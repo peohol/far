@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="nb">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="description" content="Verktøy for å kommentere farmakologiske analyser." />
+    <title>Kommentarverktøy for farmakologiske analyser</title>
+    <script>
+      // Settes før første maling slik at siden ikke blinker i feil tema.
+      try {
+        var lagret = localStorage.getItem('far:tema')
+        var moerkt = window.matchMedia('(prefers-color-scheme: dark)').matches
+        document.documentElement.dataset.tema =
+          lagret === 'lyst' || lagret === 'moerkt' ? lagret : moerkt ? 'moerkt' : 'lyst'
+      } catch (e) {
+        document.documentElement.dataset.tema = 'lyst'
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

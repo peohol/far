@@ -1,0 +1,515 @@
+/** Komponentstiler. Rekkefølgen følger stegene i arbeidsflyten. */
+
+/* --- Hurtigtastmerke ---------------------------------------------------- */
+
+.hurtigtast {
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-medium);
+  line-height: 1;
+  padding: 0.25em 0.5em;
+  border: var(--kant) solid currentColor;
+  border-radius: var(--runding-s);
+  opacity: 0.62;
+  white-space: nowrap;
+}
+
+/* --- Knapp -------------------------------------------------------------- */
+
+.knapp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  border: var(--kant-tykk) solid transparent;
+  border-radius: var(--runding-full);
+  cursor: pointer;
+  transition:
+    background-color var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve),
+    color var(--fart) var(--kurve),
+    transform var(--fart) var(--kurve);
+}
+
+.knapp:active {
+  transform: translateY(1px);
+}
+
+.knapp__ikon {
+  display: grid;
+  font-size: 1.15em;
+}
+
+.knapp--primary {
+  background: var(--aksent);
+  color: var(--aksent-blekk);
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-medium);
+  padding: var(--rom-3) var(--rom-5);
+  box-shadow: var(--skygge);
+}
+
+.knapp--primary:hover {
+  background: color-mix(in oklab, var(--aksent) 88%, var(--blekk));
+}
+
+.knapp--subtle {
+  background: transparent;
+  color: var(--blekk-dempet);
+  font-size: var(--tekst-s);
+  padding: var(--rom-1) var(--rom-3);
+  border-color: transparent;
+}
+
+.knapp--subtle:hover {
+  background: var(--flate-hevet);
+  color: var(--blekk);
+}
+
+/* --- Steg 1–2: søk ------------------------------------------------------ */
+
+.sok {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-5);
+  width: 100%;
+}
+
+.instruks {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  font-size: var(--tekst-l);
+  color: var(--blekk-dempet);
+  transition:
+    opacity var(--fart) var(--kurve),
+    transform var(--fart) var(--kurve);
+}
+
+.instruks__ikon {
+  font-size: 1.4em;
+  color: var(--blekk-svak);
+}
+
+/* Instruksjonen viker for søkefeltet ved første tegn, men beholder plassen
+   sin så alternativene under ikke hopper. */
+.instruks--skjult {
+  opacity: 0;
+  transform: translateY(-0.4rem);
+  pointer-events: none;
+  position: absolute;
+}
+
+.sokefelt {
+  width: min(100%, 46rem);
+  border-bottom: var(--kant-tykk) solid var(--linje-sterk);
+  transition:
+    opacity var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve);
+}
+
+.sokefelt:focus-within {
+  border-color: var(--aksent);
+}
+
+.sokefelt--skjult {
+  opacity: 0;
+  border-color: transparent;
+}
+
+.sokefelt__input {
+  width: 100%;
+  padding: var(--rom-2) var(--rom-1);
+  font-size: var(--tekst-xl);
+  font-weight: var(--vekt-medium);
+  text-align: center;
+  letter-spacing: 0.01em;
+  background: transparent;
+  border: 0;
+}
+
+.sokefelt__input:focus {
+  outline: none;
+}
+
+.alternativer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--rom-3);
+  margin: 0;
+  width: 100%;
+}
+
+.alternativ {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  height: 100%;
+  padding: var(--rom-3) var(--rom-4) var(--rom-3) var(--rom-3);
+  text-align: left;
+  background: var(--alt-soft);
+  border: var(--kant-tykk) solid var(--alt-kant);
+  border-radius: var(--runding-m);
+  cursor: pointer;
+  transition:
+    transform var(--fart) var(--kurve),
+    box-shadow var(--fart) var(--kurve);
+}
+
+.alternativ:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--skygge);
+}
+
+.alternativ__tall {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.2em;
+  height: 2.2em;
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-tung);
+  color: var(--alt-ink);
+  background: var(--alt-solid);
+  border-radius: var(--runding-s);
+}
+
+.alternativ__tekst {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.alternativ__kode {
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-tung);
+  letter-spacing: 0.02em;
+}
+
+.alternativ__navn {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+  max-width: 22ch;
+}
+
+.ingen-treff {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
+
+/* --- Verktøylinje ------------------------------------------------------- */
+
+.verktoylinje {
+  position: fixed;
+  top: var(--rom-3);
+  right: var(--rom-3);
+  z-index: 10;
+  display: flex;
+  gap: var(--rom-2);
+}
+
+.verktoyknapp {
+  display: grid;
+  place-items: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  font-size: 1.35rem;
+  color: var(--blekk-dempet);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-full);
+  cursor: pointer;
+  transition:
+    color var(--fart) var(--kurve),
+    background-color var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve);
+}
+
+.verktoyknapp:hover {
+  color: var(--blekk);
+  border-color: var(--linje-sterk);
+}
+
+/* Påslått innstilling markeres med aksentfargen, ikke bare med tekst. */
+.verktoyknapp[aria-pressed='true'] {
+  color: var(--aksent);
+  background: var(--aksent-flate);
+  border-color: var(--aksent);
+}
+
+/* --- Kort og piller ----------------------------------------------------- */
+
+.kort {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  width: min(100%, 50rem);
+  padding: var(--rom-5);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-l);
+  box-shadow: var(--skygge);
+}
+
+.kort--center {
+  align-items: center;
+  text-align: center;
+}
+
+.kort--start {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.pille {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5ch;
+  padding: var(--rom-1) var(--rom-3);
+  font-size: var(--tekst-s);
+  line-height: 1.35;
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-full);
+}
+
+.pille__ikon {
+  align-self: center;
+  font-size: 1.15em;
+}
+
+.pille__merke {
+  font-weight: var(--vekt-medium);
+  opacity: 0.75;
+}
+
+.pille__verdi {
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
+  white-space: nowrap;
+}
+
+.pille--kode {
+  font-family: var(--skrift-mono);
+  font-weight: var(--vekt-tung);
+  letter-spacing: 0.12em;
+  color: var(--aksent-blekk);
+  background: var(--aksent);
+}
+
+.pille--kode .pille__verdi {
+  color: inherit;
+}
+
+.pille--ring {
+  color: var(--niva-over-blekk);
+  background: var(--niva-over-flate);
+}
+
+.pille--ring .pille__verdi {
+  color: inherit;
+}
+
+/* --- Steg 2: analytt og konsentrasjonsbånd ------------------------------ */
+
+.analyttkort {
+  gap: var(--rom-2);
+}
+
+.analytt__navn {
+  font-size: var(--tekst-l);
+  font-weight: var(--vekt-medium);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.analytt__grenser {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+  margin-top: var(--rom-1);
+}
+
+.bandkort__merke {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.band {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--rom-3);
+  margin: 0;
+  width: 100%;
+}
+
+.bandknapp {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  height: 100%;
+  padding: var(--rom-3) var(--rom-4);
+  font-size: var(--tekst-l);
+  font-weight: var(--vekt-tung);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  border: var(--kant-tykk) solid;
+  border-radius: var(--runding-m);
+  cursor: pointer;
+  transition:
+    transform var(--fart) var(--kurve),
+    box-shadow var(--fart) var(--kurve);
+}
+
+.bandknapp:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--skygge);
+}
+
+.bandknapp:active {
+  transform: translateY(0);
+}
+
+.bandknapp__ikon {
+  font-size: 1.25em;
+}
+
+.bandknapp--under {
+  color: var(--niva-under-blekk);
+  background: var(--niva-under-flate);
+  border-color: var(--niva-under-linje);
+}
+
+.bandknapp--innenfor {
+  color: var(--niva-innenfor-blekk);
+  background: var(--niva-innenfor-flate);
+  border-color: var(--niva-innenfor-linje);
+}
+
+.bandknapp--over {
+  color: var(--niva-gul-blekk);
+  background: var(--niva-gul-flate);
+  border-color: var(--niva-gul-linje);
+}
+
+.bandknapp--ring {
+  color: var(--niva-over-blekk);
+  background: var(--niva-over-flate);
+  border-color: var(--niva-over-linje);
+}
+
+/* --- Steg 3: lim inn ---------------------------------------------------- */
+
+.limInn {
+  gap: var(--rom-4);
+}
+
+.limInn__instruks {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  font-size: var(--tekst-l);
+  color: var(--blekk-dempet);
+}
+
+.limInn__ikon {
+  font-size: 1.3em;
+  color: var(--blekk-svak);
+}
+
+.limInn__kode {
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-xxl);
+  font-weight: var(--vekt-tung);
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  overflow-wrap: anywhere;
+}
+
+.ringvarsel {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  padding: var(--rom-2) var(--rom-4);
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-tung);
+  color: var(--niva-over-blekk);
+  background: var(--niva-over-flate);
+  border: var(--kant-tykk) solid var(--niva-over-linje);
+  border-radius: var(--runding-full);
+}
+
+.ringvarsel__ikon {
+  font-size: 1.5em;
+  transform-origin: 50% 85%;
+  animation: ringer 1.4s var(--kurve) infinite;
+}
+
+/* Røret rister som en telefon som ringer. Slås av sammen med resten av
+   animasjonene når brukeren har bedt om mindre bevegelse. */
+@keyframes ringer {
+  0%,
+  62%,
+  100% {
+    transform: rotate(0deg);
+  }
+  66%,
+  74%,
+  82% {
+    transform: rotate(-16deg);
+  }
+  70%,
+  78%,
+  86% {
+    transform: rotate(16deg);
+  }
+}
+
+.handling {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-3);
+}
+
+/* Reserveløsning når utklippstavlen er utilgjengelig: kommentaren må kunne
+   markeres og kopieres for hånd. */
+.manuellKopi {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--rom-2);
+  width: min(100%, 40rem);
+  padding: var(--rom-3);
+  text-align: left;
+  background: var(--niva-over-flate);
+  border: var(--kant-tykk) solid var(--niva-over-linje);
+  border-radius: var(--runding-m);
+}
+
+.manuellKopi__melding {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  color: var(--niva-over-blekk);
+}
+
+.manuellKopi__tekst {
+  width: 100%;
+  padding: var(--rom-2);
+  font-family: var(--skrift);
+  font-size: var(--tekst-s);
+  line-height: 1.5;
+  resize: vertical;
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-s);
+}
