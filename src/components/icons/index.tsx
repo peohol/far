@@ -95,16 +95,6 @@ export function PasteIcon(props: IconProps) {
   )
 }
 
-/** Ferdig: hake i en avrundet firkant. */
-export function DoneIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <rect x="3.5" y="3.5" width="25" height="25" rx="7" opacity="0.55" />
-      <path d="M10 16.5 14.4 21 22.5 11.5" />
-    </Icon>
-  )
-}
-
 /** Søk: forstørrelsesglass. */
 export function SearchIcon(props: IconProps) {
   return (

@@ -1,17 +1,30 @@
-import { useCallback, useMemo, useReducer, useState } from 'react'
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { SearchStep } from './components/SearchStep'
 import { BandStep } from './components/BandStep'
 import { PasteStep } from './components/PasteStep'
+import { CopyFlash } from './components/CopyFlash'
 import { Toolbar } from './components/Toolbar'
 import { analytes } from './domain/analytes'
 import { bands as bandsOf, findBand, type Band } from './domain/bands'
 import { search } from './domain/search'
 import { useClipboard } from './hooks/useClipboard'
+import { useCopyFlash } from './hooks/useCopyFlash'
 import { digitToIndex, useKeyboard } from './hooks/useKeyboard'
 import { useTheme } from './hooks/useTheme'
 import { initialState, isIdle, reducer, stageOf } from './state'
 
 const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
+
+/**
+ * Kvitteringen for kopieringen, i millisekunder.
+ *
+ * `BLINK` er hele blinket. `STEGBYTTE` er hvor lenge båndknappene blir stående
+ * etterpå, så blinket rekker å starte ved knappen som ble brukt før limsteget
+ * overtar; resten av blinket går der. Begge er korte med vilje — kvitteringen
+ * skal rekke å bli sett uten å legge seg i veien for neste svar.
+ */
+const BLINK = 500
+const STEGBYTTE = 130
 
 /** Enter og mellomrom skal ikke både trykke en fokusert knapp og utløse stegets handling. */
 function buttonHasFocus(): boolean {
@@ -23,31 +36,44 @@ export default function App() {
   const [failedCopy, setFailedCopy] = useState<string | null>(null)
   const { theme, toggle } = useTheme()
   const copy = useClipboard()
+  const { flash, show } = useCopyFlash(BLINK)
+  const stegbytte = useRef<number>()
 
   const stage = stageOf(state)
   const hits = useMemo(() => search(state.query, analytes), [state.query])
 
   const pickBand = useCallback(
     async (band: Band) => {
-      if (await copy(band.kommentar)) {
-        setFailedCopy(null)
-        dispatch({ type: 'velg-band', key: band.key })
-      } else {
+      if (!(await copy(band.kommentar))) {
         setFailedCopy(band.kommentar)
+        return
       }
+      setFailedCopy(null)
+      // Knappen står her bare så lenge båndsteget vises, enten den ble klikket
+      // eller valgt med et tastetrykk. Blinket legges der den står nå.
+      show(document.querySelector(`[data-band="${band.key}"]`))
+      window.clearTimeout(stegbytte.current)
+      stegbytte.current = window.setTimeout(
+        () => dispatch({ type: 'velg-band', key: band.key }),
+        STEGBYTTE,
+      )
     },
-    [copy],
+    [copy, show],
   )
 
   const back = useCallback(() => {
+    window.clearTimeout(stegbytte.current)
     setFailedCopy(null)
     dispatch({ type: 'tilbake' })
   }, [])
 
   const reset = useCallback(() => {
+    window.clearTimeout(stegbytte.current)
     setFailedCopy(null)
     dispatch({ type: 'nullstill' })
   }, [])
+
+  useEffect(() => () => window.clearTimeout(stegbytte.current), [])
 
   // Enter og mellomrom bekrefter det samme, overalt i appen.
   const confirm = useCallback(
@@ -131,6 +157,13 @@ export default function App() {
           <PasteStep analyte={state.analyte} band={band} onBack={back} onFinish={reset} />
         )}
       </main>
+
+      {/* Kvitteringen ligger utenfor stegene, så den overlever stegbyttet. */}
+      {flash && <CopyFlash key={flash.id} flash={flash} varighet={BLINK} />}
+      {/* Blinket er visuelt; dette er den samme beskjeden for skjermlesere. */}
+      <p className="kun-skjermleser" role="status">
+        {flash ? 'Kommentaren er kopiert' : ''}
+      </p>
     </div>
   )
 }

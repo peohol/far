@@ -26,6 +26,12 @@ Datasettet er sjekket inn, så det trengs bare når PDF-en endres.
 | 3 | Velg hvilket konsentrasjonsbånd svaret havner i — kommentaren kopieres | `1`–`4` |
 | 4 | Lim inn kommentaren på analyttkoden som vises | `Enter`/`Space` avslutter og nullstiller |
 
+Peker eller tastaturfokus på et bånd viser kommentaren som blir kopiert, i et
+tips over knappene. Når kommentaren er kopiert, kvitteres det med et blink ved
+knappen som ble brukt. Blinket starter der og fortsetter et lite øyeblikk inn i
+neste steg, så det rekker å bli sett uten å holde igjen arbeidsflyten. Tiden
+står som `BLINK` og `STEGBYTTE` øverst i `src/App.tsx`.
+
 `Esc` angrer ett steg av gangen og beholder det som er skrevet i steget foran.
 `Enter` og `Space` gjør alltid det samme.
 
@@ -94,6 +100,14 @@ analytter — ville delingen gitt et bånd med én eneste verdi; da slås den
 sammen til ett rødt bånd i stedet. Testene holder båndene opp mot `classify`,
 så de to kan ikke komme i utakt.
 
+Båndene er én sammenhengende skala, og et bånd som havner alene på linje to
+leses lett som noe annet enn de andre. Knappene deler derfor bredden i kortet
+likt mellom seg og krymper skriften i stedet for å bryte raden. Grensen går der
+tallene ville blitt for små til å leses; da brytes raden heller enn å klippe et
+intervall, men det skjer først på skjermer smalere enn en mobil på høykant.
+Tallet CSS-en er dimensjonert etter — den lengste etiketten datasettet gir —
+holdes i sjakk av en test.
+
 ### Rettelser gjort i teksten
 
 Alle rettelser ligger også i `meta.rettelser` i `src/data/analytter.json`, med
@@ -137,3 +151,9 @@ alt kan betjenes med tastatur, fokusmarkeringen er synlig overalt, nivået går
 fram av både farge, ikon og tall — ikke farge alene — og animasjoner slås av
 ved `prefers-reduced-motion`. `npm test` måler kontrasten i begge temaer mot
 tokens.css, så en fargeendring som bryter kravet slår ut i testene.
+
+Tipset med kommentaren vises både ved peker og ved tastaturfokus, og er knyttet
+til knappen med `aria-describedby`, slik at skjermlesere får den samme teksten.
+Kvitteringen for kopieringen meldes i tillegg som statusbeskjed, siden blinket
+er rent visuelt. Uten bevegelse blir kvitteringen stående stille i stedet for å
+sprette fram.

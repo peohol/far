@@ -59,6 +59,17 @@ describe('bands', () => {
     }
   })
 
+  it('holder etikettene innenfor bredden knappene er dimensjonert for', () => {
+    // Knappene står alltid på én linje, og `--band-innhold` i components.css er
+    // målt mot den lengste etiketten datasettet gir («1001 – 1099»). Kommer det
+    // en lengre, må det tallet opp — ellers blir raden brutt eller trang.
+    for (const a of analytes) {
+      for (const band of bands(a)) {
+        expect(band.label.length, `${a.kode}/${band.key}: «${band.label}»`).toBeLessThanOrEqual(11)
+      }
+    }
+  })
+
   it('gir hvert bånd en unik nøkkel som kan slås opp igjen', () => {
     for (const a of analytes) {
       const keys = bands(a).map((b) => b.key)
