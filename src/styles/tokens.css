@@ -1,0 +1,135 @@
+/**
+ * Designtokens. Alt som gjentar seg — farge, avstand, skriftstørrelse, form —
+ * defineres her én gang, slik at komponentene bare refererer til navn.
+ *
+ * Fargene er valgt slik at all tekst mot sin egen flate ligger over WCAG 2.1
+ * AA (4,5:1 for brødtekst, 3:1 for stor tekst og grafiske elementer), som er
+ * kravet forskrift om universell utforming av IKT stiller. `npm test` måler
+ * kontrastene på nytt hver gang.
+ */
+
+:root {
+  /* --- Skriftstørrelser -------------------------------------------------
+     Skalerer med vindusbredden, så UI-et er like lesbart i halvt som i
+     maksimert vindu uten at noe må skrolles. */
+  --tekst-xs: clamp(0.72rem, 0.68rem + 0.14vw, 0.84rem);
+  --tekst-s: clamp(0.88rem, 0.83rem + 0.22vw, 1.05rem);
+  --tekst-m: clamp(1rem, 0.92rem + 0.34vw, 1.28rem);
+  --tekst-l: clamp(1.22rem, 1.05rem + 0.72vw, 1.85rem);
+  --tekst-xl: clamp(1.6rem, 1.24rem + 1.5vw, 2.7rem);
+  --tekst-xxl: clamp(2.3rem, 1.5rem + 3.4vw, 4.6rem);
+
+  --vekt-normal: 400;
+  --vekt-medium: 550;
+  --vekt-tung: 700;
+
+  --skrift: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+  --skrift-mono: 'JetBrains Mono', 'SFMono-Regular', 'Cascadia Mono', Consolas, monospace;
+
+  /* --- Avstand ---------------------------------------------------------- */
+  --rom-1: 0.35rem;
+  --rom-2: 0.6rem;
+  --rom-3: 0.9rem;
+  --rom-4: 1.4rem;
+  --rom-5: clamp(1.5rem, 1rem + 1.6vh, 2.4rem);
+  --rom-6: clamp(2rem, 1.2rem + 2.8vh, 3.6rem);
+
+  /* --- Form ------------------------------------------------------------- */
+  --runding-s: 0.5rem;
+  --runding-m: 0.85rem;
+  --runding-l: 1.35rem;
+  --runding-full: 999px;
+
+  --kant: 1px;
+  --kant-tykk: 2px;
+  --ikon-strek: 2;
+
+  --fart: 160ms;
+  --kurve: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* --- Alternativfarger ------------------------------------------------- */
+  --alt-flate-alfa: 0.24;
+  --alt-kant-alfa: 0.9;
+}
+
+/* --- Lyst tema ---------------------------------------------------------- */
+:root,
+:root[data-tema='lyst'] {
+  color-scheme: light;
+
+  --flate-bunn: hsl(210 36% 97%);
+  --flate: hsl(0 0% 100%);
+  --flate-hevet: hsl(210 30% 94%);
+  --linje: hsl(212 20% 84%);
+  --linje-sterk: hsl(212 18% 55%);
+
+  --blekk: hsl(215 32% 14%);
+  --blekk-dempet: hsl(215 14% 38%);
+  --blekk-svak: hsl(215 12% 50%);
+
+  --aksent: hsl(214 82% 38%);
+  --aksent-blekk: hsl(0 0% 100%);
+  --aksent-flate: hsl(214 90% 96%);
+
+  --fokus: hsl(214 90% 42%);
+  --skygge: 0 1px 2px hsl(215 30% 20% / 0.06), 0 8px 24px hsl(215 30% 20% / 0.09);
+  --skygge-hevet: 0 2px 6px hsl(215 30% 20% / 0.1), 0 18px 44px hsl(215 30% 20% / 0.16);
+
+  --niva-under-blekk: hsl(201 92% 26%);
+  --niva-under-flate: hsl(201 88% 94%);
+  --niva-under-linje: hsl(201 72% 46%);
+
+  --niva-innenfor-blekk: hsl(154 82% 22%);
+  --niva-innenfor-flate: hsl(150 62% 93%);
+  --niva-innenfor-linje: hsl(152 52% 39%);
+
+  --niva-over-blekk: hsl(357 74% 38%);
+  --niva-over-flate: hsl(357 84% 96%);
+  --niva-over-linje: hsl(357 66% 56%);
+
+  --varsel-blekk: hsl(28 88% 28%);
+  --varsel-flate: hsl(40 92% 94%);
+  --varsel-linje: hsl(34 78% 54%);
+}
+
+/* --- Mørkt tema --------------------------------------------------------- */
+:root[data-tema='moerkt'] {
+  color-scheme: dark;
+
+  --flate-bunn: hsl(216 32% 9%);
+  --flate: hsl(216 26% 13%);
+  --flate-hevet: hsl(216 22% 18%);
+  --linje: hsl(216 16% 26%);
+  --linje-sterk: hsl(216 14% 42%);
+
+  --blekk: hsl(210 32% 95%);
+  --blekk-dempet: hsl(213 16% 72%);
+  --blekk-svak: hsl(213 12% 60%);
+
+  --aksent: hsl(210 94% 70%);
+  --aksent-blekk: hsl(216 40% 10%);
+  --aksent-flate: hsl(214 46% 20%);
+
+  --fokus: hsl(206 96% 68%);
+  --skygge: 0 1px 2px hsl(216 50% 3% / 0.5), 0 8px 24px hsl(216 50% 3% / 0.55);
+  --skygge-hevet: 0 2px 6px hsl(216 50% 3% / 0.55), 0 18px 44px hsl(216 50% 3% / 0.7);
+
+  --niva-under-blekk: hsl(199 92% 74%);
+  --niva-under-flate: hsl(201 54% 17%);
+  --niva-under-linje: hsl(200 60% 46%);
+
+  --niva-innenfor-blekk: hsl(150 66% 66%);
+  --niva-innenfor-flate: hsl(154 42% 14%);
+  --niva-innenfor-linje: hsl(152 42% 40%);
+
+  --niva-over-blekk: hsl(357 96% 78%);
+  --niva-over-flate: hsl(357 40% 19%);
+  --niva-over-linje: hsl(357 58% 52%);
+
+  --varsel-blekk: hsl(38 94% 68%);
+  --varsel-flate: hsl(32 44% 16%);
+  --varsel-linje: hsl(34 62% 46%);
+
+  --alt-flate-alfa: 0.17;
+  --alt-kant-alfa: 0.55;
+}

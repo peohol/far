@@ -1,0 +1,127 @@
+/** Grunnstiler: nullstilling, typografi, sidelayout og fellesregler. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--flate-bunn);
+  color: var(--blekk);
+  font-family: var(--skrift);
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-normal);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* Synlig fokusmarkering overalt, også på egendefinerte flater. */
+:focus-visible {
+  outline: 3px solid var(--fokus);
+  outline-offset: 3px;
+  border-radius: var(--runding-s);
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* --- Sidelayout ---------------------------------------------------------
+   Én skjermfylt scene med innholdet sentrert. Stegene bytter innhold i
+   stedet for å legge til høyde, så det skal aldri bli noe å skrolle i.
+   `overflow-y: auto` er en sikkerhetsventil for svært lave vinduer. */
+
+.app {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.scene {
+  width: min(100%, 82rem);
+  padding: var(--rom-5) clamp(1rem, 4vw, 3.5rem);
+}
+
+.steg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-5);
+  text-align: center;
+}
+
+/* Fast høyde, slik at innholdet under ikke hopper når Esc-knappen dukker opp. */
+.stegbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.9rem;
+}
+
+/* Lave vinduer: stram inn luften før noe må skrolles. */
+@media (max-height: 820px) {
+  .scene {
+    padding-block: var(--rom-3);
+  }
+
+  .steg {
+    gap: var(--rom-4);
+  }
+
+  .stegbar {
+    min-height: 2.4rem;
+  }
+}
+
+/* --- Fellesklasser ------------------------------------------------------ */
+
+.ikon {
+  display: block;
+  flex: none;
+}
+
+.kun-skjermleser {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

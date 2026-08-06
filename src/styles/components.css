@@ -1,0 +1,504 @@
+/** Komponentstiler. Rekkefølgen følger stegene i arbeidsflyten. */
+
+/* --- Hurtigtastmerke ---------------------------------------------------- */
+
+.hurtigtast {
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-medium);
+  line-height: 1;
+  padding: 0.25em 0.5em;
+  border: var(--kant) solid currentColor;
+  border-radius: var(--runding-s);
+  opacity: 0.62;
+  white-space: nowrap;
+}
+
+/* --- Knapp -------------------------------------------------------------- */
+
+.knapp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  border: var(--kant-tykk) solid transparent;
+  border-radius: var(--runding-full);
+  cursor: pointer;
+  transition:
+    background-color var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve),
+    color var(--fart) var(--kurve),
+    transform var(--fart) var(--kurve);
+}
+
+.knapp:active {
+  transform: translateY(1px);
+}
+
+.knapp__ikon {
+  display: grid;
+  font-size: 1.15em;
+}
+
+.knapp--primary {
+  background: var(--aksent);
+  color: var(--aksent-blekk);
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-medium);
+  padding: var(--rom-3) var(--rom-5);
+  box-shadow: var(--skygge);
+}
+
+.knapp--primary:hover {
+  background: color-mix(in oklab, var(--aksent) 88%, var(--blekk));
+}
+
+.knapp--subtle {
+  background: transparent;
+  color: var(--blekk-dempet);
+  font-size: var(--tekst-s);
+  padding: var(--rom-1) var(--rom-3);
+  border-color: transparent;
+}
+
+.knapp--subtle:hover {
+  background: var(--flate-hevet);
+  color: var(--blekk);
+}
+
+/* --- Temavelger --------------------------------------------------------- */
+
+.temavelger {
+  position: fixed;
+  top: var(--rom-3);
+  right: var(--rom-3);
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  font-size: 1.35rem;
+  color: var(--blekk-dempet);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-full);
+  cursor: pointer;
+  transition:
+    color var(--fart) var(--kurve),
+    background-color var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve);
+}
+
+.temavelger:hover {
+  color: var(--blekk);
+  border-color: var(--linje-sterk);
+}
+
+/* --- Steg 1–2: søk ------------------------------------------------------ */
+
+.sok {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-5);
+  width: 100%;
+}
+
+.instruks {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  font-size: var(--tekst-l);
+  color: var(--blekk-dempet);
+  transition:
+    opacity var(--fart) var(--kurve),
+    transform var(--fart) var(--kurve);
+}
+
+.instruks__ikon {
+  font-size: 1.4em;
+  color: var(--blekk-svak);
+}
+
+/* Instruksjonen viker for søkefeltet ved første tegn, men beholder plassen
+   sin så alternativene under ikke hopper. */
+.instruks--skjult {
+  opacity: 0;
+  transform: translateY(-0.4rem);
+  pointer-events: none;
+  position: absolute;
+}
+
+.sokefelt {
+  width: min(100%, 46rem);
+  border-bottom: var(--kant-tykk) solid var(--linje-sterk);
+  transition:
+    opacity var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve);
+}
+
+.sokefelt:focus-within {
+  border-color: var(--aksent);
+}
+
+.sokefelt--skjult {
+  opacity: 0;
+  border-color: transparent;
+}
+
+.sokefelt__input {
+  width: 100%;
+  padding: var(--rom-2) var(--rom-1);
+  font-size: var(--tekst-xl);
+  font-weight: var(--vekt-medium);
+  text-align: center;
+  letter-spacing: 0.01em;
+  background: transparent;
+  border: 0;
+}
+
+.sokefelt__input:focus {
+  outline: none;
+}
+
+.alternativer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--rom-3);
+  margin: 0;
+  width: 100%;
+}
+
+.alternativ {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  height: 100%;
+  padding: var(--rom-3) var(--rom-4) var(--rom-3) var(--rom-3);
+  text-align: left;
+  background: var(--alt-soft);
+  border: var(--kant-tykk) solid var(--alt-kant);
+  border-radius: var(--runding-m);
+  cursor: pointer;
+  transition:
+    transform var(--fart) var(--kurve),
+    box-shadow var(--fart) var(--kurve);
+}
+
+.alternativ:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--skygge);
+}
+
+.alternativ__tall {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.2em;
+  height: 2.2em;
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-tung);
+  color: var(--alt-ink);
+  background: var(--alt-solid);
+  border-radius: var(--runding-s);
+}
+
+.alternativ__tekst {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.alternativ__kode {
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-tung);
+  letter-spacing: 0.02em;
+}
+
+.alternativ__navn {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+  max-width: 22ch;
+}
+
+.hint,
+.ingen-treff {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5ch;
+  flex-wrap: wrap;
+}
+
+/* --- Steg 3: konsentrasjon ---------------------------------------------- */
+
+.analytt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-1);
+}
+
+.analytt__kode {
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-tung);
+  letter-spacing: 0.14em;
+  color: var(--aksent);
+}
+
+.analytt__navn {
+  font-size: var(--tekst-l);
+  font-weight: var(--vekt-medium);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.analytt__ref {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
+.konsentrasjon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
+.konsentrasjon__merke {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.konsentrasjon__felt {
+  display: flex;
+  align-items: baseline;
+  gap: var(--rom-3);
+  padding: var(--rom-2) var(--rom-4);
+  background: var(--flate);
+  border: var(--kant-tykk) solid var(--linje);
+  border-radius: var(--runding-l);
+  box-shadow: var(--skygge);
+  transition: border-color var(--fart) var(--kurve);
+}
+
+.konsentrasjon__felt:focus-within {
+  border-color: var(--aksent);
+}
+
+.konsentrasjon__input {
+  width: 6ch;
+  font-size: var(--tekst-xxl);
+  font-weight: var(--vekt-tung);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  background: transparent;
+  border: 0;
+}
+
+.konsentrasjon__input:focus {
+  outline: none;
+}
+
+.konsentrasjon__input::placeholder {
+  color: var(--linje);
+  opacity: 1;
+}
+
+.konsentrasjon__enhet {
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-dempet);
+  white-space: nowrap;
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-3);
+  min-height: 4.5rem;
+}
+
+/* --- Nivåindikator og tooltip ------------------------------------------- */
+
+.indikator-hylse {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.indikator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-3);
+  padding: var(--rom-2) var(--rom-4);
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-medium);
+  border: var(--kant-tykk) solid;
+  border-radius: var(--runding-full);
+  cursor: help;
+}
+
+.indikator__ikon {
+  font-size: 1.6em;
+}
+
+.indikator--under {
+  color: var(--niva-under-blekk);
+  background: var(--niva-under-flate);
+  border-color: var(--niva-under-linje);
+}
+
+.indikator--innenfor {
+  color: var(--niva-innenfor-blekk);
+  background: var(--niva-innenfor-flate);
+  border-color: var(--niva-innenfor-linje);
+}
+
+.indikator--over {
+  color: var(--niva-over-blekk);
+  background: var(--niva-over-flate);
+  border-color: var(--niva-over-linje);
+}
+
+/* Skjules med gjennomsiktighet, ikke `visibility`, slik at teksten fortsatt
+   er tilgjengelig for skjermlesere via aria-describedby. */
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + var(--rom-3));
+  left: 50%;
+  transform: translate(-50%, 0.35rem);
+  z-index: 20;
+  width: max-content;
+  max-width: min(52rem, 84vw);
+  padding: var(--rom-3) var(--rom-4);
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-normal);
+  line-height: 1.5;
+  text-align: left;
+  text-wrap: pretty;
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-m);
+  box-shadow: var(--skygge-hevet);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--fart) var(--kurve),
+    transform var(--fart) var(--kurve);
+}
+
+/* Liten peker som knytter tooltipen til indikatoren under. */
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0.85rem;
+  height: 0.85rem;
+  background: var(--flate);
+  border-right: var(--kant) solid var(--linje);
+  border-bottom: var(--kant) solid var(--linje);
+  transform: translate(-50%, -55%) rotate(45deg);
+}
+
+.indikator-hylse:hover .tooltip,
+.indikator-hylse:focus-within .tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* --- Ringegrense og advarsel -------------------------------------------- */
+
+.ringegrense,
+.varsel {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  padding: var(--rom-1) var(--rom-3);
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-medium);
+  border-radius: var(--runding-full);
+}
+
+.ringegrense {
+  color: var(--niva-over-blekk);
+  background: var(--niva-over-flate);
+}
+
+.ringegrense__ikon {
+  font-size: 1.3em;
+}
+
+.varsel {
+  font-size: var(--tekst-s);
+  color: var(--varsel-blekk);
+  background: var(--varsel-flate);
+}
+
+.varsel__ikon {
+  font-size: 1.3em;
+}
+
+.handling {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-3);
+  min-height: 3.6rem;
+}
+
+.feil {
+  font-size: var(--tekst-s);
+  color: var(--niva-over-blekk);
+}
+
+/* --- Steg 4: lim inn ---------------------------------------------------- */
+
+.limInn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-4);
+}
+
+.limInn__instruks {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  font-size: var(--tekst-l);
+  color: var(--blekk-dempet);
+}
+
+.limInn__ikon {
+  font-size: 1.3em;
+  color: var(--blekk-svak);
+}
+
+.limInn__kode {
+  padding: var(--rom-4) var(--rom-6);
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-xxl);
+  font-weight: var(--vekt-tung);
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  overflow-wrap: anywhere;
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant-tykk) solid var(--linje-sterk);
+  border-radius: var(--runding-l);
+  box-shadow: var(--skygge);
+}
