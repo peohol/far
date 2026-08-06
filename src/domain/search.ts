@@ -3,7 +3,12 @@ import type { Analyte } from '../types'
 /** Flest alternativer som vises av gangen — tastene 1–9 og 0. */
 export const MAX_RESULTS = 10
 
-/** Gjør tekst sammenlignbar: små bokstaver, uten aksenter og skilletegn. */
+/**
+ * Gjør tekst sammenlignbar: små bokstaver, uten aksenter.
+ *
+ * Mellomrom og skilletegn beholdes, siden søket sammenligner på begynnelsen
+ * av navnet og da må navnet stå som det er.
+ */
 function normalise(text: string): string {
   return text
     .toLowerCase()
@@ -12,16 +17,7 @@ function normalise(text: string): string {
     .replace(/æ/g, 'a')
     .replace(/ø/g, 'o')
     .replace(/å/g, 'a')
-}
-
-/** Treffer alle tegnene i `needle` i rekkefølge inni `haystack`? */
-function isSubsequence(needle: string, haystack: string): boolean {
-  let i = 0
-  for (const char of haystack) {
-    if (char === needle[i]) i += 1
-    if (i === needle.length) return true
-  }
-  return needle.length === 0
+    .trim()
 }
 
 interface SearchTerm {
@@ -33,6 +29,8 @@ interface SearchTerm {
 /**
  * Søkefeltene for én analytt, med vekt etter hvor sterkt et treff teller.
  * Koden veier tyngst fordi den er det brukeren skriver når hen vet hva hen vil.
+ * Delanalyttene er med hver for seg, slik at en sumanalyse kan finnes på
+ * navnet til hvilken som helst av delene den består av.
  */
 function termsFor(analyte: Analyte): SearchTerm[] {
   return [
@@ -55,16 +53,20 @@ function cachedTerms(analyte: Analyte): SearchTerm[] {
   return terms
 }
 
-/** Beste (laveste) poengsum for ett søkeord mot én analytt, eller `null`. */
+/**
+ * Beste (laveste) poengsum for ett søkeord mot én analytt, eller `null`.
+ *
+ * Søket er strengt: et søkeord treffer bare når en kode, et analyttnavn eller
+ * en delanalytt *begynner* med det. Ingen treff inne i ordet, og ingen
+ * oppmykning der bokstavene bare må komme i riktig rekkefølge — «kve» skal gi
+ * kvetiapin og ingenting annet.
+ */
 function scoreToken(token: string, terms: SearchTerm[]): number | null {
   let best: number | null = null
   for (const term of terms) {
-    let score: number | null = null
-    if (term.value === token) score = term.weight
-    else if (term.value.startsWith(token)) score = 10 + term.weight
-    else if (term.value.includes(token)) score = 20 + term.weight
-    else if (isSubsequence(token, term.value)) score = 30 + term.weight
-    if (score !== null && (best === null || score < best)) best = score
+    if (!term.value.startsWith(token)) continue
+    const score = term.value === token ? term.weight : 10 + term.weight
+    if (best === null || score < best) best = score
   }
   return best
 }
@@ -76,8 +78,9 @@ export interface SearchHit {
 
 /**
  * Søker i koder, navn, delanalytter og aliaser. Alle ordene i søket må treffe,
- * slik at «sum amitri» og «amitri nor» begge finner sumanalysen.
- * Resultatet er sortert med beste treff først og kuttet ved {@link MAX_RESULTS}.
+ * slik at «sum amitriptylin» og «amitriptylin nortriptylin» begge finner
+ * sumanalysen. Resultatet er sortert med beste treff først og kuttet ved
+ * {@link MAX_RESULTS}.
  */
 export function search(query: string, pool: Analyte[]): SearchHit[] {
   const tokens = normalise(query).split(/\s+/).filter(Boolean)

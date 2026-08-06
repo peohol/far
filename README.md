@@ -1,8 +1,8 @@
 # far
 
 Verktøy for å kommentere farmakologiske analyser. Man søker opp en analytt,
-taster inn målt konsentrasjon, og får den konsentrasjonsavhengige kommentaren
-kopiert til utklippstavlen — hele veien med tastaturet.
+velger hvilket konsentrasjonsbånd svaret havner i, og får den tilhørende
+kommentaren kopiert til utklippstavlen — hele veien med tastaturet.
 
 ## Kom i gang
 
@@ -22,12 +22,16 @@ Datasettet er sjekket inn, så det trengs bare når PDF-en endres.
 | Steg | Hva som skjer | Taster |
 | --- | --- | --- |
 | 1 | Begynn å skrive navnet på en analytt eller kode | hvilken som helst bokstav |
-| 2 | Velg blant alternativene som passer søket | `1`–`9` og `0`, eller `Enter` når det bare er ett igjen |
-| 3 | Tast inn konsentrasjonen og se nivået fortløpende | `Enter` kopierer kommentaren |
-| 4 | Lim inn kommentaren på analyttkoden som vises | `Enter` avslutter og nullstiller |
+| 2 | Velg blant alternativene som passer søket | `1`–`9` og `0`, eller `Enter`/`Space` når det bare er ett igjen |
+| 3 | Velg hvilket konsentrasjonsbånd svaret havner i — kommentaren kopieres | `1`–`4` |
+| 4 | Lim inn kommentaren på analyttkoden som vises | `Enter`/`Space` avslutter og nullstiller |
 
 `Esc` angrer ett steg av gangen og beholder det som er skrevet i steget foran.
-Hold pekeren over nivåindikatoren for å se kommentaren før den kopieres.
+`Enter` og `Space` gjør alltid det samme.
+
+Knappen med tastatursymbol øverst til høyre viser hurtigtastmerkene i UI-et.
+Den er av som standard; tastene virker uansett. Tallene på søkealternativene
+står alltid, siden de endrer seg fra søk til søk.
 
 ## Struktur
 
@@ -36,10 +40,10 @@ scripts/build_data.py     Leser kommentarer.pdf og bygger datasettet
 src/data/analytter.json   Generert datasett (sjekket inn)
 src/data/aliaser.json     Håndholdte ekstra søkeord per analyttkode
 src/types.ts              Datamodellen
-src/state.ts              Tilstandsmaskinen for de fire stegene
-src/domain/               Klassifisering, søk, fargespredning, kontrastmåling
-src/hooks/                Tastatur, tema, utklippstavle
-src/components/           Stegene, felles knapp/ikoner
+src/state.ts              Tilstandsmaskinen for de tre stegene
+src/domain/               Bånd, klassifisering, søk, fargespredning, kontrast
+src/hooks/                Tastatur, tema, hurtigtastmerker, utklippstavle
+src/components/           Stegene, felles kort/pille/knapp/ikoner
 src/styles/               tokens.css (design) + base.css + components.css
 ```
 
@@ -62,7 +66,7 @@ PDF-en bryter lange ord midt i ordet uten bindestrek fordi kolonnene er smale
 en linje som slutter på mellomrom var et ordskille og en linje som slutter på
 en bokstav var et tvunget orddelingsbrudd. Rekonstruksjonen er derfor eksakt.
 
-### Klassifisering
+### Klassifisering og bånd
 
 Grensene kommer fra «Under»- og «Over»-kolonnene i referansetabellene, som
 til sammen dekker hele tallinjen:
@@ -73,8 +77,22 @@ konsentrasjon ≥ ovreGrense    → over
 ellers                        → innenfor
 ```
 
-Ringegrensen er uavhengig av dette og slår ut når konsentrasjonen er **over**
-den oppgitte verdien.
+`domain/bands.ts` deler den samme tallinjen i knappene brukeren velger mellom.
+Utgangspunktet er de tre nivåene, og i tillegg deles et nivå i to der
+ringegrensen går tvers gjennom det, slik at «ring rekvirenten» blir et eget
+valg. Knappene er derfor utledet av analyttens egne tall, ikke hardkodet:
+
+| Analytt | Bånd |
+| --- | --- |
+| AMTNORSUM (ringegrense = over-grensen) | `< 10` · `10 – 1799` · `≥ 1800` 📞 |
+| ZUKLO (ringegrense over) | `< 1` · `1 – 78` · `79 – 100` · `≥ 101` 📞 |
+| DOKSUM (ringegrense under) | `< 20` · `20 – 1000` · `1001 – 1099` 📞 · `≥ 1100` 📞 |
+| FLUP (desimaler) | `< 0,6` · `0,6 – 35` · `35,1 – 35,9` 📞 · `≥ 36` 📞 |
+
+Faller ringegrensen sammen med starten på «over» — som den gjør for 32 av 35
+analytter — ville delingen gitt et bånd med én eneste verdi; da slås den
+sammen til ett rødt bånd i stedet. Testene holder båndene opp mot `classify`,
+så de to kan ikke komme i utakt.
 
 ### Rettelser gjort i teksten
 
@@ -114,8 +132,8 @@ mens alle de andre måles i nmol/L, og setter `enhet` deretter.
 ## Tilgjengelighet
 
 Appen følger WCAG 2.1 AA, som er kravet i forskrift om universell utforming av
-IKT: alle hurtigtaster er merket i UI-et og meldt med `aria-keyshortcuts`, alt
-kan betjenes med tastatur, fokusmarkeringen er synlig overalt, tooltipen er
-knyttet til indikatoren med `aria-describedby`, og animasjoner slås av ved
-`prefers-reduced-motion`. `npm test` måler kontrasten i begge temaer mot
+IKT: alle hurtigtaster er meldt med `aria-keyshortcuts` og kan vises i UI-et,
+alt kan betjenes med tastatur, fokusmarkeringen er synlig overalt, nivået går
+fram av både farge, ikon og tall — ikke farge alene — og animasjoner slås av
+ved `prefers-reduced-motion`. `npm test` måler kontrasten i begge temaer mot
 tokens.css, så en fargeendring som bryter kravet slår ut i testene.

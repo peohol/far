@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Button } from './Button'
 import { StepBar } from './StepBar'
-import { Shortcut } from './Shortcut'
 import { ResetIcon, SearchIcon } from './icons'
 import { indexToDigit } from '../hooks/useKeyboard'
 import { optionColourVars } from '../domain/optionColours'
@@ -16,8 +15,13 @@ export interface SearchStepProps {
   onReset: () => void
 }
 
+/** Et vanlig tegn brukeren mente å skrive inn i søkefeltet. */
+function isTypedCharacter(event: KeyboardEvent): boolean {
+  return event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey
+}
+
 /**
- * Steg 1–2: instruksjon, søkefelt og alternativene som passer søket.
+ * Steg 1: instruksjon, søkefelt og alternativene som passer søket.
  *
  * Søkefeltet står alltid montert og har fokus, slik at det å begynne å skrive
  * er nok til å komme i gang. Instruksjonen viker for feltet ved første tegn.
@@ -28,6 +32,20 @@ export function SearchStep({ query, hits, onQueryChange, onSelect, onReset }: Se
 
   useEffect(() => {
     inputRef.current?.focus()
+  }, [])
+
+  // Et klikk utenfor feltet tar fokus med seg, og da ville skriving forsvunnet
+  // i ingenting. Første tegn henter fokus tilbake før tegnet settes inn.
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      const felt = inputRef.current
+      if (!felt || document.activeElement === felt) return
+      if (document.activeElement?.tagName === 'BUTTON') return
+      if (!isTypedCharacter(event)) return
+      felt.focus()
+    }
+    window.addEventListener('keydown', onKeyDown, true)
+    return () => window.removeEventListener('keydown', onKeyDown, true)
   }, [])
 
   return (
@@ -86,39 +104,28 @@ function Options({
   }
 
   return (
-    <>
-      <ul className="alternativer" aria-label={`${hits.length} treff`}>
-        {hits.map((hit, i) => (
-          <li key={hit.analyte.kode}>
-            <button
-              type="button"
-              className="alternativ"
-              style={optionColourVars(i, hits.length)}
-              onClick={() => onSelect(hit.analyte)}
-              aria-keyshortcuts={indexToDigit(i)}
-            >
-              <span className="alternativ__tall" aria-hidden="true">
-                {indexToDigit(i)}
-              </span>
-              <span className="alternativ__tekst">
-                <span className="alternativ__kode">{hit.analyte.kode}</span>
-                <span className="alternativ__navn">{hit.analyte.navn}</span>
-              </span>
-            </button>
-          </li>
-        ))}
-      </ul>
-      <p className="hint" role="status">
-        {hits.length === 1 ? (
-          <>
-            Trykk <Shortcut>Enter</Shortcut> eller <Shortcut>1</Shortcut> for å velge
-          </>
-        ) : (
-          <>
-            Trykk tallet foran alternativet for å velge
-          </>
-        )}
-      </p>
-    </>
+    <ul className="alternativer" aria-label={`${hits.length} treff`}>
+      {hits.map((hit, i) => (
+        <li key={hit.analyte.kode}>
+          <button
+            type="button"
+            className="alternativ"
+            style={optionColourVars(i, hits.length)}
+            onClick={() => onSelect(hit.analyte)}
+            aria-keyshortcuts={indexToDigit(i)}
+          >
+            {/* Står alltid: tallet endrer seg fra søk til søk og er ikke noe
+                man kan lære seg, så det følger ikke hurtigtastinnstillingen. */}
+            <span className="alternativ__tall" aria-hidden="true">
+              {indexToDigit(i)}
+            </span>
+            <span className="alternativ__tekst">
+              <span className="alternativ__kode">{hit.analyte.kode}</span>
+              <span className="alternativ__navn">{hit.analyte.navn}</span>
+            </span>
+          </button>
+        </li>
+      ))}
+    </ul>
   )
 }

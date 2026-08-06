@@ -1,31 +1,41 @@
 import { Button } from './Button'
+import { Card } from './Card'
 import { StepBar } from './StepBar'
-import { BackIcon, DoneIcon, PasteIcon } from './icons'
+import { BackIcon, DoneIcon, PasteIcon, PhoneIcon } from './icons'
+import type { Band } from '../domain/bands'
 import type { Analyte } from '../types'
 
 export interface PasteStepProps {
   analyte: Analyte
+  band: Band
   onBack: () => void
   onFinish: () => void
 }
 
-/** Steg 4: kommentaren ligger på utklippstavlen — her står hvor den skal. */
-export function PasteStep({ analyte, onBack, onFinish }: PasteStepProps) {
+/** Steg 3: kommentaren ligger på utklippstavlen — her står hvor den skal. */
+export function PasteStep({ analyte, band, onBack, onFinish }: PasteStepProps) {
   return (
-    <section className="steg steg--limInn" aria-label="Lim inn kommentaren">
+    <section className="steg" aria-label="Lim inn kommentaren">
       <StepBar>
         <Button variant="subtle" icon={<BackIcon />} shortcut="Esc" onClick={onBack}>
           Endre konsentrasjon
         </Button>
       </StepBar>
 
-      <div className="limInn">
+      <Card className="limInn">
         <p className="limInn__instruks">
           <PasteIcon className="limInn__ikon" />
           Lim inn kommentaren på
         </p>
         <p className="limInn__kode">{analyte.kode}</p>
-      </div>
+
+        {band.ring && (
+          <p className="ringvarsel" role="status">
+            <PhoneIcon className="ringvarsel__ikon" />
+            Husk å ringe!
+          </p>
+        )}
+      </Card>
 
       <div className="handling">
         <Button icon={<DoneIcon />} shortcut="Enter" onClick={onFinish}>

@@ -90,6 +90,12 @@
   --varsel-blekk: hsl(28 88% 28%);
   --varsel-flate: hsl(40 92% 94%);
   --varsel-linje: hsl(34 78% 54%);
+
+  /* «Over referanseområdet, men under ringegrensen» — eget trinn mellom
+     grønt og rødt, så alvorlighetsgraden leses av fargen alene. */
+  --niva-gul-blekk: hsl(30 92% 26%);
+  --niva-gul-flate: hsl(44 94% 92%);
+  --niva-gul-linje: hsl(36 76% 43%);
 }
 
 /* --- Mørkt tema --------------------------------------------------------- */
@@ -129,6 +135,10 @@
   --varsel-blekk: hsl(38 94% 68%);
   --varsel-flate: hsl(32 44% 16%);
   --varsel-linje: hsl(34 62% 46%);
+
+  --niva-gul-blekk: hsl(42 96% 68%);
+  --niva-gul-flate: hsl(36 46% 16%);
+  --niva-gul-linje: hsl(38 64% 46%);
 
   --alt-flate-alfa: 0.17;
   --alt-kant-alfa: 0.55;

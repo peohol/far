@@ -27,6 +27,15 @@ describe('search', () => {
     expect(codes('desmetylkariprazin')).toContain('KARSUM')
   })
 
+  it('treffer bare på begynnelsen av kode, navn eller delanalytt', () => {
+    // «kve» skal gi kvetiapin og ingenting annet — ingen treff inne i ordet,
+    // og ingen oppmykning der bokstavene bare må komme i riktig rekkefølge.
+    expect(codes('kve')).toEqual(['KVE'])
+    expect(codes('tiapin')).toEqual([])
+    expect(codes('kvtp')).toEqual([])
+    expect(codes('zapin')).toEqual([])
+  })
+
   it('krever at alle ordene i søket treffer', () => {
     expect(codes('sum amitriptylin')).toEqual(['AMTNORSUM'])
     expect(codes('amitriptylin sertralin')).toHaveLength(0)

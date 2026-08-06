@@ -5,39 +5,35 @@ import type { Analyte } from './types'
  * vises utledes av tilstanden, så det finnes ingen egen «steg»-variabel som
  * kan komme i utakt med resten.
  */
-export type Stage = 'search' | 'concentration' | 'paste'
+export type Stage = 'search' | 'band' | 'paste'
 
 export interface State {
   /** Teksten i søkefeltet. Beholdes når man går tilbake fra steg 2. */
   query: string
   analyte: Analyte | null
-  /** Konsentrasjonen slik den er skrevet, ikke som tall — «0,6» ≠ «0,60». */
-  concentration: string
-  /** Sann når kommentaren er kopiert og siste steg vises. */
-  copied: boolean
+  /** Nøkkelen til konsentrasjonsbåndet brukeren valgte, når kommentaren er kopiert. */
+  bandKey: string | null
 }
 
 export const initialState: State = {
   query: '',
   analyte: null,
-  concentration: '',
-  copied: false,
+  bandKey: null,
 }
 
 export type Action =
   | { type: 'sett-sok'; value: string }
   | { type: 'velg-analytt'; analyte: Analyte }
-  | { type: 'sett-konsentrasjon'; value: string }
-  | { type: 'kopiert' }
+  | { type: 'velg-band'; key: string }
   | { type: 'tilbake' }
   | { type: 'nullstill' }
 
 export function stageOf(state: State): Stage {
   if (!state.analyte) return 'search'
-  return state.copied ? 'paste' : 'concentration'
+  return state.bandKey ? 'paste' : 'band'
 }
 
-/** Sann i steg 1, før brukeren har begynt å skrive. */
+/** Sant i steg 1, før brukeren har begynt å skrive. */
 export function isIdle(state: State): boolean {
   return stageOf(state) === 'search' && state.query === ''
 }
@@ -48,13 +44,10 @@ export function reducer(state: State, action: Action): State {
       return { ...state, query: action.value }
 
     case 'velg-analytt':
-      return { ...state, analyte: action.analyte, concentration: '', copied: false }
+      return { ...state, analyte: action.analyte, bandKey: null }
 
-    case 'sett-konsentrasjon':
-      return { ...state, concentration: action.value }
-
-    case 'kopiert':
-      return { ...state, copied: true }
+    case 'velg-band':
+      return { ...state, bandKey: action.key }
 
     case 'tilbake':
       return stepBack(state)
@@ -72,8 +65,8 @@ export function reducer(state: State, action: Action): State {
 function stepBack(state: State): State {
   switch (stageOf(state)) {
     case 'paste':
-      return { ...state, copied: false }
-    case 'concentration':
+      return { ...state, bandKey: null }
+    case 'band':
       return { ...state, analyte: null }
     case 'search':
       return initialState

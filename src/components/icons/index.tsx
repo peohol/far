@@ -134,13 +134,14 @@ export function MoonIcon(props: IconProps) {
   )
 }
 
-/** Advarsel: utropstegn i en trekant. */
-export function WarningIcon(props: IconProps) {
+/** Hurtigtaster: en tast med et tegn på. */
+export function KeyboardIcon(props: IconProps) {
   return (
     <Icon {...props}>
-      <path d="M16 4.5 29.5 27.5H2.5Z" />
-      <path d="M16 13v6.5" />
-      <path d="M16 23.5h.02" />
+      <rect x="2.5" y="6.5" width="27" height="19" rx="3.5" />
+      <path d="M8 12h.02M14 12h.02M20 12h.02M26 12h.02" />
+      <path d="M8 17h.02M14 17h.02M20 17h.02M26 17h.02" />
+      <path d="M10.5 21.5h11" />
     </Icon>
   )
 }

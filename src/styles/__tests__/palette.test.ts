@@ -41,6 +41,8 @@ const KRAV: [string, string, number, string][] = [
   ['--niva-innenfor-blekk', '--niva-innenfor-flate', 4.5, 'nivå «innenfor»'],
   ['--niva-over-blekk', '--niva-over-flate', 4.5, 'nivå «over» og ringegrense'],
   ['--varsel-blekk', '--varsel-flate', 4.5, 'advarsel om måleområde'],
+  ['--niva-gul-blekk', '--niva-gul-flate', 4.5, 'bånd over referanseområdet'],
+  ['--niva-gul-linje', '--flate-bunn', 3, 'kant rundt gult bånd'],
   ['--niva-under-linje', '--flate-bunn', 3, 'kant rundt «under»'],
   ['--niva-innenfor-linje', '--flate-bunn', 3, 'kant rundt «innenfor»'],
   ['--niva-over-linje', '--flate-bunn', 3, 'kant rundt «over»'],
