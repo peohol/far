@@ -1,6 +1,22 @@
 import type { Analyte, Level, LevelComment } from '../types'
 
 /**
+ * Renser tastetrykk i konsentrasjonsfeltet: bare sifre, og høyst ett
+ * desimalskille.
+ *
+ * Skillet kan være komma eller punktum, men det første som skrives vinner —
+ * ellers ville «1,2.3» blitt stående i feltet som noe {@link parseConcentration}
+ * ikke godtar, og nivåindikatoren og kopieringsknappen ville forsvunnet uten
+ * at brukeren fikk vite hvorfor.
+ */
+export function sanitiseConcentrationInput(input: string): string {
+  const tegn = input.replace(/[^\d.,]/g, '')
+  const skille = tegn.search(/[.,]/)
+  if (skille === -1) return tegn
+  return tegn.slice(0, skille + 1) + tegn.slice(skille + 1).replace(/[.,]/g, '')
+}
+
+/**
  * Tolker et konsentrasjonsinnslag. Godtar både norsk desimalkomma og punktum,
  * og mellomrom som tusenskille. Returnerer `null` når teksten ikke er et tall.
  */

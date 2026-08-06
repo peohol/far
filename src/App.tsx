@@ -83,7 +83,10 @@ export default function App() {
             query={state.query}
             hits={hits}
             onQueryChange={(value) => dispatch({ type: 'sett-sok', value })}
-            onSelect={(analyte) => dispatch({ type: 'velg-analytt', analyte })}
+            onSelect={(analyte) => {
+              setCopyError(null)
+              dispatch({ type: 'velg-analytt', analyte })
+            }}
             onReset={() => dispatch({ type: 'nullstill' })}
           />
         )}
@@ -93,7 +96,10 @@ export default function App() {
             analyte={state.analyte}
             value={state.concentration}
             error={copyError}
-            onChange={(value) => dispatch({ type: 'sett-konsentrasjon', value })}
+            onChange={(value) => {
+              setCopyError(null)
+              dispatch({ type: 'sett-konsentrasjon', value })
+            }}
             onBack={() => dispatch({ type: 'tilbake' })}
             onCopy={() => void copyComment()}
           />

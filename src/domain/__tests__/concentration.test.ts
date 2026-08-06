@@ -6,6 +6,7 @@ import {
   isOutsideMeasuringRange,
   levelComment,
   parseConcentration,
+  sanitiseConcentrationInput,
 } from '../concentration'
 import type { Analyte } from '../../types'
 
@@ -26,6 +27,34 @@ describe('parseConcentration', () => {
     expect(parseConcentration('')).toBeNull()
     expect(parseConcentration('abc')).toBeNull()
     expect(parseConcentration('1,2,3')).toBeNull()
+  })
+})
+
+describe('sanitiseConcentrationInput', () => {
+  it('slipper gjennom sifre og ett desimalskille', () => {
+    expect(sanitiseConcentrationInput('1799')).toBe('1799')
+    expect(sanitiseConcentrationInput('0,6')).toBe('0,6')
+    expect(sanitiseConcentrationInput('0.6')).toBe('0.6')
+    expect(sanitiseConcentrationInput('12,')).toBe('12,')
+  })
+
+  it('fjerner alt annet enn sifre og skilletegn', () => {
+    expect(sanitiseConcentrationInput('12 mg/L')).toBe('12')
+    expect(sanitiseConcentrationInput('-5')).toBe('5')
+  })
+
+  it('beholder bare det første skilletegnet, uansett hvilket', () => {
+    expect(sanitiseConcentrationInput('1,2.3')).toBe('1,23')
+    expect(sanitiseConcentrationInput('1.2,3')).toBe('1.23')
+    expect(sanitiseConcentrationInput('1,2,3')).toBe('1,23')
+    expect(sanitiseConcentrationInput('1.2.3')).toBe('1.23')
+  })
+
+  it('lar alt som slipper gjennom være noe parseConcentration godtar', () => {
+    for (const rå of ['1,2.3', '1.2,3', '1,2,3', '12,5', '0.6', '9', '3,', '.5', ',5']) {
+      const renset = sanitiseConcentrationInput(rå)
+      expect(parseConcentration(renset), `«${rå}» ble «${renset}»`).not.toBeNull()
+    }
   })
 })
 

@@ -461,9 +461,38 @@
   min-height: 3.6rem;
 }
 
-.feil {
+/* Reserveløsning når utklippstavlen er utilgjengelig: kommentaren må kunne
+   markeres og kopieres for hånd. */
+.manuellKopi {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--rom-2);
+  width: min(100%, 46rem);
+  padding: var(--rom-3);
+  text-align: left;
+  background: var(--niva-over-flate);
+  border: var(--kant-tykk) solid var(--niva-over-linje);
+  border-radius: var(--runding-m);
+}
+
+.manuellKopi__melding {
   font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
   color: var(--niva-over-blekk);
+}
+
+.manuellKopi__tekst {
+  width: 100%;
+  padding: var(--rom-2);
+  font-family: var(--skrift);
+  font-size: var(--tekst-s);
+  line-height: 1.5;
+  resize: vertical;
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-s);
 }
 
 /* --- Steg 4: lim inn ---------------------------------------------------- */

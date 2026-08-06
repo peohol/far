@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Button } from './Button'
 import { StepBar } from './StepBar'
 import { LevelIndicator } from './LevelIndicator'
+import { ManualCopy } from './ManualCopy'
 import { BackIcon, CopyIcon, PhoneIcon, WarningIcon } from './icons'
 import {
   classify,
@@ -9,6 +10,7 @@ import {
   isOutsideMeasuringRange,
   levelComment,
   parseConcentration,
+  sanitiseConcentrationInput,
 } from '../domain/concentration'
 import type { Analyte } from '../types'
 
@@ -19,11 +21,6 @@ export interface ConcentrationStepProps {
   onBack: () => void
   onCopy: () => void
   error: string | null
-}
-
-/** Sifre, ett desimalskille og ingenting annet. */
-function sanitise(input: string): string {
-  return input.replace(/[^\d.,]/g, '').replace(/[.,]/g, (m, i, s) => (s.indexOf(m) === i ? m : ''))
 }
 
 /**
@@ -46,6 +43,7 @@ export function ConcentrationStep({
 
   const tall = parseConcentration(value)
   const level = tall === null ? null : classify(analyte, tall)
+  const kommentar = level === null ? null : levelComment(analyte, level).kommentar
   const ringer = tall !== null && isAboveCallLimit(analyte, tall)
   const utenforMaleomrade = tall !== null && isOutsideMeasuringRange(analyte, tall)
 
@@ -79,7 +77,7 @@ export function ConcentrationStep({
             type="text"
             inputMode="decimal"
             value={value}
-            onChange={(e) => onChange(sanitise(e.target.value))}
+            onChange={(e) => onChange(sanitiseConcentrationInput(e.target.value))}
             autoComplete="off"
             placeholder="0"
           />
@@ -88,7 +86,7 @@ export function ConcentrationStep({
       </div>
 
       <div className="status">
-        {level && <LevelIndicator level={level} comment={levelComment(analyte, level).kommentar} />}
+        {level && kommentar && <LevelIndicator level={level} comment={kommentar} />}
 
         {ringer && (
           <p className="ringegrense">
@@ -111,11 +109,7 @@ export function ConcentrationStep({
             Kopier kommentar nå
           </Button>
         )}
-        {error && (
-          <p className="feil" role="alert">
-            {error}
-          </p>
-        )}
+        {error && kommentar && <ManualCopy message={error} comment={kommentar} />}
       </div>
     </section>
   )
