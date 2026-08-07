@@ -73,12 +73,16 @@ export function BackIcon(props: IconProps) {
   )
 }
 
-/** Kopier: to ark som ligger delvis oppå hverandre. */
+/**
+ * Kopiert: to ark som ligger delvis oppå hverandre. Arket bak er tegnet bare
+ * der det stikker fram, så det møter kanten på arket foran i stedet for å bli
+ * liggende under det.
+ */
 export function CopyIcon(props: IconProps) {
   return (
     <Icon {...props}>
       <rect x="12" y="12" width="17" height="17" rx="3" />
-      <path d="M7 20H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v1" />
+      <path d="M12 20H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v6" />
     </Icon>
   )
 }

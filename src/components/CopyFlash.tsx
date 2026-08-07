@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import { CheckIcon } from './icons'
+import { CopyIcon } from './icons'
 import type { Flash } from '../hooks/useCopyFlash'
 
 export interface CopyFlashProps {
@@ -27,7 +27,7 @@ export function CopyFlash({ flash, varighet }: CopyFlashProps) {
       }
       aria-hidden="true"
     >
-      <CheckIcon className="kopiblink__ikon" />
+      <CopyIcon className="kopiblink__ikon" />
       Kopiert
     </div>
   )

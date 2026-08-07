@@ -5,14 +5,13 @@ export type Theme = 'lyst' | 'moerkt'
 const LAGRINGSNOEKKEL = 'far:tema'
 
 function initialTheme(): Theme {
-  const lagret = document.documentElement.dataset.tema
-  return lagret === 'moerkt' ? 'moerkt' : 'lyst'
+  return document.documentElement.dataset.tema === 'lyst' ? 'lyst' : 'moerkt'
 }
 
 /**
- * Lyst eller mørkt tema. Startverdien settes av et lite skript i index.html —
- * fra lagret valg, ellers fra systeminnstillingen — slik at siden aldri
- * blinker i feil tema før React har rukket å montere.
+ * Lyst eller mørkt tema. Mørkt er standard; har brukeren valgt selv, gjelder
+ * det valget. Startverdien settes av et lite skript i index.html, slik at
+ * siden aldri blinker i feil tema før React har rukket å montere.
  */
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(initialTheme)

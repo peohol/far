@@ -39,6 +39,9 @@ Knappen med tastatursymbol øverst til høyre viser hurtigtastmerkene i UI-et.
 Den er av som standard; tastene virker uansett. Tallene på søkealternativene
 står alltid, siden de endrer seg fra søk til søk.
 
+Appen står i mørkt tema som standard. Knappen ved siden av bytter til lyst, og
+valget huskes til neste gang.
+
 ## Struktur
 
 ```
