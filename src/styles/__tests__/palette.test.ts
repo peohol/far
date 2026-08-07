@@ -29,6 +29,7 @@ const TEMAER = {
 
 /** [forgrunn, bakgrunn, minstekrav, hva det er] */
 const KRAV: [string, string, number, string][] = [
+  ['--blekk-sterk', '--flate-bunn', 4.5, 'analyttnavn i søkealternativene'],
   ['--blekk', '--flate-bunn', 4.5, 'brødtekst på sidebakgrunn'],
   ['--blekk', '--flate', 4.5, 'brødtekst på kort og tooltip'],
   ['--blekk', '--flate-hevet', 4.5, 'brødtekst på hevet flate'],

@@ -63,6 +63,8 @@
   --linje: hsl(212 20% 84%);
   --linje-sterk: hsl(212 18% 55%);
 
+  /* Rein svart, til det ene ordet som skal leses først av alt på skjermen. */
+  --blekk-sterk: hsl(0 0% 0%);
   --blekk: hsl(215 32% 14%);
   --blekk-dempet: hsl(215 14% 38%);
   --blekk-svak: hsl(215 12% 50%);
@@ -108,6 +110,8 @@
   --linje: hsl(216 16% 26%);
   --linje-sterk: hsl(216 14% 42%);
 
+  /* Rein hvit — samme rolle som rein svart i det lyse temaet. */
+  --blekk-sterk: hsl(0 0% 100%);
   --blekk: hsl(210 32% 95%);
   --blekk-dempet: hsl(213 16% 72%);
   --blekk-svak: hsl(213 12% 60%);

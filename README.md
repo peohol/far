@@ -26,6 +26,12 @@ Datasettet er sjekket inn, så det trengs bare når PDF-en endres.
 | 3 | Velg hvilket konsentrasjonsbånd svaret havner i — kommentaren kopieres | `1`–`4` |
 | 4 | Lim inn kommentaren på analyttkoden som vises | `Enter`/`Space` avslutter og nullstiller |
 
+Alternativene i steg 2 setter moderstoffet størst og sterkest — rein hvit i
+mørkt tema, rein svart i lyst. Analyttkoden står i en liten pille i samme farge
+som tallmerket, og metabolittene i en sumanalyse står under moderstoffet med
+mindre og dempet skrift. Koden og metabolittene er stort sett mindre kjent enn
+moderstoffet, så det er moderstoffet som skal kunne leses av på et blikk.
+
 Peker eller tastaturfokus på et bånd viser kommentaren som blir kopiert, i et
 tips over knappene. Når kommentaren er kopiert, kvitteres det med et blink ved
 knappen som ble brukt. Blinket starter der og fortsetter et lite øyeblikk inn i
@@ -50,7 +56,7 @@ src/data/analytter.json   Generert datasett (sjekket inn)
 src/data/aliaser.json     Håndholdte ekstra søkeord per analyttkode
 src/types.ts              Datamodellen
 src/state.ts              Tilstandsmaskinen for de tre stegene
-src/domain/               Bånd, klassifisering, søk, fargespredning, kontrast
+src/domain/               Bånd, klassifisering, søk, navn, fargespredning, kontrast
 src/hooks/                Tastatur, tema, hurtigtastmerker, utklippstavle
 src/components/           Stegene, felles kort/pille/knapp/ikoner
 src/styles/               tokens.css (design) + base.css + components.css
