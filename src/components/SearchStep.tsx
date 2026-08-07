@@ -133,18 +133,16 @@ function Options({
  *
  * Moderstoffet står størst og sterkest: det er det brukeren kjenner igjen, og
  * det som skiller alternativene fra hverandre raskest. Koden og eventuelle
- * metabolitter er mindre kjent og står derfor dempet — koden i en pille i
- * alternativets egen farge, metabolittene på hver sin linje under.
+ * metabolitter er mindre kjent og står derfor dempet — koden i en pille over
+ * navnet, i alternativets egen farge, metabolittene på hver sin linje under.
  */
 function Name({ analyte }: { analyte: Analyte }) {
   const { moderstoff, metabolitter } = splitName(analyte)
 
   return (
     <span className="alternativ__tekst">
-      <span className="alternativ__topp">
-        <span className="alternativ__navn">{moderstoff}</span>
-        <span className="alternativ__kode">{analyte.kode}</span>
-      </span>
+      <span className="alternativ__kode">{analyte.kode}</span>
+      <span className="alternativ__navn">{moderstoff}</span>
       {metabolitter.length > 0 && (
         <span className="alternativ__metabolitter">
           {metabolitter.map((m) => (

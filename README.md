@@ -27,10 +27,11 @@ Datasettet er sjekket inn, så det trengs bare når PDF-en endres.
 | 4 | Lim inn kommentaren på analyttkoden som vises | `Enter`/`Space` avslutter og nullstiller |
 
 Alternativene i steg 2 setter moderstoffet størst og sterkest — rein hvit i
-mørkt tema, rein svart i lyst. Analyttkoden står i en liten pille i samme farge
-som tallmerket, og metabolittene i en sumanalyse står under moderstoffet med
-mindre og dempet skrift. Koden og metabolittene er stort sett mindre kjent enn
-moderstoffet, så det er moderstoffet som skal kunne leses av på et blikk.
+mørkt tema, rein svart i lyst. Analyttkoden beholder plassen sin øverst, men
+står i en liten pille i samme farge som tallmerket, og metabolittene i en
+sumanalyse står under moderstoffet med mindre og dempet skrift. Koden og
+metabolittene er stort sett mindre kjent enn moderstoffet, så det er
+moderstoffet som skal kunne leses av på et blikk.
 
 Peker eller tastaturfokus på et bånd viser kommentaren som blir kopiert, i et
 tips over knappene. Når kommentaren er kopiert, kvitteres det med et blink ved

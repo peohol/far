@@ -179,31 +179,14 @@
 .alternativ__tekst {
   display: flex;
   flex-direction: column;
-  gap: 0.15em;
+  align-items: flex-start;
+  gap: 0.2em;
   min-width: 0;
 }
 
-/* Navnet og koden deler linje. Koden er kort, og en linje spart holder
-   alternativene lave nok til at ti av dem får plass uten å skrolles. */
-.alternativ__topp {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--rom-2);
-}
-
-/* Moderstoffet: størst, tyngst og med sterkeste blekket i temaet. Det er
-   navnet man kjenner igjen, og alternativene skilles fra hverandre på det. */
-.alternativ__navn {
-  font-size: var(--tekst-l);
-  font-weight: var(--vekt-medium);
-  line-height: 1.15;
-  color: var(--blekk-sterk);
-  max-width: 22ch;
-}
-
-/* Koden er en oppslagsnøkkel få kan utenat, så den står som en liten pille i
-   samme farge som tallmerket i stedet for å konkurrere med navnet. */
+/* Koden er en oppslagsnøkkel få kan utenat. Den beholder plassen sin øverst,
+   men står som en liten pille i samme farge som tallmerket i stedet for å
+   konkurrere med navnet under. */
 .alternativ__kode {
   font-family: var(--skrift-mono);
   font-size: var(--tekst-xs);
@@ -214,6 +197,16 @@
   color: var(--alt-ink);
   background: var(--alt-solid);
   border-radius: var(--runding-full);
+}
+
+/* Moderstoffet: størst, tyngst og med sterkeste blekket i temaet. Det er
+   navnet man kjenner igjen, og alternativene skilles fra hverandre på det. */
+.alternativ__navn {
+  font-size: var(--tekst-l);
+  font-weight: var(--vekt-medium);
+  line-height: 1.15;
+  color: var(--blekk-sterk);
+  max-width: 22ch;
 }
 
 /* Metabolittene står under moderstoffet, én per linje: de er det minst kjente
