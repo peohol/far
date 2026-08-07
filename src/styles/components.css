@@ -342,22 +342,68 @@
   color: var(--blekk-dempet);
 }
 
+/* Båndene er én sammenhengende skala, og et bånd som havner alene på linje to
+   leses lett som noe annet enn de andre. Raden holdes derfor på én linje:
+   knappene deler bredden i kortet likt mellom seg, og skriften følger ruta hver
+   av dem får. `cqi` er 1 % av bredden på raden, og `--antall` settes av
+   BandStep.
+
+   Grensen går ved `--band-minst`. Under den ville tallene måttet krympe under
+   det lesbare for å holde linja, og da er det bedre å bryte raden enn å gjøre
+   et konsentrasjonsintervall vanskelig å lese. Det skjer først på skjermer
+   smalere enn en mobil på høykant; på et vindu i vanlig bruk står knappene
+   alltid på én linje. */
 .band {
+  --band-luft: clamp(0.3rem, 1.2cqi, 0.9rem);
+  --band-rute: calc((100cqi - (var(--antall, 3) - 1) * var(--band-luft)) / var(--antall, 3));
+  /* Hvor bred den bredeste knappen er, målt i sin egen skriftstørrelse: ikon,
+     det lengste tallet appen kan vise («1001 – 1099»), luft og innrykk. Målt i
+     nettleseren med god margin, siden skriften varierer fra maskin til maskin. */
+  --band-innhold: 10.5;
+  --band-minst: 0.7rem;
+
+  position: relative;
+  container-type: inline-size;
   display: flex;
+  /* Bryting er tillatt, men `min-width` under gjør at det først slår inn når
+     én linje ikke lenger kan holdes med lesbare tall. */
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--rom-3);
+  gap: var(--band-luft);
   margin: 0;
   width: 100%;
 }
 
-.bandknapp {
+/* Hurtigtastmerkene står inne i knappen og krever sin egen plass. */
+.band--merker {
+  --band-innhold: 12.2;
+}
+
+.band > li {
   display: flex;
+  /* Knappene deler bredden likt, men aldri i mindre biter enn tallene trenger
+     for å stå lesbare. Det er den grensen som avgjør når raden brytes. */
+  flex: 1 1 0;
+  min-width: min(100%, calc(var(--band-innhold) * var(--band-minst)));
+  /* På en brutt rad skal ikke den siste knappen bli liggende alene i full
+     bredde. Ingen knapp trenger mer plass enn tallene tar ved største skrift,
+     og på én linje er ruta alltid smalere enn dette. */
+  max-width: calc(var(--band-innhold) * var(--tekst-l));
+}
+
+.bandknapp {
+  position: relative;
+  display: flex;
+  flex: 1;
   align-items: center;
-  gap: var(--rom-2);
-  height: 100%;
-  padding: var(--rom-3) var(--rom-4);
-  font-size: var(--tekst-l);
+  justify-content: center;
+  gap: 0.35em;
+  padding: 0.5em 0.7em;
+  font-size: clamp(
+    var(--band-minst),
+    calc(var(--band-rute) / var(--band-innhold)),
+    var(--tekst-l)
+  );
   font-weight: var(--vekt-tung);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -380,6 +426,71 @@
 
 .bandknapp__ikon {
   font-size: 1.25em;
+}
+
+/* --- Kommentaren som blir kopiert -------------------------------------- */
+
+/* Tipset spenner over hele raden i stedet for å henge under hver enkelt
+   knapp: kommentarene er lange, og et tips som følger knappen ville blitt
+   klippet i kanten av vinduet på båndene ytterst. Knappene er like brede, så
+   pekeren under tipset er nok til å vise hvilken knapp det gjelder. */
+.bandtips {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + var(--rom-4));
+  z-index: 5;
+  padding: var(--rom-3) var(--rom-4);
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-normal);
+  line-height: 1.5;
+  text-align: left;
+  text-wrap: pretty;
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-m);
+  box-shadow: var(--skygge-hevet);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.4rem);
+  /* Tipset skal aldri stå i veien for knappen det hører til. */
+  pointer-events: none;
+  transition:
+    opacity var(--fart) var(--kurve),
+    transform var(--fart) var(--kurve),
+    visibility var(--fart);
+}
+
+/* Pekeren fra tipset ned mot knappen. Den henger på knappen selv, så den
+   treffer midt på uansett hvor mange bånd analytten har. */
+.bandknapp::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + var(--rom-4) - 0.45rem);
+  width: 0.9rem;
+  height: 0.9rem;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-top: 0;
+  border-left: 0;
+  transform: translateX(-50%) rotate(45deg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fart) var(--kurve);
+}
+
+.bandknapp:hover + .bandtips,
+.bandknapp:focus-visible + .bandtips {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.bandknapp:hover::after,
+.bandknapp:focus-visible::after {
+  opacity: 1;
 }
 
 .bandknapp--under {
@@ -478,6 +589,64 @@
   flex-direction: column;
   align-items: center;
   gap: var(--rom-3);
+}
+
+/* --- Kvittering for kopieringen ----------------------------------------- */
+
+/* Blinket legges der båndknappen står, i vindukoordinater, og lever videre
+   etter at limsteget har overtatt. Derfor er det festet til vinduet og ikke
+   til noe i steget under. */
+.kopiblink {
+  position: fixed;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  padding: var(--rom-2) var(--rom-4);
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  white-space: nowrap;
+  color: var(--aksent-blekk);
+  background: var(--aksent);
+  border-radius: var(--runding-full);
+  box-shadow: var(--skygge-hevet);
+  pointer-events: none;
+  animation: kopiblink var(--blink-tid) var(--kurve) both;
+}
+
+.kopiblink__ikon {
+  font-size: 1.2em;
+}
+
+/* Spretter ut av knappen, står stille lenge nok til å leses, og siger opp og
+   ut igjen. `translate(-50%, …)` sentrerer den over knappen. */
+@keyframes kopiblink {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20%) scale(0.7);
+  }
+  22% {
+    opacity: 1;
+    transform: translate(-50%, -95%) scale(1);
+  }
+  62% {
+    opacity: 1;
+    transform: translate(-50%, -105%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -155%) scale(0.94);
+  }
+}
+
+/* Uten bevegelse blir kvitteringen stående stille over knappen i stedet, og
+   forsvinner når tiden er ute. */
+@media (prefers-reduced-motion: reduce) {
+  .kopiblink {
+    animation-name: none;
+    opacity: 1;
+    transform: translate(-50%, -110%);
+  }
 }
 
 /* Reserveløsning når utklippstavlen er utilgjengelig: kommentaren må kunne

@@ -1,7 +1,7 @@
 import { Button } from './Button'
 import { Card } from './Card'
 import { StepBar } from './StepBar'
-import { BackIcon, DoneIcon, PasteIcon, PhoneIcon } from './icons'
+import { BackIcon, PasteIcon, PhoneIcon } from './icons'
 import type { Band } from '../domain/bands'
 import type { Analyte } from '../types'
 
@@ -38,7 +38,7 @@ export function PasteStep({ analyte, band, onBack, onFinish }: PasteStepProps) {
       </Card>
 
       <div className="handling">
-        <Button icon={<DoneIcon />} shortcut="Enter" onClick={onFinish}>
+        <Button shortcut="Enter" onClick={onFinish}>
           Ferdig
         </Button>
       </div>

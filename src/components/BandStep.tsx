@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, type CSSProperties } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
 import { Pill } from './Pill'
@@ -8,6 +8,7 @@ import { ManualCopy } from './ManualCopy'
 import { ArrowDownIcon, ArrowUpIcon, BackIcon, CheckIcon, PhoneIcon } from './icons'
 import { bands as bandsOf, type Band } from '../domain/bands'
 import { indexToDigit } from '../hooks/useKeyboard'
+import { useShortcutVisibility } from '../hooks/useShortcutVisibility'
 import type { Analyte } from '../types'
 
 export interface BandStepProps {
@@ -32,6 +33,7 @@ const IKON = {
  */
 export function BandStep({ analyte, onPick, onBack, failed }: BandStepProps) {
   const bands = useMemo(() => bandsOf(analyte), [analyte])
+  const { visible: merker } = useShortcutVisibility()
 
   return (
     <section className="steg" aria-label="Velg konsentrasjon">
@@ -61,21 +63,38 @@ export function BandStep({ analyte, onPick, onBack, failed }: BandStepProps) {
 
       <Card className="bandkort">
         <h2 className="bandkort__merke">Målt konsentrasjon</h2>
-        <ul className="band">
+        {/* Antallet bånd varierer med analytten, og knappene skal stå på én
+            linje. CSS-en deler bredden på antallet for å finne hvor stor
+            skriften kan være — og trenger å vite om hurtigtastmerkene tar plass
+            inne i knappene. */}
+        <ul
+          className={`band${merker ? ' band--merker' : ''}`}
+          style={{ '--antall': bands.length } as CSSProperties}
+        >
           {bands.map((band, i) => {
             const Icon = IKON[band.ring && band.niva !== 'over' ? 'ring' : band.tone]
             return (
               <li key={band.key}>
                 <button
                   type="button"
+                  // Kvitteringen for kopieringen legges der knappen står, og
+                  // finner den herfra — også når båndet ble valgt med tastaturet.
+                  data-band={band.key}
                   className={`bandknapp bandknapp--${band.tone}`}
                   onClick={() => onPick(band)}
                   aria-keyshortcuts={indexToDigit(i)}
+                  aria-describedby={`bandtips-${band.key}`}
                 >
                   <Icon className="bandknapp__ikon" />
                   <span className="bandknapp__verdi">{band.label}</span>
                   <Shortcut>{indexToDigit(i)}</Shortcut>
                 </button>
+                {/* Kommentaren som havner på utklippstavlen, som tooltip over
+                    raden. Den ligger utenfor knappen, slik at den kan spenne
+                    over hele kortet uten å styre hvor bred knappen blir. */}
+                <p className="bandtips" id={`bandtips-${band.key}`} role="tooltip">
+                  {band.kommentar}
+                </p>
               </li>
             )
           })}

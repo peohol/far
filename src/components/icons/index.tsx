@@ -73,12 +73,16 @@ export function BackIcon(props: IconProps) {
   )
 }
 
-/** Kopier: to ark som ligger delvis oppå hverandre. */
+/**
+ * Kopiert: to ark som ligger delvis oppå hverandre. Arket bak er tegnet bare
+ * der det stikker fram, så det møter kanten på arket foran i stedet for å bli
+ * liggende under det.
+ */
 export function CopyIcon(props: IconProps) {
   return (
     <Icon {...props}>
       <rect x="12" y="12" width="17" height="17" rx="3" />
-      <path d="M7 20H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v1" />
+      <path d="M12 20H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v6" />
     </Icon>
   )
 }
@@ -91,16 +95,6 @@ export function PasteIcon(props: IconProps) {
       <rect x="11" y="2.5" width="10" height="5.5" rx="1.8" />
       <path d="M16 13.5v8" />
       <path d="M12.5 18 16 21.5 19.5 18" />
-    </Icon>
-  )
-}
-
-/** Ferdig: hake i en avrundet firkant. */
-export function DoneIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <rect x="3.5" y="3.5" width="25" height="25" rx="7" opacity="0.55" />
-      <path d="M10 16.5 14.4 21 22.5 11.5" />
     </Icon>
   )
 }
