@@ -12,6 +12,7 @@
   /* --- Skriftstørrelser -------------------------------------------------
      Skalerer med vindusbredden, så UI-et er like lesbart i halvt som i
      maksimert vindu uten at noe må skrolles. */
+  --tekst-xxs: clamp(0.66rem, 0.62rem + 0.13vw, 0.77rem);
   --tekst-xs: clamp(0.72rem, 0.68rem + 0.14vw, 0.84rem);
   --tekst-s: clamp(0.88rem, 0.83rem + 0.22vw, 1.05rem);
   --tekst-m: clamp(1rem, 0.92rem + 0.34vw, 1.28rem);

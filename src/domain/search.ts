@@ -31,12 +31,16 @@ interface SearchTerm {
  * Koden veier tyngst fordi den er det brukeren skriver når hen vet hva hen vil.
  * Delanalyttene er med hver for seg, slik at en sumanalyse kan finnes på
  * navnet til hvilken som helst av delene den består av.
+ *
+ * `visningsnavn` er bevisst holdt utenfor. Det er det eneste feltet som bærer
+ * «Sum: », og med det som søkeord ble «s» og «sum» treff på hver eneste
+ * sumanalyse — ord om formen på analysen, ikke om stoffet man leter etter.
+ * Søket skal bare treffe koder, moderstoffer og metabolitter.
  */
 function termsFor(analyte: Analyte): SearchTerm[] {
   return [
     { value: normalise(analyte.kode), weight: 0 },
     { value: normalise(analyte.navn), weight: 1 },
-    { value: normalise(analyte.visningsnavn), weight: 2 },
     ...analyte.komponenter.map((k) => ({ value: normalise(k), weight: 1 })),
     ...analyte.aliaser.map((a) => ({ value: normalise(a), weight: 2 })),
   ]
@@ -78,9 +82,8 @@ export interface SearchHit {
 
 /**
  * Søker i koder, navn, delanalytter og aliaser. Alle ordene i søket må treffe,
- * slik at «sum amitriptylin» og «amitriptylin nortriptylin» begge finner
- * sumanalysen. Resultatet er sortert med beste treff først og kuttet ved
- * {@link MAX_RESULTS}.
+ * slik at «amitriptylin nortriptylin» finner sumanalysen de to inngår i.
+ * Resultatet er sortert med beste treff først og kuttet ved {@link MAX_RESULTS}.
  */
 export function search(query: string, pool: Analyte[]): SearchHit[] {
   const tokens = normalise(query).split(/\s+/).filter(Boolean)

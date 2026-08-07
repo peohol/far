@@ -186,14 +186,17 @@
 
 /* Koden er en oppslagsnøkkel få kan utenat. Den beholder plassen sin øverst,
    men står som en liten pille i samme farge som tallmerket i stedet for å
-   konkurrere med navnet under. */
+   konkurrere med navnet under. Luften under pillen er større enn den mellom
+   navnet og metabolittene, så pillen leses som sitt eget lag over navnet i
+   stedet for som første linje i det. */
 .alternativ__kode {
   font-family: var(--skrift-mono);
-  font-size: var(--tekst-xs);
+  font-size: var(--tekst-xxs);
   font-weight: var(--vekt-tung);
   line-height: 1;
   letter-spacing: 0.04em;
   padding: 0.35em 0.6em;
+  margin-bottom: var(--rom-1);
   color: var(--alt-ink);
   background: var(--alt-solid);
   border-radius: var(--runding-full);
