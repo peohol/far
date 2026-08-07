@@ -37,8 +37,17 @@ describe('search', () => {
   })
 
   it('krever at alle ordene i søket treffer', () => {
-    expect(codes('sum amitriptylin')).toEqual(['AMTNORSUM'])
+    expect(codes('amitriptylin nortriptylin')).toEqual(['AMTNORSUM'])
     expect(codes('amitriptylin sertralin')).toHaveLength(0)
+  })
+
+  it('treffer ikke på «Sum: » i visningsnavnet', () => {
+    // «Sum: » sier noe om formen på analysen, ikke om stoffet man leter etter,
+    // og skal ikke dra med seg hver eneste sumanalyse på et par bokstaver.
+    expect(codes('sum')).toEqual([])
+    expect(codes('su')).toEqual([])
+    expect(codes('s')).toEqual(['SERT'])
+    expect(codes('sum kariprazin')).toEqual([])
   })
 
   it('bruker aliaser fra datasettet', () => {
