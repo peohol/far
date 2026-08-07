@@ -3,6 +3,7 @@ import { Button } from './Button'
 import { StepBar } from './StepBar'
 import { ResetIcon, SearchIcon } from './icons'
 import { indexToDigit } from '../hooks/useKeyboard'
+import { splitName } from '../domain/names'
 import { optionColourVars } from '../domain/optionColours'
 import type { SearchHit } from '../domain/search'
 import type { Analyte } from '../types'
@@ -119,13 +120,38 @@ function Options({
             <span className="alternativ__tall" aria-hidden="true">
               {indexToDigit(i)}
             </span>
-            <span className="alternativ__tekst">
-              <span className="alternativ__kode">{hit.analyte.kode}</span>
-              <span className="alternativ__navn">{hit.analyte.navn}</span>
-            </span>
+            <Name analyte={hit.analyte} />
           </button>
         </li>
       ))}
     </ul>
+  )
+}
+
+/**
+ * Navnet på ett alternativ.
+ *
+ * Moderstoffet står størst og sterkest: det er det brukeren kjenner igjen, og
+ * det som skiller alternativene fra hverandre raskest. Koden og eventuelle
+ * metabolitter er mindre kjent og står derfor dempet — koden i en pille over
+ * navnet, i alternativets egen farge, metabolittene på hver sin linje under.
+ */
+function Name({ analyte }: { analyte: Analyte }) {
+  const { moderstoff, metabolitter } = splitName(analyte)
+
+  return (
+    <span className="alternativ__tekst">
+      <span className="alternativ__kode">{analyte.kode}</span>
+      <span className="alternativ__navn">{moderstoff}</span>
+      {metabolitter.length > 0 && (
+        <span className="alternativ__metabolitter">
+          {metabolitter.map((m) => (
+            <span className="alternativ__metabolitt" key={m}>
+              + {m}
+            </span>
+          ))}
+        </span>
+      )}
+    </span>
   )
 }

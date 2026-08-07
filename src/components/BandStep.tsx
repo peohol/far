@@ -7,6 +7,7 @@ import { Shortcut } from './Shortcut'
 import { ManualCopy } from './ManualCopy'
 import { ArrowDownIcon, ArrowUpIcon, BackIcon, CheckIcon, PhoneIcon } from './icons'
 import { bands as bandsOf, type Band } from '../domain/bands'
+import { displayName } from '../domain/names'
 import { indexToDigit } from '../hooks/useKeyboard'
 import { useShortcutVisibility } from '../hooks/useShortcutVisibility'
 import type { Analyte } from '../types'
@@ -45,7 +46,7 @@ export function BandStep({ analyte, onPick, onBack, failed }: BandStepProps) {
 
       <Card align="start" className="analyttkort">
         <Pill tone="kode">{analyte.kode}</Pill>
-        <h1 className="analytt__navn">{analyte.visningsnavn}</h1>
+        <h1 className="analytt__navn">{displayName(analyte)}</h1>
         <div className="analytt__grenser">
           {analyte.referanseomrade && (
             <Pill label="Referanseområde">

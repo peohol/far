@@ -179,20 +179,45 @@
 .alternativ__tekst {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2em;
   min-width: 0;
 }
 
+/* Koden er en oppslagsnøkkel få kan utenat. Den beholder plassen sin øverst,
+   men står som en liten pille i samme farge som tallmerket i stedet for å
+   konkurrere med navnet under. */
 .alternativ__kode {
   font-family: var(--skrift-mono);
-  font-size: var(--tekst-m);
+  font-size: var(--tekst-xs);
   font-weight: var(--vekt-tung);
-  letter-spacing: 0.02em;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  padding: 0.35em 0.6em;
+  color: var(--alt-ink);
+  background: var(--alt-solid);
+  border-radius: var(--runding-full);
 }
 
+/* Moderstoffet: størst, tyngst og med sterkeste blekket i temaet. Det er
+   navnet man kjenner igjen, og alternativene skilles fra hverandre på det. */
 .alternativ__navn {
-  font-size: var(--tekst-s);
-  color: var(--blekk-dempet);
+  font-size: var(--tekst-l);
+  font-weight: var(--vekt-medium);
+  line-height: 1.15;
+  color: var(--blekk-sterk);
   max-width: 22ch;
+}
+
+/* Metabolittene står under moderstoffet, én per linje: de er det minst kjente
+   av alt i alternativet, og skal kunne hoppes over med blikket. */
+.alternativ__metabolitter {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--tekst-s);
+  line-height: 1.3;
+  color: var(--blekk-dempet);
+  max-width: 24ch;
 }
 
 .ingen-treff {
