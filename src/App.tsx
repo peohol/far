@@ -48,6 +48,14 @@ export default function App() {
   const stage = stageOf(state)
   const hits = useMemo(() => search(state.query, analytes), [state.query])
 
+  // Tilstandsmaskinen trenger alternativene det nye søket gir for å se om det
+  // smalner inn til én analytt, så søket kjøres her og ikke først når steget
+  // tegnes opp. Datasettet er lite nok til at det ikke merkes.
+  const setQuery = useCallback((value: string) => {
+    const matches = search(value, analytes).map((hit) => hit.analyte)
+    dispatch({ type: 'sett-sok', value, matches })
+  }, [])
+
   const slippBildet = useCallback(() => {
     window.clearTimeout(stegbytte.current)
     setDveler(false)
@@ -91,7 +99,9 @@ export default function App() {
       if (buttonHasFocus()) return
       if (stage === 'search') {
         // Bare når det ikke er noe å velge mellom. Ellers får mellomrom
-        // skrives inn i søkefeltet som vanlig.
+        // skrives inn i søkefeltet som vanlig. Det ene alternativet velger som
+        // regel seg selv i det søket smalner inn til det; her står det igjen
+        // fordi brukeren nettopp kom tilbake fra den analytten.
         if (hits.length !== 1 || !hits[0]) return
         event.preventDefault()
         dispatch({ type: 'velg-analytt', analyte: hits[0].analyte })
@@ -157,7 +167,7 @@ export default function App() {
           <SearchStep
             query={state.query}
             hits={hits}
-            onQueryChange={(value) => dispatch({ type: 'sett-sok', value })}
+            onQueryChange={setQuery}
             onSelect={(analyte) => {
               setFailedCopy(null)
               dispatch({ type: 'velg-analytt', analyte })

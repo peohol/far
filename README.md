@@ -22,9 +22,19 @@ Datasettet er sjekket inn, så det trengs bare når PDF-en endres.
 | Steg | Hva som skjer | Taster |
 | --- | --- | --- |
 | 1 | Begynn å skrive navnet på en analytt eller kode | hvilken som helst bokstav |
-| 2 | Velg blant alternativene som passer søket | `1`–`9` og `0`, eller `Enter`/`Space` når det bare er ett igjen |
+| 2 | Velg blant alternativene som passer søket — er det bare ett igjen, går appen videre til det av seg selv | `1`–`9` og `0`, eller `Enter`/`Space` |
 | 3 | Velg hvilket konsentrasjonsbånd svaret havner i — kommentaren kopieres | `1`–`4` |
 | 4 | Lim inn kommentaren på analyttkoden som vises | `Enter`/`Space` avslutter og nullstiller |
+
+Smalner søket inn til én eneste analytt, er valget i praksis allerede tatt, og
+appen går videre uten at det trengs et tastetrykk til. Det skjer bare i selve
+overgangen fra noe annet enn ett alternativ til ett: kommer man tilbake med
+«Bytt analytt» eller `Esc`, blir søket stående som det var uten å sende
+brukeren rett inn igjen, og å skrive videre på det gjør heller ingenting. Ny
+sjanse får man når søket igjen gir noe annet enn ett alternativ — ved å slette
+tilbake til flere alternativer, eller tømme feltet helt. Det siste er veien inn
+igjen når det bare fantes ett alternativ hele veien, slik det gjør når bare én
+analytt passer den aller første bokstaven som skrives.
 
 Alternativene i steg 2 setter moderstoffet størst og sterkest — rein hvit i
 mørkt tema, rein svart i lyst. Analyttkoden beholder plassen sin øverst, men
