@@ -38,14 +38,13 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
   const resultat = useMemo(() => fortolkThc(inndata), [inndata])
   const kommentar = resultat.type === 'kommentar' ? resultat.kommentar : null
 
-  const sett = <K extends keyof typeof inndata>(felt: K, verdi: (typeof inndata)[K]) =>
+  // Reserveteksten for manuell kopiering gjelder kommentaren slik den var da
+  // kopieringen feilet. Endres noe i skjemaet, er den utdatert og må vekk —
+  // en gammel kommentar skal ikke bli liggende kopierbar under en ny.
+  const sett = <K extends keyof typeof inndata>(felt: K, verdi: (typeof inndata)[K]) => {
     setInndata((forrige) => ({ ...forrige, [felt]: verdi }))
-
-  // IRCAK-feltene tar bare imot talltegn. Søket hopper hit i det «th» er
-  // entydig, så den som skriver «thc-syre» i ett kjør skal ikke få resten av
-  // bokstavene inn i det autofokuserte feltet.
-  const settVerdi = (felt: 'aktuellVerdi' | 'forrigeVerdi', tekst: string) =>
-    sett(felt, tekst.replace(/[^0-9.,]/g, ''))
+    setFailedCopy(null)
+  }
 
   const nullstill = () => {
     setInndata(TOM_THC_INNDATA)
@@ -113,7 +112,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                     autoComplete="off"
                     spellCheck={false}
                     value={inndata.aktuellVerdi}
-                    onChange={(e) => settVerdi('aktuellVerdi', e.target.value)}
+                    onChange={(e) => sett('aktuellVerdi', e.target.value)}
                   />
                 </label>
                 <label className="thc-felt">
@@ -148,7 +147,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                         autoComplete="off"
                         spellCheck={false}
                         value={inndata.forrigeVerdi}
-                        onChange={(e) => settVerdi('forrigeVerdi', e.target.value)}
+                        onChange={(e) => sett('forrigeVerdi', e.target.value)}
                       />
                     </label>
                     <label className="thc-felt">
