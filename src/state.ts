@@ -13,16 +13,20 @@ export interface State {
   analyte: Analyte | null
   /** Nøkkelen til konsentrasjonsbåndet brukeren valgte, når kommentaren er kopiert. */
   bandKey: string | null
+  /** Om et enslig alternativ får velge seg selv. Se {@link narrow}. */
+  autoPick: boolean
 }
 
 export const initialState: State = {
   query: '',
   analyte: null,
   bandKey: null,
+  autoPick: true,
 }
 
 export type Action =
-  | { type: 'sett-sok'; value: string }
+  /** `matches` er analyttene det nye søket gir — se {@link narrow}. */
+  | { type: 'sett-sok'; value: string; matches: Analyte[] }
   | { type: 'velg-analytt'; analyte: Analyte }
   | { type: 'velg-band'; key: string }
   | { type: 'tilbake' }
@@ -41,10 +45,10 @@ export function isIdle(state: State): boolean {
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'sett-sok':
-      return { ...state, query: action.value }
+      return narrow(state, action.value, action.matches)
 
     case 'velg-analytt':
-      return { ...state, analyte: action.analyte, bandKey: null }
+      return pick(state, action.analyte)
 
     case 'velg-band':
       return { ...state, bandKey: action.key }
@@ -55,6 +59,28 @@ export function reducer(state: State, action: Action): State {
     case 'nullstill':
       return initialState
   }
+}
+
+function pick(state: State, analyte: Analyte): State {
+  return { ...state, analyte, bandKey: null }
+}
+
+/**
+ * Nytt søk. Smalner det inn til ett eneste alternativ, er valget i praksis
+ * allerede tatt, og appen går videre til analytten uten at brukeren må
+ * bekrefte det.
+ *
+ * Det skjer bare i selve overgangen fra noe annet enn ett alternativ til ett.
+ * Turen tilbake hit fra steg 2 rører ikke søket og lar derfor det ene
+ * alternativet stå — ellers ville «Bytt analytt» sendt brukeren rett inn igjen.
+ * Å skrive videre på et søk som alt bare gir ett alternativ gjør det heller
+ * ikke. Ny sjanse får man når søket igjen gir noe annet enn ett alternativ:
+ * ved å slette tilbake til flere alternativer, eller tømme feltet helt.
+ */
+function narrow(state: State, query: string, matches: Analyte[]): State {
+  const alone = matches.length === 1 ? matches[0] : undefined
+  const next: State = { ...state, query, autoPick: alone === undefined }
+  return alone && state.autoPick ? pick(next, alone) : next
 }
 
 /**
