@@ -677,6 +677,246 @@
   }
 }
 
+/* --- THC-syremodulen ---------------------------------------------------- */
+
+/* Modulen er ett skjema fra topp til bunn: inndatakortet, resultatkortet og
+   visualiseringen. Samme luft mellom kortene som mellom stegene ellers. */
+.thc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-5);
+  width: 100%;
+}
+
+.thc-ingress {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+  text-wrap: pretty;
+}
+
+.thc-skjema {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-3);
+  width: 100%;
+  margin-top: var(--rom-2);
+}
+
+.avkryssing {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-medium);
+  cursor: pointer;
+}
+
+.avkryssing input[type='checkbox'] {
+  width: 1.2em;
+  height: 1.2em;
+  margin: 0;
+  accent-color: var(--aksent);
+  cursor: pointer;
+}
+
+/* Prøvene side ved side når det er plass, under hverandre når det ikke er. */
+.thc-prover {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: var(--rom-3);
+  width: 100%;
+}
+
+.thc-prove {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-3);
+  min-inline-size: 0;
+  margin: 0;
+  padding: var(--rom-3) var(--rom-4) var(--rom-4);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-m);
+}
+
+.thc-prove legend {
+  padding: 0 var(--rom-1);
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.thc-felt {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-1);
+  width: 100%;
+}
+
+.thc-felt > span {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-dempet);
+}
+
+.thc-input {
+  width: 100%;
+  max-width: 14rem;
+  padding: var(--rom-2) var(--rom-3);
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-s);
+  transition: border-color var(--fart) var(--kurve);
+}
+
+.thc-input:hover {
+  border-color: var(--linje-sterk);
+}
+
+.thc-resultat__merke {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.thc-mangler {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  text-align: left;
+}
+
+.thc-mangler li {
+  position: relative;
+  padding-left: 1.2em;
+  font-size: var(--tekst-m);
+  color: var(--blekk-dempet);
+  text-wrap: pretty;
+}
+
+.thc-mangler li::before {
+  content: '';
+  position: absolute;
+  left: 0.15em;
+  top: 0.62em;
+  width: 0.45em;
+  height: 0.45em;
+  background: var(--varsel-linje);
+  border-radius: var(--runding-full);
+}
+
+/* Kommentaren slik den kopieres. Markerbar, i tilfelle man vil ta et utdrag. */
+.thc-kommentar {
+  font-size: var(--tekst-m);
+  line-height: 1.6;
+  text-align: left;
+  text-wrap: pretty;
+  user-select: text;
+}
+
+.thc-notis {
+  padding: var(--rom-2) var(--rom-3);
+  font-size: var(--tekst-s);
+  text-align: left;
+  text-wrap: pretty;
+  color: var(--varsel-blekk);
+  background: var(--varsel-flate);
+  border: var(--kant) solid var(--varsel-linje);
+  border-radius: var(--runding-s);
+}
+
+.thc-handling {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--rom-3);
+  width: 100%;
+  margin-top: var(--rom-2);
+}
+
+/* Kopier-knappen skal kunne stå avslått uten å friste: dempet, uten skygge. */
+.knapp:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  box-shadow: none;
+  transform: none;
+}
+
+/* --- Visualiseringen ---------------------------------------------------- */
+
+.thc-plot__figur {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.thc-plot__rute {
+  stroke: var(--linje);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+.thc-plot__verdi {
+  font-family: var(--skrift);
+  font-size: 16px;
+  fill: var(--blekk-dempet);
+}
+
+.thc-plot__kurve {
+  fill: none;
+  stroke-width: 3.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.thc-plot__kurve--gronn {
+  stroke: var(--niva-innenfor-linje);
+}
+
+.thc-plot__kurve--gul {
+  stroke: var(--niva-gul-linje);
+}
+
+.thc-plot__kurve--rod {
+  stroke: var(--niva-over-linje);
+}
+
+.thc-plot__punkt {
+  fill: var(--blekk-sterk);
+  stroke: var(--flate);
+  stroke-width: 2;
+}
+
+/* Etikettene får en «glorie» i flatens farge, så de står lesbare også der de
+   krysser en kurve eller rutenettet. */
+.thc-plot__etikett {
+  font-family: var(--skrift);
+  font-size: 17px;
+  font-weight: var(--vekt-tung);
+  fill: var(--blekk);
+  paint-order: stroke;
+  stroke: var(--flate);
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
+.thc-plot__akselnavn {
+  font-family: var(--skrift);
+  font-size: 17px;
+  font-weight: var(--vekt-medium);
+  fill: var(--blekk);
+}
+
 /* Reserveløsning når utklippstavlen er utilgjengelig: kommentaren må kunne
    markeres og kopieres for hånd. */
 .manuellKopi {

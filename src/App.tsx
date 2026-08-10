@@ -2,11 +2,13 @@ import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'r
 import { SearchStep } from './components/SearchStep'
 import { BandStep } from './components/BandStep'
 import { PasteStep } from './components/PasteStep'
+import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
 import { Toolbar } from './components/Toolbar'
 import { analytes } from './domain/analytes'
 import { bands as bandsOf, findBand, type Band } from './domain/bands'
 import { search } from './domain/search'
+import { THC_ANALYTT } from './domain/thc'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
 import { digitToIndex, useKeyboard } from './hooks/useKeyboard'
@@ -46,15 +48,21 @@ export default function App() {
   const stegbytte = useRef<number>()
 
   const stage = stageOf(state)
-  const hits = useMemo(() => search(state.query, analytes), [state.query])
+  // Søket dekker analyttene fra datasettet pluss THC-syre, som har sin egen
+  // fortolkningsmodul i stedet for konsentrasjonsbånd.
+  const pool = useMemo(() => [...analytes, THC_ANALYTT], [])
+  const hits = useMemo(() => search(state.query, pool), [state.query, pool])
 
   // Tilstandsmaskinen trenger alternativene det nye søket gir for å se om det
   // smalner inn til én analytt, så søket kjøres her og ikke først når steget
   // tegnes opp. Datasettet er lite nok til at det ikke merkes.
-  const setQuery = useCallback((value: string) => {
-    const matches = search(value, analytes).map((hit) => hit.analyte)
-    dispatch({ type: 'sett-sok', value, matches })
-  }, [])
+  const setQuery = useCallback(
+    (value: string) => {
+      const matches = search(value, pool).map((hit) => hit.analyte)
+      dispatch({ type: 'sett-sok', value, matches })
+    },
+    [pool],
+  )
 
   const slippBildet = useCallback(() => {
     window.clearTimeout(stegbytte.current)
@@ -184,6 +192,8 @@ export default function App() {
             failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
           />
         )}
+
+        {vist === 'thc' && <ThcStep onBack={back} copy={copy} flashAt={show} />}
 
         {vist === 'paste' && state.analyte && band && (
           <PasteStep analyte={state.analyte} band={band} onBack={back} onFinish={reset} />

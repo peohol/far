@@ -26,6 +26,10 @@ Datasettet er sjekket inn, så det trengs bare når PDF-en endres.
 | 3 | Velg hvilket konsentrasjonsbånd svaret havner i — kommentaren kopieres | `1`–`4` |
 | 4 | Lim inn kommentaren på analyttkoden som vises | `Enter`/`Space` avslutter og nullstiller |
 
+Én oppføring i søket tar en annen vei: **THC-syre** (kode `IRCAK`) går fra
+steg 2 til sin egen fortolkningsmodul i stedet for til konsentrasjonsbåndene —
+se [THC-syre i urin](#thc-syre-i-urin-ircak).
+
 Smalner søket inn til én eneste analytt, er valget i praksis allerede tatt, og
 appen går videre uten at det trengs et tastetrykk til. Det skjer bare i selve
 overgangen fra noe annet enn ett alternativ til ett: kommer man tilbake med
@@ -66,8 +70,9 @@ scripts/build_data.py     Leser kommentarer.pdf og bygger datasettet
 src/data/analytter.json   Generert datasett (sjekket inn)
 src/data/aliaser.json     Håndholdte ekstra søkeord per analyttkode
 src/types.ts              Datamodellen
-src/state.ts              Tilstandsmaskinen for de tre stegene
-src/domain/               Bånd, klassifisering, søk, navn, fargespredning, kontrast
+src/state.ts              Tilstandsmaskinen for stegene
+src/domain/               Bånd, klassifisering, søk, navn, fargespredning, kontrast,
+                          THC-fortolkning (thc.ts) og figurgrunnlaget (thcPlot.ts)
 src/hooks/                Tastatur, tema, hurtigtastmerker, utklippstavle
 src/components/           Stegene, felles kort/pille/knapp/ikoner
 src/styles/               tokens.css (design) + base.css + components.css
@@ -162,6 +167,59 @@ Disse lot seg ikke rette maskinelt. De ligger i `meta.avvik` i datasettet.
 Lamotrigin er oppgitt med stjerne på alle tallene i PDF-en, uten at fotnoten
 finnes i dokumentet. Datasettet tolker det som at analytten måles i **µmol/L**
 mens alle de andre måles i nmol/L, og setter `enhet` deretter.
+
+## THC-syre i urin (IRCAK)
+
+Søkes «THC-syre» eller «IRCAK» opp, går appen til en egen fortolkningsmodul i
+stedet for til konsentrasjonsbåndene. Modulen er en nettutgave av regnearket
+`originaldata/THC-COOH.xlsm` og vurderer om det har skjedd et nytt
+cannabisinntak, ved å sammenligne kreatininkorrigert THC-syrekonsentrasjon
+(IRCAK) i to prøver — eller, uten en tidligere prøve, ved å fortolke
+konsentrasjonen i den aktuelle prøven alene. Regnearket er fasit: kurver,
+grenser og kommentartekster er hentet derfra, og testene i
+`src/domain/__tests__/thc.test.ts` holder koden opp mot verdier lest rett ut
+av regnearkets celler.
+
+Modulen brukes gjerne mange prøver på rad. Kommentaren regnes derfor ut
+fortløpende mens feltene fylles, kopieringen kvitteres med det samme blinket
+som i båndsteget, og modulen blir stående — «Nullstill» gjør klart for neste
+prøve. Kan kommentaren ikke regnes ut, viser et Mangler-kort hva som gjenstår,
+etter mønster fra det frittstående THC-COOH-verktøyet.
+
+Slik regner den, med regnearkets cellereferanser i parentes
+(arket «Innstillinger og beregninger»):
+
+1. **Endringen mellom prøvene** korrigeres for måleusikkerhet: i stedet for
+   den målte endringen brukes 10 %-kvantilen i en lognormalfordeling rundt
+   den (B22–B25, CV 0,2 for THC-syre og 0,05 for kreatinin). Personen får
+   tvilens fordel — bare endringer som er for høye selv med usikkerheten
+   trukket fra, teller som over.
+2. **Tre utskillelseskurver** — grønn (sporadisk bruk), gul (grønn med dobbel
+   amplitude) og rød (tregeste dokumenterte utskillelse) — leses av der
+   forrige prøve ligger, og gir forventet endring frem til denne prøven
+   (rad 29–63). Kurvene er bi-eksponentielle tilpasninger fra
+   Modellering-arket, skalert med konverteringsfaktoren i H19.
+3. **Kategorien** (B65) telles opp etter hvilke kurver den korrigerte
+   endringen ligger over, med et trinn ekstra når kronisk bruk ikke legges
+   til grunn, og **kommentaren** settes sammen av regnearkets tekstformler
+   (J23–J30): konsentrasjonsnivået lav/middels høy/høy etter grensene 20 og
+   40 (M21), og konklusjonen fra «ikke nødvendigvis» via «vanskelig å
+   avgjøre» til «har vært inntatt».
+4. **Mer enn 60 døgn** mellom prøvene setter forrige prøve til side (K21):
+   kommentaren blir som om ingen tidligere prøve fantes, og modulen sier fra
+   om hvorfor. Det samme skjer, uten notis, når «Ingen tidligere prøve
+   tilgjengelig» er huket av.
+
+Visualiseringen viser de samme kurvene som regnearkets graf — «Sporadisk»,
+«Kronisk, typisk» (regnearkets lilla mellomkurve, som i grafen der) og
+«Kronisk, ekstrem» — som prosentvis endring fra forrige prøve, med begge
+prøvene som punkter. Den vises bare når fortolkningen faktisk er gjort mot en
+tidligere prøve og det er minst ett døgn mellom prøvene. Gul-kurven er utelatt
+også der: lest som relativ endring er den i praksis lik den grønne.
+
+> **Ordlyden i kommentarene** er rettsmedisinske formuleringer hentet tegn
+> for tegn fra regnearket, og skal ikke endres uten at den som eier appen
+> uttrykkelig har bedt om det og bekreftet den nye ordlyden.
 
 ## Tilgjengelighet
 
