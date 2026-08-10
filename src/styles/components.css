@@ -281,6 +281,8 @@
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-l);
   box-shadow: var(--skygge);
+  /* Litt luft mot vinduskanten når et kort rulles på plass. */
+  scroll-margin-block: var(--rom-4);
 }
 
 .kort--center {
@@ -689,10 +691,57 @@
   width: 100%;
 }
 
-.thc-ingress {
+/* Toppen av inndatakortet: koden til venstre, nullstillingen i hjørnet. */
+.thc-korthode {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--rom-3);
+  width: 100%;
+}
+
+.thc-nullstillhjorne {
+  position: relative;
+  flex: none;
+}
+
+/* Tilbudet om å nullstille med Enter, rett etter en kopiering. Står under
+   nullstill-knappen og forsvinner ved første handling som ikke tar det. */
+.thc-nullstilltips {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.6ch;
+  padding: var(--rom-2) var(--rom-3);
   font-size: var(--tekst-s);
-  color: var(--blekk-dempet);
-  text-wrap: pretty;
+  font-weight: var(--vekt-medium);
+  white-space: nowrap;
+  color: var(--aksent-blekk);
+  background: var(--aksent);
+  border-radius: var(--runding-m);
+  box-shadow: var(--skygge-hevet);
+}
+
+/* Pilen opp mot knappen tipset hører til. */
+.thc-nullstilltips::before {
+  content: '';
+  position: absolute;
+  top: -0.28rem;
+  right: 1.1rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  background: var(--aksent);
+  transform: rotate(45deg);
+}
+
+.thc-avkryssinger {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-2);
 }
 
 .thc-skjema {
@@ -915,6 +964,199 @@
   font-size: 17px;
   font-weight: var(--vekt-medium);
   fill: var(--blekk);
+}
+
+/* Legenden står i vanlig HTML over figuren, så hvert kurvenavn kan bære et
+   tips om hva profilen står for — samme mønster som kommentartipsene over
+   båndknappene: navnet bærer pilen, tipset spenner over hele legenden. */
+.thc-legende {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2) var(--rom-4);
+  width: 100%;
+}
+
+.thc-legende__punkt {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+  cursor: help;
+}
+
+.thc-legende__strek {
+  flex: none;
+  width: 1.9em;
+  height: 0.28em;
+  border-radius: var(--runding-full);
+}
+
+.thc-legende__strek--gronn {
+  background: var(--niva-innenfor-linje);
+}
+
+.thc-legende__strek--gul {
+  background: var(--niva-gul-linje);
+}
+
+.thc-legende__strek--rod {
+  background: var(--niva-over-linje);
+}
+
+.thc-profiltips {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + var(--rom-3));
+  z-index: 5;
+  padding: var(--rom-3) var(--rom-4);
+  font-size: var(--tekst-s);
+  line-height: 1.5;
+  text-align: left;
+  text-wrap: pretty;
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-m);
+  box-shadow: var(--skygge-hevet);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.4rem);
+  pointer-events: none;
+  transition:
+    opacity var(--fart) var(--kurve),
+    transform var(--fart) var(--kurve),
+    visibility var(--fart);
+}
+
+.thc-legende__punkt::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + var(--rom-3) - 0.45rem);
+  width: 0.9rem;
+  height: 0.9rem;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-top: 0;
+  border-left: 0;
+  transform: translateX(-50%) rotate(45deg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fart) var(--kurve);
+}
+
+.thc-legende__punkt:hover + .thc-profiltips,
+.thc-legende__punkt:focus-visible + .thc-profiltips {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.thc-legende__punkt:hover::after,
+.thc-legende__punkt:focus-visible::after {
+  opacity: 1;
+}
+
+/* Forklaringen under figuren: vanlig lesetekst med luft mellom avsnittene. */
+.thc-forklaring {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  padding-top: var(--rom-2);
+  font-size: var(--tekst-s);
+  line-height: 1.6;
+  text-align: left;
+  text-wrap: pretty;
+}
+
+.thc-forklaring ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  padding-left: 1.4em;
+  list-style: disc;
+}
+
+/* --- Sammenleggbare seksjoner («details») -------------------------------
+   Felles for hele appen: jevn åpning og lukking via grid-teknikken (høyden
+   glir mellom 0fr og 1fr), pil som snur, og innrykk med en loddrett linje
+   som skiller innholdet fra resten av kortet. */
+
+.detalj {
+  width: 100%;
+  text-align: left;
+}
+
+.detalj__tittel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+
+.detalj__tittel::-webkit-details-marker {
+  display: none;
+}
+
+.detalj__tittel:hover {
+  color: var(--blekk);
+}
+
+/* Pilen: peker mot høyre når seksjonen er lukket, ned når den er åpen. */
+.detalj__tittel::before {
+  content: '';
+  flex: none;
+  width: 0.42em;
+  height: 0.42em;
+  margin-top: -0.15em;
+  border-right: var(--kant-tykk) solid currentColor;
+  border-bottom: var(--kant-tykk) solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--fart) var(--kurve);
+}
+
+details[open] > .detalj__tittel::before {
+  margin-top: 0.1em;
+  transform: rotate(45deg);
+}
+
+.detalj__kropp {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--fart-glid) var(--kurve);
+}
+
+details[open] > .detalj__kropp {
+  grid-template-rows: 1fr;
+}
+
+.detalj__inner {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  padding-left: var(--rom-4);
+}
+
+.detalj__inner::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: var(--rom-2);
+  bottom: var(--rom-2);
+  width: var(--kant-tykk);
+  background: var(--linje);
+  border-radius: var(--runding-full);
 }
 
 /* Reserveløsning når utklippstavlen er utilgjengelig: kommentaren må kunne

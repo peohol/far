@@ -29,6 +29,8 @@ import { initialState, reducer, stageOf } from '../../state'
  * er navngitt i kommentarene — med regnearkets eksempel: forrige prøve 6,5
  * den 04.07.2026 og denne prøven 2,5 den 27.07.2026, kronisk bruk lagt til
  * grunn. Regnearket er fasit; disse testene skal ikke «rettes» mot noe annet.
+ * Ett bevisst avvik fra regnearket er bestilt av eieren: «5-7 dager» skrives
+ * med tankestrek, «5–7 dager».
  */
 
 describe('utskillelseskurvene mot regnearket', () => {
@@ -124,10 +126,10 @@ describe('kategorien (B65)', () => {
 })
 
 describe('kommentaren, ord for ord mot regnearket', () => {
-  it('gjenskaper regnearkets eksempel (Fortolkning!A6) tegn for tegn', () => {
+  it('gjenskaper regnearkets eksempel (Fortolkning!A6), med tankestrek i «5–7»', () => {
     expect(byggKommentar('lav', 3, true, '04.07.2026')).toBe(
       'THC-syre, et omdannelsesprodukt av cannabis, er påvist i lav konsentrasjon. ' +
-        'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5-7 dager. ' +
+        'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. ' +
         'Ved gjentatte inntak vil påvisningstiden for THC-syre i urin øke, vanligvis ' +
         'opptil en måned etter avsluttet inntak. Basert på analyseresultatet alene er ' +
         'det vanskelig å avgjøre hvorvidt cannabis har vært inntatt etter prøve tatt ' +
@@ -147,7 +149,7 @@ describe('kommentaren, ord for ord mot regnearket', () => {
     expect(byggKommentar('lav', 1, true, '04.07.2026')).toBe(
       'THC-syre, et omdannelsesprodukt av cannabis, er påvist i lav konsentrasjon. ' +
         'Analyseresultatet viser at cannabis har vært inntatt. ' +
-        'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5-7 dager. ' +
+        'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. ' +
         'Ved gjentatte inntak vil påvisningstiden for THC-syre i urin øke, vanligvis ' +
         'opptil en måned etter avsluttet inntak. Analyseresultatet tilsier at cannabis ' +
         'ikke nødvendigvis har vært inntatt etter prøve tatt 04.07.2026. Ved spørsmål ' +
@@ -218,10 +220,15 @@ describe('fortolkningen fra inndata til kommentar', () => {
     expect(resultat.kategori).toBe(3)
     expect(resultat.kommentar).toBe(byggKommentar('lav', 3, true, '04.07.2026'))
     expect(resultat.forGammelForrige).toBe(false)
-    expect(resultat.graf).not.toBeNull()
-    expect(resultat.graf?.dager).toBe(23)
-    expect(resultat.graf?.forrige).toBe(6.5)
-    expect(resultat.graf?.korrigertEndring).toBeCloseTo(-0.7352964402245712, 12)
+    expect(resultat.grunnlag).not.toBeNull()
+    expect(resultat.grunnlag?.dager).toBe(23)
+    expect(resultat.grunnlag?.forrige).toBe(6.5)
+    expect(resultat.grunnlag?.aktuell).toBe(2.5)
+    expect(resultat.grunnlag?.kronisk).toBe(true)
+    expect(resultat.grunnlag?.maltEndring).toBeCloseTo(2.5 / 6.5 - 1, 12)
+    expect(resultat.grunnlag?.korrigertEndring).toBeCloseTo(-0.7352964402245712, 12)
+    expect(resultat.grunnlag?.forventet.gul).toBeCloseTo(-0.9540072713754896, 10)
+    expect(resultat.grunnlag?.forventet.rod).toBeCloseTo(-0.44290152002030236, 10)
   })
 
   it('lister det som mangler i et tomt skjema', () => {
@@ -258,19 +265,24 @@ describe('fortolkningen fra inndata til kommentar', () => {
     const resultat = fortolkThc({
       ...TOM_THC_INNDATA,
       aktuellVerdi: '2,5',
-      aktuellDato: '2026-07-27',
       ingenTidligere: true,
     })
     if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
     expect(resultat.kommentar).toBe(byggKommentar('lav', 0, false, ''))
-    expect(resultat.graf).toBeNull()
+    expect(resultat.grunnlag).toBeNull()
+  })
+
+  it('krever ingen datoer uten en tidligere prøve — de brukes ikke til noe', () => {
+    const resultat = fortolkThc({ ...TOM_THC_INNDATA, ingenTidligere: true })
+    if (resultat.type !== 'mangler') throw new Error('ventet mangler')
+    expect(resultat.mangler).toEqual(['Fyll inn IRCAK for denne prøven.'])
   })
 
   it('setter en prøve eldre enn 60 døgn til side, slik regnearkets K21 gjør', () => {
     const resultat = fortolkThc({ ...eksempel, forrigeDato: '2026-04-01' })
     if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
     expect(resultat.forGammelForrige).toBe(true)
-    expect(resultat.graf).toBeNull()
+    expect(resultat.grunnlag).toBeNull()
     expect(resultat.kommentar).toBe(byggKommentar('lav', 0, false, ''))
   })
 
@@ -278,7 +290,7 @@ describe('fortolkningen fra inndata til kommentar', () => {
     const resultat = fortolkThc({ ...eksempel, forrigeDato: '2026-05-28' })
     if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
     expect(resultat.forGammelForrige).toBe(false)
-    expect(resultat.graf?.dager).toBe(60)
+    expect(resultat.grunnlag?.dager).toBe(60)
   })
 
   it('følger bruksmønsteret: samme prøver uten kronisk bruk gir kategori 4', () => {
@@ -297,15 +309,19 @@ describe('fortolkningen fra inndata til kommentar', () => {
     })
     if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
     expect(resultat.kategori).toBe(1)
-    expect(resultat.graf?.dager).toBe(0)
+    expect(resultat.grunnlag?.dager).toBe(0)
   })
 })
 
 describe('visualiseringen', () => {
   const graf = byggGraf({ forrige: 6.5, dager: 23, korrigertEndring: -0.7352964402245712 })
 
-  it('tegner regnearkets tre kurver med regnearkets serienavn', () => {
-    expect(graf.kurver.map((k) => k.navn)).toEqual(['Sporadisk', 'Kronisk, typisk', 'Kronisk, ekstrem'])
+  it('tegner regnearkets tre kurver, med navnene eieren har valgt', () => {
+    expect(graf.kurver.map((k) => k.navn)).toEqual([
+      'Normal utskillelse',
+      'Moderat utskillelse',
+      'Treg utskillelse',
+    ])
   })
 
   it('starter alle kurvene i null og ender der regnearket ender', () => {
@@ -317,9 +333,9 @@ describe('visualiseringen', () => {
       if (!punkt) throw new Error(`mangler kurven ${navn}`)
       return punkt.prosent
     }
-    expect(siste('Sporadisk')).toBeCloseTo(-95.40072740171043, 8)
-    expect(siste('Kronisk, typisk')).toBeCloseTo(-74.21099926939771, 8)
-    expect(siste('Kronisk, ekstrem')).toBeCloseTo(-44.290152002030236, 8)
+    expect(siste('Normal utskillelse')).toBeCloseTo(-95.40072740171043, 8)
+    expect(siste('Moderat utskillelse')).toBeCloseTo(-74.21099926939771, 8)
+    expect(siste('Treg utskillelse')).toBeCloseTo(-44.290152002030236, 8)
   })
 
   it('markerer forrige og denne prøven', () => {

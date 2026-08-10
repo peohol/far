@@ -180,11 +180,26 @@ grenser og kommentartekster er hentet derfra, og testene i
 `src/domain/__tests__/thc.test.ts` holder koden opp mot verdier lest rett ut
 av regnearkets celler.
 
-Modulen brukes gjerne mange prøver på rad. Kommentaren regnes derfor ut
-fortløpende mens feltene fylles, kopieringen kvitteres med det samme blinket
-som i båndsteget, og modulen blir stående — «Nullstill» gjør klart for neste
-prøve. Kan kommentaren ikke regnes ut, viser et Mangler-kort hva som gjenstår,
-etter mønster fra det frittstående THC-COOH-verktøyet.
+Modulen brukes gjerne mange prøver på rad, og flyten er lagt opp etter det.
+Kommentaren regnes ut fortløpende mens feltene fylles; i det den lar seg regne
+ut, rulles den øverst i vinduet. Kopiering kvitteres med det samme blinket som
+i båndsteget, ruller tilbake til feltene og legger et lite tilbud under
+nullstill-knappen i hjørnet: «Trykk ↵ for å nullstille nå». Enter tar
+tilbudet, alt annet — en annen tast, et klikk, et rull — takker nei og rydder
+det bort. Kan kommentaren ikke regnes ut, viser et Mangler-kort hva som
+gjenstår, etter mønster fra det frittstående THC-COOH-verktøyet, og
+kopier-knappen vises først når det finnes en kommentar å kopiere.
+
+Er «Ingen tidligere prøve tilgjengelig» huket av, skjules feltene for forrige
+prøve og prøvedatoen for denne prøven — datoene brukes bare til å telle døgn
+mellom prøvene, så uten en tidligere prøve spørres det ikke etter dem.
+
+Musehjulet og piltastene opp/ned hopper mellom kortene i modulen i stedet for
+å rulle jevnt, og kortet man hopper til midtstilles i vinduet
+(`src/hooks/useKortHopp.ts`, klar til gjenbruk i senere moduler). Piltastene
+lar feltene være i fred når fokus står i et av dem. I hele appen gjelder
+dessuten at et klikk på selve flaten til et kort ruller det til midten av
+vinduet, når det finnes noe å rulle.
 
 Slik regner den, med regnearkets cellereferanser i parentes
 (arket «Innstillinger og beregninger»):
@@ -210,16 +225,23 @@ Slik regner den, med regnearkets cellereferanser i parentes
    om hvorfor. Det samme skjer, uten notis, når «Ingen tidligere prøve
    tilgjengelig» er huket av.
 
-Visualiseringen viser de samme kurvene som regnearkets graf — «Sporadisk»,
-«Kronisk, typisk» (regnearkets lilla mellomkurve, som i grafen der) og
-«Kronisk, ekstrem» — som prosentvis endring fra forrige prøve, med begge
-prøvene som punkter. Den vises bare når fortolkningen faktisk er gjort mot en
-tidligere prøve og det er minst ett døgn mellom prøvene. Gul-kurven er utelatt
-også der: lest som relativ endring er den i praksis lik den grønne.
+Visualiseringen viser de samme kurvene som regnearkets graf — «Normal
+utskillelse», «Moderat utskillelse» (regnearkets lilla mellomkurve, som i
+grafen der) og «Treg utskillelse» — som prosentvis endring fra forrige prøve,
+med begge prøvene som punkter. Navnene i legenden bærer hvert sitt tips om
+hva profilen står for. Figuren vises bare når fortolkningen faktisk er gjort
+mot en tidligere prøve og det er minst ett døgn mellom prøvene. Gul-kurven er
+utelatt også der: lest som relativ endring er den i praksis lik den grønne.
+Under figuren ligger en sammenleggbar «Forklaring» som viser grunnlaget for
+fortolkningen med prøvens egne tall — dager, målt og korrigert endring,
+grensene og vurderingen. Sammenleggbare seksjoner åpner og lukker seg jevnt
+(`src/components/Details.tsx`), slik `<details>` skal gjøre overalt i appen.
 
 > **Ordlyden i kommentarene** er rettsmedisinske formuleringer hentet tegn
 > for tegn fra regnearket, og skal ikke endres uten at den som eier appen
-> uttrykkelig har bedt om det og bekreftet den nye ordlyden.
+> uttrykkelig har bedt om det og bekreftet den nye ordlyden. Ett bevisst
+> avvik er bestilt og bekreftet av eieren: «5-7 dager» skrives med
+> tankestrek, «5–7 dager».
 
 ## Tilgjengelighet
 

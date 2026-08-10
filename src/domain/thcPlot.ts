@@ -16,12 +16,12 @@ import {
  * Komponenten som tegner får ferdige tall og trenger ikke regne selv.
  */
 
-/** Kurvene i figuren, med regnearkets serienavn. Gul-kurven er utelatt der
-    også: lest som relativ endring er den lik den grønne. */
+/** Kurvene i figuren — de samme tre som i regnearkets graf. Gul-kurven er
+    utelatt der også: lest som relativ endring er den lik den grønne. */
 const FIGURKURVER: { navn: string; tone: 'gronn' | 'gul' | 'rod'; kurve: Kurve }[] = [
-  { navn: 'Sporadisk', tone: 'gronn', kurve: KURVE_GRONN },
-  { navn: 'Kronisk, typisk', tone: 'gul', kurve: KURVE_LILLA },
-  { navn: 'Kronisk, ekstrem', tone: 'rod', kurve: KURVE_ROD },
+  { navn: 'Normal utskillelse', tone: 'gronn', kurve: KURVE_GRONN },
+  { navn: 'Moderat utskillelse', tone: 'gul', kurve: KURVE_LILLA },
+  { navn: 'Treg utskillelse', tone: 'rod', kurve: KURVE_ROD },
 ]
 
 /** Punkter per kurve. Nok til at også den bratteste starten står jevn. */

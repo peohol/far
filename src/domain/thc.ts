@@ -148,7 +148,8 @@ export function beregnKategori(
    Ordlyden under er hentet tegn for tegn fra regnearkets tekstformler
    (Innstillinger og beregninger!J23–J30) og brukes i rettsmedisinske
    svarbrev. Den skal ikke endres uten at eieren av appen uttrykkelig har
-   bedt om det og bekreftet den nye ordlyden. */
+   bedt om det og bekreftet den nye ordlyden. Ett bevisst avvik er bestilt
+   av eieren: «5-7 dager» skrives med tankestrek, «5–7 dager». */
 
 export function byggKommentar(
   niva: Konsentrasjonsniva,
@@ -179,7 +180,7 @@ export function byggKommentar(
   if (medForrige && kategori < 4) {
     // J27 — generelt om påvisningstid.
     deler.push(
-      'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5-7 dager. Ved gjentatte inntak vil påvisningstiden for THC-syre i urin øke, vanligvis opptil en måned etter avsluttet inntak. ',
+      'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. Ved gjentatte inntak vil påvisningstiden for THC-syre i urin øke, vanligvis opptil en måned etter avsluttet inntak. ',
     )
     // J28 — konklusjonen mot forrige prøve.
     const lede =
@@ -222,6 +223,18 @@ export function lesTall(tekst: string): number | null {
   return Number(trimmet)
 }
 
+/** Et forholdstall med to gjeldende siffer og norsk desimaltegn: «0,26». */
+export function formaterTall(verdi: number): string {
+  return Number(verdi.toPrecision(2)).toString().replace('.', ',')
+}
+
+/** «nedgang», «økning» eller «ingen endring» — for en relativ endring. */
+export function ordEndring(endring: number): 'nedgang' | 'økning' | 'ingen endring' {
+  if (endring < 0) return 'nedgang'
+  if (endring > 0) return 'økning'
+  return 'ingen endring'
+}
+
 /* --- Fortolkningen ------------------------------------------------------- */
 
 /**
@@ -257,6 +270,16 @@ export interface ThcGrafgrunnlag {
   korrigertEndring: number
 }
 
+/** Hele tallgrunnlaget for en fortolkning mot forrige prøve, til forklaringen. */
+export interface ThcGrunnlag extends ThcGrafgrunnlag {
+  aktuell: number
+  kronisk: boolean
+  /** Den målte endringen før usikkerhetskorreksjon: aktuell/forrige − 1. */
+  maltEndring: number
+  /** Forventet endring per kurve etter like mange døgn (rad 63). */
+  forventet: { gronn: number; gul: number; rod: number }
+}
+
 export type ThcResultat =
   | { type: 'mangler'; mangler: string[] }
   | {
@@ -264,7 +287,7 @@ export type ThcResultat =
       kommentar: string
       kategori: number
       /** Satt når fortolkningen er gjort mot forrige prøve. */
-      graf: ThcGrafgrunnlag | null
+      grunnlag: ThcGrunnlag | null
       /** Sant når forrige prøve ble satt til side fordi den er for gammel. */
       forGammelForrige: boolean
     }
@@ -281,10 +304,13 @@ export function fortolkThc(inn: ThcInndata): ThcResultat {
   const aktuell = lesTall(inn.aktuellVerdi)
   if (inn.aktuellVerdi.trim() === '') mangler.push('Fyll inn IRCAK for denne prøven.')
   else if (aktuell === null || !(aktuell > 0)) mangler.push('IRCAK for denne prøven må være et tall større enn 0.')
-  if (inn.aktuellDato === '') mangler.push('Fyll inn prøvedato for denne prøven.')
 
   let forrige: number | null = null
   if (!inn.ingenTidligere) {
+    // Datoene trengs bare for å telle døgn mellom prøvene, så uten en
+    // tidligere prøve å sammenligne med er heller ikke denne prøvens dato
+    // noe å kreve.
+    if (inn.aktuellDato === '') mangler.push('Fyll inn prøvedato for denne prøven.')
     forrige = lesTall(inn.forrigeVerdi)
     if (inn.forrigeVerdi.trim() === '') {
       mangler.push('Fyll inn IRCAK for forrige prøve.')
@@ -311,7 +337,7 @@ export function fortolkThc(inn: ThcInndata): ThcResultat {
       type: 'kommentar',
       kommentar: byggKommentar(niva, kategori, false, ''),
       kategori,
-      graf: null,
+      grunnlag: null,
       forGammelForrige: false,
     }
   }
@@ -326,7 +352,7 @@ export function fortolkThc(inn: ThcInndata): ThcResultat {
       type: 'kommentar',
       kommentar: byggKommentar(niva, kategori, false, ''),
       kategori,
-      graf: null,
+      grunnlag: null,
       forGammelForrige: true,
     }
   }
@@ -343,7 +369,15 @@ export function fortolkThc(inn: ThcInndata): ThcResultat {
     type: 'kommentar',
     kommentar: byggKommentar(niva, kategori, true, formaterDatoNorsk(inn.forrigeDato)),
     kategori,
-    graf: { forrige: forrige as number, dager, korrigertEndring: korrigert },
+    grunnlag: {
+      forrige: forrige as number,
+      aktuell: aktuell as number,
+      dager,
+      kronisk: inn.kronisk,
+      maltEndring: (aktuell as number) / (forrige as number) - 1,
+      korrigertEndring: korrigert,
+      forventet,
+    },
     forGammelForrige: false,
   }
 }
