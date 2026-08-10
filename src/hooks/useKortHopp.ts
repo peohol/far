@@ -29,21 +29,19 @@ function erIRedigerbartFelt(): boolean {
   )
 }
 
-/** Musehjulet er stille så lenge et hopp pågår, så ett rull blir ett hopp. */
-const HOPPERO = 600
-
-/** Små skjelv fra pekeplaten skal ikke telle som et rull. */
-const MINSTE_RULL = 4
-
 /**
- * Diskrete hopp mellom kortene i en modul: musehjulet og piltastene opp/ned
- * flytter ett kort av gangen i stedet for å rulle jevnt, og kortet man
- * hopper til midtstilles i vinduet. Piltastene rører ingenting så lenge
- * fokus står i et felt som selv trenger dem — datofeltene blar for eksempel
- * i verdier med dem.
+ * Diskrete hopp mellom kortene i en modul: piltastene opp/ned flytter ett
+ * kort av gangen, og kortet man hopper til midtstilles i vinduet. De rører
+ * ingenting så lenge fokus står i et felt som selv trenger dem — datofeltene
+ * blar for eksempel i verdier med dem.
  *
- * Skrudd på per modul med `aktiv`, så vanlig rulling gjelder ellers i appen.
- * Kortene er elementene i `beholder` som passer `velger`, i dokumentrekkefølge.
+ * Musehjulet ruller som vanlig. Det er den eneste måten å komme gjennom et
+ * kort som er høyere enn vinduet på — en utfoldet forklaring, for eksempel —
+ * og hopping ville låst den nederste teksten inne.
+ *
+ * Skrudd på per modul med `aktiv`, så tastene gjør det vanlige ellers i
+ * appen. Kortene er elementene i `beholder` som passer `velger`, i
+ * dokumentrekkefølge.
  */
 export function useKortHopp(
   aktiv: boolean,
@@ -52,8 +50,6 @@ export function useKortHopp(
 ) {
   useEffect(() => {
     if (!aktiv) return
-
-    let stilleTil = 0
 
     const kortene = () => Array.from(beholder.current?.querySelectorAll<HTMLElement>(velger) ?? [])
 
@@ -80,17 +76,6 @@ export function useKortHopp(
       rullTilKort(liste[neste])
     }
 
-    const paaHjul = (event: WheelEvent) => {
-      // Ctrl + hjul er zoom og skal få være i fred.
-      if (event.ctrlKey) return
-      event.preventDefault()
-      if (Math.abs(event.deltaY) < MINSTE_RULL) return
-      const naa = performance.now()
-      if (naa < stilleTil) return
-      stilleTil = naa + HOPPERO
-      hopp(event.deltaY > 0 ? 1 : -1)
-    }
-
     const paaTast = (event: KeyboardEvent) => {
       if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return
       if (event.ctrlKey || event.metaKey || event.altKey) return
@@ -99,11 +84,7 @@ export function useKortHopp(
       hopp(event.key === 'ArrowDown' ? 1 : -1)
     }
 
-    window.addEventListener('wheel', paaHjul, { passive: false })
     window.addEventListener('keydown', paaTast)
-    return () => {
-      window.removeEventListener('wheel', paaHjul)
-      window.removeEventListener('keydown', paaTast)
-    }
+    return () => window.removeEventListener('keydown', paaTast)
   }, [aktiv, beholder, velger])
 }

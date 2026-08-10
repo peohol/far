@@ -987,6 +987,19 @@
   cursor: help;
 }
 
+/* Prikkestrek under navnet: hintet om at det finnes et tips å hente ved å
+   holde pekeren over. Den ligger på navnet alene, ikke på fargestreken. */
+.thc-legende__navn {
+  text-decoration: underline dotted currentColor;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.28em;
+}
+
+.thc-legende__punkt:hover .thc-legende__navn,
+.thc-legende__punkt:focus-visible .thc-legende__navn {
+  color: var(--blekk);
+}
+
 .thc-legende__strek {
   flex: none;
   width: 1.9em;

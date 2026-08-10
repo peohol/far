@@ -25,7 +25,7 @@ const PROFILTIPS: Record<'gronn' | 'gul' | 'rod', string> = {
   gronn:
     'Denne utskillelsesprofilen anses å være relativt representativ for brukere flest ved moderat bruk av cannabis, dog tregere enn det som vanligvis sees etter et enkeltinntak.',
   gul: 'Denne utskillelsesprofilen anses å være tregere enn det som kan sees etter et enkeltinntak. Den er trolig også noe tregere enn forventet – men fortsatt innenfor det som er mulig – hos de kroniske brukere.',
-  rod: 'Dette er den mest ekstreme utskillelsesprofilen som noen sinne har blitt dokumentert. Vi har per dags dato ikke sett eksempler på at THC-syre kan skilles ut saktere enn dette.',
+  rod: 'Dette er den mest ekstreme utskillelsesprofilen som noensinne har blitt dokumentert. Vi har per dags dato ikke sett eksempler på at THC-syre kan skilles ut saktere enn dette.',
 }
 
 export function ThcPlot({ grunnlag }: { grunnlag: ThcGrafgrunnlag }) {
@@ -63,7 +63,9 @@ export function ThcPlot({ grunnlag }: { grunnlag: ThcGrafgrunnlag }) {
                 className={`thc-legende__strek thc-legende__strek--${kurve.tone}`}
                 aria-hidden="true"
               />
-              {kurve.navn}
+              {/* Prikkestreken under navnet er hintet om at det er noe å
+                  hente ved å holde pekeren over. */}
+              <span className="thc-legende__navn">{kurve.navn}</span>
             </span>
             <span className="thc-profiltips" id={`thc-profiltips-${kurve.tone}`} role="tooltip">
               {PROFILTIPS[kurve.tone]}

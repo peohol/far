@@ -194,12 +194,13 @@ Er «Ingen tidligere prøve tilgjengelig» huket av, skjules feltene for forrige
 prøve og prøvedatoen for denne prøven — datoene brukes bare til å telle døgn
 mellom prøvene, så uten en tidligere prøve spørres det ikke etter dem.
 
-Musehjulet og piltastene opp/ned hopper mellom kortene i modulen i stedet for
-å rulle jevnt, og kortet man hopper til midtstilles i vinduet
-(`src/hooks/useKortHopp.ts`, klar til gjenbruk i senere moduler). Piltastene
-lar feltene være i fred når fokus står i et av dem. I hele appen gjelder
-dessuten at et klikk på selve flaten til et kort ruller det til midten av
-vinduet, når det finnes noe å rulle.
+Piltastene opp/ned hopper mellom kortene i modulen i stedet for å rulle, og
+kortet man hopper til midtstilles i vinduet (`src/hooks/useKortHopp.ts`, klar
+til gjenbruk i senere moduler). De lar feltene være i fred når fokus står i
+et av dem. Musehjulet ruller som vanlig — det er den eneste veien gjennom et
+kort som er høyere enn vinduet, slik det utfoldede forklaringskortet lett
+blir. I hele appen gjelder dessuten at et klikk på selve flaten til et kort
+ruller det til midten av vinduet, når det finnes noe å rulle.
 
 Slik regner den, med regnearkets cellereferanser i parentes
 (arket «Innstillinger og beregninger»):
