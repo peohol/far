@@ -1,11 +1,14 @@
+import { erThcAnalytt } from './domain/thc'
 import type { Analyte } from './types'
 
 /**
- * Arbeidsflyten er en liten tilstandsmaskin med tre steg. Hvilket steg som
+ * Arbeidsflyten er en liten tilstandsmaskin. Psykofarmaka går gjennom tre
+ * steg — søk, bånd, lim inn — mens THC-syre går fra søket til sin egen
+ * fortolkningsmodul og blir der til man bytter analytt. Hvilket steg som
  * vises utledes av tilstanden, så det finnes ingen egen «steg»-variabel som
  * kan komme i utakt med resten.
  */
-export type Stage = 'search' | 'band' | 'paste'
+export type Stage = 'search' | 'band' | 'paste' | 'thc'
 
 export interface State {
   /** Teksten i søkefeltet. Beholdes når man går tilbake fra steg 2. */
@@ -34,6 +37,7 @@ export type Action =
 
 export function stageOf(state: State): Stage {
   if (!state.analyte) return 'search'
+  if (erThcAnalytt(state.analyte)) return 'thc'
   return state.bandKey ? 'paste' : 'band'
 }
 
@@ -93,6 +97,7 @@ function stepBack(state: State): State {
     case 'paste':
       return { ...state, bandKey: null }
     case 'band':
+    case 'thc':
       return { ...state, analyte: null }
     case 'search':
       return initialState

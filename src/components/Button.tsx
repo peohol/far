@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react'
 import { Shortcut } from './Shortcut'
 
 type Variant = 'primary' | 'subtle'
@@ -14,18 +14,16 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 /**
  * Appens eneste knappekomponent. Hurtigtasten vises som en merkelapp og
  * meldes til hjelpemiddelteknologi med `aria-keyshortcuts`, slik at knapp og
- * tastatur alltid forteller det samme.
+ * tastatur alltid forteller det samme. Referansen peker på selve knappen,
+ * for den som skal feste noe til der den står — som kopikvitteringen.
  */
-export function Button({
-  variant = 'primary',
-  icon,
-  shortcut,
-  children,
-  className,
-  ...rest
-}: ButtonProps) {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { variant = 'primary', icon, shortcut, children, className, ...rest },
+  ref,
+) {
   return (
     <button
+      ref={ref}
       type="button"
       className={['knapp', `knapp--${variant}`, className].filter(Boolean).join(' ')}
       aria-keyshortcuts={shortcut ? ariaKey(shortcut) : undefined}
@@ -36,7 +34,7 @@ export function Button({
       {shortcut && <Shortcut>{shortcut}</Shortcut>}
     </button>
   )
-}
+})
 
 /** «Esc» → «Escape», slik `aria-keyshortcuts` vil ha det. */
 function ariaKey(shortcut: string): string {

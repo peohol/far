@@ -46,6 +46,8 @@
   --ikon-strek: 2;
 
   --fart: 160ms;
+  /* Glidning mot en ukjent høyde — sammenleggbare seksjoner o.l. */
+  --fart-glid: 280ms;
   --kurve: cubic-bezier(0.22, 0.61, 0.36, 1);
 
   /* --- Alternativfarger ------------------------------------------------- */
