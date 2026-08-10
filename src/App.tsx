@@ -128,6 +128,11 @@ export default function App() {
             if (!band) return
             e.preventDefault()
             void pickBand(band)
+          } else if (stage === 'paste') {
+            // Alle sifre avslutter, slik at man kan bruke samme talltast som i
+            // forrige bilde for å komme raskt videre.
+            e.preventDefault()
+            reset()
           }
         },
       ]),
