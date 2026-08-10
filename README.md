@@ -236,6 +236,7 @@ utelatt også der: lest som relativ endring er den i praksis lik den grønne.
 Under figuren ligger en sammenleggbar «Forklaring» som viser grunnlaget for
 fortolkningen med prøvens egne tall — dager, målt og korrigert endring,
 grensene og vurderingen. Sammenleggbare seksjoner åpner og lukker seg jevnt
+og legger seg øverst i vinduet når de er ferdig åpnet, klare til å leses
 (`src/components/Details.tsx`), slik `<details>` skal gjøre overalt i appen.
 
 > **Ordlyden i kommentarene** er rettsmedisinske formuleringer hentet tegn

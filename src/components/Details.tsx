@@ -1,4 +1,5 @@
 import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react'
+import { rullTilKort } from '../hooks/useKortHopp'
 
 export interface DetailsProps {
   /** Overskriften som åpner og lukker, f.eks. «Forklaring». */
@@ -17,6 +18,10 @@ export interface DetailsProps {
  * ferdig fjernes `open`-attributtet — ellers ville innholdet forsvunnet før
  * det rakk å gli igjen. Ved mindre bevegelse gjør CSS-en overgangen
  * umiddelbar, og det samme grepet virker fortsatt.
+ *
+ * Når seksjonen er ferdig åpnet, legges den øverst i vinduet, så langt siden
+ * rekker, slik at lesingen kan begynne med en gang. Rullingen venter til
+ * glidningen er over: først da vet vi hvor høyt innholdet ble.
  */
 export function Details({ summary, children }: DetailsProps) {
   const detaljer = useRef<HTMLDetailsElement>(null)
@@ -55,9 +60,11 @@ export function Details({ summary, children }: DetailsProps) {
       boks.style.gridTemplateRows = '0fr'
       void boks.offsetHeight
       boks.style.gridTemplateRows = '1fr'
-      // Når glidningen er ferdig, tar CSS-regelen for [open] over igjen.
+      // Når glidningen er ferdig, tar CSS-regelen for [open] over igjen, og
+      // det nye innholdet legges øverst i vinduet.
       etterGlidning(boks, () => {
         boks.style.gridTemplateRows = ''
+        rullTilKort(det, 'start')
       })
     } else {
       boks.style.gridTemplateRows = '1fr'

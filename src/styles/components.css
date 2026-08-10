@@ -1102,6 +1102,8 @@
 .detalj {
   width: 100%;
   text-align: left;
+  /* Luft over overskriften når en åpnet seksjon legges øverst i vinduet. */
+  scroll-margin-top: var(--rom-4);
 }
 
 .detalj__tittel {
