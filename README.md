@@ -182,7 +182,9 @@ av regnearkets celler.
 
 Modulen brukes gjerne mange prøver på rad, og flyten er lagt opp etter det.
 Kommentaren regnes ut fortløpende mens feltene fylles; i det den lar seg regne
-ut, rulles den øverst i vinduet. Kopiering kvitteres med det samme blinket som
+ut, slipper feltet man står i fokus, og kommentaren rulles øverst i vinduet.
+Skjemaet er da ferdig utfylt, og et felt som blir stående fokusert utenfor
+bildet stjeler bare tastetrykk. Kopiering kvitteres med det samme blinket som
 i båndsteget, ruller tilbake til feltene og legger et lite tilbud under
 nullstill-knappen i hjørnet: «Trykk ↵ for å nullstille nå». Enter tar
 tilbudet, alt annet — en annen tast, et klikk, et rull — takker nei og rydder
@@ -193,6 +195,14 @@ kopier-knappen vises først når det finnes en kommentar å kopiere.
 Er «Ingen tidligere prøve tilgjengelig» huket av, skjules feltene for forrige
 prøve og prøvedatoen for denne prøven — datoene brukes bare til å telle døgn
 mellom prøvene, så uten en tidligere prøve spørres det ikke etter dem.
+
+`Enter` gjør bare én ting i modulen: kopierer kommentaren. Det ene unntaket er
+tilbudet over — står «Trykk ↵ for å nullstille nå», tar `Enter` det i stedet.
+Tasten fanges på vinduet før feltene og knappene ser den, så den gjør det samme
+uansett hvor fokus står; ellers ville et fokusert datofelt åpnet kalenderen på
+nytt i stedet for å kopiere. `Space` trykker fortsatt knappen — eller folder ut
+«Forklaring» — man står på, så alt lar seg betjene med tastaturet som før, og
+`Esc` går tilbake til søket.
 
 Piltastene opp/ned hopper mellom kortene i modulen i stedet for å rulle, og
 kortet man hopper til midtstilles i vinduet (`src/hooks/useKortHopp.ts`, klar
