@@ -254,10 +254,11 @@ og det er minst ett døgn mellom prøvene.
 > figuren, slik grensene faktisk gjør.
 
 Under figuren ligger en sammenleggbar «Forklaring» som viser grunnlaget for
-fortolkningen med prøvens egne tall, delt i tre bolker med hver sin
+fortolkningen med prøvens egne tall, delt i fire bolker med hver sin
 overskrift: hvor stor endringen mellom målingene er, hvorfor den målte
-endringen ikke er den sanne, og hva som var å vente uten et nytt inntak —
-med grensene og vurderingen. Sammenleggbare seksjoner åpner og lukker seg jevnt
+endringen ikke er den sanne, hva som var å vente uten et nytt inntak, og
+konklusjonen. Brødteksten rykkes inn under overskriften sin, så det synes hva
+som hører sammen. Sammenleggbare seksjoner åpner og lukker seg jevnt
 og legger seg øverst i vinduet når de er ferdig åpnet, klare til å leses
 (`src/components/Details.tsx`), slik `<details>` skal gjøre overalt i appen.
 

@@ -1090,7 +1090,16 @@
 .thc-forklaring__bolk {
   display: flex;
   flex-direction: column;
+  gap: var(--rom-2);
+}
+
+/* Brødteksten rykkes inn under overskriften sin, så det synes hva som hører
+   sammen. */
+.thc-forklaring__kropp {
+  display: flex;
+  flex-direction: column;
   gap: var(--rom-3);
+  padding-left: var(--rom-3);
 }
 
 .thc-forklaring__tittel {
