@@ -35,13 +35,17 @@ function kurve(a1: number, k1: number, a2: number, k2: number): Kurve {
 /** Rask utskillelse — «Sporadisk» i regnearkets graf. */
 export const KURVE_GRONN = kurve(75.10642536264817, 2.344866277008879, 52.89994063494364, 0.13388138992902396)
 
-/** Grønn med dobbel amplitude. Brukes bare i konklusjonsgrensene. */
+/** Grønn med dobbel amplitude. Konklusjonens midterste grense. */
 export const KURVE_GUL = kurve(2 * 75.10642536264817, 2.344866277008879, 2 * 52.89994063494364, 0.13388138992902396)
 
 /** Tregest dokumenterte utskillelse — «Kronisk, ekstrem» i grafen. */
 export const KURVE_ROD = kurve(261.5116678191702, 0.10152954824642728, 52.78117322451692, 0.022237916803065798)
 
-/** Mellomkurve — «Kronisk, typisk» i grafen. Ikke med i konklusjonsgrensene. */
+/**
+ * Mellomkurve — «Kronisk, typisk» i regnearkets graf. Brukes ikke: verken
+ * konklusjonen eller figuren leser av den. Står igjen fordi parametrene er
+ * regnearkets, og testene holder dem opp mot cellene.
+ */
 export const KURVE_LILLA = kurve(2017.5730310270542, 0.3026509802677265, 86.45163183092453, 0.057581264510644554)
 
 /* --- Måleusikkerhet -----------------------------------------------------
