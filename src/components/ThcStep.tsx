@@ -80,18 +80,45 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
     }
   }
 
+  /**
+   * Enter gjør bare én ting i modulen: kopierer kommentaren. Det ene
+   * unntaket er tilbudet om å nullstille, som står rett etter en kopiering —
+   * da tar Enter tilbudet i stedet.
+   *
+   * Tasten fanges på vinduet, før feltene og knappene ser den, og
+   * nettleserens egen håndtering avlyses. Uten det gjør Enter forskjellige
+   * ting etter hvor fokus tilfeldigvis står: et datofelt åpner kalenderen
+   * igjen, en fokusert knapp trykker seg selv, og et felt i skjemaet sender
+   * skjemaet. Space trykker fortsatt knappen man står på, så alt lar seg
+   * fremdeles betjene med tastaturet.
+   *
+   * Handlingen leses fra en ref, så lytteren settes opp én gang og overlever
+   * at funksjonene bygges på nytt ved hver rendring.
+   */
+  const paaEnter = useRef<() => void>()
+  paaEnter.current = nullstillTips ? nullstill : () => void kopier()
+
+  useEffect(() => {
+    const lytt = (event: KeyboardEvent) => {
+      if (event.key !== 'Enter') return
+      // Modifikatorkombinasjoner er nettleserens egne; de går gjennom.
+      if (event.ctrlKey || event.metaKey || event.altKey) return
+      event.preventDefault()
+      event.stopPropagation()
+      paaEnter.current?.()
+    }
+    window.addEventListener('keydown', lytt, true)
+    return () => window.removeEventListener('keydown', lytt, true)
+  }, [])
+
   // Tilbudet om å nullstille står til første handling: Enter tar det, alt
   // annet — en annen tast, et klikk, et rull — takker nei og rydder det bort.
   useEffect(() => {
     if (!nullstillTips) return
     const paaTast = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        event.preventDefault()
-        event.stopPropagation()
-        nullstill()
-      } else {
-        setNullstillTips(false)
-      }
+      // Enter tas av lytteren over.
+      if (event.key === 'Enter') return
+      setNullstillTips(false)
     }
     const paaPeker = (event: PointerEvent) => {
       // Selve nullstill-knappen svarer for seg; tipset skal ikke lukke seg
@@ -108,14 +135,17 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
       window.removeEventListener('pointerdown', paaPeker, true)
       window.removeEventListener('wheel', paaHjul, { capture: true })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nullstillTips])
 
   // I det kommentaren lar seg regne ut, rulles den øverst i vinduet — det er
-  // den man er her for.
+  // den man er her for. Feltene slipper fokus på veien: skjemaet er ferdig
+  // utfylt, og et felt som blir stående fokusert utenfor bildet stjeler
+  // tastetrykk — datofeltene svarer for eksempel selv på piltastene.
   const forrigeType = useRef(resultat.type)
   useEffect(() => {
     if (forrigeType.current === 'mangler' && resultat.type === 'kommentar') {
+      const aktivt = document.activeElement
+      if (aktivt instanceof HTMLElement && seksjon.current?.contains(aktivt)) aktivt.blur()
       rullTilKort(resultatkort.current, 'start')
     }
     forrigeType.current = resultat.type
