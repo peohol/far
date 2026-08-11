@@ -316,7 +316,7 @@ describe('fortolkningen fra inndata til kommentar', () => {
 describe('visualiseringen', () => {
   const graf = byggGraf({ forrige: 6.5, dager: 23, korrigertEndring: -0.7352964402245712 })
 
-  it('tegner regnearkets tre kurver, med navnene eieren har valgt', () => {
+  it('tegner de tre kurvene fortolkningen bruker, med navnene eieren har valgt', () => {
     expect(graf.kurver.map((k) => k.navn)).toEqual([
       'Normal utskillelse',
       'Moderat utskillelse',
@@ -324,7 +324,7 @@ describe('visualiseringen', () => {
     ])
   })
 
-  it('starter alle kurvene i null og ender der regnearket ender', () => {
+  it('starter alle kurvene i null og ender på konklusjonens grenser (rad 63)', () => {
     for (const kurve of graf.kurver) {
       expect(kurve.punkter.at(0)?.prosent).toBeCloseTo(0, 8)
     }
@@ -333,9 +333,20 @@ describe('visualiseringen', () => {
       if (!punkt) throw new Error(`mangler kurven ${navn}`)
       return punkt.prosent
     }
+    // Regnearkets B63, C63 og D63 — de samme tallene grensene i kategorien
+    // leses av. Den midterste er den gule: regnearkets graf tegner den lilla
+    // (−74,21 % her), men den er ikke med i konklusjonen.
     expect(siste('Normal utskillelse')).toBeCloseTo(-95.40072740171043, 8)
-    expect(siste('Moderat utskillelse')).toBeCloseTo(-74.21099926939771, 8)
+    expect(siste('Moderat utskillelse')).toBeCloseTo(-95.40072713754896, 8)
     expect(siste('Treg utskillelse')).toBeCloseTo(-44.290152002030236, 8)
+    // Og de er de samme tallene kategorien faktisk sammenligner med.
+    for (const [navn, kurve] of [
+      ['Normal utskillelse', KURVE_GRONN],
+      ['Moderat utskillelse', KURVE_GUL],
+      ['Treg utskillelse', KURVE_ROD],
+    ] as const) {
+      expect(siste(navn)).toBeCloseTo(forventetEndring(6.5, 23, kurve) * 100, 8)
+    }
   })
 
   it('markerer forrige og denne prøven', () => {

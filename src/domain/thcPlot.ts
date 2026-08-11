@@ -1,7 +1,7 @@
 import {
   forventetEndring,
   KURVE_GRONN,
-  KURVE_LILLA,
+  KURVE_GUL,
   KURVE_ROD,
   tidForVerdi,
   verdiPaaKurve,
@@ -16,11 +16,16 @@ import {
  * Komponenten som tegner får ferdige tall og trenger ikke regne selv.
  */
 
-/** Kurvene i figuren — de samme tre som i regnearkets graf. Gul-kurven er
-    utelatt der også: lest som relativ endring er den lik den grønne. */
+/**
+ * Kurvene i figuren — de samme tre som konklusjonsgrensene leses av. Merk at
+ * dette er ett skritt bort fra regnearkets egen graf, som tegner mellomkurven
+ * «Kronisk, typisk» (den lilla) i stedet for den gule. Den lilla kurven er
+ * ikke med i konklusjonen, så figuren viste en kurve kommentaren aldri leste
+ * av — og utelot den som avgjør. Figuren skal speile fortolkningen.
+ */
 const FIGURKURVER: { navn: string; tone: 'gronn' | 'gul' | 'rod'; kurve: Kurve }[] = [
   { navn: 'Normal utskillelse', tone: 'gronn', kurve: KURVE_GRONN },
-  { navn: 'Moderat utskillelse', tone: 'gul', kurve: KURVE_LILLA },
+  { navn: 'Moderat utskillelse', tone: 'gul', kurve: KURVE_GUL },
   { navn: 'Treg utskillelse', tone: 'rod', kurve: KURVE_ROD },
 ]
 

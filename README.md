@@ -236,13 +236,23 @@ Slik regner den, med regnearkets cellereferanser i parentes
    om hvorfor. Det samme skjer, uten notis, når «Ingen tidligere prøve
    tilgjengelig» er huket av.
 
-Visualiseringen viser de samme kurvene som regnearkets graf — «Normal
-utskillelse», «Moderat utskillelse» (regnearkets lilla mellomkurve, som i
-grafen der) og «Treg utskillelse» — som prosentvis endring fra forrige prøve,
-med begge prøvene som punkter. Navnene i legenden bærer hvert sitt tips om
-hva profilen står for. Figuren vises bare når fortolkningen faktisk er gjort
-mot en tidligere prøve og det er minst ett døgn mellom prøvene. Gul-kurven er
-utelatt også der: lest som relativ endring er den i praksis lik den grønne.
+Visualiseringen viser de tre kurvene konklusjonen leses av — «Normal
+utskillelse» (grønn), «Moderat utskillelse» (gul) og «Treg utskillelse»
+(rød) — som prosentvis endring fra forrige prøve, med begge prøvene som
+punkter. Navnene i legenden bærer hvert sitt tips om hva profilen står for.
+Figuren vises bare når fortolkningen faktisk er gjort mot en tidligere prøve
+og det er minst ett døgn mellom prøvene.
+
+> Her viker figuren bevisst fra regnearkets egen graf, som tegner den lilla
+> mellomkurven («Kronisk, typisk») i stedet for den gule. Den lilla kurven er
+> ikke med i konklusjonen (`B65` teller `B64`/`C64`/`D64` — grønn, gul, rød),
+> så regnearkets graf viste en kurve kommentaren aldri leste av og utelot den
+> som avgjør. Figuren skal speile fortolkningen: havner punktet for denne
+> prøven over eller under en kurve, er det den samme sammenligningen som
+> velger kommentar. Ligger forrige prøve lavt, er grønn og gul kommet ned i
+> den flate halen og faller likt; da ligger de to øverst i hverandre i
+> figuren, slik grensene faktisk gjør.
+
 Under figuren ligger en sammenleggbar «Forklaring» som viser grunnlaget for
 fortolkningen med prøvens egne tall — dager, målt og korrigert endring,
 grensene og vurderingen. Sammenleggbare seksjoner åpner og lukker seg jevnt
