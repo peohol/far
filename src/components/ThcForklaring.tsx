@@ -5,6 +5,11 @@ import { formaterTall, konsentrasjonsniva, ordEndring, type ThcGrunnlag } from '
  * forstå hvordan kommentaren ble til. Ligger som en sammenleggbar
  * «Forklaring» under visualiseringen, etter mønster fra det frittstående
  * THC-COOH-verktøyet, og gjelder derfor bare fortolkning mot forrige prøve.
+ *
+ * Teksten er delt i tre bolker med hver sin overskrift — hvor stor endringen
+ * er, hvorfor den målte endringen ikke er den sanne, og hva som var å vente
+ * uten et nytt inntak — slik at leseren finner igjen leddene i resonnementet
+ * uten å lese alt.
  */
 
 /** «en nedgang på 74 %», «en økning på 5 %» eller «ingen endring». */
@@ -32,43 +37,62 @@ export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; k
 
   const vurdering =
     kategori >= 4
-      ? 'Den korrigerte endringen viser mindre nedgang enn det som anses mulig selv ved den tregeste ' +
-        'dokumenterte utskillelsen. Kommentaren sier derfor at cannabis har vært inntatt etter forrige prøve.'
+      ? 'Den usikkerhetskorrigerte endringen viser mindre nedgang enn det som anses mulig selv ved ' +
+        'den tregeste dokumenterte utskillelsen. Kommentaren sier derfor at cannabis har vært ' +
+        'inntatt etter forrige prøve.'
       : kategori === 3
-        ? 'Den korrigerte endringen viser mindre nedgang enn forventet uten nytt inntak, men er fortsatt ' +
+        ? 'Den usikkerhetskorrigerte endringen viser mindre nedgang enn forventet, men er fortsatt ' +
           'mulig ved spesielt treg utskillelse. Kommentaren sier derfor at det er vanskelig å avgjøre ' +
           'hvorvidt cannabis har vært inntatt etter forrige prøve.'
-        : 'Den korrigerte endringen ligger innenfor det som er forventet uten nytt inntak. Kommentaren ' +
+        : 'Den usikkerhetskorrigerte endringen ligger innenfor det som er forventet. Kommentaren ' +
           'sier derfor at cannabis ikke nødvendigvis har vært inntatt etter forrige prøve.'
 
   return (
     <div className="thc-forklaring">
-      <p>
-        Det er {dagene} mellom prøvene. IRCAK er målt til {tall(aktuell)} i denne prøven og{' '}
-        {tall(forrige)} i forrige — et forholdstall på {formaterTall(maltEndring + 1)}, altså{' '}
-        {endringsfrase(maltEndring)}.
-      </p>
-      <p>
-        Målinger har usikkerhet, så det sanne forholdstallet kan være noe høyere eller lavere enn
-        det målte. Korrigert for måleusikkerhet kan vi med 90 % sikkerhet si at det sanne
-        forholdstallet er minst {formaterTall(korrigertEndring + 1)} — tilsvarende{' '}
-        {endringsfrase(korrigertEndring)}. Det er dette tallet, med tvilen i personens favør, som
-        sammenlignes med utskillelseskurvene.
-      </p>
-      <p>
-        Forventet endring etter {dagene} ved {kronisk ? 'kronisk bruk' : 'et enkeltinntak'}, når
-        IRCAK i forrige prøve er {tall(forrige)} og det <i>ikke</i> har skjedd et nytt inntak:
-      </p>
-      <ul>
-        <li>hos de aller fleste: minst {hosFleste} % nedgang</li>
-        <li>øvre grense for hva som anses mulig: {ovreGrense} % nedgang</li>
-      </ul>
-      <p>{vurdering}</p>
-      <p>
-        Kommentarens åpning følger konsentrasjonen i denne prøven: under 20 omtales som lav, 20–40
-        som middels høy, og 40 eller mer som høy. {tall(aktuell)} regnes derfor som {niva}{' '}
-        konsentrasjon.
-      </p>
+      <section className="thc-forklaring__bolk">
+        <h3 className="thc-forklaring__tittel">Hvor stor er endringen mellom målingene?</h3>
+        <p>
+          IRCAK er målt til {tall(aktuell)} i denne prøven og {tall(forrige)} i forrige — et
+          forholdstall på {formaterTall(maltEndring + 1)} ({tall(aktuell)}/{tall(forrige)}), altså{' '}
+          {endringsfrase(maltEndring)}.
+        </p>
+      </section>
+
+      <section className="thc-forklaring__bolk">
+        <h3 className="thc-forklaring__tittel">Målt endring ≠ sann endring</h3>
+        <p>
+          Målinger har usikkerhet, så det sanne forholdstallet kan være noe høyere eller lavere enn
+          det målte. Korrigert for måleusikkerhet kan vi med 90 % sikkerhet si at det sanne
+          forholdstallet er minst {formaterTall(korrigertEndring + 1)} — tilsvarende{' '}
+          {endringsfrase(korrigertEndring)}. Det er dette tallet, med tvilen i personens favør, som
+          sammenlignes med utskillelseskurvene.
+        </p>
+      </section>
+
+      <section className="thc-forklaring__bolk">
+        <h3 className="thc-forklaring__tittel">
+          Forventet nedgang når et nytt inntak <i>ikke</i> har skjedd
+        </h3>
+        <p>
+          Det er {dagene} mellom prøvene. Forventet endring etter {dagene} ved{' '}
+          {kronisk ? 'kronisk bruk' : 'et enkeltinntak'}, når IRCAK i forrige prøve er{' '}
+          {tall(forrige)} og det <i>ikke</i> har skjedd et nytt inntak:
+        </p>
+        <ul>
+          <li>
+            Hos de aller fleste: <strong>minst {hosFleste} % nedgang</strong>
+          </li>
+          <li>
+            Øvre grense for hva som anses mulig: <strong>{ovreGrense} % nedgang</strong>
+          </li>
+        </ul>
+        <p>{vurdering}</p>
+        <p>
+          Kommentarens åpning følger konsentrasjonen i denne prøven: under 20 omtales som lav, 20–40
+          som middels høy, og 40 eller mer som høy. {tall(aktuell)} regnes derfor som {niva}{' '}
+          konsentrasjon.
+        </p>
+      </section>
     </div>
   )
 }

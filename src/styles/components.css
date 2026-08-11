@@ -1074,16 +1074,34 @@
   opacity: 1;
 }
 
-/* Forklaringen under figuren: vanlig lesetekst med luft mellom avsnittene. */
+/* Forklaringen under figuren: vanlig lesetekst med luft mellom avsnittene,
+   og tydeligere luft mellom bolkene enn inni dem. */
 .thc-forklaring {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
+  gap: var(--rom-4);
   padding-top: var(--rom-2);
   font-size: var(--tekst-s);
   line-height: 1.6;
   text-align: left;
   text-wrap: pretty;
+}
+
+.thc-forklaring__bolk {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.thc-forklaring__tittel {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-tung);
+  line-height: 1.35;
+  color: var(--blekk);
+}
+
+.thc-forklaring strong {
+  font-weight: var(--vekt-tung);
 }
 
 .thc-forklaring ul {
