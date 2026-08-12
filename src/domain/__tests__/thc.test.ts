@@ -377,12 +377,7 @@ describe('fortolkningen fra inndata til kommentar', () => {
 })
 
 describe('visualiseringen', () => {
-  const graf = byggGraf({
-    forrige: 6.5,
-    dager: 23,
-    korrigertEndring: -0.7352964402245712,
-    sikkerhetsmargin: STANDARD_SIKKERHETSMARGIN,
-  })
+  const graf = byggGraf({ forrige: 6.5, dager: 23, korrigertEndring: -0.7352964402245712 })
 
   it('tegner de tre kurvene fortolkningen bruker, med navnene eieren har valgt', () => {
     expect(graf.kurver.map((k) => k.navn)).toEqual([

@@ -708,12 +708,18 @@
   color: var(--blekk);
 }
 
+/* Boblen bærer alt fra én setning til en forklaring i flere bolker. Bolkene
+   legger seg ved siden av hverandre når det er plass — en lang forklaring i
+   én spalte blir en søyle som ikke får plass over ankeret sitt. */
 .tips {
   position: absolute;
   left: 0;
   right: 0;
   bottom: calc(100% + var(--rom-3));
   z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: var(--rom-3) var(--rom-4);
   padding: var(--rom-3) var(--rom-4);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-normal);
@@ -733,6 +739,21 @@
     opacity var(--fart) var(--kurve),
     transform var(--fart) var(--kurve),
     visibility var(--fart);
+}
+
+/* Avstanden mellom avsnittene er mindre enn mellom bolkene, så det synes hva
+   som hører sammen. */
+.tips__bolk {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  font-size: var(--tekst-xs);
+}
+
+.tips__tittel {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-tung);
+  line-height: 1.35;
 }
 
 /* Pilen ned mot ankeret boblen hører til. */
@@ -1147,16 +1168,6 @@
 
 .thc-legende__strek--rod {
   background: var(--niva-over-linje);
-}
-
-/* Linjen under figuren: hvilken sikkerhetsmargin punktet for denne prøven
-   står med. Dempet, som annen bildetekst. */
-.thc-plot__fotnote {
-  font-size: var(--tekst-xs);
-  line-height: 1.5;
-  text-align: left;
-  text-wrap: pretty;
-  color: var(--blekk-dempet);
 }
 
 /* Forklaringen under figuren: vanlig lesetekst med luft mellom avsnittene,

@@ -299,20 +299,24 @@ export const TOM_THC_INNDATA: ThcInndata = {
   sikkerhetsmargin: STANDARD_SIKKERHETSMARGIN,
 }
 
-/** Grunnlaget visualiseringen tegnes fra, når fortolkningen bruker forrige prøve. */
+/**
+ * Grunnlaget visualiseringen tegnes fra, når fortolkningen bruker forrige
+ * prøve. Sikkerhetsmarginen står ikke her: figuren tegner den korrigerte
+ * endringen, og trenger ikke vite hvor langt ut i fordelingen den er lest av.
+ */
 export interface ThcGrafgrunnlag {
   forrige: number
   dager: number
   /** Den korrigerte endringen (D20), som andel: −0,74 = 74 % nedgang. */
   korrigertEndring: number
-  /** Marginen den korrigerte endringen er lest av med. */
-  sikkerhetsmargin: Sikkerhetsmargin
 }
 
 /** Hele tallgrunnlaget for en fortolkning mot forrige prøve, til forklaringen. */
 export interface ThcGrunnlag extends ThcGrafgrunnlag {
   aktuell: number
   kronisk: boolean
+  /** Marginen den korrigerte endringen er lest av med. */
+  sikkerhetsmargin: Sikkerhetsmargin
   /** Den målte endringen før usikkerhetskorreksjon: aktuell/forrige − 1. */
   maltEndring: number
   /** Forventet endring per kurve etter like mange døgn (rad 63). */

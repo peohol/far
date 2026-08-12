@@ -251,7 +251,10 @@ nederst i inndatakortet, og står på 90 % når appen lastes:
 Marginen slår gjennom alle stedene fortolkningen bruker den korrigerte
 endringen: kategorien og dermed kommentaren, punktet for denne prøven i
 figuren, og tallene og ordlyden i «Forklaring». Overskriften over skalaen har
-prikkestrek og bærer et tips som forklarer hva marginen er, uten statistikk.
+prikkestrek og bærer forklaringen på hva marginen er, i to bolker — hvorfor en
+målt endring ikke er den sanne, og hva marginen gjør med den. Bolkene legger
+seg ved siden av hverandre når det er plass, så boblen ikke blir en søyle som
+ikke får plass over overskriften sin.
 
 Skalaen vises bare når det finnes en tidligere prøve å sammenligne med. Uten
 en slik prøve regnes ingen endring ut, og marginen har ingenting å gjøre —
@@ -268,8 +271,6 @@ og det er minst ett døgn mellom prøvene.
 
 Punktet for denne prøven er den korrigerte endringen, siden det er den
 konklusjonen leses av, og flytter seg derfor når sikkerhetsmarginen endres.
-Linjen under figuren sier hvilken margin punktet står med, så det ikke ser ut
-som en måling.
 
 > Her viker figuren bevisst fra regnearkets egen graf, som tegner den lilla
 > mellomkurven («Kronisk, typisk») i stedet for den gule. Den lilla kurven er

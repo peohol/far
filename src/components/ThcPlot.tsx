@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Tips } from './Tips'
 import { byggGraf, formaterProsent } from '../domain/thcPlot'
-import { INGEN_SIKKERHETSMARGIN, type ThcGrafgrunnlag } from '../domain/thc'
+import type { ThcGrafgrunnlag } from '../domain/thc'
 
 /**
  * Visualiseringen av en fortolkning mot forrige prøve: de tre
@@ -15,8 +15,7 @@ import { INGEN_SIKKERHETSMARGIN, type ThcGrafgrunnlag } from '../domain/thc'
  * kan bære et tips om hva profilen står for.
  *
  * Punktet for denne prøven flytter seg med sikkerhetsmarginen, siden det er
- * den korrigerte endringen som sammenlignes med kurvene. Linjen under figuren
- * sier hvilken margin punktet står med.
+ * den korrigerte endringen som sammenlignes med kurvene.
  */
 
 const BREDDE = 900
@@ -35,7 +34,6 @@ const PROFILTIPS: Record<'gronn' | 'gul' | 'rod', string> = {
 
 export function ThcPlot({ grunnlag }: { grunnlag: ThcGrafgrunnlag }) {
   const graf = useMemo(() => byggGraf(grunnlag), [grunnlag])
-  const utenMargin = grunnlag.sikkerhetsmargin === INGEN_SIKKERHETSMARGIN
 
   const venstre = MARG.venstre
   const hoyre = BREDDE - MARG.hoyre
@@ -58,15 +56,15 @@ export function ThcPlot({ grunnlag }: { grunnlag: ThcGrafgrunnlag }) {
         {graf.kurver.map((kurve) => (
           // Boblen spenner over hele legenden, ikke bare over navnet den
           // hører til, så den lange forklaringen får plass å stå på.
-          <span key={kurve.tone} className="thc-legende__oppforing">
-            <Tips tekst={PROFILTIPS[kurve.tone]} className="thc-legende__punkt">
+          <div key={kurve.tone} className="thc-legende__oppforing">
+            <Tips forklaring={PROFILTIPS[kurve.tone]} className="thc-legende__punkt">
               <span
                 className={`thc-legende__strek thc-legende__strek--${kurve.tone}`}
                 aria-hidden="true"
               />
               <span className="tipsanker__navn">{kurve.navn}</span>
             </Tips>
-          </span>
+          </div>
         ))}
       </div>
 
@@ -130,15 +128,6 @@ export function ThcPlot({ grunnlag }: { grunnlag: ThcGrafgrunnlag }) {
           Dager siden forrige prøve
         </text>
       </svg>
-
-      {/* Punktet for denne prøven er den korrigerte endringen — det er den
-          konklusjonen leses av. Da må figuren si hvilken margin den er
-          korrigert med, ellers ser det ut som en måling. */}
-      <p className="thc-plot__fotnote">
-        {utenMargin
-          ? 'Punktet for denne prøven er den målte endringen: sikkerhetsmarginen står på «Ingen», så målingene er lagt inn slik de er.'
-          : `Punktet for denne prøven er endringen med ${grunnlag.sikkerhetsmargin * 100} % sikkerhetsmargin — den største nedgangen måleusikkerheten med rimelighet kan skjule, med tvilen i personens favør.`}
-      </p>
     </>
   )
 }
