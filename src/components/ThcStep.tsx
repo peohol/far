@@ -35,15 +35,22 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
   const [failedCopy, setFailedCopy] = useState<string | null>(null)
   /** Sant rett etter en kopiering: tilbudet om å nullstille med Enter står. */
   const [nullstillTips, setNullstillTips] = useState(false)
+  /** Tikker for hver nullstilling, så fokuseringen under kan kjøre på nytt. */
+  const [fokusTeller, setFokusTeller] = useState(0)
+  // Feltet som skal ha fokus er det først synlige — «Forrige prøve» når det
+  // finnes, ellers «Denne prøven». Refen flyttes derfor mellom de to inputene
+  // etter hvilken som faktisk står øverst til venstre akkurat nå.
   const forsteFelt = useRef<HTMLInputElement>(null)
   const kopierKnapp = useRef<HTMLButtonElement>(null)
   const seksjon = useRef<HTMLElement>(null)
   const inndatakort = useRef<HTMLElement>(null)
   const resultatkort = useRef<HTMLElement>(null)
 
+  // Kjører etter mount og etter hver nullstilling — begge ganger har DOM-en
+  // allerede rukket å legge om hvilket felt refen peker på.
   useEffect(() => {
     forsteFelt.current?.focus()
-  }, [])
+  }, [fokusTeller])
 
   useKortHopp(true, seksjon)
 
@@ -62,7 +69,10 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
     setInndata(TOM_THC_INNDATA)
     setFailedCopy(null)
     setNullstillTips(false)
-    forsteFelt.current?.focus()
+    // Fokuseringen skjer i effekten over, ikke her direkte: refen kan bytte
+    // felt idet «Ingen tidligere prøve» nullstilles, og DOM-en er ikke
+    // oppdatert med det nye feltet før React har rukket å rendre på nytt.
+    setFokusTeller((t) => t + 1)
   }
 
   const kopier = async () => {
@@ -202,6 +212,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                   <label className="thc-felt">
                     <span>IRCAK</span>
                     <input
+                      ref={forsteFelt}
                       className="thc-input"
                       type="text"
                       inputMode="decimal"
@@ -228,7 +239,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                 <label className="thc-felt">
                   <span>IRCAK</span>
                   <input
-                    ref={forsteFelt}
+                    ref={inndata.ingenTidligere ? forsteFelt : undefined}
                     className="thc-input"
                     type="text"
                     inputMode="decimal"
