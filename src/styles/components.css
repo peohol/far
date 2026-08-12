@@ -422,7 +422,6 @@
 }
 
 .bandknapp {
-  position: relative;
   display: flex;
   flex: 1;
   align-items: center;
@@ -456,71 +455,6 @@
 
 .bandknapp__ikon {
   font-size: 1.25em;
-}
-
-/* --- Kommentaren som blir kopiert -------------------------------------- */
-
-/* Tipset spenner over hele raden i stedet for å henge under hver enkelt
-   knapp: kommentarene er lange, og et tips som følger knappen ville blitt
-   klippet i kanten av vinduet på båndene ytterst. Knappene er like brede, så
-   pekeren under tipset er nok til å vise hvilken knapp det gjelder. */
-.bandtips {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: calc(100% + var(--rom-4));
-  z-index: 5;
-  padding: var(--rom-3) var(--rom-4);
-  font-size: var(--tekst-s);
-  font-weight: var(--vekt-normal);
-  line-height: 1.5;
-  text-align: left;
-  text-wrap: pretty;
-  color: var(--blekk);
-  background: var(--flate);
-  border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-m);
-  box-shadow: var(--skygge-hevet);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(0.4rem);
-  /* Tipset skal aldri stå i veien for knappen det hører til. */
-  pointer-events: none;
-  transition:
-    opacity var(--fart) var(--kurve),
-    transform var(--fart) var(--kurve),
-    visibility var(--fart);
-}
-
-/* Pekeren fra tipset ned mot knappen. Den henger på knappen selv, så den
-   treffer midt på uansett hvor mange bånd analytten har. */
-.bandknapp::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + var(--rom-4) - 0.45rem);
-  width: 0.9rem;
-  height: 0.9rem;
-  background: var(--flate);
-  border: var(--kant) solid var(--linje);
-  border-top: 0;
-  border-left: 0;
-  transform: translateX(-50%) rotate(45deg);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--fart) var(--kurve);
-}
-
-.bandknapp:hover + .bandtips,
-.bandknapp:focus-visible + .bandtips {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.bandknapp:hover::after,
-.bandknapp:focus-visible::after {
-  opacity: 1;
 }
 
 .bandknapp--under {
@@ -679,111 +613,175 @@
   }
 }
 
-/* --- Tips: forklaringsbobler --------------------------------------------
-   Et navn eller en overskrift med prikkestrek under bærer en boble som vises
-   både ved peker og ved tastaturfokus. Ankeret og boblen er søsken, så boblen
-   spenner over bredden til nærmeste posisjonerte forelder i stedet for å
-   klemmes inn i ankerets egen — forelderen må derfor være `position:
-   relative`. Brukes av legenden i THC-figuren og av sikkerhetsmarginen. */
+/* --- Tooltip ------------------------------------------------------------
+   Ett system for hele appen, se src/components/Tips.tsx. Teksten som bærer et
+   tips markeres med prikkestrek. Selve boblen tegnes i en portal på <body>,
+   fast til vinduet, så den verken klippes av eller strekkes av beholderen
+   ankeret står i. Plasseringen kommer fra src/domain/tipsplassering.ts og
+   settes som left/top; --tips-pil og --tips-maks settes samme sted. */
 
 .tipsanker {
-  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--rom-2);
   cursor: help;
 }
 
-/* Prikkestreken er hintet om at det er noe å hente ved å holde pekeren over.
-   Den ligger på selve navnet, ikke på det som eventuelt står ved siden av —
-   en fargestrek i en legende, for eksempel. */
+/* Prikkestreken er hintet om at det er noe å hente. Den ligger på ankeret
+   selv, med mindre ankeret peker ut en egen del av innholdet med
+   `tipsanker__navn` — en fargestrek i en legende skal ikke ha strek under. */
+.tipsanker:not(:has(.tipsanker__navn)),
 .tipsanker__navn {
   text-decoration: underline dotted currentColor;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.28em;
 }
 
+.tipsanker:hover,
+.tipsanker:focus-visible,
 .tipsanker:hover .tipsanker__navn,
 .tipsanker:focus-visible .tipsanker__navn {
   color: var(--blekk);
 }
 
+/* Forklaringen slik skjermlesere får den, hos ankeret. Skjult for øyet, men
+   direkte refererte skjulte noder teller fortsatt med i beskrivelsen, så
+   `aria-describedby` har alltid noe å peke på — også når boblen er borte. */
+.tipsforklaring {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 /* Boblen bærer alt fra én setning til en forklaring i flere bolker. Bolkene
    legger seg ved siden av hverandre når det er plass — en lang forklaring i
-   én spalte blir en søyle som ikke får plass over ankeret sitt. */
-.tips {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: calc(100% + var(--rom-3));
-  z-index: 5;
+   én spalte blir en søyle. Fargene er snudd i forhold til resten av appen.
+
+   Ytterelementet holder plasseringen og pilen, innerelementet innholdet.
+   Delingen trengs fordi pilen stikker utenfor boblen: rullingen må skje et
+   sted som ikke klipper den. */
+.tipsboble {
+  position: fixed;
+  z-index: 40;
+  /* Boblen skal aldri stå i veien for det den forklarer. */
+  pointer-events: none;
+  /* Usynlig til målingen er gjort, så den ikke blinker til i feil hjørne. */
+  opacity: 0;
+}
+
+.tipsboble--klar {
+  opacity: 1;
+}
+
+.tipsboble__innhold {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
   gap: var(--rom-3) var(--rom-4);
+  /* Målingen setter maksmålene til den faktiske vinduskanten. Reservene
+     gjelder bare den aller første, usynlige rendringen. Høyden er grunnen til
+     at en lang forklaring aldri stikker ut under vinduet. */
+  max-width: min(44rem, var(--tips-maks-bredde, calc(100vw - 2.5rem)));
+  max-height: var(--tips-maks-hoyde, calc(100dvh - 2.5rem));
   padding: var(--rom-3) var(--rom-4);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-normal);
   line-height: 1.5;
   text-align: left;
   text-wrap: pretty;
-  color: var(--blekk);
-  background: var(--flate);
-  border: var(--kant) solid var(--linje);
+  color: var(--tips-blekk);
+  background: var(--tips-flate);
   border-radius: var(--runding-m);
   box-shadow: var(--skygge-hevet);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(0.4rem);
-  pointer-events: none;
-  transition:
-    opacity var(--fart) var(--kurve),
-    transform var(--fart) var(--kurve),
-    visibility var(--fart);
+}
+
+/* Er forklaringen høyere enn vinduet, kan den rulles — og da må boblen ta
+   imot pekeren, ellers er det ikke mulig å komme til resten av teksten.
+   Broen dekker luften mellom ankeret og boblen, så pekeren ikke mister
+   boblen på veien bort til den. */
+.tipsboble--rullbar .tipsboble__innhold {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  pointer-events: auto;
+}
+
+.tipsboble--rullbar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--tips-luft);
+  pointer-events: auto;
+}
+
+.tipsboble--rullbar.tipsboble--over::before {
+  top: 100%;
+}
+
+.tipsboble--rullbar.tipsboble--under::before {
+  bottom: 100%;
+}
+
+/* Pilen mot teksten som utløste boblen. --tips-pil er avstanden fra
+   venstrekanten, så pilen blir stående ved teksten også når boblen er skjøvet
+   inn fra en vinduskant. */
+.tipsboble::after {
+  content: '';
+  position: absolute;
+  left: var(--tips-pil);
+  width: var(--tips-pilbredde);
+  height: var(--tips-pilbredde);
+  background: var(--tips-flate);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.tipsboble--over::after {
+  top: calc(100% - var(--tips-pilbredde) / 2);
+}
+
+.tipsboble--under::after {
+  bottom: calc(100% - var(--tips-pilbredde) / 2);
+}
+
+/* Boblen siger fram fra den siden den står på. Uten bevegelse står den bare
+   der med én gang — animasjonen slås av i base.css. */
+.tipsboble--over.tipsboble--klar {
+  animation: tips-fram-over var(--fart) var(--kurve);
+}
+
+.tipsboble--under.tipsboble--klar {
+  animation: tips-fram-under var(--fart) var(--kurve);
+}
+
+@keyframes tips-fram-over {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+}
+
+@keyframes tips-fram-under {
+  from {
+    opacity: 0;
+    transform: translateY(-0.4rem);
+  }
 }
 
 /* Avstanden mellom avsnittene er mindre enn mellom bolkene, så det synes hva
    som hører sammen. */
-.tips__bolk {
+.tipsboble__bolk {
   display: flex;
   flex-direction: column;
   gap: var(--rom-2);
   font-size: var(--tekst-xs);
 }
 
-.tips__tittel {
+.tipsboble__tittel {
   font-size: var(--tekst-s);
   font-weight: var(--vekt-tung);
   line-height: 1.35;
-}
-
-/* Pilen ned mot ankeret boblen hører til. */
-.tipsanker::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + var(--rom-3) - 0.45rem);
-  width: 0.9rem;
-  height: 0.9rem;
-  background: var(--flate);
-  border: var(--kant) solid var(--linje);
-  border-top: 0;
-  border-left: 0;
-  transform: translateX(-50%) rotate(45deg);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--fart) var(--kurve);
-}
-
-.tipsanker:hover + .tips,
-.tipsanker:focus-visible + .tips {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.tipsanker:hover::after,
-.tipsanker:focus-visible::after {
-  opacity: 1;
 }
 
 /* --- THC-syremodulen ---------------------------------------------------- */
@@ -944,11 +942,8 @@
   width: 100%;
 }
 
-/* Overskriften bærer tipset, og er den posisjonerte forelderen boblen måler
-   seg mot. Den går derfor i full bredde selv om skalaen under er kortere —
-   forklaringen er lang, og en boble på skalaens bredde blir en søyle. */
+/* Overskriften bærer tipset om hva sikkerhetsmarginen er. */
 .thc-margin__hode {
-  position: relative;
   font-size: var(--tekst-s);
   font-weight: var(--vekt-medium);
   color: var(--blekk-dempet);
@@ -1136,10 +1131,8 @@
 }
 
 /* Legenden står i vanlig HTML over figuren, så hvert kurvenavn kan bære et
-   tips om hva profilen står for. Legenden er den posisjonerte forelderen
-   boblene måler seg mot, så de spenner over hele bredden hennes. */
+   tips om hva profilen står for. */
 .thc-legende {
-  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: var(--rom-2) var(--rom-4);

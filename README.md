@@ -47,8 +47,8 @@ sumanalyse står under moderstoffet med mindre og dempet skrift. Koden og
 metabolittene er stort sett mindre kjent enn moderstoffet, så det er
 moderstoffet som skal kunne leses av på et blikk.
 
-Peker eller tastaturfokus på et bånd viser kommentaren som blir kopiert, i et
-tips over knappene. Når kommentaren er kopiert, kvitteres det med et blink ved
+Peker eller tastaturfokus på et bånd viser kommentaren som blir kopiert, i en
+tooltip over den knappen den gjelder. Når kommentaren er kopiert, kvitteres det med et blink ved
 knappen som ble brukt. Blinket starter der og fortsetter et lite øyeblikk inn i
 neste steg, så det rekker å bli sett uten å holde igjen arbeidsflyten. Tiden
 står som `BLINK` og `STEGBYTTE` øverst i `src/App.tsx`.
@@ -72,16 +72,45 @@ src/data/aliaser.json     Håndholdte ekstra søkeord per analyttkode
 src/types.ts              Datamodellen
 src/state.ts              Tilstandsmaskinen for stegene
 src/domain/               Bånd, klassifisering, søk, navn, fargespredning, kontrast,
+                          tooltipplassering (tipsplassering.ts),
                           THC-fortolkning (thc.ts) og figurgrunnlaget (thcPlot.ts)
 src/hooks/                Tastatur, tema, hurtigtastmerker, utklippstavle
-src/components/           Stegene, felles kort/pille/knapp/tips/ikoner
+src/components/           Stegene, felles kort/pille/knapp/tooltip/ikoner
 src/styles/               tokens.css (design) + base.css + components.css
 ```
 
 Alt som gjentar seg — farger, avstander, skriftstørrelser, knapper,
-hurtigtastmerker, ikonrammen — er definert ett sted og gjenbrukt. Nye analytter
+hurtigtastmerker, ikonrammen, tooltipene — er definert ett sted og gjenbrukt. Nye analytter
 krever ingen kodeendring: de kommer med når PDF-en bygges på nytt. Nye steg
 legges til ved å utvide `Stage` i `src/state.ts` og skrive én komponent til.
+
+### Tooltip
+
+Appen har ett tooltipsystem, i `src/components/Tips.tsx`. Tekst som bærer en
+forklaring, markeres med prikkestrek, og forklaringen vises både ved peker og
+ved tastaturfokus.
+
+```tsx
+// Vanlig tekst med forklaring bak seg:
+<Tips forklaring="Hva dette betyr">Navnet</Tips>
+
+// Når tipset skal henge på noe som allerede har en jobb, som en knapp:
+const tips = useTips('Hva knappen gjør')
+<button {...tips.props}>…</button>
+{tips.forklaring}
+```
+
+Boblen tegnes i en portal rett på `<body>` og ligger fast til vinduet. Derfor
+er den ikke bundet av bredden, høyden eller `overflow` til beholderen teksten
+står i — en lang kommentar kan stå over en smal knapp uten å bli klippet.
+Fargene er snudd i forhold til resten av appen: svart boble med hvit skrift i
+lyst tema, hvit boble med svart skrift i mørkt.
+
+Boblen står midtstilt over teksten når det er plass. Er det ikke plass over,
+faller den ned under, og nær en sidekant skyves den innover — pilen blir
+stående igjen ved teksten, så det fortsatt går fram hva boblen hører til.
+Reglene ligger i `src/domain/tipsplassering.ts` og er dekket av tester;
+`TipsLag` i `src/main.tsx` er selve laget og må ligge rundt hele appen.
 
 ## Datasettet
 
@@ -253,8 +282,7 @@ endringen: kategorien og dermed kommentaren, punktet for denne prøven i
 figuren, og tallene og ordlyden i «Forklaring». Overskriften over skalaen har
 prikkestrek og bærer forklaringen på hva marginen er, i to bolker — hvorfor en
 målt endring ikke er den sanne, og hva marginen gjør med den. Bolkene legger
-seg ved siden av hverandre når det er plass, så boblen ikke blir en søyle som
-ikke får plass over overskriften sin.
+seg ved siden av hverandre når det er plass, så boblen ikke blir en søyle.
 
 Skalaen vises bare når det finnes en tidligere prøve å sammenligne med. Uten
 en slik prøve regnes ingen endring ut, og marginen har ingenting å gjøre —
@@ -306,10 +334,10 @@ fram av både farge, ikon og tall — ikke farge alene — og animasjoner slås 
 ved `prefers-reduced-motion`. `npm test` måler kontrasten i begge temaer mot
 tokens.css, så en fargeendring som bryter kravet slår ut i testene.
 
-Tipset med kommentaren vises både ved peker og ved tastaturfokus, og er knyttet
-til knappen med `aria-describedby`, slik at skjermlesere får den samme teksten.
-Det samme gjelder forklaringsboblene (`src/components/Tips.tsx`) — de er aldri
-ren museinformasjon. Sikkerhetsmarginen meldes med navnet på stoppet skalaen
+Tooltipene vises både ved peker og ved tastaturfokus, og teksten er knyttet til
+elementet med `aria-describedby` — den ligger skjult hos ankeret, ikke bare i
+boblen, så skjermlesere får den uansett om boblen står framme. Ingen forklaring
+i appen er ren museinformasjon. Sikkerhetsmarginen meldes med navnet på stoppet skalaen
 står på og ikke med plassen i rekka (`aria-valuetext`), og forklaringen bak
 overskriften er knyttet til både overskriften og selve skalaen.
 Kvitteringen for kopieringen meldes i tillegg som statusbeskjed, siden blinket

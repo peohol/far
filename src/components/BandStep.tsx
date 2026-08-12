@@ -5,6 +5,7 @@ import { Pill } from './Pill'
 import { StepBar } from './StepBar'
 import { Shortcut } from './Shortcut'
 import { ManualCopy } from './ManualCopy'
+import { useTips } from './Tips'
 import { ArrowDownIcon, ArrowUpIcon, BackIcon, CheckIcon, PhoneIcon } from './icons'
 import { bands as bandsOf, type Band } from '../domain/bands'
 import { displayName } from '../domain/names'
@@ -26,6 +27,35 @@ const IKON = {
   over: ArrowUpIcon,
   ring: PhoneIcon,
 } as const
+
+/**
+ * Ett bånd. Kommentaren som havner på utklippstavlen henger på knappen som et
+ * tips, så den kan leses før valget tas.
+ */
+function BandKnapp({ band, snarvei, onPick }: { band: Band; snarvei: string; onPick: () => void }) {
+  const tips = useTips(band.kommentar)
+  const Icon = IKON[band.ring && band.niva !== 'over' ? 'ring' : band.tone]
+
+  return (
+    <li>
+      <button
+        type="button"
+        // Kvitteringen for kopieringen legges der knappen står, og finner den
+        // herfra — også når båndet ble valgt med tastaturet.
+        data-band={band.key}
+        className={`bandknapp bandknapp--${band.tone}`}
+        onClick={onPick}
+        aria-keyshortcuts={snarvei}
+        {...tips.props}
+      >
+        <Icon className="bandknapp__ikon" />
+        <span className="bandknapp__verdi">{band.label}</span>
+        <Shortcut>{snarvei}</Shortcut>
+      </button>
+      {tips.forklaring}
+    </li>
+  )
+}
 
 /**
  * Steg 2: hvilken analytt som kommenteres, og hvilket konsentrasjonsbånd
@@ -72,33 +102,14 @@ export function BandStep({ analyte, onPick, onBack, failed }: BandStepProps) {
           className={`band${merker ? ' band--merker' : ''}`}
           style={{ '--antall': bands.length } as CSSProperties}
         >
-          {bands.map((band, i) => {
-            const Icon = IKON[band.ring && band.niva !== 'over' ? 'ring' : band.tone]
-            return (
-              <li key={band.key}>
-                <button
-                  type="button"
-                  // Kvitteringen for kopieringen legges der knappen står, og
-                  // finner den herfra — også når båndet ble valgt med tastaturet.
-                  data-band={band.key}
-                  className={`bandknapp bandknapp--${band.tone}`}
-                  onClick={() => onPick(band)}
-                  aria-keyshortcuts={indexToDigit(i)}
-                  aria-describedby={`bandtips-${band.key}`}
-                >
-                  <Icon className="bandknapp__ikon" />
-                  <span className="bandknapp__verdi">{band.label}</span>
-                  <Shortcut>{indexToDigit(i)}</Shortcut>
-                </button>
-                {/* Kommentaren som havner på utklippstavlen, som tooltip over
-                    raden. Den ligger utenfor knappen, slik at den kan spenne
-                    over hele kortet uten å styre hvor bred knappen blir. */}
-                <p className="bandtips" id={`bandtips-${band.key}`} role="tooltip">
-                  {band.kommentar}
-                </p>
-              </li>
-            )
-          })}
+          {bands.map((band, i) => (
+            <BandKnapp
+              key={band.key}
+              band={band}
+              snarvei={indexToDigit(i)}
+              onPick={() => onPick(band)}
+            />
+          ))}
         </ul>
       </Card>
 
