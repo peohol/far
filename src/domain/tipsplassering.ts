@@ -52,9 +52,22 @@ export interface Plassering {
 }
 
 /**
+ * Så stor boblen har lov til å bli. Alt som er større enn dette ville stukket
+ * ut av vinduet uansett hvor den plasseres, så boblen får denne grensen som
+ * `max-width`/`max-height` og ruller heller innholdet sitt.
+ */
+export function maksTipsstorrelse(vindu: Storrelse): Storrelse {
+  return {
+    bredde: Math.max(0, vindu.bredde - 2 * TIPSKANT),
+    hoyde: Math.max(0, vindu.hoyde - 2 * TIPSKANT),
+  }
+}
+
+/**
  * Holder verdien innenfor et intervall. Er intervallet snudd — boblen er
- * større enn vinduet — vinner nedre grense, så boblen legger seg mot øvre
- * venstre kant i stedet for å krype ut på motsatt side.
+ * større enn vinduet, noe `maksTipsstorrelse` normalt hindrer — vinner nedre
+ * grense, så boblen legger seg mot øvre venstre kant i stedet for å krype ut
+ * på motsatt side.
  */
 function klem(verdi: number, minst: number, mest: number): number {
   return Math.min(Math.max(verdi, minst), Math.max(minst, mest))

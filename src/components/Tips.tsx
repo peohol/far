@@ -14,7 +14,14 @@ import {
   type ReactNode,
 } from 'react'
 import { createPortal } from 'react-dom'
-import { plasserTips, TIPSKANT, TIPSPIL, type Plassering } from '../domain/tipsplassering'
+import {
+  maksTipsstorrelse,
+  plasserTips,
+  TIPSLUFT,
+  TIPSPIL,
+  type Plassering,
+  type Storrelse,
+} from '../domain/tipsplassering'
 
 /**
  * Tooltipsystemet for hele appen.
@@ -56,19 +63,45 @@ const Kontekst = createContext<Styring>({ vis: () => {}, skjul: () => {}, oppdat
 
 export function TipsLag({ children }: { children: ReactNode }) {
   const [aktivt, setAktivt] = useState<Aktivt | null>(null)
+  /** Ankeret har sluppet boblen. Den lukkes med mindre noe annet holder den. */
+  const [sluppet, setSluppet] = useState(false)
+  /** Pekeren er inne i en boble som kan rulles, og holder den åpen. */
+  const [holdt, setHoldt] = useState(false)
+  const noekkel = useRef<string | null>(null)
 
   const styring = useMemo<Styring>(
     () => ({
-      vis: (noekkel, innhold, anker) => setAktivt({ noekkel, innhold, anker }),
-      // Bare det ankeret som viser boblen, kan lukke den. Ellers ville en
+      vis: (n, innhold, anker) => {
+        noekkel.current = n
+        setAktivt({ noekkel: n, innhold, anker })
+        setSluppet(false)
+      },
+      // Bare det ankeret som viser boblen, kan slippe den. Ellers ville en
       // «pekeren forlot»-hendelse fra ankeret ved siden av slå av boblen som
       // nettopp ble åpnet.
-      skjul: (noekkel) => setAktivt((n) => (n && n.noekkel !== noekkel ? n : null)),
-      oppdater: (noekkel, innhold) =>
-        setAktivt((n) => (n && n.noekkel === noekkel && n.innhold !== innhold ? { ...n, innhold } : n)),
+      skjul: (n) => {
+        if (noekkel.current === n) setSluppet(true)
+      },
+      oppdater: (n, innhold) =>
+        setAktivt((a) => (a && a.noekkel === n && a.innhold !== innhold ? { ...a, innhold } : a)),
     }),
     [],
   )
+
+  const lukk = useCallback(() => {
+    noekkel.current = null
+    setAktivt(null)
+    setSluppet(false)
+    setHoldt(false)
+  }, [])
+
+  // Ankeret og boblen melder fra hver for seg, og begge svarene kommer i samme
+  // oppdatering. Derfor avgjøres lukkingen her og ikke i den enkelte
+  // hendelsen — da spiller rekkefølgen deres ingen rolle når pekeren flytter
+  // seg fra ankeret og inn i boblen.
+  useEffect(() => {
+    if (sluppet && !holdt) lukk()
+  }, [sluppet, holdt, lukk])
 
   // Et trykk et annet sted lukker boblen. På berøring kommer det ingen
   // «pekeren forlot»-hendelse, så uten dette ble boblen stående etter et tapp.
@@ -76,12 +109,16 @@ export function TipsLag({ children }: { children: ReactNode }) {
     if (!aktivt) return
     const paaTrykk = (event: Event) => {
       const maal = event.target
-      if (maal instanceof Node && aktivt.anker.contains(maal)) return
-      setAktivt(null)
+      if (!(maal instanceof Node)) return lukk()
+      // Trykk i ankeret eller i boblen selv — å dra i rullefeltet, for
+      // eksempel — skal ikke lukke.
+      if (aktivt.anker.contains(maal)) return
+      if (maal instanceof Element && maal.closest('.tipsboble')) return
+      lukk()
     }
     document.addEventListener('pointerdown', paaTrykk, true)
     return () => document.removeEventListener('pointerdown', paaTrykk, true)
-  }, [aktivt])
+  }, [aktivt, lukk])
 
   return (
     <Kontekst.Provider value={styring}>
@@ -90,7 +127,7 @@ export function TipsLag({ children }: { children: ReactNode }) {
         createPortal(
           // Nøkkelen gir hver boble sin egen måling, så en ny boble aldri
           // rekker å vises et øyeblikk der den forrige sto.
-          <Boble key={aktivt.noekkel} anker={aktivt.anker}>
+          <Boble key={aktivt.noekkel} anker={aktivt.anker} onHold={setHoldt}>
             {aktivt.innhold}
           </Boble>,
           document.body,
@@ -101,32 +138,49 @@ export function TipsLag({ children }: { children: ReactNode }) {
 
 interface Maal {
   plassering: Plassering
-  /** Bredden boblen har å ta av, med luft til begge vinduskantene. */
-  maks: number
+  /** Så stor boblen får bli, med luft til vinduskantene. */
+  maks: Storrelse
+  /** Sant når forklaringen er høyere enn vinduet og må kunne rulles. */
+  rullbar: boolean
 }
 
-function uendret(forrige: Maal | null, plassering: Plassering, maks: number): boolean {
+function uendret(forrige: Maal | null, nytt: Maal): boolean {
   return (
     forrige !== null &&
-    forrige.maks === maks &&
-    forrige.plassering.venstre === plassering.venstre &&
-    forrige.plassering.topp === plassering.topp &&
-    forrige.plassering.side === plassering.side &&
-    forrige.plassering.pil === plassering.pil
+    forrige.maks.bredde === nytt.maks.bredde &&
+    forrige.maks.hoyde === nytt.maks.hoyde &&
+    forrige.rullbar === nytt.rullbar &&
+    forrige.plassering.venstre === nytt.plassering.venstre &&
+    forrige.plassering.topp === nytt.plassering.topp &&
+    forrige.plassering.side === nytt.plassering.side &&
+    forrige.plassering.pil === nytt.plassering.pil
   )
 }
 
 /**
  * Selve boblen. Den tegnes først usynlig, måles, og vises der målingen sier —
  * ellers ville den blinket til i feil hjørne før den fant plassen sin.
+ *
+ * Innholdet ligger i et eget element inni, fordi pilen stikker utenfor
+ * boblen: rullingen må skje et sted som ikke klipper den.
  */
-function Boble({ anker, children }: { anker: HTMLElement; children: ReactNode }) {
+function Boble({
+  anker,
+  onHold,
+  children,
+}: {
+  anker: HTMLElement
+  onHold: (holdt: boolean) => void
+  children: ReactNode
+}) {
   const boble = useRef<HTMLDivElement>(null)
+  const innhold = useRef<HTMLDivElement>(null)
   const [maal, setMaal] = useState<Maal | null>(null)
 
   useLayoutEffect(() => {
     const element = boble.current
-    if (!element) return
+    const kropp = innhold.current
+    if (!element || !kropp) return
 
     const mal = () => {
       const a = anker.getBoundingClientRect()
@@ -138,22 +192,28 @@ function Boble({ anker, children }: { anker: HTMLElement; children: ReactNode })
         bredde: document.documentElement.clientWidth,
         hoyde: document.documentElement.clientHeight,
       }
-      const plassering = plasserTips(
-        { venstre: a.left, topp: a.top, bredde: a.width, hoyde: a.height },
-        { bredde: b.width, hoyde: b.height },
-        vindu,
-      )
-      const maks = vindu.bredde - 2 * TIPSKANT
-      setMaal((forrige) => (uendret(forrige, plassering, maks) ? forrige : { plassering, maks }))
+      const nytt: Maal = {
+        plassering: plasserTips(
+          { venstre: a.left, topp: a.top, bredde: a.width, hoyde: a.height },
+          { bredde: b.width, hoyde: b.height },
+          vindu,
+        ),
+        maks: maksTipsstorrelse(vindu),
+        // Én piksels slark: avrundet layout skal ikke gjøre boblen rullbar
+        // når alt egentlig får plass.
+        rullbar: kropp.scrollHeight > kropp.clientHeight + 1,
+      }
+      setMaal((forrige) => (uendret(forrige, nytt) ? forrige : nytt))
     }
 
     mal()
 
-    // Boblen kan skifte størrelse når maksbredden slår inn, og ankeret kan
+    // Boblen kan skifte størrelse når maksmålene slår inn, og ankeret kan
     // flytte seg når det rulles eller vinduet endres. `true` på rullingen tar
     // også med rulling inne i beholdere på siden.
     const observator = new ResizeObserver(mal)
     observator.observe(element)
+    observator.observe(kropp)
     window.addEventListener('scroll', mal, true)
     window.addEventListener('resize', mal)
     return () => {
@@ -163,12 +223,20 @@ function Boble({ anker, children }: { anker: HTMLElement; children: ReactNode })
     }
   }, [anker, children])
 
+  // Forsvinner boblen mens pekeren er inne i den, kommer det ingen
+  // «pekeren forlot» — grepet må slippes her, ellers blir det hengende.
+  useEffect(() => () => onHold(false), [onHold])
+
   const stil = {
     left: `${maal?.plassering.venstre ?? 0}px`,
     top: `${maal?.plassering.topp ?? 0}px`,
     '--tips-pil': `${maal?.plassering.pil ?? 0}px`,
     '--tips-pilbredde': `${TIPSPIL}px`,
-    ...(maal && { '--tips-maks': `${maal.maks}px` }),
+    '--tips-luft': `${TIPSLUFT}px`,
+    ...(maal && {
+      '--tips-maks-bredde': `${maal.maks.bredde}px`,
+      '--tips-maks-hoyde': `${maal.maks.hoyde}px`,
+    }),
   } as CSSProperties
 
   return (
@@ -178,6 +246,7 @@ function Boble({ anker, children }: { anker: HTMLElement; children: ReactNode })
         'tipsboble',
         `tipsboble--${maal?.plassering.side ?? 'over'}`,
         maal && 'tipsboble--klar',
+        maal?.rullbar && 'tipsboble--rullbar',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -185,8 +254,12 @@ function Boble({ anker, children }: { anker: HTMLElement; children: ReactNode })
       // bildet av den, og skal ikke telles en gang til.
       aria-hidden="true"
       style={stil}
+      onPointerEnter={() => onHold(true)}
+      onPointerLeave={() => onHold(false)}
     >
-      {children}
+      <div ref={innhold} className="tipsboble__innhold">
+        {children}
+      </div>
     </div>
   )
 }
@@ -232,6 +305,11 @@ export function useTips(innhold: ReactNode, valg: TipsValg = {}): TipsFeste {
   // hver gang den skifter.
   const siste = useRef(innhold)
   siste.current = innhold
+  // Peker og fokus telles hver for seg. Ellers ville musen som streifer et
+  // anker brukeren nettopp tabbet seg til, tatt boblen med seg når den dro —
+  // og fokuset som fortsatt står der, gir ingen ny hendelse å åpne den på.
+  const peker = useRef(false)
+  const fokus = useRef(false)
 
   const apne = useCallback(
     (element: HTMLElement | null) => {
@@ -240,8 +318,19 @@ export function useTips(innhold: ReactNode, valg: TipsValg = {}): TipsFeste {
     [id, vis],
   )
 
+  const lukk = useCallback(() => {
+    if (!peker.current && !fokus.current) skjul(id)
+  }, [id, skjul])
+
   // Et anker som forsvinner — et steg som byttes ut — tar boblen med seg.
-  useEffect(() => () => skjul(id), [id, skjul])
+  useEffect(
+    () => () => {
+      peker.current = false
+      fokus.current = false
+      skjul(id)
+    },
+    [id, skjul],
+  )
 
   // Skifter teksten mens boblen står — som når temaknappen bytter navn i det
   // den klikkes — skal boblen vise den nye med det samme.
@@ -255,22 +344,31 @@ export function useTips(innhold: ReactNode, valg: TipsValg = {}): TipsFeste {
         anker.current = element
       },
       ...(skjermleser && { 'aria-describedby': id }),
-      onPointerEnter: () => apne(anker.current),
+      onPointerEnter: () => {
+        peker.current = true
+        apne(anker.current)
+      },
       // Ved berøring slutter pekeren å finnes så snart fingeren løftes, og
       // nettleseren sender «forlot» med det samme. Da ville boblen aldri rukket
       // å bli lest. Et tapp lar den bli stående til noe annet berøres, slik
       // laget selv sørger for.
       onPointerLeave: (event: PointerEvent<HTMLElement>) => {
-        if (event.pointerType !== 'touch') skjul(id)
+        peker.current = false
+        if (event.pointerType !== 'touch') lukk()
       },
       // Bare tastaturfokus. Et klikk viser allerede boblen gjennom pekeren, og
       // skal ikke i tillegg la den bli stående etterpå.
       onFocus: (event: FocusEvent<HTMLElement>) => {
-        if (event.currentTarget.matches(':focus-visible')) apne(event.currentTarget)
+        if (!event.currentTarget.matches(':focus-visible')) return
+        fokus.current = true
+        apne(event.currentTarget)
       },
-      onBlur: () => skjul(id),
+      onBlur: () => {
+        fokus.current = false
+        lukk()
+      },
     }),
-    [id, skjermleser, apne, skjul],
+    [id, skjermleser, apne, lukk],
   )
 
   return {

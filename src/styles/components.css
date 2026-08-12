@@ -658,16 +658,33 @@
 
 /* Boblen bærer alt fra én setning til en forklaring i flere bolker. Bolkene
    legger seg ved siden av hverandre når det er plass — en lang forklaring i
-   én spalte blir en søyle. Fargene er snudd i forhold til resten av appen. */
+   én spalte blir en søyle. Fargene er snudd i forhold til resten av appen.
+
+   Ytterelementet holder plasseringen og pilen, innerelementet innholdet.
+   Delingen trengs fordi pilen stikker utenfor boblen: rullingen må skje et
+   sted som ikke klipper den. */
 .tipsboble {
   position: fixed;
   z-index: 40;
+  /* Boblen skal aldri stå i veien for det den forklarer. */
+  pointer-events: none;
+  /* Usynlig til målingen er gjort, så den ikke blinker til i feil hjørne. */
+  opacity: 0;
+}
+
+.tipsboble--klar {
+  opacity: 1;
+}
+
+.tipsboble__innhold {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
   gap: var(--rom-3) var(--rom-4);
-  /* Målingen setter --tips-maks til den faktiske vinduskanten. Reserven
-     gjelder bare den aller første, usynlige rendringen. */
-  max-width: min(44rem, var(--tips-maks, calc(100vw - 2.5rem)));
+  /* Målingen setter maksmålene til den faktiske vinduskanten. Reservene
+     gjelder bare den aller første, usynlige rendringen. Høyden er grunnen til
+     at en lang forklaring aldri stikker ut under vinduet. */
+  max-width: min(44rem, var(--tips-maks-bredde, calc(100vw - 2.5rem)));
+  max-height: var(--tips-maks-hoyde, calc(100dvh - 2.5rem));
   padding: var(--rom-3) var(--rom-4);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-normal);
@@ -678,14 +695,33 @@
   background: var(--tips-flate);
   border-radius: var(--runding-m);
   box-shadow: var(--skygge-hevet);
-  /* Boblen skal aldri stå i veien for det den forklarer. */
-  pointer-events: none;
-  /* Usynlig til målingen er gjort, så den ikke blinker til i feil hjørne. */
-  opacity: 0;
 }
 
-.tipsboble--klar {
-  opacity: 1;
+/* Er forklaringen høyere enn vinduet, kan den rulles — og da må boblen ta
+   imot pekeren, ellers er det ikke mulig å komme til resten av teksten.
+   Broen dekker luften mellom ankeret og boblen, så pekeren ikke mister
+   boblen på veien bort til den. */
+.tipsboble--rullbar .tipsboble__innhold {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  pointer-events: auto;
+}
+
+.tipsboble--rullbar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--tips-luft);
+  pointer-events: auto;
+}
+
+.tipsboble--rullbar.tipsboble--over::before {
+  top: 100%;
+}
+
+.tipsboble--rullbar.tipsboble--under::before {
+  bottom: 100%;
 }
 
 /* Pilen mot teksten som utløste boblen. --tips-pil er avstanden fra

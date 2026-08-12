@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  maksTipsstorrelse,
   plasserTips,
   TIPSHJORNE,
   TIPSKANT,
@@ -84,9 +85,19 @@ describe('plasserTips', () => {
   })
 
   it('holder seg innenfor vinduet uansett hvor ankeret står', () => {
+    // Boblen er aldri større enn `maksTipsstorrelse` tillater — den er satt
+    // som max-width/max-height i CSS-en. Den største av dem er derfor med
+    // her: en boble som fyller vinduet helt skal fortsatt havne innenfor.
+    const maks = maksTipsstorrelse(VINDU)
     for (const x of [-200, 0, 5, 150, 600, 1050, 1195, 1400]) {
       for (const y of [-50, 0, 5, 100, 400, 780, 795, 900]) {
-        for (const boble of [BOBLE, { bredde: 900, hoyde: 320 }, { bredde: 60, hoyde: 40 }]) {
+        for (const boble of [
+          BOBLE,
+          { bredde: 900, hoyde: 320 },
+          { bredde: 60, hoyde: 40 },
+          { bredde: 300, hoyde: maks.hoyde },
+          maks,
+        ]) {
           const p = plasserTips(anker(x, y), boble, VINDU)
 
           expect(p.venstre).toBeGreaterThanOrEqual(TIPSKANT)
@@ -99,6 +110,22 @@ describe('plasserTips', () => {
         }
       }
     }
+  })
+
+  it('gir maksmål som lar boblen få plass med luft til alle vinduskantene', () => {
+    const maks = maksTipsstorrelse(VINDU)
+
+    expect(maks).toEqual({ bredde: VINDU.bredde - 2 * TIPSKANT, hoyde: VINDU.hoyde - 2 * TIPSKANT })
+    // En boble på nøyaktig maksmålet skal ikke kunne stikke ut noe sted.
+    const p = plasserTips(anker(600, 400), maks, VINDU)
+    expect(p.topp).toBe(TIPSKANT)
+    expect(p.topp + maks.hoyde).toBe(VINDU.hoyde - TIPSKANT)
+    expect(p.venstre).toBe(TIPSKANT)
+    expect(p.venstre + maks.bredde).toBe(VINDU.bredde - TIPSKANT)
+  })
+
+  it('gir aldri negative maksmål i et vindu som er mindre enn luften', () => {
+    expect(maksTipsstorrelse({ bredde: 4, hoyde: 2 })).toEqual({ bredde: 0, hoyde: 0 })
   })
 
   it('legger boblen mot øvre venstre kant når den er større enn vinduet', () => {
