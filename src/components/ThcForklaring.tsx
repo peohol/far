@@ -1,4 +1,10 @@
-import { formaterTall, konsentrasjonsniva, ordEndring, type ThcGrunnlag } from '../domain/thc'
+import {
+  formaterTall,
+  INGEN_SIKKERHETSMARGIN,
+  konsentrasjonsniva,
+  ordEndring,
+  type ThcGrunnlag,
+} from '../domain/thc'
 
 /**
  * Grunnlaget for fortolkningen, i vanlig språk — til å lese for den som vil
@@ -36,16 +42,21 @@ export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; k
   const dagene = dager === 1 ? '1 dag' : `${dager} dager`
   const niva = konsentrasjonsniva(aktuell)
 
+  // Uten sikkerhetsmargin er det den målte endringen selv som sammenlignes
+  // med kurvene, og forklaringen må kalle den det den er.
+  const utenMargin = grunnlag.sikkerhetsmargin === INGEN_SIKKERHETSMARGIN
+  const endringen = utenMargin ? 'Den målte endringen' : 'Den usikkerhetskorrigerte endringen'
+
   const vurdering =
     kategori >= 4
-      ? 'Den usikkerhetskorrigerte endringen viser mindre nedgang enn det som anses mulig selv ved ' +
+      ? `${endringen} viser mindre nedgang enn det som anses mulig selv ved ` +
         'den tregeste dokumenterte utskillelsen. Kommentaren sier derfor at cannabis har vært ' +
         'inntatt etter forrige prøve.'
       : kategori === 3
-        ? 'Den usikkerhetskorrigerte endringen viser mindre nedgang enn forventet, men er fortsatt ' +
+        ? `${endringen} viser mindre nedgang enn forventet, men er fortsatt ` +
           'mulig ved spesielt treg utskillelse. Kommentaren sier derfor at det er vanskelig å avgjøre ' +
           'hvorvidt cannabis har vært inntatt etter forrige prøve.'
-        : 'Den usikkerhetskorrigerte endringen ligger innenfor det som er forventet. Kommentaren ' +
+        : `${endringen} ligger innenfor det som er forventet. Kommentaren ` +
           'sier derfor at cannabis ikke nødvendigvis har vært inntatt etter forrige prøve.'
 
   return (
@@ -64,13 +75,23 @@ export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; k
       <section className="thc-forklaring__bolk">
         <h3 className="thc-forklaring__tittel">Målt endring ≠ sann endring</h3>
         <div className="thc-forklaring__kropp">
-          <p>
-            Målinger har usikkerhet, så det sanne forholdstallet kan være noe høyere eller lavere
-            enn det målte. Korrigert for måleusikkerhet kan vi med 90 % sikkerhet si at det sanne
-            forholdstallet er minst {formaterTall(korrigertEndring + 1)} — tilsvarende{' '}
-            {endringsfrase(korrigertEndring)}. Det er dette tallet, med tvilen i personens favør,
-            som sammenlignes med utskillelseskurvene.
-          </p>
+          {utenMargin ? (
+            <p>
+              Målinger har usikkerhet, så det sanne forholdstallet kan være noe høyere eller lavere
+              enn det målte. Sikkerhetsmarginen står på «Ingen», og da regnes det ikke med
+              usikkerheten i det hele tatt: det målte forholdstallet{' '}
+              {formaterTall(maltEndring + 1)} sammenlignes rett fram med utskillelseskurvene.
+            </p>
+          ) : (
+            <p>
+              Målinger har usikkerhet, så det sanne forholdstallet kan være noe høyere eller lavere
+              enn det målte. Korrigert for måleusikkerhet kan vi med{' '}
+              {grunnlag.sikkerhetsmargin * 100} % sikkerhet si at det sanne forholdstallet er minst{' '}
+              {formaterTall(korrigertEndring + 1)} — tilsvarende {endringsfrase(korrigertEndring)}.
+              Det er dette tallet, med tvilen i personens favør, som sammenlignes med
+              utskillelseskurvene.
+            </p>
+          )}
         </div>
       </section>
 

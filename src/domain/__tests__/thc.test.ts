@@ -9,13 +9,16 @@ import {
   formaterDatoNorsk,
   fortolkThc,
   forventetEndring,
+  INGEN_SIKKERHETSMARGIN,
   konsentrasjonsniva,
+  korreksjonsfaktor,
   korrigertEndring,
   KURVE_GRONN,
   KURVE_GUL,
   KURVE_LILLA,
   KURVE_ROD,
   lesTall,
+  STANDARD_SIKKERHETSMARGIN,
   THC_ANALYTT,
   tidForVerdi,
   TOM_THC_INNDATA,
@@ -70,12 +73,35 @@ describe('utskillelseskurvene mot regnearket', () => {
 
 describe('korreksjonen for måleusikkerhet', () => {
   it('gir regnearkets korrigerte endring (D20)', () => {
-    expect(korrigertEndring(6.5, 2.5)).toBeCloseTo(-0.7352964402245712, 12)
+    expect(korrigertEndring(6.5, 2.5, 0.9)).toBeCloseTo(-0.7352964402245712, 12)
   })
 
   it('bruker regnearkets 10 %-kvantil: uendret måling regnes som nedgang', () => {
     // LOGNORM.INV(0,1; 0; √(2·CV²)) − 1 med regnearkets CV-er.
-    expect(korrigertEndring(1, 1)).toBeCloseTo(-0.3117707445838853, 10)
+    expect(korrigertEndring(1, 1, 0.9)).toBeCloseTo(-0.3117707445838853, 10)
+  })
+})
+
+describe('sikkerhetsmarginen', () => {
+  it('står på regnearkets egen sikkerhet (B5) når appen lastes', () => {
+    expect(STANDARD_SIKKERHETSMARGIN).toBe(0.9)
+    expect(TOM_THC_INNDATA.sikkerhetsmargin).toBe(0.9)
+  })
+
+  it('leser av kvantilet marginen peker på: exp(Φ⁻¹(1 − margin) · √(2·CV²))', () => {
+    expect(korreksjonsfaktor(0.5)).toBe(1)
+    expect(korreksjonsfaktor(0.9)).toBeCloseTo(0.6882292554161147, 12)
+    expect(korreksjonsfaktor(0.99)).toBeCloseTo(0.5075088513115085, 12)
+  })
+
+  it('er ingen korreksjon uten margin — medianen er den målte verdien selv', () => {
+    expect(INGEN_SIKKERHETSMARGIN).toBe(0.5)
+    expect(korrigertEndring(6.5, 2.5, INGEN_SIKKERHETSMARGIN)).toBeCloseTo(2.5 / 6.5 - 1, 12)
+  })
+
+  it('trekker mer fra jo høyere marginen er', () => {
+    expect(korreksjonsfaktor(0.99)).toBeLessThan(korreksjonsfaktor(0.9))
+    expect(korreksjonsfaktor(0.9)).toBeLessThan(korreksjonsfaktor(0.5))
   })
 })
 
@@ -97,11 +123,11 @@ describe('kategorien (B65)', () => {
   }
 
   it('gjenskaper regnearkets eksempel: over gul, under rød gir kategori 3', () => {
-    expect(beregnKategori(true, true, korrigertEndring(6.5, 2.5), forventet)).toBe(3)
+    expect(beregnKategori(true, true, korrigertEndring(6.5, 2.5, 0.9), forventet)).toBe(3)
   })
 
   it('legger til 1 når kronisk bruk ikke legges til grunn', () => {
-    expect(beregnKategori(true, false, korrigertEndring(6.5, 2.5), forventet)).toBe(4)
+    expect(beregnKategori(true, false, korrigertEndring(6.5, 2.5, 0.9), forventet)).toBe(4)
   })
 
   it('er 0 eller 1 uten sammenligningsgrunnlag', () => {
@@ -110,7 +136,7 @@ describe('kategorien (B65)', () => {
   })
 
   it('gir kategori 4 når endringen er over alle kurvene', () => {
-    expect(beregnKategori(true, true, korrigertEndring(6.5, 9), forventet)).toBe(4)
+    expect(beregnKategori(true, true, korrigertEndring(6.5, 9, 0.9), forventet)).toBe(4)
   })
 
   it('kan lande mellom grønn og gul når forrige prøve lå høyt på kurvene', () => {
@@ -121,7 +147,7 @@ describe('kategorien (B65)', () => {
       gul: forventetEndring(50, 1, KURVE_GUL),
       rod: forventetEndring(50, 1, KURVE_ROD),
     }
-    expect(beregnKategori(true, true, korrigertEndring(50, 36.671), hoyt)).toBe(2)
+    expect(beregnKategori(true, true, korrigertEndring(50, 36.671, 0.9), hoyt)).toBe(2)
   })
 })
 
@@ -212,6 +238,14 @@ describe('fortolkningen fra inndata til kommentar', () => {
     ingenTidligere: false,
     forrigeVerdi: '6,5',
     forrigeDato: '2026-07-04',
+    sikkerhetsmargin: STANDARD_SIKKERHETSMARGIN,
+  }
+
+  /** Kategorien fortolkningen lander på — snarvei for eksemplene under. */
+  const kategoriFor = (inn: typeof eksempel) => {
+    const resultat = fortolkThc(inn)
+    if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
+    return resultat.kategori
   }
 
   it('gjenskaper regnearkets eksempel fra rå felttekst', () => {
@@ -300,6 +334,35 @@ describe('fortolkningen fra inndata til kommentar', () => {
     expect(resultat.kommentar).toBe(byggKommentar('lav', 4, true, '04.07.2026'))
   })
 
+  it('lar sikkerhetsmarginen avgjøre der endringen ligger nær den tregeste kurven', () => {
+    // 6,5 → 4,55 er en målt nedgang på 30 %. Tatt på ordet er det mindre
+    // nedgang enn selv den tregeste dokumenterte utskillelsen gir på 23 døgn
+    // (44 %), og da må cannabis ha vært inntatt. Med marginen på plass regnes
+    // nedgangen som 52 %, og konklusjonen mykner et hakk.
+    const prove = { ...eksempel, aktuellVerdi: '4,55' }
+    expect(kategoriFor({ ...prove, sikkerhetsmargin: 0.5 })).toBe(4)
+    expect(kategoriFor({ ...prove, sikkerhetsmargin: 0.9 })).toBe(3)
+    expect(kategoriFor({ ...prove, sikkerhetsmargin: 0.99 })).toBe(3)
+  })
+
+  it('gir tvilens fordel ved 99 % der 90 % ikke rekker', () => {
+    // 6,5 → 5,85 er bare 10 % nedgang: over den tregeste kurven med både
+    // ingen og 90 % margin, under den med 99 %.
+    const prove = { ...eksempel, aktuellVerdi: '5,85' }
+    expect(kategoriFor({ ...prove, sikkerhetsmargin: 0.5 })).toBe(4)
+    expect(kategoriFor({ ...prove, sikkerhetsmargin: 0.9 })).toBe(4)
+    expect(kategoriFor({ ...prove, sikkerhetsmargin: 0.99 })).toBe(3)
+  })
+
+  it('tar marginen med i grunnlaget, så figuren og forklaringen kan vise den', () => {
+    const resultat = fortolkThc({ ...eksempel, sikkerhetsmargin: 0.99 })
+    if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
+    expect(resultat.grunnlag?.sikkerhetsmargin).toBe(0.99)
+    expect(resultat.grunnlag?.korrigertEndring).toBeCloseTo(korrigertEndring(6.5, 2.5, 0.99), 12)
+    // Den målte endringen står urørt av marginen.
+    expect(resultat.grunnlag?.maltEndring).toBeCloseTo(2.5 / 6.5 - 1, 12)
+  })
+
   it('samme dag er gyldig: ingen forventet nedgang, korreksjonen gjør resten', () => {
     const resultat = fortolkThc({
       ...eksempel,
@@ -314,7 +377,12 @@ describe('fortolkningen fra inndata til kommentar', () => {
 })
 
 describe('visualiseringen', () => {
-  const graf = byggGraf({ forrige: 6.5, dager: 23, korrigertEndring: -0.7352964402245712 })
+  const graf = byggGraf({
+    forrige: 6.5,
+    dager: 23,
+    korrigertEndring: -0.7352964402245712,
+    sikkerhetsmargin: STANDARD_SIKKERHETSMARGIN,
+  })
 
   it('tegner de tre kurvene fortolkningen bruker, med navnene eieren har valgt', () => {
     expect(graf.kurver.map((k) => k.navn)).toEqual([

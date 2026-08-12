@@ -679,6 +679,92 @@
   }
 }
 
+/* --- Tips: forklaringsbobler --------------------------------------------
+   Et navn eller en overskrift med prikkestrek under bærer en boble som vises
+   både ved peker og ved tastaturfokus. Ankeret og boblen er søsken, så boblen
+   spenner over bredden til nærmeste posisjonerte forelder i stedet for å
+   klemmes inn i ankerets egen — forelderen må derfor være `position:
+   relative`. Brukes av legenden i THC-figuren og av sikkerhetsmarginen. */
+
+.tipsanker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  cursor: help;
+}
+
+/* Prikkestreken er hintet om at det er noe å hente ved å holde pekeren over.
+   Den ligger på selve navnet, ikke på det som eventuelt står ved siden av —
+   en fargestrek i en legende, for eksempel. */
+.tipsanker__navn {
+  text-decoration: underline dotted currentColor;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.28em;
+}
+
+.tipsanker:hover .tipsanker__navn,
+.tipsanker:focus-visible .tipsanker__navn {
+  color: var(--blekk);
+}
+
+.tips {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + var(--rom-3));
+  z-index: 5;
+  padding: var(--rom-3) var(--rom-4);
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-normal);
+  line-height: 1.5;
+  text-align: left;
+  text-wrap: pretty;
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-m);
+  box-shadow: var(--skygge-hevet);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.4rem);
+  pointer-events: none;
+  transition:
+    opacity var(--fart) var(--kurve),
+    transform var(--fart) var(--kurve),
+    visibility var(--fart);
+}
+
+/* Pilen ned mot ankeret boblen hører til. */
+.tipsanker::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + var(--rom-3) - 0.45rem);
+  width: 0.9rem;
+  height: 0.9rem;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-top: 0;
+  border-left: 0;
+  transform: translateX(-50%) rotate(45deg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fart) var(--kurve);
+}
+
+.tipsanker:hover + .tips,
+.tipsanker:focus-visible + .tips {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.tipsanker:hover::after,
+.tipsanker:focus-visible::after {
+  opacity: 1;
+}
+
 /* --- THC-syremodulen ---------------------------------------------------- */
 
 /* Modulen er ett skjema fra topp til bunn: inndatakortet, resultatkortet og
@@ -829,6 +915,68 @@
   border-color: var(--linje-sterk);
 }
 
+/* Sikkerhetsmarginen, nederst i inndatakortet: en skala med tre stopp. */
+.thc-margin {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  width: 100%;
+}
+
+/* Overskriften bærer tipset, og er den posisjonerte forelderen boblen måler
+   seg mot. Den går derfor i full bredde selv om skalaen under er kortere —
+   forklaringen er lang, og en boble på skalaens bredde blir en søyle. */
+.thc-margin__hode {
+  position: relative;
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-dempet);
+}
+
+/* Skalaen holdes til bredden av ett felt: strukket over hele kortet blir
+   stoppene bare vanskeligere å treffe enn de trenger å være. */
+.thc-margin__skala,
+.thc-margin__merker {
+  width: 100%;
+  max-width: 22rem;
+}
+
+.thc-margin__skala {
+  margin: 0;
+  accent-color: var(--aksent);
+  cursor: pointer;
+}
+
+/* Ett merke per stopp, like brede, med det første og siste dyttet ut mot hver
+   sin ende av skalaen — der stoppene faktisk ligger. */
+.thc-margin__merker {
+  display: flex;
+  font-size: var(--tekst-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk-dempet);
+}
+
+.thc-margin__merke {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  text-align: center;
+}
+
+.thc-margin__merke:first-child {
+  text-align: left;
+}
+
+.thc-margin__merke:last-child {
+  text-align: right;
+}
+
+/* Det valgte stoppet skal kunne leses av på et blikk, uten å telle seg fram
+   til hvor knappen står. */
+.thc-margin__merke--valgt {
+  font-weight: var(--vekt-tung);
+  color: var(--blekk);
+}
+
 .thc-resultat__merke {
   font-size: var(--tekst-s);
   font-weight: var(--vekt-medium);
@@ -967,8 +1115,8 @@
 }
 
 /* Legenden står i vanlig HTML over figuren, så hvert kurvenavn kan bære et
-   tips om hva profilen står for — samme mønster som kommentartipsene over
-   båndknappene: navnet bærer pilen, tipset spenner over hele legenden. */
+   tips om hva profilen står for. Legenden er den posisjonerte forelderen
+   boblene måler seg mot, så de spenner over hele bredden hennes. */
 .thc-legende {
   position: relative;
   display: flex;
@@ -978,26 +1126,8 @@
 }
 
 .thc-legende__punkt {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--rom-2);
   font-size: var(--tekst-s);
   color: var(--blekk-dempet);
-  cursor: help;
-}
-
-/* Prikkestrek under navnet: hintet om at det finnes et tips å hente ved å
-   holde pekeren over. Den ligger på navnet alene, ikke på fargestreken. */
-.thc-legende__navn {
-  text-decoration: underline dotted currentColor;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.28em;
-}
-
-.thc-legende__punkt:hover .thc-legende__navn,
-.thc-legende__punkt:focus-visible .thc-legende__navn {
-  color: var(--blekk);
 }
 
 .thc-legende__strek {
@@ -1019,59 +1149,14 @@
   background: var(--niva-over-linje);
 }
 
-.thc-profiltips {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: calc(100% + var(--rom-3));
-  z-index: 5;
-  padding: var(--rom-3) var(--rom-4);
-  font-size: var(--tekst-s);
+/* Linjen under figuren: hvilken sikkerhetsmargin punktet for denne prøven
+   står med. Dempet, som annen bildetekst. */
+.thc-plot__fotnote {
+  font-size: var(--tekst-xs);
   line-height: 1.5;
   text-align: left;
   text-wrap: pretty;
-  color: var(--blekk);
-  background: var(--flate);
-  border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-m);
-  box-shadow: var(--skygge-hevet);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(0.4rem);
-  pointer-events: none;
-  transition:
-    opacity var(--fart) var(--kurve),
-    transform var(--fart) var(--kurve),
-    visibility var(--fart);
-}
-
-.thc-legende__punkt::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + var(--rom-3) - 0.45rem);
-  width: 0.9rem;
-  height: 0.9rem;
-  background: var(--flate);
-  border: var(--kant) solid var(--linje);
-  border-top: 0;
-  border-left: 0;
-  transform: translateX(-50%) rotate(45deg);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--fart) var(--kurve);
-}
-
-.thc-legende__punkt:hover + .thc-profiltips,
-.thc-legende__punkt:focus-visible + .thc-profiltips {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.thc-legende__punkt:hover::after,
-.thc-legende__punkt:focus-visible::after {
-  opacity: 1;
+  color: var(--blekk-dempet);
 }
 
 /* Forklaringen under figuren: vanlig lesetekst med luft mellom avsnittene,

@@ -7,11 +7,45 @@ import { StepBar } from './StepBar'
 import { ManualCopy } from './ManualCopy'
 import { ThcForklaring } from './ThcForklaring'
 import { ThcPlot } from './ThcPlot'
+import { Tips } from './Tips'
 import { BackIcon, CopyIcon, ResetIcon } from './icons'
-import { fortolkThc, MAKS_DAGER_MELLOM, THC_KODE, TOM_THC_INNDATA } from '../domain/thc'
+import {
+  fortolkThc,
+  MAKS_DAGER_MELLOM,
+  THC_KODE,
+  TOM_THC_INNDATA,
+  type Sikkerhetsmargin,
+} from '../domain/thc'
 import { rullTilKort, useKortHopp } from '../hooks/useKortHopp'
 
 const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
+
+/**
+ * Stoppene på sikkerhetsmarginen, fra ingen margin til den strengeste. De står
+ * i den rekkefølgen skalaen har dem, så plasseringen på skalaen er indeksen i
+ * lista.
+ */
+const MARGINSTOPP: { verdi: Sikkerhetsmargin; merke: string }[] = [
+  { verdi: 0.5, merke: 'Ingen' },
+  { verdi: 0.9, merke: '90 %' },
+  { verdi: 0.99, merke: '99 %' },
+]
+
+/**
+ * Hva sikkerhetsmarginen er, sagt uten statistikk. Den som fortolker prøver
+ * skal kunne velge stopp uten å vite hva et kvantil er.
+ */
+const MARGINTIPS =
+  'Ingen måling er helt eksakt: måles den samme prøven to ganger, spriker svarene litt, ' +
+  'og da er endringen fra forrige prøve like usikker. Sikkerhetsmarginen sier hvor mye av ' +
+  'den sprikingen vi tar høyde for før prøvene sammenlignes — alltid i personens favør, ' +
+  'altså som om konsentrasjonen har falt så mye som målingene med rimelighet kan skjule. ' +
+  'Med 90 % dekker vi alt annet enn de mest uheldige utslagene, og 99 % gjør terskelen for ' +
+  'å konkludere med nytt inntak enda høyere. «Ingen» tar tallene på ordet og sammenligner ' +
+  'målingene rett fram.'
+
+/** Fast id, så også skalaen kan peke på forklaringen over den. */
+const MARGINTIPS_ID = 'thc-margintips'
 
 export interface ThcStepProps {
   onBack: () => void
@@ -56,6 +90,10 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
 
   const resultat = useMemo(() => fortolkThc(inndata), [inndata])
   const kommentar = resultat.type === 'kommentar' ? resultat.kommentar : null
+
+  // Stoppet skalaen står på. Stoppene dekker alle verdiene typen tillater,
+  // så oppslaget treffer.
+  const marginIndeks = MARGINSTOPP.findIndex((stopp) => stopp.verdi === inndata.sikkerhetsmargin)
 
   // Reserveteksten for manuell kopiering gjelder kommentaren slik den var da
   // kopieringen feilet. Endres noe i skjemaet, er den utdatert og må vekk —
@@ -264,6 +302,46 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                 )}
               </fieldset>
             </div>
+
+            {/* Sikkerhetsmarginen gjelder bare sammenligningen mot forrige
+                prøve, så uten en slik prøve er den ikke noe å ta stilling
+                til — samme grunn som datoene skjules av. */}
+            {!inndata.ingenTidligere && (
+              <div className="thc-margin">
+                <div className="thc-margin__hode">
+                  <Tips tekst={MARGINTIPS} id={MARGINTIPS_ID}>
+                    <span className="tipsanker__navn">Sikkerhetsmargin</span>
+                  </Tips>
+                </div>
+                <input
+                  className="thc-margin__skala"
+                  type="range"
+                  min={0}
+                  max={MARGINSTOPP.length - 1}
+                  step={1}
+                  value={marginIndeks}
+                  aria-label="Sikkerhetsmargin"
+                  aria-describedby={MARGINTIPS_ID}
+                  aria-valuetext={MARGINSTOPP[marginIndeks]?.merke}
+                  onChange={(e) => {
+                    const stopp = MARGINSTOPP[Number(e.target.value)]
+                    if (stopp) sett('sikkerhetsmargin', stopp.verdi)
+                  }}
+                />
+                {/* Merkene er rene ledetekster — skalaen melder selv hvilket
+                    stopp den står på, gjennom aria-valuetext. */}
+                <div className="thc-margin__merker" aria-hidden="true">
+                  {MARGINSTOPP.map((stopp, i) => (
+                    <span
+                      key={stopp.verdi}
+                      className={`thc-margin__merke${i === marginIndeks ? ' thc-margin__merke--valgt' : ''}`}
+                    >
+                      {stopp.merke}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </Card>
 

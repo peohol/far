@@ -50,10 +50,13 @@ export const KURVE_LILLA = kurve(2017.5730310270542, 0.3026509802677265, 86.4516
 
 /* --- Måleusikkerhet -----------------------------------------------------
    Endringen mellom to prøver korrigeres for analysenes variasjon før den
-   sammenlignes med kurvene: i stedet for den målte endringen brukes
-   10 %-kvantilen i en lognormalfordeling rundt den (Innstillinger og
-   beregninger!B22–B25). Det gir personen tvilens fordel — bare endringer som
-   er for høye selv med måleusikkerheten trukket fra, regnes som over. */
+   sammenlignes med kurvene: i stedet for den målte endringen leses et kvantil
+   i en lognormalfordeling rundt den av (Innstillinger og beregninger!B22–B25).
+   Det gir personen tvilens fordel — bare endringer som er for høye selv med
+   måleusikkerheten trukket fra, regnes som over.
+
+   Hvor langt ut i fordelingen som leses av, styrer sikkerhetsmarginen.
+   Regnearket har den fast (B5 = 0,9); her velges den i skjemaet. */
 
 const CV_THC = 0.2
 const CV_KREATININ = 0.05
@@ -62,15 +65,39 @@ const CV_TOTAL = Math.sqrt(CV_THC ** 2 + CV_KREATININ ** 2)
 /** log-standardavvik for forholdet mellom to prøver: `=SQRT(2*B4^2)`. */
 const LOG_SD = Math.sqrt(2 * CV_TOTAL ** 2)
 
-/**
- * Φ⁻¹(0,1): z-verdien for 10-persentilen i standard normalfordeling.
- * Regnearkets «Sikkerhet» (B5) er 0,9, så LOGNORM.INV leser av 1 − 0,9 =
- * 10 %-kvantilen; dette er den tilhørende z-verdien med full presisjon.
- */
-const Z_KVANTIL = -1.2815515655446008
+/** Sikkerhetsmarginen fortolkningen regnes med — regnearkets B5. */
+export type Sikkerhetsmargin = 0.5 | 0.9 | 0.99
 
-/** Faktoren den målte endringen ganges med: `exp(Φ⁻¹(0,1) · logSD)` ≈ 0,688. */
-const KORREKSJONSFAKTOR = Math.exp(Z_KVANTIL * LOG_SD)
+/**
+ * Halve fordelingen er ingen margin i det hele tatt: medianen i en
+ * lognormalfordeling er den målte verdien selv, så korreksjonen blir 1 og
+ * målingene tolkes rett fram. Står med eget navn fordi både regnestykket og
+ * teksten sier noe annet i dette tilfellet.
+ */
+export const INGEN_SIKKERHETSMARGIN: Sikkerhetsmargin = 0.5
+
+/** Regnearkets egen sikkerhet (B5), og modulens standardvalg. */
+export const STANDARD_SIKKERHETSMARGIN: Sikkerhetsmargin = 0.9
+
+/**
+ * z-verdiene LOGNORM.INV leser av: Φ⁻¹(1 − margin) i standard
+ * normalfordeling, med full presisjon. Regnearket bruker bare den midterste —
+ * B5 er 0,9, altså 10 %-kvantilen; de to andre er de samme kvantilene lest av
+ * henholdsvis midt i og lenger ute i den samme fordelingen.
+ */
+const Z_KVANTIL: Record<Sikkerhetsmargin, number> = {
+  0.5: 0,
+  0.9: -1.2815515655446008,
+  0.99: -2.3263478740408408,
+}
+
+/**
+ * Faktoren den målte endringen ganges med: `exp(Φ⁻¹(1 − margin) · logSD)`.
+ * ≈ 0,688 ved 90 %, ≈ 0,528 ved 99 %, og nøyaktig 1 uten margin.
+ */
+export function korreksjonsfaktor(margin: Sikkerhetsmargin): number {
+  return Math.exp(Z_KVANTIL[margin] * LOG_SD)
+}
 
 /* --- Kurveregning ------------------------------------------------------- */
 
@@ -111,8 +138,12 @@ export function forventetEndring(forrige: number, dager: number, k: Kurve): numb
 }
 
 /** Målt relativ endring, korrigert for måleusikkerhet (D20 = B25 − 1). */
-export function korrigertEndring(forrige: number, aktuell: number): number {
-  return (aktuell / forrige) * KORREKSJONSFAKTOR - 1
+export function korrigertEndring(
+  forrige: number,
+  aktuell: number,
+  margin: Sikkerhetsmargin,
+): number {
+  return (aktuell / forrige) * korreksjonsfaktor(margin) - 1
 }
 
 /* --- Konsentrasjonsnivå og kategori ------------------------------------- */
@@ -255,6 +286,7 @@ export interface ThcInndata {
   ingenTidligere: boolean
   forrigeVerdi: string
   forrigeDato: string
+  sikkerhetsmargin: Sikkerhetsmargin
 }
 
 export const TOM_THC_INNDATA: ThcInndata = {
@@ -264,6 +296,7 @@ export const TOM_THC_INNDATA: ThcInndata = {
   ingenTidligere: false,
   forrigeVerdi: '',
   forrigeDato: '',
+  sikkerhetsmargin: STANDARD_SIKKERHETSMARGIN,
 }
 
 /** Grunnlaget visualiseringen tegnes fra, når fortolkningen bruker forrige prøve. */
@@ -272,6 +305,8 @@ export interface ThcGrafgrunnlag {
   dager: number
   /** Den korrigerte endringen (D20), som andel: −0,74 = 74 % nedgang. */
   korrigertEndring: number
+  /** Marginen den korrigerte endringen er lest av med. */
+  sikkerhetsmargin: Sikkerhetsmargin
 }
 
 /** Hele tallgrunnlaget for en fortolkning mot forrige prøve, til forklaringen. */
@@ -361,7 +396,7 @@ export function fortolkThc(inn: ThcInndata): ThcResultat {
     }
   }
 
-  const korrigert = korrigertEndring(forrige as number, aktuell as number)
+  const korrigert = korrigertEndring(forrige as number, aktuell as number, inn.sikkerhetsmargin)
   const forventet = {
     gronn: forventetEndring(forrige as number, dager, KURVE_GRONN),
     gul: forventetEndring(forrige as number, dager, KURVE_GUL),
@@ -380,6 +415,7 @@ export function fortolkThc(inn: ThcInndata): ThcResultat {
       kronisk: inn.kronisk,
       maltEndring: (aktuell as number) / (forrige as number) - 1,
       korrigertEndring: korrigert,
+      sikkerhetsmargin: inn.sikkerhetsmargin,
       forventet,
     },
     forGammelForrige: false,
