@@ -74,7 +74,7 @@ src/state.ts              Tilstandsmaskinen for stegene
 src/domain/               Bånd, klassifisering, søk, navn, fargespredning, kontrast,
                           THC-fortolkning (thc.ts) og figurgrunnlaget (thcPlot.ts)
 src/hooks/                Tastatur, tema, hurtigtastmerker, utklippstavle
-src/components/           Stegene, felles kort/pille/knapp/ikoner
+src/components/           Stegene, felles kort/pille/knapp/tips/ikoner
 src/styles/               tokens.css (design) + base.css + components.css
 ```
 
@@ -216,10 +216,11 @@ Slik regner den, med regnearkets cellereferanser i parentes
 (arket «Innstillinger og beregninger»):
 
 1. **Endringen mellom prøvene** korrigeres for måleusikkerhet: i stedet for
-   den målte endringen brukes 10 %-kvantilen i en lognormalfordeling rundt
-   den (B22–B25, CV 0,2 for THC-syre og 0,05 for kreatinin). Personen får
-   tvilens fordel — bare endringer som er for høye selv med usikkerheten
-   trukket fra, teller som over.
+   den målte endringen leses et kvantil i en lognormalfordeling rundt den av
+   (B22–B25, CV 0,2 for THC-syre og 0,05 for kreatinin). Personen får tvilens
+   fordel — bare endringer som er for høye selv med usikkerheten trukket fra,
+   teller som over. Hvor langt ut i fordelingen som leses av, styres av
+   [sikkerhetsmarginen](#sikkerhetsmarginen).
 2. **Tre utskillelseskurver** — grønn (sporadisk bruk), gul (grønn med dobbel
    amplitude) og rød (tregeste dokumenterte utskillelse) — leses av der
    forrige prøve ligger, og gir forventet endring frem til denne prøven
@@ -236,12 +237,40 @@ Slik regner den, med regnearkets cellereferanser i parentes
    om hvorfor. Det samme skjer, uten notis, når «Ingen tidligere prøve
    tilgjengelig» er huket av.
 
+### Sikkerhetsmarginen
+
+Regnearket har sikkerheten fast på 0,9 (B5). Her er den en skala med tre stopp
+nederst i inndatakortet, og står på 90 % når appen lastes:
+
+| Stopp | Kvantil som leses av | Faktor | Hva det betyr |
+| --- | --- | --- | --- |
+| Ingen | 50 % | 1 | Medianen er den målte verdien selv. Målingene tolkes rett fram, uten kompensasjon for usikkerhet. |
+| 90 % | 10 % | ≈ 0,688 | Regnearkets egen sikkerhet. |
+| 99 % | 1 % | ≈ 0,508 | Ekstra forsiktig, til de spesielle tilfellene. |
+
+Marginen slår gjennom alle stedene fortolkningen bruker den korrigerte
+endringen: kategorien og dermed kommentaren, punktet for denne prøven i
+figuren, og tallene og ordlyden i «Forklaring». Overskriften over skalaen har
+prikkestrek og bærer forklaringen på hva marginen er, i to bolker — hvorfor en
+målt endring ikke er den sanne, og hva marginen gjør med den. Bolkene legger
+seg ved siden av hverandre når det er plass, så boblen ikke blir en søyle som
+ikke får plass over overskriften sin.
+
+Skalaen vises bare når det finnes en tidligere prøve å sammenligne med. Uten
+en slik prøve regnes ingen endring ut, og marginen har ingenting å gjøre —
+samme grunn som prøvedatoene skjules av.
+
+### Visualiseringen
+
 Visualiseringen viser de tre kurvene konklusjonen leses av — «Normal
 utskillelse» (grønn), «Moderat utskillelse» (gul) og «Treg utskillelse»
 (rød) — som prosentvis endring fra forrige prøve, med begge prøvene som
 punkter. Navnene i legenden bærer hvert sitt tips om hva profilen står for.
 Figuren vises bare når fortolkningen faktisk er gjort mot en tidligere prøve
 og det er minst ett døgn mellom prøvene.
+
+Punktet for denne prøven er den korrigerte endringen, siden det er den
+konklusjonen leses av, og flytter seg derfor når sikkerhetsmarginen endres.
 
 > Her viker figuren bevisst fra regnearkets egen graf, som tegner den lilla
 > mellomkurven («Kronisk, typisk») i stedet for den gule. Den lilla kurven er
@@ -279,6 +308,10 @@ tokens.css, så en fargeendring som bryter kravet slår ut i testene.
 
 Tipset med kommentaren vises både ved peker og ved tastaturfokus, og er knyttet
 til knappen med `aria-describedby`, slik at skjermlesere får den samme teksten.
+Det samme gjelder forklaringsboblene (`src/components/Tips.tsx`) — de er aldri
+ren museinformasjon. Sikkerhetsmarginen meldes med navnet på stoppet skalaen
+står på og ikke med plassen i rekka (`aria-valuetext`), og forklaringen bak
+overskriften er knyttet til både overskriften og selve skalaen.
 Kvitteringen for kopieringen meldes i tillegg som statusbeskjed, siden blinket
 er rent visuelt. Uten bevegelse blir kvitteringen stående stille i stedet for å
 sprette fram.

@@ -7,11 +7,81 @@ import { StepBar } from './StepBar'
 import { ManualCopy } from './ManualCopy'
 import { ThcForklaring } from './ThcForklaring'
 import { ThcPlot } from './ThcPlot'
+import { Tips } from './Tips'
 import { BackIcon, CopyIcon, ResetIcon } from './icons'
-import { fortolkThc, MAKS_DAGER_MELLOM, THC_KODE, TOM_THC_INNDATA } from '../domain/thc'
+import {
+  fortolkThc,
+  MAKS_DAGER_MELLOM,
+  THC_KODE,
+  TOM_THC_INNDATA,
+  type Sikkerhetsmargin,
+} from '../domain/thc'
 import { rullTilKort, useKortHopp } from '../hooks/useKortHopp'
 
 const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
+
+/**
+ * Stoppene på sikkerhetsmarginen, fra ingen margin til den strengeste. De står
+ * i den rekkefølgen skalaen har dem, så plasseringen på skalaen er indeksen i
+ * lista.
+ */
+const MARGINSTOPP: { verdi: Sikkerhetsmargin; merke: string }[] = [
+  { verdi: 0.5, merke: 'Ingen' },
+  { verdi: 0.9, merke: '90 %' },
+  { verdi: 0.99, merke: '99 %' },
+]
+
+/**
+ * Hva sikkerhetsmarginen er: først hvorfor en målt endring ikke er den sanne,
+ * så hva marginen gjør med den. Ordlyden er eierens egen; bare de rette
+ * anførselstegnene er satt inn, som ellers i appen.
+ */
+const MARGINTIPS = (
+  <>
+    <section className="tips__bolk">
+      <h3 className="tips__tittel">Målinger ≠ sann verdi</h3>
+      <p>
+        Det er uunngåelig at det oppstår tilfeldige avvik mellom målinger og den sanne verdien.
+      </p>
+      <p>
+        Fordi enkeltmålingene er usikre, vil også endringen mellom to prøver være usikre. Den
+        målte endringen er altså forventet å avvike fra den sanne endringen.
+      </p>
+      <p>
+        Det er 50/50 om endringen måles høyere eller lavere enn den sanne endringen. I
+        halvparten av tilfellene vil grunnlaget vårt for fortolkning være for strengt – i den
+        andre halvparten vil det være for snilt.
+      </p>
+    </section>
+    <section className="tips__bolk">
+      <h3 className="tips__tittel">Sikkerhetsmargin</h3>
+      <p>
+        Hvis vi tolker prøvene direkte med de målingene vi har, er vi 50 % sikre på at endringen
+        vi bruker i fortolkningen, ikke er «for streng». «Ingen sikkerhetsmargin» betyr egentlig
+        bare at vi ikke har gjort noe for å kompensere for måleusikkerhet.
+      </p>
+      <p>
+        Men vi kan kompensere om vi ønsker. Ved hjelp av en statistisk modell av usikkerheten til
+        endringen, kan vi justere endringstallet til et lavere tall. Dette øker ikke
+        sannsynligheten for at fortolkningen vår er «riktig», men øker hvor sikre vi er på at vi
+        ikke bruker et for strengt endringstall.
+      </p>
+      <p>
+        Med 90 % sikkerhet (standard) justerer vi endringen som fortolkes så vi er 90 % sikre på
+        at endringen vi fortolker, ikke er for stor. I 1 av 10 tilfeller vil vi altså bruke en for
+        stor endring i fortolkningen – mot annethvert tilfelle hvis vi ikke hadde noen
+        sikkerhetsmargin.
+      </p>
+      <p>
+        Sikkerheten kan økes til 99 % i saker der man ønsker å være ekstra forsiktig, f.eks. i
+        saker der et nytt inntak av cannabis kan få store konsekvenser for prøvegiver.
+      </p>
+    </section>
+  </>
+)
+
+/** Fast id, så også skalaen kan peke på forklaringen over den. */
+const MARGINTIPS_ID = 'thc-margintips'
 
 export interface ThcStepProps {
   onBack: () => void
@@ -56,6 +126,10 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
 
   const resultat = useMemo(() => fortolkThc(inndata), [inndata])
   const kommentar = resultat.type === 'kommentar' ? resultat.kommentar : null
+
+  // Stoppet skalaen står på. Stoppene dekker alle verdiene typen tillater,
+  // så oppslaget treffer.
+  const marginIndeks = MARGINSTOPP.findIndex((stopp) => stopp.verdi === inndata.sikkerhetsmargin)
 
   // Reserveteksten for manuell kopiering gjelder kommentaren slik den var da
   // kopieringen feilet. Endres noe i skjemaet, er den utdatert og må vekk —
@@ -264,6 +338,46 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                 )}
               </fieldset>
             </div>
+
+            {/* Sikkerhetsmarginen gjelder bare sammenligningen mot forrige
+                prøve, så uten en slik prøve er den ikke noe å ta stilling
+                til — samme grunn som datoene skjules av. */}
+            {!inndata.ingenTidligere && (
+              <div className="thc-margin">
+                <div className="thc-margin__hode">
+                  <Tips forklaring={MARGINTIPS} id={MARGINTIPS_ID}>
+                    <span className="tipsanker__navn">Sikkerhetsmargin</span>
+                  </Tips>
+                </div>
+                <input
+                  className="thc-margin__skala"
+                  type="range"
+                  min={0}
+                  max={MARGINSTOPP.length - 1}
+                  step={1}
+                  value={marginIndeks}
+                  aria-label="Sikkerhetsmargin"
+                  aria-describedby={MARGINTIPS_ID}
+                  aria-valuetext={MARGINSTOPP[marginIndeks]?.merke}
+                  onChange={(e) => {
+                    const stopp = MARGINSTOPP[Number(e.target.value)]
+                    if (stopp) sett('sikkerhetsmargin', stopp.verdi)
+                  }}
+                />
+                {/* Merkene er rene ledetekster — skalaen melder selv hvilket
+                    stopp den står på, gjennom aria-valuetext. */}
+                <div className="thc-margin__merker" aria-hidden="true">
+                  {MARGINSTOPP.map((stopp, i) => (
+                    <span
+                      key={stopp.verdi}
+                      className={`thc-margin__merke${i === marginIndeks ? ' thc-margin__merke--valgt' : ''}`}
+                    >
+                      {stopp.merke}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </Card>
 

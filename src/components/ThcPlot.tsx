@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { Tips } from './Tips'
 import { byggGraf, formaterProsent } from '../domain/thcPlot'
 import type { ThcGrafgrunnlag } from '../domain/thc'
 
@@ -12,6 +13,9 @@ import type { ThcGrafgrunnlag } from '../domain/thc'
  * ingen ramme eller akselinjer — og tallene på y-aksen står til høyre.
  * Legenden ligger utenfor figuren, i vanlig HTML, slik at hvert kurvenavn
  * kan bære et tips om hva profilen står for.
+ *
+ * Punktet for denne prøven flytter seg med sikkerhetsmarginen, siden det er
+ * den korrigerte endringen som sammenlignes med kurvene.
  */
 
 const BREDDE = 900
@@ -50,27 +54,17 @@ export function ThcPlot({ grunnlag }: { grunnlag: ThcGrafgrunnlag }) {
     <>
       <div className="thc-legende">
         {graf.kurver.map((kurve) => (
-          // Tipset ligger som nabo til navnet, etter samme mønster som
-          // kommentartipsene over båndknappene: navnet bærer pilen, tipset
-          // spenner over hele legenden.
-          <span key={kurve.tone} className="thc-legende__oppforing">
-            <span
-              className="thc-legende__punkt"
-              tabIndex={0}
-              aria-describedby={`thc-profiltips-${kurve.tone}`}
-            >
+          // Boblen spenner over hele legenden, ikke bare over navnet den
+          // hører til, så den lange forklaringen får plass å stå på.
+          <div key={kurve.tone} className="thc-legende__oppforing">
+            <Tips forklaring={PROFILTIPS[kurve.tone]} className="thc-legende__punkt">
               <span
                 className={`thc-legende__strek thc-legende__strek--${kurve.tone}`}
                 aria-hidden="true"
               />
-              {/* Prikkestreken under navnet er hintet om at det er noe å
-                  hente ved å holde pekeren over. */}
-              <span className="thc-legende__navn">{kurve.navn}</span>
-            </span>
-            <span className="thc-profiltips" id={`thc-profiltips-${kurve.tone}`} role="tooltip">
-              {PROFILTIPS[kurve.tone]}
-            </span>
-          </span>
+              <span className="tipsanker__navn">{kurve.navn}</span>
+            </Tips>
+          </div>
         ))}
       </div>
 
