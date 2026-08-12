@@ -38,8 +38,8 @@ const MARGINSTOPP: { verdi: Sikkerhetsmargin; merke: string }[] = [
  */
 const MARGINTIPS = (
   <>
-    <section className="tips__bolk">
-      <h3 className="tips__tittel">Målinger ≠ sann verdi</h3>
+    <section className="tipsboble__bolk">
+      <h3 className="tipsboble__tittel">Målinger ≠ sann verdi</h3>
       <p>
         Det er uunngåelig at det oppstår tilfeldige avvik mellom målinger og den sanne verdien.
       </p>
@@ -53,8 +53,8 @@ const MARGINTIPS = (
         andre halvparten vil det være for snilt.
       </p>
     </section>
-    <section className="tips__bolk">
-      <h3 className="tips__tittel">Sikkerhetsmargin</h3>
+    <section className="tipsboble__bolk">
+      <h3 className="tipsboble__tittel">Sikkerhetsmargin</h3>
       <p>
         Hvis vi tolker prøvene direkte med de målingene vi har, er vi 50 % sikre på at endringen
         vi bruker i fortolkningen, ikke er «for streng». «Ingen sikkerhetsmargin» betyr egentlig
@@ -346,7 +346,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
               <div className="thc-margin">
                 <div className="thc-margin__hode">
                   <Tips forklaring={MARGINTIPS} id={MARGINTIPS_ID}>
-                    <span className="tipsanker__navn">Sikkerhetsmargin</span>
+                    Sikkerhetsmargin
                   </Tips>
                 </div>
                 <input

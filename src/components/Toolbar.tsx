@@ -1,4 +1,5 @@
 import { KeyboardIcon, MoonIcon, SunIcon } from './icons'
+import { useTips } from './Tips'
 import { useShortcutVisibility } from '../hooks/useShortcutVisibility'
 import type { Theme } from '../hooks/useTheme'
 
@@ -10,6 +11,11 @@ interface ToolbarButtonProps {
 }
 
 function ToolbarButton({ onClick, label, pressed, children }: ToolbarButtonProps) {
+  // Knappene viser bare et ikon, så teksten trengs for å se hva de gjør.
+  // Skjermlesere har den allerede som knappens navn og skal ikke få den to
+  // ganger, derfor `skjermleser: false`.
+  const tips = useTips(label, { skjermleser: false })
+
   return (
     <button
       type="button"
@@ -17,7 +23,7 @@ function ToolbarButton({ onClick, label, pressed, children }: ToolbarButtonProps
       onClick={onClick}
       aria-label={label}
       aria-pressed={pressed}
-      title={label}
+      {...tips.props}
     >
       {children}
     </button>

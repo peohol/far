@@ -101,6 +101,13 @@
   --niva-gul-blekk: hsl(30 92% 26%);
   --niva-gul-flate: hsl(44 94% 92%);
   --niva-gul-linje: hsl(36 76% 43%);
+
+  /* Tooltip. Snudd i forhold til resten av appen — svart flate med hvit
+     skrift i lyst tema, motsatt i mørkt — så boblen leses som noe som ligger
+     over siden og ikke som enda et kort i den. */
+  --tips-flate: hsl(0 0% 0%);
+  --tips-blekk: hsl(0 0% 100%);
+  --tips-blekk-dempet: hsl(0 0% 78%);
 }
 
 /* --- Mørkt tema --------------------------------------------------------- */
@@ -146,6 +153,10 @@
   --niva-gul-blekk: hsl(42 96% 68%);
   --niva-gul-flate: hsl(36 46% 16%);
   --niva-gul-linje: hsl(38 64% 46%);
+
+  --tips-flate: hsl(0 0% 100%);
+  --tips-blekk: hsl(0 0% 0%);
+  --tips-blekk-dempet: hsl(0 0% 28%);
 
   --alt-flate-alfa: 0.17;
   --alt-kant-alfa: 0.55;

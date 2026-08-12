@@ -31,7 +31,7 @@ const TEMAER = {
 const KRAV: [string, string, number, string][] = [
   ['--blekk-sterk', '--flate-bunn', 4.5, 'analyttnavn i søkealternativene'],
   ['--blekk', '--flate-bunn', 4.5, 'brødtekst på sidebakgrunn'],
-  ['--blekk', '--flate', 4.5, 'brødtekst på kort og tooltip'],
+  ['--blekk', '--flate', 4.5, 'brødtekst på kort'],
   ['--blekk', '--flate-hevet', 4.5, 'brødtekst på hevet flate'],
   ['--blekk-dempet', '--flate-bunn', 4.5, 'dempet tekst på sidebakgrunn'],
   ['--blekk-dempet', '--flate', 4.5, 'dempet tekst på kort'],
@@ -49,6 +49,12 @@ const KRAV: [string, string, number, string][] = [
   ['--niva-over-linje', '--flate-bunn', 3, 'kant rundt «over»'],
   ['--linje-sterk', '--flate-bunn', 3, 'sterk kantlinje'],
   ['--fokus', '--flate-bunn', 3, 'fokusmarkering'],
+  ['--tips-blekk', '--tips-flate', 4.5, 'tekst i tooltip'],
+  ['--tips-blekk-dempet', '--tips-flate', 4.5, 'dempet tekst i tooltip'],
+  // Boblen er snudd i forhold til appen, og skal skille seg fra flaten den
+  // legger seg over — ellers flyter den sammen med kortet under.
+  ['--tips-flate', '--flate', 3, 'tooltipflate mot kort'],
+  ['--tips-flate', '--flate-bunn', 3, 'tooltipflate mot sidebakgrunn'],
 ]
 
 describe.each(Object.entries(TEMAER))('%s tema', (_navn, palett) => {
