@@ -25,26 +25,32 @@ export interface ThcStepProps {
  * Fortolkningsmodulen for THC-syre i urin. I motsetning til
  * kommentarkopieringen for psykofarmaka brukes den gjerne mange prøver på
  * rad, og flyten er lagt opp etter det: kommentaren regnes ut fortløpende
- * mens feltene fylles, og i det den lar seg regne ut rulles den opp øverst
- * i vinduet. Kopieringen kvitteres med blinket, ruller tilbake til feltene
- * og tilbyr nullstilling med ett tastetrykk, så neste prøve kan tas fatt på
- * uten omveier. Musehjulet og piltastene hopper mellom kortene i stedet for
- * å rulle jevnt.
+ * mens feltene fylles. Kopieringen kvitteres med blinket, ruller tilbake til
+ * feltene og tilbyr nullstilling med ett tastetrykk, så neste prøve kan tas
+ * fatt på uten omveier. Musehjulet og piltastene hopper mellom kortene i
+ * stedet for å rulle jevnt.
  */
 export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
   const [inndata, setInndata] = useState(TOM_THC_INNDATA)
   const [failedCopy, setFailedCopy] = useState<string | null>(null)
   /** Sant rett etter en kopiering: tilbudet om å nullstille med Enter står. */
   const [nullstillTips, setNullstillTips] = useState(false)
+  /** Tikker for hver nullstilling, så fokuseringen under kan kjøre på nytt. */
+  const [fokusTeller, setFokusTeller] = useState(0)
+  // Feltet som skal ha fokus er det først synlige — «Forrige prøve» når det
+  // finnes, ellers «Denne prøven». Refen flyttes derfor mellom de to inputene
+  // etter hvilken som faktisk står øverst til venstre akkurat nå.
   const forsteFelt = useRef<HTMLInputElement>(null)
   const kopierKnapp = useRef<HTMLButtonElement>(null)
   const seksjon = useRef<HTMLElement>(null)
   const inndatakort = useRef<HTMLElement>(null)
   const resultatkort = useRef<HTMLElement>(null)
 
+  // Kjører etter mount og etter hver nullstilling — begge ganger har DOM-en
+  // allerede rukket å legge om hvilket felt refen peker på.
   useEffect(() => {
     forsteFelt.current?.focus()
-  }, [])
+  }, [fokusTeller])
 
   useKortHopp(true, seksjon)
 
@@ -63,7 +69,10 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
     setInndata(TOM_THC_INNDATA)
     setFailedCopy(null)
     setNullstillTips(false)
-    forsteFelt.current?.focus()
+    // Fokuseringen skjer i effekten over, ikke her direkte: refen kan bytte
+    // felt idet «Ingen tidligere prøve» nullstilles, og DOM-en er ikke
+    // oppdatert med det nye feltet før React har rukket å rendre på nytt.
+    setFokusTeller((t) => t + 1)
   }
 
   const kopier = async () => {
@@ -137,20 +146,6 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
     }
   }, [nullstillTips])
 
-  // I det kommentaren lar seg regne ut, rulles den øverst i vinduet — det er
-  // den man er her for. Feltene slipper fokus på veien: skjemaet er ferdig
-  // utfylt, og et felt som blir stående fokusert utenfor bildet stjeler
-  // tastetrykk — datofeltene svarer for eksempel selv på piltastene.
-  const forrigeType = useRef(resultat.type)
-  useEffect(() => {
-    if (forrigeType.current === 'mangler' && resultat.type === 'kommentar') {
-      const aktivt = document.activeElement
-      if (aktivt instanceof HTMLElement && seksjon.current?.contains(aktivt)) aktivt.blur()
-      rullTilKort(resultatkort.current, 'start')
-    }
-    forrigeType.current = resultat.type
-  }, [resultat.type])
-
   // Visualiseringen trenger minst ett døgn mellom prøvene for å ha en
   // utvikling å vise.
   const grunnlag =
@@ -211,12 +206,40 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
             </div>
 
             <div className="thc-prover">
+              {!inndata.ingenTidligere && (
+                <fieldset className="thc-prove">
+                  <legend>Forrige prøve</legend>
+                  <label className="thc-felt">
+                    <span>IRCAK</span>
+                    <input
+                      ref={forsteFelt}
+                      className="thc-input"
+                      type="text"
+                      inputMode="decimal"
+                      autoComplete="off"
+                      spellCheck={false}
+                      value={inndata.forrigeVerdi}
+                      onChange={(e) => sett('forrigeVerdi', e.target.value)}
+                    />
+                  </label>
+                  <label className="thc-felt">
+                    <span>Prøvedato</span>
+                    <input
+                      className="thc-input"
+                      type="date"
+                      value={inndata.forrigeDato}
+                      onChange={(e) => sett('forrigeDato', e.target.value)}
+                    />
+                  </label>
+                </fieldset>
+              )}
+
               <fieldset className="thc-prove">
                 <legend>Denne prøven</legend>
                 <label className="thc-felt">
                   <span>IRCAK</span>
                   <input
-                    ref={forsteFelt}
+                    ref={inndata.ingenTidligere ? forsteFelt : undefined}
                     className="thc-input"
                     type="text"
                     inputMode="decimal"
@@ -240,33 +263,6 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                   </label>
                 )}
               </fieldset>
-
-              {!inndata.ingenTidligere && (
-                <fieldset className="thc-prove">
-                  <legend>Forrige prøve</legend>
-                  <label className="thc-felt">
-                    <span>IRCAK</span>
-                    <input
-                      className="thc-input"
-                      type="text"
-                      inputMode="decimal"
-                      autoComplete="off"
-                      spellCheck={false}
-                      value={inndata.forrigeVerdi}
-                      onChange={(e) => sett('forrigeVerdi', e.target.value)}
-                    />
-                  </label>
-                  <label className="thc-felt">
-                    <span>Prøvedato</span>
-                    <input
-                      className="thc-input"
-                      type="date"
-                      value={inndata.forrigeDato}
-                      onChange={(e) => sett('forrigeDato', e.target.value)}
-                    />
-                  </label>
-                </fieldset>
-              )}
             </div>
           </div>
         </Card>
