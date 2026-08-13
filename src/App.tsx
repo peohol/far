@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'r
 import { SearchStep } from './components/SearchStep'
 import { BandStep } from './components/BandStep'
 import { PasteStep } from './components/PasteStep'
+import { RusStep } from './components/RusStep'
 import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
 import { ruteAv } from './components/Kopibevis'
@@ -9,6 +10,7 @@ import { Toolbar } from './components/Toolbar'
 import { analytes } from './domain/analytes'
 import { bands as bandsOf, findBand, type Band } from './domain/bands'
 import type { Rute } from './domain/flytting'
+import { RUS_ANALYTTER, rusModulFor } from './domain/rus'
 import { search } from './domain/search'
 import { THC_ANALYTT } from './domain/thc'
 import { useClipboard } from './hooks/useClipboard'
@@ -52,9 +54,10 @@ export default function App() {
   const [bevisFra, setBevisFra] = useState<Rute | null>(null)
 
   const stage = stageOf(state)
-  // Søket dekker analyttene fra datasettet pluss THC-syre, som har sin egen
-  // fortolkningsmodul i stedet for konsentrasjonsbånd.
-  const pool = useMemo(() => [...analytes, THC_ANALYTT], [])
+  // Søket dekker analyttene fra datasettet pluss de to kategoriene som har
+  // egne fortolkningsmoduler i stedet for konsentrasjonsbånd: THC-syre i urin
+  // og stoffene med ruspotensial i serum.
+  const pool = useMemo(() => [...analytes, THC_ANALYTT, ...RUS_ANALYTTER], [])
   const hits = useMemo(() => search(state.query, pool), [state.query, pool])
 
   // Tilstandsmaskinen trenger alternativene det nye søket gir for å se om det
@@ -165,6 +168,7 @@ export default function App() {
   })
 
   const band = state.analyte && state.bandKey ? findBand(state.analyte, state.bandKey) : undefined
+  const rusModul = state.analyte ? rusModulFor(state.analyte) : undefined
 
   /**
    * Steget som vises. Det henger etter `stage` i det korte øyeblikket
@@ -201,6 +205,20 @@ export default function App() {
         )}
 
         {vist === 'thc' && <ThcStep onBack={back} copy={copy} flashAt={show} />}
+
+        {vist === 'rus' && rusModul && (
+          <RusStep
+            // Modulen holder sine egne valg. Bytter analytten, skal de nulles,
+            // og nøkkelen gir modulen en frisk tilstand i stedet for å måtte
+            // rydde i den fra utsiden.
+            key={rusModul.id}
+            modul={rusModul}
+            onBack={back}
+            onFinish={reset}
+            copy={copy}
+            flashAt={show}
+          />
+        )}
 
         {vist === 'paste' && state.analyte && band && (
           <PasteStep

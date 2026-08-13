@@ -26,7 +26,7 @@ from pathlib import Path
 import pdfplumber
 
 ROT = Path(__file__).resolve().parent.parent
-PDF = ROT / "kommentarer.pdf"
+PDF = ROT / "originaldata" / "kommentarer.pdf"
 UT = ROT / "src" / "data" / "analytter.json"
 ALIAS_FIL = ROT / "src" / "data" / "aliaser.json"
 

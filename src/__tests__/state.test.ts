@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { analytes, findByCode } from '../domain/analytes'
+import { RUS_ANALYTTER, rusModulFor } from '../domain/rus'
 import { search } from '../domain/search'
+import { THC_ANALYTT } from '../domain/thc'
 import { initialState, reducer, stageOf, type State } from '../state'
 import type { Analyte } from '../types'
 
@@ -74,6 +76,40 @@ describe('veien tilbake fra en analytt som valgte seg selv', () => {
 
     expect(stageOf(state)).toBe('band')
     expect(valgt(state)).toBe('KVE')
+  })
+})
+
+describe('analytter med egen fortolkningsmodul', () => {
+  /** Søket slik App kjører det: hele utvalget, ikke bare psykofarmaka. */
+  const pool = [...analytes, THC_ANALYTT, ...RUS_ANALYTTER]
+
+  function velg(kode: string): State {
+    const analyte = pool.find((a) => a.kode === kode)
+    if (!analyte) throw new Error(`ukjent oppføring i testen: ${kode}`)
+    return reducer(initialState, { type: 'velg-analytt', analyte })
+  }
+
+  it('går til rusmiddelmodulen i stedet for til konsentrasjonsbåndene', () => {
+    expect(stageOf(velg('APR'))).toBe('rus')
+    expect(stageOf(velg('DIAZ · DMI · OXA'))).toBe('rus')
+  })
+
+  it('holder de tre veiene fra søket fra hverandre', () => {
+    expect(stageOf(velg('IRCAK'))).toBe('thc')
+    expect(stageOf(velg('KVE'))).toBe('band')
+  })
+
+  it('går tilbake til søket fra rusmiddelmodulen', () => {
+    const tilbake = reducer(velg('APR'), { type: 'tilbake' })
+
+    expect(stageOf(tilbake)).toBe('search')
+    expect(tilbake.analyte).toBeNull()
+  })
+
+  it('lar hver oppføring finne modulen sin', () => {
+    for (const oppforing of RUS_ANALYTTER) {
+      expect(rusModulFor(oppforing), oppforing.kode).toBeDefined()
+    }
   })
 })
 

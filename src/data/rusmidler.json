@@ -1,0 +1,307 @@
+{
+  "meta": {
+    "kilde": "originaldata/rusmidler.pdf",
+    "antallRader": 21,
+    "rettelser": [
+      {
+        "kategori": "tankestrek",
+        "hvor": "klonazepam/hovedkommentar",
+        "fra": "40-120",
+        "til": "40–120",
+        "begrunnelse": "bindestrek brukt om tallintervall"
+      },
+      {
+        "kategori": "typografi",
+        "hvor": "diazepamgruppen-samlet/merknad",
+        "fra": "Brukes når SOXA < 10 % av summen SDIA + SDDI. Dersom SOXA > 10% brukes standardkommentarene for hhv. oksazepam og diazepam/N-desmetyldiazepam.",
+        "til": "Brukes når SOXA < 10 % av summen SDIA + SDDI. Dersom SOXA > 10 % brukes standardkommentarene for hhv. oksazepam og diazepam/N-desmetyldiazepam.",
+        "begrunnelse": "manglende mellomrom foran prosenttegn"
+      },
+      {
+        "kategori": "tankestrek",
+        "hvor": "buprenorfin/hovedkommentar",
+        "fra": "2-10",
+        "til": "2–10",
+        "begrunnelse": "bindestrek brukt om tallintervall"
+      },
+      {
+        "kategori": "tankestrek",
+        "hvor": "morfin/hovedkommentar",
+        "fra": "4-6",
+        "til": "4–6",
+        "begrunnelse": "bindestrek brukt om tallintervall"
+      },
+      {
+        "kategori": "tankestrek",
+        "hvor": "morfin/hovedkommentar",
+        "fra": "8-12",
+        "til": "8–12",
+        "begrunnelse": "bindestrek brukt om tallintervall"
+      },
+      {
+        "kategori": "tankestrek",
+        "hvor": "metadon/hovedkommentar",
+        "fra": "600-1200",
+        "til": "600–1200",
+        "begrunnelse": "bindestrek brukt om tallintervall"
+      },
+      {
+        "kategori": "tankestrek",
+        "hvor": "metadon/hovedkommentar",
+        "fra": "300-600",
+        "til": "300–600",
+        "begrunnelse": "bindestrek brukt om tallintervall"
+      }
+    ]
+  },
+  "rader": [
+    {
+      "id": "alprazolam",
+      "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analytt": "Alprazolam",
+      "koder": [
+        "APR"
+      ],
+      "hovedkommentar": "160 nmol/L er øvre forventet medikamentfastende konsentrasjon av alprazolam hos voksne ved døgndose 3 mg.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "diazepam",
+      "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analytt": "Diazepam",
+      "koder": [
+        "DIAZ"
+      ],
+      "hovedkommentar": "3500 nmol/L er øvre forventet medikamentfastende konsentrasjon av diazepam og omdannelsesproduktet desmetyldiazepam (summert) hos voksne ved døgndose 15 mg diazepam. Akkumulerer ved langtidsbruk.",
+      "tilleggskommentar": "Se kommentar for diazepam i serum.",
+      "bemerkninger": [
+        "Diazepam og desmetyldiazepam vurderes samlet. Når begge er påvist legges kommentaren under diazepam. Når kun desmetyldiazepam er påvist legges kommentaren under desmetyldiazepam."
+      ]
+    },
+    {
+      "id": "desmetyldiazepam",
+      "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analytt": "Desmetyldiazepam",
+      "koder": [
+        "DMI"
+      ],
+      "hovedkommentar": "3500 nmol/L er øvre forventet medikamentfastende konsentrasjon av diazepam og omdannelsesproduktet desmetyldiazepam (summert) hos voksne ved døgndose 15 mg diazepam. Akkumulerer ved langtidsbruk.",
+      "tilleggskommentar": "Se kommentar for diazepam i serum.",
+      "bemerkninger": [
+        "Diazepam og desmetyldiazepam vurderes samlet. Når begge er påvist legges kommentaren under diazepam. Når kun desmetyldiazepam er påvist legges kommentaren under desmetyldiazepam."
+      ]
+    },
+    {
+      "id": "klonazepam",
+      "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analytt": "Klonazepam",
+      "koder": [
+        "CZP"
+      ],
+      "hovedkommentar": "50 nmol/L er øvre forventet medikamentfastende konsentrasjon av klonazepam hos voksne ved døgndose 1,5 mg. For epilepsibehandling er referanseområdet 40–120 nmol/L.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "nitrazepam",
+      "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analytt": "Nitrazepam",
+      "koder": [
+        "NIT"
+      ],
+      "hovedkommentar": "300 nmol/L er øvre forventet konsentrasjon av nitrazepam hos voksne ved døgndose 5 mg og prøvetaking minst 12 timer etter inntak. Akkumulerer ved langtidsbruk.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "oksazepam",
+      "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analytt": "Oksazepam",
+      "koder": [
+        "OXA"
+      ],
+      "hovedkommentar": "2500 nmol/L er øvre forventet medikamentfastende konsentrasjon av oksazepam hos voksne ved døgndose 45 mg.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "zolpidem",
+      "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analytt": "Zolpidem",
+      "koder": [
+        "ZOLP"
+      ],
+      "hovedkommentar": "100 nmol/L er øvre forventet konsentrasjon av zolpidem hos voksne ved døgndose 10 mg (hos eldre 5 mg) og prøvetaking minst 12 timer etter inntak.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "zopiklon",
+      "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analytt": "Zopiklon",
+      "koder": [
+        "ZOPI"
+      ],
+      "hovedkommentar": "50 nmol/L er øvre forventet konsentrasjon av zopiklon hos voksne ved døgndose 7,5 mg (hos eldre 5 mg) og prøvetaking minst 12 timer etter inntak.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "diazepamgruppen-samlet",
+      "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analytt": "KOMBINASJON Diazepam, N-desmetyldiazepam og oksazepam",
+      "koder": [
+        "DIAZ",
+        "DMI",
+        "OXA"
+      ],
+      "hovedkommentar": "3500 nmol/L er øvre forventet medikamentfastende konsentrasjon av diazepam og hovedmetabolitten desmetyldiazepam (summert) hos voksne ved døgndose 15 mg diazepam. Akkumulerer ved langtidsbruk. Oksazepam er også en metabolitt av diazepam som kan påvises i mindre mengder etter diazepaminntak.",
+      "tilleggskommentar": "Se kommentar for diazepam i serum.",
+      "bemerkninger": [
+        "Brukes når SOXA < 10 % av summen SDIA + SDDI. Dersom SOXA > 10 % brukes standardkommentarene for hhv. oksazepam og diazepam/N-desmetyldiazepam."
+      ]
+    },
+    {
+      "id": "thc",
+      "gruppe": "THC",
+      "analytt": "THC",
+      "koder": [
+        "THC"
+      ],
+      "hovedkommentar": "THC er det viktigste psykoaktive stoffet i cannabis.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "buprenorfin",
+      "gruppe": "Opioider",
+      "analytt": "Buprenorfin",
+      "koder": [
+        "BUP"
+      ],
+      "hovedkommentar": "2,5 nmol/L er øvre forventet medikamentfastende konsentrasjon av buprenorfin hos voksne ved døgndose 2 mg sublingualt. For substitusjonsbehandling er referanseområdet 2–10 nmol/L.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "fentanyl",
+      "gruppe": "Opioider",
+      "analytt": "Fentanyl",
+      "koder": [
+        "FYL"
+      ],
+      "hovedkommentar": "10 nmol/L er øvre forventet konsentrasjon av fentanyl hos voksne ved bruk av 1,2 mg (50 µg/t) depotplaster.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "kodein",
+      "gruppe": "Opioider",
+      "analytt": "Kodein",
+      "koder": [
+        "KOD"
+      ],
+      "hovedkommentar": "850 nmol/L er øvre forventet medikamentfastende konsentrasjon av kodein hos voksne ved døgndose 240 mg. Kodein omdannes til morfin i kroppen.",
+      "tilleggskommentar": "",
+      "bemerkninger": [
+        "Dersom det er kodein til stede skyldes dette i de fleste tilfeller inntak av kodein, hvis ikke morfinkonsentrasjonen er svært høy eller det er påvist MAM i tillegg, som tegn på heroin-inntak. (SMAM er ikke med i ny samlemetode)."
+      ]
+    },
+    {
+      "id": "kodein-med-morfin",
+      "gruppe": "Opioider",
+      "analytt": "Kodein ved KOMBINASJON Morfin og kodein",
+      "koder": [
+        "KOD"
+      ],
+      "hovedkommentar": "850 nmol/L er øvre forventet medikamentfastende konsentrasjon av kodein hos voksne ved døgndose 240 mg. Kodein omdannes til morfin i kroppen. Kodein kan påvises i serum etter inntak av kodein (bl.a. i Paralgin forte) og/eller heroin, som kan være forurenset med kodein.",
+      "tilleggskommentar": "",
+      "bemerkninger": [
+        "Dersom både morfin og kodein er påvist, og krav til kombinasjonskommentaren høy kodein/lav morfin nedenfor ikke passer, benyttes denne kommentaren på kodein. Det legges også til morfinkommentar på SMOR."
+      ]
+    },
+    {
+      "id": "morfin",
+      "gruppe": "Opioider",
+      "analytt": "Morfin",
+      "koder": [
+        "MOR"
+      ],
+      "hovedkommentar": "120 nmol/L er øvre forventet konsentrasjon av morfin ved peroralt inntak av 100 mg morfin og prøvetaking 4–6 timer etter inntak av vanlig tablett eller 8–12 timer etter inntak av depottablett. Morfin kan påvises etter inntak av morfin (bl.a. i Dolcontin) og/eller stoffer som omdannes til morfin i kroppen, som kodein og heroin.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "metadon",
+      "gruppe": "Opioider",
+      "analytt": "Metadon",
+      "koder": [
+        "MDO"
+      ],
+      "hovedkommentar": "600–1200 nmol/L er forventet medikamentfastende konsentrasjonsområde for racemisk metadon i LAR-behandling. Ved bruk av L-metadon er antatt konsentrasjonsområde 300–600 nmol/L.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "oksykodon",
+      "gruppe": "Opioider",
+      "analytt": "Oksykodon",
+      "koder": [
+        "OKSY"
+      ],
+      "hovedkommentar": "200 nmol/L er øvre forventet medikamentfastende konsentrasjon av oksykodon ved døgndose 60 mg.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "tapentadol",
+      "gruppe": "Opioider",
+      "analytt": "Tapentadol",
+      "koder": [
+        "TAP"
+      ],
+      "hovedkommentar": "600 nmol/L er øvre forventet medikamentfastende konsentrasjon av tapentadol ved døgndose 400 mg. Det er sparsom dokumentasjon for serumkonsentrasjoner av tapentadol.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "tramadol",
+      "gruppe": "Opioider",
+      "analytt": "Tramadol",
+      "koder": [
+        "TRAM"
+      ],
+      "hovedkommentar": "3000 nmol/L og 400 nmol/L er øvre forventede medikamentfastende konsentrasjoner av henholdsvis tramadol og omdannelsesproduktet O-desmetyltramadol hos voksne ved døgndose 400 mg tramadol.",
+      "tilleggskommentar": "",
+      "bemerkninger": []
+    },
+    {
+      "id": "o-desmetyltramadol",
+      "gruppe": "Opioider",
+      "analytt": "O-desmetyltramadol",
+      "koder": [
+        "OTRAM"
+      ],
+      "hovedkommentar": "3000 nmol/L og 400 nmol/L er øvre forventede medikamentfastende konsentrasjoner av henholdsvis tramadol og omdannelsesproduktet O-desmetyltramadol hos voksne ved døgndose 400 mg tramadol.",
+      "tilleggskommentar": "Se kommentar for tramadol i serum.",
+      "bemerkninger": [
+        "Tramadol og O-desmetyltramadol vurderes samlet. Når begge er påvist legges kommentaren under tramadol. Når kun O-desmetyltramadol er påvist legges kommentaren under O-desmetyltramadol."
+      ]
+    },
+    {
+      "id": "hoy-kodein-lav-morfin",
+      "gruppe": "Opioider",
+      "analytt": "KOMBINASJON Høy kodein, lav morfin",
+      "koder": [
+        "KOD",
+        "MOR"
+      ],
+      "hovedkommentar": "Kodein og morfin er påvist i serum. 850 nmol/L er øvre forventet medikamentfastende konsentrasjon av kodein hos voksne ved døgndose 240 mg. Kodein omdannes til morfin i kroppen.",
+      "tilleggskommentar": "Høy kodein, lav morfin. Se kommentar for kodein i serum.",
+      "bemerkninger": [
+        "Se tekst øverst for vurdering av hva som er høy kodein, lav morfin og hvordan kommentere"
+      ]
+    }
+  ]
+}
