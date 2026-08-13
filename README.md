@@ -24,7 +24,7 @@ Datasettet er sjekket inn, så det trengs bare når PDF-en endres.
 | 1 | Begynn å skrive navnet på en analytt eller kode | hvilken som helst bokstav |
 | 2 | Velg blant alternativene som passer søket — er det bare ett igjen, går appen videre til det av seg selv | `1`–`9` og `0`, eller `Enter`/`Space` |
 | 3 | Velg hvilket konsentrasjonsbånd svaret havner i — kommentaren kopieres | `1`–`4` |
-| 4 | Lim inn kommentaren på analyttkoden som vises | `Enter`/`Space` avslutter og nullstiller |
+| 4 | Lim inn kommentaren på analyttkoden som vises — båndknappen som ble brukt, står over kortet som bevis | `Enter`/`Space` avslutter og nullstiller |
 
 Én oppføring i søket tar en annen vei: **THC-syre** (kode `IRCAK`) går fra
 steg 2 til sin egen fortolkningsmodul i stedet for til konsentrasjonsbåndene —
@@ -53,6 +53,24 @@ knappen som ble brukt. Blinket starter der og fortsetter et lite øyeblikk inn i
 neste steg, så det rekker å bli sett uten å holde igjen arbeidsflyten. Tiden
 står som `BLINK` og `STEGBYTTE` øverst i `src/App.tsx`.
 
+Blinket sier at noe ble kopiert, men ikke hva. Derfor følger selve knappen med
+videre: den flyter opp fra plassen sin og lander rett over «Lim inn kommentaren
+på»-kortet, i samme farge, med samme ikon og samme tall. Der blir den stående
+som bevis på hvilken kommentar som faktisk ligger på utklippstavlen — et ekstra
+sikkerhetsledd før den limes inn — og bærer fortsatt kommentarteksten som en
+tooltip, så den kan leses en siste gang. Hurtigtastmerket blir igjen i
+båndsteget: tasten valgte båndet, og har ingen jobb når kommentaren alt er
+kopiert.
+
+Flukten er målt, ikke gjettet. Beviset tegnes der det skal ende, måles, og
+settes tilbake til ruten knappen sto i; når transformen glir bort, flyter
+knappen på plass. Regnestykket ligger i `src/domain/flytting.ts` og er dekket av
+tester. Skalaen leses av høyden og ikke av bredden — båndknappene deler bredden
+i kortet likt mellom seg og er bredere enn innholdet sitt, mens høyden bare
+kommer av skriften — så ikonet og tallene står i samme størrelse på samme sted i
+det beviset tar over. Tiden står som `--fart-flyt` i `src/styles/tokens.css`, og
+er kort nok til at blinket fortsatt står når knappen lander.
+
 `Esc` angrer ett steg av gangen og beholder det som er skrevet i steget foran.
 `Enter` og `Space` gjør alltid det samme.
 
@@ -72,7 +90,8 @@ src/data/aliaser.json     Håndholdte ekstra søkeord per analyttkode
 src/types.ts              Datamodellen
 src/state.ts              Tilstandsmaskinen for stegene
 src/domain/               Bånd, klassifisering, søk, navn, fargespredning, kontrast,
-                          tooltipplassering (tipsplassering.ts),
+                          tooltipplassering (tipsplassering.ts), flukten til
+                          kopibeviset (flytting.ts),
                           THC-fortolkning (thc.ts) og figurgrunnlaget (thcPlot.ts)
 src/hooks/                Tastatur, tema, hurtigtastmerker, utklippstavle
 src/components/           Stegene, felles kort/pille/knapp/tooltip/ikoner
@@ -342,4 +361,7 @@ står på og ikke med plassen i rekka (`aria-valuetext`), og forklaringen bak
 overskriften er knyttet til både overskriften og selve skalaen.
 Kvitteringen for kopieringen meldes i tillegg som statusbeskjed, siden blinket
 er rent visuelt. Uten bevegelse blir kvitteringen stående stille i stedet for å
-sprette fram.
+sprette fram, og beviset over lim-inn-kortet står ferdig landet i stedet for å
+fly. Beviset sier med skjult tekst hva det er — «Kopiert kommentar for» foran
+båndet — så det ikke blir en løsrevet tallrekke for den som ikke ser fargen og
+ikonet.

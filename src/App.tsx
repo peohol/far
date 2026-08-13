@@ -4,9 +4,11 @@ import { BandStep } from './components/BandStep'
 import { PasteStep } from './components/PasteStep'
 import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
+import { ruteAv } from './components/Kopibevis'
 import { Toolbar } from './components/Toolbar'
 import { analytes } from './domain/analytes'
 import { bands as bandsOf, findBand, type Band } from './domain/bands'
+import type { Rute } from './domain/flytting'
 import { search } from './domain/search'
 import { THC_ANALYTT } from './domain/thc'
 import { useClipboard } from './hooks/useClipboard'
@@ -46,6 +48,8 @@ export default function App() {
   /** Sant i det korte øyeblikket båndknappene blir stående etter et valg. */
   const [dveler, setDveler] = useState(false)
   const stegbytte = useRef<number>()
+  /** Ruten båndknappen sto i — beviset i limsteget flyter opp fra den. */
+  const [bevisFra, setBevisFra] = useState<Rute | null>(null)
 
   const stage = stageOf(state)
   // Søket dekker analyttene fra datasettet pluss THC-syre, som har sin egen
@@ -77,8 +81,11 @@ export default function App() {
       }
       setFailedCopy(null)
       // Knappen står her bare så lenge båndsteget vises, enten den ble klikket
-      // eller valgt med et tastetrykk. Blinket legges der den står nå.
-      show(document.querySelector(`[data-band="${band.key}"]`))
+      // eller valgt med et tastetrykk. Blinket legges der den står nå, og ruten
+      // følger med til limsteget, der beviset flyter opp fra den.
+      const knapp = document.querySelector(`[data-band="${band.key}"]`)
+      show(knapp)
+      setBevisFra(ruteAv(knapp))
       dispatch({ type: 'velg-band', key: band.key })
       setDveler(true)
       window.clearTimeout(stegbytte.current)
@@ -196,7 +203,13 @@ export default function App() {
         {vist === 'thc' && <ThcStep onBack={back} copy={copy} flashAt={show} />}
 
         {vist === 'paste' && state.analyte && band && (
-          <PasteStep analyte={state.analyte} band={band} onBack={back} onFinish={reset} />
+          <PasteStep
+            analyte={state.analyte}
+            band={band}
+            fra={bevisFra}
+            onBack={back}
+            onFinish={reset}
+          />
         )}
       </main>
 
