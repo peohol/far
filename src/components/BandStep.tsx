@@ -6,7 +6,8 @@ import { StepBar } from './StepBar'
 import { Shortcut } from './Shortcut'
 import { ManualCopy } from './ManualCopy'
 import { useTips } from './Tips'
-import { ArrowDownIcon, ArrowUpIcon, BackIcon, CheckIcon, PhoneIcon } from './icons'
+import { bandIkon } from './bandikon'
+import { BackIcon, PhoneIcon } from './icons'
 import { bands as bandsOf, type Band } from '../domain/bands'
 import { displayName } from '../domain/names'
 import { indexToDigit } from '../hooks/useKeyboard'
@@ -21,27 +22,21 @@ export interface BandStepProps {
   failed: { message: string; comment: string } | null
 }
 
-const IKON = {
-  under: ArrowDownIcon,
-  innenfor: CheckIcon,
-  over: ArrowUpIcon,
-  ring: PhoneIcon,
-} as const
-
 /**
  * Ett bånd. Kommentaren som havner på utklippstavlen henger på knappen som et
  * tips, så den kan leses før valget tas.
  */
 function BandKnapp({ band, snarvei, onPick }: { band: Band; snarvei: string; onPick: () => void }) {
   const tips = useTips(band.kommentar)
-  const Icon = IKON[band.ring && band.niva !== 'over' ? 'ring' : band.tone]
+  const Icon = bandIkon(band)
 
   return (
     <li>
       <button
         type="button"
-        // Kvitteringen for kopieringen legges der knappen står, og finner den
-        // herfra — også når båndet ble valgt med tastaturet.
+        // Kvitteringen legges der knappen står, og beviset i neste steg flyter
+        // opp fra den samme ruten. Begge finner knappen herfra — også når
+        // båndet ble valgt med tastaturet.
         data-band={band.key}
         className={`bandknapp bandknapp--${band.tone}`}
         onClick={onPick}

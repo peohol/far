@@ -421,23 +421,29 @@
   max-width: calc(var(--band-innhold) * var(--tekst-l));
 }
 
-.bandknapp {
+/* Formen et bånd har. Knappen i båndsteget og beviset som følger med til
+   limsteget deler den, så de to leses som den samme knappen. */
+.bandknapp,
+.kopibevis {
   display: flex;
-  flex: 1;
   align-items: center;
   justify-content: center;
   gap: 0.35em;
   padding: 0.5em 0.7em;
-  font-size: clamp(
-    var(--band-minst),
-    calc(var(--band-rute) / var(--band-innhold)),
-    var(--tekst-l)
-  );
   font-weight: var(--vekt-tung);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   border: var(--kant-tykk) solid;
   border-radius: var(--runding-m);
+}
+
+.bandknapp {
+  flex: 1;
+  font-size: clamp(
+    var(--band-minst),
+    calc(var(--band-rute) / var(--band-innhold)),
+    var(--tekst-l)
+  );
   cursor: pointer;
   transition:
     transform var(--fart) var(--kurve),
@@ -453,35 +459,74 @@
   transform: translateY(0);
 }
 
-.bandknapp__ikon {
+.bandknapp__ikon,
+.kopibevis__ikon {
   font-size: 1.25em;
 }
 
-.bandknapp--under {
+/* Fargene hører til båndet, ikke til knappen, og følger derfor med beviset. */
+.bandknapp--under,
+.kopibevis--under {
   color: var(--niva-under-blekk);
   background: var(--niva-under-flate);
   border-color: var(--niva-under-linje);
 }
 
-.bandknapp--innenfor {
+.bandknapp--innenfor,
+.kopibevis--innenfor {
   color: var(--niva-innenfor-blekk);
   background: var(--niva-innenfor-flate);
   border-color: var(--niva-innenfor-linje);
 }
 
-.bandknapp--over {
+.bandknapp--over,
+.kopibevis--over {
   color: var(--niva-gul-blekk);
   background: var(--niva-gul-flate);
   border-color: var(--niva-gul-linje);
 }
 
-.bandknapp--ring {
+.bandknapp--ring,
+.kopibevis--ring {
   color: var(--niva-over-blekk);
   background: var(--niva-over-flate);
   border-color: var(--niva-over-linje);
 }
 
 /* --- Steg 3: lim inn ---------------------------------------------------- */
+
+/* Beviset og kortet det hører til, tettere sammen enn stegets egen luft. */
+.limstabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-3);
+  width: 100%;
+}
+
+/* Båndknappen som ble brukt, landet over kortet. Størrelsen er fast her, mens
+   knappen den kom fra var så stor som analyttens antall bånd tillot — flukten
+   tar seg av forskjellen. Hurtigtastmerket er ikke med: tasten valgte båndet,
+   og har ingen jobb igjen når kommentaren alt er kopiert. */
+.kopibevis {
+  flex: none;
+  font-size: var(--tekst-m);
+  cursor: help;
+}
+
+/* Beviset tegnes der det skal ende og settes tilbake dit knappen sto. Når
+   transformen glir bort, flyter knappen opp og lander over kortet. Skaleringen
+   går om midten, som forskyvningen i src/domain/flytting.ts regner med. */
+.kopibevis--flyter {
+  transform-origin: 50% 50%;
+  animation: kopibevis-flyt var(--fart-flyt) var(--kurve);
+}
+
+@keyframes kopibevis-flyt {
+  from {
+    transform: translate(var(--flyt-x), var(--flyt-y)) scale(var(--flyt-skala));
+  }
+}
 
 .limInn {
   gap: var(--rom-4);
