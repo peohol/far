@@ -77,31 +77,54 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
   const neste = plasseringer.find((p) => !kopierte.includes(p.merke))
   const alleKopiert = plasseringer.length > 0 && neste === undefined
 
+  /**
+   * Teller opp for hver endring i skjemaet, så en kopiering som er underveis
+   * kan se om den fortsatt gjelder. Se {@link kopier}.
+   */
+  const utgave = useRef(0)
+
+  /** Et nytt svar gir en ny fortolkning, og setter kvitteringene tilbake. */
+  const endret = () => {
+    utgave.current += 1
+    // Det som var kopiert gjaldt den forrige fortolkningen, og skal ikke bli
+    // stående som kvittert.
+    setKopierte([])
+    setFailedCopy(null)
+  }
+
   const settPavist = (kode: string, pa: boolean) => {
     setInndata((forrige) => ({
       ...forrige,
       pavist: pa ? [...forrige.pavist, kode] : forrige.pavist.filter((k) => k !== kode),
     }))
-    // Et nytt valg gir en ny fortolkning; det som var kopiert gjaldt den
-    // forrige, og skal ikke bli stående som kvittert.
-    setKopierte([])
-    setFailedCopy(null)
+    endret()
   }
 
   const settVerdi = (kode: string, verdi: string) => {
     setInndata((forrige) => ({ ...forrige, verdier: { ...forrige.verdier, [kode]: verdi } }))
-    setKopierte([])
-    setFailedCopy(null)
+    endret()
   }
 
   const settAvkrysset = (avkrysset: boolean) => {
     setInndata((forrige) => ({ ...forrige, avkrysset }))
-    setKopierte([])
-    setFailedCopy(null)
+    endret()
   }
 
+  /**
+   * Legger kommentaren på utklippstavlen og kvitterer for den.
+   *
+   * Utklippstavlen svarer først etter en tur innom nettleseren, og i mellomtiden
+   * kan skjemaet ha fått et nytt svar. Da gjelder ikke lenger det som ble
+   * kopiert: teksten på utklippstavlen hører til den forrige fortolkningen.
+   * Uten sjekken under ville kvitteringen kommet tilbake på en kommentar som
+   * ikke er kopiert, og Enter hoppet over den.
+   */
   const kopier = async (plassering: RusPlassering, knapp: Element | null) => {
-    if (await copy(plassering.tekst)) {
+    const denne = utgave.current
+    const kopiert = await copy(plassering.tekst)
+    if (denne !== utgave.current) return
+
+    if (kopiert) {
       setFailedCopy(null)
       flashAt(knapp)
       setKopierte((sa) => (sa.includes(plassering.merke) ? sa : [...sa, plassering.merke]))
