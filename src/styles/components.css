@@ -1329,9 +1329,34 @@
   gap: var(--rom-4);
 }
 
+/* Tilfellet kilden ikke har en standardkommentar for. Her er det ingenting å
+   kopiere, og beskjeden om hvorfor er hele innholdet i kortet — den bærer
+   derfor samme skriftstørrelse som en kommentar ville hatt. */
+.rus-plenum {
+  padding: var(--rom-3) var(--rom-4);
+  font-size: var(--tekst-m);
+  line-height: 1.55;
+  text-align: left;
+  text-wrap: pretty;
+  color: var(--varsel-blekk);
+  background: var(--varsel-flate);
+  border: var(--kant) solid var(--varsel-linje);
+  border-radius: var(--runding-m);
+}
+
 /* Kommentarene i den rekkefølgen de skal limes inn. Nummereringen fra <ol>
    vises ikke — merkelappen over hver kommentar sier hva den er — men den gir
    rekkefølgen mening for skjermlesere. */
+/* Det kilden sier om hvordan saken skal håndteres. Står som brødtekst under
+   beskjeden, ikke som enda en varselrute — det er bakgrunn, ikke alarm. */
+.rus-veiledning {
+  font-size: var(--tekst-s);
+  line-height: 1.6;
+  text-align: left;
+  text-wrap: pretty;
+  color: var(--blekk-dempet);
+}
+
 .rus-plasseringer {
   display: flex;
   flex-direction: column;

@@ -40,35 +40,46 @@ function tekster(resultat: RusResultat): string[] {
   return resultat.plasseringer.map((p) => p.tekst)
 }
 
+function notiser(resultat: RusResultat): string {
+  if (resultat.type !== 'kommentarer') throw new Error(`ventet kommentarer, fikk ${resultat.type}`)
+  return resultat.notiser.join(' ')
+}
+
+/** Beskjeden og kildens veiledning for et tilfelle som skal til plenum. */
+function plenum(resultat: RusResultat): string {
+  if (resultat.type !== 'plenum') throw new Error(`ventet plenum, fikk ${resultat.type}`)
+  return [resultat.melding, ...resultat.veiledning].join(' ')
+}
+
 /** Kildeteksten fra en rad i rusmidler.json. */
-function kilde(id: string): { hoved: string; tillegg: string } {
+function kilde(id: string, nokkel = 'hoved'): string {
   const rad = rusDatasett.rader.find((r) => r.id === id)
   if (!rad) throw new Error(`ukjent rad i testen: ${id}`)
-  return { hoved: rad.hovedkommentar, tillegg: rad.tilleggskommentar }
+  const tekst = rad.tekster[nokkel]
+  if (tekst === undefined) throw new Error(`raden ${id} mangler teksten ${nokkel}`)
+  return tekst
 }
 
 /** Alle tekstene appen kan komme til å kopiere. */
 function alleKommentarer(): string[] {
-  return rusDatasett.rader.flatMap((r) => [r.hovedkommentar, r.tilleggskommentar]).filter(Boolean)
+  return rusDatasett.rader.flatMap((r) => Object.values(r.tekster))
 }
 
 describe('datasettet', () => {
-  it('har alle radene fra tabellene i PDF-en', () => {
-    expect(rusDatasett.rader).toHaveLength(21)
-    expect(rusDatasett.meta.antallRader).toBe(21)
+  it('har alle radene fra tabellene i kilden', () => {
+    expect(rusDatasett.rader).toHaveLength(26)
+    expect(rusDatasett.meta.antallRader).toBe(26)
+    expect(rusDatasett.meta.kilde).toBe('originaldata/rusmidler.md')
   })
 
-  it('gir hver rad en hovedkommentar og en gruppe', () => {
+  it('gir hver rad en gruppe og koder', () => {
     for (const rad of rusDatasett.rader) {
-      expect(rad.hovedkommentar, rad.id).not.toBe('')
       expect(rad.gruppe, rad.id).not.toBe('')
       expect(rad.koder.length, rad.id).toBeGreaterThan(0)
     }
   })
 
-  it('dekker alle radene med moduler, uten å bruke noen to ganger', () => {
-    // Hver rad hører til nøyaktig én modul, så ingen kommentar blir liggende
-    // utilgjengelig og ingen dukker opp to steder.
+  it('dekker alle kodene med moduler, uten å bruke noen to ganger', () => {
     const brukt = new Set<string>()
     for (const m of RUS_MODULER) {
       for (const kode of moduleKoder(m)) {
@@ -85,24 +96,27 @@ describe('datasettet', () => {
       expect(tekst, tekst).not.toMatch(/\d\s*-\s*\d/)
     }
     // Bindestrek i navn står urørt.
-    expect(kilde('o-desmetyltramadol').hoved).toContain('O-desmetyltramadol')
-    expect(kilde('metadon').hoved).toContain('LAR-behandling')
+    expect(kilde('tramadolgruppen')).toContain('O-desmetyltramadol')
+    expect(kilde('metadon')).toContain('LAR-behandling')
   })
 
   it('beholder intervallene fra kilden, med tankestrek', () => {
-    expect(kilde('klonazepam').hoved).toContain('referanseområdet 40–120 nmol/L')
-    expect(kilde('buprenorfin').hoved).toContain('referanseområdet 2–10 nmol/L')
-    expect(kilde('morfin').hoved).toContain('4–6 timer')
-    expect(kilde('morfin').hoved).toContain('8–12 timer')
-    expect(kilde('metadon').hoved).toContain('600–1200 nmol/L')
-    expect(kilde('metadon').hoved).toContain('300–600 nmol/L')
+    expect(kilde('klonazepam')).toContain('referanseområdet 40–120 nmol/L')
+    expect(kilde('buprenorfin')).toContain('referanseområdet 2–10 nmol/L')
+    expect(kilde('kun-morfin', 'morfin')).toContain('4–6 timer')
+    expect(kilde('metadon')).toContain('600–1200 nmol/L')
+    expect(kilde('amfetamin')).toContain('100–800 nmol/L')
+    expect(kilde('amfetamin')).toContain('(10–40 mg)')
   })
 
-  it('har ryddig tekst uten doble mellomrom eller løse kanter', () => {
+  it('har ryddig tekst uten notasjon fra kilden', () => {
     for (const tekst of alleKommentarer()) {
       expect(tekst, tekst).toBe(tekst.trim())
       expect(tekst, tekst).not.toMatch(/\s{2}/)
       expect(tekst, tekst).not.toMatch(/\s+[,.]/)
+      // Uthevinger og plasseringsinstrukser er notasjon, ikke kommentartekst.
+      expect(tekst, tekst).not.toMatch(/[*[\]]/)
+      expect(tekst, tekst).toMatch(/[.!?]$/)
     }
   })
 })
@@ -112,12 +126,19 @@ describe('moduler for ett stoff', () => {
     const resultat = fortolk('alprazolam')
 
     expect(plassert(resultat)).toEqual(['Hovedkommentar → APR'])
-    expect(tekster(resultat)).toEqual([kilde('alprazolam').hoved])
+    expect(tekster(resultat)).toEqual([kilde('alprazolam')])
   })
 
-  it('skiller THC i serum fra THC-syre i urin', () => {
-    expect(modul('thc').navn).toBe('THC i serum')
+  it('heter bare THC, og er ikke det samme som THC-syre i urin', () => {
+    expect(modul('thc').navn).toBe('THC')
     expect(tekster(fortolk('thc'))).toEqual(['THC er det viktigste psykoaktive stoffet i cannabis.'])
+  })
+
+  it('dekker de sentralstimulerende enkeltstoffene', () => {
+    expect(plassert(fortolk('benzoylekgonin'))).toEqual(['Hovedkommentar → BEZ1'])
+    expect(tekster(fortolk('benzoylekgonin'))[0]).toContain('omdannelsesprodukt av kokain')
+    expect(plassert(fortolk('mdma'))).toEqual(['Hovedkommentar → ECS1'])
+    expect(tekster(fortolk('mdma'))[0]).toContain('MDMA (ecstasy) er påvist i serum.')
   })
 
   it('ber ikke brukeren lese kommentaren når den ikke kan bli en annen', () => {
@@ -129,23 +150,29 @@ describe('moduler for ett stoff', () => {
 describe('diazepam, N-desmetyldiazepam og oksazepam', () => {
   const ID = 'diazepamgruppen'
 
+  /** Fortolkningen med de tre konsentrasjonene fylt inn. */
+  const medTall = (pavist: string[], diaz: string, dmi: string, oxa: string) =>
+    fortolk(ID, { pavist, verdier: { DIAZ: diaz, DMI: dmi, OXA: oxa } })
+
   it('spør hva som er påvist før den fortolker noe', () => {
-    const resultat = fortolk(ID)
-    expect(resultat.type).toBe('mangler')
+    expect(fortolk(ID).type).toBe('mangler')
   })
 
   it('legger kommentaren på diazepam når begge er påvist', () => {
     const resultat = fortolk(ID, { pavist: ['DIAZ', 'DMI'] })
 
     expect(plassert(resultat)).toEqual(['Hovedkommentar → DIAZ', 'Tilleggskommentar → DMI'])
-    expect(tekster(resultat)).toEqual([kilde('diazepam').hoved, kilde('diazepam').tillegg])
+    expect(tekster(resultat)).toEqual([
+      kilde('diazepam'),
+      kilde('desmetyldiazepam', 'tillegg'),
+    ])
   })
 
   it('legger kommentaren på desmetyldiazepam når bare den er påvist', () => {
     const resultat = fortolk(ID, { pavist: ['DMI'] })
 
     expect(plassert(resultat)).toEqual(['Hovedkommentar → DMI'])
-    expect(tekster(resultat)).toEqual([kilde('desmetyldiazepam').hoved])
+    expect(tekster(resultat)).toEqual([kilde('desmetyldiazepam')])
   })
 
   it('lar diazepam stå alene når bare den er påvist', () => {
@@ -156,16 +183,16 @@ describe('diazepam, N-desmetyldiazepam og oksazepam', () => {
     const resultat = fortolk(ID, { pavist: ['OXA'] })
 
     expect(plassert(resultat)).toEqual(['Hovedkommentar → OXA'])
-    expect(tekster(resultat)).toEqual([kilde('oksazepam').hoved])
+    expect(tekster(resultat)).toEqual([kilde('oksazepam')])
   })
 
-  it('ber om tallene bare når oksazepam er påvist sammen med de andre', () => {
+  it('ber om tallene bare når alle tre er påvist', () => {
     const felter = (pavist: string[]) => modul(ID).verdifelter(pavist).map((f) => f.kode)
 
     expect(felter(['DIAZ', 'DMI'])).toEqual([])
     expect(felter(['OXA'])).toEqual([])
+    expect(felter(['DMI', 'OXA'])).toEqual([])
     expect(felter(['DIAZ', 'DMI', 'OXA'])).toEqual(['DIAZ', 'DMI', 'OXA'])
-    expect(felter(['DMI', 'OXA'])).toEqual(['DMI', 'OXA'])
   })
 
   it('venter på tallene før den velger regel', () => {
@@ -175,79 +202,62 @@ describe('diazepam, N-desmetyldiazepam og oksazepam', () => {
     ).toBe('mangler')
   })
 
-  it('kommenterer alle tre under ett når oksazepam er under 10 % av summen', () => {
+  it('kommenterer alle tre under ett når oksazepam er høyst 10 % av summen', () => {
     // 99 av 1000 er 9,9 %.
-    const resultat = fortolk(ID, {
-      pavist: ['DIAZ', 'DMI', 'OXA'],
-      verdier: { DIAZ: '400', DMI: '600', OXA: '99' },
-    })
+    const resultat = medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '99')
 
     expect(plassert(resultat)).toEqual(['Hovedkommentar → DIAZ', 'Tilleggskommentar → DMI OXA'])
     expect(tekster(resultat)).toEqual([
-      kilde('diazepamgruppen-samlet').hoved,
-      kilde('diazepamgruppen-samlet').tillegg,
+      kilde('diazepamgruppen-samlet'),
+      kilde('diazepamgruppen-samlet', 'tillegg'),
     ])
   })
 
-  it('kommenterer oksazepam for seg når andelen er 10 % eller mer', () => {
-    // Kilden dekker ikke nøyaktig 10 %: den sier «< 10 %» om fellesskommentaren
-    // og «> 10 %» om standardkommentarene. Grensetilfellet får
-    // standardkommentarene, så fellesskommentaren bare brukes der kilden
-    // uttrykkelig sier at den skal.
-    const paa = (oksazepam: string) =>
-      fortolk(ID, {
-        pavist: ['DIAZ', 'DMI', 'OXA'],
-        verdier: { DIAZ: '400', DMI: '600', OXA: oksazepam },
-      })
+  it('tar nøyaktig 10 % med i fellesskommentaren', () => {
+    // Kilden sier «OXA ≤ 10 %» om fellesskommentaren og «OXA > 10 %» om
+    // standardkommentarene, så grensen selv hører til fellesskommentaren.
+    expect(plassert(medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '100'))).toEqual([
+      'Hovedkommentar → DIAZ',
+      'Tilleggskommentar → DMI OXA',
+    ])
+  })
 
-    expect(plassert(paa('99'))).toHaveLength(2)
-    expect(plassert(paa('100'))).toEqual([
+  it('kommenterer oksazepam for seg når andelen er over 10 %', () => {
+    const resultat = medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '101')
+
+    expect(plassert(resultat)).toEqual([
       'Hovedkommentar → DIAZ',
       'Tilleggskommentar → DMI',
       'Hovedkommentar for oksazepam → OXA',
     ])
-    expect(plassert(paa('101'))).toEqual(plassert(paa('100')))
-    expect(tekster(paa('100'))).toEqual([
-      kilde('diazepam').hoved,
-      kilde('diazepam').tillegg,
-      kilde('oksazepam').hoved,
+    expect(tekster(resultat)).toEqual([
+      kilde('diazepam'),
+      kilde('desmetyldiazepam', 'tillegg'),
+      kilde('oksazepam'),
     ])
   })
 
-  it('regner andelen av det som faktisk er påvist', () => {
-    // Uten diazepam er summen desmetyldiazepam alene: 5 av 100 er 5 %.
-    const resultat = fortolk(ID, {
-      pavist: ['DMI', 'OXA'],
-      verdier: { DMI: '100', OXA: '5' },
-    })
+  it('krever alle tre for fellesskommentaren, og sier fra når bare to er påvist', () => {
+    const resultat = fortolk(ID, { pavist: ['DMI', 'OXA'] })
 
-    expect(plassert(resultat)).toEqual(['Hovedkommentar → DMI', 'Tilleggskommentar → OXA'])
-    expect(tekster(resultat)[0]).toBe(kilde('diazepamgruppen-samlet').hoved)
+    expect(plassert(resultat)).toEqual([
+      'Hovedkommentar → DMI',
+      'Hovedkommentar for oksazepam → OXA',
+    ])
+    expect(notiser(resultat)).toContain('alle er påvist')
+    // Uten alle tre er det ingen 10 %-regel å regne på.
+    expect(modul(ID).verdifelter(['DMI', 'OXA'])).toEqual([])
   })
 
   it('sier fra i stedet for å dele på null', () => {
-    const resultat = fortolk(ID, {
-      pavist: ['DIAZ', 'DMI', 'OXA'],
-      verdier: { DIAZ: '0', DMI: '0', OXA: '5' },
-    })
-
-    expect(resultat.type).toBe('mangler')
+    expect(medTall(['DIAZ', 'DMI', 'OXA'], '0', '0', '5').type).toBe('mangler')
   })
 
   it('forteller hvilken vei regelen falt', () => {
-    const notis = (oksazepam: string) => {
-      const resultat = fortolk(ID, {
-        pavist: ['DIAZ', 'DMI', 'OXA'],
-        verdier: { DIAZ: '400', DMI: '600', OXA: oksazepam },
-      })
-      if (resultat.type !== 'kommentarer') throw new Error('ventet kommentarer')
-      return resultat.notiser.join(' ')
-    }
-
-    expect(notis('99')).toContain('9,9 %')
-    expect(notis('99')).toContain('under ett')
-    expect(notis('250')).toContain('25,0 %')
-    expect(notis('250')).toContain('for seg')
+    expect(notiser(medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '99'))).toContain('9,9 %')
+    expect(notiser(medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '99'))).toContain('under ett')
+    expect(notiser(medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '250'))).toContain('25,0 %')
+    expect(notiser(medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '250'))).toContain('for seg')
   })
 })
 
@@ -259,8 +269,8 @@ describe('tramadol og O-desmetyltramadol', () => {
 
     expect(plassert(resultat)).toEqual(['Hovedkommentar → TRAM', 'Tilleggskommentar → OTRAM'])
     expect(tekster(resultat)).toEqual([
-      kilde('tramadol').hoved,
-      kilde('o-desmetyltramadol').tillegg,
+      kilde('tramadolgruppen'),
+      kilde('tramadolgruppen', 'tillegg'),
     ])
   })
 
@@ -268,7 +278,7 @@ describe('tramadol og O-desmetyltramadol', () => {
     const resultat = fortolk(ID, { pavist: ['OTRAM'] })
 
     expect(plassert(resultat)).toEqual(['Hovedkommentar → OTRAM'])
-    expect(tekster(resultat)).toEqual([kilde('o-desmetyltramadol').hoved])
+    expect(tekster(resultat)).toEqual([kilde('tramadolgruppen')])
   })
 
   it('lar tramadol stå alene når bare den er påvist', () => {
@@ -279,50 +289,100 @@ describe('tramadol og O-desmetyltramadol', () => {
 describe('kodein og morfin', () => {
   const ID = 'kodeingruppen'
 
+  /** Fortolkningen med begge påvist og de to konsentrasjonene fylt inn. */
+  const medTall = (kodein: string, morfin: string) =>
+    fortolk(ID, { pavist: ['KOD', 'MOR'], verdier: { KOD: kodein, MOR: morfin } })
+
   it('gir hvert stoff sin egen kommentar når bare det ene er påvist', () => {
-    expect(tekster(fortolk(ID, { pavist: ['KOD'] }))).toEqual([kilde('kodein').hoved])
-    expect(tekster(fortolk(ID, { pavist: ['MOR'] }))).toEqual([kilde('morfin').hoved])
+    expect(plassert(fortolk(ID, { pavist: ['KOD'] }))).toEqual(['Hovedkommentar → KOD'])
+    expect(tekster(fortolk(ID, { pavist: ['KOD'] }))).toEqual([kilde('kun-kodein', 'kodein')])
+    expect(plassert(fortolk(ID, { pavist: ['MOR'] }))).toEqual(['Hovedkommentar → MOR'])
+    expect(tekster(fortolk(ID, { pavist: ['MOR'] }))).toEqual([kilde('kun-morfin', 'morfin')])
   })
 
-  it('viser kildens veiledning om kodein når kodein er påvist alene', () => {
-    const resultat = fortolk(ID, { pavist: ['KOD'] })
-    if (resultat.type !== 'kommentarer') throw new Error('ventet kommentarer')
-
-    expect(resultat.notiser.join(' ')).toContain('heroin-inntak')
+  it('ber om tallene bare når begge er påvist', () => {
+    expect(modul(ID).verdifelter(['KOD'])).toEqual([])
+    expect(modul(ID).verdifelter(['MOR'])).toEqual([])
+    expect(modul(ID).verdifelter(['KOD', 'MOR']).map((f) => f.kode)).toEqual(['KOD', 'MOR'])
   })
 
-  it('spør om høy kodein og lav morfin bare når begge er påvist', () => {
-    expect(modul(ID).avkryssing(['KOD'])).toBeNull()
-    expect(modul(ID).avkryssing(['MOR'])).toBeNull()
-    expect(modul(ID).avkryssing(['KOD', 'MOR'])?.merke).toBe('Høy kodein, lav morfin')
-    // Veiledningen er kildens egen tekst om hvordan kodein skal vurderes.
-    expect(modul(ID).avkryssing(['KOD', 'MOR'])?.hjelp).toContain('MAM i tillegg')
+  it('venter på tallene før den velger regel', () => {
+    expect(fortolk(ID, { pavist: ['KOD', 'MOR'] }).type).toBe('mangler')
+    expect(fortolk(ID, { pavist: ['KOD', 'MOR'], verdier: { KOD: '800' } }).type).toBe('mangler')
   })
 
-  it('bruker kombinasjonskommentaren og morfinkommentaren som standard', () => {
-    const resultat = fortolk(ID, { pavist: ['KOD', 'MOR'] })
+  it('bruker kommentaren for høy kodein og lav morfin under 20 %', () => {
+    const resultat = medTall('1000', '199')
+
+    expect(plassert(resultat)).toEqual(['Hovedkommentar → KOD', 'Tilleggskommentar → MOR'])
+    expect(tekster(resultat)).toEqual([
+      kilde('hoy-kodein-lav-morfin', 'kodein'),
+      kilde('hoy-kodein-lav-morfin', 'morfin'),
+    ])
+    expect(notiser(resultat)).toContain('19,9 %')
+  })
+
+  it('sender gråsonen mellom 20 % og 100 % til plenum, uten noe å kopiere', () => {
+    for (const morfin of ['200', '500', '1000']) {
+      const resultat = medTall('1000', morfin)
+      expect(resultat.type, morfin).toBe('plenum')
+      expect(plenum(resultat), morfin).toContain('tas opp i plenum')
+    }
+    // Kildens eget råd om utgangspunktet følger med, så den som skal ta saken
+    // videre ikke må slå det opp selv.
+    expect(plenum(medTall('1000', '500'))).toContain('kan ikke utelukke at morfin er inntatt')
+  })
+
+  it('bruker den ordinære kombinasjonen når morfin er høyere enn kodein', () => {
+    const resultat = medTall('1000', '1001')
 
     expect(plassert(resultat)).toEqual([
       'Hovedkommentar for kodein → KOD',
       'Hovedkommentar for morfin → MOR',
     ])
-    expect(tekster(resultat)).toEqual([kilde('kodein-med-morfin').hoved, kilde('morfin').hoved])
-  })
-
-  it('bytter til egen kommentar ved høy kodein og lav morfin', () => {
-    const resultat = fortolk(ID, { pavist: ['KOD', 'MOR'], avkrysset: true })
-
-    expect(plassert(resultat)).toEqual(['Hovedkommentar → KOD', 'Tilleggskommentar → MOR'])
     expect(tekster(resultat)).toEqual([
-      kilde('hoy-kodein-lav-morfin').hoved,
-      kilde('hoy-kodein-lav-morfin').tillegg,
+      kilde('kodein-morfin-ordinaer', 'kodein'),
+      kilde('kodein-morfin-ordinaer', 'morfin'),
+    ])
+    // Kodeinkommentaren her er den utvidede, med heroin og Paralgin forte.
+    expect(tekster(resultat)[0]).toContain('Paralgin forte')
+  })
+
+  it('legger grensene der kilden legger dem', () => {
+    // < 20 % → høy kodein; 20–100 % → gråsone; > 100 % → ordinær kombinasjon.
+    expect(medTall('1000', '199').type).toBe('kommentarer')
+    expect(medTall('1000', '200').type).toBe('plenum')
+    expect(medTall('1000', '1000').type).toBe('plenum')
+    expect(medTall('1000', '1001').type).toBe('kommentarer')
+  })
+
+  it('sier fra i stedet for å dele på null', () => {
+    expect(medTall('0', '100').type).toBe('mangler')
+  })
+})
+
+describe('amfetamin og metamfetamin', () => {
+  const ID = 'amfetamingruppen'
+
+  it('gir hvert stoff sin egen kommentar når bare det ene er påvist', () => {
+    expect(plassert(fortolk(ID, { pavist: ['AMF1'] }))).toEqual(['Hovedkommentar → AMF1'])
+    expect(tekster(fortolk(ID, { pavist: ['AMF1'] }))).toEqual([kilde('amfetamin')])
+    expect(plassert(fortolk(ID, { pavist: ['MAF1'] }))).toEqual(['Hovedkommentar → MAF1'])
+    expect(tekster(fortolk(ID, { pavist: ['MAF1'] }))).toEqual([kilde('metamfetamin')])
+  })
+
+  it('legger fellesskommentaren på metamfetamin når begge er påvist', () => {
+    const resultat = fortolk(ID, { pavist: ['AMF1', 'MAF1'] })
+
+    expect(plassert(resultat)).toEqual(['Hovedkommentar → MAF1', 'Tilleggskommentar → AMF1'])
+    expect(tekster(resultat)).toEqual([
+      kilde('amfetamingruppen-samlet'),
+      kilde('amfetamingruppen-samlet', 'tillegg'),
     ])
   })
 
-  it('lar avkryssingen være uten betydning når bare ett stoff er påvist', () => {
-    expect(plassert(fortolk(ID, { pavist: ['KOD'], avkrysset: true }))).toEqual([
-      'Hovedkommentar → KOD',
-    ])
+  it('trenger ingen konsentrasjoner', () => {
+    expect(modul(ID).verdifelter(['AMF1', 'MAF1'])).toEqual([])
   })
 })
 
@@ -336,14 +396,13 @@ describe('kommentarene dekker det som er påvist', () => {
     return ut
   }
 
+  /** Tall som gir en fortolkning med kommentarer i alle modulene. */
+  const verdier = { DIAZ: '400', DMI: '600', OXA: '50', KOD: '100', MOR: '500' }
+
   it('gir hver påvist analytt nøyaktig én kommentar, i alle modulene', () => {
     for (const m of RUS_MODULER) {
-      const koder = moduleKoder(m)
-      for (const pavist of delmengder(koder)) {
-        // Tallene 10 %-regelen eventuelt trenger. Verdiene her gir en andel
-        // under 10 %; grensetilfellene er dekket for seg over.
-        const verdier = Object.fromEntries(koder.map((k) => [k, k === 'OXA' ? '1' : '100']))
-        const resultat = m.fortolk({ pavist, verdier, avkrysset: false })
+      for (const pavist of delmengder(moduleKoder(m))) {
+        const resultat = m.fortolk({ pavist, verdier })
         if (resultat.type !== 'kommentarer') {
           throw new Error(`${m.id} med ${pavist.join('+')} ga ${resultat.type}`)
         }
@@ -354,11 +413,10 @@ describe('kommentarene dekker det som er påvist', () => {
     }
   })
 
-  it('gir alltid nøyaktig én hovedkommentar per påvist stoff som ikke henviser videre', () => {
+  it('gir hver fortolkning minst én hovedkommentar og entydige merker', () => {
     for (const m of RUS_MODULER) {
       for (const pavist of delmengder(moduleKoder(m))) {
-        const verdier = Object.fromEntries(moduleKoder(m).map((k) => [k, k === 'OXA' ? '1' : '100']))
-        const resultat = m.fortolk({ pavist, verdier, avkrysset: false })
+        const resultat = m.fortolk({ pavist, verdier })
         if (resultat.type !== 'kommentarer') continue
 
         const hoved = resultat.plasseringer.filter((p: RusPlassering) => p.rolle === 'hoved')
@@ -396,16 +454,23 @@ describe('oppføringene i søket', () => {
     }
   })
 
-  it('fører både tramadol og O-desmetyltramadol til fellesmodulen', () => {
+  it('fører begge stoffene i hver fellesmodul til den samme modulen', () => {
     for (const ord of ['tramadol', 'o-desmetyltramadol', 'TRAM', 'OTRAM']) {
       expect(modulerFor(ord), ord).toContain('tramadolgruppen')
     }
-  })
-
-  it('fører både kodein og morfin til fellesmodulen', () => {
     for (const ord of ['kodein', 'morfin', 'KOD', 'MOR']) {
       expect(modulerFor(ord), ord).toContain('kodeingruppen')
     }
+    for (const ord of ['amfetamin', 'metamfetamin', 'AMF1', 'MAF1']) {
+      expect(modulerFor(ord), ord).toContain('amfetamingruppen')
+    }
+  })
+
+  it('finner de sentralstimulerende stoffene på navn og hverdagsnavn', () => {
+    expect(modulerFor('benzoylekgonin')).toContain('benzoylekgonin')
+    expect(modulerFor('kokain')).toContain('benzoylekgonin')
+    expect(modulerFor('mdma')).toContain('mdma')
+    expect(modulerFor('ecstasy')).toContain('mdma')
   })
 
   it('finner hver modul på sin egen kode', () => {
@@ -422,7 +487,7 @@ describe('oppføringene i søket', () => {
     expect(oppforing?.komponenter).toEqual(['Diazepam', 'N-desmetyldiazepam', 'Oksazepam'])
   })
 
-  it('holder THC i serum og THC-syre i urin fra hverandre', () => {
+  it('holder THC og THC-syre i urin fra hverandre', () => {
     expect(forste('THC')).toBe('thc')
     expect(search('THC', pool).map((h) => h.analyte.kode)).toContain('IRCAK')
     expect(rusModulFor(THC_ANALYTT)).toBeUndefined()

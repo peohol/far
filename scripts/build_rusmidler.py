@@ -1,32 +1,24 @@
 #!/usr/bin/env python3
-"""Bygg src/data/rusmidler.json fra rusmidler.pdf.
+"""Bygg src/data/rusmidler.json fra rusmidler.md.
 
 Kjor:  python3 scripts/build_rusmidler.py
 
-Kilden er tre tabeller i PDF-en: "Benzodiazepiner og Z-hypnotika", "THC" og
-"Opioider". Hver rad er en analytt eller en navngitt kombinasjon av analytter,
-med en hovedkommentar, eventuelt en tilleggskommentar, og eventuelt en
-bemerkning om fortolkningen.
+Kilden er tabellene i originaldata/rusmidler.md, gruppert under overskrifter:
+benzodiazepiner og Z-hypnotika, cannabis, opioider og sentralstimulerende.
+De fleste tabellene har en rad per analytt eller navngitt kombinasjon, med en
+hovedkommentar og eventuelt en tilleggskommentar. Morfin/kodein-tabellen er satt
+opp annerledes, med en rad per situasjon og en kolonne per analytt.
 
-Tabellene er satt opp litt ulikt. Benzotabellen har egne kolonner for
-tilleggskommentar og bemerkning; opioidtabellen slar de to sammen til en
-kolonne ("Bemerkning om fortolkingen, tilleggskommentarer"), og THC-tabellen
-har bare en kommentarkolonne. Skriptet leser kolonnene etter overskriftene
-sine og deler den sammenslatte kolonnen i avsnitt: avsnittet som henviser
-videre ("Se kommentar for ... i serum.") er tilleggskommentaren, resten er
-bemerkning.
+TABELLER under er fasiten: den sier hvilke tabeller dokumentet skal ha, hvilke
+kolonner de skal ha, og hvilke rader i hvilken rekkefolge. Finner skriptet noe
+annet, stopper det med beskjed i stedet for a skrive et datasett appen tolker
+feil. Ider derfra er noklene domenelaget i appen slar opp pa.
 
-Hver logisk rad i PDF-en dekker tre fysiske tabellrader, fordi analyttnavnet
-star i sin egen rutedeling til venstre. Radene med full tabellbredde er de
-logiske radene; navnet hentes fra navnekolonnen over hele det bandet.
-
-Radene er ventet a vaere de samme fra gang til gang. RADER under er fasiten:
-finner skriptet noe annet i PDF-en, stopper det med beskjed i stedet for a
-skrive et datasett appen tolker feil. Ider derfra er noklene domenelaget i
-appen slar opp pa.
-
-Alle rettelser skriptet gjor er samlet i RETTELSER og havner i
-meta.rettelser i JSON-filen, slik at de kan etterproves mot PDF-en.
+Cellene i dokumentet inneholder uthevinger, harde linjeskift som er blitt til
+doble mellomrom, og plasseringsinstrukser i klammer ("[limes pa MAF1]"). Alt
+dette er notasjon rundt teksten, ikke en del av kommentaren som limes inn, og
+vaskes bort. Rettelser i selve teksten samles i RETTELSER og havner i
+meta.rettelser i JSON-filen, slik at de kan etterproves mot dokumentet.
 """
 from __future__ import annotations
 
@@ -35,58 +27,132 @@ import re
 import unicodedata
 from pathlib import Path
 
-import pdfplumber
-
 ROT = Path(__file__).resolve().parent.parent
-PDF = ROT / "originaldata" / "rusmidler.pdf"
+KILDE = ROT / "originaldata" / "rusmidler.md"
 UT = ROT / "src" / "data" / "rusmidler.json"
 
-# Fasiten over radene i PDF-en, i dokumentrekkefolge: (id, analyttetikett,
-# koder). Etiketten er analyttkolonnen slik den star, med linjeskift som
-# mellomrom. Ider er noklene appen slar opp pa og ma ikke endres uten at
-# src/domain/rus.ts endres i samme slengen.
-RADER: list[tuple[str, str, list[str]]] = [
-    ("alprazolam", "Alprazolam", ["APR"]),
-    ("diazepam", "Diazepam", ["DIAZ"]),
-    ("desmetyldiazepam", "Desmetyldiazepam", ["DMI"]),
-    ("klonazepam", "Klonazepam", ["CZP"]),
-    ("nitrazepam", "Nitrazepam", ["NIT"]),
-    ("oksazepam", "Oksazepam", ["OXA"]),
-    ("zolpidem", "Zolpidem", ["ZOLP"]),
-    ("zopiklon", "Zopiklon", ["ZOPI"]),
-    (
-        "diazepamgruppen-samlet",
-        "KOMBINASJON Diazepam, N-desmetyldiazepam og oksazepam",
-        ["DIAZ", "DMI", "OXA"],
+
+class Tabell:
+    """En ventet tabell i dokumentet.
+
+    `tekstkolonner` og `merknadkolonner` er {kolonneoverskrift: nokkel}.
+    Tekstkolonnene blir kommentarer appen kan kopiere; merknadkolonnene blir
+    veiledning til den som fortolker. Noklene er de appen slar opp pa, sa den
+    kan vise den delen av veiledningen som hjelper i situasjonen.
+
+    `rader` er (id, analyttetikett, koder, veiledning). Er `veiledning` sann,
+    er radens tekstkolonner ikke kommentarer a lime inn, men prosa om hvordan
+    saken skal handteres, og legges blant merknadene.
+    """
+
+    def __init__(self, gruppe, etikettkolonne, kodekolonne, tekstkolonner,
+                 merknadkolonner, rader):
+        self.gruppe = gruppe
+        self.etikettkolonne = etikettkolonne
+        self.kodekolonne = kodekolonne
+        self.tekstkolonner = tekstkolonner
+        self.merknadkolonner = merknadkolonner
+        self.rader = rader
+
+
+HOVED_OG_TILLEGG = {"Hovedkommentar": "hoved", "Tilleggskommentar": "tillegg"}
+
+TABELLER: list[Tabell] = [
+    Tabell(
+        "Benzodiazepiner og Z-hypnotika", "Analytt", "Kode",
+        {"Hovedkommentar": "hoved"}, {},
+        [
+            ("alprazolam", "Alprazolam", ["APR"], False),
+            ("klonazepam", "Klonazepam", ["CZP"], False),
+            ("nitrazepam", "Nitrazepam", ["NIT"], False),
+            ("zolpidem", "Zolpidem", ["ZOLP"], False),
+            ("zopiklon", "Zopiklon", ["ZOPI"], False),
+        ],
     ),
-    ("thc", "THC", ["THC"]),
-    ("buprenorfin", "Buprenorfin", ["BUP"]),
-    ("fentanyl", "Fentanyl", ["FYL"]),
-    ("kodein", "Kodein", ["KOD"]),
-    ("kodein-med-morfin", "Kodein ved KOMBINASJON Morfin og kodein", ["KOD"]),
-    ("morfin", "Morfin", ["MOR"]),
-    ("metadon", "Metadon", ["MDO"]),
-    ("oksykodon", "Oksykodon", ["OKSY"]),
-    ("tapentadol", "Tapentadol", ["TAP"]),
-    ("tramadol", "Tramadol", ["TRAM"]),
-    ("o-desmetyltramadol", "O-desmetyltramadol", ["OTRAM"]),
-    ("hoy-kodein-lav-morfin", "KOMBINASJON Høy kodein, lav morfin", ["KOD", "MOR"]),
+    Tabell(
+        "Benzodiazepiner og Z-hypnotika", "Analytt", "Kode", HOVED_OG_TILLEGG, {},
+        [
+            ("diazepam", "Diazepam", ["DIAZ"], False),
+            ("desmetyldiazepam", "Desmetyldiazepam", ["DMI"], False),
+            ("oksazepam", "Oksazepam", ["OXA"], False),
+            (
+                "diazepamgruppen-samlet",
+                "KOMBINASJON: Diazepam, N-desmetyldiazepam og oksazepam påvist og OXA ≤ DIAZ + DMI",
+                ["DIAZ", "DMI", "OXA"],
+                False,
+            ),
+        ],
+    ),
+    Tabell(
+        "Cannabis", "Analytt", "Kode", {"Kommentar": "hoved"}, {},
+        [("thc", "THC", ["THC"], False)],
+    ),
+    Tabell(
+        "Opioider", "Analytt", "Kode", {"Hovedkommentar": "hoved"}, {},
+        [
+            ("buprenorfin", "Buprenorfin", ["BUP"], False),
+            ("fentanyl", "Fentanyl", ["FYL"], False),
+            ("metadon", "Metadon", ["MDO"], False),
+            ("oksykodon", "Oksykodon", ["OKSY"], False),
+            ("tapentadol", "Tapentadol", ["TAP"], False),
+        ],
+    ),
+    Tabell(
+        "Opioider", "Analytt", "Kode", HOVED_OG_TILLEGG, {},
+        [("tramadolgruppen", "Tramadol O-desmetyltramadol", ["TRAM", "OTRAM"], False)],
+    ),
+    Tabell(
+        "Opioider", "Situasjon", None,
+        {"Kommentar på kodein (KOD)": "kodein", "Kommentar på morfin (MOR)": "morfin"},
+        {"Kriterium": "kriterium", "Håndtering / merknad": "handtering"},
+        [
+            ("kun-kodein", "Kun kodein påvist", ["KOD"], False),
+            ("kun-morfin", "Kun morfin påvist", ["MOR"], False),
+            (
+                "hoy-kodein-lav-morfin",
+                "Morfin og kodein – høy kodein, lav morfin",
+                ["KOD", "MOR"],
+                False,
+            ),
+            (
+                "kodein-morfin-grasone",
+                "Morfin og kodein – mellomområde / gråsone",
+                ["KOD", "MOR"],
+                True,
+            ),
+            (
+                "kodein-morfin-ordinaer",
+                "Morfin og kodein – ordinær kombinasjon",
+                ["KOD", "MOR"],
+                False,
+            ),
+        ],
+    ),
+    Tabell(
+        "Sentralstimulerende", "Analytt", "Kode", {"Kommentar": "hoved"}, {},
+        [
+            ("benzoylekgonin", "Benzoylekgonin", ["BEZ1"], False),
+            ("mdma", "MDMA (Ecstasy)", ["ECS1"], False),
+        ],
+    ),
+    Tabell(
+        "Sentralstimulerende", "Analytt", "Kode", HOVED_OG_TILLEGG, {},
+        [
+            ("amfetamin", "Amfetamin", ["AMF1"], False),
+            ("metamfetamin", "Metamfetamin", ["MAF1"], False),
+            (
+                "amfetamingruppen-samlet",
+                "KOMBINASJON: Amfetamin og metamfetamin",
+                ["AMF1", "MAF1"],
+                False,
+            ),
+        ],
+    ),
 ]
 
-# Kolonneoverskriftene, normalisert til feltnavnene i JSON-filen. Overskriften
-# star bare pa forste side av hver tabell; siden etterpa arver oppsettet.
-KOLONNER = {
-    "kode": "kode",
-    "hovedkommentar": "hovedkommentar",
-    "kommentar": "hovedkommentar",
-    "tilleggskommentar": "tilleggskommentar",
-    "bemerkning om fortolkningen": "merknader",
-    "bemerkning om fortolkingen, tilleggskommentarer": "merknader",
-}
-
-# Avsnittet som henviser videre til en annen analytts kommentar. Det er en
-# tilleggskommentar som skal limes inn, ikke en bemerkning til den som tolker.
-HENVISNING = re.compile(r"Se kommentar for .+ i serum\.")
+# Cellen sier uttrykkelig at analytten ikke skal ha noen kommentar i denne
+# situasjonen. Det er ikke en kommentartekst, og blir en tom celle.
+INGEN_KOMMENTAR = re.compile(r"^Ingen \w*kommentar\.?$", re.IGNORECASE)
 
 RETTELSER: list[dict] = []
 
@@ -99,216 +165,76 @@ def logg(kategori: str, hvor: str, fra: str, til: str, begrunnelse: str) -> None
 
 
 # --------------------------------------------------------------------------
-# Uttrekk fra PDF
+# Uttrekk fra dokumentet
 # --------------------------------------------------------------------------
 
-def linjer(sidetegn: list[dict], boks) -> list[tuple[float, str]]:
-    """Linjene i et rektangel, som (toppkoordinat, tekst)."""
-    x0, topp, x1, bunn = boks
-    tegn = [
-        c for c in sidetegn
-        if c["x0"] >= x0 - 0.5 and c["x1"] <= x1 + 0.5
-        and c["top"] >= topp - 0.5 and c["bottom"] <= bunn + 0.5
-    ]
-
-    samlet: dict[float, list[dict]] = {}
-    for c in tegn:
-        samlet.setdefault(round(c["top"], 1), []).append(c)
-
-    ut: list[tuple[float, str]] = []
-    for noekkel in sorted(samlet):
-        tekst = "".join(c["text"] for c in sorted(samlet[noekkel], key=lambda z: z["x0"]))
-        if tekst.strip():
-            ut.append((noekkel, tekst.rstrip()))
-    return ut
+def er_skillelinje(rad: list[str]) -> bool:
+    """Linjen under overskriftsraden i en markdown-tabell: | --- | --- |"""
+    return bool(rad) and all(re.fullmatch(r":?-{3,}:?", c.strip()) for c in rad if c.strip() != "")
 
 
-def flett(biter: list[str]) -> str:
-    """Sett sammen linjer til lopende tekst.
-
-    Kolonnene er smale, sa nesten hver linje er et tvunget brudd. Slutter en
-    linje pa bindestrek er streken en del av ordet ("O-desmetyltramadol",
-    "40-120"), og linjene settes sammen uten mellomrom; ellers med.
-    """
-    ut = ""
-    for bit in biter:
-        if not ut:
-            ut = bit
-        elif ut.endswith("-"):
-            ut += bit
-        else:
-            ut += " " + bit
-    return ut
+def celler(linje: str) -> list[str]:
+    """Cellene i en tabellinje, uten de ytre rorstrekene."""
+    return [c.strip() for c in linje.strip().strip("|").split("|")]
 
 
-def avsnitt(sidetegn: list[dict], boks) -> list[str]:
-    """Teksten i en celle, delt i avsnitt.
+def les_tabeller(tekst: str) -> list[dict]:
+    """Tabellene i dokumentet, i rekkefolge, med overskriften de star under."""
+    funnet: list[dict] = []
+    gruppe = ""
+    gjeldende: dict | None = None
 
-    Et avsnittsskille synes som et ekstra stort sprang mellom to linjer.
-    Linjeavstanden i PDF-en er den samme overalt, sa terskelen kan settes
-    romslig i forhold til den minste avstanden cellen selv har.
-    """
-    rader = linjer(sidetegn, boks)
-    if not rader:
-        return []
-    if len(rader) == 1:
-        return [rader[0][1]]
+    for linje in tekst.splitlines():
+        stripet = linje.strip()
 
-    sprang = [b[0] - a[0] for a, b in zip(rader, rader[1:])]
-    minste = min(sprang)
+        # Bare tabellens egen hovedoverskrift («# Opioider») er gruppen;
+        # underoverskrifter deler bare opp tabellene innenfor gruppen.
+        if stripet.startswith("# "):
+            gruppe = stripet[2:].strip()
+            gjeldende = None
+            continue
+        if stripet.startswith("#"):
+            gjeldende = None
+            continue
 
-    grupper: list[list[str]] = [[rader[0][1]]]
-    for (_, tekst), avstand in zip(rader[1:], sprang):
-        if avstand > minste * 1.4:
-            grupper.append([tekst])
-        else:
-            grupper[-1].append(tekst)
-    return [flett(g) for g in grupper]
+        if not stripet.startswith("|"):
+            gjeldende = None
+            continue
 
+        rad = celler(stripet)
+        if gjeldende is None:
+            gjeldende = {"gruppe": gruppe, "kolonner": rad, "rader": []}
+            funnet.append(gjeldende)
+            continue
+        if er_skillelinje(rad):
+            continue
+        if not any(c for c in rad):
+            # Tom rad, som den dokumentet har etter tramadoltabellen.
+            continue
+        gjeldende["rader"].append(rad)
 
-def datatabeller(side):
-    """Datatabellene pa siden, ovenfra og ned.
-
-    `find_tables` finner ogsa navnekolonnen som sin egen lille tabell der et
-    analyttnavn gar over flere linjer. De ligger inne i en ekte tabell og
-    lukes ut pa det. En side kan ha mer enn en ekte tabell: side 3 avslutter
-    THC-tabellen og begynner opioidtabellen.
-    """
-    alle = side.find_tables()
-
-    def inni(a, b) -> bool:
-        return (
-            a is not b
-            and a.bbox[0] >= b.bbox[0] - 1 and a.bbox[1] >= b.bbox[1] - 1
-            and a.bbox[2] <= b.bbox[2] + 1 and a.bbox[3] <= b.bbox[3] + 1
-        )
-
-    ekte = [t for t in alle if not any(inni(t, annen) for annen in alle)]
-    return sorted(ekte, key=lambda t: t.bbox[1])
-
-
-def logiske_rader(tabell):
-    """Radene som har en rute i hver kolonne, over hele tabellbredden.
-
-    Hver logiske rad dekker flere fysiske: analyttnavnet star i sin egen
-    rutedeling til venstre, og en tom kolonne kan vaere delt opp pa samme vis.
-    De delradene mangler ruter i midten, og lukes ut pa det.
-    """
-    x1 = tabell.bbox[2]
-    antall = max(len(kolonnebokser(r)) for r in tabell.rows)
-    return [
-        r for r in tabell.rows
-        if abs(r.bbox[2] - x1) < 1 and len(kolonnebokser(r)) == antall
-    ]
-
-
-def kolonnebokser(rad) -> list[tuple[float, float]]:
-    """x-omradene til kolonnene i en rad, fra venstre."""
-    return [(c[0], c[2]) for c in rad.cells if c is not None]
-
-
-def overskrift(side, tabell) -> str:
-    """Tabelloverskriften: den nederste tekstlinjen rett over tabellen."""
-    _, topp, _, _ = tabell.bbox
-    over = [c for c in side.chars if topp - 40 <= c["bottom"] <= topp - 1]
-    if not over:
-        return ""
-    nederst = max(round(c["top"], 1) for c in over)
-    linje = [c for c in over if round(c["top"], 1) == nederst]
-    return "".join(c["text"] for c in sorted(linje, key=lambda z: z["x0"])).strip()
-
-
-class Uttrekk:
-    """Radene i PDF-en, samlet mens sidene leses.
-
-    Kolonneoppsettet star bare i overskriftsraden pa forste side av hver
-    tabell; sidene etter arver det. En rad uten bade navn og kode er
-    fortsettelsen av forrige rad over et sideskift.
-    """
-
-    def __init__(self) -> None:
-        self.rader: list[dict] = []
-        self.felt: list[str] = []
-        self.gruppe = ""
-
-    def les_side(self, side) -> None:
-        tegn = side.chars
-        for tabell in datatabeller(side):
-            for rad in logiske_rader(tabell):
-                _, topp, _, bunn = rad.bbox
-                celler = [
-                    avsnitt(tegn, (x0, topp, x1, bunn)) for x0, x1 in kolonnebokser(rad)
-                ]
-                self.les_rad(side, tabell, celler)
-
-    def les_rad(self, side, tabell, celler: list[list[str]]) -> None:
-        flate = [" ".join(a).strip() for a in celler]
-        if not any(flate):
-            return
-
-        if any(f.lower() == "kode" for f in flate):
-            self.felt = ["analytt"] + [KOLONNER.get(f.lower(), "") for f in flate[1:]]
-            self.gruppe = overskrift(side, tabell) or self.gruppe
-            return
-
-        if not self.felt:
-            raise SystemExit(f"rad uten kjent kolonneoppsett pa side {side.page_number}")
-
-        post: dict[str, list[str]] = {navn: [] for navn in KOLONNER.values()}
-        post["analytt"] = []
-        for navn, deler in zip(self.felt, celler):
-            if navn:
-                post[navn] = deler
-
-        navn = flett(post["analytt"])
-        kode = flett(post["kode"])
-
-        if not navn and not kode:
-            if not self.rader:
-                raise SystemExit(f"fortsettelsesrad uten forgjenger pa side {side.page_number}")
-            for felt in ("hovedkommentar", "tilleggskommentar", "merknader"):
-                slaa_sammen(self.rader[-1][felt], post[felt])
-            return
-
-        self.rader.append({
-            "gruppe": self.gruppe,
-            "analytt": navn,
-            "koder": kode.split(),
-            "hovedkommentar": post["hovedkommentar"],
-            "tilleggskommentar": post["tilleggskommentar"],
-            "merknader": post["merknader"],
-        })
-
-
-def les_pdf() -> list[dict]:
-    """Radene i PDF-en, i dokumentrekkefolge, med tekst per kolonne."""
-    uttrekk = Uttrekk()
-    with pdfplumber.open(PDF) as pdf:
-        for side in pdf.pages:
-            uttrekk.les_side(side)
-    return uttrekk.rader
-
-
-def slaa_sammen(forrige: list[str], nye: list[str]) -> None:
-    """Skjot en celle som fortsetter over et sideskift.
-
-    Forste avsnitt pa den nye siden er resten av det siste avsnittet pa den
-    forrige; eventuelle avsnitt etter det er nye.
-    """
-    if not nye:
-        return
-    if forrige:
-        forrige[-1] = flett([forrige[-1], nye[0]])
-        forrige.extend(nye[1:])
-    else:
-        forrige.extend(nye)
+    return funnet
 
 
 # --------------------------------------------------------------------------
-# Normalisering av tekst
+# Vask av celletekst
 # --------------------------------------------------------------------------
 
 TANKESTREK = "–"
+
+# Plasseringsinstrukser står i klammer, av og til med markdown-rømming foran.
+KLAMMER = re.compile(r"\\?\[[^\]]*\\?\]")
+
+
+def uten_notasjon(tekst: str) -> str:
+    """Fjern markdown-notasjon og plasseringsinstrukser."""
+    tekst = KLAMMER.sub("", tekst)
+    tekst = re.sub(r"\*+", "", tekst)
+    tekst = tekst.replace("\\", "")
+    tekst = unicodedata.normalize("NFC", tekst)
+    # Harde linjeskift i kilden er blitt til flere mellomrom.
+    tekst = re.sub(r"\s+", " ", tekst).strip()
+    return re.sub(r"\s+([,.;:])", r"\1", tekst)
 
 
 def rett_streker(tekst: str, hvor: str) -> str:
@@ -321,20 +247,40 @@ def rett_streker(tekst: str, hvor: str) -> str:
     return re.sub(r"[\d,]+(\s*-\s*)\d+", bytt, tekst)
 
 
-def rett_prosent(tekst: str, hvor: str) -> str:
-    """Prosenttegn skal ha mellomrom foran seg, slik kilden ellers skriver det."""
-    ny = re.sub(r"(\d)%", r"\1 %", tekst)
-    if ny != tekst:
-        logg("typografi", hvor, tekst, ny, "manglende mellomrom foran prosenttegn")
+def rett_punktum(tekst: str, hvor: str) -> str:
+    """En kommentar er en hel setning og skal slutte med punktum.
+
+    Kilden mister punktumet der en plasseringsinstruks i klammer star etter
+    setningen; de samme kommentarene har det ellers.
+    """
+    if not tekst or tekst.endswith((".", "!", "?", ":")):
+        return tekst
+    ny = tekst + "."
+    logg("tegnsetting", hvor, tekst, ny, "kommentaren manglet avsluttende punktum")
     return ny
 
 
-def vask(tekst: str, hvor: str) -> str:
-    tekst = unicodedata.normalize("NFC", tekst)
-    tekst = re.sub(r"\s+", " ", tekst).strip()
-    tekst = re.sub(r"\s+([,.;:])", r"\1", tekst)
-    tekst = rett_streker(tekst, hvor)
-    return rett_prosent(tekst, hvor)
+def vask_kommentar(tekst: str, hvor: str) -> str:
+    renset = uten_notasjon(tekst)
+    if not renset or INGEN_KOMMENTAR.fullmatch(renset):
+        return ""
+    return rett_punktum(rett_streker(renset, hvor), hvor)
+
+
+def vask_merknad(tekst: str, hvor: str) -> str:
+    renset = uten_notasjon(tekst)
+    return rett_streker(renset, hvor) if renset else ""
+
+
+def uten_mellomrom(tekst: str) -> str:
+    """Til sammenligning av etiketter og koder.
+
+    Dokumentet har mistet noen linjeskift inne i celler, slik at «Tramadol» og
+    «O-desmetyltramadol» star som ett ord. Sammenligningen ser bort fra
+    mellomrom, sa den artefakten ikke stopper byggingen — men en celle som
+    faktisk sier noe annet, gjor det.
+    """
+    return re.sub(r"\s+", "", uten_notasjon(tekst))
 
 
 # --------------------------------------------------------------------------
@@ -342,54 +288,99 @@ def vask(tekst: str, hvor: str) -> str:
 # --------------------------------------------------------------------------
 
 def bygg() -> dict:
-    raa = les_pdf()
+    tabeller = les_tabeller(KILDE.read_text("utf-8"))
 
-    if len(raa) != len(RADER):
-        funnet = "\n".join(f"  {r['analytt']!r} {r['koder']}" for r in raa)
+    if len(tabeller) != len(TABELLER):
+        funnet = "\n".join(f"  {t['gruppe']}: {t['kolonner']}" for t in tabeller)
         raise SystemExit(
-            f"forventet {len(RADER)} rader i PDF-en, fant {len(raa)}:\n{funnet}"
+            f"forventet {len(TABELLER)} tabeller i dokumentet, fant {len(tabeller)}:\n{funnet}"
         )
 
     ut = []
-    for (rad_id, etikett, koder), rad in zip(RADER, raa):
-        if rad["analytt"] != etikett or rad["koder"] != koder:
-            raise SystemExit(
-                f"{rad_id}: PDF-en har {rad['analytt']!r} {rad['koder']}, "
-                f"skriptet venter {etikett!r} {koder}"
-            )
-
-        hoved = vask(flett(rad["hovedkommentar"]), f"{rad_id}/hovedkommentar")
-
-        # Benzotabellen har egen kolonne for tilleggskommentaren. Opioidtabellen
-        # slar tilleggskommentar og bemerkning sammen; der er avsnittet som
-        # henviser videre tilleggskommentaren.
-        tillegg = [vask(a, f"{rad_id}/tilleggskommentar") for a in rad["tilleggskommentar"]]
-        bemerkninger = []
-        for a in rad["merknader"]:
-            renset = vask(a, f"{rad_id}/merknad")
-            (tillegg if HENVISNING.search(renset) else bemerkninger).append(renset)
-
-        if len(tillegg) > 1:
-            raise SystemExit(f"{rad_id}: fant {len(tillegg)} tilleggskommentarer")
-
-        ut.append({
-            "id": rad_id,
-            "gruppe": rad["gruppe"],
-            "analytt": etikett,
-            "koder": koder,
-            "hovedkommentar": hoved,
-            "tilleggskommentar": tillegg[0] if tillegg else "",
-            "bemerkninger": bemerkninger,
-        })
+    for ventet, tabell in zip(TABELLER, tabeller):
+        ut.extend(les_tabell(ventet, tabell))
 
     return {
         "meta": {
-            "kilde": str(PDF.relative_to(ROT)),
+            "kilde": str(KILDE.relative_to(ROT)),
             "antallRader": len(ut),
             "rettelser": RETTELSER,
         },
         "rader": ut,
     }
+
+
+def les_tabell(ventet: Tabell, tabell: dict) -> list[dict]:
+    kolonner = [uten_notasjon(k) for k in tabell["kolonner"]]
+
+    def indeks(navn: str) -> int:
+        if navn not in kolonner:
+            raise SystemExit(
+                f"{ventet.gruppe}: fant ikke kolonnen {navn!r} blant {kolonner}"
+            )
+        return kolonner.index(navn)
+
+    if tabell["gruppe"] != ventet.gruppe:
+        raise SystemExit(
+            f"tabellen med kolonnene {kolonner} star under {tabell['gruppe']!r}, "
+            f"skriptet venter {ventet.gruppe!r}"
+        )
+    if len(tabell["rader"]) != len(ventet.rader):
+        raise SystemExit(
+            f"{ventet.gruppe} ({kolonner[0]}): forventet {len(ventet.rader)} rader, "
+            f"fant {len(tabell['rader'])}"
+        )
+
+    etikett_i = indeks(ventet.etikettkolonne)
+    kode_i = indeks(ventet.kodekolonne) if ventet.kodekolonne else None
+    tekst_i = {navn: (indeks(navn), nokkel) for navn, nokkel in ventet.tekstkolonner.items()}
+    merknad_i = {navn: (indeks(navn), nokkel) for navn, nokkel in ventet.merknadkolonner.items()}
+
+    ut = []
+    for (rad_id, etikett, koder, veiledning), rad in zip(ventet.rader, tabell["rader"]):
+        if uten_mellomrom(rad[etikett_i]) != uten_mellomrom(etikett):
+            raise SystemExit(
+                f"{rad_id}: dokumentet har {uten_notasjon(rad[etikett_i])!r}, "
+                f"skriptet venter {etikett!r}"
+            )
+        if kode_i is not None and uten_mellomrom(rad[kode_i]) != "".join(koder):
+            raise SystemExit(
+                f"{rad_id}: dokumentet har kodene {uten_notasjon(rad[kode_i])!r}, "
+                f"skriptet venter {koder}"
+            )
+
+        tekster: dict[str, str] = {}
+        merknader: dict[str, str] = {}
+        for _, (i, nokkel) in merknad_i.items():
+            merknad = vask_merknad(rad[i], f"{rad_id}/{nokkel}")
+            if merknad:
+                merknader[nokkel] = merknad
+        for navn, (i, nokkel) in tekst_i.items():
+            hvor = f"{rad_id}/{nokkel}"
+            if veiledning:
+                # Radens tekstkolonner er prosa om handteringen, ikke
+                # kommentarer noen skal lime inn.
+                merknad = vask_merknad(rad[i], hvor)
+                if merknad:
+                    merknader[nokkel] = merknad
+            else:
+                tekst = vask_kommentar(rad[i], hvor)
+                if tekst:
+                    tekster[nokkel] = tekst
+
+        if not veiledning and not tekster:
+            raise SystemExit(f"{rad_id}: fant ingen kommentartekst")
+
+        ut.append({
+            "id": rad_id,
+            "gruppe": ventet.gruppe,
+            "analytt": etikett,
+            "koder": koder,
+            "tekster": tekster,
+            "merknader": merknader,
+        })
+
+    return ut
 
 
 def main() -> None:

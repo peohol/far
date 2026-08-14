@@ -3,7 +3,7 @@ import type { Analyte } from '../types'
 
 /**
  * Fortolkning av stoffer med ruspotensial i serum, etter tabellene i
- * `originaldata/rusmidler.pdf` (bygget til `src/data/rusmidler.json` med
+ * `originaldata/rusmidler.md` (bygget til `src/data/rusmidler.json` med
  * `npm run data`).
  *
  * Denne kategorien skiller seg fra psykofarmaka på tre måter:
@@ -17,9 +17,14 @@ import type { Analyte } from '../types'
  * - Stoffer som tolkes sammen deler én modul, slik at hvilket som helst av
  *   navnene i søket fører til den samme fortolkningen.
  *
+ * To av modulene har regler som leser forholdet mellom konsentrasjoner —
+ * oksazepam mot diazepamgruppen, og morfin mot kodein. Selve kommentaren
+ * varierer fortsatt ikke med konsentrasjonen; det er hvilken kommentar som
+ * gjelder, forholdet avgjør.
+ *
  * Kommentartekstene er kildens egne og skal ikke endres her; rettelsene
- * (tankestrek i intervaller, mellomrom foran prosenttegn) gjøres i
- * byggeskriptet og ligger i `meta.rettelser` i datasettet.
+ * (tankestrek i intervaller, avsluttende punktum) gjøres i byggeskriptet og
+ * ligger i `meta.rettelser` i datasettet.
  */
 
 /* --- Datasettet --------------------------------------------------------- */
@@ -28,14 +33,16 @@ import type { Analyte } from '../types'
 export interface RusRad {
   id: string
   gruppe: string
-  /** Analyttkolonnen slik den står, f.eks. «KOMBINASJON Høy kodein, lav morfin». */
+  /** Analyttkolonnen slik den står, f.eks. «Morfin og kodein – ordinær kombinasjon». */
   analytt: string
   koder: string[]
-  hovedkommentar: string
-  /** Kommentaren som legges på de analyttene som ikke bærer hovedkommentaren. */
-  tilleggskommentar: string
-  /** Kildens veiledning til den som fortolker. Limes ikke inn noe sted. */
-  bemerkninger: string[]
+  /** Kommentartekstene raden gir, etter nøkkelen kilden gir dem. */
+  tekster: Record<string, string>
+  /**
+   * Kildens veiledning til den som fortolker, etter kolonnen den står i.
+   * Limes ikke inn noe sted.
+   */
+  merknader: Record<string, string>
 }
 
 export interface RusDatasett {
@@ -47,7 +54,9 @@ export interface RusDatasett {
   rader: RusRad[]
 }
 
-export const rusDatasett = rusdata as RusDatasett
+// Radene har ulike nøkler i `tekster` og `merknader` etter hvilken tabell de
+// kommer fra, så JSON-importens utledede type er smalere enn modellen.
+export const rusDatasett = rusdata as unknown as RusDatasett
 
 const raderById = new Map(rusDatasett.rader.map((r) => [r.id, r]))
 
@@ -55,6 +64,13 @@ const raderById = new Map(rusDatasett.rader.map((r) => [r.id, r]))
 function rad(id: string): RusRad {
   const funnet = raderById.get(id)
   if (!funnet) throw new Error(`ukjent rad i rusmidler.json: ${id}`)
+  return funnet
+}
+
+/** Kommentarteksten en rad gir under denne nøkkelen. */
+function tekst(radId: string, nokkel = 'hoved'): string {
+  const funnet = rad(radId).tekster[nokkel]
+  if (funnet === undefined) throw new Error(`raden ${radId} mangler teksten ${nokkel}`)
   return funnet
 }
 
@@ -72,6 +88,12 @@ export interface RusPlassering {
 export type RusResultat =
   | { type: 'mangler'; mangler: string[] }
   | { type: 'kommentarer'; plasseringer: RusPlassering[]; notiser: string[] }
+  /**
+   * Kilden har ingen standardkommentar for tilfellet, og sier at saken skal
+   * tas opp i plenum. Da skal appen ikke tilby noe å kopiere — bare si hvorfor
+   * (`melding`) og hva kilden sier om håndteringen (`veiledning`).
+   */
+  | { type: 'plenum'; melding: string; veiledning: string[] }
 
 /** Det brukeren har svart i modulen. */
 export interface RusInndata {
@@ -79,11 +101,9 @@ export interface RusInndata {
   pavist: string[]
   /** Målte konsentrasjoner per analyttkode, slik de er tastet inn. */
   verdier: Record<string, string>
-  /** Om modulens tilleggsavkryssing er huket av. Se {@link RusModul.avkryssing}. */
-  avkrysset: boolean
 }
 
-export const TOM_RUS_INNDATA: RusInndata = { pavist: [], verdier: {}, avkrysset: false }
+export const TOM_RUS_INNDATA: RusInndata = { pavist: [], verdier: {} }
 
 /** En analytt modulen dekker. */
 export interface RusAnalytt {
@@ -92,17 +112,7 @@ export interface RusAnalytt {
 }
 
 /** Et konsentrasjonsfelt modulen ber om for å avgjøre hvilken regel som gjelder. */
-export interface RusVerdifelt {
-  kode: string
-  navn: string
-}
-
-/** Avkryssingen modulen ber brukeren ta stilling til. */
-export interface RusAvkryssing {
-  merke: string
-  /** Kildens veiledning for vurderingen. */
-  hjelp: string
-}
+export type RusVerdifelt = RusAnalytt
 
 export interface RusModul {
   id: string
@@ -110,7 +120,7 @@ export interface RusModul {
   /** Navnet modulen vises og søkes opp med. */
   navn: string
   analytter: RusAnalytt[]
-  /** Ekstra søkeord — koder og navnevarianter fra kilden. */
+  /** Ekstra søkeord — koder og navnevarianter. */
   aliaser: string[]
   /**
    * Konsentrasjonene fortolkningen trenger, gitt hva som er påvist. Tom når
@@ -119,8 +129,6 @@ export interface RusModul {
   verdifelter: (pavist: string[]) => RusVerdifelt[]
   /** Hvorfor modulen ber om tallene. Tom når den ikke gjør det. */
   verdihjelp: string
-  /** Avkryssingen brukeren må ta stilling til, gitt hva som er påvist. */
-  avkryssing: (pavist: string[]) => RusAvkryssing | null
   fortolk: (inn: RusInndata) => RusResultat
 }
 
@@ -142,20 +150,24 @@ export function viserKommentartekst(modul: RusModul): boolean {
 
 /* --- Byggeklosser -------------------------------------------------------- */
 
-function hoved(radId: string, koder: string[], merke = 'Hovedkommentar'): RusPlassering {
-  return { rolle: 'hoved', merke, koder, tekst: rad(radId).hovedkommentar }
+function hoved(
+  radId: string,
+  koder: string[],
+  { nokkel = 'hoved', merke = 'Hovedkommentar' } = {},
+): RusPlassering {
+  return { rolle: 'hoved', merke, koder, tekst: tekst(radId, nokkel) }
 }
 
-function tillegg(radId: string, koder: string[]): RusPlassering {
-  return {
-    rolle: 'tillegg',
-    merke: 'Tilleggskommentar',
-    koder,
-    tekst: rad(radId).tilleggskommentar,
-  }
+function tillegg(
+  radId: string,
+  koder: string[],
+  { nokkel = 'tillegg', merke = 'Tilleggskommentar' } = {},
+): RusPlassering {
+  return { rolle: 'tillegg', merke, koder, tekst: tekst(radId, nokkel) }
 }
 
 const VELG_PAVIST = 'Kryss av for hvilke av analyttene som er påvist.'
+const FYLL_INN_TALL = 'Fyll inn de målte konsentrasjonene, så avgjøres regelen.'
 
 /** Kodene i `rekkefolge` som er påvist, i modulens egen rekkefølge. */
 function pavisteAv(pavist: string[], rekkefolge: string[]): string[] {
@@ -172,7 +184,13 @@ export function lesKonsentrasjon(tekst: string): number | null {
   return Number(trimmet)
 }
 
-/** «6.25» → «6,3 %». Ett desimal er nok til å se hvilken side av 10 % man er på. */
+/** Alle de oppgitte konsentrasjonene, eller `null` om noen mangler. */
+function lesAlle(verdier: Record<string, string>, koder: string[]): number[] | null {
+  const tall = koder.map((kode) => lesKonsentrasjon(verdier[kode] ?? ''))
+  return tall.every((v): v is number => v !== null) ? tall : null
+}
+
+/** «0.0625» → «6,3 %». Ett desimal er nok til å se hvilken side av grensen man er på. */
 function prosent(andel: number): string {
   return `${(andel * 100).toFixed(1).replace('.', ',')} %`
 }
@@ -181,7 +199,7 @@ function prosent(andel: number): string {
 
 /**
  * En modul for én analytt: ingen valg, én kommentar, én kode å lime den inn
- * på. Kildens bemerkning følger med som veiledning der den finnes.
+ * på. Kildens veiledning følger med der den finnes.
  */
 function enkeltmodul(radId: string, navn: string, aliaser: string[] = []): RusModul {
   const kilde = rad(radId)
@@ -196,11 +214,10 @@ function enkeltmodul(radId: string, navn: string, aliaser: string[] = []): RusMo
     aliaser: [kode, ...aliaser],
     verdifelter: () => [],
     verdihjelp: '',
-    avkryssing: () => null,
     fortolk: () => ({
       type: 'kommentarer',
       plasseringer: [hoved(radId, [kode])],
-      notiser: kilde.bemerkninger,
+      notiser: Object.values(kilde.merknader),
     }),
   }
 }
@@ -211,28 +228,38 @@ const DIAZ = 'DIAZ'
 const DMI = 'DMI'
 const OXA = 'OXA'
 
-/** Kildens grense for når de tre fortolkes under ett (diazepamgruppen-samlet). */
+/** Kildens grense: fellesskommentaren brukes når oksazepam er høyst så stor andel. */
 export const OKSAZEPAM_GRENSE = 0.1
 
-/** Raden hovedkommentaren for diazepam/desmetyldiazepam hentes fra. */
-function diazepamrad(kode: string): string {
-  return kode === DIAZ ? 'diazepam' : 'desmetyldiazepam'
-}
-
-/**
- * Diazepam, N-desmetyldiazepam og oksazepam.
- *
- * Diazepam og desmetyldiazepam vurderes alltid samlet: hovedkommentaren legges
- * på diazepam når begge er påvist, ellers på den som er påvist alene. Er
- * oksazepam påvist i tillegg, avgjør kildens 10 %-regel om alle tre får den
- * felles kommentaren, eller om oksazepam kommenteres for seg.
- */
 const DIAZEPAM_ANALYTTER: RusAnalytt[] = [
   { kode: DIAZ, navn: 'Diazepam' },
   { kode: DMI, navn: 'N-desmetyldiazepam' },
   { kode: OXA, navn: 'Oksazepam' },
 ]
 
+/**
+ * Kommentarene for diazepam og desmetyldiazepam alene: hovedkommentaren på
+ * diazepam når begge er påvist, ellers på den ene som er påvist.
+ */
+function diazepamPar(benzo: string[]): RusPlassering[] {
+  const barer = benzo[0]
+  if (barer === undefined) return []
+  const radId = barer === DIAZ ? 'diazepam' : 'desmetyldiazepam'
+  return [
+    hoved(radId, [barer]),
+    // Tilleggsteksten står på desmetyldiazepamraden i kilden, og er den samme
+    // uansett hvilken av de to som bærer hovedkommentaren.
+    ...(benzo.length > 1 ? [tillegg('desmetyldiazepam', benzo.slice(1))] : []),
+  ]
+}
+
+/**
+ * Diazepam, N-desmetyldiazepam og oksazepam.
+ *
+ * Diazepam og desmetyldiazepam vurderes alltid samlet. Er oksazepam påvist i
+ * tillegg til begge, avgjør kildens 10 %-regel om alle tre får den felles
+ * kommentaren, eller om oksazepam kommenteres for seg.
+ */
 const diazepamgruppen: RusModul = {
   id: 'diazepamgruppen',
   gruppe: rad('diazepamgruppen-samlet').gruppe,
@@ -240,52 +267,56 @@ const diazepamgruppen: RusModul = {
   analytter: DIAZEPAM_ANALYTTER,
   aliaser: [DIAZ, DMI, OXA, 'desmetyldiazepam'],
 
-  // Tallene trengs bare når oksazepam er påvist sammen med minst én av de to
-  // andre; det er da 10 %-regelen avgjør hvilken kommentar som gjelder.
-  verdifelter: (pavist) => {
-    const benzo = pavisteAv(pavist, [DIAZ, DMI])
-    if (!pavist.includes(OXA) || benzo.length === 0) return []
-    return DIAZEPAM_ANALYTTER.filter((a) => [...benzo, OXA].includes(a.kode))
-  },
+  // Kilden gir fellesskommentaren bare når alle tre er påvist, og det er da
+  // 10 %-regelen avgjør hvilken kommentar som gjelder.
+  verdifelter: (pavist) =>
+    pavisteAv(pavist, [DIAZ, DMI, OXA]).length === 3 ? DIAZEPAM_ANALYTTER : [],
 
   verdihjelp:
-    'Oksazepam kommenteres sammen med de andre bare når det utgjør under 10 % av summen av ' +
+    'Alle tre får den felles kommentaren bare når oksazepam utgjør høyst 10 % av summen av ' +
     'diazepam og desmetyldiazepam. Bare forholdet mellom tallene teller, så enheten spiller ' +
     'ingen rolle.',
-
-  avkryssing: () => null,
 
   fortolk: ({ pavist, verdier }) => {
     const benzo = pavisteAv(pavist, [DIAZ, DMI])
     const harOxa = pavist.includes(OXA)
-    const barer = benzo[0]
 
-    if (barer === undefined && !harOxa) return { type: 'mangler', mangler: [VELG_PAVIST] }
+    if (benzo.length === 0 && !harOxa) return { type: 'mangler', mangler: [VELG_PAVIST] }
 
     // Oksazepam alene er ikke en sumanalyse — da gjelder standardkommentaren.
-    if (barer === undefined) {
+    if (benzo.length === 0) {
       return { type: 'kommentarer', plasseringer: [hoved('oksazepam', [OXA])], notiser: [] }
     }
 
-    const diazepamPar = (): RusPlassering[] => [
-      hoved(diazepamrad(barer), [barer]),
-      ...(benzo.length > 1 ? [tillegg(diazepamrad(barer), benzo.slice(1))] : []),
-    ]
-
     if (!harOxa) {
-      return { type: 'kommentarer', plasseringer: diazepamPar(), notiser: [] }
+      return { type: 'kommentarer', plasseringer: diazepamPar(benzo), notiser: [] }
     }
 
-    const oksazepam = lesKonsentrasjon(verdier[OXA] ?? '')
-    const benzotall = benzo.map((kode) => lesKonsentrasjon(verdier[kode] ?? ''))
-    if (oksazepam === null || benzotall.some((v) => v === null)) {
-      return {
-        type: 'mangler',
-        mangler: ['Fyll inn de målte konsentrasjonene, så avgjøres 10 %-regelen for oksazepam.'],
-      }
+    /** Diazepam/desmetyldiazepam og oksazepam kommentert hver for seg. */
+    const hverForSeg = (notiser: string[]): RusResultat => ({
+      type: 'kommentarer',
+      plasseringer: [
+        ...diazepamPar(benzo),
+        hoved('oksazepam', [OXA], { merke: 'Hovedkommentar for oksazepam' }),
+      ],
+      notiser,
+    })
+
+    // Kilden knytter fellesskommentaren til at alle tre er påvist. Er bare den
+    // ene av diazepam og desmetyldiazepam påvist sammen med oksazepam, sier
+    // den ingenting, og stoffene kommenteres hver for seg.
+    if (benzo.length < 2) {
+      return hverForSeg([
+        'Fellesskommentaren gjelder når diazepam, desmetyldiazepam og oksazepam alle er påvist. ' +
+          'Her er bare to av dem påvist, og de kommenteres hver for seg.',
+      ])
     }
 
-    const sum = benzotall.reduce((sa: number, v) => sa + (v ?? 0), 0)
+    const tall = lesAlle(verdier, [DIAZ, DMI, OXA])
+    if (tall === null) return { type: 'mangler', mangler: [FYLL_INN_TALL] }
+
+    const [diazepam = 0, desmetyl = 0, oksazepam = 0] = tall
+    const sum = diazepam + desmetyl
     if (sum <= 0) {
       return {
         type: 'mangler',
@@ -296,34 +327,19 @@ const diazepamgruppen: RusModul = {
     }
 
     const andel = oksazepam / sum
-    const grunn = `Oksazepam utgjør ${prosent(andel)} av summen av ${benzo
-      .map((kode) => (kode === DIAZ ? 'diazepam' : 'desmetyldiazepam'))
-      .join(' og ')}.`
+    const grunn = `Oksazepam utgjør ${prosent(andel)} av summen av diazepam og desmetyldiazepam.`
 
-    // Kilden sier «Brukes når SOXA < 10 %» og «Dersom SOXA > 10 % brukes
-    // standardkommentarene». Nøyaktig 10 % dekkes ikke av noen av dem; her
-    // gjelder standardkommentarene, slik at fellesskommentaren bare brukes der
-    // kilden uttrykkelig sier at den skal.
-    if (andel < OKSAZEPAM_GRENSE) {
-      // Oksazepam er alltid med blant de øvrige her, så det finnes alltid en
-      // analytt tilleggskommentaren skal ligge på.
-      return {
-        type: 'kommentarer',
-        plasseringer: [
-          hoved('diazepamgruppen-samlet', [barer]),
-          tillegg('diazepamgruppen-samlet', [...benzo.slice(1), OXA]),
-        ],
-        notiser: [`${grunn} Under 10 %, og de påviste analyttene kommenteres under ett.`],
-      }
+    if (andel > OKSAZEPAM_GRENSE) {
+      return hverForSeg([`${grunn} Over 10 %, og oksazepam kommenteres for seg.`])
     }
 
     return {
       type: 'kommentarer',
       plasseringer: [
-        ...diazepamPar(),
-        hoved('oksazepam', [OXA], 'Hovedkommentar for oksazepam'),
+        hoved('diazepamgruppen-samlet', [DIAZ]),
+        tillegg('diazepamgruppen-samlet', [DMI, OXA]),
       ],
-      notiser: [`${grunn} Ikke under 10 %, og oksazepam kommenteres for seg.`],
+      notiser: [`${grunn} Høyst 10 %, og alle tre kommenteres under ett.`],
     }
   },
 }
@@ -339,7 +355,7 @@ const OTRAM = 'OTRAM'
  */
 const tramadolgruppen: RusModul = {
   id: 'tramadolgruppen',
-  gruppe: rad('tramadol').gruppe,
+  gruppe: rad('tramadolgruppen').gruppe,
   navn: 'Tramadol + O-desmetyltramadol',
   analytter: [
     { kode: TRAM, navn: 'Tramadol' },
@@ -348,25 +364,19 @@ const tramadolgruppen: RusModul = {
   aliaser: [TRAM, OTRAM, 'desmetyltramadol'],
   verdifelter: () => [],
   verdihjelp: '',
-  avkryssing: () => null,
 
   fortolk: ({ pavist }) => {
     const paviste = pavisteAv(pavist, [TRAM, OTRAM])
     if (paviste.length === 0) return { type: 'mangler', mangler: [VELG_PAVIST] }
 
-    if (paviste.length === 1 && paviste[0] === OTRAM) {
-      return {
-        type: 'kommentarer',
-        plasseringer: [hoved('o-desmetyltramadol', [OTRAM])],
-        notiser: [],
-      }
-    }
+    // Bare O-desmetyltramadol påvist: da bærer den hovedkommentaren selv.
+    const barer = paviste.length === 1 ? (paviste[0] as string) : TRAM
 
     return {
       type: 'kommentarer',
       plasseringer: [
-        hoved('tramadol', [TRAM]),
-        ...(paviste.length > 1 ? [tillegg('o-desmetyltramadol', [OTRAM])] : []),
+        hoved('tramadolgruppen', [barer]),
+        ...(paviste.length > 1 ? [tillegg('tramadolgruppen', [OTRAM])] : []),
       ],
       notiser: [],
     }
@@ -378,67 +388,146 @@ const tramadolgruppen: RusModul = {
 const KOD = 'KOD'
 const MOR = 'MOR'
 
+const KODEIN_ANALYTTER: RusAnalytt[] = [
+  { kode: KOD, navn: 'Kodein' },
+  { kode: MOR, navn: 'Morfin' },
+]
+
+/** Kildens grenser for forholdet morfin/kodein når begge er påvist. */
+export const LAV_MORFIN_GRENSE = 0.2
+export const HOY_MORFIN_GRENSE = 1
+
 /**
  * Kodein og morfin.
  *
- * Hver for seg har de hver sin standardkommentar. Er begge påvist, har kilden
- * to kombinasjonskommentarer: én for høy kodein og lav morfin, og én for alle
- * andre tilfeller. Den siste er kildens standardvalg, og er derfor det
- * avkryssingen står på til den hukes av.
+ * Hver for seg har de hver sin standardkommentar. Er begge påvist, avgjør
+ * forholdet mellom konsentrasjonene hvilken kommentar som gjelder: under 20 %
+ * morfin av kodein er det høy kodein og lav morfin, over 100 % er det den
+ * ordinære kombinasjonen, og imellom har kilden ingen standardkommentar —
+ * saken skal tas opp i plenum.
  */
 const kodeingruppen: RusModul = {
   id: 'kodeingruppen',
-  gruppe: rad('kodein').gruppe,
+  gruppe: rad('kun-kodein').gruppe,
   navn: 'Kodein + morfin',
-  analytter: [
-    { kode: KOD, navn: 'Kodein' },
-    { kode: MOR, navn: 'Morfin' },
-  ],
+  analytter: KODEIN_ANALYTTER,
   aliaser: [KOD, MOR],
-  verdifelter: () => [],
-  verdihjelp: '',
 
-  avkryssing: (pavist) =>
-    pavisteAv(pavist, [KOD, MOR]).length === 2
-      ? {
-          merke: 'Høy kodein, lav morfin',
-          // Kildens egen veiledning, fra bemerkningen på kodeinraden. Det er
-          // den «Se tekst øverst» i kombinasjonsraden viser til.
-          hjelp: rad('kodein').bemerkninger.join(' '),
-        }
-      : null,
+  verdifelter: (pavist) =>
+    pavisteAv(pavist, [KOD, MOR]).length === 2 ? KODEIN_ANALYTTER : [],
 
-  fortolk: ({ pavist, avkrysset }) => {
+  verdihjelp:
+    'Forholdet mellom konsentrasjonene avgjør hvilken kommentar som gjelder. Det er ikke ' +
+    'fastsatt noen absolutt konsentrasjonsgrense for hva som er høy kodein og lav morfin. ' +
+    'Bare forholdet mellom tallene teller, så enheten spiller ingen rolle.',
+
+  fortolk: ({ pavist, verdier }) => {
     const paviste = pavisteAv(pavist, [KOD, MOR])
     if (paviste.length === 0) return { type: 'mangler', mangler: [VELG_PAVIST] }
 
     if (paviste.length === 1) {
-      const alene = paviste[0] === KOD ? 'kodein' : 'morfin'
+      const alene = paviste[0] === KOD ? 'kun-kodein' : 'kun-morfin'
+      const nokkel = paviste[0] === KOD ? 'kodein' : 'morfin'
       return {
         type: 'kommentarer',
-        plasseringer: [hoved(alene, paviste)],
-        notiser: rad(alene).bemerkninger,
-      }
-    }
-
-    if (avkrysset) {
-      return {
-        type: 'kommentarer',
-        plasseringer: [
-          hoved('hoy-kodein-lav-morfin', [KOD]),
-          tillegg('hoy-kodein-lav-morfin', [MOR]),
-        ],
+        plasseringer: [hoved(alene, paviste, { nokkel })],
         notiser: [],
       }
     }
 
-    // Kilden: morfin får sin egen standardkommentar i dette tilfellet, ikke en
-    // henvisning til kodein («Det legges også til morfinkommentar på SMOR»).
+    const tall = lesAlle(verdier, [KOD, MOR])
+    if (tall === null) return { type: 'mangler', mangler: [FYLL_INN_TALL] }
+
+    const [kodein = 0, morfin = 0] = tall
+    if (kodein <= 0) {
+      return {
+        type: 'mangler',
+        mangler: ['Kodein må være større enn 0 for at forholdet mellom stoffene skal kunne regnes ut.'],
+      }
+    }
+
+    const andel = morfin / kodein
+    const grunn = `Morfin utgjør ${prosent(andel)} av kodein.`
+
+    if (andel < LAV_MORFIN_GRENSE) {
+      return {
+        type: 'kommentarer',
+        plasseringer: [
+          hoved('hoy-kodein-lav-morfin', [KOD], { nokkel: 'kodein' }),
+          tillegg('hoy-kodein-lav-morfin', [MOR], { nokkel: 'morfin' }),
+        ],
+        notiser: [`${grunn} Under 20 %: høy kodein og lav morfin.`],
+      }
+    }
+
+    // Gråsonen: kilden har ingen standardkommentar, og sier uttrykkelig at
+    // saken ikke skal avgjøres automatisk. Veiledningen som vises er den
+    // kilden gir for hvert av de to stoffene; kriteriet og håndteringsraden
+    // sier det samme som meldingen over dem.
+    if (andel <= HOY_MORFIN_GRENSE) {
+      const grasone = rad('kodein-morfin-grasone').merknader
+      return {
+        type: 'plenum',
+        melding: `${grunn} Det er mellom 20 % og 100 %, og kilden har ingen standardkommentar for dette. Saken skal tas opp i plenum.`,
+        veiledning: [grasone.kodein, grasone.morfin].filter((t): t is string => Boolean(t)),
+      }
+    }
+
     return {
       type: 'kommentarer',
       plasseringer: [
-        hoved('kodein-med-morfin', [KOD], 'Hovedkommentar for kodein'),
-        hoved('morfin', [MOR], 'Hovedkommentar for morfin'),
+        hoved('kodein-morfin-ordinaer', [KOD], {
+          nokkel: 'kodein',
+          merke: 'Hovedkommentar for kodein',
+        }),
+        hoved('kodein-morfin-ordinaer', [MOR], {
+          nokkel: 'morfin',
+          merke: 'Hovedkommentar for morfin',
+        }),
+      ],
+      notiser: [`${grunn} Over 100 %, og begge stoffene kommenteres.`],
+    }
+  },
+}
+
+/* --- Amfetamin og metamfetamin ------------------------------------------- */
+
+const AMF = 'AMF1'
+const MAF = 'MAF1'
+
+/**
+ * Amfetamin og metamfetamin.
+ *
+ * Er begge påvist, legges fellesskommentaren på metamfetamin — den forklarer
+ * nettopp at amfetamin alene kan komme fra legemidler — og amfetamin får
+ * henvisningen dit.
+ */
+const amfetamingruppen: RusModul = {
+  id: 'amfetamingruppen',
+  gruppe: rad('amfetamingruppen-samlet').gruppe,
+  navn: 'Amfetamin + metamfetamin',
+  analytter: [
+    { kode: AMF, navn: 'Amfetamin' },
+    { kode: MAF, navn: 'Metamfetamin' },
+  ],
+  aliaser: [AMF, MAF],
+  verdifelter: () => [],
+  verdihjelp: '',
+
+  fortolk: ({ pavist }) => {
+    const paviste = pavisteAv(pavist, [AMF, MAF])
+    if (paviste.length === 0) return { type: 'mangler', mangler: [VELG_PAVIST] }
+
+    if (paviste.length === 1) {
+      const alene = paviste[0] === AMF ? 'amfetamin' : 'metamfetamin'
+      return { type: 'kommentarer', plasseringer: [hoved(alene, paviste)], notiser: [] }
+    }
+
+    return {
+      type: 'kommentarer',
+      plasseringer: [
+        hoved('amfetamingruppen-samlet', [MAF]),
+        tillegg('amfetamingruppen-samlet', [AMF]),
       ],
       notiser: [],
     }
@@ -454,7 +543,7 @@ export const RUS_MODULER: RusModul[] = [
   enkeltmodul('nitrazepam', 'Nitrazepam'),
   enkeltmodul('zolpidem', 'Zolpidem'),
   enkeltmodul('zopiklon', 'Zopiklon'),
-  enkeltmodul('thc', 'THC i serum', ['cannabis']),
+  enkeltmodul('thc', 'THC', ['cannabis']),
   enkeltmodul('buprenorfin', 'Buprenorfin'),
   enkeltmodul('fentanyl', 'Fentanyl'),
   kodeingruppen,
@@ -462,6 +551,9 @@ export const RUS_MODULER: RusModul[] = [
   enkeltmodul('oksykodon', 'Oksykodon'),
   enkeltmodul('tapentadol', 'Tapentadol'),
   tramadolgruppen,
+  amfetamingruppen,
+  enkeltmodul('benzoylekgonin', 'Benzoylekgonin', ['kokain']),
+  enkeltmodul('mdma', 'MDMA', ['ecstasy']),
 ]
 
 /* --- Oppføringene i søket ------------------------------------------------ */

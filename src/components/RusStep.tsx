@@ -68,7 +68,6 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
   const inn = { ...inndata, pavist }
 
   const verdifelter = modul.verdifelter(pavist)
-  const avkryssing = modul.avkryssing(pavist)
   const resultat = modul.fortolk(inn)
   const plasseringer = resultat.type === 'kommentarer' ? resultat.plasseringer : []
 
@@ -102,11 +101,6 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
 
   const settVerdi = (kode: string, verdi: string) => {
     setInndata((forrige) => ({ ...forrige, verdier: { ...forrige.verdier, [kode]: verdi } }))
-    endret()
-  }
-
-  const settAvkrysset = (avkrysset: boolean) => {
-    setInndata((forrige) => ({ ...forrige, avkrysset }))
     endret()
   }
 
@@ -184,10 +178,6 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
             ))}
           </div>
           <h1 className="analytt__navn">{modul.navn}</h1>
-          <div className="analytt__grenser">
-            <Pill label="Gruppe">{modul.gruppe}</Pill>
-            <Pill label="Materiale">Serum</Pill>
-          </div>
 
           {!enkelt && (
             <fieldset className="rus-valg">
@@ -233,25 +223,10 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
               </div>
             </fieldset>
           )}
-
-          {avkryssing && (
-            <fieldset className="rus-valg">
-              <legend>Fortolkning</legend>
-              <p className="rus-hjelp">{avkryssing.hjelp}</p>
-              <label className="avkryssing">
-                <input
-                  type="checkbox"
-                  checked={inndata.avkrysset}
-                  onChange={(e) => settAvkrysset(e.target.checked)}
-                />
-                {avkryssing.merke}
-              </label>
-            </fieldset>
-          )}
         </Card>
 
         <Card ref={resultatkort} align="start" className="rus-resultat">
-          {resultat.type === 'mangler' ? (
+          {resultat.type === 'mangler' && (
             <>
               <h2 className="thc-resultat__merke">Mangler</h2>
               <ul className="thc-mangler">
@@ -260,7 +235,26 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
                 ))}
               </ul>
             </>
-          ) : (
+          )}
+
+          {/* Kilden har ingen standardkommentar for tilfellet, og sier at
+              saken skal tas opp i plenum. Da skal det ikke ligge noe her til
+              å kopiere — bare beskjed om hvorfor, og hva kilden sier. */}
+          {resultat.type === 'plenum' && (
+            <>
+              <h2 className="thc-resultat__merke">Til plenum</h2>
+              <p className="rus-plenum" role="note">
+                {resultat.melding}
+              </p>
+              {resultat.veiledning.map((tekst) => (
+                <p className="rus-veiledning" key={tekst}>
+                  {tekst}
+                </p>
+              ))}
+            </>
+          )}
+
+          {resultat.type === 'kommentarer' && (
             <>
               <h2 className="thc-resultat__merke">
                 {plasseringer.length > 1 ? 'Kommentarer' : 'Kommentar'}
