@@ -15,7 +15,7 @@ import { search } from './domain/search'
 import { THC_ANALYTT } from './domain/thc'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
-import { digitToIndex, useKeyboard } from './hooks/useKeyboard'
+import { digitToIndex, erBekreftelse, useKeyboard } from './hooks/useKeyboard'
 import { useTheme } from './hooks/useTheme'
 import { initialState, isIdle, reducer, stageOf } from './state'
 
@@ -124,6 +124,10 @@ export default function App() {
         event.preventDefault()
         dispatch({ type: 'velg-analytt', analyte: hits[0].analyte })
       } else if (stage === 'paste') {
+        // Mellomrom skal ikke avslutte fra et sted der tasten alt har en jobb
+        // — som feltet for manuell kopiering, der teksten skal kunne markeres
+        // og kopieres i fred.
+        if (!erBekreftelse(event)) return
         event.preventDefault()
         reset()
       }

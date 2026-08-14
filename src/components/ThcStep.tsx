@@ -5,6 +5,7 @@ import { Details } from './Details'
 import { Pill } from './Pill'
 import { StepBar } from './StepBar'
 import { ManualCopy } from './ManualCopy'
+import { Tallfelt } from './Tallfelt'
 import { ThcForklaring } from './ThcForklaring'
 import { ThcPlot } from './ThcPlot'
 import { Tips } from './Tips'
@@ -16,6 +17,7 @@ import {
   TOM_THC_INNDATA,
   type Sikkerhetsmargin,
 } from '../domain/thc'
+import { erBekreftelse } from '../hooks/useKeyboard'
 import { rullTilKort, useKortHopp } from '../hooks/useKortHopp'
 
 const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
@@ -164,43 +166,44 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
   }
 
   /**
-   * Enter gjør bare én ting i modulen: kopierer kommentaren. Det ene
+   * Bekreftelsen gjør bare én ting i modulen: kopierer kommentaren. Det ene
    * unntaket er tilbudet om å nullstille, som står rett etter en kopiering —
-   * da tar Enter tilbudet i stedet.
+   * da tar den tilbudet i stedet.
    *
    * Tasten fanges på vinduet, før feltene og knappene ser den, og
-   * nettleserens egen håndtering avlyses. Uten det gjør Enter forskjellige
+   * nettleserens egen håndtering avlyses. Uten det gjør `Enter` forskjellige
    * ting etter hvor fokus tilfeldigvis står: et datofelt åpner kalenderen
    * igjen, en fokusert knapp trykker seg selv, og et felt i skjemaet sender
-   * skjemaet. Space trykker fortsatt knappen man står på, så alt lar seg
-   * fremdeles betjene med tastaturet.
+   * skjemaet. Mellomrom gjør det samme som `Enter` der tasten er ledig — i
+   * IRCAK-feltene, for eksempel — mens den fortsatt trykker den knappen eller
+   * huker av den avkryssingen man står på, og folder ut «Forklaring»
+   * ({@link erBekreftelse}).
    *
    * Handlingen leses fra en ref, så lytteren settes opp én gang og overlever
    * at funksjonene bygges på nytt ved hver rendring.
    */
-  const paaEnter = useRef<() => void>()
-  paaEnter.current = nullstillTips ? nullstill : () => void kopier()
+  const paaBekreftelse = useRef<() => void>()
+  paaBekreftelse.current = nullstillTips ? nullstill : () => void kopier()
 
   useEffect(() => {
     const lytt = (event: KeyboardEvent) => {
-      if (event.key !== 'Enter') return
-      // Modifikatorkombinasjoner er nettleserens egne; de går gjennom.
-      if (event.ctrlKey || event.metaKey || event.altKey) return
+      if (!erBekreftelse(event)) return
       event.preventDefault()
       event.stopPropagation()
-      paaEnter.current?.()
+      paaBekreftelse.current?.()
     }
     window.addEventListener('keydown', lytt, true)
     return () => window.removeEventListener('keydown', lytt, true)
   }, [])
 
-  // Tilbudet om å nullstille står til første handling: Enter tar det, alt
-  // annet — en annen tast, et klikk, et rull — takker nei og rydder det bort.
+  // Tilbudet om å nullstille står til første handling: en bekreftelse tar det,
+  // alt annet — en annen tast, et klikk, et rull — takker nei og rydder det
+  // bort.
   useEffect(() => {
     if (!nullstillTips) return
     const paaTast = (event: KeyboardEvent) => {
-      // Enter tas av lytteren over.
-      if (event.key === 'Enter') return
+      // Bekreftelsen tas av lytteren over.
+      if (erBekreftelse(event)) return
       setNullstillTips(false)
     }
     const paaPeker = (event: PointerEvent) => {
@@ -285,15 +288,10 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                   <legend>Forrige prøve</legend>
                   <label className="thc-felt">
                     <span>IRCAK</span>
-                    <input
+                    <Tallfelt
                       ref={forsteFelt}
-                      className="thc-input"
-                      type="text"
-                      inputMode="decimal"
-                      autoComplete="off"
-                      spellCheck={false}
                       value={inndata.forrigeVerdi}
-                      onChange={(e) => sett('forrigeVerdi', e.target.value)}
+                      onChange={(verdi) => sett('forrigeVerdi', verdi)}
                     />
                   </label>
                   <label className="thc-felt">
@@ -312,15 +310,10 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                 <legend>Denne prøven</legend>
                 <label className="thc-felt">
                   <span>IRCAK</span>
-                  <input
+                  <Tallfelt
                     ref={inndata.ingenTidligere ? forsteFelt : undefined}
-                    className="thc-input"
-                    type="text"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    spellCheck={false}
                     value={inndata.aktuellVerdi}
-                    onChange={(e) => sett('aktuellVerdi', e.target.value)}
+                    onChange={(verdi) => sett('aktuellVerdi', verdi)}
                   />
                 </label>
                 {/* Uten en tidligere prøve å telle døgn mot brukes ikke datoen,
