@@ -11,11 +11,14 @@ npm install
 npm run dev        # utviklingsserver
 npm run build      # typesjekk + produksjonsbygg til dist/
 npm test           # enhetstester, inkludert kontrastmåling av paletten
-npm run data       # bygger src/data/analytter.json på nytt fra kommentarer.pdf
+npm run data       # bygger datasettene på nytt fra kildene i originaldata/
 ```
 
-`npm run data` krever Python 3 med `pdfplumber` (`pip install pdfplumber`).
-Datasettet er sjekket inn, så det trengs bare når PDF-en endres.
+`npm run data` bygger både `src/data/analytter.json` (fra `kommentarer.pdf`) og
+`src/data/rusmidler.json` (fra `rusmidler.md`). Datasettene er sjekket inn, så
+det trengs bare når kildene endres. PDF-lesingen krever Python 3 med
+`pdfplumber` (`pip install pdfplumber`); markdown-lesingen krever ingenting
+ekstra.
 
 ## Slik brukes appen
 
@@ -26,9 +29,11 @@ Datasettet er sjekket inn, så det trengs bare når PDF-en endres.
 | 3 | Velg hvilket konsentrasjonsbånd svaret havner i — kommentaren kopieres | `1`–`4` |
 | 4 | Lim inn kommentaren på analyttkoden som vises — båndknappen som ble brukt, står over kortet som bevis | `Enter`/`Space` avslutter og nullstiller |
 
-Én oppføring i søket tar en annen vei: **THC-syre** (kode `IRCAK`) går fra
-steg 2 til sin egen fortolkningsmodul i stedet for til konsentrasjonsbåndene —
-se [THC-syre i urin](#thc-syre-i-urin-ircak).
+To grupper oppføringer tar en annen vei fra steg 2, til hver sin
+fortolkningsmodul i stedet for til konsentrasjonsbåndene: **THC-syre** (kode
+`IRCAK`), se [THC-syre i urin](#thc-syre-i-urin-ircak), og **stoffene med
+ruspotensial i serum**, se
+[Stoffer med ruspotensial i serum](#stoffer-med-ruspotensial-i-serum).
 
 Smalner søket inn til én eneste analytt, er valget i praksis allerede tatt, og
 appen går videre uten at det trengs et tastetrykk til. Det skjer bare i selve
@@ -84,23 +89,25 @@ valget huskes til neste gang.
 ## Struktur
 
 ```
-scripts/build_data.py     Leser kommentarer.pdf og bygger datasettet
-src/data/analytter.json   Generert datasett (sjekket inn)
-src/data/aliaser.json     Håndholdte ekstra søkeord per analyttkode
-src/types.ts              Datamodellen
-src/state.ts              Tilstandsmaskinen for stegene
-src/domain/               Bånd, klassifisering, søk, navn, fargespredning, kontrast,
-                          tooltipplassering (tipsplassering.ts), flukten til
-                          kopibeviset (flytting.ts),
-                          THC-fortolkning (thc.ts) og figurgrunnlaget (thcPlot.ts)
-src/hooks/                Tastatur, tema, hurtigtastmerker, utklippstavle
-src/components/           Stegene, felles kort/pille/knapp/tooltip/ikoner
-src/styles/               tokens.css (design) + base.css + components.css
+scripts/build_data.py       Leser kommentarer.pdf og bygger psykofarmakadatasettet
+scripts/build_rusmidler.py  Leser rusmidler.md og bygger rusmiddeldatasettet
+src/data/analytter.json     Generert datasett (sjekket inn)
+src/data/rusmidler.json     Generert datasett (sjekket inn)
+src/data/aliaser.json       Håndholdte ekstra søkeord per analyttkode
+src/types.ts                Datamodellen
+src/state.ts                Tilstandsmaskinen for stegene
+src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, kontrast,
+                            tooltipplassering (tipsplassering.ts), flukten til
+                            kopibeviset (flytting.ts), THC-fortolkning (thc.ts) med
+                            figurgrunnlaget (thcPlot.ts) og rusmiddelfortolkning (rus.ts)
+src/hooks/                  Tastatur, tema, hurtigtastmerker, utklippstavle
+src/components/             Stegene, felles kort/pille/knapp/tooltip/ikoner
+src/styles/                 tokens.css (design) + base.css + components.css
 ```
 
 Alt som gjentar seg — farger, avstander, skriftstørrelser, knapper,
 hurtigtastmerker, ikonrammen, tooltipene — er definert ett sted og gjenbrukt. Nye analytter
-krever ingen kodeendring: de kommer med når PDF-en bygges på nytt. Nye steg
+krever ingen kodeendring: de kommer med når kilden bygges på nytt. Nye steg
 legges til ved å utvide `Stage` i `src/state.ts` og skrive én komponent til.
 
 ### Tooltip
@@ -131,7 +138,7 @@ stående igjen ved teksten, så det fortsatt går fram hva boblen hører til.
 Reglene ligger i `src/domain/tipsplassering.ts` og er dekket av tester;
 `TipsLag` i `src/main.tsx` er selve laget og må ligge rundt hele appen.
 
-## Datasettet
+## Datasettet for psykofarmaka
 
 De fire tabellene i `kommentarer.pdf` er slått sammen til én post per analytt
 (35 stykker), med kode, navn, delanalytter, gruppe, enhet, referanseområde,
@@ -344,6 +351,125 @@ og legger seg øverst i vinduet når de er ferdig åpnet, klare til å leses
 > avvik er bestilt og bekreftet av eieren: «5-7 dager» skrives med
 > tankestrek, «5–7 dager».
 
+## Stoffer med ruspotensial i serum
+
+Benzodiazepiner og Z-hypnotika, cannabis, opioider og sentralstimulerende
+stoffer kommenteres etter tabellene i `originaldata/rusmidler.md`. Søkes ett av
+stoffene opp, går appen til fortolkningsmodulen for det i stedet for til
+konsentrasjonsbåndene.
+
+Kategorien skiller seg fra psykofarmaka på tre måter, og modulen er bygd rundt
+dem:
+
+- **Kommentaren varierer ikke med konsentrasjonen.** Det finnes én kommentar
+  per stoff uansett hvor svaret ligger, så det er ingen bånd å velge mellom.
+- **Noen stoffer fortolkes samlet.** Da legges hele kommentaren på én
+  analyttkode, og de andre får en kort tilleggskommentar som henviser dit.
+  Hvilken kode som bærer hovedkommentaren avhenger av hva som er påvist: er
+  både tramadol og O-desmetyltramadol påvist, ligger den under tramadol; er
+  bare O-desmetyltramadol påvist, ligger den der.
+- **Stoffer som tolkes sammen deler én modul.** Diazepam,
+  N-desmetyldiazepam og oksazepam fører alle tre til den samme modulen, enten
+  man søker på navnet eller på koden, og alternativet i søket viser alle kodene
+  modulen dekker.
+
+De fire fellesmodulene er `DIAZ · DMI · OXA`, `TRAM · OTRAM`, `KOD · MOR` og
+`AMF1 · MAF1`. De tretten andre stoffene har hver sin modul med bare seg selv.
+
+### Slik brukes modulen
+
+Modulen spør om det den trenger for å velge riktig kommentar, og ikke om noe
+annet:
+
+| Modul | Hva den spør om |
+| --- | --- |
+| Ett stoff | Ingenting — kommentaren er gitt |
+| Fellesmodul | Hvilke av stoffene som er påvist i denne prøven |
+| Diazepam-gruppen | I tillegg de målte konsentrasjonene, når alle tre er påvist |
+| Kodein og morfin | I tillegg de målte konsentrasjonene, når begge er påvist |
+
+Har en fellesmodul flere stoffer å krysse av, bærer hver avkryssing sitt eget
+talltast — `1` for det første stoffet, `2` for det andre og så videre — så et
+helt sett kan hukes av uten mus. Konsentrasjonsfeltene bruker de samme tastene
+til å taste inn tall, og der har feltet forrang: tastene huker ikke av noe når
+et konsentrasjonsfelt står fokusert.
+
+Resultatkortet viser én blokk per kommentar, i den rekkefølgen de skal limes
+inn, med analyttkoden i store bokstaver — det er den som må leses av og
+handles på. Gjelder en tilleggskommentar to koder, står begge i den samme
+blokka, så den bare kopieres én gang. `Enter` kopierer den som står for tur, og
+merket `↵` flytter seg til den neste; når alt er kopiert, tar `Enter` deg
+tilbake til søket. Hver blokk har også sin egen kopiknapp, og kvitteres med det
+samme blinket som i båndsteget pluss et «Kopiert» som blir stående, så det
+synes hva som gjenstår når kommentarene tas én av gangen.
+
+Er det noe å velge mellom, står kommentarteksten framme i blokka: da kan
+valget bli feil, og den som limer inn skal kunne lese hva som faktisk havner
+på utklippstavlen. Er det bare én kommentar uansett — som for alprazolam eller
+metadon — er teksten unødig støy på skjermen, og henger i stedet på
+kopiknappen som en tooltip. Koden vises begge veier.
+
+Skrives en kommentar ut i sin helhet — her og i THC-modulen — står den i kursiv
+med en loddrett linje til venstre, samme konvensjon overalt i appen. Det skal
+aldri være tvil om at teksten er den kliniske kommentaren og ikke appens egne
+ord.
+
+### Reglene modulen følger
+
+**Diazepam, N-desmetyldiazepam og oksazepam.** Diazepam og desmetyldiazepam
+vurderes alltid samlet, med kommentaren under diazepam når begge er påvist.
+Oksazepam har sin egen kommentar, men er også en metabolitt av diazepam, og
+kilden har en felles kommentar for alle tre. Den brukes når alle tre er påvist
+og oksazepam utgjør høyst 10 % av summen av diazepam og desmetyldiazepam; over
+10 % kommenteres oksazepam for seg. Derfor spør modulen om konsentrasjonene når
+alle tre er påvist, regner ut andelen og viser i et banner hvilken side av
+10 %-grensen den falt på.
+
+**Kodein og morfin.** Hver for seg har de hver sin standardkommentar. Er begge
+påvist, avgjør forholdet mellom konsentrasjonene hvilken kommentar som gjelder:
+
+| Morfin av kodein | Hva som skjer |
+| --- | --- |
+| Under 20 % | Høy kodein, lav morfin: kombinasjonskommentaren på `KOD`, henvisningen på `MOR` |
+| 20–100 % | Gråsone. Kilden har ingen standardkommentar, og appen tilbyr ingenting å kopiere — den sier at saken skal tas opp i plenum, og viser kildens råd om utgangspunktet |
+| Over 100 % | Ordinær kombinasjon: den utvidede kodeinkommentaren på `KOD` og morfinets egen på `MOR` |
+
+Det er ikke fastsatt noen absolutt konsentrasjonsgrense for hva som er høy
+kodein og lav morfin; det er forholdet mellom tallene som brukes. Derfor
+spiller enheten ingen rolle, verken her eller i diazepam-gruppen.
+
+**Amfetamin og metamfetamin.** Hver for seg har de hver sin kommentar. Er begge
+påvist, går fellesskommentaren på metamfetamin — den forklarer nettopp at
+amfetamin alene kan komme fra legemidler — og amfetamin får henvisningen dit.
+
+### Rettelser gjort i teksten
+
+Rettelsene ligger i `meta.rettelser` i `src/data/rusmidler.json`, med kilde og
+begrunnelse, så de kan etterprøves mot dokumentet.
+
+| Type | Fra | Til | Antall |
+| --- | --- | --- | --- |
+| tankestrek | `40-120`, `2-10`, `600-1200`, `300-600`, `100-800`, `10-40`, `30-70`, `4-8` | `40–120`, `2–10`, `600–1200`, `300–600`, `100–800`, `10–40`, `30–70`, `4–8` | 8 |
+| tegnsetting | `Se kommentar for diazepam i serum`, `Se kommentar for metamfetamin i serum` | samme med avsluttende punktum | 2 |
+
+Som ellers i appen er bindestrek byttet til tankestrek **bare** mellom to tall.
+`O-desmetyltramadol`, `N-desmetyldiazepam` og `LAR-behandling` står urørt. De
+to punktumene mangler i kilden fordi en plasseringsinstruks i klammer står der
+punktumet ellers ville stått; de samme kommentarene har det andre steder.
+
+Uthevinger, plasseringsinstrukser i klammer og linjeskift som er blitt til
+doble mellomrom, er notasjon rundt teksten og ikke en del av kommentaren.
+Byggeskriptet fjerner dem, og en test holder kommentarene opp mot det: ingen av
+dem inneholder `*`, `[` eller `]`, doble mellomrom eller mangler sluttegn.
+
+### Uavklarte forhold i kilden
+
+| Hvor | Forhold |
+| --- | --- |
+| Diazepam-gruppen | Kilden knytter fellesskommentaren til at alle tre stoffene er påvist. Er oksazepam påvist sammen med bare ett av de to andre, sier den ingenting, og appen kommenterer stoffene hver for seg — og sier fra om at den gjør det. |
+| Diazepam-gruppen | Overskriften på kombinasjonsraden er forkortet til «OXA ≤ DIAZ + DMI», mens teksten over tabellen sier «OXA ≤ 10 % av summen DIAZ + DMI» to ganger. Appen følger teksten. |
+| Tramadol | Analytt- og kodecellen i tramadolraden har mistet linjeskiftet sitt, så «Tramadol» og «O-desmetyltramadol» står som ett ord. Byggeskriptet ser bort fra mellomrom når det sammenligner, så artefakten stopper ikke byggingen — men en celle som sier noe annet, gjør det. |
+
 ## Tilgjengelighet
 
 Appen følger WCAG 2.1 AA, som er kravet i forskrift om universell utforming av
@@ -359,6 +485,11 @@ boblen, så skjermlesere får den uansett om boblen står framme. Ingen forklari
 i appen er ren museinformasjon. Sikkerhetsmarginen meldes med navnet på stoppet skalaen
 står på og ikke med plassen i rekka (`aria-valuetext`), og forklaringen bak
 overskriften er knyttet til både overskriften og selve skalaen.
+I rusmiddelmodulen heter alle knappene «Kopier» på skjermen, der merkelappen
+over dem sier hvilken kommentar de gjelder. For skjermlesere sier hver knapp
+hele sitt eget navn — «Kopier tilleggskommentar» — så de kan skilles fra
+hverandre uten å lese omgivelsene.
+
 Kvitteringen for kopieringen meldes i tillegg som statusbeskjed, siden blinket
 er rent visuelt. Uten bevegelse blir kvitteringen stående stille i stedet for å
 sprette fram, og beviset over lim-inn-kortet står ferdig landet i stedet for å
