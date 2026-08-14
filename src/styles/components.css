@@ -1072,9 +1072,16 @@
   border-radius: var(--runding-full);
 }
 
-/* Kommentaren slik den kopieres. Markerbar, i tilfelle man vil ta et utdrag. */
+/* Kommentaren slik den kopieres, skrevet ut i sin helhet i UI-et — i THC- og
+   rusmiddelmodulen. Kursiv skrift og en loddrett linje til venstre skiller
+   den tydelig fra all annen tekst på siden: dette er ikke appens ord, men
+   teksten som limes rett inn i pasientsvaret. Markerbar, i tilfelle man vil
+   ta et utdrag. */
 .thc-kommentar {
+  padding-left: var(--rom-3);
+  border-left: var(--kant-tykk) solid var(--linje-sterk);
   font-size: var(--tekst-m);
+  font-style: italic;
   line-height: 1.6;
   text-align: left;
   text-wrap: pretty;
@@ -1086,6 +1093,7 @@
   font-size: var(--tekst-s);
   text-align: left;
   text-wrap: pretty;
+  white-space: pre-line;
   color: var(--varsel-blekk);
   background: var(--varsel-flate);
   border: var(--kant) solid var(--varsel-linje);

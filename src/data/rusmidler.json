@@ -314,7 +314,7 @@
       ],
       "tekster": {
         "kodein": "Kodein og morfin er påvist i serum. 850 nmol/L er øvre forventet medikamentfastende konsentrasjon av kodein hos voksne ved døgndose 240 mg. Kodein omdannes til morfin i kroppen.",
-        "morfin": "Høy kodein, lav morfin. Se kommentar for kodein i serum."
+        "morfin": "Se kommentar for kodein i serum."
       },
       "merknader": {
         "kriterium": "Begge påvist, og morfin < 20 % av kodein",

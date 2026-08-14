@@ -3,6 +3,7 @@ import { Button } from './Button'
 import { Card } from './Card'
 import { ManualCopy } from './ManualCopy'
 import { Pill } from './Pill'
+import { Shortcut } from './Shortcut'
 import { StepBar } from './StepBar'
 import { useTips } from './Tips'
 import { BackIcon, CheckIcon, CopyIcon, PasteIcon } from './icons'
@@ -14,6 +15,7 @@ import {
   type RusPlassering,
 } from '../domain/rus'
 import { useKortHopp } from '../hooks/useKortHopp'
+import { indexToDigit, useKeyboard } from '../hooks/useKeyboard'
 
 const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
 
@@ -105,6 +107,28 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
   }
 
   /**
+   * Tallene 1, 2 … huker av analyttene i «Påvist i denne prøven», så et helt
+   * sett kan krysses av uten mus. Konsentrasjonsfeltene bruker de samme
+   * tastene til å taste inn tall, så tastene slipper gjennom til dem der de
+   * står fokusert i stedet for å huke av noe.
+   */
+  useKeyboard(
+    enkelt
+      ? {}
+      : Object.fromEntries(
+          modul.analytter.map((analytt, i) => [
+            indexToDigit(i),
+            (e: KeyboardEvent) => {
+              const aktiv = document.activeElement
+              if (aktiv instanceof HTMLInputElement && aktiv.type === 'text') return
+              e.preventDefault()
+              settPavist(analytt.kode, !pavist.includes(analytt.kode))
+            },
+          ]),
+        ),
+  )
+
+  /**
    * Legger kommentaren på utklippstavlen og kvitterer for den.
    *
    * Utklippstavlen svarer først etter en tur innom nettleseren, og i mellomtiden
@@ -190,9 +214,11 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
                       type="checkbox"
                       checked={pavist.includes(analytt.kode)}
                       onChange={(e) => settPavist(analytt.kode, e.target.checked)}
+                      aria-keyshortcuts={indexToDigit(i)}
                     />
                     {analytt.navn}
                     <span className="rus-valg__kode">{analytt.kode}</span>
+                    <Shortcut>{indexToDigit(i)}</Shortcut>
                   </label>
                 ))}
               </div>
@@ -202,7 +228,7 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
           {verdifelter.length > 0 && (
             <fieldset className="rus-valg">
               <legend>Målte konsentrasjoner</legend>
-              <p className="rus-hjelp">{modul.verdihjelp}</p>
+              {modul.verdihjelp && <p className="rus-hjelp">{modul.verdihjelp}</p>}
               <div className="rus-felter">
                 {verdifelter.map((felt) => (
                   <label className="thc-felt" key={felt.kode}>

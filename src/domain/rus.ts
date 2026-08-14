@@ -190,11 +190,6 @@ function lesAlle(verdier: Record<string, string>, koder: string[]): number[] | n
   return tall.every((v): v is number => v !== null) ? tall : null
 }
 
-/** «0.0625» → «6,3 %». Ett desimal er nok til å se hvilken side av grensen man er på. */
-function prosent(andel: number): string {
-  return `${(andel * 100).toFixed(1).replace('.', ',')} %`
-}
-
 /* --- Moduler for ett stoff ----------------------------------------------- */
 
 /**
@@ -274,8 +269,7 @@ const diazepamgruppen: RusModul = {
 
   verdihjelp:
     'Alle tre får den felles kommentaren bare når oksazepam utgjør høyst 10 % av summen av ' +
-    'diazepam og desmetyldiazepam. Bare forholdet mellom tallene teller, så enheten spiller ' +
-    'ingen rolle.',
+    'diazepam og desmetyldiazepam.',
 
   fortolk: ({ pavist, verdier }) => {
     const benzo = pavisteAv(pavist, [DIAZ, DMI])
@@ -327,10 +321,11 @@ const diazepamgruppen: RusModul = {
     }
 
     const andel = oksazepam / sum
-    const grunn = `Oksazepam utgjør ${prosent(andel)} av summen av diazepam og desmetyldiazepam.`
 
     if (andel > OKSAZEPAM_GRENSE) {
-      return hverForSeg([`${grunn} Over 10 %, og oksazepam kommenteres for seg.`])
+      return hverForSeg([
+        'Oksazepam > 10 % av diazepam + N-desmetyldiazepam\n⟶ Oksazepam kommenteres for seg selv.',
+      ])
     }
 
     return {
@@ -339,7 +334,9 @@ const diazepamgruppen: RusModul = {
         hoved('diazepamgruppen-samlet', [DIAZ]),
         tillegg('diazepamgruppen-samlet', [DMI, OXA]),
       ],
-      notiser: [`${grunn} Høyst 10 %, og alle tre kommenteres under ett.`],
+      notiser: [
+        'Oksazepam ≤ 10 % av diazepam + N-desmetyldiazepam\n⟶ Felles kommentar for alle tre.',
+      ],
     }
   },
 }
@@ -416,10 +413,7 @@ const kodeingruppen: RusModul = {
   verdifelter: (pavist) =>
     pavisteAv(pavist, [KOD, MOR]).length === 2 ? KODEIN_ANALYTTER : [],
 
-  verdihjelp:
-    'Forholdet mellom konsentrasjonene avgjør hvilken kommentar som gjelder. Det er ikke ' +
-    'fastsatt noen absolutt konsentrasjonsgrense for hva som er høy kodein og lav morfin. ' +
-    'Bare forholdet mellom tallene teller, så enheten spiller ingen rolle.',
+  verdihjelp: '',
 
   fortolk: ({ pavist, verdier }) => {
     const paviste = pavisteAv(pavist, [KOD, MOR])
@@ -447,7 +441,6 @@ const kodeingruppen: RusModul = {
     }
 
     const andel = morfin / kodein
-    const grunn = `Morfin utgjør ${prosent(andel)} av kodein.`
 
     if (andel < LAV_MORFIN_GRENSE) {
       return {
@@ -456,7 +449,7 @@ const kodeingruppen: RusModul = {
           hoved('hoy-kodein-lav-morfin', [KOD], { nokkel: 'kodein' }),
           tillegg('hoy-kodein-lav-morfin', [MOR], { nokkel: 'morfin' }),
         ],
-        notiser: [`${grunn} Under 20 %: høy kodein og lav morfin.`],
+        notiser: ['Morfin < 20 % av kodein ⟶ Forenlig med inntak av kodein alene.'],
       }
     }
 
@@ -468,7 +461,7 @@ const kodeingruppen: RusModul = {
       const grasone = rad('kodein-morfin-grasone').merknader
       return {
         type: 'plenum',
-        melding: `${grunn} Det er mellom 20 % og 100 %, og kilden har ingen standardkommentar for dette. Saken skal tas opp i plenum.`,
+        melding: 'Morfin = 20–100 % av kodein. Vurder manuelt.',
         veiledning: [grasone.kodein, grasone.morfin].filter((t): t is string => Boolean(t)),
       }
     }
@@ -485,7 +478,7 @@ const kodeingruppen: RusModul = {
           merke: 'Hovedkommentar for morfin',
         }),
       ],
-      notiser: [`${grunn} Over 100 %, og begge stoffene kommenteres.`],
+      notiser: ['Morfin > kodein ⟶ Ikke forenlig med inntak av kodein alene.'],
     }
   },
 }

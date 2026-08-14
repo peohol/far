@@ -254,10 +254,12 @@ describe('diazepam, N-desmetyldiazepam og oksazepam', () => {
   })
 
   it('forteller hvilken vei regelen falt', () => {
-    expect(notiser(medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '99'))).toContain('9,9 %')
-    expect(notiser(medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '99'))).toContain('under ett')
-    expect(notiser(medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '250'))).toContain('25,0 %')
-    expect(notiser(medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '250'))).toContain('for seg')
+    expect(notiser(medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '99'))).toBe(
+      'Oksazepam ≤ 10 % av diazepam + N-desmetyldiazepam\n⟶ Felles kommentar for alle tre.',
+    )
+    expect(notiser(medTall(['DIAZ', 'DMI', 'OXA'], '400', '600', '250'))).toBe(
+      'Oksazepam > 10 % av diazepam + N-desmetyldiazepam\n⟶ Oksazepam kommenteres for seg selv.',
+    )
   })
 })
 
@@ -319,14 +321,17 @@ describe('kodein og morfin', () => {
       kilde('hoy-kodein-lav-morfin', 'kodein'),
       kilde('hoy-kodein-lav-morfin', 'morfin'),
     ])
-    expect(notiser(resultat)).toContain('19,9 %')
+    // Tilleggskommentaren henviser bare videre — ingen «høy kodein, lav
+    // morfin»-etikett foran, siden det allerede er sagt i banneret over.
+    expect(tekster(resultat)[1]).toBe('Se kommentar for kodein i serum.')
+    expect(notiser(resultat)).toBe('Morfin < 20 % av kodein ⟶ Forenlig med inntak av kodein alene.')
   })
 
   it('sender gråsonen mellom 20 % og 100 % til plenum, uten noe å kopiere', () => {
     for (const morfin of ['200', '500', '1000']) {
       const resultat = medTall('1000', morfin)
       expect(resultat.type, morfin).toBe('plenum')
-      expect(plenum(resultat), morfin).toContain('tas opp i plenum')
+      expect(plenum(resultat), morfin).toContain('Vurder manuelt.')
     }
     // Kildens eget råd om utgangspunktet følger med, så den som skal ta saken
     // videre ikke må slå det opp selv.
@@ -346,6 +351,7 @@ describe('kodein og morfin', () => {
     ])
     // Kodeinkommentaren her er den utvidede, med heroin og Paralgin forte.
     expect(tekster(resultat)[0]).toContain('Paralgin forte')
+    expect(notiser(resultat)).toBe('Morfin > kodein ⟶ Ikke forenlig med inntak av kodein alene.')
   })
 
   it('legger grensene der kilden legger dem', () => {

@@ -388,6 +388,12 @@ annet:
 | Diazepam-gruppen | I tillegg de målte konsentrasjonene, når alle tre er påvist |
 | Kodein og morfin | I tillegg de målte konsentrasjonene, når begge er påvist |
 
+Har en fellesmodul flere stoffer å krysse av, bærer hver avkryssing sitt eget
+talltast — `1` for det første stoffet, `2` for det andre og så videre — så et
+helt sett kan hukes av uten mus. Konsentrasjonsfeltene bruker de samme tastene
+til å taste inn tall, og der har feltet forrang: tastene huker ikke av noe når
+et konsentrasjonsfelt står fokusert.
+
 Resultatkortet viser én blokk per kommentar, i den rekkefølgen de skal limes
 inn, med analyttkoden i store bokstaver — det er den som må leses av og
 handles på. Gjelder en tilleggskommentar to koder, står begge i den samme
@@ -403,6 +409,11 @@ på utklippstavlen. Er det bare én kommentar uansett — som for alprazolam ell
 metadon — er teksten unødig støy på skjermen, og henger i stedet på
 kopiknappen som en tooltip. Koden vises begge veier.
 
+Skrives en kommentar ut i sin helhet — her og i THC-modulen — står den i kursiv
+med en loddrett linje til venstre, samme konvensjon overalt i appen. Det skal
+aldri være tvil om at teksten er den kliniske kommentaren og ikke appens egne
+ord.
+
 ### Reglene modulen følger
 
 **Diazepam, N-desmetyldiazepam og oksazepam.** Diazepam og desmetyldiazepam
@@ -411,7 +422,8 @@ Oksazepam har sin egen kommentar, men er også en metabolitt av diazepam, og
 kilden har en felles kommentar for alle tre. Den brukes når alle tre er påvist
 og oksazepam utgjør høyst 10 % av summen av diazepam og desmetyldiazepam; over
 10 % kommenteres oksazepam for seg. Derfor spør modulen om konsentrasjonene når
-alle tre er påvist, regner ut andelen og sier hvilken vei den falt.
+alle tre er påvist, regner ut andelen og viser i et banner hvilken side av
+10 %-grensen den falt på.
 
 **Kodein og morfin.** Hver for seg har de hver sin standardkommentar. Er begge
 påvist, avgjør forholdet mellom konsentrasjonene hvilken kommentar som gjelder:
