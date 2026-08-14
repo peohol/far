@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
 import { ManualCopy } from './ManualCopy'
 import { Pill } from './Pill'
 import { Shortcut } from './Shortcut'
 import { StepBar } from './StepBar'
+import { Tallfelt } from './Tallfelt'
 import { useTips } from './Tips'
 import { BackIcon, CheckIcon, CopyIcon, PasteIcon } from './icons'
 import {
@@ -14,8 +15,8 @@ import {
   type RusModul,
   type RusPlassering,
 } from '../domain/rus'
-import { useKortHopp } from '../hooks/useKortHopp'
-import { indexToDigit, useKeyboard } from '../hooks/useKeyboard'
+import { hoppFram, useKortHopp } from '../hooks/useKortHopp'
+import { erBekreftelse, indexToDigit, skrivesIFelt, useKeyboard } from '../hooks/useKeyboard'
 
 const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
 
@@ -47,8 +48,16 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
   const [failedCopy, setFailedCopy] = useState<string | null>(null)
   /** Merkene på kommentarene som alt er kopiert, så det synes hva som gjenstår. */
   const [kopierte, setKopierte] = useState<string[]>([])
+  /**
+   * Kopieringen som venter på kvittering: merket på kommentaren som ble lagt
+   * på utklippstavlen, med et løpenummer så to like kopieringer etter
+   * hverandre begge blinker. Se {@link kopier}.
+   */
+  const [kvittering, setKvittering] = useState<{ merke: string; nr: number } | null>(null)
+  const kvitteringsnr = useRef(0)
   const seksjon = useRef<HTMLElement>(null)
   const resultatkort = useRef<HTMLElement>(null)
+  const ferdigKnapp = useRef<HTMLButtonElement>(null)
   const forsteValg = useRef<HTMLInputElement>(null)
 
   useKortHopp(true, seksjon)
@@ -119,8 +128,7 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
           modul.analytter.map((analytt, i) => [
             indexToDigit(i),
             (e: KeyboardEvent) => {
-              const aktiv = document.activeElement
-              if (aktiv instanceof HTMLInputElement && aktiv.type === 'text') return
+              if (skrivesIFelt()) return
               e.preventDefault()
               settPavist(analytt.kode, !pavist.includes(analytt.kode))
             },
@@ -136,37 +144,68 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
    * kopiert: teksten på utklippstavlen hører til den forrige fortolkningen.
    * Uten sjekken under ville kvitteringen kommet tilbake på en kommentar som
    * ikke er kopiert, og Enter hoppet over den.
+   *
+   * Selve blinket settes i gang i {@link kvitter} og ikke her — det må vente
+   * til kortet har lagt seg om etter kopieringen.
    */
-  const kopier = async (plassering: RusPlassering, knapp: Element | null) => {
+  const kopier = async (plassering: RusPlassering) => {
     const denne = utgave.current
     const kopiert = await copy(plassering.tekst)
     if (denne !== utgave.current) return
 
     if (kopiert) {
       setFailedCopy(null)
-      flashAt(knapp)
+      kvitteringsnr.current += 1
+      setKvittering({ merke: plassering.merke, nr: kvitteringsnr.current })
       setKopierte((sa) => (sa.includes(plassering.merke) ? sa : [...sa, plassering.merke]))
     } else {
       setFailedCopy(plassering.tekst)
     }
   }
 
+  /** Kopiknappene i resultatkortet, én per kommentar og i samme rekkefølge. */
+  const kopiknapper = () =>
+    Array.from(resultatkort.current?.querySelectorAll<HTMLElement>('.rus-plassering .knapp') ?? [])
+
   /**
-   * Enter tar det neste steget i kommenteringen: kopierer kommentaren som står
-   * for tur, og når alle er kopiert, tilbake til søket.
+   * Etter hver kopiering: hent fram knappen som nå står for tur, og fest
+   * kvitteringen til knappen som ble brukt.
+   *
+   * Begge deler hører hjemme her og ikke i {@link kopier}. Merket «↵» flytter
+   * seg først når kortet er tegnet på nytt, og «Ferdig»-knappen finnes ikke
+   * før da — og knappen som står for tur er gjerne den brukeren ikke ser, enten
+   * kommentaren ble kopiert fra feltene med et tastetrykk eller med et klikk på
+   * knappen over. Blinket festes til slutt, når all rulling er unnagjort: det
+   * ligger fast i vinduet og ville ellers blitt stående igjen der knappen sto.
+   */
+  useLayoutEffect(() => {
+    if (!kvittering) return
+    const knapper = kopiknapper()
+    const brukt = knapper[plasseringer.findIndex((p) => p.merke === kvittering.merke)]
+    hoppFram(neste ? knapper[plasseringer.indexOf(neste)] : ferdigKnapp.current)
+    // Knappen som ble brukt må stå i bildet når blinket kommer; er den det
+    // allerede, blir siden liggende der hoppet over satte den.
+    hoppFram(brukt)
+    flashAt(brukt)
+    // Kopieringen er det som skal kvitteres for; resten leses av slik kortet
+    // står i det kvitteringen kommer.
+  }, [kvittering])
+
+  /**
+   * `Enter` tar det neste steget i kommenteringen: kopierer kommentaren som
+   * står for tur, og når alle er kopiert, tilbake til søket.
    *
    * Tasten fanges på vinduet før feltene og knappene ser den, slik den også
    * gjør i THC-modulen. Uten det ville en fokusert knapp trykket seg selv og
-   * et fokusert felt sendt skjemaet. `Space` trykker fortsatt den knappen eller
-   * avkryssingen man står på, så alt lar seg betjene med tastaturet som før.
+   * et fokusert felt sendt skjemaet. Mellomrom gjør det samme der tasten er
+   * ledig — i konsentrasjonsfeltene, for eksempel — mens den fortsatt trykker
+   * den knappen eller huker av den avkryssingen man står på
+   * ({@link erBekreftelse}).
    */
-  const paaEnter = useRef<() => void>()
-  paaEnter.current = () => {
+  const paaBekreftelse = useRef<() => void>()
+  paaBekreftelse.current = () => {
     if (neste) {
-      // Kvitteringen skal blinke ved knappen som hører til kommentaren.
-      // Knappene står i samme rekkefølge som kommentarene, én per kommentar.
-      const knapper = resultatkort.current?.querySelectorAll('.rus-plassering .knapp')
-      void kopier(neste, knapper?.[plasseringer.indexOf(neste)] ?? null)
+      void kopier(neste)
     } else if (alleKopiert) {
       onFinish()
     }
@@ -174,11 +213,10 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
 
   useEffect(() => {
     const lytt = (event: KeyboardEvent) => {
-      if (event.key !== 'Enter') return
-      if (event.ctrlKey || event.metaKey || event.altKey) return
+      if (!erBekreftelse(event)) return
       event.preventDefault()
       event.stopPropagation()
-      paaEnter.current?.()
+      paaBekreftelse.current?.()
     }
     window.addEventListener('keydown', lytt, true)
     return () => window.removeEventListener('keydown', lytt, true)
@@ -235,14 +273,9 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
                     <span>
                       {felt.navn} ({felt.kode})
                     </span>
-                    <input
-                      className="thc-input"
-                      type="text"
-                      inputMode="decimal"
-                      autoComplete="off"
-                      spellCheck={false}
+                    <Tallfelt
                       value={inndata.verdier[felt.kode] ?? ''}
-                      onChange={(e) => settVerdi(felt.kode, e.target.value)}
+                      onChange={(verdi) => settVerdi(felt.kode, verdi)}
                     />
                   </label>
                 ))}
@@ -301,14 +334,14 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
                     visMerke={plasseringer.length > 1}
                     kopiert={kopierte.includes(plassering.merke)}
                     staarForTur={neste === plassering}
-                    onCopy={(knapp) => void kopier(plassering, knapp)}
+                    onCopy={() => void kopier(plassering)}
                   />
                 ))}
               </ol>
 
               {alleKopiert && (
                 <div className="thc-handling">
-                  <Button shortcut="↵" onClick={onFinish}>
+                  <Button ref={ferdigKnapp} shortcut="↵" onClick={onFinish}>
                     Ferdig
                   </Button>
                 </div>
@@ -343,7 +376,7 @@ function Kommentar({
   visMerke: boolean
   kopiert: boolean
   staarForTur: boolean
-  onCopy: (knapp: Element | null) => void
+  onCopy: () => void
 }) {
   const tips = useTips(plassering.tekst)
 
@@ -377,7 +410,7 @@ function Kommentar({
           variant={staarForTur ? 'primary' : 'subtle'}
           icon={<CopyIcon />}
           shortcut={staarForTur ? '↵' : undefined}
-          onClick={(e) => onCopy(e.currentTarget)}
+          onClick={() => onCopy()}
         >
           Kopier
         </Button>

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { feltetTarTegnene, mellomromErLedig, type Fokusert } from '../domain/tastatur'
 
 export type KeyHandler = (event: KeyboardEvent) => void
 
@@ -40,4 +41,35 @@ export function digitToIndex(key: string): number | null {
 
 export function indexToDigit(index: number): string {
   return index === 9 ? '0' : String(index + 1)
+}
+
+/** Elementet som har fokus, lest slik reglene i `domain/tastatur.ts` vil ha det. */
+export function fokusertNa(): Fokusert | null {
+  const element = document.activeElement
+  if (!element) return null
+  return {
+    tag: element.tagName,
+    type: element instanceof HTMLInputElement ? element.type : undefined,
+    tallfelt: element instanceof HTMLElement && element.dataset.tallfelt !== undefined,
+    redigerbart: element instanceof HTMLElement && element.isContentEditable,
+  }
+}
+
+/**
+ * Sant når tastetrykket er en bekreftelse: `Enter`, eller mellomrom der
+ * mellomrom ikke alt har en jobb der fokus står.
+ *
+ * Dette er den ene regelen for «gjør det steget skal gjøre», og alle stegene
+ * og modulene bruker den, slik at de to tastene betyr det samme overalt.
+ * Modifikatorkombinasjoner er nettleserens egne og går uforstyrret gjennom.
+ */
+export function erBekreftelse(event: KeyboardEvent): boolean {
+  if (event.ctrlKey || event.metaKey || event.altKey) return false
+  if (event.key === 'Enter') return true
+  return event.key === ' ' && mellomromErLedig(fokusertNa())
+}
+
+/** Sant når det som tastes hører hjemme i feltet som står fokusert. */
+export function skrivesIFelt(): boolean {
+  return feltetTarTegnene(fokusertNa())
 }

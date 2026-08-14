@@ -77,7 +77,18 @@ det beviset tar over. Tiden står som `--fart-flyt` i `src/styles/tokens.css`, o
 er kort nok til at blinket fortsatt står når knappen lander.
 
 `Esc` angrer ett steg av gangen og beholder det som er skrevet i steget foran.
-`Enter` og `Space` gjør alltid det samme.
+`Enter` og `Space` gjør alltid det samme: velger alternativet, kopierer
+kommentaren, går videre. Mellomrom har den jobben bare der tasten ikke alt har
+en — står fokus på en knapp, i en avkryssing eller i et tekstfelt, trykker,
+huker av og skriver den som før, slik at avkryssingene i modulene fortsatt tas
+med `Tab` og `Space`. Reglene ligger samlet i `src/domain/tastatur.ts`.
+
+Feltene som tar en konsentrasjon tar tall og bare tall: bokstaver, mellomrom og
+fortegn slipper ikke inn, verken tastet eller limt inn. Både komma og punktum
+godtas som desimaltegn, som ellers i appen. Det gjør to ting. En konsentrasjon
+kan ikke bli stående med et tegn som gjør at fortolkningen ikke får lest den,
+og mellomrom er ledig til å bekrefte mens man står i feltet — så en modul som
+bare venter på tall, lar seg fullføre med mellomrom alene.
 
 Knappen med tastatursymbol øverst til høyre viser hurtigtastmerkene i UI-et.
 Den er av som standard; tastene virker uansett. Tallene på søkealternativene
@@ -99,9 +110,10 @@ src/state.ts                Tilstandsmaskinen for stegene
 src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, kontrast,
                             tooltipplassering (tipsplassering.ts), flukten til
                             kopibeviset (flytting.ts), THC-fortolkning (thc.ts) med
-                            figurgrunnlaget (thcPlot.ts) og rusmiddelfortolkning (rus.ts)
+                            figurgrunnlaget (thcPlot.ts), rusmiddelfortolkning (rus.ts),
+                            tastereglene (tastatur.ts) og tallfeltene (tallfelt.ts)
 src/hooks/                  Tastatur, tema, hurtigtastmerker, utklippstavle
-src/components/             Stegene, felles kort/pille/knapp/tooltip/ikoner
+src/components/             Stegene, felles kort/pille/knapp/tallfelt/tooltip/ikoner
 src/styles/                 tokens.css (design) + base.css + components.css
 ```
 
@@ -255,9 +267,10 @@ mellom prøvene, så uten en tidligere prøve spørres det ikke etter dem.
 tilbudet over — står «Trykk ↵ for å nullstille nå», tar `Enter` det i stedet.
 Tasten fanges på vinduet før feltene og knappene ser den, så den gjør det samme
 uansett hvor fokus står; ellers ville et fokusert datofelt åpnet kalenderen på
-nytt i stedet for å kopiere. `Space` trykker fortsatt knappen — eller folder ut
-«Forklaring» — man står på, så alt lar seg betjene med tastaturet som før, og
-`Esc` går tilbake til søket.
+nytt i stedet for å kopiere. `Space` gjør det samme som `Enter` der tasten er
+ledig — i IRCAK-feltene, i datofeltene og på sikkerhetsmarginen — og trykker
+fortsatt knappen, huker av avkryssingen eller folder ut «Forklaring» man står
+på, så alt lar seg betjene med tastaturet som før. `Esc` går tilbake til søket.
 
 Piltastene opp/ned hopper mellom kortene i modulen i stedet for å rulle, og
 kortet man hopper til midtstilles i vinduet (`src/hooks/useKortHopp.ts`, klar
@@ -397,11 +410,23 @@ et konsentrasjonsfelt står fokusert.
 Resultatkortet viser én blokk per kommentar, i den rekkefølgen de skal limes
 inn, med analyttkoden i store bokstaver — det er den som må leses av og
 handles på. Gjelder en tilleggskommentar to koder, står begge i den samme
-blokka, så den bare kopieres én gang. `Enter` kopierer den som står for tur, og
-merket `↵` flytter seg til den neste; når alt er kopiert, tar `Enter` deg
-tilbake til søket. Hver blokk har også sin egen kopiknapp, og kvitteres med det
-samme blinket som i båndsteget pluss et «Kopiert» som blir stående, så det
-synes hva som gjenstår når kommentarene tas én av gangen.
+blokka, så den bare kopieres én gang. `Enter` og `Space` kopierer den som står
+for tur, og merket `↵` flytter seg til den neste; når alt er kopiert, tar de
+deg tilbake til søket. Er tallene fylt inn, går altså hele kommenteringen på
+mellomrom alene, uten å flytte hendene fra feltene. Hver blokk har også sin
+egen kopiknapp, og kvitteres med det samme blinket som i båndsteget pluss et
+«Kopiert» som blir stående, så det synes hva som gjenstår når kommentarene tas
+én av gangen.
+
+Kopieringen henter fram knappene den gjelder. Kommentaren kopieres gjerne fra
+et felt lenger oppe, og knappen som står for tur kan ligge under skjermkanten,
+så siden hopper slik at knappen som ble brukt står i bildet når blinket kommer,
+og slik at den neste knappen kommer til syne med det samme — den er ladet og
+kopierer den siste kommentaren ved neste tastetrykk, og det skal gå fram uten
+at man må lete etter den. Er alt kopiert, er det «Ferdig» som hentes fram.
+Hoppet er umiddelbart og ikke jevnt: blinket festes til knappen i
+vindukoordinater, og en rulling som fortsatt glir ville løsrevet kvitteringen
+fra knappen den gjelder.
 
 Er det noe å velge mellom, står kommentarteksten framme i blokka: da kan
 valget bli feil, og den som limer inn skal kunne lese hva som faktisk havner

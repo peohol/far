@@ -17,6 +17,21 @@ export function rullefart(): ScrollBehavior {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
 }
 
+/**
+ * Henter elementet fram i bildet, og bare når det trengs: står det allerede
+ * helt synlig, ligger siden i ro.
+ *
+ * Hoppet er med vilje umiddelbart og ikke jevnt. Kopikvitteringen festes til
+ * knappen i vindukoordinater i det den vises, så en rulling som fortsatt glir
+ * ville løsrevet blinket fra knappen det gjelder.
+ */
+export function hoppFram(element: Element | null | undefined) {
+  if (!element) return
+  const rute = element.getBoundingClientRect()
+  if (rute.top >= 0 && rute.bottom <= window.innerHeight) return
+  element.scrollIntoView({ behavior: 'auto', block: 'center' })
+}
+
 /** Felt der piltastene trengs til sitt eget: tekst, tall, datoer, lister. */
 function erIRedigerbartFelt(): boolean {
   const aktivt = document.activeElement
