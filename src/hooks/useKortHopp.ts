@@ -18,18 +18,55 @@ export function rullefart(): ScrollBehavior {
 }
 
 /**
- * Henter elementet fram i bildet, og bare når det trengs: står det allerede
- * helt synlig, ligger siden i ro.
+ * Luft over det øverste elementet. Kopikvitteringen legger seg rett over
+ * knappen den gjelder, og skal ikke bli liggende i skjermkanten.
+ */
+const LUFT = 64
+
+/**
+ * Henter elementene fram i bildet, i ett hopp og bare når det trengs: står de
+ * allerede framme, ligger siden i ro.
  *
- * Hoppet er med vilje umiddelbart og ikke jevnt. Kopikvitteringen festes til
+ * Flere elementer skal gjerne fram samtidig — knappen som ble brukt, som
+ * kvitteringen festes til, og knappen som står for tur, som brukeren skal se
+ * er klar. Å rulle til dem etter tur ville latt det siste hoppet skyve det
+ * forrige ut av bildet igjen, så plasseringen regnes ut for hele følget under
+ * ett: får alt plass, midtstilles det. Ellers legges det første elementet
+ * øverst — det er det viktigste — og resten kommer så langt med som vinduet
+ * rekker.
+ *
+ * Hoppet er med vilje umiddelbart og ikke jevnt. Kvitteringen festes til
  * knappen i vindukoordinater i det den vises, så en rulling som fortsatt glir
  * ville løsrevet blinket fra knappen det gjelder.
  */
-export function hoppFram(element: Element | null | undefined) {
-  if (!element) return
-  const rute = element.getBoundingClientRect()
-  if (rute.top >= 0 && rute.bottom <= window.innerHeight) return
-  element.scrollIntoView({ behavior: 'auto', block: 'center' })
+export function hoppFram(...elementer: (Element | null | undefined)[]) {
+  const med = elementer.filter((e): e is Element => Boolean(e))
+  const forste = med[0]
+  if (!forste) return
+
+  const ruter = med.map((e) => e.getBoundingClientRect())
+  const topp = Math.min(...ruter.map((r) => r.top))
+  const bunn = Math.max(...ruter.map((r) => r.bottom))
+  const vindu = window.innerHeight
+  if (topp >= LUFT && bunn <= vindu) return
+
+  const passer = bunn - topp + LUFT <= vindu
+  const onsket = passer ? Math.max(LUFT, (vindu - (bunn - topp)) / 2) : LUFT
+  rull(forste, (passer ? topp : forste.getBoundingClientRect().top) - onsket)
+}
+
+/**
+ * Ruller flaten elementet ligger i. Det er vanligvis siden selv; en forelder
+ * som ruller for seg — sikkerhetsventilen for svært lave vinduer — tas først.
+ */
+function rull(fra: Element, avstand: number) {
+  for (let el = fra.parentElement; el; el = el.parentElement) {
+    if (el.scrollHeight > el.clientHeight && /auto|scroll/.test(getComputedStyle(el).overflowY)) {
+      el.scrollBy({ top: avstand, behavior: 'auto' })
+      return
+    }
+  }
+  window.scrollBy({ top: avstand, behavior: 'auto' })
 }
 
 /** Felt der piltastene trengs til sitt eget: tekst, tall, datoer, lister. */

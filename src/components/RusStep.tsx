@@ -175,17 +175,18 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
    * seg først når kortet er tegnet på nytt, og «Ferdig»-knappen finnes ikke
    * før da — og knappen som står for tur er gjerne den brukeren ikke ser, enten
    * kommentaren ble kopiert fra feltene med et tastetrykk eller med et klikk på
-   * knappen over. Blinket festes til slutt, når all rulling er unnagjort: det
+   * knappen over. De to hentes fram i ett hopp, så det ene ikke skyver det
+   * andre ut igjen. Blinket festes til slutt, når rullingen er unnagjort: det
    * ligger fast i vinduet og ville ellers blitt stående igjen der knappen sto.
    */
   useLayoutEffect(() => {
     if (!kvittering) return
     const knapper = kopiknapper()
     const brukt = knapper[plasseringer.findIndex((p) => p.merke === kvittering.merke)]
-    hoppFram(neste ? knapper[plasseringer.indexOf(neste)] : ferdigKnapp.current)
-    // Knappen som ble brukt må stå i bildet når blinket kommer; er den det
-    // allerede, blir siden liggende der hoppet over satte den.
-    hoppFram(brukt)
+    const forTur = neste ? knapper[plasseringer.indexOf(neste)] : ferdigKnapp.current
+    // Knappen som ble brukt står først: får ikke begge plass, er det den som
+    // må være i bildet når blinket kommer.
+    hoppFram(brukt, forTur)
     flashAt(brukt)
     // Kopieringen er det som skal kvitteres for; resten leses av slik kortet
     // står i det kvitteringen kommer.
