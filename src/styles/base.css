@@ -38,6 +38,17 @@ ul {
   padding: 0;
 }
 
+/* Overskriftene er navn og etiketter — ikke redigerbare. Uten dette viser
+   nettleseren markørcursoren over teksten (den vanlige oppførselen for
+   tekst man kan markere), som gir et falskt inntrykk av at et klikk skal
+   gjøre noe med navnet. Cursoren skal stå som resten av flaten rundt. */
+h1,
+h2,
+h3,
+legend {
+  cursor: default;
+}
+
 /* Synlig fokusmarkering overalt, også på egendefinerte flater. */
 :focus-visible {
   outline: 3px solid var(--fokus);
