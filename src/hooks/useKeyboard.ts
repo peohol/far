@@ -4,6 +4,19 @@ import { feltetTarTegnene, mellomromErLedig, type Fokusert } from '../domain/tas
 export type KeyHandler = (event: KeyboardEvent) => void
 
 /**
+ * Sant når et lag ligger over appen — endringsloggen, i dag.
+ *
+ * Laget er en `<dialog>` og gjør resten av siden uklikkbar av seg selv, men
+ * appens egne taster henger på vinduet og hører etter uansett hvor fokus står.
+ * Uten denne vakten ville `Esc` både lukket laget og sendt appen et steg
+ * tilbake, og talltastene valgt bånd i steget bak. Regelen står ett sted og
+ * brukes av alle som lytter på vinduet.
+ */
+export function lagLiggerOver(): boolean {
+  return document.querySelector('dialog[open]') !== null
+}
+
+/**
  * Kobler tastatursnarveier til vinduet.
  *
  * Nøkkelen i kartet er `event.key`. Handlingen kjøres bare når ingen
@@ -22,6 +35,7 @@ export function useKeyboard(handlers: Record<string, KeyHandler | undefined>, en
     if (!enabled) return
     function onKeyDown(event: KeyboardEvent) {
       if (event.ctrlKey || event.metaKey || event.altKey) return
+      if (lagLiggerOver()) return
       ref.current[event.key]?.(event)
     }
     window.addEventListener('keydown', onKeyDown)

@@ -1562,3 +1562,283 @@ details[open] > .detalj__kropp {
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-s);
 }
+
+/* --- Versjonspille og endringslogg --------------------------------------
+   Versjonen ligger fast i motsatt hjørne av verktøylinja. Den er tonet ned
+   med størrelse og plassering, ikke med kontrast: teksten holder samme
+   lesbarhetskrav som resten av appen. */
+
+.versjonspille {
+  position: fixed;
+  right: var(--rom-3);
+  bottom: var(--rom-3);
+  z-index: 10;
+  padding: 0.2rem var(--rom-2);
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-xxs);
+  letter-spacing: 0.06em;
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-full);
+  cursor: pointer;
+  transition:
+    color var(--fart) var(--kurve),
+    background-color var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve);
+}
+
+.versjonspille:hover,
+.versjonspille:focus-visible {
+  color: var(--blekk);
+  background: var(--flate);
+  border-color: var(--linje);
+}
+
+/* Selve `<dialog>`-elementet fyller vinduet, så et klikk hvor som helst
+   utenfor panelet treffer det og lukker laget. */
+.logg {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: var(--rom-4);
+  background: transparent;
+  border: none;
+}
+
+/* Bare når laget står åpent — ellers ville nettleserens egen `display: none`
+   blitt overstyrt og loggen stått framme hele tiden. */
+.logg[open] {
+  display: grid;
+  place-items: center;
+}
+
+/* `::backdrop` arver ikke tokens pålitelig, så fargen står her. */
+.logg::backdrop {
+  background: hsl(216 45% 5% / 0.62);
+}
+
+:root[data-tema='lyst'] .logg::backdrop {
+  background: hsl(215 30% 20% / 0.38);
+}
+
+.logg__panel {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 46rem);
+  max-height: 100%;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-l);
+  box-shadow: var(--skygge-hevet);
+  overflow: hidden;
+  text-align: left;
+}
+
+.logg__topp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rom-3);
+  padding: var(--rom-4) var(--rom-4) var(--rom-3);
+  border-bottom: var(--kant) solid var(--linje);
+}
+
+.logg__tittel {
+  font-size: var(--tekst-l);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
+}
+
+.logg__lukk {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.4rem;
+  height: 2.4rem;
+  font-size: 1.15rem;
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-full);
+  cursor: pointer;
+  transition:
+    color var(--fart) var(--kurve),
+    background-color var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve);
+}
+
+.logg__lukk:hover {
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  border-color: var(--linje);
+}
+
+.logg__liste {
+  overflow-y: auto;
+  padding: var(--rom-2);
+}
+
+/* --- Én føring ----------------------------------------------------------- */
+
+.loggskuff + .loggskuff {
+  border-top: var(--kant) solid var(--linje);
+}
+
+.loggskuff__tittel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-1);
+  width: 100%;
+  padding: var(--rom-3) var(--rom-5) var(--rom-3) var(--rom-3);
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: var(--runding-m);
+  cursor: pointer;
+  transition: background-color var(--fart) var(--kurve);
+}
+
+.loggskuff__tittel:hover {
+  background: var(--flate-hevet);
+}
+
+/* Pilen: peker ned når skuffen er lukket, opp når den er åpen. */
+.loggskuff__tittel::after {
+  content: '';
+  position: absolute;
+  right: var(--rom-3);
+  top: var(--rom-4);
+  width: 0.42em;
+  height: 0.42em;
+  border-right: var(--kant-tykk) solid var(--blekk-dempet);
+  border-bottom: var(--kant-tykk) solid var(--blekk-dempet);
+  transform: rotate(45deg);
+  transition: transform var(--fart) var(--kurve);
+}
+
+.loggskuff[data-apen='ja'] .loggskuff__tittel::after {
+  transform: rotate(-135deg);
+}
+
+.loggskuff__merking {
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-xxs);
+  letter-spacing: 0.06em;
+  color: var(--blekk-dempet);
+}
+
+.loggskuff__sammendrag {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  line-height: 1.4;
+  color: var(--blekk);
+}
+
+.loggskuff__merker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-1);
+  margin-top: var(--rom-1);
+}
+
+.loggmerke {
+  padding: 0.1rem var(--rom-2);
+  font-size: var(--tekst-xxs);
+  font-weight: var(--vekt-medium);
+  line-height: 1.5;
+  white-space: nowrap;
+  border-radius: var(--runding-full);
+}
+
+.loggmerke--design {
+  color: var(--merke-design-blekk);
+  background: var(--merke-design-flate);
+}
+
+.loggmerke--funksjon {
+  color: var(--merke-funksjon-blekk);
+  background: var(--merke-funksjon-flate);
+}
+
+.loggmerke--fag {
+  color: var(--merke-fag-blekk);
+  background: var(--merke-fag-flate);
+}
+
+/* Omfanget er den andre aksen, og skilles fra typemerkene ved å være
+   nøytralt med kantlinje i stedet for tonet flate. */
+.loggmerke--omfang {
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: var(--kant) solid var(--linje);
+}
+
+/* Glidningen mot en ukjent høyde, som ellers i appen. Her holder ren CSS:
+   skuffen styres av tilstand, og innholdet fjernes aldri. */
+.loggskuff__kropp {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--fart-glid) var(--kurve);
+}
+
+.loggskuff[data-apen='ja'] .loggskuff__kropp {
+  grid-template-rows: 1fr;
+}
+
+/* Lukket innhold settes usynlig når glidningen er over, så det heller ikke
+   nås med tabulator eller skjermleser. */
+.loggskuff__inner {
+  overflow: hidden;
+  min-height: 0;
+  visibility: hidden;
+  transition: visibility 0s linear var(--fart-glid);
+}
+
+.loggskuff[data-apen='ja'] .loggskuff__inner {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.loggskuff__punkter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding: var(--rom-1) var(--rom-3) var(--rom-4) var(--rom-4);
+  font-size: var(--tekst-s);
+  line-height: 1.55;
+  color: var(--blekk-dempet);
+}
+
+.loggskuff__punkter li {
+  position: relative;
+  padding-left: var(--rom-3);
+}
+
+.loggskuff__punkter li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.3em;
+  height: 0.3em;
+  background: var(--blekk-dempet);
+  border-radius: var(--runding-full);
+}
+
+/* Bakgrunnen skal ikke rulle mens laget står over den. */
+:root:has(dialog[open]) .app {
+  overflow: hidden;
+}
+
+/* Uten bevegelse skal innholdet skjules med det samme i stedet for å vente
+   på en glidning som ikke lenger finnes. */
+@media (prefers-reduced-motion: reduce) {
+  .loggskuff__inner {
+    transition-delay: 0s;
+  }
+}

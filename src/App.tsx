@@ -7,6 +7,7 @@ import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
 import { ruteAv } from './components/Kopibevis'
 import { Toolbar } from './components/Toolbar'
+import { Versjonspille } from './components/Versjonspille'
 import { analytes } from './domain/analytes'
 import { bands as bandsOf, findBand, type Band } from './domain/bands'
 import type { Rute } from './domain/flytting'
@@ -234,6 +235,9 @@ export default function App() {
           />
         )}
       </main>
+
+      {/* Versjonen og veien inn til endringsloggen, fast i hjørnet som verktøylinja. */}
+      <Versjonspille />
 
       {/* Kvitteringen ligger utenfor stegene, så den overlever stegbyttet. */}
       {flash && <CopyFlash key={flash.id} flash={flash} varighet={BLINK} />}

@@ -112,6 +112,18 @@
   --tips-flate: hsl(0 0% 0%);
   --tips-blekk: hsl(0 0% 100%);
   --tips-blekk-dempet: hsl(0 0% 78%);
+
+  /* Merkene på føringene i endringsloggen. Fiolett, petrol og plomme ligger
+     utenfor nivå- og varselfargene, så et merke i loggen aldri kan leses som
+     en klinisk vurdering. */
+  --merke-design-blekk: hsl(272 62% 36%);
+  --merke-design-flate: hsl(272 60% 95%);
+
+  --merke-funksjon-blekk: hsl(187 84% 23%);
+  --merke-funksjon-flate: hsl(185 62% 93%);
+
+  --merke-fag-blekk: hsl(322 62% 33%);
+  --merke-fag-flate: hsl(322 70% 95%);
 }
 
 /* --- Mørkt tema --------------------------------------------------------- */
@@ -161,6 +173,15 @@
   --tips-flate: hsl(0 0% 100%);
   --tips-blekk: hsl(0 0% 0%);
   --tips-blekk-dempet: hsl(0 0% 28%);
+
+  --merke-design-blekk: hsl(272 88% 82%);
+  --merke-design-flate: hsl(272 34% 21%);
+
+  --merke-funksjon-blekk: hsl(185 74% 70%);
+  --merke-funksjon-flate: hsl(187 44% 16%);
+
+  --merke-fag-blekk: hsl(322 84% 80%);
+  --merke-fag-flate: hsl(322 32% 20%);
 
   --alt-flate-alfa: 0.17;
   --alt-kant-alfa: 0.55;

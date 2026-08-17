@@ -128,6 +128,16 @@ export function MoonIcon(props: IconProps) {
   )
 }
 
+/** Lukk: et kryss. */
+export function CloseIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M9 9 23 23" />
+      <path d="M23 9 9 23" />
+    </Icon>
+  )
+}
+
 /** Hurtigtaster: en tast med et tegn på. */
 export function KeyboardIcon(props: IconProps) {
   return (
