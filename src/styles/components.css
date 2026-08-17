@@ -1830,8 +1830,11 @@ details[open] > .detalj__kropp {
   border-radius: var(--runding-full);
 }
 
-/* Bakgrunnen skal ikke rulle mens laget står over den. */
-:root:has(dialog[open]) .app {
+/* Bakgrunnen skal ikke rulle mens laget står over den.
+   Låsen må stå på rotelementet, ikke på `.app`: `.app` har `min-height` og
+   ikke fast høyde, så den vokser med innholdet i stedet for å rulle selv, og
+   det er dokumentet som får rullingen når innholdet blir høyere enn vinduet. */
+:root:has(dialog[open]) {
   overflow: hidden;
 }
 
