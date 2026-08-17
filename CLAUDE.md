@@ -30,6 +30,11 @@ FAR er et verktøy for fortolkning og kommentering av farmakologiske analyser. B
 - Endre kilden eller byggeprosessen fremfor et generert datasett når det er kilden som egentlig skal endres. Unngå manuelle rettelser i genererte filer som vil bli overskrevet ved neste bygg.
 - Ikke legg reelle pasientopplysninger i kode, tester, logger eller dokumentasjon. Bruk syntetiske eksempler.
 
+## Versjon og endringslogg
+
+- Appen har et versjonsnummer etter SemVer, og hver PR skal ha nøyaktig én føring i endringsloggen.
+- Som siste steg før en PR er klar til å slås sammen: følg `docs/endringslogg.md`. Les den filen bare da; den trengs ikke ellers i arbeidet.
+
 ## Dokumentasjon og selvvedlikehold
 
 - Hold denne rotfilen kort. Den skal bare inneholde varige regler som er nyttige i de fleste arbeidsøkter.

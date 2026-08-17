@@ -1,4 +1,5 @@
 import { useEffect, type RefObject } from 'react'
+import { lagLiggerOver } from './useKeyboard'
 
 /**
  * Ruller et kort pent på plass: vertikalt midtstilt i vinduet, eller til
@@ -131,6 +132,7 @@ export function useKortHopp(
     const paaTast = (event: KeyboardEvent) => {
       if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return
       if (event.ctrlKey || event.metaKey || event.altKey) return
+      if (lagLiggerOver()) return
       if (erIRedigerbartFelt()) return
       event.preventDefault()
       hopp(event.key === 'ArrowDown' ? 1 : -1)

@@ -105,13 +105,16 @@ scripts/build_rusmidler.py  Leser rusmidler.md og bygger rusmiddeldatasettet
 src/data/analytter.json     Generert datasett (sjekket inn)
 src/data/rusmidler.json     Generert datasett (sjekket inn)
 src/data/aliaser.json       Håndholdte ekstra søkeord per analyttkode
+src/data/endringslogg.ts    Endringsloggen appen viser (håndholdt)
 src/types.ts                Datamodellen
 src/state.ts                Tilstandsmaskinen for stegene
 src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, kontrast,
                             tooltipplassering (tipsplassering.ts), flukten til
                             kopibeviset (flytting.ts), THC-fortolkning (thc.ts) med
                             figurgrunnlaget (thcPlot.ts), rusmiddelfortolkning (rus.ts),
-                            tastereglene (tastatur.ts) og tallfeltene (tallfelt.ts)
+                            tastereglene (tastatur.ts), tallfeltene (tallfelt.ts) og
+                            versjonsformatet (versjon.ts)
+docs/endringslogg.md        Rutinen for å føre loggen ved hver endring
 src/hooks/                  Tastatur, tema, hurtigtastmerker, utklippstavle
 src/components/             Stegene, felles kort/pille/knapp/tallfelt/tooltip/ikoner
 src/styles/                 tokens.css (design) + base.css + components.css
@@ -149,6 +152,25 @@ faller den ned under, og nær en sidekant skyves den innover — pilen blir
 stående igjen ved teksten, så det fortsatt går fram hva boblen hører til.
 Reglene ligger i `src/domain/tipsplassering.ts` og er dekket av tester;
 `TipsLag` i `src/main.tsx` er selve laget og må ligge rundt hele appen.
+
+### Versjon og endringslogg
+
+Appen versjoneres etter SemVer. Versjonen står som en liten pille nederst til
+høyre i vinduet, og et klikk på den åpner endringsloggen: én skuff per endring,
+merket med dato og versjon, med en kort beskrivelse og merker for hva slags
+endring det var og hvor stor den var. Skuffen foldes ut til en punktliste i
+vanlig språk. Bare én skuff står åpen av gangen.
+
+Føringene ligger i `src/data/endringslogg.ts`, nyest først, og versjonen appen
+viser er den øverste føringen der — de to kan derfor ikke komme i utakt.
+`package.json` holdes lik av en test. Formen på en føring er definert i
+`src/domain/versjon.ts`, og rutinen for å legge inn en ny står i
+[`docs/endringslogg.md`](docs/endringslogg.md).
+
+Loggen er en `<dialog>` med `showModal()`, så fokusfelle, Escape og inert
+bakgrunn kommer fra nettleseren selv. Appens egne taster hører fortsatt etter
+på vinduet, og holdes i ro av `lagLiggerOver()` i `src/hooks/useKeyboard.ts` —
+uten den ville `Esc` både lukket loggen og sendt appen et steg tilbake.
 
 ## Datasettet for psykofarmaka
 
@@ -514,6 +536,11 @@ I rusmiddelmodulen heter alle knappene «Kopier» på skjermen, der merkelappen
 over dem sier hvilken kommentar de gjelder. For skjermlesere sier hver knapp
 hele sitt eget navn — «Kopier tilleggskommentar» — så de kan skilles fra
 hverandre uten å lese omgivelsene.
+
+Endringsloggen åpner med den nyeste føringen fokusert, ikke med lukkeknappen,
+så `Enter` folder ut det man kom for i stedet for å lukke loggen igjen med det
+samme. Innholdet i en lukket skuff er satt usynlig når glidningen er over, så
+det verken nås med tabulator eller leses opp.
 
 Kvitteringen for kopieringen meldes i tillegg som statusbeskjed, siden blinket
 er rent visuelt. Uten bevegelse blir kvitteringen stående stille i stedet for å

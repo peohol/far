@@ -60,6 +60,10 @@ const KRAV: [string, string, number, string][] = [
   // legger seg over — ellers flyter den sammen med kortet under.
   ['--tips-flate', '--flate', 3, 'tooltipflate mot kort'],
   ['--tips-flate', '--flate-bunn', 3, 'tooltipflate mot sidebakgrunn'],
+  // Merkene på føringene i endringsloggen.
+  ['--merke-design-blekk', '--merke-design-flate', 4.5, 'merket «Design / layout»'],
+  ['--merke-funksjon-blekk', '--merke-funksjon-flate', 4.5, 'merket «Funksjonalitet»'],
+  ['--merke-fag-blekk', '--merke-fag-flate', 4.5, 'merket «Fag»'],
 ]
 
 describe.each(Object.entries(TEMAER))('%s tema', (_navn, palett) => {
