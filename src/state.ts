@@ -1,17 +1,20 @@
-import { erEtgAnalytt } from './domain/etg'
+import { erEtgAnalytt, type EtgValg } from './domain/etg'
 import { erRusAnalytt } from './domain/rus'
 import { erThcAnalytt } from './domain/thc'
 import type { Analyte } from './types'
 
 /**
- * Arbeidsflyten er en liten tilstandsmaskin. Psykofarmaka går gjennom tre
- * steg — søk, bånd, lim inn — mens THC-syre, stoffene med ruspotensial i
- * serum og etanolmarkørene i urin går fra søket til hver sin
- * fortolkningsmodul og blir der til man bytter analytt. Hvilket steg som
- * vises utledes av tilstanden, så det finnes ingen egen «steg»-variabel som
- * kan komme i utakt med resten.
+ * Arbeidsflyten er en liten tilstandsmaskin.
+ *
+ * Psykofarmaka går gjennom tre steg — søk, bånd, lim inn. EtG og EtS går
+ * samme vei: søk, hva som er påvist, lim inn. THC-syre og stoffene med
+ * ruspotensial i serum går fra søket til hver sin fortolkningsmodul og blir
+ * der til man bytter analytt, fordi svaret der bygges opp av flere spørsmål.
+ *
+ * Hvilket steg som vises utledes av tilstanden, så det finnes ingen egen
+ * «steg»-variabel som kan komme i utakt med resten.
  */
-export type Stage = 'search' | 'band' | 'paste' | 'thc' | 'rus' | 'etg'
+export type Stage = 'search' | 'band' | 'paste' | 'thc' | 'rus' | 'etg' | 'etg-paste'
 
 export interface State {
   /** Teksten i søkefeltet. Beholdes når man går tilbake fra steg 2. */
@@ -19,6 +22,8 @@ export interface State {
   analyte: Analyte | null
   /** Nøkkelen til konsentrasjonsbåndet brukeren valgte, når kommentaren er kopiert. */
   bandKey: string | null
+  /** Tilfellet brukeren valgte i EtG- og EtS-modulen, når kommentaren er kopiert. */
+  etgValg: EtgValg | null
   /** Om et enslig alternativ får velge seg selv. Se {@link narrow}. */
   autoPick: boolean
 }
@@ -27,6 +32,7 @@ export const initialState: State = {
   query: '',
   analyte: null,
   bandKey: null,
+  etgValg: null,
   autoPick: true,
 }
 
@@ -35,6 +41,7 @@ export type Action =
   | { type: 'sett-sok'; value: string; matches: Analyte[] }
   | { type: 'velg-analytt'; analyte: Analyte }
   | { type: 'velg-band'; key: string }
+  | { type: 'velg-etg'; valg: EtgValg }
   | { type: 'tilbake' }
   | { type: 'nullstill' }
 
@@ -42,7 +49,7 @@ export function stageOf(state: State): Stage {
   if (!state.analyte) return 'search'
   if (erThcAnalytt(state.analyte)) return 'thc'
   if (erRusAnalytt(state.analyte)) return 'rus'
-  if (erEtgAnalytt(state.analyte)) return 'etg'
+  if (erEtgAnalytt(state.analyte)) return state.etgValg ? 'etg-paste' : 'etg'
   return state.bandKey ? 'paste' : 'band'
 }
 
@@ -62,6 +69,9 @@ export function reducer(state: State, action: Action): State {
     case 'velg-band':
       return { ...state, bandKey: action.key }
 
+    case 'velg-etg':
+      return { ...state, etgValg: action.valg }
+
     case 'tilbake':
       return stepBack(state)
 
@@ -71,7 +81,7 @@ export function reducer(state: State, action: Action): State {
 }
 
 function pick(state: State, analyte: Analyte): State {
-  return { ...state, analyte, bandKey: null }
+  return { ...state, analyte, bandKey: null, etgValg: null }
 }
 
 /**
@@ -101,6 +111,8 @@ function stepBack(state: State): State {
   switch (stageOf(state)) {
     case 'paste':
       return { ...state, bandKey: null }
+    case 'etg-paste':
+      return { ...state, etgValg: null }
     case 'band':
     case 'thc':
     case 'rus':

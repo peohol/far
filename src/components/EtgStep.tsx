@@ -1,165 +1,111 @@
-import { useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
-import { Kommentarflyt } from './Kommentarflyt'
+import { ManualCopy } from './ManualCopy'
 import { Pill } from './Pill'
 import { Shortcut } from './Shortcut'
 import { StepBar } from './StepBar'
-import { BackIcon, CheckIcon } from './icons'
+import { useTips } from './Tips'
+import { BackIcon } from './icons'
 import { ETG_ALTERNATIVER, ETG_KODE, ETS_KODE, type EtgAlternativ } from '../domain/etg'
-import { useKortHopp } from '../hooks/useKortHopp'
-import { indexToDigit, useKeyboard } from '../hooks/useKeyboard'
+import { indexToDigit } from '../hooks/useKeyboard'
 
 export interface EtgStepProps {
+  onPick: (alternativ: EtgAlternativ) => void
   onBack: () => void
-  /** Tilbake til søket, klar for neste analytt. */
-  onFinish: () => void
-  /** Legger teksten på utklippstavlen. Usant når utklippstavlen er utilgjengelig. */
-  copy: (text: string) => Promise<boolean>
-  /** Viser kopikvitteringen ved elementet — samme blink som i båndsteget. */
-  flashAt: (element: Element | null | undefined) => void
+  /** Kommentaren som skal kopieres for hånd, når utklippstavlen er utilgjengelig. */
+  failed: { message: string; comment: string } | null
 }
 
 /**
  * Fortolkningsmodulen for etylglukuronid (EtG) og etylsulfat (EtS) i urin.
  *
  * De to omdannelsesproduktene vurderes alltid sammen, og det eneste modulen
- * trenger å vite er hva som er påvist av dem. Derfor er hele modulen tre
- * knapper — ett tilfelle hver — med tastene 1, 2 og 3, slik båndknappene også
- * velges. Valget avgjør både hvilken kommentar som gjelder og hvilken
- * analyttkode den skal limes inn på; selve kopieringen er felles for
- * fortolkningsmodulene og ligger i {@link Kommentarflyt}.
+ * trenger å vite er hva som er påvist av dem. Det gjør steget til det samme
+ * valget som konsentrasjonsbåndene er for psykofarmaka: én knapp per tilfelle,
+ * med tallet sitt, og kommentaren kopiert i det knappen trykkes. Derfor er
+ * knappene bygd som båndknappene, og følger med videre til limsteget på samme
+ * måte.
  */
-export function EtgStep({ onBack, onFinish, copy, flashAt }: EtgStepProps) {
-  const [valgt, setValgt] = useState<EtgAlternativ | null>(null)
-  /**
-   * Teller opp for hvert nytt valg, så kvitteringene for det forrige ikke blir
-   * stående på kommentarer som ikke lenger gjelder.
-   */
-  const [utgave, setUtgave] = useState(0)
-  const seksjon = useRef<HTMLElement>(null)
-
-  useKortHopp(true, seksjon)
-
-  const velg = (alternativ: EtgAlternativ) => {
-    // Det samme valget om igjen er ikke noe nytt svar, og skal ikke viske ut
-    // kvitteringen for en kommentar som alt er kopiert.
-    if (alternativ === valgt) return
-    setValgt(alternativ)
-    setUtgave((sa) => sa + 1)
-  }
-
-  /** Tastene 1, 2 og 3 velger hvert sitt tilfelle, som knappene de hører til. */
-  useKeyboard(
-    Object.fromEntries(
-      ETG_ALTERNATIVER.map((alternativ, i) => [
-        indexToDigit(i),
-        (e: KeyboardEvent) => {
-          e.preventDefault()
-          velg(alternativ)
-        },
-      ]),
-    ),
-  )
-
+export function EtgStep({ onPick, onBack, failed }: EtgStepProps) {
   return (
-    <section className="steg steg--etg" aria-label="Kommenter EtG og EtS" ref={seksjon}>
+    <section className="steg steg--etg" aria-label="Velg hva som er påvist">
       <StepBar>
         <Button variant="subtle" icon={<BackIcon />} shortcut="Esc" onClick={onBack}>
           Bytt analytt
         </Button>
       </StepBar>
 
-      <div className="modul">
-        <Card align="start" className="analyttkort">
-          <div className="modul-koder">
-            <Pill tone="kode">{ETG_KODE}</Pill>
-            <Pill tone="kode">{ETS_KODE}</Pill>
-          </div>
-          <h1 className="analytt__navn">EtG + EtS</h1>
-          <p className="modul-undertittel">Etylglukuronid og etylsulfat i urin</p>
+      <Card align="start" className="analyttkort">
+        <div className="modul-koder">
+          <Pill tone="kode">{ETG_KODE}</Pill>
+          <Pill tone="kode">{ETS_KODE}</Pill>
+        </div>
+        <h1 className="analytt__navn">EtG + EtS</h1>
+        <p className="modul-undertittel">Etylglukuronid og etylsulfat i urin</p>
+      </Card>
 
-          <fieldset className="modul-valg">
-            <legend>Påvist i denne prøven</legend>
-            <ul className="etg-alternativer">
-              {ETG_ALTERNATIVER.map((alternativ, i) => (
-                <li key={alternativ.id}>
-                  <Alternativ
-                    alternativ={alternativ}
-                    snarvei={indexToDigit(i)}
-                    valgt={alternativ === valgt}
-                    onVelg={() => velg(alternativ)}
-                  />
-                </li>
-              ))}
-            </ul>
-          </fieldset>
-        </Card>
+      <Card className="bandkort">
+        <h2 className="bandkort__merke">Påvist i denne prøven</h2>
+        {/* Samme rad som båndknappene, men med ord i stedet for tall: hver
+            knapp trenger mer bredde før skriften må krympe, og tallmerket står
+            alltid og er regnet med i bredden. */}
+        <ul
+          className="band"
+          style={{ '--antall': ETG_ALTERNATIVER.length, '--band-innhold': 13 } as CSSProperties}
+        >
+          {ETG_ALTERNATIVER.map((alternativ, i) => (
+            <EtgKnapp
+              key={alternativ.id}
+              alternativ={alternativ}
+              snarvei={indexToDigit(i)}
+              onPick={() => onPick(alternativ)}
+            />
+          ))}
+        </ul>
+      </Card>
 
-        <Card align="start" className="modul-resultat">
-          {valgt === null ? (
-            <>
-              <h2 className="thc-resultat__merke">Mangler</h2>
-              <ul className="thc-mangler">
-                <li>Velg hva som er påvist i denne prøven.</li>
-              </ul>
-            </>
-          ) : (
-            <>
-              <h2 className="thc-resultat__merke">
-                {valgt.plasseringer.length > 1 ? 'Kommentarer' : 'Kommentar'}
-              </h2>
-
-              <Kommentarflyt
-                plasseringer={valgt.plasseringer}
-                utgave={utgave}
-                // Kommentaren avhenger av hvilket av de tre tilfellene som er
-                // valgt, og valget kan bli feil. Da skal den som limer inn
-                // kunne lese hva som faktisk havner på utklippstavlen.
-                visTekst
-                copy={copy}
-                flashAt={flashAt}
-                onFinish={onFinish}
-              />
-            </>
-          )}
-        </Card>
-      </div>
+      {failed && <ManualCopy message={failed.message} comment={failed.comment} />}
     </section>
   )
 }
 
 /**
- * Ett av de tre tilfellene. Kodene som er påvist står under teksten, så det
- * går fram hvilke analytter knappen svarer for — og hva som ikke er påvist.
- * Det valgte tilfellet er merket med både farge og hake, slik at valget ikke
- * bare leses av fargen.
+ * Ett av de tre tilfellene. Kommentaren som havner på utklippstavlen henger på
+ * knappen som et tips, så den kan leses før valget tas — som på båndknappene.
+ *
+ * Tallmerket står alltid. Modulen er tre knapper og ingenting annet, og da er
+ * tastene den raskeste veien gjennom den; de skal ikke måtte slås på først.
  */
-function Alternativ({
+function EtgKnapp({
   alternativ,
   snarvei,
-  valgt,
-  onVelg,
+  onPick,
 }: {
   alternativ: EtgAlternativ
   snarvei: string
-  valgt: boolean
-  onVelg: () => void
+  onPick: () => void
 }) {
+  const forste = alternativ.plasseringer[0]
+  const tips = useTips(forste?.tekst ?? '')
+
   return (
-    <button
-      type="button"
-      className="etg-alternativ"
-      aria-pressed={valgt}
-      aria-keyshortcuts={snarvei}
-      onClick={onVelg}
-    >
-      {/* Plassen til haken står der hele tiden, så knappene ikke skifter form
-          når valget flyttes. */}
-      <span className="etg-alternativ__hake">{valgt && <CheckIcon />}</span>
-      <span className="etg-alternativ__merke">{alternativ.merke}</span>
-      <span className="etg-alternativ__koder">{alternativ.pavist.join(' + ')}</span>
-      <Shortcut>{snarvei}</Shortcut>
-    </button>
+    <li>
+      <button
+        type="button"
+        // Kvitteringen legges der knappen står, og beviset i neste steg flyter
+        // opp fra den samme ruten. Begge finner knappen herfra — også når
+        // tilfellet ble valgt med tastaturet.
+        data-etg={alternativ.id}
+        className="bandknapp bandknapp--noytral"
+        onClick={onPick}
+        aria-keyshortcuts={snarvei}
+        {...tips.props}
+      >
+        <span className="bandknapp__verdi">{alternativ.merke}</span>
+        <Shortcut always>{snarvei}</Shortcut>
+      </button>
+      {tips.forklaring}
+    </li>
   )
 }

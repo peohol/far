@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
-import { Kommentarflyt } from './Kommentarflyt'
+import { Kommentarliste } from './Kommentarliste'
 import { Pill } from './Pill'
 import { Shortcut } from './Shortcut'
 import { StepBar } from './StepBar'
@@ -31,7 +31,7 @@ export interface RusStepProps {
  * hovedkommentaren skal ligge på.
  *
  * Selve kopieringen av kommentarene er felles for fortolkningsmodulene og
- * ligger i {@link Kommentarflyt}.
+ * ligger i {@link Kommentarliste}.
  */
 export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps) {
   const [inndata, setInndata] = useState(TOM_RUS_INNDATA)
@@ -200,7 +200,7 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
                 </p>
               ))}
 
-              <Kommentarflyt
+              <Kommentarliste
                 plasseringer={resultat.plasseringer}
                 utgave={utgave}
                 visTekst={visTekst}

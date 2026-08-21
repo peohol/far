@@ -95,6 +95,11 @@ export const ETG_ALTERNATIVER: EtgAlternativ[] = [
   },
 ]
 
+/** Alternativet med denne id-en. */
+export function alternativFor(id: EtgValg): EtgAlternativ | undefined {
+  return ETG_ALTERNATIVER.find((a) => a.id === id)
+}
+
 /* --- Oppføringen i søket ------------------------------------------------- */
 
 /**

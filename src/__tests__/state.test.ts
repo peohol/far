@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { analytes, findByCode } from '../domain/analytes'
-import { ETG_ANALYTT } from '../domain/etg'
+import { ETG_ALTERNATIVER, ETG_ANALYTT } from '../domain/etg'
 import { RUS_ANALYTTER, rusModulFor } from '../domain/rus'
 import { search } from '../domain/search'
 import { THC_ANALYTT } from '../domain/thc'
@@ -97,6 +97,35 @@ describe('analytter med egen fortolkningsmodul', () => {
 
   it('går til EtG- og EtS-modulen i stedet for til konsentrasjonsbåndene', () => {
     expect(stageOf(velg(ETG_ANALYTT.kode))).toBe('etg')
+  })
+
+  it('lar hvert av de tre tilfellene i EtG- og EtS-modulen føre til limsteget', () => {
+    for (const alternativ of ETG_ALTERNATIVER) {
+      const valgt = reducer(velg(ETG_ANALYTT.kode), { type: 'velg-etg', valg: alternativ.id })
+
+      expect(stageOf(valgt), alternativ.id).toBe('etg-paste')
+      expect(valgt.etgValg, alternativ.id).toBe(alternativ.id)
+    }
+  })
+
+  it('går ett steg av gangen tilbake fra limsteget i EtG- og EtS-modulen', () => {
+    const valgt = reducer(velg(ETG_ANALYTT.kode), { type: 'velg-etg', valg: 'begge' })
+
+    // Esc herfra beholder analytten og lar brukeren velge tilfellet på nytt.
+    const tilbake = reducer(valgt, { type: 'tilbake' })
+    expect(stageOf(tilbake)).toBe('etg')
+    expect(tilbake.analyte?.kode).toBe(ETG_ANALYTT.kode)
+    expect(tilbake.etgValg).toBeNull()
+
+    expect(stageOf(reducer(tilbake, { type: 'tilbake' }))).toBe('search')
+  })
+
+  it('lar ikke et tilfelle bli stående når analytten byttes', () => {
+    const valgt = reducer(velg(ETG_ANALYTT.kode), { type: 'velg-etg', valg: 'ets' })
+    const ny = reducer(valgt, { type: 'velg-analytt', analyte: analytt('KVE') })
+
+    expect(ny.etgValg).toBeNull()
+    expect(stageOf(ny)).toBe('band')
   })
 
   it('holder veiene fra søket fra hverandre', () => {

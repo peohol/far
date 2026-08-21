@@ -29,12 +29,17 @@ ekstra.
 | 3 | Velg hvilket konsentrasjonsbånd svaret havner i — kommentaren kopieres | `1`–`4` |
 | 4 | Lim inn kommentaren på analyttkoden som vises — båndknappen som ble brukt, står over kortet som bevis | `Enter`/`Space` avslutter og nullstiller |
 
-Tre grupper oppføringer tar en annen vei fra steg 2, til hver sin
+To grupper oppføringer tar en annen vei fra steg 2, til hver sin
 fortolkningsmodul i stedet for til konsentrasjonsbåndene: **THC-syre** (kode
-`IRCAK`), se [THC-syre i urin](#thc-syre-i-urin-ircak), **stoffene med
+`IRCAK`), se [THC-syre i urin](#thc-syre-i-urin-ircak), og **stoffene med
 ruspotensial i serum**, se
-[Stoffer med ruspotensial i serum](#stoffer-med-ruspotensial-i-serum), og
-**EtG og EtS i urin**, se [EtG og EtS i urin](#etg-og-ets-i-urin).
+[Stoffer med ruspotensial i serum](#stoffer-med-ruspotensial-i-serum). Begge
+bygger svaret av flere spørsmål og blir derfor stående i sitt eget bilde til
+man bytter analytt.
+
+**EtG og EtS i urin** går de samme tre stegene som psykofarmaka, men velger
+hva som er påvist i stedet for et konsentrasjonsbånd i steg 3, og kan gi to
+kommentarer i limsteget. Se [EtG og EtS i urin](#etg-og-ets-i-urin).
 
 Smalner søket inn til én eneste analytt, er valget i praksis allerede tatt, og
 appen går videre uten at det trengs et tastetrykk til. Det skjer bare i selve
@@ -118,9 +123,9 @@ src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, k
                             (tastatur.ts), tallfeltene (tallfelt.ts) og
                             versjonsformatet (versjon.ts)
 docs/endringslogg.md        Rutinen for å føre loggen ved hver endring
-src/hooks/                  Tastatur, tema, hurtigtastmerker, utklippstavle
-src/components/             Stegene, kommentarene og kopieringen av dem
-                            (Kommentarflyt.tsx), felles
+src/hooks/                  Tastatur, tema, hurtigtastmerker, utklippstavle,
+                            kopieringen av kommentarene (useKommentarflyt.ts)
+src/components/             Stegene, kommentarblokkene (Kommentarliste.tsx), felles
                             kort/pille/knapp/tallfelt/tooltip/ikoner
 src/styles/                 tokens.css (design) + base.css + components.css
 ```
@@ -466,9 +471,10 @@ med en loddrett linje til venstre, samme konvensjon overalt i appen. Det skal
 aldri være tvil om at teksten er den kliniske kommentaren og ikke appens egne
 ord.
 
-Kommentarblokkene og hele kopieringen av dem ligger i
-`src/components/Kommentarflyt.tsx` og deles med EtG- og EtS-modulen, slik at de
-to oppfører seg likt.
+Selve kopieringen — hvilken kommentar som står for tur, kvitteringene, `Enter`
+og hoppet som henter knappene fram — ligger i `src/hooks/useKommentarflyt.ts`
+og deles med limsteget i EtG- og EtS-modulen, slik at de to oppfører seg likt.
+Blokkene i denne modulen står i `src/components/Kommentarliste.tsx`.
 
 ### Reglene modulen følger
 
@@ -533,15 +539,18 @@ etanol, og de vurderes alltid sammen. Derfor deler de én modul: det spiller
 ingen rolle om man søker på `EtG`, `EtS`, hele navnet, koden eller på «etanol»
 eller «alkohol» — alt fører til den samme fortolkningen.
 
-Modulen spør om én ting: hva som er påvist i denne prøven. De tre tilfellene
-velges med et klikk eller med tallet sitt, slik konsentrasjonsbåndene også
-velges.
+Modulen spør om én ting: hva som er påvist i denne prøven. Det gjør den til det
+samme valget som konsentrasjonsbåndene er for psykofarmaka, og steget er bygd
+av de samme knappene: ett tilfelle per knapp, valgt med et klikk eller med
+tallet sitt, og kommentaren kopiert i det knappen trykkes. Så kommer limsteget,
+med knappen som ble brukt stående over kortet som bevis. `Esc` går tilbake til
+valget, `Enter` og `Space` avslutter.
 
 | Tast | Tilfelle | Hva som skjer |
 | --- | --- | --- |
-| `1` | Begge påvist | Fortolkningen legges på `UETS`, og `UETGS` får henvisningen «Se kommentar for EtS i urin.» |
-| `2` | EtG påvist | Kommentaren legges på `UETGS`. `UETS` får ingen kommentar |
-| `3` | EtS påvist | Den samme kommentaren legges på `UETS`. `UETGS` får ingen kommentar |
+| `1` | Begge påvist | Fortolkningen kopieres og skal på `UETS`. I limsteget står også henvisningen «Se kommentar for EtS i urin.», som skal på `UETGS` |
+| `2` | EtG påvist | Kommentaren kopieres og skal på `UETGS`. `UETS` får ingen kommentar |
+| `3` | EtS påvist | Den samme kommentaren kopieres og skal på `UETS`. `UETGS` får ingen kommentar |
 
 Skillet er klinisk. Er begge påvist, viser funnet at etanol er inntatt. Er bare
 den ene påvist, kan funnet være forenlig med inntak — men det kan også komme
@@ -549,16 +558,20 @@ etter alkoholfri vin eller øl og andre mat- og drikkevarer, og kommentaren sier
 det. Teksten for de to enkelttilfellene er derfor den samme; det er bare koden
 den limes inn på som skiller dem.
 
-Kommentarene kopieres som i rusmiddelmodulen: én blokk per kommentar, i den
-rekkefølgen de skal limes inn, `Enter` eller `Space` tar den som står for tur,
-og når alt er kopiert, tilbake til søket. Kommentarteksten står alltid framme
-her — valget mellom de tre tilfellene kan bli feil, og da skal den som limer inn
-kunne lese hva som faktisk havner på utklippstavlen. Byttes tilfellet ut
-underveis, forsvinner kvitteringene for det forrige: de gjaldt en annen
-fortolkning.
+Er begge påvist, hører det to kommentarer til valget, og begge står i
+limsteget med hver sin kode. Hovedkommentaren ligger alt på utklippstavlen —
+den ble kopiert da knappen ble trykket — og `Enter` eller `Space` tar
+tilleggskommentaren og deretter avslutningen, slik at kommenteringen går på
+tastaturet alene. Kommentarteksten står under koden i begge kortene: med to
+kommentarer i bildet må det gå fram hvilken som hører til hvilken kode.
 
-Det valgte tilfellet er merket med både farge og hake, slik at valget ikke må
-leses av fargen alene.
+Tallmerkene på de tre knappene står alltid, uavhengig av innstillingen for
+hurtigtastmerker. Modulen er tre knapper og ingenting annet, og tastene er den
+raskeste veien gjennom den.
+
+Knappene låner ikke fargene fra konsentrasjonsbåndene. Nivåfargene betyr noe
+klinisk i resten av appen, og et tilfelle her er ikke et nivå; knappene har
+derfor samme form som båndknappene, men en nøytral farge.
 
 > **Ordlyden i kommentarene** er bestilt av den som eier appen, og skal ikke
 > endres uten at eieren uttrykkelig har bedt om det og bekreftet den nye

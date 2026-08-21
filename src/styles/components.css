@@ -493,6 +493,20 @@
   border-color: var(--niva-over-linje);
 }
 
+/* Knapper som ikke er et konsentrasjonsbånd: EtG- og EtS-modulens tre
+   tilfeller. De skal ikke låne nivåfargene — her ville en farge sagt noe
+   klinisk som ikke er ment — men de har samme form, så knappen kjenner seg
+   igjen som bevis over lim-inn-kortet. */
+.bandknapp--noytral,
+.kopibevis--noytral {
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  /* Kanten er det som skiller knappen fra kortet — den hevede flaten alene
+     ligger for tett på kortfargen i mørkt tema — og må derfor bære kravet til
+     kontrast for grafiske elementer på egen hånd. */
+  border-color: var(--blekk-svak);
+}
+
 /* --- Steg 3: lim inn ---------------------------------------------------- */
 
 /* Beviset og kortet det hører til, tettere sammen enn stegets egen luft. */
@@ -1264,10 +1278,9 @@
 }
 
 /* --- Fortolkningsmodulene -----------------------------------------------
-   Formen rusmiddelmodulen og EtG/EtS-modulen deler: ett skjema fra topp til
-   bunn med analyttkortet over og kommentarene under, slik THC-modulen også er
-   bygd, og blokkene kommentarene kopieres fra. Det hver av dem har for seg
-   står lenger nede. */
+   Det modulene deler: korthodet med kodene modulen dekker, rammen rundt
+   spørsmålene, og blokkene kommentarene kopieres fra — de siste også i
+   limsteget for EtG og EtS. Det hver modul har for seg står lenger nede. */
 
 .modul {
   display: flex;
@@ -1461,90 +1474,31 @@
 }
 
 /* --- EtG- og EtS-modulen -------------------------------------------------
-   Hele modulen er tre alternativer — ett tilfelle hver — og de velges som
-   båndknappene: med et klikk eller med tallet sitt. */
+   Valget er bygd av båndknappene og limsteget av lim-inn-kortet, så modulen
+   har lite for seg selv. Her står det ene: limsteget viser kommentaren under
+   koden, fordi to kommentarer kan stå i bildet samtidig og det må gå fram
+   hvilken som hører til hvilken kode. */
 
-.etg-alternativer {
-  display: grid;
-  /* Står på én rad når det er plass til det, og bryter når det ikke er. */
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+.steg--etg-paste .thc-kommentar {
+  /* Fyller kortet, så den loddrette linja står i samme spor som i de andre
+     modulene selv om resten av kortet er midtstilt. */
+  align-self: stretch;
+}
+
+/* To kommentarer i samme bilde. Kortene strammes inn så begge står framme
+   uten å måtte rulles fram — det skal gå fram med én gang at det er to koder
+   å lime inn på. Koden er fortsatt det største i kortet. */
+.limstabel--flere .limInn {
   gap: var(--rom-3);
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  list-style: none;
+  padding: var(--rom-4);
 }
 
-.etg-alternativer > li {
-  display: flex;
-}
-
-.etg-alternativ {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--rom-1);
-  padding: var(--rom-3) var(--rom-4);
-  color: var(--blekk);
-  background: var(--flate-hevet);
-  border: var(--kant-tykk) solid var(--linje);
-  border-radius: var(--runding-m);
-  cursor: pointer;
-  transition:
-    color var(--fart) var(--kurve),
-    background-color var(--fart) var(--kurve),
-    border-color var(--fart) var(--kurve),
-    transform var(--fart) var(--kurve),
-    box-shadow var(--fart) var(--kurve);
-}
-
-.etg-alternativ:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--skygge);
-}
-
-.etg-alternativ:active {
-  transform: translateY(0);
-}
-
-/* Tilfellet som er valgt. Haken sier det samme som flaten og kanten, så
-   valget går fram uten at farge er det eneste som skiller. */
-.etg-alternativ[aria-pressed='true'] {
-  color: var(--aksent);
-  background: var(--aksent-flate);
-  border-color: var(--aksent);
-}
-
-/* Plassen til haken står der hele tiden, så knappene ikke skifter form når
-   valget flyttes fra den ene til den andre. */
-.etg-alternativ__hake {
-  display: grid;
-  place-items: center;
-  min-height: 1.25em;
-  font-size: 1.25em;
-}
-
-.etg-alternativ__merke {
+.limstabel--flere .limInn__instruks {
   font-size: var(--tekst-m);
-  font-weight: var(--vekt-medium);
-  line-height: 1.25;
-  text-wrap: balance;
 }
 
-/* Kodene tilfellet svarer for — samme opplysning som pillene øverst, men her
-   for å vise hvilke analytter knappen sier er påvist. */
-.etg-alternativ__koder {
-  font-family: var(--skrift-mono);
-  font-size: var(--tekst-xs);
-  letter-spacing: 0.06em;
-  color: var(--blekk-dempet);
-}
-
-/* På den valgte knappen står kodene i knappens egen farge — den dempede ville
-   stått svakt mot den valgte flaten. */
-.etg-alternativ[aria-pressed='true'] .etg-alternativ__koder {
-  color: inherit;
+.limstabel--flere .limInn__kode {
+  font-size: var(--tekst-xl);
 }
 
 /* --- Sammenleggbare seksjoner («details») -------------------------------
