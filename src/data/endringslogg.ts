@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.1.0',
+    dato: '2026-08-21',
+    sammendrag: 'THC-modulen kan tolke en forrige prøve som var «ikke påvist»',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Er IRCAK 0 i forrige prøve, konkluderer kommentaren nå med at cannabis har vært inntatt etter den prøven, uansett hvor lav konsentrasjonen er i denne prøven. Før stoppet verktøyet og ba deg krysse av for at ingen tidligere prøve fantes.',
+      'Er det mer enn 60 dager mellom prøvene, gjelder den gamle regelen som før: forrige prøve settes til side, og kommentaren fortolker bare denne prøven.',
+      'Ny avmerkingsboks «Under cut-off» øverst i «Forrige prøve». Den er for tilfellet der urinen var så fortynnet at THC-syre havnet under påvisningsgrensen og ble rapportert som «ikke påvist», selv om labsystemet internt har et tall.',
+      'Krysser du av, byttes IRCAK-feltet ut med UCAK (THC-syre) og NKRE (kreatinin). Appen regner ut IRCAK som UCAK delt på NKRE, viser resultatet rett under feltene og fortolker med det.',
+      'Fordi en slik fortolkning bygger på et tall under påvisningsgrensen, legges 50 % større måleusikkerhet til grunn. Det gjør konklusjonen mer forsiktig, og et banner over sikkerhetsmarginen sier fra om det.',
+      'Kommentaren får da sin egen ordlyd i de to tilfellene der inntaket ikke er sikkert nytt: den forklarer at nivået kan svinge over og under påvisningsgrensen uten at noe nytt er inntatt, eller at inntakstidspunktet ikke kan avgjøres. Er inntaket sikkert nytt, er kommentaren den samme som før.',
+    ],
+  },
+  {
     versjon: '1.0.0',
     dato: '2026-08-17',
     sammendrag: 'Appen har fått versjonsnummer og endringslogg',

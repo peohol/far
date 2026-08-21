@@ -290,7 +290,7 @@ tilbudet over — står «Trykk ↵ for å nullstille nå», tar `Enter` det i s
 Tasten fanges på vinduet før feltene og knappene ser den, så den gjør det samme
 uansett hvor fokus står; ellers ville et fokusert datofelt åpnet kalenderen på
 nytt i stedet for å kopiere. `Space` gjør det samme som `Enter` der tasten er
-ledig — i IRCAK-feltene, i datofeltene og på sikkerhetsmarginen — og trykker
+ledig — i tallfeltene, i datofeltene og på sikkerhetsmarginen — og trykker
 fortsatt knappen, huker av avkryssingen eller folder ut «Forklaring» man står
 på, så alt lar seg betjene med tastaturet som før. `Esc` går tilbake til søket.
 
@@ -321,11 +321,46 @@ Slik regner den, med regnearkets cellereferanser i parentes
    til grunn, og **kommentaren** settes sammen av regnearkets tekstformler
    (J23–J30): konsentrasjonsnivået lav/middels høy/høy etter grensene 20 og
    40 (M21), og konklusjonen fra «ikke nødvendigvis» via «vanskelig å
-   avgjøre» til «har vært inntatt».
+   avgjøre» til «har vært inntatt». Er forrige prøve fortolket [under
+   påvisningsgrensen](#forrige-prøve-uten-thc-syre), erstattes de to første
+   konklusjonene av hver sin egen tekst.
 4. **Mer enn 60 døgn** mellom prøvene setter forrige prøve til side (K21):
    kommentaren blir som om ingen tidligere prøve fantes, og modulen sier fra
    om hvorfor. Det samme skjer, uten notis, når «Ingen tidligere prøve
    tilgjengelig» er huket av.
+
+### Forrige prøve uten THC-syre
+
+Ble THC-syre rapportert som «ikke påvist» i forrige prøve, finnes det ingen
+utskillelse å regne på, og modulen har to veier videre.
+
+**IRCAK 0.** Tastes 0 i forrige prøve, må enhver påvisning i denne prøven komme
+av et inntak etter den prøven, og kommentaren sier det — som ved kategori 4,
+uansett hvor lav konsentrasjonen er nå. Det finnes ingen prosentvis endring fra
+0, så figuren og forklaringen uteblir. 60-dagersregelen går foran: en prøve som
+er for gammel til å sammenlignes med, er det uansett hva den viste.
+
+**Under cut-off.** Er urinen svært fortynnet, kan THC-syre havne under
+påvisningsgrensen selv om den er der, og en senere og mer konsentrert prøve kan
+komme over grensen igjen uten at noe nytt er inntatt. Labsystemet har da et
+internt THC-syretall, men kreatininkorrigerer det ikke. Avkryssingen «Under
+cut-off» øverst i «Forrige prøve» bytter derfor IRCAK-feltet ut med **UCAK**
+(THC-syre) og **NKRE** (kreatinin); IRCAK regnes ut som `UCAK/NKRE` og vises
+rett under feltene. Fortolkningen går som ellers, med to forskjeller:
+
+- **Måleusikkerheten legges 50 % høyere til grunn** (`USIKKERHET_UNDER_CUTOFF`).
+  Faktoren ganges inn i log-standardavviket, altså i spredningen korreksjonen
+  leses av i, så konklusjonen blir mer forsiktig. Et banner over
+  sikkerhetsmarginen sier fra om det. Uten sikkerhetsmargin har den ingen
+  virkning: medianen i fordelingen flytter seg ikke av at spredningen blir
+  større.
+- **Konklusjonen mot forrige prøve får sin egen ordlyd** — to tekster som ikke
+  finnes i regnearket, men er bestilt av eieren. Ligger endringen innenfor det
+  forventede, forklarer kommentaren at prøven ble rapportert som «ikke påvist»
+  selv om nivået kan svinge over og under påvisningsgrensen uten nytt inntak.
+  Ligger den mellom kurvene, sier den at inntakstidspunktet ikke kan avgjøres.
+  Er inntaket sikkert nytt, brukes den vanlige kommentaren uendret — da er det
+  ikke noe mer å forklare.
 
 ### Sikkerhetsmarginen
 

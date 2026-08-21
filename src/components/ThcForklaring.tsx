@@ -1,8 +1,10 @@
 import {
+  formaterIrcak,
   formaterTall,
   INGEN_SIKKERHETSMARGIN,
   konsentrasjonsniva,
   ordEndring,
+  USIKKERHET_UNDER_CUTOFF,
   type ThcGrunnlag,
 } from '../domain/thc'
 
@@ -26,13 +28,9 @@ function endringsfrase(endring: number): string {
   return `en ${ord} på ${Math.round(Math.abs(endring) * 100)} %`
 }
 
-/** Tall slik de skrives i løpende norsk tekst: komma som desimaltegn. */
-function tall(verdi: number): string {
-  return String(verdi).replace('.', ',')
-}
-
 export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; kategori: number }) {
-  const { forrige, aktuell, dager, kronisk, maltEndring, korrigertEndring, forventet } = grunnlag
+  const { forrige, aktuell, dager, kronisk, maltEndring, korrigertEndring, forventet, underCutoff } =
+    grunnlag
 
   // Grensene kommentaren faktisk bruker: ett trinn strengere uten kronisk
   // bruk, slik kategorien også telles.
@@ -54,10 +52,14 @@ export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; k
         'inntatt etter forrige prøve.'
       : kategori === 3
         ? `${endringen} viser mindre nedgang enn forventet, men er fortsatt ` +
-          'mulig ved spesielt treg utskillelse. Kommentaren sier derfor at det er vanskelig å avgjøre ' +
-          'hvorvidt cannabis har vært inntatt etter forrige prøve.'
+          'mulig ved spesielt treg utskillelse. Kommentaren sier derfor at ' +
+          (underCutoff
+            ? 'inntakstidspunktet ikke kan avgjøres, siden nivået kan svinge over og under ' +
+              'påvisningsgrensen uten at noe nytt er inntatt.'
+            : 'det er vanskelig å avgjøre hvorvidt cannabis har vært inntatt etter forrige prøve.')
         : `${endringen} ligger innenfor det som er forventet. Kommentaren ` +
-          'sier derfor at cannabis ikke nødvendigvis har vært inntatt etter forrige prøve.'
+          'sier derfor at cannabis ikke nødvendigvis har vært inntatt etter forrige prøve' +
+          (underCutoff ? ', selv om den ble rapportert som «ikke påvist».' : '.')
 
   return (
     <div className="thc-forklaring">
@@ -65,10 +67,17 @@ export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; k
         <h3 className="thc-forklaring__tittel">Hvor stor er endringen mellom målingene?</h3>
         <div className="thc-forklaring__kropp">
           <p>
-            IRCAK er målt til {tall(aktuell)} i denne prøven og {tall(forrige)} i forrige — et
-            forholdstall på {formaterTall(maltEndring + 1)} ({tall(aktuell)}/{tall(forrige)}),
-            altså {endringsfrase(maltEndring)}.
+            IRCAK er målt til {formaterIrcak(aktuell)} i denne prøven og {formaterIrcak(forrige)} i
+            forrige — et forholdstall på {formaterTall(maltEndring + 1)} (
+            {formaterIrcak(aktuell)}/{formaterIrcak(forrige)}), altså {endringsfrase(maltEndring)}.
           </p>
+          {underCutoff && (
+            <p>
+              THC-syre lå under påvisningsgrensen i forrige prøve, og labsystemet
+              kreatininkorrigerte den derfor ikke selv. IRCAK for den prøven er regnet ut her, som
+              THC-syre delt på kreatinin (UCAK/NKRE).
+            </p>
+          )}
         </div>
       </section>
 
@@ -92,6 +101,14 @@ export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; k
               utskillelseskurvene.
             </p>
           )}
+          {underCutoff && !utenMargin && (
+            <p>
+              Fordi forrige prøve fortolkes under påvisningsgrensen, er måleusikkerheten lagt{' '}
+              {/* Hardt mellomrom: tallet og prosenttegnet skal ikke skilles av et linjeskift. */}
+              {`${Math.round((USIKKERHET_UNDER_CUTOFF - 1) * 100)}\u00a0%`} høyere til grunn enn
+              ellers. Det gjør fortolkningen mer forsiktig.
+            </p>
+          )}
         </div>
       </section>
 
@@ -103,7 +120,7 @@ export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; k
           <p>
             Det er {dagene} mellom prøvene. Forventet endring etter {dagene} ved{' '}
             {kronisk ? 'kronisk bruk' : 'et enkeltinntak'}, når IRCAK i forrige prøve er{' '}
-            {tall(forrige)} og det <i>ikke</i> har skjedd et nytt inntak:
+            {formaterIrcak(forrige)} og det <i>ikke</i> har skjedd et nytt inntak:
           </p>
           <ul>
             <li>
@@ -122,8 +139,8 @@ export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; k
           <p>{vurdering}</p>
           <p>
             Kommentarens åpning følger konsentrasjonen i denne prøven: under 20 omtales som lav,
-            20–40 som middels høy, og 40 eller mer som høy. {tall(aktuell)} regnes derfor som{' '}
-            {niva} konsentrasjon.
+            20–40 som middels høy, og 40 eller mer som høy. {formaterIrcak(aktuell)} regnes derfor
+            som {niva} konsentrasjon.
           </p>
         </div>
       </section>

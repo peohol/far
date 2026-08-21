@@ -10,6 +10,18 @@ import type { Analyte } from '../types'
  * ligger over. Uten en tidligere prøve fortolkes bare konsentrasjonen i den
  * aktuelle prøven. Kurvene, grensene og all ordlyd er hentet uendret fra
  * regnearket; avvik herfra er en feil.
+ *
+ * To regler er kommet til etter regnearket, begge bestilt av eieren, og begge
+ * om en forrige prøve der THC-syre ble rapportert som «ikke påvist»:
+ *
+ * - Er IRCAK i forrige prøve 0, må enhver påvisning i denne prøven komme av
+ *   et inntak etter den prøven, og kommentaren sier det.
+ * - Var urinen så fortynnet at THC-syre havnet under påvisningsgrensen, kan
+ *   labsystemets interne tall likevel vise THC-syre i prøven. De to tallene
+ *   tastes da i stedet for IRCAK, og IRCAK regnes ut som UCAK/NKRE. En slik
+ *   fortolkning bygger på et tall labsystemet ikke svarer ut, så
+ *   måleusikkerheten legges høyere til grunn ({@link USIKKERHET_UNDER_CUTOFF}),
+ *   og konklusjonen mot forrige prøve får sin egen ordlyd.
  */
 
 /* --- Utskillelseskurver -------------------------------------------------
@@ -65,6 +77,15 @@ const CV_TOTAL = Math.sqrt(CV_THC ** 2 + CV_KREATININ ** 2)
 /** log-standardavvik for forholdet mellom to prøver: `=SQRT(2*B4^2)`. */
 const LOG_SD = Math.sqrt(2 * CV_TOTAL ** 2)
 
+/**
+ * Måleusikkerheten legges 50 % høyere til grunn når forrige prøve fortolkes
+ * under påvisningsgrensen: tallet labsystemet har internt er ikke
+ * kvalitetssikret på samme måte som et svar over grensen, og en fortolkning
+ * som bygger på det skal være mer forsiktig. Faktoren ganges inn i
+ * log-standardavviket, altså i spredningen selve korreksjonen leses av i.
+ */
+export const USIKKERHET_UNDER_CUTOFF = 1.5
+
 /** Sikkerhetsmarginen fortolkningen regnes med — regnearkets B5. */
 export type Sikkerhetsmargin = 0.5 | 0.9 | 0.99
 
@@ -94,9 +115,14 @@ const Z_KVANTIL: Record<Sikkerhetsmargin, number> = {
 /**
  * Faktoren den målte endringen ganges med: `exp(Φ⁻¹(1 − margin) · logSD)`.
  * ≈ 0,688 ved 90 %, ≈ 0,528 ved 99 %, og nøyaktig 1 uten margin.
+ *
+ * `usikkerhet` skalerer log-standardavviket — 1 er den vanlige
+ * måleusikkerheten, {@link USIKKERHET_UNDER_CUTOFF} den forhøyede. Uten
+ * margin er faktoren 1 uansett: medianen i fordelingen flytter seg ikke av at
+ * spredningen blir større.
  */
-export function korreksjonsfaktor(margin: Sikkerhetsmargin): number {
-  return Math.exp(Z_KVANTIL[margin] * LOG_SD)
+export function korreksjonsfaktor(margin: Sikkerhetsmargin, usikkerhet = 1): number {
+  return Math.exp(Z_KVANTIL[margin] * LOG_SD * usikkerhet)
 }
 
 /* --- Kurveregning ------------------------------------------------------- */
@@ -142,8 +168,9 @@ export function korrigertEndring(
   forrige: number,
   aktuell: number,
   margin: Sikkerhetsmargin,
+  usikkerhet = 1,
 ): number {
-  return (aktuell / forrige) * korreksjonsfaktor(margin) - 1
+  return (aktuell / forrige) * korreksjonsfaktor(margin, usikkerhet) - 1
 }
 
 /* --- Konsentrasjonsnivå og kategori ------------------------------------- */
@@ -155,6 +182,18 @@ export function konsentrasjonsniva(aktuell: number): Konsentrasjonsniva {
   if (aktuell < 20) return 'lav'
   if (aktuell < 40) return 'middels høy'
   return 'høy'
+}
+
+/**
+ * Øverste trinn i regnearkets kategori: endringen ligger over alle kurvene,
+ * og kommentaren konkluderer med at cannabis har vært inntatt etter forrige
+ * prøve.
+ */
+export const KATEGORI_NYTT_INNTAK = 4
+
+/** Trinnet som legges på når kronisk bruk ikke legges til grunn (B65). */
+function utenKronisk(kronisk: boolean): number {
+  return kronisk ? 0 : 1
 }
 
 /**
@@ -174,9 +213,9 @@ export function beregnKategori(
     if (!(korrigert > forventet.gronn)) base = 1
     else if (!(korrigert > forventet.gul)) base = 2
     else if (!(korrigert > forventet.rod)) base = 3
-    else base = 4
+    else base = KATEGORI_NYTT_INNTAK
   }
-  return base + (kronisk ? 0 : 1)
+  return base + utenKronisk(kronisk)
 }
 
 /* --- Kommentaren --------------------------------------------------------
@@ -184,15 +223,51 @@ export function beregnKategori(
    (Innstillinger og beregninger!J23–J30) og brukes i rettsmedisinske
    svarbrev. Den skal ikke endres uten at eieren av appen uttrykkelig har
    bedt om det og bekreftet den nye ordlyden. Ett bevisst avvik er bestilt
-   av eieren: «5-7 dager» skrives med tankestrek, «5–7 dager». */
+   av eieren: «5-7 dager» skrives med tankestrek, «5–7 dager».
+
+   De to konklusjonene som brukes under påvisningsgrensen finnes ikke i
+   regnearket. De er eierens egen ordlyd, bestilt til denne funksjonen, og
+   gjelder på samme vilkår som resten. */
+
+/**
+ * Konklusjonen når forrige prøve er fortolket under påvisningsgrensen og
+ * endringen ikke gir holdepunkter for et nytt inntak. Erstatter J28: at
+ * forrige prøve ble rapportert som «ikke påvist» er nettopp det som må
+ * forklares, siden den likevel inneholdt THC-syre.
+ */
+function underCutoffIkkeNodvendigvis(forrigeDatoNorsk: string): string {
+  return (
+    `Analyseresultatet tilsier at cannabis ikke nødvendigvis har vært inntatt etter prøve tatt ${forrigeDatoNorsk}, ` +
+    `selv om prøven tatt ${forrigeDatoNorsk} ble rapportert som «ikke påvist». Ved lave THC-syrekonsentrasjoner ` +
+    'og varierende kreatininresultater kan nivået svinge over og under påvisningsgrensen, uten at nytt inntak ' +
+    'nødvendigvis har funnet sted. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk ' +
+    'farmakologi Ullevål (se ous.labfag.no).'
+  )
+}
+
+/**
+ * Konklusjonen når forrige prøve er fortolket under påvisningsgrensen og
+ * endringen ligger mellom kurvene. Erstatter J28: sammenligningen mot forrige
+ * prøve er da ikke bare vanskelig å avgjøre, den lar seg ikke gjøre, og
+ * kommentaren sier hvorfor i stedet for å peke på en dato.
+ */
+const UNDER_CUTOFF_VANSKELIG =
+  'Ved lave THC-syrekonsentrasjoner og varierende kreatininresultater kan nivået svinge over og under ' +
+  'påvisningsgrensen. Vurdering i forhold til andre prøver kan derfor være vanskelig, og inntakstidspunktet ' +
+  'kan ikke avgjøres. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi ' +
+  'Ullevål (se ous.labfag.no).'
 
 export function byggKommentar(
   niva: Konsentrasjonsniva,
   kategori: number,
   medForrige: boolean,
   forrigeDatoNorsk: string,
+  underCutoff = false,
 ): string {
   const deler: string[] = []
+
+  /** Sant der de to bestilte tekstene over erstatter regnearkets J28. */
+  const underGrensen = underCutoff && medForrige && kategori < KATEGORI_NYTT_INNTAK
 
   // J23 — åpningen, alltid med.
   deler.push(`THC-syre, et omdannelsesprodukt av cannabis, er påvist i ${niva} konsentrasjon. `)
@@ -203,28 +278,37 @@ export function byggKommentar(
   }
 
   // J25 — endringen er over selv den strengeste kurven.
-  if (kategori >= 4) {
+  if (kategori >= KATEGORI_NYTT_INNTAK) {
     deler.push(`Analyseresultatet tilsier at cannabis har vært inntatt etter prøve tatt ${forrigeDatoNorsk}.`)
   }
 
   // J26 — påvist uten holdepunkter for nytt inntak: inntak har uansett skjedd.
-  if (niva !== 'høy' && kategori < 3) {
+  // Under påvisningsgrensen står setningen i begge de to kommentarene som
+  // ikke konkluderer med nytt inntak: der er det bare tidspunktet som er
+  // usikkert, ikke om cannabis har vært inntatt.
+  if (niva !== 'høy' && (kategori < 3 || underGrensen)) {
     deler.push('Analyseresultatet viser at cannabis har vært inntatt. ')
   }
 
-  if (medForrige && kategori < 4) {
+  if (medForrige && kategori < KATEGORI_NYTT_INNTAK) {
     // J27 — generelt om påvisningstid.
     deler.push(
       'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. Ved gjentatte inntak vil påvisningstiden for THC-syre i urin øke, vanligvis opptil en måned etter avsluttet inntak. ',
     )
-    // J28 — konklusjonen mot forrige prøve.
-    const lede =
-      kategori === 3
-        ? 'Basert på analyseresultatet alene er det vanskelig å avgjøre hvorvidt cannabis har vært inntatt etter prøve tatt '
-        : 'Analyseresultatet tilsier at cannabis ikke nødvendigvis har vært inntatt etter prøve tatt '
-    deler.push(
-      `${lede}${forrigeDatoNorsk}. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).`,
-    )
+    if (underGrensen) {
+      deler.push(
+        kategori === 3 ? UNDER_CUTOFF_VANSKELIG : underCutoffIkkeNodvendigvis(forrigeDatoNorsk),
+      )
+    } else {
+      // J28 — konklusjonen mot forrige prøve.
+      const lede =
+        kategori === 3
+          ? 'Basert på analyseresultatet alene er det vanskelig å avgjøre hvorvidt cannabis har vært inntatt etter prøve tatt '
+          : 'Analyseresultatet tilsier at cannabis ikke nødvendigvis har vært inntatt etter prøve tatt '
+      deler.push(
+        `${lede}${forrigeDatoNorsk}. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).`,
+      )
+    }
   }
 
   // J29 — uten sammenligningsgrunnlag.
@@ -263,6 +347,35 @@ export function formaterTall(verdi: number): string {
   return Number(verdi.toPrecision(2)).toString().replace('.', ',')
 }
 
+/**
+ * En IRCAK-verdi slik den skrives i appen: inntil tre desimaler og norsk
+ * desimaltegn. Tre desimaler holder for tallene labsystemet svarer i, og
+ * trengs når IRCAK er regnet ut av UCAK og NKRE i stedet for tastet inn — da
+ * er verdien sjelden et rundt tall. Blir tallet så lite at avrundingen ville
+ * skrevet det som 0, vises gjeldende siffer i stedet: en verdi over 0 skal
+ * aldri kunne leses som 0.
+ */
+export function formaterIrcak(verdi: number): string {
+  const avrundet = Number(verdi.toFixed(3))
+  const vist = avrundet === 0 && verdi !== 0 ? Number(verdi.toPrecision(2)) : avrundet
+  return String(vist).replace('.', ',')
+}
+
+/**
+ * IRCAK regnet ut av labsystemets interne tall, slik det gjøres når THC-syre
+ * lå under påvisningsgrensen og labsystemet derfor ikke kreatininkorrigerte
+ * den selv: `UCAK / NKRE`. `null` når feltene ikke gir et regnestykke som lar
+ * seg utføre — tomme felt, tekst som ikke er tall, negativ THC-syre eller et
+ * kreatinin som ikke er over 0.
+ */
+export function beregnIrcak(ucak: string, nkre: string): number | null {
+  const thcSyre = lesTall(ucak)
+  const kreatinin = lesTall(nkre)
+  if (thcSyre === null || thcSyre < 0) return null
+  if (kreatinin === null || !(kreatinin > 0)) return null
+  return thcSyre / kreatinin
+}
+
 /** «nedgang», «økning» eller «ingen endring» — for en relativ endring. */
 export function ordEndring(endring: number): 'nedgang' | 'økning' | 'ingen endring' {
   if (endring < 0) return 'nedgang'
@@ -284,7 +397,17 @@ export interface ThcInndata {
   aktuellVerdi: string
   aktuellDato: string
   ingenTidligere: boolean
+  /**
+   * Sant når forrige prøve fortolkes under påvisningsgrensen. Da er det ikke
+   * IRCAK som tastes, men labsystemets to interne tall — {@link forrigeUcak}
+   * og {@link forrigeNkre} — og IRCAK regnes ut av dem.
+   */
+  forrigeUnderCutoff: boolean
   forrigeVerdi: string
+  /** THC-syre i forrige prøve (UCAK), brukt under påvisningsgrensen. */
+  forrigeUcak: string
+  /** Kreatinin i forrige prøve (NKRE), brukt under påvisningsgrensen. */
+  forrigeNkre: string
   forrigeDato: string
   sikkerhetsmargin: Sikkerhetsmargin
 }
@@ -294,7 +417,10 @@ export const TOM_THC_INNDATA: ThcInndata = {
   aktuellVerdi: '',
   aktuellDato: '',
   ingenTidligere: false,
+  forrigeUnderCutoff: false,
   forrigeVerdi: '',
+  forrigeUcak: '',
+  forrigeNkre: '',
   forrigeDato: '',
   sikkerhetsmargin: STANDARD_SIKKERHETSMARGIN,
 }
@@ -317,6 +443,12 @@ export interface ThcGrunnlag extends ThcGrafgrunnlag {
   kronisk: boolean
   /** Marginen den korrigerte endringen er lest av med. */
   sikkerhetsmargin: Sikkerhetsmargin
+  /**
+   * Sant når forrige prøve er fortolket under påvisningsgrensen: IRCAK er da
+   * regnet ut av UCAK og NKRE, og måleusikkerheten er lagt
+   * {@link USIKKERHET_UNDER_CUTOFF} ganger høyere til grunn.
+   */
+  underCutoff: boolean
   /** Den målte endringen før usikkerhetskorreksjon: aktuell/forrige − 1. */
   maltEndring: number
   /** Forventet endring per kurve etter like mange døgn (rad 63). */
@@ -339,7 +471,9 @@ export type ThcResultat =
  * Validerer inndataene og bygger kommentaren. Følger regnearket også der
  * det overrasker: er det mer enn {@link MAKS_DAGER_MELLOM} døgn mellom
  * prøvene, fortolkes bare den aktuelle prøven, og kommentaren blir den samme
- * som uten en tidligere prøve.
+ * som uten en tidligere prøve. Det gjelder også en forrige prøve uten
+ * THC-syre: en prøve som er for gammel til å sammenlignes med, er det uansett
+ * hva den viste.
  */
 export function fortolkThc(inn: ThcInndata): ThcResultat {
   const mangler: string[] = []
@@ -348,22 +482,42 @@ export function fortolkThc(inn: ThcInndata): ThcResultat {
   if (inn.aktuellVerdi.trim() === '') mangler.push('Fyll inn IRCAK for denne prøven.')
   else if (aktuell === null || !(aktuell > 0)) mangler.push('IRCAK for denne prøven må være et tall større enn 0.')
 
+  // Avkryssingen står inne i «Forrige prøve», så den betyr ingenting når det
+  // ikke finnes en forrige prøve å fortolke.
+  const underCutoff = !inn.ingenTidligere && inn.forrigeUnderCutoff
+
   let forrige: number | null = null
   if (!inn.ingenTidligere) {
     // Datoene trengs bare for å telle døgn mellom prøvene, så uten en
     // tidligere prøve å sammenligne med er heller ikke denne prøvens dato
     // noe å kreve.
     if (inn.aktuellDato === '') mangler.push('Fyll inn prøvedato for denne prøven.')
-    forrige = lesTall(inn.forrigeVerdi)
-    if (inn.forrigeVerdi.trim() === '') {
-      mangler.push('Fyll inn IRCAK for forrige prøve.')
-    } else if (forrige === null || forrige < 0) {
-      mangler.push('IRCAK for forrige prøve må være et tall som ikke er negativt.')
-    } else if (forrige === 0) {
-      mangler.push(
-        'Verktøyet kan ikke sammenligne med en forrige prøve der IRCAK er 0. Mangler et brukbart sammenligningsgrunnlag, huk av for «Ingen tidligere prøve tilgjengelig».',
-      )
+
+    if (underCutoff) {
+      // Under påvisningsgrensen er det labsystemets to interne tall som
+      // tastes, og IRCAK regnes ut av dem.
+      const thcSyre = lesTall(inn.forrigeUcak)
+      const kreatinin = lesTall(inn.forrigeNkre)
+      if (inn.forrigeUcak.trim() === '') {
+        mangler.push('Fyll inn UCAK (THC-syre) for forrige prøve.')
+      } else if (thcSyre === null || thcSyre < 0) {
+        mangler.push('UCAK (THC-syre) for forrige prøve må være et tall som ikke er negativt.')
+      }
+      if (inn.forrigeNkre.trim() === '') {
+        mangler.push('Fyll inn NKRE (kreatinin) for forrige prøve.')
+      } else if (kreatinin === null || !(kreatinin > 0)) {
+        mangler.push('NKRE (kreatinin) for forrige prøve må være et tall større enn 0.')
+      }
+      forrige = beregnIrcak(inn.forrigeUcak, inn.forrigeNkre)
+    } else {
+      forrige = lesTall(inn.forrigeVerdi)
+      if (inn.forrigeVerdi.trim() === '') {
+        mangler.push('Fyll inn IRCAK for forrige prøve.')
+      } else if (forrige === null || forrige < 0) {
+        mangler.push('IRCAK for forrige prøve må være et tall som ikke er negativt.')
+      }
     }
+
     if (inn.forrigeDato === '') mangler.push('Fyll inn prøvedato for forrige prøve.')
     if (inn.forrigeDato !== '' && inn.aktuellDato !== '' && dagerMellom(inn.forrigeDato, inn.aktuellDato) < 0) {
       mangler.push('Denne prøven kan ikke være tatt før forrige prøve.')
@@ -400,26 +554,52 @@ export function fortolkThc(inn: ThcInndata): ThcResultat {
     }
   }
 
-  const korrigert = korrigertEndring(forrige as number, aktuell as number, inn.sikkerhetsmargin)
+  const forrigeIrcak = forrige as number
+
+  // Ingen THC-syre i forrige prøve: da finnes det ingen utskillelse å regne
+  // på — enhver konsentrasjon nå må komme av et inntak etter den prøven, og
+  // kategorien settes rett i toppen. Figuren og forklaringen tegner
+  // prosentvis endring fra forrige prøve, og har ingenting å vise når den er
+  // 0, så de får ikke noe grunnlag.
+  if (forrigeIrcak === 0) {
+    const kategori = KATEGORI_NYTT_INNTAK + utenKronisk(inn.kronisk)
+    return {
+      type: 'kommentar',
+      kommentar: byggKommentar(
+        niva,
+        kategori,
+        true,
+        formaterDatoNorsk(inn.forrigeDato),
+        underCutoff,
+      ),
+      kategori,
+      grunnlag: null,
+      forGammelForrige: false,
+    }
+  }
+
+  const usikkerhet = underCutoff ? USIKKERHET_UNDER_CUTOFF : 1
+  const korrigert = korrigertEndring(forrigeIrcak, aktuell as number, inn.sikkerhetsmargin, usikkerhet)
   const forventet = {
-    gronn: forventetEndring(forrige as number, dager, KURVE_GRONN),
-    gul: forventetEndring(forrige as number, dager, KURVE_GUL),
-    rod: forventetEndring(forrige as number, dager, KURVE_ROD),
+    gronn: forventetEndring(forrigeIrcak, dager, KURVE_GRONN),
+    gul: forventetEndring(forrigeIrcak, dager, KURVE_GUL),
+    rod: forventetEndring(forrigeIrcak, dager, KURVE_ROD),
   }
   const kategori = beregnKategori(true, inn.kronisk, korrigert, forventet)
 
   return {
     type: 'kommentar',
-    kommentar: byggKommentar(niva, kategori, true, formaterDatoNorsk(inn.forrigeDato)),
+    kommentar: byggKommentar(niva, kategori, true, formaterDatoNorsk(inn.forrigeDato), underCutoff),
     kategori,
     grunnlag: {
-      forrige: forrige as number,
+      forrige: forrigeIrcak,
       aktuell: aktuell as number,
       dager,
       kronisk: inn.kronisk,
-      maltEndring: (aktuell as number) / (forrige as number) - 1,
+      maltEndring: (aktuell as number) / forrigeIrcak - 1,
       korrigertEndring: korrigert,
       sikkerhetsmargin: inn.sikkerhetsmargin,
+      underCutoff,
       forventet,
     },
     forGammelForrige: false,

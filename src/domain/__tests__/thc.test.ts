@@ -2,11 +2,13 @@ import { describe, expect, it } from 'vitest'
 import { analytes } from '../analytes'
 import { search } from '../search'
 import {
+  beregnIrcak,
   beregnKategori,
   byggKommentar,
   dagerMellom,
   erThcAnalytt,
   formaterDatoNorsk,
+  formaterIrcak,
   fortolkThc,
   forventetEndring,
   INGEN_SIKKERHETSMARGIN,
@@ -22,6 +24,7 @@ import {
   THC_ANALYTT,
   tidForVerdi,
   TOM_THC_INNDATA,
+  USIKKERHET_UNDER_CUTOFF,
   verdiPaaKurve,
 } from '../thc'
 import { byggGraf, formaterProsent } from '../thcPlot'
@@ -206,6 +209,37 @@ describe('kommentaren, ord for ord mot regnearket', () => {
   })
 })
 
+describe('kommentaren under påvisningsgrensen', () => {
+  it('setter «har vært inntatt» foran begge de to konklusjonene', () => {
+    for (const kategori of [1, 2, 3]) {
+      expect(byggKommentar('lav', kategori, true, '04.07.2026', true)).toContain(
+        'Analyseresultatet viser at cannabis har vært inntatt. ',
+      )
+    }
+  })
+
+  it('lar høy konsentrasjon peke mot nylig inntak, uten setningen om at inntak har skjedd', () => {
+    expect(byggKommentar('høy', 3, true, '04.07.2026', true)).toBe(
+      'THC-syre, et omdannelsesprodukt av cannabis, er påvist i høy konsentrasjon. ' +
+        'Slike konsentrasjoner ses gjerne ved prøvetaking kort tid etter inntak av cannabis. ' +
+        'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. ' +
+        'Ved gjentatte inntak vil påvisningstiden for THC-syre i urin øke, vanligvis opptil ' +
+        'en måned etter avsluttet inntak. Ved lave THC-syrekonsentrasjoner og varierende ' +
+        'kreatininresultater kan nivået svinge over og under påvisningsgrensen. Vurdering i ' +
+        'forhold til andre prøver kan derfor være vanskelig, og inntakstidspunktet kan ikke ' +
+        'avgjøres. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for ' +
+        'klinisk farmakologi Ullevål (se ous.labfag.no).',
+    )
+  })
+
+  it('endrer ingenting når inntaket er sikkert nytt, eller når forrige prøve ikke brukes', () => {
+    expect(byggKommentar('lav', 4, true, '04.07.2026', true)).toBe(
+      byggKommentar('lav', 4, true, '04.07.2026'),
+    )
+    expect(byggKommentar('lav', 0, false, '', true)).toBe(byggKommentar('lav', 0, false, ''))
+  })
+})
+
 describe('datoer og tall', () => {
   it('teller hele døgn mellom prøvene som regnearket (E4 − E2)', () => {
     expect(dagerMellom('2026-07-04', '2026-07-27')).toBe(23)
@@ -232,6 +266,7 @@ describe('datoer og tall', () => {
 
 describe('fortolkningen fra inndata til kommentar', () => {
   const eksempel = {
+    ...TOM_THC_INNDATA,
     kronisk: true,
     aktuellVerdi: '2,5',
     aktuellDato: '2026-07-27',
@@ -280,13 +315,6 @@ describe('fortolkningen fra inndata til kommentar', () => {
     const resultat = fortolkThc({ ...eksempel, aktuellVerdi: '0' })
     if (resultat.type !== 'mangler') throw new Error('ventet mangler')
     expect(resultat.mangler).toEqual(['IRCAK for denne prøven må være et tall større enn 0.'])
-  })
-
-  it('stopper en forrige prøve med IRCAK 0 og peker på avkrysningen', () => {
-    const resultat = fortolkThc({ ...eksempel, forrigeVerdi: '0' })
-    if (resultat.type !== 'mangler') throw new Error('ventet mangler')
-    expect(resultat.mangler).toHaveLength(1)
-    expect(resultat.mangler[0]).toContain('Ingen tidligere prøve tilgjengelig')
   })
 
   it('stopper prøver i feil rekkefølge', () => {
@@ -373,6 +401,216 @@ describe('fortolkningen fra inndata til kommentar', () => {
     if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
     expect(resultat.kategori).toBe(1)
     expect(resultat.grunnlag?.dager).toBe(0)
+  })
+})
+
+describe('forrige prøve uten THC-syre (IRCAK 0)', () => {
+  const eksempel = {
+    ...TOM_THC_INNDATA,
+    aktuellVerdi: '2,5',
+    aktuellDato: '2026-07-27',
+    forrigeVerdi: '0',
+    forrigeDato: '2026-07-04',
+  }
+
+  it('konkluderer med nytt inntak, uansett hvor lav konsentrasjonen er nå', () => {
+    for (const aktuellVerdi of ['0,1', '2,5', '19,9', '50']) {
+      const resultat = fortolkThc({ ...eksempel, aktuellVerdi })
+      if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
+      expect(resultat.kategori).toBeGreaterThanOrEqual(4)
+      expect(resultat.kommentar).toContain(
+        'Analyseresultatet tilsier at cannabis har vært inntatt etter prøve tatt 04.07.2026.',
+      )
+    }
+  })
+
+  it('gir samme kommentar enten kronisk bruk legges til grunn eller ikke', () => {
+    const medKronisk = fortolkThc(eksempel)
+    const utenKronisk = fortolkThc({ ...eksempel, kronisk: false })
+    if (medKronisk.type !== 'kommentar' || utenKronisk.type !== 'kommentar') {
+      throw new Error('ventet kommentar')
+    }
+    expect(medKronisk.kategori).toBe(4)
+    expect(utenKronisk.kategori).toBe(5)
+    expect(medKronisk.kommentar).toBe(byggKommentar('lav', 4, true, '04.07.2026'))
+    expect(utenKronisk.kommentar).toBe(medKronisk.kommentar)
+  })
+
+  it('tegner ingen figur — det finnes ingen prosentvis endring fra 0', () => {
+    const resultat = fortolkThc(eksempel)
+    if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
+    expect(resultat.grunnlag).toBeNull()
+  })
+
+  it('viker for 60-dagersregelen: en for gammel prøve settes til side som før', () => {
+    const resultat = fortolkThc({ ...eksempel, forrigeDato: '2026-04-01' })
+    if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
+    expect(resultat.forGammelForrige).toBe(true)
+    expect(resultat.kommentar).toBe(byggKommentar('lav', 0, false, ''))
+  })
+
+  it('godtar fortsatt ikke en negativ IRCAK', () => {
+    const resultat = fortolkThc({ ...eksempel, forrigeVerdi: '-1' })
+    if (resultat.type !== 'mangler') throw new Error('ventet mangler')
+    expect(resultat.mangler).toEqual([
+      'IRCAK for forrige prøve må være et tall som ikke er negativt.',
+    ])
+  })
+})
+
+describe('forrige prøve under påvisningsgrensen', () => {
+  /** UCAK 0,65 og NKRE 0,1 gir IRCAK 6,5 — regnearkets eksempelverdi. */
+  const eksempel = {
+    ...TOM_THC_INNDATA,
+    aktuellVerdi: '2,5',
+    aktuellDato: '2026-07-27',
+    forrigeUnderCutoff: true,
+    forrigeUcak: '0,65',
+    forrigeNkre: '0,1',
+    forrigeDato: '2026-07-04',
+  }
+
+  it('regner IRCAK som UCAK delt på NKRE', () => {
+    expect(beregnIrcak('0,65', '0,1')).toBeCloseTo(6.5, 12)
+    expect(beregnIrcak('0.65', '0.1')).toBeCloseTo(6.5, 12)
+    expect(beregnIrcak('0', '0,1')).toBe(0)
+    // Uten et brukbart regnestykke finnes det ingen IRCAK å svare med.
+    expect(beregnIrcak('', '0,1')).toBeNull()
+    expect(beregnIrcak('0,65', '')).toBeNull()
+    expect(beregnIrcak('0,65', '0')).toBeNull()
+    expect(beregnIrcak('-1', '0,1')).toBeNull()
+  })
+
+  it('bruker den beregnede IRCAK-en som forrige prøve', () => {
+    const resultat = fortolkThc(eksempel)
+    if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
+    expect(resultat.grunnlag?.forrige).toBeCloseTo(6.5, 12)
+    expect(resultat.grunnlag?.underCutoff).toBe(true)
+    expect(resultat.grunnlag?.maltEndring).toBeCloseTo(2.5 / 6.5 - 1, 12)
+  })
+
+  it('legger måleusikkerheten 50 % høyere til grunn', () => {
+    expect(USIKKERHET_UNDER_CUTOFF).toBe(1.5)
+    expect(korreksjonsfaktor(0.9, USIKKERHET_UNDER_CUTOFF)).toBeCloseTo(0.5709521262933627, 12)
+    expect(korreksjonsfaktor(0.99, USIKKERHET_UNDER_CUTOFF)).toBeCloseTo(0.3615475572121613, 12)
+    // Uten margin flytter ikke medianen seg av at spredningen blir større.
+    expect(korreksjonsfaktor(INGEN_SIKKERHETSMARGIN, USIKKERHET_UNDER_CUTOFF)).toBe(1)
+
+    const resultat = fortolkThc(eksempel)
+    if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
+    expect(resultat.grunnlag?.korrigertEndring).toBeCloseTo(
+      korrigertEndring(6.5, 2.5, 0.9, USIKKERHET_UNDER_CUTOFF),
+      12,
+    )
+    // Den samme prøven uten avkryssingen leses av lenger inne i fordelingen.
+    expect(resultat.grunnlag?.korrigertEndring).toBeLessThan(korrigertEndring(6.5, 2.5, 0.9))
+  })
+
+  it('gjør fortolkningen mer forsiktig der endringen ligger nær en kurve', () => {
+    // 6,5 → 5,85 er 10 % nedgang. Med vanlig måleusikkerhet er det mindre
+    // nedgang enn selv den tregeste kurven gir på 23 døgn, og kommentaren
+    // konkluderer med nytt inntak. Med den forhøyede usikkerheten mykner den
+    // til «vanskelig å vurdere».
+    const utenom = fortolkThc({
+      ...eksempel,
+      aktuellVerdi: '5,85',
+      forrigeUnderCutoff: false,
+      forrigeVerdi: '6,5',
+    })
+    const under = fortolkThc({ ...eksempel, aktuellVerdi: '5,85' })
+    if (utenom.type !== 'kommentar' || under.type !== 'kommentar') throw new Error('ventet kommentar')
+    expect(utenom.kategori).toBe(4)
+    expect(under.kategori).toBe(3)
+  })
+
+  it('sier at inntakstidspunktet ikke kan avgjøres når endringen ligger mellom kurvene', () => {
+    const resultat = fortolkThc({ ...eksempel, aktuellVerdi: '5,85' })
+    if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
+    expect(resultat.kommentar).toBe(
+      'THC-syre, et omdannelsesprodukt av cannabis, er påvist i lav konsentrasjon. ' +
+        'Analyseresultatet viser at cannabis har vært inntatt. ' +
+        'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. ' +
+        'Ved gjentatte inntak vil påvisningstiden for THC-syre i urin øke, vanligvis opptil ' +
+        'en måned etter avsluttet inntak. Ved lave THC-syrekonsentrasjoner og varierende ' +
+        'kreatininresultater kan nivået svinge over og under påvisningsgrensen. Vurdering i ' +
+        'forhold til andre prøver kan derfor være vanskelig, og inntakstidspunktet kan ikke ' +
+        'avgjøres. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for ' +
+        'klinisk farmakologi Ullevål (se ous.labfag.no).',
+    )
+  })
+
+  it('forklarer «ikke påvist» når endringen er som forventet', () => {
+    const resultat = fortolkThc({ ...eksempel, aktuellVerdi: '0,5' })
+    if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
+    expect(resultat.kategori).toBe(1)
+    expect(resultat.kommentar).toBe(
+      'THC-syre, et omdannelsesprodukt av cannabis, er påvist i lav konsentrasjon. ' +
+        'Analyseresultatet viser at cannabis har vært inntatt. ' +
+        'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. ' +
+        'Ved gjentatte inntak vil påvisningstiden for THC-syre i urin øke, vanligvis opptil ' +
+        'en måned etter avsluttet inntak. Analyseresultatet tilsier at cannabis ikke ' +
+        'nødvendigvis har vært inntatt etter prøve tatt 04.07.2026, selv om prøven tatt ' +
+        '04.07.2026 ble rapportert som «ikke påvist». Ved lave THC-syrekonsentrasjoner og ' +
+        'varierende kreatininresultater kan nivået svinge over og under påvisningsgrensen, ' +
+        'uten at nytt inntak nødvendigvis har funnet sted. Ved spørsmål kan rekvirent ' +
+        'kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål ' +
+        '(se ous.labfag.no).',
+    )
+  })
+
+  it('bruker den vanlige kommentaren når inntaket er sikkert nytt', () => {
+    const resultat = fortolkThc({ ...eksempel, aktuellVerdi: '30' })
+    if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
+    expect(resultat.kategori).toBe(4)
+    expect(resultat.kommentar).toBe(byggKommentar('middels høy', 4, true, '04.07.2026'))
+  })
+
+  it('lar en UCAK på 0 falle tilbake på regelen om nytt inntak', () => {
+    const resultat = fortolkThc({ ...eksempel, forrigeUcak: '0' })
+    if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
+    expect(resultat.kategori).toBe(4)
+    expect(resultat.kommentar).toBe(byggKommentar('lav', 4, true, '04.07.2026'))
+  })
+
+  it('spør etter UCAK og NKRE i stedet for IRCAK', () => {
+    const resultat = fortolkThc({ ...TOM_THC_INNDATA, forrigeUnderCutoff: true })
+    if (resultat.type !== 'mangler') throw new Error('ventet mangler')
+    expect(resultat.mangler).toEqual([
+      'Fyll inn IRCAK for denne prøven.',
+      'Fyll inn prøvedato for denne prøven.',
+      'Fyll inn UCAK (THC-syre) for forrige prøve.',
+      'Fyll inn NKRE (kreatinin) for forrige prøve.',
+      'Fyll inn prøvedato for forrige prøve.',
+    ])
+  })
+
+  it('krever et kreatinin over 0 — ellers finnes det ingen IRCAK', () => {
+    const resultat = fortolkThc({ ...eksempel, forrigeNkre: '0' })
+    if (resultat.type !== 'mangler') throw new Error('ventet mangler')
+    expect(resultat.mangler).toEqual([
+      'NKRE (kreatinin) for forrige prøve må være et tall større enn 0.',
+    ])
+  })
+
+  it('lar avkryssingen ligge når ingen tidligere prøve finnes', () => {
+    const resultat = fortolkThc({
+      ...TOM_THC_INNDATA,
+      forrigeUnderCutoff: true,
+      ingenTidligere: true,
+      aktuellVerdi: '2,5',
+    })
+    if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
+    expect(resultat.kommentar).toBe(byggKommentar('lav', 0, false, ''))
+  })
+
+  it('skriver den beregnede IRCAK-en med norsk desimaltegn', () => {
+    expect(formaterIrcak(6.5)).toBe('6,5')
+    expect(formaterIrcak(0.65 / 0.1)).toBe('6,5')
+    expect(formaterIrcak(2 / 3)).toBe('0,667')
+    expect(formaterIrcak(12)).toBe('12')
+    // En verdi over 0 skal aldri kunne leses som 0.
+    expect(formaterIrcak(0.00004)).toBe('0,00004')
+    expect(formaterIrcak(0)).toBe('0')
   })
 })
 
