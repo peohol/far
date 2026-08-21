@@ -1,4 +1,5 @@
 import rusdata from '../data/rusmidler.json'
+import type { Kommentarplassering } from './kommentar'
 import type { Analyte } from '../types'
 
 /**
@@ -77,13 +78,7 @@ function tekst(radId: string, nokkel = 'hoved'): string {
 /* --- Fortolkningen ------------------------------------------------------ */
 
 /** Én kommentar, og analyttkoden(e) den skal limes inn på. */
-export interface RusPlassering {
-  rolle: 'hoved' | 'tillegg'
-  /** Merkelappen som vises, f.eks. «Hovedkommentar for morfin». */
-  merke: string
-  koder: string[]
-  tekst: string
-}
+export type RusPlassering = Kommentarplassering
 
 export type RusResultat =
   | { type: 'mangler'; mangler: string[] }

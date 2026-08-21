@@ -46,6 +46,10 @@ const KRAV: [string, string, number, string][] = [
   ['--niva-innenfor-blekk', '--flate-hevet', 4.5, 'kvittering for kopiert kommentar'],
   ['--niva-innenfor-blekk', '--flate', 4.5, 'kvittering for kopiert kommentar på kort'],
   ['--niva-over-blekk', '--niva-over-flate', 4.5, 'nivå «over» og ringegrense'],
+  // Det valgte alternativet i EtG- og EtS-modulen: teksten på sin egen flate,
+  // og kanten rundt knappen mot kortet den står på.
+  ['--aksent', '--aksent-flate', 4.5, 'valgt alternativ'],
+  ['--aksent', '--flate', 3, 'kant rundt valgt alternativ'],
   ['--varsel-blekk', '--varsel-flate', 4.5, 'advarsel om måleområde'],
   ['--niva-gul-blekk', '--niva-gul-flate', 4.5, 'bånd over referanseområdet'],
   ['--niva-gul-linje', '--flate-bunn', 3, 'kant rundt gult bånd'],

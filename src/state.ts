@@ -1,15 +1,17 @@
+import { erEtgAnalytt } from './domain/etg'
 import { erRusAnalytt } from './domain/rus'
 import { erThcAnalytt } from './domain/thc'
 import type { Analyte } from './types'
 
 /**
  * Arbeidsflyten er en liten tilstandsmaskin. Psykofarmaka går gjennom tre
- * steg — søk, bånd, lim inn — mens THC-syre og stoffene med ruspotensial i
- * serum går fra søket til hver sin fortolkningsmodul og blir der til man
- * bytter analytt. Hvilket steg som vises utledes av tilstanden, så det finnes
- * ingen egen «steg»-variabel som kan komme i utakt med resten.
+ * steg — søk, bånd, lim inn — mens THC-syre, stoffene med ruspotensial i
+ * serum og etanolmarkørene i urin går fra søket til hver sin
+ * fortolkningsmodul og blir der til man bytter analytt. Hvilket steg som
+ * vises utledes av tilstanden, så det finnes ingen egen «steg»-variabel som
+ * kan komme i utakt med resten.
  */
-export type Stage = 'search' | 'band' | 'paste' | 'thc' | 'rus'
+export type Stage = 'search' | 'band' | 'paste' | 'thc' | 'rus' | 'etg'
 
 export interface State {
   /** Teksten i søkefeltet. Beholdes når man går tilbake fra steg 2. */
@@ -40,6 +42,7 @@ export function stageOf(state: State): Stage {
   if (!state.analyte) return 'search'
   if (erThcAnalytt(state.analyte)) return 'thc'
   if (erRusAnalytt(state.analyte)) return 'rus'
+  if (erEtgAnalytt(state.analyte)) return 'etg'
   return state.bandKey ? 'paste' : 'band'
 }
 
@@ -101,6 +104,7 @@ function stepBack(state: State): State {
     case 'band':
     case 'thc':
     case 'rus':
+    case 'etg':
       return { ...state, analyte: null }
     case 'search':
       return initialState

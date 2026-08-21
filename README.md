@@ -29,11 +29,12 @@ ekstra.
 | 3 | Velg hvilket konsentrasjonsbånd svaret havner i — kommentaren kopieres | `1`–`4` |
 | 4 | Lim inn kommentaren på analyttkoden som vises — båndknappen som ble brukt, står over kortet som bevis | `Enter`/`Space` avslutter og nullstiller |
 
-To grupper oppføringer tar en annen vei fra steg 2, til hver sin
+Tre grupper oppføringer tar en annen vei fra steg 2, til hver sin
 fortolkningsmodul i stedet for til konsentrasjonsbåndene: **THC-syre** (kode
-`IRCAK`), se [THC-syre i urin](#thc-syre-i-urin-ircak), og **stoffene med
+`IRCAK`), se [THC-syre i urin](#thc-syre-i-urin-ircak), **stoffene med
 ruspotensial i serum**, se
-[Stoffer med ruspotensial i serum](#stoffer-med-ruspotensial-i-serum).
+[Stoffer med ruspotensial i serum](#stoffer-med-ruspotensial-i-serum), og
+**EtG og EtS i urin**, se [EtG og EtS i urin](#etg-og-ets-i-urin).
 
 Smalner søket inn til én eneste analytt, er valget i praksis allerede tatt, og
 appen går videre uten at det trengs et tastetrykk til. Det skjer bare i selve
@@ -112,11 +113,15 @@ src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, k
                             tooltipplassering (tipsplassering.ts), flukten til
                             kopibeviset (flytting.ts), THC-fortolkning (thc.ts) med
                             figurgrunnlaget (thcPlot.ts), rusmiddelfortolkning (rus.ts),
-                            tastereglene (tastatur.ts), tallfeltene (tallfelt.ts) og
+                            EtG/EtS-fortolkning (etg.ts), formen på en kommentar med
+                            koden den skal limes inn på (kommentar.ts), tastereglene
+                            (tastatur.ts), tallfeltene (tallfelt.ts) og
                             versjonsformatet (versjon.ts)
 docs/endringslogg.md        Rutinen for å føre loggen ved hver endring
 src/hooks/                  Tastatur, tema, hurtigtastmerker, utklippstavle
-src/components/             Stegene, felles kort/pille/knapp/tallfelt/tooltip/ikoner
+src/components/             Stegene, kommentarene og kopieringen av dem
+                            (Kommentarflyt.tsx), felles
+                            kort/pille/knapp/tallfelt/tooltip/ikoner
 src/styles/                 tokens.css (design) + base.css + components.css
 ```
 
@@ -461,6 +466,10 @@ med en loddrett linje til venstre, samme konvensjon overalt i appen. Det skal
 aldri være tvil om at teksten er den kliniske kommentaren og ikke appens egne
 ord.
 
+Kommentarblokkene og hele kopieringen av dem ligger i
+`src/components/Kommentarflyt.tsx` og deles med EtG- og EtS-modulen, slik at de
+to oppfører seg likt.
+
 ### Reglene modulen følger
 
 **Diazepam, N-desmetyldiazepam og oksazepam.** Diazepam og desmetyldiazepam
@@ -516,6 +525,45 @@ dem inneholder `*`, `[` eller `]`, doble mellomrom eller mangler sluttegn.
 | Diazepam-gruppen | Kilden knytter fellesskommentaren til at alle tre stoffene er påvist. Er oksazepam påvist sammen med bare ett av de to andre, sier den ingenting, og appen kommenterer stoffene hver for seg — og sier fra om at den gjør det. |
 | Diazepam-gruppen | Overskriften på kombinasjonsraden er forkortet til «OXA ≤ DIAZ + DMI», mens teksten over tabellen sier «OXA ≤ 10 % av summen DIAZ + DMI» to ganger. Appen følger teksten. |
 | Tramadol | Analytt- og kodecellen i tramadolraden har mistet linjeskiftet sitt, så «Tramadol» og «O-desmetyltramadol» står som ett ord. Byggeskriptet ser bort fra mellomrom når det sammenligner, så artefakten stopper ikke byggingen — men en celle som sier noe annet, gjør det. |
+
+## EtG og EtS i urin
+
+Etylglukuronid (`UETGS`) og etylsulfat (`UETS`) er omdannelsesprodukter av
+etanol, og de vurderes alltid sammen. Derfor deler de én modul: det spiller
+ingen rolle om man søker på `EtG`, `EtS`, hele navnet, koden eller på «etanol»
+eller «alkohol» — alt fører til den samme fortolkningen.
+
+Modulen spør om én ting: hva som er påvist i denne prøven. De tre tilfellene
+velges med et klikk eller med tallet sitt, slik konsentrasjonsbåndene også
+velges.
+
+| Tast | Tilfelle | Hva som skjer |
+| --- | --- | --- |
+| `1` | Begge påvist | Fortolkningen legges på `UETS`, og `UETGS` får henvisningen «Se kommentar for EtS i urin.» |
+| `2` | EtG påvist | Kommentaren legges på `UETGS`. `UETS` får ingen kommentar |
+| `3` | EtS påvist | Den samme kommentaren legges på `UETS`. `UETGS` får ingen kommentar |
+
+Skillet er klinisk. Er begge påvist, viser funnet at etanol er inntatt. Er bare
+den ene påvist, kan funnet være forenlig med inntak — men det kan også komme
+etter alkoholfri vin eller øl og andre mat- og drikkevarer, og kommentaren sier
+det. Teksten for de to enkelttilfellene er derfor den samme; det er bare koden
+den limes inn på som skiller dem.
+
+Kommentarene kopieres som i rusmiddelmodulen: én blokk per kommentar, i den
+rekkefølgen de skal limes inn, `Enter` eller `Space` tar den som står for tur,
+og når alt er kopiert, tilbake til søket. Kommentarteksten står alltid framme
+her — valget mellom de tre tilfellene kan bli feil, og da skal den som limer inn
+kunne lese hva som faktisk havner på utklippstavlen. Byttes tilfellet ut
+underveis, forsvinner kvitteringene for det forrige: de gjaldt en annen
+fortolkning.
+
+Det valgte tilfellet er merket med både farge og hake, slik at valget ikke må
+leses av fargen alene.
+
+> **Ordlyden i kommentarene** er bestilt av den som eier appen, og skal ikke
+> endres uten at eieren uttrykkelig har bedt om det og bekreftet den nye
+> ordlyden. Tekstene står i `src/domain/etg.ts`, og testene holder dem tegn for
+> tegn.
 
 ## Tilgjengelighet
 

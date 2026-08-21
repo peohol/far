@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { analytes, findByCode } from '../domain/analytes'
+import { ETG_ANALYTT } from '../domain/etg'
 import { RUS_ANALYTTER, rusModulFor } from '../domain/rus'
 import { search } from '../domain/search'
 import { THC_ANALYTT } from '../domain/thc'
@@ -81,7 +82,7 @@ describe('veien tilbake fra en analytt som valgte seg selv', () => {
 
 describe('analytter med egen fortolkningsmodul', () => {
   /** Søket slik App kjører det: hele utvalget, ikke bare psykofarmaka. */
-  const pool = [...analytes, THC_ANALYTT, ...RUS_ANALYTTER]
+  const pool = [...analytes, THC_ANALYTT, ...RUS_ANALYTTER, ETG_ANALYTT]
 
   function velg(kode: string): State {
     const analyte = pool.find((a) => a.kode === kode)
@@ -94,16 +95,22 @@ describe('analytter med egen fortolkningsmodul', () => {
     expect(stageOf(velg('DIAZ · DMI · OXA'))).toBe('rus')
   })
 
-  it('holder de tre veiene fra søket fra hverandre', () => {
+  it('går til EtG- og EtS-modulen i stedet for til konsentrasjonsbåndene', () => {
+    expect(stageOf(velg(ETG_ANALYTT.kode))).toBe('etg')
+  })
+
+  it('holder veiene fra søket fra hverandre', () => {
     expect(stageOf(velg('IRCAK'))).toBe('thc')
     expect(stageOf(velg('KVE'))).toBe('band')
   })
 
-  it('går tilbake til søket fra rusmiddelmodulen', () => {
-    const tilbake = reducer(velg('APR'), { type: 'tilbake' })
+  it('går tilbake til søket fra fortolkningsmodulene', () => {
+    for (const kode of ['APR', 'IRCAK', ETG_ANALYTT.kode]) {
+      const tilbake = reducer(velg(kode), { type: 'tilbake' })
 
-    expect(stageOf(tilbake)).toBe('search')
-    expect(tilbake.analyte).toBeNull()
+      expect(stageOf(tilbake), kode).toBe('search')
+      expect(tilbake.analyte, kode).toBeNull()
+    }
   })
 
   it('lar hver oppføring finne modulen sin', () => {

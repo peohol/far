@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.1.0',
+    dato: '2026-08-21',
+    sammendrag: 'Ny modul: EtG og EtS i urin',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Betydelig omfang',
+    punkter: [
+      'EtG (etylglukuronid, UETGS) og EtS (etylsulfat, UETS) kan nå kommenteres. De to deler én fortolkning, så det spiller ingen rolle om du søker på forkortelsen, hele navnet, koden eller på «etanol» eller «alkohol».',
+      'Du velger ett av tre tilfeller: begge påvist, bare EtG påvist eller bare EtS påvist. Valget tas med et klikk eller med tastene 1, 2 og 3.',
+      'Er begge påvist, får UETS kommentaren om at etanol er inntatt, og UETGS henvisningen dit. Er bare den ene påvist, får den påviste analytten kommentaren om at funnet kan være forenlig med inntak, og den andre ingen kommentar.',
+      'Kommentarene kopieres én av gangen med Enter, i den rekkefølgen de skal limes inn, slik de gjør for stoffene med ruspotensial i serum.',
+    ],
+  },
+  {
     versjon: '1.0.0',
     dato: '2026-08-17',
     sammendrag: 'Appen har fått versjonsnummer og endringslogg',

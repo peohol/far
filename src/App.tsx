@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { SearchStep } from './components/SearchStep'
 import { BandStep } from './components/BandStep'
+import { EtgStep } from './components/EtgStep'
 import { PasteStep } from './components/PasteStep'
 import { RusStep } from './components/RusStep'
 import { ThcStep } from './components/ThcStep'
@@ -10,6 +11,7 @@ import { Toolbar } from './components/Toolbar'
 import { Versjonspille } from './components/Versjonspille'
 import { analytes } from './domain/analytes'
 import { bands as bandsOf, findBand, type Band } from './domain/bands'
+import { ETG_ANALYTT } from './domain/etg'
 import type { Rute } from './domain/flytting'
 import { RUS_ANALYTTER, rusModulFor } from './domain/rus'
 import { search } from './domain/search'
@@ -55,10 +57,10 @@ export default function App() {
   const [bevisFra, setBevisFra] = useState<Rute | null>(null)
 
   const stage = stageOf(state)
-  // Søket dekker analyttene fra datasettet pluss de to kategoriene som har
-  // egne fortolkningsmoduler i stedet for konsentrasjonsbånd: THC-syre i urin
-  // og stoffene med ruspotensial i serum.
-  const pool = useMemo(() => [...analytes, THC_ANALYTT, ...RUS_ANALYTTER], [])
+  // Søket dekker analyttene fra datasettet pluss kategoriene som har egne
+  // fortolkningsmoduler i stedet for konsentrasjonsbånd: THC-syre i urin,
+  // stoffene med ruspotensial i serum og etanolmarkørene EtG og EtS i urin.
+  const pool = useMemo(() => [...analytes, THC_ANALYTT, ...RUS_ANALYTTER, ETG_ANALYTT], [])
   const hits = useMemo(() => search(state.query, pool), [state.query, pool])
 
   // Tilstandsmaskinen trenger alternativene det nye søket gir for å se om det
@@ -223,6 +225,10 @@ export default function App() {
             copy={copy}
             flashAt={show}
           />
+        )}
+
+        {vist === 'etg' && (
+          <EtgStep onBack={back} onFinish={reset} copy={copy} flashAt={show} />
         )}
 
         {vist === 'paste' && state.analyte && band && (
