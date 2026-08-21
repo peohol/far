@@ -493,6 +493,20 @@
   border-color: var(--niva-over-linje);
 }
 
+/* Knapper som ikke er et konsentrasjonsbånd: EtG- og EtS-modulens tre
+   tilfeller. De skal ikke låne nivåfargene — her ville en farge sagt noe
+   klinisk som ikke er ment — men de har samme form, så knappen kjenner seg
+   igjen som bevis over lim-inn-kortet. */
+.bandknapp--noytral,
+.kopibevis--noytral {
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  /* Kanten er det som skiller knappen fra kortet — den hevede flaten alene
+     ligger for tett på kortfargen i mørkt tema — og må derfor bære kravet til
+     kontrast for grafiske elementer på egen hånd. */
+  border-color: var(--blekk-svak);
+}
+
 /* --- Steg 3: lim inn ---------------------------------------------------- */
 
 /* Beviset og kortet det hører til, tettere sammen enn stegets egen luft. */
@@ -1303,11 +1317,12 @@
   list-style: disc;
 }
 
-/* --- Rusmiddelmodulen ---------------------------------------------------- */
+/* --- Fortolkningsmodulene -----------------------------------------------
+   Det modulene deler: korthodet med kodene modulen dekker, rammen rundt
+   spørsmålene, og blokkene kommentarene kopieres fra — de siste også i
+   limsteget for EtG og EtS. Det hver modul har for seg står lenger nede. */
 
-/* Samme oppbygning som THC-modulen: ett skjema fra topp til bunn, med
-   analyttkortet over og kommentarene under. */
-.rus {
+.modul {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1316,15 +1331,22 @@
 }
 
 /* Alle kodene modulen dekker, ved siden av hverandre. */
-.rus-koder {
+.modul-koder {
   display: flex;
   flex-wrap: wrap;
   gap: var(--rom-2);
 }
 
-/* Ett spørsmål av gangen — hva som er påvist, tallene 10 %-regelen trenger,
-   og fortolkningen som ikke lar seg regne ut. */
-.rus-valg {
+/* Navnene bak forkortelsene, der modulen er kjent på forkortelsene sine. */
+.modul-undertittel {
+  font-size: var(--tekst-s);
+  line-height: 1.5;
+  color: var(--blekk-dempet);
+}
+
+/* Ett spørsmål av gangen — hva som er påvist, tallene en regel trenger, og
+   fortolkningen som ikke lar seg regne ut. */
+.modul-valg {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1336,7 +1358,7 @@
   border-radius: var(--runding-m);
 }
 
-.rus-valg legend {
+.modul-valg legend {
   padding: 0 var(--rom-1);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-medium);
@@ -1347,13 +1369,106 @@
 
 /* Koden bak navnet i avkryssingene: samme opplysning som pillen øverst, men
    her for å knytte navnet til koden svaret ligger under i labsystemet. */
-.rus-valg__kode {
+.modul-valg__kode {
   font-family: var(--skrift-mono);
   font-size: var(--tekst-xs);
   font-weight: var(--vekt-normal);
   letter-spacing: 0.06em;
   color: var(--blekk-dempet);
 }
+
+.modul-resultat {
+  gap: var(--rom-4);
+}
+
+/* Kommentarene i den rekkefølgen de skal limes inn. Nummereringen fra <ol>
+   vises ikke — merkelappen over hver kommentar sier hva den er — men den gir
+   rekkefølgen mening for skjermlesere. */
+.plasseringer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  list-style: none;
+}
+
+/* Én kommentar med koden den skal limes inn på. Tilleggskommentaren står
+   dempet: den er en henvisning, ikke selve fortolkningen. */
+.plassering {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding: var(--rom-4);
+  text-align: left;
+  background: var(--flate-hevet);
+  border-radius: var(--runding-m);
+}
+
+.plassering--tillegg {
+  background: transparent;
+  border: var(--kant) solid var(--linje);
+}
+
+.plassering__merke {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.plassering__instruks {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
+/* Koden er det eneste på skjermen brukeren må lese av og handle på, og står
+   derfor like stort her som i limsteget for psykofarmaka. Er det flere koder,
+   skiller de lag med god luft, så de ikke leses som ett ord. */
+.plassering__koder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.9em;
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-xl);
+  font-weight: var(--vekt-tung);
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  overflow-wrap: anywhere;
+}
+
+.plassering__handling {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--rom-3);
+  width: 100%;
+  margin-top: var(--rom-1);
+}
+
+/* Kvitteringen blir stående etter at blinket er borte, så det går fram hva
+   som alt er limt inn når kommentarene tas én av gangen. */
+.kopiert {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  margin-right: auto;
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  color: var(--niva-innenfor-blekk);
+}
+
+.kopiert__ikon {
+  font-size: 1.25em;
+}
+
+/* --- Rusmiddelmodulen ---------------------------------------------------- */
 
 .rus-hjelp {
   font-size: var(--tekst-s);
@@ -1373,10 +1488,6 @@
   width: 100%;
 }
 
-.rus-resultat {
-  gap: var(--rom-4);
-}
-
 /* Tilfellet kilden ikke har en standardkommentar for. Her er det ingenting å
    kopiere, og beskjeden om hvorfor er hele innholdet i kortet — den bærer
    derfor samme skriftstørrelse som en kommentar ville hatt. */
@@ -1392,9 +1503,6 @@
   border-radius: var(--runding-m);
 }
 
-/* Kommentarene i den rekkefølgen de skal limes inn. Nummereringen fra <ol>
-   vises ikke — merkelappen over hver kommentar sier hva den er — men den gir
-   rekkefølgen mening for skjermlesere. */
 /* Det kilden sier om hvordan saken skal håndteres. Står som brødtekst under
    beskjeden, ikke som enda en varselrute — det er bakgrunn, ikke alarm. */
 .rus-veiledning {
@@ -1405,88 +1513,32 @@
   color: var(--blekk-dempet);
 }
 
-.rus-plasseringer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-4);
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  list-style: none;
+/* --- EtG- og EtS-modulen -------------------------------------------------
+   Valget er bygd av båndknappene og limsteget av lim-inn-kortet, så modulen
+   har lite for seg selv. Her står det ene: limsteget viser kommentaren under
+   koden, fordi to kommentarer kan stå i bildet samtidig og det må gå fram
+   hvilken som hører til hvilken kode. */
+
+.steg--etg-paste .thc-kommentar {
+  /* Fyller kortet, så den loddrette linja står i samme spor som i de andre
+     modulene selv om resten av kortet er midtstilt. */
+  align-self: stretch;
 }
 
-/* Én kommentar med koden den skal limes inn på. Tilleggskommentaren står
-   dempet: den er en henvisning, ikke selve fortolkningen. */
-.rus-plassering {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-2);
-  padding: var(--rom-4);
-  text-align: left;
-  background: var(--flate-hevet);
-  border-radius: var(--runding-m);
-}
-
-.rus-plassering--tillegg {
-  background: transparent;
-  border: var(--kant) solid var(--linje);
-}
-
-.rus-plassering__merke {
-  font-size: var(--tekst-s);
-  font-weight: var(--vekt-medium);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--blekk-dempet);
-}
-
-.rus-plassering__instruks {
-  display: flex;
-  align-items: center;
-  gap: var(--rom-2);
-  font-size: var(--tekst-s);
-  color: var(--blekk-dempet);
-}
-
-/* Koden er det eneste på skjermen brukeren må lese av og handle på, og står
-   derfor like stort her som i limsteget for psykofarmaka. Er det flere koder,
-   skiller de lag med god luft, så de ikke leses som ett ord. */
-.rus-plassering__koder {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 0.9em;
-  font-family: var(--skrift-mono);
-  font-size: var(--tekst-xl);
-  font-weight: var(--vekt-tung);
-  line-height: 1.1;
-  letter-spacing: 0.06em;
-  overflow-wrap: anywhere;
-}
-
-.rus-plassering__handling {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
+/* To kommentarer i samme bilde. Kortene strammes inn så begge står framme
+   uten å måtte rulles fram — det skal gå fram med én gang at det er to koder
+   å lime inn på. Koden er fortsatt det største i kortet. */
+.limstabel--flere .limInn {
   gap: var(--rom-3);
-  width: 100%;
-  margin-top: var(--rom-1);
+  padding: var(--rom-4);
 }
 
-/* Kvitteringen blir stående etter at blinket er borte, så det går fram hva
-   som alt er limt inn når kommentarene tas én av gangen. */
-.rus-kopiert {
-  display: flex;
-  align-items: center;
-  gap: var(--rom-2);
-  margin-right: auto;
-  font-size: var(--tekst-s);
-  font-weight: var(--vekt-medium);
-  color: var(--niva-innenfor-blekk);
+.limstabel--flere .limInn__instruks {
+  font-size: var(--tekst-m);
 }
 
-.rus-kopiert__ikon {
-  font-size: 1.25em;
+.limstabel--flere .limInn__kode {
+  font-size: var(--tekst-xl);
 }
 
 /* --- Sammenleggbare seksjoner («details») -------------------------------

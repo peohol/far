@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.2.0',
+    dato: '2026-08-21',
+    sammendrag: 'Ny modul: EtG og EtS i urin',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Betydelig omfang',
+    punkter: [
+      'EtG (etylglukuronid, UETGS) og EtS (etylsulfat, UETS) kan nå kommenteres. De to deler én fortolkning, så det spiller ingen rolle om du søker på forkortelsen, hele navnet, koden eller på «etanol» eller «alkohol».',
+      'Du velger ett av tre tilfeller: begge påvist, bare EtG påvist eller bare EtS påvist. Knappene virker som båndknappene ellers i appen: et klikk eller tasten 1, 2 eller 3 kopierer kommentaren med det samme og tar deg videre til «Lim inn kommentaren på». Knappen du brukte følger med og blir stående over kortet, så du ser hva som ligger på utklippstavlen.',
+      'Er bare den ene påvist, får den påviste analytten kommentaren om at funnet kan være forenlig med inntak, og den andre ingen kommentar. Enter eller mellomrom avslutter.',
+      'Er begge påvist, står begge kommentarene i limsteget med hver sin kode: kommentaren om at etanol er inntatt på UETS, og henvisningen dit på UETGS. Enter eller mellomrom kopierer henvisningen, og én gang til avslutter.',
+      'Esc går tilbake til valget hvis du kom til å velge feil.',
+      'Tallene på de tre knappene står alltid, også når hurtigtastmerkene ellers er slått av.',
+    ],
+  },
+  {
     versjon: '1.1.0',
     dato: '2026-08-21',
     sammendrag: 'THC-modulen kan tolke en forrige prøve som var «ikke påvist»',

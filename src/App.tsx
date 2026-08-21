@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { SearchStep } from './components/SearchStep'
 import { BandStep } from './components/BandStep'
+import { EtgPasteStep } from './components/EtgPasteStep'
+import { EtgStep } from './components/EtgStep'
 import { PasteStep } from './components/PasteStep'
 import { RusStep } from './components/RusStep'
 import { ThcStep } from './components/ThcStep'
@@ -10,6 +12,7 @@ import { Toolbar } from './components/Toolbar'
 import { Versjonspille } from './components/Versjonspille'
 import { analytes } from './domain/analytes'
 import { bands as bandsOf, findBand, type Band } from './domain/bands'
+import { alternativFor, ETG_ALTERNATIVER, ETG_ANALYTT, type EtgAlternativ } from './domain/etg'
 import type { Rute } from './domain/flytting'
 import { RUS_ANALYTTER, rusModulFor } from './domain/rus'
 import { search } from './domain/search'
@@ -18,7 +21,7 @@ import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
 import { digitToIndex, erBekreftelse, useKeyboard } from './hooks/useKeyboard'
 import { useTheme } from './hooks/useTheme'
-import { initialState, isIdle, reducer, stageOf } from './state'
+import { initialState, isIdle, reducer, stageOf, type Action, type Stage } from './state'
 
 const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
 
@@ -36,6 +39,12 @@ const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
  */
 const BLINK = 500
 const STEGBYTTE = 130
+
+/**
+ * Steget bildet henger igjen i mens kvitteringen starter der knappen sto. Se
+ * `STEGBYTTE` og `vist`.
+ */
+const DVELER_I: Partial<Record<Stage, Stage>> = { paste: 'band', 'etg-paste': 'etg' }
 
 /** Enter og mellomrom skal ikke både trykke en fokusert knapp og utløse stegets handling. */
 function buttonHasFocus(): boolean {
@@ -55,10 +64,10 @@ export default function App() {
   const [bevisFra, setBevisFra] = useState<Rute | null>(null)
 
   const stage = stageOf(state)
-  // Søket dekker analyttene fra datasettet pluss de to kategoriene som har
-  // egne fortolkningsmoduler i stedet for konsentrasjonsbånd: THC-syre i urin
-  // og stoffene med ruspotensial i serum.
-  const pool = useMemo(() => [...analytes, THC_ANALYTT, ...RUS_ANALYTTER], [])
+  // Søket dekker analyttene fra datasettet pluss kategoriene som har egne
+  // fortolkningsmoduler i stedet for konsentrasjonsbånd: THC-syre i urin,
+  // stoffene med ruspotensial i serum og etanolmarkørene EtG og EtS i urin.
+  const pool = useMemo(() => [...analytes, THC_ANALYTT, ...RUS_ANALYTTER, ETG_ANALYTT], [])
   const hits = useMemo(() => search(state.query, pool), [state.query, pool])
 
   // Tilstandsmaskinen trenger alternativene det nye søket gir for å se om det
@@ -77,25 +86,52 @@ export default function App() {
     setDveler(false)
   }, [])
 
-  const pickBand = useCallback(
-    async (band: Band) => {
-      if (!(await copy(band.kommentar))) {
-        setFailedCopy(band.kommentar)
+  /**
+   * Kopierer kommentaren knappen bærer og går videre til limsteget.
+   *
+   * Knappen står i bildet bare så lenge steget foran vises, enten den ble
+   * klikket eller valgt med et tastetrykk. Blinket legges der den står nå, og
+   * ruten følger med til limsteget, der beviset flyter opp fra den. Veien er
+   * den samme for konsentrasjonsbåndene og for EtG og EtS.
+   */
+  const kopierOgGaaVidere = useCallback(
+    async (tekst: string, velger: string, videre: Action) => {
+      if (!(await copy(tekst))) {
+        setFailedCopy(tekst)
         return
       }
       setFailedCopy(null)
-      // Knappen står her bare så lenge båndsteget vises, enten den ble klikket
-      // eller valgt med et tastetrykk. Blinket legges der den står nå, og ruten
-      // følger med til limsteget, der beviset flyter opp fra den.
-      const knapp = document.querySelector(`[data-band="${band.key}"]`)
+      const knapp = document.querySelector(velger)
       show(knapp)
       setBevisFra(ruteAv(knapp))
-      dispatch({ type: 'velg-band', key: band.key })
+      dispatch(videre)
       setDveler(true)
       window.clearTimeout(stegbytte.current)
       stegbytte.current = window.setTimeout(() => setDveler(false), STEGBYTTE)
     },
     [copy, show],
+  )
+
+  const pickBand = useCallback(
+    (band: Band) =>
+      kopierOgGaaVidere(band.kommentar, `[data-band="${band.key}"]`, {
+        type: 'velg-band',
+        key: band.key,
+      }),
+    [kopierOgGaaVidere],
+  )
+
+  /** Hovedkommentaren for tilfellet kopieres straks; resten hører til limsteget. */
+  const pickEtg = useCallback(
+    (alternativ: EtgAlternativ) => {
+      const forste = alternativ.plasseringer[0]
+      if (!forste) return
+      return kopierOgGaaVidere(forste.tekst, `[data-etg="${alternativ.id}"]`, {
+        type: 'velg-etg',
+        valg: alternativ.id,
+      })
+    },
+    [kopierOgGaaVidere],
   )
 
   const back = useCallback(() => {
@@ -161,6 +197,11 @@ export default function App() {
             if (!band) return
             e.preventDefault()
             void pickBand(band)
+          } else if (stage === 'etg') {
+            const alternativ = ETG_ALTERNATIVER[index]
+            if (!alternativ) return
+            e.preventDefault()
+            void pickEtg(alternativ)
           } else if (stage === 'paste') {
             // Alle sifre avslutter, slik at man kan bruke samme talltast som i
             // forrige bilde for å komme raskt videre.
@@ -174,13 +215,14 @@ export default function App() {
 
   const band = state.analyte && state.bandKey ? findBand(state.analyte, state.bandKey) : undefined
   const rusModul = state.analyte ? rusModulFor(state.analyte) : undefined
+  const etgAlternativ = state.etgValg ? alternativFor(state.etgValg) : undefined
 
   /**
-   * Steget som vises. Det henger etter `stage` i det korte øyeblikket
-   * båndknappene blir stående, så kvitteringen rekker å starte der knappen sto.
-   * Tastene følger `stage` og venter ikke på bildet.
+   * Steget som vises. Det henger etter `stage` i det korte øyeblikket knappene
+   * i steget foran blir stående, så kvitteringen rekker å starte der knappen
+   * sto. Tastene følger `stage` og venter ikke på bildet.
    */
-  const vist = dveler && stage === 'paste' ? 'band' : stage
+  const vist = (dveler && DVELER_I[stage]) || stage
 
   return (
     <div className="app" data-steg={vist} data-tomt={isIdle(state) ? 'ja' : 'nei'}>
@@ -218,6 +260,25 @@ export default function App() {
             // rydde i den fra utsiden.
             key={rusModul.id}
             modul={rusModul}
+            onBack={back}
+            onFinish={reset}
+            copy={copy}
+            flashAt={show}
+          />
+        )}
+
+        {vist === 'etg' && (
+          <EtgStep
+            onPick={(alternativ) => void pickEtg(alternativ)}
+            onBack={back}
+            failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
+          />
+        )}
+
+        {vist === 'etg-paste' && etgAlternativ && (
+          <EtgPasteStep
+            alternativ={etgAlternativ}
+            fra={bevisFra}
             onBack={back}
             onFinish={reset}
             copy={copy}

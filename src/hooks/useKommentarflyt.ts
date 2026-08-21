@@ -1,0 +1,199 @@
+import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react'
+import { kanSkriveOver, type Kommentarplassering } from '../domain/kommentar'
+import { erBekreftelse } from './useKeyboard'
+import { hoppFram } from './useKortHopp'
+
+export interface Kommentarflytvalg {
+  /** Kommentarene fortolkningen ga, i den rekkefølgen de skal limes inn. */
+  plasseringer: Kommentarplassering[]
+  /**
+   * Teller opp for hver endring i skjemaet over. Kvitteringene hører til den
+   * utgaven de ble gitt i, så et nytt svar setter dem tilbake av seg selv —
+   * det som var kopiert gjaldt den forrige fortolkningen. Står fortolkningen
+   * fast, trengs den ikke.
+   */
+  utgave?: number
+  /**
+   * Merkene på kommentarer som alt ligger på utklippstavlen når flyten starter
+   * — den første kommentaren blir kopiert idet knappen trykkes, og er ferdig
+   * før limsteget vises.
+   */
+  alleredeKopiert?: string[]
+  /** Legger teksten på utklippstavlen. Usant når utklippstavlen er utilgjengelig. */
+  copy: (text: string) => Promise<boolean>
+  /** Viser kopikvitteringen ved elementet — samme blink som i båndsteget. */
+  flashAt: (element: Element | null | undefined) => void
+  /** Tilbake til søket, klar for neste analytt. */
+  onFinish: () => void
+}
+
+export interface Kommentarflyt {
+  /** Kommentaren som står for tur, eller `undefined` når alle er kopiert. */
+  neste: Kommentarplassering | undefined
+  alleKopiert: boolean
+  erKopiert: (plassering: Kommentarplassering) => boolean
+  /** Teksten som må kopieres for hånd, når utklippstavlen sa nei. */
+  feilKopi: string | null
+  kopier: (plassering: Kommentarplassering) => void
+  /** Settes på «Ferdig»-knappen, så flyten kan hente den fram i bildet. */
+  ferdigKnapp: RefObject<HTMLButtonElement>
+}
+
+/** Kopiknappen som hører til kommentaren, slik presentasjonen har merket den. */
+function knappFor(merke: string): HTMLElement | null {
+  return document.querySelector<HTMLElement>(`[data-kommentar="${merke}"] .knapp`)
+}
+
+/**
+ * Kopieringen av kommentarene en fortolkning ga.
+ *
+ * Kommentarene kopieres én av gangen, i den rekkefølgen de skal limes inn.
+ * `Enter` tar den neste som står for tur, og til slutt tilbake til søket, så
+ * en hel kommentering går på tastaturet alene. Flyten er felles for
+ * fortolkningsmodulene, slik at den oppfører seg likt uansett hvilken av dem
+ * man står i — bare bildet er ulikt.
+ *
+ * Presentasjonen setter `data-kommentar="<merke>"` på blokka rundt hver
+ * kopiknapp. Det er slik flyten finner igjen knappen som ble brukt og den som
+ * står for tur, uten å måtte vite hvordan blokkene er bygd.
+ */
+export function useKommentarflyt({
+  plasseringer,
+  utgave = 0,
+  alleredeKopiert = [],
+  copy,
+  flashAt,
+  onFinish,
+}: Kommentarflytvalg): Kommentarflyt {
+  /** Merkene på kommentarene som er kopiert, og utgaven de gjaldt. */
+  const [kvitterte, setKvitterte] = useState<{ utgave: number; merker: string[] }>({
+    utgave,
+    merker: alleredeKopiert,
+  })
+  /** Kommentaren som må kopieres for hånd, og utgaven den gjaldt. */
+  const [feilet, setFeilet] = useState<{ utgave: number; tekst: string } | null>(null)
+  /**
+   * Kopieringen som venter på blinket: merket på kommentaren som ble lagt på
+   * utklippstavlen, med et løpenummer så to like kopieringer etter hverandre
+   * begge blinker. Se {@link kopier}.
+   */
+  const [blink, setBlink] = useState<{ utgave: number; merke: string; nr: number } | null>(null)
+  const blinknr = useRef(0)
+  const ferdigKnapp = useRef<HTMLButtonElement>(null)
+
+  // Alt som er kvittert for hører til den utgaven det ble kvittert i. Er
+  // fortolkningen en annen nå, gjelder det ikke lenger.
+  const kopierte = kvitterte.utgave === utgave ? kvitterte.merker : []
+  const feilKopi = feilet?.utgave === utgave ? feilet.tekst : null
+
+  // Neste kommentar som står for tur. Den bærer Enter-merket, så det går fram
+  // hvor tastetrykket lander.
+  const neste = plasseringer.find((p) => !kopierte.includes(p.merke))
+  const alleKopiert = plasseringer.length > 0 && neste === undefined
+
+  /**
+   * Legger kommentaren på utklippstavlen og kvitterer for den.
+   *
+   * Utklippstavlen svarer først etter en tur innom nettleseren, og i mellomtiden
+   * kan skjemaet ha fått et nytt svar. Da gjelder ikke lenger det som ble
+   * kopiert: teksten på utklippstavlen hører til den forrige fortolkningen.
+   * Utfallet føres derfor på utgaven kopieringen startet i, vises bare så lenge
+   * den utgaven er den som gjelder, og skriver ikke over noe som hører til en
+   * nyere ({@link kanSkriveOver}).
+   *
+   * Selve blinket settes i gang i {@link useLayoutEffect} og ikke her — det må
+   * vente til bildet har lagt seg om etter kopieringen.
+   */
+  const kopier = async (plassering: Kommentarplassering) => {
+    const denne = utgave
+    const kopiert = await copy(plassering.tekst)
+
+    // Gikk det ikke, må teksten kunne kopieres for hånd. Gikk det, er det
+    // ingen slik tekst lenger — men bare når det er denne kopieringen den
+    // sto for.
+    const feil = kopiert ? null : { utgave: denne, tekst: plassering.tekst }
+    setFeilet((sa) => (kanSkriveOver(sa, denne) ? feil : sa))
+
+    if (!kopiert) return
+
+    blinknr.current += 1
+    setBlink((sa) =>
+      kanSkriveOver(sa, denne) ? { utgave: denne, merke: plassering.merke, nr: blinknr.current } : sa,
+    )
+    setKvitterte((sa) => {
+      if (!kanSkriveOver(sa, denne)) return sa
+      const merker = sa.utgave === denne ? sa.merker : []
+      if (merker.includes(plassering.merke)) return sa
+      return { utgave: denne, merker: [...merker, plassering.merke] }
+    })
+  }
+
+  /**
+   * Etter hver kopiering: hent fram knappen som nå står for tur, og fest
+   * kvitteringen til knappen som ble brukt.
+   *
+   * Begge deler hører hjemme her og ikke i {@link kopier}. Merket «↵» flytter
+   * seg først når bildet er tegnet på nytt, og «Ferdig»-knappen finnes ikke
+   * før da — og knappen som står for tur er gjerne den brukeren ikke ser, enten
+   * kommentaren ble kopiert med et tastetrykk eller med et klikk på knappen
+   * over. De to hentes fram i ett hopp, så det ene ikke skyver det andre ut
+   * igjen. Blinket festes til slutt, når rullingen er unnagjort: det ligger
+   * fast i vinduet og ville ellers blitt stående igjen der knappen sto.
+   */
+  useLayoutEffect(() => {
+    if (!blink || blink.utgave !== utgave) return
+    const brukt = knappFor(blink.merke)
+    const forTur = neste ? knappFor(neste.merke) : ferdigKnapp.current
+    // Knappen som ble brukt står først: får ikke begge plass, er det den som
+    // må være i bildet når blinket kommer.
+    hoppFram(brukt, forTur)
+    flashAt(brukt)
+    // Kopieringen er det som skal kvitteres for; resten leses av slik bildet
+    // står i det kvitteringen kommer.
+  }, [blink])
+
+  /**
+   * `Enter` tar det neste steget i kommenteringen: kopierer kommentaren som
+   * står for tur, og når alle er kopiert, tilbake til søket.
+   *
+   * Tasten fanges på vinduet før feltene og knappene ser den, slik den også
+   * gjør i THC-modulen. Uten det ville en fokusert knapp trykket seg selv og
+   * et fokusert felt sendt skjemaet. Mellomrom gjør det samme der tasten er
+   * ledig — i konsentrasjonsfeltene, for eksempel — mens den fortsatt trykker
+   * den knappen eller huker av den avkryssingen man står på
+   * ({@link erBekreftelse}). Er det ingenting å kopiere, slippes tasten
+   * gjennom: da skal en fokusert knapp trykkes som ellers i appen.
+   */
+  const paaBekreftelse = useRef<() => boolean>()
+  paaBekreftelse.current = () => {
+    if (neste) {
+      void kopier(neste)
+      return true
+    }
+    if (alleKopiert) {
+      onFinish()
+      return true
+    }
+    return false
+  }
+
+  useEffect(() => {
+    const lytt = (event: KeyboardEvent) => {
+      if (!erBekreftelse(event)) return
+      if (!paaBekreftelse.current?.()) return
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    window.addEventListener('keydown', lytt, true)
+    return () => window.removeEventListener('keydown', lytt, true)
+  }, [])
+
+  return {
+    neste,
+    alleKopiert,
+    erKopiert: (plassering) => kopierte.includes(plassering.merke),
+    feilKopi,
+    kopier: (plassering) => void kopier(plassering),
+    ferdigKnapp,
+  }
+}

@@ -2,6 +2,7 @@ import { Button } from './Button'
 import { Card } from './Card'
 import { Kopibevis } from './Kopibevis'
 import { StepBar } from './StepBar'
+import { bandIkon } from './bandikon'
 import { BackIcon, PasteIcon, PhoneIcon } from './icons'
 import type { Band } from '../domain/bands'
 import type { Rute } from '../domain/flytting'
@@ -29,7 +30,13 @@ export function PasteStep({ analyte, band, fra, onBack, onFinish }: PasteStepPro
       {/* Beviset hører til kortet under og står tettere på det enn stegets
           egen luft, så de to leses som én ting: denne kommentaren, hit. */}
       <div className="limstabel">
-        <Kopibevis band={band} fra={fra} />
+        <Kopibevis
+          tone={band.tone}
+          ikon={bandIkon(band)}
+          tekst={band.label}
+          kommentar={band.kommentar}
+          fra={fra}
+        />
 
         <Card className="limInn">
           <p className="limInn__instruks">

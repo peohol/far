@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { analytes, findByCode } from '../domain/analytes'
+import { ETG_ALTERNATIVER, ETG_ANALYTT } from '../domain/etg'
 import { RUS_ANALYTTER, rusModulFor } from '../domain/rus'
 import { search } from '../domain/search'
 import { THC_ANALYTT } from '../domain/thc'
@@ -81,7 +82,7 @@ describe('veien tilbake fra en analytt som valgte seg selv', () => {
 
 describe('analytter med egen fortolkningsmodul', () => {
   /** Søket slik App kjører det: hele utvalget, ikke bare psykofarmaka. */
-  const pool = [...analytes, THC_ANALYTT, ...RUS_ANALYTTER]
+  const pool = [...analytes, THC_ANALYTT, ...RUS_ANALYTTER, ETG_ANALYTT]
 
   function velg(kode: string): State {
     const analyte = pool.find((a) => a.kode === kode)
@@ -94,16 +95,51 @@ describe('analytter med egen fortolkningsmodul', () => {
     expect(stageOf(velg('DIAZ · DMI · OXA'))).toBe('rus')
   })
 
-  it('holder de tre veiene fra søket fra hverandre', () => {
+  it('går til EtG- og EtS-modulen i stedet for til konsentrasjonsbåndene', () => {
+    expect(stageOf(velg(ETG_ANALYTT.kode))).toBe('etg')
+  })
+
+  it('lar hvert av de tre tilfellene i EtG- og EtS-modulen føre til limsteget', () => {
+    for (const alternativ of ETG_ALTERNATIVER) {
+      const valgt = reducer(velg(ETG_ANALYTT.kode), { type: 'velg-etg', valg: alternativ.id })
+
+      expect(stageOf(valgt), alternativ.id).toBe('etg-paste')
+      expect(valgt.etgValg, alternativ.id).toBe(alternativ.id)
+    }
+  })
+
+  it('går ett steg av gangen tilbake fra limsteget i EtG- og EtS-modulen', () => {
+    const valgt = reducer(velg(ETG_ANALYTT.kode), { type: 'velg-etg', valg: 'begge' })
+
+    // Esc herfra beholder analytten og lar brukeren velge tilfellet på nytt.
+    const tilbake = reducer(valgt, { type: 'tilbake' })
+    expect(stageOf(tilbake)).toBe('etg')
+    expect(tilbake.analyte?.kode).toBe(ETG_ANALYTT.kode)
+    expect(tilbake.etgValg).toBeNull()
+
+    expect(stageOf(reducer(tilbake, { type: 'tilbake' }))).toBe('search')
+  })
+
+  it('lar ikke et tilfelle bli stående når analytten byttes', () => {
+    const valgt = reducer(velg(ETG_ANALYTT.kode), { type: 'velg-etg', valg: 'ets' })
+    const ny = reducer(valgt, { type: 'velg-analytt', analyte: analytt('KVE') })
+
+    expect(ny.etgValg).toBeNull()
+    expect(stageOf(ny)).toBe('band')
+  })
+
+  it('holder veiene fra søket fra hverandre', () => {
     expect(stageOf(velg('IRCAK'))).toBe('thc')
     expect(stageOf(velg('KVE'))).toBe('band')
   })
 
-  it('går tilbake til søket fra rusmiddelmodulen', () => {
-    const tilbake = reducer(velg('APR'), { type: 'tilbake' })
+  it('går tilbake til søket fra fortolkningsmodulene', () => {
+    for (const kode of ['APR', 'IRCAK', ETG_ANALYTT.kode]) {
+      const tilbake = reducer(velg(kode), { type: 'tilbake' })
 
-    expect(stageOf(tilbake)).toBe('search')
-    expect(tilbake.analyte).toBeNull()
+      expect(stageOf(tilbake), kode).toBe('search')
+      expect(tilbake.analyte, kode).toBeNull()
+    }
   })
 
   it('lar hver oppføring finne modulen sin', () => {
