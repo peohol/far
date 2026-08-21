@@ -125,4 +125,17 @@ describe('package.json', () => {
     const pakke = JSON.parse(readFileSync(sti, 'utf8')) as { version?: string }
     expect(pakke.version).toBe(nyesteVersjon(ENDRINGSLOGG))
   })
+
+  // `package-lock.json` gjentar versjonen to steder. Blir de stående igjen på
+  // den forrige, endrer en helt vanlig `npm install` sporede filer, og verktøy
+  // som leser låsefila oppgir feil versjon.
+  it('har samme versjon i låsefila', () => {
+    const sti = fileURLToPath(new URL('../../../package-lock.json', import.meta.url))
+    const laas = JSON.parse(readFileSync(sti, 'utf8')) as {
+      version?: string
+      packages?: Record<string, { version?: string }>
+    }
+    expect(laas.version).toBe(nyesteVersjon(ENDRINGSLOGG))
+    expect(laas.packages?.['']?.version).toBe(nyesteVersjon(ENDRINGSLOGG))
+  })
 })

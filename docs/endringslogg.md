@@ -75,9 +75,12 @@ konkrete.
 
 ## 6. Fullfør
 
-1. Sett `version` i `package.json` lik den nye versjonen.
+1. Sett `version` i `package.json` lik den nye versjonen, og oppdater låsefila
+   med den: `npm install --package-lock-only`. Uten det blir versjonen stående
+   igjen to steder i `package-lock.json`.
 2. Kjør `npm test`. Testen i `src/domain/__tests__/versjon.test.ts` kontrollerer
-   rekkefølge, datoer, merker og at `package.json` stemmer.
+   rekkefølge, datoer, merker og at `package.json` og `package-lock.json`
+   stemmer.
 
 ## Vedlikehold
 
