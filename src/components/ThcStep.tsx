@@ -11,6 +11,8 @@ import { ThcPlot } from './ThcPlot'
 import { Tips } from './Tips'
 import { BackIcon, CopyIcon, ResetIcon } from './icons'
 import {
+  beregnIrcak,
+  formaterIrcak,
   fortolkThc,
   MAKS_DAGER_MELLOM,
   THC_KODE,
@@ -85,6 +87,14 @@ const MARGINTIPS = (
 /** Fast id, så også skalaen kan peke på forklaringen over den. */
 const MARGINTIPS_ID = 'thc-margintips'
 
+/**
+ * Banneret over sikkerhetsmarginen når forrige prøve fortolkes under
+ * påvisningsgrensen. Ordlyden er eierens egen.
+ */
+const UNDER_CUTOFF_BANNER =
+  'Fordi vi nå fortolker konsentrasjoner under påvisningsgrensen, legges større måleusikkerhet til grunn. ' +
+  'Dette gjør fortolkningen mer forsiktig.'
+
 export interface ThcStepProps {
   onBack: () => void
   /** Legger teksten på utklippstavlen. Usant når utklippstavlen er utilgjengelig. */
@@ -110,8 +120,9 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
   /** Tikker for hver nullstilling, så fokuseringen under kan kjøre på nytt. */
   const [fokusTeller, setFokusTeller] = useState(0)
   // Feltet som skal ha fokus er det først synlige — «Forrige prøve» når det
-  // finnes, ellers «Denne prøven». Refen flyttes derfor mellom de to inputene
-  // etter hvilken som faktisk står øverst til venstre akkurat nå.
+  // finnes, ellers «Denne prøven», og under påvisningsgrensen er det UCAK som
+  // står først. Refen flyttes derfor mellom feltene etter hvilket som faktisk
+  // står øverst til venstre akkurat nå.
   const forsteFelt = useRef<HTMLInputElement>(null)
   const kopierKnapp = useRef<HTMLButtonElement>(null)
   const seksjon = useRef<HTMLElement>(null)
@@ -128,6 +139,11 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
 
   const resultat = useMemo(() => fortolkThc(inndata), [inndata])
   const kommentar = resultat.type === 'kommentar' ? resultat.kommentar : null
+
+  // Avkryssingen står inne i «Forrige prøve», så den gjelder bare når det
+  // finnes en forrige prøve å fortolke.
+  const underCutoff = !inndata.ingenTidligere && inndata.forrigeUnderCutoff
+  const beregnetIrcak = underCutoff ? beregnIrcak(inndata.forrigeUcak, inndata.forrigeNkre) : null
 
   // Stoppet skalaen står på. Stoppene dekker alle verdiene typen tillater,
   // så oppslaget treffer.
@@ -286,14 +302,52 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
               {!inndata.ingenTidligere && (
                 <fieldset className="thc-prove">
                   <legend>Forrige prøve</legend>
-                  <label className="thc-felt">
-                    <span>IRCAK</span>
-                    <Tallfelt
-                      ref={forsteFelt}
-                      value={inndata.forrigeVerdi}
-                      onChange={(verdi) => sett('forrigeVerdi', verdi)}
+                  {/* Var urinen så fortynnet at THC-syre havnet under
+                      påvisningsgrensen, svarer labsystemet «ikke påvist» og
+                      regner ingen IRCAK. De to interne tallene tastes da i
+                      stedet, og IRCAK regnes ut av dem. */}
+                  <label className="avkryssing avkryssing--felt">
+                    <input
+                      type="checkbox"
+                      checked={inndata.forrigeUnderCutoff}
+                      onChange={(e) => sett('forrigeUnderCutoff', e.target.checked)}
                     />
+                    Under cut-off
                   </label>
+                  {inndata.forrigeUnderCutoff ? (
+                    <>
+                      <label className="thc-felt">
+                        <span>UCAK (THC-syre)</span>
+                        <Tallfelt
+                          ref={forsteFelt}
+                          value={inndata.forrigeUcak}
+                          onChange={(verdi) => sett('forrigeUcak', verdi)}
+                        />
+                      </label>
+                      <label className="thc-felt">
+                        <span>NKRE (kreatinin)</span>
+                        <Tallfelt
+                          value={inndata.forrigeNkre}
+                          onChange={(verdi) => sett('forrigeNkre', verdi)}
+                        />
+                      </label>
+                      <p className="thc-beregnet" role="status">
+                        Beregnet IRCAK:{' '}
+                        <strong>
+                          {beregnetIrcak === null ? '–' : formaterIrcak(beregnetIrcak)}
+                        </strong>
+                      </p>
+                    </>
+                  ) : (
+                    <label className="thc-felt">
+                      <span>IRCAK</span>
+                      <Tallfelt
+                        ref={forsteFelt}
+                        value={inndata.forrigeVerdi}
+                        onChange={(verdi) => sett('forrigeVerdi', verdi)}
+                      />
+                    </label>
+                  )}
                   <label className="thc-felt">
                     <span>Prøvedato</span>
                     <input
@@ -337,6 +391,11 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                 til — samme grunn som datoene skjules av. */}
             {!inndata.ingenTidligere && (
               <div className="thc-margin">
+                {underCutoff && (
+                  <p className="thc-banner" role="note">
+                    {UNDER_CUTOFF_BANNER}
+                  </p>
+                )}
                 <div className="thc-margin__hode">
                   <Tips forklaring={MARGINTIPS} id={MARGINTIPS_ID}>
                     Sikkerhetsmargin

@@ -912,6 +912,13 @@
   cursor: pointer;
 }
 
+/* Avkryssingen inne i et prøve-fieldset står blant ledetekstene til feltene,
+   og skal ikke rope høyere enn dem. */
+.avkryssing--felt {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
 .avkryssing input[type='checkbox'] {
   width: 1.2em;
   height: 1.2em;
@@ -977,6 +984,39 @@
 
 .thc-input:hover {
   border-color: var(--linje-sterk);
+}
+
+/* IRCAK regnet ut av UCAK og NKRE, rett under feltene den kommer fra. */
+.thc-beregnet {
+  font-size: var(--tekst-s);
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  color: var(--blekk-dempet);
+}
+
+.thc-beregnet strong {
+  font-weight: var(--vekt-tung);
+  color: var(--blekk);
+}
+
+/* Banneret over sikkerhetsmarginen når forrige prøve fortolkes under
+   påvisningsgrensen. Det skal ikke gå an å stille på marginen uten å ha sett
+   at fortolkningen alt regner med større måleusikkerhet, så det står i
+   varselfargene med en tykk kant mot teksten. */
+.thc-banner {
+  width: 100%;
+  margin-bottom: var(--rom-2);
+  padding: var(--rom-2) var(--rom-3);
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  line-height: 1.5;
+  text-align: left;
+  text-wrap: pretty;
+  color: var(--varsel-blekk);
+  background: var(--varsel-flate);
+  border: var(--kant) solid var(--varsel-linje);
+  border-left-width: var(--kant-tykk);
+  border-radius: var(--runding-s);
 }
 
 /* Sikkerhetsmarginen, nederst i inndatakortet: en skala med tre stopp. */
