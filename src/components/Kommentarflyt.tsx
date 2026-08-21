@@ -3,7 +3,7 @@ import { Button } from './Button'
 import { ManualCopy } from './ManualCopy'
 import { useTips } from './Tips'
 import { CheckIcon, CopyIcon, PasteIcon } from './icons'
-import type { Kommentarplassering } from '../domain/kommentar'
+import { kanSkriveOver, type Kommentarplassering } from '../domain/kommentar'
 import { hoppFram } from '../hooks/useKortHopp'
 import { erBekreftelse } from '../hooks/useKeyboard'
 
@@ -83,25 +83,31 @@ export function Kommentarflyt({
    * Utklippstavlen svarer først etter en tur innom nettleseren, og i mellomtiden
    * kan skjemaet ha fått et nytt svar. Da gjelder ikke lenger det som ble
    * kopiert: teksten på utklippstavlen hører til den forrige fortolkningen.
-   * Kvitteringen føres derfor på utgaven kopieringen startet i, og vises bare
-   * så lenge den utgaven fortsatt er den som gjelder.
+   * Utfallet føres derfor på utgaven kopieringen startet i, vises bare så lenge
+   * den utgaven er den som gjelder, og skriver ikke over noe som hører til en
+   * nyere ({@link kanSkriveOver}).
    *
    * Selve blinket settes i gang i {@link useLayoutEffect} og ikke her — det må
    * vente til kortet har lagt seg om etter kopieringen.
    */
   const kopier = async (plassering: Kommentarplassering) => {
     const denne = utgave
-    if (!(await copy(plassering.tekst))) {
-      setFeilet({ utgave: denne, tekst: plassering.tekst })
-      return
-    }
+    const kopiert = await copy(plassering.tekst)
 
-    setFeilet(null)
+    // Gikk det ikke, må teksten kunne kopieres for hånd. Gikk det, er det
+    // ingen slik tekst lenger — men bare når det er denne kopieringen den
+    // sto for.
+    const feil = kopiert ? null : { utgave: denne, tekst: plassering.tekst }
+    setFeilet((sa) => (kanSkriveOver(sa, denne) ? feil : sa))
+
+    if (!kopiert) return
+
     blinknr.current += 1
-    setBlink({ utgave: denne, merke: plassering.merke, nr: blinknr.current })
+    setBlink((sa) =>
+      kanSkriveOver(sa, denne) ? { utgave: denne, merke: plassering.merke, nr: blinknr.current } : sa,
+    )
     setKvitterte((sa) => {
-      // En kopiering som ble innhentet av en nyere skal ikke skrive over den.
-      if (sa.utgave > denne) return sa
+      if (!kanSkriveOver(sa, denne)) return sa
       const merker = sa.utgave === denne ? sa.merker : []
       if (merker.includes(plassering.merke)) return sa
       return { utgave: denne, merker: [...merker, plassering.merke] }
