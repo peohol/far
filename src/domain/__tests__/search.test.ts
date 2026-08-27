@@ -46,13 +46,26 @@ describe('search', () => {
     // og skal ikke dra med seg hver eneste sumanalyse på et par bokstaver.
     expect(codes('sum')).toEqual([])
     expect(codes('su')).toEqual([])
-    expect(codes('s')).toEqual(['SERT'])
+    // Sertralin på navnet, kanrenon på aliaset «spironolakton» — ingen
+    // sumanalyser.
+    expect(codes('s')).toEqual(['SERT', 'KANR'])
     expect(codes('sum kariprazin')).toEqual([])
   })
 
   it('bruker aliaser fra datasettet', () => {
     expect(codes('bupropion')).toContain('HBUP')
     expect(codes('hydroksyrisperidon')).toContain('PALI')
+    // Kanrenon er metabolitten av spironolakton, og det er moderstoffet som
+    // står på rekvisisjonen.
+    expect(codes('spironolakton')).toEqual(['KANR'])
+  })
+
+  it('finner metabolittanalyttene på moderstoffet de heter etter', () => {
+    // «Enalaprilat» begynner på «enalapril», så navnet finner analytten uten
+    // at det trengs et alias.
+    expect(codes('enalapril')).toEqual(['ENAT'])
+    expect(codes('ramipril')).toEqual(['RAMAT'])
+    expect(codes('losartan')).toEqual(['LOSYR'])
   })
 
   it('er ufølsom for store bokstaver og norske vokaler', () => {

@@ -1,4 +1,9 @@
-/** Datamodellen som `scripts/build_data.py` produserer fra kommentarer.pdf. */
+/**
+ * Datamodellen byggeskriptene i `scripts/` produserer: psykofarmaka fra
+ * kommentarer.pdf og antihypertensiver fra AHT.docx. De to kategoriene deler
+ * modell fordi de går samme vei gjennom appen — søk, konsentrasjonsbånd, lim
+ * inn — og skiller seg bare på hvilke referansetall analyttkortet viser.
+ */
 
 /** De tre nivåene en målt konsentrasjon kan havne i. */
 export const LEVELS = ['under', 'innenfor', 'over'] as const
@@ -28,6 +33,22 @@ export interface LevelComment {
   kommentar: string
 }
 
+/**
+ * Referansetallene en antihypertensiv analytt viser i stedet for
+ * referanseområde og ringegrense. Kategorien har ingen ringegrense.
+ */
+export interface Antihypertensivgrenser {
+  /** Nedre teknisk måleområde: under denne kan konsentrasjonen ikke tallfestes. */
+  pavisningsgrense: number
+  /**
+   * Terapiområdet slik kilden oppgir det — ikke det samme som båndet
+   * «innenfor», som også dekker konsentrasjonene over terapiområdet men under
+   * toksisk. `null` for bumetanid og furosemid, som ikke har noe definert
+   * terapiområde.
+   */
+  terapiomrade: Interval | null
+}
+
 export interface Analyte {
   /** Koden labsystemet bruker, f.eks. «AMTNORSUM». */
   kode: string
@@ -42,6 +63,8 @@ export interface Analyte {
   referanseomrade: Interval | null
   maleomrade: MeasuringRange
   ringegrense: number | null
+  /** Satt for antihypertensiver, som viser andre referansetall enn psykofarmaka. */
+  antihypertensiv?: Antihypertensivgrenser
   /** Konsentrasjoner under denne er «under». */
   nedreGrense: number
   /** Konsentrasjoner fra og med denne er «over». */
@@ -51,7 +74,7 @@ export interface Analyte {
   aliaser: string[]
 }
 
-/** En rettelse gjort i teksten fra PDF-en, for etterprøving. */
+/** En rettelse gjort i teksten fra kilden, for etterprøving. */
 export interface Correction {
   kategori: string
   hvor: string

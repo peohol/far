@@ -4,6 +4,9 @@ Verktøy for å kommentere farmakologiske analyser. Man søker opp en analytt,
 velger hvilket konsentrasjonsbånd svaret havner i, og får den tilhørende
 kommentaren kopiert til utklippstavlen — hele veien med tastaturet.
 
+Appen dekker psykofarmaka, antihypertensiver, THC-syre i urin, stoffene med
+ruspotensial i serum og etanolmarkørene EtG og EtS.
+
 ## Kom i gang
 
 ```bash
@@ -14,11 +17,12 @@ npm test           # enhetstester, inkludert kontrastmåling av paletten
 npm run data       # bygger datasettene på nytt fra kildene i originaldata/
 ```
 
-`npm run data` bygger både `src/data/analytter.json` (fra `kommentarer.pdf`) og
-`src/data/rusmidler.json` (fra `rusmidler.md`). Datasettene er sjekket inn, så
-det trengs bare når kildene endres. PDF-lesingen krever Python 3 med
-`pdfplumber` (`pip install pdfplumber`); markdown-lesingen krever ingenting
-ekstra.
+`npm run data` bygger `src/data/analytter.json` (fra `kommentarer.pdf`),
+`src/data/rusmidler.json` (fra `rusmidler.md`) og
+`src/data/antihypertensiver.json` (fra `AHT.docx`). Datasettene er sjekket inn,
+så det trengs bare når kildene endres. PDF-lesingen krever Python 3 med
+`pdfplumber` (`pip install pdfplumber`); markdown- og Word-lesingen krever
+ingenting ekstra.
 
 ## Slik brukes appen
 
@@ -108,13 +112,18 @@ valget huskes til neste gang.
 ```
 scripts/build_data.py       Leser kommentarer.pdf og bygger psykofarmakadatasettet
 scripts/build_rusmidler.py  Leser rusmidler.md og bygger rusmiddeldatasettet
+scripts/build_antihypertensiver.py
+                            Leser AHT.docx og bygger antihypertensivdatasettet
 src/data/analytter.json     Generert datasett (sjekket inn)
 src/data/rusmidler.json     Generert datasett (sjekket inn)
+src/data/antihypertensiver.json
+                            Generert datasett (sjekket inn)
 src/data/aliaser.json       Håndholdte ekstra søkeord per analyttkode
 src/data/endringslogg.ts    Endringsloggen appen viser (håndholdt)
 src/types.ts                Datamodellen
 src/state.ts                Tilstandsmaskinen for stegene
 src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, kontrast,
+                            referansetallene analyttkortet viser (piller.ts),
                             tooltipplassering (tipsplassering.ts), flukten til
                             kopibeviset (flytting.ts), THC-fortolkning (thc.ts) med
                             figurgrunnlaget (thcPlot.ts), rusmiddelfortolkning (rus.ts),
@@ -229,8 +238,9 @@ leses lett som noe annet enn de andre. Knappene deler derfor bredden i kortet
 likt mellom seg og krymper skriften i stedet for å bryte raden. Grensen går der
 tallene ville blitt for små til å leses; da brytes raden heller enn å klippe et
 intervall, men det skjer først på skjermer smalere enn en mobil på høykant.
-Tallet CSS-en er dimensjonert etter — den lengste etiketten datasettet gir —
-holdes i sjakk av en test.
+Tallet CSS-en er dimensjonert etter — den bredeste etiketten datasettene gir —
+holdes i sjakk av en test. Bredden måles i siffer: tallene står med
+tabellbreddstall, mens komma, mellomrom og tankestrek er smale.
 
 ### Rettelser gjort i teksten
 
@@ -266,6 +276,102 @@ Disse lot seg ikke rette maskinelt. De ligger i `meta.avvik` i datasettet.
 Lamotrigin er oppgitt med stjerne på alle tallene i PDF-en, uten at fotnoten
 finnes i dokumentet. Datasettet tolker det som at analytten måles i **µmol/L**
 mens alle de andre måles i nmol/L, og setter `enhet` deretter.
+
+## Datasettet for antihypertensiver
+
+Tabellen i `originaldata/AHT.docx` har tre rader per analytt — én per
+kommentar — og 25 analytter. Kilden oppgir **fem** konsentrasjonsintervaller,
+mens appen har tre knapper, så intervallene slås sammen:
+
+| Knapp | Slått sammen av | Enalaprilat |
+| --- | --- | --- |
+| under | «Under nedre teknisk måleområde» + `L` | `< 1` + `1–9` → `< 10` |
+| innenfor | «Terapiområdet» + `H` | `10–300` + `301–1199` → `10 – 1199` |
+| over | «Toksisk konsentrasjon» | `≥ 1200` |
+
+`L` og `H` er kildens merker for lav og høy konsentrasjon innenfor
+måleområdet, og de har samme kommentar som intervallet de hører til: `L` deler
+kommentar med «under måleområdet», `H` med terapiområdet. Derfor kan de slås
+sammen uten at noen kommentar går tapt.
+
+Bumetanid og furosemid er unntakene. De har verken `L` eller `H`, og kilden
+kaller mellomintervallet «Innenfor» i stedet for «Terapiområdet» fordi de ikke
+har noe definert terapiområde. De får derfor de samme tre knappene, men ingen
+terapiområdepille.
+
+Kategorien har **ingen ringegrense**. Ingen antihypertensiv analytt deler et
+bånd i to eller får en ringepåminnelse i limsteget.
+
+### Referansetallene på analyttkortet
+
+Der psykofarmaka viser referanseområde og ringegrense, viser antihypertensiver
+tre andre tall. Hvilke piller en analytt får, leses av datasettet og ikke av
+gruppenavnet; reglene ligger i `src/domain/piller.ts` og er dekket av tester.
+
+| Pille | Hvor tallet kommer fra |
+| --- | --- |
+| Påvisningsgrense | Tallet under «Under nedre teknisk måleområde» |
+| Terapiområde | «Terapiområdet» slik kilden oppgir det — smalere enn båndet, som også dekker `H` |
+| Toksisk | Samme tall som det øverste båndet begynner på |
+
+Enheten står bare på den første pillen, som ellers i appen. Den toksiske pillen
+bærer fargen til det øverste båndet, så pillen og knappen leses som det samme
+tallet.
+
+| Analytt | Piller | Bånd |
+| --- | --- | --- |
+| ENAT (Enalaprilat) | 1 nmol/L · `10 – 300` · `≥ 1200` | `< 10` · `10 – 1199` · `≥ 1200` |
+| EPLR (Eplerenon, desimaler) | 2 nmol/L · `3,5 – 350` · `≥ 1400` | `< 3,5` · `3,5 – 1399,9` · `≥ 1400` |
+| BUME (Bumetanid, uten terapiområde) | 10 nmol/L · `≥ 1600` | `< 10` · `10 – 1599` · `≥ 1600` |
+
+Kanrenon er den aktive metabolitten av spironolakton, og det er moderstoffet
+som står på rekvisisjonen. Analytten har derfor «spironolakton» som søkeord i
+`src/data/aliaser.json`. Enalaprilat, ramiprilat og losartansyre trenger
+ingenting tilsvarende: navnene begynner på moderstoffet, og søket treffer på
+begynnelsen av navnet.
+
+### Rettelser gjort i teksten
+
+Alle rettelser ligger i `meta.rettelser` i `src/data/antihypertensiver.json`,
+med kilde og begrunnelse, så de kan etterprøves mot Word-dokumentet.
+
+| Type | Fra | Til | Antall |
+| --- | --- | --- | --- |
+| desimaltegn | `2.5`, `12.5`, `1.25` | `2,5`, `12,5`, `1,25` | 12 |
+| ordlyd | `basert på bruk 5–40 mg daglig` | `basert på bruk av 5–40 mg daglig` | 9 |
+| mellomrom | dobbelt mellomrom, hardt mellomrom og mellomrom i enden | vanlige enkle mellomrom | 3 |
+| setningsrekkefølge | «… Kanrenon er den aktive metabolitten av spironolakton. Farmakokinetiske avvik? …» | «… Farmakokinetiske avvik? Kanrenon er den aktive metabolitten av spironolakton. …» | 1 |
+| klinikerrettelse | FURO/innenfor: gjentakelsen av «under»-teksten | den korte formen bumetanid har for «innenfor» | 1 |
+
+Punktum er byttet til komma **bare** mellom to siffer, så `ous.labfag.no` står
+urørt. «av» er lagt til fordi de 60 andre radene i kilden har det og setningen
+mangler preposisjonen uten det.
+
+De to siste rettelsene er innholdsmessige og gjort etter direkte
+tilbakemelding fra klinikeren, ikke maskinelt utledet som resten: kanrenons
+metabolittsetning er flyttet til å stå etter begge spørsmålene, slik
+enalaprilat, ramiprilat og losartansyre har det, og furosemids
+«innenfor»-kommentar — som i kilden var en ordrett gjentakelse av
+«under»-teksten — er byttet til den korte formen bumetanid har for det samme
+tilfellet. Begge er merket `klinikerrettelse`/`setningsrekkefølge` i
+`meta.rettelser` og skiller seg dermed fra de tekniske rettelsene.
+
+### Uavklarte forhold i kilden
+
+Disse lot seg ikke rette maskinelt og er ikke tatt stilling til av
+klinikeren. De ligger i `meta.avvik` i datasettet.
+
+| Kode | Type | Forhold |
+| --- | --- | --- |
+| VALS | overlapp | `L` slutter på 301, men terapiområdet begynner på 300. Appen lar båndet «under» slutte rett før 300. |
+| BUME | overlapp | «Innenfor» slutter på 1600, toksisk begynner på 1600. Appen sier toksisk. |
+| FURO | overlapp | «Innenfor» slutter på 40000, toksisk begynner på 40000. Appen sier toksisk. |
+| FURO | påvisningsgrense | «Innenfor» er oppgitt som `1–40000`, men påvisningsgrensen er 50. Appen lar båndet begynne på 50. |
+| KAND | overlapp | Terapiområdet slutter på 200, `H` begynner på 199. |
+| VER | overlapp | Terapiområdet slutter på 400, `H` begynner på 40 — trolig 401. |
+
+De to siste overlappene ligger inne i båndet «innenfor», som dekker
+terapiområdet og `H` under ett. De endrer derfor ingen kommentar.
 
 ## THC-syre i urin (IRCAK)
 

@@ -150,19 +150,19 @@ describe('analytter med egen fortolkningsmodul', () => {
 })
 
 describe('veien tilbake når det bare fantes ett alternativ fra første tegn', () => {
-  // Sertralin er den eneste analytten som begynner på «s», så søket har aldri
+  // Citalopram er den eneste analytten som begynner på «c», så søket har aldri
   // vist mer enn ett alternativ.
-  const tilbake = () => reducer(skriv(initialState, 's'), { type: 'tilbake' })
+  const tilbake = () => reducer(skriv(initialState, 'c'), { type: 'tilbake' })
 
   it('velger analytten av seg selv på første tegn', () => {
-    expect(valgt(skriv(initialState, 's'))).toBe('SERT')
+    expect(valgt(skriv(initialState, 'c'))).toBe('CITAL')
   })
 
   it('går videre igjen når feltet er slettet helt', () => {
     const tomt = skriv(tilbake(), '')
     expect(stageOf(tomt)).toBe('search')
 
-    expect(valgt(skriv(tomt, 's'))).toBe('SERT')
+    expect(valgt(skriv(tomt, 'c'))).toBe('CITAL')
   })
 
   it('går videre igjen når Esc nullstiller søket', () => {
@@ -170,6 +170,6 @@ describe('veien tilbake når det bare fantes ett alternativ fra første tegn', (
     const nullstilt = reducer(tilbake(), { type: 'tilbake' })
     expect(nullstilt).toEqual(initialState)
 
-    expect(valgt(skriv(nullstilt, 's'))).toBe('SERT')
+    expect(valgt(skriv(nullstilt, 'c'))).toBe('CITAL')
   })
 })

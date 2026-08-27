@@ -1,7 +1,7 @@
 import { useMemo, type CSSProperties } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
-import { Pill } from './Pill'
+import { Pill, type PillTone } from './Pill'
 import { StepBar } from './StepBar'
 import { Shortcut } from './Shortcut'
 import { ManualCopy } from './ManualCopy'
@@ -10,6 +10,7 @@ import { bandIkon } from './bandikon'
 import { BackIcon, PhoneIcon } from './icons'
 import { bands as bandsOf, type Band } from '../domain/bands'
 import { displayName } from '../domain/names'
+import { grensepiller, type Pilleslag } from '../domain/piller'
 import { indexToDigit } from '../hooks/useKeyboard'
 import { useShortcutVisibility } from '../hooks/useShortcutVisibility'
 import type { Analyte } from '../types'
@@ -52,6 +53,15 @@ function BandKnapp({ band, snarvei, onPick }: { band: Band; snarvei: string; onP
   )
 }
 
+/** Fargen hver grensepille bæres av. Se `domain/piller.ts`. */
+const TONE: Record<Pilleslag, PillTone> = {
+  referanseomrade: 'noytral',
+  ringegrense: 'ring',
+  pavisningsgrense: 'noytral',
+  terapiomrade: 'noytral',
+  toksisk: 'over',
+}
+
 /**
  * Steg 2: hvilken analytt som kommenteres, og hvilket konsentrasjonsbånd
  * svaret havner i. Båndene er utledet av analyttens egne grenser, så knappene
@@ -73,17 +83,16 @@ export function BandStep({ analyte, onPick, onBack, failed }: BandStepProps) {
         <Pill tone="kode">{analyte.kode}</Pill>
         <h1 className="analytt__navn">{displayName(analyte)}</h1>
         <div className="analytt__grenser">
-          {analyte.referanseomrade && (
-            <Pill label="Referanseområde">
-              {analyte.referanseomrade.tekst} {analyte.enhet}
+          {grensepiller(analyte).map((pille) => (
+            <Pill
+              key={pille.slag}
+              tone={TONE[pille.slag]}
+              icon={pille.slag === 'ringegrense' ? <PhoneIcon /> : undefined}
+              label={pille.merke}
+            >
+              {pille.verdi}
             </Pill>
-          )}
-          {/* Enheten står bare på den første pillen — den gjelder begge. */}
-          {analyte.ringegrense !== null && (
-            <Pill tone="ring" icon={<PhoneIcon />} label="Ringegrense">
-              {analyte.ringegrense}
-            </Pill>
-          )}
+          ))}
         </div>
       </Card>
 

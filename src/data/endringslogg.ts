@@ -12,6 +12,23 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.3.0',
+    dato: '2026-08-27',
+    sammendrag: 'Ny kategori: antihypertensiver',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Betydelig omfang',
+    punkter: [
+      '25 antihypertensiver kan nå kommenteres: enalaprilat, lisinopril, ramiprilat, eplerenon, kanrenon, karvedilol, labetalol, doksazosin, irbesartan, kandesartan, losartansyre, telmisartan, valsartan, atenolol, bisoprolol, metoprolol, bendroflumetiazid, bumetanid, furosemid, hydroklortiazid, amlodipin, diltiazem, lerkanidipin, nifedipin og verapamil.',
+      'De går de samme tre stegene som psykofarmaka: søk opp analytten, velg konsentrasjonsbånd med musen eller tastene 1, 2 og 3, og kommentaren kopieres med det samme. Knappen du brukte følger med til «Lim inn kommentaren på», så du ser hvilken kommentar som ligger på utklippstavlen.',
+      'Hver analytt har tre knapper. Kilden har fem intervaller, og de er slått sammen slik kommentarene tilsier: «under måleområdet» og «L» er én knapp, terapiområdet og «H» én, og toksisk konsentrasjon én. Kommentarene er kildens egne og er ikke endret av sammenslåingen.',
+      'Bumetanid og furosemid har ikke noe definert terapiområde. De har de samme tre knappene, men ingen terapiområdepille.',
+      'Over knappene står påvisningsgrensen, terapiområdet og grensen for toksisk konsentrasjon. Antihypertensiver har ingen ringegrense, så den pillen og påminnelsen om å ringe finnes ikke her.',
+      'Kanrenon finnes også på «spironolakton», siden det er moderstoffet som står på rekvisisjonen. Enalaprilat, ramiprilat og losartansyre finnes på moderstoffnavnet fra før, fordi søket treffer på begynnelsen av navnet.',
+      'Kommentartekstene er vasket for skrivefeil fra kilden: punktum er byttet til komma som desimaltegn i doser (for eksempel 12,5 mg), doble og harde mellomrom er fjernet, og «basert på bruk 5–40 mg daglig» er rettet til «basert på bruk av 5–40 mg daglig» slik de øvrige radene har det. Ingen tall er endret.',
+      'To kommentarer er i tillegg rettet innholdsmessig, etter tilbakemelding: kanrenons kommentar hadde en setning om at kanrenon er metabolitten av spironolakton midt inni de to første spørsmålene i stedet for etter dem, og furosemids kommentar for «innenfor» var en ordrett gjentakelse av «under»-teksten i stedet for den korte formen bumetanid har for det samme tilfellet.',
+    ],
+  },
+  {
     versjon: '1.2.0',
     dato: '2026-08-21',
     sammendrag: 'Ny modul: EtG og EtS i urin',
