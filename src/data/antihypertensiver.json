@@ -54,6 +54,13 @@
         "begrunnelse": "preposisjonen manglet; kilden har «basert på bruk av» ellers"
       },
       {
+        "kategori": "setningsrekkefolge",
+        "hvor": "KANR/under",
+        "fra": "Mangelfull medikamentetterlevelse? Kanrenon er den aktive metabolitten av spironolakton. Farmakokinetiske avvik?",
+        "til": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Kanrenon er den aktive metabolitten av spironolakton.",
+        "begrunnelse": "metabolittsetningen sto mellom de to spørsmålene; kilden har den ellers stående etter begge"
+      },
+      {
         "kategori": "ordlyd",
         "hvor": "KANR/over",
         "fra": "basert på bruk",
@@ -152,6 +159,13 @@
         "begrunnelse": "kommentaren var ikke en sammenhengende linje med enkle mellomrom"
       },
       {
+        "kategori": "klinikerrettelse",
+        "hvor": "FURO/innenfor",
+        "fra": "Furosemid er ikke påvisbart medikamentfastende, men kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).",
+        "til": "Furosemid kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).",
+        "begrunnelse": "kommentaren i kilden avvek fra den tilsvarende korte formen hos en annen analytt i samme tabell; rettet etter eksplisitt instruks fra klinikeren"
+      },
+      {
         "kategori": "desimaltegn",
         "hvor": "HYDR/under",
         "fra": "12.5",
@@ -174,11 +188,6 @@
       }
     ],
     "avvik": [
-      {
-        "kode": "KANR",
-        "type": "ordlyd",
-        "beskrivelse": "Setningen «Kanrenon er den aktive metabolitten av spironolakton.» står mellom «Mangelfull medikamentetterlevelse?» og «Farmakokinetiske avvik?», som ellers står rett etter hverandre. Teksten er gjengitt slik kilden har den."
-      },
       {
         "kode": "KAND",
         "type": "overlapp",
@@ -203,11 +212,6 @@
         "kode": "FURO",
         "type": "overlapp",
         "beskrivelse": "Innenfor slutter på 40000 mens Toksisk konsentrasjon starter på 40000; området imellom dekkes av begge. Appen klassifiserer den som toksisk."
-      },
-      {
-        "kode": "FURO",
-        "type": "ordlyd",
-        "beskrivelse": "Kommentaren for «innenfor» er ordrett den samme som for «under», så de to første knappene gir samme tekst."
       },
       {
         "kode": "VER",
@@ -453,7 +457,7 @@
           "tekst": "< 15",
           "fra": null,
           "til": 15,
-          "kommentar": "Mangelfull medikamentetterlevelse? Kanrenon er den aktive metabolitten av spironolakton. Farmakokinetiske avvik? Referanseområdet for kanrenon er basert på bruk av 25–100 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
+          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Kanrenon er den aktive metabolitten av spironolakton. Referanseområdet for kanrenon er basert på bruk av 25–100 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
         },
         {
           "niva": "innenfor",
@@ -1166,7 +1170,7 @@
           "tekst": "50 – 39999",
           "fra": 50,
           "til": 39999,
-          "kommentar": "Furosemid er ikke påvisbart medikamentfastende, men kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
+          "kommentar": "Furosemid kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
         },
         {
           "niva": "over",

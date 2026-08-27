@@ -24,7 +24,8 @@ export const ENDRINGSLOGG: Endring[] = [
       'Bumetanid og furosemid har ikke noe definert terapiområde. De har de samme tre knappene, men ingen terapiområdepille.',
       'Over knappene står påvisningsgrensen, terapiområdet og grensen for toksisk konsentrasjon. Antihypertensiver har ingen ringegrense, så den pillen og påminnelsen om å ringe finnes ikke her.',
       'Kanrenon finnes også på «spironolakton», siden det er moderstoffet som står på rekvisisjonen. Enalaprilat, ramiprilat og losartansyre finnes på moderstoffnavnet fra før, fordi søket treffer på begynnelsen av navnet.',
-      'Kommentartekstene er vasket for skrivefeil fra kilden: punktum er byttet til komma som desimaltegn i doser (for eksempel 12,5 mg), doble og harde mellomrom er fjernet, og «basert på bruk 5–40 mg daglig» er rettet til «basert på bruk av 5–40 mg daglig» slik de øvrige radene har det. Ingen tall eller faglig innhold er endret.',
+      'Kommentartekstene er vasket for skrivefeil fra kilden: punktum er byttet til komma som desimaltegn i doser (for eksempel 12,5 mg), doble og harde mellomrom er fjernet, og «basert på bruk 5–40 mg daglig» er rettet til «basert på bruk av 5–40 mg daglig» slik de øvrige radene har det. Ingen tall er endret.',
+      'To kommentarer er i tillegg rettet innholdsmessig, etter tilbakemelding: kanrenons kommentar hadde en setning om at kanrenon er metabolitten av spironolakton midt inni de to første spørsmålene i stedet for etter dem, og furosemids kommentar for «innenfor» var en ordrett gjentakelse av «under»-teksten i stedet for den korte formen bumetanid har for det samme tilfellet.',
     ],
   },
   {

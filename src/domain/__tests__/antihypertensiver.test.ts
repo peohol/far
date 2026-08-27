@@ -197,7 +197,7 @@ describe('uoverensstemmelsene i kilden', () => {
   it('er skrevet ned i datasettet med koden de gjelder', () => {
     const avvik = antihypertensivdatasett.meta.avvik
     const koder = new Set(avvik.map((a) => a.kode))
-    // De fem forholdene som faktisk kan påvirke fortolkningen eller teksten.
+    // Forholdene som faktisk kan påvirke fortolkningen.
     expect(koder).toContain('VALS')
     expect(koder).toContain('BUME')
     expect(koder).toContain('FURO')
@@ -215,5 +215,43 @@ describe('uoverensstemmelsene i kilden', () => {
       expect(r.hvor).toMatch(/^[A-ZÆØÅ]+\/(under|innenfor|over)$/)
       expect(r.begrunnelse.length).toBeGreaterThan(10)
     }
+  })
+})
+
+describe('rettelser gjort etter klinikerens tilbakemelding', () => {
+  it('setter metabolittsetningen i kanrenons kommentar etter begge spørsmålene', () => {
+    // Kilden hadde «Mangelfull medikamentetterlevelse? Kanrenon er den aktive
+    // metabolitten av spironolakton. Farmakokinetiske avvik? …», ulikt
+    // enalaprilat, ramiprilat og losartansyre, som har metabolittsetningen
+    // etter begge spørsmålene.
+    const under = levelComment(get('KANR'), 'under').kommentar
+    expect(under).toContain(
+      'Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? ' +
+        'Kanrenon er den aktive metabolitten av spironolakton.',
+    )
+    expect(under).not.toMatch(/medikamentetterlevelse\?\s+Kanrenon/)
+
+    const rekkefolge = antihypertensivdatasett.meta.rettelser.find(
+      (r) => r.hvor === 'KANR/under' && r.kategori === 'setningsrekkefolge',
+    )
+    expect(rekkefolge).toBeDefined()
+  })
+
+  it('gir furosemids «innenfor»-kommentar den korte formen, som bumetanid har', () => {
+    // Kilden gjentok teksten fra «under» («ikke påvisbart medikamentfastende,
+    // men…») også for «innenfor». Bumetanid har en kortere, egen tekst for
+    // «innenfor», og furosemid skal ha det samme.
+    expect(levelComment(get('FURO'), 'innenfor').kommentar).toBe(
+      'Furosemid kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i ' +
+        'sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ' +
+        'ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).',
+    )
+    // «under» og «over» er urørt av rettelsen.
+    expect(levelComment(get('FURO'), 'under').kommentar).toContain('ikke påvisbart')
+
+    const klinikerrettelse = antihypertensivdatasett.meta.rettelser.find(
+      (r) => r.hvor === 'FURO/innenfor' && r.kategori === 'klinikerrettelse',
+    )
+    expect(klinikerrettelse).toBeDefined()
   })
 })

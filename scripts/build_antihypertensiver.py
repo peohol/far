@@ -59,6 +59,18 @@ INNENFOR = ("Terapiområdet", "Innenfor")
 RETTELSER: list[dict] = []
 AVVIK: list[dict] = []
 
+# Kommentarer overstyrt etter eksplisitt instruks fra klinikeren (peder.holman),
+# fordi de avvek fra tilsvarende kommentar hos en annen analytt i kilden.
+# Noekkel: (kode, niva). Overstyringen logges som en rettelse med kilden og
+# den nye teksten, slik alle andre rettelser gjor.
+KLINIKERRETTELSER: dict[tuple[str, str], str] = {
+    ("FURO", "innenfor"): (
+        "Furosemid kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i "
+        "sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege "
+        "ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
+    ),
+}
+
 
 def logg(kategori: str, hvor: str, fra: str, til: str, begrunnelse: str) -> None:
     RETTELSER.append({
@@ -152,6 +164,28 @@ def rett_ordlyd(tekst: str, hvor: str) -> str:
     return ny
 
 
+def rett_setningsrekkefolge(tekst: str, hvor: str) -> str:
+    """Metabolittsetningen skal sta etter begge sporsmalene, som ellers i kilden.
+
+    Hos enalaprilat, ramiprilat og losartansyre star «X er den aktive
+    metabolitten av Y.» etter bade «Mangelfull medikamentetterlevelse?» og
+    «Farmakokinetiske avvik?». Kanrenon har den mellom de to sporsmalene.
+    """
+    m = re.search(
+        r"Mangelfull medikamentetterlevelse\?\s+(?P<setning>\S.*?\.)\s*"
+        r"Farmakokinetiske avvik\?",
+        tekst,
+    )
+    if not m:
+        return tekst
+    gammel = m.group(0)
+    ny = f"Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? {m.group('setning')}"
+    logg("setningsrekkefolge", hvor, gammel, ny,
+         "metabolittsetningen sto mellom de to spørsmålene; kilden har den ellers "
+         "stående etter begge")
+    return tekst.replace(gammel, ny, 1)
+
+
 def vask_kommentar(tekst: str, hvor: str) -> str:
     """En kommentar pa en linje, uten doble mellomrom og med norsk tegnsetting."""
     ren = unicodedata.normalize("NFC", tekst).replace("\xa0", " ")
@@ -174,6 +208,7 @@ def vask_kommentar(tekst: str, hvor: str) -> str:
     ren = rett_desimaltegn(ren, hvor)
     ren = rett_streker(ren, hvor)
     ren = rett_ordlyd(ren, hvor)
+    ren = rett_setningsrekkefolge(ren, hvor)
     return ren
 
 
@@ -377,15 +412,15 @@ def bygg() -> dict:
                      "Appen klassifiserer den som toksisk.")
 
         kommentarer = [vask_kommentar(rad[2], f"{kode}/{n}") for n, rad in zip(NIVAER, tre)]
-        # De to sporsmalene apner kommentaren sammen hos alle de andre
-        # analyttene; star noe imellom, er det en glipp i kilden.
-        mellom = re.search(r"Mangelfull medikamentetterlevelse\?\s+(\S.*?)\s*Farmakokinetiske avvik\?",
-                           kommentarer[0])
-        if mellom:
-            avvik(kode, "ordlyd",
-                  f"Setningen «{mellom.group(1).strip()}» står mellom «Mangelfull "
-                  f"medikamentetterlevelse?» og «Farmakokinetiske avvik?», som ellers "
-                  f"står rett etter hverandre. Teksten er gjengitt slik kilden har den.")
+
+        for i, n in enumerate(NIVAER):
+            overstyrt = KLINIKERRETTELSER.get((kode, n))
+            if overstyrt is None:
+                continue
+            logg("klinikerrettelse", f"{kode}/{n}", kommentarer[i], overstyrt,
+                 "kommentaren i kilden avvek fra den tilsvarende korte formen hos en annen "
+                 "analytt i samme tabell; rettet etter eksplisitt instruks fra klinikeren")
+            kommentarer[i] = overstyrt
 
         if kommentarer[0] == kommentarer[1]:
             avvik(kode, "ordlyd",

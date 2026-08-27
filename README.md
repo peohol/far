@@ -340,14 +340,26 @@ med kilde og begrunnelse, så de kan etterprøves mot Word-dokumentet.
 | desimaltegn | `2.5`, `12.5`, `1.25` | `2,5`, `12,5`, `1,25` | 12 |
 | ordlyd | `basert på bruk 5–40 mg daglig` | `basert på bruk av 5–40 mg daglig` | 9 |
 | mellomrom | dobbelt mellomrom, hardt mellomrom og mellomrom i enden | vanlige enkle mellomrom | 3 |
+| setningsrekkefølge | «… Kanrenon er den aktive metabolitten av spironolakton. Farmakokinetiske avvik? …» | «… Farmakokinetiske avvik? Kanrenon er den aktive metabolitten av spironolakton. …» | 1 |
+| klinikerrettelse | FURO/innenfor: gjentakelsen av «under»-teksten | den korte formen bumetanid har for «innenfor» | 1 |
 
 Punktum er byttet til komma **bare** mellom to siffer, så `ous.labfag.no` står
 urørt. «av» er lagt til fordi de 60 andre radene i kilden har det og setningen
-mangler preposisjonen uten det; ingen tall eller faglig innhold er endret.
+mangler preposisjonen uten det.
+
+De to siste rettelsene er innholdsmessige og gjort etter direkte
+tilbakemelding fra klinikeren, ikke maskinelt utledet som resten: kanrenons
+metabolittsetning er flyttet til å stå etter begge spørsmålene, slik
+enalaprilat, ramiprilat og losartansyre har det, og furosemids
+«innenfor»-kommentar — som i kilden var en ordrett gjentakelse av
+«under»-teksten — er byttet til den korte formen bumetanid har for det samme
+tilfellet. Begge er merket `klinikerrettelse`/`setningsrekkefølge` i
+`meta.rettelser` og skiller seg dermed fra de tekniske rettelsene.
 
 ### Uavklarte forhold i kilden
 
-Disse lot seg ikke rette maskinelt. De ligger i `meta.avvik` i datasettet.
+Disse lot seg ikke rette maskinelt og er ikke tatt stilling til av
+klinikeren. De ligger i `meta.avvik` i datasettet.
 
 | Kode | Type | Forhold |
 | --- | --- | --- |
@@ -355,14 +367,11 @@ Disse lot seg ikke rette maskinelt. De ligger i `meta.avvik` i datasettet.
 | BUME | overlapp | «Innenfor» slutter på 1600, toksisk begynner på 1600. Appen sier toksisk. |
 | FURO | overlapp | «Innenfor» slutter på 40000, toksisk begynner på 40000. Appen sier toksisk. |
 | FURO | påvisningsgrense | «Innenfor» er oppgitt som `1–40000`, men påvisningsgrensen er 50. Appen lar båndet begynne på 50. |
-| FURO | ordlyd | Kommentaren for «innenfor» er ordrett den samme som for «under». Bumetanid har to ulike tekster her. |
 | KAND | overlapp | Terapiområdet slutter på 200, `H` begynner på 199. |
 | VER | overlapp | Terapiområdet slutter på 400, `H` begynner på 40 — trolig 401. |
-| KANR | ordlyd | «Kanrenon er den aktive metabolitten av spironolakton.» står mellom «Mangelfull medikamentetterlevelse?» og «Farmakokinetiske avvik?», som ellers står rett etter hverandre. |
 
 De to siste overlappene ligger inne i båndet «innenfor», som dekker
-terapiområdet og `H` under ett. De endrer derfor ingen kommentar. Teksten i
-`KANR` og `FURO` er gjengitt ordrett slik kilden har den.
+terapiområdet og `H` under ett. De endrer derfor ingen kommentar.
 
 ## THC-syre i urin (IRCAK)
 
