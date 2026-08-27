@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-export type PillTone = 'noytral' | 'kode' | 'ring'
+export type PillTone = 'noytral' | 'kode' | 'ring' | 'over'
 
 export interface PillProps {
   children: ReactNode
@@ -10,7 +10,11 @@ export interface PillProps {
   label?: string
 }
 
-/** Liten avrundet etikett for én opplysning — kode, referanseområde, ringegrense. */
+/**
+ * Liten avrundet etikett for én opplysning — kode, referanseområde,
+ * ringegrense, påvisningsgrense, terapiområde eller grensen for toksisk
+ * konsentrasjon.
+ */
 export function Pill({ children, tone = 'noytral', icon, label }: PillProps) {
   return (
     <span className={`pille pille--${tone}`}>

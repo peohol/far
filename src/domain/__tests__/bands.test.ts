@@ -61,11 +61,15 @@ describe('bands', () => {
 
   it('holder etikettene innenfor bredden knappene er dimensjonert for', () => {
     // Knappene står alltid på én linje, og `--band-innhold` i components.css er
-    // målt mot den lengste etiketten datasettet gir («1001 – 1099»). Kommer det
-    // en lengre, må det tallet opp — ellers blir raden brutt eller trang.
+    // målt mot den bredeste etiketten datasettet gir. Bredden kommer av
+    // sifrene: de står med tabellbreddstall og er de brede tegnene, mens komma,
+    // mellomrom og tankestrek er smale. «1001 – 1099» og «300 – 15999» har
+    // begge åtte siffer og er de bredeste. Kommer det en etikett med flere
+    // siffer, må tallet i CSS-en opp — ellers blir raden brutt eller trang.
     for (const a of analytes) {
       for (const band of bands(a)) {
-        expect(band.label.length, `${a.kode}/${band.key}: «${band.label}»`).toBeLessThanOrEqual(11)
+        const siffer = band.label.replace(/\D/g, '').length
+        expect(siffer, `${a.kode}/${band.key}: «${band.label}»`).toBeLessThanOrEqual(8)
       }
     }
   })

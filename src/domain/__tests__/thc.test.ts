@@ -686,7 +686,9 @@ describe('veien inn i modulen', () => {
 
   it('forstyrrer ikke søk etter psykofarmaka', () => {
     expect(search('kve', pool).map((h) => h.analyte.kode)).toEqual(['KVE'])
-    expect(search('s', pool).map((h) => h.analyte.kode)).toEqual(['SERT'])
+    // Sertralin og kanrenon (som finnes på «spironolakton») er de eneste
+    // treffene på «s» — THC-syre legger ingen til.
+    expect(search('s', pool).map((h) => h.analyte.kode)).toEqual(['SERT', 'KANR'])
   })
 
   it('går til fortolkningsmodulen i stedet for konsentrasjonsbåndene', () => {

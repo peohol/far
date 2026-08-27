@@ -1,5 +1,6 @@
 {
   "PALI": ["hydroksyrisperidon"],
   "RISPSUM": ["paliperidon", "hydroksyrisperidon"],
-  "HBUP": ["bupropion"]
+  "HBUP": ["bupropion"],
+  "KANR": ["spironolakton"]
 }

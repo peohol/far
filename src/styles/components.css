@@ -340,7 +340,15 @@
   background: var(--niva-over-flate);
 }
 
-.pille--ring .pille__verdi {
+/* Grensen for toksisk konsentrasjon er det samme tallet som det øverste båndet
+   begynner på, og bærer derfor fargen til det båndet — ikke ringegrensens. */
+.pille--over {
+  color: var(--niva-gul-blekk);
+  background: var(--niva-gul-flate);
+}
+
+.pille--ring .pille__verdi,
+.pille--over .pille__verdi {
   color: inherit;
 }
 
