@@ -79,6 +79,8 @@
     {
       "id": "alprazolam",
       "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analysemetode": "SRUS",
+      "kategori": "Benzodiazepiner og Z-hypnotika",
       "analytt": "Alprazolam",
       "koder": [
         "APR"
@@ -91,6 +93,8 @@
     {
       "id": "klonazepam",
       "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analysemetode": "SRUS",
+      "kategori": "Benzodiazepiner og Z-hypnotika",
       "analytt": "Klonazepam",
       "koder": [
         "CZP"
@@ -103,6 +107,8 @@
     {
       "id": "nitrazepam",
       "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analysemetode": "SRUS",
+      "kategori": "Benzodiazepiner og Z-hypnotika",
       "analytt": "Nitrazepam",
       "koder": [
         "NIT"
@@ -115,6 +121,8 @@
     {
       "id": "zolpidem",
       "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analysemetode": "SRUS",
+      "kategori": "Benzodiazepiner og Z-hypnotika",
       "analytt": "Zolpidem",
       "koder": [
         "ZOLP"
@@ -127,6 +135,8 @@
     {
       "id": "zopiklon",
       "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analysemetode": "SRUS",
+      "kategori": "Benzodiazepiner og Z-hypnotika",
       "analytt": "Zopiklon",
       "koder": [
         "ZOPI"
@@ -139,6 +149,8 @@
     {
       "id": "diazepam",
       "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analysemetode": "SRUS",
+      "kategori": "Benzodiazepiner og Z-hypnotika",
       "analytt": "Diazepam",
       "koder": [
         "DIAZ"
@@ -151,6 +163,8 @@
     {
       "id": "desmetyldiazepam",
       "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analysemetode": "SRUS",
+      "kategori": "Benzodiazepiner og Z-hypnotika",
       "analytt": "Desmetyldiazepam",
       "koder": [
         "DMI"
@@ -164,6 +178,8 @@
     {
       "id": "oksazepam",
       "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analysemetode": "SRUS",
+      "kategori": "Benzodiazepiner og Z-hypnotika",
       "analytt": "Oksazepam",
       "koder": [
         "OXA"
@@ -176,6 +192,8 @@
     {
       "id": "diazepamgruppen-samlet",
       "gruppe": "Benzodiazepiner og Z-hypnotika",
+      "analysemetode": "SRUS",
+      "kategori": "Benzodiazepiner og Z-hypnotika",
       "analytt": "KOMBINASJON: Diazepam, N-desmetyldiazepam og oksazepam påvist og OXA ≤ DIAZ + DMI",
       "koder": [
         "DIAZ",
@@ -191,6 +209,8 @@
     {
       "id": "thc",
       "gruppe": "Cannabis",
+      "analysemetode": "SRUS",
+      "kategori": "Cannabinoider",
       "analytt": "THC",
       "koder": [
         "THC"
@@ -203,6 +223,8 @@
     {
       "id": "buprenorfin",
       "gruppe": "Opioider",
+      "analysemetode": "SRUS",
+      "kategori": "Opioider",
       "analytt": "Buprenorfin",
       "koder": [
         "BUP"
@@ -215,6 +237,8 @@
     {
       "id": "fentanyl",
       "gruppe": "Opioider",
+      "analysemetode": "SRUS",
+      "kategori": "Opioider",
       "analytt": "Fentanyl",
       "koder": [
         "FYL"
@@ -227,6 +251,8 @@
     {
       "id": "metadon",
       "gruppe": "Opioider",
+      "analysemetode": "SRUS",
+      "kategori": "Opioider",
       "analytt": "Metadon",
       "koder": [
         "MDO"
@@ -239,6 +265,8 @@
     {
       "id": "oksykodon",
       "gruppe": "Opioider",
+      "analysemetode": "SRUS",
+      "kategori": "Opioider",
       "analytt": "Oksykodon",
       "koder": [
         "OKSY"
@@ -251,6 +279,8 @@
     {
       "id": "tapentadol",
       "gruppe": "Opioider",
+      "analysemetode": "SRUS",
+      "kategori": "Opioider",
       "analytt": "Tapentadol",
       "koder": [
         "TAP"
@@ -263,6 +293,8 @@
     {
       "id": "tramadolgruppen",
       "gruppe": "Opioider",
+      "analysemetode": "SRUS",
+      "kategori": "Opioider",
       "analytt": "Tramadol O-desmetyltramadol",
       "koder": [
         "TRAM",
@@ -277,6 +309,8 @@
     {
       "id": "kun-kodein",
       "gruppe": "Opioider",
+      "analysemetode": "SRUS",
+      "kategori": "Opioider",
       "analytt": "Kun kodein påvist",
       "koder": [
         "KOD"
@@ -292,6 +326,8 @@
     {
       "id": "kun-morfin",
       "gruppe": "Opioider",
+      "analysemetode": "SRUS",
+      "kategori": "Opioider",
       "analytt": "Kun morfin påvist",
       "koder": [
         "MOR"
@@ -307,6 +343,8 @@
     {
       "id": "hoy-kodein-lav-morfin",
       "gruppe": "Opioider",
+      "analysemetode": "SRUS",
+      "kategori": "Opioider",
       "analytt": "Morfin og kodein – høy kodein, lav morfin",
       "koder": [
         "KOD",
@@ -324,6 +362,8 @@
     {
       "id": "kodein-morfin-grasone",
       "gruppe": "Opioider",
+      "analysemetode": "SRUS",
+      "kategori": "Opioider",
       "analytt": "Morfin og kodein – mellomområde / gråsone",
       "koder": [
         "KOD",
@@ -340,6 +380,8 @@
     {
       "id": "kodein-morfin-ordinaer",
       "gruppe": "Opioider",
+      "analysemetode": "SRUS",
+      "kategori": "Opioider",
       "analytt": "Morfin og kodein – ordinær kombinasjon",
       "koder": [
         "KOD",
@@ -357,6 +399,8 @@
     {
       "id": "benzoylekgonin",
       "gruppe": "Sentralstimulerende",
+      "analysemetode": "SRUS",
+      "kategori": "Sentralstimulerende",
       "analytt": "Benzoylekgonin",
       "koder": [
         "BEZ1"
@@ -369,6 +413,8 @@
     {
       "id": "mdma",
       "gruppe": "Sentralstimulerende",
+      "analysemetode": "SRUS",
+      "kategori": "Sentralstimulerende",
       "analytt": "MDMA (Ecstasy)",
       "koder": [
         "ECS1"
@@ -381,6 +427,8 @@
     {
       "id": "amfetamin",
       "gruppe": "Sentralstimulerende",
+      "analysemetode": "SRUS",
+      "kategori": "Sentralstimulerende",
       "analytt": "Amfetamin",
       "koder": [
         "AMF1"
@@ -393,6 +441,8 @@
     {
       "id": "metamfetamin",
       "gruppe": "Sentralstimulerende",
+      "analysemetode": "SRUS",
+      "kategori": "Sentralstimulerende",
       "analytt": "Metamfetamin",
       "koder": [
         "MAF1"
@@ -405,6 +455,8 @@
     {
       "id": "amfetamingruppen-samlet",
       "gruppe": "Sentralstimulerende",
+      "analysemetode": "SRUS",
+      "kategori": "Sentralstimulerende",
       "analytt": "KOMBINASJON: Amfetamin og metamfetamin",
       "koder": [
         "AMF1",

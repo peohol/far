@@ -59,6 +59,17 @@ export interface Analyte {
   /** Enkeltanalyttene navnet består av. */
   komponenter: string[]
   gruppe: string
+  /**
+   * Koden til analysemetoden analytten rekvireres under, f.eks. «SPFA».
+   * Sidemenyen grupperer etter denne, og kommenteringsmodulen viser den som
+   * pille over analyttkoden.
+   */
+  analysemetode: string
+  /**
+   * Underkategorien innenfor analysemetoden, f.eks. «Antidepressiver». Tom
+   * streng når analysemetoden ikke er delt opp.
+   */
+  kategori: string
   enhet: string
   referanseomrade: Interval | null
   maleomrade: MeasuringRange

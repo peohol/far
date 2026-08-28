@@ -45,6 +45,12 @@ man bytter analytt.
 hva som er påvist i stedet for et konsentrasjonsbånd i steg 3, og kan gi to
 kommentarer i limsteget. Se [EtG og EtS i urin](#etg-og-ets-i-urin).
 
+Menyknappen øverst til venstre åpner sidemenyen, som er den andre veien inn:
+der ligger alle analysemetodene med virkestoffene sine, og et trykk på et
+virkestoff går rett til kommenteringsmodulen. Menyen styrer også hvilken
+analysemetode søket leter i. Se
+[Sidemenyen og analysemetodene](#sidemenyen-og-analysemetodene).
+
 Smalner søket inn til én eneste analytt, er valget i praksis allerede tatt, og
 appen går videre uten at det trengs et tastetrykk til. Det skjer bare i selve
 overgangen fra noe annet enn ett alternativ til ett: kommer man tilbake med
@@ -123,6 +129,7 @@ src/data/endringslogg.ts    Endringsloggen appen viser (håndholdt)
 src/types.ts                Datamodellen
 src/state.ts                Tilstandsmaskinen for stegene
 src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, kontrast,
+                            analysemetodene og menytreet (analysemetoder.ts),
                             referansetallene analyttkortet viser (piller.ts),
                             tooltipplassering (tipsplassering.ts), flukten til
                             kopibeviset (flytting.ts), THC-fortolkning (thc.ts) med
@@ -134,7 +141,8 @@ src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, k
 docs/endringslogg.md        Rutinen for å føre loggen ved hver endring
 src/hooks/                  Tastatur, tema, hurtigtastmerker, utklippstavle,
                             kopieringen av kommentarene (useKommentarflyt.ts)
-src/components/             Stegene, kommentarblokkene (Kommentarliste.tsx), felles
+src/components/             Stegene, sidemenyen (Sidemeny.tsx), kommentarblokkene
+                            (Kommentarliste.tsx), felles
                             kort/pille/knapp/tallfelt/tooltip/ikoner
 src/styles/                 tokens.css (design) + base.css + components.css
 ```
@@ -172,6 +180,46 @@ stående igjen ved teksten, så det fortsatt går fram hva boblen hører til.
 Reglene ligger i `src/domain/tipsplassering.ts` og er dekket av tester;
 `TipsLag` i `src/main.tsx` er selve laget og må ligge rundt hele appen.
 
+### Sidemenyen og analysemetodene
+
+Hver analytt hører til en **analysemetode** — koden analysen rekvireres med —
+og de fleste metodene er delt i **kategorier**. Begge deler står på analytten i
+datasettet, ikke i en liste i koden:
+
+| Metode | Hva den er | Kategorier |
+| --- | --- | --- |
+| `SPFA` | Antidepressiver og antipsykotika i serum | Antidepressiver, antipsykotika, stemningsstabiliserende |
+| `SRUS` | Stoffer med ruspotensial i serum | Benzodiazepiner og Z-hypnotika, cannabinoider, opioider, sentralstimulerende |
+| `UCAK` | THC-syre i urin | ingen |
+| `UETGHB` | Etanolmetabolitter i urin | ingen |
+| `AHT` | Antihypertensiver | ACE-hemmere, aldosteronagonister, alfa- og betablokkere, alfablokkere, ARB, betablokkere, diuretika, kalsiumantagonister |
+
+Metodene og kategoriene vises som piller øverst i analyttkortet, over
+analyttkoden. De tre pilletypene har hver sin farge: analysemetoden fiolett,
+kategorien plomme og analyttkoden blå.
+
+Sidemenyen bygges av de samme søkeoppføringene som søket leter i
+(`byggMeny()` i `src/domain/analysemetoder.ts`), så listene kan ikke komme i
+utakt med det appen faktisk kan kommentere. Én skuff per metode, én av gangen
+åpen, hver med sin farge fra det samme settet som søkealternativene bruker.
+Virkestoffene står alfabetisk, og bryteren «Vis kategorier» slår
+kategoriskillene av og lister dem i én bolk i stedet.
+
+Én linje per **analyttkode**: en sumanalyse som `AMTNORSUM` er én linje, mens
+en modul som dekker flere koder — diazepamgruppen, morfin og kodein, EtG og
+EtS — får én linje per virkestoff, som alle fører til den samme modulen.
+
+Radioknappen til venstre for en metode begrenser søket til den metoden;
+«Inkluder alle analysemetoder» slår filteret av. Filteret gjelder bare søket:
+menyen viser alltid alt, og et virkestoff kan velges derfra uansett hva
+filteret står på. Et filter som står på, kan gjøre at en analytt man vet
+finnes ikke dukker opp i søket, så det er merket med en prikk på menyknappen og
+nevnt i beskjeden når søket ikke gir treff.
+
+Menyen er et lag over appen, som endringsloggen: `data-lag` sier fra til
+`lagLiggerOver()`, slik at appens egne taster ligger i ro mens den står åpen.
+`Esc` og et trykk på hovedinnholdet lukker den.
+
 ### Versjon og endringslogg
 
 Appen versjoneres etter SemVer. Versjonen står som en liten pille nederst til
@@ -189,13 +237,18 @@ viser er den øverste føringen der — de to kan derfor ikke komme i utakt.
 Loggen er en `<dialog>` med `showModal()`, så fokusfelle, Escape og inert
 bakgrunn kommer fra nettleseren selv. Appens egne taster hører fortsatt etter
 på vinduet, og holdes i ro av `lagLiggerOver()` i `src/hooks/useKeyboard.ts` —
-uten den ville `Esc` både lukket loggen og sendt appen et steg tilbake.
+uten den ville `Esc` både lukket loggen og sendt appen et steg tilbake. Den
+samme vakten gjelder sidemenyen, som sier fra med `data-lag`.
 
 ## Datasettet for psykofarmaka
 
 De fire tabellene i `kommentarer.pdf` er slått sammen til én post per analytt
 (35 stykker), med kode, navn, delanalytter, gruppe, enhet, referanseområde,
 måleområde, ringegrense og de tre nivåene med hver sin kommentar.
+
+Analysemetoden er `SPFA` for alle, og kategorien er overskriften analytten står
+under i referansetabellen — antidepressiver, antipsykotika eller
+stemningsstabiliserende.
 
 Referanseområde, måleområde og ringegrense står bare på én av de tre radene i
 PDF-en, men gjelder alle tre, og blir fylt ut på alle nivåene.
@@ -301,6 +354,23 @@ terapiområdepille.
 
 Kategorien har **ingen ringegrense**. Ingen antihypertensiv analytt deler et
 bånd i to eller får en ringepåminnelse i limsteget.
+
+### Legemiddelgruppene
+
+`AHT.docx` har ingen inndeling i legemiddelgrupper. Inndelingen sidemenyen
+viser, er gjort én gang av klinikeren ved å lese suffiksene i
+virkestoffnavnene: `-pril(at)` ACE-hemmere, `-renon` aldosteronagonister,
+`-ilol`/`-alol` alfa- og betablokkere, doksazosin alfablokker, `-sartan` ARB,
+`-olol` betablokkere, `-id` diuretika, og resten kalsiumantagonister.
+
+Suffiksene var en engangsnøkkel og er ikke en regel som gjelder videre.
+Resultatet står derfor som en oppslagsliste (`KATEGORI` i
+`scripts/build_antihypertensiver.py`) og utledes ikke av navnet; et nytt
+virkestoff må føres inn manuelt, og byggeskriptet stopper hvis noen mangler.
+To forhold er verdt å merke seg: losartansyre ender på `-syre` og ikke på
+`-sartan`, men er den virksomme metabolitten av losartan og ført som ARB, og
+«aldosteronagonister» er klinikerens egen overskrift for eplerenon og
+kanrenon.
 
 ### Referansetallene på analyttkortet
 
@@ -562,6 +632,12 @@ dem:
 De fire fellesmodulene er `DIAZ · DMI · OXA`, `TRAM · OTRAM`, `KOD · MOR` og
 `AMF1 · MAF1`. De tretten andre stoffene har hver sin modul med bare seg selv.
 
+Analysemetoden er `SRUS` for alle, og kategorien er overskriften stoffet står
+under i kilden. Det ene unntaket er «Cannabis», som heter «Cannabinoider» i
+appen etter ønske fra klinikeren; oversettelsen står i `KATEGORI` i
+`scripts/build_rusmidler.py`, og skriptet stopper hvis kilden får en overskrift
+uten kategori.
+
 ### Slik brukes modulen
 
 Modulen spør om det den trenger for å velge riktig kommentar, og ikke om noe
@@ -738,6 +814,14 @@ I rusmiddelmodulen heter alle knappene «Kopier» på skjermen, der merkelappen
 over dem sier hvilken kommentar de gjelder. For skjermlesere sier hver knapp
 hele sitt eget navn — «Kopier tilleggskommentar» — så de kan skilles fra
 hverandre uten å lese omgivelsene.
+
+Sidemenyen er merket som `<nav>` med navn, menyknappen melder om den er åpen
+med `aria-expanded`, og radioknappene er ekte radioknapper i en gruppe med
+navn, så filteret kan settes med piltastene. Skuffene melder seg med
+`aria-expanded` og `aria-controls`, og innholdet i en lukket skuff er satt
+usynlig når glidningen er over, så det verken nås med tabulator eller leses
+opp. `Esc` lukker menyen, og appens egne taster ligger i ro så lenge den står
+åpen.
 
 Endringsloggen åpner med den nyeste føringen fokusert, ikke med lukkeknappen,
 så `Enter` folder ut det man kom for i stedet for å lukke loggen igjen med det

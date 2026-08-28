@@ -124,6 +124,17 @@
 
   --merke-fag-blekk: hsl(322 62% 33%);
   --merke-fag-flate: hsl(322 70% 95%);
+
+  /* Pillene øverst i analyttkortet. Analyttkoden bærer aksentfargen; de to
+     andre skal skilles fra den og fra hverandre på farge alene, og ligger
+     derfor utenfor både aksenten og nivåfargene: fiolett for analysemetoden,
+     som er en kode og står fylt som analyttkoden, og plomme for kategorien,
+     som er et ord og står tonet. */
+  --pille-metode-blekk: hsl(0 0% 100%);
+  --pille-metode-flate: hsl(268 58% 42%);
+
+  --pille-kategori-blekk: hsl(315 60% 32%);
+  --pille-kategori-flate: hsl(315 68% 95%);
 }
 
 /* --- Mørkt tema --------------------------------------------------------- */
@@ -182,6 +193,12 @@
 
   --merke-fag-blekk: hsl(322 84% 80%);
   --merke-fag-flate: hsl(322 32% 20%);
+
+  --pille-metode-blekk: hsl(268 45% 12%);
+  --pille-metode-flate: hsl(268 72% 76%);
+
+  --pille-kategori-blekk: hsl(315 82% 82%);
+  --pille-kategori-flate: hsl(315 30% 21%);
 
   --alt-flate-alfa: 0.17;
   --alt-kant-alfa: 0.55;

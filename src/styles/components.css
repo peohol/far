@@ -352,6 +352,41 @@
   color: inherit;
 }
 
+/* Analysemetoden er en kode, som analyttkoden, og står fylt og i mono — bare i
+   en annen farge. Kategorien er et ord, og står tonet og i vanlig skrift. */
+.pille--metode {
+  font-family: var(--skrift-mono);
+  font-weight: var(--vekt-tung);
+  letter-spacing: 0.12em;
+  color: var(--pille-metode-blekk);
+  background: var(--pille-metode-flate);
+}
+
+.pille--kategori {
+  color: var(--pille-kategori-blekk);
+  background: var(--pille-kategori-flate);
+}
+
+.pille--metode .pille__verdi,
+.pille--kategori .pille__verdi {
+  color: inherit;
+}
+
+/* Metoden og kategorien står øverst i kortet, over analyttkoden. */
+.metodepiller {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
+/* Pillene er små i forhold til analyttkoden under: de sier hvor analytten
+   hører hjemme, ikke hva som skal kommenteres. */
+.metodepiller .pille {
+  padding: 0.15rem var(--rom-2);
+  font-size: var(--tekst-xs);
+}
+
 /* --- Steg 2: analytt og konsentrasjonsbånd ------------------------------ */
 
 .analyttkort {
@@ -732,7 +767,9 @@
    sted som ikke klipper den. */
 .tipsboble {
   position: fixed;
-  z-index: 40;
+  /* Over sidemenyen og menyknappen: boblen forklarer det den peker på, og må
+     ligge øverst uansett hvilket lag ankeret står i. */
+  z-index: 70;
   /* Boblen skal aldri stå i veien for det den forklarer. */
   pointer-events: none;
   /* Usynlig til målingen er gjort, så den ikke blinker til i feil hjørne. */
@@ -1942,6 +1979,380 @@ details[open] > .detalj__kropp {
    på en glidning som ikke lenger finnes. */
 @media (prefers-reduced-motion: reduce) {
   .loggskuff__inner {
+    transition-delay: 0s;
+  }
+}
+
+/* --- Sidemenyen ----------------------------------------------------------
+   Oversikten over analysemetodene, og filteret for søket. Menyknappen ligger
+   fast i motsatt hjørne av verktøylinja og bytter mellom ≡ og ×.
+
+   Menyen er tre lag: knappen øverst, panelet under den, og et lag mellom
+   panelet og appen som mørklegger og slører innholdet bak. Mørkleggingen
+   ligger som sitt eget lag i stedet for som et filter på appen, fordi et
+   filter ville gjort verktøylinja og versjonspilla om til noe de flyter i
+   stedet for å ligge fast i vinduet. */
+
+.menyknapp {
+  position: fixed;
+  top: var(--rom-3);
+  left: var(--rom-3);
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  font-size: 1.35rem;
+  color: var(--blekk-dempet);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-full);
+  cursor: pointer;
+  transition:
+    color var(--fart) var(--kurve),
+    background-color var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve);
+}
+
+.menyknapp:hover {
+  color: var(--blekk);
+  border-color: var(--linje-sterk);
+}
+
+.menyknapp[aria-expanded='true'] {
+  color: var(--aksent);
+  background: var(--aksent-flate);
+  border-color: var(--aksent);
+}
+
+/* Et filter som står på, begrenser hva søket kan finne. Prikken sier fra om
+   det uten at menyen må åpnes; hvilken metode det gjelder står i knappens
+   navn og i tipset. */
+.menyknapp[data-filter='ja']::after {
+  content: '';
+  position: absolute;
+  right: 0.35rem;
+  top: 0.35rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  background: var(--aksent);
+  border: var(--kant-tykk) solid var(--flate);
+  border-radius: var(--runding-full);
+}
+
+.menylag {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: hsl(216 45% 5% / 0.55);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--fart-glid) var(--kurve),
+    visibility 0s linear var(--fart-glid);
+}
+
+:root[data-tema='lyst'] .menylag {
+  background: hsl(215 30% 20% / 0.34);
+}
+
+.menylag[data-lag] {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* Panelet dekker hele sidens høyde og glir inn fra venstre. Flaten er delvis
+   gjennomsiktig med slør bak, så innholdet under skinner svakt gjennom uten at
+   teksten i menyen mister kontrast. */
+.sidemeny {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  width: min(24rem, 88vw);
+  height: 100dvh;
+  background: color-mix(in srgb, var(--flate) 88%, transparent);
+  backdrop-filter: blur(14px) saturate(130%);
+  border-right: var(--kant) solid var(--linje);
+  box-shadow: var(--skygge-hevet);
+  text-align: left;
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition:
+    transform var(--fart-glid) var(--kurve),
+    visibility 0s linear var(--fart-glid);
+}
+
+.sidemeny[data-apen='ja'] {
+  transform: translateX(0);
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* Tittelen viker for menyknappen, som ligger over panelets eget hjørne. */
+.sidemeny__topp {
+  flex: none;
+  display: flex;
+  align-items: center;
+  min-height: 3.9rem;
+  padding: var(--rom-3) var(--rom-3) var(--rom-3) 4.4rem;
+  border-bottom: var(--kant) solid var(--linje);
+}
+
+.sidemeny__tittel {
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
+}
+
+.sidemeny__innhold {
+  overflow-y: auto;
+  padding: var(--rom-3) var(--rom-2) var(--rom-4);
+}
+
+/* Bryteren for kategoriene står øverst: den avgjør formen på alt under. */
+.menyveksle {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  padding: var(--rom-2) var(--rom-3);
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-dempet);
+  cursor: pointer;
+}
+
+.menyveksle input[type='checkbox'] {
+  width: 1.1em;
+  height: 1.1em;
+  margin: 0;
+  accent-color: var(--aksent);
+  cursor: pointer;
+}
+
+.menyfilter {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.menyliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  margin: 0;
+}
+
+/* Radioknappen som slår filteret av: den gjelder alle metodene og står derfor
+   over dem, med en linje under som skiller den fra skuffene. */
+.menyrad--alle {
+  padding-bottom: var(--rom-2);
+  margin-bottom: var(--rom-1);
+  border-bottom: var(--kant) solid var(--linje);
+}
+
+.menyvalg {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  padding: var(--rom-2) var(--rom-3);
+  font-size: var(--tekst-s);
+  color: var(--blekk);
+  cursor: pointer;
+}
+
+.menyvalg input[type='radio'] {
+  width: 1.1em;
+  height: 1.1em;
+  margin: 0;
+  accent-color: var(--aksent);
+  cursor: pointer;
+}
+
+/* I skuffehodet er radioknappen alene: tittelen ved siden av er en egen knapp
+   som åpner skuffen, og de to kan ikke ligge inni hverandre. */
+.menyvalg--skuff {
+  flex: none;
+  padding: var(--rom-3) var(--rom-1) var(--rom-3) var(--rom-3);
+}
+
+/* --- Én analysemetode ---------------------------------------------------
+   Fargene kommer fra det samme settet som søkealternativene bruker, så to
+   metoder ved siden av hverandre alltid får hver sin. */
+
+.menyskuff {
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-m);
+  transition:
+    background-color var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve);
+}
+
+.menyskuff[data-apen='ja'] {
+  background: var(--alt-soft);
+  border-color: var(--alt-kant);
+}
+
+.menyskuff__hode {
+  display: flex;
+  align-items: center;
+}
+
+.menyskuff__tittel {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  min-width: 0;
+  padding: var(--rom-2) var(--rom-5) var(--rom-2) var(--rom-1);
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: var(--runding-m);
+  cursor: pointer;
+  transition: background-color var(--fart) var(--kurve);
+}
+
+.menyskuff__tittel:hover {
+  background: var(--alt-soft);
+}
+
+/* Pilen: peker ned når skuffen er lukket, opp når den er åpen — som i
+   endringsloggen. */
+.menyskuff__tittel::after {
+  content: '';
+  position: absolute;
+  right: var(--rom-3);
+  top: calc(50% - 0.3em);
+  width: 0.4em;
+  height: 0.4em;
+  border-right: var(--kant-tykk) solid var(--blekk-dempet);
+  border-bottom: var(--kant-tykk) solid var(--blekk-dempet);
+  transform: rotate(45deg);
+  transition: transform var(--fart) var(--kurve);
+}
+
+.menyskuff[data-apen='ja'] .menyskuff__tittel::after {
+  transform: rotate(-135deg);
+}
+
+/* Metodekoden bærer skuffens farge, på samme måte som koden i et
+   søkealternativ bærer alternativets. */
+.menyskuff__kode {
+  padding: 0.25em 0.6em;
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-xxs);
+  font-weight: var(--vekt-tung);
+  line-height: 1;
+  letter-spacing: 0.08em;
+  color: var(--alt-ink);
+  background: var(--alt-solid);
+  border-radius: var(--runding-full);
+}
+
+.menyskuff__beskrivelse {
+  font-size: var(--tekst-xs);
+  line-height: 1.35;
+  color: var(--blekk-dempet);
+}
+
+.menyskuff__kropp {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--fart-glid) var(--kurve);
+}
+
+.menyskuff[data-apen='ja'] .menyskuff__kropp {
+  grid-template-rows: 1fr;
+}
+
+/* Lukket innhold settes usynlig når glidningen er over, så det heller ikke nås
+   med tabulator eller skjermleser. */
+.menyskuff__inner {
+  overflow: hidden;
+  min-height: 0;
+  visibility: hidden;
+  transition: visibility 0s linear var(--fart-glid);
+}
+
+.menyskuff[data-apen='ja'] .menyskuff__inner {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.menykategori + .menykategori {
+  margin-top: var(--rom-2);
+}
+
+.menykategori__navn {
+  padding: var(--rom-2) var(--rom-3) var(--rom-1);
+  font-size: var(--tekst-xxs);
+  font-weight: var(--vekt-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.menyanalytter {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0 var(--rom-2) var(--rom-2);
+}
+
+.menyanalytt {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--rom-2);
+  width: 100%;
+  padding: var(--rom-1) var(--rom-2);
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: var(--runding-s);
+  cursor: pointer;
+  transition:
+    background-color var(--fart) var(--kurve),
+    color var(--fart) var(--kurve);
+}
+
+.menyanalytt:hover {
+  background: var(--flate-hevet);
+}
+
+.menyanalytt__navn {
+  font-size: var(--tekst-s);
+  line-height: 1.35;
+  color: var(--blekk);
+}
+
+.menyanalytt__kode {
+  flex: none;
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-xxs);
+  letter-spacing: 0.04em;
+  color: var(--blekk-svak);
+}
+
+/* Bakgrunnen skal ikke rulle mens menyen står over den — samme regel som for
+   endringsloggen, og av samme grunn. */
+:root:has([data-lag='meny']) {
+  overflow: hidden;
+}
+
+/* Uten bevegelse skal panelet og skuffene skjules med det samme i stedet for å
+   vente på en glidning som ikke lenger finnes. */
+@media (prefers-reduced-motion: reduce) {
+  .menylag,
+  .sidemeny,
+  .menyskuff__inner {
     transition-delay: 0s;
   }
 }

@@ -173,3 +173,29 @@ describe('veien tilbake når det bare fantes ett alternativ fra første tegn', (
     expect(valgt(skriv(nullstilt, 'c'))).toBe('CITAL')
   })
 })
+
+describe('filteret fra sidemenyen', () => {
+  const medFilter = reducer(initialState, { type: 'sett-metodefilter', metode: 'AHT' })
+
+  it('holder på metoden som er valgt', () => {
+    expect(medFilter.metodefilter).toBe('AHT')
+    expect(reducer(medFilter, { type: 'sett-metodefilter', metode: null }).metodefilter).toBe(null)
+  })
+
+  it('overlever at søket nullstilles', () => {
+    // Filteret er et valg brukeren har tatt i menyen, ikke et steg i
+    // arbeidsflyten: verken Esc fra første steg eller en ferdig kommentar
+    // skal slå det av.
+    expect(reducer(medFilter, { type: 'nullstill' }).metodefilter).toBe('AHT')
+    expect(reducer(medFilter, { type: 'tilbake' }).metodefilter).toBe('AHT')
+  })
+
+  it('nullstiller ellers alt søket har samlet opp', () => {
+    const igang = reducer(skriv(medFilter, 'k', 'kv'), { type: 'velg-band', key: 'under' })
+
+    expect(reducer(igang, { type: 'nullstill' })).toEqual({
+      ...initialState,
+      metodefilter: 'AHT',
+    })
+  })
+})

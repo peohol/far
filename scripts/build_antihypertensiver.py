@@ -46,6 +46,55 @@ W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 
 GRUPPE = "Antihypertensiver"
 STANDARD_ENHET = "nmol/L"
+
+# Analysemetoden analyttene rekvireres under. Koden vises som pille i
+# kommenteringsmodulen og er det sidemenyen grupperer etter.
+ANALYSEMETODE = "AHT"
+
+# Legemiddelgruppen hver analytt horer til.
+#
+# AHT.docx har ingen slik inndeling. Tabellen er delt inn en gang, av
+# klinikeren, ved a lese virkestoffnavnenes suffikser: -pril(at) er
+# ACE-hemmere, -renon aldosteronagonister, -ilol og -alol alfa- og
+# betablokkere, doksazosin alfablokker, -sartan ARB, -olol betablokkere, -id
+# diuretika, og resten kalsiumantagonister. Klinikeren presiserte at
+# suffiksene var en engangsnokkel og ikke en regel som skal gjelde videre, sa
+# resultatet star her som en oppslagsliste og utledes ikke av navnet. Et nytt
+# virkestoff ma fores inn manuelt; skriptet stopper hvis noen mangler.
+#
+# To forhold er verdt a merke seg:
+#   * Losartansyre ender pa -syre og ikke pa -sartan, men er den virksomme
+#     metabolitten av losartan og fort som ARB.
+#   * "Aldosteronagonister" er klinikerens egen overskrift. Eplerenon og
+#     kanrenon virker som aldosteronantagonister; overskriften er beholdt slik
+#     klinikeren skrev den og skal bare endres av klinikeren selv.
+KATEGORI = {
+    "ENAT": "ACE-hemmere",
+    "LISI": "ACE-hemmere",
+    "RAMAT": "ACE-hemmere",
+    "EPLR": "Aldosteronagonister",
+    "KANR": "Aldosteronagonister",
+    "KARV": "Alfa- og betablokkere",
+    "LABE": "Alfa- og betablokkere",
+    "DOKSA": "Alfablokkere",
+    "IRBE": "ARB",
+    "KAND": "ARB",
+    "LOSYR": "ARB",
+    "TELM": "ARB",
+    "VALS": "ARB",
+    "ATEN": "Betablokkere",
+    "BISO": "Betablokkere",
+    "METOP": "Betablokkere",
+    "BEND": "Diuretika",
+    "BUME": "Diuretika",
+    "FURO": "Diuretika",
+    "HYDR": "Diuretika",
+    "AMLO": "Kalsiumantagonister",
+    "DIL": "Kalsiumantagonister",
+    "LERK": "Kalsiumantagonister",
+    "NIFE": "Kalsiumantagonister",
+    "VER": "Kalsiumantagonister",
+}
 NIVAER = ("under", "innenfor", "over")
 TANKESTREK = "–"
 
@@ -433,6 +482,10 @@ def bygg() -> dict:
             "visningsnavn": navn,
             "komponenter": [navn],
             "gruppe": GRUPPE,
+            "analysemetode": ANALYSEMETODE,
+            # Kontrolleres mot kilden nedenfor, sa en manglende kode gir en
+            # forstaelig feil i stedet for et oppslag som sprekker her.
+            "kategori": KATEGORI.get(kode, ""),
             "enhet": STANDARD_ENHET,
             "referanseomrade": None,
             # Kilden oppgir bare nedre teknisk maleomrade, ikke noe tak.
@@ -459,6 +512,16 @@ def bygg() -> dict:
     koder = [a["kode"] for a in resultat]
     if len(set(koder)) != len(koder):
         raise SystemExit(f"Analyttkoder gar igjen: {koder}")
+
+    ukjente = sorted(set(koder) - set(KATEGORI))
+    if ukjente:
+        raise SystemExit(
+            f"Mangler legemiddelgruppe i KATEGORI for: {', '.join(ukjente)}. "
+            "For dem inn manuelt — gruppen utledes ikke av navnet."
+        )
+    ubrukte = sorted(set(KATEGORI) - set(koder))
+    if ubrukte:
+        raise SystemExit(f"KATEGORI har koder som ikke finnes i kilden: {', '.join(ubrukte)}")
 
     aliaser = json.loads(ALIAS_FIL.read_text("utf-8")) if ALIAS_FIL.exists() else {}
     for a in resultat:

@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react'
 import { Button } from './Button'
 import { StepBar } from './StepBar'
 import { ResetIcon, SearchIcon } from './icons'
-import { indexToDigit } from '../hooks/useKeyboard'
+import { indexToDigit, lagLiggerOver } from '../hooks/useKeyboard'
+import { metodebeskrivelse } from '../domain/analysemetoder'
 import { splitName } from '../domain/names'
 import { optionColourVars } from '../domain/optionColours'
 import type { SearchHit } from '../domain/search'
@@ -11,6 +12,8 @@ import type { Analyte } from '../types'
 export interface SearchStepProps {
   query: string
   hits: SearchHit[]
+  /** Analysemetoden søket er begrenset til, valgt i sidemenyen. */
+  metodefilter: string | null
   onQueryChange: (value: string) => void
   onSelect: (analyte: Analyte) => void
   onReset: () => void
@@ -22,12 +25,35 @@ function isTypedCharacter(event: KeyboardEvent): boolean {
 }
 
 /**
+ * Sant når tegnet hører til knappen som står fokusert i stedet for til søket.
+ *
+ * Mellomrom trykker en fokusert knapp, og skal aldri havne i feltet i stedet.
+ * Bokstaver hører til søket — men ikke når fokus står på en knapp i selve
+ * steget, som et søkealternativ: der er tastaturet midt i et valg. Knappene
+ * rundt steget — menyknappen, verktøylinja, versjonspilla — skal derimot ikke
+ * holde på skrivingen, ellers ville det å lukke menyen krevd et museklikk før
+ * man kunne søke videre.
+ */
+function knappTarTegnet(event: KeyboardEvent): boolean {
+  const aktiv = document.activeElement
+  if (!(aktiv instanceof HTMLElement) || aktiv.tagName !== 'BUTTON') return false
+  return event.key === ' ' || aktiv.closest('.steg') !== null
+}
+
+/**
  * Steg 1: instruksjon, søkefelt og alternativene som passer søket.
  *
  * Søkefeltet står alltid montert og har fokus, slik at det å begynne å skrive
  * er nok til å komme i gang. Instruksjonen viker for feltet ved første tegn.
  */
-export function SearchStep({ query, hits, onQueryChange, onSelect, onReset }: SearchStepProps) {
+export function SearchStep({
+  query,
+  hits,
+  metodefilter,
+  onQueryChange,
+  onSelect,
+  onReset,
+}: SearchStepProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const tomt = query === ''
 
@@ -41,8 +67,11 @@ export function SearchStep({ query, hits, onQueryChange, onSelect, onReset }: Se
     function onKeyDown(event: KeyboardEvent) {
       const felt = inputRef.current
       if (!felt || document.activeElement === felt) return
-      if (document.activeElement?.tagName === 'BUTTON') return
+      // Ligger endringsloggen eller sidemenyen over appen, hører det som
+      // skrives hjemme der og skal ikke rykke fokus ned i søkefeltet bak.
+      if (lagLiggerOver()) return
       if (!isTypedCharacter(event)) return
+      if (knappTarTegnet(event)) return
       felt.focus()
     }
     window.addEventListener('keydown', onKeyDown, true)
@@ -79,7 +108,7 @@ export function SearchStep({ query, hits, onQueryChange, onSelect, onReset }: Se
           />
         </div>
 
-        <Options hits={hits} onSelect={onSelect} query={query} />
+        <Options hits={hits} onSelect={onSelect} query={query} metodefilter={metodefilter} />
       </div>
     </section>
   )
@@ -89,10 +118,12 @@ function Options({
   hits,
   onSelect,
   query,
+  metodefilter,
 }: {
   hits: SearchHit[]
   onSelect: (analyte: Analyte) => void
   query: string
+  metodefilter: string | null
 }) {
   if (query === '') return null
 
@@ -100,6 +131,15 @@ function Options({
     return (
       <p className="ingen-treff" role="status">
         Ingen analytter passer søket.
+        {/* Står filteret på, er det den vanligste grunnen til at en analytt
+            man vet finnes, ikke dukker opp. Da skal det stå her og ikke bare
+            inne i menyen. */}
+        {metodefilter && (
+          <>
+            {' '}
+            Søket er begrenset til {metodefilter} – {metodebeskrivelse(metodefilter)}.
+          </>
+        )}
       </p>
     )
   }

@@ -4,16 +4,19 @@ import { feltetTarTegnene, mellomromErLedig, type Fokusert } from '../domain/tas
 export type KeyHandler = (event: KeyboardEvent) => void
 
 /**
- * Sant når et lag ligger over appen — endringsloggen, i dag.
+ * Sant når et lag ligger over appen — endringsloggen eller sidemenyen.
  *
- * Laget er en `<dialog>` og gjør resten av siden uklikkbar av seg selv, men
- * appens egne taster henger på vinduet og hører etter uansett hvor fokus står.
+ * Appens egne taster henger på vinduet og hører etter uansett hvor fokus står.
  * Uten denne vakten ville `Esc` både lukket laget og sendt appen et steg
  * tilbake, og talltastene valgt bånd i steget bak. Regelen står ett sted og
  * brukes av alle som lytter på vinduet.
+ *
+ * Endringsloggen er en `<dialog>` og kjennes på den. Sidemenyen er ikke en
+ * dialog — den skal kunne stå åpen mens appen bak er synlig — og sier fra med
+ * `data-lag` i stedet.
  */
 export function lagLiggerOver(): boolean {
-  return document.querySelector('dialog[open]') !== null
+  return document.querySelector('dialog[open], [data-lag]') !== null
 }
 
 /**

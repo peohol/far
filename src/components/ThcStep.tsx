@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
 import { Details } from './Details'
+import { Metodepiller } from './Metodepiller'
 import { Pill } from './Pill'
 import { StepBar } from './StepBar'
 import { ManualCopy } from './ManualCopy'
@@ -15,6 +16,7 @@ import {
   formaterIrcak,
   fortolkThc,
   MAKS_DAGER_MELLOM,
+  THC_ANALYSEMETODE,
   THC_KODE,
   TOM_THC_INNDATA,
   type Sikkerhetsmargin,
@@ -263,6 +265,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
         }}
       >
         <Card ref={inndatakort} align="start" className="analyttkort">
+          <Metodepiller metode={THC_ANALYSEMETODE} />
           <div className="thc-korthode">
             <Pill tone="kode">{THC_KODE}</Pill>
             <div className="thc-nullstillhjorne" data-nullstill>
