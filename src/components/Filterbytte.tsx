@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type FocusEvent,
+} from 'react'
 import { Metodepille } from './Metodepille'
 import { useTips } from './Tips'
 import { ANALYSEMETODER } from '../domain/analysemetoder'
@@ -16,8 +23,14 @@ import { ANALYSEMETODER } from '../domain/analysemetoder'
  * alternativ bak menyen mens den står åpen.
  */
 
-/** Luft mellom menyen og vinduskanten før den heller åpner andre veien. */
+/** Luft mellom menyen og vinduskanten. */
 const KANTLUFT = 12
+
+/**
+ * Så lav menyen får bli når verken plassen over eller under rekker. Da ruller
+ * den i stedet for å strekke seg utenfor vinduet, der valgene ikke kan nås.
+ */
+const MINSTE_HOYDE = 120
 
 export interface FilterbytteProps {
   /** Metoden filteret står på. Linja vises bare når det er satt. */
@@ -26,10 +39,18 @@ export interface FilterbytteProps {
   onFilter: (metode: string | null) => void
 }
 
+/** Hvor menyen legger seg, og hvor høy den får lov å bli der. */
+interface Oppsett {
+  retning: 'ned' | 'opp'
+  /** Plassen på den siden, i piksler. `null` før den er målt. */
+  plass: number | null
+}
+
+const UMAALT: Oppsett = { retning: 'ned', plass: null }
+
 export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
   const [apen, setApen] = useState(false)
-  /** Ned når det er plass under pillen, ellers opp. */
-  const [retning, setRetning] = useState<'ned' | 'opp'>('ned')
+  const [oppsett, setOppsett] = useState<Oppsett>(UMAALT)
   const knapp = useRef<HTMLButtonElement | null>(null)
   const meny = useRef<HTMLDivElement>(null)
 
@@ -49,7 +70,12 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
     knapp.current?.focus()
   }, [])
 
-  const apne = useCallback(() => setApen(true), [])
+  // Målingen nullstilles ved åpning, så menyen alltid måles på sin egen
+  // høyde og ikke på taket den fikk forrige gang.
+  const apne = useCallback(() => {
+    setOppsett(UMAALT)
+    setApen(true)
+  }, [])
 
   const velg = useCallback(
     (metode: string | null) => {
@@ -67,6 +93,11 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
    * den alltid stemmer med hvor høy den faktisk ble. Målingen skjer før
    * maling, så menyen ikke rekker å vises i feil retning først.
    *
+   * Menyen legger seg under pillen når den får plass der, ellers på den siden
+   * som har mest plass — og får den ikke plass på noen av dem, ruller den
+   * innenfor plassen den har. Ellers kunne de øverste valgene havnet over
+   * vinduskanten, der de verken kan ses eller trykkes.
+   *
    * Fokus følger med inn i menyen, på metoden som står valgt.
    */
   useLayoutEffect(() => {
@@ -74,8 +105,13 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
     const boks = meny.current
     const rute = knapp.current?.getBoundingClientRect()
     if (boks && rute) {
+      const over = rute.top - KANTLUFT
       const under = window.innerHeight - rute.bottom - KANTLUFT
-      setRetning(boks.offsetHeight > under ? 'opp' : 'ned')
+      const ned = boks.offsetHeight <= under || under >= over
+      setOppsett({
+        retning: ned ? 'ned' : 'opp',
+        plass: Math.max(ned ? under : over, MINSTE_HOYDE),
+      })
     }
     boks?.querySelector<HTMLElement>('[aria-current="true"]')?.focus()
   }, [apen])
@@ -93,8 +129,20 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
     return () => window.removeEventListener('keydown', paaTast)
   }, [apen, lukk])
 
+  /**
+   * Tabulator ut av menyen lukker den. Uten dette kunne fokus havnet på
+   * knappene bak — de er dekket av klikkflaten, men ikke av tastaturet — og
+   * en av dem kunne blitt trykket mens menyen fortsatt sto åpen.
+   *
+   * Fokus er allerede på vei ut, så det skal ikke rives tilbake til pillen.
+   */
+  const paaFokusUt = useCallback((event: FocusEvent<HTMLElement>) => {
+    if (event.currentTarget.contains(event.relatedTarget)) return
+    setApen(false)
+  }, [])
+
   return (
-    <span className="filterbytte" data-retning={retning}>
+    <span className="filterbytte" data-retning={oppsett.retning} onBlur={paaFokusUt}>
       <button
         ref={settKnapp}
         type="button"
@@ -111,15 +159,24 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
 
       {apen && (
         <>
-          {/* Et trykk hvor som helst ellers lukker menyen. */}
+          {/* Et trykk hvor som helst ellers lukker menyen. Flaten tar ikke
+              fokus med seg — ellers ville menyen lukket seg alt på museknappen
+              ned, og selve klikket landet på det som lå under. */}
           <div
             className="filterbytte__lag"
             data-lag="filterbytte"
             aria-hidden="true"
+            onMouseDown={(event) => event.preventDefault()}
             onClick={lukk}
           />
 
-          <div ref={meny} className="filterbytte__meny" role="group" aria-label="Endre filter">
+          <div
+            ref={meny}
+            className="filterbytte__meny"
+            role="group"
+            aria-label="Endre filter"
+            style={oppsett.plass === null ? undefined : { maxHeight: `${oppsett.plass}px` }}
+          >
             {ANALYSEMETODER.map((metode) => (
               <button
                 key={metode.kode}

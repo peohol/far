@@ -20,7 +20,8 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Pillen i «Søket er begrenset til …» er nå en knapp. Et trykk åpner en liten meny med alle analysemetodene under hverandre, og «Skru av filter» nederst. Derfra kan du bytte til en annen metode eller slå filteret av med ett trykk, uten å åpne sidemenyen.',
       'Krysset som slo filteret av, er tatt bort. Det gjorde bare den ene tingen; menyen gjør begge.',
-      'Menyen åpner nedover når det er plass under pillen, og oppover ellers, så den aldri havner utenfor vinduet. Esc eller et trykk utenfor lukker den.',
+      'Menyen åpner nedover når det er plass under pillen, og ellers til den siden som har mest plass. Er vinduet så lavt at den ikke får plass noen av veiene, ruller den innenfor plassen den har, så ingen av valgene havner utenfor skjermen.',
+      'Esc, et trykk utenfor, eller å tabulere seg ut av menyen lukker den.',
       'Slår du filteret av, forsvinner hele linja, og skrivingen fortsetter i søkefeltet uten at du må klikke deg tilbake dit.',
     ],
   },

@@ -2457,6 +2457,9 @@ details[open] > .detalj__kropp {
   align-items: stretch;
   gap: 0.15rem;
   padding: var(--rom-2);
+  /* Får menyen ikke plass verken over eller under pillen, ruller den innenfor
+     taket målingen setter i stedet for å strekke seg utenfor vinduet. */
+  overflow-y: auto;
   background: var(--flate);
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-m);
