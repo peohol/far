@@ -31,6 +31,7 @@ ingenting ekstra.
 | 1 | Begynn å skrive navnet på en analytt eller kode | hvilken som helst bokstav |
 | — | Åpne og lukke sidemenyen, når som helst | `Ctrl + M` |
 | — | Begrense søket til en analysemetode | `Alt + 1` … `Alt + 5` |
+| — | Slå filteret av igjen | `Alt + 0` |
 | 2 | Velg blant alternativene som passer søket — er det bare ett igjen, går appen videre til det av seg selv | `1`–`9` og `0`, eller `Enter`/`Space` |
 | 3 | Velg hvilket konsentrasjonsbånd svaret havner i — kommentaren kopieres | `1`–`4` |
 | 4 | Lim inn kommentaren på analyttkoden som vises — båndknappen som ble brukt, står over kortet som bevis | `Enter`/`Space` avslutter og nullstiller |
@@ -225,9 +226,10 @@ EtS — får én linje per virkestoff, som alle fører til den samme modulen.
 Radioknappen til venstre for en metode begrenser søket til den metoden;
 «Inkluder alle analysemetoder» slår filteret av. `Alt + 1` … `Alt + 5` gjør det
 samme uten å åpne noe: tallet er metodens plass i lista, den samme som gir den
-fargen, og `metodesnarvei()` leser begge av det ene registeret. Snarveiene
-virker overalt i appen — også mens menyene står åpne, siden det er der metodene
-vises — men ikke mens endringsloggen fanger tastaturet. Filteret gjelder bare søket:
+fargen, og `metodesnarvei()` leser begge av det ene registeret. `Alt + 0` slår
+filteret av — null hører ikke til noen metode, og står derfor for «ingen av
+dem». Snarveiene virker overalt i appen — også mens menyene står åpne, siden det
+er der metodene vises — men ikke mens endringsloggen fanger tastaturet. Filteret gjelder bare søket:
 menyen viser alltid alt, og et virkestoff kan velges derfra uansett hva
 filteret står på. Et filter som står på, kan gjøre at en analytt man vet
 finnes ikke dukker opp i søket, så det vises to steder utenfor menyen:

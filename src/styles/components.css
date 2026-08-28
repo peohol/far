@@ -2183,15 +2183,6 @@ details[open] > .detalj__kropp {
   padding: 0 var(--rom-2) var(--rom-2);
 }
 
-/* Radioknappen som slår filteret av gjelder alle metodene, og står derfor over
-   dem med en linje under som skiller den fra skuffene. */
-.menyvalg--alle {
-  flex: none;
-  margin-bottom: var(--rom-2);
-  padding-bottom: var(--rom-3);
-  border-bottom: var(--kant) solid var(--linje);
-}
-
 .menyliste {
   display: flex;
   flex-direction: column;
@@ -2212,12 +2203,31 @@ details[open] > .detalj__kropp {
   cursor: pointer;
 }
 
+/* Merkelappen skyves til høyre; teksten mellom tar plassen som blir igjen. */
+.menyvalg__merke {
+  margin-right: auto;
+}
+
 .menyvalg input[type='radio'] {
   width: 1.1em;
   height: 1.1em;
   margin: 0;
   accent-color: var(--aksent);
   cursor: pointer;
+}
+
+/* Radioknappen som slår filteret av gjelder alle metodene, og står derfor over
+   dem med en linje under som skiller den fra skuffene. Hurtigtastmerket flyter
+   ut til høyre, som på metodene under. */
+.menyvalg--alle {
+  flex: none;
+  justify-content: space-between;
+  /* Strammere enn radene under, så teksten og merket får plass på én linje. */
+  gap: var(--rom-1);
+  padding-inline: var(--rom-2);
+  margin-bottom: var(--rom-2);
+  padding-bottom: var(--rom-3);
+  border-bottom: var(--kant) solid var(--linje);
 }
 
 /* I skuffehodet er radioknappen alene: tittelen ved siden av er en egen knapp
@@ -2508,6 +2518,10 @@ details[open] > .detalj__kropp {
 }
 
 .filterbytte__av {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rom-4);
   padding: var(--rom-2) var(--rom-2) var(--rom-1);
   margin-top: var(--rom-1);
   font-size: var(--tekst-s);

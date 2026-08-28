@@ -66,6 +66,12 @@ export function metodesnarvei(kode: string): string | null {
   return plass >= 0 && plass < 9 ? `Alt + ${plass + 1}` : null
 }
 
+/**
+ * Hurtigtasten som slår filteret av. Null hører ikke til noen metode, og står
+ * derfor for «ingen av dem».
+ */
+export const AV_SNARVEI = 'Alt + 0'
+
 /* --- Oppføringene i menyen ---------------------------------------------- */
 
 /** Ett virkestoff i menyen, og analytten det fører til. */

@@ -176,7 +176,8 @@ export default function App() {
 
   /**
    * Alt + 1 … Alt + 5 setter filteret på hver sin analysemetode, i den
-   * rekkefølgen menyen viser dem.
+   * rekkefølgen menyen viser dem. Alt + 0 slår det av: null hører ikke til
+   * noen metode, og står derfor for «ingen av dem».
    *
    * Snarveien ligger utenom `useKeyboard`, som med vilje slipper alle
    * modifikatorkombinasjoner gjennom til nettleseren. Den leser `event.code`
@@ -189,12 +190,15 @@ export default function App() {
   useEffect(() => {
     function paaTast(event: KeyboardEvent) {
       if (!event.altKey || event.ctrlKey || event.metaKey) return
-      const truffet = /^Digit([1-9])$/.exec(event.code)
+      const truffet = /^Digit(\d)$/.exec(event.code)
       if (!truffet?.[1]) return
-      const metode = ANALYSEMETODER[Number(truffet[1]) - 1]
-      if (!metode || modaltLagLiggerOver()) return
+      const tall = Number(truffet[1])
+      if (tall > ANALYSEMETODER.length || modaltLagLiggerOver()) return
       event.preventDefault()
-      dispatch({ type: 'sett-metodefilter', metode: metode.kode })
+      dispatch({
+        type: 'sett-metodefilter',
+        metode: tall === 0 ? null : (ANALYSEMETODER[tall - 1]?.kode ?? null),
+      })
     }
     window.addEventListener('keydown', paaTast)
     return () => window.removeEventListener('keydown', paaTast)

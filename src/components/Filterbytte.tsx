@@ -9,7 +9,7 @@ import {
 import { Metodepille } from './Metodepille'
 import { Shortcut } from './Shortcut'
 import { useTips } from './Tips'
-import { ANALYSEMETODER, metodesnarvei } from '../domain/analysemetoder'
+import { ANALYSEMETODER, AV_SNARVEI, metodesnarvei } from '../domain/analysemetoder'
 
 /**
  * Pillen som viser hvilken analysemetode søket er begrenset til, og som åpner
@@ -196,8 +196,14 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
               )
             })}
 
-            <button type="button" className="filterbytte__av" onClick={() => velg(null)}>
+            <button
+              type="button"
+              className="filterbytte__av"
+              aria-keyshortcuts={AV_SNARVEI.replace(/ /g, '')}
+              onClick={() => velg(null)}
+            >
               Skru av filter
+              <Shortcut>{AV_SNARVEI}</Shortcut>
             </button>
           </div>
         </>

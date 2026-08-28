@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   ANALYSEMETODER,
+  AV_SNARVEI,
   byggMeny,
   filtrertPool,
   menyanalytter,
@@ -300,5 +301,11 @@ describe('hurtigtasten som setter filteret', () => {
     // Talltastene stopper på 9. Blir det flere metoder enn det, må menyen få
     // en annen vei inn enn Alt + tall.
     expect(ANALYSEMETODER.length).toBeLessThanOrEqual(9)
+  })
+
+  it('holder tasten som slår filteret av utenfor metodenes', () => {
+    // Null hører ikke til noen metode, og kan derfor stå for «ingen av dem».
+    expect(AV_SNARVEI).toBe('Alt + 0')
+    expect(ANALYSEMETODER.map((m) => metodesnarvei(m.kode))).not.toContain(AV_SNARVEI)
   })
 })

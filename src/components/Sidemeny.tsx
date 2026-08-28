@@ -3,6 +3,7 @@ import { Shortcut } from './Shortcut'
 import { CloseIcon, MenuIcon } from './icons'
 import { useTips } from './Tips'
 import {
+  AV_SNARVEI,
   byggMeny,
   metodefarger,
   metodesnarvei,
@@ -246,9 +247,11 @@ export function Sidemeny({ pool, metodefilter, onFilter, onVelgAnalytt }: Sideme
               type="radio"
               name="analysemetodefilter"
               checked={metodefilter === null}
+              aria-keyshortcuts={AV_SNARVEI.replace(/ /g, '')}
               onChange={() => onFilter(null)}
             />
             <span className="menyvalg__merke">Inkluder alle analysemetoder</span>
+            <Shortcut>{AV_SNARVEI}</Shortcut>
           </label>
 
           <ul className="menyliste">
