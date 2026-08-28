@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.5.0',
+    dato: '2026-08-28',
+    sammendrag: 'Bytt analysemetode direkte fra filterpillen',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Pillen i «Søket er begrenset til …» er nå en knapp. Et trykk åpner en liten meny med alle analysemetodene under hverandre, og «Skru av filter» nederst. Derfra kan du bytte til en annen metode eller slå filteret av med ett trykk, uten å åpne sidemenyen.',
+      'Krysset som slo filteret av, er tatt bort. Det gjorde bare den ene tingen; menyen gjør begge.',
+      'Menyen åpner nedover når det er plass under pillen, og oppover ellers, så den aldri havner utenfor vinduet. Esc eller et trykk utenfor lukker den.',
+      'Slår du filteret av, forsvinner hele linja, og skrivingen fortsetter i søkefeltet uten at du må klikke deg tilbake dit.',
+    ],
+  },
+  {
     versjon: '1.4.0',
     dato: '2026-08-28',
     sammendrag: 'Sidemeny med analysemetodene, og filter på søket',

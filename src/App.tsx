@@ -161,10 +161,6 @@ export default function App() {
     dispatch({ type: 'sett-metodefilter', metode })
   }, [])
 
-  const fjernMetodefilter = useCallback(() => {
-    dispatch({ type: 'sett-metodefilter', metode: null })
-  }, [])
-
   const reset = useCallback(() => {
     slippBildet()
     setFailedCopy(null)
@@ -265,7 +261,7 @@ export default function App() {
             query={state.query}
             hits={hits}
             metodefilter={state.metodefilter}
-            onFjernFilter={fjernMetodefilter}
+            onFilter={settMetodefilter}
             onQueryChange={setQuery}
             onSelect={velgAnalytt}
             onReset={reset}

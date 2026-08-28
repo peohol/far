@@ -228,8 +228,15 @@ filteret står på. Et filter som står på, kan gjøre at en analytt man vet
 finnes ikke dukker opp i søket, så det vises to steder utenfor menyen:
 menyknappen utvider seg til en pille med metodekoden i metodens farge
 («≡ SPFA»), og under søkealternativene står «Søket er begrenset til» med den
-samme pillen — også når søket gir treff. Ved siden av pillen står en knapp som
-slår filteret av, så veien ut ikke går gjennom menyen.
+samme pillen — også når søket gir treff.
+
+Den pillen er samtidig knappen som endrer filteret. Et trykk åpner en liten
+meny med alle metodene som piller under hverandre, og «Skru av filter» nederst,
+slik at man kan bytte metode eller slå filteret av uten å gå veien om
+sidemenyen. Menyen åpner nedover når det er plass under pillen og oppover ellers
+— retningen måles på den ferdig oppsatte menyen, ikke på et anslag. Den er et
+lag over appen på samme måte som sidemenyen, så talltastene i søket ikke velger
+et alternativ bak den mens den står åpen.
 
 Menyknappen åpner menyen og blir liggende skjult bak panelet til det lukkes
 igjen; panelet har sin egen lukkeknapp øverst til høyre. `Ctrl + M` åpner og
