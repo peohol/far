@@ -30,6 +30,8 @@ ingenting ekstra.
 | --- | --- | --- |
 | 1 | Begynn å skrive navnet på en analytt eller kode | hvilken som helst bokstav |
 | — | Åpne og lukke sidemenyen, når som helst | `Ctrl + M` |
+| — | Begrense søket til en analysemetode | `Alt + 1` … `Alt + 5` |
+| — | Slå filteret av igjen | `Alt + 0` |
 | 2 | Velg blant alternativene som passer søket — er det bare ett igjen, går appen videre til det av seg selv | `1`–`9` og `0`, eller `Enter`/`Space` |
 | 3 | Velg hvilket konsentrasjonsbånd svaret havner i — kommentaren kopieres | `1`–`4` |
 | 4 | Lim inn kommentaren på analyttkoden som vises — båndknappen som ble brukt, står over kortet som bevis | `Enter`/`Space` avslutter og nullstiller |
@@ -222,14 +224,32 @@ en modul som dekker flere koder — diazepamgruppen, morfin og kodein, EtG og
 EtS — får én linje per virkestoff, som alle fører til den samme modulen.
 
 Radioknappen til venstre for en metode begrenser søket til den metoden;
-«Inkluder alle analysemetoder» slår filteret av. Filteret gjelder bare søket:
+«Inkluder alle analysemetoder» slår filteret av. `Alt + 1` … `Alt + 5` gjør det
+samme uten å åpne noe: tallet er metodens plass i lista, den samme som gir den
+fargen, og `metodesnarvei()` leser begge av det ene registeret. `Alt + 0` slår
+filteret av — null hører ikke til noen metode, og står derfor for «ingen av
+dem». Snarveiene virker overalt i appen — også mens menyene står åpne, siden det
+er der metodene vises — men ikke mens endringsloggen fanger tastaturet. Filteret gjelder bare søket:
 menyen viser alltid alt, og et virkestoff kan velges derfra uansett hva
 filteret står på. Et filter som står på, kan gjøre at en analytt man vet
 finnes ikke dukker opp i søket, så det vises to steder utenfor menyen:
 menyknappen utvider seg til en pille med metodekoden i metodens farge
 («≡ SPFA»), og under søkealternativene står «Søket er begrenset til» med den
-samme pillen — også når søket gir treff. Ved siden av pillen står en knapp som
-slår filteret av, så veien ut ikke går gjennom menyen.
+samme pillen — også når søket gir treff.
+
+Den pillen er samtidig knappen som endrer filteret. Et trykk åpner en liten
+meny med alle metodene som piller under hverandre — med hurtigtasten sin ved
+siden av — og «Skru av filter» nederst, slik at man kan bytte metode eller slå
+filteret av uten å gå veien om sidemenyen.
+
+Menyen legger seg under pillen når den får plass der, ellers på den siden som
+har mest plass; får den ikke plass på noen av dem, ruller den innenfor plassen
+den har. Målingen gjøres på den ferdig oppsatte menyen og ikke på et anslag, så
+ingen av valgene kan havne utenfor vinduet. `Esc`, et trykk utenfor, eller å
+tabulere seg ut lukker den — det siste fordi knappene bak er dekket av
+klikkflaten, men ikke av tastaturet. Den er et lag over appen på samme måte som
+sidemenyen, så talltastene i søket ikke velger et alternativ bak den mens den
+står åpen.
 
 Menyknappen åpner menyen og blir liggende skjult bak panelet til det lukkes
 igjen; panelet har sin egen lukkeknapp øverst til høyre. `Ctrl + M` åpner og
@@ -835,7 +855,8 @@ hverandre uten å lese omgivelsene.
 Sidemenyen er merket som `<nav>` med navn, menyknappen melder om den er åpen
 med `aria-expanded` og om snarveien med `aria-keyshortcuts`, og radioknappene
 er ekte radioknapper i en gruppe med navn, så filteret kan settes med
-piltastene. Skuffene melder seg med `aria-expanded` og `aria-controls`, og
+piltastene. Hver metode melder sin egen `Alt`-snarvei på samme måte, både i
+sidemenyen og i filtermenyen. Skuffene melder seg med `aria-expanded` og `aria-controls`, og
 innholdet i en lukket skuff er satt usynlig når glidningen er over, så det
 verken nås med tabulator eller leses opp.
 

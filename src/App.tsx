@@ -11,7 +11,7 @@ import { CopyFlash } from './components/CopyFlash'
 import { ruteAv } from './components/Kopibevis'
 import { Toolbar } from './components/Toolbar'
 import { Versjonspille } from './components/Versjonspille'
-import { filtrertPool } from './domain/analysemetoder'
+import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
 import { analytes } from './domain/analytes'
 import { bands as bandsOf, findBand, type Band } from './domain/bands'
 import { alternativFor, ETG_ALTERNATIVER, ETG_ANALYTT, type EtgAlternativ } from './domain/etg'
@@ -21,7 +21,12 @@ import { search } from './domain/search'
 import { THC_ANALYTT } from './domain/thc'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
-import { digitToIndex, erBekreftelse, useKeyboard } from './hooks/useKeyboard'
+import {
+  digitToIndex,
+  erBekreftelse,
+  modaltLagLiggerOver,
+  useKeyboard,
+} from './hooks/useKeyboard'
 import { useTheme } from './hooks/useTheme'
 import { initialState, isIdle, reducer, stageOf, type Action, type Stage } from './state'
 import type { Analyte } from './types'
@@ -161,10 +166,6 @@ export default function App() {
     dispatch({ type: 'sett-metodefilter', metode })
   }, [])
 
-  const fjernMetodefilter = useCallback(() => {
-    dispatch({ type: 'sett-metodefilter', metode: null })
-  }, [])
-
   const reset = useCallback(() => {
     slippBildet()
     setFailedCopy(null)
@@ -172,6 +173,36 @@ export default function App() {
   }, [slippBildet])
 
   useEffect(() => () => window.clearTimeout(stegbytte.current), [])
+
+  /**
+   * Alt + 1 … Alt + 5 setter filteret på hver sin analysemetode, i den
+   * rekkefølgen menyen viser dem. Alt + 0 slår det av: null hører ikke til
+   * noen metode, og står derfor for «ingen av dem».
+   *
+   * Snarveien ligger utenom `useKeyboard`, som med vilje slipper alle
+   * modifikatorkombinasjoner gjennom til nettleseren. Den leser `event.code`
+   * og ikke `event.key`, siden Alt gjør om tegnet på flere tastaturoppsett —
+   * det er den fysiske talltasten som gjelder.
+   *
+   * Filteret kan settes mens sidemenyen eller filtermenyen står åpen; de viser
+   * nettopp metodene. Endringsloggen fanger derimot tastaturet for seg.
+   */
+  useEffect(() => {
+    function paaTast(event: KeyboardEvent) {
+      if (!event.altKey || event.ctrlKey || event.metaKey) return
+      const truffet = /^Digit(\d)$/.exec(event.code)
+      if (!truffet?.[1]) return
+      const tall = Number(truffet[1])
+      if (tall > ANALYSEMETODER.length || modaltLagLiggerOver()) return
+      event.preventDefault()
+      dispatch({
+        type: 'sett-metodefilter',
+        metode: tall === 0 ? null : (ANALYSEMETODER[tall - 1]?.kode ?? null),
+      })
+    }
+    window.addEventListener('keydown', paaTast)
+    return () => window.removeEventListener('keydown', paaTast)
+  }, [])
 
   // Enter og mellomrom bekrefter det samme, overalt i appen.
   const confirm = useCallback(
@@ -265,7 +296,7 @@ export default function App() {
             query={state.query}
             hits={hits}
             metodefilter={state.metodefilter}
-            onFjernFilter={fjernMetodefilter}
+            onFilter={settMetodefilter}
             onQueryChange={setQuery}
             onSelect={velgAnalytt}
             onReset={reset}

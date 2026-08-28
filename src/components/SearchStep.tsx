@@ -1,10 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { Button } from './Button'
 import { StepBar } from './StepBar'
-import { CloseIcon, ResetIcon, SearchIcon } from './icons'
+import { ResetIcon, SearchIcon } from './icons'
 import { indexToDigit, lagLiggerOver } from '../hooks/useKeyboard'
-import { Metodepille } from './Metodepille'
-import { useTips } from './Tips'
+import { Filterbytte } from './Filterbytte'
 import { splitName } from '../domain/names'
 import { optionColourVars } from '../domain/optionColours'
 import type { SearchHit } from '../domain/search'
@@ -15,8 +14,8 @@ export interface SearchStepProps {
   hits: SearchHit[]
   /** Analysemetoden søket er begrenset til, valgt i sidemenyen. */
   metodefilter: string | null
-  /** Slår filteret av, så alle analyttene kan finnes igjen. */
-  onFjernFilter: () => void
+  /** Endrer filteret; `null` slår det av, så alle analyttene finnes igjen. */
+  onFilter: (metode: string | null) => void
   onQueryChange: (value: string) => void
   onSelect: (analyte: Analyte) => void
   onReset: () => void
@@ -56,7 +55,7 @@ export function SearchStep({
   onQueryChange,
   onSelect,
   onReset,
-  onFjernFilter,
+  onFilter,
 }: SearchStepProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const tomt = query === ''
@@ -116,44 +115,24 @@ export function SearchStep({
 
         {/* Filteret er lett å glemme, og et glemt filter ser ut som at en
             analytt ikke finnes. Derfor står det under alternativene så lenge
-            det er på — også når søket gir treff, og med veien ut ved siden av
-            så det ikke er menyen som må åpnes for å slå det av. */}
+            det er på — også når søket gir treff. Pillen er samtidig veien til
+            å bytte eller slå av filteret, så menyen ikke må åpnes for det. */}
         {metodefilter && (
           <p className="sokfilter">
-            Søket er begrenset til <Metodepille metode={metodefilter} />
-            <FilterAv
-              onClick={() => {
-                onFjernFilter()
-                // Knappen forsvinner med filteret, så fokus gis tilbake til
-                // feltet i stedet for å falle på gulvet.
-                inputRef.current?.focus()
+            Søket er begrenset til
+            <Filterbytte
+              metodefilter={metodefilter}
+              onFilter={(metode) => {
+                onFilter(metode)
+                // Slås filteret av, forsvinner hele linja. Fokus gis tilbake
+                // til feltet i stedet for å falle på gulvet.
+                if (metode === null) inputRef.current?.focus()
               }}
             />
           </p>
         )}
       </div>
     </section>
-  )
-}
-
-/** Veien ut av filteret, ved siden av pillen som viser hvilket det er. */
-function FilterAv({ onClick }: { onClick: () => void }) {
-  // Teksten er allerede knappens navn, og skal ikke leses to ganger.
-  const tips = useTips('Slå av filteret', { skjermleser: false })
-
-  return (
-    <>
-      <button
-        type="button"
-        className="sokfilter__av"
-        aria-label="Slå av filteret"
-        onClick={onClick}
-        {...tips.props}
-      >
-        <CloseIcon />
-      </button>
-      {tips.forklaring}
-    </>
   )
 }
 

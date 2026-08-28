@@ -3,8 +3,10 @@ import { Shortcut } from './Shortcut'
 import { CloseIcon, MenuIcon } from './icons'
 import { useTips } from './Tips'
 import {
+  AV_SNARVEI,
   byggMeny,
   metodefarger,
+  metodesnarvei,
   type Menyanalytt,
   type Menymetode,
 } from '../domain/analysemetoder'
@@ -245,9 +247,11 @@ export function Sidemeny({ pool, metodefilter, onFilter, onVelgAnalytt }: Sideme
               type="radio"
               name="analysemetodefilter"
               checked={metodefilter === null}
+              aria-keyshortcuts={AV_SNARVEI.replace(/ /g, '')}
               onChange={() => onFilter(null)}
             />
             <span className="menyvalg__merke">Inkluder alle analysemetoder</span>
+            <Shortcut>{AV_SNARVEI}</Shortcut>
           </label>
 
           <ul className="menyliste">
@@ -302,6 +306,7 @@ function Skuff({
 }) {
   const id = useId()
   const rad = useRef<HTMLLIElement>(null)
+  const snarvei = metodesnarvei(metode.kode)
   const filtertips = useTips(`Vis bare treff fra ${metode.kode} i søket`, { skjermleser: false })
 
   // En skuff som åpnes nederst i lista skal ikke bli stående utenfor bildet.
@@ -339,6 +344,7 @@ function Skuff({
             checked={valgt}
             onChange={onFilter}
             aria-label={`Vis bare treff fra ${metode.kode} – ${metode.beskrivelse}`}
+            {...(snarvei && { 'aria-keyshortcuts': snarvei.replace(/ /g, '') })}
             {...filtertips.props}
           />
         </label>
@@ -350,7 +356,10 @@ function Skuff({
           aria-controls={id}
           onClick={onVeksle}
         >
-          <span className="menyskuff__kode">{metode.kode}</span>
+          <span className="menyskuff__merking">
+            <span className="menyskuff__kode">{metode.kode}</span>
+            {snarvei && <Shortcut>{snarvei}</Shortcut>}
+          </span>
           <span className="menyskuff__beskrivelse">{metode.beskrivelse}</span>
         </button>
       </div>

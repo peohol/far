@@ -2183,15 +2183,6 @@ details[open] > .detalj__kropp {
   padding: 0 var(--rom-2) var(--rom-2);
 }
 
-/* Radioknappen som slår filteret av gjelder alle metodene, og står derfor over
-   dem med en linje under som skiller den fra skuffene. */
-.menyvalg--alle {
-  flex: none;
-  margin-bottom: var(--rom-2);
-  padding-bottom: var(--rom-3);
-  border-bottom: var(--kant) solid var(--linje);
-}
-
 .menyliste {
   display: flex;
   flex-direction: column;
@@ -2212,12 +2203,31 @@ details[open] > .detalj__kropp {
   cursor: pointer;
 }
 
+/* Merkelappen skyves til høyre; teksten mellom tar plassen som blir igjen. */
+.menyvalg__merke {
+  margin-right: auto;
+}
+
 .menyvalg input[type='radio'] {
   width: 1.1em;
   height: 1.1em;
   margin: 0;
   accent-color: var(--aksent);
   cursor: pointer;
+}
+
+/* Radioknappen som slår filteret av gjelder alle metodene, og står derfor over
+   dem med en linje under som skiller den fra skuffene. Hurtigtastmerket flyter
+   ut til høyre, som på metodene under. */
+.menyvalg--alle {
+  flex: none;
+  justify-content: space-between;
+  /* Strammere enn radene under, så teksten og merket får plass på én linje. */
+  gap: var(--rom-1);
+  padding-inline: var(--rom-2);
+  margin-bottom: var(--rom-2);
+  padding-bottom: var(--rom-3);
+  border-bottom: var(--kant) solid var(--linje);
 }
 
 /* I skuffehodet er radioknappen alene: tittelen ved siden av er en egen knapp
@@ -2287,6 +2297,13 @@ details[open] > .detalj__kropp {
 
 .menyskuff[data-apen='ja'] .menyskuff__tittel::after {
   transform: rotate(-135deg);
+}
+
+/* Metodekoden og hurtigtasten som setter filteret på metoden, på linje. */
+.menyskuff__merking {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
 }
 
 /* Metodekoden bærer skuffens farge, på samme måte som koden i et
@@ -2416,28 +2433,110 @@ details[open] > .detalj__kropp {
   color: var(--blekk-dempet);
 }
 
-/* Veien ut av filteret. Dempet i ro, så den ikke konkurrerer med pillen ved
-   siden av, og tydelig når pekeren eller tastaturet finner den. */
-.sokfilter__av {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 1.7rem;
-  height: 1.7rem;
-  font-size: 0.85rem;
-  color: var(--blekk-dempet);
+/* --- Bytte av filter -----------------------------------------------------
+   Pillen er samtidig knappen som åpner en liten meny med de andre metodene og
+   veien ut av filteret. Menyen legger seg over innholdet ved pillen, og åpner
+   oppover når det ikke er plass under. */
+
+.filterbytte {
+  position: relative;
+  display: inline-flex;
+}
+
+.filterbytte__knapp {
+  display: inline-flex;
+  padding: 0;
   background: transparent;
-  border: var(--kant) solid transparent;
+  border: none;
   border-radius: var(--runding-full);
   cursor: pointer;
+  transition: transform var(--fart) var(--kurve);
+}
+
+.filterbytte__knapp:hover {
+  transform: translateY(-1px);
+}
+
+/* Et trykk hvor som helst utenfor menyen lukker den. Laget er usynlig — det
+   er ikke et lag som skal mørklegge appen, bare fange klikket. */
+.filterbytte__lag {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+}
+
+.filterbytte__meny {
+  position: absolute;
+  left: 50%;
+  z-index: 31;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.15rem;
+  padding: var(--rom-2);
+  /* Får menyen ikke plass verken over eller under pillen, ruller den innenfor
+     taket målingen setter i stedet for å strekke seg utenfor vinduet. */
+  overflow-y: auto;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-m);
+  box-shadow: var(--skygge-hevet);
+  transform: translateX(-50%);
+}
+
+.filterbytte[data-retning='ned'] .filterbytte__meny {
+  top: calc(100% + var(--rom-2));
+}
+
+.filterbytte[data-retning='opp'] .filterbytte__meny {
+  bottom: calc(100% + var(--rom-2));
+}
+
+.filterbytte__valg {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rom-4);
+  padding: 0.15rem var(--rom-2);
+  background: transparent;
+  border: var(--kant-tykk) solid transparent;
+  border-radius: var(--runding-s);
+  cursor: pointer;
   transition:
-    color var(--fart) var(--kurve),
     background-color var(--fart) var(--kurve),
     border-color var(--fart) var(--kurve);
 }
 
-.sokfilter__av:hover {
+.filterbytte__valg:hover {
+  background: var(--flate-hevet);
+}
+
+/* Metoden filteret alt står på, markert med kant og ikke med farge: fargen i
+   raden er metodens egen og skal bety metoden, ikke at den er valgt. */
+.filterbytte__valg[aria-current='true'] {
+  border-color: var(--aksent);
+}
+
+.filterbytte__av {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rom-4);
+  padding: var(--rom-2) var(--rom-2) var(--rom-1);
+  margin-top: var(--rom-1);
+  font-size: var(--tekst-s);
+  text-align: left;
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: none;
+  border-top: var(--kant) solid var(--linje);
+  border-radius: 0 0 var(--runding-s) var(--runding-s);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color var(--fart) var(--kurve), background-color var(--fart) var(--kurve);
+}
+
+.filterbytte__av:hover {
   color: var(--blekk);
   background: var(--flate-hevet);
-  border-color: var(--linje);
 }

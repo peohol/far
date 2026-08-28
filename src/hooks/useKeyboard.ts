@@ -4,19 +4,31 @@ import { feltetTarTegnene, mellomromErLedig, type Fokusert } from '../domain/tas
 export type KeyHandler = (event: KeyboardEvent) => void
 
 /**
- * Sant når et lag ligger over appen — endringsloggen eller sidemenyen.
+ * Sant når et modalt lag fanger tastaturet — endringsloggen, i dag.
+ *
+ * Skiller seg fra {@link lagLiggerOver} ved at sidemenyen og filtermenyen ikke
+ * teller. De er ikke modale, og snarveiene som gjelder hele appen skal virke
+ * mens de står åpne.
+ */
+export function modaltLagLiggerOver(): boolean {
+  return document.querySelector('dialog[open]') !== null
+}
+
+/**
+ * Sant når et lag ligger over appen — endringsloggen, sidemenyen eller
+ * filtermenyen.
  *
  * Appens egne taster henger på vinduet og hører etter uansett hvor fokus står.
  * Uten denne vakten ville `Esc` både lukket laget og sendt appen et steg
  * tilbake, og talltastene valgt bånd i steget bak. Regelen står ett sted og
  * brukes av alle som lytter på vinduet.
  *
- * Endringsloggen er en `<dialog>` og kjennes på den. Sidemenyen er ikke en
- * dialog — den skal kunne stå åpen mens appen bak er synlig — og sier fra med
+ * Endringsloggen er en `<dialog>` og kjennes på den. De to menyene er ikke
+ * dialoger — de skal kunne stå åpne mens appen bak er synlig — og sier fra med
  * `data-lag` i stedet.
  */
 export function lagLiggerOver(): boolean {
-  return document.querySelector('dialog[open], [data-lag]') !== null
+  return modaltLagLiggerOver() || document.querySelector('[data-lag]') !== null
 }
 
 /**
