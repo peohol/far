@@ -1,6 +1,5 @@
 import { Pill } from './Pill'
-import { useTips } from './Tips'
-import { metodebeskrivelse, metodefarger } from '../domain/analysemetoder'
+import { metodefarger } from '../domain/analysemetoder'
 
 export interface MetodepilleProps {
   /** Koden til analysemetoden, f.eks. «SPFA». */
@@ -11,7 +10,7 @@ export interface MetodepilleProps {
 
 /**
  * Analysemetoden en analytt rekvireres under, som én pille: «SPFA ›
- * Antidepressiver».
+ * Antipsykotika».
  *
  * Metoden og kategorien hører sammen — kategorien betyr ingenting uten
  * metoden den ligger i — så de deler pille i stedet for å stå som to.
@@ -19,28 +18,22 @@ export interface MetodepilleProps {
  * menyknappen når filteret står på metoden, slik at fargen alene sier hvilken
  * analyse dette er.
  *
- * Koden sier ikke alltid seg selv, så beskrivelsen henger på som et tips.
- * Pillen er derfor et tipsanker og får et tabulatorstopp, slik `Tips` gir all
- * annen tekst med forklaring bak seg: forklaringen skal kunne hentes fram med
- * tastaturet og ikke bare med pekeren.
+ * Koden står alene, uten forklaring bak seg: de som kommenterer analysene
+ * kjenner kodene sine, og en boble som gjentar dem ville bare vært i veien.
+ * Hva koden betyr, står i sidemenyen for den som trenger det.
  */
 export function Metodepille({ metode, kategori }: MetodepilleProps) {
-  const tips = useTips(metodebeskrivelse(metode))
-
   return (
-    <>
-      <Pill tone="metode" style={metodefarger(metode)} tabIndex={0} {...tips.props}>
-        <span className="metodepille__kode">{metode}</span>
-        {kategori && (
-          <>
-            <span className="metodepille__skille" aria-hidden="true">
-              ›
-            </span>
-            <span className="metodepille__kategori">{kategori}</span>
-          </>
-        )}
-      </Pill>
-      {tips.forklaring}
-    </>
+    <Pill tone="metode" style={metodefarger(metode)}>
+      <span className="metodepille__kode">{metode}</span>
+      {kategori && (
+        <>
+          <span className="metodepille__skille" aria-hidden="true">
+            ›
+          </span>
+          <span className="metodepille__kategori">{kategori}</span>
+        </>
+      )}
+    </Pill>
   )
 }

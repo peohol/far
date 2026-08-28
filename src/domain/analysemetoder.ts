@@ -54,19 +54,6 @@ export function metodefarger(kode: string): Record<string, string> {
   return optionColourVars(Math.max(plass, 0), ANALYSEMETODER.length)
 }
 
-/** Metoden med denne koden, eller `undefined` om koden er ukjent. */
-export function analysemetode(kode: string): Analysemetode | undefined {
-  return METODE_PER_KODE.get(kode)
-}
-
-/**
- * Beskrivelsen av metoden. Ukjente koder svarer med seg selv, slik at en ny
- * metode i datasettet vises med koden sin i stedet for å bli borte.
- */
-export function metodebeskrivelse(kode: string): string {
-  return METODE_PER_KODE.get(kode)?.beskrivelse ?? kode
-}
-
 /* --- Oppføringene i menyen ---------------------------------------------- */
 
 /** Ett virkestoff i menyen, og analytten det fører til. */

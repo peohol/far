@@ -4,7 +4,6 @@ import {
   byggMeny,
   filtrertPool,
   menyanalytter,
-  metodebeskrivelse,
   metodefarger,
 } from '../analysemetoder'
 import { analytes } from '../analytes'
@@ -63,12 +62,6 @@ describe('analysemetoden på analyttene', () => {
         `${m.kode} har både analytter med og uten kategori`,
       ).toBe(true)
     }
-  })
-
-  it('svarer med beskrivelsen av metoden, og med koden selv når den er ukjent', () => {
-    expect(metodebeskrivelse('SPFA')).toBe('Antidepressiver og antipsykotika i serum')
-    expect(metodebeskrivelse('UCAK')).toBe('THC-syre i urin')
-    expect(metodebeskrivelse('XYZ')).toBe('XYZ')
   })
 })
 

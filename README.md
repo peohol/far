@@ -198,7 +198,9 @@ datasettet, ikke i en liste i koden:
 Metoden og kategorien står sammen i **én pille** øverst i analyttkortet, over
 analyttkoden: «SPFA › Antidepressiver». De hører sammen — kategorien betyr
 ingenting uten metoden — og deler derfor pille i stedet for å stå som to.
-Analyttkoden beholder aksentfargen sin under.
+Analyttkoden beholder aksentfargen sin under. Pillen bærer ingen forklaring:
+de som kommenterer analysene kjenner kodene sine, og hva en kode betyr står i
+sidemenyen for den som trenger det.
 
 Hver metode har **én farge**, gitt av plassen i `ANALYSEMETODER` og slått opp
 med `metodefarger()`. Den samme fargen bærer skuffen i menyen, pillen i
@@ -226,7 +228,8 @@ filteret står på. Et filter som står på, kan gjøre at en analytt man vet
 finnes ikke dukker opp i søket, så det vises to steder utenfor menyen:
 menyknappen utvider seg til en pille med metodekoden i metodens farge
 («≡ SPFA»), og under søkealternativene står «Søket er begrenset til» med den
-samme pillen — også når søket gir treff.
+samme pillen — også når søket gir treff. Ved siden av pillen står en knapp som
+slår filteret av, så veien ut ikke går gjennom menyen.
 
 Menyknappen åpner menyen og blir liggende skjult bak panelet til det lukkes
 igjen; panelet har sin egen lukkeknapp øverst til høyre. `Ctrl + M` åpner og

@@ -361,8 +361,6 @@
   font-size: var(--tekst-xs);
   color: var(--alt-ink);
   background: var(--alt-solid);
-  /* Pillen bærer forklaringen av koden, som ethvert annet tipsanker. */
-  cursor: help;
 }
 
 .pille--metode .pille__verdi {
@@ -2416,4 +2414,30 @@ details[open] > .detalj__kropp {
   gap: var(--rom-2);
   font-size: var(--tekst-s);
   color: var(--blekk-dempet);
+}
+
+/* Veien ut av filteret. Dempet i ro, så den ikke konkurrerer med pillen ved
+   siden av, og tydelig når pekeren eller tastaturet finner den. */
+.sokfilter__av {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.7rem;
+  height: 1.7rem;
+  font-size: 0.85rem;
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-full);
+  cursor: pointer;
+  transition:
+    color var(--fart) var(--kurve),
+    background-color var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve);
+}
+
+.sokfilter__av:hover {
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  border-color: var(--linje);
 }
