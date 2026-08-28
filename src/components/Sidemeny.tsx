@@ -256,13 +256,17 @@ function Skuff({
   return (
     <li ref={rad} className="menyskuff" data-apen={apen ? 'ja' : 'nei'} style={farger}>
       <div className="menyskuff__hode">
-        <label className="menyvalg menyvalg--skuff" {...filtertips.props}>
+        {/* Tipset henger på selve radioknappen og ikke på etiketten rundt:
+            etiketten får aldri fokus selv, og forklaringen ville da bare vært
+            å få med pekeren. */}
+        <label className="menyvalg menyvalg--skuff">
           <input
             type="radio"
             name="analysemetodefilter"
             checked={valgt}
             onChange={onFilter}
             aria-label={`Vis bare treff fra ${metode.kode} – ${metode.beskrivelse}`}
+            {...filtertips.props}
           />
         </label>
 

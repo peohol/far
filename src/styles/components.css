@@ -360,6 +360,8 @@
   letter-spacing: 0.12em;
   color: var(--pille-metode-blekk);
   background: var(--pille-metode-flate);
+  /* Pillen bærer forklaringen av koden, som ethvert annet tipsanker. */
+  cursor: help;
 }
 
 .pille--kategori {
