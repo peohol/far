@@ -7,8 +7,9 @@ import {
   type FocusEvent,
 } from 'react'
 import { Metodepille } from './Metodepille'
+import { Shortcut } from './Shortcut'
 import { useTips } from './Tips'
-import { ANALYSEMETODER } from '../domain/analysemetoder'
+import { ANALYSEMETODER, metodesnarvei } from '../domain/analysemetoder'
 
 /**
  * Pillen som viser hvilken analysemetode søket er begrenset til, og som åpner
@@ -177,18 +178,23 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
             aria-label="Endre filter"
             style={oppsett.plass === null ? undefined : { maxHeight: `${oppsett.plass}px` }}
           >
-            {ANALYSEMETODER.map((metode) => (
-              <button
-                key={metode.kode}
-                type="button"
-                className="filterbytte__valg"
-                aria-current={metode.kode === metodefilter}
-                aria-label={`Begrens søket til ${metode.kode} – ${metode.beskrivelse}`}
-                onClick={() => velg(metode.kode)}
-              >
-                <Metodepille metode={metode.kode} />
-              </button>
-            ))}
+            {ANALYSEMETODER.map((metode) => {
+              const snarvei = metodesnarvei(metode.kode)
+              return (
+                <button
+                  key={metode.kode}
+                  type="button"
+                  className="filterbytte__valg"
+                  aria-current={metode.kode === metodefilter}
+                  aria-label={`Begrens søket til ${metode.kode} – ${metode.beskrivelse}`}
+                  {...(snarvei && { 'aria-keyshortcuts': snarvei.replace(/ /g, '') })}
+                  onClick={() => velg(metode.kode)}
+                >
+                  <Metodepille metode={metode.kode} />
+                  {snarvei && <Shortcut>{snarvei}</Shortcut>}
+                </button>
+              )
+            })}
 
             <button type="button" className="filterbytte__av" onClick={() => velg(null)}>
               Skru av filter

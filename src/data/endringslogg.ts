@@ -20,6 +20,7 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Pillen i «Søket er begrenset til …» er nå en knapp. Et trykk åpner en liten meny med alle analysemetodene under hverandre, og «Skru av filter» nederst. Derfra kan du bytte til en annen metode eller slå filteret av med ett trykk, uten å åpne sidemenyen.',
       'Krysset som slo filteret av, er tatt bort. Det gjorde bare den ene tingen; menyen gjør begge.',
+      'Nye hurtigtaster: Alt + 1 til Alt + 5 begrenser søket til hver sin analysemetode, i samme rekkefølge som menyen viser dem — Alt + 1 er SPFA, Alt + 5 er AHT. De virker overalt i appen, også mens menyene står åpne, og tasten står ved siden av metoden i begge menyene når hurtigtastmerkene er slått på.',
       'Menyen åpner nedover når det er plass under pillen, og ellers til den siden som har mest plass. Er vinduet så lavt at den ikke får plass noen av veiene, ruller den innenfor plassen den har, så ingen av valgene havner utenfor skjermen.',
       'Esc, et trykk utenfor, eller å tabulere seg ut av menyen lukker den.',
       'Slår du filteret av, forsvinner hele linja, og skrivingen fortsetter i søkefeltet uten at du må klikke deg tilbake dit.',

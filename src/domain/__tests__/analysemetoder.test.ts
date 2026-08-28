@@ -5,6 +5,7 @@ import {
   filtrertPool,
   menyanalytter,
   metodefarger,
+  metodesnarvei,
 } from '../analysemetoder'
 import { analytes } from '../analytes'
 import { ETG_ANALYTT, ETG_KODE, ETS_KODE } from '../etg'
@@ -276,5 +277,28 @@ describe('filteret', () => {
     expect(search('thc-syre', filtrertPool(pool, 'UCAK'))).toHaveLength(1)
     expect(search('etg', filtrertPool(pool, 'UETGHB'))).toHaveLength(1)
     expect(search('metadon', filtrertPool(pool, 'SRUS'))).toHaveLength(1)
+  })
+})
+
+describe('hurtigtasten som setter filteret', () => {
+  it('følger metodens plass i lista, fra Alt + 1', () => {
+    expect(metodesnarvei('SPFA')).toBe('Alt + 1')
+    expect(metodesnarvei('SRUS')).toBe('Alt + 2')
+    expect(metodesnarvei('UCAK')).toBe('Alt + 3')
+    expect(metodesnarvei('UETGHB')).toBe('Alt + 4')
+    expect(metodesnarvei('AHT')).toBe('Alt + 5')
+  })
+
+  it('gir hver metode sin egen tast, og ingen til en ukjent kode', () => {
+    const taster = ANALYSEMETODER.map((m) => metodesnarvei(m.kode))
+    expect(taster.every((t) => t !== null)).toBe(true)
+    expect(new Set(taster).size).toBe(ANALYSEMETODER.length)
+    expect(metodesnarvei('XYZ')).toBe(null)
+  })
+
+  it('rekker over alle metodene appen har', () => {
+    // Talltastene stopper på 9. Blir det flere metoder enn det, må menyen få
+    // en annen vei inn enn Alt + tall.
+    expect(ANALYSEMETODER.length).toBeLessThanOrEqual(9)
   })
 })

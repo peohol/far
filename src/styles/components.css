@@ -2289,6 +2289,13 @@ details[open] > .detalj__kropp {
   transform: rotate(-135deg);
 }
 
+/* Metodekoden og hurtigtasten som setter filteret på metoden, på linje. */
+.menyskuff__merking {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
 /* Metodekoden bærer skuffens farge, på samme måte som koden i et
    søkealternativ bærer alternativets. */
 .menyskuff__kode {
@@ -2477,7 +2484,9 @@ details[open] > .detalj__kropp {
 
 .filterbytte__valg {
   display: flex;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rom-4);
   padding: 0.15rem var(--rom-2);
   background: transparent;
   border: var(--kant-tykk) solid transparent;

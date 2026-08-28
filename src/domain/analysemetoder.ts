@@ -54,6 +54,18 @@ export function metodefarger(kode: string): Record<string, string> {
   return optionColourVars(Math.max(plass, 0), ANALYSEMETODER.length)
 }
 
+/**
+ * Hurtigtasten som setter filteret på metoden: Alt + plassen i lista, fra 1.
+ * `null` for en metode som ligger utenfor talltastene, og for ukjente koder.
+ *
+ * Tasten leses av det samme registeret som fargen og rekkefølgen, så merket i
+ * menyen og tasten som faktisk virker ikke kan komme i utakt.
+ */
+export function metodesnarvei(kode: string): string | null {
+  const plass = ANALYSEMETODER.findIndex((m) => m.kode === kode)
+  return plass >= 0 && plass < 9 ? `Alt + ${plass + 1}` : null
+}
+
 /* --- Oppføringene i menyen ---------------------------------------------- */
 
 /** Ett virkestoff i menyen, og analytten det fører til. */
