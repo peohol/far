@@ -389,7 +389,7 @@
       ],
       "gruppe": "Antihypertensiver",
       "analysemetode": "AHT",
-      "kategori": "Aldosteronagonister",
+      "kategori": "Aldosteronantagonister",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -442,7 +442,7 @@
       ],
       "gruppe": "Antihypertensiver",
       "analysemetode": "AHT",
-      "kategori": "Aldosteronagonister",
+      "kategori": "Aldosteronantagonister",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {

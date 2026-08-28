@@ -3,7 +3,7 @@ import { Button } from './Button'
 import { StepBar } from './StepBar'
 import { ResetIcon, SearchIcon } from './icons'
 import { indexToDigit, lagLiggerOver } from '../hooks/useKeyboard'
-import { metodebeskrivelse } from '../domain/analysemetoder'
+import { Metodepille } from './Metodepille'
 import { splitName } from '../domain/names'
 import { optionColourVars } from '../domain/optionColours'
 import type { SearchHit } from '../domain/search'
@@ -108,7 +108,16 @@ export function SearchStep({
           />
         </div>
 
-        <Options hits={hits} onSelect={onSelect} query={query} metodefilter={metodefilter} />
+        <Options hits={hits} onSelect={onSelect} query={query} />
+
+        {/* Filteret er lett å glemme, og et glemt filter ser ut som at en
+            analytt ikke finnes. Derfor står det under alternativene så lenge
+            det er på — også når søket gir treff. */}
+        {metodefilter && (
+          <p className="sokfilter">
+            Søket er begrenset til <Metodepille metode={metodefilter} />
+          </p>
+        )}
       </div>
     </section>
   )
@@ -118,28 +127,17 @@ function Options({
   hits,
   onSelect,
   query,
-  metodefilter,
 }: {
   hits: SearchHit[]
   onSelect: (analyte: Analyte) => void
   query: string
-  metodefilter: string | null
 }) {
   if (query === '') return null
 
   if (hits.length === 0) {
     return (
       <p className="ingen-treff" role="status">
-        Ingen analytter passer søket.
-        {/* Står filteret på, er det den vanligste grunnen til at en analytt
-            man vet finnes, ikke dukker opp. Da skal det stå her og ikke bare
-            inne i menyen. */}
-        {metodefilter && (
-          <>
-            {' '}
-            Søket er begrenset til {metodefilter} – {metodebeskrivelse(metodefilter)}.
-          </>
-        )}
+        Ingen stoffer passer med søket.
       </p>
     )
   }

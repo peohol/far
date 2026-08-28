@@ -55,25 +55,21 @@ ANALYSEMETODE = "AHT"
 #
 # AHT.docx har ingen slik inndeling. Tabellen er delt inn en gang, av
 # klinikeren, ved a lese virkestoffnavnenes suffikser: -pril(at) er
-# ACE-hemmere, -renon aldosteronagonister, -ilol og -alol alfa- og
+# ACE-hemmere, -renon aldosteronantagonister, -ilol og -alol alfa- og
 # betablokkere, doksazosin alfablokker, -sartan ARB, -olol betablokkere, -id
 # diuretika, og resten kalsiumantagonister. Klinikeren presiserte at
 # suffiksene var en engangsnokkel og ikke en regel som skal gjelde videre, sa
 # resultatet star her som en oppslagsliste og utledes ikke av navnet. Et nytt
 # virkestoff ma fores inn manuelt; skriptet stopper hvis noen mangler.
 #
-# To forhold er verdt a merke seg:
-#   * Losartansyre ender pa -syre og ikke pa -sartan, men er den virksomme
-#     metabolitten av losartan og fort som ARB.
-#   * "Aldosteronagonister" er klinikerens egen overskrift. Eplerenon og
-#     kanrenon virker som aldosteronantagonister; overskriften er beholdt slik
-#     klinikeren skrev den og skal bare endres av klinikeren selv.
+# Losartansyre er verdt a merke seg: den ender pa -syre og ikke pa -sartan,
+# men er den virksomme metabolitten av losartan og fort som ARB.
 KATEGORI = {
     "ENAT": "ACE-hemmere",
     "LISI": "ACE-hemmere",
     "RAMAT": "ACE-hemmere",
-    "EPLR": "Aldosteronagonister",
-    "KANR": "Aldosteronagonister",
+    "EPLR": "Aldosteronantagonister",
+    "KANR": "Aldosteronantagonister",
     "KARV": "Alfa- og betablokkere",
     "LABE": "Alfa- og betablokkere",
     "DOKSA": "Alfablokkere",

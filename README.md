@@ -29,6 +29,7 @@ ingenting ekstra.
 | Steg | Hva som skjer | Taster |
 | --- | --- | --- |
 | 1 | Begynn å skrive navnet på en analytt eller kode | hvilken som helst bokstav |
+| — | Åpne og lukke sidemenyen, når som helst | `Ctrl + M` |
 | 2 | Velg blant alternativene som passer søket — er det bare ett igjen, går appen videre til det av seg selv | `1`–`9` og `0`, eller `Enter`/`Space` |
 | 3 | Velg hvilket konsentrasjonsbånd svaret havner i — kommentaren kopieres | `1`–`4` |
 | 4 | Lim inn kommentaren på analyttkoden som vises — båndknappen som ble brukt, står over kortet som bevis | `Enter`/`Space` avslutter og nullstiller |
@@ -192,18 +193,27 @@ datasettet, ikke i en liste i koden:
 | `SRUS` | Stoffer med ruspotensial i serum | Benzodiazepiner og Z-hypnotika, cannabinoider, opioider, sentralstimulerende |
 | `UCAK` | THC-syre i urin | ingen |
 | `UETGHB` | Etanolmetabolitter i urin | ingen |
-| `AHT` | Antihypertensiver | ACE-hemmere, aldosteronagonister, alfa- og betablokkere, alfablokkere, ARB, betablokkere, diuretika, kalsiumantagonister |
+| `AHT` | Antihypertensiver | ACE-hemmere, aldosteronantagonister, alfa- og betablokkere, alfablokkere, ARB, betablokkere, diuretika, kalsiumantagonister |
 
-Metodene og kategoriene vises som piller øverst i analyttkortet, over
-analyttkoden. De tre pilletypene har hver sin farge: analysemetoden fiolett,
-kategorien plomme og analyttkoden blå.
+Metoden og kategorien står sammen i **én pille** øverst i analyttkortet, over
+analyttkoden: «SPFA › Antidepressiver». De hører sammen — kategorien betyr
+ingenting uten metoden — og deler derfor pille i stedet for å stå som to.
+Analyttkoden beholder aksentfargen sin under.
+
+Hver metode har **én farge**, gitt av plassen i `ANALYSEMETODER` og slått opp
+med `metodefarger()`. Den samme fargen bærer skuffen i menyen, pillen i
+analyttkortet, pillen i søket og menyknappen når filteret står på metoden, så
+SPFA er den samme fargen overalt. Fargene kommer fra det samme settet som
+søkealternativene bruker, og kontrasten deres måles i
+`domain/__tests__/optionColours.test.ts`.
 
 Sidemenyen bygges av de samme søkeoppføringene som søket leter i
 (`byggMeny()` i `src/domain/analysemetoder.ts`), så listene kan ikke komme i
 utakt med det appen faktisk kan kommentere. Én skuff per metode, én av gangen
-åpen, hver med sin farge fra det samme settet som søkealternativene bruker.
-Virkestoffene står alfabetisk, og bryteren «Vis kategorier» slår
-kategoriskillene av og lister dem i én bolk i stedet.
+åpen. Virkestoffene står alfabetisk, og bryteren «Vis kategorier» slår
+kategoriskillene av og lister dem i én bolk i stedet. Bryteren og
+«Inkluder alle analysemetoder» står fast øverst i panelet — de gjelder hele
+lista og skal ikke kunne rulles bort fra den.
 
 Én linje per **analyttkode**: en sumanalyse som `AMTNORSUM` er én linje, mens
 en modul som dekker flere koder — diazepamgruppen, morfin og kodein, EtG og
@@ -213,12 +223,18 @@ Radioknappen til venstre for en metode begrenser søket til den metoden;
 «Inkluder alle analysemetoder» slår filteret av. Filteret gjelder bare søket:
 menyen viser alltid alt, og et virkestoff kan velges derfra uansett hva
 filteret står på. Et filter som står på, kan gjøre at en analytt man vet
-finnes ikke dukker opp i søket, så det er merket med en prikk på menyknappen og
-nevnt i beskjeden når søket ikke gir treff.
+finnes ikke dukker opp i søket, så det vises to steder utenfor menyen:
+menyknappen utvider seg til en pille med metodekoden i metodens farge
+(«≡ SPFA»), og under søkealternativene står «Søket er begrenset til» med den
+samme pillen — også når søket gir treff.
+
+Menyknappen åpner menyen og blir liggende skjult bak panelet til det lukkes
+igjen; panelet har sin egen lukkeknapp øverst til høyre. `Ctrl + M` åpner og
+lukker, `Esc` lukker, og det gjør også et trykk hvor som helst på
+hovedinnholdet.
 
 Menyen er et lag over appen, som endringsloggen: `data-lag` sier fra til
 `lagLiggerOver()`, slik at appens egne taster ligger i ro mens den står åpen.
-`Esc` og et trykk på hovedinnholdet lukker den.
 
 ### Versjon og endringslogg
 
@@ -359,7 +375,7 @@ bånd i to eller får en ringepåminnelse i limsteget.
 
 `AHT.docx` har ingen inndeling i legemiddelgrupper. Inndelingen sidemenyen
 viser, er gjort én gang av klinikeren ved å lese suffiksene i
-virkestoffnavnene: `-pril(at)` ACE-hemmere, `-renon` aldosteronagonister,
+virkestoffnavnene: `-pril(at)` ACE-hemmere, `-renon` aldosteronantagonister,
 `-ilol`/`-alol` alfa- og betablokkere, doksazosin alfablokker, `-sartan` ARB,
 `-olol` betablokkere, `-id` diuretika, og resten kalsiumantagonister.
 
@@ -367,10 +383,8 @@ Suffiksene var en engangsnøkkel og er ikke en regel som gjelder videre.
 Resultatet står derfor som en oppslagsliste (`KATEGORI` i
 `scripts/build_antihypertensiver.py`) og utledes ikke av navnet; et nytt
 virkestoff må føres inn manuelt, og byggeskriptet stopper hvis noen mangler.
-To forhold er verdt å merke seg: losartansyre ender på `-syre` og ikke på
-`-sartan`, men er den virksomme metabolitten av losartan og ført som ARB, og
-«aldosteronagonister» er klinikerens egen overskrift for eplerenon og
-kanrenon.
+Losartansyre er verdt å merke seg: den ender på `-syre` og ikke på `-sartan`,
+men er den virksomme metabolitten av losartan og ført som ARB.
 
 ### Referansetallene på analyttkortet
 
@@ -816,12 +830,17 @@ hele sitt eget navn — «Kopier tilleggskommentar» — så de kan skilles fra
 hverandre uten å lese omgivelsene.
 
 Sidemenyen er merket som `<nav>` med navn, menyknappen melder om den er åpen
-med `aria-expanded`, og radioknappene er ekte radioknapper i en gruppe med
-navn, så filteret kan settes med piltastene. Skuffene melder seg med
-`aria-expanded` og `aria-controls`, og innholdet i en lukket skuff er satt
-usynlig når glidningen er over, så det verken nås med tabulator eller leses
-opp. `Esc` lukker menyen, og appens egne taster ligger i ro så lenge den står
-åpen.
+med `aria-expanded` og om snarveien med `aria-keyshortcuts`, og radioknappene
+er ekte radioknapper i en gruppe med navn, så filteret kan settes med
+piltastene. Skuffene melder seg med `aria-expanded` og `aria-controls`, og
+innholdet i en lukket skuff er satt usynlig når glidningen er over, så det
+verken nås med tabulator eller leses opp.
+
+Fordi menyknappen blir liggende skjult bak panelet, tar panelet selv imot
+fokuset når menyen åpnes, og tabulator går rundt inne i det så lenge den står
+åpen — fokus skal ikke kunne havne på noe man ikke ser. Lukking gir fokus
+tilbake til menyknappen, som da er synlig igjen. `Esc` lukker menyen, og appens
+egne taster ligger i ro så lenge den står åpen.
 
 Endringsloggen åpner med den nyeste føringen fokusert, ikke med lukkeknappen,
 så `Enter` folder ut det man kom for i stedet for å lukke loggen igjen med det

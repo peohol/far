@@ -71,10 +71,8 @@ const KRAV: [string, string, number, string][] = [
   ['--merke-design-blekk', '--merke-design-flate', 4.5, 'merket «Design / layout»'],
   ['--merke-funksjon-blekk', '--merke-funksjon-flate', 4.5, 'merket «Funksjonalitet»'],
   ['--merke-fag-blekk', '--merke-fag-flate', 4.5, 'merket «Fag»'],
-  // Pillene øverst i analyttkortet. Analyttkoden er dekket av «tekst i
-  // hovedknapp», som bruker de samme to tokenene.
-  ['--pille-metode-blekk', '--pille-metode-flate', 4.5, 'pillen for analysemetode'],
-  ['--pille-kategori-blekk', '--pille-kategori-flate', 4.5, 'pillen for kategori'],
+  // Analysemetodepillen bærer metodens egen farge og ikke et token; den
+  // kontrastmåles i `domain/__tests__/optionColours.test.ts`.
 ]
 
 describe.each(Object.entries(TEMAER))('%s tema', (_navn, palett) => {

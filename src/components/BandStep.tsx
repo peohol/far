@@ -1,7 +1,7 @@
 import { useMemo, type CSSProperties } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
-import { Metodepiller } from './Metodepiller'
+import { Metodepille } from './Metodepille'
 import { Pill, type PillTone } from './Pill'
 import { StepBar } from './StepBar'
 import { Shortcut } from './Shortcut'
@@ -81,7 +81,7 @@ export function BandStep({ analyte, onPick, onBack, failed }: BandStepProps) {
       </StepBar>
 
       <Card align="start" className="analyttkort">
-        <Metodepiller metode={analyte.analysemetode} kategori={analyte.kategori} />
+        <Metodepille metode={analyte.analysemetode} kategori={analyte.kategori} />
         <Pill tone="kode">{analyte.kode}</Pill>
         <h1 className="analytt__navn">{displayName(analyte)}</h1>
         <div className="analytt__grenser">

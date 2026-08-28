@@ -352,41 +352,39 @@
   color: inherit;
 }
 
-/* Analysemetoden er en kode, som analyttkoden, og står fylt og i mono — bare i
-   en annen farge. Kategorien er et ord, og står tonet og i vanlig skrift. */
+/* Analysemetoden bærer sin egen farge, den samme overalt i appen. Fargen
+   settes på elementet av `metodefarger()`, så pillen, skuffen i menyen og
+   menyknappen ikke kan komme i utakt. Pillen er mindre enn analyttkoden under:
+   den sier hvor analytten hører hjemme, ikke hva som skal kommenteres. */
 .pille--metode {
-  font-family: var(--skrift-mono);
-  font-weight: var(--vekt-tung);
-  letter-spacing: 0.12em;
-  color: var(--pille-metode-blekk);
-  background: var(--pille-metode-flate);
+  padding: 0.15rem var(--rom-2);
+  font-size: var(--tekst-xs);
+  color: var(--alt-ink);
+  background: var(--alt-solid);
   /* Pillen bærer forklaringen av koden, som ethvert annet tipsanker. */
   cursor: help;
 }
 
-.pille--kategori {
-  color: var(--pille-kategori-blekk);
-  background: var(--pille-kategori-flate);
-}
-
-.pille--metode .pille__verdi,
-.pille--kategori .pille__verdi {
+.pille--metode .pille__verdi {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35ch;
   color: inherit;
 }
 
-/* Metoden og kategorien står øverst i kortet, over analyttkoden. */
-.metodepiller {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--rom-2);
+/* Koden står som en kode — mono og sperret — og kategorien som et ord. */
+.metodepille__kode {
+  font-family: var(--skrift-mono);
+  font-weight: var(--vekt-tung);
+  letter-spacing: 0.1em;
 }
 
-/* Pillene er små i forhold til analyttkoden under: de sier hvor analytten
-   hører hjemme, ikke hva som skal kommenteres. */
-.metodepiller .pille {
-  padding: 0.15rem var(--rom-2);
-  font-size: var(--tekst-xs);
+.metodepille__skille {
+  opacity: 0.6;
+}
+
+.metodepille__kategori {
+  font-weight: var(--vekt-medium);
 }
 
 /* --- Steg 2: analytt og konsentrasjonsbånd ------------------------------ */
@@ -1995,15 +1993,20 @@ details[open] > .detalj__kropp {
    filter ville gjort verktøylinja og versjonspilla om til noe de flyter i
    stedet for å ligge fast i vinduet. */
 
+/* Knappen ligger under panelet i stapelen: når menyen åpnes, blir den liggende
+   skjult bak den til menyen lukkes igjen. Lukkeknappen er menyens egen. */
 .menyknapp {
   position: fixed;
   top: var(--rom-3);
   left: var(--rom-3);
-  z-index: 60;
-  display: grid;
-  place-items: center;
-  width: 2.9rem;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rom-2);
+  min-width: 2.9rem;
   height: 2.9rem;
+  padding: 0 0.75rem;
   font-size: 1.35rem;
   color: var(--blekk-dempet);
   background: var(--flate);
@@ -2021,25 +2024,31 @@ details[open] > .detalj__kropp {
   border-color: var(--linje-sterk);
 }
 
-.menyknapp[aria-expanded='true'] {
-  color: var(--aksent);
-  background: var(--aksent-flate);
-  border-color: var(--aksent);
+/* Et filter som står på, begrenser hva søket kan finne. Da utvider knappen seg
+   til en pille med metodekoden, i metodens egen farge, så det går fram av
+   hjørnet alene hva søket er begrenset til. */
+.menyknapp[data-filter='ja'] {
+  color: var(--alt-ink);
+  background: var(--alt-solid);
+  border-color: var(--alt-solid);
 }
 
-/* Et filter som står på, begrenser hva søket kan finne. Prikken sier fra om
-   det uten at menyen må åpnes; hvilken metode det gjelder står i knappens
-   navn og i tipset. */
-.menyknapp[data-filter='ja']::after {
-  content: '';
-  position: absolute;
-  right: 0.35rem;
-  top: 0.35rem;
-  width: 0.6rem;
-  height: 0.6rem;
-  background: var(--aksent);
-  border: var(--kant-tykk) solid var(--flate);
-  border-radius: var(--runding-full);
+.menyknapp[data-filter='ja']:hover {
+  color: var(--alt-ink);
+  border-color: var(--alt-ink);
+}
+
+.menyknapp__filter {
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-tung);
+  letter-spacing: 0.1em;
+  line-height: 1;
+}
+
+/* Hurtigtastmerket står i knappens egen skriftstørrelse og ikke i ikonets. */
+.menyknapp .hurtigtast {
+  font-size: var(--tekst-xxs);
 }
 
 .menylag {
@@ -2095,13 +2104,22 @@ details[open] > .detalj__kropp {
   transition-delay: 0s;
 }
 
-/* Tittelen viker for menyknappen, som ligger over panelets eget hjørne. */
+/* Panelet tar imot fokuset når det åpnes, så tabulator begynner på toppen.
+   Ringen hører til knapper og felt, ikke til flaten de står på. */
+.sidemeny:focus {
+  outline: none;
+}
+
+/* Tittelen står til venstre, lukkeknappen i motsatt hjørne. Menyknappen ligger
+   skjult bak panelet så lenge menyen er åpen. */
 .sidemeny__topp {
   flex: none;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: var(--rom-3);
   min-height: 3.9rem;
-  padding: var(--rom-3) var(--rom-3) var(--rom-3) 4.4rem;
+  padding: var(--rom-3);
   border-bottom: var(--kant) solid var(--linje);
 }
 
@@ -2111,16 +2129,38 @@ details[open] > .detalj__kropp {
   color: var(--blekk);
 }
 
-.sidemeny__innhold {
-  overflow-y: auto;
-  padding: var(--rom-3) var(--rom-2) var(--rom-4);
+.sidemeny__lukk {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.4rem;
+  height: 2.4rem;
+  font-size: 1.15rem;
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-full);
+  cursor: pointer;
+  transition:
+    color var(--fart) var(--kurve),
+    background-color var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve);
 }
 
-/* Bryteren for kategoriene står øverst: den avgjør formen på alt under. */
+.sidemeny__lukk:hover {
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  border-color: var(--linje);
+}
+
+/* Bryteren for kategoriene og «alle»-valget gjelder hele lista, og står fast
+   øverst i stedet for å rulle bort med den. */
 .menyveksle {
+  flex: none;
   display: flex;
   align-items: center;
   gap: var(--rom-2);
+  margin: var(--rom-3) var(--rom-2) 0;
   padding: var(--rom-2) var(--rom-3);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-medium);
@@ -2136,25 +2176,32 @@ details[open] > .detalj__kropp {
   cursor: pointer;
 }
 
+/* Den faste raden øverst og den rullende lista under. */
 .menyfilter {
-  margin: 0;
-  padding: 0;
-  border: none;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 0 var(--rom-2) var(--rom-2);
+}
+
+/* Radioknappen som slår filteret av gjelder alle metodene, og står derfor over
+   dem med en linje under som skiller den fra skuffene. */
+.menyvalg--alle {
+  flex: none;
+  margin-bottom: var(--rom-2);
+  padding-bottom: var(--rom-3);
+  border-bottom: var(--kant) solid var(--linje);
 }
 
 .menyliste {
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: var(--rom-1);
   margin: 0;
-}
-
-/* Radioknappen som slår filteret av: den gjelder alle metodene og står derfor
-   over dem, med en linje under som skiller den fra skuffene. */
-.menyrad--alle {
+  overflow-y: auto;
   padding-bottom: var(--rom-2);
-  margin-bottom: var(--rom-1);
-  border-bottom: var(--kant) solid var(--linje);
 }
 
 .menyvalg {
@@ -2357,4 +2404,16 @@ details[open] > .detalj__kropp {
   .menyskuff__inner {
     transition-delay: 0s;
   }
+}
+
+/* Filteret under søkealternativene. Det står så lenge filteret er på, også når
+   søket gir treff: et glemt filter ser ut som at et stoff ikke finnes. */
+.sokfilter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
 }

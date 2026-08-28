@@ -1,6 +1,6 @@
 import { forwardRef, type ComponentPropsWithoutRef, type ReactNode } from 'react'
 
-export type PillTone = 'noytral' | 'kode' | 'metode' | 'kategori' | 'ring' | 'over'
+export type PillTone = 'noytral' | 'kode' | 'metode' | 'ring' | 'over'
 
 export interface PillProps extends Omit<ComponentPropsWithoutRef<'span'>, 'children'> {
   children: ReactNode
@@ -11,7 +11,7 @@ export interface PillProps extends Omit<ComponentPropsWithoutRef<'span'>, 'child
 }
 
 /**
- * Liten avrundet etikett for én opplysning — analysemetode, kategori, kode,
+ * Liten avrundet etikett for én opplysning — analysemetode, analyttkode,
  * referanseområde, ringegrense, påvisningsgrense, terapiområde eller grensen
  * for toksisk konsentrasjon.
  *

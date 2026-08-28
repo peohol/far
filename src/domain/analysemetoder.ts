@@ -1,6 +1,7 @@
 import { ETG_ANALYTTER, erEtgAnalytt } from './etg'
 import { rusModulFor } from './rus'
 import { displayName } from './names'
+import { optionColourVars } from './optionColours'
 import { THC_KODE, erThcAnalytt } from './thc'
 import type { Analyte } from '../types'
 
@@ -18,26 +19,40 @@ export interface Analysemetode {
   kode: string
   /** Hva metoden er, i klartekst. */
   beskrivelse: string
-  /**
-   * Fargenummeret skuffen bærer i menyen, 1–5. Står her og ikke som
-   * rekkefølgen i lista, så en omrokering ikke bytter om på fargene.
-   */
-  farge: number
 }
 
 /**
  * Metodene i den rekkefølgen menyen viser dem. Beskrivelsene er metodenes
  * egne navn i labsystemet.
+ *
+ * Rekkefølgen her bestemmer også fargen hver metode bærer — se
+ * {@link metodefarger} — så en omrokering bytter om på fargene.
  */
 export const ANALYSEMETODER: Analysemetode[] = [
-  { kode: 'SPFA', beskrivelse: 'Antidepressiver og antipsykotika i serum', farge: 1 },
-  { kode: 'SRUS', beskrivelse: 'Stoffer med ruspotensial i serum', farge: 2 },
-  { kode: 'UCAK', beskrivelse: 'THC-syre i urin', farge: 3 },
-  { kode: 'UETGHB', beskrivelse: 'Etanolmetabolitter i urin', farge: 4 },
-  { kode: 'AHT', beskrivelse: 'Antihypertensiver', farge: 5 },
+  { kode: 'SPFA', beskrivelse: 'Antidepressiver og antipsykotika i serum' },
+  { kode: 'SRUS', beskrivelse: 'Stoffer med ruspotensial i serum' },
+  { kode: 'UCAK', beskrivelse: 'THC-syre i urin' },
+  { kode: 'UETGHB', beskrivelse: 'Etanolmetabolitter i urin' },
+  { kode: 'AHT', beskrivelse: 'Antihypertensiver' },
 ]
 
 const METODE_PER_KODE = new Map(ANALYSEMETODER.map((m) => [m.kode, m]))
+
+/**
+ * Fargen metoden bærer overalt i appen: skuffen i menyen, pillen i
+ * analyttkortet, pillen i søket og menyknappen når filteret står på den. Én
+ * farge per metode, ett sted, så SPFA er den samme fargen uansett hvor den
+ * dukker opp.
+ *
+ * Fargene kommer fra det samme settet som søkealternativene bruker, spredt
+ * jevnt rundt fargesirkelen etter metodens plass i {@link ANALYSEMETODER}.
+ * En kode som ikke står der, får den første fargen; at alle metodene i
+ * datasettene er registrert, holdes av testene.
+ */
+export function metodefarger(kode: string): Record<string, string> {
+  const plass = ANALYSEMETODER.findIndex((m) => m.kode === kode)
+  return optionColourVars(Math.max(plass, 0), ANALYSEMETODER.length)
+}
 
 /** Metoden med denne koden, eller `undefined` om koden er ukjent. */
 export function analysemetode(kode: string): Analysemetode | undefined {
@@ -98,7 +113,6 @@ export interface Menykategori {
 export interface Menymetode {
   kode: string
   beskrivelse: string
-  farge: number
   /** Kategoriene i metoden, alfabetisk. Tom når metoden ikke er delt opp. */
   kategorier: Menykategori[]
   /** Alle virkestoffene i metoden alfabetisk, uten kategoriskillene. */
@@ -124,7 +138,7 @@ export function byggMeny(pool: Analyte[]): Menymetode[] {
   const ukjente = [...perMetode.keys()]
     .filter((kode) => !METODE_PER_KODE.has(kode))
     .sort((a, b) => a.localeCompare(b, 'nb'))
-    .map((kode, i) => ({ kode, beskrivelse: kode, farge: ((ANALYSEMETODER.length + i) % 5) + 1 }))
+    .map((kode) => ({ kode, beskrivelse: kode }))
 
   return [...kjente, ...ukjente].map((metode) => {
     const analytter = (perMetode.get(metode.kode) ?? []).slice().sort(paaNavn)

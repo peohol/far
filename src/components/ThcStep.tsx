@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
 import { Details } from './Details'
-import { Metodepiller } from './Metodepiller'
+import { Metodepille } from './Metodepille'
 import { Pill } from './Pill'
 import { StepBar } from './StepBar'
 import { ManualCopy } from './ManualCopy'
@@ -265,7 +265,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
         }}
       >
         <Card ref={inndatakort} align="start" className="analyttkort">
-          <Metodepiller metode={THC_ANALYSEMETODE} />
+          <Metodepille metode={THC_ANALYSEMETODE} />
           <div className="thc-korthode">
             <Pill tone="kode">{THC_KODE}</Pill>
             <div className="thc-nullstillhjorne" data-nullstill>

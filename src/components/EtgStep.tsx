@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
 import { ManualCopy } from './ManualCopy'
-import { Metodepiller } from './Metodepiller'
+import { Metodepille } from './Metodepille'
 import { Pill } from './Pill'
 import { Shortcut } from './Shortcut'
 import { StepBar } from './StepBar'
@@ -44,7 +44,7 @@ export function EtgStep({ onPick, onBack, failed }: EtgStepProps) {
       </StepBar>
 
       <Card align="start" className="analyttkort">
-        <Metodepiller metode={ETG_ANALYSEMETODE} />
+        <Metodepille metode={ETG_ANALYSEMETODE} />
         <div className="modul-koder">
           <Pill tone="kode">{ETG_KODE}</Pill>
           <Pill tone="kode">{ETS_KODE}</Pill>

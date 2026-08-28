@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
 import { Kommentarliste } from './Kommentarliste'
-import { Metodepiller } from './Metodepiller'
+import { Metodepille } from './Metodepille'
 import { Pill } from './Pill'
 import { Shortcut } from './Shortcut'
 import { StepBar } from './StepBar'
@@ -115,7 +115,7 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
 
       <div className="modul">
         <Card align="start" className="analyttkort">
-          <Metodepiller metode={RUS_ANALYSEMETODE} kategori={modul.kategori} />
+          <Metodepille metode={RUS_ANALYSEMETODE} kategori={modul.kategori} />
           <div className="modul-koder">
             {koder.map((kode) => (
               <Pill key={kode} tone="kode">

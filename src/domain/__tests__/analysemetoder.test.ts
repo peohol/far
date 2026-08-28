@@ -5,6 +5,7 @@ import {
   filtrertPool,
   menyanalytter,
   metodebeskrivelse,
+  metodefarger,
 } from '../analysemetoder'
 import { analytes } from '../analytes'
 import { ETG_ANALYTT, ETG_KODE, ETS_KODE } from '../etg'
@@ -68,6 +69,26 @@ describe('analysemetoden på analyttene', () => {
     expect(metodebeskrivelse('SPFA')).toBe('Antidepressiver og antipsykotika i serum')
     expect(metodebeskrivelse('UCAK')).toBe('THC-syre i urin')
     expect(metodebeskrivelse('XYZ')).toBe('XYZ')
+  })
+})
+
+describe('fargen en metode bærer', () => {
+  it('er den samme hver gang den slås opp', () => {
+    for (const m of ANALYSEMETODER) {
+      expect(metodefarger(m.kode)).toEqual(metodefarger(m.kode))
+    }
+  })
+
+  it('er forskjellig for hver metode', () => {
+    const hues = ANALYSEMETODER.map((m) => metodefarger(m.kode)['--alt-hue'])
+    expect(new Set(hues).size).toBe(ANALYSEMETODER.length)
+  })
+
+  it('følger metodens plass i lista og ikke hvor den vises', () => {
+    // Menyen, pillen i analyttkortet, pillen i søket og menyknappen slår alle
+    // opp på koden, så SPFA er den samme fargen overalt.
+    expect(metodefarger('SPFA')['--alt-hue']).toBe('0')
+    expect(metodefarger('UCAK')['--alt-hue']).toBe(String((2 * 360) / ANALYSEMETODER.length))
   })
 })
 
@@ -192,8 +213,8 @@ describe('AHT', () => {
     ENAT: 'ACE-hemmere',
     LISI: 'ACE-hemmere',
     RAMAT: 'ACE-hemmere',
-    EPLR: 'Aldosteronagonister',
-    KANR: 'Aldosteronagonister',
+    EPLR: 'Aldosteronantagonister',
+    KANR: 'Aldosteronantagonister',
     KARV: 'Alfa- og betablokkere',
     LABE: 'Alfa- og betablokkere',
     DOKSA: 'Alfablokkere',
@@ -219,7 +240,7 @@ describe('AHT', () => {
   it('er delt i de åtte legemiddelgruppene', () => {
     expect(kategorier('AHT')).toEqual([
       'ACE-hemmere',
-      'Aldosteronagonister',
+      'Aldosteronantagonister',
       'Alfa- og betablokkere',
       'Alfablokkere',
       'ARB',
