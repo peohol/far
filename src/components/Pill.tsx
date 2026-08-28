@@ -1,26 +1,36 @@
-import type { ReactNode } from 'react'
+import { forwardRef, type ComponentPropsWithoutRef, type ReactNode } from 'react'
 
-export type PillTone = 'noytral' | 'kode' | 'ring' | 'over'
+export type PillTone = 'noytral' | 'kode' | 'metode' | 'ring' | 'over'
 
-export interface PillProps {
+export interface PillProps extends Omit<ComponentPropsWithoutRef<'span'>, 'children'> {
   children: ReactNode
   tone?: PillTone
   icon?: ReactNode
   /** Ledetekst foran verdien, f.eks. «Referanseområde». */
-  label?: string
+  label?: ReactNode
 }
 
 /**
- * Liten avrundet etikett for én opplysning — kode, referanseområde,
- * ringegrense, påvisningsgrense, terapiområde eller grensen for toksisk
- * konsentrasjon.
+ * Liten avrundet etikett for én opplysning — analysemetode, analyttkode,
+ * referanseområde, ringegrense, påvisningsgrense, terapiområde eller grensen
+ * for toksisk konsentrasjon.
+ *
+ * Resten av egenskapene går videre til elementet, slik at en pille kan bære et
+ * tips på samme måte som knappene gjør.
  */
-export function Pill({ children, tone = 'noytral', icon, label }: PillProps) {
+export const Pill = forwardRef<HTMLSpanElement, PillProps>(function Pill(
+  { children, tone = 'noytral', icon, label, className, ...rest },
+  ref,
+) {
   return (
-    <span className={`pille pille--${tone}`}>
+    <span
+      ref={ref}
+      className={['pille', `pille--${tone}`, className].filter(Boolean).join(' ')}
+      {...rest}
+    >
       {icon && <span className="pille__ikon">{icon}</span>}
       {label && <span className="pille__merke">{label}</span>}
       <span className="pille__verdi">{children}</span>
     </span>
   )
-}
+})

@@ -128,6 +128,17 @@ export function MoonIcon(props: IconProps) {
   )
 }
 
+/** Meny: tre vannrette streker. */
+export function MenuIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M5 9h22" />
+      <path d="M5 16h22" />
+      <path d="M5 23h22" />
+    </Icon>
+  )
+}
+
 /** Lukk: et kryss. */
 export function CloseIcon(props: IconProps) {
   return (

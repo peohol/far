@@ -5,11 +5,13 @@ import { EtgPasteStep } from './components/EtgPasteStep'
 import { EtgStep } from './components/EtgStep'
 import { PasteStep } from './components/PasteStep'
 import { RusStep } from './components/RusStep'
+import { Sidemeny } from './components/Sidemeny'
 import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
 import { ruteAv } from './components/Kopibevis'
 import { Toolbar } from './components/Toolbar'
 import { Versjonspille } from './components/Versjonspille'
+import { filtrertPool } from './domain/analysemetoder'
 import { analytes } from './domain/analytes'
 import { bands as bandsOf, findBand, type Band } from './domain/bands'
 import { alternativFor, ETG_ALTERNATIVER, ETG_ANALYTT, type EtgAlternativ } from './domain/etg'
@@ -22,6 +24,7 @@ import { useCopyFlash } from './hooks/useCopyFlash'
 import { digitToIndex, erBekreftelse, useKeyboard } from './hooks/useKeyboard'
 import { useTheme } from './hooks/useTheme'
 import { initialState, isIdle, reducer, stageOf, type Action, type Stage } from './state'
+import type { Analyte } from './types'
 
 const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
 
@@ -67,7 +70,16 @@ export default function App() {
   // Søket dekker analyttene fra datasettet pluss kategoriene som har egne
   // fortolkningsmoduler i stedet for konsentrasjonsbånd: THC-syre i urin,
   // stoffene med ruspotensial i serum og etanolmarkørene EtG og EtS i urin.
-  const pool = useMemo(() => [...analytes, THC_ANALYTT, ...RUS_ANALYTTER, ETG_ANALYTT], [])
+  const alleAnalytter = useMemo(
+    () => [...analytes, THC_ANALYTT, ...RUS_ANALYTTER, ETG_ANALYTT],
+    [],
+  )
+  // Filteret fra sidemenyen smalner inn hva søket kan finne. Menyen selv viser
+  // alltid alt, siden det er der filteret velges.
+  const pool = useMemo(
+    () => filtrertPool(alleAnalytter, state.metodefilter),
+    [alleAnalytter, state.metodefilter],
+  )
   const hits = useMemo(() => search(state.query, pool), [state.query, pool])
 
   // Tilstandsmaskinen trenger alternativene det nye søket gir for å se om det
@@ -139,6 +151,19 @@ export default function App() {
     setFailedCopy(null)
     dispatch({ type: 'tilbake' })
   }, [slippBildet])
+
+  const velgAnalytt = useCallback((analyte: Analyte) => {
+    setFailedCopy(null)
+    dispatch({ type: 'velg-analytt', analyte })
+  }, [])
+
+  const settMetodefilter = useCallback((metode: string | null) => {
+    dispatch({ type: 'sett-metodefilter', metode })
+  }, [])
+
+  const fjernMetodefilter = useCallback(() => {
+    dispatch({ type: 'sett-metodefilter', metode: null })
+  }, [])
 
   const reset = useCallback(() => {
     slippBildet()
@@ -226,6 +251,12 @@ export default function App() {
 
   return (
     <div className="app" data-steg={vist} data-tomt={isIdle(state) ? 'ja' : 'nei'}>
+      <Sidemeny
+        pool={alleAnalytter}
+        metodefilter={state.metodefilter}
+        onFilter={settMetodefilter}
+        onVelgAnalytt={velgAnalytt}
+      />
       <Toolbar theme={theme} onToggleTheme={toggle} />
 
       <main className="scene">
@@ -233,11 +264,10 @@ export default function App() {
           <SearchStep
             query={state.query}
             hits={hits}
+            metodefilter={state.metodefilter}
+            onFjernFilter={fjernMetodefilter}
             onQueryChange={setQuery}
-            onSelect={(analyte) => {
-              setFailedCopy(null)
-              dispatch({ type: 'velg-analytt', analyte })
-            }}
+            onSelect={velgAnalytt}
             onReset={reset}
           />
         )}

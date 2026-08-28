@@ -229,6 +229,8 @@
         "Enalaprilat"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "ACE-hemmere",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -280,6 +282,8 @@
         "Lisinopril"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "ACE-hemmere",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -331,6 +335,8 @@
         "Ramiprilat"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "ACE-hemmere",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -382,6 +388,8 @@
         "Eplerenon"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Aldosteronantagonister",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -433,6 +441,8 @@
         "Kanrenon"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Aldosteronantagonister",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -486,6 +496,8 @@
         "Karvedilol"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Alfa- og betablokkere",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -537,6 +549,8 @@
         "Labetalol"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Alfa- og betablokkere",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -588,6 +602,8 @@
         "Doksazosin"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Alfablokkere",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -639,6 +655,8 @@
         "Irbesartan"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "ARB",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -690,6 +708,8 @@
         "Kandesartan"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "ARB",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -741,6 +761,8 @@
         "Losartansyre"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "ARB",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -792,6 +814,8 @@
         "Telmisartan"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "ARB",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -843,6 +867,8 @@
         "Valsartan"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "ARB",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -894,6 +920,8 @@
         "Atenolol"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Betablokkere",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -945,6 +973,8 @@
         "Bisoprolol"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Betablokkere",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -996,6 +1026,8 @@
         "Metoprolol"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Betablokkere",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -1047,6 +1079,8 @@
         "Bendroflumetiazid"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Diuretika",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -1098,6 +1132,8 @@
         "Bumetanid"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Diuretika",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -1144,6 +1180,8 @@
         "Furosemid"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Diuretika",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -1190,6 +1228,8 @@
         "Hydroklortiazid"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Diuretika",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -1241,6 +1281,8 @@
         "Amlodipin"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -1292,6 +1334,8 @@
         "Diltiazem"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -1343,6 +1387,8 @@
         "Lerkanidipin"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -1394,6 +1440,8 @@
         "Nifedipin"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {
@@ -1445,6 +1493,8 @@
         "Verapamil"
       ],
       "gruppe": "Antihypertensiver",
+      "analysemetode": "AHT",
+      "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
       "referanseomrade": null,
       "maleomrade": {

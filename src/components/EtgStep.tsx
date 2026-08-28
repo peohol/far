@@ -2,12 +2,19 @@ import type { CSSProperties } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
 import { ManualCopy } from './ManualCopy'
+import { Metodepille } from './Metodepille'
 import { Pill } from './Pill'
 import { Shortcut } from './Shortcut'
 import { StepBar } from './StepBar'
 import { useTips } from './Tips'
 import { BackIcon } from './icons'
-import { ETG_ALTERNATIVER, ETG_KODE, ETS_KODE, type EtgAlternativ } from '../domain/etg'
+import {
+  ETG_ALTERNATIVER,
+  ETG_ANALYSEMETODE,
+  ETG_KODE,
+  ETS_KODE,
+  type EtgAlternativ,
+} from '../domain/etg'
 import { indexToDigit } from '../hooks/useKeyboard'
 
 export interface EtgStepProps {
@@ -37,6 +44,7 @@ export function EtgStep({ onPick, onBack, failed }: EtgStepProps) {
       </StepBar>
 
       <Card align="start" className="analyttkort">
+        <Metodepille metode={ETG_ANALYSEMETODE} />
         <div className="modul-koder">
           <Pill tone="kode">{ETG_KODE}</Pill>
           <Pill tone="kode">{ETS_KODE}</Pill>

@@ -31,6 +31,21 @@ ROT = Path(__file__).resolve().parent.parent
 KILDE = ROT / "originaldata" / "rusmidler.md"
 UT = ROT / "src" / "data" / "rusmidler.json"
 
+# Analysemetoden stoffene rekvireres under. Koden vises som pille i
+# kommenteringsmodulen og er det sidemenyen grupperer etter.
+ANALYSEMETODE = "SRUS"
+
+# Kategorien i sidemenyen, per overskrift i kilden. Overskriftene er kildens
+# egne; bare "Cannabis" heter noe annet i appen, fordi klinikeren ba om
+# "Cannabinoider" der. Stopper skriptet hvis dokumentet far en ny overskrift,
+# sa en ny gruppe ikke havner i menyen uten en bestemt kategori.
+KATEGORI = {
+    "Benzodiazepiner og Z-hypnotika": "Benzodiazepiner og Z-hypnotika",
+    "Cannabis": "Cannabinoider",
+    "Opioider": "Opioider",
+    "Sentralstimulerende": "Sentralstimulerende",
+}
+
 
 class Tabell:
     """En ventet tabell i dokumentet.
@@ -371,9 +386,16 @@ def les_tabell(ventet: Tabell, tabell: dict) -> list[dict]:
         if not veiledning and not tekster:
             raise SystemExit(f"{rad_id}: fant ingen kommentartekst")
 
+        if ventet.gruppe not in KATEGORI:
+            raise SystemExit(
+                f"Overskriften {ventet.gruppe!r} mangler en kategori i KATEGORI."
+            )
+
         ut.append({
             "id": rad_id,
             "gruppe": ventet.gruppe,
+            "analysemetode": ANALYSEMETODE,
+            "kategori": KATEGORI[ventet.gruppe],
             "analytt": etikett,
             "koder": koder,
             "tekster": tekster,

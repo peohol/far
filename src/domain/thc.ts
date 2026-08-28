@@ -611,6 +611,12 @@ export function fortolkThc(inn: ThcInndata): ThcResultat {
 export const THC_KODE = 'IRCAK'
 
 /**
+ * Analysemetoden IRCAK rekvireres under. Modulen er hele metoden: IRCAK er
+ * den eneste analytten i den, og den har ingen underkategorier.
+ */
+export const THC_ANALYSEMETODE = 'UCAK'
+
+/**
  * THC-syre som søkbar oppføring i det vanlige analyttsøket. Velges den, går
  * appen til fortolkningsmodulen i stedet for til konsentrasjonsbåndene, så
  * feltene som bare gjelder båndene står tomme.
@@ -621,6 +627,8 @@ export const THC_ANALYTT: Analyte = {
   visningsnavn: 'THC-syre i urin',
   komponenter: [],
   gruppe: 'Rusmiddelanalyse',
+  analysemetode: THC_ANALYSEMETODE,
+  kategori: '',
   enhet: '',
   referanseomrade: null,
   maleomrade: { tekst: '', deler: [] },

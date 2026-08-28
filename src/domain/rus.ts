@@ -34,6 +34,10 @@ import type { Analyte } from '../types'
 export interface RusRad {
   id: string
   gruppe: string
+  /** Analysemetoden stoffene rekvireres under — den samme for hele datasettet. */
+  analysemetode: string
+  /** Kategorien i sidemenyen, f.eks. «Opioider». */
+  kategori: string
   /** Analyttkolonnen slik den står, f.eks. «Morfin og kodein – ordinær kombinasjon». */
   analytt: string
   koder: string[]
@@ -58,6 +62,17 @@ export interface RusDatasett {
 // Radene har ulike nøkler i `tekster` og `merknader` etter hvilken tabell de
 // kommer fra, så JSON-importens utledede type er smalere enn modellen.
 export const rusDatasett = rusdata as unknown as RusDatasett
+
+/**
+ * Analysemetoden alle stoffene i datasettet rekvireres under. Den er den
+ * samme for hele kilden, så den leses av datasettet i stedet for å stå to
+ * steder — og skriptet som bygger datasettet setter den.
+ */
+export const RUS_ANALYSEMETODE: string = (() => {
+  const forste = rusDatasett.rader[0]
+  if (!forste) throw new Error('rusmidler.json har ingen rader')
+  return forste.analysemetode
+})()
 
 const raderById = new Map(rusDatasett.rader.map((r) => [r.id, r]))
 
@@ -112,6 +127,8 @@ export type RusVerdifelt = RusAnalytt
 export interface RusModul {
   id: string
   gruppe: string
+  /** Kategorien i sidemenyen, hentet fra raden modulen bygger på. */
+  kategori: string
   /** Navnet modulen vises og søkes opp med. */
   navn: string
   analytter: RusAnalytt[]
@@ -199,6 +216,7 @@ function enkeltmodul(radId: string, navn: string, aliaser: string[] = []): RusMo
   return {
     id: radId,
     gruppe: kilde.gruppe,
+    kategori: kilde.kategori,
     navn,
     analytter: [{ kode, navn }],
     aliaser: [kode, ...aliaser],
@@ -253,6 +271,7 @@ function diazepamPar(benzo: string[]): RusPlassering[] {
 const diazepamgruppen: RusModul = {
   id: 'diazepamgruppen',
   gruppe: rad('diazepamgruppen-samlet').gruppe,
+  kategori: rad('diazepamgruppen-samlet').kategori,
   navn: 'Diazepam + N-desmetyldiazepam + oksazepam',
   analytter: DIAZEPAM_ANALYTTER,
   aliaser: [DIAZ, DMI, OXA, 'desmetyldiazepam'],
@@ -348,6 +367,7 @@ const OTRAM = 'OTRAM'
 const tramadolgruppen: RusModul = {
   id: 'tramadolgruppen',
   gruppe: rad('tramadolgruppen').gruppe,
+  kategori: rad('tramadolgruppen').kategori,
   navn: 'Tramadol + O-desmetyltramadol',
   analytter: [
     { kode: TRAM, navn: 'Tramadol' },
@@ -401,6 +421,7 @@ export const HOY_MORFIN_GRENSE = 1
 const kodeingruppen: RusModul = {
   id: 'kodeingruppen',
   gruppe: rad('kun-kodein').gruppe,
+  kategori: rad('kun-kodein').kategori,
   navn: 'Kodein + morfin',
   analytter: KODEIN_ANALYTTER,
   aliaser: [KOD, MOR],
@@ -493,6 +514,7 @@ const MAF = 'MAF1'
 const amfetamingruppen: RusModul = {
   id: 'amfetamingruppen',
   gruppe: rad('amfetamingruppen-samlet').gruppe,
+  kategori: rad('amfetamingruppen-samlet').kategori,
   navn: 'Amfetamin + metamfetamin',
   analytter: [
     { kode: AMF, navn: 'Amfetamin' },
@@ -561,6 +583,8 @@ function tilAnalytt(modul: RusModul): Analyte {
     visningsnavn: modul.navn,
     komponenter: modul.analytter.map((a) => a.navn),
     gruppe: modul.gruppe,
+    analysemetode: RUS_ANALYSEMETODE,
+    kategori: modul.kategori,
     // Feltene under gjelder konsentrasjonsbåndene, som denne kategorien ikke
     // har. De står tomme, slik THC-syreoppføringen også gjør.
     enhet: '',

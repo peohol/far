@@ -26,6 +26,14 @@ export interface State {
   etgValg: EtgValg | null
   /** Om et enslig alternativ får velge seg selv. Se {@link narrow}. */
   autoPick: boolean
+  /**
+   * Analysemetoden søket er begrenset til, valgt i sidemenyen. `null` er
+   * «Inkluder alle analysemetoder», altså filteret slått av.
+   *
+   * Den lever utenom arbeidsflyten: et valg her skal stå til brukeren selv
+   * endrer det, og overlever både Esc og at en kommentar er ferdig limt inn.
+   */
+  metodefilter: string | null
 }
 
 export const initialState: State = {
@@ -34,6 +42,7 @@ export const initialState: State = {
   bandKey: null,
   etgValg: null,
   autoPick: true,
+  metodefilter: null,
 }
 
 export type Action =
@@ -42,6 +51,7 @@ export type Action =
   | { type: 'velg-analytt'; analyte: Analyte }
   | { type: 'velg-band'; key: string }
   | { type: 'velg-etg'; valg: EtgValg }
+  | { type: 'sett-metodefilter'; metode: string | null }
   | { type: 'tilbake' }
   | { type: 'nullstill' }
 
@@ -72,11 +82,14 @@ export function reducer(state: State, action: Action): State {
     case 'velg-etg':
       return { ...state, etgValg: action.valg }
 
+    case 'sett-metodefilter':
+      return { ...state, metodefilter: action.metode }
+
     case 'tilbake':
       return stepBack(state)
 
     case 'nullstill':
-      return initialState
+      return nullstilt(state)
   }
 }
 
@@ -119,6 +132,15 @@ function stepBack(state: State): State {
     case 'etg':
       return { ...state, analyte: null }
     case 'search':
-      return initialState
+      return nullstilt(state)
   }
+}
+
+/**
+ * Tilbake til utgangspunktet — men med filteret i behold. Det er et valg
+ * brukeren har tatt i menyen, ikke et steg i arbeidsflyten, og skal ikke bli
+ * borte av at søket nullstilles.
+ */
+function nullstilt(state: State): State {
+  return { ...initialState, metodefilter: state.metodefilter }
 }

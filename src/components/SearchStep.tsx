@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { Button } from './Button'
 import { StepBar } from './StepBar'
-import { ResetIcon, SearchIcon } from './icons'
-import { indexToDigit } from '../hooks/useKeyboard'
+import { CloseIcon, ResetIcon, SearchIcon } from './icons'
+import { indexToDigit, lagLiggerOver } from '../hooks/useKeyboard'
+import { Metodepille } from './Metodepille'
+import { useTips } from './Tips'
 import { splitName } from '../domain/names'
 import { optionColourVars } from '../domain/optionColours'
 import type { SearchHit } from '../domain/search'
@@ -11,6 +13,10 @@ import type { Analyte } from '../types'
 export interface SearchStepProps {
   query: string
   hits: SearchHit[]
+  /** Analysemetoden søket er begrenset til, valgt i sidemenyen. */
+  metodefilter: string | null
+  /** Slår filteret av, så alle analyttene kan finnes igjen. */
+  onFjernFilter: () => void
   onQueryChange: (value: string) => void
   onSelect: (analyte: Analyte) => void
   onReset: () => void
@@ -22,12 +28,36 @@ function isTypedCharacter(event: KeyboardEvent): boolean {
 }
 
 /**
+ * Sant når tegnet hører til knappen som står fokusert i stedet for til søket.
+ *
+ * Mellomrom trykker en fokusert knapp, og skal aldri havne i feltet i stedet.
+ * Bokstaver hører til søket — men ikke når fokus står på en knapp i selve
+ * steget, som et søkealternativ: der er tastaturet midt i et valg. Knappene
+ * rundt steget — menyknappen, verktøylinja, versjonspilla — skal derimot ikke
+ * holde på skrivingen, ellers ville det å lukke menyen krevd et museklikk før
+ * man kunne søke videre.
+ */
+function knappTarTegnet(event: KeyboardEvent): boolean {
+  const aktiv = document.activeElement
+  if (!(aktiv instanceof HTMLElement) || aktiv.tagName !== 'BUTTON') return false
+  return event.key === ' ' || aktiv.closest('.steg') !== null
+}
+
+/**
  * Steg 1: instruksjon, søkefelt og alternativene som passer søket.
  *
  * Søkefeltet står alltid montert og har fokus, slik at det å begynne å skrive
  * er nok til å komme i gang. Instruksjonen viker for feltet ved første tegn.
  */
-export function SearchStep({ query, hits, onQueryChange, onSelect, onReset }: SearchStepProps) {
+export function SearchStep({
+  query,
+  hits,
+  metodefilter,
+  onQueryChange,
+  onSelect,
+  onReset,
+  onFjernFilter,
+}: SearchStepProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const tomt = query === ''
 
@@ -41,8 +71,11 @@ export function SearchStep({ query, hits, onQueryChange, onSelect, onReset }: Se
     function onKeyDown(event: KeyboardEvent) {
       const felt = inputRef.current
       if (!felt || document.activeElement === felt) return
-      if (document.activeElement?.tagName === 'BUTTON') return
+      // Ligger endringsloggen eller sidemenyen over appen, hører det som
+      // skrives hjemme der og skal ikke rykke fokus ned i søkefeltet bak.
+      if (lagLiggerOver()) return
       if (!isTypedCharacter(event)) return
+      if (knappTarTegnet(event)) return
       felt.focus()
     }
     window.addEventListener('keydown', onKeyDown, true)
@@ -80,8 +113,47 @@ export function SearchStep({ query, hits, onQueryChange, onSelect, onReset }: Se
         </div>
 
         <Options hits={hits} onSelect={onSelect} query={query} />
+
+        {/* Filteret er lett å glemme, og et glemt filter ser ut som at en
+            analytt ikke finnes. Derfor står det under alternativene så lenge
+            det er på — også når søket gir treff, og med veien ut ved siden av
+            så det ikke er menyen som må åpnes for å slå det av. */}
+        {metodefilter && (
+          <p className="sokfilter">
+            Søket er begrenset til <Metodepille metode={metodefilter} />
+            <FilterAv
+              onClick={() => {
+                onFjernFilter()
+                // Knappen forsvinner med filteret, så fokus gis tilbake til
+                // feltet i stedet for å falle på gulvet.
+                inputRef.current?.focus()
+              }}
+            />
+          </p>
+        )}
       </div>
     </section>
+  )
+}
+
+/** Veien ut av filteret, ved siden av pillen som viser hvilket det er. */
+function FilterAv({ onClick }: { onClick: () => void }) {
+  // Teksten er allerede knappens navn, og skal ikke leses to ganger.
+  const tips = useTips('Slå av filteret', { skjermleser: false })
+
+  return (
+    <>
+      <button
+        type="button"
+        className="sokfilter__av"
+        aria-label="Slå av filteret"
+        onClick={onClick}
+        {...tips.props}
+      >
+        <CloseIcon />
+      </button>
+      {tips.forklaring}
+    </>
   )
 }
 
@@ -99,7 +171,7 @@ function Options({
   if (hits.length === 0) {
     return (
       <p className="ingen-treff" role="status">
-        Ingen analytter passer søket.
+        Ingen stoffer passer med søket.
       </p>
     )
   }

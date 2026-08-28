@@ -12,6 +12,27 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.4.0',
+    dato: '2026-08-28',
+    sammendrag: 'Sidemeny med analysemetodene, og filter på søket',
+    typer: ['Fag', 'Funksjonalitet', 'Design / layout'],
+    omfang: 'Større omfang',
+    punkter: [
+      'Ny menyknapp øverst til venstre. Den åpner en sidemeny som glir inn fra siden og legger seg over innholdet, som mørklegges bak den. Menyknappen blir liggende skjult bak menyen; menyen har sin egen lukkeknapp øverst til høyre. Ctrl + M åpner og lukker den, og det gjør også Esc og et trykk hvor som helst på innholdet bak.',
+      'Menyen har én skuff per analysemetode, i hver sin farge: SPFA (antidepressiver og antipsykotika i serum), SRUS (stoffer med ruspotensial i serum), UCAK (THC-syre i urin), UETGHB (etanolmetabolitter i urin) og AHT (antihypertensiver). Bare én skuff er åpen av gangen.',
+      'I skuffene står virkestoffene alfabetisk, delt i kategorier: antidepressiver, antipsykotika og stemningsstabiliserende i SPFA; benzodiazepiner og Z-hypnotika, cannabinoider, opioider og sentralstimulerende i SRUS; og de åtte legemiddelgruppene i AHT — ACE-hemmere, aldosteronantagonister, alfa- og betablokkere, alfablokkere, ARB, betablokkere, diuretika og kalsiumantagonister. UCAK og UETGHB er små nok til å stå udelt.',
+      'Bryteren «Vis kategorier» øverst i menyen slår kategoriskillene av, og lister da alle virkestoffene i en analysemetode alfabetisk i én bolk. Bryteren og «Inkluder alle analysemetoder» står fast øverst, så de ikke ruller bort når du blar i en lang liste.',
+      'Et trykk på et virkestoff går rett til kommenteringsmodulen for det, som et alternativ til å søke. Der flere virkestoffer deler modul — diazepamgruppen, tramadolgruppen, morfin og kodein, amfetamin og metamfetamin, EtG og EtS — står hvert av dem på sin egen linje, og alle fører til den samme modulen.',
+      'Radioknappen til venstre for en analysemetode begrenser søket til den metoden. Da vises bare treff derfra, og alt annet filtreres bort. «Inkluder alle analysemetoder» øverst slår filteret av igjen.',
+      'Et filter som står på, kan gjøre at et stoff du vet finnes ikke dukker opp. Derfor utvider menyknappen seg til en pille med metodekoden i metodens farge — for eksempel «≡ SPFA» — og under søkealternativene står «Søket er begrenset til» med den samme pillen, også når søket gir treff. Ved siden av pillen står et kryss som slår filteret av, så du slipper å gå via menyen. Ellers blir filteret stående til du endrer det selv; det slås ikke av av Esc eller av at en kommentar er ferdig.',
+      'Analysemetoden og kategorien vises nå som én pille øverst i analyttkortet i alle kommenteringsmodulene, over analyttkoden — for eksempel «SPFA › Antipsykotika» over «KVE».',
+      'Hver analysemetode har sin egen faste farge, den samme i menyen, i pillen og på menyknappen. Analyttkoden er blå som før.',
+      'Inndelingen av antihypertensiver i legemiddelgrupper er ny. Kilden har ingen slik inndeling; den er gjort én gang etter suffiksene i virkestoffnavnene, og losartansyre er ført som ARB fordi den er den virksomme metabolitten av losartan.',
+      'Beskjeden når søket ikke gir treff er kortet ned til «Ingen stoffer passer med søket.».',
+      'Ingen kommentartekst, grense eller fortolkningsregel er endret.',
+    ],
+  },
+  {
     versjon: '1.3.0',
     dato: '2026-08-27',
     sammendrag: 'Ny kategori: antihypertensiver',

@@ -30,6 +30,22 @@ export const ETG_KODE = 'UETGS'
 /** Etylsulfat i urin. */
 export const ETS_KODE = 'UETS'
 
+/**
+ * Analysemetoden de to rekvireres under. Modulen er hele metoden: EtG og EtS
+ * er de eneste analyttene i den, og den har ingen underkategorier.
+ */
+export const ETG_ANALYSEMETODE = 'UETGHB'
+
+/**
+ * De to analyttene metoden består av, med de korte navnene de er kjent under.
+ * Sidemenyen lister dem hver for seg, siden de har hver sin kode, men begge
+ * fører til den samme modulen.
+ */
+export const ETG_ANALYTTER: { kode: string; navn: string }[] = [
+  { kode: ETG_KODE, navn: 'EtG' },
+  { kode: ETS_KODE, navn: 'EtS' },
+]
+
 /* --- Kommentartekstene --------------------------------------------------- */
 
 /** Begge påvist: da er inntaket sikkert. Hele fortolkningen ligger på EtS. */
@@ -115,6 +131,8 @@ export const ETG_ANALYTT: Analyte = {
   visningsnavn: 'EtG + EtS i urin',
   komponenter: ['Etylglukuronid', 'Etylsulfat'],
   gruppe: 'Rusmiddelanalyse',
+  analysemetode: ETG_ANALYSEMETODE,
+  kategori: '',
   enhet: '',
   referanseomrade: null,
   maleomrade: { tekst: '', deler: [] },

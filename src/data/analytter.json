@@ -1478,6 +1478,8 @@
         "Nortriptylin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 400,
@@ -1540,6 +1542,8 @@
         "Citalopram"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 70,
@@ -1596,6 +1600,8 @@
         "Desmetyldoksepin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 18,
@@ -1658,6 +1664,8 @@
         "Duloksetin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 30,
@@ -1713,6 +1721,8 @@
         "Escitalopram"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 25,
@@ -1769,6 +1779,8 @@
         "Norfluoksetin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 400,
@@ -1831,6 +1843,8 @@
         "Fluvoksamin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 60,
@@ -1886,6 +1900,8 @@
         "Hydroksybupropion"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 500,
@@ -1944,6 +1960,8 @@
         "Desmetylklomipramin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 700,
@@ -2007,6 +2025,8 @@
         "Desmetylmianserin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 150,
@@ -2069,6 +2089,8 @@
         "Mirtazapin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 50,
@@ -2124,6 +2146,8 @@
         "Nortriptylin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 200,
@@ -2179,6 +2203,8 @@
         "Paroksetin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 40,
@@ -2234,6 +2260,8 @@
         "Sertralin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 20,
@@ -2289,6 +2317,8 @@
         "Trimipramin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 100,
@@ -2345,6 +2375,8 @@
         "O-desmetylvenlafaksin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 400,
@@ -2407,6 +2439,8 @@
         "Vortioksetin"
       ],
       "gruppe": "Antidepressiver",
+      "analysemetode": "SPFA",
+      "kategori": "Antidepressiver",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 20,
@@ -2462,6 +2496,8 @@
         "Amisulprid"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 100,
@@ -2518,6 +2554,8 @@
         "Dehydroaripiprazol"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 200,
@@ -2580,6 +2618,8 @@
         "Brekspiprazol"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 50,
@@ -2635,6 +2675,8 @@
         "Flupentiksol"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 1,
@@ -2690,6 +2732,8 @@
         "Haloperidol"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 2,
@@ -2747,6 +2791,8 @@
         "Didesmetylkariprazin"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 20,
@@ -2816,6 +2862,8 @@
         "Klorprotiksen"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 10,
@@ -2871,6 +2919,8 @@
         "Klozapin"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 300,
@@ -2926,6 +2976,8 @@
         "Kvetiapin"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 50,
@@ -2981,6 +3033,8 @@
         "Levomepromazin"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": null,
@@ -3036,6 +3090,8 @@
         "Lurasidon"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 5,
@@ -3091,6 +3147,8 @@
         "Olanzapin"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 30,
@@ -3146,6 +3204,8 @@
         "Paliperidon (hydroksyrisperidon)"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 20,
@@ -3203,6 +3263,8 @@
         "Perfenazin"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 1,
@@ -3259,6 +3321,8 @@
         "Hydroksyrisperidon"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 20,
@@ -3324,6 +3388,8 @@
         "Ziprasidon"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 40,
@@ -3379,6 +3445,8 @@
         "Zuklopentiksol"
       ],
       "gruppe": "Antipsykotika",
+      "analysemetode": "SPFA",
+      "kategori": "Antipsykotika",
       "enhet": "nmol/L",
       "referanseomrade": {
         "fra": 5,
@@ -3434,6 +3502,8 @@
         "Lamotrigin"
       ],
       "gruppe": "Stemningsstabiliserende",
+      "analysemetode": "SPFA",
+      "kategori": "Stemningsstabiliserende",
       "enhet": "µmol/L",
       "referanseomrade": {
         "fra": 10,

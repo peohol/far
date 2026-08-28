@@ -32,6 +32,10 @@ ALIAS_FIL = ROT / "src" / "data" / "aliaser.json"
 
 NIVAER = ("under", "innenfor", "over")
 
+# Analysemetoden alle analyttene i denne PDF-en rekvireres under. Koden vises
+# som pille i kommenteringsmodulen og er det sidemenyen grupperer etter.
+ANALYSEMETODE = "SPFA"
+
 # Analytter som ikke males i nmol/L. PDF-en markerer disse med en stjerne i
 # tallkolonnene, men fotnoten som forklarer stjernen finnes ikke i dokumentet.
 ENHET_UNNTAK = {"LAM": "µmol/L"}
@@ -380,6 +384,10 @@ def bygg() -> dict:
             "visningsnavn": visningsnavn,
             "komponenter": komponenter(base["navn"]),
             "gruppe": base["gruppe"],
+            "analysemetode": ANALYSEMETODE,
+            # Kategorien i sidemenyen er overskriften analytten star under i
+            # referansetabellen, sa den folger kilden og ikke en egen liste.
+            "kategori": base["gruppe"],
             "enhet": enhet,
             "referanseomrade": beriket(referanseomrade),
             "maleomrade": maleomrade,
