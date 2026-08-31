@@ -385,6 +385,17 @@
   font-weight: var(--vekt-medium);
 }
 
+/* Pillen som står i stedet for metodekoden når søket ikke har noe filter.
+   Samme størrelse som en metodepille, men i nøytral gråtone i stedet for en
+   metodefarge — det finnes ingen metode å farge den etter ennå. */
+.metodepille--tom {
+  font-weight: var(--vekt-medium);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+}
+
 /* --- Steg 2: analytt og konsentrasjonsbånd ------------------------------ */
 
 .analyttkort {
