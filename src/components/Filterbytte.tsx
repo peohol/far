@@ -7,6 +7,7 @@ import {
   type FocusEvent,
 } from 'react'
 import { Metodepille } from './Metodepille'
+import { Pill } from './Pill'
 import { Shortcut } from './Shortcut'
 import { useTips } from './Tips'
 import { ANALYSEMETODER, AV_SNARVEI, metodesnarvei } from '../domain/analysemetoder'
@@ -18,6 +19,10 @@ import { ANALYSEMETODER, AV_SNARVEI, metodesnarvei } from '../domain/analysemeto
  * Filteret settes i sidemenyen, men å endre det derfra krever at hele menyen
  * åpnes. Her ligger de samme valgene der filteret allerede vises: metodene som
  * piller under hverandre, og «Skru av filter» nederst.
+ *
+ * Uten filter viser pillen «Velg analysemetode» i stedet for en metodekode.
+ * Den åpner den samme menyen, så filteret kan settes derfra også — ikke bare
+ * fra sidemenyen.
  *
  * Menyen er et lag over appen, som sidemenyen og endringsloggen: `data-lag`
  * sier fra til `lagLiggerOver()`, så talltastene i søket ikke velger et
@@ -34,8 +39,8 @@ const KANTLUFT = 12
 const MINSTE_HOYDE = 120
 
 export interface FilterbytteProps {
-  /** Metoden filteret står på. Linja vises bare når det er satt. */
-  metodefilter: string
+  /** Metoden filteret står på. `null` når søket ikke er begrenset. */
+  metodefilter: string | null
   /** `null` slår filteret av. */
   onFilter: (metode: string | null) => void
 }
@@ -55,7 +60,9 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
   const knapp = useRef<HTMLButtonElement | null>(null)
   const meny = useRef<HTMLDivElement>(null)
 
-  const tips = useTips('Trykk for å endre filter', { skjermleser: false })
+  const tips = useTips(metodefilter ? 'Trykk for å endre filter' : 'Trykk for å velge filter', {
+    skjermleser: false,
+  })
   // Tipset og fokuset skal på det samme elementet, så de to ref-ene slås sammen.
   const { ref: tipsRef, ...knappeprops } = tips.props
   const settKnapp = useCallback(
@@ -82,9 +89,9 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
     (metode: string | null) => {
       setApen(false)
       onFilter(metode)
-      // Slås filteret av, forsvinner både menyen og knappen den hang på, og
-      // det er ingenting å gi fokus tilbake til.
-      if (metode !== null) knapp.current?.focus()
+      // Knappen selv forsvinner aldri — den viser bare en annen pille uten
+      // filter — så fokus kan alltid gis tilbake til den.
+      knapp.current?.focus()
     },
     [onFilter],
   )
@@ -148,13 +155,23 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
         ref={settKnapp}
         type="button"
         className="filterbytte__knapp"
-        aria-label={`Søket er begrenset til ${metodefilter}. Trykk for å endre filter.`}
+        aria-label={
+          metodefilter
+            ? `Søket er begrenset til ${metodefilter}. Trykk for å endre filter.`
+            : 'Søket har ikke noe filter. Trykk for å velge analysemetode.'
+        }
         aria-expanded={apen}
         aria-haspopup="true"
         onClick={() => (apen ? lukk() : apne())}
         {...knappeprops}
       >
-        <Metodepille metode={metodefilter} />
+        {metodefilter ? (
+          <Metodepille metode={metodefilter} />
+        ) : (
+          <Pill tone="metode" className="metodepille--tom">
+            Velg analysemetode
+          </Pill>
+        )}
       </button>
       {tips.forklaring}
 
@@ -196,15 +213,18 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
               )
             })}
 
-            <button
-              type="button"
-              className="filterbytte__av"
-              aria-keyshortcuts={AV_SNARVEI.replace(/ /g, '')}
-              onClick={() => velg(null)}
-            >
-              Skru av filter
-              <Shortcut>{AV_SNARVEI}</Shortcut>
-            </button>
+            {/* Er filteret alt av, er det ingenting å skru av. */}
+            {metodefilter && (
+              <button
+                type="button"
+                className="filterbytte__av"
+                aria-keyshortcuts={AV_SNARVEI.replace(/ /g, '')}
+                onClick={() => velg(null)}
+              >
+                Skru av filter
+                <Shortcut>{AV_SNARVEI}</Shortcut>
+              </button>
+            )}
           </div>
         </>
       )}
