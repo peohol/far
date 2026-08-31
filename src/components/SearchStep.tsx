@@ -119,7 +119,7 @@ export function SearchStep({
             samtidig veien til å sette, bytte eller slå av filteret, så menyen
             ikke må åpnes for det. */}
         <p className="sokfilter">
-          {metodefilter ? 'Søket er begrenset til' : 'Viser resultater fra alle analysemetoder.'}
+          {metodefilter && 'Søket er begrenset til'}
           <Filterbytte metodefilter={metodefilter} onFilter={onFilter} />
         </p>
       </div>

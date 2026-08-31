@@ -14,11 +14,11 @@ export const ENDRINGSLOGG: Endring[] = [
   {
     versjon: '1.5.1',
     dato: '2026-08-31',
-    sammendrag: 'Linja under søket vises nå også uten filter',
+    sammendrag: 'Filterpillen under søket vises nå også uten filter',
     typer: ['Design / layout', 'Funksjonalitet'],
     omfang: 'Mindre omfang',
     punkter: [
-      'Uten filter står det nå «Viser resultater fra alle analysemetoder.» under søket, med en grå pille merket «Velg analysemetode». Før forsvant hele linja når filteret var av, og det kunne se ut som funksjonen manglet.',
+      'Uten filter står det nå en grå pille merket «Velg analysemetode» under søket. Før forsvant hele pillen når filteret var av, og det kunne se ut som funksjonen manglet.',
       'Den grå pillen er en knapp: et trykk åpner den samme menyen som pillen med en aktiv metode gjør, så filteret kan settes derfra også — ikke bare fra sidemenyen.',
     ],
   },
