@@ -257,6 +257,11 @@ const UNDER_CUTOFF_VANSKELIG =
   'kan ikke avgjøres. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi ' +
   'Ullevål (se ous.labfag.no).'
 
+/** J27 — generelt om hvor lenge THC-syre kan påvises. */
+const PAVISNINGSTID =
+  'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. Ved gjentatte inntak vil ' +
+  'påvisningstiden for THC-syre i urin øke, vanligvis opptil en måned etter avsluttet inntak. '
+
 export function byggKommentar(
   niva: Konsentrasjonsniva,
   kategori: number,
@@ -292,9 +297,7 @@ export function byggKommentar(
 
   if (medForrige && kategori < KATEGORI_NYTT_INNTAK) {
     // J27 — generelt om påvisningstid.
-    deler.push(
-      'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. Ved gjentatte inntak vil påvisningstiden for THC-syre i urin øke, vanligvis opptil en måned etter avsluttet inntak. ',
-    )
+    deler.push(PAVISNINGSTID)
     if (underGrensen) {
       deler.push(
         kategori === 3 ? UNDER_CUTOFF_VANSKELIG : underCutoffIkkeNodvendigvis(forrigeDatoNorsk),
@@ -309,6 +312,12 @@ export function byggKommentar(
         `${lede}${forrigeDatoNorsk}. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).`,
       )
     }
+  } else if (!medForrige && niva !== 'høy') {
+    // Uten en forrige prøve å sammenligne med er det ingen konklusjon å
+    // knytte påvisningstiden til (J28 over), men opplysningen om hvor lenge
+    // THC-syre kan påvises er like relevant her — bestilt av eieren som et
+    // tillegg til J26.
+    deler.push(PAVISNINGSTID)
   }
 
   // J29 — uten sammenligningsgrunnlag.
@@ -386,11 +395,12 @@ export function ordEndring(endring: number): 'nedgang' | 'økning' | 'ingen endr
 /* --- Fortolkningen ------------------------------------------------------- */
 
 /**
- * Mer enn så mange døgn mellom prøvene, og forrige prøve gir ikke lenger
- * sammenligningsgrunnlag — da fortolkes bare den aktuelle prøven, som i
- * regnearkets K21.
+ * Mer enn så mange døgn mellom prøvene, og fortolkningen skjer likevel som
+ * normalt — men brukeren varsles, siden lang tid mellom prøvene gjør
+ * sammenligningen mindre treffsikker. Eierens egen grense, ikke hentet fra
+ * regnearket.
  */
-export const MAKS_DAGER_MELLOM = 60
+export const VARSEL_DAGER_MELLOM = 30
 
 export interface ThcInndata {
   kronisk: boolean
@@ -463,17 +473,18 @@ export type ThcResultat =
       kategori: number
       /** Satt når fortolkningen er gjort mot forrige prøve. */
       grunnlag: ThcGrunnlag | null
-      /** Sant når forrige prøve ble satt til side fordi den er for gammel. */
-      forGammelForrige: boolean
+      /**
+       * Sant når det er mer enn {@link VARSEL_DAGER_MELLOM} døgn mellom
+       * prøvene. Fortolkningen skjer som normalt likevel — feltet er bare et
+       * varsel til brukeren om at avstanden er stor.
+       */
+      merEnn30Dager: boolean
     }
 
 /**
- * Validerer inndataene og bygger kommentaren. Følger regnearket også der
- * det overrasker: er det mer enn {@link MAKS_DAGER_MELLOM} døgn mellom
- * prøvene, fortolkes bare den aktuelle prøven, og kommentaren blir den samme
- * som uten en tidligere prøve. Det gjelder også en forrige prøve uten
- * THC-syre: en prøve som er for gammel til å sammenlignes med, er det uansett
- * hva den viste.
+ * Validerer inndataene og bygger kommentaren. Forrige prøve brukes i
+ * sammenligningen uansett hvor lang tid det har gått siden den — appen har
+ * ingen øvre grense for det, i motsetning til regnearkets K21.
  */
 export function fortolkThc(inn: ThcInndata): ThcResultat {
   const mangler: string[] = []
@@ -535,24 +546,12 @@ export function fortolkThc(inn: ThcInndata): ThcResultat {
       kommentar: byggKommentar(niva, kategori, false, ''),
       kategori,
       grunnlag: null,
-      forGammelForrige: false,
+      merEnn30Dager: false,
     }
   }
 
   const dager = dagerMellom(inn.forrigeDato, inn.aktuellDato)
-
-  // Regnearkets K21: en prøve eldre enn 60 døgn settes til side, og
-  // kommentaren blir som om ingen tidligere prøve fantes.
-  if (dager > MAKS_DAGER_MELLOM) {
-    const kategori = beregnKategori(false, inn.kronisk)
-    return {
-      type: 'kommentar',
-      kommentar: byggKommentar(niva, kategori, false, ''),
-      kategori,
-      grunnlag: null,
-      forGammelForrige: true,
-    }
-  }
+  const merEnn30Dager = dager > VARSEL_DAGER_MELLOM
 
   const forrigeIrcak = forrige as number
 
@@ -574,7 +573,7 @@ export function fortolkThc(inn: ThcInndata): ThcResultat {
       ),
       kategori,
       grunnlag: null,
-      forGammelForrige: false,
+      merEnn30Dager,
     }
   }
 
@@ -602,7 +601,7 @@ export function fortolkThc(inn: ThcInndata): ThcResultat {
       underCutoff,
       forventet,
     },
-    forGammelForrige: false,
+    merEnn30Dager,
   }
 }
 

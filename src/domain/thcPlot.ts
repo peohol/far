@@ -66,18 +66,15 @@ function pentSteg(grovt: number): number {
   return pen * tierpotens
 }
 
-/** Dagintervallet på x-aksen: 1, 2, 5 eller 10 — det som gir nærmest 10 merker. */
+/**
+ * Dagintervallet på x-aksen: et pent tall som gir omtrent 10 merker. Bruker
+ * samme «pene steg» som y-aksen, så intervallet skalerer uansett hvor mange
+ * dager det er mellom prøvene — appen setter ingen øvre grense på det lenger,
+ * og et fast tak her ville gitt et rutenett med tusenvis av streker for en
+ * gammel eller feiltastet dato.
+ */
 function velgXSteg(dager: number): number {
-  let beste = 1
-  let minsteAvvik = Infinity
-  for (const steg of [1, 2, 5, 10]) {
-    const avvik = Math.abs(Math.floor(dager / steg) + 1 - 10)
-    if (avvik < minsteAvvik) {
-      minsteAvvik = avvik
-      beste = steg
-    }
-  }
-  return beste
+  return pentSteg(dager / 10)
 }
 
 /**
