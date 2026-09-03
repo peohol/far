@@ -15,10 +15,10 @@ import {
   beregnIrcak,
   formaterIrcak,
   fortolkThc,
-  MAKS_DAGER_MELLOM,
   THC_ANALYSEMETODE,
   THC_KODE,
   TOM_THC_INNDATA,
+  VARSEL_DAGER_MELLOM,
   type Sikkerhetsmargin,
 } from '../domain/thc'
 import { erBekreftelse } from '../hooks/useKeyboard'
@@ -449,11 +449,16 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
           ) : (
             <>
               <h2 className="thc-resultat__merke">Kommentar</h2>
-              {resultat.forGammelForrige && (
-                <p className="thc-notis" role="note">
-                  Det er mer enn {MAKS_DAGER_MELLOM} dager mellom prøvene, og forrige prøve gir da
-                  ikke grunnlag for sammenligning. Kommentaren fortolker bare denne prøven.
-                </p>
+              {resultat.merEnn30Dager && (
+                <div className="thc-notis thc-notis--handling" role="note">
+                  <p>
+                    Det er mer enn {VARSEL_DAGER_MELLOM} dager mellom prøvene. Vurder å huke av
+                    «Ingen tidligere prøve tilgjengelig».
+                  </p>
+                  <Button variant="subtle" onClick={() => sett('ingenTidligere', true)}>
+                    Huk av nå
+                  </Button>
+                </div>
               )}
               <p className="thc-kommentar">{resultat.kommentar}</p>
               <div className="thc-handling">

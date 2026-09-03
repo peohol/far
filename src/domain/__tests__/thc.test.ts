@@ -187,16 +187,20 @@ describe('kommentaren, ord for ord mot regnearket', () => {
     )
   })
 
-  it('uten tidligere prøve: lav og middels høy sier påvist og anbefaler oppfølging', () => {
+  it('uten tidligere prøve: lav og middels høy sier påvist, oppgir påvisningstid og anbefaler oppfølging', () => {
     expect(byggKommentar('lav', 0, false, '')).toBe(
       'THC-syre, et omdannelsesprodukt av cannabis, er påvist i lav konsentrasjon. ' +
         'Analyseresultatet viser at cannabis har vært inntatt. ' +
-        'Oppfølging med flere prøver anbefales.',
+        'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. ' +
+        'Ved gjentatte inntak vil påvisningstiden for THC-syre i urin øke, vanligvis ' +
+        'opptil en måned etter avsluttet inntak. Oppfølging med flere prøver anbefales.',
     )
     expect(byggKommentar('middels høy', 0, false, '')).toBe(
       'THC-syre, et omdannelsesprodukt av cannabis, er påvist i middels høy konsentrasjon. ' +
         'Analyseresultatet viser at cannabis har vært inntatt. ' +
-        'Oppfølging med flere prøver anbefales.',
+        'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. ' +
+        'Ved gjentatte inntak vil påvisningstiden for THC-syre i urin øke, vanligvis ' +
+        'opptil en måned etter avsluttet inntak. Oppfølging med flere prøver anbefales.',
     )
   })
 
@@ -288,7 +292,7 @@ describe('fortolkningen fra inndata til kommentar', () => {
     if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
     expect(resultat.kategori).toBe(3)
     expect(resultat.kommentar).toBe(byggKommentar('lav', 3, true, '04.07.2026'))
-    expect(resultat.forGammelForrige).toBe(false)
+    expect(resultat.merEnn30Dager).toBe(false)
     expect(resultat.grunnlag).not.toBeNull()
     expect(resultat.grunnlag?.dager).toBe(23)
     expect(resultat.grunnlag?.forrige).toBe(6.5)
@@ -340,19 +344,25 @@ describe('fortolkningen fra inndata til kommentar', () => {
     expect(resultat.mangler).toEqual(['Fyll inn IRCAK for denne prøven.'])
   })
 
-  it('setter en prøve eldre enn 60 døgn til side, slik regnearkets K21 gjør', () => {
+  it('sammenligner fortsatt mot en prøve langt eldre enn 60 døgn, i motsetning til regnearkets K21', () => {
     const resultat = fortolkThc({ ...eksempel, forrigeDato: '2026-04-01' })
     if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
-    expect(resultat.forGammelForrige).toBe(true)
-    expect(resultat.grunnlag).toBeNull()
-    expect(resultat.kommentar).toBe(byggKommentar('lav', 0, false, ''))
+    expect(resultat.merEnn30Dager).toBe(true)
+    expect(resultat.grunnlag).not.toBeNull()
+    expect(resultat.grunnlag?.dager).toBe(117)
+    expect(resultat.kommentar).not.toBe(byggKommentar('lav', 0, false, ''))
   })
 
-  it('lar en prøve nøyaktig 60 døgn gammel telle med', () => {
-    const resultat = fortolkThc({ ...eksempel, forrigeDato: '2026-05-28' })
-    if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
-    expect(resultat.forGammelForrige).toBe(false)
-    expect(resultat.grunnlag?.dager).toBe(60)
+  it('varsler først når det er mer enn 30 døgn mellom prøvene', () => {
+    const nøyaktig30 = fortolkThc({ ...eksempel, forrigeDato: '2026-06-27' })
+    const over30 = fortolkThc({ ...eksempel, forrigeDato: '2026-06-26' })
+    if (nøyaktig30.type !== 'kommentar' || over30.type !== 'kommentar') {
+      throw new Error('ventet kommentar')
+    }
+    expect(nøyaktig30.grunnlag?.dager).toBe(30)
+    expect(nøyaktig30.merEnn30Dager).toBe(false)
+    expect(over30.grunnlag?.dager).toBe(31)
+    expect(over30.merEnn30Dager).toBe(true)
   })
 
   it('følger bruksmønsteret: samme prøver uten kronisk bruk gir kategori 4', () => {
@@ -442,11 +452,12 @@ describe('forrige prøve uten THC-syre (IRCAK 0)', () => {
     expect(resultat.grunnlag).toBeNull()
   })
 
-  it('viker for 60-dagersregelen: en for gammel prøve settes til side som før', () => {
+  it('konkluderer med nytt inntak også når forrige prøve er langt eldre enn 30 døgn', () => {
     const resultat = fortolkThc({ ...eksempel, forrigeDato: '2026-04-01' })
     if (resultat.type !== 'kommentar') throw new Error('ventet kommentar')
-    expect(resultat.forGammelForrige).toBe(true)
-    expect(resultat.kommentar).toBe(byggKommentar('lav', 0, false, ''))
+    expect(resultat.merEnn30Dager).toBe(true)
+    expect(resultat.kategori).toBe(4)
+    expect(resultat.kommentar).toBe(byggKommentar('lav', 4, true, '01.04.2026'))
   })
 
   it('godtar fortsatt ikke en negativ IRCAK', () => {

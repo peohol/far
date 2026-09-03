@@ -1208,6 +1208,16 @@
   border-radius: var(--runding-s);
 }
 
+/* Varselet om lang tid mellom prøvene tilbyr også handlingen selv — å huke
+   av «Ingen tidligere prøve» — så knappen står under teksten i stedet for i
+   den vanlige handlingsraden nederst i kortet. */
+.thc-notis--handling {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-2);
+}
+
 .thc-handling {
   display: flex;
   flex-wrap: wrap;

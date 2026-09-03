@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.6.0',
+    dato: '2026-09-03',
+    sammendrag: 'THC-syre: prøver sammenlignes uansett dager mellom dem, med nytt 30-dagersvarsel',
+    typer: ['Funksjonalitet', 'Fag'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Fjernet grensen på 60 dager mellom prøvene i THC-syre-modulen: prøvene fortolkes nå mot hverandre uansett hvor lang tid det har gått.',
+      'Er det mer enn 30 dager mellom prøvene, vises i stedet et varsel med forslag om å huke av «Ingen tidligere prøve tilgjengelig» — med en knapp som gjør det for deg med ett trykk.',
+      'Kommentaren ved lav og middels høy konsentrasjon uten en tidligere prøve å sammenligne med nevner nå hvor lenge THC-syre kan påvises i urin.',
+    ],
+  },
+  {
     versjon: '1.5.1',
     dato: '2026-08-31',
     sammendrag: 'Filterpillen under søket vises nå også uten filter',
