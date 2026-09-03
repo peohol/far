@@ -678,6 +678,18 @@ describe('visualiseringen', () => {
     )
   })
 
+  it('skalerer x-steget så et langt mellomrom mellom prøvene ikke gir tusenvis av merker', () => {
+    // Uten en øvre grense på dager mellom prøvene (fjernet fra fortolkningen)
+    // må x-aksen selv holde antall merker nede — også for en prøve flere år
+    // gammel, eller en feiltastet årstall.
+    const langt = byggGraf({ forrige: 6.5, dager: 3650, korrigertEndring: -0.95 })
+    expect(langt.xSteg).toBeGreaterThan(10)
+    expect(langt.xMaks / langt.xSteg).toBeLessThan(20)
+
+    const ekstremt = byggGraf({ forrige: 6.5, dager: 36500, korrigertEndring: -0.95 })
+    expect(ekstremt.xMaks / ekstremt.xSteg).toBeLessThan(20)
+  })
+
   it('skriver prosent med ekte minustegn', () => {
     expect(formaterProsent(-73.6)).toBe('−74 %')
     expect(formaterProsent(0)).toBe('0 %')
