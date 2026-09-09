@@ -77,11 +77,6 @@ export function KontrollStep({ valg, sporsmal, onJa, onNei, failed }: KontrollSt
             </li>
           ))}
         </ul>
-
-        <p className="kontrollkort__hjelp">
-          Er funnet ikke bekreftet, gjelder ikke kommentaren. «Nei» tar deg tilbake til
-          konsentrasjonene.
-        </p>
       </Card>
 
       {failed && <ManualCopy message={failed.message} comment={failed.comment} />}

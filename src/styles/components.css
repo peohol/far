@@ -625,13 +625,6 @@
   font-size: var(--tekst-m);
 }
 
-.kontrollkort__hjelp {
-  max-width: 34rem;
-  font-size: var(--tekst-s);
-  color: var(--blekk-dempet);
-  text-wrap: balance;
-}
-
 /* --- Steg 3: lim inn ---------------------------------------------------- */
 
 /* Beviset og kortet det hører til, tettere sammen enn stegets egen luft. */
