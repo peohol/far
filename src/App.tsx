@@ -3,6 +3,7 @@ import { SearchStep } from './components/SearchStep'
 import { BandStep } from './components/BandStep'
 import { EtgPasteStep } from './components/EtgPasteStep'
 import { EtgStep } from './components/EtgStep'
+import { KontrollStep } from './components/KontrollStep'
 import { PasteStep } from './components/PasteStep'
 import { RusStep } from './components/RusStep'
 import { Sidemeny } from './components/Sidemeny'
@@ -13,12 +14,19 @@ import { Toolbar } from './components/Toolbar'
 import { Versjonspille } from './components/Versjonspille'
 import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
 import { analytes } from './domain/analytes'
-import { bands as bandsOf, findBand, type Band } from './domain/bands'
 import { alternativFor, ETG_ALTERNATIVER, ETG_ANALYTT, type EtgAlternativ } from './domain/etg'
 import type { Rute } from './domain/flytting'
 import { RUS_ANALYTTER, rusModulFor } from './domain/rus'
 import { search } from './domain/search'
 import { THC_ANALYTT } from './domain/thc'
+import {
+  CUTOFF_NOKKEL,
+  CUTOFF_SPORSMAL,
+  cutoffvalg,
+  finnValg,
+  valgene,
+  type Kommentarvalg,
+} from './domain/valg'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
 import {
@@ -48,12 +56,6 @@ const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
 const BLINK = 500
 const STEGBYTTE = 130
 
-/**
- * Steget bildet henger igjen i mens kvitteringen starter der knappen sto. Se
- * `STEGBYTTE` og `vist`.
- */
-const DVELER_I: Partial<Record<Stage, Stage>> = { paste: 'band', 'etg-paste': 'etg' }
-
 /** Enter og mellomrom skal ikke både trykke en fokusert knapp og utløse stegets handling. */
 function buttonHasFocus(): boolean {
   return document.activeElement?.tagName === 'BUTTON'
@@ -65,13 +67,22 @@ export default function App() {
   const { theme, toggle } = useTheme()
   const copy = useClipboard()
   const { flash, show } = useCopyFlash(BLINK)
-  /** Sant i det korte øyeblikket båndknappene blir stående etter et valg. */
-  const [dveler, setDveler] = useState(false)
+  /**
+   * Steget bildet henger igjen i mens kvitteringen starter der knappen sto —
+   * det steget kopieringen gikk ut fra. `null` når ingenting dveler. Se
+   * `STEGBYTTE` og `vist`.
+   */
+  const [dveler, setDveler] = useState<Stage | null>(null)
   const stegbytte = useRef<number>()
   /** Ruten båndknappen sto i — beviset i limsteget flyter opp fra den. */
   const [bevisFra, setBevisFra] = useState<Rute | null>(null)
 
   const stage = stageOf(state)
+  // Kopieringen svarer først etter en tur innom nettleseren, og skal legge
+  // kvitteringen i det steget den gikk ut fra. Refen holder det steget uten å
+  // binde `kopierOgGaaVidere` til en ny utgave for hver rendring.
+  const staaende = useRef(stage)
+  staaende.current = stage
   // Søket dekker analyttene fra datasettet pluss kategoriene som har egne
   // fortolkningsmoduler i stedet for konsentrasjonsbånd: THC-syre i urin,
   // stoffene med ruspotensial i serum og etanolmarkørene EtG og EtS i urin.
@@ -100,7 +111,7 @@ export default function App() {
 
   const slippBildet = useCallback(() => {
     window.clearTimeout(stegbytte.current)
-    setDveler(false)
+    setDveler(null)
   }, [])
 
   /**
@@ -109,7 +120,8 @@ export default function App() {
    * Knappen står i bildet bare så lenge steget foran vises, enten den ble
    * klikket eller valgt med et tastetrykk. Blinket legges der den står nå, og
    * ruten følger med til limsteget, der beviset flyter opp fra den. Veien er
-   * den samme for konsentrasjonsbåndene og for EtG og EtS.
+   * den samme for konsentrasjonsbåndene, for cut-off-valget og for EtG og
+   * EtS.
    */
   const kopierOgGaaVidere = useCallback(
     async (tekst: string, velger: string, videre: Action) => {
@@ -122,20 +134,36 @@ export default function App() {
       show(knapp)
       setBevisFra(ruteAv(knapp))
       dispatch(videre)
-      setDveler(true)
+      setDveler(staaende.current)
       window.clearTimeout(stegbytte.current)
-      stegbytte.current = window.setTimeout(() => setDveler(false), STEGBYTTE)
+      stegbytte.current = window.setTimeout(() => setDveler(null), STEGBYTTE)
     },
     [copy, show],
   )
 
-  const pickBand = useCallback(
-    (band: Band) =>
-      kopierOgGaaVidere(band.kommentar, `[data-band="${band.key}"]`, {
+  const kopierValg = useCallback(
+    (valg: Kommentarvalg) =>
+      kopierOgGaaVidere(valg.kommentar, `[data-band="${valg.key}"]`, {
         type: 'velg-band',
-        key: band.key,
+        key: valg.key,
       }),
     [kopierOgGaaVidere],
+  )
+
+  /**
+   * Et valg i steg 2. De fleste kopierer kommentaren med én gang; cut-off-valget
+   * går innom kontrollspørsmålet først, siden funnet må være bekreftet av
+   * laboratoriet før kommentaren gjelder.
+   */
+  const velgValg = useCallback(
+    (valg: Kommentarvalg) => {
+      if (valg.key === CUTOFF_NOKKEL) {
+        dispatch({ type: 'spor', kontroll: 'cutoff' })
+        return
+      }
+      void kopierValg(valg)
+    },
+    [kopierValg],
   )
 
   /** Hovedkommentaren for tilfellet kopieres straks; resten hører til limsteget. */
@@ -157,10 +185,14 @@ export default function App() {
     dispatch({ type: 'tilbake' })
   }, [slippBildet])
 
-  const velgAnalytt = useCallback((analyte: Analyte) => {
-    setFailedCopy(null)
-    dispatch({ type: 'velg-analytt', analyte })
-  }, [])
+  const velgAnalytt = useCallback(
+    (analyte: Analyte) => {
+      slippBildet()
+      setFailedCopy(null)
+      dispatch({ type: 'velg-analytt', analyte })
+    },
+    [slippBildet],
+  )
 
   const settMetodefilter = useCallback((metode: string | null) => {
     dispatch({ type: 'sett-metodefilter', metode })
@@ -173,6 +205,22 @@ export default function App() {
   }, [slippBildet])
 
   useEffect(() => () => window.clearTimeout(stegbytte.current), [])
+
+  /**
+   * Valget kontrollsteget spør om. Det leses av analytten og ikke av
+   * spørsmålet som står, så bildet kan bli stående det korte øyeblikket etter
+   * at spørsmålet er besvart — se `dveler`.
+   */
+  const kontrollvalg = useMemo(
+    () => (state.analyte ? cutoffvalg(state.analyte) : null),
+    [state.analyte],
+  )
+
+  /** Ja: kommentaren kopieres, og flyten går videre som ellers. */
+  const bekreftKontroll = useCallback(() => {
+    if (!state.kontroll || !kontrollvalg) return
+    void kopierValg(kontrollvalg)
+  }, [state.kontroll, kontrollvalg, kopierValg])
 
   /**
    * Alt + 1 … Alt + 5 setter filteret på hver sin analysemetode, i den
@@ -249,10 +297,16 @@ export default function App() {
             e.preventDefault()
             dispatch({ type: 'velg-analytt', analyte: hit.analyte })
           } else if (stage === 'band' && state.analyte) {
-            const band = bandsOf(state.analyte)[index]
-            if (!band) return
+            const valg = valgene(state.analyte)[index]
+            if (!valg) return
             e.preventDefault()
-            void pickBand(band)
+            velgValg(valg)
+          } else if (stage === 'kontroll') {
+            // 1 er ja, 2 er nei — i den rekkefølgen knappene står.
+            const svar = [bekreftKontroll, back][index]
+            if (!svar) return
+            e.preventDefault()
+            svar()
           } else if (stage === 'etg') {
             const alternativ = ETG_ALTERNATIVER[index]
             if (!alternativ) return
@@ -269,7 +323,8 @@ export default function App() {
     ),
   })
 
-  const band = state.analyte && state.bandKey ? findBand(state.analyte, state.bandKey) : undefined
+  const valgtValg =
+    state.analyte && state.bandKey ? finnValg(state.analyte, state.bandKey) : undefined
   const rusModul = state.analyte ? rusModulFor(state.analyte) : undefined
   const etgAlternativ = state.etgValg ? alternativFor(state.etgValg) : undefined
 
@@ -278,7 +333,7 @@ export default function App() {
    * i steget foran blir stående, så kvitteringen rekker å starte der knappen
    * sto. Tastene følger `stage` og venter ikke på bildet.
    */
-  const vist = (dveler && DVELER_I[stage]) || stage
+  const vist = dveler ?? stage
 
   return (
     <div className="app" data-steg={vist} data-tomt={isIdle(state) ? 'ja' : 'nei'}>
@@ -306,8 +361,18 @@ export default function App() {
         {vist === 'band' && state.analyte && (
           <BandStep
             analyte={state.analyte}
-            onPick={(b) => void pickBand(b)}
+            onPick={velgValg}
             onBack={back}
+            failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
+          />
+        )}
+
+        {vist === 'kontroll' && kontrollvalg && (
+          <KontrollStep
+            valg={kontrollvalg}
+            sporsmal={CUTOFF_SPORSMAL}
+            onJa={bekreftKontroll}
+            onNei={back}
             failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
           />
         )}
@@ -347,10 +412,10 @@ export default function App() {
           />
         )}
 
-        {vist === 'paste' && state.analyte && band && (
+        {vist === 'paste' && state.analyte && valgtValg && (
           <PasteStep
             analyte={state.analyte}
-            band={band}
+            valg={valgtValg}
             fra={bevisFra}
             onBack={back}
             onFinish={reset}

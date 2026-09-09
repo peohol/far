@@ -4,21 +4,22 @@ import { Kopibevis } from './Kopibevis'
 import { StepBar } from './StepBar'
 import { bandIkon } from './bandikon'
 import { BackIcon, PasteIcon, PhoneIcon } from './icons'
-import type { Band } from '../domain/bands'
 import type { Rute } from '../domain/flytting'
+import type { Kommentarvalg } from '../domain/valg'
 import type { Analyte } from '../types'
 
 export interface PasteStepProps {
   analyte: Analyte
-  band: Band
-  /** Ruten båndknappen sto i da kommentaren ble kopiert. Se {@link Kopibevis}. */
+  /** Valget kommentaren kom fra: et konsentrasjonsbånd, eller cut-off-knappen. */
+  valg: Kommentarvalg
+  /** Ruten knappen sto i da kommentaren ble kopiert. Se {@link Kopibevis}. */
   fra: Rute | null
   onBack: () => void
   onFinish: () => void
 }
 
 /** Steg 3: kommentaren ligger på utklippstavlen — her står hvor den skal. */
-export function PasteStep({ analyte, band, fra, onBack, onFinish }: PasteStepProps) {
+export function PasteStep({ analyte, valg, fra, onBack, onFinish }: PasteStepProps) {
   return (
     <section className="steg" aria-label="Lim inn kommentaren">
       <StepBar>
@@ -31,10 +32,10 @@ export function PasteStep({ analyte, band, fra, onBack, onFinish }: PasteStepPro
           egen luft, så de to leses som én ting: denne kommentaren, hit. */}
       <div className="limstabel">
         <Kopibevis
-          tone={band.tone}
-          ikon={bandIkon(band)}
-          tekst={band.label}
-          kommentar={band.kommentar}
+          tone={valg.tone}
+          ikon={bandIkon(valg)}
+          tekst={valg.label}
+          kommentar={valg.kommentar}
           fra={fra}
         />
 
@@ -45,7 +46,7 @@ export function PasteStep({ analyte, band, fra, onBack, onFinish }: PasteStepPro
           </p>
           <p className="limInn__kode">{analyte.kode}</p>
 
-          {band.ring && (
+          {valg.ring && (
             <p className="ringvarsel" role="status">
               <PhoneIcon className="ringvarsel__ikon" />
               Husk å ringe!

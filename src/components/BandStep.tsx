@@ -9,28 +9,36 @@ import { ManualCopy } from './ManualCopy'
 import { useTips } from './Tips'
 import { bandIkon } from './bandikon'
 import { BackIcon, PhoneIcon } from './icons'
-import { bands as bandsOf, type Band } from '../domain/bands'
 import { displayName } from '../domain/names'
 import { grensepiller, type Pilleslag } from '../domain/piller'
+import { CUTOFF_NOKKEL, valgene, type Kommentarvalg } from '../domain/valg'
 import { indexToDigit } from '../hooks/useKeyboard'
 import { useShortcutVisibility } from '../hooks/useShortcutVisibility'
 import type { Analyte } from '../types'
 
 export interface BandStepProps {
   analyte: Analyte
-  onPick: (band: Band) => void
+  onPick: (valg: Kommentarvalg) => void
   onBack: () => void
   /** Kommentaren som skal kopieres for hånd, når utklippstavlen er utilgjengelig. */
   failed: { message: string; comment: string } | null
 }
 
 /**
- * Ett bånd. Kommentaren som havner på utklippstavlen henger på knappen som et
+ * Ett valg. Kommentaren som havner på utklippstavlen henger på knappen som et
  * tips, så den kan leses før valget tas.
  */
-function BandKnapp({ band, snarvei, onPick }: { band: Band; snarvei: string; onPick: () => void }) {
-  const tips = useTips(band.kommentar)
-  const Icon = bandIkon(band)
+function Valgknapp({
+  valg,
+  snarvei,
+  onPick,
+}: {
+  valg: Kommentarvalg
+  snarvei: string
+  onPick: () => void
+}) {
+  const tips = useTips(valg.kommentar)
+  const Icon = bandIkon(valg)
 
   return (
     <li>
@@ -38,15 +46,15 @@ function BandKnapp({ band, snarvei, onPick }: { band: Band; snarvei: string; onP
         type="button"
         // Kvitteringen legges der knappen står, og beviset i neste steg flyter
         // opp fra den samme ruten. Begge finner knappen herfra — også når
-        // båndet ble valgt med tastaturet.
-        data-band={band.key}
-        className={`bandknapp bandknapp--${band.tone}`}
+        // valget ble tatt med tastaturet.
+        data-band={valg.key}
+        className={`bandknapp bandknapp--${valg.tone}`}
         onClick={onPick}
         aria-keyshortcuts={snarvei}
         {...tips.props}
       >
         <Icon className="bandknapp__ikon" />
-        <span className="bandknapp__verdi">{band.label}</span>
+        <span className="bandknapp__verdi">{valg.label}</span>
         <Shortcut>{snarvei}</Shortcut>
       </button>
       {tips.forklaring}
@@ -67,10 +75,19 @@ const TONE: Record<Pilleslag, PillTone> = {
  * Steg 2: hvilken analytt som kommenteres, og hvilket konsentrasjonsbånd
  * svaret havner i. Båndene er utledet av analyttens egne grenser, så knappene
  * viser tallene som gjelder akkurat den analytten.
+ *
+ * Antidepressiver og antipsykotika har ett valg til, som ikke er en
+ * konsentrasjon: stoffet er til stede, men under påvisningsgrensen. Det står
+ * under båndene, i sin egen rad, og fortsetter nummereringen deres.
  */
 export function BandStep({ analyte, onPick, onBack, failed }: BandStepProps) {
-  const bands = useMemo(() => bandsOf(analyte), [analyte])
+  const alle = useMemo(() => valgene(analyte), [analyte])
   const { visible: merker } = useShortcutVisibility()
+
+  // Hurtigtasten er plassen i utvalget, og cut-off-valget står sist. Da kan
+  // ikke tastene i de to radene komme i utakt med hverandre.
+  const bands = alle.filter((valg) => valg.key !== CUTOFF_NOKKEL)
+  const cutoff = alle.find((valg) => valg.key === CUTOFF_NOKKEL)
 
   return (
     <section className="steg" aria-label="Velg konsentrasjon">
@@ -108,15 +125,27 @@ export function BandStep({ analyte, onPick, onBack, failed }: BandStepProps) {
           className={`band${merker ? ' band--merker' : ''}`}
           style={{ '--antall': bands.length } as CSSProperties}
         >
-          {bands.map((band, i) => (
-            <BandKnapp
-              key={band.key}
-              band={band}
+          {bands.map((valg, i) => (
+            <Valgknapp
+              key={valg.key}
+              valg={valg}
               snarvei={indexToDigit(i)}
-              onPick={() => onPick(band)}
+              onPick={() => onPick(valg)}
             />
           ))}
         </ul>
+
+        {/* Egen rad: valget er ingen konsentrasjon, og skal verken dele
+            bredden med båndene eller leses som en del av skalaen. */}
+        {cutoff && (
+          <ul className="band bandkort__ekstra">
+            <Valgknapp
+              valg={cutoff}
+              snarvei={indexToDigit(bands.length)}
+              onPick={() => onPick(cutoff)}
+            />
+          </ul>
+        )}
       </Card>
 
       {failed && <ManualCopy message={failed.message} comment={failed.comment} />}

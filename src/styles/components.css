@@ -473,9 +473,11 @@
   max-width: calc(var(--band-innhold) * var(--tekst-l));
 }
 
-/* Formen et bånd har. Knappen i båndsteget og beviset som følger med til
-   limsteget deler den, så de to leses som den samme knappen. */
+/* Formen et bånd har. Knappen i båndsteget, merket i kontrollsteget og beviset
+   som følger med til limsteget deler den, så de tre leses som den samme
+   knappen hele veien gjennom. */
 .bandknapp,
+.valgmerke,
 .kopibevis {
   display: flex;
   align-items: center;
@@ -512,12 +514,14 @@
 }
 
 .bandknapp__ikon,
+.valgmerke__ikon,
 .kopibevis__ikon {
   font-size: 1.25em;
 }
 
 /* Fargene hører til båndet, ikke til knappen, og følger derfor med beviset. */
 .bandknapp--under,
+.valgmerke--under,
 .kopibevis--under {
   color: var(--niva-under-blekk);
   background: var(--niva-under-flate);
@@ -525,24 +529,51 @@
 }
 
 .bandknapp--innenfor,
+.valgmerke--innenfor,
 .kopibevis--innenfor {
   color: var(--niva-innenfor-blekk);
   background: var(--niva-innenfor-flate);
   border-color: var(--niva-innenfor-linje);
 }
 
+/* Gult bærer to ting: båndet over referanseområdet, og «Til stede under
+   cut-off». Begge er svar appen ber deg se en gang til på. */
 .bandknapp--over,
-.kopibevis--over {
+.valgmerke--over,
+.kopibevis--over,
+.bandknapp--cutoff,
+.valgmerke--cutoff,
+.kopibevis--cutoff {
   color: var(--niva-gul-blekk);
   background: var(--niva-gul-flate);
   border-color: var(--niva-gul-linje);
 }
 
 .bandknapp--ring,
+.valgmerke--ring,
 .kopibevis--ring {
   color: var(--niva-over-blekk);
   background: var(--niva-over-flate);
   border-color: var(--niva-over-linje);
+}
+
+/* Egen rad under båndene. Valget er ingen konsentrasjon og skal verken dele
+   bredden med skalaen eller leses som en del av den, så knappen tar bare den
+   plassen teksten trenger. */
+.bandkort__ekstra {
+  justify-content: center;
+}
+
+.bandkort__ekstra > li {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.bandkort__ekstra .bandknapp {
+  flex: 0 1 auto;
+  font-size: var(--tekst-m);
+  white-space: normal;
 }
 
 /* Knapper som ikke er et konsentrasjonsbånd: EtG- og EtS-modulens tre
@@ -550,6 +581,7 @@
    klinisk som ikke er ment — men de har samme form, så knappen kjenner seg
    igjen som bevis over lim-inn-kortet. */
 .bandknapp--noytral,
+.valgmerke--noytral,
 .kopibevis--noytral {
   color: var(--blekk);
   background: var(--flate-hevet);
@@ -557,6 +589,40 @@
      ligger for tett på kortfargen i mørkt tema — og må derfor bære kravet til
      kontrast for grafiske elementer på egen hånd. */
   border-color: var(--blekk-svak);
+}
+
+/* --- Kontrollsteget ----------------------------------------------------- */
+
+/* Merket som viser hvilket valg som skal bekreftes. Det har knappens form og
+   farge, men er ikke en knapp — og har derfor fast størrelse, som beviset i
+   limsteget. */
+.valgmerke {
+  flex: none;
+  font-size: var(--tekst-m);
+}
+
+.kontrollkort {
+  gap: var(--rom-4);
+}
+
+.kontrollkort__sporsmal {
+  font-size: var(--tekst-l);
+  font-weight: var(--vekt-medium);
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+/* Ja og nei står side om side i lesbar størrelse. De skal ikke dele hele
+   kortbredden mellom seg slik båndene gjør: dette er et spørsmål, ikke en
+   skala. */
+.kontrollkort__svar > li {
+  flex: 0 1 9rem;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.kontrollkort__svar .bandknapp {
+  font-size: var(--tekst-m);
 }
 
 /* --- Steg 3: lim inn ---------------------------------------------------- */

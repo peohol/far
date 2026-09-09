@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.7.0',
+    dato: '2026-09-09',
+    sammendrag: 'Ny gul knapp for funn under påvisningsgrensen',
+    typer: ['Fag', 'Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Antidepressiver og antipsykotika har fått en knapp til: «Til stede under cut-off», i gult under de vanlige konsentrasjonsknappene. Hurtigtasten er 4 — eller 5 for de analyttene som har fire konsentrasjonsknapper fra før.',
+      'Kommentaren knappen gir, er den samme som den grønne knappen gir, med denne setningen satt foran: «Prøven inneholder en lav konsentrasjon av [stoffet] som ligger under påvisningsgrensen.»',
+      'For sumanalyser navngis alle stoffene i summen, bundet sammen med «og/eller» — «amitriptylin og/eller nortriptylin», og «kariprazin, desmetylkariprazin og/eller didesmetylkariprazin».',
+      'Kommentaren kopieres ikke med én gang. Først kommer spørsmålet «Har laboratoriet bekreftet funnet – altså at det ikke bare skyldes støy?».',
+      '«Ja» (tasten 1) kopierer kommentaren og går videre til «Lim inn kommentaren på», der den gule knappen står øverst som påminnelse om hvilken knapp som ble brukt. «Nei» (tasten 2) og Esc tar deg tilbake til konsentrasjonene uten å kopiere noe.',
+    ],
+  },
+  {
     versjon: '1.6.0',
     dato: '2026-09-03',
     sammendrag: 'THC-syre: prøver sammenlignes uansett dager mellom dem, med nytt 30-dagersvarsel',

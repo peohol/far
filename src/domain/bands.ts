@@ -2,10 +2,13 @@ import type { Analyte, Level } from '../types'
 import { levelComment } from './concentration'
 
 /**
- * Fargetonen båndet vises med. «over» deles i gult og rødt etter om
+ * Fargetonen en knapp i steg 2 vises med. «over» deles i gult og rødt etter om
  * konsentrasjonen også passerer ringegrensen.
+ *
+ * «cutoff» hører til den ene knappen som ikke er et konsentrasjonsbånd — se
+ * `domain/valg.ts` — og står her fordi den deler form og farger med båndene.
  */
-export type BandTone = 'under' | 'innenfor' | 'over' | 'ring'
+export type BandTone = 'under' | 'innenfor' | 'over' | 'ring' | 'cutoff'
 
 export interface Band {
   /** Stabil id, brukes som nøkkel i tilstanden. */
@@ -119,8 +122,4 @@ function lagBand(
     label,
     kommentar: levelComment(analyte, niva).kommentar,
   }
-}
-
-export function findBand(analyte: Analyte, key: string): Band | undefined {
-  return bands(analyte).find((b) => b.key === key)
 }
