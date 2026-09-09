@@ -11,17 +11,41 @@ import type { Analyte } from './types'
  * ruspotensial i serum går fra søket til hver sin fortolkningsmodul og blir
  * der til man bytter analytt, fordi svaret der bygges opp av flere spørsmål.
  *
+ * Et valg som krever en bekreftelse før kommentaren kopieres, skyter inn et
+ * kontrollsteg mellom de to siste. Se {@link Kontroll}.
+ *
  * Hvilket steg som vises utledes av tilstanden, så det finnes ingen egen
  * «steg»-variabel som kan komme i utakt med resten.
  */
-export type Stage = 'search' | 'band' | 'paste' | 'thc' | 'rus' | 'etg' | 'etg-paste'
+export type Stage =
+  | 'search'
+  | 'band'
+  | 'kontroll'
+  | 'paste'
+  | 'thc'
+  | 'rus'
+  | 'etg'
+  | 'etg-paste'
+
+/**
+ * Kontrollspørsmålet som står og venter på svar.
+ *
+ * «Til stede under cut-off» er det ene valget som ikke kan tas på ordet: et
+ * signal under påvisningsgrensen kan like gjerne være støy, og laboratoriet må
+ * ha bekreftet funnet før kommentaren gjelder. Svares det ja, kopieres
+ * kommentaren og flyten går videre som ellers; svares det nei, er man tilbake
+ * i valget.
+ */
+export type Kontroll = 'cutoff'
 
 export interface State {
   /** Teksten i søkefeltet. Beholdes når man går tilbake fra steg 2. */
   query: string
   analyte: Analyte | null
-  /** Nøkkelen til konsentrasjonsbåndet brukeren valgte, når kommentaren er kopiert. */
+  /** Nøkkelen til valget brukeren tok i steg 2, når kommentaren er kopiert. */
   bandKey: string | null
+  /** Kontrollspørsmålet som venter på svar. `null` når ingen står. */
+  kontroll: Kontroll | null
   /** Tilfellet brukeren valgte i EtG- og EtS-modulen, når kommentaren er kopiert. */
   etgValg: EtgValg | null
   /** Om et enslig alternativ får velge seg selv. Se {@link narrow}. */
@@ -40,6 +64,7 @@ export const initialState: State = {
   query: '',
   analyte: null,
   bandKey: null,
+  kontroll: null,
   etgValg: null,
   autoPick: true,
   metodefilter: null,
@@ -50,6 +75,8 @@ export type Action =
   | { type: 'sett-sok'; value: string; matches: Analyte[] }
   | { type: 'velg-analytt'; analyte: Analyte }
   | { type: 'velg-band'; key: string }
+  /** Stiller kontrollspørsmålet, i stedet for å kopiere med én gang. */
+  | { type: 'spor'; kontroll: Kontroll }
   | { type: 'velg-etg'; valg: EtgValg }
   | { type: 'sett-metodefilter'; metode: string | null }
   | { type: 'tilbake' }
@@ -60,6 +87,7 @@ export function stageOf(state: State): Stage {
   if (erThcAnalytt(state.analyte)) return 'thc'
   if (erRusAnalytt(state.analyte)) return 'rus'
   if (erEtgAnalytt(state.analyte)) return state.etgValg ? 'etg-paste' : 'etg'
+  if (state.kontroll) return 'kontroll'
   return state.bandKey ? 'paste' : 'band'
 }
 
@@ -77,7 +105,11 @@ export function reducer(state: State, action: Action): State {
       return pick(state, action.analyte)
 
     case 'velg-band':
-      return { ...state, bandKey: action.key }
+      // Kommentaren er kopiert, og et kontrollspørsmål er dermed besvart.
+      return { ...state, bandKey: action.key, kontroll: null }
+
+    case 'spor':
+      return { ...state, kontroll: action.kontroll }
 
     case 'velg-etg':
       return { ...state, etgValg: action.valg }
@@ -94,7 +126,7 @@ export function reducer(state: State, action: Action): State {
 }
 
 function pick(state: State, analyte: Analyte): State {
-  return { ...state, analyte, bandKey: null, etgValg: null }
+  return { ...state, analyte, bandKey: null, kontroll: null, etgValg: null }
 }
 
 /**
@@ -124,6 +156,9 @@ function stepBack(state: State): State {
   switch (stageOf(state)) {
     case 'paste':
       return { ...state, bandKey: null }
+    case 'kontroll':
+      // Ubesvart, eller besvart med nei: tilbake til valget.
+      return { ...state, kontroll: null }
     case 'etg-paste':
       return { ...state, etgValg: null }
     case 'band':

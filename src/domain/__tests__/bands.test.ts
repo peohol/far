@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { analytes, findByCode } from '../analytes'
-import { bands, findBand } from '../bands'
+import { bands } from '../bands'
 import { classify } from '../concentration'
 import type { Analyte } from '../../types'
 
@@ -74,11 +74,12 @@ describe('bands', () => {
     }
   })
 
-  it('gir hvert bånd en unik nøkkel som kan slås opp igjen', () => {
+  it('gir hvert bånd en unik nøkkel', () => {
+    // Nøkkelen er det tilstanden holder på, og oppslaget tilbake gjøres av
+    // `finnValg` — se `domain/__tests__/valg.test.ts`.
     for (const a of analytes) {
       const keys = bands(a).map((b) => b.key)
       expect(new Set(keys).size, a.kode).toBe(keys.length)
-      for (const key of keys) expect(findBand(a, key)?.key).toBe(key)
     }
   })
 

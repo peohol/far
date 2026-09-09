@@ -42,6 +42,20 @@ export function ArrowUpIcon(props: IconProps) {
   )
 }
 
+/**
+ * Til stede under cut-off: en liten dråpe under den stiplede påvisningsgrensen.
+ * Streken er stiplet fordi grensen er teknisk og ikke klinisk — den sier hva
+ * analysen kan tallfeste, ikke hva som er mye eller lite.
+ */
+export function CutoffIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M3.5 8.5h25" strokeDasharray="4 3.5" opacity="0.55" />
+      <path d="M16 13c4.1 4.4 6.2 7.4 6.2 9.7a6.2 6.2 0 0 1-12.4 0c0-2.3 2.1-5.3 6.2-9.7Z" />
+    </Icon>
+  )
+}
+
 /** Ringegrense: telefonrør med ringebuer. */
 export function PhoneIcon(props: IconProps) {
   return (

@@ -4,6 +4,7 @@ import { ETG_ALTERNATIVER, ETG_ANALYTT } from '../domain/etg'
 import { RUS_ANALYTTER, rusModulFor } from '../domain/rus'
 import { search } from '../domain/search'
 import { THC_ANALYTT } from '../domain/thc'
+import { CUTOFF_NOKKEL } from '../domain/valg'
 import { initialState, reducer, stageOf, type State } from '../state'
 import type { Analyte } from '../types'
 
@@ -197,5 +198,53 @@ describe('filteret fra sidemenyen', () => {
       ...initialState,
       metodefilter: 'AHT',
     })
+  })
+})
+
+describe('kontrollspørsmålet før «Til stede under cut-off»', () => {
+  /** Kvetiapin, med den gule knappen trykket. */
+  const spurt = () => reducer(skriv(initialState, 'k', 'kv'), { type: 'spor', kontroll: 'cutoff' })
+
+  it('stiller spørsmålet i stedet for å kopiere med én gang', () => {
+    const state = spurt()
+
+    expect(stageOf(state)).toBe('kontroll')
+    // Ingenting er kopiert ennå: valget står ubesvart.
+    expect(state.bandKey).toBeNull()
+  })
+
+  it('går til limsteget når funnet bekreftes', () => {
+    const state = reducer(spurt(), { type: 'velg-band', key: CUTOFF_NOKKEL })
+
+    expect(stageOf(state)).toBe('paste')
+    expect(state.bandKey).toBe(CUTOFF_NOKKEL)
+    expect(state.kontroll).toBeNull()
+  })
+
+  it('går tilbake til valget når svaret er nei', () => {
+    const state = reducer(spurt(), { type: 'tilbake' })
+
+    expect(stageOf(state)).toBe('band')
+    expect(valgt(state)).toBe('KVE')
+    expect(state.kontroll).toBeNull()
+  })
+
+  it('lar Esc fra limsteget gå tilbake til valgene, ikke til spørsmålet', () => {
+    // Spørsmålet er besvart. Veien tilbake skal gi anledning til å velge på
+    // nytt, ikke til å svare på det samme spørsmålet en gang til.
+    const limt = reducer(spurt(), { type: 'velg-band', key: CUTOFF_NOKKEL })
+
+    expect(stageOf(reducer(limt, { type: 'tilbake' }))).toBe('band')
+  })
+
+  it('tar ikke spørsmålet med til en ny analytt', () => {
+    const bytte = reducer(spurt(), { type: 'velg-analytt', analyte: analytt('CITAL') })
+
+    expect(stageOf(bytte)).toBe('band')
+    expect(bytte.kontroll).toBeNull()
+  })
+
+  it('blir borte når alt nullstilles', () => {
+    expect(reducer(spurt(), { type: 'nullstill' })).toEqual(initialState)
   })
 })
