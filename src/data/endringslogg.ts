@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.7.1',
+    dato: '2026-09-15',
+    sammendrag: 'Analysefilteret åpnes direkte når pekeren holdes over knappen',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Når du holder pekeren over «Velg analysemetode» eller pillen for et aktivt filter, åpnes filtermenyen med en gang. Du trenger ikke klikke først.',
+      'Forklaringsboblen som tidligere dukket opp ved peker, er fjernet. På berøringsskjerm og med tastatur kan knappen fortsatt brukes som før.',
+    ],
+  },
+  {
     versjon: '1.7.0',
     dato: '2026-09-09',
     sammendrag: 'Ny gul knapp for funn under påvisningsgrensen',

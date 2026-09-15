@@ -9,7 +9,6 @@ import {
 import { Metodepille } from './Metodepille'
 import { Pill } from './Pill'
 import { Shortcut } from './Shortcut'
-import { useTips } from './Tips'
 import { ANALYSEMETODER, AV_SNARVEI, metodesnarvei } from '../domain/analysemetoder'
 
 /**
@@ -22,7 +21,8 @@ import { ANALYSEMETODER, AV_SNARVEI, metodesnarvei } from '../domain/analysemeto
  *
  * Uten filter viser pillen «Velg analysemetode» i stedet for en metodekode.
  * Den åpner den samme menyen, så filteret kan settes derfra også — ikke bare
- * fra sidemenyen.
+ * fra sidemenyen. Med mus åpnes menyen straks pekeren holdes over pillen;
+ * klikk og tastatur virker fortsatt for berøring og tastaturnavigasjon.
  *
  * Menyen er et lag over appen, som sidemenyen og endringsloggen: `data-lag`
  * sier fra til `lagLiggerOver()`, så talltastene i søket ikke velger et
@@ -37,6 +37,12 @@ const KANTLUFT = 12
  * den i stedet for å strekke seg utenfor vinduet, der valgene ikke kan nås.
  */
 const MINSTE_HOYDE = 120
+
+/**
+ * Litt slingringsmonn når pekeren krysser luftrommet mellom pillen og menyen.
+ * Åpningen har ingen forsinkelse; bare lukkingen venter disse millisekundene.
+ */
+const HOVER_LUKKEFORSINKELSE = 200
 
 export interface FilterbytteProps {
   /** Metoden filteret står på. `null` når søket ikke er begrenset. */
@@ -57,43 +63,72 @@ const UMAALT: Oppsett = { retning: 'ned', plass: null }
 export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
   const [apen, setApen] = useState(false)
   const [oppsett, setOppsett] = useState<Oppsett>(UMAALT)
+  const beholder = useRef<HTMLSpanElement | null>(null)
   const knapp = useRef<HTMLButtonElement | null>(null)
   const meny = useRef<HTMLDivElement>(null)
+  const lukkefrist = useRef<number | null>(null)
+  const skalFokusereVedAapning = useRef(false)
 
-  const tips = useTips(metodefilter ? 'Trykk for å endre filter' : 'Trykk for å velge filter', {
-    skjermleser: false,
-  })
-  // Tipset og fokuset skal på det samme elementet, så de to ref-ene slås sammen.
-  const { ref: tipsRef, ...knappeprops } = tips.props
-  const settKnapp = useCallback(
-    (element: HTMLButtonElement | null) => {
-      knapp.current = element
-      tipsRef(element)
-    },
-    [tipsRef],
-  )
+  const avbrytPlanlagtLukk = useCallback(() => {
+    if (lukkefrist.current === null) return
+    window.clearTimeout(lukkefrist.current)
+    lukkefrist.current = null
+  }, [])
+
+  const lukkUtenFokus = useCallback(() => {
+    avbrytPlanlagtLukk()
+    setApen(false)
+  }, [avbrytPlanlagtLukk])
 
   const lukk = useCallback(() => {
-    setApen(false)
+    lukkUtenFokus()
     knapp.current?.focus()
-  }, [])
+  }, [lukkUtenFokus])
 
   // Målingen nullstilles ved åpning, så menyen alltid måles på sin egen
-  // høyde og ikke på taket den fikk forrige gang.
-  const apne = useCallback(() => {
-    setOppsett(UMAALT)
-    setApen(true)
-  }, [])
+  // høyde og ikke på taket den fikk forrige gang. Hover skal ikke stjele
+  // fokus fra søkefeltet; klikk/tastatur beholder den gamle fokusflyten.
+  const apne = useCallback(
+    (fokuserMeny: boolean) => {
+      avbrytPlanlagtLukk()
+      skalFokusereVedAapning.current = fokuserMeny
+
+      if (apen) {
+        if (fokuserMeny) {
+          meny.current?.querySelector<HTMLElement>('[aria-current="true"]')?.focus()
+        }
+        return
+      }
+
+      setOppsett(UMAALT)
+      setApen(true)
+    },
+    [apen, avbrytPlanlagtLukk],
+  )
+
+  // Hover-menyen skal forsvinne igjen når pekeren går bort, men ikke idet den
+  // krysser den lille glippen mellom pillen og menyen. Har brukeren klikket seg
+  // inn i menyen, får fokus holde den åpen til den lukkes på vanlig måte.
+  const planleggHoverLukk = useCallback(() => {
+    avbrytPlanlagtLukk()
+    lukkefrist.current = window.setTimeout(() => {
+      lukkefrist.current = null
+      const fokus = document.activeElement
+      if (fokus && beholder.current?.contains(fokus)) return
+      setApen(false)
+    }, HOVER_LUKKEFORSINKELSE)
+  }, [avbrytPlanlagtLukk])
 
   const velg = useCallback(
     (metode: string | null) => {
+      avbrytPlanlagtLukk()
       setApen(false)
       onFilter(metode)
       // Knappen selv forsvinner aldri — den viser bare en annen pille uten
       // filter — så fokus kan alltid gis tilbake til den.
       knapp.current?.focus()
     },
-    [onFilter],
+    [avbrytPlanlagtLukk, onFilter],
   )
 
   /**
@@ -106,7 +141,8 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
    * innenfor plassen den har. Ellers kunne de øverste valgene havnet over
    * vinduskanten, der de verken kan ses eller trykkes.
    *
-   * Fokus følger med inn i menyen, på metoden som står valgt.
+   * Ved klikk/tastatur følger fokus med inn i menyen, på metoden som står
+   * valgt. Ved hover blir fokus der brukeren hadde det, typisk i søkefeltet.
    */
   useLayoutEffect(() => {
     if (!apen) return
@@ -121,7 +157,10 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
         plass: Math.max(ned ? under : over, MINSTE_HOYDE),
       })
     }
-    boks?.querySelector<HTMLElement>('[aria-current="true"]')?.focus()
+    if (skalFokusereVedAapning.current) {
+      boks?.querySelector<HTMLElement>('[aria-current="true"]')?.focus()
+    }
+    skalFokusereVedAapning.current = false
   }, [apen])
 
   // Escape lukker menyen. Appens egen Esc ligger stille så lenge laget står
@@ -137,6 +176,8 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
     return () => window.removeEventListener('keydown', paaTast)
   }, [apen, lukk])
 
+  useEffect(() => () => avbrytPlanlagtLukk(), [avbrytPlanlagtLukk])
+
   /**
    * Tabulator ut av menyen lukker den. Uten dette kunne fokus havnet på
    * knappene bak — de er dekket av klikkflaten, men ikke av tastaturet — og
@@ -150,20 +191,26 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
   }, [])
 
   return (
-    <span className="filterbytte" data-retning={oppsett.retning} onBlur={paaFokusUt}>
+    <span
+      ref={beholder}
+      className="filterbytte"
+      data-retning={oppsett.retning}
+      onBlur={paaFokusUt}
+    >
       <button
-        ref={settKnapp}
+        ref={knapp}
         type="button"
         className="filterbytte__knapp"
         aria-label={
           metodefilter
-            ? `Søket er begrenset til ${metodefilter}. Trykk for å endre filter.`
-            : 'Søket har ikke noe filter. Trykk for å velge analysemetode.'
+            ? `Endre analysefilter. Søket er begrenset til ${metodefilter}.`
+            : 'Velg analysemetode. Søket har ikke noe filter.'
         }
         aria-expanded={apen}
         aria-haspopup="true"
-        onClick={() => (apen ? lukk() : apne())}
-        {...knappeprops}
+        onMouseEnter={() => apne(false)}
+        onMouseLeave={planleggHoverLukk}
+        onClick={() => apne(true)}
       >
         {metodefilter ? (
           <Metodepille metode={metodefilter} />
@@ -173,7 +220,6 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
           </Pill>
         )}
       </button>
-      {tips.forklaring}
 
       {apen && (
         <>
@@ -194,6 +240,8 @@ export function Filterbytte({ metodefilter, onFilter }: FilterbytteProps) {
             role="group"
             aria-label="Endre filter"
             style={oppsett.plass === null ? undefined : { maxHeight: `${oppsett.plass}px` }}
+            onMouseEnter={avbrytPlanlagtLukk}
+            onMouseLeave={planleggHoverLukk}
           >
             {ANALYSEMETODER.map((metode) => {
               const snarvei = metodesnarvei(metode.kode)
