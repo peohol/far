@@ -2531,6 +2531,11 @@ details[open] > .detalj__kropp {
 }
 
 .filterbytte__knapp {
+  /* Når hover åpner menyen, må knappen bli liggende over det usynlige
+     klikk-laget. Ellers havner laget under pekeren og hover avsluttes
+     av sin egen meny. */
+  position: relative;
+  z-index: 31;
   display: inline-flex;
   padding: 0;
   background: transparent;
