@@ -248,3 +248,26 @@ describe('Edge-funksjonene', () => {
     }
   })
 })
+
+describe('migrasjonshistorikken', () => {
+  const mappe = 'supabase/migrations'
+  const filer = readdirSync(fileURLToPath(new URL(`../../${mappe}`, import.meta.url)))
+    .filter((f) => f.endsWith('.sql'))
+    .sort()
+
+  it('har entydige navn bak tidsstemplene', () => {
+    const navn = filer.map((f) => f.replace(/^\d+_/, ''))
+    expect(new Set(navn).size).toBe(navn.length)
+  })
+
+  it('lar bare oppryddingen fra første utkast røre historikktabellen', () => {
+    // Raden for en migrasjon føres inn etter at SQL-en har kjørt. En migrasjon
+    // kan derfor ikke slette sin egen rad, og et forsøk etterlater nettopp den
+    // raden den skulle fjerne. Fila under finnes fordi det skjedde én gang;
+    // flere av dem skal det ikke bli.
+    const rorer = filer.filter((f) =>
+      utenKommentarer(les(`${mappe}/${f}`)).includes('supabase_migrations'),
+    )
+    expect(rorer.map((f) => f.replace(/^\d+_/, ''))).toEqual(['rydd_historikken_selv.sql'])
+  })
+})
