@@ -2,8 +2,12 @@
 
 Tillegg til reglene i rotens `CLAUDE.md`. Gjelder alt under `supabase/`.
 
-- Bakgrunnen for brukersystemet står i `docs/brukere.md`. Les den før noe her
-  endres.
+- Bakgrunnen for brukersystemet står i `docs/brukere.md`, og for det
+  redigerbare faginnholdet i `docs/faginnhold.md`. Les den som gjelder før
+  noe her endres.
+- `src/__tests__/faginnhold.test.ts` kjører alle migrasjonene i en Postgres i
+  minnet. En ny migrasjon må la seg kjøre der; bruker den noe fra Supabase som
+  ikke er gjenskapt i `src/__tests__/hjelp/testdatabase.ts`, utvides det der.
 - Migrasjoner er append-only. Filnavnene svarer til versjonene i prosjektets
   migrasjonshistorikk; endres et filnavn, kommer repoet ut av takt med
   prosjektet. Kontroller med en listing av migrasjonene at hver rad der har en

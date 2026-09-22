@@ -142,6 +142,9 @@ src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, k
                             (tastatur.ts), tallfeltene (tallfelt.ts) og
                             versjonsformatet (versjon.ts)
 docs/endringslogg.md        Rutinen for å føre loggen ved hver endring
+src/faginnhold/             Det redigerbare faginnholdet: formen og kallene som
+                            endrer det. Brukes ikke av fortolkningen ennå
+docs/faginnhold.md          Hvordan faginnholdet lagres, versjoneres og publiseres
 src/hooks/                  Tastatur, tema, hurtigtastmerker, utklippstavle,
                             kopieringen av kommentarene (useKommentarflyt.ts)
 src/components/             Stegene, sidemenyen (Sidemeny.tsx), kommentarblokkene
