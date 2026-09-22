@@ -46,7 +46,8 @@ export interface Laboratorieanalyttinnhold {
 /**
  * Et kort, felt eller tekststykke på en informasjonsside. `panel` og
  * `elementtype` er nøkler (små bokstaver, tall og understrek); hva `data`
- * inneholder, bestemmes av elementtypen.
+ * inneholder, bestemmes av elementtypen. Rekkefølgen i et panel er
+ * `posisjon`, deretter objekt-ID-en — to elementer kan stå på samme plass.
  */
 export interface Innholdselementinnhold {
   infoside: string

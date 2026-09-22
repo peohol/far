@@ -209,10 +209,17 @@ create table public.innholdselementer (
   constraint innholdselementer_data check (jsonb_typeof(data) = 'object')
 );
 
-create index innholdselementer_infoside_idx on public.innholdselementer (infoside_id, tilstand, panel, posisjon);
+-- Rekkefølgen i et panel er posisjon, deretter objekt-ID. Posisjonen er
+-- bevisst ikke unik: hvert element lagres for seg, og et kort som flyttes,
+-- ville ellers støtt på plassen det skal til før de andre har rukket å flytte
+-- seg. Objekt-ID-en gjør rekkefølgen fast også når to står på samme plass.
+create index innholdselementer_infoside_idx
+  on public.innholdselementer (infoside_id, tilstand, panel, posisjon, objekt_id);
 
 comment on table public.innholdselementer is
   'Et kort, felt eller tekststykke på en informasjonsside. Panel og elementtype er nøkler; formen på data avgjøres av elementtypen.';
+comment on column public.innholdselementer.posisjon is
+  'Plassen i panelet. Ikke unik; rekkefølgen er posisjon og deretter objekt_id.';
 
 -- --- Vakter i databasen ----------------------------------------------------
 

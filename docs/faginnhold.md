@@ -35,9 +35,11 @@ Tre begreper holdes fra hverandre, som planen krever:
   én analytt.
 - **Innholdselement** — et kort, felt eller tekststykke på en
   informasjonsside. `panel` og `elementtype` er nøkler (små bokstaver, tall og
-  understrek), `posisjon` gir rekkefølgen, og `data` er et JSON-objekt hvis
-  form bestemmes av elementtypen. Panelene og elementtypene defineres når
-  sidene bygges.
+  understrek), og `data` er et JSON-objekt hvis form bestemmes av
+  elementtypen. Panelene og elementtypene defineres når sidene bygges.
+  Rekkefølgen i et panel er `posisjon`, deretter objekt-ID-en. Posisjonen er
+  bevisst ikke unik, siden hvert element lagres for seg og et kort som
+  flyttes, ellers ville støtt på plassen det skal til.
 
 Fortolkningsmoduler, kommentarer, regelsett og referanser er ikke modellert
 ennå. De kommer som nye objekttyper, på samme maskineri.
