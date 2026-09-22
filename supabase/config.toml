@@ -1,0 +1,85 @@
+# Supabase-oppsettet for OUSFAR, som kode.
+#
+# Fila er trimmet ned til det prosjektet faktisk bestemmer seg for. Alt som
+# ikke står her, er CLI-ens egne standardverdier — referansen ligger på
+# https://supabase.com/docs/guides/local-development/cli/config
+#
+# Databaseskjema, radsikkerhet og lagring ligger i `migrations/`.
+# Adminoperasjonene ligger i `functions/`.
+
+project_id = "ousfar"
+
+[api]
+enabled = true
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+# Må være den samme som i prosjektet. Sjekkes med `show server_version;`.
+major_version = 17
+
+[auth]
+enabled = true
+site_url = "https://ousfar.vercel.app"
+additional_redirect_urls = []
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+
+# OUSFAR er lukket: kontoer opprettes bare av en administrator, gjennom
+# Edge-funksjonen «opprett-bruker». Registrering, anonyme økter og manuell
+# kontosammenkobling er slått av.
+enable_signup = false
+enable_anonymous_sign_ins = false
+enable_manual_linking = false
+
+# Minstekravet appen og Edge-funksjonene kontrollerer mot står i
+# functions/_delt/passord.ts. Skrus dette opp, skal tallet der opp samtidig.
+minimum_password_length = 6
+password_requirements = ""
+
+[auth.email]
+# Innlogging med passord krever at e-postleverandøren er påslått i Auth, men
+# adressene er interne tekniske nøkler utledet av brukernavnet — se
+# functions/_delt/brukernavn.ts. Registrering via e-post er stengt.
+enable_signup = false
+# Ingen e-post skal sendes fra systemet: ingen bekreftelse, ingen
+# adresseendring, ingen tilbakestilling. Nye kontoer bekreftes server-side av
+# adminveien med `email_confirm: true`.
+enable_confirmations = false
+double_confirm_changes = false
+# Passordbytte skjer rett etter innlogging, i en økt som nettopp er
+# autentisert. Ingen ny autentisering kreves.
+secure_password_change = false
+
+[auth.sms]
+enable_signup = false
+
+[storage]
+enabled = true
+
+# Profilbilder. Privat bøtte — bildene hentes med signerte lenker av
+# innloggede brukere. Policyene ligger i migrasjonen for profilbilder.
+[storage.buckets.avatarer]
+public = false
+file_size_limit = "1MiB"
+allowed_mime_types = ["image/webp"]
+
+[edge_runtime]
+enabled = true
+deno_version = 2
+
+# Alle funksjonene krever en gyldig økt. Rollen slås opp server-side i
+# profiltabellen etterpå — se functions/_edge/kontekst.ts.
+[functions.opprett-bruker]
+verify_jwt = true
+
+[functions.sett-rolle]
+verify_jwt = true
+
+[functions.nytt-passord]
+verify_jwt = true
+
+[functions.fullfor-oppsett]
+verify_jwt = true

@@ -1,7 +1,7 @@
 {
   "name": "far",
   "private": true,
-  "version": "1.7.1",
+  "version": "1.8.0",
   "type": "module",
   "description": "Verktøy for å kommentere farmakologiske analyser",
   "scripts": {
@@ -11,17 +11,21 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "data": "python3 scripts/build_data.py && python3 scripts/build_rusmidler.py && python3 scripts/build_antihypertensiver.py"
+    "data": "python3 scripts/build_data.py && python3 scripts/build_rusmidler.py && python3 scripts/build_antihypertensiver.py",
+    "bootstrap:admin": "node scripts/bootstrap-admin.ts"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-easy-crop": "^5.5.7"
   },
   "devDependencies": {
     "@types/node": "^22.20.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "supabase": "^2.117.0",
     "typescript": "^5.7.2",
     "vite": "^6.0.7",
     "vitest": "^2.1.8"
