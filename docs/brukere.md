@@ -91,6 +91,41 @@ Alle innloggede kan se bildene gjennom signerte lenker; bare eieren kan
 skrive i sin egen mappe. Bildet beskjæres, roteres og komprimeres i
 nettleseren til 512 × 512 WebP før det lastes opp.
 
+## Innloggingsveggen
+
+Innloggingen i nettleseren avgjør bare hva som tegnes opp. Uten noe foran seg
+ville hele appen — analysedata, kommentartekster og fortolkningsregler — kunne
+lastes ned av hvem som helst som kjenner adressen, siden OUSFAR er en statisk
+app som serveres i sin helhet.
+
+Veggen legger den grensen på Vercels kant, i `middleware.ts`. Den kliniske
+delen av pakken utleveres bare til forespørsler som bærer en gyldig
+OUSFAR-økt. Innloggingssiden og det den trenger står åpent; alt annet er
+innenfor.
+
+Tre ting henger sammen og må holdes i takt:
+
+1. **Økten ligger i en informasjonskapsel**, ikke i nettleserens lokale lager.
+   Det er det som gjør at kanten kan se den. Derfor bygges klienten med
+   `createBrowserClient` fra `@supabase/ssr`.
+2. **Den kliniske delen er en egen fil.** `Port` henter `App` først når noen
+   er logget inn, og byggeoppsettet gir filen et fast navn. Rollup avgjør selv
+   hva som følger med: det innloggingssiden også bruker, blir liggende utenfor.
+3. **Kanten kontrollerer økten** mot prosjektets offentlige nøkler. Supabase
+   signerer asymmetrisk, så ingen hemmelighet er involvert, og det går ingen
+   forespørsel ut per fil.
+
+`npm run build` avslutter med `scripts/kontroller-vegg.mjs`. Den leser av
+byggingens kildekart hvilke moduler som faktisk havnet utenfor veggen, og
+krever at hver av dem står oppført i skriptet med en grunn. Alt annet feiler
+byggingen — også en helt ny modul ingen har rukket å tenke på. En modul er
+dermed beskyttet fra den blir til, og det er bare veien ut som krever et
+bevisst valg. Kontrollen kjøres også av Vercel, slik at en slik feil stanser
+utleggingen i stedet for å legge appen ut åpen.
+
+Veggen stenger appen, ikke dataene i Supabase. Det som ligger i databasen, er
+fortsatt beskyttet av radsikkerhet og Edge-funksjoner, uavhengig av dette.
+
 ## Oppsett og drift
 
 Migrasjoner og Edge-funksjoner ligger i repoet og rulles ut mot prosjektet

@@ -1,12 +1,20 @@
-import App from '../../App'
+import { Component, Suspense, lazy, type ReactNode } from 'react'
 import { useOkt } from '../../auth/okt'
 import type { Tilgang } from '../../domain/tilgang'
 import { useTheme } from '../../hooks/useTheme'
 import { Button } from '../Button'
 import { Temaknapp } from '../Toolbar'
-import { Versjonspille } from '../Versjonspille'
 import { Forstegangsoppsett } from './Forstegangsoppsett'
 import { Innlogging } from './Innlogging'
+
+/**
+ * Den kliniske appen, hentet først når noen faktisk er logget inn.
+ *
+ * Det er denne delen av pakken innloggingsveggen står foran: uten en gyldig
+ * økt svarer kanten 401, og ingenting av analysedataene, kommentartekstene
+ * eller fortolkningsreglene utleveres. Se `src/auth/vegg.ts`.
+ */
+const App = lazy(() => import('../../App'))
 
 /**
  * Portvakten foran appen.
@@ -19,12 +27,26 @@ import { Innlogging } from './Innlogging'
 export function Port() {
   const { tilgang } = useOkt()
 
-  if (tilgang === 'app') return <App />
+  if (tilgang === 'app') {
+    return (
+      <Hentefeil>
+        <Suspense fallback={<div className="port" aria-busy="true" />}>
+          <App />
+        </Suspense>
+      </Hentefeil>
+    )
+  }
   if (tilgang === 'venter') return <div className="port" aria-busy="true" />
   return <Portskall viser={tilgang} />
 }
 
-/** Rammen rundt innlogging, førstegangsoppsett og kontaktfeil. */
+/**
+ * Rammen rundt innlogging, førstegangsoppsett og kontaktfeil.
+ *
+ * Her står bare det som må stå utenfor innloggingsveggen. Endringsloggen er
+ * ikke blant det: den hører til inne i appen, og skal ikke kunne leses av noen
+ * som ikke er logget inn.
+ */
 function Portskall({ viser }: { viser: Exclude<Tilgang, 'app' | 'venter'> }) {
   const { theme, toggle } = useTheme()
 
@@ -50,8 +72,6 @@ function Portskall({ viser }: { viser: Exclude<Tilgang, 'app' | 'venter'> }) {
         {viser === 'innlogging' && <Innlogging />}
         {viser === 'feil' && <Kontaktfeil />}
       </main>
-
-      <Versjonspille />
     </div>
   )
 }
@@ -78,4 +98,40 @@ function Kontaktfeil() {
       </div>
     </div>
   )
+}
+
+/**
+ * Fanger opp at den kliniske delen ikke lot seg hente.
+ *
+ * Som regel fordi appen er lagt ut på nytt mens fanen sto åpen, og filen
+ * fanen ber om ikke finnes lenger — da hjelper det å laste siden på nytt. Uten
+ * dette ville brukeren fått en blank skjerm.
+ */
+class Hentefeil extends Component<{ children: ReactNode }, { feilet: boolean }> {
+  override state = { feilet: false }
+
+  static getDerivedStateFromError() {
+    return { feilet: true }
+  }
+
+  override render() {
+    if (!this.state.feilet) return this.props.children
+
+    return (
+      <div className="port">
+        <main className="portkort">
+          <header className="portkort__topp">
+            <h1 className="portkort__tittel">OUSFAR</h1>
+          </header>
+          <div className="skjema">
+            <p className="skjemafeil" role="alert">
+              Fikk ikke hentet appen. Det skjer gjerne rett etter at OUSFAR er oppdatert. Last
+              siden på nytt.
+            </p>
+            <Button onClick={() => window.location.reload()}>Last siden på nytt</Button>
+          </div>
+        </main>
+      </div>
+    )
+  }
 }

@@ -22,5 +22,11 @@
       "@delt/*": ["supabase/functions/_delt/*"]
     }
   },
-  "include": ["src", "scripts/bootstrap-admin.ts", "vite.config.ts", "supabase/functions/_delt"]
+  "include": [
+    "src",
+    "middleware.ts",
+    "scripts/bootstrap-admin.ts",
+    "vite.config.ts",
+    "supabase/functions/_delt"
+  ]
 }
