@@ -1,11 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './App'
+import { OktProvider } from './auth/okt'
+import { Port } from './components/konto/Port'
 import { TipsLag } from './components/Tips'
 import { ShortcutVisibilityProvider } from './hooks/useShortcutVisibility'
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/components.css'
+import './styles/konto.css'
 
 const root = document.getElementById('root')
 if (!root) throw new Error('Fant ikke #root i index.html')
@@ -16,7 +18,11 @@ createRoot(root).render(
         hvor i appen ankeret står. */}
     <TipsLag>
       <ShortcutVisibilityProvider>
-        <App />
+        {/* Økten ligger ytterst av appens egne lag: både portvakten og
+            verktøylinja leser den samme tilstanden. */}
+        <OktProvider>
+          <Port />
+        </OktProvider>
       </ShortcutVisibilityProvider>
     </TipsLag>
   </StrictMode>,

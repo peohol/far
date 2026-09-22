@@ -11,6 +11,7 @@ import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
 import { ruteAv } from './components/Kopibevis'
 import { Toolbar } from './components/Toolbar'
+import { Kontoknapper } from './components/konto/Kontoknapper'
 import { Versjonspille } from './components/Versjonspille'
 import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
 import { analytes } from './domain/analytes'
@@ -343,7 +344,7 @@ export default function App() {
         onFilter={settMetodefilter}
         onVelgAnalytt={velgAnalytt}
       />
-      <Toolbar theme={theme} onToggleTheme={toggle} />
+      <Toolbar theme={theme} onToggleTheme={toggle} foran={<Kontoknapper />} />
 
       <main className="scene">
         {vist === 'search' && (

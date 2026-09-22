@@ -174,3 +174,78 @@ export function KeyboardIcon(props: IconProps) {
     </Icon>
   )
 }
+
+/** Konto: skulder og hode. */
+export function UserIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="16" cy="11" r="6" />
+      <path d="M5 28a11 11 0 0 1 22 0" />
+    </Icon>
+  )
+}
+
+/** Brukerlista: to personer, den ene bak den andre. */
+export function UsersIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="13" cy="11.5" r="5.5" />
+      <path d="M3 27.5a10 10 0 0 1 20 0" />
+      <path d="M22 6.5a5.5 5.5 0 0 1 0 10.5" opacity="0.6" />
+      <path d="M25 18.5a10 10 0 0 1 4 9" opacity="0.6" />
+    </Icon>
+  )
+}
+
+/** Logg ut: pil ut av en åpning. */
+export function LogoutIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M19 5h6a2 2 0 0 1 2 2v18a2 2 0 0 1-2 2h-6" opacity="0.6" />
+      <path d="M13 16h12" />
+      <path d="M18 10.5 23.5 16 18 21.5" />
+      <path d="M5 5v22" opacity="0.6" />
+    </Icon>
+  )
+}
+
+/** Administrator: skjold med hake. */
+export function ShieldIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M16 3.5 27 7.5v8.2c0 6.3-4.3 11.2-11 13.8-6.7-2.6-11-7.5-11-13.8V7.5Z" />
+      <path d="M11 16.2 14.7 20 21.5 12.5" />
+    </Icon>
+  )
+}
+
+/** Legg til. */
+export function PlusIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M16 6v20" />
+      <path d="M6 16h20" />
+    </Icon>
+  )
+}
+
+/** Profilbilde: ramme med en sol og en fjellrygg. */
+export function ImageIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <rect x="4" y="6" width="24" height="20" rx="3" />
+      <circle cx="11.5" cy="13" r="2.5" opacity="0.7" />
+      <path d="M5 22.5 12 16l5.5 5 3.5-3 6 5.5" />
+    </Icon>
+  )
+}
+
+/** Roter bildet en kvart omdreining med klokka. */
+export function RotateIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M27.3 20a12 12 0 1 1-2.8-12.5L30.7 13.3" />
+      <path d="M30.7 5.3v8h-8" />
+    </Icon>
+  )
+}

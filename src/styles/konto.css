@@ -1,0 +1,449 @@
+/**
+ * Konto og brukere: innlogging, førstegangsoppsett, kontopanel og brukerliste.
+ *
+ * Alt bygger på de samme tokenene som resten av appen, og på knappene,
+ * kortene og laget som allerede finnes — auth skal ikke se ut som en annen
+ * app. Kontrastene følger de samme reglene som ellers: tekst mot sin egen
+ * flate over WCAG 2.1 AA.
+ */
+
+/* --- Porten: innlogging og førstegangsoppsett ---------------------------- */
+
+.port {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--rom-5) clamp(1rem, 4vw, 3.5rem);
+  overflow-y: auto;
+}
+
+.portkort {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  width: min(100%, 27rem);
+  padding: var(--rom-5);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-l);
+  box-shadow: var(--skygge);
+}
+
+.portkort--bred {
+  width: min(100%, 38rem);
+}
+
+.portkort__topp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  text-align: center;
+}
+
+.portkort__tittel {
+  font-size: var(--tekst-xl);
+  font-weight: var(--vekt-tung);
+  letter-spacing: 0.02em;
+  color: var(--blekk-sterk);
+}
+
+.portkort__undertittel {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
+/* --- Skjema -------------------------------------------------------------- */
+
+.skjema {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  text-align: left;
+}
+
+.skjema__ingress {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
+/* To felter side om side der det er plass, under hverandre når det ikke er. */
+.skjema__rad {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--rom-3);
+}
+
+.skjema__bolk {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+}
+
+.skjema__bolktittel {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
+}
+
+.skjema__knapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
+.skjema .knapp--primary {
+  align-self: flex-start;
+}
+
+.felt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  min-width: 0;
+}
+
+.felt__merkelapp {
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-dempet);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.felt__inndata {
+  width: 100%;
+  padding: var(--rom-2) var(--rom-3);
+  font-size: var(--tekst-s);
+  color: var(--blekk);
+  background: var(--flate-bunn);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-m);
+  transition:
+    border-color var(--fart) var(--kurve),
+    background-color var(--fart) var(--kurve);
+}
+
+.felt__inndata:hover {
+  border-color: var(--linje-sterk);
+}
+
+.felt__inndata:focus {
+  border-color: var(--aksent);
+  background: var(--flate);
+}
+
+/* Brukernavnet: vises, men er ikke et felt som kan skrives i. */
+.felt__last {
+  padding: var(--rom-2) var(--rom-3);
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-s);
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  border: var(--kant) dashed var(--linje);
+  border-radius: var(--runding-m);
+}
+
+/* Hjelpetekst er brødtekst, og bruker derfor det dempede blekket og ikke det
+   svake — det svake er målt for grafiske elementer, ikke for lesing. */
+.felt__hjelp {
+  font-size: var(--tekst-xs);
+  color: var(--blekk-dempet);
+}
+
+.skjemafeil {
+  padding: var(--rom-2) var(--rom-3);
+  font-size: var(--tekst-s);
+  color: var(--niva-over-blekk);
+  background: var(--niva-over-flate);
+  border: var(--kant) solid var(--niva-over-linje);
+  border-radius: var(--runding-m);
+}
+
+/* Kvitteringen har fast plass, så knappen under ikke hopper når den kommer. */
+.skjemakvittering {
+  min-height: 1.4em;
+  font-size: var(--tekst-s);
+  color: var(--niva-innenfor-blekk);
+}
+
+.skjemakvittering:empty {
+  min-height: 0;
+}
+
+.skille {
+  height: 0;
+  margin: var(--rom-2) 0;
+  border: 0;
+  border-top: var(--kant) solid var(--linje);
+}
+
+/* --- Avatar -------------------------------------------------------------- */
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+  color: var(--aksent-blekk);
+  background: var(--aksent);
+  border-radius: var(--runding-full);
+  font-weight: var(--vekt-medium);
+  line-height: 1;
+  user-select: none;
+}
+
+.avatar--liten {
+  width: 1.9rem;
+  height: 1.9rem;
+  font-size: var(--tekst-xxs);
+}
+
+.avatar--middels {
+  width: 2.6rem;
+  height: 2.6rem;
+  font-size: var(--tekst-xs);
+}
+
+.avatar--stor {
+  width: 5.5rem;
+  height: 5.5rem;
+  font-size: var(--tekst-l);
+}
+
+.avatar__bilde {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- Kontoknappen i verktøylinja ----------------------------------------- */
+
+.kontoknapp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  height: 2.9rem;
+  max-width: 12rem;
+  padding: 0 var(--rom-3) 0 0.35rem;
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-full);
+  cursor: pointer;
+  transition:
+    color var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve);
+}
+
+.kontoknapp:hover {
+  color: var(--blekk);
+  border-color: var(--linje-sterk);
+}
+
+.kontoknapp__navn {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Modalt lag ---------------------------------------------------------- */
+
+.modallag__handlinger {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
+.modallag__kropp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  overflow-y: auto;
+  padding: var(--rom-4);
+}
+
+/* --- Brukerlista --------------------------------------------------------- */
+
+.brukerliste {
+  display: flex;
+  flex-direction: column;
+}
+
+.brukerliste__tomt {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
+.brukerrad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3);
+  padding: var(--rom-3) 0;
+}
+
+.brukerrad + .brukerrad {
+  border-top: var(--kant) solid var(--linje);
+}
+
+.brukerrad__navn {
+  display: flex;
+  flex-direction: column;
+  min-width: 8rem;
+  margin-right: auto;
+}
+
+.brukerrad__fullt {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
+}
+
+.brukerrad__deg {
+  font-weight: var(--vekt-normal);
+  color: var(--blekk-dempet);
+}
+
+.brukerrad__brukernavn {
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-xs);
+  color: var(--blekk-dempet);
+}
+
+.brukerrad__knapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-1);
+}
+
+.adminmerke {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-1);
+  padding: 0.2em 0.7em;
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-medium);
+  color: var(--merke-funksjon-blekk);
+  background: var(--merke-funksjon-flate);
+  border-radius: var(--runding-full);
+  white-space: nowrap;
+}
+
+/* --- Det midlertidige passordet ------------------------------------------ */
+
+.passordkvittering {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding: var(--rom-3);
+  background: var(--varsel-flate);
+  border: var(--kant-tykk) solid var(--varsel-linje);
+  border-radius: var(--runding-m);
+}
+
+.passordkvittering__tittel {
+  font-size: var(--tekst-s);
+  color: var(--varsel-blekk);
+}
+
+.passordkvittering__passord {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
+.passordkvittering__passord code {
+  padding: var(--rom-2) var(--rom-3);
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-s);
+  /* Passordet skal kunne leses tegn for tegn, også når det brytes. */
+  word-break: break-all;
+}
+
+.passordkvittering__advarsel {
+  font-size: var(--tekst-xs);
+  color: var(--varsel-blekk);
+}
+
+.passordkvittering .knapp--subtle {
+  align-self: flex-start;
+  color: var(--varsel-blekk);
+}
+
+/* --- Bildevelgeren ------------------------------------------------------- */
+
+.bildevelger {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.bildevelger__visning {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3);
+}
+
+/* `react-easy-crop` legger seg ut i hele boksen, så den må ha en høyde. */
+.bildevelger__flate {
+  position: relative;
+  height: 17rem;
+  background: var(--flate-bunn);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-m);
+  overflow: hidden;
+}
+
+.bildevelger__veiledning,
+.bildevelger__notis {
+  font-size: var(--tekst-xs);
+  color: var(--blekk-dempet);
+}
+
+.bildevelger__styring {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3);
+}
+
+.bildevelger__zoom {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  flex: 1 1 12rem;
+  font-size: var(--tekst-xs);
+  color: var(--blekk-dempet);
+}
+
+.bildevelger__zoom input {
+  flex: 1;
+  min-width: 6rem;
+  accent-color: var(--aksent);
+}
+
+.bildevelger__knapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+}
+
+/* Lave vinduer: hold porten innenfor bildet uten å måtte skrolle. */
+@media (max-height: 820px) {
+  .port {
+    padding-block: var(--rom-3);
+  }
+
+  .portkort {
+    gap: var(--rom-3);
+  }
+}

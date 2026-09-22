@@ -16,7 +16,11 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
-    "types": ["vite/client", "node"]
+    "types": ["vite/client", "node"],
+    "baseUrl": ".",
+    "paths": {
+      "@delt/*": ["supabase/functions/_delt/*"]
+    }
   },
-  "include": ["src", "vite.config.ts"]
+  "include": ["src", "scripts/bootstrap-admin.ts", "vite.config.ts", "supabase/functions/_delt"]
 }

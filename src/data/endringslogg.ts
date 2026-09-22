@@ -12,6 +12,22 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.8.0',
+    dato: '2026-09-22',
+    sammendrag: 'OUSFAR krever nå innlogging, og har fått brukere og profiler',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Betydelig omfang',
+    punkter: [
+      'Appen er lukket. Du logger inn med brukernavn og passord — ingen e-post, ingen registrering og ingen konto du kan opprette selv.',
+      'Nye brukere opprettes av en administrator, som bare oppgir et brukernavn. Du får et midlertidig passord som må formidles videre; det vises bare én gang.',
+      'Første gang du logger inn, må du velge ditt eget passord og fylle ut fornavn og etternavn før du kommer inn i appen. Du kan legge inn et profilbilde samtidig, om du vil.',
+      'Profilbildet kan flyttes, zoomes og roteres før det lagres, og vises rundt i appen ved siden av navnet ditt.',
+      'Nytt kontopanel oppe til høyre: endre navn og profilbilde, bytt passord, og logg ut. Brukernavnet ditt er fast og kan ikke endres.',
+      'Ny knapp ved siden av: oversikt over alle som har tilgang. Administratorer kan i tillegg opprette brukere, gi og fjerne adminstatus, og lage et nytt midlertidig passord til den som har mistet sitt.',
+      'Kommenteringen er uendret. Tastene, analysene og kommentartekstene er de samme som før.',
+    ],
+  },
+  {
     versjon: '1.7.1',
     dato: '2026-09-15',
     sammendrag: 'Analysefilteret åpnes direkte når pekeren holdes over knappen',
