@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.8.1',
+    dato: '2026-09-22',
+    sammendrag: 'Selve appen lastes ikke ned før du er logget inn',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Før lå analysedataene, kommentartekstene og fortolkningsreglene åpent for hvem som helst som kjente adressen, selv om innloggingen skjulte dem. Nå utleveres ingenting av det før du er logget inn.',
+      'Du vil ikke merke noe til daglig. Innloggingssiden er den samme, og appen oppfører seg som før når du først er inne.',
+      'Versjonsnummeret og endringsloggen står ikke lenger på innloggingssiden. De hører til inne i appen, nederst til høyre som før.',
+    ],
+  },
+  {
     versjon: '1.8.0',
     dato: '2026-09-22',
     sammendrag: 'OUSFAR krever nå innlogging, og har fått brukere og profiler',

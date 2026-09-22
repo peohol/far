@@ -1,11 +1,17 @@
 /**
  * Supabase-klienten appen bruker.
  *
- * Den lages bare når begge innstillingene finnes, slik at et bygg uten dem
- * ikke faller sammen ved innlasting. Mangler de, sier appen fra på
+ * Økten lagres i en informasjonskapsel og ikke i nettleserens lokale lager.
+ * Det er det som gjør innloggingsveggen mulig: en kapsel følger med
+ * forespørselen etter den kliniske delen av pakken, slik at kanten kan
+ * kontrollere økten før noe utleveres. Se `src/auth/vegg.ts`.
+ *
+ * Klienten lages bare når begge innstillingene finnes, slik at et bygg uten
+ * dem ikke faller sammen ved innlasting. Mangler de, sier appen fra på
  * innloggingssiden i stedet for å vise en tom skjerm.
  */
-import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import { createBrowserClient } from '@supabase/ssr'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const publiserbarNokkel = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
@@ -15,13 +21,17 @@ export const KONFIGURASJON_MANGLER =
 
 const klienten: SupabaseClient | null =
   url && publiserbarNokkel
-    ? createClient(url, publiserbarNokkel, {
+    ? createBrowserClient(url, publiserbarNokkel, {
+        cookieOptions: {
+          // Kapselen må følge med på forespørselen etter de bygde filene, og
+          // ikke bare på sidevisninger.
+          path: '/',
+          sameSite: 'lax',
+          secure: window.location.protocol === 'https:',
+        },
         auth: {
-          // Økten skal overleve at fanen lukkes, og fornyes av seg selv
-          // mens den står åpen. Ingenting i innloggingen går gjennom
-          // adressefeltet, så URL-gjenkjenning er slått av.
-          persistSession: true,
-          autoRefreshToken: true,
+          // Ingenting i innloggingen går gjennom adressefeltet, så
+          // URL-gjenkjenning er slått av.
           detectSessionInUrl: false,
         },
       })
