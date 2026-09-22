@@ -27,6 +27,8 @@ interface Oktverdi {
   profil: Profil | null
   /** Sant når appen ikke er koblet mot brukerdatabasen i det hele tatt. */
   mangler: boolean
+  /** Henter profilen på nytt etter at oppslaget gikk galt. */
+  forsokPaaNytt: () => void
   loggInn: (brukernavn: string, passord: string) => Promise<string | null>
   loggUt: () => Promise<void>
   /** Legger en nyskrevet profil til grunn uten å hente den på nytt. */
@@ -43,6 +45,9 @@ export function OktProvider({ children }: { children: ReactNode }) {
   const [profil, setProfil] = useState<Profil | null>(null)
   /** Brukeren profilen i tilstanden hører til. Holder de to i takt. */
   const [profilFor, setProfilFor] = useState<string | null>(null)
+  const [profilfeil, setProfilfeil] = useState(false)
+  /** Økes for å hente profilen på nytt etter en feil. */
+  const [forsok, setForsok] = useState(0)
 
   const brukerId = okt?.user.id ?? null
 
@@ -63,26 +68,51 @@ export function OktProvider({ children }: { children: ReactNode }) {
     if (brukerId === null) {
       setProfil(null)
       setProfilFor(null)
+      setProfilfeil(false)
       return
     }
     let gjelder = true
-    void api
-      .hentProfil(brukerId)
-      .catch(() => null)
-      .then((hentet) => {
+
+    void (async () => {
+      try {
+        const hentet = await api.hentProfil(brukerId)
         if (!gjelder) return
+        if (!hentet) {
+          // Økten står, men raden er borte: kontoen er fjernet mens fanen sto
+          // åpen. Da hører brukeren hjemme på innloggingssiden.
+          await api.loggUt()
+          return
+        }
         setProfil(hentet)
+        setProfilfeil(false)
         setProfilFor(brukerId)
-      })
+      } catch {
+        if (!gjelder) return
+        // Nettet eller tjenesten svarte ikke. Uten dette ville brukeren blitt
+        // stående på en tom skjerm til noen lastet siden på nytt: økten er
+        // avklart, og oppslaget prøves ikke om igjen av seg selv.
+        setProfil(null)
+        setProfilfeil(true)
+        setProfilFor(brukerId)
+      }
+    })()
+
     return () => {
       gjelder = false
     }
-  }, [brukerId])
+  }, [brukerId, forsok])
+
+  const forsokPaaNytt = useCallback(() => {
+    setProfilfeil(false)
+    setProfilFor(null)
+    setForsok((runde) => runde + 1)
+  }, [])
 
   const oppfriskProfil = useCallback(async () => {
     if (brukerId === null) return
     const hentet = await api.hentProfil(brukerId)
     setProfil(hentet)
+    setProfilfeil(false)
     setProfilFor(brukerId)
   }, [brukerId])
 
@@ -93,9 +123,10 @@ export function OktProvider({ children }: { children: ReactNode }) {
   const verdi = useMemo<Oktverdi>(() => {
     const klar = oktAvklart && (brukerId === null || profilFor === brukerId)
     return {
-      tilgang: tilgangFor({ klar, harOkt: brukerId !== null, profil }),
+      tilgang: tilgangFor({ klar, harOkt: brukerId !== null, profil, profilfeil }),
       profil,
       mangler,
+      forsokPaaNytt,
       loggInn: api.loggInn,
       loggUt,
       settProfil: (ny) => {
@@ -104,7 +135,17 @@ export function OktProvider({ children }: { children: ReactNode }) {
       },
       oppfriskProfil,
     }
-  }, [oktAvklart, brukerId, profilFor, profil, mangler, loggUt, oppfriskProfil])
+  }, [
+    oktAvklart,
+    brukerId,
+    profilFor,
+    profil,
+    profilfeil,
+    mangler,
+    loggUt,
+    forsokPaaNytt,
+    oppfriskProfil,
+  ])
 
   return <Sammenheng.Provider value={verdi}>{children}</Sammenheng.Provider>
 }

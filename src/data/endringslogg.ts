@@ -24,6 +24,7 @@ export const ENDRINGSLOGG: Endring[] = [
       'Profilbildet kan flyttes, zoomes og roteres før det lagres, og vises rundt i appen ved siden av navnet ditt.',
       'Nytt kontopanel oppe til høyre: endre navn og profilbilde, bytt passord, og logg ut. Brukernavnet ditt er fast og kan ikke endres.',
       'Ny knapp ved siden av: oversikt over alle som har tilgang. Administratorer kan i tillegg opprette brukere, gi og fjerne adminstatus, og lage et nytt midlertidig passord til den som har mistet sitt.',
+      'Faller nettet ut rett etter innlogging, sier appen fra og lar deg prøve igjen, i stedet for å bli stående på en tom skjerm.',
       'Kommenteringen er uendret. Tastene, analysene og kommentartekstene er de samme som før.',
     ],
   },

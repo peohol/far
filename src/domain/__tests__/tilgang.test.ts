@@ -8,7 +8,7 @@
  */
 import { describe, expect, it } from 'vitest'
 import type { Profil } from '@delt/profil'
-import { maaGjennomOppsett, tilgangFor } from '../tilgang'
+import { maaGjennomOppsett, tilgangFor, type Oktstatus } from '../tilgang'
 
 function profil(endringer: Partial<Profil> = {}): Profil {
   return {
@@ -26,37 +26,58 @@ function profil(endringer: Partial<Profil> = {}): Profil {
   }
 }
 
+/** Oktstatus der bare det som prøves ut, skrives ned. */
+function status(endringer: Partial<Oktstatus>): Oktstatus {
+  return { klar: true, harOkt: true, profil: profil(), profilfeil: false, ...endringer }
+}
+
 describe('tilgangFor', () => {
   it('venter mens økten avklares, så appen ikke blinker fram', () => {
-    expect(tilgangFor({ klar: false, harOkt: false, profil: null })).toBe('venter')
-    expect(tilgangFor({ klar: false, harOkt: true, profil: profil() })).toBe('venter')
+    expect(tilgangFor(status({ klar: false, harOkt: false, profil: null }))).toBe('venter')
+    expect(tilgangFor(status({ klar: false }))).toBe('venter')
   })
 
   it('krever innlogging uten økt', () => {
-    expect(tilgangFor({ klar: true, harOkt: false, profil: null })).toBe('innlogging')
+    expect(tilgangFor(status({ harOkt: false, profil: null }))).toBe('innlogging')
   })
 
   it('slipper en ferdig bruker inn i appen', () => {
-    expect(tilgangFor({ klar: true, harOkt: true, profil: profil() })).toBe('app')
+    expect(tilgangFor(status({}))).toBe('app')
   })
 
   it('sender en ny bruker til førstegangsoppsettet', () => {
     const ny = profil({ must_change_password: true, onboarding_completed: false })
-    expect(tilgangFor({ klar: true, harOkt: true, profil: ny })).toBe('oppsett')
+    expect(tilgangFor(status({ profil: ny }))).toBe('oppsett')
   })
 
   it('holder brukeren i oppsettet så lenge passordet må byttes', () => {
     const tilbakestilt = profil({ must_change_password: true, onboarding_completed: true })
-    expect(tilgangFor({ klar: true, harOkt: true, profil: tilbakestilt })).toBe('oppsett')
+    expect(tilgangFor(status({ profil: tilbakestilt }))).toBe('oppsett')
   })
 
   it('holder brukeren i oppsettet når det aldri ble fullført', () => {
     const halvveis = profil({ must_change_password: false, onboarding_completed: false })
-    expect(tilgangFor({ klar: true, harOkt: true, profil: halvveis })).toBe('oppsett')
+    expect(tilgangFor(status({ profil: halvveis }))).toBe('oppsett')
   })
 
-  it('viser ikke appen når økten står, men profilen mangler', () => {
-    expect(tilgangFor({ klar: true, harOkt: true, profil: null })).toBe('venter')
+  it('viser ikke appen når økten står, men profilen ikke er hentet ennå', () => {
+    expect(tilgangFor(status({ profil: null }))).toBe('venter')
+  })
+
+  it('sier fra når profilen ikke lot seg hente, i stedet for å vente evig', () => {
+    // Uten dette skillet ville en kortvarig nettfeil etterlatt brukeren på en
+    // tom skjerm: oppslaget prøves ikke om igjen av seg selv.
+    expect(tilgangFor(status({ profil: null, profilfeil: true }))).toBe('feil')
+  })
+
+  it('lar en feil gå foran en profil som ligger igjen fra før', () => {
+    expect(tilgangFor(status({ profilfeil: true }))).toBe('feil')
+  })
+
+  it('krever innlogging framfor å melde feil når økten er borte', () => {
+    expect(tilgangFor(status({ harOkt: false, profil: null, profilfeil: true }))).toBe(
+      'innlogging',
+    )
   })
 })
 

@@ -15,12 +15,16 @@ export type Tilgang =
   | 'innlogging'
   | 'oppsett'
   | 'app'
+  /** Innlogget, men profilen lot seg ikke hente. */
+  | 'feil'
 
 export interface Oktstatus {
   /** Sant når økten og profilen er ferdig hentet. */
   klar: boolean
   harOkt: boolean
   profil: Profil | null
+  /** Sant når oppslaget mot profilen feilet — nett eller tjeneste nede. */
+  profilfeil: boolean
 }
 
 /**
@@ -37,8 +41,11 @@ export function maaGjennomOppsett(profil: Profil): boolean {
 export function tilgangFor(status: Oktstatus): Tilgang {
   if (!status.klar) return 'venter'
   if (!status.harOkt) return 'innlogging'
-  // Økt uten profil: raden hentes fortsatt, eller kontoen er fjernet mens
-  // økten sto åpen. Ingen av delene skal slippe noen inn i appen.
+  // Gikk oppslaget galt, skal brukeren få vite det og kunne prøve igjen. Uten
+  // dette skillet ville en kortvarig nettfeil sett ut som evig lasting.
+  if (status.profilfeil) return 'feil'
+  // Økt uten profil ennå: raden hentes fortsatt. Appen skal ikke blinke fram
+  // i mellomtiden.
   if (!status.profil) return 'venter'
   return maaGjennomOppsett(status.profil) ? 'oppsett' : 'app'
 }
