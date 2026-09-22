@@ -336,15 +336,44 @@ describe('hvem som kan endre faginnholdet', () => {
     }
   })
 
-  it('gir heller ikke den hemmelige nøkkelen skriverett', async () => {
-    for (const tabell of TABELLER) {
-      const feil = await feilFra(() =>
-        db.transaction(async (tx) => {
-          await tx.query(`select set_config('role', 'service_role', true)`)
-          await tx.query(`delete from public.${tabell}`)
-        }),
-      )
-      expect(feil?.code, tabell).toBe('42501')
+  it('gir API-rollene bare lesing, og kallene bare til innloggede', async () => {
+    const RELASJONER = [...TABELLER, 'objektstatus', 'objekthistorikk']
+    const RETTIGHETER = ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'MAINTAIN']
+    const KALL = [
+      'public.er_admin()',
+      'public.opprett_utkast(public.objekttype, jsonb)',
+      'public.lagre_utkast(uuid, integer, jsonb)',
+      'public.gjenopprett_revisjon(uuid, integer, integer)',
+      'public.publiser_utkast(uuid, integer)',
+    ]
+    const har = async (sql: string, ...parametre: unknown[]) =>
+      (await fasit<{ har: boolean }>(`select ${sql} as har`, parametre))[0]!.har
+
+    for (const rolle of ['anon', 'authenticated', 'service_role']) {
+      for (const relasjon of RELASJONER) {
+        for (const rett of RETTIGHETER) {
+          const forventet = rett === 'SELECT' && rolle !== 'anon'
+          expect(await har('has_table_privilege($1, $2, $3)', rolle, `public.${relasjon}`, rett), `${rolle} ${rett} ${relasjon}`)
+            .toBe(forventet)
+        }
+      }
+      for (const kall of KALL) {
+        expect(await har('has_function_privilege($1, $2, $3)', rolle, kall, 'EXECUTE'), `${rolle} ${kall}`)
+          .toBe(rolle === 'authenticated')
+      }
+      for (const rett of ['USAGE', 'SELECT', 'UPDATE']) {
+        expect(await har('has_sequence_privilege($1, $2, $3)', rolle, 'public.objektpubliseringer_id_seq', rett))
+          .toBe(false)
+      }
+      expect(await har(`has_schema_privilege($1, 'intern', 'USAGE')`, rolle), rolle).toBe(false)
+      expect(
+        await har(
+          `exists (select 1 from pg_proc where pronamespace = 'intern'::regnamespace
+                   and has_function_privilege($1, oid, 'EXECUTE'))`,
+          rolle,
+        ),
+        rolle,
+      ).toBe(false)
     }
   })
 
@@ -445,6 +474,17 @@ describe('revisjonshistorikken', () => {
     await forventSamsvar(side.id)
   })
 
+  it('godtar heltall skrevet med desimaler, men ikke brøker eller for store tall', async () => {
+    // Som JSON-tekst, slik at «2.0» kommer fram som det står.
+    const heltall = (json: string) =>
+      fasit<{ tall: number }>(`select intern.heltall($1::jsonb, 'posisjon') as tall`, [json])
+    expect(await heltall('{"posisjon": 2.0}')).toEqual([{ tall: 2 }])
+    expect(await heltall('{"posisjon": -3}')).toEqual([{ tall: -3 }])
+    for (const json of ['{"posisjon": 1.5}', '{"posisjon": 2147483648}', '{"posisjon": "2"}']) {
+      expect((await feilFra(() => heltall(json)))?.code, json).toBe('22023')
+    }
+  })
+
   it('kan ikke endres eller slettes av noen, heller ikke server-side', async () => {
     const side = await nySide()
     await publiser(side.id, 1)
@@ -521,6 +561,21 @@ describe('samtidige endringer', () => {
 
   it('sier fra når objektet ikke finnes', async () => {
     expect((await feilFra(() => lagre(crypto.randomUUID(), 1, { navn: 'Ingen' })))?.code).toBe('PT404')
+  })
+
+  it('låser utkastet før revisjonen sammenlignes, i alle operasjonene som endrer et objekt', async () => {
+    // Databasen i testene har bare én forbindelse, så to lagringer i samme
+    // øyeblikk kan ikke spilles av her. Det som gjør dem trygge, er at
+    // revisjonen leses med en radlås: den andre venter til den første er
+    // ferdig, ser den nye revisjonen og avvises. Prøvd med to samtidige
+    // økter mot en vanlig Postgres da fundamentet ble lagt.
+    const kilde = async (navn: string) =>
+      (await fasit<{ kilde: string }>(`select prosrc as kilde from pg_proc where proname = $1`, [navn]))[0]!.kilde
+    const laas = (await kilde('laas_utkast')).replace(/\s+/g, ' ')
+    expect(laas).toMatch(/where t\.objekt_id = p_objekt and t\.tilstand = 'utkast' for update;.*if gjeldende <> p_forventet_revisjon then/)
+    for (const operasjon of ['lagre_utkast', 'gjenopprett_revisjon', 'publiser_utkast']) {
+      expect(await kilde(operasjon), operasjon).toContain('intern.laas_utkast(objekt, forventet_revisjon)')
+    }
   })
 })
 
@@ -663,6 +718,8 @@ describe('publisering', () => {
   it('publiserer en sumanalyse med alle komponentene samtidig', async () => {
     const a = await nySide()
     const b = await nySide()
+    await publiser(a.id, 1)
+    await publiser(b.id, 1)
     const analytt = await opprett('laboratorieanalytt', { kode: 'TESTH', hovedside: a.id, komponenter: [a.id, b.id] })
     await publiser(analytt.id, 1)
     await lagre(analytt.id, 1, { kode: 'TESTH', hovedside: a.id, komponenter: [a.id] })
@@ -674,6 +731,44 @@ describe('publisering', () => {
     )
     expect(publisert.map((k) => k.infoside_id)).toEqual([a.id, b.id])
     await forventSamsvar(analytt.id)
+  })
+
+  it('publiserer ikke noe som peker på en side som ikke er publisert', async () => {
+    const hovedside = await nySide()
+    const komponent = await nySide()
+    const analytt = await opprett('laboratorieanalytt', {
+      kode: 'TESTJ',
+      hovedside: hovedside.id,
+      komponenter: [hovedside.id, komponent.id],
+    })
+    const element = await opprett('innholdselement', {
+      infoside: hovedside.id,
+      panel: 'testpanel',
+      posisjon: 1,
+      elementtype: 'fritekst',
+      data: {},
+    })
+
+    // Verken hovedsiden eller komponenten er publisert.
+    expect((await feilFra(() => publiser(analytt.id, 1)))?.message).toContain('hovedside_id')
+    expect((await feilFra(() => publiser(element.id, 1)))?.code).toBe('22023')
+
+    // Hovedsiden alene er ikke nok når en komponent mangler.
+    await publiser(hovedside.id, 1)
+    expect((await feilFra(() => publiser(analytt.id, 1)))?.message).toContain('infoside_id')
+
+    // Ingenting ble halvveis publisert underveis.
+    for (const id of [analytt.id, element.id]) {
+      expect(await fasit('select 1 from public.objekttilstander where objekt_id = $1 and tilstand = $2', [id, 'publisert']))
+        .toEqual([])
+      expect(await fasit('select 1 from public.objektpubliseringer where objekt_id = $1', [id])).toEqual([])
+    }
+
+    await publiser(komponent.id, 1)
+    expect((await publiser(analytt.id, 1)).publisert_revisjon).toBe(1)
+    expect((await publiser(element.id, 1)).publisert_revisjon).toBe(1)
+    await forventSamsvar(analytt.id)
+    await forventSamsvar(element.id)
   })
 })
 

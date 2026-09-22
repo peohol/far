@@ -94,8 +94,26 @@ til `Samtidighetskonflikt`.
 og `23514` er brudd på en regel i tabellen, med teknisk melding.
 
 **Øyeblikksbildet** som lagres, er alltid det som faktisk havnet i tabellene,
-lest tilbake etter skrivingen. Publisering og gjenoppretting skriver
-tabellene på nytt fra et øyeblikksbilde, gjennom den samme veien.
+lest tilbake etter skrivingen. Gjenoppretting skriver utkastet på nytt fra et
+eldre øyeblikksbilde, og publisering skriver det publiserte av utkastet — begge
+gjennom den samme veien som vanlig lagring. Publiseringen avbrytes om det
+publiserte ikke blir nøyaktig likt utkastet.
+
+**Rekkefølgen ved publisering.** Det publiserte kan bare peke på det som også
+er publisert. En laboratorieanalytt publiseres derfor etter hovedsiden og
+komponentene, og et innholdselement etter siden det står på. Ellers avvises
+publiseringen, og ingenting blir halvveis publisert.
+
+**Kjente begrensninger.**
+
+- Hver publisering gjelder ett objekt. To analytter kan derfor ikke bytte kode
+  med hverandre, og to sider ikke bytte navn, uten et mellomsteg med en
+  midlertidig kode eller et midlertidig navn som også må publiseres. Et samlet
+  kall som publiserer flere objekter på én gang, hører hjemme der
+  publiseringen får et grensesnitt.
+- En vanlig bruker ser ikke innholdet i revisjoner som aldri er publisert,
+  men kan se at de finnes: numrene på de publiserte revisjonene har hull, og
+  en gjenopprettet revisjon viser hvilken revisjon den kom fra.
 
 ## Tilgang
 
@@ -119,7 +137,8 @@ ville stengt redigeringen.
 
 **Ny objekttype.** I en ny migrasjon: en ny verdi i `objekttype`, en tabell
 med `(objekt_id, tilstand)` som peker på `objekttilstander`, triggeren
-`intern.krev_objekttype` for typen og for koblinger, funksjonsparet
+`intern.krev_objekttype` for typen og for koblinger (`objekt_id` er raden
+selv, andre kolonner er koblinger til andre objekter), funksjonsparet
 `intern.skriv_<type>` og `intern.les_<type>`, radsikkerhet og rettigheter som
 for de andre. Resten av maskineriet finner funksjonene på navnet. Legg typen
 og formen inn i `src/faginnhold/modell.ts`, og prøv den i testene.

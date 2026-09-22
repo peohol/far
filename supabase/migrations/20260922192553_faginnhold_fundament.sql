@@ -276,7 +276,12 @@ for each row execute function intern.fortlopende_revisjon();
 
 -- Koblinger til redigerbare objekter skal peke på riktig type: en hovedside
 -- er en informasjonsside, ikke en laboratorieanalytt. Argumentene er par av
--- kolonnenavn og forventet type.
+-- kolonnenavn og forventet type; `objekt_id` er raden selv, de andre er
+-- koblinger til andre objekter.
+--
+-- Det publiserte skal dessuten bare peke på det som også er publisert, så en
+-- vanlig bruker aldri ser en analytt uten den hovedsiden den hører til. Sidene
+-- publiseres derfor før det som peker på dem.
 create function intern.krev_objekttype()
 returns trigger
 language plpgsql
@@ -285,18 +290,35 @@ as $$
 declare
   rad jsonb := to_jsonb(new);
   nr integer := 0;
+  kolonne text;
+  kobling uuid;
   forventet public.objekttype;
   faktisk public.objekttype;
 begin
   while nr < tg_nargs loop
+    kolonne := tg_argv[nr];
+    kobling := (rad ->> kolonne)::uuid;
     forventet := tg_argv[nr + 1]::public.objekttype;
+
     select o.type into faktisk
     from public.redigerbare_objekter o
-    where o.id = (rad ->> tg_argv[nr])::uuid;
+    where o.id = kobling;
     if faktisk is distinct from forventet then
-      raise exception 'Koblingen % må peke på et objekt av typen %.', tg_argv[nr], forventet
+      raise exception 'Koblingen % må peke på et objekt av typen %.', kolonne, forventet
         using errcode = '22023';
     end if;
+
+    if kolonne <> 'objekt_id'
+      and rad ->> 'tilstand' = 'publisert'
+      and not exists (
+        select 1 from public.objekttilstander t
+        where t.objekt_id = kobling and t.tilstand = 'publisert'
+      )
+    then
+      raise exception 'Koblingen % peker på noe som ikke er publisert. Publiser det først.', kolonne
+        using errcode = '22023';
+    end if;
+
     nr := nr + 2;
   end loop;
   return new;
@@ -419,13 +441,17 @@ language plpgsql
 immutable
 set search_path = ''
 as $$
+declare
+  tall numeric;
 begin
-  if jsonb_typeof(p_innhold -> p_felt) is distinct from 'number'
-    or (p_innhold ->> p_felt)::numeric <> trunc((p_innhold ->> p_felt)::numeric)
-  then
+  if jsonb_typeof(p_innhold -> p_felt) is distinct from 'number' then
     raise exception 'Feltet % må være et heltall.', p_felt using errcode = '22023';
   end if;
-  return (p_innhold ->> p_felt)::integer;
+  tall := (p_innhold ->> p_felt)::numeric;
+  if tall <> trunc(tall) or tall not between -2147483648 and 2147483647 then
+    raise exception 'Feltet % må være et heltall.', p_felt using errcode = '22023';
+  end if;
+  return tall::integer;
 end;
 $$;
 
@@ -954,8 +980,12 @@ as $$
 declare
   forfatter public.profiles := intern.krev_admin();
   gjeldende public.objektrevisjoner := intern.laas_utkast(objekt, forventet_revisjon);
+  objekttype public.objekttype;
+  utkastet jsonb;
   publisert integer;
 begin
+  select o.type into objekttype from public.redigerbare_objekter o where o.id = objekt;
+
   select t.revisjon into publisert
   from public.objekttilstander t
   where t.objekt_id = objekt and t.tilstand = 'publisert'
@@ -967,12 +997,12 @@ begin
     on conflict on constraint objekttilstander_pkey
     do update set revisjon = excluded.revisjon, endret_kl = now();
 
-    perform intern.skriv(
-      (select o.type from public.redigerbare_objekter o where o.id = objekt),
-      objekt,
-      'publisert',
-      gjeldende.innhold
-    );
+    -- Det publiserte skrives av utkastet slik det står, gjennom den samme
+    -- veien som all annen lagring, og skal bli nøyaktig likt det.
+    utkastet := intern.les(objekttype, objekt, 'utkast');
+    if intern.skriv(objekttype, objekt, 'publisert', utkastet) is distinct from utkastet then
+      raise exception 'Det publiserte ble ikke likt utkastet. Ingenting er publisert.';
+    end if;
 
     insert into public.objektpubliseringer (
       objekt_id, revisjon, forrige_revisjon,
