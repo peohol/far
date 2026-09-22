@@ -37,6 +37,7 @@ function utenKommentarer(kode: string): string {
 
 const profilmigrasjon = lesMigrasjon('profiler_og_roller')
 const bildemigrasjon = lesMigrasjon('profilbilder')
+const avatarstimigrasjon = lesMigrasjon('avatarsti_laast_til_eieren')
 const oppsett = les('supabase/config.toml')
 const kontekst = les('supabase/functions/_edge/kontekst.ts')
 const endepunkter = {
@@ -153,12 +154,24 @@ describe('lagringen av profilbilder', () => {
     expect(bildemigrasjon).toContain('for select to authenticated\nusing (bucket_id = \'avatarer\')')
   })
 
-  it('lar bare eieren skrive i sin egen mappe', () => {
-    const skriveregler = bildemigrasjon.match(
-      /\(storage\.foldername\(name\)\)\[1\] = \(select auth\.uid\(\)\)::text/g,
+  it('lar bare eieren skrive, og bare til sin ene faste fil', () => {
+    // Den opprinnelige regelen målte bare mappa, og lot brukeren legge igjen
+    // vilkårlig mange filer under den. Den er erstattet av en som måler hele
+    // filnavnet.
+    const skriveregler = avatarstimigrasjon.match(
+      /name = \(select auth\.uid\(\)\)::text \|\| '\/avatar\.webp'/g,
     )
     // Én gang for insert, to for update (using og with check) og én for delete.
     expect(skriveregler?.length).toBe(4)
+    expect(avatarstimigrasjon).not.toMatch(/storage\.foldername/)
+  })
+
+  it('lar ingen peke profilen sin på et annet bilde enn sitt eget', () => {
+    // Uten dette kunne en bruker vist en kollegas ansikt som sitt eget, siden
+    // `avatar_path` er et felt brukeren selv får skrive til.
+    expect(avatarstimigrasjon).toContain(
+      "check (avatar_path is null or avatar_path = id::text || '/avatar.webp')",
+    )
   })
 })
 
