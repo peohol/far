@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.13.0',
+    dato: '2026-09-23',
+    sammendrag: 'Kommenteringen av rusmidler bruker reglene og tekstene som er publisert i databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Reglene og kommentartekstene for stoffene med ruspotensial i serum hentes nå fra det som er publisert i databasen, der de har historikk og kan rettes og publiseres uten en ny versjon av appen.',
+      'Mens reglene hentes, står det i modulen, og det er ingenting å kopiere. Kan de ikke hentes, sier modulen fra og lar deg prøve igjen. Appen kommenterer aldri med regler den ikke har fått.',
+      'Reglene er kontrollert mot den tidligere kommenteringen for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. Kommentarene, plasseringen og beskjedene er de samme som før.',
+    ],
+  },
+  {
     versjon: '1.12.0',
     dato: '2026-09-23',
     sammendrag: 'Fortolkningsreglene for rusmidler vises på analyttsidene, med en simulator',
@@ -21,6 +33,31 @@ export const ENDRINGSLOGG: Endring[] = [
       'Analyttsidene for stoffene med ruspotensial i serum har fått et panel med fortolkningsreglene. Panelet viser hvilke analytter som må være påvist, grensene som gjelder, hvilke kommentarer som brukes og hvilke koder de limes inn på.',
       'Diazepamgruppen, tramadol, kodein/morfin og amfetamin/metamfetamin har i tillegg «Prøv reglene». Der krysser du av og fyller inn tall slik som i fortolkningen, og ser hvilket scenario som gjelder og hvor kommentarene havner.',
       'Reglene i panelet er kontrollert mot dagens fortolkning for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. De gir nøyaktig samme kommentarer, plassering og beskjeder. Kommenteringen er uendret.',
+    ],
+  },
+  {
+    versjon: '1.11.2',
+    dato: '2026-09-23',
+    sammendrag: 'Planen for psykofarmakasidene er oppdatert etter den nye retningen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Indikasjonssammendragene på psykofarmakasidene beholdes som vår egen tekst, med preparatomtalene som kilde.',
+      'Preparatnavnene som ble skrevet av for hånd, er tatt bort og skal komme fra offentlige legemiddeldata.',
+      'Ingenting i appen er endret ennå.',
+    ],
+  },
+  {
+    versjon: '1.11.1',
+    dato: '2026-09-23',
+    sammendrag: 'Ny retning for informasjonssidene: legemiddeldata fra offentlige kilder og sammenleggbare seksjoner',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Planen for informasjonssidene er lagt om. Preparatnavn, styrker, legemiddelformer og andre legemiddelopplysninger skal hentes automatisk fra offentlige legemiddeldata og holdes oppdatert, i stedet for å skrives av for hånd fra Felleskatalogen.',
+      'Sidene skal etter hvert vise hver del som en sammenleggbar seksjon med en kort oppsummering, der detaljene åpnes ved behov.',
+      'Referanseområder, dosering, farmakologi, kommentarer og fortolkningsregler skal fortsatt skrives og kvalitetssikres av oss.',
+      'Ingenting i appen er endret ennå.',
     ],
   },
   {
