@@ -23,6 +23,19 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
+    versjon: '1.14.0',
+    dato: '2026-09-23',
+    sammendrag: 'Fortolkningskommentarene kan lagres som egne tekster med historikk',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Neste steg mot redigerbare fortolkningsregler: hver kommentartekst kan nå lagres for seg, med egen historikk, utkast og publisering. Ingenting av dette er synlig ennå, og kommenteringen er uendret.',
+      'Reglene peker på tekstene i stedet for å ha sin egen kopi. Samme tekst kan brukes av flere regler og rettes ett sted.',
+      'En tekst står på én linje og limes inn som den er. Et regelsett kan ikke publiseres før tekstene det bruker er publisert.',
+      'Tekster med innfylte felt, som konsentrasjonsnivå eller dato for forrige prøve, beholder de samme feltene gjennom alle endringer, så en regel som bruker teksten, alltid får fylt dem inn.',
+    ],
+  },
+  {
     versjon: '1.13.0',
     dato: '2026-09-23',
     sammendrag: 'Informasjonssidene er delt i seksjoner som åpnes og lukkes',
