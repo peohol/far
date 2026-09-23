@@ -15,7 +15,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [x] Arbeidspakke 1: fundament for redigerbart faginnhold.
 - [x] Arbeidspakke 2: referansesystem.
 - [x] Arbeidspakke 3: analyttsider og navigasjon.
-- [x] Arbeidspakke 4: import av psykofarmakainnhold (revidert og omarbeidet 23.09.2026).
+- [ ] Arbeidspakke 4: import av psykofarmakainnhold (revidert 23.09.2026, omarbeides).
 - [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
 - [ ] Arbeidspakke 6: sammensatte analyttgrupper.
 - [ ] Arbeidspakke 7: THC-syre.
@@ -915,13 +915,13 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 ## Arbeidspakke 4 - Psykofarmakainnhold
 
-**Status:** [x] Revidert og omarbeidet 23.09.2026. Innholdet er ferdig i produksjonsdatabasen, og omarbeidingen er gjort der og i PR #35.
+**Status:** [ ] Revidert 23.09.2026. Innholdet er ferdig i produksjonsdatabasen, og omarbeidingen er gjort der. PR #35 (omarbeidet) gjenstår å slå sammen.
 
 Beholdes:
 
 - [x] Render og kontroller `originaldata/Psykofarmaka.pdf`.
 - [x] Bygg kontrollert importdatasett.
-- [x] Importer antidepressiver, antipsykotika og lamotrigin: 35 sider og 103 referanser (i produksjonsdatabasen, rullet ut med migrasjonene i PR #35).
+- [x] Importer antidepressiver, antipsykotika og lamotrigin: 35 sider og 103 referanser (i produksjonsdatabasen; ikke på `main` ennå).
 - [x] Fyll panel 2–7 der kilden har data, koblet til riktige informasjonssider, også sumanalyser og komponenter.
 - [x] Første revisjon peker tilbake til kilde/side der det er mulig, f.eks. «Importert fra Psykofarmaka.pdf, side 7» (`revisjonskilde`, som også brukes av annet arbeid og beholdes uendret).
 - [x] Indikasjonssammendragene beholdes som redaksjonelt klinisk innhold (panel 5), med preparatomtalene i Felleskatalogen som referanser. FEST/HAPI gir ikke indikasjonstekst; arbeidspakke 8 bekrefter om noen av de eksterne kildene gjør det.
@@ -936,7 +936,7 @@ Omarbeidingen:
 - [x] Den manuelle preparatnavnlisten og kontrolldatoen er fjernet fra koden, importdatasettet og visningen.
 - [x] De 35 preparatnavnelementene og kontrolldatoene på indikasjonene er tatt bort i produksjonsdatabasen som nye, publiserte revisjoner med kilden «Tatt bort: preparatnavnene skal hentes fra offentlige legemiddeldata» (migrasjonen `psykofarmaka_kursendring`). De kjørte migrasjonene er ikke endret, og alt kan gjenopprettes fra historikken.
 - [x] Ingen ny, permanent panel-UI; innholdet vises gjennom seksjonsmodellen (arbeidspakke 9).
-- [x] Alle migrasjonene som er kjørt i produksjon, er med byte-identiske når PR-en slås sammen. md5-en deres er låst i testene, som kjører dem slik produksjonen gjorde.
+- [ ] Alle migrasjonene som er kjørt i produksjon, er med byte-identiske når PR-en slås sammen.
 
 Elementtypen for preparater og skjemaet for dem fra arbeidspakke 3 står fortsatt på `main`. De erstattes i arbeidspakke 11.
 
