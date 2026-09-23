@@ -71,7 +71,11 @@ function zFor(r: ThcRegelsett, margin: number): number | undefined {
  * `usikkerhet` er 1 normalt, og regelsettets faktor under cut-off ellers.
  */
 export function korreksjonsfaktor(r: ThcRegelsett, margin: number, usikkerhet = 1): number {
-  return Math.exp((zFor(r, margin) ?? Number.NaN) * logSd(r) * usikkerhet)
+  const z = zFor(r, margin)
+  // En ukjent margin ville gitt NaN, og NaN ligger aldri over noen kurve —
+  // det ville blitt en stille konklusjon. `fortolkThc` avviser den før dette.
+  if (z === undefined) throw new Error(`Sikkerhetsmarginen ${margin} finnes ikke i regelsettet.`)
+  return Math.exp(z * logSd(r) * usikkerhet)
 }
 
 /** Målt relativ endring, korrigert for måleusikkerhet. */
@@ -310,6 +314,12 @@ export function fortolkThc(inn: ThcInndata, { regler: r, tekster }: ThcModell): 
     if (inn.forrigeDato !== '' && inn.aktuellDato !== '' && dagerMellom(inn.forrigeDato, inn.aktuellDato) < 0) {
       mangler.push('Denne prøven kan ikke være tatt før forrige prøve.')
     }
+  }
+
+  // Marginen kommer fra skjemaet, som kan leve lenger enn regelsettet det ble
+  // fylt ut mot. En margin regelsettet ikke har, gir aldri en konklusjon.
+  if (zFor(r, inn.sikkerhetsmargin) === undefined) {
+    mangler.push('Sikkerhetsmarginen finnes ikke i regelsettet. Velg en av marginene som tilbys.')
   }
 
   if (mangler.length > 0) return { type: 'mangler', mangler }

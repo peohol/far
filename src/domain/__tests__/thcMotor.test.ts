@@ -321,6 +321,33 @@ describe('et redigert regelsett', () => {
     expect(b).toBeCloseTo(korrigertEndring(REGELSETT, 6.5, 2.5, 0.9), 12)
     expect(a).toBeLessThan(b)
   })
+
+  it('gir aldri en konklusjon med en margin regelsettet ikke har', () => {
+    // Skjemaet kan leve lenger enn regelsettet: 0,99 er valgt, og så fjernes den.
+    const uten099 = modell({ ...REGELSETT, sikkerhetsmarginer: REGELSETT.sikkerhetsmarginer.filter((m) => m.margin !== 0.99) })
+    const tilfeller: [ThcInndata, ThcModell][] = []
+    for (const variant of [
+      eksempel,
+      { ...eksempel, aktuellVerdi: '2,5' },
+      { ...eksempel, forrigeVerdi: '0' },
+      { ...eksempel, forrigeUnderCutoff: true, forrigeUcak: '13', forrigeNkre: '2' },
+      { ...eksempel, ingenTidligere: true },
+      { ...eksempel, kronisk: false },
+    ]) {
+      for (const margin of [0.95, 0, Number.NaN]) tilfeller.push([{ ...variant, sikkerhetsmargin: margin }, MODELL])
+      tilfeller.push([{ ...variant, sikkerhetsmargin: 0.99 }, uten099])
+      // Med marginen på plass gir de samme inndataene en kommentar.
+      expect(fortolk({ ...variant, sikkerhetsmargin: 0.99 }).type).toBe('kommentar')
+    }
+    for (const [inn, m] of tilfeller) {
+      expect(fortolk(inn, m)).toEqual({
+        type: 'mangler',
+        mangler: ['Sikkerhetsmarginen finnes ikke i regelsettet. Velg en av marginene som tilbys.'],
+      })
+    }
+    expect(() => korreksjonsfaktor(REGELSETT, 0.95)).toThrow(/0.95 finnes ikke/)
+    expect(() => korrigertEndring(REGELSETT, 6.5, 2.5, 0.95)).toThrow(/0.95 finnes ikke/)
+  })
 })
 
 describe('valideringen', () => {
