@@ -442,6 +442,21 @@ describe('preparatene på stoffsiden', () => {
     ])
   })
 
+  it('tar med reseptgruppe, administrasjonsvei, knusing og preparatomtalen fra FEST', async () => {
+    const oversikt = byggPreparatoversikt(await leser.les([AMITRIPTYLIN]), [AMITRIPTYLIN])
+    const abcur = oversikt.former[0]!.preparater.find((p) => p.navn === 'Amitriptylin Abcur')!
+    expect(abcur.administrasjonsveier).toEqual(['Oral bruk'])
+    expect(abcur.styrker.map((s) => [s.styrke, s.reseptgruppe, s.handtering, s.preparatomtaler])).toEqual([
+      // «Ikke spesifisert» om deling sier ingenting og tas ikke med.
+      ['10 mg', 'Reseptgruppe C', [], ['https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11418.pdf']],
+      ['25 mg', 'Reseptgruppe C', [], ['https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11419.pdf']],
+      ['50 mg', 'Reseptgruppe C', [], ['https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11420.pdf']],
+    ])
+    const retard = oversikt.godkjenningsfritak.find((p) => p.navn === 'Saroten Retard')!
+    expect(retard.styrker[0]!.handtering).toEqual(['Kan ikke knuses'])
+    expect(retard.styrker[0]!.preparatomtaler).toEqual([])
+  })
+
   it('merker kombinasjonspreparatet med de andre virkestoffene, i FESTs rekkefølge', async () => {
     const oversikt = byggPreparatoversikt(await leser.les([KODEIN]), [KODEIN])
     // Kodimagnyl i utdraget krever godkjenningsfritak.

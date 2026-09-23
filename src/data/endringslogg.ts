@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.14.0',
+    dato: '2026-09-23',
+    sammendrag: 'Preparatene viser reseptgruppe, bruksmåte, deling og knusing, og lenke til preparatomtalen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Under hvert preparat i seksjonen «Preparater» står reseptgruppen og administrasjonsveien, for eksempel «Reseptgruppe C · Oral bruk».',
+      'Ved styrken står det om tabletten kan deles eller knuses, eller kapselen åpnes, når FEST sier det. Står det «ukjent» i FEST, vises ingenting.',
+      'Lenke til preparatomtalen, som åpnes i en ny fane. Har styrkene hver sin, står lenken ved hver styrke.',
+      'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
     versjon: '1.13.0',
     dato: '2026-09-23',
     sammendrag: 'Stoffsidene viser preparatene fra de offentlige legemiddeldataene',

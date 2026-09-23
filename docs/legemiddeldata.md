@@ -127,7 +127,7 @@ trengs ikke for seg.
 | Knusing | `…/AdministreringLegemiddel/KanKnuses` | 1 ja, 2 nei, 9 ukjent |
 | Åpning av kapsel | `…/AdministreringLegemiddel/KanApnes` | 1 ja, 2 nei, 9 ukjent |
 | ATC | `…/Atc` | Mangler på noen få |
-| Reseptgruppe | `…/Reseptgruppe` | A, B, C, CF, F |
+| Reseptgruppe | `…/Reseptgruppe` | A, B, C, CF, F, og K («Kosttilskudd»); teksten vises som FEST skriver den |
 | Preparattype | `…/Preparattype` | Bl.a. «Legemiddel», «Krever godkj. fritak» (uregistrert), «Sykehuspreparat», «Magistrell» |
 | Særlig overvåkning | `…/SvartTrekant` | Svart trekant |
 | Preparatomtale | `…/Preparatomtaleavsnitt/Lenke/Www` | Lenke til `produktinformasjon.legemiddelsok.no`; finnes for 3 650 |
@@ -222,6 +222,12 @@ godkjenningsfritak». Grupperingen står i `src/legemiddeldata/preparater.ts`:
 - Er styrken oppgitt for et **salt**, står saltet på preparatet.
 - Andre preparattyper enn vanlige legemidler, f.eks. «Sykehuspreparat», er
   merket med typen.
+- **Reseptgruppe, administrasjonsvei og preparatomtale** står under
+  preparatnavnet når de er like for alle styrkene, ellers ved hver styrke.
+  Preparatomtalen er ofte én for hver styrke. Bare `https`-lenker vises.
+- **Deling, knusing og åpning** står ved styrken, bare når FEST sier ja eller
+  nei; «ikke spesifisert» og «ukjent» vises ikke. Delingen står med FESTs ord
+  («Delbar i 2»).
 - Nederst står kilden, datoen for uttrekket og når kopien sist ble kontrollert
   mot FEST.
 
@@ -259,5 +265,4 @@ Tas inn når preparatvisningen er på plass, i egne endringer:
   mekanisme, håndtering og referanser. Substansene er angitt med ATC-kode (og
   av og til virkestoff-ID), så de kobles til siden via ATC-kodene til
   preparatene siden er koblet til.
-- **Byttbarhet** i klartekst, **administrasjonsvei**, **deling/knusing/åpning**,
-  **reseptgruppe** og **særlig overvåkning** i detaljkortene.
+- **Byttbarhet** i klartekst og **særlig overvåkning** i detaljkortene.

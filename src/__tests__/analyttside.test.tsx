@@ -158,6 +158,13 @@ const UTVALG: Legemiddelutvalg = {
     svart_trekant: false,
     virkestoff_med_styrke: [styrke],
     virkestoff_uten_styrke: [],
+    // Tabletto: samme reseptgruppe og vei for begge styrkene, hver sin preparatomtale.
+    ...(varenavn === 'Tabletto' && {
+      reseptgruppe: { kode: 'C', tekst: 'Reseptgruppe C' },
+      administrasjonsveier: [{ kode: '53', tekst: 'Oral bruk' }],
+      preparatomtale: `https://produktinformasjon.legemiddelsok.no/preparatomtaler/${id}.pdf`,
+    }),
+    ...(id === 'ID_M2' && { deling: { kode: '2', tekst: 'Delbar i 2' } }),
   })),
   pakninger: [
     {
@@ -470,6 +477,15 @@ describe('preparatene', () => {
     await user.click(skuffknapp('Tablett'))
     expect(screen.getByText('Tabletto')).toBeTruthy()
     expect(screen.getByText('30 stk, blisterpakning (varenr. 123456)')).toBeTruthy()
+    // Det styrkene har likt står på preparatet, resten på hver styrke.
+    expect(screen.getByText('Reseptgruppe C · Oral bruk')).toBeTruthy()
+    expect(screen.getByText('Delbar i 2')).toBeTruthy()
+    expect(
+      screen.getAllByRole('link', { name: 'Preparatomtale' }).map((a) => a.getAttribute('href')),
+    ).toEqual([
+      'https://produktinformasjon.legemiddelsok.no/preparatomtaler/ID_M1.pdf',
+      'https://produktinformasjon.legemiddelsok.no/preparatomtaler/ID_M2.pdf',
+    ])
     expect(skuffknapp('Krever godkjenningsfritak')).toBeTruthy()
     expect(screen.getByText(/Kilde: FEST, Direktoratet for medisinske produkter, uttrekk fra 8\. september 2026/)).toBeTruthy()
   })
