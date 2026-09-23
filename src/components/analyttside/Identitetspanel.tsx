@@ -1,13 +1,13 @@
 import type { Analyttkatalog, Katalogoppforing } from '../../domain/analyttkatalog'
 import { analyttadresse } from '../../domain/rute'
+import { iSetning } from '../../domain/names'
 import type { Analyttsidedata } from '../../faginnhold/lesing'
-import { ELEMENTTYPER, alfabetisk, lesPreparater, type Paneldefinisjon } from '../../faginnhold/paneler'
+import type { Paneldefinisjon } from '../../faginnhold/paneler'
 import { Metodepille } from '../Metodepille'
 import { Pill } from '../Pill'
 import { Referansepille } from '../referanser/Referansepille'
-import { PreparatSkjema } from './Skjemaer'
 import { Uthev } from '../Uthev'
-import { elementAnker, panelAnker, Redigerbar, type Panelkontekst } from './Paneler'
+import { panelAnker, type Panelkontekst } from './Paneler'
 
 /** Et stoff analysen omfatter, med kodene som har det som sin side. */
 export interface Komponent {
@@ -35,9 +35,9 @@ export function komponenterFor(
 
 /**
  * Panel 1: hva siden handler om. Analyttkoden og kategorien som piller,
- * virkestoffet som hovedoverskrift, preparatnavnene alfabetisk, og for
- * sumanalysene hvilke stoffer koden omfatter — med lenker til sidene deres,
- * uten å gjøre dem til hovedanalytt.
+ * virkestoffet som hovedoverskrift, og for sumanalysene hvilke stoffer koden
+ * omfatter — med lenker til sidene deres, uten å gjøre dem til hovedanalytt.
+ * Preparatene står i seksjonen under (`Preparatpanel.tsx`).
  */
 export function Identitetspanel({
   definisjon,
@@ -54,10 +54,7 @@ export function Identitetspanel({
   komponenter: Komponent[]
   overskriftId: string
 }) {
-  const { modell, redigerer, handlinger } = kontekst
-  const element =
-    (modell.paneler.get(definisjon.nokkel) ?? []).find((e) => e.elementtype === ELEMENTTYPER.preparater) ?? null
-  const { navn: preparater } = lesPreparater(element?.data)
+  const { modell } = kontekst
   const panelreferanser = modell.panelreferanser[definisjon.nokkel] ?? []
   const sum = komponenter.length > 1
 
@@ -84,55 +81,10 @@ export function Identitetspanel({
           .
         </p>
       )}
-
-      <div className="identitet__preparater" id={element ? elementAnker(element.id) : undefined}>
-        <Redigerbar
-          navn="Preparatnavn"
-          element={element}
-          redigerer={redigerer}
-          leggTilTekst="Legg til preparatnavn"
-          visning={
-            preparater.length > 0 && (
-              <p>
-                <span className="identitet__merke">Preparater: </span>
-                <Uthev tekst={preparater.sort(alfabetisk).join(', ')} />
-                {element && element.referanser.length > 0 && (
-                  <Referansepille ider={element.referanser} niva="element" />
-                )}
-              </p>
-            )
-          }
-          skjema={(lukk) => (
-            <PreparatSkjema
-              tittel="Preparatnavn"
-              start={{ navn: preparater }}
-              referanser={element?.referanser ?? []}
-              onAvbryt={lukk}
-              onLagre={async ({ data, referanser }) => {
-                await handlinger.lagreElement(element, {
-                  panel: definisjon.nokkel,
-                  elementtype: ELEMENTTYPER.preparater,
-                  posisjon: 0,
-                  data,
-                  referanser,
-                })
-                lukk()
-              }}
-            />
-          )}
-        />
-      </div>
     </section>
   )
 }
 
-/**
- * Stoffnavnet slik det står midt i en setning: et vanlig ord får liten
- * forbokstav, mens navn som «O-desmetylvenlafaksin» og «MDMA» står som de er.
- */
-function iSetning(navn: string): string {
-  return /^\p{Lu}\p{Ll}/u.test(navn) ? navn.charAt(0).toLocaleLowerCase('nb') + navn.slice(1) : navn
-}
 
 /** Stoffet, med lenke til sidene for de andre kodene som har det som sin side. */
 function Komponentlenke({ komponent, gjeldende }: { komponent: Komponent; gjeldende: string }) {

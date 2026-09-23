@@ -18,6 +18,7 @@ import { Samtidighetskonflikt, type Faginnholdslager } from '../faginnhold/lagri
 import { TOM_SIDE, type Analyttsidedata, type Faginnholdsleser, type Utgave } from '../faginnhold/lesing'
 import type { Objektstatus, Tilstand } from '../faginnhold/modell'
 import { SITERING } from '../faginnhold/referanser'
+import { TOMT_UTVALG, type Legemiddelleser, type Legemiddelutvalg } from '../legemiddeldata/lesing'
 
 beforeAll(() => {
   globalThis.ResizeObserver ??= class {
@@ -112,6 +113,106 @@ function status(id: string, revisjon = 1): Objektstatus {
   return { id, type: 'innholdselement', revisjon, endret_kl: null, publisert_revisjon: null, publisert_kl: null }
 }
 
+/** Syntetiske legemiddeldata i FESTs form: ett virkestoff med et salt, to former og et fritak. */
+const UTVALG: Legemiddelutvalg = {
+  ...TOMT_UTVALG,
+  kontrollert_kl: '2026-09-23T04:15:00Z',
+  kildedato: '2026-09-08T03:09:06',
+  virkestoff: [
+    { id: 'ID_AMI', navn: 'Amitriptylin', navn_engelsk: null, salter: ['ID_AMISALT'], utgatt: false },
+    { id: 'ID_AMISALT', navn: 'Amitriptylinhydroklorid', navn_engelsk: null, salter: [], utgatt: false },
+  ],
+  styrker: [10, 25, 50].map((verdi) => ({
+    id: `ID_S${verdi}`,
+    virkestoff_id: 'ID_AMI',
+    styrke: { verdi, enhet: 'mg' },
+    nevner: null,
+    ovre: null,
+    operator: null,
+    alternativ_styrke: null,
+    alternativ_nevner: null,
+  })),
+  merkevarer: (
+    [
+      ['ID_M1', 'Tabletto', '53', 'Tablett', '7', 'ID_S10'],
+      ['ID_M2', 'Tabletto', '53', 'Tablett', '7', 'ID_S25'],
+      ['ID_M3', 'Retardo', '743', 'Depotkapsel, hard', '7', 'ID_S50'],
+      ['ID_M4', 'Utlandia', '53', 'Tablett', '11', 'ID_S25'],
+    ] as const
+  ).map(([id, varenavn, form, formtekst, type, styrke]) => ({
+    id,
+    varenavn,
+    navn_form_styrke: `${varenavn} ${styrke}`,
+    legemiddelform: { kode: form, tekst: formtekst },
+    legemiddelform_lang: null,
+    atc: null,
+    reseptgruppe: null,
+    preparattype: { kode: type, tekst: type === '11' ? 'Krever godkj. Fritak' : 'Legemiddel' },
+    administrasjonsveier: [],
+    deling: null,
+    kan_knuses: null,
+    kan_apnes: null,
+    produsent: null,
+    referanseprodukt: null,
+    preparatomtale: null,
+    svart_trekant: false,
+    virkestoff_med_styrke: [styrke],
+    virkestoff_uten_styrke: [],
+  })),
+  pakninger: [
+    {
+      id: 'ID_P1',
+      varenr: '123456',
+      navn_form_styrke: 'Tabletto 10 mg',
+      innhold: [
+        {
+          merkevare_id: 'ID_M1',
+          pakningsstorrelse: 30,
+          enhet: { kode: 'stk', tekst: 'stykk' },
+          pakningstype: { kode: '1', tekst: 'Blisterpakning' },
+          mengde: 30,
+          antall: null,
+        },
+      ],
+      merkevarer: ['ID_M1'],
+      markedsforingsdato: null,
+      midlertidig_utgatt_dato: null,
+      avregistrert_dato: null,
+      byttegrupper: [],
+      ean: [],
+    },
+  ],
+}
+
+/** En side med koblingen til legemiddeldataene. */
+function medKobling(tilstand: Tilstand): Analyttsidedata {
+  const data = side(tilstand)
+  return {
+    ...data,
+    elementer: [
+      ...data.elementer,
+      utgave('kobling', {
+        infoside: 'hs',
+        panel: 'preparater',
+        posisjon: 0,
+        elementtype: 'legemiddelkobling',
+        data: { virkestoff: [{ fest_id: 'ID_AMI', navn: 'Amitriptylin' }] },
+        referanser: [],
+      }),
+    ],
+  }
+}
+
+function legemiddelleser(): Legemiddelleser {
+  return {
+    les: vi.fn(async (ider: readonly string[]) => (ider.includes('ID_AMI') ? UTVALG : TOMT_UTVALG)),
+    sok: vi.fn(async () => [
+      { id: 'ID_AMISALT', navn: 'Amitriptylinhydroklorid', navn_engelsk: null, salt_av: ['Amitriptylin'], preparater: 0 },
+      { id: 'ID_AMI', navn: 'Amitriptylin', navn_engelsk: 'Amitriptyline', salt_av: [], preparater: 4 },
+    ]),
+  }
+}
+
 function kilde({
   data = side,
   kanRedigere = false,
@@ -129,7 +230,7 @@ function kilde({
     publiserUtkast: vi.fn(async (id: string) => status(id)),
     slettReferanse: vi.fn(),
   }
-  return { leser, lager, kanRedigere }
+  return { leser, lager, kanRedigere, legemidler: legemiddelleser() }
 }
 
 function vis(kode: string, k = kilde(), sted?: string[]) {
@@ -342,6 +443,59 @@ describe('seksjonene', () => {
   })
 })
 
+describe('preparatene', () => {
+  const skuffknapp = (navn: string) =>
+    screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
+
+  it('viser ikke seksjonen når siden ikke er koblet', async () => {
+    const k = kilde()
+    vis('AMTNORSUM', k)
+    await screen.findByText('10–20 nmol/L')
+    expect(screen.queryByRole('region', { name: 'Preparater' })).toBeNull()
+    expect(k.legemidler.les).not.toHaveBeenCalled()
+  })
+
+  it('viser preparatene fra legemiddeldataene gruppert etter form, med kilden', async () => {
+    const user = userEvent.setup()
+    const k = kilde({ data: medKobling })
+    vis('AMTNORSUM', k)
+    // Lukket står oppsummeringen; formene og fritakene er detaljkort.
+    expect(
+      await screen.findByText('2 preparater · 2 legemiddelformer · 3 styrker · 1 med godkjenningsfritak'),
+    ).toBeTruthy()
+    expect(k.legemidler.les).toHaveBeenCalledWith(['ID_AMI'])
+    await user.click(skuffknapp('Preparater'))
+    expect(screen.getByText('1 preparat · 10–25 mg')).toBeTruthy()
+    expect(skuffknapp('Tablett').getAttribute('aria-expanded')).toBe('false')
+    await user.click(skuffknapp('Tablett'))
+    expect(screen.getByText('Tabletto')).toBeTruthy()
+    expect(screen.getByText('30 stk, blisterpakning (varenr. 123456)')).toBeTruthy()
+    expect(skuffknapp('Krever godkjenningsfritak')).toBeTruthy()
+    expect(screen.getByText(/Kilde: FEST, Direktoratet for medisinske produkter, uttrekk fra 8\. september 2026/)).toBeTruthy()
+  })
+
+  it('finner preparatene i søket på siden, også i lukkede detaljkort', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ data: medKobling }))
+    await screen.findByText(/2 preparater/)
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'retardo')
+    await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
+    const steder = within(screen.getByRole('list', { name: 'Hvor treffene står' }))
+    await user.click(steder.getByRole('button', { name: /Depotkapsel, hard/ }))
+    expect(skuffknapp('Depotkapsel, hard').getAttribute('aria-expanded')).toBe('true')
+  })
+
+  it('sier fra når preparatene ikke kan hentes, uten at resten av siden faller', async () => {
+    const k = kilde({ data: medKobling })
+    k.legemidler.les = vi.fn(async () => {
+      throw new Error('Nettverksfeil')
+    })
+    vis('AMTNORSUM', k)
+    expect(await screen.findByText('Fikk ikke hentet preparatene')).toBeTruthy()
+    expect(screen.getByText('10–20 nmol/L')).toBeTruthy()
+  })
+})
+
 describe('redigeringsmodus', () => {
   it('viser utkastet og alle panelene, med «Sist redigert»', async () => {
     const user = userEvent.setup()
@@ -468,9 +622,13 @@ describe('redigeringsmodus', () => {
     k.leser.finnInfosider = vi.fn(async () => [utgave('nortriptylin', { navn: 'Nortriptylin' })])
     const { lager, leser } = vis('AMTNORSUM', k)
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
-    await user.click(await screen.findByRole('button', { name: 'Legg til: Preparatnavn' }))
-    const skjema = screen.getByRole('form', { name: 'Rediger: Preparatnavn' })
-    await user.type(within(skjema).getByLabelText(/Preparatnavn, ett per linje/), 'Zeta{Enter}alfa{Enter}Zeta')
+    await user.click(await screen.findByRole('button', { name: 'Legg til: Koblingen til legemiddeldataene' }))
+    const skjema = screen.getByRole('form', { name: 'Rediger: Koblingen til legemiddeldataene' })
+    // Søket står ferdig utfylt med sidens navn, og likt navn er et forslag.
+    expect((within(skjema).getByLabelText('Søk etter virkestoff') as HTMLInputElement).value).toBe('Amitriptylin')
+    expect(await within(skjema).findByText(/Forslag: samme navn som siden/)).toBeTruthy()
+    expect(within(skjema).getByText(/salt eller ester av Amitriptylin/)).toBeTruthy()
+    await user.click(within(skjema).getByRole('button', { name: 'Koble siden til Amitriptylin' }))
     await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
 
     await waitFor(() => expect(lager.opprettUtkast).toHaveBeenCalledTimes(3))
@@ -482,15 +640,15 @@ describe('redigeringsmodus', () => {
       'laboratorieanalytt',
       { kode: 'AMTNORSUM', hovedside: 'ny-1', komponenter: ['ny-1', 'nortriptylin'] },
     ])
-    // Navnene lagres hver for seg, alfabetisk og uten gjentakelser.
+    // Koblingen lagres med FESTs ID; navnet er med for historikken.
     expect(kall[2]).toEqual([
       'innholdselement',
       {
         infoside: 'ny-1',
-        panel: 'identitet',
-        elementtype: 'preparater',
+        panel: 'preparater',
+        elementtype: 'legemiddelkobling',
         posisjon: 0,
-        data: { navn: ['alfa', 'Zeta'] },
+        data: { virkestoff: [{ fest_id: 'ID_AMI', navn: 'Amitriptylin' }] },
         referanser: [],
       },
     ])

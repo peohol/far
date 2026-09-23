@@ -37,3 +37,12 @@ export function splitName(analyte: Analyte): SplitName {
   const [moderstoff = analyte.navn, ...metabolitter] = deler
   return { moderstoff, metabolitter }
 }
+
+/**
+ * Et stoffnavn slik det står midt i en setning: et vanlig ord får liten
+ * forbokstav («Kodein» blir «kodein»), mens navn som «O-desmetylvenlafaksin»
+ * og «MDMA» står som de er.
+ */
+export function iSetning(navn: string): string {
+  return /^\p{Lu}\p{Ll}/u.test(navn) ? navn.charAt(0).toLocaleLowerCase('nb') + navn.slice(1) : navn
+}

@@ -1,6 +1,7 @@
 import { createContext, useContext, type ReactNode } from 'react'
 import type { Faginnholdslager } from '../../faginnhold/lagring'
 import type { Faginnholdsleser } from '../../faginnhold/lesing'
+import type { Legemiddelleser } from '../../legemiddeldata/lesing'
 
 /**
  * Hvor informasjonssidene henter og lagrer faginnholdet, og om den innloggede
@@ -15,6 +16,11 @@ export interface Faginnholdskilde {
   leser: Faginnholdsleser
   lager: Faginnholdslager
   kanRedigere: boolean
+  /**
+   * Legemiddeldataene fra FEST, som seksjonen «Preparater» viser. Uten den
+   * vises ingen preparater.
+   */
+  legemidler?: Legemiddelleser
 }
 
 const Kontekst = createContext<Faginnholdskilde | null>(null)

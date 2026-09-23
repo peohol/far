@@ -8,8 +8,10 @@
  * redigeringen, søket og nummereringen av referansene leser dem herfra.
  *
  * Det som er data, lagres som data. Referanseområder, halveringstider og
- * serumkonsentrasjoner er strukturerte felt, ikke fritekst; preparatnavnene
- * er en liste. Riktekst brukes til det som faktisk er prosa.
+ * serumkonsentrasjoner er strukturerte felt, ikke fritekst. Riktekst brukes
+ * til det som faktisk er prosa. Preparatene er ikke OUSFARs eget innhold: de
+ * kommer fra legemiddeldataene (`src/legemiddeldata/`), og det som lagres her,
+ * er bare hvilke virkestoff siden er koblet til.
  *
  * Alt som leses fra databasen, går gjennom `les…`-funksjonene her før det
  * brukes. De tåler manglende og feilformede felt, så en side aldri faller
@@ -22,13 +24,14 @@ import { rensDokument, tomtDokument, type Riktekstdokument } from './riktekst'
 /**
  * Hvordan et panel er bygd:
  *
- * - `identitet` — koden, kategorien, navnet og preparatnavnene.
+ * - `identitet` — koden, kategorien og navnet.
+ * - `legemidler` — preparatene fra legemiddeldataene, etter koblingen siden har.
  * - `datakort` — faste kort med ett tall eller område hver.
  * - `tekst` — én riktekst.
  * - `kort` — en ordnet serie kort med overskrift og riktekst.
  * - `tabell` — én tabell med faste kolonner.
  */
-export type Panelform = 'identitet' | 'datakort' | 'tekst' | 'kort' | 'tabell'
+export type Panelform = 'identitet' | 'legemidler' | 'datakort' | 'tekst' | 'kort' | 'tabell'
 
 export interface Paneldefinisjon {
   nokkel: string
@@ -44,6 +47,7 @@ export interface Paneldefinisjon {
 
 export const PANELER = [
   { nokkel: 'identitet', tittel: 'Identitet', form: 'identitet' },
+  { nokkel: 'preparater', tittel: 'Preparater', form: 'legemidler' },
   { nokkel: 'viktige_data', tittel: 'Viktige data', form: 'datakort', apen: true },
   { nokkel: 'farmakodynamikk', tittel: 'Farmakodynamikk', form: 'tekst' },
   { nokkel: 'dosering', tittel: 'Dosering', form: 'tekst' },
@@ -75,17 +79,27 @@ export const FJERNET = 'fjernet'
 /* --- Elementtypene -------------------------------------------------------- */
 
 export const ELEMENTTYPER = {
-  preparater: 'preparater',
+  legemiddelkobling: 'legemiddelkobling',
   riktekst: 'riktekst',
   kinetikk: 'kinetikkort',
   dosetabell: 'dosetabell',
 } as const
 
-/* Panel 1: preparatnavnene. */
+/* Panelet «Preparater»: koblingen til legemiddeldataene. */
 
-export interface Preparatdata {
-  /** Preparatnavnene, hvert for seg. Vises alltid alfabetisk. */
-  navn: string[]
+/** Et virkestoff i legemiddeldataene, med FESTs ID og navnet det hadde da det ble valgt. */
+export interface KobletVirkestoff {
+  fest_id: string
+  navn: string
+}
+
+/**
+ * Virkestoffene siden viser preparatene for. Koblingen er til FESTs ID, ikke
+ * til navnet; navnet er med så koblingen kan leses også om stoffet forsvinner
+ * fra FEST.
+ */
+export interface Legemiddelkoblingdata {
+  virkestoff: KobletVirkestoff[]
 }
 
 /** Norsk alfabetisk rekkefølge, uten hensyn til store og små bokstaver. */
@@ -93,19 +107,14 @@ export function alfabetisk(a: string, b: string): number {
   return a.localeCompare(b, 'nb', { sensitivity: 'base' })
 }
 
-/** Navnene renset: uten tomme, uten gjentakelser, alfabetisk. */
-export function ryddPreparater(navn: readonly string[]): string[] {
-  const sett = new Map<string, string>()
-  for (const n of navn.map((x) => x.trim()).filter(Boolean)) {
-    const nokkel = n.toLocaleLowerCase('nb')
-    if (!sett.has(nokkel)) sett.set(nokkel, n)
+export function lesLegemiddelkobling(data: unknown): Legemiddelkoblingdata {
+  const liste = erObjekt(data) && Array.isArray(data.virkestoff) ? data.virkestoff : []
+  const sett = new Map<string, KobletVirkestoff>()
+  for (const v of liste.filter(erObjekt)) {
+    const fest_id = tekst(v.fest_id)
+    if (fest_id && !sett.has(fest_id)) sett.set(fest_id, { fest_id, navn: tekst(v.navn) })
   }
-  return [...sett.values()].sort(alfabetisk)
-}
-
-export function lesPreparater(data: unknown): Preparatdata {
-  const navn = erObjekt(data) && Array.isArray(data.navn) ? data.navn : []
-  return { navn: ryddPreparater(navn.filter((n): n is string => typeof n === 'string')) }
+  return { virkestoff: [...sett.values()] }
 }
 
 /* Panel 2: datakortene. */
@@ -294,17 +303,17 @@ export function lesDosetabell(data: unknown): Dosetabelldata {
 /* --- Kort som bare kan finnes én gang ------------------------------------ */
 
 /**
- * Elementtypene som står én gang i panelet sitt: preparatnavnene, hvert
- * datakort, rikteksten i panel 3–5 og tabellen. Farmakokinetikken kan ha
- * mange kort.
+ * Elementtypene som står én gang i panelet sitt: koblingen til
+ * legemiddeldataene, hvert datakort, rikteksten i panel 3–5 og tabellen.
+ * Farmakokinetikken kan ha mange kort.
  *
  * Databasen håndhever det samme (`innholdselementer_enkeltelement_idx` i
- * migrasjonen `enkeltelementer`), så to som oppretter det samme kortet
+ * migrasjonen `legemiddelkobling`), så to som oppretter det samme kortet
  * samtidig, ikke begge får det lagret. Testene kontrollerer at listene
  * stemmer.
  */
 export const ENKELTELEMENTER: readonly string[] = [
-  ELEMENTTYPER.preparater,
+  ELEMENTTYPER.legemiddelkobling,
   ELEMENTTYPER.riktekst,
   ELEMENTTYPER.dosetabell,
   ...DATAKORT.map((k) => k.type),

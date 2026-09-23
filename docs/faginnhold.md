@@ -231,7 +231,8 @@ radsikkerheten gjelder som ellers.
 
 | Panel | Nøkkel | Elementer |
 | --- | --- | --- |
-| 1 Identitet | `identitet` | `preparater`: `{ navn: string[] }`, vist alfabetisk |
+| 1 Identitet | `identitet` | Ingen; koden, navnet og kategorien kommer fra siden og katalogen |
+| Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
 | 2 Viktige data | `viktige_data` | Ett kort per type — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon`, `halveringstid`, `steady_state` — med `{ nedre, ovre, enhet, forbehold }` |
 | 3–5 Farmakodynamikk, dosering, indikasjon | `farmakodynamikk`, `dosering`, `indikasjon` | `riktekst`: `{ dokument }` |
 | 6 Farmakokinetikk | `farmakokinetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge |
@@ -242,7 +243,7 @@ Tallene i panel 2 er tall, ikke tekst. Bare den ene grensen oppgitt vises som
 kategorien i panel 1 kommer fra de statiske datasettene til siden finnes i
 databasen.
 
-**Visningen.** Identiteten står alltid fram. Panel 2–7 er seksjoner som åpnes
+**Visningen.** Identiteten står alltid fram. Preparatene og panel 2–7 er seksjoner som åpnes
 og lukkes, og kortene i farmakokinetikken er detaljkort i sin seksjon (se
 `docs/seksjoner.md`). En lukket seksjon viser en kort oppsummering med
 innholdets egne ord: titlene på datakortene og kinetikkortene, dosene i
@@ -256,8 +257,8 @@ Alt leses gjennom `rensDokument` før det vises.
 
 **Redigeringen.** Administratorer får knappen «Rediger». Knappene for å endre
 vises først når utkastet er hentet, og alt lagres som utkast mot revisjonen
-som ble lest; en konflikt stanser lagringen og sier fra. Preparatnavnene,
-hvert datakort, rikteksten i panel 3–5 og tabellen kan bare stå én gang i
+som ble lest; en konflikt stanser lagringen og sier fra. Koblingen til
+legemiddeldataene, hvert datakort, rikteksten i panel 3–5 og tabellen kan bare stå én gang i
 panelet sitt (`ENKELTELEMENTER`). Databasen håndhever det med en unik indeks,
 så to som oppretter det samme kortet samtidig, ikke begge får det lagret —
 den andre får en konflikt.
@@ -273,8 +274,8 @@ Et objekt kan ikke slettes. Et kort som fjernes, flyttes derfor til panelet
 historikken og kan hentes tilbake.
 
 **Søket** (`sok.ts`) er bygd for begge søkene i planen. `indekserSide` gjør én
-side om til søkedokumenter — navn, kode, komponenter, preparater,
-overskrifter, verdier, tabellrader, fritekst og referanser — hver med stedet
+side om til søkedokumenter — navn, kode, komponenter, preparatene fra
+legemiddeldataene, overskrifter, verdier, tabellrader, fritekst og referanser — hver med stedet
 den står (side › panel › kort). `sok` rangerer dokumentene og lager utdrag.
 Søket på siden bruker indeksen til å vise hvor treffene står, og fremhever
 dem i teksten — også i lukkede seksjoner, som åpnes når brukeren går til et

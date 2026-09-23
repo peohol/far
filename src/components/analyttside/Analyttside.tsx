@@ -14,6 +14,8 @@ import { SeksjonsstyringKilde, skuffnokkel, useSeksjonsstyring } from '../seksjo
 import { Sidereferanser } from '../referanser/Sidereferanser'
 import { useFaginnholdskilde } from './Faginnholdskilde'
 import { Identitetspanel, komponenterFor } from './Identitetspanel'
+import { finnKobling, Preparatpanel, preparatsoketekster } from './Preparatpanel'
+import { useLegemidler } from './useLegemidler'
 import { Datakortpanel, Kortpanel, Tabellpanel, Tekstpanel, type Panelkontekst } from './Paneler'
 import { Redigeringskilde } from './Redigeringskontekst'
 import { Sidesok } from './Sidesok'
@@ -129,9 +131,17 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
   // lagres mot det publiserte som sto før redigeringen ble slått på.
   const redigerer = handlinger.kanEndres
 
+  const koblet = useMemo(() => finnKobling(modell).kobling.virkestoff.map((v) => v.fest_id), [modell])
+  const legemidler = useLegemidler(koblet)
+
   const dokumenter = useMemo(
-    () => indekserSide({ kode: oppforing.kode, navn, komponenter: komponenter.map((k) => k.navn) }, modell),
-    [oppforing.kode, navn, komponenter, modell],
+    () =>
+      indekserSide(
+        { kode: oppforing.kode, navn, komponenter: komponenter.map((k) => k.navn) },
+        modell,
+        preparatsoketekster(legemidler),
+      ),
+    [oppforing.kode, navn, komponenter, modell, legemidler],
   )
   const ord = useMemo(() => sokeord(sporring), [sporring])
 
@@ -239,6 +249,16 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
                         navn={navn}
                         komponenter={komponenter}
                         overskriftId={overskrift}
+                      />
+                    )
+                  case 'legemidler':
+                    return (
+                      <Preparatpanel
+                        key={definisjon.nokkel}
+                        definisjon={definisjon}
+                        kontekst={kontekst}
+                        sidenavn={oppforing.sidenavn}
+                        legemidler={legemidler}
                       />
                     )
                   case 'datakort':

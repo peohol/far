@@ -34,6 +34,7 @@ import {
 } from './domain/valg'
 import { lagFaginnholdslager } from './faginnhold/lagring'
 import { lagFaginnholdsleser } from './faginnhold/lesing'
+import { lagLegemiddelleser } from './legemiddeldata/lesing'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
 import {
@@ -112,6 +113,7 @@ export default function App() {
       leser: lagFaginnholdsleser(klient()),
       lager: lagFaginnholdslager(klient()),
       kanRedigere: profil.role === 'admin',
+      legemidler: lagLegemiddelleser(klient()),
     }),
     [profil.role],
   )

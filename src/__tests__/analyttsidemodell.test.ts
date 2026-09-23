@@ -13,9 +13,8 @@ import {
   kontrollerIntervall,
   lesDosetabell,
   lesIntervallverdi,
-  lesPreparater,
+  lesLegemiddelkobling,
   lesTallfelt,
-  ryddPreparater,
   tallTilFelt,
 } from '../faginnhold/paneler'
 import { SITERING, kortnavn } from '../faginnhold/referanser'
@@ -131,10 +130,21 @@ describe('datakortene', () => {
   })
 })
 
-describe('preparatnavnene og tabellen', () => {
-  it('lagrer preparatnavnene hver for seg, alfabetisk og uten gjentakelser', () => {
-    expect(ryddPreparater(['Zeta', ' alfa ', '', 'Ærlig', 'ZETA', 'Øst', 'beta'])).toEqual(['alfa', 'beta', 'Zeta', 'Ærlig', 'Øst'])
-    expect(lesPreparater({ navn: ['B', 3, 'A'] })).toEqual({ navn: ['A', 'B'] })
+describe('koblingen til legemiddeldataene og tabellen', () => {
+  it('leser koblingen til virkestoffene med ID-ene, uten gjentakelser og feilformede', () => {
+    expect(
+      lesLegemiddelkobling({
+        virkestoff: [
+          { fest_id: 'ID_A', navn: 'Alfa' },
+          { fest_id: 'ID_A', navn: 'Alfa igjen' },
+          { fest_id: '', navn: 'Uten ID' },
+          { navn: 'Bare navn' },
+          'tull',
+          { fest_id: ' ID_B ', navn: 3 },
+        ],
+      }),
+    ).toEqual({ virkestoff: [{ fest_id: 'ID_A', navn: 'Alfa' }, { fest_id: 'ID_B', navn: '' }] })
+    expect(lesLegemiddelkobling(null)).toEqual({ virkestoff: [] })
   })
 
   it('leser tabellradene og hopper over tomme', () => {
@@ -249,6 +259,19 @@ describe('sidemodellen', () => {
     // Det fjernede kortet søkes ikke i.
     expect(sok(dokumenter, 'fjernetkilde')).toEqual([])
     expect(sok(dokumenter, '')).toEqual([])
+  })
+
+  it('tar med preparatene fra legemiddeldataene i panelets plass i rekkefølgen', () => {
+    const modell = byggSidemodell(side())
+    const dokumenter = indekserSide({ kode: 'TEST', navn: 'Testmiddel', komponenter: [] }, modell, [
+      { panel: 'preparater', element: { id: 'preparater-53', tittel: 'Tablett' }, felt: 'preparat', tekst: 'Syntetin' },
+      { panel: 'ukjent', element: { id: 'x' }, felt: 'preparat', tekst: 'Står ikke på siden' },
+    ])
+    expect(sok(dokumenter, 'syntetin').map((t) => sti(t.dokument.sted))).toEqual([['Testmiddel', 'Preparater', 'Tablett']])
+    expect(sok(dokumenter, 'står ikke')).toEqual([])
+    // Preparatene står rett etter identiteten, foran panelene med faginnhold.
+    const paneler = dokumenter.map((d) => d.sted.panel?.nokkel).filter(Boolean)
+    expect(paneler[0]).toBe('preparater')
   })
 
   it('gir referansene en kort betegnelse til editoren', () => {
