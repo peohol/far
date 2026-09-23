@@ -118,25 +118,36 @@ export const THC_TEKSTBOLKER: Record<ThcTekstnokkel, ThcTekstbolkInfo> = {
 /** Én tekst for hver bolk. */
 export type ThcTekster = Record<ThcTekstnokkel, string>
 
-/** Plassholderne i en tekst, i den rekkefølgen de står, også ukjente. */
+/** Plassholderne i en tekst, også ukjente, uten gjentakelser og sortert. */
 export function plassholdereI(tekst: string): string[] {
-  return tekst.match(/\{[^{}]*\}/g) ?? []
+  return [...new Set(tekst.match(/\{[^{}]*\}/g) ?? [])].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
+}
+
+/**
+ * Om en tekst med disse plassholderne kan brukes i bolken: den må ha
+ * plassholderne bolken krever, og ingen den ikke kan bruke. Databasen gjør den
+ * samme kontrollen, med samme ordlyd, når en bolk kobles til en kommentar.
+ */
+export function validerThcTekstbolk(nokkel: ThcTekstnokkel, plassholdere: readonly string[]): string[] {
+  const { tittel, plassholdere: kreves, tilgjengelige } = THC_TEKSTBOLKER[nokkel]
+  const feil: string[] = []
+  const ukjente = plassholdere.filter((p) => !(tilgjengelige as readonly string[]).includes(p))
+  if (ukjente.length > 0) {
+    feil.push(`Tekstbolken «${tittel}» har plassholdere den ikke kan bruke: ${ukjente.join(', ')}.`)
+  }
+  for (const p of kreves) {
+    if (!plassholdere.includes(p)) feil.push(`Tekstbolken «${tittel}» må inneholde ${p}.`)
+  }
+  return feil
 }
 
 /** Alt som er galt med teksten til én bolk, i vanlig språk. */
 export function validerThcTekst(nokkel: ThcTekstnokkel, tekst: unknown): string[] {
-  const { tittel, plassholdere, tilgjengelige } = THC_TEKSTBOLKER[nokkel]
+  const { tittel } = THC_TEKSTBOLKER[nokkel]
   if (typeof tekst !== 'string' || tekst.trim() === '') return [`Tekstbolken «${tittel}» er tom.`]
   const feil: string[] = []
   if (tekst !== tekst.trim()) feil.push(`Tekstbolken «${tittel}» begynner eller slutter med mellomrom.`)
-  const funnet = plassholdereI(tekst)
-  const ukjente = funnet.filter((p) => !(tilgjengelige as readonly string[]).includes(p))
-  if (ukjente.length > 0) {
-    feil.push(`Tekstbolken «${tittel}» har plassholdere den ikke kan bruke: ${ukjente.join(', ')}.`)
-  }
-  for (const p of plassholdere) {
-    if (!funnet.includes(p)) feil.push(`Tekstbolken «${tittel}» må inneholde ${p}.`)
-  }
+  feil.push(...validerThcTekstbolk(nokkel, plassholdereI(tekst)))
   if (/[{}]/.test(tekst.replace(/\{[^{}]*\}/g, ''))) {
     feil.push(`Tekstbolken «${tittel}» har en krøllparentes som ikke hører til en plassholder.`)
   }

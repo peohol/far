@@ -9,7 +9,7 @@ import {
   verdiPaaKurve,
   type Kurve,
 } from '../thcKurver'
-import { kurverI, validerThcRegelsett, type ThcRegelsett } from '../thcRegelsett'
+import { kurverI, validerThcRegelsett, visIrcak, type ThcRegelsett } from '../thcRegelsett'
 
 /**
  * Kurvene og beviset for at de står i rekkefølge (se `thcKurver.ts`).
@@ -131,6 +131,18 @@ describe('rekkefølgen for redigerte kurver', () => {
     const x = brudd?.ved === 'ircak' ? brudd.ircak : Number.NaN
     expect(utskillelsesrate(a, x)).toBeLessThan(utskillelsesrate(b, x))
     expect(bruddNaer(a, b, [x], [0.01, 0.1, 1])).toBe(true)
+  })
+
+  it('viser IRCAK der rekkefølgen brytes, med to gjeldende sifre', () => {
+    expect([35.65, 1234, 0.0012345, 9.96, 0.1, 1.23e-7, 4.5e25].map(visIrcak)).toEqual([
+      '36',
+      '1200',
+      '0.0012',
+      '10.0',
+      '0.10',
+      '1.2e-7',
+      '4.5e25',
+    ])
   })
 
   it('avviser kurver med lik langsom fase og ulik rask fase — de krysser alltid ved lave verdier', () => {
