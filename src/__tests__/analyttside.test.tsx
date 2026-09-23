@@ -808,9 +808,21 @@ describe('fortolkningsreglene', () => {
     return { user, ...verdier }
   }
 
+  /** Seksjonen «Fortolkning», åpnet. Den er lukket når siden vises. */
+  async function apneFortolkning(user = userEvent.setup()) {
+    const seksjon = await screen.findByRole('region', { name: 'Fortolkning' })
+    const knapp = within(seksjon).getByRole('button', { name: 'Fortolkning' })
+    expect(knapp.getAttribute('aria-expanded')).toBe('false')
+    await user.click(knapp)
+    return seksjon
+  }
+
   it('viser reglene som en tabell, med ringegrensen og cut-off', async () => {
     vis('AMTNORSUM')
-    const seksjon = await screen.findByRole('region', { name: 'Fortolkning' })
+    // Lukket sier seksjonen hva den inneholder.
+    expect((await screen.findByText('3 områder · Ringegrense 1800 nmol/L · Cut-off')).textContent).toBeTruthy()
+    const seksjon = await apneFortolkning()
+    expect(seksjon.id).toBe('panel-fortolkning')
     const rader = within(seksjon)
       .getAllByRole('row')
       .slice(1)
@@ -828,8 +840,12 @@ describe('fortolkningsreglene', () => {
   it('simulerer en verdi på og rundt grensene, og cut-off', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM')
-    const seksjon = await screen.findByRole('region', { name: 'Fortolkning' })
-    const felt = within(seksjon).getByLabelText('Målt konsentrasjon (nmol/L)')
+    const seksjon = await apneFortolkning(user)
+    // Simulatoren er et detaljkort i seksjonen, med sin egen adresse.
+    const simulator = within(seksjon).getByRole('group', { name: 'Simulator' })
+    expect(simulator.id).toBe('panel-fortolkning--simulator')
+    await user.click(within(simulator).getByRole('button', { name: 'Simulator' }))
+    const felt = within(simulator).getByLabelText('Målt konsentrasjon (nmol/L)')
     const svar = () => seksjon.querySelector('.regler__svar')!.textContent
 
     await user.type(felt, '1799,5')

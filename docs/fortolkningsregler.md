@@ -244,10 +244,13 @@ ikke tar inn noe fra databasen eller faginnholdet.
 
 ## På analyttsiden
 
-Regelsettet vises på analyttsiden for koden, under panelene, som
-«Fortolkning»: en tabell med konsentrasjonen, kommentaren og «Ring rekvirent»
-— de samme radene, fargene og tekstene som knappene på steg 2 — med
-ringegrensen under. Under tabellen er **simulatoren**: en konsentrasjon inn,
+Regelsettet vises på analyttsiden for koden, under panelene, som seksjonen
+«Fortolkning» i den felles seksjonsmodellen (`docs/seksjoner.md`, adressen
+`#/analytt/KODE/fortolkning`). Lukket sier den hvor mange områder det er, og
+ringegrensen og cut-off når de finnes. Åpnet viser den en tabell med
+konsentrasjonen, kommentaren og «Ring rekvirent» — de samme radene, fargene og
+tekstene som knappene på steg 2 — med ringegrensen under. Under tabellen er
+detaljkortet **Simulator** (`…/fortolkning/simulator`): en konsentrasjon inn,
 og ut intervallet den treffer, nivået, kommentaren og handlingen. Den bruker
 `regelsettvalg` og `finnRegel`, altså nøyaktig det steg 2 gir, og kan også
 prøve «Til stede under cut-off».
@@ -280,7 +283,8 @@ eller lagre over deres. Publiseringen skjer med resten av siden, kommentarene
 før regelsettet, og oppsummeringen før den sier hva som endres. «Sist
 redigert» åpner historikken, der en tidligere revisjon kan sammenlignes og
 gjenopprettes som en ny (se `docs/faginnhold.md`): for regelsettet, der
-kommentarene vises med navnet, og for hver kommentar for seg, ord for ord.
+kommentarene vises med navnet, og for hver kommentar for seg, ord for ord, i
+detaljkortet «Historikken for hver kommentar».
 
 ## Når noe skal endres
 
