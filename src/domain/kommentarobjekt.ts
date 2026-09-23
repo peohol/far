@@ -17,9 +17,14 @@
 export interface Kommentarinnhold {
   /** Internt navn, så kommentaren kan finnes igjen i redigeringen. */
   navn: string
-  /** Ren tekst: det er den som kopieres. */
+  /** Ren tekst på én linje: det er den som kopieres. */
   tekst: string
-  /** Plassholderne teksten kan bruke, f.eks. `{nivå}`. Tom for de fleste. */
+  /**
+   * Plassholderne teksten bruker, f.eks. `{nivå}` — nøyaktig disse, verken
+   * flere eller færre. Tom for de fleste. Settes når kommentaren opprettes og
+   * endres ikke siden, så et regelsett som har godtatt kommentaren, kan stole
+   * på den også etter senere tekstendringer.
+   */
   plassholdere: string[]
 }
 
@@ -40,13 +45,18 @@ export function validerKommentar(innhold: Kommentarinnhold): string[] {
   const feil: string[] = []
   if (!ren(innhold.navn)) feil.push('Kommentaren mangler navn eller har mellomrom i endene.')
   if (!ren(innhold.tekst)) feil.push('Kommentaren mangler tekst eller har mellomrom i endene.')
+  if (/[\r\n]/.test(innhold.tekst)) feil.push('Kommentaren må stå på én linje.')
   if (innhold.tekst.length > 4000) feil.push('Kommentaren kan ha høyst 4000 tegn.')
   for (const p of innhold.plassholdere) {
     if (!/^\{[^{}\s][^{}]*\}$/.test(p)) feil.push(`Ugyldig plassholder «${p}».`)
   }
   if (new Set(innhold.plassholdere).size !== innhold.plassholdere.length) feil.push('En plassholder står to ganger.')
-  for (const p of plassholdereI(innhold.tekst)) {
+  const brukt = plassholdereI(innhold.tekst)
+  for (const p of brukt) {
     if (!innhold.plassholdere.includes(p)) feil.push(`Teksten bruker plassholderen ${p}, som ikke er tillatt.`)
+  }
+  for (const p of innhold.plassholdere) {
+    if (!brukt.includes(p)) feil.push(`Teksten mangler plassholderen ${p}.`)
   }
   return feil
 }
