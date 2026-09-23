@@ -641,6 +641,23 @@ describe('sletting av referanser', () => {
     expect(await revisjoner(ref.id)).toHaveLength(2)
   })
 
+  it('låser objektet før referanseraden, både når den slettes og når den siteres', async () => {
+    // Databasen i testene har bare én forbindelse, så en sletting og en ny
+    // sitering i samme øyeblikk kan ikke spilles av her. Uten felles
+    // låserekkefølge kunne de vente på hverandre til Postgres avbrøt den ene
+    // med en vranglås (40P01). Gjenskapt, og rettelsen prøvd, med to samtidige
+    // økter mot en vanlig Postgres 16.
+    const kilde = async (navn: string) =>
+      (await fasit<{ kilde: string }>(`select prosrc as kilde from pg_proc where proname = $1`, [navn]))[0]!.kilde
+        .replace(/\s+/g, ' ')
+    expect(await kilde('krev_gyldig_kobling')).toMatch(
+      /from public\.redigerbare_objekter o where o\.id = new\.referanse_id for key share;.*from public\.referanser r .* for share;/,
+    )
+    expect(await kilde('slett_referanse')).toMatch(
+      /from public\.redigerbare_objekter o where o\.id = objekt for update;.*delete from public\.objekttilstander/,
+    )
+  })
+
   it('åpner ikke historikken for sletting utenom slett_referanse', async () => {
     const ref = await nyReferanse()
     const side = await nySide()

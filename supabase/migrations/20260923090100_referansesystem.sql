@@ -175,8 +175,14 @@ begin
       using errcode = '22023';
   end if;
 
-  -- Låsen gjør at en samtidig arkivering enten venter på denne siteringen og
-  -- ser den, eller er ferdig før og blir sett her.
+  -- Låsene tas i samme rekkefølge som slett_referanse tar dem: først
+  -- objektet — samme nøkkellås som fremmednøkkelen ellers tar etterpå — så
+  -- referanseraden. Ellers kunne en sletting og en ny sitering av samme
+  -- referanse vente på hverandre i en vranglås.
+  --
+  -- Låsen på referanseraden gjør at en samtidig arkivering enten venter på
+  -- denne siteringen og ser den, eller er ferdig før og blir sett her.
+  perform 1 from public.redigerbare_objekter o where o.id = new.referanse_id for key share;
   perform 1 from public.referanser r
   where r.objekt_id = new.referanse_id and r.tilstand = new.tilstand
   for share;
@@ -539,7 +545,8 @@ declare
   gjeldende public.objektrevisjoner := intern.laas_utkast(objekt, forventet_revisjon);
 begin
   -- Låsen holder unna en samtidig lagring som ville sitert referansen:
-  -- koblingen dit venter på den, og avvises når referansen er borte.
+  -- koblingen dit venter på den, og avvises når referansen er borte. Objektet
+  -- låses før referanseraden, i samme rekkefølge som krev_gyldig_kobling.
   perform 1 from public.redigerbare_objekter o where o.id = objekt for update;
 
   if (select o.type from public.redigerbare_objekter o where o.id = objekt) <> 'referanse' then
