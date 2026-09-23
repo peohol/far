@@ -78,6 +78,11 @@ hver tekst står én gang (`src/domain/scenariovisning.ts`). Med mer enn ett sce
 utfallet (`Rusutfall`) som fortolkningsmodulen, kjører `kjorScenarier` og
 markerer scenariet som traff.
 
+Reglene er seksjonen `fortolkning` på siden (`docs/seksjoner.md`), lukket fra
+start, med antall scenarier og grensene i oppsummeringen. Kommentartekstene
+(`tekster`) og simulatoren (`simulator`) er detaljkort i den, så en
+direktelenke som `#/analytt/DIAZ/fortolkning/simulator` åpner simulatoren.
+
 ## Lagringen
 
 Objekttypen `scenarioregelsett` (`supabase/migrations/*_scenarioregelsett.sql`)

@@ -388,6 +388,7 @@ export default function App() {
             <ScenarioreglerProvider kilde={scenarioregler}>
               <Analyttside
                 kode={rute.kode}
+                sted={rute.sted}
                 katalog={katalog}
                 onApneFortolkning={apneFortolkning}
                 onLukk={lukkInfoside}

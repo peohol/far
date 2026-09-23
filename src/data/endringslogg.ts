@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.14.0',
+    versjon: '1.15.0',
     dato: '2026-09-23',
     sammendrag: 'Kommenteringen av rusmidler bruker reglene og tekstene som er publisert i databasen',
     typer: ['Funksjonalitet'],
@@ -24,15 +24,31 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.13.0',
+    versjon: '1.14.0',
     dato: '2026-09-23',
     sammendrag: 'Fortolkningsreglene for rusmidler vises på analyttsidene, med en simulator',
     typer: ['Funksjonalitet'],
     omfang: 'Mindre omfang',
     punkter: [
-      'Analyttsidene for stoffene med ruspotensial i serum har fått et panel med fortolkningsreglene. Panelet viser hvilke analytter som må være påvist, grensene som gjelder, hvilke kommentarer som brukes og hvilke koder de limes inn på.',
-      'Diazepamgruppen, tramadol, kodein/morfin og amfetamin/metamfetamin har i tillegg «Prøv reglene». Der krysser du av og fyller inn tall slik som i fortolkningen, og ser hvilket scenario som gjelder og hvor kommentarene havner.',
-      'Reglene i panelet er kontrollert mot dagens fortolkning for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. De gir nøyaktig samme kommentarer, plassering og beskjeder. Kommenteringen er uendret.',
+      'Analyttsidene for stoffene med ruspotensial i serum har fått en seksjon med fortolkningsreglene. Den viser hvilke analytter som må være påvist, grensene som gjelder, hvilke kommentarer som brukes og hvilke koder de limes inn på. Lukket viser den antall scenarier og grensene.',
+      'Diazepamgruppen, tramadol, kodein/morfin og amfetamin/metamfetamin har i tillegg «Prøv reglene», som åpnes for seg i seksjonen. Der krysser du av og fyller inn tall slik som i fortolkningen, og ser hvilket scenario som gjelder og hvor kommentarene havner.',
+      'Reglene i seksjonen er kontrollert mot dagens fortolkning for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. De gir nøyaktig samme kommentarer, plassering og beskjeder. Kommenteringen er uendret.',
+    ],
+  },
+  {
+    versjon: '1.13.0',
+    dato: '2026-09-23',
+    sammendrag: 'Informasjonssidene er delt i seksjoner som åpnes og lukkes',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Delene av informasjonssiden (viktige data, farmakodynamikk, dosering, indikasjon, farmakokinetikk og serumkonsentrasjoner) er nå seksjoner som åpnes og lukkes med et trykk på overskriften. En lukket seksjon viser en kort oppsummering av hva den inneholder.',
+      'Identiteten øverst står alltid fram, og viktige data er åpen når siden åpnes.',
+      'Kortene i farmakokinetikken åpnes hver for seg inne i seksjonen.',
+      '«Åpne alle» og «Lukk alle» står øverst på siden. I redigeringsmodus åpnes alt.',
+      'Søket på siden finner også tekst i lukkede seksjoner, og viser hvor mange treff hver av dem har. Går du til et treff, åpnes seksjonen og treffet vises. Nettleserens eget søk finner også teksten.',
+      'En adresse kan peke rett på en seksjon eller et kort, og siden åpner det.',
+      'Innholdet er det samme som før, bare ordnet annerledes. Kommenteringen, kommentartekstene og fortolkningsreglene er uendret.',
     ],
   },
   {

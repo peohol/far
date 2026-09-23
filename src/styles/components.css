@@ -2999,19 +2999,14 @@ details[open] > .detalj__kropp {
   margin: 0;
 }
 
-.infokort__kort {
+/* Hvert kort er et detaljkort (`seksjoner.css`), som tegner rammen selv.
+   Ankeret søket peker på, er innholdet i kortet. */
+.infokort__innhold {
   display: flex;
   flex-direction: column;
   gap: var(--rom-2);
-  padding: var(--rom-3);
-  border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-m);
+  width: 100%;
   scroll-margin-block: var(--rom-4);
-}
-
-.infokort__tittel {
-  font-size: var(--tekst-s);
-  font-weight: var(--vekt-tung);
 }
 
 /* Panel 7: tabellen. Ruller sidelengs på smale skjermer i stedet for å
@@ -3364,7 +3359,8 @@ details[open] > .detalj__kropp {
 }
 
 /* --- Fortolkningsreglene på informasjonssiden ----------------------------
-   Scenarioreglene for rusmiddelmodulene, og simulatoren under dem. Hvert
+   Scenarioreglene for rusmiddelmodulene, i seksjonen «fortolkning», med
+   kommentartekstene og simulatoren som detaljkort. Hvert
    scenario er en rad: hva som må være påvist og gjelde til venstre, hva
    fortolkningen gir til høyre. På smal skjerm legger de seg under hverandre. */
 .regler__ingress {
@@ -3514,21 +3510,6 @@ details[open] > .detalj__kropp {
   letter-spacing: 0;
   text-transform: none;
   font-weight: var(--vekt-normal);
-}
-
-.simulator {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-3);
-  width: 100%;
-  padding-top: var(--rom-3);
-  border-top: var(--kant) solid var(--linje);
-}
-
-.simulator__tittel {
-  font-size: var(--tekst-m);
-  font-weight: var(--vekt-medium);
-  color: var(--blekk);
 }
 
 .simulator__resultat {

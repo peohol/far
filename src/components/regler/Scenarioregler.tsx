@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   rusModulFor,
   rusVerdifelter,
@@ -18,10 +18,11 @@ import {
 import { beskrivForhold, beskrivRegelsett, formaterAndel, type Scenariobeskrivelse } from '../../domain/scenariovisning'
 import type { Analyte } from '../../types'
 import { Button } from '../Button'
-import { Details } from '../Details'
 import { Rusutfall } from '../Rusutfall'
 import { Rusvalg } from '../Rusvalg'
 import { Uthev } from '../Uthev'
+import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
+import { antall, ramsOpp } from '../../faginnhold/oppsummering'
 import { useScenarioreglerkilde } from './Scenarioreglerkilde'
 
 /**
@@ -58,21 +59,26 @@ export interface ScenarioreglerProps {
  * tall, og se hvilket scenario som gjelder og hvilke kommentarer som havner på
  * hvilke koder. Simulatoren spør og svarer som fortolkningsmodulen, men har
  * ingenting å kopiere.
+ *
+ * Reglene er seksjonen `fortolkning` på siden, og kommentartekstene og
+ * simulatoren detaljkort i den (`docs/seksjoner.md`).
  */
 export function Scenarioregler({ modul, regelsett, kommentarer }: ScenarioreglerProps) {
-  const overskrift = useId()
   const beskrivelse = useMemo(() => beskrivRegelsett(regelsett, kommentarer), [regelsett, kommentarer])
   const [inndata, setInndata] = useState<RusInndata>(TOM_RUS_INNDATA)
   const treff = useMemo(() => provKjor(regelsett, kommentarer, inndata), [regelsett, kommentarer, inndata])
   const simulerbar = regelsett.scenarier.length > 1
 
   return (
-    <section className="kort kort--start infopanel regler" aria-labelledby={overskrift}>
-      <div className="infopanel__hode">
-        <h2 id={overskrift} className="infopanel__tittel">
-          <Uthev tekst="Fortolkningsregler" />
-        </h2>
-      </div>
+    <Seksjon
+      id="fortolkning"
+      tittel={<Uthev tekst="Fortolkningsregler" />}
+      oppsummering={ramsOpp([
+        antall(beskrivelse.scenarier.length, 'scenario', 'scenarier'),
+        ...beskrivelse.grenser.map((g) => `${g.navn}: ${g.prosent}`),
+      ])}
+      className="regler"
+    >
       <p className="regler__ingress">
         <Uthev
           tekst={
@@ -107,7 +113,11 @@ export function Scenarioregler({ modul, regelsett, kommentarer }: Scenarioregler
         ))}
       </ol>
 
-      <Details summary={beskrivelse.tekster.length > 1 ? 'Kommentartekstene' : 'Kommentarteksten'}>
+      <Detaljkort
+        id="tekster"
+        tittel={beskrivelse.tekster.length > 1 ? 'Kommentartekstene' : 'Kommentarteksten'}
+        oppsummering={antall(beskrivelse.tekster.length, 'tekst', 'tekster')}
+      >
         <ol className="regeltekster">
           {beskrivelse.tekster.map((t, i) => (
             <li key={t.id} className="regeltekst">
@@ -121,7 +131,7 @@ export function Scenarioregler({ modul, regelsett, kommentarer }: Scenarioregler
             </li>
           ))}
         </ol>
-      </Details>
+      </Detaljkort>
 
       {simulerbar && (
         <Simulator
@@ -133,7 +143,7 @@ export function Scenarioregler({ modul, regelsett, kommentarer }: Scenarioregler
           onEndre={setInndata}
         />
       )}
-    </section>
+    </Seksjon>
   )
 }
 
@@ -241,20 +251,21 @@ function Simulator({
   treff: Scenariotreff | null
   onEndre: (inndata: RusInndata) => void
 }) {
-  const overskrift = useId()
   const felter = rusVerdifelter(modul, verdifelterFor(regelsett, inndata.pavist))
   const nummer = treff?.scenario ? beskrivelse.findIndex((b) => b.scenario === treff.scenario) + 1 : 0
 
   return (
-    <section className="simulator" aria-labelledby={overskrift}>
-      <div className="infopanel__hode">
-        <h3 id={overskrift} className="simulator__tittel">
-          Prøv reglene
-        </h3>
+    <Detaljkort
+      id="simulator"
+      tittel="Prøv reglene"
+      oppsummering={ramsOpp(modul.analytter.map((a) => a.kode))}
+      handlinger={
         <Button variant="subtle" className="redigeringsknapp" onClick={() => onEndre(TOM_RUS_INNDATA)}>
           Nullstill
         </Button>
-      </div>
+      }
+      className="simulator"
+    >
       <p className="regler__ingress">
         Kryss av og fyll inn tall slik som i fortolkningen. Scenariet som gjelder, markeres i lista over.
       </p>
@@ -293,7 +304,7 @@ function Simulator({
           />
         )}
       </div>
-    </section>
+    </Detaljkort>
   )
 }
 
