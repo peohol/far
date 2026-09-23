@@ -1,21 +1,28 @@
 /**
  * Formen på det redigerbare faginnholdet, slik databasen lagrer det.
  *
- * Informasjonsside, laboratorieanalytt, innholdselement og referanse er hver
- * sin objekttype. Hvert objekt har en stabil ID, et utkast og eventuelt en
- * publisert utgave, og en historikk der hver endring er en egen revisjon med
- * et komplett øyeblikksbilde. Bakgrunnen står i `docs/faginnhold.md`.
- *
- * THC-syreregelsettet er også en objekttype; formen står i
- * `src/domain/thcRegelsett.ts`.
+ * Informasjonsside, laboratorieanalytt, innholdselement, referanse,
+ * THC-syreregelsett og kommentar er hver sin objekttype. Hvert objekt har en
+ * stabil ID, et utkast og eventuelt en publisert utgave, og en historikk der
+ * hver endring er en egen revisjon med et komplett øyeblikksbilde. Bakgrunnen
+ * står i `docs/faginnhold.md`; formen på THC-syreregelsettet i
+ * `src/domain/thcTekster.ts` og `thcRegelsett.ts`.
  *
  * Verdiene under står også i migrasjonen som oppretter tabellene.
  * `src/__tests__/faginnhold.test.ts` kontrollerer at de stemmer overens.
  */
 
-import type { ThcRegelsett } from '../domain/thcRegelsett'
+import type { Kommentarinnhold } from '../domain/kommentarobjekt'
+import type { ThcRegelsettinnhold } from '../domain/thcTekster'
 
-export const OBJEKTTYPER = ['infoside', 'laboratorieanalytt', 'innholdselement', 'referanse', 'thc_regelsett'] as const
+export const OBJEKTTYPER = [
+  'infoside',
+  'laboratorieanalytt',
+  'innholdselement',
+  'referanse',
+  'thc_regelsett',
+  'kommentar',
+] as const
 export type Objekttype = (typeof OBJEKTTYPER)[number]
 
 /** Utkastet er arbeidsversjonen; det publiserte er det alle innloggede ser. */
@@ -103,7 +110,8 @@ export interface Innhold {
   laboratorieanalytt: Laboratorieanalyttinnhold
   innholdselement: Innholdselementinnhold
   referanse: Referanseinnhold
-  thc_regelsett: ThcRegelsett
+  thc_regelsett: ThcRegelsettinnhold
+  kommentar: Kommentarinnhold
 }
 
 /**

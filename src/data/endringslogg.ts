@@ -12,14 +12,28 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.11.2',
+    versjon: '1.12.1',
     dato: '2026-09-23',
-    sammendrag: 'Reglene for THC-syre ligger nå i databasen',
+    sammendrag: 'Reglene og kommentartekstene for THC-syre ligger nå i databasen',
     typer: ['Funksjonalitet'],
     omfang: 'Mindre omfang',
     punkter: [
-      'Kurvene, grensene, sikkerhetsmarginene og kommentartekstene for THC-syre er lagt inn i databasen med historikk, utkast og publisering, og kontrolleres der før de kan lagres. Det er grunnlaget for å kunne redigere dem i appen.',
-      'Fortolkningen er uendret. Den bruker fortsatt de samme reglene som før, og de lagrede verdiene er kontrollert å være nøyaktig de samme.',
+      'Kurvene, grensene og sikkerhetsmarginene for THC-syre er lagt inn i databasen med historikk, utkast og publisering, og kontrolleres der før de kan lagres, også at kurvene står i riktig rekkefølge for alle prøveverdier.',
+      'Kommentartekstene for THC-syre er lagt inn som egne tekster, og reglene sier hvilken tekst som brukes hvor. En tekst kan rettes uten å røre reglene.',
+      'Fortolkningen er uendret. Den bruker fortsatt de samme reglene som før, og de lagrede verdiene og tekstene er kontrollert å være nøyaktig de samme.',
+    ],
+  },
+  {
+    versjon: '1.12.0',
+    dato: '2026-09-23',
+    sammendrag: 'Fortolkningskommentarene kan lagres som egne tekster med historikk',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Neste steg mot redigerbare fortolkningsregler: hver kommentartekst kan nå lagres for seg, med egen historikk, utkast og publisering. Ingenting av dette er synlig ennå, og kommenteringen er uendret.',
+      'Reglene peker på tekstene i stedet for å ha sin egen kopi. Samme tekst kan brukes av flere regler og rettes ett sted.',
+      'En tekst står på én linje og limes inn som den er. Et regelsett kan ikke publiseres før tekstene det bruker er publisert.',
+      'Tekster med innfylte felt, som konsentrasjonsnivå eller dato for forrige prøve, beholder de samme feltene gjennom alle endringer, så en regel som bruker teksten, alltid får fylt dem inn.',
     ],
   },
   {
