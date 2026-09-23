@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.12.0',
+    versjon: '1.14.0',
     dato: '2026-09-23',
     sammendrag: 'OUSFAR har fått sin egen kopi av de offentlige legemiddeldataene',
     typer: ['Funksjonalitet'],
@@ -22,6 +22,36 @@ export const ENDRINGSLOGG: Endring[] = [
       'En oppdatering tas bare inn når hele uttrekket er lest uten feil. Mislykkes den, vises de siste gyldige dataene som før.',
       'Preparater som forsvinner fra FEST, merkes som utgått i stedet for å slettes.',
       'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
+    versjon: '1.13.0',
+    dato: '2026-09-23',
+    sammendrag: 'Informasjonssidene er delt i seksjoner som åpnes og lukkes',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Delene av informasjonssiden (viktige data, farmakodynamikk, dosering, indikasjon, farmakokinetikk og serumkonsentrasjoner) er nå seksjoner som åpnes og lukkes med et trykk på overskriften. En lukket seksjon viser en kort oppsummering av hva den inneholder.',
+      'Identiteten øverst står alltid fram, og viktige data er åpen når siden åpnes.',
+      'Kortene i farmakokinetikken åpnes hver for seg inne i seksjonen.',
+      '«Åpne alle» og «Lukk alle» står øverst på siden. I redigeringsmodus åpnes alt.',
+      'Søket på siden finner også tekst i lukkede seksjoner, og viser hvor mange treff hver av dem har. Går du til et treff, åpnes seksjonen og treffet vises. Nettleserens eget søk finner også teksten.',
+      'En adresse kan peke rett på en seksjon eller et kort, og siden åpner det.',
+      'Innholdet er det samme som før, bare ordnet annerledes. Kommenteringen, kommentartekstene og fortolkningsreglene er uendret.',
+    ],
+  },
+  {
+    versjon: '1.12.0',
+    dato: '2026-09-23',
+    sammendrag: 'Informasjonssidene for antidepressiver og antipsykotika har fått innhold',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'De 35 sidene for antidepressiver, antipsykotika og lamotrigin er fylt med fagstoffet fra Psykofarmaka-dokumentet: dosering, farmakodynamikk, referanseområde, toksisk område, komatøs/fatal konsentrasjon, halveringstid, steady state, farmakokinetikk og serumkonsentrasjoner ved ulike doser.',
+      'Et kort sammendrag av de godkjente indikasjonene er hentet fra Felleskatalogen, med lenke til produktsidene.',
+      'Preparatnavn vises ikke foreløpig. De skal hentes automatisk fra offentlige legemiddeldata i stedet for å føres inn for hånd.',
+      'Historikken viser hvor innholdet kom fra, for eksempel «Importert fra Psykofarmaka.pdf, side 7».',
+      'Ringegrensen, måleområdet og spørsmål-og-svar-notatene fra dokumentet er ikke tatt med. Kommenteringen og fortolkningsreglene er uendret.',
     ],
   },
   {

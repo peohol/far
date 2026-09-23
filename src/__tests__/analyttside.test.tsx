@@ -132,13 +132,19 @@ function kilde({
   return { leser, lager, kanRedigere }
 }
 
-function vis(kode: string, k = kilde()) {
+function vis(kode: string, k = kilde(), sted?: string[]) {
   const onApneFortolkning = vi.fn()
   const onLukk = vi.fn()
   render(
     <TipsLag>
       <FaginnholdskildeProvider kilde={k}>
-        <Analyttside kode={kode} katalog={katalog} onApneFortolkning={onApneFortolkning} onLukk={onLukk} />
+        <Analyttside
+          kode={kode}
+          sted={sted}
+          katalog={katalog}
+          onApneFortolkning={onApneFortolkning}
+          onLukk={onLukk}
+        />
       </FaginnholdskildeProvider>
     </TipsLag>,
   )
@@ -147,6 +153,7 @@ function vis(kode: string, k = kilde()) {
 
 describe('lesemodus', () => {
   it('viser identiteten, datakortet, teksten og referansene', async () => {
+    const user = userEvent.setup()
     const { leser } = vis('AMTNORSUM')
     expect(await screen.findByText('10–20 nmol/L')).toBeTruthy()
     expect(leser.lesAnalyttside).toHaveBeenCalledWith('AMTNORSUM', 'publisert')
@@ -159,6 +166,9 @@ describe('lesemodus', () => {
     const setning = screen.getByText(/er en sumanalyse og omfatter/).closest('p')!
     expect(setning.textContent).toBe('AMTNORSUM er en sumanalyse og omfatter amitriptylin og nortriptylin (NOR).')
     expect(within(setning).getByRole('link', { name: /NOR/ }).getAttribute('href')).toBe('#/analytt/NOR')
+
+    // Teksten står i en lukket seksjon til den åpnes.
+    await user.click(screen.getByRole('button', { name: 'Farmakodynamikk' }))
 
     // Datakortet (panel 2) siterer A, teksten i panel 3 A og B, panelet B:
     // A blir 1 og B blir 2, og listen nederst følger numrene.
@@ -269,6 +279,66 @@ describe('søket på siden', () => {
     await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'GJENOPPTAKET')
     await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
     expect(document.querySelector('mark.sidetreff')?.textContent).toBe('gjenopptaket')
+  })
+})
+
+describe('seksjonene', () => {
+  /** Knappen som åpner og lukker seksjonen. */
+  const skuffknapp = (navn: string) =>
+    screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
+  const apen = (navn: string) => skuffknapp(navn).getAttribute('aria-expanded') === 'true'
+
+  it('viser viktige data åpent og resten lukket med en oppsummering', async () => {
+    vis('AMTNORSUM')
+    await screen.findByText('10–20 nmol/L')
+    expect(apen('Viktige data')).toBe(true)
+    expect(apen('Farmakodynamikk')).toBe(false)
+    // Oppsummeringen er begynnelsen av teksten, med teksten selv skjult.
+    expect(screen.getByText('Hemmer gjenopptaket')).toBeTruthy()
+    expect(screen.getByText('gjenopptaket', { selector: 'strong' }).closest('[hidden]')).not.toBeNull()
+  })
+
+  it('åpner seksjonen søket finner et treff i, og gjør treffet aktivt', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM')
+    await screen.findByText('10–20 nmol/L')
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'hemmer')
+    await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
+    // Den lukkede seksjonen sier at den har et treff.
+    expect(screen.getByText('1 treff')).toBeTruthy()
+    await user.click(within(screen.getByRole('list', { name: 'Hvor treffene står' })).getByRole('button'))
+    expect(apen('Farmakodynamikk')).toBe(true)
+    expect(document.querySelector('mark.sidetreff--aktiv')?.closest('[hidden]')).toBeNull()
+
+    await user.click(skuffknapp('Farmakodynamikk'))
+    expect(apen('Farmakodynamikk')).toBe(false)
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), '{Enter}')
+    expect(apen('Farmakodynamikk')).toBe(true)
+  })
+
+  it('åpner stedet adressen peker på', async () => {
+    vis('AMTNORSUM', kilde(), ['farmakodynamikk'])
+    await screen.findByText('10–20 nmol/L')
+    await waitFor(() => expect(apen('Farmakodynamikk')).toBe(true))
+  })
+
+  it('åpner og lukker alle seksjonene', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM')
+    await screen.findByText('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Åpne alle' }))
+    expect(apen('Farmakodynamikk') && apen('Viktige data')).toBe(true)
+    await user.click(screen.getByRole('button', { name: 'Lukk alle' }))
+    expect(apen('Farmakodynamikk') || apen('Viktige data')).toBe(false)
+  })
+
+  it('åpner alt i redigeringsmodus, også panelene som bare vises der', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    await screen.findByText('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await screen.findByRole('button', { name: 'Legg til: Dosering' })
+    expect(apen('Dosering') && apen('Farmakodynamikk')).toBe(true)
   })
 })
 
@@ -511,22 +581,28 @@ describe('rikteksteditoren', () => {
 })
 
 describe('kortene i farmakokinetikken', () => {
-  const medKort = (tilstand: Tilstand): Analyttsidedata => {
-    const data = side(tilstand)
-    const kort = (id: string, tittel: string, posisjon: number) =>
-      utgave(id, {
-        infoside: 'hs',
-        panel: 'farmakokinetikk',
-        posisjon,
-        elementtype: 'kinetikkort',
-        data: { tittel, dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Syntetisk' }] }] } },
-      })
-    return { ...data, elementer: [...data.elementer, kort('k1', 'Absorpsjon', 0), kort('k2', 'Metabolisme', 0)] }
-  }
+  /** To kinetikkort, Absorpsjon og Metabolisme, med teksten i `tekster` (eller «Syntetisk»). */
+  const medKort =
+    (tekster: Partial<Record<'k1' | 'k2', string>> = {}) =>
+    (tilstand: Tilstand): Analyttsidedata => {
+      const data = side(tilstand)
+      const kort = (id: 'k1' | 'k2', tittel: string, posisjon: number) =>
+        utgave(id, {
+          infoside: 'hs',
+          panel: 'farmakokinetikk',
+          posisjon,
+          elementtype: 'kinetikkort',
+          data: {
+            tittel,
+            dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: tekster[id] ?? 'Syntetisk' }] }] },
+          },
+        })
+      return { ...data, elementer: [...data.elementer, kort('k1', 'Absorpsjon', 0), kort('k2', 'Metabolisme', 0)] }
+    }
 
   it('flytter et kort, og lagrer bare det som får ny plass', async () => {
     const user = userEvent.setup()
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort }))
+    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort() }))
     await screen.findByText('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Flytt ned: Absorpsjon' }))
@@ -536,9 +612,55 @@ describe('kortene i farmakokinetikken', () => {
     expect(lager.lagreUtkast).toHaveBeenCalledWith('k1', 1, expect.objectContaining({ posisjon: 1 }))
   })
 
+  it('åpner både seksjonen og kortet når søket går til et treff i et lukket kort', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ data: medKort() }))
+    await screen.findByText('10–20 nmol/L')
+    const skuffknapp = (navn: string) =>
+      screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
+    expect(skuffknapp('Farmakokinetikk').getAttribute('aria-expanded')).toBe('false')
+    expect(skuffknapp('Absorpsjon').getAttribute('aria-expanded')).toBe('false')
+
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'syntetisk')
+    const steder = within(await screen.findByRole('list', { name: 'Hvor treffene står' }))
+    await user.click(steder.getByRole('button', { name: 'Farmakokinetikk › Absorpsjon' }))
+
+    expect(skuffknapp('Farmakokinetikk').getAttribute('aria-expanded')).toBe('true')
+    expect(skuffknapp('Absorpsjon').getAttribute('aria-expanded')).toBe('true')
+    expect(skuffknapp('Metabolisme').getAttribute('aria-expanded')).toBe('false')
+    // Treffet er det aktive, og står ikke lenger skjult.
+    const aktivt = document.querySelector('mark.sidetreff--aktiv')!
+    expect(aktivt.closest('[data-skuff="farmakokinetikk/k1"]')).not.toBeNull()
+    expect(aktivt.closest('[hidden]')).toBeNull()
+  })
+
+  it('går til titteltreffet når søket treffer tittelen på et lukket kort', async () => {
+    const user = userEvent.setup()
+    // «metabolisme» står i teksten i Absorpsjon og i tittelen på Metabolisme.
+    vis('AMTNORSUM', kilde({ data: medKort({ k1: 'Syntetisk metabolisme.' }) }))
+    await screen.findByText('10–20 nmol/L')
+    const skuffknapp = (navn: string) =>
+      screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
+
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'metabolisme')
+    expect(await screen.findByText('Treff 1 av 2')).toBeTruthy()
+    const steder = within(await screen.findByRole('list', { name: 'Hvor treffene står' }))
+    await user.click(steder.getByRole('button', { name: 'Farmakokinetikk › Metabolisme' }))
+
+    expect(skuffknapp('Farmakokinetikk').getAttribute('aria-expanded')).toBe('true')
+    expect(skuffknapp('Metabolisme').getAttribute('aria-expanded')).toBe('true')
+    expect(skuffknapp('Absorpsjon').getAttribute('aria-expanded')).toBe('false')
+    // Det aktive treffet er det i tittelen på Metabolisme, og det står synlig.
+    expect(screen.getByText('Treff 2 av 2')).toBeTruthy()
+    const aktivt = document.querySelector('mark.sidetreff--aktiv')!
+    expect(aktivt.textContent?.toLowerCase()).toBe('metabolisme')
+    expect(aktivt.closest('.skuff__knapp')?.closest('[data-skuff="farmakokinetikk/k2"]')).not.toBeNull()
+    expect(aktivt.closest('[hidden]')).toBeNull()
+  })
+
   it('fjerner et kort først etter en bekreftelse, uten å slette det', async () => {
     const user = userEvent.setup()
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort }))
+    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort() }))
     await screen.findByText('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Fjern: Metabolisme' }))
@@ -546,5 +668,45 @@ describe('kortene i farmakokinetikken', () => {
     await user.click(screen.getByRole('button', { name: 'Bekreft: fjern Metabolisme' }))
     await waitFor(() => expect(lager.lagreUtkast).toHaveBeenCalledTimes(1))
     expect(vi.mocked(lager.lagreUtkast).mock.calls[0]![2]).toMatchObject({ panel: 'fjernet', elementtype: 'kinetikkort' })
+  })
+})
+
+describe('innhold hentet fra en kilde', () => {
+  /** Siden etter importen: innhold fra PDF-en og et indikasjonssammendrag fra Felleskatalogen. */
+  function importert(tilstand: Tilstand): Analyttsidedata {
+    const grunn = side(tilstand)
+    const fraKilde = <T,>(u: Utgave<T>, kilde: string): Utgave<T> => ({ ...u, kilde })
+    return {
+      ...grunn,
+      elementer: [
+        fraKilde(grunn.elementer[0]!, 'Importert fra Psykofarmaka.pdf, side 7'),
+        fraKilde(
+          utgave('ind', {
+            infoside: 'hs',
+            panel: 'indikasjon',
+            posisjon: 0,
+            elementtype: 'riktekst',
+            data: {
+              dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Syntetisk indikasjon.' }] }] },
+            },
+          }),
+          'Hentet fra Felleskatalogen 23.09.2026',
+        ),
+      ],
+    }
+  }
+
+  it('viser kilden ved «Sist redigert»', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ data: importert, kanRedigere: true }))
+    // Teksten står både i den lukkede seksjonens oppsummering og i innholdet.
+    await screen.findAllByText('Syntetisk indikasjon.')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    expect(
+      await screen.findByText('Sist redigert av Rita Redaktør 22.09.2026 kl. 14:32 · Importert fra Psykofarmaka.pdf, side 7'),
+    ).toBeTruthy()
+    expect(
+      screen.getByText('Sist redigert av Rita Redaktør 22.09.2026 kl. 14:32 · Hentet fra Felleskatalogen 23.09.2026'),
+    ).toBeTruthy()
   })
 })
