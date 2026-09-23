@@ -1,0 +1,46 @@
+{
+  "referanser": {
+    "reis2009": {
+      "tittel": "Serum concentrations of antidepressant drugs in a naturalistic setting: compilation based on a large therapeutic drug monitoring database",
+      "forfattere": "Reis M et al.",
+      "aar": "2009",
+      "lenke": "https://doi.org/10.1097/ftd.0b013e31819114ea"
+    },
+    "jonsson2019": {
+      "tittel": "A Compilation of Serum Concentrations of 12 Antipsychotic Drugs in a Therapeutic Drug Monitoring Setting",
+      "forfattere": "Jönsson AK et al.",
+      "aar": "2019",
+      "lenke": "https://doi.org/10.1097/FTD.0000000000000585"
+    },
+    "hiemke2017": {
+      "tittel": "Consensus Guidelines for Therapeutic Drug Monitoring in Neuropsychopharmacology: Update 2017",
+      "forfattere": "Hiemke C et al.",
+      "aar": "2018",
+      "lenke": "https://doi.org/10.1055/s-0043-116492"
+    },
+    "schulz2020": {
+      "tittel": "Revisited: Therapeutic and toxic blood concentrations of more than 1100 drugs and other xenobiotics",
+      "forfattere": "Schulz M et al.",
+      "aar": "2020",
+      "lenke": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7201985/"
+    },
+    "referanseomradeprosjektet": {
+      "tittel": "Referanseområdeprosjektet 2005–2008: nasjonale kartleggings- og harmoniseringsprosjekter innen klinisk farmakologi – antidepressiva og antipsykotika",
+      "forfattere": "Diakonhjemmet sykehus og St. Olavs hospital",
+      "aar": "",
+      "lenke": "https://farmakologiportalen.no/nasjonale_referanseomrader/"
+    },
+    "helsebiblioteket-antipsykotika": {
+      "tittel": "Antipsykotika – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/antipsykotika-behandlingsanbefaling-ved-forgiftning"
+    },
+    "helsebiblioteket-tca": {
+      "tittel": "Trisykliske antidepressiva (TCA) – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/trisykliske-antidepressiva-tca-behandlingsanbefaling-ved-forgiftning"
+    }
+  }
+}

@@ -4,6 +4,10 @@ Denne planen beskriver overgangen fra dagens hovedsakelig statiske/hardkodede fa
 
 Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av etter hvert som de er ferdige.
 
+> **Kursendring 23.09.2026.** Preparatnavn og andre legemiddelgrunndata skal ikke lenger kopieres for hånd fra Felleskatalogen. De hentes fra autoritative offentlige legemiddeldata (FEST via Helsedirektoratets HAPI, DMP FHIR eller en kombinasjon) og synkroniseres til en egen, lokal kopi i Supabase (del 23). Stoffsidene går samtidig over til progressiv detaljering: hovedseksjoner som trekkspill med minioppsummering, og detaljkort inne i dem (del 24). Klinisk kuratert innhold forblir OUSFAR-redigert og versjonert.
+>
+> Der eldre deler av planen sier noe annet, gjelder del 23–25. Erstattede deler er merket **Erstattet**. Arbeidspakke 4 er revidert, og arbeidspakke 8–13 er nye. Del 25 sier hvordan de åpne PR-ene og øktene skal tilpasses.
+
 ## Status
 
 - [x] Supabase er etablert.
@@ -11,10 +15,16 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [x] Arbeidspakke 1: fundament for redigerbart faginnhold.
 - [x] Arbeidspakke 2: referansesystem.
 - [x] Arbeidspakke 3: analyttsider og navigasjon.
-- [ ] Arbeidspakke 4: import av psykofarmakainnhold.
+- [ ] Arbeidspakke 4: import av psykofarmakainnhold (revidert 23.09.2026, omarbeides).
 - [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
 - [ ] Arbeidspakke 6: sammensatte analyttgrupper.
 - [ ] Arbeidspakke 7: THC-syre.
+- [ ] Arbeidspakke 8: kartlegging av offentlige legemiddeldatakilder.
+- [ ] Arbeidspakke 9: seksjoner og detaljkort (progressiv detaljering).
+- [ ] Arbeidspakke 10: ekstern legemiddelgrunnmur (lokal kopi og synkronisering).
+- [ ] Arbeidspakke 11: preparater fra eksterne data, ende til ende.
+- [ ] Arbeidspakke 12: flere legemiddeldata der kildene er gode nok.
+- [ ] Arbeidspakke 13: regelvisninger og simulatorer i seksjonsarkitekturen.
 
 ---
 
@@ -105,6 +115,8 @@ Alle informasjonssider bør ha egne URL-er slik at de kan bokmerkes og åpnes di
 
 ## 4. Oppbygning av informasjonssiden
 
+Innholdet i panelene under beholdes, men vises fra arbeidspakke 9 som **hovedseksjoner** i modellen for progressiv detaljering (del 24): lukket med en minioppsummering, åpnet med innholdet og eventuelle detaljkort. «Panel» og «hovedseksjon» betyr det samme i resten av planen. Preparatene blir en egen hovedseksjon med data fra de eksterne kildene (del 23).
+
 ### Panel 1 - Identitet
 
 Vis:
@@ -112,9 +124,11 @@ Vis:
 1. Analyttkode som pille.
 2. Legemiddelkategori som pille, med samme kategorier som dagens sidemeny.
 3. Virkestoff/analyttnavn som hovedoverskrift.
-4. Preparatnavn, alfabetisk sortert.
+4. ~~Preparatnavn, alfabetisk sortert.~~ **Erstattet 23.09.2026:** preparatene vises i hovedseksjonen «Preparater», med data fra de eksterne kildene, gruppert som legemiddelform → preparat → styrker (del 23 og 24).
 
-Preparatnavn skal lagres som strukturerte enkeltoppføringer, ikke som én kommaseparert fritekst.
+~~Preparatnavn skal lagres som strukturerte enkeltoppføringer, ikke som én kommaseparert fritekst.~~ **Erstattet:** preparatnavn er ikke lenger et manuelt redigerbart element (`{ navn: string[] }`). De er strukturerte rader i den synkroniserte kopien av kildedataene.
+
+Identiteten og kritiske varsler skjules ikke i en lukket seksjon.
 
 For sumanalyser skal sammenhengen mellom kode og komponenter forklares tydelig uten å gjøre alle komponentene til hovedanalytt.
 
@@ -144,9 +158,11 @@ Fritekst med begrenset riktekstformatering.
 
 ### Panel 5 - Indikasjon
 
-Kortfattet redaksjonell oppsummering basert på gjeldende preparatomtaler i Felleskatalogen.
+Kortfattet redaksjonell oppsummering av de godkjente indikasjonene.
 
 Hvis ulike preparater har ulike indikasjoner, skal dette representeres korrekt.
+
+**Revidert 23.09.2026:** indikasjonssammendraget er OUSFAR-redigert klinisk innhold, med vanlige kildehenvisninger og vanlig revisjonshistorikk, som annen riktekst. Det har ingen egen «sist kontrollert mot Felleskatalogen»-dato. Sammendragene som ble skrevet i arbeidspakke 4, beholdes der de er faglig nyttige. Gir de eksterne kildene senere strukturerte indikasjoner eller lenker til preparatomtalen (arbeidspakke 8 og 12), vises de ved siden av sammendraget, ikke i stedet for det.
 
 ### Panel 6 - Farmakokinetikk
 
@@ -530,23 +546,15 @@ med kilde og side/posisjon.
 
 ## 16. Felleskatalogen
 
-For antidepressiver og antipsykotika gjøres en separat gjennomgang per virkestoff.
+**Erstattet 23.09.2026** av del 23 (eksterne legemiddeldata).
 
-Hent:
+Den opprinnelige planen var å hente preparatnavn og indikasjoner for hånd fra Felleskatalogen, lagre dem som vanlig redigerbart innhold og vise datoen de sist ble kontrollert. Den modellen brukes ikke lenger:
 
-- eksisterende preparatnavn
-- relevante godkjente indikasjoner
+- Permanente preparatnavnlister kopiert fra Felleskatalogen bygges ikke.
+- «Sist kontrollert mot Felleskatalogen» er ikke en vedlikeholdsmodell for preparatnavn. Aktualiteten er tidspunktet for siste vellykkede synkronisering fra kilden.
+- Preparatnavn og andre legemiddelgrunndata kommer fra autoritative, strukturerte kilder, synkronisert server-side.
 
-Preparatnavn sorteres alfabetisk.
-
-Indikasjoner kondenseres til et kort faglig sammendrag.
-
-Data fra Felleskatalogen skal ikke slås opp live hver gang analyttsiden åpnes. De lagres i OUSFAR med:
-
-- referanse
-- dato sist kontrollert mot Felleskatalogen
-
-Dette er en egen opplysning fra «sist redigert».
+Det som består: indikasjonssammendragene er redaksjonelt klinisk innhold (panel 5). Felleskatalogen kan fortsatt siteres som referanse, som enhver annen kilde.
 
 ---
 
@@ -558,6 +566,8 @@ Det skal finnes to forskjellige søk.
 
 Finner tekst i den åpne analyttsiden og fremhever treff.
 
+Søket indekserer innholdet, ikke det som tilfeldigvis er åpent på skjermen. Treff i lukkede seksjoner og detaljkort finnes derfor også. Når brukeren går til et treff, åpnes riktig hovedseksjon og eventuelt riktig detaljkort, og siden ruller til treffet og markerer det (del 24). Eksterne data på siden, som preparatnavn og styrker, er med i søket.
+
 ### Søk i hele kunnskapsbasen
 
 Søker minst i:
@@ -565,7 +575,7 @@ Søker minst i:
 - analyttnavn
 - laboratoriekoder
 - aliaser
-- preparatnavn
+- preparatnavn (fra de eksterne dataene)
 - paneloverskrifter
 - fritekstinnhold
 - eventuelt kommentarinnhold
@@ -597,6 +607,17 @@ Endelig SQL bestemmes ved implementering, men domenet skal minst kunne represent
 | Revisjon | Historisk snapshot av et redigert logisk objekt |
 | Hendelse | Opprettet, endret, publisert, gjenopprettet osv. |
 
+Eksterne legemiddeldata (del 23) er et eget lag ved siden av dette, med minst:
+
+| Objekt | Ansvar |
+| --- | --- |
+| Eksternt kildeobjekt | Én rad per substans, legemiddel, pakning osv. fra kilden, med kildens stabile ID, uendret slik den ble hentet |
+| Synkroniseringskjøring | Når kilden sist ble hentet, om det lyktes, og hva som ble nytt, endret og utgått |
+| Stoffkobling | Eksplisitt kobling fra en informasjonsside til én eller flere eksterne substans-ID-er, med rolle og hvem som bekreftet den |
+| Lokalt tillegg / lokal skjuling | OUSFARs egne unntak, lagret for seg, aldri som endring av den importerte raden |
+
+Tabellene bestemmes i arbeidspakke 10, ut fra det arbeidspakke 8 finner i de faktiske kildene, ikke ut fra antatte API-felter.
+
 Unngå å redusere alt til én stor, uvalidert JSON-kolonne. Bruk strukturerte tabeller/kolonner for data med klare invarianter; JSON kan brukes der selve domenet faktisk er variabelt.
 
 ---
@@ -610,7 +631,7 @@ Strukturerte felt passer blant annet for:
 - alvorlig/dødelig konsentrasjon
 - halveringstid
 - steady-state-tid
-- preparatnavn
+- preparatnavn, styrker og legemiddelformer (fra de eksterne dataene, del 23)
 - konsentrasjonsintervaller
 - serumkonsentrasjoner ved dose
 
@@ -669,6 +690,158 @@ Derfor:
 - analysemetode/kategori/analyttkode bruker eksisterende pillelogikk
 - innhold organiseres i tydelige paneler/kort
 - kilder, historikk og redigering er lett tilgjengelig uten å dominere siden
+- siden viser ikke alt fullt ut samtidig: hovedseksjonene er trekkspill med minioppsummering, og detaljer ligger i detaljkort (del 24)
+
+---
+
+## 23. Eksterne legemiddeldata
+
+*Ny 23.09.2026. Erstatter del 16.*
+
+### Mål
+
+OUSFAR bruker autoritative offentlige legemiddeldata som synkroniserte grunndata så langt det er faglig og teknisk fornuftig, i stedet for å kopiere dem for hånd.
+
+Kandidatkildene er:
+
+- Helsedirektoratets åpne legemiddeldata, hovedsakelig basert på FEST og oppgitt å oppdateres daglig, blant annet gjennom HAPI (legemidler, pakninger, virkestoff, ATC).
+- DMPs FHIR-tjeneste med strukturert legemiddelinformasjon.
+
+Vi bruker den kilden eller kombinasjonen som faktisk gir best og mest stabil dekning. Det avgjøres i arbeidspakke 8 ut fra faktiske svar og dokumentasjon, ikke på forhånd.
+
+### Hva som hentes
+
+Når kildene faktisk støtter det, og dataene har en plausibel nytte i OUSFAR:
+
+- preparatnavn
+- virkestoff/substans med stabile ID-er
+- styrker
+- legemiddelformer
+- administrasjonsveier
+- pakninger og pakningsstørrelser
+- markedsstatus
+- ATC
+- lenker til preparatomtale/produktside
+- reseptstatus
+- byttbarhet
+- deling, knusing, åpning og annen administrasjonsinformasjon
+- andre relevante strukturerte grunndata
+- strukturert interaksjonsinformasjon, dersom det finnes en egnet autoritativ kilde
+
+Data tas ikke inn bare fordi de finnes.
+
+### Hva som forblir OUSFAR-redigert
+
+Klinisk kuratert innhold forblir redigert og versjonert i OUSFAR, med modellen i del 5–8 og 13: referanseområder, toksiske områder, klinisk dosering, farmakokinetiske og farmakodynamiske vurderinger, serumkonsentrasjoner, indikasjonssammendrag, kommentarer og fortolkningsregler. Unntak gjøres bare når det finnes en klart bedre autoritativ modell for et konkret felt, og det besluttes da for det feltet.
+
+### Arkitektur
+
+- **Ingen kall fra nettleseren til kildene.** Nettleseren leser bare den lokale kopien i Supabase.
+- **Server-side synkronisering** til en lokal kopi i Supabase: kildens stabile ID på hver rad, kildedataene i strukturerte tabeller, og tidspunktet for siste vellykkede synkronisering.
+- **Idempotent:** samme kildedata to ganger gir samme resultat. Nye, endrede og utgåtte produkter håndteres eksplisitt; et utgått produkt merkes som utgått, det slettes ikke lydløst.
+- **Siste gyldige data beholdes** når kilden feiler eller svarer med noe ufullstendig. En feilet kjøring registreres, men erstatter ikke det som var.
+- **Hemmeligheter** (API-nøkler og tjenestenøkkelen som skriver til databasen) finnes bare server-side, aldri i klienten eller i repoet.
+- **Eget lag.** De eksterne dataene skrives ikke som revisjoner av det redaksjonelle faginnholdet (del 7) og går ikke gjennom utkast/publisering. Sporbarheten er kilden, kildens ID og synkroniseringskjøringen.
+- **Lokale unntak**, hvis de blir nødvendige: `eksterne data + lokale tillegg − lokale skjulinger`. Tilleggene og skjulingene er egne, versjonerte OUSFAR-objekter. Den importerte originalraden muteres aldri.
+- **Kildeangivelse** og lisensvilkår følges slik arbeidspakke 8 dokumenterer dem, og vises på siden der dataene brukes.
+
+Hvor jobben kjører (for eksempel en planlagt serverfunksjon eller en planlagt jobb i Supabase), velges i arbeidspakke 10 ut fra kildenes størrelse, format og autentisering.
+
+### Stabil kobling mellom stoffsider og eksterne data
+
+Koblingen mellom en informasjonsside og de eksterne dataene er eksplisitt: informasjonssiden peker på én eller flere eksterne substans-ID-er, med en rolle. Den matches aldri bare på tekstnavn.
+
+- Navnelikhet kan gi **forslag**, men en kobling tas i bruk først når en administrator har bekreftet den. Usikre koblinger gjøres ikke automatisk.
+- **Salter og estere** (f.eks. hydroklorid, dekanoat) knyttes til siden for virkestoffet, med saltformen synlig på preparatet.
+- **Metabolitter** (f.eks. nortriptylin fra amitriptylin, O-desmetylvenlafaksin fra venlafaksin) får bare preparater når metabolitten selv er et markedsført virkestoff, og da på sin egen side. Moderstoffets preparater vises ikke som metabolittens.
+- **Sumanalyser** (f.eks. `AMTNORSUM`) viser preparatene for hovedsidens virkestoff. Komponentene har sine egne sider med sine egne preparater.
+- **Kombinasjonspreparater og flere virkestoffer** vises på siden for hvert virkestoff de inneholder, tydelig merket som kombinasjon med de øvrige virkestoffene.
+- **Samme virkestoff i flere former** grupperes etter legemiddelform (del 24).
+
+## 24. Progressiv detaljering: seksjoner og detaljkort
+
+*Ny 23.09.2026.*
+
+Stoffsidene viser ikke alt innhold fullt ut samtidig. Én generell, gjenbrukbar modell brukes for hele siden:
+
+1. **Hovedseksjon**, vist som en trekkspillskuff.
+2. **Minioppsummering**, som alltid synes når skuffen er lukket.
+3. **Utvidet innhold**, når skuffen åpnes.
+4. **Detaljkort**, valgfrie, inne i den åpne skuffen, som selv kan åpnes.
+
+Høyst to nivåer: hovedseksjon → detaljkort. Det bygges ikke dypere trekkspillhierarkier.
+
+Eksempel:
+
+`Preparater`
+`12 preparater · 3 legemiddelformer · 6 styrker`
+
+Åpnet:
+
+- Tablett — 4 preparater · 10–75 mg
+- Mikstur — …
+- Injeksjon — …
+
+Et åpnet detaljkort viser de konkrete preparatene, styrkene og eventuelt pakningene. Hovedregelen for preparater er `legemiddelform → preparat → styrker`, med pakninger og annen detaljinformasjon i detaljkortene.
+
+### Bruk
+
+Samme modell brukes for OUSFARs eget innhold og for de eksterne dataene: Viktige data, Dosering, Farmakodynamikk, Farmakokinetikk, Serumkonsentrasjoner, Fortolkning/regler, Preparater, og interaksjoner og andre dynamiske seksjoner når de kommer. Regelvisninger og simulatorer (arbeidspakke 5–7) bruker også denne modellen, ikke egne, store panelvarianter (arbeidspakke 13).
+
+Identiteten (panel 1) og kritiske varsler skjules ikke.
+
+### Krav
+
+- **Minioppsummeringen** avledes av innholdet der det er mulig (antall, spenn, nøkkeltall), slik at den ikke kan bli stående utdatert.
+- **Animasjon:** rask og diskret åpning og lukking, og ingen animasjon når brukeren har valgt redusert bevegelse (`prefers-reduced-motion`).
+- **Adresser:** hver hovedseksjon og hvert detaljkort har en stabil adresse under sidens adresse (`#/analytt/<KODE>`). En direktelenke åpner riktig seksjon og eventuelt detaljkort og ruller dit.
+- **Søk på siden** finner innhold i lukkede seksjoner og detaljkort, og åpner, ruller til og markerer treffet (del 17).
+- **Referanser:** nummereringen følger fortsatt leseordenen (del 6), uavhengig av hva som er åpent eller lukket.
+- **Redigering:** redigeringshandlingene ligger i den åpne seksjonen. Å gå til redigering av et element åpner seksjonen det står i.
+- **Tastatur, mobil og skjermleser:** hovedseksjoner og detaljkort åpnes og lukkes med tastaturet, har riktig tilstand for skjermlesere (åpen/lukket, hva knappen styrer) og fungerer med berøring på små skjermer. Eksisterende hurtigtaster og kort-hopp bevares.
+- **Lyst og mørkt tema** støttes som resten av appen.
+- **Klinisk betydning endres ikke** når dagens sider flyttes over i modellen. Det er de samme dataene, vist på en ny måte.
+
+## 25. Koordinering av pågående arbeid
+
+*Ny 23.09.2026. Oppdateres når PR-ene slås sammen eller lukkes.*
+
+### Felles regler
+
+- **Migrasjoner som alt er kjørt i produksjon, endres aldri.** Alle migrasjonene i de åpne PR-ene under er kjørt mot produksjonsdatabasen, men ingen av dem er på `main` ennå. De skal inn på `main` byte-identiske. Endringer i data eller skjema som alt er i produksjon, gjøres med nye migrasjoner.
+- **`20260923064740_revisjonskilde.sql`** ligger byte-identisk i #35 og #37. Den PR-en som slås sammen først, tar den inn; den andre beholder den identiske kopien (git slår dem sammen uten konflikt). Funksjonaliteten beholdes selv om #35 omarbeides.
+- **Delte filer** som er identiske på flere grener, beholdes identiske til den første PR-en med dem er slått sammen. `src/domain/kommentarobjekt.ts` ligger i #33 og #38. Rettelsen i `src/hooks/useKortHopp.ts` (som alle grenene har) er tatt inn på `main` med denne revisjonen av planen, byte-identisk.
+- **Denne planen** redigeres av flere grener. Ved konflikt: ta `main`s tekst og legg bare inn statusendringene for egen arbeidspakke.
+- **Versjonsnummeret** settes når PR-en er klar til sammenslåing: neste ledige nummer over `main`, etter `docs/endringslogg.md`.
+- **Ny panel-UI:** ingen nye, permanente panelvarianter bygges før seksjonsmodellen (arbeidspakke 9, del 1) er på `main`. Domenearbeid, lagring, validering, historikk og paritetstester fortsetter som før.
+
+### De åpne PR-ene
+
+| PR | Arbeidspakke | Hva | Vurdering | Rebase | UI-tilpasning |
+| --- | --- | --- | --- | --- | --- |
+| #38 | 5–7, felles | Kommentarobjektene | Fortsetter uendret | Ja, på `main` med denne planen og endringsloggen | Ingen UI |
+| #37 | 5 del 1 | Intervallregelsettene i databasen, importen, pariteten | Fortsetter uendret | Ja, på `main`; planstatus etter reglene over | Ingen UI |
+| #39 | 5 del 2 | Redigering, simulator og historikk for konsentrasjonsreglene | Fortsetter. Historikkvinduet er generelt og beholdes | Ja, etter #37 | Regelvisningen og simulatoren flyttes inn i seksjonsmodellen i arbeidspakke 13. Ikke utvid panelet videre |
+| #33 | 6 del 1 | Scenariomotoren, regelsettene og simulatoren | Fortsetter | Ja, på `main` etter #38 | Scenarioregler og simulator flyttes inn i seksjonsmodellen i arbeidspakke 13. Ikke utvid panelet videre |
+| #34 | 7 del 1 | THC-motoren, reglene og tekstene som data | Fortsetter uendret | Ja, etter #33 | Ingen UI |
+| #36 | 7 del 2 | THC-regelsettet lagret i Supabase | Fortsetter uendret | Ja, etter #34 | Ingen UI. THC-editoren og -simulatoren bygges i seksjonsmodellen (arbeidspakke 13) |
+| #35 | 4 | Psykofarmakainnholdet | Omarbeidet etter arbeidspakke 4 under; den gamle formen merges ikke | Ja, på `main` | Preparat- og kontrolldatovisningen fjernes; innholdet vises gjennom seksjonsmodellen når arbeidspakke 9 er på `main` |
+
+**Rekkefølge:** denne planen først, så #38, deretter #33 og #37 (i hvilken som helst rekkefølge), #39 etter #37, #34 etter #33, og #36 etter #34. Den omarbeidede #35 kan slås sammen når den er grønn, uavhengig av de andre. Arbeidspakke 9 del 2 (flytting av dagens sider) flytter det som er på `main` når den starter; paneler som kommer senere, flyttes av eieren i arbeidspakke 13.
+
+### Øktene
+
+| Økt | Eier |
+| --- | --- |
+| «Kurskorrigering og plan» | Denne planen og koordineringen i del 25 |
+| «Fullfør arbeidspakke 4» | Arbeidspakke 4 (omarbeidingen av #35) |
+| «Arbeidspakke 5 – enkle regler» | Arbeidspakke 5 (#37, #39, del 3), og sin del av arbeidspakke 13 |
+| «Arbeidspakke 6 – analyttgrupper» | Arbeidspakke 6 (#33), og sin del av arbeidspakke 13 |
+| «Arbeidspakke 7 – THC-syre» | Arbeidspakke 7 (#34, #36), kommentarobjektene (#38), og sin del av arbeidspakke 13 |
+| «Legemiddeldata fra offentlige kilder» | Arbeidspakke 8, 10, 11 og 12 |
+| «Seksjoner og detaljkort» | Arbeidspakke 9 |
+
+#38 (kommentarobjektene) drives av «Arbeidspakke 7 – THC-syre», som sist har arbeidet på den.
 
 ---
 
@@ -742,16 +915,32 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 ## Arbeidspakke 4 - Psykofarmakainnhold
 
-**Status:** [ ] Ikke startet
+**Status:** [ ] Revidert 23.09.2026. Innholdet er ferdig i produksjonsdatabasen, og omarbeidingen er gjort der. PR #35 (omarbeidet) gjenstår å slå sammen.
 
-- [ ] Render og kontroller `originaldata/Psykofarmaka.pdf`.
-- [ ] Bygg kontrollert importdatasett.
-- [ ] Importer antidepressiver og antipsykotika.
-- [ ] Fyll panel 1-7 der kilden har data.
-- [ ] Søk i Felleskatalogen for gjeldende preparatnavn.
-- [ ] Skriv konsise indikasjonssammendrag.
-- [ ] Lagre kilder og dato sist kontrollert mot Felleskatalogen.
-- [ ] Første revisjon peker tilbake til kilde/side der det er mulig.
+Beholdes:
+
+- [x] Render og kontroller `originaldata/Psykofarmaka.pdf`.
+- [x] Bygg kontrollert importdatasett.
+- [x] Importer antidepressiver, antipsykotika og lamotrigin: 35 sider og 103 referanser (i produksjonsdatabasen; ikke på `main` ennå).
+- [x] Fyll panel 2–7 der kilden har data, koblet til riktige informasjonssider, også sumanalyser og komponenter.
+- [x] Første revisjon peker tilbake til kilde/side der det er mulig, f.eks. «Importert fra Psykofarmaka.pdf, side 7» (`revisjonskilde`, som også brukes av annet arbeid og beholdes uendret).
+- [x] Indikasjonssammendragene beholdes som redaksjonelt klinisk innhold (panel 5), med preparatomtalene i Felleskatalogen som referanser. FEST/HAPI gir ikke indikasjonstekst; arbeidspakke 8 bekrefter om noen av de eksterne kildene gjør det.
+
+Erstattet (del 16 og 23):
+
+- ~~Søk i Felleskatalogen for gjeldende preparatnavn.~~ Preparatene kommer fra de eksterne dataene (arbeidspakke 11).
+- ~~Lagre kilder og dato sist kontrollert mot Felleskatalogen.~~ Aktualiteten er tidspunktet for siste synkronisering.
+
+Omarbeidingen:
+
+- [x] Den manuelle preparatnavnlisten og kontrolldatoen er fjernet fra koden, importdatasettet og visningen.
+- [x] De 35 preparatnavnelementene og kontrolldatoene på indikasjonene er tatt bort i produksjonsdatabasen som nye, publiserte revisjoner med kilden «Tatt bort: preparatnavnene skal hentes fra offentlige legemiddeldata» (migrasjonen `psykofarmaka_kursendring`). De kjørte migrasjonene er ikke endret, og alt kan gjenopprettes fra historikken.
+- [x] Ingen ny, permanent panel-UI; innholdet vises gjennom seksjonsmodellen (arbeidspakke 9).
+- [ ] Alle migrasjonene som er kjørt i produksjon, er med byte-identiske når PR-en slås sammen.
+
+Elementtypen for preparater og skjemaet for dem fra arbeidspakke 3 står fortsatt på `main`. De erstattes i arbeidspakke 11.
+
+Til klinisk gjennomgang: avvikene mellom PDF-en og de statiske dataene (BREK, DOKSUM, LMP) og toksisk område lavere enn referanseområdet (KLOZ, PARO, MIASUM) er listet i PR #35 og ikke rettet.
 
 ## Arbeidspakke 5 - Enkle kommentarer og konsentrasjonsregler
 
@@ -807,6 +996,96 @@ Egen spesialisert regelmotor/editor for:
 
 ---
 
+# Arbeidspakker etter kursendringen 23.09.2026
+
+Arbeidspakke 5–7 fortsetter med domenearbeidet sitt som før; del 25 sier hva som endres for dem. Arbeidspakke 8–13 svarer til trinn 2–7 i kursendringen. Trinn 1, kurskorrigeringen, er denne revisjonen av planen.
+
+Avhengigheter:
+
+- 8 og 9 kan starte med en gang, parallelt.
+- 10 bygger på 8.
+- 11 bygger på 9 (del 1), 10 og omarbeidingen av arbeidspakke 4.
+- 12 bygger på 11.
+- 13 bygger på 9 (del 1), og gjøres for hver av arbeidspakke 5, 6 og 7 når PR-ene deres er slått sammen.
+
+## Arbeidspakke 8 - Kartlegging av offentlige legemiddeldatakilder
+
+**Status:** [ ] Ikke startet
+
+Undersøk faktiske svar og dokumentasjon fra HAPI (FEST) og DMP FHIR, og skriv et kort dokument i repoet, `docs/legemiddeldata.md`, som beskriver:
+
+- [ ] hvilke data vi faktisk kan hente, målt mot listen i del 23
+- [ ] hvilken kilde som bør brukes per datatype
+- [ ] stabile ID-er for substans, legemiddel og pakning
+- [ ] relasjonene mellom dem, også for salter, metabolitter og kombinasjonspreparater
+- [ ] autentisering
+- [ ] oppdateringsmekanisme og -frekvens
+- [ ] lisens og kildeangivelse
+- [ ] kjente hull og begrensninger
+- [ ] hvordan virkestoffene på dagens informasjonssider finnes igjen i kildene
+
+Ingen databasemodell lages i denne arbeidspakken.
+
+## Arbeidspakke 9 - Seksjoner og detaljkort
+
+**Status:** [ ] Ikke startet
+
+Del 1, komponenten:
+
+- [ ] Én generell komponent for hovedseksjon med minioppsummering og detaljkort, høyst to nivåer (del 24).
+- [ ] Rask, diskret animasjon som respekterer redusert bevegelse.
+- [ ] Tastatur, skjermleser og mobil.
+- [ ] Stabile adresser for seksjoner og detaljkort; direktelenker åpner riktig sted.
+- [ ] Søk på siden i lukket innhold, som åpner, ruller til og markerer treffet.
+- [ ] Lyst og mørkt tema.
+- [ ] Tester.
+
+Del 2, dagens sider:
+
+- [ ] Flytt panelene som er på `main`, over i modellen, uten å endre klinisk betydning.
+- [ ] Minioppsummering for hver hovedseksjon.
+- [ ] Referansenummereringen og kort-hoppene er uendret.
+
+## Arbeidspakke 10 - Ekstern legemiddelgrunnmur
+
+**Status:** [ ] Ikke startet. Starter når arbeidspakke 8 er ferdig.
+
+- [ ] Databasemodell i Supabase for den lokale kopien, ut fra arbeidspakke 8 (del 18 og 23).
+- [ ] Synkroniseringsjobb, server-side og planlagt, idempotent, med nye, endrede og utgåtte produkter.
+- [ ] Siste gyldige data beholdes ved feil; kjøringene registreres.
+- [ ] Hemmeligheter bare server-side.
+- [ ] Eksplisitte, bekreftede koblinger fra informasjonssidene til eksterne substans-ID-er (del 23).
+- [ ] Lokale tillegg og skjulinger uten å mutere importerte rader, hvis det trengs.
+- [ ] Testdata fra faktiske svar og integrasjonstester.
+
+## Arbeidspakke 11 - Preparater fra eksterne data
+
+**Status:** [ ] Ikke startet
+
+- [ ] Erstatt det manuelle preparatfeltet med de synkroniserte dataene.
+- [ ] Hovedseksjonen «Preparater»: `legemiddelform → preparat → styrker`, med pakninger og detaljer i detaljkort.
+- [ ] Minioppsummering, for eksempel «12 preparater · 3 legemiddelformer · 6 styrker».
+- [ ] Kildeangivelse og tidspunkt for siste synkronisering.
+- [ ] Preparatnavnene er med i søket på siden og i det globale søket.
+- [ ] Sumanalyser, salter, metabolitter og kombinasjonspreparater vises etter del 23.
+
+## Arbeidspakke 12 - Flere legemiddeldata
+
+**Status:** [ ] Ikke startet
+
+Ta inn de øvrige feltene i del 23 én etter én, der arbeidspakke 8 viser at kildedataene er gode nok og feltet har nytte i OUSFAR, for eksempel ATC, reseptstatus, markedsstatus, administrasjonsvei, byttbarhet, deling/knusing/åpning, lenke til preparatomtale og eventuelt interaksjoner.
+
+## Arbeidspakke 13 - Regelvisninger og simulatorer i seksjonsarkitekturen
+
+**Status:** [ ] Ikke startet. Starter når arbeidspakke 9 del 1 er på `main`.
+
+- [ ] Fortolkning/regler for konsentrasjonsreglene (arbeidspakke 5) vises som hovedseksjon med detaljkort.
+- [ ] Scenarioreglene og simulatoren (arbeidspakke 6) likeså.
+- [ ] THC-editoren og -simulatoren (arbeidspakke 7) bygges i modellen fra starten.
+- [ ] Regelmotorene, valideringen og paritetstestene er uendret; klinisk output endres ikke.
+
+---
+
 ## Viktige arkitekturregler for hele prosjektet
 
 1. Informasjonsside, laboratorieanalytt og fortolkningsmodul er separate konsepter.
@@ -817,8 +1096,11 @@ Egen spesialisert regelmotor/editor for:
 6. Klinisk operativt innhold støtter utkast/publisering.
 7. Referanser har stabile ID-er; synlige numre avledes per side.
 8. Brukte referanser og revisjonshistorikk hard-slettes ikke.
-9. Felleskatalog-data lagres som datert, kildebelagt innhold; ikke som live-oppslag ved hver sidevisning.
+9. Legemiddelgrunndata kommer fra autoritative offentlige kilder, synkronisert server-side til en egen lokal kopi med stabile ID-er; aldri live-oppslag fra nettleseren, aldri manuelle kopier, og aldri som revisjoner av redaksjonelt innhold. (Erstatter regelen om Felleskatalog-data, 23.09.2026.)
 10. Migrering til Supabase skal ha paritetstester mot dagens fortolkningsmotor.
 11. Komplekse regeltyper får spesialiserte editorer fremfor ett generelt visuelt programmeringsspråk.
 12. Farmakologiske tall lagres som strukturerte data når de faktisk er strukturerte.
 13. Endringer som kan påvirke klinisk output skal være eksplisitt validerte og sporbare.
+14. Stoffsider kobles til eksterne data med eksplisitte, bekreftede ID-koblinger, ikke med tekstnavn.
+15. Lokale unntak fra eksterne data lagres for seg; importerte rader muteres ikke.
+16. Stoffsidene bruker én seksjonsmodell: hovedseksjon → detaljkort, høyst to nivåer, med minioppsummering. Nye visninger bygges i den, ikke som egne panelvarianter.

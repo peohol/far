@@ -22,6 +22,10 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `supabase/migrations/*_analyttsider_lesing.sql` | Lesingen av en hel side, referansebasen og sider etter navn |
 | `supabase/migrations/*_enkeltelementer.sql` | At kortene som står én gang i panelet sitt, ikke kan opprettes to ganger |
 | `supabase/migrations/*_regelredigering_lesing.sql` | Historikken til ett objekt (`les_historikk`) og regelsettet for én kode |
+| `supabase/migrations/*_revisjonskilde.sql` | Kilden i revisjonene, for innhold som er importert |
+| `supabase/import/psykofarmaka/` | Importdatasettet for psykofarmakasidene, én fil per analyttkode |
+| `src/faginnhold/import.ts`, `psykofarmaka.ts`, `scripts/importer-psykofarmaka.ts` | Kontrollen av datasettet, planen og SQL-en som legger det inn |
+| `supabase/migrations/*_psykofarmaka_import_*.sql`, `*_psykofarmaka_kursendring.sql` | Importen slik den ble rullet ut, og kursendringen som tok bort preparatnavnene etterpå |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
 | `src/faginnhold/paneler.ts` | Panelene 1–7 og formen på hver elementtype |
@@ -37,6 +41,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/__tests__/faginnhold.test.ts`, `referanser.test.ts`, `analyttsidelesing.test.ts` | Reglene og lesingen, prøvd mot en ekte database |
 | `src/__tests__/analyttside.test.tsx`, `navigasjon.test.tsx`, `analyttsidemodell.test.ts` | Sidene, redigeringen og veiene mellom sidene og fortolkningen |
 | `src/__tests__/referansenummerering.test.ts`, `referansepille.test.tsx` | Nummereringen, og pillen med mus, berøring og tastatur |
+| `src/__tests__/psykofarmakaimport.test.ts` | Datasettet og importen, prøvd mot en ekte database |
 | `src/__tests__/hjelp/testdatabase.ts` | Postgres i minnet, bygd av migrasjonene, og kallene testene gjør |
 
 ## Domenet
@@ -77,7 +82,9 @@ Alt som kan redigeres, er et **objekt** med stabil ID i
   øyeblikksbilde av objektet (`innhold`, samme form som det appen sender),
   handlingen (`opprettet`, `endret` eller `gjenopprettet`), bruker-ID-en og
   fornavn og etternavn slik de sto i profilen da. Bruker-ID-en har bevisst
-  ingen fremmednøkkel, så historikken står også om kontoen fjernes.
+  ingen fremmednøkkel, så historikken står også om kontoen fjernes. Innhold
+  som er importert, har i tillegg en `kilde`, f.eks. «Importert fra
+  Psykofarmaka.pdf, side 7» (se [Import](#import-fra-en-kilde)).
 - **Tilstander** (`objekttilstander`): hvilken revisjon som er **utkastet**
   (arbeidsversjonen) og hvilken som er **publisert**. Innholdet i begge ligger
   som vanlige rader i tabellen for typen, med kolonnen `tilstand` — de samme
@@ -294,6 +301,67 @@ Søket på siden bruker indeksen til å vise hvor treffene står, og fremhever
 dem i teksten. Det globale søket skal indeksere alle publiserte sider på samme
 måte; det trenger bare en kilde som gir alle sidene, for eksempel en funksjon
 ved siden av `les_analyttside`.
+
+## Import fra en kilde
+
+Innhold som finnes i en kilde fra før, legges inn som en kontrollert
+datamigrering, ikke for hånd. Først psykofarmakasidene (arbeidspakke 4) fra
+`originaldata/Psykofarmaka.pdf`.
+
+**Datasettet** (`supabase/import/psykofarmaka/`) har én fil per analyttkode,
+skrevet så tett på kilden at hvert tall kan holdes opp mot den renderte siden:
+panelene med de samme nøklene som på siden, tekstene som avsnitt og
+punktlister (`_{x}` er senket, `^{x}` hevet skrift og `[tekst](https://…)` en
+lenke), og tabellene over serumkonsentrasjoner slik kilden har dem — én
+kolonne per dose — som gjøres om til rader. `felles.json` har referansene
+flere sider deler. Hva som er hentet og hva som er utelatt, og hvorfor, står i
+beskrivelsen av PR-en som la det inn.
+
+- Fra PDF-en: dosering, farmakodynamikk, konsentrasjonsområdene
+  (referanseområde, toksisk og komatøs/fatal), farmakokinetikken kort for
+  kort og serumkonsentrasjonene ved ulike doser. Ikke ringegrensen og
+  måleområdet (de hører til fortolkningen), og ikke «Spørsmål og svar» og
+  andre saksnotater, som kan ha pasientopplysninger.
+- Fra Felleskatalogen: et kort sammendrag av de godkjente indikasjonene, med
+  produktsidene som referanser. Det er redaksjonelt faginnhold som redigeres
+  som resten av siden.
+- Preparatnavnene fra Felleskatalogen og datoen de ble kontrollert, ble lagt
+  inn med importen og så tatt bort igjen (`kursendringSql`, migrasjonen
+  `*_psykofarmaka_kursendring.sql`): preparatdata skal hentes fra offentlige
+  legemiddeldata, ikke føres for hånd. De står ikke lenger i datasettet, og
+  en fil med `preparater` avvises som ukjent felt. Kortene står i
+  historikken, i panelet `fjernet`.
+- Toksisk område og komatøs/fatal siterer Schulz og Hiemke (og
+  Giftinformasjonens side der PDF-en lenker til den), fordi PDF-en oppgir dem
+  som grunnlaget for toksisitetsdataene. Referanseområdet har ingen oppgitt
+  kilde og får ingen.
+
+**Kontrollen.** `byggImportplan` i `import.ts` stopper på alt som ikke har
+formen appen leser — ukjente koder og felt, verdier som ikke er tall, tabeller
+med kolonner som ikke går opp, referanser som ikke er definert — og lister
+alle feilene samtidig. `psykofarmakaimport.test.ts` kjører hele importen i
+testdatabasen.
+
+**Innleggingen.** Importen rulles ut som migrasjoner:
+`npm run import:psykofarmaka -- <brukernavn> --migrasjoner <mappe>` lager
+filene, som legges inn med `apply_migration` (MCP-ens `execute_sql` har bare
+leserettigheter) og så legges i `supabase/migrations/` med versjonen
+prosjektet registrerte. De går gjennom de samme funksjonene som appen, som
+administratoren som er oppgitt: `opprett_utkast` for hvert objekt, så
+`publiser_utkast` i den rekkefølgen databasen krever. Hver revisjon får kilden
+sin gjennom innstillingen `far.revisjonskilde`, som bare gjelder
+transaksjonen, og som data-API-et ikke kan sette. Finnes ikke administratoren
+— som i testdatabasen og i nye grener — gjør migrasjonene ingenting. Først
+kommer referansene, deretter én blokk per kode, som hver er én transaksjon. En
+kode som alt har en side, hoppes over, og sider og referanser som finnes fra
+før, gjenbrukes. Uten `--migrasjoner` skrives den samme SQL-en som én fil, for
+SQL-editoren; der stopper den med en feil om administratoren mangler.
+
+Migrasjonene som er kjørt, er historikk og endres aldri; testen låser md5-en
+deres til den produksjonen har registrert. Datasettet kan endre seg etter dem
+(som da preparatnavnene ble tatt ut), så testen prøver ikke om de kan lages på
+nytt, men kjører dem slik produksjonen gjorde — med administratoren
+opprettet først — og sjekker at sidene viser nøyaktig det datasettet har nå.
 
 ## Tilgang
 
