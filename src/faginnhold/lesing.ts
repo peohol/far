@@ -11,6 +11,7 @@
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { tilFeil } from './lagring'
+import type { Historikk } from './historikk'
 import type {
   Infosideinnhold,
   Innholdselementinnhold,
@@ -18,6 +19,7 @@ import type {
   Referanseinnhold,
   Tilstand,
 } from './modell'
+import type { Intervallregelsett } from '../regler/modell'
 
 /** Ett objekt i én tilstand: øyeblikksbildet tilstanden peker på. */
 export interface Utgave<T> {
@@ -42,6 +44,11 @@ export interface Analyttsidedata {
   elementer: Utgave<Innholdselementinnhold>[]
   komponenter: Komponentutgave[]
   referanser: Utgave<Referanseinnhold>[]
+  /**
+   * Fortolkningsreglene for koden, når den har et regelsett. Regelsettet er
+   * sitt eget objekt og peker på koden, ikke på siden.
+   */
+  regelsett: Utgave<Intervallregelsett> | null
 }
 
 /** En kode som ikke har noen side ennå, eller som leseren ikke har tilgang til. */
@@ -51,15 +58,27 @@ export const TOM_SIDE: Analyttsidedata = {
   elementer: [],
   komponenter: [],
   referanser: [],
+  regelsett: null,
 }
 
 export interface Faginnholdsleser {
-  /** Siden for en analyttkode. {@link TOM_SIDE} når den ikke finnes. */
+  /**
+   * Siden for en analyttkode, med regelsettet for koden. {@link TOM_SIDE}
+   * når ingen av delene finnes.
+   */
   lesAnalyttside(kode: string, tilstand: Tilstand): Promise<Analyttsidedata>
   /** Hele referansebasen, til å velge kilder fra. */
   lesReferanser(tilstand: Tilstand): Promise<Utgave<Referanseinnhold>[]>
   /** Informasjonssidene med disse navnene, uten hensyn til store og små bokstaver. */
   finnInfosider(navn: string[], tilstand: Tilstand): Promise<Utgave<Infosideinnhold>[]>
+  /** Regelsettet for en analyttkode, eller `null` når koden ikke har noe. */
+  finnIntervallregelsett(kode: string, tilstand: Tilstand): Promise<Utgave<Intervallregelsett> | null>
+  /**
+   * Historikken til ett objekt: hendelsene og øyeblikksbildene. Leseren ser
+   * de revisjonene radsikkerheten gir: administratorer alle, andre de som
+   * har vært publisert.
+   */
+  lesHistorikk<T>(objekt: string): Promise<Historikk<T>>
 }
 
 export function lagFaginnholdsleser(klient: SupabaseClient): Faginnholdsleser {
@@ -71,15 +90,19 @@ export function lagFaginnholdsleser(klient: SupabaseClient): Faginnholdsleser {
 
   return {
     lesAnalyttside: async (kode, tilstand) => {
-      const side = await kall<Analyttsidedata>('les_analyttside', {
-        analyttkode: kode,
-        sidetilstand: tilstand,
-      })
-      return side ? { ...TOM_SIDE, ...side } : TOM_SIDE
+      const [side, regelsett] = await Promise.all([
+        kall<Omit<Analyttsidedata, 'regelsett'>>('les_analyttside', { analyttkode: kode, sidetilstand: tilstand }),
+        kall<Utgave<Intervallregelsett>>('finn_intervallregelsett', { analyttkode: kode, sidetilstand: tilstand }),
+      ])
+      return { ...TOM_SIDE, ...side, regelsett }
     },
     lesReferanser: async (tilstand) =>
       (await kall<Utgave<Referanseinnhold>[]>('les_referanser', { sidetilstand: tilstand })) ?? [],
     finnInfosider: async (navn, tilstand) =>
       (await kall<Utgave<Infosideinnhold>[]>('finn_infosider', { navn, sidetilstand: tilstand })) ?? [],
+    finnIntervallregelsett: (kode, tilstand) =>
+      kall<Utgave<Intervallregelsett>>('finn_intervallregelsett', { analyttkode: kode, sidetilstand: tilstand }),
+    lesHistorikk: async <T,>(objekt: string) =>
+      (await kall<Historikk<T>>('les_historikk', { objekt })) ?? { hendelser: [], revisjoner: [] },
   }
 }

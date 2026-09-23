@@ -21,12 +21,15 @@ gjøres med vilje.
 | `supabase/migrations/*_referanse_objekttype.sql`, `*_referansesystem.sql` | Referansene og koblingene til dem |
 | `supabase/migrations/*_analyttsider_lesing.sql` | Lesingen av en hel side, referansebasen og sider etter navn |
 | `supabase/migrations/*_enkeltelementer.sql` | At kortene som står én gang i panelet sitt, ikke kan opprettes to ganger |
+| `supabase/migrations/*_regelredigering_lesing.sql` | Historikken til ett objekt (`les_historikk`) og regelsettet for én kode |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
 | `src/faginnhold/paneler.ts` | Panelene 1–7 og formen på hver elementtype |
 | `src/faginnhold/riktekst.ts` | Rikteksten: nodene og merkene som er tillatt, rensing og ren tekst |
 | `src/faginnhold/analyttside.ts` | En side satt sammen: panelene, nummereringen og publiseringsrekkefølgen |
 | `src/faginnhold/sok.ts` | Indekseringen og søket, for siden og senere hele kunnskapsbasen |
+| `src/faginnhold/historikk.ts`, `innholdsfelter.ts` | Historikken: tidslinjen, sammenligningen felt for felt og ord for ord, og feltene hver objekttype deles i |
+| `src/components/historikk/` | Historikkvinduet og «Sist redigert», som åpner det |
 | `src/domain/analyttkatalog.ts`, `rute.ts` | Kodene som har en side, og adressene til dem |
 | `src/components/analyttside/` | Siden, panelene, skjemaene, editoren, referansevelgeren og søket |
 | `src/faginnhold/referanser.ts` | Siteringer, nummerering, piller og referanseliste — rene funksjoner |
@@ -92,6 +95,19 @@ unntak er en referanse som aldri har vært publisert eller brukt (se
 `objekthistorikk` viser alle handlingene samlet, publiseringene medregnet.
 Historikken sorteres på revisjon, med publiseringen etter revisjonen den
 gjelder.
+
+**Historikkvisningen.** `les_historikk(objekt)` gir hendelsene fra
+`objekthistorikk` (hvem, når, handling, kilde) og øyeblikksbildet i hver
+revisjon, i ett kall og med radsikkerheten som ellers. «Sist redigert av …»
+ved hvert redigerbart objekt åpner historikkvinduet for akkurat det objektet:
+tidslinjen, og to visninger av forskjellen mellom en revisjon og den forrige
+(eller en valgt eldre) — endringene, med det fjernede rødt og gjennomstreket
+og det nye grønt og understreket, og revisjonene side om side. Innholdet
+sammenlignes felt for felt (`innholdsfelter`: et regelsett per intervall, et
+kort per tekst, en referanse som den vises), og bare fritekst ord for ord.
+«Gjenopprett revisjon N» kaller `gjenopprett_revisjon` mot revisjonen
+utkastet står på, så en gammel nettleserøkt får en konflikt i stedet for å
+skrive over noe.
 
 ## Operasjonene
 
@@ -224,8 +240,11 @@ sidetilstand)` gir laboratorieanalytten, hovedsiden, innholdselementene,
 komponentsidene med kodene deres og referansene siden siterer — hvert objekt
 som en utgave med revisjonen tilstanden peker på, den publiserte revisjonen,
 øyeblikksbildet og hvem som laget det. Lesemodus leser det publiserte;
-redigeringsmodus utkastet. `les_referanser` gir referansebasen og
-`finn_infosider` sidene med gitte navn. Alle tre, og visningen
+redigeringsmodus utkastet. Regelsettet for koden (`finn_intervallregelsett`,
+se `docs/fortolkningsregler.md`) leses samtidig og står i sidedataene som
+`regelsett`; det er sitt eget objekt og peker på koden, ikke på siden.
+`les_referanser` gir referansebasen og `finn_infosider` sidene med gitte
+navn. Alle disse, og visningen
 `objektutgaver` de bygger på, kjører med rettighetene til den som leser, så
 radsikkerheten gjelder som ellers.
 
@@ -260,8 +279,8 @@ Første gang noe lagres på en kode uten side, opprettes informasjonssiden og
 laboratorieanalytten av katalogens opplysninger; sider med samme navn som
 finnes fra før — for eksempel en komponent — gjenbrukes. «Publiser endringene»
 viser hva som blir synlig, og publiserer i den rekkefølgen databasen krever
-(`publiseringsplan`): referanser, komponentsider, hovedsiden, analytten, så
-elementene.
+(`publiseringsplan`): referanser, komponentsider, hovedsiden, analytten,
+elementene, og til sist regelsettet, med feltene som er endret i det.
 
 Et objekt kan ikke slettes. Et kort som fjernes, flyttes derfor til panelet
 `fjernet`: det vises ikke, søkes ikke i og nummereres ikke, men står i

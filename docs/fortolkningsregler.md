@@ -16,13 +16,18 @@ rusmiddelreglene og THC-syre har egne regeltyper.
 | --- | --- |
 | `supabase/migrations/*_intervallregelsett_objekttype.sql`, `*_intervallregelsett.sql` | Objekttypen, tabellene, valideringen og lesingen |
 | `supabase/migrations/*_importer_intervallregelsett_1.sql` … `_6.sql` | Importen av dagens regler, i seks porsjoner |
+| `supabase/migrations/*_regelredigering_lesing.sql` | `finn_intervallregelsett`: regelsettet for én kode, til analyttsiden |
 | `supabase/import/intervallregelsett.json` | Importdatasettet: dagens regler, ett regelsett per linje, med kilden |
 | `src/regler/modell.ts` | Formen på et regelsett, felles for appen og databasen |
 | `src/regler/import.ts`, `scripts/importer-intervallregelsett.ts` | SQL-en som legger inn datasettet, og porsjoneringen |
 | `src/domain/intervallregler.ts` | Motoren: intervallene, regelen en verdi treffer, cut-off og båndene steg 2 viser |
 | `src/domain/valg.ts` | `regelsettvalg`: valgene på steg 2 fra et regelsett, i samme form som fra datasettet |
+| `src/regler/redigering.ts` | Endringene redigeringen gjør — grenser, deling, sammenslåing, kommentarer, ringing, cut-off — som rene funksjoner |
+| `src/regler/visning.ts` | Navnene på nivåer og handlinger, feltene historikken sammenligner, og simulatoren |
+| `src/components/regler/` | «Fortolkning» på analyttsiden: tabellen, simulatoren og redigeringen |
 | `src/__tests__/intervallregelsett.test.ts` | Import, paritet, validering, tilgang og versjonering, mot en ekte database |
 | `src/__tests__/hjelp/regelimport.ts` | Dagens regler gjort om til regelsett med den gamle motoren — fasiten |
+| `src/__tests__/regelredigering.test.ts`, `analyttside.test.tsx` | Redigeringen, simulatoren og historikken, som rene funksjoner og i siden |
 
 ## Modellen
 
@@ -107,7 +112,8 @@ regeltype har sin egen tabell for reglene og bruker disse for kommentarene.
 
 `les_intervallregelsett(sidetilstand)` gir alle regelsettene i én tilstand,
 sortert på analyttkode, i samme form som de andre objekttypene
-(`utgave_som_json`). Alle innloggede leser det publiserte; bare
+(`utgave_som_json`); `finn_intervallregelsett(analyttkode, sidetilstand)` gir
+ett av dem, eller `null`. Alle innloggede leser det publiserte; bare
 administratorer leser utkastene. Tabellene har bare lesetilgang, og alle
 endringer går gjennom `opprett_utkast`, `lagre_utkast`, `publiser_utkast` og
 `gjenopprett_revisjon`, som krever administrator. Ingenting slettes.
@@ -156,6 +162,42 @@ Byttet av fortolkningen til regelsettene gjøres for seg, med
 `fortolkningUendret.test.ts` og kontrollsummen over all klinisk output som
 vakt.
 
+## På analyttsiden
+
+Regelsettet vises på analyttsiden for koden, under panelene, som
+«Fortolkning»: en tabell med konsentrasjonen, kommentaren og «Ring rekvirent»
+— de samme radene, fargene og tekstene som knappene på steg 2 — med
+ringegrensen under. Under tabellen er **simulatoren**: en konsentrasjon inn,
+og ut intervallet den treffer, nivået, kommentaren og handlingen. Den bruker
+`regelsettvalg` og `finnRegel`, altså nøyaktig det steg 2 gir, og kan også
+prøve «Til stede under cut-off».
+
+**Redigeringen** (administratorer, i redigeringsmodus) viser intervallene
+nedenfra og opp med **grensen mellom hver av dem som ett felt**: den er delt
+av to naboer og endres derfor ett sted. Et intervall kan deles i to ved en
+ny grense (begge delene får regelen og kommentaren) eller slås sammen med det
+over (det nederstes regel beholdes). Kommentaren redigeres der den brukes;
+brukes den av flere intervaller eller av cut-off, sies det, og intervallet
+kan få sin egen eller ta i bruk en annen. «Ring rekvirent fra og med» velger
+intervallet ringingen begynner i, og ringegrensen vises som grensen selv
+eller ett steg under. Cut-off slås av og på, med innledningen og hvilken
+kommentar den settes foran. Simulatoren prøver skjemaet slik det står.
+
+Funksjonene i `redigering.ts` holder regelsettet slik databasen krever det
+etter hver endring: kommentarer ingen bruker, tas bort; cut-off følger med
+når intervallet den bygde på, slås sammen eller får en annen kommentar; og
+ringingen og ringegrensen følger grensene. Testen kjører en rekke endringer
+på hvert av de importerte regelsettene og krever at databasen godtar
+resultatet.
+
+Alt lagres som utkast i én revisjon mot den brukeren åpnet. Har noen andre
+lagret i mellomtiden, står det brukeren har gjort, og hen kan sammenligne med
+det de lagret (feltene som er ulike, rødt og grønt) og velge å forkaste sitt
+eller lagre over deres. Publiseringen skjer med resten av siden, og
+oppsummeringen før den sier hvilke felt i regelsettet som endres. «Sist
+redigert» åpner historikken, der en tidligere revisjon kan sammenlignes og
+gjenopprettes som en ny (se `docs/faginnhold.md`).
+
 ## Når noe skal endres
 
 **Nytt felt på regelsettet.** Legg det i `modell.ts`, i
@@ -164,7 +206,7 @@ standardverdi i skrivingen så eldre revisjoner fortsatt kan gjenopprettes.
 
 **Ny handling eller enhet.** En ny verdi i `regelhandling` (egen migrasjon,
 som for en ny objekttype) og i `REGELHANDLINGER`; en ny rad i
-`maleenheter`. Testen sammenligner enum-verdiene med koden.
+`maleenheter` og i `MALEENHETER`. Testen sammenligner begge med koden.
 
 **Ny import.** Legg dataene i et importdatasett med kilde, lag SQL-en med
 `npm run import:intervallregelsett -- <brukernavn> <fil> --migrering --del i/n`,

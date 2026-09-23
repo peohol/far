@@ -204,6 +204,27 @@ function side(): Analyttsidedata {
       element('fjernet', { panel: FJERNET, data: tekstMed('d') }, 2, 1),
     ],
     referanser: [ref('a', 'Kilde A'), ref('b', 'Kilde B', null), ref('c', 'Kilde C'), ref('d', 'Fjernetkilde')],
+    regelsett: utgave(
+      'rs',
+      {
+        analyttkode: 'TEST',
+        enhet: 'nmol/L',
+        desimaler: 0,
+        skillepunkter: [10],
+        intervaller: [
+          { niva: 'under', handling: null, kommentar: 'k1' },
+          { niva: 'innenfor', handling: null, kommentar: 'k2' },
+        ],
+        ringegrense: null,
+        cutoff: null,
+        kommentarer: [
+          { id: 'k1', tekst: 'Syntetisk lav.' },
+          { id: 'k2', tekst: 'Syntetisk middels.' },
+        ],
+      },
+      2,
+      1,
+    ),
   }
 }
 
@@ -234,6 +255,7 @@ describe('sidemodellen', () => {
       { slag: 'infoside', id: 's', revisjon: 2 },
       { slag: 'innholdselement', id: 'e1', revisjon: 3 },
       { slag: 'innholdselement', id: 'fjernet', revisjon: 2 },
+      { slag: 'intervallregelsett', id: 'rs', revisjon: 2 },
     ])
     expect(publiseringsplan(TOM_SIDE)).toEqual([])
   })

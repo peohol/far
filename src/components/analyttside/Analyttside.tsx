@@ -1,7 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { Analyttkatalog } from '../../domain/analyttkatalog'
 import { byggSidemodell, type Publiseringssteg } from '../../faginnhold/analyttside'
-import type { Analyttsidedata } from '../../faginnhold/lesing'
+import { endredeFelt } from '../../faginnhold/historikk'
+import type { Analyttsidedata, Utgave } from '../../faginnhold/lesing'
 import { PANELER, lesKinetikk, panelFor } from '../../faginnhold/paneler'
 import { indekserSide, sokeord } from '../../faginnhold/sok'
 import { lagLiggerOver, skrivesIFelt } from '../../hooks/useKeyboard'
@@ -17,6 +18,9 @@ import { Datakortpanel, Kortpanel, Tabellpanel, Tekstpanel, type Panelkontekst }
 import { Redigeringskilde } from './Redigeringskontekst'
 import { Sidesok } from './Sidesok'
 import { Uthevingskilde } from '../Uthev'
+import { Fortolkningsregler } from '../regler/Fortolkningsregler'
+import type { Intervallregelsett } from '../../regler/modell'
+import { regelsettfelter } from '../../regler/visning'
 import { useAnalyttside, type Sidemodus } from './useAnalyttside'
 
 export interface AnalyttsideProps {
@@ -112,7 +116,7 @@ function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps)
   const overskrift = useId()
 
   const handlinger = useAnalyttside(oppforing, modus)
-  const { side, referansebase, konflikt, plan } = handlinger
+  const { side, referansebase, publisertRegelsett, konflikt, plan } = handlinger
   const modell = useMemo(() => byggSidemodell(side.data), [side.data])
   const navn = side.data.infoside?.innhold.navn ?? oppforing.sidenavn
   const komponenter = useMemo(() => komponenterFor(oppforing, side.data, katalog), [oppforing, side.data, katalog])
@@ -128,8 +132,8 @@ function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps)
 
   const kontekst: Panelkontekst = { modell, redigerer, handlinger }
   const redigeringsverdi = useMemo(
-    () => ({ referansebase, opprettReferanse: handlinger.opprettReferanse }),
-    [referansebase, handlinger.opprettReferanse],
+    () => ({ referansebase, opprettReferanse: handlinger.opprettReferanse, gjenopprett: handlinger.gjenopprett }),
+    [referansebase, handlinger.opprettReferanse, handlinger.gjenopprett],
   )
   const harInnhold = modell.paneler.size > 0 || Object.keys(modell.panelreferanser).length > 0
 
@@ -171,6 +175,7 @@ function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps)
       {modus === 'rediger' && (
         <Redigeringsstripe
           data={side.data}
+          publisertRegelsett={publisertRegelsett}
           plan={plan}
           laster={!redigerer}
           onPubliser={handlinger.publiser}
@@ -225,6 +230,13 @@ function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps)
               {!redigerer && side.status === 'klar' && !harInnhold && (
                 <p className="analyttside__tom">Denne siden har ikke fått faginnhold ennå.</p>
               )}
+              <Fortolkningsregler
+                utgave={side.data.regelsett}
+                publisert={publisertRegelsett}
+                redigerer={redigerer}
+                onLagre={handlinger.lagreRegelsett}
+                hentNyeste={handlinger.hentRegelsettutkast}
+              />
               <Referanseliste />
             </div>
           </Redigeringskilde>
@@ -234,9 +246,23 @@ function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps)
   )
 }
 
-/** Hva et publiseringssteg gjelder, slik det står i oppsummeringen. */
-export function beskrivSteg(steg: Publiseringssteg, data: Analyttsidedata): string {
+/**
+ * Hva et publiseringssteg gjelder, slik det står i oppsummeringen. For
+ * regelsettet står også hva som er endret siden det som er publisert.
+ */
+export function beskrivSteg(
+  steg: Publiseringssteg,
+  data: Analyttsidedata,
+  publisertRegelsett: Utgave<Intervallregelsett> | null = null,
+): string {
   switch (steg.slag) {
+    case 'intervallregelsett': {
+      const regelsett = data.regelsett
+      const navn = `Fortolkningsreglene for ${regelsett?.innhold.analyttkode ?? 'koden'}`
+      if (!regelsett || !publisertRegelsett) return navn
+      const endret = endredeFelt(regelsettfelter(publisertRegelsett.innhold), regelsettfelter(regelsett.innhold))
+      return endret.length > 0 ? `${navn} (${endret.join(', ')})` : navn
+    }
     case 'referanse': {
       const referanse = data.referanser.find((r) => r.id === steg.id)
       return `Referanse: ${referanse?.innhold.tittel || referanse?.innhold.forfattere || 'uten tittel'}`
@@ -266,11 +292,13 @@ export function beskrivSteg(steg: Publiseringssteg, data: Analyttsidedata): stri
  */
 function Redigeringsstripe({
   data,
+  publisertRegelsett,
   plan,
   laster,
   onPubliser,
 }: {
   data: Analyttsidedata
+  publisertRegelsett: Utgave<Intervallregelsett> | null
   plan: Publiseringssteg[]
   /** Sant mens utkastet hentes etter at redigeringen er slått på. */
   laster: boolean
@@ -318,7 +346,7 @@ function Redigeringsstripe({
           <p className="redigeringsstripe__tekst">Dette blir publisert og synlig for alle:</p>
           <ul className="publisering__liste">
             {plan.map((steg) => (
-              <li key={steg.id}>{beskrivSteg(steg, data)}</li>
+              <li key={steg.id}>{beskrivSteg(steg, data, publisertRegelsett)}</li>
             ))}
           </ul>
           {feil && (

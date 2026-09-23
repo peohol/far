@@ -15,10 +15,12 @@ export interface ModallagProps {
   onLukk: () => void
   /** Ekstra innhold øverst til høyre, ved siden av lukkeknappen. */
   handling?: ReactNode
+  /** Bredere panel, for innhold som står side om side. */
+  bred?: boolean
   children: ReactNode
 }
 
-export function Modallag({ apen, tittel, onLukk, handling, children }: ModallagProps) {
+export function Modallag({ apen, tittel, onLukk, handling, bred, children }: ModallagProps) {
   const dialog = useRef<HTMLDialogElement>(null)
   const tittelId = useId()
 
@@ -46,7 +48,7 @@ export function Modallag({ apen, tittel, onLukk, handling, children }: ModallagP
 
   return (
     <dialog ref={dialog} className="logg modallag" aria-labelledby={tittelId} onClick={paaTrykk}>
-      <div className="logg__panel">
+      <div className={bred ? 'logg__panel modallag--bred' : 'logg__panel'}>
         <div className="logg__topp">
           <h2 id={tittelId} className="logg__tittel">
             {tittel}

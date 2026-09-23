@@ -26,14 +26,27 @@ import { bands } from '../domain/bands'
 import { classify } from '../domain/concentration'
 import { cutoffkommentar, finnRegel, intervallene, ringes } from '../domain/intervallregler'
 import { cutoffKommentar, cutoffvalg, harCutoffvalg, regelsettvalg, valgene } from '../domain/valg'
-import type { Utgave } from '../faginnhold/lesing'
+import { lagFaginnholdsleser, type Utgave } from '../faginnhold/lesing'
 import type { Objektstatus } from '../faginnhold/modell'
 import { importdel, regelimportSql, type Regelimport } from '../regler/import'
 import {
   KONSENTRASJONSNIVAER,
+  MALEENHETER,
   REGELHANDLINGER,
   type Intervallregelsett,
 } from '../regler/modell'
+import {
+  delIntervall,
+  egenKommentar,
+  klargjor,
+  kontrollerRegelsett,
+  settCutoff,
+  settKommentartekst,
+  settRing,
+  settSkillepunkt,
+  slaSammen,
+  steg,
+} from '../regler/redigering'
 import { importId, importkilde, regelimport, regelimportdata } from './hjelp/regelimport'
 import {
   faginnholdskall,
@@ -293,6 +306,8 @@ describe('databasen', () => {
       (await kall.fasit<{ v: string[] }>(`select enum_range(null::public.${type})::text[] as v`))[0]!.v
     expect(await verdier('konsentrasjonsniva')).toEqual([...KONSENTRASJONSNIVAER])
     expect(await verdier('regelhandling')).toEqual([...REGELHANDLINGER])
+    const enheter = await kall.fasit<{ enhet: string }>('select enhet from public.maleenheter')
+    expect(enheter.map((e) => e.enhet).sort()).toEqual([...MALEENHETER].sort())
   })
 
   it('lagrer et regelsett og gir det tilbake nøyaktig som det ble sendt', async () => {
@@ -518,5 +533,90 @@ describe('databasen', () => {
     )
     expect(status!.revisjon).toBe(1)
     await kall.forventSamsvar(opprettet.id)
+  })
+})
+
+/* --- 4. Redigeringen ------------------------------------------------------ */
+
+describe('redigeringen mot databasen', () => {
+  it('lager regelsett databasen godtar, for hver analytt og hver slags endring', async () => {
+    let n = 0
+    const nyId = () => importId('redigering', String(++n))
+    const publisert = await lesRegelsett(admin, 'utkast')
+    expect(publisert.length).toBeGreaterThan(0)
+
+    for (const utgave of publisert) {
+      const r = utgave.innhold
+      const toppen = r.skillepunkter.at(-1) ?? 1
+      // Alle endringene redigeringen kan gjøre, etter hverandre: en ny grense
+      // øverst, en flyttet grense, en egen kommentar, ringingen fra det nye
+      // intervallet, cut-off av eller på, og til sist en sammenslåing.
+      let endret = delIntervall(r, r.skillepunkter.length, toppen * 2)
+      endret = settSkillepunkt(endret, endret.skillepunkter.length - 1, toppen * 3)
+      endret = settKommentartekst(egenKommentar(endret, endret.intervaller.length - 1, nyId), `redigering-${n}`, ` Syntetisk ${r.analyttkode}. `)
+      endret = settRing(endret, { indeks: endret.intervaller.length - 1, over: r.analyttkode.length % 2 === 0 })
+      endret = settCutoff(endret, !r.cutoff, nyId)
+      if (endret.cutoff && !r.cutoff) endret = settKommentartekst(endret, endret.cutoff.innledning, 'Syntetisk innledning.')
+      endret = klargjor(slaSammen(endret, 0))
+      expect(kontrollerRegelsett(endret), r.analyttkode).toBeNull()
+
+      const lagret = await kall.lagre(utgave.id, utgave.revisjon, endret)
+      expect(lagret.revisjon, r.analyttkode).toBe(utgave.revisjon + 1)
+      const [revisjon] = await kall.fasit<{ innhold: Intervallregelsett }>(
+        'select innhold from public.objektrevisjoner where objekt_id = $1 and revisjon = $2',
+        [utgave.id, lagret.revisjon],
+      )
+      expect(revisjon!.innhold, r.analyttkode).toEqual(endret)
+      expect(endret.ringegrense).toBe(
+        Math.round((toppen * 3 - (r.analyttkode.length % 2 === 0 ? steg(r.desimaler) : 0)) * 10 ** r.desimaler) /
+          10 ** r.desimaler,
+      )
+    }
+  })
+
+  it('leser regelsettet for én kode, og historikken med hvem og når, med radsikkerheten', async () => {
+    const leser = lagFaginnholdsleser(kall.klientFor(admin))
+    const vanlig = lagFaginnholdsleser(kall.klientFor(bruker))
+    const forste = testregelsett()
+    const opprettet = await opprettRegelsett(forste)
+    await kall.publiser(opprettet.id, 1)
+    const andre = settKommentartekst(forste, forste.intervaller[0]!.kommentar, 'Endret syntetisk kommentar.')
+    await kall.lagre(opprettet.id, 1, andre)
+    await kall.gjenopprett(opprettet.id, 2, 1)
+
+    expect((await leser.finnIntervallregelsett(forste.analyttkode, 'utkast'))?.innhold).toEqual(forste)
+    expect((await leser.finnIntervallregelsett(forste.analyttkode, 'utkast'))?.revisjon).toBe(3)
+    expect((await vanlig.finnIntervallregelsett(forste.analyttkode, 'publisert'))?.innhold).toEqual(forste)
+    expect(await vanlig.finnIntervallregelsett(forste.analyttkode, 'utkast')).toBeNull()
+    expect(await leser.finnIntervallregelsett('FINNESIKKE', 'publisert')).toBeNull()
+
+    const historikk = await leser.lesHistorikk<Intervallregelsett>(opprettet.id)
+    expect(historikk.hendelser.map((h) => [h.handling, h.revisjon, h.gjenopprettet_fra ?? null])).toEqual([
+      ['opprettet', 1, null],
+      ['publisert', 1, null],
+      ['endret', 2, null],
+      ['gjenopprettet', 3, 1],
+    ])
+    expect(historikk.hendelser.every((h) => h.utfort_av_fornavn === 'Ada' && h.utfort_av_etternavn === 'Adminsen')).toBe(true)
+    expect(historikk.hendelser.every((h) => !Number.isNaN(Date.parse(h.utfort_kl)))).toBe(true)
+    expect(historikk.revisjoner.map((r) => r.revisjon)).toEqual([1, 2, 3])
+    expect(historikk.revisjoner[1]!.innhold).toEqual(andre)
+
+    // En vanlig bruker ser bare det som har vært publisert.
+    const forBruker = await vanlig.lesHistorikk<Intervallregelsett>(opprettet.id)
+    expect(forBruker.revisjoner.map((r) => r.revisjon)).toEqual([1])
+    expect(forBruker.hendelser.map((h) => [h.handling, h.revisjon])).toEqual([
+      ['opprettet', 1],
+      ['publisert', 1],
+    ])
+
+    // Importerte revisjoner har kilden med seg.
+    const importert = (await lesRegelsett(admin, 'publisert'))[0]!
+    const importhistorikk = await leser.lesHistorikk(importert.id)
+    expect(importhistorikk.hendelser[0]!.kilde).toMatch(/Importert/)
+
+    expect(await leser.lesHistorikk('00000000-0000-0000-0000-000000000000')).toEqual({ hendelser: [], revisjoner: [] })
+    const anon = await feilFra(() => kall.rpc(null, 'les_historikk', { objekt: opprettet.id }))
+    expect(anon?.code).toBe('42501')
   })
 })

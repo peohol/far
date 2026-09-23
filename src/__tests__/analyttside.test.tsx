@@ -16,7 +16,9 @@ import { TipsLag } from '../components/Tips'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from '../domain/analyttkatalog'
 import { Samtidighetskonflikt, type Faginnholdslager } from '../faginnhold/lagring'
 import { TOM_SIDE, type Analyttsidedata, type Faginnholdsleser, type Utgave } from '../faginnhold/lesing'
+import type { Historikk } from '../faginnhold/historikk'
 import type { Objektstatus, Tilstand } from '../faginnhold/modell'
+import type { Intervallregelsett } from '../regler/modell'
 import { SITERING } from '../faginnhold/referanser'
 
 beforeAll(() => {
@@ -27,6 +29,14 @@ beforeAll(() => {
   }
   Element.prototype.scrollIntoView ??= function () {}
   window.scrollTo = () => {}
+  // jsdom har `<dialog>`, men ikke det modale laget.
+  HTMLDialogElement.prototype.showModal ??= function (this: HTMLDialogElement) {
+    this.setAttribute('open', '')
+  }
+  HTMLDialogElement.prototype.close ??= function (this: HTMLDialogElement) {
+    this.removeAttribute('open')
+    this.dispatchEvent(new Event('close'))
+  }
 })
 
 afterEach(cleanup)
@@ -58,7 +68,52 @@ const REF_B = utgave('bbbbbbbb-0000-4000-8000-000000000002', {
   lenke: '',
 })
 
-/** En side for AMTNORSUM med et datakort, en tekst og tre siteringer. */
+/**
+ * Et syntetisk regelsett for AMTNORSUM. Utkastet har en endret kommentar i
+ * det øverste intervallet.
+ */
+function regelsett(tilstand: Tilstand = 'publisert'): Intervallregelsett {
+  return {
+    analyttkode: 'AMTNORSUM',
+    enhet: 'nmol/L',
+    desimaler: 0,
+    skillepunkter: [10, 1800],
+    intervaller: [
+      { niva: 'under', handling: null, kommentar: 'k-lav' },
+      { niva: 'innenfor', handling: null, kommentar: 'k-middels' },
+      { niva: 'over', handling: 'ring_rekvirent', kommentar: 'k-hoy' },
+    ],
+    ringegrense: 1800,
+    cutoff: { innledning: 'k-innledning', kommentar: 'k-middels' },
+    kommentarer: [
+      { id: 'k-lav', tekst: 'Syntetisk lav kommentar.' },
+      { id: 'k-middels', tekst: 'Syntetisk middels kommentar.' },
+      { id: 'k-hoy', tekst: tilstand === 'utkast' ? 'Endret syntetisk høy kommentar.' : 'Syntetisk høy kommentar.' },
+      { id: 'k-innledning', tekst: 'Syntetisk innledning.' },
+    ],
+  }
+}
+
+const REGELSETT_ID = 'rrrrrrrr-0000-4000-8000-000000000003'
+
+function regelsettutgave(tilstand: Tilstand) {
+  return tilstand === 'utkast' ? utgave(REGELSETT_ID, regelsett('utkast'), 2, 1) : utgave(REGELSETT_ID, regelsett(), 1, 1)
+}
+
+/** Historikken til regelsettet: importert, publisert og endret. */
+const REGELHISTORIKK: Historikk<Intervallregelsett> = {
+  hendelser: [
+    { handling: 'opprettet', revisjon: 1, utfort_av_fornavn: 'Ada', utfort_av_etternavn: 'Adminsen', utfort_kl: '2026-09-22T08:00:00Z', kilde: 'Syntetisk import' },
+    { handling: 'publisert', revisjon: 1, utfort_av_fornavn: 'Ada', utfort_av_etternavn: 'Adminsen', utfort_kl: '2026-09-22T08:01:00Z' },
+    { handling: 'endret', revisjon: 2, utfort_av_fornavn: 'Rita', utfort_av_etternavn: 'Redaktør', utfort_kl: '2026-09-22T12:32:00Z' },
+  ],
+  revisjoner: [
+    { revisjon: 1, innhold: regelsett() },
+    { revisjon: 2, innhold: regelsett('utkast') },
+  ],
+}
+
+/** En side for AMTNORSUM med et datakort, en tekst, tre siteringer og et regelsett. */
 function side(tilstand: Tilstand = 'publisert'): Analyttsidedata {
   const utk = tilstand === 'utkast'
   return {
@@ -105,6 +160,7 @@ function side(tilstand: Tilstand = 'publisert'): Analyttsidedata {
       }),
     ],
     referanser: [REF_A, REF_B],
+    regelsett: regelsettutgave(tilstand),
   }
 }
 
@@ -121,11 +177,13 @@ function kilde({
     lesAnalyttside: vi.fn(async (_kode: string, tilstand: Tilstand) => data(tilstand)),
     lesReferanser: vi.fn(async () => [REF_A, REF_B]),
     finnInfosider: vi.fn(async () => []),
+    finnIntervallregelsett: vi.fn(async (_kode: string, tilstand: Tilstand) => data(tilstand).regelsett),
+    lesHistorikk: vi.fn(async () => REGELHISTORIKK) as Faginnholdsleser['lesHistorikk'],
   }
   const lager: Faginnholdslager = {
     opprettUtkast: vi.fn(async () => status(`ny-${++nr}`)),
     lagreUtkast: vi.fn(async (id: string) => status(id, 3)),
-    gjenopprettRevisjon: vi.fn(),
+    gjenopprettRevisjon: vi.fn(async (id: string) => status(id, 3)),
     publiserUtkast: vi.fn(async (id: string) => status(id)),
     slettReferanse: vi.fn(),
   }
@@ -383,13 +441,23 @@ describe('redigeringsmodus', () => {
     const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
     await screen.findByText('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
-    // Bare datakortet har en revisjon som ikke er publisert.
-    await user.click(await screen.findByRole('button', { name: 'Publiser endringene (1)' }))
+    // Datakortet og regelsettet har revisjoner som ikke er publisert. For
+    // regelsettet står det hva som er endret.
+    await user.click(await screen.findByRole('button', { name: 'Publiser endringene (2)' }))
     const oppsummering = screen.getByRole('region', { name: /Redigeringsmodus/ })
-    expect(within(oppsummering).getAllByRole('listitem').map((li) => li.textContent)).toEqual(['Viktige data'])
+    await waitFor(() =>
+      expect(within(oppsummering).getAllByRole('listitem').map((li) => li.textContent)).toEqual([
+        'Viktige data',
+        'Fortolkningsreglene for AMTNORSUM (Intervall 3: Kommentar)',
+      ]),
+    )
     expect(lager.publiserUtkast).not.toHaveBeenCalled()
     await user.click(screen.getByRole('button', { name: 'Publiser nå' }))
-    await waitFor(() => expect(lager.publiserUtkast).toHaveBeenCalledWith('kort', 2))
+    await waitFor(() => expect(lager.publiserUtkast).toHaveBeenCalledWith(REGELSETT_ID, 2))
+    expect(vi.mocked(lager.publiserUtkast).mock.calls).toEqual([
+      ['kort', 2],
+      [REGELSETT_ID, 2],
+    ])
   })
 
   it('oppretter siden, med komponentene, første gang noe lagres', async () => {
@@ -546,5 +614,163 @@ describe('kortene i farmakokinetikken', () => {
     await user.click(screen.getByRole('button', { name: 'Bekreft: fjern Metabolisme' }))
     await waitFor(() => expect(lager.lagreUtkast).toHaveBeenCalledTimes(1))
     expect(vi.mocked(lager.lagreUtkast).mock.calls[0]![2]).toMatchObject({ panel: 'fjernet', elementtype: 'kinetikkort' })
+  })
+})
+
+describe('fortolkningsreglene', () => {
+  /** Siden i redigeringsmodus, med reglene fra utkastet. */
+  async function redigerer(k = kilde({ kanRedigere: true })) {
+    const user = userEvent.setup()
+    const verdier = vis('AMTNORSUM', k)
+    await screen.findByText('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await screen.findByText('Endret syntetisk høy kommentar.')
+    return { user, ...verdier }
+  }
+
+  it('viser reglene som en tabell, med ringegrensen og cut-off', async () => {
+    vis('AMTNORSUM')
+    const seksjon = await screen.findByRole('region', { name: 'Fortolkning' })
+    const rader = within(seksjon)
+      .getAllByRole('row')
+      .slice(1)
+      .map((rad) => [...rad.querySelectorAll('th, td')].map((c) => c.textContent))
+    expect(rader).toEqual([
+      ['< 10', 'Syntetisk lav kommentar.', ''],
+      ['10 – 1799', 'Syntetisk middels kommentar.', ''],
+      ['≥ 1800', 'Syntetisk høy kommentar.', 'Ring rekvirent'],
+      ['Til stede under cut-off', 'Syntetisk innledning. Syntetisk middels kommentar.', ''],
+    ])
+    expect(within(seksjon).getByText('Ringegrense: 1800 nmol/L')).toBeTruthy()
+    expect(within(seksjon).queryByRole('button', { name: 'Rediger reglene' })).toBeNull()
+  })
+
+  it('simulerer en verdi på og rundt grensene, og cut-off', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM')
+    const seksjon = await screen.findByRole('region', { name: 'Fortolkning' })
+    const felt = within(seksjon).getByLabelText('Målt konsentrasjon (nmol/L)')
+    const svar = () => seksjon.querySelector('.regler__svar')!.textContent
+
+    await user.type(felt, '1799,5')
+    expect(svar()).toBe('10 – 1799 nmol/L · Innenfor referanseområdetSyntetisk middels kommentar.Ingen ekstra handling.')
+    await user.clear(felt)
+    await user.type(felt, '1800')
+    expect(svar()).toBe('≥ 1800 nmol/L · Over referanseområdetSyntetisk høy kommentar.Ring rekvirent.')
+    await user.click(within(seksjon).getByRole('checkbox', { name: 'Til stede under cut-off' }))
+    expect(svar()).toBe('Til stede under cut-offSyntetisk innledning. Syntetisk middels kommentar.Ingen ekstra handling.')
+  })
+
+  it('lagrer en flyttet grense og en endret kommentar som utkast, med ringegrensen', async () => {
+    const { user, lager } = await redigerer()
+    const seksjon = screen.getByRole('region', { name: 'Fortolkning' })
+    await user.click(within(seksjon).getByRole('button', { name: 'Rediger reglene' }))
+    const skjema = screen.getByRole('form', { name: 'Rediger: Fortolkningsreglene for AMTNORSUM' })
+
+    const grense = within(skjema).getByLabelText('Grense mellom intervall 2 og 3')
+    await user.clear(grense)
+    await user.type(grense, '2000')
+    // Kommentaren til intervall 2 brukes også av cut-off, og det sies.
+    const intervall2 = within(skjema).getByRole('group', { name: 'Intervall 2: 10 – 1999 nmol/L' })
+    const tekst = within(intervall2).getByLabelText('Kommentartekst')
+    expect(within(intervall2).getByText(/brukes også av cut-off/)).toBeTruthy()
+    await user.clear(tekst)
+    await user.type(tekst, ' Ny syntetisk kommentar. ')
+
+    // Simulatoren prøver det som står i skjemaet.
+    await user.type(within(skjema).getByLabelText('Målt konsentrasjon (nmol/L)'), '1999')
+    expect(skjema.querySelector('.regler__svar')!.textContent).toMatch(/Ny syntetisk kommentar/)
+
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+    await waitFor(() => expect(lager.lagreUtkast).toHaveBeenCalled())
+    const [id, revisjon, innhold] = vi.mocked(lager.lagreUtkast).mock.calls[0]!
+    expect([id, revisjon]).toEqual([REGELSETT_ID, 2])
+    expect(innhold).toMatchObject({ skillepunkter: [10, 2000], ringegrense: 2000 })
+    expect((innhold as Intervallregelsett).kommentarer.find((k) => k.id === 'k-middels')!.tekst).toBe(
+      'Ny syntetisk kommentar.',
+    )
+  })
+
+  it('deler og slår sammen intervaller, og avviser en grense utenfor intervallet', async () => {
+    const { user, lager } = await redigerer()
+    await user.click(screen.getByRole('button', { name: 'Rediger reglene' }))
+    const skjema = screen.getByRole('form', { name: 'Rediger: Fortolkningsreglene for AMTNORSUM' })
+    const intervall2 = within(skjema).getByRole('group', { name: 'Intervall 2: 10 – 1799 nmol/L' })
+    await user.click(within(intervall2).getByRole('button', { name: 'Del intervallet' }))
+    await user.type(within(intervall2).getByLabelText('Ny grense inne i intervallet'), '5000')
+    await user.click(within(intervall2).getByRole('button', { name: 'Del her' }))
+    expect(within(intervall2).getByRole('alert').textContent).toBe('Grensen må ligge inne i intervallet.')
+    const ny = within(intervall2).getByLabelText('Ny grense inne i intervallet')
+    await user.clear(ny)
+    await user.type(ny, '500')
+    await user.click(within(intervall2).getByRole('button', { name: 'Del her' }))
+    expect(within(skjema).getByRole('group', { name: 'Intervall 3: 500 – 1799 nmol/L' })).toBeTruthy()
+
+    await user.click(
+      within(within(skjema).getByRole('group', { name: 'Intervall 2: 10 – 499 nmol/L' })).getByRole('button', {
+        name: 'Slå sammen med intervallet over',
+      }),
+    )
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+    await waitFor(() => expect(lager.lagreUtkast).toHaveBeenCalled())
+    expect(vi.mocked(lager.lagreUtkast).mock.calls[0]![2]).toEqual(regelsett('utkast'))
+  })
+
+  it('lar brukeren sammenligne og velge ved en konflikt, uten å miste det som er gjort', async () => {
+    const k = kilde({ kanRedigere: true })
+    const { user, lager, leser } = await redigerer(k)
+    vi.mocked(lager.lagreUtkast).mockRejectedValueOnce(new Samtidighetskonflikt(3, 2))
+    vi.mocked(leser.finnIntervallregelsett).mockResolvedValueOnce(utgave(REGELSETT_ID, regelsett(), 3, 1))
+    await user.click(screen.getByRole('button', { name: 'Rediger reglene' }))
+    const skjema = screen.getByRole('form', { name: 'Rediger: Fortolkningsreglene for AMTNORSUM' })
+    const tekst = within(within(skjema).getByRole('group', { name: /^Intervall 1/ })).getByLabelText('Kommentartekst')
+    await user.clear(tekst)
+    await user.type(tekst, 'Min syntetiske kommentar.')
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+
+    expect(await within(skjema).findByText(/Noen andre har lagret reglene/)).toBeTruthy()
+    expect((tekst as HTMLTextAreaElement).value).toBe('Min syntetiske kommentar.')
+    await user.click(within(skjema).getByRole('button', { name: 'Sammenlign med deres' }))
+    expect(await within(skjema).findByText('revisjon 3', { exact: false })).toBeTruthy()
+    // Rødt er deres, grønt er ditt.
+    expect(skjema.querySelector('del')?.textContent).toBe('Syntetisk lav')
+    expect(skjema.querySelector('ins')?.textContent).toBe('Min syntetiske')
+
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre mine over deres' }))
+    await waitFor(() => expect(lager.lagreUtkast).toHaveBeenCalledTimes(2))
+    expect(vi.mocked(lager.lagreUtkast).mock.calls[1]!.slice(0, 2)).toEqual([REGELSETT_ID, 3])
+  })
+
+  it('viser historikken med hvem, når og hva som er endret, og gjenoppretter som en ny revisjon', async () => {
+    const { user, lager } = await redigerer()
+    const seksjon = screen.getByRole('region', { name: 'Fortolkning' })
+    await user.click(within(seksjon).getByRole('button', { name: /Vis historikken for fortolkningsreglene/ }))
+    const vindu = await screen.findByRole('dialog', { name: 'Historikk: Fortolkningsreglene' })
+
+    expect(await within(vindu).findByText('Revisjon 2: endret (utkastet nå)')).toBeTruthy()
+    expect(within(vindu).getByText('av Rita Redaktør 22.09.2026 kl. 14:32')).toBeTruthy()
+    expect(within(vindu).getByText('Syntetisk import')).toBeTruthy()
+    // Endringene: bare kommentaren i det øverste intervallet, ord for ord.
+    expect(within(vindu).getByRole('heading', { name: 'Intervall 3' })).toBeTruthy()
+    expect([...vindu.querySelectorAll('del')].map((d) => d.textContent)).toEqual(['Syntetisk'])
+    expect([...vindu.querySelectorAll('ins')].map((d) => d.textContent)).toEqual(['Endret syntetisk'])
+
+    // Side om side viser alle feltene, med det endrede merket.
+    await user.click(within(vindu).getByRole('button', { name: 'Side om side' }))
+    expect(within(vindu).getByRole('columnheader', { name: 'Revisjon 1' })).toBeTruthy()
+    expect(vindu.querySelectorAll('tr.historikk__endret')).toHaveLength(1)
+
+    // Revisjon 1 gjenopprettes som en ny revisjon av utkastet.
+    await user.click(within(vindu).getByRole('button', { name: /Revisjon 1: opprettet/ }))
+    await user.click(within(vindu).getByRole('button', { name: 'Gjenopprett revisjon 1' }))
+    await user.click(within(vindu).getByRole('button', { name: 'Gjenopprett nå' }))
+    await waitFor(() => expect(lager.gjenopprettRevisjon).toHaveBeenCalledWith(REGELSETT_ID, 2, 1))
+  })
+
+  it('åpner historikken for et kort fra «Sist redigert»', async () => {
+    const { user, leser } = await redigerer()
+    await user.click(screen.getByRole('button', { name: /Vis historikken for referanseområde/ }))
+    await screen.findByRole('dialog', { name: 'Historikk: Referanseområde' })
+    expect(leser.lesHistorikk).toHaveBeenCalledWith('kort')
   })
 })

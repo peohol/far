@@ -1,6 +1,5 @@
 import { useId, useState, type ReactNode } from 'react'
 import type { Sideelement, Sidemodell } from '../../faginnhold/analyttside'
-import type { Utgave } from '../../faginnhold/lesing'
 import {
   DATAKORT,
   DOSEKOLONNER,
@@ -27,6 +26,7 @@ import {
   type Skjemaresultat,
 } from './Skjemaer'
 import { Uthev } from '../Uthev'
+import { Sistredigert } from '../historikk/Sistredigert'
 import type { Analyttsidehandlinger } from './useAnalyttside'
 
 /**
@@ -50,26 +50,6 @@ export function elementAnker(id: string): string {
 
 export function panelAnker(nokkel: string): string {
   return `panel-${nokkel}`
-}
-
-const DATOFORMAT = new Intl.DateTimeFormat('nb-NO', {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric',
-  timeZone: 'Europe/Oslo',
-})
-const TIDSFORMAT = new Intl.DateTimeFormat('nb-NO', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Oslo' })
-
-/** «Sist redigert av Ola Nordmann 22.09.2026 kl. 14:32». */
-export function sistRedigert(utgave: Utgave<unknown>): string {
-  const navn = [utgave.endret_av_fornavn, utgave.endret_av_etternavn].filter(Boolean).join(' ')
-  const tid = new Date(utgave.endret_kl)
-  const naar = Number.isNaN(tid.getTime()) ? '' : ` ${DATOFORMAT.format(tid)} kl. ${TIDSFORMAT.format(tid)}`
-  return `Sist redigert${navn ? ` av ${navn}` : ''}${naar}`
-}
-
-function Sistredigert({ utgave }: { utgave: Utgave<unknown> }) {
-  return <p className="sistredigert">{sistRedigert(utgave)}</p>
 }
 
 /* --- Rammen rundt et panel ------------------------------------------------ */
@@ -158,7 +138,7 @@ export function Redigerbar({
             {element ? 'Rediger' : (leggTilTekst ?? 'Legg til')}
           </Button>
           {ekstra}
-          {element && <Sistredigert utgave={element.utgave} />}
+          {element && <Sistredigert utgave={element.utgave} type="innholdselement" navn={navn} />}
         </div>
       )}
     </>

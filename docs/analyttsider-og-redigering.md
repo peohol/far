@@ -727,7 +727,7 @@ Hvordan referansesystemet er bygget, står i `docs/faginnhold.md`. Migrasjonene 
 
 **Status:** [x] Ferdig
 
-Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssidene». Sidene er tomme til innholdet legges inn: de viser koden, kategorien, navnet og komponentene fra de statiske datasettene, og resten fylles i arbeidspakke 4. Historikkvisningen med diff (del 7) er ikke laget; «Sist redigert» vises i redigeringsmodus.
+Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssidene». Sidene er tomme til innholdet legges inn: de viser koden, kategorien, navnet og komponentene fra de statiske datasettene, og resten fylles i arbeidspakke 4. «Sist redigert» vises i redigeringsmodus og åpner historikken med diff og gjenoppretting (del 7), laget i arbeidspakke 5.
 
 - [x] Egne URL-er for analyttsider.
 - [x] Venstremeny fører til informasjonssider.
@@ -756,18 +756,19 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 ## Arbeidspakke 5 - Enkle kommentarer og konsentrasjonsregler
 
 **Status:** [ ] Pågår. Regelsettene er i Supabase med dagens regler, og
-pariteten er dokumentert (`docs/fortolkningsregler.md`). Redigeringen,
-simulatoren, historikkvisningen og byttet av fortolkningen gjenstår.
+pariteten er dokumentert (`docs/fortolkningsregler.md`). Reglene vises,
+simuleres og redigeres på analyttsidene, med historikk, sammenligning og
+gjenoppretting. Byttet av fortolkningen til regelsettene gjenstår.
 
 - [x] Kommentarobjekter i Supabase.
 - [x] Enkle intervalbaserte regelsett.
-- [ ] Redigering av delte skillepunkter mellom intervallene.
+- [x] Redigering av delte skillepunkter mellom intervallene.
 - [x] Ingen hull eller overlapp kan publiseres.
 - [x] Kommentar og regel lagres separat.
 - [x] Cut-off-logikken representeres uten duplisering av hovedkommentar.
 - [x] «Ring rekvirent» representeres som egen handling/egenskap.
-- [ ] Regeltest/simulator.
-- [ ] Historikk og gjenoppretting.
+- [x] Regeltest/simulator.
+- [x] Historikk og gjenoppretting.
 - [x] Paritetstester mot dagens motor.
 - [ ] Produksjonsmodulene bytter til Supabase først når paritet er dokumentert.
 

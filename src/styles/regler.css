@@ -1,0 +1,417 @@
+/* Fortolkningsreglene på informasjonssiden, redigeringen av dem og
+   historikkvinduet. Fargene er nivåenes og varslenes egne tokens, så lyst
+   og mørkt tema følger av seg selv. */
+
+/* --- Tabellen og simulatoren -------------------------------------------- */
+
+.regler__ingress,
+.regler__merknad {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
+.regler__tabell th[scope='row'] {
+  white-space: nowrap;
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
+}
+
+.regler__intervall {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-1);
+}
+
+.regler__tabell .regler__intervall {
+  display: table-cell;
+}
+
+.regler__intervall svg {
+  display: inline-block;
+  margin-right: var(--rom-1);
+  vertical-align: -0.15em;
+}
+
+/* Samme farger som knappene på steg 2. */
+.regler__intervall--under {
+  color: var(--niva-under-blekk);
+  background: var(--niva-under-flate);
+}
+
+.regler__intervall--innenfor {
+  color: var(--niva-innenfor-blekk);
+  background: var(--niva-innenfor-flate);
+}
+
+.regler__intervall--over,
+.regler__intervall--cutoff {
+  color: var(--niva-gul-blekk);
+  background: var(--niva-gul-flate);
+}
+
+.regler__intervall--ring {
+  color: var(--niva-over-blekk);
+  background: var(--niva-over-flate);
+}
+
+.regler__tabell .regler__intervall--under {
+  box-shadow: inset 3px 0 0 var(--niva-under-linje);
+}
+
+.regler__tabell .regler__intervall--innenfor {
+  box-shadow: inset 3px 0 0 var(--niva-innenfor-linje);
+}
+
+.regler__tabell .regler__intervall--over,
+.regler__tabell .regler__intervall--cutoff {
+  box-shadow: inset 3px 0 0 var(--niva-gul-linje);
+}
+
+.regler__tabell .regler__intervall--ring {
+  box-shadow: inset 3px 0 0 var(--niva-over-linje);
+}
+
+.regler__simulator {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  width: 100%;
+  padding: var(--rom-3);
+  border: var(--kant) dashed var(--linje);
+  border-radius: var(--runding-m);
+}
+
+.regler__proverad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--rom-2) var(--rom-4);
+}
+
+.regler__proverad .felt {
+  flex: 0 1 14rem;
+}
+
+.regler__avkryssing {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  font-size: var(--tekst-s);
+  color: var(--blekk);
+}
+
+.regler__avkryssing input {
+  accent-color: var(--aksent);
+}
+
+.regler__svar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-1);
+  min-height: 1.5em;
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
+.regler__svar .regler__intervall {
+  padding: 0.1em var(--rom-2);
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-medium);
+  border-radius: var(--runding-full);
+}
+
+.regler__kommentar {
+  color: var(--blekk);
+}
+
+.regler__handling {
+  font-size: var(--tekst-xs);
+}
+
+/* En enhet i en merkelapp med store bokstaver skal stå som den skrives. */
+.enhet {
+  text-transform: none;
+}
+
+/* --- Redigeringen ------------------------------------------------------- */
+
+.regelredigering__intervaller {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.regelredigering__plass {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+}
+
+.regelredigering__intervall,
+.regelredigering__gruppe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  min-width: 0;
+  padding: var(--rom-2) var(--rom-3) var(--rom-3);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-s);
+}
+
+.regelredigering__intervall {
+  border-left-width: 4px;
+}
+
+.regelredigering__intervall--under {
+  border-left-color: var(--niva-under-linje);
+}
+
+.regelredigering__intervall--innenfor {
+  border-left-color: var(--niva-innenfor-linje);
+}
+
+.regelredigering__intervall--over {
+  border-left-color: var(--niva-gul-linje);
+}
+
+.regelredigering__intervall > legend,
+.regelredigering__gruppe > legend {
+  padding: 0 var(--rom-1);
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-tung);
+  color: var(--blekk);
+}
+
+/* Grensen står mellom to intervaller, litt inn, så den leses som delt. */
+.regelredigering__grense {
+  max-width: 22rem;
+  padding-left: var(--rom-4);
+}
+
+.regelredigering__deling {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  max-width: 22rem;
+}
+
+.regelredigering__valg {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.regelredigering__tall {
+  font-variant-numeric: tabular-nums;
+}
+
+.regelredigering__konflikt {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* --- Historikken -------------------------------------------------------- */
+
+.modallag--bred {
+  width: min(100%, 68rem);
+}
+
+.sistredigert--knapp {
+  padding: 0;
+  font: inherit;
+  font-size: var(--tekst-xxs);
+  text-align: left;
+  color: var(--blekk-dempet);
+  background: none;
+  border: 0;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.sistredigert--knapp:hover {
+  color: var(--blekk);
+}
+
+.historikk {
+  display: grid;
+  grid-template-columns: minmax(13rem, 18rem) minmax(0, 1fr);
+  gap: var(--rom-4);
+  align-items: start;
+}
+
+@media (max-width: 48rem) {
+  .historikk {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.historikk__tidslinje {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.historikk__velg {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  width: 100%;
+  padding: var(--rom-2);
+  font: inherit;
+  text-align: left;
+  color: var(--blekk);
+  background: none;
+  border: var(--kant) solid transparent;
+  border-left: 3px solid var(--linje);
+  border-radius: var(--runding-s);
+}
+
+button.historikk__velg {
+  cursor: pointer;
+}
+
+button.historikk__velg:hover {
+  background: var(--flate-hevet);
+}
+
+.historikk__velg[aria-pressed='true'] {
+  background: var(--aksent-flate);
+  border-color: var(--aksent);
+}
+
+.historikk__hendelse--publisert .historikk__velg {
+  border-left-color: var(--niva-innenfor-linje);
+}
+
+.historikk__handling {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+}
+
+.historikk__hvem,
+.historikk__kilde {
+  font-size: var(--tekst-xs);
+  color: var(--blekk-dempet);
+}
+
+.historikk__sammenligning {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  min-width: 0;
+}
+
+.historikk__valg {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--rom-2) var(--rom-3);
+}
+
+.historikk__mot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2);
+  font-size: var(--tekst-s);
+}
+
+.historikk__mot select {
+  width: auto;
+}
+
+.historikk__visning {
+  display: flex;
+  gap: var(--rom-1);
+}
+
+.historikk__visning [aria-pressed='true'] {
+  color: var(--aksent);
+  border-color: var(--aksent);
+}
+
+.historikk__ingen {
+  color: var(--blekk-dempet);
+}
+
+.historikk__endringer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.historikk__gruppetittel {
+  margin-bottom: var(--rom-1);
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-tung);
+  color: var(--blekk-dempet);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.historikk__felt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  margin: 0;
+}
+
+.historikk__rad {
+  display: grid;
+  grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr);
+  gap: var(--rom-3);
+  font-size: var(--tekst-s);
+}
+
+.historikk__rad dt {
+  color: var(--blekk-dempet);
+}
+
+.historikk__rad dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.historikk__tabell td {
+  overflow-wrap: anywhere;
+}
+
+.historikk__endret th,
+.historikk__endret td {
+  background: var(--varsel-flate);
+}
+
+/* Fjernet: rødt og gjennomstreket. Lagt til: grønt og understreket, så
+   forskjellen ikke bare hviler på fargen. */
+.historikk del,
+.regelredigering__konflikt del {
+  color: var(--niva-over-blekk);
+  background: var(--niva-over-flate);
+  text-decoration: line-through;
+}
+
+.historikk ins,
+.regelredigering__konflikt ins {
+  color: var(--niva-innenfor-blekk);
+  background: var(--niva-innenfor-flate);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.historikk__gjenopprett {
+  padding-top: var(--rom-2);
+  border-top: var(--kant) solid var(--linje);
+}

@@ -12,6 +12,9 @@ import { LEVELS } from '../types'
 /** Samme verdier som `konsentrasjonsniva` i databasen. */
 export const KONSENTRASJONSNIVAER = LEVELS
 
+/** Enhetene en konsentrasjon kan oppgis i. Samme som tabellen `maleenheter` i databasen. */
+export const MALEENHETER = ['nmol/L', 'µmol/L'] as const
+
 /** Handlingene en regel kan ha i tillegg til kommentaren. Samme som `regelhandling` i databasen. */
 export const REGELHANDLINGER = ['ring_rekvirent'] as const
 export type Regelhandling = (typeof REGELHANDLINGER)[number]

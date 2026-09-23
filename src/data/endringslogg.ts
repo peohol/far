@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.13.0',
+    dato: '2026-09-23',
+    sammendrag: 'Konsentrasjonsreglene vises, prøves og redigeres på analyttsidene',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Informasjonssiden for en analytt med konsentrasjonsområder har fått delen «Fortolkning»: en tabell over områdene, kommentaren hvert av dem gir og når rekvirenten skal ringes, med ringegrensen og «Til stede under cut-off».',
+      'Under tabellen kan du skrive inn en konsentrasjon og se hvilket område den havner i, hvilken kommentar den gir og om rekvirenten skal ringes — det samme som kommenteringen gir.',
+      'Administratorer kan redigere reglene i redigeringsmodus: flytte en grense (den gjelder begge nabo-områdene), dele et område i to, slå sammen to, endre kommentarene og ringingen, og prøve utkastet før det lagres. Endringene blir synlige først når de publiseres, og oppsummeringen før publisering sier hva som er endret.',
+      '«Sist redigert» ved hvert redigerbart innhold åpner nå historikken: hvem som endret hva og når, med det fjernede rødt og gjennomstreket og det nye grønt, eller versjonene side om side. En tidligere versjon kan gjenopprettes; det lager en ny versjon, og ingenting slettes.',
+      'Har noen andre lagret reglene mens du redigerte, mister du ikke det du har gjort. Du kan sammenligne med det de lagret og velge hva som skal gjelde.',
+      'Kommenteringen er uendret; den bruker fortsatt de faste reglene.',
+    ],
+  },
+  {
     versjon: '1.12.0',
     dato: '2026-09-23',
     sammendrag: 'Konsentrasjonsreglene og kommentarene er lagt inn i databasen',
