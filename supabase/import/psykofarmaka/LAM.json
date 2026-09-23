@@ -1,0 +1,59 @@
+{
+  "kode": "LAM",
+  "sider": [63],
+  "viktige_data": {
+    "referanseomrade": { "nedre": 10, "ovre": 50, "enhet": "µmol/L" },
+    "halveringstid": { "nedre": 33, "ovre": 33, "enhet": "timer", "forbehold": "Omtrentlig." },
+    "steady_state": { "nedre": 7, "ovre": 7, "enhet": "døgn", "forbehold": "Omtrentlig." }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Bruks- og spenningsavhengig hemmer av spenningsstyrte natriumkanaler, hemmer frigjøring av glutamat."
+    ]
+  },
+  "dosering": {
+    "tekst": ["25-700 mg"]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Epilepsi:",
+      { "punkter": [
+        "Voksne og ungdom >13 år: kombinasjonsbehandling eller monoterapi ved partielle og generaliserte anfall, inkl. tonisk-kloniske anfall, og anfall assosiert med Lennox-Gastaut syndrom.",
+        "Barn 2–12 år: kombinasjonsbehandling ved partielle og generaliserte anfall, inkl. tonisk-kloniske anfall og anfall assosiert med Lennox-Gastaut syndrom, og monoterapi ved typiske absensanfall."
+      ] },
+      "Bipolar lidelse:",
+      { "punkter": [
+        "Voksne >18 år: forebygging av depressive episoder hos pasienter med bipolar I lidelse, som hovedsakelig opplever depressive episoder. Ikke anbefalt til barn og ungdom <18 år."
+      ] }
+    ],
+    "referanser": ["fk-lamictal"]
+  },
+  "farmakokinetikk": [
+    { "tittel": "Biotilgjengelighet", "tekst": ["98 %"] },
+    { "tittel": "tmax", "tekst": ["2,5 timer"] },
+    { "tittel": "t1/2", "tekst": ["Ca. 33 timer"] },
+    { "tittel": "tss", "tekst": ["Ca. 7 døgn"] },
+    { "tittel": "Proteinbinding", "tekst": ["50-66 %"] },
+    { "tittel": "VD", "tekst": ["0,92-1,22 L/kg"] },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": ["Hepatisk metabolisme via UDP-glukuronyltransferaser (UGT1A4). Utskilles hovedsakelig i urin (94%)."]
+    },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Valproat: hemmer glukuronidering av lamotrigin; halvdose anbefales",
+        "Induktører (karbamazepin, fenytoin, fenobarbital, primidon): dobbel dose anbefales",
+        "Hormonelle antikonseptiva: økt clearance (ca. x2). OBS. preparater med \"pillefri\" uke"
+      ]
+    }
+  ],
+  "referanser": {
+    "fk-lamictal": {
+      "tittel": "Lamictal «GlaxoSmithKline»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/lamictal-glaxosmithkline-560748"
+    }
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "kode": "PERF",
+  "sider": [
+    56
+  ],
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 1,
+      "ovre": 7,
+      "enhet": "nmol/L",
+      "forbehold": ""
+    },
+    "toksisk_omrade": {
+      "nedre": 12,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-antipsykotika"
+      ]
+    },
+    "halveringstid": {
+      "nedre": 9,
+      "ovre": 9,
+      "enhet": "timer",
+      "forbehold": "Omtrentlig. Peroralt."
+    },
+    "steady_state": {
+      "nedre": 7,
+      "ovre": 7,
+      "enhet": "døgn",
+      "forbehold": "Peroralt. Depot: ca. 3 måneder."
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Reseptorblokade av katekolaminer, særlig dopamin."
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Tablett: 4–32 mg",
+      "Depotinjeksjon: 108,2 mg/mL perfenazindekanoat, tilsvarende 78,3 mg/mL perfenazin. 1–2 ml hver 3.–4. uke."
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Trilafon dekanoat (depotinjeksjon): kronisk schizofreni, psykoser, mani og paranoia. Behandlingen skal innledes med perfenazin tabletter for å klarlegge pasientens reaksjon på perfenazin."
+    ],
+    "referanser": [
+      "fk-trilafon-dekanoat"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "40 %",
+        "Antacida bør tas 1 timer før eller 2–3 timer etter perfenazin."
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "1–3 timer (p.o.)"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Ca. 9 timer (p.o.)"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "7 døgn (p.o.)",
+        "Ca. 3 måneder (depot)"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "90–93 %"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "20 L/kg"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Hepatisk metabolisme. Utskilles i urin (30 %)."
+      ]
+    },
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "2D6"
+      ]
+    },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Kan øke konsentrasjon av TCA og betablokkere."
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "tabeller": [
+      {
+        "stoff": "Perfenazin",
+        "kilde": "Jönsson et al. (2019)",
+        "enhet": "nmol/L",
+        "doser": [
+          "4 mg",
+          "8 mg",
+          "12 mg",
+          "16 mg",
+          "20 mg",
+          "24 mg",
+          "32 mg",
+          "40 mg",
+          "Alle"
+        ],
+        "antall": [
+          62,
+          194,
+          129,
+          281,
+          41,
+          138,
+          73,
+          19,
+          1065
+        ],
+        "p10": [
+          0.4,
+          0.4,
+          0.5,
+          0.6,
+          0.6,
+          1.2,
+          1.1,
+          2.3,
+          0.6
+        ],
+        "median": [
+          1.1,
+          1.3,
+          1.2,
+          1.9,
+          2.6,
+          3.7,
+          5.4,
+          6.7,
+          2
+        ],
+        "p90": [
+          4.8,
+          4.6,
+          6.2,
+          8.2,
+          8.9,
+          12.3,
+          19.4,
+          75,
+          10.3
+        ]
+      }
+    ],
+    "referanseomradeprosjektet": {
+      "doser": "4–32 mg",
+      "enhet": "nmol/L",
+      "p10": 1.2,
+      "p90": 6.4
+    },
+    "referanser": [
+      "jonsson2019",
+      "referanseomradeprosjektet"
+    ]
+  },
+  "referanser": {
+    "fk-trilafon-dekanoat": {
+      "tittel": "Trilafon dekanoat «Orion»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/trilafon-dekanoat-orion-564813"
+    }
+  }
+}
