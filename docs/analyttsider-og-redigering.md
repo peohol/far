@@ -975,30 +975,17 @@ Til klinisk gjennomgang: avvikene mellom PDF-en og de statiske dataene (BREK, DO
 
 ## Arbeidspakke 7 - THC-syre
 
-**Status:** [~] Pågår. Motoren og lagringen er ferdige; editoren, simulatoren
-og byttet av produksjonskilde gjenstår. Løsningen er beskrevet i
-`docs/thc-syre.md`.
+**Status:** [ ] Ikke startet
 
 Egen spesialisert regelmotor/editor for:
 
-- [x] terskelkurver
-- [x] bruksmønster
-- [x] prøveintervaller
-- [x] kreatininkorrigerte verdier
-- [x] dynamisk kommentarsammensetning
-- [x] øvrige THC-spesifikke parametere
-- [ ] simulator og regresjonstester (regresjonstestene og fasiten er ferdige)
-
-Punktene over er representert i regelsettet, motoren og lagringen i Supabase,
-med validering på serveren. Gjenstår:
-
-- [x] Strukturert lagring i Supabase, med utkast/publisering, historikk og gjenoppretting.
-- [x] Server-side validering, også av kurvenes rekkefølge for alle prøveverdier.
-- [x] Tekstbolkene lagret som egne kommentarer, som regelsettet peker på.
-- [x] Regelsettet og tekstene fra dagens modul importert og publisert.
-- [ ] Redigeringsgrensesnitt med historikk og sammenligning.
-- [ ] Simulator.
-- [ ] Produksjonsmodulen bytter til Supabase.
+- [ ] terskelkurver
+- [ ] bruksmønster
+- [ ] prøveintervaller
+- [ ] kreatininkorrigerte verdier
+- [ ] dynamisk kommentarsammensetning
+- [ ] øvrige THC-spesifikke parametere
+- [ ] simulator og regresjonstester
 
 ---
 
