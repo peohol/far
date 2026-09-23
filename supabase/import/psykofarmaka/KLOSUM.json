@@ -1,43 +1,17 @@
 {
   "kode": "KLOSUM",
-  "sider": [
-    18
-  ],
+  "sider": [18],
   "viktige_data": {
-    "referanseomrade": {
-      "nedre": 700,
-      "ovre": 1500,
-      "enhet": "nmol/L",
-      "forbehold": "Klomipramin + desmetylklomipramin."
-    },
+    "referanseomrade": { "nedre": 700, "ovre": 1500, "enhet": "nmol/L", "forbehold": "Klomipramin + desmetylklomipramin." },
     "toksisk_omrade": {
-      "nedre": 1600,
-      "ovre": null,
-      "enhet": "nmol/L",
-      "forbehold": "Klomipramin + desmetylklomipramin.",
-      "referanser": [
-        "schulz2020",
-        "hiemke2017",
-        "helsebiblioteket-tca"
-      ]
+      "nedre": 1600, "ovre": null, "enhet": "nmol/L", "forbehold": "Klomipramin + desmetylklomipramin.",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-tca"]
     },
     "alvorlig_intoksikasjon": {
-      "nedre": 3200,
-      "ovre": null,
-      "enhet": "nmol/L",
-      "forbehold": "Klomipramin + desmetylklomipramin. Komatøs/fatal. Omtrentlig grense.",
-      "referanser": [
-        "schulz2020",
-        "hiemke2017",
-        "helsebiblioteket-tca"
-      ]
+      "nedre": 3200, "ovre": null, "enhet": "nmol/L", "forbehold": "Klomipramin + desmetylklomipramin. Komatøs/fatal. Omtrentlig grense.",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-tca"]
     },
-    "steady_state": {
-      "nedre": 1,
-      "ovre": 1,
-      "enhet": "uke",
-      "forbehold": "Omtrentlig."
-    }
+    "steady_state": { "nedre": 1, "ovre": 1, "enhet": "uke", "forbehold": "Omtrentlig." }
   },
   "farmakodynamikk": {
     "tekst": [
@@ -46,63 +20,23 @@
     ]
   },
   "dosering": {
-    "tekst": [
-      "10–200 (250) mg"
-    ]
+    "tekst": ["10–200 (250) mg"]
   },
   "indikasjon": {
     "tekst": [
       "Depresjoner, obsessive tilstander og panikksyndrom.",
       "Forsøksvis ved assosierte symptomer ved narkolepsi (katapleksi, hypnagoge hallusinasjoner og søvnparalyse)."
     ],
-    "referanser": [
-      "fk-anafranil"
-    ]
+    "referanser": ["fk-anafranil"]
   },
   "farmakokinetikk": [
-    {
-      "tittel": "Biotilgjengelighet",
-      "tekst": [
-        "50 %"
-      ]
-    },
-    {
-      "tittel": "tmax",
-      "tekst": [
-        "2–6 timer"
-      ]
-    },
-    {
-      "tittel": "t1/2",
-      "tekst": [
-        "Klomipramin: 21 (12–36) timer",
-        "Desmetylklomipramin: ca. 36 timer"
-      ]
-    },
-    {
-      "tittel": "tss",
-      "tekst": [
-        "Ca. 1 uke"
-      ]
-    },
-    {
-      "tittel": "Proteinbinding",
-      "tekst": [
-        "98 % (både klomimpramin og desmetylklomipramin)"
-      ]
-    },
-    {
-      "tittel": "VD",
-      "tekst": [
-        "Ca. 12–17 L/kg"
-      ]
-    },
-    {
-      "tittel": "Eliminasjon",
-      "tekst": [
-        "Hepatisk metabolisme. Utskilles i urin (55 %) og feces (28 %)."
-      ]
-    },
+    { "tittel": "Biotilgjengelighet", "tekst": ["50 %"] },
+    { "tittel": "tmax", "tekst": ["2–6 timer"] },
+    { "tittel": "t1/2", "tekst": ["Klomipramin: 21 (12–36) timer", "Desmetylklomipramin: ca. 36 timer"] },
+    { "tittel": "tss", "tekst": ["Ca. 1 uke"] },
+    { "tittel": "Proteinbinding", "tekst": ["98 % (både klomimpramin og desmetylklomipramin)"] },
+    { "tittel": "VD", "tekst": ["Ca. 12–17 L/kg"] },
+    { "tittel": "Eliminasjon", "tekst": ["Hepatisk metabolisme. Utskilles i urin (55 %) og feces (28 %)."] },
     {
       "tittel": "CYP-enzymer (substrat)",
       "tekst": [
@@ -110,25 +44,10 @@
         "Desmetylklomipramin: 2D6",
         "Langsomme omsettere via 2D6 eller 2C19 anbefales 50 % reduksjon i startdose."
       ],
-      "referanser": [
-        "pharmgkb-klomipramin"
-      ]
+      "referanser": ["pharmgkb-klomipramin"]
     },
-    {
-      "tittel": "Interaksjoner",
-      "tekst": [
-        "Mange interaksjoner! Obs alle enzymhemmere."
-      ]
-    },
-    {
-      "tittel": "Annet",
-      "tekst": [
-        "Ratio metabolitt/modersubstans: 0,8-2,6 (AGNP)"
-      ],
-      "referanser": [
-        "hiemke2017"
-      ]
-    }
+    { "tittel": "Interaksjoner", "tekst": ["Mange interaksjoner! Obs alle enzymhemmere."] },
+    { "tittel": "Annet", "tekst": ["Ratio metabolitt/modersubstans: 0,8-2,6 (AGNP)"], "referanser": ["hiemke2017"] }
   ],
   "serumkonsentrasjoner": {
     "tabeller": [
@@ -136,193 +55,35 @@
         "stoff": "Klomipramin + desmetylklomipramin",
         "kilde": "Reis et al. (2009)",
         "enhet": "nmol/L",
-        "doser": [
-          "25 mg",
-          "50 mg",
-          "75 mg",
-          "100 mg",
-          "125 mg",
-          "150 mg",
-          "175 mg",
-          "200 mg",
-          "Alle"
-        ],
-        "antall": [
-          10,
-          36,
-          41,
-          59,
-          39,
-          115,
-          12,
-          30,
-          400
-        ],
-        "p10": [
-          38,
-          104,
-          233,
-          267,
-          435,
-          389,
-          610,
-          444,
-          null
-        ],
-        "median": [
-          97,
-          298,
-          354,
-          542,
-          753,
-          833,
-          768,
-          927,
-          null
-        ],
-        "p90": [
-          353,
-          772,
-          1210,
-          1196,
-          1573,
-          1520,
-          1329,
-          2094,
-          null
-        ]
+        "doser": ["25 mg", "50 mg", "75 mg", "100 mg", "125 mg", "150 mg", "175 mg", "200 mg", "Alle"],
+        "antall": [10, 36, 41, 59, 39, 115, 12, 30, 400],
+        "p10": [38, 104, 233, 267, 435, 389, 610, 444, null],
+        "median": [97, 298, 354, 542, 753, 833, 768, 927, null],
+        "p90": [353, 772, 1210, 1196, 1573, 1520, 1329, 2094, null]
       },
       {
         "stoff": "Klomipramin",
         "kilde": "Reis et al. (2009)",
         "enhet": "nmol/L",
-        "doser": [
-          "25 mg",
-          "50 mg",
-          "75 mg",
-          "100 mg",
-          "125 mg",
-          "150 mg",
-          "175 mg",
-          "200 mg",
-          "Alle"
-        ],
-        "antall": [
-          10,
-          36,
-          41,
-          59,
-          39,
-          115,
-          12,
-          30,
-          400
-        ],
-        "p10": [
-          28,
-          47,
-          71,
-          102,
-          109,
-          118,
-          189,
-          136,
-          71
-        ],
-        "median": [
-          38,
-          121,
-          165,
-          236,
-          303,
-          284,
-          255,
-          248,
-          236
-        ],
-        "p90": [
-          202,
-          345,
-          476,
-          672,
-          731,
-          700,
-          515,
-          952,
-          673
-        ]
+        "doser": ["25 mg", "50 mg", "75 mg", "100 mg", "125 mg", "150 mg", "175 mg", "200 mg", "Alle"],
+        "antall": [10, 36, 41, 59, 39, 115, 12, 30, 400],
+        "p10": [28, 47, 71, 102, 109, 118, 189, 136, 71],
+        "median": [38, 121, 165, 236, 303, 284, 255, 248, 236],
+        "p90": [202, 345, 476, 672, 731, 700, 515, 952, 673]
       },
       {
         "stoff": "Desmetylklomipramin",
         "kilde": "Reis et al. (2009)",
         "enhet": "nmol/L",
-        "doser": [
-          "25 mg",
-          "50 mg",
-          "75 mg",
-          "100 mg",
-          "125 mg",
-          "150 mg",
-          "175 mg",
-          "200 mg",
-          "Alle"
-        ],
-        "antall": [
-          10,
-          36,
-          41,
-          59,
-          39,
-          115,
-          12,
-          30,
-          400
-        ],
-        "p10": [
-          10,
-          52,
-          77,
-          112,
-          219,
-          185,
-          387,
-          253,
-          null
-        ],
-        "median": [
-          38,
-          157,
-          205,
-          303,
-          437,
-          486,
-          539,
-          618,
-          null
-        ],
-        "p90": [
-          202,
-          420,
-          849,
-          661,
-          789,
-          1008,
-          887,
-          1076,
-          null
-        ]
+        "doser": ["25 mg", "50 mg", "75 mg", "100 mg", "125 mg", "150 mg", "175 mg", "200 mg", "Alle"],
+        "antall": [10, 36, 41, 59, 39, 115, 12, 30, 400],
+        "p10": [10, 52, 77, 112, 219, 185, 387, 253, null],
+        "median": [38, 157, 205, 303, 437, 486, 539, 618, null],
+        "p90": [202, 420, 849, 661, 789, 1008, 887, 1076, null]
       }
     ],
-    "referanseomradeprosjektet": {
-      "doser": "50–250 mg",
-      "enhet": "nmol/L",
-      "p10": 148,
-      "p90": 1559
-    },
-    "referanser": [
-      "reis2009",
-      "referanseomradeprosjektet"
-    ]
+    "referanseomradeprosjektet": { "doser": "50–250 mg", "enhet": "nmol/L", "p10": 148, "p90": 1559 },
+    "referanser": ["reis2009", "referanseomradeprosjektet"]
   },
   "referanser": {
     "fk-anafranil": {

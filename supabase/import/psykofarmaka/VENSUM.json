@@ -1,43 +1,17 @@
 {
   "kode": "VENSUM",
-  "sider": [
-    28
-  ],
+  "sider": [28],
   "viktige_data": {
-    "referanseomrade": {
-      "nedre": 400,
-      "ovre": 2000,
-      "enhet": "nmol/L",
-      "forbehold": "Venlafaksin + O-desmetylvenlafaksin."
-    },
+    "referanseomrade": { "nedre": 400, "ovre": 2000, "enhet": "nmol/L", "forbehold": "Venlafaksin + O-desmetylvenlafaksin." },
     "toksisk_omrade": {
-      "nedre": 3000,
-      "ovre": null,
-      "enhet": "nmol/L",
-      "forbehold": "Venlafaksin + O-desmetylvenlafaksin.",
-      "referanser": [
-        "schulz2020",
-        "hiemke2017",
-        "helsebiblioteket-venlafaksin"
-      ]
+      "nedre": 3000, "ovre": null, "enhet": "nmol/L", "forbehold": "Venlafaksin + O-desmetylvenlafaksin.",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-venlafaksin"]
     },
     "alvorlig_intoksikasjon": {
-      "nedre": 11000,
-      "ovre": null,
-      "enhet": "nmol/L",
-      "forbehold": "Venlafaksin + O-desmetylvenlafaksin. Komatøs/fatal. Omtrentlig grense.",
-      "referanser": [
-        "schulz2020",
-        "hiemke2017",
-        "helsebiblioteket-venlafaksin"
-      ]
+      "nedre": 11000, "ovre": null, "enhet": "nmol/L", "forbehold": "Venlafaksin + O-desmetylvenlafaksin. Komatøs/fatal. Omtrentlig grense.",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-venlafaksin"]
     },
-    "steady_state": {
-      "nedre": 3,
-      "ovre": 3,
-      "enhet": "dager",
-      "forbehold": "Omtrentlig."
-    }
+    "steady_state": { "nedre": 3, "ovre": 3, "enhet": "dager", "forbehold": "Omtrentlig." }
   },
   "farmakodynamikk": {
     "tekst": [
@@ -47,68 +21,27 @@
     ]
   },
   "dosering": {
-    "tekst": [
-      "75–375 mg for depressiv lidelse, ofte lavere for smertestillende bruk"
-    ]
+    "tekst": ["75–375 mg for depressiv lidelse, ofte lavere for smertestillende bruk"]
   },
   "indikasjon": {
     "tekst": [
-      {
-        "punkter": [
-          "Depressive episoder",
-          "Profylaktisk mot tilbakefall av depressive episoder",
-          "Generalisert angstlidelse (GAD)",
-          "Sosial angstlidelse (SAD)",
-          "Panikklidelse, med eller uten agorafobi"
-        ]
-      }
+      { "punkter": [
+        "Depressive episoder",
+        "Profylaktisk mot tilbakefall av depressive episoder",
+        "Generalisert angstlidelse (GAD)",
+        "Sosial angstlidelse (SAD)",
+        "Panikklidelse, med eller uten agorafobi"
+      ] }
     ],
-    "referanser": [
-      "fk-efexor-depot",
-      "fk-venlafaxin-krka"
-    ]
+    "referanser": ["fk-efexor-depot", "fk-venlafaxin-krka"]
   },
   "farmakokinetikk": [
-    {
-      "tittel": "Biotilgjengelighet",
-      "tekst": [
-        "45 %"
-      ]
-    },
-    {
-      "tittel": "tmax",
-      "tekst": [
-        "Venlafaksin: 6 timer",
-        "O-desmetylvenlafaksin: 9 timer"
-      ]
-    },
-    {
-      "tittel": "t1/2",
-      "tekst": [
-        "Venlafaksin: 5 (3–7) timer",
-        "O-desmetylvenlafaksin: 11 timer"
-      ]
-    },
-    {
-      "tittel": "tss",
-      "tekst": [
-        "Ca. 3 dager"
-      ]
-    },
-    {
-      "tittel": "Proteinbinding",
-      "tekst": [
-        "Venlafaksin: 27 %",
-        "O-desmetylvenlafaksin: 30 %"
-      ]
-    },
-    {
-      "tittel": "VD",
-      "tekst": [
-        "Venlafaksin: 7.5 ± 3.7 L/kg",
-        "O-desmetylvenlafaksin: 5.7 ± 1.8 L/kg"
-      ]
-    },
+    { "tittel": "Biotilgjengelighet", "tekst": ["45 %"] },
+    { "tittel": "tmax", "tekst": ["Venlafaksin: 6 timer", "O-desmetylvenlafaksin: 9 timer"] },
+    { "tittel": "t1/2", "tekst": ["Venlafaksin: 5 (3–7) timer", "O-desmetylvenlafaksin: 11 timer"] },
+    { "tittel": "tss", "tekst": ["Ca. 3 dager"] },
+    { "tittel": "Proteinbinding", "tekst": ["Venlafaksin: 27 %", "O-desmetylvenlafaksin: 30 %"] },
+    { "tittel": "VD", "tekst": ["Venlafaksin: 7.5 ± 3.7 L/kg", "O-desmetylvenlafaksin: 5.7 ± 1.8 L/kg"] },
     {
       "tittel": "Eliminasjon",
       "tekst": [
@@ -117,12 +50,7 @@
         "Ved GFR <30 ml/min bør dose reduseres med 50%."
       ]
     },
-    {
-      "tittel": "CYP-enzymer (substrat)",
-      "tekst": [
-        "2D6, i mindre grad 3A4, 2C19 og 2C9."
-      ]
-    },
+    { "tittel": "CYP-enzymer (substrat)", "tekst": ["2D6, i mindre grad 3A4, 2C19 og 2C9."] },
     {
       "tittel": "Interaksjoner",
       "tekst": [
@@ -130,15 +58,7 @@
         "3A4-hemmere øker eksponeringen for venlafaksin og O-desmetylvenlafaksin."
       ]
     },
-    {
-      "tittel": "Annet",
-      "tekst": [
-        "Ratio metabolitt/modersubstans: 2,7–7,7 (AGNP)"
-      ],
-      "referanser": [
-        "hiemke2017"
-      ]
-    }
+    { "tittel": "Annet", "tekst": ["Ratio metabolitt/modersubstans: 2,7–7,7 (AGNP)"], "referanser": ["hiemke2017"] }
   ],
   "serumkonsentrasjoner": {
     "tabeller": [
@@ -146,193 +66,35 @@
         "stoff": "Venlafaksin + O-desmetylvenlafaksin",
         "kilde": "Reis et al. (2009)",
         "enhet": "nmol/L",
-        "doser": [
-          "37,5 mg",
-          "75 mg",
-          "112,5 mg",
-          "150 mg",
-          "225 mg",
-          "300 mg",
-          "375 mg",
-          "450 mg",
-          "Alle"
-        ],
-        "antall": [
-          18,
-          256,
-          42,
-          716,
-          391,
-          252,
-          34,
-          22,
-          1781
-        ],
-        "p10": [
-          188,
-          245,
-          292,
-          382,
-          494,
-          674,
-          862,
-          712,
-          null
-        ],
-        "median": [
-          345,
-          487,
-          827,
-          787,
-          1193,
-          1407,
-          1561,
-          1292,
-          null
-        ],
-        "p90": [
-          1024,
-          1200,
-          1489,
-          1590,
-          2277,
-          2635,
-          3605,
-          2689,
-          null
-        ]
+        "doser": ["37,5 mg", "75 mg", "112,5 mg", "150 mg", "225 mg", "300 mg", "375 mg", "450 mg", "Alle"],
+        "antall": [18, 256, 42, 716, 391, 252, 34, 22, 1781],
+        "p10": [188, 245, 292, 382, 494, 674, 862, 712, null],
+        "median": [345, 487, 827, 787, 1193, 1407, 1561, 1292, null],
+        "p90": [1024, 1200, 1489, 1590, 2277, 2635, 3605, 2689, null]
       },
       {
         "stoff": "Venlafaksin",
         "kilde": "Reis et al. (2009)",
         "enhet": "nmol/L",
-        "doser": [
-          "37,5 mg",
-          "75 mg",
-          "112,5 mg",
-          "150 mg",
-          "225 mg",
-          "300 mg",
-          "375 mg",
-          "450 mg",
-          "Alle"
-        ],
-        "antall": [
-          18,
-          256,
-          42,
-          716,
-          391,
-          252,
-          34,
-          22,
-          1781
-        ],
-        "p10": [
-          17,
-          23,
-          49,
-          46,
-          83,
-          104,
-          118,
-          103,
-          46
-        ],
-        "median": [
-          127,
-          99,
-          167,
-          179,
-          327,
-          418,
-          669,
-          334,
-          225
-        ],
-        "p90": [
-          594,
-          503,
-          1011,
-          677,
-          1017,
-          1391,
-          1760,
-          1419,
-          900
-        ]
+        "doser": ["37,5 mg", "75 mg", "112,5 mg", "150 mg", "225 mg", "300 mg", "375 mg", "450 mg", "Alle"],
+        "antall": [18, 256, 42, 716, 391, 252, 34, 22, 1781],
+        "p10": [17, 23, 49, 46, 83, 104, 118, 103, 46],
+        "median": [127, 99, 167, 179, 327, 418, 669, 334, 225],
+        "p90": [594, 503, 1011, 677, 1017, 1391, 1760, 1419, 900]
       },
       {
         "stoff": "O-desmetylvenlafaksin",
         "kilde": "Reis et al. (2009)",
         "enhet": "nmol/L",
-        "doser": [
-          "37,5 mg",
-          "75 mg",
-          "112,5 mg",
-          "150 mg",
-          "225 mg",
-          "300 mg",
-          "375 mg",
-          "450 mg",
-          "Alle"
-        ],
-        "antall": [
-          18,
-          256,
-          42,
-          716,
-          391,
-          252,
-          34,
-          22,
-          1781
-        ],
-        "p10": [
-          48,
-          160,
-          131,
-          221,
-          313,
-          381,
-          407,
-          447,
-          null
-        ],
-        "median": [
-          256,
-          373,
-          509,
-          535,
-          711,
-          858,
-          1078,
-          766,
-          null
-        ],
-        "p90": [
-          718,
-          822,
-          1069,
-          1085,
-          1480,
-          1645,
-          1993,
-          1160,
-          null
-        ]
+        "doser": ["37,5 mg", "75 mg", "112,5 mg", "150 mg", "225 mg", "300 mg", "375 mg", "450 mg", "Alle"],
+        "antall": [18, 256, 42, 716, 391, 252, 34, 22, 1781],
+        "p10": [48, 160, 131, 221, 313, 381, 407, 447, null],
+        "median": [256, 373, 509, 535, 711, 858, 1078, 766, null],
+        "p90": [718, 822, 1069, 1085, 1480, 1645, 1993, 1160, null]
       }
     ],
-    "referanseomradeprosjektet": {
-      "doser": "75–375 mg",
-      "enhet": "nmol/L",
-      "p10": 442,
-      "p90": 2028
-    },
-    "referanser": [
-      "reis2009",
-      "referanseomradeprosjektet"
-    ]
+    "referanseomradeprosjektet": { "doser": "75–375 mg", "enhet": "nmol/L", "p10": 442, "p90": 2028 },
+    "referanser": ["reis2009", "referanseomradeprosjektet"]
   },
   "referanser": {
     "fk-efexor-depot": {

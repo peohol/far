@@ -1,24 +1,10 @@
 {
   "kode": "BREK",
-  "sider": [
-    42
-  ],
+  "sider": [42],
   "viktige_data": {
-    "referanseomrade": {
-      "nedre": 50,
-      "ovre": 350,
-      "enhet": "nmol/L"
-    },
-    "halveringstid": {
-      "nedre": 91.4,
-      "ovre": 91.4,
-      "enhet": "timer"
-    },
-    "steady_state": {
-      "nedre": 19,
-      "ovre": 19,
-      "enhet": "dager"
-    }
+    "referanseomrade": { "nedre": 50, "ovre": 350, "enhet": "nmol/L" },
+    "halveringstid": { "nedre": 91.4, "ovre": 91.4, "enhet": "timer" },
+    "steady_state": { "nedre": 19, "ovre": 19, "enhet": "dager" }
   },
   "farmakodynamikk": {
     "tekst": [
@@ -28,77 +14,29 @@
     ]
   },
   "dosering": {
-    "tekst": [
-      "Tablett: 1-4 mg"
-    ]
+    "tekst": ["Tablett: 1-4 mg"]
   },
   "indikasjon": {
-    "tekst": [
-      "Voksne og ungdom ≥13 år: schizofreni."
-    ],
-    "referanser": [
-      "fk-rxulti"
-    ]
+    "tekst": ["Voksne og ungdom ≥13 år: schizofreni."],
+    "referanser": ["fk-rxulti"]
   },
   "farmakokinetikk": [
-    {
-      "tittel": "Biotilgjengelighet",
-      "tekst": [
-        "95 %"
-      ]
-    },
-    {
-      "tittel": "tmax",
-      "tekst": [
-        "4 timer"
-      ]
-    },
-    {
-      "tittel": "t1/2",
-      "tekst": [
-        "91,4 timer"
-      ]
-    },
-    {
-      "tittel": "tss",
-      "tekst": [
-        "19 dager"
-      ]
-    },
-    {
-      "tittel": "Proteinbinding",
-      "tekst": [
-        ">99 %"
-      ]
-    },
-    {
-      "tittel": "VD",
-      "tekst": [
-        "1,6 L/kg"
-      ]
-    },
-    {
-      "tittel": "Eliminasjon",
-      "tekst": [
-        "Hepatisk metabolisme. Utskilles i urin (25 %) og feces (46 %)"
-      ]
-    },
-    {
-      "tittel": "CYP-enzymer (substrat)",
-      "tekst": [
-        "3A4, 2D6"
-      ]
-    },
+    { "tittel": "Biotilgjengelighet", "tekst": ["95 %"] },
+    { "tittel": "tmax", "tekst": ["4 timer"] },
+    { "tittel": "t1/2", "tekst": ["91,4 timer"] },
+    { "tittel": "tss", "tekst": ["19 dager"] },
+    { "tittel": "Proteinbinding", "tekst": [">99 %"] },
+    { "tittel": "VD", "tekst": ["1,6 L/kg"] },
+    { "tittel": "Eliminasjon", "tekst": ["Hepatisk metabolisme. Utskilles i urin (25 %) og feces (46 %)"] },
+    { "tittel": "CYP-enzymer (substrat)", "tekst": ["3A4, 2D6"] },
     {
       "tittel": "Interaksjoner",
       "tekst": [
-        {
-          "punkter": [
-            "Halv dose når det administreres samtidig med potente CYP3A4-hemmere eller CYP2D6-hemmere",
-            "En fjerdedel av dosen ved kombinasjon med potente CYP3A4 OG CYP2D6 hemmere",
-            "Økt dosebehov ved kombinasjon med CYP3A4-induktorer (x3)"
-          ]
-        }
+        { "punkter": [
+          "Halv dose når det administreres samtidig med potente CYP3A4-hemmere eller CYP2D6-hemmere",
+          "En fjerdedel av dosen ved kombinasjon med potente CYP3A4 OG CYP2D6 hemmere",
+          "Økt dosebehov ved kombinasjon med CYP3A4-induktorer (x3)"
+        ] }
       ]
     }
   ],

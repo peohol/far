@@ -1,50 +1,18 @@
 {
   "kode": "HBUP",
-  "sider": [
-    8,
-    9
-  ],
+  "sider": [8, 9],
   "viktige_data": {
-    "referanseomrade": {
-      "nedre": 500,
-      "ovre": 4000,
-      "enhet": "nmol/L",
-      "forbehold": "Hydroksybupropion."
-    },
+    "referanseomrade": { "nedre": 500, "ovre": 4000, "enhet": "nmol/L", "forbehold": "Hydroksybupropion." },
     "toksisk_omrade": {
-      "nedre": 5000,
-      "ovre": null,
-      "enhet": "nmol/L",
-      "forbehold": "Hydroksybupropion.",
-      "referanser": [
-        "schulz2020",
-        "hiemke2017",
-        "helsebiblioteket-bupropion"
-      ]
+      "nedre": 5000, "ovre": null, "enhet": "nmol/L", "forbehold": "Hydroksybupropion.",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-bupropion"]
     },
     "alvorlig_intoksikasjon": {
-      "nedre": 16000,
-      "ovre": null,
-      "enhet": "nmol/L",
-      "forbehold": "Hydroksybupropion. Komatøs/fatal. Omtrentlig grense.",
-      "referanser": [
-        "schulz2020",
-        "hiemke2017",
-        "helsebiblioteket-bupropion"
-      ]
+      "nedre": 16000, "ovre": null, "enhet": "nmol/L", "forbehold": "Hydroksybupropion. Komatøs/fatal. Omtrentlig grense.",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-bupropion"]
     },
-    "halveringstid": {
-      "nedre": 12,
-      "ovre": 65,
-      "enhet": "timer",
-      "forbehold": "Hydroksybupropion. Typisk 20 timer."
-    },
-    "steady_state": {
-      "nedre": 8,
-      "ovre": 8,
-      "enhet": "dager",
-      "forbehold": "Omtrentlig."
-    }
+    "halveringstid": { "nedre": 12, "ovre": 65, "enhet": "timer", "forbehold": "Hydroksybupropion. Typisk 20 timer." },
+    "steady_state": { "nedre": 8, "ovre": 8, "enhet": "dager", "forbehold": "Omtrentlig." }
   },
   "farmakodynamikk": {
     "tekst": [
@@ -52,73 +20,24 @@
     ]
   },
   "dosering": {
-    "tekst": [
-      "150–300 mg daglig"
-    ]
+    "tekst": ["150–300 mg daglig"]
   },
   "indikasjon": {
     "tekst": [
       "Wellbutrin Retard, Bupropion hydrochloride (Teva): behandling av depressive episoder. Paritdam: behandling av alvorlige depressive episoder.",
       "Mysimba (naltrekson/bupropion): som tillegg til kalorifattig kosthold og økt fysisk aktivitet for vektreduksjon hos voksne (≥18 år) med innledende KMI ≥30 kg/m² (fedme), eller KMI ≥27–30 kg/m² (overvekt) og én eller flere vektrelaterte risikofaktorer (f.eks. diabetes type 2, dyslipidemi eller kontrollert hypertensjon)."
     ],
-    "referanser": [
-      "fk-wellbutrin-retard",
-      "fk-paritdam",
-      "fk-bupropion-hydrochloride-teva",
-      "fk-mysimba-orexigen"
-    ]
+    "referanser": ["fk-wellbutrin-retard", "fk-paritdam", "fk-bupropion-hydrochloride-teva", "fk-mysimba-orexigen"]
   },
   "farmakokinetikk": [
-    {
-      "tittel": "Biotilgjengelighet",
-      "tekst": [
-        "Minst 87 %"
-      ]
-    },
-    {
-      "tittel": "tmax",
-      "tekst": [
-        "Bupropion: 5 timer",
-        "Hydroksybupropion: 7 timer"
-      ]
-    },
-    {
-      "tittel": "t1/2",
-      "tekst": [
-        "Hydroksybupropion: 20 (12–65) timer"
-      ]
-    },
-    {
-      "tittel": "tss",
-      "tekst": [
-        "Ca. 8 dager"
-      ]
-    },
-    {
-      "tittel": "Proteinbinding",
-      "tekst": [
-        "Bupropion: 84 %",
-        "Hydroksybupropion: 77 %"
-      ]
-    },
-    {
-      "tittel": "VD",
-      "tekst": [
-        "3–6 L/kg"
-      ]
-    },
-    {
-      "tittel": "Eliminasjon",
-      "tekst": [
-        "Hepatisk metabolisme. Utskilles i urin (ca. 90 %) og feces (ca. 10 %)."
-      ]
-    },
-    {
-      "tittel": "CYP-enzymer (substrat)",
-      "tekst": [
-        "2B6"
-      ]
-    },
+    { "tittel": "Biotilgjengelighet", "tekst": ["Minst 87 %"] },
+    { "tittel": "tmax", "tekst": ["Bupropion: 5 timer", "Hydroksybupropion: 7 timer"] },
+    { "tittel": "t1/2", "tekst": ["Hydroksybupropion: 20 (12–65) timer"] },
+    { "tittel": "tss", "tekst": ["Ca. 8 dager"] },
+    { "tittel": "Proteinbinding", "tekst": ["Bupropion: 84 %", "Hydroksybupropion: 77 %"] },
+    { "tittel": "VD", "tekst": ["3–6 L/kg"] },
+    { "tittel": "Eliminasjon", "tekst": ["Hepatisk metabolisme. Utskilles i urin (ca. 90 %) og feces (ca. 10 %)."] },
+    { "tittel": "CYP-enzymer (substrat)", "tekst": ["2B6"] },
     {
       "tittel": "Interaksjoner",
       "tekst": [
@@ -130,37 +49,15 @@
         "Redusert eksponering ved bruk av enzyminduktorer."
       ]
     },
-    {
-      "tittel": "Annet",
-      "tekst": [
-        "Har modifisert frisetting. Doserelatert risiko for kramper, som øker ved knusing/tygging/parenteral adm."
-      ]
-    }
+    { "tittel": "Annet", "tekst": ["Har modifisert frisetting. Doserelatert risiko for kramper, som øker ved knusing/tygging/parenteral adm."] }
   ],
   "serumkonsentrasjoner": {
     "rader": [
-      {
-        "dose": "300 mg",
-        "regime": "1 gang daglig",
-        "konsentrasjon": "1005 ng/ml (~3930 nmol/L)",
-        "merknad": "Serumkonsentrasjon av HB, trough-nivå, genotype *1/*1. Kharasch & Lenze (2026)."
-      },
-      {
-        "dose": "300 mg",
-        "regime": "1 gang daglig",
-        "konsentrasjon": "735 ng/ml (~2870 nmol/L)",
-        "merknad": "Serumkonsentrasjon av HB, trough-nivå, genotype *1/*6. Kharasch & Lenze (2026)."
-      },
-      {
-        "dose": "300 mg",
-        "regime": "1 gang daglig",
-        "konsentrasjon": "707 ng/ml (~2760 nmol/L)",
-        "merknad": "Serumkonsentrasjon av HB, trough-nivå, genotype *6/*6. Kharasch & Lenze (2026)."
-      }
+      { "dose": "300 mg", "regime": "1 gang daglig", "konsentrasjon": "1005 ng/ml (~3930 nmol/L)", "merknad": "Serumkonsentrasjon av HB, trough-nivå, genotype *1/*1. Kharasch & Lenze (2026)." },
+      { "dose": "300 mg", "regime": "1 gang daglig", "konsentrasjon": "735 ng/ml (~2870 nmol/L)", "merknad": "Serumkonsentrasjon av HB, trough-nivå, genotype *1/*6. Kharasch & Lenze (2026)." },
+      { "dose": "300 mg", "regime": "1 gang daglig", "konsentrasjon": "707 ng/ml (~2760 nmol/L)", "merknad": "Serumkonsentrasjon av HB, trough-nivå, genotype *6/*6. Kharasch & Lenze (2026)." }
     ],
-    "referanser": [
-      "kharasch2026"
-    ]
+    "referanser": ["kharasch2026"]
   },
   "referanser": {
     "fk-wellbutrin-retard": {
