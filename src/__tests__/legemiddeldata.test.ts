@@ -10,10 +10,13 @@
 import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { crc32, deflateRawSync } from 'node:zlib'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { ENTITETER, lesFest, PARSERVERSJON, type Festpost } from '../legemiddeldata/fest'
 import { lagLegemiddellager, type Databasekall } from '../legemiddeldata/lager'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { behandleSynk } from '../legemiddeldata/endepunkt'
+import { lagLegemiddelleser, type Legemiddelutvalg, type Virkestofftreff } from '../legemiddeldata/lesing'
+import { byggPreparatoversikt, oppsummerGruppe, oppsummerPreparater } from '../legemiddeldata/preparater'
 import { synkroniserFest } from '../legemiddeldata/synk'
 import { pakkUt } from '../legemiddeldata/zip'
 import { feilFra, nyDatabase } from './hjelp/testdatabase'
@@ -23,6 +26,7 @@ const UTDRAG = readFileSync(new URL('./data/fest-utdrag.xml', import.meta.url), 
 const AMITRIPTYLIN = 'ID_0A1B24EF-A7F8-488B-97B8-8023193E976D'
 const AMITRIPTYLINHYDROKLORID = 'ID_070A7B5D-46F1-44DC-AAB8-B51BE5A49270'
 const AMITRIPTYLIN_ABCUR_50 = 'ID_012C7C0D-77BC-4F3D-BEBE-663743B03C1F'
+const KODEIN = 'ID_82E89E1B-9C06-4E57-BB4D-AB3DA8B33FD4'
 
 async function* biter(tekst: string, storrelse = 997): AsyncGenerator<string> {
   for (let i = 0; i < tekst.length; i += storrelse) yield tekst.slice(i, i + storrelse)
@@ -200,16 +204,7 @@ function kallSom(db: PGlite, rolle: 'service_role' | 'authenticated' | 'anon'): 
     })
 }
 
-interface Legemidler {
-  kilde: string
-  kontrollert_kl: string | null
-  kildedato: string | null
-  virkestoff: { id: string; navn: string; utgatt: boolean }[]
-  styrker: { id: string }[]
-  merkevarer: { id: string; varenavn: string }[]
-  pakninger: { id: string }[]
-  byttegrupper: { id: string }[]
-}
+type Legemidler = Legemiddelutvalg
 
 function svar(body: string | Buffer | null, status = 200, headers: Record<string, string> = {}): Response {
   return new Response(typeof body === 'string' || body === null ? body : new Uint8Array(body), { status, headers })
@@ -387,6 +382,193 @@ describe('synkroniseringen', () => {
   it('gir tomme lister for virkestoff som ikke finnes', async () => {
     const data = (await leser('les_legemidler', { virkestoff_ider: ['ID_FINNES-IKKE'] })) as Legemidler
     expect(data).toMatchObject({ virkestoff: [], merkevarer: [], pakninger: [], kontrollert_kl: null })
+  })
+})
+
+describe('preparatene på stoffsiden', () => {
+  let leser: ReturnType<typeof lagLegemiddelleser>
+  let anonym: Databasekall
+
+  beforeAll(async () => {
+    const db = await nyDatabase()
+    await synkroniserFest({
+      lager: lagLegemiddellager(kallSom(db, 'service_role')),
+      hent: async () => svar(lagZip('fest251.xml', UTDRAG), 200, { etag: '"a"' }),
+    })
+    const innlogget = kallSom(db, 'authenticated')
+    // Leseren appen bruker, mot en klient som kaller databasen som en innlogget.
+    const klient = {
+      rpc: async (funksjon: string, argumenter: Record<string, unknown>) => {
+        try {
+          return { data: await innlogget(funksjon, argumenter), error: null }
+        } catch (e) {
+          return { data: null, error: { message: (e as Error).message } }
+        }
+      },
+    } as unknown as SupabaseClient
+    leser = lagLegemiddelleser(klient)
+    anonym = kallSom(db, 'anon')
+  })
+
+  it('grupperer etter legemiddelform, preparat og styrke, med fritakene for seg', async () => {
+    const oversikt = byggPreparatoversikt(await leser.les([AMITRIPTYLIN]), [AMITRIPTYLIN])
+
+    expect(oversikt.former.map((f) => f.form)).toEqual(['Tablett'])
+    const tabletter = oversikt.former[0]!.preparater
+    expect(tabletter.map((p) => [p.navn, p.styrker.map((s) => s.styrke)])).toEqual([
+      ['Amitriptylin Abcur', ['10 mg', '25 mg', '50 mg']],
+      ['Amitriptylin Orifarm', ['10 mg', '25 mg']],
+      ['Sarotex', ['10 mg', '25 mg']],
+    ])
+    expect(tabletter.every((p) => p.kombinasjon.length === 0 && p.type === null)).toBe(true)
+
+    expect(oversikt.godkjenningsfritak.map((p) => [p.navn, p.form, p.styrker.map((s) => s.styrke)])).toEqual([
+      ['Amitriptylin-CT', 'Tablett', ['25 mg']],
+      ['Amitriptyline Hydrochloride rosemont', 'Mikstur, oppløsning', ['50 mg/5 ml']],
+      ['Amitriptyline hydrochloride syrimed', 'Mikstur, oppløsning', ['10 mg/5 ml']],
+      ['Saroten Retard', 'Depotkapsel, hard', ['50 mg']],
+    ])
+
+    expect(oppsummerPreparater(oversikt)).toBe('3 preparater · 1 legemiddelform · 3 styrker · 4 med godkjenningsfritak')
+    expect(oppsummerGruppe(tabletter)).toBe('3 preparater · 10–50 mg')
+    expect(oppsummerGruppe(oversikt.godkjenningsfritak)).toBe('4 preparater · 25–50 mg, 10–50 mg/5 ml')
+  })
+
+  it('viser pakningene med størrelse, type og varenummer', async () => {
+    const oversikt = byggPreparatoversikt(await leser.les([AMITRIPTYLIN]), [AMITRIPTYLIN])
+    const ct = oversikt.godkjenningsfritak.find((p) => p.navn === 'Amitriptylin-CT')!
+    expect(ct.styrker[0]!.pakninger).toEqual([
+      { id: expect.any(String), varenr: '342044', tekst: '100 stk, blisterpakning', midlertidig_utgatt: null },
+    ])
+  })
+
+  it('merker kombinasjonspreparatet med de andre virkestoffene, i FESTs rekkefølge', async () => {
+    const oversikt = byggPreparatoversikt(await leser.les([KODEIN]), [KODEIN])
+    // Kodimagnyl i utdraget krever godkjenningsfritak.
+    expect(oversikt.former).toEqual([])
+    const [kodimagnyl] = oversikt.godkjenningsfritak
+    expect(kodimagnyl).toMatchObject({
+      navn: 'Kodimagnyl Ikke-stoppende dak',
+      form: 'Tablett',
+      // Den korte formen grupperer; den lange står på preparatet.
+      langform: ['Tablett, filmdrasjert'],
+      kombinasjon: ['Acetylsalisylsyre', 'Magnesiumoksid'],
+    })
+    expect(kodimagnyl!.styrker[0]).toMatchObject({
+      styrke: 'kodein 9,6 mg + acetylsalisylsyre 500 mg + magnesiumoksid 150 mg',
+      mengde: null,
+    })
+    // Kombinasjonen telles, men har ikke noe spenn å vise.
+    expect(oppsummerGruppe([kodimagnyl!])).toBe('1 preparat')
+  })
+
+  it('viser saltet på preparatet, og slår sammen merkevarer med samme styrke', () => {
+    const utvalg: Legemiddelutvalg = {
+      kilde: 'FEST',
+      kontrollert_kl: null,
+      kildedato: null,
+      virkestoff: [
+        { id: 'mor', navn: 'Testmiddel', navn_engelsk: null, salter: ['salt'], utgatt: false },
+        { id: 'salt', navn: 'Testmiddelhydroklorid', navn_engelsk: null, salter: [], utgatt: false },
+      ],
+      styrker: [
+        {
+          id: 's1',
+          virkestoff_id: 'salt',
+          styrke: { verdi: 2.5, enhet: 'mg' },
+          nevner: { verdi: 1, enhet: 'ml' },
+          ovre: null,
+          operator: null,
+          alternativ_styrke: null,
+          alternativ_nevner: null,
+        },
+      ],
+      merkevarer: [
+        {
+          id: 'm1',
+          varenavn: 'Syntetin',
+          navn_form_styrke: 'Syntetin inj 2,5 mg/ml',
+          legemiddelform: { kode: '1', tekst: 'Injeksjonsvæske, oppløsning' },
+          legemiddelform_lang: null,
+          atc: null,
+          reseptgruppe: null,
+          preparattype: { kode: '15', tekst: 'Sykehuspreparat' },
+          administrasjonsveier: [],
+          deling: null,
+          kan_knuses: null,
+          kan_apnes: null,
+          produsent: null,
+          referanseprodukt: null,
+          preparatomtale: null,
+          svart_trekant: false,
+          virkestoff_med_styrke: ['s1'],
+          virkestoff_uten_styrke: [],
+        },
+      ],
+      pakninger: [],
+      byttegrupper: [],
+    }
+    // Samme preparat i samme styrke som to merkevarer, med hver sin pakning.
+    const merkevare = utvalg.merkevarer[0]!
+    utvalg.merkevarer.push({ ...merkevare, id: 'm2' })
+    const pakning = (id: string, merkevare_id: string, mengde: number) => ({
+      id,
+      varenr: id.toUpperCase(),
+      navn_form_styrke: '',
+      innhold: [
+        {
+          merkevare_id,
+          pakningsstorrelse: null,
+          enhet: { kode: 'ml', tekst: 'milliliter' },
+          pakningstype: { kode: '2', tekst: 'Ampulle' },
+          mengde,
+          antall: null,
+        },
+      ],
+      merkevarer: [merkevare_id],
+      markedsforingsdato: null,
+      midlertidig_utgatt_dato: null,
+      avregistrert_dato: null,
+      byttegrupper: [],
+      ean: [],
+    })
+    utvalg.pakninger.push(pakning('p2', 'm2', 10), pakning('p1', 'm1', 2))
+    const [preparat] = byggPreparatoversikt(utvalg, ['mor']).former[0]!.preparater
+    expect(preparat).toMatchObject({
+      salter: ['Testmiddelhydroklorid'],
+      kombinasjon: [],
+      type: 'Sykehuspreparat',
+      styrker: [{ styrke: '2,5 mg/ml', mengde: { fra: 2.5, til: 2.5, enhet: 'mg/ml' } }],
+    })
+    // Pakningene fra begge merkevarene står på den ene styrken, minste først.
+    // Uten pakningsstørrelse brukes mengden.
+    expect(preparat!.styrker[0]!.pakninger.map((p) => p.tekst)).toEqual(['2 ml, ampulle', '10 ml, ampulle'])
+  })
+
+  it('søker etter virkestoff med likt navn først, og sier hva som er salt', async () => {
+    const treff = await leser.sok('amitriptylin')
+    expect(treff.map((t) => t.navn)).toEqual(['Amitriptylin', 'Amitriptylinhydroklorid'])
+    expect(treff[0]).toEqual<Virkestofftreff>({
+      id: AMITRIPTYLIN,
+      navn: 'Amitriptylin',
+      navn_engelsk: 'Amitriptyline',
+      salt_av: [],
+      preparater: 11,
+    })
+    expect(treff[1]!.salt_av).toEqual(['Amitriptylin'])
+    // Det engelske navnet treffer også, og midt i ordet.
+    expect((await leser.sok('Codeine')).map((t) => t.id)).toEqual([KODEIN])
+    expect((await leser.sok('triptyl')).length).toBe(2)
+  })
+
+  it('søker ikke på under to tegn, og bare for innloggede', async () => {
+    expect(await leser.sok('a')).toEqual([])
+    expect(await leser.sok('  ')).toEqual([])
+    await expect(anonym('sok_virkestoff', { sok: 'amitriptylin' })).rejects.toThrow(/permission denied/)
+  })
+
+  it('leser ingenting for en side uten kobling', async () => {
+    expect(await leser.les([])).toMatchObject({ virkestoff: [], merkevarer: [] })
   })
 })
 

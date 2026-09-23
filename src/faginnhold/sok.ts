@@ -33,7 +33,6 @@ import {
   lesDosetabell,
   lesIntervallverdi,
   lesKinetikk,
-  lesPreparater,
   lesRiktekst,
   panelFor,
 } from './paneler'
@@ -153,17 +152,15 @@ export interface Elementtekst {
 }
 
 /**
- * Tekstene i et innholdselement, slik de leses: preparatnavnene, fritekst
- * uten formatering, radene i tabellen og verdien i et datakort. Tomme tekster
- * er utelatt. Søket og historikken bruker de samme.
+ * Tekstene i et innholdselement, slik de leses: fritekst uten formatering,
+ * radene i tabellen og verdien i et datakort. Tomme tekster er utelatt.
+ * Søket og historikken bruker de samme.
  */
 export function elementtekster(elementtype: string, data: unknown): Elementtekst[] {
   const tekst = (felt: Sokefelt, t: string, tittel?: string): Elementtekst[] =>
     t.trim() ? [{ felt, tekst: t, ...(tittel && { tittel }) }] : []
 
   switch (elementtype) {
-    case ELEMENTTYPER.preparater:
-      return lesPreparater(data).navn.flatMap((navn) => tekst('preparat', navn))
     case ELEMENTTYPER.riktekst:
       return tekst('fritekst', klartekst(lesRiktekst(data).dokument))
     case ELEMENTTYPER.kinetikk: {
@@ -194,11 +191,28 @@ function elementdokumenter(side: Sokested['side'], element: Sideelement): Sokedo
 }
 
 /**
- * Søkedokumentene for én side: navnet, koden, komponentene og aliasene, og
- * alt innholdet i panelene — overskrifter, verdier, tabeller og fritekst.
- * Referansene siden bruker, er med som egne dokumenter.
+ * Tekst som står i et panel uten å være faginnhold på siden, som preparatene
+ * fra legemiddeldataene. `element` er stedet teksten står, med ankeret
+ * `elementAnker(id)` på siden.
  */
-export function indekserSide(identitet: Sideidentitet, modell: Sidemodell): Sokedokument[] {
+export interface Tilleggstekst {
+  panel: string
+  element: { id: string; tittel?: string }
+  felt: Sokefelt
+  tekst: string
+}
+
+/**
+ * Søkedokumentene for én side: navnet, koden, komponentene og aliasene, og
+ * alt innholdet i panelene — overskrifter, verdier, tabeller og fritekst —
+ * sammen med tilleggstekstene, panel for panel. Referansene siden bruker, er
+ * med som egne dokumenter.
+ */
+export function indekserSide(
+  identitet: Sideidentitet,
+  modell: Sidemodell,
+  tillegg: readonly Tilleggstekst[] = [],
+): Sokedokument[] {
   const side = { kode: identitet.kode, navn: identitet.navn }
   const dokumenter: Sokedokument[] = [
     { sted: { side }, felt: 'navn', tekst: identitet.navn },
@@ -207,14 +221,23 @@ export function indekserSide(identitet: Sideidentitet, modell: Sidemodell): Soke
     ...(identitet.aliaser ?? []).map((tekst): Sokedokument => ({ sted: { side }, felt: 'navn', tekst })),
   ]
 
+  const perPanel = new Map<string, Sokedokument[]>()
+  const iPanel = (panel: string) => perPanel.get(panel) ?? perPanel.set(panel, []).get(panel)!
+
   // Datakortene står i fast rekkefølge, resten i den rekkefølgen panelet har.
   const datakortplass = new Map<string, number>(DATAKORT.map((k, i) => [k.type, i]))
-  for (const [, elementer] of [...modell.paneler].sort(([a], [b]) => panelplass(a) - panelplass(b))) {
+  for (const [panel, elementer] of modell.paneler) {
     const ordnet = [...elementer].sort(
       (a, b) => (datakortplass.get(a.elementtype) ?? 0) - (datakortplass.get(b.elementtype) ?? 0),
     )
-    for (const element of ordnet) dokumenter.push(...elementdokumenter(side, element))
+    for (const element of ordnet) iPanel(panel).push(...elementdokumenter(side, element))
   }
+  for (const { panel, element, felt, tekst } of tillegg) {
+    const definisjon = panelFor(panel)
+    if (!definisjon || !tekst.trim()) continue
+    iPanel(panel).push({ sted: { side, panel: { nokkel: panel, tittel: definisjon.tittel }, element }, felt, tekst })
+  }
+  for (const [, panel] of [...perPanel].sort(([a], [b]) => panelplass(a) - panelplass(b))) dokumenter.push(...panel)
 
   for (const { referanse } of modell.referanseliste) {
     dokumenter.push({ sted: { side }, felt: 'referanse', tekst: formaterReferanse(referanse) })

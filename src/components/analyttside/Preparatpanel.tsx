@@ -1,0 +1,270 @@
+import type { Sideelement, Sidemodell } from '../../faginnhold/analyttside'
+import {
+  ELEMENTTYPER,
+  lesLegemiddelkobling,
+  type Legemiddelkoblingdata,
+  type Paneldefinisjon,
+  type Panelnokkel,
+} from '../../faginnhold/paneler'
+import type { Tilleggstekst } from '../../faginnhold/sok'
+import { iSetning } from '../../domain/names'
+import {
+  oppsummerGruppe,
+  oppsummerPreparater,
+  type Preparat,
+} from '../../legemiddeldata/preparater'
+import { Detaljkort } from '../seksjoner/Seksjon'
+import { Uthev } from '../Uthev'
+import { elementAnker, Panel, Redigerbar, type Panelkontekst } from './Paneler'
+import { LegemiddelkoblingSkjema } from './Skjemaer'
+import type { Legemiddeltilstand } from './useLegemidler'
+
+/** Detaljkortet for preparatene som krever godkjenningsfritak. */
+const FRITAK = 'godkjenningsfritak'
+
+/** Stedet på siden for et detaljkort i seksjonen: en legemiddelform, eller fritakene. */
+function kortsted(formId: string | null): string {
+  return `preparater-${formId ?? FRITAK}`
+}
+
+const DATO = new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })
+
+function dato(tidspunkt: string | null): string | null {
+  if (!tidspunkt) return null
+  const d = new Date(tidspunkt)
+  return Number.isNaN(d.getTime()) ? null : DATO.format(d)
+}
+
+/** Seksjonen koblingen står i. */
+export const PREPARATPANEL: Panelnokkel = 'preparater'
+
+/** Koblingen siden har til legemiddeldataene, og elementet den står i. */
+export function finnKobling(modell: Sidemodell): { element: Sideelement | null; kobling: Legemiddelkoblingdata } {
+  const element =
+    (modell.paneler.get(PREPARATPANEL) ?? []).find((e) => e.elementtype === ELEMENTTYPER.legemiddelkobling) ?? null
+  return { element, kobling: lesLegemiddelkobling(element?.data) }
+}
+
+/** Preparatnavnene, slik søket på siden finner dem, med detaljkortet de står i. */
+export function preparatsoketekster(tilstand: Legemiddeltilstand): Tilleggstekst[] {
+  if (tilstand.status !== 'klar') return []
+  const { former, godkjenningsfritak } = tilstand.oversikt
+  const grupper = [
+    ...former.map((f) => ({ id: kortsted(f.id), tittel: f.form, preparater: f.preparater })),
+    { id: kortsted(null), tittel: 'Krever godkjenningsfritak', preparater: godkjenningsfritak },
+  ]
+  return grupper.flatMap(({ id, tittel, preparater }) =>
+    [...new Set(preparater.map((p) => p.navn))].map(
+      (navn): Tilleggstekst => ({ panel: PREPARATPANEL, element: { id, tittel }, felt: 'preparat', tekst: navn }),
+    ),
+  )
+}
+
+/**
+ * Seksjonen «Preparater»: preparatene i legemiddeldataene fra FEST for
+ * virkestoffene siden er koblet til, gruppert som
+ * `legemiddelform → preparat → styrker` med pakningene i detaljkortene.
+ *
+ * Koblingen er det eneste som redigeres her. Den lagres med FESTs ID og
+ * publiseres som annet innhold på siden; preparatene selv kommer rett fra
+ * kopien av FEST og endres aldri i OUSFAR.
+ */
+export function Preparatpanel({
+  definisjon,
+  kontekst,
+  sidenavn,
+  legemidler,
+}: {
+  definisjon: Paneldefinisjon
+  kontekst: Panelkontekst
+  sidenavn: string
+  legemidler: Legemiddeltilstand
+}) {
+  const { modell, redigerer, handlinger } = kontekst
+  const { element, kobling } = finnKobling(modell)
+  const koblet = kobling.virkestoff.length > 0
+
+  return (
+    <Panel
+      definisjon={definisjon}
+      kontekst={kontekst}
+      tomt={!koblet}
+      oppsummering={oppsummering(legemidler)}
+    >
+      <div className="preparater" {...(element && { id: elementAnker(element.id) })}>
+        <Redigerbar
+          navn="Koblingen til legemiddeldataene"
+          element={element}
+          redigerer={redigerer}
+          leggTilTekst="Koble til legemiddeldataene"
+          visning={
+            <>
+              {redigerer && (
+                <p className="preparater__kobling">
+                  {koblet
+                    ? `Koblet til ${kobling.virkestoff.map((v) => v.navn || v.fest_id).join(', ')} i FEST.`
+                    : 'Ikke koblet til legemiddeldataene ennå.'}
+                </p>
+              )}
+              {koblet && <Preparatvisning tilstand={legemidler} />}
+            </>
+          }
+          skjema={(lukk) => (
+            <LegemiddelkoblingSkjema
+              tittel="Koblingen til legemiddeldataene"
+              sidenavn={sidenavn}
+              start={kobling}
+              referanser={element?.referanser ?? []}
+              onAvbryt={lukk}
+              onLagre={async ({ data, referanser }) => {
+                await handlinger.lagreElement(element, {
+                  panel: definisjon.nokkel,
+                  elementtype: ELEMENTTYPER.legemiddelkobling,
+                  posisjon: 0,
+                  data: { ...data },
+                  referanser,
+                })
+                lukk()
+              }}
+            />
+          )}
+        />
+      </div>
+    </Panel>
+  )
+}
+
+function oppsummering(tilstand: Legemiddeltilstand): string {
+  switch (tilstand.status) {
+    case 'ingen':
+      return ''
+    case 'laster':
+      return 'Henter preparatene …'
+    case 'feil':
+      return 'Fikk ikke hentet preparatene'
+    case 'klar':
+      return oppsummerPreparater(tilstand.oversikt) || 'Ingen preparater i FEST'
+  }
+}
+
+function Preparatvisning({ tilstand }: { tilstand: Legemiddeltilstand }) {
+  if (tilstand.status === 'ingen') return null
+  if (tilstand.status === 'laster') {
+    return (
+      <p className="preparater__melding" role="status">
+        Henter preparatene …
+      </p>
+    )
+  }
+  if (tilstand.status === 'feil') {
+    return (
+      <p className="preparater__melding" role="alert">
+        Fikk ikke hentet preparatene. {tilstand.feil}
+      </p>
+    )
+  }
+
+  const { utvalg, oversikt } = tilstand
+  const utgatte = utvalg.virkestoff.filter((v) => v.utgatt)
+  const tomt = oversikt.former.length === 0 && oversikt.godkjenningsfritak.length === 0
+
+  return (
+    <>
+      {utgatte.length > 0 && (
+        <p className="preparater__melding" role="note">
+          {utgatte.map((v) => v.navn).join(', ')} står ikke lenger i FEST. Koblingen bør kontrolleres.
+        </p>
+      )}
+      {tomt ? (
+        <p className="preparater__melding">Det er ingen preparater med dette virkestoffet i FEST.</p>
+      ) : (
+        <ul className="preparatformer">
+          {oversikt.former.map((f) => (
+            <li key={f.id}>
+              <Detaljkort id={`form-${f.id}`} tittel={<Uthev tekst={f.form} />} oppsummering={oppsummerGruppe(f.preparater)}>
+                <Preparatliste anker={kortsted(f.id)} preparater={f.preparater} />
+              </Detaljkort>
+            </li>
+          ))}
+          {oversikt.godkjenningsfritak.length > 0 && (
+            <li>
+              <Detaljkort
+                id={FRITAK}
+                tittel={<Uthev tekst="Krever godkjenningsfritak" />}
+                oppsummering={oppsummerGruppe(oversikt.godkjenningsfritak)}
+              >
+                <p className="preparater__forklaring">
+                  Preparatene har ikke markedsføringstillatelse i Norge.
+                </p>
+                <Preparatliste anker={kortsted(null)} preparater={oversikt.godkjenningsfritak} visForm />
+              </Detaljkort>
+            </li>
+          )}
+        </ul>
+      )}
+      <p className="preparater__kilde">
+        {[
+          'Kilde: FEST, Direktoratet for medisinske produkter',
+          dato(utvalg.kildedato) && `uttrekk fra ${dato(utvalg.kildedato)}`,
+          dato(utvalg.kontrollert_kl) && `sist kontrollert ${dato(utvalg.kontrollert_kl)}`,
+        ]
+          .filter(Boolean)
+          .join(', ')}
+        .
+      </p>
+    </>
+  )
+}
+
+/**
+ * Preparatene i ett detaljkort. Ankeret står på lista, inne i kortet, så søket
+ * på siden åpner kortet når det går til et treff her.
+ */
+function Preparatliste({
+  anker,
+  preparater,
+  visForm = false,
+}: {
+  anker: string
+  preparater: readonly Preparat[]
+  visForm?: boolean
+}) {
+  return (
+    <ul className="preparatliste" id={elementAnker(anker)}>
+      {preparater.map((p) => (
+        <li key={p.id} className="preparat">
+          <p className="preparat__navn">
+            <Uthev tekst={p.navn} />
+            {(visForm || p.langform.length > 0) && (
+              <span className="preparat__form">
+                <Uthev tekst={(p.langform.length > 0 ? p.langform.join(', ') : p.form).toLocaleLowerCase('nb')} />
+              </span>
+            )}
+            {p.kombinasjon.length > 0 && (
+              <span className="preparat__merke">Kombinasjon med {p.kombinasjon.map(iSetning).join(', ')}</span>
+            )}
+            {p.type && <span className="preparat__merke">{p.type}</span>}
+          </p>
+          {p.salter.length > 0 && <p className="preparat__salt">Som {p.salter.map(iSetning).join(', ')}</p>}
+          <ul className="preparat__styrker">
+            {p.styrker.map((s) => (
+              <li key={s.id}>
+                <span className="preparat__styrke">
+                  <Uthev tekst={s.styrke || s.navn_form_styrke} />
+                </span>
+                {s.pakninger.length > 0 && (
+                  <span className="preparat__pakninger">
+                    {s.pakninger
+                      .map((k) => `${k.tekst}${k.varenr ? ` (varenr. ${k.varenr})` : ''}${k.midlertidig_utgatt ? ', midlertidig utgått' : ''}`)
+                      .join('; ')}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  )
+}
+

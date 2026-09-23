@@ -1074,20 +1074,20 @@ Del 2, dagens sider:
 - [x] Synkroniseringsjobb, server-side og planlagt, idempotent, med nye, endrede og utgåtte produkter.
 - [x] Siste gyldige data beholdes ved feil; kjøringene registreres.
 - [x] Hemmeligheter bare server-side.
-- [ ] Eksplisitte, bekreftede koblinger fra informasjonssidene til eksterne substans-ID-er (del 23).
+- [x] Eksplisitte, bekreftede koblinger fra informasjonssidene til eksterne substans-ID-er (del 23). Bygget i arbeidspakke 11.
 - [ ] Lokale tillegg og skjulinger uten å mutere importerte rader, hvis det trengs. Ikke behov ennå.
 - [x] Testdata fra faktiske svar og integrasjonstester.
 
 ## Arbeidspakke 11 - Preparater fra eksterne data
 
-**Status:** [ ] Ikke startet
+**Status:** [ ] Bygget. Hver side kobles til virkestoffene i FEST av en administrator i redigeringsmodus; navnelikhet gir bare forslag. Sidene viser ingen preparater før koblingen er publisert.
 
-- [ ] Erstatt det manuelle preparatfeltet med de synkroniserte dataene.
-- [ ] Hovedseksjonen «Preparater»: `legemiddelform → preparat → styrker`, med pakninger og detaljer i detaljkort.
-- [ ] Minioppsummering, for eksempel «12 preparater · 3 legemiddelformer · 6 styrker».
-- [ ] Kildeangivelse og tidspunkt for siste synkronisering.
-- [ ] Preparatnavnene er med i søket på siden og i det globale søket.
-- [ ] Sumanalyser, salter, metabolitter og kombinasjonspreparater vises etter del 23.
+- [x] Erstatt det manuelle preparatfeltet med de synkroniserte dataene.
+- [x] Hovedseksjonen «Preparater»: `legemiddelform → preparat → styrker`, med pakninger og detaljer i detaljkort.
+- [x] Minioppsummering, for eksempel «12 preparater · 3 legemiddelformer · 6 styrker».
+- [x] Kildeangivelse og tidspunkt for siste synkronisering.
+- [ ] Preparatnavnene er med i søket på siden og i det globale søket. Søket på siden er ferdig; det globale søket finnes ikke ennå.
+- [x] Sumanalyser, salter, metabolitter og kombinasjonspreparater vises etter del 23.
 
 ## Arbeidspakke 12 - Flere legemiddeldata
 

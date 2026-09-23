@@ -2877,15 +2877,9 @@ details[open] > .detalj__kropp {
   outline: none;
 }
 
-.identitet__komponenter,
-.identitet__preparater {
+.identitet__komponenter {
   font-size: var(--tekst-s);
   color: var(--blekk-dempet);
-}
-
-.identitet__merke {
-  font-weight: var(--vekt-medium);
-  color: var(--blekk);
 }
 
 .komponentlenke {
@@ -2995,8 +2989,7 @@ details[open] > .detalj__kropp {
 }
 
 .infotekst,
-.dosetabell,
-.identitet__preparater {
+.dosetabell {
   width: 100%;
   scroll-margin-block: var(--rom-4);
 }
@@ -3018,6 +3011,137 @@ details[open] > .detalj__kropp {
   gap: var(--rom-2);
   width: 100%;
   scroll-margin-block: var(--rom-4);
+}
+
+/* Seksjonen «Preparater»: legemiddelformene som detaljkort, preparatene i dem. */
+.preparater {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  width: 100%;
+  scroll-margin-block: var(--rom-4);
+}
+
+.preparatformer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  margin: 0;
+}
+
+.preparatliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  margin: 0;
+  scroll-margin-block: var(--rom-4);
+}
+
+.preparat__navn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--rom-1) var(--rom-2);
+  margin: 0;
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-sterk);
+}
+
+.preparat__form {
+  font-weight: normal;
+  color: var(--blekk-dempet);
+}
+
+.preparat__merke {
+  padding: 0.1rem var(--rom-2);
+  font-size: var(--tekst-xs);
+  font-weight: normal;
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-full);
+}
+
+.preparat__salt,
+.preparater__forklaring,
+.preparater__kobling,
+.preparater__melding,
+.preparater__kilde {
+  margin: 0;
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
+.preparater__kilde {
+  font-size: var(--tekst-xs);
+}
+
+.preparat__styrker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: var(--rom-1) 0 0;
+  font-size: var(--tekst-s);
+}
+
+.preparat__styrker > li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--rom-2);
+}
+
+.preparat__styrke {
+  min-width: 6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.preparat__pakninger {
+  color: var(--blekk-dempet);
+}
+
+/* Koblingen i redigeringen. */
+.kobling {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+}
+
+.kobling__merke {
+  margin: 0;
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+}
+
+.kobling__valgte,
+.kobling__treff {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  margin: 0;
+}
+
+.kobling__valgte > li,
+.kobling__treff > li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-1) var(--rom-3);
+  font-size: var(--tekst-s);
+}
+
+.kobling__navn {
+  font-weight: var(--vekt-medium);
+}
+
+.kobling__forslag {
+  font-weight: normal;
+  color: var(--aksent);
+}
+
+.kobling__detalj,
+.kobling__tom {
+  margin: 0;
+  font-size: var(--tekst-xs);
+  color: var(--blekk-dempet);
 }
 
 /* Panel 7: tabellen. Ruller sidelengs på smale skjermer i stedet for å

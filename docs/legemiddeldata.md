@@ -174,22 +174,59 @@ VirkestoffMedStyrke ◀── SortertVirkestoffMedStyrke ── LegemiddelMerkev
 ## Koblingen mellom stoffsider og FEST
 
 En stoffside kobles til ett eller flere virkestoff i FEST med ID-ene deres,
-aldri med navnet. Koblingen er redaksjonelt innhold: den lagres og versjoneres
-som annet faginnhold på siden, og kan rettes av en administrator.
+aldri med navnet. Koblingen er redaksjonelt innhold: elementet
+`legemiddelkobling` i seksjonen «Preparater», med `{ virkestoff: [{ fest_id,
+navn }] }`. Den lagres som utkast, publiseres og har historikk som annet
+faginnhold på siden. Navnet lagres bare så koblingen kan leses også om stoffet
+skulle forsvinne fra FEST.
 
-Koblingene ble foreslått slik, og bare de sikre ble lagt inn:
+Ingen kobling gjøres automatisk. I redigeringsmodus velger administratoren
+virkestoff med søket (`sok_virkestoff`). Søket står ferdig utfylt med sidens
+navn, uten det som står i parentes, og et virkestoff med nøyaktig samme navn
+merkes som **forslag**. Det gjelder først når det er valgt, lagret og
+publisert. Salter og estere tas med av seg selv når moderstoffet velges, og
+søket sier fra når et treff er et salt.
 
-- **Sikker:** sidenavnet, eller navnet foran en parentes, er nøyaktig likt
-  navnet på ett moderstoff i FEST. Det gjelder 74 av de 85 sidene, blant dem
-  «Paliperidon (hydroksyrisperidon)» → Paliperidon.
-- **Må vurderes:** ingen treff. Det gjelder Benzoylekgonin, EtG, EtS,
-  Hydroksybupropion, Losartansyre, MDMA, N-desmetyldiazepam,
-  O-desmetyltramadol, THC og THC-syre. De får ingen kobling før noen velger
-  den.
-- Kanrenon og Ramiprilat er koblet til seg selv, men har ingen preparater, og
+Slik så navnelikheten ut ved første gjennomgang:
+
+- **Forslag med samme navn:** sidenavnet, eller navnet foran en parentes, er
+  nøyaktig likt navnet på ett moderstoff i FEST. Det gjelder 74 av de 85
+  sidene, blant dem «Paliperidon (hydroksyrisperidon)» → Paliperidon.
+- Navnelikhet er ikke nok alene. «Litium» finnes i FEST, men har ingen
+  preparater; de står på «Litiumion», som saltene (litiumkarbonat,
+  litiumsitrat osv.) hører til. Søket viser derfor antallet preparater ved
+  hvert treff, så forslaget kan vurderes før det velges.
+- **Ingen forslag:** Benzoylekgonin, EtG, EtS, Hydroksybupropion, Losartansyre,
+  MDMA, N-desmetyldiazepam, O-desmetyltramadol, THC og THC-syre. De får ingen
+  kobling før noen velger den.
+- Kanrenon og Ramiprilat har samme navn i FEST, men ingen preparater, og
   Enalaprilat har bare ett. Om slike sider også skal vise preparatene med
   moderstoffet (spironolakton, ramipril, enalapril), er et faglig valg som
   gjøres ved å legge moderstoffet til i koblingen.
+
+## Slik preparatene vises
+
+Seksjonen «Preparater» står rett under identiteten, lukket med en
+oppsummering som «3 preparater · 1 legemiddelform · 3 styrker · 4 med
+godkjenningsfritak». Grupperingen står i `src/legemiddeldata/preparater.ts`:
+
+- Hver **legemiddelform** (FESTs korte form, f.eks. «Tablett») er et
+  detaljkort, med antallet preparater og spennet i styrkene i oppsummeringen.
+- Et **preparat** er et varenavn i én form. Under det står styrkene, og ved
+  hver styrke pakningene med størrelse, pakningstype og varenummer.
+- Preparater som **krever godkjenningsfritak**, står i et eget detaljkort og
+  telles for seg.
+- **Kombinasjonspreparater** er merket med de andre virkestoffene, og styrken
+  viser alle, f.eks. «kodein 9,6 mg + acetylsalisylsyre 500 mg + magnesiumoksid
+  150 mg».
+- Er styrken oppgitt for et **salt**, står saltet på preparatet.
+- Andre preparattyper enn vanlige legemidler, f.eks. «Sykehuspreparat», er
+  merket med typen.
+- Nederst står kilden, datoen for uttrekket og når kopien sist ble kontrollert
+  mot FEST.
+
+Preparatnavnene er med i søket på siden, også i lukkede detaljkort. Det
+globale søket tar dem med når det kommer.
 
 ## Hull og begrensninger
 
