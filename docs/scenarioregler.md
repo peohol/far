@@ -33,9 +33,8 @@ scenariene peker på. Motoren og valideringen får kommentarene å slå opp i ve
 regelsettet.
 
 Dermed rettes en tekst ett sted, uten at regelen endres, og samme tekst kan
-brukes av flere scenarier og flere regelsett. Foreløpig finnes regelsettene
-og kommentarene bare i koden (se «Dagens regler»); lagringen i Supabase, der
-de blir hver sine redigerbare objekter, er ikke laget ennå.
+brukes av flere scenarier og flere regelsett. I Supabase er hvert regelsett
+og hver kommentar sitt eget redigerbare objekt (se «Lagringen»).
 
 Tekster i regelsettet kan vise en grense med `{nøkkel}`, som skrives ut i
 prosent. Endres grensen, følger tekstene med.
@@ -79,6 +78,29 @@ hver tekst står én gang (`src/domain/scenariovisning.ts`). Med mer enn ett sce
 utfallet (`Rusutfall`) som fortolkningsmodulen, kjører `kjorScenarier` og
 markerer scenariet som traff.
 
+## Lagringen
+
+Objekttypen `scenarioregelsett` (`supabase/migrations/*_scenarioregelsett.sql`)
+har utkast, publisering, revisjoner og gjenoppretting som alt annet
+faginnhold, og hele regelsettet står i hvert øyeblikksbilde. Delene ligger i
+tabellene som begynner på `scenario`; en plassering peker på
+`public.kommentarer` med kommentar-ID-en, og det publiserte regelsettet kan
+bare peke på publiserte kommentarer. `intern.scenariofeil` validerer med
+samme meldinger som `validerScenarioregelsett`, før noe lagres, og
+`valider_scenarioregelsett` gir feilene uten å lagre, for redigeringen. En
+modul har høyst ett regelsett, og en analyttkode hører til høyst ett.
+`src/__tests__/scenarioregelsett.test.ts` sammenligner valideringen i
+databasen med appens for dagens regelsett og et rutenett av endrede utgaver,
+og prøver lagring, publisering, gjenoppretting, samtidighet og tilgang.
+
+Dagens regler og tekster er importert og publisert
+(`*_rusregler_import.sql`, laget med `scripts/rus-import.ts` fra det frosne
+grunnlaget `src/domain/__tests__/fasit/rus-import.json`): tekstene som 31
+kommentarobjekter og reglene som 17 regelsett som peker på dem.
+`src/__tests__/rusimport.test.ts` kjører importen i testdatabasen og krever
+at regelsettene, slik databasen gir dem tilbake, fortolker nøyaktig som
+dagens moduler over hele paritetsrutenettet.
+
 ## Dagens regler
 
 `src/domain/rusregelsett.ts` er dagens rusmiddelregler skrevet som
@@ -87,5 +109,5 @@ scenarioregelsett, og tekstene fra `rusmidler.json` som kommentarer
 `src/domain/__tests__/rusparitet.test.ts` kjører dem mot `rus.ts` for alle
 kombinasjoner av påviste analytter og et rutenett av konsentrasjoner på, rett
 under og rett over hver grense, og krever identisk resultat og at hvert
-scenario blir truffet. Filen er importgrunnlaget og fjernes når fortolkningen
-leser regelsettene fra Supabase.
+scenario blir truffet (`src/__tests__/hjelp/rusparitet.ts`). Filen er
+importgrunnlaget og fjernes når fortolkningen leser regelsettene fra Supabase.

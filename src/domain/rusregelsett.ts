@@ -1,5 +1,5 @@
 import { rusDatasett, type RusRad } from './rus'
-import type { Kommentaroppslag } from './kommentarobjekt'
+import type { Kommentarinnhold, Kommentaroppslag } from './kommentarobjekt'
 import type { Scenario, Scenarioplassering, Scenarioregelsett } from './scenario'
 
 /**
@@ -22,10 +22,19 @@ export function kommentarId(radId: string, nokkel = 'hoved'): string {
   return `${radId}/${nokkel}`
 }
 
-/** Alle kommentartekstene i datasettet, etter ID: kommentarobjektene scenariene peker på. */
-export const RUS_KOMMENTARER: Kommentaroppslag = new Map(
-  rusDatasett.rader.flatMap((r) => Object.entries(r.tekster).map(([n, t]) => [kommentarId(r.id, n), t])),
+/** Hva slags kommentar en tekstnøkkel i datasettet er, til navnet på kommentarobjektet. */
+const NOKKELNAVN: Record<string, string> = { hoved: 'hovedkommentar', tillegg: 'tilleggskommentar' }
+
+/** Kommentarobjektene scenariene peker på: hver tekst i datasettet, med ID og navn. */
+export const RUS_KOMMENTAROBJEKTER: { id: string; innhold: Kommentarinnhold }[] = rusDatasett.rader.flatMap((r) =>
+  Object.entries(r.tekster).map(([n, tekst]) => ({
+    id: kommentarId(r.id, n),
+    innhold: { navn: `${r.analytt} – ${NOKKELNAVN[n] ?? `kommentar om ${n}`}`, tekst, plassholdere: [] },
+  })),
 )
+
+/** Alle kommentartekstene i datasettet, etter ID. */
+export const RUS_KOMMENTARER: Kommentaroppslag = new Map(RUS_KOMMENTAROBJEKTER.map((k) => [k.id, k.innhold.tekst]))
 
 function rad(id: string): RusRad {
   const funnet = rusDatasett.rader.find((r) => r.id === id)

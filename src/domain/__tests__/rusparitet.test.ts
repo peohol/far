@@ -9,30 +9,10 @@
  * koder og tekst i samme rekkefølge, samme notiser og samme meldinger.
  */
 import { describe, expect, it } from 'vitest'
+import { forventParitet, forventSammeVerdifelter } from '../../__tests__/hjelp/rusparitet'
 import { RUS_MODULER, type RusModul } from '../rus'
 import { RUS_KOMMENTARER, RUS_REGELSETT } from '../rusregelsett'
-import { kjorScenarier, validerScenarioregelsett, verdifelter, type Scenarioregelsett } from '../scenario'
-
-/**
- * Konsentrasjonene som prøves i hvert felt. Med dem blir andelene i
- * diazepamgruppen (OXA / (DIAZ + DMI)) og kodeingruppen (MOR / KOD) både
- * nøyaktig 10 %, 20 % og 100 %, og rett under og over.
- */
-const VERDIER = [
-  '', ' ', 'abc', '-1', '1 0', '0', '0,0', '0,05', '0,1', '0,19', '0,2', '0,21', '0,5', '0,99', '1', '1,0', '1,01',
-  '2', '10', '99', '100', '100,0', '101', '199', '199,9', '200', '200,1', '201', '400', '600', '999', '1000', '1000,5', '1001',
-]
-
-function delmengder(koder: readonly string[]): string[][] {
-  return koder.reduce<string[][]>((alle, kode) => [...alle, ...alle.map((d) => [...d, kode])], [[]])
-}
-
-function kombinasjoner(felt: readonly string[]): Record<string, string>[] {
-  return felt.reduce<Record<string, string>[]>(
-    (alle, navn) => alle.flatMap((k) => VERDIER.map((v) => ({ ...k, [navn]: v }))),
-    [{}],
-  )
-}
+import { validerScenarioregelsett, type Scenarioregelsett } from '../scenario'
 
 const par: [RusModul, Scenarioregelsett][] = RUS_MODULER.map((modul, i) => {
   const regelsett = RUS_REGELSETT[i]
@@ -67,33 +47,8 @@ describe('dagens rusmiddelregler som scenarioregelsett', () => {
 describe.each(par.map(([modul, regelsett]) => [modul.id, modul, regelsett] as const))(
   'paritet for %s',
   (_id, modul, regelsett) => {
-    const pavistSett = delmengder(regelsett.analytter)
-
-    it('ber om de samme konsentrasjonene', () => {
-      for (const pavist of pavistSett) {
-        expect(verdifelter(regelsett, pavist), pavist.join('+')).toEqual(modul.verdifelter(pavist).map((f) => f.kode))
-        // Rekkefølgen brukeren krysser av i, spiller ingen rolle.
-        const baklengs = [...pavist].reverse()
-        expect(verdifelter(regelsett, baklengs)).toEqual(modul.verdifelter(baklengs).map((f) => f.kode))
-      }
-    })
-
-    it('gir identisk resultat for alle kombinasjoner, og treffer hvert scenario', () => {
-      const truffet = new Set<string>()
-      let antall = 0
-      for (const pavist of pavistSett) {
-        for (const verdier of kombinasjoner(modul.verdifelter(pavist).map((f) => f.kode))) {
-          for (const rekkefolge of [pavist, [...pavist].reverse()]) {
-            const inn = { pavist: rekkefolge, verdier }
-            const ny = kjorScenarier(regelsett, RUS_KOMMENTARER, inn)
-            expect(ny.resultat, JSON.stringify(inn)).toEqual(modul.fortolk(inn))
-            if (ny.scenario) truffet.add(ny.scenario.nokkel)
-            antall++
-          }
-        }
-      }
-      expect(antall).toBeGreaterThan(0)
-      expect([...truffet].sort()).toEqual(regelsett.scenarier.map((s) => s.nokkel).sort())
-    })
+    it('ber om de samme konsentrasjonene', () => forventSammeVerdifelter(modul, regelsett))
+    it('gir identisk resultat for alle kombinasjoner, og treffer hvert scenario', () =>
+      forventParitet(modul, regelsett, RUS_KOMMENTARER))
   },
 )
