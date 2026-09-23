@@ -45,6 +45,7 @@ import {
 } from './hooks/useKeyboard'
 import { useRute } from './hooks/useRute'
 import { useTheme } from './hooks/useTheme'
+import { lesPubliserteRegelsett } from './regler/kommentarer'
 import { slaOpp } from './regler/publiserte'
 import { initialState, isIdle, reducer, stageOf, type Action, type Stage } from './state'
 import type { Analyte } from './types'
@@ -120,10 +121,7 @@ export default function App() {
 
   // Fortolkningsreglene er de publiserte regelsettene i databasen, hentet
   // når appen åpnes. Steg 2 og tastene bruker regelsettet for analytten.
-  const hentRegler = useCallback(
-    async () => (await faginnhold.leser.lesIntervallregelsett('publisert')).map((u) => u.innhold),
-    [faginnhold.leser],
-  )
+  const hentRegler = useCallback(() => lesPubliserteRegelsett(faginnhold.leser), [faginnhold.leser])
   const regler = usePubliserteRegler(hentRegler)
   const regeloppslag = useMemo(
     () => (state.analyte ? slaOpp(regler.tilstand, state.analyte.kode) : null),

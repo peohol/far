@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { publiseringsplan, tilReferanse, type Sideelement } from '../../faginnhold/analyttside'
 import { Samtidighetskonflikt } from '../../faginnhold/lagring'
-import { TOM_SIDE, type Analyttsidedata, type Utgave } from '../../faginnhold/lesing'
+import { TOM_SIDE, type Analyttsidedata, type Regelsettutgave, type Utgave } from '../../faginnhold/lesing'
 import type { Infosideinnhold, Innholdselementinnhold, Referanseinnhold, Tilstand } from '../../faginnhold/modell'
+import { kommentarendringer, utenKommentarer } from '../../regler/kommentarer'
 import type { Intervallregelsett } from '../../regler/modell'
 import { FJERNET, erEnkeltelement } from '../../faginnhold/paneler'
 import type { Referanse } from '../../faginnhold/referanser'
@@ -54,7 +55,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
   const [side, setSide] = useState<Sidetilstand>({ status: 'laster', data: TOM_SIDE, tilstand: null, feil: null })
   const [referansebase, setReferansebase] = useState<Referanse[]>([])
   /** Regelsettet slik det er publisert, til å vise hva som endres før publiseringen. */
-  const [publisertRegelsett, setPublisertRegelsett] = useState<Utgave<Intervallregelsett> | null>(null)
+  const [publisertRegelsett, setPublisertRegelsett] = useState<Regelsettutgave | null>(null)
   const [konflikt, setKonflikt] = useState(false)
   const [runde, setRunde] = useState(0)
   /** Det siste som er lest, og fra hvilken tilstand, for endringene som trenger revisjonene. */
@@ -257,16 +258,22 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
   )
 
   /**
-   * Lagrer regelsettet som utkast mot revisjonen brukeren åpnet, eller mot
-   * `forventetRevisjon` når brukeren har sett en nyere og velger å lagre over
-   * den. En konflikt kastes videre til redigeringen, som lar brukeren
-   * sammenligne før noe lagres.
+   * Lagrer regelsettet og de nye og endrede kommentarene som utkast, på én
+   * gang, mot revisjonene brukeren åpnet — eller mot `grunnlag` når brukeren
+   * har sett en nyere utgave og velger å lagre over den. En konflikt kastes
+   * videre til redigeringen, som lar brukeren sammenligne før noe lagres.
    */
   const lagreRegelsett = useCallback(
-    async (innhold: Intervallregelsett, forventetRevisjon?: number) => {
-      const regelsett = utkastet().regelsett
-      if (!regelsett) throw new Error(IKKE_KLAR)
-      await lager.lagreUtkast(regelsett.id, forventetRevisjon ?? regelsett.revisjon, innhold)
+    async (innhold: Intervallregelsett, grunnlag?: Regelsettutgave) => {
+      const apnet = utkastet().regelsett
+      if (!apnet) throw new Error(IKKE_KLAR)
+      const mot = grunnlag ?? apnet
+      await lager.lagreIntervallregelsett(
+        mot.regelsett.id,
+        mot.regelsett.revisjon,
+        utenKommentarer(innhold),
+        kommentarendringer(innhold, mot.kommentarer, apnet.kommentarer),
+      )
       setRunde((r) => r + 1)
     },
     [lager, utkastet],

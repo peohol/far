@@ -1,9 +1,9 @@
 import { useId, useMemo, useState, type FormEvent, type ReactNode } from 'react'
 import { formatNumber, round } from '../../domain/bands'
 import { regelsettband } from '../../domain/intervallregler'
-import { endredeFelt, sammenlignFelter } from '../../faginnhold/historikk'
+import { sammenlignFelter } from '../../faginnhold/historikk'
 import { Samtidighetskonflikt } from '../../faginnhold/lagring'
-import type { Utgave } from '../../faginnhold/lesing'
+import type { Regelsettutgave } from '../../faginnhold/lesing'
 import { lesTallfelt, tallTilFelt } from '../../faginnhold/paneler'
 import { KONSENTRASJONSNIVAER, MALEENHETER, type Intervallregelsett } from '../../regler/modell'
 import {
@@ -24,7 +24,8 @@ import {
   slaSammen,
   steg,
 } from '../../regler/redigering'
-import { NIVANAVN, regelsettfelter } from '../../regler/visning'
+import { losRegelsett } from '../../regler/kommentarer'
+import { NIVANAVN, regelsettfelter, tekstene } from '../../regler/visning'
 import type { Level } from '../../types'
 import { Button } from '../Button'
 import { Tallfelt } from '../Tallfelt'
@@ -33,10 +34,13 @@ import { Regelsimulator } from './Regeltabell'
 
 export interface RegelredigeringProps {
   start: Intervallregelsett
-  /** Lagrer utkastet, mot en nyere revisjon når brukeren har valgt å lagre over den. */
-  onLagre: (innhold: Intervallregelsett, forventetRevisjon?: number) => Promise<void>
-  /** Utkastet slik det står i databasen nå. */
-  hentNyeste: () => Promise<Utgave<Intervallregelsett> | null>
+  /**
+   * Lagrer utkastet med kommentarene, mot det brukeren åpnet, eller mot
+   * `grunnlag` når hen har sett en nyere utgave og valgt å lagre over den.
+   */
+  onLagre: (innhold: Intervallregelsett, grunnlag?: Regelsettutgave) => Promise<void>
+  /** Utkastet slik det står i databasen nå, med kommentarene. */
+  hentNyeste: () => Promise<Regelsettutgave | null>
   onAvbryt: () => void
 }
 
@@ -49,7 +53,8 @@ export interface RegelredigeringProps {
  * sies det, og intervallet kan få sin egen. Simulatoren under prøver utkastet
  * slik det står i skjemaet.
  *
- * Alt lagres som utkast i én revisjon. Har noen andre lagret i mellomtiden,
+ * Kommentarene er egne objekter. Regelsettet og de nye og endrede
+ * kommentarene lagres som utkast på én gang. Har noen andre lagret i mellomtiden,
  * står det brukeren har gjort, og hen kan sammenligne med det de lagret før
  * hen velger.
  */
@@ -59,7 +64,7 @@ export function Regelredigering({ start, onLagre, hentNyeste, onAvbryt }: Regelr
   const [grenser, setGrenser] = useState(() => start.skillepunkter.map(tallTilFelt))
   const [feil, setFeil] = useState<string | null>(null)
   const [lagrer, setLagrer] = useState(false)
-  const [konflikt, setKonflikt] = useState<{ nyeste: Utgave<Intervallregelsett> | null } | null>(null)
+  const [konflikt, setKonflikt] = useState<{ nyeste: Regelsettutgave | null } | null>(null)
   const tittel = useId()
 
   const band = useMemo(() => regelsettband(regelsett), [regelsett])
@@ -76,7 +81,7 @@ export function Regelredigering({ start, onLagre, hentNyeste, onAvbryt }: Regelr
     if (typeof verdi === 'number') setRegelsett((r) => settSkillepunkt(r, i, verdi))
   }
 
-  const lagre = async (forventetRevisjon?: number) => {
+  const lagre = async (grunnlag?: Regelsettutgave) => {
     if (grenser.some((g) => typeof lesTallfelt(g) !== 'number')) {
       setFeil('Alle grensene må være tall.')
       return
@@ -90,7 +95,7 @@ export function Regelredigering({ start, onLagre, hentNyeste, onAvbryt }: Regelr
     setLagrer(true)
     setFeil(null)
     try {
-      await onLagre(innhold, forventetRevisjon)
+      await onLagre(innhold, grunnlag)
     } catch (e) {
       if (e instanceof Samtidighetskonflikt) setKonflikt({ nyeste: null })
       else setFeil((e as Error).message)
@@ -186,7 +191,7 @@ export function Regelredigering({ start, onLagre, hentNyeste, onAvbryt }: Regelr
           mine={regelsett}
           nyeste={konflikt.nyeste}
           onSammenlign={async () => setKonflikt({ nyeste: await hentNyeste() })}
-          onLagreLikevel={(revisjon) => void lagre(revisjon)}
+          onLagreLikevel={(grunnlag) => void lagre(grunnlag)}
           onForkast={onAvbryt}
           lagrer={lagrer}
         />
@@ -409,14 +414,16 @@ function Konflikt({
   lagrer,
 }: {
   mine: Intervallregelsett
-  nyeste: Utgave<Intervallregelsett> | null
+  nyeste: Regelsettutgave | null
   onSammenlign: () => Promise<void>
-  onLagreLikevel: (revisjon: number) => void
+  onLagreLikevel: (grunnlag: Regelsettutgave) => void
   onForkast: () => void
   lagrer: boolean
 }) {
   const [feil, setFeil] = useState<string | null>(null)
-  const endringer = nyeste ? sammenlignFelter(regelsettfelter(nyeste.innhold), regelsettfelter(mine)) : []
+  const deres = nyeste && losRegelsett(nyeste)
+  const felter = (r: Intervallregelsett) => regelsettfelter(r, tekstene(r))
+  const endringer = deres ? sammenlignFelter(felter(deres), felter(mine)) : []
   return (
     <div className="sidevarsel regelredigering__konflikt" role="alert">
       <p>
@@ -426,15 +433,15 @@ function Konflikt({
       {nyeste ? (
         <>
           <p>
-            Dette er forskjellen mellom det de lagret (revisjon {nyeste.revisjon}) og ditt. Rødt er deres, grønt er ditt
-            {endredeFelt(regelsettfelter(nyeste.innhold), regelsettfelter(mine)).length === 0 && ' — de er like'}.
+            Dette er forskjellen mellom det de lagret (revisjon {nyeste.regelsett.revisjon}) og ditt. Rødt er deres, grønt
+            er ditt{endringer.every((e) => !e.endret) && ' — de er like'}.
           </p>
           <Endringsliste endringer={endringer} forste={false} />
           <div className="skjema__knapper">
             <Button variant="subtle" onClick={onForkast}>
               Forkast mine endringer
             </Button>
-            <Button className="knapp--kompakt" disabled={lagrer} onClick={() => onLagreLikevel(nyeste.revisjon)}>
+            <Button className="knapp--kompakt" disabled={lagrer} onClick={() => onLagreLikevel(nyeste)}>
               Lagre mine over deres
             </Button>
           </div>

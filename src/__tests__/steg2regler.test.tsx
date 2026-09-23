@@ -17,18 +17,30 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import type { Intervallregelsett } from '../regler/modell'
 
-/** Svaret databasen gir på neste henting av regelsettene. */
-const svar = vi.hoisted(() => ({ neste: [] as (() => Promise<{ data: unknown; error: unknown }>)[] }))
+type Svar = { data: Record<string, unknown> | null; error: unknown }
+
+/**
+ * Svaret databasen gir på neste henting av regelsettene: regelsettene og
+ * kommentarene i hvert sitt kall, fra det samme svaret.
+ */
+const svar = vi.hoisted(() => ({
+  neste: [] as (() => Promise<Svar>)[],
+  aktivt: null as Promise<Svar> | null,
+}))
 
 vi.mock('../auth/okt', () => ({
   useProfil: () => ({ role: 'user', first_name: 'Lars', last_name: 'Leser', username: 'leser' }),
 }))
 vi.mock('../auth/klient', () => ({
   klient: () => ({
-    rpc: (funksjon: string) =>
-      funksjon === 'les_intervallregelsett' && svar.neste.length > 0
-        ? svar.neste.shift()!()
-        : Promise.resolve({ data: null, error: null }),
+    rpc: async (funksjon: string) => {
+      if (funksjon === 'les_intervallregelsett' && svar.neste.length > 0) svar.aktivt = svar.neste.shift()!()
+      if ((funksjon !== 'les_intervallregelsett' && funksjon !== 'les_kommentarer') || !svar.aktivt) {
+        return { data: null, error: null }
+      }
+      const { data, error } = await svar.aktivt
+      return { data: data?.[funksjon] ?? null, error }
+    },
   }),
 }))
 vi.mock('../components/konto/Kontoknapper', () => ({ Kontoknapper: () => null }))
@@ -36,7 +48,7 @@ vi.mock('../components/konto/Kontoknapper', () => ({ Kontoknapper: () => null })
 const { default: App } = await import('../App')
 const { TipsLag } = await import('../components/Tips')
 const { ShortcutVisibilityProvider } = await import('../hooks/useShortcutVisibility')
-const { DAGENS_REGELSETT, dagensKommentar, dagensRegelsett } = await import('./hjelp/dagensregler')
+const { DAGENS_REGELSETT, dagensKommentar, dagensRegelsett, publiserteRader } = await import('./hjelp/dagensregler')
 const { regelsettvalg } = await import('../domain/valg')
 
 /** Teksten på knappene regelsettet fra før byttet gir for NOR. */
@@ -55,12 +67,13 @@ beforeAll(() => {
 afterEach(() => {
   cleanup()
   svar.neste = []
+  svar.aktivt = null
   window.location.hash = ''
 })
 
-/** Databasen svarer med disse regelsettene som de publiserte. */
+/** Databasen svarer med disse regelsettene og kommentarene som de publiserte. */
 function publisert(regelsett: Intervallregelsett[]) {
-  return () => Promise.resolve({ data: regelsett.map((innhold) => ({ innhold })), error: null })
+  return () => Promise.resolve({ data: publiserteRader(regelsett), error: null })
 }
 
 /** Databasen svarer når testen sier fra. */
@@ -100,7 +113,7 @@ describe('steg 2 på regelsettene i databasen', () => {
     await waitFor(async () => expect(await navigator.clipboard.readText()).toBe(dagensKommentar('NOR', 'innenfor')))
   })
 
-  it('følger et regelsett som er endret og publisert, uten at appen endres', async () => {
+  it('følger et regelsett og en kommentar som er endret og publisert, uten at appen endres', async () => {
     const nor = dagensRegelsett('NOR')
     const ny = { id: nor.kommentarer[0]!.id, tekst: 'Syntetisk ny kommentar for testen.' }
     const endret: Intervallregelsett = {

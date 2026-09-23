@@ -1,8 +1,13 @@
 /**
- * Formen på regelsettene for de enkle konsentrasjonsreglene, slik databasen
- * lagrer dem: øyeblikksbildet `les_intervallregelsett` gir og `lagre_utkast`
- * tar imot. Motoren som bruker dem, står i `src/domain/intervallregler.ts`, og
- * bakgrunnen i `docs/fortolkningsregler.md`.
+ * Formen på regelsettene for de enkle konsentrasjonsreglene.
+ *
+ * Databasen lagrer {@link Intervallregelsettinnhold}: reglene, som peker på
+ * kommentarobjektene med ID-en. Tekstene er egne objekter
+ * (`src/domain/kommentarobjekt.ts`) med egen historikk og publisering.
+ * Fortolkningen og redigeringen bruker {@link Intervallregelsett}: reglene med
+ * tekstene til kommentarene de peker på slått opp (`src/regler/kommentarer.ts`).
+ * Motoren står i `src/domain/intervallregler.ts`, og bakgrunnen i
+ * `docs/fortolkningsregler.md`.
  *
  * Verdiene under står også i migrasjonen som oppretter tabellene.
  * `src/__tests__/intervallregelsett.test.ts` kontrollerer at de stemmer overens.
@@ -19,13 +24,13 @@ export const MALEENHETER = ['nmol/L', 'µmol/L'] as const
 export const REGELHANDLINGER = ['ring_rekvirent'] as const
 export type Regelhandling = (typeof REGELHANDLINGER)[number]
 
-/** En kommentar: ren tekst med en stabil ID i regelsettet. */
+/** Teksten til et kommentarobjekt regelsettet peker på. */
 export interface Regelkommentar {
   id: string
   tekst: string
 }
 
-/** Regelen for ett intervall. `kommentar` er ID-en til en kommentar i regelsettet. */
+/** Regelen for ett intervall. `kommentar` er ID-en til et kommentarobjekt. */
 export interface Intervallregel {
   niva: (typeof KONSENTRASJONSNIVAER)[number]
   handling: Regelhandling | null
@@ -38,8 +43,8 @@ export interface Cutoffregel {
   kommentar: string
 }
 
-/** Øyeblikksbildet av et intervallregelsett. */
-export interface Intervallregelsett {
+/** Øyeblikksbildet av et intervallregelsett, slik databasen lagrer det. */
+export interface Intervallregelsettinnhold {
   analyttkode: string
   enhet: string
   /** Hvor fint konsentrasjonen oppgis. Grensene er hele steg. */
@@ -51,5 +56,9 @@ export interface Intervallregelsett {
   /** Ringegrensen slik den vises som referansetall, eller `null` uten ringeregel. */
   ringegrense: number | null
   cutoff: Cutoffregel | null
+}
+
+/** Regelsettet med tekstene til kommentarene det peker på, i den rekkefølgen de brukes. */
+export interface Intervallregelsett extends Intervallregelsettinnhold {
   kommentarer: Regelkommentar[]
 }

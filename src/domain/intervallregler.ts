@@ -1,5 +1,11 @@
-import { lagBand, round, type Band } from './bands'
-import type { Intervallregel, Intervallregelsett, Regelhandling, Regelkommentar } from '../regler/modell'
+import { bandmerke, lagBand, round, type Band } from './bands'
+import type {
+  Intervallregel,
+  Intervallregelsett,
+  Intervallregelsettinnhold,
+  Regelhandling,
+  Regelkommentar,
+} from '../regler/modell'
 import type { Level } from '../types'
 
 /**
@@ -19,8 +25,8 @@ import type { Level } from '../types'
  * så intervallene dekker hele tallinjen uten hull eller overlapp.
  */
 
-/** Ett intervall med grensene sine og det regelen gir. */
-export interface Regeltreff {
+/** Ett intervall med grensene sine og regelen, som peker på kommentaren med ID-en. */
+export interface Intervallgrenser {
   /** Plassen i regelsettet, fra 0. */
   indeks: number
   /** Nedre grense, inkludert. `null` = åpen. */
@@ -29,6 +35,11 @@ export interface Regeltreff {
   til: number | null
   niva: Level
   handling: Regelhandling | null
+  kommentarId: string
+}
+
+/** Ett intervall med grensene sine og det regelen gir. */
+export interface Regeltreff extends Intervallgrenser {
   kommentar: Regelkommentar
 }
 
@@ -42,8 +53,8 @@ export function kommentaren(regelsett: Intervallregelsett, id: string): Regelkom
   return kommentar
 }
 
-/** Intervallene med grensene sine, nedenfra og opp. */
-export function intervallene(regelsett: Intervallregelsett): Regeltreff[] {
+/** Intervallene med grensene sine, nedenfra og opp, uten tekstene. */
+export function grensene(regelsett: Intervallregelsettinnhold): Intervallgrenser[] {
   const { skillepunkter } = regelsett
   return regelsett.intervaller.map((regel, indeks) => ({
     indeks,
@@ -51,8 +62,13 @@ export function intervallene(regelsett: Intervallregelsett): Regeltreff[] {
     til: indeks === skillepunkter.length ? null : (skillepunkter[indeks] ?? null),
     niva: regel.niva,
     handling: regel.handling,
-    kommentar: kommentaren(regelsett, regel.kommentar),
+    kommentarId: regel.kommentar,
   }))
+}
+
+/** Intervallene med grensene sine og kommentarene, nedenfra og opp. */
+export function intervallene(regelsett: Intervallregelsett): Regeltreff[] {
+  return grensene(regelsett).map((g) => ({ ...g, kommentar: kommentaren(regelsett, g.kommentarId) }))
 }
 
 /** Sant når verdien ligger i intervallet `[fra, til)`. */
@@ -83,6 +99,11 @@ export function cutoffkommentar(regelsett: Intervallregelsett): string | null {
 /** Den minste verdien som kan oppgis over et skillepunkt: ett steg under, rundet. */
 export function stegUnder(verdi: number, desimaler: number): number {
   return round(verdi - 10 ** -desimaler, desimaler)
+}
+
+/** Intervallet slik det står på knappen: `[10, 1800)` med 0 desimaler er «10 – 1799». */
+export function intervallmerke(intervall: Pick<Intervallgrenser, 'fra' | 'til'>, desimaler: number): string {
+  return bandmerke(intervall.fra, intervall.til === null ? null : stegUnder(intervall.til, desimaler), desimaler)
 }
 
 /**

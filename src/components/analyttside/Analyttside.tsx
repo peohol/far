@@ -2,7 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { Analyttkatalog } from '../../domain/analyttkatalog'
 import { byggSidemodell, type Publiseringssteg } from '../../faginnhold/analyttside'
 import { endredeFelt } from '../../faginnhold/historikk'
-import type { Analyttsidedata, Utgave } from '../../faginnhold/lesing'
+import type { Analyttsidedata, Regelsettutgave } from '../../faginnhold/lesing'
 import { PANELER, lesKinetikk, panelFor } from '../../faginnhold/paneler'
 import { indekserSide, sokeord } from '../../faginnhold/sok'
 import { lagLiggerOver, skrivesIFelt } from '../../hooks/useKeyboard'
@@ -18,9 +18,8 @@ import { Datakortpanel, Kortpanel, Tabellpanel, Tekstpanel, type Panelkontekst }
 import { Redigeringskilde } from './Redigeringskontekst'
 import { Sidesok } from './Sidesok'
 import { Uthevingskilde } from '../Uthev'
-import { Fortolkningsregler } from '../regler/Fortolkningsregler'
-import type { Intervallregelsett } from '../../regler/modell'
-import { regelsettfelter } from '../../regler/visning'
+import { Fortolkningsregler, regelsettfelterMedTekst } from '../regler/Fortolkningsregler'
+import { losRegelsett } from '../../regler/kommentarer'
 import { useAnalyttside, type Sidemodus } from './useAnalyttside'
 
 export interface AnalyttsideProps {
@@ -253,15 +252,22 @@ function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps)
 export function beskrivSteg(
   steg: Publiseringssteg,
   data: Analyttsidedata,
-  publisertRegelsett: Utgave<Intervallregelsett> | null = null,
+  publisertRegelsett: Regelsettutgave | null = null,
 ): string {
   switch (steg.slag) {
     case 'intervallregelsett': {
       const regelsett = data.regelsett
-      const navn = `Fortolkningsreglene for ${regelsett?.innhold.analyttkode ?? 'koden'}`
+      const navn = `Fortolkningsreglene for ${regelsett?.regelsett.innhold.analyttkode ?? 'koden'}`
       if (!regelsett || !publisertRegelsett) return navn
-      const endret = endredeFelt(regelsettfelter(publisertRegelsett.innhold), regelsettfelter(regelsett.innhold))
+      const endret = endredeFelt(
+        regelsettfelterMedTekst(losRegelsett(publisertRegelsett)),
+        regelsettfelterMedTekst(losRegelsett(regelsett)),
+      )
       return endret.length > 0 ? `${navn} (${endret.join(', ')})` : navn
+    }
+    case 'kommentar': {
+      const kommentar = data.regelsett?.kommentarer.find((k) => k.id === steg.id)
+      return `Kommentar: ${kommentar?.innhold.navn ?? 'en kommentar fortolkningsreglene bruker'}`
     }
     case 'referanse': {
       const referanse = data.referanser.find((r) => r.id === steg.id)
@@ -298,7 +304,7 @@ function Redigeringsstripe({
   onPubliser,
 }: {
   data: Analyttsidedata
-  publisertRegelsett: Utgave<Intervallregelsett> | null
+  publisertRegelsett: Regelsettutgave | null
   plan: Publiseringssteg[]
   /** Sant mens utkastet hentes etter at redigeringen er slått på. */
   laster: boolean

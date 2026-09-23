@@ -3,11 +3,11 @@
  * feltene historikken sammenligner, og simulatoren.
  */
 import { formatNumber } from '../domain/bands'
-import { cutoffkommentar, finnRegel, regelsettband } from '../domain/intervallregler'
+import { finnRegel, grensene, intervallmerke } from '../domain/intervallregler'
 import { CUTOFF_NOKKEL, regelsettvalg, type Kommentarvalg } from '../domain/valg'
 import type { Felt } from '../faginnhold/historikk'
 import type { Level } from '../types'
-import type { Intervallregelsett, Regelhandling } from './modell'
+import type { Intervallregelsett, Intervallregelsettinnhold, Regelhandling } from './modell'
 
 export const NIVANAVN: Record<Level, string> = {
   under: 'Under referanseområdet',
@@ -20,46 +20,73 @@ export const HANDLINGSNAVN: Record<Regelhandling, string> = {
 }
 
 /** Ringegrensen slik den står under tabellen, eller `null`. */
-export function visRingegrense(regelsett: Intervallregelsett): string | null {
+export function visRingegrense(regelsett: Intervallregelsettinnhold): string | null {
   if (regelsett.ringegrense === null) return null
   return `${formatNumber(regelsett.ringegrense, regelsett.desimaler)} ${regelsett.enhet}`
 }
 
 /**
- * Feltene i et regelsett, slik historikken sammenligner dem: enheten og
- * oppløsningen, så grensene, nivået, kommentaren og handlingen for hvert
- * intervall nedenfra og opp, og til sist ringegrensen og cut-off-kommentaren.
+ * Hvordan en kommentar står i feltene: teksten, eller navnet på
+ * kommentarobjektet der det er regelsettet selv som sammenlignes.
+ */
+export type Kommentarvisning = (id: string) => string
+
+/** Tekstene regelsettet har slått opp. */
+export function tekstene(regelsett: Intervallregelsett): Kommentarvisning {
+  const oppslag = new Map(regelsett.kommentarer.map((k) => [k.id, k.tekst]))
+  return (id) => oppslag.get(id) ?? ''
+}
+
+/**
+ * Feltene i et regelsett, slik historikken og oppsummeringene sammenligner
+ * dem: enheten og oppløsningen, så grensene, nivået, kommentaren og
+ * handlingen for hvert intervall nedenfra og opp, og til sist ringegrensen og
+ * «Til stede under cut-off».
  *
  * Intervallene kjennes igjen på plassen: et intervall som er delt i to, gir
  * endringer i alle over det.
  */
-export function regelsettfelter(regelsett: Intervallregelsett): Felt[] {
-  const band = regelsettband(regelsett)
+export function regelsettfelter(regelsett: Intervallregelsettinnhold, kommentar: Kommentarvisning): Felt[] {
   const felter: Felt[] = [
     { nokkel: 'enhet', navn: 'Enhet', verdi: regelsett.enhet },
     { nokkel: 'desimaler', navn: 'Desimaler', verdi: String(regelsett.desimaler) },
   ]
-  for (const [i, regel] of regelsett.intervaller.entries()) {
+  for (const intervall of grensene(regelsett)) {
+    const i = intervall.indeks
     const gruppe = `Intervall ${i + 1}`
-    const kommentar = band[i]?.kommentar ?? ''
     felter.push(
-      { nokkel: `intervall-${i}-grenser`, gruppe, navn: 'Konsentrasjon', verdi: `${band[i]?.label ?? ''} ${regelsett.enhet}` },
-      { nokkel: `intervall-${i}-niva`, gruppe, navn: 'Nivå', verdi: NIVANAVN[regel.niva] },
-      { nokkel: `intervall-${i}-kommentar`, gruppe, navn: 'Kommentar', verdi: kommentar, tekst: true },
+      {
+        nokkel: `intervall-${i}-grenser`,
+        gruppe,
+        navn: 'Konsentrasjon',
+        verdi: `${intervallmerke(intervall, regelsett.desimaler)} ${regelsett.enhet}`,
+      },
+      { nokkel: `intervall-${i}-niva`, gruppe, navn: 'Nivå', verdi: NIVANAVN[intervall.niva] },
+      { nokkel: `intervall-${i}-kommentar`, gruppe, navn: 'Kommentar', verdi: kommentar(intervall.kommentarId), tekst: true },
       {
         nokkel: `intervall-${i}-handling`,
         gruppe,
         navn: 'Ekstra handling',
-        verdi: regel.handling ? HANDLINGSNAVN[regel.handling] : 'Ingen',
+        verdi: intervall.handling ? HANDLINGSNAVN[intervall.handling] : 'Ingen',
       },
     )
   }
+  const { cutoff } = regelsett
+  const gruppe = 'Til stede under cut-off'
   felter.push(
     { nokkel: 'ringegrense', navn: 'Ringegrense', verdi: visRingegrense(regelsett) ?? 'Ingen' },
     {
-      nokkel: 'cutoff',
-      navn: 'Til stede under cut-off',
-      verdi: cutoffkommentar(regelsett) ?? 'Ingen',
+      nokkel: 'cutoff-innledning',
+      gruppe,
+      navn: 'Innledning',
+      verdi: cutoff ? kommentar(cutoff.innledning) : 'Ingen',
+      tekst: true,
+    },
+    {
+      nokkel: 'cutoff-kommentar',
+      gruppe,
+      navn: 'Settes foran',
+      verdi: cutoff ? kommentar(cutoff.kommentar) : 'Ingen',
       tekst: true,
     },
   )

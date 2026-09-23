@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { fulltNavn, tidspunkt } from '../../faginnhold/historikk'
+import { fulltNavn, tidspunkt, type Felt } from '../../faginnhold/historikk'
 import { innholdsfelter } from '../../faginnhold/innholdsfelter'
 import type { Utgave } from '../../faginnhold/lesing'
 import type { Innhold, Objekttype } from '../../faginnhold/modell'
@@ -22,16 +22,22 @@ export function Sistredigert<T extends Objekttype>({
   utgave,
   type,
   navn,
+  felter: egneFelter,
 }: {
   utgave: Utgave<Innhold[T]>
   type: T
   /** Hva objektet er, f.eks. «Referanseområde». */
   navn: string
+  /** Feltene historikken sammenligner, når de trenger mer enn innholdet selv. */
+  felter?: (innhold: Innhold[T]) => Felt[]
 }) {
   const { gjenopprett } = useRedigering()
   const [apen, setApen] = useState(false)
   const tekst = sistRedigert(utgave)
-  const felter = useCallback((innhold: Innhold[T]) => innholdsfelter(type, innhold), [type])
+  const felter = useCallback(
+    (innhold: Innhold[T]) => (egneFelter ? egneFelter(innhold) : innholdsfelter(type, innhold)),
+    [type, egneFelter],
+  )
   const lukk = useCallback(() => setApen(false), [])
 
   return (
@@ -40,7 +46,7 @@ export function Sistredigert<T extends Objekttype>({
         type="button"
         className="sistredigert sistredigert--knapp"
         aria-haspopup="dialog"
-        aria-label={`${tekst}. Vis historikken for ${navn.toLowerCase()}`}
+        aria-label={`${tekst}. Vis historikken for ${navn.charAt(0).toLowerCase()}${navn.slice(1)}`}
         onClick={() => setApen(true)}
       >
         {tekst}

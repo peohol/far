@@ -58,14 +58,6 @@ export interface Bandgrunnlag {
  * `intervallregler.ts`.
  */
 export function lagBand({ niva, fra, til, ring, desimaler, kommentar, key }: Bandgrunnlag): Band {
-  const steg = 10 ** -desimaler
-  const f = (v: number) => formatNumber(v, desimaler)
-  let label: string
-  if (fra === null && til !== null) label = `< ${f(round(til + steg, desimaler))}`
-  else if (til === null && fra !== null) label = `≥ ${f(fra)}`
-  else if (fra !== null && til !== null) label = fra === til ? f(fra) : `${f(fra)} – ${f(til)}`
-  else label = '–'
-
   return {
     key: key ?? (ring ? `${niva}-ring` : niva),
     niva,
@@ -73,7 +65,16 @@ export function lagBand({ niva, fra, til, ring, desimaler, kommentar, key }: Ban
     tone: niva === 'over' && ring ? 'ring' : niva,
     fra,
     til,
-    label,
+    label: bandmerke(fra, til, desimaler),
     kommentar,
   }
+}
+
+/** Teksten på knappen for et bånd der `fra` og `til` er inklusive og `null` er åpen ende. */
+export function bandmerke(fra: number | null, til: number | null, desimaler: number): string {
+  const f = (v: number) => formatNumber(v, desimaler)
+  if (fra === null && til !== null) return `< ${f(round(til + 10 ** -desimaler, desimaler))}`
+  if (til === null && fra !== null) return `≥ ${f(fra)}`
+  if (fra !== null && til !== null) return fra === til ? f(fra) : `${f(fra)} – ${f(til)}`
+  return '–'
 }

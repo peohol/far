@@ -20,11 +20,11 @@ vi.mock('../auth/okt', () => ({
   useProfil: () => ({ role: 'user', first_name: 'Lars', last_name: 'Leser', username: 'leser' }),
 }))
 vi.mock('../auth/klient', async () => {
-  const { DAGENS_REGELSETT } = await import('./hjelp/dagensregler')
-  const regelsett = DAGENS_REGELSETT.map((innhold) => ({ innhold }))
+  const { DAGENS_REGELSETT, publiserteRader } = await import('./hjelp/dagensregler')
+  const rader: Record<string, unknown> = publiserteRader(DAGENS_REGELSETT)
   return {
     klient: () => ({
-      rpc: async (funksjon: string) => ({ data: funksjon === 'les_intervallregelsett' ? regelsett : null, error: null }),
+      rpc: async (funksjon: string) => ({ data: rader[funksjon] ?? null, error: null }),
     }),
   }
 })

@@ -12,7 +12,7 @@
  */
 
 import type { Kommentarinnhold } from '../domain/kommentarobjekt'
-import type { Intervallregelsett } from '../regler/modell'
+import type { Intervallregelsettinnhold } from '../regler/modell'
 
 export const OBJEKTTYPER = [
   'infoside',
@@ -110,7 +110,7 @@ export interface Innhold {
   innholdselement: Innholdselementinnhold
   referanse: Referanseinnhold
   /** Formen står i `src/regler/modell.ts`. */
-  intervallregelsett: Intervallregelsett
+  intervallregelsett: Intervallregelsettinnhold
   kommentar: Kommentarinnhold
 }
 

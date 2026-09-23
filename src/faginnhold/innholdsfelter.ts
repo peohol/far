@@ -56,7 +56,14 @@ const FELTER: { [T in Objekttype]: (innhold: Innhold[T]) => Felt[] } = {
     { nokkel: 'referanse', navn: 'Referanse', verdi: formaterReferanse(innhold), tekst: true },
     { nokkel: 'arkivert', navn: 'Arkivert', verdi: innhold.arkivert ? 'Ja' : 'Nei' },
   ],
-  intervallregelsett: regelsettfelter,
+  // Regelsettet peker på kommentarene; uten navnene for hånden vises ID-en.
+  // Fortolkningsreglene gir historikken navnene (se Fortolkningsregler).
+  intervallregelsett: (innhold) => regelsettfelter(innhold, (id) => id),
+  kommentar: (innhold) => [
+    { nokkel: 'navn', navn: 'Navn', verdi: innhold.navn },
+    { nokkel: 'tekst', navn: 'Tekst', verdi: innhold.tekst, tekst: true },
+    { nokkel: 'plassholdere', navn: 'Plassholdere', verdi: innhold.plassholdere.join(', ') || 'Ingen' },
+  ],
 }
 
 /** Feltene historikken sammenligner for et objekt av typen. */

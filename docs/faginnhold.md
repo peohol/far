@@ -126,6 +126,11 @@ gir tilbake objektets nye status.
 | `lagre_utkast(objekt, forventet_revisjon, innhold)` | Ny revisjon av utkastet. Uendret innhold gir ingen ny revisjon |
 | `gjenopprett_revisjon(objekt, forventet_revisjon, fra_revisjon)` | Ny revisjon med innholdet fra en tidligere. Alt senere blir stående |
 | `publiser_utkast(objekt, forventet_revisjon)` | Publiserer utkastet slik det står. Lager ingen ny revisjon |
+| `lagre_intervallregelsett(objekt, forventet_revisjon, innhold, kommentarer)` | Et regelsett og de nye og endrede kommentarene det bruker, i én transaksjon (`docs/fortolkningsregler.md`) |
+
+`opprett_utkast` går gjennom `intern.opprett_objekt(type, id, innhold)`, som
+også brukes når ID-en alt er gitt: en import med faste ID-er, eller en ny
+kommentar som reglene i samme lagring peker på.
 
 **Samtidighet.** `forventet_revisjon` er revisjonen brukeren åpnet. Funksjonen
 låser utkastet og sammenligner; er det kommet en nyere revisjon i mellomtiden,
@@ -283,8 +288,9 @@ komponentsidene med kodene deres og referansene siden siterer — hvert objekt
 som en utgave med revisjonen tilstanden peker på, den publiserte revisjonen,
 øyeblikksbildet og hvem som laget det. Lesemodus leser det publiserte;
 redigeringsmodus utkastet. Regelsettet for koden (`finn_intervallregelsett`,
-se `docs/fortolkningsregler.md`) leses samtidig og står i sidedataene som
-`regelsett`; det er sitt eget objekt og peker på koden, ikke på siden.
+se `docs/fortolkningsregler.md`) leses samtidig, med kommentarobjektene det
+peker på, og står i sidedataene som `regelsett`; det er sitt eget objekt og
+peker på koden, ikke på siden.
 `les_referanser` gir referansebasen og `finn_infosider` sidene med gitte
 navn. Alle disse, og visningen
 `objektutgaver` de bygger på, kjører med rettighetene til den som leser, så

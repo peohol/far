@@ -1,8 +1,9 @@
-import { useId, useState } from 'react'
+import { useCallback, useId, useMemo, useState } from 'react'
 import { endredeFelt } from '../../faginnhold/historikk'
-import type { Utgave } from '../../faginnhold/lesing'
-import type { Intervallregelsett } from '../../regler/modell'
-import { regelsettfelter } from '../../regler/visning'
+import type { Regelsettutgave } from '../../faginnhold/lesing'
+import { losRegelsett } from '../../regler/kommentarer'
+import type { Intervallregelsett, Intervallregelsettinnhold } from '../../regler/modell'
+import { regelsettfelter, tekstene } from '../../regler/visning'
 import { Button } from '../Button'
 import { Sistredigert } from '../historikk/Sistredigert'
 import { Regelredigering, type RegelredigeringProps } from './Regelredigering'
@@ -11,14 +12,20 @@ import { Regelsimulator, Regeltabell } from './Regeltabell'
 /** Ankeret seksjonen har på siden. */
 export const FORTOLKNING_ANKER = 'panel-fortolkning'
 
+/** Feltene oppsummeringene sammenligner, med tekstene regelsettet har slått opp. */
+export function regelsettfelterMedTekst(regelsett: Intervallregelsett) {
+  return regelsettfelter(regelsett, tekstene(regelsett))
+}
+
 /**
  * Fortolkningsreglene for koden, på informasjonssiden: kommentaren hver
  * konsentrasjon gir, og en simulator for å prøve en verdi.
  *
  * Regelsettet er et eget objekt og ikke en del av informasjonssiden; det
- * vises her fordi det gjelder koden siden hører til. I redigeringsmodus kan
- * administratorer endre det, se hva som ikke er publisert og åpne
- * historikken.
+ * vises her fordi det gjelder koden siden hører til. Kommentarene det peker
+ * på, er egne objekter igjen. I redigeringsmodus kan administratorer endre
+ * reglene og tekstene, se hva som ikke er publisert og åpne historikken — for
+ * regelsettet og for hver kommentar.
  */
 export function Fortolkningsregler({
   utgave,
@@ -27,21 +34,29 @@ export function Fortolkningsregler({
   onLagre,
   hentNyeste,
 }: {
-  utgave: Utgave<Intervallregelsett> | null
+  utgave: Regelsettutgave | null
   /** Det publiserte regelsettet, til å si hva som ikke er publisert ennå. */
-  publisert: Utgave<Intervallregelsett> | null
+  publisert: Regelsettutgave | null
   redigerer: boolean
   onLagre: RegelredigeringProps['onLagre']
   hentNyeste: RegelredigeringProps['hentNyeste']
 }) {
   const overskrift = useId()
   const [redigeres, setRedigeres] = useState(false)
-  if (!utgave) return null
-  const regelsett = utgave.innhold
+  const regelsett = useMemo(() => utgave && losRegelsett(utgave), [utgave])
+  const publiserte = useMemo(() => publisert && losRegelsett(publisert), [publisert])
+  /** Navnene på kommentarene, som regelsettets egen historikk viser i stedet for tekstene. */
+  const navn = useMemo(() => new Map(utgave?.kommentarer.map((k) => [k.id, k.innhold.navn])), [utgave])
+  const historikkfelter = useCallback(
+    (innhold: Intervallregelsettinnhold) =>
+      regelsettfelter(innhold, (id) => navn.get(id) ?? 'En kommentar regelsettet ikke bruker nå'),
+    [navn],
+  )
+  if (!utgave || !regelsett) return null
   const upubliserte =
-    redigerer && utgave.publisert_revisjon !== utgave.revisjon
-      ? publisert
-        ? endredeFelt(regelsettfelter(publisert.innhold), regelsettfelter(regelsett))
+    redigerer && [utgave.regelsett, ...utgave.kommentarer].some((u) => u.publisert_revisjon !== u.revisjon)
+      ? publiserte
+        ? endredeFelt(regelsettfelterMedTekst(publiserte), regelsettfelterMedTekst(regelsett))
         : ['Hele regelsettet']
       : []
 
@@ -59,10 +74,10 @@ export function Fortolkningsregler({
       </div>
       {redigeres && redigerer ? (
         <Regelredigering
-          key={utgave.revisjon}
+          key={[utgave.regelsett.revisjon, ...utgave.kommentarer.map((k) => k.revisjon)].join('-')}
           start={regelsett}
-          onLagre={async (innhold, forventet) => {
-            await onLagre(innhold, forventet)
+          onLagre={async (innhold, grunnlag) => {
+            await onLagre(innhold, grunnlag)
             setRedigeres(false)
           }}
           hentNyeste={hentNyeste}
@@ -78,11 +93,27 @@ export function Fortolkningsregler({
         </>
       )}
       {redigerer && (
-        <div className="redigeringsrad">
-          <Sistredigert utgave={utgave} type="intervallregelsett" navn="Fortolkningsreglene" />
+        <div className="redigeringsrad regler__historikk">
+          <Sistredigert
+            utgave={utgave.regelsett}
+            type="intervallregelsett"
+            navn="Fortolkningsreglene"
+            felter={historikkfelter}
+          />
           {upubliserte.length > 0 && (
             <p className="sistredigert">Ikke publisert: {upubliserte.join(', ')}.</p>
           )}
+          <details className="regler__kommentarhistorikk">
+            <summary className="sistredigert">Historikken for hver kommentar</summary>
+            <ul>
+              {utgave.kommentarer.map((k) => (
+                <li key={k.id}>
+                  <span className="sistredigert">{k.innhold.navn}: </span>
+                  <Sistredigert utgave={k} type="kommentar" navn={`Kommentaren «${k.innhold.navn}»`} />
+                </li>
+              ))}
+            </ul>
+          </details>
         </div>
       )}
     </section>

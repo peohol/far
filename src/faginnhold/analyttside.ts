@@ -86,6 +86,7 @@ export type Publiseringsslag =
   | 'infoside'
   | 'laboratorieanalytt'
   | 'innholdselement'
+  | 'kommentar'
   | 'intervallregelsett'
 
 export interface Publiseringssteg {
@@ -104,8 +105,8 @@ export function upublisert(utgave: Utgave<unknown>): boolean {
  * Det som må publiseres for at siden skal bli slik utkastet viser den, i den
  * rekkefølgen databasen krever: det publiserte kan bare peke på det som også
  * er publisert. Referansene først, så sidene — komponentsidene før
- * hovedsiden — så laboratorieanalytten og innholdselementene. Regelsettet
- * peker ikke på noe av det og står til sist.
+ * hovedsiden — så laboratorieanalytten og innholdselementene. Til sist
+ * kommentarene regelsettet peker på, og så regelsettet.
  *
  * `data` er utkastet. Bare det som faktisk har upubliserte endringer, er med.
  * Referansene som er med, er dem siden siterer.
@@ -128,6 +129,7 @@ export function publiseringsplan(data: Analyttsidedata): Publiseringssteg[] {
   for (const element of [...data.elementer].sort((a, b) => (a.id < b.id ? -1 : 1))) {
     legg('innholdselement', element)
   }
-  legg('intervallregelsett', data.regelsett)
+  for (const kommentar of data.regelsett?.kommentarer ?? []) legg('kommentar', kommentar)
+  legg('intervallregelsett', data.regelsett?.regelsett ?? null)
   return steg
 }

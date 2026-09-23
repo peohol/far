@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.15.0',
+    dato: '2026-09-23',
+    sammendrag: 'Kommentarene i konsentrasjonsreglene er egne kommentarer med egen historikk',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Hver kommentar konsentrasjonsreglene gir, er nå en egen kommentar med navn, egen historikk og egen publisering. Reglene sier bare hvilken kommentar som gis når; samme kommentar kan brukes av flere regler, og en tekst rettes ett sted.',
+      'På informasjonssiden viser «Historikken for hver kommentar» hvem som har endret hver tekst og når, ord for ord, og en tidligere versjon kan gjenopprettes. Historikken for reglene viser hvilken kommentar hvert område gir, med navnet.',
+      'En endret tekst og endrede regler lagres sammen, alt eller ingenting, og publiseres sammen med resten av siden.',
+      'Kommentarene og grensene er de samme som før, tegn for tegn, og kommenteringen gir nøyaktig det samme.',
+    ],
+  },
+  {
     versjon: '1.14.0',
     dato: '2026-09-23',
     sammendrag: 'Kommenteringen bruker de publiserte konsentrasjonsreglene',

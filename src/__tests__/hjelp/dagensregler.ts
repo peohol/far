@@ -18,7 +18,8 @@
 import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { antihypertensivdatasett, dataset } from '../../domain/analytes'
-import type { Regelimport } from '../../regler/import'
+import { tilRegelimport, type Regelimport, type Regelkilde } from '../../regler/import'
+import { kommentarnavn, utenKommentarer } from '../../regler/kommentarer'
 import type { Intervallregelsett } from '../../regler/modell'
 import type { Analyte, Level } from '../../types'
 
@@ -37,8 +38,14 @@ export const FASITSUMMER = {
   grenser: 'eb9a0c277d920705c92d91ec5189f0b5f21b390ec0c9e64a541fcee38e490638',
 }
 
-/** Importdatasettet: hvert regelsett med kilden den første revisjonen fikk. */
-export const IMPORTDATASETT = lesJson<Regelimport[]>('../../../supabase/import/intervallregelsett.json')
+/**
+ * Importdatasettet: hvert regelsett med kilden den første revisjonen fikk,
+ * og tekstene slik de ble importert, før kommentarene ble egne objekter.
+ */
+export const IMPORTDATASETT = lesJson<Regelkilde[]>('../../../supabase/import/intervallregelsett.json')
+
+/** Importdatasettet slik det importeres nå: reglene og kommentarobjektene hver for seg. */
+export const DAGENS_IMPORT: Regelimport[] = IMPORTDATASETT.map(tilRegelimport)
 
 /** Regelsettene fra før byttet, sortert på analyttkode. */
 export const DAGENS_REGELSETT: Intervallregelsett[] = IMPORTDATASETT.map((i) => i.regelsett)
@@ -102,4 +109,27 @@ export function dagensKommentar(kode: string, niva: Level): string {
   const kommentar = regelsett.kommentarer.find((k) => k.id === regel?.kommentar)
   if (!kommentar) throw new Error(`${kode} har ingen kommentar for nivået «${niva}»`)
   return kommentar.tekst
+}
+
+/**
+ * Det databasen gir for disse regelsettene som de publiserte: regelsettene
+ * uten tekstene (`les_intervallregelsett`) og kommentarobjektene de peker på
+ * (`les_kommentarer`). For testene som erstatter databasen.
+ */
+export function publiserteRader(regelsett: Intervallregelsett[]) {
+  const utgave = <T,>(id: string, innhold: T) => ({
+    id,
+    revisjon: 1,
+    publisert_revisjon: 1,
+    innhold,
+    endret_av_fornavn: '',
+    endret_av_etternavn: '',
+    endret_kl: '',
+  })
+  return {
+    les_intervallregelsett: regelsett.map((r) => utgave(importId(r.analyttkode), utenKommentarer(r))),
+    les_kommentarer: regelsett.flatMap((r) =>
+      r.kommentarer.map((k) => utgave(k.id, { navn: kommentarnavn(r, k.id), tekst: k.tekst, plassholdere: [] })),
+    ),
+  }
 }

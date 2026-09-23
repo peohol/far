@@ -9,6 +9,8 @@
  */
 import { round } from '../domain/bands'
 import { ringes } from '../domain/intervallregler'
+import { validerKommentar } from '../domain/kommentarobjekt'
+import { kommentarIder } from './kommentarer'
 import type { Level } from '../types'
 import type { Intervallregel, Intervallregelsett, Regelkommentar } from './modell'
 
@@ -72,15 +74,9 @@ function medRing(forrige: Intervallregelsett, neste: Intervallregelsett): Interv
 
 /* --- Kommentarene -------------------------------------------------------- */
 
-/** ID-ene til kommentarene regelsettet bruker, i den rekkefølgen de brukes. */
-export function brukteKommentarer(regelsett: Intervallregelsett): string[] {
-  const ider = regelsett.intervaller.map((r) => r.kommentar)
-  if (regelsett.cutoff) ider.push(regelsett.cutoff.kommentar, regelsett.cutoff.innledning)
-  return [...new Set(ider)]
-}
-
 /**
- * Tar bort kommentarene ingen lenger bruker; databasen godtar dem ikke.
+ * Tar bort kommentarene ingen lenger bruker, så redigeringen bare lagrer dem
+ * regelsettet peker på.
  *
  * Cut-off må bygge på en kommentar et intervall bruker. Har det intervallet
  * cut-off bygde på, fått en annen kommentar eller blitt slått sammen, følger
@@ -93,7 +89,7 @@ export function rydd(regelsett: Intervallregelsett, erstatning?: string): Interv
     cutoff && !iIntervallene.has(cutoff.kommentar)
       ? { ...regelsett, cutoff: { ...cutoff, kommentar: erstatning ?? regelsett.intervaller[0]!.kommentar } }
       : regelsett
-  const brukt = new Set(brukteKommentarer(ryddet))
+  const brukt = new Set(kommentarIder(ryddet))
   return { ...ryddet, kommentarer: ryddet.kommentarer.filter((k) => brukt.has(k.id)) }
 }
 
@@ -234,9 +230,6 @@ export function klargjor(regelsett: Intervallregelsett): Intervallregelsett {
   return { ...regelsett, kommentarer: regelsett.kommentarer.map((k) => ({ ...k, tekst: k.tekst.trim() })) }
 }
 
-/** Det lengste en kommentar kan være, som i databasen. */
-export const KOMMENTAR_MAKS = 4000
-
 /**
  * Det som kan sies før regelsettet sendes: grensene og tekstene. Databasen
  * kontrollerer resten og svarer med en melding som kan vises. `null` når
@@ -253,7 +246,10 @@ export function kontrollerRegelsett(regelsett: Intervallregelsett): string | nul
   for (const kommentar of regelsett.kommentarer) {
     if (!kommentar.tekst.trim()) return 'Alle kommentarene må ha tekst.'
     if (somEnLinje(kommentar.tekst) !== kommentar.tekst) return 'En kommentar må stå på én linje.'
-    if (kommentar.tekst.trim().length > KOMMENTAR_MAKS) return `En kommentar kan ha høyst ${KOMMENTAR_MAKS} tegn.`
+    // Resten som kommentarobjektet krever. En konsentrasjonsregel fyller
+    // ikke inn noe, så kommentarene har ingen plassholdere.
+    const [feil] = validerKommentar({ navn: regelsett.analyttkode, tekst: kommentar.tekst.trim(), plassholdere: [] })
+    if (feil) return feil
   }
   return null
 }

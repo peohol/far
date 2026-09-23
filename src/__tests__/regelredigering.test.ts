@@ -34,7 +34,7 @@ import {
   settSkillepunkt,
   slaSammen,
 } from '../regler/redigering'
-import { regelsettfelter, simuler } from '../regler/visning'
+import { regelsettfelter, simuler, tekstene } from '../regler/visning'
 
 function regelsett(endring: Partial<Intervallregelsett> = {}): Intervallregelsett {
   return {
@@ -270,7 +270,7 @@ describe('sammenligningen', () => {
   it('deler et regelsett i felt for hvert intervall, så en endret grense og kommentar vises for seg', () => {
     const for_ = regelsett()
     const etter = settKommentartekst(settSkillepunkt(for_, 1, 2000), 'hoy', 'Endret høy kommentar.')
-    const endret = sammenlignFelter(regelsettfelter(for_), regelsettfelter(etter)).filter((e) => e.endret)
+    const endret = sammenlignFelter(regelsettfelter(for_, tekstene(for_)), regelsettfelter(etter, tekstene(etter))).filter((e) => e.endret)
     expect(endret.map((e) => [e.gruppe ?? '', e.navn, e.for, e.etter])).toEqual([
       ['Intervall 2', 'Konsentrasjon', '10 – 1799 nmol/L', '10 – 1999 nmol/L'],
       ['Intervall 3', 'Konsentrasjon', '≥ 1800 nmol/L', '≥ 2000 nmol/L'],

@@ -2,33 +2,55 @@
  * Importen av regelsett, som en kontrollert datamigrering.
  *
  * Regelsettene ligger først i et importdatasett (`supabase/import/`), hvert med
- * kilden sin, og legges inn med SQL som går gjennom de samme funksjonene appen
- * bruker (`opprett_utkast`, `publiser_utkast`) — med de samme kontrollene —
- * som administratoren som har bestilt importen. Hver revisjon får kilden sin
- * (`far.revisjonskilde`), så historikken viser hvor regelsettet kom fra.
+ * kilden sin og kommentarene det bruker, og legges inn med SQL som går gjennom
+ * de samme kontrollene som appen — som administratoren som har bestilt
+ * importen. Hver kommentar blir et kommentarobjekt med ID-en regelsettet
+ * peker på, og publiseres før regelsettet. Hver revisjon får kilden sin
+ * (`far.revisjonskilde`), så historikken viser hvor innholdet kom fra.
  *
  * Samme fremgangsmåte som importen av faginnholdet (`src/faginnhold/import.ts`):
  * SQL-en kjøres med databasens egne rettigheter. Alt er én transaksjon, og en
  * analyttkode som alt har et regelsett, hoppes over, så importen kan kjøres
  * igjen.
  *
- * Importen til produksjon ligger som datamigreringer
- * (`supabase/migrations/*_importer_intervallregelsett_*.sql`), laget herfra og
- * delt i porsjoner med `importdel` så hver er liten nok å rulle ut. Der
- * gjør importen ingenting når administratoren ikke finnes — slik som i en ny,
- * tom database — i stedet for å stoppe migreringen.
+ * Importen til produksjon ble gjort før kommentarene ble egne objekter
+ * (`supabase/migrations/*_importer_intervallregelsett_*.sql`), og flyttet over
+ * av `*_flytt_regelsettkommentarer.sql`. Den gjør ingenting når
+ * administratoren ikke finnes — slik som i en ny, tom database — i stedet for
+ * å stoppe migreringen, og det kan importen herfra også.
  *
  * SQL-en har en kontrollsum for dataene og stopper før noe er lagt inn hvis
  * de ikke er nøyaktig det som ble laget her — for eksempel om noe har gått
  * tapt da SQL-en ble kopiert.
  */
 import { createHash } from 'node:crypto'
-import type { Intervallregelsett } from './modell'
+import type { Kommentarinnhold } from '../domain/kommentarobjekt'
+import { kommentarnavn, utenKommentarer } from './kommentarer'
+import type { Intervallregelsett, Intervallregelsettinnhold } from './modell'
 
-/** Ett regelsett i importdatasettet, med kilden revisjonen skal vise. */
-export interface Regelimport {
+/** Ett regelsett i importdatasettet, med tekstene, og kilden revisjonene skal vise. */
+export interface Regelkilde {
   kilde: string
   regelsett: Intervallregelsett
+}
+
+/** Ett regelsett slik det importeres: reglene og kommentarobjektene de peker på. */
+export interface Regelimport {
+  kilde: string
+  regelsett: Intervallregelsettinnhold
+  kommentarer: { id: string; innhold: Kommentarinnhold }[]
+}
+
+/** Regelsettet delt i reglene og kommentarobjektene, med navnene kommentarene får. */
+export function tilRegelimport({ kilde, regelsett }: Regelkilde): Regelimport {
+  return {
+    kilde,
+    regelsett: utenKommentarer(regelsett),
+    kommentarer: regelsett.kommentarer.map(({ id, tekst }) => ({
+      id,
+      innhold: { navn: kommentarnavn(regelsett, id), tekst, plassholdere: [] },
+    })),
+  }
 }
 
 /** En tekst som SQL-literal. */
@@ -69,12 +91,13 @@ export function regelimportSql(
     utenAdministrator === 'stopp'
       ? `    raise exception ${melding}`
       : `    raise notice ${melding}\n    return;`
-  return `-- Regelsettene for de enkle konsentrasjonsreglene
+  return `-- Regelsettene for de enkle konsentrasjonsreglene, med kommentarene
 do $import$
 declare
   importdata constant text := $data$${data}$data$;
   administrator uuid;
   import jsonb;
+  kommentar jsonb;
   status public.objektstatus;
 begin
   if md5(importdata) <> '${kontrollsum}' then
@@ -97,6 +120,10 @@ ${utenAdmin}
       continue;
     end if;
     perform set_config('far.revisjonskilde', import ->> 'kilde', true);
+    for kommentar in select e.v from jsonb_array_elements(import -> 'kommentarer') e(v) loop
+      status := intern.opprett_objekt('kommentar', (kommentar ->> 'id')::uuid, kommentar -> 'innhold');
+      perform public.publiser_utkast(status.id, status.revisjon);
+    end loop;
     status := public.opprett_utkast('intervallregelsett', import -> 'regelsett');
     perform public.publiser_utkast(status.id, status.revisjon);
   end loop;
