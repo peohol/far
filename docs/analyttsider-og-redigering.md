@@ -835,7 +835,7 @@ Identiteten (panel 1) og kritiske varsler skjules ikke.
 | --- | --- |
 | «Kurskorrigering og plan» | Denne planen og koordineringen i del 25 |
 | «Fullfør arbeidspakke 4» | Arbeidspakke 4 (omarbeidingen av #35) |
-| «Arbeidspakke 5 – enkle regler» | Arbeidspakke 5 (#37, #39, #44 og del 4), og sin del av arbeidspakke 13 |
+| «Arbeidspakke 5 – enkle regler» | Arbeidspakke 5 (#37, #39, #44, #46 og del 5), og sin del av arbeidspakke 13 |
 | «Arbeidspakke 6 – analyttgrupper» | Arbeidspakke 6 (#33), og sin del av arbeidspakke 13 |
 | «Arbeidspakke 7 – THC-syre» | Arbeidspakke 7 (#34, #36), kommentarobjektene (#38), og sin del av arbeidspakke 13 |
 | «Legemiddeldata fra offentlige kilder» | Arbeidspakke 8, 10, 11 og 12 |
@@ -951,7 +951,9 @@ gjenoppretting. Steg 2 i fortolkningen bruker de publiserte regelsettene, og
 grensene og kommentarene er tatt ut av de statiske datasettene; testene måler
 mot en frosset fasit fra før byttet. Tekstene er de felles
 kommentarobjektene (#38), med egen historikk og publisering; regelsettene
-peker på dem med ID og inneholder ikke tekstene (del 4). Regelvisningen og simulatoren på
+peker på dem med ID og inneholder ikke tekstene (del 4). Referanseområdet
+under analyttnavnet på steg 2 leses fra kortet på informasjonssiden, så de to
+alltid viser det samme (del 5). Regelvisningen og simulatoren på
 analyttsiden skal flyttes inn i den generelle seksjonsarkitekturen når den
 finnes.
 

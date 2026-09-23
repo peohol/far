@@ -8,8 +8,9 @@
  * THC-syrekommentarene over alle kombinasjonene av det de bygges av.
  *
  * Knappene og pillene for konsentrasjonsbåndene lages av regelsettene fra før
- * byttet (se `dagensregler.ts`), slik steg 2 lager dem av de publiserte
- * regelsettene — med den samme koden.
+ * byttet (se `dagensregler.ts`) og referanseområdene på informasjonssidene
+ * (`data/referanseomrader.json`), slik steg 2 lager dem av de publiserte —
+ * med den samme koden.
  *
  * Rutenettet for rusmiddelmodulene tar med verdiene rett på og rundt
  * grensene reglene bruker (se `OKSAZEPAM_GRENSE`, `LAV_MORFIN_GRENSE` og
@@ -22,6 +23,7 @@ import { RUS_MODULER } from '../../domain/rus'
 import { beregnKategori, byggKommentar, type Konsentrasjonsniva } from '../../domain/thc'
 import { cutoffvalg, regelsettvalg } from '../../domain/valg'
 import { dagensRegelsett } from './dagensregler'
+import { referanseomradeFor } from './referanseomrader'
 
 /** Konsentrasjonene som prøves i hvert felt en rusmiddelmodul ber om. */
 const RUSVERDIER = ['', '0', '0,05', '0,1', '0,19', '0,2', '0,21', '0,5', '0,99', '1', '1,01', '2', '10', '100']
@@ -46,7 +48,7 @@ export function fortolkningsutfall() {
       kode: analyte.kode,
       valg: regelsettvalg(regelsett),
       cutoff: cutoffvalg(regelsett),
-      piller: grensepiller(analyte, regelsett),
+      piller: grensepiller(analyte, regelsett, referanseomradeFor(analyte.kode)),
     }
   })
 

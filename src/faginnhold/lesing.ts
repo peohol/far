@@ -20,6 +20,7 @@ import type {
   Tilstand,
 } from './modell'
 import type { Kommentarinnhold } from '../domain/kommentarobjekt'
+import { harVerdi, lesIntervallverdi, type Intervallverdi } from './paneler'
 import { kommentarIder } from '../regler/kommentarer'
 import type { Intervallregelsettinnhold } from '../regler/modell'
 
@@ -89,6 +90,11 @@ export interface Faginnholdsleser {
   /** Kommentarene i én tilstand: alle, eller bare dem med disse ID-ene. */
   lesKommentarer(tilstand: Tilstand, ider?: string[]): Promise<Utgave<Kommentarinnhold>[]>
   /**
+   * Referanseområdet på informasjonssiden for hver analyttkode som har det,
+   * i én tilstand. Fortolkningen viser det samme tallet under analyttnavnet.
+   */
+  lesReferanseomrader(tilstand: Tilstand): Promise<ReadonlyMap<string, Intervallverdi>>
+  /**
    * Historikken til ett objekt: hendelsene og øyeblikksbildene. Leseren ser
    * de revisjonene radsikkerheten gir: administratorer alle, andre de som
    * har vært publisert.
@@ -134,6 +140,16 @@ export function lagFaginnholdsleser(klient: SupabaseClient): Faginnholdsleser {
     lesIntervallregelsett: async (tilstand) =>
       (await kall<Utgave<Intervallregelsettinnhold>[]>('les_intervallregelsett', { sidetilstand: tilstand })) ?? [],
     lesKommentarer,
+    lesReferanseomrader: async (tilstand) => {
+      const rader =
+        (await kall<{ analyttkode: string; verdi: unknown }[]>('les_referanseomrader', { sidetilstand: tilstand })) ?? []
+      return new Map(
+        rader.flatMap(({ analyttkode, verdi }) => {
+          const omrade = lesIntervallverdi(verdi)
+          return harVerdi(omrade) ? [[analyttkode, omrade] as const] : []
+        }),
+      )
+    },
     lesHistorikk: async <T,>(objekt: string) =>
       (await kall<Historikk<T>>('les_historikk', { objekt })) ?? { hendelser: [], revisjoner: [] },
   }

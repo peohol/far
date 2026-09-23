@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { Intervallregelsett } from '../regler/modell'
-import { etterKode, type Regeltilstand } from '../regler/publiserte'
+import { klar, type Publisertgrunnlag, type Regeltilstand } from '../regler/publiserte'
 
 /**
- * De publiserte regelsettene, hentet én gang når appen åpnes.
+ * De publiserte regelsettene og referanseområdene, hentet én gang når appen
+ * åpnes.
  *
  * `hentPaNytt` henter dem igjen: etter en feil, eller når en administrator kan
  * ha publisert nye regler. Har appen alt regelsettene, blir de stående til de
  * nye er hentet, så steg 2 ikke blinker; en feil da beholder de gamle.
  */
-export function usePubliserteRegler(hent: () => Promise<Intervallregelsett[]>): {
+export function usePubliserteRegler(hent: () => Promise<Publisertgrunnlag>): {
   tilstand: Regeltilstand
   hentPaNytt: () => void
 } {
@@ -21,8 +21,8 @@ export function usePubliserteRegler(hent: () => Promise<Intervallregelsett[]>): 
     const denne = (siste.current += 1)
     setTilstand((forrige) => (forrige.status === 'feil' ? { status: 'laster' } : forrige))
     hent().then(
-      (regelsett) => {
-        if (denne === siste.current) setTilstand({ status: 'klar', etterKode: etterKode(regelsett) })
+      (grunnlag) => {
+        if (denne === siste.current) setTilstand(klar(grunnlag))
       },
       (feil: unknown) => {
         if (denne !== siste.current) return

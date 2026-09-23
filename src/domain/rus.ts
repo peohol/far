@@ -588,7 +588,6 @@ function tilAnalytt(modul: RusModul): Analyte {
     // Feltene under gjelder konsentrasjonsbåndene, som denne kategorien ikke
     // har. De står tomme, slik THC-syreoppføringen også gjør.
     enhet: '',
-    referanseomrade: null,
     maleomrade: { tekst: '', deler: [] },
     aliaser: modul.aliaser,
   }

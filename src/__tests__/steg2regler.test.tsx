@@ -5,9 +5,10 @@
  * - Knappene, pillene og kommentarene kommer fra regelsettet databasen gir,
  *   ikke fra noe som ligger i appen: et publisert regelsett med en annen
  *   grense og kommentar gir andre knapper og kopierer den nye teksten.
+ * - Referanseområdet under analyttnavnet er det informasjonssiden har, lest
+ *   fra databasen sammen med regelsettene.
  * - Mens regelsettene hentes, og når hentingen feiler eller koden ikke har
- *   noe regelsett, er det ingen knapper og ingenting å kopiere; tallene fra
- *   datasettet står likevel på analyttkortet.
+ *   noe regelsett, er det ingen knapper og ingenting å kopiere.
  * - «Prøv igjen» henter regelsettene på nytt.
  *
  * Regelsettene er de fra før byttet, eller syntetiske endringer av dem.
@@ -35,7 +36,7 @@ vi.mock('../auth/klient', () => ({
   klient: () => ({
     rpc: async (funksjon: string) => {
       if (funksjon === 'les_intervallregelsett' && svar.neste.length > 0) svar.aktivt = svar.neste.shift()!()
-      if ((funksjon !== 'les_intervallregelsett' && funksjon !== 'les_kommentarer') || !svar.aktivt) {
+      if (!['les_intervallregelsett', 'les_kommentarer', 'les_referanseomrader'].includes(funksjon) || !svar.aktivt) {
         return { data: null, error: null }
       }
       const { data, error } = await svar.aktivt
@@ -71,9 +72,9 @@ afterEach(() => {
   window.location.hash = ''
 })
 
-/** Databasen svarer med disse regelsettene og kommentarene som de publiserte. */
-function publisert(regelsett: Intervallregelsett[]) {
-  return () => Promise.resolve({ data: publiserteRader(regelsett), error: null })
+/** Databasen svarer med disse regelsettene, kommentarene og referanseområdene som de publiserte. */
+function publisert(regelsett: Intervallregelsett[], referanseomrader?: Parameters<typeof publiserteRader>[1]) {
+  return () => Promise.resolve({ data: publiserteRader(regelsett, referanseomrader), error: null })
 }
 
 /** Databasen svarer når testen sier fra. */
@@ -128,12 +129,18 @@ describe('steg 2 på regelsettene i databasen', () => {
     await waitFor(async () => expect(await navigator.clipboard.readText()).toBe(ny.tekst))
   })
 
-  it('har ingen knapper mens regelsettene hentes, og tallene fra datasettet står', async () => {
+  it('viser referanseområdet informasjonssiden har, også når det er endret der', async () => {
+    svar.neste.push(publisert(DAGENS_REGELSETT, { NOR: { nedre: 210, ovre: 590, enhet: 'nmol/L' } }))
+    const { steg } = await tilSteg2('NOR')
+    await waitFor(() => expect(within(steg).getByText('210 – 590 nmol/L')).toBeTruthy())
+  })
+
+  it('har ingen knapper mens regelsettene hentes, og viser referanseområdet når det er hentet', async () => {
     const svarNa = venter()
     const { user, steg } = await tilSteg2('NOR')
     expect(within(steg).getByText('Henter fortolkningsreglene …')).toBeTruthy()
     expect(knappene(steg)).toEqual([])
-    expect(within(steg).getByText('Referanseområde')).toBeTruthy()
+    expect(within(steg).queryByText('Referanseområde')).toBeNull()
     expect(within(steg).queryByText('Ringegrense')).toBeNull()
 
     await navigator.clipboard.writeText('før')
@@ -143,6 +150,7 @@ describe('steg 2 på regelsettene i databasen', () => {
     svarNa()
     await waitFor(() => expect(knappene(steg)).toEqual(NOR_KNAPPER))
     expect(within(steg).getByText('Ringegrense')).toBeTruthy()
+    expect(within(steg).getByText('200 – 600 nmol/L')).toBeTruthy()
   })
 
   it('sier fra når hentingen feiler, og henter på nytt med «Prøv igjen»', async () => {
@@ -165,5 +173,7 @@ describe('steg 2 på regelsettene i databasen', () => {
       'Det finnes ingen publiserte fortolkningsregler for NOR.',
     )
     expect(knappene(steg)).toEqual([])
+    // Referanseområdet er informasjonssidens, og står likevel.
+    expect(within(steg).getByText('200 – 600 nmol/L')).toBeTruthy()
   })
 })

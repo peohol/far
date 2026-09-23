@@ -232,7 +232,6 @@
       "analysemetode": "AHT",
       "kategori": "ACE-hemmere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -259,7 +258,6 @@
       "analysemetode": "AHT",
       "kategori": "ACE-hemmere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -286,7 +284,6 @@
       "analysemetode": "AHT",
       "kategori": "ACE-hemmere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -313,7 +310,6 @@
       "analysemetode": "AHT",
       "kategori": "Aldosteronantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -340,7 +336,6 @@
       "analysemetode": "AHT",
       "kategori": "Aldosteronantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -369,7 +364,6 @@
       "analysemetode": "AHT",
       "kategori": "Alfa- og betablokkere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -396,7 +390,6 @@
       "analysemetode": "AHT",
       "kategori": "Alfa- og betablokkere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -423,7 +416,6 @@
       "analysemetode": "AHT",
       "kategori": "Alfablokkere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -450,7 +442,6 @@
       "analysemetode": "AHT",
       "kategori": "ARB",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -477,7 +468,6 @@
       "analysemetode": "AHT",
       "kategori": "ARB",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -504,7 +494,6 @@
       "analysemetode": "AHT",
       "kategori": "ARB",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -531,7 +520,6 @@
       "analysemetode": "AHT",
       "kategori": "ARB",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -558,7 +546,6 @@
       "analysemetode": "AHT",
       "kategori": "ARB",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -585,7 +572,6 @@
       "analysemetode": "AHT",
       "kategori": "Betablokkere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -612,7 +598,6 @@
       "analysemetode": "AHT",
       "kategori": "Betablokkere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -639,7 +624,6 @@
       "analysemetode": "AHT",
       "kategori": "Betablokkere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -666,7 +650,6 @@
       "analysemetode": "AHT",
       "kategori": "Diuretika",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -693,7 +676,6 @@
       "analysemetode": "AHT",
       "kategori": "Diuretika",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -715,7 +697,6 @@
       "analysemetode": "AHT",
       "kategori": "Diuretika",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -737,7 +718,6 @@
       "analysemetode": "AHT",
       "kategori": "Diuretika",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -764,7 +744,6 @@
       "analysemetode": "AHT",
       "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -791,7 +770,6 @@
       "analysemetode": "AHT",
       "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -818,7 +796,6 @@
       "analysemetode": "AHT",
       "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -845,7 +822,6 @@
       "analysemetode": "AHT",
       "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
@@ -872,7 +848,6 @@
       "analysemetode": "AHT",
       "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []

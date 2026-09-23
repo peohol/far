@@ -479,7 +479,6 @@ def bygg() -> dict:
             # forstaelig feil i stedet for et oppslag som sprekker her.
             "kategori": KATEGORI.get(kode, ""),
             "enhet": STANDARD_ENHET,
-            "referanseomrade": None,
             # Kilden oppgir bare nedre teknisk maleomrade, ikke noe tak.
             "maleomrade": {"tekst": "", "deler": []},
             "antihypertensiv": {

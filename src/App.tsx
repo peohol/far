@@ -120,8 +120,15 @@ export default function App() {
   const hits = useMemo(() => search(state.query, pool), [state.query, pool])
 
   // Fortolkningsreglene er de publiserte regelsettene i databasen, hentet
-  // når appen åpnes. Steg 2 og tastene bruker regelsettet for analytten.
-  const hentRegler = useCallback(() => lesPubliserteRegelsett(faginnhold.leser), [faginnhold.leser])
+  // når appen åpnes, sammen med referanseområdet informasjonssidene har for
+  // hver analytt. Steg 2 og tastene bruker det som gjelder analytten.
+  const hentRegler = useCallback(async () => {
+    const [regelsett, referanseomrader] = await Promise.all([
+      lesPubliserteRegelsett(faginnhold.leser),
+      faginnhold.leser.lesReferanseomrader('publisert'),
+    ])
+    return { regelsett, referanseomrader }
+  }, [faginnhold.leser])
   const regler = usePubliserteRegler(hentRegler)
   const regeloppslag = useMemo(
     () => (state.analyte ? slaOpp(regler.tilstand, state.analyte.kode) : null),

@@ -232,6 +232,7 @@ function kilde({
       return regelsett ? [regelsett.regelsett] : []
     }),
     lesKommentarer: vi.fn(async (tilstand: Tilstand) => data(tilstand).regelsett?.kommentarer ?? []),
+    lesReferanseomrader: vi.fn(async () => new Map()),
     lesHistorikk: vi.fn(async (id: string) =>
       id === HOY ? KOMMENTARHISTORIKK : REGELHISTORIKK,
     ) as Faginnholdsleser['lesHistorikk'],

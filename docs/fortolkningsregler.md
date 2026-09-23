@@ -24,7 +24,8 @@ rusmiddelreglene og THC-syre har egne regeltyper.
 | `src/regler/import.ts`, `scripts/importer-intervallregelsett.ts` | SQL-en som legger inn datasettet, og porsjoneringen |
 | `src/domain/intervallregler.ts` | Motoren: intervallene, regelen en verdi treffer, cut-off og båndene steg 2 viser |
 | `src/domain/valg.ts` | `regelsettvalg`: valgene på steg 2 fra et regelsett, med «Til stede under cut-off» sist |
-| `src/domain/piller.ts` | Tallene over knappene: ringegrensen og den toksiske grensen fra regelsettet, resten fra datasettet |
+| `src/domain/piller.ts` | Tallene over knappene: referanseområdet fra informasjonssiden, ringegrensen og den toksiske grensen fra regelsettet, resten fra datasettet |
+| `supabase/migrations/*_referanseomrader_lesing.sql` | `les_referanseomrader`: referanseområdet på informasjonssiden for hver kode |
 | `src/regler/publiserte.ts`, `src/hooks/usePubliserteRegler.ts` | De publiserte regelsettene fortolkningen bruker: hentingen (`lesPubliserteRegelsett` i `kommentarer.ts`), og oppslaget for én kode |
 | `src/components/BandStep.tsx` | Steg 2: knappene, og hva som står i stedet mens reglene hentes eller mangler |
 | `src/regler/redigering.ts` | Endringene redigeringen gjør — grenser, deling, sammenslåing, kommentarer, ringing, cut-off — som rene funksjoner |
@@ -34,6 +35,7 @@ rusmiddelreglene og THC-syre har egne regeltyper.
 | `src/__tests__/kommentarflytting.test.ts` | Flyttingen av tekstene til kommentarobjekter, på de historiske importfilene |
 | `src/__tests__/hjelp/dagensregler.ts`, `src/__tests__/data/dagensgrenser.json` | Fasiten fra før byttet: regelsettene og grensene den gamle motoren ga |
 | `src/__tests__/fortolkningUendret.test.ts`, `steg2regler.test.tsx` | At klinisk output er den samme som før byttet, og steg 2 på regelsettene i appen |
+| `src/__tests__/referanseomrader.test.ts`, `src/__tests__/data/referanseomrader.json` | Lesingen av referanseområdene, og referanseområdene fasiten bruker |
 | `src/__tests__/regelredigering.test.ts`, `analyttside.test.tsx` | Redigeringen, simulatoren og historikken, som rene funksjoner og i siden |
 
 ## Modellen
@@ -198,22 +200,24 @@ analytt:
 `src/__tests__/fortolkningUendret.test.ts` lager steg 2 — knappene,
 kommentarene, cut-off og pillene — for alle analyttene av fasiten, med den
 samme koden appen bruker, og krever den samme kontrollsummen over all
-klinisk output som før analyttsidene kom. Den ble ikke endret av byttet.
+klinisk output som før analyttsidene kom. Den ble ikke endret av byttet, men
+én gang senere, med vilje, for referanseområdet (se «I fortolkningen»).
 
 ## I fortolkningen
 
 Appen henter de publiserte regelsettene og kommentarene én gang når den
-åpnes (`lesPubliserteRegelsett`), og steg 2 bruker regelsettet for
-analytten: knappene, kommentarene, «Til stede under cut-off» og tallene over
-knappene. Kjernen og stegene henter ingenting selv; regelsettet kommer som et
-argument (`Regeloppslag`), og `fortolkningUendret.test.ts` passer på at de
+åpnes (`lesPubliserteRegelsett`), sammen med referanseområdene
+(`les_referanseomrader`), og steg 2 bruker det som gjelder analytten:
+knappene, kommentarene, «Til stede under cut-off» og tallene over knappene.
+Kjernen og stegene henter ingenting selv; regelsettet og referanseområdet
+kommer som et argument (`Regeloppslag`), og `fortolkningUendret.test.ts` passer på at de
 ikke tar inn noe fra databasen eller faginnholdet.
 
 - **Mens reglene hentes,** eller når hentingen feiler eller koden ikke har
   noe publisert regelsett, står en melding i stedet for knappene, og tastene
   gjør ingenting. Uten knapper kan ingen kommentar bli gitt etter andre regler
-  enn de publiserte. En feil har «Prøv igjen». Referanseområdet,
-  påvisningsgrensen og terapiområdet står likevel; de er fra datasettet.
+  enn de publiserte. En feil har «Prøv igjen». Påvisningsgrensen og
+  terapiområdet står likevel; de er fra datasettet.
 - **Nye regler** gjelder fra neste gang appen åpnes. En administrator som går
   fra en analyttside tilbake til fortolkningen, får dem hentet på nytt med en
   gang. Har appen alt regelsettene, blir de stående til de nye er hentet.
@@ -221,9 +225,19 @@ ikke tar inn noe fra databasen eller faginnholdet.
   toksiske grensen — der det første intervallet på nivået «over» begynner —
   leses av regelsettet. Enheten står på den første pillen, og på en senere
   bare når den har en annen enhet.
+- **Referanseområdet** under analyttnavnet er kortet «Referanseområde» i
+  «Viktige data» på hovedsiden til koden — de samme tallene som
+  informasjonssiden viser, fra samme rad i databasen, og endret når kortet
+  endres og publiseres. Det står når det er hentet, og ikke for en kode uten
+  kortet. Med dette ble tre av tallene steg 2 viste, annerledes enn før:
+  BREK 50–350 (før 50–330), DOKSUM 180–550 (før 18–550) og LMP 10–300 (før
+  «< 300»), slik Peder bestemte. Fasiten for klinisk output
+  (`fortolkningUendret.test.ts`) ble endret for akkurat det, og bruker
+  referanseområdene slik de står på informasjonssidene
+  (`src/__tests__/data/referanseomrader.json`).
 - **Datasettene** (`analytter.json`, `antihypertensiver.json`) har ikke lenger
-  grensene, ringegrensen eller kommentarene, og byggeskriptene skriver dem
-  ikke. Skriptene leser og kontrollerer dem fortsatt, så `meta.rettelser` og
+  grensene, ringegrensen, kommentarene eller referanseområdet, og
+  byggeskriptene skriver dem ikke. Skriptene leser og kontrollerer dem fortsatt, så `meta.rettelser` og
   `meta.avvik` viser hvordan de importerte reglene og tekstene kom fra
   kildedokumentene; det er grunnen til at de står igjen. Resten av
   datasettene er uendret.

@@ -18,7 +18,8 @@ meta.rettelser i JSON-filen, slik at de kan etterprovest mot PDF-en.
 
 Grensene, ringegrensen og kommentarene er ikke lenger en del av datasettet:
 de ble importert til regelsettene i Supabase (se docs/fortolkningsregler.md),
-og det er dem fortolkningen bruker. Skriptet leser og kontrollerer dem
+og det er dem fortolkningen bruker. Referanseomradet er heller ikke med:
+fortolkningen viser det informasjonssiden har. Skriptet leser og kontrollerer dem
 fortsatt, sa rettelsene og avvikene i meta viser hvordan de importerte
 reglene kom fra kilden. Datasettet har bare det analyttkortet og
 informasjonssidene viser.
@@ -329,7 +330,6 @@ def bygg() -> dict:
                  "lost tegn i kildetabellen, ikke et intervall")
             ref_tekst = ""
 
-        referanseomrade = les_intervall(ref_tekst)
         maleomrade = les_maleomrade(maal_tekst, f"{kode}/maleomrade")
         ringegrense = tall(ringe_tekst)
 
@@ -390,7 +390,6 @@ def bygg() -> dict:
             # referansetabellen, sa den folger kilden og ikke en egen liste.
             "kategori": base["gruppe"],
             "enhet": enhet,
-            "referanseomrade": beriket(referanseomrade),
             "maleomrade": maleomrade,
         })
 
@@ -422,10 +421,6 @@ def neste(verdier: list[str], hvor: str) -> str:
         logg("artefakt", hvor, ekstra, "",
              "lost tegn pa en av de andre radene for samme analytt")
     return utfylte[0] if utfylte else ""
-
-
-def beriket(iv: dict | None) -> dict | None:
-    return {**iv, "tekst": intervalltekst(iv)} if iv else None
 
 
 def maks_maleomrade(maleomrade: dict) -> float | None:
