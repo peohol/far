@@ -236,29 +236,13 @@ describe('valideringen', () => {
 })
 
 describe('kommentarene er egne objekter', () => {
-  it('krever navn, ren tekst og at plassholderne i teksten er tillatt', () => {
-    const kommentar = { navn: 'Kodein, hoved', tekst: 'Forenlig med inntak.', plassholdere: [] }
-    expect(validerKommentar(kommentar)).toEqual([])
-    for (const tekst of ['', ' ', 'Med mellomrom. ']) {
-      expect(validerKommentar({ ...kommentar, tekst }), JSON.stringify(tekst)).toEqual([
-        'Kommentaren mangler tekst eller har mellomrom i endene.',
-      ])
+  it('gir rustekstene som gyldige kommentarer uten plassholdere', () => {
+    // Hele valideringen av kommentarer prøves mot databasen i `kommentarer.test.ts`.
+    for (const [id, tekst] of RUS_KOMMENTARER) {
+      expect(validerKommentar({ navn: id, tekst, plassholdere: [] }), id).toEqual([])
     }
-    expect(validerKommentar({ ...kommentar, navn: ' ' })).toEqual(['Kommentaren mangler navn eller har mellomrom i endene.'])
-    expect(validerKommentar({ ...kommentar, tekst: 'x'.repeat(4001) })).toEqual(['Kommentaren kan ha høyst 4000 tegn.'])
-    expect(validerKommentar({ ...kommentar, tekst: 'To\nlinjer.' })).toEqual(['Kommentaren må stå på én linje.'])
-    expect(validerKommentar({ ...kommentar, tekst: 'Nivå {nivå}.' })).toEqual([
-      'Teksten bruker plassholderen {nivå}, som ikke er tillatt.',
-    ])
-    expect(validerKommentar({ ...kommentar, tekst: 'Nivå {nivå}.', plassholdere: ['{nivå}'] })).toEqual([])
-    // Nøyaktig de erklærte plassholderne: en erklært som ikke brukes, er også feil.
-    expect(validerKommentar({ ...kommentar, plassholdere: ['{nivå}'] })).toEqual(['Teksten mangler plassholderen {nivå}.'])
-    expect(validerKommentar({ ...kommentar, tekst: '{a} {a}', plassholdere: ['nivå', '{ }', '{a}', '{a}'] })).toEqual([
-      'Ugyldig plassholder «nivå».',
-      'Ugyldig plassholder «{ }».',
-      'En plassholder står to ganger.',
-      'Teksten mangler plassholderen nivå.',
-      'Teksten mangler plassholderen { }.',
+    expect(validerKommentar({ navn: 'x', tekst: 'Nivå {nivå}.', plassholdere: [] })).toEqual([
+      'Kommentarteksten har plassholdere som ikke er oppgitt: {nivå}.',
     ])
   })
 

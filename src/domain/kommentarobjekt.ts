@@ -2,61 +2,93 @@
  * Fortolkningskommentaren som eget objekt.
  *
  * En kommentar er teksten som limes inn i pasientsvaret. Den er et eget
- * redigerbart objekt, med stabil ID, egen historikk og egen publisering.
- * Reglene peker på kommentarene med ID-en og eier ikke teksten: kommentar og
- * regel er separate objekter (`docs/analyttsider-og-redigering.md`). Samme
- * kommentar kan dermed brukes av flere regler og regelsett, og en tekst rettes
- * ett sted.
+ * redigerbart objekt (objekttypen `kommentar`), med stabil ID, egen historikk
+ * og egen publisering. Reglene peker på kommentarene med ID-en og eier ikke
+ * teksten: kommentar og regel er separate objekter
+ * (`docs/analyttsider-og-redigering.md`, avsnitt 10). Samme kommentar kan
+ * dermed brukes av flere regler og regelsett, og en tekst rettes ett sted.
  *
- * Formen er felles for alle regeltypene. Et regelsett kan kreve mer av
- * kommentarene det peker på — scenarioreglene krever for eksempel at de ikke
- * har plassholdere — men selve kommentaren er den samme overalt.
+ * **Plassholdere** er de navngitte hullene en regeltype fyller inn når
+ * kommentaren settes sammen, for eksempel `{nivå}`. Teksten bruker nøyaktig
+ * de plassholderne kommentaren oppgir, og de er de samme i alle revisjoner.
+ * En regeltype som har godtatt en kommentar, kan derfor stole på den også
+ * etter senere endringer av teksten. Vanlige kommentarer har ingen.
+ *
+ * De samme reglene håndheves av databasen (`intern.skriv_kommentar`);
+ * `src/__tests__/kommentarer.test.ts` kontrollerer at de to er enige.
  */
 
-/** Innholdet i en kommentar, det som versjoneres. */
+/** Innholdet i en kommentar, det som versjoneres. Ren tekst: det er den som kopieres. */
 export interface Kommentarinnhold {
-  /** Internt navn, så kommentaren kan finnes igjen i redigeringen. */
+  /** Hva kommentaren er, slik redigeringen viser den. Følger ikke med i pasientsvaret. */
   navn: string
-  /** Ren tekst på én linje: det er den som kopieres. */
   tekst: string
-  /**
-   * Plassholderne teksten bruker, f.eks. `{nivå}` — nøyaktig disse, verken
-   * flere eller færre. Tom for de fleste. Settes når kommentaren opprettes og
-   * endres ikke siden, så et regelsett som har godtatt kommentaren, kan stole
-   * på den også etter senere tekstendringer.
-   */
+  /** Plassholderne teksten bruker, sortert. Tom for vanlige kommentarer. */
   plassholdere: string[]
 }
 
 /** Kommentartekstene fortolkningen kan slå opp i, etter kommentar-ID. */
 export type Kommentaroppslag = ReadonlyMap<string, string>
 
-const PLASSHOLDER = /\{[^{}]*\}/g
+export const MAKS_NAVNELENGDE = 200
+export const MAKS_TEKSTLENGDE = 4000
 
-/** Plassholderne som står i teksten, i den rekkefølgen de først står. */
-export function plassholdereI(tekst: string): string[] {
-  return [...new Set(tekst.match(PLASSHOLDER) ?? [])]
+/** Formen på én plassholder: et navn i krøllparenteser, uten mellomrom i endene. */
+const PLASSHOLDER = /^\{[^{}\s](?:[^{}]*[^{}\s])?\}$/
+
+/** Rekkefølgen plassholderne lagres i: tegn for tegn, som `collate "C"` i databasen. */
+function sortert(liste: Iterable<string>): string[] {
+  return [...liste].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
 }
 
-const ren = (verdi: string) => verdi.trim() !== '' && verdi === verdi.trim()
+/** Plassholderne i en tekst — alt mellom { og } — uten gjentakelser, sortert. */
+export function plassholdereI(tekst: string): string[] {
+  return sortert(new Set(tekst.match(/\{[^{}]*\}/g) ?? []))
+}
 
-/** Feilene i en kommentar. Tom liste betyr gyldig. */
-export function validerKommentar(innhold: Kommentarinnhold): string[] {
+/**
+ * Feilene i en kommentar, med samme ordlyd som databasen. Tom liste betyr
+ * gyldig. `tidligere` er plassholderne kommentaren har fra før, når den
+ * finnes: de kan ikke endres.
+ */
+export function validerKommentar(innhold: Kommentarinnhold, tidligere?: readonly string[]): string[] {
+  const { navn, tekst, plassholdere } = innhold
   const feil: string[] = []
-  if (!ren(innhold.navn)) feil.push('Kommentaren mangler navn eller har mellomrom i endene.')
-  if (!ren(innhold.tekst)) feil.push('Kommentaren mangler tekst eller har mellomrom i endene.')
-  if (/[\r\n]/.test(innhold.tekst)) feil.push('Kommentaren må stå på én linje.')
-  if (innhold.tekst.length > 4000) feil.push('Kommentaren kan ha høyst 4000 tegn.')
-  for (const p of innhold.plassholdere) {
-    if (!/^\{[^{}\s][^{}]*\}$/.test(p)) feil.push(`Ugyldig plassholder «${p}».`)
+
+  if (navn.trim() === '') feil.push('Kommentaren mangler navn.')
+  else if ([...navn.trim()].length > MAKS_NAVNELENGDE) {
+    feil.push(`Navnet på kommentaren kan ha høyst ${MAKS_NAVNELENGDE} tegn.`)
   }
-  if (new Set(innhold.plassholdere).size !== innhold.plassholdere.length) feil.push('En plassholder står to ganger.')
-  const brukt = plassholdereI(innhold.tekst)
-  for (const p of brukt) {
-    if (!innhold.plassholdere.includes(p)) feil.push(`Teksten bruker plassholderen ${p}, som ikke er tillatt.`)
+
+  if (tekst.trim() === '') feil.push('Kommentaren mangler tekst.')
+  else {
+    if (tekst !== tekst.trim()) feil.push('Kommentarteksten begynner eller slutter med mellomrom.')
+    if (/[\r\n]/.test(tekst)) feil.push('Kommentarteksten må stå på én linje.')
+    if ([...tekst].length > MAKS_TEKSTLENGDE) {
+      feil.push(`Kommentarteksten kan ha høyst ${MAKS_TEKSTLENGDE} tegn.`)
+    }
   }
-  for (const p of innhold.plassholdere) {
-    if (!brukt.includes(p)) feil.push(`Teksten mangler plassholderen ${p}.`)
+
+  if (plassholdere.some((p) => !PLASSHOLDER.test(p))) {
+    feil.push('En plassholder skrives som et navn i krøllparenteser, for eksempel {nivå}.')
+  } else if (new Set(plassholdere).size !== plassholdere.length) {
+    feil.push('Samme plassholder er oppgitt flere ganger.')
+  } else {
+    const brukte = plassholdereI(tekst)
+    const ukjente = brukte.filter((p) => !plassholdere.includes(p))
+    if (ukjente.length > 0) {
+      feil.push(`Kommentarteksten har plassholdere som ikke er oppgitt: ${ukjente.join(', ')}.`)
+    }
+    const ubrukte = sortert(plassholdere).filter((p) => !brukte.includes(p))
+    if (ubrukte.length > 0) {
+      feil.push(`Kommentarteksten mangler plassholderne den oppgir: ${ubrukte.join(', ')}.`)
+    }
+    if (/[{}]/.test(tekst.replace(/\{[^{}]*\}/g, ''))) {
+      feil.push('Kommentarteksten har en krøllparentes som ikke hører til en plassholder.')
+    }
+    if (tidligere && sortert(tidligere).join('\n') !== sortert(plassholdere).join('\n')) {
+      feil.push('Plassholderne i en kommentar kan ikke endres. Lag en ny kommentar i stedet.')
+    }
   }
   return feil
 }
