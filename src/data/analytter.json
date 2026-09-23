@@ -1481,12 +1481,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 400,
-        "til": 900,
-        "merknad": "",
-        "tekst": "400 – 900"
-      },
       "maleomrade": {
         "tekst": "AMI: 10 – 2000, NOR: 10 – 2000",
         "deler": [
@@ -1519,12 +1513,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 70,
-        "til": 350,
-        "merknad": "",
-        "tekst": "70 – 350"
-      },
       "maleomrade": {
         "tekst": "10 – 2000",
         "deler": [
@@ -1551,12 +1539,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 18,
-        "til": 550,
-        "merknad": "",
-        "tekst": "18 – 550"
-      },
       "maleomrade": {
         "tekst": "DOKS: 20 – 2000, DDOKS: 20 – 2000",
         "deler": [
@@ -1589,12 +1571,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 30,
-        "til": 300,
-        "merknad": "",
-        "tekst": "30 – 300"
-      },
       "maleomrade": {
         "tekst": "20 – 600",
         "deler": [
@@ -1620,12 +1596,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 25,
-        "til": 140,
-        "merknad": "",
-        "tekst": "25 – 140"
-      },
       "maleomrade": {
         "tekst": "10 – 2000",
         "deler": [
@@ -1652,12 +1622,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 400,
-        "til": 2500,
-        "merknad": "",
-        "tekst": "400 – 2500"
-      },
       "maleomrade": {
         "tekst": "FLU: 50 – 3000, NFLU: 50 – 3000",
         "deler": [
@@ -1690,12 +1654,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 60,
-        "til": 900,
-        "merknad": "",
-        "tekst": "60 – 900"
-      },
       "maleomrade": {
         "tekst": "20 – 2000",
         "deler": [
@@ -1721,12 +1679,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 500,
-        "til": 4000,
-        "merknad": "",
-        "tekst": "500 – 4000"
-      },
       "maleomrade": {
         "tekst": "100 – 10000",
         "deler": [
@@ -1755,12 +1707,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 700,
-        "til": 1500,
-        "merknad": "",
-        "tekst": "700 – 1500"
-      },
       "maleomrade": {
         "tekst": "KLO: 10 – 2000, DKLO: 20 – 2000",
         "deler": [
@@ -1794,12 +1740,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 150,
-        "til": 900,
-        "merknad": "",
-        "tekst": "150 – 900"
-      },
       "maleomrade": {
         "tekst": "MIA: 10 – 2000, DMIA: 20 – 600",
         "deler": [
@@ -1832,12 +1772,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 50,
-        "til": 350,
-        "merknad": "",
-        "tekst": "50 – 350"
-      },
       "maleomrade": {
         "tekst": "10 – 2000",
         "deler": [
@@ -1863,12 +1797,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 200,
-        "til": 600,
-        "merknad": "",
-        "tekst": "200 – 600"
-      },
       "maleomrade": {
         "tekst": "10 – 2000",
         "deler": [
@@ -1894,12 +1822,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 40,
-        "til": 400,
-        "merknad": "",
-        "tekst": "40 – 400"
-      },
       "maleomrade": {
         "tekst": "10 – 1000",
         "deler": [
@@ -1925,12 +1847,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 20,
-        "til": 250,
-        "merknad": "",
-        "tekst": "20 – 250"
-      },
       "maleomrade": {
         "tekst": "5 – 1000",
         "deler": [
@@ -1956,12 +1872,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 100,
-        "til": 800,
-        "merknad": "",
-        "tekst": "100 – 800"
-      },
       "maleomrade": {
         "tekst": "10 – 2000",
         "deler": [
@@ -1988,12 +1898,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 400,
-        "til": 2000,
-        "merknad": "",
-        "tekst": "400 – 2000"
-      },
       "maleomrade": {
         "tekst": "VEN: 20 – 3000, ODVEN: 20 – 3000",
         "deler": [
@@ -2026,12 +1930,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antidepressiver",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 20,
-        "til": 100,
-        "merknad": "",
-        "tekst": "20 – 100"
-      },
       "maleomrade": {
         "tekst": "5 – 500",
         "deler": [
@@ -2057,12 +1955,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 100,
-        "til": 1500,
-        "merknad": "",
-        "tekst": "100 – 1500"
-      },
       "maleomrade": {
         "tekst": "10 – 2000",
         "deler": [
@@ -2089,12 +1981,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 200,
-        "til": 1300,
-        "merknad": "",
-        "tekst": "200 – 1300"
-      },
       "maleomrade": {
         "tekst": "ARI: 10 – 2000, DARI: 20 – 600",
         "deler": [
@@ -2127,12 +2013,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 50,
-        "til": 330,
-        "merknad": "",
-        "tekst": "50 – 330"
-      },
       "maleomrade": {
         "tekst": "10 – 600",
         "deler": [
@@ -2158,12 +2038,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 1,
-        "til": 15,
-        "merknad": "",
-        "tekst": "1 – 15"
-      },
       "maleomrade": {
         "tekst": "0,6 – 36",
         "deler": [
@@ -2189,12 +2063,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 2,
-        "til": 25,
-        "merknad": "",
-        "tekst": "2 – 25"
-      },
       "maleomrade": {
         "tekst": "1 – 60",
         "deler": [
@@ -2222,12 +2090,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 20,
-        "til": 150,
-        "merknad": "",
-        "tekst": "20 – 150"
-      },
       "maleomrade": {
         "tekst": "KARI: 2 – 120, DKARI: 2 – 120, DDKARI: 10 – 300",
         "deler": [
@@ -2267,12 +2129,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 10,
-        "til": 100,
-        "merknad": "",
-        "tekst": "10 – 100"
-      },
       "maleomrade": {
         "tekst": "5 – 500 (Obs lavere enn ringegrense)",
         "deler": [
@@ -2298,12 +2154,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 300,
-        "til": 2500,
-        "merknad": "",
-        "tekst": "300 – 2500"
-      },
       "maleomrade": {
         "tekst": "30 – 6000",
         "deler": [
@@ -2329,12 +2179,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 50,
-        "til": 700,
-        "merknad": "",
-        "tekst": "50 – 700"
-      },
       "maleomrade": {
         "tekst": "15 – 3000",
         "deler": [
@@ -2360,12 +2204,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": null,
-        "til": 300,
-        "merknad": "",
-        "tekst": "< 300"
-      },
       "maleomrade": {
         "tekst": "5 – 500 (Obs lavere enn ringegrense)",
         "deler": [
@@ -2391,12 +2229,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 5,
-        "til": 60,
-        "merknad": "",
-        "tekst": "5 – 60"
-      },
       "maleomrade": {
         "tekst": "2 – 200",
         "deler": [
@@ -2422,12 +2254,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 30,
-        "til": 200,
-        "merknad": "",
-        "tekst": "30 – 200"
-      },
       "maleomrade": {
         "tekst": "10 – 600",
         "deler": [
@@ -2453,12 +2279,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 20,
-        "til": 120,
-        "merknad": "",
-        "tekst": "20 – 120"
-      },
       "maleomrade": {
         "tekst": "10 – 600",
         "deler": [
@@ -2486,12 +2306,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 1,
-        "til": 7,
-        "merknad": "",
-        "tekst": "1 – 7"
-      },
       "maleomrade": {
         "tekst": "0,6 – 36",
         "deler": [
@@ -2518,12 +2332,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 20,
-        "til": 120,
-        "merknad": "",
-        "tekst": "20 – 120"
-      },
       "maleomrade": {
         "tekst": "RIS: 10 – 600, PAL: 10 – 600",
         "deler": [
@@ -2559,12 +2367,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 40,
-        "til": 300,
-        "merknad": "",
-        "tekst": "40 – 300"
-      },
       "maleomrade": {
         "tekst": "10 – 600",
         "deler": [
@@ -2590,12 +2392,6 @@
       "analysemetode": "SPFA",
       "kategori": "Antipsykotika",
       "enhet": "nmol/L",
-      "referanseomrade": {
-        "fra": 5,
-        "til": 35,
-        "merknad": "",
-        "tekst": "5 – 35"
-      },
       "maleomrade": {
         "tekst": "1 – 200",
         "deler": [
@@ -2621,12 +2417,6 @@
       "analysemetode": "SPFA",
       "kategori": "Stemningsstabiliserende",
       "enhet": "µmol/L",
-      "referanseomrade": {
-        "fra": 10,
-        "til": 50,
-        "merknad": "",
-        "tekst": "10 – 50"
-      },
       "maleomrade": {
         "tekst": "2 – 75",
         "deler": [

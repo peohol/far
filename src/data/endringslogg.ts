@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.18.1',
+    dato: '2026-09-23',
+    sammendrag: 'Referanseområdet i kommenteringen er det samme som på informasjonssiden',
+    typer: ['Fag'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Referanseområdet under analyttnavnet i kommenteringen hentes nå fra informasjonssiden for analytten, fra samme sted i databasen. De to viser alltid det samme, og en endring på informasjonssiden gjelder i kommenteringen når den er publisert.',
+      'Tre referanseområder er endret slik at de følger informasjonssiden: brekspiprazol 50–350 nmol/L (før 50–330), doksepin 180–550 nmol/L (før 18–550) og levomepromazin 10–300 nmol/L (før under 300).',
+      'Kommentarene og knappene er de samme som før.',
+    ],
+  },
+  {
     versjon: '1.18.0',
     dato: '2026-09-23',
     sammendrag: 'Konsentrasjonsreglene vises, prøves og redigeres på analyttsidene, og kommenteringen bruker de publiserte',

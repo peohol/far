@@ -570,7 +570,6 @@ export const THC_ANALYTT: Analyte = {
   analysemetode: THC_ANALYSEMETODE,
   kategori: '',
   enhet: '',
-  referanseomrade: null,
   maleomrade: { tekst: '', deler: [] },
   aliaser: ['THC-COOH', 'cannabis'],
 }

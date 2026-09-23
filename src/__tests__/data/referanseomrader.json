@@ -1,0 +1,177 @@
+{
+  "AMIS": {
+    "nedre": 100,
+    "ovre": 1500,
+    "enhet": "nmol/L"
+  },
+  "AMTNORSUM": {
+    "nedre": 400,
+    "ovre": 900,
+    "enhet": "nmol/L"
+  },
+  "ARISUM": {
+    "nedre": 200,
+    "ovre": 1300,
+    "enhet": "nmol/L"
+  },
+  "BREK": {
+    "nedre": 50,
+    "ovre": 350,
+    "enhet": "nmol/L"
+  },
+  "CITAL": {
+    "nedre": 70,
+    "ovre": 350,
+    "enhet": "nmol/L"
+  },
+  "DOKSUM": {
+    "nedre": 180,
+    "ovre": 550,
+    "enhet": "nmol/L"
+  },
+  "DULO": {
+    "nedre": 30,
+    "ovre": 300,
+    "enhet": "nmol/L"
+  },
+  "ESCIT": {
+    "nedre": 25,
+    "ovre": 140,
+    "enhet": "nmol/L"
+  },
+  "FLUOSUM": {
+    "nedre": 400,
+    "ovre": 2500,
+    "enhet": "nmol/L"
+  },
+  "FLUP": {
+    "nedre": 1,
+    "ovre": 15,
+    "enhet": "nmol/L"
+  },
+  "FLUV": {
+    "nedre": 60,
+    "ovre": 900,
+    "enhet": "nmol/L"
+  },
+  "HALO": {
+    "nedre": 2,
+    "ovre": 25,
+    "enhet": "nmol/L"
+  },
+  "HBUP": {
+    "nedre": 500,
+    "ovre": 4000,
+    "enhet": "nmol/L"
+  },
+  "KARSUM": {
+    "nedre": 20,
+    "ovre": 150,
+    "enhet": "nmol/L"
+  },
+  "KLORP": {
+    "nedre": 10,
+    "ovre": 100,
+    "enhet": "nmol/L"
+  },
+  "KLOSUM": {
+    "nedre": 700,
+    "ovre": 1500,
+    "enhet": "nmol/L"
+  },
+  "KLOZ": {
+    "nedre": 300,
+    "ovre": 2500,
+    "enhet": "nmol/L"
+  },
+  "KVE": {
+    "nedre": 50,
+    "ovre": 700,
+    "enhet": "nmol/L"
+  },
+  "LAM": {
+    "nedre": 10,
+    "ovre": 50,
+    "enhet": "µmol/L"
+  },
+  "LMP": {
+    "nedre": 10,
+    "ovre": 300,
+    "enhet": "nmol/L"
+  },
+  "LURA": {
+    "nedre": 5,
+    "ovre": 60,
+    "enhet": "nmol/L"
+  },
+  "MIASUM": {
+    "nedre": 150,
+    "ovre": 900,
+    "enhet": "nmol/L"
+  },
+  "MTZ": {
+    "nedre": 50,
+    "ovre": 350,
+    "enhet": "nmol/L"
+  },
+  "NOR": {
+    "nedre": 200,
+    "ovre": 600,
+    "enhet": "nmol/L"
+  },
+  "OLAN": {
+    "nedre": 30,
+    "ovre": 200,
+    "enhet": "nmol/L"
+  },
+  "PALI": {
+    "nedre": 20,
+    "ovre": 120,
+    "enhet": "nmol/L"
+  },
+  "PARO": {
+    "nedre": 40,
+    "ovre": 400,
+    "enhet": "nmol/L"
+  },
+  "PERF": {
+    "nedre": 1,
+    "ovre": 7,
+    "enhet": "nmol/L"
+  },
+  "RISPSUM": {
+    "nedre": 20,
+    "ovre": 120,
+    "enhet": "nmol/L"
+  },
+  "SERT": {
+    "nedre": 20,
+    "ovre": 250,
+    "enhet": "nmol/L"
+  },
+  "TRIM": {
+    "nedre": 100,
+    "ovre": 800,
+    "enhet": "nmol/L"
+  },
+  "VENSUM": {
+    "nedre": 400,
+    "ovre": 2000,
+    "enhet": "nmol/L"
+  },
+  "VOR": {
+    "nedre": 20,
+    "ovre": 100,
+    "enhet": "nmol/L"
+  },
+  "ZIPRA": {
+    "nedre": 40,
+    "ovre": 300,
+    "enhet": "nmol/L"
+  },
+  "ZUKLO": {
+    "nedre": 5,
+    "ovre": 35,
+    "enhet": "nmol/L"
+  }
+}

@@ -64,7 +64,6 @@ export interface Analyte {
    */
   kategori: string
   enhet: string
-  referanseomrade: Interval | null
   maleomrade: MeasuringRange
   /** Satt for antihypertensiver, som viser andre referansetall enn psykofarmaka. */
   antihypertensiv?: Antihypertensivgrenser

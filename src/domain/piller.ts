@@ -14,6 +14,17 @@ import type { Analyte } from '../types'
  * Hvilken av de to en analytt er, leses av datasettet og ikke av gruppenavnet.
  */
 
+/**
+ * Referanseområdet slik informasjonssiden har det: kortet «Referanseområde» i
+ * «Viktige data». Fortolkningen får det fra samme sted, så steg 2 og siden
+ * alltid viser det samme. `null` er en grense som ikke er oppgitt.
+ */
+export interface Referanseomrade {
+  nedre: number | null
+  ovre: number | null
+  enhet: string
+}
+
 /** Hva pillen bærer. Avgjør ledetekst, farge og rekkefølge. */
 export type Pilleslag =
   | 'referanseomrade'
@@ -41,6 +52,16 @@ const MERKE: Record<Pilleslag, string> = {
 /** Norsk tallform med de desimalene tallet faktisk har. */
 function tall(verdi: number): string {
   return formatNumber(verdi, (String(verdi).split('.')[1] ?? '').length)
+}
+
+/**
+ * Referanseområdet slik pillen viser det: «10 – 300», eller «fra 10» og
+ * «opptil 300» når bare den ene grensen er oppgitt — som på informasjonssiden,
+ * uten å si om grensen er med.
+ */
+function omrade({ nedre, ovre }: Referanseomrade): string {
+  if (nedre !== null && ovre !== null) return nedre === ovre ? tall(nedre) : `${tall(nedre)} – ${tall(ovre)}`
+  return nedre !== null ? `fra ${tall(nedre)}` : `opptil ${tall(ovre!)}`
 }
 
 /** En pille med enheten verdien er oppgitt i, før enheten er satt på. */
@@ -71,15 +92,20 @@ function regelpiller(regelsett: Intervallregelsett, antihypertensiv: boolean): P
 /**
  * Pillene analyttkortet viser, i den rekkefølgen de skal stå.
  *
- * Referanseområdet, påvisningsgrensen og terapiområdet står i datasettet;
- * ringegrensen og den toksiske grensen hører til fortolkningsreglene og leses
- * av regelsettet. Uten regelsett — mens det hentes — står bare de første.
+ * Referanseområdet er det informasjonssiden har; påvisningsgrensen og
+ * terapiområdet står i datasettet; ringegrensen og den toksiske grensen hører
+ * til fortolkningsreglene og leses av regelsettet. Mens referanseområdet og
+ * regelsettet hentes, står bare det som er i datasettet.
  *
  * Enheten står bare på den første pillen — den gjelder alle, og gjentatt på
  * hver pille ville den tatt oppmerksomhet fra tallene. Bare en pille med en
  * annen enhet enn pillen foran får sin egen.
  */
-export function grensepiller(analyte: Analyte, regelsett: Intervallregelsett | null): Grensepille[] {
+export function grensepiller(
+  analyte: Analyte,
+  regelsett: Intervallregelsett | null,
+  referanseomrade: Referanseomrade | null,
+): Grensepille[] {
   const grenser = analyte.antihypertensiv
   const piller: Pilleutkast[] = [
     ...(grenser
@@ -89,8 +115,8 @@ export function grensepiller(analyte: Analyte, regelsett: Intervallregelsett | n
             ? [pille('terapiomrade', grenser.terapiomrade.tekst, analyte.enhet)]
             : []),
         ]
-      : analyte.referanseomrade
-        ? [pille('referanseomrade', analyte.referanseomrade.tekst, analyte.enhet)]
+      : referanseomrade && (referanseomrade.nedre !== null || referanseomrade.ovre !== null)
+        ? [pille('referanseomrade', omrade(referanseomrade), referanseomrade.enhet || analyte.enhet)]
         : []),
     ...(regelsett ? regelpiller(regelsett, grenser !== undefined) : []),
   ]

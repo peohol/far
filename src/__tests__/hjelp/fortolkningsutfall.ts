@@ -8,8 +8,9 @@
  * THC-syrekommentarene over alle kombinasjonene av det de bygges av.
  *
  * Knappene og pillene for konsentrasjonsbåndene lages av regelsettene fra før
- * byttet (se `dagensregler.ts`), slik steg 2 lager dem av de publiserte
- * regelsettene — med den samme koden.
+ * byttet (se `dagensregler.ts`) og referanseområdene på informasjonssidene
+ * (`data/referanseomrader.json`), slik steg 2 lager dem av de publiserte —
+ * med den samme koden.
  *
  * Rusmiddelmodulene fortolkes med regelsettene som er publisert i Supabase.
  * Uten database brukes grunnlaget de ble importert fra (`rusgrunnlag.ts`),
@@ -25,6 +26,7 @@ import { kjorScenarier, verdifelter } from '../../domain/scenario'
 import { beregnKategori, byggKommentar, type Konsentrasjonsniva } from '../../domain/thc'
 import { cutoffvalg, regelsettvalg } from '../../domain/valg'
 import { dagensRegelsett } from './dagensregler'
+import { referanseomradeFor } from './referanseomrader'
 import { RUS_KOMMENTARER, rusRegelsett } from './rusgrunnlag'
 
 /** Konsentrasjonene som prøves i hvert felt en rusmiddelmodul ber om. */
@@ -50,7 +52,7 @@ export function fortolkningsutfall() {
       kode: analyte.kode,
       valg: regelsettvalg(regelsett),
       cutoff: cutoffvalg(regelsett),
-      piller: grensepiller(analyte, regelsett),
+      piller: grensepiller(analyte, regelsett, referanseomradeFor(analyte.kode)),
     }
   })
 

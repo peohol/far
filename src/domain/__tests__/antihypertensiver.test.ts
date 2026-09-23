@@ -5,6 +5,7 @@
  */
 import { describe, expect, it } from 'vitest'
 import { dagensKommentar, dagensRegelsett } from '../../__tests__/hjelp/dagensregler'
+import { referanseomradeFor } from '../../__tests__/hjelp/referanseomrader'
 import { analytes, antihypertensivdatasett, findByCode } from '../analytes'
 import { finnRegel, intervallene, regelsettband } from '../intervallregler'
 import { LEVELS } from '../../types'
@@ -42,7 +43,7 @@ describe('datasettet for antihypertensiver', () => {
   it('har ingen ringegrense — kategorien har ikke det begrepet', () => {
     for (const a of antihypertensiver) {
       expect(dagensRegelsett(a.kode).ringegrense, a.kode).toBeNull()
-      expect(a.referanseomrade, a.kode).toBeNull()
+      expect(referanseomradeFor(a.kode), a.kode).toBeNull()
       expect(a.gruppe, a.kode).toBe('Antihypertensiver')
       expect(a.enhet, a.kode).toBe('nmol/L')
     }

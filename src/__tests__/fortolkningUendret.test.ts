@@ -10,7 +10,8 @@
  * ingenting selv. Testene her holder det slik:
  *
  * - datasettene er de samme som før, bortsett fra grensene og kommentarene,
- *   som ble tatt ut da fortolkningen ble byttet over,
+ *   som ble tatt ut da fortolkningen ble byttet over, og referanseområdet,
+ *   som steg 2 nå har fra informasjonssidene,
  * - fasiten fra før byttet (`hjelp/dagensregler.ts`) er uendret,
  * - kjernen og fortolkningsstegene henter ingenting fra faginnholdet, fra
  *   analyttsidene eller fra databasen selv — reglene fra databasen kommer inn
@@ -19,7 +20,8 @@
  *   alle analyttene med regelsettene fra før byttet, alle rusmiddelmodulene
  *   med konsentrasjoner på og rundt grensene, og alle THC-syrekommentarene
  *   (se `hjelp/fortolkningsutfall.ts`). Summen står for hver del, så en del
- *   kan legges om uten å røre de andre.
+ *   kan legges om uten å røre de andre. Unntaket er referanseområdet for tre
+ *   analytter, som ble endret med vilje (se {@link FORTOLKNINGSUTFALL}).
  *
  * Endres reglene i databasen, endres ikke fasiten: det er de publiserte
  * regelsettene som gjelder, og historikken deres viser hva som er endret.
@@ -41,23 +43,30 @@ const ROT = fileURLToPath(new URL('../../', import.meta.url))
  *
  * Summene for analytter.json og antihypertensiver.json ble endret da
  * fortolkningen ble byttet over til regelsettene: grensene, ringegrensen og
- * kommentarene ble tatt ut, og ingenting annet. Resten av innholdet er det
- * samme som før.
+ * kommentarene ble tatt ut, og ingenting annet. De ble endret igjen da
+ * referanseområdet ble tatt ut, fordi fortolkningen nå viser det
+ * informasjonssiden har. Resten av innholdet er det samme som før.
  */
 const DATASETT: Record<string, string> = {
-  'src/data/analytter.json': 'bd169f468b9b66ba698488f430152f3e33f4e8e0f136fc3287f023008f78a62e',
-  'src/data/antihypertensiver.json': '02bd6d9495fe3ad7a3c483973a8a4bd8286aff082c6f47fef57609f28c489a4a',
+  'src/data/analytter.json': 'fd88b5cb103e2bbd43e76e8072fe77cbf3ecb6258fcb5e5c236fdfa34e2cace4',
+  'src/data/antihypertensiver.json': '75b4b688155a1ac03876c469ba98628c1d78f8d3ce408a6bce2482868421e33e',
   'src/data/aliaser.json': 'ab5f4ae6284d81cc32762a0da1709131d8b814138a302623b6ab60b00366ccfd',
 }
 
 /**
  * Kontrollsummene for all klinisk output fra fortolkningsmodulene, del for
- * del, slik den var før analyttsidene kom. Summene er de samme etter byttet
- * til regelsettene i Supabase. Endres outputen med vilje, oppdateres summen i
- * samme PR, og føringen i endringsloggen får merket «Fag».
+ * del. Endres outputen med vilje, oppdateres summen i samme PR, og føringen i
+ * endringsloggen får merket «Fag».
+ *
+ * Summene var de samme fra før analyttsidene kom og gjennom byttet til
+ * regelsettene i Supabase. Summen for konsentrasjonsbåndene ble endret én
+ * gang, med vilje, da referanseområdet under analyttnavnet ble hentet fra
+ * informasjonssidene: da ble det 50 – 350 for BREK (før 50 – 330), 180 – 550
+ * for DOKSUM (før 18 – 550) og 10 – 300 for LMP (før < 300), og ingenting
+ * annet endret seg. Kommentarene og knappene er de samme.
  */
 const FORTOLKNINGSUTFALL: Record<string, string> = {
-  band: 'b2fce3266b626576260e7bf64dbc9fe917ae5899efa98fe18754b308c11db8eb',
+  band: '0beefabadcb7f4dc7e1438c9feb7f9496c40e7a883336031a2f6f59648114779',
   etg: '9aa2aea633064367b24e4a9578c37fb5fde700f7b410c8710187769c62ef434c',
   rus: '33a3739b124621c0deca34f68675b10c5398598ca78f3f6775456e3981621078',
   thc: 'fa7eb624ba7424585774af6033cf049d1887088eab781b0aadf39307ad27c20f',
@@ -119,11 +128,11 @@ function importer(kode: string): string[] {
   return [...kode.matchAll(/(?:\bfrom|\bimport)\s*\(?\s*['"]([^'"]+)['"]/g)].map((m) => m[1]!)
 }
 
-/** Feltene som ble tatt ut av datasettene da fortolkningen ble byttet over. */
-const UTTATTE_FELT = ['ringegrense', 'nedreGrense', 'ovreGrense', 'nivaer']
+/** Feltene som ble tatt ut av datasettene da fortolkningen fikk dem fra databasen. */
+const UTTATTE_FELT = ['ringegrense', 'nedreGrense', 'ovreGrense', 'nivaer', 'referanseomrade']
 
 describe('fortolkningen etter byttet til regelsettene i Supabase', () => {
-  it('bruker de samme datasettene som før, uten grensene og kommentarene', () => {
+  it('bruker de samme datasettene som før, uten grensene, kommentarene og referanseområdene', () => {
     for (const [fil, forventet] of Object.entries(DATASETT)) {
       // Lest og skrevet ut på nytt, så bare innholdet teller — ikke
       // linjeskift eller innrykk.
@@ -132,7 +141,7 @@ describe('fortolkningen etter byttet til regelsettene i Supabase', () => {
     }
   })
 
-  it('har ikke lenger grensene og kommentarene i datasettene', () => {
+  it('har ikke lenger grensene, kommentarene og referanseområdene i datasettene', () => {
     for (const analyte of analytes) {
       for (const felt of UTTATTE_FELT) expect(Object.hasOwn(analyte, felt), `${analyte.kode}.${felt}`).toBe(false)
     }

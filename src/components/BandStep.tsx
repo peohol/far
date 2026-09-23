@@ -15,7 +15,7 @@ import { grensepiller, type Pilleslag } from '../domain/piller'
 import { CUTOFF_NOKKEL, type Kommentarvalg } from '../domain/valg'
 import { indexToDigit } from '../hooks/useKeyboard'
 import { useShortcutVisibility } from '../hooks/useShortcutVisibility'
-import type { Regeloppslag } from '../regler/publiserte'
+import { referanseomradet, type Regeloppslag } from '../regler/publiserte'
 import type { Analyte } from '../types'
 
 export interface BandStepProps {
@@ -148,7 +148,7 @@ export function BandStep({ analyte, regler, valg: alle, onPick, onBack, onProvIg
         <Kodepille kode={analyte.kode} />
         <h1 className="analytt__navn">{displayName(analyte)}</h1>
         <div className="analytt__grenser">
-          {grensepiller(analyte, regelsett).map((pille) => (
+          {grensepiller(analyte, regelsett, referanseomradet(regler)).map((pille) => (
             <Pill
               key={pille.slag}
               tone={TONE[pille.slag]}

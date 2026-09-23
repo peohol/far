@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { dagensRegelsett } from '../../__tests__/hjelp/dagensregler'
+import { referanseomradeFor } from '../../__tests__/hjelp/referanseomrader'
 import { analytes, findByCode } from '../analytes'
 import { regelsettband } from '../intervallregler'
-import { grensepiller } from '../piller'
+import { grensepiller, type Referanseomrade } from '../piller'
+import type { Intervallregelsett } from '../../regler/modell'
 import type { Analyte } from '../../types'
 
 function get(kode: string): Analyte {
@@ -11,12 +13,16 @@ function get(kode: string): Analyte {
   return a
 }
 
-/** Pillene analytten får med regelsettet fra før byttet. */
-function piller(kode: string, regelsett = dagensRegelsett(kode)): [string, string][] {
-  return grensepiller(get(kode), regelsett).map((p) => [p.merke, p.verdi])
+/** Pillene analytten får med regelsettet fra før byttet og referanseområdet på informasjonssiden. */
+function piller(
+  kode: string,
+  regelsett: Intervallregelsett | null = dagensRegelsett(kode),
+  referanseomrade: Referanseomrade | null = referanseomradeFor(kode),
+): [string, string][] {
+  return grensepiller(get(kode), regelsett, referanseomrade).map((p) => [p.merke, p.verdi])
 }
 
-const medRegelsett = (a: Analyte) => grensepiller(a, dagensRegelsett(a.kode))
+const medRegelsett = (a: Analyte) => grensepiller(a, dagensRegelsett(a.kode), referanseomradeFor(a.kode))
 
 describe('grensepiller', () => {
   it('gir psykofarmaka referanseområde og ringegrense', () => {
@@ -101,11 +107,32 @@ describe('grensepiller', () => {
     expect(piller('ENAT', { ...enat, skillepunkter: [10, 1300] }).at(-1)).toEqual(['Toksisk', '≥ 1300'])
   })
 
-  it('viser bare tallene fra datasettet mens regelsettet hentes', () => {
-    expect(grensepiller(get('AMTNORSUM'), null).map((p) => [p.merke, p.verdi])).toEqual([
-      ['Referanseområde', '400 – 900 nmol/L'],
+  it('viser referanseområdet informasjonssiden har', () => {
+    // De tre som var ulike i de gamle datasettene (50–330, 18–550 og < 300).
+    expect(piller('BREK')[0]).toEqual(['Referanseområde', '50 – 350 nmol/L'])
+    expect(piller('DOKSUM')[0]).toEqual(['Referanseområde', '180 – 550 nmol/L'])
+    expect(piller('LMP')[0]).toEqual(['Referanseområde', '10 – 300 nmol/L'])
+    // Enheten er den kortet har.
+    expect(piller('AMTNORSUM', undefined, { nedre: 0.4, ovre: 0.9, enhet: 'µmol/L' })).toEqual([
+      ['Referanseområde', '0,4 – 0,9 µmol/L'],
+      ['Ringegrense', '1800 nmol/L'],
     ])
-    expect(grensepiller(get('ENAT'), null).map((p) => p.slag)).toEqual(['pavisningsgrense', 'terapiomrade'])
+  })
+
+  it('sier bare det som er oppgitt når kortet har én grense', () => {
+    expect(piller('AMTNORSUM', null, { nedre: 10, ovre: null, enhet: 'nmol/L' })).toEqual([
+      ['Referanseområde', 'fra 10 nmol/L'],
+    ])
+    expect(piller('AMTNORSUM', null, { nedre: null, ovre: 300, enhet: 'nmol/L' })).toEqual([
+      ['Referanseområde', 'opptil 300 nmol/L'],
+    ])
+    expect(piller('AMTNORSUM', null, { nedre: 5, ovre: 5, enhet: 'nmol/L' })).toEqual([['Referanseområde', '5 nmol/L']])
+    expect(piller('AMTNORSUM', null, { nedre: null, ovre: null, enhet: 'nmol/L' })).toEqual([])
+  })
+
+  it('viser bare tallene fra datasettet mens regelsettet og referanseområdet hentes', () => {
+    expect(grensepiller(get('AMTNORSUM'), null, null)).toEqual([])
+    expect(grensepiller(get('ENAT'), null, null).map((p) => p.slag)).toEqual(['pavisningsgrense', 'terapiomrade'])
   })
 
   it('setter enheten også på en pille som har en annen enhet enn pillen foran', () => {

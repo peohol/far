@@ -21,6 +21,8 @@ import { antihypertensivdatasett, dataset } from '../../domain/analytes'
 import { tilRegelimport, type Regelimport, type Regelkilde } from '../../regler/import'
 import { kommentarnavn, utenKommentarer } from '../../regler/kommentarer'
 import type { Intervallregelsett } from '../../regler/modell'
+import type { Referanseomrade } from '../../domain/piller'
+import { REFERANSEOMRADER } from './referanseomrader'
 import type { Analyte, Level } from '../../types'
 
 function lesJson<T>(sti: string): T {
@@ -113,10 +115,14 @@ export function dagensKommentar(kode: string, niva: Level): string {
 
 /**
  * Det databasen gir for disse regelsettene som de publiserte: regelsettene
- * uten tekstene (`les_intervallregelsett`) og kommentarobjektene de peker på
- * (`les_kommentarer`). For testene som erstatter databasen.
+ * uten tekstene (`les_intervallregelsett`), kommentarobjektene de peker på
+ * (`les_kommentarer`) og referanseområdene på informasjonssidene
+ * (`les_referanseomrader`). For testene som erstatter databasen.
  */
-export function publiserteRader(regelsett: Intervallregelsett[]) {
+export function publiserteRader(
+  regelsett: Intervallregelsett[],
+  referanseomrader: Readonly<Record<string, Referanseomrade>> = REFERANSEOMRADER,
+) {
   const utgave = <T,>(id: string, innhold: T) => ({
     id,
     revisjon: 1,
@@ -131,5 +137,9 @@ export function publiserteRader(regelsett: Intervallregelsett[]) {
     les_kommentarer: regelsett.flatMap((r) =>
       r.kommentarer.map((k) => utgave(k.id, { navn: kommentarnavn(r, k.id), tekst: k.tekst, plassholdere: [] })),
     ),
+    les_referanseomrader: Object.entries(referanseomrader).map(([analyttkode, verdi]) => ({
+      analyttkode,
+      verdi: { ...verdi, forbehold: '' },
+    })),
   }
 }

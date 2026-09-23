@@ -54,6 +54,7 @@ function visSide(kode: string, { kilde = HENTET, sted }: { kilde?: Scenarioregle
     finnIntervallregelsett: vi.fn(async () => null),
     lesIntervallregelsett: vi.fn(async () => []),
     lesKommentarer: vi.fn(async () => []),
+    lesReferanseomrader: vi.fn(async () => new Map()),
     lesHistorikk: vi.fn(async () => {
       throw new Error('ikke i bruk')
     }),
