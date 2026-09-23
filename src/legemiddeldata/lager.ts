@@ -6,8 +6,8 @@
  * Funksjonene er beskrevet i migrasjonen `*_legemiddeldata.sql`.
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Entitetnavn } from './fest'
-import type { Filinfo, ForrigeSynk, Innlastingsrad, Legemiddellager, Opptelling } from './synk'
+import type { Entitetnavn } from './fest.js'
+import type { Filinfo, ForrigeSynk, Innlastingsrad, Legemiddellager, Opptelling } from './synk.js'
 
 /** Et kall til en databasefunksjon med navngitte argumenter. Kaster ved feil. */
 export type Databasekall = (funksjon: string, argumenter: Record<string, unknown>) => Promise<unknown>

@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.22.1',
+    dato: '2026-09-23',
+    sammendrag: 'Den nattlige oppdateringen av legemiddeldataene starter igjen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Den nattlige oppdateringen av legemiddeldataene fra FEST stoppet før den kom i gang, fordi serveren ikke fant koden sin. Nå starter den og avviser alt som ikke kommer fra den planlagte kjøringen.',
+      'Appen ellers er uendret.',
+    ],
+  },
+  {
     versjon: '1.22.0',
     dato: '2026-09-23',
     sammendrag: 'Stoffsidene viser interaksjonene fra de offentlige legemiddeldataene',

@@ -6,8 +6,8 @@
  * den aldri. Selve jobben står i `synk.ts`.
  */
 import { createClient } from '@supabase/supabase-js'
-import { kallMot, lagLegemiddellager } from './lager'
-import { synkroniserFest, type Synkresultat, type Synkvalg } from './synk'
+import { kallMot, lagLegemiddellager } from './lager.js'
+import { synkroniserFest, type Synkresultat, type Synkvalg } from './synk.js'
 
 export type Miljo = Record<string, string | undefined>
 

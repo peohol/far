@@ -19,8 +19,8 @@
  * minnet, serveren det i `lager.ts`.
  */
 import { createHash } from 'node:crypto'
-import { ENTITETER, lesFest, PARSERVERSJON, type Entitetnavn, type Festpost } from './fest'
-import { pakkUt } from './zip'
+import { ENTITETER, lesFest, PARSERVERSJON, type Entitetnavn, type Festpost } from './fest.js'
+import { pakkUt } from './zip.js'
 
 export const FEST_URL =
   'https://www.dmp.no/globalassets/documents/om-oss/distribusjon-av-legemiddeldata/fest/festfiler/fest251.zip'
