@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.11.2',
+    dato: '2026-09-23',
+    sammendrag: 'Reglene for THC-syre ligger nå i databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Kurvene, grensene, sikkerhetsmarginene og kommentartekstene for THC-syre er lagt inn i databasen med historikk, utkast og publisering, og kontrolleres der før de kan lagres. Det er grunnlaget for å kunne redigere dem i appen.',
+      'Fortolkningen er uendret. Den bruker fortsatt de samme reglene som før, og de lagrede verdiene er kontrollert å være nøyaktig de samme.',
+    ],
+  },
+  {
     versjon: '1.11.1',
     dato: '2026-09-23',
     sammendrag: 'THC-syremodulen er gjort klar til å få reglene sine fra databasen',

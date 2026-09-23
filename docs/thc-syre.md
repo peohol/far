@@ -18,6 +18,9 @@ uleselige.
 | `src/domain/thcTall.ts` | Tall og datoer slik de tastes og skrives |
 | `src/domain/thcPlot.ts` | Figuren med kurvene og de to prøvene |
 | `src/domain/thc.ts` | Den opprinnelige modulen, med regnearkets konstanter i koden. Brukes av fortolkningen til byttet er gjort |
+| `supabase/migrations/*_thc_regelsett*.sql` | Tabellene, valideringen på serveren, importen og rettingen av sifrene |
+| `scripts/thc-import.ts` | SQL-en som importerte regelsettet |
+| `src/__tests__/thcRegelsettlagring.test.ts` | Lagringen, prøvd mot en ekte database |
 | `src/domain/__tests__/fasit/thc-regelsett-import.json` | Regelsettet slik det ble importert fra den opprinnelige modulen |
 | `src/domain/__tests__/fasit/thc-fasit.json` | Fasiten: utfallet av den opprinnelige modulen for over 4000 inndata |
 | `scripts/lag-thc-fasit.ts` | Lager fasiten på nytt, bare ved bevisst klinisk endring |
@@ -73,6 +76,36 @@ mellomrom i endene.
 
 Den lilla kurven i regnearket («Kronisk, typisk») er ikke med: verken
 konklusjonen eller figuren bruker den.
+
+## Lagringen
+
+Regelsettet er objekttypen `thc_regelsett` i faginnholdet
+(`docs/faginnhold.md`), med utkast, publisering, revisjoner, gjenoppretting
+og samtidighetskontroll derfra. Det finnes bare ett: en unik indeks per
+tilstand, og `opprett_utkast` avvises når det alt finnes.
+
+Delene har egne tabeller med kontroller på hver kolonne: `thc_regelsett`
+(enkeltverdiene), `thc_kurver`, `thc_sikkerhetsmarginer`,
+`thc_konsentrasjonsnivaer`, `thc_bruksmonstre` og `thc_tekstbolker`. Tallene
+er `float8`, som i motoren. `intern.skriv_thc_regelsett` kontrollerer de samme
+invariantene som `validerThcRegelsett`, med de samme meldingene der det lar
+seg gjøre — også z mot AS 241 og kurverekkefølgen over det samme rutenettet.
+Testene sender over 25 ugyldige regelsett til begge og krever at begge
+avviser dem.
+
+`les_thc_regelsett('publisert' | 'utkast')` gir regelsettet med revisjon og
+hvem som sist endret det; utkastet bare til administratorer. Tabellene kan
+ikke skrives direkte.
+
+Øyeblikksbildet skal gi nøyaktig de samme flyttallene tilbake, og
+`les_thc_regelsett` setter derfor selv `extra_float_digits` (se
+`docs/faginnhold.md`).
+
+**Importen** (`*_thc_regelsett_import.sql`, laget av `scripts/thc-import.ts`)
+la regelsettet fra den opprinnelige modulen inn gjennom `opprett_utkast` og
+`publiser_utkast`, som Peder, med kilden i revisjonen. Revisjon 1 fikk bare 15
+sifre i tallene. Revisjon 2 (`*_thc_regelsett_flyttall.sql`) har alle, og er
+lik `thc-regelsett-import.json` tall for tall. Det er den som er publisert.
 
 ## Fasiten
 

@@ -20,6 +20,9 @@
 export const THC_KURVEROLLER = ['gronn', 'gul', 'rod'] as const
 export type ThcKurverolle = (typeof THC_KURVEROLLER)[number]
 
+/** Fargen på kurven, bøyd som i «den grønne kurven». */
+export const KURVEFARGE: Record<ThcKurverolle, string> = { gronn: 'grønne', gul: 'gule', rod: 'røde' }
+
 /**
  * En bi-eksponentiell utskillelseskurve C(t) = a1·e^(−k1·t) + a2·e^(−k2·t),
  * med t i døgn. Amplitudene står i kildedataenes enheter, slik regnearket
@@ -337,7 +340,7 @@ export function validerThcRegelsett(r: ThcRegelsett): string[] {
 
   for (const rolle of THC_KURVEROLLER) {
     const kurve = r.kurver[rolle]
-    if (kurve.navn.trim() === '') feil.push(`Kurve ${rolle} mangler navn.`)
+    if (kurve.navn.trim() === '') feil.push(`Den ${KURVEFARGE[rolle]} kurven mangler navn.`)
     for (const felt of ['a1', 'k1', 'a2', 'k2'] as const) {
       if (!positivt(kurve[felt])) feil.push(`${kurve.navn || rolle}: ${felt} må være et tall større enn 0.`)
     }
@@ -385,12 +388,14 @@ export function validerThcRegelsett(r: ThcRegelsett): string[] {
     feil.push('To konsentrasjonsnivåer har samme navn.')
   }
 
-  for (const [navn, monster] of Object.entries(r.bruksmonstre)) {
+  for (const kronisk of [true, false]) {
+    const monster = kronisk ? r.bruksmonstre.kronisk : r.bruksmonstre.ikke_kronisk
+    const navn = kronisk ? 'ved kronisk bruk' : 'uten kronisk bruk'
     const vanskelig = THC_KURVEROLLER.indexOf(monster.vanskelig_over)
     const nytt = THC_KURVEROLLER.indexOf(monster.nytt_inntak_over)
-    if (vanskelig < 0 || nytt < 0) feil.push(`Bruksmønsteret ${navn} peker på en ukjent kurve.`)
+    if (vanskelig < 0 || nytt < 0) feil.push(`Grensene ${navn} peker på en ukjent kurve.`)
     else if (!(vanskelig < nytt)) {
-      feil.push(`Bruksmønsteret ${navn}: grensen for nytt inntak må være en tregere kurve enn grensen for «vanskelig å avgjøre».`)
+      feil.push(`Grensene ${navn}: nytt inntak må ligge på en tregere kurve enn «vanskelig å avgjøre».`)
     }
   }
 

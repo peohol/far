@@ -786,17 +786,29 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 ## Arbeidspakke 7 - THC-syre
 
-**Status:** [ ] Ikke startet
+**Status:** [~] Pågår. Motoren og lagringen er ferdige; editoren, simulatoren
+og byttet av produksjonskilde gjenstår. Løsningen er beskrevet i
+`docs/thc-syre.md`.
 
 Egen spesialisert regelmotor/editor for:
 
-- [ ] terskelkurver
-- [ ] bruksmønster
-- [ ] prøveintervaller
-- [ ] kreatininkorrigerte verdier
-- [ ] dynamisk kommentarsammensetning
-- [ ] øvrige THC-spesifikke parametere
-- [ ] simulator og regresjonstester
+- [x] terskelkurver
+- [x] bruksmønster
+- [x] prøveintervaller
+- [x] kreatininkorrigerte verdier
+- [x] dynamisk kommentarsammensetning
+- [x] øvrige THC-spesifikke parametere
+- [ ] simulator og regresjonstester (regresjonstestene og fasiten er ferdige)
+
+Punktene over er representert i regelsettet, motoren og lagringen i Supabase,
+med validering på serveren. Gjenstår:
+
+- [x] Strukturert lagring i Supabase, med utkast/publisering, historikk og gjenoppretting.
+- [x] Server-side validering.
+- [x] Regelsettet fra dagens modul importert og publisert.
+- [ ] Redigeringsgrensesnitt med historikk og sammenligning.
+- [ ] Simulator.
+- [ ] Produksjonsmodulen bytter til Supabase.
 
 ---
 
