@@ -274,8 +274,13 @@ for each row execute function intern.krev_objekttype('objekt_id', 'scenarioregel
 
 -- --- Lesing av det som sendes inn ------------------------------------------
 
+-- intern.liste og intern.tall er felles lesehjelpere som regelsettene for
+-- konsentrasjonsbånd og THC-syre også definerer, med nøyaktig samme innhold.
+-- De skrives derfor med «or replace», så rekkefølgen migrasjonene kjøres i
+-- ikke spiller noen rolle.
+
 -- En liste fra innholdet, som JSON.
-create function intern.liste(p_innhold jsonb, p_felt text)
+create or replace function intern.liste(p_innhold jsonb, p_felt text)
 returns jsonb
 language plpgsql
 immutable
@@ -323,7 +328,8 @@ begin
 end;
 $$;
 
-create function intern.tall(p_innhold jsonb, p_felt text)
+-- Et tall fra innholdet, uten etterfølgende nuller.
+create or replace function intern.tall(p_innhold jsonb, p_felt text)
 returns numeric
 language plpgsql
 immutable
@@ -333,7 +339,7 @@ begin
   if jsonb_typeof(p_innhold -> p_felt) is distinct from 'number' then
     raise exception 'Feltet % må være et tall.', p_felt using errcode = '22023';
   end if;
-  return (p_innhold ->> p_felt)::numeric;
+  return trim_scale((p_innhold ->> p_felt)::numeric);
 end;
 $$;
 
