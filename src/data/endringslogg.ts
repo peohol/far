@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.12.1',
+    versjon: '1.13.1',
     dato: '2026-09-23',
     sammendrag: 'Reglene og kommentartekstene for THC-syre er skilt ut fra koden',
     typer: ['Funksjonalitet'],
@@ -20,6 +20,20 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Kurvene, grensene og sikkerhetsmarginene i THC-syremodulen er skilt ut som egne regler, og kommentartekstene som egne tekster. De kontrolleres før de kan brukes, også at kurvene står i riktig rekkefølge for alle prøveverdier. Det er første steg mot at de kan redigeres i appen.',
       'Fortolkningen er uendret. Den er kontrollert mot over 4000 prøvepar, også rett på og rett ved siden av hver grense, og gir de samme kommentarene tegn for tegn.',
+    ],
+  },
+  {
+    versjon: '1.12.0',
+    dato: '2026-09-23',
+    sammendrag: 'Informasjonssidene for antidepressiver og antipsykotika har fått innhold',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'De 35 sidene for antidepressiver, antipsykotika og lamotrigin er fylt med fagstoffet fra Psykofarmaka-dokumentet: dosering, farmakodynamikk, referanseområde, toksisk område, komatøs/fatal konsentrasjon, halveringstid, steady state, farmakokinetikk og serumkonsentrasjoner ved ulike doser.',
+      'Et kort sammendrag av de godkjente indikasjonene er hentet fra Felleskatalogen, med lenke til produktsidene.',
+      'Preparatnavn vises ikke foreløpig. De skal hentes automatisk fra offentlige legemiddeldata i stedet for å føres inn for hånd.',
+      'Historikken viser hvor innholdet kom fra, for eksempel «Importert fra Psykofarmaka.pdf, side 7».',
+      'Ringegrensen, måleområdet og spørsmål-og-svar-notatene fra dokumentet er ikke tatt med. Kommenteringen og fortolkningsreglene er uendret.',
     ],
   },
   {

@@ -26,6 +26,7 @@
     "src",
     "middleware.ts",
     "scripts/bootstrap-admin.ts",
+    "scripts/importer-psykofarmaka.ts",
     "vite.config.ts",
     "supabase/functions/_delt"
   ]
