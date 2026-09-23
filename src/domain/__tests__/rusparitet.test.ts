@@ -1,30 +1,26 @@
 /**
- * Paritet mellom dagens rusmiddelmotor (`rus.ts`) og scenariomotoren med
- * dagens regler importert som scenarioregelsett (`rusregelsett.ts`).
+ * Rusmiddelreglene som ble importert til Supabase, mot fasiten fra den
+ * opprinnelige rusmiddelmotoren (se `src/__tests__/hjelp/rusparitet.ts`).
  *
- * Alle modulene prøves over alle kombinasjoner av påviste analytter, og over
- * et rutenett av konsentrasjoner som treffer hver grense nøyaktig, rett under
- * og rett over — pluss tomme felt, null og tekst som ikke er tall. Resultatet
- * skal være identisk: samme type, samme kommentarer med samme merke, rolle,
- * koder og tekst i samme rekkefølge, samme notiser og samme meldinger.
+ * Alle modulene prøves over alle kombinasjoner av påviste analytter og et
+ * rutenett av konsentrasjoner på, rett under og rett over hver grense.
+ * Resultatet skal være identisk: samme type, samme kommentarer med samme
+ * merke, rolle, koder og tekst i samme rekkefølge, samme notiser og samme
+ * meldinger. At regelsettene i databasen er de samme, prøves i
+ * `src/__tests__/rusimport.test.ts`.
  */
 import { describe, expect, it } from 'vitest'
-import { forventParitet, forventSammeVerdifelter } from '../../__tests__/hjelp/rusparitet'
-import { RUS_MODULER, type RusModul } from '../rus'
-import { RUS_KOMMENTARER, RUS_REGELSETT } from '../rusregelsett'
-import { validerScenarioregelsett, type Scenarioregelsett } from '../scenario'
+import { FASITMODULER, forventFasit } from '../../__tests__/hjelp/rusparitet'
+import { RUS_GRUNNLAG, RUS_KOMMENTARER, RUS_REGELSETT } from '../../__tests__/hjelp/rusgrunnlag'
+import { moduleKoder, RUS_MODULER } from '../rus'
+import { validerScenarioregelsett } from '../scenario'
 
-const par: [RusModul, Scenarioregelsett][] = RUS_MODULER.map((modul, i) => {
-  const regelsett = RUS_REGELSETT[i]
-  if (!regelsett) throw new Error(`mangler regelsett for ${modul.id}`)
-  return [modul, regelsett]
-})
-
-describe('dagens rusmiddelregler som scenarioregelsett', () => {
+describe('de importerte rusmiddelreglene', () => {
   it('har ett regelsett per modul, med samme koder i samme rekkefølge', () => {
     expect(RUS_REGELSETT.map((r) => r.modul)).toEqual(RUS_MODULER.map((m) => m.id))
-    for (const [modul, regelsett] of par) {
-      expect(regelsett.analytter, modul.id).toEqual(modul.analytter.map((a) => a.kode))
+    expect(FASITMODULER).toEqual(RUS_MODULER.map((m) => m.id))
+    for (const [i, modul] of RUS_MODULER.entries()) {
+      expect(RUS_REGELSETT[i]!.analytter, modul.id).toEqual(moduleKoder(modul))
     }
   })
 
@@ -34,21 +30,17 @@ describe('dagens rusmiddelregler som scenarioregelsett', () => {
     }
   })
 
-  it('viser til hver kommentartekst i datasettet, og ikke til noe annet', () => {
+  it('viser til hver kommentar i grunnlaget, og ikke til noe annet', () => {
     const brukt = new Set(
       RUS_REGELSETT.flatMap((r) =>
         r.scenarier.flatMap((s) => (s.utfall.type === 'kommentarer' ? s.utfall.plasseringer.map((p) => p.kommentar) : [])),
       ),
     )
-    expect([...brukt].sort()).toEqual([...RUS_KOMMENTARER.keys()].sort())
+    expect([...brukt].sort()).toEqual(RUS_GRUNNLAG.kommentarer.map((k) => k.id).sort())
   })
 })
 
-describe.each(par.map(([modul, regelsett]) => [modul.id, modul, regelsett] as const))(
-  'paritet for %s',
-  (_id, modul, regelsett) => {
-    it('ber om de samme konsentrasjonene', () => forventSammeVerdifelter(modul, regelsett))
-    it('gir identisk resultat for alle kombinasjoner, og treffer hvert scenario', () =>
-      forventParitet(modul, regelsett, RUS_KOMMENTARER))
-  },
-)
+describe.each(RUS_REGELSETT.map((r) => [r.modul, r] as const))('paritet for %s', (_modul, regelsett) => {
+  it('gir det den opprinnelige motoren ga, for alle kombinasjoner, og treffer hvert scenario', () =>
+    forventFasit(regelsett, RUS_KOMMENTARER))
+})

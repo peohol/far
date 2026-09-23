@@ -16,7 +16,7 @@ import { Identitetspanel, komponenterFor } from './Identitetspanel'
 import { Datakortpanel, Kortpanel, Tabellpanel, Tekstpanel, type Panelkontekst } from './Paneler'
 import { Redigeringskilde } from './Redigeringskontekst'
 import { Sidesok } from './Sidesok'
-import { Scenarioregler, scenarioreglerFor } from '../regler/Scenarioregler'
+import { Scenarioregler, useScenarioreglerFor } from '../regler/Scenarioregler'
 import { Uthevingskilde } from '../Uthev'
 import { useAnalyttside, type Sidemodus } from './useAnalyttside'
 
@@ -132,7 +132,7 @@ function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps)
     () => ({ referansebase, opprettReferanse: handlinger.opprettReferanse }),
     [referansebase, handlinger.opprettReferanse],
   )
-  const regler = useMemo(() => scenarioreglerFor(oppforing.fortolkning), [oppforing.fortolkning])
+  const regler = useScenarioreglerFor(oppforing.fortolkning)
   const harInnhold = modell.paneler.size > 0 || Object.keys(modell.panelreferanser).length > 0
 
   // En side som åpnes, begynner øverst, med fokus på navnet — så tastaturet og

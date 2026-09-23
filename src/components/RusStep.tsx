@@ -10,16 +10,21 @@ import { StepBar } from './StepBar'
 import { BackIcon } from './icons'
 import {
   moduleKoder,
+  rusVerdifelter,
   viserKommentartekst,
   RUS_ANALYSEMETODE,
   TOM_RUS_INNDATA,
   type RusModul,
+  type Rusregler,
 } from '../domain/rus'
+import { flettInn, kjorScenarier, verdifelter as verdifelterFor } from '../domain/scenario'
 import { useKortHopp } from '../hooks/useKortHopp'
 import { indexToDigit, skrivesIFelt, useKeyboard } from '../hooks/useKeyboard'
 
 export interface RusStepProps {
   modul: RusModul
+  /** Regelsettet og kommentarene modulen fortolkes med, eller hvorfor de ikke er der. */
+  regler: Rusregler
   onBack: () => void
   /** Tilbake til søket, klar for neste analytt. */
   onFinish: () => void
@@ -37,10 +42,14 @@ export interface RusStepProps {
  * det bestemmer hvilken kommentar som gjelder, og hvilken analyttkode
  * hovedkommentaren skal ligge på.
  *
+ * Reglene er modulens publiserte scenarioregelsett, med kommentarene det
+ * peker på (`docs/scenarioregler.md`). Er de ikke hentet ennå, eller kunne de
+ * ikke hentes, sier modulen det i stedet for å fortolke.
+ *
  * Selve kopieringen av kommentarene er felles for fortolkningsmodulene og
  * ligger i {@link Kommentarliste}.
  */
-export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps) {
+export function RusStep({ modul, regler, onBack, onFinish, copy, flashAt }: RusStepProps) {
   const [inndata, setInndata] = useState(TOM_RUS_INNDATA)
   /**
    * Teller opp for hver endring i skjemaet. Et nytt svar gir en ny
@@ -68,8 +77,10 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
   const pavist = enkelt ? koder : inndata.pavist
   const inn = { ...inndata, pavist }
 
-  const verdifelter = modul.verdifelter(pavist)
-  const resultat = modul.fortolk(inn)
+  const klar = regler.status === 'klar' ? regler : null
+  const verdifelter = klar ? rusVerdifelter(modul, verdifelterFor(klar.regelsett, pavist)) : []
+  const verdihjelp = klar ? flettInn(klar.regelsett.verdihjelp, klar.regelsett.parametere) : ''
+  const resultat = klar ? kjorScenarier(klar.regelsett, klar.kommentarer, inn).resultat : null
 
   const settPavist = (kode: string, pa: boolean) => {
     setInndata((forrige) => ({
@@ -128,7 +139,7 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
             pavist={pavist}
             verdifelter={verdifelter}
             verdier={inndata.verdier}
-            verdihjelp={modul.verdihjelp}
+            verdihjelp={verdihjelp}
             onPavist={settPavist}
             onVerdi={settVerdi}
             forsteValg={forsteValg}
@@ -137,19 +148,36 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
         </Card>
 
         <Card align="start" className="modul-resultat">
-          <Rusutfall
-            resultat={resultat}
-            kommentarer={(plasseringer) => (
-              <Kommentarliste
-                plasseringer={plasseringer}
-                utgave={utgave}
-                visTekst={visTekst}
-                copy={copy}
-                flashAt={flashAt}
-                onFinish={onFinish}
-              />
-            )}
-          />
+          {resultat ? (
+            <Rusutfall
+              resultat={resultat}
+              kommentarer={(plasseringer) => (
+                <Kommentarliste
+                  plasseringer={plasseringer}
+                  utgave={utgave}
+                  visTekst={visTekst}
+                  copy={copy}
+                  flashAt={flashAt}
+                  onFinish={onFinish}
+                />
+              )}
+            />
+          ) : regler.status === 'feil' ? (
+            <>
+              <h2 className="thc-resultat__merke">Reglene mangler</h2>
+              <ul className="thc-mangler" role="alert">
+                <li>{regler.melding}</li>
+              </ul>
+              <Button variant="subtle" onClick={regler.provIgjen}>
+                Prøv igjen
+              </Button>
+            </>
+          ) : (
+            <>
+              <h2 className="thc-resultat__merke">Henter reglene</h2>
+              <p role="status">Fortolkningsreglene hentes …</p>
+            </>
+          )}
         </Card>
       </div>
     </section>

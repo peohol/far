@@ -1,19 +1,24 @@
 // @vitest-environment jsdom
 /**
  * Fortolkningsreglene og simulatoren på analyttsiden, prøvd i en nettleser i
- * minnet. Reglene er dagens rusmiddelregler; at de gir det samme som dagens
- * fortolkning, prøves i `rusparitet.test.ts`.
+ * minnet. Reglene er de publiserte rusmiddelreglene (grunnlaget de ble
+ * importert fra); at de gir det samme som den opprinnelige fortolkningen,
+ * prøves i `rusparitet.test.ts`.
  */
 import { cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { Analyttside } from '../components/analyttside/Analyttside'
 import { FaginnholdskildeProvider } from '../components/analyttside/Faginnholdskilde'
-import { Scenarioregler, scenarioreglerFor } from '../components/regler/Scenarioregler'
+import { Scenarioregler } from '../components/regler/Scenarioregler'
+import { ScenarioreglerProvider, type Scenarioreglerkilde } from '../components/regler/Scenarioreglerkilde'
 import { TipsLag } from '../components/Tips'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from '../domain/analyttkatalog'
 import type { Faginnholdslager } from '../faginnhold/lagring'
+import { rusModulFor } from '../domain/rus'
 import { TOM_SIDE, type Faginnholdsleser } from '../faginnhold/lesing'
+import { tilScenarioregler } from '../faginnhold/scenarioregler'
+import { RUS_KOMMENTARER, rusRegelsett, rusScenarioregeldata } from './hjelp/rusgrunnlag'
 
 beforeAll(() => {
   globalThis.ResizeObserver ??= class {
@@ -29,13 +34,19 @@ afterEach(cleanup)
 
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
 
+/** Reglene for modulen koden fortolkes i. */
 function regler(kode: string) {
-  const funnet = scenarioreglerFor(katalog.finn(kode)!.fortolkning)
-  if (!funnet) throw new Error(`ingen scenarioregler for ${kode}`)
-  return funnet
+  const modul = rusModulFor(katalog.finn(kode)!.fortolkning)
+  if (!modul) throw new Error(`ingen rusmiddelmodul for ${kode}`)
+  return { modul, regelsett: rusRegelsett(modul.id), kommentarer: RUS_KOMMENTARER }
 }
 
-function visSide(kode: string) {
+const HENTET: Scenarioreglerkilde = {
+  tilstand: { status: 'klar', regler: tilScenarioregler(rusScenarioregeldata()) },
+  provIgjen: () => {},
+}
+
+function visSide(kode: string, kilde: Scenarioreglerkilde = HENTET) {
   const leser: Faginnholdsleser = {
     lesAnalyttside: vi.fn(async () => TOM_SIDE),
     lesReferanser: vi.fn(async () => []),
@@ -45,7 +56,9 @@ function visSide(kode: string) {
   render(
     <TipsLag>
       <FaginnholdskildeProvider kilde={{ leser, lager, kanRedigere: false }}>
-        <Analyttside kode={kode} katalog={katalog} onApneFortolkning={vi.fn()} onLukk={vi.fn()} />
+        <ScenarioreglerProvider kilde={kilde}>
+          <Analyttside kode={kode} katalog={katalog} onApneFortolkning={vi.fn()} onLukk={vi.fn()} />
+        </ScenarioreglerProvider>
       </FaginnholdskildeProvider>
     </TipsLag>,
   )
@@ -62,6 +75,15 @@ describe('på analyttsiden', () => {
     visSide('NOR')
     await screen.findByText('Denne siden har ikke fått faginnhold ennå.')
     expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeNull()
+  })
+
+  it('viser ingen regler før de er hentet, eller når de ikke kunne hentes', async () => {
+    for (const tilstand of [{ status: 'laster' }, { status: 'feil', melding: 'Nede.' }] as const) {
+      visSide('OXA', { tilstand, provIgjen: () => {} })
+      await screen.findByRole('heading', { level: 1 })
+      expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeNull()
+      cleanup()
+    }
   })
 
   it('viser en modul med én analytt uten simulator', () => {

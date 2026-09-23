@@ -1,60 +1,56 @@
 /**
- * Importen av rusmiddelreglene til Supabase (`scripts/rus-import.ts`).
+ * Importen av rusmiddelreglene til Supabase (`scripts/rus-import.ts`), og
+ * lesingen fortolkningen gjør av dem.
  *
- * Grunnlaget skal være dagens regler og tekster, importen skal legge dem inn
- * og publisere dem uendret, og regelsettene slik databasen gir dem tilbake —
- * med kommentarene slått opp på ID-ene de fikk — skal fortolke nøyaktig som
- * dagens moduler.
+ * Importen skal legge inn og publisere grunnlaget uendret, og regelsettene
+ * slik en vanlig bruker får dem fra `les_scenarioregler` — kontrollert og
+ * gjort klare slik appen gjør det — skal fortolke nøyaktig som den
+ * opprinnelige rusmiddelmotoren (fasiten i `hjelp/rusparitet.ts`).
  */
 import type { PGlite } from '@electric-sql/pglite'
 import { readdirSync, readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { rusImportSql } from '../../scripts/rus-import'
-import grunnlag from '../domain/__tests__/fasit/rus-import.json'
 import { validerKommentar } from '../domain/kommentarobjekt'
-import { RUS_MODULER } from '../domain/rus'
-import { RUS_KOMMENTAROBJEKTER, RUS_REGELSETT } from '../domain/rusregelsett'
 import type { Scenarioregelsett } from '../domain/scenario'
-import { forventParitet } from './hjelp/rusparitet'
+import { lesScenarioregler, tilScenarioregler, type Scenarioregler } from '../faginnhold/scenarioregler'
+import { RUS_GRUNNLAG, RUS_KOMMENTARER, RUS_REGELSETT } from './hjelp/rusgrunnlag'
+import { forventFasit } from './hjelp/rusparitet'
 import { faginnholdskall, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
 const MIGRASJONER = new URL('../../supabase/migrations/', import.meta.url)
 
 let db: PGlite
 let kall: Faginnholdskall
+let admin: string
+let bruker: string
 
-/** Det publiserte i databasen: regelsettene etter modul og kommentartekstene etter ID. */
+/** Det en vanlig bruker får fra lesingen, gjort klart slik appen gjør det. */
+let regler: Scenarioregler
 let regelsett: Map<string, Scenarioregelsett>
-let kommentarer: Map<string, string>
+let kommentarer: ReadonlyMap<string, string>
 
 async function publisert() {
-  const [rad] = await kall.fasit<{ regelsett: Scenarioregelsett[]; kommentarer: { id: string; innhold: { tekst: string } }[] }>(
-    `select
-       (select coalesce(jsonb_agg(intern.les_scenarioregelsett(r.objekt_id, 'publisert') order by r.modul), '[]')
-        from public.scenarioregelsett r where r.tilstand = 'publisert') as regelsett,
-       public.les_kommentarer('publisert') as kommentarer`,
-  )
+  const klare = tilScenarioregler(await lesScenarioregler(kall.klientFor(bruker)))
   return {
-    regelsett: new Map(rad!.regelsett.map((r) => [r.modul, r])),
-    kommentarer: new Map(rad!.kommentarer.map((k) => [k.id, k.innhold.tekst])),
+    regler: klare,
+    regelsett: new Map([...klare.regelsett].map(([modul, u]) => [modul, u.innhold])),
+    kommentarer: klare.kommentarer,
   }
 }
 
 beforeAll(async () => {
   db = await nyDatabase()
-  const admin = await opprettBruker(db, { brukernavn: 'admin', fornavn: 'Ada', etternavn: 'Adminsen', rolle: 'admin' })
+  admin = await opprettBruker(db, { brukernavn: 'admin', fornavn: 'Ada', etternavn: 'Adminsen', rolle: 'admin' })
+  bruker = await opprettBruker(db, { brukernavn: 'vanlig', fornavn: 'Vera', etternavn: 'Vanlig', rolle: 'user' })
   kall = faginnholdskall(db, admin)
   await db.exec(rusImportSql('admin'))
-  ;({ regelsett, kommentarer } = await publisert())
+  ;({ regler, regelsett, kommentarer } = await publisert())
 }, 120_000)
 
 describe('grunnlaget for importen', () => {
-  it('er dagens regelsett og kommentarer', () => {
-    expect(grunnlag).toEqual({ kommentarer: RUS_KOMMENTAROBJEKTER, regelsett: RUS_REGELSETT })
-  })
-
   it('har bare gyldige kommentarer, uten plassholdere', () => {
-    for (const k of grunnlag.kommentarer) {
+    for (const k of RUS_GRUNNLAG.kommentarer) {
       expect(validerKommentar(k.innhold), k.id).toEqual([])
       expect(k.innhold.plassholdere).toEqual([])
     }
@@ -68,9 +64,10 @@ describe('grunnlaget for importen', () => {
 })
 
 describe('importen', () => {
-  it('publiserer hvert regelsett og hver kommentar én gang', () => {
+  it('publiserer hvert regelsett og hver kommentar én gang, og alle består appens kontroll', () => {
     expect([...regelsett.keys()].sort()).toEqual(RUS_REGELSETT.map((r) => r.modul).sort())
-    expect(kommentarer.size).toBe(grunnlag.kommentarer.length)
+    expect(kommentarer.size).toBe(RUS_GRUNNLAG.kommentarer.length)
+    expect(regler.ugyldige.size).toBe(0)
   })
 
   it('gir regelsettene og tekstene tilbake uendret, med ID-ene kommentarene fikk', () => {
@@ -83,12 +80,18 @@ describe('importen', () => {
             ? { ...s, utfall: { ...s.utfall, plasseringer: s.utfall.plasseringer.map((p) => ({ ...p, kommentar: slaOpp(p.kommentar) })) } }
             : s,
         )
-      const tekst = new Map(RUS_KOMMENTAROBJEKTER.map((k) => [k.id, k.innhold.tekst]))
       expect({ ...lagret, scenarier: medTekst(lagret, (id) => kommentarer.get(id)) }, mal.modul).toEqual({
         ...mal,
-        scenarier: medTekst(mal, (id) => tekst.get(id)),
+        scenarier: medTekst(mal, (id) => RUS_KOMMENTARER.get(id)),
       })
     }
+  })
+
+  it('gir vanlige brukere bare det publiserte', async () => {
+    expect(await lesScenarioregler(kall.klientFor(bruker), 'utkast')).toEqual({ regelsett: [], kommentarer: [] })
+    const utkast = await lesScenarioregler(kall.klientFor(admin), 'utkast')
+    expect(utkast.regelsett).toHaveLength(RUS_REGELSETT.length)
+    expect(utkast.kommentarer).toHaveLength(RUS_GRUNNLAG.kommentarer.length)
   })
 
   it('gjør ingenting når den kjøres igjen', async () => {
@@ -104,8 +107,8 @@ describe('importen', () => {
   })
 })
 
-describe.each(RUS_MODULER.map((m) => [m.id, m] as const))('paritet for %s fra databasen', (id, modul) => {
-  it('gir identisk resultat for alle kombinasjoner, og treffer hvert scenario', () => {
-    forventParitet(modul, regelsett.get(id)!, kommentarer)
+describe.each(RUS_REGELSETT.map((r) => [r.modul] as const))('paritet for %s fra databasen', (modul) => {
+  it('gir det den opprinnelige motoren ga, for alle kombinasjoner, og treffer hvert scenario', () => {
+    forventFasit(regelsett.get(modul)!, kommentarer)
   })
 })

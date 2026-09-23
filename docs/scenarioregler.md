@@ -101,13 +101,29 @@ kommentarobjekter og reglene som 17 regelsett som peker på dem.
 at regelsettene, slik databasen gir dem tilbake, fortolker nøyaktig som
 dagens moduler over hele paritetsrutenettet.
 
-## Dagens regler
+## Fortolkningen
 
-`src/domain/rusregelsett.ts` er dagens rusmiddelregler skrevet som
-scenarioregelsett, og tekstene fra `rusmidler.json` som kommentarer
-(`RUS_KOMMENTARER`, med ID-en `rad/nøkkel`).
-`src/domain/__tests__/rusparitet.test.ts` kjører dem mot `rus.ts` for alle
-kombinasjoner av påviste analytter og et rutenett av konsentrasjoner på, rett
-under og rett over hver grense, og krever identisk resultat og at hvert
-scenario blir truffet (`src/__tests__/hjelp/rusparitet.ts`). Filen er
-importgrunnlaget og fjernes når fortolkningen leser regelsettene fra Supabase.
+Fortolkningsmodulene bruker de publiserte regelsettene. Appen henter dem én
+gang når den starter, med `public.les_scenarioregler` (alle regelsett i én
+tilstand, og kommentarene de viser til), og `tilScenarioregler`
+(`src/faginnhold/scenarioregler.ts`) kontrollerer hvert regelsett med
+`validerScenarioregelsett`. `reglerForModul` gir `RusStep` reglene for én
+modul: mens de hentes, viser steget det og har ingenting å kopiere; kunne de
+ikke hentes, eller mangler eller feiler modulens regelsett, sier steget
+hvorfor og tilbyr «Prøv igjen». Det fortolker aldri med regler som ikke er
+publisert og kontrollert. Analyttsiden bruker de samme hentede reglene
+(`src/components/regler/Scenarioreglerkilde.tsx`). Hvilke moduler som finnes,
+og hvilke koder de dekker, står i `src/domain/rus.ts`.
+
+## Paritet
+
+`src/domain/__tests__/fasit/rus-fasit.json` er fasiten: det den opprinnelige
+rusmiddelmotoren svarte for alle kombinasjoner av påviste analytter og et
+rutenett av konsentrasjoner på, rett under og rett over hver grense, tatt opp
+før fortolkningen ble lagt om. `src/__tests__/hjelp/rusparitet.ts` krever at
+et regelsett gir nøyaktig det samme og treffer hvert scenario.
+`src/domain/__tests__/rusparitet.test.ts` prøver importgrunnlaget mot fasiten,
+og `src/__tests__/rusimport.test.ts` regelsettene slik en vanlig bruker får
+dem fra databasen. `src/__tests__/fortolkningUendret.test.ts` låser i tillegg
+hele fortolkningsutfallet. Endres reglene med vilje, er det fasiten som skal
+tas opp på nytt, sammen med en klinisk begrunnelse.

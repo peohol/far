@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { validerKommentar } from '../kommentarobjekt'
-import { RUS_KOMMENTARER, RUS_REGELSETT } from '../rusregelsett'
+import { RUS_KOMMENTARER, RUS_REGELSETT } from '../../__tests__/hjelp/rusgrunnlag'
 import {
   flettInn,
   fraProsent,

@@ -1,10 +1,11 @@
 /**
  * Importen av rusmiddelreglene til Supabase.
  *
- * Grunnlaget er dagens rusmiddelregler skrevet som scenarioregelsett, og
+ * Grunnlaget er de opprinnelige rusmiddelreglene skrevet som scenarioregelsett, og
  * kommentartekstene som egne kommentarobjekter
- * (`src/domain/__tests__/fasit/rus-import.json`, laget fra
- * `src/domain/rusregelsett.ts`). Scenariene peker på kommentarene med en
+ * (`src/domain/__tests__/fasit/rus-import.json`, frosset slik det ble
+ * importert; tekstene er de som sto i `src/data/rusmidler.json`, hentet fra
+ * `originaldata/rusmidler.md`). Scenariene peker på kommentarene med en
  * nøkkel i grunnlaget; importen lager kommentarene først, publiserer dem, og
  * setter inn ID-ene de fikk før regelsettene lagres og publiseres. Alt går
  * gjennom de vanlige funksjonene, med de samme kontrollene som i appen, som

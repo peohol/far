@@ -1,23 +1,26 @@
 /**
- * Fortolkningen står på de statiske dataene, ikke på det redigerbare
- * faginnholdet.
+ * Den kliniske outputen er den samme som før, og fortolkningen henter reglene
+ * sine bare der det er bestemt.
  *
- * Analyttsidene (arbeidspakke 3) bruker faginnholdet og referansesystemet i
- * Supabase, men fortolkningen gjør det ikke: kommentartekstene, grensene og
- * fortolkningsreglene ligger fortsatt i datasettene under `src/data/` og i
- * `src/domain/`, og det er bare de fortolkningen leser. Testene her holder det
- * slik:
+ * Rusmiddelmodulene fortolkes med scenarioregelsettene som er publisert i
+ * Supabase (`docs/scenarioregler.md`): appen henter dem og gir dem til
+ * fortolkningssteget, og at de gir det samme som den opprinnelige motoren,
+ * prøves i `rusparitet.test.ts` og `rusimport.test.ts`. Resten av
+ * fortolkningen står fortsatt på datasettene under `src/data/` og i
+ * `src/domain/`. Testene her holder det slik:
  *
  * - datasettene er de samme som før,
  * - kjernen og fortolkningsstegene henter ingenting fra faginnholdet, fra
- *   analyttsidene eller fra databasen,
+ *   analyttsidene eller fra databasen selv — reglene fra databasen kommer inn
+ *   som argumenter,
  * - og all klinisk output modulene kan gi, er nøyaktig den samme — målt over
  *   alle analyttene, alle rusmiddelmodulene med konsentrasjoner på og rundt
  *   grensene, og alle THC-syrekommentarene (se `hjelp/fortolkningsutfall.ts`).
+ *   Summen står for hver del, så en del kan legges om uten å røre de andre.
  *
- * Byttet til Supabase skal skje med vilje, med paritetstester mot dagens
- * motor (se docs/analyttsider-og-redigering.md). Da skal testene her endres i
- * samme omgang — ikke før.
+ * Legges flere moduler om til Supabase, skal det skje med vilje, med
+ * paritetstester mot dagens motor (se docs/analyttsider-og-redigering.md), og
+ * testene her endres i samme omgang.
  */
 import { createHash } from 'node:crypto'
 import { readdirSync, readFileSync, statSync } from 'node:fs'
@@ -36,16 +39,23 @@ const ROT = fileURLToPath(new URL('../../', import.meta.url))
 const DATASETT: Record<string, string> = {
   'src/data/analytter.json': 'f32f9b30223d58a229f6d9068e42c762744664c707026416517dff780b5e3a56',
   'src/data/antihypertensiver.json': '2e1e0908ffb4ad67082eb7f5583ab6146af7e777d6ef3136543c1911b6cc0aa9',
-  'src/data/rusmidler.json': '7f62a5c0894db2bb2a297b44b8aab1fb7a236e3714a7b623008f5c19bb4069f2',
   'src/data/aliaser.json': 'ab5f4ae6284d81cc32762a0da1709131d8b814138a302623b6ab60b00366ccfd',
 }
 
 /**
- * Kontrollsummen for all klinisk output fra fortolkningsmodulene, slik den var
- * før analyttsidene kom. Endres outputen med vilje, oppdateres summen i samme
- * PR, og føringen i endringsloggen får merket «Fag».
+ * Kontrollsummene for all klinisk output fra fortolkningsmodulene, del for
+ * del, slik den var før analyttsidene kom. Summene er de samme som da
+ * rusmiddelmodulene ble lagt om til regelsettene i Supabase. Endres outputen
+ * med vilje, oppdateres summen i samme PR, og føringen i endringsloggen får
+ * merket «Fag».
  */
-const FORTOLKNINGSUTFALL = 'a456aa252cf5289f7dc7fa6fd8b66760a84418dc4342d747b94c333ee7e281fd'
+const FORTOLKNINGSUTFALL: Record<string, string> = {
+  band: 'b2fce3266b626576260e7bf64dbc9fe917ae5899efa98fe18754b308c11db8eb',
+  etg: '9aa2aea633064367b24e4a9578c37fb5fde700f7b410c8710187769c62ef434c',
+  rus: '33a3739b124621c0deca34f68675b10c5398598ca78f3f6775456e3981621078',
+  thc: 'fa7eb624ba7424585774af6033cf049d1887088eab781b0aadf39307ad27c20f',
+  kategorier: '50493eb7d4632a8e279174238aa78970cd2ee143ea0824e1178e6a9b0bfa9a53',
+}
 
 /** Kjernen i fortolkningen: reglene, datasettene og tilstandsmaskinen. */
 const FORTOLKNINGSKJERNEN = ['src/domain', 'src/data', 'src/state.ts']
@@ -120,7 +130,10 @@ describe('fortolkningen etter at analyttsidene er tatt i bruk', () => {
   })
 
   it('gir nøyaktig den samme kliniske outputen som før', () => {
-    const utfall = JSON.stringify(fortolkningsutfall())
-    expect(createHash('sha256').update(utfall).digest('hex')).toBe(FORTOLKNINGSUTFALL)
+    const utfall: Record<string, unknown> = fortolkningsutfall()
+    expect(Object.keys(utfall).sort()).toEqual(Object.keys(FORTOLKNINGSUTFALL).sort())
+    for (const [del, forventet] of Object.entries(FORTOLKNINGSUTFALL)) {
+      expect(createHash('sha256').update(JSON.stringify(utfall[del])).digest('hex'), del).toBe(forventet)
+    }
   })
 })

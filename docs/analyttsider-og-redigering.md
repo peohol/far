@@ -773,18 +773,18 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 **Status:** [ ] Påbegynt
 
-Scenariomodellen og motoren står i `docs/scenarioregler.md`. Dagens regler er skrevet som scenarioregelsett og gir identisk resultat som dagens motor; fortolkningen bruker fortsatt dagens motor. Analyttsidene viser reglene, med simulator.
+Scenariomodellen, motoren, lagringen og fortolkningen står i `docs/scenarioregler.md`. Reglene for alle rusmiddelmodulene ligger publisert i Supabase som scenarioregelsett som peker på egne kommentarobjekter, med utkast, publisering, historikk og gjenoppretting på serveren, og fortolkningen bruker dem. Paritetstester mot fasiten fra den opprinnelige motoren låser at resultatet er det samme. Analyttsidene viser reglene, med simulator. Det som gjenstår, er skjermbildene for å redigere regelsettene, med historikk og forskjeller, som skal bygges i den felles seksjonsarkitekturen for analyttsidene.
 
-- [ ] Redigerbare scenarioer.
-- [ ] Påvist/ikke påvist-betingelser.
-- [ ] Forholdstall/terskler.
-- [ ] Hoved-/tilleggskommentarer og plassering.
-- [ ] Eksplisitte manuelle/gråsoneutfall.
+- [ ] Redigerbare scenarioer (lagring og kontroll på serveren er på plass; skjermbildet gjenstår).
+- [x] Påvist/ikke påvist-betingelser.
+- [x] Forholdstall/terskler.
+- [x] Hoved-/tilleggskommentarer og plassering.
+- [x] Eksplisitte manuelle/gråsoneutfall.
 - [x] Simulator for hele regelsettet.
-- [ ] Migrer diazepamgruppen.
-- [ ] Migrer tramadolgruppen.
-- [ ] Migrer kodein/morfin.
-- [ ] Migrer amfetamin/metamfetamin.
+- [x] Migrer diazepamgruppen.
+- [x] Migrer tramadolgruppen.
+- [x] Migrer kodein/morfin.
+- [x] Migrer amfetamin/metamfetamin.
 
 ## Arbeidspakke 7 - THC-syre
 
