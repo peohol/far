@@ -282,10 +282,10 @@ describe('importen i databasen', () => {
   })
 
   it('legger hver referanse inn én gang, og nummererer dem på siden', async () => {
-    const [{ n }] = await kall.fasit<{ n: number }>(
+    const [antall] = await kall.fasit<{ n: number }>(
       "select count(*)::int as n from public.referanser where tilstand = 'publisert'",
     )
-    expect(n).toBe(plan.referanser.length)
+    expect(antall?.n).toBe(plan.referanser.length)
     const liste = byggSidemodell(sider.get('AMTNORSUM')!).referanseliste
     expect(liste.map((r) => r.referanse.tittel)).toContain(PSYKOFARMAKA_REFERANSER.reis2009!.tittel)
   })
