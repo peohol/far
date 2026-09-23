@@ -57,6 +57,11 @@ const FELTER: { [T in Objekttype]: (innhold: Innhold[T]) => Felt[] } = {
     { nokkel: 'arkivert', navn: 'Arkivert', verdi: innhold.arkivert ? 'Ja' : 'Nei' },
   ],
   intervallregelsett: regelsettfelter,
+  kommentar: (innhold) => [
+    { nokkel: 'navn', navn: 'Navn', verdi: innhold.navn },
+    { nokkel: 'tekst', navn: 'Tekst', verdi: innhold.tekst, tekst: true },
+    { nokkel: 'plassholdere', navn: 'Plassholdere', verdi: innhold.plassholdere.join(', ') || 'Ingen' },
+  ],
 }
 
 /** Feltene historikken sammenligner for et objekt av typen. */
