@@ -12,6 +12,23 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.13.0',
+    dato: '2026-09-23',
+    sammendrag: 'Stoffsidene viser preparatene fra de offentlige legemiddeldataene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Ny seksjon «Preparater» rett under navnet på stoffsiden. Lukket viser den en oppsummering, for eksempel «3 preparater · 1 legemiddelform · 3 styrker».',
+      'Preparatene er gruppert etter legemiddelform, med styrkene under hvert preparat og pakningene med størrelse og varenummer. Preparater som krever godkjenningsfritak, står for seg.',
+      'Kombinasjonspreparater er merket med de andre virkestoffene, og saltformen står på preparatet når FEST oppgir den.',
+      'Dataene kommer fra FEST og oppdateres hver natt. Kilden og datoen står nederst i seksjonen.',
+      'Preparatnavnene er med i søket på siden, også i detaljkort som er lukket.',
+      'Administratorer kobler hver side til riktig virkestoff i redigeringsmodus. Et virkestoff med samme navn som siden foreslås, men ingenting kobles uten at noen har valgt det. Siden viser ingen preparater før koblingen er publisert.',
+      'Preparatnavnene som ble skrevet inn for hånd, er borte.',
+      'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
     versjon: '1.12.0',
     dato: '2026-09-23',
     sammendrag: 'OUSFAR har fått sin egen kopi av de offentlige legemiddeldataene',

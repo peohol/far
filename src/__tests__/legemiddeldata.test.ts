@@ -462,7 +462,7 @@ describe('preparatene på stoffsiden', () => {
     expect(oppsummerGruppe([kodimagnyl!])).toBe('1 preparat')
   })
 
-  it('viser saltet på preparatet når styrken er oppgitt for saltet', () => {
+  it('viser saltet på preparatet, og slår sammen merkevarer med samme styrke', () => {
     const utvalg: Legemiddelutvalg = {
       kilde: 'FEST',
       kontrollert_kl: null,
@@ -508,6 +508,31 @@ describe('preparatene på stoffsiden', () => {
       pakninger: [],
       byttegrupper: [],
     }
+    // Samme preparat i samme styrke som to merkevarer, med hver sin pakning.
+    const merkevare = utvalg.merkevarer[0]!
+    utvalg.merkevarer.push({ ...merkevare, id: 'm2' })
+    const pakning = (id: string, merkevare_id: string, mengde: number) => ({
+      id,
+      varenr: id.toUpperCase(),
+      navn_form_styrke: '',
+      innhold: [
+        {
+          merkevare_id,
+          pakningsstorrelse: null,
+          enhet: { kode: 'ml', tekst: 'milliliter' },
+          pakningstype: { kode: '2', tekst: 'Ampulle' },
+          mengde,
+          antall: null,
+        },
+      ],
+      merkevarer: [merkevare_id],
+      markedsforingsdato: null,
+      midlertidig_utgatt_dato: null,
+      avregistrert_dato: null,
+      byttegrupper: [],
+      ean: [],
+    })
+    utvalg.pakninger.push(pakning('p2', 'm2', 10), pakning('p1', 'm1', 2))
     const [preparat] = byggPreparatoversikt(utvalg, ['mor']).former[0]!.preparater
     expect(preparat).toMatchObject({
       salter: ['Testmiddelhydroklorid'],
@@ -515,6 +540,9 @@ describe('preparatene på stoffsiden', () => {
       type: 'Sykehuspreparat',
       styrker: [{ styrke: '2,5 mg/ml', mengde: { fra: 2.5, til: 2.5, enhet: 'mg/ml' } }],
     })
+    // Pakningene fra begge merkevarene står på den ene styrken, minste først.
+    // Uten pakningsstørrelse brukes mengden.
+    expect(preparat!.styrker[0]!.pakninger.map((p) => p.tekst)).toEqual(['2 ml, ampulle', '10 ml, ampulle'])
   })
 
   it('søker etter virkestoff med likt navn først, og sier hva som er salt', async () => {

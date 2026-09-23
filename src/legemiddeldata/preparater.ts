@@ -43,8 +43,9 @@ export interface Styrkemengde {
   enhet: string
 }
 
-/** Én merkevare: preparatet i én styrke. */
+/** Preparatet i én styrke: én merkevare i FEST, eller flere med samme styrke. */
 export interface Preparatstyrke {
+  /** Den første merkevaren med styrken. */
   id: string
   /** Styrken, f.eks. «25 mg» eller «10 mg/5 ml». For kombinasjoner alle virkestoffene. */
   styrke: string
@@ -106,12 +107,14 @@ export function byggPreparatoversikt(utvalg: Legemiddelutvalg, koblet: readonly 
   const pakningerFor = new Map<string, Preparatpakning[]>()
   for (const p of utvalg.pakninger) {
     for (const innhold of p.innhold) {
+      // Noen pakninger oppgir mengden i stedet for pakningsstørrelsen.
+      const storrelse = innhold.pakningsstorrelse ?? innhold.mengde
       const liste = pakningerFor.get(innhold.merkevare_id) ?? []
       liste.push({
         id: p.id,
         varenr: p.varenr,
         tekst: [
-          innhold.pakningsstorrelse !== null && `${formaterTall(innhold.pakningsstorrelse)} ${innhold.enhet?.kode ?? ''}`.trim(),
+          storrelse !== null && `${formaterTall(storrelse)} ${innhold.enhet?.kode ?? ''}`.trim(),
           innhold.pakningstype?.tekst.toLocaleLowerCase('nb'),
         ]
           .filter(Boolean)
@@ -148,7 +151,7 @@ export function byggPreparatoversikt(utvalg: Legemiddelutvalg, koblet: readonly 
     leggTil(preparat.salter, stoff.filter((id) => salter.has(id)).map((id) => virkestoff.get(id)?.navn))
     leggTil(preparat.kombinasjon, andre.map((id) => virkestoff.get(id)?.navn))
     const mengder = mine.map((s) => styrkemengde(s.styrke, s.ovre, s.nevner))
-    preparat.styrker.push({
+    const styrke: Preparatstyrke = {
       id: m.id,
       styrke: mine
         .map((s, i) => {
@@ -162,12 +165,20 @@ export function byggPreparatoversikt(utvalg: Legemiddelutvalg, koblet: readonly 
       navn_form_styrke: m.navn_form_styrke,
       reseptgruppe: m.reseptgruppe?.kode ?? null,
       produsent: m.produsent,
-      pakninger: (pakningerFor.get(m.id) ?? []).sort((a, b) => a.tekst.localeCompare(b.tekst, 'nb', { numeric: true })),
-    })
+      pakninger: pakningerFor.get(m.id) ?? [],
+    }
+    // Samme preparat i samme styrke kan være flere merkevarer i FEST, f.eks.
+    // med hver sine pakninger. Det er én styrke å vise, med alle pakningene.
+    const lik = preparat.styrker.find((x) => x.styrke === styrke.styrke)
+    if (lik) lik.pakninger.push(...styrke.pakninger.filter((p) => !lik.pakninger.some((q) => q.id === p.id)))
+    else preparat.styrker.push(styrke)
     preparater.set(nokkel, preparat)
   }
 
   const alle = [...preparater.values()].map((p) => {
+    for (const styrke of p.styrker) {
+      styrke.pakninger.sort((a, b) => a.tekst.localeCompare(b.tekst, 'nb', { numeric: true }))
+    }
     p.styrker.sort(
       (a, b) =>
         (a.mengde?.fra ?? 0) - (b.mengde?.fra ?? 0) ||
