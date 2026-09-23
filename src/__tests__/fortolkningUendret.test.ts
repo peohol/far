@@ -2,9 +2,11 @@
  * Fortolkningen står på de publiserte regelsettene i Supabase, og gir den
  * samme kliniske outputen som før byttet.
  *
- * Konsentrasjonsreglene og kommentarene er regelsett i databasen (arbeidspakke
- * 5, se `docs/fortolkningsregler.md`). Appen henter de publiserte når den
- * åpnes og gir steg 2 regelsettet for analytten; kjernen og stegene henter
+ * Konsentrasjonsreglene og kommentarene er intervallregelsett i databasen
+ * (arbeidspakke 5, se `docs/fortolkningsregler.md`), og rusmiddelmodulene
+ * fortolkes med scenarioregelsettene (`docs/scenarioregler.md`, med paritet i
+ * `rusparitet.test.ts` og `rusimport.test.ts`). Appen henter de publiserte når
+ * den åpnes og gir dem til fortolkningsstegene; kjernen og stegene henter
  * ingenting selv. Testene her holder det slik:
  *
  * - datasettene er de samme som før, bortsett fra grensene og kommentarene,
@@ -12,11 +14,13 @@
  *   som steg 2 nå har fra informasjonssidene,
  * - fasiten fra før byttet (`hjelp/dagensregler.ts`) er uendret,
  * - kjernen og fortolkningsstegene henter ingenting fra faginnholdet, fra
- *   analyttsidene eller fra databasen — regelsettene kommer som argumenter,
- * - og all klinisk output modulene kan gi, er nøyaktig den samme, målt over
+ *   analyttsidene eller fra databasen selv — reglene fra databasen kommer inn
+ *   som argumenter,
+ * - og all klinisk output modulene kan gi, er nøyaktig den samme — målt over
  *   alle analyttene med regelsettene fra før byttet, alle rusmiddelmodulene
  *   med konsentrasjoner på og rundt grensene, og alle THC-syrekommentarene
- *   (se `hjelp/fortolkningsutfall.ts`). Unntaket er referanseområdet for tre
+ *   (se `hjelp/fortolkningsutfall.ts`). Summen står for hver del, så en del
+ *   kan legges om uten å røre de andre. Unntaket er referanseområdet for tre
  *   analytter, som ble endret med vilje (se {@link FORTOLKNINGSUTFALL}).
  *
  * Endres reglene i databasen, endres ikke fasiten: det er de publiserte
@@ -46,23 +50,28 @@ const ROT = fileURLToPath(new URL('../../', import.meta.url))
 const DATASETT: Record<string, string> = {
   'src/data/analytter.json': 'fd88b5cb103e2bbd43e76e8072fe77cbf3ecb6258fcb5e5c236fdfa34e2cace4',
   'src/data/antihypertensiver.json': '75b4b688155a1ac03876c469ba98628c1d78f8d3ce408a6bce2482868421e33e',
-  'src/data/rusmidler.json': '7f62a5c0894db2bb2a297b44b8aab1fb7a236e3714a7b623008f5c19bb4069f2',
   'src/data/aliaser.json': 'ab5f4ae6284d81cc32762a0da1709131d8b814138a302623b6ab60b00366ccfd',
 }
 
 /**
- * Kontrollsummen for all klinisk output fra fortolkningsmodulene. Endres
- * outputen med vilje, oppdateres summen i samme PR, og føringen i
+ * Kontrollsummene for all klinisk output fra fortolkningsmodulene, del for
+ * del. Endres outputen med vilje, oppdateres summen i samme PR, og føringen i
  * endringsloggen får merket «Fag».
  *
- * Summen var den samme fra før analyttsidene kom og gjennom byttet til
- * regelsettene (`a456aa25…`). Den ble endret én gang, med vilje, da
- * referanseområdet under analyttnavnet ble hentet fra informasjonssidene:
- * da ble det 50 – 350 for BREK (før 50 – 330), 180 – 550 for DOKSUM (før
- * 18 – 550) og 10 – 300 for LMP (før < 300), og ingenting annet endret seg.
- * Kommentarene og knappene er de samme.
+ * Summene var de samme fra før analyttsidene kom og gjennom byttet til
+ * regelsettene i Supabase. Summen for konsentrasjonsbåndene ble endret én
+ * gang, med vilje, da referanseområdet under analyttnavnet ble hentet fra
+ * informasjonssidene: da ble det 50 – 350 for BREK (før 50 – 330), 180 – 550
+ * for DOKSUM (før 18 – 550) og 10 – 300 for LMP (før < 300), og ingenting
+ * annet endret seg. Kommentarene og knappene er de samme.
  */
-const FORTOLKNINGSUTFALL = 'a6ac08ee5a23601f60bc0420338f683b28bdbf5cbfd1b79982bb0dfded7c7e01'
+const FORTOLKNINGSUTFALL: Record<string, string> = {
+  band: '0beefabadcb7f4dc7e1438c9feb7f9496c40e7a883336031a2f6f59648114779',
+  etg: '9aa2aea633064367b24e4a9578c37fb5fde700f7b410c8710187769c62ef434c',
+  rus: '33a3739b124621c0deca34f68675b10c5398598ca78f3f6775456e3981621078',
+  thc: 'fa7eb624ba7424585774af6033cf049d1887088eab781b0aadf39307ad27c20f',
+  kategorier: '50493eb7d4632a8e279174238aa78970cd2ee143ea0824e1178e6a9b0bfa9a53',
+}
 
 /**
  * Kjernen i fortolkningen: motoren, datasettene og tilstandsmaskinen, og
@@ -162,7 +171,10 @@ describe('fortolkningen etter byttet til regelsettene i Supabase', () => {
   })
 
   it('gir nøyaktig den samme kliniske outputen som før', () => {
-    const utfall = JSON.stringify(fortolkningsutfall())
-    expect(createHash('sha256').update(utfall).digest('hex')).toBe(FORTOLKNINGSUTFALL)
+    const utfall: Record<string, unknown> = fortolkningsutfall()
+    expect(Object.keys(utfall).sort()).toEqual(Object.keys(FORTOLKNINGSUTFALL).sort())
+    for (const [del, forventet] of Object.entries(FORTOLKNINGSUTFALL)) {
+      expect(createHash('sha256').update(JSON.stringify(utfall[del])).digest('hex'), del).toBe(forventet)
+    }
   })
 })

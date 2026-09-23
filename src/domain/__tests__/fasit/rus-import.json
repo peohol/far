@@ -1,0 +1,1292 @@
+{
+  "kommentarer": [
+    {
+      "id": "alprazolam/hoved",
+      "innhold": {
+        "navn": "Alprazolam – hovedkommentar",
+        "tekst": "160 nmol/L er øvre forventet medikamentfastende konsentrasjon av alprazolam hos voksne ved døgndose 3 mg.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "klonazepam/hoved",
+      "innhold": {
+        "navn": "Klonazepam – hovedkommentar",
+        "tekst": "50 nmol/L er øvre forventet medikamentfastende konsentrasjon av klonazepam hos voksne ved døgndose 1,5 mg. For epilepsibehandling er referanseområdet 40–120 nmol/L.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "nitrazepam/hoved",
+      "innhold": {
+        "navn": "Nitrazepam – hovedkommentar",
+        "tekst": "300 nmol/L er øvre forventet konsentrasjon av nitrazepam hos voksne ved døgndose 5 mg og prøvetaking minst 12 timer etter inntak. Akkumulerer ved langtidsbruk.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "zolpidem/hoved",
+      "innhold": {
+        "navn": "Zolpidem – hovedkommentar",
+        "tekst": "100 nmol/L er øvre forventet konsentrasjon av zolpidem hos voksne ved døgndose 10 mg (hos eldre 5 mg) og prøvetaking minst 12 timer etter inntak.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "zopiklon/hoved",
+      "innhold": {
+        "navn": "Zopiklon – hovedkommentar",
+        "tekst": "50 nmol/L er øvre forventet konsentrasjon av zopiklon hos voksne ved døgndose 7,5 mg (hos eldre 5 mg) og prøvetaking minst 12 timer etter inntak.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "diazepam/hoved",
+      "innhold": {
+        "navn": "Diazepam – hovedkommentar",
+        "tekst": "3500 nmol/L er øvre forventet medikamentfastende konsentrasjon av diazepam og omdannelsesproduktet desmetyldiazepam (summert) hos voksne ved døgndose 15 mg diazepam. Akkumulerer ved langtidsbruk.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "desmetyldiazepam/hoved",
+      "innhold": {
+        "navn": "Desmetyldiazepam – hovedkommentar",
+        "tekst": "3500 nmol/L er øvre forventet medikamentfastende konsentrasjon av diazepam og omdannelsesproduktet desmetyldiazepam (summert) hos voksne ved døgndose 15 mg diazepam. Akkumulerer ved langtidsbruk.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "desmetyldiazepam/tillegg",
+      "innhold": {
+        "navn": "Desmetyldiazepam – tilleggskommentar",
+        "tekst": "Se kommentar for diazepam i serum.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "oksazepam/hoved",
+      "innhold": {
+        "navn": "Oksazepam – hovedkommentar",
+        "tekst": "2500 nmol/L er øvre forventet medikamentfastende konsentrasjon av oksazepam hos voksne ved døgndose 45 mg.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "diazepamgruppen-samlet/hoved",
+      "innhold": {
+        "navn": "KOMBINASJON: Diazepam, N-desmetyldiazepam og oksazepam påvist og OXA ≤ DIAZ + DMI – hovedkommentar",
+        "tekst": "3500 nmol/L er øvre forventet medikamentfastende konsentrasjon av diazepam og hovedmetabolitten desmetyldiazepam (summert) hos voksne ved døgndose 15 mg diazepam. Akkumulerer ved langtidsbruk. Oksazepam er også en metabolitt av diazepam som kan påvises i mindre mengder etter diazepaminntak.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "diazepamgruppen-samlet/tillegg",
+      "innhold": {
+        "navn": "KOMBINASJON: Diazepam, N-desmetyldiazepam og oksazepam påvist og OXA ≤ DIAZ + DMI – tilleggskommentar",
+        "tekst": "Se kommentar for diazepam i serum.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "thc/hoved",
+      "innhold": {
+        "navn": "THC – hovedkommentar",
+        "tekst": "THC er det viktigste psykoaktive stoffet i cannabis.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "buprenorfin/hoved",
+      "innhold": {
+        "navn": "Buprenorfin – hovedkommentar",
+        "tekst": "2,5 nmol/L er øvre forventet medikamentfastende konsentrasjon av buprenorfin hos voksne ved døgndose 2 mg sublingualt. For substitusjonsbehandling er referanseområdet 2–10 nmol/L.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "fentanyl/hoved",
+      "innhold": {
+        "navn": "Fentanyl – hovedkommentar",
+        "tekst": "10 nmol/L er øvre forventet konsentrasjon av fentanyl hos voksne ved bruk av 1,2 mg (50 µg/t) depotplaster.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "metadon/hoved",
+      "innhold": {
+        "navn": "Metadon – hovedkommentar",
+        "tekst": "600–1200 nmol/L er forventet medikamentfastende konsentrasjonsområde for racemisk metadon i LAR-behandling. Ved bruk av L-metadon er antatt konsentrasjonsområde 300–600 nmol/L.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "oksykodon/hoved",
+      "innhold": {
+        "navn": "Oksykodon – hovedkommentar",
+        "tekst": "200 nmol/L er øvre forventet medikamentfastende konsentrasjon av oksykodon ved døgndose 60 mg.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "tapentadol/hoved",
+      "innhold": {
+        "navn": "Tapentadol – hovedkommentar",
+        "tekst": "600 nmol/L er øvre forventet medikamentfastende konsentrasjon av tapentadol ved døgndose 400 mg. Det er sparsom dokumentasjon for serumkonsentrasjoner av tapentadol.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "tramadolgruppen/hoved",
+      "innhold": {
+        "navn": "Tramadol O-desmetyltramadol – hovedkommentar",
+        "tekst": "3000 nmol/L og 400 nmol/L er øvre forventede medikamentfastende konsentrasjoner av henholdsvis tramadol og omdannelsesproduktet O-desmetyltramadol hos voksne ved døgndose 400 mg tramadol.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "tramadolgruppen/tillegg",
+      "innhold": {
+        "navn": "Tramadol O-desmetyltramadol – tilleggskommentar",
+        "tekst": "Se kommentar for tramadol i serum.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "kun-kodein/kodein",
+      "innhold": {
+        "navn": "Kun kodein påvist – kommentar om kodein",
+        "tekst": "850 nmol/L er øvre forventet medikamentfastende konsentrasjon av kodein hos voksne ved døgndose 240 mg. Kodein omdannes til morfin i kroppen.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "kun-morfin/morfin",
+      "innhold": {
+        "navn": "Kun morfin påvist – kommentar om morfin",
+        "tekst": "120 nmol/L er øvre forventet konsentrasjon av morfin ved peroralt inntak av 100 mg morfin og prøvetaking 4–6 timer etter inntak av vanlig tablett eller 8–12 timer etter inntak av depottablett. Morfin kan påvises etter inntak av morfin (bl.a. i Dolcontin) og/eller stoffer som omdannes til morfin i kroppen, som kodein og heroin.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "hoy-kodein-lav-morfin/kodein",
+      "innhold": {
+        "navn": "Morfin og kodein – høy kodein, lav morfin – kommentar om kodein",
+        "tekst": "Kodein og morfin er påvist i serum. 850 nmol/L er øvre forventet medikamentfastende konsentrasjon av kodein hos voksne ved døgndose 240 mg. Kodein omdannes til morfin i kroppen.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "hoy-kodein-lav-morfin/morfin",
+      "innhold": {
+        "navn": "Morfin og kodein – høy kodein, lav morfin – kommentar om morfin",
+        "tekst": "Se kommentar for kodein i serum.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "kodein-morfin-ordinaer/kodein",
+      "innhold": {
+        "navn": "Morfin og kodein – ordinær kombinasjon – kommentar om kodein",
+        "tekst": "850 nmol/L er øvre forventet medikamentfastende konsentrasjon av kodein hos voksne ved døgndose 240 mg. Kodein omdannes til morfin i kroppen. Kodein kan påvises i serum etter inntak av kodein (bl.a. i Paralgin forte) og/eller heroin, som kan være forurenset med kodein.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "kodein-morfin-ordinaer/morfin",
+      "innhold": {
+        "navn": "Morfin og kodein – ordinær kombinasjon – kommentar om morfin",
+        "tekst": "120 nmol/L er øvre forventet konsentrasjon av morfin ved peroralt inntak av 100 mg morfin og prøvetaking 4–6 timer etter inntak av vanlig tablett eller 8–12 timer etter inntak av depottablett. Morfin kan påvises etter inntak av morfin (bl.a. i Dolcontin) og/eller stoffer som omdannes til morfin i kroppen, som kodein og heroin.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "benzoylekgonin/hoved",
+      "innhold": {
+        "navn": "Benzoylekgonin – hovedkommentar",
+        "tekst": "Benzoylekgonin, et omdannelsesprodukt av kokain, er påvist i serum. Dette viser at kokain er tatt inn. Kokain er et stimulerende rusmiddel.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "mdma/hoved",
+      "innhold": {
+        "navn": "MDMA (Ecstasy) – hovedkommentar",
+        "tekst": "MDMA (ecstasy) er påvist i serum. MDMA er et stimulerende rusmiddel.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "amfetamin/hoved",
+      "innhold": {
+        "navn": "Amfetamin – hovedkommentar",
+        "tekst": "100–800 nmol/L er referanseområdet for amfetamin hos voksne ved bruk av vanlige doser deksamfetamin (10–40 mg) eller lisdeksamfetamin (30–70 mg) og prøvetaking 4–8 timer etter siste medikamentinntak. Sammenhengen mellom serumkonsentrasjon og klinisk effekt for amfetaminpreparater varierer mellom enkeltpasienter og klinisk vurdering avgjør behov for doseendring.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "metamfetamin/hoved",
+      "innhold": {
+        "navn": "Metamfetamin – hovedkommentar",
+        "tekst": "Metamfetamin er et stimulerende rusmiddel.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "amfetamingruppen-samlet/hoved",
+      "innhold": {
+        "navn": "KOMBINASJON: Amfetamin og metamfetamin – hovedkommentar",
+        "tekst": "Metamfetamin og amfetamin er stimulerende rusmidler, og amfetamin er virkestoff i enkelte legemidler. Ved bruk av legemidlene lisdeksamfetamin/deksamfetamin vil amfetamin påvises alene.",
+        "plassholdere": []
+      }
+    },
+    {
+      "id": "amfetamingruppen-samlet/tillegg",
+      "innhold": {
+        "navn": "KOMBINASJON: Amfetamin og metamfetamin – tilleggskommentar",
+        "tekst": "Se kommentar for metamfetamin i serum.",
+        "plassholdere": []
+      }
+    }
+  ],
+  "regelsett": [
+    {
+      "modul": "alprazolam",
+      "analytter": [
+        "APR"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "APR"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "alprazolam/hoved",
+                "koder": [
+                  "APR"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "diazepamgruppen",
+      "analytter": [
+        "DIAZ",
+        "DMI",
+        "OXA"
+      ],
+      "verdihjelp": "Alle tre får den felles kommentaren bare når oksazepam utgjør høyst {oksazepamgrense} % av summen av diazepam og desmetyldiazepam.",
+      "forhold": [
+        {
+          "nokkel": "oksazepamandel",
+          "teller": [
+            "OXA"
+          ],
+          "nevner": [
+            "DIAZ",
+            "DMI"
+          ],
+          "nullmelding": "Summen av diazepam og desmetyldiazepam må være større enn 0 for at {oksazepamgrense} %-regelen skal kunne regnes ut."
+        }
+      ],
+      "parametere": [
+        {
+          "nokkel": "oksazepamgrense",
+          "navn": "Oksazepam som andel av diazepam + N-desmetyldiazepam",
+          "verdi": 0.1
+        }
+      ],
+      "scenarier": [
+        {
+          "nokkel": "diaz",
+          "pavist": [
+            "DIAZ"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "diazepam/hoved",
+                "koder": [
+                  "DIAZ"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        },
+        {
+          "nokkel": "dmi",
+          "pavist": [
+            "DMI"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "desmetyldiazepam/hoved",
+                "koder": [
+                  "DMI"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        },
+        {
+          "nokkel": "oxa",
+          "pavist": [
+            "OXA"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "oksazepam/hoved",
+                "koder": [
+                  "OXA"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        },
+        {
+          "nokkel": "diaz_dmi",
+          "pavist": [
+            "DIAZ",
+            "DMI"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "diazepam/hoved",
+                "koder": [
+                  "DIAZ"
+                ]
+              },
+              {
+                "rolle": "tillegg",
+                "merke": "Tilleggskommentar",
+                "kommentar": "desmetyldiazepam/tillegg",
+                "koder": [
+                  "DMI"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        },
+        {
+          "nokkel": "diaz_oxa",
+          "pavist": [
+            "DIAZ",
+            "OXA"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "diazepam/hoved",
+                "koder": [
+                  "DIAZ"
+                ]
+              },
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar for oksazepam",
+                "kommentar": "oksazepam/hoved",
+                "koder": [
+                  "OXA"
+                ]
+              }
+            ],
+            "notiser": [
+              "Fellesskommentaren gjelder når diazepam, desmetyldiazepam og oksazepam alle er påvist. Her er bare to av dem påvist, og de kommenteres hver for seg."
+            ]
+          }
+        },
+        {
+          "nokkel": "dmi_oxa",
+          "pavist": [
+            "DMI",
+            "OXA"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "desmetyldiazepam/hoved",
+                "koder": [
+                  "DMI"
+                ]
+              },
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar for oksazepam",
+                "kommentar": "oksazepam/hoved",
+                "koder": [
+                  "OXA"
+                ]
+              }
+            ],
+            "notiser": [
+              "Fellesskommentaren gjelder når diazepam, desmetyldiazepam og oksazepam alle er påvist. Her er bare to av dem påvist, og de kommenteres hver for seg."
+            ]
+          }
+        },
+        {
+          "nokkel": "alle_felles",
+          "pavist": [
+            "DIAZ",
+            "DMI",
+            "OXA"
+          ],
+          "vilkar": [
+            {
+              "forhold": "oksazepamandel",
+              "operator": "<=",
+              "parameter": "oksazepamgrense"
+            }
+          ],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "diazepamgruppen-samlet/hoved",
+                "koder": [
+                  "DIAZ"
+                ]
+              },
+              {
+                "rolle": "tillegg",
+                "merke": "Tilleggskommentar",
+                "kommentar": "diazepamgruppen-samlet/tillegg",
+                "koder": [
+                  "DMI",
+                  "OXA"
+                ]
+              }
+            ],
+            "notiser": [
+              "Oksazepam ≤ {oksazepamgrense} % av diazepam + N-desmetyldiazepam\n⟶ Felles kommentar for alle tre."
+            ]
+          }
+        },
+        {
+          "nokkel": "alle_hver_for_seg",
+          "pavist": [
+            "DIAZ",
+            "DMI",
+            "OXA"
+          ],
+          "vilkar": [
+            {
+              "forhold": "oksazepamandel",
+              "operator": ">",
+              "parameter": "oksazepamgrense"
+            }
+          ],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "diazepam/hoved",
+                "koder": [
+                  "DIAZ"
+                ]
+              },
+              {
+                "rolle": "tillegg",
+                "merke": "Tilleggskommentar",
+                "kommentar": "desmetyldiazepam/tillegg",
+                "koder": [
+                  "DMI"
+                ]
+              },
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar for oksazepam",
+                "kommentar": "oksazepam/hoved",
+                "koder": [
+                  "OXA"
+                ]
+              }
+            ],
+            "notiser": [
+              "Oksazepam > {oksazepamgrense} % av diazepam + N-desmetyldiazepam\n⟶ Oksazepam kommenteres for seg selv."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "modul": "klonazepam",
+      "analytter": [
+        "CZP"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "CZP"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "klonazepam/hoved",
+                "koder": [
+                  "CZP"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "nitrazepam",
+      "analytter": [
+        "NIT"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "NIT"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "nitrazepam/hoved",
+                "koder": [
+                  "NIT"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "zolpidem",
+      "analytter": [
+        "ZOLP"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "ZOLP"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "zolpidem/hoved",
+                "koder": [
+                  "ZOLP"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "zopiklon",
+      "analytter": [
+        "ZOPI"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "ZOPI"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "zopiklon/hoved",
+                "koder": [
+                  "ZOPI"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "thc",
+      "analytter": [
+        "THC"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "THC"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "thc/hoved",
+                "koder": [
+                  "THC"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "buprenorfin",
+      "analytter": [
+        "BUP"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "BUP"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "buprenorfin/hoved",
+                "koder": [
+                  "BUP"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "fentanyl",
+      "analytter": [
+        "FYL"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "FYL"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "fentanyl/hoved",
+                "koder": [
+                  "FYL"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "kodeingruppen",
+      "analytter": [
+        "KOD",
+        "MOR"
+      ],
+      "verdihjelp": "",
+      "forhold": [
+        {
+          "nokkel": "morfinandel",
+          "teller": [
+            "MOR"
+          ],
+          "nevner": [
+            "KOD"
+          ],
+          "nullmelding": "Kodein må være større enn 0 for at forholdet mellom stoffene skal kunne regnes ut."
+        }
+      ],
+      "parametere": [
+        {
+          "nokkel": "lav_morfin",
+          "navn": "Morfin som andel av kodein, nedre grense for gråsonen",
+          "verdi": 0.2
+        },
+        {
+          "nokkel": "hoy_morfin",
+          "navn": "Morfin som andel av kodein, øvre grense for gråsonen",
+          "verdi": 1
+        }
+      ],
+      "scenarier": [
+        {
+          "nokkel": "kod",
+          "pavist": [
+            "KOD"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "kun-kodein/kodein",
+                "koder": [
+                  "KOD"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        },
+        {
+          "nokkel": "mor",
+          "pavist": [
+            "MOR"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "kun-morfin/morfin",
+                "koder": [
+                  "MOR"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        },
+        {
+          "nokkel": "hoy_kodein_lav_morfin",
+          "pavist": [
+            "KOD",
+            "MOR"
+          ],
+          "vilkar": [
+            {
+              "forhold": "morfinandel",
+              "operator": "<",
+              "parameter": "lav_morfin"
+            }
+          ],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "hoy-kodein-lav-morfin/kodein",
+                "koder": [
+                  "KOD"
+                ]
+              },
+              {
+                "rolle": "tillegg",
+                "merke": "Tilleggskommentar",
+                "kommentar": "hoy-kodein-lav-morfin/morfin",
+                "koder": [
+                  "MOR"
+                ]
+              }
+            ],
+            "notiser": [
+              "Morfin < {lav_morfin} % av kodein ⟶ Forenlig med inntak av kodein alene."
+            ]
+          }
+        },
+        {
+          "nokkel": "grasone",
+          "pavist": [
+            "KOD",
+            "MOR"
+          ],
+          "vilkar": [
+            {
+              "forhold": "morfinandel",
+              "operator": ">=",
+              "parameter": "lav_morfin"
+            },
+            {
+              "forhold": "morfinandel",
+              "operator": "<=",
+              "parameter": "hoy_morfin"
+            }
+          ],
+          "utfall": {
+            "type": "manuell",
+            "melding": "Morfin = {lav_morfin}–{hoy_morfin} % av kodein. Vurder manuelt.",
+            "veiledning": [
+              "Den spesifikke saken skal tas opp i plenum. Utgangspunktet er sannsynligvis en liten modifikasjon av kommentaren «Høy kodein, lav morfin», for eksempel med tillegg: «kan ikke utelukke at morfin er inntatt i tillegg».",
+              "Ikke entydig standardisert i teksten. Morfin kommenteres i sammenheng med den individuelt fastsatte kodeinkommentaren."
+            ]
+          }
+        },
+        {
+          "nokkel": "ordinaer_kombinasjon",
+          "pavist": [
+            "KOD",
+            "MOR"
+          ],
+          "vilkar": [
+            {
+              "forhold": "morfinandel",
+              "operator": ">",
+              "parameter": "hoy_morfin"
+            }
+          ],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar for kodein",
+                "kommentar": "kodein-morfin-ordinaer/kodein",
+                "koder": [
+                  "KOD"
+                ]
+              },
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar for morfin",
+                "kommentar": "kodein-morfin-ordinaer/morfin",
+                "koder": [
+                  "MOR"
+                ]
+              }
+            ],
+            "notiser": [
+              "Morfin > kodein ⟶ Ikke forenlig med inntak av kodein alene."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "modul": "metadon",
+      "analytter": [
+        "MDO"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "MDO"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "metadon/hoved",
+                "koder": [
+                  "MDO"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "oksykodon",
+      "analytter": [
+        "OKSY"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "OKSY"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "oksykodon/hoved",
+                "koder": [
+                  "OKSY"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "tapentadol",
+      "analytter": [
+        "TAP"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "TAP"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "tapentadol/hoved",
+                "koder": [
+                  "TAP"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "tramadolgruppen",
+      "analytter": [
+        "TRAM",
+        "OTRAM"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "tram",
+          "pavist": [
+            "TRAM"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "tramadolgruppen/hoved",
+                "koder": [
+                  "TRAM"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        },
+        {
+          "nokkel": "otram",
+          "pavist": [
+            "OTRAM"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "tramadolgruppen/hoved",
+                "koder": [
+                  "OTRAM"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        },
+        {
+          "nokkel": "begge",
+          "pavist": [
+            "TRAM",
+            "OTRAM"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "tramadolgruppen/hoved",
+                "koder": [
+                  "TRAM"
+                ]
+              },
+              {
+                "rolle": "tillegg",
+                "merke": "Tilleggskommentar",
+                "kommentar": "tramadolgruppen/tillegg",
+                "koder": [
+                  "OTRAM"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "amfetamingruppen",
+      "analytter": [
+        "AMF1",
+        "MAF1"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "amf",
+          "pavist": [
+            "AMF1"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "amfetamin/hoved",
+                "koder": [
+                  "AMF1"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        },
+        {
+          "nokkel": "maf",
+          "pavist": [
+            "MAF1"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "metamfetamin/hoved",
+                "koder": [
+                  "MAF1"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        },
+        {
+          "nokkel": "begge",
+          "pavist": [
+            "AMF1",
+            "MAF1"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "amfetamingruppen-samlet/hoved",
+                "koder": [
+                  "MAF1"
+                ]
+              },
+              {
+                "rolle": "tillegg",
+                "merke": "Tilleggskommentar",
+                "kommentar": "amfetamingruppen-samlet/tillegg",
+                "koder": [
+                  "AMF1"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "benzoylekgonin",
+      "analytter": [
+        "BEZ1"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "BEZ1"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "benzoylekgonin/hoved",
+                "koder": [
+                  "BEZ1"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    },
+    {
+      "modul": "mdma",
+      "analytter": [
+        "ECS1"
+      ],
+      "verdihjelp": "",
+      "forhold": [],
+      "parametere": [],
+      "scenarier": [
+        {
+          "nokkel": "pavist",
+          "pavist": [
+            "ECS1"
+          ],
+          "vilkar": [],
+          "utfall": {
+            "type": "kommentarer",
+            "plasseringer": [
+              {
+                "rolle": "hoved",
+                "merke": "Hovedkommentar",
+                "kommentar": "mdma/hoved",
+                "koder": [
+                  "ECS1"
+                ]
+              }
+            ],
+            "notiser": []
+          }
+        }
+      ]
+    }
+  ]
+}
