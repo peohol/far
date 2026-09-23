@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState, type RefObject } from 'react'
 import { sok, sti, type Sokedokument } from '../../faginnhold/sok'
 import { rullefart } from '../../hooks/useKortHopp'
+import { detaljkortRundt } from '../seksjoner/Seksjon'
 import { useSeksjonsstyring, type Rulleplass } from '../seksjoner/Seksjonsstyring'
 import { Shortcut } from '../Shortcut'
 import { elementAnker, panelAnker } from './Paneler'
@@ -97,14 +98,21 @@ export function Sidesok({ sporring, onEndre, beholder, dokumenter, innholdsnokke
     if (merke) vis(merke, 'center')
   }
 
-  /** Går til stedet, og gjør det første treffet der til det aktive. */
+  /**
+   * Går til stedet, og gjør det første treffet der til det aktive. Er det et
+   * treff, er det treffet som vises, så skuffene det står i åpnes — også et
+   * detaljkort inne i stedet. Står stedet i et detaljkort, er det hele kortet
+   * som gjelder, så også treff i tittelen i hodet kommer med.
+   */
   const gaTilSted = (anker: string) => {
-    const sted = document.getElementById(anker)
-    if (!sted) return
+    const element = document.getElementById(anker)
+    if (!element) return
+    const sted = detaljkortRundt(element) ?? element
     const alle = merker()
     const forste = alle.findIndex((m) => sted.contains(m))
-    if (forste !== -1) setAktiv(forste)
-    vis(sted, 'start')
+    if (forste === -1) return vis(sted, 'start')
+    setAktiv(forste)
+    vis(alle[forste]!, 'center')
   }
 
   const status = !sporring.trim()

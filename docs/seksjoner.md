@@ -75,7 +75,8 @@ Innholdet i en lukket skuff står i dokumentet, skjult med
   lukket skuff med treff sier «2 treff» i hodet. Når brukeren går til et treff
   (Enter, Shift + Enter, eller et av stedene under søkefeltet), åpnes
   seksjonen og detaljkortet treffet står i, og treffet rulles fram og
-  markeres.
+  markeres. Et sted i et detaljkort gjelder hele kortet, så stedet går også
+  til et treff i korttittelen.
 - **Nettleserens eget søk** (Ctrl/Cmd + F) finner også teksten, og åpner
   skuffen den står i (hendelsen `beforematch`, i nettlesere som støtter det).
 - Skjult innhold er ellers utenfor tabulatorrekkefølgen og skjermleseren.

@@ -60,6 +60,11 @@ export function detaljanker(seksjon: string, kort: string): string {
   return `${seksjonsanker(seksjon)}--${kort}`
 }
 
+/** Detaljkortet elementet står i, om det står i et. */
+export function detaljkortRundt(element: Element): HTMLElement | null {
+  return element.closest<HTMLElement>(`.${KLASSE}--detalj`)
+}
+
 interface Felles {
   /**
    * Fast nøkkel for skuffen. Står i adressen (`#/analytt/KODE/<seksjon>/<kort>`)
