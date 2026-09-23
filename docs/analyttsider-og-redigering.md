@@ -960,18 +960,20 @@ Til klinisk gjennomgang: avvikene mellom PDF-en og de statiske dataene (BREK, DO
 
 ## Arbeidspakke 6 - Sammensatte analyttgrupper
 
-**Status:** [ ] Ikke startet
+**Status:** [ ] Påbegynt
 
-- [ ] Redigerbare scenarioer.
-- [ ] Påvist/ikke påvist-betingelser.
-- [ ] Forholdstall/terskler.
-- [ ] Hoved-/tilleggskommentarer og plassering.
-- [ ] Eksplisitte manuelle/gråsoneutfall.
-- [ ] Simulator for hele regelsettet.
-- [ ] Migrer diazepamgruppen.
-- [ ] Migrer tramadolgruppen.
-- [ ] Migrer kodein/morfin.
-- [ ] Migrer amfetamin/metamfetamin.
+Scenariomodellen, motoren, lagringen og fortolkningen står i `docs/scenarioregler.md`. Reglene for alle rusmiddelmodulene ligger publisert i Supabase som scenarioregelsett som peker på egne kommentarobjekter, med utkast, publisering, historikk og gjenoppretting på serveren, og fortolkningen bruker dem. Paritetstester mot fasiten fra den opprinnelige motoren låser at resultatet er det samme. Analyttsidene viser reglene, med simulator. Det som gjenstår, er skjermbildene for å redigere regelsettene, med historikk og forskjeller, som bygges i seksjonsarkitekturen (arbeidspakke 13).
+
+- [ ] Redigerbare scenarioer (lagring og kontroll på serveren er på plass; skjermbildet gjenstår).
+- [x] Påvist/ikke påvist-betingelser.
+- [x] Forholdstall/terskler.
+- [x] Hoved-/tilleggskommentarer og plassering.
+- [x] Eksplisitte manuelle/gråsoneutfall.
+- [x] Simulator for hele regelsettet.
+- [x] Migrer diazepamgruppen.
+- [x] Migrer tramadolgruppen.
+- [x] Migrer kodein/morfin.
+- [x] Migrer amfetamin/metamfetamin.
 
 ## Arbeidspakke 7 - THC-syre
 
@@ -1075,7 +1077,7 @@ Ta inn de øvrige feltene i del 23 én etter én, der arbeidspakke 8 viser at ki
 **Status:** [ ] Ikke startet. Starter når arbeidspakke 9 del 1 er på `main`.
 
 - [ ] Fortolkning/regler for konsentrasjonsreglene (arbeidspakke 5) vises som hovedseksjon med detaljkort.
-- [ ] Scenarioreglene og simulatoren (arbeidspakke 6) likeså.
+- [x] Scenarioreglene og simulatoren (arbeidspakke 6) likeså.
 - [ ] THC-editoren og -simulatoren (arbeidspakke 7) bygges i modellen fra starten.
 - [ ] Regelmotorene, valideringen og paritetstestene er uendret; klinisk output endres ikke.
 

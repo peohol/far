@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { renskTall } from '../tallfelt'
-import { lesKonsentrasjon } from '../rus'
+import { lesKonsentrasjon } from '../scenario'
 import { lesTall } from '../thc'
 
 describe('hva et konsentrasjonsfelt tar imot', () => {
