@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import importert from './fasit/thc-regelsett-import.json'
+import importerteTekster from './fasit/thc-tekster-import.json'
 import fasitfil from './fasit/thc-fasit.json'
 import {
   dekodInndata,
@@ -8,49 +9,57 @@ import {
   type Fasit,
   type FasitUtfall,
 } from './hjelp/thcFasit'
+import { forventetEndring, tidForVerdi, verdiPaaKurve } from '../thcKurver'
 import {
-  forventetEndring,
   fortolkThc,
   konklusjon,
   konsentrasjonsniva,
   korreksjonsfaktor,
   korrigertEndring,
-  kurvefeil,
-  kurverI,
   kurverOver,
+  lagThcModell,
   settSammen,
-  tidForVerdi,
   tomThcInndata,
   velgTekstbolker,
-  verdiPaaKurve,
   type ThcInndata,
   type ThcKonklusjon,
+  type ThcModell,
   type ThcResultat,
 } from '../thcMotor'
+import { byggGraf, figurkurver } from '../thcPlot'
+import { godkjennThcRegelsett, kurverI, normalkvantil, validerThcRegelsett, type ThcRegelsett } from '../thcRegelsett'
 import {
-  normalkvantil,
   THC_TEKSTBOLKER,
   THC_TEKSTNOKLER,
-  validerThcRegelsett,
-  type ThcRegelsett,
+  validerThcTekster,
+  type ThcTekster,
   type ThcTekstnokkel,
-} from '../thcRegelsett'
-import { byggGraf, figurkurver } from '../thcPlot'
+} from '../thcTekster'
 
 /**
- * Den nye THC-syremotoren, som leser fagkunnskapen fra et regelsett i stedet
- * for fra konstanter i koden.
+ * Den nye THC-syremotoren, som leser fagkunnskapen fra et regelsett og
+ * tekstbolker i stedet for fra konstanter i koden.
  *
- * `REGELSETT` er regelsettet slik det ble importert fra den opprinnelige
- * modulen — samme verdier og tekster som migrasjonen legger inn i Supabase.
- * Fasiten (`fasit/thc-fasit.json`) er utfallet av den opprinnelige modulen
- * for over 4000 inndata, og motoren skal gi nøyaktig det samme.
+ * `REGELSETT` og `TEKSTER` er reglene og tekstene slik de sto i den
+ * opprinnelige modulen. Fasiten (`fasit/thc-fasit.json`) er utfallet av den
+ * opprinnelige modulen for over 4000 inndata, og motoren skal gi nøyaktig det
+ * samme.
  */
 const REGELSETT = importert as ThcRegelsett
+const TEKSTER = importerteTekster as ThcTekster
 const FASIT = fasitfil as Fasit
 
-function fortolk(inn: ThcInndata, r: ThcRegelsett = REGELSETT): ThcResultat {
-  return fortolkThc(inn, r)
+/** Reglene og tekstene satt sammen; testen feiler om de ikke godtas. */
+function modell(r: ThcRegelsett = REGELSETT, t: ThcTekster = TEKSTER): ThcModell {
+  const m = lagThcModell(r, t)
+  if (!m.ok) throw new Error(m.feil.join('\n'))
+  return m.modell
+}
+
+const MODELL = modell()
+
+function fortolk(inn: ThcInndata, m: ThcModell = MODELL): ThcResultat {
+  return fortolkThc(inn, m)
 }
 
 function somFasitutfall(r: ThcResultat): FasitUtfall {
@@ -72,9 +81,9 @@ function kommentar(r: ThcResultat) {
 const kurver = kurverI(REGELSETT)
 
 describe('regelsettet som ble importert', () => {
-  it('er gyldig', () => {
+  it('er gyldig, med gyldige tekster', () => {
     expect(validerThcRegelsett(REGELSETT)).toEqual([])
-    expect(kurvefeil(REGELSETT)).toEqual([])
+    expect(validerThcTekster(TEKSTER)).toEqual([])
   })
 
   it('har regnearkets kurver (A-verdiene i rad 14 og Newton-søket i rad 59)', () => {
@@ -223,7 +232,7 @@ describe('tekstbolkene', () => {
 
   it('setter inn nivået og datoen der plassholderne står, og binder bolkene med ett mellomrom', () => {
     const tekst = settSammen(
-      { ...REGELSETT, tekster: { ...REGELSETT.tekster, apning: 'A {nivå}.', nytt_inntak: 'B {forrige prøvedato} {forrige prøvedato}.' } },
+      { ...TEKSTER, apning: 'A {nivå}.', nytt_inntak: 'B {forrige prøvedato} {forrige prøvedato}.' },
       ['apning', 'nytt_inntak'],
       { niva: 'lav', forrigeDato: '01.02.2026' },
     )
@@ -279,12 +288,12 @@ describe('et redigert regelsett', () => {
   it('flytter nivået når skillepunktet flyttes', () => {
     const nivaer = REGELSETT.konsentrasjonsnivaer.map((n) => (n.nedre === 20 ? { ...n, nedre: 25 } : n))
     expect(kommentar(fortolk(eksempel)).niva.navn).toBe('middels høy')
-    expect(kommentar(fortolk(eksempel, { ...REGELSETT, konsentrasjonsnivaer: nivaer })).niva.navn).toBe('lav')
+    expect(kommentar(fortolk(eksempel, modell({ ...REGELSETT, konsentrasjonsnivaer: nivaer }))).niva.navn).toBe('lav')
   })
 
   it('bruker den nye ordlyden', () => {
-    const r = { ...REGELSETT, tekster: { ...REGELSETT.tekster, uten_forrige: 'Ny prøve anbefales.' } }
-    expect(kommentar(fortolk({ ...eksempel, ingenTidligere: true }, r)).kommentar.endsWith('Ny prøve anbefales.')).toBe(true)
+    const m = modell(REGELSETT, { ...TEKSTER, uten_forrige: 'Ny prøve anbefales.' })
+    expect(kommentar(fortolk({ ...eksempel, ingenTidligere: true }, m)).kommentar.endsWith('Ny prøve anbefales.')).toBe(true)
   })
 
   it('følger grensene for bruksmønsteret', () => {
@@ -294,19 +303,21 @@ describe('et redigert regelsett', () => {
       ...REGELSETT,
       bruksmonstre: { ...REGELSETT.bruksmonstre, kronisk: { vanskelig_over: 'gronn', nytt_inntak_over: 'gul' } },
     } satisfies ThcRegelsett
-    expect(kommentar(fortolk(prove, strengere)).konklusjon).toBe('nytt_inntak')
+    expect(kommentar(fortolk(prove, modell(strengere))).konklusjon).toBe('nytt_inntak')
   })
 
   it('varsler etter regelsettets grense', () => {
     const r = { ...REGELSETT, varsel_dager_mellom: 22 }
     expect(kommentar(fortolk(eksempel)).langtMellomProvene).toBe(false)
-    expect(kommentar(fortolk(eksempel, r)).langtMellomProvene).toBe(true)
+    expect(kommentar(fortolk(eksempel, modell(r))).langtMellomProvene).toBe(true)
   })
 
   it('bruker regelsettets faktor for måleusikkerhet under cut-off', () => {
     const inn = { ...eksempel, forrigeUnderCutoff: true, forrigeUcak: '13', forrigeNkre: '2', aktuellVerdi: '2,5' }
     const a = kommentar(fortolk(inn)).grunnlag!.korrigertEndring
-    const b = kommentar(fortolk(inn, { ...REGELSETT, maleusikkerhet: { ...REGELSETT.maleusikkerhet, faktor_under_cutoff: 1 } })).grunnlag!.korrigertEndring
+    const b = kommentar(
+      fortolk(inn, modell({ ...REGELSETT, maleusikkerhet: { ...REGELSETT.maleusikkerhet, faktor_under_cutoff: 1 } })),
+    ).grunnlag!.korrigertEndring
     expect(b).toBeCloseTo(korrigertEndring(REGELSETT, 6.5, 2.5, 0.9), 12)
     expect(a).toBeLessThan(b)
   })
@@ -314,12 +325,13 @@ describe('et redigert regelsett', () => {
 
 describe('valideringen', () => {
   const med = (endring: Partial<ThcRegelsett>): ThcRegelsett => ({ ...REGELSETT, ...endring })
-  const tekst = (nokkel: ThcTekstnokkel, verdi: string) => med({ tekster: { ...REGELSETT.tekster, [nokkel]: verdi } })
+  const tekst = (nokkel: ThcTekstnokkel, verdi: string): ThcTekster => ({ ...TEKSTER, [nokkel]: verdi })
 
   it.each<[string, ThcRegelsett, RegExp]>([
     ['konverteringsfaktor 0', med({ konverteringsfaktor: 0 }), /Konverteringsfaktoren/],
     ['negativ amplitude', med({ kurver: { ...REGELSETT.kurver, rod: { ...REGELSETT.kurver.rod, a1: -1 } } }), /a1 må være/],
-    ['kurve uten navn', med({ kurver: { ...REGELSETT.kurver, gul: { ...REGELSETT.kurver.gul, navn: ' ' } } }), /mangler navn/],
+    ['kurve uten navn', med({ kurver: { ...REGELSETT.kurver, gul: { ...REGELSETT.kurver.gul, navn: ' ' } } }), /gule kurven mangler navn/],
+    ['kurver i feil rekkefølge', med({ kurver: { ...REGELSETT.kurver, gronn: REGELSETT.kurver.rod, rod: REGELSETT.kurver.gronn } }), /grønne kurven må gi minst like rask/],
     ['CV 0', med({ maleusikkerhet: { ...REGELSETT.maleusikkerhet, cv_thc: 0 } }), /CV for THC-syre/],
     ['faktor under 1', med({ maleusikkerhet: { ...REGELSETT.maleusikkerhet, faktor_under_cutoff: 0.9 } }), /minst 1/],
     ['ingen marginer', med({ sikkerhetsmarginer: [] }), /minst én sikkerhetsmargin/],
@@ -333,19 +345,31 @@ describe('valideringen', () => {
     ['like nivånavn', med({ konsentrasjonsnivaer: REGELSETT.konsentrasjonsnivaer.map((n) => ({ ...n, navn: 'lav' })) }), /samme navn/],
     ['bruksmønster i feil rekkefølge', med({ bruksmonstre: { ...REGELSETT.bruksmonstre, kronisk: { vanskelig_over: 'rod', nytt_inntak_over: 'gul' } } }), /tregere kurve/],
     ['varsel 0 døgn', med({ varsel_dager_mellom: 0 }), /helt antall døgn/],
+  ])('avviser regelsett med %s', (_, r, melding) => {
+    expect(validerThcRegelsett(r).join('\n')).toMatch(melding)
+    const godkjent = godkjennThcRegelsett(r)
+    expect(godkjent.ok).toBe(false)
+    expect(lagThcModell(r, TEKSTER).ok).toBe(false)
+  })
+
+  it.each<[string, ThcTekster, RegExp]>([
     ['tom tekst', tekst('pavisningstid', ''), /er tom/],
     ['tekst med mellomrom i enden', tekst('pavisningstid', 'Tekst. '), /mellomrom/],
     ['dato mangler', tekst('vanskelig', 'Vanskelig å avgjøre.'), /må inneholde \{forrige prøvedato\}/],
     ['dato der den ikke finnes', tekst('uten_forrige', 'Siden {forrige prøvedato}.'), /ikke kan bruke/],
     ['ukjent plassholder', tekst('apning', 'Påvist i {nivå} {mengde}.'), /ikke kan bruke: \{mengde\}/],
     ['løs krøllparentes', tekst('apning', 'Påvist i {nivå} }.'), /krøllparentes/],
-  ])('avviser %s', (_, r, melding) => {
-    expect(validerThcRegelsett(r).join('\n')).toMatch(melding)
+  ])('avviser tekster med %s', (_, t, melding) => {
+    expect(validerThcTekster(t).join('\n')).toMatch(melding)
+    expect(lagThcModell(REGELSETT, t).ok).toBe(false)
   })
 
-  it('avviser kurver i feil rekkefølge', () => {
-    const byttet = { ...REGELSETT, kurver: { ...REGELSETT.kurver, gronn: REGELSETT.kurver.rod, rod: REGELSETT.kurver.gronn } }
-    expect(validerThcRegelsett(byttet)).toEqual([])
-    expect(kurvefeil(byttet).join()).toMatch(/rekkefølge/)
+  it('er den eneste veien til et regelsett motoren tar imot', () => {
+    const godkjent = godkjennThcRegelsett(REGELSETT)
+    expect(godkjent.ok && godkjent.regelsett).toBe(REGELSETT)
+    // Et ukontrollert regelsett stoppes allerede av typene.
+    // @ts-expect-error — reglene og tekstene er ikke godkjent
+    const ukontrollert: ThcModell = { regler: REGELSETT, tekster: TEKSTER }
+    void ukontrollert
   })
 })

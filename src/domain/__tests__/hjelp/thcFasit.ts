@@ -1,6 +1,6 @@
 /**
- * Fasiten for THC-syremodulen: tusenvis av inndata med utfallet slik modulen
- * ga det før fortolkningsreglene ble flyttet til Supabase.
+ * Fasiten for THC-syremodulen: tusenvis av inndata med utfallet slik den
+ * opprinnelige modulen gir det.
  *
  * Fasiten ble laget én gang, av den opprinnelige modulen med regnearkets
  * konstanter og tekster i koden, og ligger frosset i
@@ -334,8 +334,8 @@ export function fasittilfeller(kurvetreff: Kurvetreff): FasitInndata[] {
 /* --- Fasitfilen ----------------------------------------------------------- */
 
 const OM =
-  'Utfallet av THC-syremodulen for et fast sett inndata, laget av den opprinnelige modulen før ' +
-  'fortolkningsreglene ble flyttet til Supabase. Se src/domain/__tests__/hjelp/thcFasit.ts.'
+  'Utfallet av THC-syremodulen for et fast sett inndata, laget av den opprinnelige modulen med ' +
+  'regnearkets konstanter og tekster i koden. Se src/domain/__tests__/hjelp/thcFasit.ts.'
 
 export function lagFasit(
   inndata: FasitInndata[],

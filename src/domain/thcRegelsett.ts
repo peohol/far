@@ -1,24 +1,26 @@
 /**
- * THC-syreregelsettet: alt ved fortolkningen av THC-syre i urin som er
+ * THC-syreregelsettet: reglene ved fortolkningen av THC-syre i urin som er
  * fagkunnskap og ikke programlogikk — utskillelseskurvene, måleusikkerheten,
  * sikkerhetsmarginene, konsentrasjonsnivåene, grensene for hvert
- * bruksmønster, varselet om lang tid mellom prøvene og tekstbolkene
- * kommentaren settes sammen av.
+ * bruksmønster og varselet om lang tid mellom prøvene.
  *
- * Regelsettet er ett objekt i det redigerbare faginnholdet (objekttypen
- * `thc_regelsett`), med utkast, publisering, revisjoner og gjenoppretting som
- * alt annet faginnhold. Formen her er den samme som øyeblikksbildet databasen
- * lagrer i hver revisjon. Motoren som bruker regelsettet, står i
- * `thcMotor.ts`; bakgrunnen i `docs/thc-syre.md`.
+ * Kommentartekstene hører ikke til reglene; de står i `thcTekster.ts`.
+ * Motoren som bruker begge, står i `thcMotor.ts`; bakgrunnen i
+ * `docs/thc-syre.md`.
  *
- * Valideringen her er den samme som databasen gjør før noe lagres (se
- * migrasjonen `*_thc_regelsett.sql`), slik at redigeringen kan si fra før
- * brukeren trykker «Lagre». Databasen er likevel den som avgjør.
+ * {@link validerThcRegelsett} er den ene kontrollen av et regelsett: tom
+ * liste betyr at det kan brukes. Motoren tar bare imot et regelsett som har
+ * vært gjennom den ({@link godkjennThcRegelsett}), så ingen kan bruke et
+ * regelsett uten å ha kontrollert det.
  */
+import { sammenlign, type Kurve, type Rekkefolgebrudd } from './thcKurver'
 
 /** Kurvene konklusjonen leses av, fra raskest til tregest utskillelse. */
 export const THC_KURVEROLLER = ['gronn', 'gul', 'rod'] as const
 export type ThcKurverolle = (typeof THC_KURVEROLLER)[number]
+
+/** Kurvene omtalt i meldingene: «den grønne kurven». */
+export const KURVEFARGE: Record<ThcKurverolle, string> = { gronn: 'grønne', gul: 'gule', rod: 'røde' }
 
 /**
  * En bi-eksponentiell utskillelseskurve C(t) = a1·e^(−k1·t) + a2·e^(−k2·t),
@@ -67,114 +69,10 @@ export interface ThcSikkerhetsmargin {
   margin: number
   /**
    * z-verdien med full presisjon. Lagres ved siden av marginen fordi
-   * 1 − margin ikke kan regnes eksakt i flyttall; databasen kontrollerer at
-   * de stemmer overens.
+   * 1 − margin ikke kan regnes eksakt i flyttall; valideringen kontrollerer
+   * at de stemmer overens.
    */
   z: number
-}
-
-/** Tekstbolkene kommentaren settes sammen av. Rekkefølgen er den i kommentaren. */
-export const THC_TEKSTNOKLER = [
-  'apning',
-  'nylig_inntak',
-  'nytt_inntak',
-  'inntak_har_skjedd',
-  'pavisningstid',
-  'vanskelig',
-  'ikke_nodvendigvis',
-  'under_cutoff_vanskelig',
-  'under_cutoff_ikke_nodvendigvis',
-  'uten_forrige',
-] as const
-export type ThcTekstnokkel = (typeof THC_TEKSTNOKLER)[number]
-
-/** Plassholderne en tekstbolk kan inneholde. */
-export const THC_PLASSHOLDERE = ['{nivå}', '{forrige prøvedato}'] as const
-export type ThcPlassholder = (typeof THC_PLASSHOLDERE)[number]
-
-export interface ThcTekstbolkInfo {
-  tittel: string
-  /** Når bolken tas med, i vanlig språk. */
-  brukes: string
-  /** Plassholderne bolken må ha — de den ellers ville mistet meningen uten. */
-  plassholdere: readonly ThcPlassholder[]
-  /**
-   * Plassholderne bolken kan ha. Datoen for forrige prøve finnes bare i
-   * bolkene som brukes når det er en forrige prøve.
-   */
-  tilgjengelige: readonly ThcPlassholder[]
-}
-
-/**
- * Hva hver tekstbolk er og når den brukes. Vilkårene er motorens
- * (`thcMotor.ts`), skrevet ut slik redigeringen og simulatoren viser dem.
- */
-export const THC_TEKSTBOLKER: Record<ThcTekstnokkel, ThcTekstbolkInfo> = {
-  apning: {
-    tittel: 'Åpning',
-    brukes: 'Alltid.',
-    plassholdere: ['{nivå}'],
-    tilgjengelige: ['{nivå}'],
-  },
-  nylig_inntak: {
-    tittel: 'Nylig inntak',
-    brukes: 'Når konsentrasjonsnivået gjerne ses kort tid etter inntak.',
-    plassholdere: [],
-    tilgjengelige: ['{nivå}'],
-  },
-  nytt_inntak: {
-    tittel: 'Nytt inntak etter forrige prøve',
-    brukes: 'Når endringen ligger over grensen for nytt inntak, eller forrige prøve hadde IRCAK 0.',
-    plassholdere: ['{forrige prøvedato}'],
-    tilgjengelige: ['{nivå}', '{forrige prøvedato}'],
-  },
-  inntak_har_skjedd: {
-    tittel: 'Inntak har skjedd',
-    brukes:
-      'Når konsentrasjonsnivået ikke tyder på nylig inntak, og konklusjonen er «ikke nødvendigvis», ' +
-      'det er ingen forrige prøve, eller forrige prøve er fortolket under cut-off og konklusjonen er ' +
-      '«vanskelig å avgjøre».',
-    plassholdere: [],
-    tilgjengelige: ['{nivå}'],
-  },
-  pavisningstid: {
-    tittel: 'Påvisningstid',
-    brukes:
-      'Med forrige prøve: når konklusjonen ikke er nytt inntak. Uten forrige prøve: når ' +
-      'konsentrasjonsnivået ikke tyder på nylig inntak.',
-    plassholdere: [],
-    tilgjengelige: ['{nivå}'],
-  },
-  vanskelig: {
-    tittel: 'Vanskelig å avgjøre',
-    brukes: 'Når endringen ligger over grensen for «vanskelig å avgjøre», men ikke for nytt inntak.',
-    plassholdere: ['{forrige prøvedato}'],
-    tilgjengelige: ['{nivå}', '{forrige prøvedato}'],
-  },
-  ikke_nodvendigvis: {
-    tittel: 'Ikke nødvendigvis nytt inntak',
-    brukes: 'Når endringen ligger innenfor det som er forventet.',
-    plassholdere: ['{forrige prøvedato}'],
-    tilgjengelige: ['{nivå}', '{forrige prøvedato}'],
-  },
-  under_cutoff_vanskelig: {
-    tittel: 'Vanskelig å avgjøre, forrige prøve under cut-off',
-    brukes: 'I stedet for «Vanskelig å avgjøre» når forrige prøve er fortolket under cut-off.',
-    plassholdere: [],
-    tilgjengelige: ['{nivå}', '{forrige prøvedato}'],
-  },
-  under_cutoff_ikke_nodvendigvis: {
-    tittel: 'Ikke nødvendigvis nytt inntak, forrige prøve under cut-off',
-    brukes: 'I stedet for «Ikke nødvendigvis nytt inntak» når forrige prøve er fortolket under cut-off.',
-    plassholdere: ['{forrige prøvedato}'],
-    tilgjengelige: ['{nivå}', '{forrige prøvedato}'],
-  },
-  uten_forrige: {
-    tittel: 'Uten forrige prøve',
-    brukes: 'Når det ikke finnes en tidligere prøve å sammenligne med.',
-    plassholdere: [],
-    tilgjengelige: ['{nivå}'],
-  },
 }
 
 export interface ThcMaleusikkerhet {
@@ -189,7 +87,7 @@ export interface ThcMaleusikkerhet {
   faktor_under_cutoff: number
 }
 
-/** Hele regelsettet — det som lagres i hver revisjon. */
+/** Hele regelsettet. */
 export interface ThcRegelsett {
   /** Regner kildedataenes enheter om til enhetene IRCAK svares ut i. */
   konverteringsfaktor: number
@@ -203,7 +101,6 @@ export interface ThcRegelsett {
   bruksmonstre: { kronisk: ThcBruksmonster; ikke_kronisk: ThcBruksmonster }
   /** Mer enn så mange døgn mellom prøvene gir et varsel. */
   varsel_dager_mellom: number
-  tekster: Record<ThcTekstnokkel, string>
 }
 
 /** Marginen der medianen leses av: ingen korreksjon i det hele tatt. */
@@ -215,7 +112,7 @@ export const INGEN_SIKKERHETSMARGIN = 0.5
  * Φ⁻¹(p), kvantilet i standard normalfordeling — Wichuras algoritme AS 241
  * (PPND16), med relativ feil rundt 1e-16. Brukes til å foreslå z når en ny
  * sikkerhetsmargin legges til, og til å kontrollere at lagrede z-verdier
- * stemmer med marginen. Samme algoritme står i migrasjonen.
+ * stemmer med marginen.
  */
 export function normalkvantil(p: number): number {
   if (!(p > 0 && p < 1)) return Number.NaN
@@ -303,32 +200,74 @@ export const Z_TOLERANSE = 1e-9
 
 /* --- Validering ----------------------------------------------------------- */
 
+/** Tallene i en kurve. */
+const KURVEFELT = ['a1', 'k1', 'a2', 'k2'] as const
+
 /** Et endelig tall større enn 0. */
 function positivt(verdi: unknown): verdi is number {
   return typeof verdi === 'number' && Number.isFinite(verdi) && verdi > 0
 }
 
-/** Plassholderne i en tekst, i den rekkefølgen de står, også ukjente. */
-export function plassholdereI(tekst: string): string[] {
-  return tekst.match(/\{[^{}]*\}/g) ?? []
+/** Kurven i IRCAK-enheter: amplitudene ganget med konverteringsfaktoren. */
+export function omregnetKurve(kurve: ThcKurve, konverteringsfaktor: number): Kurve {
+  return {
+    a1: kurve.a1 * konverteringsfaktor,
+    k1: kurve.k1,
+    a2: kurve.a2 * konverteringsfaktor,
+    k2: kurve.k2,
+  }
+}
+
+/** Alle tre kurvene i regelsettet, omregnet. */
+export function kurverI(r: ThcRegelsett): Record<ThcKurverolle, Kurve> {
+  return {
+    gronn: omregnetKurve(r.kurver.gronn, r.konverteringsfaktor),
+    gul: omregnetKurve(r.kurver.gul, r.konverteringsfaktor),
+    rod: omregnetKurve(r.kurver.rod, r.konverteringsfaktor),
+  }
+}
+
+/** Hvor rekkefølgen brytes, i vanlig språk. */
+function hvor(brudd: Rekkefolgebrudd): string {
+  switch (brudd.ved) {
+    case 'lave':
+      return 'ved lave konsentrasjoner, altså lang tid etter inntak'
+    case 'hoye':
+      return 'ved høye konsentrasjoner'
+    case 'overalt':
+      return 'noe sted'
+    case 'ircak':
+      return `rundt IRCAK ${brudd.ircak.toPrecision(2)}`
+  }
 }
 
 /**
- * Døgnene og IRCAK-verdiene kurvenes rekkefølge kontrolleres over. De samme
- * står i migrasjonen.
+ * Kurvene skal stå i rekkefølge: fra enhver forrige prøve og over ethvert
+ * tidsrom forventer grønn minst like stor nedgang som gul, og gul minst like
+ * stor som rød. Ellers gir ikke grensene per bruksmønster mening. Avgjøres
+ * for hele domenet, ikke bare for utvalgte verdier (se `thcKurver.ts`).
  */
-export const KURVEKONTROLL_FORRIGE = [0.01, 0.1, 1, 5, 20, 100, 1000] as const
-export const KURVEKONTROLL_DAGER = [1, 3, 7, 14, 30, 90] as const
-/**
- * Grønn og gul faller sammen når forrige prøve ligger langt ute på kurvene,
- * og skiller seg da bare i siste siffer. Så mye må rekkefølgen tåle.
- */
-export const KURVEKONTROLL_TOLERANSE = 1e-9
+function kurvefeil(r: ThcRegelsett): string[] {
+  const kurver = kurverI(r)
+  const feil: string[] = []
+  for (let i = 1; i < THC_KURVEROLLER.length; i++) {
+    const raskere = THC_KURVEROLLER[i - 1]!
+    const tregere = THC_KURVEROLLER[i]!
+    const brudd = sammenlign(kurver[raskere], kurver[tregere])
+    if (brudd) {
+      feil.push(
+        `Den ${KURVEFARGE[raskere]} kurven må gi minst like rask utskillelse som den ${KURVEFARGE[tregere]} ` +
+          `ved alle konsentrasjoner, men gjør det ikke ${hvor(brudd)}.`,
+      )
+    }
+  }
+  return feil
+}
 
 /**
  * Alt som er galt med regelsettet, i vanlig språk. Tom liste betyr at det kan
- * lagres og publiseres. Kurvenes rekkefølge kontrolleres av
- * {@link kurvefeil} i `thcMotor.ts`, som trenger kurveregningen.
+ * brukes. Dette er den eneste kontrollen: alt et regelsett må oppfylle, også
+ * kurvenes rekkefølge, står her.
  */
 export function validerThcRegelsett(r: ThcRegelsett): string[] {
   const feil: string[] = []
@@ -337,8 +276,8 @@ export function validerThcRegelsett(r: ThcRegelsett): string[] {
 
   for (const rolle of THC_KURVEROLLER) {
     const kurve = r.kurver[rolle]
-    if (kurve.navn.trim() === '') feil.push(`Kurve ${rolle} mangler navn.`)
-    for (const felt of ['a1', 'k1', 'a2', 'k2'] as const) {
+    if (kurve.navn.trim() === '') feil.push(`Den ${KURVEFARGE[rolle]} kurven mangler navn.`)
+    for (const felt of KURVEFELT) {
       if (!positivt(kurve[felt])) feil.push(`${kurve.navn || rolle}: ${felt} må være et tall større enn 0.`)
     }
   }
@@ -385,12 +324,16 @@ export function validerThcRegelsett(r: ThcRegelsett): string[] {
     feil.push('To konsentrasjonsnivåer har samme navn.')
   }
 
-  for (const [navn, monster] of Object.entries(r.bruksmonstre)) {
+  for (const kronisk of [true, false]) {
+    const monster = kronisk ? r.bruksmonstre.kronisk : r.bruksmonstre.ikke_kronisk
+    const bruk = kronisk ? 'kronisk bruk' : 'uten kronisk bruk'
     const vanskelig = THC_KURVEROLLER.indexOf(monster.vanskelig_over)
     const nytt = THC_KURVEROLLER.indexOf(monster.nytt_inntak_over)
-    if (vanskelig < 0 || nytt < 0) feil.push(`Bruksmønsteret ${navn} peker på en ukjent kurve.`)
+    if (vanskelig < 0 || nytt < 0) feil.push(`Grensene ved ${bruk} peker på en ukjent kurve.`)
     else if (!(vanskelig < nytt)) {
-      feil.push(`Bruksmønsteret ${navn}: grensen for nytt inntak må være en tregere kurve enn grensen for «vanskelig å avgjøre».`)
+      feil.push(
+        `Grensene ved ${bruk}: nytt inntak må ligge på en tregere kurve enn «vanskelig å avgjøre».`,
+      )
     }
   }
 
@@ -398,26 +341,25 @@ export function validerThcRegelsett(r: ThcRegelsett): string[] {
     feil.push('Varselet om tid mellom prøvene må være et helt antall døgn, minst 1.')
   }
 
-  for (const nokkel of THC_TEKSTNOKLER) {
-    const tekst = r.tekster[nokkel]
-    const { tittel, plassholdere, tilgjengelige } = THC_TEKSTBOLKER[nokkel]
-    if (typeof tekst !== 'string' || tekst.trim() === '') {
-      feil.push(`Tekstbolken «${tittel}» er tom.`)
-      continue
-    }
-    if (tekst !== tekst.trim()) feil.push(`Tekstbolken «${tittel}» begynner eller slutter med mellomrom.`)
-    const funnet = plassholdereI(tekst)
-    const ukjente = funnet.filter((p) => !(tilgjengelige as readonly string[]).includes(p))
-    if (ukjente.length > 0) {
-      feil.push(`Tekstbolken «${tittel}» har plassholdere den ikke kan bruke: ${ukjente.join(', ')}.`)
-    }
-    for (const p of plassholdere) {
-      if (!funnet.includes(p)) feil.push(`Tekstbolken «${tittel}» må inneholde ${p}.`)
-    }
-    if (/[{}]/.test(tekst.replace(/\{[^{}]*\}/g, ''))) {
-      feil.push(`Tekstbolken «${tittel}» har en krøllparentes som ikke hører til en plassholder.`)
-    }
-  }
-
+  // Rekkefølgen kan bare avgjøres for kurver med gyldige tall; ellers er
+  // feilen i tallene meldt over.
+  const kurvetall = THC_KURVEROLLER.every((rolle) => KURVEFELT.every((felt) => positivt(r.kurver[rolle][felt])))
+  if (kurvetall && positivt(r.konverteringsfaktor)) feil.push(...kurvefeil(r))
   return feil
+}
+
+declare const godkjent: unique symbol
+
+/** Et regelsett som har vært gjennom {@link validerThcRegelsett} uten feil. */
+export type GodkjentThcRegelsett = ThcRegelsett & { readonly [godkjent]: true }
+
+/**
+ * Kontrollerer regelsettet og gir det tilbake som godkjent, eller feilene.
+ * Den eneste veien til et regelsett motoren tar imot.
+ */
+export function godkjennThcRegelsett(
+  r: ThcRegelsett,
+): { ok: true; regelsett: GodkjentThcRegelsett } | { ok: false; feil: string[] } {
+  const feil = validerThcRegelsett(r)
+  return feil.length === 0 ? { ok: true, regelsett: r as GodkjentThcRegelsett } : { ok: false, feil }
 }
