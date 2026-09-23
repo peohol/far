@@ -1,0 +1,53 @@
+{
+  "kode": "KARSUM",
+  "sider": [45],
+  "preparater": {
+    "navn": ["Reagila"],
+    "referanser": ["fk-reagila"]
+  },
+  "viktige_data": {
+    "referanseomrade": { "nedre": 20, "ovre": 150, "enhet": "nmol/L", "forbehold": "Kariprazin + desmetylkariprazin + didesmetylkariprazin." },
+    "steady_state": { "nedre": 5, "ovre": 5, "enhet": "uker", "forbehold": "Omtrentlig." }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Partiell agonist av D_{2}-, D_{3}- og 5-HT_{1A}-reseptorene. Antagonist av 5-HT_{2B}-, 5-HT_{2A}- og H_{1}-reseptorene.",
+      "Aktive metabolitter: desmetylkariprazin og didesmetylkariprazin"
+    ]
+  },
+  "dosering": {
+    "tekst": ["Tablett: 1,5–6 mg"]
+  },
+  "indikasjon": {
+    "tekst": ["Behandling av schizofreni hos voksne."],
+    "referanser": ["fk-reagila"]
+  },
+  "farmakokinetikk": [
+    { "tittel": "tmax", "tekst": ["3-8 timer (både kariprazin og aktive mtb)"] },
+    {
+      "tittel": "t1/2",
+      "tekst": ["Kariprazin: 1-3 dager", "Desmetylkariprazin: 1-3 dager", "Didesmetylkariprazin: 13-19 dager"]
+    },
+    { "tittel": "tss", "tekst": ["ca. 5 uker"] },
+    { "tittel": "Proteinbinding", "tekst": ["KAR: 96-97 %", "DKAR: 94-97 %", "DDKAR: 92-97 %"] },
+    { "tittel": "VD", "tekst": ["KAR: 916 L", "DKAR: 475 L", "DDKAR: 1568 L"] },
+    { "tittel": "Eliminasjon", "tekst": ["Hepatisk metabolisme. Utskilles i urin (20,8 %)."] },
+    { "tittel": "CYP-enzymer (substrat)", "tekst": ["3A4 (2D6)"] },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Bruk av sterke eller moderate 3A4-hemmere og induktorer er kontraindisert.",
+        "Usannsynlig at 2D6-hemmere vil ha en klinisk relevant effekt på metabolisme av kariprazin."
+      ]
+    },
+    { "tittel": "Annet", "tekst": ["Ratio KAR/DDKAR 3-6 (AGNP)"], "referanser": ["hiemke2017"] }
+  ],
+  "referanser": {
+    "fk-reagila": {
+      "tittel": "Reagila «Gedeon Richter»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/reagila-gedeon-richter-652889"
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "kode": "HBUP",
+  "sider": [8, 9],
+  "preparater": {
+    "navn": ["Wellbutrin Retard", "Paritdam", "Bupropion hydrochloride", "Mysimba (med naltrekson)"],
+    "referanser": ["fk-wellbutrin-retard", "fk-paritdam", "fk-bupropion-hydrochloride-teva", "fk-mysimba-orexigen", "fk-mysimba-2care4"]
+  },
+  "viktige_data": {
+    "referanseomrade": { "nedre": 500, "ovre": 4000, "enhet": "nmol/L", "forbehold": "Hydroksybupropion." },
+    "toksisk_omrade": {
+      "nedre": 5000, "ovre": null, "enhet": "nmol/L", "forbehold": "Hydroksybupropion.",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-bupropion"]
+    },
+    "alvorlig_intoksikasjon": {
+      "nedre": 16000, "ovre": null, "enhet": "nmol/L", "forbehold": "Hydroksybupropion. Komatøs/fatal. Omtrentlig grense.",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-bupropion"]
+    },
+    "halveringstid": { "nedre": 12, "ovre": 65, "enhet": "timer", "forbehold": "Hydroksybupropion. Typisk 20 timer." },
+    "steady_state": { "nedre": 8, "ovre": 8, "enhet": "dager", "forbehold": "Omtrentlig." }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Selektiv noradrenalin- og dopamin-reopptakshemmer (NDRI). Minimal effekt på reopptak av serotonin."
+    ]
+  },
+  "dosering": {
+    "tekst": ["150–300 mg daglig"]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Wellbutrin Retard, Bupropion hydrochloride (Teva): behandling av depressive episoder. Paritdam: behandling av alvorlige depressive episoder.",
+      "Mysimba (naltrekson/bupropion): som tillegg til kalorifattig kosthold og økt fysisk aktivitet for vektreduksjon hos voksne (≥18 år) med innledende KMI ≥30 kg/m² (fedme), eller KMI ≥27–30 kg/m² (overvekt) og én eller flere vektrelaterte risikofaktorer (f.eks. diabetes type 2, dyslipidemi eller kontrollert hypertensjon)."
+    ],
+    "referanser": ["fk-wellbutrin-retard", "fk-paritdam", "fk-bupropion-hydrochloride-teva", "fk-mysimba-orexigen"]
+  },
+  "farmakokinetikk": [
+    { "tittel": "Biotilgjengelighet", "tekst": ["Minst 87 %"] },
+    { "tittel": "tmax", "tekst": ["Bupropion: 5 timer", "Hydroksybupropion: 7 timer"] },
+    { "tittel": "t1/2", "tekst": ["Hydroksybupropion: 20 (12–65) timer"] },
+    { "tittel": "tss", "tekst": ["Ca. 8 dager"] },
+    { "tittel": "Proteinbinding", "tekst": ["Bupropion: 84 %", "Hydroksybupropion: 77 %"] },
+    { "tittel": "VD", "tekst": ["3–6 L/kg"] },
+    { "tittel": "Eliminasjon", "tekst": ["Hepatisk metabolisme. Utskilles i urin (ca. 90 %) og feces (ca. 10 %)."] },
+    { "tittel": "CYP-enzymer (substrat)", "tekst": ["2B6"] },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Bupropion og hydroksibupropion hemmer CYP2D6.",
+        "Kan redusere konsentrasjonen av digoksin – obs toksisitet ved seponering av bupropion.",
+        "Skal unngås ved tamoksifenbehandling.",
+        "Kan gi behov for dosetilpasning av andre 2D6-substrater.",
+        "Økt eksponering ved bruk av andre substrater for 2B6 (f.eks cyklofosfamid og ifosfamid) eller 2B6-hemmere (f.eks. tiklopidin og klopidogrel), også ved andre enzymhemmere som valproat.",
+        "Redusert eksponering ved bruk av enzyminduktorer."
+      ]
+    },
+    { "tittel": "Annet", "tekst": ["Har modifisert frisetting. Doserelatert risiko for kramper, som øker ved knusing/tygging/parenteral adm."] }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      { "dose": "300 mg", "regime": "1 gang daglig", "konsentrasjon": "1005 ng/ml (~3930 nmol/L)", "merknad": "Serumkonsentrasjon av HB, trough-nivå, genotype *1/*1. Kharasch & Lenze (2026)." },
+      { "dose": "300 mg", "regime": "1 gang daglig", "konsentrasjon": "735 ng/ml (~2870 nmol/L)", "merknad": "Serumkonsentrasjon av HB, trough-nivå, genotype *1/*6. Kharasch & Lenze (2026)." },
+      { "dose": "300 mg", "regime": "1 gang daglig", "konsentrasjon": "707 ng/ml (~2760 nmol/L)", "merknad": "Serumkonsentrasjon av HB, trough-nivå, genotype *6/*6. Kharasch & Lenze (2026)." }
+    ],
+    "referanser": ["kharasch2026"]
+  },
+  "referanser": {
+    "fk-wellbutrin-retard": {
+      "tittel": "Wellbutrin Retard «GlaxoSmithKline»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/wellbutrin-retard-glaxosmithkline-565480"
+    },
+    "fk-paritdam": {
+      "tittel": "Paritdam «Accord»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/paritdam-accord-685606"
+    },
+    "fk-bupropion-hydrochloride-teva": {
+      "tittel": "Bupropion hydrochloride «Teva»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/bupropion-hydrochloride-teva-676386"
+    },
+    "fk-mysimba-orexigen": {
+      "tittel": "Mysimba «Orexigen»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/mysimba-orexigen-642598"
+    },
+    "fk-mysimba-2care4": {
+      "tittel": "Mysimba «2care4»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/mysimba-2care4-710542"
+    },
+    "helsebiblioteket-bupropion": {
+      "tittel": "Bupropion – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/bupropion-behandlingsanbefaling-ved-forgiftning"
+    },
+    "kharasch2026": {
+      "tittel": "Pharmacogenetic influence on bupropion bioactivation and clinical outcomes in major depressive disorder",
+      "forfattere": "Kharasch E.D. & Lenze E.J.",
+      "aar": "2026",
+      "lenke": "https://doi.org/10.1124/jpet.126.000169"
+    }
+  }
+}

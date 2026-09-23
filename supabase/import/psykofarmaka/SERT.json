@@ -1,0 +1,260 @@
+{
+  "kode": "SERT",
+  "sider": [
+    24
+  ],
+  "preparater": {
+    "navn": [
+      "Sertralin Bluefish",
+      "Sertralin HEXAL",
+      "Sertralin Zentiva",
+      "Sertraline Accord",
+      "Zoloft"
+    ],
+    "referanser": [
+      "fk-sertralin-bluefish",
+      "fk-sertralin-hexal",
+      "fk-sertralin-zentiva",
+      "fk-sertraline-accord",
+      "fk-zoloft"
+    ]
+  },
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 20,
+      "ovre": 250,
+      "enhet": "nmol/L"
+    },
+    "toksisk_omrade": {
+      "nedre": 1000,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-sertralin"
+      ]
+    },
+    "alvorlig_intoksikasjon": {
+      "nedre": 3600,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "Komatøs/fatal. Omtrentlig grense.",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-sertralin"
+      ]
+    },
+    "halveringstid": {
+      "nedre": 22,
+      "ovre": 36,
+      "enhet": "timer",
+      "forbehold": "Typisk 26 timer."
+    },
+    "steady_state": {
+      "nedre": 5,
+      "ovre": 7,
+      "enhet": "dager"
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Potent hemmer av reopptak av serotonin (SSRI). Svak effekt på reopptak av noradrenalin og dopamin. Har ingen affinitet til muskarin-, serotonin-, dopamin-, adrenerge-, histamin- eller GABA-reseptorer. Øker ikke katekolaminerg aktivitet."
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "25–200 mg"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Depressive episoder",
+          "Forebygging av tilbakefall av nye depressive episoder",
+          "Panikklidelse, med eller uten agorafobi",
+          "Tvangslidelse (OCD) hos voksne samt hos barn og ungdom i alderen 6-17 år",
+          "Sosial angstlidelse",
+          "Posttraumatisk stresslidelse (PTSD)"
+        ]
+      }
+    ],
+    "referanser": [
+      "fk-zoloft"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        ">44 %"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "4–8 timer"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "26 (22–36) timer"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "5–7 dager"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "98 %"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        ">20 L/kg"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Hepatisk metabolisme. Utskilles i urin og feces."
+      ]
+    },
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "3A4, 2C19, (2B6)",
+        "Ca. 50 % høyere konsentrasjon hos langsomme omsettere via 2C19."
+      ]
+    },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Mild til moderat hemmer av CYP2D6.",
+        "Milde-moderate hemmere av 3A4 gir økt eksponering. 2C19-hemmere kan gi økt eksponering.",
+        "Er substrat for P-gp.",
+        "Kan gi økt eksponering for fenytoin (motstridende funn)."
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "tabeller": [
+      {
+        "stoff": "Sertralin",
+        "kilde": "Reis et al. (2009)",
+        "enhet": "nmol/L",
+        "doser": [
+          "25 mg",
+          "50 mg",
+          "75 mg",
+          "100 mg",
+          "125 mg",
+          "150 mg",
+          "200 mg",
+          "300 mg",
+          "Alle"
+        ],
+        "antall": [
+          50,
+          984,
+          136,
+          1071,
+          28,
+          403,
+          281,
+          11,
+          2998
+        ],
+        "p10": [
+          9,
+          13,
+          25,
+          26,
+          48,
+          39,
+          47,
+          96,
+          19
+        ],
+        "median": [
+          23,
+          40,
+          69,
+          73,
+          112,
+          112,
+          125,
+          238,
+          67
+        ],
+        "p90": [
+          54,
+          99,
+          146,
+          166,
+          212,
+          244,
+          261,
+          406,
+          182
+        ]
+      }
+    ],
+    "referanseomradeprosjektet": {
+      "doser": "50–200 mg",
+      "enhet": "nmol/L",
+      "p10": 26,
+      "p90": 291
+    },
+    "referanser": [
+      "reis2009",
+      "referanseomradeprosjektet"
+    ]
+  },
+  "referanser": {
+    "fk-sertralin-bluefish": {
+      "tittel": "Sertralin Bluefish «Bluefish»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/sertralin-bluefish-bluefish-568495"
+    },
+    "fk-sertralin-hexal": {
+      "tittel": "Sertralin HEXAL «HEXAL»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/sertralin-hexal-hexal-596732"
+    },
+    "fk-sertralin-zentiva": {
+      "tittel": "Sertralin Zentiva «Zentiva»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/sertralin-zentiva-zentiva-760489"
+    },
+    "fk-sertraline-accord": {
+      "tittel": "Sertraline Accord «Accord»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/sertraline-accord-accord-655239"
+    },
+    "fk-zoloft": {
+      "tittel": "Zoloft «2care4»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/zoloft-2care4-639548"
+    },
+    "helsebiblioteket-sertralin": {
+      "tittel": "Sertralin – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/sertralin-behandlingsanbefaling-ved-forgiftning"
+    }
+  }
+}

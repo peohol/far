@@ -1,0 +1,66 @@
+{
+  "kode": "NOR",
+  "sider": [22],
+  "preparater": {
+    "navn": ["Noritren"],
+    "referanser": ["fk-noritren"]
+  },
+  "viktige_data": {
+    "referanseomrade": { "nedre": 200, "ovre": 600, "enhet": "nmol/L" },
+    "toksisk_omrade": {
+      "nedre": 1200, "ovre": null, "enhet": "nmol/L",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-tca"]
+    },
+    "halveringstid": { "nedre": 17, "ovre": 93, "enhet": "timer", "forbehold": "Typisk 26 timer." },
+    "steady_state": { "nedre": 3.5, "ovre": 19, "enhet": "dager", "forbehold": "Typisk 5.5 dager." }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Potent hemmer av reopptak av noradrenalin. Hemmer også reopptak av serotonin. Betydelig antihistaminerg effekt. Mindre antikolinergt enn amitriptylin."
+    ]
+  },
+  "dosering": {
+    "tekst": ["Tablett: 25–150 (200) mg for depressiv lidelse, lavere for annen bruk."]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Voksne: endogene depresjoner av uni- og bipolar type. Forsøksvis ved reaktive nevrotiske og symptomatiske depresjoner."
+    ],
+    "referanser": ["fk-noritren"]
+  },
+  "farmakokinetikk": [
+    { "tittel": "Biotilgjengelighet", "tekst": ["51 %"] },
+    { "tittel": "tmax", "tekst": ["Ca. 5 timer"] },
+    { "tittel": "t1/2", "tekst": ["26 (17–93) timer"] },
+    { "tittel": "tss", "tekst": ["5.5 (3.5–19) dager"] },
+    { "tittel": "Proteinbinding", "tekst": ["93 %"] },
+    { "tittel": "VD", "tekst": ["Ca. 17–25 L/kg"] },
+    { "tittel": "Eliminasjon", "tekst": ["Hepatisk metabolisme. Utskilles som konjugerte metabolitter i urin."] },
+    { "tittel": "CYP-enzymer (substrat)", "tekst": ["2D6", "50 % reduksjon i startdose hos langsomme omsettere via 2D6."] },
+    { "tittel": "Interaksjoner", "tekst": ["Mange interaksjoner! Obs alle enzymhemmere."] }
+  ],
+  "serumkonsentrasjoner": {
+    "tabeller": [
+      {
+        "stoff": "Nortriptylin",
+        "kilde": "Reis et al. (2009)",
+        "enhet": "nmol/L",
+        "doser": ["25 mg", "30 mg", "50 mg", "75 mg", "100 mg", "125 mg", "150 mg", "Alle"],
+        "antall": [6, 9, 45, 42, 50, 14, 25, 206],
+        "p10": [32, 61, 93, 166, 96, 279, 250, 92],
+        "median": [108, 140, 179, 360, 358, 392, 533, 310],
+        "p90": [291, 211, 358, 799, 834, 711, 1072, 753]
+      }
+    ],
+    "referanseomradeprosjektet": { "doser": "25–150 mg", "enhet": "nmol/L", "p10": 109, "p90": 649 },
+    "referanser": ["reis2009", "referanseomradeprosjektet"]
+  },
+  "referanser": {
+    "fk-noritren": {
+      "tittel": "Noritren «Lundbeck»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/noritren-lundbeck-562088"
+    }
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "kode": "DOKSUM",
+  "sider": [
+    12,
+    13
+  ],
+  "preparater": {
+    "navn": [
+      "Sinequan"
+    ],
+    "referanser": [
+      "fk-sinequan-orifarm"
+    ]
+  },
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 180,
+      "ovre": 550,
+      "enhet": "nmol/L",
+      "forbehold": "Doksepin + desmetyldoksepin."
+    },
+    "toksisk_omrade": {
+      "nedre": 1800,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "Doksepin + desmetyldoksepin.",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-tca"
+      ]
+    },
+    "alvorlig_intoksikasjon": {
+      "nedre": 3600,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "Doksepin + desmetyldoksepin. Komatøs/fatal. Omtrentlig grense.",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-tca"
+      ]
+    },
+    "steady_state": {
+      "nedre": 1,
+      "ovre": 1,
+      "enhet": "uke",
+      "forbehold": "Omtrentlig."
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Dårlig kjent. Hemmer trolig reopptak av noradrenalin.",
+      "Aktiv metabolitt: desmetyldoksepin."
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "30–300 mg"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "30 %"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "Doksepin: 3,5 (2–4) timer",
+        "Desmetyldoksepin: 3–10 timer"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Doksepin: 17 (8–24) timer",
+        "Desmetyldoksepin: 50 (33–80) timer"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "Ca. 1 uke"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "75 %"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "20 L/kg"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Hepatisk metabolisme. Ca. 50 % utskilles i urin."
+      ]
+    },
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "2C19 og 2D6"
+      ]
+    },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Veldig sparsomt med informasjon i SPC! Obs 2D6-hemmere.",
+        "Redusert startdose bør vurderes hos langsomme omsettere via 2D6 (økt konsentrasjon av både moderstoff og metabolitt)."
+      ]
+    }
+  ],
+  "referanser": {
+    "fk-sinequan-orifarm": {
+      "tittel": "Sinequan «Orifarm»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/sinequan-orifarm-633925"
+    }
+  }
+}

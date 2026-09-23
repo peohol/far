@@ -1,0 +1,190 @@
+{
+  "kode": "OLAN",
+  "sider": [
+    52
+  ],
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 30,
+      "ovre": 200,
+      "enhet": "nmol/L",
+      "forbehold": ""
+    },
+    "toksisk_omrade": {
+      "nedre": 385,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-antipsykotika"
+      ]
+    },
+    "halveringstid": {
+      "nedre": 33,
+      "ovre": 33,
+      "enhet": "timer",
+      "forbehold": "Peroralt. Depot: ca. 30 dager."
+    },
+    "steady_state": {
+      "nedre": 7,
+      "ovre": 7,
+      "enhet": "døgn",
+      "forbehold": "Peroralt. Depot: ca. 3–4 måneder."
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Antagonist på 5-HT_{2A/2C}-, D_{1-4}-, α_{1}- og H_{1}-reseptorer, samt kolinerge reseptorer. Høyere affinitet til 5-HT_{2} enn D_{2}."
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Tablett: 5–20 (30) mg",
+      "Depotinjeksjon: 150–300 mg/2 uker. 300–405 mg/4 uker."
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "60 %"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "5–8 timer (p.o.)",
+        "15–45 minutter (i.m.)",
+        "Jevn frisetting i > 4 uker (depot)"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "33 timer (p.o.)",
+        "Ca. 30 dager (depot; absorpsjon og eliminasjon er fullstendig ca. 6-8 mnd etter siste injeksjon)"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "7 døgn (p.o.)",
+        "Ca. 3–4 måneder (depot)."
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "93 % (albumin, alfa-1-surt glykoprotein)"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "16,4 ± 5,1 L/kg"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Hepatisk metabolisme. Utskilles i urin (57 %)."
+      ]
+    },
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "1A2"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Obs. postinjeksjonssyndrom som tegn på i.v. injeksjon av depot."
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "tabeller": [
+      {
+        "stoff": "Olanzapin",
+        "kilde": "Jönsson et al. (2019)",
+        "enhet": "nmol/L",
+        "doser": [
+          "2,5 mg",
+          "5 mg",
+          "7,5 mg",
+          "10 mg",
+          "15 mg",
+          "20 mg",
+          "25 mg",
+          "30 mg",
+          "Alle"
+        ],
+        "antall": [
+          245,
+          1194,
+          675,
+          3190,
+          1853,
+          2139,
+          229,
+          409,
+          10268
+        ],
+        "p10": [
+          10,
+          18,
+          28,
+          31,
+          48,
+          56,
+          60,
+          77,
+          29
+        ],
+        "median": [
+          21,
+          39,
+          59,
+          70,
+          98,
+          119,
+          137,
+          166,
+          82
+        ],
+        "p90": [
+          40,
+          83,
+          113,
+          141,
+          197,
+          241,
+          290,
+          336,
+          193
+        ]
+      }
+    ],
+    "referanseomradeprosjektet": {
+      "doser": "5–30 mg",
+      "enhet": "nmol/L",
+      "p10": 39,
+      "p90": 197
+    },
+    "rader": [
+      {
+        "dose": "150 til 300 mg ZypAdhera",
+        "regime": "i.m. hver andre uke",
+        "konsentrasjon": "4,2–73,2 ng/ml (4,2 ng/ml = 13.443 nmol/l; 73,2 ng/ml = 234.285 nmol/l)",
+        "merknad": "10- til 90-persentil av steady-state plasmakonsentrasjoner av olanzapin etter gjentatte i.m. injeksjoner. Akkumulering av olanzapin observert de tre første månedene, men ikke ytterligere akkumulering ved langtidsbruk (12 måneder) med inntil 300 mg hver andre uke. Kilde: SPC (ZypAdhera)."
+      }
+    ],
+    "referanser": [
+      "jonsson2019",
+      "referanseomradeprosjektet"
+    ]
+  }
+}

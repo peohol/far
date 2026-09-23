@@ -1,0 +1,78 @@
+{
+  "kode": "HALO",
+  "sider": [44],
+  "preparater": {
+    "navn": ["Haldol", "Haldol depot"],
+    "referanser": ["fk-haldol"]
+  },
+  "viktige_data": {
+    "referanseomrade": { "nedre": 2, "ovre": 25, "enhet": "nmol/L", "forbehold": "" },
+    "toksisk_omrade": {
+      "nedre": 40, "ovre": null, "enhet": "nmol/L", "forbehold": "",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-antipsykotika"]
+    },
+    "alvorlig_intoksikasjon": {
+      "nedre": 480, "ovre": null, "enhet": "nmol/L", "forbehold": "Komatøs/fatal. Omtrentlig grense.",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-antipsykotika"]
+    },
+    "halveringstid": { "nedre": 24, "ovre": 24, "enhet": "timer", "forbehold": "Peroralt. 21 timer ved i.m. injeksjon (ikke depot)." },
+    "steady_state": { "nedre": 5, "ovre": 5, "enhet": "døgn", "forbehold": "Peroralt. Ved depotinjeksjon 2–4 måneder." }
+  },
+  "farmakodynamikk": {
+    "tekst": ["Potent D_{2}-antagonist"]
+  },
+  "dosering": {
+    "tekst": ["Tablett: 2–10 (20) mg", "Depotinjeksjon: 50–300 mg hver 3. til 4. uke"]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Tabletter, voksne ≥18 år: schizofreni og schizoaffektive lidelser; akutt behandling av delirium når ikke-farmakologisk behandling er mislykket; moderate til alvorlige maniske episoder ved bipolar lidelse type 1; akutt psykomotorisk agitasjon forbundet med psykotisk sykdom eller maniske episoder; vedvarende aggresjon og psykotiske symptomer ved moderat til alvorlig Alzheimers demens og vaskulær demens; sykdommer med tics, inkl. Tourettes syndrom; mild til moderat chorea ved Huntingtons sykdom.",
+      "Tabletter, barn og ungdom: schizofreni (13–17 år) når annen farmakologisk behandling er mislykket eller ikke blir tolerert; vedvarende, alvorlig aggresjon ved autisme eller gjennomgripende utviklingsforstyrrelse (6–17 år); sykdommer med tics, inkl. Tourettes syndrom, med alvorlig svekkelse (10–17 år).",
+      "Injeksjonsvæske 5 mg/ml, voksne: rask kontroll av alvorlig, akutt psykomotorisk agitasjon forbundet med psykotisk sykdom; akutt behandling av delirium når ikke-farmakologisk behandling er mislykket; mild til moderat chorea ved Huntingtons sykdom; mono- eller kombinasjonsprofylakse og kombinasjonsbehandling av postoperativ kvalme og oppkast.",
+      "Haldol depot, voksne: vedlikeholdsbehandling av schizofreni og schizoaffektiv lidelse hos pasienter som er stabilisert på oral haloperidol."
+    ],
+    "referanser": ["fk-haldol"]
+  },
+  "farmakokinetikk": [
+    { "tittel": "Biotilgjengelighet", "tekst": ["60 ± 18 %"] },
+    { "tittel": "tmax", "tekst": ["2–6 timer (p.o.)", "3–9 dager (depot)"] },
+    { "tittel": "t1/2", "tekst": ["24 timer (p.o.)", "21 timer (i.m. injeksjon, ikke depot)"] },
+    { "tittel": "tss", "tekst": ["5 døgn (p.o.)", "2–4 måneder (depot)"] },
+    { "tittel": "Proteinbinding", "tekst": ["Ca. 92 %"] },
+    { "tittel": "VD", "tekst": ["18 ± 7 L/kg"] },
+    { "tittel": "Eliminasjon", "tekst": ["Hepatisk metabolisme til inaktive metabolitter, primært ved glukuronidering. Utskilles i urin og feces."] },
+    { "tittel": "CYP-enzymer (substrat)", "tekst": ["3A4, (2D6)"] },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Hemmer CYP2D6.",
+        "Betydningen av endret 3A4 og/eller 2D6-aktivitet er motstridende rapportert. Ved bruk av hemmer av 3A4 og/eller 2D6: 20-40 % (100 %) økning i serumkonsentrasjon.",
+        "Valproat øker ikke serumkonsentrasjonen av haloperidol (selv om den hemmer glukuronidering)."
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "tabeller": [
+      {
+        "stoff": "Haloperidol",
+        "kilde": "Jönsson et al. (2019)",
+        "enhet": "nmol/L",
+        "doser": ["2 mg", "4 mg", "6 mg", "8 mg", "10 mg", "12 mg", "16 mg", "20 mg", "Alle"],
+        "antall": [50, 61, 24, 43, 20, 17, 20, 13, 390],
+        "p10": [1, 2.5, 3.9, 3.5, 7.3, 7.9, 15.5, 10.7, 1.4],
+        "median": [2.8, 5.7, 7.9, 11.2, 14.7, 14.4, 21.5, 27, 6.9],
+        "p90": [8.2, 11.4, 26.3, 28.2, 59.4, 30.2, 56.9, 75.8, 34.1]
+      }
+    ],
+    "referanseomradeprosjektet": { "doser": "1–20 mg", "enhet": "nmol/L", "p10": 2, "p90": 24 },
+    "referanser": ["jonsson2019", "referanseomradeprosjektet"]
+  },
+  "referanser": {
+    "fk-haldol": {
+      "tittel": "Haldol, Haldol depot «Janssen»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/haldol-haldol-depot-janssen-559751"
+    }
+  }
+}

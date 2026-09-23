@@ -1,0 +1,138 @@
+{
+  "kode": "PALI",
+  "sider": [
+    54
+  ],
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 20,
+      "ovre": 120,
+      "enhet": "nmol/L",
+      "forbehold": ""
+    },
+    "toksisk_omrade": {
+      "nedre": 280,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-antipsykotika"
+      ]
+    },
+    "halveringstid": {
+      "nedre": 25,
+      "ovre": 49,
+      "enhet": "dager",
+      "forbehold": "Xeplion; avhengig av injeksjonssted. Trevicta: 84–139 dager."
+    },
+    "steady_state": {
+      "nedre": 3,
+      "ovre": 3,
+      "enhet": "injeksjoner",
+      "forbehold": ""
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Potent D_{2}-antagonist. Binder sterkt til 5-HT_{2}- og D_{2}-reseptorer. Blokkerer også α_{1}-reseptorer, og i litt mindre grad H_{1}- og α_{2}-reseptorer. Binder ikke til kolinerge reseptorer."
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Xeplion: 25–150 mg/mnd",
+      "Palmeux: 50-150mg/mnd",
+      "Trevicta: 175–525 mg/3 mnd"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "100 %"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "13 dager"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "25–49 dager (Xeplion), 84–139 dager (Trevicta), avhengig av injeksjonssted"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "3 injeksjoner"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "74 %"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "5–9 L/kg"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Hovedsakelig renalt."
+      ]
+    },
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "Nei"
+      ]
+    },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Substrat for P-gp. Bruk av induktor av P-gp (f.eks. karbamazepin) kan gi behov for doseøkning."
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Er en aktiv metabolitt av risperidon"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "",
+        "regime": "Månedlige injeksjoner",
+        "konsentrasjon": "ca. 18 nmol/L per mg/døgn",
+        "merknad": "Gjennomsnittlig forhold mellom serumkonsentrasjon og dose (de Leon (2020))."
+      },
+      {
+        "dose": "Xeplion 100 mg (fordelt på 30 døgn: 3,33 mg/døgn)",
+        "regime": "Månedlig injeksjon",
+        "konsentrasjon": "60 nmol/L",
+        "merknad": "Eksempel: «forventet» serumkonsentrasjon = 18 nmol/L/mg/døgn · 3,33 mg/døgn (de Leon (2020))."
+      }
+    ],
+    "referanser": [
+      "deleon2020"
+    ]
+  },
+  "referanser": {
+    "deleon2020": {
+      "tittel": "Personalizing dosing of risperidone, paliperidone and clozapine using therapeutic drug monitoring and pharmacogenetics",
+      "forfattere": "de Leon J",
+      "aar": "2020",
+      "lenke": "https://doi.org/10.1016/j.neuropharm.2019.05.033"
+    }
+  }
+}

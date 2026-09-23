@@ -1,0 +1,75 @@
+{
+  "kode": "FLUP",
+  "sider": [43],
+  "preparater": {
+    "navn": ["Fluanxol", "Fluanxol Depot"],
+    "referanser": ["fk-fluanxol"]
+  },
+  "viktige_data": {
+    "referanseomrade": { "nedre": 1, "ovre": 15, "enhet": "nmol/L", "forbehold": "" },
+    "toksisk_omrade": {
+      "nedre": 36, "ovre": null, "enhet": "nmol/L", "forbehold": "",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-antipsykotika"]
+    },
+    "halveringstid": { "nedre": 20, "ovre": 40, "enhet": "timer", "forbehold": "Peroralt. Ved depotinjeksjon ca. 3 uker." },
+    "steady_state": { "nedre": 7, "ovre": 10, "enhet": "døgn", "forbehold": "Peroralt. Ved depotinjeksjon 3 måneder." }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Høy affinitet (antagonist) til D_{1}-, D_{2}-, α_{1}- og 5-HT_{2}-reseptorer.",
+      "Ingen affinitet til kolinerge reseptorer og kun svak antihistaminerg effekt. Ingen α_{2}-reseptorantagonisme."
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Tablett: 1–30 mg",
+      "Depotinjeksjon: 100 mg, se [Fluanxol Depot](https://www.felleskatalogen.no/medisin/fluanxol-fluanxol-depot-lundbeck-559164)"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Tabletter: schizofreni og andre psykoser, spesielt i langtidsbehandlingen; mani; akutte psykoser; adjuvans ved abstinenssymptomer hos alkoholikere og narkomane; adjuvans til pasienter med psykiske lidelser preget av langvarig/vedvarende depresjons- og angstfølelse; behandlingstrengende atferdsforstyrrelser ved psykisk utviklingshemming.",
+      "Depotinjeksjon (Fluanxol Depot): vedlikeholdsbehandling av schizofreni og andre psykoser."
+    ],
+    "referanser": ["fk-fluanxol"]
+  },
+  "farmakokinetikk": [
+    { "tittel": "Biotilgjengelighet", "tekst": ["60 %"] },
+    { "tittel": "tmax", "tekst": ["4–5 timer (p.o.)", "4–10 dager (depot)"] },
+    { "tittel": "t1/2", "tekst": ["20–40 timer (p.o.)", "Ca. 3 uker (depot)"] },
+    { "tittel": "tss", "tekst": ["7–10 døgn (p.o.)", "3 måneder (depot)"] },
+    { "tittel": "Proteinbinding", "tekst": ["99 %"] },
+    { "tittel": "VD", "tekst": ["14 L/kg"] },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Metaboliseres via sulfoksidasjon, N-dealkylering av sidekjeden og glukuronsyrekonjungering.",
+        "Inaktive metabolitter i feces og urin (4:1)"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "tabeller": [
+      {
+        "stoff": "Flupentiksol",
+        "kilde": "Jönsson et al. (2019)",
+        "enhet": "nmol/L",
+        "doser": ["1 mg", "2 mg", "3 mg", "4 mg", "5 mg", "6 mg", "10 mg", "20 mg", "Alle"],
+        "antall": [33, 33, 35, 21, 17, 13, 14, 7, 215],
+        "p10": [0.9, 1.3, 2.1, 1.1, 1.9, 2.2, 0.4, 0.9, 1.1],
+        "median": [1.8, 2.8, 4.4, 5.4, 12.2, 6.5, 12.1, 18.3, 4.3],
+        "p90": [3.4, 9.7, 7.4, 11.5, 31, 26.1, 35.7, 69.3, 19.3]
+      }
+    ],
+    "referanseomradeprosjektet": { "doser": "1–15 mg p.o.", "enhet": "nmol/L", "p10": 1, "p90": 12 },
+    "referanser": ["jonsson2019", "referanseomradeprosjektet"]
+  },
+  "referanser": {
+    "fk-fluanxol": {
+      "tittel": "Fluanxol, Fluanxol Depot «Lundbeck»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/fluanxol-fluanxol-depot-lundbeck-559164"
+    }
+  }
+}

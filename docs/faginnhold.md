@@ -20,6 +20,9 @@ gjøres med vilje.
 | `supabase/migrations/*_referanse_objekttype.sql`, `*_referansesystem.sql` | Referansene og koblingene til dem |
 | `supabase/migrations/*_analyttsider_lesing.sql` | Lesingen av en hel side, referansebasen og sider etter navn |
 | `supabase/migrations/*_enkeltelementer.sql` | At kortene som står én gang i panelet sitt, ikke kan opprettes to ganger |
+| `supabase/migrations/*_revisjonskilde.sql` | Kilden i revisjonene, for innhold som er importert |
+| `supabase/import/psykofarmaka/` | Importdatasettet for psykofarmakasidene, én fil per analyttkode |
+| `src/faginnhold/import.ts`, `psykofarmaka.ts`, `scripts/importer-psykofarmaka.ts` | Kontrollen av datasettet, planen og SQL-en som legger det inn |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
 | `src/faginnhold/paneler.ts` | Panelene 1–7 og formen på hver elementtype |
@@ -33,6 +36,7 @@ gjøres med vilje.
 | `src/__tests__/faginnhold.test.ts`, `referanser.test.ts`, `analyttsidelesing.test.ts` | Reglene og lesingen, prøvd mot en ekte database |
 | `src/__tests__/analyttside.test.tsx`, `navigasjon.test.tsx`, `analyttsidemodell.test.ts` | Sidene, redigeringen og veiene mellom sidene og fortolkningen |
 | `src/__tests__/referansenummerering.test.ts`, `referansepille.test.tsx` | Nummereringen, og pillen med mus, berøring og tastatur |
+| `src/__tests__/psykofarmakaimport.test.ts` | Datasettet og importen, prøvd mot en ekte database |
 | `src/__tests__/hjelp/testdatabase.ts` | Postgres i minnet, bygd av migrasjonene, og kallene testene gjør |
 
 ## Domenet
@@ -72,7 +76,9 @@ Alt som kan redigeres, er et **objekt** med stabil ID i
   øyeblikksbilde av objektet (`innhold`, samme form som det appen sender),
   handlingen (`opprettet`, `endret` eller `gjenopprettet`), bruker-ID-en og
   fornavn og etternavn slik de sto i profilen da. Bruker-ID-en har bevisst
-  ingen fremmednøkkel, så historikken står også om kontoen fjernes.
+  ingen fremmednøkkel, så historikken står også om kontoen fjernes. Innhold
+  som er importert, har i tillegg en `kilde`, f.eks. «Importert fra
+  Psykofarmaka.pdf, side 7» (se [Import](#import-fra-en-kilde)).
 - **Tilstander** (`objekttilstander`): hvilken revisjon som er **utkastet**
   (arbeidsversjonen) og hvilken som er **publisert**. Innholdet i begge ligger
   som vanlige rader i tabellen for typen, med kolonnen `tilstand` — de samme
@@ -237,6 +243,12 @@ radsikkerheten gjelder som ellers.
 | 6 Farmakokinetikk | `farmakokinetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge |
 | 7 Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }` |
 
+Preparatnavnene og indikasjonen holdes à jour mot Felleskatalogen
+(`kontrolleresMot` i `paneler.ts`). Datoen de sist ble kontrollert, står i
+dataene som `kontrollert` («2026-09-23»), vises som «Kontrollert mot
+Felleskatalogen 23.09.2026» og er noe annet enn «Sist redigert»: den endres
+bare når noen fyller inn en ny dato i skjemaet.
+
 Tallene i panel 2 er tall, ikke tekst. Bare den ene grensen oppgitt vises som
 «fra 10» eller «opptil 20», uten å si om grensen er med. Koden, navnet og
 kategorien i panel 1 kommer fra de statiske datasettene til siden finnes i
@@ -273,6 +285,51 @@ Søket på siden bruker indeksen til å vise hvor treffene står, og fremhever
 dem i teksten. Det globale søket skal indeksere alle publiserte sider på samme
 måte; det trenger bare en kilde som gir alle sidene, for eksempel en funksjon
 ved siden av `les_analyttside`.
+
+## Import fra en kilde
+
+Innhold som finnes i en kilde fra før, legges inn som en kontrollert
+datamigrering, ikke for hånd. Først psykofarmakasidene (arbeidspakke 4) fra
+`originaldata/Psykofarmaka.pdf`.
+
+**Datasettet** (`supabase/import/psykofarmaka/`) har én fil per analyttkode,
+skrevet så tett på kilden at hvert tall kan holdes opp mot den renderte siden:
+panelene med de samme nøklene som på siden, tekstene som avsnitt og
+punktlister (`_{x}` er senket, `^{x}` hevet skrift og `[tekst](https://…)` en
+lenke), og tabellene over serumkonsentrasjoner slik kilden har dem — én
+kolonne per dose — som gjøres om til rader. `felles.json` har referansene
+flere sider deler. Hva som er hentet og hva som er utelatt, og hvorfor, står i
+beskrivelsen av PR-en som la det inn.
+
+- Fra PDF-en: preparatnavn, dosering, farmakodynamikk, konsentrasjonsområdene
+  (referanseområde, toksisk og komatøs/fatal), farmakokinetikken kort for
+  kort og serumkonsentrasjonene ved ulike doser. Ikke ringegrensen og
+  måleområdet (de hører til fortolkningen), og ikke «Spørsmål og svar» og
+  andre saksnotater, som kan ha pasientopplysninger.
+- Fra Felleskatalogen: preparatnavnene og et kort sammendrag av de godkjente
+  indikasjonene, med produktsidene som referanser og datoen de ble
+  kontrollert.
+- Toksisk område og komatøs/fatal siterer Schulz og Hiemke (og
+  Giftinformasjonens side der PDF-en lenker til den), fordi PDF-en oppgir dem
+  som grunnlaget for toksisitetsdataene. Referanseområdet har ingen oppgitt
+  kilde og får ingen.
+
+**Kontrollen.** `byggImportplan` i `import.ts` stopper på alt som ikke har
+formen appen leser — ukjente koder og felt, verdier som ikke er tall, tabeller
+med kolonner som ikke går opp, referanser som ikke er definert — og lister
+alle feilene samtidig. `psykofarmakaimport.test.ts` kjører hele importen i
+testdatabasen.
+
+**Innleggingen.** `npm run import:psykofarmaka -- <brukernavn> fil.sql` lager
+SQL-en. Den kjøres med databasens egne rettigheter (SQL-editoren, eller
+`execute_sql` gjennom MCP) og går gjennom de samme funksjonene som appen, som
+administratoren som er oppgitt: `opprett_utkast` for hvert objekt, så
+`publiser_utkast` i den rekkefølgen databasen krever. Hver revisjon får kilden
+sin gjennom innstillingen `far.revisjonskilde`, som bare gjelder
+transaksjonen, og som data-API-et ikke kan sette. Første blokk legger inn
+referansene; deretter én blokk per kode, som hver er én transaksjon. En kode
+som alt har en side, hoppes over, og sider og referanser som finnes fra før,
+gjenbrukes — så SQL-en kan kjøres igjen etter et avbrudd.
 
 ## Tilgang
 

@@ -1,0 +1,112 @@
+{
+  "kode": "ARISUM",
+  "sider": [40],
+  "preparater": {
+    "navn": ["Abilify", "Abilify Maintena", "Aripiprazole Accord"],
+    "referanser": ["fk-abilify", "fk-abilify-maintena", "fk-substansregister-aripiprazol"]
+  },
+  "viktige_data": {
+    "referanseomrade": { "nedre": 200, "ovre": 1300, "enhet": "nmol/L", "forbehold": "Aripiprazol + dehydroaripiprazol." },
+    "toksisk_omrade": {
+      "nedre": 2200, "ovre": null, "enhet": "nmol/L", "forbehold": "Aripiprazol + dehydroaripiprazol.",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-antipsykotika"]
+    },
+    "alvorlig_intoksikasjon": {
+      "nedre": 4200, "ovre": null, "enhet": "nmol/L", "forbehold": "Aripiprazol + dehydroaripiprazol. Komatøs/fatal. Omtrentlig grense.",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-antipsykotika"]
+    },
+    "halveringstid": { "nedre": 75, "ovre": 75, "enhet": "timer", "forbehold": "Omtrentlig." },
+    "steady_state": { "nedre": 2, "ovre": 2, "enhet": "uker", "forbehold": "Omtrentlig. Peroralt; ved depotinjeksjon etter 4 injeksjoner." }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Partiell agonist på D_{2}- og 5-HT_{1A}-reseptorer. Antagonist på 5-HT_{2A}-reseptorer.",
+      "Binder med høy affinitet til D_{2}-reseptoren. Bytte fra potent D_{2}-antagonist til aripiprazol kan paradoksalt gi redusert D_{2}-blokkade og økt symptomtrykk når dosen av aripiprazol økes.",
+      "Aktiv metabolitt: dehydroaripiprazol."
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Tablett: 5–30 mg",
+      "Depotinjeksjon: 400 mg, se [Abilify Maintena](https://www.felleskatalogen.no/medisin/abilify-maintena-otsuka-pharmaceutical-586071) for dosering"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Abilify tabletter, smeltetabletter og mikstur:",
+      { "punkter": [
+        "Voksne og ungdom ≥15 år: schizofreni.",
+        "Voksne: moderat til alvorlig manisk episode ved bipolar I lidelse, og forebygging av tilbakefall.",
+        "Ungdom ≥13 år: opptil 12 ukers behandling av moderat til alvorlig manisk episode ved bipolar I lidelse."
+      ] },
+      "Abilify injeksjonsvæske: voksne, hurtig kontroll av agitasjon og atferdsforstyrrelser hos pasienter med schizofreni eller maniske episoder ved bipolar I lidelse, når oral behandling ikke er egnet.",
+      "Abilify Maintena (depotinjeksjon): vedlikeholdsbehandling av schizofreni hos voksne stabilisert med aripiprazol (400 mg: stabilisert med oral aripiprazol)."
+    ],
+    "referanser": ["fk-abilify", "fk-abilify-maintena"]
+  },
+  "farmakokinetikk": [
+    { "tittel": "Biotilgjengelighet", "tekst": ["87 % p.o."] },
+    { "tittel": "tmax", "tekst": ["3 ± 0.6 timer (p.o.)", "7 dager (depot)"] },
+    { "tittel": "t1/2", "tekst": ["Ca. 75 timer"] },
+    { "tittel": "tss", "tekst": ["Ca. 2 uker (p.o), eller 4 depotinjeksjoner"] },
+    { "tittel": "Proteinbinding", "tekst": [">99 %"] },
+    { "tittel": "VD", "tekst": ["4,9 L/kg"] },
+    { "tittel": "Eliminasjon", "tekst": ["Hepatisk metabolisme. Utskilles i urin (27 %) og feces (60 %)."] },
+    { "tittel": "CYP-enzymer (substrat)", "tekst": ["3A4, 2D6"] },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Ved bruk av potente 2D6- eller 3A4-hemmere bør dosen halveres.",
+        "Ved bruk av potente 3A4-indusere bør dosen dobles.",
+        "Kan bidra til serotonergt syndrom."
+      ]
+    },
+    { "tittel": "Annet", "tekst": ["Ratio metabolitt/modersubstans: 0,3–0,5 (AGNP)"], "referanser": ["hiemke2017"] }
+  ],
+  "serumkonsentrasjoner": {
+    "tabeller": [
+      {
+        "stoff": "Aripiprazol",
+        "kilde": "Jönsson et al. (2019)",
+        "enhet": "nmol/L",
+        "doser": ["5 mg", "10 mg", "15 mg", "20 mg", "25 mg", "30 mg", "Alle"],
+        "antall": [128, 418, 568, 207, 32, 215, 1610],
+        "p10": [73, 134, 206, 247, 406, 371, 151],
+        "median": [166, 285, 415, 527, 685, 792, 401],
+        "p90": [365, 613, 764, 973, 1235, 1392, 915]
+      },
+      {
+        "stoff": "Dehydroaripiprazol",
+        "kilde": "Jönsson et al. (2019)",
+        "enhet": "nmol/L",
+        "doser": ["5 mg", "10 mg", "15 mg", "20 mg", "25 mg", "30 mg", "Alle"],
+        "antall": [128, 418, 568, 207, 32, 215, 1610],
+        "p10": [42, 48, 68, 84, 91, 110, null],
+        "median": [54, 95, 136, 165, 191, 235, null],
+        "p90": [72, 175, 231, 297, 306, 396, null]
+      }
+    ],
+    "referanseomradeprosjektet": { "doser": "10–30 mg", "enhet": "nmol/L", "p10": 280, "p90": 1298 },
+    "referanser": ["jonsson2019", "referanseomradeprosjektet"]
+  },
+  "referanser": {
+    "fk-abilify": {
+      "tittel": "Abilify «Otsuka Pharmaceutical»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/abilify-otsuka-pharmaceutical-545656"
+    },
+    "fk-abilify-maintena": {
+      "tittel": "Abilify Maintena «Otsuka Pharmaceutical»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/abilify-maintena-otsuka-pharmaceutical-586071"
+    },
+    "fk-substansregister-aripiprazol": {
+      "tittel": "Aripiprazol – substansregister",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/substansregister/aripiprazol"
+    }
+  }
+}

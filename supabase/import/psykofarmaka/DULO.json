@@ -1,0 +1,163 @@
+{
+  "kode": "DULO",
+  "sider": [
+    14
+  ],
+  "preparater": {
+    "navn": [
+      "Cymbalta",
+      "Duloxetin Pensa",
+      "Duloxetine Medical Valley",
+      "Duloxetine Viatris"
+    ],
+    "referanser": [
+      "fk-cymbalta-orifarm",
+      "fk-duloxetin-pensa",
+      "fk-duloxetine-medical-valley",
+      "fk-duloxetine-viatris"
+    ]
+  },
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 30,
+      "ovre": 300,
+      "enhet": "nmol/L",
+      "forbehold": ""
+    },
+    "toksisk_omrade": {
+      "nedre": 800,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017"
+      ]
+    },
+    "halveringstid": {
+      "nedre": 6,
+      "ovre": 17,
+      "enhet": "timer",
+      "forbehold": "Typisk 12 timer."
+    },
+    "steady_state": {
+      "nedre": 2,
+      "ovre": 3,
+      "enhet": "døgn",
+      "forbehold": "Omtrentlig."
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Hemmer reopptak av serotonin og noradrenalin (SNRI). Svak hemmer av reopptak av dopamin. Ikke signifikant affinitet for histaminerge, dopaminerge, kolinerge eller adrenerge reseptorer. Smertehemmende effekt antas å skyldes potensering av nedadgående smertehemmende baner i CNS."
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "30–120 mg"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Voksne: behandling av depressive lidelser, smerter ved perifer diabetisk nevropati og generalisert angstlidelse."
+    ],
+    "referanser": [
+      "fk-duloxetin-pensa",
+      "fk-duloxetine-viatris"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "50 % (32–80 %)"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "6 (2–10) timer; forlenges noe av matinntak"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "12 (6–17) timer"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "Ca. 2–3 døgn"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "> 90 % (albumin og alfa1-surt-glykoprotein)"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "7 ± 1,3 L/kg"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Hepatisk metabolisme. Utskilles primært i urin som konjugerte metabolitter."
+      ]
+    },
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "1A2 og 2D6"
+      ]
+    },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Moderat hemmer av CYP2D6.",
+        "Kontraindisert sammen med 1A2-hemmere, f.eks. ciprofloksacin og fluvoksamin. Ca. 50 % lavere konsentrasjon hos røykere pga. induksjon av 1A2."
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "referanseomradeprosjektet": {
+      "doser": "60–120 mg",
+      "enhet": "nmol/L",
+      "p10": 33,
+      "p90": 287
+    },
+    "referanser": [
+      "referanseomradeprosjektet"
+    ]
+  },
+  "referanser": {
+    "fk-cymbalta-orifarm": {
+      "tittel": "Cymbalta «Orifarm»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/cymbalta-orifarm-669762"
+    },
+    "fk-duloxetin-pensa": {
+      "tittel": "Duloxetin Pensa «Pensa Pharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/duloxetin-pensa-pensa-pharma-600087"
+    },
+    "fk-duloxetine-medical-valley": {
+      "tittel": "Duloxetine Medical Valley «Medical Valley»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/duloxetine-medical-valley-medical-valley-736548"
+    },
+    "fk-duloxetine-viatris": {
+      "tittel": "Duloxetine Viatris «Viatris»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/duloxetine-viatris-viatris-603041"
+    }
+  }
+}

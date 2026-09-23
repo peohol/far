@@ -3161,6 +3161,13 @@ details[open] > .detalj__kropp {
   color: var(--blekk-dempet);
 }
 
+/* «Kontrollert mot Felleskatalogen …»: en opplysning om innholdet, like diskret. */
+.kildekontroll {
+  margin-top: var(--rom-1);
+  font-size: var(--tekst-xxs);
+  color: var(--blekk-dempet);
+}
+
 .redigering {
   display: flex;
   flex-direction: column;

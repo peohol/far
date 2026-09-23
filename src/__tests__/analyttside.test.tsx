@@ -548,3 +548,82 @@ describe('kortene i farmakokinetikken', () => {
     expect(vi.mocked(lager.lagreUtkast).mock.calls[0]![2]).toMatchObject({ panel: 'fjernet', elementtype: 'kinetikkort' })
   })
 })
+
+describe('innhold hentet fra en kilde', () => {
+  /** Siden med preparatnavn og indikasjon kontrollert mot Felleskatalogen, som etter importen. */
+  function importert(tilstand: Tilstand): Analyttsidedata {
+    const grunn = side(tilstand)
+    const fraKilde = <T,>(u: Utgave<T>, kilde: string): Utgave<T> => ({ ...u, kilde })
+    return {
+      ...grunn,
+      elementer: [
+        fraKilde(grunn.elementer[0]!, 'Importert fra Psykofarmaka.pdf, side 7'),
+        fraKilde(
+          utgave('prep', {
+            infoside: 'hs',
+            panel: 'identitet',
+            posisjon: 0,
+            elementtype: 'preparater',
+            data: { navn: ['Syntetex'], kontrollert: '2026-09-23' },
+          }),
+          'Hentet fra Felleskatalogen 23.09.2026',
+        ),
+        utgave('ind', {
+          infoside: 'hs',
+          panel: 'indikasjon',
+          posisjon: 0,
+          elementtype: 'riktekst',
+          data: {
+            dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Syntetisk indikasjon.' }] }] },
+            kontrollert: '2026-09-01',
+          },
+        }),
+      ],
+    }
+  }
+
+  it('viser når preparatnavnene og indikasjonen sist ble kontrollert mot Felleskatalogen', async () => {
+    vis('AMTNORSUM', kilde({ data: importert }))
+    await screen.findByText('Syntetisk indikasjon.')
+    expect(screen.getByText('Kontrollert mot Felleskatalogen 23.09.2026')).toBeTruthy()
+    expect(screen.getByText('Kontrollert mot Felleskatalogen 01.09.2026')).toBeTruthy()
+  })
+
+  it('viser kilden ved «Sist redigert»', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ data: importert, kanRedigere: true }))
+    await screen.findByText('Syntetisk indikasjon.')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    expect(
+      await screen.findByText('Sist redigert av Rita Redaktør 22.09.2026 kl. 14:32 · Importert fra Psykofarmaka.pdf, side 7'),
+    ).toBeTruthy()
+    expect(
+      screen.getByText('Sist redigert av Rita Redaktør 22.09.2026 kl. 14:32 · Hentet fra Felleskatalogen 23.09.2026'),
+    ).toBeTruthy()
+  })
+
+  it('beholder datoen for kontrollen når noe annet redigeres, og lagrer en ny dato', async () => {
+    const user = userEvent.setup()
+    const { lager } = vis('AMTNORSUM', kilde({ data: importert, kanRedigere: true }))
+    await screen.findByText('Syntetisk indikasjon.')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+
+    await user.click(await screen.findByRole('button', { name: 'Rediger: Preparatnavn' }))
+    let skjema = screen.getByRole('form', { name: 'Rediger: Preparatnavn' })
+    await user.type(within(skjema).getByLabelText(/Preparatnavn, ett per linje/), '{Enter}Annetex')
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+    await waitFor(() => expect(lager.lagreUtkast).toHaveBeenCalledTimes(1))
+    expect(vi.mocked(lager.lagreUtkast).mock.calls[0]![2]).toMatchObject({
+      data: { navn: ['Annetex', 'Syntetex'], kontrollert: '2026-09-23' },
+    })
+
+    await user.click(await screen.findByRole('button', { name: 'Rediger: Indikasjon' }))
+    skjema = screen.getByRole('form', { name: 'Rediger: Indikasjon' })
+    const dato = within(skjema).getByLabelText('Sist kontrollert mot Felleskatalogen')
+    await user.clear(dato)
+    await user.type(dato, '2026-09-24')
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+    await waitFor(() => expect(lager.lagreUtkast).toHaveBeenCalledTimes(2))
+    expect(vi.mocked(lager.lagreUtkast).mock.calls[1]![2]).toMatchObject({ data: { kontrollert: '2026-09-24' } })
+  })
+})

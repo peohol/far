@@ -1,0 +1,221 @@
+{
+  "kode": "RISPSUM",
+  "sider": [
+    58
+  ],
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 20,
+      "ovre": 120,
+      "enhet": "nmol/L",
+      "forbehold": "Risperidon + paliperidon."
+    },
+    "toksisk_omrade": {
+      "nedre": 280,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "Risperidon + paliperidon.",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-antipsykotika"
+      ]
+    },
+    "steady_state": {
+      "nedre": 4,
+      "ovre": 5,
+      "enhet": "dager",
+      "forbehold": "Peroralt."
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Potent D_{2}-antagonist.",
+      "Aktiv metabolitt: paliperidon (9-hydroksyrisperidon)."
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Tablett: 0,5–8 mg",
+      "Depotinjeksjon: 25–50 mg hver 2. uke (Risperdal Consta)",
+      "Depotinjeksjon: 75 og 100 mg hver 28. dag (Okedi)"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "66 ± 28 %"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "1.5 timer (p.o.)"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Risperidon: 3 timer",
+        "Paliperidon: 24 timer."
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "4–5 dager (p.o)"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "90 %"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "1,1 ± 0,2 L/kg"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Hepatisk metabolisme. Utskilles i urin (70 %) og feces (14 %)."
+      ]
+    },
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "2D6, (3A4)"
+      ]
+    },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Både risperidon og paliperidon er substrater for P-gp.",
+        "Ved samtidig bruk av sterke hemmere eller induktorer av 3A4 og/eller P-gp bør doseringen av risperidon revurderes.",
+        "Dosering av risperidon bør revurderes ved bruk av sterke 2D6-hemmere."
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Ratio metabolitt/modersubstans 3,6–22,7 (p.o.), 1,2–4,3 (i.m.) (AGNP)"
+      ],
+      "referanser": [
+        "hiemke2017"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "tabeller": [
+      {
+        "stoff": "Risperidon + paliperidon",
+        "kilde": "Jönsson et al. (2019)",
+        "enhet": "nmol/L",
+        "doser": [
+          "0,5 mg",
+          "1 mg",
+          "2 mg",
+          "4 mg",
+          "6 mg",
+          "8 mg",
+          "Alle"
+        ],
+        "antall": [
+          95,
+          332,
+          660,
+          886,
+          409,
+          125,
+          3255
+        ],
+        "p10": [
+          10,
+          16,
+          25,
+          42,
+          52,
+          76,
+          26
+        ],
+        "median": [
+          20,
+          33,
+          50,
+          81,
+          121,
+          157,
+          70
+        ],
+        "p90": [
+          47,
+          81,
+          107,
+          155,
+          227,
+          280,
+          166
+        ]
+      },
+      {
+        "stoff": "Paliperidon (9-hydroksyrisperidon, i prøver med risperidon)",
+        "kilde": "Jönsson et al. (2019)",
+        "enhet": "nmol/L",
+        "doser": [
+          "0,5 mg",
+          "1 mg",
+          "2 mg",
+          "4 mg",
+          "6 mg",
+          "8 mg"
+        ],
+        "antall": [
+          95,
+          332,
+          660,
+          886,
+          409,
+          125
+        ],
+        "p10": [
+          4,
+          8,
+          12,
+          22,
+          29,
+          42
+        ],
+        "median": [
+          12,
+          21,
+          33,
+          56,
+          77,
+          92
+        ],
+        "p90": [
+          36,
+          54,
+          73,
+          103,
+          150,
+          183
+        ]
+      }
+    ],
+    "referanseomradeprosjektet": {
+      "doser": "1–8 mg (p.o.)",
+      "enhet": "nmol/L",
+      "p10": 24,
+      "p90": 120
+    },
+    "referanser": [
+      "jonsson2019",
+      "referanseomradeprosjektet"
+    ]
+  }
+}

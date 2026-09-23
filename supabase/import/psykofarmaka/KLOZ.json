@@ -1,0 +1,81 @@
+{
+  "kode": "KLOZ",
+  "sider": [47],
+  "viktige_data": {
+    "referanseomrade": { "nedre": 300, "ovre": 2500, "enhet": "nmol/L", "forbehold": "" },
+    "toksisk_omrade": {
+      "nedre": 1800, "ovre": null, "enhet": "nmol/L", "forbehold": "",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-antipsykotika"]
+    },
+    "alvorlig_intoksikasjon": {
+      "nedre": 3600, "ovre": null, "enhet": "nmol/L", "forbehold": "Komatøs/fatal. Omtrentlig grense.",
+      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-antipsykotika"]
+    },
+    "halveringstid": { "nedre": 6, "ovre": 26, "enhet": "timer", "forbehold": "Typisk 12 timer." },
+    "steady_state": { "nedre": 1, "ovre": 5, "enhet": "døgn", "forbehold": "" }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Antagonist på serotonerge (5-HT_{2A}), alfa-adrenerge, kolinerge, histaminerge og dopaminerge reseptorer. Lav affinitet til D_{1}-, D_{2}-, D_{3}- og D_{5}-reseptorer, men viser høy affinitet til D_{4}-reseptorer."
+    ]
+  },
+  "dosering": {
+    "tekst": ["Tablett: (12,5) 100–900 mg"]
+  },
+  "farmakokinetikk": [
+    { "tittel": "Biotilgjengelighet", "tekst": ["55 ± 12 %"] },
+    { "tittel": "tmax", "tekst": ["1–3 timer"] },
+    { "tittel": "t1/2", "tekst": ["12 (6–26) timer"] },
+    { "tittel": "tss", "tekst": ["1–5 døgn"] },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        ">95 %",
+        "Bindes i stor grad til alfa1-surt glykoprotein som er et akuttfaseprotein. Ved akutt inflammasjon øker serumkonsentrasjonen av klozapin pga. økning av proteinbundet fraksjon. Fri fraksjon vil være relativt sett lite endret, og derfor forventes ikke vesentlig endret effekt. Doseendring i denne fasen bør som regel avventes. Det anbefales å unngå TDM av klozapin i akutt fase!"
+      ]
+    },
+    { "tittel": "VD", "tekst": ["5,4 ± 3,5 L/kg"] },
+    { "tittel": "Eliminasjon", "tekst": ["Nesten fullstendig. Utskilles i urin (50 %) og feces (30 %)."] },
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "1A2, 3A4, (2D6, 2C19)",
+        "Hemming av CYP-enzymer under inflammasjon bidrar trolig også til økning i serumkonsentrasjon."
+      ]
+    },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Kan gi økt fri fraksjon av legemidler med høy proteinbinding, f.eks. warfarin og digoksin.",
+        "1A2-hemmere (f.eks fluvoksamin, perazin, koffein) kan gi behov for dosereduksjon. Seponering av hemmer kan gi behov for doseøkning. Etter en 5 dagers koffeinfri periode kan serumkonsentrasjonen av klozapin synke 50 %. Induksjon av 1A2 (røyking, omeprazol) kan gi behov for doseøkning.",
+        "Induksjon/hemming av 3A4 kan gi behov for doseendring.",
+        "Oppstart/seponering av hormonell prevensjon (som hemmer 1A2, 3A4, 2C19) kan endre dosebehovet."
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Ratio metabolitt/modersubstans: 0,45–0,8 (AGNP, lavere hos røykere)",
+        "Vanlig bivirkning: alvorlig obstipasjon.",
+        "Kontraindisert sammen med andre legemidler som påvirker beinmargsfunsjonen."
+      ],
+      "referanser": ["hiemke2017"]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "tabeller": [
+      {
+        "stoff": "Klozapin",
+        "kilde": "Jönsson et al. (2019)",
+        "enhet": "nmol/L",
+        "doser": ["100 mg", "200 mg", "300 mg", "400 mg", "500 mg", "600 mg", "700 mg", "Alle"],
+        "antall": [51, 128, 178, 158, 90, 87, 31, 1189],
+        "p10": [155, 368, 380, 547, 599, 545, 1000, 341],
+        "median": [549, 833, 1026, 1243, 1373, 1437, 1391, 1067],
+        "p90": [1276, 1644, 2060, 2333, 2547, 3275, 3108, 2348]
+      }
+    ],
+    "referanseomradeprosjektet": { "doser": "100–900 mg", "enhet": "nmol/L", "p10": 405, "p90": 2270 },
+    "referanser": ["jonsson2019", "referanseomradeprosjektet"]
+  }
+}

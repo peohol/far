@@ -6,6 +6,7 @@ import {
   DOSEKOLONNER,
   ELEMENTTYPER,
   formaterIntervall,
+  formaterKontroll,
   harVerdi,
   lesDosetabell,
   lesIntervallverdi,
@@ -60,16 +61,30 @@ const DATOFORMAT = new Intl.DateTimeFormat('nb-NO', {
 })
 const TIDSFORMAT = new Intl.DateTimeFormat('nb-NO', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Oslo' })
 
-/** «Sist redigert av Ola Nordmann 22.09.2026 kl. 14:32». */
+/**
+ * «Sist redigert av Ola Nordmann 22.09.2026 kl. 14:32», og hvor innholdet kom
+ * fra når det ikke ble skrevet i appen: «… · Importert fra Psykofarmaka.pdf,
+ * side 7».
+ */
 export function sistRedigert(utgave: Utgave<unknown>): string {
   const navn = [utgave.endret_av_fornavn, utgave.endret_av_etternavn].filter(Boolean).join(' ')
   const tid = new Date(utgave.endret_kl)
   const naar = Number.isNaN(tid.getTime()) ? '' : ` ${DATOFORMAT.format(tid)} kl. ${TIDSFORMAT.format(tid)}`
-  return `Sist redigert${navn ? ` av ${navn}` : ''}${naar}`
+  const kilde = utgave.kilde ? ` · ${utgave.kilde}` : ''
+  return `Sist redigert${navn ? ` av ${navn}` : ''}${naar}${kilde}`
 }
 
 function Sistredigert({ utgave }: { utgave: Utgave<unknown> }) {
   return <p className="sistredigert">{sistRedigert(utgave)}</p>
+}
+
+/**
+ * «Kontrollert mot Felleskatalogen 23.09.2026» under innholdet i et panel som
+ * holdes à jour mot en kilde. Vises bare når datoen er oppgitt.
+ */
+export function Kildekontroll({ kilde, dato }: { kilde: string | undefined; dato: string }) {
+  const tekst = kilde ? formaterKontroll(kilde, dato) : ''
+  return tekst ? <p className="kildekontroll">{tekst}</p> : null
 }
 
 /* --- Rammen rundt et panel ------------------------------------------------ */
@@ -258,7 +273,7 @@ export function Tekstpanel({ definisjon, kontekst }: { definisjon: Paneldefinisj
     (e) => e.elementtype === ELEMENTTYPER.riktekst,
   )
   const element = elementer[0] ?? null
-  const dokument = element ? lesRiktekst(element.data).dokument : tomtDokument()
+  const { dokument, kontrollert } = element ? lesRiktekst(element.data) : { dokument: tomtDokument(), kontrollert: '' }
   const tomt = !element || (erTomt(dokument) && element.referanser.length === 0)
 
   return (
@@ -274,13 +289,15 @@ export function Tekstpanel({ definisjon, kontekst }: { definisjon: Paneldefinisj
               <>
                 <Riktekst dokument={dokument} />
                 <Kortreferanser element={element} />
+                <Kildekontroll kilde={definisjon.kontrolleresMot} dato={kontrollert} />
               </>
             )
           }
           skjema={(lukk) => (
             <TekstSkjema
               tittel={definisjon.tittel}
-              start={{ dokument }}
+              start={{ dokument, kontrollert }}
+              kontrolleresMot={definisjon.kontrolleresMot}
               referanser={element?.referanser ?? []}
               onAvbryt={lukk}
               onLagre={async ({ data, referanser }) => {

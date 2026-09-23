@@ -34,14 +34,22 @@ export interface Paneldefinisjon {
   nokkel: string
   tittel: string
   form: Panelform
+  /**
+   * Kilden innholdet i panelet holdes à jour mot, når det finnes én. Datoen
+   * det sist ble kontrollert, lagres i dataene (`kontrollert`) og vises for
+   * seg — den er noe annet enn når innholdet sist ble redigert.
+   */
+  kontrolleresMot?: string
 }
 
+const FELLESKATALOGEN = 'Felleskatalogen'
+
 export const PANELER = [
-  { nokkel: 'identitet', tittel: 'Identitet', form: 'identitet' },
+  { nokkel: 'identitet', tittel: 'Identitet', form: 'identitet', kontrolleresMot: FELLESKATALOGEN },
   { nokkel: 'viktige_data', tittel: 'Viktige data', form: 'datakort' },
   { nokkel: 'farmakodynamikk', tittel: 'Farmakodynamikk', form: 'tekst' },
   { nokkel: 'dosering', tittel: 'Dosering', form: 'tekst' },
-  { nokkel: 'indikasjon', tittel: 'Indikasjon', form: 'tekst' },
+  { nokkel: 'indikasjon', tittel: 'Indikasjon', form: 'tekst', kontrolleresMot: FELLESKATALOGEN },
   { nokkel: 'farmakokinetikk', tittel: 'Farmakokinetikk', form: 'kort' },
   { nokkel: 'serumkonsentrasjoner', tittel: 'Serumkonsentrasjoner ved ulike doser', form: 'tabell' },
 ] as const satisfies readonly Paneldefinisjon[]
@@ -75,11 +83,42 @@ export const ELEMENTTYPER = {
   dosetabell: 'dosetabell',
 } as const
 
+/* Kontrollen mot en kilde. */
+
+/**
+ * Datoen innholdet sist ble kontrollert mot kilden panelet holdes à jour mot
+ * (`kontrolleresMot`), på formen «2026-09-23». Tom når den ikke er oppgitt.
+ */
+export type Kontrolldato = string
+
+const ISODATO = /^\d{4}-\d{2}-\d{2}$/
+
+/** Datoen, når den er en gyldig dato på formen «2026-09-23»; ellers tom. */
+export function lesKontrolldato(verdi: unknown): Kontrolldato {
+  if (typeof verdi !== 'string' || !ISODATO.test(verdi)) return ''
+  const dato = new Date(`${verdi}T00:00:00Z`)
+  return !Number.isNaN(dato.getTime()) && dato.toISOString().startsWith(verdi) ? verdi : ''
+}
+
+/** «Kontrollert mot Felleskatalogen 23.09.2026», eller tom uten dato. */
+export function formaterKontroll(kilde: string, dato: Kontrolldato): string {
+  if (!lesKontrolldato(dato)) return ''
+  const [aar, maned, dag] = dato.split('-')
+  return `Kontrollert mot ${kilde} ${dag}.${maned}.${aar}`
+}
+
+/** Dataene med kontrolldatoen, som bare står med når den er oppgitt. */
+export function medKontrolldato<T extends object>(data: T, dato: Kontrolldato): T & { kontrollert?: string } {
+  const gyldig = lesKontrolldato(dato)
+  return gyldig ? { ...data, kontrollert: gyldig } : data
+}
+
 /* Panel 1: preparatnavnene. */
 
 export interface Preparatdata {
   /** Preparatnavnene, hvert for seg. Vises alltid alfabetisk. */
   navn: string[]
+  kontrollert: Kontrolldato
 }
 
 /** Norsk alfabetisk rekkefølge, uten hensyn til store og små bokstaver. */
@@ -99,7 +138,10 @@ export function ryddPreparater(navn: readonly string[]): string[] {
 
 export function lesPreparater(data: unknown): Preparatdata {
   const navn = erObjekt(data) && Array.isArray(data.navn) ? data.navn : []
-  return { navn: ryddPreparater(navn.filter((n): n is string => typeof n === 'string')) }
+  return {
+    navn: ryddPreparater(navn.filter((n): n is string => typeof n === 'string')),
+    kontrollert: lesKontrolldato(erObjekt(data) ? data.kontrollert : undefined),
+  }
 }
 
 /* Panel 2: datakortene. */
@@ -222,10 +264,15 @@ export function kontrollerIntervall(verdi: Intervallverdi): string | null {
 
 export interface Rikteksdata {
   dokument: Riktekstdokument
+  /** Bare i paneler som holdes à jour mot en kilde. */
+  kontrollert: Kontrolldato
 }
 
 export function lesRiktekst(data: unknown): Rikteksdata {
-  return { dokument: rensDokument(erObjekt(data) ? data.dokument : undefined) }
+  return {
+    dokument: rensDokument(erObjekt(data) ? data.dokument : undefined),
+    kontrollert: lesKontrolldato(erObjekt(data) ? data.kontrollert : undefined),
+  }
 }
 
 /* Panel 6: farmakokinetikken, kort for kort. */
