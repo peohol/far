@@ -285,6 +285,29 @@ export function lesDosetabell(data: unknown): Dosetabelldata {
   }
 }
 
+/* --- Kort som bare kan finnes én gang ------------------------------------ */
+
+/**
+ * Elementtypene som står én gang i panelet sitt: preparatnavnene, hvert
+ * datakort, rikteksten i panel 3–5 og tabellen. Farmakokinetikken kan ha
+ * mange kort.
+ *
+ * Databasen håndhever det samme (`innholdselementer_enkeltelement_idx` i
+ * migrasjonen `enkeltelementer`), så to som oppretter det samme kortet
+ * samtidig, ikke begge får det lagret. Testene kontrollerer at listene
+ * stemmer.
+ */
+export const ENKELTELEMENTER: readonly string[] = [
+  ELEMENTTYPER.preparater,
+  ELEMENTTYPER.riktekst,
+  ELEMENTTYPER.dosetabell,
+  ...DATAKORT.map((k) => k.type),
+]
+
+export function erEnkeltelement(elementtype: string): boolean {
+  return ENKELTELEMENTER.includes(elementtype)
+}
+
 /* --- Felles --------------------------------------------------------------- */
 
 function erObjekt(verdi: unknown): verdi is Record<string, unknown> {

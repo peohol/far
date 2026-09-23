@@ -116,7 +116,9 @@ function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps)
   const modell = useMemo(() => byggSidemodell(side.data), [side.data])
   const navn = side.data.infoside?.innhold.navn ?? oppforing.sidenavn
   const komponenter = useMemo(() => komponenterFor(oppforing, side.data, katalog), [oppforing, side.data, katalog])
-  const redigerer = modus === 'rediger'
+  // Knappene for å endre vises først når utkastet er hentet, så ingenting
+  // lagres mot det publiserte som sto før redigeringen ble slått på.
+  const redigerer = handlinger.kanEndres
 
   const dokumenter = useMemo(
     () => indekserSide({ kode: oppforing.kode, navn, komponenter: komponenter.map((k) => k.navn) }, modell),
@@ -150,10 +152,10 @@ function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps)
         {kanRedigere && (
           <Button
             variant="subtle"
-            aria-pressed={redigerer}
-            onClick={() => setModus(redigerer ? 'lese' : 'rediger')}
+            aria-pressed={modus === 'rediger'}
+            onClick={() => setModus(modus === 'rediger' ? 'lese' : 'rediger')}
           >
-            {redigerer ? 'Avslutt redigering' : 'Rediger'}
+            {modus === 'rediger' ? 'Avslutt redigering' : 'Rediger'}
           </Button>
         )}
       </StepBar>
@@ -166,11 +168,11 @@ function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps)
         innholdsnokkel={side.data}
       />
 
-      {redigerer && (
+      {modus === 'rediger' && (
         <Redigeringsstripe
           data={side.data}
           plan={plan}
-          laster={side.status === 'laster'}
+          laster={!redigerer}
           onPubliser={handlinger.publiser}
         />
       )}
@@ -270,6 +272,7 @@ function Redigeringsstripe({
 }: {
   data: Analyttsidedata
   plan: Publiseringssteg[]
+  /** Sant mens utkastet hentes etter at redigeringen er slått på. */
   laster: boolean
   onPubliser: () => Promise<void>
 }) {
@@ -302,7 +305,11 @@ function Redigeringsstripe({
       {!data.analytt && !laster && (
         <p className="redigeringsstripe__tekst">Siden opprettes i databasen første gang du lagrer noe på den.</p>
       )}
-      {plan.length === 0 ? (
+      {laster ? (
+        <p className="redigeringsstripe__tekst" role="status">
+          Henter utkastet …
+        </p>
+      ) : plan.length === 0 ? (
         <p className="redigeringsstripe__tekst" role="status">
           {ferdig ? 'Alt er publisert.' : 'Ingen upubliserte endringer.'}
         </p>

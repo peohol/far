@@ -19,6 +19,7 @@ gjøres med vilje.
 | `supabase/migrations/*_faginnhold_fundament.sql` | Tabellene, radsikkerheten og funksjonene |
 | `supabase/migrations/*_referanse_objekttype.sql`, `*_referansesystem.sql` | Referansene og koblingene til dem |
 | `supabase/migrations/*_analyttsider_lesing.sql` | Lesingen av en hel side, referansebasen og sider etter navn |
+| `supabase/migrations/*_enkeltelementer.sql` | At kortene som står én gang i panelet sitt, ikke kan opprettes to ganger |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
 | `src/faginnhold/paneler.ts` | Panelene 1–7 og formen på hver elementtype |
@@ -246,8 +247,13 @@ Tillatt er avsnitt, linjeskift, punkt- og nummererte lister, fet, kursiv,
 understreket, senket og hevet skrift, lenker (bare `http(s)`) og siteringer.
 Alt leses gjennom `rensDokument` før det vises.
 
-**Redigeringen.** Administratorer får knappen «Rediger». Alt lagres som utkast
-mot revisjonen som ble lest, og en konflikt stanser lagringen og sier fra.
+**Redigeringen.** Administratorer får knappen «Rediger». Knappene for å endre
+vises først når utkastet er hentet, og alt lagres som utkast mot revisjonen
+som ble lest; en konflikt stanser lagringen og sier fra. Preparatnavnene,
+hvert datakort, rikteksten i panel 3–5 og tabellen kan bare stå én gang i
+panelet sitt (`ENKELTELEMENTER`). Databasen håndhever det med en unik indeks,
+så to som oppretter det samme kortet samtidig, ikke begge får det lagret —
+den andre får en konflikt.
 Første gang noe lagres på en kode uten side, opprettes informasjonssiden og
 laboratorieanalytten av katalogens opplysninger; sider med samme navn som
 finnes fra før — for eksempel en komponent — gjenbrukes. «Publiser endringene»

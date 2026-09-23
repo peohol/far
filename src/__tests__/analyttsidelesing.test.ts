@@ -16,6 +16,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { byggSidemodell, publiseringsplan } from '../faginnhold/analyttside'
 import { lagFaginnholdslager, type Faginnholdslager } from '../faginnhold/lagring'
 import { TOM_SIDE, lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
+import { ENKELTELEMENTER } from '../faginnhold/paneler'
 import { SITERING } from '../faginnhold/referanser'
 import { faginnholdskall, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
@@ -175,6 +176,32 @@ describe('les_referanser og finn_infosider', () => {
   it('finner sider på navnet uten hensyn til store og små bokstaver', async () => {
     const treff = await adminleser.finnInfosider(['testmiddel', 'DESMETYLTESTMIDDEL', 'Ukjent'], 'utkast')
     expect(treff.map((t) => t.id).sort()).toEqual([ider.hoved, ider.metabolitt].sort())
+  })
+})
+
+describe('kortene som bare kan stå én gang', () => {
+  it('avviser et kort nummer to av samme type i samme panel', async () => {
+    const side = (await lager.opprettUtkast('infoside', { navn: 'Enkeltkortside' })).id
+    const kort = (elementtype: string, panel = 'panel_x', posisjon = 0) =>
+      lager.opprettUtkast('innholdselement', { infoside: side, panel, posisjon, elementtype, data: {} })
+
+    for (const type of ENKELTELEMENTER) {
+      await kort(type)
+      await expect(kort(type), type).rejects.toThrow()
+      // Samme type i et annet panel er et annet kort.
+      await kort(type, 'panel_y')
+    }
+  })
+
+  it('lar farmakokinetikken ha mange kort, og et fjernet kort gi plass til et nytt', async () => {
+    const side = (await lager.opprettUtkast('infoside', { navn: 'Flerkortside' })).id
+    const innhold = (elementtype: string, panel: string) => ({ infoside: side, panel, posisjon: 0, elementtype, data: {} })
+    await lager.opprettUtkast('innholdselement', innhold('kinetikkort', 'farmakokinetikk'))
+    await lager.opprettUtkast('innholdselement', innhold('kinetikkort', 'farmakokinetikk'))
+
+    const forste = await lager.opprettUtkast('innholdselement', innhold('riktekst', 'dosering'))
+    await lager.lagreUtkast(forste.id, 1, innhold('riktekst', 'fjernet'))
+    await lager.opprettUtkast('innholdselement', innhold('riktekst', 'dosering'))
   })
 })
 

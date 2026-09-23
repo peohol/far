@@ -427,6 +427,61 @@ describe('redigeringsmodus', () => {
   })
 })
 
+describe('overgangen til redigering', () => {
+  it('viser ingen redigeringsknapper før utkastet er hentet', async () => {
+    const user = userEvent.setup()
+    let slipp: (d: Analyttsidedata) => void = () => {}
+    const k = kilde({ kanRedigere: true })
+    k.leser.lesAnalyttside = vi.fn((_kode: string, tilstand: Tilstand) =>
+      tilstand === 'utkast' ? new Promise<Analyttsidedata>((r) => (slipp = r)) : Promise.resolve(side('publisert')),
+    )
+    vis('AMTNORSUM', k)
+    await screen.findByText('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+
+    // Det publiserte står fortsatt, men kan ikke endres mens utkastet hentes.
+    expect(screen.getByText('Henter utkastet …')).toBeTruthy()
+    expect(screen.queryByRole('button', { name: 'Rediger: Referanseområde' })).toBeNull()
+    expect(screen.queryByRole('button', { name: /^Legg til/ })).toBeNull()
+
+    await act(async () => slipp(side('utkast')))
+    expect(await screen.findByRole('button', { name: 'Rediger: Referanseområde' })).toBeTruthy()
+  })
+
+  it('gjør et kort som noen andre alt har lagt inn, til en konflikt', async () => {
+    const user = userEvent.setup()
+    const k = kilde({ kanRedigere: true })
+    let andreHarLagret = false
+    k.leser.lesAnalyttside = vi.fn(async (_kode: string, tilstand: Tilstand) => {
+      const data = side(tilstand)
+      if (!andreHarLagret) return data
+      const halveringstid = utgave('ht', {
+        infoside: 'hs',
+        panel: 'viktige_data',
+        posisjon: 3,
+        elementtype: 'halveringstid',
+        data: { nedre: 1, ovre: 2, enhet: 'timer', forbehold: '' },
+      })
+      return { ...data, elementer: [...data.elementer, halveringstid] }
+    })
+    k.lager.opprettUtkast = vi.fn(async () => {
+      andreHarLagret = true
+      throw new Error('Innholdet ble ikke godtatt. Kontroller feltene og prøv igjen.')
+    })
+    vis('AMTNORSUM', k)
+    await screen.findByText('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await user.click(await screen.findByRole('button', { name: 'Legg til: Halveringstid' }))
+    const skjema = screen.getByRole('form', { name: 'Rediger: Halveringstid' })
+    await user.type(within(skjema).getByLabelText('Nedre grense'), '3')
+    await user.type(within(skjema).getByLabelText('Enhet'), 'timer')
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+
+    expect((await within(skjema).findByRole('alert')).textContent).toMatch(/Noen andre har lagret/)
+    expect(screen.getByRole('button', { name: 'Hent nyeste utgave' })).toBeTruthy()
+  })
+})
+
 describe('rikteksteditoren', () => {
   it('har en verktøyrad med bare den tillatte formateringen', async () => {
     const user = userEvent.setup()

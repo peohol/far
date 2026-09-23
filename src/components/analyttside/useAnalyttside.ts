@@ -3,7 +3,7 @@ import { publiseringsplan, tilReferanse, type Sideelement } from '../../faginnho
 import { Samtidighetskonflikt } from '../../faginnhold/lagring'
 import { TOM_SIDE, type Analyttsidedata, type Utgave } from '../../faginnhold/lesing'
 import type { Infosideinnhold, Innholdselementinnhold, Referanseinnhold, Tilstand } from '../../faginnhold/modell'
-import { FJERNET } from '../../faginnhold/paneler'
+import { FJERNET, erEnkeltelement } from '../../faginnhold/paneler'
 import type { Referanse } from '../../faginnhold/referanser'
 import type { Katalogoppforing } from '../../domain/analyttkatalog'
 import { useFaginnholdskilde } from './Faginnholdskilde'
@@ -22,8 +22,16 @@ export interface Elementendring {
 export interface Sidetilstand {
   status: 'laster' | 'klar' | 'feil'
   data: Analyttsidedata
+  /**
+   * Tilstanden `data` er lest fra. Står modusen nettopp byttet, er det den
+   * forrige til den nye er hentet.
+   */
+  tilstand: Tilstand | null
   feil: string | null
 }
+
+const IKKE_KLAR = 'Utkastet er ikke hentet ennå. Vent litt og prøv igjen.'
+const LAGT_INN_AV_ANDRE = 'Noen andre har lagt inn dette i mellomtiden.'
 
 /**
  * En analyttside: innholdet i den tilstanden modusen viser, og endringene som
@@ -42,12 +50,12 @@ export interface Sidetilstand {
 export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
   const { leser, lager } = useFaginnholdskilde()
   const tilstand: Tilstand = modus === 'rediger' ? 'utkast' : 'publisert'
-  const [side, setSide] = useState<Sidetilstand>({ status: 'laster', data: TOM_SIDE, feil: null })
+  const [side, setSide] = useState<Sidetilstand>({ status: 'laster', data: TOM_SIDE, tilstand: null, feil: null })
   const [referansebase, setReferansebase] = useState<Referanse[]>([])
   const [konflikt, setKonflikt] = useState(false)
   const [runde, setRunde] = useState(0)
-  /** Det siste som er lest, for endringene som trenger revisjonene. */
-  const siste = useRef<Analyttsidedata>(TOM_SIDE)
+  /** Det siste som er lest, og fra hvilken tilstand, for endringene som trenger revisjonene. */
+  const siste = useRef<{ tilstand: Tilstand | null; data: Analyttsidedata }>({ tilstand: null, data: TOM_SIDE })
 
   useEffect(() => {
     let gjelder = true
@@ -56,13 +64,13 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
       .lesAnalyttside(oppforing.kode, tilstand)
       .then((data) => {
         if (!gjelder) return
-        siste.current = data
-        setSide({ status: 'klar', data, feil: null })
+        siste.current = { tilstand, data }
+        setSide({ status: 'klar', data, tilstand, feil: null })
       })
       .catch((e: Error) => {
         if (!gjelder) return
-        siste.current = TOM_SIDE
-        setSide({ status: 'feil', data: TOM_SIDE, feil: e.message })
+        siste.current = { tilstand: null, data: TOM_SIDE }
+        setSide({ status: 'feil', data: TOM_SIDE, tilstand: null, feil: e.message })
       })
     return () => {
       gjelder = false
@@ -107,11 +115,20 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
   )
 
   /**
+   * Utkastet slik det sist ble lest. Endringene lagres alltid mot utkastets
+   * revisjoner, aldri mot det publiserte som sto før modusen ble byttet.
+   */
+  const utkastet = useCallback((): Analyttsidedata => {
+    if (siste.current.tilstand !== 'utkast') throw new Error(IKKE_KLAR)
+    return siste.current.data
+  }, [])
+
+  /**
    * Informasjonssiden koden hører til, opprettet først om den ikke finnes.
    * Gir tilbake utkastet slik det står nå.
    */
   const sikreSide = useCallback(async (): Promise<Utgave<Infosideinnhold>> => {
-    const data = siste.current
+    const data = utkastet()
     if (data.analytt && data.infoside) return data.infoside
 
     const navn = [...new Set([oppforing.sidenavn, ...oppforing.komponenter])]
@@ -143,26 +160,45 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
       komponenter: komponenter.length > 0 ? komponenter : [hovedside.id],
     })
     return hovedside
-  }, [leser, lager, oppforing])
+  }, [leser, lager, oppforing, utkastet])
 
+  /**
+   * Lagrer et element, eller oppretter det. Et kort som bare kan finnes én
+   * gang på siden, er vernet i databasen; har noen andre lagt det inn i
+   * mellomtiden, blir det en konflikt som ellers, ikke et kort nummer to.
+   */
   const lagreElement = useCallback(
     (element: Sideelement | null, endring: Elementendring) =>
       endre(async () => {
         const hovedside = await sikreSide()
         const innhold: Innholdselementinnhold = { infoside: hovedside.id, ...endring }
-        if (element) await lager.lagreUtkast(element.id, element.utgave.revisjon, innhold)
-        else await lager.opprettUtkast('innholdselement', innhold)
+        if (element) {
+          await lager.lagreUtkast(element.id, element.utgave.revisjon, innhold)
+          return
+        }
+        try {
+          await lager.opprettUtkast('innholdselement', innhold)
+        } catch (feil) {
+          if (!erEnkeltelement(endring.elementtype)) throw feil
+          const na = await leser.lesAnalyttside(oppforing.kode, 'utkast')
+          const finnes = na.elementer.some(
+            (e) => e.innhold.panel === endring.panel && e.innhold.elementtype === endring.elementtype,
+          )
+          if (!finnes) throw feil
+          throw Object.assign(new Samtidighetskonflikt(null, null), { message: LAGT_INN_AV_ANDRE })
+        }
       }),
-    [endre, sikreSide, lager],
+    [endre, sikreSide, lager, leser, oppforing.kode],
   )
 
   /** Tar kortet bort fra siden. Det slettes ikke; se `FJERNET`. */
   const fjernElement = useCallback(
     (element: Sideelement) =>
-      endre(() =>
-        lager.lagreUtkast(element.id, element.utgave.revisjon, { ...element.utgave.innhold, panel: FJERNET }),
-      ),
-    [endre, lager],
+      endre(() => {
+        utkastet()
+        return lager.lagreUtkast(element.id, element.utgave.revisjon, { ...element.utgave.innhold, panel: FJERNET })
+      }),
+    [endre, lager, utkastet],
   )
 
   /**
@@ -172,6 +208,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
   const flyttElement = useCallback(
     (element: Sideelement, naboer: readonly Sideelement[], retning: -1 | 1) =>
       endre(async () => {
+        utkastet()
         const rekke = [...naboer]
         const fra = rekke.findIndex((e) => e.id === element.id)
         const til = fra + retning
@@ -182,7 +219,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
           await lager.lagreUtkast(e.id, e.utgave.revisjon, { ...e.utgave.innhold, posisjon })
         }
       }),
-    [endre, lager],
+    [endre, lager, utkastet],
   )
 
   const lagrePanelreferanser = useCallback(
@@ -216,15 +253,20 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
   const publiser = useCallback(
     () =>
       endre(async () => {
-        for (const steg of publiseringsplan(siste.current)) {
+        for (const steg of publiseringsplan(utkastet())) {
           await lager.publiserUtkast(steg.id, steg.revisjon)
         }
       }),
-    [endre, lager],
+    [endre, lager, utkastet],
   )
 
   return {
     side,
+    /**
+     * Sant når utkastet er lest og kan endres. Mens det hentes etter at
+     * redigeringen er slått på, vises siden uten redigeringsknapper.
+     */
+    kanEndres: modus === 'rediger' && side.tilstand === 'utkast',
     referansebase,
     konflikt,
     plan,
