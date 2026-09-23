@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.10.0',
+    dato: '2026-09-23',
+    sammendrag: 'Grunnlaget for kildehenvisninger på analyttsidene er lagt',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Neste steg mot egne analyttsider: en felles referansebase der hver kilde lagres én gang og kan brukes på mange sider. Ingenting av dette er synlig ennå.',
+      'Kildene vises som «Tittel · Forfatter(e) · År · Lenke». Endres en kilde, blir den riktig overalt der den er brukt.',
+      'Kilder kan henvises til i teksten, på et enkelt kort eller på et helt panel. Numrene settes automatisk på hver side etter hvor kilden først står, og følger med når innholdet flyttes eller endres. Nederst på siden kommer en liste over kildene som faktisk er brukt.',
+      'Henvisningene vises som små nummerpiller, for eksempel «1–3, 5». Kildene kommer fram når du holder pekeren over, trykker, eller bruker tastaturet.',
+      'Kildene har full historikk og utkast/publisering som resten av fagstoffet. En kilde som er eller har vært i bruk, kan ikke slettes. Den kan arkiveres når den ikke lenger brukes noe sted.',
+      'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
     versjon: '1.9.0',
     dato: '2026-09-22',
     sammendrag: 'Grunnmuren for redigerbare analyttsider er lagt',

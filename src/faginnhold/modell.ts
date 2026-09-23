@@ -1,8 +1,8 @@
 /**
  * Formen på det redigerbare faginnholdet, slik databasen lagrer det.
  *
- * Informasjonsside, laboratorieanalytt og innholdselement er hver sin
- * objekttype. Hvert objekt har en stabil ID, et utkast og eventuelt en
+ * Informasjonsside, laboratorieanalytt, innholdselement og referanse er hver
+ * sin objekttype. Hvert objekt har en stabil ID, et utkast og eventuelt en
  * publisert utgave, og en historikk der hver endring er en egen revisjon med
  * et komplett øyeblikksbilde. Bakgrunnen står i `docs/faginnhold.md`.
  *
@@ -10,7 +10,7 @@
  * `src/__tests__/faginnhold.test.ts` kontrollerer at de stemmer overens.
  */
 
-export const OBJEKTTYPER = ['infoside', 'laboratorieanalytt', 'innholdselement'] as const
+export const OBJEKTTYPER = ['infoside', 'laboratorieanalytt', 'innholdselement', 'referanse'] as const
 export type Objekttype = (typeof OBJEKTTYPER)[number]
 
 /** Utkastet er arbeidsversjonen; det publiserte er det alle innloggede ser. */
@@ -27,9 +27,23 @@ export type Handling = (typeof HANDLINGER)[number]
  */
 export const KONFLIKT = 'PT409'
 
-/** Informasjonssiden for et virkestoff, f.eks. Amitriptylin. */
+/**
+ * Nivåene en referanse kan siteres på, i leserekkefølge: et helt panel, et
+ * kort (innholdselement) og inline i teksten.
+ */
+export const REFERANSENIVAER = ['panel', 'element', 'inline'] as const
+export type Referanseniva = (typeof REFERANSENIVAER)[number]
+
+/**
+ * Informasjonssiden for et virkestoff, f.eks. Amitriptylin.
+ *
+ * `panelreferanser` er referansene som gjelder et helt panel, fra panelnøkkel
+ * til en ordnet liste med referanse-ID-er. Databasen gir alltid feltet
+ * tilbake; utelatt betyr ingen.
+ */
 export interface Infosideinnhold {
   navn: string
+  panelreferanser?: Record<string, string[]>
 }
 
 /**
@@ -48,6 +62,11 @@ export interface Laboratorieanalyttinnhold {
  * `elementtype` er nøkler (små bokstaver, tall og understrek); hva `data`
  * inneholder, bestemmes av elementtypen. Rekkefølgen i et panel er
  * `posisjon`, deretter objekt-ID-en — to elementer kan stå på samme plass.
+ *
+ * `referanser` er kortreferansene: kildene for hele kortet, i rekkefølge.
+ * Inline-siteringer står som siteringsnoder i `data` (se
+ * `src/faginnhold/referanser.ts`). Databasen gir alltid feltet tilbake;
+ * utelatt betyr ingen.
  */
 export interface Innholdselementinnhold {
   infoside: string
@@ -55,6 +74,22 @@ export interface Innholdselementinnhold {
   posisjon: number
   elementtype: string
   data: Record<string, unknown>
+  referanser?: string[]
+}
+
+/**
+ * Én kilde i den globale referansebasen. Feltene er de samme som i Slaids, og
+ * vises som «Tittel · Forfatter(e) · År · Lenke». Minst ett av tittel,
+ * forfattere og lenke må være fylt ut, og lenken må være en nettadresse.
+ *
+ * En arkivert referanse kan ikke siteres. Utelatt `arkivert` er `false`.
+ */
+export interface Referanseinnhold {
+  tittel: string
+  forfattere: string
+  aar: string
+  lenke: string
+  arkivert?: boolean
 }
 
 /** Innholdet til hver objekttype — det som lagres og står i hver revisjon. */
@@ -62,6 +97,7 @@ export interface Innhold {
   infoside: Infosideinnhold
   laboratorieanalytt: Laboratorieanalyttinnhold
   innholdselement: Innholdselementinnhold
+  referanse: Referanseinnhold
 }
 
 /**

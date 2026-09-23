@@ -87,14 +87,19 @@ export interface Faginnholdslager {
   ): Promise<Objektstatus>
   /** Publiserer utkastet slik det står i `forventetRevisjon`. */
   publiserUtkast(objekt: string, forventetRevisjon: number): Promise<Objektstatus>
+  /**
+   * Sletter en referanse for godt. Går bare når den aldri har vært publisert
+   * eller sitert, heller ikke i en eldre revisjon; ellers må den arkiveres.
+   */
+  slettReferanse(objekt: string, forventetRevisjon: number): Promise<void>
 }
 
 export function lagFaginnholdslager(klient: SupabaseClient): Faginnholdslager {
-  async function kall(funksjon: string, argumenter: Record<string, unknown>): Promise<Objektstatus> {
+  async function kall<T = Objektstatus>(funksjon: string, argumenter: Record<string, unknown>): Promise<T> {
     const { data, error } = await klient.rpc(funksjon, argumenter)
     if (error) throw tilFeil(error)
     if (!data) throw new Error(UVENTET_FEIL)
-    return data as Objektstatus
+    return data as T
   }
 
   return {
@@ -109,5 +114,8 @@ export function lagFaginnholdslager(klient: SupabaseClient): Faginnholdslager {
       }),
     publiserUtkast: (objekt, forventetRevisjon) =>
       kall('publiser_utkast', { objekt, forventet_revisjon: forventetRevisjon }),
+    slettReferanse: async (objekt, forventetRevisjon) => {
+      await kall<string>('slett_referanse', { objekt, forventet_revisjon: forventetRevisjon })
+    },
   }
 }

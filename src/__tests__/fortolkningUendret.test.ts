@@ -2,8 +2,9 @@
  * Fortolkningen står på de statiske dataene, ikke på det redigerbare
  * faginnholdet.
  *
- * Fundamentet for redigerbart faginnhold — tabellene og funksjonene i
- * Supabase, og `src/faginnhold/` — er lagt uten at noe klinisk er flyttet dit.
+ * Fundamentet for redigerbart faginnhold og referansesystemet — tabellene og
+ * funksjonene i Supabase, `src/faginnhold/` og `src/components/referanser/` —
+ * er lagt uten at noe klinisk er flyttet dit, og uten at appen bruker dem.
  * Kommentartekstene, grensene og fortolkningsreglene ligger fortsatt i
  * datasettene under `src/data/` og i `src/domain/`, og det er bare de
  * fortolkningen leser. At databasen ikke har fått noe innhold, prøves i
@@ -38,6 +39,9 @@ const FORTOLKNINGSKJERNEN = ['src/domain', 'src/data', 'src/state.ts']
 
 /** Det kjernen ikke skal hente noe fra, så lenge byttet ikke er gjort. */
 const REDIGERBART = resolve(ROT, 'src/faginnhold')
+
+/** Det appen ellers ikke bruker ennå: analyttsidene kommer senere. */
+const IKKE_I_BRUK = [REDIGERBART, resolve(ROT, 'src/components/referanser')]
 
 function kildefiler(sti: string): string[] {
   const full = resolve(ROT, sti)
@@ -76,6 +80,22 @@ describe('fortolkningen etter at fundamentet for redigerbart faginnhold er lagt'
         if (modul.startsWith('.')) {
           expect(resolve(dirname(fil), modul).startsWith(REDIGERBART), hvor).toBe(false)
         }
+      }
+    }
+  })
+
+  it('viser ingenting fra referansesystemet i appen ennå', () => {
+    const filer = kildefiler('src').filter((fil) => !IKKE_I_BRUK.some((mappe) => fil.startsWith(mappe)))
+    expect(filer.length).toBeGreaterThan(20)
+
+    for (const fil of filer) {
+      for (const modul of importer(readFileSync(fil, 'utf8'))) {
+        if (!modul.startsWith('.')) continue
+        const mal = resolve(dirname(fil), modul)
+        expect(
+          IKKE_I_BRUK.some((mappe) => mal.startsWith(mappe)),
+          `${relative(ROT, fil)} henter ${modul}`,
+        ).toBe(false)
       }
     }
   })

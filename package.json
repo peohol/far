@@ -1,7 +1,7 @@
 {
   "name": "far",
   "private": true,
-  "version": "1.9.0",
+  "version": "1.10.0",
   "type": "module",
   "description": "Verktøy for å kommentere farmakologiske analyser",
   "scripts": {
@@ -24,11 +24,15 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.8",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
     "@types/node": "^22.20.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vercel/functions": "^3.9.9",
     "@vitejs/plugin-react": "^4.3.4",
+    "jsdom": "^25.0.1",
     "supabase": "^2.117.0",
     "typescript": "^5.7.2",
     "vite": "^6.0.7",
