@@ -19,6 +19,12 @@ import type { Innhold, Objektstatus, Objekttype } from '../../faginnhold/modell'
 const MIGRASJONER = fileURLToPath(new URL('../../../supabase/migrations', import.meta.url))
 
 const SUPABASE_GRUNNLAG = /* sql */ `
+  -- Supabase-prosjektet skriver flyttall med 15 gjeldende sifre
+  -- (extra_float_digits = 0 i konfigurasjonen), ikke med den korteste eksakte
+  -- skrivemåten Postgres ellers bruker. Det som gjør flyttall om til tekst
+  -- eller JSON, må derfor selv sørge for alle sifrene.
+  set extra_float_digits = 0;
+
   create role anon nologin noinherit;
   create role authenticated nologin noinherit;
   create role service_role nologin noinherit bypassrls;
