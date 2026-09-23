@@ -229,10 +229,12 @@ export function kurverI(r: ThcRegelsett): Record<ThcKurverolle, Kurve> {
 
 /**
  * En IRCAK med to gjeldende sifre, slik feilmeldingene viser den: 36, 1200,
- * 0.0012. Svært små og store verdier skrives med tierpotens (1.2e-7). Samme
- * skrivemåte som `intern.thc_vis_ircak` i databasen.
+ * 0.0012. Svært små og store verdier skrives med tierpotens (1.2e-7), og
+ * verdier utenfor flyttallene som 0 og ∞. Samme skrivemåte som
+ * `intern.thc_vis_ircak` i databasen.
  */
 export function visIrcak(x: number): string {
+  if (!(x > 0 && x < Infinity)) return x > 0 ? '∞' : '0'
   const e = Math.floor(Math.log10(x))
   if (e < -6 || e > 20) return `${(Math.round((x / 10 ** e) * 10) / 10).toFixed(1)}e${e}`
   return (Math.round(x / 10 ** (e - 1)) * 10 ** (e - 1)).toFixed(Math.max(0, 1 - e))

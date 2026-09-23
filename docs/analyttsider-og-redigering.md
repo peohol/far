@@ -804,8 +804,9 @@ Punktene over er representert i regelsettet, motoren og lagringen i Supabase,
 med validering på serveren. Gjenstår:
 
 - [x] Strukturert lagring i Supabase, med utkast/publisering, historikk og gjenoppretting.
-- [x] Server-side validering.
-- [x] Regelsettet fra dagens modul importert og publisert.
+- [x] Server-side validering, også av kurvenes rekkefølge for alle prøveverdier.
+- [x] Tekstbolkene lagret som egne kommentarer, som regelsettet peker på.
+- [x] Regelsettet og tekstene fra dagens modul importert og publisert.
 - [ ] Redigeringsgrensesnitt med historikk og sammenligning.
 - [ ] Simulator.
 - [ ] Produksjonsmodulen bytter til Supabase.

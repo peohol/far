@@ -9,7 +9,13 @@
  *
  * Bolkene bindes sammen med ett mellomrom, så en tekst skal ikke begynne
  * eller slutte med mellomrom.
+ *
+ * I databasen er hver tekst en kommentar (`kommentarobjekt.ts`), og
+ * regelsettet sier hvilken kommentar hver bolk bruker ({@link ThcTekstbolker}).
  */
+
+import { plassholdereI, type Kommentaroppslag } from './kommentarobjekt'
+import type { ThcRegelsett } from './thcRegelsett'
 
 /** Tekstbolkene kommentaren settes sammen av. Rekkefølgen er den i kommentaren. */
 export const THC_TEKSTNOKLER = [
@@ -118,10 +124,37 @@ export const THC_TEKSTBOLKER: Record<ThcTekstnokkel, ThcTekstbolkInfo> = {
 /** Én tekst for hver bolk. */
 export type ThcTekster = Record<ThcTekstnokkel, string>
 
-/** Plassholderne i en tekst, også ukjente, uten gjentakelser og sortert. */
-export function plassholdereI(tekst: string): string[] {
-  return [...new Set(tekst.match(/\{[^{}]*\}/g) ?? [])].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
+/** Kommentaren hver bolk bruker, med kommentarens ID. */
+export type ThcTekstbolker = Record<ThcTekstnokkel, string>
+
+/**
+ * THC-syreregelsettet slik det lagres: reglene, og hvilken kommentar hver
+ * tekstbolk bruker. Selve tekstene står i kommentarene.
+ */
+export interface ThcRegelsettinnhold extends ThcRegelsett {
+  tekstbolker: ThcTekstbolker
 }
+
+/** Teksten til hver bolk, slått opp i kommentarene, eller bolkene som mangler en. */
+export function thcTeksterFra(
+  tekstbolker: ThcTekstbolker,
+  kommentarer: Kommentaroppslag,
+): { ok: true; tekster: ThcTekster } | { ok: false; feil: string[] } {
+  const mangler = THC_TEKSTNOKLER.filter((nokkel) => !kommentarer.has(tekstbolker[nokkel]))
+  if (mangler.length > 0) {
+    return {
+      ok: false,
+      feil: mangler.map((nokkel) => `Fant ikke kommentaren til tekstbolken «${THC_TEKSTBOLKER[nokkel].tittel}».`),
+    }
+  }
+  return {
+    ok: true,
+    tekster: Object.fromEntries(
+      THC_TEKSTNOKLER.map((nokkel) => [nokkel, kommentarer.get(tekstbolker[nokkel])!]),
+    ) as ThcTekster,
+  }
+}
+
 
 /**
  * Om en tekst med disse plassholderne kan brukes i bolken: den må ha
