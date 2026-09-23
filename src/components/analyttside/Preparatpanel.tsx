@@ -8,10 +8,12 @@ import {
 } from '../../faginnhold/paneler'
 import type { Tilleggstekst } from '../../faginnhold/sok'
 import { iSetning } from '../../domain/names'
+import { ramsOpp } from '../../faginnhold/oppsummering'
 import {
   oppsummerGruppe,
   oppsummerPreparater,
   type Preparat,
+  type Preparatstyrke,
 } from '../../legemiddeldata/preparater'
 import { Detaljkort } from '../seksjoner/Seksjon'
 import { Uthev } from '../Uthev'
@@ -246,12 +248,14 @@ function Preparatliste({
             {p.type && <span className="preparat__merke">{p.type}</span>}
           </p>
           {p.salter.length > 0 && <p className="preparat__salt">Som {p.salter.map(iSetning).join(', ')}</p>}
+          <Preparatdetaljer preparat={p} />
           <ul className="preparat__styrker">
             {p.styrker.map((s) => (
               <li key={s.id}>
                 <span className="preparat__styrke">
                   <Uthev tekst={s.styrke || s.navn_form_styrke} />
                 </span>
+                <Styrkedetaljer preparat={p} styrke={s} />
                 {s.pakninger.length > 0 && (
                   <span className="preparat__pakninger">
                     {s.pakninger
@@ -259,6 +263,7 @@ function Preparatliste({
                       .join('; ')}
                   </span>
                 )}
+                {felles(p, omtaler).length === 0 && <Omtalelenker lenker={s.preparatomtaler} />}
               </li>
             ))}
           </ul>
@@ -268,3 +273,47 @@ function Preparatliste({
   )
 }
 
+/**
+ * Det alle styrkene har likt, som står én gang på preparatet i stedet for på
+ * hver styrke. Tomt når styrkene er ulike.
+ */
+function felles(preparat: Preparat, verdi: (s: Preparatstyrke) => readonly string[]): readonly string[] {
+  const [forste, ...resten] = preparat.styrker.map((s) => verdi(s).join('\n'))
+  return forste && resten.every((v) => v === forste) ? forste.split('\n') : []
+}
+
+const reseptgruppe = (s: Preparatstyrke) => (s.reseptgruppe ? [s.reseptgruppe] : [])
+const omtaler = (s: Preparatstyrke) => s.preparatomtaler
+
+/**
+ * Reseptgruppe, administrasjonsvei og preparatomtalen for preparatet. Det
+ * som er ulikt mellom styrkene står på hver styrke i stedet.
+ */
+function Preparatdetaljer({ preparat }: { preparat: Preparat }) {
+  const tekst = ramsOpp([...felles(preparat, reseptgruppe), ...preparat.administrasjonsveier])
+  const lenker = felles(preparat, omtaler)
+  if (!tekst && lenker.length === 0) return null
+  return (
+    <p className="preparat__detaljer">
+      {tekst}
+      <Omtalelenker lenker={lenker} />
+    </p>
+  )
+}
+
+/** Deling og knusing for styrken, og reseptgruppen når styrkene har ulike. */
+function Styrkedetaljer({ preparat, styrke }: { preparat: Preparat; styrke: Preparatstyrke }) {
+  const tekst = ramsOpp([
+    ...(felles(preparat, reseptgruppe).length === 0 ? reseptgruppe(styrke) : []),
+    ...styrke.handtering,
+  ])
+  return tekst ? <span className="preparat__handtering">{tekst}</span> : null
+}
+
+function Omtalelenker({ lenker }: { lenker: readonly string[] }) {
+  return lenker.map((lenke, i) => (
+    <a key={lenke} className="preparat__omtale" href={lenke} target="_blank" rel="noopener noreferrer">
+      {lenker.length > 1 ? `Preparatomtale ${i + 1}` : 'Preparatomtale'}
+    </a>
+  ))
+}

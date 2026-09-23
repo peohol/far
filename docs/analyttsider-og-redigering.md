@@ -1091,9 +1091,13 @@ Del 2, dagens sider:
 
 ## Arbeidspakke 12 - Flere legemiddeldata
 
-**Status:** [ ] Ikke startet
+**Status:** [ ] Påbegynt. Reseptgruppe, administrasjonsvei, deling/knusing/åpning og preparatomtalen er bygget; interaksjoner og byttbarhet gjenstår.
 
 Ta inn de øvrige feltene i del 23 én etter én, der arbeidspakke 8 viser at kildedataene er gode nok og feltet har nytte i OUSFAR, for eksempel ATC, reseptstatus, markedsstatus, administrasjonsvei, byttbarhet, deling/knusing/åpning, lenke til preparatomtale og eventuelt interaksjoner.
+
+- [x] Reseptgruppe, administrasjonsvei, deling/knusing/åpning og lenke til preparatomtale på preparatene.
+- [ ] Interaksjoner fra FEST.
+- [ ] Byttbarhet i klartekst.
 
 ## Arbeidspakke 13 - Regelvisninger og simulatorer i seksjonsarkitekturen
 

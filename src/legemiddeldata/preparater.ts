@@ -19,7 +19,7 @@
 import { antall, ramsOpp } from '../faginnhold/oppsummering'
 import { iSetning } from '../domain/names'
 import { alfabetisk, formaterTall } from '../faginnhold/paneler'
-import type { Mengde } from './fest'
+import type { Mengde, Merkevaredata } from './fest'
 import type { Legemiddelutvalg } from './lesing'
 
 /** Preparattypen FEST bruker for preparater som krever godkjenningsfritak. */
@@ -53,8 +53,13 @@ export interface Preparatstyrke {
   mengde: Styrkemengde | null
   /** FESTs eget navn med form og styrke, f.eks. «Sarotex tab 25 mg». */
   navn_form_styrke: string
+  /** Reseptgruppen som FEST skriver den, f.eks. «Reseptgruppe C» eller «Kosttilskudd». */
   reseptgruppe: string | null
   produsent: string | null
+  /** Om tabletten kan deles, knuses eller kapselen åpnes, der FEST sier det. */
+  handtering: string[]
+  /** Lenkene til preparatomtalen (SPC). Ofte én for hver styrke. */
+  preparatomtaler: string[]
   pakninger: Preparatpakning[]
 }
 
@@ -71,6 +76,8 @@ export interface Preparat {
   kombinasjon: string[]
   /** Preparattypen når den ikke er et vanlig legemiddel, f.eks. «Sykehuspreparat». */
   type: string | null
+  /** Administrasjonsveiene, f.eks. «Oral bruk». */
+  administrasjonsveier: string[]
   styrker: Preparatstyrke[]
 }
 
@@ -145,8 +152,10 @@ export function byggPreparatoversikt(utvalg: Legemiddelutvalg, koblet: readonly 
       kombinasjon: [],
       type: m.preparattype && !VANLIGE_TYPER.has(m.preparattype.kode) ? m.preparattype.tekst : null,
       fritak: m.preparattype?.kode === GODKJENNINGSFRITAK,
+      administrasjonsveier: [],
       styrker: [],
     }
+    leggTil(preparat.administrasjonsveier, m.administrasjonsveier.map((v) => v.tekst))
     if (m.legemiddelform_lang && m.legemiddelform_lang !== form) leggTil(preparat.langform, [m.legemiddelform_lang])
     leggTil(preparat.salter, stoff.filter((id) => salter.has(id)).map((id) => virkestoff.get(id)?.navn))
     leggTil(preparat.kombinasjon, andre.map((id) => virkestoff.get(id)?.navn))
@@ -163,15 +172,20 @@ export function byggPreparatoversikt(utvalg: Legemiddelutvalg, koblet: readonly 
         .join(' + '),
       mengde: !kombinert && mengder.length === 1 ? (mengder[0] ?? null) : null,
       navn_form_styrke: m.navn_form_styrke,
-      reseptgruppe: m.reseptgruppe?.kode ?? null,
+      reseptgruppe: m.reseptgruppe?.tekst || null,
       produsent: m.produsent,
+      handtering: handtering(m),
+      preparatomtaler: [trygLenke(m.preparatomtale)].filter((l) => l !== undefined),
       pakninger: pakningerFor.get(m.id) ?? [],
     }
     // Samme preparat i samme styrke kan være flere merkevarer i FEST, f.eks.
     // med hver sine pakninger. Det er én styrke å vise, med alle pakningene.
     const lik = preparat.styrker.find((x) => x.styrke === styrke.styrke)
-    if (lik) lik.pakninger.push(...styrke.pakninger.filter((p) => !lik.pakninger.some((q) => q.id === p.id)))
-    else preparat.styrker.push(styrke)
+    if (lik) {
+      lik.pakninger.push(...styrke.pakninger.filter((p) => !lik.pakninger.some((q) => q.id === p.id)))
+      leggTil(lik.handtering, styrke.handtering)
+      leggTil(lik.preparatomtaler, styrke.preparatomtaler)
+    } else preparat.styrker.push(styrke)
     preparater.set(nokkel, preparat)
   }
 
@@ -208,7 +222,30 @@ function fjernIntern({ fritak: _f, formkode: _k, ...preparat }: Preparat & { fri
   return preparat
 }
 
-function leggTil(liste: string[], navn: readonly (string | undefined)[]) {
+/**
+ * Deling, knusing og åpning. Delingen står med FESTs egne ord («Delbar i 2»);
+ * knusing og åpning er ja/nei i FEST og får en setning. «Ikke spesifisert»
+ * (0) og «Ukjent» (9) sier ingenting og tas ikke med.
+ */
+const USPESIFISERT = new Set(['0', '9'])
+const KNUSING: Record<string, string> = { '1': 'Kan knuses', '2': 'Kan ikke knuses' }
+const APNING: Record<string, string> = { '1': 'Kapselen kan åpnes', '2': 'Kapselen kan ikke åpnes' }
+
+function handtering(m: Merkevaredata): string[] {
+  const kjent = <K extends { kode: string }>(k: K | null) => (k && !USPESIFISERT.has(k.kode) ? k : null)
+  return [
+    kjent(m.deling)?.tekst,
+    KNUSING[kjent(m.kan_knuses)?.kode ?? ''],
+    APNING[kjent(m.kan_apnes)?.kode ?? ''],
+  ].filter((t): t is string => !!t)
+}
+
+/** Bare vanlige nettadresser blir lenker. */
+function trygLenke(adresse: string | null): string | undefined {
+  return adresse && /^https:\/\/[^\s]+$/.test(adresse) ? adresse : undefined
+}
+
+function leggTil(liste: string[], navn: readonly (string | null | undefined)[]) {
   for (const n of navn) if (n && !liste.includes(n)) liste.push(n)
 }
 

@@ -3098,6 +3098,19 @@ details[open] > .detalj__kropp {
   color: var(--blekk-dempet);
 }
 
+.preparat__handtering {
+  color: var(--blekk-dempet);
+}
+
+.preparat__detaljer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--rom-2);
+  margin: 0;
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
 /* Koblingen i redigeringen. */
 .kobling {
   display: flex;
