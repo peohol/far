@@ -5,11 +5,12 @@ innholdselementer, referanser, fortolkningskommentarer, revisjoner eller
 publisering å gjøre skal endres. Planen og fremdriften står i `docs/analyttsider-og-redigering.md`; her står hvordan
 fundamentet faktisk er bygget.
 
-Informasjonssidene (arbeidspakke 3) bygger på dette. Fortolkningen gjør det
-ikke: kommentartekstene, grensene og reglene ligger fortsatt i de statiske
-datasettene, og `src/__tests__/fortolkningUendret.test.ts` holder det slik —
-også med en kontrollsum over all klinisk output modulene kan gi — til byttet
-gjøres med vilje.
+Informasjonssidene (arbeidspakke 3) bygger på dette, og det gjør de enkle
+konsentrasjonsreglene også: de er regelsett, og steg 2 i fortolkningen bruker
+de publiserte (se `docs/fortolkningsregler.md`). Rusmiddelmodulene, EtG/EtS og
+THC-syre står fortsatt i `src/domain/`. `src/__tests__/fortolkningUendret.test.ts`
+holder en kontrollsum over all klinisk output modulene kan gi, og passer på at
+kjernen og stegene ikke henter noe fra faginnholdet selv.
 
 ## Delene
 
@@ -19,18 +20,22 @@ gjøres med vilje.
 | `supabase/migrations/*_referanse_objekttype.sql`, `*_referansesystem.sql` | Referansene og koblingene til dem |
 | `supabase/migrations/*_analyttsider_lesing.sql` | Lesingen av en hel side, referansebasen og sider etter navn |
 | `supabase/migrations/*_enkeltelementer.sql` | At kortene som står én gang i panelet sitt, ikke kan opprettes to ganger |
+| `supabase/migrations/*_regelredigering_lesing.sql` | Historikken til ett objekt (`les_historikk`) og regelsettet for én kode |
+| `supabase/migrations/*_kommentar_objekttype.sql`, `*_kommentarer.sql` | Fortolkningskommentarene som egne objekter |
+| `src/domain/kommentarobjekt.ts` | Formen på en kommentar og kontrollen av den, lik databasens |
 | `supabase/migrations/*_revisjonskilde.sql` | Kilden i revisjonene, for innhold som er importert |
 | `supabase/import/psykofarmaka/` | Importdatasettet for psykofarmakasidene, én fil per analyttkode |
 | `src/faginnhold/import.ts`, `psykofarmaka.ts`, `scripts/importer-psykofarmaka.ts` | Kontrollen av datasettet, planen og SQL-en som legger det inn |
 | `supabase/migrations/*_psykofarmaka_import_*.sql`, `*_psykofarmaka_kursendring.sql` | Importen slik den ble rullet ut, og kursendringen som tok bort preparatnavnene etterpå |
-| `supabase/migrations/*_kommentar_objekttype.sql`, `*_kommentarer.sql` | Fortolkningskommentarene som egne objekter |
-| `src/domain/kommentarobjekt.ts` | Formen på en kommentar og kontrollen av den, lik databasens |
+| `supabase/migrations/*_scenarioregelsett*.sql`, `*_rusregler_import.sql`, `*_scenarioregler_lesing.sql` | Scenarioregelsettene for analytter som vurderes samlet, importen av rusmiddelreglene og lesingen fortolkningen gjør (`docs/scenarioregler.md`) |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
 | `src/faginnhold/paneler.ts` | Panelene 1–7 og formen på hver elementtype |
 | `src/faginnhold/riktekst.ts` | Rikteksten: nodene og merkene som er tillatt, rensing og ren tekst |
 | `src/faginnhold/analyttside.ts` | En side satt sammen: panelene, nummereringen og publiseringsrekkefølgen |
 | `src/faginnhold/sok.ts` | Indekseringen og søket, for siden og senere hele kunnskapsbasen |
+| `src/faginnhold/historikk.ts`, `innholdsfelter.ts` | Historikken: tidslinjen, sammenligningen felt for felt og ord for ord, og feltene hver objekttype deles i |
+| `src/components/historikk/` | Historikkvinduet og «Sist redigert», som åpner det |
 | `src/domain/analyttkatalog.ts`, `rute.ts` | Kodene som har en side, og adressene til dem |
 | `src/components/analyttside/` | Siden, panelene, skjemaene, editoren, referansevelgeren og søket |
 | `src/faginnhold/referanser.ts` | Siteringer, nummerering, piller og referanseliste — rene funksjoner |
@@ -67,8 +72,16 @@ Tre begreper holdes fra hverandre, som planen krever:
 - **Kommentar** — en fortolkningskommentar: teksten som limes inn i
   pasientsvaret. Se [Kommentarer](#kommentarer).
 
-Regelsettene som bestemmer når en kommentar brukes, er egne objekttyper, én
-per regeltype, på samme maskineri.
+- **Intervallregelsett** (`intervallregelsett`) — de enkle
+  konsentrasjonsreglene for én analyttkode. Regelsettet peker på kommentarene i
+  stedet for å ha sin egen kopi. Se `docs/fortolkningsregler.md`.
+- **THC-syreregelsett** (`thc_regelsett`) — reglene for THC-syre i urin som
+  ett objekt: kurvene, grensene og hvilken kommentar hver tekstbolk bruker
+  lagres, publiseres og gjenopprettes samlet. Tekstene er kommentarer. Det
+  finnes bare ett. Se `docs/thc-syre.md`.
+
+Regelsettene for de øvrige regeltypene er egne objekttyper, én per regeltype,
+på samme maskineri.
 
 ## Objekter, revisjoner og tilstander
 
@@ -101,6 +114,19 @@ unntak er en referanse som aldri har vært publisert eller brukt (se
 Historikken sorteres på revisjon, med publiseringen etter revisjonen den
 gjelder.
 
+**Historikkvisningen.** `les_historikk(objekt)` gir hendelsene fra
+`objekthistorikk` (hvem, når, handling, kilde) og øyeblikksbildet i hver
+revisjon, i ett kall og med radsikkerheten som ellers. «Sist redigert av …»
+ved hvert redigerbart objekt åpner historikkvinduet for akkurat det objektet:
+tidslinjen, og to visninger av forskjellen mellom en revisjon og den forrige
+(eller en valgt eldre) — endringene, med det fjernede rødt og gjennomstreket
+og det nye grønt og understreket, og revisjonene side om side. Innholdet
+sammenlignes felt for felt (`innholdsfelter`: et regelsett per intervall, et
+kort per tekst, en referanse som den vises), og bare fritekst ord for ord.
+«Gjenopprett revisjon N» kaller `gjenopprett_revisjon` mot revisjonen
+utkastet står på, så en gammel nettleserøkt får en konflikt i stedet for å
+skrive over noe.
+
 ## Operasjonene
 
 Alt som endrer noe, går gjennom fire databasefunksjoner, og for referansene
@@ -114,6 +140,11 @@ gir tilbake objektets nye status.
 | `lagre_utkast(objekt, forventet_revisjon, innhold)` | Ny revisjon av utkastet. Uendret innhold gir ingen ny revisjon |
 | `gjenopprett_revisjon(objekt, forventet_revisjon, fra_revisjon)` | Ny revisjon med innholdet fra en tidligere. Alt senere blir stående |
 | `publiser_utkast(objekt, forventet_revisjon)` | Publiserer utkastet slik det står. Lager ingen ny revisjon |
+| `lagre_intervallregelsett(objekt, forventet_revisjon, innhold, kommentarer)` | Et regelsett og de nye og endrede kommentarene det bruker, i én transaksjon (`docs/fortolkningsregler.md`) |
+
+`opprett_utkast` går gjennom `intern.opprett_objekt(type, id, innhold)`, som
+også brukes når ID-en alt er gitt: en import med faste ID-er, eller en ny
+kommentar som reglene i samme lagring peker på.
 
 **Samtidighet.** `forventet_revisjon` er revisjonen brukeren åpnet. Funksjonen
 låser utkastet og sammenligner; er det kommet en nyere revisjon i mellomtiden,
@@ -270,8 +301,12 @@ sidetilstand)` gir laboratorieanalytten, hovedsiden, innholdselementene,
 komponentsidene med kodene deres og referansene siden siterer — hvert objekt
 som en utgave med revisjonen tilstanden peker på, den publiserte revisjonen,
 øyeblikksbildet og hvem som laget det. Lesemodus leser det publiserte;
-redigeringsmodus utkastet. `les_referanser` gir referansebasen og
-`finn_infosider` sidene med gitte navn. Alle tre, og visningen
+redigeringsmodus utkastet. Regelsettet for koden (`finn_intervallregelsett`,
+se `docs/fortolkningsregler.md`) leses samtidig, med kommentarobjektene det
+peker på, og står i sidedataene som `regelsett`; det er sitt eget objekt og
+peker på koden, ikke på siden.
+`les_referanser` gir referansebasen og `finn_infosider` sidene med gitte
+navn. Alle disse, og visningen
 `objektutgaver` de bygger på, kjører med rettighetene til den som leser, så
 radsikkerheten gjelder som ellers.
 
@@ -315,8 +350,8 @@ Første gang noe lagres på en kode uten side, opprettes informasjonssiden og
 laboratorieanalytten av katalogens opplysninger; sider med samme navn som
 finnes fra før — for eksempel en komponent — gjenbrukes. «Publiser endringene»
 viser hva som blir synlig, og publiserer i den rekkefølgen databasen krever
-(`publiseringsplan`): referanser, komponentsider, hovedsiden, analytten, så
-elementene.
+(`publiseringsplan`): referanser, komponentsider, hovedsiden, analytten,
+elementene, og til sist regelsettet, med feltene som er endret i det.
 
 Et objekt kan ikke slettes. Et kort som fjernes, flyttes derfor til panelet
 `fjernet`: det vises ikke, søkes ikke i og nummereres ikke, men står i
@@ -422,6 +457,12 @@ selv, andre kolonner er koblinger til andre objekter), funksjonsparet
 `intern.skriv_<type>` og `intern.les_<type>`, radsikkerhet og rettigheter som
 for de andre. Resten av maskineriet finner funksjonene på navnet. Legg typen
 og formen inn i `src/faginnhold/modell.ts`, og prøv den i testene.
+
+**Flyttall.** Supabase-prosjektet skriver flyttall med 15 gjeldende sifre
+(`extra_float_digits = 0`), og øyeblikksbildet — som også det publiserte
+skrives av — får da bare 15. Et `les_<type>` som gjør `float8` om til JSON,
+skal derfor ha `set extra_float_digits = 1`, som gir den korteste eksakte
+skrivemåten. Testdatabasen har samme innstilling som prosjektet.
 
 **Nytt felt på en type.** Revisjonene endres aldri, så eldre øyeblikksbilder
 mangler feltet. `skriv_<type>` må tåle det — med en standardverdi, f.eks.

@@ -1,7 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { Analyttkatalog } from '../../domain/analyttkatalog'
 import { byggSidemodell, type Publiseringssteg } from '../../faginnhold/analyttside'
-import type { Analyttsidedata } from '../../faginnhold/lesing'
+import { endredeFelt } from '../../faginnhold/historikk'
+import type { Analyttsidedata, Regelsettutgave } from '../../faginnhold/lesing'
 import { PANELER, lesKinetikk, panelFor } from '../../faginnhold/paneler'
 import { indekserSide, sokeord } from '../../faginnhold/sok'
 import { lagLiggerOver, skrivesIFelt } from '../../hooks/useKeyboard'
@@ -21,7 +22,10 @@ import { useInteraksjoner } from './useInteraksjoner'
 import { Datakortpanel, Kortpanel, Tabellpanel, Tekstpanel, type Panelkontekst } from './Paneler'
 import { Redigeringskilde } from './Redigeringskontekst'
 import { Sidesok } from './Sidesok'
+import { Scenarioregler, useScenarioreglerFor } from '../regler/Scenarioregler'
 import { Uthevingskilde } from '../Uthev'
+import { Fortolkningsregler, regelsettfelterMedTekst } from '../regler/Fortolkningsregler'
+import { losRegelsett } from '../../regler/kommentarer'
 import { useAnalyttside, type Sidemodus } from './useAnalyttside'
 
 export interface AnalyttsideProps {
@@ -125,7 +129,7 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
   const overskrift = useId()
 
   const handlinger = useAnalyttside(oppforing, modus)
-  const { side, referansebase, konflikt, plan } = handlinger
+  const { side, referansebase, publisertRegelsett, konflikt, plan } = handlinger
   const modell = useMemo(() => byggSidemodell(side.data), [side.data])
   const navn = side.data.infoside?.innhold.navn ?? oppforing.sidenavn
   const komponenter = useMemo(() => komponenterFor(oppforing, side.data, katalog), [oppforing, side.data, katalog])
@@ -150,9 +154,10 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
 
   const kontekst: Panelkontekst = { modell, redigerer, handlinger }
   const redigeringsverdi = useMemo(
-    () => ({ referansebase, opprettReferanse: handlinger.opprettReferanse }),
-    [referansebase, handlinger.opprettReferanse],
+    () => ({ referansebase, opprettReferanse: handlinger.opprettReferanse, gjenopprett: handlinger.gjenopprett }),
+    [referansebase, handlinger.opprettReferanse, handlinger.gjenopprett],
   )
+  const regler = useScenarioreglerFor(oppforing.fortolkning)
   const harInnhold = modell.paneler.size > 0 || Object.keys(modell.panelreferanser).length > 0
 
   // En side som åpnes, begynner øverst, med fokus på navnet — så tastaturet og
@@ -183,7 +188,7 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
         <Button variant="subtle" onClick={() => onApneFortolkning(oppforing.fortolkning)}>
           Åpne fortolkning
         </Button>
-        {styring && harInnhold && (
+        {styring && (harInnhold || regler) && (
           <Button variant="subtle" onClick={() => styring.settAlle(!styring.alleApne)}>
             {styring.alleApne ? 'Lukk alle' : 'Åpne alle'}
           </Button>
@@ -214,6 +219,7 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
       {modus === 'rediger' && (
         <Redigeringsstripe
           data={side.data}
+          publisertRegelsett={publisertRegelsett}
           plan={plan}
           laster={!redigerer}
           onPubliser={handlinger.publiser}
@@ -289,6 +295,14 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
               {!redigerer && side.status === 'klar' && !harInnhold && (
                 <p className="analyttside__tom">Denne siden har ikke fått faginnhold ennå.</p>
               )}
+              {regler && <Scenarioregler {...regler} />}
+              <Fortolkningsregler
+                utgave={side.data.regelsett}
+                publisert={publisertRegelsett}
+                redigerer={redigerer}
+                onLagre={handlinger.lagreRegelsett}
+                hentNyeste={handlinger.hentRegelsettutkast}
+              />
               <Referanseliste />
             </div>
           </Redigeringskilde>
@@ -298,9 +312,30 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
   )
 }
 
-/** Hva et publiseringssteg gjelder, slik det står i oppsummeringen. */
-export function beskrivSteg(steg: Publiseringssteg, data: Analyttsidedata): string {
+/**
+ * Hva et publiseringssteg gjelder, slik det står i oppsummeringen. For
+ * regelsettet står også hva som er endret siden det som er publisert.
+ */
+export function beskrivSteg(
+  steg: Publiseringssteg,
+  data: Analyttsidedata,
+  publisertRegelsett: Regelsettutgave | null = null,
+): string {
   switch (steg.slag) {
+    case 'intervallregelsett': {
+      const regelsett = data.regelsett
+      const navn = `Fortolkningsreglene for ${regelsett?.regelsett.innhold.analyttkode ?? 'koden'}`
+      if (!regelsett || !publisertRegelsett) return navn
+      const endret = endredeFelt(
+        regelsettfelterMedTekst(losRegelsett(publisertRegelsett)),
+        regelsettfelterMedTekst(losRegelsett(regelsett)),
+      )
+      return endret.length > 0 ? `${navn} (${endret.join(', ')})` : navn
+    }
+    case 'kommentar': {
+      const kommentar = data.regelsett?.kommentarer.find((k) => k.id === steg.id)
+      return `Kommentar: ${kommentar?.innhold.navn ?? 'en kommentar fortolkningsreglene bruker'}`
+    }
     case 'referanse': {
       const referanse = data.referanser.find((r) => r.id === steg.id)
       return `Referanse: ${referanse?.innhold.tittel || referanse?.innhold.forfattere || 'uten tittel'}`
@@ -330,11 +365,13 @@ export function beskrivSteg(steg: Publiseringssteg, data: Analyttsidedata): stri
  */
 function Redigeringsstripe({
   data,
+  publisertRegelsett,
   plan,
   laster,
   onPubliser,
 }: {
   data: Analyttsidedata
+  publisertRegelsett: Regelsettutgave | null
   plan: Publiseringssteg[]
   /** Sant mens utkastet hentes etter at redigeringen er slått på. */
   laster: boolean
@@ -382,7 +419,7 @@ function Redigeringsstripe({
           <p className="redigeringsstripe__tekst">Dette blir publisert og synlig for alle:</p>
           <ul className="publisering__liste">
             {plan.map((steg) => (
-              <li key={steg.id}>{beskrivSteg(steg, data)}</li>
+              <li key={steg.id}>{beskrivSteg(steg, data, publisertRegelsett)}</li>
             ))}
           </ul>
           {feil && (

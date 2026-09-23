@@ -232,12 +232,10 @@
       "analysemetode": "AHT",
       "kategori": "ACE-hemmere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -247,31 +245,6 @@
           "tekst": "10 – 300"
         }
       },
-      "nedreGrense": 10,
-      "ovreGrense": 1200,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Enalaprilat er den aktive metabolitten av enalapril. Referanseområdet for enalaprilat er basert på bruk av 5–40 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 1199",
-          "fra": 10,
-          "til": 1199,
-          "kommentar": "Enalaprilat er den aktive metabolitten av enalapril. Referanseområdet for enalaprilat er basert på bruk av 5–40 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1200",
-          "fra": 1200,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Enalaprilat er den aktive metabolitten av enalapril. Referanseområdet for enalaprilat er basert på bruk av 5–40 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -285,12 +258,10 @@
       "analysemetode": "AHT",
       "kategori": "ACE-hemmere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -300,31 +271,6 @@
           "tekst": "10 – 300"
         }
       },
-      "nedreGrense": 10,
-      "ovreGrense": 1200,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for lisinopril er basert på bruk av 5–80 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 1199",
-          "fra": 10,
-          "til": 1199,
-          "kommentar": "Referanseområdet for lisinopril er basert på bruk av 5–80 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1200",
-          "fra": 1200,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for lisinopril er basert på bruk av 5–80 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -338,12 +284,10 @@
       "analysemetode": "AHT",
       "kategori": "ACE-hemmere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -353,31 +297,6 @@
           "tekst": "4 – 60"
         }
       },
-      "nedreGrense": 4,
-      "ovreGrense": 240,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 4",
-          "fra": null,
-          "til": 4,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Ramiprilat er den aktive metabolitten av ramipril. Referanseområdet for ramiprilat er basert på bruk av 2,5–10 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "4 – 239",
-          "fra": 4,
-          "til": 239,
-          "kommentar": "Ramiprilat er den aktive metabolitten av ramipril. Referanseområdet for ramiprilat er basert på bruk av 2,5–10 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 240",
-          "fra": 240,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ramiprilat er den aktive metabolitten av ramipril. Referanseområdet for ramiprilat er basert på bruk av 2,5–10 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -391,12 +310,10 @@
       "analysemetode": "AHT",
       "kategori": "Aldosteronantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 2,
         "terapiomrade": {
@@ -406,31 +323,6 @@
           "tekst": "3,5 – 350"
         }
       },
-      "nedreGrense": 3.5,
-      "ovreGrense": 1400,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 3,5",
-          "fra": null,
-          "til": 3.5,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for eplerenon er basert på bruk av 25–50 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "3,5 – 1399",
-          "fra": 3.5,
-          "til": 1399,
-          "kommentar": "Referanseområdet for eplerenon er basert på bruk av 25–50 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1400",
-          "fra": 1400,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for eplerenon er basert på bruk av 25–50 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -444,12 +336,10 @@
       "analysemetode": "AHT",
       "kategori": "Aldosteronantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 10,
         "terapiomrade": {
@@ -459,31 +349,6 @@
           "tekst": "15 – 300"
         }
       },
-      "nedreGrense": 15,
-      "ovreGrense": 1200,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 15",
-          "fra": null,
-          "til": 15,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Kanrenon er den aktive metabolitten av spironolakton. Referanseområdet for kanrenon er basert på bruk av 25–100 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "15 – 1199",
-          "fra": 15,
-          "til": 1199,
-          "kommentar": "Kanrenon er den aktive metabolitten av spironolakton. Referanseområdet for kanrenon er basert på bruk av 25–100 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1200",
-          "fra": 1200,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Kanrenon er den aktive metabolitten av spironolakton. Referanseområdet for kanrenon er basert på bruk av 25–100 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": [
         "spironolakton"
       ]
@@ -499,12 +364,10 @@
       "analysemetode": "AHT",
       "kategori": "Alfa- og betablokkere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -514,31 +377,6 @@
           "tekst": "2,5 – 50"
         }
       },
-      "nedreGrense": 2.5,
-      "ovreGrense": 200,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 2,5",
-          "fra": null,
-          "til": 2.5,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for karvedilol er basert på bruk av 12,5–50 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "2,5 – 199",
-          "fra": 2.5,
-          "til": 199,
-          "kommentar": "Referanseområdet for karvedilol er basert på bruk av 12,5–50 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 200",
-          "fra": 200,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for karvedilol er basert på bruk av 12,5–50 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -552,12 +390,10 @@
       "analysemetode": "AHT",
       "kategori": "Alfa- og betablokkere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -567,31 +403,6 @@
           "tekst": "50 – 1000"
         }
       },
-      "nedreGrense": 50,
-      "ovreGrense": 4000,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 50",
-          "fra": null,
-          "til": 50,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for labetalol er basert på bruk av 200–2400 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "50 – 3999",
-          "fra": 50,
-          "til": 3999,
-          "kommentar": "Referanseområdet for labetalol er basert på bruk av 200–2400 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 4000",
-          "fra": 4000,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for labetalol er basert på bruk av 200–2400 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -605,12 +416,10 @@
       "analysemetode": "AHT",
       "kategori": "Alfablokkere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 2,
         "terapiomrade": {
@@ -620,31 +429,6 @@
           "tekst": "5 – 80"
         }
       },
-      "nedreGrense": 5,
-      "ovreGrense": 320,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 5",
-          "fra": null,
-          "til": 5,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for doksazosin er basert på bruk av 4–8 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "5 – 319",
-          "fra": 5,
-          "til": 319,
-          "kommentar": "Referanseområdet for doksazosin er basert på bruk av 4–8 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 320",
-          "fra": 320,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for doksazosin er basert på bruk av 4–8 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -658,12 +442,10 @@
       "analysemetode": "AHT",
       "kategori": "ARB",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 50,
         "terapiomrade": {
@@ -673,31 +455,6 @@
           "tekst": "300 – 3000"
         }
       },
-      "nedreGrense": 300,
-      "ovreGrense": 12000,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 300",
-          "fra": null,
-          "til": 300,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for irbesartan er basert på bruk av 150–300 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "300 – 11999",
-          "fra": 300,
-          "til": 11999,
-          "kommentar": "Referanseområdet for irbesartan er basert på bruk av 150–300 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 12000",
-          "fra": 12000,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for irbesartan er basert på bruk av 150–300 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -711,12 +468,10 @@
       "analysemetode": "AHT",
       "kategori": "ARB",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -726,31 +481,6 @@
           "tekst": "15 – 200"
         }
       },
-      "nedreGrense": 15,
-      "ovreGrense": 800,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 15",
-          "fra": null,
-          "til": 15,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for kandesartan er basert på bruk av 8–32 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "15 – 799",
-          "fra": 15,
-          "til": 799,
-          "kommentar": "Referanseområdet for kandesartan er basert på bruk av 8–32 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 800",
-          "fra": 800,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for kandesartan er basert på bruk av 8–32 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -764,12 +494,10 @@
       "analysemetode": "AHT",
       "kategori": "ARB",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -779,31 +507,6 @@
           "tekst": "30 – 350"
         }
       },
-      "nedreGrense": 30,
-      "ovreGrense": 1400,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 30",
-          "fra": null,
-          "til": 30,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Losartansyre er den aktive metabolitten av losartan. Referanseområdet for losartansyre er basert på bruk av 50–100 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "30 – 1399",
-          "fra": 30,
-          "til": 1399,
-          "kommentar": "Losartansyre er den aktive metabolitten av losartan. Referanseområdet for losartansyre er basert på bruk av 50–100 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1400",
-          "fra": 1400,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Losartansyre er den aktive metabolitten av losartan. Referanseområdet for losartansyre er basert på bruk av 50–100 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -817,12 +520,10 @@
       "analysemetode": "AHT",
       "kategori": "ARB",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 2,
         "terapiomrade": {
@@ -832,31 +533,6 @@
           "tekst": "8 – 80"
         }
       },
-      "nedreGrense": 8,
-      "ovreGrense": 320,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 8",
-          "fra": null,
-          "til": 8,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for telmisartan er basert på bruk av 20–80 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "8 – 319",
-          "fra": 8,
-          "til": 319,
-          "kommentar": "Referanseområdet for telmisartan er basert på bruk av 20–80 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 320",
-          "fra": 320,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for telmisartan er basert på bruk av 20–80 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -870,12 +546,10 @@
       "analysemetode": "AHT",
       "kategori": "ARB",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 50,
         "terapiomrade": {
@@ -885,31 +559,6 @@
           "tekst": "300 – 4000"
         }
       },
-      "nedreGrense": 300,
-      "ovreGrense": 16000,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 300",
-          "fra": null,
-          "til": 300,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for valsartan er basert på bruk av 80–320 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "300 – 15999",
-          "fra": 300,
-          "til": 15999,
-          "kommentar": "Referanseområdet for valsartan er basert på bruk av 80–320 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 16000",
-          "fra": 16000,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for valsartan er basert på bruk av 80–320 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -923,12 +572,10 @@
       "analysemetode": "AHT",
       "kategori": "Betablokkere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 10,
         "terapiomrade": {
@@ -938,31 +585,6 @@
           "tekst": "75 – 750"
         }
       },
-      "nedreGrense": 75,
-      "ovreGrense": 3000,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 75",
-          "fra": null,
-          "til": 75,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for atenolol er basert på bruk av 50–100 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "75 – 2999",
-          "fra": 75,
-          "til": 2999,
-          "kommentar": "Referanseområdet for atenolol er basert på bruk av 50–100 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 3000",
-          "fra": 3000,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for atenolol er basert på bruk av 50–100 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -976,12 +598,10 @@
       "analysemetode": "AHT",
       "kategori": "Betablokkere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -991,31 +611,6 @@
           "tekst": "10 – 200"
         }
       },
-      "nedreGrense": 10,
-      "ovreGrense": 800,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for bisoprolol er basert på bruk av 5–20 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 799",
-          "fra": 10,
-          "til": 799,
-          "kommentar": "Referanseområdet for bisoprolol er basert på bruk av 5–20 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 800",
-          "fra": 800,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for bisoprolol er basert på bruk av 5–20 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1029,12 +624,10 @@
       "analysemetode": "AHT",
       "kategori": "Betablokkere",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -1044,31 +637,6 @@
           "tekst": "10 – 500"
         }
       },
-      "nedreGrense": 10,
-      "ovreGrense": 2000,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for metoprolol er basert på bruk av 50–200 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 1999",
-          "fra": 10,
-          "til": 1999,
-          "kommentar": "Referanseområdet for metoprolol er basert på bruk av 50–200 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 2000",
-          "fra": 2000,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for metoprolol er basert på bruk av 50–200 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1082,12 +650,10 @@
       "analysemetode": "AHT",
       "kategori": "Diuretika",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -1097,31 +663,6 @@
           "tekst": "1,5 – 30"
         }
       },
-      "nedreGrense": 1.5,
-      "ovreGrense": 120,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 1,5",
-          "fra": null,
-          "til": 1.5,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for bendroflumetiazid er basert på bruk av 1,25–5 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "1,5 – 119",
-          "fra": 1.5,
-          "til": 119,
-          "kommentar": "Referanseområdet for bendroflumetiazid er basert på bruk av 1,25–5 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 120",
-          "fra": 120,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for bendroflumetiazid er basert på bruk av 1,25–5 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1135,41 +676,14 @@
       "analysemetode": "AHT",
       "kategori": "Diuretika",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 10,
         "terapiomrade": null
       },
-      "nedreGrense": 10,
-      "ovreGrense": 1600,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Bumetanid er ikke påvisbart medikamentfastende, men kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 1599",
-          "fra": 10,
-          "til": 1599,
-          "kommentar": "Bumetanid kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1600",
-          "fra": 1600,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Bumetanid er ikke påvisbart medikamentfastende, men kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1183,41 +697,14 @@
       "analysemetode": "AHT",
       "kategori": "Diuretika",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 50,
         "terapiomrade": null
       },
-      "nedreGrense": 50,
-      "ovreGrense": 40000,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 50",
-          "fra": null,
-          "til": 50,
-          "kommentar": "Furosemid er ikke påvisbart medikamentfastende, men kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "50 – 39999",
-          "fra": 50,
-          "til": 39999,
-          "kommentar": "Furosemid kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 40000",
-          "fra": 40000,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Furosemid er ikke påvisbart medikamentfastende, men kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1231,12 +718,10 @@
       "analysemetode": "AHT",
       "kategori": "Diuretika",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -1246,31 +731,6 @@
           "tekst": "15 – 300"
         }
       },
-      "nedreGrense": 15,
-      "ovreGrense": 1200,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 15",
-          "fra": null,
-          "til": 15,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for hydroklortiazid er basert på bruk av 12,5–50 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "15 – 1199",
-          "fra": 15,
-          "til": 1199,
-          "kommentar": "Referanseområdet for hydroklortiazid er basert på bruk av 12,5–50 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1200",
-          "fra": 1200,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for hydroklortiazid er basert på bruk av 12,5–50 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1284,12 +744,10 @@
       "analysemetode": "AHT",
       "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -1299,31 +757,6 @@
           "tekst": "10 – 70"
         }
       },
-      "nedreGrense": 10,
-      "ovreGrense": 280,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for amlodipin er basert på bruk av 5–10 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 279",
-          "fra": 10,
-          "til": 279,
-          "kommentar": "Referanseområdet for amlodipin er basert på bruk av 5–10 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 280",
-          "fra": 280,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for amlodipin er basert på bruk av 5–10 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1337,12 +770,10 @@
       "analysemetode": "AHT",
       "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 10,
         "terapiomrade": {
@@ -1352,31 +783,6 @@
           "tekst": "100 – 500"
         }
       },
-      "nedreGrense": 100,
-      "ovreGrense": 2000,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 100",
-          "fra": null,
-          "til": 100,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for diltiazem er basert på bruk av 240–480 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "100 – 1999",
-          "fra": 100,
-          "til": 1999,
-          "kommentar": "Referanseområdet for diltiazem er basert på bruk av 240–480 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 2000",
-          "fra": 2000,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for diltiazem er basert på bruk av 240–480 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1390,12 +796,10 @@
       "analysemetode": "AHT",
       "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 0.1,
         "terapiomrade": {
@@ -1405,31 +809,6 @@
           "tekst": "0,2 – 5"
         }
       },
-      "nedreGrense": 0.2,
-      "ovreGrense": 20,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 0,2",
-          "fra": null,
-          "til": 0.2,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for lerkanidipin er basert på bruk av 10–20 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "0,2 – 19",
-          "fra": 0.2,
-          "til": 19,
-          "kommentar": "Referanseområdet for lerkanidipin er basert på bruk av 10–20 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 20",
-          "fra": 20,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for lerkanidipin er basert på bruk av 10–20 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1443,12 +822,10 @@
       "analysemetode": "AHT",
       "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 1,
         "terapiomrade": {
@@ -1458,31 +835,6 @@
           "tekst": "20 – 150"
         }
       },
-      "nedreGrense": 20,
-      "ovreGrense": 600,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 20",
-          "fra": null,
-          "til": 20,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for nifedipin er basert på bruk av 20–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "20 – 599",
-          "fra": 20,
-          "til": 599,
-          "kommentar": "Referanseområdet for nifedipin er basert på bruk av 20–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 600",
-          "fra": 600,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for nifedipin er basert på bruk av 20–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1496,12 +848,10 @@
       "analysemetode": "AHT",
       "kategori": "Kalsiumantagonister",
       "enhet": "nmol/L",
-      "referanseomrade": null,
       "maleomrade": {
         "tekst": "",
         "deler": []
       },
-      "ringegrense": null,
       "antihypertensiv": {
         "pavisningsgrense": 10,
         "terapiomrade": {
@@ -1511,31 +861,6 @@
           "tekst": "40 – 400"
         }
       },
-      "nedreGrense": 40,
-      "ovreGrense": 1600,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 40",
-          "fra": null,
-          "til": 40,
-          "kommentar": "Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? Referanseområdet for verapamil er basert på bruk av 120–480 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "40 – 1599",
-          "fra": 40,
-          "til": 1599,
-          "kommentar": "Referanseområdet for verapamil er basert på bruk av 120–480 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1600",
-          "fra": 1600,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Referanseområdet for verapamil er basert på bruk av 120–480 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        }
-      ],
       "aliaser": []
     }
   ]

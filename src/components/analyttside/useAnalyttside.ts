@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { publiseringsplan, tilReferanse, type Sideelement } from '../../faginnhold/analyttside'
 import { Samtidighetskonflikt } from '../../faginnhold/lagring'
-import { TOM_SIDE, type Analyttsidedata, type Utgave } from '../../faginnhold/lesing'
+import { TOM_SIDE, type Analyttsidedata, type Regelsettutgave, type Utgave } from '../../faginnhold/lesing'
 import type { Infosideinnhold, Innholdselementinnhold, Referanseinnhold, Tilstand } from '../../faginnhold/modell'
+import { kommentarendringer, utenKommentarer } from '../../regler/kommentarer'
+import type { Intervallregelsett } from '../../regler/modell'
 import { FJERNET, erEnkeltelement } from '../../faginnhold/paneler'
 import type { Referanse } from '../../faginnhold/referanser'
 import type { Katalogoppforing } from '../../domain/analyttkatalog'
@@ -52,6 +54,8 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
   const tilstand: Tilstand = modus === 'rediger' ? 'utkast' : 'publisert'
   const [side, setSide] = useState<Sidetilstand>({ status: 'laster', data: TOM_SIDE, tilstand: null, feil: null })
   const [referansebase, setReferansebase] = useState<Referanse[]>([])
+  /** Regelsettet slik det er publisert, til å vise hva som endres før publiseringen. */
+  const [publisertRegelsett, setPublisertRegelsett] = useState<Regelsettutgave | null>(null)
   const [konflikt, setKonflikt] = useState(false)
   const [runde, setRunde] = useState(0)
   /** Det siste som er lest, og fra hvilken tilstand, for endringene som trenger revisjonene. */
@@ -77,7 +81,8 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
     }
   }, [leser, oppforing.kode, tilstand, runde])
 
-  // Referansebasen trengs bare for å velge kilder, altså bare i redigeringen.
+  // Referansebasen trengs bare for å velge kilder, og det publiserte
+  // regelsettet bare for å si hva som endres — altså bare i redigeringen.
   useEffect(() => {
     if (modus !== 'rediger') return
     let gjelder = true
@@ -89,10 +94,18 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
       .catch(() => {
         if (gjelder) setReferansebase([])
       })
+    leser
+      .finnIntervallregelsett(oppforing.kode, 'publisert')
+      .then((utgave) => {
+        if (gjelder) setPublisertRegelsett(utgave)
+      })
+      .catch(() => {
+        if (gjelder) setPublisertRegelsett(null)
+      })
     return () => {
       gjelder = false
     }
-  }, [leser, modus, runde])
+  }, [leser, modus, runde, oppforing.kode])
 
   const lastInn = useCallback(() => {
     setKonflikt(false)
@@ -244,6 +257,44 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
     [lager],
   )
 
+  /**
+   * Lagrer regelsettet og de nye og endrede kommentarene som utkast, på én
+   * gang, mot revisjonene brukeren åpnet — eller mot `grunnlag` når brukeren
+   * har sett en nyere utgave og velger å lagre over den. En konflikt kastes
+   * videre til redigeringen, som lar brukeren sammenligne før noe lagres.
+   */
+  const lagreRegelsett = useCallback(
+    async (innhold: Intervallregelsett, grunnlag?: Regelsettutgave) => {
+      const apnet = utkastet().regelsett
+      if (!apnet) throw new Error(IKKE_KLAR)
+      const mot = grunnlag ?? apnet
+      await lager.lagreIntervallregelsett(
+        mot.regelsett.id,
+        mot.regelsett.revisjon,
+        utenKommentarer(innhold),
+        kommentarendringer(innhold, mot.kommentarer, apnet.kommentarer),
+      )
+      setRunde((r) => r + 1)
+    },
+    [lager, utkastet],
+  )
+
+  /** Regelsettet slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */
+  const hentRegelsettutkast = useCallback(
+    () => leser.finnIntervallregelsett(oppforing.kode, 'utkast'),
+    [leser, oppforing.kode],
+  )
+
+  /** Lager en ny revisjon av objektet med innholdet fra en tidligere. */
+  const gjenopprett = useCallback(
+    (utgave: Utgave<unknown>, fraRevisjon: number) =>
+      endre(async () => {
+        utkastet()
+        await lager.gjenopprettRevisjon(utgave.id, utgave.revisjon, fraRevisjon)
+      }),
+    [endre, lager, utkastet],
+  )
+
   const plan = useMemo(() => (modus === 'rediger' ? publiseringsplan(side.data) : []), [modus, side.data])
 
   /**
@@ -268,6 +319,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
      */
     kanEndres: modus === 'rediger' && side.tilstand === 'utkast',
     referansebase,
+    publisertRegelsett,
     konflikt,
     plan,
     lastInn,
@@ -276,6 +328,9 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
     flyttElement,
     lagrePanelreferanser,
     opprettReferanse,
+    lagreRegelsett,
+    hentRegelsettutkast,
+    gjenopprett,
     publiser,
   }
 }

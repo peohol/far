@@ -18,7 +18,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [ ] Arbeidspakke 4: import av psykofarmakainnhold (revidert 23.09.2026, omarbeides).
 - [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
 - [ ] Arbeidspakke 6: sammensatte analyttgrupper.
-- [ ] Arbeidspakke 7: THC-syre.
+- [ ] Arbeidspakke 7: THC-syre (motor og lagring ferdige; editor og simulator i arbeidspakke 13).
 - [ ] Arbeidspakke 8: kartlegging av offentlige legemiddeldatakilder.
 - [x] Arbeidspakke 9: seksjoner og detaljkort (progressiv detaljering).
 - [ ] Arbeidspakke 10: ekstern legemiddelgrunnmur (lokal kopi og synkronisering).
@@ -835,7 +835,7 @@ Identiteten (panel 1) og kritiske varsler skjules ikke.
 | --- | --- |
 | «Kurskorrigering og plan» | Denne planen og koordineringen i del 25 |
 | «Fullfør arbeidspakke 4» | Arbeidspakke 4 (omarbeidingen av #35) |
-| «Arbeidspakke 5 – enkle regler» | Arbeidspakke 5 (#37, #39, del 3), og sin del av arbeidspakke 13 |
+| «Arbeidspakke 5 – enkle regler» | Arbeidspakke 5 (#37, #39, #44, #46 og del 5), og sin del av arbeidspakke 13 |
 | «Arbeidspakke 6 – analyttgrupper» | Arbeidspakke 6 (#33), og sin del av arbeidspakke 13 |
 | «Arbeidspakke 7 – THC-syre» | Arbeidspakke 7 (#34, #36), kommentarobjektene (#38), og sin del av arbeidspakke 13 |
 | «Legemiddeldata fra offentlige kilder» | Arbeidspakke 8, 10, 11 og 12 |
@@ -900,7 +900,7 @@ Hvordan referansesystemet er bygget, står i `docs/faginnhold.md`. Migrasjonene 
 
 **Status:** [x] Ferdig
 
-Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssidene». Sidene er tomme til innholdet legges inn: de viser koden, kategorien, navnet og komponentene fra de statiske datasettene, og resten fylles i arbeidspakke 4. Historikkvisningen med diff (del 7) er ikke laget; «Sist redigert» vises i redigeringsmodus.
+Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssidene». Sidene er tomme til innholdet legges inn: de viser koden, kategorien, navnet og komponentene fra de statiske datasettene, og resten fylles i arbeidspakke 4. «Sist redigert» vises i redigeringsmodus og åpner historikken med diff og gjenoppretting (del 7), laget i arbeidspakke 5.
 
 - [x] Egne URL-er for analyttsider.
 - [x] Venstremeny fører til informasjonssider.
@@ -944,48 +944,73 @@ Til klinisk gjennomgang: avvikene mellom PDF-en og de statiske dataene (BREK, DO
 
 ## Arbeidspakke 5 - Enkle kommentarer og konsentrasjonsregler
 
-**Status:** [ ] Ikke startet
+**Status:** [x] Ferdig. Regelsettene er i Supabase med dagens regler, og
+pariteten er dokumentert (`docs/fortolkningsregler.md`). Reglene vises,
+simuleres og redigeres på analyttsidene, med historikk, sammenligning og
+gjenoppretting. Steg 2 i fortolkningen bruker de publiserte regelsettene, og
+grensene og kommentarene er tatt ut av de statiske datasettene; testene måler
+mot en frosset fasit fra før byttet. Tekstene er de felles
+kommentarobjektene (#38), med egen historikk og publisering; regelsettene
+peker på dem med ID og inneholder ikke tekstene (del 4). Referanseområdet
+under analyttnavnet på steg 2 leses fra kortet på informasjonssiden, så de to
+alltid viser det samme (del 5). Regelvisningen på analyttsiden er seksjonen
+«Fortolkning», med simulatoren og kommentarhistorikken som detaljkort
+(arbeidspakke 13).
 
-- [ ] Kommentarobjekter i Supabase.
-- [ ] Enkle intervalbaserte regelsett.
-- [ ] Redigering av delte skillepunkter mellom intervallene.
-- [ ] Ingen hull eller overlapp kan publiseres.
-- [ ] Kommentar og regel lagres separat.
-- [ ] Cut-off-logikken representeres uten duplisering av hovedkommentar.
-- [ ] «Ring rekvirent» representeres som egen handling/egenskap.
-- [ ] Regeltest/simulator.
-- [ ] Historikk og gjenoppretting.
-- [ ] Paritetstester mot dagens motor.
-- [ ] Produksjonsmodulene bytter til Supabase først når paritet er dokumentert.
+- [x] Kommentarobjekter i Supabase.
+- [x] Enkle intervalbaserte regelsett.
+- [x] Redigering av delte skillepunkter mellom intervallene.
+- [x] Ingen hull eller overlapp kan publiseres.
+- [x] Kommentar og regel lagres separat.
+- [x] Cut-off-logikken representeres uten duplisering av hovedkommentar.
+- [x] «Ring rekvirent» representeres som egen handling/egenskap.
+- [x] Regeltest/simulator.
+- [x] Historikk og gjenoppretting.
+- [x] Paritetstester mot dagens motor.
+- [x] Produksjonsmodulene bytter til Supabase først når paritet er dokumentert.
 
 ## Arbeidspakke 6 - Sammensatte analyttgrupper
 
-**Status:** [ ] Ikke startet
+**Status:** [ ] Påbegynt
 
-- [ ] Redigerbare scenarioer.
-- [ ] Påvist/ikke påvist-betingelser.
-- [ ] Forholdstall/terskler.
-- [ ] Hoved-/tilleggskommentarer og plassering.
-- [ ] Eksplisitte manuelle/gråsoneutfall.
-- [ ] Simulator for hele regelsettet.
-- [ ] Migrer diazepamgruppen.
-- [ ] Migrer tramadolgruppen.
-- [ ] Migrer kodein/morfin.
-- [ ] Migrer amfetamin/metamfetamin.
+Scenariomodellen, motoren, lagringen og fortolkningen står i `docs/scenarioregler.md`. Reglene for alle rusmiddelmodulene ligger publisert i Supabase som scenarioregelsett som peker på egne kommentarobjekter, med utkast, publisering, historikk og gjenoppretting på serveren, og fortolkningen bruker dem. Paritetstester mot fasiten fra den opprinnelige motoren låser at resultatet er det samme. Analyttsidene viser reglene, med simulator. Det som gjenstår, er skjermbildene for å redigere regelsettene, med historikk og forskjeller, som bygges i seksjonsarkitekturen (arbeidspakke 13).
+
+- [ ] Redigerbare scenarioer (lagring og kontroll på serveren er på plass; skjermbildet gjenstår).
+- [x] Påvist/ikke påvist-betingelser.
+- [x] Forholdstall/terskler.
+- [x] Hoved-/tilleggskommentarer og plassering.
+- [x] Eksplisitte manuelle/gråsoneutfall.
+- [x] Simulator for hele regelsettet.
+- [x] Migrer diazepamgruppen.
+- [x] Migrer tramadolgruppen.
+- [x] Migrer kodein/morfin.
+- [x] Migrer amfetamin/metamfetamin.
 
 ## Arbeidspakke 7 - THC-syre
 
-**Status:** [ ] Ikke startet
+**Status:** [~] Pågår. Motoren og lagringen er ferdige; editoren, simulatoren
+og byttet av produksjonskilde gjenstår. Løsningen er beskrevet i
+`docs/thc-syre.md`.
 
 Egen spesialisert regelmotor/editor for:
 
-- [ ] terskelkurver
-- [ ] bruksmønster
-- [ ] prøveintervaller
-- [ ] kreatininkorrigerte verdier
-- [ ] dynamisk kommentarsammensetning
-- [ ] øvrige THC-spesifikke parametere
-- [ ] simulator og regresjonstester
+- [x] terskelkurver
+- [x] bruksmønster
+- [x] prøveintervaller
+- [x] kreatininkorrigerte verdier
+- [x] dynamisk kommentarsammensetning
+- [x] øvrige THC-spesifikke parametere
+- [ ] simulator og regresjonstester (regresjonstestene og fasiten er ferdige)
+
+Punktene over er representert i regelsettet, motoren og lagringen i Supabase,
+med validering på serveren. Gjenstår:
+
+- [x] Strukturert lagring i Supabase, med utkast/publisering, historikk og gjenoppretting.
+- [x] Server-side validering, også av kurvenes rekkefølge for alle prøveverdier.
+- [x] Tekstbolkene lagret som egne kommentarer, som regelsettet peker på.
+- [x] Regelsettet og tekstene fra dagens modul importert og publisert.
+- [ ] Editor og simulator, bygd i seksjonsmodellen (arbeidspakke 13).
+- [ ] Produksjonsmodulen bytter til Supabase.
 
 ---
 
@@ -1078,8 +1103,8 @@ Ta inn de øvrige feltene i del 23 én etter én, der arbeidspakke 8 viser at ki
 
 **Status:** [ ] Ikke startet. Starter når arbeidspakke 9 del 1 er på `main`.
 
-- [ ] Fortolkning/regler for konsentrasjonsreglene (arbeidspakke 5) vises som hovedseksjon med detaljkort.
-- [ ] Scenarioreglene og simulatoren (arbeidspakke 6) likeså.
+- [x] Fortolkning/regler for konsentrasjonsreglene (arbeidspakke 5) vises som hovedseksjon med detaljkort.
+- [x] Scenarioreglene og simulatoren (arbeidspakke 6) likeså.
 - [ ] THC-editoren og -simulatoren (arbeidspakke 7) bygges i modellen fra starten.
 - [ ] Regelmotorene, valideringen og paritetstestene er uendret; klinisk output endres ikke.
 

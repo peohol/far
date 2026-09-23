@@ -8,6 +8,7 @@ import './styles/tokens.css'
 import './styles/base.css'
 import './styles/components.css'
 import './styles/konto.css'
+import './styles/regler.css'
 
 const root = document.getElementById('root')
 if (!root) throw new Error('Fant ikke #root i index.html')
