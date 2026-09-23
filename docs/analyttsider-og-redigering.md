@@ -20,7 +20,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [ ] Arbeidspakke 6: sammensatte analyttgrupper.
 - [ ] Arbeidspakke 7: THC-syre.
 - [ ] Arbeidspakke 8: kartlegging av offentlige legemiddeldatakilder.
-- [ ] Arbeidspakke 9: seksjoner og detaljkort (progressiv detaljering).
+- [x] Arbeidspakke 9: seksjoner og detaljkort (progressiv detaljering).
 - [ ] Arbeidspakke 10: ekstern legemiddelgrunnmur (lokal kopi og synkronisering).
 - [ ] Arbeidspakke 11: preparater fra eksterne data, ende til ende.
 - [ ] Arbeidspakke 12: flere legemiddeldata der kildene er gode nok.
@@ -1024,23 +1024,25 @@ Ingen databasemodell lages i denne arbeidspakken.
 
 ## Arbeidspakke 9 - Seksjoner og detaljkort
 
-**Status:** [ ] Ikke startet
+**Status:** [x] Ferdig
+
+Stoffsidene bruker progressiv detaljering: seksjon → detaljkort, beskrevet i `docs/seksjoner.md`. Identiteten står alltid fram; Viktige data er åpen fra start; de andre seksjonene er lukket med en kort oppsummering av innholdet. Direktelenker: `#/analytt/<KODE>/<seksjon>/<kort>`. Redigeringsmodus åpner alt.
 
 Del 1, komponenten:
 
-- [ ] Én generell komponent for hovedseksjon med minioppsummering og detaljkort, høyst to nivåer (del 24).
-- [ ] Rask, diskret animasjon som respekterer redusert bevegelse.
-- [ ] Tastatur, skjermleser og mobil.
-- [ ] Stabile adresser for seksjoner og detaljkort; direktelenker åpner riktig sted.
-- [ ] Søk på siden i lukket innhold, som åpner, ruller til og markerer treffet.
-- [ ] Lyst og mørkt tema.
-- [ ] Tester.
+- [x] Én generell komponent for hovedseksjon med minioppsummering og detaljkort, høyst to nivåer (del 24).
+- [x] Rask, diskret animasjon som respekterer redusert bevegelse.
+- [x] Tastatur, skjermleser og mobil.
+- [x] Stabile adresser for seksjoner og detaljkort; direktelenker åpner riktig sted.
+- [x] Søk på siden i lukket innhold, som åpner, ruller til og markerer treffet.
+- [x] Lyst og mørkt tema.
+- [x] Tester.
 
 Del 2, dagens sider:
 
-- [ ] Flytt panelene som er på `main`, over i modellen, uten å endre klinisk betydning.
-- [ ] Minioppsummering for hver hovedseksjon.
-- [ ] Referansenummereringen og kort-hoppene er uendret.
+- [x] Flytt panelene som er på `main`, over i modellen, uten å endre klinisk betydning.
+- [x] Minioppsummering for hver hovedseksjon.
+- [x] Referansenummereringen og kort-hoppene er uendret.
 
 ## Arbeidspakke 10 - Ekstern legemiddelgrunnmur
 

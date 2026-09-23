@@ -11,6 +11,7 @@ import { Button } from '../Button'
 import { StepBar } from '../StepBar'
 import { BackIcon } from '../icons'
 import { Referanseliste } from '../referanser/Referanseliste'
+import { SeksjonsstyringKilde, skuffnokkel, useSeksjonsstyring } from '../seksjoner/Seksjonsstyring'
 import { Sidereferanser } from '../referanser/Sidereferanser'
 import { useFaginnholdskilde } from './Faginnholdskilde'
 import { Identitetspanel, komponenterFor } from './Identitetspanel'
@@ -26,6 +27,8 @@ import { useAnalyttside, type Sidemodus } from './useAnalyttside'
 export interface AnalyttsideProps {
   /** Analyttkoden fra adressen. */
   kode: string
+  /** Seksjonen og eventuelt detaljkortet adressen peker på (se `src/domain/rute.ts`). */
+  sted?: readonly string[]
   katalog: Analyttkatalog
   /** Åpner fortolkningsmodulen koden hører til. */
   onApneFortolkning: (analyte: Analyte) => void
@@ -38,7 +41,10 @@ export interface AnalyttsideProps {
  *
  * Siden er et oppslagsverk: sju paneler i fast rekkefølge (se
  * `src/faginnhold/paneler.ts`), med referansene nummerert etter første
- * forekomst og listet nederst. Den åpnes fra sidemenyen, fra kodepillene i
+ * forekomst og listet nederst. Identiteten står alltid fram; de andre
+ * panelene er seksjoner som åpnes og lukkes, med en kort oppsummering når de
+ * er lukket (`src/components/seksjoner/`). En adresse med et sted etter koden
+ * åpner seksjonen eller detaljkortet den peker på. Den åpnes fra sidemenyen, fra kodepillene i
  * fortolkningsmodulene og fra sin egen adresse, og har «Åpne fortolkning» for
  * veien tilbake til arbeidsflyten.
  *
@@ -48,7 +54,7 @@ export interface AnalyttsideProps {
  *
  * Tastene: `Escape` lukker siden, `/` går til søket på siden.
  */
-export function Analyttside({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps) {
+export function Analyttside({ kode, sted, katalog, onApneFortolkning, onLukk }: AnalyttsideProps) {
   const oppforing = katalog.finn(kode)
   useEffect(() => {
     const forrige = document.title
@@ -77,15 +83,18 @@ export function Analyttside({ kode, katalog, onApneFortolkning, onLukk }: Analyt
       </section>
     )
   }
-  // Nøkkelen gir hver kode en frisk side: modus, søk og skjemaer hører til siden.
+  // Nøkkelen gir hver kode en frisk side: modus, søk, skjemaer og hvilke
+  // seksjoner som er åpne, hører til siden.
   return (
-    <Innhold
-      key={oppforing.kode}
-      kode={oppforing.kode}
-      katalog={katalog}
-      onApneFortolkning={onApneFortolkning}
-      onLukk={onLukk}
-    />
+    <SeksjonsstyringKilde key={oppforing.kode}>
+      <Innhold
+        kode={oppforing.kode}
+        sted={sted}
+        katalog={katalog}
+        onApneFortolkning={onApneFortolkning}
+        onLukk={onLukk}
+      />
+    </SeksjonsstyringKilde>
   )
 }
 
@@ -107,7 +116,7 @@ function useLukkMedEscape(onLukk: () => void) {
   }, [])
 }
 
-function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps) {
+function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: AnalyttsideProps) {
   const oppforing = katalog.finn(kode)!
   const { kanRedigere } = useFaginnholdskilde()
   const [modus, setModus] = useState<Sidemodus>('lese')
@@ -139,10 +148,22 @@ function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps)
 
   // En side som åpnes, begynner øverst, med fokus på navnet — så tastaturet og
   // skjermleseren står der siden begynner, og ikke igjen i menyen eller modulen.
+  // Peker adressen på et sted på siden, åpnes det og rulles det dit i stedet.
+  const styring = useSeksjonsstyring()
+  const apne = styring?.apne
+  const stedsnokkel = skuffnokkel(sted ?? [])
+  const pekerPaaSted = useRef(stedsnokkel !== '')
   useEffect(() => {
-    window.scrollTo({ top: 0 })
+    if (!pekerPaaSted.current) window.scrollTo({ top: 0 })
     document.getElementById(overskrift)?.focus({ preventScroll: true })
   }, [overskrift])
+  // Nøkkelen, og ikke lista, avgjør om stedet er nytt: en ny adresse til det
+  // samme stedet skal ikke rulle siden dit på nytt.
+  const stedet = useRef(sted)
+  stedet.current = sted
+  useEffect(() => {
+    if (stedsnokkel && stedet.current) apne?.(stedet.current)
+  }, [stedsnokkel, apne])
 
   return (
     <section ref={beholder} className="analyttside" aria-labelledby={overskrift} data-modus={modus}>
@@ -153,11 +174,20 @@ function Innhold({ kode, katalog, onApneFortolkning, onLukk }: AnalyttsideProps)
         <Button variant="subtle" onClick={() => onApneFortolkning(oppforing.fortolkning)}>
           Åpne fortolkning
         </Button>
+        {styring && harInnhold && (
+          <Button variant="subtle" onClick={() => styring.settAlle(!styring.alleApne)}>
+            {styring.alleApne ? 'Lukk alle' : 'Åpne alle'}
+          </Button>
+        )}
         {kanRedigere && (
           <Button
             variant="subtle"
             aria-pressed={modus === 'rediger'}
-            onClick={() => setModus(modus === 'rediger' ? 'lese' : 'rediger')}
+            onClick={() => {
+              // Den som redigerer, skal se hele siden: alt åpnes.
+              if (modus === 'lese') styring?.settAlle(true)
+              setModus(modus === 'rediger' ? 'lese' : 'rediger')
+            }}
           >
             {modus === 'rediger' ? 'Avslutt redigering' : 'Rediger'}
           </Button>

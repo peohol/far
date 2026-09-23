@@ -13,8 +13,10 @@ import {
   type Datakortdefinisjon,
   type Paneldefinisjon,
 } from '../../faginnhold/paneler'
-import { erTomt, tomtDokument } from '../../faginnhold/riktekst'
+import { antall, forhandsvisning, ramsOpp } from '../../faginnhold/oppsummering'
+import { erTomt, klartekst, tomtDokument } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
+import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
 import { Referansepille } from '../referanser/Referansepille'
 import { Riktekst } from './Riktekst'
 import {
@@ -32,6 +34,10 @@ import type { Analyttsidehandlinger } from './useAnalyttside'
 /**
  * Panelene 2–7 på informasjonssiden, i lese- og redigeringsmodus.
  *
+ * Hvert panel er en seksjon som åpnes og lukkes (`src/components/seksjoner/`),
+ * med en kort oppsummering av innholdet når den er lukket. Kortene i
+ * farmakokinetikken er detaljkort i seksjonen.
+ *
  * I lesemodus vises bare det som har innhold: siden skal leses som et
  * oppslagsverk. I redigeringsmodus står alle panelene og alle datakortene
  * fram, med diskrete knapper for å redigere, legge til, flytte og fjerne.
@@ -48,9 +54,7 @@ export function elementAnker(id: string): string {
   return `element-${id}`
 }
 
-export function panelAnker(nokkel: string): string {
-  return `panel-${nokkel}`
-}
+export const panelAnker = seksjonsanker
 
 /* --- Rammen rundt et panel ------------------------------------------------ */
 
@@ -58,33 +62,39 @@ export function Panel({
   definisjon,
   kontekst,
   tomt,
+  oppsummering,
   children,
 }: {
   definisjon: Paneldefinisjon
   kontekst: Panelkontekst
   /** Sant når panelet ikke har noe å vise. Da skjules det i lesemodus. */
   tomt: boolean
+  /** Det seksjonen viser når den er lukket. */
+  oppsummering: string
   children: ReactNode
 }) {
-  const overskrift = useId()
   const [kilder, setKilder] = useState(false)
   const { modell, redigerer, handlinger } = kontekst
   const panelreferanser = modell.panelreferanser[definisjon.nokkel] ?? []
   if (tomt && !redigerer) return null
 
   return (
-    <section id={panelAnker(definisjon.nokkel)} className="kort kort--start infopanel" aria-labelledby={overskrift}>
-      <div className="infopanel__hode">
-        <h2 id={overskrift} className="infopanel__tittel">
-          <Uthev tekst={definisjon.tittel} />
-          {panelreferanser.length > 0 && <Referansepille ider={panelreferanser} niva="panel" />}
-        </h2>
-        {redigerer && !kilder && (
+    <Seksjon
+      id={definisjon.nokkel}
+      className="infopanel"
+      tittel={<Uthev tekst={definisjon.tittel} />}
+      tittelTillegg={panelreferanser.length > 0 && <Referansepille ider={panelreferanser} niva="panel" />}
+      oppsummering={tomt ? 'Ikke noe innhold ennå' : oppsummering}
+      apenFraStart={definisjon.apen}
+      handlinger={
+        redigerer &&
+        !kilder && (
           <Button variant="subtle" className="redigeringsknapp" onClick={() => setKilder(true)}>
             Kilder for panelet
           </Button>
-        )}
-      </div>
+        )
+      }
+    >
       {kilder && (
         <PanelkildeSkjema
           tittel={definisjon.tittel}
@@ -98,7 +108,7 @@ export function Panel({
       )}
       {tomt && redigerer && <p className="infopanel__tomt">Panelet har ikke noe innhold ennå.</p>}
       {children}
-    </section>
+    </Seksjon>
   )
 }
 
@@ -172,7 +182,12 @@ export function Datakortpanel({ definisjon, kontekst }: { definisjon: Paneldefin
   const synlige = kort.filter(({ element }) => element && harVerdi(lesIntervallverdi(element.data)))
 
   return (
-    <Panel definisjon={definisjon} kontekst={kontekst} tomt={synlige.length === 0}>
+    <Panel
+      definisjon={definisjon}
+      kontekst={kontekst}
+      tomt={synlige.length === 0}
+      oppsummering={ramsOpp(synlige.map(({ def }) => def.tittel))}
+    >
       <ul className="datakort">
         {(kontekst.redigerer ? kort : synlige).map(({ def, plass, element }) => {
           const verdi = lesIntervallverdi(element?.data)
@@ -242,7 +257,7 @@ export function Tekstpanel({ definisjon, kontekst }: { definisjon: Paneldefinisj
   const tomt = !element || (erTomt(dokument) && element.referanser.length === 0)
 
   return (
-    <Panel definisjon={definisjon} kontekst={kontekst} tomt={tomt}>
+    <Panel definisjon={definisjon} kontekst={kontekst} tomt={tomt} oppsummering={forhandsvisning(klartekst(dokument))}>
       <div className="infotekst" {...(element && { id: elementAnker(element.id) })}>
         <Redigerbar
           navn={definisjon.tittel}
@@ -292,76 +307,87 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
   const { handlinger, redigerer } = kontekst
 
   return (
-    <Panel definisjon={definisjon} kontekst={kontekst} tomt={elementer.length === 0}>
+    <Panel
+      definisjon={definisjon}
+      kontekst={kontekst}
+      tomt={elementer.length === 0}
+      oppsummering={ramsOpp(elementer.map((e) => lesKinetikk(e.data).tittel))}
+    >
       {elementer.length > 0 && (
         <ul className="infokort">
           {elementer.map((element, i) => {
             const { tittel, dokument } = lesKinetikk(element.data)
             return (
-              <li key={element.id} id={elementAnker(element.id)} className="infokort__kort">
-                <h3 className="infokort__tittel">
-                  <Uthev tekst={tittel} />
-                  <Kortreferanser element={element} />
-                </h3>
-                <Redigerbar
-                  navn={tittel}
-                  element={element}
-                  redigerer={redigerer}
-                  visning={<Riktekst dokument={dokument} />}
-                  ekstra={
-                    <>
-                      {i > 0 && (
-                        <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt opp: ${tittel}`} onClick={() => void handlinger.flyttElement(element, elementer, -1)}>
-                          Flytt opp
-                        </Button>
+              <li key={element.id} className="infokort__kort">
+                <Detaljkort
+                  id={element.id}
+                  tittel={<Uthev tekst={tittel} />}
+                  tittelTillegg={<Kortreferanser element={element} />}
+                  oppsummering={forhandsvisning(klartekst(dokument))}
+                >
+                  {/* Ankeret søket peker på står inne i detaljkortet, så å gå dit åpner også kortet. */}
+                  <div id={elementAnker(element.id)} className="infokort__innhold">
+                    <Redigerbar
+                      navn={tittel}
+                      element={element}
+                      redigerer={redigerer}
+                      visning={<Riktekst dokument={dokument} />}
+                      ekstra={
+                        <>
+                          {i > 0 && (
+                            <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt opp: ${tittel}`} onClick={() => void handlinger.flyttElement(element, elementer, -1)}>
+                              Flytt opp
+                            </Button>
+                          )}
+                          {i < elementer.length - 1 && (
+                            <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt ned: ${tittel}`} onClick={() => void handlinger.flyttElement(element, elementer, 1)}>
+                              Flytt ned
+                            </Button>
+                          )}
+                          {/* To trykk: et kort som fjernes, forsvinner fra utkastet og
+                              hentes bare tilbake gjennom historikken. */}
+                          {fjerner === element.id ? (
+                            <Button
+                              variant="subtle"
+                              className="redigeringsknapp"
+                              aria-label={`Bekreft: fjern ${tittel}`}
+                              onClick={() => void handlinger.fjernElement(element)}
+                            >
+                              Bekreft fjerning
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="subtle"
+                              className="redigeringsknapp"
+                              aria-label={`Fjern: ${tittel}`}
+                              onClick={() => setFjerner(element.id)}
+                            >
+                              Fjern
+                            </Button>
+                          )}
+                        </>
+                      }
+                      skjema={(lukk) => (
+                        <KinetikkSkjema
+                          tittel={tittel}
+                          start={{ tittel, dokument }}
+                          referanser={element.referanser}
+                          onAvbryt={lukk}
+                          onLagre={async ({ data, referanser }) => {
+                            await handlinger.lagreElement(element, {
+                              panel: definisjon.nokkel,
+                              elementtype: ELEMENTTYPER.kinetikk,
+                              posisjon: element.posisjon,
+                              data,
+                              referanser,
+                            })
+                            lukk()
+                          }}
+                        />
                       )}
-                      {i < elementer.length - 1 && (
-                        <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt ned: ${tittel}`} onClick={() => void handlinger.flyttElement(element, elementer, 1)}>
-                          Flytt ned
-                        </Button>
-                      )}
-                      {/* To trykk: et kort som fjernes, forsvinner fra utkastet og
-                          hentes bare tilbake gjennom historikken. */}
-                      {fjerner === element.id ? (
-                        <Button
-                          variant="subtle"
-                          className="redigeringsknapp"
-                          aria-label={`Bekreft: fjern ${tittel}`}
-                          onClick={() => void handlinger.fjernElement(element)}
-                        >
-                          Bekreft fjerning
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="subtle"
-                          className="redigeringsknapp"
-                          aria-label={`Fjern: ${tittel}`}
-                          onClick={() => setFjerner(element.id)}
-                        >
-                          Fjern
-                        </Button>
-                      )}
-                    </>
-                  }
-                  skjema={(lukk) => (
-                    <KinetikkSkjema
-                      tittel={tittel}
-                      start={{ tittel, dokument }}
-                      referanser={element.referanser}
-                      onAvbryt={lukk}
-                      onLagre={async ({ data, referanser }) => {
-                        await handlinger.lagreElement(element, {
-                          panel: definisjon.nokkel,
-                          elementtype: ELEMENTTYPER.kinetikk,
-                          posisjon: element.posisjon,
-                          data,
-                          referanser,
-                        })
-                        lukk()
-                      }}
                     />
-                  )}
-                />
+                  </div>
+                </Detaljkort>
               </li>
             )
           })}
@@ -406,7 +432,12 @@ export function Tabellpanel({ definisjon, kontekst }: { definisjon: Paneldefinis
   const tittel = useId()
 
   return (
-    <Panel definisjon={definisjon} kontekst={kontekst} tomt={rader.length === 0}>
+    <Panel
+      definisjon={definisjon}
+      kontekst={kontekst}
+      tomt={rader.length === 0}
+      oppsummering={ramsOpp(rader.map((r) => r.dose)) || antall(rader.length, 'rad', 'rader')}
+    >
       <div className="dosetabell" {...(element && { id: elementAnker(element.id) })}>
         <Redigerbar
           navn={definisjon.tittel}

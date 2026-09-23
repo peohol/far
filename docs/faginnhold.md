@@ -270,6 +270,13 @@ Tallene i panel 2 er tall, ikke tekst. Bare den ene grensen oppgitt vises som
 kategorien i panel 1 kommer fra de statiske datasettene til siden finnes i
 databasen.
 
+**Visningen.** Identiteten står alltid fram. Panel 2–7 er seksjoner som åpnes
+og lukkes, og kortene i farmakokinetikken er detaljkort i sin seksjon (se
+`docs/seksjoner.md`). En lukket seksjon viser en kort oppsummering med
+innholdets egne ord: titlene på datakortene og kinetikkortene, dosene i
+tabellen eller begynnelsen av teksten. «Viktige data» står åpent fra start
+(`apen` i `paneler.ts`); i redigeringsmodus åpnes alt.
+
 **Rikteksten** er et ProseMirror-dokument, redigert med TipTap som i Slaids.
 Tillatt er avsnitt, linjeskift, punkt- og nummererte lister, fet, kursiv,
 understreket, senket og hevet skrift, lenker (bare `http(s)`) og siteringer.
@@ -298,7 +305,8 @@ side om til søkedokumenter — navn, kode, komponenter, preparater,
 overskrifter, verdier, tabellrader, fritekst og referanser — hver med stedet
 den står (side › panel › kort). `sok` rangerer dokumentene og lager utdrag.
 Søket på siden bruker indeksen til å vise hvor treffene står, og fremhever
-dem i teksten. Det globale søket skal indeksere alle publiserte sider på samme
+dem i teksten — også i lukkede seksjoner, som åpnes når brukeren går til et
+treff der. Det globale søket skal indeksere alle publiserte sider på samme
 måte; det trenger bare en kilde som gir alle sidene, for eksempel en funksjon
 ved siden av `les_analyttside`.
 
