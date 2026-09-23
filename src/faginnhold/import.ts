@@ -21,15 +21,12 @@ import type { Referanseinnhold } from './modell'
 import {
   DATAKORT,
   ELEMENTTYPER,
-  PANELER,
   formaterTall,
   kontrollerIntervall,
   lesDosetabell,
   lesIntervallverdi,
   lesKinetikk,
   lesPreparater,
-  lesRiktekst,
-  medKontrolldato,
   type Doserad,
   type Intervallverdi,
 } from './paneler'
@@ -289,9 +286,8 @@ const FILFELT = new Set([
 ])
 const TEKSTPANELER = ['farmakodynamikk', 'dosering', 'indikasjon'] as const
 const DATAKORTTYPER = new Set<string>(DATAKORT.map((k) => k.type))
-const FELLESKATALOGPANELER = new Set<string>(
-  PANELER.filter((p) => 'kontrolleresMot' in p && p.kontrolleresMot === 'Felleskatalogen').map((p) => p.nokkel),
-)
+/** Panelene som ble hentet fra Felleskatalogen, ikke fra PDF-en. */
+const FELLESKATALOGPANELER = new Set<string>(['identitet', 'indikasjon'])
 
 /** Verdien med nøklene sortert, så to like objekter sammenlignes likt uansett rekkefølge. */
 function kanonisk(verdi: unknown): unknown {
@@ -419,15 +415,16 @@ export function byggImportplan(
       return dokument
     }
 
-    // Panel 1: preparatnavnene.
+    // Panel 1: preparatnavnene, med datoen de ble kontrollert mot Felleskatalogen.
+    // Slik ble de lagt inn 23.09.2026; begge deler er tatt bort igjen
+    // etterpå (se `kursendringSql`), men står i historikken.
     if (fil.preparater) {
-      const data = medKontrolldato({ navn: fil.preparater.navn }, kilde.felleskatalogen)
-      const lest = lesPreparater(data)
+      const lest = lesPreparater({ navn: fil.preparater.navn })
       if (lest.navn.length === 0) feil.push(`${hvor} preparater: ingen navn.`)
-      if (!erLik([...fil.preparater.navn].sort(), [...lest.navn].sort()) || lest.kontrollert !== kilde.felleskatalogen) {
+      if (!erLik([...fil.preparater.navn].sort(), [...lest.navn].sort())) {
         feil.push(`${hvor} preparater: navnene har tomme felt eller gjentakelser.`)
       }
-      element('identitet', ELEMENTTYPER.preparater, { ...data, navn: lest.navn }, fil.preparater.referanser)
+      element('identitet', ELEMENTTYPER.preparater, { navn: lest.navn, kontrollert: kilde.felleskatalogen }, fil.preparater.referanser)
     }
 
     // Panel 2: datakortene.
@@ -452,10 +449,7 @@ export function byggImportplan(
       if (!innhold) continue
       const dokument = tekst(innhold.tekst, panel)
       if (!dokument) continue
-      const data = FELLESKATALOGPANELER.has(panel) ? medKontrolldato({ dokument }, kilde.felleskatalogen) : { dokument }
-      if (lesRiktekst(data).kontrollert !== ('kontrollert' in data ? data.kontrollert : '')) {
-        feil.push(`${hvor} ${panel}: datoen for kontrollen mot Felleskatalogen er ugyldig.`)
-      }
+      const data = FELLESKATALOGPANELER.has(panel) ? { dokument, kontrollert: kilde.felleskatalogen } : { dokument }
       element(panel, ELEMENTTYPER.riktekst, data, innhold.referanser)
     }
 
@@ -722,4 +716,56 @@ export function importmigrasjoner(plan: Importplan, admin: string, maksTegn = 50
     else filer.push([blokk])
   }
   return filer.map((blokker) => blokker.join('\n\n'))
+}
+
+/** Kilden revisjonene fra kursendringen får i historikken. */
+export const KURSENDRINGSKILDER = {
+  preparater: 'Tatt bort: preparatnavnene skal hentes fra offentlige legemiddeldata',
+  kontrolldato: 'Tatt bort: datoen for kontroll mot Felleskatalogen',
+} as const
+
+/**
+ * Kursendringen etter importen: preparatnavnene skal ikke føres for hånd, men
+ * hentes fra offentlige legemiddeldata, og datoen for kontroll mot
+ * Felleskatalogen skal ikke vedlikeholdes. Preparatkortene importen la inn,
+ * tas derfor bort fra siden (panelet `fjernet`), og datoen tas ut av
+ * indikasjonene — som nye, publiserte revisjoner, så alt står i historikken
+ * og kan hentes tilbake. Bare det importen la inn og ingen har endret siden,
+ * røres. Uten administratoren gjør den ingenting, som migrasjonene over.
+ */
+export function kursendringSql(admin: string): string {
+  return `-- Kursendringen: preparatnavnene og datoen for kontroll mot Felleskatalogen tas bort
+do $kursendring$
+declare
+  administrator uuid;
+  e record;
+begin
+${innlogging(admin, 'hopp over')}
+
+  for e in
+    select u.objekt_id, u.revisjon, r.innhold
+    from public.objekttilstander u
+    join public.objekttilstander p on p.objekt_id = u.objekt_id and p.tilstand = 'publisert' and p.revisjon = u.revisjon
+    join public.objektrevisjoner r on r.objekt_id = u.objekt_id and r.revisjon = u.revisjon
+    join public.objektrevisjoner forste on forste.objekt_id = u.objekt_id and forste.revisjon = 1
+    join public.redigerbare_objekter o on o.id = u.objekt_id and o.type = 'innholdselement'
+    where u.tilstand = 'utkast'
+      and u.revisjon = 1
+      and forste.kilde like 'Hentet fra Felleskatalogen %'
+      and r.innhold->>'panel' <> 'fjernet'
+    order by u.objekt_id
+  loop
+    if e.innhold->>'elementtype' = 'preparater' then
+      perform set_config('far.revisjonskilde', ${lit(KURSENDRINGSKILDER.preparater)}, true);
+      perform public.lagre_utkast(e.objekt_id, e.revisjon, jsonb_set(e.innhold, '{panel}', '"fjernet"'));
+    elsif e.innhold->'data' ? 'kontrollert' then
+      perform set_config('far.revisjonskilde', ${lit(KURSENDRINGSKILDER.kontrolldato)}, true);
+      perform public.lagre_utkast(e.objekt_id, e.revisjon, e.innhold #- '{data,kontrollert}');
+    else
+      continue;
+    end if;
+    perform public.publiser_utkast(e.objekt_id, e.revisjon + 1);
+  end loop;
+end
+$kursendring$;`
 }

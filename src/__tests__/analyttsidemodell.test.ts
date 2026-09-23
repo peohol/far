@@ -10,15 +10,11 @@ import {
   FJERNET,
   PANELREKKEFOLGE,
   formaterIntervall,
-  formaterKontroll,
   kontrollerIntervall,
   lesDosetabell,
   lesIntervallverdi,
-  lesKontrolldato,
   lesPreparater,
-  lesRiktekst,
   lesTallfelt,
-  medKontrolldato,
   ryddPreparater,
   tallTilFelt,
 } from '../faginnhold/paneler'
@@ -138,34 +134,13 @@ describe('datakortene', () => {
 describe('preparatnavnene og tabellen', () => {
   it('lagrer preparatnavnene hver for seg, alfabetisk og uten gjentakelser', () => {
     expect(ryddPreparater(['Zeta', ' alfa ', '', 'Ærlig', 'ZETA', 'Øst', 'beta'])).toEqual(['alfa', 'beta', 'Zeta', 'Ærlig', 'Øst'])
-    expect(lesPreparater({ navn: ['B', 3, 'A'] })).toEqual({ navn: ['A', 'B'], kontrollert: '' })
+    expect(lesPreparater({ navn: ['B', 3, 'A'] })).toEqual({ navn: ['A', 'B'] })
   })
 
   it('leser tabellradene og hopper over tomme', () => {
     expect(
       lesDosetabell({ rader: [{ dose: ' 100 mg ', regime: 'x1', konsentrasjon: '', merknad: '' }, { dose: '' }, 'tull'] }),
     ).toEqual({ rader: [{ dose: '100 mg', regime: 'x1', konsentrasjon: '', merknad: '' }] })
-  })
-})
-
-describe('kontrollen mot Felleskatalogen', () => {
-  it('leser bare gyldige datoer', () => {
-    expect(lesKontrolldato('2026-09-23')).toBe('2026-09-23')
-    expect(lesKontrolldato('2026-02-30')).toBe('')
-    expect(lesKontrolldato('23.09.2026')).toBe('')
-    expect(lesKontrolldato(20260923)).toBe('')
-  })
-
-  it('står i dataene bare når datoen er oppgitt', () => {
-    expect(medKontrolldato({ navn: ['A'] }, '2026-09-23')).toEqual({ navn: ['A'], kontrollert: '2026-09-23' })
-    expect(medKontrolldato({ navn: ['A'] }, '')).toEqual({ navn: ['A'] })
-    expect(lesPreparater({ navn: ['A'], kontrollert: '2026-09-23' }).kontrollert).toBe('2026-09-23')
-    expect(lesRiktekst({ dokument: tomtDokument(), kontrollert: 'i går' }).kontrollert).toBe('')
-  })
-
-  it('vises med kilden og norsk dato', () => {
-    expect(formaterKontroll('Felleskatalogen', '2026-09-23')).toBe('Kontrollert mot Felleskatalogen 23.09.2026')
-    expect(formaterKontroll('Felleskatalogen', '')).toBe('')
   })
 })
 

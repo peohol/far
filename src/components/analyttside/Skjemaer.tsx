@@ -2,16 +2,13 @@ import { useId, useState, type FormEvent, type ReactNode } from 'react'
 import {
   DOSEKOLONNER,
   kontrollerIntervall,
-  lesKontrolldato,
   lesTallfelt,
-  medKontrolldato,
   ryddPreparater,
   tallTilFelt,
   tomDoserad,
   type Datakortdefinisjon,
   type Doserad,
   type Intervallverdi,
-  type Kontrolldato,
 } from '../../faginnhold/paneler'
 import { erTomt, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { Samtidighetskonflikt } from '../../faginnhold/lagring'
@@ -131,45 +128,16 @@ function Tekstfelt({
   )
 }
 
-/**
- * Datoen innholdet sist ble kontrollert mot kilden panelet holdes à jour mot.
- * Den endres bare når brukeren endrer den, så en vanlig redigering ikke gir
- * inntrykk av at alt er kontrollert på nytt.
- */
-function Kontrolldatofelt({ kilde, verdi, onEndre }: { kilde: string; verdi: Kontrolldato; onEndre: (v: string) => void }) {
-  return (
-    <Felt
-      merkelapp={`Sist kontrollert mot ${kilde}`}
-      type="date"
-      value={verdi}
-      onChange={(e) => onEndre(e.target.value)}
-    />
-  )
-}
-
-const UGYLDIG_DATO = 'Datoen for kontrollen er ikke en gyldig dato.'
-
-/** Datoen fra feltet, eller en feil når noe er fylt ut som ikke er en dato. */
-function lesDatofelt(verdi: string): { dato: Kontrolldato } | { feil: string } {
-  const dato = lesKontrolldato(verdi.trim())
-  return verdi.trim() && !dato ? { feil: UGYLDIG_DATO } : { dato }
-}
-
 /* --- Preparatnavnene ------------------------------------------------------ */
 
-export function PreparatSkjema(
-  props: SkjemaProps<{ navn: string[]; kontrollert?: Kontrolldato }> & { kontrolleresMot?: string },
-) {
+export function PreparatSkjema(props: SkjemaProps<{ navn: string[] }>) {
   const [tekst, setTekst] = useState(props.start.navn.join('\n'))
-  const [kontrollert, setKontrollert] = useState(props.start.kontrollert ?? '')
   const id = useId()
-  const kontroller = () => {
-    const dato = lesDatofelt(kontrollert)
-    if ('feil' in dato) return dato
-    return { data: medKontrolldato({ navn: ryddPreparater(tekst.split('\n')) }, dato.dato) }
-  }
   return (
-    <Skjemaramme {...props} kontroller={kontroller}>
+    <Skjemaramme
+      {...props}
+      kontroller={() => ({ data: { navn: ryddPreparater(tekst.split('\n')) } })}
+    >
       <label className="felt" htmlFor={id}>
         <span className="felt__merkelapp">Preparatnavn, ett per linje</span>
         <textarea
@@ -184,9 +152,6 @@ export function PreparatSkjema(
           Navnene lagres hver for seg og vises alltid alfabetisk.
         </span>
       </label>
-      {props.kontrolleresMot && (
-        <Kontrolldatofelt kilde={props.kontrolleresMot} verdi={kontrollert} onEndre={setKontrollert} />
-      )}
     </Skjemaramme>
   )
 }
@@ -226,21 +191,11 @@ export function DatakortSkjema(props: SkjemaProps<Intervallverdi> & { kort: Data
 
 /* --- Rikteksten ----------------------------------------------------------- */
 
-export function TekstSkjema(
-  props: SkjemaProps<{ dokument: Riktekstdokument; kontrollert?: Kontrolldato }> & { kontrolleresMot?: string },
-) {
+export function TekstSkjema(props: SkjemaProps<{ dokument: Riktekstdokument }>) {
   const [dokument, setDokument] = useState(props.start.dokument)
-  const [kontrollert, setKontrollert] = useState(props.start.kontrollert ?? '')
-  const kontroller = () => {
-    const dato = lesDatofelt(kontrollert)
-    return 'feil' in dato ? dato : { data: medKontrolldato({ dokument }, dato.dato) }
-  }
   return (
-    <Skjemaramme {...props} kontroller={kontroller}>
+    <Skjemaramme {...props} kontroller={() => ({ data: { dokument } })}>
       <Rikteksteditor dokument={props.start.dokument} onEndre={setDokument} etikett={props.tittel} />
-      {props.kontrolleresMot && (
-        <Kontrolldatofelt kilde={props.kontrolleresMot} verdi={kontrollert} onEndre={setKontrollert} />
-      )}
     </Skjemaramme>
   )
 }

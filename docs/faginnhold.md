@@ -23,6 +23,7 @@ gjøres med vilje.
 | `supabase/migrations/*_revisjonskilde.sql` | Kilden i revisjonene, for innhold som er importert |
 | `supabase/import/psykofarmaka/` | Importdatasettet for psykofarmakasidene, én fil per analyttkode |
 | `src/faginnhold/import.ts`, `psykofarmaka.ts`, `scripts/importer-psykofarmaka.ts` | Kontrollen av datasettet, planen og SQL-en som legger det inn |
+| `supabase/migrations/*_psykofarmaka_import_*.sql`, `*_psykofarmaka_kursendring.sql` | Importen slik den ble rullet ut, og kursendringen som tok bort preparatnavnene etterpå |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
 | `src/faginnhold/paneler.ts` | Panelene 1–7 og formen på hver elementtype |
@@ -243,12 +244,6 @@ radsikkerheten gjelder som ellers.
 | 6 Farmakokinetikk | `farmakokinetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge |
 | 7 Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }` |
 
-Preparatnavnene og indikasjonen holdes à jour mot Felleskatalogen
-(`kontrolleresMot` i `paneler.ts`). Datoen de sist ble kontrollert, står i
-dataene som `kontrollert` («2026-09-23»), vises som «Kontrollert mot
-Felleskatalogen 23.09.2026» og er noe annet enn «Sist redigert»: den endres
-bare når noen fyller inn en ny dato i skjemaet.
-
 Tallene i panel 2 er tall, ikke tekst. Bare den ene grensen oppgitt vises som
 «fra 10» eller «opptil 20», uten å si om grensen er med. Koden, navnet og
 kategorien i panel 1 kommer fra de statiske datasettene til siden finnes i
@@ -301,14 +296,19 @@ kolonne per dose — som gjøres om til rader. `felles.json` har referansene
 flere sider deler. Hva som er hentet og hva som er utelatt, og hvorfor, står i
 beskrivelsen av PR-en som la det inn.
 
-- Fra PDF-en: preparatnavn, dosering, farmakodynamikk, konsentrasjonsområdene
+- Fra PDF-en: dosering, farmakodynamikk, konsentrasjonsområdene
   (referanseområde, toksisk og komatøs/fatal), farmakokinetikken kort for
   kort og serumkonsentrasjonene ved ulike doser. Ikke ringegrensen og
   måleområdet (de hører til fortolkningen), og ikke «Spørsmål og svar» og
   andre saksnotater, som kan ha pasientopplysninger.
-- Fra Felleskatalogen: preparatnavnene og et kort sammendrag av de godkjente
-  indikasjonene, med produktsidene som referanser og datoen de ble
-  kontrollert.
+- Fra Felleskatalogen: et kort sammendrag av de godkjente indikasjonene, med
+  produktsidene som referanser. Det er redaksjonelt faginnhold som redigeres
+  som resten av siden.
+- Preparatnavnene fra Felleskatalogen og datoen de ble kontrollert, ble lagt
+  inn og så tatt bort igjen (`kursendringSql`, migrasjonen
+  `*_psykofarmaka_kursendring.sql`): preparatdata skal hentes fra offentlige
+  legemiddeldata, ikke føres for hånd. Kortene står i historikken, i panelet
+  `fjernet`.
 - Toksisk område og komatøs/fatal siterer Schulz og Hiemke (og
   Giftinformasjonens side der PDF-en lenker til den), fordi PDF-en oppgir dem
   som grunnlaget for toksisitetsdataene. Referanseområdet har ingen oppgitt

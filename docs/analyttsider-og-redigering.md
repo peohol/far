@@ -11,7 +11,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [x] Arbeidspakke 1: fundament for redigerbart faginnhold.
 - [x] Arbeidspakke 2: referansesystem.
 - [x] Arbeidspakke 3: analyttsider og navigasjon.
-- [x] Arbeidspakke 4: import av psykofarmakainnhold.
+- [ ] Arbeidspakke 4: import av psykofarmakainnhold.
 - [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
 - [ ] Arbeidspakke 6: sammensatte analyttgrupper.
 - [ ] Arbeidspakke 7: THC-syre.
@@ -742,18 +742,16 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 ## Arbeidspakke 4 - Psykofarmakainnhold
 
-**Status:** [x] Ferdig
+**Status:** [ ] Ikke startet
 
-Hvordan importen er bygget og kontrollert, står i `docs/faginnhold.md` under «Import fra en kilde». Alle 35 koder for antidepressiver, antipsykotika og lamotrigin er lagt inn og publisert. Ringegrense, måleområde og «Spørsmål og svar» er ikke importert. Avvik mellom PDF-en og de statiske dataene, og tvilsomme verdier i PDF-en, er listet i PR-en som la inn innholdet, og er ikke rettet.
-
-- [x] Render og kontroller `originaldata/Psykofarmaka.pdf`.
-- [x] Bygg kontrollert importdatasett.
-- [x] Importer antidepressiver og antipsykotika.
-- [x] Fyll panel 1-7 der kilden har data.
-- [x] Søk i Felleskatalogen for gjeldende preparatnavn.
-- [x] Skriv konsise indikasjonssammendrag.
-- [x] Lagre kilder og dato sist kontrollert mot Felleskatalogen.
-- [x] Første revisjon peker tilbake til kilde/side der det er mulig.
+- [ ] Render og kontroller `originaldata/Psykofarmaka.pdf`.
+- [ ] Bygg kontrollert importdatasett.
+- [ ] Importer antidepressiver og antipsykotika.
+- [ ] Fyll panel 1-7 der kilden har data.
+- [ ] Søk i Felleskatalogen for gjeldende preparatnavn.
+- [ ] Skriv konsise indikasjonssammendrag.
+- [ ] Lagre kilder og dato sist kontrollert mot Felleskatalogen.
+- [ ] Første revisjon peker tilbake til kilde/side der det er mulig.
 
 ## Arbeidspakke 5 - Enkle kommentarer og konsentrasjonsregler
 

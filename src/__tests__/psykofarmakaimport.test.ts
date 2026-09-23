@@ -20,6 +20,8 @@ import {
   Importfeil,
   importmigrasjoner,
   importSql,
+  KURSENDRINGSKILDER,
+  kursendringSql,
   lit,
   kinetikktittel,
   sidetekst,
@@ -250,12 +252,11 @@ describe('importen i databasen', () => {
       enhet: 'nmol/L',
       forbehold: 'Amitriptylin + nortriptylin.',
     })
-    expect(lesPreparater(element('preparater').innhold.data)).toEqual({
-      navn: ['Amitriptylin Abcur', 'Amitriptylin Orifarm', 'Sarotex'],
-      kontrollert: '2026-09-23',
-    })
+    expect(lesPreparater(element('preparater').innhold.data).navn).toEqual(['Amitriptylin Abcur', 'Amitriptylin Orifarm', 'Sarotex'])
+    expect(element('preparater').innhold.data).toMatchObject({ kontrollert: '2026-09-23' })
     const indikasjon = side.elementer.find((e) => e.innhold.panel === 'indikasjon')!
-    expect(lesRiktekst(indikasjon.innhold.data).kontrollert).toBe('2026-09-23')
+    expect(lesRiktekst(indikasjon.innhold.data).dokument.content?.length).toBeGreaterThan(0)
+    expect(indikasjon.innhold.data).toMatchObject({ kontrollert: '2026-09-23' })
   })
 
   it('viser kilden i historikken: siden i PDF-en, eller Felleskatalogen med dato', () => {
@@ -330,6 +331,38 @@ describe('importen i databasen', () => {
     const utkast = await lagFaginnholdsleser(kall.klientFor(admin)).lesAnalyttside('AMTNORSUM', 'utkast')
     expect(utkast.elementer.find((e) => e.id === element.id)).not.toHaveProperty('kilde')
   })
+
+  it('kursendringen tar bort preparatnavnene og kontrolldatoen, og beholder resten', async () => {
+    const leser = lagFaginnholdsleser(kall.klientFor(bruker))
+    const for_ = await leser.lesAnalyttside('SERT', 'publisert')
+    await db.exec(kursendringSql('redaktor'))
+    const etter = await leser.lesAnalyttside('SERT', 'publisert')
+
+    const synlige = (s: Analyttsidedata) => s.elementer.filter((e) => e.innhold.panel !== 'fjernet')
+    expect(synlige(etter).some((e) => e.innhold.elementtype === 'preparater')).toBe(false)
+    expect(synlige(etter)).toHaveLength(synlige(for_).length - 1)
+    const indikasjon = etter.elementer.find((e) => e.innhold.panel === 'indikasjon')!
+    expect(indikasjon.innhold.data).not.toHaveProperty('kontrollert')
+    expect(indikasjon.innhold.data).toEqual({ dokument: for_.elementer.find((e) => e.id === indikasjon.id)!.innhold.data.dokument })
+    expect(indikasjon.kilde).toBe(KURSENDRINGSKILDER.kontrolldato)
+    expect(etter.elementer.find((e) => e.innhold.elementtype === 'preparater')?.kilde).toBe(KURSENDRINGSKILDER.preparater)
+
+    // Alt annet står urørt, og et nytt forsøk gjør ingenting.
+    for (const e of synlige(etter).filter((e) => e.id !== indikasjon.id)) {
+      expect(e.revisjon).toBe(1)
+    }
+    const revisjoner = async () => (await kall.fasit<{ n: number }>('select count(*)::int as n from public.objektrevisjoner'))[0]!.n
+    const antall = await revisjoner()
+    await db.exec(kursendringSql('redaktor'))
+    expect(await revisjoner()).toBe(antall)
+  })
+
+  it('kursendringen gjør ingenting der administratoren ikke finnes', async () => {
+    const revisjoner = async () => (await kall.fasit<{ n: number }>('select count(*)::int as n from public.objektrevisjoner'))[0]!.n
+    const antall = await revisjoner()
+    await db.exec(kursendringSql('leser'))
+    expect(await revisjoner()).toBe(antall)
+  })
 })
 
 describe('importen som migrasjoner', () => {
@@ -349,6 +382,12 @@ describe('importen som migrasjoner', () => {
       .filter((f) => /^\d+_psykofarmaka_import_\d+\.sql$/.test(f))
       .sort((a, b) => a.split('_').at(-1)!.localeCompare(b.split('_').at(-1)!))
     expect(filer.map((f) => readFileSync(new URL(f, mappe), 'utf8'))).toEqual(importmigrasjoner(plan, 'peohol'))
+  })
+
+  it('har kursendringen i sin egen migrasjon', () => {
+    const mappe = new URL('../../supabase/migrations/', import.meta.url)
+    const filer = readdirSync(mappe).filter((f) => /^\d+_psykofarmaka_kursendring\.sql$/.test(f))
+    expect(filer.map((f) => readFileSync(new URL(f, mappe), 'utf8'))).toEqual([kursendringSql('peohol')])
   })
 
   it('har ingen usynlige tegn, som kan bli byttet ut på veien inn i databasen', () => {

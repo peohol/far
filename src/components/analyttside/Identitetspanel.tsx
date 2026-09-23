@@ -7,7 +7,7 @@ import { Pill } from '../Pill'
 import { Referansepille } from '../referanser/Referansepille'
 import { PreparatSkjema } from './Skjemaer'
 import { Uthev } from '../Uthev'
-import { elementAnker, Kildekontroll, panelAnker, Redigerbar, type Panelkontekst } from './Paneler'
+import { elementAnker, panelAnker, Redigerbar, type Panelkontekst } from './Paneler'
 
 /** Et stoff analysen omfatter, med kodene som har det som sin side. */
 export interface Komponent {
@@ -57,7 +57,7 @@ export function Identitetspanel({
   const { modell, redigerer, handlinger } = kontekst
   const element =
     (modell.paneler.get(definisjon.nokkel) ?? []).find((e) => e.elementtype === ELEMENTTYPER.preparater) ?? null
-  const { navn: preparater, kontrollert } = lesPreparater(element?.data)
+  const { navn: preparater } = lesPreparater(element?.data)
   const panelreferanser = modell.panelreferanser[definisjon.nokkel] ?? []
   const sum = komponenter.length > 1
 
@@ -93,23 +93,19 @@ export function Identitetspanel({
           leggTilTekst="Legg til preparatnavn"
           visning={
             preparater.length > 0 && (
-              <>
-                <p>
-                  <span className="identitet__merke">Preparater: </span>
-                  <Uthev tekst={preparater.sort(alfabetisk).join(', ')} />
-                  {element && element.referanser.length > 0 && (
-                    <Referansepille ider={element.referanser} niva="element" />
-                  )}
-                </p>
-                <Kildekontroll kilde={definisjon.kontrolleresMot} dato={kontrollert} />
-              </>
+              <p>
+                <span className="identitet__merke">Preparater: </span>
+                <Uthev tekst={preparater.sort(alfabetisk).join(', ')} />
+                {element && element.referanser.length > 0 && (
+                  <Referansepille ider={element.referanser} niva="element" />
+                )}
+              </p>
             )
           }
           skjema={(lukk) => (
             <PreparatSkjema
               tittel="Preparatnavn"
-              start={{ navn: preparater, kontrollert }}
-              kontrolleresMot={definisjon.kontrolleresMot}
+              start={{ navn: preparater }}
               referanser={element?.referanser ?? []}
               onAvbryt={lukk}
               onLagre={async ({ data, referanser }) => {
