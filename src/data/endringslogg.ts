@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.15.0',
+    versjon: '1.16.0',
     dato: '2026-09-23',
     sammendrag: 'Kommentarene i konsentrasjonsreglene er egne kommentarer med egen historikk',
     typer: ['Funksjonalitet'],
@@ -25,7 +25,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.14.0',
+    versjon: '1.15.0',
     dato: '2026-09-23',
     sammendrag: 'Kommenteringen bruker de publiserte konsentrasjonsreglene',
     typer: ['Funksjonalitet'],
@@ -37,7 +37,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.13.0',
+    versjon: '1.14.0',
     dato: '2026-09-23',
     sammendrag: 'Konsentrasjonsreglene vises, prøves og redigeres på analyttsidene',
     typer: ['Funksjonalitet', 'Design / layout'],
@@ -52,7 +52,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.12.0',
+    versjon: '1.13.0',
     dato: '2026-09-23',
     sammendrag: 'Konsentrasjonsreglene og kommentarene er lagt inn i databasen',
     typer: ['Funksjonalitet'],
@@ -62,6 +62,20 @@ export const ENDRINGSLOGG: Endring[] = [
       'Grensene lagres som skillepunkter mellom områdene, så det ikke kan oppstå hull eller overlapp. «Ring rekvirent» er lagret som en egen handling, og kommentaren for «Til stede under cut-off» gjenbruker hovedkommentaren i stedet for å gjenta den.',
       'Reglene er kontrollert mot dagens fortolkning for hver analytt, rett på, rett under og rett over hver grense, og gir de samme kommentarene og de samme beskjedene om å ringe.',
       'Ingenting av dette er synlig ennå. Kommenteringen er uendret.',
+    ],
+  },
+  {
+    versjon: '1.12.0',
+    dato: '2026-09-23',
+    sammendrag: 'Informasjonssidene for antidepressiver og antipsykotika har fått innhold',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'De 35 sidene for antidepressiver, antipsykotika og lamotrigin er fylt med fagstoffet fra Psykofarmaka-dokumentet: dosering, farmakodynamikk, referanseområde, toksisk område, komatøs/fatal konsentrasjon, halveringstid, steady state, farmakokinetikk og serumkonsentrasjoner ved ulike doser.',
+      'Et kort sammendrag av de godkjente indikasjonene er hentet fra Felleskatalogen, med lenke til produktsidene.',
+      'Preparatnavn vises ikke foreløpig. De skal hentes automatisk fra offentlige legemiddeldata i stedet for å føres inn for hånd.',
+      'Historikken viser hvor innholdet kom fra, for eksempel «Importert fra Psykofarmaka.pdf, side 7».',
+      'Ringegrensen, måleområdet og spørsmål-og-svar-notatene fra dokumentet er ikke tatt med. Kommenteringen og fortolkningsreglene er uendret.',
     ],
   },
   {
