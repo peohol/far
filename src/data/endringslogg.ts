@@ -12,6 +12,22 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.12.0',
+    dato: '2026-09-23',
+    sammendrag: 'Informasjonssidene er delt i seksjoner som åpnes og lukkes',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Delene av informasjonssiden (viktige data, farmakodynamikk, dosering, indikasjon, farmakokinetikk og serumkonsentrasjoner) er nå seksjoner som åpnes og lukkes med et trykk på overskriften. En lukket seksjon viser en kort oppsummering av hva den inneholder.',
+      'Identiteten øverst står alltid fram, og viktige data er åpen når siden åpnes.',
+      'Kortene i farmakokinetikken åpnes hver for seg inne i seksjonen.',
+      '«Åpne alle» og «Lukk alle» står øverst på siden. I redigeringsmodus åpnes alt.',
+      'Søket på siden finner også tekst i lukkede seksjoner, og viser hvor mange treff hver av dem har. Går du til et treff, åpnes seksjonen og treffet vises. Nettleserens eget søk finner også teksten.',
+      'En adresse kan peke rett på en seksjon eller et kort, og siden åpner det.',
+      'Innholdet er det samme som før, bare ordnet annerledes. Kommenteringen, kommentartekstene og fortolkningsreglene er uendret.',
+    ],
+  },
+  {
     versjon: '1.11.0',
     dato: '2026-09-23',
     sammendrag: 'Hver analytt har fått sin egen informasjonsside',

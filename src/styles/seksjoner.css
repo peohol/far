@@ -9,9 +9,11 @@
 }
 
 /* Seksjonen er et kort; mellomrommet står i innholdet, så en lukket
-   seksjon ikke får luft under hodet. */
+   seksjon ikke får luft under hodet. Luften over og under er mindre enn i
+   andre kort, så mange lukkede seksjoner kan leses som en innholdsliste. */
 .skuff--seksjon.kort {
   gap: 0;
+  padding-block: var(--rom-3);
 }
 
 .skuff--detalj {

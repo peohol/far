@@ -238,14 +238,15 @@ function useSkjuling(
   apen: boolean,
   animer: boolean,
 ) {
-  const tegnet = useRef(false)
+  // Bare et skifte glir; den første tegningen (også den doble i StrictMode) gjør ikke.
+  const forrige = useRef(apen)
   useLayoutEffect(() => {
     const boks = kropp.current
     const el = inner.current
     if (!boks || !el) return
-    const forste = !tegnet.current
-    tegnet.current = true
-    const glir = animer && !forste && !redusertBevegelse()
+    const skiftet = forrige.current !== apen
+    forrige.current = apen
+    const glir = animer && skiftet && !redusertBevegelse()
 
     if (apen) el.removeAttribute('hidden')
     if (!glir) {
