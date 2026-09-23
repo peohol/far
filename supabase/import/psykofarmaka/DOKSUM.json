@@ -59,6 +59,14 @@
       "30–300 mg"
     ]
   },
+  "indikasjon": {
+    "tekst": [
+      "Felleskatalogen har ingen indikasjonstekst for Sinequan. Preparatet er parallellimportert, og referansepreparatet er avregistrert."
+    ],
+    "referanser": [
+      "fk-sinequan-orifarm"
+    ]
+  },
   "farmakokinetikk": [
     {
       "tittel": "Biotilgjengelighet",

@@ -9,6 +9,7 @@
  * det: publisert, ført på administratoren som bestilte den, og med kilden i
  * hver revisjon.
  */
+import { readdirSync, readFileSync } from 'node:fs'
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { byggKatalog, FORTOLKNINGSOPPFORINGER } from '../domain/analyttkatalog'
@@ -17,7 +18,9 @@ import {
   byggImportplan,
   doserader,
   Importfeil,
+  importmigrasjoner,
   importSql,
+  lit,
   kinetikktittel,
   sidetekst,
   tilDokument,
@@ -146,7 +149,8 @@ describe('byggesteinene', () => {
         konsentrasjon: 'Median 2 nmol/L (10.–90. persentil: 1–3)',
         merknad: 'Testmiddel. 5 prøver. Nordmann et al. (2020)',
       },
-      { dose: '20 mg', regime: '', konsentrasjon: 'Median 2 500 nmol/L', merknad: 'Testmiddel. 1 200 prøver. Nordmann et al. (2020)' },
+      // Vanlig mellomrom mellom tusener: et hardt mellomrom er usynlig og kan bli byttet ut på veien.
+      { dose: '20 mg', regime: '', konsentrasjon: 'Median 2 500 nmol/L', merknad: 'Testmiddel. 1 200 prøver. Nordmann et al. (2020)' },
       {
         dose: '10–20 mg',
         regime: '',
@@ -219,7 +223,8 @@ describe('importen i databasen', () => {
     bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lars', etternavn: 'Leser', rolle: 'user' })
     kall = faginnholdskall(db, admin)
     plan = psykofarmakaplan(katalog)
-    for (const blokk of importSql(plan, 'redaktor')) await db.exec(blokk)
+    // Slik den rulles ut: som migrasjoner.
+    for (const migrasjon of importmigrasjoner(plan, 'redaktor')) await db.exec(migrasjon)
 
     const leser = lagFaginnholdsleser(kall.klientFor(bruker))
     sider = new Map()
@@ -300,6 +305,20 @@ describe('importen i databasen', () => {
     await expect(db.exec(importSql(plan, 'leser')[0]!)).rejects.toThrow('Fant ingen administrator med brukernavnet leser.')
   })
 
+  it('får tekster inn i databasen tegn for tegn, også usynlige tegn og lange tekster', async () => {
+    const tekster = ["O'Brien \\ 1\u00a0026", 'x'.repeat(401) + '\u00a0' + "'".repeat(3), '']
+    for (const tekst of tekster) {
+      const [rad] = await kall.fasit<{ t: string }>(`select ${lit(tekst)} as t`)
+      expect(rad!.t).toBe(tekst)
+    }
+  })
+
+  it('gjør ingenting som migrasjon der administratoren ikke finnes', async () => {
+    const for_ = await antallObjekter()
+    await db.exec(importmigrasjoner(plan, 'leser')[0]!)
+    expect(await antallObjekter()).toBe(for_)
+  })
+
   it('gir vanlige endringer i appen ingen kilde', async () => {
     const element = sider.get('AMTNORSUM')!.elementer.find((e) => e.innhold.elementtype === 'referanseomrade')!
     await kall.lagre(element.id, 1, { ...element.innhold, data: { ...element.innhold.data, forbehold: 'Endret.' } })
@@ -310,5 +329,35 @@ describe('importen i databasen', () => {
     expect(rad!.kilde).toBeNull()
     const utkast = await lagFaginnholdsleser(kall.klientFor(admin)).lesAnalyttside('AMTNORSUM', 'utkast')
     expect(utkast.elementer.find((e) => e.id === element.id)).not.toHaveProperty('kilde')
+  })
+})
+
+describe('importen som migrasjoner', () => {
+  const plan = psykofarmakaplan(katalog)
+
+  it('har alle blokkene, i samme rekkefølge, i filer under grensen', () => {
+    const blokker = importSql(plan, 'peohol', 'hopp over')
+    const filer = importmigrasjoner(plan, 'peohol', 40_000)
+    expect(filer.join('\n\n')).toBe(blokker.join('\n\n'))
+    for (const fil of filer) expect(fil.length <= 40_000 || blokker.includes(fil)).toBe(true)
+    expect(filer.length).toBeLessThan(blokker.length)
+  })
+
+  it('er det som ligger i migrasjonene, fil for fil', () => {
+    const mappe = new URL('../../supabase/migrations/', import.meta.url)
+    const filer = readdirSync(mappe)
+      .filter((f) => /^\d+_psykofarmaka_import_\d+\.sql$/.test(f))
+      .sort((a, b) => a.split('_').at(-1)!.localeCompare(b.split('_').at(-1)!))
+    expect(filer.map((f) => readFileSync(new URL(f, mappe), 'utf8'))).toEqual(importmigrasjoner(plan, 'peohol'))
+  })
+
+  it('har ingen usynlige tegn, som kan bli byttet ut på veien inn i databasen', () => {
+    for (const fil of importmigrasjoner(plan, 'peohol')) expect(fil).not.toMatch(/[\u00a0\u00ad\u2000-\u200f\u2028-\u202f\ufeff]/)
+  })
+
+  it('stopper ikke når administratoren mangler, men hopper over', () => {
+    const [blokk] = importmigrasjoner(plan, 'peohol')
+    expect(blokk).toContain('importen hoppes over')
+    expect(blokk).not.toContain('raise exception \'Fant ingen administrator')
   })
 })

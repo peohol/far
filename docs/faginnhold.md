@@ -320,16 +320,20 @@ med kolonner som ikke går opp, referanser som ikke er definert — og lister
 alle feilene samtidig. `psykofarmakaimport.test.ts` kjører hele importen i
 testdatabasen.
 
-**Innleggingen.** `npm run import:psykofarmaka -- <brukernavn> fil.sql` lager
-SQL-en. Den kjøres med databasens egne rettigheter (SQL-editoren, eller
-`execute_sql` gjennom MCP) og går gjennom de samme funksjonene som appen, som
+**Innleggingen.** Importen rulles ut som migrasjoner:
+`npm run import:psykofarmaka -- <brukernavn> --migrasjoner <mappe>` lager
+filene, som legges inn med `apply_migration` (MCP-ens `execute_sql` har bare
+leserettigheter) og så legges i `supabase/migrations/` med versjonen
+prosjektet registrerte. De går gjennom de samme funksjonene som appen, som
 administratoren som er oppgitt: `opprett_utkast` for hvert objekt, så
 `publiser_utkast` i den rekkefølgen databasen krever. Hver revisjon får kilden
 sin gjennom innstillingen `far.revisjonskilde`, som bare gjelder
-transaksjonen, og som data-API-et ikke kan sette. Første blokk legger inn
-referansene; deretter én blokk per kode, som hver er én transaksjon. En kode
-som alt har en side, hoppes over, og sider og referanser som finnes fra før,
-gjenbrukes — så SQL-en kan kjøres igjen etter et avbrudd.
+transaksjonen, og som data-API-et ikke kan sette. Finnes ikke administratoren
+— som i testdatabasen og i nye grener — gjør migrasjonene ingenting. Først
+kommer referansene, deretter én blokk per kode, som hver er én transaksjon. En
+kode som alt har en side, hoppes over, og sider og referanser som finnes fra
+før, gjenbrukes. Uten `--migrasjoner` skrives den samme SQL-en som én fil, for
+SQL-editoren; der stopper den med en feil om administratoren mangler.
 
 ## Tilgang
 

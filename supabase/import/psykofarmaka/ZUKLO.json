@@ -3,6 +3,18 @@
   "sider": [
     60
   ],
+  "preparater": {
+    "navn": [
+      "Cisordinol",
+      "Cisordinol Depot",
+      "Cisordinol-Acutard"
+    ],
+    "referanser": [
+      "fk-cisordinol",
+      "fk-cisordinol-depot",
+      "fk-cisordinol-acutard"
+    ]
+  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 5,
@@ -43,6 +55,18 @@
     "tekst": [
       "Tablett: 6–75 mg (SPC)",
       "Depotinjeksjon: 100–400 mg hver 2.–4. uke"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Cisordinol (tabletter og dråper): akutt og kronisk schizofreni og andre psykoser; mani; behandlingstrengende atferdsforstyrrelser ved psykisk utviklingshemming.",
+      "Cisordinol-Acutard (injeksjon): initial behandling av akutte psykoser, manier og eksacerbasjoner av kroniske psykoser.",
+      "Cisordinol Depot (depotinjeksjon): akutt og kronisk schizofreni; andre paranoide og hallusinatoriske tilstander."
+    ],
+    "referanser": [
+      "fk-cisordinol",
+      "fk-cisordinol-acutard",
+      "fk-cisordinol-depot"
     ]
   },
   "farmakokinetikk": [
@@ -179,5 +203,25 @@
       "jonsson2019",
       "referanseomradeprosjektet"
     ]
+  },
+  "referanser": {
+    "fk-cisordinol": {
+      "tittel": "Cisordinol «Lundbeck»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/cisordinol-lundbeck-547526"
+    },
+    "fk-cisordinol-acutard": {
+      "tittel": "Cisordinol-Acutard «Lundbeck»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/cisordinol-acutard-lundbeck-547522"
+    },
+    "fk-cisordinol-depot": {
+      "tittel": "Cisordinol Depot «Lundbeck»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/cisordinol-depot-lundbeck-547524"
+    }
   }
 }

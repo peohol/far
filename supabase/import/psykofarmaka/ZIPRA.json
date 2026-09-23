@@ -3,6 +3,14 @@
   "sider": [
     59
   ],
+  "preparater": {
+    "navn": [
+      "Ziprasidon Actavis"
+    ],
+    "referanser": [
+      "fk-ziprasidon-actavis"
+    ]
+  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 40,
@@ -43,6 +51,15 @@
   "dosering": {
     "tekst": [
       "Tablett: 40–160 mg (SPC)"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Voksne: behandling av schizofreni.",
+      "Voksne, ungdom og barn 10–17 år: behandling av maniske eller blandede episoder av moderat alvorlighetsgrad i forbindelse med bipolar lidelse (forebygging av episoder i forbindelse med bipolar lidelse er ikke fastslått)."
+    ],
+    "referanser": [
+      "fk-ziprasidon-actavis"
     ]
   },
   "farmakokinetikk": [
@@ -175,5 +192,13 @@
       "jonsson2019",
       "referanseomradeprosjektet"
     ]
+  },
+  "referanser": {
+    "fk-ziprasidon-actavis": {
+      "tittel": "Ziprasidon Actavis «Actavis»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/ziprasidon-actavis-actavis-584182"
+    }
   }
 }

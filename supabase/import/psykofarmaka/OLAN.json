@@ -3,6 +3,23 @@
   "sider": [
     52
   ],
+  "preparater": {
+    "navn": [
+      "Olanzapine Accord",
+      "Olanzapine Teva",
+      "Olanzapine Viatris",
+      "ZypAdhera",
+      "Zyprexa",
+      "Zyprexa Velotab"
+    ],
+    "referanser": [
+      "fk-olanzapine-accord",
+      "fk-olanzapine-teva",
+      "fk-olanzapine-viatris",
+      "fk-zypadhera",
+      "fk-zyprexa"
+    ]
+  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 30,
@@ -43,6 +60,20 @@
     "tekst": [
       "Tablett: 5–20 (30) mg",
       "Depotinjeksjon: 150–300 mg/2 uker. 300–405 mg/4 uker."
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Tabletter og smeltetabletter (voksne): behandling av schizofreni, inkludert vedlikeholdsbehandling hos pasienter som har vist initial behandlingsrespons; behandling av moderat til alvorlig manisk episode; forebygging av nye episoder hos pasienter med bipolar lidelse som har respondert på olanzapinbehandling i manisk fase.",
+      "Zyprexa pulver til injeksjonsvæske (voksne): hurtig kontroll av agitasjon og forstyrret oppførsel hos pasienter med schizofreni eller manisk episode når peroral terapi ikke er hensiktsmessig.",
+      "ZypAdhera (depotinjeksjon): vedlikeholdsbehandling av schizofreni hos voksne, tilstrekkelig stabilisert under akuttbehandling med oral olanzapin."
+    ],
+    "referanser": [
+      "fk-zyprexa",
+      "fk-zypadhera",
+      "fk-olanzapine-accord",
+      "fk-olanzapine-teva",
+      "fk-olanzapine-viatris"
     ]
   },
   "farmakokinetikk": [
@@ -186,5 +217,37 @@
       "jonsson2019",
       "referanseomradeprosjektet"
     ]
+  },
+  "referanser": {
+    "fk-zyprexa": {
+      "tittel": "Zyprexa, Zyprexa Velotab «Cheplapharm»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/zyprexa-zyprexa-velotab-cheplapharm-565738"
+    },
+    "fk-zypadhera": {
+      "tittel": "ZypAdhera «Cheplapharm»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/zypadhera-cheplapharm-565731"
+    },
+    "fk-olanzapine-accord": {
+      "tittel": "Olanzapine Accord «Accord»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/olanzapine-accord-accord-579885"
+    },
+    "fk-olanzapine-teva": {
+      "tittel": "Olanzapine Teva «Teva»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/olanzapine-teva-teva-562369"
+    },
+    "fk-olanzapine-viatris": {
+      "tittel": "Olanzapine Viatris «Viatris»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/olanzapine-viatris-viatris-727920"
+    }
   }
 }

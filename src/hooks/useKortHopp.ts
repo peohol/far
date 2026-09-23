@@ -15,7 +15,7 @@ export function rullTilKort(kort: Element | null | undefined, block: ScrollLogic
 
 /**
  * Jevn rulling, med mindre brukeren har bedt om mindre bevegelse. Uten
- * `matchMedia` (som i testmiljøet) rulles det jevnt.
+ * `matchMedia` (eldre nettlesere, testmiljøet) rulles det jevnt.
  */
 export function rullefart(): ScrollBehavior {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'

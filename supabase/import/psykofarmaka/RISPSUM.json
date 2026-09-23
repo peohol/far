@@ -3,6 +3,22 @@
   "sider": [
     58
   ],
+  "preparater": {
+    "navn": [
+      "Okedi",
+      "Risperdal",
+      "Risperdal Consta",
+      "Risperidon Sandoz",
+      "Risperidone Grindeks"
+    ],
+    "referanser": [
+      "fk-okedi",
+      "fk-risperdal",
+      "fk-risperdal-consta",
+      "fk-risperidon-sandoz",
+      "fk-risperidone-grindeks"
+    ]
+  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 20,
@@ -39,6 +55,28 @@
       "Tablett: 0,5–8 mg",
       "Depotinjeksjon: 25–50 mg hver 2. uke (Risperdal Consta)",
       "Depotinjeksjon: 75 og 100 mg hver 28. dag (Okedi)"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Schizofreni.",
+          "Moderate til alvorlige maniske episoder i forbindelse med bipolare lidelser.",
+          "Korttidsbehandling (opptil 6 uker) av vedvarende aggresjon hos pasienter med moderat til alvorlig Alzheimers demens som ikke responderer på ikke-farmakologisk behandling, og når det er risiko for selvskading eller skade av andre.",
+          "Barn fra 5 år og ungdom: symptomatisk korttidsbehandling (opptil 6 uker) av vedvarende aggresjon ved utagerende atferd (conduct disorder) hos pasienter med under middels intellektuell funksjon eller mental retardasjon, når alvoret av atferden krever farmakologisk behandling."
+        ]
+      },
+      "Punktene over gjelder de perorale preparatene (Risperdal, Risperidon Sandoz, Risperidone Grindeks).",
+      "Risperdal Consta (depotinjeksjon): vedlikeholdsbehandling av schizofreni hos pasienter stabilisert på orale antipsykotika.",
+      "Okedi (depotinjeksjon, voksne): behandling av schizofreni der tolerabilitet og effekt er fastslått med oralt risperidon."
+    ],
+    "referanser": [
+      "fk-risperdal",
+      "fk-risperdal-consta",
+      "fk-okedi",
+      "fk-risperidon-sandoz",
+      "fk-risperidone-grindeks"
     ]
   },
   "farmakokinetikk": [
@@ -217,5 +255,37 @@
       "jonsson2019",
       "referanseomradeprosjektet"
     ]
+  },
+  "referanser": {
+    "fk-risperdal": {
+      "tittel": "Risperdal «Janssen»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/risperdal-janssen-563543"
+    },
+    "fk-risperdal-consta": {
+      "tittel": "Risperdal Consta «Janssen»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/risperdal-consta-janssen-563537"
+    },
+    "fk-okedi": {
+      "tittel": "Okedi «ROVI»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/okedi-rovi-757488"
+    },
+    "fk-risperidon-sandoz": {
+      "tittel": "Risperidon Sandoz «Sandoz»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/risperidon-sandoz-sandoz-563550"
+    },
+    "fk-risperidone-grindeks": {
+      "tittel": "Risperidone Grindeks «Grindeks»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/risperidone-grindeks-grindeks-758708"
+    }
   }
 }

@@ -53,6 +53,14 @@
       "Depotinjeksjon: 108,2 mg/mL perfenazindekanoat, tilsvarende 78,3 mg/mL perfenazin. 1–2 ml hver 3.–4. uke."
     ]
   },
+  "indikasjon": {
+    "tekst": [
+      "Trilafon dekanoat (depotinjeksjon): kronisk schizofreni, psykoser, mani og paranoia. Behandlingen skal innledes med perfenazin tabletter for å klarlegge pasientens reaksjon på perfenazin."
+    ],
+    "referanser": [
+      "fk-trilafon-dekanoat"
+    ]
+  },
   "farmakokinetikk": [
     {
       "tittel": "Biotilgjengelighet",

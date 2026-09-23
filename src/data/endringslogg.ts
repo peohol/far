@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.12.0',
+    dato: '2026-09-23',
+    sammendrag: 'Informasjonssidene for antidepressiver og antipsykotika har fått innhold',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'De 35 sidene for antidepressiver, antipsykotika og lamotrigin er fylt med fagstoffet fra Psykofarmaka-dokumentet: dosering, farmakodynamikk, referanseområde, toksisk område, komatøs/fatal konsentrasjon, halveringstid, steady state, farmakokinetikk og serumkonsentrasjoner ved ulike doser.',
+      'Preparatnavn og et kort sammendrag av de godkjente indikasjonene er hentet fra Felleskatalogen, med lenke til produktsidene. Under dem står datoen de sist ble kontrollert mot Felleskatalogen, og administratorer oppdaterer datoen når de redigerer.',
+      'Historikken viser hvor innholdet kom fra, for eksempel «Importert fra Psykofarmaka.pdf, side 7».',
+      'Ringegrensen, måleområdet og spørsmål-og-svar-notatene fra dokumentet er ikke tatt med. Kommenteringen og fortolkningsreglene er uendret.',
+    ],
+  },
+  {
     versjon: '1.11.0',
     dato: '2026-09-23',
     sammendrag: 'Hver analytt har fått sin egen informasjonsside',

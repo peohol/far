@@ -206,8 +206,13 @@ export function tilDokument(blokker: readonly Tekstblokk[]): Riktekstdokument {
 
 /* --- Tabellen over serumkonsentrasjoner ----------------------------------- */
 
+/**
+ * Et tall på norsk form, med vanlig mellomrom mellom tusener: teksten lagres,
+ * og et hardt mellomrom er usynlig og overlever ikke alle veier inn i
+ * databasen.
+ */
 function tall(verdi: number): string {
-  return formaterTall(verdi)
+  return formaterTall(verdi).replace(/\u00a0/g, ' ')
 }
 
 /** «Median 118 nmol/L (10.–90. persentil: 51–402)», med det kilden faktisk har. */
@@ -507,9 +512,31 @@ export function byggImportplan(
 
 /* --- SQL-en --------------------------------------------------------------- */
 
-/** En tekst som SQL-literal. */
-function lit(tekst: string): string {
-  return `'${tekst.replace(/'/g, "''")}'`
+/** Så mange tegn står det høyst på hver linje i en lang literal. */
+const LITERALBREDDE = 400
+
+/** Tegn som ikke synes, og som derfor kan byttes ut uten at noen ser det. */
+const USYNLIGE_TEGN = /[\u00a0\u00ad\u1680\u2000-\u200f\u2028-\u202f\u205f-\u2064\u3000\ufeff]/
+
+/**
+ * En tekst som SQL-literal. Lange tekster deles over flere linjer, som
+ * Postgres setter sammen igjen (literaler skilt av linjeskift er én literal),
+ * slik at SQL-en kan leses og limes inn uten kilometerlange linjer. Har
+ * teksten usynlige tegn (som hardt mellomrom), blir den en Unicode-literal
+ * der de står som escape (`U&'1\00A0026'`), slik at de ikke kan bli til noe
+ * annet på veien inn i databasen.
+ */
+export function lit(tekst: string): string {
+  const unicode = USYNLIGE_TEGN.test(tekst)
+  const tegn = [...tekst].map((t) => {
+    if (t === "'") return "''"
+    if (!unicode) return t
+    if (t === '\\') return '\\\\'
+    return USYNLIGE_TEGN.test(t) ? `\\${t.codePointAt(0)!.toString(16).toUpperCase().padStart(4, '0')}` : t
+  })
+  const linjer: string[] = []
+  for (let i = 0; i < tegn.length; i += LITERALBREDDE) linjer.push(`'${tegn.slice(i, i + LITERALBREDDE).join('')}'`)
+  return `${unicode ? 'U&' : ''}${(linjer.length > 0 ? linjer : ["''"]).join('\n    ')}`
 }
 
 function jsonLit(verdi: unknown): string {
@@ -529,16 +556,27 @@ function finnReferanse(innhold: Referanseinnhold): string {
      order by r.objekt_id limit 1)`
 }
 
+/**
+ * Hva en blokk gjør når administratoren ikke finnes: stopper med en feil
+ * (SQL-en kjøres for hånd), eller hopper over uten å gjøre noe (SQL-en ligger
+ * i en migrasjon, som også kjøres i testdatabasen og i nye grener).
+ */
+export type UtenAdministrator = 'feil' | 'hopp over'
+
 /** Starten på hver blokk: administratoren som gjør importen, som innlogget. */
-function innlogging(admin: string): string {
+function innlogging(admin: string, utenAdministrator: UtenAdministrator): string {
+  const mangler =
+    utenAdministrator === 'feil'
+      ? `    raise exception 'Fant ingen administrator med brukernavnet %.', ${lit(admin)};`
+      : `    raise notice 'Fant ingen administrator med brukernavnet %, så importen hoppes over.', ${lit(admin)};\n    return;`
   return `  select p.id into administrator from public.profiles p where p.username = ${lit(admin)} and p.role = 'admin';
   if administrator is null then
-    raise exception 'Fant ingen administrator med brukernavnet %.', ${lit(admin)};
+${mangler}
   end if;
   perform set_config('request.jwt.claims', jsonb_build_object('sub', administrator, 'role', 'authenticated')::text, true);`
 }
 
-function blokk(navn: string, deklarasjoner: string, admin: string, kropp: string[]): string {
+function blokk(navn: string, deklarasjoner: string, admin: string, utenAdministrator: UtenAdministrator, kropp: string[]): string {
   return `-- ${navn}
 do $import$
 declare
@@ -547,7 +585,7 @@ declare
   objekt uuid;
 ${deklarasjoner}
 begin
-${innlogging(admin)}
+${innlogging(admin, utenAdministrator)}
 ${kropp.join('\n')}
 
   -- Alt som ble opprettet, publiseres i den rekkefølgen det ble laget:
@@ -571,17 +609,26 @@ function referanseSql(ref: Planreferanse): string[] {
   ]
 }
 
+/** Så mange referanser legges inn i hver blokk, så ingen blokk blir for stor. */
+const REFERANSER_PER_BLOKK = 25
+
 /**
- * SQL-en for importen: én blokk for referansene, så én per analyttkode. Hver
+ * SQL-en for importen: blokker for referansene, så én per analyttkode. Hver
  * blokk er én transaksjon. `admin` er brukernavnet til administratoren
  * revisjonene føres på.
  */
-export function importSql(plan: Importplan, admin: string): string[] {
-  const referanseblokk = blokk(
-    'Referansene',
-    '',
-    admin,
-    plan.referanser.flatMap((ref) => [`  -- ${ref.nokkel}`, ...referanseSql(ref)]),
+export function importSql(plan: Importplan, admin: string, utenAdministrator: UtenAdministrator = 'feil'): string[] {
+  const referansegrupper = Array.from({ length: Math.ceil(plan.referanser.length / REFERANSER_PER_BLOKK) }, (_, i) =>
+    plan.referanser.slice(i * REFERANSER_PER_BLOKK, (i + 1) * REFERANSER_PER_BLOKK),
+  )
+  const referanseblokker = referansegrupper.map((gruppe, i) =>
+    blokk(
+      referansegrupper.length > 1 ? `Referansene (${i + 1} av ${referansegrupper.length})` : 'Referansene',
+      '',
+      admin,
+      utenAdministrator,
+      gruppe.flatMap((ref) => [`  -- ${ref.nokkel}`, ...referanseSql(ref)]),
+    ),
   )
 
   const kodeblokker = plan.koder.map((kode) => {
@@ -655,8 +702,24 @@ export function importSql(plan: Importplan, admin: string): string[] {
         `  nye := nye || objekt;`,
       )
     }
-    return blokk(kode.kode, deklarasjoner, admin, kropp)
+    return blokk(kode.kode, deklarasjoner, admin, utenAdministrator, kropp)
   })
 
-  return [referanseblokk, ...kodeblokker]
+  return [...referanseblokker, ...kodeblokker]
+}
+
+/**
+ * Importen som migrasjoner: blokkene samlet i filer på høyst `maksTegn` tegn
+ * (en blokk som alene er større, får en fil for seg), i samme rekkefølge.
+ * Finnes ikke administratoren, gjør de ingenting — slik kan de kjøres i
+ * testdatabasen og i nye grener, der importen ikke hører hjemme.
+ */
+export function importmigrasjoner(plan: Importplan, admin: string, maksTegn = 50_000): string[] {
+  const filer: string[][] = []
+  for (const blokk of importSql(plan, admin, 'hopp over')) {
+    const siste = filer.at(-1)
+    if (siste && [...siste, blokk].join('\n\n').length <= maksTegn) siste.push(blokk)
+    else filer.push([blokk])
+  }
+  return filer.map((blokker) => blokker.join('\n\n'))
 }

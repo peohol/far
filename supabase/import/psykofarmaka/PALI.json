@@ -3,6 +3,20 @@
   "sider": [
     54
   ],
+  "preparater": {
+    "navn": [
+      "Paliperidon Zentiva",
+      "Palmeux",
+      "Trevicta",
+      "Xeplion"
+    ],
+    "referanser": [
+      "fk-paliperidon-zentiva",
+      "fk-palmeux",
+      "fk-trevicta",
+      "fk-xeplion"
+    ]
+  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 20,
@@ -44,6 +58,18 @@
       "Xeplion: 25–150 mg/mnd",
       "Palmeux: 50-150mg/mnd",
       "Trevicta: 175–525 mg/3 mnd"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Xeplion, Palmeux og Paliperidon Zentiva (depotinjeksjon 1 gang i måneden, voksne): vedlikeholdsbehandling av schizofreni hos pasienter stabilisert med paliperidon eller risperidon. Kan hos voksne som tidligere har respondert på oral paliperidon eller risperidon brukes uten foregående stabilisering med oral behandling.",
+      "Trevicta (depotinjeksjon hver 3. måned, voksne): vedlikeholdsbehandling av schizofreni hos pasienter som er klinisk stabile på paliperidonpalmitat injeksjonspreparat til bruk 1 gang i måneden (Xeplion)."
+    ],
+    "referanser": [
+      "fk-xeplion",
+      "fk-trevicta",
+      "fk-palmeux",
+      "fk-paliperidon-zentiva"
     ]
   },
   "farmakokinetikk": [
@@ -128,6 +154,30 @@
     ]
   },
   "referanser": {
+    "fk-xeplion": {
+      "tittel": "Xeplion «Janssen»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/xeplion-janssen-571586"
+    },
+    "fk-trevicta": {
+      "tittel": "Trevicta «Janssen»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/trevicta-janssen-628177"
+    },
+    "fk-palmeux": {
+      "tittel": "Palmeux «Amdipharm»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/palmeux-amdipharm-724412"
+    },
+    "fk-paliperidon-zentiva": {
+      "tittel": "Paliperidon Zentiva «Zentiva»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/paliperidon-zentiva-zentiva-779603"
+    },
     "deleon2020": {
       "tittel": "Personalizing dosing of risperidone, paliperidone and clozapine using therapeutic drug monitoring and pharmacogenetics",
       "forfattere": "de Leon J",
