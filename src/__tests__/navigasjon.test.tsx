@@ -21,7 +21,9 @@ vi.mock('../auth/okt', () => ({
 }))
 vi.mock('../auth/klient', async () => {
   const { DAGENS_REGELSETT, publiserteRader } = await import('./hjelp/dagensregler')
-  const rader: Record<string, unknown> = publiserteRader(DAGENS_REGELSETT)
+  const { rusScenarioregeldata } = await import('./hjelp/rusgrunnlag')
+  // Reglene fortolkningen henter, er de publiserte regelsettene.
+  const rader: Record<string, unknown> = { ...publiserteRader(DAGENS_REGELSETT), les_scenarioregler: rusScenarioregeldata() }
   return {
     klient: () => ({
       rpc: async (funksjon: string) => ({ data: rader[funksjon] ?? null, error: null }),
@@ -145,6 +147,9 @@ describe('mellom fortolkningen og informasjonssiden', () => {
         within(fortolkningen()).getByRole('link', { name: `${kode} – åpne informasjonssiden` }).getAttribute('href'),
       ).toBe(`#/analytt/${kode}`)
     }
+    // Modulen fortolker med reglene appen hentet.
+    await user.click(within(fortolkningen()).getByRole('checkbox', { name: /Oksazepam/ }))
+    expect(within(fortolkningen()).getByRole('button', { name: 'Kopier hovedkommentar' })).toBeTruthy()
   })
 
   it('lar fortolkningen ligge i ro mens informasjonssiden vises', async () => {

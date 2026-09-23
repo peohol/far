@@ -10,6 +10,7 @@ import { EtgStep } from './components/EtgStep'
 import { KontrollStep } from './components/KontrollStep'
 import { PasteStep } from './components/PasteStep'
 import { RusStep } from './components/RusStep'
+import { ScenarioreglerProvider, useHentScenarioregler } from './components/regler/Scenarioreglerkilde'
 import { Sidemeny } from './components/Sidemeny'
 import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
@@ -33,6 +34,7 @@ import {
 } from './domain/valg'
 import { lagFaginnholdslager } from './faginnhold/lagring'
 import { lagFaginnholdsleser } from './faginnhold/lesing'
+import { lesScenarioregler, reglerForModul } from './faginnhold/scenarioregler'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
 import { usePubliserteRegler } from './hooks/usePubliserteRegler'
@@ -117,6 +119,8 @@ export default function App() {
     }),
     [profil.role],
   )
+  // Reglene rusmiddelmodulene fortolkes med, hentet én gang for hele appen.
+  const scenarioregler = useHentScenarioregler(useCallback(() => lesScenarioregler(klient()), []))
   const hits = useMemo(() => search(state.query, pool), [state.query, pool])
 
   // Fortolkningsreglene er de publiserte regelsettene i databasen, hentet
@@ -399,13 +403,15 @@ export default function App() {
       {rute.side === 'analytt' && (
         <main className="scene scene--infoside">
           <FaginnholdskildeProvider kilde={faginnhold}>
-            <Analyttside
-              kode={rute.kode}
-              sted={rute.sted}
-              katalog={katalog}
-              onApneFortolkning={apneFortolkning}
-              onLukk={lukkInfoside}
-            />
+            <ScenarioreglerProvider kilde={scenarioregler}>
+              <Analyttside
+                kode={rute.kode}
+                sted={rute.sted}
+                katalog={katalog}
+                onApneFortolkning={apneFortolkning}
+                onLukk={lukkInfoside}
+              />
+            </ScenarioreglerProvider>
           </FaginnholdskildeProvider>
         </main>
       )}
@@ -461,6 +467,7 @@ export default function App() {
             // rydde i den fra utsiden.
             key={rusModul.id}
             modul={rusModul}
+            regler={reglerForModul(scenarioregler.tilstand, rusModul, scenarioregler.provIgjen)}
             onBack={back}
             onFinish={reset}
             copy={copy}

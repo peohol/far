@@ -3368,3 +3368,170 @@ details[open] > .detalj__kropp {
 .siteringsmerke--valgt {
   box-shadow: 0 0 0 2px var(--fokus);
 }
+
+/* --- Fortolkningsreglene på informasjonssiden ----------------------------
+   Scenarioreglene for rusmiddelmodulene, i seksjonen «fortolkning», med
+   kommentartekstene og simulatoren som detaljkort. Hvert
+   scenario er en rad: hva som må være påvist og gjelde til venstre, hva
+   fortolkningen gir til høyre. På smal skjerm legger de seg under hverandre. */
+.regler__ingress {
+  font-size: var(--tekst-s);
+  line-height: 1.5;
+  text-align: left;
+  color: var(--blekk-dempet);
+}
+
+.regler__grenser {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+  width: 100%;
+  margin: 0;
+}
+
+.regler__grense {
+  display: flex;
+  align-items: baseline;
+  gap: var(--rom-2);
+  padding: var(--rom-2) var(--rom-3);
+  font-size: var(--tekst-s);
+  text-align: left;
+  background: var(--flate-hevet);
+  border-radius: var(--runding-m);
+}
+
+.regler__grense dd {
+  margin: 0;
+  white-space: nowrap;
+  font-weight: var(--vekt-tung);
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk-sterk);
+}
+
+.scenarioliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scenario {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: var(--rom-1) var(--rom-4);
+  padding: var(--rom-3);
+  font-size: var(--tekst-s);
+  line-height: 1.5;
+  text-align: left;
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-m);
+  transition:
+    background var(--fart) var(--kurve),
+    border-color var(--fart) var(--kurve);
+}
+
+.scenario--truffet {
+  background: var(--aksent-flate);
+  border-color: var(--aksent);
+}
+
+.scenario__nummer {
+  grid-column: 1 / -1;
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.scenario__vilkar,
+.scenario__utfall {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  min-width: 0;
+}
+
+.scenario__etikett {
+  color: var(--blekk-dempet);
+}
+
+.scenario__kode,
+.scenario__uttrykk {
+  font-family: var(--skrift-mono);
+  font-size: 0.95em;
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-sterk);
+  overflow-wrap: anywhere;
+}
+
+.scenario__plasseringer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scenario__notis {
+  white-space: pre-line;
+  color: var(--blekk-dempet);
+}
+
+.scenario__manuell {
+  font-weight: var(--vekt-medium);
+  color: var(--varsel-blekk);
+}
+
+@media (max-width: 40rem) {
+  .scenario {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.regeltekster {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.regeltekst {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  text-align: left;
+}
+
+.regeltekst__nummer {
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.regeltekst__bruk {
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: var(--vekt-normal);
+}
+
+.simulator__resultat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.simulator__scenario {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-medium);
+  text-align: left;
+  color: var(--blekk);
+}

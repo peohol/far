@@ -2,20 +2,24 @@
  * Fortolkningen står på de publiserte regelsettene i Supabase, og gir den
  * samme kliniske outputen som før byttet.
  *
- * Konsentrasjonsreglene og kommentarene er regelsett i databasen (arbeidspakke
- * 5, se `docs/fortolkningsregler.md`). Appen henter de publiserte når den
- * åpnes og gir steg 2 regelsettet for analytten; kjernen og stegene henter
+ * Konsentrasjonsreglene og kommentarene er intervallregelsett i databasen
+ * (arbeidspakke 5, se `docs/fortolkningsregler.md`), og rusmiddelmodulene
+ * fortolkes med scenarioregelsettene (`docs/scenarioregler.md`, med paritet i
+ * `rusparitet.test.ts` og `rusimport.test.ts`). Appen henter de publiserte når
+ * den åpnes og gir dem til fortolkningsstegene; kjernen og stegene henter
  * ingenting selv. Testene her holder det slik:
  *
  * - datasettene er de samme som før, bortsett fra grensene og kommentarene,
  *   som ble tatt ut da fortolkningen ble byttet over,
  * - fasiten fra før byttet (`hjelp/dagensregler.ts`) er uendret,
  * - kjernen og fortolkningsstegene henter ingenting fra faginnholdet, fra
- *   analyttsidene eller fra databasen — regelsettene kommer som argumenter,
+ *   analyttsidene eller fra databasen selv — reglene fra databasen kommer inn
+ *   som argumenter,
  * - og all klinisk output modulene kan gi, er nøyaktig den samme — målt over
  *   alle analyttene med regelsettene fra før byttet, alle rusmiddelmodulene
  *   med konsentrasjoner på og rundt grensene, og alle THC-syrekommentarene
- *   (se `hjelp/fortolkningsutfall.ts`).
+ *   (se `hjelp/fortolkningsutfall.ts`). Summen står for hver del, så en del
+ *   kan legges om uten å røre de andre.
  *
  * Endres reglene i databasen, endres ikke fasiten: det er de publiserte
  * regelsettene som gjelder, og historikken deres viser hva som er endret.
@@ -43,17 +47,22 @@ const ROT = fileURLToPath(new URL('../../', import.meta.url))
 const DATASETT: Record<string, string> = {
   'src/data/analytter.json': 'bd169f468b9b66ba698488f430152f3e33f4e8e0f136fc3287f023008f78a62e',
   'src/data/antihypertensiver.json': '02bd6d9495fe3ad7a3c483973a8a4bd8286aff082c6f47fef57609f28c489a4a',
-  'src/data/rusmidler.json': '7f62a5c0894db2bb2a297b44b8aab1fb7a236e3714a7b623008f5c19bb4069f2',
   'src/data/aliaser.json': 'ab5f4ae6284d81cc32762a0da1709131d8b814138a302623b6ab60b00366ccfd',
 }
 
 /**
- * Kontrollsummen for all klinisk output fra fortolkningsmodulene, slik den var
- * før analyttsidene kom — og den samme etter byttet til regelsettene. Endres
- * outputen med vilje, oppdateres summen i samme PR, og føringen i
- * endringsloggen får merket «Fag».
+ * Kontrollsummene for all klinisk output fra fortolkningsmodulene, del for
+ * del, slik den var før analyttsidene kom. Summene er de samme etter byttet
+ * til regelsettene i Supabase. Endres outputen med vilje, oppdateres summen i
+ * samme PR, og føringen i endringsloggen får merket «Fag».
  */
-const FORTOLKNINGSUTFALL = 'a456aa252cf5289f7dc7fa6fd8b66760a84418dc4342d747b94c333ee7e281fd'
+const FORTOLKNINGSUTFALL: Record<string, string> = {
+  band: 'b2fce3266b626576260e7bf64dbc9fe917ae5899efa98fe18754b308c11db8eb',
+  etg: '9aa2aea633064367b24e4a9578c37fb5fde700f7b410c8710187769c62ef434c',
+  rus: '33a3739b124621c0deca34f68675b10c5398598ca78f3f6775456e3981621078',
+  thc: 'fa7eb624ba7424585774af6033cf049d1887088eab781b0aadf39307ad27c20f',
+  kategorier: '50493eb7d4632a8e279174238aa78970cd2ee143ea0824e1178e6a9b0bfa9a53',
+}
 
 /**
  * Kjernen i fortolkningen: motoren, datasettene og tilstandsmaskinen, og
@@ -153,7 +162,10 @@ describe('fortolkningen etter byttet til regelsettene i Supabase', () => {
   })
 
   it('gir nøyaktig den samme kliniske outputen som før', () => {
-    const utfall = JSON.stringify(fortolkningsutfall())
-    expect(createHash('sha256').update(utfall).digest('hex')).toBe(FORTOLKNINGSUTFALL)
+    const utfall: Record<string, unknown> = fortolkningsutfall()
+    expect(Object.keys(utfall).sort()).toEqual(Object.keys(FORTOLKNINGSUTFALL).sort())
+    for (const [del, forventet] of Object.entries(FORTOLKNINGSUTFALL)) {
+      expect(createHash('sha256').update(JSON.stringify(utfall[del])).digest('hex'), del).toBe(forventet)
+    }
   })
 })

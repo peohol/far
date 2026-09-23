@@ -4,22 +4,27 @@ import { Card } from './Card'
 import { Kommentarliste } from './Kommentarliste'
 import { Metodepille } from './Metodepille'
 import { Kodepille } from './Kodepille'
-import { Shortcut } from './Shortcut'
+import { Rusutfall } from './Rusutfall'
+import { Rusvalg } from './Rusvalg'
 import { StepBar } from './StepBar'
-import { Tallfelt } from './Tallfelt'
 import { BackIcon } from './icons'
 import {
   moduleKoder,
+  rusVerdifelter,
   viserKommentartekst,
   RUS_ANALYSEMETODE,
   TOM_RUS_INNDATA,
   type RusModul,
+  type Rusregler,
 } from '../domain/rus'
+import { flettInn, kjorScenarier, verdifelter as verdifelterFor } from '../domain/scenario'
 import { useKortHopp } from '../hooks/useKortHopp'
 import { indexToDigit, skrivesIFelt, useKeyboard } from '../hooks/useKeyboard'
 
 export interface RusStepProps {
   modul: RusModul
+  /** Regelsettet og kommentarene modulen fortolkes med, eller hvorfor de ikke er der. */
+  regler: Rusregler
   onBack: () => void
   /** Tilbake til søket, klar for neste analytt. */
   onFinish: () => void
@@ -37,10 +42,14 @@ export interface RusStepProps {
  * det bestemmer hvilken kommentar som gjelder, og hvilken analyttkode
  * hovedkommentaren skal ligge på.
  *
+ * Reglene er modulens publiserte scenarioregelsett, med kommentarene det
+ * peker på (`docs/scenarioregler.md`). Er de ikke hentet ennå, eller kunne de
+ * ikke hentes, sier modulen det i stedet for å fortolke.
+ *
  * Selve kopieringen av kommentarene er felles for fortolkningsmodulene og
  * ligger i {@link Kommentarliste}.
  */
-export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps) {
+export function RusStep({ modul, regler, onBack, onFinish, copy, flashAt }: RusStepProps) {
   const [inndata, setInndata] = useState(TOM_RUS_INNDATA)
   /**
    * Teller opp for hver endring i skjemaet. Et nytt svar gir en ny
@@ -68,8 +77,10 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
   const pavist = enkelt ? koder : inndata.pavist
   const inn = { ...inndata, pavist }
 
-  const verdifelter = modul.verdifelter(pavist)
-  const resultat = modul.fortolk(inn)
+  const klar = regler.status === 'klar' ? regler : null
+  const verdifelter = klar ? rusVerdifelter(modul, verdifelterFor(klar.regelsett, pavist)) : []
+  const verdihjelp = klar ? flettInn(klar.regelsett.verdihjelp, klar.regelsett.parametere) : ''
+  const resultat = klar ? kjorScenarier(klar.regelsett, klar.kommentarer, inn).resultat : null
 
   const settPavist = (kode: string, pa: boolean) => {
     setInndata((forrige) => ({
@@ -123,97 +134,48 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
           </div>
           <h1 className="analytt__navn">{modul.navn}</h1>
 
-          {!enkelt && (
-            <fieldset className="modul-valg">
-              <legend>Påvist i denne prøven</legend>
-              <div className="thc-avkryssinger">
-                {modul.analytter.map((analytt, i) => (
-                  <label className="avkryssing" key={analytt.kode}>
-                    <input
-                      ref={i === 0 ? forsteValg : undefined}
-                      type="checkbox"
-                      checked={pavist.includes(analytt.kode)}
-                      onChange={(e) => settPavist(analytt.kode, e.target.checked)}
-                      aria-keyshortcuts={indexToDigit(i)}
-                    />
-                    {analytt.navn}
-                    <span className="modul-valg__kode">{analytt.kode}</span>
-                    <Shortcut>{indexToDigit(i)}</Shortcut>
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-          )}
-
-          {verdifelter.length > 0 && (
-            <fieldset className="modul-valg">
-              <legend>Målte konsentrasjoner</legend>
-              {modul.verdihjelp && <p className="rus-hjelp">{modul.verdihjelp}</p>}
-              <div className="rus-felter">
-                {verdifelter.map((felt) => (
-                  <label className="thc-felt" key={felt.kode}>
-                    <span>
-                      {felt.navn} ({felt.kode})
-                    </span>
-                    <Tallfelt
-                      value={inndata.verdier[felt.kode] ?? ''}
-                      onChange={(verdi) => settVerdi(felt.kode, verdi)}
-                    />
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-          )}
+          <Rusvalg
+            analytter={modul.analytter}
+            pavist={pavist}
+            verdifelter={verdifelter}
+            verdier={inndata.verdier}
+            verdihjelp={verdihjelp}
+            onPavist={settPavist}
+            onVerdi={settVerdi}
+            forsteValg={forsteValg}
+            snarveier
+          />
         </Card>
 
         <Card align="start" className="modul-resultat">
-          {resultat.type === 'mangler' && (
+          {resultat ? (
+            <Rusutfall
+              resultat={resultat}
+              kommentarer={(plasseringer) => (
+                <Kommentarliste
+                  plasseringer={plasseringer}
+                  utgave={utgave}
+                  visTekst={visTekst}
+                  copy={copy}
+                  flashAt={flashAt}
+                  onFinish={onFinish}
+                />
+              )}
+            />
+          ) : regler.status === 'feil' ? (
             <>
-              <h2 className="thc-resultat__merke">Mangler</h2>
-              <ul className="thc-mangler">
-                {resultat.mangler.map((melding) => (
-                  <li key={melding}>{melding}</li>
-                ))}
+              <h2 className="thc-resultat__merke">Reglene mangler</h2>
+              <ul className="thc-mangler" role="alert">
+                <li>{regler.melding}</li>
               </ul>
+              <Button variant="subtle" onClick={regler.provIgjen}>
+                Prøv igjen
+              </Button>
             </>
-          )}
-
-          {/* Kilden har ingen standardkommentar for tilfellet, og sier at
-              saken skal tas opp i plenum. Da skal det ikke ligge noe her til
-              å kopiere — bare beskjed om hvorfor, og hva kilden sier. */}
-          {resultat.type === 'plenum' && (
+          ) : (
             <>
-              <h2 className="thc-resultat__merke">Til plenum</h2>
-              <p className="rus-plenum" role="note">
-                {resultat.melding}
-              </p>
-              {resultat.veiledning.map((tekst) => (
-                <p className="rus-veiledning" key={tekst}>
-                  {tekst}
-                </p>
-              ))}
-            </>
-          )}
-
-          {resultat.type === 'kommentarer' && (
-            <>
-              <h2 className="thc-resultat__merke">
-                {resultat.plasseringer.length > 1 ? 'Kommentarer' : 'Kommentar'}
-              </h2>
-              {resultat.notiser.map((notis) => (
-                <p className="thc-notis" role="note" key={notis}>
-                  {notis}
-                </p>
-              ))}
-
-              <Kommentarliste
-                plasseringer={resultat.plasseringer}
-                utgave={utgave}
-                visTekst={visTekst}
-                copy={copy}
-                flashAt={flashAt}
-                onFinish={onFinish}
-              />
+              <h2 className="thc-resultat__merke">Henter reglene</h2>
+              <p role="status">Fortolkningsreglene hentes …</p>
             </>
           )}
         </Card>
