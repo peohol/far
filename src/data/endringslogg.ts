@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.14.2',
+    versjon: '1.16.2',
     dato: '2026-09-23',
     sammendrag: 'Reglene og kommentartekstene for THC-syre ligger nå i databasen',
     typer: ['Funksjonalitet'],
@@ -24,7 +24,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.14.1',
+    versjon: '1.16.1',
     dato: '2026-09-23',
     sammendrag: 'Reglene og kommentartekstene for THC-syre er skilt ut fra koden',
     typer: ['Funksjonalitet'],
@@ -32,6 +32,30 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Kurvene, grensene og sikkerhetsmarginene i THC-syremodulen er skilt ut som egne regler, og kommentartekstene som egne tekster. De kontrolleres før de kan brukes, også at kurvene står i riktig rekkefølge for alle prøveverdier. Det er første steg mot at de kan redigeres i appen.',
       'Fortolkningen er uendret. Den er kontrollert mot over 4000 prøvepar, også rett på og rett ved siden av hver grense, og gir de samme kommentarene tegn for tegn.',
+    ],
+  },
+  {
+    versjon: '1.16.0',
+    dato: '2026-09-23',
+    sammendrag: 'Kommenteringen av rusmidler bruker reglene og tekstene som er publisert i databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Reglene og kommentartekstene for stoffene med ruspotensial i serum hentes nå fra det som er publisert i databasen, der de har historikk og kan rettes og publiseres uten en ny versjon av appen.',
+      'Mens reglene hentes, står det i modulen, og det er ingenting å kopiere. Kan de ikke hentes, sier modulen fra og lar deg prøve igjen. Appen kommenterer aldri med regler den ikke har fått.',
+      'Reglene er kontrollert mot den tidligere kommenteringen for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. Kommentarene, plasseringen og beskjedene er de samme som før.',
+    ],
+  },
+  {
+    versjon: '1.15.0',
+    dato: '2026-09-23',
+    sammendrag: 'Fortolkningsreglene for rusmidler vises på analyttsidene, med en simulator',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Analyttsidene for stoffene med ruspotensial i serum har fått en seksjon med fortolkningsreglene. Den viser hvilke analytter som må være påvist, grensene som gjelder, hvilke kommentarer som brukes og hvilke koder de limes inn på. Lukket viser den antall scenarier og grensene.',
+      'Diazepamgruppen, tramadol, kodein/morfin og amfetamin/metamfetamin har i tillegg «Prøv reglene», som åpnes for seg i seksjonen. Der krysser du av og fyller inn tall slik som i fortolkningen, og ser hvilket scenario som gjelder og hvor kommentarene havner.',
+      'Reglene i seksjonen er kontrollert mot dagens fortolkning for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. De gir nøyaktig samme kommentarer, plassering og beskjeder. Kommenteringen er uendret.',
     ],
   },
   {

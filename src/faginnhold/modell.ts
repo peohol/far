@@ -2,11 +2,11 @@
  * Formen på det redigerbare faginnholdet, slik databasen lagrer det.
  *
  * Informasjonsside, laboratorieanalytt, innholdselement, referanse,
- * THC-syreregelsett og kommentar er hver sin objekttype. Hvert objekt har en
- * stabil ID, et utkast og eventuelt en publisert utgave, og en historikk der
- * hver endring er en egen revisjon med et komplett øyeblikksbilde. Bakgrunnen
- * står i `docs/faginnhold.md`; formen på THC-syreregelsettet i
- * `src/domain/thcTekster.ts` og `thcRegelsett.ts`.
+ * THC-syreregelsett, kommentar og scenarioregelsett (`docs/scenarioregler.md`)
+ * er hver sin objekttype. Hvert objekt har en stabil ID, et utkast og eventuelt
+ * en publisert utgave, og en historikk der hver endring er en egen revisjon med
+ * et komplett øyeblikksbilde. Bakgrunnen står i `docs/faginnhold.md`; formen på
+ * THC-syreregelsettet i `src/domain/thcTekster.ts` og `thcRegelsett.ts`.
  *
  * Verdiene under står også i migrasjonen som oppretter tabellene.
  * `src/__tests__/faginnhold.test.ts` kontrollerer at de stemmer overens.
@@ -14,6 +14,7 @@
 
 import type { Kommentarinnhold } from '../domain/kommentarobjekt'
 import type { ThcRegelsettinnhold } from '../domain/thcTekster'
+import type { Scenarioregelsett } from '../domain/scenario'
 
 export const OBJEKTTYPER = [
   'infoside',
@@ -22,6 +23,7 @@ export const OBJEKTTYPER = [
   'referanse',
   'thc_regelsett',
   'kommentar',
+  'scenarioregelsett',
 ] as const
 export type Objekttype = (typeof OBJEKTTYPER)[number]
 
@@ -112,6 +114,7 @@ export interface Innhold {
   referanse: Referanseinnhold
   thc_regelsett: ThcRegelsettinnhold
   kommentar: Kommentarinnhold
+  scenarioregelsett: Scenarioregelsett
 }
 
 /**
