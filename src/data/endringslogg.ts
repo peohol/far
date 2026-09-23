@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.14.0',
+    versjon: '1.15.0',
     dato: '2026-09-23',
     sammendrag: 'OUSFAR har fått sin egen kopi av de offentlige legemiddeldataene',
     typer: ['Funksjonalitet'],
@@ -22,6 +22,19 @@ export const ENDRINGSLOGG: Endring[] = [
       'En oppdatering tas bare inn når hele uttrekket er lest uten feil. Mislykkes den, vises de siste gyldige dataene som før.',
       'Preparater som forsvinner fra FEST, merkes som utgått i stedet for å slettes.',
       'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
+    versjon: '1.14.0',
+    dato: '2026-09-23',
+    sammendrag: 'Fortolkningskommentarene kan lagres som egne tekster med historikk',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Neste steg mot redigerbare fortolkningsregler: hver kommentartekst kan nå lagres for seg, med egen historikk, utkast og publisering. Ingenting av dette er synlig ennå, og kommenteringen er uendret.',
+      'Reglene peker på tekstene i stedet for å ha sin egen kopi. Samme tekst kan brukes av flere regler og rettes ett sted.',
+      'En tekst står på én linje og limes inn som den er. Et regelsett kan ikke publiseres før tekstene det bruker er publisert.',
+      'Tekster med innfylte felt, som konsentrasjonsnivå eller dato for forrige prøve, beholder de samme feltene gjennom alle endringer, så en regel som bruker teksten, alltid får fylt dem inn.',
     ],
   },
   {
