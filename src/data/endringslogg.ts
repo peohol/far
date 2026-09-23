@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.16.0',
+    versjon: '1.17.0',
     dato: '2026-09-23',
     sammendrag: 'Kommenteringen bruker de publiserte konsentrasjonsreglene',
     typer: ['Funksjonalitet'],
@@ -24,7 +24,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.15.0',
+    versjon: '1.16.0',
     dato: '2026-09-23',
     sammendrag: 'Konsentrasjonsreglene vises, prøves og redigeres på analyttsidene',
     typer: ['Funksjonalitet', 'Design / layout'],
@@ -39,7 +39,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.14.0',
+    versjon: '1.15.0',
     dato: '2026-09-23',
     sammendrag: 'Konsentrasjonsreglene og kommentarene er lagt inn i databasen',
     typer: ['Funksjonalitet'],
@@ -49,6 +49,19 @@ export const ENDRINGSLOGG: Endring[] = [
       'Grensene lagres som skillepunkter mellom områdene, så det ikke kan oppstå hull eller overlapp. «Ring rekvirent» er lagret som en egen handling, og kommentaren for «Til stede under cut-off» gjenbruker hovedkommentaren i stedet for å gjenta den.',
       'Reglene er kontrollert mot dagens fortolkning for hver analytt, rett på, rett under og rett over hver grense, og gir de samme kommentarene og de samme beskjedene om å ringe.',
       'Ingenting av dette er synlig ennå. Kommenteringen er uendret.',
+    ],
+  },
+  {
+    versjon: '1.14.0',
+    dato: '2026-09-23',
+    sammendrag: 'Fortolkningskommentarene kan lagres som egne tekster med historikk',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Neste steg mot redigerbare fortolkningsregler: hver kommentartekst kan nå lagres for seg, med egen historikk, utkast og publisering. Ingenting av dette er synlig ennå, og kommenteringen er uendret.',
+      'Reglene peker på tekstene i stedet for å ha sin egen kopi. Samme tekst kan brukes av flere regler og rettes ett sted.',
+      'En tekst står på én linje og limes inn som den er. Et regelsett kan ikke publiseres før tekstene det bruker er publisert.',
+      'Tekster med innfylte felt, som konsentrasjonsnivå eller dato for forrige prøve, beholder de samme feltene gjennom alle endringer, så en regel som bruker teksten, alltid får fylt dem inn.',
     ],
   },
   {
