@@ -2,15 +2,24 @@
  * Lesingen av legemiddeldataene, slik appen gjør den.
  *
  * Nettleseren leser bare OUSFARs egen kopi i Supabase, aldri FEST direkte, og
- * bare gjennom de to funksjonene som er åpne for innloggede:
- * `les_legemidler` (alt en stoffside trenger om virkestoffene den er koblet
- * til) og `sok_virkestoff` (til å velge koblingen). Begge er beskrevet i
- * migrasjonene `*_legemiddeldata.sql` og `*_legemiddelkobling.sql`.
+ * bare gjennom funksjonene som er åpne for innloggede: `les_legemidler` (alt
+ * en stoffside trenger om virkestoffene den er koblet til), `sok_virkestoff`
+ * (til å velge koblingen) og `les_interaksjoner` (interaksjonene for
+ * ATC-kodene og virkestoffene). De er beskrevet i migrasjonene
+ * `*_legemiddeldata.sql`, `*_legemiddelkobling.sql` og `*_interaksjoner.sql`.
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { Byttegruppedata, Merkevaredata, Pakningsdata, Styrkedata, Virkestoffdata } from './fest'
+import type {
+  Byttegruppedata,
+  IkkeVurdertdata,
+  Interaksjonsdata,
+  Merkevaredata,
+  Pakningsdata,
+  Styrkedata,
+  Virkestoffdata,
+} from './fest'
 
-type MedId<T> = T & { id: string }
+export type MedId<T> = T & { id: string }
 
 /** Legemiddeldataene for virkestoffene en side er koblet til. */
 export interface Legemiddelutvalg {
@@ -49,9 +58,24 @@ export interface Virkestofftreff {
   preparater: number
 }
 
+/** Det interaksjonene slås opp på: ATC-kodene, og virkestoff uten ATC-kode. */
+export interface Interaksjonsnokler {
+  atc: readonly string[]
+  virkestoff: readonly string[]
+}
+
+/** Interaksjonene i FEST for et sett nøkler, og hvilke ATC-koder som ikke er vurdert. */
+export interface Interaksjonsutvalg {
+  interaksjoner: MedId<Interaksjonsdata>[]
+  ikke_vurdert: MedId<IkkeVurdertdata>[]
+}
+
+export const TOMME_INTERAKSJONER: Interaksjonsutvalg = { interaksjoner: [], ikke_vurdert: [] }
+
 export interface Legemiddelleser {
   les(virkestoff: readonly string[]): Promise<Legemiddelutvalg>
   sok(tekst: string): Promise<Virkestofftreff[]>
+  interaksjoner(nokler: Interaksjonsnokler): Promise<Interaksjonsutvalg>
 }
 
 export function lagLegemiddelleser(klient: SupabaseClient): Legemiddelleser {
@@ -69,5 +93,13 @@ export function lagLegemiddelleser(klient: SupabaseClient): Legemiddelleser {
     },
     sok: async (tekst) =>
       tekst.trim().length < 2 ? [] : ((await kall<Virkestofftreff[]>('sok_virkestoff', { sok: tekst })) ?? []),
+    interaksjoner: async ({ atc, virkestoff }) => {
+      if (atc.length === 0 && virkestoff.length === 0) return TOMME_INTERAKSJONER
+      const utvalg = await kall<Interaksjonsutvalg>('les_interaksjoner', {
+        atc_koder: [...atc],
+        virkestoff_ider: [...virkestoff],
+      })
+      return utvalg ? { ...TOMME_INTERAKSJONER, ...utvalg } : TOMME_INTERAKSJONER
+    },
   }
 }

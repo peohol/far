@@ -17,6 +17,7 @@ import {
 } from '../../legemiddeldata/preparater'
 import { Detaljkort } from '../seksjoner/Seksjon'
 import { Uthev } from '../Uthev'
+import { Festkilde } from './Festkilde'
 import { elementAnker, Panel, Redigerbar, type Panelkontekst } from './Paneler'
 import { LegemiddelkoblingSkjema } from './Skjemaer'
 import type { Legemiddeltilstand } from './useLegemidler'
@@ -27,14 +28,6 @@ const FRITAK = 'godkjenningsfritak'
 /** Stedet på siden for et detaljkort i seksjonen: en legemiddelform, eller fritakene. */
 function kortsted(formId: string | null): string {
   return `preparater-${formId ?? FRITAK}`
-}
-
-const DATO = new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })
-
-function dato(tidspunkt: string | null): string | null {
-  if (!tidspunkt) return null
-  const d = new Date(tidspunkt)
-  return Number.isNaN(d.getTime()) ? null : DATO.format(d)
 }
 
 /** Seksjonen koblingen står i. */
@@ -204,16 +197,7 @@ function Preparatvisning({ tilstand }: { tilstand: Legemiddeltilstand }) {
           )}
         </ul>
       )}
-      <p className="preparater__kilde">
-        {[
-          'Kilde: FEST, Direktoratet for medisinske produkter',
-          dato(utvalg.kildedato) && `uttrekk fra ${dato(utvalg.kildedato)}`,
-          dato(utvalg.kontrollert_kl) && `sist kontrollert ${dato(utvalg.kontrollert_kl)}`,
-        ]
-          .filter(Boolean)
-          .join(', ')}
-        .
-      </p>
+      <Festkilde utvalg={utvalg} />
     </>
   )
 }

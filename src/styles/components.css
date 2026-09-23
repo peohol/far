@@ -3111,6 +3111,100 @@ details[open] > .detalj__kropp {
   color: var(--blekk-dempet);
 }
 
+/* Seksjonen «Interaksjoner»: én interaksjon per detaljkort. Fargen følger
+   relevansen, slik FESTs veiledning ber om: rød for «Bør unngås», gul for
+   «Forholdsregler bør tas». */
+.interaksjoner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  width: 100%;
+}
+
+.interaksjonsliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  margin: 0;
+}
+
+.interaksjon {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  scroll-margin-block: var(--rom-4);
+}
+
+.interaksjon__relevans {
+  align-self: flex-start;
+  margin: 0;
+  padding: 0.1rem var(--rom-2);
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-medium);
+  border-radius: var(--runding-full);
+}
+
+.interaksjon__relevans--unnga {
+  color: var(--niva-over-blekk);
+  background: var(--niva-over-flate);
+}
+
+.interaksjon__relevans--forholdsregler {
+  color: var(--niva-gul-blekk);
+  background: var(--niva-gul-flate);
+}
+
+.interaksjon__situasjon,
+.interaksjoner__ikke-vurdert {
+  margin: 0;
+  padding: var(--rom-2) var(--rom-3);
+  font-size: var(--tekst-s);
+  color: var(--varsel-blekk);
+  background: var(--varsel-flate);
+  border-inline-start: 3px solid var(--varsel-linje);
+  border-radius: var(--runding-s);
+}
+
+.interaksjon__felter {
+  display: grid;
+  grid-template-columns: minmax(7rem, max-content) 1fr;
+  gap: var(--rom-1) var(--rom-3);
+  margin: 0;
+  font-size: var(--tekst-s);
+}
+
+.interaksjon__felter dt {
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-dempet);
+}
+
+.interaksjon__felter dd {
+  margin: 0;
+}
+
+.interaksjon__felter dd > p {
+  margin: 0 0 var(--rom-1);
+}
+
+.interaksjon__felter dd > p:last-child {
+  margin-block-end: 0;
+}
+
+.interaksjon__referanser {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+
+@media (max-width: 540px) {
+  .interaksjon__felter {
+    grid-template-columns: 1fr;
+  }
+
+  .interaksjon__felter dd {
+    margin-block-end: var(--rom-2);
+  }
+}
+
 /* Koblingen i redigeringen. */
 .kobling {
   display: flex;

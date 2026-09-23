@@ -102,7 +102,7 @@ DMP tar ikke ansvar for integrasjoner av FEST. Brukeren av dataene skal:
 | `KatLegemiddelMerkevare` | 8 962 | Ett preparat i én form og styrke, f.eks. «Sarotex tab 25 mg» | Ja |
 | `KatLegemiddelpakning` | 10 828 | Pakningene, med varenummer | Ja |
 | `KatByttegruppe` | 1 721 | Gruppene av byttbare pakninger | Ja |
-| `KatInteraksjon` | 11 454 | DMPs interaksjonsvurderinger | Senere, se [Senere felter](#senere-felter) |
+| `KatInteraksjon` | 11 454 | DMPs interaksjonsvurderinger: 11 000 `Interaksjon` og 454 `InteraksjonIkkeVurdert` | Ja, se [Slik interaksjonene vises](#slik-interaksjonene-vises) |
 | `KatLegemiddelVirkestoff` | 2 196 | Virkestoffrekvirering, samling av likeverdige preparater | Nei |
 | `KatLegemiddeldose` | 9 467 | Enkeltdoser til multidose | Nei |
 | `KatRefusjon`, `KatVilkar` | 1 158 / 205 | Refusjon og vilkår | Nei |
@@ -234,6 +234,46 @@ godkjenningsfritak». Grupperingen står i `src/legemiddeldata/preparater.ts`:
 Preparatnavnene er med i søket på siden, også i lukkede detaljkort. Det
 globale søket tar dem med når det kommer.
 
+## Slik interaksjonene vises
+
+Seksjonen «Interaksjoner» står etter «Farmakokinetikk» og viser DMPs
+interaksjoner i FEST for virkestoffene siden er koblet til. Den har ingenting
+å redigere; den følger koblingen i «Preparater». Visningen følger kapittel 8 i
+[FESTs implementeringsveiledning](https://www.dmp.no/contentassets/3cb9b85e742745d4b1db7d899eb987b7/202511_implementeringsveiledning-fest-v3.6.pdf),
+og logikken står i `src/legemiddeldata/interaksjoner.ts`.
+
+- **Oppslaget.** En interaksjon er et par av to substansgrupper. Stoffene i
+  dem har ATC-kode, på 5. nivå eller et overordnet nivå som gjelder alle
+  kodene under (f.eks. N06AA, trisykliske antidepressiva), eller virkestoffets
+  ID når de ikke har ATC-kode (f.eks. perikum). FEST har ingen kobling mellom
+  virkestoff og ATC-kode, så siden slår opp på ATC-kodene til preparatene som
+  bare har sidens virkestoff (med saltene). Kombinasjonspreparatenes koder tas
+  ikke med; de ville gitt interaksjonene til de andre virkestoffene. Kodene
+  som ble brukt, står i kildelinjen. Oppslaget gjøres av `les_interaksjoner` i
+  databasen.
+- **Hva som vises.** Bare «Bør unngås» (rød) og «Forholdsregler bør tas»
+  (gul), de alvorligste først og ellers alfabetisk. «Ingen tiltak nødvendig»
+  skal etter veiledningen ikke gi interaksjonsmelding og vises ikke.
+  Visningsregelen (allmennlege, spesialist, sykehus, apotek) brukes ikke: alle
+  interaksjoner med en av de to relevansene gjelder også sykehus.
+- **Hver interaksjon** er et detaljkort med stoffet eller gruppen den gjelder
+  («Terbinafin», «Johannesurt»), relevansen og begynnelsen av den kliniske
+  konsekvensen. Åpnet står situasjonskriteriet tydelig først, så klinisk
+  konsekvens, mekanisme, håndteringen i avsnitt med overskrift
+  (Dosetilpasning, Justering av administrering, Monitorering,
+  Legemiddelalternativer), kildegrunnlaget og referansene med lenke.
+- **Gruppenavnet** er FESTs eget når gruppen har et. Ellers er det navnet på
+  stoffet med den overordnede ATC-koden (f.eks. «Ikke-selektive
+  monoaminreopptakshemmere»), og ellers stoffet selv. Det dekker alle
+  gruppene i filen.
+- **Ikke vurdert.** Står en av sidens ATC-koder blant dem DMP ikke har
+  vurdert, sier seksjonen fra, så en tom liste ikke leses som at det ikke
+  finnes interaksjoner.
+- Stoffnavnene er med i søket på siden.
+
+Eksempler fra filen 08.09.2026: amitriptylin 21 bør unngås og 36 forholdsregler,
+kvetiapin 38 og 12, karbamazepin 180 og 169.
+
 ## Hull og begrensninger
 
 - **Klinisk innhold** (dosering, referanseområder, farmakokinetikk,
@@ -261,8 +301,4 @@ globale søket tar dem med når det kommer.
 
 Tas inn når preparatvisningen er på plass, i egne endringer:
 
-- **Interaksjoner** (`KatInteraksjon`): relevansgrad, klinisk konsekvens,
-  mekanisme, håndtering og referanser. Substansene er angitt med ATC-kode (og
-  av og til virkestoff-ID), så de kobles til siden via ATC-kodene til
-  preparatene siden er koblet til.
 - **Byttbarhet** i klartekst og **særlig overvåkning** i detaljkortene.

@@ -4,18 +4,20 @@
  *
  * Utdraget i `data/fest-utdrag.xml` er ekte oppføringer fra FEST
  * (amitriptylin med salt, styrker, preparater og pakninger, og ett
- * kombinasjonspreparat med kodein), pluss én interaksjon og én handelsvare som
- * skal hoppes over.
+ * kombinasjonspreparat med kodein), fire interaksjoner (tre med amitriptylin,
+ * én uten), én ATC-kode som ikke er vurdert for interaksjoner, og én
+ * handelsvare som skal hoppes over.
  */
 import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { crc32, deflateRawSync } from 'node:zlib'
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
-import { ENTITETER, lesFest, PARSERVERSJON, type Festpost } from '../legemiddeldata/fest'
+import { ENTITETER, lesFest, PARSERVERSJON, type Festpost, type Interaksjonsdata } from '../legemiddeldata/fest'
 import { lagLegemiddellager, type Databasekall } from '../legemiddeldata/lager'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { behandleSynk } from '../legemiddeldata/endepunkt'
 import { lagLegemiddelleser, type Legemiddelutvalg, type Virkestofftreff } from '../legemiddeldata/lesing'
+import { byggInteraksjoner, interaksjonsnokler, oppsummerInteraksjoner } from '../legemiddeldata/interaksjoner'
 import { byggPreparatoversikt, oppsummerGruppe, oppsummerPreparater } from '../legemiddeldata/preparater'
 import { synkroniserFest } from '../legemiddeldata/synk'
 import { pakkUt } from '../legemiddeldata/zip'
@@ -27,6 +29,7 @@ const AMITRIPTYLIN = 'ID_0A1B24EF-A7F8-488B-97B8-8023193E976D'
 const AMITRIPTYLINHYDROKLORID = 'ID_070A7B5D-46F1-44DC-AAB8-B51BE5A49270'
 const AMITRIPTYLIN_ABCUR_50 = 'ID_012C7C0D-77BC-4F3D-BEBE-663743B03C1F'
 const KODEIN = 'ID_82E89E1B-9C06-4E57-BB4D-AB3DA8B33FD4'
+const TERBINAFIN_AMITRIPTYLIN = 'ID_43E3CEDF-77A1-4D0D-844A-9F8A01267559'
 
 async function* biter(tekst: string, storrelse = 997): AsyncGenerator<string> {
   for (let i = 0; i < tekst.length; i += storrelse) yield tekst.slice(i, i + storrelse)
@@ -86,7 +89,63 @@ describe('lesingen av FEST', () => {
     const { poster, hentetDato } = await les(UTDRAG)
     expect(hentetDato).toBe('2026-09-08T03:09:06')
     const perType = Object.fromEntries(ENTITETER.map((e) => [e, poster.filter((p) => p.entitet === e).length]))
-    expect(perType).toEqual({ virkestoff: 5, virkestoff_styrke: 9, merkevare: 12, pakning: 12, byttegruppe: 2 })
+    expect(perType).toEqual({
+      virkestoff: 5,
+      virkestoff_styrke: 9,
+      merkevare: 12,
+      pakning: 12,
+      byttegruppe: 2,
+      interaksjon: 4,
+      interaksjon_ikke_vurdert: 1,
+    })
+  })
+
+  it('leser interaksjonen med substansgruppene, og ATC-kodene som ikke er vurdert', async () => {
+    const { poster } = await les(UTDRAG)
+    expect(poster.find((p) => p.fest_id === TERBINAFIN_AMITRIPTYLIN)?.data).toEqual({
+      relevans: { kode: '2', tekst: 'Forholdsregler bør tas' },
+      klinisk_konsekvens: expect.stringMatching(/^Økt konsentrasjon av amitriptylin og aktiv metabolitt/),
+      mekanisme: expect.stringMatching(/^Terbinafin hemmer metabolisme av amitriptylin/),
+      handtering: expect.stringMatching(/^Dosetilpasning: .*\nLegemiddelalternativer: /s),
+      situasjonskriterier: ['Gjelder ved amitriptylindoser større eller lik 75 mg daglig.'],
+      kildegrunnlag: { kode: '2', tekst: 'Kasusrapporter' },
+      referanser: [
+        expect.objectContaining({ kilde: expect.stringMatching(/^Castberg I/), lenke: expect.stringMatching(/^http:\/\//) }),
+        { kilde: expect.stringMatching(/^Abdel-Rahman SM/), lenke: 'https://pubmed.ncbi.nlm.nih.gov/10383919' },
+        { kilde: expect.stringMatching(/^Abdel-Rahman SM/), lenke: 'https://pubmed.ncbi.nlm.nih.gov/10340911' },
+      ],
+      substansgrupper: [
+        {
+          navn: 'Terbinafin',
+          substanser: [{ navn: 'Terbinafin', atc: { kode: 'D01BA02', tekst: 'Terbinafin' }, virkestoff_id: null }],
+        },
+        {
+          navn: 'Amitriptylin',
+          substanser: [
+            { navn: 'Amitriptylin', atc: { kode: 'N06AA09', tekst: 'Amitriptylin' }, virkestoff_id: null },
+            {
+              navn: 'Amitriptylin og psykoleptika',
+              atc: { kode: 'N06CA01', tekst: 'Amitriptylin og psykoleptika' },
+              virkestoff_id: null,
+            },
+          ],
+        },
+      ],
+    })
+    // Et stoff uten ATC-kode har virkestoffets ID.
+    const johannesurt = poster.find((p) => JSON.stringify(p.data).includes('Johannesurt'))!.data as Interaksjonsdata
+    expect(johannesurt.substansgrupper[0]!.substanser[0]).toEqual({
+      navn: 'Perikum',
+      atc: null,
+      virkestoff_id: 'ID_D8977B6C-F30E-40E2-AA71-E7F3A4B9497E',
+    })
+    // «Ikke vurdert» har ingen egen ID; oppføringens brukes.
+    expect(poster.find((p) => p.entitet === 'interaksjon_ikke_vurdert')).toEqual({
+      entitet: 'interaksjon_ikke_vurdert',
+      fest_id: 'ID_12F59012-13DC-4264-96DF-290B598C7C70',
+      tidspunkt: '2017-02-01T00:53:49',
+      data: { atc: [{ kode: 'N07AB02', tekst: 'Betanekol' }] },
+    })
   })
 
   it('leser virkestoffet med saltet', async () => {
@@ -385,7 +444,7 @@ describe('synkroniseringen', () => {
   })
 })
 
-describe('preparatene på stoffsiden', () => {
+describe('preparatene og interaksjonene på stoffsiden', () => {
   let leser: ReturnType<typeof lagLegemiddelleser>
   let anonym: Databasekall
 
@@ -584,6 +643,54 @@ describe('preparatene på stoffsiden', () => {
 
   it('leser ingenting for en side uten kobling', async () => {
     expect(await leser.les([])).toMatchObject({ virkestoff: [], merkevarer: [] })
+    expect(await leser.interaksjoner({ atc: [], virkestoff: [] })).toEqual({ interaksjoner: [], ikke_vurdert: [] })
+  })
+
+  it('slår opp interaksjonene på ATC-koden til preparatene med bare sidens virkestoff', async () => {
+    const utvalg = await leser.les([AMITRIPTYLIN])
+    const nokler = interaksjonsnokler(utvalg, [AMITRIPTYLIN])
+    expect(nokler).toEqual({ atc: ['N06AA09'], virkestoff: [AMITRIPTYLINHYDROKLORID, AMITRIPTYLIN].sort() })
+    // Kombinasjonspreparatets kode tas ikke med: kodeinsiden har ingen å slå opp på.
+    expect(interaksjonsnokler(await leser.les([KODEIN]), [KODEIN]).atc).toEqual([])
+
+    const funnet = await leser.interaksjoner(nokler)
+    // Direkte på ATC-koden (terbinafin, fentanyl) og gjennom klassen N06AA (johannesurt).
+    expect(funnet.interaksjoner.map((i) => i.substansgrupper[0]!.navn ?? i.substansgrupper[0]!.substanser[0]!.navn).sort()).toEqual(
+      ['Fentanyl', 'Johannesurt', 'Terbinafin'],
+    )
+    expect(funnet.ikke_vurdert).toEqual([])
+
+    const oversikt = byggInteraksjoner(funnet, nokler)
+    // «Ingen tiltak nødvendig» (fentanyl) vises ikke; «Bør unngås» står først.
+    expect(oversikt.interaksjoner.map((i) => [i.med, i.gjelder, i.relevanstekst])).toEqual([
+      ['Johannesurt', 'Ikke-selektive monoaminreopptakshemmere', 'Bør unngås'],
+      ['Terbinafin', 'Amitriptylin', 'Forholdsregler bør tas'],
+    ])
+    const terbinafin = oversikt.interaksjoner[1]!
+    expect(terbinafin.situasjonskriterier).toEqual(['Gjelder ved amitriptylindoser større eller lik 75 mg daglig.'])
+    expect(terbinafin.handtering.map((a) => a.overskrift)).toEqual(['Dosetilpasning', 'Legemiddelalternativer'])
+    expect(terbinafin.handtering[0]!.tekst).toMatch(/^Anslagsvis 50-70% reduksjon av amitriptylin/)
+    expect(terbinafin.referanser[0]!.lenke).toMatch(/^http:\/\/www\.ncbi\.nlm\.nih\.gov\//)
+    expect(oppsummerInteraksjoner(oversikt)).toBe('1 bør unngås · 1 forholdsregler bør tas')
+  })
+
+  it('sier fra om ATC-koder som ikke er vurdert, også gjennom et overordnet nivå', async () => {
+    const funnet = await leser.interaksjoner({ atc: ['N07AB02'], virkestoff: [] })
+    expect(funnet.interaksjoner).toEqual([])
+    const oversikt = byggInteraksjoner(funnet, { atc: ['N07AB02'], virkestoff: [] })
+    expect(oversikt.ikke_vurdert).toEqual(['Betanekol (N07AB02)'])
+    expect(oppsummerInteraksjoner(oversikt)).toBe('Ikke vurdert av DMP')
+    // Et stoff uten ATC-kode finnes på virkestoffets ID.
+    const perikum = await leser.interaksjoner({ atc: [], virkestoff: ['ID_D8977B6C-F30E-40E2-AA71-E7F3A4B9497E'] })
+    expect(perikum.interaksjoner).toHaveLength(1)
+  })
+
+  it('slår opp interaksjonene bare for innloggede, og på et begrenset antall koder', async () => {
+    await expect(anonym('les_interaksjoner', { atc_koder: ['N06AA09'], virkestoff_ider: [] })).rejects.toThrow(
+      /permission denied/,
+    )
+    const mange = Array.from({ length: 101 }, (_, i) => `N06AA${i}`)
+    await expect(leser.interaksjoner({ atc: mange, virkestoff: [] })).rejects.toThrow(/For mange ATC-koder/)
   })
 })
 

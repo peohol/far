@@ -97,11 +97,12 @@ export interface Preparatoversikt {
 /** Typer som er vanlige legemidler og ikke trenger å stå på preparatet. */
 const VANLIGE_TYPER = new Set(['7', GODKJENNINGSFRITAK])
 
-export function byggPreparatoversikt(utvalg: Legemiddelutvalg, koblet: readonly string[]): Preparatoversikt {
+/**
+ * Virkestoffene som hører til siden: de koblede og saltene deres, og hvilke av
+ * dem som er salter.
+ */
+export function egneVirkestoff(utvalg: Legemiddelutvalg, koblet: readonly string[]) {
   const virkestoff = new Map(utvalg.virkestoff.map((v) => [v.id, v]))
-  const styrker = new Map(utvalg.styrker.map((s) => [s.id, s]))
-
-  // Sidens virkestoff med saltene sine; saltene husker hvilket de hører til.
   const egne = new Set<string>(koblet)
   const salter = new Set<string>()
   for (const id of koblet) {
@@ -110,6 +111,21 @@ export function byggPreparatoversikt(utvalg: Legemiddelutvalg, koblet: readonly 
       salter.add(salt)
     }
   }
+  return { egne, salter }
+}
+
+/** Alle virkestoffene i merkevaren, med og uten styrke. */
+export function virkestoffI(m: Merkevaredata, styrker: ReadonlyMap<string, { virkestoff_id: string }>): string[] {
+  return [
+    ...m.virkestoff_med_styrke.map((id) => styrker.get(id)?.virkestoff_id).filter((id) => id !== undefined),
+    ...m.virkestoff_uten_styrke,
+  ]
+}
+
+export function byggPreparatoversikt(utvalg: Legemiddelutvalg, koblet: readonly string[]): Preparatoversikt {
+  const virkestoff = new Map(utvalg.virkestoff.map((v) => [v.id, v]))
+  const styrker = new Map(utvalg.styrker.map((s) => [s.id, s]))
+  const { egne, salter } = egneVirkestoff(utvalg, koblet)
 
   const pakningerFor = new Map<string, Preparatpakning[]>()
   for (const p of utvalg.pakninger) {
@@ -138,7 +154,7 @@ export function byggPreparatoversikt(utvalg: Legemiddelutvalg, koblet: readonly 
     const form = m.legemiddelform?.tekst || 'Ukjent legemiddelform'
     const nokkel = `${formkode}:${m.varenavn}`
     const mine = m.virkestoff_med_styrke.map((id) => styrker.get(id)).filter((s) => s !== undefined)
-    const stoff = [...mine.map((s) => s.virkestoff_id), ...m.virkestoff_uten_styrke]
+    const stoff = virkestoffI(m, styrker)
     const andre = stoff.filter((id) => !egne.has(id))
     const kombinert = andre.length > 0
 
@@ -240,9 +256,12 @@ function handtering(m: Merkevaredata): string[] {
   ].filter((t): t is string => !!t)
 }
 
-/** Bare vanlige nettadresser blir lenker. */
-function trygLenke(adresse: string | null): string | undefined {
-  return adresse && /^https:\/\/[^\s]+$/.test(adresse) ? adresse : undefined
+/**
+ * Bare vanlige nettadresser blir lenker: `https`, og `http` når det er sagt.
+ * Mange eldre kildehenvisninger i FEST er `http`.
+ */
+export function trygLenke(adresse: string | null, { http = false } = {}): string | undefined {
+  return adresse && (http ? /^https?:\/\/\S+$/ : /^https:\/\/\S+$/).test(adresse) ? adresse : undefined
 }
 
 function leggTil(liste: string[], navn: readonly (string | null | undefined)[]) {

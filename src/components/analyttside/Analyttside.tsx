@@ -17,6 +17,8 @@ import { useFaginnholdskilde } from './Faginnholdskilde'
 import { Identitetspanel, komponenterFor } from './Identitetspanel'
 import { finnKobling, Preparatpanel, preparatsoketekster } from './Preparatpanel'
 import { useLegemidler } from './useLegemidler'
+import { Interaksjonspanel, interaksjonssoketekster } from './Interaksjonspanel'
+import { useInteraksjoner } from './useInteraksjoner'
 import { Datakortpanel, Kortpanel, Tabellpanel, Tekstpanel, type Panelkontekst } from './Paneler'
 import { Redigeringskilde } from './Redigeringskontekst'
 import { Sidesok } from './Sidesok'
@@ -137,15 +139,16 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
 
   const koblet = useMemo(() => finnKobling(modell).kobling.virkestoff.map((v) => v.fest_id), [modell])
   const legemidler = useLegemidler(koblet)
+  const interaksjoner = useInteraksjoner(legemidler, koblet)
 
   const dokumenter = useMemo(
     () =>
       indekserSide(
         { kode: oppforing.kode, navn, komponenter: komponenter.map((k) => k.navn) },
         modell,
-        preparatsoketekster(legemidler),
+        [...preparatsoketekster(legemidler), ...interaksjonssoketekster(interaksjoner)],
       ),
-    [oppforing.kode, navn, komponenter, modell, legemidler],
+    [oppforing.kode, navn, komponenter, modell, legemidler, interaksjoner],
   )
   const ord = useMemo(() => sokeord(sporring), [sporring])
 
@@ -265,6 +268,17 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
                         kontekst={kontekst}
                         sidenavn={oppforing.sidenavn}
                         legemidler={legemidler}
+                      />
+                    )
+                  case 'interaksjoner':
+                    return (
+                      <Interaksjonspanel
+                        key={definisjon.nokkel}
+                        definisjon={definisjon}
+                        kontekst={kontekst}
+                        koblet={koblet.length > 0}
+                        legemidler={legemidler}
+                        interaksjoner={interaksjoner}
                       />
                     )
                   case 'datakort':

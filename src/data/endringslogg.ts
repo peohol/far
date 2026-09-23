@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.22.0',
+    dato: '2026-09-23',
+    sammendrag: 'Stoffsidene viser interaksjonene fra de offentlige legemiddeldataene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Ny seksjon «Interaksjoner» etter «Farmakokinetikk». Lukket viser den en oppsummering, for eksempel «21 bør unngås · 36 forholdsregler bør tas».',
+      'Interaksjonene er vurderingene til Direktoratet for medisinske produkter i FEST. «Bør unngås» er merket rødt og står først, «Forholdsregler bør tas» er merket gult. De der DMP mener ingen tiltak er nødvendig, vises ikke.',
+      'Hver interaksjon er et eget kort. Åpnet viser det når interaksjonen gjelder, klinisk konsekvens, mekanisme, håndtering og referansene med lenke.',
+      'Interaksjonene gjelder virkestoffet siden er koblet til under «Preparater», også når de er oppført for en hel legemiddelklasse. Har DMP ikke vurdert stoffet ennå, står det i seksjonen.',
+      'Stoffnavnene er med i søket på siden.',
+      'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
     versjon: '1.21.0',
     dato: '2026-09-23',
     sammendrag: 'Preparatene viser reseptgruppe, bruksmåte, deling og knusing, og lenke til preparatomtalen',
