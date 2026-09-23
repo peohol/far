@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.16.1',
+    dato: '2026-09-23',
+    sammendrag: 'Reglene og kommentartekstene for THC-syre er skilt ut fra koden',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Kurvene, grensene og sikkerhetsmarginene i THC-syremodulen er skilt ut som egne regler, og kommentartekstene som egne tekster. De kontrolleres før de kan brukes, også at kurvene står i riktig rekkefølge for alle prøveverdier. Det er første steg mot at de kan redigeres i appen.',
+      'Fortolkningen er uendret. Den er kontrollert mot over 4000 prøvepar, også rett på og rett ved siden av hver grense, og gir de samme kommentarene tegn for tegn.',
+    ],
+  },
+  {
     versjon: '1.16.0',
     dato: '2026-09-23',
     sammendrag: 'Kommenteringen av rusmidler bruker reglene og tekstene som er publisert i databasen',
