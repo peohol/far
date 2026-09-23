@@ -1,13 +1,6 @@
-import {
-  forventetEndring,
-  KURVE_GRONN,
-  KURVE_GUL,
-  KURVE_ROD,
-  tidForVerdi,
-  verdiPaaKurve,
-  type Kurve,
-  type ThcGrafgrunnlag,
-} from './thc'
+import { KURVE_GRONN, KURVE_GUL, KURVE_ROD } from './thc'
+import { forventetEndring, kurverI, tidForVerdi, verdiPaaKurve, type Kurve, type ThcGrafgrunnlag } from './thcMotor'
+import { THC_KURVEROLLER, type ThcKurverolle, type ThcRegelsett } from './thcRegelsett'
 
 /**
  * Tallgrunnlaget for visualiseringen av en fortolkning mot forrige prøve —
@@ -17,13 +10,30 @@ import {
  */
 
 /**
- * Kurvene i figuren — de samme tre som konklusjonsgrensene leses av. Merk at
- * dette er ett skritt bort fra regnearkets egen graf, som tegner mellomkurven
- * «Kronisk, typisk» (den lilla) i stedet for den gule. Den lilla kurven er
- * ikke med i konklusjonen, så figuren viste en kurve kommentaren aldri leste
- * av — og utelot den som avgjør. Figuren skal speile fortolkningen.
+ * En kurve slik figuren tegner den. Fargen følger rollen kurven har i
+ * konklusjonen.
  */
-const FIGURKURVER: { navn: string; tone: 'gronn' | 'gul' | 'rod'; kurve: Kurve }[] = [
+export interface Figurkurve {
+  navn: string
+  tone: ThcKurverolle
+  kurve: Kurve
+}
+
+/**
+ * Kurvene i figuren — de samme tre som konklusjonsgrensene leses av, med
+ * navnene fra regelsettet. Merk at dette er ett skritt bort fra regnearkets
+ * egen graf, som tegner mellomkurven «Kronisk, typisk» (den lilla) i stedet
+ * for den gule. Den lilla kurven er ikke med i konklusjonen, så figuren viste
+ * en kurve kommentaren aldri leste av — og utelot den som avgjør. Figuren
+ * skal speile fortolkningen.
+ */
+export function figurkurver(r: ThcRegelsett): Figurkurve[] {
+  const kurver = kurverI(r)
+  return THC_KURVEROLLER.map((rolle) => ({ navn: r.kurver[rolle].navn, tone: rolle, kurve: kurver[rolle] }))
+}
+
+/** Figurkurvene fra konstantene i den opprinnelige modulen. */
+const FIGURKURVER: Figurkurve[] = [
   { navn: 'Normal utskillelse', tone: 'gronn', kurve: KURVE_GRONN },
   { navn: 'Moderat utskillelse', tone: 'gul', kurve: KURVE_GUL },
   { navn: 'Treg utskillelse', tone: 'rod', kurve: KURVE_ROD },
@@ -34,7 +44,7 @@ const OPPLOSNING = 160
 
 export interface Kurvespor {
   navn: string
-  tone: 'gronn' | 'gul' | 'rod'
+  tone: ThcKurverolle
   /** Prosentvis endring per tidspunkt, fra dag 0 til siste dag. */
   punkter: { dag: number; prosent: number }[]
 }
@@ -91,10 +101,13 @@ function penYAkse(minst: number, storst: number): { yTopp: number; yBunn: number
 }
 
 /** Bygger hele figuren fra fortolkningens grafgrunnlag. */
-export function byggGraf({ forrige, dager, korrigertEndring }: ThcGrafgrunnlag): Graf {
+export function byggGraf(
+  { forrige, dager, korrigertEndring }: ThcGrafgrunnlag,
+  figur: Figurkurve[] = FIGURKURVER,
+): Graf {
   const korrigertProsent = korrigertEndring * 100
 
-  const kurver: Kurvespor[] = FIGURKURVER.map(({ navn, tone, kurve }) => {
+  const kurver: Kurvespor[] = figur.map(({ navn, tone, kurve }) => {
     // Kurven leses av fra der forrige prøve ligger på den, som i regnearkets
     // graftabell — ett oppslag her i stedet for ett per punkt.
     const start = tidForVerdi(forrige, kurve)
@@ -107,7 +120,8 @@ export function byggGraf({ forrige, dager, korrigertEndring }: ThcGrafgrunnlag):
   })
 
   // Grønn kurve faller brattest og setter bunnen, om ikke prøvepunktet gjør det.
-  const gronnSlutt = forventetEndring(forrige, dager, KURVE_GRONN) * 100
+  const gronn = figur.find((k) => k.tone === 'gronn')?.kurve ?? figur[0]!.kurve
+  const gronnSlutt = forventetEndring(forrige, dager, gronn) * 100
   const { yTopp, yBunn, ySteg } = penYAkse(
     Math.min(gronnSlutt, korrigertProsent),
     Math.max(0, korrigertProsent),

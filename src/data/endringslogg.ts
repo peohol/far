@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.11.1',
+    dato: '2026-09-23',
+    sammendrag: 'THC-syremodulen er gjort klar til å få reglene sine fra databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Kurvene, grensene, sikkerhetsmarginene og kommentartekstene i THC-syremodulen kan nå leses som data i stedet for å stå fast i koden. Det er første steg mot at de kan redigeres i appen.',
+      'Fortolkningen er uendret. Den er kontrollert mot over 4000 prøvepar, også rett på og rett ved siden av hver grense, og gir de samme kommentarene tegn for tegn.',
+    ],
+  },
+  {
     versjon: '1.11.0',
     dato: '2026-09-23',
     sammendrag: 'Hver analytt har fått sin egen informasjonsside',
