@@ -1,0 +1,51 @@
+{
+  "kode": "BREK",
+  "sider": [42],
+  "viktige_data": {
+    "referanseomrade": { "nedre": 50, "ovre": 350, "enhet": "nmol/L" },
+    "halveringstid": { "nedre": 91.4, "ovre": 91.4, "enhet": "timer" },
+    "steady_state": { "nedre": 19, "ovre": 19, "enhet": "dager" }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Partiell agonist på D_{2}- og 5-HT_{1A}-reseptorer. Antagonist på 5-HT_{2A}- og noradrenerge reseptorer.",
+      "Binder med høy affinitet til D_{2}-reseptoren. Bytte fra potent D_{2}-antagonist til brekspiprazol kan paradoksalt gi redusert D_{2}-blokkade og økt symptomtrykk, på samme måte som for aripiprazol.",
+      "Metabolitt: DM-3411, bidrar ikke til den terapeutiske effekten."
+    ]
+  },
+  "dosering": {
+    "tekst": ["Tablett: 1-4 mg"]
+  },
+  "indikasjon": {
+    "tekst": ["Voksne og ungdom ≥13 år: schizofreni."],
+    "referanser": ["fk-rxulti"]
+  },
+  "farmakokinetikk": [
+    { "tittel": "Biotilgjengelighet", "tekst": ["95 %"] },
+    { "tittel": "tmax", "tekst": ["4 timer"] },
+    { "tittel": "t1/2", "tekst": ["91,4 timer"] },
+    { "tittel": "tss", "tekst": ["19 dager"] },
+    { "tittel": "Proteinbinding", "tekst": [">99 %"] },
+    { "tittel": "VD", "tekst": ["1,6 L/kg"] },
+    { "tittel": "Eliminasjon", "tekst": ["Hepatisk metabolisme. Utskilles i urin (25 %) og feces (46 %)"] },
+    { "tittel": "CYP-enzymer (substrat)", "tekst": ["3A4, 2D6"] },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        { "punkter": [
+          "Halv dose når det administreres samtidig med potente CYP3A4-hemmere eller CYP2D6-hemmere",
+          "En fjerdedel av dosen ved kombinasjon med potente CYP3A4 OG CYP2D6 hemmere",
+          "Økt dosebehov ved kombinasjon med CYP3A4-induktorer (x3)"
+        ] }
+      ]
+    }
+  ],
+  "referanser": {
+    "fk-rxulti": {
+      "tittel": "Rxulti «Otsuka Pharmaceutical»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/rxulti-otsuka-pharmaceutical-657929"
+    }
+  }
+}
