@@ -581,22 +581,28 @@ describe('rikteksteditoren', () => {
 })
 
 describe('kortene i farmakokinetikken', () => {
-  const medKort = (tilstand: Tilstand): Analyttsidedata => {
-    const data = side(tilstand)
-    const kort = (id: string, tittel: string, posisjon: number) =>
-      utgave(id, {
-        infoside: 'hs',
-        panel: 'farmakokinetikk',
-        posisjon,
-        elementtype: 'kinetikkort',
-        data: { tittel, dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Syntetisk' }] }] } },
-      })
-    return { ...data, elementer: [...data.elementer, kort('k1', 'Absorpsjon', 0), kort('k2', 'Metabolisme', 0)] }
-  }
+  /** To kinetikkort, Absorpsjon og Metabolisme, med teksten i `tekster` (eller «Syntetisk»). */
+  const medKort =
+    (tekster: Partial<Record<'k1' | 'k2', string>> = {}) =>
+    (tilstand: Tilstand): Analyttsidedata => {
+      const data = side(tilstand)
+      const kort = (id: 'k1' | 'k2', tittel: string, posisjon: number) =>
+        utgave(id, {
+          infoside: 'hs',
+          panel: 'farmakokinetikk',
+          posisjon,
+          elementtype: 'kinetikkort',
+          data: {
+            tittel,
+            dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: tekster[id] ?? 'Syntetisk' }] }] },
+          },
+        })
+      return { ...data, elementer: [...data.elementer, kort('k1', 'Absorpsjon', 0), kort('k2', 'Metabolisme', 0)] }
+    }
 
   it('flytter et kort, og lagrer bare det som får ny plass', async () => {
     const user = userEvent.setup()
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort }))
+    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort() }))
     await screen.findByText('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Flytt ned: Absorpsjon' }))
@@ -608,7 +614,7 @@ describe('kortene i farmakokinetikken', () => {
 
   it('åpner både seksjonen og kortet når søket går til et treff i et lukket kort', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', kilde({ data: medKort }))
+    vis('AMTNORSUM', kilde({ data: medKort() }))
     await screen.findByText('10–20 nmol/L')
     const skuffknapp = (navn: string) =>
       screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
@@ -628,9 +634,33 @@ describe('kortene i farmakokinetikken', () => {
     expect(aktivt.closest('[hidden]')).toBeNull()
   })
 
+  it('går til titteltreffet når søket treffer tittelen på et lukket kort', async () => {
+    const user = userEvent.setup()
+    // «metabolisme» står i teksten i Absorpsjon og i tittelen på Metabolisme.
+    vis('AMTNORSUM', kilde({ data: medKort({ k1: 'Syntetisk metabolisme.' }) }))
+    await screen.findByText('10–20 nmol/L')
+    const skuffknapp = (navn: string) =>
+      screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
+
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'metabolisme')
+    expect(await screen.findByText('Treff 1 av 2')).toBeTruthy()
+    const steder = within(await screen.findByRole('list', { name: 'Hvor treffene står' }))
+    await user.click(steder.getByRole('button', { name: 'Farmakokinetikk › Metabolisme' }))
+
+    expect(skuffknapp('Farmakokinetikk').getAttribute('aria-expanded')).toBe('true')
+    expect(skuffknapp('Metabolisme').getAttribute('aria-expanded')).toBe('true')
+    expect(skuffknapp('Absorpsjon').getAttribute('aria-expanded')).toBe('false')
+    // Det aktive treffet er det i tittelen på Metabolisme, og det står synlig.
+    expect(screen.getByText('Treff 2 av 2')).toBeTruthy()
+    const aktivt = document.querySelector('mark.sidetreff--aktiv')!
+    expect(aktivt.textContent?.toLowerCase()).toBe('metabolisme')
+    expect(aktivt.closest('.skuff__knapp')?.closest('[data-skuff="farmakokinetikk/k2"]')).not.toBeNull()
+    expect(aktivt.closest('[hidden]')).toBeNull()
+  })
+
   it('fjerner et kort først etter en bekreftelse, uten å slette det', async () => {
     const user = userEvent.setup()
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort }))
+    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort() }))
     await screen.findByText('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Fjern: Metabolisme' }))
