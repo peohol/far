@@ -97,14 +97,19 @@ export function Sidesok({ sporring, onEndre, beholder, dokumenter, innholdsnokke
     if (merke) vis(merke, 'center')
   }
 
-  /** Går til stedet, og gjør det første treffet der til det aktive. */
+  /**
+   * Går til stedet, og gjør det første treffet der til det aktive. Er det et
+   * treff, er det treffet som vises, så skuffene det står i åpnes — også et
+   * detaljkort inne i stedet.
+   */
   const gaTilSted = (anker: string) => {
     const sted = document.getElementById(anker)
     if (!sted) return
     const alle = merker()
     const forste = alle.findIndex((m) => sted.contains(m))
-    if (forste !== -1) setAktiv(forste)
-    vis(sted, 'start')
+    if (forste === -1) return vis(sted, 'start')
+    setAktiv(forste)
+    vis(alle[forste]!, 'center')
   }
 
   const status = !sporring.trim()

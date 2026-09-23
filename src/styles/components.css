@@ -2999,8 +2999,13 @@ details[open] > .detalj__kropp {
   margin: 0;
 }
 
-/* Hvert kort er et detaljkort (`seksjoner.css`), som tegner rammen selv. */
-.infokort__kort {
+/* Hvert kort er et detaljkort (`seksjoner.css`), som tegner rammen selv.
+   Ankeret søket peker på, er innholdet i kortet. */
+.infokort__innhold {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  width: 100%;
   scroll-margin-block: var(--rom-4);
 }
 

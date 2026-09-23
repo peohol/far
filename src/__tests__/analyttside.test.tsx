@@ -606,6 +606,28 @@ describe('kortene i farmakokinetikken', () => {
     expect(lager.lagreUtkast).toHaveBeenCalledWith('k1', 1, expect.objectContaining({ posisjon: 1 }))
   })
 
+  it('åpner både seksjonen og kortet når søket går til et treff i et lukket kort', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ data: medKort }))
+    await screen.findByText('10–20 nmol/L')
+    const skuffknapp = (navn: string) =>
+      screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
+    expect(skuffknapp('Farmakokinetikk').getAttribute('aria-expanded')).toBe('false')
+    expect(skuffknapp('Absorpsjon').getAttribute('aria-expanded')).toBe('false')
+
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'syntetisk')
+    const steder = within(await screen.findByRole('list', { name: 'Hvor treffene står' }))
+    await user.click(steder.getByRole('button', { name: 'Farmakokinetikk › Absorpsjon' }))
+
+    expect(skuffknapp('Farmakokinetikk').getAttribute('aria-expanded')).toBe('true')
+    expect(skuffknapp('Absorpsjon').getAttribute('aria-expanded')).toBe('true')
+    expect(skuffknapp('Metabolisme').getAttribute('aria-expanded')).toBe('false')
+    // Treffet er det aktive, og står ikke lenger skjult.
+    const aktivt = document.querySelector('mark.sidetreff--aktiv')!
+    expect(aktivt.closest('[data-skuff="farmakokinetikk/k1"]')).not.toBeNull()
+    expect(aktivt.closest('[hidden]')).toBeNull()
+  })
+
   it('fjerner et kort først etter en bekreftelse, uten å slette det', async () => {
     const user = userEvent.setup()
     const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort }))

@@ -338,72 +338,75 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
           {elementer.map((element, i) => {
             const { tittel, dokument } = lesKinetikk(element.data)
             return (
-              <li key={element.id} id={elementAnker(element.id)} className="infokort__kort">
+              <li key={element.id} className="infokort__kort">
                 <Detaljkort
                   id={element.id}
                   tittel={<Uthev tekst={tittel} />}
                   tittelTillegg={<Kortreferanser element={element} />}
                   oppsummering={forhandsvisning(klartekst(dokument))}
                 >
-                <Redigerbar
-                  navn={tittel}
-                  element={element}
-                  redigerer={redigerer}
-                  visning={<Riktekst dokument={dokument} />}
-                  ekstra={
-                    <>
-                      {i > 0 && (
-                        <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt opp: ${tittel}`} onClick={() => void handlinger.flyttElement(element, elementer, -1)}>
-                          Flytt opp
-                        </Button>
+                  {/* Ankeret søket peker på står inne i detaljkortet, så å gå dit åpner også kortet. */}
+                  <div id={elementAnker(element.id)} className="infokort__innhold">
+                    <Redigerbar
+                      navn={tittel}
+                      element={element}
+                      redigerer={redigerer}
+                      visning={<Riktekst dokument={dokument} />}
+                      ekstra={
+                        <>
+                          {i > 0 && (
+                            <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt opp: ${tittel}`} onClick={() => void handlinger.flyttElement(element, elementer, -1)}>
+                              Flytt opp
+                            </Button>
+                          )}
+                          {i < elementer.length - 1 && (
+                            <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt ned: ${tittel}`} onClick={() => void handlinger.flyttElement(element, elementer, 1)}>
+                              Flytt ned
+                            </Button>
+                          )}
+                          {/* To trykk: et kort som fjernes, forsvinner fra utkastet og
+                              hentes bare tilbake gjennom historikken. */}
+                          {fjerner === element.id ? (
+                            <Button
+                              variant="subtle"
+                              className="redigeringsknapp"
+                              aria-label={`Bekreft: fjern ${tittel}`}
+                              onClick={() => void handlinger.fjernElement(element)}
+                            >
+                              Bekreft fjerning
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="subtle"
+                              className="redigeringsknapp"
+                              aria-label={`Fjern: ${tittel}`}
+                              onClick={() => setFjerner(element.id)}
+                            >
+                              Fjern
+                            </Button>
+                          )}
+                        </>
+                      }
+                      skjema={(lukk) => (
+                        <KinetikkSkjema
+                          tittel={tittel}
+                          start={{ tittel, dokument }}
+                          referanser={element.referanser}
+                          onAvbryt={lukk}
+                          onLagre={async ({ data, referanser }) => {
+                            await handlinger.lagreElement(element, {
+                              panel: definisjon.nokkel,
+                              elementtype: ELEMENTTYPER.kinetikk,
+                              posisjon: element.posisjon,
+                              data,
+                              referanser,
+                            })
+                            lukk()
+                          }}
+                        />
                       )}
-                      {i < elementer.length - 1 && (
-                        <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt ned: ${tittel}`} onClick={() => void handlinger.flyttElement(element, elementer, 1)}>
-                          Flytt ned
-                        </Button>
-                      )}
-                      {/* To trykk: et kort som fjernes, forsvinner fra utkastet og
-                          hentes bare tilbake gjennom historikken. */}
-                      {fjerner === element.id ? (
-                        <Button
-                          variant="subtle"
-                          className="redigeringsknapp"
-                          aria-label={`Bekreft: fjern ${tittel}`}
-                          onClick={() => void handlinger.fjernElement(element)}
-                        >
-                          Bekreft fjerning
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="subtle"
-                          className="redigeringsknapp"
-                          aria-label={`Fjern: ${tittel}`}
-                          onClick={() => setFjerner(element.id)}
-                        >
-                          Fjern
-                        </Button>
-                      )}
-                    </>
-                  }
-                  skjema={(lukk) => (
-                    <KinetikkSkjema
-                      tittel={tittel}
-                      start={{ tittel, dokument }}
-                      referanser={element.referanser}
-                      onAvbryt={lukk}
-                      onLagre={async ({ data, referanser }) => {
-                        await handlinger.lagreElement(element, {
-                          panel: definisjon.nokkel,
-                          elementtype: ELEMENTTYPER.kinetikk,
-                          posisjon: element.posisjon,
-                          data,
-                          referanser,
-                        })
-                        lukk()
-                      }}
                     />
-                  )}
-                />
+                  </div>
                 </Detaljkort>
               </li>
             )
