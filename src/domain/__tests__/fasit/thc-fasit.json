@@ -1,5 +1,5 @@
 {
-  "om": "Utfallet av THC-syremodulen for et fast sett inndata, laget av den opprinnelige modulen før fortolkningsreglene ble flyttet til Supabase. Se src/domain/__tests__/hjelp/thcFasit.ts.",
+  "om": "Utfallet av THC-syremodulen for et fast sett inndata, laget av den opprinnelige modulen med regnearkets konstanter og tekster i koden. Se src/domain/__tests__/hjelp/thcFasit.ts.",
   "tallgrunnlag": "add5a405c44f473768e1222e0279d37aee79097850b5bfc8733ccb8fe6c27bed",
   "kommentarer": [
       "THC-syre, et omdannelsesprodukt av cannabis, er påvist i lav konsentrasjon. Analyseresultatet tilsier at cannabis har vært inntatt etter prøve tatt 27.07.2026.",

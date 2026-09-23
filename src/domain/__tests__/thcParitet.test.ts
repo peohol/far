@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import importert from './fasit/thc-regelsett-import.json'
+import importerteTekster from './fasit/thc-tekster-import.json'
 import { fortolkThc as gammelFortolk, type Sikkerhetsmargin } from '../thc'
-import { fortolkThc as nyFortolk, type ThcInndata } from '../thcMotor'
+import { fortolkThc as nyFortolk, lagThcModell, type ThcInndata } from '../thcMotor'
 import type { ThcRegelsett } from '../thcRegelsett'
+import type { ThcTekster } from '../thcTekster'
 import { byggGraf, figurkurver } from '../thcPlot'
 
 /**
@@ -12,6 +14,11 @@ import { byggGraf, figurkurver } from '../thcPlot'
  * fasiten som står igjen.
  */
 const REGELSETT = importert as ThcRegelsett
+const MODELL = (() => {
+  const m = lagThcModell(REGELSETT, importerteTekster as ThcTekster)
+  if (!m.ok) throw new Error(m.feil.join('\n'))
+  return m.modell
+})()
 
 /** Fast frø, så et avvik kan gjenskapes. */
 function tilfeldig(frø: number) {
@@ -53,7 +60,7 @@ describe('den nye motoren mot den opprinnelige modulen', () => {
         sikkerhetsmargin: velg([0.5, 0.9, 0.99]),
       }
       const gammel = gammelFortolk({ ...inn, sikkerhetsmargin: inn.sikkerhetsmargin as Sikkerhetsmargin })
-      const ny = nyFortolk(inn, REGELSETT)
+      const ny = nyFortolk(inn, MODELL)
       const likt =
         gammel.type === 'mangler' || ny.type === 'mangler'
           ? JSON.stringify(gammel) === JSON.stringify(ny)

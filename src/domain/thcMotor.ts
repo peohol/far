@@ -1,15 +1,15 @@
+import { forventetEndring } from './thcKurver'
 import {
   INGEN_SIKKERHETSMARGIN,
-  KURVEKONTROLL_DAGER,
-  KURVEKONTROLL_FORRIGE,
-  KURVEKONTROLL_TOLERANSE,
   THC_KURVEROLLER,
+  godkjennThcRegelsett,
+  kurverI,
+  type GodkjentThcRegelsett,
   type ThcKonsentrasjonsniva,
-  type ThcKurve,
   type ThcKurverolle,
   type ThcRegelsett,
-  type ThcTekstnokkel,
 } from './thcRegelsett'
+import { godkjennThcTekster, type GodkjenteThcTekster, type ThcTekster, type ThcTekstnokkel } from './thcTekster'
 import { beregnIrcak, dagerMellom, formaterDatoNorsk, lesTall } from './thcTall'
 
 /**
@@ -24,96 +24,32 @@ import { beregnIrcak, dagerMellom, formaterDatoNorsk, lesTall } from './thcTall'
  * forrige prøve fortolket under cut-off (UCAK/NKRE i stedet for IRCAK, med
  * høyere måleusikkerhet og egen ordlyd).
  *
- * Alt som er fagkunnskap — kurvene, usikkerheten, marginene, nivåene,
- * grensene per bruksmønster og tekstene — kommer fra regelsettet
- * (`thcRegelsett.ts`). Her står bare fremgangsmåten. Regnestykkene er gjort i
+ * Alt som er fagkunnskap kommer utenfra: kurvene, usikkerheten, marginene,
+ * nivåene og grensene per bruksmønster fra regelsettet (`thcRegelsett.ts`),
+ * og ordlyden fra tekstbolkene (`thcTekster.ts`). Her står bare
+ * fremgangsmåten, og hvilke bolker hver konklusjon gir. Regnestykkene er gjort i
  * nøyaktig samme rekkefølge som i den opprinnelige modulen, slik at
  * resultatene er like helt ned til siste siffer; testene mot fasiten
  * (`__tests__/fasit/`) holder det slik.
  */
 
-/* --- Kurvene -------------------------------------------------------------- */
+/* --- Regelsettet og tekstene --------------------------------------------- */
 
-/** En kurve med amplitudene regnet om til IRCAK-enheter. */
-export interface Kurve {
-  a1: number
-  k1: number
-  a2: number
-  k2: number
+/** Reglene og tekstene fortolkningen bruker, begge kontrollert. */
+export interface ThcModell {
+  regler: GodkjentThcRegelsett
+  tekster: GodkjenteThcTekster
 }
 
-export function omregnetKurve(kurve: ThcKurve, konverteringsfaktor: number): Kurve {
-  return {
-    a1: kurve.a1 * konverteringsfaktor,
-    k1: kurve.k1,
-    a2: kurve.a2 * konverteringsfaktor,
-    k2: kurve.k2,
-  }
-}
-
-/** Kurvens verdi etter `t` døgn. Definert også for negative `t`. */
-export function verdiPaaKurve(t: number, k: Kurve): number {
-  return k.a1 * Math.exp(-k.k1 * t) + k.a2 * Math.exp(-k.k2 * t)
-}
-
-/**
- * Tidspunktet der kurven passerer `verdi`. Kurven er strengt fallende, så
- * svaret er entydig; binærsøket lander på regnearkets Newton-løsning med
- * maskinpresisjon. Verdier over kurvens startpunkt gir negativ tid — kurven
- * forlenges da bakover, akkurat som i regnearket.
- */
-export function tidForVerdi(verdi: number, k: Kurve): number {
-  let lav = -1000
-  let hoy = 1000
-  for (let i = 0; i < 200; i++) {
-    const midt = (lav + hoy) / 2
-    if (verdiPaaKurve(midt, k) > verdi) {
-      lav = midt
-    } else {
-      hoy = midt
-    }
-  }
-  return (lav + hoy) / 2
-}
-
-/**
- * Forventet relativ endring fra forrige prøve etter `dager` døgn, om
- * utskillelsen følger kurven. −0,25 betyr 25 % nedgang.
- */
-export function forventetEndring(forrige: number, dager: number, k: Kurve): number {
-  const t0 = tidForVerdi(forrige, k)
-  return verdiPaaKurve(t0 + dager, k) / forrige - 1
-}
-
-/** Alle tre kurvene i regelsettet, omregnet. */
-export function kurverI(r: ThcRegelsett): Record<ThcKurverolle, Kurve> {
-  return {
-    gronn: omregnetKurve(r.kurver.gronn, r.konverteringsfaktor),
-    gul: omregnetKurve(r.kurver.gul, r.konverteringsfaktor),
-    rod: omregnetKurve(r.kurver.rod, r.konverteringsfaktor),
-  }
-}
-
-/**
- * Kontrollerer at kurvene står i rekkefølge: fra samme forrige prøve skal
- * grønn aldri forvente mindre nedgang enn gul, og gul aldri mindre enn rød.
- * Ellers gir ikke grensene per bruksmønster mening. Prøves over et rutenett
- * av IRCAK-verdier og døgn; databasen gjør det samme.
- */
-export function kurvefeil(r: ThcRegelsett): string[] {
-  const kurver = kurverI(r)
-  for (const forrige of KURVEKONTROLL_FORRIGE) {
-    for (const dager of KURVEKONTROLL_DAGER) {
-      const [g, y, rd] = THC_KURVEROLLER.map((rolle) => forventetEndring(forrige, dager, kurver[rolle]))
-      if (!(g! <= y! + KURVEKONTROLL_TOLERANSE && y! <= rd! + KURVEKONTROLL_TOLERANSE)) {
-        return [
-          'Kurvene må stå i rekkefølge: grønn gir raskest utskillelse, gul langsommere og rød langsomst. ' +
-            `Det holder ikke for IRCAK ${forrige} etter ${dager} døgn.`,
-        ]
-      }
-    }
-  }
-  return []
+/** Kontrollerer reglene og tekstene og setter dem sammen, eller gir feilene. */
+export function lagThcModell(
+  regler: ThcRegelsett,
+  tekster: ThcTekster,
+): { ok: true; modell: ThcModell } | { ok: false; feil: string[] } {
+  const r = godkjennThcRegelsett(regler)
+  const t = godkjennThcTekster(tekster)
+  if (r.ok && t.ok) return { ok: true, modell: { regler: r.regelsett, tekster: t.tekster } }
+  return { ok: false, feil: [...(r.ok ? [] : r.feil), ...(t.ok ? [] : t.feil)] }
 }
 
 /* --- Måleusikkerheten ----------------------------------------------------- */
@@ -236,13 +172,13 @@ export function velgTekstbolker(
 
 /** Setter inn plassholderne og binder bolkene sammen med mellomrom. */
 export function settSammen(
-  r: ThcRegelsett,
+  tekster: ThcTekster,
   bolker: ThcTekstnokkel[],
   verdier: { niva: string; forrigeDato: string },
 ): string {
   return bolker
     .map((nokkel) =>
-      r.tekster[nokkel]
+      tekster[nokkel]
         .replaceAll('{nivå}', verdier.niva)
         .replaceAll('{forrige prøvedato}', verdier.forrigeDato),
     )
@@ -332,7 +268,7 @@ export type ThcResultat =
  * Validerer inndataene og bygger kommentaren. Forrige prøve brukes i
  * sammenligningen uansett hvor lang tid det har gått siden den.
  */
-export function fortolkThc(inn: ThcInndata, r: ThcRegelsett): ThcResultat {
+export function fortolkThc(inn: ThcInndata, { regler: r, tekster }: ThcModell): ThcResultat {
   const mangler: string[] = []
 
   const aktuell = lesTall(inn.aktuellVerdi)
@@ -384,7 +320,7 @@ export function fortolkThc(inn: ThcInndata, r: ThcRegelsett): ThcResultat {
     const bolker = velgTekstbolker(niva, utfall, underCutoff)
     return {
       type: 'kommentar' as const,
-      kommentar: settSammen(r, bolker, { niva: niva.navn, forrigeDato }),
+      kommentar: settSammen(tekster, bolker, { niva: niva.navn, forrigeDato }),
       konklusjon: utfall,
       niva,
       bolker,

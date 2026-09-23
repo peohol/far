@@ -1,6 +1,7 @@
 import { KURVE_GRONN, KURVE_GUL, KURVE_ROD } from './thc'
-import { forventetEndring, kurverI, tidForVerdi, verdiPaaKurve, type Kurve, type ThcGrafgrunnlag } from './thcMotor'
-import { THC_KURVEROLLER, type ThcKurverolle, type ThcRegelsett } from './thcRegelsett'
+import { forventetEndring, tidForVerdi, verdiPaaKurve, type Kurve } from './thcKurver'
+import type { ThcGrafgrunnlag } from './thcMotor'
+import { THC_KURVEROLLER, kurverI, type ThcKurverolle, type ThcRegelsett } from './thcRegelsett'
 
 /**
  * Tallgrunnlaget for visualiseringen av en fortolkning mot forrige prøve —

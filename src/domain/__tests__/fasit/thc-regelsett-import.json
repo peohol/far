@@ -70,17 +70,5 @@
       "nytt_inntak_over": "gul"
     }
   },
-  "varsel_dager_mellom": 30,
-  "tekster": {
-    "apning": "THC-syre, et omdannelsesprodukt av cannabis, er påvist i {nivå} konsentrasjon.",
-    "nylig_inntak": "Slike konsentrasjoner ses gjerne ved prøvetaking kort tid etter inntak av cannabis.",
-    "nytt_inntak": "Analyseresultatet tilsier at cannabis har vært inntatt etter prøve tatt {forrige prøvedato}.",
-    "inntak_har_skjedd": "Analyseresultatet viser at cannabis har vært inntatt.",
-    "pavisningstid": "Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. Ved gjentatte inntak vil påvisningstiden for THC-syre i urin øke, vanligvis opptil en måned etter avsluttet inntak.",
-    "vanskelig": "Basert på analyseresultatet alene er det vanskelig å avgjøre hvorvidt cannabis har vært inntatt etter prøve tatt {forrige prøvedato}. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).",
-    "ikke_nodvendigvis": "Analyseresultatet tilsier at cannabis ikke nødvendigvis har vært inntatt etter prøve tatt {forrige prøvedato}. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).",
-    "under_cutoff_vanskelig": "Ved lave THC-syrekonsentrasjoner og varierende kreatininresultater kan nivået svinge over og under påvisningsgrensen. Vurdering i forhold til andre prøver kan derfor være vanskelig, og inntakstidspunktet kan ikke avgjøres. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).",
-    "under_cutoff_ikke_nodvendigvis": "Analyseresultatet tilsier at cannabis ikke nødvendigvis har vært inntatt etter prøve tatt {forrige prøvedato}, selv om prøven tatt {forrige prøvedato} ble rapportert som «ikke påvist». Ved lave THC-syrekonsentrasjoner og varierende kreatininresultater kan nivået svinge over og under påvisningsgrensen, uten at nytt inntak nødvendigvis har funnet sted. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).",
-    "uten_forrige": "Oppfølging med flere prøver anbefales."
-  }
+  "varsel_dager_mellom": 30
 }
