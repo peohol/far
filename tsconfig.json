@@ -27,6 +27,7 @@
     "middleware.ts",
     "scripts/bootstrap-admin.ts",
     "vite.config.ts",
-    "supabase/functions/_delt"
+    "supabase/functions/_delt",
+    "api"
   ]
 }
