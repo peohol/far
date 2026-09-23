@@ -236,13 +236,34 @@ describe('valideringen', () => {
 })
 
 describe('kommentarene er egne objekter', () => {
-  it('krever ren tekst uten mellomrom i endene', () => {
-    expect(validerKommentar({ tekst: 'Forenlig med inntak.' })).toEqual([])
+  it('krever navn, ren tekst og at plassholderne i teksten er tillatt', () => {
+    const kommentar = { navn: 'Kodein, hoved', tekst: 'Forenlig med inntak.', plassholdere: [] }
+    expect(validerKommentar(kommentar)).toEqual([])
     for (const tekst of ['', ' ', 'Med mellomrom. ', '\nLinjeskift foran.']) {
-      expect(validerKommentar({ tekst }), JSON.stringify(tekst)).toEqual([
+      expect(validerKommentar({ ...kommentar, tekst }), JSON.stringify(tekst)).toEqual([
         'Kommentaren mangler tekst eller har mellomrom i endene.',
       ])
     }
+    expect(validerKommentar({ ...kommentar, navn: ' ' })).toEqual(['Kommentaren mangler navn eller har mellomrom i endene.'])
+    expect(validerKommentar({ ...kommentar, tekst: 'x'.repeat(4001) })).toEqual(['Kommentaren kan ha høyst 4000 tegn.'])
+    expect(validerKommentar({ ...kommentar, tekst: 'Nivå {nivå}.' })).toEqual([
+      'Teksten bruker plassholderen {nivå}, som ikke er tillatt.',
+    ])
+    expect(validerKommentar({ ...kommentar, tekst: 'Nivå {nivå}.', plassholdere: ['{nivå}'] })).toEqual([])
+    expect(validerKommentar({ ...kommentar, plassholdere: ['nivå', '{ }', '{a}', '{a}'] })).toEqual([
+      'Ugyldig plassholder «nivå».',
+      'Ugyldig plassholder «{ }».',
+      'En plassholder står to ganger.',
+    ])
+  })
+
+  it('godtar ikke at et scenario viser til en kommentar med plassholdere', () => {
+    const med = new Map(RUS_KOMMENTARER).set('tramadolgruppen/hoved', 'Nivå {nivå}.')
+    expect(validerScenarioregelsett(regelsett('tramadolgruppen'), med)).toEqual([
+      'Scenariet tram viser til en kommentar med plassholdere.',
+      'Scenariet otram viser til en kommentar med plassholdere.',
+      'Scenariet begge viser til en kommentar med plassholdere.',
+    ])
   })
 
   it('slås opp når regelen kjøres, så en rettet tekst gjelder uten at regelen endres', () => {

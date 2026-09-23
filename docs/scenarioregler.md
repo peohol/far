@@ -25,9 +25,11 @@ kommentar-ID og kodene den limes inn på — og notiser, eller en eksplisitt
 
 Kommentar og regel er separate objekter (planen, del 2 og 11). En
 kommentar — teksten som limes inn i pasientsvaret — er et eget objekt med
-stabil ID (`src/domain/kommentarobjekt.ts`): ren tekst, uten mellomrom i
-endene. Regelsettet inneholder ingen tekster, bare ID-ene scenariene peker
-på. Motoren og valideringen får kommentarene å slå opp i ved siden av
+stabil ID (`src/domain/kommentarobjekt.ts`): et internt navn, ren tekst og
+plassholderne teksten kan bruke. Formen er felles for alle regeltypene.
+Scenarioreglene limer inn teksten slik den står og godtar ikke kommentarer
+med plassholdere. Regelsettet inneholder ingen tekster, bare ID-ene
+scenariene peker på. Motoren og valideringen får kommentarene å slå opp i ved siden av
 regelsettet.
 
 Dermed rettes en tekst ett sted, uten at regelen endres, og samme tekst kan
@@ -49,7 +51,7 @@ prosent. Endres grensen, følger tekstene med.
 - et forholdstall regnes bare av påviste analytter;
 - hvert kommentarutfall har minst én hovedkommentar, entydige merker, og gir
   hver påvist analytt nøyaktig én kommentar;
-- kommentarene scenariene viser til, finnes;
+- kommentarene scenariene viser til, finnes og har ingen plassholdere;
 - grensene er tall større enn 0, og tekstene i regelsettet (meldinger,
   notiser, merker) er ikke tomme og viser bare til grenser som finnes.
 

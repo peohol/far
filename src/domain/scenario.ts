@@ -1,5 +1,5 @@
 import type { Kommentarplassering } from './kommentar'
-import type { Kommentaroppslag } from './kommentarobjekt'
+import { plassholdereI, type Kommentaroppslag } from './kommentarobjekt'
 
 /**
  * Scenarioregelsett: fortolkningen av analytter som vurderes samlet.
@@ -449,9 +449,10 @@ function validerScenario(
   const dekket: string[] = []
   for (const p of u.plasseringer) {
     tekst(p.merke, `Merket i ${s.nokkel}`)
-    if (!kommentarer.has(p.kommentar)) {
-      feil.push(`${hva} viser til en kommentar som ikke finnes.`)
-    }
+    const kommentar = kommentarer.get(p.kommentar)
+    if (kommentar === undefined) feil.push(`${hva} viser til en kommentar som ikke finnes.`)
+    // Scenarioreglene limer inn teksten slik den står, og fyller ikke inn noe.
+    else if (plassholdereI(kommentar).length > 0) feil.push(`${hva} viser til en kommentar med plassholdere.`)
     if (p.koder.length === 0) feil.push(`${hva} har en kommentar uten analyttkode.`)
     dekket.push(...p.koder)
   }
