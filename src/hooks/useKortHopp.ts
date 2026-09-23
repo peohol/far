@@ -13,9 +13,12 @@ export function rullTilKort(kort: Element | null | undefined, block: ScrollLogic
   kort.scrollIntoView({ behavior: rullefart(), block: forHoyt ? 'start' : block })
 }
 
-/** Jevn rulling, med mindre brukeren har bedt om mindre bevegelse. */
+/**
+ * Jevn rulling, med mindre brukeren har bedt om mindre bevegelse. Uten
+ * `matchMedia` (eldre nettlesere, testmiljøet) rulles det jevnt.
+ */
 export function rullefart(): ScrollBehavior {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
 }
 
 /**
