@@ -960,14 +960,16 @@ Til klinisk gjennomgang: avvikene mellom PDF-en og de statiske dataene (BREK, DO
 
 ## Arbeidspakke 6 - Sammensatte analyttgrupper
 
-**Status:** [ ] Ikke startet
+**Status:** [ ] Påbegynt
+
+Scenariomodellen og motoren står i `docs/scenarioregler.md`. Dagens regler er skrevet som scenarioregelsett og gir identisk resultat som dagens motor; fortolkningen bruker fortsatt dagens motor. Analyttsidene viser reglene, med simulator.
 
 - [ ] Redigerbare scenarioer.
 - [ ] Påvist/ikke påvist-betingelser.
 - [ ] Forholdstall/terskler.
 - [ ] Hoved-/tilleggskommentarer og plassering.
 - [ ] Eksplisitte manuelle/gråsoneutfall.
-- [ ] Simulator for hele regelsettet.
+- [x] Simulator for hele regelsettet.
 - [ ] Migrer diazepamgruppen.
 - [ ] Migrer tramadolgruppen.
 - [ ] Migrer kodein/morfin.
@@ -1075,7 +1077,7 @@ Ta inn de øvrige feltene i del 23 én etter én, der arbeidspakke 8 viser at ki
 **Status:** [ ] Ikke startet. Starter når arbeidspakke 9 del 1 er på `main`.
 
 - [ ] Fortolkning/regler for konsentrasjonsreglene (arbeidspakke 5) vises som hovedseksjon med detaljkort.
-- [ ] Scenarioreglene og simulatoren (arbeidspakke 6) likeså.
+- [x] Scenarioreglene og simulatoren (arbeidspakke 6) likeså.
 - [ ] THC-editoren og -simulatoren (arbeidspakke 7) bygges i modellen fra starten.
 - [ ] Regelmotorene, valideringen og paritetstestene er uendret; klinisk output endres ikke.
 

@@ -4,9 +4,9 @@ import { Card } from './Card'
 import { Kommentarliste } from './Kommentarliste'
 import { Metodepille } from './Metodepille'
 import { Kodepille } from './Kodepille'
-import { Shortcut } from './Shortcut'
+import { Rusutfall } from './Rusutfall'
+import { Rusvalg } from './Rusvalg'
 import { StepBar } from './StepBar'
-import { Tallfelt } from './Tallfelt'
 import { BackIcon } from './icons'
 import {
   moduleKoder,
@@ -123,99 +123,33 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
           </div>
           <h1 className="analytt__navn">{modul.navn}</h1>
 
-          {!enkelt && (
-            <fieldset className="modul-valg">
-              <legend>Påvist i denne prøven</legend>
-              <div className="thc-avkryssinger">
-                {modul.analytter.map((analytt, i) => (
-                  <label className="avkryssing" key={analytt.kode}>
-                    <input
-                      ref={i === 0 ? forsteValg : undefined}
-                      type="checkbox"
-                      checked={pavist.includes(analytt.kode)}
-                      onChange={(e) => settPavist(analytt.kode, e.target.checked)}
-                      aria-keyshortcuts={indexToDigit(i)}
-                    />
-                    {analytt.navn}
-                    <span className="modul-valg__kode">{analytt.kode}</span>
-                    <Shortcut>{indexToDigit(i)}</Shortcut>
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-          )}
-
-          {verdifelter.length > 0 && (
-            <fieldset className="modul-valg">
-              <legend>Målte konsentrasjoner</legend>
-              {modul.verdihjelp && <p className="rus-hjelp">{modul.verdihjelp}</p>}
-              <div className="rus-felter">
-                {verdifelter.map((felt) => (
-                  <label className="thc-felt" key={felt.kode}>
-                    <span>
-                      {felt.navn} ({felt.kode})
-                    </span>
-                    <Tallfelt
-                      value={inndata.verdier[felt.kode] ?? ''}
-                      onChange={(verdi) => settVerdi(felt.kode, verdi)}
-                    />
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-          )}
+          <Rusvalg
+            analytter={modul.analytter}
+            pavist={pavist}
+            verdifelter={verdifelter}
+            verdier={inndata.verdier}
+            verdihjelp={modul.verdihjelp}
+            onPavist={settPavist}
+            onVerdi={settVerdi}
+            forsteValg={forsteValg}
+            snarveier
+          />
         </Card>
 
         <Card align="start" className="modul-resultat">
-          {resultat.type === 'mangler' && (
-            <>
-              <h2 className="thc-resultat__merke">Mangler</h2>
-              <ul className="thc-mangler">
-                {resultat.mangler.map((melding) => (
-                  <li key={melding}>{melding}</li>
-                ))}
-              </ul>
-            </>
-          )}
-
-          {/* Kilden har ingen standardkommentar for tilfellet, og sier at
-              saken skal tas opp i plenum. Da skal det ikke ligge noe her til
-              å kopiere — bare beskjed om hvorfor, og hva kilden sier. */}
-          {resultat.type === 'plenum' && (
-            <>
-              <h2 className="thc-resultat__merke">Til plenum</h2>
-              <p className="rus-plenum" role="note">
-                {resultat.melding}
-              </p>
-              {resultat.veiledning.map((tekst) => (
-                <p className="rus-veiledning" key={tekst}>
-                  {tekst}
-                </p>
-              ))}
-            </>
-          )}
-
-          {resultat.type === 'kommentarer' && (
-            <>
-              <h2 className="thc-resultat__merke">
-                {resultat.plasseringer.length > 1 ? 'Kommentarer' : 'Kommentar'}
-              </h2>
-              {resultat.notiser.map((notis) => (
-                <p className="thc-notis" role="note" key={notis}>
-                  {notis}
-                </p>
-              ))}
-
+          <Rusutfall
+            resultat={resultat}
+            kommentarer={(plasseringer) => (
               <Kommentarliste
-                plasseringer={resultat.plasseringer}
+                plasseringer={plasseringer}
                 utgave={utgave}
                 visTekst={visTekst}
                 copy={copy}
                 flashAt={flashAt}
                 onFinish={onFinish}
               />
-            </>
-          )}
+            )}
+          />
         </Card>
       </div>
     </section>

@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.15.0',
+    dato: '2026-09-23',
+    sammendrag: 'Fortolkningsreglene for rusmidler vises på analyttsidene, med en simulator',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Analyttsidene for stoffene med ruspotensial i serum har fått en seksjon med fortolkningsreglene. Den viser hvilke analytter som må være påvist, grensene som gjelder, hvilke kommentarer som brukes og hvilke koder de limes inn på. Lukket viser den antall scenarier og grensene.',
+      'Diazepamgruppen, tramadol, kodein/morfin og amfetamin/metamfetamin har i tillegg «Prøv reglene», som åpnes for seg i seksjonen. Der krysser du av og fyller inn tall slik som i fortolkningen, og ser hvilket scenario som gjelder og hvor kommentarene havner.',
+      'Reglene i seksjonen er kontrollert mot dagens fortolkning for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. De gir nøyaktig samme kommentarer, plassering og beskjeder. Kommenteringen er uendret.',
+    ],
+  },
+  {
     versjon: '1.14.0',
     dato: '2026-09-23',
     sammendrag: 'Fortolkningskommentarene kan lagres som egne tekster med historikk',
