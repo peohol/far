@@ -69,9 +69,15 @@ Tre begreper holdes fra hverandre, som planen krever:
 - **Kommentar** — en fortolkningskommentar: teksten som limes inn i
   pasientsvaret. Se [Kommentarer](#kommentarer).
 
-Fortolkningsreglene er egne objekttyper på samme maskineri, én per regeltype.
-De enkle konsentrasjonsreglene er objekttypen `intervallregelsett`, beskrevet i
-`docs/fortolkningsregler.md`.
+- **Intervallregelsett** (`intervallregelsett`) — de enkle
+  konsentrasjonsreglene for én analyttkode. Se `docs/fortolkningsregler.md`.
+- **THC-syreregelsett** (`thc_regelsett`) — reglene for THC-syre i urin som
+  ett objekt: kurvene, grensene og hvilken kommentar hver tekstbolk bruker
+  lagres, publiseres og gjenopprettes samlet. Tekstene er kommentarer. Det
+  finnes bare ett. Se `docs/thc-syre.md`.
+
+Regelsettene for de øvrige regeltypene er egne objekttyper, én per regeltype,
+på samme maskineri.
 
 ## Objekter, revisjoner og tilstander
 
@@ -423,6 +429,12 @@ selv, andre kolonner er koblinger til andre objekter), funksjonsparet
 `intern.skriv_<type>` og `intern.les_<type>`, radsikkerhet og rettigheter som
 for de andre. Resten av maskineriet finner funksjonene på navnet. Legg typen
 og formen inn i `src/faginnhold/modell.ts`, og prøv den i testene.
+
+**Flyttall.** Supabase-prosjektet skriver flyttall med 15 gjeldende sifre
+(`extra_float_digits = 0`), og øyeblikksbildet — som også det publiserte
+skrives av — får da bare 15. Et `les_<type>` som gjør `float8` om til JSON,
+skal derfor ha `set extra_float_digits = 1`, som gir den korteste eksakte
+skrivemåten. Testdatabasen har samme innstilling som prosjektet.
 
 **Nytt felt på en type.** Revisjonene endres aldri, så eldre øyeblikksbilder
 mangler feltet. `skriv_<type>` må tåle det — med en standardverdi, f.eks.
