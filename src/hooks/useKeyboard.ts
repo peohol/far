@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { feltetTarTegnene, mellomromErLedig, type Fokusert } from '../domain/tastatur'
+import { enterErLedig, feltetTarTegnene, mellomromErLedig, type Fokusert } from '../domain/tastatur'
 
 export type KeyHandler = (event: KeyboardEvent) => void
 
@@ -31,8 +31,24 @@ export function lagLiggerOver(): boolean {
   return modaltLagLiggerOver() || document.querySelector('[data-lag]') !== null
 }
 
+/** Merket fortolkningen bærer mens den står skjult bak en informasjonsside. */
+export const SKJULT_FORTOLKNING = 'skjult'
+
 /**
- * Kobler tastatursnarveier til vinduet.
+ * Sant mens fortolkningen står skjult bak en informasjonsside.
+ *
+ * Fortolkningen blir stående montert når en informasjonsside åpnes, så det
+ * brukeren har fylt inn, er der når hen kommer tilbake. Tastene dens skal
+ * derimot ligge i ro så lenge den ikke vises: `Enter` på informasjonssiden
+ * skal ikke kopiere en kommentar ingen ser. Alle som lytter på vinduet på
+ * vegne av fortolkningen, spør her — samme mønster som {@link lagLiggerOver}.
+ */
+export function fortolkningenErSkjult(): boolean {
+  return document.querySelector(`[data-fortolkning="${SKJULT_FORTOLKNING}"]`) !== null
+}
+
+/**
+ * Kobler fortolkningens tastatursnarveier til vinduet.
  *
  * Nøkkelen i kartet er `event.key`. Handlingen kjøres bare når ingen
  * modifikatortast holdes nede, slik at nettleserens egne snarveier
@@ -50,7 +66,7 @@ export function useKeyboard(handlers: Record<string, KeyHandler | undefined>, en
     if (!enabled) return
     function onKeyDown(event: KeyboardEvent) {
       if (event.ctrlKey || event.metaKey || event.altKey) return
-      if (lagLiggerOver()) return
+      if (lagLiggerOver() || fortolkningenErSkjult()) return
       ref.current[event.key]?.(event)
     }
     window.addEventListener('keydown', onKeyDown)
@@ -86,7 +102,8 @@ export function fokusertNa(): Fokusert | null {
 
 /**
  * Sant når tastetrykket er en bekreftelse: `Enter`, eller mellomrom der
- * mellomrom ikke alt har en jobb der fokus står.
+ * mellomrom ikke alt har en jobb der fokus står. `Enter` på en lenke følger
+ * lenken, og mens fortolkningen står skjult, bekrefter ingen av dem noe.
  *
  * Dette er den ene regelen for «gjør det steget skal gjøre», og alle stegene
  * og modulene bruker den, slik at de to tastene betyr det samme overalt.
@@ -94,7 +111,8 @@ export function fokusertNa(): Fokusert | null {
  */
 export function erBekreftelse(event: KeyboardEvent): boolean {
   if (event.ctrlKey || event.metaKey || event.altKey) return false
-  if (event.key === 'Enter') return true
+  if (fortolkningenErSkjult()) return false
+  if (event.key === 'Enter') return enterErLedig(fokusertNa())
   return event.key === ' ' && mellomromErLedig(fokusertNa())
 }
 

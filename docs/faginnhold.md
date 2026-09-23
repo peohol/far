@@ -6,10 +6,11 @@ endres. Planen
 og fremdriften står i `docs/analyttsider-og-redigering.md`; her står hvordan
 fundamentet faktisk er bygget.
 
-Fortolkningen bruker ikke noe av dette ennå. Kommentartekstene, grensene og
-reglene ligger fortsatt i de statiske datasettene, og
-`src/__tests__/fortolkningUendret.test.ts` holder det slik til byttet gjøres
-med vilje.
+Informasjonssidene (arbeidspakke 3) bygger på dette. Fortolkningen gjør det
+ikke: kommentartekstene, grensene og reglene ligger fortsatt i de statiske
+datasettene, og `src/__tests__/fortolkningUendret.test.ts` holder det slik —
+også med en kontrollsum over all klinisk output modulene kan gi — til byttet
+gjøres med vilje.
 
 ## Delene
 
@@ -17,11 +18,19 @@ med vilje.
 | --- | --- |
 | `supabase/migrations/*_faginnhold_fundament.sql` | Tabellene, radsikkerheten og funksjonene |
 | `supabase/migrations/*_referanse_objekttype.sql`, `*_referansesystem.sql` | Referansene og koblingene til dem |
+| `supabase/migrations/*_analyttsider_lesing.sql` | Lesingen av en hel side, referansebasen og sider etter navn |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
-| `src/faginnhold/lagring.ts` | Kallene appen gjør, og konflikter gjort om til en egen feil |
+| `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
+| `src/faginnhold/paneler.ts` | Panelene 1–7 og formen på hver elementtype |
+| `src/faginnhold/riktekst.ts` | Rikteksten: nodene og merkene som er tillatt, rensing og ren tekst |
+| `src/faginnhold/analyttside.ts` | En side satt sammen: panelene, nummereringen og publiseringsrekkefølgen |
+| `src/faginnhold/sok.ts` | Indekseringen og søket, for siden og senere hele kunnskapsbasen |
+| `src/domain/analyttkatalog.ts`, `rute.ts` | Kodene som har en side, og adressene til dem |
+| `src/components/analyttside/` | Siden, panelene, skjemaene, editoren, referansevelgeren og søket |
 | `src/faginnhold/referanser.ts` | Siteringer, nummerering, piller og referanseliste — rene funksjoner |
 | `src/components/referanser/` | Referansepillen med boblen, og referanselisten |
-| `src/__tests__/faginnhold.test.ts`, `referanser.test.ts` | Reglene, prøvd mot en ekte database |
+| `src/__tests__/faginnhold.test.ts`, `referanser.test.ts`, `analyttsidelesing.test.ts` | Reglene og lesingen, prøvd mot en ekte database |
+| `src/__tests__/analyttside.test.tsx`, `navigasjon.test.tsx`, `analyttsidemodell.test.ts` | Sidene, redigeringen og veiene mellom sidene og fortolkningen |
 | `src/__tests__/referansenummerering.test.ts`, `referansepille.test.tsx` | Nummereringen, og pillen med mus, berøring og tastatur |
 | `src/__tests__/hjelp/testdatabase.ts` | Postgres i minnet, bygd av migrasjonene, og kallene testene gjør |
 
@@ -196,7 +205,68 @@ knappen i dokumentet, så Tab når lenkene i den, og plasseres som tipsboblene
 (`useBobleplassering` i `Tips.tsx`). Pillene og listen henter numrene og
 referansene fra `Sidereferanser` rundt siden.
 
-Appen bruker ikke referansene ennå; det gjør analyttsidene i arbeidspakke 3.
+## Informasjonssidene
+
+**Adressene.** Hver analyttkode appen kan fortolke, har en side på
+`#/analytt/<KODE>` (`src/domain/rute.ts`). Adressen står etter `#`, så
+nettleseren alene leser den: siden som lastes, og innloggingsveggen, er de
+samme. Hvilke koder som finnes, gir katalogen (`analyttkatalog.ts`), bygd av
+de samme søkeoppføringene som søket og sidemenyen. Katalogen sier også hvilken
+informasjonsside koden hører til (moderstoffet for sumanalysene), hvilke
+stoffer den omfatter, og hvilken fortolkningsmodul «Åpne fortolkning» fører
+til.
+
+**Lesingen.** En side leses i ett kall: `les_analyttside(analyttkode,
+sidetilstand)` gir laboratorieanalytten, hovedsiden, innholdselementene,
+komponentsidene med kodene deres og referansene siden siterer — hvert objekt
+som en utgave med revisjonen tilstanden peker på, den publiserte revisjonen,
+øyeblikksbildet og hvem som laget det. Lesemodus leser det publiserte;
+redigeringsmodus utkastet. `les_referanser` gir referansebasen og
+`finn_infosider` sidene med gitte navn. Alle tre, og visningen
+`objektutgaver` de bygger på, kjører med rettighetene til den som leser, så
+radsikkerheten gjelder som ellers.
+
+**Panelene** står i `paneler.ts`, med formen på `data` for hver elementtype:
+
+| Panel | Nøkkel | Elementer |
+| --- | --- | --- |
+| 1 Identitet | `identitet` | `preparater`: `{ navn: string[] }`, vist alfabetisk |
+| 2 Viktige data | `viktige_data` | Ett kort per type — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon`, `halveringstid`, `steady_state` — med `{ nedre, ovre, enhet, forbehold }` |
+| 3–5 Farmakodynamikk, dosering, indikasjon | `farmakodynamikk`, `dosering`, `indikasjon` | `riktekst`: `{ dokument }` |
+| 6 Farmakokinetikk | `farmakokinetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge |
+| 7 Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }` |
+
+Tallene i panel 2 er tall, ikke tekst. Bare den ene grensen oppgitt vises som
+«fra 10» eller «opptil 20», uten å si om grensen er med. Koden, navnet og
+kategorien i panel 1 kommer fra de statiske datasettene til siden finnes i
+databasen.
+
+**Rikteksten** er et ProseMirror-dokument, redigert med TipTap som i Slaids.
+Tillatt er avsnitt, linjeskift, punkt- og nummererte lister, fet, kursiv,
+understreket, senket og hevet skrift, lenker (bare `http(s)`) og siteringer.
+Alt leses gjennom `rensDokument` før det vises.
+
+**Redigeringen.** Administratorer får knappen «Rediger». Alt lagres som utkast
+mot revisjonen som ble lest, og en konflikt stanser lagringen og sier fra.
+Første gang noe lagres på en kode uten side, opprettes informasjonssiden og
+laboratorieanalytten av katalogens opplysninger; sider med samme navn som
+finnes fra før — for eksempel en komponent — gjenbrukes. «Publiser endringene»
+viser hva som blir synlig, og publiserer i den rekkefølgen databasen krever
+(`publiseringsplan`): referanser, komponentsider, hovedsiden, analytten, så
+elementene.
+
+Et objekt kan ikke slettes. Et kort som fjernes, flyttes derfor til panelet
+`fjernet`: det vises ikke, søkes ikke i og nummereres ikke, men står i
+historikken og kan hentes tilbake.
+
+**Søket** (`sok.ts`) er bygd for begge søkene i planen. `indekserSide` gjør én
+side om til søkedokumenter — navn, kode, komponenter, preparater,
+overskrifter, verdier, tabellrader, fritekst og referanser — hver med stedet
+den står (side › panel › kort). `sok` rangerer dokumentene og lager utdrag.
+Søket på siden bruker indeksen til å vise hvor treffene står, og fremhever
+dem i teksten. Det globale søket skal indeksere alle publiserte sider på samme
+måte; det trenger bare en kilde som gir alle sidene, for eksempel en funksjon
+ved siden av `les_analyttside`.
 
 ## Tilgang
 

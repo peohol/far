@@ -3,7 +3,7 @@ import { Button } from './Button'
 import { Card } from './Card'
 import { ManualCopy } from './ManualCopy'
 import { Metodepille } from './Metodepille'
-import { Pill } from './Pill'
+import { Kodepille } from './Kodepille'
 import { Shortcut } from './Shortcut'
 import { StepBar } from './StepBar'
 import { useTips } from './Tips'
@@ -46,8 +46,8 @@ export function EtgStep({ onPick, onBack, failed }: EtgStepProps) {
       <Card align="start" className="analyttkort">
         <Metodepille metode={ETG_ANALYSEMETODE} />
         <div className="modul-koder">
-          <Pill tone="kode">{ETG_KODE}</Pill>
-          <Pill tone="kode">{ETS_KODE}</Pill>
+          <Kodepille kode={ETG_KODE} />
+          <Kodepille kode={ETS_KODE} />
         </div>
         <h1 className="analytt__navn">EtG + EtS</h1>
         <p className="modul-undertittel">Etylglukuronid og etylsulfat i urin</p>

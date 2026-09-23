@@ -10,6 +10,7 @@ import {
   type Menyanalytt,
   type Menymetode,
 } from '../domain/analysemetoder'
+import { analyttadresse } from '../domain/rute'
 import { lagLiggerOver } from '../hooks/useKeyboard'
 import { rullefart } from '../hooks/useKortHopp'
 import type { Analyte } from '../types'
@@ -17,11 +18,14 @@ import type { Analyte } from '../types'
 /**
  * Sidemenyen: oversikten over analysemetodene, og filteret for søket.
  *
- * Menyen har to jobber. Den er en vei inn til en analytt for den som heller
- * vil bla enn å søke, og den avgjør hvilken analysemetode søket leter i.
+ * Menyen har to jobber. Den er veien inn til informasjonssiden for hver
+ * analyttkode — oppslagsverket, ordnet etter analysemetode og kategori — og
+ * den avgjør hvilken analysemetode søket leter i. Fortolkningen startes fra
+ * søket, eller med «Åpne fortolkning» på informasjonssiden.
  *
  * Innholdet bygges av de samme søkeoppføringene som søket bruker, så listene
- * kan ikke komme i utakt med det appen faktisk kan kommentere.
+ * kan ikke komme i utakt med det appen faktisk kan kommentere. Virkestoffene
+ * er lenker, så de også kan åpnes i en ny fane.
  *
  * Menyen er et lag over appen, på linje med endringsloggen: `data-lag` sier
  * fra til `lagLiggerOver()`, slik at appens egne taster holder seg i ro mens
@@ -56,11 +60,9 @@ export interface SidemenyProps {
   /** Analysemetoden søket er begrenset til. `null` er alle metodene. */
   metodefilter: string | null
   onFilter: (metode: string | null) => void
-  /** Trykk på et virkestoff: rett inn i kommenteringsmodulen dens. */
-  onVelgAnalytt: (analyte: Analyte) => void
 }
 
-export function Sidemeny({ pool, metodefilter, onFilter, onVelgAnalytt }: SidemenyProps) {
+export function Sidemeny({ pool, metodefilter, onFilter }: SidemenyProps) {
   const [apen, setApen] = useState(false)
   /** Av gjemmer kategoriene og lister virkestoffene i én alfabetisk bolk. */
   const [visKategorier, setVisKategorier] = useState(true)
@@ -163,15 +165,9 @@ export function Sidemeny({ pool, metodefilter, onFilter, onVelgAnalytt }: Sideme
     if (apen) panel.current?.focus()
   }, [apen])
 
-  const velg = useCallback(
-    (analyte: Analyte) => {
-      // Ikke `lukk()`: det nye steget tar fokus selv, og skal ikke få det
-      // revet tilbake til menyknappen.
-      setApen(false)
-      onVelgAnalytt(analyte)
-    },
-    [onVelgAnalytt],
-  )
+  // Ikke `lukk()`: informasjonssiden tar fokus selv, og skal ikke få det revet
+  // tilbake til menyknappen. Lenken gjør resten.
+  const velg = useCallback(() => setApen(false), [])
 
   return (
     <>
@@ -302,7 +298,7 @@ function Skuff({
   visKategorier: boolean
   onVeksle: () => void
   onFilter: () => void
-  onVelgAnalytt: (analyte: Analyte) => void
+  onVelgAnalytt: () => void
 }) {
   const id = useId()
   const rad = useRef<HTMLLIElement>(null)
@@ -382,22 +378,16 @@ function Skuff({
   )
 }
 
-/** Virkestoffene i en skuff eller en kategori, alfabetisk. */
-function Virkestoffer({
-  analytter,
-  onVelg,
-}: {
-  analytter: Menyanalytt[]
-  onVelg: (analyte: Analyte) => void
-}) {
+/** Virkestoffene i en skuff eller en kategori, alfabetisk, som lenker til informasjonssidene. */
+function Virkestoffer({ analytter, onVelg }: { analytter: Menyanalytt[]; onVelg: () => void }) {
   return (
     <ul className="menyanalytter">
       {analytter.map((oppforing) => (
         <li key={oppforing.kode}>
-          <button type="button" className="menyanalytt" onClick={() => onVelg(oppforing.analyte)}>
+          <a className="menyanalytt" href={analyttadresse(oppforing.kode)} onClick={onVelg}>
             <span className="menyanalytt__navn">{oppforing.navn}</span>
             <span className="menyanalytt__kode">{oppforing.kode}</span>
-          </button>
+          </a>
         </li>
       ))}
     </ul>

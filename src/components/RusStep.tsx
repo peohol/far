@@ -3,7 +3,7 @@ import { Button } from './Button'
 import { Card } from './Card'
 import { Kommentarliste } from './Kommentarliste'
 import { Metodepille } from './Metodepille'
-import { Pill } from './Pill'
+import { Kodepille } from './Kodepille'
 import { Shortcut } from './Shortcut'
 import { StepBar } from './StepBar'
 import { Tallfelt } from './Tallfelt'
@@ -118,9 +118,7 @@ export function RusStep({ modul, onBack, onFinish, copy, flashAt }: RusStepProps
           <Metodepille metode={RUS_ANALYSEMETODE} kategori={modul.kategori} />
           <div className="modul-koder">
             {koder.map((kode) => (
-              <Pill key={kode} tone="kode">
-                {kode}
-              </Pill>
+              <Kodepille key={kode} kode={kode} />
             ))}
           </div>
           <h1 className="analytt__navn">{modul.navn}</h1>

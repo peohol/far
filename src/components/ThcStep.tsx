@@ -3,7 +3,7 @@ import { Button } from './Button'
 import { Card } from './Card'
 import { Details } from './Details'
 import { Metodepille } from './Metodepille'
-import { Pill } from './Pill'
+import { Kodepille } from './Kodepille'
 import { StepBar } from './StepBar'
 import { ManualCopy } from './ManualCopy'
 import { Tallfelt } from './Tallfelt'
@@ -267,7 +267,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
         <Card ref={inndatakort} align="start" className="analyttkort">
           <Metodepille metode={THC_ANALYSEMETODE} />
           <div className="thc-korthode">
-            <Pill tone="kode">{THC_KODE}</Pill>
+            <Kodepille kode={THC_KODE} />
             <div className="thc-nullstillhjorne" data-nullstill>
               <Button variant="subtle" icon={<ResetIcon />} onClick={nullstill}>
                 Nullstill

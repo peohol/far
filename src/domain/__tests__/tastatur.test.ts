@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { feltetTarTegnene, fokustype, mellomromErLedig, type Fokusert } from '../tastatur'
+import { enterErLedig, feltetTarTegnene, fokustype, mellomromErLedig, type Fokusert } from '../tastatur'
 
 const felt = (type: string, ekstra: Partial<Fokusert> = {}): Fokusert => ({
   tag: 'INPUT',
@@ -72,5 +72,20 @@ describe('hvor tegnene brukeren taster hører hjemme', () => {
     expect(feltetTarTegnene(null)).toBe(false)
     expect(feltetTarTegnene(felt('checkbox'))).toBe(false)
     expect(feltetTarTegnene({ tag: 'BUTTON' })).toBe(false)
+  })
+})
+
+describe('hva Enter lander på', () => {
+  it('lar Enter bekrefte overalt der fokus ikke står på en lenke', () => {
+    expect(enterErLedig(null)).toBe(true)
+    expect(enterErLedig({ tag: 'BUTTON' })).toBe(true)
+    expect(enterErLedig(felt('text'))).toBe(true)
+    expect(enterErLedig(felt('checkbox'))).toBe(true)
+  })
+
+  it('lar Enter på en lenke følge lenken', () => {
+    // Analyttkodene i fortolkningsmodulene er lenker til informasjonssidene.
+    expect(enterErLedig({ tag: 'A' })).toBe(false)
+    expect(enterErLedig({ tag: 'a' })).toBe(false)
   })
 })

@@ -1,0 +1,72 @@
+/**
+ * All klinisk output fortolkningsmodulene kan gi, samlet i én struktur.
+ *
+ * Brukes av `fortolkningUendret.test.ts` til å vise at outputen er nøyaktig
+ * den samme som før: kommentarene, knappene og referansetallene for hver
+ * analytt med konsentrasjonsbånd, EtG/EtS-alternativene, rusmiddelmodulene
+ * over et rutenett av påviste analytter og konsentrasjoner, og
+ * THC-syrekommentarene over alle kombinasjonene av det de bygges av.
+ *
+ * Rutenettet for rusmiddelmodulene tar med verdiene rett på og rundt
+ * grensene reglene bruker (se `OKSAZEPAM_GRENSE`, `LAV_MORFIN_GRENSE` og
+ * `HOY_MORFIN_GRENSE` i `src/domain/rus.ts`), så en endring der slår ut.
+ */
+import { analytes } from '../../domain/analytes'
+import { ETG_ALTERNATIVER } from '../../domain/etg'
+import { grensepiller } from '../../domain/piller'
+import { RUS_MODULER } from '../../domain/rus'
+import { beregnKategori, byggKommentar, type Konsentrasjonsniva } from '../../domain/thc'
+import { cutoffvalg, valgene } from '../../domain/valg'
+
+/** Konsentrasjonene som prøves i hvert felt en rusmiddelmodul ber om. */
+const RUSVERDIER = ['', '0', '0,05', '0,1', '0,19', '0,2', '0,21', '0,5', '0,99', '1', '1,01', '2', '10', '100']
+
+/** Alle delmengder av kodene, i fast rekkefølge. */
+function delmengder(koder: string[]): string[][] {
+  return koder.reduce<string[][]>((alle, kode) => [...alle, ...alle.map((d) => [...d, kode])], [[]])
+}
+
+/** Alle kombinasjoner av verdier i feltene, som felt → verdi. */
+function kombinasjoner(felt: string[]): Record<string, string>[] {
+  return felt.reduce<Record<string, string>[]>(
+    (alle, navn) => alle.flatMap((k) => RUSVERDIER.map((v) => ({ ...k, [navn]: v }))),
+    [{}],
+  )
+}
+
+export function fortolkningsutfall() {
+  const band = analytes.map((analyte) => ({
+    kode: analyte.kode,
+    valg: valgene(analyte),
+    cutoff: cutoffvalg(analyte),
+    piller: grensepiller(analyte),
+  }))
+
+  const rus = RUS_MODULER.map((modul) => ({
+    id: modul.id,
+    utfall: delmengder(modul.analytter.map((a) => a.kode)).flatMap((pavist) =>
+      kombinasjoner(modul.verdifelter(pavist).map((f) => f.kode)).map((verdier) => ({
+        pavist,
+        verdier,
+        resultat: modul.fortolk({ pavist, verdier }),
+      })),
+    ),
+  }))
+
+  const nivaer: Konsentrasjonsniva[] = ['lav', 'middels høy', 'høy']
+  const thc = nivaer.flatMap((niva) =>
+    [0, 1, 2, 3, 4, 5].flatMap((kategori) =>
+      [true, false].flatMap((medForrige) =>
+        [true, false].map((underCutoff) => byggKommentar(niva, kategori, medForrige, '01.02.2026', underCutoff)),
+      ),
+    ),
+  )
+  const forventet = { gronn: 1, gul: 2, rod: 3 }
+  const kategorier = [true, false].flatMap((medForrige) =>
+    [true, false].flatMap((kronisk) =>
+      [0.5, 1, 1.5, 2, 2.5, 3, 3.5].map((korrigert) => beregnKategori(medForrige, kronisk, korrigert, forventet)),
+    ),
+  )
+
+  return { band, etg: ETG_ALTERNATIVER, rus, thc, kategorier }
+}

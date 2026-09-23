@@ -10,7 +10,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [x] Brukersystem med profiler og roller er etablert.
 - [x] Arbeidspakke 1: fundament for redigerbart faginnhold.
 - [x] Arbeidspakke 2: referansesystem.
-- [ ] Arbeidspakke 3: analyttsider og navigasjon.
+- [x] Arbeidspakke 3: analyttsider og navigasjon.
 - [ ] Arbeidspakke 4: import av psykofarmakainnhold.
 - [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
 - [ ] Arbeidspakke 6: sammensatte analyttgrupper.
@@ -678,7 +678,7 @@ Derfor:
 
 **Status:** [x] Ferdig
 
-Hvordan fundamentet er bygget, står i `docs/faginnhold.md`. Migrasjonen må rulles ut mot Supabase-prosjektet før arbeidspakke 3 tar tabellene i bruk; appen bruker dem ikke før det.
+Hvordan fundamentet er bygget, står i `docs/faginnhold.md`. Migrasjonen er rullet ut mot Supabase-prosjektet.
 
 Mål: etablere domenemodellen og den tekniske infrastrukturen som senere innhold, referanser, regler og analyttsider skal bygge på, uten å migrere klinisk innhold ennå.
 
@@ -709,7 +709,7 @@ Avgrensning:
 
 **Status:** [x] Ferdig
 
-Hvordan referansesystemet er bygget, står i `docs/faginnhold.md`. Migrasjonene rulles ut mot Supabase-prosjektet sammen med fundamentet, før arbeidspakke 3 tar dem i bruk. Pillen, boblen og listen er laget og prøvd hver for seg; de settes inn i analyttsidene i arbeidspakke 3.
+Hvordan referansesystemet er bygget, står i `docs/faginnhold.md`. Migrasjonene er rullet ut mot Supabase-prosjektet, og pillen, boblen og listen brukes på analyttsidene.
 
 - [x] Global referansebase med stabile ID-er.
 - [x] Slaids-format for referanser.
@@ -725,17 +725,20 @@ Hvordan referansesystemet er bygget, står i `docs/faginnhold.md`. Migrasjonene 
 
 ## Arbeidspakke 3 - Analyttsider og navigasjon
 
-**Status:** [ ] Ikke startet
+**Status:** [x] Ferdig
 
-- [ ] Egne URL-er for analyttsider.
-- [ ] Venstremeny fører til informasjonssider.
-- [ ] Klikkbare analyttkodepiller i fortolkningsmodulene.
-- [ ] «Åpne fortolkning» fra informasjonssiden.
-- [ ] Panelstruktur 1-7.
-- [ ] Lesemodus/redigeringsmodus.
-- [ ] Begrenset rikteksteditor.
-- [ ] Søk på siden.
-- [ ] Arkitektur for globalt søk.
+Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssidene». Sidene er tomme til innholdet legges inn: de viser koden, kategorien, navnet og komponentene fra de statiske datasettene, og resten fylles i arbeidspakke 4. Historikkvisningen med diff (del 7) er ikke laget; «Sist redigert» vises i redigeringsmodus.
+
+- [x] Egne URL-er for analyttsider.
+- [x] Venstremeny fører til informasjonssider.
+- [x] Klikkbare analyttkodepiller i fortolkningsmodulene.
+- [x] «Åpne fortolkning» fra informasjonssiden.
+- [x] Panelstruktur 1-7.
+- [x] Lesemodus/redigeringsmodus.
+- [x] Begrenset rikteksteditor.
+- [x] Panel-, kort- og inline-referanser med dynamisk nummerering og referanseliste.
+- [x] Søk på siden.
+- [x] Arkitektur for globalt søk.
 
 ## Arbeidspakke 4 - Psykofarmakainnhold
 

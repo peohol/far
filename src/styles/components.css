@@ -1085,6 +1085,10 @@
   margin: 0;
 }
 
+.referanseliste__punkt {
+  overflow-wrap: anywhere;
+}
+
 .referanseliste__punkt::marker {
   font-weight: var(--vekt-tung);
   font-variant-numeric: tabular-nums;
@@ -2758,4 +2762,603 @@ details[open] > .detalj__kropp {
 .filterbytte__av:hover {
   color: var(--blekk);
   background: var(--flate-hevet);
+}
+
+/* --- Kodepillen som lenke ----------------------------------------------- */
+
+/* Analyttkoden i fortolkningsmodulene fører til informasjonssiden. Den ser ut
+   som de andre kodepillene, og viser at den kan trykkes ved peker over. */
+.pille--lenke {
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--fart) var(--kurve),
+    box-shadow var(--fart) var(--kurve);
+}
+
+.pille--lenke:hover {
+  background: color-mix(in oklab, var(--aksent) 84%, var(--blekk));
+  box-shadow: 0 0 0 var(--kant-tykk) var(--aksent-flate);
+}
+
+/* En kompakt hovedknapp, til skjemaene på informasjonssidene. Samme farge som
+   den store, men på størrelse med de dempede knappene ved siden av. */
+.knapp--primary.knapp--kompakt {
+  font-size: var(--tekst-s);
+  padding: var(--rom-1) var(--rom-4);
+}
+
+.knapp:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* --- Informasjonssiden -------------------------------------------------- */
+
+/* Siden er et oppslagsverk og kan være lang. Den står øverst i vinduet og
+   ruller som en vanlig side, i stedet for å sentreres som stegene. */
+.app[data-side='analytt'] {
+  /* Kolonnen følger vinduet, ikke det bredeste innholdet — ellers ville en
+     lang referanse eller tabell presset siden ut over kanten på mobil. */
+  grid-template-columns: minmax(0, 1fr);
+  place-items: start center;
+}
+
+.scene--infoside {
+  width: min(100%, 64rem);
+}
+
+.analyttside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+}
+
+.analyttside .stegbar {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+}
+
+.analyttside__paneler {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+}
+
+.analyttside__paneler[aria-busy='true'] {
+  opacity: 0.7;
+  transition: opacity var(--fart) var(--kurve);
+}
+
+.analyttside .kort {
+  width: 100%;
+}
+
+.analyttside__tom,
+.infopanel__tomt,
+.datakort__tom {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
+/* Panel 1: identiteten. */
+.identitet {
+  gap: var(--rom-2);
+}
+
+.identitet__piller {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
+.identitet__navn {
+  font-size: var(--tekst-xl);
+  font-weight: var(--vekt-medium);
+  line-height: 1.2;
+  color: var(--blekk-sterk);
+  text-wrap: balance;
+}
+
+.identitet__navn:focus {
+  outline: none;
+}
+
+.identitet__komponenter,
+.identitet__preparater {
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
+.identitet__merke {
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
+}
+
+.komponentlenke {
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-xs);
+  color: var(--aksent);
+}
+
+/* Panelene. Overskriften er liten og rolig; innholdet er det som skal leses. */
+.infopanel {
+  gap: var(--rom-3);
+}
+
+.infopanel__hode {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--rom-2);
+  width: 100%;
+}
+
+.infopanel__tittel {
+  font-size: var(--tekst-m);
+  font-weight: var(--vekt-tung);
+  color: var(--blekk);
+}
+
+/* Panel 2: datakortene. Ett tall per kort, stort og sentrert, så det kan
+   leses av i farten. */
+.datakort {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+  gap: var(--rom-3);
+  width: 100%;
+  margin: 0;
+}
+
+.datakort__kort {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-1);
+  padding: var(--rom-3);
+  text-align: center;
+  background: var(--flate-hevet);
+  border-radius: var(--runding-m);
+  scroll-margin-block: var(--rom-4);
+}
+
+.datakort__tittel {
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-medium);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.datakort__symbol {
+  margin-left: 0.5ch;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.datakort__verdi {
+  font-size: var(--tekst-l);
+  font-weight: var(--vekt-medium);
+  line-height: 1.25;
+  color: var(--blekk-sterk);
+  font-variant-numeric: tabular-nums;
+}
+
+.datakort__forbehold {
+  font-size: var(--tekst-xs);
+  color: var(--blekk-dempet);
+}
+
+/* Prosa: venstrejustert, mindre enn tallene, og lik overalt. */
+.riktekst {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  font-size: var(--tekst-s);
+  line-height: 1.6;
+  text-align: left;
+}
+
+.riktekst ul,
+.riktekst ol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  padding-left: 1.4em;
+}
+
+.riktekst ul {
+  list-style: disc;
+}
+
+.riktekst ol {
+  list-style: decimal;
+}
+
+.riktekst a {
+  color: var(--aksent);
+}
+
+.infotekst,
+.dosetabell,
+.identitet__preparater {
+  width: 100%;
+  scroll-margin-block: var(--rom-4);
+}
+
+/* Panel 6: kortene i farmakokinetikken. */
+.infokort {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  width: 100%;
+  margin: 0;
+}
+
+.infokort__kort {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding: var(--rom-3);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-m);
+  scroll-margin-block: var(--rom-4);
+}
+
+.infokort__tittel {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-tung);
+}
+
+/* Panel 7: tabellen. Ruller sidelengs på smale skjermer i stedet for å
+   presse kolonnene sammen. */
+.dosetabell__rull {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.dosetabell__tabell {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--tekst-s);
+  text-align: left;
+}
+
+.dosetabell__tabell th,
+.dosetabell__tabell td {
+  padding: var(--rom-1) var(--rom-2);
+  border-bottom: var(--kant) solid var(--linje);
+  vertical-align: top;
+}
+
+.dosetabell__tabell th {
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-dempet);
+}
+
+/* Søket på siden. */
+.sidesok {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2) var(--rom-3);
+}
+
+.sidesok__felt {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  flex: 1 1 18rem;
+  padding: var(--rom-1) var(--rom-3);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-full);
+}
+
+.sidesok__felt:focus-within {
+  border-color: var(--aksent);
+}
+
+.sidesok__input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--rom-1) 0;
+  font-size: var(--tekst-s);
+  background: transparent;
+  border: 0;
+}
+
+.sidesok__input:focus {
+  outline: none;
+}
+
+.sidesok__status {
+  font-size: var(--tekst-xs);
+  color: var(--blekk-dempet);
+}
+
+.sidesok__steder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-1);
+  width: 100%;
+  margin: 0;
+}
+
+.sidesok__sted {
+  padding: 0.15rem var(--rom-2);
+  font-size: var(--tekst-xs);
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+  border: 0;
+  border-radius: var(--runding-full);
+  cursor: pointer;
+}
+
+.sidesok__sted:hover {
+  color: var(--blekk);
+}
+
+.sidetreff {
+  color: inherit;
+  background: var(--niva-gul-flate);
+  border-radius: 0.2em;
+  box-shadow: 0 0 0 1px var(--niva-gul-linje);
+}
+
+.sidetreff--aktiv {
+  background: var(--niva-gul-linje);
+  color: var(--blekk-sterk);
+}
+
+/* Redigeringen. Knappene er diskrete til de brukes: siden skal fortsatt
+   leses som et oppslagsverk. */
+.redigeringsstripe,
+.sidevarsel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-2);
+  padding: var(--rom-3) var(--rom-4);
+  font-size: var(--tekst-s);
+  border-radius: var(--runding-m);
+}
+
+.redigeringsstripe {
+  color: var(--blekk);
+  background: var(--aksent-flate);
+}
+
+.sidevarsel {
+  color: var(--varsel-blekk);
+  background: var(--varsel-flate);
+  border: var(--kant) solid var(--varsel-linje);
+}
+
+.publisering__liste {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+
+.redigeringsrad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-1) var(--rom-2);
+}
+
+.redigeringsknapp {
+  font-size: var(--tekst-xs);
+}
+
+.sistredigert {
+  font-size: var(--tekst-xxs);
+  color: var(--blekk-dempet);
+}
+
+.redigering {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  width: 100%;
+  padding: var(--rom-3);
+  text-align: left;
+  background: var(--flate-bunn);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-m);
+}
+
+.redigering__tittel,
+.nyreferanse__tittel {
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-tung);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.feltrad {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--rom-2);
+}
+
+.felt__inndata--flerlinje {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.doserad {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-2);
+  padding: var(--rom-2) var(--rom-3);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-s);
+}
+
+.doserad .feltrad {
+  width: 100%;
+}
+
+.doserad__tittel {
+  font-size: var(--tekst-xs);
+  color: var(--blekk-dempet);
+}
+
+/* Referansevelgeren. */
+.referansevelger {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  min-width: 0;
+  padding: var(--rom-2) var(--rom-3) var(--rom-3);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-s);
+}
+
+.referansevelger__tittel {
+  padding: 0 var(--rom-1);
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-dempet);
+}
+
+.referansevelger__valgte {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  padding-left: 1.4em;
+  font-size: var(--tekst-xs);
+  list-style: decimal;
+}
+
+.referansevelger__valgt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--rom-1);
+}
+
+.referansevelger__handlinger {
+  display: flex;
+  gap: var(--rom-1);
+}
+
+.referansevelger__tom {
+  font-size: var(--tekst-xs);
+  color: var(--blekk-dempet);
+}
+
+.referansevelger__forslag {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+
+.referansevelger__forslagsknapp {
+  width: 100%;
+  padding: var(--rom-1) var(--rom-2);
+  font-size: var(--tekst-xs);
+  text-align: left;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-s);
+  cursor: pointer;
+}
+
+.referansevelger__forslagsknapp:hover {
+  border-color: var(--aksent);
+}
+
+.nyreferanse {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+}
+
+/* Rikteksteditoren. Verktøyraden har bare det formateringen tillater. */
+.rikteksteditor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+}
+
+.verktoyrad,
+.symbolpanel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.verktoyrad__knapp {
+  min-width: 2.2rem;
+  padding: var(--rom-1) var(--rom-2);
+  font-size: var(--tekst-xs);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-s);
+  cursor: pointer;
+}
+
+.verktoyrad__knapp:hover {
+  border-color: var(--linje-sterk);
+}
+
+.verktoyrad__knapp[aria-pressed='true'],
+.verktoyrad__knapp[aria-expanded='true'] {
+  color: var(--aksent-blekk);
+  background: var(--aksent);
+  border-color: var(--aksent);
+}
+
+.verktoypanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding: var(--rom-2);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-s);
+}
+
+.riktekstfelt {
+  min-height: 7rem;
+  padding: var(--rom-2) var(--rom-3);
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-m);
+}
+
+.riktekstfelt:focus {
+  border-color: var(--aksent);
+  outline: none;
+}
+
+.riktekstfelt p {
+  margin: 0;
+}
+
+.siteringsmerke {
+  padding: 0 0.35em;
+  font-size: 0.8em;
+  color: var(--aksent-blekk);
+  background: var(--aksent);
+  border-radius: var(--runding-full);
+  white-space: nowrap;
+}
+
+.siteringsmerke--valgt {
+  box-shadow: 0 0 0 2px var(--fokus);
 }
