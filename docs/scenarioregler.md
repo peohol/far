@@ -60,6 +60,16 @@ traff og forholdstallene, som simulatoren viser. Rekkefølgen:
 3. En nevner på 0 gir forholdets melding.
 4. Scenariet der alle vilkårene holder, gir utfallet.
 
+## På analyttsiden
+
+`src/components/regler/Scenarioregler.tsx` viser regelsettet på siden til
+hver analytt i modulen: grensene, scenariene sortert etter hva som er påvist,
+med vilkår og utfall, og kommentartekstene nummerert, så hver tekst står én
+gang (`src/domain/scenariovisning.ts`). Med mer enn ett scenario følger
+«Prøv reglene», som bruker samme skjema (`Rusvalg`) og samme visning av
+utfallet (`Rusutfall`) som fortolkningsmodulen, kjører `kjorScenarier` og
+markerer scenariet som traff.
+
 ## Dagens regler
 
 `src/domain/rusregelsett.ts` er dagens rusmiddelregler skrevet som

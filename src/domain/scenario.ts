@@ -271,7 +271,7 @@ export function kjorScenarier(regelsett: Scenarioregelsett, inn: Scenarioinndata
     throw new Error(`${regelsett.modul}: ${treff.length} scenarier traff ${paviste.join('+')}`)
   }
 
-  return { resultat: utfallet(regelsett, scenario.utfall), scenario, forhold }
+  return { resultat: utfallFor(regelsett, scenario.utfall), scenario, forhold }
 }
 
 /** Kort vei til bare resultatet. */
@@ -279,7 +279,11 @@ export function fortolkScenarier(regelsett: Scenarioregelsett, inn: Scenarioinnd
   return kjorScenarier(regelsett, inn).resultat
 }
 
-function utfallet(regelsett: Scenarioregelsett, utfall: Scenarioutfall): Exclude<Scenarioresultat, { type: 'mangler' }> {
+/** Utfallet slik brukeren ser det: tekstene slått opp og grensene flettet inn. */
+export function utfallFor(
+  regelsett: Scenarioregelsett,
+  utfall: Scenarioutfall,
+): Exclude<Scenarioresultat, { type: 'mangler' }> {
   const flett = (tekst: string) => flettInn(tekst, regelsett.parametere)
   if (utfall.type === 'manuell') {
     return { type: 'plenum', melding: flett(utfall.melding), veiledning: utfall.veiledning.map(flett) }

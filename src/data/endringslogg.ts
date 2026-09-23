@@ -14,13 +14,13 @@ export const ENDRINGSLOGG: Endring[] = [
   {
     versjon: '1.12.0',
     dato: '2026-09-23',
-    sammendrag: 'Grunnlaget for redigerbare regler for rusmidler som vurderes samlet',
+    sammendrag: 'Fortolkningsreglene for rusmidler vises på analyttsidene, med en simulator',
     typer: ['Funksjonalitet'],
-    omfang: 'Minimalt omfang',
+    omfang: 'Mindre omfang',
     punkter: [
-      'Første steg mot at reglene for diazepamgruppen, tramadol, kodein/morfin og amfetamin/metamfetamin kan redigeres i appen. Reglene er skrevet om til scenarier: hvilke analytter som er påvist, eventuelle forholdstall mot en grense, og hvilke kommentarer som da brukes og hvor de limes inn.',
-      'De nye reglene er kontrollert mot dagens fortolkning for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. De gir nøyaktig samme kommentarer, plassering og beskjeder.',
-      'Ingenting av dette er synlig ennå. Kommenteringen er uendret.',
+      'Analyttsidene for stoffene med ruspotensial i serum har fått et panel med fortolkningsreglene. Panelet viser hvilke analytter som må være påvist, grensene som gjelder, hvilke kommentarer som brukes og hvilke koder de limes inn på.',
+      'Diazepamgruppen, tramadol, kodein/morfin og amfetamin/metamfetamin har i tillegg «Prøv reglene». Der krysser du av og fyller inn tall slik som i fortolkningen, og ser hvilket scenario som gjelder og hvor kommentarene havner.',
+      'Reglene i panelet er kontrollert mot dagens fortolkning for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. De gir nøyaktig samme kommentarer, plassering og beskjeder. Kommenteringen er uendret.',
     ],
   },
   {

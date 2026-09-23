@@ -773,14 +773,14 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 **Status:** [ ] Påbegynt
 
-Scenariomodellen og motoren står i `docs/scenarioregler.md`. Dagens regler er skrevet som scenarioregelsett og gir identisk resultat som dagens motor; fortolkningen bruker fortsatt dagens motor.
+Scenariomodellen og motoren står i `docs/scenarioregler.md`. Dagens regler er skrevet som scenarioregelsett og gir identisk resultat som dagens motor; fortolkningen bruker fortsatt dagens motor. Analyttsidene viser reglene, med simulator.
 
 - [ ] Redigerbare scenarioer.
 - [ ] Påvist/ikke påvist-betingelser.
 - [ ] Forholdstall/terskler.
 - [ ] Hoved-/tilleggskommentarer og plassering.
 - [ ] Eksplisitte manuelle/gråsoneutfall.
-- [ ] Simulator for hele regelsettet.
+- [x] Simulator for hele regelsettet.
 - [ ] Migrer diazepamgruppen.
 - [ ] Migrer tramadolgruppen.
 - [ ] Migrer kodein/morfin.
