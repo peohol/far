@@ -7,7 +7,8 @@ og fremdriften står i `docs/analyttsider-og-redigering.md`; her står hvordan
 fundamentet faktisk er bygget.
 
 Informasjonssidene (arbeidspakke 3) bygger på dette. Fortolkningen gjør det
-ikke: kommentartekstene, grensene og reglene ligger fortsatt i de statiske
+ikke ennå: de enkle konsentrasjonsreglene er lagt inn som regelsett (se
+`docs/fortolkningsregler.md`), men fortolkningen leser fortsatt de statiske
 datasettene, og `src/__tests__/fortolkningUendret.test.ts` holder det slik —
 også med en kontrollsum over all klinisk output modulene kan gi — til byttet
 gjøres med vilje.
@@ -59,8 +60,9 @@ Tre begreper holdes fra hverandre, som planen krever:
 - **Referanse** — én kilde i den globale referansebasen. Se
   [Referanser](#referanser).
 
-Fortolkningsmoduler, kommentarer og regelsett er ikke modellert ennå. De
-kommer som nye objekttyper, på samme maskineri.
+Fortolkningsreglene er egne objekttyper på samme maskineri. De enkle
+konsentrasjonsreglene er objekttypen `intervallregelsett`, beskrevet i
+`docs/fortolkningsregler.md`.
 
 ## Objekter, revisjoner og tilstander
 

@@ -755,18 +755,20 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 ## Arbeidspakke 5 - Enkle kommentarer og konsentrasjonsregler
 
-**Status:** [ ] Ikke startet
+**Status:** [ ] Pågår. Regelsettene er i Supabase med dagens regler, og
+pariteten er dokumentert (`docs/fortolkningsregler.md`). Redigeringen,
+simulatoren, historikkvisningen og byttet av fortolkningen gjenstår.
 
-- [ ] Kommentarobjekter i Supabase.
-- [ ] Enkle intervalbaserte regelsett.
+- [x] Kommentarobjekter i Supabase.
+- [x] Enkle intervalbaserte regelsett.
 - [ ] Redigering av delte skillepunkter mellom intervallene.
-- [ ] Ingen hull eller overlapp kan publiseres.
-- [ ] Kommentar og regel lagres separat.
-- [ ] Cut-off-logikken representeres uten duplisering av hovedkommentar.
-- [ ] «Ring rekvirent» representeres som egen handling/egenskap.
+- [x] Ingen hull eller overlapp kan publiseres.
+- [x] Kommentar og regel lagres separat.
+- [x] Cut-off-logikken representeres uten duplisering av hovedkommentar.
+- [x] «Ring rekvirent» representeres som egen handling/egenskap.
 - [ ] Regeltest/simulator.
 - [ ] Historikk og gjenoppretting.
-- [ ] Paritetstester mot dagens motor.
+- [x] Paritetstester mot dagens motor.
 - [ ] Produksjonsmodulene bytter til Supabase først når paritet er dokumentert.
 
 ## Arbeidspakke 6 - Sammensatte analyttgrupper

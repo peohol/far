@@ -28,12 +28,12 @@ export interface Band {
 }
 
 /** Antall desimaler i tallene til en analytt — styrer hvor fint båndene deles. */
-function decimalsOf(analyte: Analyte): number {
+export function decimalsOf(analyte: Analyte): number {
   const values = [analyte.nedreGrense, analyte.ovreGrense, analyte.ringegrense]
   return Math.max(...values.map((v) => (v === null ? 0 : (String(v).split('.')[1] ?? '').length)))
 }
 
-function round(value: number, decimals: number): number {
+export function round(value: number, decimals: number): number {
   const f = 10 ** decimals
   return Math.round(value * f) / f
 }
@@ -76,6 +76,9 @@ export function bands(analyte: Analyte): Band[] {
 
   const ut: Band[] = []
   for (const seg of segmenter) {
+    const kommentar = levelComment(analyte, seg.niva).kommentar
+    const nivaband = (fra: number | null, til: number | null, ringes: boolean) =>
+      lagBand({ niva: seg.niva, fra, til, ring: ringes, desimaler, kommentar })
     const hoyeste = seg.til === null ? null : round(seg.til - steg, desimaler)
     const heltUnderRing = ring !== null && hoyeste !== null && hoyeste <= ring
     const heltOverRing = ring !== null && seg.fra !== null && seg.fra > ring
@@ -84,26 +87,39 @@ export function bands(analyte: Analyte): Band[] {
     const delingGirEnkeltverdi = ring !== null && seg.fra !== null && seg.fra >= ring
 
     if (ring === null || heltUnderRing) {
-      ut.push(lagBand(analyte, seg.niva, seg.fra, hoyeste, false, desimaler))
+      ut.push(nivaband(seg.fra, hoyeste, false))
     } else if (heltOverRing || delingGirEnkeltverdi) {
-      ut.push(lagBand(analyte, seg.niva, seg.fra, hoyeste, true, desimaler))
+      ut.push(nivaband(seg.fra, hoyeste, true))
     } else {
-      ut.push(lagBand(analyte, seg.niva, seg.fra, ring, false, desimaler))
-      ut.push(lagBand(analyte, seg.niva, round(ring + steg, desimaler), hoyeste, true, desimaler))
+      ut.push(nivaband(seg.fra, ring, false))
+      ut.push(nivaband(round(ring + steg, desimaler), hoyeste, true))
     }
   }
   return ut
 }
 
-/** Bygger ett bånd. `fra` og `til` er begge inklusive; `null` er åpen ende. */
-function lagBand(
-  analyte: Analyte,
-  niva: Level,
-  fra: number | null,
-  til: number | null,
-  ring: boolean,
-  desimaler: number,
-): Band {
+/** Det som skal til for å bygge ett bånd. */
+export interface Bandgrunnlag {
+  niva: Level
+  /** Inklusiv nedre grense. `null` = ingen nedre grense. */
+  fra: number | null
+  /** Inklusiv øvre grense. `null` = ingen øvre grense. */
+  til: number | null
+  ring: boolean
+  desimaler: number
+  kommentar: string
+  /** Nøkkelen, når den ikke er den vanlige for nivået og ringingen. */
+  key?: string
+}
+
+/**
+ * Bygger ett bånd: tonen, nøkkelen og teksten på knappen. `fra` og `til` er
+ * begge inklusive; `null` er åpen ende.
+ *
+ * Både båndene fra datasettet og båndene fra et regelsett i databasen
+ * bygges her, så de vises likt.
+ */
+export function lagBand({ niva, fra, til, ring, desimaler, kommentar, key }: Bandgrunnlag): Band {
   const steg = 10 ** -desimaler
   const f = (v: number) => formatNumber(v, desimaler)
   let label: string
@@ -113,13 +129,13 @@ function lagBand(
   else label = '–'
 
   return {
-    key: ring ? `${niva}-ring` : niva,
+    key: key ?? (ring ? `${niva}-ring` : niva),
     niva,
     ring,
     tone: niva === 'over' && ring ? 'ring' : niva,
     fra,
     til,
     label,
-    kommentar: levelComment(analyte, niva).kommentar,
+    kommentar,
   }
 }

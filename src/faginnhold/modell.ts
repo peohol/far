@@ -1,8 +1,8 @@
 /**
  * Formen på det redigerbare faginnholdet, slik databasen lagrer det.
  *
- * Informasjonsside, laboratorieanalytt, innholdselement og referanse er hver
- * sin objekttype. Hvert objekt har en stabil ID, et utkast og eventuelt en
+ * Informasjonsside, laboratorieanalytt, innholdselement, referanse og
+ * intervallregelsett er hver sin objekttype. Hvert objekt har en stabil ID, et utkast og eventuelt en
  * publisert utgave, og en historikk der hver endring er en egen revisjon med
  * et komplett øyeblikksbilde. Bakgrunnen står i `docs/faginnhold.md`.
  *
@@ -10,7 +10,15 @@
  * `src/__tests__/faginnhold.test.ts` kontrollerer at de stemmer overens.
  */
 
-export const OBJEKTTYPER = ['infoside', 'laboratorieanalytt', 'innholdselement', 'referanse'] as const
+import type { Intervallregelsett } from '../regler/modell'
+
+export const OBJEKTTYPER = [
+  'infoside',
+  'laboratorieanalytt',
+  'innholdselement',
+  'referanse',
+  'intervallregelsett',
+] as const
 export type Objekttype = (typeof OBJEKTTYPER)[number]
 
 /** Utkastet er arbeidsversjonen; det publiserte er det alle innloggede ser. */
@@ -98,6 +106,8 @@ export interface Innhold {
   laboratorieanalytt: Laboratorieanalyttinnhold
   innholdselement: Innholdselementinnhold
   referanse: Referanseinnhold
+  /** Formen står i `src/regler/modell.ts`. */
+  intervallregelsett: Intervallregelsett
 }
 
 /**

@@ -1,5 +1,7 @@
 import { bands, type BandTone } from './bands'
 import { levelComment } from './concentration'
+import { cutoffkommentar, regelsettband } from './intervallregler'
+import type { Intervallregelsett } from '../regler/modell'
 import { splitName } from './names'
 import type { Analyte } from '../types'
 
@@ -57,7 +59,7 @@ export const CUTOFF_SPORSMAL =
 export const CUTOFF_KATEGORIER: string[] = ['Antidepressiver', 'Antipsykotika']
 
 /** Setningen som settes foran kommentaren fra det grønne båndet. */
-function cutoffInnledning(analyte: Analyte): string {
+export function cutoffInnledning(analyte: Analyte): string {
   return `Prøven inneholder en lav konsentrasjon av ${cutoffNavn(analyte)} som ligger under påvisningsgrensen. `
 }
 
@@ -112,16 +114,15 @@ export function cutoffKommentar(analyte: Analyte): string {
   return cutoffInnledning(analyte) + levelComment(analyte, 'innenfor').kommentar
 }
 
+/** Knappen for cut-off-kommentaren. */
+function lagCutoffvalg(kommentar: string): Kommentarvalg {
+  return { key: CUTOFF_NOKKEL, tone: 'cutoff', ring: false, label: CUTOFF_MERKE, kommentar }
+}
+
 /** Knappen «Til stede under cut-off», eller `null` for analytter uten den. */
 export function cutoffvalg(analyte: Analyte): Kommentarvalg | null {
   if (!harCutoffvalg(analyte)) return null
-  return {
-    key: CUTOFF_NOKKEL,
-    tone: 'cutoff',
-    ring: false,
-    label: CUTOFF_MERKE,
-    kommentar: cutoffKommentar(analyte),
-  }
+  return lagCutoffvalg(cutoffKommentar(analyte))
 }
 
 /* --- Utvalget under ett -------------------------------------------------- */
@@ -135,6 +136,18 @@ export function valgene(analyte: Analyte): Kommentarvalg[] {
   const cutoff = cutoffvalg(analyte)
   const alle: Kommentarvalg[] = [...bands(analyte)]
   if (cutoff) alle.push(cutoff)
+  return alle
+}
+
+/**
+ * Valgene et regelsett fra databasen gir: ett bånd per intervall, og
+ * «Til stede under cut-off» sist når regelsettet har den. Samme form og
+ * rekkefølge som {@link valgene}.
+ */
+export function regelsettvalg(regelsett: Intervallregelsett): Kommentarvalg[] {
+  const cutoff = cutoffkommentar(regelsett)
+  const alle: Kommentarvalg[] = [...regelsettband(regelsett)]
+  if (cutoff !== null) alle.push(lagCutoffvalg(cutoff))
   return alle
 }
 
