@@ -12,6 +12,7 @@ import {
   type FocusEvent,
   type PointerEvent,
   type ReactNode,
+  type RefObject,
 } from 'react'
 import { createPortal } from 'react-dom'
 import {
@@ -157,24 +158,35 @@ function uendret(forrige: Maal | null, nytt: Maal): boolean {
   )
 }
 
+/** Det `useBobleplassering` gir tilbake: festene, klassene og stilen. */
+export interface Bobleplassering<T extends HTMLElement> {
+  /** Festes på selve boblen — elementet som plasseres. */
+  boble: RefObject<T>
+  /** Festes på innholdet inni, der rullingen skjer. */
+  innhold: RefObject<T>
+  /** `tipsboble`-klassene: siden den står på, om den er klar og rullbar. */
+  klasser: string
+  stil: CSSProperties
+}
+
 /**
- * Selve boblen. Den tegnes først usynlig, måles, og vises der målingen sier —
- * ellers ville den blinket til i feil hjørne før den fant plassen sin.
+ * Plasserer en boble ved ankeret, i vinduet. Boblen tegnes først usynlig,
+ * måles, og vises der målingen sier — ellers ville den blinket til i feil
+ * hjørne før den fant plassen sin. Følger ankeret når det rulles eller
+ * vinduet endres.
  *
  * Innholdet ligger i et eget element inni, fordi pilen stikker utenfor
  * boblen: rullingen må skje et sted som ikke klipper den.
+ *
+ * `oppdatering` er det som kan endre størrelsen på boblen, så den måles på
+ * nytt når det skifter.
  */
-function Boble({
-  anker,
-  onHold,
-  children,
-}: {
-  anker: HTMLElement
-  onHold: (holdt: boolean) => void
-  children: ReactNode
-}) {
-  const boble = useRef<HTMLDivElement>(null)
-  const innhold = useRef<HTMLDivElement>(null)
+export function useBobleplassering<T extends HTMLElement = HTMLDivElement>(
+  anker: HTMLElement,
+  oppdatering?: unknown,
+): Bobleplassering<T> {
+  const boble = useRef<T>(null)
+  const innhold = useRef<T>(null)
   const [maal, setMaal] = useState<Maal | null>(null)
 
   useLayoutEffect(() => {
@@ -221,11 +233,7 @@ function Boble({
       window.removeEventListener('scroll', mal, true)
       window.removeEventListener('resize', mal)
     }
-  }, [anker, children])
-
-  // Forsvinner boblen mens pekeren er inne i den, kommer det ingen
-  // «pekeren forlot» — grepet må slippes her, ellers blir det hengende.
-  useEffect(() => () => onHold(false), [onHold])
+  }, [anker, oppdatering])
 
   const stil = {
     left: `${maal?.plassering.venstre ?? 0}px`,
@@ -239,17 +247,38 @@ function Boble({
     }),
   } as CSSProperties
 
+  const klasser = [
+    'tipsboble',
+    `tipsboble--${maal?.plassering.side ?? 'over'}`,
+    maal && 'tipsboble--klar',
+    maal?.rullbar && 'tipsboble--rullbar',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
+  return { boble, innhold, klasser, stil }
+}
+
+/** Selve tipsboblen, plassert ved ankeret. */
+function Boble({
+  anker,
+  onHold,
+  children,
+}: {
+  anker: HTMLElement
+  onHold: (holdt: boolean) => void
+  children: ReactNode
+}) {
+  const { boble, innhold, klasser, stil } = useBobleplassering(anker, children)
+
+  // Forsvinner boblen mens pekeren er inne i den, kommer det ingen
+  // «pekeren forlot» — grepet må slippes her, ellers blir det hengende.
+  useEffect(() => () => onHold(false), [onHold])
+
   return (
     <div
       ref={boble}
-      className={[
-        'tipsboble',
-        `tipsboble--${maal?.plassering.side ?? 'over'}`,
-        maal && 'tipsboble--klar',
-        maal?.rullbar && 'tipsboble--rullbar',
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      className={klasser}
       // Teksten leses fra forklaringen som ligger hos ankeret. Boblen er bare
       // bildet av den, og skal ikke telles en gang til.
       aria-hidden="true"

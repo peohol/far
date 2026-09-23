@@ -963,6 +963,133 @@
   line-height: 1.35;
 }
 
+/* --- Referanser ---------------------------------------------------------- */
+
+/* En sitering er en liten, rund pille med numrene på siden, som i Slaids.
+   Inline står den hevet i teksten; på et kort eller panel står den for seg
+   ved overskriften. */
+.referansepille-feste {
+  position: relative;
+  line-height: 0;
+}
+
+.referansepille {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.55em;
+  height: 1.55em;
+  padding: 0 0.4em;
+  font: inherit;
+  font-size: var(--tekst-xxs);
+  font-weight: var(--vekt-tung);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+  border: 0;
+  border-radius: var(--runding-full);
+  cursor: pointer;
+  transition: background var(--fart) var(--kurve), color var(--fart) var(--kurve);
+}
+
+.referansepille--inline {
+  margin-left: 0.12em;
+  vertical-align: super;
+}
+
+.referansepille:hover,
+.referansepille[aria-expanded='true'] {
+  color: var(--aksent-blekk);
+  background: var(--aksent);
+}
+
+/* Boblen er tipsboblen, men den tar imot pekeren: lenkene i den skal kunne
+   klikkes. Broen over luften holder den åpen på vei inn. */
+.tipsboble--interaktiv,
+.tipsboble--interaktiv .tipsboble__innhold {
+  pointer-events: auto;
+}
+
+.tipsboble--interaktiv::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--tips-luft);
+}
+
+.tipsboble--interaktiv.tipsboble--over::before {
+  top: 100%;
+}
+
+.tipsboble--interaktiv.tipsboble--under::before {
+  bottom: 100%;
+}
+
+.referanseboble {
+  line-height: normal;
+  white-space: normal;
+}
+
+.referanseboble__innhold {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  max-width: min(32rem, var(--tips-maks-bredde, calc(100vw - 2.5rem)));
+  font-size: var(--tekst-xs);
+}
+
+.referanseboble__punkt {
+  display: flex;
+  gap: var(--rom-2);
+}
+
+.referanseboble__nummer {
+  flex: none;
+  min-width: 1.5em;
+  font-weight: var(--vekt-tung);
+  font-variant-numeric: tabular-nums;
+}
+
+.referanse__lenke {
+  color: inherit;
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+
+.tipsboble .referanse__lenke {
+  color: var(--tips-blekk);
+}
+
+/* Listen nederst på siden. Den lages av numrene og redigeres aldri. */
+.referanseliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  font-size: var(--tekst-xs);
+  color: var(--blekk-dempet);
+}
+
+.referanseliste__tittel {
+  font-size: var(--tekst-s);
+  font-weight: var(--vekt-tung);
+  color: var(--blekk);
+}
+
+.referanseliste__liste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  padding-left: 2em;
+  margin: 0;
+}
+
+.referanseliste__punkt::marker {
+  font-weight: var(--vekt-tung);
+  font-variant-numeric: tabular-nums;
+}
+
 /* --- THC-syremodulen ---------------------------------------------------- */
 
 /* Modulen er ett skjema fra topp til bunn: inndatakortet, resultatkortet og

@@ -9,7 +9,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [x] Supabase er etablert.
 - [x] Brukersystem med profiler og roller er etablert.
 - [x] Arbeidspakke 1: fundament for redigerbart faginnhold.
-- [ ] Arbeidspakke 2: referansesystem.
+- [x] Arbeidspakke 2: referansesystem.
 - [ ] Arbeidspakke 3: analyttsider og navigasjon.
 - [ ] Arbeidspakke 4: import av psykofarmakainnhold.
 - [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
@@ -707,19 +707,21 @@ Avgrensning:
 
 ## Arbeidspakke 2 - Referansesystem
 
-**Status:** [ ] Ikke startet
+**Status:** [x] Ferdig
 
-- [ ] Global referansebase med stabile ID-er.
-- [ ] Slaids-format for referanser.
-- [ ] Referansekoblinger til innholdselementer.
-- [ ] Inline-siteringer i riktekst.
-- [ ] Kort-/panelreferanser.
-- [ ] Sidebasert dynamisk nummerering etter første forekomst.
-- [ ] Komprimerte referansepiller.
-- [ ] Hover + klikk/trykk/tastatur-popover.
-- [ ] Dynamisk referanseliste nederst på siden.
-- [ ] Referansehistorikk.
-- [ ] Beskyttelse mot hard-sletting av referanser i bruk.
+Hvordan referansesystemet er bygget, står i `docs/faginnhold.md`. Migrasjonene rulles ut mot Supabase-prosjektet sammen med fundamentet, før arbeidspakke 3 tar dem i bruk. Pillen, boblen og listen er laget og prøvd hver for seg; de settes inn i analyttsidene i arbeidspakke 3.
+
+- [x] Global referansebase med stabile ID-er.
+- [x] Slaids-format for referanser.
+- [x] Referansekoblinger til innholdselementer.
+- [x] Inline-siteringer i riktekst.
+- [x] Kort-/panelreferanser.
+- [x] Sidebasert dynamisk nummerering etter første forekomst.
+- [x] Komprimerte referansepiller.
+- [x] Hover + klikk/trykk/tastatur-popover.
+- [x] Dynamisk referanseliste nederst på siden.
+- [x] Referansehistorikk.
+- [x] Beskyttelse mot hard-sletting av referanser i bruk.
 
 ## Arbeidspakke 3 - Analyttsider og navigasjon
 

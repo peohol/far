@@ -10,7 +10,6 @@
  * eksemplene fra planen; ingen kliniske verdier inngår.
  */
 import type { PGlite } from '@electric-sql/pglite'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { lagFaginnholdslager, Samtidighetskonflikt } from '../faginnhold/lagring'
 import {
@@ -18,11 +17,16 @@ import {
   KONFLIKT,
   OBJEKTTYPER,
   TILSTANDER,
-  type Innhold,
   type Objektstatus,
-  type Objekttype,
 } from '../faginnhold/modell'
-import { feilFra, nyDatabase, opprettBruker, som } from './hjelp/testdatabase'
+import {
+  faginnholdskall,
+  feilFra,
+  nyDatabase,
+  opprettBruker,
+  som,
+  type Faginnholdskall,
+} from './hjelp/testdatabase'
 
 /** Tabellene fundamentet består av, med kolonnen som peker på objektet. */
 const OBJEKTKOLONNE = {
@@ -41,6 +45,8 @@ let db: PGlite
 let admin: string
 let admin2: string
 let bruker: string
+let { rpc, les, fasit, opprett, lagre, gjenopprett, publiser, revisjoner, forventSamsvar, klientFor } =
+  {} as Faginnholdskall
 
 beforeAll(async () => {
   db = await nyDatabase()
@@ -62,95 +68,17 @@ beforeAll(async () => {
     etternavn: 'Vanlig',
     rolle: 'user',
   })
+  ;({ rpc, les, fasit, opprett, lagre, gjenopprett, publiser, revisjoner, forventSamsvar, klientFor } =
+    faginnholdskall(db, admin))
 }, 60_000)
 
 /* --- Hjelpere ------------------------------------------------------------- */
-
-/**
- * Kaller en funksjon slik data-API-et gjør det: med navngitte argumenter, som
- * den oppgitte brukeren, i én transaksjon.
- */
-async function rpc<T = Objektstatus>(
-  brukerId: string | null,
-  funksjon: string,
-  argumenter: Record<string, unknown>,
-): Promise<T> {
-  const navn = Object.keys(argumenter)
-  const verdier = Object.values(argumenter).map((v) =>
-    v !== null && typeof v === 'object' ? JSON.stringify(v) : v,
-  )
-  return som(db, brukerId, async (tx) => {
-    const { rows } = await tx.query<T>(
-      `select * from public.${funksjon}(${navn.map((n, i) => `${n} => $${i + 1}`).join(', ')})`,
-      verdier,
-    )
-    return rows[0]!
-  })
-}
-
-/** Leser som den oppgitte brukeren. */
-async function les<T>(brukerId: string | null, sql: string, parametre: unknown[] = []) {
-  return som(db, brukerId, async (tx) => (await tx.query<T>(sql, parametre)).rows)
-}
-
-/** Leser uten radsikkerhet — det som faktisk ligger i databasen. */
-async function fasit<T>(sql: string, parametre: unknown[] = []) {
-  return (await db.query<T>(sql, parametre)).rows
-}
-
-function opprett<T extends Objekttype>(type: T, innhold: Innhold[T], av = admin) {
-  return rpc(av, 'opprett_utkast', { objekttype: type, innhold })
-}
-
-function lagre<T extends Objekttype>(id: string, forventet: number, innhold: Innhold[T], av = admin) {
-  return rpc(av, 'lagre_utkast', { objekt: id, forventet_revisjon: forventet, innhold })
-}
-
-function gjenopprett(id: string, forventet: number, fra: number, av = admin) {
-  return rpc(av, 'gjenopprett_revisjon', { objekt: id, forventet_revisjon: forventet, fra_revisjon: fra })
-}
-
-function publiser(id: string, forventet: number, av = admin) {
-  return rpc(av, 'publiser_utkast', { objekt: id, forventet_revisjon: forventet })
-}
 
 let lopenummer = 0
 /** En informasjonsside med et navn ingen annen test bruker. */
 async function nySide(prefiks = 'Testside') {
   lopenummer += 1
   return opprett('infoside', { navn: `${prefiks} ${lopenummer}` })
-}
-
-interface Revisjon {
-  revisjon: number
-  handling: string
-  innhold: Record<string, unknown>
-  gjenopprettet_fra: number | null
-  utfort_av: string
-  utfort_av_fornavn: string
-  utfort_av_etternavn: string
-}
-
-function revisjoner(id: string, som_: string | null = null) {
-  const sql = 'select * from public.objektrevisjoner where objekt_id = $1 order by revisjon'
-  return som_ === null ? fasit<Revisjon>(sql, [id]) : les<Revisjon>(som_, sql, [id])
-}
-
-/**
- * Radene i hver tilstand skal være nøyaktig øyeblikksbildet i revisjonen
- * tilstanden peker på. Kontrolleres etter hver operasjon som endrer noe.
- */
-async function forventSamsvar(id: string) {
-  const rader = await fasit<{ tilstand: string; lik: boolean }>(
-    `select t.tilstand, intern.les(o.type, o.id, t.tilstand) = r.innhold as lik
-     from public.objekttilstander t
-     join public.redigerbare_objekter o on o.id = t.objekt_id
-     join public.objektrevisjoner r on r.objekt_id = t.objekt_id and r.revisjon = t.revisjon
-     where t.objekt_id = $1`,
-    [id],
-  )
-  expect(rader.length).toBeGreaterThan(0)
-  for (const rad of rader) expect(rad.lik, rad.tilstand).toBe(true)
 }
 
 /* --- Utgangspunktet ------------------------------------------------------- */
@@ -824,20 +752,6 @@ describe('hva en vanlig bruker får se', () => {
 /* --- Appens lagringsmodul ------------------------------------------------- */
 
 describe('lagringsmodulen i appen', () => {
-  /** En klient som svarer som data-API-et, med databasen over bak seg. */
-  function klientFor(brukerId: string): SupabaseClient {
-    return {
-      rpc: async (funksjon: string, argumenter: Record<string, unknown>) => {
-        try {
-          return { data: await rpc(brukerId, funksjon, argumenter), error: null }
-        } catch (feil) {
-          const { code, message, detail } = feil as { code: string; message: string; detail?: string }
-          return { data: null, error: { code, message, details: detail ?? null, hint: null } }
-        }
-      },
-    } as unknown as SupabaseClient
-  }
-
   it('oppretter, lagrer, gjenoppretter og publiserer', async () => {
     const lager = lagFaginnholdslager(klientFor(admin))
     const side = await lager.opprettUtkast('infoside', { navn: 'Fra appen' })

@@ -1,7 +1,8 @@
 # Redigerbart faginnhold i OUSFAR
 
 Leses når noe som har med informasjonssider, laboratorieanalytter,
-innholdselementer, revisjoner eller publisering å gjøre skal endres. Planen
+innholdselementer, referanser, revisjoner eller publisering å gjøre skal
+endres. Planen
 og fremdriften står i `docs/analyttsider-og-redigering.md`; her står hvordan
 fundamentet faktisk er bygget.
 
@@ -15,10 +16,14 @@ med vilje.
 | Hvor | Hva |
 | --- | --- |
 | `supabase/migrations/*_faginnhold_fundament.sql` | Tabellene, radsikkerheten og funksjonene |
+| `supabase/migrations/*_referanse_objekttype.sql`, `*_referansesystem.sql` | Referansene og koblingene til dem |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
 | `src/faginnhold/lagring.ts` | Kallene appen gjør, og konflikter gjort om til en egen feil |
-| `src/__tests__/faginnhold.test.ts` | Reglene, prøvd mot en ekte database |
-| `src/__tests__/hjelp/testdatabase.ts` | Postgres i minnet, bygd av migrasjonene |
+| `src/faginnhold/referanser.ts` | Siteringer, nummerering, piller og referanseliste — rene funksjoner |
+| `src/components/referanser/` | Referansepillen med boblen, og referanselisten |
+| `src/__tests__/faginnhold.test.ts`, `referanser.test.ts` | Reglene, prøvd mot en ekte database |
+| `src/__tests__/referansenummerering.test.ts`, `referansepille.test.tsx` | Nummereringen, og pillen med mus, berøring og tastatur |
+| `src/__tests__/hjelp/testdatabase.ts` | Postgres i minnet, bygd av migrasjonene, og kallene testene gjør |
 
 ## Domenet
 
@@ -41,8 +46,11 @@ Tre begreper holdes fra hverandre, som planen krever:
   bevisst ikke unik, siden hvert element lagres for seg og et kort som
   flyttes, ellers ville støtt på plassen det skal til.
 
-Fortolkningsmoduler, kommentarer, regelsett og referanser er ikke modellert
-ennå. De kommer som nye objekttyper, på samme maskineri.
+- **Referanse** — én kilde i den globale referansebasen. Se
+  [Referanser](#referanser).
+
+Fortolkningsmoduler, kommentarer og regelsett er ikke modellert ennå. De
+kommer som nye objekttyper, på samme maskineri.
 
 ## Objekter, revisjoner og tilstander
 
@@ -64,7 +72,9 @@ Alt som kan redigeres, er et **objekt** med stabil ID i
   revisjonen som ble publisert, den den erstattet, og hvem.
 
 Revisjoner, publiseringer og objekter kan ikke endres eller slettes av noen —
-triggere stopper det også for server-side klienter og migrasjoner.
+triggere stopper det også for server-side klienter og migrasjoner. Eneste
+unntak er en referanse som aldri har vært publisert eller brukt (se
+[Referanser](#referanser)).
 
 `objektstatus` viser gjeldende og publisert revisjon per objekt;
 `objekthistorikk` viser alle handlingene samlet, publiseringene medregnet.
@@ -73,7 +83,8 @@ gjelder.
 
 ## Operasjonene
 
-Alt som endrer noe, går gjennom fire databasefunksjoner. Hver av dem krever
+Alt som endrer noe, går gjennom fire databasefunksjoner, og for referansene
+en femte, `slett_referanse` (se [Referanser](#referanser)). Hver av dem krever
 administrator før noe annet skjer, gjør hele endringen i én transaksjon og
 gir tilbake objektets nye status.
 
@@ -117,6 +128,76 @@ publiseringen, og ingenting blir halvveis publisert.
   men kan se at de finnes: numrene på de publiserte revisjonene har hull, og
   en gjenopprettet revisjon viser hvilken revisjon den kom fra.
 
+## Referanser
+
+En referanse er en objekttype som alle andre, med stabil ID, utkast,
+publisering, revisjoner og gjenoppretting. Feltene er de samme som i Slaids —
+`tittel`, `forfattere`, `aar` og `lenke`, alle tekst — og den vises som
+**Tittel · Forfatter(e) · År · Lenke**, uten tomme ledd. Minst ett av tittel,
+forfattere og lenke må være fylt ut, og lenken må begynne med `http://` eller
+`https://`. DOI, PMID og lignende er ikke egne felt ennå; de kan legges til
+senere uten å endre visningen. `arkivert` er et felt i innholdet, så
+arkivering er en vanlig revisjon som kan gjøres om.
+
+**Siteringer.** Innholdet viser til referansene med ID-ene, aldri med numre,
+på tre nivåer:
+
+| Nivå | Hvor ID-ene står |
+| --- | --- |
+| `panel` | Informasjonssidens `panelreferanser`: panelnøkkel → ordnet liste |
+| `element` | Innholdselementets `referanser`: kortets kilder, ordnet |
+| `inline` | Siteringsnoder hvor som helst i elementets `data`: `{"type": "sitering", "attrs": {"referanser": [...]}}` — samme node som i Slaids, med norske navn |
+
+Et panel eller kort viser til hver referanse bare én gang; inline kan samme
+referanse stå så mange ganger som teksten trenger. `type: "sitering"` er
+dermed reservert i `data`. ID-ene i en siteringsnode skal stå med små
+bokstaver, siden appen kjenner igjen referansene på teksten.
+
+Feltene `panelreferanser` og `referanser` kom til etter at typene ble laget.
+Uten referanser utelates de i øyeblikksbildet i stedet for å stå tomme. Da har
+et objekt uten referanser samme form som før, og innhold fra før
+referansesystemet står fortsatt likt revisjonen det peker på.
+
+**Koblingene.** Hver sitering blir en rad i `referansekoblinger`, skrevet av
+de samme funksjonene som skriver innholdet og for samme tilstand. Panel- og
+kortreferansene lagres der, ikke som JSON; inline-siteringene leses ut av
+dataene. Det er koblingene databasen håndhever reglene med:
+
+- En kobling må peke på en referanse. I det publiserte må referansen også
+  være publisert — referansen publiseres før det som siterer den.
+- En arkivert referanse kan ikke siteres, og en referanse som er sitert, kan
+  ikke arkiveres. Det gjelder hver tilstand for seg: skal en publisert
+  referanse arkiveres, må innholdet der den er fjernet, publiseres først.
+- `referansebruk` viser hvilke sider hver referanse brukes på, og hvor mange
+  ganger, i utkastet og i det publiserte.
+
+**Sletting.** `slett_referanse(objekt, forventet_revisjon)` sletter en
+referanse for godt — med revisjonene sine — bare når den aldri har vært
+publisert og ikke står i noen revisjon av noe annet objekt, heller ikke en
+eldre. Alt annet må arkiveres, så historikken aldri peker på noe som er borte.
+Slettingen føres i `slettede_referanser` med siste utkast og hvem som slettet.
+Det er det eneste unntaket fra at historikken er uforanderlig, og triggeren
+slipper det bare gjennom for den ene referansen, i transaksjonen som sletter
+den.
+
+**Nummereringen** regnes ut i `src/faginnhold/referanser.ts` når siden vises,
+etter første forekomst i leserekkefølgen på akkurat den siden: panelene i den
+rekkefølgen siden viser dem (ukjente paneler etter, alfabetisk), kortene etter
+posisjon og ID, og teksten i dokumentrekkefølge. Det en beholder siterer —
+panelet, kortet — kommer før det som står i den. Samme referanse beholder
+nummeret fra første gang, og kan ha ulike numre på ulike sider. Pillene
+komprimerer serier på minst tre (`1–3, 5, 9–11`), og referanselisten nederst
+er alltid det nummereringen gir.
+
+**Pillen og boblen** (`Referansepille`) åpnes ved peker over, og ved klikk,
+trykk, Enter eller mellomrom; et klikk fester den. Escape, et nytt klikk, et
+trykk utenfor eller fokus som går videre, lukker den. Boblen står rett etter
+knappen i dokumentet, så Tab når lenkene i den, og plasseres som tipsboblene
+(`useBobleplassering` i `Tips.tsx`). Pillene og listen henter numrene og
+referansene fra `Sidereferanser` rundt siden.
+
+Appen bruker ikke referansene ennå; det gjør analyttsidene i arbeidspakke 3.
+
 ## Tilgang
 
 - Alle innloggede leser det publiserte: publiserte rader, revisjoner som har
@@ -129,7 +210,7 @@ publiseringen, og ingenting blir halvveis publisert.
   tilgang til.
 - `anon` har ingen tilgang i det hele tatt.
 
-Sikkerhetsrådgiveren i Supabase vil peke på at de fire funksjonene og
+Sikkerhetsrådgiveren i Supabase vil peke på at de fem funksjonene og
 `er_admin()` kjører med eierens rettigheter og kan kalles av innloggede. Det
 er bevisst: det er slik skriveretten holdes borte fra tabellene, og hver av
 dem krever administrator før noe annet skjer. Å stenge dem for `authenticated`
@@ -137,8 +218,10 @@ ville stengt redigeringen.
 
 ## Når noe skal endres
 
-**Ny objekttype.** I en ny migrasjon: en ny verdi i `objekttype`, en tabell
-med `(objekt_id, tilstand)` som peker på `objekttilstander`, triggeren
+**Ny objekttype.** Den nye verdien i `objekttype` legges til i en migrasjon
+for seg, siden en ny enum-verdi ikke kan brukes i samme transaksjon. I neste
+migrasjon: en tabell med `(objekt_id, tilstand)` som peker på
+`objekttilstander`, triggeren
 `intern.krev_objekttype` for typen og for koblinger (`objekt_id` er raden
 selv, andre kolonner er koblinger til andre objekter), funksjonsparet
 `intern.skriv_<type>` og `intern.les_<type>`, radsikkerhet og rettigheter som
@@ -146,9 +229,9 @@ for de andre. Resten av maskineriet finner funksjonene på navnet. Legg typen
 og formen inn i `src/faginnhold/modell.ts`, og prøv den i testene.
 
 **Nytt felt på en type.** Revisjonene endres aldri, så eldre øyeblikksbilder
-mangler feltet. `skriv_<type>` må tåle det — med en standardverdi — ellers kan
-de eldre revisjonene ikke gjenopprettes. Det feiler i så fall høylytt, ikke i
-stillhet.
+mangler feltet. `skriv_<type>` må tåle det — med en standardverdi, f.eks.
+gjennom `intern.med_standard` — ellers kan de eldre revisjonene ikke
+gjenopprettes. Det feiler i så fall høylytt, ikke i stillhet.
 
 **Testene** kjører alle migrasjonene i en Postgres i minnet (PGlite), med det
 Supabase har på plass fra før gjenskapt i `testdatabase.ts`: API-rollene,

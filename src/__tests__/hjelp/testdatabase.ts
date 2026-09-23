@@ -8,10 +8,13 @@
  * får i `public`, `auth.uid()` og de tabellene migrasjonene bygger på.
  */
 import { PGlite, type Transaction } from '@electric-sql/pglite'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { expect } from 'vitest'
 import { INTERN_AUTH_DOMENE } from '@delt/brukernavn'
 import type { Rolle } from '@delt/profil'
+import type { Innhold, Objektstatus, Objekttype } from '../../faginnhold/modell'
 
 const MIGRASJONER = fileURLToPath(new URL('../../../supabase/migrations', import.meta.url))
 
@@ -60,17 +63,32 @@ export function migrasjonsfiler(): string[] {
     .sort()
 }
 
-/** En ny, tom database med alle migrasjonene kjørt. */
-export async function nyDatabase(): Promise<PGlite> {
-  const db = new PGlite()
-  await db.exec(SUPABASE_GRUNNLAG)
+/**
+ * Kjører migrasjonene fra og med `fra` til, men ikke med, `til` — begge
+ * filnavnprefikser. Uten grenser kjøres alle.
+ */
+export async function kjorMigrasjoner(
+  db: PGlite,
+  { fra = '', til }: { fra?: string; til?: string } = {},
+): Promise<void> {
   for (const fil of migrasjonsfiler()) {
+    if (fil < fra || (til !== undefined && fil >= til)) continue
     try {
       await db.exec(readFileSync(`${MIGRASJONER}/${fil}`, 'utf8'))
     } catch (feil) {
       throw new Error(`Migrasjonen ${fil} feilet: ${(feil as Error).message}`)
     }
   }
+}
+
+/**
+ * En ny, tom database med migrasjonene kjørt — alle, eller bare dem før
+ * `til`, for å prøve hvordan en senere migrasjon møter data som alt finnes.
+ */
+export async function nyDatabase({ til }: { til?: string } = {}): Promise<PGlite> {
+  const db = new PGlite()
+  await db.exec(SUPABASE_GRUNNLAG)
+  await kjorMigrasjoner(db, { til })
   return db
 }
 
@@ -135,3 +153,121 @@ export async function feilFra(
     return feil as { code: string; message: string; detail?: string }
   }
 }
+
+/* --- Faginnholdet --------------------------------------------------------- */
+
+/** Én revisjon slik den ligger i `objektrevisjoner`. */
+export interface Revisjon {
+  revisjon: number
+  handling: string
+  innhold: Record<string, unknown>
+  gjenopprettet_fra: number | null
+  utfort_av: string
+  utfort_av_fornavn: string
+  utfort_av_etternavn: string
+}
+
+/**
+ * Kallene testene av faginnholdet gjør mot databasen, slik data-API-et gjør
+ * dem. `admin` er brukeren som endrer når ingen annen er oppgitt.
+ */
+export function faginnholdskall(db: PGlite, admin: string) {
+  /**
+   * Kaller en funksjon slik data-API-et gjør det: med navngitte argumenter,
+   * som den oppgitte brukeren, i én transaksjon.
+   */
+  async function rpc<T = Objektstatus>(
+    brukerId: string | null,
+    funksjon: string,
+    argumenter: Record<string, unknown>,
+  ): Promise<T> {
+    const navn = Object.keys(argumenter)
+    const verdier = Object.values(argumenter).map((v) =>
+      v !== null && typeof v === 'object' ? JSON.stringify(v) : v,
+    )
+    return som(db, brukerId, async (tx) => {
+      const { rows } = await tx.query<T>(
+        `select * from public.${funksjon}(${navn.map((n, i) => `${n} => $${i + 1}`).join(', ')})`,
+        verdier,
+      )
+      return rows[0]!
+    })
+  }
+
+  /** Leser som den oppgitte brukeren. */
+  async function les<T>(brukerId: string | null, sql: string, parametre: unknown[] = []) {
+    return som(db, brukerId, async (tx) => (await tx.query<T>(sql, parametre)).rows)
+  }
+
+  /** Leser uten radsikkerhet — det som faktisk ligger i databasen. */
+  async function fasit<T>(sql: string, parametre: unknown[] = []) {
+    return (await db.query<T>(sql, parametre)).rows
+  }
+
+  function opprett<T extends Objekttype>(type: T, innhold: Innhold[T], av = admin) {
+    return rpc(av, 'opprett_utkast', { objekttype: type, innhold })
+  }
+
+  function lagre<T extends Objekttype>(id: string, forventet: number, innhold: Innhold[T], av = admin) {
+    return rpc(av, 'lagre_utkast', { objekt: id, forventet_revisjon: forventet, innhold })
+  }
+
+  function gjenopprett(id: string, forventet: number, fra: number, av = admin) {
+    return rpc(av, 'gjenopprett_revisjon', { objekt: id, forventet_revisjon: forventet, fra_revisjon: fra })
+  }
+
+  function publiser(id: string, forventet: number, av = admin) {
+    return rpc(av, 'publiser_utkast', { objekt: id, forventet_revisjon: forventet })
+  }
+
+  function revisjoner(id: string, som_: string | null = null) {
+    const sql = 'select * from public.objektrevisjoner where objekt_id = $1 order by revisjon'
+    return som_ === null ? fasit<Revisjon>(sql, [id]) : les<Revisjon>(som_, sql, [id])
+  }
+
+  /**
+   * Radene i hver tilstand skal være nøyaktig øyeblikksbildet i revisjonen
+   * tilstanden peker på. Kontrolleres etter hver operasjon som endrer noe.
+   */
+  async function forventSamsvar(id: string) {
+    const rader = await fasit<{ tilstand: string; lik: boolean }>(
+      `select t.tilstand, intern.les(o.type, o.id, t.tilstand) = r.innhold as lik
+       from public.objekttilstander t
+       join public.redigerbare_objekter o on o.id = t.objekt_id
+       join public.objektrevisjoner r on r.objekt_id = t.objekt_id and r.revisjon = t.revisjon
+       where t.objekt_id = $1`,
+      [id],
+    )
+    expect(rader.length).toBeGreaterThan(0)
+    for (const rad of rader) expect(rad.lik, rad.tilstand).toBe(true)
+  }
+
+  /** En klient som svarer som data-API-et, med databasen bak seg. */
+  function klientFor(brukerId: string): SupabaseClient {
+    return {
+      rpc: async (funksjon: string, argumenter: Record<string, unknown>) => {
+        try {
+          return { data: await rpc(brukerId, funksjon, argumenter), error: null }
+        } catch (feil) {
+          const { code, message, detail } = feil as { code: string; message: string; detail?: string }
+          return { data: null, error: { code, message, details: detail ?? null, hint: null } }
+        }
+      },
+    } as unknown as SupabaseClient
+  }
+
+  return {
+    rpc,
+    les,
+    fasit,
+    opprett,
+    lagre,
+    gjenopprett,
+    publiser,
+    revisjoner,
+    forventSamsvar,
+    klientFor,
+  }
+}
+
+export type Faginnholdskall = ReturnType<typeof faginnholdskall>
