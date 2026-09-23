@@ -22,4 +22,22 @@ describe('adressene i appen', () => {
     expect(sammeRute(rute, lesRute('#/analytt/amf1'))).toBe(true)
     expect(sammeRute(rute, FORTOLKNING)).toBe(false)
   })
+
+  it('leser og skriver et sted på siden: en seksjon og et detaljkort i den', () => {
+    expect(lesRute('#/analytt/AMTNORSUM/farmakokinetikk')).toEqual({
+      side: 'analytt',
+      kode: 'AMTNORSUM',
+      sted: ['farmakokinetikk'],
+    })
+    const rute = { side: 'analytt', kode: 'NOR', sted: ['farmakokinetikk', 'kort 1/ø'] } as const
+    expect(adresse(rute)).toBe('#/analytt/NOR/farmakokinetikk/kort%201%2F%C3%B8')
+    expect(lesRute(adresse(rute))).toEqual(rute)
+    // Et annet sted er en annen adresse til den samme siden.
+    expect(sammeRute(rute, { side: 'analytt', kode: 'NOR' })).toBe(false)
+  })
+
+  it('åpner siden uten sted når stedet ikke kan leses eller har for mange nivåer', () => {
+    expect(lesRute('#/analytt/NOR/a/b/c')).toEqual({ side: 'analytt', kode: 'NOR' })
+    expect(lesRute('#/analytt/NOR/%E0%A4%A')).toEqual({ side: 'analytt', kode: 'NOR' })
+  })
 })

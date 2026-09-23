@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.13.2',
+    versjon: '1.14.2',
     dato: '2026-09-23',
     sammendrag: 'Reglene og kommentartekstene for THC-syre ligger nå i databasen',
     typer: ['Funksjonalitet'],
@@ -24,7 +24,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.13.1',
+    versjon: '1.14.1',
     dato: '2026-09-23',
     sammendrag: 'Reglene og kommentartekstene for THC-syre er skilt ut fra koden',
     typer: ['Funksjonalitet'],
@@ -35,7 +35,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.13.0',
+    versjon: '1.14.0',
     dato: '2026-09-23',
     sammendrag: 'Fortolkningskommentarene kan lagres som egne tekster med historikk',
     typer: ['Funksjonalitet'],
@@ -45,6 +45,22 @@ export const ENDRINGSLOGG: Endring[] = [
       'Reglene peker på tekstene i stedet for å ha sin egen kopi. Samme tekst kan brukes av flere regler og rettes ett sted.',
       'En tekst står på én linje og limes inn som den er. Et regelsett kan ikke publiseres før tekstene det bruker er publisert.',
       'Tekster med innfylte felt, som konsentrasjonsnivå eller dato for forrige prøve, beholder de samme feltene gjennom alle endringer, så en regel som bruker teksten, alltid får fylt dem inn.',
+    ],
+  },
+  {
+    versjon: '1.13.0',
+    dato: '2026-09-23',
+    sammendrag: 'Informasjonssidene er delt i seksjoner som åpnes og lukkes',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Delene av informasjonssiden (viktige data, farmakodynamikk, dosering, indikasjon, farmakokinetikk og serumkonsentrasjoner) er nå seksjoner som åpnes og lukkes med et trykk på overskriften. En lukket seksjon viser en kort oppsummering av hva den inneholder.',
+      'Identiteten øverst står alltid fram, og viktige data er åpen når siden åpnes.',
+      'Kortene i farmakokinetikken åpnes hver for seg inne i seksjonen.',
+      '«Åpne alle» og «Lukk alle» står øverst på siden. I redigeringsmodus åpnes alt.',
+      'Søket på siden finner også tekst i lukkede seksjoner, og viser hvor mange treff hver av dem har. Går du til et treff, åpnes seksjonen og treffet vises. Nettleserens eget søk finner også teksten.',
+      'En adresse kan peke rett på en seksjon eller et kort, og siden åpner det.',
+      'Innholdet er det samme som før, bare ordnet annerledes. Kommenteringen, kommentartekstene og fortolkningsreglene er uendret.',
     ],
   },
   {
