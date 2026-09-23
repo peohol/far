@@ -7,6 +7,10 @@
  * over et rutenett av påviste analytter og konsentrasjoner, og
  * THC-syrekommentarene over alle kombinasjonene av det de bygges av.
  *
+ * Knappene og pillene for konsentrasjonsbåndene lages av regelsettene fra før
+ * byttet (se `dagensregler.ts`), slik steg 2 lager dem av de publiserte
+ * regelsettene — med den samme koden.
+ *
  * Rusmiddelmodulene fortolkes med regelsettene som er publisert i Supabase.
  * Uten database brukes grunnlaget de ble importert fra (`rusgrunnlag.ts`),
  * som `rusimport.test.ts` viser at databasen gir tilbake uendret. Rutenettet
@@ -19,7 +23,8 @@ import { grensepiller } from '../../domain/piller'
 import { RUS_MODULER } from '../../domain/rus'
 import { kjorScenarier, verdifelter } from '../../domain/scenario'
 import { beregnKategori, byggKommentar, type Konsentrasjonsniva } from '../../domain/thc'
-import { cutoffvalg, valgene } from '../../domain/valg'
+import { cutoffvalg, regelsettvalg } from '../../domain/valg'
+import { dagensRegelsett } from './dagensregler'
 import { RUS_KOMMENTARER, rusRegelsett } from './rusgrunnlag'
 
 /** Konsentrasjonene som prøves i hvert felt en rusmiddelmodul ber om. */
@@ -39,12 +44,15 @@ function kombinasjoner(felt: string[]): Record<string, string>[] {
 }
 
 export function fortolkningsutfall() {
-  const band = analytes.map((analyte) => ({
-    kode: analyte.kode,
-    valg: valgene(analyte),
-    cutoff: cutoffvalg(analyte),
-    piller: grensepiller(analyte),
-  }))
+  const band = analytes.map((analyte) => {
+    const regelsett = dagensRegelsett(analyte.kode)
+    return {
+      kode: analyte.kode,
+      valg: regelsettvalg(regelsett),
+      cutoff: cutoffvalg(regelsett),
+      piller: grensepiller(analyte, regelsett),
+    }
+  })
 
   const rus = RUS_MODULER.map((modul) => {
     const regelsett = rusRegelsett(modul.id)

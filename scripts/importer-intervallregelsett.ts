@@ -10,10 +10,11 @@
  * hoppes over. Med `--migrering` gjør SQL-en ingenting når administratoren
  * mangler, så den kan rulles ut som en datamigrering (`apply_migration`).
  * Med `--del i/n` lages bare del `i` når importen deles i `n` porsjoner.
- * Bakgrunnen står i docs/fortolkningsregler.md.
+ * Kommentarene blir kommentarobjekter med ID-ene i datasettet. Bakgrunnen
+ * står i docs/fortolkningsregler.md.
  */
 import { readFileSync, writeFileSync } from 'node:fs'
-import { importdel, regelimportSql, type Regelimport } from '../src/regler/import'
+import { importdel, regelimportSql, tilRegelimport, type Regelkilde } from '../src/regler/import'
 
 const argumenter = process.argv.slice(2).filter((a) => a !== '--')
 const migrering = argumenter.includes('--migrering')
@@ -27,8 +28,8 @@ if (!admin) {
 
 const alle = JSON.parse(
   readFileSync(new URL('../supabase/import/intervallregelsett.json', import.meta.url), 'utf8'),
-) as Regelimport[]
-const importer = importdel(alle, del ?? 0, antall ?? 0)
+) as Regelkilde[]
+const importer = importdel(alle, del ?? 0, antall ?? 0).map(tilRegelimport)
 const sql = regelimportSql(importer, admin, migrering ? 'hopp over' : 'stopp')
 if (fil) {
   writeFileSync(fil, sql)

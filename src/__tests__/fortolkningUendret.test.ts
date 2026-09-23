@@ -1,53 +1,60 @@
 /**
- * Den kliniske outputen er den samme som før, og fortolkningen henter reglene
- * sine bare der det er bestemt.
+ * Fortolkningen står på de publiserte regelsettene i Supabase, og gir den
+ * samme kliniske outputen som før byttet.
  *
- * Rusmiddelmodulene fortolkes med scenarioregelsettene som er publisert i
- * Supabase (`docs/scenarioregler.md`): appen henter dem og gir dem til
- * fortolkningssteget, og at de gir det samme som den opprinnelige motoren,
- * prøves i `rusparitet.test.ts` og `rusimport.test.ts`. Resten av
- * fortolkningen står fortsatt på datasettene under `src/data/` og i
- * `src/domain/`. Testene her holder det slik:
+ * Konsentrasjonsreglene og kommentarene er intervallregelsett i databasen
+ * (arbeidspakke 5, se `docs/fortolkningsregler.md`), og rusmiddelmodulene
+ * fortolkes med scenarioregelsettene (`docs/scenarioregler.md`, med paritet i
+ * `rusparitet.test.ts` og `rusimport.test.ts`). Appen henter de publiserte når
+ * den åpnes og gir dem til fortolkningsstegene; kjernen og stegene henter
+ * ingenting selv. Testene her holder det slik:
  *
- * - datasettene er de samme som før,
+ * - datasettene er de samme som før, bortsett fra grensene og kommentarene,
+ *   som ble tatt ut da fortolkningen ble byttet over,
+ * - fasiten fra før byttet (`hjelp/dagensregler.ts`) er uendret,
  * - kjernen og fortolkningsstegene henter ingenting fra faginnholdet, fra
  *   analyttsidene eller fra databasen selv — reglene fra databasen kommer inn
  *   som argumenter,
  * - og all klinisk output modulene kan gi, er nøyaktig den samme — målt over
- *   alle analyttene, alle rusmiddelmodulene med konsentrasjoner på og rundt
- *   grensene, og alle THC-syrekommentarene (se `hjelp/fortolkningsutfall.ts`).
- *   Summen står for hver del, så en del kan legges om uten å røre de andre.
+ *   alle analyttene med regelsettene fra før byttet, alle rusmiddelmodulene
+ *   med konsentrasjoner på og rundt grensene, og alle THC-syrekommentarene
+ *   (se `hjelp/fortolkningsutfall.ts`). Summen står for hver del, så en del
+ *   kan legges om uten å røre de andre.
  *
- * Legges flere moduler om til Supabase, skal det skje med vilje, med
- * paritetstester mot dagens motor (se docs/analyttsider-og-redigering.md), og
- * testene her endres i samme omgang.
+ * Endres reglene i databasen, endres ikke fasiten: det er de publiserte
+ * regelsettene som gjelder, og historikken deres viser hva som er endret.
  */
 import { createHash } from 'node:crypto'
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { dirname, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
+import { DAGENS_GRENSER, FASITSUMMER, IMPORTDATASETT, kontrollsum } from './hjelp/dagensregler'
 import { fortolkningsutfall } from './hjelp/fortolkningsutfall'
+import { analytes } from '../domain/analytes'
 
 const ROT = fileURLToPath(new URL('../../', import.meta.url))
 
 /**
- * Kontrollsummer for de statiske datasettene, slik de var da fundamentet ble
- * lagt. Endres et datasett med vilje, oppdateres summen i samme PR, og
- * føringen i endringsloggen får merket «Fag».
+ * Kontrollsummer for de statiske datasettene. Endres et datasett med vilje,
+ * oppdateres summen i samme PR, og føringen i endringsloggen får merket «Fag».
+ *
+ * Summene for analytter.json og antihypertensiver.json ble endret da
+ * fortolkningen ble byttet over til regelsettene: grensene, ringegrensen og
+ * kommentarene ble tatt ut, og ingenting annet. Resten av innholdet er det
+ * samme som før.
  */
 const DATASETT: Record<string, string> = {
-  'src/data/analytter.json': 'f32f9b30223d58a229f6d9068e42c762744664c707026416517dff780b5e3a56',
-  'src/data/antihypertensiver.json': '2e1e0908ffb4ad67082eb7f5583ab6146af7e777d6ef3136543c1911b6cc0aa9',
+  'src/data/analytter.json': 'bd169f468b9b66ba698488f430152f3e33f4e8e0f136fc3287f023008f78a62e',
+  'src/data/antihypertensiver.json': '02bd6d9495fe3ad7a3c483973a8a4bd8286aff082c6f47fef57609f28c489a4a',
   'src/data/aliaser.json': 'ab5f4ae6284d81cc32762a0da1709131d8b814138a302623b6ab60b00366ccfd',
 }
 
 /**
  * Kontrollsummene for all klinisk output fra fortolkningsmodulene, del for
- * del, slik den var før analyttsidene kom. Summene er de samme som da
- * rusmiddelmodulene ble lagt om til regelsettene i Supabase. Endres outputen
- * med vilje, oppdateres summen i samme PR, og føringen i endringsloggen får
- * merket «Fag».
+ * del, slik den var før analyttsidene kom. Summene er de samme etter byttet
+ * til regelsettene i Supabase. Endres outputen med vilje, oppdateres summen i
+ * samme PR, og føringen i endringsloggen får merket «Fag».
  */
 const FORTOLKNINGSUTFALL: Record<string, string> = {
   band: 'b2fce3266b626576260e7bf64dbc9fe917ae5899efa98fe18754b308c11db8eb',
@@ -57,8 +64,18 @@ const FORTOLKNINGSUTFALL: Record<string, string> = {
   kategorier: '50493eb7d4632a8e279174238aa78970cd2ee143ea0824e1178e6a9b0bfa9a53',
 }
 
-/** Kjernen i fortolkningen: reglene, datasettene og tilstandsmaskinen. */
-const FORTOLKNINGSKJERNEN = ['src/domain', 'src/data', 'src/state.ts']
+/**
+ * Kjernen i fortolkningen: motoren, datasettene og tilstandsmaskinen, og
+ * hentingen av de publiserte regelsettene, som får lesingen fra appen.
+ */
+const FORTOLKNINGSKJERNEN = [
+  'src/domain',
+  'src/data',
+  'src/state.ts',
+  'src/regler/modell.ts',
+  'src/regler/publiserte.ts',
+  'src/hooks/usePubliserteRegler.ts',
+]
 
 /**
  * Stegene og modulene som viser fortolkningen og kopierer kommentarene. De
@@ -78,7 +95,7 @@ const FORTOLKNINGSSTEGENE = [
   'src/hooks/useKommentarflyt.ts',
 ]
 
-/** Det fortolkningen ikke skal hente noe fra, så lenge byttet ikke er gjort. */
+/** Det fortolkningen ikke skal hente noe fra: regelsettene kommer som argumenter. */
 const REDIGERBART = [
   resolve(ROT, 'src/faginnhold'),
   resolve(ROT, 'src/components/analyttside'),
@@ -102,14 +119,29 @@ function importer(kode: string): string[] {
   return [...kode.matchAll(/(?:\bfrom|\bimport)\s*\(?\s*['"]([^'"]+)['"]/g)].map((m) => m[1]!)
 }
 
-describe('fortolkningen etter at analyttsidene er tatt i bruk', () => {
-  it('bruker de samme datasettene som før', () => {
+/** Feltene som ble tatt ut av datasettene da fortolkningen ble byttet over. */
+const UTTATTE_FELT = ['ringegrense', 'nedreGrense', 'ovreGrense', 'nivaer']
+
+describe('fortolkningen etter byttet til regelsettene i Supabase', () => {
+  it('bruker de samme datasettene som før, uten grensene og kommentarene', () => {
     for (const [fil, forventet] of Object.entries(DATASETT)) {
       // Lest og skrevet ut på nytt, så bare innholdet teller — ikke
       // linjeskift eller innrykk.
       const innhold = JSON.stringify(JSON.parse(readFileSync(resolve(ROT, fil), 'utf8')))
       expect(createHash('sha256').update(innhold).digest('hex'), fil).toBe(forventet)
     }
+  })
+
+  it('har ikke lenger grensene og kommentarene i datasettene', () => {
+    for (const analyte of analytes) {
+      for (const felt of UTTATTE_FELT) expect(Object.hasOwn(analyte, felt), `${analyte.kode}.${felt}`).toBe(false)
+    }
+  })
+
+  it('måler mot den samme fasiten som før byttet', () => {
+    expect(kontrollsum(IMPORTDATASETT)).toBe(FASITSUMMER.importdatasett)
+    expect(kontrollsum(DAGENS_GRENSER)).toBe(FASITSUMMER.grenser)
+    expect(DAGENS_GRENSER.map((g) => g.kode)).toEqual(analytes.map((a) => a.kode))
   })
 
   it('henter ingenting fra det redigerbare faginnholdet, analyttsidene eller databasen', () => {

@@ -16,7 +16,7 @@
 import type { Kommentarinnhold } from '../domain/kommentarobjekt'
 import type { ThcRegelsettinnhold } from '../domain/thcTekster'
 import type { Scenarioregelsett } from '../domain/scenario'
-import type { Intervallregelsett } from '../regler/modell'
+import type { Intervallregelsettinnhold } from '../regler/modell'
 
 export const OBJEKTTYPER = [
   'infoside',
@@ -116,7 +116,7 @@ export interface Innhold {
   innholdselement: Innholdselementinnhold
   referanse: Referanseinnhold
   /** Formen står i `src/regler/modell.ts`. */
-  intervallregelsett: Intervallregelsett
+  intervallregelsett: Intervallregelsettinnhold
   thc_regelsett: ThcRegelsettinnhold
   kommentar: Kommentarinnhold
   scenarioregelsett: Scenarioregelsett

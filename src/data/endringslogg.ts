@@ -12,6 +12,23 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.18.0',
+    dato: '2026-09-23',
+    sammendrag: 'Konsentrasjonsreglene vises, prøves og redigeres på analyttsidene, og kommenteringen bruker de publiserte',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Informasjonssiden for en analytt med konsentrasjonsområder har fått seksjonen «Fortolkning». Lukket sier den hvor mange områder det er, ringegrensen og om cut-off gjelder. Åpnet viser den en tabell over områdene, kommentaren hvert av dem gir og når rekvirenten skal ringes.',
+      'Detaljkortet «Simulator» i seksjonen tar en konsentrasjon og viser hvilket område den havner i, hvilken kommentar den gir og om rekvirenten skal ringes — det samme som kommenteringen gir.',
+      'Knappene, kommentarene, «Til stede under cut-off» og ringegrensen i kommenteringen kommer nå fra de publiserte reglene. Når en administrator publiserer en endring i reglene, gjelder den også i kommenteringen. Til reglene er hentet, eller hvis det ikke går, kopieres ingen kommentar.',
+      'Hver kommentar reglene gir, er en egen kommentar med navn, egen historikk og egen publisering. Reglene sier bare hvilken kommentar som gis når, og en tekst rettes ett sted.',
+      'Administratorer kan redigere reglene i redigeringsmodus: flytte en grense, dele et område i to, slå sammen to, endre kommentarene og ringingen, og prøve utkastet før det lagres. Reglene og tekstene lagres sammen, alt eller ingenting, og blir synlige først når de publiseres.',
+      '«Sist redigert» ved hvert redigerbart innhold åpner historikken: hvem som endret hva og når, med det fjernede rødt og gjennomstreket og det nye grønt. En tidligere versjon kan gjenopprettes; det lager en ny versjon, og ingenting slettes. Detaljkortet «Historikken for hver kommentar» gjør det samme for hver tekst.',
+      'Har noen andre lagret mens du redigerte, mister du ikke det du har gjort. Du kan sammenligne og velge hva som skal gjelde.',
+      'Kommentarene og grensene er de samme som før, tegn for tegn. Hver analytt er kontrollert rett på, rett under og rett over hver grense, og alt kommenteringen kan gi, er ord for ord det samme.',
+    ],
+  },
+  {
     versjon: '1.17.0',
     dato: '2026-09-23',
     sammendrag: 'Konsentrasjonsreglene og kommentarene er lagt inn i databasen',

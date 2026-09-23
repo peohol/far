@@ -835,7 +835,7 @@ Identiteten (panel 1) og kritiske varsler skjules ikke.
 | --- | --- |
 | «Kurskorrigering og plan» | Denne planen og koordineringen i del 25 |
 | «Fullfør arbeidspakke 4» | Arbeidspakke 4 (omarbeidingen av #35) |
-| «Arbeidspakke 5 – enkle regler» | Arbeidspakke 5 (#37, #39, del 3), og sin del av arbeidspakke 13 |
+| «Arbeidspakke 5 – enkle regler» | Arbeidspakke 5 (#37, #39, #44 og del 4), og sin del av arbeidspakke 13 |
 | «Arbeidspakke 6 – analyttgrupper» | Arbeidspakke 6 (#33), og sin del av arbeidspakke 13 |
 | «Arbeidspakke 7 – THC-syre» | Arbeidspakke 7 (#34, #36), kommentarobjektene (#38), og sin del av arbeidspakke 13 |
 | «Legemiddeldata fra offentlige kilder» | Arbeidspakke 8, 10, 11 og 12 |
@@ -900,7 +900,7 @@ Hvordan referansesystemet er bygget, står i `docs/faginnhold.md`. Migrasjonene 
 
 **Status:** [x] Ferdig
 
-Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssidene». Sidene er tomme til innholdet legges inn: de viser koden, kategorien, navnet og komponentene fra de statiske datasettene, og resten fylles i arbeidspakke 4. Historikkvisningen med diff (del 7) er ikke laget; «Sist redigert» vises i redigeringsmodus.
+Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssidene». Sidene er tomme til innholdet legges inn: de viser koden, kategorien, navnet og komponentene fra de statiske datasettene, og resten fylles i arbeidspakke 4. «Sist redigert» vises i redigeringsmodus og åpner historikken med diff og gjenoppretting (del 7), laget i arbeidspakke 5.
 
 - [x] Egne URL-er for analyttsider.
 - [x] Venstremeny fører til informasjonssider.
@@ -944,21 +944,28 @@ Til klinisk gjennomgang: avvikene mellom PDF-en og de statiske dataene (BREK, DO
 
 ## Arbeidspakke 5 - Enkle kommentarer og konsentrasjonsregler
 
-**Status:** [ ] Pågår. Regelsettene er i Supabase med dagens regler, og
-pariteten er dokumentert (`docs/fortolkningsregler.md`). Redigeringen,
-simulatoren, historikkvisningen og byttet av fortolkningen gjenstår.
+**Status:** [x] Ferdig. Regelsettene er i Supabase med dagens regler, og
+pariteten er dokumentert (`docs/fortolkningsregler.md`). Reglene vises,
+simuleres og redigeres på analyttsidene, med historikk, sammenligning og
+gjenoppretting. Steg 2 i fortolkningen bruker de publiserte regelsettene, og
+grensene og kommentarene er tatt ut av de statiske datasettene; testene måler
+mot en frosset fasit fra før byttet. Tekstene er de felles
+kommentarobjektene (#38), med egen historikk og publisering; regelsettene
+peker på dem med ID og inneholder ikke tekstene (del 4). Regelvisningen på
+analyttsiden er seksjonen «Fortolkning», med simulatoren og kommentarhistorikken
+som detaljkort (arbeidspakke 13).
 
 - [x] Kommentarobjekter i Supabase.
 - [x] Enkle intervalbaserte regelsett.
-- [ ] Redigering av delte skillepunkter mellom intervallene.
+- [x] Redigering av delte skillepunkter mellom intervallene.
 - [x] Ingen hull eller overlapp kan publiseres.
 - [x] Kommentar og regel lagres separat.
 - [x] Cut-off-logikken representeres uten duplisering av hovedkommentar.
 - [x] «Ring rekvirent» representeres som egen handling/egenskap.
-- [ ] Regeltest/simulator.
-- [ ] Historikk og gjenoppretting.
+- [x] Regeltest/simulator.
+- [x] Historikk og gjenoppretting.
 - [x] Paritetstester mot dagens motor.
-- [ ] Produksjonsmodulene bytter til Supabase først når paritet er dokumentert.
+- [x] Produksjonsmodulene bytter til Supabase først når paritet er dokumentert.
 
 ## Arbeidspakke 6 - Sammensatte analyttgrupper
 
@@ -1090,7 +1097,7 @@ Ta inn de øvrige feltene i del 23 én etter én, der arbeidspakke 8 viser at ki
 
 **Status:** [ ] Ikke startet. Starter når arbeidspakke 9 del 1 er på `main`.
 
-- [ ] Fortolkning/regler for konsentrasjonsreglene (arbeidspakke 5) vises som hovedseksjon med detaljkort.
+- [x] Fortolkning/regler for konsentrasjonsreglene (arbeidspakke 5) vises som hovedseksjon med detaljkort.
 - [x] Scenarioreglene og simulatoren (arbeidspakke 6) likeså.
 - [ ] THC-editoren og -simulatoren (arbeidspakke 7) bygges i modellen fra starten.
 - [ ] Regelmotorene, valideringen og paritetstestene er uendret; klinisk output endres ikke.

@@ -51,6 +51,12 @@ function visSide(kode: string, { kilde = HENTET, sted }: { kilde?: Scenarioregle
     lesAnalyttside: vi.fn(async () => TOM_SIDE),
     lesReferanser: vi.fn(async () => []),
     finnInfosider: vi.fn(async () => []),
+    finnIntervallregelsett: vi.fn(async () => null),
+    lesIntervallregelsett: vi.fn(async () => []),
+    lesKommentarer: vi.fn(async () => []),
+    lesHistorikk: vi.fn(async () => {
+      throw new Error('ikke i bruk')
+    }),
   }
   const lager = {} as Faginnholdslager
   render(
