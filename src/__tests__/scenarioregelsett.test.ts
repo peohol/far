@@ -6,11 +6,15 @@
  * lang rekke endrede utgaver av dem — hull, overlapp, flyttede grenser,
  * manglende kommentarer og feil plassering. Ellers prøves lagring, lesing,
  * publisering, gjenoppretting, samtidighet og hvem som ser hva.
+ *
+ * Kommentarene er egne objekter. Testen legger dagens rustekster inn som
+ * kommentarer først, og regelsettene peker på dem.
  */
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { randomUUID } from 'node:crypto'
-import { RUS_REGELSETT } from '../domain/rusregelsett'
+import type { Kommentarinnhold } from '../domain/kommentarobjekt'
+import { RUS_KOMMENTARER, RUS_REGELSETT } from '../domain/rusregelsett'
 import { validerScenarioregelsett, type Scenarioregelsett } from '../domain/scenario'
 import { KONFLIKT, type Objektstatus } from '../faginnhold/modell'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
@@ -19,15 +23,29 @@ let db: PGlite
 let admin: string
 let bruker: string
 let kall: Faginnholdskall
-/** Kommentar-ID i importgrunnlaget → ID i databasen, som er en UUID. */
+/** Kommentar-ID i importgrunnlaget → kommentarobjektet i databasen. Ukjente ID-er får en UUID som ikke finnes. */
 const kommentarIder = new Map<string, string>()
 const uuid = (id: string) => kommentarIder.get(id) ?? kommentarIder.set(id, randomUUID()).get(id)!
+/** Kommentarene i databasen, slik appen slår opp i dem. */
+const oppslag = new Map<string, string>()
+/** En kommentar med plassholdere, som scenarioreglene ikke godtar. */
+let medPlassholder: string
+
+async function nyKommentar(innhold: Kommentarinnhold, publiser = true): Promise<Objektstatus> {
+  const status = await kall.rpc<Objektstatus>(admin, 'opprett_utkast', { objekttype: 'kommentar', innhold })
+  oppslag.set(status.id, innhold.tekst)
+  return publiser ? kall.publiser(status.id, status.revisjon!) : status
+}
 
 beforeAll(async () => {
   db = await nyDatabase()
   admin = await opprettBruker(db, { brukernavn: 'admin', fornavn: 'Ada', etternavn: 'Adminsen', rolle: 'admin' })
   bruker = await opprettBruker(db, { brukernavn: 'vanlig', fornavn: 'Vera', etternavn: 'Vanlig', rolle: 'user' })
   kall = faginnholdskall(db, admin)
+  for (const [id, tekst] of RUS_KOMMENTARER) {
+    kommentarIder.set(id, (await nyKommentar({ navn: id, tekst, plassholdere: [] })).id)
+  }
+  medPlassholder = (await nyKommentar({ navn: 'Med plassholder', tekst: 'Nivå {nivå}.', plassholdere: ['{nivå}'] })).id
 }, 120_000)
 
 /**
@@ -36,7 +54,6 @@ beforeAll(async () => {
  */
 function iDatabasen(r: Scenarioregelsett): Scenarioregelsett {
   const kopi = structuredClone(r)
-  for (const k of kopi.kommentarer) k.id = uuid(k.id)
   for (const s of kopi.scenarier) {
     if (s.utfall.type !== 'kommentarer') continue
     s.utfall.plasseringer = s.utfall.plasseringer.map((p) => ({ ...p, kommentar: uuid(p.kommentar) }))
@@ -142,13 +159,15 @@ function varianter(r: Scenarioregelsett): [string, Scenarioregelsett][] {
   variant('dobbel analytt', (k) => k.analytter.push(k.analytter[0]!))
   variant('ugyldig nøkkel', (k) => (k.scenarier[0]!.nokkel = 'Stor'))
   variant('hjelpetekst med ukjent grense', (k) => (k.verdihjelp = 'Høyst {ukjent} %.'))
-  variant('ubrukt kommentar', (k) => k.kommentarer.push({ id: randomUUID(), tekst: 'Ubrukt.' }))
-  variant('kommentar to ganger', (k) => k.kommentarer.push({ ...k.kommentarer[0]! }))
-  variant('tom kommentar', (k) => (k.kommentarer[0]!.tekst = ' '))
-  variant('ukjent kommentar', (k) => {
-    const u = k.scenarier.find((x) => x.utfall.type === 'kommentarer')!.utfall
-    if (u.type === 'kommentarer') u.plasseringer[0]!.kommentar = randomUUID()
-  })
+  const pekPa = (navn: string, kommentar: () => string) =>
+    variant(navn, (k) => {
+      const u = k.scenarier.find((x) => x.utfall.type === 'kommentarer')!.utfall
+      if (u.type === 'kommentarer') u.plasseringer[0]!.kommentar = kommentar()
+    })
+  pekPa('ukjent kommentar', () => randomUUID())
+  pekPa('kommentar med plassholdere', () => medPlassholder)
+  // Kommentarene er felles: et regelsett kan bruke en tekst et annet regelsett også bruker.
+  pekPa('kommentar som et annet regelsett bruker', () => uuid('oksykodon/hoved'))
   return ut
 }
 
@@ -162,7 +181,7 @@ describe('valideringen i databasen', () => {
     let ugyldige = 0
     for (const r of RUS_REGELSETT.filter((x) => x.analytter.length > 1)) {
       for (const [navn, variant] of varianter(iDatabasen(r))) {
-        const forventet = validerScenarioregelsett(variant)
+        const forventet = validerScenarioregelsett(variant, oppslag)
         expect([...(await sqlFeil(variant))].sort(), navn).toEqual([...forventet].sort())
         provd++
         if (forventet.length > 0) ugyldige++
@@ -177,8 +196,6 @@ describe('valideringen i databasen', () => {
   it('avviser et ugyldig regelsett når det lagres, med meldingene', async () => {
     const r = regelsett('tramadolgruppen')
     r.scenarier.pop()
-    // Tilleggskommentaren ble bare brukt av scenariet som er borte.
-    r.kommentarer.pop()
     const feil = await feilFra(() => opprett(r))
     expect(feil?.code).toBe('22023')
     expect(feil?.message).toBe('Ingen scenarier gjelder når TRAM + OTRAM er påvist.')
@@ -247,17 +264,30 @@ describe('publisering, gjenoppretting og samtidighet', () => {
     id = status.id
   })
 
-  it('publiserer hele regelsettet, tekstene med', async () => {
+  it('publiserer regelsettet først når kommentarene det peker på, er publisert', async () => {
+    // En ny kommentar som bare finnes som utkast.
+    const ny = await nyKommentar({ navn: 'Ny', tekst: 'En ny tekst.', plassholdere: [] }, false)
+    const medNy = structuredClone(r)
+    const u = medNy.scenarier.find((s) => s.nokkel === 'kod')!.utfall
+    if (u.type === 'kommentarer') u.plasseringer[0]!.kommentar = ny.id
+    status = await lagre(id, status.revisjon!, medNy)
+    expect(status.revisjon).toBe(2)
+    const feil = await feilFra(() => kall.publiser(id, status.revisjon!))
+    expect(feil?.code).toBe('22023')
+    expect(feil?.message).toMatch(/ikke er publisert/)
+
+    // Regelsettet eier ikke teksten: den publiseres for seg.
+    await kall.publiser(ny.id, ny.revisjon!)
     status = await kall.publiser(id, status.revisjon!)
-    expect(status.publisert_revisjon).toBe(1)
-    expect(await lest(id, 'publisert')).toEqual(r)
+    expect(status.publisert_revisjon).toBe(2)
+    expect(await lest(id, 'publisert')).toEqual(medNy)
   })
 
   it('viser vanlige brukere bare det publiserte', async () => {
     const endret = structuredClone(r)
     endret.parametere[0]!.verdi = 0.25
     status = await lagre(id, status.revisjon!, endret)
-    expect(status.revisjon).toBe(2)
+    expect(status.revisjon).toBe(3)
 
     const vanlig = await kall.les<{ verdi: string; tilstand: string }>(
       bruker,
@@ -282,16 +312,17 @@ describe('publisering, gjenoppretting og samtidighet', () => {
     const endret = structuredClone(r)
     endret.scenarier.reverse()
     endret.parametere[1]!.verdi = 1.5
-    endret.kommentarer[0]!.tekst = 'En annen tekst.'
+    const u = endret.scenarier.find((s) => s.utfall.type === 'kommentarer')!.utfall
+    if (u.type === 'kommentarer') u.plasseringer[0] = { ...u.plasseringer[0]!, kommentar: uuid('oksykodon/hoved') }
     status = await lagre(id, status.revisjon!, endret)
-    expect(status.revisjon).toBe(3)
-
-    status = await kall.gjenopprett(id, 3, 1)
     expect(status.revisjon).toBe(4)
+
+    status = await kall.gjenopprett(id, 4, 1)
+    expect(status.revisjon).toBe(5)
     expect(await lest(id)).toEqual(r)
     const historikk = await kall.revisjoner(id)
-    expect(historikk.map((h) => h.handling)).toEqual(['opprettet', 'endret', 'endret', 'gjenopprettet'])
-    expect(historikk[3]!.gjenopprettet_fra).toBe(1)
+    expect(historikk.map((h) => h.handling)).toEqual(['opprettet', 'endret', 'endret', 'endret', 'gjenopprettet'])
+    expect(historikk[4]!.gjenopprettet_fra).toBe(1)
     await kall.forventSamsvar(id)
   })
 

@@ -4,7 +4,7 @@
 -- Bygger på fundamentet for redigerbart faginnhold og på kommentarene. Et
 -- regelsett er ett objekt, med utkast, publisering, revisjoner og
 -- gjenoppretting som alt annet faginnhold. Hele regelsettet står i hvert
--- øyeblikksbilde, så en gjenoppretting gjenoppretter alt på én gang.
+-- øyeblikksbilde, så en gjenoppretting gjenoppretter alle reglene på én gang.
 --
 -- Modellen og reglene står i docs/scenarioregler.md, og er de samme som i
 -- src/domain/scenario.ts. Kort fortalt:
@@ -16,9 +16,11 @@
 --     kommentarer plassert på bestemte koder, eller en manuell vurdering.
 --   * Grensene er navngitte parametere, så en grense mellom to scenarier er
 --     ett tall.
---   * Kommentartekstene hører til regelsettet og ligger i den felles tabellen
---     for regelsettkommentarer fra arbeidspakke 5. Scenariene peker på dem
---     med ID, og hver tekst brukes av minst ett scenario.
+--   * Kommentarene er egne objekter (public.kommentarer). Scenariene peker på
+--     dem med objekt-ID-en og eier ikke tekstene: kommentar og regel er
+--     separate objekter. Scenarioreglene limer inn teksten slik den står, og
+--     godtar ikke kommentarer med plassholdere. Et publisert regelsett kan
+--     bare peke på publiserte kommentarer.
 --   * Valideringen gjøres her, før noe lagres, og avviser et regelsett som har
 --     hull eller overlapp: hver kombinasjon av påviste analytter og
 --     forholdstall skal gi nøyaktig ett scenario. Meldingene er de samme som
@@ -206,15 +208,20 @@ create table public.scenarioplasseringer (
     foreign key (objekt_id, tilstand, scenario)
     references public.scenarier (objekt_id, tilstand, nokkel) on delete cascade,
   constraint scenarioplasseringer_kommentar_fkey
-    foreign key (objekt_id, tilstand, kommentar_id)
-    references public.regelsettkommentarer (regelsett_id, tilstand, kommentar_id),
+    foreign key (kommentar_id) references public.redigerbare_objekter (id),
   constraint scenarioplasseringer_merke_entydig unique (objekt_id, tilstand, scenario, merke),
   constraint scenarioplasseringer_rolle check (rolle in ('hoved', 'tillegg')),
   constraint scenarioplasseringer_merke check (char_length(merke) between 1 and 200 and merke = btrim(merke))
 );
 
 create index scenarioplasseringer_kommentar_idx
-  on public.scenarioplasseringer (objekt_id, tilstand, kommentar_id);
+  on public.scenarioplasseringer (kommentar_id);
+
+-- Kommentaren er en kommentar, og det publiserte regelsettet peker bare på
+-- publiserte kommentarer: kommentarene publiseres før regelsettet.
+create trigger scenarioplasseringer_kommentar
+before insert or update on public.scenarioplasseringer
+for each row execute function intern.krev_objekttype('kommentar_id', 'kommentar');
 
 comment on table public.scenarioplasseringer is
   'En kommentar i et scenarios utfall: hovedkommentar eller tilleggskommentar, med merket som vises og kommentaren som kopieres.';
@@ -514,12 +521,7 @@ declare
   dekket text[];
   hva text;
   forholdet jsonb;
-  kommentarer text[] := array(select x.e ->> 'id' from jsonb_array_elements(p_innhold -> 'kommentarer') x(e));
-  brukt text[] := array(
-    select y.e ->> 'kommentar'
-    from jsonb_array_elements(p_innhold -> 'scenarier') x(e),
-      jsonb_array_elements(coalesce(x.e -> 'utfall' -> 'plasseringer', '[]')) y(e)
-  );
+  kommentaren public.kommentarer;
 begin
   if modul !~ '^[a-z0-9]+(-[a-z0-9]+)*$' then
     feil := feil || format('Ugyldig modulnøkkel «%s».', modul);
@@ -589,20 +591,6 @@ begin
     end if;
   end loop;
 
-  -- Kommentarene: entydige ID-er, ren tekst, og alle i bruk.
-  if cardinality(kommentarer) <> (select count(distinct k) from unnest(kommentarer) k) then
-    feil := feil || 'To kommentarer har samme ID.'::text;
-  end if;
-  feil := feil || array(
-    select format('Kommentaren %s mangler tekst eller har mellomrom i endene.', k ->> 'id')
-    from jsonb_array_elements(p_innhold -> 'kommentarer') k
-    where btrim(k ->> 'tekst') = '' or k ->> 'tekst' <> btrim(k ->> 'tekst')
-  );
-  feil := feil || array(
-    select format('Kommentaren %s brukes ikke av noe scenario.', k)
-    from unnest(kommentarer) k where k <> all (brukt)
-  );
-
   for s in select e from jsonb_array_elements(p_innhold -> 'scenarier') e loop
     hva := 'Scenariet ' || (s ->> 'nokkel');
     pavist := intern.tekstliste(s, 'pavist');
@@ -663,8 +651,14 @@ begin
     dekket := '{}';
     for pl in select e from jsonb_array_elements(s -> 'utfall' -> 'plasseringer') e loop
       feil := feil || array(select intern.scenariotekstfeil(pl ->> 'merke', 'Merket i ' || (s ->> 'nokkel'), parametere));
-      if (pl ->> 'kommentar') <> all (kommentarer) then
+      -- Kommentaren slik den står i utkastet; plassholderne er de samme i alle
+      -- revisjoner. Scenarioreglene limer inn teksten slik den står.
+      select k.* into kommentaren from public.kommentarer k
+      where k.objekt_id = (pl ->> 'kommentar')::uuid and k.tilstand = 'utkast';
+      if not found then
         feil := feil || (hva || ' viser til en kommentar som ikke finnes.');
+      elsif cardinality(kommentaren.plassholdere) > 0 then
+        feil := feil || (hva || ' viser til en kommentar med plassholdere.');
       end if;
       koder := intern.tekstliste(pl, 'koder');
       if cardinality(koder) = 0 then
@@ -702,7 +696,7 @@ declare
   u jsonb;
 begin
   perform intern.krev_felt(
-    p_innhold, array['modul', 'analytter', 'verdihjelp', 'forhold', 'parametere', 'scenarier', 'kommentarer']
+    p_innhold, array['modul', 'analytter', 'verdihjelp', 'forhold', 'parametere', 'scenarier']
   );
   perform intern.ra_tekst(p_innhold, 'modul');
   perform intern.ra_tekst(p_innhold, 'verdihjelp');
@@ -714,12 +708,6 @@ begin
     perform intern.ra_tekst(e, 'nullmelding');
     perform intern.tekstliste(e, 'teller');
     perform intern.tekstliste(e, 'nevner');
-  end loop;
-
-  for e in select x from jsonb_array_elements(intern.liste(p_innhold, 'kommentarer')) x loop
-    perform intern.krev_felt(e, array['id', 'tekst']);
-    perform intern.id(e, 'id');
-    perform intern.ra_tekst(e, 'tekst');
   end loop;
 
   for e in select x from jsonb_array_elements(intern.liste(p_innhold, 'parametere')) x loop
@@ -812,10 +800,6 @@ begin
   delete from public.scenarioforhold f where f.objekt_id = p_objekt and f.tilstand = p_tilstand;
   delete from public.scenarioparametere p where p.objekt_id = p_objekt and p.tilstand = p_tilstand;
   delete from public.scenarioanalytter a where a.objekt_id = p_objekt and a.tilstand = p_tilstand;
-
-  -- Tekstene skrives etter at scenariene som pekte på dem, er borte, og før
-  -- de nye peker på dem.
-  perform intern.skriv_regelsettkommentarer(p_objekt, p_tilstand, p_innhold -> 'kommentarer');
 
   insert into public.scenarioanalytter (objekt_id, tilstand, kode, posisjon)
   select p_objekt, p_tilstand, a, nr
@@ -937,8 +921,7 @@ as $$
        ) order by s.posisjon)
        from public.scenarier s where s.objekt_id = r.objekt_id and s.tilstand = r.tilstand),
       '[]'
-    ),
-    'kommentarer', intern.les_regelsettkommentarer(r.objekt_id, r.tilstand)
+    )
   )
   from public.scenarioregelsett r
   where r.objekt_id = p_objekt and r.tilstand = p_tilstand
