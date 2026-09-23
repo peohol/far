@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.15.0',
+    versjon: '1.16.0',
     dato: '2026-09-23',
     sammendrag: 'Kommenteringen av rusmidler bruker reglene og tekstene som er publisert i databasen',
     typer: ['Funksjonalitet'],
@@ -24,7 +24,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.14.0',
+    versjon: '1.15.0',
     dato: '2026-09-23',
     sammendrag: 'Fortolkningsreglene for rusmidler vises på analyttsidene, med en simulator',
     typer: ['Funksjonalitet'],
@@ -33,6 +33,19 @@ export const ENDRINGSLOGG: Endring[] = [
       'Analyttsidene for stoffene med ruspotensial i serum har fått en seksjon med fortolkningsreglene. Den viser hvilke analytter som må være påvist, grensene som gjelder, hvilke kommentarer som brukes og hvilke koder de limes inn på. Lukket viser den antall scenarier og grensene.',
       'Diazepamgruppen, tramadol, kodein/morfin og amfetamin/metamfetamin har i tillegg «Prøv reglene», som åpnes for seg i seksjonen. Der krysser du av og fyller inn tall slik som i fortolkningen, og ser hvilket scenario som gjelder og hvor kommentarene havner.',
       'Reglene i seksjonen er kontrollert mot dagens fortolkning for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. De gir nøyaktig samme kommentarer, plassering og beskjeder. Kommenteringen er uendret.',
+    ],
+  },
+  {
+    versjon: '1.14.0',
+    dato: '2026-09-23',
+    sammendrag: 'Fortolkningskommentarene kan lagres som egne tekster med historikk',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Neste steg mot redigerbare fortolkningsregler: hver kommentartekst kan nå lagres for seg, med egen historikk, utkast og publisering. Ingenting av dette er synlig ennå, og kommenteringen er uendret.',
+      'Reglene peker på tekstene i stedet for å ha sin egen kopi. Samme tekst kan brukes av flere regler og rettes ett sted.',
+      'En tekst står på én linje og limes inn som den er. Et regelsett kan ikke publiseres før tekstene det bruker er publisert.',
+      'Tekster med innfylte felt, som konsentrasjonsnivå eller dato for forrige prøve, beholder de samme feltene gjennom alle endringer, så en regel som bruker teksten, alltid får fylt dem inn.',
     ],
   },
   {
