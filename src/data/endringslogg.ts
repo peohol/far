@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.16.0',
+    versjon: '1.20.0',
     dato: '2026-09-23',
     sammendrag: 'Stoffsidene viser preparatene fra de offentlige legemiddeldataene',
     typer: ['Funksjonalitet'],
@@ -29,7 +29,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.15.0',
+    versjon: '1.19.0',
     dato: '2026-09-23',
     sammendrag: 'OUSFAR har fått sin egen kopi av de offentlige legemiddeldataene',
     typer: ['Funksjonalitet'],
@@ -39,6 +39,95 @@ export const ENDRINGSLOGG: Endring[] = [
       'En oppdatering tas bare inn når hele uttrekket er lest uten feil. Mislykkes den, vises de siste gyldige dataene som før.',
       'Preparater som forsvinner fra FEST, merkes som utgått i stedet for å slettes.',
       'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
+    versjon: '1.18.1',
+    dato: '2026-09-23',
+    sammendrag: 'Referanseområdet i kommenteringen er det samme som på informasjonssiden',
+    typer: ['Fag'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Referanseområdet under analyttnavnet i kommenteringen hentes nå fra informasjonssiden for analytten, fra samme sted i databasen. De to viser alltid det samme, og en endring på informasjonssiden gjelder i kommenteringen når den er publisert.',
+      'Tre referanseområder er endret slik at de følger informasjonssiden: brekspiprazol 50–350 nmol/L (før 50–330), doksepin 180–550 nmol/L (før 18–550) og levomepromazin 10–300 nmol/L (før under 300).',
+      'Kommentarene og knappene er de samme som før.',
+    ],
+  },
+  {
+    versjon: '1.18.0',
+    dato: '2026-09-23',
+    sammendrag: 'Konsentrasjonsreglene vises, prøves og redigeres på analyttsidene, og kommenteringen bruker de publiserte',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Informasjonssiden for en analytt med konsentrasjonsområder har fått seksjonen «Fortolkning». Lukket sier den hvor mange områder det er, ringegrensen og om cut-off gjelder. Åpnet viser den en tabell over områdene, kommentaren hvert av dem gir og når rekvirenten skal ringes.',
+      'Detaljkortet «Simulator» i seksjonen tar en konsentrasjon og viser hvilket område den havner i, hvilken kommentar den gir og om rekvirenten skal ringes — det samme som kommenteringen gir.',
+      'Knappene, kommentarene, «Til stede under cut-off» og ringegrensen i kommenteringen kommer nå fra de publiserte reglene. Når en administrator publiserer en endring i reglene, gjelder den også i kommenteringen. Til reglene er hentet, eller hvis det ikke går, kopieres ingen kommentar.',
+      'Hver kommentar reglene gir, er en egen kommentar med navn, egen historikk og egen publisering. Reglene sier bare hvilken kommentar som gis når, og en tekst rettes ett sted.',
+      'Administratorer kan redigere reglene i redigeringsmodus: flytte en grense, dele et område i to, slå sammen to, endre kommentarene og ringingen, og prøve utkastet før det lagres. Reglene og tekstene lagres sammen, alt eller ingenting, og blir synlige først når de publiseres.',
+      '«Sist redigert» ved hvert redigerbart innhold åpner historikken: hvem som endret hva og når, med det fjernede rødt og gjennomstreket og det nye grønt. En tidligere versjon kan gjenopprettes; det lager en ny versjon, og ingenting slettes. Detaljkortet «Historikken for hver kommentar» gjør det samme for hver tekst.',
+      'Har noen andre lagret mens du redigerte, mister du ikke det du har gjort. Du kan sammenligne og velge hva som skal gjelde.',
+      'Kommentarene og grensene er de samme som før, tegn for tegn. Hver analytt er kontrollert rett på, rett under og rett over hver grense, og alt kommenteringen kan gi, er ord for ord det samme.',
+    ],
+  },
+  {
+    versjon: '1.17.0',
+    dato: '2026-09-23',
+    sammendrag: 'Konsentrasjonsreglene og kommentarene er lagt inn i databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Første steg mot at konsentrasjonsreglene og kommentarene kan redigeres i appen. Dagens regler for alle de 60 analyttene med konsentrasjonsområder er lagt inn i databasen, med kilde og full historikk.',
+      'Grensene lagres som skillepunkter mellom områdene, så det ikke kan oppstå hull eller overlapp. «Ring rekvirent» er lagret som en egen handling, og kommentaren for «Til stede under cut-off» gjenbruker hovedkommentaren i stedet for å gjenta den.',
+      'Reglene er kontrollert mot dagens fortolkning for hver analytt, rett på, rett under og rett over hver grense, og gir de samme kommentarene og de samme beskjedene om å ringe.',
+      'Ingenting av dette er synlig ennå. Kommenteringen er uendret.',
+    ],
+  },
+  {
+    versjon: '1.16.2',
+    dato: '2026-09-23',
+    sammendrag: 'Reglene og kommentartekstene for THC-syre ligger nå i databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Kurvene, grensene og sikkerhetsmarginene for THC-syre er lagt inn i databasen med historikk, utkast og publisering, og kontrolleres der før de kan lagres, også at kurvene står i riktig rekkefølge for alle prøveverdier.',
+      'Kommentartekstene for THC-syre er lagt inn som egne tekster, og reglene sier hvilken tekst som brukes hvor. En tekst kan rettes uten å røre reglene.',
+      'Fortolkningen er uendret. Den bruker fortsatt de samme reglene som før, og de lagrede verdiene og tekstene er kontrollert å være nøyaktig de samme.',
+    ],
+  },
+  {
+    versjon: '1.16.1',
+    dato: '2026-09-23',
+    sammendrag: 'Reglene og kommentartekstene for THC-syre er skilt ut fra koden',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Kurvene, grensene og sikkerhetsmarginene i THC-syremodulen er skilt ut som egne regler, og kommentartekstene som egne tekster. De kontrolleres før de kan brukes, også at kurvene står i riktig rekkefølge for alle prøveverdier. Det er første steg mot at de kan redigeres i appen.',
+      'Fortolkningen er uendret. Den er kontrollert mot over 4000 prøvepar, også rett på og rett ved siden av hver grense, og gir de samme kommentarene tegn for tegn.',
+    ],
+  },
+  {
+    versjon: '1.16.0',
+    dato: '2026-09-23',
+    sammendrag: 'Kommenteringen av rusmidler bruker reglene og tekstene som er publisert i databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Reglene og kommentartekstene for stoffene med ruspotensial i serum hentes nå fra det som er publisert i databasen, der de har historikk og kan rettes og publiseres uten en ny versjon av appen.',
+      'Mens reglene hentes, står det i modulen, og det er ingenting å kopiere. Kan de ikke hentes, sier modulen fra og lar deg prøve igjen. Appen kommenterer aldri med regler den ikke har fått.',
+      'Reglene er kontrollert mot den tidligere kommenteringen for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. Kommentarene, plasseringen og beskjedene er de samme som før.',
+    ],
+  },
+  {
+    versjon: '1.15.0',
+    dato: '2026-09-23',
+    sammendrag: 'Fortolkningsreglene for rusmidler vises på analyttsidene, med en simulator',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Analyttsidene for stoffene med ruspotensial i serum har fått en seksjon med fortolkningsreglene. Den viser hvilke analytter som må være påvist, grensene som gjelder, hvilke kommentarer som brukes og hvilke koder de limes inn på. Lukket viser den antall scenarier og grensene.',
+      'Diazepamgruppen, tramadol, kodein/morfin og amfetamin/metamfetamin har i tillegg «Prøv reglene», som åpnes for seg i seksjonen. Der krysser du av og fyller inn tall slik som i fortolkningen, og ser hvilket scenario som gjelder og hvor kommentarene havner.',
+      'Reglene i seksjonen er kontrollert mot dagens fortolkning for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. De gir nøyaktig samme kommentarer, plassering og beskjeder. Kommenteringen er uendret.',
     ],
   },
   {

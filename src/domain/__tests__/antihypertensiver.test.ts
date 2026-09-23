@@ -1,7 +1,13 @@
+/**
+ * Antihypertensivene: datasettet med det analyttkortet viser, og
+ * konsentrasjonsreglene og kommentarene de fikk da de ble importert til
+ * regelsettene (se `hjelp/dagensregler.ts`).
+ */
 import { describe, expect, it } from 'vitest'
+import { dagensKommentar, dagensRegelsett } from '../../__tests__/hjelp/dagensregler'
+import { referanseomradeFor } from '../../__tests__/hjelp/referanseomrader'
 import { analytes, antihypertensivdatasett, findByCode } from '../analytes'
-import { bands } from '../bands'
-import { classify, levelComment } from '../concentration'
+import { finnRegel, intervallene, regelsettband } from '../intervallregler'
 import { LEVELS } from '../../types'
 import type { Analyte } from '../../types'
 
@@ -14,7 +20,11 @@ function get(kode: string): Analyte {
 }
 
 function labels(kode: string): string[] {
-  return bands(get(kode)).map((b) => b.label)
+  return regelsettband(dagensRegelsett(kode)).map((b) => b.label)
+}
+
+function niva(a: Analyte, verdi: number) {
+  return finnRegel(dagensRegelsett(a.kode), verdi).niva
 }
 
 describe('datasettet for antihypertensiver', () => {
@@ -32,8 +42,8 @@ describe('datasettet for antihypertensiver', () => {
 
   it('har ingen ringegrense — kategorien har ikke det begrepet', () => {
     for (const a of antihypertensiver) {
-      expect(a.ringegrense, a.kode).toBeNull()
-      expect(a.referanseomrade, a.kode).toBeNull()
+      expect(dagensRegelsett(a.kode).ringegrense, a.kode).toBeNull()
+      expect(referanseomradeFor(a.kode), a.kode).toBeNull()
       expect(a.gruppe, a.kode).toBe('Antihypertensiver')
       expect(a.enhet, a.kode).toBe('nmol/L')
     }
@@ -45,7 +55,8 @@ describe('datasettet for antihypertensiver', () => {
       expect(grenser, a.kode).toBeDefined()
       if (!grenser) continue
       expect(grenser.pavisningsgrense, a.kode).toBeGreaterThan(0)
-      expect(grenser.pavisningsgrense, a.kode).toBeLessThanOrEqual(a.nedreGrense)
+      const innenfor = intervallene(dagensRegelsett(a.kode)).find((i) => i.niva === 'innenfor')
+      expect(grenser.pavisningsgrense, a.kode).toBeLessThanOrEqual(innenfor?.fra ?? 0)
     }
   })
 
@@ -62,8 +73,8 @@ describe('datasettet for antihypertensiver', () => {
     for (const a of antihypertensiver) {
       const terapi = a.antihypertensiv?.terapiomrade
       if (!terapi || terapi.fra === null || terapi.til === null) continue
-      expect(classify(a, terapi.fra), `${a.kode} nedre`).toBe('innenfor')
-      expect(classify(a, terapi.til), `${a.kode} øvre`).toBe('innenfor')
+      expect(niva(a, terapi.fra), `${a.kode} nedre`).toBe('innenfor')
+      expect(niva(a, terapi.til), `${a.kode} øvre`).toBe('innenfor')
     }
   })
 })
@@ -71,7 +82,7 @@ describe('datasettet for antihypertensiver', () => {
 describe('de tre knappene', () => {
   it('gir nøyaktig tre bånd, uten ringepåminnelse', () => {
     for (const a of antihypertensiver) {
-      const b = bands(a)
+      const b = regelsettband(dagensRegelsett(a.kode))
       expect(b.map((x) => x.key), a.kode).toEqual(['under', 'innenfor', 'over'])
       for (const band of b) expect(band.ring, `${a.kode}/${band.key}`).toBe(false)
     }
@@ -104,46 +115,46 @@ describe('de tre knappene', () => {
 
   it('treffer riktig nivå på hver side av grensene', () => {
     const enat = get('ENAT')
-    expect(classify(enat, 9)).toBe('under')
-    expect(classify(enat, 9.9)).toBe('under')
-    expect(classify(enat, 10)).toBe('innenfor')
-    expect(classify(enat, 1199)).toBe('innenfor')
-    expect(classify(enat, 1200)).toBe('over')
+    expect(niva(enat, 9)).toBe('under')
+    expect(niva(enat, 9.9)).toBe('under')
+    expect(niva(enat, 10)).toBe('innenfor')
+    expect(niva(enat, 1199)).toBe('innenfor')
+    expect(niva(enat, 1200)).toBe('over')
 
     const lerk = get('LERK')
-    expect(classify(lerk, 0.1)).toBe('under')
-    expect(classify(lerk, 0.2)).toBe('innenfor')
+    expect(niva(lerk, 0.1)).toBe('under')
+    expect(niva(lerk, 0.2)).toBe('innenfor')
     // Hullet mellom terapiområdet (opp til 5) og H (fra 6) hører til innenfor.
-    expect(classify(lerk, 5.5)).toBe('innenfor')
-    expect(classify(lerk, 19.9)).toBe('innenfor')
-    expect(classify(lerk, 20)).toBe('over')
+    expect(niva(lerk, 5.5)).toBe('innenfor')
+    expect(niva(lerk, 19.9)).toBe('innenfor')
+    expect(niva(lerk, 20)).toBe('over')
   })
 
   it('lar toksisk vinne der kilden lar innenfor og toksisk overlappe', () => {
     // BUME og FURO oppgir samme tall som slutt på innenfor og start på toksisk.
-    expect(classify(get('BUME'), 1600)).toBe('over')
-    expect(classify(get('FURO'), 40000)).toBe('over')
+    expect(niva(get('BUME'), 1600)).toBe('over')
+    expect(niva(get('FURO'), 40000)).toBe('over')
   })
 
   it('lar innenfor begynne der terapiområdet gjør det, også der L strekker seg forbi', () => {
     // VALS: L er oppgitt som 50–301 mens terapiområdet begynner på 300.
     const vals = get('VALS')
-    expect(classify(vals, 299)).toBe('under')
-    expect(classify(vals, 300)).toBe('innenfor')
-    expect(classify(vals, 301)).toBe('innenfor')
+    expect(niva(vals, 299)).toBe('under')
+    expect(niva(vals, 300)).toBe('innenfor')
+    expect(niva(vals, 301)).toBe('innenfor')
   })
 
   it('lar innenfor begynne på påvisningsgrensen der kilden sier lavere', () => {
     // FURO: innenfor er oppgitt som 1–40000, men påvisningsgrensen er 50.
     const furo = get('FURO')
-    expect(classify(furo, 49)).toBe('under')
-    expect(classify(furo, 50)).toBe('innenfor')
+    expect(niva(furo, 49)).toBe('under')
+    expect(niva(furo, 50)).toBe('innenfor')
   })
 })
 
 describe('kommentarene', () => {
   const alle = antihypertensiver.flatMap((a) =>
-    LEVELS.map((niva) => ({ hvor: `${a.kode}/${niva}`, tekst: levelComment(a, niva).kommentar })),
+    LEVELS.map((niva) => ({ hvor: `${a.kode}/${niva}`, tekst: dagensKommentar(a.kode, niva) })),
   )
 
   it('står på én linje, med enkle mellomrom', () => {
@@ -178,7 +189,7 @@ describe('kommentarene', () => {
 
   it('åpner den toksiske kommentaren med at konsentrasjonen er potensielt toksisk', () => {
     for (const a of antihypertensiver) {
-      expect(levelComment(a, 'over').kommentar, a.kode).toMatch(
+      expect(dagensKommentar(a.kode, 'over'), a.kode).toMatch(
         /^Potensielt toksisk konsentrasjon\./,
       )
     }
@@ -186,8 +197,8 @@ describe('kommentarene', () => {
 
   it('viser hver kommentar på knappen den hører til', () => {
     for (const a of antihypertensiver) {
-      for (const band of bands(a)) {
-        expect(band.kommentar, `${a.kode}/${band.key}`).toBe(levelComment(a, band.niva).kommentar)
+      for (const band of regelsettband(dagensRegelsett(a.kode))) {
+        expect(band.kommentar, `${a.kode}/${band.key}`).toBe(dagensKommentar(a.kode, band.niva))
       }
     }
   })
@@ -224,7 +235,7 @@ describe('rettelser gjort etter klinikerens tilbakemelding', () => {
     // metabolitten av spironolakton. Farmakokinetiske avvik? …», ulikt
     // enalaprilat, ramiprilat og losartansyre, som har metabolittsetningen
     // etter begge spørsmålene.
-    const under = levelComment(get('KANR'), 'under').kommentar
+    const under = dagensKommentar('KANR', 'under')
     expect(under).toContain(
       'Mangelfull medikamentetterlevelse? Farmakokinetiske avvik? ' +
         'Kanrenon er den aktive metabolitten av spironolakton.',
@@ -241,13 +252,13 @@ describe('rettelser gjort etter klinikerens tilbakemelding', () => {
     // Kilden gjentok teksten fra «under» («ikke påvisbart medikamentfastende,
     // men…») også for «innenfor». Bumetanid har en kortere, egen tekst for
     // «innenfor», og furosemid skal ha det samme.
-    expect(levelComment(get('FURO'), 'innenfor').kommentar).toBe(
+    expect(dagensKommentar('FURO', 'innenfor')).toBe(
       'Furosemid kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i ' +
         'sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ' +
         'ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).',
     )
     // «under» og «over» er urørt av rettelsen.
-    expect(levelComment(get('FURO'), 'under').kommentar).toContain('ikke påvisbart')
+    expect(dagensKommentar('FURO', 'under')).toContain('ikke påvisbart')
 
     const klinikerrettelse = antihypertensivdatasett.meta.rettelser.find(
       (r) => r.hvor === 'FURO/innenfor' && r.kategori === 'klinikerrettelse',

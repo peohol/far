@@ -11,6 +11,8 @@
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { KONFLIKT, type Innhold, type Objektstatus, type Objekttype } from './modell'
+import type { Kommentarendring } from '../regler/kommentarer'
+import type { Intervallregelsettinnhold } from '../regler/modell'
 
 const UVENTET_FEIL = 'Noe gikk galt. Prøv igjen.'
 const IKKE_GODTATT = 'Innholdet ble ikke godtatt. Kontroller feltene og prøv igjen.'
@@ -94,6 +96,17 @@ export interface Faginnholdslager {
     forventetRevisjon: number,
     fraRevisjon: number,
   ): Promise<Objektstatus>
+  /**
+   * Lagrer et intervallregelsett og de nye og endrede kommentarene det peker
+   * på, som utkast i én transaksjon: alt eller ingenting. Er noen av
+   * revisjonene endret i mellomtiden, kastes {@link Samtidighetskonflikt}.
+   */
+  lagreIntervallregelsett(
+    objekt: string,
+    forventetRevisjon: number,
+    innhold: Intervallregelsettinnhold,
+    kommentarer: Kommentarendring[],
+  ): Promise<Objektstatus>
   /** Publiserer utkastet slik det står i `forventetRevisjon`. */
   publiserUtkast(objekt: string, forventetRevisjon: number): Promise<Objektstatus>
   /**
@@ -121,6 +134,8 @@ export function lagFaginnholdslager(klient: SupabaseClient): Faginnholdslager {
         forventet_revisjon: forventetRevisjon,
         fra_revisjon: fraRevisjon,
       }),
+    lagreIntervallregelsett: (objekt, forventetRevisjon, innhold, kommentarer) =>
+      kall('lagre_intervallregelsett', { objekt, forventet_revisjon: forventetRevisjon, innhold, kommentarer }),
     publiserUtkast: (objekt, forventetRevisjon) =>
       kall('publiser_utkast', { objekt, forventet_revisjon: forventetRevisjon }),
     slettReferanse: async (objekt, forventetRevisjon) => {
