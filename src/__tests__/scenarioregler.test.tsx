@@ -35,7 +35,7 @@ function regler(kode: string) {
   return funnet
 }
 
-function visSide(kode: string) {
+function visSide(kode: string, sted?: readonly string[]) {
   const leser: Faginnholdsleser = {
     lesAnalyttside: vi.fn(async () => TOM_SIDE),
     lesReferanser: vi.fn(async () => []),
@@ -45,10 +45,17 @@ function visSide(kode: string) {
   render(
     <TipsLag>
       <FaginnholdskildeProvider kilde={{ leser, lager, kanRedigere: false }}>
-        <Analyttside kode={kode} katalog={katalog} onApneFortolkning={vi.fn()} onLukk={vi.fn()} />
+        <Analyttside kode={kode} sted={sted} katalog={katalog} onApneFortolkning={vi.fn()} onLukk={vi.fn()} />
       </FaginnholdskildeProvider>
     </TipsLag>,
   )
+}
+
+/** Reglene for modulen, med seksjonen og simulatoren åpnet slik brukeren gjør det. */
+async function visSimulator(user: ReturnType<typeof userEvent.setup>, kode: string) {
+  render(<Scenarioregler {...regler(kode)} />)
+  await user.click(screen.getByRole('button', { name: 'Fortolkningsregler' }))
+  await user.click(screen.getByRole('button', { name: 'Prøv reglene' }))
 }
 
 const truffet = () => document.querySelector('.scenario[aria-current="true"]')
@@ -62,6 +69,31 @@ describe('på analyttsiden', () => {
     visSide('NOR')
     await screen.findByText('Denne siden har ikke fått faginnhold ennå.')
     expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeNull()
+  })
+
+  it('står lukket, med antall scenarier og grensene i oppsummeringen', async () => {
+    const user = userEvent.setup()
+    render(<Scenarioregler {...regler('DIAZ')} />)
+    const knapp = screen.getByRole('button', { name: 'Fortolkningsregler' })
+    expect(knapp.getAttribute('aria-expanded')).toBe('false')
+    expect(document.querySelector('.skuff__oppsummering')?.textContent).toBe(
+      '8 scenarier · Oksazepam som andel av diazepam + N-desmetyldiazepam: 10 %',
+    )
+    await user.click(knapp)
+    expect(knapp.getAttribute('aria-expanded')).toBe('true')
+    // Kommentartekstene og simulatoren er detaljkort i seksjonen, lukket til de åpnes.
+    for (const navn of ['Kommentartekstene', 'Prøv reglene']) {
+      expect(screen.getByRole('button', { name: navn }).getAttribute('aria-expanded')).toBe('false')
+    }
+    expect(document.getElementById('panel-fortolkning--simulator')).toBeTruthy()
+  })
+
+  it('åpner simulatoren fra en direktelenke', async () => {
+    visSide('OXA', ['fortolkning', 'simulator'])
+    const simulator = await screen.findByRole('button', { name: 'Prøv reglene' })
+    expect(simulator.getAttribute('aria-expanded')).toBe('true')
+    expect(screen.getByRole('button', { name: 'Fortolkningsregler' }).getAttribute('aria-expanded')).toBe('true')
+    expect(screen.getByRole('button', { name: 'Åpne alle' })).toBeTruthy()
   })
 
   it('viser en modul med én analytt uten simulator', () => {
@@ -99,7 +131,7 @@ describe('reglene', () => {
 describe('simulatoren', () => {
   it('ber om avkrysning, og viser scenariet og hvor kommentarene limes inn', async () => {
     const user = userEvent.setup()
-    render(<Scenarioregler {...regler('AMF1')} />)
+    await visSimulator(user, 'AMF1')
     expect(status()).toBe('Ingen scenario gjelder ennå.')
     expect(screen.getByText('Kryss av for hvilke av analyttene som er påvist.')).toBeTruthy()
 
@@ -122,7 +154,7 @@ describe('simulatoren', () => {
 
   it('regner forholdstallet, og følger grensen rett på og rett over', async () => {
     const user = userEvent.setup()
-    render(<Scenarioregler {...regler('KOD')} />)
+    await visSimulator(user, 'KOD')
     await user.click(screen.getByRole('checkbox', { name: /Kodein/ }))
     await user.click(screen.getByRole('checkbox', { name: /Morfin/ }))
     expect(screen.getByText('Fyll inn de målte konsentrasjonene, så avgjøres regelen.')).toBeTruthy()
@@ -145,7 +177,7 @@ describe('simulatoren', () => {
 
   it('bruker den samme grensen som reglene, og ber om tall bare når alle tre er påvist', async () => {
     const user = userEvent.setup()
-    render(<Scenarioregler {...regler('DIAZ')} />)
+    await visSimulator(user, 'DIAZ')
     await user.click(screen.getByRole('checkbox', { name: /^Diazepam/ }))
     await user.click(screen.getByRole('checkbox', { name: /Oksazepam/ }))
     expect(screen.queryAllByRole('textbox')).toHaveLength(0)
