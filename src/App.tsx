@@ -10,6 +10,7 @@ import { EtgStep } from './components/EtgStep'
 import { KontrollStep } from './components/KontrollStep'
 import { PasteStep } from './components/PasteStep'
 import { RusStep } from './components/RusStep'
+import { ScenarioreglerProvider, useHentScenarioregler } from './components/regler/Scenarioreglerkilde'
 import { Sidemeny } from './components/Sidemeny'
 import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
@@ -28,15 +29,16 @@ import {
   CUTOFF_NOKKEL,
   CUTOFF_SPORSMAL,
   cutoffvalg,
-  finnValg,
-  valgene,
+  regelsettvalg,
   type Kommentarvalg,
 } from './domain/valg'
 import { lagFaginnholdslager } from './faginnhold/lagring'
 import { lagFaginnholdsleser } from './faginnhold/lesing'
+import { lesScenarioregler, reglerForModul } from './faginnhold/scenarioregler'
 import { lagLegemiddelleser } from './legemiddeldata/lesing'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
+import { usePubliserteRegler } from './hooks/usePubliserteRegler'
 import {
   digitToIndex,
   erBekreftelse,
@@ -46,6 +48,8 @@ import {
 } from './hooks/useKeyboard'
 import { useRute } from './hooks/useRute'
 import { useTheme } from './hooks/useTheme'
+import { lesPubliserteRegelsett } from './regler/kommentarer'
+import { slaOpp } from './regler/publiserte'
 import { initialState, isIdle, reducer, stageOf, type Action, type Stage } from './state'
 import type { Analyte } from './types'
 
@@ -117,7 +121,36 @@ export default function App() {
     }),
     [profil.role],
   )
+  // Reglene rusmiddelmodulene fortolkes med, hentet én gang for hele appen.
+  const scenarioregler = useHentScenarioregler(useCallback(() => lesScenarioregler(klient()), []))
   const hits = useMemo(() => search(state.query, pool), [state.query, pool])
+
+  // Fortolkningsreglene er de publiserte regelsettene i databasen, hentet
+  // når appen åpnes, sammen med referanseområdet informasjonssidene har for
+  // hver analytt. Steg 2 og tastene bruker det som gjelder analytten.
+  const hentRegler = useCallback(async () => {
+    const [regelsett, referanseomrader] = await Promise.all([
+      lesPubliserteRegelsett(faginnhold.leser),
+      faginnhold.leser.lesReferanseomrader('publisert'),
+    ])
+    return { regelsett, referanseomrader }
+  }, [faginnhold.leser])
+  const regler = usePubliserteRegler(hentRegler)
+  const regeloppslag = useMemo(
+    () => (state.analyte ? slaOpp(regler.tilstand, state.analyte.kode) : null),
+    [regler.tilstand, state.analyte],
+  )
+  const regelsett = regeloppslag?.status === 'klar' ? regeloppslag.regelsett : null
+  const valgene = useMemo(() => (regelsett ? regelsettvalg(regelsett) : []), [regelsett])
+
+  // En administrator kan ha publisert nye regler på en informasjonsside. De
+  // hentes når hen går tilbake til fortolkningen.
+  const varPaInfoside = useRef(paaInfoside)
+  const { hentPaNytt } = regler
+  useEffect(() => {
+    if (varPaInfoside.current && !paaInfoside && faginnhold.kanRedigere) hentPaNytt()
+    varPaInfoside.current = paaInfoside
+  }, [paaInfoside, faginnhold.kanRedigere, hentPaNytt])
 
   // Tilstandsmaskinen trenger alternativene det nye søket gir for å se om det
   // smalner inn til én analytt, så søket kjøres her og ikke først når steget
@@ -242,14 +275,11 @@ export default function App() {
   useEffect(() => () => window.clearTimeout(stegbytte.current), [])
 
   /**
-   * Valget kontrollsteget spør om. Det leses av analytten og ikke av
+   * Valget kontrollsteget spør om. Det leses av regelsettet og ikke av
    * spørsmålet som står, så bildet kan bli stående det korte øyeblikket etter
    * at spørsmålet er besvart — se `dveler`.
    */
-  const kontrollvalg = useMemo(
-    () => (state.analyte ? cutoffvalg(state.analyte) : null),
-    [state.analyte],
-  )
+  const kontrollvalg = useMemo(() => (regelsett ? cutoffvalg(regelsett) : null), [regelsett])
 
   /** Ja: kommentaren kopieres, og flyten går videre som ellers. */
   const bekreftKontroll = useCallback(() => {
@@ -331,8 +361,8 @@ export default function App() {
             if (!hit) return
             e.preventDefault()
             dispatch({ type: 'velg-analytt', analyte: hit.analyte })
-          } else if (stage === 'band' && state.analyte) {
-            const valg = valgene(state.analyte)[index]
+          } else if (stage === 'band') {
+            const valg = valgene[index]
             if (!valg) return
             e.preventDefault()
             velgValg(valg)
@@ -358,8 +388,7 @@ export default function App() {
     ),
   })
 
-  const valgtValg =
-    state.analyte && state.bandKey ? finnValg(state.analyte, state.bandKey) : undefined
+  const valgtValg = state.bandKey ? valgene.find((v) => v.key === state.bandKey) : undefined
   const rusModul = state.analyte ? rusModulFor(state.analyte) : undefined
   const etgAlternativ = state.etgValg ? alternativFor(state.etgValg) : undefined
 
@@ -383,13 +412,15 @@ export default function App() {
       {rute.side === 'analytt' && (
         <main className="scene scene--infoside">
           <FaginnholdskildeProvider kilde={faginnhold}>
-            <Analyttside
-              kode={rute.kode}
-              sted={rute.sted}
-              katalog={katalog}
-              onApneFortolkning={apneFortolkning}
-              onLukk={lukkInfoside}
-            />
+            <ScenarioreglerProvider kilde={scenarioregler}>
+              <Analyttside
+                kode={rute.kode}
+                sted={rute.sted}
+                katalog={katalog}
+                onApneFortolkning={apneFortolkning}
+                onLukk={lukkInfoside}
+              />
+            </ScenarioreglerProvider>
           </FaginnholdskildeProvider>
         </main>
       )}
@@ -414,11 +445,14 @@ export default function App() {
           />
         )}
 
-        {vist === 'band' && state.analyte && (
+        {vist === 'band' && state.analyte && regeloppslag && (
           <BandStep
             analyte={state.analyte}
+            regler={regeloppslag}
+            valg={valgene}
             onPick={velgValg}
             onBack={back}
+            onProvIgjen={hentPaNytt}
             failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
           />
         )}
@@ -442,6 +476,7 @@ export default function App() {
             // rydde i den fra utsiden.
             key={rusModul.id}
             modul={rusModul}
+            regler={reglerForModul(scenarioregler.tilstand, rusModul, scenarioregler.provIgjen)}
             onBack={back}
             onFinish={reset}
             copy={copy}

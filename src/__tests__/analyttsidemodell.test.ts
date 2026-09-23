@@ -214,6 +214,30 @@ function side(): Analyttsidedata {
       element('fjernet', { panel: FJERNET, data: tekstMed('d') }, 2, 1),
     ],
     referanser: [ref('a', 'Kilde A'), ref('b', 'Kilde B', null), ref('c', 'Kilde C'), ref('d', 'Fjernetkilde')],
+    regelsett: {
+      regelsett: utgave(
+        'rs',
+        {
+          analyttkode: 'TEST',
+          enhet: 'nmol/L',
+          desimaler: 0,
+          skillepunkter: [10],
+          intervaller: [
+            { niva: 'under', handling: null, kommentar: 'k1' },
+            { niva: 'innenfor', handling: null, kommentar: 'k2' },
+          ],
+          ringegrense: null,
+          cutoff: null,
+        },
+        2,
+        1,
+      ),
+      // Den ene kommentaren er endret, den andre ikke.
+      kommentarer: [
+        utgave('k2', { navn: 'TEST – innenfor referanseområdet', tekst: 'Syntetisk middels.', plassholdere: [] }, 1, 1),
+        utgave('k1', { navn: 'TEST – under referanseområdet', tekst: 'Syntetisk lav.', plassholdere: [] }, 2, 1),
+      ],
+    },
   }
 }
 
@@ -244,6 +268,9 @@ describe('sidemodellen', () => {
       { slag: 'infoside', id: 's', revisjon: 2 },
       { slag: 'innholdselement', id: 'e1', revisjon: 3 },
       { slag: 'innholdselement', id: 'fjernet', revisjon: 2 },
+      // Kommentarene regelsettet peker på, før regelsettet.
+      { slag: 'kommentar', id: 'k1', revisjon: 2 },
+      { slag: 'intervallregelsett', id: 'rs', revisjon: 2 },
     ])
     expect(publiseringsplan(TOM_SIDE)).toEqual([])
   })

@@ -19,6 +19,12 @@ import type { Innhold, Objektstatus, Objekttype } from '../../faginnhold/modell'
 const MIGRASJONER = fileURLToPath(new URL('../../../supabase/migrations', import.meta.url))
 
 const SUPABASE_GRUNNLAG = /* sql */ `
+  -- Supabase-prosjektet skriver flyttall med 15 gjeldende sifre
+  -- (extra_float_digits = 0 i konfigurasjonen), ikke med den korteste eksakte
+  -- skrivemåten Postgres ellers bruker. Det som gjør flyttall om til tekst
+  -- eller JSON, må derfor selv sørge for alle sifrene.
+  set extra_float_digits = 0;
+
   create role anon nologin noinherit;
   create role authenticated nologin noinherit;
   create role service_role nologin noinherit bypassrls;
@@ -172,6 +178,25 @@ export interface Revisjon {
  * dem. `admin` er brukeren som endrer når ingen annen er oppgitt.
  */
 export function faginnholdskall(db: PGlite, admin: string) {
+  const typerEtterFunksjon = new Map<string, Promise<Map<string, string>>>()
+
+  /** Typene til argumentene en funksjon i `public` tar, etter navn. */
+  function argumenttyper(funksjon: string): Promise<Map<string, string>> {
+    let typer = typerEtterFunksjon.get(funksjon)
+    if (!typer) {
+      typer = db
+        .query<{ navn: string; type: string }>(
+          `select a.navn, format_type(a.typ, null) as type
+           from pg_proc p, unnest(p.proargnames, p.proargtypes::oid[]) a(navn, typ)
+           where p.proname = $1 and p.pronamespace = 'public'::regnamespace`,
+          [funksjon],
+        )
+        .then(({ rows }) => new Map(rows.map((r) => [r.navn, r.type])))
+      typerEtterFunksjon.set(funksjon, typer)
+    }
+    return typer
+  }
+
   /**
    * Kaller en funksjon slik data-API-et gjør det: med navngitte argumenter,
    * som den oppgitte brukeren, i én transaksjon.
@@ -182,11 +207,12 @@ export function faginnholdskall(db: PGlite, admin: string) {
     argumenter: Record<string, unknown>,
   ): Promise<T> {
     const navn = Object.keys(argumenter)
-    // Objekter er jsonb-argumenter og sendes som JSON; lister er
-    // tabellargumenter (som `text[]`) og sendes som lister, slik data-API-et
-    // gjør det om for funksjonen.
-    const verdier = Object.values(argumenter).map((v) =>
-      v !== null && typeof v === 'object' && !Array.isArray(v) ? JSON.stringify(v) : v,
+    // Et jsonb-argument sendes som JSON, også når det er en liste; andre
+    // lister er tabellargumenter (som `text[]`) og sendes som lister, slik
+    // data-API-et gjør det om for funksjonen.
+    const typer = await argumenttyper(funksjon)
+    const verdier = Object.entries(argumenter).map(([n, v]) =>
+      v !== null && typeof v === 'object' && (typer.get(n) === 'jsonb' || !Array.isArray(v)) ? JSON.stringify(v) : v,
     )
     return som(db, brukerId, async (tx) => {
       const { rows } = await tx.query<T>(

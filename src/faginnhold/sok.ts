@@ -144,35 +144,50 @@ export interface Sideidentitet {
   aliaser?: readonly string[]
 }
 
+/** Én tekst i et innholdselement, med hva slags felt det er og kortets overskrift. */
+export interface Elementtekst {
+  felt: Sokefelt
+  tekst: string
+  tittel?: string
+}
+
+/**
+ * Tekstene i et innholdselement, slik de leses: fritekst uten formatering,
+ * radene i tabellen og verdien i et datakort. Tomme tekster er utelatt.
+ * Søket og historikken bruker de samme.
+ */
+export function elementtekster(elementtype: string, data: unknown): Elementtekst[] {
+  const tekst = (felt: Sokefelt, t: string, tittel?: string): Elementtekst[] =>
+    t.trim() ? [{ felt, tekst: t, ...(tittel && { tittel }) }] : []
+
+  switch (elementtype) {
+    case ELEMENTTYPER.riktekst:
+      return tekst('fritekst', klartekst(lesRiktekst(data).dokument))
+    case ELEMENTTYPER.kinetikk: {
+      const { tittel, dokument } = lesKinetikk(data)
+      return [...tekst('overskrift', tittel, tittel), ...tekst('fritekst', klartekst(dokument), tittel)]
+    }
+    case ELEMENTTYPER.dosetabell:
+      return lesDosetabell(data).rader.flatMap((rad) =>
+        tekst('tabell', DOSEKOLONNER.map(({ felt }) => rad[felt]).filter(Boolean).join(' · ')),
+      )
+    default: {
+      const kort = datakortFor(elementtype)
+      if (!kort) return []
+      const verdi = lesIntervallverdi(data)
+      return tekst('verdi', [formaterIntervall(verdi), verdi.forbehold].filter(Boolean).join(' — '), kort.tittel)
+    }
+  }
+}
+
 function elementdokumenter(side: Sokested['side'], element: Sideelement): Sokedokument[] {
   const panelDef = panelFor(element.panel)
   const panel = panelDef && { nokkel: panelDef.nokkel, tittel: panelDef.tittel }
-  const sted = (tittel?: string): Sokested => ({
-    side,
-    ...(panel && { panel }),
-    element: { id: element.id, ...(tittel && { tittel }) },
-  })
-  const dok = (felt: Sokefelt, tekst: string, tittel?: string): Sokedokument[] =>
-    tekst.trim() ? [{ sted: sted(tittel), felt, tekst }] : []
-
-  switch (element.elementtype) {
-    case ELEMENTTYPER.riktekst:
-      return dok('fritekst', klartekst(lesRiktekst(element.data).dokument))
-    case ELEMENTTYPER.kinetikk: {
-      const { tittel, dokument } = lesKinetikk(element.data)
-      return [...dok('overskrift', tittel, tittel), ...dok('fritekst', klartekst(dokument), tittel)]
-    }
-    case ELEMENTTYPER.dosetabell:
-      return lesDosetabell(element.data).rader.flatMap((rad) =>
-        dok('tabell', DOSEKOLONNER.map(({ felt }) => rad[felt]).filter(Boolean).join(' · ')),
-      )
-    default: {
-      const kort = datakortFor(element.elementtype)
-      if (!kort) return []
-      const verdi = lesIntervallverdi(element.data)
-      return dok('verdi', [formaterIntervall(verdi), verdi.forbehold].filter(Boolean).join(' — '), kort.tittel)
-    }
-  }
+  return elementtekster(element.elementtype, element.data).map(({ felt, tekst, tittel }) => ({
+    sted: { side, ...(panel && { panel }), element: { id: element.id, ...(tittel && { tittel }) } },
+    felt,
+    tekst,
+  }))
 }
 
 /**

@@ -17,8 +17,7 @@ npm test           # enhetstester, inkludert kontrastmåling av paletten
 npm run data       # bygger datasettene på nytt fra kildene i originaldata/
 ```
 
-`npm run data` bygger `src/data/analytter.json` (fra `kommentarer.pdf`),
-`src/data/rusmidler.json` (fra `rusmidler.md`) og
+`npm run data` bygger `src/data/analytter.json` (fra `kommentarer.pdf`) og
 `src/data/antihypertensiver.json` (fra `AHT.docx`). Datasettene er sjekket inn,
 så det trengs bare når kildene endres. PDF-lesingen krever Python 3 med
 `pdfplumber` (`pip install pdfplumber`); markdown- og Word-lesingen krever
@@ -121,11 +120,9 @@ valget huskes til neste gang.
 
 ```
 scripts/build_data.py       Leser kommentarer.pdf og bygger psykofarmakadatasettet
-scripts/build_rusmidler.py  Leser rusmidler.md og bygger rusmiddeldatasettet
 scripts/build_antihypertensiver.py
                             Leser AHT.docx og bygger antihypertensivdatasettet
 src/data/analytter.json     Generert datasett (sjekket inn)
-src/data/rusmidler.json     Generert datasett (sjekket inn)
 src/data/antihypertensiver.json
                             Generert datasett (sjekket inn)
 src/data/aliaser.json       Håndholdte ekstra søkeord per analyttkode
@@ -676,6 +673,14 @@ stoffer kommenteres etter tabellene i `originaldata/rusmidler.md`. Søkes ett av
 stoffene opp, går appen til fortolkningsmodulen for det i stedet for til
 konsentrasjonsbåndene.
 
+Reglene og kommentartekstene modulene bruker, er de publiserte
+scenarioregelsettene og kommentarene i Supabase (se `docs/scenarioregler.md`).
+Appen henter dem når den starter. Til de er hentet, sier modulen fra om det og
+har ingenting å kopiere; kunne de ikke hentes, eller består et regelsett ikke
+kontrollen, sier den hvorfor og lar brukeren prøve igjen. Den fortolker aldri
+med regler den ikke har fått. Hvilke moduler som finnes, og hvilke koder de
+dekker, står i `src/domain/rus.ts`.
+
 Kategorien skiller seg fra psykofarmaka på tre måter, og modulen er bygd rundt
 dem:
 
@@ -696,9 +701,8 @@ De fire fellesmodulene er `DIAZ · DMI · OXA`, `TRAM · OTRAM`, `KOD · MOR` og
 
 Analysemetoden er `SRUS` for alle, og kategorien er overskriften stoffet står
 under i kilden. Det ene unntaket er «Cannabis», som heter «Cannabinoider» i
-appen etter ønske fra klinikeren; oversettelsen står i `KATEGORI` i
-`scripts/build_rusmidler.py`, og skriptet stopper hvis kilden får en overskrift
-uten kategori.
+appen etter ønske fra klinikeren; det står ved THC-modulen i
+`src/domain/rus.ts`.
 
 ### Slik brukes modulen
 
@@ -785,13 +789,18 @@ amfetamin alene kan komme fra legemidler — og amfetamin får henvisningen dit.
 
 ### Rettelser gjort i teksten
 
-Rettelsene ligger i `meta.rettelser` i `src/data/rusmidler.json`, med kilde og
-begrunnelse, så de kan etterprøves mot dokumentet.
+Tekstene ble rettet da de ble hentet ut av `originaldata/rusmidler.md`, og
+står rettet i kommentarobjektene. Rettelsene er disse, så de kan etterprøves
+mot dokumentet:
 
-| Type | Fra | Til | Antall |
+| Type | Kommentar | Fra | Til |
 | --- | --- | --- | --- |
-| tankestrek | `40-120`, `2-10`, `600-1200`, `300-600`, `100-800`, `10-40`, `30-70`, `4-8` | `40–120`, `2–10`, `600–1200`, `300–600`, `100–800`, `10–40`, `30–70`, `4–8` | 8 |
-| tegnsetting | `Se kommentar for diazepam i serum`, `Se kommentar for metamfetamin i serum` | samme med avsluttende punktum | 2 |
+| tankestrek | Klonazepam | `40-120` | `40–120` |
+| tankestrek | Buprenorfin | `2-10` | `2–10` |
+| tankestrek | Metadon | `600-1200`, `300-600` | `600–1200`, `300–600` |
+| tankestrek | Amfetamin | `100-800`, `10-40`, `30-70`, `4-8` | `100–800`, `10–40`, `30–70`, `4–8` |
+| tegnsetting | Tillegg i diazepamgruppen | `Se kommentar for diazepam i serum` | med avsluttende punktum |
+| tegnsetting | Tillegg i amfetamingruppen | `Se kommentar for metamfetamin i serum` | med avsluttende punktum |
 
 Som ellers i appen er bindestrek byttet til tankestrek **bare** mellom to tall.
 `O-desmetyltramadol`, `N-desmetyldiazepam` og `LAR-behandling` står urørt. De
