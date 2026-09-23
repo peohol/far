@@ -3,22 +3,6 @@
   "sider": [
     58
   ],
-  "preparater": {
-    "navn": [
-      "Okedi",
-      "Risperdal",
-      "Risperdal Consta",
-      "Risperidon Sandoz",
-      "Risperidone Grindeks"
-    ],
-    "referanser": [
-      "fk-okedi",
-      "fk-risperdal",
-      "fk-risperdal-consta",
-      "fk-risperidon-sandoz",
-      "fk-risperidone-grindeks"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 20,

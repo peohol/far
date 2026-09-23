@@ -3,20 +3,6 @@
   "sider": [
     16
   ],
-  "preparater": {
-    "navn": [
-      "Fluoxetin Sandoz",
-      "Fluoxetin Viatris",
-      "Fluoxetine Vitabalans",
-      "Fontex"
-    ],
-    "referanser": [
-      "fk-fluoxetin-sandoz",
-      "fk-fluoxetin-viatris",
-      "fk-fluoxetine-vitabalans",
-      "fk-fontex-2care4"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 400,
@@ -267,18 +253,6 @@
       "forfattere": "Felleskatalogen",
       "aar": "",
       "lenke": "https://www.felleskatalogen.no/medisin/fluoxetin-viatris-viatris-559253"
-    },
-    "fk-fluoxetine-vitabalans": {
-      "tittel": "Fluoxetine Vitabalans «Vitabalans»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/fluoxetine-vitabalans-vitabalans-588815"
-    },
-    "fk-fontex-2care4": {
-      "tittel": "Fontex «2care4»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/fontex-2care4-686470"
     },
     "helsebiblioteket-fluoksetin": {
       "tittel": "Fluoksetin – behandlingsanbefaling ved forgiftning",

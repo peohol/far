@@ -3,21 +3,6 @@
   "sider": [
     21
   ],
-  "preparater": {
-    "navn": [
-      "Mirtazapin Bluefish",
-      "Mirtazapin HEXAL",
-      "Mirtazapin Orion",
-      "Remeron",
-      "Remeron-S"
-    ],
-    "referanser": [
-      "fk-mirtazapin-bluefish",
-      "fk-mirtazapin-hexal",
-      "fk-mirtazapin-orion",
-      "fk-remeron"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 50,
@@ -194,24 +179,6 @@
     ]
   },
   "referanser": {
-    "fk-mirtazapin-bluefish": {
-      "tittel": "Mirtazapin Bluefish «Bluefish»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/mirtazapin-bluefish-bluefish-575244"
-    },
-    "fk-mirtazapin-hexal": {
-      "tittel": "Mirtazapin HEXAL «HEXAL»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/mirtazapin-hexal-hexal-561580"
-    },
-    "fk-mirtazapin-orion": {
-      "tittel": "Mirtazapin Orion «Orion»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/mirtazapin-orion-orion-633220"
-    },
     "fk-remeron": {
       "tittel": "Remeron, Remeron-S «Organon»",
       "forfattere": "Felleskatalogen",

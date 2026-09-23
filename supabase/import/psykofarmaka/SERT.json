@@ -3,22 +3,6 @@
   "sider": [
     24
   ],
-  "preparater": {
-    "navn": [
-      "Sertralin Bluefish",
-      "Sertralin HEXAL",
-      "Sertralin Zentiva",
-      "Sertraline Accord",
-      "Zoloft"
-    ],
-    "referanser": [
-      "fk-sertralin-bluefish",
-      "fk-sertralin-hexal",
-      "fk-sertralin-zentiva",
-      "fk-sertraline-accord",
-      "fk-zoloft"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 20,
@@ -220,30 +204,6 @@
     ]
   },
   "referanser": {
-    "fk-sertralin-bluefish": {
-      "tittel": "Sertralin Bluefish «Bluefish»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/sertralin-bluefish-bluefish-568495"
-    },
-    "fk-sertralin-hexal": {
-      "tittel": "Sertralin HEXAL «HEXAL»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/sertralin-hexal-hexal-596732"
-    },
-    "fk-sertralin-zentiva": {
-      "tittel": "Sertralin Zentiva «Zentiva»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/sertralin-zentiva-zentiva-760489"
-    },
-    "fk-sertraline-accord": {
-      "tittel": "Sertraline Accord «Accord»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/sertraline-accord-accord-655239"
-    },
     "fk-zoloft": {
       "tittel": "Zoloft «2care4»",
       "forfattere": "Felleskatalogen",

@@ -3,20 +3,6 @@
   "sider": [
     14
   ],
-  "preparater": {
-    "navn": [
-      "Cymbalta",
-      "Duloxetin Pensa",
-      "Duloxetine Medical Valley",
-      "Duloxetine Viatris"
-    ],
-    "referanser": [
-      "fk-cymbalta-orifarm",
-      "fk-duloxetin-pensa",
-      "fk-duloxetine-medical-valley",
-      "fk-duloxetine-viatris"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 30,
@@ -135,23 +121,11 @@
     ]
   },
   "referanser": {
-    "fk-cymbalta-orifarm": {
-      "tittel": "Cymbalta «Orifarm»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/cymbalta-orifarm-669762"
-    },
     "fk-duloxetin-pensa": {
       "tittel": "Duloxetin Pensa «Pensa Pharma»",
       "forfattere": "Felleskatalogen",
       "aar": "",
       "lenke": "https://www.felleskatalogen.no/medisin/duloxetin-pensa-pensa-pharma-600087"
-    },
-    "fk-duloxetine-medical-valley": {
-      "tittel": "Duloxetine Medical Valley «Medical Valley»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/duloxetine-medical-valley-medical-valley-736548"
     },
     "fk-duloxetine-viatris": {
       "tittel": "Duloxetine Viatris «Viatris»",

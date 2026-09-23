@@ -305,10 +305,11 @@ beskrivelsen av PR-en som la det inn.
   produktsidene som referanser. Det er redaksjonelt faginnhold som redigeres
   som resten av siden.
 - Preparatnavnene fra Felleskatalogen og datoen de ble kontrollert, ble lagt
-  inn og så tatt bort igjen (`kursendringSql`, migrasjonen
+  inn med importen og så tatt bort igjen (`kursendringSql`, migrasjonen
   `*_psykofarmaka_kursendring.sql`): preparatdata skal hentes fra offentlige
-  legemiddeldata, ikke føres for hånd. Kortene står i historikken, i panelet
-  `fjernet`.
+  legemiddeldata, ikke føres for hånd. De står ikke lenger i datasettet, og
+  en fil med `preparater` avvises som ukjent felt. Kortene står i
+  historikken, i panelet `fjernet`.
 - Toksisk område og komatøs/fatal siterer Schulz og Hiemke (og
   Giftinformasjonens side der PDF-en lenker til den), fordi PDF-en oppgir dem
   som grunnlaget for toksisitetsdataene. Referanseområdet har ingen oppgitt
@@ -334,6 +335,12 @@ kommer referansene, deretter én blokk per kode, som hver er én transaksjon. En
 kode som alt har en side, hoppes over, og sider og referanser som finnes fra
 før, gjenbrukes. Uten `--migrasjoner` skrives den samme SQL-en som én fil, for
 SQL-editoren; der stopper den med en feil om administratoren mangler.
+
+Migrasjonene som er kjørt, er historikk og endres aldri; testen låser md5-en
+deres til den produksjonen har registrert. Datasettet kan endre seg etter dem
+(som da preparatnavnene ble tatt ut), så testen prøver ikke om de kan lages på
+nytt, men kjører dem slik produksjonen gjorde — med administratoren
+opprettet først — og sjekker at sidene viser nøyaktig det datasettet har nå.
 
 ## Tilgang
 

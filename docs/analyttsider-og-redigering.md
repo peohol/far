@@ -15,7 +15,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [x] Arbeidspakke 1: fundament for redigerbart faginnhold.
 - [x] Arbeidspakke 2: referansesystem.
 - [x] Arbeidspakke 3: analyttsider og navigasjon.
-- [ ] Arbeidspakke 4: import av psykofarmakainnhold (revidert 23.09.2026, omarbeides).
+- [x] Arbeidspakke 4: import av psykofarmakainnhold (revidert og omarbeidet 23.09.2026).
 - [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
 - [ ] Arbeidspakke 6: sammensatte analyttgrupper.
 - [ ] Arbeidspakke 7: THC-syre.
@@ -915,7 +915,7 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 ## Arbeidspakke 4 - Psykofarmakainnhold
 
-**Status:** [ ] Revidert 23.09.2026, omarbeides. Innholdet er lagt inn i produksjonsdatabasen fra PR #35, men PR-en merges ikke i nåværende form.
+**Status:** [x] Revidert 23.09.2026 og omarbeidet i PR #35, som kan slås sammen. Innholdet er i produksjonsdatabasen; preparatnavnene og kontrolldatoen er tatt bort der med en egen migrasjon.
 
 Beholdes:
 
@@ -924,7 +924,7 @@ Beholdes:
 - [x] Importer antidepressiver og antipsykotika (i produksjonsdatabasen; ikke på `main` ennå).
 - [x] Fyll panel 2–7 der kilden har data, koblet til riktige informasjonssider.
 - [x] Første revisjon peker tilbake til kilde/side der det er mulig (`revisjonskilde`, som også brukes av annet arbeid og beholdes).
-- [ ] Vurder indikasjonssammendragene og behold dem som redaksjonelt klinisk innhold der de er faglig nyttige (panel 5).
+- [x] Vurder indikasjonssammendragene og behold dem som redaksjonelt klinisk innhold der de er faglig nyttige (panel 5). Alle 35 beholdes: de er korte sammendrag av godkjent bruk med Felleskatalogens preparatomtaler som vanlige referanser. For doksepin (DOKSUM) sier sammendraget at Felleskatalogen ikke har indikasjonstekst.
 
 Erstattet (del 16 og 23):
 
@@ -933,10 +933,10 @@ Erstattet (del 16 og 23):
 
 Gjenstår i omarbeidingen:
 
-- [ ] Fjern den manuelle preparatnavnlisten og kontrolldatoen fra koden og importdatasettet.
-- [ ] Fjern preparatnavnene og kontrolldatoene som alt er i produksjonsdatabasen, med en ny migrasjon. De kjørte migrasjonene endres ikke.
-- [ ] Ingen ny, permanent panel-UI; innholdet vises gjennom seksjonsmodellen (arbeidspakke 9).
-- [ ] Alle migrasjonene som er kjørt i produksjon, er med byte-identiske når PR-en slås sammen.
+- [x] Fjern den manuelle preparatnavnlisten og kontrolldatoen fra koden og importdatasettet.
+- [x] Fjern preparatnavnene og kontrolldatoene som alt er i produksjonsdatabasen, med en ny migrasjon (`*_psykofarmaka_kursendring.sql`). De kjørte migrasjonene endres ikke.
+- [x] Ingen ny, permanent panel-UI; innholdet vises gjennom seksjonsmodellen (arbeidspakke 9).
+- [x] Alle migrasjonene som er kjørt i produksjon, er med byte-identiske når PR-en slås sammen (md5-en er låst i testen).
 
 ## Arbeidspakke 5 - Enkle kommentarer og konsentrasjonsregler
 

@@ -1,22 +1,49 @@
 {
   "kode": "KVE",
-  "sider": [49],
-  "preparater": {
-    "navn": ["Seroquel"],
-    "referanser": ["fk-seroquel"]
-  },
+  "sider": [
+    49
+  ],
   "viktige_data": {
-    "referanseomrade": { "nedre": 50, "ovre": 700, "enhet": "nmol/L", "forbehold": "" },
+    "referanseomrade": {
+      "nedre": 50,
+      "ovre": 700,
+      "enhet": "nmol/L",
+      "forbehold": ""
+    },
     "toksisk_omrade": {
-      "nedre": 3600, "ovre": null, "enhet": "nmol/L", "forbehold": "",
-      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-antipsykotika"]
+      "nedre": 3600,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-antipsykotika"
+      ]
     },
     "alvorlig_intoksikasjon": {
-      "nedre": 3600, "ovre": null, "enhet": "nmol/L", "forbehold": "Komatøs/fatal fra ca. (2400) 3600 nmol/L. Omtrentlig grense.",
-      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-antipsykotika"]
+      "nedre": 3600,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "Komatøs/fatal fra ca. (2400) 3600 nmol/L. Omtrentlig grense.",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-antipsykotika"
+      ]
     },
-    "halveringstid": { "nedre": 7, "ovre": 7, "enhet": "timer", "forbehold": "" },
-    "steady_state": { "nedre": 2, "ovre": 2, "enhet": "døgn", "forbehold": "Omtrentlig." }
+    "halveringstid": {
+      "nedre": 7,
+      "ovre": 7,
+      "enhet": "timer",
+      "forbehold": ""
+    },
+    "steady_state": {
+      "nedre": 2,
+      "ovre": 2,
+      "enhet": "døgn",
+      "forbehold": "Omtrentlig."
+    }
   },
   "farmakodynamikk": {
     "tekst": [
@@ -25,7 +52,10 @@
     ]
   },
   "dosering": {
-    "tekst": ["Immediate release: (25) 50–800 mg", "Extended release: 50–800 mg"]
+    "tekst": [
+      "Immediate release: (25) 50–800 mg",
+      "Extended release: 50–800 mg"
+    ]
   },
   "indikasjon": {
     "tekst": [
@@ -39,17 +69,60 @@
         ]
       }
     ],
-    "referanser": ["fk-seroquel"]
+    "referanser": [
+      "fk-seroquel"
+    ]
   },
   "farmakokinetikk": [
-    { "tittel": "Biotilgjengelighet", "tekst": ["Extended release: samtidig inntak av fettrikt måltid øker C_{max} og AUC."] },
-    { "tittel": "tmax", "tekst": ["1–1,8 timer (immediate release)", "6 timer (extended release)"] },
-    { "tittel": "t1/2", "tekst": ["7 timer"] },
-    { "tittel": "tss", "tekst": ["Ca. 2 døgn"] },
-    { "tittel": "Proteinbinding", "tekst": ["83 %"] },
-    { "tittel": "VD", "tekst": ["10 ± 4 L/kg"] },
-    { "tittel": "Eliminasjon", "tekst": ["Inaktive metabolitter. Utskilles i urin (73 %) og feces (21 %)."] },
-    { "tittel": "CYP-enzymer (substrat)", "tekst": ["3A4 (2D6)"] },
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "Extended release: samtidig inntak av fettrikt måltid øker C_{max} og AUC."
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "1–1,8 timer (immediate release)",
+        "6 timer (extended release)"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "7 timer"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "Ca. 2 døgn"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "83 %"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "10 ± 4 L/kg"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Inaktive metabolitter. Utskilles i urin (73 %) og feces (21 %)."
+      ]
+    },
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "3A4 (2D6)"
+      ]
+    },
     {
       "tittel": "Interaksjoner",
       "tekst": [
@@ -59,8 +132,12 @@
     },
     {
       "tittel": "Annet",
-      "tekst": ["Ratio metabolitt/modersubstans: 0,54–3,1 (AGNP). Metabolitt maks 35 % av moderstoff ved steady state (SPC)."],
-      "referanser": ["hiemke2017"]
+      "tekst": [
+        "Ratio metabolitt/modersubstans: 0,54–3,1 (AGNP). Metabolitt maks 35 % av moderstoff ved steady state (SPC)."
+      ],
+      "referanser": [
+        "hiemke2017"
+      ]
     }
   ],
   "serumkonsentrasjoner": {
@@ -69,15 +146,73 @@
         "stoff": "Kvetiapin (inkluderer både immediate og extended release. Obs ulik tmax.)",
         "kilde": "Jönsson et al. (2019)",
         "enhet": "nmol/L",
-        "doser": ["50 mg", "100 mg", "200 mg", "300 mg", "400 mg", "600 mg", "800 mg", "1000 mg", "Alle"],
-        "antall": [252, 474, 633, 718, 888, 832, 495, 110, 5853],
-        "p10": [16, 27, 36, 59, 60, 90, 89, 157, 37],
-        "median": [46, 85, 140, 205, 217, 328, 335, 430, 198],
-        "p90": [756, 151, 272, 499, 573, 693, 1053, 952, 1406]
+        "doser": [
+          "50 mg",
+          "100 mg",
+          "200 mg",
+          "300 mg",
+          "400 mg",
+          "600 mg",
+          "800 mg",
+          "1000 mg",
+          "Alle"
+        ],
+        "antall": [
+          252,
+          474,
+          633,
+          718,
+          888,
+          832,
+          495,
+          110,
+          5853
+        ],
+        "p10": [
+          16,
+          27,
+          36,
+          59,
+          60,
+          90,
+          89,
+          157,
+          37
+        ],
+        "median": [
+          46,
+          85,
+          140,
+          205,
+          217,
+          328,
+          335,
+          430,
+          198
+        ],
+        "p90": [
+          756,
+          151,
+          272,
+          499,
+          573,
+          693,
+          1053,
+          952,
+          1406
+        ]
       }
     ],
-    "referanseomradeprosjektet": { "doser": "50–1000 mg", "enhet": "nmol/L", "p10": 57, "p90": 639 },
-    "referanser": ["jonsson2019", "referanseomradeprosjektet"]
+    "referanseomradeprosjektet": {
+      "doser": "50–1000 mg",
+      "enhet": "nmol/L",
+      "p10": 57,
+      "p90": 639
+    },
+    "referanser": [
+      "jonsson2019",
+      "referanseomradeprosjektet"
+    ]
   },
   "referanser": {
     "fk-seroquel": {

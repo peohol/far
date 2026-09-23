@@ -3,18 +3,6 @@
   "sider": [
     60
   ],
-  "preparater": {
-    "navn": [
-      "Cisordinol",
-      "Cisordinol Depot",
-      "Cisordinol-Acutard"
-    ],
-    "referanser": [
-      "fk-cisordinol",
-      "fk-cisordinol-depot",
-      "fk-cisordinol-acutard"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 5,

@@ -3,20 +3,6 @@
   "sider": [
     54
   ],
-  "preparater": {
-    "navn": [
-      "Paliperidon Zentiva",
-      "Palmeux",
-      "Trevicta",
-      "Xeplion"
-    ],
-    "referanser": [
-      "fk-paliperidon-zentiva",
-      "fk-palmeux",
-      "fk-trevicta",
-      "fk-xeplion"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 20,

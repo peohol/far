@@ -4,14 +4,6 @@
     12,
     13
   ],
-  "preparater": {
-    "navn": [
-      "Sinequan"
-    ],
-    "referanser": [
-      "fk-sinequan-orifarm"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 180,

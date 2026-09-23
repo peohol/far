@@ -3,16 +3,6 @@
   "sider": [
     47
   ],
-  "preparater": {
-    "navn": [
-      "Clozapin HEXAL",
-      "Leponex"
-    ],
-    "referanser": [
-      "fk-clozapin-hexal",
-      "fk-leponex"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 300,

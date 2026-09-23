@@ -26,7 +26,6 @@ import {
   lesDosetabell,
   lesIntervallverdi,
   lesKinetikk,
-  lesPreparater,
   type Doserad,
   type Intervallverdi,
 } from './paneler'
@@ -88,7 +87,6 @@ export interface Importserum {
 export interface Importfil {
   kode: string
   sider: number[]
-  preparater?: { navn: string[]; referanser?: string[] }
   viktige_data?: Record<string, Importverdi>
   farmakodynamikk?: Importtekst
   dosering?: Importtekst
@@ -104,8 +102,8 @@ export interface Importkilde {
   /** Dokumentet innholdet er hentet fra, f.eks. «Psykofarmaka.pdf». */
   dokument: string
   /**
-   * Datoen preparatnavnene og indikasjonene ble kontrollert mot
-   * Felleskatalogen, som «2026-09-23». Står også i dataene deres.
+   * Datoen indikasjonene ble hentet fra Felleskatalogen, som «2026-09-23».
+   * Står i kilden til revisjonene deres.
    */
   felleskatalogen: string
 }
@@ -275,7 +273,6 @@ export function kinetikktittel(tittel: string): string {
 const FILFELT = new Set([
   'kode',
   'sider',
-  'preparater',
   'viktige_data',
   'farmakodynamikk',
   'dosering',
@@ -286,8 +283,8 @@ const FILFELT = new Set([
 ])
 const TEKSTPANELER = ['farmakodynamikk', 'dosering', 'indikasjon'] as const
 const DATAKORTTYPER = new Set<string>(DATAKORT.map((k) => k.type))
-/** Panelene som ble hentet fra Felleskatalogen, ikke fra PDF-en. */
-const FELLESKATALOGPANELER = new Set<string>(['identitet', 'indikasjon'])
+/** Panelene som er hentet fra Felleskatalogen, ikke fra PDF-en. */
+const FELLESKATALOGPANELER = new Set<string>(['indikasjon'])
 
 /** Verdien med nøklene sortert, så to like objekter sammenlignes likt uansett rekkefølge. */
 function kanonisk(verdi: unknown): unknown {
@@ -415,18 +412,6 @@ export function byggImportplan(
       return dokument
     }
 
-    // Panel 1: preparatnavnene, med datoen de ble kontrollert mot Felleskatalogen.
-    // Slik ble de lagt inn 23.09.2026; begge deler er tatt bort igjen
-    // etterpå (se `kursendringSql`), men står i historikken.
-    if (fil.preparater) {
-      const lest = lesPreparater({ navn: fil.preparater.navn })
-      if (lest.navn.length === 0) feil.push(`${hvor} preparater: ingen navn.`)
-      if (!erLik([...fil.preparater.navn].sort(), [...lest.navn].sort())) {
-        feil.push(`${hvor} preparater: navnene har tomme felt eller gjentakelser.`)
-      }
-      element('identitet', ELEMENTTYPER.preparater, { navn: lest.navn, kontrollert: kilde.felleskatalogen }, fil.preparater.referanser)
-    }
-
     // Panel 2: datakortene.
     for (const [type, verdi] of Object.entries(fil.viktige_data ?? {})) {
       if (!DATAKORTTYPER.has(type)) {
@@ -449,8 +434,7 @@ export function byggImportplan(
       if (!innhold) continue
       const dokument = tekst(innhold.tekst, panel)
       if (!dokument) continue
-      const data = FELLESKATALOGPANELER.has(panel) ? { dokument, kontrollert: kilde.felleskatalogen } : { dokument }
-      element(panel, ELEMENTTYPER.riktekst, data, innhold.referanser)
+      element(panel, ELEMENTTYPER.riktekst, { dokument }, innhold.referanser)
     }
 
     // Panel 6: farmakokinetikken, kort for kort.

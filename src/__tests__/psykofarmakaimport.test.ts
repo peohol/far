@@ -9,7 +9,8 @@
  * det: publisert, ført på administratoren som bestilte den, og med kilden i
  * hver revisjon.
  */
-import { readdirSync, readFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
+import { readFileSync } from 'node:fs'
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { byggKatalog, FORTOLKNINGSOPPFORINGER } from '../domain/analyttkatalog'
@@ -30,11 +31,45 @@ import {
   type Importplan,
 } from '../faginnhold/import'
 import { lagFaginnholdsleser, type Analyttsidedata } from '../faginnhold/lesing'
-import { lesIntervallverdi, lesPreparater, lesRiktekst } from '../faginnhold/paneler'
+import { lesIntervallverdi, lesRiktekst } from '../faginnhold/paneler'
 import { PSYKOFARMAKA_FILER, PSYKOFARMAKA_KILDE, PSYKOFARMAKA_REFERANSER, psykofarmakaplan } from '../faginnhold/psykofarmaka'
-import { faginnholdskall, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
+import {
+  faginnholdskall,
+  kjorMigrasjoner,
+  migrasjonsfiler,
+  nyDatabase,
+  opprettBruker,
+  type Faginnholdskall,
+} from './hjelp/testdatabase'
 
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
+const MIGRASJONSMAPPE = new URL('../../supabase/migrations/', import.meta.url)
+const FORSTE_IMPORTMIGRASJON = '20260923072247'
+
+/**
+ * Migrasjonene importen og kursendringen ble rullet ut som, med md5-en
+ * produksjonen har registrert for dem (`supabase_migrations.schema_migrations`).
+ * De er kjørt og skal aldri endres; datasettet kan endre seg etter dem.
+ */
+const KJORT_I_PRODUKSJONEN: Record<string, string> = {
+  '20260923064740_revisjonskilde.sql': 'd878f21f31b80f67459fcb4157c3a327',
+  '20260923072247_psykofarmaka_import_01.sql': '693bbd301854bb6fdb21c7900bf30e8c',
+  '20260923072458_psykofarmaka_import_02.sql': '9b46c8c37a3ab70e7f4c0360e9a2b59e',
+  '20260923072751_psykofarmaka_import_03.sql': 'adeffa7ac56543aa0352c1c8c49d429d',
+  '20260923072813_psykofarmaka_import_05.sql': '9f628f5d6df7241198f83060bf07622c',
+  '20260923072824_psykofarmaka_import_12.sql': 'ce26f70a05c90fa133720ca53dafe994',
+  '20260923073223_psykofarmaka_import_08.sql': '5275b43e4d3629620728930cb0047a41',
+  '20260923073243_psykofarmaka_import_04.sql': 'e0fbcc7a18068f38c8db1b01d7b3b62b',
+  '20260923073308_psykofarmaka_import_11.sql': 'fd0f66065278a0501093bc7c9a5c45e7',
+  '20260923073309_psykofarmaka_import_14.sql': 'c5cce369527890f60f9180bc7aa2ae64',
+  '20260923073453_psykofarmaka_import_09.sql': 'd7175855f0c226c9aa95d41daff860e9',
+  '20260923073455_psykofarmaka_import_15.sql': 'ae7492d3269983d0f4fd7f765fc33751',
+  '20260923073513_psykofarmaka_import_13.sql': 'ec3494ab545b43ddc8655e771a9b0cd2',
+  '20260923073520_psykofarmaka_import_06.sql': '00df743f6985e0815d50fc4f02719344',
+  '20260923073659_psykofarmaka_import_10.sql': '31566db9719951adc53ef5d81a9bdf05',
+  '20260923073743_psykofarmaka_import_07.sql': '39f5bf66cf1b192ddd429a5a00ed3869',
+  '20260923085447_psykofarmaka_kursendring.sql': '46294ad63d9de983aaf8d6bdb9d59dfe',
+}
 
 /* --- Datasettet ----------------------------------------------------------- */
 
@@ -57,16 +92,18 @@ describe('datasettet', () => {
     }
   })
 
-  it('oppgir kilden til alt som kommer fra Felleskatalogen, med datoen det ble kontrollert', () => {
-    const fraFelleskatalogen = plan.koder.flatMap((k) =>
-      k.elementer.filter((e) => e.panel === 'identitet' || e.panel === 'indikasjon'),
-    )
-    expect(fraFelleskatalogen.length).toBeGreaterThan(0)
-    for (const e of fraFelleskatalogen) {
-      expect(e.referanser.some((r) => r.startsWith('fk-')), `${e.panel}`).toBe(true)
-      expect(e.data.kontrollert).toBe(PSYKOFARMAKA_KILDE.felleskatalogen)
+  it('oppgir Felleskatalogen som kilde for indikasjonene, uten en kontrolldato å vedlikeholde', () => {
+    const indikasjoner = plan.koder.flatMap((k) => k.elementer.filter((e) => e.panel === 'indikasjon'))
+    expect(indikasjoner).toHaveLength(plan.koder.length)
+    for (const e of indikasjoner) {
+      expect(e.referanser.some((r) => r.startsWith('fk-')), e.panel).toBe(true)
+      expect(Object.keys(e.data)).toEqual(['dokument'])
       expect(e.kilde).toBe('Hentet fra Felleskatalogen 23.09.2026')
     }
+  })
+
+  it('har ingen preparatnavn: de skal hentes fra offentlige legemiddeldata', () => {
+    expect(plan.koder.flatMap((k) => k.elementer).filter((e) => e.panel === 'identitet')).toEqual([])
   })
 
   it('siterer grunnlaget for toksisitetsdataene på kortene for toksisk og alvorlig intoksikasjon', () => {
@@ -81,7 +118,7 @@ describe('datasettet', () => {
     for (const kode of plan.koder) {
       const fil = PSYKOFARMAKA_FILER.find((f) => f.kode === kode.kode)!
       expect(kode.kilde).toBe(`Importert fra Psykofarmaka.pdf, ${sidetekst(fil.sider)}`)
-      for (const e of kode.elementer.filter((e) => e.panel !== 'identitet' && e.panel !== 'indikasjon')) {
+      for (const e of kode.elementer.filter((e) => e.panel !== 'indikasjon')) {
         expect(e.kilde).toBe(kode.kilde)
       }
     }
@@ -180,6 +217,7 @@ describe('byggesteinene', () => {
         kode: 'SERT',
         sider: [24],
         ukjent: true,
+        preparater: { navn: ['Preparat'] },
         viktige_data: { referanseomrade: { nedre: 20, ovre: 10, enhet: 'nmol/L' } },
         farmakodynamikk: { tekst: ['Tekst'], referanser: ['mangler'] },
         serumkonsentrasjoner: {
@@ -198,6 +236,7 @@ describe('byggesteinene', () => {
       expect.arrayContaining([
         'FINNESIKKE: koden finnes ikke i katalogen.',
         'SERT: ukjent felt «ukjent».',
+        'SERT: ukjent felt «preparater».',
         'SERT referanseomrade: Nedre grense kan ikke være høyere enn øvre.',
         'SERT farmakodynamikk/riktekst: referansen «mangler» er ikke definert.',
         'SERT serumkonsentrasjoner «S»: kolonnene må ha like mange verdier som dosene.',
@@ -218,66 +257,106 @@ describe('importen i databasen', () => {
 
   const antallObjekter = async () =>
     (await kall.fasit<{ n: number }>('select count(*)::int as n from public.redigerbare_objekter'))[0]!.n
+  const antallRevisjoner = async () =>
+    (await kall.fasit<{ n: number }>('select count(*)::int as n from public.objektrevisjoner'))[0]!.n
+  const synlige = (side: Analyttsidedata) => side.elementer.filter((e) => e.innhold.panel !== 'fjernet')
 
   beforeAll(async () => {
-    db = await nyDatabase()
-    admin = await opprettBruker(db, { brukernavn: 'redaktor', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
+    // Slik produksjonen fikk den: administratoren fantes da importen og
+    // kursendringen ble rullet ut, som migrasjonene de er lagret som.
+    db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
+    admin = await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
     bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lars', etternavn: 'Leser', rolle: 'user' })
+    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON })
     kall = faginnholdskall(db, admin)
     plan = psykofarmakaplan(katalog)
-    // Slik den rulles ut: som migrasjoner.
-    for (const migrasjon of importmigrasjoner(plan, 'redaktor')) await db.exec(migrasjon)
 
     const leser = lagFaginnholdsleser(kall.klientFor(bruker))
     sider = new Map()
     for (const { kode } of plan.koder) sider.set(kode, await leser.lesAnalyttside(kode, 'publisert'))
   }, 120_000)
 
-  it('publiserer hver side med alt innholdet, synlig for vanlige brukere', () => {
+  it('viser nøyaktig det datasettet har, side for side, synlig for vanlige brukere', () => {
+    const referanse = new Map(plan.referanser.map((r) => [r.nokkel, r.innhold]))
+    const sortert = <T extends { panel: string; elementtype: string; posisjon: number }>(liste: T[]) =>
+      [...liste].sort((a, b) => `${a.panel}/${a.elementtype}/${a.posisjon}`.localeCompare(`${b.panel}/${b.elementtype}/${b.posisjon}`))
     for (const kode of plan.koder) {
       const side = sider.get(kode.kode)!
       expect(side.analytt?.innhold.kode, kode.kode).toBe(kode.kode)
       expect(side.infoside?.innhold.navn).toBe(kode.hovedside.navn)
       expect(side.komponenter.map((k) => k.innhold.navn)).toEqual(kode.komponenter.map((k) => k.navn))
-      expect(side.elementer).toHaveLength(kode.elementer.length)
+      const iDatabasen = new Map(side.referanser.map((r) => [r.id, r.innhold]))
+      const vist = synlige(side).map(({ innhold: { panel, posisjon, elementtype, data, referanser = [] } }) => ({
+        panel,
+        posisjon,
+        elementtype,
+        data,
+        referanser: referanser.map((id) => iDatabasen.get(id)),
+      }))
+      const forventet = kode.elementer.map(({ panel, posisjon, elementtype, data, referanser }) => ({
+        panel,
+        posisjon,
+        elementtype,
+        data,
+        referanser: referanser.map((n) => expect.objectContaining(referanse.get(n))),
+      }))
+      expect(sortert(vist), kode.kode).toEqual(sortert(forventet))
     }
   })
 
   it('legger inn verdiene slik datasettet har dem', () => {
     const side = sider.get('AMTNORSUM')!
-    const element = (type: string) => side.elementer.find((e) => e.innhold.elementtype === type)!
+    const element = (type: string) => synlige(side).find((e) => e.innhold.elementtype === type)!
     expect(lesIntervallverdi(element('referanseomrade').innhold.data)).toEqual({
       nedre: 400,
       ovre: 900,
       enhet: 'nmol/L',
       forbehold: 'Amitriptylin + nortriptylin.',
     })
-    expect(lesPreparater(element('preparater').innhold.data).navn).toEqual(['Amitriptylin Abcur', 'Amitriptylin Orifarm', 'Sarotex'])
-    expect(element('preparater').innhold.data).toMatchObject({ kontrollert: '2026-09-23' })
-    const indikasjon = side.elementer.find((e) => e.innhold.panel === 'indikasjon')!
+    const indikasjon = synlige(side).find((e) => e.innhold.panel === 'indikasjon')!
     expect(lesRiktekst(indikasjon.innhold.data).dokument.content?.length).toBeGreaterThan(0)
-    expect(indikasjon.innhold.data).toMatchObject({ kontrollert: '2026-09-23' })
   })
 
-  it('viser kilden i historikken: siden i PDF-en, eller Felleskatalogen med dato', () => {
+  it('viser kilden i historikken: siden i PDF-en, eller hva kursendringen gjorde', () => {
     const side = sider.get('AMTNORSUM')!
-    for (const e of side.elementer) {
-      const fraFelleskatalogen = e.innhold.panel === 'identitet' || e.innhold.panel === 'indikasjon'
-      expect(e.kilde).toBe(fraFelleskatalogen ? 'Hentet fra Felleskatalogen 23.09.2026' : 'Importert fra Psykofarmaka.pdf, side 7')
+    for (const e of synlige(side)) {
+      expect(e.kilde).toBe(e.innhold.panel === 'indikasjon' ? KURSENDRINGSKILDER.kontrolldato : 'Importert fra Psykofarmaka.pdf, side 7')
       expect([e.endret_av_fornavn, e.endret_av_etternavn]).toEqual(['Rita', 'Redaktør'])
     }
     expect(side.infoside?.kilde).toBe('Importert fra Psykofarmaka.pdf, side 7')
   })
 
-  it('fører alt på administratoren som opprettet, og publiserer den første revisjonen', async () => {
+  it('tok bort preparatnavnene og kontrolldatoen i nye revisjoner, så de står i historikken', async () => {
+    for (const kode of plan.koder) {
+      const side = sider.get(kode.kode)!
+      const preparater = side.elementer.filter((e) => e.innhold.elementtype === 'preparater')
+      expect(preparater, kode.kode).toHaveLength(1)
+      expect(preparater[0]).toMatchObject({ revisjon: 2, publisert_revisjon: 2, kilde: KURSENDRINGSKILDER.preparater })
+      expect(preparater[0]!.innhold.panel).toBe('fjernet')
+      const indikasjon = synlige(side).find((e) => e.innhold.panel === 'indikasjon')!
+      expect(indikasjon).toMatchObject({ revisjon: 2, publisert_revisjon: 2, kilde: KURSENDRINGSKILDER.kontrolldato })
+      for (const e of synlige(side).filter((e) => e.id !== indikasjon.id)) expect(e.revisjon).toBe(1)
+    }
+    const forste = await kall.fasit<{ data: Record<string, unknown> }>(
+      "select innhold->'data' as data from public.objektrevisjoner where revisjon = 1 and innhold->>'panel' = 'indikasjon'",
+    )
+    expect(forste).toHaveLength(plan.koder.length)
+    for (const { data } of forste) expect(data.kontrollert).toBe(PSYKOFARMAKA_KILDE.felleskatalogen)
+  })
+
+  it('fører alt på administratoren som opprettet, og publiserer hver revisjon', async () => {
     const rader = await kall.fasit<{ utfort_av: string; handling: string; revisjon: number; kilde: string | null }>(
       'select utfort_av, handling, revisjon, kilde from public.objektrevisjoner',
     )
     expect(rader.length).toBeGreaterThan(0)
-    for (const rad of rader) expect(rad).toMatchObject({ utfort_av: admin, handling: 'opprettet', revisjon: 1 })
+    for (const rad of rader) {
+      expect(rad.utfort_av).toBe(admin)
+      if (rad.revisjon === 1) expect(rad).toMatchObject({ handling: 'opprettet' })
+      else expect(rad).toMatchObject({ handling: 'endret', revisjon: 2, kilde: expect.stringMatching(/^Tatt bort: /) })
+    }
     expect(rader.every((r) => r.kilde !== null)).toBe(true)
     const upublisert = await kall.fasit(
-      "select 1 from public.redigerbare_objekter o where not exists (select 1 from public.objekttilstander t where t.objekt_id = o.id and t.tilstand = 'publisert')",
+      "select 1 from public.objekttilstander u join public.objekttilstander p on p.objekt_id = u.objekt_id and p.tilstand = 'publisert' where u.tilstand = 'utkast' and u.revisjon <> p.revisjon",
     )
     expect(upublisert).toEqual([])
   })
@@ -288,17 +367,20 @@ describe('importen i databasen', () => {
   })
 
   it('legger hver referanse inn én gang, og nummererer dem på siden', async () => {
-    const [antall] = await kall.fasit<{ n: number }>(
-      "select count(*)::int as n from public.referanser where tilstand = 'publisert'",
+    const referanser = await kall.fasit<{ tittel: string }>(
+      "select tittel from public.referanser where tilstand = 'publisert'",
     )
-    expect(antall?.n).toBe(plan.referanser.length)
+    for (const { innhold } of plan.referanser) {
+      expect(referanser.filter((r) => r.tittel === innhold.tittel), innhold.tittel).toHaveLength(1)
+    }
     const liste = byggSidemodell(sider.get('AMTNORSUM')!).referanseliste
     expect(liste.map((r) => r.referanse.tittel)).toContain(PSYKOFARMAKA_REFERANSER.reis2009!.tittel)
   })
 
   it('kan kjøres igjen uten å legge inn noe to ganger', async () => {
     const for_ = await antallObjekter()
-    for (const blokk of importSql(plan, 'redaktor')) await db.exec(blokk)
+    for (const blokk of importSql(plan, 'peohol')) await db.exec(blokk)
+    await db.exec(kursendringSql('peohol'))
     expect(await antallObjekter()).toBe(for_)
   })
 
@@ -307,7 +389,7 @@ describe('importen i databasen', () => {
   })
 
   it('får tekster inn i databasen tegn for tegn, også usynlige tegn og lange tekster', async () => {
-    const tekster = ["O'Brien \\ 1\u00a0026", 'x'.repeat(401) + '\u00a0' + "'".repeat(3), '']
+    const tekster = ["O'Brien \\ 1 026", 'x'.repeat(401) + ' ' + "'".repeat(3), '']
     for (const tekst of tekster) {
       const [rad] = await kall.fasit<{ t: string }>(`select ${lit(tekst)} as t`)
       expect(rad!.t).toBe(tekst)
@@ -315,9 +397,10 @@ describe('importen i databasen', () => {
   })
 
   it('gjør ingenting som migrasjon der administratoren ikke finnes', async () => {
-    const for_ = await antallObjekter()
+    const [objekter, revisjoner] = [await antallObjekter(), await antallRevisjoner()]
     await db.exec(importmigrasjoner(plan, 'leser')[0]!)
-    expect(await antallObjekter()).toBe(for_)
+    await db.exec(kursendringSql('leser'))
+    expect([await antallObjekter(), await antallRevisjoner()]).toEqual([objekter, revisjoner])
   })
 
   it('gir vanlige endringer i appen ingen kilde', async () => {
@@ -330,38 +413,6 @@ describe('importen i databasen', () => {
     expect(rad!.kilde).toBeNull()
     const utkast = await lagFaginnholdsleser(kall.klientFor(admin)).lesAnalyttside('AMTNORSUM', 'utkast')
     expect(utkast.elementer.find((e) => e.id === element.id)).not.toHaveProperty('kilde')
-  })
-
-  it('kursendringen tar bort preparatnavnene og kontrolldatoen, og beholder resten', async () => {
-    const leser = lagFaginnholdsleser(kall.klientFor(bruker))
-    const for_ = await leser.lesAnalyttside('SERT', 'publisert')
-    await db.exec(kursendringSql('redaktor'))
-    const etter = await leser.lesAnalyttside('SERT', 'publisert')
-
-    const synlige = (s: Analyttsidedata) => s.elementer.filter((e) => e.innhold.panel !== 'fjernet')
-    expect(synlige(etter).some((e) => e.innhold.elementtype === 'preparater')).toBe(false)
-    expect(synlige(etter)).toHaveLength(synlige(for_).length - 1)
-    const indikasjon = etter.elementer.find((e) => e.innhold.panel === 'indikasjon')!
-    expect(indikasjon.innhold.data).not.toHaveProperty('kontrollert')
-    expect(indikasjon.innhold.data).toEqual({ dokument: for_.elementer.find((e) => e.id === indikasjon.id)!.innhold.data.dokument })
-    expect(indikasjon.kilde).toBe(KURSENDRINGSKILDER.kontrolldato)
-    expect(etter.elementer.find((e) => e.innhold.elementtype === 'preparater')?.kilde).toBe(KURSENDRINGSKILDER.preparater)
-
-    // Alt annet står urørt, og et nytt forsøk gjør ingenting.
-    for (const e of synlige(etter).filter((e) => e.id !== indikasjon.id)) {
-      expect(e.revisjon).toBe(1)
-    }
-    const revisjoner = async () => (await kall.fasit<{ n: number }>('select count(*)::int as n from public.objektrevisjoner'))[0]!.n
-    const antall = await revisjoner()
-    await db.exec(kursendringSql('redaktor'))
-    expect(await revisjoner()).toBe(antall)
-  })
-
-  it('kursendringen gjør ingenting der administratoren ikke finnes', async () => {
-    const revisjoner = async () => (await kall.fasit<{ n: number }>('select count(*)::int as n from public.objektrevisjoner'))[0]!.n
-    const antall = await revisjoner()
-    await db.exec(kursendringSql('leser'))
-    expect(await revisjoner()).toBe(antall)
   })
 })
 
@@ -376,18 +427,17 @@ describe('importen som migrasjoner', () => {
     expect(filer.length).toBeLessThan(blokker.length)
   })
 
-  it('er det som ligger i migrasjonene, fil for fil', () => {
-    const mappe = new URL('../../supabase/migrations/', import.meta.url)
-    const filer = readdirSync(mappe)
-      .filter((f) => /^\d+_psykofarmaka_import_\d+\.sql$/.test(f))
-      .sort((a, b) => a.split('_').at(-1)!.localeCompare(b.split('_').at(-1)!))
-    expect(filer.map((f) => readFileSync(new URL(f, mappe), 'utf8'))).toEqual(importmigrasjoner(plan, 'peohol'))
+  it('lar migrasjonene som er kjørt i produksjonen, stå byte for byte som de ble kjørt', () => {
+    const kjorte = migrasjonsfiler().filter((f) => /_(revisjonskilde|psykofarmaka_\w+)\.sql$/.test(f))
+    const avtrykk = Object.fromEntries(
+      kjorte.map((f) => [f, createHash('md5').update(readFileSync(new URL(f, MIGRASJONSMAPPE))).digest('hex')]),
+    )
+    expect(avtrykk).toEqual(KJORT_I_PRODUKSJONEN)
   })
 
   it('har kursendringen i sin egen migrasjon', () => {
-    const mappe = new URL('../../supabase/migrations/', import.meta.url)
-    const filer = readdirSync(mappe).filter((f) => /^\d+_psykofarmaka_kursendring\.sql$/.test(f))
-    expect(filer.map((f) => readFileSync(new URL(f, mappe), 'utf8'))).toEqual([kursendringSql('peohol')])
+    const filer = migrasjonsfiler().filter((f) => /^\d+_psykofarmaka_kursendring\.sql$/.test(f))
+    expect(filer.map((f) => readFileSync(new URL(f, MIGRASJONSMAPPE), 'utf8'))).toEqual([kursendringSql('peohol')])
   })
 
   it('har ingen usynlige tegn, som kan bli byttet ut på veien inn i databasen', () => {

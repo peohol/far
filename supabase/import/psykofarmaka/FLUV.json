@@ -3,14 +3,6 @@
   "sider": [
     17
   ],
-  "preparater": {
-    "navn": [
-      "Fevarin"
-    ],
-    "referanser": [
-      "fk-fevarin"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 60,

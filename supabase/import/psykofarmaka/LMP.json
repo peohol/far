@@ -1,28 +1,59 @@
 {
   "kode": "LMP",
-  "sider": [50],
-  "preparater": {
-    "navn": ["Levomepromazine Orion"],
-    "referanser": ["fk-levomepromazine-orion"]
-  },
+  "sider": [
+    50
+  ],
   "viktige_data": {
-    "referanseomrade": { "nedre": 10, "ovre": 300, "enhet": "nmol/L", "forbehold": "Tidligere ref.omr. høydose: 150–800 (1500) nmol/L." },
+    "referanseomrade": {
+      "nedre": 10,
+      "ovre": 300,
+      "enhet": "nmol/L",
+      "forbehold": "Tidligere ref.omr. høydose: 150–800 (1500) nmol/L."
+    },
     "toksisk_omrade": {
-      "nedre": 970, "ovre": null, "enhet": "nmol/L", "forbehold": "",
-      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-antipsykotika"]
+      "nedre": 970,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-antipsykotika"
+      ]
     },
     "alvorlig_intoksikasjon": {
-      "nedre": 1500, "ovre": null, "enhet": "nmol/L", "forbehold": "Komatøs/fatal. Omtrentlig grense.",
-      "referanser": ["schulz2020", "hiemke2017", "helsebiblioteket-antipsykotika"]
+      "nedre": 1500,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "Komatøs/fatal. Omtrentlig grense.",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-antipsykotika"
+      ]
     },
-    "halveringstid": { "nedre": 15, "ovre": 80, "enhet": "timer", "forbehold": "" },
-    "steady_state": { "nedre": 3, "ovre": 6, "enhet": "døgn", "forbehold": "" }
+    "halveringstid": {
+      "nedre": 15,
+      "ovre": 80,
+      "enhet": "timer",
+      "forbehold": ""
+    },
+    "steady_state": {
+      "nedre": 3,
+      "ovre": 6,
+      "enhet": "døgn",
+      "forbehold": ""
+    }
   },
   "farmakodynamikk": {
-    "tekst": ["Blokade av monoaminerg transmisjon, særlig dopaminerg, adrenerg og noradrenerg."]
+    "tekst": [
+      "Blokade av monoaminerg transmisjon, særlig dopaminerg, adrenerg og noradrenerg."
+    ]
   },
   "dosering": {
-    "tekst": ["Tablett: 25–400 mg"]
+    "tekst": [
+      "Tablett: 25–400 mg"
+    ]
   },
   "indikasjon": {
     "tekst": [
@@ -33,17 +64,59 @@
         ]
       }
     ],
-    "referanser": ["fk-levomepromazine-orion"]
+    "referanser": [
+      "fk-levomepromazine-orion"
+    ]
   },
   "farmakokinetikk": [
-    { "tittel": "Biotilgjengelighet", "tekst": ["50 %"] },
-    { "tittel": "tmax", "tekst": ["1–3 timer"] },
-    { "tittel": "t1/2", "tekst": ["15–80 timer"] },
-    { "tittel": "tss", "tekst": ["3–6 døgn"] },
-    { "tittel": "Proteinbinding", "tekst": ["Ikke angitt"] },
-    { "tittel": "VD", "tekst": ["5,8 L/kg"] },
-    { "tittel": "Eliminasjon", "tekst": ["Metabolismen er ikke godt kjent, men utskilles primært som konjugerte metabolitter."] },
-    { "tittel": "CYP-enzymer (substrat)", "tekst": ["2D6"] },
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "50 %"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "1–3 timer"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "15–80 timer"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "3–6 døgn"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Ikke angitt"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "5,8 L/kg"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Metabolismen er ikke godt kjent, men utskilles primært som konjugerte metabolitter."
+      ]
+    },
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "2D6"
+      ]
+    },
     {
       "tittel": "Interaksjoner",
       "tekst": [
@@ -53,8 +126,15 @@
     }
   ],
   "serumkonsentrasjoner": {
-    "referanseomradeprosjektet": { "doser": "…?", "enhet": "nmol/L", "p10": 14, "p90": 158 },
-    "referanser": ["referanseomradeprosjektet"]
+    "referanseomradeprosjektet": {
+      "doser": "…?",
+      "enhet": "nmol/L",
+      "p10": 14,
+      "p90": 158
+    },
+    "referanser": [
+      "referanseomradeprosjektet"
+    ]
   },
   "referanser": {
     "fk-levomepromazine-orion": {

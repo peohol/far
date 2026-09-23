@@ -3,16 +3,6 @@
   "sider": [
     23
   ],
-  "preparater": {
-    "navn": [
-      "Paroxetin Aristo",
-      "Seroxat"
-    ],
-    "referanser": [
-      "fk-paroxetin-aristo",
-      "fk-seroxat"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 40,
@@ -205,12 +195,6 @@
     ]
   },
   "referanser": {
-    "fk-paroxetin-aristo": {
-      "tittel": "Paroxetin Aristo «Aristo Pharma»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/paroxetin-aristo-aristo-pharma-673904"
-    },
     "fk-seroxat": {
       "tittel": "Seroxat «GlaxoSmithKline»",
       "forfattere": "Felleskatalogen",

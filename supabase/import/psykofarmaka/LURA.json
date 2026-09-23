@@ -3,16 +3,6 @@
   "sider": [
     51
   ],
-  "preparater": {
-    "navn": [
-      "Latuda",
-      "Lurasidone Accord"
-    ],
-    "referanser": [
-      "fk-latuda",
-      "fk-lurasidone-accord"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 5,
@@ -132,12 +122,6 @@
       "forfattere": "Felleskatalogen",
       "aar": "",
       "lenke": "https://www.felleskatalogen.no/medisin/latuda-angelini-pharma-589608"
-    },
-    "fk-lurasidone-accord": {
-      "tittel": "Lurasidone Accord «Accord»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/lurasidone-accord-accord-761387"
     }
   }
 }

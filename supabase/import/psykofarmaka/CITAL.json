@@ -3,17 +3,6 @@
   "sider": [
     10
   ],
-  "preparater": {
-    "navn": [
-      "Cipramil",
-      "Citalopram Orion"
-    ],
-    "referanser": [
-      "fk-cipramil-lundbeck",
-      "fk-cipramil-2care4",
-      "fk-citalopram-orion"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 70,
@@ -202,18 +191,6 @@
     ]
   },
   "referanser": {
-    "fk-cipramil-lundbeck": {
-      "tittel": "Cipramil «Lundbeck»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/cipramil-lundbeck-547492"
-    },
-    "fk-cipramil-2care4": {
-      "tittel": "Cipramil «2care4»",
-      "forfattere": "Felleskatalogen",
-      "aar": "",
-      "lenke": "https://www.felleskatalogen.no/medisin/cipramil-2care4-686468"
-    },
     "fk-citalopram-orion": {
       "tittel": "Citalopram Orion «Orion»",
       "forfattere": "Felleskatalogen",

@@ -3,14 +3,6 @@
   "sider": [
     20
   ],
-  "preparater": {
-    "navn": [
-      "Mianserin Viatris"
-    ],
-    "referanser": [
-      "fk-mianserin-viatris"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 150,

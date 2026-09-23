@@ -3,23 +3,6 @@
   "sider": [
     52
   ],
-  "preparater": {
-    "navn": [
-      "Olanzapine Accord",
-      "Olanzapine Teva",
-      "Olanzapine Viatris",
-      "ZypAdhera",
-      "Zyprexa",
-      "Zyprexa Velotab"
-    ],
-    "referanser": [
-      "fk-olanzapine-accord",
-      "fk-olanzapine-teva",
-      "fk-olanzapine-viatris",
-      "fk-zypadhera",
-      "fk-zyprexa"
-    ]
-  },
   "viktige_data": {
     "referanseomrade": {
       "nedre": 30,
