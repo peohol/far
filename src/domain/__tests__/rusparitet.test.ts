@@ -49,13 +49,18 @@ describe('dagens rusmiddelregler som scenarioregelsett', () => {
   })
 
   it('er gyldige', () => {
-    for (const regelsett of RUS_REGELSETT) expect(validerScenarioregelsett(regelsett), regelsett.modul).toEqual([])
+    for (const regelsett of RUS_REGELSETT) {
+      expect(validerScenarioregelsett(regelsett, RUS_KOMMENTARER), regelsett.modul).toEqual([])
+    }
   })
 
-  it('tar med hver kommentartekst i datasettet, uendret og bare én gang', () => {
-    const tatt = RUS_REGELSETT.flatMap((r) => r.kommentarer)
-    expect(tatt.map((k) => k.id).sort()).toEqual([...RUS_KOMMENTARER.keys()].sort())
-    for (const k of tatt) expect(k.tekst, k.id).toBe(RUS_KOMMENTARER.get(k.id))
+  it('viser til hver kommentartekst i datasettet, og ikke til noe annet', () => {
+    const brukt = new Set(
+      RUS_REGELSETT.flatMap((r) =>
+        r.scenarier.flatMap((s) => (s.utfall.type === 'kommentarer' ? s.utfall.plasseringer.map((p) => p.kommentar) : [])),
+      ),
+    )
+    expect([...brukt].sort()).toEqual([...RUS_KOMMENTARER.keys()].sort())
   })
 })
 
@@ -80,7 +85,7 @@ describe.each(par.map(([modul, regelsett]) => [modul.id, modul, regelsett] as co
         for (const verdier of kombinasjoner(modul.verdifelter(pavist).map((f) => f.kode))) {
           for (const rekkefolge of [pavist, [...pavist].reverse()]) {
             const inn = { pavist: rekkefolge, verdier }
-            const ny = kjorScenarier(regelsett, inn)
+            const ny = kjorScenarier(regelsett, RUS_KOMMENTARER, inn)
             expect(ny.resultat, JSON.stringify(inn)).toEqual(modul.fortolk(inn))
             if (ny.scenario) truffet.add(ny.scenario.nokkel)
             antall++

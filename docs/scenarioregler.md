@@ -16,16 +16,24 @@ Et **scenarioregelsett** gjelder én fortolkningsmodul, f.eks.
 | `parametere` | Navngitte grenser, lagret som andel (0,1 = 10 %) |
 | `scenarier` | Nøyaktig hvilke analytter som er påvist, vilkår på forholdstallene, og utfallet |
 | `verdihjelp` | Hvorfor modulen ber om konsentrasjoner |
-| `kommentarer` | Kommentartekstene, med en ID hver — ren tekst, det som kopieres |
 
 Et **utfall** er enten kommentarer — hver med rolle (hoved/tillegg), merke,
 kommentar-ID og kodene den limes inn på — og notiser, eller en eksplisitt
 **manuell vurdering** med melding og veiledning og ingenting å kopiere.
 
-Kommentartekstene hører til regelsettet, og scenariene peker på dem med ID.
-Samme tekst kan dermed brukes av flere scenarier uten å stå flere ganger, og
-hele regelsettet — tekstene med — versjoneres, publiseres og gjenopprettes
-samlet.
+## Kommentarene er egne objekter
+
+Kommentar og regel er separate objekter (planen, del 2 og 11). En
+kommentar — teksten som limes inn i pasientsvaret — er et eget objekt med
+stabil ID (`src/domain/kommentarobjekt.ts`): ren tekst, uten mellomrom i
+endene. Regelsettet inneholder ingen tekster, bare ID-ene scenariene peker
+på. Motoren og valideringen får kommentarene å slå opp i ved siden av
+regelsettet.
+
+Dermed rettes en tekst ett sted, uten at regelen endres, og samme tekst kan
+brukes av flere scenarier og flere regelsett. Foreløpig finnes regelsettene
+og kommentarene bare i koden (se «Dagens regler»); lagringen i Supabase, der
+de blir hver sine redigerbare objekter, er ikke laget ennå.
 
 Tekster i regelsettet kan vise en grense med `{nøkkel}`, som skrives ut i
 prosent. Endres grensen, følger tekstene med.
@@ -41,16 +49,15 @@ prosent. Endres grensen, følger tekstene med.
 - et forholdstall regnes bare av påviste analytter;
 - hvert kommentarutfall har minst én hovedkommentar, entydige merker, og gir
   hver påvist analytt nøyaktig én kommentar;
-- kommentarene har entydige ID-er, ren tekst uten mellomrom i endene, og
-  hver brukes av minst ett scenario;
-- kommentarene scenariene viser til, finnes, grensene er tall større enn 0, og tekstene er ikke
-  tomme og viser bare til grenser som finnes.
+- kommentarene scenariene viser til, finnes;
+- grensene er tall større enn 0, og tekstene i regelsettet (meldinger,
+  notiser, merker) er ikke tomme og viser bare til grenser som finnes.
 
 En modul med bare én analytt regner den som påvist.
 
 ## Motoren
 
-`kjorScenarier` tar regelsettet og det brukeren har svart,
+`kjorScenarier` tar regelsettet, kommentarene og det brukeren har svart,
 og gir resultatet i samme form som `RusModul.fortolk` — pluss scenariet som
 traff og forholdstallene, som simulatoren viser. Rekkefølgen:
 
@@ -64,8 +71,8 @@ traff og forholdstallene, som simulatoren viser. Rekkefølgen:
 
 `src/components/regler/Scenarioregler.tsx` viser regelsettet på siden til
 hver analytt i modulen: grensene, scenariene sortert etter hva som er påvist,
-med vilkår og utfall, og kommentartekstene nummerert, så hver tekst står én
-gang (`src/domain/scenariovisning.ts`). Med mer enn ett scenario følger
+med vilkår og utfall, og kommentarene regelsettet viser til, nummerert, så
+hver tekst står én gang (`src/domain/scenariovisning.ts`). Med mer enn ett scenario følger
 «Prøv reglene», som bruker samme skjema (`Rusvalg`) og samme visning av
 utfallet (`Rusutfall`) som fortolkningsmodulen, kjører `kjorScenarier` og
 markerer scenariet som traff.
@@ -73,7 +80,8 @@ markerer scenariet som traff.
 ## Dagens regler
 
 `src/domain/rusregelsett.ts` er dagens rusmiddelregler skrevet som
-scenarioregelsett, med tekstene fra `rusmidler.json`.
+scenarioregelsett, og tekstene fra `rusmidler.json` som kommentarer
+(`RUS_KOMMENTARER`, med ID-en `rad/nøkkel`).
 `src/domain/__tests__/rusparitet.test.ts` kjører dem mot `rus.ts` for alle
 kombinasjoner av påviste analytter og et rutenett av konsentrasjoner på, rett
 under og rett over hver grense, og krever identisk resultat og at hvert

@@ -1,9 +1,10 @@
+import type { Kommentaroppslag } from './kommentarobjekt'
 import { flettInn, somProsent, type Forhold, type Operator, type Scenario, type Scenarioregelsett } from './scenario'
 
 /**
  * Et scenarioregelsett skrevet ut slik analyttsiden viser det: vilkårene som
- * lesbar tekst og kommentartekstene nummerert, så en regel kan vise til
- * «tekst 2» i stedet for å gjenta hele teksten.
+ * lesbar tekst, og kommentarene regelsettet viser til nummerert, så en regel
+ * kan vise til «tekst 2» i stedet for å gjenta hele teksten.
  */
 
 export const OPERATORTEGN: Record<Operator, string> = { '<': '<', '<=': '≤', '>': '>', '>=': '≥' }
@@ -45,7 +46,7 @@ export interface Regelsettbeskrivelse {
   grenser: { nokkel: string; navn: string; prosent: string }[]
   /** Scenariene gruppert etter hvilke analytter som er påvist, i modulens rekkefølge. */
   scenarier: Scenariobeskrivelse[]
-  /** Kommentartekstene i den rekkefølgen de først brukes; nummeret er plassen + 1. */
+  /** Kommentarene regelsettet viser til, i den rekkefølgen de først brukes; nummeret er plassen + 1. */
   tekster: { id: string; tekst: string; brukesAv: number }[]
 }
 
@@ -67,7 +68,7 @@ function sammenlign(a: readonly number[], b: readonly number[]): number {
  * kombinasjonen av påviste analytter — rekkefølgen i regelsettet betyr ikke
  * noe for utfallet — og innenfor en kombinasjon står de som i regelsettet.
  */
-export function beskrivRegelsett(regelsett: Scenarioregelsett): Regelsettbeskrivelse {
+export function beskrivRegelsett(regelsett: Scenarioregelsett, kommentarer: Kommentaroppslag): Regelsettbeskrivelse {
   const flett = (tekst: string) => flettInn(tekst, regelsett.parametere)
   const forhold = new Map(regelsett.forhold.map((f) => [f.nokkel, f]))
   const grense = new Map(regelsett.parametere.map((p) => [p.nokkel, p]))
@@ -120,7 +121,7 @@ export function beskrivRegelsett(regelsett: Scenarioregelsett): Regelsettbeskriv
     })),
     tekster: [...nummer.keys()].map((id) => ({
       id,
-      tekst: regelsett.kommentarer.find((k) => k.id === id)?.tekst ?? '',
+      tekst: kommentarer.get(id) ?? '',
       brukesAv: bruk.get(id) ?? 0,
     })),
   }

@@ -1,14 +1,16 @@
 import { rusDatasett, type RusRad } from './rus'
+import type { Kommentaroppslag } from './kommentarobjekt'
 import type { Scenario, Scenarioplassering, Scenarioregelsett } from './scenario'
 
 /**
  * Dagens rusmiddelregler, skrevet som scenarioregelsett.
  *
  * Dette er importgrunnlaget for arbeidspakke 6: reglene i `rus.ts` oversatt
- * til scenarier, med kommentartekstene fra `rusmidler.json` som egne
- * kommentarer. Paritetstestene kjører dem mot dagens motor over alle
+ * til scenarier, og kommentartekstene fra `rusmidler.json` som egne
+ * kommentarobjekter som scenariene peker på. Paritetstestene kjører dem mot dagens motor over alle
  * kombinasjoner av påviste analytter og konsentrasjoner på og rundt
- * grensene, og det er disse regelsettene som legges inn i Supabase.
+ * grensene, og det er disse regelsettene og kommentarene som legges inn i
+ * Supabase.
  *
  * Filen er migreringskode. Den fjernes sammen med `rusmidler.json` når
  * fortolkningen leser regelsettene fra Supabase og paritetstestene står på
@@ -20,29 +22,10 @@ export function kommentarId(radId: string, nokkel = 'hoved'): string {
   return `${radId}/${nokkel}`
 }
 
-/** Alle kommentartekstene i datasettet, etter ID. */
-export const RUS_KOMMENTARER: ReadonlyMap<string, string> = new Map(
+/** Alle kommentartekstene i datasettet, etter ID: kommentarobjektene scenariene peker på. */
+export const RUS_KOMMENTARER: Kommentaroppslag = new Map(
   rusDatasett.rader.flatMap((r) => Object.entries(r.tekster).map(([n, t]) => [kommentarId(r.id, n), t])),
 )
-
-type UtenKommentarer = Omit<Scenarioregelsett, 'kommentarer'>
-
-/** Regelsettet med tekstene scenariene bruker, i den rekkefølgen de først brukes. */
-function medKommentarer(r: UtenKommentarer): Scenarioregelsett {
-  const ider = [
-    ...new Set(
-      r.scenarier.flatMap((s) => (s.utfall.type === 'kommentarer' ? s.utfall.plasseringer.map((p) => p.kommentar) : [])),
-    ),
-  ]
-  return {
-    ...r,
-    kommentarer: ider.map((id) => {
-      const tekst = RUS_KOMMENTARER.get(id)
-      if (tekst === undefined) throw new Error(`ukjent kommentar i rusmidler.json: ${id}`)
-      return { id, tekst }
-    }),
-  }
-}
 
 function rad(id: string): RusRad {
   const funnet = rusDatasett.rader.find((r) => r.id === id)
@@ -64,7 +47,7 @@ function kommentarer(nokkel: string, pavist: string[], plasseringer: Scenariopla
 }
 
 /** En modul for én analytt: ett scenario, én kommentar. */
-function enkelt(radId: string): UtenKommentarer {
+function enkelt(radId: string): Scenarioregelsett {
   const kilde = rad(radId)
   const kode = kilde.koder[0]
   if (kode === undefined) throw new Error(`raden ${radId} mangler analyttkode`)
@@ -85,7 +68,7 @@ const TO_AV_TRE =
   'Fellesskommentaren gjelder når diazepam, desmetyldiazepam og oksazepam alle er påvist. ' +
   'Her er bare to av dem påvist, og de kommenteres hver for seg.'
 
-const diazepamgruppen: UtenKommentarer = {
+const diazepamgruppen: Scenarioregelsett = {
   modul: 'diazepamgruppen',
   analytter: ['DIAZ', 'DMI', 'OXA'],
   verdihjelp:
@@ -135,7 +118,7 @@ const diazepamgruppen: UtenKommentarer = {
 
 /* --- Tramadol og O-desmetyltramadol -------------------------------------- */
 
-const tramadolgruppen: UtenKommentarer = {
+const tramadolgruppen: Scenarioregelsett = {
   modul: 'tramadolgruppen',
   analytter: ['TRAM', 'OTRAM'],
   verdihjelp: '',
@@ -152,7 +135,7 @@ const tramadolgruppen: UtenKommentarer = {
 
 const grasone = rad('kodein-morfin-grasone').merknader
 
-const kodeingruppen: UtenKommentarer = {
+const kodeingruppen: Scenarioregelsett = {
   modul: 'kodeingruppen',
   analytter: ['KOD', 'MOR'],
   verdihjelp: '',
@@ -215,7 +198,7 @@ const kodeingruppen: UtenKommentarer = {
 
 /* --- Amfetamin og metamfetamin ------------------------------------------- */
 
-const amfetamingruppen: UtenKommentarer = {
+const amfetamingruppen: Scenarioregelsett = {
   modul: 'amfetamingruppen',
   analytter: ['AMF1', 'MAF1'],
   verdihjelp: '',
@@ -232,8 +215,7 @@ const amfetamingruppen: UtenKommentarer = {
 }
 
 /** Regelsettene, i samme rekkefølge som `RUS_MODULER`. */
-export const RUS_REGELSETT: Scenarioregelsett[] = (
-  [
+export const RUS_REGELSETT: Scenarioregelsett[] = [
   enkelt('alprazolam'),
   diazepamgruppen,
   enkelt('klonazepam'),
@@ -251,5 +233,4 @@ export const RUS_REGELSETT: Scenarioregelsett[] = (
   amfetamingruppen,
   enkelt('benzoylekgonin'),
   enkelt('mdma'),
-  ] satisfies UtenKommentarer[]
-).map(medKommentarer)
+]

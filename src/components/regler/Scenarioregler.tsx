@@ -1,6 +1,7 @@
 import { useId, useMemo, useState } from 'react'
 import { rusModulFor, TOM_RUS_INNDATA, type RusInndata, type RusModul, type RusPlassering } from '../../domain/rus'
-import { RUS_REGELSETT } from '../../domain/rusregelsett'
+import type { Kommentaroppslag } from '../../domain/kommentarobjekt'
+import { RUS_KOMMENTARER, RUS_REGELSETT } from '../../domain/rusregelsett'
 import {
   flettInn,
   kjorScenarier,
@@ -18,12 +19,13 @@ import { Uthev } from '../Uthev'
 
 /**
  * Regelsettet fortolkningsmodulen bruker for denne analytten, med navnene på
- * analyttene. `null` når modulen ikke fortolkes med scenarioregler.
+ * analyttene og kommentarene regelsettet viser til. `null` når modulen ikke
+ * fortolkes med scenarioregler.
  */
-export function scenarioreglerFor(fortolkning: Analyte): { modul: RusModul; regelsett: Scenarioregelsett } | null {
+export function scenarioreglerFor(fortolkning: Analyte): ScenarioreglerProps | null {
   const modul = rusModulFor(fortolkning)
   const regelsett = modul && RUS_REGELSETT.find((r) => r.modul === modul.id)
-  return modul && regelsett ? { modul, regelsett } : null
+  return modul && regelsett ? { modul, regelsett, kommentarer: RUS_KOMMENTARER } : null
 }
 
 const OG = new Intl.ListFormat('nb', { type: 'conjunction' })
@@ -31,24 +33,26 @@ const OG = new Intl.ListFormat('nb', { type: 'conjunction' })
 export interface ScenarioreglerProps {
   modul: RusModul
   regelsett: Scenarioregelsett
+  /** Kommentarobjektene scenariene peker på. */
+  kommentarer: Kommentaroppslag
 }
 
 /**
  * Fortolkningsreglene på analyttsiden, for moduler som fortolkes med
  * scenarioregler (`docs/scenarioregler.md`): grensene, scenariene — hva som er
- * påvist, vilkårene og utfallet — og kommentartekstene, nummerert, så hver
- * står bare én gang.
+ * påvist, vilkårene og utfallet — og kommentarene scenariene viser til,
+ * nummerert, så hver står bare én gang.
  *
  * Har regelsettet mer enn ett scenario, følger en simulator: kryss av, fyll inn
  * tall, og se hvilket scenario som gjelder og hvilke kommentarer som havner på
  * hvilke koder. Simulatoren spør og svarer som fortolkningsmodulen, men har
  * ingenting å kopiere.
  */
-export function Scenarioregler({ modul, regelsett }: ScenarioreglerProps) {
+export function Scenarioregler({ modul, regelsett, kommentarer }: ScenarioreglerProps) {
   const overskrift = useId()
-  const beskrivelse = useMemo(() => beskrivRegelsett(regelsett), [regelsett])
+  const beskrivelse = useMemo(() => beskrivRegelsett(regelsett, kommentarer), [regelsett, kommentarer])
   const [inndata, setInndata] = useState<RusInndata>(TOM_RUS_INNDATA)
-  const treff = useMemo(() => provKjor(regelsett, inndata), [regelsett, inndata])
+  const treff = useMemo(() => provKjor(regelsett, kommentarer, inndata), [regelsett, kommentarer, inndata])
   const simulerbar = regelsett.scenarier.length > 1
 
   return (
@@ -123,9 +127,13 @@ export function Scenarioregler({ modul, regelsett }: ScenarioreglerProps) {
 }
 
 /** Kjører regelsettet, men lar et regelsett som ikke er gyldig, gi `null` i stedet for å velte siden. */
-function provKjor(regelsett: Scenarioregelsett, inndata: RusInndata): Scenariotreff | null {
+function provKjor(
+  regelsett: Scenarioregelsett,
+  kommentarer: Kommentaroppslag,
+  inndata: RusInndata,
+): Scenariotreff | null {
   try {
-    return kjorScenarier(regelsett, inndata)
+    return kjorScenarier(regelsett, kommentarer, inndata)
   } catch {
     return null
   }

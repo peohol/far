@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { RUS_REGELSETT } from '../rusregelsett'
+import { RUS_KOMMENTARER, RUS_REGELSETT } from '../rusregelsett'
 import { beskrivForhold, beskrivRegelsett, formaterAndel } from '../scenariovisning'
 
 function regelsett(modul: string) {
@@ -20,7 +20,7 @@ describe('regelsettet skrevet ut for analyttsiden', () => {
   })
 
   it('sorterer scenariene etter hva som er påvist, og skriver vilkårene med grensen i prosent', () => {
-    const b = beskrivRegelsett(regelsett('diazepamgruppen'))
+    const b = beskrivRegelsett(regelsett('diazepamgruppen'), RUS_KOMMENTARER)
     expect(b.grenser).toEqual([
       { nokkel: 'oksazepamgrense', navn: 'Oksazepam som andel av diazepam + N-desmetyldiazepam', prosent: '10 %' },
     ])
@@ -50,18 +50,19 @@ describe('regelsettet skrevet ut for analyttsiden', () => {
 
   it('nummererer hver tekst én gang, i den rekkefølgen den først brukes, og teller bruken', () => {
     const r = regelsett('diazepamgruppen')
-    const b = beskrivRegelsett(r)
-    expect(b.tekster.map((t) => t.id).sort()).toEqual(r.kommentarer.map((k) => k.id).sort())
+    const b = beskrivRegelsett(r, RUS_KOMMENTARER)
+    const brukt = r.scenarier.flatMap((s) => (s.utfall.type === 'kommentarer' ? s.utfall.plasseringer.map((p) => p.kommentar) : []))
+    expect(b.tekster.map((t) => t.id).sort()).toEqual([...new Set(brukt)].sort())
     expect(b.tekster[0]).toMatchObject({ id: 'diazepam/hoved', brukesAv: 4 })
     // Oksazepams egen kommentar står i «bare OXA» og tre scenarier til.
     expect(b.tekster.find((t) => t.id === 'oksazepam/hoved')?.brukesAv).toBe(4)
-    for (const t of b.tekster) expect(t.tekst).toBe(r.kommentarer.find((k) => k.id === t.id)?.tekst)
+    for (const t of b.tekster) expect(t.tekst).toBe(RUS_KOMMENTARER.get(t.id))
   })
 
   it('viser gråsonen med grensene flettet inn og følger en endret grense', () => {
     const r = regelsett('kodeingruppen')
     r.parametere[0]!.verdi = 0.25
-    const grasone = beskrivRegelsett(r).scenarier.find((s) => s.scenario.nokkel === 'grasone')!
+    const grasone = beskrivRegelsett(r, RUS_KOMMENTARER).scenarier.find((s) => s.scenario.nokkel === 'grasone')!
     expect(grasone.vilkar).toEqual(['MOR / KOD ≥ 25 %', 'MOR / KOD ≤ 100 %'])
     expect(grasone.utfall).toMatchObject({ type: 'manuell', melding: 'Morfin = 25–100 % av kodein. Vurder manuelt.' })
   })
