@@ -1,6 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState, type RefObject } from 'react'
 import { sok, sti, type Sokedokument } from '../../faginnhold/sok'
 import { rullefart } from '../../hooks/useKortHopp'
+import { detaljkortRundt } from '../seksjoner/Seksjon'
+import { useSeksjonsstyring, type Rulleplass } from '../seksjoner/Seksjonsstyring'
 import { Shortcut } from '../Shortcut'
 import { elementAnker, panelAnker } from './Paneler'
 import { TREFFKLASSE } from '../Uthev'
@@ -27,9 +29,11 @@ export interface SidesokProps {
 /**
  * Søket på den åpne siden.
  *
- * Treffene fremheves der de står (se `Uthev`) og telles. `Enter` går til det
- * neste og `Shift + Enter` til det forrige; `Escape` tømmer feltet. Under
- * feltet står stedene treffene er — panelet og kortet — som snarveier dit.
+ * Treffene fremheves der de står (se `Uthev`) og telles — også i seksjoner
+ * og detaljkort som er lukket, der innholdet står skjult. `Enter` går til det
+ * neste og `Shift + Enter` til det forrige, og åpner skuffene treffet står i;
+ * `Escape` tømmer feltet. Under feltet står stedene treffene er — panelet og
+ * kortet — som snarveier dit.
  * Stedene finnes med den samme indekseringen som det globale søket skal
  * bruke (`src/faginnhold/sok.ts`).
  */
@@ -38,6 +42,13 @@ export function Sidesok({ sporring, onEndre, beholder, dokumenter, innholdsnokke
   const felt = useRef<HTMLInputElement>(null)
   const [antall, setAntall] = useState(0)
   const [aktiv, setAktiv] = useState(0)
+  const styring = useSeksjonsstyring()
+
+  /** Viser elementet: åpner skuffene det står i, og ruller det fram. */
+  const vis = (element: Element, plass: Rulleplass) => {
+    if (styring) styring.apneTil(element, plass)
+    else if (plass) element.scrollIntoView({ behavior: rullefart(), block: plass })
+  }
 
   const steder = useMemo(() => {
     const sett = new Map<string, { sti: string[]; anker: string }>()
@@ -83,7 +94,25 @@ export function Sidesok({ sporring, onEndre, beholder, dokumenter, innholdsnokke
     if (alle.length === 0) return
     const neste = (aktiv + retning + alle.length) % alle.length
     setAktiv(neste)
-    alle[neste]?.scrollIntoView({ behavior: rullefart(), block: 'center' })
+    const merke = alle[neste]
+    if (merke) vis(merke, 'center')
+  }
+
+  /**
+   * Går til stedet, og gjør det første treffet der til det aktive. Er det et
+   * treff, er det treffet som vises, så skuffene det står i åpnes — også et
+   * detaljkort inne i stedet. Står stedet i et detaljkort, er det hele kortet
+   * som gjelder, så også treff i tittelen i hodet kommer med.
+   */
+  const gaTilSted = (anker: string) => {
+    const element = document.getElementById(anker)
+    if (!element) return
+    const sted = detaljkortRundt(element) ?? element
+    const alle = merker()
+    const forste = alle.findIndex((m) => sted.contains(m))
+    if (forste === -1) return vis(sted, 'start')
+    setAktiv(forste)
+    vis(alle[forste]!, 'center')
   }
 
   const status = !sporring.trim()
@@ -134,7 +163,7 @@ export function Sidesok({ sporring, onEndre, beholder, dokumenter, innholdsnokke
               <button
                 type="button"
                 className="sidesok__sted"
-                onClick={() => document.getElementById(anker)?.scrollIntoView({ behavior: rullefart(), block: 'start' })}
+                onClick={() => gaTilSted(anker)}
               >
                 {deler.join(' › ')}
               </button>
