@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.12.0',
+    versjon: '1.13.0',
     dato: '2026-09-23',
     sammendrag: 'Fortolkningskommentarene kan lagres som egne tekster med historikk',
     typer: ['Funksjonalitet'],
@@ -22,6 +22,20 @@ export const ENDRINGSLOGG: Endring[] = [
       'Reglene peker på tekstene i stedet for å ha sin egen kopi. Samme tekst kan brukes av flere regler og rettes ett sted.',
       'En tekst står på én linje og limes inn som den er. Et regelsett kan ikke publiseres før tekstene det bruker er publisert.',
       'Tekster med innfylte felt, som konsentrasjonsnivå eller dato for forrige prøve, beholder de samme feltene gjennom alle endringer, så en regel som bruker teksten, alltid får fylt dem inn.',
+    ],
+  },
+  {
+    versjon: '1.12.0',
+    dato: '2026-09-23',
+    sammendrag: 'Informasjonssidene for antidepressiver og antipsykotika har fått innhold',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'De 35 sidene for antidepressiver, antipsykotika og lamotrigin er fylt med fagstoffet fra Psykofarmaka-dokumentet: dosering, farmakodynamikk, referanseområde, toksisk område, komatøs/fatal konsentrasjon, halveringstid, steady state, farmakokinetikk og serumkonsentrasjoner ved ulike doser.',
+      'Et kort sammendrag av de godkjente indikasjonene er hentet fra Felleskatalogen, med lenke til produktsidene.',
+      'Preparatnavn vises ikke foreløpig. De skal hentes automatisk fra offentlige legemiddeldata i stedet for å føres inn for hånd.',
+      'Historikken viser hvor innholdet kom fra, for eksempel «Importert fra Psykofarmaka.pdf, side 7».',
+      'Ringegrensen, måleområdet og spørsmål-og-svar-notatene fra dokumentet er ikke tatt med. Kommenteringen og fortolkningsreglene er uendret.',
     ],
   },
   {
