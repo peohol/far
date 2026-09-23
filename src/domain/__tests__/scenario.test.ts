@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { RUS_KOMMENTARER, RUS_REGELSETT } from '../rusregelsett'
+import { RUS_REGELSETT } from '../rusregelsett'
 import {
   flettInn,
   fraProsent,
@@ -17,13 +17,11 @@ function regelsett(modul: string): Scenarioregelsett {
   return structuredClone(funnet)
 }
 
-const KOMMENTARER = new Set(RUS_KOMMENTARER.keys())
-
 /** Regelsettet med én endring, for å prøve valideringen. */
 function endret(modul: string, endre: (r: Scenarioregelsett) => void): string[] {
   const r = regelsett(modul)
   endre(r)
-  return validerScenarioregelsett(r, KOMMENTARER)
+  return validerScenarioregelsett(r)
 }
 
 function scenario(r: Scenarioregelsett, nokkel: string) {
@@ -71,10 +69,10 @@ describe('en grense som skiller to scenarier, er ett tall', () => {
     const r = regelsett('diazepamgruppen')
     const grense = r.parametere.find((p) => p.nokkel === 'oksazepamgrense')!
     grense.verdi = 0.15
-    expect(validerScenarioregelsett(r, KOMMENTARER)).toEqual([])
+    expect(validerScenarioregelsett(r)).toEqual([])
 
     const kjor = (oxa: string) =>
-      kjorScenarier(r, RUS_KOMMENTARER, { pavist: ['DIAZ', 'DMI', 'OXA'], verdier: { DIAZ: '400', DMI: '600', OXA: oxa } })
+      kjorScenarier(r, { pavist: ['DIAZ', 'DMI', 'OXA'], verdier: { DIAZ: '400', DMI: '600', OXA: oxa } })
     expect(kjor('150').scenario?.nokkel).toBe('alle_felles')
     expect(kjor('151').scenario?.nokkel).toBe('alle_hver_for_seg')
     // Teksten som viser grensen, følger med.
@@ -86,7 +84,7 @@ describe('en grense som skiller to scenarier, er ett tall', () => {
   it('holder gråsonen for kodein og morfin eksplisitt, uten noe å kopiere', () => {
     const r = regelsett('kodeingruppen')
     const kjor = (morfin: string) =>
-      kjorScenarier(r, RUS_KOMMENTARER, { pavist: ['KOD', 'MOR'], verdier: { KOD: '1000', MOR: morfin } })
+      kjorScenarier(r, { pavist: ['KOD', 'MOR'], verdier: { KOD: '1000', MOR: morfin } })
     expect(kjor('200').resultat).toMatchObject({ type: 'plenum', melding: 'Morfin = 20–100 % av kodein. Vurder manuelt.' })
     expect(kjor('200').scenario?.nokkel).toBe('grasone')
     expect(kjor('199').scenario?.nokkel).toBe('hoy_kodein_lav_morfin')
@@ -99,13 +97,26 @@ describe('en grense som skiller to scenarier, er ett tall', () => {
 
 describe('valideringen', () => {
   it('godtar de importerte regelsettene', () => {
-    for (const r of RUS_REGELSETT) expect(validerScenarioregelsett(r, KOMMENTARER), r.modul).toEqual([])
+    for (const r of RUS_REGELSETT) expect(validerScenarioregelsett(r), r.modul).toEqual([])
   })
 
   it('finner hull når en kombinasjon av påviste analytter mangler scenario', () => {
     expect(endret('tramadolgruppen', (r) => r.scenarier.splice(2, 1))).toEqual([
-      'Ingen scenarier gjelder når TRAM + OTRAM er påvist.',
+      // Tilleggskommentaren ble bare brukt av scenariet som er borte.
+      'Kommentaren tramadolgruppen/tillegg brukes ikke av noe scenario.',
     ])
+    expect(
+      endret('amfetamingruppen', (r) => {
+        r.scenarier[2]!.pavist = ['AMF1']
+        r.scenarier[2]!.nokkel = 'amf_igjen'
+      }),
+    ).toContain('Scenariet amf_igjen må gi hver påviste analytt nøyaktig én kommentar, og ingen andre.')
+    expect(
+      endret('kodeingruppen', (r) => {
+        r.scenarier.splice(1, 1)
+        r.kommentarer = r.kommentarer.filter((k) => k.id !== 'kun-morfin/morfin')
+      }),
+    ).toEqual(['Ingen scenarier gjelder når MOR er påvist.'])
   })
 
   it('finner hull på tallinjen, også rett på grensen', () => {
@@ -149,10 +160,20 @@ describe('valideringen', () => {
     ).toEqual(['Scenariet begge viser til en kommentar som ikke finnes.'])
     expect(
       endret('tramadolgruppen', (r) => {
+        r.kommentarer.push({ id: 'ubrukt', tekst: 'Ubrukt.' }, { ...r.kommentarer[0]! })
+        r.kommentarer[0]!.tekst = 'Med mellomrom. '
+      }),
+    ).toEqual([
+      'To kommentarer har samme ID.',
+      'Kommentaren tramadolgruppen/hoved mangler tekst eller har mellomrom i endene.',
+      'Kommentaren ubrukt brukes ikke av noe scenario.',
+    ])
+    expect(
+      endret('tramadolgruppen', (r) => {
         const u = scenario(r, 'begge').utfall
         if (u.type === 'kommentarer') u.plasseringer.pop()
       }),
-    ).toEqual(['Scenariet begge må gi hver påviste analytt nøyaktig én kommentar, og ingen andre.'])
+    ).toContain('Scenariet begge må gi hver påviste analytt nøyaktig én kommentar, og ingen andre.')
     expect(
       endret('tramadolgruppen', (r) => {
         const u = scenario(r, 'tram').utfall

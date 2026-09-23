@@ -15,9 +15,11 @@ import type { Kommentarplassering } from './kommentar'
  * navngitte parametere, slik at en grense som skiller to scenarier, er ett
  * tall som endres ett sted.
  *
- * Kommentartekstene er egne objekter; scenariene peker på dem med ID. Motoren
- * får tekstene som et oppslag, slik at samme regelsett kan kjøres mot utkastet
- * og det publiserte.
+ * Kommentartekstene hører til regelsettet, med en ID hver, og scenariene peker
+ * på dem med ID-en. Samme tekst brukes da av flere scenarier uten å stå flere
+ * ganger, og hele regelsettet — tekstene med — versjoneres og publiseres
+ * samlet. Tekstene er ren tekst: det er dem som kopieres til
+ * laboratoriesystemet.
  *
  * Et gyldig regelsett gir nøyaktig ett scenario for hver mulig kombinasjon av
  * påviste analytter og forholdstall — {@link validerScenarioregelsett} sjekker
@@ -58,6 +60,12 @@ export interface Vilkar {
   parameter: string
 }
 
+/** En kommentartekst i regelsettet. */
+export interface Scenariokommentar {
+  id: string
+  tekst: string
+}
+
 /** Én kommentar i et utfall: teksten (som ID) og kodene den limes inn på. */
 export interface Scenarioplassering {
   rolle: Kommentarplassering['rolle']
@@ -95,6 +103,8 @@ export interface Scenarioregelsett {
   forhold: Forhold[]
   parametere: Parameter[]
   scenarier: Scenario[]
+  /** Tekstene scenariene bruker. Hver brukes minst én gang. */
+  kommentarer: Scenariokommentar[]
 }
 
 /* --- Resultatet ---------------------------------------------------------- */
@@ -110,9 +120,6 @@ export interface Scenarioinndata {
   pavist: string[]
   verdier: Record<string, string>
 }
-
-/** Tekstene kommentar-ID-ene peker på. */
-export type Kommentaroppslag = ReadonlyMap<string, string>
 
 export const VELG_PAVIST = 'Kryss av for hvilke av analyttene som er påvist.'
 export const FYLL_INN_TALL = 'Fyll inn de målte konsentrasjonene, så avgjøres regelen.'
@@ -232,11 +239,7 @@ export type Scenariotreff =
  * Kjører regelsettet på det brukeren har svart. Kaster om regelsettet ikke
  * gir nøyaktig ett scenario — det skal validering ha stoppet.
  */
-export function kjorScenarier(
-  regelsett: Scenarioregelsett,
-  kommentarer: Kommentaroppslag,
-  inn: Scenarioinndata,
-): Scenariotreff {
+export function kjorScenarier(regelsett: Scenarioregelsett, inn: Scenarioinndata): Scenariotreff {
   const forhold = new Map<string, number>()
   const mangler = (melding: string): Scenariotreff => ({
     resultat: { type: 'mangler', mangler: [melding] },
@@ -268,23 +271,15 @@ export function kjorScenarier(
     throw new Error(`${regelsett.modul}: ${treff.length} scenarier traff ${paviste.join('+')}`)
   }
 
-  return { resultat: utfallet(regelsett, kommentarer, scenario.utfall), scenario, forhold }
+  return { resultat: utfallet(regelsett, scenario.utfall), scenario, forhold }
 }
 
 /** Kort vei til bare resultatet. */
-export function fortolkScenarier(
-  regelsett: Scenarioregelsett,
-  kommentarer: Kommentaroppslag,
-  inn: Scenarioinndata,
-): Scenarioresultat {
-  return kjorScenarier(regelsett, kommentarer, inn).resultat
+export function fortolkScenarier(regelsett: Scenarioregelsett, inn: Scenarioinndata): Scenarioresultat {
+  return kjorScenarier(regelsett, inn).resultat
 }
 
-function utfallet(
-  regelsett: Scenarioregelsett,
-  kommentarer: Kommentaroppslag,
-  utfall: Scenarioutfall,
-): Exclude<Scenarioresultat, { type: 'mangler' }> {
+function utfallet(regelsett: Scenarioregelsett, utfall: Scenarioutfall): Exclude<Scenarioresultat, { type: 'mangler' }> {
   const flett = (tekst: string) => flettInn(tekst, regelsett.parametere)
   if (utfall.type === 'manuell') {
     return { type: 'plenum', melding: flett(utfall.melding), veiledning: utfall.veiledning.map(flett) }
@@ -292,7 +287,7 @@ function utfallet(
   return {
     type: 'kommentarer',
     plasseringer: utfall.plasseringer.map((p) => {
-      const tekst = kommentarer.get(p.kommentar)
+      const tekst = regelsett.kommentarer.find((k) => k.id === p.kommentar)?.tekst
       if (tekst === undefined) throw new Error(`${regelsett.modul}: mangler kommentaren ${p.kommentar}`)
       return { rolle: p.rolle, merke: p.merke, koder: [...p.koder], tekst }
     }),
@@ -347,13 +342,9 @@ function beskrivForhold(forhold: ReadonlyMap<string, number>): string {
 
 /**
  * Feilene i regelsettet, som meldinger en administrator kan handle på. Tom
- * liste betyr gyldig. `kommentarer` er ID-ene som finnes; utelatt sjekkes ikke
- * det.
+ * liste betyr gyldig.
  */
-export function validerScenarioregelsett(
-  regelsett: Scenarioregelsett,
-  kommentarer?: ReadonlySet<string>,
-): string[] {
+export function validerScenarioregelsett(regelsett: Scenarioregelsett): string[] {
   const feil: string[] = []
   const { analytter } = regelsett
 
@@ -399,17 +390,35 @@ export function validerScenarioregelsett(
     if (!Number.isFinite(p.verdi) || p.verdi <= 0) feil.push(`Grensen ${p.nokkel} må være et tall større enn 0.`)
   }
 
-  for (const s of regelsett.scenarier) feil.push(...validerScenario(regelsett, s, kommentarer, tekst))
+  feil.push(...validerKommentarer(regelsett))
+  for (const s of regelsett.scenarier) feil.push(...validerScenario(regelsett, s, tekst))
 
   // Bare når delene er i orden, gir det mening å prøve helheten.
   if (feil.length === 0) feil.push(...dekning(regelsett))
   return [...new Set(feil)]
 }
 
+/** Kommentartekstene: ren, ikke tom tekst, entydige ID-er, og alle i bruk. */
+function validerKommentarer(regelsett: Scenarioregelsett): string[] {
+  const feil: string[] = []
+  const ider = regelsett.kommentarer.map((k) => k.id)
+  if (new Set(ider).size !== ider.length) feil.push('To kommentarer har samme ID.')
+  const brukt = new Set(
+    regelsett.scenarier.flatMap((s) => (s.utfall.type === 'kommentarer' ? s.utfall.plasseringer.map((p) => p.kommentar) : [])),
+  )
+  for (const k of regelsett.kommentarer) {
+    if (k.id.trim() === '') feil.push('En kommentar mangler ID.')
+    if (k.tekst.trim() === '' || k.tekst !== k.tekst.trim()) {
+      feil.push(`Kommentaren ${k.id} mangler tekst eller har mellomrom i endene.`)
+    }
+    if (!brukt.has(k.id)) feil.push(`Kommentaren ${k.id} brukes ikke av noe scenario.`)
+  }
+  return feil
+}
+
 function validerScenario(
   regelsett: Scenarioregelsett,
   s: Scenario,
-  kommentarer: ReadonlySet<string> | undefined,
   tekst: (verdi: string, hva: string) => void,
 ): string[] {
   const feil: string[] = []
@@ -448,7 +457,9 @@ function validerScenario(
   const dekket: string[] = []
   for (const p of u.plasseringer) {
     tekst(p.merke, `Merket i ${s.nokkel}`)
-    if (kommentarer && !kommentarer.has(p.kommentar)) feil.push(`${hva} viser til en kommentar som ikke finnes.`)
+    if (!regelsett.kommentarer.some((k) => k.id === p.kommentar)) {
+      feil.push(`${hva} viser til en kommentar som ikke finnes.`)
+    }
     if (p.koder.length === 0) feil.push(`${hva} har en kommentar uten analyttkode.`)
     dekket.push(...p.koder)
   }

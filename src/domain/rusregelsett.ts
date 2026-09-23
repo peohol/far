@@ -25,6 +25,25 @@ export const RUS_KOMMENTARER: ReadonlyMap<string, string> = new Map(
   rusDatasett.rader.flatMap((r) => Object.entries(r.tekster).map(([n, t]) => [kommentarId(r.id, n), t])),
 )
 
+type UtenKommentarer = Omit<Scenarioregelsett, 'kommentarer'>
+
+/** Regelsettet med tekstene scenariene bruker, i den rekkefølgen de først brukes. */
+function medKommentarer(r: UtenKommentarer): Scenarioregelsett {
+  const ider = [
+    ...new Set(
+      r.scenarier.flatMap((s) => (s.utfall.type === 'kommentarer' ? s.utfall.plasseringer.map((p) => p.kommentar) : [])),
+    ),
+  ]
+  return {
+    ...r,
+    kommentarer: ider.map((id) => {
+      const tekst = RUS_KOMMENTARER.get(id)
+      if (tekst === undefined) throw new Error(`ukjent kommentar i rusmidler.json: ${id}`)
+      return { id, tekst }
+    }),
+  }
+}
+
 function rad(id: string): RusRad {
   const funnet = rusDatasett.rader.find((r) => r.id === id)
   if (!funnet) throw new Error(`ukjent rad i rusmidler.json: ${id}`)
@@ -45,7 +64,7 @@ function kommentarer(nokkel: string, pavist: string[], plasseringer: Scenariopla
 }
 
 /** En modul for én analytt: ett scenario, én kommentar. */
-function enkelt(radId: string): Scenarioregelsett {
+function enkelt(radId: string): UtenKommentarer {
   const kilde = rad(radId)
   const kode = kilde.koder[0]
   if (kode === undefined) throw new Error(`raden ${radId} mangler analyttkode`)
@@ -66,7 +85,7 @@ const TO_AV_TRE =
   'Fellesskommentaren gjelder når diazepam, desmetyldiazepam og oksazepam alle er påvist. ' +
   'Her er bare to av dem påvist, og de kommenteres hver for seg.'
 
-const diazepamgruppen: Scenarioregelsett = {
+const diazepamgruppen: UtenKommentarer = {
   modul: 'diazepamgruppen',
   analytter: ['DIAZ', 'DMI', 'OXA'],
   verdihjelp:
@@ -116,7 +135,7 @@ const diazepamgruppen: Scenarioregelsett = {
 
 /* --- Tramadol og O-desmetyltramadol -------------------------------------- */
 
-const tramadolgruppen: Scenarioregelsett = {
+const tramadolgruppen: UtenKommentarer = {
   modul: 'tramadolgruppen',
   analytter: ['TRAM', 'OTRAM'],
   verdihjelp: '',
@@ -133,7 +152,7 @@ const tramadolgruppen: Scenarioregelsett = {
 
 const grasone = rad('kodein-morfin-grasone').merknader
 
-const kodeingruppen: Scenarioregelsett = {
+const kodeingruppen: UtenKommentarer = {
   modul: 'kodeingruppen',
   analytter: ['KOD', 'MOR'],
   verdihjelp: '',
@@ -196,7 +215,7 @@ const kodeingruppen: Scenarioregelsett = {
 
 /* --- Amfetamin og metamfetamin ------------------------------------------- */
 
-const amfetamingruppen: Scenarioregelsett = {
+const amfetamingruppen: UtenKommentarer = {
   modul: 'amfetamingruppen',
   analytter: ['AMF1', 'MAF1'],
   verdihjelp: '',
@@ -213,7 +232,8 @@ const amfetamingruppen: Scenarioregelsett = {
 }
 
 /** Regelsettene, i samme rekkefølge som `RUS_MODULER`. */
-export const RUS_REGELSETT: Scenarioregelsett[] = [
+export const RUS_REGELSETT: Scenarioregelsett[] = (
+  [
   enkelt('alprazolam'),
   diazepamgruppen,
   enkelt('klonazepam'),
@@ -231,4 +251,5 @@ export const RUS_REGELSETT: Scenarioregelsett[] = [
   amfetamingruppen,
   enkelt('benzoylekgonin'),
   enkelt('mdma'),
-]
+  ] satisfies UtenKommentarer[]
+).map(medKommentarer)
