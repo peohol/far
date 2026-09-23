@@ -28,6 +28,7 @@
     "scripts/bootstrap-admin.ts",
     "scripts/importer-psykofarmaka.ts",
     "vite.config.ts",
+    "scripts/importer-intervallregelsett.ts",
     "supabase/functions/_delt"
   ]
 }

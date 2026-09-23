@@ -6,7 +6,8 @@ publisering å gjøre skal endres. Planen og fremdriften står i `docs/analyttsi
 fundamentet faktisk er bygget.
 
 Informasjonssidene (arbeidspakke 3) bygger på dette. Fortolkningen gjør det
-ikke: kommentartekstene, grensene og reglene ligger fortsatt i de statiske
+ikke ennå: de enkle konsentrasjonsreglene er lagt inn som regelsett (se
+`docs/fortolkningsregler.md`), men fortolkningen leser fortsatt de statiske
 datasettene, og `src/__tests__/fortolkningUendret.test.ts` holder det slik —
 også med en kontrollsum over all klinisk output modulene kan gi — til byttet
 gjøres med vilje.
@@ -68,6 +69,8 @@ Tre begreper holdes fra hverandre, som planen krever:
 - **Kommentar** — en fortolkningskommentar: teksten som limes inn i
   pasientsvaret. Se [Kommentarer](#kommentarer).
 
+- **Intervallregelsett** (`intervallregelsett`) — de enkle
+  konsentrasjonsreglene for én analyttkode. Se `docs/fortolkningsregler.md`.
 - **THC-syreregelsett** (`thc_regelsett`) — reglene for THC-syre i urin som
   ett objekt: kurvene, grensene og hvilken kommentar hver tekstbolk bruker
   lagres, publiseres og gjenopprettes samlet. Tekstene er kommentarer. Det

@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.17.0',
+    dato: '2026-09-23',
+    sammendrag: 'Konsentrasjonsreglene og kommentarene er lagt inn i databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Første steg mot at konsentrasjonsreglene og kommentarene kan redigeres i appen. Dagens regler for alle de 60 analyttene med konsentrasjonsområder er lagt inn i databasen, med kilde og full historikk.',
+      'Grensene lagres som skillepunkter mellom områdene, så det ikke kan oppstå hull eller overlapp. «Ring rekvirent» er lagret som en egen handling, og kommentaren for «Til stede under cut-off» gjenbruker hovedkommentaren i stedet for å gjenta den.',
+      'Reglene er kontrollert mot dagens fortolkning for hver analytt, rett på, rett under og rett over hver grense, og gir de samme kommentarene og de samme beskjedene om å ringe.',
+      'Ingenting av dette er synlig ennå. Kommenteringen er uendret.',
+    ],
+  },
+  {
     versjon: '1.16.2',
     dato: '2026-09-23',
     sammendrag: 'Reglene og kommentartekstene for THC-syre ligger nå i databasen',
