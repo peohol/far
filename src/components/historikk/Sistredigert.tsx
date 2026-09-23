@@ -6,11 +6,16 @@ import type { Innhold, Objekttype } from '../../faginnhold/modell'
 import { useRedigering } from '../analyttside/Redigeringskontekst'
 import { Historikkvindu } from './Historikkvindu'
 
-/** «Sist redigert av Ola Nordmann 22.09.2026 kl. 14:32». */
+/**
+ * «Sist redigert av Ola Nordmann 22.09.2026 kl. 14:32», og hvor innholdet kom
+ * fra når det ikke ble skrevet i appen: «… · Importert fra Psykofarmaka.pdf,
+ * side 7».
+ */
 export function sistRedigert(utgave: Utgave<unknown>): string {
   const navn = fulltNavn({ fornavn: utgave.endret_av_fornavn, etternavn: utgave.endret_av_etternavn })
   const naar = tidspunkt(utgave.endret_kl)
-  return ['Sist redigert', navn && `av ${navn}`, naar].filter(Boolean).join(' ')
+  const tekst = ['Sist redigert', navn && `av ${navn}`, naar].filter(Boolean).join(' ')
+  return utgave.kilde ? `${tekst} · ${utgave.kilde}` : tekst
 }
 
 /**
