@@ -1,0 +1,74 @@
+{
+  "konverteringsfaktor": 0.344451,
+  "kurver": {
+    "gronn": {
+      "navn": "Normal utskillelse",
+      "a1": 75.10642536264817,
+      "k1": 2.344866277008879,
+      "a2": 52.89994063494364,
+      "k2": 0.13388138992902396
+    },
+    "gul": {
+      "navn": "Moderat utskillelse",
+      "a1": 150.21285072529633,
+      "k1": 2.344866277008879,
+      "a2": 105.79988126988728,
+      "k2": 0.13388138992902396
+    },
+    "rod": {
+      "navn": "Treg utskillelse",
+      "a1": 261.5116678191702,
+      "k1": 0.10152954824642728,
+      "a2": 52.78117322451692,
+      "k2": 0.022237916803065798
+    }
+  },
+  "maleusikkerhet": {
+    "cv_thc": 0.2,
+    "cv_kreatinin": 0.05,
+    "faktor_under_cutoff": 1.5
+  },
+  "sikkerhetsmarginer": [
+    {
+      "margin": 0.5,
+      "z": 0
+    },
+    {
+      "margin": 0.9,
+      "z": -1.2815515655446008
+    },
+    {
+      "margin": 0.99,
+      "z": -2.3263478740408408
+    }
+  ],
+  "standard_sikkerhetsmargin": 0.9,
+  "konsentrasjonsnivaer": [
+    {
+      "navn": "lav",
+      "nedre": null,
+      "nylig_inntak": false
+    },
+    {
+      "navn": "middels høy",
+      "nedre": 20,
+      "nylig_inntak": false
+    },
+    {
+      "navn": "høy",
+      "nedre": 40,
+      "nylig_inntak": true
+    }
+  ],
+  "bruksmonstre": {
+    "kronisk": {
+      "vanskelig_over": "gul",
+      "nytt_inntak_over": "rod"
+    },
+    "ikke_kronisk": {
+      "vanskelig_over": "gronn",
+      "nytt_inntak_over": "gul"
+    }
+  },
+  "varsel_dager_mellom": 30
+}

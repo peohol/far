@@ -2,16 +2,17 @@
  * Formen på det redigerbare faginnholdet, slik databasen lagrer det.
  *
  * Informasjonsside, laboratorieanalytt, innholdselement, referanse,
- * intervallregelsett og kommentar er hver sin objekttype. Hvert objekt har en
- * stabil ID, et utkast og eventuelt en publisert utgave, og en historikk der
- * hver endring er en egen revisjon med et komplett øyeblikksbilde. Bakgrunnen
- * står i `docs/faginnhold.md`.
+ * intervallregelsett, kommentar og scenarioregelsett (`docs/scenarioregler.md`)
+ * er hver sin objekttype. Hvert objekt har en stabil ID, et utkast og eventuelt
+ * en publisert utgave, og en historikk der hver endring er en egen revisjon med
+ * et komplett øyeblikksbilde. Bakgrunnen står i `docs/faginnhold.md`.
  *
  * Verdiene under står også i migrasjonen som oppretter tabellene.
  * `src/__tests__/faginnhold.test.ts` kontrollerer at de stemmer overens.
  */
 
 import type { Kommentarinnhold } from '../domain/kommentarobjekt'
+import type { Scenarioregelsett } from '../domain/scenario'
 import type { Intervallregelsett } from '../regler/modell'
 
 export const OBJEKTTYPER = [
@@ -21,6 +22,7 @@ export const OBJEKTTYPER = [
   'referanse',
   'intervallregelsett',
   'kommentar',
+  'scenarioregelsett',
 ] as const
 export type Objekttype = (typeof OBJEKTTYPER)[number]
 
@@ -112,6 +114,7 @@ export interface Innhold {
   /** Formen står i `src/regler/modell.ts`. */
   intervallregelsett: Intervallregelsett
   kommentar: Kommentarinnhold
+  scenarioregelsett: Scenarioregelsett
 }
 
 /**
