@@ -15,13 +15,31 @@
  * Nøkkelen er analyttkoden laboratoriet rapporterer. Den er stabil og kjent
  * for brukerne, og det er koden fortolkningsmodulene viser — også når flere
  * koder deler en informasjonsside eller en fortolkningsmodul.
+ *
+ * Etter koden kan adressen peke på et sted på siden: en seksjon, og eventuelt
+ * et detaljkort i den. Siden åpner da stedet og ruller dit:
+ *
+ *   #/analytt/AMTNORSUM/farmakokinetikk
+ *   #/analytt/AMTNORSUM/farmakokinetikk/<kort-ID>
+ *
+ * Seksjonene og kortene har faste nøkler (se `src/components/seksjoner/`).
  */
 
-export type Rute = { side: 'fortolkning' } | { side: 'analytt'; kode: string }
+export type Rute =
+  | { side: 'fortolkning' }
+  | {
+      side: 'analytt'
+      kode: string
+      /** Seksjonen og eventuelt detaljkortet adressen peker på. Utelatt når den peker på siden. */
+      sted?: readonly string[]
+    }
 
 export const FORTOLKNING: Rute = { side: 'fortolkning' }
 
-const ANALYTT = /^#\/analytt\/([^/?#]+)\/?$/i
+const ANALYTT = /^#\/analytt\/([^/?#]+)((?:\/[^/?#]+)*)\/?$/i
+
+/** Flest ledd i stedet: seksjonen og detaljkortet. */
+const MAKS_STEDSLEDD = 2
 
 /** Ruten adressen peker på. Alt som ikke er en informasjonsside, er fortolkningen. */
 export function lesRute(hash: string): Rute {
@@ -34,17 +52,33 @@ export function lesRute(hash: string): Rute {
     return FORTOLKNING
   }
   kode = kode.trim().toUpperCase()
-  return kode ? { side: 'analytt', kode } : FORTOLKNING
+  if (!kode) return FORTOLKNING
+  const sted = lesSted(treff[2] ?? '')
+  return sted ? { side: 'analytt', kode, sted } : { side: 'analytt', kode }
+}
+
+/**
+ * Stedsleddene etter koden. Et sted med flere ledd enn siden har nivåer, eller
+ * som ikke lar seg lese, gir siden uten sted — ikke en annen side.
+ */
+function lesSted(hale: string): string[] | undefined {
+  const ledd = hale.split('/').filter(Boolean)
+  if (ledd.length === 0 || ledd.length > MAKS_STEDSLEDD) return undefined
+  try {
+    return ledd.map((l) => decodeURIComponent(l))
+  } catch {
+    return undefined
+  }
 }
 
 /** Adressen til en rute, slik den står i adressefeltet. */
 export function adresse(rute: Rute): string {
-  return rute.side === 'analytt' ? analyttadresse(rute.kode) : '#/'
+  return rute.side === 'analytt' ? analyttadresse(rute.kode, rute.sted) : '#/'
 }
 
-/** Adressen til informasjonssiden for en analyttkode. */
-export function analyttadresse(kode: string): string {
-  return `#/analytt/${encodeURIComponent(kode.toUpperCase())}`
+/** Adressen til informasjonssiden for en analyttkode, eventuelt til et sted på den. */
+export function analyttadresse(kode: string, sted: readonly string[] = []): string {
+  return ['#/analytt', kode.toUpperCase(), ...sted].map((l, i) => (i === 0 ? l : encodeURIComponent(l))).join('/')
 }
 
 export function sammeRute(a: Rute, b: Rute): boolean {
