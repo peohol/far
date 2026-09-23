@@ -35,6 +35,11 @@ export interface Utgave<T> {
   endret_av_fornavn: string
   endret_av_etternavn: string
   endret_kl: string
+  /**
+   * Hvor innholdet kom fra når det ikke ble skrevet i appen, f.eks.
+   * «Importert fra Psykofarmaka.pdf, side 7». Utelatt for vanlige endringer.
+   */
+  kilde?: string
 }
 
 /**
