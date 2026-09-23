@@ -19,7 +19,7 @@ import { SaxesParser } from 'saxes'
  * kjøring selv om FEST-filen er uendret, slik at også de eldre radene får den
  * nye formen.
  */
-export const PARSERVERSJON = 1
+export const PARSERVERSJON = 2
 
 /* --- Et lite tre per oppføring -------------------------------------------- */
 
@@ -172,6 +172,41 @@ export interface Byttegruppedata {
   gyldig_til: string | null
 }
 
+/** Et stoff i en interaksjon: med ATC-kode, eller med virkestoffets ID når det ikke har noen. */
+export interface Interaksjonssubstans {
+  navn: string
+  /** ATC-koden. Kan være på et overordnet nivå, og gjelder da alle kodene under. */
+  atc: Kode | null
+  virkestoff_id: string | null
+}
+
+/** Den ene siden av en interaksjon: ett stoff, eller en gruppe med navn. */
+export interface Substansgruppe {
+  /** Navnet på gruppen, når den har flere stoffer, f.eks. «Johannesurt». */
+  navn: string | null
+  substanser: Interaksjonssubstans[]
+}
+
+export interface Interaksjonsdata {
+  /** «Bør unngås», «Forholdsregler bør tas» eller «Ingen tiltak nødvendig». */
+  relevans: Kode | null
+  klinisk_konsekvens: string | null
+  mekanisme: string | null
+  /** Håndteringen, med avsnitt som «Dosetilpasning: …» på hver sin linje. */
+  handtering: string | null
+  /** Når interaksjonen bare gjelder under visse forhold. */
+  situasjonskriterier: string[]
+  kildegrunnlag: Kode | null
+  referanser: { kilde: string; lenke: string | null }[]
+  /** De to sidene av interaksjonen. */
+  substansgrupper: Substansgruppe[]
+}
+
+/** ATC-koder DMP ikke har vurdert for interaksjoner ennå, f.eks. nye legemidler. */
+export interface IkkeVurdertdata {
+  atc: Kode[]
+}
+
 /** Én post fra FEST, klar til å lagres. */
 export interface Festpost {
   entitet: Entitetnavn
@@ -190,6 +225,8 @@ interface Enhet {
   katalog: string
   /** Elementet i oppføringen som bærer posten. */
   element: string
+  /** ID-en. Som regel elementets egen; noen elementer har ingen, og bruker oppføringens. */
+  id?: (element: Xmlnode, oppforing: Xmlnode) => string | null
   les: (node: Xmlnode) => object
 }
 
@@ -303,6 +340,39 @@ export const ENHETER = [
       gyldig_til: tekstIn(n, 'GyldigTilDato'),
     }),
   },
+  {
+    entitet: 'interaksjon',
+    katalog: 'KatInteraksjon',
+    element: 'Interaksjon',
+    les: (n): Interaksjonsdata => ({
+      relevans: kode(n, 'Relevans'),
+      klinisk_konsekvens: tekstIn(n, 'KliniskKonsekvens'),
+      mekanisme: tekstIn(n, 'Interaksjonsmekanisme'),
+      handtering: tekstIn(n, 'Handtering'),
+      situasjonskriterier: alleBarn(n, 'Situasjonskriterium')
+        .map((b) => b.tekst.trim())
+        .filter(Boolean),
+      kildegrunnlag: kode(n, 'Kildegrunnlag'),
+      referanser: alleBarn(n, 'Referanse')
+        .map((r) => ({ kilde: tekstIn(r, 'Kilde') ?? '', lenke: barn(r, 'Lenke')?.attr.V?.trim() || null }))
+        .filter((r) => r.kilde || r.lenke),
+      substansgrupper: alleBarn(n, 'Substansgruppe').map((g) => ({
+        navn: tekstIn(g, 'Navn'),
+        substanser: alleBarn(g, 'Substans').map((s) => ({
+          navn: tekstIn(s, 'Substans') ?? '',
+          atc: kode(s, 'Atc'),
+          virkestoff_id: tekstIn(s, 'RefVirkestoff'),
+        })),
+      })),
+    }),
+  },
+  {
+    entitet: 'interaksjon_ikke_vurdert',
+    katalog: 'KatInteraksjon',
+    element: 'InteraksjonIkkeVurdert',
+    id: (_element, oppforing) => tekstIn(oppforing, 'Id'),
+    les: (n): IkkeVurdertdata => ({ atc: koder(n, 'Atc') }),
+  },
 ] as const satisfies readonly Enhet[]
 
 export type Entitetnavn = (typeof ENHETER)[number]['entitet']
@@ -325,8 +395,9 @@ export function lesOppforing(katalog: string, oppforing: Xmlnode): Festpost | nu
   if (barn(oppforing, 'Status')?.attr.V !== 'A') return null
   for (const enhet of enheter) {
     const node = barn(oppforing, enhet.element)
-    const id = tekstIn(node, 'Id')
-    if (!node || !id) continue
+    if (!node) continue
+    const id = enhet.id ? enhet.id(node, oppforing) : tekstIn(node, 'Id')
+    if (!id) continue
     return {
       entitet: enhet.entitet as Entitetnavn,
       fest_id: id,

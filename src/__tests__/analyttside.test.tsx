@@ -18,7 +18,14 @@ import { Samtidighetskonflikt, type Faginnholdslager } from '../faginnhold/lagri
 import { TOM_SIDE, type Analyttsidedata, type Faginnholdsleser, type Utgave } from '../faginnhold/lesing'
 import type { Objektstatus, Tilstand } from '../faginnhold/modell'
 import { SITERING } from '../faginnhold/referanser'
-import { TOMT_UTVALG, type Legemiddelleser, type Legemiddelutvalg } from '../legemiddeldata/lesing'
+import type { Interaksjonsdata } from '../legemiddeldata/fest'
+import {
+  TOMME_INTERAKSJONER,
+  TOMT_UTVALG,
+  type Interaksjonsutvalg,
+  type Legemiddelleser,
+  type Legemiddelutvalg,
+} from '../legemiddeldata/lesing'
 
 beforeAll(() => {
   globalThis.ResizeObserver ??= class {
@@ -160,6 +167,7 @@ const UTVALG: Legemiddelutvalg = {
     virkestoff_uten_styrke: [],
     // Tabletto: samme reseptgruppe og vei for begge styrkene, hver sin preparatomtale.
     ...(varenavn === 'Tabletto' && {
+      atc: { kode: 'N06AA09', tekst: 'Amitriptylin' },
       reseptgruppe: { kode: 'C', tekst: 'Reseptgruppe C' },
       administrasjonsveier: [{ kode: '53', tekst: 'Oral bruk' }],
       preparatomtale: `https://produktinformasjon.legemiddelsok.no/preparatomtaler/${id}.pdf`,
@@ -191,6 +199,45 @@ const UTVALG: Legemiddelutvalg = {
   ],
 }
 
+/** Syntetiske interaksjoner i FESTs form: én av hver relevans, mot en ATC-kode og en klasse. */
+function interaksjon(
+  id: string,
+  relevans: [string, string],
+  med: string,
+  egen: string,
+  tillegg: Partial<Interaksjonsdata> = {},
+): Interaksjonsdata & { id: string } {
+  return {
+    id,
+    relevans: { kode: relevans[0], tekst: relevans[1] },
+    klinisk_konsekvens: `Endret effekt ved samtidig bruk av ${med}.`,
+    mekanisme: null,
+    handtering: null,
+    situasjonskriterier: [],
+    kildegrunnlag: null,
+    referanser: [],
+    substansgrupper: [
+      { navn: null, substanser: [{ navn: med, atc: { kode: 'X01AA01', tekst: med }, virkestoff_id: null }] },
+      { navn: null, substanser: [{ navn: 'Amitriptylin', atc: { kode: egen, tekst: '' }, virkestoff_id: null }] },
+    ],
+    ...tillegg,
+  }
+}
+
+const INTERAKSJONER: Interaksjonsutvalg = {
+  interaksjoner: [
+    interaksjon('ID_I1', ['2', 'Forholdsregler bør tas'], 'Testhemmer', 'N06AA', {
+      situasjonskriterier: ['Gjelder ved høye doser.'],
+      handtering: 'Dosetilpasning: Juster dosen.\nMonitorering: Mål serumkonsentrasjonen.',
+      kildegrunnlag: { kode: '4', tekst: 'Indirekte data' },
+      referanser: [{ kilde: 'Testkilde', lenke: 'https://example.org/kilde' }],
+    }),
+    interaksjon('ID_I2', ['1', 'Bør unngås'], 'Farligin', 'N06AA09'),
+    interaksjon('ID_I3', ['3', 'Ingen tiltak nødvendig'], 'Ufarligin', 'N06AA09'),
+  ],
+  ikke_vurdert: [],
+}
+
 /** En side med koblingen til legemiddeldataene. */
 function medKobling(tilstand: Tilstand): Analyttsidedata {
   const data = side(tilstand)
@@ -217,6 +264,7 @@ function legemiddelleser(): Legemiddelleser {
       { id: 'ID_AMISALT', navn: 'Amitriptylinhydroklorid', navn_engelsk: null, salt_av: ['Amitriptylin'], preparater: 0 },
       { id: 'ID_AMI', navn: 'Amitriptylin', navn_engelsk: 'Amitriptyline', salt_av: [], preparater: 4 },
     ]),
+    interaksjoner: vi.fn(async ({ atc }) => (atc.includes('N06AA09') ? INTERAKSJONER : TOMME_INTERAKSJONER)),
   }
 }
 
@@ -487,7 +535,11 @@ describe('preparatene', () => {
       'https://produktinformasjon.legemiddelsok.no/preparatomtaler/ID_M2.pdf',
     ])
     expect(skuffknapp('Krever godkjenningsfritak')).toBeTruthy()
-    expect(screen.getByText(/Kilde: FEST, Direktoratet for medisinske produkter, uttrekk fra 8\. september 2026/)).toBeTruthy()
+    expect(
+      within(screen.getByRole('region', { name: 'Preparater' })).getByText(
+        /Kilde: FEST, Direktoratet for medisinske produkter, uttrekk fra 8\. september 2026/,
+      ),
+    ).toBeTruthy()
   })
 
   it('finner preparatene i søket på siden, også i lukkede detaljkort', async () => {
@@ -508,6 +560,75 @@ describe('preparatene', () => {
     })
     vis('AMTNORSUM', k)
     expect(await screen.findByText('Fikk ikke hentet preparatene')).toBeTruthy()
+    expect(screen.getByText('10–20 nmol/L')).toBeTruthy()
+  })
+})
+
+describe('interaksjonene', () => {
+  const skuffknapp = (navn: string) =>
+    screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
+
+  it('viser ikke seksjonen når siden ikke er koblet', async () => {
+    const k = kilde()
+    vis('AMTNORSUM', k)
+    await screen.findByText('10–20 nmol/L')
+    expect(screen.queryByRole('region', { name: 'Interaksjoner' })).toBeNull()
+    expect(k.legemidler.interaksjoner).not.toHaveBeenCalled()
+  })
+
+  it('slår opp på ATC-koden til preparatene, og viser de alvorligste først', async () => {
+    const user = userEvent.setup()
+    const k = kilde({ data: medKobling })
+    vis('AMTNORSUM', k)
+    // «Ingen tiltak nødvendig» telles ikke og vises ikke.
+    expect(await screen.findByText('1 bør unngås · 1 forholdsregler bør tas')).toBeTruthy()
+    expect(k.legemidler.interaksjoner).toHaveBeenCalledWith({ atc: ['N06AA09'], virkestoff: ['ID_AMI', 'ID_AMISALT'] })
+    await user.click(skuffknapp('Interaksjoner'))
+    const seksjon = screen.getByRole('region', { name: 'Interaksjoner' })
+    const kort = within(seksjon)
+      .getAllByRole('button', { hidden: true })
+      .filter((b) => b.hasAttribute('aria-expanded') && b !== skuffknapp('Interaksjoner'))
+      .map((b) => b.textContent)
+    expect(kort[0]).toMatch(/^Farligin/)
+    expect(kort[1]).toMatch(/^Testhemmer/)
+    expect(within(seksjon).queryByText(/Ufarligin/)).toBeNull()
+
+    await user.click(skuffknapp('Testhemmer'))
+    expect(screen.getByText('Gjelder ved høye doser.')).toBeTruthy()
+    expect(screen.getByText('Dosetilpasning:')).toBeTruthy()
+    expect(screen.getByText('Mål serumkonsentrasjonen.')).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Testkilde' }).getAttribute('href')).toBe('https://example.org/kilde')
+    expect(screen.getByText(/De der DMP mener ingen tiltak er nødvendig, vises ikke\./)).toBeTruthy()
+  })
+
+  it('finner stoffene i søket på siden, også i lukkede detaljkort', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ data: medKobling }))
+    await screen.findByText(/1 bør unngås/)
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'farligin')
+    await waitFor(() => expect(screen.getByRole('status').textContent).toMatch(/^Treff 1 av/))
+    const steder = within(screen.getByRole('list', { name: 'Hvor treffene står' }))
+    await user.click(steder.getAllByRole('button', { name: /Interaksjoner.*Farligin/ })[0]!)
+    expect(skuffknapp('Farligin').getAttribute('aria-expanded')).toBe('true')
+  })
+
+  it('sier fra når stoffet ikke er vurdert, og når interaksjonene ikke kan hentes', async () => {
+    const k = kilde({ data: medKobling })
+    k.legemidler.interaksjoner = vi.fn(async () => ({
+      interaksjoner: [],
+      ikke_vurdert: [{ id: 'ID_V', atc: [{ kode: 'N06AA09', tekst: 'Amitriptylin' }] }],
+    }))
+    vis('AMTNORSUM', k)
+    expect(await screen.findByText('Ikke vurdert av DMP')).toBeTruthy()
+    expect(screen.getByText(/DMP har ikke vurdert interaksjonene for Amitriptylin \(N06AA09\) ennå/)).toBeTruthy()
+    cleanup()
+
+    const feil = kilde({ data: medKobling })
+    feil.legemidler.interaksjoner = vi.fn(async () => {
+      throw new Error('Nettverksfeil')
+    })
+    vis('AMTNORSUM', feil)
+    expect(await screen.findByText('Fikk ikke hentet interaksjonene')).toBeTruthy()
     expect(screen.getByText('10–20 nmol/L')).toBeTruthy()
   })
 })

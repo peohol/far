@@ -236,6 +236,7 @@ radsikkerheten gjelder som ellers.
 | 2 Viktige data | `viktige_data` | Ett kort per type — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon`, `halveringstid`, `steady_state` — med `{ nedre, ovre, enhet, forbehold }` |
 | 3–5 Farmakodynamikk, dosering, indikasjon | `farmakodynamikk`, `dosering`, `indikasjon` | `riktekst`: `{ dokument }` |
 | 6 Farmakokinetikk | `farmakokinetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge |
+| Interaksjoner | `interaksjoner` | Ingen; interaksjonene kommer fra FEST for koblingen i «Preparater» |
 | 7 Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }` |
 
 Tallene i panel 2 er tall, ikke tekst. Bare den ene grensen oppgitt vises som

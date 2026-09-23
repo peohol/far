@@ -26,12 +26,13 @@ import { rensDokument, tomtDokument, type Riktekstdokument } from './riktekst'
  *
  * - `identitet` — koden, kategorien og navnet.
  * - `legemidler` — preparatene fra legemiddeldataene, etter koblingen siden har.
+ * - `interaksjoner` — interaksjonene i legemiddeldataene, for de samme preparatene.
  * - `datakort` — faste kort med ett tall eller område hver.
  * - `tekst` — én riktekst.
  * - `kort` — en ordnet serie kort med overskrift og riktekst.
  * - `tabell` — én tabell med faste kolonner.
  */
-export type Panelform = 'identitet' | 'legemidler' | 'datakort' | 'tekst' | 'kort' | 'tabell'
+export type Panelform = 'identitet' | 'legemidler' | 'interaksjoner' | 'datakort' | 'tekst' | 'kort' | 'tabell'
 
 export interface Paneldefinisjon {
   nokkel: string
@@ -53,6 +54,7 @@ export const PANELER = [
   { nokkel: 'dosering', tittel: 'Dosering', form: 'tekst' },
   { nokkel: 'indikasjon', tittel: 'Indikasjon', form: 'tekst' },
   { nokkel: 'farmakokinetikk', tittel: 'Farmakokinetikk', form: 'kort' },
+  { nokkel: 'interaksjoner', tittel: 'Interaksjoner', form: 'interaksjoner' },
   { nokkel: 'serumkonsentrasjoner', tittel: 'Serumkonsentrasjoner ved ulike doser', form: 'tabell' },
 ] as const satisfies readonly Paneldefinisjon[]
 
