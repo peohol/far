@@ -21,6 +21,8 @@ import { SITERING, sidereferanser, type Referanse } from '../faginnhold/referans
 import {
   faginnholdskall,
   feilFra,
+  kjorMigrasjoner,
+  migrasjonsfiler,
   nyDatabase,
   opprettBruker,
   type Faginnholdskall,
@@ -345,13 +347,52 @@ describe('koblingene fra innholdet', () => {
     expect((await koblinger(kort.id)).map((k) => k.referanse_id).sort()).toEqual([a.id, b.id].sort())
   })
 
-  it('lar et objekt uten referanser være som før, og fyller inn tomme lister', async () => {
-    const side = await opprett('infoside', { navn: `Uten referanser ${neste()}` })
-    const kort = await opprett('innholdselement', element(side.id))
-    expect(await utkastet(side.id)).toMatchObject({ panelreferanser: {} })
-    expect(await utkastet(kort.id)).toMatchObject({ referanser: [] })
+  it('lar et objekt uten referanser ha samme form som før', async () => {
+    const side = await opprett('infoside', { navn: `Uten referanser ${neste()}`, panelreferanser: {} })
+    const kort = await opprett('innholdselement', element(side.id, { referanser: [] }))
+    expect(await utkastet(side.id)).toEqual({ navn: expect.any(String) })
+    expect(await utkastet(kort.id)).toEqual({
+      infoside: side.id,
+      panel: 'farmakodynamikk',
+      posisjon: 0,
+      elementtype: 'tekst',
+      data: {},
+    })
     expect(await koblinger(kort.id)).toEqual([])
+    await forventSamsvar(side.id)
+    await forventSamsvar(kort.id)
   })
+
+  it('lar innhold fra før migrasjonen stå likt revisjonen sin, og publiseres uten ny revisjon', async () => {
+    const REFERANSEMIGRASJON = migrasjonsfiler().find((f) => f.endsWith('_referanse_objekttype.sql'))!
+    const gammel = await nyDatabase({ til: REFERANSEMIGRASJON })
+    const redaktor = await opprettBruker(gammel, {
+      brukernavn: 'admin.gammel',
+      fornavn: 'Gro',
+      etternavn: 'Gammel',
+      rolle: 'admin',
+    })
+    const kall = faginnholdskall(gammel, redaktor)
+    const side = await kall.opprett('infoside', { navn: 'Fra før referansene' })
+    await kall.publiser(side.id, 1)
+    const kort = await kall.opprett('innholdselement', element(side.id, { data: { tekst: 'Uten kilder' } }))
+
+    await kjorMigrasjoner(gammel, { fra: REFERANSEMIGRASJON })
+
+    await kall.forventSamsvar(side.id)
+    await kall.forventSamsvar(kort.id)
+    // Uendret innhold gir ingen ny revisjon, og publiseringen peker på den
+    // revisjonen som faktisk er det publiserte.
+    expect((await kall.lagre(side.id, 1, { navn: 'Fra før referansene' })).revisjon).toBe(1)
+    expect(await kall.publiser(kort.id, 1)).toMatchObject({ revisjon: 1, publisert_revisjon: 1 })
+    await kall.forventSamsvar(kort.id)
+
+    // Og det gamle innholdet kan få referanser som alt annet.
+    const ref = await kall.opprett('referanse', referanseinnhold('Ny kilde'))
+    expect((await kall.lagre(kort.id, 1, element(side.id, { referanser: [ref.id] }))).revisjon).toBe(2)
+    expect((await kall.gjenopprett(kort.id, 2, 1)).revisjon).toBe(3)
+    await kall.forventSamsvar(kort.id)
+  }, 60_000)
 
   it('avviser siteringer som ikke peker på en referanse', async () => {
     const ref = await nyReferanse()

@@ -356,6 +356,10 @@ $$;
 
 -- Informasjonssiden får panelreferansene: et objekt fra panelnøkkel til en
 -- ordnet liste med referanse-ID-er. De lagres som koblinger, ikke som JSON.
+--
+-- Uten referanser utelates feltet i øyeblikksbildet, i stedet for å stå tomt.
+-- Da er et objekt fra før denne migrasjonen fortsatt nøyaktig likt revisjonen
+-- det peker på, og kan publiseres og gjenopprettes uten en ny revisjon.
 create or replace function intern.skriv_infoside(
   p_objekt uuid, p_tilstand public.objekttilstand, p_innhold jsonb
 )
@@ -408,27 +412,26 @@ language sql
 stable
 set search_path = ''
 as $$
-  select jsonb_build_object(
-    'navn', s.navn,
-    'panelreferanser', coalesce(
-      (
-        select jsonb_object_agg(p.panel, p.ider)
-        from (
-          select k.panel, jsonb_agg(k.referanse_id order by k.nr) as ider
-          from public.referansekoblinger k
-          where k.objekt_id = s.objekt_id and k.tilstand = s.tilstand and k.niva = 'panel'
-          group by k.panel
-        ) p
-      ),
-      '{}'::jsonb
-    )
+  select jsonb_build_object('navn', s.navn) || coalesce(
+    (
+      select jsonb_build_object('panelreferanser', jsonb_object_agg(p.panel, p.ider))
+      from (
+        select k.panel, jsonb_agg(k.referanse_id order by k.nr) as ider
+        from public.referansekoblinger k
+        where k.objekt_id = s.objekt_id and k.tilstand = s.tilstand and k.niva = 'panel'
+        group by k.panel
+      ) p
+      having count(*) > 0
+    ),
+    '{}'::jsonb
   )
   from public.infosider s
   where s.objekt_id = p_objekt and s.tilstand = p_tilstand
 $$;
 
 -- Innholdselementet får kortreferansene som en ordnet liste, og
--- inline-siteringene leses ut av dataene.
+-- inline-siteringene leses ut av dataene. Uten kortreferanser utelates
+-- feltet, av samme grunn som panelreferansene over.
 create or replace function intern.skriv_innholdselement(
   p_objekt uuid, p_tilstand public.objekttilstand, p_innhold jsonb
 )
@@ -490,15 +493,15 @@ as $$
     'panel', e.panel,
     'posisjon', e.posisjon,
     'elementtype', e.elementtype,
-    'data', e.data,
-    'referanser', coalesce(
-      (
-        select jsonb_agg(k.referanse_id order by k.nr)
-        from public.referansekoblinger k
-        where k.objekt_id = e.objekt_id and k.tilstand = e.tilstand and k.niva = 'element'
-      ),
-      '[]'::jsonb
-    )
+    'data', e.data
+  ) || coalesce(
+    (
+      select jsonb_build_object('referanser', jsonb_agg(k.referanse_id order by k.nr))
+      from public.referansekoblinger k
+      where k.objekt_id = e.objekt_id and k.tilstand = e.tilstand and k.niva = 'element'
+      having count(*) > 0
+    ),
+    '{}'::jsonb
   )
   from public.innholdselementer e
   where e.objekt_id = p_objekt and e.tilstand = p_tilstand

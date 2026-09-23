@@ -63,17 +63,32 @@ export function migrasjonsfiler(): string[] {
     .sort()
 }
 
-/** En ny, tom database med alle migrasjonene kjørt. */
-export async function nyDatabase(): Promise<PGlite> {
-  const db = new PGlite()
-  await db.exec(SUPABASE_GRUNNLAG)
+/**
+ * Kjører migrasjonene fra og med `fra` til, men ikke med, `til` — begge
+ * filnavnprefikser. Uten grenser kjøres alle.
+ */
+export async function kjorMigrasjoner(
+  db: PGlite,
+  { fra = '', til }: { fra?: string; til?: string } = {},
+): Promise<void> {
   for (const fil of migrasjonsfiler()) {
+    if (fil < fra || (til !== undefined && fil >= til)) continue
     try {
       await db.exec(readFileSync(`${MIGRASJONER}/${fil}`, 'utf8'))
     } catch (feil) {
       throw new Error(`Migrasjonen ${fil} feilet: ${(feil as Error).message}`)
     }
   }
+}
+
+/**
+ * En ny, tom database med migrasjonene kjørt — alle, eller bare dem før
+ * `til`, for å prøve hvordan en senere migrasjon møter data som alt finnes.
+ */
+export async function nyDatabase({ til }: { til?: string } = {}): Promise<PGlite> {
+  const db = new PGlite()
+  await db.exec(SUPABASE_GRUNNLAG)
+  await kjorMigrasjoner(db, { til })
   return db
 }
 

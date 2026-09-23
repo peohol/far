@@ -154,7 +154,9 @@ dermed reservert i `data`. ID-ene i en siteringsnode skal stå med små
 bokstaver, siden appen kjenner igjen referansene på teksten.
 
 Feltene `panelreferanser` og `referanser` kom til etter at typene ble laget.
-Eldre revisjoner mangler dem, og da regnes de som tomme.
+Uten referanser utelates de i øyeblikksbildet i stedet for å stå tomme. Da har
+et objekt uten referanser samme form som før, og innhold fra før
+referansesystemet står fortsatt likt revisjonen det peker på.
 
 **Koblingene.** Hver sitering blir en rad i `referansekoblinger`, skrevet av
 de samme funksjonene som skriver innholdet og for samme tilstand. Panel- og

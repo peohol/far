@@ -38,8 +38,8 @@ export type Referanseniva = (typeof REFERANSENIVAER)[number]
  * Informasjonssiden for et virkestoff, f.eks. Amitriptylin.
  *
  * `panelreferanser` er referansene som gjelder et helt panel, fra panelnøkkel
- * til en ordnet liste med referanse-ID-er. Databasen gir alltid feltet
- * tilbake; utelatt betyr ingen.
+ * til en ordnet liste med referanse-ID-er. Utelatt betyr ingen, og databasen
+ * utelater feltet når siden ikke har noen.
  */
 export interface Infosideinnhold {
   navn: string
@@ -65,8 +65,8 @@ export interface Laboratorieanalyttinnhold {
  *
  * `referanser` er kortreferansene: kildene for hele kortet, i rekkefølge.
  * Inline-siteringer står som siteringsnoder i `data` (se
- * `src/faginnhold/referanser.ts`). Databasen gir alltid feltet tilbake;
- * utelatt betyr ingen.
+ * `src/faginnhold/referanser.ts`). Utelatt betyr ingen, og databasen
+ * utelater feltet når kortet ikke har noen.
  */
 export interface Innholdselementinnhold {
   infoside: string
