@@ -1,9 +1,8 @@
 # Redigerbart faginnhold i OUSFAR
 
 Leses når noe som har med informasjonssider, laboratorieanalytter,
-innholdselementer, referanser, revisjoner eller publisering å gjøre skal
-endres. Planen
-og fremdriften står i `docs/analyttsider-og-redigering.md`; her står hvordan
+innholdselementer, referanser, fortolkningskommentarer, revisjoner eller
+publisering å gjøre skal endres. Planen og fremdriften står i `docs/analyttsider-og-redigering.md`; her står hvordan
 fundamentet faktisk er bygget.
 
 Informasjonssidene (arbeidspakke 3) bygger på dette. Fortolkningen gjør det
@@ -25,6 +24,8 @@ gjøres med vilje.
 | `supabase/import/psykofarmaka/` | Importdatasettet for psykofarmakasidene, én fil per analyttkode |
 | `src/faginnhold/import.ts`, `psykofarmaka.ts`, `scripts/importer-psykofarmaka.ts` | Kontrollen av datasettet, planen og SQL-en som legger det inn |
 | `supabase/migrations/*_psykofarmaka_import_*.sql`, `*_psykofarmaka_kursendring.sql` | Importen slik den ble rullet ut, og kursendringen som tok bort preparatnavnene etterpå |
+| `supabase/migrations/*_kommentar_objekttype.sql`, `*_kommentarer.sql` | Fortolkningskommentarene som egne objekter |
+| `src/domain/kommentarobjekt.ts` | Formen på en kommentar og kontrollen av den, lik databasens |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
 | `src/faginnhold/paneler.ts` | Panelene 1–7 og formen på hver elementtype |
@@ -35,7 +36,7 @@ gjøres med vilje.
 | `src/components/analyttside/` | Siden, panelene, skjemaene, editoren, referansevelgeren og søket |
 | `src/faginnhold/referanser.ts` | Siteringer, nummerering, piller og referanseliste — rene funksjoner |
 | `src/components/referanser/` | Referansepillen med boblen, og referanselisten |
-| `src/__tests__/faginnhold.test.ts`, `referanser.test.ts`, `analyttsidelesing.test.ts` | Reglene og lesingen, prøvd mot en ekte database |
+| `src/__tests__/faginnhold.test.ts`, `referanser.test.ts`, `analyttsidelesing.test.ts`, `kommentarer.test.ts` | Reglene og lesingen, prøvd mot en ekte database |
 | `src/__tests__/analyttside.test.tsx`, `navigasjon.test.tsx`, `analyttsidemodell.test.ts` | Sidene, redigeringen og veiene mellom sidene og fortolkningen |
 | `src/__tests__/referansenummerering.test.ts`, `referansepille.test.tsx` | Nummereringen, og pillen med mus, berøring og tastatur |
 | `src/__tests__/psykofarmakaimport.test.ts` | Datasettet og importen, prøvd mot en ekte database |
@@ -64,9 +65,11 @@ Tre begreper holdes fra hverandre, som planen krever:
 
 - **Referanse** — én kilde i den globale referansebasen. Se
   [Referanser](#referanser).
+- **Kommentar** — en fortolkningskommentar: teksten som limes inn i
+  pasientsvaret. Se [Kommentarer](#kommentarer).
 
-Fortolkningsreglene er egne objekttyper på samme maskineri. De enkle
-konsentrasjonsreglene er objekttypen `intervallregelsett`, beskrevet i
+Fortolkningsreglene er egne objekttyper på samme maskineri, én per regeltype.
+De enkle konsentrasjonsreglene er objekttypen `intervallregelsett`, beskrevet i
 `docs/fortolkningsregler.md`.
 
 ## Objekter, revisjoner og tilstander
@@ -214,6 +217,44 @@ trykk utenfor eller fokus som går videre, lukker den. Boblen står rett etter
 knappen i dokumentet, så Tab når lenkene i den, og plasseres som tipsboblene
 (`useBobleplassering` i `Tips.tsx`). Pillene og listen henter numrene og
 referansene fra `Sidereferanser` rundt siden.
+
+## Kommentarer
+
+Kommentar og regel er ulike objekter (planen, avsnitt 10). En kommentar er
+teksten; en regel sier når den brukes. Hver kommentar er et eget objekt med
+egen historikk og publisering, og reglene peker på den med ID-en. Samme
+kommentar kan brukes av flere regler og regelsett, og en tekst rettes ett
+sted.
+
+```ts
+{ navn: 'Åpning', tekst: 'THC-syre … er påvist i {nivå} konsentrasjon.', plassholdere: ['{nivå}'] }
+```
+
+- **Teksten** er ren tekst på én linje, 1–4000 tegn, uten mellomrom i endene.
+  Den limes inn som den står. `navn` er det redigeringen viser, og følger
+  ikke med i pasientsvaret.
+- **Plassholderne** er hullene en regeltype fyller inn når kommentaren settes
+  sammen, som `{nivå}`. Teksten må bruke nøyaktig de plassholderne som er
+  oppgitt, ingen flere og ingen færre, og en krøllparentes som ikke hører til
+  en plassholder, avvises. Plassholderne lagres sortert, og **kan ikke endres**
+  etter at kommentaren er opprettet: alle revisjoner har de samme. Trengs
+  andre, lages en ny kommentar. Slik kan en regeltype som har godtatt en
+  kommentar, stole på den også etter senere endringer av teksten, uten at
+  kommentaren må vite hvem som bruker den. Hvilke plassholdere en regeltype
+  godtar, og hvilke den krever, kontrollerer regeltypen selv. Vanlige
+  kommentarer har ingen.
+- **Koblingen** fra en regel er en `uuid`-kolonne med `intern.krev_objekttype`
+  for `'kommentar'`. Den samme kontrollen gjør at det publiserte regelsettet
+  bare kan peke på publiserte kommentarer: **kommentarene publiseres før
+  regelsettet**. Regelsettet binder ikke en bestemt revisjon av kommentaren;
+  fortolkningen bruker den publiserte utgaven av hver.
+- **Lesingen.** `les_kommentarer(kommentartilstand, ider)` gir kommentarene i
+  én tilstand — alle, eller bare de med ID-ene i `ider` — i samme form som de
+  andre lesefunksjonene.
+
+`validerKommentar` i `src/domain/kommentarobjekt.ts` gir de samme feilene som
+databasen, med samme ordlyd, så redigeringen kan si fra før lagring.
+`kommentarer.test.ts` kjører de samme tilfellene gjennom begge.
 
 ## Informasjonssidene
 
