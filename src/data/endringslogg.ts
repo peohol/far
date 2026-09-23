@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.9.0',
+    dato: '2026-09-22',
+    sammendrag: 'Grunnmuren for redigerbare analyttsider er lagt',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Første steg mot en egen informasjonsside for hver analytt, der fagstoffet kan redigeres direkte i appen. Ingenting av dette er synlig ennå.',
+      'Fagstoffet lagres med full historikk: hvem som endret hva og når. En eldre utgave kan hentes fram igjen uten at noe av det som kom senere, går tapt.',
+      'Endringer lagres først som utkast, og tas ikke i bruk før de publiseres. Bare administratorer kan redigere og publisere; alle innloggede kan lese det som er publisert.',
+      'Lagrer to personer det samme samtidig, blir den siste stoppet i stedet for å skrive over den første.',
+      'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
     versjon: '1.8.1',
     dato: '2026-09-22',
     sammendrag: 'Selve appen lastes ikke ned før du er logget inn',

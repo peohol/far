@@ -8,7 +8,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 
 - [x] Supabase er etablert.
 - [x] Brukersystem med profiler og roller er etablert.
-- [ ] Arbeidspakke 1: fundament for redigerbart faginnhold.
+- [x] Arbeidspakke 1: fundament for redigerbart faginnhold.
 - [ ] Arbeidspakke 2: referansesystem.
 - [ ] Arbeidspakke 3: analyttsider og navigasjon.
 - [ ] Arbeidspakke 4: import av psykofarmakainnhold.
@@ -676,24 +676,26 @@ Derfor:
 
 ## Arbeidspakke 1 - Fundament for redigerbart faginnhold
 
-**Status:** [ ] Ikke startet
+**Status:** [x] Ferdig
+
+Hvordan fundamentet er bygget, står i `docs/faginnhold.md`. Migrasjonen må rulles ut mot Supabase-prosjektet før arbeidspakke 3 tar tabellene i bruk; appen bruker dem ikke før det.
 
 Mål: etablere domenemodellen og den tekniske infrastrukturen som senere innhold, referanser, regler og analyttsider skal bygge på, uten å migrere klinisk innhold ennå.
 
 Omfang:
 
-- [ ] Modell for informasjonsside/virkestoff.
-- [ ] Modell for laboratorieanalytt.
-- [ ] Modell for analyttkomponenter/sumanalyser.
-- [ ] Modell for generelle redigerbare innholdselementer.
-- [ ] Versjonering/revisjonshistorikk med komplette snapshots.
-- [ ] Stabil bruker-ID + navn på endringstidspunktet i historikken.
-- [ ] Gjenoppretting som ny revisjon, aldri omskriving/sletting av historikk.
-- [ ] Optimistisk samtidighetskontroll slik at gammel versjon ikke kan overskrive ny.
-- [ ] Grunnlag for utkast/publisert tilstand.
-- [ ] Server-side tilgangskontroll bygget på eksisterende brukerroller.
-- [ ] Tester av RLS, revisjoner, gjenoppretting, samtidighetskonflikt og publisering.
-- [ ] Ingen eksisterende fortolkningsmodul skal endre klinisk oppførsel i denne arbeidspakken.
+- [x] Modell for informasjonsside/virkestoff.
+- [x] Modell for laboratorieanalytt.
+- [x] Modell for analyttkomponenter/sumanalyser.
+- [x] Modell for generelle redigerbare innholdselementer.
+- [x] Versjonering/revisjonshistorikk med komplette snapshots.
+- [x] Stabil bruker-ID + navn på endringstidspunktet i historikken.
+- [x] Gjenoppretting som ny revisjon, aldri omskriving/sletting av historikk.
+- [x] Optimistisk samtidighetskontroll slik at gammel versjon ikke kan overskrive ny.
+- [x] Grunnlag for utkast/publisert tilstand.
+- [x] Server-side tilgangskontroll bygget på eksisterende brukerroller.
+- [x] Tester av RLS, revisjoner, gjenoppretting, samtidighetskonflikt og publisering.
+- [x] Ingen eksisterende fortolkningsmodul skal endre klinisk oppførsel i denne arbeidspakken.
 
 Avgrensning:
 
