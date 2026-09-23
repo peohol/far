@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.12.0',
+    versjon: '1.13.0',
     dato: '2026-09-23',
     sammendrag: 'Fortolkningsreglene for rusmidler vises på analyttsidene, med en simulator',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,20 @@ export const ENDRINGSLOGG: Endring[] = [
       'Analyttsidene for stoffene med ruspotensial i serum har fått et panel med fortolkningsreglene. Panelet viser hvilke analytter som må være påvist, grensene som gjelder, hvilke kommentarer som brukes og hvilke koder de limes inn på.',
       'Diazepamgruppen, tramadol, kodein/morfin og amfetamin/metamfetamin har i tillegg «Prøv reglene». Der krysser du av og fyller inn tall slik som i fortolkningen, og ser hvilket scenario som gjelder og hvor kommentarene havner.',
       'Reglene i panelet er kontrollert mot dagens fortolkning for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. De gir nøyaktig samme kommentarer, plassering og beskjeder. Kommenteringen er uendret.',
+    ],
+  },
+  {
+    versjon: '1.12.0',
+    dato: '2026-09-23',
+    sammendrag: 'Informasjonssidene for antidepressiver og antipsykotika har fått innhold',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'De 35 sidene for antidepressiver, antipsykotika og lamotrigin er fylt med fagstoffet fra Psykofarmaka-dokumentet: dosering, farmakodynamikk, referanseområde, toksisk område, komatøs/fatal konsentrasjon, halveringstid, steady state, farmakokinetikk og serumkonsentrasjoner ved ulike doser.',
+      'Et kort sammendrag av de godkjente indikasjonene er hentet fra Felleskatalogen, med lenke til produktsidene.',
+      'Preparatnavn vises ikke foreløpig. De skal hentes automatisk fra offentlige legemiddeldata i stedet for å føres inn for hånd.',
+      'Historikken viser hvor innholdet kom fra, for eksempel «Importert fra Psykofarmaka.pdf, side 7».',
+      'Ringegrensen, måleområdet og spørsmål-og-svar-notatene fra dokumentet er ikke tatt med. Kommenteringen og fortolkningsreglene er uendret.',
     ],
   },
   {
