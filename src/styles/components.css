@@ -2999,19 +2999,9 @@ details[open] > .detalj__kropp {
   margin: 0;
 }
 
+/* Hvert kort er et detaljkort (`seksjoner.css`), som tegner rammen selv. */
 .infokort__kort {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-2);
-  padding: var(--rom-3);
-  border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-m);
   scroll-margin-block: var(--rom-4);
-}
-
-.infokort__tittel {
-  font-size: var(--tekst-s);
-  font-weight: var(--vekt-tung);
 }
 
 /* Panel 7: tabellen. Ruller sidelengs på smale skjermer i stedet for å

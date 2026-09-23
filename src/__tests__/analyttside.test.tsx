@@ -132,13 +132,19 @@ function kilde({
   return { leser, lager, kanRedigere }
 }
 
-function vis(kode: string, k = kilde()) {
+function vis(kode: string, k = kilde(), sted?: string[]) {
   const onApneFortolkning = vi.fn()
   const onLukk = vi.fn()
   render(
     <TipsLag>
       <FaginnholdskildeProvider kilde={k}>
-        <Analyttside kode={kode} katalog={katalog} onApneFortolkning={onApneFortolkning} onLukk={onLukk} />
+        <Analyttside
+          kode={kode}
+          sted={sted}
+          katalog={katalog}
+          onApneFortolkning={onApneFortolkning}
+          onLukk={onLukk}
+        />
       </FaginnholdskildeProvider>
     </TipsLag>,
   )
@@ -147,6 +153,7 @@ function vis(kode: string, k = kilde()) {
 
 describe('lesemodus', () => {
   it('viser identiteten, datakortet, teksten og referansene', async () => {
+    const user = userEvent.setup()
     const { leser } = vis('AMTNORSUM')
     expect(await screen.findByText('10–20 nmol/L')).toBeTruthy()
     expect(leser.lesAnalyttside).toHaveBeenCalledWith('AMTNORSUM', 'publisert')
@@ -159,6 +166,9 @@ describe('lesemodus', () => {
     const setning = screen.getByText(/er en sumanalyse og omfatter/).closest('p')!
     expect(setning.textContent).toBe('AMTNORSUM er en sumanalyse og omfatter amitriptylin og nortriptylin (NOR).')
     expect(within(setning).getByRole('link', { name: /NOR/ }).getAttribute('href')).toBe('#/analytt/NOR')
+
+    // Teksten står i en lukket seksjon til den åpnes.
+    await user.click(screen.getByRole('button', { name: 'Farmakodynamikk' }))
 
     // Datakortet (panel 2) siterer A, teksten i panel 3 A og B, panelet B:
     // A blir 1 og B blir 2, og listen nederst følger numrene.
@@ -269,6 +279,66 @@ describe('søket på siden', () => {
     await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'GJENOPPTAKET')
     await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
     expect(document.querySelector('mark.sidetreff')?.textContent).toBe('gjenopptaket')
+  })
+})
+
+describe('seksjonene', () => {
+  /** Knappen som åpner og lukker seksjonen. */
+  const skuffknapp = (navn: string) =>
+    screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
+  const apen = (navn: string) => skuffknapp(navn).getAttribute('aria-expanded') === 'true'
+
+  it('viser viktige data åpent og resten lukket med en oppsummering', async () => {
+    vis('AMTNORSUM')
+    await screen.findByText('10–20 nmol/L')
+    expect(apen('Viktige data')).toBe(true)
+    expect(apen('Farmakodynamikk')).toBe(false)
+    // Oppsummeringen er begynnelsen av teksten, med teksten selv skjult.
+    expect(screen.getByText('Hemmer gjenopptaket')).toBeTruthy()
+    expect(screen.getByText('gjenopptaket', { selector: 'strong' }).closest('[hidden]')).not.toBeNull()
+  })
+
+  it('åpner seksjonen søket finner et treff i, og gjør treffet aktivt', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM')
+    await screen.findByText('10–20 nmol/L')
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'hemmer')
+    await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
+    // Den lukkede seksjonen sier at den har et treff.
+    expect(screen.getByText('1 treff')).toBeTruthy()
+    await user.click(within(screen.getByRole('list', { name: 'Hvor treffene står' })).getByRole('button'))
+    expect(apen('Farmakodynamikk')).toBe(true)
+    expect(document.querySelector('mark.sidetreff--aktiv')?.closest('[hidden]')).toBeNull()
+
+    await user.click(skuffknapp('Farmakodynamikk'))
+    expect(apen('Farmakodynamikk')).toBe(false)
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), '{Enter}')
+    expect(apen('Farmakodynamikk')).toBe(true)
+  })
+
+  it('åpner stedet adressen peker på', async () => {
+    vis('AMTNORSUM', kilde(), ['farmakodynamikk'])
+    await screen.findByText('10–20 nmol/L')
+    await waitFor(() => expect(apen('Farmakodynamikk')).toBe(true))
+  })
+
+  it('åpner og lukker alle seksjonene', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM')
+    await screen.findByText('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Åpne alle' }))
+    expect(apen('Farmakodynamikk') && apen('Viktige data')).toBe(true)
+    await user.click(screen.getByRole('button', { name: 'Lukk alle' }))
+    expect(apen('Farmakodynamikk') || apen('Viktige data')).toBe(false)
+  })
+
+  it('åpner alt i redigeringsmodus, også panelene som bare vises der', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    await screen.findByText('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await screen.findByRole('button', { name: 'Legg til: Dosering' })
+    expect(apen('Dosering') && apen('Farmakodynamikk')).toBe(true)
   })
 })
 
