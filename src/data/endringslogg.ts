@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.12.0',
+    dato: '2026-09-23',
+    sammendrag: 'Grunnlaget for redigerbare regler for rusmidler som vurderes samlet',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Første steg mot at reglene for diazepamgruppen, tramadol, kodein/morfin og amfetamin/metamfetamin kan redigeres i appen. Reglene er skrevet om til scenarier: hvilke analytter som er påvist, eventuelle forholdstall mot en grense, og hvilke kommentarer som da brukes og hvor de limes inn.',
+      'De nye reglene er kontrollert mot dagens fortolkning for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. De gir nøyaktig samme kommentarer, plassering og beskjeder.',
+      'Ingenting av dette er synlig ennå. Kommenteringen er uendret.',
+    ],
+  },
+  {
     versjon: '1.11.0',
     dato: '2026-09-23',
     sammendrag: 'Hver analytt har fått sin egen informasjonsside',

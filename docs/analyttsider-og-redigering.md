@@ -771,7 +771,9 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 ## Arbeidspakke 6 - Sammensatte analyttgrupper
 
-**Status:** [ ] Ikke startet
+**Status:** [ ] Påbegynt
+
+Scenariomodellen og motoren står i `docs/scenarioregler.md`. Dagens regler er skrevet som scenarioregelsett og gir identisk resultat som dagens motor; fortolkningen bruker fortsatt dagens motor.
 
 - [ ] Redigerbare scenarioer.
 - [ ] Påvist/ikke påvist-betingelser.

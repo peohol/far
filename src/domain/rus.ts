@@ -1,6 +1,9 @@
 import rusdata from '../data/rusmidler.json'
 import type { Kommentarplassering } from './kommentar'
+import { FYLL_INN_TALL, lesKonsentrasjon, VELG_PAVIST } from './scenario'
 import type { Analyte } from '../types'
+
+export { lesKonsentrasjon }
 
 /**
  * Fortolkning av stoffer med ruspotensial i serum, etter tabellene i
@@ -178,22 +181,9 @@ function tillegg(
   return { rolle: 'tillegg', merke, koder, tekst: tekst(radId, nokkel) }
 }
 
-const VELG_PAVIST = 'Kryss av for hvilke av analyttene som er påvist.'
-const FYLL_INN_TALL = 'Fyll inn de målte konsentrasjonene, så avgjøres regelen.'
-
 /** Kodene i `rekkefolge` som er påvist, i modulens egen rekkefølge. */
 function pavisteAv(pavist: string[], rekkefolge: string[]): string[] {
   return rekkefolge.filter((kode) => pavist.includes(kode))
-}
-
-/**
- * Leser et konsentrasjonstall slik det tastes i norske felt. `null` når
- * teksten ikke er et tall som ikke er negativt.
- */
-export function lesKonsentrasjon(tekst: string): number | null {
-  const trimmet = tekst.trim().replace(',', '.')
-  if (trimmet === '' || !/^\d+(\.\d+)?$/.test(trimmet)) return null
-  return Number(trimmet)
 }
 
 /** Alle de oppgitte konsentrasjonene, eller `null` om noen mangler. */
