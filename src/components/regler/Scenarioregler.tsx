@@ -1,7 +1,13 @@
 import { useMemo, useState } from 'react'
-import { rusModulFor, TOM_RUS_INNDATA, type RusInndata, type RusModul, type RusPlassering } from '../../domain/rus'
+import {
+  rusModulFor,
+  rusVerdifelter,
+  TOM_RUS_INNDATA,
+  type RusInndata,
+  type RusModul,
+  type RusPlassering,
+} from '../../domain/rus'
 import type { Kommentaroppslag } from '../../domain/kommentarobjekt'
-import { RUS_KOMMENTARER, RUS_REGELSETT } from '../../domain/rusregelsett'
 import {
   flettInn,
   kjorScenarier,
@@ -17,16 +23,21 @@ import { Rusvalg } from '../Rusvalg'
 import { Uthev } from '../Uthev'
 import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
+import { useScenarioreglerkilde } from './Scenarioreglerkilde'
 
 /**
- * Regelsettet fortolkningsmodulen bruker for denne analytten, med navnene på
- * analyttene og kommentarene regelsettet viser til. `null` når modulen ikke
- * fortolkes med scenarioregler.
+ * Det publiserte regelsettet fortolkningsmodulen bruker for denne analytten,
+ * med navnene på analyttene og kommentarene regelsettet viser til. `null` når
+ * modulen ikke fortolkes med scenarioregler, eller reglene ikke er hentet.
  */
-export function scenarioreglerFor(fortolkning: Analyte): ScenarioreglerProps | null {
-  const modul = rusModulFor(fortolkning)
-  const regelsett = modul && RUS_REGELSETT.find((r) => r.modul === modul.id)
-  return modul && regelsett ? { modul, regelsett, kommentarer: RUS_KOMMENTARER } : null
+export function useScenarioreglerFor(fortolkning: Analyte): ScenarioreglerProps | null {
+  const { tilstand } = useScenarioreglerkilde()
+  return useMemo(() => {
+    const modul = rusModulFor(fortolkning)
+    if (!modul || tilstand.status !== 'klar') return null
+    const utgave = tilstand.regler.regelsett.get(modul.id)
+    return utgave ? { modul, regelsett: utgave.innhold, kommentarer: tilstand.regler.kommentarer } : null
+  }, [fortolkning, tilstand])
 }
 
 const OG = new Intl.ListFormat('nb', { type: 'conjunction' })
@@ -240,8 +251,7 @@ function Simulator({
   treff: Scenariotreff | null
   onEndre: (inndata: RusInndata) => void
 }) {
-  const navn = new Map(modul.analytter.map((a) => [a.kode, a.navn]))
-  const felter = verdifelterFor(regelsett, inndata.pavist).map((kode) => ({ kode, navn: navn.get(kode) ?? kode }))
+  const felter = rusVerdifelter(modul, verdifelterFor(regelsett, inndata.pavist))
   const nummer = treff?.scenario ? beskrivelse.findIndex((b) => b.scenario === treff.scenario) + 1 : 0
 
   return (

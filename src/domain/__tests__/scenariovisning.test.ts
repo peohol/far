@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { RUS_KOMMENTARER, RUS_REGELSETT } from '../rusregelsett'
+import { RUS_KOMMENTARER, RUS_REGELSETT } from '../../__tests__/hjelp/rusgrunnlag'
 import { beskrivForhold, beskrivRegelsett, formaterAndel } from '../scenariovisning'
 
 function regelsett(modul: string) {

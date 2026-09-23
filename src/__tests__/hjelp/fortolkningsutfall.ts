@@ -7,16 +7,20 @@
  * over et rutenett av påviste analytter og konsentrasjoner, og
  * THC-syrekommentarene over alle kombinasjonene av det de bygges av.
  *
- * Rutenettet for rusmiddelmodulene tar med verdiene rett på og rundt
- * grensene reglene bruker (se `OKSAZEPAM_GRENSE`, `LAV_MORFIN_GRENSE` og
- * `HOY_MORFIN_GRENSE` i `src/domain/rus.ts`), så en endring der slår ut.
+ * Rusmiddelmodulene fortolkes med regelsettene som er publisert i Supabase.
+ * Uten database brukes grunnlaget de ble importert fra (`rusgrunnlag.ts`),
+ * som `rusimport.test.ts` viser at databasen gir tilbake uendret. Rutenettet
+ * tar med verdiene rett på og rundt grensene reglene bruker (10 %, 20 % og
+ * 100 %), så en endring der slår ut.
  */
 import { analytes } from '../../domain/analytes'
 import { ETG_ALTERNATIVER } from '../../domain/etg'
 import { grensepiller } from '../../domain/piller'
 import { RUS_MODULER } from '../../domain/rus'
+import { kjorScenarier, verdifelter } from '../../domain/scenario'
 import { beregnKategori, byggKommentar, type Konsentrasjonsniva } from '../../domain/thc'
 import { cutoffvalg, valgene } from '../../domain/valg'
+import { RUS_KOMMENTARER, rusRegelsett } from './rusgrunnlag'
 
 /** Konsentrasjonene som prøves i hvert felt en rusmiddelmodul ber om. */
 const RUSVERDIER = ['', '0', '0,05', '0,1', '0,19', '0,2', '0,21', '0,5', '0,99', '1', '1,01', '2', '10', '100']
@@ -42,16 +46,19 @@ export function fortolkningsutfall() {
     piller: grensepiller(analyte),
   }))
 
-  const rus = RUS_MODULER.map((modul) => ({
-    id: modul.id,
-    utfall: delmengder(modul.analytter.map((a) => a.kode)).flatMap((pavist) =>
-      kombinasjoner(modul.verdifelter(pavist).map((f) => f.kode)).map((verdier) => ({
-        pavist,
-        verdier,
-        resultat: modul.fortolk({ pavist, verdier }),
-      })),
-    ),
-  }))
+  const rus = RUS_MODULER.map((modul) => {
+    const regelsett = rusRegelsett(modul.id)
+    return {
+      id: modul.id,
+      utfall: delmengder(modul.analytter.map((a) => a.kode)).flatMap((pavist) =>
+        kombinasjoner(verdifelter(regelsett, pavist)).map((verdier) => ({
+          pavist,
+          verdier,
+          resultat: kjorScenarier(regelsett, RUS_KOMMENTARER, { pavist, verdier }).resultat,
+        })),
+      ),
+    }
+  })
 
   const nivaer: Konsentrasjonsniva[] = ['lav', 'middels høy', 'høy']
   const thc = nivaer.flatMap((niva) =>

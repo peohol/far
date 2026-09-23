@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest'
+import { fortolkRus, RUS_KOMMENTARER, RUS_REGELSETT, rusRegelsett } from '../../__tests__/hjelp/rusgrunnlag'
 import { analytes } from '../analytes'
 import {
   erRusAnalytt,
-  lesKonsentrasjon,
   moduleKoder,
-  rusDatasett,
   rusModulFor,
   RUS_ANALYTTER,
   RUS_MODULER,
@@ -15,8 +14,15 @@ import {
   type RusPlassering,
   type RusResultat,
 } from '../rus'
+import { lesKonsentrasjon, verdifelter } from '../scenario'
 import { search } from '../search'
 import { THC_ANALYTT } from '../thc'
+
+/**
+ * Rusmiddelmodulene, med reglene som er publisert i Supabase (grunnlaget de
+ * ble importert fra, se `src/__tests__/hjelp/rusgrunnlag.ts`), prøvd mot det
+ * kilden sier — på og rundt hver grense.
+ */
 
 /** Modulen med denne id-en. */
 function modul(id: string): RusModul {
@@ -26,7 +32,12 @@ function modul(id: string): RusModul {
 }
 
 function fortolk(id: string, inn: Partial<RusInndata> = {}): RusResultat {
-  return modul(id).fortolk({ ...TOM_RUS_INNDATA, ...inn })
+  return fortolkRus(id, { ...TOM_RUS_INNDATA, ...inn })
+}
+
+/** Konsentrasjonene modulen ber om, gitt hva som er påvist. */
+function felter(id: string, pavist: string[]): string[] {
+  return verdifelter(rusRegelsett(id), pavist)
 }
 
 /** Kommentarene et resultat gir, som «merke → koder», i rekkefølge. */
@@ -51,35 +62,27 @@ function plenum(resultat: RusResultat): string {
   return [resultat.melding, ...resultat.veiledning].join(' ')
 }
 
-/** Kildeteksten fra en rad i rusmidler.json. */
+/** Kommentarteksten fra kilden, etter raden og nøkkelen den ble importert med. */
 function kilde(id: string, nokkel = 'hoved'): string {
-  const rad = rusDatasett.rader.find((r) => r.id === id)
-  if (!rad) throw new Error(`ukjent rad i testen: ${id}`)
-  const tekst = rad.tekster[nokkel]
-  if (tekst === undefined) throw new Error(`raden ${id} mangler teksten ${nokkel}`)
+  const tekst = RUS_KOMMENTARER.get(`${id}/${nokkel}`)
+  if (tekst === undefined) throw new Error(`ukjent kommentar i testen: ${id}/${nokkel}`)
   return tekst
 }
 
 /** Alle tekstene appen kan komme til å kopiere. */
 function alleKommentarer(): string[] {
-  return rusDatasett.rader.flatMap((r) => Object.values(r.tekster))
+  return [...RUS_KOMMENTARER.values()]
 }
 
-describe('datasettet', () => {
-  it('har alle radene fra tabellene i kilden', () => {
-    expect(rusDatasett.rader).toHaveLength(26)
-    expect(rusDatasett.meta.antallRader).toBe(26)
-    expect(rusDatasett.meta.kilde).toBe('originaldata/rusmidler.md')
-  })
-
-  it('gir hver rad en gruppe og koder', () => {
-    for (const rad of rusDatasett.rader) {
-      expect(rad.gruppe, rad.id).not.toBe('')
-      expect(rad.koder.length, rad.id).toBeGreaterThan(0)
+describe('modulene og kommentartekstene', () => {
+  it('gir hver modul en gruppe og koder', () => {
+    for (const m of RUS_MODULER) {
+      expect(m.gruppe, m.id).not.toBe('')
+      expect(moduleKoder(m).length, m.id).toBeGreaterThan(0)
     }
   })
 
-  it('dekker alle kodene med moduler, uten å bruke noen to ganger', () => {
+  it('dekker alle kodene i reglene med moduler, uten å bruke noen to ganger', () => {
     const brukt = new Set<string>()
     for (const m of RUS_MODULER) {
       for (const kode of moduleKoder(m)) {
@@ -87,8 +90,8 @@ describe('datasettet', () => {
         brukt.add(kode)
       }
     }
-    const iKilden = new Set(rusDatasett.rader.flatMap((r) => r.koder))
-    expect([...brukt].sort()).toEqual([...iKilden].sort())
+    const iReglene = new Set(RUS_REGELSETT.flatMap((r) => r.analytter))
+    expect([...brukt].sort()).toEqual([...iReglene].sort())
   })
 
   it('skriver tallintervaller med tankestrek, ikke bindestrek', () => {
@@ -187,12 +190,10 @@ describe('diazepam, N-desmetyldiazepam og oksazepam', () => {
   })
 
   it('ber om tallene bare når alle tre er påvist', () => {
-    const felter = (pavist: string[]) => modul(ID).verdifelter(pavist).map((f) => f.kode)
-
-    expect(felter(['DIAZ', 'DMI'])).toEqual([])
-    expect(felter(['OXA'])).toEqual([])
-    expect(felter(['DMI', 'OXA'])).toEqual([])
-    expect(felter(['DIAZ', 'DMI', 'OXA'])).toEqual(['DIAZ', 'DMI', 'OXA'])
+    expect(felter(ID, ['DIAZ', 'DMI'])).toEqual([])
+    expect(felter(ID, ['OXA'])).toEqual([])
+    expect(felter(ID, ['DMI', 'OXA'])).toEqual([])
+    expect(felter(ID, ['DIAZ', 'DMI', 'OXA'])).toEqual(['DIAZ', 'DMI', 'OXA'])
   })
 
   it('venter på tallene før den velger regel', () => {
@@ -246,7 +247,7 @@ describe('diazepam, N-desmetyldiazepam og oksazepam', () => {
     ])
     expect(notiser(resultat)).toContain('alle er påvist')
     // Uten alle tre er det ingen 10 %-regel å regne på.
-    expect(modul(ID).verdifelter(['DMI', 'OXA'])).toEqual([])
+    expect(felter(ID, ['DMI', 'OXA'])).toEqual([])
   })
 
   it('sier fra i stedet for å dele på null', () => {
@@ -303,9 +304,9 @@ describe('kodein og morfin', () => {
   })
 
   it('ber om tallene bare når begge er påvist', () => {
-    expect(modul(ID).verdifelter(['KOD'])).toEqual([])
-    expect(modul(ID).verdifelter(['MOR'])).toEqual([])
-    expect(modul(ID).verdifelter(['KOD', 'MOR']).map((f) => f.kode)).toEqual(['KOD', 'MOR'])
+    expect(felter(ID, ['KOD'])).toEqual([])
+    expect(felter(ID, ['MOR'])).toEqual([])
+    expect(felter(ID, ['KOD', 'MOR'])).toEqual(['KOD', 'MOR'])
   })
 
   it('venter på tallene før den velger regel', () => {
@@ -388,7 +389,7 @@ describe('amfetamin og metamfetamin', () => {
   })
 
   it('trenger ingen konsentrasjoner', () => {
-    expect(modul(ID).verdifelter(['AMF1', 'MAF1'])).toEqual([])
+    expect(felter(ID, ['AMF1', 'MAF1'])).toEqual([])
   })
 })
 
@@ -408,7 +409,7 @@ describe('kommentarene dekker det som er påvist', () => {
   it('gir hver påvist analytt nøyaktig én kommentar, i alle modulene', () => {
     for (const m of RUS_MODULER) {
       for (const pavist of delmengder(moduleKoder(m))) {
-        const resultat = m.fortolk({ pavist, verdier })
+        const resultat = fortolkRus(m.id, { pavist, verdier })
         if (resultat.type !== 'kommentarer') {
           throw new Error(`${m.id} med ${pavist.join('+')} ga ${resultat.type}`)
         }
@@ -422,7 +423,7 @@ describe('kommentarene dekker det som er påvist', () => {
   it('gir hver fortolkning minst én hovedkommentar og entydige merker', () => {
     for (const m of RUS_MODULER) {
       for (const pavist of delmengder(moduleKoder(m))) {
-        const resultat = m.fortolk({ pavist, verdier })
+        const resultat = fortolkRus(m.id, { pavist, verdier })
         if (resultat.type !== 'kommentarer') continue
 
         const hoved = resultat.plasseringer.filter((p: RusPlassering) => p.rolle === 'hoved')

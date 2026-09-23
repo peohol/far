@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.16.0',
+    dato: '2026-09-23',
+    sammendrag: 'Kommenteringen av rusmidler bruker reglene og tekstene som er publisert i databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Reglene og kommentartekstene for stoffene med ruspotensial i serum hentes nå fra det som er publisert i databasen, der de har historikk og kan rettes og publiseres uten en ny versjon av appen.',
+      'Mens reglene hentes, står det i modulen, og det er ingenting å kopiere. Kan de ikke hentes, sier modulen fra og lar deg prøve igjen. Appen kommenterer aldri med regler den ikke har fått.',
+      'Reglene er kontrollert mot den tidligere kommenteringen for alle kombinasjoner av påviste analytter og for konsentrasjoner rett på, rett under og rett over hver grense. Kommentarene, plasseringen og beskjedene er de samme som før.',
+    ],
+  },
+  {
     versjon: '1.15.0',
     dato: '2026-09-23',
     sammendrag: 'Fortolkningsreglene for rusmidler vises på analyttsidene, med en simulator',

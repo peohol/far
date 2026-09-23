@@ -19,9 +19,18 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 vi.mock('../auth/okt', () => ({
   useProfil: () => ({ role: 'user', first_name: 'Lars', last_name: 'Leser', username: 'leser' }),
 }))
-vi.mock('../auth/klient', () => ({
-  klient: () => ({ rpc: async () => ({ data: null, error: null }) }),
-}))
+vi.mock('../auth/klient', async () => {
+  const { rusScenarioregeldata } = await import('./hjelp/rusgrunnlag')
+  return {
+    // Reglene fortolkningen henter, er de publiserte rusmiddelreglene.
+    klient: () => ({
+      rpc: async (funksjon: string) => ({
+        data: funksjon === 'les_scenarioregler' ? rusScenarioregeldata() : null,
+        error: null,
+      }),
+    }),
+  }
+})
 vi.mock('../components/konto/Kontoknapper', () => ({ Kontoknapper: () => null }))
 
 const { default: App } = await import('../App')
@@ -138,6 +147,9 @@ describe('mellom fortolkningen og informasjonssiden', () => {
         within(fortolkningen()).getByRole('link', { name: `${kode} – åpne informasjonssiden` }).getAttribute('href'),
       ).toBe(`#/analytt/${kode}`)
     }
+    // Modulen fortolker med reglene appen hentet.
+    await user.click(within(fortolkningen()).getByRole('checkbox', { name: /Oksazepam/ }))
+    expect(within(fortolkningen()).getByRole('button', { name: 'Kopier hovedkommentar' })).toBeTruthy()
   })
 
   it('lar fortolkningen ligge i ro mens informasjonssiden vises', async () => {
