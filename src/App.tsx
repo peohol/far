@@ -403,6 +403,7 @@ export default function App() {
           <FaginnholdskildeProvider kilde={faginnhold}>
             <Analyttside
               kode={rute.kode}
+              sted={rute.sted}
               katalog={katalog}
               onApneFortolkning={apneFortolkning}
               onLukk={lukkInfoside}
