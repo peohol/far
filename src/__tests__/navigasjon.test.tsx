@@ -10,7 +10,7 @@
  *   ligger i ro så lenge den er skjult.
  *
  * Innloggingen og databasen er erstattet: økten er en vanlig bruker, og
- * databasen har ingen sider ennå.
+ * databasen har ingen sider ennå, bare regelsettene fra før byttet.
  */
 import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -19,12 +19,21 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 vi.mock('../auth/okt', () => ({
   useProfil: () => ({ role: 'user', first_name: 'Lars', last_name: 'Leser', username: 'leser' }),
 }))
-vi.mock('../auth/klient', () => ({
-  klient: () => ({ rpc: async () => ({ data: null, error: null }) }),
-}))
+vi.mock('../auth/klient', async () => {
+  const { DAGENS_REGELSETT, publiserteRader } = await import('./hjelp/dagensregler')
+  const { rusScenarioregeldata } = await import('./hjelp/rusgrunnlag')
+  // Reglene fortolkningen henter, er de publiserte regelsettene.
+  const rader: Record<string, unknown> = { ...publiserteRader(DAGENS_REGELSETT), les_scenarioregler: rusScenarioregeldata() }
+  return {
+    klient: () => ({
+      rpc: async (funksjon: string) => ({ data: rader[funksjon] ?? null, error: null }),
+    }),
+  }
+})
 vi.mock('../components/konto/Kontoknapper', () => ({ Kontoknapper: () => null }))
 
 const { default: App } = await import('../App')
+const { dagensKommentar } = await import('./hjelp/dagensregler')
 const { TipsLag } = await import('../components/Tips')
 const { ShortcutVisibilityProvider } = await import('../hooks/useShortcutVisibility')
 
@@ -138,6 +147,9 @@ describe('mellom fortolkningen og informasjonssiden', () => {
         within(fortolkningen()).getByRole('link', { name: `${kode} – åpne informasjonssiden` }).getAttribute('href'),
       ).toBe(`#/analytt/${kode}`)
     }
+    // Modulen fortolker med reglene appen hentet.
+    await user.click(within(fortolkningen()).getByRole('checkbox', { name: /Oksazepam/ }))
+    expect(within(fortolkningen()).getByRole('button', { name: 'Kopier hovedkommentar' })).toBeTruthy()
   })
 
   it('lar fortolkningen ligge i ro mens informasjonssiden vises', async () => {
@@ -160,6 +172,6 @@ describe('mellom fortolkningen og informasjonssiden', () => {
     expect(within(fortolkningen()).getByRole('link', { name: 'NOR – åpne informasjonssiden' })).toBeTruthy()
     // Nå virker tastene igjen: 1 kopierer kommentaren for det første båndet.
     await user.keyboard('1')
-    await waitFor(async () => expect(await navigator.clipboard.readText()).not.toBe(''))
+    await waitFor(async () => expect(await navigator.clipboard.readText()).toBe(dagensKommentar('NOR', 'under')))
   })
 })

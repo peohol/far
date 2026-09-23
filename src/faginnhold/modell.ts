@@ -1,18 +1,33 @@
 /**
  * Formen på det redigerbare faginnholdet, slik databasen lagrer det.
  *
- * Informasjonsside, laboratorieanalytt, innholdselement, referanse og
- * kommentar er hver sin objekttype. Hvert objekt har en stabil ID, et utkast
- * og eventuelt en publisert utgave, og en historikk der hver endring er en
- * egen revisjon med et komplett øyeblikksbilde. Bakgrunnen står i `docs/faginnhold.md`.
+ * Informasjonsside, laboratorieanalytt, innholdselement, referanse,
+ * intervallregelsett, THC-syreregelsett, kommentar og scenarioregelsett
+ * (`docs/scenarioregler.md`) er hver sin objekttype. Hvert objekt har en stabil
+ * ID, et utkast og eventuelt en publisert utgave, og en historikk der hver
+ * endring er en egen revisjon med et komplett øyeblikksbilde. Bakgrunnen står
+ * i `docs/faginnhold.md`; formen på THC-syreregelsettet i
+ * `src/domain/thcTekster.ts` og `thcRegelsett.ts`.
  *
  * Verdiene under står også i migrasjonen som oppretter tabellene.
  * `src/__tests__/faginnhold.test.ts` kontrollerer at de stemmer overens.
  */
 
 import type { Kommentarinnhold } from '../domain/kommentarobjekt'
+import type { ThcRegelsettinnhold } from '../domain/thcTekster'
+import type { Scenarioregelsett } from '../domain/scenario'
+import type { Intervallregelsettinnhold } from '../regler/modell'
 
-export const OBJEKTTYPER = ['infoside', 'laboratorieanalytt', 'innholdselement', 'referanse', 'kommentar'] as const
+export const OBJEKTTYPER = [
+  'infoside',
+  'laboratorieanalytt',
+  'innholdselement',
+  'referanse',
+  'intervallregelsett',
+  'thc_regelsett',
+  'kommentar',
+  'scenarioregelsett',
+] as const
 export type Objekttype = (typeof OBJEKTTYPER)[number]
 
 /** Utkastet er arbeidsversjonen; det publiserte er det alle innloggede ser. */
@@ -100,7 +115,11 @@ export interface Innhold {
   laboratorieanalytt: Laboratorieanalyttinnhold
   innholdselement: Innholdselementinnhold
   referanse: Referanseinnhold
+  /** Formen står i `src/regler/modell.ts`. */
+  intervallregelsett: Intervallregelsettinnhold
+  thc_regelsett: ThcRegelsettinnhold
   kommentar: Kommentarinnhold
+  scenarioregelsett: Scenarioregelsett
 }
 
 /**

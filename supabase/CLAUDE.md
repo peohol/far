@@ -19,6 +19,11 @@ Tillegg til reglene i rotens `CLAUDE.md`. Gjelder alt under `supabase/`.
   etter at SQL-en har kjørt. Skriv derfor aldri en «oppryddingsmigrasjon» som
   forsøker det — den etterlater nettopp den raden den skulle fjerne. Er en rad
   først der, hører den til, og da skrives fila for den.
+- `execute_sql` gjennom MCP er skrivebeskyttet. Data som skal legges inn,
+  går som en datamigrering, med fil her som alle andre.
+- Prosjektet skriver flyttall med 15 sifre (`extra_float_digits = 0`). En
+  funksjon som gjør `float8` om til tekst eller JSON som skal leses tilbake,
+  setter `extra_float_digits = 1` selv.
 - `functions/_delt/` leses også av appen, gjennom `@delt/...`. Den skal være
   ren TypeScript uten Deno-API-er og uten avhengigheter. Alt som bare hører
   til serveren, ligger i `functions/_edge/`.

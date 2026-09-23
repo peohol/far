@@ -134,12 +134,7 @@ export const ETG_ANALYTT: Analyte = {
   analysemetode: ETG_ANALYSEMETODE,
   kategori: '',
   enhet: '',
-  referanseomrade: null,
   maleomrade: { tekst: '', deler: [] },
-  ringegrense: null,
-  nedreGrense: 0,
-  ovreGrense: 0,
-  nivaer: [],
   aliaser: [ETG_KODE, ETS_KODE, 'EtG', 'EtS', 'etanol', 'alkohol'],
 }
 
