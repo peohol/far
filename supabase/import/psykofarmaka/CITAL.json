@@ -1,0 +1,207 @@
+{
+  "kode": "CITAL",
+  "sider": [
+    10
+  ],
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 70,
+      "ovre": 350,
+      "enhet": "nmol/L",
+      "forbehold": ""
+    },
+    "toksisk_omrade": {
+      "nedre": 700,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-citalopram"
+      ]
+    },
+    "alvorlig_intoksikasjon": {
+      "nedre": 10000,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "Komatøs/fatal. Omtrentlig grense.",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-citalopram"
+      ]
+    },
+    "halveringstid": {
+      "nedre": 33,
+      "ovre": 33,
+      "enhet": "timer",
+      "forbehold": "Oppgitt som 33 ± 4 timer."
+    },
+    "steady_state": {
+      "nedre": 6,
+      "ovre": 8,
+      "enhet": "døgn",
+      "forbehold": ""
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Kraftig og selektiv hemmer av gjenopptak av serotonin (SSRI). Ingen effekt på reopptak av noradrenalin, dopamin eller GABA. Ingen effekt på muskarine, histaminerge eller adrenerge reseptorer."
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "10–40 mg"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Behandling av alvorlige depressive episoder, panikklidelser med eller uten agorafobi og tvangslidelse (OCD). Profylakse ved tilbakevendende depressive episoder.",
+      "Bør ikke brukes hos pasienter under 18 år."
+    ],
+    "referanser": [
+      "fk-citalopram-orion"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "80 ± 13 %"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "3 (1–7) timer"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "33 ± 4 timer"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "6–8 døgn"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "80 %"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "15,4 ± 2,4 L/kg"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Hepatisk metabolisme. Utskilles i urin (ca. 15 %) og i feces (ca. 85 %)."
+      ]
+    },
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "2C19, 2D6, (3A4)"
+      ]
+    },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Hemmer CYP2D6.",
+        "Dosejustering kan være nødvendig ved bruk av 2C19-hemmere som f.eks. omeprazol, esomeprazol, flukonazol, fluvoksamin, lansoprazol, tiklopidin."
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "tabeller": [
+      {
+        "stoff": "Citalopram",
+        "kilde": "Reis et al. (2009)",
+        "enhet": "nmol/L",
+        "doser": [
+          "10 mg",
+          "20 mg",
+          "30 mg",
+          "40 mg",
+          "50 mg",
+          "60 mg",
+          "80 mg",
+          "Alle"
+        ],
+        "antall": [
+          202,
+          2330,
+          573,
+          1671,
+          117,
+          467,
+          41,
+          5457
+        ],
+        "p10": [
+          29,
+          57,
+          83,
+          107,
+          124,
+          153,
+          111,
+          65
+        ],
+        "median": [
+          70,
+          119,
+          174,
+          216,
+          256,
+          297,
+          250,
+          165
+        ],
+        "p90": [
+          185,
+          253,
+          339,
+          414,
+          425,
+          534,
+          583,
+          372
+        ]
+      }
+    ],
+    "referanseomradeprosjektet": {
+      "doser": "20–60 mg",
+      "enhet": "nmol/L",
+      "p10": 64,
+      "p90": 328
+    },
+    "referanser": [
+      "reis2009",
+      "referanseomradeprosjektet"
+    ]
+  },
+  "referanser": {
+    "fk-citalopram-orion": {
+      "tittel": "Citalopram Orion «Orion»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/citalopram-orion-orion-591942"
+    },
+    "helsebiblioteket-citalopram": {
+      "tittel": "Citalopram – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/citalopram-behandlingsanbefaling-ved-forgiftning"
+    }
+  }
+}

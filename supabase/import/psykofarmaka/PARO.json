@@ -1,0 +1,211 @@
+{
+  "kode": "PARO",
+  "sider": [
+    23
+  ],
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 40,
+      "ovre": 400,
+      "enhet": "nmol/L"
+    },
+    "toksisk_omrade": {
+      "nedre": 350,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-paroksetin"
+      ]
+    },
+    "alvorlig_intoksikasjon": {
+      "nedre": 3600,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "Komatøs/fatal. Omtrentlig grense.",
+      "referanser": [
+        "schulz2020",
+        "hiemke2017",
+        "helsebiblioteket-paroksetin"
+      ]
+    },
+    "halveringstid": {
+      "nedre": 14,
+      "ovre": 24,
+      "enhet": "timer"
+    },
+    "steady_state": {
+      "nedre": 7,
+      "ovre": 14,
+      "enhet": "dager"
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Hemmer reopptak av serotonin (SSRI). Lav affinitet til α1-, α2- og β-adrenerge reseptorer, D2-, 5-HT1-lignende-, 5-HT2-, H1- og muskarinkolinerge reseptorer."
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "20–60 mg"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Depresjon",
+          "Tvangslidelse",
+          "Panikklidelse med og uten agorafobi",
+          "Sosial angstlidelse/sosial fobi",
+          "Generalisert angstlidelse",
+          "Posttraumatisk stresslidelse"
+        ]
+      },
+      "Barn og ungdom <18 år: Bør ikke brukes."
+    ],
+    "referanser": [
+      "fk-seroxat"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "God, men ikke-lineær pga. delvis metning av førstepassasjemetabolisme ved økende doser"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "5 timer"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "14–24 timer"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "7–14 dager"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "95 %"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "7–27 L/kg"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Hepatisk metabolisme. Utskilles i urin (64 %) og feces (36 %)."
+      ]
+    },
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "2D6, noe 3A4."
+      ]
+    },
+    {
+      "tittel": "Interaksjoner",
+      "tekst": [
+        "Potent hemmer av CYP2D6"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "tabeller": [
+      {
+        "stoff": "Paroksetin",
+        "kilde": "Reis et al. (2009)",
+        "enhet": "nmol/L",
+        "doser": [
+          "10 mg",
+          "20 mg",
+          "30 mg",
+          "40 mg",
+          "50 mg",
+          "60 mg",
+          "80 mg",
+          "Alle"
+        ],
+        "antall": [
+          45,
+          704,
+          209,
+          499,
+          37,
+          139,
+          18,
+          1677
+        ],
+        "p10": [
+          9,
+          20,
+          44,
+          64,
+          50,
+          141,
+          88,
+          29
+        ],
+        "median": [
+          28,
+          79,
+          140,
+          192,
+          177,
+          375,
+          366,
+          131
+        ],
+        "p90": [
+          156,
+          215,
+          381,
+          489,
+          417,
+          845,
+          1085,
+          433
+        ]
+      }
+    ],
+    "referanseomradeprosjektet": {
+      "doser": "20–60 mg",
+      "enhet": "nmol/L",
+      "p10": 41,
+      "p90": 401
+    },
+    "referanser": [
+      "reis2009",
+      "referanseomradeprosjektet"
+    ]
+  },
+  "referanser": {
+    "fk-seroxat": {
+      "tittel": "Seroxat «GlaxoSmithKline»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/seroxat-glaxosmithkline-563860"
+    },
+    "helsebiblioteket-paroksetin": {
+      "tittel": "Paroksetin – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/paroksetin-behandlingsanbefaling-ved-forgiftning"
+    }
+  }
+}

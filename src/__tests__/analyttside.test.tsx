@@ -640,3 +640,43 @@ describe('kortene i farmakokinetikken', () => {
     expect(vi.mocked(lager.lagreUtkast).mock.calls[0]![2]).toMatchObject({ panel: 'fjernet', elementtype: 'kinetikkort' })
   })
 })
+
+describe('innhold hentet fra en kilde', () => {
+  /** Siden etter importen: innhold fra PDF-en og et indikasjonssammendrag fra Felleskatalogen. */
+  function importert(tilstand: Tilstand): Analyttsidedata {
+    const grunn = side(tilstand)
+    const fraKilde = <T,>(u: Utgave<T>, kilde: string): Utgave<T> => ({ ...u, kilde })
+    return {
+      ...grunn,
+      elementer: [
+        fraKilde(grunn.elementer[0]!, 'Importert fra Psykofarmaka.pdf, side 7'),
+        fraKilde(
+          utgave('ind', {
+            infoside: 'hs',
+            panel: 'indikasjon',
+            posisjon: 0,
+            elementtype: 'riktekst',
+            data: {
+              dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Syntetisk indikasjon.' }] }] },
+            },
+          }),
+          'Hentet fra Felleskatalogen 23.09.2026',
+        ),
+      ],
+    }
+  }
+
+  it('viser kilden ved «Sist redigert»', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ data: importert, kanRedigere: true }))
+    // Teksten står både i den lukkede seksjonens oppsummering og i innholdet.
+    await screen.findAllByText('Syntetisk indikasjon.')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    expect(
+      await screen.findByText('Sist redigert av Rita Redaktør 22.09.2026 kl. 14:32 · Importert fra Psykofarmaka.pdf, side 7'),
+    ).toBeTruthy()
+    expect(
+      screen.getByText('Sist redigert av Rita Redaktør 22.09.2026 kl. 14:32 · Hentet fra Felleskatalogen 23.09.2026'),
+    ).toBeTruthy()
+  })
+})

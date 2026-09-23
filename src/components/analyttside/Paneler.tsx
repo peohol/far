@@ -64,12 +64,17 @@ const DATOFORMAT = new Intl.DateTimeFormat('nb-NO', {
 })
 const TIDSFORMAT = new Intl.DateTimeFormat('nb-NO', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Oslo' })
 
-/** «Sist redigert av Ola Nordmann 22.09.2026 kl. 14:32». */
+/**
+ * «Sist redigert av Ola Nordmann 22.09.2026 kl. 14:32», og hvor innholdet kom
+ * fra når det ikke ble skrevet i appen: «… · Importert fra Psykofarmaka.pdf,
+ * side 7».
+ */
 export function sistRedigert(utgave: Utgave<unknown>): string {
   const navn = [utgave.endret_av_fornavn, utgave.endret_av_etternavn].filter(Boolean).join(' ')
   const tid = new Date(utgave.endret_kl)
   const naar = Number.isNaN(tid.getTime()) ? '' : ` ${DATOFORMAT.format(tid)} kl. ${TIDSFORMAT.format(tid)}`
-  return `Sist redigert${navn ? ` av ${navn}` : ''}${naar}`
+  const kilde = utgave.kilde ? ` · ${utgave.kilde}` : ''
+  return `Sist redigert${navn ? ` av ${navn}` : ''}${naar}${kilde}`
 }
 
 function Sistredigert({ utgave }: { utgave: Utgave<unknown> }) {
