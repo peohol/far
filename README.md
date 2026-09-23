@@ -48,11 +48,12 @@ man bytter analytt.
 hva som er påvist i stedet for et konsentrasjonsbånd i steg 3, og kan gi to
 kommentarer i limsteget. Se [EtG og EtS i urin](#etg-og-ets-i-urin).
 
-Menyknappen øverst til venstre åpner sidemenyen, som er den andre veien inn:
-der ligger alle analysemetodene med virkestoffene sine, og et trykk på et
-virkestoff går rett til kommenteringsmodulen. Menyen styrer også hvilken
-analysemetode søket leter i. Se
-[Sidemenyen og analysemetodene](#sidemenyen-og-analysemetodene).
+Menyknappen øverst til venstre åpner sidemenyen, som er veien inn til
+oppslagsverket: der ligger alle analysemetodene med virkestoffene sine, og et
+trykk på et virkestoff åpner **informasjonssiden** for koden. Menyen styrer også
+hvilken analysemetode søket leter i. Se
+[Sidemenyen og analysemetodene](#sidemenyen-og-analysemetodene) og
+[Informasjonssidene](#informasjonssidene).
 
 Smalner søket inn til én eneste analytt, er valget i praksis allerede tatt, og
 appen går videre uten at det trengs et tastetrykk til. Det skjer bare i selve
@@ -142,9 +143,12 @@ src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, k
                             (tastatur.ts), tallfeltene (tallfelt.ts) og
                             versjonsformatet (versjon.ts)
 docs/endringslogg.md        Rutinen for å føre loggen ved hver endring
-src/faginnhold/             Det redigerbare faginnholdet: formen og kallene som
-                            endrer det. Brukes ikke av fortolkningen ennå
-docs/faginnhold.md          Hvordan faginnholdet lagres, versjoneres og publiseres
+src/faginnhold/             Det redigerbare faginnholdet: formen, lesingen og
+                            lagringen, panelene, rikteksten, referansene og søket.
+                            Brukes av informasjonssidene, ikke av fortolkningen
+src/components/analyttside/ Informasjonssidene: panelene, redigeringen,
+                            rikteksteditoren, referansevelgeren og søket på siden
+docs/faginnhold.md          Hvordan faginnholdet lagres, versjoneres, publiseres og vises
 src/hooks/                  Tastatur, tema, hurtigtastmerker, utklippstavle,
                             kopieringen av kommentarene (useKommentarflyt.ts)
 src/components/             Stegene, sidemenyen (Sidemeny.tsx), kommentarblokkene
@@ -224,7 +228,25 @@ lista og skal ikke kunne rulles bort fra den.
 
 Én linje per **analyttkode**: en sumanalyse som `AMTNORSUM` er én linje, mens
 en modul som dekker flere koder — diazepamgruppen, morfin og kodein, EtG og
-EtS — får én linje per virkestoff, som alle fører til den samme modulen.
+EtS — får én linje per virkestoff. Hver linje er en lenke til
+informasjonssiden for koden; fortolkningen åpnes derfra med «Åpne
+fortolkning», eller fra søket som før.
+
+### Informasjonssidene
+
+Hver analyttkode har en informasjonsside med sin egen adresse, for eksempel
+`#/analytt/AMTNORSUM`, som kan bokmerkes og åpnes direkte. Sidene nås fra
+sidemenyen, fra analyttkodepillene i fortolkningsmodulene (de er lenker, én
+per kode) og fra lenkene mellom sidene. «Åpne fortolkning» fører tilbake til
+modulen koden hører til. Fortolkningen blir stående som den var bak en åpen
+side, og tastene dens ligger i ro så lenge siden vises; `Esc` lukker siden.
+
+Siden har sju paneler — identitet, viktige data, farmakodynamikk, dosering,
+indikasjon, farmakokinetikk og serumkonsentrasjoner — med referansene
+nummerert etter første forekomst og listet nederst. `/` går til søket på
+siden, som fremhever og teller treffene (`Enter` og `Shift + Enter` blar).
+Administratorer kan slå på redigeringsmodus. Hvordan sidene er bygget, står i
+`docs/faginnhold.md`.
 
 Radioknappen til venstre for en metode begrenser søket til den metoden;
 «Inkluder alle analysemetoder» slår filteret av. `Alt + 1` … `Alt + 5` gjør det
@@ -868,6 +890,13 @@ fokuset når menyen åpnes, og tabulator går rundt inne i det så lenge den st�
 åpen — fokus skal ikke kunne havne på noe man ikke ser. Lukking gir fokus
 tilbake til menyknappen, som da er synlig igjen. `Esc` lukker menyen, og appens
 egne taster ligger i ro så lenge den står åpen.
+
+Informasjonssidene er seksjoner med overskrifter i fast nivå: navnet er `h1`,
+panelene `h2` og kortene `h3`, og fokus flyttes til navnet når en side åpnes.
+Søket på siden er en `search`-region med navn, og antallet treff meldes som
+status. Referansepillene åpnes med tastatur, klikk og peker, tabellen har
+kolonneoverskrifter, og rikteksteditoren har en navngitt verktøyrad der
+formateringen som står på, meldes med `aria-pressed`.
 
 Endringsloggen åpner med den nyeste føringen fokusert, ikke med lukkeknappen,
 så `Enter` folder ut det man kom for i stedet for å lukke loggen igjen med det

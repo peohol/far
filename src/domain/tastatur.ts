@@ -80,6 +80,17 @@ export function mellomromErLedig(fokus: Fokusert | null | undefined): boolean {
 }
 
 /**
+ * Sant når `Enter` er ledig der fokus står, og derfor skal bekrefte.
+ *
+ * En lenke har `Enter` som sin egen tast: den følger lenken. Analyttkodene i
+ * fortolkningsmodulene er lenker til informasjonssidene, og en bruker som
+ * står på en av dem og trykker `Enter`, vil dit — ikke kopiere kommentaren.
+ */
+export function enterErLedig(fokus: Fokusert | null | undefined): boolean {
+  return fokus?.tag.toUpperCase() !== 'A'
+}
+
+/**
  * Sant når det brukeren taster hører hjemme i feltet som står fokusert.
  *
  * Tallene 1, 2 … er hurtigtaster flere steder i appen, og de skal skrives inn

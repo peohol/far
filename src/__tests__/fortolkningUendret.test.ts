@@ -2,13 +2,18 @@
  * Fortolkningen står på de statiske dataene, ikke på det redigerbare
  * faginnholdet.
  *
- * Fundamentet for redigerbart faginnhold og referansesystemet — tabellene og
- * funksjonene i Supabase, `src/faginnhold/` og `src/components/referanser/` —
- * er lagt uten at noe klinisk er flyttet dit, og uten at appen bruker dem.
- * Kommentartekstene, grensene og fortolkningsreglene ligger fortsatt i
- * datasettene under `src/data/` og i `src/domain/`, og det er bare de
- * fortolkningen leser. At databasen ikke har fått noe innhold, prøves i
- * `faginnhold.test.ts`.
+ * Analyttsidene (arbeidspakke 3) bruker faginnholdet og referansesystemet i
+ * Supabase, men fortolkningen gjør det ikke: kommentartekstene, grensene og
+ * fortolkningsreglene ligger fortsatt i datasettene under `src/data/` og i
+ * `src/domain/`, og det er bare de fortolkningen leser. Testene her holder det
+ * slik:
+ *
+ * - datasettene er de samme som før,
+ * - kjernen og fortolkningsstegene henter ingenting fra faginnholdet, fra
+ *   analyttsidene eller fra databasen,
+ * - og all klinisk output modulene kan gi, er nøyaktig den samme — målt over
+ *   alle analyttene, alle rusmiddelmodulene med konsentrasjoner på og rundt
+ *   grensene, og alle THC-syrekommentarene (se `hjelp/fortolkningsutfall.ts`).
  *
  * Byttet til Supabase skal skje med vilje, med paritetstester mot dagens
  * motor (se docs/analyttsider-og-redigering.md). Da skal testene her endres i
@@ -19,6 +24,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { dirname, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
+import { fortolkningsutfall } from './hjelp/fortolkningsutfall'
 
 const ROT = fileURLToPath(new URL('../../', import.meta.url))
 
@@ -34,14 +40,41 @@ const DATASETT: Record<string, string> = {
   'src/data/aliaser.json': 'ab5f4ae6284d81cc32762a0da1709131d8b814138a302623b6ab60b00366ccfd',
 }
 
+/**
+ * Kontrollsummen for all klinisk output fra fortolkningsmodulene, slik den var
+ * før analyttsidene kom. Endres outputen med vilje, oppdateres summen i samme
+ * PR, og føringen i endringsloggen får merket «Fag».
+ */
+const FORTOLKNINGSUTFALL = 'a456aa252cf5289f7dc7fa6fd8b66760a84418dc4342d747b94c333ee7e281fd'
+
 /** Kjernen i fortolkningen: reglene, datasettene og tilstandsmaskinen. */
 const FORTOLKNINGSKJERNEN = ['src/domain', 'src/data', 'src/state.ts']
 
-/** Det kjernen ikke skal hente noe fra, så lenge byttet ikke er gjort. */
-const REDIGERBART = resolve(ROT, 'src/faginnhold')
+/**
+ * Stegene og modulene som viser fortolkningen og kopierer kommentarene. De
+ * lenker til informasjonssidene, men henter ingenting fra dem.
+ */
+const FORTOLKNINGSSTEGENE = [
+  'src/components/SearchStep.tsx',
+  'src/components/BandStep.tsx',
+  'src/components/KontrollStep.tsx',
+  'src/components/PasteStep.tsx',
+  'src/components/RusStep.tsx',
+  'src/components/ThcStep.tsx',
+  'src/components/EtgStep.tsx',
+  'src/components/EtgPasteStep.tsx',
+  'src/components/Kommentarliste.tsx',
+  'src/components/Kodepille.tsx',
+  'src/hooks/useKommentarflyt.ts',
+]
 
-/** Det appen ellers ikke bruker ennå: analyttsidene kommer senere. */
-const IKKE_I_BRUK = [REDIGERBART, resolve(ROT, 'src/components/referanser')]
+/** Det fortolkningen ikke skal hente noe fra, så lenge byttet ikke er gjort. */
+const REDIGERBART = [
+  resolve(ROT, 'src/faginnhold'),
+  resolve(ROT, 'src/components/analyttside'),
+  resolve(ROT, 'src/components/referanser'),
+  resolve(ROT, 'src/auth'),
+]
 
 function kildefiler(sti: string): string[] {
   const full = resolve(ROT, sti)
@@ -59,7 +92,7 @@ function importer(kode: string): string[] {
   return [...kode.matchAll(/(?:\bfrom|\bimport)\s*\(?\s*['"]([^'"]+)['"]/g)].map((m) => m[1]!)
 }
 
-describe('fortolkningen etter at fundamentet for redigerbart faginnhold er lagt', () => {
+describe('fortolkningen etter at analyttsidene er tatt i bruk', () => {
   it('bruker de samme datasettene som før', () => {
     for (const [fil, forventet] of Object.entries(DATASETT)) {
       // Lest og skrevet ut på nytt, så bare innholdet teller — ikke
@@ -69,34 +102,25 @@ describe('fortolkningen etter at fundamentet for redigerbart faginnhold er lagt'
     }
   })
 
-  it('henter ingenting fra det redigerbare faginnholdet eller fra databasen', () => {
-    const filer = FORTOLKNINGSKJERNEN.flatMap(kildefiler)
-    expect(filer.length).toBeGreaterThan(10)
+  it('henter ingenting fra det redigerbare faginnholdet, analyttsidene eller databasen', () => {
+    const filer = [...FORTOLKNINGSKJERNEN, ...FORTOLKNINGSSTEGENE].flatMap(kildefiler)
+    expect(filer.length).toBeGreaterThan(20)
 
     for (const fil of filer) {
       for (const modul of importer(readFileSync(fil, 'utf8'))) {
         const hvor = `${relative(ROT, fil)} henter ${modul}`
         expect(modul.startsWith('@supabase/'), hvor).toBe(false)
+        expect(modul.startsWith('@tiptap/'), hvor).toBe(false)
         if (modul.startsWith('.')) {
-          expect(resolve(dirname(fil), modul).startsWith(REDIGERBART), hvor).toBe(false)
+          const mal = resolve(dirname(fil), modul)
+          expect(REDIGERBART.some((mappe) => mal.startsWith(mappe)), hvor).toBe(false)
         }
       }
     }
   })
 
-  it('viser ingenting fra referansesystemet i appen ennå', () => {
-    const filer = kildefiler('src').filter((fil) => !IKKE_I_BRUK.some((mappe) => fil.startsWith(mappe)))
-    expect(filer.length).toBeGreaterThan(20)
-
-    for (const fil of filer) {
-      for (const modul of importer(readFileSync(fil, 'utf8'))) {
-        if (!modul.startsWith('.')) continue
-        const mal = resolve(dirname(fil), modul)
-        expect(
-          IKKE_I_BRUK.some((mappe) => mal.startsWith(mappe)),
-          `${relative(ROT, fil)} henter ${modul}`,
-        ).toBe(false)
-      }
-    }
+  it('gir nøyaktig den samme kliniske outputen som før', () => {
+    const utfall = JSON.stringify(fortolkningsutfall())
+    expect(createHash('sha256').update(utfall).digest('hex')).toBe(FORTOLKNINGSUTFALL)
   })
 })

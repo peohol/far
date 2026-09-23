@@ -12,6 +12,23 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.11.0',
+    dato: '2026-09-23',
+    sammendrag: 'Hver analytt har fått sin egen informasjonsside',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Større omfang',
+    punkter: [
+      'Et trykk på et virkestoff i sidemenyen åpner nå informasjonssiden for analytten, ikke kommenteringen. Kommenteringen starter du fra søket som før, eller med «Åpne fortolkning» øverst på informasjonssiden.',
+      'Analyttkodene i kommenteringen kan trykkes på og fører til informasjonssiden for koden. Der flere koder kommenteres sammen, fører hver kode til sin egen side. Kommenteringen står som du forlot den når du lukker siden med Esc eller «Lukk».',
+      'Hver side har sin egen adresse, så den kan bokmerkes, deles og åpnes direkte.',
+      'Siden har faste deler: identitet og preparatnavn, viktige data (referanseområde, toksisk område, alvorlig/dødelig intoksikasjon, halveringstid og tid til steady state), farmakodynamikk, dosering, indikasjon, farmakokinetikk og serumkonsentrasjoner ved ulike doser. Sidene er foreløpig tomme; fagstoffet legges inn i neste steg.',
+      'Kildehenvisningene vises som nummerpiller i teksten, på kortene og på panelene, med kildelisten nederst.',
+      'Trykk / for å søke på siden. Treffene utheves, og Enter går til neste.',
+      'Administratorer kan redigere sidene i en redigeringsmodus med en enkel teksteditor, og publisere når de er ferdige. Ingenting blir synlig for andre før det er publisert.',
+      'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
     versjon: '1.10.0',
     dato: '2026-09-23',
     sammendrag: 'Grunnlaget for kildehenvisninger på analyttsidene er lagt',

@@ -258,3 +258,20 @@ export function sidereferanser(
     liste: referanseoppforinger(nummerering, referanser),
   }
 }
+
+/* --- Kortform ------------------------------------------------------------- */
+
+/**
+ * En kort betegnelse på referansen, der numrene ennå ikke er regnet ut — i
+ * editoren, for eksempel: første forfatters etternavn og året («Nordmann
+ * 2021»), ellers begynnelsen av tittelen eller lenken.
+ */
+export function kortnavn(referanse: Referanseinnhold): string {
+  const forste = referanse.forfattere.split(/[,;]/)[0]?.trim() ?? ''
+  const etternavn = forste.split(/\s+/)[0] ?? ''
+  const aar = referanse.aar.trim()
+  if (etternavn) return aar ? `${etternavn} ${aar}` : etternavn
+  const tittel = referanse.tittel.trim() || referanse.lenke.trim()
+  const kort = tittel.length > 40 ? `${tittel.slice(0, 39)}…` : tittel
+  return aar ? `${kort} ${aar}` : kort
+}

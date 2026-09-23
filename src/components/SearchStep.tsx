@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Button } from './Button'
 import { StepBar } from './StepBar'
 import { ResetIcon, SearchIcon } from './icons'
-import { indexToDigit, lagLiggerOver } from '../hooks/useKeyboard'
+import { fortolkningenErSkjult, indexToDigit, lagLiggerOver } from '../hooks/useKeyboard'
 import { Filterbytte } from './Filterbytte'
 import { splitName } from '../domain/names'
 import { optionColourVars } from '../domain/optionColours'
@@ -72,7 +72,7 @@ export function SearchStep({
       if (!felt || document.activeElement === felt) return
       // Ligger endringsloggen eller sidemenyen over appen, hører det som
       // skrives hjemme der og skal ikke rykke fokus ned i søkefeltet bak.
-      if (lagLiggerOver()) return
+      if (lagLiggerOver() || fortolkningenErSkjult()) return
       if (!isTypedCharacter(event)) return
       if (knappTarTegnet(event)) return
       felt.focus()

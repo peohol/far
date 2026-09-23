@@ -182,8 +182,11 @@ export function faginnholdskall(db: PGlite, admin: string) {
     argumenter: Record<string, unknown>,
   ): Promise<T> {
     const navn = Object.keys(argumenter)
+    // Objekter er jsonb-argumenter og sendes som JSON; lister er
+    // tabellargumenter (som `text[]`) og sendes som lister, slik data-API-et
+    // gjør det om for funksjonen.
     const verdier = Object.values(argumenter).map((v) =>
-      v !== null && typeof v === 'object' ? JSON.stringify(v) : v,
+      v !== null && typeof v === 'object' && !Array.isArray(v) ? JSON.stringify(v) : v,
     )
     return som(db, brukerId, async (tx) => {
       const { rows } = await tx.query<T>(
@@ -242,12 +245,19 @@ export function faginnholdskall(db: PGlite, admin: string) {
     for (const rad of rader) expect(rad.lik, rad.tilstand).toBe(true)
   }
 
-  /** En klient som svarer som data-API-et, med databasen bak seg. */
+  /**
+   * En klient som svarer som data-API-et, med databasen bak seg. Som der gis
+   * en funksjon som returnerer én verdi, tilbake som verdien selv, og ikke som
+   * en rad.
+   */
   function klientFor(brukerId: string): SupabaseClient {
     return {
       rpc: async (funksjon: string, argumenter: Record<string, unknown>) => {
         try {
-          return { data: await rpc(brukerId, funksjon, argumenter), error: null }
+          const rad = await rpc<Record<string, unknown>>(brukerId, funksjon, argumenter)
+          const kolonner = rad ? Object.keys(rad) : []
+          const data = kolonner.length === 1 && kolonner[0] === funksjon ? rad[funksjon] : rad
+          return { data, error: null }
         } catch (feil) {
           const { code, message, detail } = feil as { code: string; message: string; detail?: string }
           return { data: null, error: { code, message, details: detail ?? null, hint: null } }

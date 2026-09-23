@@ -1,4 +1,8 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { useProfil } from './auth/okt'
+import { klient } from './auth/klient'
+import { Analyttside } from './components/analyttside/Analyttside'
+import { FaginnholdskildeProvider, type Faginnholdskilde } from './components/analyttside/Faginnholdskilde'
 import { SearchStep } from './components/SearchStep'
 import { BandStep } from './components/BandStep'
 import { EtgPasteStep } from './components/EtgPasteStep'
@@ -14,12 +18,12 @@ import { Toolbar } from './components/Toolbar'
 import { Kontoknapper } from './components/konto/Kontoknapper'
 import { Versjonspille } from './components/Versjonspille'
 import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
-import { analytes } from './domain/analytes'
-import { alternativFor, ETG_ALTERNATIVER, ETG_ANALYTT, type EtgAlternativ } from './domain/etg'
+import { FORTOLKNINGSOPPFORINGER, byggKatalog } from './domain/analyttkatalog'
+import { alternativFor, ETG_ALTERNATIVER, type EtgAlternativ } from './domain/etg'
 import type { Rute } from './domain/flytting'
-import { RUS_ANALYTTER, rusModulFor } from './domain/rus'
+import { FORTOLKNING } from './domain/rute'
+import { rusModulFor } from './domain/rus'
 import { search } from './domain/search'
-import { THC_ANALYTT } from './domain/thc'
 import {
   CUTOFF_NOKKEL,
   CUTOFF_SPORSMAL,
@@ -28,14 +32,18 @@ import {
   valgene,
   type Kommentarvalg,
 } from './domain/valg'
+import { lagFaginnholdslager } from './faginnhold/lagring'
+import { lagFaginnholdsleser } from './faginnhold/lesing'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
 import {
   digitToIndex,
   erBekreftelse,
   modaltLagLiggerOver,
+  SKJULT_FORTOLKNING,
   useKeyboard,
 } from './hooks/useKeyboard'
+import { useRute } from './hooks/useRute'
 import { useTheme } from './hooks/useTheme'
 import { initialState, isIdle, reducer, stageOf, type Action, type Stage } from './state'
 import type { Analyte } from './types'
@@ -84,18 +92,28 @@ export default function App() {
   // binde `kopierOgGaaVidere` til en ny utgave for hver rendring.
   const staaende = useRef(stage)
   staaende.current = stage
-  // Søket dekker analyttene fra datasettet pluss kategoriene som har egne
-  // fortolkningsmoduler i stedet for konsentrasjonsbånd: THC-syre i urin,
-  // stoffene med ruspotensial i serum og etanolmarkørene EtG og EtS i urin.
-  const alleAnalytter = useMemo(
-    () => [...analytes, THC_ANALYTT, ...RUS_ANALYTTER, ETG_ANALYTT],
-    [],
-  )
+  // Søket dekker alt appen kan fortolke — se `FORTOLKNINGSOPPFORINGER`.
+  const alleAnalytter = FORTOLKNINGSOPPFORINGER
   // Filteret fra sidemenyen smalner inn hva søket kan finne. Menyen selv viser
   // alltid alt, siden det er der filteret velges.
   const pool = useMemo(
     () => filtrertPool(alleAnalytter, state.metodefilter),
     [alleAnalytter, state.metodefilter],
+  )
+  // Informasjonssidene: én per analyttkode i søkeoppføringene, så menyen,
+  // kodepillene og adressene peker på de samme sidene.
+  const katalog = useMemo(() => byggKatalog(alleAnalytter), [alleAnalytter])
+  const [rute, gaaTil] = useRute()
+  const paaInfoside = rute.side === 'analytt'
+
+  const profil = useProfil()
+  const faginnhold = useMemo<Faginnholdskilde>(
+    () => ({
+      leser: lagFaginnholdsleser(klient()),
+      lager: lagFaginnholdslager(klient()),
+      kanRedigere: profil.role === 'admin',
+    }),
+    [profil.role],
   )
   const hits = useMemo(() => search(state.query, pool), [state.query, pool])
 
@@ -194,6 +212,20 @@ export default function App() {
     },
     [slippBildet],
   )
+
+  /**
+   * «Åpne fortolkning» på en informasjonsside: modulen koden hører til, som
+   * om den var valgt i søket. Var den alt åpen, står den som den sto.
+   */
+  const apneFortolkning = useCallback(
+    (analyte: Analyte) => {
+      if (state.analyte?.kode !== analyte.kode) velgAnalytt(analyte)
+      gaaTil(FORTOLKNING)
+    },
+    [state.analyte, velgAnalytt, gaaTil],
+  )
+
+  const lukkInfoside = useCallback(() => gaaTil(FORTOLKNING), [gaaTil])
 
   const settMetodefilter = useCallback((metode: string | null) => {
     dispatch({ type: 'sett-metodefilter', metode })
@@ -337,16 +369,36 @@ export default function App() {
   const vist = dveler ?? stage
 
   return (
-    <div className="app" data-steg={vist} data-tomt={isIdle(state) ? 'ja' : 'nei'}>
-      <Sidemeny
-        pool={alleAnalytter}
-        metodefilter={state.metodefilter}
-        onFilter={settMetodefilter}
-        onVelgAnalytt={velgAnalytt}
-      />
+    <div
+      className="app"
+      data-steg={vist}
+      data-tomt={isIdle(state) && !paaInfoside ? 'ja' : 'nei'}
+      data-side={rute.side}
+    >
+      <Sidemeny pool={alleAnalytter} metodefilter={state.metodefilter} onFilter={settMetodefilter} />
       <Toolbar theme={theme} onToggleTheme={toggle} foran={<Kontoknapper />} />
 
-      <main className="scene">
+      {rute.side === 'analytt' && (
+        <main className="scene scene--infoside">
+          <FaginnholdskildeProvider kilde={faginnhold}>
+            <Analyttside
+              kode={rute.kode}
+              katalog={katalog}
+              onApneFortolkning={apneFortolkning}
+              onLukk={lukkInfoside}
+            />
+          </FaginnholdskildeProvider>
+        </main>
+      )}
+
+      {/* Fortolkningen blir stående bak en åpen informasjonsside, så det
+          brukeren har fylt inn, er der når hen kommer tilbake. Tastene dens
+          ligger i ro så lenge den er skjult — se `fortolkningenErSkjult`. */}
+      <main
+        className="scene"
+        hidden={paaInfoside}
+        {...(paaInfoside && { 'data-fortolkning': SKJULT_FORTOLKNING })}
+      >
         {vist === 'search' && (
           <SearchStep
             query={state.query}

@@ -22,6 +22,16 @@ export default defineConfig({
           pakke.facadeModuleId?.endsWith('/src/App.tsx')
             ? `assets/${KLINISK_PAKKE}-[hash].js`
             : 'assets/[name]-[hash].js',
+        /**
+         * Rikteksteditoren (TipTap og ProseMirror) er et stort bibliotek uten
+         * noe faglig innhold, og får sin egen pakke i stedet for å gjøre den
+         * kliniske tung. Det er bare kode fra `node_modules` her; kontrollen
+         * av veggen slår ut om noe av vårt eget havner i den.
+         */
+        manualChunks: (id) =>
+          /\/node_modules\/(@tiptap\/(?!react)|prosemirror-|orderedmap|rope-sequence|w3c-keyname|linkifyjs)/.test(id)
+            ? 'riktekstbibliotek'
+            : undefined,
       },
     },
   },

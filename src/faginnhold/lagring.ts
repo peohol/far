@@ -30,7 +30,7 @@ export class Samtidighetskonflikt extends Error {
 }
 
 /** Feilen data-API-et gir, så langt denne modulen bruker den. */
-interface Databasefeil {
+export interface Databasefeil {
   code?: string
   message?: string
   details?: string | null
@@ -49,7 +49,16 @@ function tallEllerNull(verdi: unknown): number | null {
   return typeof verdi === 'number' ? verdi : null
 }
 
-function tilFeil(feil: Databasefeil): Error {
+/**
+ * Funksjonen finnes ikke i databasen — migrasjonene er ikke rullet ut mot
+ * prosjektet appen er koblet til. Sies rett ut i stedet for å skjules.
+ */
+const MANGLER_I_DATABASEN = 'PGRST202'
+const IKKE_SATT_OPP = 'Faginnholdet er ikke satt opp i databasen ennå. Si fra til den som drifter OUSFAR.'
+
+/** Feilen fra data-API-et gjort om til noe appen kan handle på og vise. */
+export function tilFeil(feil: Databasefeil): Error {
+  if (feil.code === MANGLER_I_DATABASEN) return new Error(IKKE_SATT_OPP)
   if (feil.code === KONFLIKT) {
     let detaljer: Record<string, unknown> = {}
     try {
