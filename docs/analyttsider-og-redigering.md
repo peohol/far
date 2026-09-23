@@ -825,7 +825,7 @@ Identiteten (panel 1) og kritiske varsler skjules ikke.
 | #33 | 6 del 1 | Scenariomotoren, regelsettene og simulatoren | Fortsetter | Ja, på `main` etter #38 | Scenarioregler og simulator flyttes inn i seksjonsmodellen i arbeidspakke 13. Ikke utvid panelet videre |
 | #34 | 7 del 1 | THC-motoren, reglene og tekstene som data | Fortsetter uendret | Ja, etter #33 | Ingen UI |
 | #36 | 7 del 2 | THC-regelsettet lagret i Supabase | Fortsetter uendret | Ja, etter #34 | Ingen UI. THC-editoren og -simulatoren bygges i seksjonsmodellen (arbeidspakke 13) |
-| #35 | 4 | Psykofarmakainnholdet | **Merges ikke i nåværende form.** Omarbeides etter arbeidspakke 4 under | Ja, på `main` | Preparat- og kontrolldatovisningen fjernes; innholdet vises gjennom seksjonsmodellen når arbeidspakke 9 er på `main` |
+| #35 | 4 | Psykofarmakainnholdet | Omarbeidet etter arbeidspakke 4 under; den gamle formen merges ikke | Ja, på `main` | Preparat- og kontrolldatovisningen fjernes; innholdet vises gjennom seksjonsmodellen når arbeidspakke 9 er på `main` |
 
 **Rekkefølge:** denne planen først, så #38, deretter #33 og #37 (i hvilken som helst rekkefølge), #39 etter #37, #34 etter #33, og #36 etter #34. Den omarbeidede #35 kan slås sammen når den er grønn, uavhengig av de andre. Arbeidspakke 9 del 2 (flytting av dagens sider) flytter det som er på `main` når den starter; paneler som kommer senere, flyttes av eieren i arbeidspakke 13.
 
@@ -915,28 +915,32 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 ## Arbeidspakke 4 - Psykofarmakainnhold
 
-**Status:** [ ] Revidert 23.09.2026, omarbeides. Innholdet er lagt inn i produksjonsdatabasen fra PR #35, men PR-en merges ikke i nåværende form.
+**Status:** [ ] Revidert 23.09.2026. Innholdet er ferdig i produksjonsdatabasen, og omarbeidingen er gjort der. PR #35 (omarbeidet) gjenstår å slå sammen.
 
 Beholdes:
 
 - [x] Render og kontroller `originaldata/Psykofarmaka.pdf`.
 - [x] Bygg kontrollert importdatasett.
-- [x] Importer antidepressiver og antipsykotika (i produksjonsdatabasen; ikke på `main` ennå).
-- [x] Fyll panel 2–7 der kilden har data, koblet til riktige informasjonssider.
-- [x] Første revisjon peker tilbake til kilde/side der det er mulig (`revisjonskilde`, som også brukes av annet arbeid og beholdes).
-- [ ] Vurder indikasjonssammendragene og behold dem som redaksjonelt klinisk innhold der de er faglig nyttige (panel 5).
+- [x] Importer antidepressiver, antipsykotika og lamotrigin: 35 sider og 103 referanser (i produksjonsdatabasen; ikke på `main` ennå).
+- [x] Fyll panel 2–7 der kilden har data, koblet til riktige informasjonssider, også sumanalyser og komponenter.
+- [x] Første revisjon peker tilbake til kilde/side der det er mulig, f.eks. «Importert fra Psykofarmaka.pdf, side 7» (`revisjonskilde`, som også brukes av annet arbeid og beholdes uendret).
+- [x] Indikasjonssammendragene beholdes som redaksjonelt klinisk innhold (panel 5), med preparatomtalene i Felleskatalogen som referanser. FEST/HAPI gir ikke indikasjonstekst; arbeidspakke 8 bekrefter om noen av de eksterne kildene gjør det.
 
 Erstattet (del 16 og 23):
 
 - ~~Søk i Felleskatalogen for gjeldende preparatnavn.~~ Preparatene kommer fra de eksterne dataene (arbeidspakke 11).
 - ~~Lagre kilder og dato sist kontrollert mot Felleskatalogen.~~ Aktualiteten er tidspunktet for siste synkronisering.
 
-Gjenstår i omarbeidingen:
+Omarbeidingen:
 
-- [ ] Fjern den manuelle preparatnavnlisten og kontrolldatoen fra koden og importdatasettet.
-- [ ] Fjern preparatnavnene og kontrolldatoene som alt er i produksjonsdatabasen, med en ny migrasjon. De kjørte migrasjonene endres ikke.
-- [ ] Ingen ny, permanent panel-UI; innholdet vises gjennom seksjonsmodellen (arbeidspakke 9).
+- [x] Den manuelle preparatnavnlisten og kontrolldatoen er fjernet fra koden, importdatasettet og visningen.
+- [x] De 35 preparatnavnelementene og kontrolldatoene på indikasjonene er tatt bort i produksjonsdatabasen som nye, publiserte revisjoner med kilden «Tatt bort: preparatnavnene skal hentes fra offentlige legemiddeldata» (migrasjonen `psykofarmaka_kursendring`). De kjørte migrasjonene er ikke endret, og alt kan gjenopprettes fra historikken.
+- [x] Ingen ny, permanent panel-UI; innholdet vises gjennom seksjonsmodellen (arbeidspakke 9).
 - [ ] Alle migrasjonene som er kjørt i produksjon, er med byte-identiske når PR-en slås sammen.
+
+Elementtypen for preparater og skjemaet for dem fra arbeidspakke 3 står fortsatt på `main`. De erstattes i arbeidspakke 11.
+
+Til klinisk gjennomgang: avvikene mellom PDF-en og de statiske dataene (BREK, DOKSUM, LMP) og toksisk område lavere enn referanseområdet (KLOZ, PARO, MIASUM) er listet i PR #35 og ikke rettet.
 
 ## Arbeidspakke 5 - Enkle kommentarer og konsentrasjonsregler
 

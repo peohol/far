@@ -48,6 +48,18 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
+    versjon: '1.11.2',
+    dato: '2026-09-23',
+    sammendrag: 'Planen for psykofarmakasidene er oppdatert etter den nye retningen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Indikasjonssammendragene på psykofarmakasidene beholdes som vår egen tekst, med preparatomtalene som kilde.',
+      'Preparatnavnene som ble skrevet av for hånd, er tatt bort og skal komme fra offentlige legemiddeldata.',
+      'Ingenting i appen er endret ennå.',
+    ],
+  },
+  {
     versjon: '1.11.1',
     dato: '2026-09-23',
     sammendrag: 'Ny retning for informasjonssidene: legemiddeldata fra offentlige kilder og sammenleggbare seksjoner',
