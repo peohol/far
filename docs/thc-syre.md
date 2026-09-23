@@ -41,7 +41,9 @@ Kilden er regnearket `originaldata/THC-COOH.xlsm`, med eierens senere tillegg.
 3. **Korrigert endring** er aktuell/forrige · exp(z · logSD · u) − 1, der
    logSD = √(2 · (CV_THC² + CV_kreatinin²)), z er kvantilet for den valgte
    sikkerhetsmarginen, og u er faktoren for måleusikkerhet under cut-off
-   (ellers 1).
+   (ellers 1). En margin regelsettet ikke har, er ugyldig inndata: den gir
+   en mangel og aldri en konklusjon, siden skjemaet kan leve lenger enn
+   regelsettet det ble fylt ut mot.
 4. **Forventet endring** per kurve: kurven leses av der forrige prøve ligger,
    og like mange døgn senere.
 5. **Konklusjonen** avgjøres av hvor mange kurver, fra grønn og utover, den
