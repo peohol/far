@@ -34,11 +34,17 @@ export interface Paneldefinisjon {
   nokkel: string
   tittel: string
   form: Panelform
+  /**
+   * Om panelet står åpent når siden åpnes. Panelene er seksjoner som kan
+   * åpnes og lukkes (`src/components/seksjoner/`); de fleste står lukket med
+   * en kort oppsummering, men det som leses oftest, står åpent.
+   */
+  apen?: boolean
 }
 
 export const PANELER = [
   { nokkel: 'identitet', tittel: 'Identitet', form: 'identitet' },
-  { nokkel: 'viktige_data', tittel: 'Viktige data', form: 'datakort' },
+  { nokkel: 'viktige_data', tittel: 'Viktige data', form: 'datakort', apen: true },
   { nokkel: 'farmakodynamikk', tittel: 'Farmakodynamikk', form: 'tekst' },
   { nokkel: 'dosering', tittel: 'Dosering', form: 'tekst' },
   { nokkel: 'indikasjon', tittel: 'Indikasjon', form: 'tekst' },
