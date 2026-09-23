@@ -12,9 +12,10 @@ uleselige.
 ## Status
 
 Motoren, reglene og tekstene finnes som kode og data i appen, med fasit mot
-den opprinnelige modulen. Fortolkningen i appen bruker fortsatt den
-opprinnelige modulen (`src/domain/thc.ts`). Lagring i Supabase, redigering og
-byttet av datakilde er ikke gjort ennå.
+den opprinnelige modulen. Reglene og tekstene er lagret og publisert i
+Supabase, med historikk og kontroll på serveren (se [Lagringen](#lagringen)).
+Fortolkningen i appen bruker fortsatt den opprinnelige modulen
+(`src/domain/thc.ts`). Redigering og byttet av datakilde er ikke gjort ennå.
 
 ## Delene
 
@@ -30,6 +31,8 @@ byttet av datakilde er ikke gjort ennå.
 | `src/domain/__tests__/fasit/thc-regelsett-import.json`, `thc-tekster-import.json` | Reglene og tekstene slik de står i den opprinnelige modulen |
 | `src/domain/__tests__/fasit/thc-fasit.json` | Fasiten: utfallet av den opprinnelige modulen for over 4000 inndata |
 | `scripts/lag-thc-fasit.ts` | Lager fasiten på nytt, bare ved bevisst klinisk endring |
+| `supabase/migrations/*_thc_regelsett*.sql`, `*_thc_tekster_som_kommentarer.sql` | Lagringen: tabellene, kontrollen på serveren, importen og flyttingen av tekstene |
+| `src/__tests__/thcRegelsettlagring.test.ts` | Lagringen prøvd mot en ekte database bygd av migrasjonene |
 
 ## Fremgangsmåten
 
@@ -72,6 +75,10 @@ to adskilte ting, som prosjektets arkitekturregel om kommentar og regel krever:
 
 Motoren tar imot begge, satt sammen og kontrollert, som en `ThcModell` fra
 `lagThcModell`.
+
+I databasen er hver tekst en kommentar (objekttypen `kommentar`, se
+`docs/faginnhold.md`), og regelsettet sier hvilken kommentar hver bolk bruker
+(`tekstbolker`). `thcTeksterFra` slår tekstene opp i kommentarene.
 
 ## Reglene
 
@@ -120,6 +127,50 @@ For at motoren skal regne den samme modellen som beviset gjelder for, utvides
 søket etter tidspunktet på kurven når forrige prøve ligger lenger ut enn
 ±1000 døgn. Det skjer bare for IRCAK langt under det laboratoriet kan måle.
 Innenfor gir søket de samme tallene som før, bit for bit.
+
+## Lagringen
+
+Regelsettet er objekttypen `thc_regelsett` i faginnholdet
+(`docs/faginnhold.md`), med utkast, publisering, revisjoner, gjenoppretting
+og samtidighetskontroll derfra. Det finnes bare ett. Formen er
+`ThcRegelsettinnhold`: reglene, og `tekstbolker` med kommentar-ID-en for hver
+bolk.
+
+Delene har egne tabeller med kontroller på hver kolonne: `thc_regelsett`
+(enkeltverdiene), `thc_kurver`, `thc_sikkerhetsmarginer`,
+`thc_konsentrasjonsnivaer`, `thc_bruksmonstre` og `thc_tekstbolker`, som
+bare peker på kommentarer. Tallene er `float8`, som i motoren.
+
+**Kontrollen på serveren.** `intern.skriv_thc_regelsett` er veien alt som
+lagres og publiseres går gjennom, og avviser det `validerThcRegelsett`
+avviser: z mot AS 241, skillepunktene, grensene per bruksmønster og kurvenes
+rekkefølge — avgjort for hele domenet med den samme fremgangsmåten som
+`thcKurver.ts`, og med de samme meldingene. En bolk må peke på en kommentar
+med plassholderne bolken krever, og ingen den ikke kan bruke
+(`validerThcTekstbolk`). Plassholderne i en kommentar kan aldri endres, så
+det holder også når teksten senere rettes. Et regelsett kan ikke publiseres
+før kommentarene det peker på er publisert. Testene sender de samme ugyldige
+regelsettene og tilfeldige kurvepar til appen og databasen og krever samme
+svar.
+
+**Lesingen.** `les_thc_regelsett('publisert' | 'utkast')` gir regelsettet
+med revisjon og hvem som sist endret det, og `les_kommentarer` tekstene;
+utkastene bare til administratorer. Tabellene kan ikke skrives direkte.
+Øyeblikksbildet gir nøyaktig de samme flyttallene tilbake, fordi
+`les_thc_regelsett` setter `extra_float_digits` selv.
+
+**Historikken i prosjektet.**
+1. Importen (`*_thc_regelsett_import.sql`) la inn reglene og tekstene fra den
+   opprinnelige modulen, som Peder. Revisjon 1 fikk bare 15 sifre i tallene.
+2. Revisjon 2 (`*_thc_regelsett_flyttall.sql`) har alle sifrene.
+3. `*_thc_tekster_som_kommentarer.sql` flyttet de ti tekstene ut som
+   publiserte kommentarer («THC-syre: Åpning» osv.), og revisjon 3 peker på
+   dem. Den er publisert, og reglene og tekstene er lik
+   `thc-regelsett-import.json` og `thc-tekster-import.json`.
+
+Revisjon 1 og 2 har tekstene i seg. Gjenopprettes en av dem, får regelsettet
+reglene derfra og beholder kommentarene det peker på nå; tekstene har sin egen
+historikk.
 
 ## Fasiten
 

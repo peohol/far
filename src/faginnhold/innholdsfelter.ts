@@ -64,6 +64,7 @@ const FELTER: { [T in Objekttype]: (innhold: Innhold[T]) => Felt[] } = {
     { nokkel: 'tekst', navn: 'Tekst', verdi: innhold.tekst, tekst: true },
     { nokkel: 'plassholdere', navn: 'Plassholdere', verdi: innhold.plassholdere.join(', ') || 'Ingen' },
   ],
+  thc_regelsett: (innhold) => jsonfelter(innhold),
   scenarioregelsett: (innhold) => jsonfelter(innhold),
 }
 
