@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.11.1',
+    dato: '2026-09-23',
+    sammendrag: 'Ny retning for informasjonssidene: legemiddeldata fra offentlige kilder og sammenleggbare seksjoner',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Planen for informasjonssidene er lagt om. Preparatnavn, styrker, legemiddelformer og andre legemiddelopplysninger skal hentes automatisk fra offentlige legemiddeldata og holdes oppdatert, i stedet for å skrives av for hånd fra Felleskatalogen.',
+      'Sidene skal etter hvert vise hver del som en sammenleggbar seksjon med en kort oppsummering, der detaljene åpnes ved behov.',
+      'Referanseområder, dosering, farmakologi, kommentarer og fortolkningsregler skal fortsatt skrives og kvalitetssikres av oss.',
+      'Ingenting i appen er endret ennå.',
+    ],
+  },
+  {
     versjon: '1.11.0',
     dato: '2026-09-23',
     sammendrag: 'Hver analytt har fått sin egen informasjonsside',
