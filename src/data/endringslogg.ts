@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.16.0',
+    versjon: '1.17.0',
     dato: '2026-09-23',
     sammendrag: 'Kommentarene i konsentrasjonsreglene er egne kommentarer med egen historikk',
     typer: ['Funksjonalitet'],
@@ -25,7 +25,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.15.0',
+    versjon: '1.16.0',
     dato: '2026-09-23',
     sammendrag: 'Kommenteringen bruker de publiserte konsentrasjonsreglene',
     typer: ['Funksjonalitet'],
@@ -37,7 +37,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.14.0',
+    versjon: '1.15.0',
     dato: '2026-09-23',
     sammendrag: 'Konsentrasjonsreglene vises, prøves og redigeres på analyttsidene',
     typer: ['Funksjonalitet', 'Design / layout'],
@@ -52,7 +52,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.13.0',
+    versjon: '1.14.0',
     dato: '2026-09-23',
     sammendrag: 'Konsentrasjonsreglene og kommentarene er lagt inn i databasen',
     typer: ['Funksjonalitet'],
@@ -62,6 +62,22 @@ export const ENDRINGSLOGG: Endring[] = [
       'Grensene lagres som skillepunkter mellom områdene, så det ikke kan oppstå hull eller overlapp. «Ring rekvirent» er lagret som en egen handling, og kommentaren for «Til stede under cut-off» gjenbruker hovedkommentaren i stedet for å gjenta den.',
       'Reglene er kontrollert mot dagens fortolkning for hver analytt, rett på, rett under og rett over hver grense, og gir de samme kommentarene og de samme beskjedene om å ringe.',
       'Ingenting av dette er synlig ennå. Kommenteringen er uendret.',
+    ],
+  },
+  {
+    versjon: '1.13.0',
+    dato: '2026-09-23',
+    sammendrag: 'Informasjonssidene er delt i seksjoner som åpnes og lukkes',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Delene av informasjonssiden (viktige data, farmakodynamikk, dosering, indikasjon, farmakokinetikk og serumkonsentrasjoner) er nå seksjoner som åpnes og lukkes med et trykk på overskriften. En lukket seksjon viser en kort oppsummering av hva den inneholder.',
+      'Identiteten øverst står alltid fram, og viktige data er åpen når siden åpnes.',
+      'Kortene i farmakokinetikken åpnes hver for seg inne i seksjonen.',
+      '«Åpne alle» og «Lukk alle» står øverst på siden. I redigeringsmodus åpnes alt.',
+      'Søket på siden finner også tekst i lukkede seksjoner, og viser hvor mange treff hver av dem har. Går du til et treff, åpnes seksjonen og treffet vises. Nettleserens eget søk finner også teksten.',
+      'En adresse kan peke rett på en seksjon eller et kort, og siden åpner det.',
+      'Innholdet er det samme som før, bare ordnet annerledes. Kommenteringen, kommentartekstene og fortolkningsreglene er uendret.',
     ],
   },
   {
