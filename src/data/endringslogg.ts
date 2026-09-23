@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.12.1',
+    versjon: '1.12.2',
     dato: '2026-09-23',
     sammendrag: 'Reglene og kommentartekstene for THC-syre ligger nå i databasen',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,17 @@ export const ENDRINGSLOGG: Endring[] = [
       'Kurvene, grensene og sikkerhetsmarginene for THC-syre er lagt inn i databasen med historikk, utkast og publisering, og kontrolleres der før de kan lagres, også at kurvene står i riktig rekkefølge for alle prøveverdier.',
       'Kommentartekstene for THC-syre er lagt inn som egne tekster, og reglene sier hvilken tekst som brukes hvor. En tekst kan rettes uten å røre reglene.',
       'Fortolkningen er uendret. Den bruker fortsatt de samme reglene som før, og de lagrede verdiene og tekstene er kontrollert å være nøyaktig de samme.',
+    ],
+  },
+  {
+    versjon: '1.12.1',
+    dato: '2026-09-23',
+    sammendrag: 'Reglene og kommentartekstene for THC-syre er skilt ut fra koden',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Kurvene, grensene og sikkerhetsmarginene i THC-syremodulen er skilt ut som egne regler, og kommentartekstene som egne tekster. De kontrolleres før de kan brukes, også at kurvene står i riktig rekkefølge for alle prøveverdier. Det er første steg mot at de kan redigeres i appen.',
+      'Fortolkningen er uendret. Den er kontrollert mot over 4000 prøvepar, også rett på og rett ved siden av hver grense, og gir de samme kommentarene tegn for tegn.',
     ],
   },
   {
@@ -39,12 +50,14 @@ export const ENDRINGSLOGG: Endring[] = [
   {
     versjon: '1.11.1',
     dato: '2026-09-23',
-    sammendrag: 'Reglene og kommentartekstene for THC-syre er skilt ut fra koden',
+    sammendrag: 'Ny retning for informasjonssidene: legemiddeldata fra offentlige kilder og sammenleggbare seksjoner',
     typer: ['Funksjonalitet'],
-    omfang: 'Mindre omfang',
+    omfang: 'Minimalt omfang',
     punkter: [
-      'Kurvene, grensene og sikkerhetsmarginene i THC-syremodulen er skilt ut som egne regler, og kommentartekstene som egne tekster. De kontrolleres før de kan brukes, også at kurvene står i riktig rekkefølge for alle prøveverdier. Det er første steg mot at de kan redigeres i appen.',
-      'Fortolkningen er uendret. Den er kontrollert mot over 4000 prøvepar, også rett på og rett ved siden av hver grense, og gir de samme kommentarene tegn for tegn.',
+      'Planen for informasjonssidene er lagt om. Preparatnavn, styrker, legemiddelformer og andre legemiddelopplysninger skal hentes automatisk fra offentlige legemiddeldata og holdes oppdatert, i stedet for å skrives av for hånd fra Felleskatalogen.',
+      'Sidene skal etter hvert vise hver del som en sammenleggbar seksjon med en kort oppsummering, der detaljene åpnes ved behov.',
+      'Referanseområder, dosering, farmakologi, kommentarer og fortolkningsregler skal fortsatt skrives og kvalitetssikres av oss.',
+      'Ingenting i appen er endret ennå.',
     ],
   },
   {
