@@ -1003,19 +1003,19 @@ Avhengigheter:
 
 ## Arbeidspakke 8 - Kartlegging av offentlige legemiddeldatakilder
 
-**Status:** [ ] Ikke startet
+**Status:** [x] Ferdig 23.09.2026. FEST (M30-filen fra DMP) er eneste kilde foreløpig; HAPI og DMP FHIR krever nøkkel og gir ikke noe vi trenger ennå. Se `docs/legemiddeldata.md`.
 
 Undersøk faktiske svar og dokumentasjon fra HAPI (FEST) og DMP FHIR, og skriv et kort dokument i repoet, `docs/legemiddeldata.md`, som beskriver:
 
-- [ ] hvilke data vi faktisk kan hente, målt mot listen i del 23
-- [ ] hvilken kilde som bør brukes per datatype
-- [ ] stabile ID-er for substans, legemiddel og pakning
-- [ ] relasjonene mellom dem, også for salter, metabolitter og kombinasjonspreparater
-- [ ] autentisering
-- [ ] oppdateringsmekanisme og -frekvens
-- [ ] lisens og kildeangivelse
-- [ ] kjente hull og begrensninger
-- [ ] hvordan virkestoffene på dagens informasjonssider finnes igjen i kildene
+- [x] hvilke data vi faktisk kan hente, målt mot listen i del 23
+- [x] hvilken kilde som bør brukes per datatype
+- [x] stabile ID-er for substans, legemiddel og pakning
+- [x] relasjonene mellom dem, også for salter, metabolitter og kombinasjonspreparater
+- [x] autentisering
+- [x] oppdateringsmekanisme og -frekvens
+- [x] lisens og kildeangivelse
+- [x] kjente hull og begrensninger
+- [x] hvordan virkestoffene på dagens informasjonssider finnes igjen i kildene
 
 Ingen databasemodell lages i denne arbeidspakken.
 
@@ -1041,15 +1041,15 @@ Del 2, dagens sider:
 
 ## Arbeidspakke 10 - Ekstern legemiddelgrunnmur
 
-**Status:** [ ] Ikke startet. Starter når arbeidspakke 8 er ferdig.
+**Status:** [ ] Grunnmuren er i produksjonsdatabasen (PR #45): egen kopi av FEST i skjemaet `legemiddeldata`, synkronisert hver natt fra Vercel. Koblingene fra sidene kommer med arbeidspakke 11.
 
-- [ ] Databasemodell i Supabase for den lokale kopien, ut fra arbeidspakke 8 (del 18 og 23).
-- [ ] Synkroniseringsjobb, server-side og planlagt, idempotent, med nye, endrede og utgåtte produkter.
-- [ ] Siste gyldige data beholdes ved feil; kjøringene registreres.
-- [ ] Hemmeligheter bare server-side.
+- [x] Databasemodell i Supabase for den lokale kopien, ut fra arbeidspakke 8 (del 18 og 23).
+- [x] Synkroniseringsjobb, server-side og planlagt, idempotent, med nye, endrede og utgåtte produkter.
+- [x] Siste gyldige data beholdes ved feil; kjøringene registreres.
+- [x] Hemmeligheter bare server-side.
 - [ ] Eksplisitte, bekreftede koblinger fra informasjonssidene til eksterne substans-ID-er (del 23).
-- [ ] Lokale tillegg og skjulinger uten å mutere importerte rader, hvis det trengs.
-- [ ] Testdata fra faktiske svar og integrasjonstester.
+- [ ] Lokale tillegg og skjulinger uten å mutere importerte rader, hvis det trengs. Ikke behov ennå.
+- [x] Testdata fra faktiske svar og integrasjonstester.
 
 ## Arbeidspakke 11 - Preparater fra eksterne data
 
