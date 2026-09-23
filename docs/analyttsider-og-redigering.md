@@ -951,9 +951,9 @@ gjenoppretting. Steg 2 i fortolkningen bruker de publiserte regelsettene, og
 grensene og kommentarene er tatt ut av de statiske datasettene; testene måler
 mot en frosset fasit fra før byttet. Tekstene er de felles
 kommentarobjektene (#38), med egen historikk og publisering; regelsettene
-peker på dem med ID og inneholder ikke tekstene (del 4). Regelvisningen og simulatoren på
-analyttsiden skal flyttes inn i den generelle seksjonsarkitekturen når den
-finnes.
+peker på dem med ID og inneholder ikke tekstene (del 4). Regelvisningen på
+analyttsiden er seksjonen «Fortolkning», med simulatoren og kommentarhistorikken
+som detaljkort (arbeidspakke 13).
 
 - [x] Kommentarobjekter i Supabase.
 - [x] Enkle intervalbaserte regelsett.
@@ -1083,7 +1083,7 @@ Ta inn de øvrige feltene i del 23 én etter én, der arbeidspakke 8 viser at ki
 
 **Status:** [ ] Ikke startet. Starter når arbeidspakke 9 del 1 er på `main`.
 
-- [ ] Fortolkning/regler for konsentrasjonsreglene (arbeidspakke 5) vises som hovedseksjon med detaljkort.
+- [x] Fortolkning/regler for konsentrasjonsreglene (arbeidspakke 5) vises som hovedseksjon med detaljkort.
 - [ ] Scenarioreglene og simulatoren (arbeidspakke 6) likeså.
 - [ ] THC-editoren og -simulatoren (arbeidspakke 7) bygges i modellen fra starten.
 - [ ] Regelmotorene, valideringen og paritetstestene er uendret; klinisk output endres ikke.

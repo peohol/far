@@ -1,25 +1,42 @@
-import { useCallback, useId, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { endredeFelt } from '../../faginnhold/historikk'
 import type { Regelsettutgave } from '../../faginnhold/lesing'
+import { antall, ramsOpp } from '../../faginnhold/oppsummering'
 import { losRegelsett } from '../../regler/kommentarer'
 import type { Intervallregelsett, Intervallregelsettinnhold } from '../../regler/modell'
-import { regelsettfelter, tekstene } from '../../regler/visning'
+import { regelsettfelter, tekstene, visRingegrense } from '../../regler/visning'
 import { Button } from '../Button'
 import { Sistredigert } from '../historikk/Sistredigert'
+import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
+import { Uthev } from '../Uthev'
 import { Regelredigering, type RegelredigeringProps } from './Regelredigering'
 import { Regelsimulator, Regeltabell } from './Regeltabell'
 
+/** Nøkkelen seksjonen har i adressen (`#/analytt/KODE/fortolkning`), som scenarioreglene. */
+export const FORTOLKNING = 'fortolkning'
+
 /** Ankeret seksjonen har på siden. */
-export const FORTOLKNING_ANKER = 'panel-fortolkning'
+export const FORTOLKNING_ANKER = seksjonsanker(FORTOLKNING)
 
 /** Feltene oppsummeringene sammenligner, med tekstene regelsettet har slått opp. */
 export function regelsettfelterMedTekst(regelsett: Intervallregelsett) {
   return regelsettfelter(regelsett, tekstene(regelsett))
 }
 
+/** Det en lukket seksjon sier om reglene: antall områder, ringegrensen og cut-off. */
+export function regeloppsummering(regelsett: Intervallregelsettinnhold): string {
+  const ringegrense = visRingegrense(regelsett)
+  return ramsOpp([
+    antall(regelsett.intervaller.length, 'område', 'områder'),
+    ringegrense && `Ringegrense ${ringegrense}`,
+    regelsett.cutoff && 'Cut-off',
+  ])
+}
+
 /**
- * Fortolkningsreglene for koden, på informasjonssiden: kommentaren hver
- * konsentrasjon gir, og en simulator for å prøve en verdi.
+ * Fortolkningsreglene for koden, på informasjonssiden: seksjonen «Fortolkning»
+ * med kommentaren hver konsentrasjon gir, og detaljkortet «Simulator» for å
+ * prøve en verdi (se `docs/seksjoner.md`).
  *
  * Regelsettet er et eget objekt og ikke en del av informasjonssiden; det
  * vises her fordi det gjelder koden siden hører til. Kommentarene det peker
@@ -41,7 +58,6 @@ export function Fortolkningsregler({
   onLagre: RegelredigeringProps['onLagre']
   hentNyeste: RegelredigeringProps['hentNyeste']
 }) {
-  const overskrift = useId()
   const [redigeres, setRedigeres] = useState(false)
   const regelsett = useMemo(() => utgave && losRegelsett(utgave), [utgave])
   const publiserte = useMemo(() => publisert && losRegelsett(publisert), [publisert])
@@ -60,19 +76,24 @@ export function Fortolkningsregler({
         : ['Hele regelsettet']
       : []
 
+  const redigeringsmodus = redigeres && redigerer
+
   return (
-    <section id={FORTOLKNING_ANKER} className="kort kort--start infopanel regler" aria-labelledby={overskrift}>
-      <div className="infopanel__hode">
-        <h2 id={overskrift} className="infopanel__tittel">
-          Fortolkning
-        </h2>
-        {redigerer && !redigeres && (
+    <Seksjon
+      id={FORTOLKNING}
+      tittel={<Uthev tekst="Fortolkning" />}
+      oppsummering={regeloppsummering(regelsett)}
+      handlinger={
+        redigerer &&
+        !redigeres && (
           <Button variant="subtle" className="redigeringsknapp" onClick={() => setRedigeres(true)}>
             Rediger reglene
           </Button>
-        )}
-      </div>
-      {redigeres && redigerer ? (
+        )
+      }
+      className="regler"
+    >
+      {redigeringsmodus ? (
         <Regelredigering
           key={[utgave.regelsett.revisjon, ...utgave.kommentarer.map((k) => k.revisjon)].join('-')}
           start={regelsett}
@@ -86,10 +107,12 @@ export function Fortolkningsregler({
       ) : (
         <>
           <p className="regler__ingress">
-            Kommentaren fortolkningen gir for {regelsett.analyttkode}, etter målt konsentrasjon.
+            <Uthev tekst={`Kommentaren fortolkningen gir for ${regelsett.analyttkode}, etter målt konsentrasjon.`} />
           </p>
           <Regeltabell regelsett={regelsett} />
-          <Regelsimulator regelsett={regelsett} />
+          <Detaljkort id="simulator" tittel={<Uthev tekst="Simulator" />} oppsummering="Prøv en konsentrasjon">
+            <Regelsimulator regelsett={regelsett} />
+          </Detaljkort>
         </>
       )}
       {redigerer && (
@@ -103,19 +126,24 @@ export function Fortolkningsregler({
           {upubliserte.length > 0 && (
             <p className="sistredigert">Ikke publisert: {upubliserte.join(', ')}.</p>
           )}
-          <details className="regler__kommentarhistorikk">
-            <summary className="sistredigert">Historikken for hver kommentar</summary>
-            <ul>
-              {utgave.kommentarer.map((k) => (
-                <li key={k.id}>
-                  <span className="sistredigert">{k.innhold.navn}: </span>
-                  <Sistredigert utgave={k} type="kommentar" navn={`Kommentaren «${k.innhold.navn}»`} />
-                </li>
-              ))}
-            </ul>
-          </details>
         </div>
       )}
-    </section>
+      {redigerer && (
+        <Detaljkort
+          id="kommentarhistorikk"
+          tittel="Historikken for hver kommentar"
+          oppsummering={antall(utgave.kommentarer.length, 'kommentar', 'kommentarer')}
+        >
+          <ul className="regler__kommentarhistorikk">
+            {utgave.kommentarer.map((k) => (
+              <li key={k.id}>
+                <span className="sistredigert">{k.innhold.navn}: </span>
+                <Sistredigert utgave={k} type="kommentar" navn={`Kommentaren «${k.innhold.navn}»`} />
+              </li>
+            ))}
+          </ul>
+        </Detaljkort>
+      )}
+    </Seksjon>
   )
 }

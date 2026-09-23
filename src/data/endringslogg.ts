@@ -12,43 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.18.0',
-    dato: '2026-09-23',
-    sammendrag: 'Kommentarene i konsentrasjonsreglene er egne kommentarer med egen historikk',
-    typer: ['Funksjonalitet'],
-    omfang: 'Mindre omfang',
-    punkter: [
-      'Hver kommentar konsentrasjonsreglene gir, er nå en egen kommentar med navn, egen historikk og egen publisering. Reglene sier bare hvilken kommentar som gis når; samme kommentar kan brukes av flere regler, og en tekst rettes ett sted.',
-      'På informasjonssiden viser «Historikken for hver kommentar» hvem som har endret hver tekst og når, ord for ord, og en tidligere versjon kan gjenopprettes. Historikken for reglene viser hvilken kommentar hvert område gir, med navnet.',
-      'En endret tekst og endrede regler lagres sammen, alt eller ingenting, og publiseres sammen med resten av siden.',
-      'Kommentarene og grensene er de samme som før, tegn for tegn, og kommenteringen gir nøyaktig det samme.',
-    ],
-  },
-  {
-    versjon: '1.17.0',
-    dato: '2026-09-23',
-    sammendrag: 'Kommenteringen bruker de publiserte konsentrasjonsreglene',
-    typer: ['Funksjonalitet'],
-    omfang: 'Mindre omfang',
-    punkter: [
-      'Knappene, kommentarene, «Til stede under cut-off» og ringegrensen i kommenteringen kommer nå fra de publiserte reglene. Når en administrator publiserer en endring i reglene på informasjonssiden, gjelder den også i kommenteringen.',
-      'Kommentarene og grensene er de samme som før. Hver analytt er kontrollert rett på, rett under og rett over hver grense, og alt kommenteringen kan gi, er ord for ord det samme.',
-      'Reglene hentes når appen åpnes. Til de er hentet, står «Henter fortolkningsreglene …» der knappene skal stå. Går det ikke, får du beskjed og kan prøve igjen; det kopieres ingen kommentar før reglene er på plass.',
-    ],
-  },
-  {
     versjon: '1.16.0',
     dato: '2026-09-23',
-    sammendrag: 'Konsentrasjonsreglene vises, prøves og redigeres på analyttsidene',
+    sammendrag: 'Konsentrasjonsreglene vises, prøves og redigeres på analyttsidene, og kommenteringen bruker de publiserte',
     typer: ['Funksjonalitet', 'Design / layout'],
     omfang: 'Moderat omfang',
     punkter: [
-      'Informasjonssiden for en analytt med konsentrasjonsområder har fått delen «Fortolkning»: en tabell over områdene, kommentaren hvert av dem gir og når rekvirenten skal ringes, med ringegrensen og «Til stede under cut-off».',
-      'Under tabellen kan du skrive inn en konsentrasjon og se hvilket område den havner i, hvilken kommentar den gir og om rekvirenten skal ringes — det samme som kommenteringen gir.',
-      'Administratorer kan redigere reglene i redigeringsmodus: flytte en grense (den gjelder begge nabo-områdene), dele et område i to, slå sammen to, endre kommentarene og ringingen, og prøve utkastet før det lagres. Endringene blir synlige først når de publiseres, og oppsummeringen før publisering sier hva som er endret.',
-      '«Sist redigert» ved hvert redigerbart innhold åpner nå historikken: hvem som endret hva og når, med det fjernede rødt og gjennomstreket og det nye grønt, eller versjonene side om side. En tidligere versjon kan gjenopprettes; det lager en ny versjon, og ingenting slettes.',
-      'Har noen andre lagret reglene mens du redigerte, mister du ikke det du har gjort. Du kan sammenligne med det de lagret og velge hva som skal gjelde.',
-      'Kommenteringen er uendret; den bruker fortsatt de faste reglene.',
+      'Informasjonssiden for en analytt med konsentrasjonsområder har fått seksjonen «Fortolkning». Lukket sier den hvor mange områder det er, ringegrensen og om cut-off gjelder. Åpnet viser den en tabell over områdene, kommentaren hvert av dem gir og når rekvirenten skal ringes.',
+      'Detaljkortet «Simulator» i seksjonen tar en konsentrasjon og viser hvilket område den havner i, hvilken kommentar den gir og om rekvirenten skal ringes — det samme som kommenteringen gir.',
+      'Knappene, kommentarene, «Til stede under cut-off» og ringegrensen i kommenteringen kommer nå fra de publiserte reglene. Når en administrator publiserer en endring i reglene, gjelder den også i kommenteringen. Til reglene er hentet, eller hvis det ikke går, kopieres ingen kommentar.',
+      'Hver kommentar reglene gir, er en egen kommentar med navn, egen historikk og egen publisering. Reglene sier bare hvilken kommentar som gis når, og en tekst rettes ett sted.',
+      'Administratorer kan redigere reglene i redigeringsmodus: flytte en grense, dele et område i to, slå sammen to, endre kommentarene og ringingen, og prøve utkastet før det lagres. Reglene og tekstene lagres sammen, alt eller ingenting, og blir synlige først når de publiseres.',
+      '«Sist redigert» ved hvert redigerbart innhold åpner historikken: hvem som endret hva og når, med det fjernede rødt og gjennomstreket og det nye grønt. En tidligere versjon kan gjenopprettes; det lager en ny versjon, og ingenting slettes. Detaljkortet «Historikken for hver kommentar» gjør det samme for hver tekst.',
+      'Har noen andre lagret mens du redigerte, mister du ikke det du har gjort. Du kan sammenligne og velge hva som skal gjelde.',
+      'Kommentarene og grensene er de samme som før, tegn for tegn. Hver analytt er kontrollert rett på, rett under og rett over hver grense, og alt kommenteringen kan gi, er ord for ord det samme.',
     ],
   },
   {

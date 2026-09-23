@@ -415,3 +415,14 @@ button.historikk__velg:hover {
   padding-top: var(--rom-2);
   border-top: var(--kant) solid var(--linje);
 }
+
+/* --- Historikken for hver kommentar, i detaljkortet ---------------------- */
+
+.regler__kommentarhistorikk {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
