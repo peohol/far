@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.14.0',
+    dato: '2026-09-23',
+    sammendrag: 'Kommenteringen bruker de publiserte konsentrasjonsreglene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Knappene, kommentarene, «Til stede under cut-off» og ringegrensen i kommenteringen kommer nå fra de publiserte reglene. Når en administrator publiserer en endring i reglene på informasjonssiden, gjelder den også i kommenteringen.',
+      'Kommentarene og grensene er de samme som før. Hver analytt er kontrollert rett på, rett under og rett over hver grense, og alt kommenteringen kan gi, er ord for ord det samme.',
+      'Reglene hentes når appen åpnes. Til de er hentet, står «Henter fortolkningsreglene …» der knappene skal stå. Går det ikke, får du beskjed og kan prøve igjen; det kopieres ingen kommentar før reglene er på plass.',
+    ],
+  },
+  {
     versjon: '1.13.0',
     dato: '2026-09-23',
     sammendrag: 'Konsentrasjonsreglene vises, prøves og redigeres på analyttsidene',

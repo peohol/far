@@ -1506,32 +1506,6 @@
           }
         ]
       },
-      "ringegrense": 1800,
-      "nedreGrense": 10,
-      "ovreGrense": 1800,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet er basert på summen av amitriptylin og nortriptylin, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 1799",
-          "fra": 10,
-          "til": 1799,
-          "kommentar": "Referanseområdet er basert på summen av amitriptylin og nortriptylin, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1800",
-          "fra": 1800,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet er basert på summen av amitriptylin og nortriptylin, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1563,32 +1537,6 @@
           }
         ]
       },
-      "ringegrense": 700,
-      "nedreGrense": 10,
-      "ovreGrense": 700,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for citalopram er basert på bruk av 20–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 699",
-          "fra": 10,
-          "til": 699,
-          "kommentar": "Referanseområdet for citalopram er basert på bruk av 20–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 700",
-          "fra": 700,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for citalopram er basert på bruk av 20–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1628,32 +1576,6 @@
           }
         ]
       },
-      "ringegrense": 1000,
-      "nedreGrense": 20,
-      "ovreGrense": 1100,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 20",
-          "fra": null,
-          "til": 20,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet er basert på summen av doksepin og desmetyldoksepin, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "20 – 1099",
-          "fra": 20,
-          "til": 1099,
-          "kommentar": "Referanseområdet er basert på summen av doksepin og desmetyldoksepin, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1100",
-          "fra": 1100,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet er basert på summen av doksepin og desmetyldoksepin, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1685,32 +1607,6 @@
           }
         ]
       },
-      "ringegrense": 600,
-      "nedreGrense": 20,
-      "ovreGrense": 600,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 20",
-          "fra": null,
-          "til": 20,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for duloksetin er basert på bruk av 60–120 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "20 – 599",
-          "fra": 20,
-          "til": 599,
-          "kommentar": "Referanseområdet for duloksetin er basert på bruk av 60–120 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 600",
-          "fra": 600,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for duloksetin er basert på bruk av 60–120 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1742,32 +1638,6 @@
           }
         ]
       },
-      "ringegrense": 280,
-      "nedreGrense": 10,
-      "ovreGrense": 280,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for escitalopram er basert på bruk av 10–30 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 279",
-          "fra": 10,
-          "til": 279,
-          "kommentar": "Referanseområdet for escitalopram er basert på bruk av 10–30 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 280",
-          "fra": 280,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for escitalopram er basert på bruk av 10–30 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1807,32 +1677,6 @@
           }
         ]
       },
-      "ringegrense": 5000,
-      "nedreGrense": 50,
-      "ovreGrense": 5000,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 50",
-          "fra": null,
-          "til": 50,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet er basert på summen av fluoksetin og norfluoksetin ved bruk av 20–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "50 – 4999",
-          "fra": 50,
-          "til": 4999,
-          "kommentar": "Referanseområdet er basert på summen av fluoksetin og norfluoksetin ved bruk av 20–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 5000",
-          "fra": 5000,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet er basert på summen av fluoksetin og norfluoksetin ved bruk av 20–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1864,32 +1708,6 @@
           }
         ]
       },
-      "ringegrense": 1800,
-      "nedreGrense": 20,
-      "ovreGrense": 1800,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 20",
-          "fra": null,
-          "til": 20,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for fluvoksamin er basert på bruk av 100–300 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "20 – 1799",
-          "fra": 20,
-          "til": 1799,
-          "kommentar": "Referanseområdet for fluvoksamin er basert på bruk av 100–300 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1800",
-          "fra": 1800,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for fluvoksamin er basert på bruk av 100–300 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -1921,32 +1739,6 @@
           }
         ]
       },
-      "ringegrense": 8000,
-      "nedreGrense": 100,
-      "ovreGrense": 8000,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 100",
-          "fra": null,
-          "til": 100,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Siden bupropion er ustabil i serum analyseres kun den aktive metabolitten hydroksybupropion. Referanseområdet er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "100 – 7999",
-          "fra": 100,
-          "til": 7999,
-          "kommentar": "Siden bupropion er ustabil i serum analyseres kun den aktive metabolitten hydroksybupropion. Referanseområdet er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 8000",
-          "fra": 8000,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Siden bupropion er ustabil i serum analyseres kun den aktive metabolitten hydroksybupropion. Referanseområdet er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": [
         "bupropion"
       ]
@@ -1988,32 +1780,6 @@
           }
         ]
       },
-      "ringegrense": 2000,
-      "nedreGrense": 10,
-      "ovreGrense": 2000,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet er basert på summen av klomipramin og desmetylklomipramin, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 1999",
-          "fra": 10,
-          "til": 1999,
-          "kommentar": "Referanseområdet er basert på summen av klomipramin og desmetylklomipramin, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 2000",
-          "fra": 2000,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet er basert på summen av klomipramin og desmetylklomipramin, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2053,32 +1819,6 @@
           }
         ]
       },
-      "ringegrense": 1800,
-      "nedreGrense": 10,
-      "ovreGrense": 1800,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet er basert på summen av mianserin og desmetylmianserin ved bruk av 60–120 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 1799",
-          "fra": 10,
-          "til": 1799,
-          "kommentar": "Referanseområdet er basert på summen av mianserin og desmetylmianserin ved bruk av 60–120 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1800",
-          "fra": 1800,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet er basert på summen av mianserin og desmetylmianserin ved bruk av 60–120 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2110,32 +1850,6 @@
           }
         ]
       },
-      "ringegrense": 700,
-      "nedreGrense": 10,
-      "ovreGrense": 700,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for mirtazapin er basert på bruk av 15–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 699",
-          "fra": 10,
-          "til": 699,
-          "kommentar": "Referanseområdet for mirtazapin er basert på bruk av 15–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 700",
-          "fra": 700,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for mirtazapin er basert på bruk av 15–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2167,32 +1881,6 @@
           }
         ]
       },
-      "ringegrense": 1200,
-      "nedreGrense": 10,
-      "ovreGrense": 1200,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for nortriptylin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 1199",
-          "fra": 10,
-          "til": 1199,
-          "kommentar": "Referanseområdet for nortriptylin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1200",
-          "fra": 1200,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for nortriptylin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2224,32 +1912,6 @@
           }
         ]
       },
-      "ringegrense": 800,
-      "nedreGrense": 10,
-      "ovreGrense": 800,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for paroksetin er basert på bruk av 20–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 799",
-          "fra": 10,
-          "til": 799,
-          "kommentar": "Referanseområdet for paroksetin er basert på bruk av 20–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 800",
-          "fra": 800,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for paroksetin er basert på bruk av 20–60 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2281,32 +1943,6 @@
           }
         ]
       },
-      "ringegrense": 500,
-      "nedreGrense": 5,
-      "ovreGrense": 500,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 5",
-          "fra": null,
-          "til": 5,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for sertralin er basert på bruk av 50–200 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "5 – 499",
-          "fra": 5,
-          "til": 499,
-          "kommentar": "Referanseområdet for sertralin er basert på bruk av 50–200 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 500",
-          "fra": 500,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for sertralin er basert på bruk av 50–200 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2338,32 +1974,6 @@
           }
         ]
       },
-      "ringegrense": 1600,
-      "nedreGrense": 10,
-      "ovreGrense": 1600,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for trimipramin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 1599",
-          "fra": 10,
-          "til": 1599,
-          "kommentar": "Referanseområdet for trimipramin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1600",
-          "fra": 1600,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for trimipramin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2403,32 +2013,6 @@
           }
         ]
       },
-      "ringegrense": 4000,
-      "nedreGrense": 20,
-      "ovreGrense": 4000,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 20",
-          "fra": null,
-          "til": 20,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet er basert på summen av venlafaksin og O-desmetylvenlafaksin ved bruk av 75–375 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "20 – 3999",
-          "fra": 20,
-          "til": 3999,
-          "kommentar": "Referanseområdet er basert på summen av venlafaksin og O-desmetylvenlafaksin ved bruk av 75–375 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 4000",
-          "fra": 4000,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet er basert på summen av venlafaksin og O-desmetylvenlafaksin ved bruk av 75–375 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2460,32 +2044,6 @@
           }
         ]
       },
-      "ringegrense": 200,
-      "nedreGrense": 5,
-      "ovreGrense": 200,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 5",
-          "fra": null,
-          "til": 5,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for vortioksetin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "5 – 199",
-          "fra": 5,
-          "til": 199,
-          "kommentar": "Referanseområdet for vortioksetin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 200",
-          "fra": 200,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for vortioksetin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2517,32 +2075,6 @@
           }
         ]
       },
-      "ringegrense": 1800,
-      "nedreGrense": 10,
-      "ovreGrense": 1800,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for amisulprid er basert på bruk av 50–1200 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 1799",
-          "fra": 10,
-          "til": 1799,
-          "kommentar": "Referanseområdet for amisulprid er basert på bruk av 50–1200 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1800",
-          "fra": 1800,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for amisulprid er basert på bruk av 50–1200 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2582,32 +2114,6 @@
           }
         ]
       },
-      "ringegrense": 2200,
-      "nedreGrense": 10,
-      "ovreGrense": 2200,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet er basert på summen av aripiprazol + dehydroaripiprazol ved bruk av 10–30 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 2199",
-          "fra": 10,
-          "til": 2199,
-          "kommentar": "Referanseområdet er basert på summen av aripiprazol + dehydroaripiprazol ved bruk av 10–30 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 2200",
-          "fra": 2200,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet er basert på summen av aripiprazol + dehydroaripiprazol ved bruk av 10–30 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2639,32 +2145,6 @@
           }
         ]
       },
-      "ringegrense": 600,
-      "nedreGrense": 10,
-      "ovreGrense": 600,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for brekspiprazol er basert på bruk av 1–4 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysen er ny og begrenset dokumentasjon foreligger. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 600",
-          "fra": 10,
-          "til": 600,
-          "kommentar": "Referanseområdet for brekspiprazol er basert på bruk av 1–4 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysen er ny og begrenset dokumentasjon foreligger. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 600",
-          "fra": 600,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for brekspiprazol er basert på bruk av 1–4 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysen er ny og begrenset dokumentasjon foreligger."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2696,32 +2176,6 @@
           }
         ]
       },
-      "ringegrense": 35,
-      "nedreGrense": 0.6,
-      "ovreGrense": 36,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 0,6",
-          "fra": null,
-          "til": 0.6,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for flupentiksol er basert på bruk av 1–15 mg flupentiksol daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "0,6 – 34",
-          "fra": 0.6,
-          "til": 34,
-          "kommentar": "Referanseområdet for flupentiksol er basert på bruk av 1–15 mg flupentiksol daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 36",
-          "fra": 36,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for flupentiksol er basert på bruk av 1–15 mg flupentiksol daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2753,32 +2207,6 @@
           }
         ]
       },
-      "ringegrense": 40,
-      "nedreGrense": 1,
-      "ovreGrense": 40,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 1",
-          "fra": null,
-          "til": 1,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for haloperidol er basert på bruk av 1–20 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "1 – 39",
-          "fra": 1,
-          "til": 39,
-          "kommentar": "Referanseområdet for haloperidol er basert på bruk av 1–20 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 40",
-          "fra": 40,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for haloperidol er basert på bruk av 1–20 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2826,32 +2254,6 @@
           }
         ]
       },
-      "ringegrense": 300,
-      "nedreGrense": 2,
-      "ovreGrense": 300,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 2",
-          "fra": null,
-          "til": 2,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet er basert på summen av kariprazin, desmetylkariprazin og didesmetylkariprazin ved bruk av 1,5–6 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysen er ny og begrenset dokumentasjon foreligger. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "2 – 300",
-          "fra": 2,
-          "til": 300,
-          "kommentar": "Referanseområdet er basert på summen av kariprazin, desmetylkariprazin og didesmetylkariprazin ved bruk av 1,5–6 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysen er ny og begrenset dokumentasjon foreligger. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 300",
-          "fra": 300,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet er basert på summen av kariprazin, desmetylkariprazin og didesmetylkariprazin ved bruk av 1,5–6 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysen er ny og begrenset dokumentasjon foreligger."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2883,32 +2285,6 @@
           }
         ]
       },
-      "ringegrense": 1200,
-      "nedreGrense": 5,
-      "ovreGrense": 1200,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 5",
-          "fra": null,
-          "til": 5,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Referanseområdet omfatter ikke bruk av klorprotiksen som primær antipsykotisk behandling. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "5 – 1199",
-          "fra": 5,
-          "til": 1199,
-          "kommentar": "Referanseområdet for klorprotiksen er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Referanseområdet omfatter ikke bruk av klorprotiksen som primær antipsykotisk behandling. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 1200",
-          "fra": 1200,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for klorprotiksen er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Referanseområdet omfatter ikke bruk av klorprotiksen som primær antipsykotisk behandling."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2940,32 +2316,6 @@
           }
         ]
       },
-      "ringegrense": 3000,
-      "nedreGrense": 30,
-      "ovreGrense": 3000,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 30",
-          "fra": null,
-          "til": 30,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for klozapin er basert på bruk av 100–900 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "30 – 2999",
-          "fra": 30,
-          "til": 2999,
-          "kommentar": "Referanseområdet for klozapin er basert på bruk av 100–900 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 3000",
-          "fra": 3000,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for klozapin er basert på bruk av 100–900 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -2997,32 +2347,6 @@
           }
         ]
       },
-      "ringegrense": 2600,
-      "nedreGrense": 15,
-      "ovreGrense": 2600,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 15",
-          "fra": null,
-          "til": 15,
-          "kommentar": "Kvetiapinkonsentrasjon lavere enn referanseområdet eller under påvisningsgrensen er forventet ved bruk av doser < 100 mg. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "15 – 2599",
-          "fra": 15,
-          "til": 2599,
-          "kommentar": "Referanseområdet for kvetiapin er basert på bruk av 50–1000 mg daglig, prøvetaking 12 timer ± 1 time etter siste dose ved bruk av tabletter og 18–24 timer ved bruk av depottablett og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 2600",
-          "fra": 2600,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for kvetiapin er basert på bruk av 50–1000 mg daglig, prøvetaking 12 timer ± 1 time etter siste dose ved bruk av tabletter og 18–24 timer ved bruk av depottablett og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -3054,32 +2378,6 @@
           }
         ]
       },
-      "ringegrense": 970,
-      "nedreGrense": 5,
-      "ovreGrense": 970,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 5",
-          "fra": null,
-          "til": 5,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for levomepromazin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Referanseområdet omfatter ikke bruk av levomepromazin som primær antipsykotisk behandling. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "5 – 969",
-          "fra": 5,
-          "til": 969,
-          "kommentar": "Referanseområdet er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Referanseområdet omfatter ikke bruk av levomepromazin som primær antipsykotisk behandling. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 970",
-          "fra": 970,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Referanseområdet omfatter ikke bruk av levomepromazin som primær antipsykotisk behandling."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -3111,32 +2409,6 @@
           }
         ]
       },
-      "ringegrense": 120,
-      "nedreGrense": 2,
-      "ovreGrense": 120,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 2",
-          "fra": null,
-          "til": 2,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for lurasidon er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "2 – 119",
-          "fra": 2,
-          "til": 119,
-          "kommentar": "Referanseområdet for lurasidon er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 120",
-          "fra": 120,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for lurasidon er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -3168,32 +2440,6 @@
           }
         ]
       },
-      "ringegrense": 400,
-      "nedreGrense": 10,
-      "ovreGrense": 400,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for olanzapin er basert på bruk av 5–30 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 399",
-          "fra": 10,
-          "til": 399,
-          "kommentar": "Referanseområdet for olanzapin er basert på bruk av 5–30 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 400",
-          "fra": 400,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for olanzapin er basert på bruk av 5–30 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -3225,32 +2471,6 @@
           }
         ]
       },
-      "ringegrense": 240,
-      "nedreGrense": 10,
-      "ovreGrense": 240,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Er riktig analyse rekvirert? Referanseområdet for paliperidon er basert på prøvetaking 0–2 dager før neste depotinjeksjon og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 239",
-          "fra": 10,
-          "til": 239,
-          "kommentar": "Referanseområdet for paliperidon er basert på prøvetaking 0–2 dager før neste depotinjeksjon og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 240",
-          "fra": 240,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for paliperidon er basert på prøvetaking 0–2 dager før neste depotinjeksjon og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": [
         "hydroksyrisperidon"
       ]
@@ -3284,32 +2504,6 @@
           }
         ]
       },
-      "ringegrense": 14,
-      "nedreGrense": 0.6,
-      "ovreGrense": 14,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 0,6",
-          "fra": null,
-          "til": 0.6,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for perfenazin er basert på bruk av 4–32 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "0,6 – 13",
-          "fra": 0.6,
-          "til": 13,
-          "kommentar": "Referanseområdet for perfenazin er basert på bruk av 4–32 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 14",
-          "fra": 14,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for perfenazin er basert på bruk av 4–32 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -3349,32 +2543,6 @@
           }
         ]
       },
-      "ringegrense": 240,
-      "nedreGrense": 10,
-      "ovreGrense": 240,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet er basert på summen av risperidon + paliperidon (hydroksyrisperidon) ved bruk av 1–8 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 239",
-          "fra": 10,
-          "til": 239,
-          "kommentar": "Referanseområdet er basert på summen av risperidon + paliperidon (hydroksyrisperidon) ved bruk av 1–8 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Ved bruk av både risperidon og paliperidon vil begge bidra til påvist paliperidonkonsentrasjon (risperidon omdannes til paliperidon). Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 240",
-          "fra": 240,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet er basert på summen av risperidon + paliperidon (hydroksyrisperidon) ved bruk av 1–8 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Ved bruk av både risperidon og paliperidon vil begge bidra til påvist paliperidonkonsentrasjon (risperidon omdannes til paliperidon)."
-        }
-      ],
       "aliaser": [
         "paliperidon",
         "hydroksyrisperidon"
@@ -3409,32 +2577,6 @@
           }
         ]
       },
-      "ringegrense": 600,
-      "nedreGrense": 10,
-      "ovreGrense": 600,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 10",
-          "fra": null,
-          "til": 10,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for ziprasidon er basert på bruk av 40–240 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "10 – 599",
-          "fra": 10,
-          "til": 599,
-          "kommentar": "Referanseområdet for ziprasidon er basert på bruk av 40–240 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 600",
-          "fra": 600,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for ziprasidon er basert på bruk av 40–240 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -3466,32 +2608,6 @@
           }
         ]
       },
-      "ringegrense": 100,
-      "nedreGrense": 1,
-      "ovreGrense": 79,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 1",
-          "fra": null,
-          "til": 1,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for zuklopentiksol er basert på bruk av 2–30 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "1 – 79",
-          "fra": 1,
-          "til": 79,
-          "kommentar": "Referanseområdet for zuklopentiksol er basert på bruk av 2–30 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 79",
-          "fra": 79,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for zuklopentiksol er basert på bruk av 2–30 mg daglig, prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon. Ved depot anbefales prøvetaking 0–2 dager før neste injeksjon."
-        }
-      ],
       "aliaser": []
     },
     {
@@ -3523,32 +2639,6 @@
           }
         ]
       },
-      "ringegrense": 75,
-      "nedreGrense": 2,
-      "ovreGrense": 75,
-      "nivaer": [
-        {
-          "niva": "under",
-          "tekst": "< 2",
-          "fra": null,
-          "til": 2,
-          "kommentar": "Manglende etterlevelse? Er riktig analyse rekvirert? Referanseområdet for lamotrigin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon, og er primært etablert for behandling av epilepsi. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "innenfor",
-          "tekst": "2 – 75",
-          "fra": 2,
-          "til": 75,
-          "kommentar": "Referanseområdet for lamotrigin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon, og er primært etablert for behandling av epilepsi. Analysesvaret må alltid ses i sammenheng med klinikk. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no)."
-        },
-        {
-          "niva": "over",
-          "tekst": "≥ 75",
-          "fra": 75,
-          "til": null,
-          "kommentar": "Potensielt toksisk konsentrasjon. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no). Referanseområdet for lamotrigin er basert på prøvetaking 12–24 timer etter siste dose og oppnådd likevektskonsentrasjon, og er primært etablert for behandling av epilepsi."
-        }
-      ],
       "aliaser": []
     }
   ]

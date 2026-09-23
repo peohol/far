@@ -1,5 +1,4 @@
-import type { Analyte, Level } from '../types'
-import { levelComment } from './concentration'
+import type { Level } from '../types'
 
 /**
  * Fargetonen en knapp i steg 2 vises med. «over» deles i gult og rødt etter om
@@ -27,12 +26,6 @@ export interface Band {
   kommentar: string
 }
 
-/** Antall desimaler i tallene til en analytt — styrer hvor fint båndene deles. */
-export function decimalsOf(analyte: Analyte): number {
-  const values = [analyte.nedreGrense, analyte.ovreGrense, analyte.ringegrense]
-  return Math.max(...values.map((v) => (v === null ? 0 : (String(v).split('.')[1] ?? '').length)))
-}
-
 export function round(value: number, decimals: number): number {
   const f = 10 ** decimals
   return Math.round(value * f) / f
@@ -41,61 +34,6 @@ export function round(value: number, decimals: number): number {
 /** Norsk tallformat: desimalkomma, ingen tusenskille. */
 export function formatNumber(value: number, decimals = 0): string {
   return value.toFixed(decimals).replace('.', ',').replace(/,0+$/, '')
-}
-
-interface Segment {
-  niva: Level
-  /** Inklusiv nedre grense. `null` = ingen nedre grense. */
-  fra: number | null
-  /** Eksklusiv øvre grense. `null` = ingen øvre grense. */
-  til: number | null
-}
-
-/**
- * Deler konsentrasjonsaksen i de båndene brukeren kan velge mellom.
- *
- * Grunnlaget er de tre nivåene fra referansetabellen. I tillegg deles et nivå
- * i to der ringegrensen går tvers gjennom det, slik at «ring rekvirenten» blir
- * et eget valg. Sammenfaller ringegrensen med starten på «over» — som den gjør
- * for 32 av 35 analytter — ville delingen gitt et bånd med én eneste verdi;
- * da slås den sammen til ett rødt bånd i stedet.
- *
- * Båndene dekker hele tallinjen uten hull eller overlapp, og deler den på
- * nøyaktig samme grenser som `classify`.
- */
-export function bands(analyte: Analyte): Band[] {
-  const desimaler = decimalsOf(analyte)
-  const steg = 10 ** -desimaler
-  const ring = analyte.ringegrense
-
-  const segmenter: Segment[] = [
-    { niva: 'under', fra: null, til: analyte.nedreGrense },
-    { niva: 'innenfor', fra: analyte.nedreGrense, til: analyte.ovreGrense },
-    { niva: 'over', fra: analyte.ovreGrense, til: null },
-  ]
-
-  const ut: Band[] = []
-  for (const seg of segmenter) {
-    const kommentar = levelComment(analyte, seg.niva).kommentar
-    const nivaband = (fra: number | null, til: number | null, ringes: boolean) =>
-      lagBand({ niva: seg.niva, fra, til, ring: ringes, desimaler, kommentar })
-    const hoyeste = seg.til === null ? null : round(seg.til - steg, desimaler)
-    const heltUnderRing = ring !== null && hoyeste !== null && hoyeste <= ring
-    const heltOverRing = ring !== null && seg.fra !== null && seg.fra > ring
-    // Et bånd på én verdi er ikke verdt en egen knapp; da tar ringegrensen
-    // hele segmentet i stedet.
-    const delingGirEnkeltverdi = ring !== null && seg.fra !== null && seg.fra >= ring
-
-    if (ring === null || heltUnderRing) {
-      ut.push(nivaband(seg.fra, hoyeste, false))
-    } else if (heltOverRing || delingGirEnkeltverdi) {
-      ut.push(nivaband(seg.fra, hoyeste, true))
-    } else {
-      ut.push(nivaband(seg.fra, ring, false))
-      ut.push(nivaband(round(ring + steg, desimaler), hoyeste, true))
-    }
-  }
-  return ut
 }
 
 /** Det som skal til for å bygge ett bånd. */
@@ -116,8 +54,8 @@ export interface Bandgrunnlag {
  * Bygger ett bånd: tonen, nøkkelen og teksten på knappen. `fra` og `til` er
  * begge inklusive; `null` er åpen ende.
  *
- * Både båndene fra datasettet og båndene fra et regelsett i databasen
- * bygges her, så de vises likt.
+ * Båndene steg 2 viser for et regelsett, bygges her; se `regelsettband` i
+ * `intervallregler.ts`.
  */
 export function lagBand({ niva, fra, til, ring, desimaler, kommentar, key }: Bandgrunnlag): Band {
   const steg = 10 ** -desimaler

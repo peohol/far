@@ -178,6 +178,10 @@ function kilde({
     lesReferanser: vi.fn(async () => [REF_A, REF_B]),
     finnInfosider: vi.fn(async () => []),
     finnIntervallregelsett: vi.fn(async (_kode: string, tilstand: Tilstand) => data(tilstand).regelsett),
+    lesIntervallregelsett: vi.fn(async (tilstand: Tilstand) => {
+      const regelsett = data(tilstand).regelsett
+      return regelsett ? [regelsett] : []
+    }),
     lesHistorikk: vi.fn(async () => REGELHISTORIKK) as Faginnholdsleser['lesHistorikk'],
   }
   const lager: Faginnholdslager = {

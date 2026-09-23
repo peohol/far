@@ -15,6 +15,13 @@ rekonstruksjonen eksakt, uten heuristikk.
 
 Alle rettelser skriptet gjor er samlet i RETTELSER og havner i
 meta.rettelser i JSON-filen, slik at de kan etterprovest mot PDF-en.
+
+Grensene, ringegrensen og kommentarene er ikke lenger en del av datasettet:
+de ble importert til regelsettene i Supabase (se docs/fortolkningsregler.md),
+og det er dem fortolkningen bruker. Skriptet leser og kontrollerer dem
+fortsatt, sa rettelsene og avvikene i meta viser hvordan de importerte
+reglene kom fra kilden. Datasettet har bare det analyttkortet og
+informasjonssidene viser.
 """
 from __future__ import annotations
 
@@ -335,16 +342,10 @@ def bygg() -> dict:
         nedre = under["til"]
         ovre = over["fra"]
 
-        nivaer = []
-        for niva, rad, iv in zip(NIVAER, rader, (under, innenfor, over)):
-            hvor = f"{kode}/{niva}"
-            nivaer.append({
-                "niva": niva,
-                "tekst": intervalltekst(iv),
-                "fra": iv["fra"],
-                "til": iv["til"],
-                "kommentar": vask_kommentar(rad["celler"][2], hvor),
-            })
+        # Kommentarene vaskes fortsatt, sa rettelsene star i meta.rettelser
+        # som sporbarhet for tekstene som ble importert til regelsettene.
+        for niva, rad in zip(NIVAER, rader):
+            vask_kommentar(rad["celler"][2], f"{kode}/{niva}")
 
         # Avvik som ikke lar seg rette maskinelt, men som brukeren bor kjenne til.
         if innenfor["til"] is not None and ovre is not None and innenfor["til"] >= ovre:
@@ -391,10 +392,6 @@ def bygg() -> dict:
             "enhet": enhet,
             "referanseomrade": beriket(referanseomrade),
             "maleomrade": maleomrade,
-            "ringegrense": ringegrense,
-            "nedreGrense": nedre,
-            "ovreGrense": ovre,
-            "nivaer": nivaer,
         })
 
     resultat.sort(key=lambda a: (a["gruppe"], a["navn"]))

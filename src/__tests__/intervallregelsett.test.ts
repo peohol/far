@@ -3,13 +3,14 @@
  *
  * Tre ting prøves her:
  *
- * 1. Importen: importdatasettet er nøyaktig det dagens statiske regler og
- *    kommentarer gir, for hver analytt med konsentrasjonsbånd, og importen
- *    legger det inn og publiserer det med kilden på hver revisjon.
- * 2. Pariteten: den nye motoren, brukt på regelsettene slik en vanlig bruker
- *    leser dem fra databasen, gir det samme som dagens motor — alle knappene,
- *    kommentarene, «ring rekvirent» og cut-off, og regelen hver konsentrasjon
- *    treffer, på og rundt hver grense.
+ * 1. Importen: importdatasettet er fasiten fra før byttet (se
+ *    `hjelp/dagensregler.ts`), ett regelsett for hver analytt med
+ *    konsentrasjonsbånd, og importen legger det inn og publiserer det med
+ *    kilden på hver revisjon.
+ * 2. Pariteten: motoren, brukt på regelsettene slik en vanlig bruker leser
+ *    dem fra databasen — slik appen gjør — gir det samme som den gamle
+ *    motoren ga: alle knappene, kommentarene, «ring rekvirent» og cut-off, og
+ *    regelen hver konsentrasjon treffer, på og rundt hver grense.
  * 3. Reglene databasen håndhever: kontrollen av grenser, kommentarer, enhet og
  *    handlinger, rettighetene, og at hele regelsettet versjoneres, publiseres
  *    og gjenopprettes på én gang.
@@ -22,10 +23,8 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { analytes } from '../domain/analytes'
-import { bands } from '../domain/bands'
-import { classify } from '../domain/concentration'
-import { cutoffkommentar, finnRegel, intervallene, ringes } from '../domain/intervallregler'
-import { cutoffKommentar, cutoffvalg, harCutoffvalg, regelsettvalg, valgene } from '../domain/valg'
+import { cutoffkommentar, finnRegel, intervallene, regelsettband, ringes } from '../domain/intervallregler'
+import { cutoffvalg, regelsettvalg } from '../domain/valg'
 import { lagFaginnholdsleser, type Utgave } from '../faginnhold/lesing'
 import type { Objektstatus } from '../faginnhold/modell'
 import { importdel, regelimportSql, type Regelimport } from '../regler/import'
@@ -47,7 +46,14 @@ import {
   slaSammen,
   steg,
 } from '../regler/redigering'
-import { importId, importkilde, regelimport, regelimportdata } from './hjelp/regelimport'
+import {
+  DAGENS_GRENSER,
+  DAGENS_REGELSETT,
+  dagensNiva,
+  IMPORTDATASETT,
+  importId,
+  importkilde,
+} from './hjelp/dagensregler'
 import {
   faginnholdskall,
   feilFra,
@@ -57,8 +63,7 @@ import {
   type Faginnholdskall,
 } from './hjelp/testdatabase'
 
-const IMPORTDATASETT = fileURLToPath(new URL('../../supabase/import/intervallregelsett.json', import.meta.url))
-const importdatasett = JSON.parse(readFileSync(IMPORTDATASETT, 'utf8')) as Regelimport[]
+const importdatasett: Regelimport[] = IMPORTDATASETT
 const MIGRASJONER = fileURLToPath(new URL('../../supabase/migrations', import.meta.url))
 /** Administratoren som bestilte importen til produksjon. */
 const IMPORTADMIN = 'peohol'
@@ -89,8 +94,14 @@ beforeAll(async () => {
 /* --- 1. Importen ---------------------------------------------------------- */
 
 describe('importen av dagens regler', () => {
-  it('er nøyaktig det de statiske datasettene gir', () => {
-    expect(importdatasett).toEqual(regelimportdata())
+  it('har ett regelsett for hver analytt med konsentrasjonsbånd, med kilden fra datasettet den kom fra', () => {
+    const etterKode = new Map(analytes.map((a) => [a.kode, a]))
+    expect(importdatasett.map((i) => i.regelsett.analyttkode)).toEqual(analytes.map((a) => a.kode).sort((a, b) => a.localeCompare(b)))
+    for (const { kilde, regelsett } of importdatasett) {
+      const analyte = etterKode.get(regelsett.analyttkode)!
+      expect(kilde, regelsett.analyttkode).toBe(importkilde(analyte))
+      expect(regelsett.enhet, regelsett.analyttkode).toBe(analyte.enhet)
+    }
   })
 
   it('kan kjøres igjen uten å legge inn noe to ganger', async () => {
@@ -162,13 +173,13 @@ describe('importen av dagens regler', () => {
   it('lagrer regelsettene nøyaktig slik de ble importert', async () => {
     const publisert = await lesRegelsett(bruker, 'publisert')
     const etterKode = new Map(publisert.map((u) => [u.innhold.analyttkode, u.innhold]))
-    for (const regelsett of regelimport()) {
+    for (const regelsett of DAGENS_REGELSETT) {
       expect(etterKode.get(regelsett.analyttkode), regelsett.analyttkode).toEqual(regelsett)
     }
   })
 
   it('lagrer hver kommentar én gang, også når flere regler bruker den', async () => {
-    for (const regelsett of regelimport()) {
+    for (const regelsett of DAGENS_REGELSETT) {
       const ider = regelsett.kommentarer.map((k) => k.id)
       expect(new Set(ider).size, regelsett.analyttkode).toBe(ider.length)
       const tekster = regelsett.kommentarer.map((k) => k.tekst)
@@ -186,7 +197,7 @@ describe('importen av dagens regler', () => {
 
 /* --- 2. Pariteten --------------------------------------------------------- */
 
-describe('den nye motoren mot dagens', () => {
+describe('motoren på regelsettene i databasen mot den gamle', () => {
   let regelsett: Map<string, Intervallregelsett>
 
   beforeAll(async () => {
@@ -194,67 +205,80 @@ describe('den nye motoren mot dagens', () => {
     regelsett = new Map(publisert.map((u) => [u.innhold.analyttkode, u.innhold]))
   })
 
-  it('gir de samme knappene, med samme nøkler, farger, tekster og kommentarer', () => {
-    for (const analyte of analytes) {
-      expect(regelsettvalg(regelsett.get(analyte.kode)!), analyte.kode).toEqual(valgene(analyte))
+  it('gir de samme knappene, med samme nøkler, grenser, ring og rekkefølge', () => {
+    for (const gamle of DAGENS_GRENSER) {
+      const band = regelsettband(regelsett.get(gamle.kode)!)
+      expect(band.map(({ key, fra, til, ring }) => ({ key, fra, til, ring })), gamle.kode).toEqual(gamle.band)
+      expect(regelsettvalg(regelsett.get(gamle.kode)!).slice(0, band.length), gamle.kode).toEqual(band)
     }
   })
 
-  it('gir den samme cut-off-kommentaren, og bare for de samme analyttene', () => {
+  it('gir de samme knappene og kommentarene som fasiten', () => {
+    // Fasiten ble målt mot den gamle motoren da den ble laget, og
+    // `fortolkningUendret.test.ts` holder hele outputen fra den mot
+    // kontrollsummen fra før byttet.
+    for (const fasit of DAGENS_REGELSETT) {
+      const nytt = regelsett.get(fasit.analyttkode)!
+      expect(regelsettvalg(nytt), fasit.analyttkode).toEqual(regelsettvalg(fasit))
+    }
+  })
+
+  it('gir cut-off-kommentaren bare til antidepressiver og antipsykotika, som før', () => {
     for (const analyte of analytes) {
       const ny = cutoffkommentar(regelsett.get(analyte.kode)!)
-      expect(ny, analyte.kode).toBe(harCutoffvalg(analyte) ? cutoffKommentar(analyte) : null)
-      expect(ny !== null, analyte.kode).toBe(cutoffvalg(analyte) !== null)
+      const skal = ['Antidepressiver', 'Antipsykotika'].includes(analyte.kategori)
+      expect(ny !== null, analyte.kode).toBe(skal)
+      expect(ny !== null, analyte.kode).toBe(cutoffvalg(regelsett.get(analyte.kode)!) !== null)
     }
   })
 
   it('gir den samme ringegrensen og ringer i de samme båndene', () => {
-    for (const analyte of analytes) {
-      const nytt = regelsett.get(analyte.kode)!
-      expect(nytt.ringegrense, analyte.kode).toBe(analyte.ringegrense)
-      expect(intervallene(nytt).map(ringes), analyte.kode).toEqual(bands(analyte).map((b) => b.ring))
+    for (const gamle of DAGENS_GRENSER) {
+      const nytt = regelsett.get(gamle.kode)!
+      expect(nytt.ringegrense, gamle.kode).toBe(gamle.ringegrense)
+      expect(intervallene(nytt).map(ringes), gamle.kode).toEqual(gamle.band.map((b) => b.ring))
     }
   })
 
   it('plasserer hver konsentrasjon på, rett under og rett over hver grense likt', () => {
     let prøvd = 0
-    for (const analyte of analytes) {
-      const nytt = regelsett.get(analyte.kode)!
+    for (const gamle of DAGENS_GRENSER) {
+      const nytt = regelsett.get(gamle.kode)!
       const steg = 10 ** -nytt.desimaler
-      const gamle = bands(analyte)
+      const valg = regelsettvalg(nytt)
       const rund = (v: number) => Number((Math.round(v / steg) * steg).toFixed(nytt.desimaler))
 
       // Alle grensene fra begge motorene, og verdiene rundt dem i hele steg.
       const grenser = new Set<number>([
         ...nytt.skillepunkter,
-        ...gamle.flatMap((b) => [b.fra, b.til].filter((v): v is number => v !== null)),
-        analyte.nedreGrense,
-        analyte.ovreGrense,
-        ...(analyte.ringegrense === null ? [] : [analyte.ringegrense]),
+        ...gamle.band.flatMap((b) => [b.fra, b.til].filter((v): v is number => v !== null)),
+        gamle.nedreGrense,
+        gamle.ovreGrense,
+        ...(gamle.ringegrense === null ? [] : [gamle.ringegrense]),
       ])
       const verdier = [...grenser].flatMap((g) => [g - 2 * steg, g - steg, g, g + steg, g + 2 * steg].map(rund))
       verdier.push(0, rund(steg), rund(Math.max(...grenser) * 10))
 
       for (const verdi of verdier.filter((v) => v >= 0)) {
-        const gammelt = gamle.find((b) => (b.fra === null || verdi >= b.fra - steg / 2) && (b.til === null || verdi <= b.til + steg / 2))
+        const gammelt = gamle.band.find((b) => (b.fra === null || verdi >= b.fra - steg / 2) && (b.til === null || verdi <= b.til + steg / 2))
         const treff = finnRegel(nytt, verdi)
-        const hvor = `${analyte.kode} ${verdi}`
+        const hvor = `${gamle.kode} ${verdi}`
         expect(gammelt, hvor).toBeDefined()
-        expect(regelsettvalg(nytt)[treff.indeks]?.key, hvor).toBe(gammelt!.key)
+        expect(valg[treff.indeks]?.key, hvor).toBe(gammelt!.key)
         expect(ringes(treff), hvor).toBe(gammelt!.ring)
-        expect(treff.kommentar.tekst, hvor).toBe(gammelt!.kommentar)
-        expect(treff.niva, hvor).toBe(classify(analyte, verdi))
+        expect(treff.kommentar.tekst, hvor).toBe(valg[treff.indeks]?.kommentar)
+        expect(treff.niva, hvor).toBe(dagensNiva(gamle, verdi))
         prøvd += 1
       }
 
-      // Også mellom de hele stegene følger nivået den kanoniske regelen.
+      // Også mellom de hele stegene følger nivået den gamle kanoniske regelen.
       for (const g of grenser) {
         for (const verdi of [g - steg / 2, g - steg / 10, g + steg / 10, g + steg / 2].filter((v) => v >= 0)) {
-          expect(finnRegel(nytt, verdi).niva, `${analyte.kode} ${verdi}`).toBe(classify(analyte, verdi))
+          expect(finnRegel(nytt, verdi).niva, `${gamle.kode} ${verdi}`).toBe(dagensNiva(gamle, verdi))
         }
       }
     }
-    expect(prøvd).toBeGreaterThan(analytes.length * 10)
+    expect(prøvd).toBeGreaterThan(DAGENS_GRENSER.length * 10)
   })
 })
 

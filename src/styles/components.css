@@ -576,6 +576,17 @@
   white-space: normal;
 }
 
+/* I stedet for knappene, mens regelsettet hentes eller når det mangler. */
+.bandkort__melding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-2);
+  text-align: center;
+  font-size: var(--tekst-s);
+  color: var(--blekk-dempet);
+}
+
 /* Knapper som ikke er et konsentrasjonsbånd: EtG- og EtS-modulens tre
    tilfeller. De skal ikke låne nivåfargene — her ville en farge sagt noe
    klinisk som ikke er ment — men de har samme form, så knappen kjenner seg

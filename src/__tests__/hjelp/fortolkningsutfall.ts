@@ -7,6 +7,10 @@
  * over et rutenett av påviste analytter og konsentrasjoner, og
  * THC-syrekommentarene over alle kombinasjonene av det de bygges av.
  *
+ * Knappene og pillene for konsentrasjonsbåndene lages av regelsettene fra før
+ * byttet (se `dagensregler.ts`), slik steg 2 lager dem av de publiserte
+ * regelsettene — med den samme koden.
+ *
  * Rutenettet for rusmiddelmodulene tar med verdiene rett på og rundt
  * grensene reglene bruker (se `OKSAZEPAM_GRENSE`, `LAV_MORFIN_GRENSE` og
  * `HOY_MORFIN_GRENSE` i `src/domain/rus.ts`), så en endring der slår ut.
@@ -16,7 +20,8 @@ import { ETG_ALTERNATIVER } from '../../domain/etg'
 import { grensepiller } from '../../domain/piller'
 import { RUS_MODULER } from '../../domain/rus'
 import { beregnKategori, byggKommentar, type Konsentrasjonsniva } from '../../domain/thc'
-import { cutoffvalg, valgene } from '../../domain/valg'
+import { cutoffvalg, regelsettvalg } from '../../domain/valg'
+import { dagensRegelsett } from './dagensregler'
 
 /** Konsentrasjonene som prøves i hvert felt en rusmiddelmodul ber om. */
 const RUSVERDIER = ['', '0', '0,05', '0,1', '0,19', '0,2', '0,21', '0,5', '0,99', '1', '1,01', '2', '10', '100']
@@ -35,12 +40,15 @@ function kombinasjoner(felt: string[]): Record<string, string>[] {
 }
 
 export function fortolkningsutfall() {
-  const band = analytes.map((analyte) => ({
-    kode: analyte.kode,
-    valg: valgene(analyte),
-    cutoff: cutoffvalg(analyte),
-    piller: grensepiller(analyte),
-  }))
+  const band = analytes.map((analyte) => {
+    const regelsett = dagensRegelsett(analyte.kode)
+    return {
+      kode: analyte.kode,
+      valg: regelsettvalg(regelsett),
+      cutoff: cutoffvalg(regelsett),
+      piller: grensepiller(analyte, regelsett),
+    }
+  })
 
   const rus = RUS_MODULER.map((modul) => ({
     id: modul.id,

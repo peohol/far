@@ -6,12 +6,12 @@ endres. Planen
 og fremdriften står i `docs/analyttsider-og-redigering.md`; her står hvordan
 fundamentet faktisk er bygget.
 
-Informasjonssidene (arbeidspakke 3) bygger på dette. Fortolkningen gjør det
-ikke ennå: de enkle konsentrasjonsreglene er lagt inn som regelsett (se
-`docs/fortolkningsregler.md`), men fortolkningen leser fortsatt de statiske
-datasettene, og `src/__tests__/fortolkningUendret.test.ts` holder det slik —
-også med en kontrollsum over all klinisk output modulene kan gi — til byttet
-gjøres med vilje.
+Informasjonssidene (arbeidspakke 3) bygger på dette, og det gjør de enkle
+konsentrasjonsreglene også: de er regelsett, og steg 2 i fortolkningen bruker
+de publiserte (se `docs/fortolkningsregler.md`). Rusmiddelmodulene, EtG/EtS og
+THC-syre står fortsatt i `src/domain/`. `src/__tests__/fortolkningUendret.test.ts`
+holder en kontrollsum over all klinisk output modulene kan gi, og passer på at
+kjernen og stegene ikke henter noe fra faginnholdet selv.
 
 ## Delene
 

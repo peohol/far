@@ -590,10 +590,6 @@ function tilAnalytt(modul: RusModul): Analyte {
     enhet: '',
     referanseomrade: null,
     maleomrade: { tekst: '', deler: [] },
-    ringegrense: null,
-    nedreGrense: 0,
-    ovreGrense: 0,
-    nivaer: [],
     aliaser: modul.aliaser,
   }
 }

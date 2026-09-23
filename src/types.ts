@@ -3,6 +3,9 @@
  * kommentarer.pdf og antihypertensiver fra AHT.docx. De to kategoriene deler
  * modell fordi de går samme vei gjennom appen — søk, konsentrasjonsbånd, lim
  * inn — og skiller seg bare på hvilke referansetall analyttkortet viser.
+ *
+ * Grensene, ringegrensen og kommentarene står ikke her: de er regelsett i
+ * Supabase (se `src/regler/modell.ts` og `docs/fortolkningsregler.md`).
  */
 
 /** De tre nivåene en målt konsentrasjon kan havne i. */
@@ -21,16 +24,6 @@ export interface Interval {
 export interface MeasuringRange {
   tekst: string
   deler: (Interval & { kode: string | null })[]
-}
-
-/** Kommentaren som hører til ett konsentrasjonsnivå. */
-export interface LevelComment {
-  niva: Level
-  /** Intervallet slik det vises, f.eks. «10 – 1799». */
-  tekst: string
-  fra: number | null
-  til: number | null
-  kommentar: string
 }
 
 /**
@@ -73,14 +66,8 @@ export interface Analyte {
   enhet: string
   referanseomrade: Interval | null
   maleomrade: MeasuringRange
-  ringegrense: number | null
   /** Satt for antihypertensiver, som viser andre referansetall enn psykofarmaka. */
   antihypertensiv?: Antihypertensivgrenser
-  /** Konsentrasjoner under denne er «under». */
-  nedreGrense: number
-  /** Konsentrasjoner fra og med denne er «over». */
-  ovreGrense: number
-  nivaer: LevelComment[]
   /** Ekstra søkeord, vedlikeholdt i `src/data/aliaser.json`. */
   aliaser: string[]
 }

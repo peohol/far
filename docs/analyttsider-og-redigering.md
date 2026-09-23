@@ -755,10 +755,14 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 ## Arbeidspakke 5 - Enkle kommentarer og konsentrasjonsregler
 
-**Status:** [ ] Pågår. Regelsettene er i Supabase med dagens regler, og
+**Status:** [x] Ferdig. Regelsettene er i Supabase med dagens regler, og
 pariteten er dokumentert (`docs/fortolkningsregler.md`). Reglene vises,
 simuleres og redigeres på analyttsidene, med historikk, sammenligning og
-gjenoppretting. Byttet av fortolkningen til regelsettene gjenstår.
+gjenoppretting. Steg 2 i fortolkningen bruker de publiserte regelsettene, og
+grensene og kommentarene er tatt ut av de statiske datasettene; testene måler
+mot en frosset fasit fra før byttet. Regelvisningen og simulatoren på
+analyttsiden skal flyttes inn i den generelle seksjonsarkitekturen når den
+finnes.
 
 - [x] Kommentarobjekter i Supabase.
 - [x] Enkle intervalbaserte regelsett.
@@ -770,7 +774,7 @@ gjenoppretting. Byttet av fortolkningen til regelsettene gjenstår.
 - [x] Regeltest/simulator.
 - [x] Historikk og gjenoppretting.
 - [x] Paritetstester mot dagens motor.
-- [ ] Produksjonsmodulene bytter til Supabase først når paritet er dokumentert.
+- [x] Produksjonsmodulene bytter til Supabase først når paritet er dokumentert.
 
 ## Arbeidspakke 6 - Sammensatte analyttgrupper
 

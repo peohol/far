@@ -631,10 +631,6 @@ export const THC_ANALYTT: Analyte = {
   enhet: '',
   referanseomrade: null,
   maleomrade: { tekst: '', deler: [] },
-  ringegrense: null,
-  nedreGrense: 0,
-  ovreGrense: 0,
-  nivaer: [],
   aliaser: ['THC-COOH', 'cannabis'],
 }
 

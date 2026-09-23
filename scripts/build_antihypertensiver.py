@@ -24,6 +24,12 @@ Bumetanid og furosemid har verken L eller H. De har "Innenfor" i stedet for
 
 Kategorien har ingen ringegrense, og kilden oppgir ikke noe ovre maleomrade.
 
+Grensene og kommentarene er ikke lenger en del av datasettet: de ble importert
+til regelsettene i Supabase (se docs/fortolkningsregler.md), og det er dem
+fortolkningen bruker. Skriptet leser og kontrollerer dem fortsatt, sa
+rettelsene og avvikene i meta viser hvordan de importerte reglene kom fra
+kilden. Datasettet har bare det analyttkortet og informasjonssidene viser.
+
 Alle rettelser skriptet gjor er samlet i RETTELSER og havner i
 meta.rettelser i JSON-filen, slik at de kan etterproves mot dokumentet.
 Uoverensstemmelser som ikke lar seg rette maskinelt havner i meta.avvik.
@@ -319,16 +325,6 @@ def intervalltekst(fra: float | None, til: float | None) -> str:
     return ""
 
 
-def niva(navn: str, fra: float | None, til: float | None, kommentar: str) -> dict:
-    return {
-        "niva": navn,
-        "tekst": intervalltekst(fra, til),
-        "fra": fra,
-        "til": til,
-        "kommentar": kommentar,
-    }
-
-
 # --------------------------------------------------------------------------
 # Sammenstilling
 # --------------------------------------------------------------------------
@@ -486,7 +482,6 @@ def bygg() -> dict:
             "referanseomrade": None,
             # Kilden oppgir bare nedre teknisk maleomrade, ikke noe tak.
             "maleomrade": {"tekst": "", "deler": []},
-            "ringegrense": None,
             "antihypertensiv": {
                 "pavisningsgrense": pavisningsgrense,
                 "terapiomrade": {
@@ -496,13 +491,6 @@ def bygg() -> dict:
                     "tekst": intervalltekst(terapi["fra"], terapi["til"]),
                 } if har_terapiomrade else None,
             },
-            "nedreGrense": nedre,
-            "ovreGrense": ovre,
-            "nivaer": [
-                niva("under", None, nedre, kommentarer[0]),
-                niva("innenfor", nedre, innenfor_til, kommentarer[1]),
-                niva("over", ovre, None, kommentarer[2]),
-            ],
         })
 
     koder = [a["kode"] for a in resultat]

@@ -73,6 +73,8 @@ export interface Faginnholdsleser {
   finnInfosider(navn: string[], tilstand: Tilstand): Promise<Utgave<Infosideinnhold>[]>
   /** Regelsettet for en analyttkode, eller `null` når koden ikke har noe. */
   finnIntervallregelsett(kode: string, tilstand: Tilstand): Promise<Utgave<Intervallregelsett> | null>
+  /** Alle regelsettene i én tilstand, sortert på analyttkode. Fortolkningen bruker de publiserte. */
+  lesIntervallregelsett(tilstand: Tilstand): Promise<Utgave<Intervallregelsett>[]>
   /**
    * Historikken til ett objekt: hendelsene og øyeblikksbildene. Leseren ser
    * de revisjonene radsikkerheten gir: administratorer alle, andre de som
@@ -102,6 +104,8 @@ export function lagFaginnholdsleser(klient: SupabaseClient): Faginnholdsleser {
       (await kall<Utgave<Infosideinnhold>[]>('finn_infosider', { navn, sidetilstand: tilstand })) ?? [],
     finnIntervallregelsett: (kode, tilstand) =>
       kall<Utgave<Intervallregelsett>>('finn_intervallregelsett', { analyttkode: kode, sidetilstand: tilstand }),
+    lesIntervallregelsett: async (tilstand) =>
+      (await kall<Utgave<Intervallregelsett>[]>('les_intervallregelsett', { sidetilstand: tilstand })) ?? [],
     lesHistorikk: async <T,>(objekt: string) =>
       (await kall<Historikk<T>>('les_historikk', { objekt })) ?? { hendelser: [], revisjoner: [] },
   }

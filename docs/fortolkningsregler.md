@@ -21,12 +21,16 @@ rusmiddelreglene og THC-syre har egne regeltyper.
 | `src/regler/modell.ts` | Formen på et regelsett, felles for appen og databasen |
 | `src/regler/import.ts`, `scripts/importer-intervallregelsett.ts` | SQL-en som legger inn datasettet, og porsjoneringen |
 | `src/domain/intervallregler.ts` | Motoren: intervallene, regelen en verdi treffer, cut-off og båndene steg 2 viser |
-| `src/domain/valg.ts` | `regelsettvalg`: valgene på steg 2 fra et regelsett, i samme form som fra datasettet |
+| `src/domain/valg.ts` | `regelsettvalg`: valgene på steg 2 fra et regelsett, med «Til stede under cut-off» sist |
+| `src/domain/piller.ts` | Tallene over knappene: ringegrensen og den toksiske grensen fra regelsettet, resten fra datasettet |
+| `src/regler/publiserte.ts`, `src/hooks/usePubliserteRegler.ts` | De publiserte regelsettene fortolkningen bruker: hentingen, og oppslaget for én kode |
+| `src/components/BandStep.tsx` | Steg 2: knappene, og hva som står i stedet mens reglene hentes eller mangler |
 | `src/regler/redigering.ts` | Endringene redigeringen gjør — grenser, deling, sammenslåing, kommentarer, ringing, cut-off — som rene funksjoner |
 | `src/regler/visning.ts` | Navnene på nivåer og handlinger, feltene historikken sammenligner, og simulatoren |
 | `src/components/regler/` | «Fortolkning» på analyttsiden: tabellen, simulatoren og redigeringen |
 | `src/__tests__/intervallregelsett.test.ts` | Import, paritet, validering, tilgang og versjonering, mot en ekte database |
-| `src/__tests__/hjelp/regelimport.ts` | Dagens regler gjort om til regelsett med den gamle motoren — fasiten |
+| `src/__tests__/hjelp/dagensregler.ts`, `src/__tests__/data/dagensgrenser.json` | Fasiten fra før byttet: regelsettene og grensene den gamle motoren ga |
+| `src/__tests__/fortolkningUendret.test.ts`, `steg2regler.test.tsx` | At klinisk output er den samme som før byttet, og steg 2 på regelsettene i appen |
 | `src/__tests__/regelredigering.test.ts`, `analyttside.test.tsx` | Redigeringen, simulatoren og historikken, som rene funksjoner og i siden |
 
 ## Modellen
@@ -120,17 +124,15 @@ endringer går gjennom `opprett_utkast`, `lagre_utkast`, `publiser_utkast` og
 
 ## Importen av dagens regler
 
-Dagens regler ligger i de statiske datasettene (`src/data/`). De er lagt inn
-som regelsett, uten at fortolkningen er byttet over.
+Reglene lå i de statiske datasettene (`src/data/`) og ble fortolket av en
+motor i `src/domain/`. De ble lagt inn som regelsett før fortolkningen ble
+byttet over.
 
-- **Fasiten** er `regelsettFraAnalytt` i `src/__tests__/hjelp/regelimport.ts`.
-  Den bygger regelsettene med den gamle motoren selv (`bands` og
-  cut-off-teksten i `valg.ts`), så regelsettene er nøyaktig det dagens motor
-  gir. Kommentar-ID-ene er faste (md5 av analyttkode og hva kommentaren er),
-  så importen blir den samme hver gang.
-- **Datasettet** `supabase/import/intervallregelsett.json` er fasiten skrevet
-  ut, med kilden hver revisjon skal vise. Testen krever at det er likt
-  fasiten.
+- **Datasettet** `supabase/import/intervallregelsett.json` er regelsettene
+  den gamle motoren ga, med kilden hver revisjon skal vise. Det ble laget med
+  den gamle motoren selv, og testene krevde at det var nøyaktig det den ga.
+  Kommentar-ID-ene er faste (md5 av analyttkode og hva kommentaren er), så
+  importen blir den samme hver gang. Etter byttet er det fasiten (se under).
 - **SQL-en** (`regelimportSql`) går gjennom `opprett_utkast` og
   `publiser_utkast`, som administratoren som bestilte importen (Peder,
   `peohol`), med kilden i `far.revisjonskilde`. Den har en kontrollsum for
@@ -148,19 +150,59 @@ som regelsett, uten at fortolkningen er byttet over.
 
 ## Pariteten
 
+Før byttet ble den nye motoren prøvd mot den gamle på de samme dataene. Den
+gamle motoren er borte, men det den ga, står igjen som en frosset **fasit**
+(`src/__tests__/hjelp/dagensregler.ts`), med kontrollsum:
+
+- **importdatasettet**, regelsettene og kommentarene ord for ord;
+- **`dagensgrenser.json`**: grensene den gamle motoren fortolket etter — nedre
+  og øvre grense og ringegrensen — og båndene den ga, skrevet ut med den
+  gamle motoren rett før den ble fjernet.
+
 `src/__tests__/intervallregelsett.test.ts` legger inn importen i en ekte
-database, leser regelsettene tilbake og krever for hver analytt:
+database, leser regelsettene tilbake som en vanlig bruker og krever for hver
+analytt:
 
-- at valgene på steg 2 fra regelsettet (`regelsettvalg`) er nøyaktig de samme
-  som fra datasettet (`valgene`): nøkler, grenser, tekst, ring og rekkefølge;
-- at cut-off-teksten, ringegrensen og ringingen er de samme;
+- at båndene er de samme som den gamle motoren ga: nøkler, grenser, ring og
+  rekkefølge, og at knappene og kommentarene er fasitens;
+- at cut-off finnes for de samme analyttene, og ringegrensen og ringingen er
+  de samme;
 - at hver grense, ett og to steg under og over den, og et halvt og en
-  tiendedels steg under og over den, gir samme nivå, kommentar og ring i
-  begge motorene.
+  tiendedels steg under og over den, gir samme nivå, bånd og ring som den
+  gamle motoren.
 
-Byttet av fortolkningen til regelsettene gjøres for seg, med
-`fortolkningUendret.test.ts` og kontrollsummen over all klinisk output som
-vakt.
+`src/__tests__/fortolkningUendret.test.ts` lager steg 2 — knappene,
+kommentarene, cut-off og pillene — for alle analyttene av fasiten, med den
+samme koden appen bruker, og krever den samme kontrollsummen over all
+klinisk output som før analyttsidene kom. Den ble ikke endret av byttet.
+
+## I fortolkningen
+
+Appen henter de publiserte regelsettene én gang når den åpnes
+(`les_intervallregelsett('publisert')`), og steg 2 bruker regelsettet for
+analytten: knappene, kommentarene, «Til stede under cut-off» og tallene over
+knappene. Kjernen og stegene henter ingenting selv; regelsettet kommer som et
+argument (`Regeloppslag`), og `fortolkningUendret.test.ts` passer på at de
+ikke tar inn noe fra databasen eller faginnholdet.
+
+- **Mens reglene hentes,** eller når hentingen feiler eller koden ikke har
+  noe publisert regelsett, står en melding i stedet for knappene, og tastene
+  gjør ingenting. Uten knapper kan ingen kommentar bli gitt etter andre regler
+  enn de publiserte. En feil har «Prøv igjen». Referanseområdet,
+  påvisningsgrensen og terapiområdet står likevel; de er fra datasettet.
+- **Nye regler** gjelder fra neste gang appen åpnes. En administrator som går
+  fra en analyttside tilbake til fortolkningen, får dem hentet på nytt med en
+  gang. Har appen alt regelsettene, blir de stående til de nye er hentet.
+- **Tallene over knappene:** ringegrensen, og for antihypertensiver den
+  toksiske grensen — der det første intervallet på nivået «over» begynner —
+  leses av regelsettet. Enheten står på den første pillen, og på en senere
+  bare når den har en annen enhet.
+- **Datasettene** (`analytter.json`, `antihypertensiver.json`) har ikke lenger
+  grensene, ringegrensen eller kommentarene, og byggeskriptene skriver dem
+  ikke. Skriptene leser og kontrollerer dem fortsatt, så `meta.rettelser` og
+  `meta.avvik` viser hvordan de importerte reglene og tekstene kom fra
+  kildedokumentene; det er grunnen til at de står igjen. Resten av
+  datasettene er uendret.
 
 ## På analyttsiden
 
