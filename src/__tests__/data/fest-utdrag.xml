@@ -1,0 +1,1292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FEST xmlns="http://www.kith.no/xmlstds/eresept/m30/2014-12-01">
+  <HentetDato>2026-09-08T03:09:06</HentetDato>
+  <KatLegemiddelMerkevare>
+    <OppfLegemiddelMerkevare>
+      <Id>ID_F5D2EABE-15D7-4585-B926-E7A155984E80</Id>
+      <Tidspunkt>2026-01-23T03:13:53</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <LegemiddelMerkevare>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptylin Abcur tab 50 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <AdministreringLegemiddel>
+          <Administrasjonsvei V="53" S="2.16.578.1.12.4.1.1.7477" DN="Oral bruk" />
+          <KanKnuses V="9" DN="Ukjent" />
+          <Deling V="0" DN="Ikke spesifisert" />
+          <EnhetDosering V="13" S="2.16.578.1.12.4.1.1.7480" DN="tablett" />
+          <Kortdose V="5508" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+1" />
+          <Kortdose V="5559" S="2.16.578.1.12.4.1.1.7478" DN="1+0+0+1" />
+          <BruksomradeEtikett V="330" S="2.16.578.1.12.4.1.1.7488" DN="MOT DEPRESJON" />
+        </AdministreringLegemiddel>
+        <Id>ID_012C7C0D-77BC-4F3D-BEBE-663743B03C1F</Id>
+        <Varenavn>Amitriptylin Abcur</Varenavn>
+        <LegemiddelformLang>Tablett, filmdrasjert</LegemiddelformLang>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>0</Sortering>
+          <RefVirkestoffMedStyrke>ID_48B84A5E-0EC8-4696-967C-95E7CEC550A9</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <ProduktInfo>
+          <Referanseprodukt>Sarotex</Referanseprodukt>
+          <Produsent>Abcur AB</Produsent>
+        </ProduktInfo>
+        <Reseptgyldighet>
+          <Varighet>P1Y</Varighet>
+        </Reseptgyldighet>
+        <Preparatomtaleavsnitt>
+          <Avsnittoverskrift V="SPCHUMAN_00" DN="INNHOLDSFORTEGNELSE" />
+          <Lenke>
+            <Www V="https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11420.pdf" />
+          </Lenke>
+        </Preparatomtaleavsnitt>
+      </LegemiddelMerkevare>
+    </OppfLegemiddelMerkevare>
+    <OppfLegemiddelMerkevare>
+      <Id>ID_10430438-0B1A-4621-A2DA-3F1F9987E9AA</Id>
+      <Tidspunkt>2025-07-05T03:10:53</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <LegemiddelMerkevare>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptyline Hydrochloride rosemont mikst oppl 50 mg/5 ml</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="842" S="2.16.578.1.12.4.1.1.7448" DN="Mikstur, oppløsning" />
+        <RefVilkar>ID_491E7F6C-23A9-45C3-A906-95A1332AD5BD</RefVilkar>
+        <Preparattype V="11" DN="Krever godkj. Fritak" />
+        <TypeSoknadSlv V="2" DN="Søknad vurderes av apotek" />
+        <AdministreringLegemiddel>
+          <Administrasjonsvei V="53" S="2.16.578.1.12.4.1.1.7477" DN="Oral bruk" />
+          <EnhetDosering V="8" S="2.16.578.1.12.4.1.1.7480" DN="ml" />
+        </AdministreringLegemiddel>
+        <Id>ID_03F15B1E-64C6-4FC8-BEE5-A803D981C65D</Id>
+        <Varenavn>Amitriptyline Hydrochloride rosemont</Varenavn>
+        <LegemiddelformLang>Mikstur, oppløsning</LegemiddelformLang>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>0</Sortering>
+          <RefVirkestoffMedStyrke>ID_729B8088-6800-4B89-B6D2-52008185BC1B</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <ProduktInfo>
+          <Produsent>Rosemont Pharmaceuticals</Produsent>
+        </ProduktInfo>
+        <Reseptgyldighet>
+          <Varighet>P1Y</Varighet>
+        </Reseptgyldighet>
+      </LegemiddelMerkevare>
+    </OppfLegemiddelMerkevare>
+    <OppfLegemiddelMerkevare>
+      <Id>ID_71BD2CC9-63F2-4060-B8F5-40BAB3304CEB</Id>
+      <Tidspunkt>2026-01-23T03:13:53</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <LegemiddelMerkevare>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptylin Orifarm tab 25 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <AdministreringLegemiddel>
+          <Administrasjonsvei V="53" S="2.16.578.1.12.4.1.1.7477" DN="Oral bruk" />
+          <KanKnuses V="9" DN="Ukjent" />
+          <EnhetDosering V="13" S="2.16.578.1.12.4.1.1.7480" DN="tablett" />
+          <Kortdose V="5508" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+1" />
+          <Kortdose V="5514" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+2" />
+          <Kortdose V="5519" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+3" />
+          <Kortdose V="5559" S="2.16.578.1.12.4.1.1.7478" DN="1+0+0+1" />
+          <Kortdose V="5548" S="2.16.578.1.12.4.1.1.7478" DN="2+0+0+2" />
+          <Kortdose V="5534" S="2.16.578.1.12.4.1.1.7478" DN="3+0+0+3" />
+          <BruksomradeEtikett V="330" S="2.16.578.1.12.4.1.1.7488" DN="MOT DEPRESJON" />
+          <BruksomradeEtikett V="690" S="2.16.578.1.12.4.1.1.7488" DN="MOT SENGEVÆTING" />
+          <BruksomradeEtikett V="730" S="2.16.578.1.12.4.1.1.7488" DN="MOT SMERTER" />
+          <BruksomradeEtikett V="100" S="2.16.578.1.12.4.1.1.7488" DN="FOREBYGGER MIGRENE" />
+        </AdministreringLegemiddel>
+        <Id>ID_13523A15-FEEC-44B7-B08B-C0181F46BF98</Id>
+        <Varenavn>Amitriptylin Orifarm</Varenavn>
+        <LegemiddelformLang>Tablett, filmdrasjert</LegemiddelformLang>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>0</Sortering>
+          <RefVirkestoffMedStyrke>ID_7ACADBE5-5AA7-4CC9-93B0-5C58E6BABECD</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <ProduktInfo>
+          <Varseltrekant>false</Varseltrekant>
+          <Referanseprodukt>Sarotex</Referanseprodukt>
+          <Produsent>Orifarm Generics A/S</Produsent>
+        </ProduktInfo>
+        <Reseptgyldighet>
+          <Varighet>P1Y</Varighet>
+        </Reseptgyldighet>
+        <Preparatomtaleavsnitt>
+          <Avsnittoverskrift V="SPCHUMAN_00" DN="INNHOLDSFORTEGNELSE" />
+          <Lenke>
+            <Www V="https://produktinformasjon.legemiddelsok.no/preparatomtaler/17-11693.pdf" />
+          </Lenke>
+        </Preparatomtaleavsnitt>
+      </LegemiddelMerkevare>
+    </OppfLegemiddelMerkevare>
+    <OppfLegemiddelMerkevare>
+      <Id>ID_D555B3A2-76AD-4724-AD0F-696AF47C43A8</Id>
+      <Tidspunkt>2026-01-23T03:13:53</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <LegemiddelMerkevare>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptylin Abcur tab 25 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <AdministreringLegemiddel>
+          <Administrasjonsvei V="53" S="2.16.578.1.12.4.1.1.7477" DN="Oral bruk" />
+          <KanKnuses V="9" DN="Ukjent" />
+          <Deling V="0" DN="Ikke spesifisert" />
+          <EnhetDosering V="13" S="2.16.578.1.12.4.1.1.7480" DN="tablett" />
+          <Kortdose V="5508" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+1" />
+          <Kortdose V="5514" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+2" />
+          <Kortdose V="5519" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+3" />
+          <Kortdose V="5559" S="2.16.578.1.12.4.1.1.7478" DN="1+0+0+1" />
+          <Kortdose V="5548" S="2.16.578.1.12.4.1.1.7478" DN="2+0+0+2" />
+          <Kortdose V="5534" S="2.16.578.1.12.4.1.1.7478" DN="3+0+0+3" />
+          <BruksomradeEtikett V="330" S="2.16.578.1.12.4.1.1.7488" DN="MOT DEPRESJON" />
+          <BruksomradeEtikett V="690" S="2.16.578.1.12.4.1.1.7488" DN="MOT SENGEVÆTING" />
+          <BruksomradeEtikett V="730" S="2.16.578.1.12.4.1.1.7488" DN="MOT SMERTER" />
+          <BruksomradeEtikett V="100" S="2.16.578.1.12.4.1.1.7488" DN="FOREBYGGER MIGRENE" />
+        </AdministreringLegemiddel>
+        <Id>ID_159E6443-2B09-4071-B57F-731C53727EB5</Id>
+        <Varenavn>Amitriptylin Abcur</Varenavn>
+        <LegemiddelformLang>Tablett, filmdrasjert</LegemiddelformLang>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>0</Sortering>
+          <RefVirkestoffMedStyrke>ID_7ACADBE5-5AA7-4CC9-93B0-5C58E6BABECD</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <ProduktInfo>
+          <Referanseprodukt>Sarotex</Referanseprodukt>
+          <Produsent>Abcur AB</Produsent>
+        </ProduktInfo>
+        <Reseptgyldighet>
+          <Varighet>P1Y</Varighet>
+        </Reseptgyldighet>
+        <Preparatomtaleavsnitt>
+          <Avsnittoverskrift V="SPCHUMAN_00" DN="INNHOLDSFORTEGNELSE" />
+          <Lenke>
+            <Www V="https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11419.pdf" />
+          </Lenke>
+        </Preparatomtaleavsnitt>
+      </LegemiddelMerkevare>
+    </OppfLegemiddelMerkevare>
+    <OppfLegemiddelMerkevare>
+      <Id>ID_3FAD6854-8329-42C9-B51C-C0D756D90D72</Id>
+      <Tidspunkt>2026-01-23T03:13:53</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <LegemiddelMerkevare>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptylin Orifarm tab 10 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <AdministreringLegemiddel>
+          <Administrasjonsvei V="53" S="2.16.578.1.12.4.1.1.7477" DN="Oral bruk" />
+          <KanKnuses V="9" DN="Ukjent" />
+          <EnhetDosering V="13" S="2.16.578.1.12.4.1.1.7480" DN="tablett" />
+          <Kortdose V="5508" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+1" />
+          <Kortdose V="5514" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+2" />
+          <Kortdose V="5519" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+3" />
+          <Kortdose V="5559" S="2.16.578.1.12.4.1.1.7478" DN="1+0+0+1" />
+          <Kortdose V="5548" S="2.16.578.1.12.4.1.1.7478" DN="2+0+0+2" />
+          <Kortdose V="5534" S="2.16.578.1.12.4.1.1.7478" DN="3+0+0+3" />
+          <BruksomradeEtikett V="330" S="2.16.578.1.12.4.1.1.7488" DN="MOT DEPRESJON" />
+          <BruksomradeEtikett V="730" S="2.16.578.1.12.4.1.1.7488" DN="MOT SMERTER" />
+          <BruksomradeEtikett V="100" S="2.16.578.1.12.4.1.1.7488" DN="FOREBYGGER MIGRENE" />
+        </AdministreringLegemiddel>
+        <Id>ID_22A42A6A-884E-4A30-875D-08ACAA69B46E</Id>
+        <Varenavn>Amitriptylin Orifarm</Varenavn>
+        <LegemiddelformLang>Tablett, filmdrasjert</LegemiddelformLang>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>0</Sortering>
+          <RefVirkestoffMedStyrke>ID_C5B1F8FA-E33D-4336-8BBE-D0FFEC3C966D</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <ProduktInfo>
+          <Varseltrekant>false</Varseltrekant>
+          <Referanseprodukt>Sarotex</Referanseprodukt>
+          <Produsent>Orifarm Generics A/S</Produsent>
+        </ProduktInfo>
+        <Reseptgyldighet>
+          <Varighet>P1Y</Varighet>
+        </Reseptgyldighet>
+        <Preparatomtaleavsnitt>
+          <Avsnittoverskrift V="SPCHUMAN_00" DN="INNHOLDSFORTEGNELSE" />
+          <Lenke>
+            <Www V="https://produktinformasjon.legemiddelsok.no/preparatomtaler/17-11692.pdf" />
+          </Lenke>
+        </Preparatomtaleavsnitt>
+      </LegemiddelMerkevare>
+    </OppfLegemiddelMerkevare>
+    <OppfLegemiddelMerkevare>
+      <Id>ID_855DCFBB-7358-446B-B122-3DADDF03E60D</Id>
+      <Tidspunkt>2025-06-05T03:11:24</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <LegemiddelMerkevare>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptylin-CT tab 25 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <RefVilkar>ID_491E7F6C-23A9-45C3-A906-95A1332AD5BD</RefVilkar>
+        <Preparattype V="11" DN="Krever godkj. Fritak" />
+        <TypeSoknadSlv V="2" DN="Søknad vurderes av apotek" />
+        <AdministreringLegemiddel>
+          <Administrasjonsvei V="53" S="2.16.578.1.12.4.1.1.7477" DN="Oral bruk" />
+          <KanKnuses V="9" DN="Ukjent" />
+          <EnhetDosering V="13" S="2.16.578.1.12.4.1.1.7480" DN="tablett" />
+          <BruksomradeEtikett V="330" S="2.16.578.1.12.4.1.1.7488" DN="MOT DEPRESJON" />
+          <BruksomradeEtikett V="690" S="2.16.578.1.12.4.1.1.7488" DN="MOT SENGEVÆTING" />
+          <BruksomradeEtikett V="730" S="2.16.578.1.12.4.1.1.7488" DN="MOT SMERTER" />
+          <BruksomradeEtikett V="100" S="2.16.578.1.12.4.1.1.7488" DN="FOREBYGGER MIGRENE" />
+        </AdministreringLegemiddel>
+        <Id>ID_37D01760-8689-44BF-92C1-0A76BC2D39C9</Id>
+        <Varenavn>Amitriptylin-CT</Varenavn>
+        <LegemiddelformLang>Tablett</LegemiddelformLang>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>0</Sortering>
+          <RefVirkestoffMedStyrke>ID_7ACADBE5-5AA7-4CC9-93B0-5C58E6BABECD</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <ProduktInfo>
+          <Produsent>AbZ-Pharma</Produsent>
+        </ProduktInfo>
+        <Reseptgyldighet>
+          <Varighet>P1Y</Varighet>
+        </Reseptgyldighet>
+      </LegemiddelMerkevare>
+    </OppfLegemiddelMerkevare>
+    <OppfLegemiddelMerkevare>
+      <Id>ID_418932E1-54CB-409A-B3E2-C713939B6570</Id>
+      <Tidspunkt>2026-01-23T03:13:53</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <LegemiddelMerkevare>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Sarotex tab 10 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <AdministreringLegemiddel>
+          <Administrasjonsvei V="53" S="2.16.578.1.12.4.1.1.7477" DN="Oral bruk" />
+          <KanKnuses V="9" DN="Ukjent" />
+          <Deling V="0" DN="Ikke spesifisert" />
+          <EnhetDosering V="13" S="2.16.578.1.12.4.1.1.7480" DN="tablett" />
+          <Kortdose V="5508" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+1" />
+          <Kortdose V="5514" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+2" />
+          <Kortdose V="5519" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+3" />
+          <Kortdose V="5559" S="2.16.578.1.12.4.1.1.7478" DN="1+0+0+1" />
+          <Kortdose V="5548" S="2.16.578.1.12.4.1.1.7478" DN="2+0+0+2" />
+          <Kortdose V="5534" S="2.16.578.1.12.4.1.1.7478" DN="3+0+0+3" />
+          <BruksomradeEtikett V="330" S="2.16.578.1.12.4.1.1.7488" DN="MOT DEPRESJON" />
+          <BruksomradeEtikett V="730" S="2.16.578.1.12.4.1.1.7488" DN="MOT SMERTER" />
+          <BruksomradeEtikett V="100" S="2.16.578.1.12.4.1.1.7488" DN="FOREBYGGER MIGRENE" />
+        </AdministreringLegemiddel>
+        <Id>ID_52B8BE66-BEE1-4CAA-8962-D7C52C45A5DD</Id>
+        <Varenavn>Sarotex</Varenavn>
+        <LegemiddelformLang>Tablett, filmdrasjert</LegemiddelformLang>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>0</Sortering>
+          <RefVirkestoffMedStyrke>ID_C5B1F8FA-E33D-4336-8BBE-D0FFEC3C966D</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <ProduktInfo>
+          <Varseltrekant>false</Varseltrekant>
+          <Produsent>H. Lundbeck A/S</Produsent>
+        </ProduktInfo>
+        <Reseptgyldighet>
+          <Varighet>P1Y</Varighet>
+        </Reseptgyldighet>
+        <Preparatomtaleavsnitt>
+          <Avsnittoverskrift V="SPCHUMAN_00" DN="INNHOLDSFORTEGNELSE" />
+          <Lenke>
+            <Www V="https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-04327.pdf" />
+          </Lenke>
+        </Preparatomtaleavsnitt>
+      </LegemiddelMerkevare>
+    </OppfLegemiddelMerkevare>
+    <OppfLegemiddelMerkevare>
+      <Id>ID_A55E3C6B-3DBD-42ED-90C2-2AB4994C7A7E</Id>
+      <Tidspunkt>2025-06-21T03:11:17</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <LegemiddelMerkevare>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptyline hydrochloride syrimed mikst oppl 10 mg/5 ml</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="842" S="2.16.578.1.12.4.1.1.7448" DN="Mikstur, oppløsning" />
+        <RefVilkar>ID_491E7F6C-23A9-45C3-A906-95A1332AD5BD</RefVilkar>
+        <Preparattype V="11" DN="Krever godkj. Fritak" />
+        <TypeSoknadSlv V="2" DN="Søknad vurderes av apotek" />
+        <AdministreringLegemiddel>
+          <Administrasjonsvei V="53" S="2.16.578.1.12.4.1.1.7477" DN="Oral bruk" />
+          <EnhetDosering V="8" S="2.16.578.1.12.4.1.1.7480" DN="ml" />
+        </AdministreringLegemiddel>
+        <Id>ID_8FE0C4B2-864B-4EE8-9D5A-CCE3F197921C</Id>
+        <Varenavn>Amitriptyline hydrochloride syrimed</Varenavn>
+        <LegemiddelformLang>Mikstur, oppløsning</LegemiddelformLang>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>0</Sortering>
+          <RefVirkestoffMedStyrke>ID_388A34AB-3543-4880-BDE2-A513FDB5906E</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <ProduktInfo>
+          <Produsent>SyriMed</Produsent>
+        </ProduktInfo>
+        <Reseptgyldighet>
+          <Varighet>P1Y</Varighet>
+        </Reseptgyldighet>
+      </LegemiddelMerkevare>
+    </OppfLegemiddelMerkevare>
+    <OppfLegemiddelMerkevare>
+      <Id>ID_99F7A5CE-1EEF-49D2-B747-8DE3ADF6FA2E</Id>
+      <Tidspunkt>2022-11-19T03:11:20</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <LegemiddelMerkevare>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Saroten Retard depotkaps, hard 50 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="743" S="2.16.578.1.12.4.1.1.7448" DN="Depotkapsel, hard" />
+        <RefVilkar>ID_491E7F6C-23A9-45C3-A906-95A1332AD5BD</RefVilkar>
+        <Preparattype V="11" DN="Krever godkj. Fritak" />
+        <TypeSoknadSlv V="2" DN="Søknad vurderes av apotek" />
+        <AdministreringLegemiddel>
+          <Administrasjonsvei V="53" S="2.16.578.1.12.4.1.1.7477" DN="Oral bruk" />
+          <KanKnuses V="2" DN="Nei" />
+          <EnhetDosering V="6" S="2.16.578.1.12.4.1.1.7480" DN="kapsel" />
+          <BruksomradeEtikett V="730" S="2.16.578.1.12.4.1.1.7488" DN="MOT SMERTER" />
+          <BruksomradeEtikett V="330" S="2.16.578.1.12.4.1.1.7488" DN="MOT DEPRESJON" />
+          <BruksomradeEtikett V="690" S="2.16.578.1.12.4.1.1.7488" DN="MOT SENGEVÆTING" />
+        </AdministreringLegemiddel>
+        <Id>ID_AD9F4BBC-F105-4FAE-9BB9-7D1B60A9EB56</Id>
+        <Varenavn>Saroten Retard</Varenavn>
+        <LegemiddelformLang>Depotkapsel, hard</LegemiddelformLang>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>0</Sortering>
+          <RefVirkestoffMedStyrke>ID_69987C94-A37E-4AB8-94DF-BB62CD14EE06</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <ProduktInfo>
+          <Produsent>Lundbeck</Produsent>
+        </ProduktInfo>
+        <Reseptgyldighet>
+          <Varighet>P1Y</Varighet>
+        </Reseptgyldighet>
+      </LegemiddelMerkevare>
+    </OppfLegemiddelMerkevare>
+    <OppfLegemiddelMerkevare>
+      <Id>ID_55A1E51D-8B94-4314-82A7-804D07B1297D</Id>
+      <Tidspunkt>2026-01-23T03:13:53</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <LegemiddelMerkevare>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Sarotex tab 25 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <AdministreringLegemiddel>
+          <Administrasjonsvei V="53" S="2.16.578.1.12.4.1.1.7477" DN="Oral bruk" />
+          <KanKnuses V="9" DN="Ukjent" />
+          <Deling V="0" DN="Ikke spesifisert" />
+          <EnhetDosering V="13" S="2.16.578.1.12.4.1.1.7480" DN="tablett" />
+          <Kortdose V="5508" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+1" />
+          <Kortdose V="5514" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+2" />
+          <Kortdose V="5519" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+3" />
+          <Kortdose V="5559" S="2.16.578.1.12.4.1.1.7478" DN="1+0+0+1" />
+          <Kortdose V="5548" S="2.16.578.1.12.4.1.1.7478" DN="2+0+0+2" />
+          <Kortdose V="5534" S="2.16.578.1.12.4.1.1.7478" DN="3+0+0+3" />
+          <BruksomradeEtikett V="330" S="2.16.578.1.12.4.1.1.7488" DN="MOT DEPRESJON" />
+          <BruksomradeEtikett V="690" S="2.16.578.1.12.4.1.1.7488" DN="MOT SENGEVÆTING" />
+          <BruksomradeEtikett V="730" S="2.16.578.1.12.4.1.1.7488" DN="MOT SMERTER" />
+          <BruksomradeEtikett V="100" S="2.16.578.1.12.4.1.1.7488" DN="FOREBYGGER MIGRENE" />
+        </AdministreringLegemiddel>
+        <Id>ID_E8F2322E-4E0E-46BA-B61E-CBDD839F1398</Id>
+        <Varenavn>Sarotex</Varenavn>
+        <LegemiddelformLang>Tablett, filmdrasjert</LegemiddelformLang>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>0</Sortering>
+          <RefVirkestoffMedStyrke>ID_7ACADBE5-5AA7-4CC9-93B0-5C58E6BABECD</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <ProduktInfo>
+          <Varseltrekant>false</Varseltrekant>
+          <Produsent>H. Lundbeck A/S</Produsent>
+        </ProduktInfo>
+        <Reseptgyldighet>
+          <Varighet>P1Y</Varighet>
+        </Reseptgyldighet>
+        <Preparatomtaleavsnitt>
+          <Avsnittoverskrift V="SPCHUMAN_00" DN="INNHOLDSFORTEGNELSE" />
+          <Lenke>
+            <Www V="https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-04328.pdf" />
+          </Lenke>
+        </Preparatomtaleavsnitt>
+      </LegemiddelMerkevare>
+    </OppfLegemiddelMerkevare>
+    <OppfLegemiddelMerkevare>
+      <Id>ID_2602F198-0D7C-4347-8B48-333C2167D656</Id>
+      <Tidspunkt>2026-01-23T03:13:53</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <LegemiddelMerkevare>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptylin Abcur tab 10 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <AdministreringLegemiddel>
+          <Administrasjonsvei V="53" S="2.16.578.1.12.4.1.1.7477" DN="Oral bruk" />
+          <KanKnuses V="9" DN="Ukjent" />
+          <Deling V="0" DN="Ikke spesifisert" />
+          <EnhetDosering V="13" S="2.16.578.1.12.4.1.1.7480" DN="tablett" />
+          <Kortdose V="5508" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+1" />
+          <Kortdose V="5514" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+2" />
+          <Kortdose V="5519" S="2.16.578.1.12.4.1.1.7478" DN="0+0+0+3" />
+          <Kortdose V="5559" S="2.16.578.1.12.4.1.1.7478" DN="1+0+0+1" />
+          <Kortdose V="5548" S="2.16.578.1.12.4.1.1.7478" DN="2+0+0+2" />
+          <Kortdose V="5534" S="2.16.578.1.12.4.1.1.7478" DN="3+0+0+3" />
+          <BruksomradeEtikett V="330" S="2.16.578.1.12.4.1.1.7488" DN="MOT DEPRESJON" />
+          <BruksomradeEtikett V="730" S="2.16.578.1.12.4.1.1.7488" DN="MOT SMERTER" />
+          <BruksomradeEtikett V="100" S="2.16.578.1.12.4.1.1.7488" DN="FOREBYGGER MIGRENE" />
+        </AdministreringLegemiddel>
+        <Id>ID_FCE2D23D-93ED-4764-A958-D2DD3420433D</Id>
+        <Varenavn>Amitriptylin Abcur</Varenavn>
+        <LegemiddelformLang>Tablett, filmdrasjert</LegemiddelformLang>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>0</Sortering>
+          <RefVirkestoffMedStyrke>ID_C5B1F8FA-E33D-4336-8BBE-D0FFEC3C966D</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <ProduktInfo>
+          <Referanseprodukt>Sarotex</Referanseprodukt>
+          <Produsent>Abcur AB</Produsent>
+        </ProduktInfo>
+        <Reseptgyldighet>
+          <Varighet>P1Y</Varighet>
+        </Reseptgyldighet>
+        <Preparatomtaleavsnitt>
+          <Avsnittoverskrift V="SPCHUMAN_00" DN="INNHOLDSFORTEGNELSE" />
+          <Lenke>
+            <Www V="https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11418.pdf" />
+          </Lenke>
+        </Preparatomtaleavsnitt>
+      </LegemiddelMerkevare>
+    </OppfLegemiddelMerkevare>
+    <OppfLegemiddelMerkevare>
+      <Id>ID_F449DCA0-666E-4FB0-9EF3-C6DDD4C17C42</Id>
+      <Tidspunkt>2026-02-27T03:09:52</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <LegemiddelMerkevare>
+        <Atc V="N02AJ07" S="2.16.578.1.12.4.1.1.7180" DN="Kodein og acetylsalisylsyre" />
+        <NavnFormStyrke>Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg</NavnFormStyrke>
+        <Reseptgruppe V="B" DN="Reseptgruppe B" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <RefVilkar>ID_491E7F6C-23A9-45C3-A906-95A1332AD5BD</RefVilkar>
+        <Preparattype V="11" DN="Krever godkj. Fritak" />
+        <TypeSoknadSlv V="2" DN="Søknad vurderes av apotek" />
+        <Opioidsoknad>true</Opioidsoknad>
+        <AdministreringLegemiddel>
+          <Administrasjonsvei V="53" S="2.16.578.1.12.4.1.1.7477" DN="Oral bruk" />
+          <EnhetDosering V="13" S="2.16.578.1.12.4.1.1.7480" DN="tablett" />
+        </AdministreringLegemiddel>
+        <Id>ID_000A27B8-3930-4264-80F9-CDB14C895662</Id>
+        <Varenavn>Kodimagnyl Ikke-stoppende dak</Varenavn>
+        <LegemiddelformLang>Tablett, filmdrasjert</LegemiddelformLang>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>0</Sortering>
+          <RefVirkestoffMedStyrke>ID_EBA32704-A830-4F76-8099-216B184396D3</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>1</Sortering>
+          <RefVirkestoffMedStyrke>ID_CC09F8A9-36D8-466E-996C-31172AA89BCB</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <SortertVirkestoffMedStyrke>
+          <Sortering>2</Sortering>
+          <RefVirkestoffMedStyrke>ID_A1C0BEE8-A849-4F0E-A799-F09DEFB03B7B</RefVirkestoffMedStyrke>
+        </SortertVirkestoffMedStyrke>
+        <ProduktInfo>
+          <Produsent>Orifarm Healthcare</Produsent>
+        </ProduktInfo>
+        <Reseptgyldighet>
+          <Varighet>P1Y</Varighet>
+        </Reseptgyldighet>
+      </LegemiddelMerkevare>
+    </OppfLegemiddelMerkevare>
+  </KatLegemiddelMerkevare>
+  <KatLegemiddelpakning>
+    <OppfLegemiddelpakning>
+      <Id>ID_D1CD1603-2B08-4DB9-9A01-638727E3BFC8</Id>
+      <Tidspunkt>2025-06-05T03:11:24</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Legemiddelpakning>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptylin-CT tab 25 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="11" DN="Krever godkj. Fritak" />
+        <TypeSoknadSlv V="2" DN="Søknad vurderes av apotek" />
+        <Id>ID_15C2AB34-F856-43EA-B08D-92E95A0FAF11</Id>
+        <Varenr>342044</Varenr>
+        <Oppbevaring V="R" DN="Rom (15-25 grader)" />
+        <Pakningsinfo>
+          <RefLegemiddelMerkevare>ID_37D01760-8689-44BF-92C1-0A76BC2D39C9</RefLegemiddelMerkevare>
+          <Pakningsstr>100</Pakningsstr>
+          <EnhetPakning V="stk" S="2.16.578.1.12.4.1.1.7452" DN="stykk" />
+          <Pakningstype V="169" S="2.16.578.1.12.4.1.1.7449" DN="Blisterpakning" />
+          <Mengde>100</Mengde>
+          <DDD V="0.075" U="g" />
+          <Statistikkfaktor>2.5</Statistikkfaktor>
+        </Pakningsinfo>
+        <Markedsforingsinfo>
+          <Markedsforingsdato>2025-06-15</Markedsforingsdato>
+        </Markedsforingsinfo>
+      </Legemiddelpakning>
+    </OppfLegemiddelpakning>
+    <OppfLegemiddelpakning>
+      <Id>ID_817B2752-A43F-48F6-A02E-774FFF968DDB</Id>
+      <Tidspunkt>2025-07-05T03:10:53</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Legemiddelpakning>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptyline Hydrochloride rosemont mikst oppl 50 mg/5 ml</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="842" S="2.16.578.1.12.4.1.1.7448" DN="Mikstur, oppløsning" />
+        <Preparattype V="11" DN="Krever godkj. Fritak" />
+        <TypeSoknadSlv V="2" DN="Søknad vurderes av apotek" />
+        <Id>ID_2276D0B4-02A5-40F4-81A5-2C307B8C9492</Id>
+        <Varenr>307893</Varenr>
+        <Oppbevaring V="R" DN="Rom (15-25 grader)" />
+        <Pakningsinfo>
+          <RefLegemiddelMerkevare>ID_03F15B1E-64C6-4FC8-BEE5-A803D981C65D</RefLegemiddelMerkevare>
+          <Pakningsstr>150</Pakningsstr>
+          <EnhetPakning V="ml" S="2.16.578.1.12.4.1.1.7452" DN="milliliter" />
+          <Pakningstype V="120" S="2.16.578.1.12.4.1.1.7449" DN="Flaske av mørkt glass" />
+          <Mengde>150</Mengde>
+          <DDD V="0.075" U="g" />
+          <Statistikkfaktor>1.5</Statistikkfaktor>
+        </Pakningsinfo>
+        <Markedsforingsinfo>
+          <Markedsforingsdato>2025-07-15</Markedsforingsdato>
+        </Markedsforingsinfo>
+      </Legemiddelpakning>
+    </OppfLegemiddelpakning>
+    <OppfLegemiddelpakning>
+      <Id>ID_2428E25D-9413-4696-978C-53A17FA95980</Id>
+      <Tidspunkt>2026-01-15T03:10:07</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Legemiddelpakning>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptylin Orifarm tab 10 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <Refusjon>
+          <RefRefusjonsgruppe>ID_7018F66E-8CE0-4C06-914A-B8C7E4D32F82</RefRefusjonsgruppe>
+          <GyldigFraDato>2018-06-01</GyldigFraDato>
+        </Refusjon>
+        <PakningByttegruppe>
+          <RefByttegruppe>ID_E68A44F4-7B33-4BD9-A067-5896B532E6FB</RefByttegruppe>
+          <GyldigFraDato>2018-06-01</GyldigFraDato>
+        </PakningByttegruppe>
+        <Id>ID_2896779B-D7F6-4852-8B4E-4C763B41037F</Id>
+        <Varenr>564290</Varenr>
+        <Ean>7046265642909</Ean>
+        <Oppbevaring V="R" DN="Rom (15-25 grader)" />
+        <Pakningsinfo>
+          <RefLegemiddelMerkevare>ID_22A42A6A-884E-4A30-875D-08ACAA69B46E</RefLegemiddelMerkevare>
+          <Pakningsstr>100</Pakningsstr>
+          <EnhetPakning V="stk" S="2.16.578.1.12.4.1.1.7452" DN="stykk" />
+          <Pakningstype V="169" S="2.16.578.1.12.4.1.1.7449" DN="Blisterpakning" />
+          <Mengde>100</Mengde>
+          <DDD V="0.075" U="g" />
+          <Statistikkfaktor>1</Statistikkfaktor>
+        </Pakningsinfo>
+        <PrisVare>
+          <Type V="2" S="2.16.578.1.12.4.1.1.7453" DN="Refusjonspris" />
+          <Pris V="110.4" U="NOK" />
+          <GyldigFraDato>2026-01-15</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="4" S="2.16.578.1.12.4.1.1.7453" DN="AUP" />
+          <Pris V="110.4" U="NOK" />
+          <GyldigFraDato>2026-01-15</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="3" S="2.16.578.1.12.4.1.1.7453" DN="AIP" />
+          <Pris V="58.12" U="NOK" />
+          <GyldigFraDato>2026-01-15</GyldigFraDato>
+        </PrisVare>
+        <Markedsforingsinfo>
+          <Markedsforingsdato>2018-10-15</Markedsforingsdato>
+        </Markedsforingsinfo>
+      </Legemiddelpakning>
+    </OppfLegemiddelpakning>
+    <OppfLegemiddelpakning>
+      <Id>ID_9D4FBFDB-EAB8-46A0-BC80-DDFE63A53714</Id>
+      <Tidspunkt>2026-02-27T03:09:52</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Legemiddelpakning>
+        <Atc V="N02AJ07" S="2.16.578.1.12.4.1.1.7180" DN="Kodein og acetylsalisylsyre" />
+        <NavnFormStyrke>Kodimagnyl Ikke-stoppende dak tab 9,6 mg/500 mg/150 mg</NavnFormStyrke>
+        <Reseptgruppe V="B" DN="Reseptgruppe B" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="11" DN="Krever godkj. Fritak" />
+        <TypeSoknadSlv V="2" DN="Søknad vurderes av apotek" />
+        <Opioidsoknad>true</Opioidsoknad>
+        <Id>ID_39A1D548-A66D-4E62-B0BC-FA556660B24E</Id>
+        <Varenr>243591</Varenr>
+        <Oppbevaring V="R" DN="Rom (15-25 grader)" />
+        <Pakningsinfo>
+          <RefLegemiddelMerkevare>ID_000A27B8-3930-4264-80F9-CDB14C895662</RefLegemiddelMerkevare>
+          <Pakningsstr>100</Pakningsstr>
+          <EnhetPakning V="stk" S="2.16.578.1.12.4.1.1.7452" DN="stykk" />
+          <Pakningstype V="169" S="2.16.578.1.12.4.1.1.7449" DN="Blisterpakning" />
+          <Mengde>100</Mengde>
+          <DDD V="6" U="ED" />
+          <Statistikkfaktor>100</Statistikkfaktor>
+        </Pakningsinfo>
+        <Markedsforingsinfo>
+          <Markedsforingsdato>2023-06-15</Markedsforingsdato>
+        </Markedsforingsinfo>
+      </Legemiddelpakning>
+    </OppfLegemiddelpakning>
+    <OppfLegemiddelpakning>
+      <Id>ID_D7EA0CD1-B79E-4F38-A21C-5D33F9A7F919</Id>
+      <Tidspunkt>2026-03-15T03:09:56</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Legemiddelpakning>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptylin Abcur tab 50 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <Refusjon>
+          <RefRefusjonsgruppe>ID_7018F66E-8CE0-4C06-914A-B8C7E4D32F82</RefRefusjonsgruppe>
+          <GyldigFraDato>2020-04-15</GyldigFraDato>
+        </Refusjon>
+        <Id>ID_428FBA9D-B6B5-46EB-B4EA-77C49EE80598</Id>
+        <Varenr>529377</Varenr>
+        <Ean>5060353000022</Ean>
+        <Oppbevaring V="R" DN="Rom (15-25 grader)" />
+        <Pakningsinfo>
+          <RefLegemiddelMerkevare>ID_012C7C0D-77BC-4F3D-BEBE-663743B03C1F</RefLegemiddelMerkevare>
+          <Pakningsstr>100</Pakningsstr>
+          <EnhetPakning V="stk" S="2.16.578.1.12.4.1.1.7452" DN="stykk" />
+          <Pakningstype V="8" S="2.16.578.1.12.4.1.1.7449" DN="Boks" />
+          <Mengde>100</Mengde>
+          <DDD V="0.075" U="g" />
+          <Statistikkfaktor>5</Statistikkfaktor>
+        </Pakningsinfo>
+        <PrisVare>
+          <Type V="3" S="2.16.578.1.12.4.1.1.7453" DN="AIP" />
+          <Pris V="148.53" U="NOK" />
+          <GyldigFraDato>2026-03-15</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="4" S="2.16.578.1.12.4.1.1.7453" DN="AUP" />
+          <Pris V="225.6" U="NOK" />
+          <GyldigFraDato>2026-03-15</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="2" S="2.16.578.1.12.4.1.1.7453" DN="Refusjonspris" />
+          <Pris V="225.6" U="NOK" />
+          <GyldigFraDato>2026-03-15</GyldigFraDato>
+        </PrisVare>
+        <Markedsforingsinfo>
+          <Markedsforingsdato>2017-08-15</Markedsforingsdato>
+        </Markedsforingsinfo>
+      </Legemiddelpakning>
+    </OppfLegemiddelpakning>
+    <OppfLegemiddelpakning>
+      <Id>ID_CA658795-B057-44D5-9776-0FD7CDF1A9C3</Id>
+      <Tidspunkt>2026-01-15T03:10:07</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Legemiddelpakning>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptylin Abcur tab 10 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <Refusjon>
+          <RefRefusjonsgruppe>ID_7018F66E-8CE0-4C06-914A-B8C7E4D32F82</RefRefusjonsgruppe>
+          <GyldigFraDato>2018-09-15</GyldigFraDato>
+        </Refusjon>
+        <PakningByttegruppe>
+          <RefByttegruppe>ID_E68A44F4-7B33-4BD9-A067-5896B532E6FB</RefByttegruppe>
+          <GyldigFraDato>2018-07-15</GyldigFraDato>
+        </PakningByttegruppe>
+        <Id>ID_702976C3-34F4-45CD-B3FD-B0AEAB1D424A</Id>
+        <Varenr>079353</Varenr>
+        <Ean>5060353000015</Ean>
+        <Oppbevaring V="R" DN="Rom (15-25 grader)" />
+        <Pakningsinfo>
+          <RefLegemiddelMerkevare>ID_FCE2D23D-93ED-4764-A958-D2DD3420433D</RefLegemiddelMerkevare>
+          <Pakningsstr>100</Pakningsstr>
+          <EnhetPakning V="stk" S="2.16.578.1.12.4.1.1.7452" DN="stykk" />
+          <Pakningstype V="8" S="2.16.578.1.12.4.1.1.7449" DN="Boks" />
+          <Mengde>100</Mengde>
+          <DDD V="0.075" U="g" />
+          <Statistikkfaktor>1</Statistikkfaktor>
+        </Pakningsinfo>
+        <PrisVare>
+          <Type V="3" S="2.16.578.1.12.4.1.1.7453" DN="AIP" />
+          <Pris V="58.12" U="NOK" />
+          <GyldigFraDato>2026-01-15</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="4" S="2.16.578.1.12.4.1.1.7453" DN="AUP" />
+          <Pris V="110.4" U="NOK" />
+          <GyldigFraDato>2026-01-15</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="2" S="2.16.578.1.12.4.1.1.7453" DN="Refusjonspris" />
+          <Pris V="110.4" U="NOK" />
+          <GyldigFraDato>2026-01-15</GyldigFraDato>
+        </PrisVare>
+        <Markedsforingsinfo>
+          <Markedsforingsdato>2017-08-15</Markedsforingsdato>
+        </Markedsforingsinfo>
+      </Legemiddelpakning>
+    </OppfLegemiddelpakning>
+    <OppfLegemiddelpakning>
+      <Id>ID_32529D8B-A1B2-49A4-84F5-92242BEAD773</Id>
+      <Tidspunkt>2026-01-15T03:10:07</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Legemiddelpakning>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptylin Orifarm tab 25 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <Refusjon>
+          <RefRefusjonsgruppe>ID_7018F66E-8CE0-4C06-914A-B8C7E4D32F82</RefRefusjonsgruppe>
+          <GyldigFraDato>2018-06-01</GyldigFraDato>
+        </Refusjon>
+        <PakningByttegruppe>
+          <RefByttegruppe>ID_3508C18E-3A38-426F-B540-19B7A3B8051B</RefByttegruppe>
+          <GyldigFraDato>2018-06-01</GyldigFraDato>
+        </PakningByttegruppe>
+        <Id>ID_782183C8-06AF-4D80-AD96-9164390A174B</Id>
+        <Varenr>147665</Varenr>
+        <Ean>7046261476652</Ean>
+        <Oppbevaring V="R" DN="Rom (15-25 grader)" />
+        <Pakningsinfo>
+          <RefLegemiddelMerkevare>ID_13523A15-FEEC-44B7-B08B-C0181F46BF98</RefLegemiddelMerkevare>
+          <Pakningsstr>100</Pakningsstr>
+          <EnhetPakning V="stk" S="2.16.578.1.12.4.1.1.7452" DN="stykk" />
+          <Pakningstype V="169" S="2.16.578.1.12.4.1.1.7449" DN="Blisterpakning" />
+          <Mengde>100</Mengde>
+          <DDD V="0.075" U="g" />
+          <Statistikkfaktor>2.5</Statistikkfaktor>
+        </Pakningsinfo>
+        <PrisVare>
+          <Type V="3" S="2.16.578.1.12.4.1.1.7453" DN="AIP" />
+          <Pris V="97" U="NOK" />
+          <GyldigFraDato>2026-01-15</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="2" S="2.16.578.1.12.4.1.1.7453" DN="Refusjonspris" />
+          <Pris V="159.9" U="NOK" />
+          <GyldigFraDato>2026-01-15</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="4" S="2.16.578.1.12.4.1.1.7453" DN="AUP" />
+          <Pris V="159.9" U="NOK" />
+          <GyldigFraDato>2026-01-15</GyldigFraDato>
+        </PrisVare>
+        <Markedsforingsinfo>
+          <Markedsforingsdato>2018-10-15</Markedsforingsdato>
+        </Markedsforingsinfo>
+      </Legemiddelpakning>
+    </OppfLegemiddelpakning>
+    <OppfLegemiddelpakning>
+      <Id>ID_0C2C0B96-94C9-47DC-934B-E90B23F0B3A9</Id>
+      <Tidspunkt>2026-01-01T03:10:22</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Legemiddelpakning>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Sarotex tab 10 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <Refusjon>
+          <RefRefusjonsgruppe>ID_7018F66E-8CE0-4C06-914A-B8C7E4D32F82</RefRefusjonsgruppe>
+          <GyldigFraDato>2008-01-17</GyldigFraDato>
+        </Refusjon>
+        <PakningByttegruppe>
+          <RefByttegruppe>ID_E68A44F4-7B33-4BD9-A067-5896B532E6FB</RefByttegruppe>
+          <GyldigFraDato>2018-06-01</GyldigFraDato>
+        </PakningByttegruppe>
+        <Id>ID_B4189194-717D-4CA5-81DA-1CEC9A06B79D</Id>
+        <Varenr>444067</Varenr>
+        <Ean>5702150147929</Ean>
+        <Oppbevaring V="R" DN="Rom (15-25 grader)" />
+        <Pakningsinfo>
+          <RefLegemiddelMerkevare>ID_52B8BE66-BEE1-4CAA-8962-D7C52C45A5DD</RefLegemiddelMerkevare>
+          <Pakningsstr>100</Pakningsstr>
+          <EnhetPakning V="stk" S="2.16.578.1.12.4.1.1.7452" DN="stykk" />
+          <Pakningstype V="8" S="2.16.578.1.12.4.1.1.7449" DN="Boks" />
+          <Mengde>100</Mengde>
+          <DDD V="0.075" U="g" />
+          <Statistikkfaktor>1</Statistikkfaktor>
+        </Pakningsinfo>
+        <PrisVare>
+          <Type V="2" S="2.16.578.1.12.4.1.1.7453" DN="Refusjonspris" />
+          <Pris V="110.4" U="NOK" />
+          <GyldigFraDato>2026-01-01</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="4" S="2.16.578.1.12.4.1.1.7453" DN="AUP" />
+          <Pris V="110.4" U="NOK" />
+          <GyldigFraDato>2026-01-01</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="3" S="2.16.578.1.12.4.1.1.7453" DN="AIP" />
+          <Pris V="58.12" U="NOK" />
+          <GyldigFraDato>2026-01-01</GyldigFraDato>
+        </PrisVare>
+        <Markedsforingsinfo>
+          <Markedsforingsdato>2001-01-01</Markedsforingsdato>
+        </Markedsforingsinfo>
+      </Legemiddelpakning>
+    </OppfLegemiddelpakning>
+    <OppfLegemiddelpakning>
+      <Id>ID_B1EBF1AF-7BE7-49BD-B865-CCDA543CCF25</Id>
+      <Tidspunkt>2025-06-21T03:11:17</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Legemiddelpakning>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptyline hydrochloride syrimed mikst oppl 10 mg/5 ml</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="842" S="2.16.578.1.12.4.1.1.7448" DN="Mikstur, oppløsning" />
+        <Preparattype V="11" DN="Krever godkj. Fritak" />
+        <TypeSoknadSlv V="2" DN="Søknad vurderes av apotek" />
+        <Id>ID_BE4C1FDA-7142-4660-B0AC-A3593C13E183</Id>
+        <Varenr>298299</Varenr>
+        <Oppbevaring V="R" DN="Rom (15-25 grader)" />
+        <Pakningsinfo>
+          <RefLegemiddelMerkevare>ID_8FE0C4B2-864B-4EE8-9D5A-CCE3F197921C</RefLegemiddelMerkevare>
+          <Pakningsstr>150</Pakningsstr>
+          <EnhetPakning V="ml" S="2.16.578.1.12.4.1.1.7452" DN="milliliter" />
+          <Pakningstype V="120" S="2.16.578.1.12.4.1.1.7449" DN="Flaske av mørkt glass" />
+          <Mengde>150</Mengde>
+          <DDD V="0.075" U="g" />
+          <Statistikkfaktor>0.3</Statistikkfaktor>
+        </Pakningsinfo>
+        <Markedsforingsinfo>
+          <Markedsforingsdato>2025-07-01</Markedsforingsdato>
+        </Markedsforingsinfo>
+      </Legemiddelpakning>
+    </OppfLegemiddelpakning>
+    <OppfLegemiddelpakning>
+      <Id>ID_C06AEAF9-B2B5-41C9-85CA-4C54CB53730F</Id>
+      <Tidspunkt>2026-01-01T03:10:22</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Legemiddelpakning>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Sarotex tab 25 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <Refusjon>
+          <RefRefusjonsgruppe>ID_7018F66E-8CE0-4C06-914A-B8C7E4D32F82</RefRefusjonsgruppe>
+          <GyldigFraDato>2008-01-17</GyldigFraDato>
+        </Refusjon>
+        <PakningByttegruppe>
+          <RefByttegruppe>ID_3508C18E-3A38-426F-B540-19B7A3B8051B</RefByttegruppe>
+          <GyldigFraDato>2018-06-01</GyldigFraDato>
+        </PakningByttegruppe>
+        <Id>ID_E5125B2B-ADB2-4524-A346-96E80050BA6A</Id>
+        <Varenr>444091</Varenr>
+        <Ean>5702150147936</Ean>
+        <Oppbevaring V="R" DN="Rom (15-25 grader)" />
+        <Pakningsinfo>
+          <RefLegemiddelMerkevare>ID_E8F2322E-4E0E-46BA-B61E-CBDD839F1398</RefLegemiddelMerkevare>
+          <Pakningsstr>100</Pakningsstr>
+          <EnhetPakning V="stk" S="2.16.578.1.12.4.1.1.7452" DN="stykk" />
+          <Pakningstype V="8" S="2.16.578.1.12.4.1.1.7449" DN="Boks" />
+          <Mengde>100</Mengde>
+          <DDD V="0.075" U="g" />
+          <Statistikkfaktor>2.5</Statistikkfaktor>
+        </Pakningsinfo>
+        <PrisVare>
+          <Type V="3" S="2.16.578.1.12.4.1.1.7453" DN="AIP" />
+          <Pris V="97" U="NOK" />
+          <GyldigFraDato>2026-01-01</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="4" S="2.16.578.1.12.4.1.1.7453" DN="AUP" />
+          <Pris V="159.9" U="NOK" />
+          <GyldigFraDato>2026-01-01</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="2" S="2.16.578.1.12.4.1.1.7453" DN="Refusjonspris" />
+          <Pris V="159.9" U="NOK" />
+          <GyldigFraDato>2026-01-01</GyldigFraDato>
+        </PrisVare>
+        <Markedsforingsinfo>
+          <Markedsforingsdato>2001-01-01</Markedsforingsdato>
+        </Markedsforingsinfo>
+      </Legemiddelpakning>
+    </OppfLegemiddelpakning>
+    <OppfLegemiddelpakning>
+      <Id>ID_7827CB92-8895-4653-B66C-8AD93867FA78</Id>
+      <Tidspunkt>2025-02-18T03:12:40</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Legemiddelpakning>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Saroten Retard depotkaps, hard 50 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="743" S="2.16.578.1.12.4.1.1.7448" DN="Depotkapsel, hard" />
+        <Preparattype V="11" DN="Krever godkj. Fritak" />
+        <TypeSoknadSlv V="2" DN="Søknad vurderes av apotek" />
+        <Id>ID_FBCAB3B7-6A73-43A9-BC48-221DB51EA9C1</Id>
+        <Varenr>231622</Varenr>
+        <Ean>7680373600583</Ean>
+        <Oppbevaring V="R" DN="Rom (15-25 grader)" />
+        <Pakningsinfo>
+          <RefLegemiddelMerkevare>ID_AD9F4BBC-F105-4FAE-9BB9-7D1B60A9EB56</RefLegemiddelMerkevare>
+          <Pakningsstr>100</Pakningsstr>
+          <EnhetPakning V="stk" S="2.16.578.1.12.4.1.1.7452" DN="stykk" />
+          <Pakningstype V="8" S="2.16.578.1.12.4.1.1.7449" DN="Boks" />
+          <Mengde>100</Mengde>
+          <DDD V="0.075" U="g" />
+          <Statistikkfaktor>5</Statistikkfaktor>
+        </Pakningsinfo>
+        <Markedsforingsinfo>
+          <Markedsforingsdato>2018-07-01</Markedsforingsdato>
+        </Markedsforingsinfo>
+      </Legemiddelpakning>
+    </OppfLegemiddelpakning>
+    <OppfLegemiddelpakning>
+      <Id>ID_20BA654B-A820-4B90-8FF0-816D2419F293</Id>
+      <Tidspunkt>2026-01-15T03:10:07</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Legemiddelpakning>
+        <Atc V="N06AA09" S="2.16.578.1.12.4.1.1.7180" DN="Amitriptylin" />
+        <NavnFormStyrke>Amitriptylin Abcur tab 25 mg</NavnFormStyrke>
+        <Reseptgruppe V="C" DN="Reseptgruppe C" />
+        <LegemiddelformKort V="53" S="2.16.578.1.12.4.1.1.7448" DN="Tablett" />
+        <Preparattype V="7" DN="Legemiddel" />
+        <TypeSoknadSlv V="1" DN="Skal ikke søkes" />
+        <Refusjon>
+          <RefRefusjonsgruppe>ID_7018F66E-8CE0-4C06-914A-B8C7E4D32F82</RefRefusjonsgruppe>
+          <GyldigFraDato>2018-09-15</GyldigFraDato>
+        </Refusjon>
+        <PakningByttegruppe>
+          <RefByttegruppe>ID_3508C18E-3A38-426F-B540-19B7A3B8051B</RefByttegruppe>
+          <GyldigFraDato>2018-07-15</GyldigFraDato>
+        </PakningByttegruppe>
+        <Id>ID_FCDD035D-5C33-4C76-BD42-9C68B1CBAD86</Id>
+        <Varenr>431926</Varenr>
+        <Ean>5060353000008</Ean>
+        <Oppbevaring V="R" DN="Rom (15-25 grader)" />
+        <Pakningsinfo>
+          <RefLegemiddelMerkevare>ID_159E6443-2B09-4071-B57F-731C53727EB5</RefLegemiddelMerkevare>
+          <Pakningsstr>100</Pakningsstr>
+          <EnhetPakning V="stk" S="2.16.578.1.12.4.1.1.7452" DN="stykk" />
+          <Pakningstype V="8" S="2.16.578.1.12.4.1.1.7449" DN="Boks" />
+          <Mengde>100</Mengde>
+          <DDD V="0.075" U="g" />
+          <Statistikkfaktor>2.5</Statistikkfaktor>
+        </Pakningsinfo>
+        <PrisVare>
+          <Type V="2" S="2.16.578.1.12.4.1.1.7453" DN="Refusjonspris" />
+          <Pris V="159.9" U="NOK" />
+          <GyldigFraDato>2026-01-15</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="3" S="2.16.578.1.12.4.1.1.7453" DN="AIP" />
+          <Pris V="97" U="NOK" />
+          <GyldigFraDato>2026-01-15</GyldigFraDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="4" S="2.16.578.1.12.4.1.1.7453" DN="AUP" />
+          <Pris V="159.9" U="NOK" />
+          <GyldigFraDato>2026-01-15</GyldigFraDato>
+        </PrisVare>
+        <Markedsforingsinfo>
+          <Markedsforingsdato>2017-08-15</Markedsforingsdato>
+        </Markedsforingsinfo>
+      </Legemiddelpakning>
+    </OppfLegemiddelpakning>
+  </KatLegemiddelpakning>
+  <KatByttegruppe>
+    <OppfByttegruppe>
+      <Id>ID_148271C4-18BD-44F8-BD54-2ED3340A1190</Id>
+      <Tidspunkt>2018-05-22T10:36:49</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Byttegruppe>
+        <Id>ID_3508C18E-3A38-426F-B540-19B7A3B8051B</Id>
+        <Kode V="002256" DN="AMITRIPTYLIN TABLETT 25 MG" />
+        <MerknadTilByttbarhet>false</MerknadTilByttbarhet>
+        <GyldigFraDato>2018-05-16</GyldigFraDato>
+      </Byttegruppe>
+    </OppfByttegruppe>
+    <OppfByttegruppe>
+      <Id>ID_8D8A5B9E-B68C-450F-A533-B666F556D3DC</Id>
+      <Tidspunkt>2018-05-22T10:36:49</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Byttegruppe>
+        <Id>ID_E68A44F4-7B33-4BD9-A067-5896B532E6FB</Id>
+        <Kode V="002255" DN="AMITRIPTYLIN TABLETT 10 MG" />
+        <MerknadTilByttbarhet>false</MerknadTilByttbarhet>
+        <GyldigFraDato>2018-05-16</GyldigFraDato>
+      </Byttegruppe>
+    </OppfByttegruppe>
+  </KatByttegruppe>
+  <KatInteraksjon>
+    <OppfInteraksjon>
+      <Id>ID_EDB0D2C6-89A3-4A88-95BD-9FAEA2BC1374</Id>
+      <Tidspunkt>2018-01-03T00:53:09</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Interaksjon>
+        <Id>ID_FD61A401-0759-44AE-AED9-A3A900F87802</Id>
+        <Relevans V="1" DN="Bør unngås" />
+        <KliniskKonsekvens>Økt konsentrasjon av simeprevir (7-10 ganger basert på data med den krafitge enzymhemmeren ritonavir)</KliniskKonsekvens>
+        <Interaksjonsmekanisme>Hemmet metabolisme av simeprevir via CYP3A4.</Interaksjonsmekanisme>
+        <Kildegrunnlag V="4" DN="Indirekte data" />
+        <Handtering>Legemiddelalternativer: Må vurderes på individuelt grunnlag.
+</Handtering>
+        <Visningsregel V="1" S="2.16.578.1.12.4.1.1.7442" DN="Allmennlege" />
+        <Visningsregel V="4" S="2.16.578.1.12.4.1.1.7442" DN="Apotek" />
+        <Visningsregel V="2" S="2.16.578.1.12.4.1.1.7442" DN="Spesialist" />
+        <Visningsregel V="3" S="2.16.578.1.12.4.1.1.7442" DN="Sykehus" />
+        <Referanse>
+          <Kilde>SPC Olysio</Kilde>
+          <Lenke V="http://www.ema.europa.eu/ema/index.jsp?curl=pages/includes/document/document_detail.jsp?webContentId=WC500167867&amp;mid=WC0b01ac058009a3dc" />
+        </Referanse>
+        <Referanse>
+          <Kilde>Spigset O, Molden E. Cytokrom P-450 3A4 - kroppens viktigste arena for legemiddelinteraksjoner. Tidsskr Nor Legeforen 2008; 128: 2832-5.</Kilde>
+          <Lenke V="http://tidsskriftet.no/article/1782258" />
+        </Referanse>
+        <Substansgruppe>
+          <Substans>
+            <Substans>Simeprevir</Substans>
+            <Atc V="J05AP05" S="2.16.578.1.12.4.1.1.7180" DN="Simeprevir" />
+          </Substans>
+        </Substansgruppe>
+        <Substansgruppe>
+          <Substans>
+            <Substans>Posakonazol</Substans>
+            <Atc V="J02AC04" S="2.16.578.1.12.4.1.1.7180" DN="Posakonazol" />
+          </Substans>
+        </Substansgruppe>
+      </Interaksjon>
+    </OppfInteraksjon>
+  </KatInteraksjon>
+  <KatHandelsvare>
+    <OppfHandelsvare>
+      <Id>ID_9D4FC873-09D1-49C5-A9BC-6944EB926264</Id>
+      <Tidspunkt>2026-06-16T12:26:16</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <MedForbMatr>
+        <Nr>009282</Nr>
+        <Navn>NaCl 9 mg/ml, plastampulle</Navn>
+        <ProduktInfoVare>
+          <ProduktNr>FRE009282</ProduktNr>
+          <Volum>20 ml</Volum>
+          <EnhetStorrelse V="stk" S="2.16.578.1.12.4.1.1.7452" DN="stykk" />
+          <AntPerPakning>20</AntPerPakning>
+          <TillattMerMakspris>false</TillattMerMakspris>
+        </ProduktInfoVare>
+        <Leverandor>
+          <Navn>FRESENIUS KABI NORGE AS</Navn>
+          <Adresse>GJERDRUMSVEIEN 10A 0484 OSLO</Adresse>
+          <Telefon>22588000</Telefon>
+        </Leverandor>
+        <PrisVare>
+          <Type V="N" S="2.16.578.1.12.4.1.1.7423" DN="Innkjøpspris" />
+          <Pris V="3.85" U="NOK" />
+          <GyldigFraDato>2026-07-01</GyldigFraDato>
+          <GyldigTilDato>2026-09-30</GyldigTilDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="E" S="2.16.578.1.12.4.1.1.7423" DN="Maksimal refusjonspris per enhet" />
+          <Pris V="6.02" U="NOK" />
+          <GyldigFraDato>2026-07-01</GyldigFraDato>
+          <GyldigTilDato>2026-09-30</GyldigTilDato>
+        </PrisVare>
+        <PrisVare>
+          <Type V="P" S="2.16.578.1.12.4.1.1.7423" DN="Maksimal refusjonspris per pakning" />
+          <Pris V="120.4" U="NOK" />
+          <GyldigFraDato>2026-07-01</GyldigFraDato>
+          <GyldigTilDato>2026-09-30</GyldigTilDato>
+        </PrisVare>
+        <Refusjon>
+          <RefRefusjonsgruppe>RID_131391</RefRefusjonsgruppe>
+          <RefRefusjonsgruppe>RID_267951</RefRefusjonsgruppe>
+          <RefRefusjonsgruppe>RID_2662921</RefRefusjonsgruppe>
+          <GyldigFraDato>2026-07-01</GyldigFraDato>
+        </Refusjon>
+      </MedForbMatr>
+    </OppfHandelsvare>
+  </KatHandelsvare>
+  <KatVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_FBCF21A3-EB63-4D99-9775-8A1C5803EE88</Id>
+      <Tidspunkt>2017-02-27T16:59:32</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Virkestoff>
+        <Id>ID_070A7B5D-46F1-44DC-AAB8-B51BE5A49270</Id>
+        <Navn>Amitriptylinhydroklorid</Navn>
+        <NavnEngelsk>Amitriptyline hydrochloride</NavnEngelsk>
+      </Virkestoff>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_C6495EBD-D478-457F-B767-A9ACADD09AC1</Id>
+      <Tidspunkt>2019-10-24T14:39:46</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Virkestoff>
+        <Id>ID_0A1B24EF-A7F8-488B-97B8-8023193E976D</Id>
+        <Navn>Amitriptylin</Navn>
+        <NavnEngelsk>Amitriptyline</NavnEngelsk>
+        <RefVirkestoff>ID_070A7B5D-46F1-44DC-AAB8-B51BE5A49270</RefVirkestoff>
+      </Virkestoff>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_68B854AF-894B-4224-A844-D378AE14C083</Id>
+      <Tidspunkt>2023-02-23T03:10:41</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Virkestoff>
+        <Id>ID_433FABF6-968F-43D2-BF5E-CDC5546F0AB2</Id>
+        <Navn>Acetylsalisylsyre</Navn>
+        <NavnEngelsk>Acetylsalicylic acid</NavnEngelsk>
+        <RefVirkestoff>ID_68EB5401-A358-43C1-83CF-7388661A5626</RefVirkestoff>
+      </Virkestoff>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_8A685F5B-24AE-482A-AAEF-DAADA0D75BA3</Id>
+      <Tidspunkt>2024-01-06T00:50:03</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Virkestoff>
+        <Id>ID_585DA679-0530-4ADC-AB07-A2AEDB26E899</Id>
+        <Navn>Magnesiumoksid</Navn>
+        <NavnEngelsk>Magnesium oxide</NavnEngelsk>
+        <RefVirkestoff>ID_B6AE002D-331C-4823-8A82-CB808FFC135E</RefVirkestoff>
+        <RefVirkestoff>ID_EA4E81BB-3E8C-4793-8DDD-E11EA6C1584F</RefVirkestoff>
+      </Virkestoff>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_62B24125-5332-4845-B322-D776FA705BAE</Id>
+      <Tidspunkt>2022-09-16T03:10:20</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <Virkestoff>
+        <Id>ID_82E89E1B-9C06-4E57-BB4D-AB3DA8B33FD4</Id>
+        <Navn>Kodein</Navn>
+        <NavnEngelsk>Codeine</NavnEngelsk>
+        <RefVirkestoff>ID_2B96AC49-E95A-4FB5-B9BB-F9E0451DDE4A</RefVirkestoff>
+        <RefVirkestoff>ID_376140DF-117B-4433-983B-A4A354657BE2</RefVirkestoff>
+        <RefVirkestoff>ID_37D7105D-4D16-4B86-A453-3C49E7C9FB98</RefVirkestoff>
+        <RefVirkestoff>ID_7B4E2DBB-C8AE-4A8D-B3EF-E380C5D8C3D9</RefVirkestoff>
+        <RefVirkestoff>ID_CC6C5972-2B2A-479F-A1B6-498DECA22761</RefVirkestoff>
+      </Virkestoff>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_F74DC368-1AD3-4F3A-B39A-9271FC6B7CE2</Id>
+      <Tidspunkt>2025-06-21T03:11:17</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <VirkestoffMedStyrke>
+        <Id>ID_388A34AB-3543-4880-BDE2-A513FDB5906E</Id>
+        <Styrke V="10" U="mg" />
+        <StyrkeNevner V="5" U="ml" />
+        <RefVirkestoff>ID_0A1B24EF-A7F8-488B-97B8-8023193E976D</RefVirkestoff>
+        <Styrkeoperator V="L" S="2.16.578.1.12.4.1.1.7445" DN="Lik" />
+      </VirkestoffMedStyrke>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_4788187C-5ECE-4385-B862-54A9BF51B634</Id>
+      <Tidspunkt>2019-02-13T18:20:15</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <VirkestoffMedStyrke>
+        <Id>ID_48B84A5E-0EC8-4696-967C-95E7CEC550A9</Id>
+        <Styrke V="50" U="mg" />
+        <RefVirkestoff>ID_0A1B24EF-A7F8-488B-97B8-8023193E976D</RefVirkestoff>
+        <Styrkeoperator V="L" S="2.16.578.1.12.4.1.1.7445" DN="Lik" />
+      </VirkestoffMedStyrke>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_B1D8C82F-4546-421C-9B92-16CB4328C6C0</Id>
+      <Tidspunkt>2021-07-02T00:53:48</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <VirkestoffMedStyrke>
+        <Id>ID_69987C94-A37E-4AB8-94DF-BB62CD14EE06</Id>
+        <Styrke V="50" U="mg" />
+        <RefVirkestoff>ID_0A1B24EF-A7F8-488B-97B8-8023193E976D</RefVirkestoff>
+        <Styrkeoperator V="L" S="2.16.578.1.12.4.1.1.7445" DN="Lik" />
+      </VirkestoffMedStyrke>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_C3429D8A-1701-4BB0-903B-7D0AB6925274</Id>
+      <Tidspunkt>2025-07-05T03:10:53</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <VirkestoffMedStyrke>
+        <Id>ID_729B8088-6800-4B89-B6D2-52008185BC1B</Id>
+        <Styrke V="50" U="mg" />
+        <StyrkeNevner V="5" U="ml" />
+        <RefVirkestoff>ID_0A1B24EF-A7F8-488B-97B8-8023193E976D</RefVirkestoff>
+        <Styrkeoperator V="L" S="2.16.578.1.12.4.1.1.7445" DN="Lik" />
+      </VirkestoffMedStyrke>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_D4128963-DE0A-42E4-9E66-E14225ACA37B</Id>
+      <Tidspunkt>2019-02-13T18:20:15</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <VirkestoffMedStyrke>
+        <Id>ID_7ACADBE5-5AA7-4CC9-93B0-5C58E6BABECD</Id>
+        <Styrke V="25" U="mg" />
+        <RefVirkestoff>ID_0A1B24EF-A7F8-488B-97B8-8023193E976D</RefVirkestoff>
+        <Styrkeoperator V="L" S="2.16.578.1.12.4.1.1.7445" DN="Lik" />
+      </VirkestoffMedStyrke>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_FF6A519A-5D34-4D9A-988D-4E7FE6718913</Id>
+      <Tidspunkt>2026-02-27T03:09:52</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <VirkestoffMedStyrke>
+        <Id>ID_A1C0BEE8-A849-4F0E-A799-F09DEFB03B7B</Id>
+        <Styrke V="150" U="mg" />
+        <RefVirkestoff>ID_585DA679-0530-4ADC-AB07-A2AEDB26E899</RefVirkestoff>
+        <Styrkeoperator V="L" S="2.16.578.1.12.4.1.1.7445" DN="Lik" />
+        <AtcKombipreparat V="A02AA04" S="2.16.578.1.12.4.1.1.7180" DN="Magnesiumhydroksid" />
+      </VirkestoffMedStyrke>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_F0646F4A-45B7-435E-89AA-79FE87981788</Id>
+      <Tidspunkt>2019-02-13T18:20:15</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <VirkestoffMedStyrke>
+        <Id>ID_C5B1F8FA-E33D-4336-8BBE-D0FFEC3C966D</Id>
+        <Styrke V="10" U="mg" />
+        <RefVirkestoff>ID_0A1B24EF-A7F8-488B-97B8-8023193E976D</RefVirkestoff>
+        <Styrkeoperator V="L" S="2.16.578.1.12.4.1.1.7445" DN="Lik" />
+      </VirkestoffMedStyrke>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_3176F1BE-6B2D-45E3-AA27-DEC13FC26029</Id>
+      <Tidspunkt>2026-02-27T03:09:52</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <VirkestoffMedStyrke>
+        <Id>ID_CC09F8A9-36D8-466E-996C-31172AA89BCB</Id>
+        <Styrke V="500" U="mg" />
+        <RefVirkestoff>ID_433FABF6-968F-43D2-BF5E-CDC5546F0AB2</RefVirkestoff>
+        <Styrkeoperator V="L" S="2.16.578.1.12.4.1.1.7445" DN="Lik" />
+        <AtcKombipreparat V="N02BA01" S="2.16.578.1.12.4.1.1.7180" DN="Acetylsalisylsyre" />
+      </VirkestoffMedStyrke>
+    </OppfVirkestoff>
+    <OppfVirkestoff>
+      <Id>ID_B737D2CA-44DB-4DE6-AF7D-B3D9ED21E4A0</Id>
+      <Tidspunkt>2026-02-27T03:09:52</Tidspunkt>
+      <Status V="A" DN="Aktiv oppføring" />
+      <VirkestoffMedStyrke>
+        <Id>ID_EBA32704-A830-4F76-8099-216B184396D3</Id>
+        <Styrke V="9.6" U="mg" />
+        <RefVirkestoff>ID_82E89E1B-9C06-4E57-BB4D-AB3DA8B33FD4</RefVirkestoff>
+        <Styrkeoperator V="L" S="2.16.578.1.12.4.1.1.7445" DN="Lik" />
+        <AtcKombipreparat V="R05DA04" S="2.16.578.1.12.4.1.1.7180" DN="Kodein" />
+      </VirkestoffMedStyrke>
+    </OppfVirkestoff>
+  </KatVirkestoff>
+</FEST>

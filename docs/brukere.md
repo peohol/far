@@ -139,6 +139,9 @@ Appen trenger to innstillinger i Vercel, begge offentlige:
 
 Hemmelige nøkler skal aldri ligge i `VITE_`-variabler — de blir med i bygget.
 
+Den nattlige synkroniseringen av legemiddeldata trenger i tillegg to hemmelige
+innstillinger; se `docs/legemiddeldata.md`.
+
 ### Den første administratoren
 
 `npm run bootstrap:admin` oppretter den, idempotent. Den leser
