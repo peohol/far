@@ -15,6 +15,11 @@ export function Uthevingskilde({ ord, children }: { ord: readonly string[]; chil
   return <Sokeord.Provider value={ord}>{children}</Sokeord.Provider>
 }
 
+/** Ordene det søkes etter på siden, slik de sammenlignes. Tom når det ikke søkes. */
+export function useSokeord(): readonly string[] {
+  return useContext(Sokeord)
+}
+
 /** Klassen hvert treff har. Søket finner treffene på den. */
 export const TREFFKLASSE = 'sidetreff'
 
