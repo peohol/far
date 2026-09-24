@@ -1,63 +1,25 @@
-import type { Sideelement, Sidemodell } from '../../faginnhold/analyttside'
-import {
-  ELEMENTTYPER,
-  lesLegemiddelkobling,
-  type Legemiddelkoblingdata,
-  type Paneldefinisjon,
-  type Panelnokkel,
-} from '../../faginnhold/paneler'
+import { ELEMENTTYPER, type Paneldefinisjon } from '../../faginnhold/paneler'
 import type { Tilleggstekst } from '../../faginnhold/sok'
-import { iSetning } from '../../domain/names'
-import { ramsOpp } from '../../faginnhold/oppsummering'
-import {
-  oppsummerGruppe,
-  oppsummerPreparater,
-  type Preparat,
-  type Preparatstyrke,
-} from '../../legemiddeldata/preparater'
-import { Detaljkort } from '../seksjoner/Seksjon'
-import { Uthev } from '../Uthev'
+import { oppsummerPreparatvisning } from '../../legemiddeldata/preparatmodell'
+import { finnKobling, preparattekster } from '../../legemiddeldata/stoffside'
+import { Legemiddelformer } from '../preparater/Legemiddelformer'
 import { elementAnker, Panel, Redigerbar, type Panelkontekst } from './Paneler'
 import { LegemiddelkoblingSkjema } from './Skjemaer'
 import type { Legemiddeltilstand } from './useLegemidler'
+import '../../styles/preparater.css'
 
-/** Detaljkortet for preparatene som krever godkjenningsfritak. */
-const FRITAK = 'godkjenningsfritak'
-
-/** Stedet på siden for et detaljkort i seksjonen: en legemiddelform, eller fritakene. */
-function kortsted(formId: string | null): string {
-  return `preparater-${formId ?? FRITAK}`
-}
-
-/** Seksjonen koblingen står i. */
-export const PREPARATPANEL: Panelnokkel = 'preparater'
-
-/** Koblingen siden har til legemiddeldataene, og elementet den står i. */
-export function finnKobling(modell: Sidemodell): { element: Sideelement | null; kobling: Legemiddelkoblingdata } {
-  const element =
-    (modell.paneler.get(PREPARATPANEL) ?? []).find((e) => e.elementtype === ELEMENTTYPER.legemiddelkobling) ?? null
-  return { element, kobling: lesLegemiddelkobling(element?.data) }
-}
+export { finnKobling, PREPARATPANEL } from '../../legemiddeldata/stoffside'
 
 /** Preparatnavnene, slik søket på siden finner dem, med detaljkortet de står i. */
 export function preparatsoketekster(tilstand: Legemiddeltilstand): Tilleggstekst[] {
-  if (tilstand.status !== 'klar') return []
-  const { former, godkjenningsfritak } = tilstand.oversikt
-  const grupper = [
-    ...former.map((f) => ({ id: kortsted(f.id), tittel: f.form, preparater: f.preparater })),
-    { id: kortsted(null), tittel: 'Krever godkjenningsfritak', preparater: godkjenningsfritak },
-  ]
-  return grupper.flatMap(({ id, tittel, preparater }) =>
-    [...new Set(preparater.map((p) => p.navn))].map(
-      (navn): Tilleggstekst => ({ panel: PREPARATPANEL, element: { id, tittel }, felt: 'preparat', tekst: navn }),
-    ),
-  )
+  return tilstand.status === 'klar' ? preparattekster(tilstand.visning) : []
 }
 
 /**
  * Seksjonen «Preparater»: preparatene i legemiddeldataene fra FEST for
- * virkestoffene siden er koblet til, gruppert som
- * `legemiddelform → preparat → styrker` med pakningene i detaljkortene.
+ * virkestoffene siden er koblet til, som
+ * `legemiddelform → styrke → preparat → preparatvindu` (se
+ * `src/components/preparater/`).
  *
  * Koblingen er det eneste som redigeres her. Den lagres med FESTs ID og
  * publiseres som annet innhold på siden; preparatene selv kommer rett fra
@@ -100,7 +62,7 @@ export function Preparatpanel({
                     : 'Ikke koblet til legemiddeldataene ennå.'}
                 </p>
               )}
-              {koblet && <Preparatvisning tilstand={legemidler} />}
+              {koblet && <Preparatvisning tilstand={legemidler} sidenavn={sidenavn} />}
             </>
           }
           skjema={(lukk) => (
@@ -137,11 +99,11 @@ function oppsummering(tilstand: Legemiddeltilstand): string {
     case 'feil':
       return 'Fikk ikke hentet preparatene'
     case 'klar':
-      return oppsummerPreparater(tilstand.oversikt) || 'Ingen preparater i FEST'
+      return oppsummerPreparatvisning(tilstand.visning) || 'Ingen preparater i FEST'
   }
 }
 
-function Preparatvisning({ tilstand }: { tilstand: Legemiddeltilstand }) {
+function Preparatvisning({ tilstand, sidenavn }: { tilstand: Legemiddeltilstand; sidenavn: string }) {
   if (tilstand.status === 'ingen') return null
   if (tilstand.status === 'laster') {
     return (
@@ -158,9 +120,8 @@ function Preparatvisning({ tilstand }: { tilstand: Legemiddeltilstand }) {
     )
   }
 
-  const { utvalg, oversikt } = tilstand
+  const { utvalg, visning } = tilstand
   const utgatte = utvalg.virkestoff.filter((v) => v.utgatt)
-  const tomt = oversikt.former.length === 0 && oversikt.godkjenningsfritak.length === 0
 
   return (
     <>
@@ -169,133 +130,11 @@ function Preparatvisning({ tilstand }: { tilstand: Legemiddeltilstand }) {
           {utgatte.map((v) => v.navn).join(', ')} står ikke lenger i FEST. Koblingen bør kontrolleres.
         </p>
       )}
-      {tomt ? (
+      {visning.former.length === 0 ? (
         <p className="preparater__melding">Det er ingen preparater med dette virkestoffet i FEST.</p>
       ) : (
-        <ul className="preparatformer">
-          {oversikt.former.map((f) => (
-            <li key={f.id}>
-              <Detaljkort id={`form-${f.id}`} tittel={<Uthev tekst={f.form} />} oppsummering={oppsummerGruppe(f.preparater)}>
-                <Preparatliste anker={kortsted(f.id)} preparater={f.preparater} />
-              </Detaljkort>
-            </li>
-          ))}
-          {oversikt.godkjenningsfritak.length > 0 && (
-            <li>
-              <Detaljkort
-                id={FRITAK}
-                tittel={<Uthev tekst="Krever godkjenningsfritak" />}
-                oppsummering={oppsummerGruppe(oversikt.godkjenningsfritak)}
-              >
-                <p className="preparater__forklaring">
-                  Preparatene har ikke markedsføringstillatelse i Norge.
-                </p>
-                <Preparatliste anker={kortsted(null)} preparater={oversikt.godkjenningsfritak} visForm />
-              </Detaljkort>
-            </li>
-          )}
-        </ul>
+        <Legemiddelformer visning={visning} sidenavn={sidenavn} />
       )}
     </>
   )
-}
-
-/**
- * Preparatene i ett detaljkort. Ankeret står på lista, inne i kortet, så søket
- * på siden åpner kortet når det går til et treff her.
- */
-function Preparatliste({
-  anker,
-  preparater,
-  visForm = false,
-}: {
-  anker: string
-  preparater: readonly Preparat[]
-  visForm?: boolean
-}) {
-  return (
-    <ul className="preparatliste" id={elementAnker(anker)}>
-      {preparater.map((p) => (
-        <li key={p.id} className="preparat">
-          <p className="preparat__navn">
-            <Uthev tekst={p.navn} />
-            {(visForm || p.langform.length > 0) && (
-              <span className="preparat__form">
-                <Uthev tekst={(p.langform.length > 0 ? p.langform.join(', ') : p.form).toLocaleLowerCase('nb')} />
-              </span>
-            )}
-            {p.kombinasjon.length > 0 && (
-              <span className="preparat__merke">Kombinasjon med {p.kombinasjon.map(iSetning).join(', ')}</span>
-            )}
-            {p.type && <span className="preparat__merke">{p.type}</span>}
-          </p>
-          {p.salter.length > 0 && <p className="preparat__salt">Som {p.salter.map(iSetning).join(', ')}</p>}
-          <Preparatdetaljer preparat={p} />
-          <ul className="preparat__styrker">
-            {p.styrker.map((s) => (
-              <li key={s.id}>
-                <span className="preparat__styrke">
-                  <Uthev tekst={s.styrke || s.navn_form_styrke} />
-                </span>
-                <Styrkedetaljer preparat={p} styrke={s} />
-                {s.pakninger.length > 0 && (
-                  <span className="preparat__pakninger">
-                    {s.pakninger
-                      .map((k) => `${k.tekst}${k.varenr ? ` (varenr. ${k.varenr})` : ''}${k.midlertidig_utgatt ? ', midlertidig utgått' : ''}`)
-                      .join('; ')}
-                  </span>
-                )}
-                {felles(p, omtaler).length === 0 && <Omtalelenker lenker={s.preparatomtaler} />}
-              </li>
-            ))}
-          </ul>
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-/**
- * Det alle styrkene har likt, som står én gang på preparatet i stedet for på
- * hver styrke. Tomt når styrkene er ulike.
- */
-function felles(preparat: Preparat, verdi: (s: Preparatstyrke) => readonly string[]): readonly string[] {
-  const [forste, ...resten] = preparat.styrker.map((s) => verdi(s).join('\n'))
-  return forste && resten.every((v) => v === forste) ? forste.split('\n') : []
-}
-
-const reseptgruppe = (s: Preparatstyrke) => (s.reseptgruppe ? [s.reseptgruppe] : [])
-const omtaler = (s: Preparatstyrke) => s.preparatomtaler
-
-/**
- * Reseptgruppe, administrasjonsvei og preparatomtalen for preparatet. Det
- * som er ulikt mellom styrkene står på hver styrke i stedet.
- */
-function Preparatdetaljer({ preparat }: { preparat: Preparat }) {
-  const tekst = ramsOpp([...felles(preparat, reseptgruppe), ...preparat.administrasjonsveier])
-  const lenker = felles(preparat, omtaler)
-  if (!tekst && lenker.length === 0) return null
-  return (
-    <p className="preparat__detaljer">
-      {tekst}
-      <Omtalelenker lenker={lenker} />
-    </p>
-  )
-}
-
-/** Deling og knusing for styrken, og reseptgruppen når styrkene har ulike. */
-function Styrkedetaljer({ preparat, styrke }: { preparat: Preparat; styrke: Preparatstyrke }) {
-  const tekst = ramsOpp([
-    ...(felles(preparat, reseptgruppe).length === 0 ? reseptgruppe(styrke) : []),
-    ...styrke.handtering,
-  ])
-  return tekst ? <span className="preparat__handtering">{tekst}</span> : null
-}
-
-function Omtalelenker({ lenker }: { lenker: readonly string[] }) {
-  return lenker.map((lenke, i) => (
-    <a key={lenke} className="preparat__omtale" href={lenke} target="_blank" rel="noopener noreferrer">
-      {lenker.length > 1 ? `Preparatomtale ${i + 1}` : 'Preparatomtale'}
-    </a>
-  ))
 }

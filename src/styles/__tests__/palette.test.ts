@@ -74,6 +74,7 @@ const KRAV: [string, string, number, string][] = [
   ['--blekk', '--flate-hevet', 4.5, 'tekst på nøytral knapp'],
   ['--blekk-svak', '--flate', 3, 'kant rundt nøytral knapp'],
   ['--varsel-blekk', '--varsel-flate', 4.5, 'advarsel om måleområde'],
+  ['--fritak-blekk', '--fritak-flate', 4.5, 'merket for godkjenningsfritak i Preparater'],
   ['--referanse-kant', '--flate-bunn', 3, 'kant rundt «innenfor»'],
   ['--toksisk-kant', '--flate-bunn', 3, 'kant rundt gult bånd'],
   ['--alvorlig-kant', '--flate-bunn', 3, 'kant rundt «over»'],
