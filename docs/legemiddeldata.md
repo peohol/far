@@ -46,9 +46,12 @@ nyttig.
 ## Lisens og kildeangivelse
 
 FEST er lagt ut under **Norsk lisens for offentlige data (NLOD)**. Dataene kan
-brukes fritt, men kilden skal oppgis. Stoffsidene viser derfor «Kilde: FEST,
-Direktoratet for medisinske produkter» og datoen for siste vellykkede
-synkronisering ved alt som kommer derfra.
+brukes fritt, men kilden skal oppgis. Stoffsidene har derfor FEST som en
+nummerert referanse («FEST – Forskrivnings- og ekspedisjonsstøtte ·
+Direktoratet for medisinske produkter») i referansefeltet ved alt som kommer
+derfra, med datoen for uttrekket og siste vellykkede kontroll ved siden av.
+Referansen er automatisk og kan ikke redigeres (se «Automatiske referanser» i
+`docs/faginnhold.md`).
 
 DMP tar ikke ansvar for integrasjoner av FEST. Brukeren av dataene skal:
 
@@ -228,8 +231,8 @@ godkjenningsfritak». Grupperingen står i `src/legemiddeldata/preparater.ts`:
 - **Deling, knusing og åpning** står ved styrken, bare når FEST sier ja eller
   nei; «ikke spesifisert» og «ukjent» vises ikke. Delingen står med FESTs ord
   («Delbar i 2»).
-- Nederst står kilden, datoen for uttrekket og når kopien sist ble kontrollert
-  mot FEST.
+- Nederst står FEST som referanse i seksjonens referansefelt, med datoen for
+  uttrekket og når kopien sist ble kontrollert mot FEST.
 
 Preparatnavnene er med i søket på siden, også i lukkede detaljkort. Det
 globale søket tar dem med når det kommer.
@@ -297,7 +300,7 @@ og logikken står i `src/legemiddeldata/interaksjoner.ts`.
   virkestoff og ATC-kode, så siden slår opp på ATC-kodene til preparatene som
   bare har sidens virkestoff (med saltene). Kombinasjonspreparatenes koder tas
   ikke med; de ville gitt interaksjonene til de andre virkestoffene. Kodene
-  som ble brukt, står i kildelinjen. Oppslaget gjøres av `les_interaksjoner` i
+  som ble brukt, står i merknaden nederst i seksjonen. Oppslaget gjøres av `les_interaksjoner` i
   databasen.
 - **Hva som vises.** Bare «Bør unngås» (rød) og «Forholdsregler bør tas»
   (gul), de alvorligste først og ellers alfabetisk. «Ingen tiltak nødvendig»
@@ -309,7 +312,9 @@ og logikken står i `src/legemiddeldata/interaksjoner.ts`.
   konsekvensen. Åpnet står situasjonskriteriet tydelig først, så klinisk
   konsekvens, mekanisme, håndteringen i avsnitt med overskrift
   (Dosetilpasning, Justering av administrering, Monitorering,
-  Legemiddelalternativer), kildegrunnlaget og referansene med lenke.
+  Legemiddelalternativer) og kildegrunnlaget. DMPs referanser står i
+  referansefeltet nederst i kortet, nummerert sammen med sidens andre
+  referanser og listet nederst på siden.
 - **Gruppenavnet** er FESTs eget når gruppen har et. Ellers er det navnet på
   stoffet med den overordnede ATC-koden (f.eks. «Ikke-selektive
   monoaminreopptakshemmere»), og ellers stoffet selv. Det dekker alle

@@ -36,7 +36,11 @@ function sitering(...referanser: string[]) {
   return { type: SITERING, attrs: { referanser } }
 }
 
-/** En side med en panelreferanse, en kortreferanse og siteringer i teksten. */
+/**
+ * En side med en panelreferanse, en kortreferanse og siteringer i teksten.
+ * Teksten nummereres før kortets og panelets referansefelt, og siteringen
+ * står i rekkefølgen C, B, A.
+ */
 const SIDE: Sidegrunnlag = {
   panelreferanser: { dynamikk: ['c'] },
   elementer: [
@@ -45,7 +49,7 @@ const SIDE: Sidegrunnlag = {
       panel: 'dynamikk',
       posisjon: 0,
       referanser: ['b'],
-      data: { tekst: { type: 'doc', content: [{ type: 'paragraph', content: [sitering('a', 'b', 'c')] }] } },
+      data: { tekst: { type: 'doc', content: [{ type: 'paragraph', content: [sitering('c', 'b', 'a')] }] } },
     },
   ],
 }
@@ -82,7 +86,7 @@ function bobleTil(knapp: HTMLElement) {
 describe('pillen', () => {
   it('viser numrene på siden, komprimert, og har et navn skjermlesere kan lese', () => {
     render(<Side />)
-    // Panelet først (C = 1), så kortet (B = 2), så teksten (A = 3).
+    // Teksten først, i siteringens rekkefølge: C = 1, B = 2 og A = 3.
     expect(pille('Referanse 1')).toHaveProperty('textContent', '1')
     expect(pille('Referanse 2')).toHaveProperty('textContent', '2')
     const inline = pille('Referanser 1–3')
