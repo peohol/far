@@ -81,12 +81,12 @@ describe('ikonene', () => {
     const { container } = render(
       <>
         <Ikon navn="search" />
-        <Ikon navn="warn" etikett="Advarsel" />
+        <Ikon navn="tox" etikett="Toksisk" />
       </>,
     )
-    const [pynt] = container.querySelectorAll('svg')
+    const pynt = container.querySelector('svg')!
     expect(pynt.getAttribute('aria-hidden')).toBe('true')
-    expect(screen.getByRole('img', { name: 'Advarsel' })).toBeTruthy()
+    expect(screen.getByRole('img', { name: 'Toksisk' })).toBeTruthy()
   })
 
   it('tar navngitte størrelser fra tokens, og tall som piksler', () => {
@@ -97,7 +97,7 @@ describe('ikonene', () => {
         <Ikon navn="search" storrelse={24} />
       </>,
     )
-    const [navngitt, tall] = container.querySelectorAll('svg')
+    const [navngitt, tall] = [...container.querySelectorAll('svg')] as [SVGSVGElement, SVGSVGElement]
     expect(navngitt.getAttribute('data-storrelse')).toBe('seksjon')
     expect(tall.getAttribute('width')).toBe('24px')
     expect(tall.hasAttribute('data-storrelse')).toBe(false)

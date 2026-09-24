@@ -70,7 +70,7 @@ Atlas. Det er data, så et nytt ikon er en ny oppføring der.
 ```tsx
 <Ikon navn="interp" />                         // følger skriftstørrelsen
 <Ikon navn="dose" storrelse="seksjon" />       // 36 px, fra --ikon-seksjon
-<Ikon navn="warn" storrelse={24} etikett="Advarsel" />
+<Ikon navn="tox" storrelse={24} etikett="Toksisk" />
 ```
 
 - **Størrelse:** `tekst`, `ui`, `underpunkt`, `seksjon`, `konsept`, `plot`,
