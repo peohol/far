@@ -457,10 +457,13 @@ describe('lesemodus', () => {
   it('viser bare panelene som har innhold, og ingen redigering for vanlige brukere', async () => {
     vis('AMTNORSUM')
     await screen.findByText('10–20 nmol/L')
-    // Overskriften til et panel med egne kilder bærer referansepillen.
+    // Kildene for et helt panel står i referansefeltet nederst, ikke i overskriften.
     expect(screen.getByRole('heading', { level: 2, name: 'Viktige data' })).toBeTruthy()
-    const dynamikk = screen.getByRole('heading', { level: 2, name: /^Farmakodynamikk/ })
-    expect(within(dynamikk).getByRole('button', { name: 'Referanse 2' })).toBeTruthy()
+    const dynamikk = screen.getByRole('heading', { level: 2, name: 'Farmakodynamikk' })
+    expect(within(dynamikk).queryByRole('button', { name: /Referanse/ })).toBeNull()
+    const felt = screen.getByRole('region', { name: 'Farmakodynamikk', hidden: true }).querySelector('.referansefelt')!
+    expect(felt.textContent).toBe('Kilder2')
+    expect(felt.getAttribute('title')).toBe('Gjelder hele seksjonen')
     expect(screen.queryByRole('heading', { level: 2, name: 'Dosering' })).toBeNull()
     expect(screen.queryByRole('button', { name: 'Rediger' })).toBeNull()
   })
@@ -651,11 +654,21 @@ describe('preparatene', () => {
       'https://produktinformasjon.legemiddelsok.no/preparatomtaler/ID_M2.pdf',
     ])
     expect(skuffknapp('Krever godkjenningsfritak')).toBeTruthy()
-    expect(
-      within(screen.getByRole('region', { name: 'Preparater' })).getByText(
-        /Kilde: FEST, Direktoratet for medisinske produkter, uttrekk fra 8\. september 2026/,
-      ),
-    ).toBeTruthy()
+    // FEST er kilden i seksjonens referansefelt: en nummerert referanse, med
+    // uttrekket og kontrollen ved siden av, ikke en løpende «Kilde: …».
+    const preparater = screen.getByRole('region', { name: 'Preparater' })
+    expect(within(preparater).queryByText(/Kilde: FEST/)).toBeNull()
+    const felt = preparater.querySelector(':scope > * .referansefelt--panel')!
+    expect(within(felt as HTMLElement).getByRole('button', { name: 'Referanse 1' })).toBeTruthy()
+    expect(felt.textContent).toMatch(
+      /Legemiddeldata fra FEST, uttrekk fra 8\. september 2026, sist kontrollert 23\. september 2026 · kan ikke redigeres/,
+    )
+    // I listen nederst står FEST sammen med de redaksjonelle, merket som automatisk.
+    const liste = screen.getByRole('region', { name: 'Referanser' })
+    const [forste] = within(liste).getAllByRole('listitem')
+    expect(forste!.getAttribute('value')).toBe('1')
+    expect(forste!.textContent).toMatch(/^FEST – Forskrivnings- og ekspedisjonsstøtte · Direktoratet for medisinske produkter/)
+    expect(within(forste!).getByText('Automatisk fra FEST · kan ikke redigeres')).toBeTruthy()
   })
 
   it('finner preparatene i søket på siden, også i lukkede detaljkort', async () => {
@@ -713,7 +726,21 @@ describe('interaksjonene', () => {
     expect(screen.getByText('Gjelder ved høye doser.')).toBeTruthy()
     expect(screen.getByText('Dosetilpasning:')).toBeTruthy()
     expect(screen.getByText('Mål serumkonsentrasjonen.')).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Testkilde' }).getAttribute('href')).toBe('https://example.org/kilde')
+    // DMPs referanse står i kortets referansefelt, i samme nummerering som resten.
+    const testhemmer = screen.getByText('Gjelder ved høye doser.').closest('.interaksjon') as HTMLElement
+    const felt = testhemmer.querySelector('.referansefelt') as HTMLElement
+    const pille = within(felt).getByRole('button', { name: /^Referanse \d+$/ })
+    await user.click(pille)
+    expect(within(felt).getByRole('link', { name: 'https://example.org/kilde' }).getAttribute('href')).toBe(
+      'https://example.org/kilde',
+    )
+    expect(felt.textContent).toContain('Testkilde · https://example.org/kilde')
+    const liste = screen.getByRole('region', { name: 'Referanser' })
+    const oppforing = within(liste)
+      .getAllByRole('listitem')
+      .find((li) => li.textContent?.startsWith('Testkilde · https://example.org/kilde'))!
+    expect(oppforing.getAttribute('value')).toBe(pille.textContent)
+    expect(within(oppforing).getByText('Automatisk fra FEST · kan ikke redigeres')).toBeTruthy()
     expect(screen.getByText(/De der DMP mener ingen tiltak er nødvendig, vises ikke\./)).toBeTruthy()
   })
 

@@ -2,6 +2,7 @@ import { useId } from 'react'
 import { referanseoppforinger } from '../../faginnhold/referanser'
 import { Referansetekst } from './Referansetekst'
 import { useSidereferanser } from './Sidereferanser'
+import '../../styles/referanser.css'
 
 /** ID-en en referanse har i listen nederst på siden. */
 export function listeId(referanse: string): string {
@@ -11,7 +12,10 @@ export function listeId(referanse: string): string {
 /**
  * Listen nederst på siden: alle referansene som faktisk brukes der, i samme
  * rekkefølge som numrene. Den bygges av nummereringen hver gang og redigeres
- * aldri for hånd. Uten referanser vises ingenting.
+ * aldri for hånd. Redaksjonelle og automatiske referanser står sammen; de
+ * automatiske er merket, med sporbarheten under teksten. Det er det eneste
+ * stedet hele referanseteksten står fast på siden. Uten referanser vises
+ * ingenting.
  */
 export function Referanseliste({ tittel = 'Referanser' }: { tittel?: string }) {
   const { nummerering, referanser } = useSidereferanser()
@@ -28,6 +32,12 @@ export function Referanseliste({ tittel = 'Referanser' }: { tittel?: string }) {
         {liste.map(({ nummer, referanse }) => (
           <li key={referanse.id} id={listeId(referanse.id)} value={nummer} className="referanseliste__punkt">
             <Referansetekst referanse={referanse} />
+            {referanse.automatisk && (
+              <span className="referanseliste__automatisk">
+                <span className="referansemerke">Automatisk fra {referanse.automatisk.kilde} · kan ikke redigeres</span>
+                {referanse.automatisk.opphav && <span>{referanse.automatisk.opphav}</span>}
+              </span>
+            )}
           </li>
         ))}
       </ol>

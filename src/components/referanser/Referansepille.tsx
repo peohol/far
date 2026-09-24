@@ -13,6 +13,7 @@ import { formaterReferanse, komprimer, numreFor, type Referanse } from '../../fa
 import { useBobleplassering } from '../Tips'
 import { Referansetekst } from './Referansetekst'
 import { useSidereferanser } from './Sidereferanser'
+import '../../styles/referanser.css'
 
 /**
  * Hvor lenge boblen blir stående etter at pekeren har forlatt pillen, så den
@@ -24,8 +25,8 @@ export interface ReferansepilleProps {
   /** Referansene siteringen viser til, i den rekkefølgen de er lagret. */
   ider: readonly string[]
   /**
-   * `inline` står hevet i teksten. `element` og `panel` står for seg, ved
-   * overskriften til kortet eller panelet.
+   * `inline` står hevet i teksten. `element` og `panel` står for seg, i
+   * referansefeltet nederst i kortet eller panelet (`Referansefelt`).
    */
   niva?: Referanseniva
 }

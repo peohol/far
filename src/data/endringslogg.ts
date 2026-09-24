@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.23.0',
+    dato: '2026-09-24',
+    sammendrag: 'Alle kilder på stoffsidene er nummererte referanser, også de fra FEST',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Kildene som gjelder et helt kort eller en hel seksjon, står nå i et eget felt nederst, ikke ved overskriften. Numrene følger derfor rekkefølgen de står i nedover siden.',
+      'FEST og referansene DMP oppgir for hver interaksjon, er nå nummererte referanser med pille og boble, og står i referanselisten nederst sammen med de andre kildene.',
+      'Kildelinjen «Kilde: FEST …» er erstattet av FEST-referansen i seksjonens kildefelt, med datoen for uttrekket og siste kontroll ved siden av.',
+      'Kilder fra FEST er merket som automatiske. De kan ikke redigeres eller velges i redigeringsmodus, og forsvinner av seg selv når FEST ikke lenger har dem.',
+    ],
+  },
+  {
     versjon: '1.22.1',
     dato: '2026-09-23',
     sammendrag: 'Den nattlige oppdateringen av legemiddeldataene starter igjen',

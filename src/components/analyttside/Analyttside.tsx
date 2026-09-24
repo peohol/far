@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { Analyttkatalog } from '../../domain/analyttkatalog'
-import { byggSidemodell, type Publiseringssteg } from '../../faginnhold/analyttside'
+import { byggSidemodell, referanseunivers, type Publiseringssteg } from '../../faginnhold/analyttside'
 import { endredeFelt } from '../../faginnhold/historikk'
 import type { Analyttsidedata, Regelsettutgave } from '../../faginnhold/lesing'
 import { PANELER, lesKinetikk, panelFor } from '../../faginnhold/paneler'
@@ -26,6 +26,7 @@ import { Scenarioregler, useScenarioreglerFor } from '../regler/Scenarioregler'
 import { Uthevingskilde } from '../Uthev'
 import { Fortolkningsregler, regelsettfelterMedTekst } from '../regler/Fortolkningsregler'
 import { losRegelsett } from '../../regler/kommentarer'
+import { festreferanser } from '../../legemiddeldata/referanser'
 import { useAnalyttside, type Sidemodus } from './useAnalyttside'
 
 export interface AnalyttsideProps {
@@ -140,6 +141,18 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
   const koblet = useMemo(() => finnKobling(modell).kobling.virkestoff.map((v) => v.fest_id), [modell])
   const legemidler = useLegemidler(koblet)
   const interaksjoner = useInteraksjoner(legemidler, koblet)
+  // Redaksjonelle og automatiske referanser (FEST) nummereres sammen.
+  const univers = useMemo(
+    () =>
+      referanseunivers(
+        modell,
+        festreferanser(
+          legemidler.status === 'klar' ? legemidler.utvalg : null,
+          interaksjoner.status === 'klar' ? interaksjoner.oversikt : null,
+        ),
+      ),
+    [modell, legemidler, interaksjoner],
+  )
 
   const dokumenter = useMemo(
     () =>
@@ -243,7 +256,11 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
       )}
 
       <Uthevingskilde ord={ord}>
-        <Sidereferanser nummerering={modell.nummerering} referanser={modell.referanser}>
+        <Sidereferanser
+          nummerering={univers.nummerering}
+          referanser={univers.referanser}
+          panelreferanser={univers.panelreferanser}
+        >
           <Redigeringskilde verdi={redigeringsverdi}>
             <div className="analyttside__paneler" aria-busy={side.status === 'laster'}>
               {PANELER.map((definisjon) => {
@@ -253,7 +270,6 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
                       <Identitetspanel
                         key={definisjon.nokkel}
                         definisjon={definisjon}
-                        kontekst={kontekst}
                         oppforing={oppforing}
                         navn={navn}
                         komponenter={komponenter}
@@ -277,7 +293,6 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
                         definisjon={definisjon}
                         kontekst={kontekst}
                         koblet={koblet.length > 0}
-                        legemidler={legemidler}
                         interaksjoner={interaksjoner}
                       />
                     )

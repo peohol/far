@@ -17,7 +17,8 @@ import { antall, forhandsvisning, ramsOpp } from '../../faginnhold/oppsummering'
 import { erTomt, klartekst, tomtDokument } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
 import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
-import { Referansepille } from '../referanser/Referansepille'
+import { Referansefelt } from '../referanser/Referansefelt'
+import { useSidereferanser } from '../referanser/Sidereferanser'
 import { Riktekst } from './Riktekst'
 import {
   DatakortSkjema,
@@ -75,7 +76,9 @@ export function Panel({
 }) {
   const [kilder, setKilder] = useState(false)
   const { modell, redigerer, handlinger } = kontekst
+  // De redaksjonelle redigeres her; feltet viser dem sammen med de automatiske.
   const panelreferanser = modell.panelreferanser[definisjon.nokkel] ?? []
+  const feltreferanser = useSidereferanser().panelreferanser[definisjon.nokkel] ?? []
   if (tomt && !redigerer) return null
 
   return (
@@ -83,7 +86,6 @@ export function Panel({
       id={definisjon.nokkel}
       className="infopanel"
       tittel={<Uthev tekst={definisjon.tittel} />}
-      tittelTillegg={panelreferanser.length > 0 && <Referansepille ider={panelreferanser} niva="panel" />}
       oppsummering={tomt ? 'Ikke noe innhold ennå' : oppsummering}
       apenFraStart={definisjon.apen}
       handlinger={
@@ -108,6 +110,7 @@ export function Panel({
       )}
       {tomt && redigerer && <p className="infopanel__tomt">Panelet har ikke noe innhold ennå.</p>}
       {children}
+      <Referansefelt ider={feltreferanser} niva="panel" />
     </Seksjon>
   )
 }
@@ -155,9 +158,10 @@ export function Redigerbar({
   )
 }
 
+/** Referansefeltet nederst i et kort, med kildene som gjelder hele kortet. */
 function Kortreferanser({ element }: { element: Sideelement | null | undefined }) {
   if (!element || element.referanser.length === 0) return null
-  return <Referansepille ider={element.referanser} niva="element" />
+  return <Referansefelt ider={element.referanser} niva="element" />
 }
 
 /* --- Panel 2: viktige data ------------------------------------------------ */
@@ -196,7 +200,6 @@ export function Datakortpanel({ definisjon, kontekst }: { definisjon: Paneldefin
               <h3 className="datakort__tittel">
                 <Uthev tekst={def.tittel} />
                 {def.symbol && <Kortsymbol symbol={def.symbol} />}
-                <Kortreferanser element={element} />
               </h3>
               <Redigerbar
                 navn={def.tittel}
@@ -238,6 +241,7 @@ export function Datakortpanel({ definisjon, kontekst }: { definisjon: Paneldefin
                   />
                 )}
               />
+              <Kortreferanser element={element} />
             </li>
           )
         })}
@@ -322,7 +326,6 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
                 <Detaljkort
                   id={element.id}
                   tittel={<Uthev tekst={tittel} />}
-                  tittelTillegg={<Kortreferanser element={element} />}
                   oppsummering={forhandsvisning(klartekst(dokument))}
                 >
                   {/* Ankeret søket peker på står inne i detaljkortet, så å gå dit åpner også kortet. */}
@@ -386,6 +389,7 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
                         />
                       )}
                     />
+                    <Kortreferanser element={element} />
                   </div>
                 </Detaljkort>
               </li>

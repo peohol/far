@@ -2,48 +2,59 @@ import type { Paneldefinisjon, Panelnokkel } from '../../faginnhold/paneler'
 import type { Tilleggstekst } from '../../faginnhold/sok'
 import { forhandsvisning } from '../../faginnhold/oppsummering'
 import { oppsummerInteraksjoner, type Interaksjon } from '../../legemiddeldata/interaksjoner'
+import {
+  interaksjonsreferanse,
+  interaksjonsreferanser,
+  interaksjonssted as kortsted,
+} from '../../legemiddeldata/referanser'
+import { formaterReferanse } from '../../faginnhold/referanser'
 import { Detaljkort } from '../seksjoner/Seksjon'
+import { Referansefelt } from '../referanser/Referansefelt'
 import { Uthev } from '../Uthev'
-import { Festkilde } from './Festkilde'
 import { elementAnker, Panel, type Panelkontekst } from './Paneler'
 import type { Interaksjonstilstand } from './useInteraksjoner'
-import type { Legemiddeltilstand } from './useLegemidler'
 
 /** Seksjonen interaksjonene står i. */
 export const INTERAKSJONSPANEL: Panelnokkel = 'interaksjoner'
 
-/** Stedet på siden for en interaksjon: detaljkortet, og ankeret inne i det. */
-function kortsted(interaksjon: Interaksjon): string {
-  return `interaksjon-${interaksjon.id}`
-}
-
-/** Stoffene siden interagerer med, slik søket på siden finner dem, med detaljkortet de står i. */
+/**
+ * Stoffene siden interagerer med, og referansene DMP oppgir, slik søket på
+ * siden finner dem, med detaljkortet de står i.
+ */
 export function interaksjonssoketekster(tilstand: Interaksjonstilstand): Tilleggstekst[] {
   if (tilstand.status !== 'klar') return []
-  return tilstand.oversikt.interaksjoner.map((i): Tilleggstekst => ({
-    panel: INTERAKSJONSPANEL,
-    element: { id: kortsted(i), tittel: i.med },
-    felt: 'overskrift',
-    tekst: i.med,
-  }))
+  return tilstand.oversikt.interaksjoner.flatMap((i): Tilleggstekst[] => {
+    const element = { id: kortsted(i), tittel: i.med }
+    return [
+      { panel: INTERAKSJONSPANEL, element, felt: 'overskrift', tekst: i.med },
+      ...i.referanser.map(
+        (r): Tilleggstekst => ({
+          panel: INTERAKSJONSPANEL,
+          element,
+          felt: 'referanse',
+          tekst: formaterReferanse(interaksjonsreferanse(r)),
+        }),
+      ),
+    ]
+  })
 }
 
 /**
  * Seksjonen «Interaksjoner»: DMPs interaksjoner i FEST for preparatene siden
  * er koblet til, én per detaljkort, de alvorligste først. Ingenting redigeres
- * her; koblingen står i «Preparater».
+ * her; koblingen står i «Preparater». DMPs referanser står i referansefeltet
+ * nederst i hvert kort, og FEST som kilde i seksjonens (se
+ * `src/legemiddeldata/referanser.ts`).
  */
 export function Interaksjonspanel({
   definisjon,
   kontekst,
   koblet,
-  legemidler,
   interaksjoner,
 }: {
   definisjon: Paneldefinisjon
   kontekst: Panelkontekst
   koblet: boolean
-  legemidler: Legemiddeltilstand
   interaksjoner: Interaksjonstilstand
 }) {
   return (
@@ -53,7 +64,7 @@ export function Interaksjonspanel({
           Interaksjonene hentes fra FEST når siden er koblet til legemiddeldataene under «Preparater».
         </p>
       )}
-      {koblet && <Interaksjonsvisning tilstand={interaksjoner} legemidler={legemidler} />}
+      {koblet && <Interaksjonsvisning tilstand={interaksjoner} />}
     </Panel>
   )
 }
@@ -71,7 +82,7 @@ function oppsummering(tilstand: Interaksjonstilstand): string {
   }
 }
 
-function Interaksjonsvisning({ tilstand, legemidler }: { tilstand: Interaksjonstilstand; legemidler: Legemiddeltilstand }) {
+function Interaksjonsvisning({ tilstand }: { tilstand: Interaksjonstilstand }) {
   if (tilstand.status === 'ingen') return null
   if (tilstand.status === 'laster') {
     return (
@@ -123,11 +134,9 @@ function Interaksjonsvisning({ tilstand, legemidler }: { tilstand: Interaksjonst
           ))}
         </ul>
       )}
-      {legemidler.status === 'klar' && (
-        <Festkilde utvalg={legemidler.utvalg}>
-          {`Interaksjonene er DMPs vurderinger for ${atc.length > 0 ? atc.join(', ') : 'preparatene'}. De der DMP mener ingen tiltak er nødvendig, vises ikke.`}
-        </Festkilde>
-      )}
+      <p className="interaksjoner__merknad">
+        {`Interaksjonene er DMPs vurderinger for ${atc.length > 0 ? atc.join(', ') : 'preparatene'}. De der DMP mener ingen tiltak er nødvendig, vises ikke.`}
+      </p>
     </div>
   )
 }
@@ -182,27 +191,8 @@ function Interaksjonsdetaljer({ interaksjon: i }: { interaksjon: Interaksjon }) 
             <dd>{i.kildegrunnlag}</dd>
           </>
         )}
-        {i.referanser.length > 0 && (
-          <>
-            <dt>Referanser</dt>
-            <dd>
-              <ol className="interaksjon__referanser">
-                {i.referanser.map((r, n) => (
-                  <li key={n}>
-                    {r.lenke ? (
-                      <a href={r.lenke} target="_blank" rel="noopener noreferrer">
-                        {r.kilde}
-                      </a>
-                    ) : (
-                      r.kilde
-                    )}
-                  </li>
-                ))}
-              </ol>
-            </dd>
-          </>
-        )}
       </dl>
+      <Referansefelt ider={interaksjonsreferanser(i)} />
     </div>
   )
 }

@@ -8,9 +8,16 @@
  * samme referanse kan ha nummer 2 på én side og 7 på en annen.
  *
  * Leserekkefølgen er panelrekkefølgen, så kortrekkefølgen i panelet, så
- * forekomsten i innholdet. Referansene som gjelder en hel beholder, kommer før
- * det som står i den: panelets referanser før kortene, kortets referanser før
- * teksten i kortet — slik de også vises, i overskriften.
+ * forekomsten i innholdet. Referansene som gjelder en hel beholder, kommer
+ * etter det som står i den: teksten i kortet før kortets referanser, kortene
+ * før panelets — slik de også vises, i referansefeltet nederst i beholderen.
+ *
+ * Referansene har to opphav i samme univers. De redaksjonelle er objekter i
+ * databasen, med historikk, og redigeres i OUSFAR. De automatiske lages av
+ * data OUSFAR henter fra andre (FEST, se `src/legemiddeldata/referanser.ts`),
+ * med en stabil ID fra kilden: de kan ikke redigeres eller slettes, og
+ * forsvinner av seg selv når kilden ikke lenger har dem. Begge nummereres,
+ * vises og listes likt.
  *
  * Alt her er rene funksjoner uten DOM og uten database, samme modell som
  * `src/domain/references.ts` i Slaids.
@@ -23,9 +30,28 @@ export const SITERING = 'sitering'
 /** Skilletegnet i referanseformatet, som i planen. */
 const SKILLE = ' · '
 
-/** En referanse med den stabile ID-en sin. */
+/**
+ * Hvor en automatisk referanse kommer fra. `kilde` er dataene den er laget av,
+ * f.eks. «FEST». `opphav` er sporbarheten — uttrekket og kontrollen — når
+ * referansen er selve datakilden; den står for seg, ikke i referanseteksten.
+ */
+export interface Automatiskopphav {
+  kilde: string
+  opphav?: string
+}
+
+/**
+ * En referanse med den stabile ID-en sin. `automatisk` skiller de automatiske
+ * fra de redaksjonelle; uten er referansen redaksjonell.
+ */
 export interface Referanse extends Referanseinnhold {
   id: string
+  automatisk?: Automatiskopphav
+}
+
+/** Sant for en referanse som kommer fra data OUSFAR henter, og som ikke kan redigeres. */
+export function erAutomatisk(referanse: Pick<Referanse, 'automatisk'>): boolean {
+  return referanse.automatisk !== undefined
 }
 
 /** Referanse-ID → nummeret den har på siden. */
@@ -99,10 +125,35 @@ export interface Sideelement {
   data: unknown
 }
 
+/** Et sted med automatiske referanser, som et detaljkort med en interaksjon fra FEST. */
+export interface Automatiskelement {
+  panel: string
+  id: string
+  referanser: readonly string[]
+}
+
+/**
+ * Det automatiske innholdet på en side siterer. Elementene kommer etter de
+ * redaksjonelle i panelet, i den rekkefølgen de står her, og panelreferansene
+ * etter panelets redaksjonelle.
+ */
+export interface Automatiskegrunnlag {
+  panelreferanser?: Readonly<Record<string, readonly string[]>>
+  elementer?: readonly Automatiskelement[]
+}
+
+/** De automatiske referansene på en side, og hvor de siteres. */
+export interface Automatiskekilder extends Automatiskegrunnlag {
+  referanser: readonly Referanse[]
+}
+
+export const INGEN_AUTOMATISKE: Automatiskekilder = { referanser: [] }
+
 /** Det på en side som kan sitere referanser. */
 export interface Sidegrunnlag {
   panelreferanser?: Readonly<Record<string, readonly string[]>>
   elementer: readonly Sideelement[]
+  automatiske?: Automatiskegrunnlag
 }
 
 /** Én forekomst i leserekkefølgen: det som vises som én pille. */
@@ -110,6 +161,8 @@ export interface Forekomst {
   panel: string
   /** Elementet forekomsten står i, eller `null` for panelets referanser. */
   element: string | null
+  /** Sant når det er automatisk innhold som siterer. */
+  automatisk?: boolean
   niva: 'panel' | 'element' | 'inline'
   ider: string[]
 }
@@ -124,41 +177,67 @@ function sammenlignTekst(a: string, b: string): number {
  * `panelrekkefolge` er panelene slik siden viser dem. Paneler som ikke står
  * der, kommer etter, sortert på nøkkelen, så ingenting faller ut og
  * rekkefølgen alltid er den samme. I et panel står kortene etter posisjon og
- * deretter ID — samme rekkefølge som databasen bruker.
+ * deretter ID — samme rekkefølge som databasen bruker — og så de automatiske.
+ * Et kort siterer teksten sin før kortets egne referanser, og panelets
+ * referanser kommer etter kortene: referansefeltet står nederst.
  */
 export function forekomster(side: Sidegrunnlag, panelrekkefolge: readonly string[] = []): Forekomst[] {
   const panelreferanser = side.panelreferanser ?? {}
-  const perPanel = new Map<string, Sideelement[]>()
-  for (const element of side.elementer) {
-    const liste = perPanel.get(element.panel) ?? []
-    liste.push(element)
-    perPanel.set(element.panel, liste)
-  }
+  const automatiskePanel = side.automatiske?.panelreferanser ?? {}
+  const perPanel = gruppert(side.elementer)
+  const automatiskePerPanel = gruppert(side.automatiske?.elementer ?? [])
 
   const kjente = new Set(panelrekkefolge)
-  const ovrige = [...new Set([...Object.keys(panelreferanser), ...perPanel.keys()])]
+  const ovrige = [
+    ...new Set([
+      ...Object.keys(panelreferanser),
+      ...Object.keys(automatiskePanel),
+      ...perPanel.keys(),
+      ...automatiskePerPanel.keys(),
+    ]),
+  ]
     .filter((panel) => !kjente.has(panel))
     .sort(sammenlignTekst)
 
   const resultat: Forekomst[] = []
+  const legg = (forekomst: Forekomst) => {
+    if (forekomst.ider.length > 0) resultat.push(forekomst)
+  }
   for (const panel of [...new Set(panelrekkefolge), ...ovrige]) {
-    const egne = panelreferanser[panel] ?? []
-    if (egne.length > 0) resultat.push({ panel, element: null, niva: 'panel', ider: [...egne] })
-
     const elementer = [...(perPanel.get(panel) ?? [])].sort(
       (a, b) => a.posisjon - b.posisjon || sammenlignTekst(a.id, b.id),
     )
     for (const element of elementer) {
-      const kort = element.referanser ?? []
-      if (kort.length > 0) {
-        resultat.push({ panel, element: element.id, niva: 'element', ider: [...kort] })
-      }
-      for (const ider of siteringer(element.data)) {
-        resultat.push({ panel, element: element.id, niva: 'inline', ider })
-      }
+      for (const ider of siteringer(element.data)) legg({ panel, element: element.id, niva: 'inline', ider })
+      legg({ panel, element: element.id, niva: 'element', ider: [...(element.referanser ?? [])] })
     }
+    for (const element of automatiskePerPanel.get(panel) ?? []) {
+      legg({ panel, element: element.id, niva: 'element', ider: [...element.referanser], automatisk: true })
+    }
+    legg({ panel, element: null, niva: 'panel', ider: [...(panelreferanser[panel] ?? [])] })
+    legg({ panel, element: null, niva: 'panel', ider: [...(automatiskePanel[panel] ?? [])], automatisk: true })
   }
   return resultat
+}
+
+function gruppert<T extends { panel: string }>(elementer: readonly T[]): Map<string, T[]> {
+  const perPanel = new Map<string, T[]>()
+  for (const element of elementer) {
+    const liste = perPanel.get(element.panel) ?? []
+    liste.push(element)
+    perPanel.set(element.panel, liste)
+  }
+  return perPanel
+}
+
+/**
+ * Referansene et panel viser i referansefeltet sitt: de redaksjonelle først,
+ * så de automatiske, uten gjentakelser.
+ */
+export function feltreferanser(side: Pick<Sidegrunnlag, 'panelreferanser' | 'automatiske'>, panel: string): string[] {
+  return [
+    ...new Set([...(side.panelreferanser?.[panel] ?? []), ...(side.automatiske?.panelreferanser?.[panel] ?? [])]),
+  ]
 }
 
 /* --- Nummereringen -------------------------------------------------------- */
