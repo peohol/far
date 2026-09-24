@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type RefObject } from 'react'
 import { flushSync } from 'react-dom'
+import { useFlytting } from '../../hooks/useFlytting'
 import { rullefart } from '../../hooks/useKortHopp'
 import { oppsummerStyrke, type Formgruppe, type Styrkegruppe } from '../../legemiddeldata/preparatmodell'
 import { Ikon } from '../ikon/Ikon'
@@ -43,9 +44,35 @@ export function Styrkerutenett({
   // En form med én styrke har ingenting å velge mellom.
   const [apen, setApen] = useState<string | null>(form.styrker.length === 1 ? form.styrker[0]!.id : null)
   const ikon = formikonnavn(form.ikon)
+  const rutenett = useRef<HTMLUListElement>(null)
+  // Kortet brukeren åpnet, rulles fram når det har vokst ferdig.
+  const rullTil = useRef(false)
+  const husk = useFlytting(rutenett, {
+    etter: () => {
+      if (!rullTil.current) return
+      rullTil.current = false
+      rutenett.current
+        ?.querySelector(':scope > [data-apen]')
+        ?.scrollIntoView({ behavior: rullefart(), block: 'nearest' })
+    },
+  })
+  // Et trykk flytter kortene synlig; søket som åpner et kort, gjør det straks.
+  const veksle = useCallback(
+    (id: string, apnes: boolean) => {
+      husk()
+      rullTil.current = apnes
+      setApen(apnes ? id : null)
+    },
+    [husk],
+  )
 
   return (
-    <ul className="styrkerutenett" id={anker} aria-label={`Styrker, ${form.form.toLocaleLowerCase('nb')}`}>
+    <ul
+      ref={rutenett}
+      className="styrkerutenett"
+      id={anker}
+      aria-label={`Styrker, ${form.form.toLocaleLowerCase('nb')}`}
+    >
       {form.styrker.map((s) => (
         <Styrkekort
           key={s.id}
@@ -54,6 +81,7 @@ export function Styrkerutenett({
           ikon={ikon}
           apen={apen === s.id}
           settApen={setApen}
+          veksle={veksle}
           valgt={valgt?.styrke === s.id ? valgt.preparat : null}
           onVelg={(preparat) => onVelg({ preparat, styrke: s.id })}
         />
@@ -68,6 +96,7 @@ function Styrkekort({
   ikon,
   apen,
   settApen,
+  veksle,
   valgt,
   onVelg,
 }: {
@@ -75,15 +104,15 @@ function Styrkekort({
   form: string
   ikon: Ikonnavn
   apen: boolean
-  /** Hvilket kort i rutenettet som står åpent; `null` lukker. */
+  /** Hvilket kort i rutenettet som står åpent, straks; `null` lukker. */
   settApen: (id: string | null) => void
+  /** Åpner eller lukker kortet med flytting, som et trykk gjør. */
+  veksle: (id: string, apnes: boolean) => void
   valgt: string | null
   onVelg: (preparat: string) => void
 }) {
   const id = useId()
-  const ramme = useRef<HTMLLIElement>(null)
   const innhold = useRef<HTMLDivElement>(null)
-  const [rull, setRull] = useState(false)
   const tekst = styrke.styrke || UTEN_STYRKE
   const antall = oppsummerStyrke(styrke)
 
@@ -92,16 +121,8 @@ function Styrkekort({
   const vis = useCallback(() => settApen(styrke.id), [settApen, styrke.id])
   useSkjultTilFunnet(innhold, apen, vis)
 
-  // Når brukeren åpner kortet, rulles det fram når det er tegnet i full bredde.
-  useEffect(() => {
-    if (!apen || !rull) return
-    setRull(false)
-    ramme.current?.scrollIntoView({ behavior: rullefart(), block: 'nearest' })
-  }, [apen, rull])
-
   return (
     <li
-      ref={ramme}
       className={['styrkekort', styrke.kombinasjon && 'styrkekort--lang'].filter(Boolean).join(' ')}
       data-apen={apen || undefined}
     >
@@ -113,10 +134,7 @@ function Styrkekort({
         aria-controls={`${id}-innhold`}
         aria-describedby={`${id}-antall`}
         title={styrke.kombinasjon ? tekst : undefined}
-        onClick={() => {
-          settApen(apen ? null : styrke.id)
-          setRull(!apen)
-        }}
+        onClick={() => veksle(styrke.id, !apen)}
       >
         <Ikon navn={ikon} className="styrkekort__ikon" />
         <span className="styrkekort__tekst">

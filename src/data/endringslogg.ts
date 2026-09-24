@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.28.2',
+    versjon: '1.28.3',
     dato: '2026-09-24',
     sammendrag: 'En åpnet skuff som får plass på skjermen, midtstilles',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,18 @@ export const ENDRINGSLOGG: Endring[] = [
       'Når du åpner en seksjon eller et detaljkort som får plass på skjermen, ruller siden slik at det står midt i det synlige feltet under toppmenyen.',
       'Er den åpne skuffen høyere enn skjermen, legges toppen av den rett under toppmenyen, som før.',
       'Begynner du å rulle selv mens skuffen åpnes, lar siden deg rulle i fred.',
+    ],
+  },
+  {
+    versjon: '1.28.2',
+    dato: '2026-09-24',
+    sammendrag: 'Styrkekortene under Preparater åpner og lukker med glidning',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Et styrkekort som åpnes, vokser jevnt ut til full bredde, og kortene som må flytte til en annen rad, glir dit, så du ser hvor de havner. Lukking går samme vei tilbake.',
+      'Styrkene i preparatvinduet glir opp og igjen på samme måte som seksjonene.',
+      'Har du bedt om mindre bevegelse i systemet, åpner og lukker kortene straks, som før.',
     ],
   },
   {

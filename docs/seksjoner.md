@@ -97,6 +97,12 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   Skjuler den noe, gjøres det med `hidden="until-found"`, og den åpner seg
   når nettleserens søk finner noe der (`beforematch`) og når `apneTil` sender
   `VIS_HENDELSE` fra elementet som skal vises (`useSkjultTilFunnet`).
+- Glidningen er felles: `useSkjuling` (`src/hooks/`) skjuler og viser
+  innholdet rundt en kropp som glir mellom `grid-template-rows: 0fr` og `1fr`,
+  og brukes av skuffene og styrkene i preparatvinduet. Kortene i et rutenett
+  som åpnes over hele bredden, flytter seg med `useFlytting` (FLIP): kortet
+  vokser dit det skal, og naboene glir til sin nye plass. Klipp innholdet ved
+  kroppens kant, ikke radens; mens raden glir, er kroppen høyere enn den.
 
 Stoffsidens paneler (`src/components/analyttside/Paneler.tsx`) er seksjoner med
 panelnøkkelen som `id`; om et panel står åpent fra start, står i `apen` i

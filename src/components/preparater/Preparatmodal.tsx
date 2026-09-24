@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { ramsOpp } from '../../faginnhold/oppsummering'
 import type { Preparatpakning } from '../../legemiddeldata/preparater'
 import {
@@ -9,6 +10,7 @@ import {
 } from '../../legemiddeldata/preparatmodell'
 import { FEST_KILDE } from '../../legemiddeldata/referanser'
 import { rullefart } from '../../hooks/useKortHopp'
+import { useSkjuling } from '../../hooks/useSkjuling'
 import { Ikon } from '../ikon/Ikon'
 import { Merke } from '../Merke'
 import { Modallag } from '../Modallag'
@@ -138,7 +140,21 @@ function Styrkerad({
 }) {
   const id = useId()
   const rad = useRef<HTMLLIElement>(null)
+  const kropp = useRef<HTMLDivElement>(null)
+  const inner = useRef<HTMLDivElement>(null)
   const pakninger = styrke.pakninger.length
+  useSkjuling(kropp, inner, apen)
+
+  // Nettleserens søk fant noe i en lukket styrke: åpne den før den ruller dit.
+  const apneForFunn = useRef(onVeksle)
+  apneForFunn.current = apen ? () => {} : onVeksle
+  useEffect(() => {
+    const el = inner.current
+    if (!el) return
+    const funnet = () => flushSync(() => apneForFunn.current())
+    el.addEventListener('beforematch', funnet)
+    return () => el.removeEventListener('beforematch', funnet)
+  }, [])
 
   // Styrken vinduet ble åpnet fra, rulles fram.
   useEffect(() => {
@@ -170,16 +186,20 @@ function Styrkerad({
           {fra && <Merke tone="aksent">Åpnet herfra</Merke>}
         </span>
       </div>
-      <div id={`${id}-innhold`} className="preparatstyrke__innhold" hidden={!apen}>
-        <p className="preparatstyrke__fest">
-          {ramsOpp([
-            styrke.navn_form_styrke.join(', '),
-            visReseptgruppe && styrke.reseptgrupper.join(', '),
-            visProdusent && styrke.produsenter.join(', '),
-          ])}
-        </p>
-        {pakninger > 0 && <Pakningstabell pakninger={styrke.pakninger} />}
-        {visOmtaler && styrke.preparatomtaler.length > 0 && <Omtalelenker lenker={styrke.preparatomtaler} />}
+      <div ref={kropp} className="preparatstyrke__kropp">
+        <div ref={inner} id={`${id}-innhold`} className="preparatstyrke__inner">
+          <div className="preparatstyrke__innhold">
+            <p className="preparatstyrke__fest">
+              {ramsOpp([
+                styrke.navn_form_styrke.join(', '),
+                visReseptgruppe && styrke.reseptgrupper.join(', '),
+                visProdusent && styrke.produsenter.join(', '),
+              ])}
+            </p>
+            {pakninger > 0 && <Pakningstabell pakninger={styrke.pakninger} />}
+            {visOmtaler && styrke.preparatomtaler.length > 0 && <Omtalelenker lenker={styrke.preparatomtaler} />}
+          </div>
+        </div>
       </div>
     </li>
   )

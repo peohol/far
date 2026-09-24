@@ -3,7 +3,6 @@ import {
   useContext,
   useEffect,
   useId,
-  useLayoutEffect,
   useRef,
   useState,
   type MouseEvent,
@@ -16,13 +15,13 @@ import { Ikon } from '../ikon/Ikon'
 import type { Ikonnavn } from '../ikon/register'
 import {
   INNHOLDSATTRIBUTT,
-  MAKS_GLIDETID,
   SKUFFATTRIBUTT,
   SeksjonsstyringKilde,
   skuffnokkel,
   useSeksjonsstyring,
   type Seksjonsstyring,
 } from './Seksjonsstyring'
+import { useSkjuling } from '../../hooks/useSkjuling'
 import '../../styles/seksjoner.css'
 
 /**
@@ -53,7 +52,6 @@ import '../../styles/seksjoner.css'
 
 /** Klassen skuffene har; seksjon og detaljkort er varianter av den. */
 const KLASSE = 'skuff'
-
 
 /** Nivået en skuff står på, så to nivåer ikke blir flere. */
 type Niva = { slag: 'seksjon'; id: string } | { slag: 'detalj' }
@@ -286,63 +284,6 @@ function Skuff({
       </div>
     </Ramme>
   )
-}
-
-/**
- * Skjuler innholdet når skuffen lukkes — etter at lukkingen har glidd ferdig,
- * så innholdet ikke forsvinner før det rakk å gli sammen — og viser det straks
- * skuffen åpnes. Mens skuffen glir, bærer kroppen `data-glir`, og innholdet
- * klippes; ellers står det fritt, så fokusrammer og bobler ikke kuttes.
- */
-function useSkjuling(
-  kropp: RefObject<HTMLDivElement>,
-  inner: RefObject<HTMLDivElement>,
-  apen: boolean,
-  animer: boolean,
-) {
-  // Bare et skifte glir; den første tegningen (også den doble i StrictMode) gjør ikke.
-  const forrige = useRef(apen)
-  useLayoutEffect(() => {
-    const boks = kropp.current
-    const el = inner.current
-    if (!boks || !el) return
-    const skiftet = forrige.current !== apen
-    forrige.current = apen
-    const glir = animer && skiftet && !redusertBevegelse()
-
-    if (apen) el.removeAttribute('hidden')
-    if (!glir) {
-      delete boks.dataset.glir
-      if (!apen) el.setAttribute('hidden', 'until-found')
-      return
-    }
-
-    boks.dataset.glir = ''
-    let ferdig = false
-    const avslutt = () => {
-      if (ferdig) return
-      ferdig = true
-      boks.removeEventListener('transitionend', paaSlutt)
-      window.clearTimeout(frist)
-      delete boks.dataset.glir
-      if (!apen) el.setAttribute('hidden', 'until-found')
-    }
-    const paaSlutt = (event: TransitionEvent) => {
-      if (event.target === boks && event.propertyName === 'grid-template-rows') avslutt()
-    }
-    boks.addEventListener('transitionend', paaSlutt)
-    const frist = window.setTimeout(avslutt, MAKS_GLIDETID)
-    // Snur skuffen før den er ferdig, overtar neste runde uten å skjule.
-    return () => {
-      ferdig = true
-      boks.removeEventListener('transitionend', paaSlutt)
-      window.clearTimeout(frist)
-    }
-  }, [kropp, inner, apen, animer])
-}
-
-function redusertBevegelse(): boolean {
-  return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
 }
 
 /** Hvor mange søketreff som står i innholdet. Vises på lukkede skuffer. */

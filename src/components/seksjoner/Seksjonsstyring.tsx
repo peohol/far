@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { rullefart } from '../../hooks/useKortHopp'
+import { MAKS_GLIDETID } from '../../hooks/useSkjuling'
 
 /**
  * Hvilke seksjoner og detaljkort på en side som er åpne, og veien til et sted
@@ -41,9 +42,6 @@ export const VIS_HENDELSE = 'ousfar:vis'
 
 /** Attributtet elementet med skuffens innhold bærer, så høyden den får når den er åpen, kan måles. */
 export const INNHOLDSATTRIBUTT = 'data-skuffinnhold'
-
-/** Hvor lenge noe venter på at en skuff skal gli ferdig, før det skjer likevel. */
-export const MAKS_GLIDETID = 450
 
 /** Forelderen til seksjonene på siden. Ingen skuff har en tom nøkkel. */
 const ROT = ''
