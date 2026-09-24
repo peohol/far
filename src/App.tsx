@@ -16,6 +16,8 @@ import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
 import { ruteAv } from './components/Kopibevis'
 import { Kontomeny } from './components/konto/Kontomeny'
+import { Fagsok } from './components/sok/Fagsok'
+import { Sokeside } from './components/sok/Sokeside'
 import { Toppmeny } from './components/toppmeny/Toppmeny'
 import { ToppmenyKilde } from './components/toppmeny/Toppmenykilde'
 import { Versjonspille } from './components/Versjonspille'
@@ -23,7 +25,7 @@ import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from './domain/analyttkatalog'
 import { alternativFor, ETG_ALTERNATIVER, type EtgAlternativ } from './domain/etg'
 import type { Rute } from './domain/flytting'
-import { FORTOLKNING } from './domain/rute'
+import { FORTOLKNING, lesRute } from './domain/rute'
 import { rusModulFor } from './domain/rus'
 import { search } from './domain/search'
 import {
@@ -36,6 +38,7 @@ import {
 import { lagFaginnholdslager } from './faginnhold/lagring'
 import { lagFaginnholdsleser } from './faginnhold/lesing'
 import { lesScenarioregler, reglerForModul } from './faginnhold/scenarioregler'
+import { lagSideleser, lesSokeindeks } from './faginnhold/globaltSok'
 import { lagLegemiddelleser } from './legemiddeldata/lesing'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
@@ -48,6 +51,7 @@ import {
   useKeyboard,
 } from './hooks/useKeyboard'
 import { useRute } from './hooks/useRute'
+import { useSokeindeks } from './hooks/useSokeindeks'
 import { useTheme } from './hooks/useTheme'
 import { lesPubliserteRegelsett } from './regler/kommentarer'
 import { slaOpp } from './regler/publiserte'
@@ -111,6 +115,8 @@ export default function App() {
   const katalog = useMemo(() => byggKatalog(alleAnalytter), [alleAnalytter])
   const [rute, gaaTil] = useRute()
   const paaInfoside = rute.side === 'analytt'
+  // Stoffsidene og søkesiden legger seg over fortolkningen, som står skjult bak.
+  const fortolkningSkjult = rute.side !== 'fortolkning'
 
   const profil = useProfil()
   const faginnhold = useMemo<Faginnholdskilde>(
@@ -137,6 +143,30 @@ export default function App() {
     return { regelsett, referanseomrader }
   }, [faginnhold.leser])
   const regler = usePubliserteRegler(hentRegler)
+
+  // Fagsøket: indeksen over alt publisert fagstoff, hentet første gang noen
+  // søker. De andre navnene en kode er kjent under, kommer fra katalogen, så
+  // fagsøket og analyttsøket kjenner de samme.
+  const hentSokeindeks = useCallback(
+    () =>
+      lesSokeindeks(lagSideleser(klient()), lagLegemiddelleser(klient()), {
+        aliaser: (kode) => {
+          const oppforing = katalog.finn(kode)
+          return oppforing?.kode === oppforing?.fortolkning.kode ? oppforing?.fortolkning.aliaser : undefined
+        },
+      }),
+    [katalog],
+  )
+  const sokeindeks = useSokeindeks(hentSokeindeks)
+  const beskrivSide = useCallback(
+    (kode: string) => {
+      const oppforing = katalog.finn(kode)
+      if (!oppforing) return undefined
+      return [oppforing.kode, [oppforing.analysemetode, oppforing.kategori].filter(Boolean).join(' › ')].join(' · ')
+    },
+    [katalog],
+  )
+  const gaaTilAdresse = useCallback((adresse: string) => gaaTil(lesRute(adresse)), [gaaTil])
   const regeloppslag = useMemo(
     () => (state.analyte ? slaOpp(regler.tilstand, state.analyte.kode) : null),
     [regler.tilstand, state.analyte],
@@ -147,11 +177,16 @@ export default function App() {
   // En administrator kan ha publisert nye regler på en informasjonsside. De
   // hentes når hen går tilbake til fortolkningen.
   const varPaInfoside = useRef(paaInfoside)
+  // Det samme gjelder fagsøket, som henter indeksen på nytt neste gang det brukes.
   const { hentPaNytt } = regler
+  const { foreld: foreldSokeindeks } = sokeindeks
   useEffect(() => {
-    if (varPaInfoside.current && !paaInfoside && faginnhold.kanRedigere) hentPaNytt()
+    if (varPaInfoside.current && !paaInfoside && faginnhold.kanRedigere) {
+      hentPaNytt()
+      foreldSokeindeks()
+    }
     varPaInfoside.current = paaInfoside
-  }, [paaInfoside, faginnhold.kanRedigere, hentPaNytt])
+  }, [paaInfoside, faginnhold.kanRedigere, hentPaNytt, foreldSokeindeks])
 
   // Tilstandsmaskinen trenger alternativene det nye søket gir for å se om det
   // smalner inn til én analytt, så søket kjøres her og ikke først når steget
@@ -405,11 +440,20 @@ export default function App() {
       <div
         className="app"
         data-steg={vist}
-        data-tomt={isIdle(state) && !paaInfoside ? 'ja' : 'nei'}
+        data-tomt={isIdle(state) && !fortolkningSkjult ? 'ja' : 'nei'}
         data-side={rute.side}
       >
         <Toppmeny
           meny={<Sidemeny pool={alleAnalytter} metodefilter={state.metodefilter} onFilter={settMetodefilter} />}
+          sok={
+            <Fagsok
+              indeks={sokeindeks.tilstand}
+              onKrev={sokeindeks.krev}
+              sporring={rute.side === 'sok' ? rute.q : undefined}
+              beskrivSide={beskrivSide}
+              onGaaTil={gaaTilAdresse}
+            />
+          }
           konto={<Kontomeny theme={theme} onToggleTheme={toggle} />}
           theme={theme}
           onToggleTheme={toggle}
@@ -431,13 +475,25 @@ export default function App() {
           </main>
         )}
 
+        {rute.side === 'sok' && (
+          <main className="scene scene--sokeside">
+            <Sokeside
+              q={rute.q}
+              indeks={sokeindeks.tilstand}
+              onKrev={sokeindeks.krev}
+              beskrivSide={beskrivSide}
+              onLukk={lukkInfoside}
+            />
+          </main>
+        )}
+
         {/* Fortolkningen blir stående bak en åpen informasjonsside, så det
             brukeren har fylt inn, er der når hen kommer tilbake. Tastene dens
             ligger i ro så lenge den er skjult — se `fortolkningenErSkjult`. */}
         <main
           className="scene"
-          hidden={paaInfoside}
-          {...(paaInfoside && { 'data-fortolkning': SKJULT_FORTOLKNING })}
+          hidden={fortolkningSkjult}
+          {...(fortolkningSkjult && { 'data-fortolkning': SKJULT_FORTOLKNING })}
         >
           {vist === 'search' && (
             <SearchStep

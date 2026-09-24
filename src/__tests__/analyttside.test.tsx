@@ -633,7 +633,7 @@ describe('søket på siden', () => {
     const user = userEvent.setup()
     vis('AMTNORSUM')
     await finnVerdi('10–20 nmol/L')
-    await user.keyboard('/')
+    await user.keyboard('{Control>}b{/Control}')
     const sok = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
     expect(document.activeElement).toBe(sok)
     await user.keyboard('kilde')
@@ -651,6 +651,32 @@ describe('søket på siden', () => {
     expect(
       within(screen.getByRole('list', { name: 'Hvor treffene står' })).getByRole('button').textContent,
     ).toBe('Viktige data › Referanseområde')
+  })
+
+  it('hentes fram med Ctrl B og Cmd B, men ikke fra et redigeringsfelt', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM')
+    await finnVerdi('10–20 nmol/L')
+    const sok = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
+    await user.keyboard('{Meta>}b{/Meta}')
+    expect(document.activeElement).toBe(sok)
+    sok.blur()
+    // Skråstreken var snarveien før; nå er den bare et tegn.
+    await user.keyboard('/')
+    expect(document.activeElement).not.toBe(sok)
+
+    // I riktekst er Ctrl B fet skrift.
+    const redigerbart = document.createElement('div')
+    redigerbart.contentEditable = 'true'
+    redigerbart.tabIndex = 0
+    document.body.append(redigerbart)
+    redigerbart.focus()
+    // jsdom regner ikke ut `isContentEditable`.
+    Object.defineProperty(redigerbart, 'isContentEditable', { value: true })
+    const tast = new KeyboardEvent('keydown', { key: 'b', ctrlKey: true, bubbles: true, cancelable: true })
+    redigerbart.dispatchEvent(tast)
+    expect(tast.defaultPrevented).toBe(false)
+    redigerbart.remove()
   })
 
   it('ser bort fra store og små bokstaver og aksenter', async () => {

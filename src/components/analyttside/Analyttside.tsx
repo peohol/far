@@ -3,10 +3,11 @@ import type { Analyttkatalog } from '../../domain/analyttkatalog'
 import { byggSidemodell, referanseunivers } from '../../faginnhold/analyttside'
 import { PANELER } from '../../faginnhold/paneler'
 import { indekserSide, sokeord } from '../../faginnhold/sok'
-import { lagLiggerOver, skrivesIFelt } from '../../hooks/useKeyboard'
+import { useLukkMedEscape } from '../../hooks/useLukkMedEscape'
 import type { Analyte } from '../../types'
 import { Button } from '../Button'
 import { Ikonknapp } from '../Ikonknapp'
+import { Lukkeknapp } from '../Lukkeknapp'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
 import { Referanseliste } from '../referanser/Referanseliste'
@@ -57,7 +58,8 @@ export interface AnalyttsideProps {
  * slå på redigeringsmodus, som viser utkastet med diskrete knapper for å endre
  * det, og publiserer når de er ferdige.
  *
- * Tastene: `Escape` lukker siden, `/` går til søket på siden.
+ * Tastene: `Escape` lukker siden, `Ctrl + B` eller `Cmd + B` går til søket på
+ * siden, og `Ctrl + K` eller `Cmd + K` til fagsøket i toppmenyen.
  */
 export function Analyttside({ kode, sted, katalog, onApneFortolkning, onLukk }: AnalyttsideProps) {
   const oppforing = katalog.finn(kode)
@@ -99,29 +101,6 @@ export function Analyttside({ kode, sted, katalog, onApneFortolkning, onLukk }: 
       />
     </SeksjonsstyringKilde>
   )
-}
-
-/** Tilbake til fortolkningen. `Escape` gjør det samme (se `useLukkMedEscape`). */
-function Lukkeknapp({ onLukk }: { onLukk: () => void }) {
-  return <Ikonknapp ikon="close" etikett="Lukk" aria-keyshortcuts="Escape" onClick={onLukk} />
-}
-
-/** `Escape` lukker siden — men ikke fra et felt, et åpent skjema eller et lag over den. */
-function useLukkMedEscape(onLukk: () => void) {
-  const lukk = useRef(onLukk)
-  lukk.current = onLukk
-  useEffect(() => {
-    const paaTast = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape' || event.defaultPrevented) return
-      if (event.ctrlKey || event.metaKey || event.altKey) return
-      if (lagLiggerOver() || skrivesIFelt()) return
-      if (document.querySelector('.analyttside .redigering')) return
-      event.preventDefault()
-      lukk.current()
-    }
-    window.addEventListener('keydown', paaTast)
-    return () => window.removeEventListener('keydown', paaTast)
-  }, [])
 }
 
 function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: AnalyttsideProps) {
@@ -227,13 +206,16 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
         )}
       </ToppmenyInnhold>
 
-      <Sidesok
-        sporring={sporring}
-        onEndre={setSporring}
-        beholder={beholder}
-        dokumenter={dokumenter}
-        innholdsnokkel={side.data}
-      />
+      {/* Søket på siden står også i toppmenyen, foran handlingene. */}
+      <ToppmenyInnhold spor="sidesok">
+        <Sidesok
+          sporring={sporring}
+          onEndre={setSporring}
+          beholder={beholder}
+          dokumenter={dokumenter}
+          innholdsnokkel={side.data}
+        />
+      </ToppmenyInnhold>
 
       {modus === 'rediger' && redigerer && !side.data.analytt && (
         <p className="redigeringsstripe">Siden opprettes i databasen første gang du lagrer noe på den.</p>

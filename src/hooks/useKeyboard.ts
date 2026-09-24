@@ -31,11 +31,40 @@ export function lagLiggerOver(): boolean {
   return modaltLagLiggerOver() || document.querySelector('[data-lag]') !== null
 }
 
+/**
+ * Merket det globale fagsøket bærer som `data-lag` mens fokus står i det.
+ *
+ * Fagsøket står i toppmenyen over fortolkningen, og det som skrives der, er
+ * et søk: sifrene skal ikke velge et alternativ, `Enter` ikke kopiere en
+ * kommentar og `Escape` ikke gå et steg tilbake i steget bak. Som laget over
+ * appen legger det derfor appens egne taster i ro (se {@link lagLiggerOver}).
+ */
+export const FAGSOK_LAG = 'fagsok'
+
+/** Sant når fokus står i det globale fagsøket (se {@link FAGSOK_LAG}). */
+export function fokusIFagsok(): boolean {
+  return document.activeElement?.closest(`[data-lag="${FAGSOK_LAG}"]`) != null
+}
+
+/**
+ * Ctrl + tasten, eller Cmd + tasten på macOS: snarveiene som henter fram
+ * søkefeltene — K for fagsøket og B for søket på siden. Et redigeringsfelt
+ * (riktekst, der Ctrl + B er fet skrift) og et lag over appen går foran. Fra
+ * fagsøket kan man likevel gå rett videre til søket på siden.
+ */
+export function erSokesnarvei(event: KeyboardEvent, tast: string): boolean {
+  if (event.key.toLowerCase() !== tast || event.altKey || event.shiftKey) return false
+  if (event.ctrlKey === event.metaKey) return false
+  const aktivt = document.activeElement
+  if (aktivt instanceof HTMLElement && aktivt.isContentEditable) return false
+  return !lagLiggerOver() || fokusIFagsok()
+}
+
 /** Merket fortolkningen bærer mens den står skjult bak en informasjonsside. */
 export const SKJULT_FORTOLKNING = 'skjult'
 
 /**
- * Sant mens fortolkningen står skjult bak en informasjonsside.
+ * Sant mens fortolkningen står skjult bak en informasjonsside eller søkesiden.
  *
  * Fortolkningen blir stående montert når en informasjonsside åpnes, så det
  * brukeren har fylt inn, er der når hen kommer tilbake. Tastene dens skal
@@ -103,7 +132,8 @@ export function fokusertNa(): Fokusert | null {
 /**
  * Sant når tastetrykket er en bekreftelse: `Enter`, eller mellomrom der
  * mellomrom ikke alt har en jobb der fokus står. `Enter` på en lenke følger
- * lenken, og mens fortolkningen står skjult, bekrefter ingen av dem noe.
+ * lenken, og mens fortolkningen står skjult eller det skrives i fagsøket,
+ * bekrefter ingen av dem noe.
  *
  * Dette er den ene regelen for «gjør det steget skal gjøre», og alle stegene
  * og modulene bruker den, slik at de to tastene betyr det samme overalt.
@@ -111,7 +141,7 @@ export function fokusertNa(): Fokusert | null {
  */
 export function erBekreftelse(event: KeyboardEvent): boolean {
   if (event.ctrlKey || event.metaKey || event.altKey) return false
-  if (fortolkningenErSkjult()) return false
+  if (fortolkningenErSkjult() || fokusIFagsok()) return false
   if (event.key === 'Enter') return enterErLedig(fokusertNa())
   return event.key === ' ' && mellomromErLedig(fokusertNa())
 }

@@ -2589,69 +2589,6 @@ details[open] > .detalj__kropp {
   color: var(--blekk-dempet);
 }
 
-/* Søket på siden. */
-.sidesok {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--rom-3) var(--rom-5);
-}
-
-.sidesok__felt {
-  display: flex;
-  align-items: center;
-  gap: var(--rom-3);
-  flex: 1 1 18rem;
-  padding: var(--rom-2) var(--rom-5);
-  background: var(--flate);
-  border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-full);
-}
-
-.sidesok__felt:focus-within {
-  border-color: var(--aksent);
-}
-
-.sidesok__input {
-  flex: 1;
-  min-width: 0;
-  padding: var(--rom-2) 0;
-  font-size: var(--tekst-s);
-  background: transparent;
-  border: 0;
-}
-
-.sidesok__input:focus {
-  outline: none;
-}
-
-.sidesok__status {
-  font-size: var(--tekst-xs);
-  color: var(--blekk-dempet);
-}
-
-.sidesok__steder {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--rom-2);
-  width: 100%;
-  margin: 0;
-}
-
-.sidesok__sted {
-  padding: 0.15rem var(--rom-3);
-  font-size: var(--tekst-xs);
-  color: var(--blekk-dempet);
-  background: var(--flate-hevet);
-  border: 0;
-  border-radius: var(--runding-full);
-  cursor: pointer;
-}
-
-.sidesok__sted:hover {
-  color: var(--blekk);
-}
-
 .sidetreff {
   color: inherit;
   background: var(--niva-gul-flate);

@@ -1,0 +1,539 @@
+/**
+ * De to søkene (`docs/ux-reimagination.md`, del 6), som i Atlas-referansen
+ * «Søk og hovedflate» (6b):
+ *
+ * - Globalt fagsøk i toppmenyen, med rullegardinen (`Fagsok`) og søkesiden
+ *   (`Sokeside`, `#/sok?q=…`).
+ * - Søket på den åpne siden (`Sidesok`), et kompakt felt i toppmenyen og i
+ *   dokken på smale flater.
+ *
+ * Selve fagsøkfeltet står i `toppmeny.css`. Grensen for smal flate (47,5em ≈
+ * 760 px) står i hver media query; CSS kan ikke lese den fra et token.
+ */
+
+/* Et treff i søket, i rullegardinen, på søkesiden og i utdragene. */
+.sokemerke {
+  color: inherit;
+  background: color-mix(in oklab, var(--toksisk) 38%, transparent);
+  border-radius: var(--runding-merke);
+}
+
+/* --- Rullegardinen under fagsøket ---------------------------------------------- */
+
+/* Lagmerket og fokushåndteringen sitter på omslaget; oppsettet er feltets. */
+.fagsokkilde {
+  display: contents;
+}
+
+.fagsok__rullegardin {
+  position: absolute;
+  top: calc(100% + var(--rom-5));
+  right: 0;
+  left: 0;
+  z-index: var(--lag-popover);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - var(--toppmeny-offset) - var(--rom-8));
+  overflow: hidden;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-kort);
+  box-shadow: var(--skygge-modal);
+}
+
+.fagsok__rullegardin[hidden] {
+  display: none;
+}
+
+.fagsok__treff {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--rom-2);
+}
+
+.fagsok__treff:empty {
+  display: none;
+}
+
+.fagsok__rad {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-4);
+  padding: var(--rom-3) var(--rom-4);
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--runding-felt);
+}
+
+.fagsok__rad[aria-selected='true'] {
+  background: var(--aksent-flate);
+  box-shadow: inset 0 0 0 var(--kant) var(--aksent);
+}
+
+.fagsok__radikon,
+.sokeresultat__ikon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: calc(var(--ikon-ui) + var(--rom-5));
+  height: calc(var(--ikon-ui) + var(--rom-5));
+  font-size: var(--ikon-ui);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.fagsok__radtekst {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--rom-1);
+  min-width: 0;
+}
+
+.fagsok__radtittel {
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
+}
+
+.fagsok__radsti {
+  overflow: hidden;
+  font-size: var(--tekst-liten);
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk-dempet);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.fagsok__radtype {
+  flex: none;
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+}
+
+.fagsok__melding {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-4);
+  margin: 0;
+  padding: var(--rom-5) var(--rom-6);
+  font-size: var(--tekst-ui);
+  color: var(--blekk-dempet);
+}
+
+.fagsok__melding p {
+  margin: 0;
+}
+
+.fagsok__bunn {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--rom-5);
+  padding: var(--rom-3) var(--rom-5) var(--rom-3) var(--rom-6);
+  background: var(--flate-hevet);
+  border-top: var(--kant) solid var(--linje);
+}
+
+.fagsok__hint {
+  flex: 1;
+  font-size: var(--tekst-meta);
+  color: var(--blekk-dempet);
+}
+
+/* --- Søkesiden ------------------------------------------------------------------ */
+
+/* Siden står øverst og ruller som en vanlig side, som stoffsidene. */
+.app[data-side='sok'] {
+  grid-template-columns: minmax(0, 1fr);
+  place-items: start center;
+}
+
+.scene--sokeside {
+  width: min(100%, 53.75rem);
+}
+
+.sokeside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-7);
+  padding-block: var(--rom-9);
+}
+
+.sokeside__hode {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.sokeside__overtittel {
+  margin: 0;
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-halvfet);
+  letter-spacing: var(--sperring-meta);
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.sokeside__sok {
+  margin: 0;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-sidetittel);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-titler);
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.sokeside__sok:focus {
+  outline: none;
+}
+
+.sokeside__antall,
+.sokeside__melding {
+  margin: 0;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-ingress);
+  font-style: italic;
+  color: var(--blekk-dempet);
+}
+
+.sokeside__filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+}
+
+.sokefilter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  height: var(--hoyde-liten);
+  padding: 0 var(--rom-2) 0 var(--rom-5);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+  line-height: 1;
+  color: var(--blekk);
+  background: transparent;
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve);
+}
+
+.sokefilter:hover:not(:disabled) {
+  border-color: var(--linje-sterk);
+}
+
+/* Valgt fane er invertert; `aria-pressed` sier det samme til skjermlesere. */
+.sokefilter[aria-pressed='true'] {
+  color: var(--flate);
+  background: var(--blekk);
+  border-color: var(--blekk);
+}
+
+.sokefilter:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.sokefilter__antall {
+  padding: var(--rom-1) var(--rom-2);
+  font-size: var(--tekst-merke);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.sokefilter[aria-pressed='true'] .sokefilter__antall {
+  color: inherit;
+  background: color-mix(in oklab, var(--flate) 22%, transparent);
+}
+
+.treffgruppe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.treffgruppe__navn {
+  display: flex;
+  align-items: baseline;
+  gap: var(--rom-3);
+  margin: 0;
+  padding-inline: var(--rom-1);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-style: italic;
+  font-weight: var(--vekt-normal);
+  color: var(--blekk-dempet);
+}
+
+.treffgruppe__antall {
+  margin-left: auto;
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-meta);
+  font-style: normal;
+  font-weight: var(--vekt-halvfet);
+}
+
+.treffgruppe__liste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.treffgruppe > .knapp {
+  align-self: flex-start;
+}
+
+.sokeresultat {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--rom-5);
+  padding: var(--rom-5) var(--rom-6);
+  color: inherit;
+  text-decoration: none;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort);
+  transition: border-color var(--fart-rask) var(--kurve);
+}
+
+.sokeresultat:hover {
+  border-color: var(--linje-sterk);
+}
+
+.sokeresultat__ikon {
+  width: calc(var(--ikon-ui) + var(--rom-6));
+  height: calc(var(--ikon-ui) + var(--rom-6));
+}
+
+.sokeresultat__tekst {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--rom-2);
+  min-width: 0;
+}
+
+.sokeresultat__sti {
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.sokeresultat__tittel {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-seksjon);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-titler);
+  overflow-wrap: anywhere;
+}
+
+.sokeresultat[data-gruppe='stoff'] .sokeresultat__tittel {
+  font-size: var(--tekst-tall);
+}
+
+.sokeresultat__utdrag {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  line-height: var(--linjehoyde-lesing);
+  color: var(--blekk-dempet);
+  overflow-wrap: anywhere;
+}
+
+.sokeresultat__utdrag .sokemerke {
+  color: var(--blekk);
+}
+
+.sokeresultat__pil {
+  display: grid;
+  flex: none;
+  place-items: center;
+  align-self: center;
+  width: calc(var(--ikon-ui) + var(--rom-3));
+  height: calc(var(--ikon-ui) + var(--rom-3));
+  font-size: var(--tekst-liten);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-pille);
+}
+
+/* --- Søket på siden --------------------------------------------------------------- */
+
+.sidesok {
+  position: relative;
+  flex: none;
+}
+
+.sidesok__felt {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  height: var(--hoyde-kontroll);
+  padding: 0 var(--rom-2) 0 var(--rom-4);
+  font-size: var(--ikon-ui);
+  background: transparent;
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-pille);
+  cursor: text;
+  transition: border-color var(--fart-rask) var(--kurve);
+}
+
+.sidesok__felt:focus-within {
+  border-color: var(--aksent);
+  outline: var(--fokusring) solid var(--fokus);
+  outline-offset: var(--fokusring);
+}
+
+/* Kompakt til det brukes: feltet vokser mens det har fokus eller et søk. */
+.sidesok__input {
+  width: 4.5rem;
+  min-width: 0;
+  font-size: var(--tekst-ui);
+  color: var(--blekk);
+  background: transparent;
+  border: 0;
+  outline: none;
+  transition: width var(--fart-glid) var(--kurve);
+}
+
+.sidesok:focus-within .sidesok__input,
+.sidesok[data-sok='ja'] .sidesok__input {
+  width: 10rem;
+}
+
+.sidesok__input::placeholder {
+  color: var(--blekk-dempet);
+}
+
+.sidesok__teller {
+  flex: none;
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk-dempet);
+}
+
+/* Antallet og stedene står under feltet mens det har fokus og et søk. */
+.sidesok__treff {
+  position: absolute;
+  top: calc(100% + var(--rom-5));
+  right: 0;
+  z-index: var(--lag-popover);
+  display: none;
+  flex-direction: column;
+  gap: var(--rom-3);
+  width: min(22rem, calc(100vw - 2 * var(--rom-side)));
+  padding: var(--rom-4);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-kort);
+  box-shadow: var(--skygge-modal);
+}
+
+.sidesok[data-sok='ja']:focus-within .sidesok__treff {
+  display: flex;
+}
+
+.sidesok__status {
+  margin: 0;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.sidesok__steder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sidesok__sted {
+  padding: var(--rom-1) var(--rom-3);
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+}
+
+.sidesok__sted:hover {
+  color: var(--blekk);
+}
+
+/* --- Smale flater ------------------------------------------------------------------- */
+@media (max-width: 47.5em) {
+  /* Rullegardinen tar hele bredden under toppmenyen. */
+  .fagsok__rullegardin {
+    position: fixed;
+    top: calc(var(--hoyde-toppmeny) + var(--rom-5));
+    right: var(--rom-3);
+    left: var(--rom-3);
+    max-height: calc(100dvh - var(--hoyde-toppmeny) - var(--dokk-offset) - var(--rom-5));
+  }
+
+  .fagsok__hint {
+    display: none;
+  }
+
+  .fagsok__bunn {
+    justify-content: flex-end;
+  }
+
+  /* I dokken: kompakt, og over hele dokken mens det brukes. Stedene står
+     over dokken. */
+  .toppmeny__kontekst .sidesok .hurtigtast {
+    display: none;
+  }
+
+  .toppmeny__kontekst .sidesok:focus-within {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--rom-2);
+    background: var(--flate);
+    border-radius: inherit;
+  }
+
+  .toppmeny__kontekst .sidesok:focus-within .sidesok__felt {
+    flex: 1;
+    height: var(--hoyde-trykk);
+  }
+
+  .toppmeny__kontekst .sidesok:focus-within .sidesok__input {
+    flex: 1;
+    width: auto;
+  }
+
+  .toppmeny__kontekst .sidesok__treff {
+    top: auto;
+    bottom: calc(100% + var(--rom-3));
+    left: 0;
+    width: auto;
+  }
+
+  .sokeside {
+    padding-block: var(--rom-7);
+  }
+
+  .sokeresultat {
+    padding: var(--rom-4);
+  }
+}
