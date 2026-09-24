@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.28.1',
+    dato: '2026-09-24',
+    sammendrag: 'Brukerlista kan rulles igjen',
+    typer: ['Design / layout'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'I brukerlista kan du nå rulle ned til alle brukerne. Før ble lista kuttet nederst når det var flere brukere enn det var plass til i vinduet.',
+    ],
+  },
+  {
     versjon: '1.28.0',
     dato: '2026-09-24',
     sammendrag: 'Siste gjennomgang av det nye utseendet, med «Åpne stoffside» i fortolkningen',

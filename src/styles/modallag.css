@@ -101,6 +101,14 @@
   padding: var(--rom-7);
 }
 
+/* Det er kroppen som ruller, ikke det som står i den. Uten dette krymper
+   flexboksen et barn med `overflow: hidden` (som kortet med brukerne) til det
+   får plass, og det som ikke får plass, blir klippet bort i stedet for å
+   kunne rulles fram. */
+.modallag__kropp > * {
+  flex-shrink: 0;
+}
+
 .modallag__kropp--tett {
   padding: var(--rom-3) var(--rom-5) var(--rom-6);
 }
