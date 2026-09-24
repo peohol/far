@@ -217,37 +217,6 @@
   object-fit: cover;
 }
 
-/* --- Kontoknappen i verktøylinja ----------------------------------------- */
-
-.kontoknapp {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--rom-3);
-  height: 2.9rem;
-  max-width: 12rem;
-  padding: 0 var(--rom-5) 0 0.35rem;
-  font-size: var(--tekst-s);
-  color: var(--blekk-dempet);
-  background: var(--flate);
-  border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-full);
-  cursor: pointer;
-  transition:
-    color var(--fart) var(--kurve),
-    border-color var(--fart) var(--kurve);
-}
-
-.kontoknapp:hover {
-  color: var(--blekk);
-  border-color: var(--linje-sterk);
-}
-
-.kontoknapp__navn {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 /* --- Modalt lag ---------------------------------------------------------- */
 
 .modallag__handlinger {

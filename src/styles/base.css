@@ -16,10 +16,11 @@ body,
   height: 100%;
 }
 
-/* Den faste toppmenyen ligger over innholdet. Ankere, scrollIntoView og
-   nettleserens søk skal legge det de viser fram under den, ikke bak den. */
-html {
-  scroll-padding-top: var(--toppmeny-offset);
+/* Den faste toppmenyen ligger over innholdet. Ankere og scrollIntoView skal
+   legge det de viser fram under den, ikke bak den. (Skuffene i
+   `seksjoner.css` gjør det samme for seg selv.) */
+.scene [id] {
+  scroll-margin-top: var(--toppmeny-offset);
 }
 
 body {

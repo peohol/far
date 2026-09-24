@@ -13,6 +13,8 @@ import './styles/tokens.css'
 import './styles/base.css'
 import './styles/components.css'
 import './styles/ikon.css'
+import './styles/handlinger.css'
+import './styles/toppmeny.css'
 import './styles/konto.css'
 import './styles/regler.css'
 
