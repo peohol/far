@@ -12,7 +12,8 @@ import { ELEMENTTYPER, lesLegemiddelkobling, type Legemiddelkoblingdata, type Pa
 import type { Tilleggstekst } from '../faginnhold/sok'
 import type { Interaksjonsoversikt } from './interaksjoner'
 import type { Legemiddelutvalg } from './lesing'
-import { egneVirkestoff, virkestoffI, type Preparatoversikt } from './preparater'
+import type { Preparatvisning } from './preparatmodell'
+import { egneVirkestoff, virkestoffI } from './preparater'
 import { interaksjonssted } from './referanser'
 
 /** Seksjonen koblingen og preparatene står i. */
@@ -21,17 +22,14 @@ export const PREPARATPANEL: Panelnokkel = 'preparater'
 /** Seksjonen interaksjonene står i. */
 export const INTERAKSJONSPANEL: Panelnokkel = 'interaksjoner'
 
-/** Detaljkortet for preparatene som krever godkjenningsfritak. */
-export const FRITAK = 'godkjenningsfritak'
-
-/** Detaljkortet for en legemiddelform, eller for fritakene. Nøkkelen står i direktelenker. */
-export function preparatkort(formId: string | null): string {
-  return formId === null ? FRITAK : `form-${formId}`
+/** Detaljkortet for en legemiddelform. Nøkkelen står i direktelenker. */
+export function preparatkort(formId: string): string {
+  return `form-${formId}`
 }
 
-/** Ankeret til preparatlisten i detaljkortet for en legemiddelform, eller for fritakene. */
-export function preparatsted(formId: string | null): string {
-  return `preparater-${formId ?? FRITAK}`
+/** Ankeret til styrkene i detaljkortet for en legemiddelform. */
+export function preparatsted(formId: string): string {
+  return `preparater-${formId}`
 }
 
 /** Koblingen siden har til legemiddeldataene, og elementet den står i. */
@@ -46,18 +44,18 @@ export function koblede(modell: Sidemodell): string[] {
   return finnKobling(modell).kobling.virkestoff.map((v) => v.fest_id)
 }
 
-/** Preparatnavnene, med detaljkortet og ankeret de står i. */
-export function preparattekster({ former, godkjenningsfritak }: Preparatoversikt): Tilleggstekst[] {
-  const grupper = [
-    ...former.map((f) => ({ form: f.id as string | null, tittel: f.form, preparater: f.preparater })),
-    { form: null, tittel: 'Krever godkjenningsfritak', preparater: godkjenningsfritak },
-  ]
-  return grupper.flatMap(({ form, tittel, preparater }) =>
-    [...new Set(preparater.map((p) => p.navn))].map(
+/**
+ * Preparatnavnene, én gang per legemiddelform, med detaljkortet de står i.
+ * Et navn står i styrkekortene i formen, også i de lukkede, så søket finner
+ * det der og åpner kortet.
+ */
+export function preparattekster({ former }: Preparatvisning): Tilleggstekst[] {
+  return former.flatMap((f) =>
+    [...new Set(f.styrker.flatMap((s) => s.preparater.map((p) => p.navn)))].map(
       (navn): Tilleggstekst => ({
         panel: PREPARATPANEL,
-        element: { id: preparatsted(form), tittel },
-        detaljkort: preparatkort(form),
+        element: { id: preparatsted(f.id), tittel: f.form },
+        detaljkort: preparatkort(f.id),
         felt: 'preparat',
         tekst: navn,
       }),

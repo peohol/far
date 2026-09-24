@@ -19,7 +19,7 @@
 .knapp {
   display: inline-flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   border: var(--kant-tykk) solid transparent;
   border-radius: var(--runding-full);
   cursor: pointer;
@@ -44,7 +44,7 @@
   color: var(--aksent-blekk);
   font-size: var(--tekst-m);
   font-weight: var(--vekt-medium);
-  padding: var(--rom-3) var(--rom-5);
+  padding: var(--rom-5) var(--rom-8);
   box-shadow: var(--skygge);
 }
 
@@ -56,7 +56,7 @@
   background: transparent;
   color: var(--blekk-dempet);
   font-size: var(--tekst-s);
-  padding: var(--rom-1) var(--rom-3);
+  padding: var(--rom-2) var(--rom-5);
   border-color: transparent;
 }
 
@@ -71,14 +71,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--rom-5);
+  gap: var(--rom-8);
   width: 100%;
 }
 
 .instruks {
   display: flex;
   align-items: center;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   font-size: var(--tekst-l);
   color: var(--blekk-dempet);
   transition:
@@ -102,7 +102,7 @@
 
 .sokefelt {
   width: min(100%, 46rem);
-  border-bottom: var(--kant-tykk) solid var(--linje-sterk);
+  border-bottom: var(--kant-tykk) solid var(--linje-kontroll);
   transition:
     opacity var(--fart) var(--kurve),
     border-color var(--fart) var(--kurve);
@@ -119,7 +119,7 @@
 
 .sokefelt__input {
   width: 100%;
-  padding: var(--rom-2) var(--rom-1);
+  padding: var(--rom-3) var(--rom-2);
   font-size: var(--tekst-xl);
   font-weight: var(--vekt-medium);
   text-align: center;
@@ -136,7 +136,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   margin: 0;
   width: 100%;
 }
@@ -144,9 +144,9 @@
 .alternativ {
   display: flex;
   align-items: center;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   height: 100%;
-  padding: var(--rom-3) var(--rom-4) var(--rom-3) var(--rom-3);
+  padding: var(--rom-5) var(--rom-7) var(--rom-5) var(--rom-5);
   text-align: left;
   background: var(--alt-soft);
   border: var(--kant-tykk) solid var(--alt-kant);
@@ -196,7 +196,7 @@
   line-height: 1;
   letter-spacing: 0.04em;
   padding: 0.35em 0.6em;
-  margin-bottom: var(--rom-1);
+  margin-bottom: var(--rom-2);
   color: var(--alt-ink);
   background: var(--alt-solid);
   border-radius: var(--runding-full);
@@ -229,44 +229,17 @@
 }
 
 
-/* --- Verktøylinje ------------------------------------------------------- */
+/* --- Verktøylinje ---------------------------------------------------------
+   Bare på innloggingssiden, der temaknappen står alene i hjørnet. Inne i
+   appen ligger den i toppmenyen. */
 
 .verktoylinje {
   position: fixed;
-  top: var(--rom-3);
-  right: var(--rom-3);
+  top: var(--rom-5);
+  right: var(--rom-5);
   z-index: 10;
   display: flex;
-  gap: var(--rom-2);
-}
-
-.verktoyknapp {
-  display: grid;
-  place-items: center;
-  width: 2.9rem;
-  height: 2.9rem;
-  font-size: 1.35rem;
-  color: var(--blekk-dempet);
-  background: var(--flate);
-  border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-full);
-  cursor: pointer;
-  transition:
-    color var(--fart) var(--kurve),
-    background-color var(--fart) var(--kurve),
-    border-color var(--fart) var(--kurve);
-}
-
-.verktoyknapp:hover {
-  color: var(--blekk);
-  border-color: var(--linje-sterk);
-}
-
-/* Påslått innstilling markeres med aksentfargen, ikke bare med tekst. */
-.verktoyknapp[aria-pressed='true'] {
-  color: var(--aksent);
-  background: var(--aksent-flate);
-  border-color: var(--aksent);
+  gap: var(--rom-3);
 }
 
 /* --- Kort og piller ----------------------------------------------------- */
@@ -274,15 +247,15 @@
 .kort {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   width: min(100%, 50rem);
-  padding: var(--rom-5);
+  padding: var(--rom-8);
   background: var(--flate);
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-l);
   box-shadow: var(--skygge);
   /* Litt luft mot vinduskanten når et kort rulles på plass. */
-  scroll-margin-block: var(--rom-4);
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
 }
 
 .kort--center {
@@ -299,7 +272,7 @@
   display: inline-flex;
   align-items: baseline;
   gap: 0.5ch;
-  padding: var(--rom-1) var(--rom-3);
+  padding: var(--rom-2) var(--rom-5);
   font-size: var(--tekst-s);
   line-height: 1.35;
   color: var(--blekk-dempet);
@@ -357,7 +330,7 @@
    menyknappen ikke kan komme i utakt. Pillen er mindre enn analyttkoden under:
    den sier hvor analytten hører hjemme, ikke hva som skal kommenteres. */
 .pille--metode {
-  padding: 0.15rem var(--rom-2);
+  padding: 0.15rem var(--rom-3);
   font-size: var(--tekst-xs);
   color: var(--alt-ink);
   background: var(--alt-solid);
@@ -399,7 +372,7 @@
 /* --- Steg 2: analytt og konsentrasjonsbånd ------------------------------ */
 
 .analyttkort {
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .analytt__navn {
@@ -412,8 +385,8 @@
 .analytt__grenser {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--rom-2);
-  margin-top: var(--rom-1);
+  gap: var(--rom-3);
+  margin-top: var(--rom-2);
 }
 
 .bandkort__merke {
@@ -581,7 +554,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   text-align: center;
   font-size: var(--tekst-s);
   color: var(--blekk-dempet);
@@ -613,7 +586,7 @@
 }
 
 .kontrollkort {
-  gap: var(--rom-4);
+  gap: var(--rom-7);
 }
 
 .kontrollkort__sporsmal {
@@ -643,7 +616,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   width: 100%;
 }
 
@@ -672,13 +645,13 @@
 }
 
 .limInn {
-  gap: var(--rom-4);
+  gap: var(--rom-7);
 }
 
 .limInn__instruks {
   display: flex;
   align-items: center;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   font-size: var(--tekst-l);
   color: var(--blekk-dempet);
 }
@@ -700,8 +673,8 @@
 .ringvarsel {
   display: flex;
   align-items: center;
-  gap: var(--rom-2);
-  padding: var(--rom-2) var(--rom-4);
+  gap: var(--rom-3);
+  padding: var(--rom-3) var(--rom-7);
   font-size: var(--tekst-m);
   font-weight: var(--vekt-tung);
   color: var(--niva-over-blekk);
@@ -740,7 +713,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
 }
 
 /* --- Kvittering for kopieringen ----------------------------------------- */
@@ -753,8 +726,8 @@
   z-index: 30;
   display: flex;
   align-items: center;
-  gap: var(--rom-2);
-  padding: var(--rom-2) var(--rom-4);
+  gap: var(--rom-3);
+  padding: var(--rom-3) var(--rom-7);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-medium);
   white-space: nowrap;
@@ -811,7 +784,7 @@
 .tipsanker {
   display: inline-flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   cursor: help;
 }
 
@@ -869,13 +842,13 @@
 .tipsboble__innhold {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
-  gap: var(--rom-3) var(--rom-4);
+  gap: var(--rom-5) var(--rom-7);
   /* Målingen setter maksmålene til den faktiske vinduskanten. Reservene
      gjelder bare den aller første, usynlige rendringen. Høyden er grunnen til
      at en lang forklaring aldri stikker ut under vinduet. */
   max-width: min(44rem, var(--tips-maks-bredde, calc(100vw - 2.5rem)));
   max-height: var(--tips-maks-hoyde, calc(100dvh - 2.5rem));
-  padding: var(--rom-3) var(--rom-4);
+  padding: var(--rom-5) var(--rom-7);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-normal);
   line-height: 1.5;
@@ -964,7 +937,7 @@
 .tipsboble__bolk {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   font-size: var(--tekst-xs);
 }
 
@@ -985,7 +958,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--rom-5);
+  gap: var(--rom-8);
   width: 100%;
 }
 
@@ -994,7 +967,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   width: 100%;
 }
 
@@ -1013,7 +986,7 @@
   display: flex;
   align-items: center;
   gap: 0.6ch;
-  padding: var(--rom-2) var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-medium);
   white-space: nowrap;
@@ -1039,22 +1012,22 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .thc-skjema {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   width: 100%;
-  margin-top: var(--rom-2);
+  margin-top: var(--rom-3);
 }
 
 .avkryssing {
   display: inline-flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   font-size: var(--tekst-m);
   font-weight: var(--vekt-medium);
   cursor: pointer;
@@ -1079,7 +1052,7 @@
 .thc-prover {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   width: 100%;
 }
 
@@ -1087,16 +1060,16 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   min-inline-size: 0;
   margin: 0;
-  padding: var(--rom-3) var(--rom-4) var(--rom-4);
+  padding: var(--rom-5) var(--rom-7) var(--rom-7);
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-m);
 }
 
 .thc-prove legend {
-  padding: 0 var(--rom-1);
+  padding: 0 var(--rom-2);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-medium);
   letter-spacing: 0.06em;
@@ -1108,7 +1081,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   width: 100%;
 }
 
@@ -1121,7 +1094,7 @@
 .thc-input {
   width: 100%;
   max-width: 14rem;
-  padding: var(--rom-2) var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   font-variant-numeric: tabular-nums;
   color: var(--blekk);
   background: var(--flate-hevet);
@@ -1153,8 +1126,8 @@
    varselfargene med en tykk kant mot teksten. */
 .thc-banner {
   width: 100%;
-  margin-bottom: var(--rom-2);
-  padding: var(--rom-2) var(--rom-3);
+  margin-bottom: var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-medium);
   line-height: 1.5;
@@ -1171,7 +1144,7 @@
 .thc-margin {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   width: 100%;
 }
 
@@ -1237,7 +1210,7 @@
 .thc-mangler {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   text-align: left;
 }
 
@@ -1266,7 +1239,7 @@
    teksten som limes rett inn i pasientsvaret. Markerbar, i tilfelle man vil
    ta et utdrag. */
 .thc-kommentar {
-  padding-left: var(--rom-3);
+  padding-left: var(--rom-5);
   border-left: var(--kant-tykk) solid var(--linje-sterk);
   font-size: var(--tekst-m);
   font-style: italic;
@@ -1277,7 +1250,7 @@
 }
 
 .thc-notis {
-  padding: var(--rom-2) var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   font-size: var(--tekst-s);
   text-align: left;
   text-wrap: pretty;
@@ -1295,7 +1268,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .thc-handling {
@@ -1303,9 +1276,9 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   width: 100%;
-  margin-top: var(--rom-2);
+  margin-top: var(--rom-3);
 }
 
 /* Kopier-knappen skal kunne stå avslått uten å friste: dempet, uten skygge. */
@@ -1386,7 +1359,7 @@
 .thc-legende {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--rom-2) var(--rom-4);
+  gap: var(--rom-3) var(--rom-7);
   width: 100%;
 }
 
@@ -1419,8 +1392,8 @@
 .thc-forklaring {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-4);
-  padding-top: var(--rom-2);
+  gap: var(--rom-7);
+  padding-top: var(--rom-3);
   font-size: var(--tekst-s);
   line-height: 1.6;
   text-align: left;
@@ -1430,7 +1403,7 @@
 .thc-forklaring__bolk {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 /* Brødteksten rykkes inn under overskriften sin, så det synes hva som hører
@@ -1438,8 +1411,8 @@
 .thc-forklaring__kropp {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
-  padding-left: var(--rom-3);
+  gap: var(--rom-5);
+  padding-left: var(--rom-5);
 }
 
 .thc-forklaring__tittel {
@@ -1456,7 +1429,7 @@
 .thc-forklaring ul {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   padding-left: 1.4em;
   list-style: disc;
 }
@@ -1470,7 +1443,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--rom-5);
+  gap: var(--rom-8);
   width: 100%;
 }
 
@@ -1478,7 +1451,7 @@
 .modul-koder {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 /* Navnene bak forkortelsene, der modulen er kjent på forkortelsene sine. */
@@ -1494,16 +1467,16 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   width: 100%;
-  margin: var(--rom-2) 0 0;
-  padding: var(--rom-3) var(--rom-4) var(--rom-4);
+  margin: var(--rom-3) 0 0;
+  padding: var(--rom-5) var(--rom-7) var(--rom-7);
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-m);
 }
 
 .modul-valg legend {
-  padding: 0 var(--rom-1);
+  padding: 0 var(--rom-2);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-medium);
   letter-spacing: 0.06em;
@@ -1522,7 +1495,7 @@
 }
 
 .modul-resultat {
-  gap: var(--rom-4);
+  gap: var(--rom-7);
 }
 
 /* Kommentarene i den rekkefølgen de skal limes inn. Nummereringen fra <ol>
@@ -1531,7 +1504,7 @@
 .plasseringer {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-4);
+  gap: var(--rom-7);
   margin: 0;
   padding: 0;
   width: 100%;
@@ -1543,8 +1516,8 @@
 .plassering {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
-  padding: var(--rom-4);
+  gap: var(--rom-3);
+  padding: var(--rom-7);
   text-align: left;
   background: var(--flate-hevet);
   border-radius: var(--runding-m);
@@ -1566,7 +1539,7 @@
 .plassering__instruks {
   display: flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   font-size: var(--tekst-s);
   color: var(--blekk-dempet);
 }
@@ -1591,9 +1564,9 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   width: 100%;
-  margin-top: var(--rom-1);
+  margin-top: var(--rom-2);
 }
 
 /* Kvitteringen blir stående etter at blinket er borte, så det går fram hva
@@ -1601,7 +1574,7 @@
 .kopiert {
   display: flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   margin-right: auto;
   font-size: var(--tekst-s);
   font-weight: var(--vekt-medium);
@@ -1628,7 +1601,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
   align-items: end;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   width: 100%;
 }
 
@@ -1636,7 +1609,7 @@
    kopiere, og beskjeden om hvorfor er hele innholdet i kortet — den bærer
    derfor samme skriftstørrelse som en kommentar ville hatt. */
 .rus-plenum {
-  padding: var(--rom-3) var(--rom-4);
+  padding: var(--rom-5) var(--rom-7);
   font-size: var(--tekst-m);
   line-height: 1.55;
   text-align: left;
@@ -1673,8 +1646,8 @@
    uten å måtte rulles fram — det skal gå fram med én gang at det er to koder
    å lime inn på. Koden er fortsatt det største i kortet. */
 .limstabel--flere .limInn {
-  gap: var(--rom-3);
-  padding: var(--rom-4);
+  gap: var(--rom-5);
+  padding: var(--rom-7);
 }
 
 .limstabel--flere .limInn__instruks {
@@ -1694,13 +1667,13 @@
   width: 100%;
   text-align: left;
   /* Luft over overskriften når en åpnet seksjon legges øverst i vinduet. */
-  scroll-margin-top: var(--rom-4);
+  scroll-margin-top: var(--toppmeny-offset);
 }
 
 .detalj__tittel {
   display: inline-flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-medium);
   letter-spacing: 0.06em;
@@ -1751,15 +1724,15 @@ details[open] > .detalj__kropp {
   position: relative;
   overflow: hidden;
   min-height: 0;
-  padding-left: var(--rom-4);
+  padding-left: var(--rom-7);
 }
 
 .detalj__inner::before {
   content: '';
   position: absolute;
   left: 0;
-  top: var(--rom-2);
-  bottom: var(--rom-2);
+  top: var(--rom-3);
+  bottom: var(--rom-3);
   width: var(--kant-tykk);
   background: var(--linje);
   border-radius: var(--runding-full);
@@ -1771,9 +1744,9 @@ details[open] > .detalj__kropp {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   width: min(100%, 40rem);
-  padding: var(--rom-3);
+  padding: var(--rom-5);
   text-align: left;
   background: var(--niva-over-flate);
   border: var(--kant-tykk) solid var(--niva-over-linje);
@@ -1788,7 +1761,7 @@ details[open] > .detalj__kropp {
 
 .manuellKopi__tekst {
   width: 100%;
-  padding: var(--rom-2);
+  padding: var(--rom-3);
   font-family: var(--skrift);
   font-size: var(--tekst-s);
   line-height: 1.5;
@@ -1806,10 +1779,10 @@ details[open] > .detalj__kropp {
 
 .versjonspille {
   position: fixed;
-  right: var(--rom-3);
-  bottom: var(--rom-3);
+  right: var(--rom-5);
+  bottom: var(--rom-5);
   z-index: 10;
-  padding: 0.2rem var(--rom-2);
+  padding: 0.2rem var(--rom-3);
   font-family: var(--skrift-mono);
   font-size: var(--tekst-xxs);
   letter-spacing: 0.06em;
@@ -1839,7 +1812,7 @@ details[open] > .detalj__kropp {
   height: 100%;
   max-height: none;
   margin: 0;
-  padding: var(--rom-4);
+  padding: var(--rom-7);
   background: transparent;
   border: none;
 }
@@ -1877,8 +1850,8 @@ details[open] > .detalj__kropp {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--rom-3);
-  padding: var(--rom-4) var(--rom-4) var(--rom-3);
+  gap: var(--rom-5);
+  padding: var(--rom-7) var(--rom-7) var(--rom-5);
   border-bottom: var(--kant) solid var(--linje);
 }
 
@@ -1914,7 +1887,7 @@ details[open] > .detalj__kropp {
 
 .logg__liste {
   overflow-y: auto;
-  padding: var(--rom-2);
+  padding: var(--rom-3);
 }
 
 /* --- Én føring ----------------------------------------------------------- */
@@ -1928,9 +1901,9 @@ details[open] > .detalj__kropp {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   width: 100%;
-  padding: var(--rom-3) var(--rom-5) var(--rom-3) var(--rom-3);
+  padding: var(--rom-5) var(--rom-8) var(--rom-5) var(--rom-5);
   text-align: left;
   background: transparent;
   border: none;
@@ -1947,8 +1920,8 @@ details[open] > .detalj__kropp {
 .loggskuff__tittel::after {
   content: '';
   position: absolute;
-  right: var(--rom-3);
-  top: var(--rom-4);
+  right: var(--rom-5);
+  top: var(--rom-7);
   width: 0.42em;
   height: 0.42em;
   border-right: var(--kant-tykk) solid var(--blekk-dempet);
@@ -1978,12 +1951,12 @@ details[open] > .detalj__kropp {
 .loggskuff__merker {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--rom-1);
-  margin-top: var(--rom-1);
+  gap: var(--rom-2);
+  margin-top: var(--rom-2);
 }
 
 .loggmerke {
-  padding: 0.1rem var(--rom-2);
+  padding: 0.1rem var(--rom-3);
   font-size: var(--tekst-xxs);
   font-weight: var(--vekt-medium);
   line-height: 1.5;
@@ -2043,8 +2016,8 @@ details[open] > .detalj__kropp {
 .loggskuff__punkter {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
-  padding: var(--rom-1) var(--rom-3) var(--rom-4) var(--rom-4);
+  gap: var(--rom-3);
+  padding: var(--rom-2) var(--rom-5) var(--rom-7) var(--rom-7);
   font-size: var(--tekst-s);
   line-height: 1.55;
   color: var(--blekk-dempet);
@@ -2052,7 +2025,7 @@ details[open] > .detalj__kropp {
 
 .loggskuff__punkter li {
   position: relative;
-  padding-left: var(--rom-3);
+  padding-left: var(--rom-5);
 }
 
 .loggskuff__punkter li::before {
@@ -2083,72 +2056,14 @@ details[open] > .detalj__kropp {
 }
 
 /* --- Sidemenyen ----------------------------------------------------------
-   Oversikten over analysemetodene, og filteret for søket. Menyknappen ligger
-   fast i motsatt hjørne av verktøylinja og bytter mellom ≡ og ×.
+   Oversikten over analysemetodene, og filteret for søket. Menyknappen står
+   først i toppmenyen (se `toppmeny.css`).
 
-   Menyen er tre lag: knappen øverst, panelet under den, og et lag mellom
-   panelet og appen som mørklegger og slører innholdet bak. Mørkleggingen
-   ligger som sitt eget lag i stedet for som et filter på appen, fordi et
-   filter ville gjort verktøylinja og versjonspilla om til noe de flyter i
-   stedet for å ligge fast i vinduet. */
-
-/* Knappen ligger under panelet i stapelen: når menyen åpnes, blir den liggende
-   skjult bak den til menyen lukkes igjen. Lukkeknappen er menyens egen. */
-.menyknapp {
-  position: fixed;
-  top: var(--rom-3);
-  left: var(--rom-3);
-  z-index: 45;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--rom-2);
-  min-width: 2.9rem;
-  height: 2.9rem;
-  padding: 0 0.75rem;
-  font-size: 1.35rem;
-  color: var(--blekk-dempet);
-  background: var(--flate);
-  border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-full);
-  cursor: pointer;
-  transition:
-    color var(--fart) var(--kurve),
-    background-color var(--fart) var(--kurve),
-    border-color var(--fart) var(--kurve);
-}
-
-.menyknapp:hover {
-  color: var(--blekk);
-  border-color: var(--linje-sterk);
-}
-
-/* Et filter som står på, begrenser hva søket kan finne. Da utvider knappen seg
-   til en pille med metodekoden, i metodens egen farge, så det går fram av
-   hjørnet alene hva søket er begrenset til. */
-.menyknapp[data-filter='ja'] {
-  color: var(--alt-ink);
-  background: var(--alt-solid);
-  border-color: var(--alt-solid);
-}
-
-.menyknapp[data-filter='ja']:hover {
-  color: var(--alt-ink);
-  border-color: var(--alt-ink);
-}
-
-.menyknapp__filter {
-  font-family: var(--skrift-mono);
-  font-size: var(--tekst-xs);
-  font-weight: var(--vekt-tung);
-  letter-spacing: 0.1em;
-  line-height: 1;
-}
-
-/* Hurtigtastmerket står i knappens egen skriftstørrelse og ikke i ikonets. */
-.menyknapp .hurtigtast {
-  font-size: var(--tekst-xxs);
-}
+   Menyen er tre lag: knappen, panelet over den, og et lag mellom panelet og
+   appen som mørklegger og slører innholdet bak. Mørkleggingen ligger som sitt
+   eget lag i stedet for som et filter på appen, fordi et filter ville gjort
+   toppmenyen og versjonspilla om til noe de flyter i stedet for å ligge fast
+   i vinduet. */
 
 .menylag {
   position: fixed;
@@ -2216,9 +2131,9 @@ details[open] > .detalj__kropp {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   min-height: 3.9rem;
-  padding: var(--rom-3);
+  padding: var(--rom-5);
   border-bottom: var(--kant) solid var(--linje);
 }
 
@@ -2258,9 +2173,9 @@ details[open] > .detalj__kropp {
   flex: none;
   display: flex;
   align-items: center;
-  gap: var(--rom-2);
-  margin: var(--rom-3) var(--rom-2) 0;
-  padding: var(--rom-2) var(--rom-3);
+  gap: var(--rom-3);
+  margin: var(--rom-5) var(--rom-3) 0;
+  padding: var(--rom-3) var(--rom-5);
   font-size: var(--tekst-s);
   font-weight: var(--vekt-medium);
   color: var(--blekk-dempet);
@@ -2281,24 +2196,24 @@ details[open] > .detalj__kropp {
   flex-direction: column;
   flex: 1;
   min-height: 0;
-  padding: 0 var(--rom-2) var(--rom-2);
+  padding: 0 var(--rom-3) var(--rom-3);
 }
 
 .menyliste {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   margin: 0;
   overflow-y: auto;
-  padding-bottom: var(--rom-2);
+  padding-bottom: var(--rom-3);
 }
 
 .menyvalg {
   display: flex;
   align-items: center;
-  gap: var(--rom-2);
-  padding: var(--rom-2) var(--rom-3);
+  gap: var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   font-size: var(--tekst-s);
   color: var(--blekk);
   cursor: pointer;
@@ -2324,10 +2239,10 @@ details[open] > .detalj__kropp {
   flex: none;
   justify-content: space-between;
   /* Strammere enn radene under, så teksten og merket får plass på én linje. */
-  gap: var(--rom-1);
-  padding-inline: var(--rom-2);
-  margin-bottom: var(--rom-2);
-  padding-bottom: var(--rom-3);
+  gap: var(--rom-2);
+  padding-inline: var(--rom-3);
+  margin-bottom: var(--rom-3);
+  padding-bottom: var(--rom-5);
   border-bottom: var(--kant) solid var(--linje);
 }
 
@@ -2335,7 +2250,7 @@ details[open] > .detalj__kropp {
    som åpner skuffen, og de to kan ikke ligge inni hverandre. */
 .menyvalg--skuff {
   flex: none;
-  padding: var(--rom-3) var(--rom-1) var(--rom-3) var(--rom-3);
+  padding: var(--rom-5) var(--rom-2) var(--rom-5) var(--rom-5);
 }
 
 /* --- Én analysemetode ---------------------------------------------------
@@ -2368,7 +2283,7 @@ details[open] > .detalj__kropp {
   align-items: flex-start;
   gap: 0.15rem;
   min-width: 0;
-  padding: var(--rom-2) var(--rom-5) var(--rom-2) var(--rom-1);
+  padding: var(--rom-3) var(--rom-8) var(--rom-3) var(--rom-2);
   text-align: left;
   background: transparent;
   border: none;
@@ -2386,7 +2301,7 @@ details[open] > .detalj__kropp {
 .menyskuff__tittel::after {
   content: '';
   position: absolute;
-  right: var(--rom-3);
+  right: var(--rom-5);
   top: calc(50% - 0.3em);
   width: 0.4em;
   height: 0.4em;
@@ -2404,7 +2319,7 @@ details[open] > .detalj__kropp {
 .menyskuff__merking {
   display: flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 /* Metodekoden bærer skuffens farge, på samme måte som koden i et
@@ -2452,11 +2367,11 @@ details[open] > .detalj__kropp {
 }
 
 .menykategori + .menykategori {
-  margin-top: var(--rom-2);
+  margin-top: var(--rom-3);
 }
 
 .menykategori__navn {
-  padding: var(--rom-2) var(--rom-3) var(--rom-1);
+  padding: var(--rom-3) var(--rom-5) var(--rom-2);
   font-size: var(--tekst-xxs);
   font-weight: var(--vekt-medium);
   letter-spacing: 0.08em;
@@ -2468,16 +2383,16 @@ details[open] > .detalj__kropp {
   display: flex;
   flex-direction: column;
   margin: 0;
-  padding: 0 var(--rom-2) var(--rom-2);
+  padding: 0 var(--rom-3) var(--rom-3);
 }
 
 .menyanalytt {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   width: 100%;
-  padding: var(--rom-1) var(--rom-2);
+  padding: var(--rom-2) var(--rom-3);
   text-align: left;
   background: transparent;
   border: none;
@@ -2529,7 +2444,7 @@ details[open] > .detalj__kropp {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   font-size: var(--tekst-s);
   color: var(--blekk-dempet);
 }
@@ -2579,7 +2494,7 @@ details[open] > .detalj__kropp {
   flex-direction: column;
   align-items: stretch;
   gap: 0.15rem;
-  padding: var(--rom-2);
+  padding: var(--rom-3);
   /* Får menyen ikke plass verken over eller under pillen, ruller den innenfor
      taket målingen setter i stedet for å strekke seg utenfor vinduet. */
   overflow-y: auto;
@@ -2591,19 +2506,19 @@ details[open] > .detalj__kropp {
 }
 
 .filterbytte[data-retning='ned'] .filterbytte__meny {
-  top: calc(100% + var(--rom-2));
+  top: calc(100% + var(--rom-3));
 }
 
 .filterbytte[data-retning='opp'] .filterbytte__meny {
-  bottom: calc(100% + var(--rom-2));
+  bottom: calc(100% + var(--rom-3));
 }
 
 .filterbytte__valg {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--rom-4);
-  padding: 0.15rem var(--rom-2);
+  gap: var(--rom-7);
+  padding: 0.15rem var(--rom-3);
   background: transparent;
   border: var(--kant-tykk) solid transparent;
   border-radius: var(--runding-s);
@@ -2627,9 +2542,9 @@ details[open] > .detalj__kropp {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--rom-4);
-  padding: var(--rom-2) var(--rom-2) var(--rom-1);
-  margin-top: var(--rom-1);
+  gap: var(--rom-7);
+  padding: var(--rom-3) var(--rom-3) var(--rom-2);
+  margin-top: var(--rom-2);
   font-size: var(--tekst-s);
   text-align: left;
   color: var(--blekk-dempet);
@@ -2668,7 +2583,7 @@ details[open] > .detalj__kropp {
    den store, men på størrelse med de dempede knappene ved siden av. */
 .knapp--primary.knapp--kompakt {
   font-size: var(--tekst-s);
-  padding: var(--rom-1) var(--rom-4);
+  padding: var(--rom-2) var(--rom-7);
 }
 
 .knapp:disabled {
@@ -2694,19 +2609,13 @@ details[open] > .detalj__kropp {
 .analyttside {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-4);
-}
-
-.analyttside .stegbar {
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: var(--rom-2);
+  gap: var(--rom-7);
 }
 
 .analyttside__paneler {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-4);
+  gap: var(--rom-7);
 }
 
 .analyttside__paneler[aria-busy='true'] {
@@ -2727,14 +2636,14 @@ details[open] > .detalj__kropp {
 
 /* Panel 1: identiteten. */
 .identitet {
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .identitet__piller {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .identitet__navn {
@@ -2762,7 +2671,7 @@ details[open] > .detalj__kropp {
 
 /* Panelene. Overskriften er liten og rolig; innholdet er det som skal leses. */
 .infopanel {
-  gap: var(--rom-3);
+  gap: var(--rom-5);
 }
 
 .infopanel__hode {
@@ -2770,7 +2679,7 @@ details[open] > .detalj__kropp {
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   width: 100%;
 }
 
@@ -2785,7 +2694,7 @@ details[open] > .detalj__kropp {
 .datakort {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   width: 100%;
   margin: 0;
 }
@@ -2794,12 +2703,12 @@ details[open] > .detalj__kropp {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--rom-1);
-  padding: var(--rom-3);
+  gap: var(--rom-2);
+  padding: var(--rom-5);
   text-align: center;
   background: var(--flate-hevet);
   border-radius: var(--runding-m);
-  scroll-margin-block: var(--rom-4);
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
 }
 
 .datakort__tittel {
@@ -2834,7 +2743,7 @@ details[open] > .detalj__kropp {
 .riktekst {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   font-size: var(--tekst-s);
   line-height: 1.6;
   text-align: left;
@@ -2844,7 +2753,7 @@ details[open] > .detalj__kropp {
 .riktekst ol {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   padding-left: 1.4em;
 }
 
@@ -2863,14 +2772,14 @@ details[open] > .detalj__kropp {
 .infotekst,
 .dosetabell {
   width: 100%;
-  scroll-margin-block: var(--rom-4);
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
 }
 
 /* Panel 6: kortene i farmakokinetikken. */
 .infokort {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   width: 100%;
   margin: 0;
 }
@@ -2880,63 +2789,11 @@ details[open] > .detalj__kropp {
 .infokort__innhold {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
-  width: 100%;
-  scroll-margin-block: var(--rom-4);
-}
-
-/* Seksjonen «Preparater»: legemiddelformene som detaljkort, preparatene i dem. */
-.preparater {
-  display: flex;
-  flex-direction: column;
   gap: var(--rom-3);
   width: 100%;
-  scroll-margin-block: var(--rom-4);
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
 }
 
-.preparatformer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-3);
-  margin: 0;
-}
-
-.preparatliste {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-3);
-  margin: 0;
-  scroll-margin-block: var(--rom-4);
-}
-
-.preparat__navn {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--rom-1) var(--rom-2);
-  margin: 0;
-  font-weight: var(--vekt-medium);
-  color: var(--blekk-sterk);
-}
-
-.preparat__form {
-  font-weight: normal;
-  color: var(--blekk-dempet);
-}
-
-.preparat__merke {
-  padding: 0.1rem var(--rom-2);
-  font-size: var(--tekst-xs);
-  font-weight: normal;
-  color: var(--blekk-dempet);
-  background: var(--flate-hevet);
-  border-radius: var(--runding-full);
-}
-
-.preparat__salt,
-.preparater__forklaring,
-.preparater__kobling,
-.preparater__melding,
 .interaksjoner__merknad {
   margin: 0;
   font-size: var(--tekst-s);
@@ -2945,42 +2802,6 @@ details[open] > .detalj__kropp {
 
 .interaksjoner__merknad {
   font-size: var(--tekst-xs);
-}
-
-.preparat__styrker {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  margin: var(--rom-1) 0 0;
-  font-size: var(--tekst-s);
-}
-
-.preparat__styrker > li {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--rom-2);
-}
-
-.preparat__styrke {
-  min-width: 6rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.preparat__pakninger {
-  color: var(--blekk-dempet);
-}
-
-.preparat__handtering {
-  color: var(--blekk-dempet);
-}
-
-.preparat__detaljer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--rom-2);
-  margin: 0;
-  font-size: var(--tekst-s);
-  color: var(--blekk-dempet);
 }
 
 /* Seksjonen «Interaksjoner»: én interaksjon per detaljkort. Fargen følger
@@ -2989,28 +2810,28 @@ details[open] > .detalj__kropp {
 .interaksjoner {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   width: 100%;
 }
 
 .interaksjonsliste {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   margin: 0;
 }
 
 .interaksjon {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
-  scroll-margin-block: var(--rom-4);
+  gap: var(--rom-3);
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
 }
 
 .interaksjon__relevans {
   align-self: flex-start;
   margin: 0;
-  padding: 0.1rem var(--rom-2);
+  padding: 0.1rem var(--rom-3);
   font-size: var(--tekst-xs);
   font-weight: var(--vekt-medium);
   border-radius: var(--runding-full);
@@ -3029,7 +2850,7 @@ details[open] > .detalj__kropp {
 .interaksjon__situasjon,
 .interaksjoner__ikke-vurdert {
   margin: 0;
-  padding: var(--rom-2) var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   font-size: var(--tekst-s);
   color: var(--varsel-blekk);
   background: var(--varsel-flate);
@@ -3040,7 +2861,7 @@ details[open] > .detalj__kropp {
 .interaksjon__felter {
   display: grid;
   grid-template-columns: minmax(7rem, max-content) 1fr;
-  gap: var(--rom-1) var(--rom-3);
+  gap: var(--rom-2) var(--rom-5);
   margin: 0;
   font-size: var(--tekst-s);
 }
@@ -3055,7 +2876,7 @@ details[open] > .detalj__kropp {
 }
 
 .interaksjon__felter dd > p {
-  margin: 0 0 var(--rom-1);
+  margin: 0 0 var(--rom-2);
 }
 
 .interaksjon__felter dd > p:last-child {
@@ -3073,7 +2894,7 @@ details[open] > .detalj__kropp {
   }
 
   .interaksjon__felter dd {
-    margin-block-end: var(--rom-2);
+    margin-block-end: var(--rom-3);
   }
 }
 
@@ -3081,7 +2902,7 @@ details[open] > .detalj__kropp {
 .kobling {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .kobling__merke {
@@ -3094,7 +2915,7 @@ details[open] > .detalj__kropp {
 .kobling__treff {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   margin: 0;
 }
 
@@ -3103,7 +2924,7 @@ details[open] > .detalj__kropp {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--rom-1) var(--rom-3);
+  gap: var(--rom-2) var(--rom-5);
   font-size: var(--tekst-s);
 }
 
@@ -3139,7 +2960,7 @@ details[open] > .detalj__kropp {
 
 .dosetabell__tabell th,
 .dosetabell__tabell td {
-  padding: var(--rom-1) var(--rom-2);
+  padding: var(--rom-2) var(--rom-3);
   border-bottom: var(--kant) solid var(--linje);
   vertical-align: top;
 }
@@ -3155,15 +2976,15 @@ details[open] > .detalj__kropp {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--rom-2) var(--rom-3);
+  gap: var(--rom-3) var(--rom-5);
 }
 
 .sidesok__felt {
   display: flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   flex: 1 1 18rem;
-  padding: var(--rom-1) var(--rom-3);
+  padding: var(--rom-2) var(--rom-5);
   background: var(--flate);
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-full);
@@ -3176,7 +2997,7 @@ details[open] > .detalj__kropp {
 .sidesok__input {
   flex: 1;
   min-width: 0;
-  padding: var(--rom-1) 0;
+  padding: var(--rom-2) 0;
   font-size: var(--tekst-s);
   background: transparent;
   border: 0;
@@ -3194,13 +3015,13 @@ details[open] > .detalj__kropp {
 .sidesok__steder {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   width: 100%;
   margin: 0;
 }
 
 .sidesok__sted {
-  padding: 0.15rem var(--rom-2);
+  padding: 0.15rem var(--rom-3);
   font-size: var(--tekst-xs);
   color: var(--blekk-dempet);
   background: var(--flate-hevet);
@@ -3232,8 +3053,8 @@ details[open] > .detalj__kropp {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--rom-2);
-  padding: var(--rom-3) var(--rom-4);
+  gap: var(--rom-3);
+  padding: var(--rom-5) var(--rom-7);
   font-size: var(--tekst-s);
   border-radius: var(--runding-m);
 }
@@ -3258,7 +3079,7 @@ details[open] > .detalj__kropp {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--rom-1) var(--rom-2);
+  gap: var(--rom-2) var(--rom-3);
 }
 
 .redigeringsknapp {
@@ -3273,9 +3094,9 @@ details[open] > .detalj__kropp {
 .redigering {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   width: 100%;
-  padding: var(--rom-3);
+  padding: var(--rom-5);
   text-align: left;
   background: var(--flate-bunn);
   border: var(--kant) solid var(--linje);
@@ -3294,7 +3115,7 @@ details[open] > .detalj__kropp {
 .feltrad {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .felt__inndata--flerlinje {
@@ -3306,8 +3127,8 @@ details[open] > .detalj__kropp {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--rom-2);
-  padding: var(--rom-2) var(--rom-3);
+  gap: var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-s);
 }
@@ -3325,15 +3146,15 @@ details[open] > .detalj__kropp {
 .referansevelger {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   min-width: 0;
-  padding: var(--rom-2) var(--rom-3) var(--rom-3);
+  padding: var(--rom-3) var(--rom-5) var(--rom-5);
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-s);
 }
 
 .referansevelger__tittel {
-  padding: 0 var(--rom-1);
+  padding: 0 var(--rom-2);
   font-size: var(--tekst-xs);
   font-weight: var(--vekt-medium);
   color: var(--blekk-dempet);
@@ -3342,7 +3163,7 @@ details[open] > .detalj__kropp {
 .referansevelger__valgte {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   padding-left: 1.4em;
   font-size: var(--tekst-xs);
   list-style: decimal;
@@ -3353,12 +3174,12 @@ details[open] > .detalj__kropp {
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
 }
 
 .referansevelger__handlinger {
   display: flex;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
 }
 
 .referansevelger__tom {
@@ -3375,7 +3196,7 @@ details[open] > .detalj__kropp {
 
 .referansevelger__forslagsknapp {
   width: 100%;
-  padding: var(--rom-1) var(--rom-2);
+  padding: var(--rom-2) var(--rom-3);
   font-size: var(--tekst-xs);
   text-align: left;
   background: var(--flate);
@@ -3391,14 +3212,14 @@ details[open] > .detalj__kropp {
 .nyreferanse {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 /* Rikteksteditoren. Verktøyraden har bare det formateringen tillater. */
 .rikteksteditor {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .verktoyrad,
@@ -3410,7 +3231,7 @@ details[open] > .detalj__kropp {
 
 .verktoyrad__knapp {
   min-width: 2.2rem;
-  padding: var(--rom-1) var(--rom-2);
+  padding: var(--rom-2) var(--rom-3);
   font-size: var(--tekst-xs);
   font-weight: var(--vekt-medium);
   color: var(--blekk);
@@ -3434,8 +3255,8 @@ details[open] > .detalj__kropp {
 .verktoypanel {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
-  padding: var(--rom-2);
+  gap: var(--rom-3);
+  padding: var(--rom-3);
   background: var(--flate);
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-s);
@@ -3443,7 +3264,7 @@ details[open] > .detalj__kropp {
 
 .riktekstfelt {
   min-height: 7rem;
-  padding: var(--rom-2) var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   color: var(--blekk);
   background: var(--flate);
   border: var(--kant) solid var(--linje);
@@ -3487,7 +3308,7 @@ details[open] > .detalj__kropp {
 .regler__grenser {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   width: 100%;
   margin: 0;
 }
@@ -3495,8 +3316,8 @@ details[open] > .detalj__kropp {
 .regler__grense {
   display: flex;
   align-items: baseline;
-  gap: var(--rom-2);
-  padding: var(--rom-2) var(--rom-3);
+  gap: var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   font-size: var(--tekst-s);
   text-align: left;
   background: var(--flate-hevet);
@@ -3514,7 +3335,7 @@ details[open] > .detalj__kropp {
 .scenarioliste {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   width: 100%;
   margin: 0;
   padding: 0;
@@ -3524,8 +3345,8 @@ details[open] > .detalj__kropp {
 .scenario {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-  gap: var(--rom-1) var(--rom-4);
-  padding: var(--rom-3);
+  gap: var(--rom-2) var(--rom-7);
+  padding: var(--rom-5);
   font-size: var(--tekst-s);
   line-height: 1.5;
   text-align: left;
@@ -3554,7 +3375,7 @@ details[open] > .detalj__kropp {
 .scenario__utfall {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   min-width: 0;
 }
 
@@ -3574,7 +3395,7 @@ details[open] > .detalj__kropp {
 .scenario__plasseringer {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -3599,7 +3420,7 @@ details[open] > .detalj__kropp {
 .regeltekster {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-4);
+  gap: var(--rom-7);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -3608,7 +3429,7 @@ details[open] > .detalj__kropp {
 .regeltekst {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   text-align: left;
 }
 
@@ -3629,7 +3450,7 @@ details[open] > .detalj__kropp {
 .simulator__resultat {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
 }
 
 .simulator__scenario {

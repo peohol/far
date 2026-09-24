@@ -11,6 +11,20 @@ export interface Rgb {
   b: number
 }
 
+/** Tolker «#0e6b6b» (også kortformen «#fff»). */
+export function parseHex(css: string): Rgb {
+  const m = css.trim().match(/^#([\da-f]{3}|[\da-f]{6})$/i)
+  if (!m?.[1]) throw new Error(`Ikke en hex-farge: ${css}`)
+  const hex = m[1].length === 3 ? [...m[1]].map((c) => c + c).join('') : m[1]
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255) as [number, number, number]
+  return { r, g, b }
+}
+
+/** Tolker en farge skrevet som hex eller hsl — de to formene tokenene bruker. */
+export function parseFarge(css: string): Rgb {
+  return css.trim().startsWith('#') ? parseHex(css) : parseHsl(css)
+}
+
 /** Tolker «hsl(214 82% 38%)» og «hsl(0 40% 70%)». */
 export function parseHsl(css: string): Rgb {
   const m = css.match(/hsl\(\s*([\d.]+)\s*,?\s*([\d.]+)%\s*,?\s*([\d.]+)%/i)
@@ -46,8 +60,8 @@ export function relativeLuminance({ r, g, b }: Rgb): number {
 
 /** Kontrastforhold mellom to farger, fra 1 (likt) til 21 (svart mot hvitt). */
 export function contrastRatio(a: string, b: string): number {
-  const la = relativeLuminance(parseHsl(a))
-  const lb = relativeLuminance(parseHsl(b))
+  const la = relativeLuminance(parseFarge(a))
+  const lb = relativeLuminance(parseFarge(b))
   const [lys, moerk] = la > lb ? [la, lb] : [lb, la]
   return (lys + 0.05) / (moerk + 0.05)
 }

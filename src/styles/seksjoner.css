@@ -5,7 +5,7 @@
 
 .skuff {
   width: 100%;
-  scroll-margin-block: var(--rom-4);
+  scroll-margin-block: var(--rom-7);
 }
 
 /* Seksjonen er et kort; mellomrommet står i innholdet, så en lukket
@@ -13,13 +13,13 @@
    andre kort, så mange lukkede seksjoner kan leses som en innholdsliste. */
 .skuff--seksjon.kort {
   gap: 0;
-  padding-block: var(--rom-3);
+  padding-block: var(--rom-5);
 }
 
 .skuff--detalj {
   display: flex;
   flex-direction: column;
-  padding: var(--rom-1) var(--rom-3);
+  padding: var(--rom-2) var(--rom-5);
   text-align: left;
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-m);
@@ -29,7 +29,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 var(--rom-2);
+  gap: 0 var(--rom-3);
   width: 100%;
   cursor: pointer;
 }
@@ -38,7 +38,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--rom-1) var(--rom-2);
+  gap: var(--rom-2) var(--rom-3);
   flex: 1 1 auto;
   min-width: 0;
   font-size: var(--tekst-m);
@@ -54,7 +54,7 @@
 .skuff__knapp {
   display: inline-flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   min-height: 2.75rem;
   padding: 0;
   font: inherit;
@@ -93,12 +93,12 @@
 .skuff__handlinger {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   margin-left: auto;
 }
 
 .skuff__treff {
-  padding: 0.1rem var(--rom-2);
+  padding: 0.1rem var(--rom-3);
   font-size: var(--tekst-xxs);
   color: var(--blekk);
   background: var(--niva-gul-flate);
@@ -111,8 +111,8 @@
 .skuff__oppsummering {
   display: -webkit-box;
   flex-basis: 100%;
-  margin: calc(-1 * var(--rom-1)) 0 var(--rom-1);
-  padding-left: calc(0.7em + var(--rom-2));
+  margin: calc(-1 * var(--rom-2)) 0 var(--rom-2);
+  padding-left: calc(0.7em + var(--rom-3));
   overflow: hidden;
   font-size: var(--tekst-xs);
   font-weight: var(--vekt-normal, 400);
@@ -153,14 +153,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--rom-3);
-  padding: var(--rom-2) 0 var(--rom-1);
+  gap: var(--rom-5);
+  padding: var(--rom-3) 0 var(--rom-2);
 }
 
 .skuff--detalj .skuff__innhold {
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   padding-top: 0;
-  padding-bottom: var(--rom-2);
+  padding-bottom: var(--rom-3);
 }
 
 /* Når siden ruller til en skuff — brukeren åpnet den, eller en lenke eller

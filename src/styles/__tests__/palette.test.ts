@@ -10,21 +10,38 @@ import { contrastRatio } from '../../domain/contrast'
 
 const css = readFileSync(fileURLToPath(new URL('../tokens.css', import.meta.url)), 'utf8')
 
-/** Plukker ut variablene som gjelder i ett tema. */
-function tokens(selector: string): Record<string, string> {
-  const start = css.indexOf(selector)
-  if (start === -1) throw new Error(`Fant ikke ${selector} i tokens.css`)
-  const block = css.slice(css.indexOf('{', start) + 1, css.indexOf('}', start))
+/** Variablene i blokken som begynner med nøyaktig denne selektoren. */
+function blokk(selektor: string): Record<string, string> {
+  const start = css.indexOf(`${selektor} {`)
+  if (start === -1) throw new Error(`Fant ikke ${selektor} i tokens.css`)
+  const innhold = css.slice(css.indexOf('{', start) + 1, css.indexOf('}', start))
   const funn: Record<string, string> = {}
-  for (const m of block.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
+  for (const m of innhold.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
     if (m[1] && m[2]) funn[m[1]] = m[2].trim()
   }
   return funn
 }
 
+/** Følger `var(--navn)` til verdien den peker på, så overgangsnavnene måles som det de er. */
+function losOpp(palett: Record<string, string>): Record<string, string> {
+  const los = (verdi: string, sett: string[] = []): string => {
+    const m = /^var\((--[\w-]+)\)$/.exec(verdi)
+    if (!m?.[1]) return verdi
+    const neste = palett[m[1]]
+    if (neste === undefined || sett.includes(m[1])) throw new Error(`Kan ikke løse opp ${verdi}`)
+    return los(neste, [...sett, m[1]])
+  }
+  return Object.fromEntries(Object.entries(palett).map(([navn, verdi]) => [navn, los(verdi)]))
+}
+
+const FELLES = blokk(':root')
+const OVERGANG = blokk(':root,\n[data-tema]')
+const LYST = blokk(":root,\n:root[data-tema='lyst'],\n[data-tema='lyst']")
+
 const TEMAER = {
-  lyst: { ...tokens(":root,\n:root[data-tema='lyst']") },
-  moerkt: { ...tokens(":root[data-tema='moerkt']") },
+  lyst: losOpp({ ...FELLES, ...LYST, ...OVERGANG }),
+  // Mørkt tema legger seg over det lyse, som i nettleseren.
+  moerkt: losOpp({ ...FELLES, ...LYST, ...blokk(":root[data-tema='moerkt'],\n[data-tema='moerkt']"), ...OVERGANG }),
 }
 
 /** [forgrunn, bakgrunn, minstekrav, hva det er] */
@@ -35,32 +52,38 @@ const KRAV: [string, string, number, string][] = [
   ['--blekk', '--flate-hevet', 4.5, 'brødtekst på hevet flate'],
   ['--blekk-dempet', '--flate-bunn', 4.5, 'dempet tekst på sidebakgrunn'],
   ['--blekk-dempet', '--flate', 4.5, 'dempet tekst på kort'],
-  ['--blekk-dempet', '--flate-hevet', 4.5, 'dempet tekst på hevet flate'],
+  ['--blekk-dempet', '--flate-hevet', 4.5, 'dempet tekst på hevet flate, som i søkefeltet'],
   ['--blekk-svak', '--flate-bunn', 3, 'svake ikoner (grafisk element)'],
   ['--blekk-svak', '--flate-hevet', 3, 'svake ikoner på hevet flate'],
   ['--aksent', '--flate-bunn', 4.5, 'analyttkode'],
+  ['--aksent', '--flate', 4.5, 'metalinjens kode og lenker på kort'],
+  ['--paa-aksent', '--aksent', 4.5, 'tekst i primærknapp'],
   ['--aksent-blekk', '--aksent', 4.5, 'tekst i hovedknapp'],
-  ['--niva-under-blekk', '--niva-under-flate', 4.5, 'nivå «under»'],
-  ['--niva-innenfor-blekk', '--niva-innenfor-flate', 4.5, 'nivå «innenfor»'],
+  ['--under-blekk', '--under-flate', 4.5, 'nivå «under»'],
+  ['--referanse-blekk', '--referanse-flate', 4.5, 'nivå «innenfor» og referanseområde'],
+  ['--toksisk-blekk', '--toksisk-flate', 4.5, 'toksisk område og bånd over referanseområdet'],
+  ['--alvorlig-blekk', '--alvorlig-flate', 4.5, 'nivå «over», ringegrense og alvorlig intoksikasjon'],
   // Kvitteringen «Kopiert» i rusmiddelmodulen, på begge flatene den kan stå på.
   ['--niva-innenfor-blekk', '--flate-hevet', 4.5, 'kvittering for kopiert kommentar'],
   ['--niva-innenfor-blekk', '--flate', 4.5, 'kvittering for kopiert kommentar på kort'],
-  ['--niva-over-blekk', '--niva-over-flate', 4.5, 'nivå «over» og ringegrense'],
-  // Påslått innstilling i verktøylinja: teksten på sin egen flate, og kanten
-  // rundt knappen mot sidebakgrunnen.
-  ['--aksent', '--aksent-flate', 4.5, 'påslått knapp i verktøylinja'],
+  // Påslått innstilling og valgt tilstand: teksten på sin egen flate, og
+  // kanten rundt knappen mot sidebakgrunnen.
+  ['--aksent', '--aksent-flate', 4.5, 'påslått eller valgt knapp'],
   ['--aksent', '--flate-bunn', 3, 'kant rundt påslått knapp'],
   // Den nøytrale knappen i EtG- og EtS-modulen står på et kort.
   ['--blekk', '--flate-hevet', 4.5, 'tekst på nøytral knapp'],
   ['--blekk-svak', '--flate', 3, 'kant rundt nøytral knapp'],
   ['--varsel-blekk', '--varsel-flate', 4.5, 'advarsel om måleområde'],
-  ['--niva-gul-blekk', '--niva-gul-flate', 4.5, 'bånd over referanseområdet'],
-  ['--niva-gul-linje', '--flate-bunn', 3, 'kant rundt gult bånd'],
-  ['--niva-under-linje', '--flate-bunn', 3, 'kant rundt «under»'],
-  ['--niva-innenfor-linje', '--flate-bunn', 3, 'kant rundt «innenfor»'],
-  ['--niva-over-linje', '--flate-bunn', 3, 'kant rundt «over»'],
-  ['--linje-sterk', '--flate-bunn', 3, 'sterk kantlinje'],
+  ['--fritak-blekk', '--fritak-flate', 4.5, 'merket for godkjenningsfritak i Preparater'],
+  ['--referanse-kant', '--flate-bunn', 3, 'kant rundt «innenfor»'],
+  ['--toksisk-kant', '--flate-bunn', 3, 'kant rundt gult bånd'],
+  ['--alvorlig-kant', '--flate-bunn', 3, 'kant rundt «over»'],
+  ['--under-kant', '--flate-bunn', 3, 'kant rundt «under»'],
+  // Kanten som alene viser hvor et felt er — søkefeltet i fortolkningen.
+  ['--linje-kontroll', '--flate-bunn', 3, 'kant rundt felt på sidebakgrunn'],
+  ['--linje-kontroll', '--flate', 3, 'kant rundt felt på kort'],
   ['--fokus', '--flate-bunn', 3, 'fokusmarkering'],
+  ['--fokus', '--flate-hevet', 3, 'fokusmarkering på hevet flate, som i toppmenyen'],
   ['--tips-blekk', '--tips-flate', 4.5, 'tekst i tooltip'],
   ['--tips-blekk-dempet', '--tips-flate', 4.5, 'dempet tekst i tooltip'],
   // Boblen er snudd i forhold til appen, og skal skille seg fra flaten den
@@ -68,9 +91,11 @@ const KRAV: [string, string, number, string][] = [
   ['--tips-flate', '--flate', 3, 'tooltipflate mot kort'],
   ['--tips-flate', '--flate-bunn', 3, 'tooltipflate mot sidebakgrunn'],
   // Merkene på føringene i endringsloggen.
-  ['--merke-design-blekk', '--merke-design-flate', 4.5, 'merket «Design / layout»'],
-  ['--merke-funksjon-blekk', '--merke-funksjon-flate', 4.5, 'merket «Funksjonalitet»'],
-  ['--merke-fag-blekk', '--merke-fag-flate', 4.5, 'merket «Fag»'],
+  ['--merke-design', '--merke-design-flate', 4.5, 'merket «Design / layout»'],
+  ['--merke-funksjon', '--merke-funksjon-flate', 4.5, 'merket «Funksjonalitet»'],
+  ['--merke-fag', '--merke-fag-flate', 4.5, 'merket «Fag»'],
+  // Admin-merket i kontomenyen.
+  ['--aksent-2', '--flate', 4.5, 'merket «Admin»'],
   // Analysemetodepillen bærer metodens egen farge og ikke et token; den
   // kontrastmåles i `domain/__tests__/optionColours.test.ts`.
 ]
@@ -82,5 +107,21 @@ describe.each(Object.entries(TEMAER))('%s tema', (_navn, palett) => {
     expect(forgrunn, `mangler ${fg}`).toBeDefined()
     expect(bakgrunn, `mangler ${bg}`).toBeDefined()
     expect(contrastRatio(forgrunn as string, bakgrunn as string)).toBeGreaterThanOrEqual(minst)
+  })
+})
+
+describe('tokens', () => {
+  it('har samme fargenavn i lyst og mørkt tema', () => {
+    const farger = (palett: Record<string, string>) =>
+      Object.keys(palett).filter((navn) => !(navn in FELLES) && !(navn in OVERGANG)).sort()
+    const moerkt = blokk(":root[data-tema='moerkt'],\n[data-tema='moerkt']")
+    expect(Object.keys(moerkt).filter((navn) => !(navn in FELLES)).sort()).toEqual(farger(LYST))
+  })
+
+  it('setter alle varigheter til 0 ved redusert bevegelse', () => {
+    const varigheter = Object.keys(FELLES).filter((navn) => navn.startsWith('--fart-'))
+    const redusert = css.slice(css.indexOf('@media (prefers-reduced-motion: reduce)'))
+    const blokken = redusert.slice(0, redusert.indexOf('}\n}'))
+    for (const navn of varigheter) expect(blokken, navn).toContain(`${navn}: 0ms`)
   })
 })

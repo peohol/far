@@ -38,7 +38,7 @@ import {
 } from '../faginnhold/sok'
 import { byggInteraksjoner, interaksjonsnokler } from '../legemiddeldata/interaksjoner'
 import { lagLegemiddelleser, TOMME_INTERAKSJONER, TOMT_UTVALG, type Legemiddelleser } from '../legemiddeldata/lesing'
-import { byggPreparatoversikt } from '../legemiddeldata/preparater'
+import { byggPreparatvisning } from '../legemiddeldata/preparatmodell'
 import { interaksjonstekster, koblede, preparatkort, preparattekster } from '../legemiddeldata/stoffside'
 import { AMITRIPTYLIN, KODEIN, synkroniserUtdrag } from './hjelp/fest'
 import { faginnholdskall, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
@@ -176,7 +176,7 @@ describe('lesingen av kunnskapsbasen', () => {
         const utvalg = await legemidler.les(koblet)
         const nokler = interaksjonsnokler(utvalg, koblet)
         tillegg.push(
-          ...preparattekster(byggPreparatoversikt(utvalg, koblet)),
+          ...preparattekster(byggPreparatvisning(utvalg, koblet)),
           ...interaksjonstekster(byggInteraksjoner(await legemidler.interaksjoner(nokler), nokler)),
         )
       }
@@ -237,12 +237,17 @@ describe('søket i kunnskapsbasen', () => {
     const [treff] = sokGlobalt(indeks, 'sarotex')
     expect(treff!.dokument.felt).toBe('preparat')
     expect(sti(treff!.dokument.sted)).toEqual(['Amitriptylin', 'Preparater', 'Tablett'])
-    const oversikt = byggPreparatoversikt(await legemidler.les([AMITRIPTYLIN]), [AMITRIPTYLIN])
-    const tablett = oversikt.former.find((f) => f.form === 'Tablett')!.id
-    expect(sokeadresse(treff!.dokument.sted)).toBe(`#/analytt/AMTNORSUM/preparater/${preparatkort(tablett)}`)
-    // Preparatene som krever godkjenningsfritak, står i sitt eget kort.
+    const formMed = async (koblet: string, navn: string) => {
+      const visning = byggPreparatvisning(await legemidler.les([koblet]), [koblet])
+      return visning.former.find((f) => f.styrker.some((s) => s.preparater.some((p) => p.navn === navn)))!
+    }
+    const tablett = await formMed(AMITRIPTYLIN, 'Sarotex')
+    expect(tablett.form).toBe('Tablett')
+    expect(sokeadresse(treff!.dokument.sted)).toBe(`#/analytt/AMTNORSUM/preparater/${preparatkort(tablett.id)}`)
+    // Et preparat som krever godkjenningsfritak, står i kortet for sin form, som de andre.
     const [fritak] = sokGlobalt(indeks, 'kodimagnyl')
-    expect(sokeadresse(fritak!.dokument.sted)).toBe('#/analytt/KOD/preparater/godkjenningsfritak')
+    const form = await formMed(KODEIN, fritak!.dokument.tekst)
+    expect(sokeadresse(fritak!.dokument.sted)).toBe(`#/analytt/KOD/preparater/${preparatkort(form.id)}`)
   })
 
   it('finner en interaksjon og peker på kortet dens', () => {

@@ -44,7 +44,7 @@ vi.mock('../auth/klient', () => ({
     },
   }),
 }))
-vi.mock('../components/konto/Kontoknapper', () => ({ Kontoknapper: () => null }))
+vi.mock('../components/konto/Kontomeny', () => ({ Kontomeny: () => null }))
 
 const { default: App } = await import('../App')
 const { TipsLag } = await import('../components/Tips')

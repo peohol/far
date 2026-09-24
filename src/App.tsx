@@ -15,8 +15,9 @@ import { Sidemeny } from './components/Sidemeny'
 import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
 import { ruteAv } from './components/Kopibevis'
-import { Toolbar } from './components/Toolbar'
-import { Kontoknapper } from './components/konto/Kontoknapper'
+import { Kontomeny } from './components/konto/Kontomeny'
+import { Toppmeny } from './components/toppmeny/Toppmeny'
+import { ToppmenyKilde } from './components/toppmeny/Toppmenykilde'
 import { Versjonspille } from './components/Versjonspille'
 import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from './domain/analyttkatalog'
@@ -400,129 +401,135 @@ export default function App() {
   const vist = dveler ?? stage
 
   return (
-    <div
-      className="app"
-      data-steg={vist}
-      data-tomt={isIdle(state) && !paaInfoside ? 'ja' : 'nei'}
-      data-side={rute.side}
-    >
-      <Sidemeny pool={alleAnalytter} metodefilter={state.metodefilter} onFilter={settMetodefilter} />
-      <Toolbar theme={theme} onToggleTheme={toggle} foran={<Kontoknapper />} />
-
-      {rute.side === 'analytt' && (
-        <main className="scene scene--infoside">
-          <FaginnholdskildeProvider kilde={faginnhold}>
-            <ScenarioreglerProvider kilde={scenarioregler}>
-              <Analyttside
-                kode={rute.kode}
-                sted={rute.sted}
-                katalog={katalog}
-                onApneFortolkning={apneFortolkning}
-                onLukk={lukkInfoside}
-              />
-            </ScenarioreglerProvider>
-          </FaginnholdskildeProvider>
-        </main>
-      )}
-
-      {/* Fortolkningen blir stående bak en åpen informasjonsside, så det
-          brukeren har fylt inn, er der når hen kommer tilbake. Tastene dens
-          ligger i ro så lenge den er skjult — se `fortolkningenErSkjult`. */}
-      <main
-        className="scene"
-        hidden={paaInfoside}
-        {...(paaInfoside && { 'data-fortolkning': SKJULT_FORTOLKNING })}
+    <ToppmenyKilde>
+      <div
+        className="app"
+        data-steg={vist}
+        data-tomt={isIdle(state) && !paaInfoside ? 'ja' : 'nei'}
+        data-side={rute.side}
       >
-        {vist === 'search' && (
-          <SearchStep
-            query={state.query}
-            hits={hits}
-            metodefilter={state.metodefilter}
-            onFilter={settMetodefilter}
-            onQueryChange={setQuery}
-            onSelect={velgAnalytt}
-            onReset={reset}
-          />
+        <Toppmeny
+          meny={<Sidemeny pool={alleAnalytter} metodefilter={state.metodefilter} onFilter={settMetodefilter} />}
+          konto={<Kontomeny theme={theme} onToggleTheme={toggle} />}
+          theme={theme}
+          onToggleTheme={toggle}
+        />
+
+        {rute.side === 'analytt' && (
+          <main className="scene scene--infoside">
+            <FaginnholdskildeProvider kilde={faginnhold}>
+              <ScenarioreglerProvider kilde={scenarioregler}>
+                <Analyttside
+                  kode={rute.kode}
+                  sted={rute.sted}
+                  katalog={katalog}
+                  onApneFortolkning={apneFortolkning}
+                  onLukk={lukkInfoside}
+                />
+              </ScenarioreglerProvider>
+            </FaginnholdskildeProvider>
+          </main>
         )}
 
-        {vist === 'band' && state.analyte && regeloppslag && (
-          <BandStep
-            analyte={state.analyte}
-            regler={regeloppslag}
-            valg={valgene}
-            onPick={velgValg}
-            onBack={back}
-            onProvIgjen={hentPaNytt}
-            failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
-          />
-        )}
+        {/* Fortolkningen blir stående bak en åpen informasjonsside, så det
+            brukeren har fylt inn, er der når hen kommer tilbake. Tastene dens
+            ligger i ro så lenge den er skjult — se `fortolkningenErSkjult`. */}
+        <main
+          className="scene"
+          hidden={paaInfoside}
+          {...(paaInfoside && { 'data-fortolkning': SKJULT_FORTOLKNING })}
+        >
+          {vist === 'search' && (
+            <SearchStep
+              query={state.query}
+              hits={hits}
+              metodefilter={state.metodefilter}
+              onFilter={settMetodefilter}
+              onQueryChange={setQuery}
+              onSelect={velgAnalytt}
+              onReset={reset}
+            />
+          )}
 
-        {vist === 'kontroll' && kontrollvalg && (
-          <KontrollStep
-            valg={kontrollvalg}
-            sporsmal={CUTOFF_SPORSMAL}
-            onJa={bekreftKontroll}
-            onNei={back}
-            failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
-          />
-        )}
+          {vist === 'band' && state.analyte && regeloppslag && (
+            <BandStep
+              analyte={state.analyte}
+              regler={regeloppslag}
+              valg={valgene}
+              onPick={velgValg}
+              onBack={back}
+              onProvIgjen={hentPaNytt}
+              failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
+            />
+          )}
 
-        {vist === 'thc' && <ThcStep onBack={back} copy={copy} flashAt={show} />}
+          {vist === 'kontroll' && kontrollvalg && (
+            <KontrollStep
+              valg={kontrollvalg}
+              sporsmal={CUTOFF_SPORSMAL}
+              onJa={bekreftKontroll}
+              onNei={back}
+              failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
+            />
+          )}
 
-        {vist === 'rus' && rusModul && (
-          <RusStep
-            // Modulen holder sine egne valg. Bytter analytten, skal de nulles,
-            // og nøkkelen gir modulen en frisk tilstand i stedet for å måtte
-            // rydde i den fra utsiden.
-            key={rusModul.id}
-            modul={rusModul}
-            regler={reglerForModul(scenarioregler.tilstand, rusModul, scenarioregler.provIgjen)}
-            onBack={back}
-            onFinish={reset}
-            copy={copy}
-            flashAt={show}
-          />
-        )}
+          {vist === 'thc' && <ThcStep onBack={back} copy={copy} flashAt={show} />}
 
-        {vist === 'etg' && (
-          <EtgStep
-            onPick={(alternativ) => void pickEtg(alternativ)}
-            onBack={back}
-            failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
-          />
-        )}
+          {vist === 'rus' && rusModul && (
+            <RusStep
+              // Modulen holder sine egne valg. Bytter analytten, skal de nulles,
+              // og nøkkelen gir modulen en frisk tilstand i stedet for å måtte
+              // rydde i den fra utsiden.
+              key={rusModul.id}
+              modul={rusModul}
+              regler={reglerForModul(scenarioregler.tilstand, rusModul, scenarioregler.provIgjen)}
+              onBack={back}
+              onFinish={reset}
+              copy={copy}
+              flashAt={show}
+            />
+          )}
 
-        {vist === 'etg-paste' && etgAlternativ && (
-          <EtgPasteStep
-            alternativ={etgAlternativ}
-            fra={bevisFra}
-            onBack={back}
-            onFinish={reset}
-            copy={copy}
-            flashAt={show}
-          />
-        )}
+          {vist === 'etg' && (
+            <EtgStep
+              onPick={(alternativ) => void pickEtg(alternativ)}
+              onBack={back}
+              failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
+            />
+          )}
 
-        {vist === 'paste' && state.analyte && valgtValg && (
-          <PasteStep
-            analyte={state.analyte}
-            valg={valgtValg}
-            fra={bevisFra}
-            onBack={back}
-            onFinish={reset}
-          />
-        )}
-      </main>
+          {vist === 'etg-paste' && etgAlternativ && (
+            <EtgPasteStep
+              alternativ={etgAlternativ}
+              fra={bevisFra}
+              onBack={back}
+              onFinish={reset}
+              copy={copy}
+              flashAt={show}
+            />
+          )}
 
-      {/* Versjonen og veien inn til endringsloggen, fast i hjørnet som verktøylinja. */}
-      <Versjonspille />
+          {vist === 'paste' && state.analyte && valgtValg && (
+            <PasteStep
+              analyte={state.analyte}
+              valg={valgtValg}
+              fra={bevisFra}
+              onBack={back}
+              onFinish={reset}
+            />
+          )}
+        </main>
 
-      {/* Kvitteringen ligger utenfor stegene, så den overlever stegbyttet. */}
-      {flash && <CopyFlash key={flash.id} flash={flash} varighet={BLINK} />}
-      {/* Blinket er visuelt; dette er den samme beskjeden for skjermlesere. */}
-      <p className="kun-skjermleser" role="status">
-        {flash ? 'Kommentaren er kopiert' : ''}
-      </p>
-    </div>
+        {/* Versjonen og veien inn til endringsloggen, fast nederst i hjørnet. */}
+        <Versjonspille />
+
+        {/* Kvitteringen ligger utenfor stegene, så den overlever stegbyttet. */}
+        {flash && <CopyFlash key={flash.id} flash={flash} varighet={BLINK} />}
+        {/* Blinket er visuelt; dette er den samme beskjeden for skjermlesere. */}
+        <p className="kun-skjermleser" role="status">
+          {flash ? 'Kommentaren er kopiert' : ''}
+        </p>
+      </div>
+    </ToppmenyKilde>
   )
 }

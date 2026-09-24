@@ -24,7 +24,7 @@ import { alfabetisk } from './paneler'
 import { indekserSide, lagSokeindeks, type Sokedokument, type Sokeindeks, type Tilleggstekst } from './sok'
 import { byggInteraksjoner, interaksjonsnokler } from '../legemiddeldata/interaksjoner'
 import type { Interaksjonsnokler, Interaksjonsutvalg, Legemiddelleser, Legemiddelutvalg } from '../legemiddeldata/lesing'
-import { byggPreparatoversikt } from '../legemiddeldata/preparater'
+import { byggPreparatvisning } from '../legemiddeldata/preparatmodell'
 import { interaksjonstekster, koblede, preparattekster, utvalgFor } from '../legemiddeldata/stoffside'
 
 /** Alt søket i kunnskapsbasen indekserer. */
@@ -120,7 +120,7 @@ function legemiddeltekster(base: Kunnskapsbase, koblet: readonly string[]): Till
   if (!base.legemidler || koblet.length === 0) return []
   const utvalg = utvalgFor(base.legemidler, koblet)
   return [
-    ...preparattekster(byggPreparatoversikt(utvalg, koblet)),
+    ...preparattekster(byggPreparatvisning(utvalg, koblet)),
     ...(base.interaksjoner
       ? interaksjonstekster(byggInteraksjoner(base.interaksjoner, interaksjonsnokler(utvalg, koblet)))
       : []),

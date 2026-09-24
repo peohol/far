@@ -1,189 +1,81 @@
 /**
- * Ikonene appen bruker, tegnet for hånd i et 32×32-rutenett.
+ * De navngitte ikonene appen har brukt siden før Atlas.
  *
- * De vises i store størrelser, så de tåler — og bruker — flere detaljer enn et
- * typisk 16 px-ikonsett: piler har en grenselinje som viser hva de peker forbi,
- * og telefonen har ringebuer. Alle arver farge fra teksten via `currentColor`.
+ * De fleste tegnes nå av Atlas-registeret (`src/components/ikon/`), så hele
+ * appen får samme ikonspråk uten at hver komponent må skrives om. Ny kode
+ * bruker `<Ikon navn="…" />` direkte. De få som ennå ikke har et Atlas-ikon,
+ * står igjen som strekikoner i et 32×32-rutenett med `currentColor`.
  */
+import { Ikon } from '../ikon/Ikon'
+import type { Ikonnavn } from '../ikon/register'
 import { Icon, type IconProps } from './Icon'
 
 export { Icon }
 export type { IconProps }
 
-/** Under referanseområdet: pil som peker ned forbi den nedre grenselinjen. */
-export function ArrowDownIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M16 4v17" />
-      <path d="M9 14.5 16 21.5 23 14.5" />
-      <path d="M6 27.5h20" opacity="0.55" />
-    </Icon>
-  )
+/** Et gammelt ikonnavn som tegnes av Atlas-registeret. */
+function atlas(navn: Ikonnavn) {
+  return function AtlasIkon({ size, ...rest }: IconProps) {
+    return <Ikon navn={navn} storrelse={size} {...rest} />
+  }
 }
 
-/** Innenfor referanseområdet: hake i en ring. */
-export function CheckIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <circle cx="16" cy="16" r="12" opacity="0.55" />
-      <path d="M10 16.5 14.4 21 22.5 11.5" />
-    </Icon>
-  )
-}
+/** Under referanseområdet. */
+export const ArrowDownIcon = atlas('bUnder')
 
-/** Over referanseområdet: pil som peker opp forbi den øvre grenselinjen. */
-export function ArrowUpIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M16 28V11" />
-      <path d="M9 17.5 16 10.5 23 17.5" />
-      <path d="M6 4.5h20" opacity="0.55" />
-    </Icon>
-  )
-}
+/** Innenfor referanseområdet. */
+export const CheckIcon = atlas('bInnenfor')
 
-/**
- * Til stede under cut-off: en liten dråpe under den stiplede påvisningsgrensen.
- * Streken er stiplet fordi grensen er teknisk og ikke klinisk — den sier hva
- * analysen kan tallfeste, ikke hva som er mye eller lite.
- */
-export function CutoffIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M3.5 8.5h25" strokeDasharray="4 3.5" opacity="0.55" />
-      <path d="M16 13c4.1 4.4 6.2 7.4 6.2 9.7a6.2 6.2 0 0 1-12.4 0c0-2.3 2.1-5.3 6.2-9.7Z" />
-    </Icon>
-  )
-}
+/** Over referanseområdet. */
+export const ArrowUpIcon = atlas('bOver')
 
-/** Ringegrense: telefonrør med ringebuer. */
-export function PhoneIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M8.5 5h4.2l2.1 5.2-2.6 2.1a15.5 15.5 0 0 0 7.5 7.5l2.1-2.6 5.2 2.1v4.2a2.5 2.5 0 0 1-2.7 2.5C15.6 25.2 6.8 16.4 6 6.7A2.5 2.5 0 0 1 8.5 5Z" />
-      <path d="M21 3.5a9 9 0 0 1 7.5 7.5" opacity="0.6" />
-      <path d="M20 8.5a4.5 4.5 0 0 1 3.5 3.5" opacity="0.6" />
-    </Icon>
-  )
-}
+/** Cut-off. */
+export const CutoffIcon = atlas('cutoff')
 
-/** Nullstill: pil rundt i en sirkel, mot klokka. */
-export function ResetIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M4.7 20a12 12 0 1 0 2.8-12.5L1.3 13.3" />
-      <path d="M1.3 5.3v8h8" />
-    </Icon>
-  )
-}
+/** Ring rekvirenten. */
+export const PhoneIcon = atlas('phone')
 
-/** Tilbake: pil mot venstre. */
-export function BackIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M27 16H6" />
-      <path d="M15 25 6 16l9-9" />
-    </Icon>
-  )
-}
+/** Nullstill. */
+export const ResetIcon = atlas('reset')
 
-/**
- * Kopiert: to ark som ligger delvis oppå hverandre. Arket bak er tegnet bare
- * der det stikker fram, så det møter kanten på arket foran i stedet for å bli
- * liggende under det.
- */
-export function CopyIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <rect x="12" y="12" width="17" height="17" rx="3" />
-      <path d="M12 20H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v6" />
-    </Icon>
-  )
-}
+/** Tilbake. */
+export const BackIcon = atlas('back')
 
-/** Lim inn: utklippstavle med en pil som peker ned i den. */
-export function PasteIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M11 5H8a2.5 2.5 0 0 0-2.5 2.5v18A2.5 2.5 0 0 0 8 28h16a2.5 2.5 0 0 0 2.5-2.5v-18A2.5 2.5 0 0 0 24 5h-3" />
-      <rect x="11" y="2.5" width="10" height="5.5" rx="1.8" />
-      <path d="M16 13.5v8" />
-      <path d="M12.5 18 16 21.5 19.5 18" />
-    </Icon>
-  )
-}
+/** Kopier. */
+export const CopyIcon = atlas('copy')
 
-/** Søk: forstørrelsesglass. */
-export function SearchIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <circle cx="14" cy="14" r="9.5" />
-      <path d="M21 21l7.5 7.5" />
-    </Icon>
-  )
-}
+/** Lim inn. */
+export const PasteIcon = atlas('paste')
+
+/** Søk. */
+export const SearchIcon = atlas('search')
 
 /** Lyst tema. */
-export function SunIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <circle cx="16" cy="16" r="6.5" />
-      <path d="M16 2v4M16 26v4M30 16h-4M6 16H2M25.9 6.1l-2.8 2.8M8.9 23.1l-2.8 2.8M25.9 25.9l-2.8-2.8M8.9 8.9 6.1 6.1" />
-    </Icon>
-  )
-}
+export const SunIcon = atlas('sun')
 
 /** Mørkt tema. */
-export function MoonIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M27 19.5A12 12 0 0 1 12.5 5 12 12 0 1 0 27 19.5Z" />
-    </Icon>
-  )
-}
+export const MoonIcon = atlas('moon')
 
-/** Meny: tre vannrette streker. */
-export function MenuIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M5 9h22" />
-      <path d="M5 16h22" />
-      <path d="M5 23h22" />
-    </Icon>
-  )
-}
+/** Sidemenyen. */
+export const MenuIcon = atlas('menu')
 
-/** Lukk: et kryss. */
-export function CloseIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M9 9 23 23" />
-      <path d="M23 9 9 23" />
-    </Icon>
-  )
-}
+/** Lukk. */
+export const CloseIcon = atlas('close')
 
-/** Hurtigtaster: en tast med et tegn på. */
-export function KeyboardIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <rect x="2.5" y="6.5" width="27" height="19" rx="3.5" />
-      <path d="M8 12h.02M14 12h.02M20 12h.02M26 12h.02" />
-      <path d="M8 17h.02M14 17h.02M20 17h.02M26 17h.02" />
-      <path d="M10.5 21.5h11" />
-    </Icon>
-  )
-}
+/** Hurtigtaster. */
+export const KeyboardIcon = atlas('keys')
 
-/** Konto: skulder og hode. */
-export function UserIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <circle cx="16" cy="11" r="6" />
-      <path d="M5 28a11 11 0 0 1 22 0" />
-    </Icon>
-  )
-}
+/** Konto. */
+export const UserIcon = atlas('user')
+
+/** Logg ut. */
+export const LogoutIcon = atlas('logout')
+
+/** Administrator. */
+export const ShieldIcon = atlas('shield')
+
+/** Legg til. */
+export const PlusIcon = atlas('plus')
 
 /** Brukerlista: to personer, den ene bak den andre. */
 export function UsersIcon(props: IconProps) {
@@ -193,38 +85,6 @@ export function UsersIcon(props: IconProps) {
       <path d="M3 27.5a10 10 0 0 1 20 0" />
       <path d="M22 6.5a5.5 5.5 0 0 1 0 10.5" opacity="0.6" />
       <path d="M25 18.5a10 10 0 0 1 4 9" opacity="0.6" />
-    </Icon>
-  )
-}
-
-/** Logg ut: pil ut av en åpning. */
-export function LogoutIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M19 5h6a2 2 0 0 1 2 2v18a2 2 0 0 1-2 2h-6" opacity="0.6" />
-      <path d="M13 16h12" />
-      <path d="M18 10.5 23.5 16 18 21.5" />
-      <path d="M5 5v22" opacity="0.6" />
-    </Icon>
-  )
-}
-
-/** Administrator: skjold med hake. */
-export function ShieldIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M16 3.5 27 7.5v8.2c0 6.3-4.3 11.2-11 13.8-6.7-2.6-11-7.5-11-13.8V7.5Z" />
-      <path d="M11 16.2 14.7 20 21.5 12.5" />
-    </Icon>
-  )
-}
-
-/** Legg til. */
-export function PlusIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M16 6v20" />
-      <path d="M6 16h20" />
     </Icon>
   )
 }

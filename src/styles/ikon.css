@@ -1,0 +1,157 @@
+/**
+ * Ikonene fra Atlas-registeret (`src/components/ikon/`).
+ *
+ * Tynn kontur over dempede flater i 2–3 semantiske farger. Konturen blandes
+ * med delens egen farge, og frie linjer bruker `--ikon-linje`, så samme
+ * geometri fungerer i lyst og mørkt tema. Strekbredden er 1,3 i et
+ * 24-rutenett og skaleres med rutenettet.
+ */
+
+.ikon {
+  --ikon-sw: 1.3;
+  --ikon-farge: initial;
+  overflow: visible;
+}
+
+.ikon[data-rutenett='48'] {
+  --ikon-sw: 2.6;
+}
+
+/* --- Størrelser ---------------------------------------------------------- */
+.ikon[data-storrelse='ui'] {
+  width: var(--ikon-ui);
+  height: var(--ikon-ui);
+}
+
+.ikon[data-storrelse='underpunkt'] {
+  width: var(--ikon-underpunkt);
+  height: var(--ikon-underpunkt);
+}
+
+.ikon[data-storrelse='seksjon'] {
+  width: var(--ikon-seksjon);
+  height: var(--ikon-seksjon);
+}
+
+.ikon[data-storrelse='konsept'] {
+  width: var(--ikon-konsept);
+  height: var(--ikon-konsept);
+}
+
+.ikon[data-storrelse='plot'] {
+  width: var(--ikon-plot);
+  height: var(--ikon-plot);
+}
+
+/* --- Farger ---------------------------------------------------------------- */
+.ikon [data-farge='aksent'] { --ikon-farge: var(--aksent); }
+.ikon [data-farge='aksent-2'] { --ikon-farge: var(--aksent-2); }
+.ikon [data-farge='referanse'] { --ikon-farge: var(--referanse); }
+.ikon [data-farge='toksisk'] { --ikon-farge: var(--toksisk); }
+.ikon [data-farge='alvorlig'] { --ikon-farge: var(--alvorlig); }
+.ikon [data-farge='blod'] { --ikon-farge: var(--blod); }
+.ikon [data-farge='under'] { --ikon-farge: var(--under); }
+.ikon [data-farge='info'] { --ikon-farge: var(--info); }
+.ikon [data-farge='glass'] { --ikon-farge: var(--glass); }
+.ikon [data-farge='papir'] { --ikon-farge: var(--papir); }
+.ikon [data-farge='ikon-blekk'] { --ikon-farge: var(--ikon-blekk); }
+.ikon [data-farge='ikon-linje'] { --ikon-farge: var(--ikon-linje); }
+
+/* --- Roller ---------------------------------------------------------------- */
+.ikon [data-rolle^='f'] {
+  fill: var(--ikon-farge);
+  fill-opacity: 0.24;
+  stroke: color-mix(in oklab, var(--ikon-farge) 52%, var(--ikon-linje));
+  stroke-width: var(--ikon-sw);
+  stroke-linejoin: round;
+}
+
+.ikon [data-rolle='f2'] {
+  fill-opacity: 0.5;
+}
+
+/* Glass er lyst i seg selv og trenger litt mer dekning for å synes. */
+.ikon [data-rolle='f1'][data-farge='glass'] {
+  fill-opacity: 0.3;
+}
+
+.ikon [data-rolle='f2'][data-farge='glass'] {
+  fill-opacity: 0.55;
+}
+
+.ikon [data-rolle^='f'][data-farge='papir'] {
+  fill-opacity: 1;
+}
+
+.ikon [data-rolle='l'],
+.ikon [data-rolle='d'] {
+  fill: none;
+  stroke: var(--ikon-farge, var(--ikon-linje));
+  stroke-width: calc(var(--ikon-sw) * var(--ikon-strekfaktor, 1));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ikon [data-rolle='d'] {
+  stroke-dasharray: calc(var(--ikon-sw) * 1.2) calc(var(--ikon-sw) * 1.9);
+}
+
+.ikon [data-tynn] {
+  --ikon-strekfaktor: 0.8;
+}
+
+.ikon [data-rolle='h'] {
+  fill: var(--ikon-farge, var(--ikon-linje));
+}
+
+/* --- Animasjon --------------------------------------------------------------
+   Spilles én gang ved hover eller fokus og første gang ikonet kommer i
+   bildet (se `Ikon`). Aldri kontinuerlig. */
+.ikon[data-spiller] [data-anim] {
+  animation-timing-function: var(--kurve-ikon);
+  animation-fill-mode: both;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.ikon[data-spiller] [data-anim='spin45'] { animation-name: o-spin45; animation-duration: 900ms; }
+.ikon[data-spiller] [data-anim='spinm60'] { animation-name: o-spinm60; animation-duration: 900ms; }
+.ikon[data-spiller] [data-anim='spin240'] { animation-name: o-spin240; animation-duration: 1100ms; transform-box: view-box; }
+.ikon[data-spiller] [data-anim='spinback'] { animation-name: o-spinback; animation-duration: 800ms; transform-box: view-box; }
+.ikon[data-spiller] [data-anim='rayL'] { animation-name: o-rayL; animation-duration: 900ms; }
+.ikon[data-spiller] [data-anim='rayS'] { animation-name: o-rayS; animation-duration: 900ms; }
+.ikon[data-spiller] [data-anim='wink'] { animation-name: o-wink; animation-duration: 520ms; }
+.ikon[data-spiller] [data-anim='pop'] { animation-name: o-pop; animation-duration: 480ms; }
+.ikon[data-spiller] [data-anim='drop'] { animation-name: o-drop; animation-duration: 700ms; }
+.ikon[data-spiller] [data-anim='bumpR'] { animation-name: o-bumpR; animation-duration: 560ms; }
+.ikon[data-spiller] [data-anim='bumpL'] { animation-name: o-bumpL; animation-duration: 560ms; }
+.ikon[data-spiller] [data-anim='flash'] { animation-name: o-flash; animation-duration: 600ms; }
+.ikon[data-spiller] [data-anim='draw'] { animation-name: o-draw; animation-duration: 1000ms; stroke-dasharray: 1; }
+.ikon[data-spiller] [data-anim='tick'] { animation-name: o-tick; animation-duration: 900ms; transform-box: view-box; transform-origin: 33px 33px; }
+.ikon[data-spiller] [data-anim='fill'] { animation-name: o-fill; animation-duration: 800ms; transform-origin: bottom; }
+.ikon[data-spiller] [data-anim='shake'] { animation-name: o-shake; animation-duration: 520ms; transform-box: view-box; }
+.ikon[data-spiller] [data-anim='pulse'] { animation-name: o-pulse; animation-duration: 480ms; transform-box: view-box; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ikon [data-anim] {
+    animation: none !important;
+  }
+}
+
+@keyframes o-spin45 { from { transform: rotate(0); } to { transform: rotate(45deg); } }
+@keyframes o-spinm60 { from { transform: rotate(0); } to { transform: rotate(-60deg); } }
+@keyframes o-spin240 { from { transform: rotate(0); } to { transform: rotate(240deg); } }
+@keyframes o-spinback { from { transform: rotate(0); } to { transform: rotate(-360deg); } }
+@keyframes o-rayL { 0%, 100% { stroke-dasharray: 1 1; } 50% { stroke-dasharray: 0.42 1; } }
+@keyframes o-rayS { 0%, 100% { stroke-dasharray: 0.42 1; } 50% { stroke-dasharray: 1 1; } }
+@keyframes o-wink { 0%, 100% { transform: scaleY(1); } 45%, 60% { transform: scaleY(0.12); } }
+@keyframes o-shake { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-7deg); } 40% { transform: rotate(6deg); } 60% { transform: rotate(-4deg); } 80% { transform: rotate(2deg); } }
+@keyframes o-pulse { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.07); } }
+@keyframes o-pop { 0% { transform: scale(0); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
+@keyframes o-drop { 0% { transform: translateY(-7px); opacity: 0; } 55% { opacity: 1; } 100% { transform: translateY(0); opacity: 1; } }
+@keyframes o-bumpR { 0% { transform: translateX(-6px); } 55% { transform: translateX(1.5px); } 100% { transform: translateX(0); } }
+@keyframes o-bumpL { 0% { transform: translateX(6px); } 55% { transform: translateX(-1.5px); } 100% { transform: translateX(0); } }
+@keyframes o-flash { 0%, 45% { opacity: 0; transform: scale(0.5); } 75% { opacity: 1; transform: scale(1.15); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes o-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes o-tick { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+@keyframes o-fill { from { transform: scaleY(0.15); } to { transform: scaleY(1); } }

@@ -19,7 +19,8 @@ import {
   type Preparatvisning,
 } from '../legemiddeldata/preparatmodell'
 import { formaterTall } from '../faginnhold/paneler'
-import { byggPreparatoversikt, GODKJENNINGSFRITAK } from '../legemiddeldata/preparater'
+import { GODKJENNINGSFRITAK, pakningerPerMerkevare, trygLenke } from '../legemiddeldata/preparater'
+import { preparatkort, preparattekster } from '../legemiddeldata/stoffside'
 import { AMITRIPTYLIN, innloggetLeser, KODEIN, synkroniserUtdrag } from './hjelp/fest'
 import { nyDatabase } from './hjelp/testdatabase'
 
@@ -93,17 +94,17 @@ describe('preparatmodellen med utdraget fra FEST', () => {
     expect(retard.merker.map((m) => m.type)).toEqual(['godkjenningsfritak'])
   })
 
-  it('mister ingenting av det dagens visning har: alle merkevarer, pakninger og lenker', () => {
-    const gammel = byggPreparatoversikt(amitriptylin, [AMITRIPTYLIN])
-    const gamle = [...gammel.former.flatMap((f) => f.preparater), ...gammel.godkjenningsfritak]
+  it('mister ingenting fra FEST: alle merkevarer, pakninger og lenker står i detaljene', () => {
     const nye = [...visning.preparater.values()]
-    const alt = (liste: { styrker: { pakninger: { id: string }[]; preparatomtaler: string[] }[] }[]) => ({
-      pakninger: liste.flatMap((p) => p.styrker.flatMap((s) => s.pakninger.map((k) => k.id))).sort(),
-      omtaler: liste.flatMap((p) => p.styrker.flatMap((s) => s.preparatomtaler)).sort(),
-    })
-    expect(alt(nye)).toEqual(alt(gamle))
+    const pakninger = pakningerPerMerkevare(amitriptylin)
+    expect(nye.flatMap((p) => p.styrker.flatMap((s) => s.pakninger.map((k) => k.id))).sort()).toEqual(
+      [...new Set(amitriptylin.merkevarer.flatMap((m) => (pakninger.get(m.id) ?? []).map((k) => k.id)))].sort(),
+    )
+    expect(nye.flatMap((p) => p.styrker.flatMap((s) => s.preparatomtaler)).sort()).toEqual(
+      [...new Set(amitriptylin.merkevarer.map((m) => trygLenke(m.preparatomtale)).filter((l) => l !== undefined))].sort(),
+    )
     expect(nye.flatMap((p) => p.styrker.flatMap((s) => s.merkevarer)).sort()).toEqual(amitriptylin.merkevarer.map((m) => m.id).sort())
-    expect(nye.map((p) => p.navn).sort()).toEqual(gamle.map((p) => p.navn).sort())
+    expect(nye.map((p) => p.navn).sort()).toEqual([...new Set(amitriptylin.merkevarer.map((m) => m.varenavn))].sort())
   })
 
   it('viser kombinasjonen med alle virkestoffene og merker den', () => {
@@ -123,6 +124,15 @@ describe('preparatmodellen med utdraget fra FEST', () => {
     const [kodimagnyl] = v.preparater.values()
     expect(kodimagnyl!.merker.map((m) => m.type)).toEqual(['godkjenningsfritak', 'kombinasjon'])
     expect(kodimagnyl!.kombinasjon).toEqual(['Acetylsalisylsyre', 'Magnesiumoksid'])
+  })
+
+  it('gir søket hvert preparatnavn én gang per form, med stedet det står', () => {
+    const tekster = preparattekster(visning)
+    const tablett = tekster.filter((t) => t.element.tittel === 'Tablett')
+    expect(tablett.map((t) => t.tekst)).toEqual(['Amitriptylin Abcur', 'Amitriptylin Orifarm', 'Sarotex', 'Amitriptylin-CT'])
+    expect(tablett.every((t) => t.panel === 'preparater' && t.felt === 'preparat' && t.element.id === 'preparater-53')).toBe(true)
+    expect(tekster).toHaveLength(7)
+    expect(preparatkort('53')).toBe('form-53')
   })
 
   it('gir de samme, adressetrygge ID-ene hver gang', () => {

@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.24.1',
+    versjon: '1.26.1',
     dato: '2026-09-24',
     sammendrag: 'Grunnlaget for å søke i alle stoffsidene samtidig',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,36 @@ export const ENDRINGSLOGG: Endring[] = [
       'Appen kan nå lese og søke gjennom alle de publiserte stoffsidene på én gang: navn, koder, andre navn, preparatnavn, interaksjoner, overskrifter, verdier, tekst og kilder. Hvert treff peker på seksjonen eller kortet det står i. Søkefeltet som bruker dette, kommer i en senere versjon.',
       'Søket på stoffsiden rangerer stedene under søkefeltet litt annerledes: preparatnavn kommer etter navn og komponenter, og en tekst som begynner med søkeordet kommer foran en der ordet står lenger inne.',
       'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
+    versjon: '1.26.0',
+    dato: '2026-09-24',
+    sammendrag: 'Preparatene vises som legemiddelform, styrke og preparat, med et eget vindu for hvert preparat',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Hver legemiddelform er en stor overskrift med eget ikon. Under den står styrkene som like store kort, ett per styrke.',
+      'Et åpnet styrkekort viser preparatene med den styrken alfabetisk. Bare ett styrkekort står åpent om gangen.',
+      'Preparater som krever godkjenningsfritak, står i den samme lista med et tydelig merke, ikke i en egen gruppe.',
+      'Et trykk på et preparatnavn åpner et vindu med alt om preparatet: reseptgruppe, administrasjonsvei, virkestoff, ATC, alle styrkene med deling, knusing og åpning, pakningene med varenummer og lenken til preparatomtalen. Styrken du kom fra, står åpen og er merket.',
+      'Vinduet lukkes med Escape, lukkeknappen eller et trykk utenfor. På mobil kommer det opp nedenfra.',
+      'Søket på siden finner preparatnavnene også i lukkede former og styrker, og åpner dem.',
+    ],
+  },
+  {
+    versjon: '1.25.0',
+    dato: '2026-09-24',
+    sammendrag: 'Nytt utseende og én felles meny øverst',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Betydelig omfang',
+    punkter: [
+      'Appen har fått nye farger, ny skrift og nye ikoner, i både lyst og mørkt tema.',
+      'Menyknappen, knappene oppe til høyre og knappene på stoffsidene er samlet i én meny øverst, som står der mens du ruller.',
+      'På stoffsiden ligger «Åpne fortolkning», «Rediger» og «Lukk» i menyen øverst. På mobil ligger de nederst i vinduet.',
+      'Profilen, brukerlista, endringsloggen og utloggingen ligger i en meny bak profilbildet ditt helt til høyre.',
+      'Lenker og hopp på siden stopper nå under menyen, ikke bak den.',
+      'Fortolkningen, tastene og kommentarene er uendret.',
     ],
   },
   {

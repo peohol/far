@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { Legemiddelutvalg } from '../../legemiddeldata/lesing'
-import { byggPreparatoversikt, type Preparatoversikt } from '../../legemiddeldata/preparater'
+import { byggPreparatvisning, type Preparatvisning } from '../../legemiddeldata/preparatmodell'
 import { useFaginnholdskilde } from './Faginnholdskilde'
 
 export type Legemiddeltilstand =
   | { status: 'ingen' }
   | { status: 'laster' }
-  | { status: 'klar'; utvalg: Legemiddelutvalg; oversikt: Preparatoversikt }
+  | { status: 'klar'; utvalg: Legemiddelutvalg; visning: Preparatvisning }
   | { status: 'feil'; feil: string }
 
 /**
@@ -30,7 +30,7 @@ export function useLegemidler(koblet: readonly string[]): Legemiddeltilstand {
     legemidler
       .les(ider)
       .then((utvalg) => {
-        if (gjelder) setTilstand({ status: 'klar', utvalg, oversikt: byggPreparatoversikt(utvalg, ider) })
+        if (gjelder) setTilstand({ status: 'klar', utvalg, visning: byggPreparatvisning(utvalg, ider) })
       })
       .catch((e: Error) => {
         if (gjelder) setTilstand({ status: 'feil', feil: e.message })

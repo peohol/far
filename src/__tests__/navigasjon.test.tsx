@@ -30,7 +30,7 @@ vi.mock('../auth/klient', async () => {
     }),
   }
 })
-vi.mock('../components/konto/Kontoknapper', () => ({ Kontoknapper: () => null }))
+vi.mock('../components/konto/Kontomeny', () => ({ Kontomeny: () => null }))
 
 const { default: App } = await import('../App')
 const { dagensKommentar } = await import('./hjelp/dagensregler')
