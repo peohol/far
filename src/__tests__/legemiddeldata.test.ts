@@ -9,27 +9,29 @@
  * handelsvare som skal hoppes over.
  */
 import type { PGlite } from '@electric-sql/pglite'
-import { readFileSync } from 'node:fs'
-import { crc32, deflateRawSync } from 'node:zlib'
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { ENTITETER, lesFest, PARSERVERSJON, type Festpost, type Interaksjonsdata } from '../legemiddeldata/fest'
 import { lagLegemiddellager, type Databasekall } from '../legemiddeldata/lager'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { behandleSynk } from '../legemiddeldata/endepunkt'
 import { lagLegemiddelleser, type Legemiddelutvalg, type Virkestofftreff } from '../legemiddeldata/lesing'
 import { byggInteraksjoner, interaksjonsnokler, oppsummerInteraksjoner } from '../legemiddeldata/interaksjoner'
 import { byggPreparatoversikt, oppsummerGruppe, oppsummerPreparater } from '../legemiddeldata/preparater'
 import { synkroniserFest } from '../legemiddeldata/synk'
 import { pakkUt } from '../legemiddeldata/zip'
+import {
+  AMITRIPTYLIN,
+  AMITRIPTYLIN_ABCUR_50,
+  AMITRIPTYLINHYDROKLORID,
+  kallSom,
+  KODEIN,
+  innloggetLeser,
+  lagZip,
+  svar,
+  synkroniserUtdrag,
+  TERBINAFIN_AMITRIPTYLIN,
+  UTDRAG,
+} from './hjelp/fest'
 import { feilFra, nyDatabase } from './hjelp/testdatabase'
-
-const UTDRAG = readFileSync(new URL('./data/fest-utdrag.xml', import.meta.url), 'utf8')
-
-const AMITRIPTYLIN = 'ID_0A1B24EF-A7F8-488B-97B8-8023193E976D'
-const AMITRIPTYLINHYDROKLORID = 'ID_070A7B5D-46F1-44DC-AAB8-B51BE5A49270'
-const AMITRIPTYLIN_ABCUR_50 = 'ID_012C7C0D-77BC-4F3D-BEBE-663743B03C1F'
-const KODEIN = 'ID_82E89E1B-9C06-4E57-BB4D-AB3DA8B33FD4'
-const TERBINAFIN_AMITRIPTYLIN = 'ID_43E3CEDF-77A1-4D0D-844A-9F8A01267559'
 
 async function* biter(tekst: string, storrelse = 997): AsyncGenerator<string> {
   for (let i = 0; i < tekst.length; i += storrelse) yield tekst.slice(i, i + storrelse)
@@ -40,40 +42,6 @@ async function les(tekst: string): Promise<{ poster: Festpost[]; hentetDato: str
   const poster: Festpost[] = []
   for await (const p of lesFest(biter(tekst), fil)) poster.push(p)
   return { poster, hentetDato: fil.hentetDato }
-}
-
-/** Et zip-arkiv med én fil, slik DMP pakker FEST. */
-function lagZip(navn: string, innhold: string): Buffer {
-  const data = Buffer.from(innhold, 'utf8')
-  const komprimert = deflateRawSync(data)
-  const navnBuf = Buffer.from(navn)
-  const sum = crc32(data)
-  const lokal = Buffer.alloc(30)
-  lokal.writeUInt32LE(0x04034b50, 0)
-  lokal.writeUInt16LE(20, 4)
-  lokal.writeUInt16LE(8, 8)
-  lokal.writeUInt32LE(sum, 14)
-  lokal.writeUInt32LE(komprimert.length, 18)
-  lokal.writeUInt32LE(data.length, 22)
-  lokal.writeUInt16LE(navnBuf.length, 26)
-  const sentral = Buffer.alloc(46)
-  sentral.writeUInt32LE(0x02014b50, 0)
-  sentral.writeUInt16LE(20, 4)
-  sentral.writeUInt16LE(20, 6)
-  sentral.writeUInt16LE(8, 10)
-  sentral.writeUInt32LE(sum, 16)
-  sentral.writeUInt32LE(komprimert.length, 20)
-  sentral.writeUInt32LE(data.length, 24)
-  sentral.writeUInt16LE(navnBuf.length, 28)
-  sentral.writeUInt32LE(0, 42)
-  const katalogStart = lokal.length + navnBuf.length + komprimert.length
-  const slutt = Buffer.alloc(22)
-  slutt.writeUInt32LE(0x06054b50, 0)
-  slutt.writeUInt16LE(1, 8)
-  slutt.writeUInt16LE(1, 10)
-  slutt.writeUInt32LE(sentral.length + navnBuf.length, 12)
-  slutt.writeUInt32LE(katalogStart, 16)
-  return Buffer.concat([lokal, navnBuf, komprimert, sentral, navnBuf, slutt])
 }
 
 async function tekstFra(strom: AsyncIterable<string>): Promise<string> {
@@ -244,30 +212,7 @@ describe('utpakkingen', () => {
 
 /* --- Databasen ------------------------------------------------------------ */
 
-function kallSom(db: PGlite, rolle: 'service_role' | 'authenticated' | 'anon'): Databasekall {
-  return (funksjon, argumenter) =>
-    db.transaction(async (tx) => {
-      await tx.query(`select set_config('role', $1, true)`, [rolle])
-      await tx.query(`select set_config('request.jwt.claims', $1, true)`, [
-        JSON.stringify(rolle === 'authenticated' ? { sub: '00000000-0000-0000-0000-000000000001', role: rolle } : { role: rolle }),
-      ])
-      const navn = Object.keys(argumenter)
-      const verdier = Object.values(argumenter).map((v) =>
-        v !== null && typeof v === 'object' && !(Array.isArray(v) && v.every((x) => typeof x === 'string')) ? JSON.stringify(v) : v,
-      )
-      const { rows } = await tx.query<{ r: unknown }>(
-        `select public.${funksjon}(${navn.map((n, i) => `${n} => $${i + 1}`).join(', ')}) as r`,
-        verdier,
-      )
-      return rows[0]?.r ?? null
-    })
-}
-
 type Legemidler = Legemiddelutvalg
-
-function svar(body: string | Buffer | null, status = 200, headers: Record<string, string> = {}): Response {
-  return new Response(typeof body === 'string' || body === null ? body : new Uint8Array(body), { status, headers })
-}
 
 describe('synkroniseringen', () => {
   let db: PGlite
@@ -450,22 +395,8 @@ describe('preparatene og interaksjonene på stoffsiden', () => {
 
   beforeAll(async () => {
     const db = await nyDatabase()
-    await synkroniserFest({
-      lager: lagLegemiddellager(kallSom(db, 'service_role')),
-      hent: async () => svar(lagZip('fest251.xml', UTDRAG), 200, { etag: '"a"' }),
-    })
-    const innlogget = kallSom(db, 'authenticated')
-    // Leseren appen bruker, mot en klient som kaller databasen som en innlogget.
-    const klient = {
-      rpc: async (funksjon: string, argumenter: Record<string, unknown>) => {
-        try {
-          return { data: await innlogget(funksjon, argumenter), error: null }
-        } catch (e) {
-          return { data: null, error: { message: (e as Error).message } }
-        }
-      },
-    } as unknown as SupabaseClient
-    leser = lagLegemiddelleser(klient)
+    await synkroniserUtdrag(db)
+    leser = innloggetLeser(db)
     anonym = kallSom(db, 'anon')
   })
 

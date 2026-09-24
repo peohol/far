@@ -201,20 +201,11 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
         <Button variant="subtle" onClick={() => onApneFortolkning(oppforing.fortolkning)}>
           Åpne fortolkning
         </Button>
-        {styring && (harInnhold || regler) && (
-          <Button variant="subtle" onClick={() => styring.settAlle(!styring.alleApne)}>
-            {styring.alleApne ? 'Lukk alle' : 'Åpne alle'}
-          </Button>
-        )}
         {kanRedigere && (
           <Button
             variant="subtle"
             aria-pressed={modus === 'rediger'}
-            onClick={() => {
-              // Den som redigerer, skal se hele siden: alt åpnes.
-              if (modus === 'lese') styring?.settAlle(true)
-              setModus(modus === 'rediger' ? 'lese' : 'rediger')
-            }}
+            onClick={() => setModus(modus === 'rediger' ? 'lese' : 'rediger')}
           >
             {modus === 'rediger' ? 'Avslutt redigering' : 'Rediger'}
           </Button>

@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.23.0',
+    versjon: '1.24.0',
     dato: '2026-09-24',
     sammendrag: 'Alle kilder på stoffsidene er nummererte referanser, også de fra FEST',
     typer: ['Design / layout', 'Funksjonalitet'],
@@ -22,6 +22,32 @@ export const ENDRINGSLOGG: Endring[] = [
       'FEST og referansene DMP oppgir for hver interaksjon, er nå nummererte referanser med pille og boble, og står i referanselisten nederst sammen med de andre kildene.',
       'Kildelinjen «Kilde: FEST …» er erstattet av FEST-referansen i seksjonens kildefelt, med datoen for uttrekket og siste kontroll ved siden av.',
       'Kilder fra FEST er merket som automatiske. De kan ikke redigeres eller velges i redigeringsmodus, og forsvinner av seg selv når FEST ikke lenger har dem.',
+    ],
+  },
+  {
+    versjon: '1.23.1',
+    dato: '2026-09-24',
+    sammendrag: 'Forarbeid til den nye visningen av preparatene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Preparatene kan nå ordnes som legemiddelform, styrke og preparat, slik den nye visningen skal vise dem. Styrker som bare ser like ut, for eksempel ulike salter eller mg mot mg/ml, holdes fra hverandre.',
+      'Hver legemiddelform som brukes av stoffsidene, har fått et ikon. Nye former fra FEST får et generisk ikon og blir fanget opp.',
+      'Ingenting er endret i det du ser ennå. Kommenteringen er uendret.',
+    ],
+  },
+  {
+    versjon: '1.23.0',
+    dato: '2026-09-24',
+    sammendrag: 'Bare én skuff står åpen om gangen på stoffsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Når du åpner en seksjon på en stoffside, lukkes den som sto åpen. Det samme gjelder detaljkortene i en seksjon: åpner du ett, lukkes de andre, mens seksjonen står åpen.',
+      'Siden ruller til toppen av seksjonen eller kortet du åpnet.',
+      'Regelen gjelder også når en lenke, søket på siden eller nettleserens eget søk åpner noe.',
+      '«Åpne alle» og «Lukk alle» er fjernet. Redigeringsmodus åpner ikke lenger alt; du åpner seksjonen du vil redigere, og «Kilder for panelet» åpner seksjonen sin.',
+      'Fortolkningen, reglene og kommentartekstene er uendret.',
     ],
   },
   {

@@ -1,7 +1,7 @@
 # OUSFAR – UX-reimagination og stoffmonografer
 
 **Dato:** 24.09.2026  
-**Status:** Implementeringsplan. Dette dokumentet er spesifikasjonen for design- og implementeringsarbeidet, ikke en beskrivelse av dagens UI.
+**Status:** Implementeringsplan. Dette dokumentet er spesifikasjonen for design- og implementeringsarbeidet, ikke en beskrivelse av dagens UI. Fremdriften står i §16.
 
 ## 1. Mål
 
@@ -497,3 +497,25 @@ Arbeidet er ikke ferdig før:
 5. **Klinisk innhold er ikke UX-copy.** Designrunden kan rydde chrome og hjelpetekst, ikke forbedre farmakologisk tekst automatisk.
 6. **Animasjon skal gi feedback.** Ikke bruk konstant dekorativ bevegelse i en arbeidsflate som skal kunne brukes under konsentrasjon.
 7. **Mobil er en referanseflate, ikke en etterkontroll.** Kvetiapin-monografen skal designes eksplisitt både bred og smal før komponentene generaliseres.
+
+## 16. Fremdrift
+
+Vedlikeholdes bare av koordinatorøkten, ved hver merge. Visuell fasit: Claude Design-handoff «OUSFAR Visual Directions», retning Atlas.
+
+| PR | Innhold | Status |
+| --- | --- | --- |
+| A | Designsystem, ikoner og felles toppmeny | Under arbeid |
+| B | Trekkspillmotor: én åpen skuff per nivå | Merget (#52, 1.23.0) |
+| C | Søkedata for globalt søk | Under arbeid |
+| D | Referansemodell med FEST | Merget (#54, 1.24.0) |
+| F1 | Preparatmodell og legemiddelformregister | Merget (#53, 1.23.1) |
+| E | Monografstruktur og Viktige data | Venter på A |
+| F2 | Preparater-UI | Venter på A |
+| G | Globalt og lokalt søk-UI | Venter på A og C |
+| H | Øvrige monografpaneler og serumtabell | Venter på A |
+| I | Resten av appens visuelle språk | Venter på bølge 2 |
+| J | Sluttintegrasjon og kvalitetskontroll | Venter på I |
+
+Kjente mellomtilstander:
+
+- Etter B og før E er Viktige data en vanlig søskenseksjon, så den lukkes når en annen seksjon åpnes. E tar den ut av trekkspillet.
