@@ -1,0 +1,310 @@
+/* --- Toppen av stoffmonografen ---------------------------------------------
+   Identiteten og viktige data, som alltid står fram over seksjonene
+   (`Identitetspanel.tsx`, `ViktigeData.tsx`). Mål og uttrykk fra Atlas
+   (`OUSFAR Monograf`): metalinje, stoffnavn i display-serif, og nøkkeltallene
+   i to grupper. Farge er aldri eneste signal: hvert kort har ikon og etikett. */
+
+/* Identiteten. */
+.identitet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+  padding: var(--rom-8) var(--rom-4) var(--rom-3);
+}
+
+.metalinje {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
+  letter-spacing: var(--sperring-meta);
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.metalinje__kode {
+  color: var(--aksent);
+}
+
+.identitet__navn {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-display);
+  font-weight: var(--vekt-medium);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--blekk-sterk);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.identitet__navn:focus {
+  outline: none;
+}
+
+.identitet__komponenter {
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.komponentlenke {
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-meta);
+  color: var(--aksent);
+}
+
+/* Viktige data: konsentrasjonene (3 deler) ved siden av kinetikken (2 deler).
+   Gruppene brytes under hverandre når det blir trangt, og en gruppe alene
+   tar hele bredden. */
+.viktige-data {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  margin-bottom: var(--rom-7);
+  scroll-margin-top: var(--toppmeny-offset);
+}
+
+.viktige-data__grupper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-7);
+}
+
+.viktige-data__gruppe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  min-width: 0;
+}
+
+.viktige-data__gruppe--konsentrasjon {
+  flex: 3 1 30rem;
+}
+
+.viktige-data__gruppe--kinetikk {
+  flex: 2 1 20rem;
+}
+
+.viktige-data__gruppetittel {
+  padding-left: var(--rom-1);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-ingress);
+  font-style: italic;
+  font-weight: var(--vekt-normal);
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk-dempet);
+}
+
+.viktige-data__kort {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: var(--rom-4);
+  padding: 0;
+  list-style: none;
+}
+
+/* Ett kort. Konsentrasjonene er farget etter nivået, uten kant; kinetikken
+   står på flaten med kant og et miniplott øverst. */
+.datakort {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  min-width: 0;
+  padding: var(--rom-6);
+  background: var(--flate);
+  border-radius: var(--runding-kort);
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
+}
+
+.datakort--kinetikk {
+  gap: var(--rom-3);
+  border: var(--kant) solid var(--linje);
+}
+
+.datakort--referanse {
+  --datakort-blekk: var(--referanse-blekk);
+  background: var(--referanse-flate);
+}
+
+.datakort--toksisk {
+  --datakort-blekk: var(--toksisk-blekk);
+  background: var(--toksisk-flate);
+}
+
+.datakort--alvorlig {
+  --datakort-blekk: var(--alvorlig-blekk);
+  background: var(--alvorlig-flate);
+}
+
+.datakort__ikon {
+  flex: none;
+}
+
+.datakort__plot {
+  display: grid;
+  place-items: center;
+  padding: var(--rom-1);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-felt);
+}
+
+.datakort__tittel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--rom-2) var(--rom-3);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+  line-height: 1.25;
+  color: var(--datakort-blekk, var(--blekk-dempet));
+}
+
+/* t₁/₂ og tₛₛ: symbolet i kursiv serif foran etiketten. */
+.datakort__symbol {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-seksjon);
+  font-style: italic;
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+  color: var(--aksent);
+}
+
+.datakort__symbol sub {
+  font-size: 0.55em;
+}
+
+.datakort__verdi {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--rom-2);
+  color: var(--blekk-sterk);
+}
+
+.datakort__forledd {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-style: italic;
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk-dempet);
+}
+
+.datakort__tall {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-tall);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.datakort__enhet {
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk-dempet);
+}
+
+.datakort__forbehold {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-ingress);
+  font-style: italic;
+  line-height: 1.35;
+  color: var(--blekk-dempet);
+}
+
+.datakort__tom {
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+/* Kildefeltet står nederst i kortet, på flaten, så det skiller seg fra tonen. */
+.datakort .referansefelt {
+  margin-top: auto;
+  background: var(--flate);
+}
+
+/* Smal flate: konsentrasjonene blir stablede rader med ikon, etikett og
+   verdi på linje; kinetikken står to i bredden med ikonet ved symbolet. */
+@media (max-width: 47.5em) {
+  .viktige-data {
+    /* Konseptikonene på smal flate (40 px i Atlas). */
+    --datakort-ikon-smal: 2.5rem;
+  }
+
+  .viktige-data__grupper {
+    gap: var(--rom-5);
+  }
+
+  .viktige-data__gruppe--konsentrasjon .viktige-data__kort {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--rom-3);
+  }
+
+  .viktige-data__gruppe--kinetikk .viktige-data__kort {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--rom-3);
+  }
+
+  .datakort {
+    gap: var(--rom-3);
+    padding: var(--rom-4) var(--rom-5);
+    border-radius: var(--runding-panel);
+  }
+
+  .datakort--konsentrasjon {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--rom-4);
+  }
+
+  .datakort--konsentrasjon > :not(.datakort__ikon, .datakort__tittel, .datakort__verdi) {
+    grid-column: 1 / -1;
+  }
+
+  .datakort--konsentrasjon .ikon.datakort__ikon,
+  .datakort--kinetikk .datakort__plot .ikon {
+    width: var(--datakort-ikon-smal);
+    height: var(--datakort-ikon-smal);
+  }
+
+  .datakort--kinetikk {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .datakort--kinetikk > :not(.datakort__plot, .datakort__tittel) {
+    grid-column: 1 / -1;
+  }
+
+  .datakort--kinetikk .datakort__plot {
+    grid-area: 1 / 2;
+    padding: 0;
+    background: none;
+  }
+
+  .datakort--kinetikk .datakort__tittel {
+    grid-area: 1 / 1;
+  }
+
+  /* Symbolet står alene; etiketten er der fortsatt for skjermlesere. */
+  .datakort--kinetikk .datakort__etikett {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .datakort__tall {
+    font-size: var(--tekst-seksjon);
+  }
+}

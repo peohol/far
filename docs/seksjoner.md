@@ -24,8 +24,8 @@ offentlige kilder.
 - Når brukeren åpner en skuff, ruller siden til toppen av den, under den
   faste toppmenyen. Søsknene som lukkes, lukkes straks, så toppen står stille
   mens siden ruller dit.
-- Identiteten øverst på siden, og kritiske varsler, er ikke skuffer. De står
-  alltid fram.
+- Identiteten og viktige data øverst på siden, og kritiske varsler, er ikke
+  skuffer. De står alltid fram, og å åpne en seksjon lukker dem ikke.
 - Pilen foran overskriften viser om skuffen er åpen. Hele hodet kan trykkes
   på; knappene i det gjør sin egen jobb. Handlingene i hodet (som «Kilder for
   panelet») virker på innholdet, så de åpner også skuffen; knappene i
@@ -106,7 +106,8 @@ En **direktelenke** peker på en seksjon eller et detaljkort:
 ```
 
 Siden åpner da stedet og ruller dit — også når innholdet først kommer etter at
-siden er hentet. Adressene lages med `analyttadresse(kode, sted)` i
+siden er hentet. En lenke til noe som alltid står fram (`#/analytt/KODE/viktige_data`)
+ruller bare dit, uten å åpne eller lukke noe. Adressene lages med `analyttadresse(kode, sted)` i
 `src/domain/rute.ts`. Å åpne og lukke skuffer endrer ikke adressen.
 
 ## Styringen for siden
@@ -122,6 +123,7 @@ regelen om én åpen per nivå kan ikke brytes. `useSeksjonsstyring()` gir:
 | `apne(['seksjon', 'kort'])` | Åpner stedet uten å gli, lukker søsknene, og ruller dit |
 | `apneTil(element)` | Åpner skuffene elementet står i på samme måte, og ruller det fram |
 | `sett(sti, apen)` | Det et trykk gjør: åpner (og ruller til toppen) eller lukker |
+| `fastSted(sti, element)` | Melder inn et sted som alltid står fram, så `apne` ruller dit uten å røre skuffene. Brukes gjennom `useFastSted(id, ref)` |
 
 Står flere søsken åpne fra start (`apenFraStart`), er det den første som
 gjelder. En seksjon uten styringen rundt seg lager sin egen, så detaljkortene

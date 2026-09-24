@@ -1,16 +1,11 @@
 import { useId, useState, type ReactNode } from 'react'
 import type { Sideelement, Sidemodell } from '../../faginnhold/analyttside'
 import {
-  DATAKORT,
   DOSEKOLONNER,
   ELEMENTTYPER,
-  formaterIntervall,
-  harVerdi,
   lesDosetabell,
-  lesIntervallverdi,
   lesKinetikk,
   lesRiktekst,
-  type Datakortdefinisjon,
   type Paneldefinisjon,
 } from '../../faginnhold/paneler'
 import { antall, forhandsvisning, ramsOpp } from '../../faginnhold/oppsummering'
@@ -20,28 +15,23 @@ import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { useSidereferanser } from '../referanser/Sidereferanser'
 import { Riktekst } from './Riktekst'
-import {
-  DatakortSkjema,
-  DosetabellSkjema,
-  KinetikkSkjema,
-  PanelkildeSkjema,
-  TekstSkjema,
-  type Skjemaresultat,
-} from './Skjemaer'
+import { DosetabellSkjema, KinetikkSkjema, PanelkildeSkjema, TekstSkjema } from './Skjemaer'
 import { Uthev } from '../Uthev'
 import { Sistredigert } from '../historikk/Sistredigert'
 import type { Analyttsidehandlinger } from './useAnalyttside'
 
 /**
- * Panelene 2–7 på informasjonssiden, i lese- og redigeringsmodus.
+ * Seksjonene på informasjonssiden, i lese- og redigeringsmodus. Identiteten
+ * og viktige data står alltid fram og har egne filer (`Identitetspanel.tsx`,
+ * `ViktigeData.tsx`).
  *
  * Hvert panel er en seksjon som åpnes og lukkes (`src/components/seksjoner/`),
  * med en kort oppsummering av innholdet når den er lukket. Kortene i
  * farmakokinetikken er detaljkort i seksjonen.
  *
  * I lesemodus vises bare det som har innhold: siden skal leses som et
- * oppslagsverk. I redigeringsmodus står alle panelene og alle datakortene
- * fram, med diskrete knapper for å redigere, legge til, flytte og fjerne.
+ * oppslagsverk. I redigeringsmodus står alle panelene fram, med diskrete
+ * knapper for å redigere, legge til, flytte og fjerne.
  */
 
 export interface Panelkontekst {
@@ -162,92 +152,6 @@ export function Redigerbar({
 function Kortreferanser({ element }: { element: Sideelement | null | undefined }) {
   if (!element || element.referanser.length === 0) return null
   return <Referansefelt ider={element.referanser} niva="element" />
-}
-
-/* --- Panel 2: viktige data ------------------------------------------------ */
-
-function Kortsymbol({ symbol }: { symbol: string }) {
-  const [grunn, senket] = symbol.split('_')
-  return (
-    <span className="datakort__symbol">
-      {grunn}
-      {senket && <sub>{senket}</sub>}
-    </span>
-  )
-}
-
-export function Datakortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
-  const elementer = kontekst.modell.paneler.get(definisjon.nokkel) ?? []
-  const kort = DATAKORT.map((def, plass) => ({
-    def: def as Datakortdefinisjon,
-    plass,
-    element: elementer.find((e) => e.elementtype === def.type) ?? null,
-  }))
-  const synlige = kort.filter(({ element }) => element && harVerdi(lesIntervallverdi(element.data)))
-
-  return (
-    <Panel
-      definisjon={definisjon}
-      kontekst={kontekst}
-      tomt={synlige.length === 0}
-      oppsummering={ramsOpp(synlige.map(({ def }) => def.tittel))}
-    >
-      <ul className="datakort">
-        {(kontekst.redigerer ? kort : synlige).map(({ def, plass, element }) => {
-          const verdi = lesIntervallverdi(element?.data)
-          return (
-            <li key={def.type} className="datakort__kort" {...(element && { id: elementAnker(element.id) })}>
-              <h3 className="datakort__tittel">
-                <Uthev tekst={def.tittel} />
-                {def.symbol && <Kortsymbol symbol={def.symbol} />}
-              </h3>
-              <Redigerbar
-                navn={def.tittel}
-                element={element}
-                redigerer={kontekst.redigerer}
-                visning={
-                  harVerdi(verdi) ? (
-                    <>
-                      <p className="datakort__verdi">
-                        <Uthev tekst={formaterIntervall(verdi)} />
-                      </p>
-                      {verdi.forbehold && (
-                        <p className="datakort__forbehold">
-                          <Uthev tekst={verdi.forbehold} />
-                        </p>
-                      )}
-                    </>
-                  ) : (
-                    <p className="datakort__tom">Ikke oppgitt</p>
-                  )
-                }
-                skjema={(lukk) => (
-                  <DatakortSkjema
-                    kort={def}
-                    tittel={def.tittel}
-                    start={verdi}
-                    referanser={element?.referanser ?? []}
-                    onAvbryt={lukk}
-                    onLagre={async ({ data, referanser }: Skjemaresultat<object>) => {
-                      await kontekst.handlinger.lagreElement(element, {
-                        panel: definisjon.nokkel,
-                        elementtype: def.type,
-                        posisjon: plass,
-                        data: data as Record<string, unknown>,
-                        referanser,
-                      })
-                      lukk()
-                    }}
-                  />
-                )}
-              />
-              <Kortreferanser element={element} />
-            </li>
-          )
-        })}
-      </ul>
-    </Panel>
-  )
 }
 
 /* --- Panel 3–5: én riktekst ----------------------------------------------- */
