@@ -13,16 +13,16 @@
   min-height: 100dvh;
   display: grid;
   place-items: center;
-  padding: var(--rom-5) clamp(1rem, 4vw, 3.5rem);
+  padding: var(--rom-8) clamp(1rem, 4vw, 3.5rem);
   overflow-y: auto;
 }
 
 .portkort {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-4);
+  gap: var(--rom-7);
   width: min(100%, 27rem);
-  padding: var(--rom-5);
+  padding: var(--rom-8);
   background: var(--flate);
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-l);
@@ -36,7 +36,7 @@
 .portkort__topp {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   text-align: center;
 }
 
@@ -57,7 +57,7 @@
 .skjema {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   text-align: left;
 }
 
@@ -70,13 +70,13 @@
 .skjema__rad {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-  gap: var(--rom-3);
+  gap: var(--rom-5);
 }
 
 .skjema__bolk {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .skjema__bolktittel {
@@ -89,7 +89,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .skjema .knapp--primary {
@@ -99,7 +99,7 @@
 .felt {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   min-width: 0;
 }
 
@@ -113,7 +113,7 @@
 
 .felt__inndata {
   width: 100%;
-  padding: var(--rom-2) var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   font-size: var(--tekst-s);
   color: var(--blekk);
   background: var(--flate-bunn);
@@ -135,7 +135,7 @@
 
 /* Brukernavnet: vises, men er ikke et felt som kan skrives i. */
 .felt__last {
-  padding: var(--rom-2) var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   font-family: var(--skrift-mono);
   font-size: var(--tekst-s);
   color: var(--blekk);
@@ -152,7 +152,7 @@
 }
 
 .skjemafeil {
-  padding: var(--rom-2) var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   font-size: var(--tekst-s);
   color: var(--niva-over-blekk);
   background: var(--niva-over-flate);
@@ -173,7 +173,7 @@
 
 .skille {
   height: 0;
-  margin: var(--rom-2) 0;
+  margin: var(--rom-3) 0;
   border: 0;
   border-top: var(--kant) solid var(--linje);
 }
@@ -222,10 +222,10 @@
 .kontoknapp {
   display: inline-flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   height: 2.9rem;
   max-width: 12rem;
-  padding: 0 var(--rom-3) 0 0.35rem;
+  padding: 0 var(--rom-5) 0 0.35rem;
   font-size: var(--tekst-s);
   color: var(--blekk-dempet);
   background: var(--flate);
@@ -253,15 +253,15 @@
 .modallag__handlinger {
   display: flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .modallag__kropp {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   overflow-y: auto;
-  padding: var(--rom-4);
+  padding: var(--rom-7);
 }
 
 /* --- Brukerlista --------------------------------------------------------- */
@@ -280,8 +280,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--rom-3);
-  padding: var(--rom-3) 0;
+  gap: var(--rom-5);
+  padding: var(--rom-5) 0;
 }
 
 .brukerrad + .brukerrad {
@@ -315,13 +315,13 @@
 .brukerrad__knapper {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
 }
 
 .adminmerke {
   display: inline-flex;
   align-items: center;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   padding: 0.2em 0.7em;
   font-size: var(--tekst-xs);
   font-weight: var(--vekt-medium);
@@ -336,8 +336,8 @@
 .passordkvittering {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
-  padding: var(--rom-3);
+  gap: var(--rom-3);
+  padding: var(--rom-5);
   background: var(--varsel-flate);
   border: var(--kant-tykk) solid var(--varsel-linje);
   border-radius: var(--runding-m);
@@ -352,11 +352,11 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .passordkvittering__passord code {
-  padding: var(--rom-2) var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
   font-family: var(--skrift-mono);
   font-size: var(--tekst-m);
   font-weight: var(--vekt-medium);
@@ -383,14 +383,14 @@
 .bildevelger {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
 }
 
 .bildevelger__visning {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
 }
 
 /* `react-easy-crop` legger seg ut i hele boksen, så den må ha en høyde. */
@@ -413,13 +413,13 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
 }
 
 .bildevelger__zoom {
   display: flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   flex: 1 1 12rem;
   font-size: var(--tekst-xs);
   color: var(--blekk-dempet);
@@ -434,16 +434,16 @@
 .bildevelger__knapper {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 /* Lave vinduer: hold porten innenfor bildet uten å måtte skrolle. */
 @media (max-height: 820px) {
   .port {
-    padding-block: var(--rom-3);
+    padding-block: var(--rom-5);
   }
 
   .portkort {
-    gap: var(--rom-3);
+    gap: var(--rom-5);
   }
 }

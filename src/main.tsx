@@ -4,9 +4,15 @@ import { OktProvider } from './auth/okt'
 import { Port } from './components/konto/Port'
 import { TipsLag } from './components/Tips'
 import { ShortcutVisibilityProvider } from './hooks/useShortcutVisibility'
+// Skriftene ligger i appen selv, så et klinisk verktøy ikke er avhengig av en
+// ekstern skrifttjeneste. Newsreader med optisk størrelse, som i designet.
+import '@fontsource-variable/newsreader/opsz.css'
+import '@fontsource-variable/newsreader/opsz-italic.css'
+import '@fontsource-variable/public-sans/wght.css'
 import './styles/tokens.css'
 import './styles/base.css'
 import './styles/components.css'
+import './styles/ikon.css'
 import './styles/konto.css'
 import './styles/regler.css'
 
