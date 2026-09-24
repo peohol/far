@@ -231,8 +231,10 @@ godkjenningsfritak». Grupperingen står i `src/legemiddeldata/preparater.ts`:
 - Nederst står kilden, datoen for uttrekket og når kopien sist ble kontrollert
   mot FEST.
 
-Preparatnavnene er med i søket på siden, også i lukkede detaljkort. Det
-globale søket tar dem med når det kommer.
+Preparatnavnene er med i søket på siden, også i lukkede detaljkort, og i søket
+i hele kunnskapsbasen, der treffet peker på kortet for legemiddelformen.
+Nøklene til kortene og tekstene søket finner, står i
+`src/legemiddeldata/stoffside.ts`.
 
 ## Slik interaksjonene vises
 
@@ -269,7 +271,7 @@ og logikken står i `src/legemiddeldata/interaksjoner.ts`.
 - **Ikke vurdert.** Står en av sidens ATC-koder blant dem DMP ikke har
   vurdert, sier seksjonen fra, så en tom liste ikke leses som at det ikke
   finnes interaksjoner.
-- Stoffnavnene er med i søket på siden.
+- Stoffnavnene er med i søket på siden og i søket i hele kunnskapsbasen.
 
 Eksempler fra filen 08.09.2026: amitriptylin 21 bør unngås og 36 forholdsregler,
 kvetiapin 38 og 12, karbamazepin 180 og 169.

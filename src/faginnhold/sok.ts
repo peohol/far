@@ -1,21 +1,23 @@
 /**
  * Søket i faginnholdet.
  *
- * Det finnes to søk (planen, del 17): søket på den åpne siden, som finner og
- * fremhever tekst der den står, og — senere — søket i hele kunnskapsbasen,
- * som finner sider og peker til riktig nivå, f.eks. «Sertralin ›
- * Farmakokinetikk › Metabolisme».
+ * Det finnes to søk (planen, del 17, og `docs/ux-reimagination.md`, del 6):
+ * søket på den åpne siden, som finner og fremhever tekst der den står, og
+ * søket i hele kunnskapsbasen, som finner sider og peker til riktig nivå,
+ * f.eks. «Sertralin › Farmakokinetikk › Metabolisme».
  *
  * Begge bygger på det samme her:
  *
  * - {@link indekserSide} gjør én side om til søkedokumenter: ett per tekst,
  *   med stedet det står (siden, panelet, kortet) og hva slags felt det er.
  *   Det globale søket indekserer alle publiserte sider på samme måte og slår
- *   sammen dokumentene; ingenting her vet om én eller mange sider.
+ *   sammen dokumentene (`globaltSok.ts`).
  * - {@link sok} finner dokumentene der alle ordene i søket står, rangert, med
- *   et utdrag rundt treffet.
+ *   et utdrag rundt treffet. {@link sokGlobalt} gjør det samme i en
+ *   {@link Sokeindeks} over mange sider, og gir det beste treffet per sted.
  * - {@link treffIntervaller} finner ordene i en tekst, som fremhevingen
  *   på siden bruker.
+ * - {@link sokeadresse} er adressen et treff peker på.
  *
  * Sammenligningen ser bort fra store og små bokstaver og aksenter, og leser
  * æ, ø og å som a, o og a — som søket etter analytter i `src/domain/search.ts`.
@@ -38,6 +40,7 @@ import {
 } from './paneler'
 import { formaterReferanse } from './referanser'
 import { klartekst } from './riktekst'
+import { analyttadresse } from '../domain/rute'
 
 /* --- Sammenligningen ------------------------------------------------------ */
 
@@ -94,6 +97,7 @@ export function treffIntervaller(tekst: string, ord: readonly string[]): [number
 export type Sokefelt =
   | 'navn'
   | 'kode'
+  | 'alias'
   | 'komponent'
   | 'preparat'
   | 'overskrift'
@@ -102,25 +106,39 @@ export type Sokefelt =
   | 'tabell'
   | 'referanse'
 
-/** Hvor sterkt et treff i feltet teller; lavere er bedre. */
+/**
+ * Hvor sterkt et treff i feltet teller; lavere er bedre. Rekkefølgen er
+ * planens (`docs/ux-reimagination.md`, 6.2): stoffnavn og kode, alias og
+ * komponent, preparatnavn, overskrifter, strukturerte verdier og tabeller,
+ * fritekst og til sist referanser.
+ */
 const VEKT: Record<Sokefelt, number> = {
   kode: 0,
   navn: 0,
+  alias: 1,
   komponent: 1,
-  preparat: 1,
-  overskrift: 2,
-  verdi: 3,
+  preparat: 2,
+  overskrift: 3,
+  verdi: 4,
   tabell: 4,
   fritekst: 5,
   referanse: 6,
 }
 
+/** Feltene som sier hva siden er, og ikke hva som står på den. */
+const IDENTITETSFELT: ReadonlySet<Sokefelt> = new Set(['navn', 'kode', 'alias', 'komponent'])
+
 /** Hvor en tekst står, fra siden og innover. */
 export interface Sokested {
   side: { kode: string; navn: string }
   panel?: { nokkel: string; tittel: string }
-  /** Kortet teksten står i, med overskriften når kortet har en. */
+  /** Kortet teksten står i, med overskriften når kortet har en. `id` er ankeret på siden. */
   element?: { id: string; tittel?: string }
+  /**
+   * Detaljkortet teksten står i, når den står i et: nøkkelen en direktelenke
+   * åpner (`docs/seksjoner.md`). Ikke alltid det samme som ankeret.
+   */
+  detaljkort?: string
 }
 
 export interface Sokedokument {
@@ -134,13 +152,28 @@ export function sti(sted: Sokested): string[] {
   return [sted.side.navn, sted.panel?.tittel, sted.element?.tittel].filter((d): d is string => !!d)
 }
 
+/** Stedsleddene i adressen: seksjonen, og detaljkortet når teksten står i et. */
+export function stedsledd(sted: Sokested): string[] {
+  return sted.panel ? [sted.panel.nokkel, ...(sted.detaljkort ? [sted.detaljkort] : [])] : []
+}
+
+/** Adressen treffet peker på, f.eks. `#/analytt/AMTNORSUM/farmakokinetikk/<kort-ID>`. */
+export function sokeadresse(sted: Sokested): string {
+  return analyttadresse(sted.side.kode, stedsledd(sted))
+}
+
+/** Nøkkelen til stedet, så flere treff på samme sted kan slås sammen. */
+export function stedsnokkel(sted: Sokested): string {
+  return [sted.side.kode, sted.panel?.nokkel ?? '', sted.element?.id ?? ''].join('\n')
+}
+
 /** Det siden er, uavhengig av innholdet i panelene. */
 export interface Sideidentitet {
   kode: string
   navn: string
   /** Stoffene analysen omfatter. */
   komponenter: readonly string[]
-  /** Andre navn siden er kjent under. */
+  /** Andre navn siden er kjent under. Rangeres med komponentene. */
   aliaser?: readonly string[]
 }
 
@@ -183,8 +216,15 @@ export function elementtekster(elementtype: string, data: unknown): Elementtekst
 function elementdokumenter(side: Sokested['side'], element: Sideelement): Sokedokument[] {
   const panelDef = panelFor(element.panel)
   const panel = panelDef && { nokkel: panelDef.nokkel, tittel: panelDef.tittel }
+  // I et panel av kort er hvert element sitt eget detaljkort.
+  const detaljkort = panelDef?.form === 'kort' ? element.id : undefined
   return elementtekster(element.elementtype, element.data).map(({ felt, tekst, tittel }) => ({
-    sted: { side, ...(panel && { panel }), element: { id: element.id, ...(tittel && { tittel }) } },
+    sted: {
+      side,
+      ...(panel && { panel }),
+      element: { id: element.id, ...(tittel && { tittel }) },
+      ...(detaljkort && { detaljkort }),
+    },
     felt,
     tekst,
   }))
@@ -198,6 +238,8 @@ function elementdokumenter(side: Sokested['side'], element: Sideelement): Sokedo
 export interface Tilleggstekst {
   panel: string
   element: { id: string; tittel?: string }
+  /** Detaljkortet teksten står i, når den står i et. */
+  detaljkort?: string
   felt: Sokefelt
   tekst: string
 }
@@ -218,7 +260,7 @@ export function indekserSide(
     { sted: { side }, felt: 'navn', tekst: identitet.navn },
     { sted: { side }, felt: 'kode', tekst: identitet.kode },
     ...identitet.komponenter.map((tekst): Sokedokument => ({ sted: { side }, felt: 'komponent', tekst })),
-    ...(identitet.aliaser ?? []).map((tekst): Sokedokument => ({ sted: { side }, felt: 'navn', tekst })),
+    ...(identitet.aliaser ?? []).map((tekst): Sokedokument => ({ sted: { side }, felt: 'alias', tekst })),
   ]
 
   const perPanel = new Map<string, Sokedokument[]>()
@@ -232,10 +274,11 @@ export function indekserSide(
     )
     for (const element of ordnet) iPanel(panel).push(...elementdokumenter(side, element))
   }
-  for (const { panel, element, felt, tekst } of tillegg) {
+  for (const { panel, element, detaljkort, felt, tekst } of tillegg) {
     const definisjon = panelFor(panel)
     if (!definisjon || !tekst.trim()) continue
-    iPanel(panel).push({ sted: { side, panel: { nokkel: panel, tittel: definisjon.tittel }, element }, felt, tekst })
+    const sted = { side, panel: { nokkel: panel, tittel: definisjon.tittel }, element, ...(detaljkort && { detaljkort }) }
+    iPanel(panel).push({ sted, felt, tekst })
   }
   for (const [, panel] of [...perPanel].sort(([a], [b]) => panelplass(a) - panelplass(b))) dokumenter.push(...panel)
 
@@ -288,20 +331,96 @@ export function utdrag(tekst: string, ord: readonly string[]): Utdrag {
 }
 
 /**
- * Dokumentene der alle ordene i søket står, best først: treff i navn og kode
- * foran treff i fritekst, og treff som begynner et ord foran treff inne i et.
+ * Dokumentene ferdige til å søkes i: teksten i hvert, slik søket
+ * sammenligner den, og navnene og kodene til hver side. Lages én gang for et
+ * sett dokumenter, så et søk per tastetrykk bare sammenligner.
  */
-export function sok(dokumenter: readonly Sokedokument[], sporring: string, maks = 50): Soketreff[] {
+export interface Sokeindeks {
+  dokumenter: readonly Sokedokument[]
+  /** Teksten i hvert dokument, foldet og med mellomrommene slått sammen. */
+  foldet: readonly string[]
+  /** Navnet, koden, aliasene og komponentene til hver side, etter koden. */
+  identitet: ReadonlyMap<string, string>
+}
+
+export function lagSokeindeks(dokumenter: readonly Sokedokument[]): Sokeindeks {
+  const foldet = dokumenter.map((d) => fold(d.tekst).replace(/\s+/g, ' ').trim())
+  const identitet = new Map<string, string>()
+  dokumenter.forEach((d, i) => {
+    if (!IDENTITETSFELT.has(d.felt)) return
+    const kode = d.sted.side.kode
+    identitet.set(kode, [identitet.get(kode), foldet[i]].filter(Boolean).join('\n'))
+  })
+  return { dokumenter, foldet, identitet }
+}
+
+export interface Sokevalg {
+  /** Flest treff. */
+  maks?: number
+  /**
+   * Om ord som ikke står i dokumentet, kan stå i navnet eller koden til siden
+   * det står på. Da finner «sertralin metabolisme» kortet «Metabolisme» på
+   * siden om sertralin. Minst ett av ordene må stå i selve dokumentet.
+   */
+  sidekontekst?: boolean
+}
+
+/**
+ * Hvor godt ordene treffer teksten; lavere er bedre: teksten er søket eller
+ * begynner med det, ordene begynner et ord i teksten, eller de står inne i et.
+ */
+function treffkvalitet(foldet: string, ord: readonly string[], ordstart: ReadonlyMap<string, RegExp>): number {
+  if (foldet.startsWith(ord.join(' '))) return 0
+  return ord.every((o) => ordstart.get(o)!.test(foldet)) ? 1 : 2
+}
+
+/** Plasser mellom feltene, så feltet alltid teller mer enn hvor godt ordene treffer. */
+const KVALITETSTRINN = 3
+
+function finn(indeks: Sokeindeks, sporring: string, { maks = 50, sidekontekst = false }: Sokevalg): Soketreff[] {
   const ord = sokeord(sporring)
   if (ord.length === 0) return []
+  const ordstart = new Map(ord.map((o) => [o, new RegExp(`(^|[^\\p{L}\\p{N}])${escape(o)}`, 'u')]))
   const treff: Soketreff[] = []
-  for (const dokument of dokumenter) {
-    const foldet = fold(dokument.tekst)
-    if (!ord.every((o) => foldet.includes(o))) continue
-    const ordstart = ord.every((o) => new RegExp(`(^|[^\\p{L}\\p{N}])${escape(o)}`, 'u').test(foldet))
-    treff.push({ dokument, utdrag: utdrag(dokument.tekst, ord), poeng: VEKT[dokument.felt] * 2 + (ordstart ? 0 : 1) })
-  }
+  indeks.dokumenter.forEach((dokument, i) => {
+    const foldet = indeks.foldet[i]!
+    const iTeksten = ord.filter((o) => foldet.includes(o))
+    if (iTeksten.length === 0) return
+    if (iTeksten.length < ord.length) {
+      const side = sidekontekst ? (indeks.identitet.get(dokument.sted.side.kode) ?? '') : ''
+      if (!ord.every((o) => iTeksten.includes(o) || side.includes(o))) return
+    }
+    treff.push({
+      dokument,
+      utdrag: utdrag(dokument.tekst, iTeksten),
+      poeng: VEKT[dokument.felt] * KVALITETSTRINN + treffkvalitet(foldet, iTeksten, ordstart),
+    })
+  })
   return treff.sort((a, b) => a.poeng - b.poeng).slice(0, maks)
+}
+
+/**
+ * Dokumentene der alle ordene i søket står, best først: treff i navn og kode
+ * foran treff i fritekst, og treff som begynner teksten eller et ord foran
+ * treff inne i et. Like gode treff står i dokumentenes rekkefølge.
+ */
+export function sok(dokumenter: readonly Sokedokument[], sporring: string, maks = 50): Soketreff[] {
+  return finn(lagSokeindeks(dokumenter), sporring, { maks })
+}
+
+/**
+ * Søket i hele kunnskapsbasen: det beste treffet på hvert sted — siden,
+ * panelet eller kortet — best først. Ord kan også treffe navnet på siden
+ * stedet står på (se {@link Sokevalg}).
+ */
+export function sokGlobalt(indeks: Sokeindeks, sporring: string, maks = 50): Soketreff[] {
+  const beste = new Map<string, Soketreff>()
+  for (const t of finn(indeks, sporring, { maks: Infinity, sidekontekst: true })) {
+    const nokkel = stedsnokkel(t.dokument.sted)
+    if (!beste.has(nokkel)) beste.set(nokkel, t)
+    if (beste.size === maks) break
+  }
+  return [...beste.values()]
 }
 
 function escape(tekst: string): string {

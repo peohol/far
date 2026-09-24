@@ -1,7 +1,8 @@
-import type { Paneldefinisjon, Panelnokkel } from '../../faginnhold/paneler'
+import type { Paneldefinisjon } from '../../faginnhold/paneler'
 import type { Tilleggstekst } from '../../faginnhold/sok'
 import { forhandsvisning } from '../../faginnhold/oppsummering'
 import { oppsummerInteraksjoner, type Interaksjon } from '../../legemiddeldata/interaksjoner'
+import { interaksjonskort, interaksjonstekster } from '../../legemiddeldata/stoffside'
 import { Detaljkort } from '../seksjoner/Seksjon'
 import { Uthev } from '../Uthev'
 import { Festkilde } from './Festkilde'
@@ -9,23 +10,9 @@ import { elementAnker, Panel, type Panelkontekst } from './Paneler'
 import type { Interaksjonstilstand } from './useInteraksjoner'
 import type { Legemiddeltilstand } from './useLegemidler'
 
-/** Seksjonen interaksjonene står i. */
-export const INTERAKSJONSPANEL: Panelnokkel = 'interaksjoner'
-
-/** Stedet på siden for en interaksjon: detaljkortet, og ankeret inne i det. */
-function kortsted(interaksjon: Interaksjon): string {
-  return `interaksjon-${interaksjon.id}`
-}
-
 /** Stoffene siden interagerer med, slik søket på siden finner dem, med detaljkortet de står i. */
 export function interaksjonssoketekster(tilstand: Interaksjonstilstand): Tilleggstekst[] {
-  if (tilstand.status !== 'klar') return []
-  return tilstand.oversikt.interaksjoner.map((i): Tilleggstekst => ({
-    panel: INTERAKSJONSPANEL,
-    element: { id: kortsted(i), tittel: i.med },
-    felt: 'overskrift',
-    tekst: i.med,
-  }))
+  return tilstand.status === 'klar' ? interaksjonstekster(tilstand.oversikt) : []
 }
 
 /**
@@ -108,7 +95,7 @@ function Interaksjonsvisning({ tilstand, legemidler }: { tilstand: Interaksjonst
           {interaksjoner.map((i) => (
             <li key={i.id}>
               <Detaljkort
-                id={kortsted(i)}
+                id={interaksjonskort(i)}
                 tittel={<Uthev tekst={i.med} />}
                 oppsummering={
                   <>
@@ -135,7 +122,7 @@ function Interaksjonsvisning({ tilstand, legemidler }: { tilstand: Interaksjonst
 /** Alt FEST sier om interaksjonen. Ankeret står inne i kortet, så søket på siden åpner det. */
 function Interaksjonsdetaljer({ interaksjon: i }: { interaksjon: Interaksjon }) {
   return (
-    <div className="interaksjon" id={elementAnker(kortsted(i))}>
+    <div className="interaksjon" id={elementAnker(interaksjonskort(i))}>
       <p className={`interaksjon__relevans interaksjon__relevans--${i.relevans}`}>{i.relevanstekst}</p>
       {i.situasjonskriterier.map((k) => (
         <p key={k} className="interaksjon__situasjon">

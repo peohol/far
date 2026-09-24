@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.22.2',
+    dato: '2026-09-24',
+    sammendrag: 'Grunnlaget for å søke i alle stoffsidene samtidig',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Appen kan nå lese og søke gjennom alle de publiserte stoffsidene på én gang: navn, koder, andre navn, preparatnavn, interaksjoner, overskrifter, verdier, tekst og kilder. Hvert treff peker på seksjonen eller kortet det står i. Søkefeltet som bruker dette, kommer i en senere versjon.',
+      'Søket på stoffsiden rangerer stedene under søkefeltet litt annerledes: preparatnavn kommer etter navn og komponenter, og en tekst som begynner med søkeordet kommer foran en der ordet står lenger inne.',
+      'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
     versjon: '1.22.1',
     dato: '2026-09-23',
     sammendrag: 'Den nattlige oppdateringen av legemiddeldataene starter igjen',

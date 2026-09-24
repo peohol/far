@@ -1,11 +1,4 @@
-import type { Sideelement, Sidemodell } from '../../faginnhold/analyttside'
-import {
-  ELEMENTTYPER,
-  lesLegemiddelkobling,
-  type Legemiddelkoblingdata,
-  type Paneldefinisjon,
-  type Panelnokkel,
-} from '../../faginnhold/paneler'
+import { ELEMENTTYPER, type Paneldefinisjon } from '../../faginnhold/paneler'
 import type { Tilleggstekst } from '../../faginnhold/sok'
 import { iSetning } from '../../domain/names'
 import { ramsOpp } from '../../faginnhold/oppsummering'
@@ -15,6 +8,7 @@ import {
   type Preparat,
   type Preparatstyrke,
 } from '../../legemiddeldata/preparater'
+import { finnKobling, preparatkort, preparatsted, preparattekster } from '../../legemiddeldata/stoffside'
 import { Detaljkort } from '../seksjoner/Seksjon'
 import { Uthev } from '../Uthev'
 import { Festkilde } from './Festkilde'
@@ -22,37 +16,11 @@ import { elementAnker, Panel, Redigerbar, type Panelkontekst } from './Paneler'
 import { LegemiddelkoblingSkjema } from './Skjemaer'
 import type { Legemiddeltilstand } from './useLegemidler'
 
-/** Detaljkortet for preparatene som krever godkjenningsfritak. */
-const FRITAK = 'godkjenningsfritak'
-
-/** Stedet på siden for et detaljkort i seksjonen: en legemiddelform, eller fritakene. */
-function kortsted(formId: string | null): string {
-  return `preparater-${formId ?? FRITAK}`
-}
-
-/** Seksjonen koblingen står i. */
-export const PREPARATPANEL: Panelnokkel = 'preparater'
-
-/** Koblingen siden har til legemiddeldataene, og elementet den står i. */
-export function finnKobling(modell: Sidemodell): { element: Sideelement | null; kobling: Legemiddelkoblingdata } {
-  const element =
-    (modell.paneler.get(PREPARATPANEL) ?? []).find((e) => e.elementtype === ELEMENTTYPER.legemiddelkobling) ?? null
-  return { element, kobling: lesLegemiddelkobling(element?.data) }
-}
+export { finnKobling } from '../../legemiddeldata/stoffside'
 
 /** Preparatnavnene, slik søket på siden finner dem, med detaljkortet de står i. */
 export function preparatsoketekster(tilstand: Legemiddeltilstand): Tilleggstekst[] {
-  if (tilstand.status !== 'klar') return []
-  const { former, godkjenningsfritak } = tilstand.oversikt
-  const grupper = [
-    ...former.map((f) => ({ id: kortsted(f.id), tittel: f.form, preparater: f.preparater })),
-    { id: kortsted(null), tittel: 'Krever godkjenningsfritak', preparater: godkjenningsfritak },
-  ]
-  return grupper.flatMap(({ id, tittel, preparater }) =>
-    [...new Set(preparater.map((p) => p.navn))].map(
-      (navn): Tilleggstekst => ({ panel: PREPARATPANEL, element: { id, tittel }, felt: 'preparat', tekst: navn }),
-    ),
-  )
+  return tilstand.status === 'klar' ? preparattekster(tilstand.oversikt) : []
 }
 
 /**
@@ -176,22 +144,22 @@ function Preparatvisning({ tilstand }: { tilstand: Legemiddeltilstand }) {
         <ul className="preparatformer">
           {oversikt.former.map((f) => (
             <li key={f.id}>
-              <Detaljkort id={`form-${f.id}`} tittel={<Uthev tekst={f.form} />} oppsummering={oppsummerGruppe(f.preparater)}>
-                <Preparatliste anker={kortsted(f.id)} preparater={f.preparater} />
+              <Detaljkort id={preparatkort(f.id)} tittel={<Uthev tekst={f.form} />} oppsummering={oppsummerGruppe(f.preparater)}>
+                <Preparatliste anker={preparatsted(f.id)} preparater={f.preparater} />
               </Detaljkort>
             </li>
           ))}
           {oversikt.godkjenningsfritak.length > 0 && (
             <li>
               <Detaljkort
-                id={FRITAK}
+                id={preparatkort(null)}
                 tittel={<Uthev tekst="Krever godkjenningsfritak" />}
                 oppsummering={oppsummerGruppe(oversikt.godkjenningsfritak)}
               >
                 <p className="preparater__forklaring">
                   Preparatene har ikke markedsføringstillatelse i Norge.
                 </p>
-                <Preparatliste anker={kortsted(null)} preparater={oversikt.godkjenningsfritak} visForm />
+                <Preparatliste anker={preparatsted(null)} preparater={oversikt.godkjenningsfritak} visForm />
               </Detaljkort>
             </li>
           )}
