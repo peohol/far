@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.26.0',
+    dato: '2026-09-24',
+    sammendrag: 'Preparatene vises som legemiddelform, styrke og preparat, med et eget vindu for hvert preparat',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Hver legemiddelform er en stor overskrift med eget ikon. Under den står styrkene som like store kort, ett per styrke.',
+      'Et åpnet styrkekort viser preparatene med den styrken alfabetisk. Bare ett styrkekort står åpent om gangen.',
+      'Preparater som krever godkjenningsfritak, står i den samme lista med et tydelig merke, ikke i en egen gruppe.',
+      'Et trykk på et preparatnavn åpner et vindu med alt om preparatet: reseptgruppe, administrasjonsvei, virkestoff, ATC, alle styrkene med deling, knusing og åpning, pakningene med varenummer og lenken til preparatomtalen. Styrken du kom fra, står åpen og er merket.',
+      'Vinduet lukkes med Escape, lukkeknappen eller et trykk utenfor. På mobil kommer det opp nedenfra.',
+      'Søket på siden finner preparatnavnene også i lukkede former og styrker, og åpner dem.',
+    ],
+  },
+  {
     versjon: '1.25.0',
     dato: '2026-09-24',
     sammendrag: 'Nytt utseende og én felles meny øverst',

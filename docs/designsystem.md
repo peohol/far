@@ -25,7 +25,8 @@ har ingen egne tall. Mangler en verdi, legges den inn der på riktig nivå.
 - **Kanter og høyder:** `--kant`, `--kant-aktiv`, `--kant-tykk`,
   `--fokusring`, `--hoyde-kontroll`, `--hoyde-trykk` (minste trykkflate),
   `--hoyde-toppmeny` og `--hoyde-dokk`.
-- **Ikoner:** `--ikon-ui`, `-underpunkt`, `-seksjon`, `-konsept` og `-plot`.
+- **Ikoner:** `--ikon-ui`, `-underpunkt`, `-seksjon`, `-form`, `-konsept` og
+  `-plot`.
 - **Lag:** `--lag-toppmeny`, `--lag-popover` og `--lag-modal`.
 - **Bevegelse:** `--fart-rask`, `-glid`, `-flyt` og `-ikon`, med `--kurve`
   og `--kurve-ikon`. Med `prefers-reduced-motion` er alle `--fart-*` 0 ms.
@@ -44,6 +45,7 @@ settes på et enkelt element.
   bakgrunnen. Atlas sin `--linje-sterk` er for svak til det.
 - **Aksent:** `--aksent`, `--aksent-2`, `--aksent-flate`, `--paa-aksent`,
   `--fokus`.
+- **Merker:** `--fritak-blekk` og `--fritak-flate` for godkjenningsfritak.
 - **Nivåer:** `--referanse`, `--toksisk`, `--alvorlig`, `--under` og `--blod`,
   hver med `-blekk`, `-flate` og `-kant`. `-kant` er for kanter og streker som
   må holde 3:1. Farge er aldri alene om å bære betydning: nivået står også i
@@ -100,6 +102,20 @@ uten å endres.
   krymper en sekundær knapp til bare ikon.
 
 Alle handlinger i toppmenyen har ikon.
+
+## Merker og modale lag
+
+- **`Merke`** (`src/components/Merke.tsx`) er en liten merkelapp for en
+  status, f.eks. «Godkjenningsfritak» eller «Åpnet herfra». Tonene er
+  `noytral`, `flate`, `aksent`, `fritak`, `referanse`, `toksisk` og
+  `alvorlig`, og hver er et fargepar som `palette.test.ts` måler. Betydningen
+  står alltid i teksten.
+- **`Modallag`** (`src/components/Modallag.tsx`) er det ene modale laget,
+  bygget på `<dialog>`: fokusfelle, Escape, trykk på bakgrunnen, låst
+  rulling bak og fokuset tilbake. Med `meta`, `ikon`, `undertittel` eller
+  `merker` får det Atlas-hodet: en linje i versaler, ikonet i en sirkel,
+  tittelen i Newsreader og merkene under, på en hevet flate. Med `ark` blir
+  det et ark nedenfra på smale flater. Stilen står i `modallag.css`.
 
 ## Toppmenyen
 
