@@ -27,7 +27,8 @@ har ingen egne tall. Mangler en verdi, legges den inn der på riktig nivå.
   `--fokusring`, `--hoyde-kontroll`, `--hoyde-trykk` (minste trykkflate),
   `--hoyde-toppmeny` og `--hoyde-dokk`.
 - **Ikoner:** `--ikon-ui`, `-underpunkt`, `-seksjon`, `-form`, `-konsept` og
-  `-plot`.
+  `-plot`, og `--ikon-sirkel` (`-smal` på mobil) for sirkelen rundt
+  seksjonsikonet.
 - **Lag:** `--lag-toppmeny`, `--lag-popover` og `--lag-modal`.
 - **Bevegelse:** `--fart-rask`, `-glid`, `-flyt` og `-ikon`, med `--kurve`
   og `--kurve-ikon`. Med `prefers-reduced-motion` er alle `--fart-*` 0 ms.

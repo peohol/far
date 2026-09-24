@@ -26,7 +26,10 @@ offentlige kilder.
   mens siden ruller dit.
 - Identiteten og viktige data øverst på siden, og kritiske varsler, er ikke
   skuffer. De står alltid fram, og å åpne en seksjon lukker dem ikke.
-- Pilen foran overskriften viser om skuffen er åpen. Hele hodet kan trykkes
+- En seksjon står som en rad med hårlinje over, med seksjonsikonet i en sirkel
+  foran overskriften. Detaljkortene står som kort i et rutenett med to eller
+  tre kolonner (`skuffrutenett`), og et åpnet kort går over hele bredden.
+- Pilen til høyre i hodet viser om skuffen er åpen. Hele hodet kan trykkes
   på; knappene i det gjør sin egen jobb. Handlingene i hodet (som «Kilder for
   panelet») virker på innholdet, så de åpner også skuffen; knappene i
   overskriften (referansepillene) gjør det ikke.
@@ -48,6 +51,7 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   oppsummering="12 preparater · 3 legemiddelformer · 6 styrker"
   tittelTillegg={<Referansepille ider={…} niva="panel" />}   // valgfritt
   handlinger={redigerer && <Button …>Rediger</Button>}       // valgfritt
+  ikon="prep"                                  // valgfritt, fra ikonregisteret
   apenFraStart={false}                         // lukket er standard
 >
   <Detaljkort id="tablett" tittel="Tablett" oppsummering="4 preparater · 10–75 mg">
@@ -69,6 +73,12 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
 - `tittelTillegg` er det som står i overskriften etter tittelen og selv kan
   trykkes på. `handlinger` er knappene i hodet. Begge står utenfor knappen
   som åpner og lukker.
+- `ikon` er et navn fra ikonregisteret (`src/components/ikon/register.ts`).
+  Det er pynt ved siden av tittelen og skjult for skjermlesere. Stoffsidens
+  seksjonsikoner, og ikonene for kortene i farmakokinetikken, velges i
+  `src/components/analyttside/panelvisning.ts`: kinetikkortene får ikon etter
+  hva overskriften handler om (absorpsjon, halveringstid, CYP …), og et
+  generisk ikon når ingen kategori passer, så en ny overskrift aldri feiler.
 - En seksjon i en seksjon, eller et detaljkort utenfor en seksjon eller i et
   annet detaljkort, stopper tegningen med en feil. Trenger innholdet et
   tredje nivå, skal det heller deles opp.

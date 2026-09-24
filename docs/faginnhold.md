@@ -376,6 +376,20 @@ oppsummering med innholdets egne ord: titlene på kinetikkortene, dosene i
 tabellen eller begynnelsen av teksten. Redigeringsmodus åpner ikke alt;
 redaktøren åpner seksjonen som skal redigeres.
 
+Hvordan innholdet tegnes, endrer aldri hva som står der:
+
+- **Dosering** vises som ett kort per avsnitt når hvert avsnitt begynner med
+  en kort etikett og et kolon («Immediate release: (25) 50–800 mg» blir kortet
+  «Immediate release» med verdien under). Ellers vises teksten som den er
+  (`src/faginnhold/doseringskort.ts`).
+- **Serumkonsentrasjonene** vises som i kilden: én tabell per stoff med
+  dosene som kolonner og antall prøver, 10-persentil, median og 90-persentil
+  som rader, og referanseområdeprosjektet i en egen liten tabell.
+  `src/faginnhold/serumtabell.ts` leser de lagrede radene tilbake til den
+  formen, og godtar en rad bare når teksten den ville skrevet, er nøyaktig den
+  som er lagret. En rad som er redigert til noe annet, vises som en vanlig rad
+  med tekstene sine.
+
 **Rikteksten** er et ProseMirror-dokument, redigert med TipTap som i Slaids.
 Tillatt er avsnitt, linjeskift, punkt- og nummererte lister, fet, kursiv,
 understreket, senket og hevet skrift, lenker (bare `http(s)`) og siteringer.

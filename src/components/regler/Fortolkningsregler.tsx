@@ -7,6 +7,7 @@ import type { Intervallregelsett, Intervallregelsettinnhold } from '../../regler
 import { regelsettfelter, tekstene, visRingegrense } from '../../regler/visning'
 import { Button } from '../Button'
 import { Sistredigert } from '../historikk/Sistredigert'
+import { seksjonsikon } from '../analyttside/panelvisning'
 import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
 import { Uthev } from '../Uthev'
 import { Regelredigering, type RegelredigeringProps } from './Regelredigering'
@@ -81,6 +82,7 @@ export function Fortolkningsregler({
   return (
     <Seksjon
       id={FORTOLKNING}
+      ikon={seksjonsikon(FORTOLKNING)}
       tittel={<Uthev tekst="Fortolkning" />}
       oppsummering={regeloppsummering(regelsett)}
       handlinger={
