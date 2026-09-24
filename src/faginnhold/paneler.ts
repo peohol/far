@@ -38,12 +38,6 @@ export interface Paneldefinisjon {
   nokkel: string
   tittel: string
   form: Panelform
-  /**
-   * Om panelet står åpent når siden åpnes. Panelene er seksjoner som kan
-   * åpnes og lukkes (`src/components/seksjoner/`); de fleste står lukket med
-   * en kort oppsummering, men det som leses oftest, står åpent.
-   */
-  apen?: boolean
 }
 
 /**

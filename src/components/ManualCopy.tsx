@@ -1,7 +1,11 @@
 import { useEffect, useRef } from 'react'
 
+/** Beskjeden når utklippstavlen ikke var tilgjengelig. Den samme overalt. */
+export const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
+
 export interface ManualCopyProps {
-  message: string
+  /** Beskjeden over feltet. Uten står {@link KOPIFEIL}. */
+  message?: string
   comment: string
 }
 
@@ -13,7 +17,7 @@ export interface ManualCopyProps {
  * vises den i et markerbart felt som velges automatisk, slik at Ctrl+C
  * fullfører oppgaven likevel.
  */
-export function ManualCopy({ message, comment }: ManualCopyProps) {
+export function ManualCopy({ message = KOPIFEIL, comment }: ManualCopyProps) {
   const ref = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {

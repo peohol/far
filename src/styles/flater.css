@@ -1,0 +1,368 @@
+/**
+ * Flatene innholdet står på, fra Atlas: panelet (`Card`) med overskriften sin
+ * (`Panelhode`), metalinjen over et stoffnavn (`Metalinje`), pillene, den
+ * kliniske kommentaren skrevet ut (`CommentBlock`), varselet (`Notice`) og de
+ * sammenleggbare seksjonene (`Details`). Felles for fortolkningen, THC,
+ * regelvisningen og informasjonssiden.
+ */
+
+/* --- Panel -----------------------------------------------------------------
+   Flaten med hårlinje og stor runding. Innholdet ligger ikke over siden, så
+   panelet har ingen skygge. */
+.kort {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+  width: 100%;
+  padding: var(--rom-7) var(--rom-8) var(--rom-8);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-panel);
+  /* Litt luft mot vinduskanten når et kort rulles på plass. */
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
+}
+
+.kort--center {
+  align-items: center;
+  text-align: center;
+}
+
+.kort--start {
+  align-items: flex-start;
+  text-align: left;
+}
+
+@media (max-width: 47.5em) {
+  .kort {
+    padding: var(--rom-6) var(--rom-5) var(--rom-7);
+    border-radius: var(--runding-kort);
+  }
+}
+
+/* Overskriften i et panel: kursiv serif og dempet, med ikonet foran. */
+.panelhode {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+}
+
+.panelhode__ikon {
+  width: var(--ikon-panel);
+  height: var(--ikon-panel);
+}
+
+.panelhode__tittel {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-style: italic;
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk-dempet);
+}
+
+.panelhode[data-tone='toksisk'] .panelhode__tittel {
+  color: var(--toksisk-blekk);
+}
+
+/* --- Metalinje --------------------------------------------------------------
+   «KVE · SPFA › Antipsykotika»: versaler, sperret, koden i aksentfargen. */
+.metalinje {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
+  letter-spacing: var(--sperring-meta);
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.metalinje__kode {
+  color: var(--aksent);
+}
+
+/* Koden som lenke til informasjonssiden: understrekingen kommer ved peker og
+   fokus, så linjen er rolig når den bare skal leses. */
+.metalinje__lenke {
+  text-decoration: none;
+  text-underline-offset: 0.3em;
+  border-radius: var(--runding-merke);
+}
+
+.metalinje__lenke:hover,
+.metalinje__lenke:focus-visible {
+  text-decoration: underline;
+}
+
+/* Stoffnavnet under metalinjen i et analyttkort. */
+.analytt__navn {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-sidetittel);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+  letter-spacing: -0.02em;
+  color: var(--blekk-sterk);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+/* --- Piller -----------------------------------------------------------------
+   Én opplysning hver: dempet ledetekst og verdien i fet skrift. */
+.pille {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  padding: var(--rom-2) var(--rom-4);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.pille:has(.pille__ikon) {
+  padding-left: var(--rom-2);
+}
+
+.pille__ikon {
+  display: grid;
+  font-size: var(--tekst-lesing);
+}
+
+.pille__merke {
+  color: var(--blekk-dempet);
+}
+
+.pille__verdi {
+  font-weight: var(--vekt-fet);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.pille--ring {
+  color: var(--alvorlig-blekk);
+  background: var(--alvorlig-flate);
+}
+
+/* Grensen for toksisk konsentrasjon er det samme tallet som det øverste båndet
+   begynner på, og bærer derfor fargen til det båndet — ikke ringegrensens. */
+.pille--over {
+  color: var(--toksisk-blekk);
+  background: var(--toksisk-flate);
+}
+
+.pille--ring .pille__merke,
+.pille--over .pille__merke {
+  color: inherit;
+}
+
+/* Analysemetoden bærer sin egen farge, den samme overalt i appen. Fargen
+   settes på elementet av `metodefarger()`, så pillen, skuffen i menyen og
+   menyknappen ikke kan komme i utakt. */
+.pille--metode {
+  padding: var(--rom-2) var(--rom-3);
+  font-size: var(--tekst-meta);
+  color: var(--alt-ink);
+  background: var(--alt-solid);
+}
+
+.pille--metode .pille__verdi {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35ch;
+}
+
+.metodepille__kode {
+  font-weight: var(--vekt-fet);
+  letter-spacing: 0.04em;
+}
+
+.metodepille__skille {
+  opacity: 0.6;
+}
+
+.metodepille__kategori {
+  font-weight: var(--vekt-medium);
+}
+
+/* Pillen som står i stedet for metodekoden når søket ikke har noe filter:
+   nøytral, fordi det ikke finnes noen metode å farge den etter ennå. */
+.metodepille--tom {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+}
+
+/* --- Kommentaren skrevet ut -------------------------------------------------
+   Teksten som kopieres, skrevet ut i sin helhet. Kursiv serif og en loddrett
+   aksentlinje skiller den fra alt annet på siden: dette er ikke appens ord,
+   men teksten som limes rett inn i pasientsvaret. Markerbar, i tilfelle man
+   vil ta et utdrag. */
+.kommentartekst {
+  padding: 0.1em 0 0.1em var(--rom-6);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-style: italic;
+  line-height: var(--linjehoyde-lesing);
+  text-align: left;
+  text-wrap: pretty;
+  border-left: var(--kant-tykk) solid var(--aksent);
+  user-select: text;
+}
+
+/* --- Varsel -----------------------------------------------------------------
+   Forsiktighet i en flate: noe å se en gang til på, ikke en alarm. */
+.notis {
+  padding: var(--rom-4) var(--rom-4) var(--rom-4) var(--rom-5);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-medium);
+  line-height: 1.45;
+  text-align: left;
+  text-wrap: pretty;
+  white-space: pre-line;
+  color: var(--toksisk-blekk);
+  background: var(--toksisk-flate);
+  border-radius: var(--runding-underkort);
+}
+
+/* Varselet som også tilbyr handlingen selv, med knappen til høyre. */
+.notis--handling {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3) var(--rom-5);
+}
+
+.notis--handling > p {
+  flex: 1 1 16rem;
+}
+
+/* Det som mangler før noe kan fortolkes, som en liste med merker i
+   varselfargen. Teksten sier det samme som merket. */
+.mangelliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding-left: calc(var(--ikon-panel) + var(--rom-3));
+  text-align: left;
+}
+
+.mangelliste li {
+  position: relative;
+  font-size: var(--tekst-lesing);
+  color: var(--blekk);
+  text-wrap: pretty;
+}
+
+.mangelliste li::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--rom-6));
+  top: 0.6em;
+  width: 0.45em;
+  height: 0.45em;
+  background: var(--toksisk-kant);
+  border-radius: var(--runding-pille);
+}
+
+/* --- Sammenleggbare seksjoner («details») -----------------------------------
+   Jevn åpning og lukking via grid-teknikken (høyden glir mellom 0fr og 1fr),
+   en hårlinje over, ikon og serif-tittel, og en pil som snur. */
+.detalj {
+  width: 100%;
+  text-align: left;
+  border-top: var(--kant) solid var(--linje);
+  /* Luft over overskriften når en åpnet seksjon legges øverst i vinduet. */
+  scroll-margin-top: var(--toppmeny-offset);
+}
+
+.detalj__tittel {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-4);
+  padding: var(--rom-5) 0;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+
+.detalj__tittel::-webkit-details-marker {
+  display: none;
+}
+
+.detalj__ikon {
+  width: var(--ikon-panel);
+  height: var(--ikon-panel);
+}
+
+.detalj__tekst {
+  flex: 1;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+}
+
+.detalj__pil {
+  font-size: var(--tekst-liten);
+  transition: transform var(--fart-glid) var(--kurve);
+}
+
+details[open] > .detalj__tittel .detalj__pil {
+  transform: rotate(90deg);
+}
+
+.detalj__kropp {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--fart-glid) var(--kurve);
+}
+
+details[open] > .detalj__kropp {
+  grid-template-rows: 1fr;
+}
+
+.detalj__inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* --- Kopiering for hånd -----------------------------------------------------
+   Reserveløsning når utklippstavlen er utilgjengelig: kommentaren må kunne
+   markeres og kopieres for hånd. */
+.manuellKopi {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--rom-3);
+  width: 100%;
+  padding: var(--rom-5);
+  text-align: left;
+  background: var(--alvorlig-flate);
+  border: var(--kant-tykk) solid var(--alvorlig-kant);
+  border-radius: var(--runding-underkort);
+}
+
+.manuellKopi__melding {
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+  color: var(--alvorlig-blekk);
+}
+
+.manuellKopi__tekst {
+  width: 100%;
+  padding: var(--rom-3);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-ui);
+  line-height: var(--linjehoyde-lesing);
+  resize: vertical;
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje-kontroll);
+  border-radius: var(--runding-felt);
+}

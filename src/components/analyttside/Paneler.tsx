@@ -81,7 +81,6 @@ export function Panel({
       ikon={seksjonsikon(definisjon.nokkel)}
       tittel={<Uthev tekst={definisjon.tittel} />}
       oppsummering={tomt ? 'Ikke noe innhold ennå' : oppsummering}
-      apenFraStart={definisjon.apen}
       handlinger={
         redigerer &&
         !kilder && (

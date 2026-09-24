@@ -7,6 +7,7 @@ import { useRef } from 'react'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { useSidereferanser } from '../referanser/Sidereferanser'
 import { useFastSted } from '../seksjoner/Seksjonsstyring'
+import { Metalinje } from '../Metalinje'
 import { Uthev } from '../Uthev'
 import { panelAnker } from './Paneler'
 import '../../styles/monograf-topp.css'
@@ -61,7 +62,7 @@ export function Identitetspanel({
 
   return (
     <section ref={flate} id={panelAnker(definisjon.nokkel)} className="identitet" aria-labelledby={overskriftId}>
-      <Metalinje kode={oppforing.kode} metode={oppforing.analysemetode} kategori={oppforing.kategori} />
+      <Metalinje koder={[oppforing.kode]} metode={oppforing.analysemetode} kategori={oppforing.kategori} />
       <h1 id={overskriftId} className="identitet__navn" tabIndex={-1}>
         <Uthev tekst={navn} />
       </h1>
@@ -80,28 +81,6 @@ export function Identitetspanel({
       )}
       <Referansefelt ider={panelreferanser} niva="panel" />
     </section>
-  )
-}
-
-/**
- * Linjen over stoffnavnet: «KVE · SPFA › Antipsykotika». Koden står i
- * aksentfargen; metoden og kategorien hører sammen, som i sidemenyen.
- */
-function Metalinje({ kode, metode, kategori }: { kode: string; metode: string; kategori?: string }) {
-  return (
-    <p className="metalinje">
-      <span className="metalinje__kode">{kode}</span>
-      <span aria-hidden="true">·</span>
-      <span>
-        {metode}
-        {kategori && (
-          <>
-            {' '}
-            <span aria-hidden="true">›</span> {kategori}
-          </>
-        )}
-      </span>
-    </p>
   )
 }
 

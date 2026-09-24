@@ -54,8 +54,6 @@ export const APNE_MODULER = new Map(
       'src/components/ikon/Ikon.tsx',
       'src/components/ikon/register.ts',
       'src/components/toppmeny/Temaknapp.tsx',
-      'src/components/icons/Icon.tsx',
-      'src/components/icons/index.tsx',
       'src/domain/tipsplassering.ts',
       'src/hooks/useTheme.ts',
       'src/hooks/useShortcutVisibility.tsx',

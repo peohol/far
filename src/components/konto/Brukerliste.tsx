@@ -16,7 +16,6 @@ import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Merke } from '../Merke'
 import { Modallag } from '../Modallag'
-import { CheckIcon, CopyIcon, PlusIcon } from '../icons'
 import { Avatar } from './Avatar'
 import { Felt } from './Felt'
 
@@ -123,7 +122,7 @@ export function Brukerliste({ apen, onLukk }: { apen: boolean; onLukk: () => voi
       onLukk={onLukk}
       handling={
         erAdmin && !oppretter ? (
-          <Button className="knapp--kompakt" icon={<PlusIcon />} onClick={() => setOppretter(true)}>
+          <Button className="knapp--kompakt" icon={<Ikon navn="plus" />} onClick={() => setOppretter(true)}>
             Opprett bruker
           </Button>
         ) : null
@@ -261,7 +260,7 @@ function Passordkvittering({
         <code>{midlertidig.midlertidigPassord}</code>
         <Button
           className="knapp--kompakt"
-          icon={kopiert ? <CheckIcon /> : <CopyIcon />}
+          icon={kopiert ? <Ikon navn="bInnenfor" /> : <Ikon navn="copy" />}
           onClick={() => void kopier(midlertidig.midlertidigPassord).then(setKopiert)}
         >
           {kopiert ? 'Kopiert' : 'Kopier'}

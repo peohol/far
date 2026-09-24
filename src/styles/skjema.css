@@ -1,0 +1,210 @@
+/**
+ * Skjemaprimitivene fra Atlas: avkryssingen (`Checkbox`), feltgruppen
+ * (`Fieldset`), tallfeltet og datofeltet (`NumberField`, `DateField`) og
+ * bryteren (`Toggle`). Felles for fortolkningsmodulene, THC og simulatoren i
+ * regelvisningen, så de spør likt.
+ */
+
+/* --- Avkryssing -------------------------------------------------------------
+   En pille med boksen foran teksten. Inne i en feltgruppe står den uten
+   pille, blant ledetekstene til feltene, og roper ikke høyere enn dem. */
+.avkryssinger {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-3);
+}
+
+.avkryssing {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-3);
+  min-height: var(--hoyde-trykk);
+  padding: 0 var(--rom-5) 0 var(--rom-4);
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+}
+
+.avkryssing--felt {
+  min-height: 0;
+  padding: 0;
+  font-size: var(--tekst-etikett);
+  color: var(--blekk-dempet);
+  background: transparent;
+}
+
+.avkryssing input[type='checkbox'] {
+  flex: none;
+  width: 1.2em;
+  height: 1.2em;
+  margin: 0;
+  accent-color: var(--aksent);
+  cursor: pointer;
+}
+
+/* Tallet som huker av står først i pillen, som i Atlas; i koden står det
+   sist, så navnet kommer først for skjermlesere. */
+.avkryssing .hurtigtast {
+  order: -1;
+}
+
+/* Koden bak navnet: samme opplysning som metalinjen, men her for å knytte
+   navnet til koden svaret ligger under i labsystemet. */
+.avkryssing__kode {
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  letter-spacing: 0.06em;
+  color: var(--blekk-dempet);
+}
+
+/* --- Feltgruppe -------------------------------------------------------------
+   «Forrige prøve», «Denne prøven», «Påvist i denne prøven»: hårlinje rundt og
+   legenden i kursiv serif. */
+.feltgruppe {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--rom-5);
+  min-inline-size: 0;
+  margin: 0;
+  padding: var(--rom-2) var(--rom-6) var(--rom-6);
+  text-align: left;
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-felt-gruppe);
+}
+
+.feltgruppe > legend {
+  margin-left: calc(-1 * var(--rom-2));
+  padding: 0 var(--rom-2);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-style: italic;
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk);
+}
+
+.feltgruppe__hjelp {
+  font-size: var(--tekst-etikett);
+  line-height: var(--linjehoyde-lesing);
+  text-wrap: pretty;
+  color: var(--blekk-dempet);
+}
+
+/* Feltene på rad når det er plass. Ledetekstene er ulikt lange og bryter
+   ulikt; `end` holder likevel selve feltene på linje. */
+.feltrad {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  align-items: end;
+  gap: var(--rom-3) var(--rom-5);
+  width: 100%;
+}
+
+/* To felt som hører sammen, alltid side om side. */
+.feltrad--par {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--rom-3);
+}
+
+/* --- Felt -------------------------------------------------------------------
+   Ledeteksten over feltet. Tallene står store og med faste sifferbredder. */
+.skjemafelt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  min-width: 0;
+}
+
+.skjemafelt > span {
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+}
+
+.inndatafelt {
+  width: 100%;
+  min-height: var(--hoyde-felt);
+  padding: 0 var(--rom-5);
+  font-size: var(--tekst-lesing);
+  font-weight: var(--vekt-halvfet);
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk);
+  background: var(--flate-bunn);
+  border: var(--kant) solid var(--linje-kontroll);
+  border-radius: var(--runding-felt);
+  transition: border-color var(--fart-rask) var(--kurve);
+}
+
+.inndatafelt:hover {
+  border-color: var(--blekk-dempet);
+}
+
+.inndatafelt:focus-visible {
+  border-color: var(--aksent);
+}
+
+/* --- Bryter -----------------------------------------------------------------
+   Av og på, som «Vis kategorier». Selve avkryssingen er usynlig, men står i
+   bryteren og tar imot fokus og tastetrykk; sporet viser tilstanden med både
+   farge og hvor knotten står. */
+.bryter {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-3);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-medium);
+  cursor: pointer;
+}
+
+.bryter input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.bryter__spor {
+  --bryter-knott: calc(var(--hoyde-liten) / 2 - var(--rom-1));
+
+  position: relative;
+  flex: none;
+  width: calc(var(--bryter-knott) * 2 + var(--rom-2) * 1.5);
+  height: calc(var(--bryter-knott) + var(--rom-2));
+  background: var(--linje-kontroll);
+  border-radius: var(--runding-pille);
+  transition: background-color var(--fart-rask) var(--kurve);
+}
+
+.bryter__spor::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--rom-2) / 2);
+  left: calc(var(--rom-2) / 2);
+  width: var(--bryter-knott);
+  height: var(--bryter-knott);
+  background: var(--flate);
+  border-radius: var(--runding-pille);
+  transition: transform var(--fart-rask) var(--kurve);
+}
+
+.bryter input:checked + .bryter__spor {
+  background: var(--aksent);
+}
+
+.bryter input:checked + .bryter__spor::after {
+  transform: translateX(calc(var(--bryter-knott) + var(--rom-2) / 2));
+}
+
+.bryter input:focus-visible + .bryter__spor {
+  outline: var(--fokusring) solid var(--fokus);
+  outline-offset: var(--fokusring);
+}

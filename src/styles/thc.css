@@ -1,0 +1,328 @@
+/**
+ * Fortolkningsmodulen for THC-syre i urin, fra Atlas (`ThcModule`): uendret
+ * mekanikk og rekkefølge, nytt skall. Inndatapanelet med feltgruppene og
+ * sikkerhetsmarginen, resultatpanelet og visualiseringen. Skjemaprimitivene
+ * står i `skjema.css`, panelene og kommentaren i `flater.css`.
+ */
+
+/* Modulen er ett skjema fra topp til bunn: inndatapanelet, resultatpanelet og
+   visualiseringen. */
+.thc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-6);
+  width: 100%;
+}
+
+/* Toppen av inndatapanelet: koppen i en sirkel, metalinjen og navnet, og
+   nullstillingen i hjørnet. */
+.thc-korthode {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--rom-5);
+  width: 100%;
+}
+
+.thc-korthode__ikon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--ikon-konsept);
+  height: var(--ikon-konsept);
+  font-size: var(--ikon-seksjon);
+  background: var(--toksisk-flate);
+  border-radius: var(--runding-pille);
+}
+
+.thc-korthode__tittel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--rom-2);
+  min-width: 0;
+  padding-top: var(--rom-1);
+}
+
+.thc-nullstillhjorne {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--rom-2);
+}
+
+/* Tilbudet om å nullstille med Enter, rett etter en kopiering. Står under
+   nullstill-knappen og forsvinner ved første handling som ikke tar det. */
+.thc-nullstilltips {
+  display: flex;
+  align-items: center;
+  gap: 0.6ch;
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-medium);
+  white-space: nowrap;
+  color: var(--blekk-dempet);
+}
+
+.thc-skjema {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+  width: 100%;
+}
+
+/* Prøvene side ved side når det er plass, under hverandre når det ikke er. */
+.thc-prover {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--rom-5);
+  width: 100%;
+}
+
+/* IRCAK regnet ut av UCAK og NKRE, rett under feltene den kommer fra. */
+.thc-beregnet {
+  font-size: var(--tekst-ui);
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk-dempet);
+}
+
+.thc-beregnet strong {
+  font-weight: var(--vekt-fet);
+  color: var(--blekk);
+}
+
+/* Sikkerhetsmarginen, nederst i inndatapanelet: en skala med tre stopp i en
+   hevet flate (Atlas `MarginScale`). */
+.thc-margin {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  width: 100%;
+  padding: var(--rom-6) var(--rom-6) var(--rom-5);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-felt-gruppe);
+}
+
+/* Banneret over skalaen når forrige prøve fortolkes under påvisningsgrensen.
+   Det skal ikke gå an å stille på marginen uten å ha sett at fortolkningen alt
+   regner med større måleusikkerhet. */
+.thc-margin > .notis {
+  background: var(--flate);
+}
+
+/* Overskriften bærer tipset om hva sikkerhetsmarginen er. */
+.thc-margin__hode {
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+}
+
+.thc-margin__skala {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--aksent);
+  cursor: pointer;
+}
+
+/* Ett merke per stopp, med det første og siste ut mot hver sin ende av
+   skalaen — der stoppene faktisk ligger. Det valgte stoppet står i en
+   aksentpille, så det kan leses av på et blikk. */
+.thc-margin__merker {
+  display: flex;
+  justify-content: space-between;
+}
+
+.thc-margin__merke {
+  padding: var(--rom-1) var(--rom-3);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk-dempet);
+  border-radius: var(--runding-pille);
+}
+
+.thc-margin__merke--valgt {
+  font-weight: var(--vekt-fet);
+  color: var(--paa-aksent);
+  background: var(--aksent);
+}
+
+/* --- Visualiseringen ------------------------------------------------------ */
+
+.thc-plot__figur {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.thc-plot__rute {
+  stroke: var(--linje);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+.thc-plot__verdi {
+  font-family: var(--skrift-ui);
+  font-size: 16px;
+  fill: var(--blekk-dempet);
+}
+
+.thc-plot__kurve {
+  fill: none;
+  stroke-width: 3.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.thc-plot__kurve--gronn {
+  stroke: var(--referanse-kant);
+}
+
+.thc-plot__kurve--gul {
+  stroke: var(--toksisk-kant);
+}
+
+.thc-plot__kurve--rod {
+  stroke: var(--alvorlig-kant);
+}
+
+.thc-plot__punkt {
+  fill: var(--blekk-sterk);
+  stroke: var(--flate);
+  stroke-width: 2;
+}
+
+/* Etikettene får en «glorie» i flatens farge, så de står lesbare også der de
+   krysser en kurve eller rutenettet. */
+.thc-plot__etikett {
+  font-family: var(--skrift-ui);
+  font-size: 17px;
+  font-weight: var(--vekt-fet);
+  fill: var(--blekk);
+  paint-order: stroke;
+  stroke: var(--flate);
+  stroke-width: 5;
+  stroke-linejoin: round;
+}
+
+.thc-plot__akselnavn {
+  font-family: var(--skrift-ui);
+  font-size: 17px;
+  font-weight: var(--vekt-medium);
+  fill: var(--blekk);
+}
+
+/* Legenden står i vanlig HTML over figuren, så hvert kurvenavn kan bære et
+   tips om hva profilen står for. Hver oppføring er en liten pille. */
+.thc-legende {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-3);
+  width: 100%;
+}
+
+.thc-legende__oppforing {
+  display: flex;
+  align-items: center;
+  min-height: calc(var(--hoyde-liten) - var(--rom-1) / 2);
+  padding: 0 var(--rom-5) 0 var(--rom-3);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.thc-legende__punkt {
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+}
+
+.thc-legende__strek {
+  flex: none;
+  width: var(--rom-7);
+  height: var(--rom-1);
+  border-radius: var(--runding-pille);
+}
+
+.thc-legende__strek--gronn {
+  background: var(--referanse-kant);
+}
+
+.thc-legende__strek--gul {
+  background: var(--toksisk-kant);
+}
+
+.thc-legende__strek--rod {
+  background: var(--alvorlig-kant);
+}
+
+/* Forklaringen under figuren: bolkene side om side når det er plass, hver
+   med en dempet linje foran og brødteksten i serif. */
+.thc-forklaring {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: var(--rom-7) var(--rom-8);
+  padding: var(--rom-2) 0 var(--rom-6) calc(var(--ikon-panel) + var(--rom-4));
+  text-align: left;
+  text-wrap: pretty;
+}
+
+.thc-forklaring__bolk {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  padding-left: var(--rom-5);
+  border-left: var(--kant-tykk) solid var(--linje-sterk);
+}
+
+.thc-forklaring__tittel {
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-ui);
+  color: var(--blekk);
+}
+
+.thc-forklaring__kropp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-ingress);
+  line-height: var(--linjehoyde-lesing);
+}
+
+.thc-forklaring strong {
+  font-weight: var(--vekt-halvfet);
+}
+
+.thc-forklaring ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding-left: 1.4em;
+  list-style: disc;
+}
+
+@media (max-width: 47.5em) {
+  .thc-forklaring {
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 40rem) {
+  .thc-korthode {
+    flex-wrap: wrap;
+  }
+
+  .thc-korthode__ikon {
+    width: var(--ikon-sirkel-smal);
+    height: var(--ikon-sirkel-smal);
+    font-size: var(--ikon-underpunkt);
+  }
+
+  .thc-korthode__tittel {
+    flex-basis: calc(100% - var(--ikon-sirkel-smal) - var(--rom-5));
+  }
+
+  .thc-nullstillhjorne {
+    flex-direction: row;
+    align-items: center;
+  }
+}

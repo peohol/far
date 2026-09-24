@@ -830,14 +830,14 @@ describe('preparatene', () => {
     const felt = preparater.querySelector(':scope > * .referansefelt--panel')!
     expect(within(felt as HTMLElement).getByRole('button', { name: 'Referanse 3' })).toBeTruthy()
     expect(felt.textContent).toMatch(
-      /Legemiddeldata fra FEST, uttrekk fra 8\. september 2026, sist kontrollert 23\. september 2026 · kan ikke redigeres/,
+      /Legemiddeldata fra FEST, uttrekk fra 8\. september 2026, sist kontrollert 23\. september 2026$/,
     )
     // I listen nederst står FEST sammen med de redaksjonelle, merket som automatisk.
     const liste = screen.getByRole('region', { name: 'Referanser' })
     const [, , fest] = within(liste).getAllByRole('listitem')
     expect(fest!.getAttribute('value')).toBe('3')
     expect(fest!.textContent).toMatch(/^FEST – Forskrivnings- og ekspedisjonsstøtte · Direktoratet for medisinske produkter/)
-    expect(within(fest!).getByText('Automatisk fra FEST · kan ikke redigeres')).toBeTruthy()
+    expect(within(fest!).getByText('Automatisk fra FEST')).toBeTruthy()
   })
 
   it('åpner preparatvinduet med alle styrkene, og gir fokuset tilbake når det lukkes', async () => {
@@ -997,7 +997,7 @@ describe('interaksjonene', () => {
       .getAllByRole('listitem')
       .find((li) => li.textContent?.startsWith('Testkilde · https://example.org/kilde'))!
     expect(oppforing.getAttribute('value')).toBe(pille.textContent)
-    expect(within(oppforing).getByText('Automatisk fra FEST · kan ikke redigeres')).toBeTruthy()
+    expect(within(oppforing).getByText('Automatisk fra FEST')).toBeTruthy()
     expect(screen.getByText(/De der DMP mener ingen tiltak er nødvendig, vises ikke\./)).toBeTruthy()
   })
 
