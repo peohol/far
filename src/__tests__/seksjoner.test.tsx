@@ -673,6 +673,12 @@ describe('rullingen', () => {
     expect(css).toMatch(/\.skuff\s*\{[^}]*scroll-margin-block:\s*var\(--toppmeny-offset\)/)
     expect(css).toMatch(/\.skuff\s*\{\s*scroll-margin-bottom:\s*var\(--dokk-offset\)/)
   })
+
+  it('klipper innholdet ved kroppens kant mens skuffen glir, så det ikke blir et tomt bånd nederst', () => {
+    const css = readFileSync('src/styles/seksjoner.css', 'utf8')
+    expect(css).toMatch(/\.skuff__kropp\[data-glir\]\s*\{\s*overflow:\s*hidden/)
+    expect(css).not.toMatch(/\.skuff__kropp\[data-glir\]\s*>\s*\.skuff__inner/)
+  })
 })
 
 describe('oppsummeringene', () => {
