@@ -122,7 +122,7 @@ describe('på analyttsiden', () => {
     const simulator = await screen.findByRole('button', { name: 'Prøv reglene' })
     expect(simulator.getAttribute('aria-expanded')).toBe('true')
     expect(screen.getByRole('button', { name: 'Fortolkningsregler' }).getAttribute('aria-expanded')).toBe('true')
-    expect(screen.getByRole('button', { name: 'Åpne alle' })).toBeTruthy()
+    expect(screen.queryByRole('button', { name: 'Åpne alle' })).toBeNull()
   })
 
   it('viser en modul med én analytt uten simulator', () => {

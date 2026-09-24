@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.23.0',
+    dato: '2026-09-24',
+    sammendrag: 'Bare én skuff står åpen om gangen på stoffsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Når du åpner en seksjon på en stoffside, lukkes den som sto åpen. Det samme gjelder detaljkortene i en seksjon: åpner du ett, lukkes de andre, mens seksjonen står åpen.',
+      'Siden ruller til toppen av seksjonen eller kortet du åpnet.',
+      'Regelen gjelder også når en lenke, søket på siden eller nettleserens eget søk åpner noe.',
+      '«Åpne alle» og «Lukk alle» er fjernet. Redigeringsmodus åpner ikke lenger alt; du åpner seksjonen du vil redigere, og «Kilder for panelet» åpner seksjonen sin.',
+      'Fortolkningen, reglene og kommentartekstene er uendret.',
+    ],
+  },
+  {
     versjon: '1.22.1',
     dato: '2026-09-23',
     sammendrag: 'Den nattlige oppdateringen av legemiddeldataene starter igjen',
