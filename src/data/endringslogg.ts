@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.25.0',
+    dato: '2026-09-24',
+    sammendrag: 'Nytt utseende og én felles meny øverst',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Betydelig omfang',
+    punkter: [
+      'Appen har fått nye farger, ny skrift og nye ikoner, i både lyst og mørkt tema.',
+      'Menyknappen, knappene oppe til høyre og knappene på stoffsidene er samlet i én meny øverst, som står der mens du ruller.',
+      'På stoffsiden ligger «Åpne fortolkning», «Rediger» og «Lukk» i menyen øverst. På mobil ligger de nederst i vinduet.',
+      'Profilen, brukerlista, endringsloggen og utloggingen ligger i en meny bak profilbildet ditt helt til høyre.',
+      'Lenker og hopp på siden stopper nå under menyen, ikke bak den.',
+      'Fortolkningen, tastene og kommentarene er uendret.',
+    ],
+  },
+  {
     versjon: '1.24.0',
     dato: '2026-09-24',
     sammendrag: 'Alle kilder på stoffsidene er nummererte referanser, også de fra FEST',

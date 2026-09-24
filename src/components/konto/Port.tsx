@@ -3,7 +3,7 @@ import { useOkt } from '../../auth/okt'
 import type { Tilgang } from '../../domain/tilgang'
 import { useTheme } from '../../hooks/useTheme'
 import { Button } from '../Button'
-import { Temaknapp } from '../Toolbar'
+import { Temaknapp } from '../toppmeny/Temaknapp'
 import { Forstegangsoppsett } from './Forstegangsoppsett'
 import { Innlogging } from './Innlogging'
 

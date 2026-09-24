@@ -20,7 +20,7 @@
 .regler__intervall {
   display: inline-flex;
   align-items: center;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
 }
 
 .regler__tabell .regler__intervall {
@@ -29,7 +29,7 @@
 
 .regler__intervall svg {
   display: inline-block;
-  margin-right: var(--rom-1);
+  margin-right: var(--rom-2);
   vertical-align: -0.15em;
 }
 
@@ -75,9 +75,9 @@
 .regler__simulator {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   width: 100%;
-  padding: var(--rom-3);
+  padding: var(--rom-5);
   border: var(--kant) dashed var(--linje);
   border-radius: var(--runding-m);
 }
@@ -86,7 +86,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: var(--rom-2) var(--rom-4);
+  gap: var(--rom-3) var(--rom-7);
 }
 
 .regler__proverad .felt {
@@ -96,7 +96,7 @@
 .regler__avkryssing {
   display: inline-flex;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   font-size: var(--tekst-s);
   color: var(--blekk);
 }
@@ -109,14 +109,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   min-height: 1.5em;
   font-size: var(--tekst-s);
   color: var(--blekk-dempet);
 }
 
 .regler__svar .regler__intervall {
-  padding: 0.1em var(--rom-2);
+  padding: 0.1em var(--rom-3);
   font-size: var(--tekst-xs);
   font-weight: var(--vekt-medium);
   border-radius: var(--runding-full);
@@ -140,7 +140,7 @@
 .regelredigering__intervaller {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   list-style: none;
   padding: 0;
   margin: 0;
@@ -149,16 +149,16 @@
 .regelredigering__plass {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
 }
 
 .regelredigering__intervall,
 .regelredigering__gruppe {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   min-width: 0;
-  padding: var(--rom-2) var(--rom-3) var(--rom-3);
+  padding: var(--rom-3) var(--rom-5) var(--rom-5);
   border: var(--kant) solid var(--linje);
   border-radius: var(--runding-s);
 }
@@ -181,7 +181,7 @@
 
 .regelredigering__intervall > legend,
 .regelredigering__gruppe > legend {
-  padding: 0 var(--rom-1);
+  padding: 0 var(--rom-2);
   font-size: var(--tekst-xs);
   font-weight: var(--vekt-tung);
   color: var(--blekk);
@@ -190,20 +190,20 @@
 /* Grensen står mellom to intervaller, litt inn, så den leses som delt. */
 .regelredigering__grense {
   max-width: 22rem;
-  padding-left: var(--rom-4);
+  padding-left: var(--rom-7);
 }
 
 .regelredigering__deling {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   max-width: 22rem;
 }
 
 .regelredigering__valg {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   border: 0;
   padding: 0;
   margin: 0;
@@ -244,7 +244,7 @@
 .historikk {
   display: grid;
   grid-template-columns: minmax(13rem, 18rem) minmax(0, 1fr);
-  gap: var(--rom-4);
+  gap: var(--rom-7);
   align-items: start;
 }
 
@@ -257,7 +257,7 @@
 .historikk__tidslinje {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   list-style: none;
   padding: 0;
   margin: 0;
@@ -268,7 +268,7 @@
   flex-direction: column;
   gap: 0.15em;
   width: 100%;
-  padding: var(--rom-2);
+  padding: var(--rom-3);
   font: inherit;
   text-align: left;
   color: var(--blekk);
@@ -309,7 +309,7 @@ button.historikk__velg:hover {
 .historikk__sammenligning {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   min-width: 0;
 }
 
@@ -318,14 +318,14 @@ button.historikk__velg:hover {
   flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--rom-2) var(--rom-3);
+  gap: var(--rom-3) var(--rom-5);
 }
 
 .historikk__mot {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   font-size: var(--tekst-s);
 }
 
@@ -335,7 +335,7 @@ button.historikk__velg:hover {
 
 .historikk__visning {
   display: flex;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
 }
 
 .historikk__visning [aria-pressed='true'] {
@@ -350,11 +350,11 @@ button.historikk__velg:hover {
 .historikk__endringer {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
+  gap: var(--rom-5);
 }
 
 .historikk__gruppetittel {
-  margin-bottom: var(--rom-1);
+  margin-bottom: var(--rom-2);
   font-size: var(--tekst-xs);
   font-weight: var(--vekt-tung);
   color: var(--blekk-dempet);
@@ -365,14 +365,14 @@ button.historikk__velg:hover {
 .historikk__felt {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-2);
+  gap: var(--rom-3);
   margin: 0;
 }
 
 .historikk__rad {
   display: grid;
   grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr);
-  gap: var(--rom-3);
+  gap: var(--rom-5);
   font-size: var(--tekst-s);
 }
 
@@ -412,7 +412,7 @@ button.historikk__velg:hover {
 }
 
 .historikk__gjenopprett {
-  padding-top: var(--rom-2);
+  padding-top: var(--rom-3);
   border-top: var(--kant) solid var(--linje);
 }
 
@@ -421,7 +421,7 @@ button.historikk__velg:hover {
 .regler__kommentarhistorikk {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   margin: 0;
   padding: 0;
   list-style: none;

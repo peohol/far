@@ -1,0 +1,467 @@
+/**
+ * Appskallet: den ene faste toppmenyen, dokken på smale flater og
+ * kontomenyen (`src/components/toppmeny/`, `Kontomeny`).
+ *
+ * Menyen er en svevende pille øverst i vinduet. Flaten er delvis
+ * gjennomsiktig med uskarphet bak, og helt dekkende der nettleseren ikke kan
+ * gjøre uskarphet. Uskarpheten ligger på et eget lag bak innholdet i pillen
+ * (`::before`): et element med `backdrop-filter` blir ramme for alt som er
+ * festet til vinduet inni det, og da ville dokken og sidemenyen, som ligger
+ * i menyen, blitt festet til pillen i stedet for til vinduet.
+ *
+ * Grensen for smal flate (47,5em ≈ 760 px) står i hver media query; CSS kan
+ * ikke lese den fra et token.
+ */
+
+.toppmeny {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: var(--lag-toppmeny);
+  padding: var(--toppmeny-luft) var(--rom-side) 0;
+  pointer-events: none;
+}
+
+.toppmeny__pille {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  width: min(100%, 82rem);
+  height: var(--hoyde-toppmeny);
+  margin-inline: auto;
+  padding: 0 var(--rom-3);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-pille);
+  box-shadow: var(--skygge-toppmeny);
+  pointer-events: auto;
+}
+
+/* Den svevende flaten, bak innholdet: pillen her og dokken på smale flater. */
+.toppmeny__pille::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--flate);
+  border-radius: inherit;
+}
+
+/* Dekkende flate der nettleseren ikke kan gjøre uskarphet. */
+.toppmeny__kontekst::before {
+  background: var(--flate);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .toppmeny__pille::before,
+  .toppmeny__kontekst::before {
+    background: var(--flate-toppmeny);
+    -webkit-backdrop-filter: blur(var(--blur-toppmeny));
+    backdrop-filter: blur(var(--blur-toppmeny));
+  }
+}
+
+/* Fagsøket tar resten av bredden. Uten søk holder plassen resten av menyen
+   til høyre. */
+.toppmeny__sok {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.toppmeny__kontekst,
+.toppmeny__spor,
+.toppmeny__innstillinger,
+.toppmeny__reserve {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
+/* En side uten egne handlinger gir ingen tom plass i menyen. */
+.toppmeny__kontekst:not(:has(.toppmeny__spor > *)),
+.toppmeny__spor:empty {
+  display: none;
+}
+
+/* Skillet står mellom siden og innstillingene, så det trengs bare når det er
+   noe på venstre side av det. */
+.toppmeny__sok:empty ~ .toppmeny__kontekst:not(:has(.toppmeny__spor > *)) + .toppmeny__skille {
+  display: none;
+}
+
+.toppmeny__skille {
+  flex: none;
+  width: var(--kant);
+  height: 1.625rem;
+  margin-inline: var(--rom-1);
+  background: var(--linje);
+}
+
+/* Utenfor toppmenyen — når en side vises uten den. */
+.toppmeny__reserve {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+/* --- Sidemenyknappen ----------------------------------------------------------
+   Rund som de andre knappene. Står filteret på, utvider den seg til en pille
+   med metodekoden i metodens egen farge, så det går fram av menyen alene hva
+   søket er begrenset til. */
+.menyknapp {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rom-2);
+  min-width: var(--hoyde-kontroll);
+  height: var(--hoyde-kontroll);
+  padding: 0 var(--rom-3);
+  font-size: var(--ikon-ui);
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  transition: border-color var(--fart-rask) var(--kurve);
+}
+
+.menyknapp:hover {
+  border-color: var(--linje-sterk);
+}
+
+.menyknapp[data-filter='ja'] {
+  color: var(--alt-ink);
+  background: var(--alt-solid);
+}
+
+.menyknapp[data-filter='ja']:hover {
+  border-color: var(--alt-ink);
+}
+
+.menyknapp__filter {
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-fet);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+/* --- Handling med tekst -------------------------------------------------------
+   «Åpne fortolkning» (primær) og «Avslutt redigering» (sekundær). Ikonet står
+   i en sirkel foran teksten. */
+.toppmenyknapp {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--rom-3);
+  height: var(--hoyde-kontroll);
+  padding: 0 var(--rom-6) 0 var(--rom-2);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--blekk);
+  background: transparent;
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve);
+}
+
+.toppmenyknapp__ikon {
+  display: grid;
+  place-items: center;
+  width: 1.875rem;
+  height: 1.875rem;
+  font-size: var(--ikon-ui);
+  background: var(--flate);
+  border-radius: var(--runding-pille);
+}
+
+.toppmenyknapp__ikon .ikon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.toppmenyknapp[data-variant='primar'] {
+  color: var(--paa-aksent);
+  background: var(--aksent);
+  border-color: var(--aksent);
+}
+
+.toppmenyknapp[data-variant='sekundar']:hover {
+  border-color: var(--linje-sterk);
+}
+
+.toppmenyknapp[data-variant='primar']:hover {
+  background: color-mix(in oklab, var(--aksent) 88%, var(--blekk));
+}
+
+.toppmenyknapp[aria-pressed='true'] {
+  border-color: var(--aksent);
+}
+
+/* Trange flater: sekundære handlinger krymper til bare ikonet før søket
+   presses sammen. Teksten er fortsatt knappens navn og tooltip. */
+@media (max-width: 64em) {
+  .toppmenyknapp[data-variant='sekundar'] {
+    width: var(--hoyde-kontroll);
+    padding: 0;
+    justify-content: center;
+    border-color: transparent;
+    background: var(--flate-hevet);
+  }
+
+  .toppmenyknapp[data-variant='sekundar'] .toppmenyknapp__tekst {
+    display: none;
+  }
+
+  .toppmenyknapp[data-variant='sekundar'] .toppmenyknapp__ikon {
+    background: transparent;
+  }
+}
+
+/* --- Globalt fagsøk ------------------------------------------------------------ */
+.fagsok {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.fagsok__felt {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  height: var(--hoyde-kontroll);
+  padding: 0 var(--rom-2) 0 var(--rom-5);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+  cursor: text;
+}
+
+.fagsok__felt:focus-within {
+  outline: var(--fokusring) solid var(--fokus);
+  outline-offset: var(--fokusring);
+}
+
+.fagsok__input {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--tekst-ui);
+  color: var(--blekk);
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.fagsok__input::placeholder {
+  color: var(--blekk-dempet);
+}
+
+/* --- Kontomenyen -------------------------------------------------------------- */
+.kontomeny {
+  position: relative;
+  flex: none;
+}
+
+.kontomeny__knapp .avatar {
+  width: 100%;
+  height: 100%;
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-fet);
+}
+
+.kontomeny__knapp:has(.avatar) {
+  overflow: hidden;
+}
+
+.kontomeny__panel {
+  position: absolute;
+  top: calc(100% + var(--rom-5));
+  right: 0;
+  width: min(21.25rem, calc(100vw - 2 * var(--rom-side)));
+  overflow: hidden;
+  text-align: left;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-kort);
+  box-shadow: var(--skygge-modal);
+}
+
+.kontomeny__panel[hidden] {
+  display: none;
+}
+
+.kontomeny__hode {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-5);
+  padding: var(--rom-6) var(--rom-6) var(--rom-5);
+  background: var(--flate-hevet);
+}
+
+.kontomeny__hode .avatar {
+  width: var(--rom-10);
+  height: var(--rom-10);
+  font-size: 1.25rem;
+  font-weight: var(--vekt-fet);
+}
+
+.kontomeny__hvem {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--rom-2);
+  min-width: 0;
+}
+
+.kontomeny__navn {
+  font-family: var(--skrift-display);
+  font-size: 1.375rem;
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+}
+
+.kontomeny__brukernavn {
+  font-size: var(--tekst-liten);
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk-dempet);
+}
+
+.kontomeny__merke {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  padding: var(--rom-2) var(--rom-3) var(--rom-2) var(--rom-2);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  line-height: 1;
+  color: var(--aksent-2);
+  background: color-mix(in oklab, var(--aksent-2) 16%, var(--flate));
+  border-radius: var(--runding-pille);
+}
+
+.kontomeny__merke .ikon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.kontomeny__valg {
+  display: flex;
+  flex-direction: column;
+  padding: var(--rom-2);
+}
+
+.kontomeny__valgknapp {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-4);
+  width: 100%;
+  min-height: var(--hoyde-felt);
+  padding: 0 var(--rom-4);
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-medium);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-felt);
+  cursor: pointer;
+}
+
+.kontomeny__valgknapp:hover {
+  background: var(--flate-hevet);
+}
+
+.kontomeny__valgknapp .ikon {
+  width: 1.375rem;
+  height: 1.375rem;
+}
+
+.kontomeny__tekst {
+  flex: 1;
+}
+
+.kontomeny__hint {
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+}
+
+/* Temaet står i kontomenyen bare når knappen i menyen har veket for søket. */
+.kontomeny__bare-smal {
+  display: none;
+}
+
+/* --- Smale flater ---------------------------------------------------------------
+   Toppmenyen beholder meny, fagsøk og konto. Sidens handlinger og søket i
+   siden flytter til en dokk nederst i vinduet, med samme pillestil. */
+@media (max-width: 47.5em) {
+  .toppmeny {
+    padding: var(--rom-3) var(--rom-3) 0;
+  }
+
+  .toppmeny__skille,
+  .toppmeny__innstillinger {
+    display: none;
+  }
+
+  .kontomeny__bare-smal {
+    display: block;
+  }
+
+  .menyknapp {
+    min-width: var(--hoyde-trykk);
+    height: var(--hoyde-trykk);
+  }
+
+  .toppmeny__kontekst {
+    position: fixed;
+    right: var(--rom-3);
+    bottom: var(--rom-4);
+    left: var(--rom-3);
+    isolation: isolate;
+    height: var(--hoyde-dokk);
+    padding: 0 var(--rom-2);
+    border: var(--kant) solid var(--linje);
+    border-radius: var(--runding-pille);
+    box-shadow: var(--skygge-toppmeny);
+  }
+
+  .toppmeny__kontekst::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+  }
+
+  /* Hovedhandlingen fyller dokken; resten står som ikoner. */
+  .toppmeny__spor[data-spor='handlinger'] {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toppmeny__kontekst .toppmenyknapp[data-variant='primar'] {
+    flex: 1;
+    justify-content: center;
+    height: var(--hoyde-trykk);
+  }
+
+  .toppmeny__kontekst .toppmenyknapp[data-variant='sekundar'] {
+    width: var(--hoyde-trykk);
+    height: var(--hoyde-trykk);
+  }
+
+  /* Dokken skal ikke dekke det nederste av innholdet, og versjonen i hjørnet
+     viker for den (endringsloggen ligger i kontomenyen). */
+  .app:has(.toppmeny__spor > *) {
+    padding-bottom: var(--dokk-offset);
+  }
+
+  .app:has(.toppmeny__spor > *) .versjonspille {
+    display: none;
+  }
+}

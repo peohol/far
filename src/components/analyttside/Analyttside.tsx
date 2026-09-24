@@ -8,8 +8,9 @@ import { indekserSide, sokeord } from '../../faginnhold/sok'
 import { lagLiggerOver, skrivesIFelt } from '../../hooks/useKeyboard'
 import type { Analyte } from '../../types'
 import { Button } from '../Button'
-import { StepBar } from '../StepBar'
-import { BackIcon } from '../icons'
+import { Ikonknapp } from '../Ikonknapp'
+import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
+import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
 import { Referanseliste } from '../referanser/Referanseliste'
 import { SeksjonsstyringKilde, skuffnokkel, useSeksjonsstyring } from '../seksjoner/Seksjonsstyring'
 import { Sidereferanser } from '../referanser/Sidereferanser'
@@ -74,11 +75,9 @@ export function Analyttside({ kode, sted, katalog, onApneFortolkning, onLukk }: 
   if (!oppforing) {
     return (
       <section className="steg analyttside" aria-labelledby="ukjent-analytt">
-        <StepBar>
-          <Button variant="subtle" icon={<BackIcon />} shortcut="Esc" onClick={onLukk}>
-            Lukk
-          </Button>
-        </StepBar>
+        <ToppmenyInnhold spor="handlinger">
+          <Lukkeknapp onLukk={onLukk} />
+        </ToppmenyInnhold>
         <div className="kort kort--start">
           <h1 id="ukjent-analytt" className="identitet__navn">
             Fant ingen analytt med koden {kode}
@@ -101,6 +100,11 @@ export function Analyttside({ kode, sted, katalog, onApneFortolkning, onLukk }: 
       />
     </SeksjonsstyringKilde>
   )
+}
+
+/** Tilbake til fortolkningen. `Escape` gjør det samme (se `useLukkMedEscape`). */
+function Lukkeknapp({ onLukk }: { onLukk: () => void }) {
+  return <Ikonknapp ikon="close" etikett="Lukk" aria-keyshortcuts="Escape" onClick={onLukk} />
 }
 
 /** `Escape` lukker siden — men ikke fra et felt, et åpent skjema eller et lag over den. */
@@ -194,23 +198,25 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
 
   return (
     <section ref={beholder} className="analyttside" aria-labelledby={overskrift} data-modus={modus}>
-      <StepBar>
-        <Button variant="subtle" icon={<BackIcon />} shortcut="Esc" onClick={onLukk}>
-          Lukk
-        </Button>
-        <Button variant="subtle" onClick={() => onApneFortolkning(oppforing.fortolkning)}>
+      {/* Sidens handlinger står i toppmenyen (i dokken på smale flater). */}
+      <ToppmenyInnhold spor="handlinger">
+        <Toppmenyknapp
+          ikon="interp"
+          variant="primar"
+          onClick={() => onApneFortolkning(oppforing.fortolkning)}
+        >
           Åpne fortolkning
-        </Button>
-        {kanRedigere && (
-          <Button
-            variant="subtle"
-            aria-pressed={modus === 'rediger'}
-            onClick={() => setModus(modus === 'rediger' ? 'lese' : 'rediger')}
-          >
-            {modus === 'rediger' ? 'Avslutt redigering' : 'Rediger'}
-          </Button>
-        )}
-      </StepBar>
+        </Toppmenyknapp>
+        {kanRedigere &&
+          (modus === 'rediger' ? (
+            <Toppmenyknapp ikon="close" aria-pressed="true" onClick={() => setModus('lese')}>
+              Avslutt redigering
+            </Toppmenyknapp>
+          ) : (
+            <Ikonknapp ikon="edit" etikett="Rediger" aria-pressed="false" onClick={() => setModus('rediger')} />
+          ))}
+        <Lukkeknapp onLukk={onLukk} />
+      </ToppmenyInnhold>
 
       <Sidesok
         sporring={sporring}

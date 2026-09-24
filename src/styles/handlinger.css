@@ -1,0 +1,83 @@
+/**
+ * Handlingsprimitiver fra Atlas: den runde ikonknappen (`Ikonknapp`) og
+ * hurtigtastmerket slik det står i felt og toppmeny.
+ */
+
+/* --- Ikonknapp ------------------------------------------------------------
+   Rund, med ikonet i midten. Variantene skiller seg bare på flaten. */
+.ikonknapp {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--hoyde-kontroll);
+  height: var(--hoyde-kontroll);
+  padding: 0;
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve);
+}
+
+.ikonknapp[data-storrelse='liten'] {
+  width: var(--hoyde-liten);
+  height: var(--hoyde-liten);
+}
+
+.ikonknapp[data-variant='stille'],
+.ikonknapp[data-variant='kant'] {
+  background: transparent;
+}
+
+.ikonknapp[data-variant='kant'] {
+  border-color: var(--linje);
+}
+
+.ikonknapp[data-variant='aksent'] {
+  background: var(--aksent-flate);
+}
+
+/* Hover spiller ikonanimasjonen; flaten markeres bare svakt. */
+.ikonknapp:hover {
+  border-color: var(--linje-sterk);
+}
+
+/* Påslått innstilling eller valgt tilstand: aksentflate og aksentkant, ikke
+   bare farge i ikonet. */
+.ikonknapp[aria-pressed='true'],
+.ikonknapp[aria-expanded='true'] {
+  background: var(--aksent-flate);
+  border-color: var(--aksent);
+}
+
+.ikonknapp:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* Trykkflater er minst 44 px på smale flater. */
+@media (max-width: 47.5em) {
+  .ikonknapp,
+  .ikonknapp[data-storrelse='liten'] {
+    width: var(--hoyde-trykk);
+    height: var(--hoyde-trykk);
+  }
+}
+
+/* --- Hurtigtastmerke i Atlas-flatene ---------------------------------------
+   Liten pille i UI-skriften, som «Ctrl K» i søkefeltet. */
+.fagsok .hurtigtast,
+.toppmeny .hurtigtast {
+  padding: var(--rom-1) var(--rom-3);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+  background: var(--flate);
+  border: 0;
+  border-radius: var(--runding-pille);
+  opacity: 1;
+}

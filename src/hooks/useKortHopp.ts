@@ -1,4 +1,5 @@
 import { useEffect, type RefObject } from 'react'
+import { toppmenyensBunn } from '../components/toppmeny/toppmenyplass'
 import { fortolkningenErSkjult, lagLiggerOver } from './useKeyboard'
 
 /**
@@ -23,7 +24,8 @@ export function rullefart(): ScrollBehavior {
 
 /**
  * Luft over det øverste elementet. Kopikvitteringen legger seg rett over
- * knappen den gjelder, og skal ikke bli liggende i skjermkanten.
+ * knappen den gjelder, og skal ikke bli liggende i skjermkanten — eller bak
+ * toppmenyen, som luften regnes fra.
  */
 const LUFT = 64
 
@@ -48,14 +50,15 @@ export function hoppFram(...elementer: (Element | null | undefined)[]) {
   const forste = med[0]
   if (!forste) return
 
+  const luft = toppmenyensBunn() + LUFT
   const ruter = med.map((e) => e.getBoundingClientRect())
   const topp = Math.min(...ruter.map((r) => r.top))
   const bunn = Math.max(...ruter.map((r) => r.bottom))
   const vindu = window.innerHeight
-  if (topp >= LUFT && bunn <= vindu) return
+  if (topp >= luft && bunn <= vindu) return
 
-  const passer = bunn - topp + LUFT <= vindu
-  const onsket = passer ? Math.max(LUFT, (vindu - (bunn - topp)) / 2) : LUFT
+  const passer = bunn - topp + luft <= vindu
+  const onsket = passer ? Math.max(luft, (vindu - (bunn - topp)) / 2) : luft
   rull(forste, (passer ? topp : forste.getBoundingClientRect().top) - onsket)
 }
 

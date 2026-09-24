@@ -1,188 +1,338 @@
 /**
- * Designtokens. Alt som gjentar seg — farge, avstand, skriftstørrelse, form —
- * defineres her én gang, slik at komponentene bare refererer til navn.
+ * Designtokens for retningen Atlas. Alt som gjentar seg — farge, avstand,
+ * skriftstørrelse, form, lag og bevegelse — defineres her én gang, slik at
+ * komponentene bare refererer til navn. Verdiene er fasiten fra Claude
+ * Design-handoffen «OUSFAR Atlas» (se `docs/designsystem.md`).
  *
  * Fargene er valgt slik at all tekst mot sin egen flate ligger over WCAG 2.1
  * AA (4,5:1 for brødtekst, 3:1 for stor tekst og grafiske elementer), som er
  * kravet forskrift om universell utforming av IKT stiller. `npm test` måler
  * kontrastene på nytt hver gang.
+ *
+ * Nederst står overgangsnavn for tokens komponentene brukte før Atlas. De
+ * peker på det nye systemet, og fjernes etter hvert som flatene bygges om.
  */
 
 :root {
-  /* --- Skriftstørrelser -------------------------------------------------
-     Skalerer med vindusbredden, så UI-et er like lesbart i halvt som i
-     maksimert vindu uten at noe må skrolles. */
-  --tekst-xxs: clamp(0.66rem, 0.62rem + 0.13vw, 0.77rem);
-  --tekst-xs: clamp(0.72rem, 0.68rem + 0.14vw, 0.84rem);
-  --tekst-s: clamp(0.88rem, 0.83rem + 0.22vw, 1.05rem);
-  --tekst-m: clamp(1rem, 0.92rem + 0.34vw, 1.28rem);
-  --tekst-l: clamp(1.22rem, 1.05rem + 0.72vw, 1.85rem);
-  --tekst-xl: clamp(1.6rem, 1.24rem + 1.5vw, 2.7rem);
-  --tekst-xxl: clamp(2.3rem, 1.5rem + 3.4vw, 4.6rem);
-
-  --vekt-normal: 400;
-  --vekt-medium: 550;
-  --vekt-tung: 700;
-
-  --skrift: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+  /* --- Skrift -----------------------------------------------------------
+     Newsreader (serif) til stoffnavn, titler, nøkkeltall og klinisk tekst;
+     Public Sans til alt UI. Begge ligger i appen selv (se `main.tsx`), så et
+     klinisk verktøy ikke er avhengig av en ekstern skrifttjeneste. */
+  --skrift-display: 'Newsreader Variable', 'Newsreader', 'Iowan Old Style', Georgia, serif;
+  --skrift-ui: 'Public Sans Variable', 'Public Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --skrift-mono: 'JetBrains Mono', 'SFMono-Regular', 'Cascadia Mono', Consolas, monospace;
 
-  /* --- Avstand ---------------------------------------------------------- */
-  --rom-1: 0.35rem;
-  --rom-2: 0.6rem;
-  --rom-3: 0.9rem;
-  --rom-4: 1.4rem;
-  --rom-5: clamp(1.5rem, 1rem + 1.6vh, 2.4rem);
-  --rom-6: clamp(2rem, 1.2rem + 2.8vh, 3.6rem);
+  --vekt-normal: 400;
+  --vekt-medium: 500;
+  --vekt-halvfet: 600;
+  --vekt-fet: 700;
 
-  /* --- Form ------------------------------------------------------------- */
-  --runding-s: 0.5rem;
-  --runding-m: 0.85rem;
-  --runding-l: 1.35rem;
-  --runding-full: 999px;
+  /* Seks nivåer som skalerer med vindusbredden (rem/clamp), og en fast
+     UI-skala. */
+  /* Display: stoffnavn på monografen (80 px på bred desktop). */
+  --tekst-display: clamp(3rem, 2.2rem + 3.2vw, 5rem);
+  /* Sidetittel: modul- og sidenavn (46 px). */
+  --tekst-sidetittel: clamp(2.1rem, 1.7rem + 1.4vw, 2.875rem);
+  /* Nøkkeltall i datakort (40 px). */
+  --tekst-tall: clamp(2rem, 1.7rem + 0.9vw, 2.5rem);
+  /* Seksjonstittel, trekkspill nivå 1 (27 px). */
+  --tekst-seksjon: clamp(1.4rem, 1.25rem + 0.5vw, 1.6875rem);
+  /* Kommentartekst og åpnet innhold i serif (18–20 px). */
+  --tekst-lesing: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
+  /* Gruppeetikett og oppsummering, kursiv serif (15–17 px). */
+  --tekst-ingress: clamp(0.9375rem, 0.9rem + 0.15vw, 1.0625rem);
+  --tekst-ui: 0.9375rem; /* 15 px – knapper, felt, søk */
+  --tekst-etikett: 0.875rem; /* 14 px – kortetiketter, underkorttitler */
+  --tekst-liten: 0.8125rem; /* 13 px – oppsummering, feltetiketter */
+  --tekst-meta: 0.75rem; /* 12 px – metalinje (versaler, sperret) */
+  --tekst-merke: 0.6875rem; /* 11 px – hurtigtast, referansepille */
+
+  --sperring-meta: 0.14em;
+  --linjehoyde-tett: 1;
+  --linjehoyde-titler: 1.1;
+  --linjehoyde-ui: 1.3;
+  --linjehoyde-lesing: 1.5;
+
+  /* --- Rom (gap, padding, margin) --------------------------------------- */
+  --rom-1: 0.25rem; /* 4 */
+  --rom-2: 0.375rem; /* 6 */
+  --rom-3: 0.625rem; /* 10 */
+  --rom-4: 0.75rem; /* 12 */
+  --rom-5: 0.875rem; /* 14 */
+  --rom-6: 1.125rem; /* 18 */
+  --rom-7: 1.375rem; /* 22 */
+  --rom-8: 1.75rem; /* 28 */
+  --rom-9: 2.5rem; /* 40 */
+  --rom-10: 3.5rem; /* 56 */
+  /* Sidemarg. */
+  --rom-side: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
+
+  /* --- Form --------------------------------------------------------------- */
+  --runding-merke: 0.375rem; /* 6 – små merker */
+  --runding-felt: 0.875rem; /* 14 – tallfelt, datofelt, bannere */
+  --runding-underkort: 1rem; /* 16 – trekkspill nivå 2 */
+  --runding-felt-gruppe: 1.25rem; /* 20 – fieldset, marginboks */
+  --runding-kort: 1.375rem; /* 22 – datakort */
+  --runding-panel: 1.5rem; /* 24 – store paneler, modal */
+  --runding-pille: 999px; /* knapper, søk, toppmeny, piller */
 
   --kant: 1px;
+  --kant-aktiv: 1.5px; /* åpnet underkort, valgt felt */
   --kant-tykk: 2px;
-  --ikon-strek: 2;
+  --fokusring: 2px;
 
-  --fart: 160ms;
-  /* Glidning mot en ukjent høyde — sammenleggbare seksjoner o.l. */
-  --fart-glid: 280ms;
+  /* --- Kontrollhøyder -----------------------------------------------------
+     Trykkflater er minst 44 px på smale flater. */
+  --hoyde-liten: 2.25rem; /* 36 */
+  --hoyde-kontroll: 2.625rem; /* 42 */
+  --hoyde-trykk: 2.75rem; /* 44 */
+  --hoyde-felt: 3rem; /* 48 */
+  --hoyde-toppmeny: 3.75rem; /* 60 */
+  --hoyde-dokk: 3.625rem; /* 58 */
+
+  /* --- Ikonstørrelser (se `Ikon`) --------------------------------------- */
+  --ikon-ui: 1.25rem; /* 20 – knapper og toppmeny */
+  --ikon-underpunkt: 1.875rem; /* 30 – underkort i trekkspillet */
+  --ikon-seksjon: 2.25rem; /* 36 – i ikonsirkelen på 56 */
+  --ikon-konsept: 3.75rem; /* 60 – datakortene i viktige data */
+  --ikon-plot: 5rem; /* 80 – miniplottene for t½ og tss */
+
+  /* --- Toppmeny og dokk ----------------------------------------------------
+     Den ene faste toppmenyen svever over innholdet. `--toppmeny-offset` er
+     hvor mye av vinduet den tar øverst: innhold, ankere og scrollIntoView
+     skal alltid legge seg under den. `--dokk-offset` er det samme nederst
+     på smale flater, der monografens handlinger ligger i en dokk. */
+  --toppmeny-luft: var(--rom-5);
+  --toppmeny-offset: calc(var(--hoyde-toppmeny) + 1.75rem);
+  --dokk-offset: calc(var(--hoyde-dokk) + 1.75rem);
+  --blur-toppmeny: 16px;
+
+  /* --- Lag ---------------------------------------------------------------- */
+  --lag-toppmeny: 50;
+  --lag-popover: 60;
+  --lag-modal: 70;
+
+  /* --- Bevegelse -----------------------------------------------------------
+     Kort og meningsfull; ingen kontinuerlig animasjon. */
+  --fart-rask: 160ms; /* hover, trykk, fargeskift */
+  --fart-glid: 280ms; /* skuffer åpner og lukker */
   /* Et element som flytter seg tvers over bildet — båndknappen som flyter opp
      og blir beviset i limsteget. Kort nok til at blinket fra kopieringen
      fortsatt står når knappen lander. */
   --fart-flyt: 340ms;
+  --fart-ikon: 700ms; /* ikonanimasjon */
   --kurve: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --kurve-ikon: cubic-bezier(0.3, 0.7, 0.3, 1);
 
-  /* --- Alternativfarger ------------------------------------------------- */
+  /* --- Alternativfarger ---------------------------------------------------
+     Søkealternativene og analysemetodene får hver sin farge fra plassen sin
+     (se `optionColour`); dette er hvor sterkt den brukes. */
   --alt-flate-alfa: 0.24;
   --alt-kant-alfa: 0.9;
 }
 
-/* --- Lyst tema ---------------------------------------------------------- */
+/* --- Lyst tema: varm papirtone ---------------------------------------------
+   Kan også settes på et enkelt element med data-tema. */
 :root,
-:root[data-tema='lyst'] {
+:root[data-tema='lyst'],
+[data-tema='lyst'] {
   color-scheme: light;
 
-  --flate-bunn: hsl(210 36% 97%);
-  --flate: hsl(0 0% 100%);
-  --flate-hevet: hsl(210 30% 94%);
-  --linje: hsl(212 20% 84%);
-  --linje-sterk: hsl(212 18% 55%);
+  /* Flater */
+  --flate-bunn: #f5f1e8; /* sidebakgrunn */
+  --flate: #fffdf8; /* kort, paneler, felt */
+  --flate-hevet: #efe8da; /* ikonsirkler, sekundærknapper, søkefelt */
+  --flate-toppmeny: rgb(255 253 248 / 0.82); /* over backdrop-blur */
+  --linje: #e2d9c7; /* hårlinjer, kortkanter */
+  --linje-sterk: #d3c8b2; /* innrykkslinjer */
+  /* Kanten som alene viser hvor et felt eller en knapp er (WCAG 1.4.11). */
+  --linje-kontroll: #8d8474;
 
-  /* Rein svart, til det ene ordet som skal leses først av alt på skjermen. */
-  --blekk-sterk: hsl(0 0% 0%);
-  --blekk: hsl(215 32% 14%);
-  --blekk-dempet: hsl(215 14% 38%);
-  --blekk-svak: hsl(215 12% 50%);
+  /* Tekst */
+  --blekk-sterk: #000000;
+  --blekk: #1f1b15;
+  --blekk-dempet: #5e574b;
 
-  --aksent: hsl(214 82% 38%);
-  --aksent-blekk: hsl(0 0% 100%);
-  --aksent-flate: hsl(214 90% 96%);
+  /* Aksent: interaksjon, valgt og primær handling */
+  --aksent: #0e6b6b;
+  --aksent-flate: #d9ece9;
+  --paa-aksent: #ffffff;
+  --aksent-2: #7b4a8e; /* sekundær ikonfarge */
+  --fokus: #0e6b6b;
 
-  --fokus: hsl(214 90% 42%);
-  --skygge: 0 1px 2px hsl(215 30% 20% / 0.06), 0 8px 24px hsl(215 30% 20% / 0.09);
-  --skygge-hevet: 0 2px 6px hsl(215 30% 20% / 0.1), 0 18px 44px hsl(215 30% 20% / 0.16);
+  /* Kliniske nivåer — alltid sammen med tekst og ikon, aldri farge alene.
+     `-kant` er nivåets farge mørknet til 3:1 mot sidebakgrunnen, til
+     kanter som skal skille en knapp fra flaten den står på. */
+  --referanse: #3e9e68;
+  --referanse-flate: #e2f0e4;
+  --referanse-blekk: #22683f;
+  --referanse-kant: #308354;
+  --toksisk: #d99722;
+  --toksisk-flate: #fbedd2;
+  --toksisk-blekk: #7e5200;
+  --toksisk-kant: #ac7411;
+  --alvorlig: #d2493a;
+  --alvorlig-flate: #f8e0da;
+  --alvorlig-blekk: #9e2a1e;
+  --alvorlig-kant: #d2493a;
+  --under: #3f7fc2;
+  --under-flate: #e1ecf7;
+  --under-blekk: #1d4e86;
+  --under-kant: #3f7fc2;
 
-  --niva-under-blekk: hsl(201 92% 26%);
-  --niva-under-flate: hsl(201 88% 94%);
-  --niva-under-linje: hsl(201 72% 46%);
+  /* Ikonfarger */
+  --blod: #c22e45;
+  --info: #4c7fc4;
+  --glass: #9fb4ba;
+  --papir: #fffdf8;
+  --ikon-blekk: #1f1b15; /* frie linjer: akser, piler */
+  --ikon-linje: #2a231a; /* konturer blandes med ikonfargen */
 
-  --niva-innenfor-blekk: hsl(154 82% 22%);
-  --niva-innenfor-flate: hsl(150 62% 93%);
-  --niva-innenfor-linje: hsl(152 52% 39%);
+  /* Merkene på føringene i endringsloggen — utenfor de kliniske
+     nivåfargene, så et merke aldri kan leses som en klinisk vurdering. */
+  --merke-design: #6b3fa0;
+  --merke-design-flate: #efe6f7;
+  --merke-funksjon: #0e6b6b;
+  --merke-funksjon-flate: #d9ece9;
+  --merke-fag: #8e2f6b;
+  --merke-fag-flate: #f6e3ee;
 
-  --niva-over-blekk: hsl(357 74% 38%);
-  --niva-over-flate: hsl(357 84% 96%);
-  --niva-over-linje: hsl(357 66% 56%);
+  /* Tooltip. Snudd i forhold til resten av appen, så boblen leses som noe
+     som ligger over siden og ikke som enda et kort i den. */
+  --tips-flate: #1f1b15;
+  --tips-blekk: #fffdf8;
+  --tips-blekk-dempet: #cfc7b8;
 
-  --varsel-blekk: hsl(28 88% 28%);
-  --varsel-flate: hsl(40 92% 94%);
-  --varsel-linje: hsl(34 78% 54%);
-
-  /* «Over referanseområdet, men under ringegrensen» — eget trinn mellom
-     grønt og rødt, så alvorlighetsgraden leses av fargen alene. */
-  --niva-gul-blekk: hsl(30 92% 26%);
-  --niva-gul-flate: hsl(44 94% 92%);
-  --niva-gul-linje: hsl(36 76% 43%);
-
-  /* Tooltip. Snudd i forhold til resten av appen — svart flate med hvit
-     skrift i lyst tema, motsatt i mørkt — så boblen leses som noe som ligger
-     over siden og ikke som enda et kort i den. */
-  --tips-flate: hsl(0 0% 0%);
-  --tips-blekk: hsl(0 0% 100%);
-  --tips-blekk-dempet: hsl(0 0% 78%);
-
-  /* Merkene på føringene i endringsloggen. Fiolett, petrol og plomme ligger
-     utenfor nivå- og varselfargene, så et merke i loggen aldri kan leses som
-     en klinisk vurdering. */
-  --merke-design-blekk: hsl(272 62% 36%);
-  --merke-design-flate: hsl(272 60% 95%);
-
-  --merke-funksjon-blekk: hsl(187 84% 23%);
-  --merke-funksjon-flate: hsl(185 62% 93%);
-
-  --merke-fag-blekk: hsl(322 62% 33%);
-  --merke-fag-flate: hsl(322 70% 95%);
+  /* Skygger. Bare det som svever — toppmenyen, dokken og modaler. */
+  --skygge-toppmeny: 0 8px 28px rgb(60 40 10 / 0.1);
+  --skygge-modal: 0 24px 64px rgb(60 40 10 / 0.22);
 }
 
-/* --- Mørkt tema --------------------------------------------------------- */
-:root[data-tema='moerkt'] {
+/* --- Mørkt tema: kjølig skifer ---------------------------------------------- */
+:root[data-tema='moerkt'],
+[data-tema='moerkt'] {
   color-scheme: dark;
 
-  --flate-bunn: hsl(216 32% 9%);
-  --flate: hsl(216 26% 13%);
-  --flate-hevet: hsl(216 22% 18%);
-  --linje: hsl(216 16% 26%);
-  --linje-sterk: hsl(216 14% 42%);
+  --flate-bunn: #0e1217;
+  --flate: #151a21;
+  --flate-hevet: #1c232c;
+  --flate-toppmeny: rgb(21 26 33 / 0.8);
+  --linje: #29313c;
+  --linje-sterk: #3a4452;
+  --linje-kontroll: #6e7987;
 
-  /* Rein hvit — samme rolle som rein svart i det lyse temaet. */
-  --blekk-sterk: hsl(0 0% 100%);
-  --blekk: hsl(210 32% 95%);
-  --blekk-dempet: hsl(213 16% 72%);
-  --blekk-svak: hsl(213 12% 60%);
+  --blekk-sterk: #ffffff;
+  --blekk: #e6ecf2;
+  --blekk-dempet: #a2aebc;
 
-  --aksent: hsl(210 94% 70%);
-  --aksent-blekk: hsl(216 40% 10%);
-  --aksent-flate: hsl(214 46% 20%);
+  --aksent: #5cc6c0;
+  --aksent-flate: #10292a;
+  --paa-aksent: #0b1a1a;
+  --aksent-2: #b3a2ee;
+  --fokus: #5cc6c0;
 
-  --fokus: hsl(206 96% 68%);
-  --skygge: 0 1px 2px hsl(216 50% 3% / 0.5), 0 8px 24px hsl(216 50% 3% / 0.55);
-  --skygge-hevet: 0 2px 6px hsl(216 50% 3% / 0.55), 0 18px 44px hsl(216 50% 3% / 0.7);
+  --referanse: #6dd19a;
+  --referanse-flate: #13261e;
+  --referanse-blekk: #8bddb0;
+  --referanse-kant: #6dd19a;
+  --toksisk: #efbe5e;
+  --toksisk-flate: #2a2414;
+  --toksisk-blekk: #f4cb7a;
+  --toksisk-kant: #efbe5e;
+  --alvorlig: #f08576;
+  --alvorlig-flate: #2d1a1c;
+  --alvorlig-blekk: #f7a195;
+  --alvorlig-kant: #f08576;
+  --under: #7fb4ee;
+  --under-flate: #14233a;
+  --under-blekk: #a9ccf5;
+  --under-kant: #7fb4ee;
 
-  --niva-under-blekk: hsl(199 92% 74%);
-  --niva-under-flate: hsl(201 54% 17%);
-  --niva-under-linje: hsl(200 60% 46%);
+  --blod: #f2708a;
+  --info: #8cb5ee;
+  --glass: #9fb0c2;
+  --papir: #dde4ec;
+  --ikon-blekk: #e6ecf2;
+  --ikon-linje: #d5dde6;
 
-  --niva-innenfor-blekk: hsl(150 66% 66%);
-  --niva-innenfor-flate: hsl(154 42% 14%);
-  --niva-innenfor-linje: hsl(152 42% 40%);
+  --merke-design: #cdb1f2;
+  --merke-design-flate: #261c36;
+  --merke-funksjon: #7fd6d0;
+  --merke-funksjon-flate: #10292a;
+  --merke-fag: #f0a6d2;
+  --merke-fag-flate: #33182a;
 
-  --niva-over-blekk: hsl(357 96% 78%);
-  --niva-over-flate: hsl(357 40% 19%);
-  --niva-over-linje: hsl(357 58% 52%);
+  --tips-flate: #e6ecf2;
+  --tips-blekk: #0e1217;
+  --tips-blekk-dempet: #3f4854;
 
-  --varsel-blekk: hsl(38 94% 68%);
-  --varsel-flate: hsl(32 44% 16%);
-  --varsel-linje: hsl(34 62% 46%);
-
-  --niva-gul-blekk: hsl(42 96% 68%);
-  --niva-gul-flate: hsl(36 46% 16%);
-  --niva-gul-linje: hsl(38 64% 46%);
-
-  --tips-flate: hsl(0 0% 100%);
-  --tips-blekk: hsl(0 0% 0%);
-  --tips-blekk-dempet: hsl(0 0% 28%);
-
-  --merke-design-blekk: hsl(272 88% 82%);
-  --merke-design-flate: hsl(272 34% 21%);
-
-  --merke-funksjon-blekk: hsl(185 74% 70%);
-  --merke-funksjon-flate: hsl(187 44% 16%);
-
-  --merke-fag-blekk: hsl(322 84% 80%);
-  --merke-fag-flate: hsl(322 32% 20%);
+  --skygge-toppmeny: 0 8px 28px rgb(0 0 0 / 0.45);
+  --skygge-modal: 0 24px 64px rgb(0 0 0 / 0.6);
 
   --alt-flate-alfa: 0.17;
   --alt-kant-alfa: 0.55;
+}
+
+/* --- Redusert bevegelse ----------------------------------------------------
+   Alle varigheter blir 0, og ikonene ligger i ro. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --fart-rask: 0ms;
+    --fart-glid: 0ms;
+    --fart-flyt: 0ms;
+    --fart-ikon: 0ms;
+  }
+}
+
+/* --- Overgangsnavn -----------------------------------------------------------
+   Navnene komponentene brukte før Atlas. De peker på de nye tokenene og skal
+   ikke brukes i ny kode. Blokken gjelder også elementer med eget tema, så et
+   navn her alltid følger temaet det står i. */
+:root,
+[data-tema] {
+  --skrift: var(--skrift-ui);
+  --vekt-tung: var(--vekt-fet);
+
+  --tekst-xxs: var(--tekst-merke);
+  --tekst-xs: var(--tekst-meta);
+  --tekst-s: var(--tekst-ui);
+  --tekst-m: var(--tekst-lesing);
+  --tekst-l: var(--tekst-seksjon);
+  --tekst-xl: var(--tekst-sidetittel);
+  --tekst-xxl: var(--tekst-display);
+
+  --runding-s: var(--runding-merke);
+  --runding-m: var(--runding-felt);
+  --runding-l: var(--runding-kort);
+  --runding-full: var(--runding-pille);
+
+  --fart: var(--fart-rask);
+  /* Strekbredden til de få strekikonene som ennå ikke har et Atlas-ikon. */
+  --ikon-strek: 2;
+
+  --blekk-svak: var(--blekk-dempet);
+  --aksent-blekk: var(--paa-aksent);
+  --skygge: var(--skygge-toppmeny);
+  --skygge-hevet: var(--skygge-modal);
+
+  --niva-under-blekk: var(--under-blekk);
+  --niva-under-flate: var(--under-flate);
+  --niva-under-linje: var(--under-kant);
+  --niva-innenfor-blekk: var(--referanse-blekk);
+  --niva-innenfor-flate: var(--referanse-flate);
+  --niva-innenfor-linje: var(--referanse-kant);
+  --niva-over-blekk: var(--alvorlig-blekk);
+  --niva-over-flate: var(--alvorlig-flate);
+  --niva-over-linje: var(--alvorlig-kant);
+  /* «Over referanseområdet, men under ringegrensen». */
+  --niva-gul-blekk: var(--toksisk-blekk);
+  --niva-gul-flate: var(--toksisk-flate);
+  --niva-gul-linje: var(--toksisk-kant);
+  --varsel-blekk: var(--toksisk-blekk);
+  --varsel-flate: var(--toksisk-flate);
+  --varsel-linje: var(--toksisk-kant);
+
+  --merke-design-blekk: var(--merke-design);
+  --merke-funksjon-blekk: var(--merke-funksjon);
+  --merke-fag-blekk: var(--merke-fag);
 }
