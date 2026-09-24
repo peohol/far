@@ -1,13 +1,11 @@
 import type { CSSProperties } from 'react'
-import { Button } from './Button'
 import { Card } from './Card'
 import { ManualCopy } from './ManualCopy'
-import { Metodepille } from './Metodepille'
-import { Kodepille } from './Kodepille'
+import { Metalinje } from './Metalinje'
+import { Panelhode } from './Panelhode'
 import { Shortcut } from './Shortcut'
 import { StepBar } from './StepBar'
 import { useTips } from './Tips'
-import { BackIcon } from './icons'
 import {
   ETG_ALTERNATIVER,
   ETG_ANALYSEMETODE,
@@ -37,24 +35,16 @@ export interface EtgStepProps {
 export function EtgStep({ onPick, onBack, failed }: EtgStepProps) {
   return (
     <section className="steg steg--etg" aria-label="Velg hva som er påvist">
-      <StepBar>
-        <Button variant="subtle" icon={<BackIcon />} shortcut="Esc" onClick={onBack}>
-          Bytt analytt
-        </Button>
-      </StepBar>
+      <StepBar onEsc={onBack}>Bytt analytt</StepBar>
 
       <Card align="start" className="analyttkort">
-        <Metodepille metode={ETG_ANALYSEMETODE} />
-        <div className="modul-koder">
-          <Kodepille kode={ETG_KODE} />
-          <Kodepille kode={ETS_KODE} />
-        </div>
+        <Metalinje koder={[ETG_KODE, ETS_KODE]} metode={ETG_ANALYSEMETODE} lenker />
         <h1 className="analytt__navn">EtG + EtS</h1>
         <p className="modul-undertittel">Etylglukuronid og etylsulfat i urin</p>
       </Card>
 
-      <Card className="bandkort">
-        <h2 className="bandkort__merke">Påvist i denne prøven</h2>
+      <Card align="start" className="bandkort">
+        <Panelhode>Påvist i denne prøven</Panelhode>
         {/* Samme rad som båndknappene, men med ord i stedet for tall: hver
             knapp trenger mer bredde før skriften må krympe, og tallmerket står
             alltid og er regnet med i bredden. */}

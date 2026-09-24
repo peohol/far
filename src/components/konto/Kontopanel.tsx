@@ -6,7 +6,7 @@ import { useAvatarlenker } from '../../auth/avatarer'
 import { useOkt, useProfil } from '../../auth/okt'
 import { Button } from '../Button'
 import { Modallag } from '../Modallag'
-import { LogoutIcon } from '../icons'
+import { Ikon } from '../ikon/Ikon'
 import { Avatar } from './Avatar'
 import { Bildevelgerlast } from './Bildevelgerlast'
 import { Felt, Lastfelt } from './Felt'
@@ -211,7 +211,7 @@ export function Kontopanel({ apen, onLukk }: { apen: boolean; onLukk: () => void
 
       <hr className="skille" />
 
-      <Button variant="kant" icon={<LogoutIcon />} onClick={() => void loggUt()}>
+      <Button variant="kant" icon={<Ikon navn="logout" />} onClick={() => void loggUt()}>
         Logg ut
       </Button>
     </Modallag>

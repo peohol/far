@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Shortcut } from './Shortcut'
-import { CloseIcon, MenuIcon } from './icons'
+import { Ikon } from './ikon/Ikon'
 import { useTips } from './Tips'
 import {
   AV_SNARVEI,
@@ -187,7 +187,7 @@ export function Sidemeny({ pool, metodefilter, onFilter }: SidemenyProps) {
         onClick={apne}
         {...knappeprops}
       >
-        <MenuIcon />
+        <Ikon navn="menu" storrelse="ui" />
         {metodefilter && <span className="menyknapp__filter">{metodefilter}</span>}
         <Shortcut>{MENY_SNARVEI}</Shortcut>
       </button>
@@ -218,18 +218,20 @@ export function Sidemeny({ pool, metodefilter, onFilter }: SidemenyProps) {
             aria-label="Lukk menyen"
             onClick={lukk}
           >
-            <CloseIcon />
+            <Ikon navn="close" storrelse="ui" />
           </button>
         </div>
 
         {/* Bryteren og «alle»-valget står fast øverst. De gjelder hele lista,
             og skal ikke kunne rulles bort fra den. */}
-        <label className="menyveksle">
+        <label className="bryter menyveksle">
           <input
             type="checkbox"
+            role="switch"
             checked={visKategorier}
             onChange={(e) => setVisKategorier(e.target.checked)}
           />
+          <span className="bryter__spor" aria-hidden="true" />
           <span>Vis kategorier</span>
         </label>
 
@@ -352,11 +354,10 @@ function Skuff({
           aria-controls={id}
           onClick={onVeksle}
         >
-          <span className="menyskuff__merking">
-            <span className="menyskuff__kode">{metode.kode}</span>
-            {snarvei && <Shortcut>{snarvei}</Shortcut>}
-          </span>
+          <span className="menyskuff__kode">{metode.kode}</span>
           <span className="menyskuff__beskrivelse">{metode.beskrivelse}</span>
+          {snarvei && <Shortcut>{snarvei}</Shortcut>}
+          <Ikon navn="chev" className="menyskuff__pil" />
         </button>
       </div>
 

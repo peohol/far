@@ -12,6 +12,23 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.26.5',
+    dato: '2026-09-24',
+    sammendrag: 'Fortolkningen og sidemenyen har fått det nye utseendet',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Stegene i fortolkningen og modulene for EtG, rusmidler og THC begynner øverst på siden, med de nye panelene, overskriftene og ikonene.',
+      'Koden og analysemetoden står i en rolig linje over analyttnavnet, og koden er fortsatt en lenke til informasjonssiden.',
+      '«Bytt analytt», «Endre konsentrasjon» og de andre Esc-valgene står alltid på samme sted øverst i steget.',
+      'Kommentarblokkene viser hvor kommentaren skal limes inn, og teksten i sin helhet. Står teksten skrevet ut, gjentas den ikke lenger i en boble over «Kopier».',
+      'Skjemaene i THC og rusmodulen, sidemenyen og regelvisningen har fått samme utseende som resten av appen.',
+      'Første klikk på en knapp med ikon kunne bli borte, blant annet på menyknappen. Det er rettet.',
+      'I referanselista og under seksjonene står «kan ikke redigeres» ved kilder fra FEST bare mens siden redigeres.',
+      'Fortolkningen, tastene, kopieringen og kommentarene er uendret.',
+    ],
+  },
+  {
     versjon: '1.26.4',
     dato: '2026-09-24',
     sammendrag: 'Innlogging, konto, brukerliste og redigering i det nye utseendet',

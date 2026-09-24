@@ -2,12 +2,12 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
 import { Kommentarliste } from './Kommentarliste'
-import { Metodepille } from './Metodepille'
-import { Kodepille } from './Kodepille'
+import { Metalinje } from './Metalinje'
+import { Panelhode } from './Panelhode'
 import { Rusutfall } from './Rusutfall'
 import { Rusvalg } from './Rusvalg'
 import { StepBar } from './StepBar'
-import { BackIcon } from './icons'
+import { Ikon } from './ikon/Ikon'
 import {
   moduleKoder,
   rusVerdifelter,
@@ -118,20 +118,11 @@ export function RusStep({ modul, regler, onBack, onFinish, copy, flashAt }: RusS
 
   return (
     <section className="steg steg--rus" aria-label={`Kommenter ${modul.navn}`} ref={seksjon}>
-      <StepBar>
-        <Button variant="subtle" icon={<BackIcon />} shortcut="Esc" onClick={onBack}>
-          Bytt analytt
-        </Button>
-      </StepBar>
+      <StepBar onEsc={onBack}>Bytt analytt</StepBar>
 
       <div className="modul">
         <Card align="start" className="analyttkort">
-          <Metodepille metode={RUS_ANALYSEMETODE} kategori={modul.kategori} />
-          <div className="modul-koder">
-            {koder.map((kode) => (
-              <Kodepille key={kode} kode={kode} />
-            ))}
-          </div>
+          <Metalinje koder={koder} metode={RUS_ANALYSEMETODE} kategori={modul.kategori} lenker />
           <h1 className="analytt__navn">{modul.navn}</h1>
 
           <Rusvalg
@@ -164,17 +155,19 @@ export function RusStep({ modul, regler, onBack, onFinish, copy, flashAt }: RusS
             />
           ) : regler.status === 'feil' ? (
             <>
-              <h2 className="thc-resultat__merke">Reglene mangler</h2>
-              <ul className="thc-mangler" role="alert">
+              <Panelhode ikon="fallback" tone="toksisk">
+                Reglene mangler
+              </Panelhode>
+              <ul className="mangelliste" role="alert">
                 <li>{regler.melding}</li>
               </ul>
-              <Button variant="subtle" onClick={regler.provIgjen}>
+              <Button variant="subtle" icon={<Ikon navn="reset" />} onClick={regler.provIgjen}>
                 Prøv igjen
               </Button>
             </>
           ) : (
             <>
-              <h2 className="thc-resultat__merke">Henter reglene</h2>
+              <Panelhode>Henter reglene</Panelhode>
               <p role="status">Fortolkningsreglene hentes …</p>
             </>
           )}

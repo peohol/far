@@ -10,15 +10,11 @@
      lukkede kortene i to kolonner, og et åpnet kort tar hele bredden med
      aksentkant. */
 
-.skuff {
-  width: 100%;
-  scroll-margin-block: var(--rom-7);
-}
-
 /* Når siden ruller til en skuff — brukeren åpnet den, eller en lenke eller
    søket peker dit — legges toppen av den under den faste toppmenyen. */
 .skuff {
-  scroll-margin-top: var(--toppmeny-offset, 5.5rem);
+  width: 100%;
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
 }
 
 /* --- Nivå 1: seksjonen -------------------------------------------------- */

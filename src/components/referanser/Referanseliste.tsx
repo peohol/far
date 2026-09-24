@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import { referanseoppforinger } from '../../faginnhold/referanser'
+import { useLaastMerknad } from './laas'
 import { Referansetekst } from './Referansetekst'
 import { useSidereferanser } from './Sidereferanser'
 import '../../styles/referanser.css'
@@ -19,6 +20,7 @@ export function listeId(referanse: string): string {
  */
 export function Referanseliste({ tittel = 'Referanser' }: { tittel?: string }) {
   const { nummerering, referanser } = useSidereferanser()
+  const laast = useLaastMerknad()
   const overskrift = useId()
   const liste = referanseoppforinger(nummerering, referanser.values())
   if (liste.length === 0) return null
@@ -34,7 +36,7 @@ export function Referanseliste({ tittel = 'Referanser' }: { tittel?: string }) {
             <Referansetekst referanse={referanse} />
             {referanse.automatisk && (
               <span className="referanseliste__automatisk">
-                <span className="referansemerke">Automatisk fra {referanse.automatisk.kilde} · kan ikke redigeres</span>
+                <span className="referansemerke">{laast(`Automatisk fra ${referanse.automatisk.kilde}`)}</span>
                 {referanse.automatisk.opphav && <span>{referanse.automatisk.opphav}</span>}
               </span>
             )}
