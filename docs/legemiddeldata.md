@@ -255,8 +255,9 @@ pakning eller preparatomtale fra FEST går tapt, kontrolleres i
 
 Preparatnavnene er med i søket på siden, også i lukkede former og styrker:
 søket åpner formen og styrken treffet står i, og nettleserens eget søk gjør
-det samme. Tekstene og stedene står i `src/legemiddeldata/stoffside.ts`, så
-det globale søket kan bruke de samme.
+det samme. De er også med i søket i hele kunnskapsbasen, der treffet peker på
+kortet for legemiddelformen. Tekstene og stedene står i
+`src/legemiddeldata/stoffside.ts`, så begge søkene bruker de samme.
 
 ### Legemiddelformene og ikonene
 

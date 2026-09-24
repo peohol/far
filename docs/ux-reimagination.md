@@ -506,12 +506,12 @@ Vedlikeholdes bare av koordinatorøkten, ved hver merge. Visuell fasit: Claude D
 | --- | --- | --- |
 | A | Designsystem, ikoner og felles toppmeny | Merget (#56, 1.25.0) |
 | B | Trekkspillmotor: én åpen skuff per nivå | Merget (#52, 1.23.0) |
-| C | Søkedata for globalt søk | Under arbeid |
+| C | Søkedata for globalt søk | Merget (#55, 1.26.6) |
 | D | Referansemodell med FEST | Merget (#54, 1.24.0) |
 | F1 | Preparatmodell og legemiddelformregister | Merget (#53, 1.23.1) |
 | E | Monografstruktur og Viktige data | Merget (#58, 1.26.1) |
 | F2 | Preparater-UI | Merget (#57, 1.26.0; rettelse #59, 1.26.2) |
-| G | Globalt og lokalt søk-UI | Under arbeid (lander etter C) |
+| G | Globalt og lokalt søk-UI | Klar, lander rett etter C |
 | H | Øvrige monografpaneler og serumtabell | Merget (#60, 1.26.3) |
 | I | Resten av appens visuelle språk | Merget (#62, 1.26.5) |
 | Konto | Innlogging, konto, brukerliste, endringslogg og redigering | Merget (#61, 1.26.4) |

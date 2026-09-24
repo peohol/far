@@ -19,6 +19,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `supabase/migrations/*_faginnhold_fundament.sql` | Tabellene, radsikkerheten og funksjonene |
 | `supabase/migrations/*_referanse_objekttype.sql`, `*_referansesystem.sql` | Referansene og koblingene til dem |
 | `supabase/migrations/*_analyttsider_lesing.sql` | Lesingen av en hel side, referansebasen og sider etter navn |
+| `supabase/migrations/*_analyttsider_samlet_lesing.sql` | Alle sidene i én tilstand i ett kall, for søket i hele kunnskapsbasen |
 | `supabase/migrations/*_enkeltelementer.sql` | At kortene som står én gang i panelet sitt, ikke kan opprettes to ganger |
 | `supabase/migrations/*_regelredigering_lesing.sql` | Historikken til ett objekt (`les_historikk`) og regelsettet for én kode |
 | `supabase/migrations/*_kommentar_objekttype.sql`, `*_kommentarer.sql` | Fortolkningskommentarene som egne objekter |
@@ -33,7 +34,9 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/faginnhold/paneler.ts` | Panelene 1–7 og formen på hver elementtype |
 | `src/faginnhold/riktekst.ts` | Rikteksten: nodene og merkene som er tillatt, rensing og ren tekst |
 | `src/faginnhold/analyttside.ts` | En side satt sammen: panelene, nummereringen og publiseringsrekkefølgen |
-| `src/faginnhold/sok.ts` | Indekseringen og søket, for siden og senere hele kunnskapsbasen |
+| `src/faginnhold/sok.ts` | Indekseringen, rangeringen og søket, for siden og hele kunnskapsbasen |
+| `src/faginnhold/globaltSok.ts` | Lesingen og indekseringen av hele kunnskapsbasen for det globale søket |
+| `src/legemiddeldata/stoffside.ts` | Hvor preparatene og interaksjonene står på siden, og tekstene søket finner der |
 | `src/faginnhold/historikk.ts`, `innholdsfelter.ts` | Historikken: tidslinjen, sammenligningen felt for felt og ord for ord, og feltene hver objekttype deles i |
 | `src/components/historikk/` | Historikkvinduet og «Sist redigert», som åpner det |
 | `src/domain/analyttkatalog.ts`, `rute.ts` | Kodene som har en side, og adressene til dem |
@@ -414,14 +417,39 @@ Et objekt kan ikke slettes. Et kort som fjernes, flyttes derfor til panelet
 historikken og kan hentes tilbake.
 
 **Søket** (`sok.ts`) er bygd for begge søkene i planen. `indekserSide` gjør én
-side om til søkedokumenter — navn, kode, komponenter, preparatene fra
-legemiddeldataene, overskrifter, verdier, tabellrader, fritekst og referanser — hver med stedet
-den står (side › panel › kort). `sok` rangerer dokumentene og lager utdrag.
-Søket på siden bruker indeksen til å vise hvor treffene står, og fremhever
-dem i teksten — også i lukkede seksjoner, som åpnes når brukeren går til et
-treff der. Det globale søket skal indeksere alle publiserte sider på samme
-måte; det trenger bare en kilde som gir alle sidene, for eksempel en funksjon
-ved siden av `les_analyttside`.
+side om til søkedokumenter — navn, kode, aliaser, komponenter, preparatene og
+interaksjonene fra legemiddeldataene, overskrifter, verdier, tabellrader,
+fritekst og referanser — hver med stedet den står (side › panel › kort).
+`sok` rangerer dokumentene og lager utdrag. Søket på siden bruker indeksen til
+å vise hvor treffene står, og fremhever dem i teksten — også i lukkede
+seksjoner, som åpnes når brukeren går til et treff der.
+
+**Rangeringen** er fast og forklarbar, uten uklar likhetssøk. Alle ordene i
+søket må treffe; æ, ø og å leses som a, o og a, og aksenter og store
+bokstaver teller ikke. Først avgjør feltet, i planens rekkefølge
+(`docs/ux-reimagination.md`, 6.2): stoffnavn og kode, så alias og komponent,
+preparatnavn, overskrifter, verdier og tabeller, fritekst og til sist
+referanser. Innen samme felt kommer en tekst som begynner med søket foran en
+der søket begynner et ord, og den foran en der det står inne i et ord. Ellers
+står treffene i sidens rekkefølge.
+
+**Søket i hele kunnskapsbasen** (`globaltSok.ts`) indekserer alle de
+publiserte sidene med den samme `indekserSide`, så det finner det samme som
+søket på hver side. Lesingen er tre kall uansett antall sider:
+`les_analyttsider` gir alle sidene på samme form som `les_analyttside`, med
+referansene én gang; `les_legemidler` gir legemiddeldataene for alle
+koblingene, og hver side får sin del av dem (`utvalgFor`); `les_interaksjoner`
+gir interaksjonene, delt i flere kall bare om nøklene er flere enn databasen
+tar imot. Kan ikke legemiddeldataene leses, indekseres faginnholdet likevel.
+`sokGlobalt` gir det beste treffet per sted, og lar ord som ikke står i
+teksten, stå i navnet eller koden til siden: «sertralin metabolisme» finner
+kortet «Metabolisme» på sertralinsiden. Aliasene til kodene gis av appen fra
+analyttkatalogen. Deler flere koder én side, indekseres siden én gang.
+
+Hvert treff har stedet det står: siden, seksjonen, ankeret på siden og — når
+teksten står i et detaljkort — nøkkelen til kortet. `sokeadresse` gjør stedet
+om til direktelenken, `#/analytt/<KODE>/<seksjon>/<kort>` (se
+`docs/seksjoner.md`). Søkefeltet og resultatsiden bygger på dette.
 
 ## Import fra en kilde
 

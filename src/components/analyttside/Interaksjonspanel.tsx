@@ -1,26 +1,18 @@
-import type { Paneldefinisjon, Panelnokkel } from '../../faginnhold/paneler'
+import type { Paneldefinisjon } from '../../faginnhold/paneler'
 import type { Tilleggstekst } from '../../faginnhold/sok'
 import { forhandsvisning } from '../../faginnhold/oppsummering'
 import { oppsummerInteraksjoner, type Interaksjon } from '../../legemiddeldata/interaksjoner'
 import { interaksjonsreferanser, interaksjonssted as kortsted } from '../../legemiddeldata/referanser'
+import { interaksjonstekster } from '../../legemiddeldata/stoffside'
 import { Detaljkort } from '../seksjoner/Seksjon'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { Uthev } from '../Uthev'
 import { elementAnker, Panel, type Panelkontekst } from './Paneler'
 import type { Interaksjonstilstand } from './useInteraksjoner'
 
-/** Seksjonen interaksjonene står i. */
-export const INTERAKSJONSPANEL: Panelnokkel = 'interaksjoner'
-
 /** Stoffene siden interagerer med, slik søket på siden finner dem, med detaljkortet de står i. */
 export function interaksjonssoketekster(tilstand: Interaksjonstilstand): Tilleggstekst[] {
-  if (tilstand.status !== 'klar') return []
-  return tilstand.oversikt.interaksjoner.map((i): Tilleggstekst => ({
-    panel: INTERAKSJONSPANEL,
-    element: { id: kortsted(i), tittel: i.med },
-    felt: 'overskrift',
-    tekst: i.med,
-  }))
+  return tilstand.status === 'klar' ? interaksjonstekster(tilstand.oversikt) : []
 }
 
 /**
