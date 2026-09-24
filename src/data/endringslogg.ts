@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.26.1',
+    dato: '2026-09-24',
+    sammendrag: 'Stoffsidens paneler har fått nytt utseende og egne ikoner, og serumtabellen er satt opp som i originalen',
+    typer: ['Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Hver seksjon på stoffsiden har fått sitt eget ikon: tannhjul for farmakodynamikk, kors med hake for indikasjon, pipette for dosering, bloddråpe med stoppeklokke for farmakokinetikk, to objekter som møtes for interaksjoner og et blodfylt prøverør for serumkonsentrasjoner.',
+      'Kortene i farmakokinetikken står i et rutenett, hvert med et ikon etter hva det handler om, som biotilgjengelighet, halveringstid, proteinbinding eller CYP-enzymer.',
+      'Doseringen vises som ett kort per legemiddelform når teksten har den formen, med dosen stort.',
+      'Serumkonsentrasjonene står som i originalen: én kolonne per dose, med antall prøver, 10-persentil, median og 90-persentil som rader, og referanseområdeprosjektet i en egen liten tabell. På mobil ruller tabellen sidelengs mens radnavnene står fast.',
+      'Tallene, tekstene og fortolkningen er uendret.',
+    ],
+  },
+  {
     versjon: '1.26.0',
     dato: '2026-09-24',
     sammendrag: 'Preparatene vises som legemiddelform, styrke og preparat, med et eget vindu for hvert preparat',
