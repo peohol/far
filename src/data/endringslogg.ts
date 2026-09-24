@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.28.4',
+    dato: '2026-09-24',
+    sammendrag: 'Ingen tom stripe nederst når en skuff glir opp',
+    typer: ['Design / layout'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Mens en seksjon eller et detaljkort glir opp eller igjen, fyller innholdet hele skuffen. Før kunne det stå en tom stripe nederst i skuffen underveis.',
+    ],
+  },
+  {
     versjon: '1.28.3',
     dato: '2026-09-24',
     sammendrag: 'En åpnet skuff som får plass på skjermen, midtstilles',
