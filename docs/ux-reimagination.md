@@ -512,7 +512,7 @@ Vedlikeholdes bare av koordinatorøkten, ved hver merge. Visuell fasit: Claude D
 | E | Monografstruktur og Viktige data | Merget (#58, 1.26.1) |
 | F2 | Preparater-UI | Merget (#57, 1.26.0; rettelse #59, 1.26.2) |
 | G | Globalt og lokalt søk-UI | Venter på C |
-| H | Øvrige monografpaneler og serumtabell | Under arbeid |
+| H | Øvrige monografpaneler og serumtabell | Merget (#60, 1.26.3) |
 | I | Resten av appens visuelle språk | Venter på bølge 2 |
 | J | Sluttintegrasjon og kvalitetskontroll | Venter på I |
 
