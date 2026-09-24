@@ -511,11 +511,11 @@ Vedlikeholdes bare av koordinatorøkten, ved hver merge. Visuell fasit: Claude D
 | F1 | Preparatmodell og legemiddelformregister | Merget (#53, 1.23.1) |
 | E | Monografstruktur og Viktige data | Merget (#58, 1.26.1) |
 | F2 | Preparater-UI | Merget (#57, 1.26.0; rettelse #59, 1.26.2) |
-| G | Globalt og lokalt søk-UI | Venter på C |
+| G | Globalt og lokalt søk-UI | Under arbeid (lander etter C) |
 | H | Øvrige monografpaneler og serumtabell | Merget (#60, 1.26.3) |
-| I | Resten av appens visuelle språk | Under arbeid |
+| I | Resten av appens visuelle språk | Merget (#62, 1.26.5) |
 | Konto | Innlogging, konto, brukerliste, endringslogg og redigering | Merget (#61, 1.26.4) |
-| J | Sluttintegrasjon og kvalitetskontroll | Venter på I |
+| J | Sluttintegrasjon og kvalitetskontroll | Venter på G |
 
 Kjente mellomtilstander:
 
