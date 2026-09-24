@@ -136,6 +136,24 @@ describe('mellom fortolkningen og informasjonssiden', () => {
     expect(within(fortolkningen()).getByRole('link', { name: 'NOR – åpne informasjonssiden' })).toBeTruthy()
   })
 
+  it('har «Åpne stoffside» i toppmenyen mens en modul fortolkes, og kommer tilbake til samme modul', async () => {
+    const user = userEvent.setup()
+    visApp()
+    // Uten valgt analytt er det ingen stoffside å åpne.
+    expect(screen.queryByRole('button', { name: 'Åpne stoffside' })).toBeNull()
+    await velgNortriptylin(user)
+
+    await user.click(screen.getByRole('button', { name: 'Åpne stoffside' }))
+    await infosideFor('Nortriptylin')
+    expect(window.location.hash).toBe('#/analytt/NOR')
+    // Stoffsiden har sine egne handlinger i stedet.
+    expect(screen.queryByRole('button', { name: 'Åpne stoffside' })).toBeNull()
+
+    await user.click(screen.getByRole('button', { name: 'Åpne fortolkning' }))
+    await waitFor(() => expect(fortolkningen().hidden).toBe(false))
+    expect(await screen.findByRole('region', { name: 'Velg konsentrasjon' })).toBeTruthy()
+  })
+
   it('åpner riktig modul fra en informasjonsside, også for koder som deler modul', async () => {
     const user = userEvent.setup()
     window.location.hash = '#/analytt/OXA'

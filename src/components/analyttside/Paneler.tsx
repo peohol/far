@@ -11,6 +11,7 @@ import { doseringskort } from '../../faginnhold/doseringskort'
 import { OPPSUMMERINGSSKILLE, antall, forhandsvisning, ramsOpp } from '../../faginnhold/oppsummering'
 import { NODER, erTomt, klartekst, tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
+import { Ikon } from '../ikon/Ikon'
 import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { useSidereferanser } from '../referanser/Sidereferanser'
@@ -84,7 +85,7 @@ export function Panel({
       handlinger={
         redigerer &&
         !kilder && (
-          <Button variant="subtle" className="redigeringsknapp" onClick={() => setKilder(true)}>
+          <Button variant="kant" icon={<Ikon navn="refs" />} className="redigeringsknapp" onClick={() => setKilder(true)}>
             Kilder for panelet
           </Button>
         )
@@ -148,7 +149,13 @@ export function Redigerbar({
       {visning}
       {redigerer && (
         <div className="redigeringsrad">
-          <Button variant="subtle" className="redigeringsknapp" aria-label={`${element ? 'Rediger' : 'Legg til'}: ${navn}`} onClick={() => setApen(true)}>
+          <Button
+            variant="kant"
+            icon={<Ikon navn={element ? 'edit' : 'plus'} />}
+            className="redigeringsknapp"
+            aria-label={`${element ? 'Rediger' : 'Legg til'}: ${navn}`}
+            onClick={() => setApen(true)}
+          >
             {element ? 'Rediger' : (leggTilTekst ?? 'Legg til')}
           </Button>
           {ekstra}
@@ -360,7 +367,7 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
           />
         ) : (
           <div className="redigeringsrad">
-            <Button variant="subtle" className="redigeringsknapp" onClick={() => setNytt(true)}>
+            <Button variant="kant" icon={<Ikon navn="plus" />} className="redigeringsknapp" onClick={() => setNytt(true)}>
               Legg til kort
             </Button>
           </div>

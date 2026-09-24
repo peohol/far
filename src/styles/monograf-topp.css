@@ -92,6 +92,8 @@
 /* Ett kort. Konsentrasjonene er farget etter nivået, uten kant; kinetikken
    står på flaten med kant og et miniplott øverst. */
 .datakort {
+  /* Tallet skaleres etter kortets bredde (se `.datakort__tall`). */
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   gap: var(--rom-4);
@@ -178,7 +180,8 @@
 
 .datakort__tall {
   font-family: var(--skrift-display);
-  font-size: var(--tekst-tall);
+  /* Smale kort på bred skjerm: et område som «50–700» skal stå på én linje. */
+  font-size: min(var(--tekst-tall), 27cqi);
   font-weight: var(--vekt-medium);
   line-height: var(--linjehoyde-tett);
   font-variant-numeric: lining-nums tabular-nums;

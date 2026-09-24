@@ -6,6 +6,7 @@ import { losRegelsett } from '../../regler/kommentarer'
 import type { Intervallregelsett, Intervallregelsettinnhold } from '../../regler/modell'
 import { regelsettfelter, tekstene, visRingegrense } from '../../regler/visning'
 import { Button } from '../Button'
+import { Ikon } from '../ikon/Ikon'
 import { Sistredigert } from '../historikk/Sistredigert'
 import { seksjonsikon } from '../analyttside/panelvisning'
 import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
@@ -88,7 +89,7 @@ export function Fortolkningsregler({
       handlinger={
         redigerer &&
         !redigeres && (
-          <Button variant="subtle" className="redigeringsknapp" onClick={() => setRedigeres(true)}>
+          <Button variant="kant" icon={<Ikon navn="edit" />} className="redigeringsknapp" onClick={() => setRedigeres(true)}>
             Rediger reglene
           </Button>
         )
