@@ -250,15 +250,16 @@ describe('sidemodellen', () => {
 
   it('nummererer referansene i leserekkefølgen på siden', () => {
     const modell = byggSidemodell(side())
-    // Dosering (B) før farmakokinetikken, der panelets C kommer før kortene
-    // Absorpsjon (B) og Metabolisme (A). D står bare i et fjernet kort og får ikke nummer.
+    // Dosering (B) før farmakokinetikken, der kortene Absorpsjon (B) og
+    // Metabolisme (A) kommer før panelets C i referansefeltet nederst. D står
+    // bare i et fjernet kort og får ikke nummer.
     expect(PANELREKKEFOLGE.indexOf('dosering')).toBeLessThan(PANELREKKEFOLGE.indexOf('farmakokinetikk'))
     expect([...modell.nummerering]).toEqual([
       ['b', 1],
-      ['c', 2],
-      ['a', 3],
+      ['a', 2],
+      ['c', 3],
     ])
-    expect(modell.referanseliste.map((r) => r.referanse.tittel)).toEqual(['Kilde B', 'Kilde C', 'Kilde A'])
+    expect(modell.referanseliste.map((r) => r.referanse.tittel)).toEqual(['Kilde B', 'Kilde A', 'Kilde C'])
   })
 
   it('publiserer i den rekkefølgen databasen krever, og bare det som er endret', () => {

@@ -507,12 +507,12 @@ Vedlikeholdes bare av koordinatorøkten, ved hver merge. Visuell fasit: Claude D
 | A | Designsystem, ikoner og felles toppmeny | Under arbeid |
 | B | Trekkspillmotor: én åpen skuff per nivå | Merget (#52, 1.23.0) |
 | C | Søkedata for globalt søk | Under arbeid |
-| D | Referansemodell med FEST | Under arbeid |
-| F1 | Preparatmodell og legemiddelformregister | Under arbeid |
-| E | Monografstruktur og Viktige data | Venter på A og D |
-| F2 | Preparater-UI | Venter på A, D og F1 |
+| D | Referansemodell med FEST | Merget (#54, 1.24.0) |
+| F1 | Preparatmodell og legemiddelformregister | Merget (#53, 1.23.1) |
+| E | Monografstruktur og Viktige data | Venter på A |
+| F2 | Preparater-UI | Venter på A |
 | G | Globalt og lokalt søk-UI | Venter på A og C |
-| H | Øvrige monografpaneler og serumtabell | Venter på A og D |
+| H | Øvrige monografpaneler og serumtabell | Venter på A |
 | I | Resten av appens visuelle språk | Venter på bølge 2 |
 | J | Sluttintegrasjon og kvalitetskontroll | Venter på I |
 

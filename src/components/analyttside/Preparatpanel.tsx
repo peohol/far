@@ -11,7 +11,6 @@ import {
 import { finnKobling, preparatkort, preparatsted, preparattekster } from '../../legemiddeldata/stoffside'
 import { Detaljkort } from '../seksjoner/Seksjon'
 import { Uthev } from '../Uthev'
-import { Festkilde } from './Festkilde'
 import { elementAnker, Panel, Redigerbar, type Panelkontekst } from './Paneler'
 import { LegemiddelkoblingSkjema } from './Skjemaer'
 import type { Legemiddeltilstand } from './useLegemidler'
@@ -165,7 +164,6 @@ function Preparatvisning({ tilstand }: { tilstand: Legemiddeltilstand }) {
           )}
         </ul>
       )}
-      <Festkilde utvalg={utvalg} />
     </>
   )
 }

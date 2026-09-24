@@ -1,6 +1,6 @@
 import { useId, useMemo, useState } from 'react'
 import type { Referanseinnhold } from '../../faginnhold/modell'
-import { formaterReferanse, type Referanse } from '../../faginnhold/referanser'
+import { erAutomatisk, formaterReferanse, type Referanse } from '../../faginnhold/referanser'
 import { erTrygLenke } from '../../faginnhold/riktekst'
 import { fold, sokeord } from '../../faginnhold/sok'
 import { Button } from '../Button'
@@ -23,8 +23,10 @@ export interface ReferansevelgerProps {
  *
  * Kildene hentes fra den felles referansebasen, så samme referanse kan brukes
  * mange steder og rettes ett sted. Finnes den ikke, kan den legges inn her.
- * Arkiverte referanser kan ikke velges. Rekkefølgen er den de velges i; numrene
- * på siden regnes ut når den vises.
+ * Arkiverte referanser kan ikke velges, og heller ikke automatiske (FEST): de
+ * siteres bare av dataene de kommer fra, og kan verken redigeres eller
+ * fjernes her. Rekkefølgen er den de velges i; numrene på siden regnes ut når
+ * den vises.
  */
 export function Referansevelger({ tittel, valgte, onEndre }: ReferansevelgerProps) {
   const { referansebase } = useRedigering()
@@ -37,7 +39,7 @@ export function Referansevelger({ tittel, valgte, onEndre }: ReferansevelgerProp
     const ord = sokeord(sporring)
     if (ord.length === 0) return []
     return referansebase
-      .filter((r) => !r.arkivert && !valgte.includes(r.id))
+      .filter((r) => !r.arkivert && !erAutomatisk(r) && !valgte.includes(r.id))
       .filter((r) => {
         const tekst = fold(formaterReferanse(r))
         return ord.every((o) => tekst.includes(o))

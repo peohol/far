@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.23.1',
+    versjon: '1.24.1',
     dato: '2026-09-24',
     sammendrag: 'Grunnlaget for å søke i alle stoffsidene samtidig',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,31 @@ export const ENDRINGSLOGG: Endring[] = [
       'Appen kan nå lese og søke gjennom alle de publiserte stoffsidene på én gang: navn, koder, andre navn, preparatnavn, interaksjoner, overskrifter, verdier, tekst og kilder. Hvert treff peker på seksjonen eller kortet det står i. Søkefeltet som bruker dette, kommer i en senere versjon.',
       'Søket på stoffsiden rangerer stedene under søkefeltet litt annerledes: preparatnavn kommer etter navn og komponenter, og en tekst som begynner med søkeordet kommer foran en der ordet står lenger inne.',
       'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
+    versjon: '1.24.0',
+    dato: '2026-09-24',
+    sammendrag: 'Alle kilder på stoffsidene er nummererte referanser, også de fra FEST',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Kildene som gjelder et helt kort eller en hel seksjon, står nå i et eget felt nederst, ikke ved overskriften. Numrene følger derfor rekkefølgen de står i nedover siden.',
+      'FEST og referansene DMP oppgir for hver interaksjon, er nå nummererte referanser med pille og boble, og står i referanselisten nederst sammen med de andre kildene.',
+      'Kildelinjen «Kilde: FEST …» er erstattet av FEST-referansen i seksjonens kildefelt, med datoen for uttrekket og siste kontroll ved siden av.',
+      'Kilder fra FEST er merket som automatiske. De kan ikke redigeres eller velges i redigeringsmodus, og forsvinner av seg selv når FEST ikke lenger har dem.',
+    ],
+  },
+  {
+    versjon: '1.23.1',
+    dato: '2026-09-24',
+    sammendrag: 'Forarbeid til den nye visningen av preparatene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Preparatene kan nå ordnes som legemiddelform, styrke og preparat, slik den nye visningen skal vise dem. Styrker som bare ser like ut, for eksempel ulike salter eller mg mot mg/ml, holdes fra hverandre.',
+      'Hver legemiddelform som brukes av stoffsidene, har fått et ikon. Nye former fra FEST får et generisk ikon og blir fanget opp.',
+      'Ingenting er endret i det du ser ennå. Kommenteringen er uendret.',
     ],
   },
   {

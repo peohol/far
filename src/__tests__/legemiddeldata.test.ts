@@ -12,22 +12,26 @@ import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { ENTITETER, lesFest, PARSERVERSJON, type Festpost, type Interaksjonsdata } from '../legemiddeldata/fest'
 import { lagLegemiddellager, type Databasekall } from '../legemiddeldata/lager'
-import type { SupabaseClient } from '@supabase/supabase-js'
 import { behandleSynk } from '../legemiddeldata/endepunkt'
 import { lagLegemiddelleser, type Legemiddelutvalg, type Virkestofftreff } from '../legemiddeldata/lesing'
 import { byggInteraksjoner, interaksjonsnokler, oppsummerInteraksjoner } from '../legemiddeldata/interaksjoner'
 import { byggPreparatoversikt, oppsummerGruppe, oppsummerPreparater } from '../legemiddeldata/preparater'
 import { synkroniserFest } from '../legemiddeldata/synk'
 import { pakkUt } from '../legemiddeldata/zip'
-import { kallSom, lagZip, svar, synkroniserUtdrag, UTDRAG } from './hjelp/fest'
+import {
+  AMITRIPTYLIN,
+  AMITRIPTYLIN_ABCUR_50,
+  AMITRIPTYLINHYDROKLORID,
+  kallSom,
+  KODEIN,
+  innloggetLeser,
+  lagZip,
+  svar,
+  synkroniserUtdrag,
+  TERBINAFIN_AMITRIPTYLIN,
+  UTDRAG,
+} from './hjelp/fest'
 import { feilFra, nyDatabase } from './hjelp/testdatabase'
-
-
-const AMITRIPTYLIN = 'ID_0A1B24EF-A7F8-488B-97B8-8023193E976D'
-const AMITRIPTYLINHYDROKLORID = 'ID_070A7B5D-46F1-44DC-AAB8-B51BE5A49270'
-const AMITRIPTYLIN_ABCUR_50 = 'ID_012C7C0D-77BC-4F3D-BEBE-663743B03C1F'
-const KODEIN = 'ID_82E89E1B-9C06-4E57-BB4D-AB3DA8B33FD4'
-const TERBINAFIN_AMITRIPTYLIN = 'ID_43E3CEDF-77A1-4D0D-844A-9F8A01267559'
 
 async function* biter(tekst: string, storrelse = 997): AsyncGenerator<string> {
   for (let i = 0; i < tekst.length; i += storrelse) yield tekst.slice(i, i + storrelse)
@@ -392,18 +396,7 @@ describe('preparatene og interaksjonene på stoffsiden', () => {
   beforeAll(async () => {
     const db = await nyDatabase()
     await synkroniserUtdrag(db)
-    const innlogget = kallSom(db, 'authenticated')
-    // Leseren appen bruker, mot en klient som kaller databasen som en innlogget.
-    const klient = {
-      rpc: async (funksjon: string, argumenter: Record<string, unknown>) => {
-        try {
-          return { data: await innlogget(funksjon, argumenter), error: null }
-        } catch (e) {
-          return { data: null, error: { message: (e as Error).message } }
-        }
-      },
-    } as unknown as SupabaseClient
-    leser = lagLegemiddelleser(klient)
+    leser = innloggetLeser(db)
     anonym = kallSom(db, 'anon')
   })
 

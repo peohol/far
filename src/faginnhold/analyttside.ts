@@ -9,7 +9,16 @@
 import type { Analyttsidedata, Utgave } from './lesing'
 import type { Innholdselementinnhold, Referanseinnhold } from './modell'
 import { FJERNET, PANELREKKEFOLGE, panelFor } from './paneler'
-import { sidereferanser, type Nummerering, type Referanse, type Referanseoppforing } from './referanser'
+import {
+  feltreferanser,
+  INGEN_AUTOMATISKE,
+  sidereferanser,
+  type Automatiskekilder,
+  type Nummerering,
+  type Referanse,
+  type Referanseoppforing,
+  type Sidegrunnlag,
+} from './referanser'
 
 /** Et innholdselement på siden. */
 export interface Sideelement {
@@ -29,9 +38,23 @@ export interface Sidemodell {
   panelreferanser: Readonly<Record<string, readonly string[]>>
   /** Referansene siden kan vise, med ID. */
   referanser: Referanse[]
+  /** Numrene de redaksjonelle referansene har når siden står uten de automatiske. */
   nummerering: Nummerering
-  /** Referanselisten nederst på siden. */
+  /** Referanselisten nederst på siden, med bare de redaksjonelle. */
   referanseliste: Referanseoppforing[]
+}
+
+/**
+ * Hele referanseuniverset på siden: de redaksjonelle og de automatiske
+ * referansene nummerert sammen, listen nederst, og hva hvert panels
+ * referansefelt viser.
+ */
+export interface Referanseunivers {
+  referanser: Referanse[]
+  nummerering: Nummerering
+  liste: Referanseoppforing[]
+  /** Panelnøkkel → referansene i panelets referansefelt. Paneler uten er utelatt. */
+  panelreferanser: Readonly<Record<string, readonly string[]>>
 }
 
 function sammenlign(a: Sideelement, b: Sideelement): number {
@@ -65,17 +88,40 @@ export function byggSidemodell(data: Analyttsidedata): Sidemodell {
   }
   for (const liste of paneler.values()) liste.sort(sammenlign)
 
-  const panelreferanser = Object.fromEntries(
-    Object.entries(data.infoside?.innhold.panelreferanser ?? {}).filter(([panel]) => panelFor(panel)),
-  )
+  const panelreferanser = bareKjentePaneler(data.infoside?.innhold.panelreferanser ?? {})
   const referanser = data.referanser.map(tilReferanse)
-  const { nummerering, liste } = sidereferanser(
-    { panelreferanser, elementer: [...paneler.values()].flat() },
-    referanser,
-    PANELREKKEFOLGE,
-  )
+  const modell = { paneler, panelreferanser, referanser }
+  const { nummerering, liste } = referanseunivers(modell)
+  return { ...modell, nummerering, referanseliste: liste }
+}
 
-  return { paneler, panelreferanser, referanser, nummerering, referanseliste: liste }
+function bareKjentePaneler<T>(perPanel: Readonly<Record<string, T>>): Record<string, T> {
+  return Object.fromEntries(Object.entries(perPanel).filter(([panel]) => panelFor(panel)))
+}
+
+/**
+ * Referanseuniverset for siden, med de automatiske referansene fra data
+ * OUSFAR henter (se `src/legemiddeldata/referanser.ts`). Som for de
+ * redaksjonelle er bare paneler siden kjenner, med.
+ */
+export function referanseunivers(
+  modell: Pick<Sidemodell, 'paneler' | 'panelreferanser' | 'referanser'>,
+  automatiske: Automatiskekilder = INGEN_AUTOMATISKE,
+): Referanseunivers {
+  const side: Sidegrunnlag = {
+    panelreferanser: modell.panelreferanser,
+    elementer: [...modell.paneler.values()].flat(),
+    automatiske: {
+      panelreferanser: bareKjentePaneler(automatiske.panelreferanser ?? {}),
+      elementer: (automatiske.elementer ?? []).filter((e) => panelFor(e.panel)),
+    },
+  }
+  const referanser = [...modell.referanser, ...automatiske.referanser]
+  const { nummerering, liste } = sidereferanser(side, referanser, PANELREKKEFOLGE)
+  const panelreferanser = Object.fromEntries(
+    PANELREKKEFOLGE.map((panel) => [panel, feltreferanser(side, panel)] as const).filter(([, ider]) => ider.length > 0),
+  )
+  return { referanser, nummerering, liste, panelreferanser }
 }
 
 /* --- Publiseringen -------------------------------------------------------- */

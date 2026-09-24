@@ -40,11 +40,8 @@ import { byggInteraksjoner, interaksjonsnokler } from '../legemiddeldata/interak
 import { lagLegemiddelleser, TOMME_INTERAKSJONER, TOMT_UTVALG, type Legemiddelleser } from '../legemiddeldata/lesing'
 import { byggPreparatoversikt } from '../legemiddeldata/preparater'
 import { interaksjonstekster, koblede, preparatkort, preparattekster } from '../legemiddeldata/stoffside'
-import { synkroniserUtdrag } from './hjelp/fest'
+import { AMITRIPTYLIN, KODEIN, synkroniserUtdrag } from './hjelp/fest'
 import { faginnholdskall, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
-
-const AMITRIPTYLIN = 'ID_0A1B24EF-A7F8-488B-97B8-8023193E976D'
-const KODEIN = 'ID_82E89E1B-9C06-4E57-BB4D-AB3DA8B33FD4'
 
 function dokument(...innhold: unknown[]) {
   return { type: 'doc', content: [{ type: 'paragraph', content: innhold }] }

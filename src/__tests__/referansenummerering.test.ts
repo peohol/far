@@ -9,6 +9,8 @@ import { describe, expect, it } from 'vitest'
 import {
   SITERING,
   forekomster,
+  erAutomatisk,
+  feltreferanser,
   formaterReferanse,
   komprimer,
   nummerer,
@@ -105,7 +107,7 @@ describe('nummereringen etter første forekomst', () => {
         kort('k3', 'b', 0, { data: tekst(sitering('d')) }),
       ],
     }
-    expect(numre(side, ['a', 'b'])).toEqual({ b: 1, a: 2, c: 3, p: 4, d: 5 })
+    expect(numre(side, ['a', 'b'])).toEqual({ b: 1, a: 2, c: 3, d: 4, p: 5 })
   })
 
   it('lar samme referanse beholde nummeret fra første gang, uansett hvor ofte den går igjen', () => {
@@ -127,17 +129,17 @@ describe('nummereringen etter første forekomst', () => {
     expect(numre(sideB).felles).toBe(3)
   })
 
-  it('setter panelets referanser før kortene, og kortets før teksten i det', () => {
+  it('setter teksten før kortets referanser, og kortene før panelets — referansefeltet står nederst', () => {
     const side: Sidegrunnlag = {
       panelreferanser: { a: ['panel'] },
       elementer: [kort('k', 'a', 0, { referanser: ['kort'], data: tekst(sitering('inline')) })],
     }
     expect(forekomster(side).map((f) => [f.niva, f.ider])).toEqual([
-      ['panel', ['panel']],
-      ['element', ['kort']],
       ['inline', ['inline']],
+      ['element', ['kort']],
+      ['panel', ['panel']],
     ])
-    expect(numre(side)).toEqual({ panel: 1, kort: 2, inline: 3 })
+    expect(numre(side)).toEqual({ inline: 1, kort: 2, panel: 3 })
   })
 
   it('nummererer på nytt når et kort flyttes', () => {
@@ -212,9 +214,9 @@ describe('referanselisten nederst på siden', () => {
     }
     const { nummerering, liste } = sidereferanser(side, referanser, ['p'])
     expect(liste.map((o) => [o.nummer, o.referanse.id])).toEqual([
-      [1, 'c'],
-      [2, 'b'],
-      [3, 'a'],
+      [1, 'a'],
+      [2, 'c'],
+      [3, 'b'],
     ])
     expect(referanseoppforinger(nummerering, referanser)).toEqual(liste)
   })
@@ -231,5 +233,85 @@ describe('referanselisten nederst på siden', () => {
       referanser,
     )
     expect(etter.liste.map((o) => o.referanse.id)).toEqual(['y', 'x'])
+  })
+})
+
+describe('automatiske referanser i samme univers', () => {
+  const fest = ref('fest:kilde', { automatisk: { kilde: 'FEST', opphav: 'Uttrekk fra 1. januar 2026' } })
+  const dmp = ref('fest:1', { automatisk: { kilde: 'FEST' } })
+
+  it('nummereres sammen med de redaksjonelle, etter første forekomst', () => {
+    const side: Sidegrunnlag = {
+      panelreferanser: { interaksjoner: ['red'], preparater: ['red'] },
+      elementer: [kort('k', 'preparater', 0, { data: tekst(sitering('inline')) })],
+      automatiske: {
+        panelreferanser: { preparater: ['fest:kilde'], interaksjoner: ['fest:kilde'] },
+        elementer: [
+          { panel: 'interaksjoner', id: 'i1', referanser: ['fest:1'] },
+          { panel: 'interaksjoner', id: 'i2', referanser: ['fest:1', 'inline'] },
+        ],
+      },
+    }
+    // Preparatene: teksten, så feltet med den redaksjonelle før FEST.
+    // Interaksjonene: kortene, så feltet. Kjente referanser beholder nummeret.
+    expect(numre(side, ['preparater', 'interaksjoner'])).toEqual({
+      inline: 1,
+      red: 2,
+      'fest:kilde': 3,
+      'fest:1': 4,
+    })
+    const { liste } = sidereferanser(side, [...['inline', 'red'].map((id) => ref(id)), fest, dmp], [
+      'preparater',
+      'interaksjoner',
+    ])
+    expect(liste.map((o) => [o.nummer, o.referanse.id, erAutomatisk(o.referanse)])).toEqual([
+      [1, 'inline', false],
+      [2, 'red', false],
+      [3, 'fest:kilde', true],
+      [4, 'fest:1', true],
+    ])
+  })
+
+  it('setter de automatiske kortene etter de redaksjonelle, i den rekkefølgen de kommer', () => {
+    const side: Sidegrunnlag = {
+      elementer: [kort('k', 'a', 5, { referanser: ['red'] })],
+      automatiske: {
+        elementer: [
+          { panel: 'a', id: 'z', referanser: ['z'] },
+          { panel: 'a', id: 'y', referanser: ['y'] },
+        ],
+      },
+    }
+    expect(forekomster(side).map((f) => [f.element, !!f.automatisk])).toEqual([
+      ['k', false],
+      ['z', true],
+      ['y', true],
+    ])
+  })
+
+  it('forsvinner fra nummereringen og listen når kilden ikke lenger har dem, uten å etterlate hull', () => {
+    const med: Sidegrunnlag = {
+      elementer: [kort('k', 'a', 0, { data: tekst(sitering('x')) })],
+      automatiske: { elementer: [{ panel: 'a', id: 'i', referanser: ['fest:1'] }] },
+    }
+    const uten: Sidegrunnlag = { elementer: med.elementer, automatiske: { elementer: [] } }
+    const x = ref('x')
+    expect(sidereferanser(med, [x, dmp]).liste.map((o) => o.referanse.id)).toEqual(['x', 'fest:1'])
+    expect(sidereferanser(uten, [x]).liste.map((o) => [o.nummer, o.referanse.id])).toEqual([[1, 'x']])
+  })
+
+  it('viser redaksjonelle og automatiske panelreferanser i samme felt, uten gjentakelser', () => {
+    const side: Sidegrunnlag = {
+      panelreferanser: { p: ['a', 'fest:kilde'] },
+      elementer: [],
+      automatiske: { panelreferanser: { p: ['fest:kilde', 'b'] } },
+    }
+    expect(feltreferanser(side, 'p')).toEqual(['a', 'fest:kilde', 'b'])
+    expect(feltreferanser(side, 'q')).toEqual([])
+  })
+
+  it('skiller opphavet: uten `automatisk` er referansen redaksjonell', () => {
+    expect(erAutomatisk(ref('x'))).toBe(false)
+    expect(erAutomatisk(fest)).toBe(true)
   })
 })

@@ -793,15 +793,15 @@ describe('nummereringen av en publisert side', () => {
       referanser,
       ['dynamikk', 'kinetikk'],
     )
-    // dynamikk: kortet på posisjon 1 (C på kortet, så B og C inline), så
-    // posisjon 2 (A). kinetikk: panelets D, så A igjen.
+    // dynamikk: kortet på posisjon 1 (B og C inline, så C i kortets
+    // referansefelt), så posisjon 2 (A). kinetikk: A igjen, så panelets D.
     expect(Object.fromEntries([...nummerering].map(([id, n]) => [referanser.find((r) => r.id === id)!.tittel, n]))).toEqual({
-      C: 1,
-      B: 2,
+      B: 1,
+      C: 2,
       A: 3,
       D: 4,
     })
-    expect(liste.map((o) => `${o.nummer} ${o.referanse.tittel}`)).toEqual(['1 C', '2 B', '3 A', '4 D'])
+    expect(liste.map((o) => `${o.nummer} ${o.referanse.tittel}`)).toEqual(['1 B', '2 C', '3 A', '4 D'])
   })
 })
 

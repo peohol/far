@@ -122,11 +122,11 @@ export function virkestoffI(m: Merkevaredata, styrker: ReadonlyMap<string, { vir
   ]
 }
 
-export function byggPreparatoversikt(utvalg: Legemiddelutvalg, koblet: readonly string[]): Preparatoversikt {
-  const virkestoff = new Map(utvalg.virkestoff.map((v) => [v.id, v]))
-  const styrker = new Map(utvalg.styrker.map((s) => [s.id, s]))
-  const { egne, salter } = egneVirkestoff(utvalg, koblet)
-
+/**
+ * Pakningene til hver merkevare, med størrelse, pakningstype og varenummer.
+ * Brukes av både dagens visning og {@link ./preparatmodell}.
+ */
+export function pakningerPerMerkevare(utvalg: Legemiddelutvalg): Map<string, Preparatpakning[]> {
   const pakningerFor = new Map<string, Preparatpakning[]>()
   for (const p of utvalg.pakninger) {
     for (const innhold of p.innhold) {
@@ -147,6 +147,15 @@ export function byggPreparatoversikt(utvalg: Legemiddelutvalg, koblet: readonly 
       pakningerFor.set(innhold.merkevare_id, liste)
     }
   }
+  return pakningerFor
+}
+
+export function byggPreparatoversikt(utvalg: Legemiddelutvalg, koblet: readonly string[]): Preparatoversikt {
+  const virkestoff = new Map(utvalg.virkestoff.map((v) => [v.id, v]))
+  const styrker = new Map(utvalg.styrker.map((s) => [s.id, s]))
+  const { egne, salter } = egneVirkestoff(utvalg, koblet)
+
+  const pakningerFor = pakningerPerMerkevare(utvalg)
 
   const preparater = new Map<string, Preparat & { fritak: boolean; formkode: string }>()
   for (const m of utvalg.merkevarer) {
@@ -239,21 +248,54 @@ function fjernIntern({ fritak: _f, formkode: _k, ...preparat }: Preparat & { fri
 }
 
 /**
- * Deling, knusing og åpning. Delingen står med FESTs egne ord («Delbar i 2»);
- * knusing og åpning er ja/nei i FEST og får en setning. «Ikke spesifisert»
- * (0) og «Ukjent» (9) sier ingenting og tas ikke med.
+ * Deling, knusing og åpning som FEST oppgir dem. `tekst` er det som vises:
+ * delingen med FESTs egne ord («Delbar i 2»); knusing og åpning er ja/nei i
+ * FEST og får en setning. «Ikke spesifisert» (0) og «Ukjent» (9) sier
+ * ingenting: status `ukjent` og ingen tekst. `varierer` brukes bare når flere
+ * merkevarer slås sammen og FEST sier ulikt om dem.
  */
+export type Handteringsstatus = 'ja' | 'nei' | 'ukjent' | 'varierer'
+
+export interface Handteringsvalg {
+  status: Handteringsstatus
+  tekst: string | null
+}
+
+export interface Handtering {
+  deling: Handteringsvalg
+  knusing: Handteringsvalg
+  apning: Handteringsvalg
+}
+
 const USPESIFISERT = new Set(['0', '9'])
-const KNUSING: Record<string, string> = { '1': 'Kan knuses', '2': 'Kan ikke knuses' }
-const APNING: Record<string, string> = { '1': 'Kapselen kan åpnes', '2': 'Kapselen kan ikke åpnes' }
+const UKJENT: Handteringsvalg = { status: 'ukjent', tekst: null }
+const DELING: Record<string, Handteringsstatus> = { '1': 'nei', '2': 'ja', '4': 'ja' }
+const KNUSING: Record<string, Handteringsvalg> = {
+  '1': { status: 'ja', tekst: 'Kan knuses' },
+  '2': { status: 'nei', tekst: 'Kan ikke knuses' },
+}
+const APNING: Record<string, Handteringsvalg> = {
+  '1': { status: 'ja', tekst: 'Kapselen kan åpnes' },
+  '2': { status: 'nei', tekst: 'Kapselen kan ikke åpnes' },
+}
+
+export function handteringFor(m: Merkevaredata): Handtering {
+  const kjent = <K extends { kode: string }>(k: K | null) => (k && !USPESIFISERT.has(k.kode) ? k : null)
+  const deling = kjent(m.deling)
+  return {
+    deling: deling ? { status: DELING[deling.kode] ?? 'ukjent', tekst: deling.tekst || null } : UKJENT,
+    knusing: KNUSING[kjent(m.kan_knuses)?.kode ?? ''] ?? UKJENT,
+    apning: APNING[kjent(m.kan_apnes)?.kode ?? ''] ?? UKJENT,
+  }
+}
+
+/** Tekstene for det FEST faktisk sier, i rekkefølgen deling, knusing, åpning. */
+export function handteringstekster(h: Handtering): string[] {
+  return [h.deling, h.knusing, h.apning].flatMap((v) => (v.tekst ? [v.tekst] : []))
+}
 
 function handtering(m: Merkevaredata): string[] {
-  const kjent = <K extends { kode: string }>(k: K | null) => (k && !USPESIFISERT.has(k.kode) ? k : null)
-  return [
-    kjent(m.deling)?.tekst,
-    KNUSING[kjent(m.kan_knuses)?.kode ?? ''],
-    APNING[kjent(m.kan_apnes)?.kode ?? ''],
-  ].filter((t): t is string => !!t)
+  return handteringstekster(handteringFor(m))
 }
 
 /**

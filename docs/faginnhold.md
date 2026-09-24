@@ -41,11 +41,13 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/components/historikk/` | Historikkvinduet og «Sist redigert», som åpner det |
 | `src/domain/analyttkatalog.ts`, `rute.ts` | Kodene som har en side, og adressene til dem |
 | `src/components/analyttside/` | Siden, panelene, skjemaene, editoren, referansevelgeren og søket |
-| `src/faginnhold/referanser.ts` | Siteringer, nummerering, piller og referanseliste — rene funksjoner |
-| `src/components/referanser/` | Referansepillen med boblen, og referanselisten |
+| `src/faginnhold/referanser.ts` | Siteringer, nummerering, piller og referanseliste, for redaksjonelle og automatiske referanser — rene funksjoner |
+| `src/legemiddeldata/referanser.ts` | De automatiske referansene fra FEST |
+| `src/components/referanser/` | Referansepillen med boblen, referansefeltet og referanselisten |
 | `src/__tests__/faginnhold.test.ts`, `referanser.test.ts`, `analyttsidelesing.test.ts`, `kommentarer.test.ts` | Reglene og lesingen, prøvd mot en ekte database |
 | `src/__tests__/analyttside.test.tsx`, `navigasjon.test.tsx`, `analyttsidemodell.test.ts` | Sidene, redigeringen og veiene mellom sidene og fortolkningen |
 | `src/__tests__/referansenummerering.test.ts`, `referansepille.test.tsx` | Nummereringen, og pillen med mus, berøring og tastatur |
+| `src/__tests__/festreferanser.test.ts`, `referansefelt.test.tsx` | FEST-referansene, referansefeltet, listen og at editoren aldri tilbyr en automatisk kilde |
 | `src/__tests__/psykofarmakaimport.test.ts` | Datasettet og importen, prøvd mot en ekte database |
 | `src/__tests__/hjelp/testdatabase.ts` | Postgres i minnet, bygd av migrasjonene, og kallene testene gjør |
 
@@ -238,17 +240,50 @@ den.
 etter første forekomst i leserekkefølgen på akkurat den siden: panelene i den
 rekkefølgen siden viser dem (ukjente paneler etter, alfabetisk), kortene etter
 posisjon og ID, og teksten i dokumentrekkefølge. Det en beholder siterer —
-panelet, kortet — kommer før det som står i den. Samme referanse beholder
-nummeret fra første gang, og kan ha ulike numre på ulike sider. Pillene
-komprimerer serier på minst tre (`1–3, 5, 9–11`), og referanselisten nederst
-er alltid det nummereringen gir.
+kortet, panelet — kommer etter det som står i den, fordi det vises i
+referansefeltet nederst i beholderen: teksten i et kort før kortets kilder,
+kortene før panelets. Samme referanse beholder nummeret fra første gang, og
+kan ha ulike numre på ulike sider. Pillene komprimerer serier på minst tre
+(`1–3, 5, 9–11`), og referanselisten nederst er alltid det nummereringen gir.
+
+**Visningen.** Inline-siteringer er hevede piller i teksten. Kildene for et
+helt kort eller panel står i et eget, avgrenset **referansefelt** nederst i
+beholderen («Kilder» og pillen, `Referansefelt`), aldri i overskriften eller
+teksten. Referanselisten nederst på siden er det eneste stedet hele
+referanseteksten står fast; ellers står den i boblen.
 
 **Pillen og boblen** (`Referansepille`) åpnes ved peker over, og ved klikk,
 trykk, Enter eller mellomrom; et klikk fester den. Escape, et nytt klikk, et
 trykk utenfor eller fokus som går videre, lukker den. Boblen står rett etter
 knappen i dokumentet, så Tab når lenkene i den, og plasseres som tipsboblene
-(`useBobleplassering` i `Tips.tsx`). Pillene og listen henter numrene og
-referansene fra `Sidereferanser` rundt siden.
+(`useBobleplassering` i `Tips.tsx`). Pillene, feltene og listen henter
+numrene og referansene fra `Sidereferanser` rundt siden.
+
+### Automatiske referanser
+
+Referansene har to opphav i samme nummerering, samme bobler og samme liste:
+
+| Opphav | Hvor de kommer fra | Redigering |
+| --- | --- | --- |
+| Redaksjonell | Objekter i databasen, som over | Redigeres, arkiveres og slettes gjennom den vanlige arbeidsflyten |
+| Automatisk | Lages av data OUSFAR henter fra andre, hver gang siden vises (`automatisk` på `Referanse`) | Aldri: de er ikke objekter, kan ikke velges i referansevelgeren og forsvinner av seg selv når kilden ikke lenger har dem |
+
+Den eneste automatiske kilden nå er FEST (`src/legemiddeldata/referanser.ts`):
+
+- **FEST selv** (ID `fest:kilde`) står i referansefeltet til «Preparater» og
+  «Interaksjoner». Sporbarheten NLOD krever — uttrekket kopien bygger på og
+  når den sist ble kontrollert — er ikke referansetekst: den står diskret i
+  feltet ved pillen og under referansen i listen, med «kan ikke redigeres».
+- **DMPs referanser for hver interaksjon** står i referansefeltet nederst i
+  interaksjonens detaljkort. ID-en er `fest:` og en kontrollsum av teksten og
+  lenken DMP har gitt, så samme referanse får samme nummer uansett hvor mange
+  interaksjoner som viser til den, og samme ID ved neste synkronisering.
+
+`referanseunivers` i `src/faginnhold/analyttside.ts` slår de redaksjonelle og
+de automatiske sammen for siden. Automatiske elementer kommer etter de
+redaksjonelle i panelet, og automatiske panelreferanser etter panelets
+redaksjonelle. Redaksjonelt innhold kan ikke sitere en automatisk referanse;
+databasen kjenner dem ikke.
 
 ## Kommentarer
 

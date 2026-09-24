@@ -5,9 +5,10 @@ import type { Analyttsidedata } from '../../faginnhold/lesing'
 import type { Paneldefinisjon } from '../../faginnhold/paneler'
 import { Metodepille } from '../Metodepille'
 import { Pill } from '../Pill'
-import { Referansepille } from '../referanser/Referansepille'
+import { Referansefelt } from '../referanser/Referansefelt'
+import { useSidereferanser } from '../referanser/Sidereferanser'
 import { Uthev } from '../Uthev'
-import { panelAnker, type Panelkontekst } from './Paneler'
+import { panelAnker } from './Paneler'
 
 /** Et stoff analysen omfatter, med kodene som har det som sin side. */
 export interface Komponent {
@@ -41,21 +42,18 @@ export function komponenterFor(
  */
 export function Identitetspanel({
   definisjon,
-  kontekst,
   oppforing,
   navn,
   komponenter,
   overskriftId,
 }: {
   definisjon: Paneldefinisjon
-  kontekst: Panelkontekst
   oppforing: Katalogoppforing
   navn: string
   komponenter: Komponent[]
   overskriftId: string
 }) {
-  const { modell } = kontekst
-  const panelreferanser = modell.panelreferanser[definisjon.nokkel] ?? []
+  const panelreferanser = useSidereferanser().panelreferanser[definisjon.nokkel] ?? []
   const sum = komponenter.length > 1
 
   return (
@@ -66,7 +64,6 @@ export function Identitetspanel({
       </div>
       <h1 id={overskriftId} className="identitet__navn" tabIndex={-1}>
         <Uthev tekst={navn} />
-        {panelreferanser.length > 0 && <Referansepille ider={panelreferanser} niva="panel" />}
       </h1>
 
       {sum && (
@@ -81,6 +78,7 @@ export function Identitetspanel({
           .
         </p>
       )}
+      <Referansefelt ider={panelreferanser} niva="panel" />
     </section>
   )
 }

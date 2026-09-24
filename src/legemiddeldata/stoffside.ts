@@ -10,9 +10,10 @@
 import type { Sideelement, Sidemodell } from '../faginnhold/analyttside'
 import { ELEMENTTYPER, lesLegemiddelkobling, type Legemiddelkoblingdata, type Panelnokkel } from '../faginnhold/paneler'
 import type { Tilleggstekst } from '../faginnhold/sok'
-import type { Interaksjon, Interaksjonsoversikt } from './interaksjoner'
+import type { Interaksjonsoversikt } from './interaksjoner'
 import type { Legemiddelutvalg } from './lesing'
 import { egneVirkestoff, virkestoffI, type Preparatoversikt } from './preparater'
+import { interaksjonssted } from './referanser'
 
 /** Seksjonen koblingen og preparatene står i. */
 export const PREPARATPANEL: Panelnokkel = 'preparater'
@@ -31,11 +32,6 @@ export function preparatkort(formId: string | null): string {
 /** Ankeret til preparatlisten i detaljkortet for en legemiddelform, eller for fritakene. */
 export function preparatsted(formId: string | null): string {
   return `preparater-${formId ?? FRITAK}`
-}
-
-/** Detaljkortet for en interaksjon. Ankeret inne i kortet har samme nøkkel. */
-export function interaksjonskort(interaksjon: Pick<Interaksjon, 'id'>): string {
-  return `interaksjon-${interaksjon.id}`
 }
 
 /** Koblingen siden har til legemiddeldataene, og elementet den står i. */
@@ -72,7 +68,7 @@ export function preparattekster({ former, godkjenningsfritak }: Preparatoversikt
 /** Stoffene siden interagerer med, med detaljkortet de står i. */
 export function interaksjonstekster({ interaksjoner }: Interaksjonsoversikt): Tilleggstekst[] {
   return interaksjoner.map((i): Tilleggstekst => {
-    const kort = interaksjonskort(i)
+    const kort = interaksjonssted(i)
     return { panel: INTERAKSJONSPANEL, element: { id: kort, tittel: i.med }, detaljkort: kort, felt: 'overskrift', tekst: i.med }
   })
 }

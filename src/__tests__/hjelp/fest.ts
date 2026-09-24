@@ -1,19 +1,26 @@
 /**
- * FEST i testene: utdraget av den ekte filen, pakket slik DMP pakker den, og
- * kall mot databasen i rollene data-API-et bruker.
- *
- * Utdraget i `../data/fest-utdrag.xml` er beskrevet i `legemiddeldata.test.ts`.
+ * Felles for prøvene som bruker legemiddeldataene fra FEST: utdraget i
+ * `data/fest-utdrag.xml`, ID-ene i det, og en database med utdraget
+ * synkronisert inn og lest slik appen leser det.
  */
 import type { PGlite } from '@electric-sql/pglite'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { readFileSync } from 'node:fs'
 import { crc32, deflateRawSync } from 'node:zlib'
 import { lagLegemiddellager, type Databasekall } from '../../legemiddeldata/lager'
+import { lagLegemiddelleser, type Legemiddelleser } from '../../legemiddeldata/lesing'
 import { synkroniserFest } from '../../legemiddeldata/synk'
 
 export const UTDRAG = readFileSync(new URL('../data/fest-utdrag.xml', import.meta.url), 'utf8')
 
-export /** Et zip-arkiv med én fil, slik DMP pakker FEST. */
-function lagZip(navn: string, innhold: string): Buffer {
+export const AMITRIPTYLIN = 'ID_0A1B24EF-A7F8-488B-97B8-8023193E976D'
+export const AMITRIPTYLINHYDROKLORID = 'ID_070A7B5D-46F1-44DC-AAB8-B51BE5A49270'
+export const AMITRIPTYLIN_ABCUR_50 = 'ID_012C7C0D-77BC-4F3D-BEBE-663743B03C1F'
+export const KODEIN = 'ID_82E89E1B-9C06-4E57-BB4D-AB3DA8B33FD4'
+export const TERBINAFIN_AMITRIPTYLIN = 'ID_43E3CEDF-77A1-4D0D-844A-9F8A01267559'
+
+/** Et zip-arkiv med én fil, slik DMP pakker FEST. */
+export function lagZip(navn: string, innhold: string): Buffer {
   const data = Buffer.from(innhold, 'utf8')
   const komprimert = deflateRawSync(data)
   const navnBuf = Buffer.from(navn)
@@ -69,10 +76,25 @@ export function svar(body: string | Buffer | null, status = 200, headers: Record
   return new Response(typeof body === 'string' || body === null ? body : new Uint8Array(body), { status, headers })
 }
 
-/** Legger utdraget inn i databasen, slik den nattlige synkroniseringen gjør. */
-export function synkroniserUtdrag(db: PGlite) {
-  return synkroniserFest({
+/** Utdraget synkronisert inn i databasen, som den nattlige jobben gjør det. */
+export async function synkroniserUtdrag(db: PGlite): Promise<void> {
+  await synkroniserFest({
     lager: lagLegemiddellager(kallSom(db, 'service_role')),
     hent: async () => svar(lagZip('fest251.xml', UTDRAG), 200, { etag: '"a"' }),
   })
+}
+
+/** Leseren appen bruker, mot en klient som kaller databasen som en innlogget. */
+export function innloggetLeser(db: PGlite): Legemiddelleser {
+  const innlogget = kallSom(db, 'authenticated')
+  const klient = {
+    rpc: async (funksjon: string, argumenter: Record<string, unknown>) => {
+      try {
+        return { data: await innlogget(funksjon, argumenter), error: null }
+      } catch (e) {
+        return { data: null, error: { message: (e as Error).message } }
+      }
+    },
+  } as unknown as SupabaseClient
+  return lagLegemiddelleser(klient)
 }

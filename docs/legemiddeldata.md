@@ -46,9 +46,12 @@ nyttig.
 ## Lisens og kildeangivelse
 
 FEST er lagt ut under **Norsk lisens for offentlige data (NLOD)**. Dataene kan
-brukes fritt, men kilden skal oppgis. Stoffsidene viser derfor «Kilde: FEST,
-Direktoratet for medisinske produkter» og datoen for siste vellykkede
-synkronisering ved alt som kommer derfra.
+brukes fritt, men kilden skal oppgis. Stoffsidene har derfor FEST som en
+nummerert referanse («FEST – Forskrivnings- og ekspedisjonsstøtte ·
+Direktoratet for medisinske produkter») i referansefeltet ved alt som kommer
+derfra, med datoen for uttrekket og siste vellykkede kontroll ved siden av.
+Referansen er automatisk og kan ikke redigeres (se «Automatiske referanser» i
+`docs/faginnhold.md`).
 
 DMP tar ikke ansvar for integrasjoner av FEST. Brukeren av dataene skal:
 
@@ -228,13 +231,61 @@ godkjenningsfritak». Grupperingen står i `src/legemiddeldata/preparater.ts`:
 - **Deling, knusing og åpning** står ved styrken, bare når FEST sier ja eller
   nei; «ikke spesifisert» og «ukjent» vises ikke. Delingen står med FESTs ord
   («Delbar i 2»).
-- Nederst står kilden, datoen for uttrekket og når kopien sist ble kontrollert
-  mot FEST.
+- Nederst står FEST som referanse i seksjonens referansefelt, med datoen for
+  uttrekket og når kopien sist ble kontrollert mot FEST.
 
 Preparatnavnene er med i søket på siden, også i lukkede detaljkort, og i søket
 i hele kunnskapsbasen, der treffet peker på kortet for legemiddelformen.
 Nøklene til kortene og tekstene søket finner, står i
 `src/legemiddeldata/stoffside.ts`.
+
+### Ny visningsmodell: form → styrke → preparat
+
+Den nye Preparater-visningen (`docs/ux-reimagination.md`, del 9) bygger på
+`src/legemiddeldata/preparatmodell.ts`. Den er ikke tatt i bruk ennå; visningen
+over bruker fortsatt `preparater.ts` til det nye UI-et erstatter den, og da kan
+den gamle grupperingen fjernes.
+
+- **Legemiddelform** er FESTs korte form, med koden som identitet og et ikon
+  fra registeret under. Godkjenningsfritak er ikke en egen gruppe.
+- **Styrke** er identifisert av de strukturerte feltene i FEST, ikke av
+  teksten: virkestoffet (også hvilket salt), verdi, enhet, nevner, øvre verdi,
+  operator og alternativ styrke for hvert virkestoff, sortert så rekkefølgen i
+  FEST ikke betyr noe, og virkestoffene uten styrke. Kombinasjoner, ulike
+  salter, mg, mg/ml og mg/5 ml slås derfor aldri sammen. To ulike styrker med
+  samme tekst i samme form får en presisering, f.eks. saltet eller «tilsvarer
+  1 000 IE». Hver styrke har en kort, fast ID til direktelenker.
+- «Mindre enn» og «Større enn» fra FEST vises som `<` og `>` foran styrken.
+- **Preparat** er et varenavn i én form, som før. Detaljen har alle styrkene
+  med reseptgruppe, produsent, ATC, deling/knusing/åpning som ja, nei, ukjent
+  (eller «varierer» når merkevarene i én styrke sier ulikt), preparatomtaler og
+  pakninger. Ingenting dagens visning har, går tapt; det kontrolleres i
+  `src/__tests__/preparatmodell.test.ts`.
+- **Merker** på preparatet: godkjenningsfritak, andre preparattyper enn vanlig
+  legemiddel (med FESTs tekst), og kombinasjon. De står på preparatet i
+  styrken de gjelder.
+
+### Legemiddelformene og ikonene
+
+`src/legemiddeldata/legemiddelformer.ts` kobler FESTs formkode til en
+semantisk variant (tablett, depottablett, kapsel, mikstur, injeksjon …) og
+varianten til et ikon i Atlas-registeret. Atlas har ikoner for tablett,
+depottablett og kapsel; de andre variantene bruker det generiske ikonet til
+designet har egne. En kode som ikke står i registeret, får det generiske ikonet
+og merkes `kartlagt: false`.
+
+Hvilke former som faktisk brukes, er ikke en håndlaget liste.
+`scripts/legemiddelformer-i-bruk.sql` finner de distinkte formene blant
+preparatene til de publiserte stoffsidene, og svaret ligger i
+`src/legemiddeldata/legemiddelformer-i-bruk.json`. 24.09.2026 var det 17 former
+fra 35 koblede virkestoff. En prøve krever at hver av dem står i registeret.
+
+Slik fanges nye former opp etter en FEST-oppdatering eller nye koblinger:
+
+1. Kjør spørringen mot produksjonsdatabasen (bare lesing, f.eks. med
+   Supabase-verktøyet for SQL) og lagre svaret i JSON-filen.
+2. Kjør prøvene. Feiler `legemiddelformer.test.ts`, står de nye formene med navn
+   og kode i feilmeldingen. Legg dem inn i `FORMKODER`.
 
 ## Slik interaksjonene vises
 
@@ -251,7 +302,7 @@ og logikken står i `src/legemiddeldata/interaksjoner.ts`.
   virkestoff og ATC-kode, så siden slår opp på ATC-kodene til preparatene som
   bare har sidens virkestoff (med saltene). Kombinasjonspreparatenes koder tas
   ikke med; de ville gitt interaksjonene til de andre virkestoffene. Kodene
-  som ble brukt, står i kildelinjen. Oppslaget gjøres av `les_interaksjoner` i
+  som ble brukt, står i merknaden nederst i seksjonen. Oppslaget gjøres av `les_interaksjoner` i
   databasen.
 - **Hva som vises.** Bare «Bør unngås» (rød) og «Forholdsregler bør tas»
   (gul), de alvorligste først og ellers alfabetisk. «Ingen tiltak nødvendig»
@@ -263,7 +314,9 @@ og logikken står i `src/legemiddeldata/interaksjoner.ts`.
   konsekvensen. Åpnet står situasjonskriteriet tydelig først, så klinisk
   konsekvens, mekanisme, håndteringen i avsnitt med overskrift
   (Dosetilpasning, Justering av administrering, Monitorering,
-  Legemiddelalternativer), kildegrunnlaget og referansene med lenke.
+  Legemiddelalternativer) og kildegrunnlaget. DMPs referanser står i
+  referansefeltet nederst i kortet, nummerert sammen med sidens andre
+  referanser og listet nederst på siden.
 - **Gruppenavnet** er FESTs eget når gruppen har et. Ellers er det navnet på
   stoffet med den overordnede ATC-koden (f.eks. «Ikke-selektive
   monoaminreopptakshemmere»), og ellers stoffet selv. Det dekker alle
