@@ -12,13 +12,28 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.26.7',
+    versjon: '1.27.1',
     dato: '2026-09-24',
     sammendrag: 'Brukerlista kan rulles igjen',
     typer: ['Design / layout'],
     omfang: 'Minimalt omfang',
     punkter: [
       'I brukerlista kan du nå rulle ned til alle brukerne. Før ble lista kuttet nederst når det var flere brukere enn det var plass til i vinduet.',
+    ],
+  },
+  {
+    versjon: '1.27.0',
+    dato: '2026-09-24',
+    sammendrag: 'Søk i alle stoffsidene fra toppmenyen, og søket på siden flyttet opp i menyen',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Større omfang',
+    punkter: [
+      'Søkefeltet i toppmenyen søker i fagstoffet på alle stoffsidene: navn, koder, andre navn, preparater, interaksjoner, overskrifter, tall, tekst og kilder. Ctrl + K (Cmd + K på Mac) setter markøren i feltet, hvor du enn er i appen.',
+      'Under feltet står de beste treffene, med hvor på siden de står. Piltastene velger, Enter åpner og Esc lukker. Et treff åpner stoffsiden rett på seksjonen eller kortet det står i.',
+      '«Vis alle treff» åpner en egen søkeside med alle treffene, delt i stoff, preparater, tekst og kilder. Søket står i adressen, så siden kan bokmerkes og deles.',
+      'Søket er noe annet enn analyttsøket i fortolkningen, og det som skrives i det, påvirker ikke fortolkningen: tall, Enter og Esc velger ikke analytt, kopierer ingenting og går ikke tilbake.',
+      'Søket på en stoffside står nå i menyen øverst (i menyen nederst på mobil), er mindre og vokser når du bruker det. Ctrl + B (Cmd + B på Mac) setter markøren der; skråstreken gjør det ikke lenger. Antallet treff og hvor de står, vises under feltet mens du søker.',
+      'Fortolkningen, reglene og kommentarene er uendret.',
     ],
   },
   {

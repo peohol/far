@@ -3,69 +3,7 @@
  * i stilark per område (se `docs/designsystem.md`).
  */
 
-/* Søket på siden. */
-.sidesok {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--rom-3) var(--rom-5);
-}
-
-.sidesok__felt {
-  display: flex;
-  align-items: center;
-  gap: var(--rom-3);
-  flex: 1 1 18rem;
-  padding: var(--rom-2) var(--rom-5);
-  background: var(--flate);
-  border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-pille);
-}
-
-.sidesok__felt:focus-within {
-  border-color: var(--aksent);
-}
-
-.sidesok__input {
-  flex: 1;
-  min-width: 0;
-  padding: var(--rom-2) 0;
-  font-size: var(--tekst-ui);
-  background: transparent;
-  border: 0;
-}
-
-.sidesok__input:focus {
-  outline: none;
-}
-
-.sidesok__status {
-  font-size: var(--tekst-meta);
-  color: var(--blekk-dempet);
-}
-
-.sidesok__steder {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--rom-2);
-  width: 100%;
-  margin: 0;
-}
-
-.sidesok__sted {
-  padding: 0.15rem var(--rom-3);
-  font-size: var(--tekst-meta);
-  color: var(--blekk-dempet);
-  background: var(--flate-hevet);
-  border: 0;
-  border-radius: var(--runding-pille);
-  cursor: pointer;
-}
-
-.sidesok__sted:hover {
-  color: var(--blekk);
-}
-
+/* Treffene i teksten på siden (`Uthev`). Søkefeltene står i `sok.css`. */
 .sidetreff {
   color: inherit;
   background: var(--toksisk-flate);

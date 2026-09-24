@@ -1086,7 +1086,7 @@ Del 2, dagens sider:
 - [x] Hovedseksjonen «Preparater»: `legemiddelform → preparat → styrker`, med pakninger og detaljer i detaljkort.
 - [x] Minioppsummering, for eksempel «12 preparater · 3 legemiddelformer · 6 styrker».
 - [x] Kildeangivelse og tidspunkt for siste synkronisering.
-- [ ] Preparatnavnene er med i søket på siden og i det globale søket. Søket på siden er ferdig; det globale søket finnes ikke ennå.
+- [x] Preparatnavnene er med i søket på siden og i det globale søket.
 - [x] Sumanalyser, salter, metabolitter og kombinasjonspreparater vises etter del 23.
 
 ## Arbeidspakke 12 - Flere legemiddeldata

@@ -11,7 +11,7 @@ import {
   type Menymetode,
 } from '../domain/analysemetoder'
 import { analyttadresse } from '../domain/rute'
-import { lagLiggerOver } from '../hooks/useKeyboard'
+import { fokusIFagsok, lagLiggerOver } from '../hooks/useKeyboard'
 import { rullefart } from '../hooks/useKortHopp'
 import type { Analyte } from '../types'
 
@@ -110,8 +110,9 @@ export function Sidemeny({ pool, metodefilter, onFilter }: SidemenyProps) {
     function paaTast(event: KeyboardEvent) {
       if (!event.ctrlKey || event.metaKey || event.altKey) return
       if (event.key.toLowerCase() !== 'm') return
-      // Et annet lag over appen — endringsloggen — har forrangen.
-      if (!apen && lagLiggerOver()) return
+      // Et annet lag over appen — endringsloggen — har forrangen. Fagsøket
+      // er et lag bare for tastene i siden bak; menyen åpnes også derfra.
+      if (!apen && lagLiggerOver() && !fokusIFagsok()) return
       event.preventDefault()
       if (apen) lukk()
       else apne()

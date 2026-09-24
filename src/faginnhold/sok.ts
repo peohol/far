@@ -17,7 +17,8 @@
  *   {@link Sokeindeks} over mange sider, og gir det beste treffet per sted.
  * - {@link treffIntervaller} finner ordene i en tekst, som fremhevingen
  *   på siden bruker.
- * - {@link sokeadresse} er adressen et treff peker på.
+ * - {@link sokeadresse} er adressen et treff peker på, og
+ *   {@link treffgruppe} hvilken gruppe det står i på søkesiden.
  *
  * Sammenligningen ser bort fra store og små bokstaver og aksenter, og leser
  * æ, ø og å som a, o og a — som søket etter analytter i `src/domain/search.ts`.
@@ -127,6 +128,39 @@ const VEKT: Record<Sokefelt, number> = {
 
 /** Feltene som sier hva siden er, og ikke hva som står på den. */
 const IDENTITETSFELT: ReadonlySet<Sokefelt> = new Set(['navn', 'kode', 'alias', 'komponent'])
+
+/**
+ * Gruppene treffene i fagsøket vises i: stoffet selv, preparatene, teksten på
+ * siden og referansene. De følger {@link VEKT}, så gruppene står i den samme
+ * rekkefølgen som rangeringen.
+ */
+export type Treffgruppe = 'stoff' | 'preparat' | 'tekst' | 'referanse'
+
+const GRUPPE: Record<Sokefelt, Treffgruppe> = {
+  navn: 'stoff',
+  kode: 'stoff',
+  alias: 'stoff',
+  komponent: 'stoff',
+  preparat: 'preparat',
+  overskrift: 'tekst',
+  verdi: 'tekst',
+  tabell: 'tekst',
+  fritekst: 'tekst',
+  referanse: 'referanse',
+}
+
+/** Gruppene i rangeringens rekkefølge. */
+export const TREFFGRUPPER: readonly Treffgruppe[] = ['stoff', 'preparat', 'tekst', 'referanse']
+
+/** Gruppen et treff i feltet står i. */
+export function treffgruppe(felt: Sokefelt): Treffgruppe {
+  return GRUPPE[felt]
+}
+
+/** Sant når feltet sier hva siden er — navnet, koden, et annet navn eller en komponent. */
+export function erIdentitetsfelt(felt: Sokefelt): boolean {
+  return IDENTITETSFELT.has(felt)
+}
 
 /** Hvor en tekst står, fra siden og innover. */
 export interface Sokested {
