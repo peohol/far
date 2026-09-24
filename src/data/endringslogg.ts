@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.28.3',
+    versjon: '1.28.5',
     dato: '2026-09-24',
     sammendrag: 'Søkefeltene i toppmenyen overlapper ikke lenger i mellomstore vinduer',
     typer: ['Design / layout'],
@@ -21,6 +21,28 @@ export const ENDRINGSLOGG: Endring[] = [
       'I vinduer som er litt bredere enn mobilvisningen, kunne fagsøket og «På siden» gli inn over hverandre. Nå får fagsøket plassen først, og resten av menyen viker, i alle bredder.',
       'I mellomstore og smale vinduer står «På siden» som en rund lupeknapp til du bruker det (klikk eller Ctrl B). Står det et søk i den, har knappen en farget kant.',
       'Når det er trangt, viker snarveimerket i fagsøket først, og til slutt står bare lupen igjen. Klikker du den, eller trykker Ctrl K, legger søkefeltet seg over knappene til høyre så lenge du skriver.',
+    ],
+  },
+  {
+    versjon: '1.28.4',
+    dato: '2026-09-24',
+    sammendrag: 'Ingen tom stripe nederst når en skuff glir opp',
+    typer: ['Design / layout'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Mens en seksjon eller et detaljkort glir opp eller igjen, fyller innholdet hele skuffen. Før kunne det stå en tom stripe nederst i skuffen underveis.',
+    ],
+  },
+  {
+    versjon: '1.28.3',
+    dato: '2026-09-24',
+    sammendrag: 'En åpnet skuff som får plass på skjermen, midtstilles',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Når du åpner en seksjon eller et detaljkort som får plass på skjermen, ruller siden slik at det står midt i det synlige feltet under toppmenyen.',
+      'Er den åpne skuffen høyere enn skjermen, legges toppen av den rett under toppmenyen, som før.',
+      'Begynner du å rulle selv mens skuffen åpnes, lar siden deg rulle i fred.',
     ],
   },
   {

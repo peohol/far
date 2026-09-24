@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, type RefObject } from 'react'
 
 /** Hvor lenge skjulingen venter på at lukkingen skal gli ferdig, før den skjer likevel. */
-const MAKS_GLIDETID = 450
+export const MAKS_GLIDETID = 450
 
 /**
  * Innhold som glir opp og igjen: skuffene (`Seksjon`) og styrkene i

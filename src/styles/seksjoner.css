@@ -11,10 +11,19 @@
      aksentkant. */
 
 /* Når siden ruller til en skuff — brukeren åpnet den, eller en lenke eller
-   søket peker dit — legges toppen av den under den faste toppmenyen. */
+   søket peker dit — legges toppen av den under den faste toppmenyen. Margen
+   over og under avgrenser også det synlige feltet en åpnet skuff midtstilles
+   i (se `rullTilpasset` i `Seksjonsstyring.tsx`). */
 .skuff {
   width: 100%;
   scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
+}
+
+/* På smale flater står dokken nederst, og feltet slutter over den. */
+@media (max-width: 47.5em) {
+  .skuff {
+    scroll-margin-bottom: var(--dokk-offset);
+  }
 }
 
 /* --- Nivå 1: seksjonen -------------------------------------------------- */
@@ -246,9 +255,12 @@
   min-height: 0;
 }
 
-/* Innholdet klippes bare mens skuffen er lukket eller glir. */
-.skuff:not([data-apen]) > .skuff__kropp > .skuff__inner,
-.skuff__kropp[data-glir] > .skuff__inner {
+/* Innholdet klippes bare mens skuffen er lukket eller glir, og ved kroppens
+   kant, ikke radens: mens raden glir, er kroppen høyere enn raden i den, og
+   innholdet skal fylle den, ikke etterlate et tomt bånd nederst. Samme grep
+   som styrkene i preparatvinduet. */
+.skuff:not([data-apen]) > .skuff__kropp,
+.skuff__kropp[data-glir] {
   overflow: hidden;
 }
 
