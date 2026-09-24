@@ -2,12 +2,7 @@ import type { Paneldefinisjon, Panelnokkel } from '../../faginnhold/paneler'
 import type { Tilleggstekst } from '../../faginnhold/sok'
 import { forhandsvisning } from '../../faginnhold/oppsummering'
 import { oppsummerInteraksjoner, type Interaksjon } from '../../legemiddeldata/interaksjoner'
-import {
-  interaksjonsreferanse,
-  interaksjonsreferanser,
-  interaksjonssted as kortsted,
-} from '../../legemiddeldata/referanser'
-import { formaterReferanse } from '../../faginnhold/referanser'
+import { interaksjonsreferanser, interaksjonssted as kortsted } from '../../legemiddeldata/referanser'
 import { Detaljkort } from '../seksjoner/Seksjon'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { Uthev } from '../Uthev'
@@ -17,26 +12,15 @@ import type { Interaksjonstilstand } from './useInteraksjoner'
 /** Seksjonen interaksjonene står i. */
 export const INTERAKSJONSPANEL: Panelnokkel = 'interaksjoner'
 
-/**
- * Stoffene siden interagerer med, og referansene DMP oppgir, slik søket på
- * siden finner dem, med detaljkortet de står i.
- */
+/** Stoffene siden interagerer med, slik søket på siden finner dem, med detaljkortet de står i. */
 export function interaksjonssoketekster(tilstand: Interaksjonstilstand): Tilleggstekst[] {
   if (tilstand.status !== 'klar') return []
-  return tilstand.oversikt.interaksjoner.flatMap((i): Tilleggstekst[] => {
-    const element = { id: kortsted(i), tittel: i.med }
-    return [
-      { panel: INTERAKSJONSPANEL, element, felt: 'overskrift', tekst: i.med },
-      ...i.referanser.map(
-        (r): Tilleggstekst => ({
-          panel: INTERAKSJONSPANEL,
-          element,
-          felt: 'referanse',
-          tekst: formaterReferanse(interaksjonsreferanse(r)),
-        }),
-      ),
-    ]
-  })
+  return tilstand.oversikt.interaksjoner.map((i): Tilleggstekst => ({
+    panel: INTERAKSJONSPANEL,
+    element: { id: kortsted(i), tittel: i.med },
+    felt: 'overskrift',
+    tekst: i.med,
+  }))
 }
 
 /**
