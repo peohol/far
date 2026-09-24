@@ -345,29 +345,36 @@ navn. Alle disse, og visningen
 `objektutgaver` de bygger på, kjører med rettighetene til den som leser, så
 radsikkerheten gjelder som ellers.
 
-**Panelene** står i `paneler.ts`, med formen på `data` for hver elementtype:
+**Panelene** står i `paneler.ts`, med formen på `data` for hver elementtype.
+Tabellen står i den rekkefølgen siden viser panelene (`PANELER`, som også
+styrer søket og nummereringen av referansene):
 
 | Panel | Nøkkel | Elementer |
 | --- | --- | --- |
-| 1 Identitet | `identitet` | Ingen; koden, navnet og kategorien kommer fra siden og katalogen |
+| Identitet | `identitet` | Ingen; koden, navnet og kategorien kommer fra siden og katalogen |
+| Viktige data | `viktige_data` | Ett kort per type — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk) — med `{ nedre, ovre, enhet, forbehold }` |
+| Farmakodynamikk, indikasjon | `farmakodynamikk`, `indikasjon` | `riktekst`: `{ dokument }` |
 | Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
-| 2 Viktige data | `viktige_data` | Ett kort per type — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon`, `halveringstid`, `steady_state` — med `{ nedre, ovre, enhet, forbehold }` |
-| 3–5 Farmakodynamikk, dosering, indikasjon | `farmakodynamikk`, `dosering`, `indikasjon` | `riktekst`: `{ dokument }` |
-| 6 Farmakokinetikk | `farmakokinetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge |
+| Dosering | `dosering` | `riktekst`: `{ dokument }` |
+| Farmakokinetikk | `farmakokinetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge |
 | Interaksjoner | `interaksjoner` | Ingen; interaksjonene kommer fra FEST for koblingen i «Preparater» |
-| 7 Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }` |
+| Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }` |
 
-Tallene i panel 2 er tall, ikke tekst. Bare den ene grensen oppgitt vises som
-«fra 10» eller «opptil 20», uten å si om grensen er med. Koden, navnet og
-kategorien i panel 1 kommer fra de statiske datasettene til siden finnes i
-databasen.
+Tallene i viktige data er tall, ikke tekst. Bare den ene grensen oppgitt vises
+som «fra 10» eller «opptil 20», uten å si om grensen er med. Koden, navnet og
+kategorien i identiteten kommer fra de statiske datasettene til siden finnes
+i databasen.
 
-**Visningen.** Identiteten står alltid fram. Preparatene og panel 2–7 er seksjoner som åpnes
-og lukkes, og kortene i farmakokinetikken er detaljkort i sin seksjon (se
-`docs/seksjoner.md`). En lukket seksjon viser en kort oppsummering med
-innholdets egne ord: titlene på datakortene og kinetikkortene, dosene i
-tabellen eller begynnelsen av teksten. «Viktige data» står åpent fra start
-(`apen` i `paneler.ts`); i redigeringsmodus åpnes alt.
+**Visningen.** Identiteten og viktige data står alltid fram øverst
+(`Identitetspanel.tsx`, `ViktigeData.tsx`). Viktige data har ingen synlig
+tittel, men er et område med navnet for skjermlesere; kortene står i to
+grupper (`DATAKORTGRUPPER`), med konseptikon og etikett på hvert kort, og
+halveringstid og tid til steady state vises som t₁/₂ og tₛₛ. De andre panelene
+er seksjoner som åpnes og lukkes, og kortene i farmakokinetikken er detaljkort
+i sin seksjon (se `docs/seksjoner.md`). En lukket seksjon viser en kort
+oppsummering med innholdets egne ord: titlene på kinetikkortene, dosene i
+tabellen eller begynnelsen av teksten. Redigeringsmodus åpner ikke alt;
+redaktøren åpner seksjonen som skal redigeres.
 
 Hvordan innholdet tegnes, endrer aldri hva som står der:
 
@@ -391,7 +398,7 @@ Alt leses gjennom `rensDokument` før det vises.
 **Redigeringen.** Administratorer får knappen «Rediger». Knappene for å endre
 vises først når utkastet er hentet, og alt lagres som utkast mot revisjonen
 som ble lest; en konflikt stanser lagringen og sier fra. Koblingen til
-legemiddeldataene, hvert datakort, rikteksten i panel 3–5 og tabellen kan bare stå én gang i
+legemiddeldataene, hvert datakort, rikteksten i tekstpanelene og tabellen kan bare stå én gang i
 panelet sitt (`ENKELTELEMENTER`). Databasen håndhever det med en unik indeks,
 så to som oppretter det samme kortet samtidig, ikke begge får det lagret —
 den andre får en konflikt.

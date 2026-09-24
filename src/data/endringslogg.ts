@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.26.1',
+    versjon: '1.26.3',
     dato: '2026-09-24',
     sammendrag: 'Stoffsidens paneler har fått nytt utseende og egne ikoner, og serumtabellen er satt opp som i originalen',
     typer: ['Design / layout'],
@@ -23,6 +23,32 @@ export const ENDRINGSLOGG: Endring[] = [
       'Doseringen vises som ett kort per legemiddelform når teksten har den formen, med dosen stort.',
       'Serumkonsentrasjonene står som i originalen: én kolonne per dose, med antall prøver, 10-persentil, median og 90-persentil som rader, og referanseområdeprosjektet i en egen liten tabell. På mobil ruller tabellen sidelengs mens radnavnene står fast.',
       'Tallene, tekstene og fortolkningen er uendret.',
+    ],
+  },
+  {
+    versjon: '1.26.2',
+    dato: '2026-09-24',
+    sammendrag: 'Godkjenningsfritak står ved riktig styrke i preparatvinduet',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Når bare én av styrkene til et preparat krever godkjenningsfritak, står merket ved den styrken i preparatvinduet, ikke øverst som om det gjaldt hele preparatet.',
+      'Legemiddelformene under Preparater står i full bredde.',
+    ],
+  },
+  {
+    versjon: '1.26.1',
+    dato: '2026-09-24',
+    sammendrag: 'Ny rekkefølge på stoffsiden og viktige data alltid synlig',
+    typer: ['Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Viktige data står alltid rett under stoffnavnet, uten egen overskrift, og lukkes ikke når du åpner en annen del av siden.',
+      'Tallene er delt i «Konsentrasjoner i serum» og «Kinetikk», med et eget bilde på hvert kort. Etiketten og tallet gjelder; fargen er bare en hjelp.',
+      'Halveringstid og tid til steady state vises som t₁/₂ og tₛₛ.',
+      'Stoffsiden har ny rekkefølge: farmakodynamikk, indikasjon, preparater, dosering, farmakokinetikk, interaksjoner og serumkonsentrasjoner. Søket og nummereringen av kildene følger den samme rekkefølgen.',
+      'Over stoffnavnet står koden, analysemetoden og kategorien på én linje.',
+      'Fortolkningen, tallene og tekstene er uendret.',
     ],
   },
   {
