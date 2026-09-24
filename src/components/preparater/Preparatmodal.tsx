@@ -1,7 +1,12 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { ramsOpp } from '../../faginnhold/oppsummering'
 import type { Preparatpakning } from '../../legemiddeldata/preparater'
-import type { Preparatdetalj, Preparatstyrkedetalj } from '../../legemiddeldata/preparatmodell'
+import {
+  fordelMerker,
+  type Preparatdetalj,
+  type Preparatmerke,
+  type Preparatstyrkedetalj,
+} from '../../legemiddeldata/preparatmodell'
 import { FEST_KILDE } from '../../legemiddeldata/referanser'
 import { rullefart } from '../../hooks/useKortHopp'
 import { Ikon } from '../ikon/Ikon'
@@ -37,6 +42,8 @@ export function Preparatmodal({
   const flereReseptgrupper = preparat.reseptgrupper.length > 1
   const flereProdusenter = preparat.produsenter.length > 1
   const felles = fellesOmtaler(preparat.styrker)
+  // Hodet har merkene som gjelder hele preparatet; resten står ved styrken.
+  const merker = fordelMerker(preparat)
 
   return (
     <Modallag
@@ -47,7 +54,7 @@ export function Preparatmodal({
       meta={ramsOpp([sidenavn, preparat.form])}
       ikon={formikonnavn(preparat.ikon)}
       undertittel={preparat.produsenter.join(', ') || undefined}
-      merker={preparat.merker.length > 0 ? <Preparatmerker merker={preparat.merker} /> : undefined}
+      merker={merker.felles.length > 0 ? <Preparatmerker merker={merker.felles} /> : undefined}
       lukketekst="Lukk preparatet"
     >
       <dl className="preparatfakta">
@@ -65,10 +72,11 @@ export function Preparatmodal({
           Styrker, håndtering og pakninger
         </h3>
         <ul className="preparatstyrker__liste">
-          {preparat.styrker.map((s) => (
+          {preparat.styrker.map((s, i) => (
             <Styrkerad
               key={s.styrke_id}
               styrke={s}
+              merker={merker.egne[i]!}
               apen={apen === s.styrke_id}
               fra={fraStyrke === s.styrke_id}
               onVeksle={() => setApen((a) => (a === s.styrke_id ? null : s.styrke_id))}
@@ -110,6 +118,7 @@ function fellesOmtaler(styrker: readonly Preparatstyrkedetalj[]): string[] | nul
 
 function Styrkerad({
   styrke,
+  merker,
   apen,
   fra,
   onVeksle,
@@ -118,6 +127,8 @@ function Styrkerad({
   visOmtaler,
 }: {
   styrke: Preparatstyrkedetalj
+  /** Merkene bare denne styrken har. */
+  merker: readonly Preparatmerke[]
   apen: boolean
   fra: boolean
   onVeksle: () => void
@@ -154,6 +165,7 @@ function Styrkerad({
           </span>
         </button>
         <span className="preparatstyrke__merker">
+          <Preparatmerker merker={merker} />
           <Handteringsmerker handtering={styrke.handtering} />
           {fra && <Merke tone="aksent">Åpnet herfra</Merke>}
         </span>

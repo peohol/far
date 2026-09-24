@@ -12,6 +12,7 @@ import type { Kode, Merkevaredata, Styrkedata } from '../legemiddeldata/fest'
 import type { Legemiddelutvalg, MedId } from '../legemiddeldata/lesing'
 import {
   byggPreparatvisning,
+  fordelMerker,
   oppsummerForm,
   oppsummerPreparatvisning,
   oppsummerStyrke,
@@ -335,6 +336,15 @@ describe('styrker som ser like ut, men ikke er det', () => {
       [['Alfa', ['Krever godkj. fritak']]],
     ])
     expect(v.preparater.get('53:Alfa')!.merker).toEqual([{ type: 'godkjenningsfritak', tekst: 'Krever godkj. fritak' }])
+    // Preparatvinduet: fritaket gjelder bare den ene styrken, ikke hele preparatet.
+    expect(fordelMerker(v.preparater.get('53:Alfa')!)).toEqual({
+      felles: [],
+      egne: [[], [{ type: 'godkjenningsfritak', tekst: 'Krever godkj. fritak' }]],
+    })
+    expect(fordelMerker(v.preparater.get('53:Beta')!)).toEqual({
+      felles: [{ type: 'preparattype', tekst: 'Sykehuspreparat' }],
+      egne: [[]],
+    })
   })
 
   it('gir en ukjent form det generiske ikonet og lister den som ukartlagt', () => {
