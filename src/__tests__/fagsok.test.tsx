@@ -422,4 +422,18 @@ describe('indeksen fagsøket bruker', () => {
     await act(async () => svar(ny))
     expect(result.current.tilstand).toEqual({ status: 'klar', indeks: ny })
   })
+
+  it('hentes med én gang når den er utdatert og noe alt viser den', async () => {
+    const ny = lagSokeindeks(DOKUMENTER.slice(0, 1))
+    const hent = vi.fn().mockResolvedValueOnce(indeks).mockResolvedValueOnce(ny)
+    const { result } = renderHook(() => useSokeindeks(hent))
+    act(() => result.current.krev())
+    await waitFor(() => expect(result.current.tilstand.status).toBe('klar'))
+
+    act(() => result.current.foreld())
+    expect(hent).toHaveBeenCalledTimes(1)
+    act(() => result.current.foreld(true))
+    expect(hent).toHaveBeenCalledTimes(2)
+    await waitFor(() => expect(result.current.tilstand).toEqual({ status: 'klar', indeks: ny }))
+  })
 })
