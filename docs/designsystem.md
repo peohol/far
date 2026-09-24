@@ -35,7 +35,8 @@ har ingen egne tall. Mangler en verdi, legges den inn der på riktig nivå.
   `--lag-modal`.
 - **Bevegelse:** `--fart-rask`, `-glid`, `-flyt` og `-ikon`, med `--kurve`
   og `--kurve-ikon`. Med `prefers-reduced-motion` er alle `--fart-*` 0 ms.
-  Egne overganger skal bruke dem, så de slås av med resten.
+  Egne overganger skal bruke dem, så de slås av med resten. Det gjelder også
+  bevegelse i JavaScript: `useFlytting` leser `--fart-flyt` og `--kurve`.
 
 ### Farger og tema
 

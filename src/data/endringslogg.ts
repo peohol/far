@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.28.2',
+    dato: '2026-09-24',
+    sammendrag: 'Styrkekortene under Preparater åpner og lukker med glidning',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Et styrkekort som åpnes, vokser jevnt ut til full bredde, og kortene som må flytte til en annen rad, glir dit, så du ser hvor de havner. Lukking går samme vei tilbake.',
+      'Styrkene i preparatvinduet glir opp og igjen på samme måte som seksjonene.',
+      'Har du bedt om mindre bevegelse i systemet, åpner og lukker kortene straks, som før.',
+    ],
+  },
+  {
     versjon: '1.28.1',
     dato: '2026-09-24',
     sammendrag: 'Brukerlista kan rulles igjen',
