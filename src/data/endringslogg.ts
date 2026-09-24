@@ -12,13 +12,30 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.27.1',
+    versjon: '1.28.1',
     dato: '2026-09-24',
     sammendrag: 'Brukerlista kan rulles igjen',
     typer: ['Design / layout'],
     omfang: 'Minimalt omfang',
     punkter: [
       'I brukerlista kan du nå rulle ned til alle brukerne. Før ble lista kuttet nederst når det var flere brukere enn det var plass til i vinduet.',
+    ],
+  },
+  {
+    versjon: '1.28.0',
+    dato: '2026-09-24',
+    sammendrag: 'Siste gjennomgang av det nye utseendet, med «Åpne stoffside» i fortolkningen',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Mens en analytt fortolkes, står «Åpne stoffside» i menyen øverst. Den åpner stoffsiden, og «Åpne fortolkning» der fører tilbake til fortolkningen slik du forlot den. Kodepillen i steget virker som før.',
+      'På mobil fikk ikke alle knappene i menyen nederst plass på stoffsiden, og «Lukk» havnet utenfor skjermen. Søket på siden står nå som en rund lupe til du bruker det, og alle knappene får plass.',
+      'Hurtigtastmerket «Ctrl K» vises ikke lenger i søkefeltet på mobil.',
+      'Et område som «50–700» i Viktige data står på én linje også på brede skjermer.',
+      'Når du tabulerer gjennom en side, havner det som har fokus aldri bak menyen øverst eller nederst.',
+      'Hjelpeteksten på kontoknappen legger seg ikke lenger over kontomenyen når den åpnes.',
+      'I redigering har knappene i panelene («Rediger», «Legg til», «Kilder for panelet» og de andre) fått ramme og ikon, så de skiller seg fra teksten rundt.',
+      'Fortolkningen, tastene, kopieringen og kommentarene er uendret.',
     ],
   },
   {

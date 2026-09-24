@@ -515,8 +515,8 @@ Vedlikeholdes bare av koordinatorøkten, ved hver merge. Visuell fasit: Claude D
 | H | Øvrige monografpaneler og serumtabell | Merget (#60, 1.26.3) |
 | I | Resten av appens visuelle språk | Merget (#62, 1.26.5) |
 | Konto | Innlogging, konto, brukerliste, endringslogg og redigering | Merget (#61, 1.26.4) |
-| J | Sluttintegrasjon og kvalitetskontroll | Klar, lander rett etter G |
+| J | Sluttintegrasjon og kvalitetskontroll | Merget (#64, 1.28.0) |
 
-Kjente mellomtilstander:
+Hele planen er gjennomført. Merknad:
 
 - Rom-skalaen fulgte Atlas fra A (1.25.0): gamle `--rom-1…6` er nå `--rom-2, 3, 5, 7, 8, 9`. Ny CSS bruker den nye skalaen.

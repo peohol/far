@@ -121,6 +121,20 @@ export function TipsLag({ children }: { children: ReactNode }) {
     return () => document.removeEventListener('pointerdown', paaTrykk, true)
   }, [aktivt, lukk])
 
+  // Et anker som åpner sin egen meny eller skuff (`aria-expanded`), gir plass
+  // til den: boblen ville ellers lagt seg over det som nettopp ble åpnet.
+  useEffect(() => {
+    if (!aktivt) return
+    const { anker } = aktivt
+    const sjekk = () => {
+      if (anker.getAttribute('aria-expanded') === 'true') lukk()
+    }
+    sjekk()
+    const observator = new MutationObserver(sjekk)
+    observator.observe(anker, { attributes: true, attributeFilter: ['aria-expanded'] })
+    return () => observator.disconnect()
+  }, [aktivt, lukk])
+
   return (
     <Kontekst.Provider value={styring}>
       {children}

@@ -19,13 +19,14 @@ import { Kontomeny } from './components/konto/Kontomeny'
 import { Fagsok } from './components/sok/Fagsok'
 import { Sokeside } from './components/sok/Sokeside'
 import { Toppmeny } from './components/toppmeny/Toppmeny'
-import { ToppmenyKilde } from './components/toppmeny/Toppmenykilde'
+import { ToppmenyInnhold, ToppmenyKilde } from './components/toppmeny/Toppmenykilde'
+import { Toppmenyknapp } from './components/toppmeny/Toppmenyknapp'
 import { Versjonspille } from './components/Versjonspille'
 import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from './domain/analyttkatalog'
 import { alternativFor, ETG_ALTERNATIVER, type EtgAlternativ } from './domain/etg'
 import type { Rute } from './domain/flytting'
-import { FORTOLKNING, lesRute } from './domain/rute'
+import { FORTOLKNING, analyttadresse, lesRute } from './domain/rute'
 import { rusModulFor } from './domain/rus'
 import { search } from './domain/search'
 import {
@@ -301,6 +302,13 @@ export default function App() {
 
   const lukkInfoside = useCallback(() => gaaTil(FORTOLKNING), [gaaTil])
 
+  /**
+   * Stoffsiden til modulen som fortolkes, når den har én: toppmenyens
+   * «Åpne stoffside». Moduler uten en egen kode i katalogen (som EtG/EtS) har
+   * bare kodepillene, én per side.
+   */
+  const stoffside = state.analyte ? katalog.finn(state.analyte.kode)?.kode : undefined
+
   const settMetodefilter = useCallback((metode: string | null) => {
     dispatch({ type: 'sett-metodefilter', metode })
   }, [])
@@ -461,6 +469,16 @@ export default function App() {
           theme={theme}
           onToggleTheme={toggle}
         />
+
+        {/* Fortolkningens handling i toppmenyen. Stoffsiden og søkesiden
+            har sine egne mens de vises. */}
+        {!fortolkningSkjult && stoffside && (
+          <ToppmenyInnhold spor="handlinger">
+            <Toppmenyknapp ikon="indik" onClick={() => gaaTilAdresse(analyttadresse(stoffside))}>
+              Åpne stoffside
+            </Toppmenyknapp>
+          </ToppmenyInnhold>
+        )}
 
         {rute.side === 'analytt' && (
           <main className="scene scene--infoside">
