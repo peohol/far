@@ -1,0 +1,92 @@
+{
+  "hentet": "2026-09-24",
+  "kildedato": "2026-09-08T03:09:06",
+  "virkestoff": 35,
+  "former": [
+    {
+      "kode": "5",
+      "tekst": "Dispergerbar tablett",
+      "merkevarer": 7
+    },
+    {
+      "kode": "25",
+      "tekst": "Depottablett",
+      "merkevarer": 59
+    },
+    {
+      "kode": "48",
+      "tekst": "Smeltetablett",
+      "merkevarer": 36
+    },
+    {
+      "kode": "53",
+      "tekst": "Tablett",
+      "merkevarer": 216
+    },
+    {
+      "kode": "171",
+      "tekst": "Konsentrat til mikstur",
+      "merkevarer": 2
+    },
+    {
+      "kode": "524",
+      "tekst": "Tyggetablett/dispergerbar tablett",
+      "merkevarer": 7
+    },
+    {
+      "kode": "743",
+      "tekst": "Depotkapsel, hard",
+      "merkevarer": 8
+    },
+    {
+      "kode": "748",
+      "tekst": "Dråper, oppløsning",
+      "merkevarer": 5
+    },
+    {
+      "kode": "769",
+      "tekst": "Enterokapsel, hard",
+      "merkevarer": 8
+    },
+    {
+      "kode": "789",
+      "tekst": "Pulver til injeksjonsvæske, oppløsning",
+      "merkevarer": 2
+    },
+    {
+      "kode": "816",
+      "tekst": "Injeksjonsvæske, oppløsning",
+      "merkevarer": 15
+    },
+    {
+      "kode": "819",
+      "tekst": "Pulver og væske til depotinjeksjonsvæske, suspensjon",
+      "merkevarer": 14
+    },
+    {
+      "kode": "840",
+      "tekst": "Mikstur, suspensjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "842",
+      "tekst": "Mikstur, oppløsning",
+      "merkevarer": 10
+    },
+    {
+      "kode": "880",
+      "tekst": "Injeksjons-/infusjonsvæske, oppløsning",
+      "merkevarer": 1
+    },
+    {
+      "kode": "891",
+      "tekst": "Kapsel, hard",
+      "merkevarer": 18
+    },
+    {
+      "kode": "913",
+      "tekst": "Depotinjeksjonsvæske, suspensjon",
+      "merkevarer": 25
+    }
+  ]
+}

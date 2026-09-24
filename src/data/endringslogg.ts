@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.22.2',
+    dato: '2026-09-24',
+    sammendrag: 'Forarbeid til den nye visningen av preparatene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Preparatene kan nå ordnes som legemiddelform, styrke og preparat, slik den nye visningen skal vise dem. Styrker som bare ser like ut, for eksempel ulike salter eller mg mot mg/ml, holdes fra hverandre.',
+      'Hver legemiddelform som brukes av stoffsidene, har fått et ikon. Nye former fra FEST får et generisk ikon og blir fanget opp.',
+      'Ingenting er endret i det du ser ennå. Kommenteringen er uendret.',
+    ],
+  },
+  {
     versjon: '1.22.1',
     dato: '2026-09-23',
     sammendrag: 'Den nattlige oppdateringen av legemiddeldataene starter igjen',
