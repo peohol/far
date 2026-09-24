@@ -76,8 +76,8 @@ ikke møtes i én stor fil. De felles står i `main.tsx`, i denne rekkefølgen:
 - `fortolkning.css` og `thc.css`: fortolkningsstegene og THC-modulen.
 - `sidemeny.css`, `infoside.css`, `redigering.css`, `ikon.css`,
   `toppmeny.css`, `endringslogg.css`, `konto.css` og `regler.css`.
-- `sok.css`: fagsøkets rullegardin, søkesiden og søket på siden.
-- `components.css`: bare fremhevingen av treff i teksten (`.sidetreff`).
+- `sok.css`: fagsøkets rullegardin, søkesiden, søket på siden og
+  fremhevingen av treff i teksten (`.sidetreff`).
 
 Komponentene i informasjonssiden, seksjonene, referansene, merkene og det
 modale laget henter sitt eget stilark selv.
@@ -180,6 +180,21 @@ Slik står grensesnitteksten i fortolkningen (Atlas har de samme ordene):
 | THC | «Forrige prøve», «Denne prøven», feltnavnene, «Nullstill», «Trykk ↵ for å nullstille nå», «Forklaring» |
 | Kopiering feiler | «Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.» (`KOPIFEIL` i `ManualCopy.tsx`) |
 
+Resten av grensesnitteksten:
+
+| Hvor | Tekst |
+| --- | --- |
+| Toppmenyen | «Søk i fagstoff» med «Ctrl K», «På siden» med «Ctrl B», «Åpne fortolkning» (stoffsiden), «Åpne stoffside» (fortolkningen), «Rediger», «Lukk» |
+| Redigering | statuspillen «Redigerer · …» («ingen upubliserte endringer», «utkast med N endringer», «alt er publisert»), «Publiser», «Avslutt redigering», «Publiser endringene», «Publiser nå» |
+| Panelene i redigering | «Rediger», «Legg til», «Legg til kort», «Koble til legemiddeldataene», «Kilder for panelet», «Rediger reglene», «Lagre utkast», «Avbryt» |
+| Viktige data | «Konsentrasjoner i serum», «Kinetikk», «Ikke oppgitt» |
+| Fagsøket | «↑ ↓ velg · Enter åpne · Esc lukk», «Vis alle treff (N)», «Ingen treff i fagstoffet.» |
+| Søkesiden | «Søk i fagstoff», fanene «Alle», «Stoff», «Preparater», «Tekst», «Referanser», og gruppen «I teksten» |
+| Kontomenyen | «Endre navn og profilbilde», «Brukere», «Endringslogg» med versjonen, «Logg ut» |
+
+Hurtigtastmerkene vises ikke i søkefeltene på smale flater: der er det
+sjelden et tastatur.
+
 Ryddet bort i omleggingen:
 
 - Tooltipen på «Kopier» når kommentarteksten står skrevet ut rett over.
@@ -244,7 +259,9 @@ som i en test, blir innholdet stående i siden.
   «Lukk». I redigeringsmodus står bare redigeringen der: status, «Publiser»
   og «Avslutt redigering» (`Redigeringslinje.tsx`). Publiseringen viser hva
   som blir synlig for alle i et modalt lag før noe publiseres. Stilene for
-  redigeringen står i `src/styles/redigering.css`.
+  redigeringen står i `src/styles/redigering.css`. Fortolkningen bruker den
+  til «Åpne stoffside» mens en modul med egen stoffside er valgt (`App.tsx`);
+  søkesiden til «Lukk».
 - `sidesok`: plassen til søket i den åpne siden. Stoffsiden legger sitt
   kompakte søk her (`Sidesok.tsx`, snarveien Ctrl B eller Cmd B). Det vokser
   mens det brukes, og antallet treff og stedene de står, vises under feltet.
@@ -264,7 +281,8 @@ menyen, bruker den:
 
 - `.app` har den som luft øverst.
 - Ankere i `.scene` har den som `scroll-margin-top`, så en lenke til et anker
-  ikke havner under menyen.
+  ikke havner under menyen. Det samme gjelder alt som kan få fokus, så
+  tabulering aldri legger fokus bak menyen (eller bak dokken på smale flater).
 - Seksjonene gjør det samme (se `docs/seksjoner.md`).
 - Rulling i skript regner fra menyens underkant (`toppmenyensBunn()`).
 
@@ -275,7 +293,12 @@ Under 760 px bredde gjelder dette:
 - Søket får all plassen i pillen.
 - Knappene for hurtigtaster og tema viker. Temaet ligger da i kontomenyen.
 - Sidens plasser flytter til en **dokk** nederst i vinduet, og siden får
-  `--dokk-offset` luft nederst.
+  `--dokk-offset` luft nederst. Søket på siden står som en rund lupeknapp til
+  det brukes, og hovedhandlingen korter teksten heller enn å skyve de andre
+  ut av vinduet. Har siden verken søk eller hovedhandling (søkesiden), er
+  dokken bare så bred som knappene.
+- Fortolkningen har ingen dokk. «Åpne stoffside» står bare i toppmenyen på
+  brede flater; på smale fører kodepillen i steget til stoffsiden.
 
 ### Kontomenyen
 

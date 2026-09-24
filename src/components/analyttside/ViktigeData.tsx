@@ -118,7 +118,7 @@ function Panelkilder({ definisjon, kontekst }: { definisjon: Paneldefinisjon; ko
   if (!apen) {
     return (
       <div className="redigeringsrad">
-        <Button variant="subtle" className="redigeringsknapp" onClick={() => setApen(true)}>
+        <Button variant="kant" icon={<Ikon navn="refs" />} className="redigeringsknapp" onClick={() => setApen(true)}>
           Kilder for {definisjon.tittel.toLowerCase()}
         </Button>
       </div>

@@ -438,6 +438,12 @@
     border-radius: inherit;
   }
 
+  /* Uten søk på siden og uten hovedhandling (søkesiden har bare «Lukk») er
+     dokken ikke bredere enn knappene i den. */
+  .toppmeny__kontekst:not(:has(.sidesok, [data-variant='primar'])) {
+    left: auto;
+  }
+
   /* Hovedhandlingen fyller dokken; resten står som ikoner. */
   .toppmeny__spor[data-spor='handlinger'] {
     flex: 1;
@@ -447,7 +453,16 @@
   .toppmeny__kontekst .toppmenyknapp[data-variant='primar'] {
     flex: 1;
     justify-content: center;
+    min-width: 0;
     height: var(--hoyde-trykk);
+  }
+
+  /* På de aller smaleste skjermene kortes teksten heller enn at dokken
+     presser handlingene ut av vinduet. */
+  .toppmeny__kontekst .toppmenyknapp__tekst {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .toppmeny__kontekst .toppmenyknapp[data-variant='sekundar'] {
@@ -455,13 +470,19 @@
     height: var(--hoyde-trykk);
   }
 
+  /* Dokken er for sidene. I fortolkningen fører kodepillene i steget til
+     stoffsiden, så «Åpne stoffside» får ikke en egen dokk over arbeidsflaten. */
+  .app[data-side='fortolkning'] .toppmeny__kontekst {
+    display: none;
+  }
+
   /* Dokken skal ikke dekke det nederste av innholdet, og versjonen i hjørnet
      viker for den (endringsloggen ligger i kontomenyen). */
-  .app:has(.toppmeny__spor > *) {
+  .app:not([data-side='fortolkning']):has(.toppmeny__spor > *) {
     padding-bottom: var(--dokk-offset);
   }
 
-  .app:has(.toppmeny__spor > *) .versjonspille {
+  .app:not([data-side='fortolkning']):has(.toppmeny__spor > *) .versjonspille {
     display: none;
   }
 }

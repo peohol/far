@@ -23,6 +23,18 @@ body,
   scroll-margin-top: var(--toppmeny-offset);
 }
 
+/* Det samme for tastaturfokus: det som tabuleres fram, legges under
+   toppmenyen (og over dokken på smale flater), ikke bak dem. */
+.scene :is(a[href], button, input, select, textarea, summary, [tabindex]) {
+  scroll-margin-top: var(--toppmeny-offset);
+}
+
+@media (max-width: 47.5em) {
+  .scene :is(a[href], button, input, select, textarea, summary, [tabindex]) {
+    scroll-margin-bottom: var(--dokk-offset);
+  }
+}
+
 body {
   background: var(--flate-bunn);
   color: var(--blekk);

@@ -483,6 +483,19 @@
   color: var(--blekk);
 }
 
+/* Treffene i teksten på siden (`Uthev`). */
+.sidetreff {
+  color: inherit;
+  background: var(--toksisk-flate);
+  border-radius: 0.2em;
+  box-shadow: 0 0 0 1px var(--toksisk-kant);
+}
+
+.sidetreff--aktiv {
+  background: var(--toksisk-kant);
+  color: var(--blekk-sterk);
+}
+
 /* --- Smale flater ------------------------------------------------------------------- */
 @media (max-width: 47.5em) {
   /* Rullegardinen tar hele bredden under toppmenyen. */
@@ -494,7 +507,8 @@
     max-height: calc(100dvh - var(--hoyde-toppmeny) - var(--dokk-offset) - var(--rom-5));
   }
 
-  .fagsok__hint {
+  .fagsok__hint,
+  .fagsok__felt .hurtigtast {
     display: none;
   }
 
@@ -502,10 +516,23 @@
     justify-content: flex-end;
   }
 
-  /* I dokken: kompakt, og over hele dokken mens det brukes. Stedene står
-     over dokken. */
+  /* I dokken: bare lupen i en rund knapp til det brukes, og over hele dokken
+     mens det brukes. Stedene står over dokken. */
   .toppmeny__kontekst .sidesok .hurtigtast {
     display: none;
+  }
+
+  .toppmeny__kontekst .sidesok:not(:focus-within, [data-sok='ja']) .sidesok__felt {
+    justify-content: center;
+    gap: 0;
+    width: var(--hoyde-trykk);
+    height: var(--hoyde-trykk);
+    padding: 0;
+  }
+
+  .toppmeny__kontekst .sidesok:not(:focus-within, [data-sok='ja']) .sidesok__input {
+    width: 0;
+    padding: 0;
   }
 
   .toppmeny__kontekst .sidesok:focus-within {
