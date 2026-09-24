@@ -10,10 +10,13 @@ import {
 } from '../../auth/api'
 import { useAvatarlenker } from '../../auth/avatarer'
 import { useProfil } from '../../auth/okt'
+import { maaGjennomOppsett } from '../../domain/tilgang'
 import { useClipboard } from '../../hooks/useClipboard'
 import { Button } from '../Button'
+import { Ikon } from '../ikon/Ikon'
+import { Merke } from '../Merke'
 import { Modallag } from '../Modallag'
-import { CheckIcon, CopyIcon, PlusIcon, ShieldIcon } from '../icons'
+import { CheckIcon, CopyIcon, PlusIcon } from '../icons'
 import { Avatar } from './Avatar'
 import { Felt } from './Felt'
 
@@ -115,10 +118,12 @@ export function Brukerliste({ apen, onLukk }: { apen: boolean; onLukk: () => voi
     <Modallag
       apen={apen}
       tittel="Brukere"
+      ikon="shield"
+      bred
       onLukk={onLukk}
       handling={
         erAdmin && !oppretter ? (
-          <Button variant="subtle" icon={<PlusIcon />} onClick={() => setOppretter(true)}>
+          <Button className="knapp--kompakt" icon={<PlusIcon />} onClick={() => setOppretter(true)}>
             Opprett bruker
           </Button>
         ) : null
@@ -166,47 +171,58 @@ export function Brukerliste({ apen, onLukk }: { apen: boolean; onLukk: () => voi
         <p className="brukerliste__tomt">Henter brukerne …</p>
       ) : (
         <ul className="brukerliste">
-          {profiler.map((profil) => (
-            <li key={profil.id} className="brukerrad">
-              <Avatar
-                profil={profil}
-                lenke={profil.avatar_path ? (lenker.get(profil.avatar_path) ?? null) : null}
-              />
-              <span className="brukerrad__navn">
-                <span className="brukerrad__fullt">
-                  {visningsnavn(profil)}
-                  {profil.id === meg.id && <span className="brukerrad__deg"> (deg)</span>}
+          {profiler.map((profil) => {
+            const navn = visningsnavn(profil)
+            return (
+              <li key={profil.id} className="brukerrad">
+                <Avatar
+                  profil={profil}
+                  lenke={profil.avatar_path ? (lenker.get(profil.avatar_path) ?? null) : null}
+                />
+                <span className="brukerrad__navn">
+                  <span className="brukerrad__fullt">
+                    {navn}
+                    {profil.id === meg.id && <span className="brukerrad__deg"> (deg)</span>}
+                  </span>
+                  <span className="brukerrad__brukernavn">{profil.username}</span>
                 </span>
-                <span className="brukerrad__brukernavn">{profil.username}</span>
-              </span>
 
-              {profil.role === 'admin' && (
-                <span className="adminmerke">
-                  <ShieldIcon />
-                  Administrator
+                <span className="brukerrad__merker">
+                  {profil.role === 'admin' ? (
+                    <Merke tone="aksent" ikon={<Ikon navn="shield" />}>
+                      Administrator
+                    </Merke>
+                  ) : (
+                    <Merke>Bruker</Merke>
+                  )}
+                  {maaGjennomOppsett(profil) && <Merke tone="toksisk">Må bytte passord</Merke>}
                 </span>
-              )}
 
-              {erAdmin && profil.id !== meg.id && (
-                <span className="brukerrad__knapper">
-                  <Button
-                    variant="subtle"
-                    disabled={arbeider !== null}
-                    onClick={() => void byttRolle(profil)}
-                  >
-                    {profil.role === 'admin' ? 'Fjern administrator' : 'Gjør til administrator'}
-                  </Button>
-                  <Button
-                    variant="subtle"
-                    disabled={arbeider !== null}
-                    onClick={() => void nyttPassord(profil)}
-                  >
-                    Nytt midlertidig passord
-                  </Button>
-                </span>
-              )}
-            </li>
-          ))}
+                {erAdmin && profil.id !== meg.id && (
+                  <span className="brukerrad__knapper">
+                    <Button
+                      variant="kant"
+                      icon={<Ikon navn="key" />}
+                      aria-label={`Nytt passord for ${navn}`}
+                      disabled={arbeider !== null}
+                      onClick={() => void nyttPassord(profil)}
+                    >
+                      Nytt passord
+                    </Button>
+                    <Button
+                      variant="kant"
+                      icon={<Ikon navn="shield" />}
+                      aria-label={`${profil.role === 'admin' ? 'Fjern admin' : 'Gjør til admin'}: ${navn}`}
+                      disabled={arbeider !== null}
+                      onClick={() => void byttRolle(profil)}
+                    >
+                      {profil.role === 'admin' ? 'Fjern admin' : 'Gjør til admin'}
+                    </Button>
+                  </span>
+                )}
+              </li>
+            )
+          })}
         </ul>
       )}
     </Modallag>
@@ -236,12 +252,15 @@ function Passordkvittering({
   return (
     <div className="passordkvittering" role="alert">
       <p className="passordkvittering__tittel">
-        Midlertidig passord for <strong>{midlertidig.brukernavn}</strong>
+        <Ikon navn="key" storrelse="underpunkt" />
+        <span>
+          Midlertidig passord for <strong>{midlertidig.brukernavn}</strong>
+        </span>
       </p>
       <p className="passordkvittering__passord">
         <code>{midlertidig.midlertidigPassord}</code>
         <Button
-          variant="subtle"
+          className="knapp--kompakt"
           icon={kopiert ? <CheckIcon /> : <CopyIcon />}
           onClick={() => void kopier(midlertidig.midlertidigPassord).then(setKopiert)}
         >
@@ -252,7 +271,7 @@ function Passordkvittering({
         Passordet vises bare nå. Gi det til brukeren, som må bytte det ved første innlogging.
         Blir det borte, må du lage et nytt.
       </p>
-      <Button variant="subtle" onClick={onLukk}>
+      <Button variant="kant" onClick={onLukk}>
         Jeg har notert passordet
       </Button>
     </div>

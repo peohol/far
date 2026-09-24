@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.26.1',
+    versjon: '1.26.5',
     dato: '2026-09-24',
     sammendrag: 'Grunnlaget for å søke i alle stoffsidene samtidig',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,61 @@ export const ENDRINGSLOGG: Endring[] = [
       'Appen kan nå lese og søke gjennom alle de publiserte stoffsidene på én gang: navn, koder, andre navn, preparatnavn, interaksjoner, overskrifter, verdier, tekst og kilder. Hvert treff peker på seksjonen eller kortet det står i. Søkefeltet som bruker dette, kommer i en senere versjon.',
       'Søket på stoffsiden rangerer stedene under søkefeltet litt annerledes: preparatnavn kommer etter navn og komponenter, og en tekst som begynner med søkeordet kommer foran en der ordet står lenger inne.',
       'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
+    versjon: '1.26.4',
+    dato: '2026-09-24',
+    sammendrag: 'Innlogging, konto, brukerliste og redigering i det nye utseendet',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Innloggingen, førstegangsoppsettet, profilen, brukerlista og endringsloggen har fått det nye utseendet. Innloggingssiden har fått OUSFAR-merket.',
+      'I brukerlista står rollen som et merke, og «Må bytte passord» står ved brukere som ikke har fullført førstegangsoppsettet ennå.',
+      'Mens du redigerer en stoffside, står status, «Publiser» og «Avslutt redigering» i menyen øverst, i stedet for i en stripe på siden. Statusen viser hvor mange endringer som ikke er publisert. Escape lukker siden som før.',
+      'Før noe publiseres, vises det som blir synlig for alle i et eget vindu.',
+      'Tekstverktøyene og referansevelgeren har fått nytt utseende. Kilder fra FEST vises med en lås når søket treffer dem, og kan fortsatt ikke velges.',
+      'Fortolkningen, tastene og kommentarene er uendret.',
+    ],
+  },
+  {
+    versjon: '1.26.3',
+    dato: '2026-09-24',
+    sammendrag: 'Stoffsidens paneler har fått nytt utseende og egne ikoner, og serumtabellen er satt opp som i originalen',
+    typer: ['Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Hver seksjon på stoffsiden har fått sitt eget ikon: tannhjul for farmakodynamikk, kors med hake for indikasjon, pipette for dosering, bloddråpe med stoppeklokke for farmakokinetikk, to objekter som møtes for interaksjoner og et blodfylt prøverør for serumkonsentrasjoner.',
+      'Kortene i farmakokinetikken står i et rutenett, hvert med et ikon etter hva det handler om, som biotilgjengelighet, halveringstid, proteinbinding eller CYP-enzymer.',
+      'Doseringen vises som ett kort per legemiddelform når teksten har den formen, med dosen stort.',
+      'Serumkonsentrasjonene står som i originalen: én kolonne per dose, med antall prøver, 10-persentil, median og 90-persentil som rader, og referanseområdeprosjektet i en egen liten tabell. På mobil ruller tabellen sidelengs mens radnavnene står fast.',
+      'Tallene, tekstene og fortolkningen er uendret.',
+    ],
+  },
+  {
+    versjon: '1.26.2',
+    dato: '2026-09-24',
+    sammendrag: 'Godkjenningsfritak står ved riktig styrke i preparatvinduet',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Når bare én av styrkene til et preparat krever godkjenningsfritak, står merket ved den styrken i preparatvinduet, ikke øverst som om det gjaldt hele preparatet.',
+      'Legemiddelformene under Preparater står i full bredde.',
+    ],
+  },
+  {
+    versjon: '1.26.1',
+    dato: '2026-09-24',
+    sammendrag: 'Ny rekkefølge på stoffsiden og viktige data alltid synlig',
+    typer: ['Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Viktige data står alltid rett under stoffnavnet, uten egen overskrift, og lukkes ikke når du åpner en annen del av siden.',
+      'Tallene er delt i «Konsentrasjoner i serum» og «Kinetikk», med et eget bilde på hvert kort. Etiketten og tallet gjelder; fargen er bare en hjelp.',
+      'Halveringstid og tid til steady state vises som t₁/₂ og tₛₛ.',
+      'Stoffsiden har ny rekkefølge: farmakodynamikk, indikasjon, preparater, dosering, farmakokinetikk, interaksjoner og serumkonsentrasjoner. Søket og nummereringen av kildene følger den samme rekkefølgen.',
+      'Over stoffnavnet står koden, analysemetoden og kategorien på én linje.',
+      'Fortolkningen, tallene og tekstene er uendret.',
     ],
   },
   {

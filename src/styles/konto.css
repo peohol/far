@@ -1,10 +1,10 @@
 /**
  * Konto og brukere: innlogging, førstegangsoppsett, kontopanel og brukerliste.
  *
- * Alt bygger på de samme tokenene som resten av appen, og på knappene,
- * kortene og laget som allerede finnes — auth skal ikke se ut som en annen
- * app. Kontrastene følger de samme reglene som ellers: tekst mot sin egen
- * flate over WCAG 2.1 AA.
+ * Følger Atlas (`OUSFAR Konto og redigering`): porten er en smal kolonne med
+ * merket øverst og ett kort med serif-overskrift, feltene er høye med runde
+ * hjørner, og brukerlista er rader i ett kort. Alt bygger på tokens, så auth
+ * ikke ser ut som en annen app, og følger temaet.
  */
 
 /* --- Porten: innlogging og førstegangsoppsett ---------------------------- */
@@ -13,43 +13,123 @@
   min-height: 100dvh;
   display: grid;
   place-items: center;
-  padding: var(--rom-8) clamp(1rem, 4vw, 3.5rem);
+  padding: var(--rom-9) var(--rom-side);
   overflow-y: auto;
+  background: var(--flate-bunn);
+}
+
+/* Temaknappen står alene i hjørnet: porten har ingen toppmeny. */
+.port__tema {
+  position: fixed;
+  top: var(--rom-6);
+  right: var(--rom-6);
+  z-index: 10;
+}
+
+.port__innhold {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-7);
+  width: min(100%, 26.25rem);
+}
+
+.port__innhold--bred {
+  width: min(100%, 36rem);
+}
+
+.port__merke {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-5);
+  margin: 0;
+}
+
+.port__ordmerke {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-tall);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk);
+}
+
+.port__notis {
+  margin: 0;
+  font-size: var(--tekst-liten);
+  line-height: var(--linjehoyde-lesing);
+  text-align: center;
+  color: var(--blekk-dempet);
 }
 
 .portkort {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-7);
-  width: min(100%, 27rem);
-  padding: var(--rom-8);
+  gap: var(--rom-6);
+  padding: var(--rom-8) var(--rom-8) var(--rom-7);
   background: var(--flate);
   border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-l);
-  box-shadow: var(--skygge);
-}
-
-.portkort--bred {
-  width: min(100%, 38rem);
-}
-
-.portkort__topp {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-2);
-  text-align: center;
+  border-radius: var(--runding-panel);
 }
 
 .portkort__tittel {
-  font-size: var(--tekst-xl);
-  font-weight: var(--vekt-tung);
-  letter-spacing: 0.02em;
-  color: var(--blekk-sterk);
+  margin: 0;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-seksjon);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-titler);
+  color: var(--blekk);
 }
 
-.portkort__undertittel {
-  font-size: var(--tekst-s);
-  color: var(--blekk-dempet);
+/* Hovedknappen i porten fyller kortet, som i designet. */
+.portkort .skjema > .knapp--primary,
+.portkort .skjema__knapper > .knapp--primary {
+  justify-content: center;
+  min-height: 3.125rem;
+}
+
+.portkort .skjema > .knapp--primary {
+  align-self: stretch;
+}
+
+/* --- Merket --------------------------------------------------------------- */
+
+.logomerke {
+  flex: none;
+  width: var(--rom-10);
+  height: var(--rom-10);
+}
+
+.logomerke__flate {
+  fill: var(--aksent);
+}
+
+.logomerke__akse,
+.logomerke__hjelpelinje,
+.logomerke__kurve {
+  fill: none;
+  stroke: var(--paa-aksent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.logomerke__akse {
+  stroke-width: 1.6;
+  stroke-opacity: 0.5;
+}
+
+.logomerke__hjelpelinje {
+  stroke-width: 1.2;
+  stroke-opacity: 0.6;
+  stroke-dasharray: 1.6 2;
+}
+
+.logomerke__kurve {
+  stroke-width: 2.6;
+}
+
+.logomerke__punkt {
+  fill: var(--logo-punkt);
+  stroke: var(--logo-punkt-kant);
+  stroke-width: 1.4;
 }
 
 /* --- Skjema -------------------------------------------------------------- */
@@ -57,12 +137,14 @@
 .skjema {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-5);
+  gap: var(--rom-6);
   text-align: left;
 }
 
 .skjema__ingress {
-  font-size: var(--tekst-s);
+  margin: 0;
+  font-size: var(--tekst-ui);
+  line-height: var(--linjehoyde-lesing);
   color: var(--blekk-dempet);
 }
 
@@ -80,9 +162,9 @@
 }
 
 .skjema__bolktittel {
-  font-size: var(--tekst-s);
-  font-weight: var(--vekt-medium);
-  color: var(--blekk);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
 }
 
 .skjema__knapper {
@@ -104,28 +186,26 @@
 }
 
 .felt__merkelapp {
-  font-size: var(--tekst-xs);
-  font-weight: var(--vekt-medium);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
   color: var(--blekk-dempet);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 
 .felt__inndata {
   width: 100%;
+  min-height: var(--hoyde-felt);
   padding: var(--rom-3) var(--rom-5);
-  font-size: var(--tekst-s);
+  font-family: var(--skrift-ui);
+  font-size: 1rem;
+  font-weight: var(--vekt-medium);
   color: var(--blekk);
   background: var(--flate-bunn);
-  border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-m);
+  border: var(--kant) solid var(--linje-kontroll);
+  border-radius: var(--runding-felt);
   transition:
-    border-color var(--fart) var(--kurve),
-    background-color var(--fart) var(--kurve);
-}
-
-.felt__inndata:hover {
-  border-color: var(--linje-sterk);
+    border-color var(--fart-rask) var(--kurve),
+    background-color var(--fart-rask) var(--kurve);
 }
 
 .felt__inndata:focus {
@@ -135,36 +215,40 @@
 
 /* Brukernavnet: vises, men er ikke et felt som kan skrives i. */
 .felt__last {
-  padding: var(--rom-3) var(--rom-5);
+  display: flex;
+  align-items: center;
+  min-height: var(--hoyde-felt);
+  padding: 0 var(--rom-5);
   font-family: var(--skrift-mono);
-  font-size: var(--tekst-s);
+  font-size: var(--tekst-ui);
   color: var(--blekk);
   background: var(--flate-hevet);
-  border: var(--kant) dashed var(--linje);
-  border-radius: var(--runding-m);
+  border: var(--kant) dashed var(--linje-sterk);
+  border-radius: var(--runding-felt);
 }
 
-/* Hjelpetekst er brødtekst, og bruker derfor det dempede blekket og ikke det
-   svake — det svake er målt for grafiske elementer, ikke for lesing. */
+/* Hjelpetekst er brødtekst, og bruker derfor det dempede blekket. */
 .felt__hjelp {
-  font-size: var(--tekst-xs);
+  font-size: var(--tekst-meta);
   color: var(--blekk-dempet);
 }
 
 .skjemafeil {
+  margin: 0;
   padding: var(--rom-3) var(--rom-5);
-  font-size: var(--tekst-s);
-  color: var(--niva-over-blekk);
-  background: var(--niva-over-flate);
-  border: var(--kant) solid var(--niva-over-linje);
-  border-radius: var(--runding-m);
+  font-size: var(--tekst-ui);
+  color: var(--alvorlig-blekk);
+  background: var(--alvorlig-flate);
+  border: var(--kant) solid var(--alvorlig-kant);
+  border-radius: var(--runding-felt);
 }
 
 /* Kvitteringen har fast plass, så knappen under ikke hopper når den kommer. */
 .skjemakvittering {
   min-height: 1.4em;
-  font-size: var(--tekst-s);
-  color: var(--niva-innenfor-blekk);
+  margin: 0;
+  font-size: var(--tekst-ui);
+  color: var(--referanse-blekk);
 }
 
 .skjemakvittering:empty {
@@ -185,10 +269,11 @@
   place-items: center;
   flex: none;
   overflow: hidden;
-  color: var(--aksent-blekk);
+  color: var(--paa-aksent);
   background: var(--aksent);
-  border-radius: var(--runding-full);
-  font-weight: var(--vekt-medium);
+  border-radius: var(--runding-pille);
+  font-family: var(--skrift-ui);
+  font-weight: var(--vekt-fet);
   line-height: 1;
   user-select: none;
 }
@@ -196,19 +281,19 @@
 .avatar--liten {
   width: 1.9rem;
   height: 1.9rem;
-  font-size: var(--tekst-xxs);
+  font-size: var(--tekst-merke);
 }
 
 .avatar--middels {
-  width: 2.6rem;
-  height: 2.6rem;
-  font-size: var(--tekst-xs);
+  width: var(--hoyde-trykk);
+  height: var(--hoyde-trykk);
+  font-size: var(--tekst-ui);
 }
 
 .avatar--stor {
   width: 5.5rem;
   height: 5.5rem;
-  font-size: var(--tekst-l);
+  font-size: var(--tekst-seksjon);
 }
 
 .avatar__bilde {
@@ -217,40 +302,34 @@
   object-fit: cover;
 }
 
-/* --- Modalt lag ---------------------------------------------------------- */
-
-.modallag__handlinger {
-  display: flex;
-  align-items: center;
-  gap: var(--rom-3);
-}
-
-.modallag__kropp {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-5);
-  overflow-y: auto;
-  padding: var(--rom-7);
-}
-
 /* --- Brukerlista --------------------------------------------------------- */
 
 .brukerliste {
   display: flex;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-kort);
+  overflow: hidden;
 }
 
 .brukerliste__tomt {
-  font-size: var(--tekst-s);
+  margin: 0;
+  font-size: var(--tekst-ui);
   color: var(--blekk-dempet);
 }
 
+/* Avatar, navn, rolle og handlinger. Der det er trangt, legger handlingene
+   seg på en egen linje under navnet. */
 .brukerrad {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--rom-5);
-  padding: var(--rom-5) 0;
+  padding: var(--rom-4) var(--rom-5);
 }
 
 .brukerrad + .brukerrad {
@@ -260,44 +339,54 @@
 .brukerrad__navn {
   display: flex;
   flex-direction: column;
-  min-width: 8rem;
-  margin-right: auto;
+  gap: var(--rom-1);
+  min-width: 0;
 }
 
 .brukerrad__fullt {
-  font-size: var(--tekst-s);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
   font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-titler);
   color: var(--blekk);
 }
 
 .brukerrad__deg {
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-liten);
   font-weight: var(--vekt-normal);
   color: var(--blekk-dempet);
 }
 
 .brukerrad__brukernavn {
-  font-family: var(--skrift-mono);
-  font-size: var(--tekst-xs);
+  font-size: var(--tekst-liten);
   color: var(--blekk-dempet);
 }
 
+.brukerrad__merker,
 .brukerrad__knapper {
   display: flex;
   flex-wrap: wrap;
   gap: var(--rom-2);
 }
 
-.adminmerke {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--rom-2);
-  padding: 0.2em 0.7em;
-  font-size: var(--tekst-xs);
-  font-weight: var(--vekt-medium);
-  color: var(--merke-funksjon-blekk);
-  background: var(--merke-funksjon-flate);
-  border-radius: var(--runding-full);
-  white-space: nowrap;
+/* Egen rad har ingen knapper; merkene står da helt til høyre. */
+.brukerrad__merker:last-child {
+  grid-column: 3 / -1;
+  justify-content: flex-end;
+}
+
+@media (max-width: 47.5em) {
+  .brukerrad {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .brukerrad__merker,
+  .brukerrad__merker:last-child,
+  .brukerrad__knapper {
+    grid-column: 2;
+    justify-content: flex-start;
+  }
 }
 
 /* --- Det midlertidige passordet ------------------------------------------ */
@@ -305,16 +394,23 @@
 .passordkvittering {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
-  padding: var(--rom-5);
-  background: var(--varsel-flate);
-  border: var(--kant-tykk) solid var(--varsel-linje);
-  border-radius: var(--runding-m);
+  gap: var(--rom-4);
+  padding: var(--rom-6) var(--rom-7);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-kort);
+  box-shadow: var(--skygge-modal);
 }
 
 .passordkvittering__tittel {
-  font-size: var(--tekst-s);
-  color: var(--varsel-blekk);
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  margin: 0;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
 }
 
 .passordkvittering__passord {
@@ -322,29 +418,34 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--rom-3);
+  margin: 0;
+  padding: var(--rom-4) var(--rom-5);
+  background: var(--flate-bunn);
+  border: var(--kant) dashed var(--linje-sterk);
+  border-radius: var(--runding-felt);
 }
 
 .passordkvittering__passord code {
-  padding: var(--rom-3) var(--rom-5);
+  flex: 1;
   font-family: var(--skrift-mono);
-  font-size: var(--tekst-m);
-  font-weight: var(--vekt-medium);
+  font-size: var(--tekst-lesing);
+  font-weight: var(--vekt-halvfet);
+  letter-spacing: 0.08em;
   color: var(--blekk);
-  background: var(--flate);
-  border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-s);
   /* Passordet skal kunne leses tegn for tegn, også når det brytes. */
   word-break: break-all;
 }
 
 .passordkvittering__advarsel {
-  font-size: var(--tekst-xs);
-  color: var(--varsel-blekk);
+  margin: 0;
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-lesing);
+  color: var(--toksisk-blekk);
 }
 
-.passordkvittering .knapp--subtle {
+.passordkvittering > .knapp--kant {
   align-self: flex-start;
-  color: var(--varsel-blekk);
 }
 
 /* --- Bildevelgeren ------------------------------------------------------- */
@@ -355,11 +456,22 @@
   gap: var(--rom-5);
 }
 
+/* Avataren, hvor stort bildet blir, og knappen, på en hevet rad. */
 .bildevelger__visning {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--rom-5);
+  padding: var(--rom-3) var(--rom-4);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-underkort);
+}
+
+.bildevelger__hint {
+  flex: 1;
+  min-width: 8rem;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
 }
 
 /* `react-easy-crop` legger seg ut i hele boksen, så den må ha en høyde. */
@@ -368,13 +480,14 @@
   height: 17rem;
   background: var(--flate-bunn);
   border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-m);
+  border-radius: var(--runding-felt);
   overflow: hidden;
 }
 
 .bildevelger__veiledning,
 .bildevelger__notis {
-  font-size: var(--tekst-xs);
+  margin: 0;
+  font-size: var(--tekst-meta);
   color: var(--blekk-dempet);
 }
 
@@ -390,7 +503,7 @@
   align-items: center;
   gap: var(--rom-3);
   flex: 1 1 12rem;
-  font-size: var(--tekst-xs);
+  font-size: var(--tekst-meta);
   color: var(--blekk-dempet);
 }
 
@@ -412,6 +525,7 @@
     padding-block: var(--rom-5);
   }
 
+  .port__innhold,
   .portkort {
     gap: var(--rom-5);
   }

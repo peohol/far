@@ -21,6 +21,7 @@ import { Button } from '../Button'
 import { Rusutfall } from '../Rusutfall'
 import { Rusvalg } from '../Rusvalg'
 import { Uthev } from '../Uthev'
+import { seksjonsikon } from '../analyttside/panelvisning'
 import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
 import { useScenarioreglerkilde } from './Scenarioreglerkilde'
@@ -72,6 +73,7 @@ export function Scenarioregler({ modul, regelsett, kommentarer }: Scenarioregler
   return (
     <Seksjon
       id="fortolkning"
+      ikon={seksjonsikon('fortolkning')}
       tittel={<Uthev tekst="Fortolkningsregler" />}
       oppsummering={ramsOpp([
         antall(beskrivelse.scenarier.length, 'scenario', 'scenarier'),

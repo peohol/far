@@ -12,6 +12,8 @@ import {
 } from 'react'
 import { flushSync } from 'react-dom'
 import { TREFFKLASSE, Uthevingskilde, useSokeord } from '../Uthev'
+import { Ikon } from '../ikon/Ikon'
+import type { Ikonnavn } from '../ikon/register'
 import {
   SKUFFATTRIBUTT,
   SeksjonsstyringKilde,
@@ -96,6 +98,12 @@ interface Felles {
    * trykkes.
    */
   handlinger?: ReactNode
+  /**
+   * Ikonet foran overskriften, fra Atlas-registeret. En seksjon får det i en
+   * sirkel, et detaljkort i underpunktstørrelse. Ikonet er pynt: tittelen
+   * står alltid i tekst.
+   */
+  ikon?: Ikonnavn
   /** Om skuffen er åpen når siden tegnes. Lukket når ikke annet er sagt. */
   apenFraStart?: boolean
   className?: string
@@ -162,6 +170,7 @@ function Skuff({
   tittelTillegg,
   oppsummering,
   handlinger,
+  ikon,
   apenFraStart = false,
   className,
   children,
@@ -219,30 +228,41 @@ function Skuff({
   return (
     <Ramme
       id={anker}
-      className={[KLASSE, `${KLASSE}--${slag}`, slag === 'seksjon' && 'kort kort--start', className]
-        .filter(Boolean)
-        .join(' ')}
+      className={[KLASSE, `${KLASSE}--${slag}`, className].filter(Boolean).join(' ')}
       aria-labelledby={overskrift}
       {...(slag === 'detalj' && { role: 'group' })}
       {...{ [SKUFFATTRIBUTT]: nokkel }}
       data-apen={apen || undefined}
       data-stille={!animer || undefined}
+      data-ikon={ikon ? '' : undefined}
     >
-      <div className={`${KLASSE}__hode`} onClick={trykkIHodet}>
-        <Overskrift id={overskrift} className={`${KLASSE}__tittel`}>
-          <button
-            type="button"
-            className={`${KLASSE}__knapp`}
-            aria-expanded={apen}
-            aria-controls={innholdId}
-            {...(beskrivelse && { 'aria-describedby': beskrivelse })}
-            onClick={veksle}
-          >
-            <span className={`${KLASSE}__pil`} aria-hidden="true" />
-            <span className={`${KLASSE}__tittelTekst`}>{tittel}</span>
-          </button>
-          {tittelTillegg}
-        </Overskrift>
+      {/* `data-ih`: ikonet spiller når hodet får pekeren eller fokus. */}
+      <div className={`${KLASSE}__hode`} onClick={trykkIHodet} data-ih="">
+        {ikon && (
+          <span className={`${KLASSE}__ikon`}>
+            <Ikon navn={ikon} storrelse={slag === 'seksjon' ? 'seksjon' : 'underpunkt'} />
+          </span>
+        )}
+        <div className={`${KLASSE}__tekst`}>
+          <Overskrift id={overskrift} className={`${KLASSE}__tittel`}>
+            <button
+              type="button"
+              className={`${KLASSE}__knapp`}
+              aria-expanded={apen}
+              aria-controls={innholdId}
+              {...(beskrivelse && { 'aria-describedby': beskrivelse })}
+              onClick={veksle}
+            >
+              <span className={`${KLASSE}__tittelTekst`}>{tittel}</span>
+            </button>
+            {tittelTillegg}
+          </Overskrift>
+          {visOppsummering && (
+            <p id={oppsummeringId} className={`${KLASSE}__oppsummering`}>
+              <Uthevingskilde ord={INGEN_ORD}>{oppsummering}</Uthevingskilde>
+            </p>
+          )}
+        </div>
         {visTreff && (
           <span id={treffId} className={`${KLASSE}__treff`}>
             {treff === 1 ? '1 treff' : `${treff} treff`}
@@ -253,11 +273,10 @@ function Skuff({
             {handlinger}
           </div>
         )}
-        {visOppsummering && (
-          <p id={oppsummeringId} className={`${KLASSE}__oppsummering`}>
-            <Uthevingskilde ord={INGEN_ORD}>{oppsummering}</Uthevingskilde>
-          </p>
-        )}
+        {/* Pilen viser om skuffen er åpen; knappen sier det samme med `aria-expanded`. */}
+        <span className={`${KLASSE}__pil`} aria-hidden="true">
+          <Ikon navn="chev" />
+        </span>
       </div>
       <div ref={kropp} className={`${KLASSE}__kropp`}>
         <div ref={inner} id={innholdId} className={`${KLASSE}__inner`}>

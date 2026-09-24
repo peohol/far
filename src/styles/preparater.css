@@ -3,9 +3,12 @@
    som her tegnes som en stor overskrift med ikon; styrkene er et rutenett av
    like store kort; preparatvinduet står i et modalt lag (`modallag.css`). */
 
+/* Formene er overskrifter i full bredde, også om seksjonen legger
+   detaljkortene sine i et rutenett. */
 .preparater {
   display: flex;
   flex-direction: column;
+  grid-column: 1 / -1;
   gap: var(--rom-5);
   width: 100%;
   scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
@@ -28,27 +31,26 @@
 
 /* --- Legemiddelformen som overskrift (Atlas: FormHeader) ------------------ */
 
-.skuff--detalj.preparatform {
+.skuff--detalj.preparatform,
+.skuff--detalj.preparatform[data-apen] {
   padding: 0 0 var(--rom-3);
+  background: none;
   border: 0;
   border-bottom: var(--kant) solid var(--linje);
   border-radius: 0;
 }
 
-.preparatform > .skuff__hode > .skuff__tittel {
+.skuff--detalj.preparatform > .skuff__hode .skuff__tittel {
   font: var(--vekt-medium) var(--tekst-tall) / var(--linjehoyde-tett) var(--skrift-display);
   letter-spacing: -0.01em;
 }
 
-.preparatform > .skuff__hode > .skuff__tittel > .skuff__knapp {
+.preparatform > .skuff__hode .skuff__tittel > .skuff__knapp {
   flex: 1 1 auto;
   min-height: calc(var(--ikon-form) + var(--rom-3));
 }
 
-/* Pilen står til høyre, som i Atlas; ikonet og navnet først. */
 .preparatform > .skuff__hode .skuff__pil {
-  order: 1;
-  margin-left: auto;
   font-size: var(--tekst-ui);
 }
 
@@ -64,7 +66,7 @@
   height: var(--ikon-form);
 }
 
-.preparatform > .skuff__hode > .skuff__oppsummering {
+.skuff--detalj.preparatform > .skuff__hode .skuff__oppsummering {
   margin-top: 0;
   padding-left: calc(var(--ikon-form) + var(--rom-5));
 }

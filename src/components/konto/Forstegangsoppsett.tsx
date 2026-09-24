@@ -72,8 +72,8 @@ export function Forstegangsoppsett() {
   return (
     <form className="skjema" onSubmit={(hendelse) => void send(hendelse)}>
       <p className="skjema__ingress">
-        Velkommen. Før du kommer inn i OUSFAR må du velge ditt eget passord og fylle ut navnet
-        ditt. Det midlertidige passordet slutter å virke med det samme.
+        Du er logget inn med et midlertidig passord. Velg ditt eget og fyll ut navnet ditt før du
+        går videre. Det midlertidige passordet slutter å virke med det samme.
       </p>
 
       <Lastfelt
@@ -133,7 +133,7 @@ export function Forstegangsoppsett() {
 
       <div className="skjema__knapper">
         <Button type="submit" disabled={arbeider}>
-          {arbeider ? 'Lagrer …' : 'Lagre og åpne OUSFAR'}
+          {arbeider ? 'Lagrer …' : 'Lagre og gå videre'}
         </Button>
         <Button variant="subtle" onClick={() => void loggUt()}>
           Logg ut

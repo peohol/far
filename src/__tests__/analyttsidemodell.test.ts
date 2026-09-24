@@ -7,8 +7,11 @@ import { byggSidemodell, publiseringsplan } from '../faginnhold/analyttside'
 import { TOM_SIDE, type Analyttsidedata, type Utgave } from '../faginnhold/lesing'
 import type { Innholdselementinnhold } from '../faginnhold/modell'
 import {
+  DATAKORT,
+  DATAKORTGRUPPER,
   FJERNET,
   PANELREKKEFOLGE,
+  delIntervall,
   formaterIntervall,
   kontrollerIntervall,
   lesDosetabell,
@@ -101,6 +104,25 @@ describe('datakortene', () => {
     expect(v(null, 20, 'timer')).toBe('opptil 20 timer')
     expect(v(20, 20, 'døgn')).toBe('20 døgn')
     expect(v(null, null)).toBe('')
+  })
+
+  it('deler verdien i forledd, tall og enhet, som til sammen er teksten som søkes i', () => {
+    const verdi = (nedre: number | null, ovre: number | null, enhet = 'nmol/L') => ({ nedre, ovre, enhet, forbehold: '' })
+    expect(delIntervall(verdi(10, 300))).toEqual({ forledd: '', tall: '10–300', enhet: 'nmol/L' })
+    expect(delIntervall(verdi(1500, null))).toEqual({ forledd: 'fra', tall: '1\u00a0500', enhet: 'nmol/L' })
+    expect(delIntervall(verdi(null, 20, ''))).toEqual({ forledd: 'opptil', tall: '20', enhet: '' })
+    expect(delIntervall(verdi(null, null))).toBeNull()
+    for (const v of [verdi(10, 300), verdi(1500, null), verdi(null, 20, '')]) {
+      const d = delIntervall(v)!
+      expect([d.forledd, d.tall, d.enhet].filter(Boolean).join(' ')).toBe(formaterIntervall(v))
+    }
+  })
+
+  it('står i to grupper: konsentrasjonene og kinetikken', () => {
+    expect(DATAKORTGRUPPER.map((g) => g.tittel)).toEqual(['Konsentrasjoner i serum', 'Kinetikk'])
+    const iGruppe = (gruppe: string) => DATAKORT.filter((k) => k.gruppe === gruppe).map((k) => k.type)
+    expect(iGruppe('konsentrasjon')).toEqual(['referanseomrade', 'toksisk_omrade', 'alvorlig_intoksikasjon'])
+    expect(iGruppe('kinetikk')).toEqual(['halveringstid', 'steady_state'])
   })
 
   it('leser tall slik de tastes, og avviser det som ikke er tall', () => {
@@ -246,6 +268,20 @@ describe('sidemodellen', () => {
     const modell = byggSidemodell(side())
     expect([...modell.paneler.keys()].sort()).toEqual(['dosering', 'farmakokinetikk'])
     expect(modell.paneler.get('farmakokinetikk')!.map((e) => e.id)).toEqual(['e2', 'e3'])
+  })
+
+  it('har panelene i monografens rekkefølge', () => {
+    expect(PANELREKKEFOLGE).toEqual([
+      'identitet',
+      'viktige_data',
+      'farmakodynamikk',
+      'indikasjon',
+      'preparater',
+      'dosering',
+      'farmakokinetikk',
+      'interaksjoner',
+      'serumkonsentrasjoner',
+    ])
   })
 
   it('nummererer referansene i leserekkefølgen på siden', () => {

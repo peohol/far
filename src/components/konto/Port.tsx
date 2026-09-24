@@ -1,4 +1,4 @@
-import { Component, Suspense, lazy, type ReactNode } from 'react'
+import { Component, Suspense, lazy, useId, type ReactNode } from 'react'
 import { useOkt } from '../../auth/okt'
 import type { Tilgang } from '../../domain/tilgang'
 import { useTheme } from '../../hooks/useTheme'
@@ -6,6 +6,7 @@ import { Button } from '../Button'
 import { Temaknapp } from '../toppmeny/Temaknapp'
 import { Forstegangsoppsett } from './Forstegangsoppsett'
 import { Innlogging } from './Innlogging'
+import { Logomerke } from './Logomerke'
 
 /**
  * Den kliniske appen, hentet først når noen faktisk er logget inn.
@@ -40,37 +41,76 @@ export function Port() {
   return <Portskall viser={tilgang} />
 }
 
+type Portvisning = Exclude<Tilgang, 'app' | 'venter'>
+
+/** Overskriften på kortet for hver av skjermene porten kan vise. */
+const TITTEL: Record<Portvisning, string> = {
+  innlogging: 'Logg inn',
+  oppsett: 'Velg ditt eget passord',
+  feil: 'Ingen kontakt',
+}
+
 /**
- * Rammen rundt innlogging, førstegangsoppsett og kontaktfeil.
+ * Innlogging, førstegangsoppsett og kontaktfeil.
  *
  * Her står bare det som må stå utenfor innloggingsveggen. Endringsloggen er
  * ikke blant det: den hører til inne i appen, og skal ikke kunne leses av noen
  * som ikke er logget inn.
  */
-function Portskall({ viser }: { viser: Exclude<Tilgang, 'app' | 'venter'> }) {
+function Portskall({ viser }: { viser: Portvisning }) {
+  return (
+    <Portramme
+      tittel={TITTEL[viser]}
+      bred={viser === 'oppsett'}
+      notis={viser === 'innlogging' ? 'OUSFAR er lukket. Kontoer opprettes av en administrator.' : undefined}
+    >
+      {viser === 'oppsett' && <Forstegangsoppsett />}
+      {viser === 'innlogging' && <Innlogging />}
+      {viser === 'feil' && <Kontaktfeil />}
+    </Portramme>
+  )
+}
+
+/**
+ * Rammen for alt porten viser: temaknappen alene i hjørnet, merket og
+ * ordmerket over, og kortet med overskriften. Uten toppmeny — den hører til
+ * inne i appen.
+ */
+function Portramme({
+  tittel,
+  bred,
+  notis,
+  children,
+}: {
+  tittel: string
+  bred?: boolean
+  /** En linje under kortet, for det som gjelder alle som står her. */
+  notis?: string | undefined
+  children: ReactNode
+}) {
   const { theme, toggle } = useTheme()
+  const tittelId = useId()
 
   return (
     <div className="port">
-      <div className="verktoylinje">
-        <Temaknapp theme={theme} onToggleTheme={toggle} />
+      <div className="port__tema">
+        <Temaknapp theme={theme} onToggleTheme={toggle} variant="kant" storrelse="kontroll" />
       </div>
 
-      <main
-        className={['portkort', viser === 'oppsett' && 'portkort--bred']
-          .filter(Boolean)
-          .join(' ')}
-      >
-        <header className="portkort__topp">
-          <h1 className="portkort__tittel">OUSFAR</h1>
-          <p className="portkort__undertittel">
-            Fortolkning og kommentering av farmakologiske analyser
-          </p>
-        </header>
+      <main className={['port__innhold', bred && 'port__innhold--bred'].filter(Boolean).join(' ')}>
+        <p className="port__merke">
+          <Logomerke />
+          <span className="port__ordmerke">OUSFAR</span>
+        </p>
 
-        {viser === 'oppsett' && <Forstegangsoppsett />}
-        {viser === 'innlogging' && <Innlogging />}
-        {viser === 'feil' && <Kontaktfeil />}
+        <section className="portkort" aria-labelledby={tittelId}>
+          <h1 id={tittelId} className="portkort__tittel">
+            {tittel}
+          </h1>
+          {children}
+        </section>
+
+        {notis && <p className="port__notis">{notis}</p>}
       </main>
     </div>
   )
@@ -118,20 +158,14 @@ class Hentefeil extends Component<{ children: ReactNode }, { feilet: boolean }> 
     if (!this.state.feilet) return this.props.children
 
     return (
-      <div className="port">
-        <main className="portkort">
-          <header className="portkort__topp">
-            <h1 className="portkort__tittel">OUSFAR</h1>
-          </header>
-          <div className="skjema">
-            <p className="skjemafeil" role="alert">
-              Fikk ikke hentet appen. Det skjer gjerne rett etter at OUSFAR er oppdatert. Last
-              siden på nytt.
-            </p>
-            <Button onClick={() => window.location.reload()}>Last siden på nytt</Button>
-          </div>
-        </main>
-      </div>
+      <Portramme tittel="Fikk ikke hentet appen">
+        <div className="skjema">
+          <p className="skjemafeil" role="alert">
+            Det skjer gjerne rett etter at OUSFAR er oppdatert. Last siden på nytt.
+          </p>
+          <Button onClick={() => window.location.reload()}>Last siden på nytt</Button>
+        </div>
+      </Portramme>
     )
   }
 }

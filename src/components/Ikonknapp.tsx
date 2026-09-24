@@ -20,6 +20,11 @@ export interface IkonknappProps extends Omit<ButtonHTMLAttributes<HTMLButtonElem
   storrelse?: 'kontroll' | 'liten'
   /** Noe som skal stå i knappen i stedet for ikonet, som et profilbilde. */
   innhold?: ReactNode
+  /**
+   * Uten tooltip, der boblen ikke kan vises: i et modalt lag ligger siden,
+   * og dermed boblen, under laget. Navnet står fortsatt for skjermlesere.
+   */
+  utenTips?: boolean
 }
 
 /**
@@ -28,7 +33,7 @@ export interface IkonknappProps extends Omit<ButtonHTMLAttributes<HTMLButtonElem
  * Ikonet spiller animasjonen sin når knappen får peker eller fokus.
  */
 export const Ikonknapp = forwardRef<HTMLButtonElement, IkonknappProps>(function Ikonknapp(
-  { ikon, etikett, variant = 'myk', storrelse = 'kontroll', innhold, className, ...rest },
+  { ikon, etikett, variant = 'myk', storrelse = 'kontroll', innhold, utenTips, className, ...rest },
   ref,
 ) {
   const tips = useTips(etikett, { skjermleser: false })
@@ -52,7 +57,7 @@ export const Ikonknapp = forwardRef<HTMLButtonElement, IkonknappProps>(function 
       data-storrelse={storrelse}
       data-ih=""
       aria-label={etikett}
-      {...tipsprops}
+      {...(utenTips ? {} : tipsprops)}
       {...rest}
     >
       {innhold ?? <Ikon navn={ikon} storrelse="ui" />}

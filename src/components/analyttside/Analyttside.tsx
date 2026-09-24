@@ -1,9 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { Analyttkatalog } from '../../domain/analyttkatalog'
-import { byggSidemodell, referanseunivers, type Publiseringssteg } from '../../faginnhold/analyttside'
-import { endredeFelt } from '../../faginnhold/historikk'
-import type { Analyttsidedata, Regelsettutgave } from '../../faginnhold/lesing'
-import { PANELER, lesKinetikk, panelFor } from '../../faginnhold/paneler'
+import { byggSidemodell, referanseunivers } from '../../faginnhold/analyttside'
+import { PANELER } from '../../faginnhold/paneler'
 import { indekserSide, sokeord } from '../../faginnhold/sok'
 import { lagLiggerOver, skrivesIFelt } from '../../hooks/useKeyboard'
 import type { Analyte } from '../../types'
@@ -20,13 +18,14 @@ import { finnKobling, Preparatpanel, preparatsoketekster } from './Preparatpanel
 import { useLegemidler } from './useLegemidler'
 import { Interaksjonspanel, interaksjonssoketekster } from './Interaksjonspanel'
 import { useInteraksjoner } from './useInteraksjoner'
-import { Datakortpanel, Kortpanel, Tabellpanel, Tekstpanel, type Panelkontekst } from './Paneler'
+import { Kortpanel, Tabellpanel, Tekstpanel, type Panelkontekst } from './Paneler'
+import { ViktigeData } from './ViktigeData'
 import { Redigeringskilde } from './Redigeringskontekst'
+import { Redigeringshandlinger } from './Redigeringslinje'
 import { Sidesok } from './Sidesok'
 import { Scenarioregler, useScenarioreglerFor } from '../regler/Scenarioregler'
 import { Uthevingskilde } from '../Uthev'
-import { Fortolkningsregler, regelsettfelterMedTekst } from '../regler/Fortolkningsregler'
-import { losRegelsett } from '../../regler/kommentarer'
+import { Fortolkningsregler } from '../regler/Fortolkningsregler'
 import { festreferanser } from '../../legemiddeldata/referanser'
 import { useAnalyttside, type Sidemodus } from './useAnalyttside'
 
@@ -45,10 +44,10 @@ export interface AnalyttsideProps {
 /**
  * Informasjonssiden for en analyttkode.
  *
- * Siden er et oppslagsverk: sju paneler i fast rekkefølge (se
+ * Siden er et oppslagsverk: panelene i fast rekkefølge (se
  * `src/faginnhold/paneler.ts`), med referansene nummerert etter første
- * forekomst og listet nederst. Identiteten står alltid fram; de andre
- * panelene er seksjoner som åpnes og lukkes, med en kort oppsummering når de
+ * forekomst og listet nederst. Identiteten og viktige data står alltid fram
+ * øverst; de andre panelene er seksjoner som åpnes og lukkes, med en kort oppsummering når de
  * er lukket (`src/components/seksjoner/`). En adresse med et sted etter koden
  * åpner seksjonen eller detaljkortet den peker på. Den åpnes fra sidemenyen, fra kodepillene i
  * fortolkningsmodulene og fra sin egen adresse, og har «Åpne fortolkning» for
@@ -200,22 +199,32 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
     <section ref={beholder} className="analyttside" aria-labelledby={overskrift} data-modus={modus}>
       {/* Sidens handlinger står i toppmenyen (i dokken på smale flater). */}
       <ToppmenyInnhold spor="handlinger">
-        <Toppmenyknapp
-          ikon="interp"
-          variant="primar"
-          onClick={() => onApneFortolkning(oppforing.fortolkning)}
-        >
-          Åpne fortolkning
-        </Toppmenyknapp>
-        {kanRedigere &&
-          (modus === 'rediger' ? (
-            <Toppmenyknapp ikon="close" aria-pressed="true" onClick={() => setModus('lese')}>
-              Avslutt redigering
+        {/* Mens siden redigeres, er det redigeringen som står i menyen; veien
+            ut er «Avslutt redigering», og Escape lukker siden som før. */}
+        {kanRedigere && modus === 'rediger' ? (
+          <Redigeringshandlinger
+            data={side.data}
+            publisertRegelsett={publisertRegelsett}
+            plan={plan}
+            laster={!redigerer}
+            onPubliser={handlinger.publiser}
+            onAvslutt={() => setModus('lese')}
+          />
+        ) : (
+          <>
+            <Toppmenyknapp
+              ikon="interp"
+              variant="primar"
+              onClick={() => onApneFortolkning(oppforing.fortolkning)}
+            >
+              Åpne fortolkning
             </Toppmenyknapp>
-          ) : (
-            <Ikonknapp ikon="edit" etikett="Rediger" aria-pressed="false" onClick={() => setModus('rediger')} />
-          ))}
-        <Lukkeknapp onLukk={onLukk} />
+            {kanRedigere && (
+              <Ikonknapp ikon="edit" etikett="Rediger" aria-pressed="false" onClick={() => setModus('rediger')} />
+            )}
+            <Lukkeknapp onLukk={onLukk} />
+          </>
+        )}
       </ToppmenyInnhold>
 
       <Sidesok
@@ -226,14 +235,8 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
         innholdsnokkel={side.data}
       />
 
-      {modus === 'rediger' && (
-        <Redigeringsstripe
-          data={side.data}
-          publisertRegelsett={publisertRegelsett}
-          plan={plan}
-          laster={!redigerer}
-          onPubliser={handlinger.publiser}
-        />
+      {modus === 'rediger' && redigerer && !side.data.analytt && (
+        <p className="redigeringsstripe">Siden opprettes i databasen første gang du lagrer noe på den.</p>
       )}
       {konflikt && (
         <div className="sidevarsel" role="alert">
@@ -294,7 +297,7 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
                       />
                     )
                   case 'datakort':
-                    return <Datakortpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
+                    return <ViktigeData key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                   case 'tekst':
                     return <Tekstpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                   case 'kort':
@@ -321,138 +324,5 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
         </Sidereferanser>
       </Uthevingskilde>
     </section>
-  )
-}
-
-/**
- * Hva et publiseringssteg gjelder, slik det står i oppsummeringen. For
- * regelsettet står også hva som er endret siden det som er publisert.
- */
-export function beskrivSteg(
-  steg: Publiseringssteg,
-  data: Analyttsidedata,
-  publisertRegelsett: Regelsettutgave | null = null,
-): string {
-  switch (steg.slag) {
-    case 'intervallregelsett': {
-      const regelsett = data.regelsett
-      const navn = `Fortolkningsreglene for ${regelsett?.regelsett.innhold.analyttkode ?? 'koden'}`
-      if (!regelsett || !publisertRegelsett) return navn
-      const endret = endredeFelt(
-        regelsettfelterMedTekst(losRegelsett(publisertRegelsett)),
-        regelsettfelterMedTekst(losRegelsett(regelsett)),
-      )
-      return endret.length > 0 ? `${navn} (${endret.join(', ')})` : navn
-    }
-    case 'kommentar': {
-      const kommentar = data.regelsett?.kommentarer.find((k) => k.id === steg.id)
-      return `Kommentar: ${kommentar?.innhold.navn ?? 'en kommentar fortolkningsreglene bruker'}`
-    }
-    case 'referanse': {
-      const referanse = data.referanser.find((r) => r.id === steg.id)
-      return `Referanse: ${referanse?.innhold.tittel || referanse?.innhold.forfattere || 'uten tittel'}`
-    }
-    case 'komponent': {
-      const side = data.komponenter.find((k) => k.id === steg.id)
-      return `Siden for ${side?.innhold.navn ?? 'en komponent'}`
-    }
-    case 'infoside':
-      return `Siden ${data.infoside?.innhold.navn ?? ''} og kildene for panelene`.replace('  ', ' ')
-    case 'laboratorieanalytt':
-      return `Analyttkoden ${data.analytt?.innhold.kode ?? ''}`
-    case 'innholdselement': {
-      const element = data.elementer.find((e) => e.id === steg.id)
-      if (!element) return 'Et kort'
-      const panel = panelFor(element.innhold.panel)
-      const tittel = lesKinetikk(element.innhold.data).tittel
-      if (!panel) return tittel ? `Fjernet: ${tittel}` : 'Et fjernet kort'
-      return [panel.tittel, tittel].filter(Boolean).join(' › ')
-    }
-  }
-}
-
-/**
- * Stripa øverst i redigeringsmodus: hva modusen betyr, og publiseringen.
- * Før noe publiseres, vises hva som vil bli synlig for alle.
- */
-function Redigeringsstripe({
-  data,
-  publisertRegelsett,
-  plan,
-  laster,
-  onPubliser,
-}: {
-  data: Analyttsidedata
-  publisertRegelsett: Regelsettutgave | null
-  plan: Publiseringssteg[]
-  /** Sant mens utkastet hentes etter at redigeringen er slått på. */
-  laster: boolean
-  onPubliser: () => Promise<void>
-}) {
-  const [bekrefter, setBekrefter] = useState(false)
-  const [publiserer, setPubliserer] = useState(false)
-  const [feil, setFeil] = useState<string | null>(null)
-  const [ferdig, setFerdig] = useState(false)
-  const tittel = useId()
-
-  const publiser = async () => {
-    setPubliserer(true)
-    setFeil(null)
-    try {
-      await onPubliser()
-      setFerdig(true)
-      setBekrefter(false)
-    } catch (e) {
-      setFeil((e as Error).message)
-    } finally {
-      setPubliserer(false)
-    }
-  }
-
-  return (
-    <div className="redigeringsstripe" role="region" aria-labelledby={tittel}>
-      <p id={tittel} className="redigeringsstripe__tekst">
-        <strong>Redigeringsmodus.</strong> Du ser utkastet. Endringene blir synlige for andre først når de
-        publiseres.
-      </p>
-      {!data.analytt && !laster && (
-        <p className="redigeringsstripe__tekst">Siden opprettes i databasen første gang du lagrer noe på den.</p>
-      )}
-      {laster ? (
-        <p className="redigeringsstripe__tekst" role="status">
-          Henter utkastet …
-        </p>
-      ) : plan.length === 0 ? (
-        <p className="redigeringsstripe__tekst" role="status">
-          {ferdig ? 'Alt er publisert.' : 'Ingen upubliserte endringer.'}
-        </p>
-      ) : bekrefter ? (
-        <div className="publisering">
-          <p className="redigeringsstripe__tekst">Dette blir publisert og synlig for alle:</p>
-          <ul className="publisering__liste">
-            {plan.map((steg) => (
-              <li key={steg.id}>{beskrivSteg(steg, data, publisertRegelsett)}</li>
-            ))}
-          </ul>
-          {feil && (
-            <p className="skjemafeil" role="alert">
-              {feil}
-            </p>
-          )}
-          <div className="skjema__knapper">
-            <Button variant="subtle" onClick={() => setBekrefter(false)}>
-              Avbryt
-            </Button>
-            <Button className="knapp--kompakt" disabled={publiserer} onClick={() => void publiser()}>
-              {publiserer ? 'Publiserer …' : 'Publiser nå'}
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <Button className="knapp--kompakt" onClick={() => setBekrefter(true)}>
-          Publiser endringene ({plan.length})
-        </Button>
-      )}
-    </div>
   )
 }
