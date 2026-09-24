@@ -16,14 +16,25 @@ offentlige kilder.
   står der.
 - **Detaljkort** i en åpen seksjon er mindre skuffer med sin egen
   oppsummering.
+- **Bare én skuff per nivå står åpen.** Åpnes en seksjon, lukkes den som sto
+  åpen; åpnes et detaljkort, lukkes de andre kortene i samme seksjon, mens
+  seksjonen står åpen. Det gjelder uansett hva som åpner skuffen: et trykk,
+  en direktelenke, søket på siden eller nettleserens eget søk. Et detaljkort
+  husker at det sto åpent når seksjonen lukkes og åpnes igjen.
+- Når brukeren åpner en skuff, ruller siden til toppen av den, under den
+  faste toppmenyen. Søsknene som lukkes, lukkes straks, så toppen står stille
+  mens siden ruller dit.
 - Identiteten øverst på siden, og kritiske varsler, er ikke skuffer. De står
   alltid fram.
 - Pilen foran overskriften viser om skuffen er åpen. Hele hodet kan trykkes
-  på; knappene i det (redigering, referansepiller) gjør sin egen jobb.
-- Åpning og lukking glir raskt. Den som har bedt om mindre bevegelse i
-  systemet, får skuffen åpnet og lukket uten glidning.
-- «Åpne alle» og «Lukk alle» står i verktøylinja. I redigeringsmodus åpnes
-  alt, så redaktøren ser hele siden.
+  på; knappene i det gjør sin egen jobb. Handlingene i hodet (som «Kilder for
+  panelet») virker på innholdet, så de åpner også skuffen; knappene i
+  overskriften (referansepillene) gjør det ikke.
+- Åpning glir raskt. Den som har bedt om mindre bevegelse i systemet, får
+  skuffen åpnet og lukket, og siden rullet, uten glidning.
+- Det finnes ingen «Åpne alle». Heller ikke redigeringsmodus åpner alt:
+  redaktøren åpner seksjonen som skal redigeres, og en handling i hodet åpner
+  seksjonen skjemaet står i.
 - Ved utskrift står alt åpent.
 
 ## Hvordan det brukes i koden
@@ -95,18 +106,24 @@ siden er hentet. Adressene lages med `analyttadresse(kode, sted)` i
 ## Styringen for siden
 
 `SeksjonsstyringKilde` (`Seksjonsstyring.tsx`) ligger rundt hele stoffsiden og
-holder rede på hvilke skuffer som er åpne, med seksjonens ID — og kortets, med
-`/` imellom — som nøkkel. `useSeksjonsstyring()` gir:
+holder rede på hvilken skuff som er åpen i hver søskenflokk — skuffene med
+samme forelder. Nøkkelen er seksjonens ID, og kortets med `/` imellom.
+Tilstanden er *hvilken* skuff som er åpen, ikke om hver enkelt er det, så
+regelen om én åpen per nivå kan ikke brytes. `useSeksjonsstyring()` gir:
 
 | | |
 | --- | --- |
-| `apne(['seksjon', 'kort'])` | Åpner stedet og ruller dit |
-| `apneTil(element)` | Åpner skuffene elementet står i, og ruller det fram |
-| `settAlle(true/false)` | Åpner eller lukker alle, også skuffer som kommer til senere |
-| `alleApne` | Om alle skuffene på siden er åpne |
+| `apne(['seksjon', 'kort'])` | Åpner stedet uten å gli, lukker søsknene, og ruller dit |
+| `apneTil(element)` | Åpner skuffene elementet står i på samme måte, og ruller det fram |
+| `sett(sti, apen)` | Det et trykk gjør: åpner (og ruller til toppen) eller lukker |
 
-Uten styringen rundt seg holder hver skuff tilstanden selv, så seksjonene kan
-også brukes andre steder.
+Står flere søsken åpne fra start (`apenFraStart`), er det den første som
+gjelder. En seksjon uten styringen rundt seg lager sin egen, så detaljkortene
+i den følger den samme regelen også andre steder.
+
+Hvor langt ned på siden en skuff legges når siden ruller dit, står i
+`seksjoner.css` som `scroll-margin-top: var(--toppmeny-offset, …)`, der
+`--toppmeny-offset` er høyden til den faste toppmenyen med luft under.
 
 ## Tilgjengelighet
 

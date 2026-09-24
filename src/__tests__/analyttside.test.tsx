@@ -404,6 +404,22 @@ function kilde({
   return { leser, lager, kanRedigere, legemidler: legemiddelleser() }
 }
 
+/** Knappen som åpner og lukker skuffen med navnet, også når skuffen står skjult. */
+function skuffen(navn: string): HTMLElement {
+  const knapp = screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))
+  if (!knapp) throw new Error(`Fant ingen skuff som heter «${navn}»`)
+  return knapp
+}
+
+/**
+ * Åpner skuffen med navnet, slik brukeren gjør. Bare én skuff per nivå står
+ * åpen, så også en redaktør åpner seksjonen som skal redigeres.
+ */
+async function apneSkuff(user: ReturnType<typeof userEvent.setup>, navn: string) {
+  const knapp = await waitFor(() => skuffen(navn))
+  if (knapp.getAttribute('aria-expanded') !== 'true') await user.click(knapp)
+}
+
 function vis(kode: string, k = kilde(), sted?: string[]) {
   const onApneFortolkning = vi.fn()
   const onLukk = vi.fn()
@@ -439,12 +455,12 @@ describe('lesemodus', () => {
     expect(setning.textContent).toBe('AMTNORSUM er en sumanalyse og omfatter amitriptylin og nortriptylin (NOR).')
     expect(within(setning).getByRole('link', { name: /NOR/ }).getAttribute('href')).toBe('#/analytt/NOR')
 
-    // Teksten står i en lukket seksjon til den åpnes.
-    await user.click(screen.getByRole('button', { name: 'Farmakodynamikk' }))
-
     // Datakortet (panel 2) siterer A, teksten i panel 3 A og B, panelet B:
     // A blir 1 og B blir 2, og listen nederst følger numrene.
     expect(screen.getByRole('button', { name: 'Referanse 1' })).toBeTruthy()
+
+    // Teksten står i en lukket seksjon til den åpnes.
+    await user.click(screen.getByRole('button', { name: 'Farmakodynamikk' }))
     expect(screen.getByRole('button', { name: 'Referanse 2' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Referanser 1, 2' })).toBeTruthy()
     const liste = screen.getByRole('region', { name: 'Referanser' })
@@ -594,23 +610,51 @@ describe('seksjonene', () => {
     await waitFor(() => expect(apen('Farmakodynamikk')).toBe(true))
   })
 
-  it('åpner og lukker alle seksjonene', async () => {
+  it('holder bare én seksjon åpen, og har ingen knapp for å åpne alle', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM')
     await screen.findByText('10–20 nmol/L')
-    await user.click(screen.getByRole('button', { name: 'Åpne alle' }))
-    expect(apen('Farmakodynamikk') && apen('Viktige data')).toBe(true)
-    await user.click(screen.getByRole('button', { name: 'Lukk alle' }))
-    expect(apen('Farmakodynamikk') || apen('Viktige data')).toBe(false)
+    expect(screen.queryByRole('button', { name: 'Åpne alle' })).toBeNull()
+    await user.click(skuffknapp('Farmakodynamikk'))
+    expect(apen('Farmakodynamikk')).toBe(true)
+    expect(apen('Viktige data')).toBe(false)
+    await user.click(skuffknapp('Viktige data'))
+    expect(apen('Viktige data')).toBe(true)
+    expect(apen('Farmakodynamikk')).toBe(false)
   })
 
-  it('åpner alt i redigeringsmodus, også panelene som bare vises der', async () => {
+  it('åpner søkets treff i én seksjon om gangen', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM')
+    await screen.findByText('10–20 nmol/L')
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'hemmer')
+    await user.click(within(await screen.findByRole('list', { name: 'Hvor treffene står' })).getByRole('button'))
+    expect(apen('Farmakodynamikk')).toBe(true)
+    expect(apen('Viktige data')).toBe(false)
+  })
+
+  it('åpner ikke alt i redigeringsmodus; redaktøren åpner seksjonen, også de som bare vises der', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM', kilde({ kanRedigere: true }))
     await screen.findByText('10–20 nmol/L')
+    await user.click(skuffknapp('Farmakodynamikk'))
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
-    await screen.findByRole('button', { name: 'Legg til: Dosering' })
-    expect(apen('Dosering') && apen('Farmakodynamikk')).toBe(true)
+    await screen.findByRole('heading', { level: 2, name: 'Dosering' })
+    // Det som sto åpent, står fortsatt åpent, og bare det.
+    await screen.findByRole('button', { name: 'Rediger: Farmakodynamikk' })
+    expect(apen('Farmakodynamikk')).toBe(true)
+    expect(apen('Dosering') || apen('Viktige data')).toBe(false)
+    expect(screen.queryByRole('button', { name: 'Legg til: Dosering' })).toBeNull()
+
+    await user.click(skuffknapp('Dosering'))
+    expect(await screen.findByRole('button', { name: 'Legg til: Dosering' })).toBeTruthy()
+    expect(apen('Farmakodynamikk')).toBe(false)
+
+    // «Kilder for panelet» i hodet åpner seksjonen skjemaet står i.
+    const indikasjon = screen.getByRole('region', { name: 'Indikasjon' })
+    await user.click(within(indikasjon).getByRole('button', { name: 'Kilder for panelet' }))
+    expect(apen('Indikasjon')).toBe(true)
+    expect(apen('Dosering')).toBe(false)
   })
 })
 
@@ -885,6 +929,7 @@ describe('redigeringsmodus', () => {
     k.leser.finnInfosider = vi.fn(async () => [utgave('nortriptylin', { navn: 'Nortriptylin' })])
     const { lager, leser } = vis('AMTNORSUM', k)
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await apneSkuff(user, 'Preparater')
     await user.click(await screen.findByRole('button', { name: 'Legg til: Koblingen til legemiddeldataene' }))
     const skjema = screen.getByRole('form', { name: 'Rediger: Koblingen til legemiddeldataene' })
     // Søket står ferdig utfylt med sidens navn, og likt navn er et forslag.
@@ -979,6 +1024,7 @@ describe('rikteksteditoren', () => {
     vis('AMTNORSUM', kilde({ kanRedigere: true }))
     await screen.findByText('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await apneSkuff(user, 'Farmakodynamikk')
     await user.click(await screen.findByRole('button', { name: 'Rediger: Farmakodynamikk' }))
 
     const rad = await screen.findByRole('toolbar', { name: 'Formatering – Farmakodynamikk' })
@@ -1026,6 +1072,8 @@ describe('kortene i farmakokinetikken', () => {
     const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort() }))
     await screen.findByText('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await apneSkuff(user, 'Farmakokinetikk')
+    await apneSkuff(user, 'Absorpsjon')
     await user.click(await screen.findByRole('button', { name: 'Flytt ned: Absorpsjon' }))
     // Begge sto på plass 0, i ID-rekkefølge. Metabolisme blir stående på 0;
     // bare Absorpsjon får ny plass og lagres.
@@ -1084,6 +1132,8 @@ describe('kortene i farmakokinetikken', () => {
     const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort() }))
     await screen.findByText('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await apneSkuff(user, 'Farmakokinetikk')
+    await apneSkuff(user, 'Metabolisme')
     await user.click(await screen.findByRole('button', { name: 'Fjern: Metabolisme' }))
     expect(lager.lagreUtkast).not.toHaveBeenCalled()
     await user.click(screen.getByRole('button', { name: 'Bekreft: fjern Metabolisme' }))
@@ -1249,7 +1299,7 @@ describe('fortolkningsreglene', () => {
 
   it('viser historikken med hvem, når og hva som er endret, og gjenoppretter som en ny revisjon', async () => {
     const { user, lager } = await redigerer()
-    const seksjon = screen.getByRole('region', { name: 'Fortolkning' })
+    const seksjon = await apneFortolkning(user)
     await user.click(within(seksjon).getByRole('button', { name: /Vis historikken for fortolkningsreglene/ }))
     const vindu = await screen.findByRole('dialog', { name: 'Historikk: Fortolkningsreglene' })
 

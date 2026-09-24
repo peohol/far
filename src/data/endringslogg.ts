@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.22.2',
+    versjon: '1.23.1',
     dato: '2026-09-24',
     sammendrag: 'Grunnlaget for å søke i alle stoffsidene samtidig',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,20 @@ export const ENDRINGSLOGG: Endring[] = [
       'Appen kan nå lese og søke gjennom alle de publiserte stoffsidene på én gang: navn, koder, andre navn, preparatnavn, interaksjoner, overskrifter, verdier, tekst og kilder. Hvert treff peker på seksjonen eller kortet det står i. Søkefeltet som bruker dette, kommer i en senere versjon.',
       'Søket på stoffsiden rangerer stedene under søkefeltet litt annerledes: preparatnavn kommer etter navn og komponenter, og en tekst som begynner med søkeordet kommer foran en der ordet står lenger inne.',
       'Kommenteringen er uendret. Analysene, kommentartekstene og fortolkningsreglene er de samme som før.',
+    ],
+  },
+  {
+    versjon: '1.23.0',
+    dato: '2026-09-24',
+    sammendrag: 'Bare én skuff står åpen om gangen på stoffsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Når du åpner en seksjon på en stoffside, lukkes den som sto åpen. Det samme gjelder detaljkortene i en seksjon: åpner du ett, lukkes de andre, mens seksjonen står åpen.',
+      'Siden ruller til toppen av seksjonen eller kortet du åpnet.',
+      'Regelen gjelder også når en lenke, søket på siden eller nettleserens eget søk åpner noe.',
+      '«Åpne alle» og «Lukk alle» er fjernet. Redigeringsmodus åpner ikke lenger alt; du åpner seksjonen du vil redigere, og «Kilder for panelet» åpner seksjonen sin.',
+      'Fortolkningen, reglene og kommentartekstene er uendret.',
     ],
   },
   {

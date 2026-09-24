@@ -2,8 +2,10 @@
 /**
  * Seksjonene og detaljkortene (`src/components/seksjoner/`), prøvd for seg:
  * åpning og lukking, oppsummeringen, de to nivåene, styringen for siden,
- * søketreff i lukket innhold og nettleserens eget søk.
+ * regelen om én åpen skuff per nivå, rullingen, søketreff i lukket innhold og
+ * nettleserens eget søk.
  */
+import { readFileSync } from 'node:fs'
 import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -25,8 +27,8 @@ beforeAll(() => {
   window.matchMedia = ((sporring: string) => ({
     matches: redusert && sporring.includes('reduce'),
   })) as unknown as typeof window.matchMedia
-  Element.prototype.scrollIntoView = function (this: Element) {
-    rullet(this)
+  Element.prototype.scrollIntoView = function (this: Element, valg?: boolean | ScrollIntoViewOptions) {
+    rullet(this, valg)
   }
 })
 
@@ -94,24 +96,36 @@ describe('en seksjon', () => {
     expect(innhold.parentElement!.hasAttribute('data-glir')).toBe(false)
   })
 
-  it('åpnes med et trykk i hodet, men ikke med knappene der', async () => {
+  it('åpnes med et trykk i hodet, men ikke med knappene i overskriften', async () => {
+    const user = userEvent.setup()
+    const pille = vi.fn()
+    render(
+      <Seksjon id="a" tittel="A" oppsummering="Kort sagt" tittelTillegg={<button onClick={pille}>1</button>}>
+        <p>Innholdet</p>
+      </Seksjon>,
+    )
+    const knapp = screen.getByRole('button', { name: 'A' })
+    await user.click(screen.getByRole('button', { name: '1' }))
+    expect(pille).toHaveBeenCalled()
+    expect(knapp.getAttribute('aria-expanded')).toBe('false')
+    await user.click(screen.getByText('Kort sagt'))
+    expect(knapp.getAttribute('aria-expanded')).toBe('true')
+  })
+
+  it('åpnes når en handling i hodet trykkes, siden den virker på innholdet', async () => {
     const user = userEvent.setup()
     const handling = vi.fn()
     render(
-      <Seksjon
-        id="a"
-        tittel="A"
-        oppsummering="Kort sagt"
-        handlinger={<button onClick={handling}>Rediger</button>}
-      >
+      <Seksjon id="a" tittel="A" handlinger={<button onClick={handling}>Rediger</button>}>
         <p>Innholdet</p>
       </Seksjon>,
     )
     const knapp = screen.getByRole('button', { name: 'A' })
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
-    expect(handling).toHaveBeenCalled()
-    expect(knapp.getAttribute('aria-expanded')).toBe('false')
-    await user.click(screen.getByText('Kort sagt'))
+    expect(handling).toHaveBeenCalledTimes(1)
+    expect(knapp.getAttribute('aria-expanded')).toBe('true')
+    // En åpen skuff lukkes ikke av handlingen.
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
     expect(knapp.getAttribute('aria-expanded')).toBe('true')
   })
 
@@ -255,7 +269,7 @@ describe('styringen for siden', () => {
     // Søket åpner uten å gli, så treffet står der det skal når det rulles fram.
     expect(document.getElementById('panel-kinetikk')!.hasAttribute('data-stille')).toBe(true)
     await nesteBilde()
-    expect(rullet).toHaveBeenCalledWith(screen.getByTestId('treff'))
+    expect(rullet).toHaveBeenCalledWith(screen.getByTestId('treff'), expect.objectContaining({ block: 'center' }))
   })
 
   it('åpner et sted fra en lenke, også når detaljkortet kommer senere', async () => {
@@ -275,17 +289,230 @@ describe('styringen for siden', () => {
     await user.click(screen.getByRole('button', { name: 'Hent' }))
     expect(apen('Metabolisme')).toBe(true)
     await nesteBilde()
-    expect(rullet).toHaveBeenCalledWith(document.getElementById('panel-kinetikk--metabolisme'))
+    expect(rullet).toHaveBeenCalledWith(
+      document.getElementById('panel-kinetikk--metabolisme'),
+      expect.objectContaining({ block: 'start' }),
+    )
   })
 
-  it('åpner og lukker alle', async () => {
+  it('har ingen «åpne alle»', () => {
     render(<Side />)
-    expect(styring!.alleApne).toBe(false)
-    act(() => styring!.settAlle(true))
-    expect(['Kinetikk', 'Metabolisme', 'Dosering'].every(apen)).toBe(true)
-    expect(styring!.alleApne).toBe(true)
-    act(() => styring!.settAlle(false))
-    expect(['Kinetikk', 'Metabolisme', 'Dosering'].some(apen)).toBe(false)
+    expect(styring).not.toHaveProperty('settAlle')
+    expect(styring).not.toHaveProperty('alleApne')
+  })
+})
+
+describe('én åpen skuff per nivå', () => {
+  let styring: Seksjonsstyring | null = null
+  function Fanger() {
+    styring = useSeksjonsstyring()
+    return null
+  }
+
+  /** Tre seksjoner; Kinetikk har tre detaljkort. Viktige data står åpen fra start. */
+  function Side({ utenStyring = false }: { utenStyring?: boolean }) {
+    const seksjoner = (
+      <>
+        <Fanger />
+        <Seksjon id="viktige" tittel="Viktige" apenFraStart>
+          <p>Kjernen</p>
+        </Seksjon>
+        <Seksjon id="kinetikk" tittel="Kinetikk">
+          <Detaljkort id="absorpsjon" tittel="Absorpsjon">
+            <p>Opptaket</p>
+          </Detaljkort>
+          <Detaljkort id="metabolisme" tittel="Metabolisme">
+            <p>
+              Via <span data-testid="treff">CYP2D6</span>
+            </p>
+          </Detaljkort>
+          <Detaljkort id="eliminasjon" tittel="Eliminasjon">
+            <p>Utskillelsen</p>
+          </Detaljkort>
+        </Seksjon>
+        <Seksjon id="dosering" tittel="Dosering">
+          <p>Dosene</p>
+        </Seksjon>
+      </>
+    )
+    return utenStyring ? seksjoner : <SeksjonsstyringKilde>{seksjoner}</SeksjonsstyringKilde>
+  }
+
+  const knapp = (navn: string) => screen.getByRole('button', { name: navn, hidden: true })
+  /**
+   * Skuffene som står åpne og synlige, i rekkefølgen på siden. Et detaljkort
+   * husker at det sto åpent mens seksjonen er lukket, men står da skjult.
+   */
+  const apne = () =>
+    ['Viktige', 'Kinetikk', 'Absorpsjon', 'Metabolisme', 'Eliminasjon', 'Dosering'].filter(
+      (n) => knapp(n).getAttribute('aria-expanded') === 'true' && !knapp(n).closest('[hidden]'),
+    )
+
+  it('lukker de andre hovedseksjonene når en åpnes', async () => {
+    const user = userEvent.setup()
+    render(<Side />)
+    expect(apne()).toEqual(['Viktige'])
+    await user.click(knapp('Kinetikk'))
+    expect(apne()).toEqual(['Kinetikk'])
+    await user.click(knapp('Dosering'))
+    expect(apne()).toEqual(['Dosering'])
+    // Den som lukker den åpne, får alle lukket.
+    await user.click(knapp('Dosering'))
+    expect(apne()).toEqual([])
+  })
+
+  it('lukker de andre detaljkortene i seksjonen, og lar seksjonen stå åpen', async () => {
+    const user = userEvent.setup()
+    render(<Side />)
+    await user.click(knapp('Kinetikk'))
+    await user.click(knapp('Absorpsjon'))
+    expect(apne()).toEqual(['Kinetikk', 'Absorpsjon'])
+    await user.click(knapp('Eliminasjon'))
+    expect(apne()).toEqual(['Kinetikk', 'Eliminasjon'])
+    await user.click(knapp('Metabolisme'))
+    expect(apne()).toEqual(['Kinetikk', 'Metabolisme'])
+    // Kortet som sto åpent, står åpent igjen når seksjonen åpnes på nytt.
+    await user.click(knapp('Dosering'))
+    expect(apne()).toEqual(['Dosering'])
+    await user.click(knapp('Kinetikk'))
+    expect(apne()).toEqual(['Kinetikk', 'Metabolisme'])
+  })
+
+  it('følger regelen også i en seksjon uten styring for siden', async () => {
+    const user = userEvent.setup()
+    render(<Side utenStyring />)
+    await user.click(knapp('Kinetikk'))
+    await user.click(knapp('Absorpsjon'))
+    await user.click(knapp('Eliminasjon'))
+    expect(knapp('Absorpsjon').getAttribute('aria-expanded')).toBe('false')
+    expect(knapp('Eliminasjon').getAttribute('aria-expanded')).toBe('true')
+  })
+
+  it('ender i samme tilstand når en direktelenke åpner et sted', () => {
+    render(<Side />)
+    act(() => styring!.apne(['kinetikk', 'eliminasjon']))
+    expect(apne()).toEqual(['Kinetikk', 'Eliminasjon'])
+    act(() => styring!.apne(['kinetikk', 'absorpsjon']))
+    expect(apne()).toEqual(['Kinetikk', 'Absorpsjon'])
+    act(() => styring!.apne(['dosering']))
+    expect(apne()).toEqual(['Dosering'])
+  })
+
+  it('ender i samme tilstand når søket åpner skuffene rundt et treff', async () => {
+    const user = userEvent.setup()
+    render(<Side />)
+    await user.click(knapp('Kinetikk'))
+    await user.click(knapp('Absorpsjon'))
+    await user.click(knapp('Dosering'))
+    act(() => styring!.apneTil(screen.getByTestId('treff')))
+    expect(apne()).toEqual(['Kinetikk', 'Metabolisme'])
+  })
+
+  it('ender i samme tilstand når nettleserens eget søk åpner en skuff, uten å rulle selv', async () => {
+    const user = userEvent.setup()
+    render(<Side />)
+    await user.click(knapp('Kinetikk'))
+    await user.click(knapp('Absorpsjon'))
+    await user.click(knapp('Dosering'))
+    await nesteBilde()
+    rullet.mockClear()
+    act(() => {
+      innholdFor(knapp('Metabolisme')).dispatchEvent(new Event('beforematch'))
+    })
+    expect(apne()).toEqual(['Kinetikk', 'Metabolisme'])
+    // Søsknene er lukket straks, før nettleseren ruller til treffet.
+    expect(innholdFor(knapp('Dosering')).getAttribute('hidden')).toBe('until-found')
+    expect(innholdFor(knapp('Absorpsjon')).getAttribute('hidden')).toBe('until-found')
+    await nesteBilde()
+    expect(rullet).not.toHaveBeenCalled()
+  })
+
+  it('lar den første som står åpen fra start, være den åpne, og lukker den når en annen åpnes', () => {
+    render(
+      <SeksjonsstyringKilde>
+        <Fanger />
+        <Seksjon id="a" tittel="A" apenFraStart>
+          x
+        </Seksjon>
+        <Seksjon id="b" tittel="B" apenFraStart>
+          y
+        </Seksjon>
+      </SeksjonsstyringKilde>,
+    )
+    expect(knapp('A').getAttribute('aria-expanded')).toBe('true')
+    expect(knapp('B').getAttribute('aria-expanded')).toBe('false')
+    act(() => styring!.apne(['b']))
+    expect(knapp('A').getAttribute('aria-expanded')).toBe('false')
+    expect(knapp('B').getAttribute('aria-expanded')).toBe('true')
+  })
+})
+
+describe('rullingen', () => {
+  const knapp = (navn: string) => screen.getByRole('button', { name: navn, hidden: true })
+
+  function Side() {
+    return (
+      <SeksjonsstyringKilde>
+        <Seksjon id="a" tittel="A" apenFraStart>
+          <p>Første</p>
+        </Seksjon>
+        <Seksjon id="b" tittel="B">
+          <Detaljkort id="k" tittel="K">
+            <p>Kortet</p>
+          </Detaljkort>
+        </Seksjon>
+      </SeksjonsstyringKilde>
+    )
+  }
+
+  it('ruller til toppen av skuffen når brukeren har åpnet den og den er tegnet', async () => {
+    const user = userEvent.setup()
+    render(<Side />)
+    await user.click(knapp('B'))
+    await nesteBilde()
+    expect(rullet).toHaveBeenCalledWith(document.getElementById('panel-b'), { behavior: 'auto', block: 'start' })
+    await user.click(knapp('K'))
+    await nesteBilde()
+    expect(rullet).toHaveBeenLastCalledWith(document.getElementById('panel-b--k'), { behavior: 'auto', block: 'start' })
+  })
+
+  it('ruller ikke når skuffen lukkes', async () => {
+    const user = userEvent.setup()
+    render(<Side />)
+    await user.click(knapp('A'))
+    await nesteBilde()
+    expect(rullet).not.toHaveBeenCalled()
+  })
+
+  it('ruller jevnt og lar skuffen gli, men lukker søsknene straks', async () => {
+    redusert = false
+    const user = userEvent.setup()
+    render(<Side />)
+    await user.click(knapp('B'))
+    // Søskenet over lukkes uten å gli, så toppen av skuffen står stille mens siden ruller dit.
+    const a = document.getElementById('panel-a')!
+    expect(a.hasAttribute('data-stille')).toBe(true)
+    expect(innholdFor(knapp('A')).getAttribute('hidden')).toBe('until-found')
+    const b = document.getElementById('panel-b')!
+    expect(b.hasAttribute('data-stille')).toBe(false)
+    expect(innholdFor(knapp('B')).parentElement!.hasAttribute('data-glir')).toBe(true)
+    await nesteBilde()
+    expect(rullet).toHaveBeenCalledWith(b, { behavior: 'smooth', block: 'start' })
+  })
+
+  it('åpner uten å gli og ruller straks for den som har bedt om mindre bevegelse', async () => {
+    const user = userEvent.setup()
+    render(<Side />)
+    await user.click(knapp('B'))
+    expect(innholdFor(knapp('B')).parentElement!.hasAttribute('data-glir')).toBe(false)
+    expect(innholdFor(knapp('B')).hasAttribute('hidden')).toBe(false)
+    await nesteBilde()
+    expect(rullet).toHaveBeenCalledWith(document.getElementById('panel-b'), { behavior: 'auto', block: 'start' })
+  })
+
+  it('legger toppen av skuffen under den faste toppmenyen', () => {
+    const css = readFileSync('src/styles/seksjoner.css', 'utf8')
+    expect(css).toMatch(/\.skuff\s*\{\s*scroll-margin-top:\s*var\(--toppmeny-offset/)
   })
 })
 

@@ -10,12 +10,14 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react'
+import { flushSync } from 'react-dom'
 import { TREFFKLASSE, Uthevingskilde, useSokeord } from '../Uthev'
 import {
   SKUFFATTRIBUTT,
+  SeksjonsstyringKilde,
   skuffnokkel,
   useSeksjonsstyring,
-  type Skufftilstand,
+  type Seksjonsstyring,
 } from './Seksjonsstyring'
 import '../../styles/seksjoner.css'
 
@@ -28,12 +30,16 @@ import '../../styles/seksjoner.css'
  * - Det er to nivåer og ikke flere: seksjon → detaljkort. En seksjon i en
  *   seksjon, eller et detaljkort utenfor en seksjon eller i et annet, er en
  *   programmeringsfeil og stopper tegningen.
+ * - Bare én skuff per nivå står åpen: å åpne en skuff lukker søsknene, men
+ *   ikke forelderen (se `Seksjonsstyring`). Når brukeren åpner en skuff,
+ *   ruller siden til toppen av den.
  *
  * Innholdet står i dokumentet også når skuffen er lukket, skjult med
  * `hidden="until-found"`. Da finner både søket på siden og nettleserens eget
  * søk det: søket åpner skuffene rundt treffet (se `Seksjonsstyring`), og
- * nettleseren sier fra med `beforematch`, som åpner skuffen. Skjult innhold er
- * ellers utenfor tabulatorrekkefølgen og skjermleseren.
+ * nettleseren sier fra med `beforematch`, som åpner skuffen og lukker
+ * søsknene før nettleseren ruller til treffet. Skjult innhold er ellers
+ * utenfor tabulatorrekkefølgen og skjermleseren.
  *
  * Åpning og lukking glir raskt, med høyden fra 0fr til 1fr (samme grep som
  * `Details`), og skjer umiddelbart for den som har bedt om mindre bevegelse,
@@ -84,7 +90,11 @@ interface Felles {
    * innholdet.
    */
   oppsummering?: ReactNode
-  /** Knapper i hodet, f.eks. «Rediger». Står utenfor knappen som åpner og lukker. */
+  /**
+   * Knapper i hodet, f.eks. «Rediger». Står utenfor knappen som åpner og
+   * lukker, men virker på innholdet, så en lukket skuff åpnes når en av dem
+   * trykkes.
+   */
   handlinger?: ReactNode
   /** Om skuffen er åpen når siden tegnes. Lukket når ikke annet er sagt. */
   apenFraStart?: boolean
@@ -95,10 +105,22 @@ interface Felles {
 export type SeksjonProps = Felles
 export type DetaljkortProps = Felles
 
-/** Hovedseksjon på siden: en skuff med overskrift på nivå 2. */
+/**
+ * Hovedseksjon på siden: en skuff med overskrift på nivå 2. Står den ikke i en
+ * side med `SeksjonsstyringKilde`, får den sin egen, så detaljkortene i den
+ * følger den samme regelen.
+ */
 export function Seksjon(props: SeksjonProps) {
   const niva = useContext(Nivakontekst)
+  const styring = useSeksjonsstyring()
   if (niva) throw new Error(`Seksjonen «${props.id}» står inne i en annen skuff. Siden har bare to nivåer.`)
+  if (!styring) {
+    return (
+      <SeksjonsstyringKilde>
+        <Seksjon {...props} />
+      </SeksjonsstyringKilde>
+    )
+  }
   return (
     <Nivakontekst.Provider value={{ slag: 'seksjon', id: props.id }}>
       <Skuff {...props} slag="seksjon" sti={[props.id]} anker={seksjonsanker(props.id)} />
@@ -119,14 +141,11 @@ export function Detaljkort(props: DetaljkortProps) {
   )
 }
 
-/** Tilstanden til skuffen: fra styringen for siden når den finnes, ellers skuffens egen. */
-function useSkufftilstand(nokkel: string, apenFraStart: boolean): [Skufftilstand, (apen: boolean) => void] {
+/** Styringen skuffen står i. En seksjon lager sin egen når siden ikke har en, så den finnes alltid her. */
+function useStyring(): Seksjonsstyring {
   const styring = useSeksjonsstyring()
-  const [egen, setEgen] = useState<Skufftilstand>({ apen: apenFraStart, animer: true })
-  const registrer = styring?.registrer
-  useEffect(() => registrer?.(nokkel, apenFraStart), [registrer, nokkel, apenFraStart])
-  if (styring) return [styring.tilstand(nokkel, apenFraStart), (apen) => styring.sett(nokkel, apen)]
-  return [egen, (apen) => setEgen({ apen, animer: true })]
+  if (!styring) throw new Error('En skuff må stå i en seksjon.')
+  return styring
 }
 
 /** Interaktivt innhold i hodet som har sin egen jobb når det trykkes på. */
@@ -148,7 +167,14 @@ function Skuff({
   children,
 }: Felles & { slag: 'seksjon' | 'detalj'; sti: readonly string[]; anker: string }) {
   const nokkel = skuffnokkel(sti)
-  const [{ apen, animer }, sett] = useSkufftilstand(nokkel, apenFraStart)
+  const styring = useStyring()
+  const { registrer } = styring
+  // Stien er en ny liste ved hver tegning; nøkkelen sier når den er en annen.
+  const stien = useRef(sti)
+  stien.current = sti
+  useEffect(() => registrer(stien.current, apenFraStart), [registrer, nokkel, apenFraStart])
+  const { apen, animer } = styring.tilstand(sti, apenFraStart)
+  const sett = (apen: boolean) => styring.sett(sti, apen)
   const id = useId()
   const overskrift = `${id}-overskrift`
   const innholdId = `${id}-innhold`
@@ -160,14 +186,17 @@ function Skuff({
 
   useSkjuling(kropp, inner, apen, animer)
 
-  // Nettleserens eget søk fant noe i den lukkede skuffen.
+  // Nettleserens eget søk fant noe i den lukkede skuffen. Skuffen åpnes, og
+  // søsknene lukkes, før nettleseren ruller til treffet — så treffet står der
+  // nettleseren tror det står.
+  const { apneTil } = styring
   useEffect(() => {
     const el = inner.current
     if (!el) return
-    const aapne = () => sett(true)
+    const aapne = () => flushSync(() => apneTil(el, false))
     el.addEventListener('beforematch', aapne)
     return () => el.removeEventListener('beforematch', aapne)
-  })
+  }, [apneTil])
 
   const veksle = () => sett(!apen)
   // Et trykk hvor som helst i hodet åpner og lukker — men ikke på knappene i det.
@@ -175,6 +204,10 @@ function Skuff({
     if ((event.target as Element).closest(INTERAKTIVT)) return
     if (!window.getSelection()?.isCollapsed) return
     veksle()
+  }
+  // Knappene i hodet virker på innholdet, så det må stå fram.
+  const trykkPaaHandling = (event: MouseEvent<HTMLDivElement>) => {
+    if (!apen && (event.target as Element).closest(INTERAKTIVT)) sett(true)
   }
 
   const Overskrift = slag === 'seksjon' ? 'h2' : 'h3'
@@ -215,7 +248,11 @@ function Skuff({
             {treff === 1 ? '1 treff' : `${treff} treff`}
           </span>
         )}
-        {handlinger && <div className={`${KLASSE}__handlinger`}>{handlinger}</div>}
+        {handlinger && (
+          <div className={`${KLASSE}__handlinger`} onClick={trykkPaaHandling}>
+            {handlinger}
+          </div>
+        )}
         {visOppsummering && (
           <p id={oppsummeringId} className={`${KLASSE}__oppsummering`}>
             <Uthevingskilde ord={INGEN_ORD}>{oppsummering}</Uthevingskilde>
