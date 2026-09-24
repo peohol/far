@@ -1,0 +1,306 @@
+/* --- Stoffsidens paneler -------------------------------------------------
+   Farmakodynamikk, Indikasjon, Dosering, Farmakokinetikk, Interaksjoner og
+   Serumkonsentrasjoner i Atlas-uttrykket (referanseflate 2–4 i
+   «OUSFAR Monograf»). Selve skuffene står i `seksjoner.css`; her står
+   innholdet i dem. Alle verdier er tokens fra `tokens.css`. */
+
+/* Seksjonene står som en liste med hårlinjer mellom, uten luft mellom
+   radene. Det som ikke er en seksjon (identiteten), holder luften under seg. */
+.analyttside .analyttside__paneler {
+  gap: 0;
+}
+
+.analyttside__paneler > :not(.skuff--seksjon) {
+  margin-block-end: var(--rom-9);
+}
+
+.analyttside__paneler > :last-child {
+  margin-block-end: 0;
+}
+
+/* --- Lesetekst ------------------------------------------------------------
+   Prosa i panelene er serif i lesestørrelse, med en linjelengde som kan
+   leses. Et avsnitt som leder inn i en liste («Seroquel (filmdrasjerte
+   tabletter):»), er en ingress i UI-skrift. */
+.infotekst > .riktekst,
+.infokort__innhold > .riktekst {
+  gap: var(--rom-4);
+  max-width: 44em;
+  font: var(--vekt-normal) var(--tekst-lesing) / 1.55 var(--skrift-display);
+  color: var(--blekk);
+  text-wrap: pretty;
+}
+
+.infotekst > .riktekst p:has(+ ul, + ol) {
+  font: var(--vekt-halvfet) var(--tekst-ui) / 1.3 var(--skrift-ui);
+  color: var(--blekk-sterk);
+}
+
+.infotekst > .riktekst ul,
+.infotekst > .riktekst ol {
+  gap: var(--rom-2);
+  padding-left: var(--rom-7);
+}
+
+.infokort__innhold > .riktekst {
+  gap: var(--rom-2);
+  font-size: var(--tekst-ingress);
+  line-height: 1.5;
+}
+
+/* --- Dosering: ett kort per avsnitt --------------------------------------- */
+.dosekort {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: var(--rom-4);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dosekort__kort {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding: var(--rom-6) var(--rom-6);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort);
+}
+
+.dosekort__etikett {
+  font: var(--vekt-halvfet) var(--tekst-liten) / 1.2 var(--skrift-ui);
+  color: var(--blekk-dempet);
+}
+
+.dosekort__verdi > .riktekst {
+  font: var(--vekt-medium) var(--tekst-seksjon) / 1.15 var(--skrift-display);
+  color: var(--blekk-sterk);
+  font-variant-numeric: lining-nums;
+}
+
+.dosekort__verdi[data-lang] > .riktekst {
+  font: var(--vekt-normal) var(--tekst-lesing) / 1.45 var(--skrift-display);
+  color: var(--blekk);
+}
+
+/* --- Farmakokinetikk: kortene --------------------------------------------- */
+.infokort__innhold {
+  gap: var(--rom-3);
+}
+
+/* --- Interaksjoner ---------------------------------------------------------
+   Én rad per interaksjon, med stoffet i serif og graden som merke. Graden står
+   alltid i tekst; fargen følger den (rød «Bør unngås», amber «Forholdsregler
+   bør tas»). */
+.interaksjonsliste {
+  gap: var(--rom-3);
+  padding: 0;
+  list-style: none;
+}
+
+.interaksjonsliste .skuff--detalj > .skuff__hode .skuff__tittel {
+  font: var(--vekt-medium) var(--tekst-seksjon) / 1.1 var(--skrift-display);
+  font-size: var(--tekst-lesing);
+}
+
+.interaksjonsliste .skuff--detalj > .skuff__hode .skuff__oppsummering {
+  white-space: normal;
+}
+
+.interaksjon__relevans {
+  display: inline-block;
+  padding: var(--rom-1) var(--rom-3);
+  font: var(--vekt-halvfet) var(--tekst-meta) / 1.3 var(--skrift-ui);
+  border-radius: var(--runding-pille);
+}
+
+.interaksjon__relevans--unnga {
+  color: var(--alvorlig-blekk);
+  background: var(--alvorlig-flate);
+}
+
+.interaksjon__relevans--forholdsregler {
+  color: var(--toksisk-blekk);
+  background: var(--toksisk-flate);
+}
+
+.interaksjon__felter {
+  font-size: var(--tekst-ui);
+}
+
+.interaksjon__felter dt {
+  font: var(--vekt-halvfet) var(--tekst-liten) / 1.4 var(--skrift-ui);
+}
+
+.interaksjon__felter dd {
+  font: var(--vekt-normal) var(--tekst-ingress) / 1.5 var(--skrift-display);
+}
+
+.interaksjon__situasjon,
+.interaksjoner__ikke-vurdert {
+  color: var(--toksisk-blekk);
+  background: var(--toksisk-flate);
+  border-inline-start: var(--kant-tykk) solid var(--toksisk-kant);
+  border-radius: var(--runding-merke);
+}
+
+.interaksjoner__merknad {
+  font: italic var(--vekt-normal) var(--tekst-liten) / 1.4 var(--skrift-display);
+}
+
+/* --- Serumkonsentrasjoner ---------------------------------------------------
+   Som i kilden: én kolonne per dose og én rad per mål, med den samlede
+   kolonnen «Alle» sist og tonet. Tallene står med tabellsiffer, medianen
+   uthevet. På smale skjermer ruller tabellen sidelengs, og radoverskriftene
+   står fast til venstre. */
+.serumtabell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-7);
+  width: 100%;
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
+}
+
+.serumtabell__del {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  min-width: 0;
+}
+
+.serumtabell__hode {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+}
+
+.serumtabell__stoff {
+  margin: 0;
+  font: var(--vekt-halvfet) var(--tekst-ui) / 1.3 var(--skrift-ui);
+  color: var(--blekk-sterk);
+}
+
+.serumtabell__meta {
+  margin: 0;
+  font: italic var(--vekt-normal) var(--tekst-ingress) / 1.35 var(--skrift-display);
+  color: var(--blekk-dempet);
+}
+
+.serumtabell__rull {
+  max-width: 100%;
+  overflow-x: auto;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort);
+}
+
+.serumtabell__rull:focus-visible {
+  outline: var(--fokusring) solid var(--fokus);
+  outline-offset: var(--fokusring);
+}
+
+.serumtabell__tabell {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font: var(--vekt-normal) var(--tekst-ui) / 1.2 var(--skrift-ui);
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk);
+}
+
+.serumtabell__tabell th,
+.serumtabell__tabell td {
+  padding: var(--rom-3) var(--rom-4);
+  white-space: nowrap;
+  border-top: var(--kant) solid var(--linje);
+}
+
+.serumtabell__tabell tr:first-child > th,
+.serumtabell__tabell tr:first-child > td {
+  border-top: 0;
+}
+
+.serumtabell__tabell th {
+  font: var(--vekt-halvfet) var(--tekst-liten) / 1.2 var(--skrift-ui);
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+}
+
+/* Matrisen: dosene i serif over kolonnene, tallene høyrejustert. */
+.serumtabell__tabell--persentiler td,
+.serumtabell__tabell--prosjekt td,
+.serumtabell__dose {
+  text-align: right;
+}
+
+.serumtabell__tabell .serumtabell__dose {
+  font: var(--vekt-medium) var(--tekst-ui) / 1 var(--skrift-display);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--blekk-sterk);
+}
+
+.serumtabell__tabell tbody th[scope='row'] {
+  text-align: right;
+}
+
+/* Radoverskriftene står fast når tabellen ruller sidelengs. */
+.serumtabell__tabell--persentiler th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  border-right: var(--kant) solid var(--linje);
+}
+
+.serumtabell__tabell tr[data-felt='antall'] td {
+  color: var(--blekk-dempet);
+}
+
+.serumtabell__tabell tr[data-felt='median'] td {
+  font-weight: var(--vekt-fet);
+  color: var(--blekk-sterk);
+}
+
+.serumtabell__tabell [data-samlet] {
+  border-left: var(--kant) solid var(--linje-sterk);
+}
+
+.serumtabell__tabell td[data-samlet] {
+  background: var(--flate-hevet);
+}
+
+/* Referanseområdeprosjektet: to rader, bare så bred som den trenger. */
+.serumtabell__del--prosjekt .serumtabell__tabell {
+  align-self: flex-start;
+  width: auto;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort);
+  overflow: hidden;
+}
+
+/* Rader som ikke er en persentiltabell: vanlig tabell med tekst som brytes. */
+.serumtabell__tabell--rader th,
+.serumtabell__tabell--rader td {
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+}
+
+.serumtabell__tabell--rader th {
+  white-space: nowrap;
+}
+
+.serumtabell__tabell--rader td {
+  min-width: 8rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 47.5em) {
+  .serumtabell__tabell th,
+  .serumtabell__tabell td {
+    padding: var(--rom-2) var(--rom-3);
+  }
+}

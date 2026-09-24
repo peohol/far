@@ -96,6 +96,8 @@
   --ikon-seksjon: 2.25rem; /* 36 – i ikonsirkelen på 56 */
   --ikon-konsept: 3.75rem; /* 60 – datakortene i viktige data */
   --ikon-plot: 5rem; /* 80 – miniplottene for t½ og tss */
+  --ikon-sirkel: 3.5rem; /* 56 – sirkelen rundt seksjonsikonet */
+  --ikon-sirkel-smal: 2.75rem; /* 44 – samme sirkel på smale flater */
 
   /* --- Toppmeny og dokk ----------------------------------------------------
      Den ene faste toppmenyen svever over innholdet. `--toppmeny-offset` er

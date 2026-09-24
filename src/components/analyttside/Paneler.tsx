@@ -1,8 +1,7 @@
-import { useId, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import type { Sideelement, Sidemodell } from '../../faginnhold/analyttside'
 import {
   DATAKORT,
-  DOSEKOLONNER,
   ELEMENTTYPER,
   formaterIntervall,
   harVerdi,
@@ -13,8 +12,9 @@ import {
   type Datakortdefinisjon,
   type Paneldefinisjon,
 } from '../../faginnhold/paneler'
-import { antall, forhandsvisning, ramsOpp } from '../../faginnhold/oppsummering'
-import { erTomt, klartekst, tomtDokument } from '../../faginnhold/riktekst'
+import { doseringskort } from '../../faginnhold/doseringskort'
+import { OPPSUMMERINGSSKILLE, antall, forhandsvisning, ramsOpp } from '../../faginnhold/oppsummering'
+import { NODER, erTomt, klartekst, tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
 import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
 import { Referansefelt } from '../referanser/Referansefelt'
@@ -31,6 +31,9 @@ import {
 import { Uthev } from '../Uthev'
 import { Sistredigert } from '../historikk/Sistredigert'
 import type { Analyttsidehandlinger } from './useAnalyttside'
+import { kinetikkikon, seksjonsikon, tekstvisning } from './panelvisning'
+import { Serumtabell } from './Serumtabell'
+import '../../styles/monograf.css'
 
 /**
  * Panelene 2–7 på informasjonssiden, i lese- og redigeringsmodus.
@@ -85,6 +88,7 @@ export function Panel({
     <Seksjon
       id={definisjon.nokkel}
       className="infopanel"
+      ikon={seksjonsikon(definisjon.nokkel)}
       tittel={<Uthev tekst={definisjon.tittel} />}
       oppsummering={tomt ? 'Ikke noe innhold ennå' : oppsummering}
       apenFraStart={definisjon.apen}
@@ -113,6 +117,14 @@ export function Panel({
       <Referansefelt ider={feltreferanser} niva="panel" />
     </Seksjon>
   )
+}
+
+/** Oppsummeringen av en riktekst: avsnittene og punktene etter hverandre, «Tablett: 5–30 mg · Depotinjeksjon: …». */
+function tekstoppsummering(dokument: Riktekstdokument): string {
+  // En linje som leder inn i en liste («… tabletter):»), henger sammen med det første punktet.
+  const linjer = ramsOpp(klartekst(dokument).split('\n')).split(OPPSUMMERINGSSKILLE)
+  const tekst = linjer.reduce((samlet, linje) => (samlet === '' ? linje : `${samlet}${samlet.endsWith(':') ? ' ' : OPPSUMMERINGSSKILLE}${linje}`), '')
+  return forhandsvisning(tekst)
 }
 
 /* --- Et redigerbart element ----------------------------------------------- */
@@ -261,7 +273,7 @@ export function Tekstpanel({ definisjon, kontekst }: { definisjon: Paneldefinisj
   const tomt = !element || (erTomt(dokument) && element.referanser.length === 0)
 
   return (
-    <Panel definisjon={definisjon} kontekst={kontekst} tomt={tomt} oppsummering={forhandsvisning(klartekst(dokument))}>
+    <Panel definisjon={definisjon} kontekst={kontekst} tomt={tomt} oppsummering={tekstoppsummering(dokument)}>
       <div className="infotekst" {...(element && { id: elementAnker(element.id) })}>
         <Redigerbar
           navn={definisjon.tittel}
@@ -271,7 +283,7 @@ export function Tekstpanel({ definisjon, kontekst }: { definisjon: Paneldefinisj
           visning={
             !tomt && (
               <>
-                <Riktekst dokument={dokument} />
+                <Tekstvisning nokkel={definisjon.nokkel} dokument={dokument} />
                 <Kortreferanser element={element} />
               </>
             )
@@ -300,6 +312,33 @@ export function Tekstpanel({ definisjon, kontekst }: { definisjon: Paneldefinisj
   )
 }
 
+/** Teksten i et tekstpanel, som løpende tekst eller som kort (se `tekstvisning`). */
+function Tekstvisning({ nokkel, dokument }: { nokkel: string; dokument: Riktekstdokument }) {
+  const kort = tekstvisning(nokkel) === 'dosering' ? doseringskort(dokument) : null
+  if (!kort) return <Riktekst dokument={dokument} />
+  return (
+    <ul className="dosekort">
+      {kort.map(({ etikett, innhold }, i) => (
+        <li key={i} className="dosekort__kort">
+          {etikett && (
+            <span className="dosekort__etikett">
+              <Uthev tekst={etikett} />
+              {/* Kolonet står i teksten, så den leses og kopieres som den er skrevet. */}
+              <span className="kun-skjermleser">: </span>
+            </span>
+          )}
+          <div className="dosekort__verdi" data-lang={klartekst({ type: NODER.dokument, content: innhold }).length > KORT_VERDI || undefined}>
+            <Riktekst dokument={{ type: NODER.dokument, content: [{ type: NODER.avsnitt, content: innhold }] }} />
+          </div>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+/** Lengste verdi som vises med store tall i et doseringskort; lengre tekst vises som lesetekst. */
+const KORT_VERDI = 28
+
 /* --- Panel 6: kort med overskrift og tekst -------------------------------- */
 
 export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
@@ -318,15 +357,16 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
       oppsummering={ramsOpp(elementer.map((e) => lesKinetikk(e.data).tittel))}
     >
       {elementer.length > 0 && (
-        <ul className="infokort">
+        <ul className="infokort skuffrutenett">
           {elementer.map((element, i) => {
             const { tittel, dokument } = lesKinetikk(element.data)
             return (
               <li key={element.id} className="infokort__kort">
                 <Detaljkort
                   id={element.id}
-                  tittel={<Uthev tekst={tittel} />}
-                  oppsummering={forhandsvisning(klartekst(dokument))}
+                  ikon={kinetikkikon(tittel)}
+                  tittel={<Kinetikktittel tittel={tittel} />}
+                  oppsummering={tekstoppsummering(dokument)}
                 >
                   {/* Ankeret søket peker på står inne i detaljkortet, så å gå dit åpner også kortet. */}
                   <div id={elementAnker(element.id)} className="infokort__innhold">
@@ -426,6 +466,29 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
   )
 }
 
+/** Unicode-tegn for senket skrift, som i «tₘₐₓ» og «tₛₛ». */
+const SENKET = /([\u2080-\u209c]+)/
+
+/**
+ * Overskriften på et kinetikkort, med senket skrift som `<sub>`: «tₘₐₓ» vises
+ * og leses som t med «max» senket. Teksten er den samme.
+ */
+function Kinetikktittel({ tittel }: { tittel: string }) {
+  return (
+    <>
+      {tittel.split(SENKET).map((del, i) =>
+        i % 2 === 1 ? (
+          <sub key={i}>
+            <Uthev tekst={del.normalize('NFKC')} />
+          </sub>
+        ) : (
+          del && <Uthev key={i} tekst={del} />
+        ),
+      )}
+    </>
+  )
+}
+
 /* --- Panel 7: tabellen ---------------------------------------------------- */
 
 export function Tabellpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
@@ -433,7 +496,6 @@ export function Tabellpanel({ definisjon, kontekst }: { definisjon: Paneldefinis
     (kontekst.modell.paneler.get(definisjon.nokkel) ?? []).find((e) => e.elementtype === ELEMENTTYPER.dosetabell) ??
     null
   const { rader } = lesDosetabell(element?.data)
-  const tittel = useId()
 
   return (
     <Panel
@@ -451,33 +513,7 @@ export function Tabellpanel({ definisjon, kontekst }: { definisjon: Paneldefinis
           visning={
             rader.length > 0 && (
               <>
-                <div className="dosetabell__rull">
-                  <table className="dosetabell__tabell" aria-labelledby={tittel}>
-                    <caption id={tittel} className="kun-skjermleser">
-                      {definisjon.tittel}
-                    </caption>
-                    <thead>
-                      <tr>
-                        {DOSEKOLONNER.map(({ felt, tittel: kolonne }) => (
-                          <th key={felt} scope="col">
-                            {kolonne}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rader.map((rad, i) => (
-                        <tr key={i}>
-                          {DOSEKOLONNER.map(({ felt }) => (
-                            <td key={felt}>
-                              <Uthev tekst={rad[felt]} />
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <Serumtabell rader={rader} tittel={definisjon.tittel} />
                 <Kortreferanser element={element} />
               </>
             )

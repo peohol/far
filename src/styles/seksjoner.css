@@ -1,37 +1,123 @@
 /* --- Seksjoner og detaljkort («skuffer») --------------------------------
-   Se `src/components/seksjoner/Seksjon.tsx`. Hodet er en rad med pil,
-   overskrift, eventuelle treff og knapper, og oppsummeringen under når
-   skuffen er lukket. Kroppen glir mellom 0fr og 1fr. */
+   Se `src/components/seksjoner/Seksjon.tsx` og Atlas-komponentene
+   `Section` og `DetailCard`. Hodet er en rad med ikon, tittel med
+   oppsummering under, eventuelle treff og knapper, og pilen til slutt.
+   Kroppen glir mellom 0fr og 1fr.
+
+   - Nivå 1 (seksjon) er en rad med hårlinje over: seksjonsikonet i en
+     sirkel, serif-tittel og oppsummering i kursiv serif.
+   - Nivå 2 (detaljkort) er et lite kort. I et `.skuffrutenett` står de
+     lukkede kortene i to kolonner, og et åpnet kort tar hele bredden med
+     aksentkant. */
 
 .skuff {
   width: 100%;
   scroll-margin-block: var(--rom-7);
 }
 
-/* Seksjonen er et kort; mellomrommet står i innholdet, så en lukket
-   seksjon ikke får luft under hodet. Luften over og under er mindre enn i
-   andre kort, så mange lukkede seksjoner kan leses som en innholdsliste. */
-.skuff--seksjon.kort {
-  gap: 0;
-  padding-block: var(--rom-5);
+/* Når siden ruller til en skuff — brukeren åpnet den, eller en lenke eller
+   søket peker dit — legges toppen av den under den faste toppmenyen. */
+.skuff {
+  scroll-margin-top: var(--toppmeny-offset, 5.5rem);
 }
+
+/* --- Nivå 1: seksjonen -------------------------------------------------- */
+
+.skuff--seksjon {
+  --skuff-sirkel: var(--ikon-sirkel);
+  --skuff-innrykk: calc(var(--skuff-sirkel) + var(--rom-6));
+  display: flex;
+  flex-direction: column;
+  padding: var(--rom-5) var(--rom-2);
+  border-top: var(--kant) solid var(--linje);
+}
+
+.skuff--seksjon[data-apen] {
+  padding-bottom: var(--rom-8);
+}
+
+/* --- Nivå 2: detaljkortet ----------------------------------------------- */
 
 .skuff--detalj {
   display: flex;
   flex-direction: column;
-  padding: var(--rom-2) var(--rom-5);
+  min-width: 0;
+  padding: var(--rom-3) var(--rom-5) var(--rom-3) var(--rom-4);
   text-align: left;
+  background: var(--flate);
   border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-m);
+  border-radius: var(--runding-underkort);
 }
+
+.skuff--detalj[data-apen] {
+  padding-bottom: var(--rom-6);
+  border: var(--kant-aktiv) solid var(--aksent);
+}
+
+/* Detaljkortene i en seksjon: to kolonner når det er plass, og et åpnet kort
+   over hele bredden. Kortet kan stå rett i rutenettet eller i et listepunkt. */
+.skuffrutenett {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: var(--rom-3);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skuffrutenett > .skuff--detalj[data-apen],
+.skuffrutenett > :has(> .skuff--detalj[data-apen]) {
+  grid-column: 1 / -1;
+}
+
+/* --- Hodet -------------------------------------------------------------- */
 
 .skuff__hode {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 var(--rom-3);
+  gap: var(--rom-2) var(--rom-6);
   width: 100%;
   cursor: pointer;
+}
+
+.skuff--detalj > .skuff__hode {
+  column-gap: var(--rom-4);
+}
+
+/* I et smalt kort deler teksten plassen med ikonet og pilen, så pilen blir
+   stående på raden i stedet for å brytes ned under. */
+.skuff--detalj > .skuff__hode > .skuff__tekst {
+  flex-basis: 0;
+}
+
+/* Seksjonsikonet står i en sirkel som får aksentflate når seksjonen er åpen. */
+.skuff__ikon {
+  display: grid;
+  flex: none;
+  place-items: center;
+}
+
+.skuff--seksjon > .skuff__hode > .skuff__ikon {
+  width: var(--skuff-sirkel);
+  height: var(--skuff-sirkel);
+  background: var(--flate-hevet);
+  border-radius: 50%;
+  transition: background-color var(--fart-rask) var(--kurve);
+}
+
+.skuff--seksjon[data-apen] > .skuff__hode > .skuff__ikon {
+  background: var(--aksent-flate);
+}
+
+/* Tittelen med oppsummeringen under. */
+.skuff__tekst {
+  display: flex;
+  flex: 1 1 12rem;
+  flex-direction: column;
+  gap: var(--rom-1);
+  min-width: 0;
 }
 
 .skuff__tittel {
@@ -39,23 +125,29 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--rom-2) var(--rom-3);
-  flex: 1 1 auto;
   min-width: 0;
-  font-size: var(--tekst-m);
-  font-weight: var(--vekt-tung);
-  color: var(--blekk);
+  margin: 0;
+  color: var(--blekk-sterk);
 }
 
-.skuff--detalj > .skuff__hode > .skuff__tittel {
-  font-size: var(--tekst-s);
+.skuff--seksjon > .skuff__hode .skuff__tittel {
+  font: var(--vekt-medium) var(--tekst-seksjon) / 1.1 var(--skrift-display);
 }
 
-/* Knappen er hele overskriften, med god flate for fingre. */
+.skuff--detalj > .skuff__hode .skuff__tittel {
+  font: var(--vekt-halvfet) var(--tekst-etikett) / 1.2 var(--skrift-ui);
+}
+
+.skuff--detalj[data-apen] > .skuff__hode .skuff__tittel {
+  font-size: var(--tekst-ui);
+}
+
+/* Knappen er hele tittelen, med god flate for fingre. Resten av hodet kan
+   også trykkes på (se `trykkIHodet`). */
 .skuff__knapp {
   display: inline-flex;
   align-items: center;
-  gap: var(--rom-3);
-  min-height: 2.75rem;
+  min-height: var(--hoyde-liten);
   padding: 0;
   font: inherit;
   color: inherit;
@@ -65,29 +157,35 @@
   cursor: pointer;
 }
 
-.skuff--detalj .skuff__knapp {
-  min-height: 2.5rem;
+.skuff__knapp:focus-visible {
+  outline: var(--fokusring) solid var(--fokus);
+  outline-offset: var(--rom-1);
+  border-radius: var(--runding-merke);
 }
 
-.skuff__knapp:hover {
-  color: var(--blekk-sterk);
+.skuff__oppsummering {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--blekk-dempet);
 }
 
-/* Pilen peker mot høyre når skuffen er lukket, ned når den er åpen. */
-.skuff__pil {
-  flex: none;
-  width: 0.45em;
-  height: 0.45em;
-  margin: -0.15em 0.1em 0 0.15em;
-  border-right: var(--kant-tykk) solid currentColor;
-  border-bottom: var(--kant-tykk) solid currentColor;
-  transform: rotate(-45deg);
-  transition: transform var(--fart) var(--kurve);
+.skuff--seksjon > .skuff__hode .skuff__oppsummering {
+  font: italic var(--vekt-normal) var(--tekst-ingress) / 1.3 var(--skrift-display);
 }
 
-.skuff[data-apen] > .skuff__hode .skuff__pil {
-  margin-top: 0.1em;
-  transform: rotate(45deg);
+.skuff--detalj > .skuff__hode .skuff__oppsummering {
+  font: var(--vekt-normal) var(--tekst-liten) / 1.3 var(--skrift-ui);
+}
+
+.skuff__treff {
+  padding: var(--rom-1) var(--rom-3);
+  font: var(--vekt-medium) var(--tekst-meta) / 1.2 var(--skrift-ui);
+  color: var(--toksisk-blekk);
+  background: var(--toksisk-flate);
+  border-radius: var(--runding-pille);
 }
 
 .skuff__handlinger {
@@ -97,29 +195,38 @@
   margin-left: auto;
 }
 
-.skuff__treff {
-  padding: 0.1rem var(--rom-3);
-  font-size: var(--tekst-xxs);
-  color: var(--blekk);
-  background: var(--niva-gul-flate);
-  border-radius: var(--runding-full);
-  box-shadow: 0 0 0 1px var(--niva-gul-linje);
+/* Pilen peker mot høyre når skuffen er lukket, ned når den er åpen. På en
+   seksjon står den i en sirkel som får aksent når seksjonen er åpen. */
+.skuff__pil {
+  display: grid;
+  flex: none;
+  place-items: center;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+  transition:
+    transform var(--fart-glid) var(--kurve),
+    background-color var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve);
 }
 
-/* Oppsummeringen står under overskriften, på linje med teksten i den, og
-   kuttes etter to linjer. */
-.skuff__oppsummering {
-  display: -webkit-box;
-  flex-basis: 100%;
-  margin: calc(-1 * var(--rom-2)) 0 var(--rom-2);
-  padding-left: calc(0.7em + var(--rom-3));
-  overflow: hidden;
-  font-size: var(--tekst-xs);
-  font-weight: var(--vekt-normal, 400);
-  color: var(--blekk-dempet);
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+.skuff--seksjon > .skuff__hode > .skuff__pil {
+  width: var(--hoyde-liten);
+  height: var(--hoyde-liten);
+  font-size: var(--tekst-ui);
+  border: var(--kant) solid var(--linje);
+  border-radius: 50%;
 }
+
+.skuff[data-apen] > .skuff__hode > .skuff__pil {
+  transform: rotate(90deg);
+}
+
+.skuff--seksjon[data-apen] > .skuff__hode > .skuff__pil {
+  background: var(--aksent-flate);
+  border-color: var(--aksent);
+}
+
+/* --- Kroppen ------------------------------------------------------------ */
 
 .skuff__kropp {
   display: grid;
@@ -134,7 +241,7 @@
 
 /* Når søket eller en lenke åpner skuffen, skal den stå åpen med én gang. */
 .skuff[data-stille] > .skuff__kropp,
-.skuff[data-stille] > .skuff__hode .skuff__pil {
+.skuff[data-stille] > .skuff__hode > .skuff__pil {
   transition: none;
 }
 
@@ -154,19 +261,51 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--rom-5);
-  padding: var(--rom-3) 0 var(--rom-2);
+  padding: var(--rom-6) 0 var(--rom-2);
 }
 
-.skuff--detalj .skuff__innhold {
+/* Innholdet står på linje med tittelen, ikke under ikonet. */
+.skuff--seksjon[data-ikon] > .skuff__kropp .skuff__innhold {
+  padding-left: var(--skuff-innrykk);
+}
+
+.skuff--detalj > .skuff__kropp .skuff__innhold {
   gap: var(--rom-3);
-  padding-top: 0;
-  padding-bottom: var(--rom-3);
+  padding: var(--rom-3) 0 0;
 }
 
-/* Når siden ruller til en skuff — brukeren åpnet den, eller en lenke eller
-   søket peker dit — legges toppen av den under den faste toppmenyen. */
-.skuff {
-  scroll-margin-top: var(--toppmeny-offset, 5.5rem);
+.skuff--detalj[data-ikon] > .skuff__kropp .skuff__innhold {
+  padding-left: calc(var(--ikon-underpunkt) + var(--rom-4));
+}
+
+/* --- Smale flater ------------------------------------------------------- */
+
+@media (max-width: 47.5em) {
+  .skuff--seksjon {
+    --skuff-sirkel: var(--ikon-sirkel-smal);
+    padding-inline: 0;
+  }
+
+  .skuff--seksjon > .skuff__hode {
+    column-gap: var(--rom-4);
+  }
+
+  .skuff--seksjon > .skuff__hode > .skuff__ikon > .ikon {
+    width: var(--ikon-underpunkt);
+    height: var(--ikon-underpunkt);
+  }
+
+  .skuff--seksjon > .skuff__hode .skuff__oppsummering {
+    font-size: var(--tekst-liten);
+  }
+
+  .skuff--seksjon[data-ikon] > .skuff__kropp .skuff__innhold {
+    padding-left: 0;
+  }
+
+  .skuff__knapp {
+    min-height: var(--hoyde-trykk);
+  }
 }
 
 /* På papir står alt åpent. */
@@ -181,7 +320,8 @@
   }
 
   .skuff__oppsummering,
-  .skuff__treff {
+  .skuff__treff,
+  .skuff__pil {
     display: none;
   }
 }
