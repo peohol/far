@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useId, useImperativeHandle, useRef, type InputHTMLAttributes, type ReactNode } from 'react'
-import { lagLiggerOver } from '../../hooks/useKeyboard'
+import { erSokesnarvei } from '../../hooks/useKeyboard'
 import { Ikon } from '../ikon/Ikon'
 import { Shortcut } from '../Shortcut'
 
@@ -11,11 +11,7 @@ export const FAGSOK_SNARVEI = 'Ctrl K'
  * over appen går foran: der kan kombinasjonen ha en egen jobb.
  */
 export function erFagsokSnarvei(event: KeyboardEvent): boolean {
-  if (event.key.toLowerCase() !== 'k' || event.altKey || event.shiftKey) return false
-  if (event.ctrlKey === event.metaKey) return false
-  const aktivt = document.activeElement
-  if (aktivt instanceof HTMLElement && aktivt.isContentEditable) return false
-  return !lagLiggerOver()
+  return erSokesnarvei(event, 'k')
 }
 
 export interface FagsokfeltProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'children'> {

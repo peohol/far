@@ -1,14 +1,21 @@
 import { useEffect, useId, useMemo, useRef, useState, type RefObject } from 'react'
 import { sok, sti, type Sokedokument } from '../../faginnhold/sok'
+import { erSokesnarvei } from '../../hooks/useKeyboard'
 import { rullefart } from '../../hooks/useKortHopp'
+import { Ikon } from '../ikon/Ikon'
 import { detaljkortRundt } from '../seksjoner/Seksjon'
 import { useSeksjonsstyring, type Rulleplass } from '../seksjoner/Seksjonsstyring'
 import { Shortcut } from '../Shortcut'
 import { elementAnker, panelAnker } from './Paneler'
 import { TREFFKLASSE } from '../Uthev'
 
-/** Tasten som setter fokus i søket, når fokus ikke står i et felt. */
-export const SOK_SNARVEI = '/'
+/** Snarveien som henter søket på siden fram, som den står i merket i feltet. */
+export const SIDESOK_SNARVEI = 'Ctrl B'
+
+/** Ctrl + B, eller Cmd + B på macOS (se `erSokesnarvei`). */
+export function erSidesokSnarvei(event: KeyboardEvent): boolean {
+  return erSokesnarvei(event, 'b')
+}
 
 /** Flest steder som listes under søket. */
 const MAKS_STEDER = 6
@@ -27,15 +34,17 @@ export interface SidesokProps {
 }
 
 /**
- * Søket på den åpne siden.
+ * Søket på den åpne siden, et kompakt felt i toppmenyen (i dokken på smale
+ * flater). `Ctrl + B` eller `Cmd + B` henter det fram.
  *
  * Treffene fremheves der de står (se `Uthev`) og telles — også i seksjoner
  * og detaljkort som er lukket, der innholdet står skjult. `Enter` går til det
  * neste og `Shift + Enter` til det forrige, og åpner skuffene treffet står i;
- * `Escape` tømmer feltet. Under feltet står stedene treffene er — panelet og
- * kortet — som snarveier dit.
- * Stedene finnes med den samme indekseringen som det globale søket skal
- * bruke (`src/faginnhold/sok.ts`).
+ * `Escape` tømmer feltet. Under feltet står, mens det har fokus, hvor mange
+ * treff det er og stedene de står — panelet og kortet — som snarveier dit.
+ * Stedene finnes med den samme indekseringen som det globale søket bruker
+ * (`src/faginnhold/sok.ts`), men søket er sitt eget: det globale fagsøket
+ * søker i alle sidene, dette bare i den som står åpen.
  */
 export function Sidesok({ sporring, onEndre, beholder, dokumenter, innholdsnokkel }: SidesokProps) {
   const id = useId()
@@ -75,15 +84,14 @@ export function Sidesok({ sporring, onEndre, beholder, dokumenter, innholdsnokke
     alle.forEach((m, i) => m.classList.toggle(AKTIV, i === aktiv))
   })
 
-  // «/» henter søket fram fra hvor som helst på siden.
+  // Ctrl/Cmd + B henter søket fram fra hvor som helst på siden, også fra
+  // fagsøket. Nettleseren har sin egen bruk av kombinasjonen; her er det søket.
   useEffect(() => {
     const paaTast = (event: KeyboardEvent) => {
-      if (event.key !== SOK_SNARVEI || event.ctrlKey || event.metaKey || event.altKey) return
-      const aktivt = document.activeElement
-      if (aktivt instanceof HTMLElement && (aktivt.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(aktivt.tagName))) return
-      if (document.querySelector('dialog[open], [data-lag]')) return
+      if (!erSidesokSnarvei(event)) return
       event.preventDefault()
       felt.current?.focus()
+      felt.current?.select()
     }
     window.addEventListener('keydown', paaTast)
     return () => window.removeEventListener('keydown', paaTast)
@@ -121,18 +129,24 @@ export function Sidesok({ sporring, onEndre, beholder, dokumenter, innholdsnokke
       ? 'Ingen treff på siden'
       : `Treff ${aktiv + 1} av ${antall}`
 
+  const teller = !sporring.trim() ? '' : antall === 0 ? '0' : `${aktiv + 1}/${antall}`
+
   return (
-    <div className="sidesok" role="search">
-      <label className="sidesok__felt" htmlFor={id}>
-        <span className="kun-skjermleser">Søk på denne siden</span>
+    <div className="sidesok" role="search" data-sok={sporring.trim() ? 'ja' : 'nei'}>
+      <label className="sidesok__felt" htmlFor={id} data-ih="">
+        <Ikon navn="pagesearch" storrelse="ui" />
+        <span id={`${id}-navn`} className="kun-skjermleser">
+          Søk på denne siden
+        </span>
         <input
           ref={felt}
           id={id}
+          aria-labelledby={`${id}-navn`}
           type="search"
           className="sidesok__input"
-          placeholder="Søk på siden"
+          placeholder="På siden"
           value={sporring}
-          aria-keyshortcuts={SOK_SNARVEI}
+          aria-keyshortcuts="Control+B Meta+B"
           aria-describedby={`${id}-status`}
           onChange={(e) => {
             onEndre(e.target.value)
@@ -149,28 +163,35 @@ export function Sidesok({ sporring, onEndre, beholder, dokumenter, innholdsnokke
             }
           }}
         />
-        <Shortcut>{SOK_SNARVEI}</Shortcut>
+        {teller && (
+          <span className="sidesok__teller" aria-hidden="true">
+            {teller}
+          </span>
+        )}
+        <Shortcut always>{SIDESOK_SNARVEI}</Shortcut>
       </label>
-      <p id={`${id}-status`} className="sidesok__status" role="status">
-        {status}
-      </p>
-      {steder.length > 0 && (
-        <ul className="sidesok__steder" aria-label="Hvor treffene står">
-          {steder.map(({ sti: deler, anker }) => (
-            <li key={anker}>
-              {/* Knapp og ikke lenke: adressefeltet skal peke på siden, ikke
-                  på et sted i den. */}
-              <button
-                type="button"
-                className="sidesok__sted"
-                onClick={() => gaTilSted(anker)}
-              >
-                {deler.join(' › ')}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="sidesok__treff">
+        <p id={`${id}-status`} className="sidesok__status" role="status">
+          {status}
+        </p>
+        {steder.length > 0 && (
+          <ul className="sidesok__steder" aria-label="Hvor treffene står">
+            {steder.map(({ sti: deler, anker }) => (
+              <li key={anker}>
+                {/* Knapp og ikke lenke: adressefeltet skal peke på siden, ikke
+                    på et sted i den. */}
+                <button
+                  type="button"
+                  className="sidesok__sted"
+                  onClick={() => gaTilSted(anker)}
+                >
+                  {deler.join(' › ')}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   )
 }

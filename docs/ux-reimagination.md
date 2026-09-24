@@ -511,13 +511,12 @@ Vedlikeholdes bare av koordinatorøkten, ved hver merge. Visuell fasit: Claude D
 | F1 | Preparatmodell og legemiddelformregister | Merget (#53, 1.23.1) |
 | E | Monografstruktur og Viktige data | Merget (#58, 1.26.1) |
 | F2 | Preparater-UI | Merget (#57, 1.26.0; rettelse #59, 1.26.2) |
-| G | Globalt og lokalt søk-UI | Klar, lander rett etter C |
+| G | Globalt og lokalt søk-UI | Merget (#63, 1.27.0) |
 | H | Øvrige monografpaneler og serumtabell | Merget (#60, 1.26.3) |
 | I | Resten av appens visuelle språk | Merget (#62, 1.26.5) |
 | Konto | Innlogging, konto, brukerliste, endringslogg og redigering | Merget (#61, 1.26.4) |
-| J | Sluttintegrasjon og kvalitetskontroll | Venter på G |
+| J | Sluttintegrasjon og kvalitetskontroll | Klar, lander rett etter G |
 
 Kjente mellomtilstander:
 
 - Rom-skalaen fulgte Atlas fra A (1.25.0): gamle `--rom-1…6` er nå `--rom-2, 3, 5, 7, 8, 9`. Ny CSS bruker den nye skalaen.
-- Toppmenyens globale søkeplass og `Fagsokfelt` (Ctrl/Cmd+K) er bygget, men monteres først av G. Stoffsidens lokale søk står i siden til G flytter det.

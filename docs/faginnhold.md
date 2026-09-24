@@ -449,7 +449,17 @@ analyttkatalogen. Deler flere koder én side, indekseres siden én gang.
 Hvert treff har stedet det står: siden, seksjonen, ankeret på siden og — når
 teksten står i et detaljkort — nøkkelen til kortet. `sokeadresse` gjør stedet
 om til direktelenken, `#/analytt/<KODE>/<seksjon>/<kort>` (se
-`docs/seksjoner.md`). Søkefeltet og resultatsiden bygger på dette.
+`docs/seksjoner.md`).
+
+**Fagsøket** i toppmenyen (`src/components/sok/`) bruker dette uten egen
+rangering. Indeksen hentes første gang noen søker, ikke når appen åpnes
+(`useSokeindeks`), og hentes på nytt neste gang når en administrator går ut
+av en stoffside, der noe kan være publisert. `treffgruppe` deler treffene i
+stoff, preparater, tekst og referanser, i rangeringens rekkefølge;
+`treffvisning.ts` lager tittelen, stien og utdraget. Rullegardinen viser de
+første treffene, og søkesiden (`#/sok?q=…`) alle, gruppert og med filter.
+En referanse står på siden selv, så den vises som egen gruppe bare når
+siden ikke alt er med som stoff.
 
 ## Import fra en kilde
 
