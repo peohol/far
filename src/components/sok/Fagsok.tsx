@@ -48,8 +48,12 @@ export function Fagsok({ indeks, onKrev, sporring, beskrivSide, onGaaTil }: Fags
   const viste = treff.slice(0, MAKS_I_RULLEGARDIN).map(vis)
   const harSok = verdi.trim() !== ''
   const visListe = fokus && apen && harSok
+  // Treffene henger etter feltet mens React regner ut det nye søket. Da står
+  // ingen rad valgt, så `Enter` går til søkesiden med teksten i feltet i
+  // stedet for å åpne et treff fra søket før.
+  const forsinket = soket !== verdi
   // Listen kan ha blitt kortere siden raden ble valgt.
-  const valgtIndeks = aktiv < 0 ? -1 : Math.min(aktiv, viste.length - 1)
+  const valgtIndeks = aktiv < 0 || forsinket ? -1 : Math.min(aktiv, viste.length - 1)
   const valgt = visListe ? viste[valgtIndeks] : undefined
 
   // Søkesiden og feltet viser det samme søket.
@@ -135,7 +139,7 @@ export function Fagsok({ indeks, onKrev, sporring, beskrivSide, onGaaTil }: Fags
             indeks={indeks}
             onKrev={onKrev}
             antall={treff.length}
-            forsinket={soket !== verdi}
+            forsinket={forsinket}
           >
             <div id={listeId} role="listbox" aria-label="Treff i fagstoff" className="fagsok__treff">
               {viste.map((t, i) => (
