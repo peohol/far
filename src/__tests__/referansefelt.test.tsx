@@ -34,6 +34,7 @@ const FEST: Referanse = {
 }
 const DMP: Referanse = { id: 'fest:1', tittel: 'Hiemke C et al.', forfattere: '', aar: '', lenke: '', automatisk: { kilde: 'FEST' } }
 const REFERANSER = [REDAKSJONELL, FEST, DMP]
+const REDIGERING = { redigerer: false, referansebase: REFERANSER, opprettReferanse: vi.fn(), gjenopprett: vi.fn() }
 
 function Side({ children }: { children: React.ReactNode }) {
   return (
@@ -53,7 +54,19 @@ describe('referansefeltet', () => {
     const pille = screen.getByRole('button', { name: 'Referanser 1, 2' })
     const felt = pille.closest('.referansefelt')!
     expect(felt.getAttribute('title')).toBe('Gjelder hele seksjonen')
-    expect(felt.textContent).toBe(
+    // At kilden ikke kan redigeres, er bare verdt å si når siden står i redigering.
+    expect(felt.textContent).toBe('Kilder1, 2Legemiddeldata fra FEST, uttrekk fra 8. september 2026')
+  })
+
+  it('sier at den automatiske kilden ikke kan redigeres når siden står i redigering', () => {
+    render(
+      <Redigeringskilde verdi={{ ...REDIGERING, redigerer: true }}>
+        <Side>
+          <Referansefelt ider={['r', 'fest:kilde']} niva="panel" />
+        </Side>
+      </Redigeringskilde>,
+    )
+    expect(screen.getByRole('button', { name: 'Referanser 1, 2' }).closest('.referansefelt')!.textContent).toBe(
       'Kilder1, 2Legemiddeldata fra FEST, uttrekk fra 8. september 2026 · kan ikke redigeres',
     )
   })
@@ -85,7 +98,7 @@ describe('referansefeltet', () => {
 })
 
 describe('referanselisten', () => {
-  it('lister begge opphav sammen, og merker de automatiske som ikke redigerbare', () => {
+  it('lister begge opphav sammen, og merker de automatiske', () => {
     render(
       <Side>
         <Referanseliste />
@@ -96,20 +109,32 @@ describe('referanselisten', () => {
       ['1', 'Hiemke C · 2018'],
       [
         '2',
-        'FEST – Forskrivnings- og ekspedisjonsstøtte · Direktoratet for medisinske produkterAutomatisk fra FEST · kan ikke redigeresLegemiddeldata fra FEST, uttrekk fra 8. september 2026',
+        'FEST – Forskrivnings- og ekspedisjonsstøtte · Direktoratet for medisinske produkterAutomatisk fra FESTLegemiddeldata fra FEST, uttrekk fra 8. september 2026',
       ],
-      ['3', 'Hiemke C et al.Automatisk fra FEST · kan ikke redigeres'],
+      ['3', 'Hiemke C et al.Automatisk fra FEST'],
     ])
+  })
+
+  it('merker de automatiske som ikke redigerbare når siden står i redigering', () => {
+    render(
+      <Redigeringskilde verdi={{ ...REDIGERING, redigerer: true }}>
+        <Side>
+          <Referanseliste />
+        </Side>
+      </Redigeringskilde>,
+    )
+    const punkter = within(screen.getByRole('region', { name: 'Referanser' })).getAllByRole('listitem')
+    expect(punkter[2]!.textContent).toBe('Hiemke C et al.Automatisk fra FEST · kan ikke redigeres')
   })
 })
 
 describe('editoren', () => {
-  it('tilbyr aldri en automatisk kilde, selv om den skulle ligge i referansebasen', async () => {
+  it('tilbyr aldri en automatisk kilde, selv om den skulle ligge i referansebasen, men viser den låst', async () => {
     const bruker = userEvent.setup()
     const onEndre = vi.fn()
     render(
       <Redigeringskilde
-        verdi={{ referansebase: REFERANSER, opprettReferanse: vi.fn(), gjenopprett: vi.fn() }}
+        verdi={{ ...REDIGERING, redigerer: true }}
       >
         <Referansevelger tittel="Kilder for kortet" valgte={[]} onEndre={onEndre} />
       </Redigeringskilde>,
@@ -120,6 +145,9 @@ describe('editoren', () => {
 
     await bruker.clear(screen.getByRole('searchbox', { name: 'Finn en referanse' }))
     await bruker.type(screen.getByRole('searchbox', { name: 'Finn en referanse' }), 'FEST')
-    expect(screen.getByText('Ingen referanser passer.')).toBeTruthy()
+    // Den automatiske kilden står i treffene, men låst: den kan ikke velges.
+    const treff = screen.getByRole('list', { name: 'Referanser som passer' })
+    expect(within(treff).queryAllByRole('button')).toEqual([])
+    expect(within(treff).getByRole('img', { name: /Automatisk fra FEST/ })).toBeTruthy()
   })
 })

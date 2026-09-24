@@ -1,12 +1,7 @@
-import {
-  useCallback,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type ComponentType,
-  type CSSProperties,
-} from 'react'
+import { useCallback, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import { flyttingMellom, type Flytting, type Rute } from '../domain/flytting'
+import { Ikon } from './ikon/Ikon'
+import type { Ikonnavn } from './ikon/register'
 import { useTips } from './Tips'
 import type { BandTone } from '../domain/bands'
 
@@ -20,7 +15,7 @@ export type Bevistone = BandTone | 'noytral'
 export interface KopibevisProps {
   tone: Bevistone
   /** Ikonet knappen bar, der den hadde ett. */
-  ikon?: ComponentType<{ className?: string }>
+  ikon?: Ikonnavn
   /** Teksten som sto på knappen. */
   tekst: string
   /** Kommentaren som ble kopiert. Henger på beviset som et tips. */
@@ -55,7 +50,7 @@ export function ruteAv(element: Element | null | undefined): Rute | null {
  * settes tilbake dit knappen sto — før første opptegning, så det aldri blinker
  * til på plassen sin først. Se `src/domain/flytting.ts`.
  */
-export function Kopibevis({ tone, ikon: Ikon, tekst, kommentar, fra }: KopibevisProps) {
+export function Kopibevis({ tone, ikon, tekst, kommentar, fra }: KopibevisProps) {
   const element = useRef<HTMLElement | null>(null)
   const [flytting, setFlytting] = useState<Flytting | null>(null)
   const tips = useTips(kommentar)
@@ -94,7 +89,7 @@ export function Kopibevis({ tone, ikon: Ikon, tekst, kommentar, fra }: Kopibevis
         tabIndex={0}
         {...tipsprops}
       >
-        {Ikon && <Ikon className="kopibevis__ikon" />}
+        {ikon && <Ikon navn={ikon} className="kopibevis__ikon" />}
         {/* Fargen, ikonet og plassen over kortet sier hva teksten er til den
             som ser dem. Dette sier det samme til den som ikke gjør det. */}
         <span className="kun-skjermleser">Kopiert kommentar for </span>

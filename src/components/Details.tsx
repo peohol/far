@@ -1,9 +1,13 @@
 import { useEffect, useRef, type MouseEvent, type ReactNode } from 'react'
 import { rullTilKort } from '../hooks/useKortHopp'
+import { Ikon } from './ikon/Ikon'
+import type { Ikonnavn } from './ikon/register'
 
 export interface DetailsProps {
   /** Overskriften som åpner og lukker, f.eks. «Forklaring». */
   summary: string
+  /** Ikonet foran overskriften. */
+  ikon?: Ikonnavn
   children: ReactNode
 }
 
@@ -23,7 +27,7 @@ export interface DetailsProps {
  * rekker, slik at lesingen kan begynne med en gang. Rullingen venter til
  * glidningen er over: først da vet vi hvor høyt innholdet ble.
  */
-export function Details({ summary, children }: DetailsProps) {
+export function Details({ summary, ikon, children }: DetailsProps) {
   const detaljer = useRef<HTMLDetailsElement>(null)
   const kropp = useRef<HTMLDivElement>(null)
   const rydder = useRef<() => void>()
@@ -79,8 +83,10 @@ export function Details({ summary, children }: DetailsProps) {
 
   return (
     <details ref={detaljer} className="detalj">
-      <summary className="detalj__tittel" onClick={veksle}>
-        {summary}
+      <summary className="detalj__tittel" data-ih="" onClick={veksle}>
+        {ikon && <Ikon navn={ikon} className="detalj__ikon" />}
+        <span className="detalj__tekst">{summary}</span>
+        <Ikon navn="chev" className="detalj__pil" />
       </summary>
       <div ref={kropp} className="detalj__kropp">
         <div className="detalj__inner">{children}</div>

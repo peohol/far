@@ -1,7 +1,12 @@
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react'
 import { Shortcut } from './Shortcut'
 
-type Variant = 'primary' | 'subtle'
+/**
+ * - `primary`: aksentflate, sidens hovedhandling
+ * - `subtle`: gjennomsiktig, for det som står ved siden av
+ * - `kant`: liten pille med hårlinje, for handlinger på en rad (Atlas)
+ */
+type Variant = 'primary' | 'subtle' | 'kant'
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant

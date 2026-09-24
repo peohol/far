@@ -4,14 +4,19 @@ import type { Referanseinnhold } from '../../faginnhold/modell'
 import type { Referanse } from '../../faginnhold/referanser'
 
 /**
- * Det redigeringen på en informasjonsside deler: referansebasen det kan
- * velges kilder fra, veien til å legge inn en ny referanse, og
- * gjenopprettingen av en tidligere revisjon fra historikken.
+ * Det redigeringen på en informasjonsside deler: om siden står i redigering,
+ * referansebasen det kan velges kilder fra, veien til å legge inn en ny
+ * referanse, og gjenopprettingen av en tidligere revisjon fra historikken.
  *
  * Settes opp av siden i redigeringsmodus, slik at editorene dypt inne i et
  * panel ikke må få den sendt ned.
  */
 export interface Redigeringsverdi {
+  /**
+   * Siden står i redigering. Det som bare er nyttig å vite når man kan endre
+   * noe — som at en automatisk kilde ikke kan redigeres — vises bare da.
+   */
+  redigerer: boolean
   /** Alle referansene i utkastet, arkiverte medregnet. */
   referansebase: readonly Referanse[]
   /** Legger inn en ny referanse i referansebasen og gir den tilbake. */
@@ -23,6 +28,7 @@ export interface Redigeringsverdi {
 const IKKE_TILGJENGELIG = () => Promise.reject(new Error('Redigering er ikke tilgjengelig her.'))
 
 const Kontekst = createContext<Redigeringsverdi>({
+  redigerer: false,
   referansebase: [],
   opprettReferanse: IKKE_TILGJENGELIG,
   gjenopprett: IKKE_TILGJENGELIG,

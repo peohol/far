@@ -96,6 +96,7 @@ function Interaksjonsvisning({ tilstand }: { tilstand: Interaksjonstilstand }) {
             <li key={i.id}>
               <Detaljkort
                 id={kortsted(i)}
+                ikon="inter"
                 tittel={<Uthev tekst={i.med} />}
                 oppsummering={
                   <>

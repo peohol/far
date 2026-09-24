@@ -1,15 +1,15 @@
 import type { CSSProperties } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
-import { Kodepille } from './Kodepille'
-import { Metodepille } from './Metodepille'
+import { Metalinje } from './Metalinje'
+import { Panelhode } from './Panelhode'
 import { Pill, type PillTone } from './Pill'
 import { StepBar } from './StepBar'
 import { Shortcut } from './Shortcut'
 import { ManualCopy } from './ManualCopy'
 import { useTips } from './Tips'
 import { bandIkon } from './bandikon'
-import { BackIcon, PhoneIcon } from './icons'
+import { Ikon } from './ikon/Ikon'
 import { displayName } from '../domain/names'
 import { grensepiller, type Pilleslag } from '../domain/piller'
 import { CUTOFF_NOKKEL, type Kommentarvalg } from '../domain/valg'
@@ -46,7 +46,6 @@ function Valgknapp({
   onPick: () => void
 }) {
   const tips = useTips(valg.kommentar)
-  const Icon = bandIkon(valg)
 
   return (
     <li>
@@ -61,7 +60,7 @@ function Valgknapp({
         aria-keyshortcuts={snarvei}
         {...tips.props}
       >
-        <Icon className="bandknapp__ikon" />
+        <Ikon navn={bandIkon(valg)} className="bandknapp__ikon" />
         <span className="bandknapp__verdi">{valg.label}</span>
         <Shortcut>{snarvei}</Shortcut>
       </button>
@@ -110,7 +109,7 @@ function Regelmelding({
   return (
     <div className="bandkort__melding" role="alert">
       <p>Fikk ikke hentet fortolkningsreglene. {regler.melding}</p>
-      <Button variant="subtle" onClick={onProvIgjen}>
+      <Button variant="subtle" icon={<Ikon navn="reset" />} onClick={onProvIgjen}>
         Prøv igjen
       </Button>
     </div>
@@ -137,22 +136,17 @@ export function BandStep({ analyte, regler, valg: alle, onPick, onBack, onProvIg
 
   return (
     <section className="steg" aria-label="Velg konsentrasjon">
-      <StepBar>
-        <Button variant="subtle" icon={<BackIcon />} shortcut="Esc" onClick={onBack}>
-          Bytt analytt
-        </Button>
-      </StepBar>
+      <StepBar onEsc={onBack}>Bytt analytt</StepBar>
 
       <Card align="start" className="analyttkort">
-        <Metodepille metode={analyte.analysemetode} kategori={analyte.kategori} />
-        <Kodepille kode={analyte.kode} />
+        <Metalinje koder={[analyte.kode]} metode={analyte.analysemetode} kategori={analyte.kategori} lenker />
         <h1 className="analytt__navn">{displayName(analyte)}</h1>
         <div className="analytt__grenser">
           {grensepiller(analyte, regelsett, referanseomradet(regler)).map((pille) => (
             <Pill
               key={pille.slag}
               tone={TONE[pille.slag]}
-              icon={pille.slag === 'ringegrense' ? <PhoneIcon /> : undefined}
+              icon={pille.slag === 'ringegrense' ? <Ikon navn="phone" /> : undefined}
               label={pille.merke}
             >
               {pille.verdi}
@@ -161,8 +155,8 @@ export function BandStep({ analyte, regler, valg: alle, onPick, onBack, onProvIg
         </div>
       </Card>
 
-      <Card className="bandkort">
-        <h2 className="bandkort__merke">Målt konsentrasjon</h2>
+      <Card align="start" className="bandkort">
+        <Panelhode>Målt konsentrasjon</Panelhode>
         {regler.status !== 'klar' && (
           <Regelmelding regler={regler} kode={analyte.kode} onProvIgjen={onProvIgjen} />
         )}

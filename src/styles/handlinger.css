@@ -1,7 +1,121 @@
 /**
- * Handlingsprimitiver fra Atlas: den runde ikonknappen (`Ikonknapp`) og
- * hurtigtastmerket slik det står i felt og toppmeny.
+ * Handlingsprimitiver fra Atlas: knappen (`Button`), den runde ikonknappen
+ * (`Ikonknapp`) og hurtigtastmerket (`Shortcut`).
  */
+
+/* --- Hurtigtastmerke --------------------------------------------------------
+   Liten pille i UI-skriften, som «Ctrl K» i søkefeltet og «Esc» ved
+   tilbakeknappen. Står den på en aksentflate, blandes flaten inn i aksenten. */
+.hurtigtast {
+  flex: none;
+  padding: var(--rom-1) var(--rom-3);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
+  white-space: nowrap;
+  color: var(--blekk-dempet);
+  background: var(--flate);
+  border-radius: var(--runding-pille);
+}
+
+/* --- Knapp ------------------------------------------------------------------
+   Pilleformet. Hovedknappen har ikonet i en egen sirkel; de andre har det
+   rett foran teksten. Alle handlinger har ikon. */
+.knapp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-3);
+  min-height: var(--hoyde-kontroll);
+  padding: 0 var(--rom-5);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve),
+    color var(--fart-rask) var(--kurve),
+    filter var(--fart-rask) var(--kurve);
+}
+
+.knapp__ikon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  font-size: var(--ikon-ui);
+}
+
+.knapp:has(.knapp__ikon) {
+  padding-left: var(--rom-3);
+}
+
+/* Hovedknappen: aksentflate, ikonet i en lys sirkel og tastemerket blandet
+   inn i aksenten. */
+.knapp--primary {
+  min-height: var(--hoyde-felt);
+  padding: 0 var(--rom-6);
+  font-size: var(--tekst-ui);
+  color: var(--paa-aksent);
+  background: var(--aksent);
+}
+
+.knapp--primary:has(.knapp__ikon) {
+  padding: 0 var(--rom-4) 0 var(--rom-2);
+}
+
+.knapp--primary:hover {
+  background: color-mix(in oklab, var(--aksent) 88%, var(--blekk));
+}
+
+.knapp--primary .knapp__ikon {
+  width: var(--ikon-underpunkt);
+  height: var(--ikon-underpunkt);
+  font-size: var(--tekst-lesing);
+  color: var(--blekk);
+  background: var(--flate);
+  border-radius: var(--runding-pille);
+}
+
+.knapp--primary .hurtigtast {
+  color: var(--paa-aksent);
+  background: color-mix(in oklab, var(--paa-aksent) 22%, transparent);
+}
+
+/* En kompakt hovedknapp, til skjemaene på informasjonssidene. */
+.knapp--primary.knapp--kompakt {
+  min-height: var(--hoyde-kontroll);
+  font-size: var(--tekst-etikett);
+}
+
+/* Den stille knappen står på sidens egen flate: gjennomsiktig til pekeren
+   kommer, og tastemerket på den hevede flaten så det skiller seg ut. */
+.knapp--subtle {
+  min-height: var(--hoyde-liten);
+}
+
+.knapp--subtle:hover {
+  background: var(--flate-hevet);
+}
+
+.knapp--subtle .hurtigtast {
+  background: var(--flate-hevet);
+}
+
+.knapp--subtle:hover .hurtigtast {
+  background: var(--flate);
+}
+
+/* En avslått knapp skal kunne stå uten å friste. */
+.knapp:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  filter: none;
+}
 
 /* --- Ikonknapp ------------------------------------------------------------
    Rund, med ikonet i midten. Variantene skiller seg bare på flaten. */
@@ -67,17 +181,39 @@
   }
 }
 
-/* --- Hurtigtastmerke i Atlas-flatene ---------------------------------------
-   Liten pille i UI-skriften, som «Ctrl K» i søkefeltet. */
-.fagsok .hurtigtast,
-.toppmeny .hurtigtast {
-  padding: var(--rom-1) var(--rom-3);
-  font-family: var(--skrift-ui);
-  font-size: var(--tekst-merke);
+/* --- Knapp med kant -------------------------------------------------------
+   `Button variant="kant"`: en liten pille med hårlinje og ikon foran teksten,
+   for handlinger som står på en rad — «Nytt passord», «Endre kobling». */
+.knapp--kant {
+  min-height: var(--hoyde-liten);
+  padding: 0 var(--rom-4) 0 var(--rom-3);
+  font-size: var(--tekst-liten);
   font-weight: var(--vekt-halvfet);
-  color: var(--blekk-dempet);
-  background: var(--flate);
-  border: 0;
-  border-radius: var(--runding-pille);
-  opacity: 1;
+  color: var(--blekk);
+  background: transparent;
+  border: var(--kant) solid var(--linje-kontroll);
+  gap: var(--rom-2);
+}
+
+.knapp--kant .hurtigtast {
+  background: var(--flate-hevet);
+}
+
+.knapp--kant:hover {
+  background: var(--flate-hevet);
+}
+
+.knapp--kant .knapp__ikon {
+  font-size: var(--ikon-ui);
+}
+
+.knapp--kant:not(:has(.knapp__ikon)) {
+  padding: 0 var(--rom-4);
+}
+
+@media (max-width: 47.5em) {
+  .knapp--subtle,
+  .knapp--kant {
+    min-height: var(--hoyde-trykk);
+  }
 }

@@ -2,8 +2,9 @@
 
 OUSFAR bruker designsystemet **OUSFAR Atlas** fra Claude Design. Planen for
 hele omleggingen står i `docs/ux-reimagination.md`. Denne filen beskriver
-byggeklossene: tokens, ikoner, knapper og den faste toppmenyen. Den er for
-den som skal bygge nye skjermbilder eller flytte gamle over.
+byggeklossene: tokens, stilarkene, ikoner, knapper, flatene og skjemaene,
+de modale lagene og den faste toppmenyen, og hvordan tekst i grensesnittet
+skrives. Den er for den som skal bygge nye skjermbilder eller endre gamle.
 
 ## Tokens
 
@@ -20,14 +21,18 @@ har ingen egne tall. Mangler en verdi, legges den inn der på riktig nivå.
   `--linjehoyde-*` og `--sperring-meta` (sperringen i små versaler).
 - **Mellomrom:** `--rom-1` til `--rom-10` er 4, 6, 10, 12, 14, 18, 22, 28, 40
   og 56 px. `--rom-side` er margen mot vinduskanten.
-- **Runding:** `--runding-merke`, `-felt`, `-underkort`, `-felt-gruppe`,
-  `-kort`, `-panel` og `-pille`.
+- **Runding:** `--runding-merke`, `-felt`, `-knapp`, `-underkort`,
+  `-felt-gruppe`, `-kort`, `-panel` og `-pille`.
+- **Bredder:** `--bredde-fortolkning` er kolonnen fortolkningsstegene står i.
 - **Kanter og høyder:** `--kant`, `--kant-aktiv`, `--kant-tykk`,
   `--fokusring`, `--hoyde-kontroll`, `--hoyde-trykk` (minste trykkflate),
   `--hoyde-toppmeny` og `--hoyde-dokk`.
-- **Ikoner:** `--ikon-ui`, `-underpunkt`, `-seksjon`, `-form`, `-konsept` og
-  `-plot`.
-- **Lag:** `--lag-toppmeny`, `--lag-popover` og `--lag-modal`.
+- **Ikoner:** `--ikon-ui`, `-panel`, `-underpunkt`, `-seksjon`, `-form`,
+  `-konsept` og `-plot`, og `--ikon-sirkel` (`-smal` på mobil) for sirkelen rundt
+  seksjonsikonet.
+- **Lag:** `--lag-innhold` (det som flyter over siden, under toppmenyen og
+  mørkleggingen bak sidemenyen), `--lag-toppmeny`, `--lag-popover` og
+  `--lag-modal`.
 - **Bevegelse:** `--fart-rask`, `-glid`, `-flyt` og `-ikon`, med `--kurve`
   og `--kurve-ikon`. Med `prefers-reduced-motion` er alle `--fart-*` 0 ms.
   Egne overganger skal bruke dem, så de slås av med resten.
@@ -54,15 +59,27 @@ settes på et enkelt element.
 `src/styles/__tests__/palette.test.ts` sjekker kontrasten til alle par som
 brukes sammen, i begge temaer. Et nytt fargepar skal inn der.
 
-### Eldre navn
+Logomerket (`src/components/konto/Logomerke.tsx`) er pynt og tegnes med
+`--aksent`, `--paa-aksent` og `--logo-punkt`, så det følger temaet.
 
-Stilarkene fra før Atlas bruker eldre navn som `--skrift`, `--tekst-s`,
-`--runding-m`, `--skygge`, `--niva-*` og `--merke-*`. De står nederst i
-`tokens.css` som aliaser for de nye tokens. Ny kode bruker de nye navnene, og
-aliasene fjernes etter hvert som skjermbildene flyttes over.
+## Stilarkene
 
-Mellomromskalaen fikk nye trinn. Alle eksisterende stilark er flyttet over:
-gamle `--rom-1` til `-6` heter nå `--rom-2`, `-3`, `-5`, `-7`, `-8` og `-9`.
+Hvert område har sitt eget stilark i `src/styles/`, så parallelle endringer
+ikke møtes i én stor fil. De felles står i `main.tsx`, i denne rekkefølgen:
+
+- `tokens.css` og `base.css`: verdiene, og siden, scenen og stegkolonnen.
+- `handlinger.css`: knappene og hurtigtastmerket.
+- `flater.css`: panelet, panelhodet, metalinjen, pillene, kommentarteksten,
+  varselet, mangellista, de sammenleggbare seksjonene og kopiering for hånd.
+- `skjema.css`: avkryssing, feltgruppe, feltrad, felt og bryter.
+- `tips.css`: tooltipen.
+- `fortolkning.css` og `thc.css`: fortolkningsstegene og THC-modulen.
+- `sidemeny.css`, `infoside.css`, `redigering.css`, `ikon.css`,
+  `toppmeny.css`, `endringslogg.css`, `konto.css` og `regler.css`.
+- `components.css`: bare søket på siden, til det får sin egen fil.
+
+Komponentene i informasjonssiden, seksjonene, referansene, merkene og det
+modale laget henter sitt eget stilark selv.
 
 ## Ikoner
 
@@ -87,35 +104,110 @@ Atlas. Det er data, så et nytt ikon er en ny oppføring der.
   `[data-ih]` får peker eller fokus, og første gang det kommer i bildet.
   Ingenting spilles med `prefers-reduced-motion`.
 
-De eldre ikonene i `src/components/icons/` (`SearchIcon`, `CopyIcon` osv.)
-tegnes nå med Atlas-ikonene, så gamle skjermbilder har fått de nye tegningene
-uten å endres.
+- **Klikk:** delene av tegningen tegnes på nytt hver gang animasjonen
+  spilles, også når et museklikk gir knappen fokus. Derfor tar bare selve
+  ikonet imot pekeren (`.ikon * { pointer-events: none }`). Ellers ville
+  trykket sluppet på et annet element enn det startet på, og klikket blitt
+  borte.
+
+Alle ikoner i appen er `Ikon`. Det finnes ingen andre ikonsett.
 
 ## Knapper
 
 - **`Ikonknapp`** (`src/components/Ikonknapp.tsx`) er en rund knapp med bare
   ikon. `etikett` er påkrevd og blir både knappens navn og tooltip.
   Variantene er `myk`, `stille`, `aksent` og `kant`, og størrelsene er
-  `kontroll` og `liten`. På smale flater er den minst 44 px.
+  `kontroll` og `liten`. På smale flater er den minst 44 px. `utenTips`
+  tar bort tooltipen der den ville havnet under et modalt lag.
 - **`Toppmenyknapp`** (`src/components/toppmeny/Toppmenyknapp.tsx`) er en
   pille med ikon og tekst, `primar` eller `sekundar`. På smalere skjermer
   krymper en sekundær knapp til bare ikon.
+- **`Button`** (`src/components/Button.tsx`) er knappen i skjemaer og lag:
+  `primary`, `subtle` og `kant` (pille med tynn kant, for handlinger på en
+  rad, som «Nytt passord» i brukerlista).
 
 Alle handlinger i toppmenyen har ikon.
+
+`Button` med `shortcut` viser tasten i et merke. Knappen som står for tur,
+er `primary` med ↵; de andre er `kant`.
+
+## Flater og skjema
+
+- **`Card`** er panelet: hårlinje, stor runding og ingen skygge. `align="start"`
+  venstrestiller innholdet.
+- **`Panelhode`** (`src/components/Panelhode.tsx`) er overskriften i et panel:
+  ikon og kursiv serif. `tone="toksisk"` er for det som mangler.
+- **`Metalinje`** (`src/components/Metalinje.tsx`) er linja over et stoffnavn,
+  som «KVE · SPFA › Antipsykotika». Med `lenker` er kodene lenker til
+  informasjonssiden (`Kodepille`).
+- **`StepBar`** er raden øverst i hvert fortolkningssteg. Esc-handlingen står
+  alltid der, med ikon og tastemerke.
+- **`Kommentarliste`** er kommentarblokkene i modulene: hvor kommentaren skal
+  limes inn, teksten skrevet ut og kopiknappen. `Kopibevis` er knappen som
+  ble brukt, og som følger med til limsteget.
+- **`Details`** er en sammenleggbar seksjon med ikon og pil.
+- **Klasser uten egen komponent:** `.kommentartekst` (teksten som limes inn),
+  `.notis` (forsiktighet, med `--handling` når den tilbyr handlingen),
+  `.mangelliste`, og skjemaklassene `.avkryssinger`/`.avkryssing`,
+  `.feltgruppe`, `.feltrad`, `.skjemafelt`, `.inndatafelt` og `.bryter`.
+
+Fargen til et konsentrasjonsbånd går gjennom `--band-farge`: under er
+`--under`, innenfor referanseområdet `--referanse`, over og cut-off
+`--toksisk`, ringegrensen `--alvorlig`. Nivået står også i ikonet og tallet.
+
+## Tekst i grensesnittet
+
+Planen (§12) skiller mellom to slags tekst:
+
+- **Klinisk innhold:** kommentarene, analyttnavn, enheter, grenser, regler
+  og varsler som sier noe faglig, som THC-merknaden om måleusikkerhet under
+  påvisningsgrensen. Den endres bare i faglige oppgaver, aldri i et
+  designløft.
+- **Grensesnittekst:** knapper, overskrifter, instrukser og hjelpetekster.
+  Den skal være kort, og ikke gjenta det ikon, etikett eller plassering
+  allerede sier.
+
+Slik står grensesnitteksten i fortolkningen (Atlas har de samme ordene):
+
+| Hvor | Tekst |
+| --- | --- |
+| Søket | «Begynn å skrive navnet på en analytt eller kode.» og «Søket er begrenset til» foran metodepillen |
+| Esc-raden | «Bytt analytt», «Endre konsentrasjon», «Endre valg» |
+| Panelhoder | «Målt konsentrasjon», «Påvist i denne prøven», «Kommentar(er)», «Til plenum», «Mangler», «Henter reglene», «Visualisering» |
+| Limsteget | «Lim inn kommentaren på» og koden, «Husk å ringe!», «Ferdig» |
+| Kommentarblokkene | merket («Hovedkommentar»), «Lim inn på» og koden, «Kopier», «Kopiert» |
+| THC | «Forrige prøve», «Denne prøven», feltnavnene, «Nullstill», «Trykk ↵ for å nullstille nå», «Forklaring» |
+| Kopiering feiler | «Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.» (`KOPIFEIL` i `ManualCopy.tsx`) |
+
+Ryddet bort i omleggingen:
+
+- Tooltipen på «Kopier» når kommentarteksten står skrevet ut rett over.
+- «· kan ikke redigeres» ved automatiske kilder i lesemodus. Merknaden står
+  bare i redigering, der den betyr noe.
 
 ## Merker og modale lag
 
 - **`Merke`** (`src/components/Merke.tsx`) er en liten merkelapp for en
-  status, f.eks. «Godkjenningsfritak» eller «Åpnet herfra». Tonene er
-  `noytral`, `flate`, `aksent`, `fritak`, `referanse`, `toksisk` og
-  `alvorlig`, og hver er et fargepar som `palette.test.ts` måler. Betydningen
-  står alltid i teksten.
+  status, f.eks. «Godkjenningsfritak», «Åpnet herfra» eller «Administrator».
+  Tonene er `noytral`, `flate`, `aksent`, `fritak`, `referanse`, `toksisk`
+  og `alvorlig`, og hver er et fargepar som `palette.test.ts` måler.
+  Betydningen står alltid i teksten.
 - **`Modallag`** (`src/components/Modallag.tsx`) er det ene modale laget,
-  bygget på `<dialog>`: fokusfelle, Escape, trykk på bakgrunnen, låst
-  rulling bak og fokuset tilbake. Med `meta`, `ikon`, `undertittel` eller
-  `merker` får det Atlas-hodet: en linje i versaler, ikonet i en sirkel,
-  tittelen i Newsreader og merkene under, på en hevet flate. Med `ark` blir
-  det et ark nedenfra på smale flater. Stilen står i `modallag.css`.
+  for endringsloggen, kontoen, brukerlista, historikken, publiseringen og
+  preparatvinduet. Det bygger på `<dialog>`: fokusfelle, Escape, trykk på
+  bakgrunnen, låst rulling bak og fokuset tilbake. Tittelen er lagets navn,
+  og lukkeknappen heter «Lukk» og tittelen, eller `lukketekst`.
+  - `ikon`: ikonet i sirkelen foran tittelen.
+  - `handling`: en ekstra knapp øverst, som «Opprett bruker». På smale
+    flater får den en egen rad under tittelen.
+  - `bred`: bredere panel. `tettKropp`: mindre luft rundt innholdet.
+  - `autofokus`: en CSS-velger for hvor fokus skal stå når laget åpnes.
+  - `meta`, `undertittel` og `merker` gir Atlas-hodet: en linje i versaler,
+    ikonet, tittelen i Newsreader og merkene under, på en hevet flate.
+  - `ark`: laget blir et ark nedenfra på smale flater.
+
+  Stilen står i `modallag.css`. Endringsloggen og versjonspillen har sin
+  egen i `endringslogg.css`.
 
 ## Toppmenyen
 
@@ -148,7 +240,10 @@ siden, med sidens tilstand og kontekster. Står siden uten toppmeny rundt seg,
 som i en test, blir innholdet stående i siden.
 
 - `handlinger`: brukes av stoffsiden til «Åpne fortolkning», «Rediger» og
-  «Lukk».
+  «Lukk». I redigeringsmodus står bare redigeringen der: status, «Publiser»
+  og «Avslutt redigering» (`Redigeringslinje.tsx`). Publiseringen viser hva
+  som blir synlig for alle i et modalt lag før noe publiseres. Stilene for
+  redigeringen står i `src/styles/redigering.css`.
 - `sidesok`: plassen til søket i den åpne siden. Den er tom foreløpig, og
   stoffsidens eget søk står i siden som før.
 - `sok` (en prop på `Toppmeny`): plassen til globalt fagsøk. Feltet er

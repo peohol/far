@@ -1,10 +1,9 @@
-import { Button } from './Button'
 import { Card } from './Card'
 import { ManualCopy } from './ManualCopy'
 import { Shortcut } from './Shortcut'
 import { StepBar } from './StepBar'
 import { bandIkon } from './bandikon'
-import { BackIcon } from './icons'
+import { Ikon } from './ikon/Ikon'
 import type { Kommentarvalg } from '../domain/valg'
 import { indexToDigit } from '../hooks/useKeyboard'
 
@@ -37,21 +36,15 @@ export interface KontrollStepProps {
  * som ikke er ment — fargene i appen hører til konsentrasjonsnivåene.
  */
 export function KontrollStep({ valg, sporsmal, onJa, onNei, failed }: KontrollStepProps) {
-  const Ikon = bandIkon(valg)
-
   return (
     <section className="steg" aria-label="Bekreft funnet">
-      <StepBar>
-        <Button variant="subtle" icon={<BackIcon />} shortcut="Esc" onClick={onNei}>
-          Endre konsentrasjon
-        </Button>
-      </StepBar>
+      <StepBar onEsc={onNei}>Endre konsentrasjon</StepBar>
 
       <Card className="kontrollkort">
         {/* Kvitteringen legges der merket står, og beviset i limsteget flyter
             opp fra den samme ruten — samme feste som knappene i steget foran. */}
         <p className={`valgmerke valgmerke--${valg.tone}`} data-band={valg.key}>
-          <Ikon className="valgmerke__ikon" />
+          <Ikon navn={bandIkon(valg)} className="valgmerke__ikon" />
           {valg.label}
         </p>
 

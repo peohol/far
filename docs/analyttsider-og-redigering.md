@@ -1048,7 +1048,7 @@ Ingen databasemodell lages i denne arbeidspakken.
 
 **Status:** [x] Ferdig
 
-Stoffsidene bruker progressiv detaljering: seksjon → detaljkort, beskrevet i `docs/seksjoner.md`. Identiteten står alltid fram; Viktige data er åpen fra start; de andre seksjonene er lukket med en kort oppsummering av innholdet. Direktelenker: `#/analytt/<KODE>/<seksjon>/<kort>`. Redigeringsmodus åpner alt.
+Stoffsidene bruker progressiv detaljering: seksjon → detaljkort, beskrevet i `docs/seksjoner.md`. Identiteten og Viktige data står alltid fram og er ikke seksjoner; de andre seksjonene er lukket med en kort oppsummering av innholdet, og bare én står åpen om gangen. Direktelenker: `#/analytt/<KODE>/<seksjon>/<kort>`. Rekkefølgen og visningen er fra `docs/ux-reimagination.md` del 8.
 
 Del 1, komponenten:
 

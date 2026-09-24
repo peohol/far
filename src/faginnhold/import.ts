@@ -21,7 +21,6 @@ import type { Referanseinnhold } from './modell'
 import {
   DATAKORT,
   ELEMENTTYPER,
-  formaterTall,
   kontrollerIntervall,
   lesDosetabell,
   lesIntervallverdi,
@@ -29,6 +28,7 @@ import {
   type Doserad,
   type Intervallverdi,
 } from './paneler'
+import { PROSJEKTMERKNAD, persentilmerknad, persentiltekst } from './serumtabell'
 import { MERKER, NODER, rensDokument, type Riktekstdokument, type Riktekstnode } from './riktekst'
 
 /* --- Datasettet ----------------------------------------------------------- */
@@ -201,29 +201,6 @@ export function tilDokument(blokker: readonly Tekstblokk[]): Riktekstdokument {
 
 /* --- Tabellen over serumkonsentrasjoner ----------------------------------- */
 
-/**
- * Et tall på norsk form, med vanlig mellomrom mellom tusener: teksten lagres,
- * og et hardt mellomrom er usynlig og overlever ikke alle veier inn i
- * databasen.
- */
-function tall(verdi: number): string {
-  return formaterTall(verdi).replace(/\u00a0/g, ' ')
-}
-
-/** «Median 118 nmol/L (10.–90. persentil: 51–402)», med det kilden faktisk har. */
-function persentiltekst(median: number | null, p10: number | null, p90: number | null, enhet: string): string {
-  const spenn =
-    p10 !== null && p90 !== null
-      ? `10.–90. persentil: ${tall(p10)}–${tall(p90)}`
-      : p10 !== null
-        ? `10. persentil: ${tall(p10)}`
-        : p90 !== null
-          ? `90. persentil: ${tall(p90)}`
-          : ''
-  if (median === null) return spenn ? `${spenn} ${enhet}` : ''
-  return `Median ${tall(median)} ${enhet}${spenn ? ` (${spenn})` : ''}`
-}
-
 /** Radene i tabellen: persentiltabellene kolonne for kolonne, så resten som i kilden. */
 export function doserader(serum: Importserum): Doserad[] {
   const rader: Doserad[] = []
@@ -231,11 +208,7 @@ export function doserader(serum: Importserum): Doserad[] {
     tabell.doser.forEach((dose, i) => {
       const konsentrasjon = persentiltekst(tabell.median[i] ?? null, tabell.p10[i] ?? null, tabell.p90[i] ?? null, tabell.enhet)
       if (!konsentrasjon) return
-      const antall = tabell.antall[i] ?? null
-      const merknad = [tabell.stoff, antall !== null ? `${tall(antall)} prøver` : '', tabell.kilde]
-        .filter(Boolean)
-        .map((del) => (/[.)]$/.test(del) ? del : `${del}.`))
-        .join(' ')
+      const merknad = persentilmerknad(tabell.stoff, tabell.antall[i] ?? null, tabell.kilde)
       rader.push({ dose, regime: '', konsentrasjon, merknad })
     })
   }
@@ -245,7 +218,7 @@ export function doserader(serum: Importserum): Doserad[] {
       dose: prosjekt.doser,
       regime: '',
       konsentrasjon: persentiltekst(null, prosjekt.p10, prosjekt.p90, prosjekt.enhet),
-      merknad: 'Referanseområdeprosjektet 2005–2008 (Diakonhjemmet/St. Olavs).',
+      merknad: PROSJEKTMERKNAD,
     })
   }
   return [...rader, ...(serum.rader ?? [])]

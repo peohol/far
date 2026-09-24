@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { Button } from './Button'
 import { StepBar } from './StepBar'
-import { ResetIcon, SearchIcon } from './icons'
+import { Ikon } from './ikon/Ikon'
 import { fortolkningenErSkjult, indexToDigit, lagLiggerOver } from '../hooks/useKeyboard'
 import { Filterbytte } from './Filterbytte'
 import { splitName } from '../domain/names'
@@ -83,17 +82,15 @@ export function SearchStep({
 
   return (
     <section className="steg steg--sok" aria-label="Velg analytt">
-      <StepBar>
-        {!tomt && (
-          <Button variant="subtle" icon={<ResetIcon />} shortcut="Esc" onClick={onReset}>
-            Nullstill
-          </Button>
-        )}
+      <StepBar ikon="reset" onEsc={tomt ? undefined : onReset}>
+        Nullstill
       </StepBar>
 
       <div className="sok">
         <p className={`instruks${tomt ? '' : ' instruks--skjult'}`} aria-hidden={!tomt}>
-          <SearchIcon className="instruks__ikon" />
+          <span className="instruks__sirkel" data-ih="">
+            <Ikon navn="search" className="instruks__ikon" />
+          </span>
           Begynn å skrive navnet på en analytt eller kode.
         </p>
 

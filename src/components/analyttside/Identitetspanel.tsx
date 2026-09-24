@@ -3,12 +3,14 @@ import { analyttadresse } from '../../domain/rute'
 import { iSetning } from '../../domain/names'
 import type { Analyttsidedata } from '../../faginnhold/lesing'
 import type { Paneldefinisjon } from '../../faginnhold/paneler'
-import { Metodepille } from '../Metodepille'
-import { Pill } from '../Pill'
+import { useRef } from 'react'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { useSidereferanser } from '../referanser/Sidereferanser'
+import { useFastSted } from '../seksjoner/Seksjonsstyring'
+import { Metalinje } from '../Metalinje'
 import { Uthev } from '../Uthev'
 import { panelAnker } from './Paneler'
+import '../../styles/monograf-topp.css'
 
 /** Et stoff analysen omfatter, med kodene som har det som sin side. */
 export interface Komponent {
@@ -35,10 +37,10 @@ export function komponenterFor(
 }
 
 /**
- * Panel 1: hva siden handler om. Analyttkoden og kategorien som piller,
- * virkestoffet som hovedoverskrift, og for sumanalysene hvilke stoffer koden
- * omfatter — med lenker til sidene deres, uten å gjøre dem til hovedanalytt.
- * Preparatene står i seksjonen under (`Preparatpanel.tsx`).
+ * Panel 1: hva siden handler om. Metalinjen med analyttkoden, metoden og
+ * kategorien, virkestoffet som hovedoverskrift, og for sumanalysene hvilke
+ * stoffer koden omfatter — med lenker til sidene deres, uten å gjøre dem til
+ * hovedanalytt. Står alltid fram, over viktige data (`ViktigeData.tsx`).
  */
 export function Identitetspanel({
   definisjon,
@@ -55,13 +57,12 @@ export function Identitetspanel({
 }) {
   const panelreferanser = useSidereferanser().panelreferanser[definisjon.nokkel] ?? []
   const sum = komponenter.length > 1
+  const flate = useRef<HTMLElement>(null)
+  useFastSted(definisjon.nokkel, flate)
 
   return (
-    <section id={panelAnker(definisjon.nokkel)} className="kort kort--start infopanel identitet" aria-labelledby={overskriftId}>
-      <div className="identitet__piller">
-        <Pill tone="kode">{oppforing.kode}</Pill>
-        <Metodepille metode={oppforing.analysemetode} kategori={oppforing.kategori} />
-      </div>
+    <section ref={flate} id={panelAnker(definisjon.nokkel)} className="identitet" aria-labelledby={overskriftId}>
+      <Metalinje koder={[oppforing.kode]} metode={oppforing.analysemetode} kategori={oppforing.kategori} />
       <h1 id={overskriftId} className="identitet__navn" tabIndex={-1}>
         <Uthev tekst={navn} />
       </h1>
@@ -82,7 +83,6 @@ export function Identitetspanel({
     </section>
   )
 }
-
 
 /** Stoffet, med lenke til sidene for de andre kodene som har det som sin side. */
 function Komponentlenke({ komponent, gjeldende }: { komponent: Komponent; gjeldende: string }) {

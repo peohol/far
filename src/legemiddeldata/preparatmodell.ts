@@ -143,7 +143,7 @@ export interface Preparatdetalj {
   salter: string[]
   /** De andre virkestoffene, når preparatet er en kombinasjon. */
   kombinasjon: string[]
-  /** Merkene samlet for alle styrkene. */
+  /** Merkene samlet for alle styrkene; `fordelMerker` skiller det felles fra det som gjelder én styrke. */
   merker: Preparatmerke[]
   administrasjonsveier: string[]
   reseptgrupper: string[]
@@ -472,8 +472,24 @@ function leggTilKoder(liste: Kode[], koder: readonly (Kode | null)[]) {
   for (const k of koder) if (k && !liste.some((x) => x.kode === k.kode)) liste.push(k)
 }
 
+const sammeMerke = (a: Preparatmerke) => (b: Preparatmerke) => a.type === b.type && a.tekst === b.tekst
+
 function leggTilMerker(liste: Preparatmerke[], merker: readonly Preparatmerke[]) {
-  for (const m of merker) if (!liste.some((x) => x.type === m.type && x.tekst === m.tekst)) liste.push(m)
+  for (const m of merker) if (!liste.some(sammeMerke(m))) liste.push(m)
+}
+
+/**
+ * Merkene som gjelder hele preparatet, og merkene som bare gjelder hver
+ * styrke. Et preparat med godkjenningsfritak i én styrke er ikke et
+ * fritakspreparat i de andre.
+ */
+export function fordelMerker({ merker, styrker }: Pick<Preparatdetalj, 'merker' | 'styrker'>): {
+  felles: Preparatmerke[]
+  /** I samme rekkefølge som styrkene. */
+  egne: Preparatmerke[][]
+} {
+  const felles = merker.filter((m) => styrker.every((s) => s.merker.some(sammeMerke(m))))
+  return { felles, egne: styrker.map((s) => s.merker.filter((m) => !felles.some(sammeMerke(m)))) }
 }
 
 /* --- Oppsummeringene ------------------------------------------------------- */

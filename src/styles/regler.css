@@ -1,18 +1,20 @@
 /* Fortolkningsreglene på informasjonssiden, redigeringen av dem og
    historikkvinduet. Fargene er nivåenes og varslenes egne tokens, så lyst
-   og mørkt tema følger av seg selv. */
+   og mørkt tema følger av seg selv; formene er Atlas-primitivene fra
+   `flater.css`, `skjema.css` og `fortolkning.css`, så reglene leses som
+   knappene og kommentarblokkene i fortolkningen. */
 
 /* --- Tabellen og simulatoren -------------------------------------------- */
 
 .regler__ingress,
 .regler__merknad {
-  font-size: var(--tekst-s);
+  font-size: var(--tekst-ui);
   color: var(--blekk-dempet);
 }
 
 .regler__tabell th[scope='row'] {
   white-space: nowrap;
-  font-size: var(--tekst-s);
+  font-size: var(--tekst-ui);
   font-weight: var(--vekt-medium);
   color: var(--blekk);
 }
@@ -35,51 +37,51 @@
 
 /* Samme farger som knappene på steg 2. */
 .regler__intervall--under {
-  color: var(--niva-under-blekk);
-  background: var(--niva-under-flate);
+  color: var(--under-blekk);
+  background: var(--under-flate);
 }
 
 .regler__intervall--innenfor {
-  color: var(--niva-innenfor-blekk);
-  background: var(--niva-innenfor-flate);
+  color: var(--referanse-blekk);
+  background: var(--referanse-flate);
 }
 
 .regler__intervall--over,
 .regler__intervall--cutoff {
-  color: var(--niva-gul-blekk);
-  background: var(--niva-gul-flate);
+  color: var(--toksisk-blekk);
+  background: var(--toksisk-flate);
 }
 
 .regler__intervall--ring {
-  color: var(--niva-over-blekk);
-  background: var(--niva-over-flate);
+  color: var(--alvorlig-blekk);
+  background: var(--alvorlig-flate);
 }
 
 .regler__tabell .regler__intervall--under {
-  box-shadow: inset 3px 0 0 var(--niva-under-linje);
+  box-shadow: inset calc(var(--kant-tykk) + var(--kant)) 0 0 var(--under-kant);
 }
 
 .regler__tabell .regler__intervall--innenfor {
-  box-shadow: inset 3px 0 0 var(--niva-innenfor-linje);
+  box-shadow: inset calc(var(--kant-tykk) + var(--kant)) 0 0 var(--referanse-kant);
 }
 
 .regler__tabell .regler__intervall--over,
 .regler__tabell .regler__intervall--cutoff {
-  box-shadow: inset 3px 0 0 var(--niva-gul-linje);
+  box-shadow: inset calc(var(--kant-tykk) + var(--kant)) 0 0 var(--toksisk-kant);
 }
 
 .regler__tabell .regler__intervall--ring {
-  box-shadow: inset 3px 0 0 var(--niva-over-linje);
+  box-shadow: inset calc(var(--kant-tykk) + var(--kant)) 0 0 var(--alvorlig-kant);
 }
 
 .regler__simulator {
   display: flex;
   flex-direction: column;
-  gap: var(--rom-3);
+  gap: var(--rom-4);
   width: 100%;
-  padding: var(--rom-5);
-  border: var(--kant) dashed var(--linje);
-  border-radius: var(--runding-m);
+  padding: var(--rom-6);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-felt-gruppe);
 }
 
 .regler__proverad {
@@ -97,11 +99,14 @@
   display: inline-flex;
   align-items: center;
   gap: var(--rom-3);
-  font-size: var(--tekst-s);
+  font-size: var(--tekst-ui);
   color: var(--blekk);
 }
 
 .regler__avkryssing input {
+  width: 1.2em;
+  height: 1.2em;
+  margin: 0;
   accent-color: var(--aksent);
 }
 
@@ -111,15 +116,15 @@
   align-items: flex-start;
   gap: var(--rom-2);
   min-height: 1.5em;
-  font-size: var(--tekst-s);
+  font-size: var(--tekst-ui);
   color: var(--blekk-dempet);
 }
 
 .regler__svar .regler__intervall {
   padding: 0.1em var(--rom-3);
-  font-size: var(--tekst-xs);
+  font-size: var(--tekst-meta);
   font-weight: var(--vekt-medium);
-  border-radius: var(--runding-full);
+  border-radius: var(--runding-pille);
 }
 
 .regler__kommentar {
@@ -127,7 +132,7 @@
 }
 
 .regler__handling {
-  font-size: var(--tekst-xs);
+  font-size: var(--tekst-meta);
 }
 
 /* En enhet i en merkelapp med store bokstaver skal stå som den skrives. */
@@ -158,32 +163,34 @@
   flex-direction: column;
   gap: var(--rom-3);
   min-width: 0;
-  padding: var(--rom-3) var(--rom-5) var(--rom-5);
+  padding: var(--rom-2) var(--rom-6) var(--rom-6);
   border: var(--kant) solid var(--linje);
-  border-radius: var(--runding-s);
+  border-radius: var(--runding-felt-gruppe);
 }
 
 .regelredigering__intervall {
-  border-left-width: 4px;
+  border-left-width: calc(var(--kant-tykk) * 2);
 }
 
 .regelredigering__intervall--under {
-  border-left-color: var(--niva-under-linje);
+  border-left-color: var(--under-kant);
 }
 
 .regelredigering__intervall--innenfor {
-  border-left-color: var(--niva-innenfor-linje);
+  border-left-color: var(--referanse-kant);
 }
 
 .regelredigering__intervall--over {
-  border-left-color: var(--niva-gul-linje);
+  border-left-color: var(--toksisk-kant);
 }
 
 .regelredigering__intervall > legend,
 .regelredigering__gruppe > legend {
   padding: 0 var(--rom-2);
-  font-size: var(--tekst-xs);
-  font-weight: var(--vekt-tung);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-ingress);
+  font-style: italic;
+  font-weight: var(--vekt-medium);
   color: var(--blekk);
 }
 
@@ -220,14 +227,10 @@
 
 /* --- Historikken -------------------------------------------------------- */
 
-.modallag--bred {
-  width: min(100%, 68rem);
-}
-
 .sistredigert--knapp {
   padding: 0;
   font: inherit;
-  font-size: var(--tekst-xxs);
+  font-size: var(--tekst-merke);
   text-align: left;
   color: var(--blekk-dempet);
   background: none;
@@ -274,8 +277,8 @@
   color: var(--blekk);
   background: none;
   border: var(--kant) solid transparent;
-  border-left: 3px solid var(--linje);
-  border-radius: var(--runding-s);
+  border-left: calc(var(--kant-tykk) + var(--kant)) solid var(--linje);
+  border-radius: var(--runding-felt);
 }
 
 button.historikk__velg {
@@ -292,17 +295,17 @@ button.historikk__velg:hover {
 }
 
 .historikk__hendelse--publisert .historikk__velg {
-  border-left-color: var(--niva-innenfor-linje);
+  border-left-color: var(--referanse-kant);
 }
 
 .historikk__handling {
-  font-size: var(--tekst-s);
+  font-size: var(--tekst-ui);
   font-weight: var(--vekt-medium);
 }
 
 .historikk__hvem,
 .historikk__kilde {
-  font-size: var(--tekst-xs);
+  font-size: var(--tekst-meta);
   color: var(--blekk-dempet);
 }
 
@@ -326,7 +329,7 @@ button.historikk__velg:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--rom-3);
-  font-size: var(--tekst-s);
+  font-size: var(--tekst-ui);
 }
 
 .historikk__mot select {
@@ -355,8 +358,8 @@ button.historikk__velg:hover {
 
 .historikk__gruppetittel {
   margin-bottom: var(--rom-2);
-  font-size: var(--tekst-xs);
-  font-weight: var(--vekt-tung);
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-fet);
   color: var(--blekk-dempet);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -373,7 +376,7 @@ button.historikk__velg:hover {
   display: grid;
   grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr);
   gap: var(--rom-5);
-  font-size: var(--tekst-s);
+  font-size: var(--tekst-ui);
 }
 
 .historikk__rad dt {
@@ -391,22 +394,22 @@ button.historikk__velg:hover {
 
 .historikk__endret th,
 .historikk__endret td {
-  background: var(--varsel-flate);
+  background: var(--toksisk-flate);
 }
 
 /* Fjernet: rødt og gjennomstreket. Lagt til: grønt og understreket, så
    forskjellen ikke bare hviler på fargen. */
 .historikk del,
 .regelredigering__konflikt del {
-  color: var(--niva-over-blekk);
-  background: var(--niva-over-flate);
+  color: var(--alvorlig-blekk);
+  background: var(--alvorlig-flate);
   text-decoration: line-through;
 }
 
 .historikk ins,
 .regelredigering__konflikt ins {
-  color: var(--niva-innenfor-blekk);
-  background: var(--niva-innenfor-flate);
+  color: var(--referanse-blekk);
+  background: var(--referanse-flate);
   text-decoration: underline;
   text-underline-offset: 0.15em;
 }
@@ -425,4 +428,175 @@ button.historikk__velg:hover {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* --- Scenarioreglene -----------------------------------------------------
+   Fortolkningsreglene på informasjonssiden:
+   scenarioreglene for rusmiddelmodulene, i seksjonen «fortolkning», med
+   kommentartekstene og simulatoren som detaljkort. Hvert
+   scenario er en rad: hva som må være påvist og gjelde til venstre, hva
+   fortolkningen gir til høyre. På smal skjerm legger de seg under hverandre. */
+.regler__ingress {
+  font-size: var(--tekst-ui);
+  line-height: 1.5;
+  text-align: left;
+  color: var(--blekk-dempet);
+}
+
+.regler__grenser {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-3);
+  width: 100%;
+  margin: 0;
+}
+
+.regler__grense {
+  display: flex;
+  align-items: baseline;
+  gap: var(--rom-2);
+  padding: var(--rom-2) var(--rom-4);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-medium);
+  text-align: left;
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.regler__grense dd {
+  margin: 0;
+  white-space: nowrap;
+  font-weight: var(--vekt-fet);
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk);
+}
+
+.scenarioliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scenario {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: var(--rom-2) var(--rom-7);
+  padding: var(--rom-5) var(--rom-6);
+  font-size: var(--tekst-ui);
+  line-height: var(--linjehoyde-lesing);
+  text-align: left;
+  background: var(--flate-bunn);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-knapp);
+  transition:
+    background var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve);
+}
+
+.scenario--truffet {
+  background: var(--aksent-flate);
+  border-color: var(--aksent);
+}
+
+.scenario__nummer {
+  grid-column: 1 / -1;
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.scenario__vilkar,
+.scenario__utfall {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  min-width: 0;
+}
+
+.scenario__etikett {
+  color: var(--blekk-dempet);
+}
+
+.scenario__kode,
+.scenario__uttrykk {
+  font-family: var(--skrift-mono);
+  font-size: 0.95em;
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-sterk);
+  overflow-wrap: anywhere;
+}
+
+.scenario__plasseringer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scenario__notis {
+  white-space: pre-line;
+  color: var(--blekk-dempet);
+}
+
+.scenario__manuell {
+  font-weight: var(--vekt-medium);
+  color: var(--toksisk-blekk);
+}
+
+@media (max-width: 40rem) {
+  .scenario {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.regeltekster {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-7);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.regeltekst {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  text-align: left;
+}
+
+.regeltekst__nummer {
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.regeltekst__bruk {
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: var(--vekt-normal);
+}
+
+.simulator__resultat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+}
+
+.simulator__scenario {
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-medium);
+  text-align: left;
+  color: var(--blekk);
 }

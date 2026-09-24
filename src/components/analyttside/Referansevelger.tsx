@@ -4,11 +4,15 @@ import { erAutomatisk, formaterReferanse, type Referanse } from '../../faginnhol
 import { erTrygLenke } from '../../faginnhold/riktekst'
 import { fold, sokeord } from '../../faginnhold/sok'
 import { Button } from '../Button'
+import { Ikon } from '../ikon/Ikon'
 import { Referansetekst } from '../referanser/Referansetekst'
 import { useRedigering } from './Redigeringskontekst'
 
 /** Flest forslag som vises av gangen. */
 const MAKS_FORSLAG = 8
+
+/** Hvorfor en automatisk kilde står låst i lista. */
+const AUTOMATISK_LAAST = 'Automatisk fra FEST – kan ikke velges eller redigeres'
 
 export interface ReferansevelgerProps {
   /** Overskriften, f.eks. «Kilder for kortet». */
@@ -25,7 +29,7 @@ export interface ReferansevelgerProps {
  * mange steder og rettes ett sted. Finnes den ikke, kan den legges inn her.
  * Arkiverte referanser kan ikke velges, og heller ikke automatiske (FEST): de
  * siteres bare av dataene de kommer fra, og kan verken redigeres eller
- * fjernes her. Rekkefølgen er den de velges i; numrene på siden regnes ut når
+ * fjernes her. De står likevel låst i treffene, så det er tydelig hvorfor. Rekkefølgen er den de velges i; numrene på siden regnes ut når
  * den vises.
  */
 export function Referansevelger({ tittel, valgte, onEndre }: ReferansevelgerProps) {
@@ -35,16 +39,21 @@ export function Referansevelger({ tittel, valgte, onEndre }: ReferansevelgerProp
   const sokId = useId()
 
   const perId = useMemo(() => new Map(referansebase.map((r) => [r.id, r])), [referansebase])
-  const forslag = useMemo(() => {
+  // De automatiske (FEST) som passer, står med i lista, låst: slik er det
+  // tydelig at kilden finnes, men ikke kan velges eller endres her.
+  const { forslag, laste } = useMemo(() => {
     const ord = sokeord(sporring)
-    if (ord.length === 0) return []
-    return referansebase
-      .filter((r) => !r.arkivert && !erAutomatisk(r) && !valgte.includes(r.id))
+    if (ord.length === 0) return { forslag: [], laste: [] }
+    const passer = referansebase
+      .filter((r) => !r.arkivert && !valgte.includes(r.id))
       .filter((r) => {
         const tekst = fold(formaterReferanse(r))
         return ord.every((o) => tekst.includes(o))
       })
-      .slice(0, MAKS_FORSLAG)
+    return {
+      forslag: passer.filter((r) => !erAutomatisk(r)).slice(0, MAKS_FORSLAG),
+      laste: passer.filter(erAutomatisk).slice(0, MAKS_FORSLAG),
+    }
   }, [referansebase, sporring, valgte])
 
   const leggTil = (id: string) => {
@@ -69,7 +78,7 @@ export function Referansevelger({ tittel, valgte, onEndre }: ReferansevelgerProp
                 <span className="referansevelger__handlinger">
                   {i > 0 && (
                     <Button
-                      variant="subtle"
+                      variant="kant"
                       aria-label={`Flytt opp: ${navn}`}
                       onClick={() => onEndre(bytt(valgte, i, i - 1))}
                     >
@@ -77,7 +86,7 @@ export function Referansevelger({ tittel, valgte, onEndre }: ReferansevelgerProp
                     </Button>
                   )}
                   <Button
-                    variant="subtle"
+                    variant="kant"
                     aria-label={`Fjern: ${navn}`}
                     onClick={() => onEndre(valgte.filter((v) => v !== id))}
                   >
@@ -94,22 +103,25 @@ export function Referansevelger({ tittel, valgte, onEndre }: ReferansevelgerProp
 
       <label className="felt" htmlFor={sokId}>
         <span className="felt__merkelapp">Finn en referanse</span>
-        <input
-          id={sokId}
-          className="felt__inndata"
-          type="search"
-          value={sporring}
-          placeholder="Tittel, forfatter eller år"
-          onChange={(e) => setSporring(e.target.value)}
-          onKeyDown={(e) => {
-            // Enter skal ikke sende skjemaet velgeren står i. Står det bare
-            // ett forslag igjen, velges det.
-            if (e.key !== 'Enter') return
-            e.preventDefault()
-            const [eneste] = forslag
-            if (eneste && forslag.length === 1) leggTil(eneste.id)
-          }}
-        />
+        <span className="referansevelger__sok">
+          <Ikon navn="search" storrelse="ui" />
+          <input
+            id={sokId}
+            className="referansevelger__sokefelt"
+            type="search"
+            value={sporring}
+            placeholder="Tittel, forfatter eller år"
+            onChange={(e) => setSporring(e.target.value)}
+            onKeyDown={(e) => {
+              // Enter skal ikke sende skjemaet velgeren står i. Står det bare
+              // ett forslag igjen, velges det.
+              if (e.key !== 'Enter') return
+              e.preventDefault()
+              const [eneste] = forslag
+              if (eneste && forslag.length === 1) leggTil(eneste.id)
+            }}
+          />
+        </span>
       </label>
       {sporring.trim() && (
         <ul className="referansevelger__forslag" aria-label="Referanser som passer">
@@ -121,7 +133,15 @@ export function Referansevelger({ tittel, valgte, onEndre }: ReferansevelgerProp
               </button>
             </li>
           ))}
-          {forslag.length === 0 && <li className="referansevelger__tom">Ingen referanser passer.</li>}
+          {laste.map((referanse) => (
+            <li key={referanse.id} className="referansevelger__last">
+              <span>{formaterReferanse(referanse)}</span>
+              <Ikon navn="lock" storrelse="ui" etikett={AUTOMATISK_LAAST} />
+            </li>
+          ))}
+          {forslag.length === 0 && laste.length === 0 && (
+            <li className="referansevelger__tom">Ingen referanser passer.</li>
+          )}
         </ul>
       )}
 
@@ -134,7 +154,7 @@ export function Referansevelger({ tittel, valgte, onEndre }: ReferansevelgerProp
           onAvbryt={() => setNy(false)}
         />
       ) : (
-        <Button variant="subtle" onClick={() => setNy(true)}>
+        <Button variant="subtle" className="referansevelger__ny" icon={<Ikon navn="plus" />} onClick={() => setNy(true)}>
           Ny referanse …
         </Button>
       )}

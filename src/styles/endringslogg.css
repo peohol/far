@@ -1,0 +1,199 @@
+/**
+ * Endringsloggen (`src/components/Endringslogg.tsx`) og versjonspilla som
+ * åpner den. Selve laget står i `modallag.css`.
+ */
+
+/* --- Versjonspilla --------------------------------------------------------
+   Fast nederst til høyre. Den er tonet ned med størrelse og plassering, ikke
+   med kontrast: teksten holder samme lesbarhetskrav som resten av appen. */
+.versjonspille {
+  position: fixed;
+  right: var(--rom-5);
+  bottom: var(--rom-5);
+  z-index: 10;
+  height: 1.875rem;
+  padding: 0 var(--rom-4);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  transition:
+    color var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve);
+}
+
+.versjonspille:hover,
+.versjonspille:focus-visible {
+  color: var(--blekk);
+  border-color: var(--linje-kontroll);
+}
+
+/* --- Endringsloggen --------------------------------------------------------
+   Én føring per rad. Bare én står åpen om gangen; den åpne får hevet flate
+   og hårlinje, og pilen i sirkelen snur seg ned. */
+.logg__liste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.loggskuff {
+  background: transparent;
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-underkort);
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve);
+}
+
+.loggskuff[data-apen='ja'] {
+  background: var(--flate-hevet);
+  border-color: var(--linje);
+}
+
+.loggskuff__tittel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--rom-3);
+  width: 100%;
+  padding: var(--rom-4) var(--rom-5);
+  color: var(--blekk);
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: var(--runding-underkort);
+  cursor: pointer;
+}
+
+.loggskuff:not([data-apen='ja']) .loggskuff__tittel:hover {
+  background: color-mix(in oklab, var(--flate-hevet) 55%, transparent);
+}
+
+.loggskuff__linje {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+}
+
+.loggskuff__merking {
+  flex: 1;
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-halvfet);
+  letter-spacing: 0.06em;
+  color: var(--blekk-dempet);
+}
+
+.loggskuff__pil {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.625rem;
+  height: 1.625rem;
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-pille);
+  transition: transform var(--fart-glid) var(--kurve);
+}
+
+.loggskuff[data-apen='ja'] .loggskuff__pil {
+  transform: rotate(90deg);
+}
+
+.loggskuff__sammendrag {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-weight: var(--vekt-medium);
+  line-height: 1.25;
+}
+
+.loggskuff__merker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+}
+
+.loggmerke {
+  padding: var(--rom-2) var(--rom-3);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  line-height: 1;
+  white-space: nowrap;
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-pille);
+}
+
+.loggmerke--design {
+  color: var(--merke-design);
+  background: var(--merke-design-flate);
+}
+
+.loggmerke--funksjon {
+  color: var(--merke-funksjon);
+  background: var(--merke-funksjon-flate);
+}
+
+.loggmerke--fag {
+  color: var(--merke-fag);
+  background: var(--merke-fag-flate);
+}
+
+/* Omfanget er den andre aksen, og skilles fra typemerkene ved å være
+   nøytralt med kantlinje i stedet for tonet flate. */
+.loggmerke--omfang {
+  color: var(--blekk-dempet);
+  background: transparent;
+  border-color: var(--linje-sterk);
+}
+
+/* Glidningen mot en ukjent høyde, som ellers i appen. Her holder ren CSS:
+   skuffen styres av tilstand, og innholdet fjernes aldri. */
+.loggskuff__kropp {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--fart-glid) var(--kurve);
+}
+
+.loggskuff[data-apen='ja'] .loggskuff__kropp {
+  grid-template-rows: 1fr;
+}
+
+/* Lukket innhold settes usynlig når glidningen er over, så det heller ikke
+   nås med tabulator eller skjermleser. */
+.loggskuff__inner {
+  overflow: hidden;
+  min-height: 0;
+  visibility: hidden;
+  transition: visibility 0s linear var(--fart-glid);
+}
+
+.loggskuff[data-apen='ja'] .loggskuff__inner {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.loggskuff__punkter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  margin: 0;
+  padding: 0 var(--rom-6) var(--rom-5) var(--rom-9);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-ingress);
+  line-height: var(--linjehoyde-lesing);
+  color: var(--blekk);
+}
+
+/* Uten bevegelse skal innholdet skjules med det samme i stedet for å vente
+   på en glidning som ikke lenger finnes. */
+@media (prefers-reduced-motion: reduce) {
+  .loggskuff__inner {
+    transition-delay: 0s;
+  }
+}

@@ -1,6 +1,6 @@
 import { forwardRef, type ComponentPropsWithoutRef, type ReactNode } from 'react'
 
-export type PillTone = 'noytral' | 'kode' | 'metode' | 'ring' | 'over'
+export type PillTone = 'noytral' | 'metode' | 'ring' | 'over'
 
 export interface PillProps extends Omit<ComponentPropsWithoutRef<'span'>, 'children'> {
   children: ReactNode

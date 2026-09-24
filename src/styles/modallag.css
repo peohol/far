@@ -1,8 +1,141 @@
-/* --- Modalt lag: hodet med identitet, og arket på smale flater ------------
-   Se `src/components/Modallag.tsx`. Rammen (`.logg`) og kroppen står i
-   `components.css` og `konto.css`; her står bare det Atlas la til:
-   metalinjen, ikonet, undertittelen og merkene i et hevet hode, og arket
-   nedenfra på mobil. */
+/**
+ * Det modale laget (`src/components/Modallag.tsx`): endringsloggen, kontoen,
+ * brukerlista, historikken, publiseringen og preparatvinduet.
+ *
+ * Laget følger Atlas: panelet er en flate med runding som et panel og
+ * skygge som det eneste som svever, ikonet står i en sirkel foran tittelen,
+ * og lukkeknappen er en rund ikonknapp. Det rike hodet (preparatvinduet) har
+ * metalinje, identitet og merker på hevet flate, og blir et ark nedenfra på
+ * mobil. Fargene er tokens, så laget følger temaet.
+ */
+
+/* --- Det modale laget ------------------------------------------------------
+   Selve `<dialog>`-elementet fyller vinduet, så et klikk hvor som helst
+   utenfor panelet treffer det og lukker laget. */
+.modallag {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: var(--rom-9) var(--rom-side);
+  color: var(--blekk);
+  background: transparent;
+  border: none;
+}
+
+/* Bare når laget står åpent — ellers ville nettleserens egen `display: none`
+   blitt overstyrt og laget stått framme hele tiden. */
+.modallag[open] {
+  display: grid;
+  place-items: start center;
+}
+
+/* `::backdrop` arver ikke tokens pålitelig, så fargen står her. */
+.modallag::backdrop {
+  background: rgb(6 9 12 / 0.62);
+}
+
+:root[data-tema='lyst'] .modallag::backdrop {
+  background: rgb(60 48 30 / 0.38);
+}
+
+.modallag__panel {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 47.5rem);
+  max-height: 100%;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-panel);
+  box-shadow: var(--skygge-modal);
+  overflow: hidden;
+  text-align: left;
+}
+
+.modallag__panel--bred {
+  width: min(100%, 68rem);
+}
+
+.modallag__topp {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-4);
+  padding: var(--rom-7) var(--rom-7) var(--rom-5);
+  border-bottom: var(--kant) solid var(--linje);
+}
+
+.modallag__ikon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--hoyde-kontroll);
+  height: var(--hoyde-kontroll);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.modallag__tittel {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-seksjon);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-titler);
+  color: var(--blekk);
+}
+
+.modallag__handling {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+}
+
+.modallag__kropp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-6);
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--rom-7);
+}
+
+.modallag__kropp--tett {
+  padding: var(--rom-3) var(--rom-5) var(--rom-6);
+}
+
+/* Bakgrunnen skal ikke rulle mens laget står over den.
+   Låsen må stå på rotelementet, ikke på `.app`: `.app` har `min-height` og
+   ikke fast høyde, så den vokser med innholdet i stedet for å rulle selv, og
+   det er dokumentet som får rullingen når innholdet blir høyere enn vinduet. */
+:root:has(dialog[open]) {
+  overflow: hidden;
+}
+
+@media (max-width: 47.5em) {
+  .modallag {
+    padding: var(--rom-5) var(--rom-3);
+  }
+
+  .modallag__topp {
+    flex-wrap: wrap;
+    padding: var(--rom-5);
+  }
+
+  .modallag__topp .modallag__handling {
+    order: 1;
+    flex-basis: 100%;
+  }
+
+  .modallag__kropp {
+    padding: var(--rom-5);
+  }
+}
+
+/* --- Det rike hodet og arket ---------------------------------------------
+   Med `meta`, `undertittel` eller `merker`: metalinjen, ikonet, tittelen og
+   merkene i et hevet hode, og arket nedenfra på smale flater (`ark`). */
 
 .modallag__hode {
   display: flex;
@@ -28,9 +161,8 @@
   color: var(--blekk-dempet);
 }
 
-.modallag__hode .logg__lukk {
-  width: var(--hoyde-trykk);
-  height: var(--hoyde-trykk);
+/* Hodet står på hevet flate; lukkeknappen får vanlig flate for å synes. */
+.modallag__hode .ikonknapp {
   background: var(--flate);
 }
 
@@ -40,7 +172,7 @@
   gap: var(--rom-6);
 }
 
-.modallag__ikon {
+.modallag__hode .modallag__ikon {
   display: grid;
   flex: none;
   place-items: center;
@@ -50,7 +182,7 @@
   border-radius: var(--runding-pille);
 }
 
-.modallag__ikon .ikon {
+.modallag__hode .modallag__ikon .ikon {
   width: calc(var(--ikon-form) - var(--rom-1));
   height: calc(var(--ikon-form) - var(--rom-1));
 }
@@ -63,7 +195,7 @@
   min-width: 0;
 }
 
-.modallag__tittel {
+.modallag__hode .modallag__tittel {
   margin: 0;
   font: var(--vekt-medium) var(--tekst-sidetittel) / var(--linjehoyde-tett) var(--skrift-display);
   letter-spacing: -0.015em;
@@ -90,7 +222,7 @@
     padding: var(--rom-3) 0 0;
   }
 
-  .modallag--ark .logg__panel {
+  .modallag--ark .modallag__panel {
     width: 100%;
     max-height: 92dvh;
     border-bottom: 0;

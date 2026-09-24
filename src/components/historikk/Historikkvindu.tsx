@@ -101,7 +101,7 @@ export function Historikkvindu<T>({
   }
 
   return (
-    <Modallag apen={apen} tittel={`Historikk: ${navn}`} onLukk={onLukk} bred>
+    <Modallag apen={apen} tittel={`Historikk: ${navn}`} ikon="history" onLukk={onLukk} bred>
       {lasting.status === 'laster' && <p role="status">Henter historikken …</p>}
       {lasting.status === 'feil' && (
         <p className="skjemafeil" role="alert">

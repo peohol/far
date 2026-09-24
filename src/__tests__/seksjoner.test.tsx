@@ -9,11 +9,12 @@ import { readFileSync } from 'node:fs'
 import { act, cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Detaljkort, Seksjon } from '../components/seksjoner/Seksjon'
 import {
   SeksjonsstyringKilde,
   skufferRundt,
+  useFastSted,
   useSeksjonsstyring,
   type Seksjonsstyring,
 } from '../components/seksjoner/Seksjonsstyring'
@@ -295,6 +296,61 @@ describe('styringen for siden', () => {
     )
   })
 
+  /** Et område som alltid står fram, som «Viktige data». */
+  function Fast() {
+    const ref = useRef<HTMLDivElement>(null)
+    useFastSted('viktige', ref)
+    return (
+      <div ref={ref} data-testid="fast">
+        Nøkkeltallene
+      </div>
+    )
+  }
+
+  it('ruller til et sted som alltid står fram, uten å åpne eller lukke noe', async () => {
+    const user = userEvent.setup()
+    function Hel() {
+      return (
+        <SeksjonsstyringKilde>
+          <Fanger />
+          <Fast />
+          <Seksjon id="dosering" tittel="Dosering">
+            <p>Dosene</p>
+          </Seksjon>
+        </SeksjonsstyringKilde>
+      )
+    }
+    render(<Hel />)
+    await user.click(screen.getByRole('button', { name: 'Dosering' }))
+    rullet.mockClear()
+    act(() => styring!.apne(['viktige']))
+    await nesteBilde()
+    expect(rullet).toHaveBeenCalledWith(screen.getByTestId('fast'), expect.objectContaining({ block: 'start' }))
+    // Seksjonen som sto åpen, står fortsatt åpen.
+    expect(apen('Dosering')).toBe(true)
+  })
+
+  it('ruller til stedet som alltid står fram når det kommer etter lenken', async () => {
+    function Senere() {
+      const [vis, setVis] = useState(false)
+      return (
+        <SeksjonsstyringKilde>
+          <Fanger />
+          <button onClick={() => setVis(true)}>Hent</button>
+          {vis && <Fast />}
+        </SeksjonsstyringKilde>
+      )
+    }
+    const user = userEvent.setup()
+    render(<Senere />)
+    act(() => styring!.apne(['viktige']))
+    await nesteBilde()
+    expect(rullet).not.toHaveBeenCalled()
+    await user.click(screen.getByRole('button', { name: 'Hent' }))
+    await nesteBilde()
+    expect(rullet).toHaveBeenCalledWith(screen.getByTestId('fast'), expect.objectContaining({ block: 'start' }))
+  })
+
   it('har ingen «åpne alle»', () => {
     render(<Side />)
     expect(styring).not.toHaveProperty('settAlle')
@@ -512,7 +568,7 @@ describe('rullingen', () => {
 
   it('legger toppen av skuffen under den faste toppmenyen', () => {
     const css = readFileSync('src/styles/seksjoner.css', 'utf8')
-    expect(css).toMatch(/\.skuff\s*\{\s*scroll-margin-top:\s*var\(--toppmeny-offset/)
+    expect(css).toMatch(/\.skuff\s*\{[^}]*scroll-margin-block:\s*var\(--toppmeny-offset\)/)
   })
 })
 

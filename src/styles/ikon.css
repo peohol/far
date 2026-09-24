@@ -17,6 +17,14 @@
   --ikon-sw: 2.6;
 }
 
+/* Delene tegnes på nytt hver gang animasjonen spilles, også når knappen rundt
+   får fokus av et museklikk. Trykket måtte da ha sluppet på et annet element
+   enn det startet på, og nettleseren sender ikke klikket. Pekeren treffer
+   derfor bare selve ikonet, som står fast. */
+.ikon * {
+  pointer-events: none;
+}
+
 /* --- Størrelser ---------------------------------------------------------- */
 .ikon[data-storrelse='ui'] {
   width: var(--ikon-ui);

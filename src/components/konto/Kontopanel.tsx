@@ -6,7 +6,7 @@ import { useAvatarlenker } from '../../auth/avatarer'
 import { useOkt, useProfil } from '../../auth/okt'
 import { Button } from '../Button'
 import { Modallag } from '../Modallag'
-import { LogoutIcon } from '../icons'
+import { Ikon } from '../ikon/Ikon'
 import { Avatar } from './Avatar'
 import { Bildevelgerlast } from './Bildevelgerlast'
 import { Felt, Lastfelt } from './Felt'
@@ -128,7 +128,7 @@ export function Kontopanel({ apen, onLukk }: { apen: boolean; onLukk: () => void
     forhandsvisning ?? (profil.avatar_path ? (lenker.get(profil.avatar_path) ?? null) : null)
 
   return (
-    <Modallag apen={apen} tittel="Kontoen din" onLukk={onLukk}>
+    <Modallag apen={apen} tittel="Kontoen din" ikon="user" onLukk={onLukk}>
       <form className="skjema" onSubmit={(hendelse) => void lagreProfil(hendelse)}>
         <Lastfelt
           merkelapp="Brukernavn"
@@ -211,7 +211,7 @@ export function Kontopanel({ apen, onLukk }: { apen: boolean; onLukk: () => void
 
       <hr className="skille" />
 
-      <Button variant="subtle" icon={<LogoutIcon />} onClick={() => void loggUt()}>
+      <Button variant="kant" icon={<Ikon navn="logout" />} onClick={() => void loggUt()}>
         Logg ut
       </Button>
     </Modallag>

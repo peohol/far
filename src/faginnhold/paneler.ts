@@ -1,8 +1,8 @@
 /**
  * Panelene på en informasjonsside og innholdet i dem.
  *
- * Siden er bygd av sju paneler i fast rekkefølge (planen i
- * `docs/analyttsider-og-redigering.md`, del 4). Hvert panel har en form som
+ * Siden er bygd av panelene i fast rekkefølge (`docs/ux-reimagination.md`,
+ * del 8): identiteten, viktige data, og så seksjonene. Hvert panel har en form som
  * avgjør hvilke innholdselementer det har, og hver elementtype har en fast
  * form på `data`. Formene står her og ingen andre steder: visningen,
  * redigeringen, søket og nummereringen av referansene leser dem herfra.
@@ -38,21 +38,20 @@ export interface Paneldefinisjon {
   nokkel: string
   tittel: string
   form: Panelform
-  /**
-   * Om panelet står åpent når siden åpnes. Panelene er seksjoner som kan
-   * åpnes og lukkes (`src/components/seksjoner/`); de fleste står lukket med
-   * en kort oppsummering, men det som leses oftest, står åpent.
-   */
-  apen?: boolean
 }
 
+/**
+ * Panelene i den rekkefølgen siden viser dem. Identiteten og viktige data står
+ * alltid fram øverst og er ikke seksjoner; tittelen på viktige data vises
+ * ikke, men brukes av skjermlesere, søket og publiseringen.
+ */
 export const PANELER = [
   { nokkel: 'identitet', tittel: 'Identitet', form: 'identitet' },
-  { nokkel: 'preparater', tittel: 'Preparater', form: 'legemidler' },
-  { nokkel: 'viktige_data', tittel: 'Viktige data', form: 'datakort', apen: true },
+  { nokkel: 'viktige_data', tittel: 'Viktige data', form: 'datakort' },
   { nokkel: 'farmakodynamikk', tittel: 'Farmakodynamikk', form: 'tekst' },
-  { nokkel: 'dosering', tittel: 'Dosering', form: 'tekst' },
   { nokkel: 'indikasjon', tittel: 'Indikasjon', form: 'tekst' },
+  { nokkel: 'preparater', tittel: 'Preparater', form: 'legemidler' },
+  { nokkel: 'dosering', tittel: 'Dosering', form: 'tekst' },
   { nokkel: 'farmakokinetikk', tittel: 'Farmakokinetikk', form: 'kort' },
   { nokkel: 'interaksjoner', tittel: 'Interaksjoner', form: 'interaksjoner' },
   { nokkel: 'serumkonsentrasjoner', tittel: 'Serumkonsentrasjoner ved ulike doser', form: 'tabell' },
@@ -119,7 +118,7 @@ export function lesLegemiddelkobling(data: unknown): Legemiddelkoblingdata {
   return { virkestoff: [...sett.values()] }
 }
 
-/* Panel 2: datakortene. */
+/* «Viktige data»: datakortene. */
 
 /**
  * Et tall eller et område med enhet. `nedre` og `ovre` er `null` når de ikke
@@ -133,25 +132,40 @@ export interface Intervallverdi {
   forbehold: string
 }
 
+/**
+ * Gruppene kortene i «Viktige data» står i, i rekkefølge: konsentrasjonene i
+ * serum for seg, de kinetiske nøkkeltallene for seg.
+ */
+export const DATAKORTGRUPPER = [
+  { nokkel: 'konsentrasjon', tittel: 'Konsentrasjoner i serum' },
+  { nokkel: 'kinetikk', tittel: 'Kinetikk' },
+] as const
+
+export type Datakortgruppe = (typeof DATAKORTGRUPPER)[number]['nokkel']
+
 export interface Datakortdefinisjon {
   /** Elementtypen kortet lagres som. */
   type: string
   tittel: string
+  gruppe: Datakortgruppe
   /**
-   * Kortform ved siden av tittelen, f.eks. «t½». Det som står etter `_`,
-   * er senket skrift: «t_ss» vises som t med «ss» senket.
+   * Symbolet kortet vises med, f.eks. t₁/₂. Det som står etter `_`, er senket
+   * skrift: «t_ss» vises som t med «ss» senket. Tittelen er fortsatt det
+   * skjermlesere leser.
    */
   symbol?: string
 }
 
 /** Kortene i panelet «Viktige data», i den rekkefølgen de står. */
 export const DATAKORT = [
-  { type: 'referanseomrade', tittel: 'Referanseområde' },
-  { type: 'toksisk_omrade', tittel: 'Toksisk område' },
-  { type: 'alvorlig_intoksikasjon', tittel: 'Alvorlig/dødelig intoksikasjon' },
-  { type: 'halveringstid', tittel: 'Halveringstid', symbol: 't½' },
-  { type: 'steady_state', tittel: 'Tid til steady state', symbol: 't_ss' },
+  { type: 'referanseomrade', tittel: 'Referanseområde', gruppe: 'konsentrasjon' },
+  { type: 'toksisk_omrade', tittel: 'Toksisk område', gruppe: 'konsentrasjon' },
+  { type: 'alvorlig_intoksikasjon', tittel: 'Alvorlig/dødelig intoksikasjon', gruppe: 'konsentrasjon' },
+  { type: 'halveringstid', tittel: 'Halveringstid', gruppe: 'kinetikk', symbol: 't_1/2' },
+  { type: 'steady_state', tittel: 'Tid til steady state', gruppe: 'kinetikk', symbol: 't_ss' },
 ] as const satisfies readonly Datakortdefinisjon[]
+
+export type Datakorttype = (typeof DATAKORT)[number]['type']
 
 const DATAKORT_PER_TYPE = new Map<string, Datakortdefinisjon>(DATAKORT.map((k) => [k.type, k]))
 
@@ -190,22 +204,40 @@ export function formaterTall(tall: number): string {
   return TALLFORMAT.format(tall)
 }
 
+/** Verdien i delene kortet viser hver for seg. Tomme deler er `''`. */
+export interface Intervalldeler {
+  /** «fra» eller «opptil» når bare den ene grensen er oppgitt. */
+  forledd: string
+  tall: string
+  enhet: string
+}
+
 /**
- * Verdien slik kortet viser den: «10–300 nmol/L», eller «fra 10» og
- * «opptil 300» når bare den ene grensen er oppgitt. Tom når ingen er det.
+ * Verdien delt opp: «fra» og «opptil» når bare den ene grensen er oppgitt,
+ * tallet eller området, og enheten. `null` når ingen grense er oppgitt.
  *
  * Formuleringene sier bevisst ikke om grensen er med eller ikke — det er ikke
  * lagret, og skal ikke leses inn i tallet.
  */
-export function formaterIntervall(verdi: Intervallverdi): string {
+export function delIntervall(verdi: Intervallverdi): Intervalldeler | null {
   const { nedre, ovre, enhet } = verdi
-  let tall: string
   if (nedre !== null && ovre !== null) {
-    tall = nedre === ovre ? formaterTall(nedre) : `${formaterTall(nedre)}–${formaterTall(ovre)}`
-  } else if (nedre !== null) tall = `fra ${formaterTall(nedre)}`
-  else if (ovre !== null) tall = `opptil ${formaterTall(ovre)}`
-  else return ''
-  return enhet ? `${tall} ${enhet}` : tall
+    const tall = nedre === ovre ? formaterTall(nedre) : `${formaterTall(nedre)}–${formaterTall(ovre)}`
+    return { forledd: '', tall, enhet }
+  }
+  if (nedre !== null) return { forledd: 'fra', tall: formaterTall(nedre), enhet }
+  if (ovre !== null) return { forledd: 'opptil', tall: formaterTall(ovre), enhet }
+  return null
+}
+
+/**
+ * Verdien slik den leses og søkes i: «10–300 nmol/L», eller «fra 10» og
+ * «opptil 300» når bare den ene grensen er oppgitt. Tom når ingen er det.
+ * Delene står med mellomrom imellom, i samme rekkefølge som på kortet.
+ */
+export function formaterIntervall(verdi: Intervallverdi): string {
+  const deler = delIntervall(verdi)
+  return deler ? [deler.forledd, deler.tall, deler.enhet].filter(Boolean).join(' ') : ''
 }
 
 /**
@@ -235,7 +267,7 @@ export function kontrollerIntervall(verdi: Intervallverdi): string | null {
   return null
 }
 
-/* Panel 3–5: riktekst. */
+/* Farmakodynamikk, indikasjon og dosering: riktekst. */
 
 export interface Rikteksdata {
   dokument: Riktekstdokument
@@ -245,7 +277,7 @@ export function lesRiktekst(data: unknown): Rikteksdata {
   return { dokument: rensDokument(erObjekt(data) ? data.dokument : undefined) }
 }
 
-/* Panel 6: farmakokinetikken, kort for kort. */
+/* Farmakokinetikken, kort for kort. */
 
 export interface Kinetikkdata {
   tittel: string
@@ -257,7 +289,7 @@ export function lesKinetikk(data: unknown): Kinetikkdata {
   return { tittel: tekst(data.tittel), dokument: rensDokument(data.dokument) }
 }
 
-/* Panel 7: serumkonsentrasjonene. */
+/* Serumkonsentrasjonene. */
 
 /** Én rad i tabellen over serumkonsentrasjoner ved ulike doser. */
 export interface Doserad {
@@ -306,7 +338,7 @@ export function lesDosetabell(data: unknown): Dosetabelldata {
 
 /**
  * Elementtypene som står én gang i panelet sitt: koblingen til
- * legemiddeldataene, hvert datakort, rikteksten i panel 3–5 og tabellen.
+ * legemiddeldataene, hvert datakort, rikteksten i tekstpanelene og tabellen.
  * Farmakokinetikken kan ha mange kort.
  *
  * Databasen håndhever det samme (`innholdselementer_enkeltelement_idx` i

@@ -4,7 +4,7 @@ import 'react-easy-crop/react-easy-crop.css'
 import { AVATAR_STORRELSE } from '@delt/profil'
 import { lagAvatar } from '../../auth/bilde'
 import { Button } from '../Button'
-import { ImageIcon, RotateIcon } from '../icons'
+import { Ikon } from '../ikon/Ikon'
 
 /** Største fil vi tar imot fra disken. Bildet krymper uansett før opplasting. */
 const STORSTE_FIL = 15 * 1024 * 1024
@@ -82,7 +82,10 @@ export function Bildevelger({ visning, onValgt }: BildevelgerProps) {
       <div className="bildevelger">
         <div className="bildevelger__visning">
           {visning}
-          <Button variant="subtle" icon={<ImageIcon />} onClick={() => filvelger.current?.click()}>
+          <span className="bildevelger__hint">
+            Beskjæres til {AVATAR_STORRELSE} × {AVATAR_STORRELSE} piksler
+          </span>
+          <Button variant="kant" icon={<Ikon navn="image" />} onClick={() => filvelger.current?.click()}>
             Velg profilbilde
           </Button>
         </div>
@@ -145,7 +148,7 @@ export function Bildevelger({ visning, onValgt }: BildevelgerProps) {
         </label>
         <Button
           variant="subtle"
-          icon={<RotateIcon />}
+          icon={<Ikon navn="rotate" />}
           onClick={() => setRotasjon((forrige) => (forrige + 90) % 360)}
         >
           Roter

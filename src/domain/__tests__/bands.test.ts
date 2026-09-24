@@ -61,7 +61,7 @@ describe('båndene', () => {
   })
 
   it('holder etikettene innenfor bredden knappene er dimensjonert for', () => {
-    // Knappene står alltid på én linje, og `--band-innhold` i components.css er
+    // Knappene står alltid på én linje, og `--band-innhold` i fortolkning.css er
     // målt mot den bredeste etiketten regelsettene gir. Bredden kommer av
     // sifrene: de står med tabellbreddstall og er de brede tegnene, mens komma,
     // mellomrom og tankestrek er smale. «1001 – 1099» og «300 – 15999» har

@@ -8,9 +8,6 @@
  * AA (4,5:1 for brødtekst, 3:1 for stor tekst og grafiske elementer), som er
  * kravet forskrift om universell utforming av IKT stiller. `npm test` måler
  * kontrastene på nytt hver gang.
- *
- * Nederst står overgangsnavn for tokens komponentene brukte før Atlas. De
- * peker på det nye systemet, og fjernes etter hvert som flatene bygges om.
  */
 
 :root {
@@ -66,13 +63,16 @@
   --rom-10: 3.5rem; /* 56 */
   /* Sidemarg. */
   --rom-side: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
+  /* Kolonnen fortolkningsstegene står i (Atlas: 820–900 px). */
+  --bredde-fortolkning: 56.25rem;
 
   /* --- Form --------------------------------------------------------------- */
   --runding-merke: 0.375rem; /* 6 – små merker */
   --runding-felt: 0.875rem; /* 14 – tallfelt, datofelt, bannere */
   --runding-underkort: 1rem; /* 16 – trekkspill nivå 2 */
   --runding-felt-gruppe: 1.25rem; /* 20 – fieldset, marginboks */
-  --runding-kort: 1.375rem; /* 22 – datakort */
+  --runding-knapp: 1.125rem; /* 18 – båndknapper, kopibeviset, kommentarblokker */
+  --runding-kort: 1.375rem; /* 22 – datakort, søkealternativer */
   --runding-panel: 1.5rem; /* 24 – store paneler, modal */
   --runding-pille: 999px; /* knapper, søk, toppmeny, piller */
 
@@ -97,6 +97,9 @@
   --ikon-konsept: 3.75rem; /* 60 – datakortene i viktige data */
   --ikon-plot: 5rem; /* 80 – miniplottene for t½ og tss */
   --ikon-form: 3rem; /* 48 – legemiddelformen i Preparater og preparatvinduet */
+  --ikon-sirkel: 3.5rem; /* 56 – sirkelen rundt seksjonsikonet */
+  --ikon-sirkel-smal: 2.75rem; /* 44 – samme sirkel på smale flater */
+  --ikon-panel: 1.625rem; /* 26 – foran paneloverskrifter og i limkortet */
 
   /* --- Toppmeny og dokk ----------------------------------------------------
      Den ene faste toppmenyen svever over innholdet. `--toppmeny-offset` er
@@ -108,7 +111,10 @@
   --dokk-offset: calc(var(--hoyde-dokk) + 1.75rem);
   --blur-toppmeny: 16px;
 
-  /* --- Lag ---------------------------------------------------------------- */
+  /* --- Lag ----------------------------------------------------------------
+     `--lag-innhold` er det som flyter over siden, men under toppmenyen og
+     mørkleggingen bak sidemenyen. */
+  --lag-innhold: 30;
   --lag-toppmeny: 50;
   --lag-popover: 60;
   --lag-modal: 70;
@@ -191,6 +197,9 @@
   --papir: #fffdf8;
   --ikon-blekk: #1f1b15; /* frie linjer: akser, piler */
   --ikon-linje: #2a231a; /* konturer blandes med ikonfargen */
+  /* Halveringspunktet i OUSFAR-merket. */
+  --logo-punkt: #f3ba55;
+  --logo-punkt-kant: transparent;
 
   /* Merkene på føringene i endringsloggen — utenfor de kliniske
      nivåfargene, så et merke aldri kan leses som en klinisk vurdering. */
@@ -260,6 +269,8 @@
   --papir: #dde4ec;
   --ikon-blekk: #e6ecf2;
   --ikon-linje: #d5dde6;
+  --logo-punkt: #fffdf8;
+  --logo-punkt-kant: var(--paa-aksent);
 
   --merke-design: #cdb1f2;
   --merke-design-flate: #261c36;
@@ -288,57 +299,4 @@
     --fart-flyt: 0ms;
     --fart-ikon: 0ms;
   }
-}
-
-/* --- Overgangsnavn -----------------------------------------------------------
-   Navnene komponentene brukte før Atlas. De peker på de nye tokenene og skal
-   ikke brukes i ny kode. Blokken gjelder også elementer med eget tema, så et
-   navn her alltid følger temaet det står i. */
-:root,
-[data-tema] {
-  --skrift: var(--skrift-ui);
-  --vekt-tung: var(--vekt-fet);
-
-  --tekst-xxs: var(--tekst-merke);
-  --tekst-xs: var(--tekst-meta);
-  --tekst-s: var(--tekst-ui);
-  --tekst-m: var(--tekst-lesing);
-  --tekst-l: var(--tekst-seksjon);
-  --tekst-xl: var(--tekst-sidetittel);
-  --tekst-xxl: var(--tekst-display);
-
-  --runding-s: var(--runding-merke);
-  --runding-m: var(--runding-felt);
-  --runding-l: var(--runding-kort);
-  --runding-full: var(--runding-pille);
-
-  --fart: var(--fart-rask);
-  /* Strekbredden til de få strekikonene som ennå ikke har et Atlas-ikon. */
-  --ikon-strek: 2;
-
-  --blekk-svak: var(--blekk-dempet);
-  --aksent-blekk: var(--paa-aksent);
-  --skygge: var(--skygge-toppmeny);
-  --skygge-hevet: var(--skygge-modal);
-
-  --niva-under-blekk: var(--under-blekk);
-  --niva-under-flate: var(--under-flate);
-  --niva-under-linje: var(--under-kant);
-  --niva-innenfor-blekk: var(--referanse-blekk);
-  --niva-innenfor-flate: var(--referanse-flate);
-  --niva-innenfor-linje: var(--referanse-kant);
-  --niva-over-blekk: var(--alvorlig-blekk);
-  --niva-over-flate: var(--alvorlig-flate);
-  --niva-over-linje: var(--alvorlig-kant);
-  /* «Over referanseområdet, men under ringegrensen». */
-  --niva-gul-blekk: var(--toksisk-blekk);
-  --niva-gul-flate: var(--toksisk-flate);
-  --niva-gul-linje: var(--toksisk-kant);
-  --varsel-blekk: var(--toksisk-blekk);
-  --varsel-flate: var(--toksisk-flate);
-  --varsel-linje: var(--toksisk-kant);
-
-  --merke-design-blekk: var(--merke-design);
-  --merke-funksjon-blekk: var(--merke-funksjon);
-  --merke-fag-blekk: var(--merke-fag);
 }

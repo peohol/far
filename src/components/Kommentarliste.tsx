@@ -1,17 +1,17 @@
 import { Button } from './Button'
 import { ManualCopy } from './ManualCopy'
 import { useTips } from './Tips'
-import { CheckIcon, CopyIcon, PasteIcon } from './icons'
+import { Ikon } from './ikon/Ikon'
 import type { Kommentarplassering } from '../domain/kommentar'
 import { useKommentarflyt } from '../hooks/useKommentarflyt'
-
-const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
 
 export interface KommentarlisteProps {
   /** Kommentarene fortolkningen ga, i den rekkefølgen de skal limes inn. */
   plasseringer: Kommentarplassering[]
   /** Teller opp for hver endring i skjemaet over. Se `useKommentarflyt`. */
-  utgave: number
+  utgave?: number
+  /** Merkene på kommentarene som alt ligger på utklippstavlen. Se `useKommentarflyt`. */
+  alleredeKopiert?: string[]
   /**
    * Sant når kommentarteksten skal stå framme i blokka. Er det noe å velge
    * mellom, kan valget bli feil, og den som limer inn skal kunne lese hva som
@@ -27,19 +27,22 @@ export interface KommentarlisteProps {
 /**
  * Kommentarene en fortolkning ga, som en liste med én blokk hver.
  *
- * Bildet som hører til fortolkningsmoduler der svaret kan endres mens man
- * står i det — rusmiddelmodulen. Selve kopieringen ligger i
- * {@link useKommentarflyt} og er felles med limsteget i EtG- og EtS-modulen.
+ * Felles for rusmiddelmodulen, der svaret kan endres mens man står i det, og
+ * limsteget i EtG- og EtS-modulen, der den første kommentaren alt er kopiert.
+ * Selve kopieringen ligger i {@link useKommentarflyt}. Hver blokk er Atlas
+ * `CommentPlacement`: koden stort, teksten under, og kopiknappen til høyre —
+ * primær og med Enter-merket på den som står for tur.
  */
 export function Kommentarliste({
   plasseringer,
   utgave,
+  alleredeKopiert,
   visTekst,
   copy,
   flashAt,
   onFinish,
 }: KommentarlisteProps) {
-  const flyt = useKommentarflyt({ plasseringer, utgave, copy, flashAt, onFinish })
+  const flyt = useKommentarflyt({ plasseringer, utgave, alleredeKopiert, copy, flashAt, onFinish })
 
   return (
     <>
@@ -63,14 +66,14 @@ export function Kommentarliste({
       </ol>
 
       {flyt.alleKopiert && (
-        <div className="thc-handling">
-          <Button ref={flyt.ferdigKnapp} shortcut="↵" onClick={onFinish}>
+        <div className="handlingsrad">
+          <Button ref={flyt.ferdigKnapp} icon={<Ikon navn="done" />} shortcut="↵" onClick={onFinish}>
             Ferdig
           </Button>
         </div>
       )}
 
-      {flyt.feilKopi && <ManualCopy message={KOPIFEIL} comment={flyt.feilKopi} />}
+      {flyt.feilKopi && <ManualCopy comment={flyt.feilKopi} />}
     </>
   )
 }
@@ -97,44 +100,54 @@ function Kommentar({
   staarForTur: boolean
   onCopy: () => void
 }) {
+  // Står teksten skrevet ut, ville et tips på knappen bare gjenta den.
   const tips = useTips(plassering.tekst)
+  const medTips = !visTekst
 
   return (
     // Merket er det flyten finner kopiknappen igjen på. Se `useKommentarflyt`.
-    <li className={`plassering plassering--${plassering.rolle}`} data-kommentar={plassering.merke}>
-      {visMerke && <p className="plassering__merke">{plassering.merke}</p>}
+    <li
+      className={`plassering plassering--${plassering.rolle}`}
+      data-kommentar={plassering.merke}
+      data-for-tur={staarForTur ? '' : undefined}
+    >
+      <div className="plassering__innhold">
+        {visMerke && <p className="plassering__merke">{plassering.merke}</p>}
 
-      <p className="plassering__instruks">
-        <PasteIcon className="limInn__ikon" />
-        Lim inn på
-      </p>
-      <p className="plassering__koder">
-        {plassering.koder.map((kode) => (
-          <span key={kode}>{kode}</span>
-        ))}
-      </p>
+        <p className="plassering__sted">
+          <span className="plassering__instruks">
+            <Ikon navn="paste" className="plassering__ikon" />
+            Lim inn på
+          </span>
+          <span className="plassering__koder">
+            {plassering.koder.map((kode) => (
+              <span key={kode}>{kode}</span>
+            ))}
+          </span>
+        </p>
 
-      {visTekst && <p className="thc-kommentar">{plassering.tekst}</p>}
+        {visTekst && <p className="kommentartekst">{plassering.tekst}</p>}
+      </div>
 
       <div className="plassering__handling">
-        {kopiert && (
-          <p className="kopiert">
-            <CheckIcon className="kopiert__ikon" />
-            Kopiert
-          </p>
-        )}
         <Button
-          {...tips.props}
+          {...(medTips && tips.props)}
           // Knappene heter det samme; merket sier hvilken kommentar det er.
           aria-label={`Kopier ${plassering.merke.toLowerCase()}`}
-          variant={staarForTur ? 'primary' : 'subtle'}
-          icon={<CopyIcon />}
+          variant={staarForTur ? 'primary' : 'kant'}
+          icon={<Ikon navn="copy" />}
           shortcut={staarForTur ? '↵' : undefined}
           onClick={() => onCopy()}
         >
           Kopier
         </Button>
-        {tips.forklaring}
+        {medTips && tips.forklaring}
+        {kopiert && (
+          <p className="kopiert">
+            <Ikon navn="bInnenfor" className="kopiert__ikon" />
+            Kopiert
+          </p>
+        )}
       </div>
     </li>
   )
