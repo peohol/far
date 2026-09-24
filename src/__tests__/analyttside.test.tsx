@@ -763,31 +763,38 @@ describe('preparatene', () => {
     expect(k.legemidler.les).not.toHaveBeenCalled()
   })
 
-  it('viser preparatene fra legemiddeldataene gruppert etter form, med kilden', async () => {
+  it('viser formene som overskrifter, styrkene som kort og preparatene i den åpne styrken, med kilden', async () => {
     const user = userEvent.setup()
     const k = kilde({ data: medKobling })
     vis('AMTNORSUM', k)
-    // Lukket står oppsummeringen; formene og fritakene er detaljkort.
+    // Lukket står oppsummeringen. Fritaket telles, men er ikke en egen gruppe.
     expect(
-      await screen.findByText('2 preparater · 2 legemiddelformer · 3 styrker · 1 med godkjenningsfritak'),
+      await screen.findByText('3 preparater · 2 legemiddelformer · 3 styrker · 1 med godkjenningsfritak'),
     ).toBeTruthy()
     expect(k.legemidler.les).toHaveBeenCalledWith(['ID_AMI'])
     await user.click(skuffknapp('Preparater'))
-    expect(screen.getByText('1 preparat · 10–25 mg')).toBeTruthy()
-    expect(skuffknapp('Tablett').getAttribute('aria-expanded')).toBe('false')
+    expect(screen.getByText('2 styrker · 10–25 mg · 2 preparater')).toBeTruthy()
+    expect(screen.queryByRole('button', { name: 'Krever godkjenningsfritak' })).toBeNull()
     await user.click(skuffknapp('Tablett'))
-    expect(screen.getByText('Tabletto')).toBeTruthy()
-    expect(screen.getByText('30 stk, blisterpakning (varenr. 123456)')).toBeTruthy()
-    // Det styrkene har likt står på preparatet, resten på hver styrke.
-    expect(screen.getByText('Reseptgruppe C · Oral bruk')).toBeTruthy()
-    expect(screen.getByText('Delbar i 2')).toBeTruthy()
-    expect(
-      screen.getAllByRole('link', { name: 'Preparatomtale' }).map((a) => a.getAttribute('href')),
-    ).toEqual([
-      'https://produktinformasjon.legemiddelsok.no/preparatomtaler/ID_M1.pdf',
-      'https://produktinformasjon.legemiddelsok.no/preparatomtaler/ID_M2.pdf',
-    ])
-    expect(skuffknapp('Krever godkjenningsfritak')).toBeTruthy()
+
+    // Ett kort per styrke, uansett antall preparater, med antallet som beskrivelse.
+    const styrker = within(screen.getByRole('list', { name: 'Styrker, tablett' }))
+    const [ti, tjuefem] = styrker.getAllByRole('button', { expanded: false })
+    expect([ti!.textContent, tjuefem!.textContent]).toEqual(['10 mg1 preparat', '25 mg2 preparater'])
+    expect(tjuefem!.getAttribute('aria-describedby')).toBeTruthy()
+
+    // Åpnet står preparatnavnene alfabetisk, og fritaket er et merke i samme liste.
+    await user.click(tjuefem!)
+    expect(tjuefem!.getAttribute('aria-expanded')).toBe('true')
+    const navn = within(screen.getByRole('list', { name: 'Preparater med 25 mg' })).getAllByRole('button')
+    expect(navn.map((b) => b.textContent)).toEqual(['Tabletto', 'UtlandiaGodkjenningsfritak'])
+    expect(navn[0]!.getAttribute('aria-haspopup')).toBe('dialog')
+
+    // Bare én styrke står åpen.
+    await user.click(ti!)
+    expect(ti!.getAttribute('aria-expanded')).toBe('true')
+    expect(tjuefem!.getAttribute('aria-expanded')).toBe('false')
+
     // FEST er kilden i seksjonens referansefelt: en nummerert referanse, med
     // uttrekket og kontrollen ved siden av, ikke en løpende «Kilde: …».
     // Preparatene står etter viktige data og farmakodynamikken, som har kilde
@@ -807,15 +814,103 @@ describe('preparatene', () => {
     expect(within(fest!).getByText('Automatisk fra FEST · kan ikke redigeres')).toBeTruthy()
   })
 
-  it('finner preparatene i søket på siden, også i lukkede detaljkort', async () => {
+  it('åpner preparatvinduet med alle styrkene, og gir fokuset tilbake når det lukkes', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM', kilde({ data: medKobling }))
-    await screen.findByText(/2 preparater/)
-    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'retardo')
+    await apneSkuff(user, 'Preparater')
+    await apneSkuff(user, 'Tablett')
+    await user.click(screen.getByRole('button', { name: /^25 mg/ }))
+    const tabletto = screen.getByRole('button', { name: 'Tabletto' })
+    await user.click(tabletto)
+
+    const vindu = screen.getByRole('dialog', { name: 'Tabletto' })
+    expect(vindu.hasAttribute('open')).toBe(true)
+    expect(within(vindu).getByText('Amitriptylin · Tablett')).toBeTruthy()
+    const fakta = (navn: string) => within(vindu).getByText(navn).nextElementSibling?.textContent
+    expect([fakta('Reseptgruppe'), fakta('Administrasjon'), fakta('ATC'), fakta('Virkestoff')]).toEqual([
+      'C',
+      'Oral bruk',
+      'N06AA09',
+      'Amitriptylin',
+    ])
+
+    // Alle styrkene står i vinduet. Den det ble åpnet fra, står åpen og er merket.
+    const [ti, tjuefem] = within(vindu).getAllByRole('button', { name: /pakning/ })
+    expect([ti!.textContent, tjuefem!.textContent]).toEqual(['10 mg1 pakning', '25 mg0 pakninger'])
+    expect(tjuefem!.getAttribute('aria-expanded')).toBe('true')
+    expect(ti!.getAttribute('aria-expanded')).toBe('false')
+    const rad25 = tjuefem!.closest('li')!
+    expect(within(rad25).getByText('Åpnet herfra')).toBeTruthy()
+    // Delingen står med FESTs egne ord, som tekst og ikke bare som ikon.
+    expect(rad25.querySelector('.handteringsmerke')!.textContent).toBe('Deling: Delbar i 2')
+    // Preparatomtalen er ulik for styrkene, og står ved hver av dem.
+    expect(within(rad25).getByRole('link', { name: /Preparatomtale/ }).getAttribute('href')).toBe(
+      'https://produktinformasjon.legemiddelsok.no/preparatomtaler/ID_M2.pdf',
+    )
+
+    // En annen styrke åpnes for seg, med pakningene og varenummeret.
+    await user.click(ti!)
+    expect(tjuefem!.getAttribute('aria-expanded')).toBe('false')
+    const tabell = within(ti!.closest('li')!).getByRole('table')
+    expect(within(tabell).getAllByRole('row').map((r) => r.textContent)).toEqual(['PakningVarenr.', '30 stk, blisterpakning123456'])
+    // FEST er kilden i vinduet også, med samme nummer som i referanselisten.
+    const liste = screen.getByRole('region', { name: 'Referanser' })
+    const fest = within(liste)
+      .getAllByRole('listitem')
+      .find((r) => r.textContent?.startsWith('FEST'))!
+    expect(within(vindu).getByRole('button', { name: `Referanse ${fest.getAttribute('value')}` })).toBeTruthy()
+
+    await user.click(within(vindu).getByRole('button', { name: 'Lukk preparatet' }))
+    expect(screen.queryByRole('dialog')).toBeNull()
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Tabletto' }))
+
+    // Et trykk på bakgrunnen lukker også, og fritaket står som merke i vinduet.
+    await user.click(screen.getByRole('button', { name: /^Utlandia/ }))
+    const fritak = screen.getByRole('dialog', { name: 'Utlandia' })
+    expect(within(fritak).getByText('Godkjenningsfritak')).toBeTruthy()
+    await user.click(fritak)
+    expect(screen.queryByRole('dialog')).toBeNull()
+  })
+
+  it('åpner legemiddelformen fra en direktelenke', async () => {
+    vis('AMTNORSUM', kilde({ data: medKobling }), ['preparater', 'form-53'])
+    await waitFor(() => expect(skuffknapp('Tablett').getAttribute('aria-expanded')).toBe('true'))
+    expect(skuffknapp('Preparater').getAttribute('aria-expanded')).toBe('true')
+    expect(skuffknapp('Depotkapsel, hard').getAttribute('aria-expanded')).toBe('false')
+  })
+
+  it('finner preparatene i søket på siden, og åpner formen og styrken treffet står i', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ data: medKobling }))
+    await screen.findByText(/3 preparater/)
+    const felt = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
+    await user.type(felt, 'retardo')
     await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
     const steder = within(screen.getByRole('list', { name: 'Hvor treffene står' }))
     await user.click(steder.getByRole('button', { name: /Depotkapsel, hard/ }))
     expect(skuffknapp('Depotkapsel, hard').getAttribute('aria-expanded')).toBe('true')
+
+    // Treffet står i en lukket styrke; Enter går dit og åpner den.
+    await user.clear(felt)
+    await user.type(felt, 'utlandia{Enter}')
+    await waitFor(() => expect(skuffknapp('Tablett').getAttribute('aria-expanded')).toBe('true'))
+    expect(screen.getByRole('button', { name: /^25 mg/ }).getAttribute('aria-expanded')).toBe('true')
+    expect(screen.getByRole('button', { name: /^10 mg/ }).getAttribute('aria-expanded')).toBe('false')
+  })
+
+  it('åpner styrken når nettleserens eget søk finner noe i den', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ data: medKobling }))
+    await apneSkuff(user, 'Preparater')
+    await apneSkuff(user, 'Tablett')
+    const knapp = screen.getByRole('button', { name: /^10 mg/ })
+    const innhold = document.getElementById(knapp.getAttribute('aria-controls')!)!
+    expect(innhold.getAttribute('hidden')).toBe('until-found')
+    act(() => {
+      innhold.dispatchEvent(new Event('beforematch'))
+    })
+    expect(knapp.getAttribute('aria-expanded')).toBe('true')
+    expect(innhold.hasAttribute('hidden')).toBe(false)
   })
 
   it('sier fra når preparatene ikke kan hentes, uten at resten av siden faller', async () => {

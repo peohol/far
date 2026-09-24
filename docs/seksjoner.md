@@ -72,6 +72,12 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
 - En seksjon i en seksjon, eller et detaljkort utenfor en seksjon eller i et
   annet detaljkort, stopper tegningen med en feil. Trenger innholdet et
   tredje nivå, skal det heller deles opp.
+- Innholdet i et detaljkort kan likevel ha en egen liten visning som åpner og
+  lukker, når designet ber om det: styrkekortene i «Preparater»
+  (`src/components/preparater/`). Den styrer seg selv og er ikke en skuff.
+  Skjuler den noe, gjøres det med `hidden="until-found"`, og den åpner seg
+  når nettleserens søk finner noe der (`beforematch`) og når `apneTil` sender
+  `VIS_HENDELSE` fra elementet som skal vises (`useSkjultTilFunnet`).
 
 Stoffsidens paneler (`src/components/analyttside/Paneler.tsx`) er seksjoner med
 panelnøkkelen som `id`; om et panel står åpent fra start, står i `apen` i

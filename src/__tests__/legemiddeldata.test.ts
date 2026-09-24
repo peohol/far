@@ -15,7 +15,7 @@ import { lagLegemiddellager, type Databasekall } from '../legemiddeldata/lager'
 import { behandleSynk } from '../legemiddeldata/endepunkt'
 import { lagLegemiddelleser, type Legemiddelutvalg, type Virkestofftreff } from '../legemiddeldata/lesing'
 import { byggInteraksjoner, interaksjonsnokler, oppsummerInteraksjoner } from '../legemiddeldata/interaksjoner'
-import { byggPreparatoversikt, oppsummerGruppe, oppsummerPreparater } from '../legemiddeldata/preparater'
+import { byggPreparatvisning, oppsummerForm, oppsummerPreparatvisning } from '../legemiddeldata/preparatmodell'
 import { synkroniserFest } from '../legemiddeldata/synk'
 import { pakkUt } from '../legemiddeldata/zip'
 import {
@@ -400,58 +400,57 @@ describe('preparatene og interaksjonene på stoffsiden', () => {
     anonym = kallSom(db, 'anon')
   })
 
-  it('grupperer etter legemiddelform, preparat og styrke, med fritakene for seg', async () => {
-    const oversikt = byggPreparatoversikt(await leser.les([AMITRIPTYLIN]), [AMITRIPTYLIN])
+  it('grupperer etter legemiddelform og styrke, med fritakene som merke i de samme listene', async () => {
+    const visning = byggPreparatvisning(await leser.les([AMITRIPTYLIN]), [AMITRIPTYLIN])
 
-    expect(oversikt.former.map((f) => f.form)).toEqual(['Tablett'])
-    const tabletter = oversikt.former[0]!.preparater
-    expect(tabletter.map((p) => [p.navn, p.styrker.map((s) => s.styrke)])).toEqual([
-      ['Amitriptylin Abcur', ['10 mg', '25 mg', '50 mg']],
-      ['Amitriptylin Orifarm', ['10 mg', '25 mg']],
-      ['Sarotex', ['10 mg', '25 mg']],
+    expect(visning.former.map((f) => f.form)).toEqual(['Depotkapsel, hard', 'Mikstur, oppløsning', 'Tablett'])
+    const tablett = visning.former.find((f) => f.form === 'Tablett')!
+    expect(tablett.styrker.map((s) => [s.styrke, s.preparater.map((p) => p.navn)])).toEqual([
+      ['10 mg', ['Amitriptylin Abcur', 'Amitriptylin Orifarm', 'Sarotex']],
+      ['25 mg', ['Amitriptylin Abcur', 'Amitriptylin Orifarm', 'Amitriptylin-CT', 'Sarotex']],
+      ['50 mg', ['Amitriptylin Abcur']],
     ])
-    expect(tabletter.every((p) => p.kombinasjon.length === 0 && p.type === null)).toBe(true)
-
-    expect(oversikt.godkjenningsfritak.map((p) => [p.navn, p.form, p.styrker.map((s) => s.styrke)])).toEqual([
+    const fritak = [...visning.preparater.values()].filter((p) => p.merker.some((m) => m.type === 'godkjenningsfritak'))
+    expect(fritak.map((p) => [p.navn, p.form, p.styrker.map((s) => s.styrke)]).sort()).toEqual([
       ['Amitriptylin-CT', 'Tablett', ['25 mg']],
       ['Amitriptyline Hydrochloride rosemont', 'Mikstur, oppløsning', ['50 mg/5 ml']],
       ['Amitriptyline hydrochloride syrimed', 'Mikstur, oppløsning', ['10 mg/5 ml']],
       ['Saroten Retard', 'Depotkapsel, hard', ['50 mg']],
     ])
 
-    expect(oppsummerPreparater(oversikt)).toBe('3 preparater · 1 legemiddelform · 3 styrker · 4 med godkjenningsfritak')
-    expect(oppsummerGruppe(tabletter)).toBe('3 preparater · 10–50 mg')
-    expect(oppsummerGruppe(oversikt.godkjenningsfritak)).toBe('4 preparater · 25–50 mg, 10–50 mg/5 ml')
+    expect(oppsummerPreparatvisning(visning)).toBe('7 preparater · 3 legemiddelformer · 5 styrker · 4 med godkjenningsfritak')
+    expect(oppsummerForm(tablett)).toBe('3 styrker · 10–50 mg · 4 preparater')
   })
 
   it('viser pakningene med størrelse, type og varenummer', async () => {
-    const oversikt = byggPreparatoversikt(await leser.les([AMITRIPTYLIN]), [AMITRIPTYLIN])
-    const ct = oversikt.godkjenningsfritak.find((p) => p.navn === 'Amitriptylin-CT')!
+    const visning = byggPreparatvisning(await leser.les([AMITRIPTYLIN]), [AMITRIPTYLIN])
+    const ct = visning.preparater.get('53:Amitriptylin-CT')!
     expect(ct.styrker[0]!.pakninger).toEqual([
       { id: expect.any(String), varenr: '342044', tekst: '100 stk, blisterpakning', midlertidig_utgatt: null },
     ])
   })
 
   it('tar med reseptgruppe, administrasjonsvei, knusing og preparatomtalen fra FEST', async () => {
-    const oversikt = byggPreparatoversikt(await leser.les([AMITRIPTYLIN]), [AMITRIPTYLIN])
-    const abcur = oversikt.former[0]!.preparater.find((p) => p.navn === 'Amitriptylin Abcur')!
+    const visning = byggPreparatvisning(await leser.les([AMITRIPTYLIN]), [AMITRIPTYLIN])
+    const abcur = visning.preparater.get('53:Amitriptylin Abcur')!
     expect(abcur.administrasjonsveier).toEqual(['Oral bruk'])
-    expect(abcur.styrker.map((s) => [s.styrke, s.reseptgruppe, s.handtering, s.preparatomtaler])).toEqual([
-      // «Ikke spesifisert» om deling sier ingenting og tas ikke med.
-      ['10 mg', 'Reseptgruppe C', [], ['https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11418.pdf']],
-      ['25 mg', 'Reseptgruppe C', [], ['https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11419.pdf']],
-      ['50 mg', 'Reseptgruppe C', [], ['https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11420.pdf']],
+    const ukjent = { status: 'ukjent', tekst: null }
+    expect(abcur.styrker.map((s) => [s.styrke, s.reseptgrupper, s.handtering, s.preparatomtaler])).toEqual([
+      // «Ikke spesifisert» om deling sier ingenting og er ukjent.
+      ['10 mg', ['Reseptgruppe C'], { deling: ukjent, knusing: ukjent, apning: ukjent }, ['https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11418.pdf']],
+      ['25 mg', ['Reseptgruppe C'], { deling: ukjent, knusing: ukjent, apning: ukjent }, ['https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11419.pdf']],
+      ['50 mg', ['Reseptgruppe C'], { deling: ukjent, knusing: ukjent, apning: ukjent }, ['https://produktinformasjon.legemiddelsok.no/preparatomtaler/16-11420.pdf']],
     ])
-    const retard = oversikt.godkjenningsfritak.find((p) => p.navn === 'Saroten Retard')!
-    expect(retard.styrker[0]!.handtering).toEqual(['Kan ikke knuses'])
+    const retard = visning.preparater.get('743:Saroten Retard')!
+    expect(retard.styrker[0]!.handtering.knusing).toEqual({ status: 'nei', tekst: 'Kan ikke knuses' })
     expect(retard.styrker[0]!.preparatomtaler).toEqual([])
   })
 
   it('merker kombinasjonspreparatet med de andre virkestoffene, i FESTs rekkefølge', async () => {
-    const oversikt = byggPreparatoversikt(await leser.les([KODEIN]), [KODEIN])
-    // Kodimagnyl i utdraget krever godkjenningsfritak.
-    expect(oversikt.former).toEqual([])
-    const [kodimagnyl] = oversikt.godkjenningsfritak
+    const visning = byggPreparatvisning(await leser.les([KODEIN]), [KODEIN])
+    // Kodimagnyl i utdraget krever godkjenningsfritak; det er et merke, ikke en egen gruppe.
+    expect(visning.former.map((f) => f.form)).toEqual(['Tablett'])
+    const [kodimagnyl] = visning.preparater.values()
     expect(kodimagnyl).toMatchObject({
       navn: 'Kodimagnyl Ikke-stoppende dak',
       form: 'Tablett',
@@ -464,7 +463,7 @@ describe('preparatene og interaksjonene på stoffsiden', () => {
       mengde: null,
     })
     // Kombinasjonen telles, men har ikke noe spenn å vise.
-    expect(oppsummerGruppe([kodimagnyl!])).toBe('1 preparat')
+    expect(oppsummerForm(visning.former[0]!)).toBe('1 styrke · 1 preparat')
   })
 
   it('viser saltet på preparatet, og slår sammen merkevarer med samme styrke', () => {
@@ -538,12 +537,12 @@ describe('preparatene og interaksjonene på stoffsiden', () => {
       ean: [],
     })
     utvalg.pakninger.push(pakning('p2', 'm2', 10), pakning('p1', 'm1', 2))
-    const [preparat] = byggPreparatoversikt(utvalg, ['mor']).former[0]!.preparater
+    const [preparat] = byggPreparatvisning(utvalg, ['mor']).preparater.values()
     expect(preparat).toMatchObject({
       salter: ['Testmiddelhydroklorid'],
       kombinasjon: [],
-      type: 'Sykehuspreparat',
-      styrker: [{ styrke: '2,5 mg/ml', mengde: { fra: 2.5, til: 2.5, enhet: 'mg/ml' } }],
+      merker: [{ type: 'preparattype', tekst: 'Sykehuspreparat' }],
+      styrker: [{ styrke: '2,5 mg/ml', mengde: { fra: 2.5, til: 2.5, enhet: 'mg/ml' }, merkevarer: ['m1', 'm2'] }],
     })
     // Pakningene fra begge merkevarene står på den ene styrken, minste først.
     // Uten pakningsstørrelse brukes mengden.

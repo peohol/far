@@ -2708,58 +2708,6 @@ details[open] > .detalj__kropp {
   scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
 }
 
-/* Seksjonen «Preparater»: legemiddelformene som detaljkort, preparatene i dem. */
-.preparater {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-5);
-  width: 100%;
-  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
-}
-
-.preparatformer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-5);
-  margin: 0;
-}
-
-.preparatliste {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-5);
-  margin: 0;
-  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
-}
-
-.preparat__navn {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--rom-2) var(--rom-3);
-  margin: 0;
-  font-weight: var(--vekt-medium);
-  color: var(--blekk-sterk);
-}
-
-.preparat__form {
-  font-weight: normal;
-  color: var(--blekk-dempet);
-}
-
-.preparat__merke {
-  padding: 0.1rem var(--rom-3);
-  font-size: var(--tekst-xs);
-  font-weight: normal;
-  color: var(--blekk-dempet);
-  background: var(--flate-hevet);
-  border-radius: var(--runding-full);
-}
-
-.preparat__salt,
-.preparater__forklaring,
-.preparater__kobling,
-.preparater__melding,
 .interaksjoner__merknad {
   margin: 0;
   font-size: var(--tekst-s);
@@ -2768,42 +2716,6 @@ details[open] > .detalj__kropp {
 
 .interaksjoner__merknad {
   font-size: var(--tekst-xs);
-}
-
-.preparat__styrker {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  margin: var(--rom-2) 0 0;
-  font-size: var(--tekst-s);
-}
-
-.preparat__styrker > li {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--rom-3);
-}
-
-.preparat__styrke {
-  min-width: 6rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.preparat__pakninger {
-  color: var(--blekk-dempet);
-}
-
-.preparat__handtering {
-  color: var(--blekk-dempet);
-}
-
-.preparat__detaljer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--rom-3);
-  margin: 0;
-  font-size: var(--tekst-s);
-  color: var(--blekk-dempet);
 }
 
 /* Seksjonen «Interaksjoner»: én interaksjon per detaljkort. Fargen følger
