@@ -15,6 +15,8 @@ import { TREFFKLASSE, Uthevingskilde, useSokeord } from '../Uthev'
 import { Ikon } from '../ikon/Ikon'
 import type { Ikonnavn } from '../ikon/register'
 import {
+  INNHOLDSATTRIBUTT,
+  MAKS_GLIDETID,
   SKUFFATTRIBUTT,
   SeksjonsstyringKilde,
   skuffnokkel,
@@ -34,7 +36,8 @@ import '../../styles/seksjoner.css'
  *   programmeringsfeil og stopper tegningen.
  * - Bare én skuff per nivå står åpen: å åpne en skuff lukker søsknene, men
  *   ikke forelderen (se `Seksjonsstyring`). Når brukeren åpner en skuff,
- *   ruller siden til toppen av den.
+ *   ruller siden den fram: midtstilt når den får plass, ellers med toppen
+ *   øverst.
  *
  * Innholdet står i dokumentet også når skuffen er lukket, skjult med
  * `hidden="until-found"`. Da finner både søket på siden og nettleserens eget
@@ -51,8 +54,6 @@ import '../../styles/seksjoner.css'
 /** Klassen skuffene har; seksjon og detaljkort er varianter av den. */
 const KLASSE = 'skuff'
 
-/** Hvor lenge skjulingen venter på at lukkingen skal gli ferdig, før den skjer likevel. */
-const MAKS_GLIDETID = 450
 
 /** Nivået en skuff står på, så to nivåer ikke blir flere. */
 type Niva = { slag: 'seksjon'; id: string } | { slag: 'detalj' }
@@ -279,7 +280,7 @@ function Skuff({
         </span>
       </div>
       <div ref={kropp} className={`${KLASSE}__kropp`}>
-        <div ref={inner} id={innholdId} className={`${KLASSE}__inner`}>
+        <div ref={inner} id={innholdId} className={`${KLASSE}__inner`} {...{ [INNHOLDSATTRIBUTT]: '' }}>
           <div className={`${KLASSE}__innhold`}>{children}</div>
         </div>
       </div>

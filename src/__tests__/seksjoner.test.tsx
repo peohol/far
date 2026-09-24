@@ -505,6 +505,27 @@ describe('én åpen skuff per nivå', () => {
 
 describe('rullingen', () => {
   const knapp = (navn: string) => screen.getByRole('button', { name: navn, hidden: true })
+  const rulletTil = vi.fn()
+  const VINDU = 800
+  const RULLET = 1000
+  /** Toppmenyen over og luften under: det synlige feltet er 800 − 88 − 28 = 684 px høyt. */
+  const OVER = 88
+  const UNDER = 28
+
+  beforeEach(() => {
+    rulletTil.mockClear()
+    window.scrollTo = rulletTil as unknown as typeof window.scrollTo
+    Object.defineProperty(window, 'innerHeight', { value: VINDU, configurable: true })
+    Object.defineProperty(window, 'scrollY', { value: RULLET, configurable: true })
+    Object.defineProperty(document.documentElement, 'scrollHeight', { value: 100_000, configurable: true })
+    const ekte = window.getComputedStyle.bind(window)
+    vi.spyOn(window, 'getComputedStyle').mockImplementation((el, pseudo) => {
+      if (!(el as Element).hasAttribute?.('data-skuff')) return ekte(el, pseudo)
+      return { ...ekte(el, pseudo), scrollMarginTop: `${OVER}px`, scrollMarginBottom: `${UNDER}px` } as CSSStyleDeclaration
+    })
+  })
+
+  afterEach(() => vi.mocked(window.getComputedStyle).mockRestore())
 
   function Side() {
     return (
@@ -521,15 +542,51 @@ describe('rullingen', () => {
     )
   }
 
-  it('ruller til toppen av skuffen når brukeren har åpnet den og den er tegnet', async () => {
+  /**
+   * Gir skuffen et sted i vinduet: toppen `top` px ned, et hode på `hode` px
+   * og innhold på `innhold` px når den har glidd ferdig — men ennå ikke
+   * glidd fram, som rett etter at den er åpnet.
+   */
+  function plasser(id: string, { top, hode, innhold }: { top: number; hode: number; innhold: number }) {
+    const skuff = document.getElementById(id)!
+    const inner = innholdFor(within(skuff).getAllByRole('button', { hidden: true })[0]!)
+    skuff.getBoundingClientRect = () => ({ top, height: hode }) as DOMRect
+    inner.getBoundingClientRect = () => ({ top: top + hode, height: 0 }) as DOMRect
+    Object.defineProperty(inner, 'scrollHeight', { value: innhold, configurable: true })
+    return skuff
+  }
+
+  it('midtstiller en skuff som får plass i det synlige feltet når den er åpnet', async () => {
+    const user = userEvent.setup()
+    render(<Side />)
+    plasser('panel-b', { top: 300, hode: 60, innhold: 200 })
+    await user.click(knapp('B'))
+    await nesteBilde()
+    // 260 px høy i et felt på 684: 212 px luft over og under.
+    expect(rulletTil).toHaveBeenCalledWith({ top: RULLET + 300 - OVER - 212, behavior: 'auto' })
+    expect(rullet).not.toHaveBeenCalled()
+  })
+
+  it('legger toppen av en skuff som er høyere enn feltet, rett under toppmenyen', async () => {
+    const user = userEvent.setup()
+    render(<Side />)
+    plasser('panel-b', { top: 300, hode: 60, innhold: 900 })
+    await user.click(knapp('B'))
+    await nesteBilde()
+    expect(rulletTil).toHaveBeenCalledWith({ top: RULLET + 300 - OVER, behavior: 'auto' })
+  })
+
+  it('gjør det samme for et detaljkort, målt uten kortene i det', async () => {
     const user = userEvent.setup()
     render(<Side />)
     await user.click(knapp('B'))
+    plasser('panel-b--k', { top: -50, hode: 40, innhold: 100 })
     await nesteBilde()
-    expect(rullet).toHaveBeenCalledWith(document.getElementById('panel-b'), { behavior: 'auto', block: 'start' })
+    rulletTil.mockClear()
     await user.click(knapp('K'))
     await nesteBilde()
-    expect(rullet).toHaveBeenLastCalledWith(document.getElementById('panel-b--k'), { behavior: 'auto', block: 'start' })
+    // 140 px høyt: (684 − 140) / 2 = 272 px luft.
+    expect(rulletTil).toHaveBeenLastCalledWith({ top: RULLET - 50 - OVER - 272, behavior: 'auto' })
   })
 
   it('ruller ikke når skuffen lukkes', async () => {
@@ -537,6 +594,7 @@ describe('rullingen', () => {
     render(<Side />)
     await user.click(knapp('A'))
     await nesteBilde()
+    expect(rulletTil).not.toHaveBeenCalled()
     expect(rullet).not.toHaveBeenCalled()
   })
 
@@ -544,6 +602,7 @@ describe('rullingen', () => {
     redusert = false
     const user = userEvent.setup()
     render(<Side />)
+    plasser('panel-b', { top: 300, hode: 60, innhold: 900 })
     await user.click(knapp('B'))
     // Søskenet over lukkes uten å gli, så toppen av skuffen står stille mens siden ruller dit.
     const a = document.getElementById('panel-a')!
@@ -553,22 +612,66 @@ describe('rullingen', () => {
     expect(b.hasAttribute('data-stille')).toBe(false)
     expect(innholdFor(knapp('B')).parentElement!.hasAttribute('data-glir')).toBe(true)
     await nesteBilde()
-    expect(rullet).toHaveBeenCalledWith(b, { behavior: 'smooth', block: 'start' })
+    expect(rulletTil).toHaveBeenCalledWith({ top: RULLET + 300 - OVER, behavior: 'smooth' })
   })
 
   it('åpner uten å gli og ruller straks for den som har bedt om mindre bevegelse', async () => {
     const user = userEvent.setup()
     render(<Side />)
+    plasser('panel-b', { top: 300, hode: 60, innhold: 200 })
     await user.click(knapp('B'))
     expect(innholdFor(knapp('B')).parentElement!.hasAttribute('data-glir')).toBe(false)
     expect(innholdFor(knapp('B')).hasAttribute('hidden')).toBe(false)
     await nesteBilde()
-    expect(rullet).toHaveBeenCalledWith(document.getElementById('panel-b'), { behavior: 'auto', block: 'start' })
+    expect(rulletTil).toHaveBeenCalledWith(expect.objectContaining({ behavior: 'auto' }))
   })
 
-  it('legger toppen av skuffen under den faste toppmenyen', () => {
+  /** Sier at skuffen har glidd ferdig. */
+  function gliddFerdig(id: string) {
+    const kropp = document.getElementById(id)!.querySelector('.skuff__kropp')!
+    act(() => {
+      const slutt = new Event('transitionend') as TransitionEvent
+      Object.defineProperty(slutt, 'propertyName', { value: 'grid-template-rows' })
+      kropp.dispatchEvent(slutt)
+    })
+  }
+
+  it('justerer etter den virkelige høyden når skuffen har glidd ferdig', async () => {
+    redusert = false
+    const user = userEvent.setup()
+    render(<Side />)
+    plasser('panel-b', { top: 300, hode: 60, innhold: 200 })
+    await user.click(knapp('B'))
+    await nesteBilde()
+    expect(rulletTil).toHaveBeenCalledTimes(1)
+    // Ferdig åpnet ble skuffen 40 px høyere enn ventet (luft under som også glir): 300 px, 192 px luft.
+    const skuff = document.getElementById('panel-b')!
+    skuff.getBoundingClientRect = () => ({ top: 300, height: 300 }) as DOMRect
+    const inner = innholdFor(knapp('B'))
+    inner.getBoundingClientRect = () => ({ top: 360, height: 200 }) as DOMRect
+    gliddFerdig('panel-b')
+    expect(rulletTil).toHaveBeenCalledTimes(2)
+    expect(rulletTil).toHaveBeenLastCalledWith({ top: RULLET + 300 - OVER - 192, behavior: 'smooth' })
+  })
+
+  it('lar siden ligge når brukeren har begynt å rulle selv før skuffen har glidd ferdig', async () => {
+    redusert = false
+    const user = userEvent.setup()
+    render(<Side />)
+    plasser('panel-b', { top: 300, hode: 60, innhold: 200 })
+    await user.click(knapp('B'))
+    await nesteBilde()
+    act(() => {
+      window.dispatchEvent(new Event('wheel'))
+    })
+    gliddFerdig('panel-b')
+    expect(rulletTil).toHaveBeenCalledTimes(1)
+  })
+
+  it('bruker toppmenyen og luften under som grenser for feltet', () => {
     const css = readFileSync('src/styles/seksjoner.css', 'utf8')
     expect(css).toMatch(/\.skuff\s*\{[^}]*scroll-margin-block:\s*var\(--toppmeny-offset\)/)
+    expect(css).toMatch(/\.skuff\s*\{\s*scroll-margin-bottom:\s*var\(--dokk-offset\)/)
   })
 })
 
