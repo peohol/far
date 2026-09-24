@@ -1,0 +1,825 @@
+/**
+ * Fortolkningsflatene, fra Atlas (`OUSFAR Fortolkning`): søket, båndsteget,
+ * kontrollsteget, limsteget og kommentarblokkene i modulene. Mekanikken er
+ * den samme som før: tallene velger, Enter kopierer og går videre, Esc går
+ * ett steg tilbake, og knappen som ble brukt flyter opp og står som bevis
+ * over limkortet. THC-modulen står i `thc.css`.
+ */
+
+/* --- Søket ------------------------------------------------------------------ */
+
+.steg--sok {
+  width: min(100%, var(--bredde-fortolkning));
+}
+
+.steg--sok .stegbar {
+  justify-content: flex-end;
+}
+
+.sok {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-6);
+  width: 100%;
+  /* Det tomme søket står et stykke ned på siden, ikke klistret til menyen. */
+  padding-top: clamp(var(--rom-5), 10vh, var(--rom-10));
+}
+
+/* Det tomme søket: et stort søkeikon i en sirkel og beskjeden i serif. */
+.instruks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-7);
+  max-width: 14em;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-tall);
+  font-weight: var(--vekt-medium);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: balance;
+  transition:
+    opacity var(--fart-rask) var(--kurve),
+    transform var(--fart-rask) var(--kurve);
+}
+
+.instruks__sirkel {
+  display: grid;
+  place-items: center;
+  width: calc(var(--ikon-sirkel) + var(--rom-8));
+  height: calc(var(--ikon-sirkel) + var(--rom-8));
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.instruks__ikon {
+  width: var(--ikon-form);
+  height: var(--ikon-form);
+}
+
+/* Instruksjonen viker for søkefeltet ved første tegn, men beholder plassen
+   sin så alternativene under ikke hopper. */
+.instruks--skjult {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(-0.4rem);
+  pointer-events: none;
+}
+
+/* Søkefeltet er en stor pille med aksentkant. Det står alltid montert og har
+   fokus, men er usynlig til det første tegnet er skrevet. */
+.sokefelt {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: calc(var(--hoyde-felt) + var(--rom-8));
+  padding: 0 var(--rom-7);
+  background: var(--flate);
+  border: var(--kant-aktiv) solid var(--aksent);
+  border-radius: var(--runding-pille);
+  box-shadow: 0 0 0 var(--rom-1) var(--aksent-flate);
+  transition:
+    opacity var(--fart-rask) var(--kurve),
+    box-shadow var(--fart-rask) var(--kurve);
+}
+
+.sokefelt--skjult {
+  opacity: 0;
+  box-shadow: none;
+}
+
+.sokefelt__input {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-tall);
+  font-weight: var(--vekt-medium);
+  letter-spacing: -0.01em;
+  background: transparent;
+  border: 0;
+}
+
+.sokefelt__input:focus {
+  outline: none;
+}
+
+/* Treffene, ett under det andre, hvert i sin egen farge. */
+.alternativer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  width: 100%;
+  margin: 0;
+}
+
+.alternativ {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-6);
+  width: 100%;
+  padding: var(--rom-5) var(--rom-7) var(--rom-5) var(--rom-5);
+  text-align: left;
+  background: var(--alt-soft);
+  border: var(--kant-aktiv) solid var(--alt-kant);
+  border-radius: var(--runding-kort);
+  cursor: pointer;
+  transition:
+    transform var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve);
+}
+
+.alternativ:hover {
+  transform: translateY(-1px);
+  border-color: var(--alt-solid);
+}
+
+.alternativ__tall {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--hoyde-trykk);
+  height: var(--hoyde-trykk);
+  font-size: var(--tekst-lesing);
+  font-weight: var(--vekt-fet);
+  color: var(--alt-ink);
+  background: var(--alt-solid);
+  border-radius: var(--runding-pille);
+}
+
+.alternativ__tekst {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-2);
+  min-width: 0;
+}
+
+/* Koden er en oppslagsnøkkel få kan utenat. Den står som en liten pille i
+   alternativets farge over navnet, i stedet for å konkurrere med det. */
+.alternativ__kode {
+  padding: var(--rom-1) var(--rom-2);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-fet);
+  line-height: var(--linjehoyde-tett);
+  letter-spacing: 0.06em;
+  color: var(--alt-ink);
+  background: var(--alt-solid);
+  border-radius: var(--runding-pille);
+}
+
+/* Moderstoffet: størst, i serif og med sterkeste blekket. Det er navnet man
+   kjenner igjen, og alternativene skilles fra hverandre på det. */
+.alternativ__navn {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-tall);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk-sterk);
+}
+
+/* Metabolittene står under, én per linje: de er det minst kjente av alt i
+   alternativet, og skal kunne hoppes over med blikket. */
+.alternativ__metabolitter {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--tekst-ui);
+  line-height: 1.2;
+  color: var(--blekk-dempet);
+}
+
+.ingen-treff {
+  font-size: var(--tekst-ui);
+  color: var(--blekk-dempet);
+}
+
+/* Filteret under alternativene. Det står så lenge filteret er på, også når
+   søket gir treff: et glemt filter ser ut som at et stoff ikke finnes. */
+.sokfilter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rom-3);
+  font-size: var(--tekst-ui);
+  color: var(--blekk-dempet);
+}
+
+/* --- Analyttkortet ------------------------------------------------------------ */
+
+.analyttkort {
+  gap: var(--rom-4);
+}
+
+.analytt__grenser {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+}
+
+/* Navnene bak forkortelsene, der modulen er kjent på forkortelsene sine. */
+.modul-undertittel {
+  font-size: var(--tekst-ui);
+  color: var(--blekk-dempet);
+}
+
+/* --- Konsentrasjonsbåndene --------------------------------------------------
+   Båndene er én sammenhengende skala, og et bånd som havner alene på linje to
+   leses lett som noe annet enn de andre. Raden holdes derfor på én linje:
+   knappene deler bredden i kortet likt mellom seg, og skriften følger ruta hver
+   av dem får. `cqi` er 1 % av bredden på raden, og `--antall` settes av
+   BandStep.
+
+   Grensen går ved `--band-minst`. Under den ville tallene måttet krympe under
+   det lesbare for å holde linja, og da er det bedre å bryte raden enn å gjøre
+   et konsentrasjonsintervall vanskelig å lese. */
+.band {
+  --band-luft: clamp(0.3rem, 1.2cqi, var(--rom-3));
+  --band-rute: calc((100cqi - (var(--antall, 3) - 1) * var(--band-luft)) / var(--antall, 3));
+  /* Hvor bred den bredeste knappen er, målt i sin egen skriftstørrelse: ikon,
+     det lengste tallet appen kan vise («1001 – 1099»), luft og innrykk. Målt i
+     nettleseren med god margin, siden skriften varierer fra maskin til maskin. */
+  --band-innhold: 9.4;
+  --band-minst: 0.7rem;
+
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  /* Bryting er tillatt, men `min-width` under gjør at det først slår inn når
+     én linje ikke lenger kan holdes med lesbare tall. */
+  flex-wrap: wrap;
+  gap: var(--band-luft);
+  margin: 0;
+  width: 100%;
+}
+
+/* Hurtigtastmerkene står inne i knappen og krever sin egen plass. */
+.band--merker {
+  --band-innhold: 10.6;
+}
+
+.band > li {
+  display: flex;
+  /* Knappene deler bredden likt, men aldri i mindre biter enn tallene trenger
+     for å stå lesbare. Det er den grensen som avgjør når raden brytes. */
+  flex: 1 1 0;
+  min-width: min(100%, calc(var(--band-innhold) * var(--band-minst)));
+}
+
+/* Formen et bånd har. Knappen i båndsteget, merket i kontrollsteget og beviset
+   som følger med til limsteget deler den, så de tre leses som den samme
+   knappen hele veien gjennom. Fargen til nivået ligger i `--band-farge`. */
+.bandknapp,
+.valgmerke,
+.kopibevis {
+  display: flex;
+  align-items: center;
+  gap: 0.43em;
+  font-family: var(--skrift-display);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+  font-variant-numeric: lining-nums tabular-nums;
+  white-space: nowrap;
+  border: var(--kant-aktiv) solid var(--band-farge);
+  border-radius: var(--runding-knapp);
+}
+
+.bandknapp {
+  flex: 1;
+  min-height: calc(var(--hoyde-felt) * 1.5);
+  padding: 0 0.5em 0 0.57em;
+  font-size: clamp(
+    var(--band-minst),
+    calc(var(--band-rute) / var(--band-innhold)),
+    var(--tekst-seksjon)
+  );
+  cursor: pointer;
+  transition:
+    box-shadow var(--fart-rask) var(--kurve),
+    transform var(--fart-rask) var(--kurve);
+}
+
+.bandknapp:hover {
+  box-shadow: 0 0 0 var(--rom-1) color-mix(in oklab, var(--band-farge) 22%, transparent);
+}
+
+.bandknapp:active {
+  transform: translateY(1px);
+}
+
+.bandknapp__verdi {
+  flex: 1;
+  text-align: left;
+}
+
+.bandknapp__ikon,
+.valgmerke__ikon,
+.kopibevis__ikon {
+  font-size: 1.07em;
+}
+
+/* Tallet som velger båndet, som et rundt merke inne i knappen. */
+.bandknapp .hurtigtast {
+  display: grid;
+  place-items: center;
+  min-width: 2em;
+  height: 2em;
+  padding: 0 var(--rom-1);
+  font-size: max(var(--tekst-merke), 0.43em);
+  font-weight: var(--vekt-fet);
+  color: var(--blekk);
+  background: var(--flate);
+}
+
+/* Fargene hører til båndet, ikke til knappen, og følger derfor med beviset. */
+.bandknapp--under,
+.valgmerke--under,
+.kopibevis--under {
+  --band-farge: var(--under-kant);
+  color: var(--under-blekk);
+  background: var(--under-flate);
+}
+
+.bandknapp--innenfor,
+.valgmerke--innenfor,
+.kopibevis--innenfor {
+  --band-farge: var(--referanse-kant);
+  color: var(--referanse-blekk);
+  background: var(--referanse-flate);
+}
+
+/* Gult bærer to ting: båndet over referanseområdet, og «Til stede under
+   cut-off». Begge er svar appen ber deg se en gang til på. */
+.bandknapp--over,
+.valgmerke--over,
+.kopibevis--over,
+.bandknapp--cutoff,
+.valgmerke--cutoff,
+.kopibevis--cutoff {
+  --band-farge: var(--toksisk-kant);
+  color: var(--toksisk-blekk);
+  background: var(--toksisk-flate);
+}
+
+.bandknapp--ring,
+.valgmerke--ring,
+.kopibevis--ring {
+  --band-farge: var(--alvorlig-kant);
+  color: var(--alvorlig-blekk);
+  background: var(--alvorlig-flate);
+}
+
+/* Knapper som ikke er et konsentrasjonsbånd: EtG- og EtS-modulens tre
+   tilfeller og ja/nei i kontrollsteget. De skal ikke låne nivåfargene — her
+   ville en farge sagt noe klinisk som ikke er ment — men de har samme form,
+   så knappen kjenner seg igjen som bevis over limkortet. Kanten er det som
+   skiller knappen fra kortet, og bærer derfor kravet til kontrast for
+   grafiske elementer på egen hånd. */
+.bandknapp--noytral,
+.valgmerke--noytral,
+.kopibevis--noytral {
+  --band-farge: var(--linje-kontroll);
+  color: var(--blekk);
+  background: var(--flate-hevet);
+}
+
+/* Egen rad under båndene. Valget er ingen konsentrasjon og skal verken dele
+   bredden med skalaen eller leses som en del av den, så knappen tar bare den
+   plassen teksten trenger, i UI-skriften. */
+.bandkort__ekstra > li {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.bandkort__ekstra .bandknapp {
+  min-height: calc(var(--hoyde-felt) + var(--rom-2));
+  padding: 0 var(--rom-4) 0 var(--rom-5);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+  white-space: normal;
+}
+
+.bandkort__ekstra .bandknapp__ikon {
+  font-size: var(--ikon-panel);
+}
+
+/* I stedet for knappene, mens regelsettet hentes eller når det mangler. */
+.bandkort__melding {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-3);
+  font-size: var(--tekst-ui);
+  color: var(--blekk-dempet);
+}
+
+/* --- Kontrollsteget -----------------------------------------------------------
+   Merket viser hvilket valg som skal bekreftes. Det har knappens form og
+   farge og står som valgt, men er ikke en knapp. */
+.valgmerke {
+  flex: none;
+  padding: var(--rom-4) var(--rom-7) var(--rom-4) var(--rom-5);
+  font-size: var(--tekst-seksjon);
+  border-width: var(--kant-tykk);
+  box-shadow: 0 0 0 var(--rom-1) color-mix(in oklab, var(--band-farge) 22%, transparent);
+}
+
+.kontrollkort {
+  gap: var(--rom-7);
+}
+
+.kontrollkort__sporsmal {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-seksjon);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-titler);
+  text-wrap: balance;
+}
+
+/* Ja og nei står side om side i lesbar størrelse. De skal ikke dele hele
+   kortbredden mellom seg slik båndene gjør: dette er et spørsmål, ikke en
+   skala. */
+.kontrollkort__svar {
+  justify-content: center;
+}
+
+.kontrollkort__svar > li {
+  flex: 0 1 9rem;
+  min-width: 0;
+}
+
+.kontrollkort__svar .bandknapp {
+  font-size: var(--tekst-seksjon);
+}
+
+/* --- Limsteget --------------------------------------------------------------- */
+
+/* Beviset og kortet det hører til, tettere sammen enn stegets egen luft. */
+.limstabel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--rom-3);
+  padding-top: var(--rom-3);
+  width: 100%;
+}
+
+/* Båndknappen som ble brukt, landet over kortet med en glorie i sin egen
+   farge. Hurtigtastmerket er ikke med: tasten valgte båndet, og har ingen
+   jobb igjen når kommentaren alt er kopiert. */
+.kopibevis {
+  flex: none;
+  align-self: center;
+  padding: var(--rom-4) var(--rom-7) var(--rom-4) var(--rom-5);
+  font-size: var(--tekst-seksjon);
+  border-width: var(--kant-tykk);
+  box-shadow: 0 0 0 var(--rom-2) color-mix(in oklab, var(--band-farge) 18%, transparent);
+  cursor: help;
+}
+
+/* Beviset tegnes der det skal ende og settes tilbake dit knappen sto. Når
+   transformen glir bort, flyter knappen opp og lander over kortet. Skaleringen
+   går om midten, som forskyvningen i src/domain/flytting.ts regner med. */
+.kopibevis--flyter {
+  transform-origin: 50% 50%;
+  animation: kopibevis-flyt var(--fart-flyt) var(--kurve);
+}
+
+@keyframes kopibevis-flyt {
+  from {
+    transform: translate(var(--flyt-x), var(--flyt-y)) scale(var(--flyt-skala));
+  }
+}
+
+/* Limkortet: «Lim inn kommentaren på» i kursiv serif og koden stort. */
+.limInn {
+  gap: var(--rom-5);
+  padding-block: calc(var(--rom-8) + var(--rom-2)) var(--rom-8);
+}
+
+.limInn__instruks {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-seksjon);
+  font-style: italic;
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk-dempet);
+}
+
+.limInn__ikon {
+  width: var(--ikon-panel);
+  height: var(--ikon-panel);
+}
+
+.limInn__kode {
+  font-size: var(--tekst-display);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
+  letter-spacing: 0.04em;
+  overflow-wrap: anywhere;
+}
+
+.ringvarsel {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  margin-top: var(--rom-2);
+  padding: var(--rom-3) var(--rom-6) var(--rom-3) var(--rom-4);
+  font-size: var(--tekst-lesing);
+  font-weight: var(--vekt-fet);
+  line-height: var(--linjehoyde-tett);
+  color: var(--alvorlig-blekk);
+  background: var(--alvorlig-flate);
+  border-radius: var(--runding-pille);
+}
+
+/* Røret rister et par ganger som en telefon som ringer, og blir så stående:
+   det skal fange blikket, ikke fortsette å bevege seg. Slås av sammen med
+   resten av animasjonene når brukeren har bedt om mindre bevegelse. */
+.ringvarsel__ikon {
+  font-size: var(--ikon-panel);
+  transform-origin: 50% 85%;
+  animation: ringer 1.4s var(--kurve) 2;
+}
+
+@keyframes ringer {
+  0%,
+  62%,
+  100% {
+    transform: rotate(0deg);
+  }
+  66%,
+  74%,
+  82% {
+    transform: rotate(-16deg);
+  }
+  70%,
+  78%,
+  86% {
+    transform: rotate(16deg);
+  }
+}
+
+/* Hovedhandlingen i steget, nederst til høyre. */
+.handling,
+.handlingsrad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--rom-5);
+  width: 100%;
+}
+
+.handlingsrad--start {
+  justify-content: flex-start;
+}
+
+/* --- Kvittering for kopieringen ---------------------------------------------
+   Blinket legges der båndknappen står, i vindukoordinater, og lever videre
+   etter at limsteget har overtatt. Derfor er det festet til vinduet og ikke
+   til noe i steget under. */
+.kopiblink {
+  position: fixed;
+  z-index: var(--lag-innhold);
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  padding: var(--rom-3) var(--rom-6);
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+  white-space: nowrap;
+  color: var(--paa-aksent);
+  background: var(--aksent);
+  border-radius: var(--runding-pille);
+  box-shadow: var(--skygge-modal);
+  pointer-events: none;
+  animation: kopiblink var(--blink-tid) var(--kurve) both;
+}
+
+.kopiblink__ikon {
+  font-size: var(--ikon-ui);
+}
+
+/* Spretter ut av knappen, står stille lenge nok til å leses, og siger opp og
+   ut igjen. `translate(-50%, …)` sentrerer den over knappen. */
+@keyframes kopiblink {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20%) scale(0.7);
+  }
+  22% {
+    opacity: 1;
+    transform: translate(-50%, -95%) scale(1);
+  }
+  62% {
+    opacity: 1;
+    transform: translate(-50%, -105%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -155%) scale(0.94);
+  }
+}
+
+/* Uten bevegelse blir kvitteringen stående stille over knappen i stedet, og
+   forsvinner når tiden er ute. */
+@media (prefers-reduced-motion: reduce) {
+  .kopiblink {
+    animation-name: none;
+    opacity: 1;
+    transform: translate(-50%, -110%);
+  }
+}
+
+/* --- Fortolkningsmodulene -----------------------------------------------------
+   Det rusmiddelmodulen, EtG og simulatoren i regelvisningen deler: rammen rundt
+   kortene og kommentarblokkene (Atlas `CommentPlacement`). */
+
+.modul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+  width: 100%;
+}
+
+.modul-resultat {
+  gap: var(--rom-5);
+}
+
+/* Kommentarene i den rekkefølgen de skal limes inn. Nummereringen fra <ol>
+   vises ikke — merkelappen over hver kommentar sier hva den er — men den gir
+   rekkefølgen mening for skjermlesere. */
+.plasseringer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Én kommentar: koden og teksten til venstre, kopiknappen til høyre. Den som
+   står for tur, har aksentflate og aksentkant — og primærknappen med Enter,
+   så det står i tekst og form, ikke bare i farge. */
+.plassering {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--rom-6);
+  padding: var(--rom-5) var(--rom-6);
+  text-align: left;
+  background: var(--flate-bunn);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-knapp);
+}
+
+.plassering[data-for-tur] {
+  background: var(--aksent-flate);
+  border-color: var(--aksent);
+}
+
+.plassering__innhold {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--rom-2);
+  min-width: 0;
+}
+
+.plassering__merke {
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.plassering__sted {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--rom-2) var(--rom-4);
+}
+
+.plassering__instruks {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-style: italic;
+  line-height: var(--linjehoyde-tett);
+  color: var(--blekk-dempet);
+}
+
+.plassering__ikon {
+  font-size: var(--ikon-ui);
+}
+
+/* Koden er det eneste i blokka brukeren må lese av og handle på, og står
+   derfor størst. Er det flere koder, skiller de lag med god luft, så de ikke
+   leses som ett ord. */
+.plassering__koder {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0 0.9em;
+  font-size: var(--tekst-tall);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
+  letter-spacing: 0.04em;
+  overflow-wrap: anywhere;
+}
+
+.plassering .kommentartekst {
+  margin-top: var(--rom-1);
+  padding-left: var(--rom-5);
+}
+
+.plassering__handling {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--rom-2);
+}
+
+/* Kopiknappen har ikonet i en liten sirkel, både som primær og som kantet. */
+.plassering__handling .knapp {
+  min-height: var(--hoyde-trykk);
+  padding: 0 var(--rom-4) 0 var(--rom-2);
+}
+
+.plassering__handling .knapp__ikon {
+  width: var(--ikon-panel);
+  height: var(--ikon-panel);
+  font-size: var(--tekst-etikett);
+  color: var(--blekk);
+  background: var(--flate);
+  border-radius: var(--runding-pille);
+}
+
+/* Kvitteringen blir stående etter at blinket er borte, så det går fram hva
+   som alt er limt inn når kommentarene tas én av gangen. */
+.kopiert {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
+  color: var(--referanse-blekk);
+}
+
+.kopiert__ikon {
+  font-size: var(--tekst-lesing);
+}
+
+@media (max-width: 40rem) {
+  .plassering {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--rom-4);
+  }
+
+  .plassering__handling {
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}
+
+/* --- Rusmiddelmodulen ---------------------------------------------------------- */
+
+/* Tilfellet kilden ikke har en standardkommentar for. Her er det ingenting å
+   kopiere, og beskjeden om hvorfor er hele innholdet i kortet — den bærer
+   derfor samme skriftstørrelse som en kommentar ville hatt. */
+.rus-plenum {
+  padding: var(--rom-5) var(--rom-6);
+  font-size: var(--tekst-lesing);
+  line-height: var(--linjehoyde-lesing);
+  text-align: left;
+  text-wrap: pretty;
+  color: var(--toksisk-blekk);
+  background: var(--toksisk-flate);
+  border-radius: var(--runding-underkort);
+}
+
+/* Det kilden sier om hvordan saken skal håndteres. Står som brødtekst under
+   beskjeden, ikke som enda en varselrute — det er bakgrunn, ikke alarm. */
+.rus-veiledning {
+  font-size: var(--tekst-ui);
+  line-height: 1.6;
+  text-align: left;
+  text-wrap: pretty;
+  color: var(--blekk-dempet);
+}

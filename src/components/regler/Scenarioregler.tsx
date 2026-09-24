@@ -127,7 +127,7 @@ export function Scenarioregler({ modul, regelsett, kommentarer }: Scenarioregler
                 Tekst {i + 1}
                 {t.brukesAv > 1 && <span className="regeltekst__bruk"> · brukes i {t.brukesAv} scenarier</span>}
               </p>
-              <p className="thc-kommentar">
+              <p className="kommentartekst">
                 <Uthev tekst={t.tekst} />
               </p>
             </li>
@@ -316,14 +316,18 @@ function Plasseringer({ plasseringer }: { plasseringer: RusPlassering[] }) {
     <ol className="plasseringer">
       {plasseringer.map((p) => (
         <li key={p.merke} className={`plassering plassering--${p.rolle}`}>
-          {plasseringer.length > 1 && <p className="plassering__merke">{p.merke}</p>}
-          <p className="plassering__instruks">Limes inn på</p>
-          <p className="plassering__koder">
-            {p.koder.map((kode) => (
-              <span key={kode}>{kode}</span>
-            ))}
-          </p>
-          <p className="thc-kommentar">{p.tekst}</p>
+          <div className="plassering__innhold">
+            {plasseringer.length > 1 && <p className="plassering__merke">{p.merke}</p>}
+            <p className="plassering__sted">
+              <span className="plassering__instruks">Limes inn på</span>
+              <span className="plassering__koder">
+                {p.koder.map((kode) => (
+                  <span key={kode}>{kode}</span>
+                ))}
+              </span>
+            </p>
+            <p className="kommentartekst">{p.tekst}</p>
+          </div>
         </li>
       ))}
     </ol>

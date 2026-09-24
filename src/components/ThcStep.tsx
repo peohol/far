@@ -2,15 +2,15 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
 import { Details } from './Details'
-import { Metodepille } from './Metodepille'
-import { Kodepille } from './Kodepille'
+import { Metalinje } from './Metalinje'
+import { Panelhode } from './Panelhode'
 import { StepBar } from './StepBar'
 import { ManualCopy } from './ManualCopy'
 import { Tallfelt } from './Tallfelt'
 import { ThcForklaring } from './ThcForklaring'
 import { ThcPlot } from './ThcPlot'
 import { Tips } from './Tips'
-import { BackIcon, CopyIcon, ResetIcon } from './icons'
+import { Ikon } from './ikon/Ikon'
 import {
   beregnIrcak,
   formaterIrcak,
@@ -23,8 +23,6 @@ import {
 } from '../domain/thc'
 import { erBekreftelse } from '../hooks/useKeyboard'
 import { rullTilKort, useKortHopp } from '../hooks/useKortHopp'
-
-const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
 
 /**
  * Stoppene på sikkerhetsmarginen, fra ingen margin til den strengeste. De står
@@ -251,11 +249,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
 
   return (
     <section className="steg steg--thc" aria-label="Fortolk THC-syre i urin" ref={seksjon}>
-      <StepBar>
-        <Button variant="subtle" icon={<BackIcon />} shortcut="Esc" onClick={onBack}>
-          Bytt analytt
-        </Button>
-      </StepBar>
+      <StepBar onEsc={onBack}>Bytt analytt</StepBar>
 
       <form
         className="thc"
@@ -265,11 +259,16 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
         }}
       >
         <Card ref={inndatakort} align="start" className="analyttkort">
-          <Metodepille metode={THC_ANALYSEMETODE} />
           <div className="thc-korthode">
-            <Kodepille kode={THC_KODE} />
+            <span className="thc-korthode__ikon" data-ih="">
+              <Ikon navn="cup" />
+            </span>
+            <div className="thc-korthode__tittel">
+              <Metalinje koder={[THC_KODE]} metode={THC_ANALYSEMETODE} lenker />
+              <h1 className="analytt__navn">THC-syre i urin</h1>
+            </div>
             <div className="thc-nullstillhjorne" data-nullstill>
-              <Button variant="subtle" icon={<ResetIcon />} onClick={nullstill}>
+              <Button variant="kant" icon={<Ikon navn="reset" />} onClick={nullstill}>
                 Nullstill
               </Button>
               {nullstillTips && (
@@ -279,10 +278,9 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
               )}
             </div>
           </div>
-          <h1 className="analytt__navn">THC-syre i urin</h1>
 
           <div className="thc-skjema">
-            <div className="thc-avkryssinger">
+            <div className="avkryssinger">
               <label className="avkryssing">
                 <input
                   type="checkbox"
@@ -303,7 +301,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
 
             <div className="thc-prover">
               {!inndata.ingenTidligere && (
-                <fieldset className="thc-prove">
+                <fieldset className="feltgruppe">
                   <legend>Forrige prøve</legend>
                   {/* Var urinen så fortynnet at THC-syre havnet under
                       påvisningsgrensen, svarer labsystemet «ikke påvist» og
@@ -319,21 +317,23 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                   </label>
                   {inndata.forrigeUnderCutoff ? (
                     <>
-                      <label className="thc-felt">
-                        <span>UCAK (THC-syre)</span>
-                        <Tallfelt
-                          ref={forsteFelt}
-                          value={inndata.forrigeUcak}
-                          onChange={(verdi) => sett('forrigeUcak', verdi)}
-                        />
-                      </label>
-                      <label className="thc-felt">
-                        <span>NKRE (kreatinin)</span>
-                        <Tallfelt
-                          value={inndata.forrigeNkre}
-                          onChange={(verdi) => sett('forrigeNkre', verdi)}
-                        />
-                      </label>
+                      <div className="feltrad feltrad--par">
+                        <label className="skjemafelt">
+                          <span>UCAK (THC-syre)</span>
+                          <Tallfelt
+                            ref={forsteFelt}
+                            value={inndata.forrigeUcak}
+                            onChange={(verdi) => sett('forrigeUcak', verdi)}
+                          />
+                        </label>
+                        <label className="skjemafelt">
+                          <span>NKRE (kreatinin)</span>
+                          <Tallfelt
+                            value={inndata.forrigeNkre}
+                            onChange={(verdi) => sett('forrigeNkre', verdi)}
+                          />
+                        </label>
+                      </div>
                       <p className="thc-beregnet" role="status">
                         Beregnet IRCAK:{' '}
                         <strong>
@@ -342,7 +342,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                       </p>
                     </>
                   ) : (
-                    <label className="thc-felt">
+                    <label className="skjemafelt">
                       <span>IRCAK</span>
                       <Tallfelt
                         ref={forsteFelt}
@@ -351,10 +351,10 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                       />
                     </label>
                   )}
-                  <label className="thc-felt">
+                  <label className="skjemafelt">
                     <span>Prøvedato</span>
                     <input
-                      className="thc-input"
+                      className="inndatafelt"
                       type="date"
                       value={inndata.forrigeDato}
                       onChange={(e) => sett('forrigeDato', e.target.value)}
@@ -363,9 +363,9 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                 </fieldset>
               )}
 
-              <fieldset className="thc-prove">
+              <fieldset className="feltgruppe">
                 <legend>Denne prøven</legend>
-                <label className="thc-felt">
+                <label className="skjemafelt">
                   <span>IRCAK</span>
                   <Tallfelt
                     ref={inndata.ingenTidligere ? forsteFelt : undefined}
@@ -376,10 +376,10 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
                 {/* Uten en tidligere prøve å telle døgn mot brukes ikke datoen,
                     og da skal den heller ikke fylles ut. */}
                 {!inndata.ingenTidligere && (
-                  <label className="thc-felt">
+                  <label className="skjemafelt">
                     <span>Prøvedato</span>
                     <input
-                      className="thc-input"
+                      className="inndatafelt"
                       type="date"
                       value={inndata.aktuellDato}
                       onChange={(e) => sett('aktuellDato', e.target.value)}
@@ -395,7 +395,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
             {!inndata.ingenTidligere && (
               <div className="thc-margin">
                 {underCutoff && (
-                  <p className="thc-banner" role="note">
+                  <p className="notis" role="note">
                     {UNDER_CUTOFF_BANNER}
                   </p>
                 )}
@@ -439,8 +439,10 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
         <Card ref={resultatkort} align="start" className="thc-resultat">
           {resultat.type === 'mangler' ? (
             <>
-              <h2 className="thc-resultat__merke">Mangler</h2>
-              <ul className="thc-mangler">
+              <Panelhode ikon="fallback" tone="toksisk">
+                Mangler
+              </Panelhode>
+              <ul className="mangelliste">
                 {resultat.mangler.map((melding) => (
                   <li key={melding}>{melding}</li>
                 ))}
@@ -448,35 +450,39 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
             </>
           ) : (
             <>
-              <h2 className="thc-resultat__merke">Kommentar</h2>
+              <Panelhode ikon="interp">Kommentar</Panelhode>
               {resultat.merEnn30Dager && (
-                <div className="thc-notis thc-notis--handling" role="note">
+                <div className="notis notis--handling" role="note">
                   <p>
                     Det er mer enn {VARSEL_DAGER_MELLOM} dager mellom prøvene. Vurder å huke av
                     «Ingen tidligere prøve tilgjengelig».
                   </p>
-                  <Button variant="subtle" onClick={() => sett('ingenTidligere', true)}>
+                  <Button
+                    variant="kant"
+                    icon={<Ikon navn="done" />}
+                    onClick={() => sett('ingenTidligere', true)}
+                  >
                     Huk av nå
                   </Button>
                 </div>
               )}
-              <p className="thc-kommentar">{resultat.kommentar}</p>
-              <div className="thc-handling">
-                <Button ref={kopierKnapp} type="submit" icon={<CopyIcon />} shortcut="↵">
+              <p className="kommentartekst">{resultat.kommentar}</p>
+              <div className="handlingsrad handlingsrad--start">
+                <Button ref={kopierKnapp} type="submit" icon={<Ikon navn="copy" />} shortcut="↵">
                   Kopier kommentar
                 </Button>
               </div>
             </>
           )}
 
-          {failedCopy && <ManualCopy message={KOPIFEIL} comment={failedCopy} />}
+          {failedCopy && <ManualCopy comment={failedCopy} />}
         </Card>
 
         {grunnlag && (
           <Card align="start" className="thc-plot">
-            <h2 className="thc-resultat__merke">Visualisering</h2>
+            <Panelhode ikon="hl">Visualisering</Panelhode>
             <ThcPlot grunnlag={grunnlag} />
-            <Details summary="Forklaring">
+            <Details summary="Forklaring" ikon="fallback">
               <ThcForklaring grunnlag={grunnlag} kategori={kategori} />
             </Details>
           </Card>

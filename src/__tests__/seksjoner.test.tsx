@@ -568,7 +568,7 @@ describe('rullingen', () => {
 
   it('legger toppen av skuffen under den faste toppmenyen', () => {
     const css = readFileSync('src/styles/seksjoner.css', 'utf8')
-    expect(css).toMatch(/\.skuff\s*\{\s*scroll-margin-top:\s*var\(--toppmeny-offset/)
+    expect(css).toMatch(/\.skuff\s*\{[^}]*scroll-margin-block:\s*var\(--toppmeny-offset\)/)
   })
 })
 

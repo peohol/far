@@ -12,6 +12,7 @@ import {
 } from '../../regler/visning'
 import { Tallfelt } from '../Tallfelt'
 import { bandIkon } from '../bandikon'
+import { Ikon } from '../ikon/Ikon'
 
 /**
  * Reglene i et regelsett som en tabell: konsentrasjonen, kommentaren den gir,
@@ -33,19 +34,16 @@ export function Regeltabell({ regelsett }: { regelsett: Intervallregelsett }) {
             </tr>
           </thead>
           <tbody>
-            {regelsettvalg(regelsett).map((valg) => {
-              const Ikon = bandIkon(valg)
-              return (
-                <tr key={valg.key}>
-                  <th scope="row" className={`regler__intervall regler__intervall--${valg.tone}`}>
-                    <Ikon aria-hidden="true" />
-                    {valg.label}
-                  </th>
-                  <td>{valg.kommentar}</td>
-                  <td>{valg.ring ? HANDLINGSNAVN.ring_rekvirent : ''}</td>
-                </tr>
-              )
-            })}
+            {regelsettvalg(regelsett).map((valg) => (
+              <tr key={valg.key}>
+                <th scope="row" className={`regler__intervall regler__intervall--${valg.tone}`}>
+                  <Ikon navn={bandIkon(valg)} />
+                  {valg.label}
+                </th>
+                <td>{valg.kommentar}</td>
+                <td>{valg.ring ? HANDLINGSNAVN.ring_rekvirent : ''}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

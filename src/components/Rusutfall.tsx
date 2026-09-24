@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Panelhode } from './Panelhode'
 import type { RusPlassering, RusResultat } from '../domain/rus'
 
 export interface RusutfallProps {
@@ -17,8 +18,10 @@ export function Rusutfall({ resultat, kommentarer }: RusutfallProps) {
     case 'mangler':
       return (
         <>
-          <h2 className="thc-resultat__merke">Mangler</h2>
-          <ul className="thc-mangler">
+          <Panelhode ikon="fallback" tone="toksisk">
+            Mangler
+          </Panelhode>
+          <ul className="mangelliste">
             {resultat.mangler.map((melding) => (
               <li key={melding}>{melding}</li>
             ))}
@@ -32,7 +35,7 @@ export function Rusutfall({ resultat, kommentarer }: RusutfallProps) {
     case 'plenum':
       return (
         <>
-          <h2 className="thc-resultat__merke">Til plenum</h2>
+          <Panelhode ikon="interp">Til plenum</Panelhode>
           <p className="rus-plenum" role="note">
             {resultat.melding}
           </p>
@@ -47,9 +50,9 @@ export function Rusutfall({ resultat, kommentarer }: RusutfallProps) {
     case 'kommentarer':
       return (
         <>
-          <h2 className="thc-resultat__merke">{resultat.plasseringer.length > 1 ? 'Kommentarer' : 'Kommentar'}</h2>
+          <Panelhode ikon="interp">{resultat.plasseringer.length > 1 ? 'Kommentarer' : 'Kommentar'}</Panelhode>
           {resultat.notiser.map((notis) => (
-            <p className="thc-notis" role="note" key={notis}>
+            <p className="notis" role="note" key={notis}>
               {notis}
             </p>
           ))}

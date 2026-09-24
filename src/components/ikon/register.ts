@@ -545,6 +545,20 @@ const REGISTER = {
     vb: 24,
     parts: [R(4, 13, 16, 7.5, 2, 'f1', 'accent'), G([P('M12 15V4M8 7.5 12 3.5l4 4', 'l', 'i-ink')], 'drop')],
   },
+  // Tegnet i OUSFAR for profilbildet, i samme stil som resten av registeret.
+  image: {
+    vb: 24,
+    parts: [
+      R(3.5, 5, 17, 14, 2.5, 'f1', 'info'),
+      C(9, 10, 1.8, 'f2', 'warn', 'pop'),
+      P('M4 17l5-4.5 4 3.5 2.5-2 4.5 4', 'l', 'i-ink'),
+    ],
+  },
+  rotate: {
+    vb: 24,
+    ga: 'spin45',
+    parts: [C(12, 12, 3, 'f2', 'accent'), P('M19.4 13.5A7.6 7.6 0 1 1 17.4 6.6L20 9.2', 'l', 'i-ink'), P('M20 4.8v4.4h-4.4', 'l', 'i-ink')],
+  },
 } satisfies Record<string, Ikondefinisjon>
 
 export type Ikonnavn = keyof typeof REGISTER

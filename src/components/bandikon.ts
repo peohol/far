@@ -1,13 +1,13 @@
-import { ArrowDownIcon, ArrowUpIcon, CheckIcon, CutoffIcon, PhoneIcon } from './icons'
+import type { Ikonnavn } from './ikon/register'
 import type { Kommentarvalg } from '../domain/valg'
 
 const IKON = {
-  under: ArrowDownIcon,
-  innenfor: CheckIcon,
-  over: ArrowUpIcon,
-  ring: PhoneIcon,
-  cutoff: CutoffIcon,
-} as const
+  under: 'bUnder',
+  innenfor: 'bInnenfor',
+  over: 'bOver',
+  ring: 'phone',
+  cutoff: 'cutoff',
+} as const satisfies Record<Kommentarvalg['tone'] | 'ring', Ikonnavn>
 
 /**
  * Ikonet valget bæres av. Knappen i steg 2 og beviset over lim-inn-kortet
@@ -19,6 +19,6 @@ const IKON = {
  * tonen er den røde: den tonen er forbeholdt båndet som både ligger over
  * referanseområdet og over ringegrensen.
  */
-export function bandIkon(valg: Pick<Kommentarvalg, 'tone' | 'ring'>) {
+export function bandIkon(valg: Pick<Kommentarvalg, 'tone' | 'ring'>): Ikonnavn {
   return IKON[valg.ring && valg.tone !== 'ring' ? 'ring' : valg.tone]
 }

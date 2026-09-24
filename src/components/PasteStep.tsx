@@ -3,7 +3,7 @@ import { Card } from './Card'
 import { Kopibevis } from './Kopibevis'
 import { StepBar } from './StepBar'
 import { bandIkon } from './bandikon'
-import { BackIcon, PasteIcon, PhoneIcon } from './icons'
+import { Ikon } from './ikon/Ikon'
 import type { Rute } from '../domain/flytting'
 import type { Kommentarvalg } from '../domain/valg'
 import type { Analyte } from '../types'
@@ -22,11 +22,7 @@ export interface PasteStepProps {
 export function PasteStep({ analyte, valg, fra, onBack, onFinish }: PasteStepProps) {
   return (
     <section className="steg" aria-label="Lim inn kommentaren">
-      <StepBar>
-        <Button variant="subtle" icon={<BackIcon />} shortcut="Esc" onClick={onBack}>
-          Endre konsentrasjon
-        </Button>
-      </StepBar>
+      <StepBar onEsc={onBack}>Endre konsentrasjon</StepBar>
 
       {/* Beviset hører til kortet under og står tettere på det enn stegets
           egen luft, så de to leses som én ting: denne kommentaren, hit. */}
@@ -39,27 +35,38 @@ export function PasteStep({ analyte, valg, fra, onBack, onFinish }: PasteStepPro
           fra={fra}
         />
 
-        <Card className="limInn">
-          <p className="limInn__instruks">
-            <PasteIcon className="limInn__ikon" />
-            Lim inn kommentaren på
-          </p>
-          <p className="limInn__kode">{analyte.kode}</p>
-
-          {valg.ring && (
-            <p className="ringvarsel" role="status">
-              <PhoneIcon className="ringvarsel__ikon" />
-              Husk å ringe!
-            </p>
-          )}
-        </Card>
+        <Limkort kode={analyte.kode} ring={valg.ring} />
       </div>
 
       <div className="handling">
-        <Button shortcut="Enter" onClick={onFinish}>
+        <Button icon={<Ikon navn="done" />} shortcut="Enter" onClick={onFinish}>
           Ferdig
         </Button>
       </div>
     </section>
+  )
+}
+
+/**
+ * Limkortet: «Lim inn kommentaren på» og koden stort, og ringevarselet når det
+ * gjelder (Atlas `PasteCard`). Koden er det eneste på skjermen brukeren må
+ * lese av og handle på, og står derfor størst.
+ */
+function Limkort({ kode, ring }: { kode: string; ring: boolean }) {
+  return (
+    <Card className="limInn">
+      <p className="limInn__instruks">
+        <Ikon navn="paste" className="limInn__ikon" />
+        Lim inn kommentaren på
+      </p>
+      <p className="limInn__kode">{kode}</p>
+
+      {ring && (
+        <p className="ringvarsel" role="status">
+          <Ikon navn="phone" className="ringvarsel__ikon" />
+          Husk å ringe!
+        </p>
+      )}
+    </Card>
   )
 }

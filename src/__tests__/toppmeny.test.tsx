@@ -3,6 +3,7 @@
  * Appskallet fra designsystemet: ikonene, den faste toppmenyen med plassene
  * sidene fyller, fagsøkfeltets snarvei og kontomenyen.
  */
+import { readFileSync } from 'node:fs'
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
@@ -116,6 +117,13 @@ describe('ikonene', () => {
       expect(svg.hasAttribute('data-spiller')).toBe(!rolig)
       unmount()
     }
+  })
+
+  it('lar klikket lande på ikonet, ikke på delene som tegnes på nytt', () => {
+    // Fokus fra et museklikk spiller animasjonen og bytter ut delene mellom
+    // trykk og slipp. Treffer pekeren delene, sender nettleseren ikke klikket.
+    const css = readFileSync('src/styles/ikon.css', 'utf8')
+    expect(css).toMatch(/\.ikon \*\s*\{[^}]*pointer-events:\s*none/)
   })
 })
 

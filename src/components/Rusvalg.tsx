@@ -38,9 +38,9 @@ export function Rusvalg({
   return (
     <>
       {analytter.length > 1 && (
-        <fieldset className="modul-valg">
+        <fieldset className="feltgruppe">
           <legend>Påvist i denne prøven</legend>
-          <div className="thc-avkryssinger">
+          <div className="avkryssinger">
             {analytter.map((analytt, i) => (
               <label className="avkryssing" key={analytt.kode}>
                 <input
@@ -51,7 +51,7 @@ export function Rusvalg({
                   aria-keyshortcuts={snarveier ? indexToDigit(i) : undefined}
                 />
                 {analytt.navn}
-                <span className="modul-valg__kode">{analytt.kode}</span>
+                <span className="avkryssing__kode">{analytt.kode}</span>
                 {snarveier && <Shortcut>{indexToDigit(i)}</Shortcut>}
               </label>
             ))}
@@ -60,12 +60,12 @@ export function Rusvalg({
       )}
 
       {verdifelter.length > 0 && (
-        <fieldset className="modul-valg">
+        <fieldset className="feltgruppe">
           <legend>Målte konsentrasjoner</legend>
-          {verdihjelp && <p className="rus-hjelp">{verdihjelp}</p>}
-          <div className="rus-felter">
+          {verdihjelp && <p className="feltgruppe__hjelp">{verdihjelp}</p>}
+          <div className="feltrad">
             {verdifelter.map((felt) => (
-              <label className="thc-felt" key={felt.kode}>
+              <label className="skjemafelt" key={felt.kode}>
                 <span>
                   {felt.navn} ({felt.kode})
                 </span>

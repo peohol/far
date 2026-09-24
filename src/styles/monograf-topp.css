@@ -1,7 +1,7 @@
 /* --- Toppen av stoffmonografen ---------------------------------------------
    Identiteten og viktige data, som alltid står fram over seksjonene
    (`Identitetspanel.tsx`, `ViktigeData.tsx`). Mål og uttrykk fra Atlas
-   (`OUSFAR Monograf`): metalinje, stoffnavn i display-serif, og nøkkeltallene
+   (`OUSFAR Monograf`): metalinjen (`flater.css`), stoffnavn i display-serif, og nøkkeltallene
    i to grupper. Farge er aldri eneste signal: hvert kort har ikon og etikett. */
 
 /* Identiteten. */
@@ -10,24 +10,6 @@
   flex-direction: column;
   gap: var(--rom-5);
   padding: var(--rom-8) var(--rom-4) var(--rom-3);
-}
-
-.metalinje {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--rom-3);
-  font-family: var(--skrift-ui);
-  font-size: var(--tekst-meta);
-  font-weight: var(--vekt-halvfet);
-  line-height: var(--linjehoyde-tett);
-  letter-spacing: var(--sperring-meta);
-  text-transform: uppercase;
-  color: var(--blekk-dempet);
-}
-
-.metalinje__kode {
-  color: var(--aksent);
 }
 
 .identitet__navn {

@@ -151,7 +151,8 @@ src/hooks/                  Tastatur, tema, hurtigtastmerker, utklippstavle,
 src/components/             Stegene, sidemenyen (Sidemeny.tsx), kommentarblokkene
                             (Kommentarliste.tsx), felles
                             kort/pille/knapp/tallfelt/tooltip/ikoner
-src/styles/                 tokens.css (design) + base.css + components.css
+src/styles/                 tokens.css (design) + base.css + ett stilark per
+                            område (se docs/designsystem.md)
 ```
 
 Alt som gjentar seg — farger, avstander, skriftstørrelser, knapper,

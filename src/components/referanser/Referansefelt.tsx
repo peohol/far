@@ -1,5 +1,6 @@
 import type { Referanseniva } from '../../faginnhold/modell'
 import { numreFor } from '../../faginnhold/referanser'
+import { useLaastMerknad } from './laas'
 import { Referansepille } from './Referansepille'
 import { useSidereferanser } from './Sidereferanser'
 import '../../styles/referanser.css'
@@ -27,6 +28,7 @@ export function Referansefelt({
   niva?: Exclude<Referanseniva, 'inline'>
 }) {
   const { nummerering, referanser } = useSidereferanser()
+  const laast = useLaastMerknad()
   if (numreFor(ider, nummerering).length === 0) return null
   const opphav = [
     ...new Set(ider.flatMap((id) => referanser.get(id)?.automatisk?.opphav ?? [])),
@@ -39,7 +41,7 @@ export function Referansefelt({
       {opphav.length > 0 && (
         <span className="referansefelt__opphav">
           {opphav.map((tekst) => (
-            <span key={tekst}>{tekst} · kan ikke redigeres</span>
+            <span key={tekst}>{laast(tekst)}</span>
           ))}
         </span>
       )}

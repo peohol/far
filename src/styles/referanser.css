@@ -19,16 +19,16 @@
   height: 1.55em;
   padding: 0 0.4em;
   font: inherit;
-  font-size: var(--tekst-xxs);
-  font-weight: var(--vekt-tung);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-fet);
   font-variant-numeric: tabular-nums;
   line-height: 1;
   color: var(--aksent);
   background: var(--aksent-flate);
   border: 0;
-  border-radius: var(--runding-full);
+  border-radius: var(--runding-pille);
   cursor: pointer;
-  transition: background var(--fart) var(--kurve), color var(--fart) var(--kurve);
+  transition: background var(--fart-rask) var(--kurve), color var(--fart-rask) var(--kurve);
 }
 
 .referansepille--inline {
@@ -38,7 +38,7 @@
 
 .referansepille:hover,
 .referansepille[aria-expanded='true'] {
-  color: var(--aksent-blekk);
+  color: var(--paa-aksent);
   background: var(--aksent);
 }
 
@@ -75,7 +75,7 @@
   flex-direction: column;
   gap: var(--rom-3);
   max-width: min(32rem, var(--tips-maks-bredde, calc(100vw - 2.5rem)));
-  font-size: var(--tekst-xs);
+  font-size: var(--tekst-meta);
 }
 
 .referanseboble__punkt {
@@ -86,7 +86,7 @@
 .referanseboble__nummer {
   flex: none;
   min-width: 1.5em;
-  font-weight: var(--vekt-tung);
+  font-weight: var(--vekt-fet);
   font-variant-numeric: tabular-nums;
 }
 
@@ -105,13 +105,13 @@
   display: flex;
   flex-direction: column;
   gap: var(--rom-3);
-  font-size: var(--tekst-xs);
+  font-size: var(--tekst-meta);
   color: var(--blekk-dempet);
 }
 
 .referanseliste__tittel {
-  font-size: var(--tekst-s);
-  font-weight: var(--vekt-tung);
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-fet);
   color: var(--blekk);
 }
 
@@ -128,7 +128,7 @@
 }
 
 .referanseliste__punkt::marker {
-  font-weight: var(--vekt-tung);
+  font-weight: var(--vekt-fet);
   font-variant-numeric: tabular-nums;
   color: var(--aksent);
 }
@@ -146,13 +146,13 @@
   display: inline-flex;
   align-items: center;
   padding: 0.2em 0.6em;
-  font-size: var(--tekst-xxs);
-  font-weight: var(--vekt-tung);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-fet);
   line-height: 1.2;
   color: var(--blekk-dempet);
   white-space: nowrap;
   background: var(--flate-hevet);
-  border-radius: var(--runding-full);
+  border-radius: var(--runding-pille);
 }
 
 /* Referansefeltet: kildene for et helt kort eller panel, i en egen, avgrenset
@@ -164,10 +164,10 @@
   gap: var(--rom-2) var(--rom-3);
   margin-top: var(--rom-3);
   padding: var(--rom-2) var(--rom-3);
-  font-size: var(--tekst-xs);
+  font-size: var(--tekst-meta);
   color: var(--blekk-dempet);
   background: var(--flate-bunn);
-  border-radius: var(--runding-m);
+  border-radius: var(--runding-felt);
 }
 
 .referansefelt__etikett {
@@ -180,5 +180,5 @@
   flex-direction: column;
   align-items: flex-end;
   text-align: right;
-  font-size: var(--tekst-xxs);
+  font-size: var(--tekst-merke);
 }

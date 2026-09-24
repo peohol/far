@@ -78,7 +78,7 @@ export function Analyttside({ kode, sted, katalog, onApneFortolkning, onLukk }: 
           <Lukkeknapp onLukk={onLukk} />
         </ToppmenyInnhold>
         <div className="kort kort--start">
-          <h1 id="ukjent-analytt" className="identitet__navn">
+          <h1 id="ukjent-analytt" className="analytt__navn">
             Fant ingen analytt med koden {kode}
           </h1>
           <p>Sjekk koden i adressen, eller finn analytten i menyen.</p>
@@ -170,8 +170,13 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
 
   const kontekst: Panelkontekst = { modell, redigerer, handlinger }
   const redigeringsverdi = useMemo(
-    () => ({ referansebase, opprettReferanse: handlinger.opprettReferanse, gjenopprett: handlinger.gjenopprett }),
-    [referansebase, handlinger.opprettReferanse, handlinger.gjenopprett],
+    () => ({
+      redigerer,
+      referansebase,
+      opprettReferanse: handlinger.opprettReferanse,
+      gjenopprett: handlinger.gjenopprett,
+    }),
+    [redigerer, referansebase, handlinger.opprettReferanse, handlinger.gjenopprett],
   )
   const regler = useScenarioreglerFor(oppforing.fortolkning)
   const harInnhold = modell.paneler.size > 0 || Object.keys(modell.panelreferanser).length > 0

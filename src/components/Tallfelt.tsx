@@ -30,7 +30,7 @@ export const Tallfelt = forwardRef<HTMLInputElement, TallfeltProps>(function Tal
   return (
     <input
       ref={ref}
-      className={className ? `thc-input ${className}` : 'thc-input'}
+      className={className ? `inndatafelt ${className}` : 'inndatafelt'}
       type="text"
       inputMode="decimal"
       autoComplete="off"

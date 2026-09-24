@@ -26,8 +26,8 @@ body,
 body {
   background: var(--flate-bunn);
   color: var(--blekk);
-  font-family: var(--skrift);
-  font-size: var(--tekst-m);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-lesing);
   font-weight: var(--vekt-normal);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
@@ -76,7 +76,8 @@ ul {
   /* Plass til toppmenyen, som ligger fast over innholdet. */
   padding-top: var(--toppmeny-offset);
   display: grid;
-  place-items: center;
+  /* Innholdet begynner øverst, rett under toppmenyen, som i Atlas. */
+  place-items: start center;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -86,20 +87,23 @@ ul {
   padding: var(--rom-8) clamp(1rem, 4vw, 3.5rem);
 }
 
+/* Ett steg i fortolkningen: en venstrestilt kolonne med panelene under
+   hverandre (Atlas). */
 .steg {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--rom-8);
-  text-align: center;
+  align-items: stretch;
+  gap: var(--rom-5);
+  width: min(100%, var(--bredde-fortolkning));
+  margin-inline: auto;
+  text-align: left;
 }
 
 /* Fast høyde, slik at innholdet under ikke hopper når Esc-knappen dukker opp. */
 .stegbar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 2.9rem;
+  min-height: var(--hoyde-kontroll);
 }
 
 /* Lave vinduer: stram inn luften før noe må skrolles. */
@@ -109,11 +113,7 @@ ul {
   }
 
   .steg {
-    gap: var(--rom-7);
-  }
-
-  .stegbar {
-    min-height: 2.4rem;
+    gap: var(--rom-4);
   }
 }
 
