@@ -225,6 +225,9 @@ godkjenningsfritak». Visningen følger `docs/ux-reimagination.md`, del 9:
   hvor mange preparater som har den. Bare ett kort er åpent om gangen; det
   fyller bredden og lister preparatnavnene alfabetisk. En form med bare én
   styrke har den åpen fra start. På smale flater står styrkene tre i bredden.
+  Et trykk på et kort lar det vokse til full bredde, og naboene som må til en
+  annen rad, glir dit, så øyet kan følge dem; å lukke går samme vei tilbake.
+  Søket åpner et kort straks, uten glidning.
 - **Godkjenningsfritak** er ikke en egen gruppe, men et merke på preparatet i
   den samme lista. Andre preparattyper enn vanlige legemidler, f.eks.
   «Sykehuspreparat», og kombinasjoner er også merker.
@@ -234,7 +237,8 @@ godkjenningsfritak». Visningen følger `docs/ux-reimagination.md`, del 9:
   Hver styrke har deling, knusing og åpning som merker (bare når FEST sier
   ja, nei eller at merkevarene sier ulikt; delingen med FESTs ord, «Delbar i
   2»), FESTs navn med form og styrke, og pakningene med varenummer. Styrken
-  vinduet ble åpnet fra, står åpen og er merket. Det som er likt for alle
+  vinduet ble åpnet fra, står åpen og er merket; de andre glir opp og igjen
+  som skuffene. Det som er likt for alle
   styrkene (reseptgruppe, produsent, preparatomtalen), står én gang; det som
   er ulikt, står ved hver styrke. Bare `https`-lenker vises. FEST står som
   kilde nederst. På smale flater er vinduet et ark nedenfra.

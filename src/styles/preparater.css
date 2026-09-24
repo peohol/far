@@ -77,6 +77,8 @@
   display: grid;
   width: 100%;
   grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  /* Radene strekkes ikke når høyden glir mens kortene flytter seg (`useFlytting`). */
+  align-content: start;
   gap: var(--rom-3);
   margin: var(--rom-3) 0 var(--rom-2);
   scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
@@ -332,9 +334,6 @@
 }
 
 .preparatstyrke {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-4);
   padding: var(--rom-3) var(--rom-5);
   background: var(--flate);
   border: var(--kant) solid var(--linje);
@@ -402,14 +401,34 @@
   gap: var(--rom-2);
 }
 
+/* Innholdet glir opp og igjen som i skuffene (`useSkjuling`). */
+.preparatstyrke__kropp {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--fart-glid) var(--kurve);
+}
+
+.preparatstyrke[data-apen] > .preparatstyrke__kropp {
+  grid-template-rows: 1fr;
+}
+
+.preparatstyrke__inner {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Klippet ved kroppens kant, ikke radens: mens raden glir, er kroppen høyere
+   enn raden i den, og innholdet skal fylle den. */
+.preparatstyrke:not([data-apen]) > .preparatstyrke__kropp,
+.preparatstyrke__kropp[data-glir] {
+  overflow: hidden;
+}
+
 .preparatstyrke__innhold {
   display: flex;
   flex-direction: column;
   gap: var(--rom-4);
-}
-
-.preparatstyrke__innhold[hidden] {
-  display: none;
+  padding-top: var(--rom-4);
 }
 
 .preparatstyrke__fest {
