@@ -9,9 +9,15 @@ import { rullefart } from '../../hooks/useKortHopp'
  * seksjonens ID, eller seksjonens og kortets ID med `/` imellom — de samme
  * leddene som står i adressen (`#/analytt/KODE/seksjon/kort`, se
  * `src/domain/rute.ts`). Tilstanden holdes her, samlet for siden, så noe
- * utenfor skuffen kan åpne den: søket på siden, en direktelenke og «Åpne alle».
+ * utenfor skuffen kan åpne den: søket på siden, en direktelenke og
+ * nettleserens eget søk.
  *
- * Uten denne rundt seg holder hver skuff tilstanden selv.
+ * **Én åpen skuff per nivå.** Skuffene med samme forelder — seksjonene på
+ * siden, eller detaljkortene i en seksjon — er søsken, og bare én av dem kan
+ * stå åpen. Tilstanden holdes derfor som *hvilken* skuff som er åpen i hver
+ * søskenflokk, så regelen ikke kan brytes, uansett hva som åpner: brukeren,
+ * en direktelenke, søket eller nettleseren. Å åpne en skuff lukker søsknene,
+ * mens forelderen står åpen.
  */
 
 /** Skillet mellom leddene i en nøkkel, som i adressen. */
@@ -25,6 +31,9 @@ export function skuffnokkel(sti: readonly string[]): string {
 /** Attributtet skuffens ytterste element bærer nøkkelen i. */
 export const SKUFFATTRIBUTT = 'data-skuff'
 
+/** Forelderen til seksjonene på siden. Ingen skuff har en tom nøkkel. */
+const ROT = ''
+
 export interface Skufftilstand {
   apen: boolean
   /** Usann når skuffen skal skifte uten å gli, f.eks. når søket åpner den. */
@@ -35,11 +44,15 @@ export interface Skufftilstand {
 export type Rulleplass = ScrollLogicalPosition | false
 
 export interface Seksjonsstyring {
-  /** Tilstanden til skuffen med nøkkelen. */
-  tilstand(nokkel: string, apenFraStart: boolean): Skufftilstand
-  sett(nokkel: string, apen: boolean, animer?: boolean): void
+  /** Tilstanden til skuffen stien peker på. */
+  tilstand(sti: readonly string[], apenFraStart: boolean): Skufftilstand
+  /**
+   * Brukeren åpner eller lukker skuffen. Åpnes den, lukkes søsknene straks,
+   * skuffen glir opp, og siden ruller til toppen av den når den er tegnet.
+   */
+  sett(sti: readonly string[], apen: boolean): void
   /** Kalles av skuffen når den tegnes; gir tilbake avregistreringen. */
-  registrer(nokkel: string, apenFraStart: boolean): () => void
+  registrer(sti: readonly string[], apenFraStart: boolean): () => void
   /**
    * Åpner seksjonen og eventuelt detaljkortet stien peker på, og ruller dit.
    * Finnes skuffen ikke ennå — innholdet er ikke hentet — åpnes den og rulles
@@ -48,40 +61,72 @@ export interface Seksjonsstyring {
   apne(sti: readonly string[], plass?: Rulleplass): void
   /**
    * Åpner skuffene elementet står i, innenfra og ut, og ruller elementet fram.
-   * Brukes av søket for å vise et treff i en lukket seksjon.
+   * Brukes av søket for å vise et treff i en lukket seksjon, og av
+   * nettleserens eget søk.
    */
   apneTil(element: Element, plass?: Rulleplass): void
-  /** Åpner eller lukker alle skuffene på siden. */
-  settAlle(apen: boolean): void
-  /** Sant når alle skuffene på siden er åpne. */
-  alleApne: boolean
 }
 
 const Kontekst = createContext<Seksjonsstyring | null>(null)
 
-/** Styringen for siden, eller `null` når skuffene holder tilstanden selv. */
+/** Styringen for siden, eller `null` utenfor en `SeksjonsstyringKilde`. */
 export function useSeksjonsstyring(): Seksjonsstyring | null {
   return useContext(Kontekst)
 }
 
-/** Rammen for en side med seksjoner. Legges rundt hele siden, søket medregnet. */
+/** Den åpne skuffen i en søskenflokk, eller `null` når alle er lukket. */
+interface Valg {
+  nokkel: string | null
+  /** Om skiftet skal gli. Søsknene som lukkes fordi en annen åpnes, lukkes straks. */
+  animer: boolean
+}
+
+interface Registrering {
+  forelder: string
+  apenFraStart: boolean
+}
+
+/** Kjeden av nøkler fra seksjonen og innover til skuffen stien peker på. */
+function kjedeFor(sti: readonly string[]): string[] {
+  return sti.map((_, i) => skuffnokkel(sti.slice(0, i + 1)))
+}
+
+/**
+ * Rammen for en side med seksjoner. Legges rundt hele siden, søket medregnet.
+ * En seksjon uten en slik ramme rundt seg lager sin egen (se `Seksjon`).
+ */
 export function SeksjonsstyringKilde({ children }: { children: ReactNode }) {
-  const [overstyrt, setOverstyrt] = useState<ReadonlyMap<string, Skufftilstand>>(() => new Map())
-  const [registrert, setRegistrert] = useState<ReadonlyMap<string, boolean>>(() => new Map())
-  /**
-   * Hva «Åpne alle» eller «Lukk alle» sist satte. Gjelder også skuffer som
-   * kommer til etterpå, f.eks. de tomme panelene som vises i redigeringsmodus.
-   */
-  const [standard, setStandard] = useState<boolean | null>(null)
+  /** Den åpne skuffen i hver søskenflokk som er åpnet eller lukket, med forelderens nøkkel. */
+  const [valgt, setValgt] = useState<ReadonlyMap<string, Valg>>(() => new Map())
+  const [registrert, setRegistrert] = useState<ReadonlyMap<string, Registrering>>(() => new Map())
   /** Stedet en direktelenke peker på, mens det venter på at skuffen skal tegnes. */
   const venter = useRef<{ nokkel: string; plass: Rulleplass } | null>(null)
 
-  const sett = useCallback((nokkel: string, apen: boolean, animer = true) => {
-    setOverstyrt((forrige) => new Map(forrige).set(nokkel, { apen, animer }))
+  /**
+   * Åpner kjeden av skuffer, ytterst først. Hver av dem blir den åpne i sin
+   * søskenflokk. Bare den innerste glir, og bare når `animer` er sann.
+   */
+  const velg = useCallback((kjede: readonly string[], animer: boolean) => {
+    if (kjede.length === 0) return
+    setValgt((forrige) => {
+      const neste = new Map(forrige)
+      kjede.forEach((nokkel, i) => {
+        neste.set(kjede[i - 1] ?? ROT, { nokkel, animer: animer && i === kjede.length - 1 })
+      })
+      return neste
+    })
   }, [])
 
-  const registrer = useCallback((nokkel: string, apenFraStart: boolean) => {
-    setRegistrert((forrige) => new Map(forrige).set(nokkel, apenFraStart))
+  const rullNar = useCallback((nokkel: string, plass: Rulleplass) => {
+    const skuff = finnSkuff(nokkel)
+    if (skuff) etterTegning(() => rull(skuff, plass))
+    else venter.current = { nokkel, plass }
+  }, [])
+
+  const registrer = useCallback((sti: readonly string[], apenFraStart: boolean) => {
+    const nokkel = skuffnokkel(sti)
+    const forelder = skuffnokkel(sti.slice(0, -1))
+    setRegistrert((forrige) => new Map(forrige).set(nokkel, { forelder, apenFraStart }))
     if (venter.current?.nokkel === nokkel) {
       const { plass } = venter.current
       venter.current = null
@@ -95,54 +140,61 @@ export function SeksjonsstyringKilde({ children }: { children: ReactNode }) {
       })
   }, [])
 
-  const apneStille = useCallback((nokler: readonly string[]) => {
-    if (nokler.length === 0) return
-    setOverstyrt((forrige) => {
-      const neste = new Map(forrige)
-      for (const n of nokler) neste.set(n, { apen: true, animer: false })
-      return neste
-    })
-  }, [])
-
   const apne = useCallback(
     (sti: readonly string[], plass: Rulleplass = 'start') => {
-      const nokler = sti.map((_, i) => skuffnokkel(sti.slice(0, i + 1)))
-      const mal = nokler[nokler.length - 1]
+      const kjede = kjedeFor(sti)
+      const mal = kjede[kjede.length - 1]
       if (!mal) return
-      apneStille(nokler)
-      const skuff = finnSkuff(mal)
-      if (skuff) etterTegning(() => rull(skuff, plass))
-      else venter.current = { nokkel: mal, plass }
+      velg(kjede, false)
+      rullNar(mal, plass)
     },
-    [apneStille],
+    [velg, rullNar],
   )
 
   const apneTil = useCallback(
     (element: Element, plass: Rulleplass = 'center') => {
-      apneStille(skufferRundt(element))
+      velg(skufferRundt(element), false)
       etterTegning(() => rull(element, plass))
     },
-    [apneStille],
+    [velg],
   )
 
-  const settAlle = useCallback((apen: boolean) => {
-    setStandard(apen)
-    setOverstyrt(new Map())
-  }, [])
+  /**
+   * Skuffen som står åpen fra start i hver søskenflokk som ingen har åpnet
+   * eller lukket noe i ennå: den første som ber om det.
+   */
+  const standard = useMemo(() => {
+    const forste = new Map<string, string>()
+    for (const [nokkel, { forelder, apenFraStart }] of registrert) {
+      if (apenFraStart && !forste.has(forelder)) forste.set(forelder, nokkel)
+    }
+    return forste
+  }, [registrert])
 
   const verdi = useMemo<Seksjonsstyring>(() => {
-    const tilstand = (nokkel: string, apenFraStart: boolean): Skufftilstand =>
-      overstyrt.get(nokkel) ?? { apen: standard ?? apenFraStart, animer: true }
-    return {
-      tilstand,
-      sett,
-      registrer,
-      apne,
-      apneTil,
-      settAlle,
-      alleApne: registrert.size > 0 && [...registrert].every(([n, fra]) => tilstand(n, fra).apen),
+    const tilstand = (sti: readonly string[], apenFraStart: boolean): Skufftilstand => {
+      const nokkel = skuffnokkel(sti)
+      const forelder = skuffnokkel(sti.slice(0, -1))
+      const valg = valgt.get(forelder)
+      if (valg) {
+        if (valg.nokkel === nokkel) return { apen: true, animer: valg.animer }
+        // Lukket brukeren skuffen, glir den igjen; lukkes den fordi et søsken åpnes, skjer det straks.
+        return { apen: false, animer: valg.nokkel === null && valg.animer }
+      }
+      // Står åpen fra start, men ikke før den har vist at den er den første i flokken som ber om det.
+      return { apen: apenFraStart && (standard.get(forelder) ?? nokkel) === nokkel, animer: false }
     }
-  }, [overstyrt, standard, registrert, sett, registrer, apne, apneTil, settAlle])
+    const sett = (sti: readonly string[], apen: boolean) => {
+      const nokkel = skuffnokkel(sti)
+      if (apen) {
+        velg(kjedeFor(sti), true)
+        rullNar(nokkel, 'start')
+      } else if (tilstand(sti, registrert.get(nokkel)?.apenFraStart ?? false).apen) {
+        setValgt((forrige) => new Map(forrige).set(skuffnokkel(sti.slice(0, -1)), { nokkel: null, animer: true }))
+      }
+    }
+    return { tilstand, sett, registrer, apne, apneTil }
+  }, [valgt, standard, registrert, velg, rullNar, registrer, apne, apneTil])
 
   return <Kontekst.Provider value={verdi}>{children}</Kontekst.Provider>
 }
@@ -168,6 +220,11 @@ function etterTegning(gjor: () => void) {
   requestAnimationFrame(() => gjor())
 }
 
+/**
+ * Ruller elementet fram, straks for den som har bedt om mindre bevegelse.
+ * Hvor langt under toppen av vinduet det legges, står i CSS
+ * (`scroll-margin-top`, se `seksjoner.css`), så det havner under toppmenyen.
+ */
 function rull(element: Element | null, plass: Rulleplass) {
-  if (element && plass) element.scrollIntoView({ behavior: rullefart(), block: plass })
+  if (element?.isConnected && plass) element.scrollIntoView({ behavior: rullefart(), block: plass })
 }
