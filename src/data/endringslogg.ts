@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.28.3',
+    dato: '2026-09-24',
+    sammendrag: 'Søkefeltene i toppmenyen overlapper ikke lenger i mellomstore vinduer',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'I vinduer som er litt bredere enn mobilvisningen, kunne fagsøket og «På siden» gli inn over hverandre. Nå får fagsøket plassen først, og resten av menyen viker, i alle bredder.',
+      'I mellomstore og smale vinduer står «På siden» som en rund lupeknapp til du bruker det (klikk eller Ctrl B). Står det et søk i den, har knappen en farget kant.',
+      'Når det er trangt, viker snarveimerket i fagsøket først, og til slutt står bare lupen igjen. Klikker du den, eller trykker Ctrl K, legger søkefeltet seg over knappene til høyre så lenge du skriver.',
+    ],
+  },
+  {
     versjon: '1.28.2',
     dato: '2026-09-24',
     sammendrag: 'Styrkekortene under Preparater åpner og lukker med glidning',

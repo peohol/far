@@ -275,6 +275,23 @@ som i en test, blir innholdet stående i siden.
   likevel derfra, så man kan gå rett mellom de to søkene. Snarveiene virker
   ikke i et redigeringsfelt eller mens et annet lag står åpent.
 
+### Når plassen ikke strekker til
+
+Hvor mye plass søkene får, kommer an på hva siden legger i menyen. Fagsøket
+har forrang, og menyen viker i denne rekkefølgen, så ingenting noen gang
+flyter inn over noe annet:
+
+- Under 1024 px krymper de sekundære handlingene og søket på siden til
+  runde ikonknapper. Står det et søk i søket på siden, er kanten i
+  aksentfargen.
+- Fagsøket svarer på sin egen bredde (et spørrefelt, `@container fagsok`),
+  ikke vinduets. Snarveimerket viker først. Til slutt står bare lupen igjen,
+  og mens søket da brukes, legger feltet seg over sidens handlinger i full
+  bredde. Innholdet i feltet klippes i kanten.
+- Søket på siden tar plassen fra fagsøket mens det brukes, og krymper selv
+  heller enn å skyve resten av menyen ut av pillen.
+- Rullegardinen og treffpanelet er aldri smalere enn `--bredde-sokepanel`.
+
 ### Høyden og rullingen
 
 `--toppmeny-offset` er menyens høyde med luft under. Alt som skal stå under

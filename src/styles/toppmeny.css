@@ -66,7 +66,7 @@
 .toppmeny__sok {
   display: flex;
   flex: 1 1 auto;
-  min-width: 0;
+  min-width: var(--hoyde-kontroll);
 }
 
 .toppmeny__kontekst,
@@ -225,10 +225,30 @@
 }
 
 /* --- Globalt fagsøk ------------------------------------------------------------ */
+/* Feltet tar plassen resten av menyen levner, men aldri mindre enn lupen.
+   Høyden står her og ikke bare på feltet, som kan legge seg over naboene
+   (se under); rullegardinen henger under den. I bruk ligger søket over resten
+   av menyen. */
 .fagsok {
   position: relative;
   flex: 1 1 auto;
-  min-width: 0;
+  min-width: var(--hoyde-kontroll);
+  min-height: var(--hoyde-kontroll);
+}
+
+.fagsok:focus-within {
+  z-index: 1;
+}
+
+/* Feltet svarer på sin egen bredde, ikke vinduets (`@container fagsok`):
+   hvor mye plass det får, kommer an på hva siden legger i menyen. Innholdet
+   klippes i kanten, så det aldri flyter inn over naboene. På smale flater
+   står rullegardinen fast i vinduet, og det kan den ikke inni en slik
+   beholder. */
+@media (width > 47.5em) {
+  .fagsok {
+    container: fagsok / inline-size;
+  }
 }
 
 .fagsok__felt {
@@ -237,6 +257,7 @@
   gap: var(--rom-3);
   height: var(--hoyde-kontroll);
   padding: 0 var(--rom-2) 0 var(--rom-5);
+  overflow: hidden;
   background: var(--flate-hevet);
   border-radius: var(--runding-pille);
   cursor: text;
@@ -259,6 +280,45 @@
 
 .fagsok__input::placeholder {
   color: var(--blekk-dempet);
+}
+
+/* Når feltet presses sammen, viker snarveimerket først, så teksten ikke
+   forsvinner under det. */
+@container fagsok (max-width: 14rem) {
+  .fagsok__felt .hurtigtast {
+    display: none;
+  }
+}
+
+/* Til slutt står bare lupen igjen, som en rund knapp. Mens feltet brukes,
+   legger det seg over sidens handlinger til høyre i full bredde, og
+   rullegardinen følger med. */
+@container fagsok (max-width: 6rem) {
+  .fagsok__felt {
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+  }
+
+  .fagsok__input {
+    flex: none;
+    width: 0;
+  }
+
+  .fagsok:focus-within .fagsok__felt {
+    position: absolute;
+    top: 0;
+    left: 0;
+    justify-content: flex-start;
+    gap: var(--rom-3);
+    width: var(--bredde-sokepanel);
+    padding: 0 var(--rom-2) 0 var(--rom-5);
+    box-shadow: var(--skygge-toppmeny);
+  }
+
+  .fagsok:focus-within .fagsok__input {
+    flex: 1;
+  }
 }
 
 /* --- Kontomenyen -------------------------------------------------------------- */
