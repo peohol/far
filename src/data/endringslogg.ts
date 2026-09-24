@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.26.1',
+    dato: '2026-09-24',
+    sammendrag: 'Godkjenningsfritak står ved riktig styrke i preparatvinduet',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Når bare én av styrkene til et preparat krever godkjenningsfritak, står merket ved den styrken i preparatvinduet, ikke øverst som om det gjaldt hele preparatet.',
+      'Legemiddelformene under Preparater står i full bredde.',
+    ],
+  },
+  {
     versjon: '1.26.0',
     dato: '2026-09-24',
     sammendrag: 'Preparatene vises som legemiddelform, styrke og preparat, med et eget vindu for hvert preparat',
