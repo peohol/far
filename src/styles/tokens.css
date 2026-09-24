@@ -191,6 +191,9 @@
   --papir: #fffdf8;
   --ikon-blekk: #1f1b15; /* frie linjer: akser, piler */
   --ikon-linje: #2a231a; /* konturer blandes med ikonfargen */
+  /* Halveringspunktet i OUSFAR-merket. */
+  --logo-punkt: #f3ba55;
+  --logo-punkt-kant: transparent;
 
   /* Merkene på føringene i endringsloggen — utenfor de kliniske
      nivåfargene, så et merke aldri kan leses som en klinisk vurdering. */
@@ -260,6 +263,8 @@
   --papir: #dde4ec;
   --ikon-blekk: #e6ecf2;
   --ikon-linje: #d5dde6;
+  --logo-punkt: #fffdf8;
+  --logo-punkt-kant: var(--paa-aksent);
 
   --merke-design: #cdb1f2;
   --merke-design-flate: #261c36;

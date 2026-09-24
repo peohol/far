@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.26.2',
+    dato: '2026-09-24',
+    sammendrag: 'Innlogging, konto, brukerliste og redigering i det nye utseendet',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Innloggingen, førstegangsoppsettet, profilen, brukerlista og endringsloggen har fått det nye utseendet. Innloggingssiden har fått OUSFAR-merket.',
+      'I brukerlista står rollen som et merke, og «Må bytte passord» står ved brukere som ikke har fullført førstegangsoppsettet ennå.',
+      'Mens du redigerer en stoffside, står status, «Publiser» og «Avslutt redigering» i menyen øverst, i stedet for i en stripe på siden. Statusen viser hvor mange endringer som ikke er publisert. Escape lukker siden som før.',
+      'Før noe publiseres, vises det som blir synlig for alle i et eget vindu.',
+      'Tekstverktøyene og referansevelgeren har fått nytt utseende. Kilder fra FEST vises med en lås når søket treffer dem, og kan fortsatt ikke velges.',
+      'Fortolkningen, tastene og kommentarene er uendret.',
+    ],
+  },
+  {
     versjon: '1.26.1',
     dato: '2026-09-24',
     sammendrag: 'Ny rekkefølge på stoffsiden og viktige data alltid synlig',

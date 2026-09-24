@@ -41,6 +41,7 @@ export const APNE_MODULER = new Map(
       'src/components/konto/Forstegangsoppsett.tsx',
       'src/components/konto/Felt.tsx',
       'src/components/konto/Avatar.tsx',
+      'src/components/konto/Logomerke.tsx',
       'src/components/konto/Bildevelgerlast.tsx',
       'src/components/konto/Bildevelger.tsx',
       'src/auth/bilde.ts',

@@ -2,8 +2,9 @@
 
 OUSFAR bruker designsystemet **OUSFAR Atlas** fra Claude Design. Planen for
 hele omleggingen står i `docs/ux-reimagination.md`. Denne filen beskriver
-byggeklossene: tokens, ikoner, knapper og den faste toppmenyen. Den er for
-den som skal bygge nye skjermbilder eller flytte gamle over.
+byggeklossene: tokens, ikoner, knapper, de modale lagene og den faste
+toppmenyen. Den er for den som skal bygge nye skjermbilder eller flytte gamle
+over.
 
 ## Tokens
 
@@ -54,6 +55,9 @@ settes på et enkelt element.
 `src/styles/__tests__/palette.test.ts` sjekker kontrasten til alle par som
 brukes sammen, i begge temaer. Et nytt fargepar skal inn der.
 
+Logomerket (`src/components/konto/Logomerke.tsx`) er pynt og tegnes med
+`--aksent`, `--paa-aksent` og `--logo-punkt`, så det følger temaet.
+
 ### Eldre navn
 
 Stilarkene fra før Atlas bruker eldre navn som `--skrift`, `--tekst-s`,
@@ -96,26 +100,40 @@ uten å endres.
 - **`Ikonknapp`** (`src/components/Ikonknapp.tsx`) er en rund knapp med bare
   ikon. `etikett` er påkrevd og blir både knappens navn og tooltip.
   Variantene er `myk`, `stille`, `aksent` og `kant`, og størrelsene er
-  `kontroll` og `liten`. På smale flater er den minst 44 px.
+  `kontroll` og `liten`. På smale flater er den minst 44 px. `utenTips`
+  tar bort tooltipen der den ville havnet under et modalt lag.
 - **`Toppmenyknapp`** (`src/components/toppmeny/Toppmenyknapp.tsx`) er en
   pille med ikon og tekst, `primar` eller `sekundar`. På smalere skjermer
   krymper en sekundær knapp til bare ikon.
+- **`Button`** (`src/components/Button.tsx`) er knappen i skjemaer og lag:
+  `primary`, `subtle` og `kant` (pille med tynn kant, for handlinger på en
+  rad, som «Nytt passord» i brukerlista).
 
 Alle handlinger i toppmenyen har ikon.
 
 ## Merker og modale lag
 
 - **`Merke`** (`src/components/Merke.tsx`) er en liten merkelapp for en
-  status, f.eks. «Godkjenningsfritak» eller «Åpnet herfra». Tonene er
-  `noytral`, `flate`, `aksent`, `fritak`, `referanse`, `toksisk` og
-  `alvorlig`, og hver er et fargepar som `palette.test.ts` måler. Betydningen
-  står alltid i teksten.
+  status, f.eks. «Godkjenningsfritak», «Åpnet herfra» eller «Administrator».
+  Tonene er `noytral`, `flate`, `aksent`, `fritak`, `referanse`, `toksisk`
+  og `alvorlig`, og hver er et fargepar som `palette.test.ts` måler.
+  Betydningen står alltid i teksten.
 - **`Modallag`** (`src/components/Modallag.tsx`) er det ene modale laget,
-  bygget på `<dialog>`: fokusfelle, Escape, trykk på bakgrunnen, låst
-  rulling bak og fokuset tilbake. Med `meta`, `ikon`, `undertittel` eller
-  `merker` får det Atlas-hodet: en linje i versaler, ikonet i en sirkel,
-  tittelen i Newsreader og merkene under, på en hevet flate. Med `ark` blir
-  det et ark nedenfra på smale flater. Stilen står i `modallag.css`.
+  for endringsloggen, kontoen, brukerlista, historikken, publiseringen og
+  preparatvinduet. Det bygger på `<dialog>`: fokusfelle, Escape, trykk på
+  bakgrunnen, låst rulling bak og fokuset tilbake. Tittelen er lagets navn,
+  og lukkeknappen heter «Lukk» og tittelen, eller `lukketekst`.
+  - `ikon`: ikonet i sirkelen foran tittelen.
+  - `handling`: en ekstra knapp øverst, som «Opprett bruker». På smale
+    flater får den en egen rad under tittelen.
+  - `bred`: bredere panel. `tettKropp`: mindre luft rundt innholdet.
+  - `autofokus`: en CSS-velger for hvor fokus skal stå når laget åpnes.
+  - `meta`, `undertittel` og `merker` gir Atlas-hodet: en linje i versaler,
+    ikonet, tittelen i Newsreader og merkene under, på en hevet flate.
+  - `ark`: laget blir et ark nedenfra på smale flater.
+
+  Stilen står i `modallag.css`. Endringsloggen og versjonspillen har sin
+  egen i `endringslogg.css`.
 
 ## Toppmenyen
 
@@ -148,7 +166,10 @@ siden, med sidens tilstand og kontekster. Står siden uten toppmeny rundt seg,
 som i en test, blir innholdet stående i siden.
 
 - `handlinger`: brukes av stoffsiden til «Åpne fortolkning», «Rediger» og
-  «Lukk».
+  «Lukk». I redigeringsmodus står bare redigeringen der: status, «Publiser»
+  og «Avslutt redigering» (`Redigeringslinje.tsx`). Publiseringen viser hva
+  som blir synlig for alle i et modalt lag før noe publiseres. Stilene for
+  redigeringen står i `src/styles/redigering.css`.
 - `sidesok`: plassen til søket i den åpne siden. Den er tom foreløpig, og
   stoffsidens eget søk står i siden som før.
 - `sok` (en prop på `Toppmeny`): plassen til globalt fagsøk. Feltet er

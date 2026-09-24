@@ -82,7 +82,10 @@ export function Bildevelger({ visning, onValgt }: BildevelgerProps) {
       <div className="bildevelger">
         <div className="bildevelger__visning">
           {visning}
-          <Button variant="subtle" icon={<ImageIcon />} onClick={() => filvelger.current?.click()}>
+          <span className="bildevelger__hint">
+            Beskjæres til {AVATAR_STORRELSE} × {AVATAR_STORRELSE} piksler
+          </span>
+          <Button variant="kant" icon={<ImageIcon />} onClick={() => filvelger.current?.click()}>
             Velg profilbilde
           </Button>
         </div>

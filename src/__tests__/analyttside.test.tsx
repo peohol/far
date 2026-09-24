@@ -1015,6 +1015,10 @@ describe('redigeringsmodus', () => {
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await waitFor(() => expect(leser.lesAnalyttside).toHaveBeenLastCalledWith('AMTNORSUM', 'utkast'))
     expect(screen.getByRole('button', { name: 'Avslutt redigering' }).getAttribute('aria-pressed')).toBe('true')
+    // I redigeringsmodus står bare redigeringen i menyen.
+    for (const navn of ['Åpne fortolkning', 'Rediger', 'Lukk']) {
+      expect(screen.queryByRole('button', { name: navn })).toBeNull()
+    }
     for (const panel of ['Dosering', 'Indikasjon', 'Farmakokinetikk', 'Serumkonsentrasjoner ved ulike doser']) {
       expect(screen.getByRole('heading', { level: 2, name: panel })).toBeTruthy()
     }
@@ -1120,8 +1124,10 @@ describe('redigeringsmodus', () => {
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     // Datakortet og en kommentar regelsettet peker på, har revisjoner som ikke
     // er publisert. Regelsettet selv er publisert og er ikke med.
-    await user.click(await screen.findByRole('button', { name: 'Publiser endringene (2)' }))
-    const oppsummering = screen.getByRole('region', { name: /Redigeringsmodus/ })
+    // Statuspillen i toppmenyen teller det som ikke er publisert.
+    expect(await screen.findByText('Redigerer · utkast med 2 endringer')).toBeTruthy()
+    await user.click(screen.getByRole('button', { name: 'Publiser' }))
+    const oppsummering = screen.getByRole('dialog', { name: 'Publiser endringene' })
     await waitFor(() =>
       expect(within(oppsummering).getAllByRole('listitem').map((li) => li.textContent)).toEqual([
         'Viktige data',
