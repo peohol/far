@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { rullefart } from '../../hooks/useKortHopp'
+import { MAKS_GLIDETID } from '../../hooks/useSkjuling'
 
 /**
  * Hvilke seksjoner og detaljkort på en side som er åpne, og veien til et sted
@@ -39,6 +40,9 @@ export const SKUFFATTRIBUTT = 'data-skuff'
  */
 export const VIS_HENDELSE = 'ousfar:vis'
 
+/** Attributtet elementet med skuffens innhold bærer, så høyden den får når den er åpen, kan måles. */
+export const INNHOLDSATTRIBUTT = 'data-skuffinnhold'
+
 /** Forelderen til seksjonene på siden. Ingen skuff har en tom nøkkel. */
 const ROT = ''
 
@@ -51,12 +55,20 @@ export interface Skufftilstand {
 /** Hvor elementet legges i vinduet, eller `false` for å la vinduet ligge. */
 export type Rulleplass = ScrollLogicalPosition | false
 
+/**
+ * Plassen en skuff brukeren har åpnet, rulles til: midt i det synlige feltet
+ * når den får plass der, ellers med toppen rett under toppmenyen (se `rullTilpasset`).
+ */
+const TILPASSET = 'tilpasset'
+type Rullemal = Rulleplass | typeof TILPASSET
+
 export interface Seksjonsstyring {
   /** Tilstanden til skuffen stien peker på. */
   tilstand(sti: readonly string[], apenFraStart: boolean): Skufftilstand
   /**
    * Brukeren åpner eller lukker skuffen. Åpnes den, lukkes søsknene straks,
-   * skuffen glir opp, og siden ruller til toppen av den når den er tegnet.
+   * skuffen glir opp, og siden ruller den fram når den er tegnet: midtstilt
+   * når den får plass i det synlige feltet, ellers med toppen øverst.
    */
   sett(sti: readonly string[], apen: boolean): void
   /** Kalles av skuffen når den tegnes; gir tilbake avregistreringen. */
@@ -114,7 +126,7 @@ export function SeksjonsstyringKilde({ children }: { children: ReactNode }) {
   const [valgt, setValgt] = useState<ReadonlyMap<string, Valg>>(() => new Map())
   const [registrert, setRegistrert] = useState<ReadonlyMap<string, Registrering>>(() => new Map())
   /** Stedet en direktelenke peker på, mens det venter på at skuffen skal tegnes. */
-  const venter = useRef<{ nokkel: string; plass: Rulleplass } | null>(null)
+  const venter = useRef<{ nokkel: string; plass: Rullemal } | null>(null)
   /** Stedene som alltid står fram, med elementet de står i. */
   const faste = useRef(new Map<string, Element>())
 
@@ -133,7 +145,7 @@ export function SeksjonsstyringKilde({ children }: { children: ReactNode }) {
     })
   }, [])
 
-  const rullNar = useCallback((nokkel: string, plass: Rulleplass) => {
+  const rullNar = useCallback((nokkel: string, plass: Rullemal) => {
     const skuff = finnSkuff(nokkel)
     if (skuff) etterTegning(() => rull(skuff, plass))
     else venter.current = { nokkel, plass }
@@ -220,7 +232,7 @@ export function SeksjonsstyringKilde({ children }: { children: ReactNode }) {
       const nokkel = skuffnokkel(sti)
       if (apen) {
         velg(kjedeFor(sti), true)
-        rullNar(nokkel, 'start')
+        rullNar(nokkel, TILPASSET)
       } else if (tilstand(sti, registrert.get(nokkel)?.apenFraStart ?? false).apen) {
         setValgt((forrige) => new Map(forrige).set(skuffnokkel(sti.slice(0, -1)), { nokkel: null, animer: true }))
       }
@@ -271,6 +283,92 @@ function etterTegning(gjor: () => void) {
  * Hvor langt under toppen av vinduet det legges, står i CSS
  * (`scroll-margin-top`, se `seksjoner.css`), så det havner under toppmenyen.
  */
-function rull(element: Element | null, plass: Rulleplass) {
-  if (element?.isConnected && plass) element.scrollIntoView({ behavior: rullefart(), block: plass })
+function rull(element: Element | null, plass: Rullemal) {
+  if (!element?.isConnected || !plass) return
+  if (plass === TILPASSET) rullTilpasset(element)
+  else element.scrollIntoView({ behavior: rullefart(), block: plass })
+}
+
+/**
+ * Ruller en skuff brukeren nettopp har åpnet, fram. Det synlige feltet er
+ * vinduet minus toppmenyen over og luften under (skuffens `scroll-margin`,
+ * se `seksjoner.css`).
+ *
+ * - Får skuffen plass i feltet når den er åpen, midtstilles den i det.
+ * - Er den høyere, legges toppen rett under toppmenyen.
+ *
+ * Siden begynner å rulle straks, etter høyden skuffen er ventet å få. Når
+ * den har glidd ferdig og høyden er den virkelige — og siden er lang nok til
+ * å rulle helt fram — justeres det til riktig sted, med mindre brukeren
+ * alt har begynt å rulle selv.
+ */
+function rullTilpasset(skuff: Element) {
+  window.scrollTo({ top: tilpassetPlass(skuff), behavior: rullefart() })
+  const brukeren = folgBrukeren()
+  etterGlidning(skuff, () => {
+    if (brukeren.harRullet() || !skuff.isConnected) return
+    window.scrollTo({ top: tilpassetPlass(skuff), behavior: rullefart() })
+  })
+}
+
+/** Hendelsene som viser at brukeren ruller eller gjør noe annet selv. */
+const EGNE_HENDELSER = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const
+
+/** Følger med på om brukeren tar over rullingen, til `harRullet` spørres. */
+function folgBrukeren() {
+  let rullet = false
+  const merk = () => {
+    rullet = true
+  }
+  for (const h of EGNE_HENDELSER) window.addEventListener(h, merk, { capture: true, passive: true })
+  return {
+    harRullet() {
+      for (const h of EGNE_HENDELSER) window.removeEventListener(h, merk, { capture: true })
+      return rullet
+    },
+  }
+}
+
+/** Hvor langt ned siden skal rulles for å vise skuffen slik `rullTilpasset` beskriver. */
+function tilpassetPlass(skuff: Element): number {
+  const { top, height } = skuff.getBoundingClientRect()
+  const stil = window.getComputedStyle(skuff)
+  const over = parseFloat(stil.scrollMarginTop) || 0
+  const under = parseFloat(stil.scrollMarginBottom) || 0
+  const felt = window.innerHeight - over - under
+  const hoyde = endeligHoyde(skuff, height)
+  const luft = hoyde < felt ? (felt - hoyde) / 2 : 0
+  return Math.max(0, window.scrollY + top - over - luft)
+}
+
+/** Innholdet til skuffen selv, ikke til et detaljkort i den. */
+function innholdI(skuff: Element): Element | undefined {
+  return [...skuff.querySelectorAll(`[${INNHOLDSATTRIBUTT}]`)].find(
+    (el) => el.closest(`[${SKUFFATTRIBUTT}]`) === skuff,
+  )
+}
+
+/**
+ * Høyden skuffen er ventet å få når den har glidd ferdig: høyden nå, med
+ * innholdet i full høyde i stedet for så langt det har glidd fram. Det som
+ * ellers glir samtidig, som luften under en åpnet skuff, er ikke regnet med.
+ */
+function endeligHoyde(skuff: Element, naa: number): number {
+  const innhold = innholdI(skuff)
+  return innhold ? naa - innhold.getBoundingClientRect().height + innhold.scrollHeight : naa
+}
+
+/** Kjører `gjor` når skuffen har glidd ferdig, eller når den burde ha gjort det. */
+function etterGlidning(skuff: Element, gjor: () => void) {
+  const kropp = innholdI(skuff)?.parentElement
+  let ferdig = false
+  const slutt = (event?: Event) => {
+    if (ferdig || (event && event.target !== kropp)) return
+    ferdig = true
+    kropp?.removeEventListener('transitionend', slutt)
+    window.clearTimeout(frist)
+    gjor()
+  }
+  kropp?.addEventListener('transitionend', slutt)
+  const frist = window.setTimeout(slutt, MAKS_GLIDETID)
 }

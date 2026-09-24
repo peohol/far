@@ -21,9 +21,18 @@ offentlige kilder.
   seksjonen står åpen. Det gjelder uansett hva som åpner skuffen: et trykk,
   en direktelenke, søket på siden eller nettleserens eget søk. Et detaljkort
   husker at det sto åpent når seksjonen lukkes og åpnes igjen.
-- Når brukeren åpner en skuff, ruller siden til toppen av den, under den
-  faste toppmenyen. Søsknene som lukkes, lukkes straks, så toppen står stille
-  mens siden ruller dit.
+- Når brukeren åpner en skuff, ruller siden den fram i det synlige feltet
+  mellom den faste toppmenyen og bunnen av vinduet (over dokken på smale
+  flater):
+  - får den åpne skuffen plass i feltet, midtstilles den;
+  - er den høyere enn feltet, legges toppen rett under toppmenyen.
+
+  Siden begynner å rulle straks, etter høyden skuffen er ventet å få, og
+  justeres til den virkelige når skuffen har glidd ferdig — med mindre
+  brukeren alt har begynt å rulle selv. Søsknene som lukkes, lukkes straks,
+  så skuffen står stille mens siden ruller. Nederst på siden kan den ikke
+  alltid midtstilles, for siden kan ikke rulles forbi slutten.
+  Direktelenker legger fortsatt toppen øverst, og søket midtstiller treffet.
 - Identiteten og viktige data øverst på siden, og kritiske varsler, er ikke
   skuffer. De står alltid fram, og å åpne en seksjon lukker dem ikke.
 - En seksjon står som en rad med hårlinje over, med seksjonsikonet i en sirkel
@@ -138,7 +147,7 @@ regelen om én åpen per nivå kan ikke brytes. `useSeksjonsstyring()` gir:
 | --- | --- |
 | `apne(['seksjon', 'kort'])` | Åpner stedet uten å gli, lukker søsknene, og ruller dit |
 | `apneTil(element)` | Åpner skuffene elementet står i på samme måte, og ruller det fram |
-| `sett(sti, apen)` | Det et trykk gjør: åpner (og ruller til toppen) eller lukker |
+| `sett(sti, apen)` | Det et trykk gjør: åpner (og ruller den fram, se over) eller lukker |
 | `fastSted(sti, element)` | Melder inn et sted som alltid står fram, så `apne` ruller dit uten å røre skuffene. Brukes gjennom `useFastSted(id, ref)` |
 
 Står flere søsken åpne fra start (`apenFraStart`), er det den første som
@@ -146,8 +155,11 @@ gjelder. En seksjon uten styringen rundt seg lager sin egen, så detaljkortene
 i den følger den samme regelen også andre steder.
 
 Hvor langt ned på siden en skuff legges når siden ruller dit, står i
-`seksjoner.css` som `scroll-margin-top: var(--toppmeny-offset, …)`, der
-`--toppmeny-offset` er høyden til den faste toppmenyen med luft under.
+`seksjoner.css` som `scroll-margin-block: var(--toppmeny-offset) …`, der
+`--toppmeny-offset` er høyden til den faste toppmenyen med luft under. Margen
+over og under er også grensene for feltet en åpnet skuff midtstilles i; på
+smale flater er margen under `--dokk-offset`. Høyden skuffen får, måles på
+innholdet, som bærer `data-skuffinnhold`.
 
 ## Tilgjengelighet
 
