@@ -48,7 +48,9 @@ export function Fagsok({ indeks, onKrev, sporring, beskrivSide, onGaaTil }: Fags
   const viste = treff.slice(0, MAKS_I_RULLEGARDIN).map(vis)
   const harSok = verdi.trim() !== ''
   const visListe = fokus && apen && harSok
-  const valgt = visListe ? viste[aktiv] : undefined
+  // Listen kan ha blitt kortere siden raden ble valgt.
+  const valgtIndeks = aktiv < 0 ? -1 : Math.min(aktiv, viste.length - 1)
+  const valgt = visListe ? viste[valgtIndeks] : undefined
 
   // Søkesiden og feltet viser det samme søket.
   useEffect(() => {
@@ -76,9 +78,9 @@ export function Fagsok({ indeks, onKrev, sporring, beskrivSide, onGaaTil }: Fags
         if (!harSok) return
         event.preventDefault()
         if (!apen) return setApen(true)
-        const siste = viste.length - 1
         // Over det første treffet står ingen valgt: da går `Enter` til søkesiden.
-        setAktiv((a) => (event.key === 'ArrowDown' ? Math.min(a + 1, siste) : Math.max(a - 1, -1)))
+        const siste = Math.max(viste.length - 1, 0)
+        setAktiv(event.key === 'ArrowDown' ? Math.min(valgtIndeks + 1, siste) : Math.max(valgtIndeks - 1, -1))
         return
       }
       case 'Enter':
@@ -126,7 +128,7 @@ export function Fagsok({ indeks, onKrev, sporring, beskrivSide, onGaaTil }: Fags
         aria-autocomplete="list"
         aria-expanded={visListe}
         aria-controls={listeId}
-        {...(valgt && { 'aria-activedescendant': radId(aktiv) })}
+        {...(valgt && { 'aria-activedescendant': radId(valgtIndeks) })}
       >
         <div className="fagsok__rullegardin" hidden={!visListe}>
           <Liste
@@ -142,7 +144,7 @@ export function Fagsok({ indeks, onKrev, sporring, beskrivSide, onGaaTil }: Fags
                   id={radId(i)}
                   href={t.adresse}
                   role="option"
-                  aria-selected={i === aktiv}
+                  aria-selected={i === valgtIndeks}
                   tabIndex={-1}
                   className="fagsok__rad"
                   data-ih=""

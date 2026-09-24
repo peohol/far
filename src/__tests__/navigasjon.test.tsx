@@ -8,6 +8,8 @@
  * - Hver side har sin egen adresse, som kan åpnes direkte.
  * - Fortolkningen står uendret bak en åpen informasjonsside, og tastene dens
  *   ligger i ro så lenge den er skjult.
+ * - Fagsøket i toppmenyen når tastene i fortolkningen aldri, og søkesiden
+ *   legger seg over fortolkningen som en informasjonsside.
  *
  * Innloggingen og databasen er erstattet: økten er en vanlig bruker, og
  * databasen har ingen sider ennå, bare regelsettene fra før byttet.
@@ -65,7 +67,7 @@ function visApp() {
 
 /** Fortolkningen, synlig eller skjult. */
 function fortolkningen(): HTMLElement {
-  return document.querySelector('main.scene:not(.scene--infoside)')!
+  return document.querySelector('main.scene:not(.scene--infoside):not(.scene--sokeside)')!
 }
 
 /** Søker opp NOR og velger det beste treffet — koden selv — med tasten 1. */
@@ -173,5 +175,48 @@ describe('mellom fortolkningen og informasjonssiden', () => {
     // Nå virker tastene igjen: 1 kopierer kommentaren for det første båndet.
     await user.keyboard('1')
     await waitFor(async () => expect(await navigator.clipboard.readText()).toBe(dagensKommentar('NOR', 'under')))
+  })
+})
+
+describe('fagsøket i hele appen', () => {
+  it('hentes med Ctrl K fra fortolkningen, uten at det som skrives når tastene der', async () => {
+    const user = userEvent.setup()
+    // Utklippstavlen kan ha noe fra testen før; merket viser om noe kopieres.
+    const urort = 'ingenting kopiert'
+    await navigator.clipboard.writeText(urort)
+    visApp()
+    await velgNortriptylin(user)
+
+    await user.keyboard('{Control>}k{/Control}')
+    const fagsok = screen.getByRole('combobox', { name: 'Søk i fagstoffet' })
+    expect(document.activeElement).toBe(fagsok)
+    // 1 ville kopiert kommentaren for det første båndet, og Esc gått tilbake til søket.
+    await user.keyboard('1')
+    await user.keyboard('{Escape}{Escape}')
+    expect(await navigator.clipboard.readText()).toBe(urort)
+    expect(screen.getByRole('region', { name: 'Velg konsentrasjon' })).toBeTruthy()
+
+    // Enter uten valgt treff går til søkesiden, over fortolkningen.
+    await user.keyboard('amitriptylin{Enter}')
+    expect(window.location.hash).toBe('#/sok?q=amitriptylin')
+    expect(await screen.findByRole('heading', { level: 1, name: '«amitriptylin»' })).toBeTruthy()
+    expect(fortolkningen().hidden).toBe(true)
+    expect(await navigator.clipboard.readText()).toBe(urort)
+
+    // Esc lukker søkesiden, og fortolkningen står der den sto.
+    await user.keyboard('{Escape}')
+    await waitFor(() => expect(fortolkningen().hidden).toBe(false))
+    expect(within(fortolkningen()).getByRole('region', { name: 'Velg konsentrasjon' })).toBeTruthy()
+    await user.keyboard('1')
+    await waitFor(async () => expect(await navigator.clipboard.readText()).toBe(dagensKommentar('NOR', 'under')))
+  })
+
+  it('åpner søkesiden direkte fra adressen, med søket i feltet', async () => {
+    window.location.hash = '#/sok?q=kvetiapin'
+    visApp()
+    expect(await screen.findByRole('heading', { level: 1, name: '«kvetiapin»' })).toBeTruthy()
+    expect((screen.getByRole('combobox', { name: 'Søk i fagstoffet' }) as HTMLInputElement).value).toBe('kvetiapin')
+    // Databasen her har ingen sider.
+    expect(await screen.findByText('Ingen treff')).toBeTruthy()
   })
 })

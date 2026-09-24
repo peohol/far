@@ -29,6 +29,7 @@ ingenting ekstra.
 | --- | --- | --- |
 | 1 | Begynn å skrive navnet på en analytt eller kode | hvilken som helst bokstav |
 | — | Åpne og lukke sidemenyen, når som helst | `Ctrl + M` |
+| — | Søke i fagstoffet på alle stoffsidene, fra feltet i toppmenyen | `Ctrl + K` (`Cmd + K` på Mac) |
 | — | Begrense søket til en analysemetode | `Alt + 1` … `Alt + 5` |
 | — | Slå filteret av igjen | `Alt + 0` |
 | 2 | Velg blant alternativene som passer søket — er det bare ett igjen, går appen videre til det av seg selv | `1`–`9` og `0`, eller `Enter`/`Space` |
@@ -241,8 +242,17 @@ side, og tastene dens ligger i ro så lenge siden vises; `Esc` lukker siden.
 
 Siden har sju paneler — identitet, viktige data, farmakodynamikk, dosering,
 indikasjon, farmakokinetikk og serumkonsentrasjoner — med referansene
-nummerert etter første forekomst og listet nederst. `/` går til søket på
-siden, som fremhever og teller treffene (`Enter` og `Shift + Enter` blar).
+nummerert etter første forekomst og listet nederst. `Ctrl + B` (`Cmd + B` på
+Mac) går til søket på siden i toppmenyen, som fremhever og teller treffene
+(`Enter` og `Shift + Enter` blar).
+
+Fagsøket i toppmenyen (`Ctrl + K`, `Cmd + K` på Mac) søker i alle de
+publiserte stoffsidene, og er noe annet enn analyttsøket som driver
+fortolkningen. Rullegardinen viser de beste treffene med stien på siden
+(piltastene velger, `Enter` åpner, `Esc` lukker), og «Vis alle treff» åpner
+søkesiden `#/sok?q=…`, som kan bokmerkes og deles. Hvert treff går rett til
+seksjonen eller kortet det står i. Det som skrives i fagsøket, når aldri
+tastene i fortolkningen bak.
 Administratorer kan slå på redigeringsmodus. Hvordan sidene er bygget, står i
 `docs/faginnhold.md`.
 
@@ -904,7 +914,8 @@ egne taster ligger i ro så lenge den står åpen.
 Informasjonssidene er seksjoner med overskrifter i fast nivå: navnet er `h1`,
 panelene `h2` og kortene `h3`, og fokus flyttes til navnet når en side åpnes.
 Søket på siden er en `search`-region med navn, og antallet treff meldes som
-status. Referansepillene åpnes med tastatur, klikk og peker, tabellen har
+status. Fagsøket er en kombinasjonsboks med en navngitt liste, der det valgte
+treffet følger piltastene (`aria-activedescendant`). Referansepillene åpnes med tastatur, klikk og peker, tabellen har
 kolonneoverskrifter, og rikteksteditoren har en navngitt verktøyrad der
 formateringen som står på, meldes med `aria-pressed`.
 

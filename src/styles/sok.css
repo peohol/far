@@ -18,6 +18,13 @@
   border-radius: var(--runding-merke);
 }
 
+/* Søkefeltene har ingen egen tømmeknapp i Atlas; Escape tømmer dem. */
+.fagsok__input::-webkit-search-cancel-button,
+.sidesok__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 /* --- Rullegardinen under fagsøket ---------------------------------------------- */
 
 /* Lagmerket og fokushåndteringen sitter på omslaget; oppsettet er feltets. */
@@ -399,7 +406,7 @@
 
 /* Kompakt til det brukes: feltet vokser mens det har fokus eller et søk. */
 .sidesok__input {
-  width: 4.5rem;
+  width: 5.25rem;
   min-width: 0;
   font-size: var(--tekst-ui);
   color: var(--blekk);
@@ -509,7 +516,7 @@
     align-items: center;
     padding: 0 var(--rom-2);
     background: var(--flate);
-    border-radius: inherit;
+    border-radius: var(--runding-pille);
   }
 
   .toppmeny__kontekst .sidesok:focus-within .sidesok__felt {

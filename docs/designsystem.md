@@ -76,7 +76,8 @@ ikke møtes i én stor fil. De felles står i `main.tsx`, i denne rekkefølgen:
 - `fortolkning.css` og `thc.css`: fortolkningsstegene og THC-modulen.
 - `sidemeny.css`, `infoside.css`, `redigering.css`, `ikon.css`,
   `toppmeny.css`, `endringslogg.css`, `konto.css` og `regler.css`.
-- `components.css`: bare søket på siden, til det får sin egen fil.
+- `sok.css`: fagsøkets rullegardin, søkesiden og søket på siden.
+- `components.css`: bare fremhevingen av treff i teksten (`.sidetreff`).
 
 Komponentene i informasjonssiden, seksjonene, referansene, merkene og det
 modale laget henter sitt eget stilark selv.
@@ -244,12 +245,17 @@ som i en test, blir innholdet stående i siden.
   og «Avslutt redigering» (`Redigeringslinje.tsx`). Publiseringen viser hva
   som blir synlig for alle i et modalt lag før noe publiseres. Stilene for
   redigeringen står i `src/styles/redigering.css`.
-- `sidesok`: plassen til søket i den åpne siden. Den er tom foreløpig, og
-  stoffsidens eget søk står i siden som før.
-- `sok` (en prop på `Toppmeny`): plassen til globalt fagsøk. Feltet er
-  klart i `Fagsokfelt.tsx`, med snarveien Ctrl K eller Cmd K. Selve søket
-  og rullegardinen kobles til når fagsøket bygges. Snarveien virker ikke i
-  et redigeringsfelt eller mens et lag står åpent.
+- `sidesok`: plassen til søket i den åpne siden. Stoffsiden legger sitt
+  kompakte søk her (`Sidesok.tsx`, snarveien Ctrl B eller Cmd B). Det vokser
+  mens det brukes, og antallet treff og stedene de står, vises under feltet.
+  I dokken dekker det hele dokken mens det har fokus.
+- `sok` (en prop på `Toppmeny`): globalt fagsøk. Appen legger `Fagsok`
+  (`src/components/sok/`) her: feltet fra `Fagsokfelt.tsx` med snarveien
+  Ctrl K eller Cmd K, og en rullegardin med de beste treffene. Mens fokus står
+  i fagsøket, er det et lag over appen (`data-lag="fagsok"`), så det som
+  skrives, ikke når tastene i siden bak. Ctrl/Cmd K og Ctrl/Cmd B virker
+  likevel derfra, så man kan gå rett mellom de to søkene. Snarveiene virker
+  ikke i et redigeringsfelt eller mens et annet lag står åpent.
 
 ### Høyden og rullingen
 
