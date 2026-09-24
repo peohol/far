@@ -2628,45 +2628,9 @@ details[open] > .detalj__kropp {
 }
 
 .analyttside__tom,
-.infopanel__tomt,
-.datakort__tom {
+.infopanel__tomt {
   font-size: var(--tekst-s);
   color: var(--blekk-dempet);
-}
-
-/* Panel 1: identiteten. */
-.identitet {
-  gap: var(--rom-3);
-}
-
-.identitet__piller {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--rom-3);
-}
-
-.identitet__navn {
-  font-size: var(--tekst-xl);
-  font-weight: var(--vekt-medium);
-  line-height: 1.2;
-  color: var(--blekk-sterk);
-  text-wrap: balance;
-}
-
-.identitet__navn:focus {
-  outline: none;
-}
-
-.identitet__komponenter {
-  font-size: var(--tekst-s);
-  color: var(--blekk-dempet);
-}
-
-.komponentlenke {
-  font-family: var(--skrift-mono);
-  font-size: var(--tekst-xs);
-  color: var(--aksent);
 }
 
 /* Panelene. Overskriften er liten og rolig; innholdet er det som skal leses. */
@@ -2687,56 +2651,6 @@ details[open] > .detalj__kropp {
   font-size: var(--tekst-m);
   font-weight: var(--vekt-tung);
   color: var(--blekk);
-}
-
-/* Panel 2: datakortene. Ett tall per kort, stort og sentrert, så det kan
-   leses av i farten. */
-.datakort {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
-  gap: var(--rom-5);
-  width: 100%;
-  margin: 0;
-}
-
-.datakort__kort {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--rom-2);
-  padding: var(--rom-5);
-  text-align: center;
-  background: var(--flate-hevet);
-  border-radius: var(--runding-m);
-  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
-}
-
-.datakort__tittel {
-  font-size: var(--tekst-xs);
-  font-weight: var(--vekt-medium);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--blekk-dempet);
-}
-
-.datakort__symbol {
-  margin-left: 0.5ch;
-  font-style: italic;
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-.datakort__verdi {
-  font-size: var(--tekst-l);
-  font-weight: var(--vekt-medium);
-  line-height: 1.25;
-  color: var(--blekk-sterk);
-  font-variant-numeric: tabular-nums;
-}
-
-.datakort__forbehold {
-  font-size: var(--tekst-xs);
-  color: var(--blekk-dempet);
 }
 
 /* Prosa: venstrejustert, mindre enn tallene, og lik overalt. */

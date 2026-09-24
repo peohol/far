@@ -20,7 +20,8 @@ import { finnKobling, Preparatpanel, preparatsoketekster } from './Preparatpanel
 import { useLegemidler } from './useLegemidler'
 import { Interaksjonspanel, interaksjonssoketekster } from './Interaksjonspanel'
 import { useInteraksjoner } from './useInteraksjoner'
-import { Datakortpanel, Kortpanel, Tabellpanel, Tekstpanel, type Panelkontekst } from './Paneler'
+import { Kortpanel, Tabellpanel, Tekstpanel, type Panelkontekst } from './Paneler'
+import { ViktigeData } from './ViktigeData'
 import { Redigeringskilde } from './Redigeringskontekst'
 import { Sidesok } from './Sidesok'
 import { Scenarioregler, useScenarioreglerFor } from '../regler/Scenarioregler'
@@ -45,10 +46,10 @@ export interface AnalyttsideProps {
 /**
  * Informasjonssiden for en analyttkode.
  *
- * Siden er et oppslagsverk: sju paneler i fast rekkefølge (se
+ * Siden er et oppslagsverk: panelene i fast rekkefølge (se
  * `src/faginnhold/paneler.ts`), med referansene nummerert etter første
- * forekomst og listet nederst. Identiteten står alltid fram; de andre
- * panelene er seksjoner som åpnes og lukkes, med en kort oppsummering når de
+ * forekomst og listet nederst. Identiteten og viktige data står alltid fram
+ * øverst; de andre panelene er seksjoner som åpnes og lukkes, med en kort oppsummering når de
  * er lukket (`src/components/seksjoner/`). En adresse med et sted etter koden
  * åpner seksjonen eller detaljkortet den peker på. Den åpnes fra sidemenyen, fra kodepillene i
  * fortolkningsmodulene og fra sin egen adresse, og har «Åpne fortolkning» for
@@ -294,7 +295,7 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
                       />
                     )
                   case 'datakort':
-                    return <Datakortpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
+                    return <ViktigeData key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                   case 'tekst':
                     return <Tekstpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                   case 'kort':
