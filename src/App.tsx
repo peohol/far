@@ -177,16 +177,19 @@ export default function App() {
   // En administrator kan ha publisert nye regler på en informasjonsside. De
   // hentes når hen går tilbake til fortolkningen.
   const varPaInfoside = useRef(paaInfoside)
-  // Det samme gjelder fagsøket, som henter indeksen på nytt neste gang det brukes.
+  // Det samme gjelder fagsøket, som henter indeksen på nytt neste gang det
+  // brukes, eller med én gang når hen går rett til søkesiden: den har alt bedt
+  // om indeksen før denne effekten kjører, og ber ikke igjen.
   const { hentPaNytt } = regler
   const { foreld: foreldSokeindeks } = sokeindeks
+  const paaSokeside = rute.side === 'sok'
   useEffect(() => {
     if (varPaInfoside.current && !paaInfoside && faginnhold.kanRedigere) {
       hentPaNytt()
-      foreldSokeindeks()
+      foreldSokeindeks(paaSokeside)
     }
     varPaInfoside.current = paaInfoside
-  }, [paaInfoside, faginnhold.kanRedigere, hentPaNytt, foreldSokeindeks])
+  }, [paaInfoside, paaSokeside, faginnhold.kanRedigere, hentPaNytt, foreldSokeindeks])
 
   // Tilstandsmaskinen trenger alternativene det nye søket gir for å se om det
   // smalner inn til én analytt, så søket kjøres her og ikke først når steget

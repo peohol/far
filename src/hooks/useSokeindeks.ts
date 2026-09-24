@@ -18,12 +18,13 @@ export type Sokeindekstilstand =
  * `krev` henter den når den mangler, etter en feil, eller når `foreld` har
  * sagt at den kan være utdatert (en administrator kan ha publisert noe). En
  * utdatert indeks blir stående til den nye er hentet, så søket ikke blinker;
- * en feil da beholder den gamle.
+ * en feil da beholder den gamle. `foreld(true)` henter den nye med én gang,
+ * for det som alt viser indeksen og ikke ber om den igjen (søkesiden).
  */
 export function useSokeindeks(hent: () => Promise<Lestsokeindeks>): {
   tilstand: Sokeindekstilstand
   krev: () => void
-  foreld: () => void
+  foreld: (hentNaa?: boolean) => void
 } {
   const [tilstand, setTilstand] = useState<Sokeindekstilstand>({ status: 'uhentet' })
   const status = useRef<Sokeindekstilstand['status']>('uhentet')
@@ -57,9 +58,13 @@ export function useSokeindeks(hent: () => Promise<Lestsokeindeks>): {
     )
   }, [hent])
 
-  const foreld = useCallback(() => {
-    utdatert.current = true
-  }, [])
+  const foreld = useCallback(
+    (hentNaa = false) => {
+      utdatert.current = true
+      if (hentNaa) krev()
+    },
+    [krev],
+  )
 
   return { tilstand, krev, foreld }
 }
