@@ -32,11 +32,13 @@
   display: contents;
 }
 
+/* Like bred som feltet, og aldri smalere enn at treffene kan leses. */
 .fagsok__rullegardin {
   position: absolute;
   top: calc(100% + var(--rom-5));
   right: 0;
   left: 0;
+  min-width: var(--bredde-sokepanel);
   z-index: var(--lag-popover);
   display: flex;
   flex-direction: column;
@@ -442,7 +444,7 @@
   display: none;
   flex-direction: column;
   gap: var(--rom-3);
-  width: min(22rem, calc(100vw - 2 * var(--rom-side)));
+  width: var(--bredde-sokepanel);
   padding: var(--rom-4);
   background: var(--flate);
   border: var(--kant) solid var(--linje);
@@ -496,6 +498,58 @@
   color: var(--blekk-sterk);
 }
 
+/* --- Trange flater ------------------------------------------------------------------
+   Som de sekundære handlingene krymper søket på siden til lupen i en rund
+   knapp før det globale fagsøket presses sammen. Står det et søk i det, er
+   kanten i aksentfargen (treffene er fremhevet på siden). */
+@media (max-width: 64em) {
+  .toppmeny__kontekst .sidesok:not(:focus-within) .sidesok__felt {
+    justify-content: center;
+    gap: 0;
+    width: var(--hoyde-kontroll);
+    padding: 0;
+  }
+
+  .toppmeny__kontekst .sidesok[data-sok='ja']:not(:focus-within) .sidesok__felt {
+    border-color: var(--aksent);
+  }
+
+  .toppmeny__kontekst .sidesok:not(:focus-within) .sidesok__input {
+    flex: none;
+    width: 0;
+    padding: 0;
+  }
+
+  .toppmeny__kontekst .sidesok:not(:focus-within) :is(.hurtigtast, .sidesok__teller) {
+    display: none;
+  }
+}
+
+/* Mens det brukes, tar det plassen fra fagsøket (som da krymper til lupen)
+   og ikke mer enn det er plass til, så resten av menyen blir stående. */
+@media (width > 47.5em) {
+  .toppmeny__kontekst {
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .toppmeny__spor[data-spor='sidesok'],
+  .sidesok {
+    flex-shrink: 1;
+    min-width: var(--hoyde-kontroll);
+  }
+
+  .sidesok__felt {
+    overflow: hidden;
+  }
+
+  .sidesok:focus-within .sidesok__input,
+  .sidesok[data-sok='ja'] .sidesok__input {
+    flex: 0 1 10rem;
+    width: auto;
+  }
+}
+
 /* --- Smale flater ------------------------------------------------------------------- */
 @media (max-width: 47.5em) {
   /* Rullegardinen tar hele bredden under toppmenyen. */
@@ -516,23 +570,15 @@
     justify-content: flex-end;
   }
 
-  /* I dokken: bare lupen i en rund knapp til det brukes, og over hele dokken
-     mens det brukes. Stedene står over dokken. */
+  /* I dokken: lupen (se over) i trykkstørrelse til det brukes, og over hele
+     dokken mens det brukes. Stedene står over dokken. */
   .toppmeny__kontekst .sidesok .hurtigtast {
     display: none;
   }
 
-  .toppmeny__kontekst .sidesok:not(:focus-within, [data-sok='ja']) .sidesok__felt {
-    justify-content: center;
-    gap: 0;
+  .toppmeny__kontekst .sidesok:not(:focus-within) .sidesok__felt {
     width: var(--hoyde-trykk);
     height: var(--hoyde-trykk);
-    padding: 0;
-  }
-
-  .toppmeny__kontekst .sidesok:not(:focus-within, [data-sok='ja']) .sidesok__input {
-    width: 0;
-    padding: 0;
   }
 
   .toppmeny__kontekst .sidesok:focus-within {

@@ -65,6 +65,9 @@
   --rom-side: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
   /* Kolonnen fortolkningsstegene står i (Atlas: 820–900 px). */
   --bredde-fortolkning: 56.25rem;
+  /* Søkene i toppmenyen i bruk: rullegardinen og treffpanelet under dem, og
+     fagsøkfeltet når menyen har presset det sammen til lupen. */
+  --bredde-sokepanel: min(22rem, 100vw - 2 * var(--rom-side));
 
   /* --- Form --------------------------------------------------------------- */
   --runding-merke: 0.375rem; /* 6 – små merker */
