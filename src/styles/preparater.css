@@ -1,0 +1,545 @@
+/* --- Preparater: form → styrke → preparat → preparatvindu ------------------
+   Se `src/components/preparater/`. Formen er et detaljkort (`seksjoner.css`)
+   som her tegnes som en stor overskrift med ikon; styrkene er et rutenett av
+   like store kort; preparatvinduet står i et modalt lag (`modallag.css`). */
+
+.preparater {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+  width: 100%;
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
+}
+
+.preparater__kobling,
+.preparater__melding {
+  margin: 0;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.preparatformer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  width: 100%;
+  margin: 0;
+}
+
+/* --- Legemiddelformen som overskrift (Atlas: FormHeader) ------------------ */
+
+.skuff--detalj.preparatform {
+  padding: 0 0 var(--rom-3);
+  border: 0;
+  border-bottom: var(--kant) solid var(--linje);
+  border-radius: 0;
+}
+
+.preparatform > .skuff__hode > .skuff__tittel {
+  font: var(--vekt-medium) var(--tekst-tall) / var(--linjehoyde-tett) var(--skrift-display);
+  letter-spacing: -0.01em;
+}
+
+.preparatform > .skuff__hode > .skuff__tittel > .skuff__knapp {
+  flex: 1 1 auto;
+  min-height: calc(var(--ikon-form) + var(--rom-3));
+}
+
+/* Pilen står til høyre, som i Atlas; ikonet og navnet først. */
+.preparatform > .skuff__hode .skuff__pil {
+  order: 1;
+  margin-left: auto;
+  font-size: var(--tekst-ui);
+}
+
+.preparatform > .skuff__hode .skuff__tittelTekst {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-5);
+}
+
+.preparatform__ikon {
+  flex: none;
+  width: var(--ikon-form);
+  height: var(--ikon-form);
+}
+
+.preparatform > .skuff__hode > .skuff__oppsummering {
+  margin-top: 0;
+  padding-left: calc(var(--ikon-form) + var(--rom-5));
+}
+
+/* --- Styrkene (Atlas: StrengthGrid og StrengthCard) ---------------------- */
+
+.styrkerutenett {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: var(--rom-3);
+  margin: var(--rom-3) 0 var(--rom-2);
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
+}
+
+.styrkekort {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort);
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
+  transition: border-color var(--fart-rask) var(--kurve);
+}
+
+.styrkekort[data-apen] {
+  grid-column: 1 / -1;
+  gap: var(--rom-4);
+  padding-bottom: var(--rom-5);
+  border: var(--kant-aktiv) solid var(--aksent);
+  border-radius: var(--runding-felt-gruppe);
+}
+
+.styrkekort__knapp {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--rom-3);
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  min-width: 0;
+  padding: var(--rom-5) var(--rom-6);
+  font: inherit;
+  color: var(--blekk);
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: inherit;
+  cursor: pointer;
+}
+
+.styrkekort__knapp:hover {
+  color: var(--blekk-sterk);
+}
+
+.styrkekort:not([data-apen]):hover {
+  border-color: var(--linje-kontroll);
+}
+
+.styrkekort[data-apen] > .styrkekort__knapp {
+  flex-direction: row;
+  align-items: center;
+  aspect-ratio: auto;
+  gap: var(--rom-5);
+  padding-bottom: 0;
+}
+
+.styrkekort__ikon {
+  flex: none;
+  width: var(--ikon-seksjon);
+  height: var(--ikon-seksjon);
+}
+
+.styrkekort__tekst {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  min-width: 0;
+}
+
+.styrkekort[data-apen] .styrkekort__tekst {
+  flex: 1;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--rom-1) var(--rom-4);
+}
+
+.styrkekort__styrke {
+  font: var(--vekt-medium) var(--tekst-seksjon) / var(--linjehoyde-tett) var(--skrift-display);
+  font-variant-numeric: lining-nums tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* En kombinasjon har alle virkestoffene i styrken, og får mindre tekst. */
+.styrkekort--lang .styrkekort__styrke {
+  display: -webkit-box;
+  overflow: hidden;
+  font: var(--vekt-medium) var(--tekst-etikett) / var(--linjehoyde-ui) var(--skrift-ui);
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.styrkekort--lang[data-apen] .styrkekort__styrke {
+  display: inline;
+  font-size: var(--tekst-ui);
+}
+
+.styrkekort__presisering,
+.styrkekort__antall {
+  font-size: var(--tekst-meta);
+  line-height: var(--linjehoyde-ui);
+  color: var(--blekk-dempet);
+}
+
+.styrkekort__pil {
+  display: none;
+  flex: none;
+  place-items: center;
+  width: var(--hoyde-liten);
+  height: var(--hoyde-liten);
+  font-size: var(--tekst-liten);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-pille);
+  transform: rotate(90deg);
+}
+
+.styrkekort[data-apen] .styrkekort__pil {
+  display: grid;
+}
+
+.styrkekort__innhold {
+  padding: 0 var(--rom-6);
+}
+
+/* --- Preparatnavnene i en åpnet styrke (Atlas: PreparatRow) ------------- */
+
+.preparatrader {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: var(--rom-2);
+  margin: 0;
+}
+
+.preparatrad {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-4);
+  width: 100%;
+  min-height: var(--hoyde-felt);
+  padding: var(--rom-4) var(--rom-4) var(--rom-4) var(--rom-5);
+  font: inherit;
+  color: var(--blekk);
+  text-align: left;
+  background: var(--flate-bunn);
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-felt);
+  cursor: pointer;
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve);
+}
+
+.preparatrad:hover {
+  border-color: var(--linje-kontroll);
+}
+
+.preparatrad[data-valgt] {
+  background: var(--aksent-flate);
+  border-color: var(--aksent);
+}
+
+.preparatrad__navn {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--rom-1);
+  min-width: 0;
+}
+
+.preparatrad__tittel {
+  font-weight: var(--vekt-halvfet);
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.preparatrad__merker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+}
+
+.preparatrad__produsent {
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.preparatrad__pil {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--rom-8);
+  height: var(--rom-8);
+  font-size: var(--tekst-meta);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+/* --- Preparatvinduet ------------------------------------------------------ */
+
+.preparatfakta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--rom-3);
+  margin: 0;
+}
+
+.preparatfakta__flis {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  min-width: 0;
+  padding: var(--rom-4) var(--rom-5);
+  background: var(--flate-bunn);
+  border-radius: var(--runding-felt);
+}
+
+.preparatfakta__flis dt {
+  font: var(--vekt-halvfet) var(--tekst-merke) / var(--linjehoyde-tett) var(--skrift-ui);
+  letter-spacing: var(--sperring-meta);
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.preparatfakta__flis dd {
+  margin: 0;
+  font: var(--vekt-medium) var(--tekst-lesing) / var(--linjehoyde-titler) var(--skrift-display);
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.preparatstyrker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.preparatstyrker__tittel {
+  margin: 0;
+  font: var(--vekt-halvfet) var(--tekst-meta) / var(--linjehoyde-ui) var(--skrift-ui);
+  letter-spacing: var(--sperring-meta);
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.preparatstyrker__liste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  margin: 0;
+}
+
+.preparatstyrke {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  padding: var(--rom-3) var(--rom-5);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort);
+}
+
+.preparatstyrke[data-apen] {
+  border: var(--kant-aktiv) solid var(--aksent);
+}
+
+.preparatstyrke__hode {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3);
+}
+
+.preparatstyrke__knapp {
+  display: flex;
+  flex: 1 1 14rem;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--rom-1) var(--rom-4);
+  min-height: var(--hoyde-trykk);
+  padding: 0;
+  font: inherit;
+  color: var(--blekk);
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.preparatstyrke__styrke {
+  font: var(--vekt-medium) var(--tekst-seksjon) / var(--linjehoyde-tett) var(--skrift-display);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.preparatstyrke__presisering,
+.preparatstyrke__antall {
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.preparatstyrke__pil {
+  display: grid;
+  align-self: center;
+  place-items: center;
+  width: var(--rom-8);
+  height: var(--rom-8);
+  margin-left: auto;
+  font-size: var(--tekst-meta);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-pille);
+  transition: transform var(--fart-rask) var(--kurve);
+}
+
+.preparatstyrke[data-apen] .preparatstyrke__pil {
+  transform: rotate(90deg);
+}
+
+.preparatstyrke__merker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+}
+
+.preparatstyrke__innhold {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+}
+
+.preparatstyrke__innhold[hidden] {
+  display: none;
+}
+
+.preparatstyrke__fest {
+  margin: 0;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+/* Deling, knusing og åpning (Atlas: HandlingChip). */
+.handteringsmerke {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  min-height: var(--rom-8);
+  padding: 0 var(--rom-3) 0 var(--rom-2);
+  font: var(--vekt-medium) var(--tekst-meta) / var(--linjehoyde-tett) var(--skrift-ui);
+  background: var(--flate-bunn);
+  border-radius: var(--runding-pille);
+}
+
+.handteringsmerke__ikon {
+  width: var(--rom-6);
+  height: var(--rom-6);
+}
+
+.handteringsmerke__status {
+  width: var(--rom-5);
+  height: var(--rom-5);
+}
+
+.handteringsmerke__verdi {
+  color: var(--blekk-dempet);
+}
+
+/* Pakningene (Atlas: PackageTable). */
+.pakningstabell {
+  width: 100%;
+  font: var(--vekt-normal) var(--tekst-etikett) / var(--linjehoyde-ui) var(--skrift-ui);
+  border-collapse: collapse;
+}
+
+.pakningstabell th {
+  padding: 0 var(--rom-1) var(--rom-2);
+  font: var(--vekt-halvfet) var(--tekst-merke) / var(--linjehoyde-tett) var(--skrift-ui);
+  letter-spacing: var(--sperring-meta);
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.pakningstabell td {
+  padding: var(--rom-3) var(--rom-1);
+  vertical-align: middle;
+  border-top: var(--kant) solid var(--linje);
+}
+
+.pakningstabell__pakning {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2) var(--rom-3);
+}
+
+.pakningstabell__ikon {
+  width: var(--rom-6);
+  height: var(--rom-6);
+}
+
+.pakningstabell__varenr {
+  width: 7.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.preparatlenker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2) var(--rom-5);
+  margin: 0;
+}
+
+.preparatlenke {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  min-height: var(--hoyde-trykk);
+  font-weight: var(--vekt-medium);
+  color: var(--aksent);
+}
+
+/* --- Smale flater ---------------------------------------------------------
+   Styrkene står tre i bredden som kvadrater, og preparatnavnene i én kolonne. */
+@media (max-width: 47.5em) {
+  .styrkerutenett {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--rom-2);
+  }
+
+  .styrkekort__knapp {
+    aspect-ratio: 1;
+    padding: var(--rom-3);
+  }
+
+  .styrkekort__ikon {
+    width: var(--ikon-underpunkt);
+    height: var(--ikon-underpunkt);
+  }
+
+  .styrkekort__styrke {
+    font-size: var(--tekst-ui);
+  }
+
+  .styrkekort__innhold {
+    padding: 0 var(--rom-3);
+  }
+
+  .preparatrader {
+    grid-template-columns: 1fr;
+  }
+
+  /* Merkene står under navnet, så navnet får hele bredden. */
+  .preparatrad {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: var(--rom-2);
+  }
+
+  .preparatrad__merker {
+    grid-row: 2;
+  }
+
+  .preparatrad__pil {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+  }
+}

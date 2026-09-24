@@ -1,0 +1,42 @@
+/* --- Merke (`src/components/Merke.tsx`) ---------------------------------- */
+
+.merke {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  padding: var(--rom-2) var(--rom-3);
+  font: var(--vekt-halvfet) var(--tekst-meta) / var(--linjehoyde-tett) var(--skrift-ui);
+  white-space: nowrap;
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.merke--flate {
+  background: var(--flate);
+}
+
+.merke--aksent {
+  color: var(--aksent);
+  background: var(--aksent-flate);
+}
+
+.merke--fritak {
+  color: var(--fritak-blekk);
+  background: var(--fritak-flate);
+}
+
+.merke--referanse {
+  color: var(--referanse-blekk);
+  background: var(--referanse-flate);
+}
+
+.merke--toksisk {
+  color: var(--toksisk-blekk);
+  background: var(--toksisk-flate);
+}
+
+.merke--alvorlig {
+  color: var(--alvorlig-blekk);
+  background: var(--alvorlig-flate);
+}

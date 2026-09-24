@@ -1,0 +1,111 @@
+/* --- Modalt lag: hodet med identitet, og arket på smale flater ------------
+   Se `src/components/Modallag.tsx`. Rammen (`.logg`) og kroppen står i
+   `components.css` og `konto.css`; her står bare det Atlas la til:
+   metalinjen, ikonet, undertittelen og merkene i et hevet hode, og arket
+   nedenfra på mobil. */
+
+.modallag__hode {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+  padding: var(--rom-7) var(--rom-8) var(--rom-7);
+  background: var(--flate-hevet);
+}
+
+.modallag__metarad {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+}
+
+.modallag__meta {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font: var(--vekt-halvfet) var(--tekst-meta) / var(--linjehoyde-ui) var(--skrift-ui);
+  letter-spacing: var(--sperring-meta);
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.modallag__hode .logg__lukk {
+  width: var(--hoyde-trykk);
+  height: var(--hoyde-trykk);
+  background: var(--flate);
+}
+
+.modallag__identitet {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-6);
+}
+
+.modallag__ikon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: calc(var(--ikon-form) + var(--rom-4));
+  height: calc(var(--ikon-form) + var(--rom-4));
+  background: var(--flate);
+  border-radius: var(--runding-pille);
+}
+
+.modallag__ikon .ikon {
+  width: calc(var(--ikon-form) - var(--rom-1));
+  height: calc(var(--ikon-form) - var(--rom-1));
+}
+
+.modallag__navn {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--rom-2);
+  min-width: 0;
+}
+
+.modallag__tittel {
+  margin: 0;
+  font: var(--vekt-medium) var(--tekst-sidetittel) / var(--linjehoyde-tett) var(--skrift-display);
+  letter-spacing: -0.015em;
+  color: var(--blekk-sterk);
+  overflow-wrap: break-word;
+}
+
+.modallag__undertittel {
+  margin: 0;
+  font-size: var(--tekst-etikett);
+  color: var(--blekk-dempet);
+}
+
+.modallag__merker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+}
+
+/* Arket: på smale flater står laget langs underkanten, i hele bredden. */
+@media (max-width: 47.5em) {
+  .modallag--ark[open] {
+    place-items: end stretch;
+    padding: var(--rom-3) 0 0;
+  }
+
+  .modallag--ark .logg__panel {
+    width: 100%;
+    max-height: 92dvh;
+    border-bottom: 0;
+    border-radius: var(--runding-panel) var(--runding-panel) 0 0;
+  }
+
+  .modallag--ark .modallag__hode {
+    padding: var(--rom-3) var(--rom-6) var(--rom-5);
+  }
+
+  .modallag--ark .modallag__ikon {
+    display: none;
+  }
+
+  .modallag--ark .modallag__kropp {
+    padding: var(--rom-5);
+  }
+}

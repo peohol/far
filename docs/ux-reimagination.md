@@ -509,10 +509,10 @@ Vedlikeholdes bare av koordinatorøkten, ved hver merge. Visuell fasit: Claude D
 | C | Søkedata for globalt søk | Under arbeid |
 | D | Referansemodell med FEST | Merget (#54, 1.24.0) |
 | F1 | Preparatmodell og legemiddelformregister | Merget (#53, 1.23.1) |
-| E | Monografstruktur og Viktige data | Klar til start |
-| F2 | Preparater-UI | Klar til start |
+| E | Monografstruktur og Viktige data | Under arbeid |
+| F2 | Preparater-UI | Merget (#57, 1.26.0) |
 | G | Globalt og lokalt søk-UI | Venter på C |
-| H | Øvrige monografpaneler og serumtabell | Klar til start |
+| H | Øvrige monografpaneler og serumtabell | Under arbeid |
 | I | Resten av appens visuelle språk | Venter på bølge 2 |
 | J | Sluttintegrasjon og kvalitetskontroll | Venter på I |
 

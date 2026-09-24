@@ -210,58 +210,53 @@ Slik så navnelikheten ut ved første gjennomgang:
 ## Slik preparatene vises
 
 Seksjonen «Preparater» står rett under identiteten, lukket med en
-oppsummering som «3 preparater · 1 legemiddelform · 3 styrker · 4 med
-godkjenningsfritak». Grupperingen står i `src/legemiddeldata/preparater.ts`:
-
-- Hver **legemiddelform** (FESTs korte form, f.eks. «Tablett») er et
-  detaljkort, med antallet preparater og spennet i styrkene i oppsummeringen.
-- Et **preparat** er et varenavn i én form. Under det står styrkene, og ved
-  hver styrke pakningene med størrelse, pakningstype og varenummer.
-- Preparater som **krever godkjenningsfritak**, står i et eget detaljkort og
-  telles for seg.
-- **Kombinasjonspreparater** er merket med de andre virkestoffene, og styrken
-  viser alle, f.eks. «kodein 9,6 mg + acetylsalisylsyre 500 mg + magnesiumoksid
-  150 mg».
-- Er styrken oppgitt for et **salt**, står saltet på preparatet.
-- Andre preparattyper enn vanlige legemidler, f.eks. «Sykehuspreparat», er
-  merket med typen.
-- **Reseptgruppe, administrasjonsvei og preparatomtale** står under
-  preparatnavnet når de er like for alle styrkene, ellers ved hver styrke.
-  Preparatomtalen er ofte én for hver styrke. Bare `https`-lenker vises.
-- **Deling, knusing og åpning** står ved styrken, bare når FEST sier ja eller
-  nei; «ikke spesifisert» og «ukjent» vises ikke. Delingen står med FESTs ord
-  («Delbar i 2»).
-- Nederst står FEST som referanse i seksjonens referansefelt, med datoen for
-  uttrekket og når kopien sist ble kontrollert mot FEST.
-
-Preparatnavnene er med i søket på siden, også i lukkede detaljkort. Det
-globale søket tar dem med når det kommer.
-
-### Ny visningsmodell: form → styrke → preparat
-
-Den nye Preparater-visningen (`docs/ux-reimagination.md`, del 9) bygger på
-`src/legemiddeldata/preparatmodell.ts`. Den er ikke tatt i bruk ennå; visningen
-over bruker fortsatt `preparater.ts` til det nye UI-et erstatter den, og da kan
-den gamle grupperingen fjernes.
+oppsummering som «7 preparater · 3 legemiddelformer · 5 styrker · 4 med
+godkjenningsfritak». Visningen følger `docs/ux-reimagination.md`, del 9:
+**legemiddelform → styrke → preparat → preparatvindu**. Modellen står i
+`src/legemiddeldata/preparatmodell.ts`, skjermbildet i
+`src/components/preparater/` og stilen i `src/styles/preparater.css`.
 
 - **Legemiddelform** er FESTs korte form, med koden som identitet og et ikon
-  fra registeret under. Godkjenningsfritak er ikke en egen gruppe.
-- **Styrke** er identifisert av de strukturerte feltene i FEST, ikke av
-  teksten: virkestoffet (også hvilket salt), verdi, enhet, nevner, øvre verdi,
-  operator og alternativ styrke for hvert virkestoff, sortert så rekkefølgen i
-  FEST ikke betyr noe, og virkestoffene uten styrke. Kombinasjoner, ulike
-  salter, mg, mg/ml og mg/5 ml slås derfor aldri sammen. To ulike styrker med
-  samme tekst i samme form får en presisering, f.eks. saltet eller «tilsvarer
-  1 000 IE». Hver styrke har en kort, fast ID til direktelenker.
-- «Mindre enn» og «Større enn» fra FEST vises som `<` og `>` foran styrken.
-- **Preparat** er et varenavn i én form, som før. Detaljen har alle styrkene
-  med reseptgruppe, produsent, ATC, deling/knusing/åpning som ja, nei, ukjent
-  (eller «varierer» når merkevarene i én styrke sier ulikt), preparatomtaler og
-  pakninger. Ingenting dagens visning har, går tapt; det kontrolleres i
-  `src/__tests__/preparatmodell.test.ts`.
-- **Merker** på preparatet: godkjenningsfritak, andre preparattyper enn vanlig
-  legemiddel (med FESTs tekst), og kombinasjon. De står på preparatet i
-  styrken de gjelder.
+  fra registeret under. Hver form er et detaljkort som vises som en stor
+  overskrift med ikonet og en oppsummering som «3 styrker · 10–50 mg ·
+  4 preparater». Står det bare én form, er den åpen når seksjonen åpnes.
+  Direktelenken er `#/analytt/KODE/preparater/form-<kode>`.
+- **Styrkene** i en form står som like store kort, ett per styrke uansett
+  hvor mange preparater som har den. Bare ett kort er åpent om gangen; det
+  fyller bredden og lister preparatnavnene alfabetisk. En form med bare én
+  styrke har den åpen fra start. På smale flater står styrkene tre i bredden.
+- **Godkjenningsfritak** er ikke en egen gruppe, men et merke på preparatet i
+  den samme lista. Andre preparattyper enn vanlige legemidler, f.eks.
+  «Sykehuspreparat», og kombinasjoner er også merker.
+- **Preparatvinduet** åpnes fra et preparatnavn. Det handler om preparatet,
+  med alle styrkene: reseptgruppe, administrasjonsvei, virkestoff (saltet når
+  styrken er oppgitt for et salt), ATC og den lange formen når den sier mer.
+  Hver styrke har deling, knusing og åpning som merker (bare når FEST sier
+  ja, nei eller at merkevarene sier ulikt; delingen med FESTs ord, «Delbar i
+  2»), FESTs navn med form og styrke, og pakningene med varenummer. Styrken
+  vinduet ble åpnet fra, står åpen og er merket. Det som er likt for alle
+  styrkene (reseptgruppe, produsent, preparatomtalen), står én gang; det som
+  er ulikt, står ved hver styrke. Bare `https`-lenker vises. FEST står som
+  kilde nederst. På smale flater er vinduet et ark nedenfra.
+- **Refusjon** står ikke i OUSFARs kopi av FEST og vises ikke.
+- Nederst i seksjonen står FEST som referanse i referansefeltet, med datoen
+  for uttrekket og når kopien sist ble kontrollert mot FEST.
+
+**Styrke** er identifisert av de strukturerte feltene i FEST, ikke av
+teksten: virkestoffet (også hvilket salt), verdi, enhet, nevner, øvre verdi,
+operator og alternativ styrke for hvert virkestoff, sortert så rekkefølgen i
+FEST ikke betyr noe, og virkestoffene uten styrke. Kombinasjoner, ulike
+salter, mg, mg/ml og mg/5 ml slås derfor aldri sammen. To ulike styrker med
+samme tekst i samme form får en presisering, f.eks. saltet eller «tilsvarer
+1 000 IE». «Mindre enn» og «Større enn» fra FEST vises som `<` og `>` foran
+styrken. Et **preparat** er et varenavn i én form. At ingen merkevare,
+pakning eller preparatomtale fra FEST går tapt, kontrolleres i
+`src/__tests__/preparatmodell.test.ts`.
+
+Preparatnavnene er med i søket på siden, også i lukkede former og styrker:
+søket åpner formen og styrken treffet står i, og nettleserens eget søk gjør
+det samme. Tekstene og stedene står i `src/legemiddeldata/stoffside.ts`, så
+det globale søket kan bruke de samme.
 
 ### Legemiddelformene og ikonene
 

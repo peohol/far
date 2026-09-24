@@ -3,9 +3,8 @@
  *
  *   legemiddelform → styrke → preparater → full preparatdetalj
  *
- * (`docs/ux-reimagination.md`, del 9). Den erstatter grupperingen
- * `legemiddelform → preparat → styrker` i `preparater.ts` når det nye
- * Preparater-UI-et tas i bruk.
+ * (`docs/ux-reimagination.md`, del 9), slik `src/components/preparater/`
+ * viser den.
  *
  * Som i `preparater.ts` er alt avledet av FEST-dataene og legger ingenting
  * til: formene, navnene og styrkene er FESTs egne.

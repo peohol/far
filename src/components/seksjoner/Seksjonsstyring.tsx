@@ -31,6 +31,14 @@ export function skuffnokkel(sti: readonly string[]): string {
 /** Attributtet skuffens ytterste element bærer nøkkelen i. */
 export const SKUFFATTRIBUTT = 'data-skuff'
 
+/**
+ * Hendelsen `apneTil` sender fra elementet den skal vise, før skuffene rundt
+ * åpnes. Den bobler, så en visning inne i et detaljkort som selv skjuler noe
+ * — som styrkekortene i «Preparater» — kan åpne det elementet står i. Det er
+ * ikke et tredje nivå med skuffer; visningen styrer seg selv.
+ */
+export const VIS_HENDELSE = 'ousfar:vis'
+
 /** Forelderen til seksjonene på siden. Ingen skuff har en tom nøkkel. */
 const ROT = ''
 
@@ -153,6 +161,7 @@ export function SeksjonsstyringKilde({ children }: { children: ReactNode }) {
 
   const apneTil = useCallback(
     (element: Element, plass: Rulleplass = 'center') => {
+      element.dispatchEvent(new Event(VIS_HENDELSE, { bubbles: true }))
       velg(skufferRundt(element), false)
       etterTegning(() => rull(element, plass))
     },
