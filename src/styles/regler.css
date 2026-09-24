@@ -220,10 +220,6 @@
 
 /* --- Historikken -------------------------------------------------------- */
 
-.modallag--bred {
-  width: min(100%, 68rem);
-}
-
 .sistredigert--knapp {
   padding: 0;
   font: inherit;

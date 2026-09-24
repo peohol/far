@@ -513,7 +513,8 @@ Vedlikeholdes bare av koordinatorøkten, ved hver merge. Visuell fasit: Claude D
 | F2 | Preparater-UI | Merget (#57, 1.26.0; rettelse #59, 1.26.2) |
 | G | Globalt og lokalt søk-UI | Venter på C |
 | H | Øvrige monografpaneler og serumtabell | Merget (#60, 1.26.3) |
-| I | Resten av appens visuelle språk | Venter på bølge 2 |
+| I | Resten av appens visuelle språk | Under arbeid |
+| Konto | Innlogging, konto, brukerliste, endringslogg og redigering | Merget (#61, 1.26.4) |
 | J | Sluttintegrasjon og kvalitetskontroll | Venter på I |
 
 Kjente mellomtilstander:

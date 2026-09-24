@@ -2,15 +2,11 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { ENDRINGSLOGG } from '../data/endringslogg'
 import { formaterDato, type Endring, type Endringstype } from '../domain/versjon'
 import { rullefart } from '../hooks/useKortHopp'
-import { CloseIcon } from './icons'
+import { Ikon } from './ikon/Ikon'
+import { Modallag } from './Modallag'
 
 /**
- * Endringsloggen, som et lag over appen.
- *
- * Bygget på `<dialog>` med `showModal()`. Nettleseren gir da fokusfelle,
- * lukking med Escape, bakgrunn som ikke kan klikkes, og fokuset tilbake dit
- * det kom fra — alt sammen uten egen kode, og mer robust enn en håndskrevet
- * variant ville blitt.
+ * Endringsloggen, som et modalt lag over appen (se `Modallag`).
  *
  * Merk at appens egne taster fortsatt hører etter på vinduet mens laget står
  * åpent. Vakten mot det ligger i `lagLiggerOver()` i `hooks/useKeyboard.ts`.
@@ -29,79 +25,47 @@ const TONE: Record<Endringstype, string> = {
  */
 const ETTER_GLIDNING = 300
 
+/**
+ * Uten dette ville fokus landet på lukkeknappen, som er det første
+ * nettleseren finner — og da ville `Enter` lukket loggen i samme øyeblikk
+ * som den ble åpnet. Den nyeste føringen er det man kom for, så fokus legges
+ * der: `Enter` folder den ut i stedet.
+ */
+const FORSTE_FORING = '.loggskuff__tittel'
+
 export function Endringslogg({ apen, onLukk }: { apen: boolean; onLukk: () => void }) {
-  const dialog = useRef<HTMLDialogElement>(null)
   /** Versjonen til skuffen som står åpen — bare én av gangen. */
   const [apenSkuff, setApenSkuff] = useState<string | null>(null)
-
-  useEffect(() => {
-    const el = dialog.current
-    if (!el) return
-    if (apen && !el.open) {
-      el.showModal()
-      // Uten dette lander fokus på lukkeknappen, som er det første nettleseren
-      // finner — og da ville `Enter` lukket loggen i samme øyeblikk som den
-      // ble åpnet. Den nyeste føringen er det man kom for, så fokus legges
-      // der: `Enter` folder den ut i stedet.
-      el.querySelector<HTMLElement>('.loggskuff__tittel')?.focus()
-    } else if (!apen && el.open) {
-      el.close()
-    }
-  }, [apen])
-
-  // Alle veier ut — Escape, klikk på bakgrunnen, lukkeknappen — ender i
-  // nettleserens egen `close`, så tilstanden utenfor holdes i takt ett sted.
-  useEffect(() => {
-    const el = dialog.current
-    if (!el) return
-    el.addEventListener('close', onLukk)
-    return () => el.removeEventListener('close', onLukk)
-  }, [onLukk])
 
   // Lukket lag: neste åpning skal begynne på toppen, med alle skuffer igjen.
   useEffect(() => {
     if (!apen) setApenSkuff(null)
   }, [apen])
 
-  // Et klikk utenfor panelet treffer selve `<dialog>`, som fyller hele
-  // vinduet. Panelet inni fanger sine egne klikk.
-  const paaTrykk = (event: React.MouseEvent<HTMLDialogElement>) => {
-    if (event.target === dialog.current) dialog.current?.close()
-  }
-
   const veksle = useCallback((versjon: string) => {
     setApenSkuff((forrige) => (forrige === versjon ? null : versjon))
   }, [])
 
   return (
-    <dialog ref={dialog} className="logg" aria-labelledby="logg-tittel" onClick={paaTrykk}>
-      <div className="logg__panel">
-        <div className="logg__topp">
-          <h2 id="logg-tittel" className="logg__tittel">
-            Endringslogg
-          </h2>
-          <button
-            type="button"
-            className="logg__lukk"
-            aria-label="Lukk endringsloggen"
-            onClick={() => dialog.current?.close()}
-          >
-            <CloseIcon />
-          </button>
-        </div>
-
-        <ul className="logg__liste">
-          {ENDRINGSLOGG.map((endring) => (
-            <Skuff
-              key={endring.versjon}
-              endring={endring}
-              apen={apenSkuff === endring.versjon}
-              onVeksle={() => veksle(endring.versjon)}
-            />
-          ))}
-        </ul>
-      </div>
-    </dialog>
+    <Modallag
+      apen={apen}
+      tittel="Endringslogg"
+      ikon="history"
+      onLukk={onLukk}
+      autofokus={FORSTE_FORING}
+      tettKropp
+    >
+      <ul className="logg__liste">
+        {ENDRINGSLOGG.map((endring) => (
+          <Skuff
+            key={endring.versjon}
+            endring={endring}
+            apen={apenSkuff === endring.versjon}
+            onVeksle={() => veksle(endring.versjon)}
+          />
+        ))}
+      </ul>
+    </Modallag>
   )
 }
 
@@ -150,8 +114,13 @@ function Skuff({
         aria-controls={id}
         onClick={onVeksle}
       >
-        <span className="loggskuff__merking">
-          {formaterDato(endring.dato)} · {endring.versjon}
+        <span className="loggskuff__linje">
+          <span className="loggskuff__merking">
+            {formaterDato(endring.dato)} · {endring.versjon}
+          </span>
+          <span className="loggskuff__pil" aria-hidden="true">
+            <Ikon navn="chev" storrelse={11} />
+          </span>
         </span>
         <span className="loggskuff__sammendrag">{endring.sammendrag}</span>
         <span className="loggskuff__merker">

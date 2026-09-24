@@ -81,3 +81,35 @@
   border-radius: var(--runding-pille);
   opacity: 1;
 }
+
+/* --- Knapp med kant -------------------------------------------------------
+   `Button variant="kant"`: en liten pille med hårlinje og ikon foran teksten,
+   for handlinger som står på en rad — «Nytt passord», «Endre kobling». */
+.knapp--kant {
+  min-height: var(--hoyde-liten);
+  padding: 0 var(--rom-4) 0 var(--rom-3);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+  background: transparent;
+  border: var(--kant) solid var(--linje-kontroll);
+  gap: var(--rom-2);
+}
+
+.knapp--kant:hover {
+  background: var(--flate-hevet);
+}
+
+.knapp--kant .knapp__ikon {
+  font-size: var(--ikon-ui);
+}
+
+.knapp--kant:not(:has(.knapp__ikon)) {
+  padding: 0 var(--rom-4);
+}
+
+@media (max-width: 47.5em) {
+  .knapp--kant {
+    min-height: var(--hoyde-trykk);
+  }
+}

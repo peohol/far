@@ -263,7 +263,7 @@ Referansene har to opphav i samme nummerering, samme bobler og samme liste:
 | Opphav | Hvor de kommer fra | Redigering |
 | --- | --- | --- |
 | Redaksjonell | Objekter i databasen, som over | Redigeres, arkiveres og slettes gjennom den vanlige arbeidsflyten |
-| Automatisk | Lages av data OUSFAR henter fra andre, hver gang siden vises (`automatisk` på `Referanse`) | Aldri: de er ikke objekter, kan ikke velges i referansevelgeren og forsvinner av seg selv når kilden ikke lenger har dem |
+| Automatisk | Lages av data OUSFAR henter fra andre, hver gang siden vises (`automatisk` på `Referanse`) | Aldri: de er ikke objekter, kan ikke velges i referansevelgeren (der står de låst når søket treffer dem) og forsvinner av seg selv når kilden ikke lenger har dem |
 
 Den eneste automatiske kilden nå er FEST (`src/legemiddeldata/referanser.ts`):
 

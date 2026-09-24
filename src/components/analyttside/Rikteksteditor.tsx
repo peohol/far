@@ -20,6 +20,7 @@ import {
   type Riktekstdokument,
 } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
+import { Ikon } from '../ikon/Ikon'
 import { Referansevelger } from './Referansevelger'
 import { useRedigering } from './Redigeringskontekst'
 
@@ -161,15 +162,17 @@ export function Rikteksteditor({ dokument, onEndre, etikett }: RikteksteditorPro
 interface Formatknapp {
   navn: string
   merke: string
+  /** Merket vises med formateringen det setter, som «F» i fet. */
+  stil?: 'fet' | 'kursiv' | 'understreket'
   tast?: string
   aktiv: (e: Editor) => boolean
   utfor: (e: Editor) => void
 }
 
 const FORMATKNAPPER: Formatknapp[] = [
-  { navn: 'Fet', merke: 'F', tast: 'Control+B', aktiv: (e) => e.isActive(MERKER.fet), utfor: (e) => e.chain().focus().toggleBold().run() },
-  { navn: 'Kursiv', merke: 'K', tast: 'Control+I', aktiv: (e) => e.isActive(MERKER.kursiv), utfor: (e) => e.chain().focus().toggleItalic().run() },
-  { navn: 'Understreket', merke: 'U', tast: 'Control+U', aktiv: (e) => e.isActive(MERKER.understreket), utfor: (e) => e.chain().focus().toggleUnderline().run() },
+  { navn: 'Fet', merke: 'F', stil: 'fet', tast: 'Control+B', aktiv: (e) => e.isActive(MERKER.fet), utfor: (e) => e.chain().focus().toggleBold().run() },
+  { navn: 'Kursiv', merke: 'K', stil: 'kursiv', tast: 'Control+I', aktiv: (e) => e.isActive(MERKER.kursiv), utfor: (e) => e.chain().focus().toggleItalic().run() },
+  { navn: 'Understreket', merke: 'U', stil: 'understreket', tast: 'Control+U', aktiv: (e) => e.isActive(MERKER.understreket), utfor: (e) => e.chain().focus().toggleUnderline().run() },
   { navn: 'Senket skrift', merke: 'x₂', tast: 'Control+,', aktiv: (e) => e.isActive(MERKER.senket), utfor: (e) => e.chain().focus().toggleSubscript().run() },
   { navn: 'Hevet skrift', merke: 'x²', tast: 'Control+.', aktiv: (e) => e.isActive(MERKER.hevet), utfor: (e) => e.chain().focus().toggleSuperscript().run() },
   { navn: 'Punktliste', merke: '•', aktiv: (e) => e.isActive(NODER.punktliste), utfor: (e) => e.chain().focus().toggleBulletList().run() },
@@ -201,19 +204,27 @@ function Verktoylinje({
           key={knapp.navn}
           navn={knapp.navn}
           tast={knapp.tast}
+          stil={knapp.stil}
           aktiv={aktive[i] ?? false}
           onClick={() => knapp.utfor(editor)}
         >
           {knapp.merke}
         </Verktoyknapp>
       ))}
+      <span className="verktoyrad__skille" aria-hidden="true" />
       <Verktoyknapp navn="Lenke" aktiv={aktive[FORMATKNAPPER.length] ?? false} apner={panel === 'lenke'} onClick={() => veksle('lenke')}>
         Lenke
       </Verktoyknapp>
       <Verktoyknapp navn="Sett inn symbol" apner={panel === 'symbol'} onClick={() => veksle('symbol')}>
         Ω
       </Verktoyknapp>
-      <Verktoyknapp navn="Sett inn referanse" apner={panel === 'referanse'} onClick={() => veksle('referanse')}>
+      <Verktoyknapp
+        navn="Sett inn referanse"
+        stil="referanse"
+        apner={panel === 'referanse'}
+        onClick={() => veksle('referanse')}
+      >
+        <Ikon navn="refs" storrelse="ui" />
         Referanse
       </Verktoyknapp>
     </div>
@@ -223,6 +234,7 @@ function Verktoylinje({
 function Verktoyknapp({
   navn,
   tast,
+  stil,
   aktiv,
   apner,
   onClick,
@@ -230,6 +242,7 @@ function Verktoyknapp({
 }: {
   navn: string
   tast?: string | undefined
+  stil?: Formatknapp['stil'] | 'referanse' | undefined
   aktiv?: boolean
   /** Satt for knappene som åpner et panel under raden. */
   apner?: boolean
@@ -239,7 +252,7 @@ function Verktoyknapp({
   return (
     <button
       type="button"
-      className="verktoyrad__knapp"
+      className={stil ? `verktoyrad__knapp verktoyrad__knapp--${stil}` : 'verktoyrad__knapp'}
       aria-label={navn}
       title={navn}
       {...(aktiv !== undefined && { 'aria-pressed': aktiv })}

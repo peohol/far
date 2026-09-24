@@ -1,0 +1,447 @@
+/**
+ * Redigeringen på informasjonssidene: statusen og publiseringen i
+ * toppmenyen, skjemaene for kortene, rikteksteditoren og referansevelgeren.
+ *
+ * Følger Atlas (`OUSFAR Konto og redigering`, redigeringsmodus). Knappene er
+ * diskrete til de brukes: siden skal fortsatt leses som et oppslagsverk.
+ */
+
+/* --- Statusen i toppmenyen -------------------------------------------------
+   «Redigerer · utkast med 3 endringer». Tonet som et varsel, med ikon og
+   tekst: fargen er aldri alene om å si at siden står i redigeringsmodus. */
+.redigeringsstatus {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 auto;
+  gap: var(--rom-2);
+  min-width: 0;
+  height: var(--hoyde-kontroll);
+  padding: 0 var(--rom-5);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  color: var(--toksisk-blekk);
+  background: var(--toksisk-flate);
+  border-radius: var(--runding-pille);
+}
+
+.redigeringsstatus .ikon {
+  flex: none;
+}
+
+.redigeringsstatus__tekst {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* --- Merknader på siden ---------------------------------------------------- */
+.redigeringsstripe,
+.sidevarsel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-3);
+  margin: 0;
+  padding: var(--rom-5) var(--rom-7);
+  font-size: var(--tekst-ui);
+  line-height: var(--linjehoyde-lesing);
+  border-radius: var(--runding-felt);
+}
+
+.redigeringsstripe {
+  color: var(--blekk);
+  background: var(--aksent-flate);
+}
+
+.sidevarsel {
+  color: var(--toksisk-blekk);
+  background: var(--toksisk-flate);
+  border: var(--kant) solid var(--toksisk-kant);
+}
+
+/* --- Publiseringen ---------------------------------------------------------- */
+.publisering__ingress {
+  margin: 0;
+  font-size: var(--tekst-ui);
+  color: var(--blekk-dempet);
+}
+
+.publisering__liste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  margin: 0;
+  padding-left: 1.4em;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-ingress);
+  line-height: var(--linjehoyde-lesing);
+  list-style: disc;
+}
+
+/* --- Knappene i panelene ---------------------------------------------------- */
+.redigeringsrad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2) var(--rom-3);
+}
+
+.redigeringsknapp {
+  font-size: var(--tekst-meta);
+}
+
+.sistredigert {
+  font-size: var(--tekst-merke);
+  color: var(--blekk-dempet);
+}
+
+/* --- Skjemaene for kortene -------------------------------------------------- */
+.redigering {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+  width: 100%;
+  padding: var(--rom-5);
+  text-align: left;
+  background: var(--flate-bunn);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort);
+}
+
+.redigering__tittel,
+.nyreferanse__tittel {
+  margin: 0;
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-fet);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.feltrad {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--rom-3);
+}
+
+.felt__inndata--flerlinje {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.doserad {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-3);
+  padding: var(--rom-3) var(--rom-5);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-felt);
+}
+
+.doserad .feltrad {
+  width: 100%;
+}
+
+.doserad__tittel {
+  font-size: var(--tekst-meta);
+  color: var(--blekk-dempet);
+}
+
+/* --- Referansevelgeren ------------------------------------------------------ */
+.referansevelger {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  min-width: 0;
+  margin: 0;
+  padding: var(--rom-3) var(--rom-4) var(--rom-4);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-felt-gruppe);
+}
+
+.referansevelger__tittel {
+  padding: 0 var(--rom-2);
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+}
+
+/* De valgte kildene, nummerert i rekkefølgen de er valgt i. */
+.referansevelger__valgte {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  margin: 0;
+  padding: 0;
+  font-size: var(--tekst-liten);
+  list-style: none;
+  counter-reset: valgt;
+}
+
+.referansevelger__valgt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3);
+  min-height: 2.5rem;
+  padding: var(--rom-1) var(--rom-3);
+  background: var(--aksent-flate);
+  border-radius: var(--runding-felt);
+  counter-increment: valgt;
+}
+
+.referansevelger__valgt::before {
+  content: counter(valgt);
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  color: var(--paa-aksent);
+  background: var(--aksent);
+  border-radius: var(--runding-pille);
+}
+
+.referansevelger__tekst {
+  flex: 1;
+  min-width: 10rem;
+}
+
+.referansevelger__handlinger {
+  display: flex;
+  gap: var(--rom-2);
+}
+
+.referansevelger__tom {
+  margin: 0;
+  padding: var(--rom-2) var(--rom-3);
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+/* Søkefeltet: en pille med luppen foran, som søkene ellers i appen. */
+.referansevelger__sok {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  height: 2.5rem;
+  padding: 0 var(--rom-4);
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+  border: var(--kant) solid var(--linje-kontroll);
+  border-radius: var(--runding-pille);
+}
+
+.referansevelger__sok:focus-within {
+  border-color: var(--aksent);
+}
+
+.referansevelger__sokefelt {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  font: inherit;
+  font-size: var(--tekst-etikett);
+  color: var(--blekk);
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.referansevelger__forslag {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.referansevelger__forslagsknapp,
+.referansevelger__last {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  width: 100%;
+  min-height: 2.5rem;
+  padding: var(--rom-1) var(--rom-3);
+  font-size: var(--tekst-etikett);
+  line-height: var(--linjehoyde-ui);
+  text-align: left;
+  color: var(--blekk);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-felt);
+}
+
+.referansevelger__forslagsknapp {
+  cursor: pointer;
+}
+
+.referansevelger__forslagsknapp:hover {
+  background: var(--aksent-flate);
+}
+
+/* En automatisk kilde (FEST) står låst: den finnes, men kan ikke velges. */
+.referansevelger__last {
+  color: var(--blekk-dempet);
+}
+
+.referansevelger__last > span {
+  flex: 1;
+}
+
+.referansevelger__ny {
+  align-self: flex-start;
+  color: var(--aksent);
+  font-weight: var(--vekt-halvfet);
+}
+
+.nyreferanse {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+/* --- Rikteksteditoren -------------------------------------------------------
+   Ett kort: verktøyraden på hevet flate øverst, teksten i serif under.
+   Kortet får aksentkant mens det skrives i det. */
+.rikteksteditor {
+  display: flex;
+  flex-direction: column;
+  background: var(--flate);
+  border: var(--kant-aktiv) solid var(--linje-kontroll);
+  border-radius: var(--runding-underkort);
+  transition: border-color var(--fart-rask) var(--kurve);
+}
+
+.rikteksteditor:focus-within {
+  border-color: var(--aksent);
+}
+
+.verktoyrad,
+.symbolpanel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-1);
+}
+
+.verktoyrad {
+  padding: var(--rom-2) var(--rom-3);
+  background: var(--flate-hevet);
+  border-bottom: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort) var(--runding-underkort) 0 0;
+}
+
+.verktoyrad__skille {
+  width: var(--kant);
+  height: 1.5rem;
+  margin: 0 var(--rom-2);
+  background: var(--linje);
+}
+
+.verktoyrad__knapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rom-2);
+  min-width: 2.125rem;
+  height: 2.125rem;
+  padding: 0 var(--rom-2);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+  background: transparent;
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-merke);
+  cursor: pointer;
+  transition: background-color var(--fart-rask) var(--kurve);
+}
+
+.verktoyrad__knapp:hover {
+  background: var(--flate);
+}
+
+.verktoyrad__knapp--fet {
+  font-weight: var(--vekt-fet);
+}
+
+.verktoyrad__knapp--kursiv {
+  font-style: italic;
+}
+
+.verktoyrad__knapp--understreket {
+  text-decoration: underline;
+}
+
+/* «Referanse» er en pille med ikon, som i designet. */
+.verktoyrad__knapp--referanse {
+  padding: 0 var(--rom-4) 0 var(--rom-3);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-liten);
+  color: var(--aksent);
+  background: var(--aksent-flate);
+  border-radius: var(--runding-pille);
+}
+
+.verktoyrad__knapp[aria-pressed='true'],
+.verktoyrad__knapp[aria-expanded='true'] {
+  color: var(--paa-aksent);
+  background: var(--aksent);
+  border-color: var(--aksent);
+}
+
+.verktoypanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  padding: var(--rom-3);
+  border-bottom: var(--kant) solid var(--linje);
+}
+
+.riktekstfelt {
+  min-height: 7rem;
+  padding: var(--rom-5) var(--rom-6) var(--rom-6);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  line-height: 1.55;
+  color: var(--blekk);
+  background: transparent;
+  border: 0;
+  border-radius: 0 0 var(--runding-underkort) var(--runding-underkort);
+}
+
+.riktekstfelt:focus {
+  outline: none;
+}
+
+.riktekstfelt p {
+  margin: 0;
+}
+
+.riktekstfelt p + p {
+  margin-top: var(--rom-3);
+}
+
+/* Siteringen i teksten, mens den redigeres: forfatter og år i en pille. */
+.siteringsmerke {
+  padding: 0 0.45em;
+  font-family: var(--skrift-ui);
+  font-size: 0.7em;
+  font-weight: var(--vekt-halvfet);
+  color: var(--paa-aksent);
+  background: var(--aksent);
+  border-radius: var(--runding-pille);
+  white-space: nowrap;
+}
+
+.siteringsmerke--valgt {
+  box-shadow: 0 0 0 var(--fokusring) var(--fokus);
+}

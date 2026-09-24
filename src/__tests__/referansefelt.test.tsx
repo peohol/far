@@ -104,7 +104,7 @@ describe('referanselisten', () => {
 })
 
 describe('editoren', () => {
-  it('tilbyr aldri en automatisk kilde, selv om den skulle ligge i referansebasen', async () => {
+  it('tilbyr aldri en automatisk kilde, selv om den skulle ligge i referansebasen, men viser den låst', async () => {
     const bruker = userEvent.setup()
     const onEndre = vi.fn()
     render(
@@ -120,6 +120,9 @@ describe('editoren', () => {
 
     await bruker.clear(screen.getByRole('searchbox', { name: 'Finn en referanse' }))
     await bruker.type(screen.getByRole('searchbox', { name: 'Finn en referanse' }), 'FEST')
-    expect(screen.getByText('Ingen referanser passer.')).toBeTruthy()
+    // Den automatiske kilden står i treffene, men låst: den kan ikke velges.
+    const treff = screen.getByRole('list', { name: 'Referanser som passer' })
+    expect(within(treff).queryAllByRole('button')).toEqual([])
+    expect(within(treff).getByRole('img', { name: /Automatisk fra FEST/ })).toBeTruthy()
   })
 })

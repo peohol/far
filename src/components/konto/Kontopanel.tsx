@@ -128,7 +128,7 @@ export function Kontopanel({ apen, onLukk }: { apen: boolean; onLukk: () => void
     forhandsvisning ?? (profil.avatar_path ? (lenker.get(profil.avatar_path) ?? null) : null)
 
   return (
-    <Modallag apen={apen} tittel="Kontoen din" onLukk={onLukk}>
+    <Modallag apen={apen} tittel="Kontoen din" ikon="user" onLukk={onLukk}>
       <form className="skjema" onSubmit={(hendelse) => void lagreProfil(hendelse)}>
         <Lastfelt
           merkelapp="Brukernavn"
@@ -211,7 +211,7 @@ export function Kontopanel({ apen, onLukk }: { apen: boolean; onLukk: () => void
 
       <hr className="skille" />
 
-      <Button variant="subtle" icon={<LogoutIcon />} onClick={() => void loggUt()}>
+      <Button variant="kant" icon={<LogoutIcon />} onClick={() => void loggUt()}>
         Logg ut
       </Button>
     </Modallag>

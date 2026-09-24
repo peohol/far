@@ -96,6 +96,8 @@ const KRAV: [string, string, number, string][] = [
   ['--merke-fag', '--merke-fag-flate', 4.5, 'merket «Fag»'],
   // Admin-merket i kontomenyen.
   ['--aksent-2', '--flate', 4.5, 'merket «Admin»'],
+  ['--toksisk-blekk', '--flate', 4.5, 'advarselen ved det midlertidige passordet'],
+  ['--blekk', '--flate-bunn', 4.5, 'tekst i skjemafelt'],
   // Analysemetodepillen bærer metodens egen farge og ikke et token; den
   // kontrastmåles i `domain/__tests__/optionColours.test.ts`.
 ]
