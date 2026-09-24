@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.26.1',
+    dato: '2026-09-24',
+    sammendrag: 'Ny rekkefølge på stoffsiden og viktige data alltid synlig',
+    typer: ['Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Viktige data står alltid rett under stoffnavnet, uten egen overskrift, og lukkes ikke når du åpner en annen del av siden.',
+      'Tallene er delt i «Konsentrasjoner i serum» og «Kinetikk», med et eget bilde på hvert kort. Etiketten og tallet gjelder; fargen er bare en hjelp.',
+      'Halveringstid og tid til steady state vises som t₁/₂ og tₛₛ.',
+      'Stoffsiden har ny rekkefølge: farmakodynamikk, indikasjon, preparater, dosering, farmakokinetikk, interaksjoner og serumkonsentrasjoner. Søket og nummereringen av kildene følger den samme rekkefølgen.',
+      'Over stoffnavnet står koden, analysemetoden og kategorien på én linje.',
+      'Fortolkningen, tallene og tekstene er uendret.',
+    ],
+  },
+  {
     versjon: '1.26.0',
     dato: '2026-09-24',
     sammendrag: 'Preparatene vises som legemiddelform, styrke og preparat, med et eget vindu for hvert preparat',

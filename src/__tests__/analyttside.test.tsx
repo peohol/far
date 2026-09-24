@@ -27,6 +27,7 @@ import type { Objektstatus, Tilstand } from '../faginnhold/modell'
 import { kommentarnavn, utenKommentarer } from '../regler/kommentarer'
 import type { Intervallregelsett, Intervallregelsettinnhold } from '../regler/modell'
 import { SITERING } from '../faginnhold/referanser'
+import { formaterTall } from '../faginnhold/paneler'
 import type { Interaksjonsdata } from '../legemiddeldata/fest'
 import {
   TOMME_INTERAKSJONER,
@@ -420,6 +421,16 @@ async function apneSkuff(user: ReturnType<typeof userEvent.setup>, navn: string)
   if (knapp.getAttribute('aria-expanded') !== 'true') await user.click(knapp)
 }
 
+/**
+ * Verdien på et datakort. Forleddet, tallet og enheten står i hvert sitt
+ * element, så teksten sammenlignes for hele verdien.
+ */
+function erVerdi(tekst: string) {
+  return (_: string, el: Element | null) => !!el?.matches('.datakort__verdi') && el.textContent === tekst
+}
+const finnVerdi = (tekst: string) => screen.findByText(erVerdi(tekst))
+const hentVerdi = (tekst: string) => screen.getByText(erVerdi(tekst))
+
 function vis(kode: string, k = kilde(), sted?: string[]) {
   const onApneFortolkning = vi.fn()
   const onLukk = vi.fn()
@@ -443,7 +454,7 @@ describe('lesemodus', () => {
   it('viser identiteten, datakortet, teksten og referansene', async () => {
     const user = userEvent.setup()
     const { leser } = vis('AMTNORSUM')
-    expect(await screen.findByText('10–20 nmol/L')).toBeTruthy()
+    expect(await finnVerdi('10–20 nmol/L')).toBeTruthy()
     expect(leser.lesAnalyttside).toHaveBeenCalledWith('AMTNORSUM', 'publisert')
 
     expect(screen.getByRole('heading', { level: 1, name: /Amitriptylin/ })).toBeTruthy()
@@ -470,11 +481,90 @@ describe('lesemodus', () => {
     ])
   })
 
+  it('viser koden, metoden og kategorien i metalinjen over navnet', async () => {
+    vis('AMTNORSUM')
+    await finnVerdi('10–20 nmol/L')
+    const identitet = screen.getByRole('heading', { level: 1 }).closest('section')!
+    const oppforing = katalog.finn('AMTNORSUM')!
+    const metalinje = identitet.querySelector('.metalinje')!
+    expect(within(metalinje as HTMLElement).getByText('AMTNORSUM').className).toBe('metalinje__kode')
+    expect(metalinje.textContent).toContain(oppforing.analysemetode)
+    // Linjen står før navnet.
+    expect(metalinje.compareDocumentPosition(screen.getByRole('heading', { level: 1 }))).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    )
+  })
+
+  it('grupperer viktige data i konsentrasjoner og kinetikk, med t₁/₂ og tₛₛ som symboler', async () => {
+    const kort = (id: string, elementtype: string, posisjon: number, data: Record<string, unknown>) =>
+      utgave(id, {
+        infoside: 'hs',
+        panel: 'viktige_data',
+        posisjon,
+        elementtype,
+        data: { nedre: null, ovre: null, forbehold: '', ...data },
+        referanser: [],
+      })
+    const alle = (t: Tilstand): Analyttsidedata => {
+      const s = side(t)
+      return {
+        ...s,
+        elementer: [
+          ...s.elementer,
+          kort('tox', 'toksisk_omrade', 1, { nedre: 3600, enhet: 'nmol/L' }),
+          kort('hl', 'halveringstid', 3, { nedre: 7, ovre: 7, enhet: 'timer' }),
+          kort('ss', 'steady_state', 4, { nedre: 2, ovre: 2, enhet: 'døgn', forbehold: 'Omtrentlig.' }),
+        ],
+      }
+    }
+    vis('AMTNORSUM', kilde({ data: alle }))
+    await finnVerdi('10–20 nmol/L')
+    const viktige = screen.getByRole('region', { name: 'Viktige data' })
+    const gruppe = (navn: string) => within(viktige).getByRole('group', { name: navn })
+    const titler = (el: HTMLElement) => within(el).getAllByRole('heading', { level: 3 }).map((h) => h.textContent)
+
+    // Konsentrasjonene: etiketten og ikonet står alltid, ikke bare fargen.
+    const konsentrasjoner = gruppe('Konsentrasjoner i serum')
+    expect(titler(konsentrasjoner)).toEqual(['Referanseområde', 'Toksisk område'])
+    for (const li of within(konsentrasjoner).getAllByRole('listitem')) expect(li.querySelector('svg.ikon')).not.toBeNull()
+    expect(within(konsentrasjoner).getByText(erVerdi(`fra ${formaterTall(3600)} nmol/L`))).toBeTruthy()
+
+    // Kinetikken: symbolet med senket skrift, og etiketten for skjermlesere.
+    const kinetikk = gruppe('Kinetikk')
+    const overskrifter = within(kinetikk).getAllByRole('heading', { level: 3 })
+    expect(overskrifter.map((h) => h.querySelector('.datakort__symbol')?.innerHTML)).toEqual([
+      't<sub>1/2</sub>',
+      't<sub>ss</sub>',
+    ])
+    expect(overskrifter.map((h) => h.querySelector('.datakort__symbol')?.getAttribute('aria-hidden'))).toEqual([
+      'true',
+      'true',
+    ])
+    expect(overskrifter.map((h) => h.querySelector('.datakort__etikett')?.textContent)).toEqual([
+      'Halveringstid',
+      'Tid til steady state',
+    ])
+    expect(within(kinetikk).getByText(erVerdi('7 timer'))).toBeTruthy()
+    expect(within(kinetikk).getByText('Omtrentlig.')).toBeTruthy()
+  })
+
+  it('går til viktige data fra en lenke uten å åpne eller lukke seksjoner', async () => {
+    const rull = vi.spyOn(Element.prototype, 'scrollIntoView')
+    vis('AMTNORSUM', kilde(), ['viktige_data'])
+    await finnVerdi('10–20 nmol/L')
+    const viktige = screen.getByRole('region', { name: 'Viktige data' })
+    await waitFor(() => expect(rull.mock.contexts).toContain(viktige))
+    expect(screen.getByRole('button', { name: 'Farmakodynamikk' }).getAttribute('aria-expanded')).toBe('false')
+    rull.mockRestore()
+  })
+
   it('viser bare panelene som har innhold, og ingen redigering for vanlige brukere', async () => {
     vis('AMTNORSUM')
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
+    // Viktige data står fram, uten tittel.
+    expect(screen.getByRole('region', { name: 'Viktige data' })).toBeTruthy()
+    expect(screen.queryByRole('heading', { name: 'Viktige data' })).toBeNull()
     // Kildene for et helt panel står i referansefeltet nederst, ikke i overskriften.
-    expect(screen.getByRole('heading', { level: 2, name: 'Viktige data' })).toBeTruthy()
     const dynamikk = screen.getByRole('heading', { level: 2, name: 'Farmakodynamikk' })
     expect(within(dynamikk).queryByRole('button', { name: /Referanse/ })).toBeNull()
     const felt = screen.getByRole('region', { name: 'Farmakodynamikk', hidden: true }).querySelector('.referansefelt')!
@@ -524,7 +614,7 @@ describe('veiene ut av siden', () => {
   it('lukkes med Esc, men ikke mens det skrives i søket', async () => {
     const user = userEvent.setup()
     const { onLukk } = vis('AMTNORSUM')
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     const sok = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
     await user.click(sok)
     await user.keyboard('nmol')
@@ -542,7 +632,7 @@ describe('søket på siden', () => {
   it('fremhever og teller treffene, og viser hvor de står', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM')
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.keyboard('/')
     const sok = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
     expect(document.activeElement).toBe(sok)
@@ -566,7 +656,7 @@ describe('søket på siden', () => {
   it('ser bort fra store og små bokstaver og aksenter', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM')
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'GJENOPPTAKET')
     await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
     expect(document.querySelector('mark.sidetreff')?.textContent).toBe('gjenopptaket')
@@ -579,10 +669,12 @@ describe('seksjonene', () => {
     screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
   const apen = (navn: string) => skuffknapp(navn).getAttribute('aria-expanded') === 'true'
 
-  it('viser viktige data åpent og resten lukket med en oppsummering', async () => {
+  it('viser viktige data alltid, utenfor trekkspillet, og resten lukket med en oppsummering', async () => {
     vis('AMTNORSUM')
-    await screen.findByText('10–20 nmol/L')
-    expect(apen('Viktige data')).toBe(true)
+    await finnVerdi('10–20 nmol/L')
+    const viktige = screen.getByRole('region', { name: 'Viktige data' })
+    expect(viktige.closest('[data-skuff], [hidden]')).toBeNull()
+    expect(viktige.querySelector('[data-skuff]')).toBeNull()
     expect(apen('Farmakodynamikk')).toBe(false)
     // Oppsummeringen er begynnelsen av teksten, med teksten selv skjult.
     expect(screen.getByText('Hemmer gjenopptaket')).toBeTruthy()
@@ -592,7 +684,7 @@ describe('seksjonene', () => {
   it('åpner seksjonen søket finner et treff i, og gjør treffet aktivt', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM')
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'hemmer')
     await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
     // Den lukkede seksjonen sier at den har et treff.
@@ -609,44 +701,42 @@ describe('seksjonene', () => {
 
   it('åpner stedet adressen peker på', async () => {
     vis('AMTNORSUM', kilde(), ['farmakodynamikk'])
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await waitFor(() => expect(apen('Farmakodynamikk')).toBe(true))
   })
 
   it('holder bare én seksjon åpen, og har ingen knapp for å åpne alle', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM')
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     expect(screen.queryByRole('button', { name: 'Åpne alle' })).toBeNull()
     await user.click(skuffknapp('Farmakodynamikk'))
     expect(apen('Farmakodynamikk')).toBe(true)
-    expect(apen('Viktige data')).toBe(false)
-    await user.click(skuffknapp('Viktige data'))
-    expect(apen('Viktige data')).toBe(true)
-    expect(apen('Farmakodynamikk')).toBe(false)
+    // Viktige data er ikke et søsken i trekkspillet og står fram uansett.
+    expect(hentVerdi('10–20 nmol/L').closest('[hidden]')).toBeNull()
   })
 
   it('åpner søkets treff i én seksjon om gangen', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM')
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'hemmer')
     await user.click(within(await screen.findByRole('list', { name: 'Hvor treffene står' })).getByRole('button'))
     expect(apen('Farmakodynamikk')).toBe(true)
-    expect(apen('Viktige data')).toBe(false)
+    expect(hentVerdi('10–20 nmol/L').closest('[hidden]')).toBeNull()
   })
 
   it('åpner ikke alt i redigeringsmodus; redaktøren åpner seksjonen, også de som bare vises der', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM', kilde({ kanRedigere: true }))
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(skuffknapp('Farmakodynamikk'))
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await screen.findByRole('heading', { level: 2, name: 'Dosering' })
     // Det som sto åpent, står fortsatt åpent, og bare det.
     await screen.findByRole('button', { name: 'Rediger: Farmakodynamikk' })
     expect(apen('Farmakodynamikk')).toBe(true)
-    expect(apen('Dosering') || apen('Viktige data')).toBe(false)
+    expect(apen('Dosering')).toBe(false)
     expect(screen.queryByRole('button', { name: 'Legg til: Dosering' })).toBeNull()
 
     await user.click(skuffknapp('Dosering'))
@@ -668,7 +758,7 @@ describe('preparatene', () => {
   it('viser ikke seksjonen når siden ikke er koblet', async () => {
     const k = kilde()
     vis('AMTNORSUM', k)
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     expect(screen.queryByRole('region', { name: 'Preparater' })).toBeNull()
     expect(k.legemidler.les).not.toHaveBeenCalled()
   })
@@ -707,19 +797,21 @@ describe('preparatene', () => {
 
     // FEST er kilden i seksjonens referansefelt: en nummerert referanse, med
     // uttrekket og kontrollen ved siden av, ikke en løpende «Kilde: …».
+    // Preparatene står etter viktige data og farmakodynamikken, som har kilde
+    // 1 og 2, så FEST blir 3.
     const preparater = screen.getByRole('region', { name: 'Preparater' })
     expect(within(preparater).queryByText(/Kilde: FEST/)).toBeNull()
     const felt = preparater.querySelector(':scope > * .referansefelt--panel')!
-    expect(within(felt as HTMLElement).getByRole('button', { name: 'Referanse 1' })).toBeTruthy()
+    expect(within(felt as HTMLElement).getByRole('button', { name: 'Referanse 3' })).toBeTruthy()
     expect(felt.textContent).toMatch(
       /Legemiddeldata fra FEST, uttrekk fra 8\. september 2026, sist kontrollert 23\. september 2026 · kan ikke redigeres/,
     )
     // I listen nederst står FEST sammen med de redaksjonelle, merket som automatisk.
     const liste = screen.getByRole('region', { name: 'Referanser' })
-    const [forste] = within(liste).getAllByRole('listitem')
-    expect(forste!.getAttribute('value')).toBe('1')
-    expect(forste!.textContent).toMatch(/^FEST – Forskrivnings- og ekspedisjonsstøtte · Direktoratet for medisinske produkter/)
-    expect(within(forste!).getByText('Automatisk fra FEST · kan ikke redigeres')).toBeTruthy()
+    const [, , fest] = within(liste).getAllByRole('listitem')
+    expect(fest!.getAttribute('value')).toBe('3')
+    expect(fest!.textContent).toMatch(/^FEST – Forskrivnings- og ekspedisjonsstøtte · Direktoratet for medisinske produkter/)
+    expect(within(fest!).getByText('Automatisk fra FEST · kan ikke redigeres')).toBeTruthy()
   })
 
   it('åpner preparatvinduet med alle styrkene, og gir fokuset tilbake når det lukkes', async () => {
@@ -761,8 +853,12 @@ describe('preparatene', () => {
     expect(tjuefem!.getAttribute('aria-expanded')).toBe('false')
     const tabell = within(ti!.closest('li')!).getByRole('table')
     expect(within(tabell).getAllByRole('row').map((r) => r.textContent)).toEqual(['PakningVarenr.', '30 stk, blisterpakning123456'])
-    // FEST er kilden i vinduet også.
-    expect(within(vindu).getByRole('button', { name: 'Referanse 1' })).toBeTruthy()
+    // FEST er kilden i vinduet også, med samme nummer som i referanselisten.
+    const liste = screen.getByRole('region', { name: 'Referanser' })
+    const fest = within(liste)
+      .getAllByRole('listitem')
+      .find((r) => r.textContent?.startsWith('FEST'))!
+    expect(within(vindu).getByRole('button', { name: `Referanse ${fest.getAttribute('value')}` })).toBeTruthy()
 
     await user.click(within(vindu).getByRole('button', { name: 'Lukk preparatet' }))
     expect(screen.queryByRole('dialog')).toBeNull()
@@ -824,7 +920,7 @@ describe('preparatene', () => {
     })
     vis('AMTNORSUM', k)
     expect(await screen.findByText('Fikk ikke hentet preparatene')).toBeTruthy()
-    expect(screen.getByText('10–20 nmol/L')).toBeTruthy()
+    expect(hentVerdi('10–20 nmol/L')).toBeTruthy()
   })
 })
 
@@ -835,7 +931,7 @@ describe('interaksjonene', () => {
   it('viser ikke seksjonen når siden ikke er koblet', async () => {
     const k = kilde()
     vis('AMTNORSUM', k)
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     expect(screen.queryByRole('region', { name: 'Interaksjoner' })).toBeNull()
     expect(k.legemidler.interaksjoner).not.toHaveBeenCalled()
   })
@@ -907,7 +1003,7 @@ describe('interaksjonene', () => {
     })
     vis('AMTNORSUM', feil)
     expect(await screen.findByText('Fikk ikke hentet interaksjonene')).toBeTruthy()
-    expect(screen.getByText('10–20 nmol/L')).toBeTruthy()
+    expect(hentVerdi('10–20 nmol/L')).toBeTruthy()
   })
 })
 
@@ -915,7 +1011,7 @@ describe('redigeringsmodus', () => {
   it('viser utkastet og alle panelene, med «Sist redigert»', async () => {
     const user = userEvent.setup()
     const { leser } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await waitFor(() => expect(leser.lesAnalyttside).toHaveBeenLastCalledWith('AMTNORSUM', 'utkast'))
     expect(screen.getByRole('button', { name: 'Avslutt redigering' }).getAttribute('aria-pressed')).toBe('true')
@@ -929,7 +1025,7 @@ describe('redigeringsmodus', () => {
   it('lagrer et datakort mot revisjonen som ble åpnet', async () => {
     const user = userEvent.setup()
     const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
 
@@ -953,7 +1049,7 @@ describe('redigeringsmodus', () => {
   it('avviser en nedre grense over den øvre, uten å lagre', async () => {
     const user = userEvent.setup()
     const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
     const skjema = screen.getByRole('form', { name: 'Rediger: Referanseområde' })
@@ -972,7 +1068,7 @@ describe('redigeringsmodus', () => {
       throw new Samtidighetskonflikt(3, 2)
     })
     vis('AMTNORSUM', k)
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
     const skjema = screen.getByRole('form', { name: 'Rediger: Referanseområde' })
@@ -988,7 +1084,7 @@ describe('redigeringsmodus', () => {
   it('velger kilder fra referansebasen og legger inn nye', async () => {
     const user = userEvent.setup()
     const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
     const skjema = screen.getByRole('form', { name: 'Rediger: Referanseområde' })
@@ -1020,7 +1116,7 @@ describe('redigeringsmodus', () => {
   it('publiserer de upubliserte endringene etter en oppsummering', async () => {
     const user = userEvent.setup()
     const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     // Datakortet og en kommentar regelsettet peker på, har revisjoner som ikke
     // er publisert. Regelsettet selv er publisert og er ikke med.
@@ -1090,7 +1186,7 @@ describe('overgangen til redigering', () => {
       tilstand === 'utkast' ? new Promise<Analyttsidedata>((r) => (slipp = r)) : Promise.resolve(side('publisert')),
     )
     vis('AMTNORSUM', k)
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
 
     // Det publiserte står fortsatt, men kan ikke endres mens utkastet hentes.
@@ -1123,7 +1219,7 @@ describe('overgangen til redigering', () => {
       throw new Error('Innholdet ble ikke godtatt. Kontroller feltene og prøv igjen.')
     })
     vis('AMTNORSUM', k)
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Legg til: Halveringstid' }))
     const skjema = screen.getByRole('form', { name: 'Rediger: Halveringstid' })
@@ -1140,7 +1236,7 @@ describe('rikteksteditoren', () => {
   it('har en verktøyrad med bare den tillatte formateringen', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM', kilde({ kanRedigere: true }))
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await apneSkuff(user, 'Farmakodynamikk')
     await user.click(await screen.findByRole('button', { name: 'Rediger: Farmakodynamikk' }))
@@ -1188,7 +1284,7 @@ describe('kortene i farmakokinetikken', () => {
   it('flytter et kort, og lagrer bare det som får ny plass', async () => {
     const user = userEvent.setup()
     const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort() }))
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await apneSkuff(user, 'Farmakokinetikk')
     await apneSkuff(user, 'Absorpsjon')
@@ -1202,7 +1298,7 @@ describe('kortene i farmakokinetikken', () => {
   it('åpner både seksjonen og kortet når søket går til et treff i et lukket kort', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM', kilde({ data: medKort() }))
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     const skuffknapp = (navn: string) =>
       screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
     expect(skuffknapp('Farmakokinetikk').getAttribute('aria-expanded')).toBe('false')
@@ -1225,7 +1321,7 @@ describe('kortene i farmakokinetikken', () => {
     const user = userEvent.setup()
     // «metabolisme» står i teksten i Absorpsjon og i tittelen på Metabolisme.
     vis('AMTNORSUM', kilde({ data: medKort({ k1: 'Syntetisk metabolisme.' }) }))
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     const skuffknapp = (navn: string) =>
       screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
 
@@ -1248,7 +1344,7 @@ describe('kortene i farmakokinetikken', () => {
   it('fjerner et kort først etter en bekreftelse, uten å slette det', async () => {
     const user = userEvent.setup()
     const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort() }))
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await apneSkuff(user, 'Farmakokinetikk')
     await apneSkuff(user, 'Metabolisme')
@@ -1265,7 +1361,7 @@ describe('fortolkningsreglene', () => {
   async function redigerer(k = kilde({ kanRedigere: true })) {
     const user = userEvent.setup()
     const verdier = vis('AMTNORSUM', k)
-    await screen.findByText('10–20 nmol/L')
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await screen.findByText('Endret syntetisk høy kommentar.')
     return { user, ...verdier }

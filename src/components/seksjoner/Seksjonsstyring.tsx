@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
 import { rullefart } from '../../hooks/useKortHopp'
 
 /**
@@ -73,6 +73,12 @@ export interface Seksjonsstyring {
    * nettleserens eget søk.
    */
   apneTil(element: Element, plass?: Rulleplass): void
+  /**
+   * Et sted på siden som alltid står fram og ikke er en skuff, som «Viktige
+   * data». En direktelenke dit ruller dit uten å åpne eller lukke noe. Gir
+   * tilbake avregistreringen. Se `useFastSted`.
+   */
+  fastSted(sti: readonly string[], element: Element): () => void
 }
 
 const Kontekst = createContext<Seksjonsstyring | null>(null)
@@ -109,6 +115,8 @@ export function SeksjonsstyringKilde({ children }: { children: ReactNode }) {
   const [registrert, setRegistrert] = useState<ReadonlyMap<string, Registrering>>(() => new Map())
   /** Stedet en direktelenke peker på, mens det venter på at skuffen skal tegnes. */
   const venter = useRef<{ nokkel: string; plass: Rulleplass } | null>(null)
+  /** Stedene som alltid står fram, med elementet de står i. */
+  const faste = useRef(new Map<string, Element>())
 
   /**
    * Åpner kjeden av skuffer, ytterst først. Hver av dem blir den åpne i sin
@@ -148,11 +156,26 @@ export function SeksjonsstyringKilde({ children }: { children: ReactNode }) {
       })
   }, [])
 
+  const fastSted = useCallback((sti: readonly string[], element: Element) => {
+    const nokkel = skuffnokkel(sti)
+    faste.current.set(nokkel, element)
+    if (venter.current?.nokkel === nokkel) {
+      const { plass } = venter.current
+      venter.current = null
+      etterTegning(() => rull(element, plass))
+    }
+    return () => {
+      if (faste.current.get(nokkel) === element) faste.current.delete(nokkel)
+    }
+  }, [])
+
   const apne = useCallback(
     (sti: readonly string[], plass: Rulleplass = 'start') => {
       const kjede = kjedeFor(sti)
       const mal = kjede[kjede.length - 1]
       if (!mal) return
+      const fast = faste.current.get(mal)
+      if (fast) return etterTegning(() => rull(fast, plass))
       velg(kjede, false)
       rullNar(mal, plass)
     },
@@ -202,10 +225,24 @@ export function SeksjonsstyringKilde({ children }: { children: ReactNode }) {
         setValgt((forrige) => new Map(forrige).set(skuffnokkel(sti.slice(0, -1)), { nokkel: null, animer: true }))
       }
     }
-    return { tilstand, sett, registrer, apne, apneTil }
-  }, [valgt, standard, registrert, velg, rullNar, registrer, apne, apneTil])
+    return { tilstand, sett, registrer, apne, apneTil, fastSted }
+  }, [valgt, standard, registrert, velg, rullNar, registrer, apne, apneTil, fastSted])
 
   return <Kontekst.Provider value={verdi}>{children}</Kontekst.Provider>
+}
+
+/**
+ * Melder elementet inn som et sted som alltid står fram (se
+ * `Seksjonsstyring.fastSted`), så en direktelenke til `id` ruller dit — også
+ * når lenken ble fulgt før innholdet var hentet. Gjør ingenting utenfor en
+ * `SeksjonsstyringKilde`.
+ */
+export function useFastSted(id: string, element: RefObject<Element>) {
+  const fastSted = useSeksjonsstyring()?.fastSted
+  useEffect(() => {
+    const el = element.current
+    if (el && fastSted) return fastSted([id], el)
+  }, [id, element, fastSted])
 }
 
 /** Nøklene til skuffene elementet står i, ytterst først. Elementet selv regnes med når det er en skuff. */
