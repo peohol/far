@@ -42,6 +42,7 @@ function visSide(kode: string, sted?: readonly string[]) {
     lesReferanser: vi.fn(async () => []),
     finnInfosider: vi.fn(async () => []),
     finnIntervallregelsett: vi.fn(async () => null),
+    finnScenarioregelsett: vi.fn(async () => null),
     lesIntervallregelsett: vi.fn(async () => []),
     lesThcRegelsett: vi.fn(async () => thcregelsett),
     lesKommentarer: vi.fn(async () => []),

@@ -287,6 +287,7 @@ describe('redigeringen', () => {
       finnIntervallregelsett: vi.fn(async () => null),
       finnScenarioregelsett: vi.fn(async (_modul: string, tilstand: Tilstand) => scenarioutgave(tilstand)),
       lesIntervallregelsett: vi.fn(async () => []),
+      lesThcRegelsett: vi.fn(async () => null),
       lesKommentarer: vi.fn(async () => []),
       lesReferanseomrader: vi.fn(async () => new Map()),
       lesHistorikk: vi.fn(async () => ({ hendelser: [], revisjoner: [] })),
