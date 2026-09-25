@@ -1,7 +1,7 @@
 import { erUtenMargin, konsentrasjonsniva, type ThcGrunnlag, type ThcKonklusjon } from '../domain/thcMotor'
 import type { ThcRegelsett } from '../domain/thcRegelsett'
-import { formaterIrcak, formaterTall, ordEndring } from '../domain/thcTall'
-import { forventetNedgang, nivabeskrivelse, somProsent } from '../domain/thcVisning'
+import { formaterIrcak, formaterTall } from '../domain/thcTall'
+import { endringsfrase, forventetNedgang, nivabeskrivelse, somProsent } from '../domain/thcVisning'
 
 /**
  * Grunnlaget for fortolkningen, i vanlig språk — til å lese for den som vil
@@ -18,13 +18,6 @@ import { forventetNedgang, nivabeskrivelse, somProsent } from '../domain/thcVisn
  * Grensene, nivåene og faktoren under cut-off leses av regelsettet
  * fortolkningen brukte, så forklaringen alltid stemmer med kommentaren.
  */
-
-/** «en nedgang på 74 %», «en økning på 5 %» eller «ingen endring». */
-function endringsfrase(endring: number): string {
-  const ord = ordEndring(endring)
-  if (ord === 'ingen endring') return 'ingen endring'
-  return `en ${ord} på ${Math.round(Math.abs(endring) * 100)} %`
-}
 
 export function ThcForklaring({
   grunnlag,

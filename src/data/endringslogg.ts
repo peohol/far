@@ -14,13 +14,15 @@ export const ENDRINGSLOGG: Endring[] = [
   {
     versjon: '1.34.2',
     dato: '2026-09-25',
-    sammendrag: 'Sikkerhetsmarginen i THC-modulen velges med en bryter',
+    sammendrag: 'Sikkerhetsmarginen i THC-modulen velges med en bryter og forklares under den',
     typer: ['Design / layout', 'Funksjonalitet'],
     omfang: 'Mindre omfang',
     punkter: [
       'Glidebryteren for sikkerhetsmargin er byttet ut med en midtstilt bryter med tre valg: Ingen (50 %), 90 % og 99 %. 90 % er fortsatt standard.',
       'Trykk direkte på valget du vil ha, eller dra knotten til høyre eller venstre; slipper du den mellom to valg, legger den seg på det nærmeste. Knotten glir animert, og står stille om du har bedt om mindre bevegelse i systemet.',
       'Tastaturet virker som før: piltastene flytter ett valg av gangen, og mellomrom og Enter kopierer kommentaren.',
+      'Forklaringen av sikkerhetsmarginen er flyttet fra tooltipen på overskriften til «Hva er sikkerhetsmarginen?» under bryteren, som kan foldes ut. Teksten er delt i korte bolker, med hva hver margin gjør.',
+      'Den har også et eksempel: to prøver fortolket med hver margin, med endringen som legges til grunn og konklusjonen hver av dem gir.',
       'Kommentaren er den samme som før for hver margin.',
     ],
   },

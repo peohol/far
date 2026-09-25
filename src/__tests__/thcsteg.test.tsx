@@ -17,7 +17,9 @@ import type { ThcRegelsett } from '../domain/thcRegelsett'
 import type { ThcTekster } from '../domain/thcTekster'
 import { thcReglerFra } from '../faginnhold/thcregler'
 import { ShortcutVisibilityProvider } from '../hooks/useShortcutVisibility'
-import { marginvalg } from '../domain/thcVisning'
+import { formaterProsent } from '../domain/thcPlot'
+import { THC_TEKSTBOLKER } from '../domain/thcTekster'
+import { margineksempel, marginvalg } from '../domain/thcVisning'
 import { medPekerhendelser, trykkPaaValg } from './hjelp/pekerhendelser'
 import { THC_MODELL, THC_REGELSETT, THC_TEKSTER, thcRegelsettutgave } from './hjelp/thcgrunnlag'
 
@@ -132,6 +134,30 @@ describe('fortolkningsmodulen for THC-syre', () => {
     }
     // Tilfellet er valgt så marginen faktisk endrer konklusjonen.
     expect(kommentarer.size).toBeGreaterThan(1)
+  })
+
+  it('forklarer sikkerhetsmarginen under bryteren, med eksempelet regnet av reglene', async () => {
+    const user = userEvent.setup()
+    visSteg({ status: 'klar', modell: THC_MODELL })
+    const sammendrag = screen.getByText('Hva er sikkerhetsmarginen?')
+    const detaljer = sammendrag.closest('details')!
+    expect(detaljer.open).toBe(false)
+    await user.click(sammendrag)
+    expect(detaljer.open).toBe(true)
+
+    const rader = within(detaljer)
+      .getAllByRole('row')
+      .slice(1)
+      .map((rad) => Array.from(rad.children, (celle) => celle.textContent))
+    expect(rader).toEqual(
+      margineksempel(THC_REGELSETT).map(({ margin, endring, utfall }) => [
+        marginvalg(margin),
+        formaterProsent(endring * 100),
+        THC_TEKSTBOLKER[utfall].tittel,
+      ]),
+    )
+    expect(within(detaljer).getByText('90 % (standard)')).toBeTruthy()
+    expect(detaljer.textContent).toContain('i 1 av 100 tilfeller')
   })
 
   it('bruker tekstene, marginene og varselgrensen i regelsettet den får', async () => {

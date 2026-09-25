@@ -1,6 +1,6 @@
-import type { ThcForventet } from './thcMotor'
+import { sammenlignMedForrige, type ThcForventet, type ThcKonklusjon } from './thcMotor'
 import { INGEN_SIKKERHETSMARGIN, KURVEFARGE, type ThcRegelsett } from './thcRegelsett'
-import { formaterIrcak } from './thcTall'
+import { formaterIrcak, ordEndring } from './thcTall'
 
 /**
  * Det fortolkningen og simulatoren viser om THC-syreregelsettet, avledet av
@@ -26,6 +26,37 @@ export function marginvalg(margin: number): string {
   return margin === INGEN_SIKKERHETSMARGIN
     ? `${marginmerke(margin)} (${somProsent(margin)}\u00a0%)`
     : marginmerke(margin)
+}
+
+/** «en nedgang på 74 %», «en økning på 5 %» eller «ingen endring». */
+export function endringsfrase(endring: number): string {
+  const ord = ordEndring(endring)
+  if (ord === 'ingen endring') return 'ingen endring'
+  return `en ${ord} på ${Math.round(Math.abs(endring) * 100)} %`
+}
+
+/**
+ * Hvor ofte endringen som fortolkes, er større enn den sanne med marginen:
+ * «i annethvert tilfelle» uten margin, «i 1 av 10 tilfeller» med 90 %.
+ */
+export function hvorOfteForStor(margin: number): string {
+  const n = Math.round(1 / (1 - margin))
+  return n === 2 ? 'i annethvert tilfelle' : `i 1 av ${n} tilfeller`
+}
+
+/**
+ * De to prøvene i eksempelet på hva sikkerhetsmarginen gjør. Tallene er
+ * oppdiktede og valgt fordi hver margin i de publiserte reglene gir en egen
+ * konklusjon for dem; konklusjonene regnes likevel av reglene som gjelder.
+ */
+export const MARGINEKSEMPEL = { forrige: 50, aktuell: 40, dager: 3, kronisk: true } as const
+
+/** Eksempelet fortolket med hver margin i regelsettet: endringen som fortolkes, og konklusjonen. */
+export function margineksempel(r: ThcRegelsett): { margin: number; endring: number; utfall: ThcKonklusjon }[] {
+  return r.sikkerhetsmarginer.map(({ margin }) => {
+    const { korrigert, utfall } = sammenlignMedForrige(r, { ...MARGINEKSEMPEL, margin, usikkerhet: 1 })
+    return { margin, endring: korrigert, utfall }
+  })
 }
 
 /** Hvert konsentrasjonsnivå med området det dekker: «under 20», «20–40», «40 eller mer». */
