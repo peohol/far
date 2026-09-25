@@ -1,0 +1,85 @@
+{
+  "kode": "AMF1",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Deksamfetamin (Attentin, Dexatin, Dexfarm): barn og ungdom 6–17 år med ADHD, som del av et omfattende behandlingsprogram, når respons på tidligere behandling med metylfenidat anses som klinisk uegnet. Behandlingen skal være under oppsyn av spesialist innen atferdsforstyrrelser hos barn og/eller ungdom.",
+      "Lisdeksamfetamin, som del av et omfattende behandlingsprogram ved ADHD, under tilsyn av spesialist innen atferdsforstyrrelser:",
+      {
+        "punkter": [
+          "Elvanse, Balidax og Dexhility: barn ≥6 år når respons på tidligere metylfenidatbehandling ikke anses som klinisk tilstrekkelig, og voksne med symptomer på ADHD i barndommen.",
+          "Silarosa: bare barn ≥6 år, når respons på tidligere metylfenidatbehandling ikke anses som klinisk tilstrekkelig.",
+          "Aduvanz og Volidax: bare voksne."
+        ]
+      },
+      "Hos voksne skal symptomene på ADHD ha vært til stede i barndommen og kunne bekreftes retrospektivt, og pasienten skal minst ha ADHD av moderat alvorlighetsgrad, med minst moderat funksjonssvekkelse i to eller flere situasjoner."
+    ],
+    "referanser": [
+      "fk-attentin",
+      "fk-dexatin",
+      "fk-dexfarm",
+      "fk-elvanse",
+      "fk-balidax",
+      "fk-dexhility",
+      "fk-silarosa",
+      "fk-aduvanz",
+      "fk-volidax"
+    ]
+  },
+  "referanser": {
+    "fk-attentin": {
+      "tittel": "Attentin «Medice»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/attentin-medice-602877"
+    },
+    "fk-dexatin": {
+      "tittel": "Dexatin «Abboxia»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/dexatin-abboxia-750402"
+    },
+    "fk-dexfarm": {
+      "tittel": "Dexfarm «Orifarm Healthcare»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/dexfarm-orifarm-healthcare-754521"
+    },
+    "fk-elvanse": {
+      "tittel": "Elvanse «Takeda»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/elvanse-takeda-588199"
+    },
+    "fk-balidax": {
+      "tittel": "Balidax «Teva»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/balidax-teva-728889"
+    },
+    "fk-dexhility": {
+      "tittel": "Dexhility «Sandoz»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/dexhility-sandoz-781874"
+    },
+    "fk-silarosa": {
+      "tittel": "Silarosa «FrostPharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/silarosa-frostpharma-743290"
+    },
+    "fk-aduvanz": {
+      "tittel": "Aduvanz «Takeda»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/aduvanz-takeda-643161"
+    },
+    "fk-volidax": {
+      "tittel": "Volidax «Teva»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/volidax-teva-729320"
+    }
+  }
+}

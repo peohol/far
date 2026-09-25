@@ -580,10 +580,14 @@ avvises. Den utvider en side som finnes, som TDM-importen. `npx vite-node
 scripts/importer-stoffsider.ts -- <brukernavn> <mappe>` lager migrasjonene
 (`src/faginnhold/stoffsider.ts`). Indikasjonene deres står for seg i
 `supabase/import/indikasjoner/` (bare `indikasjon`, sammendraget av
-preparatomtalene i Felleskatalogen med dem som referanser), og legges til på
-samme måte med `scripts/importer-indikasjoner.ts`; et indikasjonskort som alt
-står på siden, røres ikke. Har Felleskatalogen ingen preparatomtale for
-stoffet, sier kortet det.
+preparatomtalene i Felleskatalogen med dem som referanser). Filene legges inn
+i omganger (`INDIKASJONSIMPORTER` i `src/faginnhold/indikasjoner.ts`), hver
+med sin migrasjon og datoen de ble hentet, så en ny omgang ikke endrer
+migrasjonene som er kjørt: `scripts/importer-indikasjoner.ts -- <brukernavn>
+<migrasjon> <mappe>`. En fil kan gjelde en side med analyttkode (`kode`), som
+amfetaminsiden (AMF1), med indikasjonene for deksamfetamin og
+lisdeksamfetamin. Et indikasjonskort som alt står på siden, røres ikke. Har
+Felleskatalogen ingen preparatomtale for stoffet, sier kortet det.
 
 **Rettinger.** En feil i det som ble importert, rettes med en rettingsfil i
 `supabase/import/rettinger/`: kilden, og per retting koden, raden slik den

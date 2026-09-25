@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.36.5',
+    dato: '2026-09-25',
+    sammendrag: 'Amfetaminsiden viser preparater og indikasjoner for deksamfetamin og lisdeksamfetamin',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Amfetaminsiden er koblet til deksamfetamin og lisdeksamfetamin i FEST, og viser preparatene og interaksjonene for begge. Racemisk amfetamin er ikke med, siden referanseområdet ikke gjelder for det.',
+      'Siden har fått seksjonen «Indikasjon», med indikasjonene for Attentin, Dexatin og Dexfarm og for Elvanse og generika, hentet fra Felleskatalogen, med lenker til preparatomtalene.',
+    ],
+  },
+  {
     versjon: '1.36.4',
     dato: '2026-09-25',
     sammendrag: 'Alle legemiddelformene har fått egne ikoner',

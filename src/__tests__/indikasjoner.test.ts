@@ -1,31 +1,42 @@
 /**
- * Indikasjonene for stoffsidene uten analyttkode, hentet fra Felleskatalogen
- * (`supabase/import/indikasjoner/`): datasettet, og migrasjonene kjørt på
- * sidene stoffsideimporten la inn, lest slik appen leser dem.
+ * Indikasjonene hentet fra Felleskatalogen (`supabase/import/indikasjoner/`),
+ * for stoffsidene uten analyttkode og for amfetaminsiden: datasettet, og
+ * migrasjonene kjørt på sidene som finnes, lest slik appen leser dem.
  */
 import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
-import { importmigrasjoner } from '../faginnhold/import'
-import { INDIKASJONSDATASETT, indikasjonsplan } from '../faginnhold/indikasjoner'
+import { filnokkel, importmigrasjoner } from '../faginnhold/import'
+import { INDIKASJONSDATASETT, INDIKASJONSIMPORTER, indikasjonsplan } from '../faginnhold/indikasjoner'
 import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import { ELEMENTTYPER, lesRiktekst } from '../faginnhold/paneler'
 import { klartekst } from '../faginnhold/riktekst'
 import { stoffsideplan } from '../faginnhold/stoffsider'
 import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
-const plan = indikasjonsplan()
-const MIGRASJONER = migrasjonsfiler().filter((f) => /_stoffsider_indikasjoner_\d+\.sql$/.test(f))
-const FORSTE_STOFFSIDE = migrasjonsfiler().find((f) => /_stoffsider_import_\d+\.sql$/.test(f))!
+const omgang = (migrasjon: string) => INDIKASJONSIMPORTER.find((i) => i.migrasjon === migrasjon)!
+const plan = indikasjonsplan(omgang('stoffsider_indikasjoner'))
+const amfetamin = indikasjonsplan(omgang('amfetamin_indikasjoner'))
+const PLANER = INDIKASJONSIMPORTER.map((i) => ({ migrasjon: i.migrasjon, plan: indikasjonsplan(i) }))
+const migrasjonene = (migrasjon: string) => migrasjonsfiler().filter((f) => new RegExp(`_${migrasjon}_\\d+\\.sql$`).test(f))
+const MIGRASJONER = PLANER.flatMap((p) => migrasjonene(p.migrasjon))
+/** Den første migrasjonen som lager sider indikasjonene legges på (amfetaminsiden). */
+const FORSTE_SIDE = migrasjonsfiler().find((f) => /_tdm_referanseomrader_\d+\.sql$/.test(f))!
 const MIGRASJONSMAPPE = new URL('../../supabase/migrations/', import.meta.url)
 const FK_KILDE = 'Hentet fra Felleskatalogen 25.09.2026'
 /** Stoffene Felleskatalogen ikke har noen preparatomtale for. */
 const UTEN_OMTALE = ['Flunitrazepam', 'Ketobemidon']
 
-const stoff = (navn: string) => plan.koder.find((k) => k.hovedside.navn === navn)!
-const tekst = (navn: string) => klartekst(lesRiktekst(stoff(navn).elementer[0]!.data).dokument)
+const tekst = (navn: string, p = plan) =>
+  klartekst(lesRiktekst(p.koder.find((k) => k.hovedside.navn === navn)!.elementer[0]!.data).dokument)
 
 describe('datasettet', () => {
+  it('legger hver fil inn i nøyaktig én omgang', () => {
+    const iOmganger = INDIKASJONSIMPORTER.flatMap((i) => i.filer)
+    expect([...iOmganger].sort()).toEqual(INDIKASJONSDATASETT.filer.map(filnokkel).sort())
+    expect(new Set(iOmganger).size).toBe(iOmganger.length)
+  })
+
   it('har ett indikasjonskort, og ikke noe annet, for hver stoffside uten analyttkode', () => {
     expect(plan.koder.map((k) => k.hovedside.navn)).toEqual(stoffsideplan().koder.map((k) => k.hovedside.navn))
     for (const k of plan.koder) {
@@ -36,7 +47,7 @@ describe('datasettet', () => {
   })
 
   it('siterer preparatomtalene i Felleskatalogen, og sier fra der det ikke finnes noen', () => {
-    for (const r of plan.referanser) {
+    for (const r of PLANER.flatMap((p) => p.plan.referanser)) {
       expect(r.nokkel).toMatch(/^fk-/)
       expect(r.kilde, r.nokkel).toBe(FK_KILDE)
       expect(r.innhold).toMatchObject({ forfattere: 'Felleskatalogen', lenke: expect.stringMatching(/^https:\/\/www\.felleskatalogen\.no\/medisin\/[a-z0-9-]+-\d{6}$/) })
@@ -70,10 +81,29 @@ describe('datasettet', () => {
     expect(tekst('Metylfenidat')).toContain('Tuzulby (6–17 år)')
   })
 
+  it('legger indikasjonene for deksamfetamin og lisdeksamfetamin på amfetaminsiden', () => {
+    const [k, ...flere] = amfetamin.koder
+    expect(flere).toEqual([])
+    expect(k!.kode).toBe('AMF1')
+    expect(k!.hovedside.navn).toBe('Amfetamin')
+    expect(k!.elementer.map((e) => [e.panel, e.elementtype, e.kilde])).toEqual([['indikasjon', ELEMENTTYPER.riktekst, FK_KILDE]])
+    const t = tekst('Amfetamin', amfetamin)
+    expect(t).toContain('Deksamfetamin (Attentin, Dexatin, Dexfarm): barn og ungdom 6–17 år med ADHD')
+    expect(t).toContain('Elvanse, Balidax og Dexhility: barn ≥6 år')
+    expect(t).toContain('Silarosa: bare barn ≥6 år')
+    expect(t).toContain('Aduvanz og Volidax: bare voksne.')
+    expect(k!.elementer[0]!.referanser).toEqual([
+      'fk-attentin', 'fk-dexatin', 'fk-dexfarm', 'fk-elvanse', 'fk-balidax', 'fk-dexhility', 'fk-silarosa', 'fk-aduvanz', 'fk-volidax',
+    ])
+  })
+
   it('er de samme migrasjonene som datasettet gir', () => {
-    const filer = importmigrasjoner(plan, 'peohol', 55_000, 'utvid')
-    expect(MIGRASJONER).toHaveLength(filer.length)
-    MIGRASJONER.forEach((fil, i) => expect(readFileSync(new URL(fil, MIGRASJONSMAPPE), 'utf8'), fil).toBe(filer[i]))
+    for (const p of PLANER) {
+      const filer = importmigrasjoner(p.plan, 'peohol', 55_000, 'utvid')
+      const kjorte = migrasjonene(p.migrasjon)
+      expect(kjorte, p.migrasjon).toHaveLength(filer.length)
+      kjorte.forEach((fil, i) => expect(readFileSync(new URL(fil, MIGRASJONSMAPPE), 'utf8'), fil).toBe(filer[i]))
+    }
   })
 })
 
@@ -81,33 +111,42 @@ describe('migrasjonene i databasen', () => {
   let db: PGlite
   let leser: Faginnholdsleser
   let revisjoner: number
+  let sider: number
+  const elementerFor = new Map<string, number>()
 
   const antall = async (sql: string) => (await db.query<{ n: number }>(sql)).rows[0]!.n
+  const utkast = () => antall("select count(*)::int as n from public.infosider where tilstand = 'utkast'")
 
   beforeAll(async () => {
-    db = await nyDatabase({ til: FORSTE_STOFFSIDE })
+    db = await nyDatabase({ til: FORSTE_SIDE })
     const admin = await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
     const bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lars', etternavn: 'Leser', rolle: 'user' })
-    await kjorMigrasjoner(db, { fra: FORSTE_STOFFSIDE })
+    await kjorMigrasjoner(db, { fra: FORSTE_SIDE, til: MIGRASJONER[0] })
     leser = lagFaginnholdsleser(faginnholdskall(db, admin).klientFor(bruker))
+    for (const k of PLANER.flatMap((p) => p.plan.koder)) {
+      elementerFor.set(k.hovedside.navn, (await leser.lesStoffside(k.hovedside.navn, 'publisert')).elementer.length)
+    }
+    sider = await utkast()
+    await kjorMigrasjoner(db, { fra: MIGRASJONER[0] })
     revisjoner = await antall('select count(*)::int as n from public.objektrevisjoner')
   }, 180_000)
 
   it('legger indikasjonen publisert på sidene som finnes, med kildene, og lar resten av siden stå', async () => {
-    const stoffsider = stoffsideplan()
-    for (const k of plan.koder) {
-      const navn = k.hovedside.navn
-      const side = await leser.lesStoffside(navn, 'publisert')
-      const [indikasjon, ...flere] = side.elementer.filter((e) => e.innhold.panel === 'indikasjon')
-      expect(flere, navn).toEqual([])
-      expect(indikasjon!.innhold.data, navn).toEqual(k.elementer[0]!.data)
-      expect(indikasjon!.kilde, navn).toBe(FK_KILDE)
-      const titler = (indikasjon!.innhold.referanser ?? []).map((id) => side.referanser.find((r) => r.id === id)!.innhold.tittel)
-      expect(titler, navn).toEqual(k.elementer[0]!.referanser.map((n) => plan.referanser.find((r) => r.nokkel === n)!.innhold.tittel))
-      const ovrige = stoffsider.koder.find((s) => s.hovedside.navn === navn)!.elementer.length
-      expect(side.elementer.length, navn).toBe(ovrige + 1)
+    for (const { plan: p } of PLANER) {
+      for (const k of p.koder) {
+        const navn = k.hovedside.navn
+        const side = await leser.lesStoffside(navn, 'publisert')
+        const [indikasjon, ...flere] = side.elementer.filter((e) => e.innhold.panel === 'indikasjon')
+        expect(flere, navn).toEqual([])
+        expect(indikasjon!.innhold.data, navn).toEqual(k.elementer[0]!.data)
+        expect(indikasjon!.kilde, navn).toBe(FK_KILDE)
+        const titler = (indikasjon!.innhold.referanser ?? []).map((id) => side.referanser.find((r) => r.id === id)!.innhold.tittel)
+        expect(titler, navn).toEqual(k.elementer[0]!.referanser.map((n) => p.referanser.find((r) => r.nokkel === n)!.innhold.tittel))
+        expect(elementerFor.get(navn), navn).toBeGreaterThan(0)
+        expect(side.elementer.length, navn).toBe(elementerFor.get(navn)! + 1)
+      }
     }
-    expect(await antall('select count(*)::int as n from public.infosider where tilstand = \'utkast\'')).toBe(plan.koder.length)
+    expect(await utkast()).toBe(sider)
   })
 
   it('gjør ingenting når de kjøres en gang til', async () => {

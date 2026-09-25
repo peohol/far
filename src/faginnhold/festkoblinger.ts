@@ -17,7 +17,7 @@ import { PREPARATPANEL } from '../legemiddeldata/stoffside'
 import { innlogging, lit } from './import'
 
 export interface Festkobling {
-  /** Navnet på stoffsiden. */
+  /** Navnet på stoffsiden. Har siden flere virkestoff, står den én gang for hvert. */
   side: string
   /** FESTs ID for virkestoffet. Saltene følger med av seg selv. */
   fest_id: string
@@ -55,43 +55,68 @@ export const STOFFSIDE_FESTKOBLINGER: readonly Festkobling[] = [
   },
 ]
 
+/**
+ * Amfetaminsiden (AMF1): referanseområdet gjelder deksamfetamin og
+ * lisdeksamfetamin, ikke racemisk amfetamin (`supabase/import/tdm/AMF1.json`).
+ */
+export const AMFETAMIN_FESTKOBLINGER: readonly Festkobling[] = [
+  {
+    side: 'Amfetamin',
+    fest_id: 'ID_94B3D11A-B6E3-4139-8F0E-8FE9B5B12D62',
+    merknad: 'Deksamfetamin, med saltene i Attentin, Dexatin og Dexfarm.',
+  },
+  {
+    side: 'Amfetamin',
+    fest_id: 'ID_90176257-5082-40EB-9F18-687F7AC07352',
+    merknad: 'Lisdeksamfetamin, med saltene i Elvanse og generika.',
+  },
+]
+
+/** Hver import av koblinger, i rekkefølge, med navnet migrasjonen fikk. */
+export const FESTKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: readonly Festkobling[] }[] = [
+  { migrasjon: 'stoffsider_fest_kobling', koblinger: STOFFSIDE_FESTKOBLINGER },
+  { migrasjon: 'amfetamin_fest_kobling', koblinger: AMFETAMIN_FESTKOBLINGER },
+]
+
 /** Kilden revisjonene får i historikken. */
 export const FESTKOBLINGSKILDE = 'Koblet til virkestoffet i FEST'
 
 /**
- * SQL-en som legger inn koblingene, som administratoren `admin`, publisert.
- * Den hopper over — med en melding — en side som ikke finnes, et virkestoff
- * som ikke finnes i FEST-kopien eller er utgått, og en side som alt er koblet,
- * så den kan kjøres igjen uten å gjøre noe. Uten administratoren gjør den
- * ingenting, som i testdatabasen.
+ * SQL-en som legger inn koblingene, som administratoren `admin`, publisert:
+ * ett kort per side, med virkestoffene i den rekkefølgen de står. Den hopper
+ * over — med en melding — en side som ikke finnes eller alt er koblet, og et
+ * virkestoff som ikke finnes i FEST-kopien eller er utgått (har siden ingen
+ * igjen, hoppes den over), så den kan kjøres igjen uten å gjøre noe. Uten
+ * administratoren gjør den ingenting, som i testdatabasen.
+ *
+ * Migrasjonen `stoffsider_fest_kobling` ble laget med en tidligere utgave, med
+ * ett virkestoff per side; den står som den ble kjørt.
  */
 export function festkoblingSql(koblinger: readonly Festkobling[], admin: string): string {
-  const rader = koblinger.map((k) => `      (${lit(k.side)}, ${lit(k.fest_id)})`).join(',\n')
+  const rader = koblinger.map((k, i) => `      (${lit(k.side)}, ${lit(k.fest_id)}, ${i})`).join(',\n')
   return `-- Stoffsidene kobles til virkestoffene i FEST
 do $kobling$
 declare
   administrator uuid;
   k record;
   side uuid;
-  virkestoff text;
+  virkestoff jsonb;
   status public.objektstatus;
 begin
 ${innlogging(admin, 'hopp over')}
   perform set_config('far.revisjonskilde', ${lit(FESTKOBLINGSKILDE)}, true);
 
   for k in
-    select * from (values
+    select t.side, array_agg(t.fest_id order by t.nr) as fest_ider
+    from (values
 ${rader}
-    ) as t(side, fest_id)
+    ) as t(side, fest_id, nr)
+    group by t.side
+    order by min(t.nr)
   loop
     side := (select i.objekt_id from public.infosider i where i.tilstand = 'publisert' and i.navn = k.side);
     if side is null then
       raise notice 'Fant ingen publisert side %, så den hoppes over.', k.side;
-      continue;
-    end if;
-    virkestoff := (select v.navn from legemiddeldata.virkestoff v where v.fest_id = k.fest_id and v.utgatt_kl is null);
-    if virkestoff is null then
-      raise notice 'Virkestoffet % for % finnes ikke i FEST, så siden hoppes over.', k.fest_id, k.side;
       continue;
     end if;
     if exists (
@@ -101,13 +126,24 @@ ${rader}
       raise notice '% er alt koblet til legemiddeldataene, så den hoppes over.', k.side;
       continue;
     end if;
+    virkestoff := (
+      select jsonb_agg(jsonb_build_object('fest_id', v.fest_id, 'navn', v.navn) order by array_position(k.fest_ider, v.fest_id))
+      from legemiddeldata.virkestoff v where v.fest_id = any(k.fest_ider) and v.utgatt_kl is null
+    );
+    if coalesce(jsonb_array_length(virkestoff), 0) < cardinality(k.fest_ider) then
+      raise notice 'Noen av virkestoffene % for % finnes ikke i FEST.', k.fest_ider, k.side;
+    end if;
+    if virkestoff is null then
+      raise notice 'Ingen av virkestoffene for % finnes i FEST, så siden hoppes over.', k.side;
+      continue;
+    end if;
 
     status := public.opprett_utkast('innholdselement', jsonb_build_object(
       'infoside', side,
       'panel', ${lit(PREPARATPANEL)},
       'posisjon', 0,
       'elementtype', ${lit(ELEMENTTYPER.legemiddelkobling)},
-      'data', jsonb_build_object('virkestoff', jsonb_build_array(jsonb_build_object('fest_id', k.fest_id, 'navn', virkestoff)))
+      'data', jsonb_build_object('virkestoff', virkestoff)
     ));
     perform public.publiser_utkast(status.id, status.revisjon);
   end loop;
