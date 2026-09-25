@@ -1,55 +1,12 @@
-import { useId, type Ref } from 'react'
+import type { Ref } from 'react'
+import { Details } from './Details'
 import { Tallfelt } from './Tallfelt'
-import { Tips } from './Tips'
+import { ThcMarginforklaring } from './ThcMarginforklaring'
+import { Trinnbryter } from './Trinnbryter'
 import type { ThcInndata } from '../domain/thcMotor'
 import type { ThcRegelsett } from '../domain/thcRegelsett'
 import { beregnIrcak, formaterIrcak } from '../domain/thcTall'
-import { marginmerke } from '../domain/thcVisning'
-
-/**
- * Hva sikkerhetsmarginen er: først hvorfor en målt endring ikke er den sanne,
- * så hva marginen gjør med den. Ordlyden er eierens egen; bare de rette
- * anførselstegnene er satt inn, som ellers i appen.
- */
-const MARGINTIPS = (
-  <>
-    <section className="tipsboble__bolk">
-      <h3 className="tipsboble__tittel">Målinger ≠ sann verdi</h3>
-      <p>Det er uunngåelig at det oppstår tilfeldige avvik mellom målinger og den sanne verdien.</p>
-      <p>
-        Fordi enkeltmålingene er usikre, vil også endringen mellom to prøver være usikre. Den målte endringen
-        er altså forventet å avvike fra den sanne endringen.
-      </p>
-      <p>
-        Det er 50/50 om endringen måles høyere eller lavere enn den sanne endringen. I halvparten av
-        tilfellene vil grunnlaget vårt for fortolkning være for strengt – i den andre halvparten vil det være
-        for snilt.
-      </p>
-    </section>
-    <section className="tipsboble__bolk">
-      <h3 className="tipsboble__tittel">Sikkerhetsmargin</h3>
-      <p>
-        Hvis vi tolker prøvene direkte med de målingene vi har, er vi 50 % sikre på at endringen vi bruker i
-        fortolkningen, ikke er «for streng». «Ingen sikkerhetsmargin» betyr egentlig bare at vi ikke har gjort
-        noe for å kompensere for måleusikkerhet.
-      </p>
-      <p>
-        Men vi kan kompensere om vi ønsker. Ved hjelp av en statistisk modell av usikkerheten til endringen,
-        kan vi justere endringstallet til et lavere tall. Dette øker ikke sannsynligheten for at fortolkningen
-        vår er «riktig», men øker hvor sikre vi er på at vi ikke bruker et for strengt endringstall.
-      </p>
-      <p>
-        Med 90 % sikkerhet (standard) justerer vi endringen som fortolkes så vi er 90 % sikre på at endringen
-        vi fortolker, ikke er for stor. I 1 av 10 tilfeller vil vi altså bruke en for stor endring i
-        fortolkningen – mot annethvert tilfelle hvis vi ikke hadde noen sikkerhetsmargin.
-      </p>
-      <p>
-        Sikkerheten kan økes til 99 % i saker der man ønsker å være ekstra forsiktig, f.eks. i saker der et
-        nytt inntak av cannabis kan få store konsekvenser for prøvegiver.
-      </p>
-    </section>
-  </>
-)
+import { marginvalg } from '../domain/thcVisning'
 
 /**
  * Banneret over sikkerhetsmarginen når forrige prøve fortolkes under
@@ -74,21 +31,18 @@ export interface ThcSkjemaProps {
  * analyttsiden, så de spør på samme måte.
  */
 export function ThcSkjema({ inndata, onEndre, regler, forsteFelt }: ThcSkjemaProps) {
-  const tipsId = useId()
-
   // Avkryssingen står inne i «Forrige prøve», så den gjelder bare når det
   // finnes en forrige prøve å fortolke.
   const underCutoff = !inndata.ingenTidligere && inndata.forrigeUnderCutoff
   const beregnetIrcak = underCutoff ? beregnIrcak(inndata.forrigeUcak, inndata.forrigeNkre) : null
 
-  // Stoppene på skalaen er regelsettets marginer, fra ingen margin til den
-  // strengeste. Står skjemaet på en margin regelsettet ikke har, står skalaen
+  // Valgene på bryteren er regelsettets marginer, fra ingen margin til den
+  // strengeste. Står skjemaet på en margin regelsettet ikke har, står bryteren
   // på ingen av dem, og fortolkningen sier fra.
-  const stopp = regler.sikkerhetsmarginer.map(({ margin }) => ({
+  const marginer = regler.sikkerhetsmarginer.map(({ margin }) => ({
     verdi: margin,
-    merke: marginmerke(margin),
+    merke: marginvalg(margin),
   }))
-  const marginIndeks = stopp.findIndex(({ verdi }) => verdi === inndata.sikkerhetsmargin)
 
   return (
     <div className="thc-skjema">
@@ -209,38 +163,18 @@ export function ThcSkjema({ inndata, onEndre, regler, forsteFelt }: ThcSkjemaPro
               {UNDER_CUTOFF_BANNER}
             </p>
           )}
-          <div className="thc-margin__hode">
-            <Tips forklaring={MARGINTIPS} id={tipsId}>
-              Sikkerhetsmargin
-            </Tips>
-          </div>
-          <input
-            className="thc-margin__skala"
-            type="range"
-            min={0}
-            max={stopp.length - 1}
-            step={1}
-            value={marginIndeks}
-            aria-label="Sikkerhetsmargin"
-            aria-describedby={tipsId}
-            aria-valuetext={stopp[marginIndeks]?.merke}
-            onChange={(e) => {
-              const valgt = stopp[Number(e.target.value)]
-              if (valgt) onEndre('sikkerhetsmargin', valgt.verdi)
-            }}
+          <p className="thc-margin__hode" aria-hidden="true">
+            Sikkerhetsmargin
+          </p>
+          <Trinnbryter
+            etikett="Sikkerhetsmargin"
+            valg={marginer}
+            verdi={inndata.sikkerhetsmargin}
+            onVelg={(margin) => onEndre('sikkerhetsmargin', margin)}
           />
-          {/* Merkene er rene ledetekster — skalaen melder selv hvilket
-              stopp den står på, gjennom aria-valuetext. */}
-          <div className="thc-margin__merker" aria-hidden="true">
-            {stopp.map(({ verdi, merke }, i) => (
-              <span
-                key={verdi}
-                className={`thc-margin__merke${i === marginIndeks ? ' thc-margin__merke--valgt' : ''}`}
-              >
-                {merke}
-              </span>
-            ))}
-          </div>
+          <Details summary="Hva er sikkerhetsmarginen?" ikon="fallback">
+            <ThcMarginforklaring regler={regler} />
+          </Details>
         </div>
       )}
     </div>

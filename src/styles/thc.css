@@ -90,11 +90,12 @@
   color: var(--blekk);
 }
 
-/* Sikkerhetsmarginen, nederst i inndatapanelet: en skala med tre stopp i en
-   hevet flate (Atlas `MarginScale`). */
+/* Sikkerhetsmarginen, nederst i inndatapanelet: overskriften og bryteren
+   midtstilt i en hevet flate (Atlas `MarginScale`), og forklaringen under. */
 .thc-margin {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--rom-4);
   width: 100%;
   padding: var(--rom-6) var(--rom-6) var(--rom-5);
@@ -106,44 +107,13 @@
    Det skal ikke gå an å stille på marginen uten å ha sett at fortolkningen alt
    regner med større måleusikkerhet. */
 .thc-margin > .notis {
+  align-self: stretch;
   background: var(--flate);
 }
 
-/* Overskriften bærer tipset om hva sikkerhetsmarginen er. */
 .thc-margin__hode {
   font-size: var(--tekst-ui);
   font-weight: var(--vekt-halvfet);
-}
-
-.thc-margin__skala {
-  width: 100%;
-  margin: 0;
-  accent-color: var(--aksent);
-  cursor: pointer;
-}
-
-/* Ett merke per stopp, med det første og siste ut mot hver sin ende av
-   skalaen — der stoppene faktisk ligger. Det valgte stoppet står i en
-   aksentpille, så det kan leses av på et blikk. */
-.thc-margin__merker {
-  display: flex;
-  justify-content: space-between;
-}
-
-.thc-margin__merke {
-  padding: var(--rom-1) var(--rom-3);
-  font-size: var(--tekst-liten);
-  font-weight: var(--vekt-medium);
-  line-height: var(--linjehoyde-tett);
-  font-variant-numeric: tabular-nums;
-  color: var(--blekk-dempet);
-  border-radius: var(--runding-pille);
-}
-
-.thc-margin__merke--valgt {
-  font-weight: var(--vekt-fet);
-  color: var(--paa-aksent);
-  background: var(--aksent);
 }
 
 /* --- Visualiseringen ------------------------------------------------------ */
@@ -298,6 +268,51 @@
   gap: var(--rom-2);
   padding-left: 1.4em;
   list-style: disc;
+}
+
+/* Hva hver sikkerhetsmargin gjør, i forklaringen under bryteren: marginen
+   som overskrift på sin egen linje, og teksten under. */
+.thc-marginvalg {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+}
+
+.thc-marginvalg dt {
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+}
+
+/* Eksempelet: én rad per margin, med endringen og konklusjonen den gir. */
+.thc-margineksempel {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-etikett);
+  line-height: var(--linjehoyde-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+.thc-margineksempel th,
+.thc-margineksempel td {
+  padding: var(--rom-2) var(--rom-3) var(--rom-2) 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: var(--kant) solid var(--linje);
+}
+
+.thc-margineksempel thead th {
+  font-weight: var(--vekt-medium);
+  color: var(--blekk-dempet);
+}
+
+.thc-margineksempel tbody th {
+  font-weight: var(--vekt-halvfet);
+}
+
+.thc-margineksempel td:nth-child(2) {
+  white-space: nowrap;
 }
 
 @media (max-width: 47.5em) {

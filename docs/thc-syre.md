@@ -191,10 +191,14 @@ setter dem sammen til modellen motoren bruker. Modulen gir ingen kommentar før
 de er hentet, og sier fra i stedet om de ikke kunne hentes, ikke finnes eller
 ikke består kontrollen. Mens de hentes på nytt, står de gamle.
 
-Alt modulen viser om reglene kommer fra regelsettet: stoppene på
-sikkerhetsmarginen, varselgrensen, og nivåene, grensene per bruksmønster og
-faktoren under cut-off i forklaringen. Står skjemaet på en margin et nytt
-regelsett ikke har, gir motoren en mangel og ingen kommentar.
+Alt modulen viser om reglene kommer fra regelsettet: varselgrensen, nivåene,
+grensene per bruksmønster og faktoren under cut-off i forklaringen, og valgene
+på bryteren for sikkerhetsmarginen (`Trinnbryter`, med «Ingen (50 %)» for
+ingen margin). Under bryteren forklarer «Hva er sikkerhetsmarginen?»
+(`ThcMarginforklaring`) hva marginene gjør, med et eksempel som fortolkes med
+hver margin av `sammenlignMedForrige`, det samme steget fortolkningen bruker.
+Står skjemaet på en margin et nytt regelsett ikke har, gir motoren en mangel
+og ingen kommentar.
 
 Analyttsiden for IRCAK har seksjonen `fortolkning` med oversikten over
 reglene, detaljkortet `tekster` med hver tekstbolk og når den brukes, og

@@ -144,6 +144,36 @@ export function konklusjon(
   return 'ikke_nodvendigvis'
 }
 
+/** To prøver med IRCAK over 0 og hvordan de skal sammenlignes. */
+export interface ThcSammenligning {
+  forrige: number
+  aktuell: number
+  dager: number
+  kronisk: boolean
+  margin: number
+  /** 1 normalt, og regelsettets faktor når forrige prøve fortolkes under cut-off. */
+  usikkerhet: number
+}
+
+/**
+ * Sammenligningen med forrige prøve: den korrigerte endringen, hva kurvene
+ * venter etter like mange døgn, og konklusjonen. Fortolkningen bruker den, og
+ * eksempelet i forklaringen av sikkerhetsmarginen.
+ */
+export function sammenlignMedForrige(
+  r: ThcRegelsett,
+  { forrige, aktuell, dager, kronisk, margin, usikkerhet }: ThcSammenligning,
+): { korrigert: number; forventet: ThcForventet; utfall: ThcKonklusjon } {
+  const korrigert = korrigertEndring(r, forrige, aktuell, margin, usikkerhet)
+  const kurver = kurverI(r)
+  const forventet: ThcForventet = {
+    gronn: forventetEndring(forrige, dager, kurver.gronn),
+    gul: forventetEndring(forrige, dager, kurver.gul),
+    rod: forventetEndring(forrige, dager, kurver.rod),
+  }
+  return { korrigert, forventet, utfall: konklusjon(r, kronisk, korrigert, forventet) }
+}
+
 /* --- Kommentaren ---------------------------------------------------------- */
 
 /**
@@ -363,17 +393,17 @@ export function fortolkThc(inn: ThcInndata, { regler: r, tekster }: ThcModell): 
   // Figuren og forklaringen har ingen prosentvis endring fra 0 å vise.
   if (forrigeIrcak === 0) return resultat('nytt_inntak', forrigeDato, null, langt)
 
-  const usikkerhet = underCutoff ? r.maleusikkerhet.faktor_under_cutoff : 1
-  const korrigert = korrigertEndring(r, forrigeIrcak, aktuellIrcak, inn.sikkerhetsmargin, usikkerhet)
-  const kurver = kurverI(r)
-  const forventet: ThcForventet = {
-    gronn: forventetEndring(forrigeIrcak, dager, kurver.gronn),
-    gul: forventetEndring(forrigeIrcak, dager, kurver.gul),
-    rod: forventetEndring(forrigeIrcak, dager, kurver.rod),
-  }
+  const { korrigert, forventet, utfall } = sammenlignMedForrige(r, {
+    forrige: forrigeIrcak,
+    aktuell: aktuellIrcak,
+    dager,
+    kronisk: inn.kronisk,
+    margin: inn.sikkerhetsmargin,
+    usikkerhet: underCutoff ? r.maleusikkerhet.faktor_under_cutoff : 1,
+  })
 
   return resultat(
-    konklusjon(r, inn.kronisk, korrigert, forventet),
+    utfall,
     forrigeDato,
     {
       forrige: forrigeIrcak,
