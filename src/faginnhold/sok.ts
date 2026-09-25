@@ -32,8 +32,10 @@ import {
   ELEMENTTYPER,
   PANELREKKEFOLGE,
   datakortFor,
+  formaterFormverdier,
   formaterIntervall,
   lesDosetabell,
+  lesFormverdier,
   lesIntervallverdi,
   lesKinetikk,
   lesRiktekst,
@@ -241,8 +243,9 @@ export function elementtekster(elementtype: string, data: unknown): Elementtekst
     default: {
       const kort = datakortFor(elementtype)
       if (!kort) return []
-      const verdi = lesIntervallverdi(data)
-      return tekst('verdi', [formaterIntervall(verdi), verdi.forbehold].filter(Boolean).join(' — '), kort.tittel)
+      const verdi = kort.verdi === 'formvis' ? formaterFormverdier(lesFormverdier(data)) : formaterIntervall(lesIntervallverdi(data))
+      // Et forbehold vises ikke lenger, men står i eldre revisjoner, og historikken skal vise dem som de var.
+      return tekst('verdi', [verdi, lesIntervallverdi(data).forbehold].filter(Boolean).join(' — '), kort.tittel)
     }
   }
 }

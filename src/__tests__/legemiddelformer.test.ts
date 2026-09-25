@@ -16,6 +16,7 @@ import { lagFaginnholdslager } from '../faginnhold/lagring'
 import { ELEMENTTYPER } from '../faginnhold/paneler'
 import { FORMKODER, FORMVARIANTER, formikon, GENERISK_FORM } from '../legemiddeldata/legemiddelformer'
 import iBruk from '../legemiddeldata/legemiddelformer-i-bruk.json'
+import { IKONER } from '../components/ikon/register'
 import { AMITRIPTYLIN, KODEIN, synkroniserUtdrag } from './hjelp/fest'
 import { faginnholdskall, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
@@ -52,11 +53,18 @@ describe('ikonregisteret for legemiddelformene', () => {
     expect(formikon('25')).toMatchObject({ variant: 'depottablett', ikon: 'depot' })
   })
 
-  it('peker bare på varianter som finnes, og bare på ikoner fra Atlas-registeret', () => {
+  it('peker bare på varianter som finnes, og bare på ikoner i ikonregisteret', () => {
     for (const variant of Object.values(FORMKODER)) expect(FORMVARIANTER).toHaveProperty(variant)
-    // Formikonene Atlas-designet har (design/lib/ousfar-icons.js), og det generiske.
-    const atlas = new Set(['tablet', 'depot', 'capsule', 'fallback'])
-    for (const { ikon } of Object.values(FORMVARIANTER)) expect(atlas).toContain(ikon)
+    for (const { ikon } of Object.values(FORMVARIANTER)) expect(IKONER).toHaveProperty(ikon)
+  })
+
+  it('gir injeksjonene sprøyten, miksturene flasken og dråpene dråpeflasken', () => {
+    expect(formikon('816').ikon).toBe('syringe') // Injeksjonsvæske, oppløsning
+    expect(formikon('913').ikon).toBe('syringe') // Depotinjeksjonsvæske, suspensjon
+    expect(formikon('842').ikon).toBe('bottle') // Mikstur, oppløsning
+    expect(formikon('748').ikon).toBe('dropper') // Dråper, oppløsning
+    // Ingen form som er i bruk på de publiserte sidene, står igjen med det generiske ikonet.
+    for (const { kode } of (iBruk as FormerIBruk).former) expect(formikon(kode).ikon).not.toBe('fallback')
   })
 })
 

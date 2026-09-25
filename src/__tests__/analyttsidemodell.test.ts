@@ -11,9 +11,15 @@ import {
   DATAKORTGRUPPER,
   FJERNET,
   PANELREKKEFOLGE,
+  datakortHarVerdi,
+  delFormverdi,
   delIntervall,
+  formaterFormverdier,
   formaterIntervall,
+  fraPlussMinus,
+  kontrollerFormverdier,
   kontrollerIntervall,
+  lesFormverdier,
   lesDosetabell,
   lesIntervallverdi,
   lesLegemiddelkobling,
@@ -100,7 +106,7 @@ describe('datakortene', () => {
     const v = (nedre: number | null, ovre: number | null, enhet = 'nmol/L') => formaterIntervall({ nedre, ovre, enhet, forbehold: '' })
     expect(v(10, 300)).toBe('10–300 nmol/L')
     expect(v(0.5, 1.25)).toBe('0,5–1,25 nmol/L')
-    expect(v(1500, null)).toBe('fra 1\u00a0500 nmol/L')
+    expect(v(1500, null)).toBe('> 1\u00a0500 nmol/L')
     expect(v(null, 20, 'timer')).toBe('opptil 20 timer')
     expect(v(20, 20, 'døgn')).toBe('20 døgn')
     expect(v(null, null)).toBe('')
@@ -109,7 +115,7 @@ describe('datakortene', () => {
   it('deler verdien i forledd, tall og enhet, som til sammen er teksten som søkes i', () => {
     const verdi = (nedre: number | null, ovre: number | null, enhet = 'nmol/L') => ({ nedre, ovre, enhet, forbehold: '' })
     expect(delIntervall(verdi(10, 300))).toEqual({ forledd: '', tall: '10–300', enhet: 'nmol/L' })
-    expect(delIntervall(verdi(1500, null))).toEqual({ forledd: 'fra', tall: '1\u00a0500', enhet: 'nmol/L' })
+    expect(delIntervall(verdi(1500, null))).toEqual({ forledd: '>', tall: '1\u00a0500', enhet: 'nmol/L' })
     expect(delIntervall(verdi(null, 20, ''))).toEqual({ forledd: 'opptil', tall: '20', enhet: '' })
     expect(delIntervall(verdi(null, null))).toBeNull()
     for (const v of [verdi(10, 300), verdi(1500, null), verdi(null, 20, '')]) {
@@ -149,6 +155,67 @@ describe('datakortene', () => {
   it('tåler data som ikke ser ut som ventet', () => {
     expect(lesIntervallverdi({ nedre: '10', ovre: Infinity, enhet: 5 })).toEqual({ nedre: null, ovre: null, enhet: '', forbehold: '' })
     expect(lesIntervallverdi(null)).toEqual({ nedre: null, ovre: null, enhet: '', forbehold: '' })
+  })
+})
+
+describe('t₁/₂ og tₛₛ per legemiddelform', () => {
+  const f = (typisk: number | null, min: number | null, maks: number | null, enhet = 'timer', form = '') => ({ form, typisk, min, maks, enhet })
+
+  it('viser typisk verdi med området i parentes, bare den typiske, eller bare området', () => {
+    expect(formaterFormverdier({ former: [f(33, 29, 37)] })).toBe('33 (29–37) timer')
+    expect(formaterFormverdier({ former: [f(33, null, null)] })).toBe('33 timer')
+    expect(formaterFormverdier({ former: [f(null, 29, 37)] })).toBe('29–37 timer')
+    expect(formaterFormverdier({ former: [f(5.5, 3.5, 19, 'dager')] })).toBe('5,5 (3,5–19) dager')
+    expect(delFormverdi(f(33, 29, 37))).toEqual({ typisk: '33', omrade: '29–37', enhet: 'timer' })
+    expect(delFormverdi(f(null, null, null))).toBeNull()
+  })
+
+  it('viser formene etter hverandre, med navnet foran', () => {
+    const haloperidol = { former: [f(5, null, null, 'døgn', 'Peroralt'), f(null, 2, 4, 'måneder', 'Depotinjeksjon')] }
+    expect(formaterFormverdier(haloperidol)).toBe('Peroralt: 5 døgn · Depotinjeksjon: 2–4 måneder')
+  })
+
+  it('regner «33 ± 4» om til 33 (29–37), uten flyttallsstøy', () => {
+    expect(fraPlussMinus(33, 4)).toEqual({ typisk: 33, min: 29, maks: 37 })
+    expect(fraPlussMinus(6.6, 0.3)).toEqual({ typisk: 6.6, min: 6.3, maks: 6.9 })
+  })
+
+  it('leser de eldre kortene med ett område som én verdi uten form', () => {
+    expect(lesFormverdier({ nedre: 16, ovre: 40, enhet: 'timer', forbehold: '' })).toEqual({ former: [f(null, 16, 40)] })
+    expect(lesFormverdier({ nedre: 24, ovre: 24, enhet: 'timer', forbehold: 'Peroralt.' })).toEqual({ former: [f(24, null, null)] })
+    expect(lesFormverdier({ nedre: null, ovre: null, enhet: '', forbehold: '' })).toEqual({ former: [] })
+    expect(lesFormverdier(null)).toEqual({ former: [] })
+  })
+
+  it('tåler former som ikke ser ut som ventet, og hopper over tomme', () => {
+    const lest = lesFormverdier({ former: [{ form: ' Peroralt ', typisk: '5', min: 3, maks: 7, enhet: 'døgn' }, { form: 'Tom' }, 'feil'] })
+    expect(lest).toEqual({ former: [f(null, 3, 7, 'døgn', 'Peroralt')] })
+  })
+
+  it('ser om et kort har noe å vise, etter formen på verdien', () => {
+    const [ht, ref] = [DATAKORT.find((k) => k.type === 'halveringstid')!, DATAKORT.find((k) => k.type === 'referanseomrade')!]
+    expect(datakortHarVerdi(ht, { former: [f(33, null, null)] })).toBe(true)
+    expect(datakortHarVerdi(ht, { former: [] })).toBe(false)
+    expect(datakortHarVerdi(ht, { nedre: 1, ovre: 2, enhet: 'timer' })).toBe(true)
+    expect(datakortHarVerdi(ref, { nedre: 1, ovre: null, enhet: 'nmol/L' })).toBe(true)
+    expect(datakortHarVerdi(ref, { former: [f(33, null, null)] })).toBe(false)
+  })
+
+  it('kontrollerer verdiene rett på og rundt grensene', () => {
+    const k = (...former: ReturnType<typeof f>[]) => kontrollerFormverdier({ former })
+    expect(k(f(33, 29, 37))).toBeNull()
+    expect(k(f(29, 29, 37))).toBeNull()
+    expect(k(f(37, 29, 37))).toBeNull()
+    expect(k(f(28.9, 29, 37))).toMatch(/mellom minimum og maksimum/)
+    expect(k(f(37.1, 29, 37))).toMatch(/mellom minimum og maksimum/)
+    expect(k(f(null, 37, 37))).toBeNull()
+    expect(k(f(null, 37.1, 37))).toMatch(/Minimum kan ikke/)
+    expect(k(f(33, 29, null))).toMatch(/både minimum og maksimum/)
+    expect(k(f(33, null, null, ''))).toMatch(/enheten/)
+    expect(k(f(null, null, null))).toMatch(/typisk verdi, et område/)
+    expect(k(f(5, null, null, 'døgn', 'Peroralt'), f(3, null, null, 'måneder'))).toMatch(/Oppgi legemiddelformen/)
+    expect(k(f(5, null, null, 'døgn', 'Peroralt'), f(3, null, null, 'døgn', 'peroralt'))).toMatch(/står to ganger/)
+    expect(k()).toBeNull()
   })
 })
 

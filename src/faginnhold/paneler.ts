@@ -121,9 +121,14 @@ export function lesLegemiddelkobling(data: unknown): Legemiddelkoblingdata {
 /* «Viktige data»: datakortene. */
 
 /**
- * Et tall eller et område med enhet. `nedre` og `ovre` er `null` når de ikke
- * er oppgitt; begge oppgitt er et område, én av dem er en grense. Forbehold
- * lagres for seg og vises under tallet.
+ * Et tall eller et område med enhet: konsentrasjonskortene. `nedre` og `ovre`
+ * er `null` når de ikke er oppgitt; begge oppgitt er et område, én av dem er
+ * en grense.
+ *
+ * `forbehold` er en tekst som tidligere sto under tallet. Den vises og
+ * redigeres ikke lenger, og migrasjonen `viktige_data_former` tok den bort
+ * fra de publiserte kortene; den leses fortsatt fordi importen av
+ * Psykofarmaka (`import.ts`) skrev den.
  */
 export interface Intervallverdi {
   nedre: number | null
@@ -149,6 +154,12 @@ export interface Datakortdefinisjon {
   tittel: string
   gruppe: Datakortgruppe
   /**
+   * Formen på verdien: ett tall eller område (`intervall`, se
+   * {@link Intervallverdi}), eller typisk verdi, minimum og maksimum for én
+   * eller flere legemiddelformer (`formvis`, se {@link Formverdier}).
+   */
+  verdi: 'intervall' | 'formvis'
+  /**
    * Symbolet kortet vises med, f.eks. t₁/₂. Det som står etter `_`, er senket
    * skrift: «t_ss» vises som t med «ss» senket. Tittelen er fortsatt det
    * skjermlesere leser.
@@ -158,11 +169,11 @@ export interface Datakortdefinisjon {
 
 /** Kortene i panelet «Viktige data», i den rekkefølgen de står. */
 export const DATAKORT = [
-  { type: 'referanseomrade', tittel: 'Referanseområde', gruppe: 'konsentrasjon' },
-  { type: 'toksisk_omrade', tittel: 'Toksisk område', gruppe: 'konsentrasjon' },
-  { type: 'alvorlig_intoksikasjon', tittel: 'Alvorlig/dødelig intoksikasjon', gruppe: 'konsentrasjon' },
-  { type: 'halveringstid', tittel: 'Halveringstid', gruppe: 'kinetikk', symbol: 't_1/2' },
-  { type: 'steady_state', tittel: 'Tid til steady state', gruppe: 'kinetikk', symbol: 't_ss' },
+  { type: 'referanseomrade', tittel: 'Referanseområde', gruppe: 'konsentrasjon', verdi: 'intervall' },
+  { type: 'toksisk_omrade', tittel: 'Toksisk område', gruppe: 'konsentrasjon', verdi: 'intervall' },
+  { type: 'alvorlig_intoksikasjon', tittel: 'Alvorlig/dødelig intoksikasjon', gruppe: 'konsentrasjon', verdi: 'intervall' },
+  { type: 'halveringstid', tittel: 'Halveringstid', gruppe: 'kinetikk', symbol: 't_1/2', verdi: 'formvis' },
+  { type: 'steady_state', tittel: 'Tid til steady state', gruppe: 'kinetikk', symbol: 't_ss', verdi: 'formvis' },
 ] as const satisfies readonly Datakortdefinisjon[]
 
 export type Datakorttype = (typeof DATAKORT)[number]['type']
@@ -206,18 +217,21 @@ export function formaterTall(tall: number): string {
 
 /** Verdien i delene kortet viser hver for seg. Tomme deler er `''`. */
 export interface Intervalldeler {
-  /** «fra» eller «opptil» når bare den ene grensen er oppgitt. */
-  forledd: string
+  /** «>» eller «opptil» når bare den ene grensen er oppgitt. */
+  forledd: '' | typeof OVER | 'opptil'
   tall: string
   enhet: string
 }
 
+/** Tegnet foran en nedre grense uten øvre: «> 1 800 nmol/L». */
+export const OVER = '>'
+
 /**
- * Verdien delt opp: «fra» og «opptil» når bare den ene grensen er oppgitt,
+ * Verdien delt opp: «>» og «opptil» når bare den ene grensen er oppgitt,
  * tallet eller området, og enheten. `null` når ingen grense er oppgitt.
  *
- * Formuleringene sier bevisst ikke om grensen er med eller ikke — det er ikke
- * lagret, og skal ikke leses inn i tallet.
+ * Tegnet og ordet sier bevisst ikke mer om grensen er med eller ikke enn
+ * kilden gjør — det er ikke lagret, og skal ikke leses inn i tallet.
  */
 export function delIntervall(verdi: Intervallverdi): Intervalldeler | null {
   const { nedre, ovre, enhet } = verdi
@@ -225,13 +239,13 @@ export function delIntervall(verdi: Intervallverdi): Intervalldeler | null {
     const tall = nedre === ovre ? formaterTall(nedre) : `${formaterTall(nedre)}–${formaterTall(ovre)}`
     return { forledd: '', tall, enhet }
   }
-  if (nedre !== null) return { forledd: 'fra', tall: formaterTall(nedre), enhet }
+  if (nedre !== null) return { forledd: OVER, tall: formaterTall(nedre), enhet }
   if (ovre !== null) return { forledd: 'opptil', tall: formaterTall(ovre), enhet }
   return null
 }
 
 /**
- * Verdien slik den leses og søkes i: «10–300 nmol/L», eller «fra 10» og
+ * Verdien slik den leses og søkes i: «10–300 nmol/L», eller «> 10» og
  * «opptil 300» når bare den ene grensen er oppgitt. Tom når ingen er det.
  * Delene står med mellomrom imellom, i samme rekkefølge som på kortet.
  */
@@ -266,6 +280,145 @@ export function kontrollerIntervall(verdi: Intervallverdi): string | null {
   if (!harVerdi(verdi) && verdi.enhet) return 'Oppgi minst én grense, eller fjern enheten.'
   return null
 }
+
+/* «Viktige data»: t₁/₂ og tₛₛ, per legemiddelform. */
+
+/**
+ * Verdien for én legemiddelform: en typisk verdi, et område fra minimum til
+ * maksimum, eller begge. `form` er det formen heter på kortet («Peroralt»,
+ * «Depotinjeksjon»), og tom når verdien ikke gjelder en bestemt form.
+ */
+export interface Formverdi {
+  form: string
+  typisk: number | null
+  min: number | null
+  maks: number | null
+  enhet: string
+}
+
+/** Verdiene på et formvis datakort, én per legemiddelform, i rekkefølgen de står. */
+export interface Formverdier {
+  former: Formverdi[]
+}
+
+export function tomFormverdi(): Formverdi {
+  return { form: '', typisk: null, min: null, maks: null, enhet: '' }
+}
+
+function harFormverdi(verdi: Formverdi): boolean {
+  return verdi.typisk !== null || verdi.min !== null || verdi.maks !== null
+}
+
+/**
+ * Verdiene på et formvis datakort. Kortene ble tidligere lagret som ett område
+ * ({@link Intervallverdi}); det leses som én verdi uten form — et område når
+ * grensene er ulike, ellers den typiske verdien.
+ */
+export function lesFormverdier(data: unknown): Formverdier {
+  if (!erObjekt(data)) return { former: [] }
+  if (Array.isArray(data.former)) {
+    return {
+      former: data.former
+        .filter(erObjekt)
+        .map((f) => ({
+          form: tekst(f.form),
+          typisk: tallEllerNull(f.typisk),
+          min: tallEllerNull(f.min),
+          maks: tallEllerNull(f.maks),
+          enhet: tekst(f.enhet),
+        }))
+        .filter(harFormverdi),
+    }
+  }
+  const { nedre, ovre, enhet } = lesIntervallverdi(data)
+  if (nedre === null && ovre === null) return { former: [] }
+  const omrade = nedre !== null && ovre !== null && nedre !== ovre
+  return {
+    former: [
+      omrade
+        ? { form: '', typisk: null, min: nedre, maks: ovre, enhet }
+        : { form: '', typisk: nedre ?? ovre, min: null, maks: null, enhet },
+    ],
+  }
+}
+
+/** Om et datakort har noe å vise, uansett formen på verdien. */
+export function datakortHarVerdi(kort: Pick<Datakortdefinisjon, 'verdi'>, data: unknown): boolean {
+  return kort.verdi === 'formvis' ? lesFormverdier(data).former.length > 0 : harVerdi(lesIntervallverdi(data))
+}
+
+/** Tallene i en formverdi hver for seg: den typiske verdien og området. Tomme deler er `''`. */
+export interface Formverdideler {
+  typisk: string
+  /** «29–37», uten parentes. */
+  omrade: string
+  enhet: string
+}
+
+/**
+ * «33 (29–37) timer» deles i den typiske verdien, området og enheten. Står
+ * bare den ene av dem, er den andre tom. `null` når ingenting er oppgitt.
+ */
+export function delFormverdi(verdi: Formverdi): Formverdideler | null {
+  if (!harFormverdi(verdi)) return null
+  const { typisk, min, maks, enhet } = verdi
+  const omrade = min !== null && maks !== null ? `${formaterTall(min)}–${formaterTall(maks)}` : ''
+  return { typisk: typisk === null ? '' : formaterTall(typisk), omrade, enhet }
+}
+
+/** Tallet slik det står på kortet: «33 (29–37)», «33» eller «29–37». */
+export function formverditall({ typisk, omrade }: Formverdideler): string {
+  return typisk && omrade ? `${typisk} (${omrade})` : typisk || omrade
+}
+
+/**
+ * Verdiene slik de leses og søkes i: «33 (29–37) timer», og med formene
+ * foran når det er flere: «Peroralt: 5 døgn · Depotinjeksjon: 2–4 måneder».
+ */
+export function formaterFormverdier({ former }: Formverdier): string {
+  return former
+    .map((f) => {
+      const deler = delFormverdi(f)!
+      const verdi = [formverditall(deler), deler.enhet].filter(Boolean).join(' ')
+      return f.form ? `${f.form}: ${verdi}` : verdi
+    })
+    .join(' · ')
+}
+
+/**
+ * «33 ± 4» som typisk verdi og område: 33 (29–37). Kilder som oppgir et
+ * standardavvik eller en usikkerhet slik, skrives om til den formen kortene
+ * har.
+ */
+export function fraPlussMinus(midt: number, avvik: number): Pick<Formverdi, 'typisk' | 'min' | 'maks'> {
+  const rund = (tall: number) => Number(tall.toFixed(6))
+  return { typisk: midt, min: rund(midt - avvik), maks: rund(midt + avvik) }
+}
+
+/** Feilen i verdiene som skal lagres, eller `null` når de er gyldige. */
+export function kontrollerFormverdier({ former }: Formverdier): string | null {
+  for (const [i, f] of former.entries()) {
+    const hvor = former.length > 1 ? `${f.form || `Rad ${i + 1}`}: ` : ''
+    if (!harFormverdi(f)) return `${hvor}Oppgi en typisk verdi, et område eller begge.`
+    if ((f.min === null) !== (f.maks === null)) return `${hvor}Oppgi både minimum og maksimum, eller ingen av dem.`
+    if (f.min !== null && f.maks !== null && f.min > f.maks) return `${hvor}Minimum kan ikke være høyere enn maksimum.`
+    if (f.typisk !== null && f.min !== null && f.maks !== null && (f.typisk < f.min || f.typisk > f.maks)) {
+      return `${hvor}Den typiske verdien må ligge mellom minimum og maksimum.`
+    }
+    if (!f.enhet) return `${hvor}Oppgi enheten.`
+    if (former.length > 1 && !f.form) return `Rad ${i + 1}: Oppgi legemiddelformen når kortet har flere.`
+  }
+  const navn = former.map((f) => f.form.toLocaleLowerCase('nb'))
+  const dobbel = navn.find((n, i) => navn.indexOf(n) !== i)
+  if (dobbel !== undefined) return `Legemiddelformen «${former[navn.indexOf(dobbel)]!.form}» står to ganger.`
+  return null
+}
+
+/**
+ * Formene redaktøren får som forslag. Fri tekst er lov; ikonet på kortet
+ * velges etter ordene i navnet (`administrasjonsikon`).
+ */
+export const FORSLAG_LEGEMIDDELFORMER = ['Peroralt', 'Injeksjon', 'Depotinjeksjon', 'Mikstur', 'Dråper'] as const
 
 /* Farmakodynamikk, indikasjon og dosering: riktekst. */
 

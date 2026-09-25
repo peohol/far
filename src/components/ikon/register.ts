@@ -452,6 +452,50 @@ const REGISTER = {
     ga: 'pulse',
     parts: [C(24, 24, 15, 'f1', 'info'), C(24, 24, 10.5, 'f2', 'info'), P('M24 9v30', 'l')],
   },
+  /* Legemiddelformene uten egen tegning i handoffen, i samme stil: sprøyte
+     (injeksjon og depotinjeksjon), flaske (mikstur) og dråpeflaske (dråper). */
+  syringe: {
+    vb: 48,
+    rot: 'rotate(-45 24 24)',
+    parts: [
+      R(13, 18, 20, 12, 3, 'f1', 'glass'),
+      R(15, 20.5, 11, 7, 1.5, 'f2', 'info', 'fill'),
+      P('M18 18v3.5M22 18v3.5M26 18v3.5', 'l'),
+      G([P('M29 24h13M42 18.5v11', 'l', 'i-ink'), R(26, 20.5, 3, 7, 1, 'f2', 'accent2')], 'bumpL'),
+      P('M33 14.5v19', 'l', 'i-ink'),
+      P('M13 24H3.5', 'l', 'i-ink'),
+    ],
+  },
+  bottle: {
+    vb: 48,
+    ga: 'pulse',
+    parts: [
+      P('M19.5 11h9v4.5c5 1.8 8 5.5 8 10.5v13a4 4 0 0 1-4 4H15.5a4 4 0 0 1-4-4V26c0-5 3-8.7 8-10.5z', 'f1', 'glass'),
+      P('M11.5 29h25v10a4 4 0 0 1-4 4h-17a4 4 0 0 1-4-4z', 'f2', 'info', 'fill'),
+      R(18, 4.5, 12, 6.5, 2, 'f2', 'accent2'),
+      P('M17 23h6', 'l'),
+    ],
+  },
+  dropper: {
+    vb: 48,
+    parts: [
+      P('M21 13V9a3 3 0 0 1 6 0v4z', 'f2', 'accent2'),
+      R(19, 13, 10, 5, 1.5, 'f1', 'accent2'),
+      R(12, 18, 24, 25, 5, 'f1', 'glass'),
+      P('M12 30h24v8a5 5 0 0 1-5 5H17a5 5 0 0 1-5-5z', 'f2', 'info', 'fill'),
+      P('M17 24h6', 'l'),
+    ],
+    free: [P('M40.5 6.5c-1.8 2.2-2.7 3.5-2.7 4.5a2.7 2.7 0 0 0 5.4 0c0-1-.9-2.3-2.7-4.5z', 'f2', 'info', 'drop')],
+  },
+  /* Farmakogenetikk: en dobbelspiral med basepar. */
+  dna: {
+    vb: 48,
+    parts: [
+      G([P('M16.5 8h15M17.5 19.5h13M17.5 28.5h13M16.5 40h15', 'l', 'i-line')], 'flash'),
+      P('M14 4c0 10 20 10 20 20s-20 10-20 20', 'l', 'accent'),
+      P('M34 4c0 10-20 10-20 20s20 10 20 20', 'l', 'accent2'),
+    ],
+  },
   yes: { vb: 24, parts: [C(12, 12, 9, 'f1', 'ok'), P('M8 12.3l2.6 2.6L16 9.5', 'l', null, 'pop')] },
   no: { vb: 24, parts: [C(12, 12, 9, 'f1', 'danger'), P('M9 9l6 6M15 9l-6 6', 'l', null, 'pop')] },
   na: { vb: 24, parts: [C(12, 12, 9, 'f1', 'glass'), P('M8.5 12h7', 'l')] },

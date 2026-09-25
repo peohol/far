@@ -3,11 +3,15 @@ import type { Sideelement } from '../../faginnhold/analyttside'
 import {
   DATAKORT,
   DATAKORTGRUPPER,
+  OVER,
+  datakortHarVerdi,
+  delFormverdi,
   delIntervall,
-  harVerdi,
+  lesFormverdier,
   lesIntervallverdi,
   type Datakortdefinisjon,
   type Datakorttype,
+  type Formverdi,
   type Paneldefinisjon,
 } from '../../faginnhold/paneler'
 import { Button } from '../Button'
@@ -18,7 +22,8 @@ import { useSidereferanser } from '../referanser/Sidereferanser'
 import { useFastSted } from '../seksjoner/Seksjonsstyring'
 import { Uthev } from '../Uthev'
 import { elementAnker, panelAnker, Redigerbar, type Panelkontekst } from './Paneler'
-import { DatakortSkjema, PanelkildeSkjema, type Skjemaresultat } from './Skjemaer'
+import { legemiddelformikon } from './panelvisning'
+import { DatakortSkjema, FormverdiSkjema, PanelkildeSkjema, type Skjemaresultat } from './Skjemaer'
 import '../../styles/monograf-topp.css'
 
 /**
@@ -42,6 +47,10 @@ const UTSEENDE: Record<Datakorttype, { ikon: Ikonnavn; tone?: 'referanse' | 'tok
  * konsentrasjonene i serum (referanseområde, toksisk, alvorlig/dødelig) og
  * kinetikken (t₁/₂ og tₛₛ). I lesemodus vises bare kortene som har en verdi,
  * og ingenting når ingen har det; i redigeringsmodus står alle kortene fram.
+ *
+ * Innholdet i hvert kort står midtstilt. Kinetikken viser symbolet og ikke
+ * ordet (det står for skjermlesere), og en verdi per legemiddelform, side om
+ * side, når kortet har flere.
  */
 export function ViktigeData({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
   const elementer = kontekst.modell.paneler.get(definisjon.nokkel) ?? []
@@ -51,7 +60,7 @@ export function ViktigeData({ definisjon, kontekst }: { definisjon: Paneldefinis
     plass,
     element: elementer.find((e) => e.elementtype === def.type) ?? null,
   }))
-  const synlige = kort.filter(({ element }) => element && harVerdi(lesIntervallverdi(element.data)))
+  const synlige = kort.filter(({ def, element }) => element && datakortHarVerdi(def, element.data))
   if (synlige.length === 0 && !kontekst.redigerer) return null
   return <Flate definisjon={definisjon} kontekst={kontekst} kort={kontekst.redigerer ? kort : synlige} />
 }
@@ -155,8 +164,19 @@ function Datakort({
   kontekst,
 }: Kortplass & { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
   const { ikon, tone } = UTSEENDE[type]
-  const verdi = lesIntervallverdi(element?.data)
-  const deler = delIntervall(verdi)
+  const lagre =
+    (lukk: () => void) =>
+    async ({ data, referanser }: Skjemaresultat<object>) => {
+      await kontekst.handlinger.lagreElement(element, {
+        panel: definisjon.nokkel,
+        elementtype: type,
+        posisjon: plass,
+        data: data as Record<string, unknown>,
+        referanser,
+      })
+      lukk()
+    }
+  const skjemaProps = { tittel: def.tittel, ikon, referanser: element?.referanser ?? [] }
 
   return (
     <li
@@ -173,70 +193,127 @@ function Datakort({
       )}
       <h3 className="datakort__tittel">
         {def.symbol && <Symbol symbol={def.symbol} />}
-        <span className="datakort__etikett">
+        {/* Med symbol står ordet bare for skjermlesere og søket. */}
+        <span className={def.symbol ? 'kun-skjermleser' : 'datakort__etikett'}>
           <Uthev tekst={def.tittel} />
         </span>
       </h3>
-      <Redigerbar
-        navn={def.tittel}
-        element={element}
-        redigerer={kontekst.redigerer}
-        visning={
-          deler ? (
-            <>
-              {/* Delene står med mellomrom imellom, så teksten er den samme som søket leser. */}
-              <p className="datakort__verdi">
-                {deler.forledd && (
-                  <>
-                    <span className="datakort__forledd">
-                      <Uthev tekst={deler.forledd} />
-                    </span>{' '}
-                  </>
-                )}
-                <span className="datakort__tall">
-                  <Uthev tekst={deler.tall} />
-                </span>
-                {deler.enhet && (
-                  <>
-                    {' '}
-                    <span className="datakort__enhet">
-                      <Uthev tekst={deler.enhet} />
-                    </span>
-                  </>
-                )}
-              </p>
-              {verdi.forbehold && (
-                <p className="datakort__forbehold">
-                  <Uthev tekst={verdi.forbehold} />
-                </p>
-              )}
-            </>
-          ) : (
-            <p className="datakort__tom">Ikke oppgitt</p>
-          )
-        }
-        skjema={(lukk) => (
-          <DatakortSkjema
-            kort={def}
-            tittel={def.tittel}
-            ikon={ikon}
-            start={verdi}
-            referanser={element?.referanser ?? []}
-            onAvbryt={lukk}
-            onLagre={async ({ data, referanser }: Skjemaresultat<object>) => {
-              await kontekst.handlinger.lagreElement(element, {
-                panel: definisjon.nokkel,
-                elementtype: type,
-                posisjon: plass,
-                data: data as Record<string, unknown>,
-                referanser,
-              })
-              lukk()
-            }}
-          />
-        )}
-      />
+      {def.verdi === 'formvis' ? (
+        <Redigerbar
+          navn={def.tittel}
+          element={element}
+          redigerer={kontekst.redigerer}
+          visning={<Formverdivisning former={lesFormverdier(element?.data).former} />}
+          skjema={(lukk) => (
+            <FormverdiSkjema {...skjemaProps} start={lesFormverdier(element?.data)} onAvbryt={lukk} onLagre={lagre(lukk)} />
+          )}
+        />
+      ) : (
+        <Redigerbar
+          navn={def.tittel}
+          element={element}
+          redigerer={kontekst.redigerer}
+          visning={<Intervallvisning data={element?.data} />}
+          skjema={(lukk) => (
+            <DatakortSkjema
+              {...skjemaProps}
+              kort={def}
+              start={lesIntervallverdi(element?.data)}
+              onAvbryt={lukk}
+              onLagre={lagre(lukk)}
+            />
+          )}
+        />
+      )}
       {element && element.referanser.length > 0 && <Referansefelt ider={element.referanser} niva="element" />}
     </li>
+  )
+}
+
+const IKKE_OPPGITT = <p className="datakort__tom">Ikke oppgitt</p>
+
+/** Et tall eller område: «> 1 800 nmol/L». Tegnet står i samme store skrift som tallet. */
+function Intervallvisning({ data }: { data: unknown }) {
+  const deler = delIntervall(lesIntervallverdi(data))
+  if (!deler) return IKKE_OPPGITT
+  const tegn = deler.forledd === OVER
+  return (
+    // Delene står med mellomrom imellom, så teksten er den samme som søket leser.
+    <p className="datakort__verdi">
+      {/* «> 3 600» brytes aldri mellom tegnet og tallet. */}
+      <span className="datakort__samlet">
+        {deler.forledd && (
+          <>
+            <span className={tegn ? 'datakort__tall' : 'datakort__forledd'}>
+              <Uthev tekst={deler.forledd} />
+            </span>{' '}
+          </>
+        )}
+        <span className="datakort__tall">
+          <Uthev tekst={deler.tall} />
+        </span>
+      </span>
+      <Enhet enhet={deler.enhet} />
+    </p>
+  )
+}
+
+function Enhet({ enhet }: { enhet: string }) {
+  if (!enhet) return null
+  return (
+    <>
+      {' '}
+      <span className="datakort__enhet">
+        <Uthev tekst={enhet} />
+      </span>
+    </>
+  )
+}
+
+/**
+ * Verdiene per legemiddelform, side om side: ikonet og navnet på formen, og
+ * under den verdien — «33 (29–37) timer», «33 timer» eller «29–37 timer».
+ * En verdi uten form står alene, som et vanlig tall.
+ */
+function Formverdivisning({ former }: { former: readonly Formverdi[] }) {
+  if (former.length === 0) return IKKE_OPPGITT
+  return (
+    <ul className="datakort__former" data-antall={former.length}>
+      {former.map((f, i) => (
+        <li key={`${i}:${f.form}`} className="datakort__form">
+          {f.form && (
+            <span className="datakort__formnavn">
+              <Ikon navn={legemiddelformikon(f.form)} className="datakort__formikon" />
+              <Uthev tekst={f.form} />
+              <span className="kun-skjermleser">: </span>
+            </span>
+          )}
+          <Formverditall verdi={f} />
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function Formverditall({ verdi }: { verdi: Formverdi }) {
+  const deler = delFormverdi(verdi)
+  if (!deler) return null
+  return (
+    <p className="datakort__verdi">
+      {deler.typisk && (
+        <span className="datakort__tall">
+          <Uthev tekst={deler.typisk} />
+        </span>
+      )}
+      {deler.omrade && (
+        <>
+          {deler.typisk && ' '}
+          <span className={deler.typisk ? 'datakort__spenn' : 'datakort__tall'}>
+            <Uthev tekst={deler.typisk ? `(${deler.omrade})` : deler.omrade} />
+          </span>
+        </>
+      )}
+      <Enhet enhet={deler.enhet} />
+    </p>
   )
 }

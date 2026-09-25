@@ -17,9 +17,10 @@
 
 /**
  * De semantiske variantene og ikonet hver av dem vises med. Atlas har ikoner
- * for tablett, depottablett og kapsel; de andre variantene bruker det
- * generiske ikonet til designet har egne. Da er det bare ikonnavnet her som
- * endres.
+ * for tablett, depottablett og kapsel; sprøyten, flasken og dråpeflasken er
+ * tegnet i samme stil (`src/components/ikon/register.ts`). En variant uten
+ * egen tegning bruker det generiske ikonet; får den en, er det bare
+ * ikonnavnet her som endres.
  */
 export const FORMVARIANTER = {
   tablett: { ikon: 'tablet' },
@@ -29,10 +30,10 @@ export const FORMVARIANTER = {
   kapsel: { ikon: 'capsule' },
   depotkapsel: { ikon: 'capsule' },
   enterokapsel: { ikon: 'capsule' },
-  mikstur: { ikon: 'fallback' },
-  draper: { ikon: 'fallback' },
-  injeksjon: { ikon: 'fallback' },
-  depotinjeksjon: { ikon: 'fallback' },
+  mikstur: { ikon: 'bottle' },
+  draper: { ikon: 'dropper' },
+  injeksjon: { ikon: 'syringe' },
+  depotinjeksjon: { ikon: 'syringe' },
   generisk: { ikon: 'fallback' },
 } as const satisfies Record<string, { ikon: string }>
 
