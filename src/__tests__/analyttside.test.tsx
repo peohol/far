@@ -391,6 +391,8 @@ function kilde({
   let nr = 0
   const leser: Faginnholdsleser = {
     lesAnalyttside: vi.fn(async (_kode: string, tilstand: Tilstand) => data(tilstand)),
+    lesStoffside: vi.fn(async () => TOM_SIDE),
+    lesStoffsidenavn: vi.fn(async () => []),
     lesReferanser: vi.fn(async () => [REF_A, REF_B]),
     finnInfosider: vi.fn(async () => []),
     finnIntervallregelsett: vi.fn(async (_kode: string, tilstand: Tilstand) => data(tilstand).regelsett),
@@ -462,6 +464,87 @@ function vis(kode: string, k = kilde(), sted?: string[]) {
   )
   return { onApneFortolkning, onLukk, ...k }
 }
+
+/** Siden for et stoff uten analyttkode, som `vis` for en kode. */
+function visStoff(stoff: string, k = kilde()) {
+  const onLukk = vi.fn()
+  render(
+    <TipsLag>
+      <FaginnholdskildeProvider kilde={k}>
+        <Analyttside stoff={stoff} katalog={katalog} onApneFortolkning={vi.fn()} onLukk={onLukk} />
+      </FaginnholdskildeProvider>
+    </TipsLag>,
+  )
+  return { onLukk, ...k }
+}
+
+/** En stoffside uten kode, med ett datakort. */
+function stoffside(): Analyttsidedata {
+  return {
+    ...TOM_SIDE,
+    infoside: utgave('stoff', { navn: 'Teststoff' }),
+    elementer: [
+      utgave('stoffkort', {
+        infoside: 'stoff',
+        panel: 'viktige_data',
+        posisjon: 0,
+        elementtype: 'referanseomrade',
+        data: { nedre: 30, ovre: 60, enhet: 'µmol/L' },
+      }),
+    ],
+  }
+}
+
+describe('stoffside uten analyttkode', () => {
+  it('viser siden etter navnet, uten kode og uten veien til fortolkningen', async () => {
+    const k = kilde()
+    k.leser.lesStoffside = vi.fn(async () => stoffside())
+    const { leser } = visStoff('Teststoff', k)
+    expect(await finnVerdi('30–60 µmol/L')).toBeTruthy()
+    expect(leser.lesStoffside).toHaveBeenCalledWith('Teststoff', 'publisert')
+    expect(leser.lesAnalyttside).not.toHaveBeenCalled()
+    expect(leser.finnIntervallregelsett).not.toHaveBeenCalled()
+    expect(screen.getByRole('heading', { level: 1, name: 'Teststoff' })).toBeTruthy()
+    expect(screen.getByText('Stoffside uten labkode')).toBeTruthy()
+    expect(screen.queryByRole('button', { name: /Åpne fortolkning/ })).toBeNull()
+    expect(document.title).toBe('Teststoff – OUSFAR')
+  })
+
+  it('sier fra til en vanlig bruker når stoffet ikke har noen side', async () => {
+    visStoff('Finnesikke')
+    expect(await screen.findByRole('heading', { name: 'Fant ingen stoffside som heter Finnesikke' })).toBeTruthy()
+  })
+
+  it('går til siden for koden når stoffet har en side i katalogen', async () => {
+    window.location.hash = '#/stoff/amitriptylin'
+    const { leser } = visStoff('amitriptylin')
+    expect(await finnVerdi('10–20 nmol/L')).toBeTruthy()
+    expect(leser.lesAnalyttside).toHaveBeenCalledWith('AMTNORSUM', 'publisert')
+    await waitFor(() => expect(window.location.hash).toBe('#/analytt/AMTNORSUM'))
+    window.location.hash = ''
+  })
+
+  it('oppretter bare informasjonssiden, med navnet fra adressen, første gang noe lagres', async () => {
+    const user = userEvent.setup()
+    const { lager, leser } = visStoff('Nytt stoff', kilde({ kanRedigere: true, data: () => TOM_SIDE }))
+    await user.click(await screen.findByRole('button', { name: 'Rediger' }))
+    expect(await screen.findByText('Siden opprettes i databasen første gang du lagrer noe på den.')).toBeTruthy()
+    await user.click(await screen.findByRole('button', { name: 'Legg til: Referanseområde' }))
+    const skjema = redigeringsvindu('Referanseområde')
+    await user.type(within(skjema).getByLabelText('Nedre grense'), '30')
+    await user.type(within(skjema).getByLabelText('Øvre grense'), '60')
+    await user.type(within(skjema).getByLabelText('Enhet'), 'µmol/L')
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+
+    await waitFor(() => expect(lager.opprettUtkast).toHaveBeenCalledTimes(2))
+    expect(leser.finnInfosider).toHaveBeenCalledWith(['Nytt stoff'], 'utkast')
+    const kall = vi.mocked(lager.opprettUtkast).mock.calls
+    expect(kall[0]).toEqual(['infoside', { navn: 'Nytt stoff' }])
+    expect(kall[1]![0]).toBe('innholdselement')
+    expect(kall[1]![1]).toMatchObject({ infoside: 'ny-1', panel: 'viktige_data', elementtype: 'referanseomrade' })
+    expect(kall.some(([type]) => type === 'laboratorieanalytt')).toBe(false)
+  })
+})
 
 describe('lesemodus', () => {
   it('viser identiteten, datakortet, teksten og referansene', async () => {

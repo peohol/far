@@ -39,6 +39,8 @@ function visSide(kode: string, sted?: readonly string[]) {
   const thcregelsett = thcRegelsettutgave()
   const leser: Faginnholdsleser = {
     lesAnalyttside: vi.fn(async (k: string) => ({ ...TOM_SIDE, thcregelsett: k === THC_KODE ? thcregelsett : null })),
+    lesStoffside: vi.fn(async () => TOM_SIDE),
+    lesStoffsidenavn: vi.fn(async () => []),
     lesReferanser: vi.fn(async () => []),
     finnInfosider: vi.fn(async () => []),
     finnIntervallregelsett: vi.fn(async () => null),

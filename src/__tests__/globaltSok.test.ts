@@ -148,7 +148,7 @@ describe('les_analyttsider', () => {
 })
 
 describe('lesingen av kunnskapsbasen', () => {
-  it('leser alt i tre kall, uansett hvor mange sider det er', async () => {
+  it('leser alt i fire kall, uansett hvor mange sider det er', async () => {
     const kalt: string[] = []
     const tellende = {
       rpc: (funksjon: string, argumenter: Record<string, unknown>) => {
@@ -157,7 +157,7 @@ describe('lesingen av kunnskapsbasen', () => {
       },
     } as unknown as SupabaseClient
     const base = await lesKunnskapsbase(lagSideleser(tellende), lagLegemiddelleser(tellende))
-    expect(kalt).toEqual(['les_analyttsider', 'les_legemidler', 'les_interaksjoner'])
+    expect(kalt).toEqual(['les_analyttsider', 'les_stoffsider', 'les_legemidler', 'les_interaksjoner'])
     expect(base.sider).toHaveLength(3)
     expect(base.festfeil).toBeUndefined()
   })
@@ -221,7 +221,7 @@ describe('lesingen av kunnskapsbasen', () => {
         return { interaksjoner: [{ id: 'felles' } as never], ikke_vurdert: [] }
       },
     }
-    const base = await lesKunnskapsbase({ lesAnalyttsider: async () => sider }, mange)
+    const base = await lesKunnskapsbase({ lesAnalyttsider: async () => sider, lesStoffsider: async () => [] }, mange)
     expect(oppslag).toEqual([MAKS_INTERAKSJONSNOKLER, 20])
     expect(base.interaksjoner?.interaksjoner).toHaveLength(1)
   })

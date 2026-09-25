@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { FORTOLKNING, adresse, analyttadresse, lesRute, sammeRute, sokeside } from '../rute'
+import { FORTOLKNING, adresse, analyttadresse, informasjonsadresse, lesRute, sammeRute, sokeside, stoffadresse } from '../rute'
 
 describe('adressene i appen', () => {
   it('leser informasjonssidene av adressen', () => {
@@ -39,6 +39,20 @@ describe('adressene i appen', () => {
   it('åpner siden uten sted når stedet ikke kan leses eller har for mange nivåer', () => {
     expect(lesRute('#/analytt/NOR/a/b/c')).toEqual({ side: 'analytt', kode: 'NOR' })
     expect(lesRute('#/analytt/NOR/%E0%A4%A')).toEqual({ side: 'analytt', kode: 'NOR' })
+  })
+
+  it('leser og skriver siden for et stoff uten analyttkode, etter navnet', () => {
+    expect(lesRute('#/stoff/Valproat')).toEqual({ side: 'stoff', navn: 'Valproat' })
+    expect(lesRute('#/stoff/Valproat/tdm')).toEqual({ side: 'stoff', navn: 'Valproat', sted: ['tdm'] })
+    expect(lesRute('#/stoff/%20Litium%20/')).toEqual({ side: 'stoff', navn: 'Litium' })
+    expect(lesRute('#/stoff/')).toEqual(FORTOLKNING)
+    const rute = { side: 'stoff', navn: 'Stoff med æøå/skråstrek', sted: ['tdm', 'kort-1'] } as const
+    expect(adresse(rute)).toBe('#/stoff/Stoff%20med%20%C3%A6%C3%B8%C3%A5%2Fskr%C3%A5strek/tdm/kort-1')
+    expect(lesRute(adresse(rute))).toEqual(rute)
+    // Navnet beholder store og små bokstaver, der koden gjøres stor.
+    expect(stoffadresse('litium')).toBe('#/stoff/litium')
+    expect(informasjonsadresse({ navn: 'Litium' }, ['tdm'])).toBe('#/stoff/Litium/tdm')
+    expect(informasjonsadresse({ kode: 'nor', navn: 'Nortriptylin' })).toBe('#/analytt/NOR')
   })
 
   it('leser og skriver søkesiden, med søket i adressen', () => {

@@ -117,7 +117,7 @@ export default function App() {
   // kodepillene og adressene peker på de samme sidene.
   const katalog = useMemo(() => byggKatalog(alleAnalytter), [alleAnalytter])
   const [rute, gaaTil] = useRute()
-  const paaInfoside = rute.side === 'analytt'
+  const paaInfoside = rute.side === 'analytt' || rute.side === 'stoff'
   // Stoffsidene og søkesiden legger seg over fortolkningen, som står skjult bak.
   const fortolkningSkjult = rute.side !== 'fortolkning'
 
@@ -151,6 +151,16 @@ export default function App() {
   const thc = useHenting(useCallback(() => faginnhold.leser.lesThcRegelsett('publisert'), [faginnhold.leser]))
   const { hentPaNytt: hentThcPaNytt } = thc
   const thcRegler = useMemo(() => thcReglerFra(thc.tilstand, hentThcPaNytt), [thc.tilstand, hentThcPaNytt])
+
+  // Stoffene uten analyttkode har ingen plass i katalogen; sidemenyen lister
+  // sidene deres fra databasen. Redaktørene ser også dem som ikke er publisert.
+  const stoffsider = useHenting(
+    useCallback(
+      () => faginnhold.leser.lesStoffsidenavn(faginnhold.kanRedigere ? 'utkast' : 'publisert'),
+      [faginnhold],
+    ),
+  )
+  const { hentPaNytt: hentStoffsiderPaNytt } = stoffsider
 
   // Fagsøket: indeksen over alt publisert fagstoff, hentet første gang noen
   // søker. De andre navnene en kode er kjent under, kommer fra katalogen, så
@@ -197,10 +207,19 @@ export default function App() {
     if (varPaInfoside.current && !paaInfoside && faginnhold.kanRedigere) {
       hentPaNytt()
       hentThcPaNytt()
+      hentStoffsiderPaNytt()
       foreldSokeindeks(paaSokeside)
     }
     varPaInfoside.current = paaInfoside
-  }, [paaInfoside, paaSokeside, faginnhold.kanRedigere, hentPaNytt, hentThcPaNytt, foreldSokeindeks])
+  }, [
+    paaInfoside,
+    paaSokeside,
+    faginnhold.kanRedigere,
+    hentPaNytt,
+    hentThcPaNytt,
+    hentStoffsiderPaNytt,
+    foreldSokeindeks,
+  ])
 
   // Tilstandsmaskinen trenger alternativene det nye søket gir for å se om det
   // smalner inn til én analytt, så søket kjøres her og ikke først når steget
@@ -465,7 +484,15 @@ export default function App() {
         data-side={rute.side}
       >
         <Toppmeny
-          meny={<Sidemeny pool={alleAnalytter} metodefilter={state.metodefilter} onFilter={settMetodefilter} />}
+          meny={
+            <Sidemeny
+              pool={alleAnalytter}
+              metodefilter={state.metodefilter}
+              onFilter={settMetodefilter}
+              stoffsider={stoffsider.tilstand.status === 'klar' ? stoffsider.tilstand.data : []}
+              kanOpprette={faginnhold.kanRedigere}
+            />
+          }
           sok={
             <Fagsok
               indeks={sokeindeks.tilstand}
@@ -490,12 +517,12 @@ export default function App() {
           </ToppmenyInnhold>
         )}
 
-        {rute.side === 'analytt' && (
+        {(rute.side === 'analytt' || rute.side === 'stoff') && (
           <main className="scene scene--infoside">
             <FaginnholdskildeProvider kilde={faginnhold}>
               <ScenarioreglerProvider kilde={scenarioregler}>
                 <Analyttside
-                  kode={rute.kode}
+                  {...(rute.side === 'analytt' ? { kode: rute.kode } : { stoff: rute.navn })}
                   sted={rute.sted}
                   katalog={katalog}
                   onApneFortolkning={apneFortolkning}

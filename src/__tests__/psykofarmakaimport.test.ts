@@ -91,7 +91,7 @@ describe('datasettet', () => {
 
   it('knytter hver kode til siden og stoffene katalogen sier', () => {
     for (const kode of plan.koder) {
-      const oppforing = katalog.finn(kode.kode)!
+      const oppforing = katalog.finn(kode.kode!)!
       expect(kode.hovedside.navn).toBe(oppforing.sidenavn)
       expect(kode.komponenter.map((k) => k.navn)).toEqual(oppforing.komponenter)
     }
@@ -278,7 +278,7 @@ describe('importen i databasen', () => {
 
     const leser = lagFaginnholdsleser(kall.klientFor(bruker))
     sider = new Map()
-    for (const { kode } of plan.koder) sider.set(kode, await leser.lesAnalyttside(kode, 'publisert'))
+    for (const { kode } of plan.koder) sider.set(kode!, await leser.lesAnalyttside(kode!, 'publisert'))
   }, 120_000)
 
   it('viser nøyaktig det datasettet har, side for side, synlig for vanlige brukere', () => {
@@ -286,8 +286,8 @@ describe('importen i databasen', () => {
     const sortert = <T extends { panel: string; elementtype: string; posisjon: number }>(liste: T[]) =>
       [...liste].sort((a, b) => `${a.panel}/${a.elementtype}/${a.posisjon}`.localeCompare(`${b.panel}/${b.elementtype}/${b.posisjon}`))
     for (const kode of plan.koder) {
-      const side = sider.get(kode.kode)!
-      expect(side.analytt?.innhold.kode, kode.kode).toBe(kode.kode)
+      const side = sider.get(kode.kode!)!
+      expect(side.analytt?.innhold.kode, kode.kode!).toBe(kode.kode)
       expect(side.infoside?.innhold.navn).toBe(kode.hovedside.navn)
       expect(side.komponenter.map((k) => k.innhold.navn)).toEqual(kode.komponenter.map((k) => k.navn))
       const iDatabasen = new Map(side.referanser.map((r) => [r.id, r.innhold]))
@@ -305,7 +305,7 @@ describe('importen i databasen', () => {
         data,
         referanser: referanser.map((n) => expect.objectContaining(referanse.get(n))),
       }))
-      expect(sortert(vist), kode.kode).toEqual(sortert(forventet))
+      expect(sortert(vist), kode.kode!).toEqual(sortert(forventet))
     }
   })
 
@@ -333,9 +333,9 @@ describe('importen i databasen', () => {
 
   it('tok bort preparatnavnene og kontrolldatoen i nye revisjoner, så de står i historikken', async () => {
     for (const kode of plan.koder) {
-      const side = sider.get(kode.kode)!
+      const side = sider.get(kode.kode!)!
       const preparater = side.elementer.filter((e) => e.innhold.elementtype === 'preparater')
-      expect(preparater, kode.kode).toHaveLength(1)
+      expect(preparater, kode.kode!).toHaveLength(1)
       expect(preparater[0]).toMatchObject({ revisjon: 2, publisert_revisjon: 2, kilde: KURSENDRINGSKILDER.preparater })
       expect(preparater[0]!.innhold.panel).toBe('fjernet')
       const indikasjon = synlige(side).find((e) => e.innhold.panel === 'indikasjon')!

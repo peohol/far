@@ -154,7 +154,8 @@ En **direktelenke** peker på en seksjon eller et detaljkort:
 Siden åpner da stedet og ruller dit — også når innholdet først kommer etter at
 siden er hentet. En lenke til noe som alltid står fram (`#/analytt/KODE/viktige_data`)
 ruller bare dit, uten å åpne eller lukke noe. Adressene lages med `analyttadresse(kode, sted)` i
-`src/domain/rute.ts`. Å åpne og lukke skuffer endrer ikke adressen.
+`src/domain/rute.ts`, og for et stoff uten kode med `stoffadresse(navn, sted)`
+(`#/stoff/<navn>/<seksjon>/<kort>`). Å åpne og lukke skuffer endrer ikke adressen.
 
 ## Styringen for siden
 

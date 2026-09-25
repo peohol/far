@@ -12,6 +12,23 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.36.0',
+    dato: '2026-09-25',
+    sammendrag: 'Stoffer uten labkode kan ha egen stoffside, og 15 nye stoffsider er lagt inn fra kildene om serumkonsentrasjoner',
+    typer: ['Funksjonalitet', 'Fag'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Et stoff kan nå ha en stoffside selv om laboratoriet ikke har noen analyse for det. Siden har de samme seksjonene som de andre, men ingen kode og ingen «Åpne fortolkning».',
+      'Sidemenyen har en ny skuff nederst, «Stoffer uten labkode», med disse sidene. Redaktører kan åpne en ny stoffside med et navn derfra; den lagres første gang noe legges inn på den.',
+      'Fagsøket finner også disse sidene, og viser «Stoffside uten labkode» der de andre sidene viser koden.',
+      'Nye stoffsider med referanseområde og TDM-seksjon: fenobarbital, fenytoin, gabapentin, karbamazepin, levetiracetam, okskarbazepin, topiramat og valproat, sertindol og litium (referanseområdeprosjektet 2008), ketobemidon, petidin og flunitrazepam (Helland mfl. 2016), og atomoksetin og metylfenidat (Frost mfl. 2019).',
+      'Litium har også toksisk område og alvorlig intoksikasjon, med Giftinformasjonens inndeling av symptomene.',
+      'For metylfenidat gjelder referanseområdet metabolitten ritalinsyre, for karbamazepin summen med karbamazepinepoksid, og for okskarbazepin metabolitten MHD. Det står på sidene.',
+      'Antiepileptikasidene sier fra om at nyere nasjonale referanseområder fra 2017 finnes; områdene på sidene er fra 2008.',
+      'Får et av stoffene en kode senere, blir siden stoffsiden for koden.',
+    ],
+  },
+  {
     versjon: '1.35.2',
     dato: '2026-09-25',
     sammendrag: 'Sikkerhetsmarginen i THC-modulen velges med en bryter og forklares under den',

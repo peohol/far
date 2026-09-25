@@ -2,9 +2,10 @@
  * Grunnlaget for søket i hele kunnskapsbasen: alle de publiserte sidene,
  * lest i én omgang og indeksert med den samme koden som søket på én side.
  *
- * Lesingen er tre kall, uansett hvor mange sider det er:
+ * Lesingen er fire kall, uansett hvor mange sider det er:
  *
- * 1. `les_analyttsider` gir alle sidene på samme form som `les_analyttside`.
+ * 1. `les_analyttsider` gir alle sidene på samme form som `les_analyttside`,
+ *    og `les_stoffsider` sidene for stoffene uten analyttkode, på samme form.
  * 2. `les_legemidler` gir legemiddeldataene for alle virkestoffene sidene er
  *    koblet til. Hver side får sin del (`utvalgFor`), med de samme
  *    preparatene som seksjonen «Preparater» viser.
@@ -48,27 +49,31 @@ export interface Kunnskapsbase {
 export interface Sideleser {
   /** Alle analyttsidene i én tilstand, sortert på koden. */
   lesAnalyttsider(tilstand: Tilstand): Promise<Analyttsidedata[]>
+  /** Sidene for stoffene uten analyttkode i én tilstand, alfabetisk. `analytt` er `null`. */
+  lesStoffsider(tilstand: Tilstand): Promise<Analyttsidedata[]>
 }
 
-/** Formen `les_analyttsider` gir: sidene, og referansene de siterer, én gang. */
+/** Formen `les_analyttsider` og `les_stoffsider` gir: sidene, og referansene de siterer, én gang. */
 interface Samletlesing {
   sider: (Omit<Analyttsidedata, 'referanser' | 'regelsett' | 'scenarioregelsett'> & { referanser: string[] })[]
   referanser: Utgave<Referanseinnhold>[]
 }
 
 export function lagSideleser(klient: SupabaseClient): Sideleser {
+  async function les(funksjon: string, tilstand: Tilstand): Promise<Analyttsidedata[]> {
+    const { data, error } = await klient.rpc(funksjon, { sidetilstand: tilstand })
+    if (error) throw tilFeil(error)
+    const { sider = [], referanser = [] } = (data ?? {}) as Partial<Samletlesing>
+    const perId = new Map(referanser.map((r) => [r.id, r]))
+    return sider.map((side) => ({
+      ...TOM_SIDE,
+      ...side,
+      referanser: side.referanser.flatMap((id) => perId.get(id) ?? []),
+    }))
+  }
   return {
-    lesAnalyttsider: async (tilstand) => {
-      const { data, error } = await klient.rpc('les_analyttsider', { sidetilstand: tilstand })
-      if (error) throw tilFeil(error)
-      const { sider = [], referanser = [] } = (data ?? {}) as Partial<Samletlesing>
-      const perId = new Map(referanser.map((r) => [r.id, r]))
-      return sider.map((side) => ({
-        ...TOM_SIDE,
-        ...side,
-        referanser: side.referanser.flatMap((id) => perId.get(id) ?? []),
-      }))
-    },
+    lesAnalyttsider: (tilstand) => les('les_analyttsider', tilstand),
+    lesStoffsider: (tilstand) => les('les_stoffsider', tilstand),
   }
 }
 
@@ -84,7 +89,7 @@ export async function lesKunnskapsbase(
   legemidler: Legemiddelleser | null,
   tilstand: Tilstand = 'publisert',
 ): Promise<Kunnskapsbase> {
-  const lest = await sider.lesAnalyttsider(tilstand)
+  const lest = (await Promise.all([sider.lesAnalyttsider(tilstand), sider.lesStoffsider(tilstand)])).flat()
   const tom: Kunnskapsbase = { sider: lest, legemidler: null, interaksjoner: null }
   const perSide = lest.map((s) => koblede(byggSidemodell(s))).filter((k) => k.length > 0)
   if (!legemidler || perSide.length === 0) return tom
@@ -147,13 +152,14 @@ export interface Indekseringsvalg {
    * informasjonsside — da viser siden navnet fra katalogen og
    * fortolkningsreglene. Søket finner også de sidene, på navnet og koden.
    */
-  sider?: readonly Omit<Sideidentitet, 'aliaser'>[]
+  sider?: readonly (Omit<Sideidentitet, 'aliaser' | 'kode'> & { kode: string })[]
 }
 
 /** En side slik søket indekserer den: navnet, kodene som viser den, og innholdet. */
 interface Indekseringsside {
   navn: string
-  koder: [string, ...string[]]
+  /** Tom for et stoff uten analyttkode. */
+  koder: string[]
   komponenter: readonly string[]
   modell: Sidemodell
   tillegg: Tilleggstekst[]
@@ -169,15 +175,17 @@ const TOM_MODELL = byggSidemodell(TOM_SIDE)
  * Deler flere koder samme informasjonsside, indekseres siden én gang, under
  * den første koden, og de andre kodene er med som koder på den. En kode i
  * `sider` som ingen informasjonsside viser, indekseres med navnet fra
- * katalogen, som siden selv viser.
+ * katalogen, som siden selv viser. Et stoff uten analyttkode indekseres
+ * under navnet.
  */
 export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser, sider = [] }: Indekseringsvalg = {}): Sokedokument[] {
-  const perInfoside = new Map<string, { data: Analyttsidedata; koder: [string, ...string[]] }>()
+  const perInfoside = new Map<string, { data: Analyttsidedata; koder: string[] }>()
   for (const data of base.sider) {
-    if (!data.analytt || !data.infoside) continue
+    if (!data.infoside) continue
+    const koder = data.analytt ? [data.analytt.innhold.kode] : []
     const side = perInfoside.get(data.infoside.id)
-    if (side) side.koder.push(data.analytt.innhold.kode)
-    else perInfoside.set(data.infoside.id, { data, koder: [data.analytt.innhold.kode] })
+    if (side) side.koder.push(...koder)
+    else perInfoside.set(data.infoside.id, { data, koder })
   }
 
   const medInfoside = [...perInfoside.values()].map(({ data, koder }): Indekseringsside => {
@@ -202,7 +210,7 @@ export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser, sider = []
     }))
 
   const alle = [...medInfoside, ...utenInfoside].sort(
-    (a, b) => alfabetisk(a.navn, b.navn) || (a.koder[0] < b.koder[0] ? -1 : 1),
+    (a, b) => alfabetisk(a.navn, b.navn) || ((a.koder[0] ?? '') < (b.koder[0] ?? '') ? -1 : 1),
   )
   return alle.flatMap(({ navn, koder, komponenter, modell, tillegg }) => {
     const [kode, ...andre] = koder
@@ -211,7 +219,7 @@ export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser, sider = []
       (a) => !kjente.has(a.toLocaleLowerCase('nb')),
     )
     const dokumenter = indekserSide(
-      { kode, navn, komponenter, ...(andreNavn.length > 0 && { aliaser: andreNavn }) },
+      { ...(kode && { kode }), navn, komponenter, ...(andreNavn.length > 0 && { aliaser: andreNavn }) },
       modell,
       tillegg,
     )

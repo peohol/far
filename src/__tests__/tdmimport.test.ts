@@ -73,7 +73,7 @@ describe('datasettet', () => {
     expect(plan.koder.filter(perForm).map((k) => k.kode)).toEqual(['ARISUM', 'FLUP', 'HALO', 'KVE', 'MOR', 'OLAN', 'PERF', 'RISPSUM', 'ZUKLO'])
     const fraKommentarene = plan.koder.filter((k) => k.elementer.some((e) => e.referanser.includes('ousfortolkning')))
     expect(fraKommentarene.map((k) => k.kode)).toEqual(['ARISUM', 'FLUP', 'HALO', 'KVE', 'MOR', 'OLAN', 'PALI', 'PERF', 'RISPSUM', 'ZUKLO'])
-    for (const kode of fraKommentarene) expect(kode.kilde, kode.kode).toMatch(/fortolkningskommentarene i FAR$/)
+    for (const kode of fraKommentarene) expect(kode.kilde, kode.kode!).toMatch(/fortolkningskommentarene i FAR$/)
     const tekst = (kode: string) => klartekst(lesKinetikk(perForm(plan.koder.find((k) => k.kode === kode)!)!.data).dokument)
     expect(tekst('HALO')).toContain('Depotinjeksjon: 0–2 dager før neste injeksjon.')
     expect(tekst('KVE')).toContain('Depottabletter: 18–24 timer etter siste dose.')
@@ -87,7 +87,7 @@ describe('datasettet', () => {
   it('har prøvetakingstidspunktet øverst i TDM for hver kode', () => {
     for (const kode of plan.koder) {
       const forste = kode.elementer.find((e) => e.panel === 'tdm' && e.posisjon === 0)
-      expect(lesKinetikk(forste?.data).tittel, kode.kode).toBe('Prøvetakingstidspunkt')
+      expect(lesKinetikk(forste?.data).tittel, kode.kode!).toBe('Prøvetakingstidspunkt')
     }
   })
 
@@ -160,11 +160,11 @@ describe('migrasjonene i databasen', () => {
           referanser: e.referanser.map(tittel),
           kilde: kode.kilde,
         }))
-      const vist = tdmkort(etter, kode.kode).map((k) => {
-        expect(k.utkast, kode.kode).toBe(k.publisert)
+      const vist = tdmkort(etter, kode.kode!).map((k) => {
+        expect(k.utkast, kode.kode!).toBe(k.publisert)
         return { posisjon: k.posisjon, data: k.data, referanser: k.referanser, kilde: k.kilde }
       })
-      expect(vist, kode.kode).toEqual(forventet)
+      expect(vist, kode.kode!).toEqual(forventet)
     }
   })
 
@@ -212,7 +212,7 @@ describe('migrasjonene i databasen', () => {
   })
 
   it('gjør ingenting når den kjøres en gang til', async () => {
-    await kjorMigrasjoner(db, { fra: TDM[0] })
+    await kjorMigrasjoner(db, { bare: TDM })
     expect(await kort(db)).toEqual(etter)
   })
 

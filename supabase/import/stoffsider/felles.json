@@ -1,0 +1,22 @@
+{
+  "referanser": {
+    "referanseomradeprosjektet": {
+      "tittel": "Referanseområdeprosjektet 2005–2008: nasjonale kartleggings- og harmoniseringsprosjekter innen klinisk farmakologi – antidepressiva og antipsykotika",
+      "forfattere": "Diakonhjemmet sykehus og St. Olavs hospital",
+      "aar": "",
+      "lenke": "https://farmakologiportalen.no/nasjonale_referanseomrader/"
+    },
+    "helland2016": {
+      "tittel": "Serumkonsentrasjonsmålinger av vanedannende legemidler",
+      "forfattere": "Helland A, Berg JA, Gustavsen I et al.",
+      "aar": "2016",
+      "lenke": "https://tidsskriftet.no/sites/default/files/pdf2016--400-2.pdf"
+    },
+    "frost2019": {
+      "tittel": "Nye anbefalinger ved serumkonsentrasjonsmålinger av sentralstimulerende legemidler",
+      "forfattere": "Frost J, Bernard J-P, Dietrichs ES et al.",
+      "aar": "2019",
+      "lenke": "https://doi.org/10.4045/tidsskr.19.0385"
+    }
+  }
+}

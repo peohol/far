@@ -43,7 +43,7 @@ import {
 } from './paneler'
 import { formaterReferanse } from './referanser'
 import { klartekst } from './riktekst'
-import { analyttadresse } from '../domain/rute'
+import { informasjonsadresse } from '../domain/rute'
 
 /* --- Sammenligningen ------------------------------------------------------ */
 
@@ -166,7 +166,8 @@ export function erIdentitetsfelt(felt: Sokefelt): boolean {
 
 /** Hvor en tekst står, fra siden og innover. */
 export interface Sokested {
-  side: { kode: string; navn: string }
+  /** Siden: koden den har, eller bare navnet for et stoff uten analyttkode. */
+  side: { kode?: string; navn: string }
   panel?: { nokkel: string; tittel: string }
   /** Kortet teksten står i, med overskriften når kortet har en. `id` er ankeret på siden. */
   element?: { id: string; tittel?: string }
@@ -193,19 +194,28 @@ export function stedsledd(sted: Sokested): string[] {
   return sted.panel ? [sted.panel.nokkel, ...(sted.detaljkort ? [sted.detaljkort] : [])] : []
 }
 
-/** Adressen treffet peker på, f.eks. `#/analytt/AMTNORSUM/farmakokinetikk/<kort-ID>`. */
+/**
+ * Adressen treffet peker på, f.eks. `#/analytt/AMTNORSUM/farmakokinetikk/<kort-ID>`,
+ * eller `#/stoff/<navn>/…` for et stoff uten analyttkode.
+ */
 export function sokeadresse(sted: Sokested): string {
-  return analyttadresse(sted.side.kode, stedsledd(sted))
+  return informasjonsadresse(sted.side, stedsledd(sted))
+}
+
+/** Nøkkelen til siden: koden, eller navnet når siden ikke har noen kode. */
+export function sidenokkel(side: Sokested['side']): string {
+  return side.kode ?? `stoff:${side.navn.toLocaleLowerCase('nb')}`
 }
 
 /** Nøkkelen til stedet, så flere treff på samme sted kan slås sammen. */
 export function stedsnokkel(sted: Sokested): string {
-  return [sted.side.kode, sted.panel?.nokkel ?? '', sted.element?.id ?? ''].join('\n')
+  return [sidenokkel(sted.side), sted.panel?.nokkel ?? '', sted.element?.id ?? ''].join('\n')
 }
 
 /** Det siden er, uavhengig av innholdet i panelene. */
 export interface Sideidentitet {
-  kode: string
+  /** Analyttkoden. Utelatt for et stoff uten kode. */
+  kode?: string
   navn: string
   /** Stoffene analysen omfatter. */
   komponenter: readonly string[]
@@ -292,10 +302,10 @@ export function indekserSide(
   modell: Sidemodell,
   tillegg: readonly Tilleggstekst[] = [],
 ): Sokedokument[] {
-  const side = { kode: identitet.kode, navn: identitet.navn }
+  const side = identitet.kode ? { kode: identitet.kode, navn: identitet.navn } : { navn: identitet.navn }
   const dokumenter: Sokedokument[] = [
     { sted: { side }, felt: 'navn', tekst: identitet.navn },
-    { sted: { side }, felt: 'kode', tekst: identitet.kode },
+    ...(identitet.kode ? [{ sted: { side }, felt: 'kode', tekst: identitet.kode } satisfies Sokedokument] : []),
     ...identitet.komponenter.map((tekst): Sokedokument => ({ sted: { side }, felt: 'komponent', tekst })),
     ...(identitet.aliaser ?? []).map((tekst): Sokedokument => ({ sted: { side }, felt: 'alias', tekst })),
   ]
@@ -376,7 +386,7 @@ export interface Sokeindeks {
   dokumenter: readonly Sokedokument[]
   /** Teksten i hvert dokument, foldet og med mellomrommene slått sammen. */
   foldet: readonly string[]
-  /** Navnet, koden, aliasene og komponentene til hver side, etter koden. */
+  /** Navnet, koden, aliasene og komponentene til hver side, etter {@link sidenokkel}. */
   identitet: ReadonlyMap<string, string>
 }
 
@@ -385,8 +395,8 @@ export function lagSokeindeks(dokumenter: readonly Sokedokument[]): Sokeindeks {
   const identitet = new Map<string, string>()
   dokumenter.forEach((d, i) => {
     if (!IDENTITETSFELT.has(d.felt)) return
-    const kode = d.sted.side.kode
-    identitet.set(kode, [identitet.get(kode), foldet[i]].filter(Boolean).join('\n'))
+    const nokkel = sidenokkel(d.sted.side)
+    identitet.set(nokkel, [identitet.get(nokkel), foldet[i]].filter(Boolean).join('\n'))
   })
   return { dokumenter, foldet, identitet }
 }
@@ -424,7 +434,7 @@ function finn(indeks: Sokeindeks, sporring: string, { maks = 50, sidekontekst = 
     const iTeksten = ord.filter((o) => foldet.includes(o))
     if (iTeksten.length === 0) return
     if (iTeksten.length < ord.length) {
-      const side = sidekontekst ? (indeks.identitet.get(dokument.sted.side.kode) ?? '') : ''
+      const side = sidekontekst ? (indeks.identitet.get(sidenokkel(dokument.sted.side)) ?? '') : ''
       if (!ord.every((o) => iTeksten.includes(o) || side.includes(o))) return
     }
     treff.push({

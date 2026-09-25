@@ -63,6 +63,9 @@ const STOFFIKON: Ikonnavn = 'pk'
 /** Stien til referansene nederst på siden, som ikke er en seksjon. */
 const REFERANSER = 'Referanser'
 
+/** Stien under navnet for en stoffside uten analyttkode, der de andre har koden og metoden. */
+const UTEN_KODE = 'Stoffside uten labkode'
+
 /** Teksten med ordene fra søket markert. */
 export function markert(tekst: string, ord: readonly string[]): Utdrag {
   return { tekst, treff: treffIntervaller(tekst, ord) }
@@ -95,7 +98,7 @@ export function visTreff(
       ...felles,
       ikon: STOFFIKON,
       tittel: markert(sted.side.navn, ord),
-      sti: [beskrivSide?.(sted.side.kode) ?? sted.side.kode],
+      sti: [sted.side.kode ? (beskrivSide?.(sted.side.kode) ?? sted.side.kode) : UTEN_KODE],
       ...(annetNavn && { utdrag }),
     }
   }

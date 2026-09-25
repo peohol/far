@@ -2,7 +2,7 @@
  * Import av faginnhold fra en kilde, som en kontrollert datamigrering.
  *
  * Innholdet ligger først i et importdatasett — én JSON-fil per analyttkode,
- * skrevet så tett på kilden at hvert tall kan kontrolleres mot den — og gjøres
+ * eller per stoff uten analyttkode (`side`), skrevet så tett på kilden at hvert tall kan kontrolleres mot den — og gjøres
  * her om til objektene databasen lagrer: referanser, informasjonssider,
  * laboratorieanalytter og innholdselementer. Datasettet kontrolleres først, og
  * alt som ikke har formen appen leser, stopper importen.
@@ -10,9 +10,9 @@
  * Selve innleggingen er SQL som går gjennom de samme funksjonene appen bruker
  * (`opprett_utkast`, `publiser_utkast`), som administratoren som har bestilt
  * importen. Hver revisjon får kilden sin (`far.revisjonskilde`), så historikken
- * viser «Importert fra Psykofarmaka.pdf, side 7». Én blokk per analyttkode, som
- * hver lykkes eller feiler for seg; en kode som alt har en side, hoppes over,
- * så importen kan kjøres igjen etter et avbrudd.
+ * viser «Importert fra Psykofarmaka.pdf, side 7». Én blokk per analyttkode
+ * eller stoff, som hver lykkes eller feiler for seg; en kode eller et stoff som
+ * alt har en side, hoppes over, så importen kan kjøres igjen etter et avbrudd.
  *
  * Alt her er rene funksjoner. Bakgrunnen står i docs/faginnhold.md.
  */
@@ -83,9 +83,18 @@ export interface Importserum {
   referanser?: string[]
 }
 
-/** Innholdet for én analyttkode, fra én eller flere sider i kilden. */
+/**
+ * Innholdet for én analyttkode, eller for ett stoff uten analyttkode, fra én
+ * eller flere sider i kilden. Nøyaktig én av `kode` og `side` står.
+ */
 export interface Importfil {
-  kode: string
+  /** Analyttkoden siden hører til, som katalogen kjenner den. */
+  kode?: string
+  /**
+   * Navnet på informasjonssiden for et stoff som ikke har noen analyttkode.
+   * Siden lages uten laboratorieanalytt; se `docs/faginnhold.md`.
+   */
+  side?: string
   /** Sidene i dokumentet innholdet er hentet fra. Kan utelates når `kilde` står. */
   sider?: number[]
   /**
@@ -121,7 +130,12 @@ export interface Importkilde {
 /** Filen med referansene flere filer i et datasett deler. */
 const FELLESFIL = 'felles.json'
 
-/** Et datasett: filene for hver analyttkode, sortert på koden, og de felles referansene. */
+/** Koden eller navnet filen gjelder, som den sorteres og meldes etter. */
+export function filnokkel(fil: Pick<Importfil, 'kode' | 'side'>): string {
+  return fil.kode ?? fil.side ?? ''
+}
+
+/** Et datasett: filene for hver analyttkode eller stoff, sortert, og de felles referansene. */
 export interface Datasett {
   filer: Importfil[]
   referanser: Record<string, Referanseinnhold>
@@ -139,7 +153,7 @@ export function datasett(filer: Readonly<Record<string, unknown>>): Datasett {
     filer: Object.entries(filer)
       .filter(([sti]) => !sti.endsWith(`/${FELLESFIL}`))
       .map(([, fil]) => fil as Importfil)
-      .sort((a, b) => a.kode.localeCompare(b.kode)),
+      .sort((a, b) => filnokkel(a).localeCompare(filnokkel(b))),
     referanser: felles?.referanser ?? {},
   }
 }
@@ -169,9 +183,10 @@ export interface Planelement extends Planlagt {
   referanser: string[]
 }
 
-/** Alt for én analyttkode: siden, komponentene og innholdet. */
+/** Alt for én analyttkode — eller ett stoff uten kode — : siden, komponentene og innholdet. */
 export interface Plankode {
-  kode: string
+  /** Analyttkoden, eller `null` for et stoff uten kode: da lages bare siden. */
+  kode: string | null
   hovedside: Planside
   /** Stoffene analysen omfatter, i rekkefølge. Hovedsiden kan være ett av dem. */
   komponenter: Planside[]
@@ -281,6 +296,7 @@ export function kinetikktittel(tittel: string): string {
 
 const FILFELT = new Set([
   'kode',
+  'side',
   'sider',
   'kilde',
   'viktige_data',
@@ -359,17 +375,35 @@ export function byggImportplan(
 
   const koder: Plankode[] = []
   const brukteKoder = new Set<string>()
-  const sorterte = [...filer].sort((a, b) => a.kode.localeCompare(b.kode))
+  const katalogsider = new Set(katalog.oppforinger.map((o) => o.sidenavn.toLocaleLowerCase('nb')))
+  const sorterte = [...filer].sort((a, b) => filnokkel(a).localeCompare(filnokkel(b)))
 
   for (const fil of sorterte) {
-    const hvor = fil.kode || '(uten kode)'
-    const oppforing = katalog.finn(fil.kode)
-    if (!oppforing || oppforing.kode !== fil.kode) {
-      feil.push(`${hvor}: koden finnes ikke i katalogen.`)
-      continue
+    const hvor = filnokkel(fil) || '(uten kode)'
+    // Siden filen gjelder: den katalogen gir koden, eller stoffet uten kode.
+    let sider: { kode: string | null; hovedside: string; komponenter: string[] }
+    if (fil.side !== undefined) {
+      if (fil.kode !== undefined) feil.push(`${hvor}: filen kan ha «kode» eller «side», ikke begge.`)
+      if (typeof fil.side !== 'string' || fil.side.trim() === '' || fil.side !== fil.side.trim() || fil.side.length > 200) {
+        feil.push(`${hvor}: «side» må være navnet på siden, uten mellomrom først og sist.`)
+        continue
+      }
+      if (katalogsider.has(fil.side.toLocaleLowerCase('nb'))) {
+        feil.push(`${hvor}: stoffet har en side for en analyttkode; bruk «kode».`)
+        continue
+      }
+      sider = { kode: null, hovedside: fil.side, komponenter: [] }
+    } else {
+      const oppforing = katalog.finn(fil.kode ?? '')
+      if (!oppforing || oppforing.kode !== fil.kode) {
+        feil.push(`${hvor}: koden finnes ikke i katalogen.`)
+        continue
+      }
+      sider = { kode: fil.kode, hovedside: oppforing.sidenavn, komponenter: oppforing.komponenter }
     }
-    if (brukteKoder.has(fil.kode)) feil.push(`${hvor}: koden står i flere filer.`)
-    brukteKoder.add(fil.kode)
+    const nokkel = hvor.toLocaleLowerCase('nb')
+    if (brukteKoder.has(nokkel)) feil.push(`${hvor}: ${sider.kode ? 'koden' : 'siden'} står i flere filer.`)
+    brukteKoder.add(nokkel)
     for (const felt of Object.keys(fil)) if (!FILFELT.has(felt)) feil.push(`${hvor}: ukjent felt «${felt}».`)
     const kanUtelateSider = fil.sider === undefined && typeof fil.kilde === 'string'
     if (!kanUtelateSider && (!Array.isArray(fil.sider) || fil.sider.length === 0 || !fil.sider.every((s) => Number.isInteger(s) && s > 0))) {
@@ -496,9 +530,9 @@ export function byggImportplan(
 
     const side = (navn: string): Planside => ({ navn, kilde: fraKilden })
     koder.push({
-      kode: fil.kode,
-      hovedside: side(oppforing.sidenavn),
-      komponenter: oppforing.komponenter.map(side),
+      kode: sider.kode,
+      hovedside: side(sider.hovedside),
+      komponenter: sider.komponenter.map(side),
       kilde: fraKilden,
       elementer,
     })
@@ -633,7 +667,8 @@ export function kildetilleggskilde(kilde: string): string {
 }
 
 /**
- * SQL-en for importen: blokker for referansene, så én per analyttkode. Hver
+ * SQL-en for importen: blokker for referansene, så én per analyttkode eller
+ * stoff uten kode. Hver
  * blokk er én transaksjon. `admin` er brukernavnet til administratoren
  * revisjonene føres på.
  */
@@ -658,6 +693,8 @@ export function importSql(
   )
 
   const kodeblokker = plan.koder.map((kode) => {
+    // Blokken heter etter koden, eller etter siden for et stoff uten kode.
+    const navn = kode.kode ?? kode.hovedside.navn
     const sider = [kode.hovedside, ...kode.komponenter].filter(
       (s, i, alle) => alle.findIndex((a) => a.navn.toLocaleLowerCase('nb') === s.navn.toLocaleLowerCase('nb')) === i,
     )
@@ -686,27 +723,43 @@ export function importSql(
         `    nye := nye || side_${i};`,
         `  end if;`,
       ]),
-      '',
-      kildeSql(kode.kilde),
-      `  objekt := (public.opprett_utkast('laboratorieanalytt', jsonb_build_object(`,
-      `    'kode', ${lit(kode.kode)},`,
-      `    'hovedside', ${hovedside},`,
-      `    'komponenter', jsonb_build_array(${(kode.komponenter.length > 0 ? kode.komponenter : [kode.hovedside]).map((k) => sidevariabel(k.navn)).join(', ')})`,
-      `  ))).id;`,
-      `  nye := nye || objekt;`,
+      ...(kode.kode === null
+        ? []
+        : [
+            '',
+            kildeSql(kode.kilde),
+            `  objekt := (public.opprett_utkast('laboratorieanalytt', jsonb_build_object(`,
+            `    'kode', ${lit(kode.kode)},`,
+            `    'hovedside', ${hovedside},`,
+            `    'komponenter', jsonb_build_array(${(kode.komponenter.length > 0 ? kode.komponenter : [kode.hovedside]).map((k) => sidevariabel(k.navn)).join(', ')})`,
+            `  ))).id;`,
+            `  nye := nye || objekt;`,
+          ]),
     ]
+    // Siden finnes fra før: siden koden har, eller siden med stoffets navn.
+    const finnesSql =
+      kode.kode === null
+        ? `select 1 from public.infosider s where s.tilstand = 'utkast' and lower(s.navn) = lower(${lit(navn)})`
+        : `select 1 from public.laboratorieanalytter a where a.kode = ${lit(kode.kode)}`
 
     const kropp: string[] = [
       ...(utvid
-        ? [
-            '  -- Siden koden har fra før, eller en ny.',
-            `  select a.hovedside_id into ${hovedside} from public.laboratorieanalytter a`,
-            `    where a.kode = ${lit(kode.kode)} and a.tilstand = 'utkast';`,
-            '',
-          ]
+        ? kode.kode === null
+          ? [
+              '  -- Siden stoffet har fra før, eller en ny.',
+              `  select s.objekt_id into ${hovedside} from public.infosider s`,
+              `    where s.tilstand = 'utkast' and lower(s.navn) = lower(${lit(navn)});`,
+              '',
+            ]
+          : [
+              '  -- Siden koden har fra før, eller en ny.',
+              `  select a.hovedside_id into ${hovedside} from public.laboratorieanalytter a`,
+              `    where a.kode = ${lit(kode.kode)} and a.tilstand = 'utkast';`,
+              '',
+            ]
         : [
-            `  if exists (select 1 from public.laboratorieanalytter a where a.kode = ${lit(kode.kode)}) then`,
-            `    raise notice '${kode.kode} har alt en side og hoppes over.';`,
+            `  if exists (${finnesSql}) then`,
+            `    raise notice ${lit(`${navn} har alt en side og hoppes over.`)};`,
             `    return;`,
             `  end if;`,
             '',
@@ -779,9 +832,9 @@ export function importSql(
           .concat(`coalesce(innhold -> 'data' ->> 'enhet', '') = ${lit(String(e.data.enhet ?? ''))}`)
         kropp.push(
           `  elsif not (${sammeVerdi.join('\n      and ')}) then`,
-          `    raise notice '%: verdien på kortet % er en annen enn i kilden, og kortet endres ikke.', ${lit(kode.kode)}, ${lit(e.elementtype)};`,
+          `    raise notice '%: verdien på kortet % er en annen enn i kilden, og kortet endres ikke.', ${lit(navn)}, ${lit(e.elementtype)};`,
           `  elsif not publisert then`,
-          `    raise notice '%: kortet % har et upublisert utkast, og endres ikke.', ${lit(kode.kode)}, ${lit(e.elementtype)};`,
+          `    raise notice '%: kortet % har et upublisert utkast, og endres ikke.', ${lit(navn)}, ${lit(e.elementtype)};`,
           `  else`,
           `    kilder := coalesce(innhold -> 'referanser', '[]');`,
           ...e.referanser.map(
@@ -797,7 +850,7 @@ export function importSql(
       }
       kropp.push(`  end if;`)
     }
-    return blokk(kode.kode, deklarasjoner, admin, utenAdministrator, kropp)
+    return blokk(navn, deklarasjoner, admin, utenAdministrator, kropp)
   })
 
   return [...referanseblokker, ...kodeblokker]

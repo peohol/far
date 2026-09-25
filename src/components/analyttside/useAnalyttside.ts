@@ -23,6 +23,12 @@ import { useFaginnholdskilde } from './Faginnholdskilde'
 
 export type Sidemodus = 'lese' | 'rediger'
 
+/**
+ * Hvilken side: siden for en analyttkode i katalogen, eller siden for et stoff
+ * som ikke har noen analyttkode, etter navnet.
+ */
+export type Sidenokkel = { type: 'kode'; oppforing: Katalogoppforing } | { type: 'stoff'; navn: string }
+
 /** Det et innholdselement lagres med, utenom siden det står på. */
 export interface Elementendring {
   panel: string
@@ -66,15 +72,19 @@ const LAGT_INN_AV_ANDRE = 'Noen andre har lagt inn dette i mellomtiden.'
  * opprettes informasjonssiden og laboratorieanalytten av det de statiske
  * datasettene sier om koden: sidens navn og stoffene analysen omfatter.
  * Finnes en side med samme navn fra før — for eksempel som komponent i en
- * sumanalyse — brukes den.
+ * sumanalyse — brukes den. Et stoff uten analyttkode får bare
+ * informasjonssiden, med navnet fra adressen; regelsett har det ikke.
  *
  * Fortolkes koden med scenarioregler, hentes regelsettet for modulen også,
  * men bare til redigeringen: lesemodusen viser reglene appen alt har hentet.
  */
-export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
+export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
   const { leser, lager } = useFaginnholdskilde()
   const tilstand: Tilstand = modus === 'rediger' ? 'utkast' : 'publisert'
-  const modul = useMemo(() => rusModulFor(oppforing.fortolkning) ?? null, [oppforing.fortolkning])
+  const oppforing = nokkel.type === 'kode' ? nokkel.oppforing : null
+  const stoffnavn = nokkel.type === 'stoff' ? nokkel.navn : null
+  const kode = oppforing?.kode ?? null
+  const modul = useMemo(() => (oppforing ? (rusModulFor(oppforing.fortolkning) ?? null) : null), [oppforing])
   const [side, setSide] = useState<Sidetilstand>({ status: 'laster', data: TOM_SIDE, tilstand: null, feil: null })
   const [referansebase, setReferansebase] = useState<Referanse[]>([])
   const [publisert, setPublisert] = useState<Publiserteregler>(INGEN_PUBLISERTE)
@@ -83,11 +93,17 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
   /** Det siste som er lest, og fra hvilken tilstand, for endringene som trenger revisjonene. */
   const siste = useRef<{ tilstand: Tilstand | null; data: Analyttsidedata }>({ tilstand: null, data: TOM_SIDE })
 
+  /** Siden i én tilstand: gjennom koden når den har en, ellers etter navnet. */
+  const lesSide = useCallback(
+    (t: Tilstand) => (kode !== null ? leser.lesAnalyttside(kode, t) : leser.lesStoffside(stoffnavn ?? '', t)),
+    [leser, kode, stoffnavn],
+  )
+
   useEffect(() => {
     let gjelder = true
     setSide((forrige) => ({ ...forrige, status: 'laster' }))
     Promise.all([
-      leser.lesAnalyttside(oppforing.kode, tilstand),
+      lesSide(tilstand),
       tilstand === 'utkast' && modul ? leser.finnScenarioregelsett(modul.id, tilstand) : null,
     ])
       .then(([side, scenarioregelsett]) => {
@@ -104,7 +120,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
     return () => {
       gjelder = false
     }
-  }, [leser, oppforing.kode, modul, tilstand, runde])
+  }, [leser, lesSide, modul, tilstand, runde])
 
   // Referansebasen trengs bare for å velge kilder, og de publiserte
   // regelsettene bare for å si hva som endres — altså bare i redigeringen.
@@ -120,7 +136,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
         if (gjelder) setReferansebase([])
       })
     Promise.all([
-      leser.finnIntervallregelsett(oppforing.kode, 'publisert'),
+      kode !== null ? leser.finnIntervallregelsett(kode, 'publisert') : null,
       modul ? leser.finnScenarioregelsett(modul.id, 'publisert') : null,
     ])
       .then(([regelsett, scenarioregelsett]) => {
@@ -132,7 +148,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
     return () => {
       gjelder = false
     }
-  }, [leser, modus, runde, oppforing.kode, modul])
+  }, [leser, modus, runde, kode, modul])
 
   const lastInn = useCallback(() => {
     setKonflikt(false)
@@ -164,14 +180,14 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
   }, [])
 
   /**
-   * Informasjonssiden koden hører til, opprettet først om den ikke finnes.
-   * Gir tilbake utkastet slik det står nå.
+   * Informasjonssiden koden eller stoffet hører til, opprettet først om den
+   * ikke finnes. Gir tilbake utkastet slik det står nå.
    */
   const sikreSide = useCallback(async (): Promise<Utgave<Infosideinnhold>> => {
     const data = utkastet()
-    if (data.analytt && data.infoside) return data.infoside
+    if (data.infoside && (data.analytt || !oppforing)) return data.infoside
 
-    const navn = [...new Set([oppforing.sidenavn, ...oppforing.komponenter])]
+    const navn = oppforing ? [...new Set([oppforing.sidenavn, ...oppforing.komponenter])] : [stoffnavn ?? '']
     const finnes = await leser.finnInfosider(navn, 'utkast')
     const perNavn = new Map(finnes.map((u) => [u.innhold.navn.toLocaleLowerCase('nb'), u]))
     const hent = async (n: string): Promise<Utgave<Infosideinnhold>> => {
@@ -191,6 +207,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
       return ny
     }
 
+    if (!oppforing) return hent(navn[0]!)
     const hovedside = await hent(oppforing.sidenavn)
     const komponenter: string[] = []
     for (const n of oppforing.komponenter) komponenter.push((await hent(n)).id)
@@ -200,7 +217,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
       komponenter: komponenter.length > 0 ? komponenter : [hovedside.id],
     })
     return hovedside
-  }, [leser, lager, oppforing, utkastet])
+  }, [leser, lager, oppforing, stoffnavn, utkastet])
 
   /**
    * Lagrer et element, eller oppretter det. Et kort som bare kan finnes én
@@ -220,7 +237,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
           await lager.opprettUtkast('innholdselement', innhold)
         } catch (feil) {
           if (!erEnkeltelement(endring.elementtype)) throw feil
-          const na = await leser.lesAnalyttside(oppforing.kode, 'utkast')
+          const na = await lesSide('utkast')
           const finnes = na.elementer.some(
             (e) => e.innhold.panel === endring.panel && e.innhold.elementtype === endring.elementtype,
           )
@@ -228,7 +245,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
           throw Object.assign(new Samtidighetskonflikt(null, null), { message: LAGT_INN_AV_ANDRE })
         }
       }),
-    [endre, sikreSide, lager, leser, oppforing.kode],
+    [endre, sikreSide, lager, lesSide],
   )
 
   /** Tar kortet bort fra siden. Det slettes ikke; se `FJERNET`. */
@@ -326,8 +343,8 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
 
   /** Regelsettet slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */
   const hentRegelsettutkast = useCallback(
-    () => leser.finnIntervallregelsett(oppforing.kode, 'utkast'),
-    [leser, oppforing.kode],
+    async () => (kode !== null ? leser.finnIntervallregelsett(kode, 'utkast') : null),
+    [leser, kode],
   )
 
   /**

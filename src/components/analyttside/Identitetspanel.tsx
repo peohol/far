@@ -41,6 +41,8 @@ export function komponenterFor(
  * kategorien, virkestoffet som hovedoverskrift, og for sumanalysene hvilke
  * stoffer koden omfatter — med lenker til sidene deres, uten å gjøre dem til
  * hovedanalytt. Står alltid fram, over viktige data (`ViktigeData.tsx`).
+ * Et stoff uten analyttkode (`oppforing` er `null`) har ingen metalinje, men
+ * sier fra om at laboratoriet ikke har noen analyse for det.
  */
 export function Identitetspanel({
   definisjon,
@@ -50,7 +52,7 @@ export function Identitetspanel({
   overskriftId,
 }: {
   definisjon: Paneldefinisjon
-  oppforing: Katalogoppforing
+  oppforing: Katalogoppforing | null
   navn: string
   komponenter: Komponent[]
   overskriftId: string
@@ -62,12 +64,16 @@ export function Identitetspanel({
 
   return (
     <section ref={flate} id={panelAnker(definisjon.nokkel)} className="identitet" aria-labelledby={overskriftId}>
-      <Metalinje koder={[oppforing.kode]} metode={oppforing.analysemetode} kategori={oppforing.kategori} />
+      {oppforing ? (
+        <Metalinje koder={[oppforing.kode]} metode={oppforing.analysemetode} kategori={oppforing.kategori} />
+      ) : (
+        <p className="metalinje">Stoffside uten labkode</p>
+      )}
       <h1 id={overskriftId} className="identitet__navn" tabIndex={-1}>
         <Uthev tekst={navn} />
       </h1>
 
-      {sum && (
+      {sum && oppforing && (
         <p className="identitet__komponenter">
           <Uthev tekst={`${oppforing.kode} er en sumanalyse og omfatter `} />
           {komponenter.map((k, i) => (

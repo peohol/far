@@ -60,7 +60,9 @@ Tre begreper holdes fra hverandre, som planen krever:
 
 - **Informasjonsside** (`infoside`) — siden om et virkestoff, f.eks.
   Amitriptylin. Har foreløpig bare et navn; innholdet på siden er
-  innholdselementer.
+  innholdselementer. En side trenger ingen laboratorieanalytt: et stoff
+  laboratoriet ikke har noen kode for, kan likevel ha en side (se
+  [Informasjonssidene](#informasjonssidene)).
 - **Laboratorieanalytt** — koden laboratoriet rapporterer, f.eks.
   `AMTNORSUM`. Har nøyaktig én hovedside og en ordnet liste med
   **komponenter**: informasjonssidene for stoffene analysen omfatter. For
@@ -338,6 +340,17 @@ informasjonsside koden hører til (moderstoffet for sumanalysene), hvilke
 stoffer den omfatter, og hvilken fortolkningsmodul «Åpne fortolkning» fører
 til.
 
+**Stoffsider uten kode.** Et stoff uten analyttkode kan ha en side på
+`#/stoff/<navn>`: en informasjonsside som verken er hovedside eller komponent
+for noen analytt (visningen `stoffsider_uten_kode`). Den har de samme panelene,
+men ingen kode i identiteten, ingen «Åpne fortolkning» og ingen regelsett.
+Sidemenyen lister dem i skuffen «Stoffer uten labkode», fra databasen
+(`les_stoffsidenavn`); redaktørene ser også dem som ikke er publisert, og kan
+åpne en ny side med et navn derfra. Et navn som hører til en kode i katalogen,
+fører til siden for koden. Får stoffet en kode senere, opprettes
+laboratorieanalytten med siden som finnes som hovedside, og siden leses
+gjennom koden som de andre.
+
 **Lesingen.** En side leses i ett kall: `les_analyttside(analyttkode,
 sidetilstand)` gir laboratorieanalytten, hovedsiden, innholdselementene,
 komponentsidene med kodene deres og referansene siden siterer — hvert objekt
@@ -347,8 +360,10 @@ redigeringsmodus utkastet. Regelsettet for koden (`finn_intervallregelsett`,
 se `docs/fortolkningsregler.md`) leses samtidig, med kommentarobjektene det
 peker på, og står i sidedataene som `regelsett`; det er sitt eget objekt og
 peker på koden, ikke på siden.
-`les_referanser` gir referansebasen og `finn_infosider` sidene med gitte
-navn. Alle disse, og visningen
+`les_stoffside(sidenavn, sidetilstand)` gir siden for et stoff uten kode på
+samme form, med `analytt` som `null` — eller siden for koden, når navnet er
+hovedside for en. `les_referanser` gir referansebasen og `finn_infosider`
+sidene med gitte navn. Alle disse, og visningen
 `objektutgaver` de bygger på, kjører med rettighetene til den som leser, så
 radsikkerheten gjelder som ellers.
 
@@ -417,7 +432,8 @@ så to som oppretter det samme kortet samtidig, ikke begge får det lagret —
 den andre får en konflikt.
 Første gang noe lagres på en kode uten side, opprettes informasjonssiden og
 laboratorieanalytten av katalogens opplysninger; sider med samme navn som
-finnes fra før — for eksempel en komponent — gjenbrukes. «Publiser endringene»
+finnes fra før — for eksempel en komponent — gjenbrukes. På en stoffside uten
+kode opprettes bare informasjonssiden, med navnet fra adressen. «Publiser endringene»
 viser hva som blir synlig, og publiserer i den rekkefølgen databasen krever
 (`publiseringsplan`): referanser, komponentsider, hovedsiden, analytten,
 elementene, og til sist regelsettet, med feltene som er endret i det.
@@ -445,9 +461,9 @@ står treffene i sidens rekkefølge.
 
 **Søket i hele kunnskapsbasen** (`globaltSok.ts`) indekserer alle de
 publiserte sidene med den samme `indekserSide`, så det finner det samme som
-søket på hver side. Lesingen er tre kall uansett antall sider:
+søket på hver side. Lesingen er fire kall uansett antall sider:
 `les_analyttsider` gir alle sidene på samme form som `les_analyttside`, med
-referansene én gang; `les_legemidler` gir legemiddeldataene for alle
+referansene én gang, og `les_stoffsider` stoffsidene uten kode på samme form; `les_legemidler` gir legemiddeldataene for alle
 koblingene, og hver side får sin del av dem (`utvalgFor`); `les_interaksjoner`
 gir interaksjonene, delt i flere kall bare om nøklene er flere enn databasen
 tar imot. Kan ikke legemiddeldataene leses, indekseres faginnholdet likevel.
@@ -461,8 +477,10 @@ og indekseres med navnet og komponentene fra katalogen, som siden viser.
 
 Hvert treff har stedet det står: siden, seksjonen, ankeret på siden og — når
 teksten står i et detaljkort — nøkkelen til kortet. `sokeadresse` gjør stedet
-om til direktelenken, `#/analytt/<KODE>/<seksjon>/<kort>` (se
-`docs/seksjoner.md`).
+om til direktelenken, `#/analytt/<KODE>/<seksjon>/<kort>`, eller
+`#/stoff/<navn>/<seksjon>/<kort>` for et stoff uten kode (se
+`docs/seksjoner.md`). En stoffside uten kode indekseres under navnet, og
+treffet viser «Stoffside uten labkode» der de andre viser koden og metoden.
 
 **Fagsøket** i toppmenyen (`src/components/sok/`) bruker dette uten egen
 rangering. Indeksen hentes første gang noen søker, ikke når appen åpnes
@@ -549,6 +567,17 @@ referanseområde med andre tall røres ikke, men meldes. Verdier som avviker fra
 det som står på sidene, rettes altså aldri av importen — de avgjøres av en
 fagperson og rettes for seg. `npx vite-node scripts/importer-tdm.ts --
 <brukernavn> <mappe>` lager migrasjonene.
+
+**Stoffsider uten kode.** `supabase/import/stoffsider/` har stoffene de samme
+kildene gir anbefalinger for, men som appen ikke har noen analyttkode for:
+antiepileptika, sertindol og litium fra rapporten, ketobemidon, petidin og
+flunitrazepam fra Helland mfl., og atomoksetin og metylfenidat fra Frost mfl.
+(de nasjonale områdene fra 2019, med rapportens tidligere område i
+grunnlaget). Filene har `side` (navnet på siden) i stedet for `kode`; importen
+lager da bare informasjonssiden, og en fil med navnet til en side i katalogen
+avvises. Den utvider en side som finnes, som TDM-importen. `npx vite-node
+scripts/importer-stoffsider.ts -- <brukernavn> <mappe>` lager migrasjonene
+(`src/faginnhold/stoffsider.ts`).
 
 **Rettinger.** En feil i det som ble importert, rettes med en rettingsfil i
 `supabase/import/rettinger/`: kilden, og per retting koden, raden slik den
