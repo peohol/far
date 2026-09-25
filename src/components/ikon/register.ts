@@ -496,6 +496,17 @@ const REGISTER = {
       P('M34 4c0 10-20 10-20 20s20 10 20 20', 'l', 'accent2'),
     ],
   },
+  /* Terapeutisk legemiddelmonitorering: blodprøverøret og klokken for prøvetakingen. */
+  tdm: {
+    vb: 48,
+    parts: [
+      P('M9 9h11v24a5.5 5.5 0 0 1-11 0z', 'f1', 'glass'),
+      P('M9 21h11v12a5.5 5.5 0 0 1-11 0z', 'f2', 'blood', 'fill'),
+      R(7.5, 4.5, 14, 5.5, 2, 'f2', 'accent2'),
+      C(33, 33, 11, 'f1', 'accent'),
+      P('M33 26.5V33l4.5 3', 'l', 'i-ink', 'tick'),
+    ],
+  },
   yes: { vb: 24, parts: [C(12, 12, 9, 'f1', 'ok'), P('M8 12.3l2.6 2.6L16 9.5', 'l', null, 'pop')] },
   no: { vb: 24, parts: [C(12, 12, 9, 'f1', 'danger'), P('M9 9l6 6M15 9l-6 6', 'l', null, 'pop')] },
   na: { vb: 24, parts: [C(12, 12, 9, 'f1', 'glass'), P('M8.5 12h7', 'l')] },

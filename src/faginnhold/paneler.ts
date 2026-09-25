@@ -55,6 +55,7 @@ export const PANELER = [
   { nokkel: 'farmakokinetikk', tittel: 'Farmakokinetikk', form: 'kort' },
   { nokkel: 'farmakogenetikk', tittel: 'Farmakogenetikk', form: 'kort' },
   { nokkel: 'interaksjoner', tittel: 'Interaksjoner', form: 'interaksjoner' },
+  { nokkel: 'tdm', tittel: 'Terapeutisk legemiddelmonitorering (TDM)', form: 'kort' },
   { nokkel: 'serumkonsentrasjoner', tittel: 'Serumkonsentrasjoner ved ulike doser', form: 'tabell' },
 ] as const satisfies readonly Paneldefinisjon[]
 

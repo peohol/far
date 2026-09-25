@@ -91,9 +91,9 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   som åpner og lukker.
 - `ikon` er et navn fra ikonregisteret (`src/components/ikon/register.ts`).
   Det er pynt ved siden av tittelen og skjult for skjermlesere. Stoffsidens
-  seksjonsikoner, og ikonene for kortene i farmakokinetikken, velges i
-  `src/components/analyttside/panelvisning.ts`: kinetikkortene får ikon etter
-  hva overskriften handler om (absorpsjon, halveringstid, CYP …), og et
+  seksjonsikoner, og ikonene for kortene i farmakokinetikken og TDM, velges i
+  `src/components/analyttside/panelvisning.ts`: kortene får ikon etter
+  hva overskriften handler om (absorpsjon, halveringstid, CYP, prøvetaking …), og et
   generisk ikon når ingen kategori passer, så en ny overskrift aldri feiler.
 - En seksjon i en seksjon, eller et detaljkort utenfor en seksjon eller i et
   annet detaljkort, stopper tegningen med en feil. Trenger innholdet et

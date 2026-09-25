@@ -1,0 +1,70 @@
+{
+  "kode": "ZOLP",
+  "sider": [
+    1,
+    2
+  ],
+  "kilde": "Serumkonsentrasjonsmålinger av vanedannende legemidler.pdf, side 1–2",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": null,
+      "ovre": 100,
+      "enhet": "nmol/L",
+      "referanser": [
+        "helland2016"
+      ]
+    }
+  },
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Medikamentfastende, det vil si like før neste dose. Prøver tatt nær toppkonsentrasjonen er misvisende og kan ikke sammenlignes med referansegrensen.",
+        "Dosering, tidspunkt for siste inntak og tidspunkt for prøvetaking må stå på rekvisisjonen, så laboratoriet kan tolke svaret.",
+        "Referansegrensen gjelder prøver tatt minst 12 timer etter inntak."
+      ],
+      "referanser": [
+        "helland2016"
+      ]
+    },
+    {
+      "tittel": "Referansegrense",
+      "tekst": [
+        "Øvre referansegrense 100 nmol/L er den øvre forventede medikamentfastende konsentrasjonen ved døgndose 10 mg (5 mg hos eldre), høyeste døgndose ved angst, uro og/eller søvnvansker.",
+        "Det er ikke satt noen nedre grense, siden konsentrasjonen bør holdes så lav som mulig. Lavest mulig dosering og kortvarig eller periodevis bruk bør tilstrebes."
+      ],
+      "referanser": [
+        "helland2016"
+      ]
+    },
+    {
+      "tittel": "Tolkning",
+      "tekst": [
+        "Pasienter som holder seg innenfor anbefalt dosering, har i de aller fleste tilfeller medikamentfastende konsentrasjoner under referansegrensen. Konsentrasjoner over grensen kan tyde på høyere doser enn anbefalt, gitt at feil prøvetakingstidspunkt er utelukket.",
+        "Variasjonen mellom pasienter er stor. Nedsatt organfunksjon og aldersrelaterte endringer kan gi høyere konsentrasjon, mens interaksjoner og genetiske forskjeller i metabolismen kan gi både høyere og lavere konsentrasjon enn ventet.",
+        "Ved tvil om tolkningen, eller om hvordan prøven skal tas, bør det utførende laboratoriet kontaktes, gjerne før prøven tas."
+      ],
+      "referanser": [
+        "helland2016"
+      ]
+    },
+    {
+      "tittel": "Indikasjoner for måling",
+      "tekst": [
+        "Serumkonsentrasjonsmåling kan være nyttig ved:",
+        {
+          "punkter": [
+            "Kontroll av medikamentetterlevelse, som er den vanligste grunnen",
+            "Terapisvikt ved standard dosering",
+            "Uventede eller uttalte bivirkninger ved standard dosering",
+            "Ruspåvirkning, mistanke om overdosering eller intoksikasjon",
+            "Misbruksdiagnostikk (urinprøver er oftest bedre egnet)"
+          ]
+        }
+      ],
+      "referanser": [
+        "helland2016"
+      ]
+    }
+  ]
+}

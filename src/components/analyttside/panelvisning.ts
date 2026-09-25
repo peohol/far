@@ -19,6 +19,7 @@ const SEKSJONSIKONER: Readonly<Record<string, Ikonnavn>> = {
   farmakokinetikk: 'pk',
   farmakogenetikk: 'dna',
   interaksjoner: 'inter',
+  tdm: 'tdm',
   serumkonsentrasjoner: 'serum',
   fortolkning: 'interp',
   referanser: 'refs',
@@ -30,7 +31,8 @@ export function seksjonsikon(nokkel: string): Ikonnavn | undefined {
 }
 
 /**
- * Kategoriene kortene i farmakokinetikken kan høre til, med mønstre for
+ * Kategoriene kortene i farmakokinetikken og de andre kortseksjonene (som TDM)
+ * kan høre til, med mønstre for
  * overskriften. Overskriften er fri redaksjonell tekst, så den sammenlignes
  * etter normalisering (små bokstaver, uten aksenter, og senket skrift som
  * vanlige bokstaver: «tₘₐₓ» leses som «tmax»). Den første kategorien som
@@ -47,6 +49,9 @@ const KINETIKKATEGORIER: readonly { ikon: Ikonnavn; monster: RegExp }[] = [
   { ikon: 'metab', monster: /metabol|cyp|enzym/ },
   { ikon: 'elim', monster: /elimin|utskil|ekskresj|clearance/ },
   { ikon: 'inter', monster: /interaksj/ },
+  { ikon: 'tdm', monster: /pr[oø]vetak/ },
+  { ikon: 'ref', monster: /referanse(omr|grense)/ },
+  { ikon: 'indik', monster: /indikasjon/ },
 ]
 
 /** Overskriften slik kategoriene sammenlignes: «tₘₐₓ» → «tmax», «Absorpsjon» → «absorpsjon». */

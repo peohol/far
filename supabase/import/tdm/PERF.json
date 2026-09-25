@@ -1,0 +1,55 @@
+{
+  "kode": "PERF",
+  "sider": [
+    24,
+    25,
+    41
+  ],
+  "kilde": "080401 - Sluttrapport referanseområder antipsykotika og antidepressiva.pdf, side 24, 25, 41, og fortolkningskommentarene i FAR",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 1,
+      "ovre": 7,
+      "enhet": "nmol/L",
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  },
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Rett før neste dose, det vil si 12–24 timer etter siste dose."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    },
+    {
+      "tittel": "Prøvetaking per legemiddelform",
+      "tekst": [
+        {
+          "punkter": [
+            "Daglig dosering: rett før neste dose, det vil si 12–24 timer etter siste dose.",
+            "Depotinjeksjon: 0–2 dager før neste injeksjon."
+          ]
+        }
+      ],
+      "referanser": [
+        "referanseomradeprosjektet",
+        "ousfortolkning"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Referanseområdet bygger på serumkonsentrasjoner målt hos pasienter som brukte 4–32 mg peroralt daglig: 10- og 90-persentilen, rundet av, i data fra Diakonhjemmet sykehus og St. Olavs hospital (2005–2007).",
+        "Området viser hvilke konsentrasjoner som er vanlige ved anbefalte doser, og er ikke et dokumentert terapeutisk område."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  ]
+}

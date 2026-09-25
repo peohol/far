@@ -1,0 +1,15 @@
+{
+  "kode": "PALI",
+  "kilde": "fortolkningskommentarene i FAR",
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "0–2 dager før neste depotinjeksjon, når likevektskonsentrasjonen er nådd. Referanseområdet bygger på prøver tatt slik."
+      ],
+      "referanser": [
+        "ousfortolkning"
+      ]
+    }
+  ]
+}

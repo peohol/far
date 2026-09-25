@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.34.2',
+    versjon: '1.35.1',
     dato: '2026-09-25',
     sammendrag: 'Sikkerhetsmarginen i THC-modulen velges med en bryter og forklares under den',
     typer: ['Design / layout', 'Funksjonalitet'],
@@ -24,6 +24,21 @@ export const ENDRINGSLOGG: Endring[] = [
       'Forklaringen av sikkerhetsmarginen er flyttet fra tooltipen på overskriften til «Hva er sikkerhetsmarginen?» under bryteren, som kan foldes ut. Teksten er delt i korte bolker, med hva hver margin gjør.',
       'Den har også et eksempel: to prøver fortolket med hver margin, med endringen som legges til grunn og konklusjonen hver av dem gir.',
       'Kommentaren er den samme som før for hver margin.',
+    ],
+  },
+  {
+    versjon: '1.35.0',
+    dato: '2026-09-25',
+    sammendrag: 'Referanseområder og ny TDM-seksjon med prøvetakingstidspunkt, med kildene oppgitt',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Stoffsidene har en ny seksjon, Terapeutisk legemiddelmonitorering (TDM), med anbefalt prøvetakingstidspunkt og hva referanseområdet bygger på. Den redigeres som de andre seksjonene med kort.',
+      'Seksten legemidler får egen side med referansegrense, prøvetaking, tolkning og når måling er aktuelt: morfin, oksykodon, fentanyl, kodein, tramadol, O-desmetyltramadol, buprenorfin, metadon, diazepam, oksazepam, alprazolam, klonazepam, nitrazepam, zopiklon, zolpidem og amfetamin.',
+      'Referanseområdene på antidepressiva- og antipsykotikasidene viser nå kilden sin, sluttrapporten fra referanseområdeprosjektet.',
+      'Der kildene skiller mellom legemiddelformer, står prøvetakingen per form: depotinjeksjon av antipsykotika (0–2 dager før neste injeksjon), og tabletter og depottabletter av kvetiapin og morfin. Rådene for buprenorfin, fentanyl, sovemidlene og amfetamin står i prøvetakingstidspunktet.',
+      'Kildene er referanseområdeprosjektet (2008), to artikler i Tidsskriftet om vanedannende (2016) og sentralstimulerende legemidler (2019), og fortolkningskommentarene.',
+      'Skrivefeil i raden fra referanseområdeprosjektet under Serumkonsentrasjoner er rettet etter rapporten: dosene for escitalopram, fluoksetin, klorprotiksen og levomepromazin, og 90-persentilen for klorprotiksen og sertralin. Lurasidon hadde fått tallene for levomepromazin, og den raden er tatt bort. Referanseområdene er ikke endret.',
     ],
   },
   {

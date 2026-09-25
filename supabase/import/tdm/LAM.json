@@ -1,0 +1,39 @@
+{
+  "kode": "LAM",
+  "sider": [
+    29,
+    32,
+    42,
+    45
+  ],
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 10,
+      "ovre": 50,
+      "enhet": "µmol/L",
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  },
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Rett før neste dose, det vil si 12–24 timer etter siste dose."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk området St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der. Statens senter for epilepsi brukte da 10–60 µmol/L."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  ]
+}
