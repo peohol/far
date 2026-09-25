@@ -218,6 +218,19 @@ Slik så navnelikheten ut ved første gjennomgang:
   moderstoffet (spironolakton, ramipril, enalapril), er et faglig valg som
   gjøres ved å legge moderstoffet til i koblingen.
 
+**Koblinger lagt inn med migrasjon.** Når mange sider skal kobles samtidig,
+kan koblingene legges inn som en datamigrering i stedet for én og én:
+`STOFFSIDE_FESTKOBLINGER` i `src/faginnhold/festkoblinger.ts` har siden og
+FESTs ID, valgt og kontrollert mot FEST-kopien for hånd, og `npx vite-node
+scripts/lag-festkoblinger.ts -- <brukernavn> <fil>` lager migrasjonen. Den
+lager det samme publiserte kortet som redigeringen, med navnet FEST gir
+virkestoffet, og «Koblet til virkestoffet i FEST» i historikken. En side som
+mangler, et virkestoff som mangler eller er utgått i FEST, og en side som alt
+er koblet, hoppes over. Slik ble de 15 stoffsidene uten analyttkode koblet
+(`*_stoffsider_fest_kobling.sql`): Litium til Litiumion og Valproat til
+Valproinsyre, som preparatenes salter hører til. Ketobemidon har ingen
+preparater i FEST, så siden sier det.
+
 ## Slik preparatene vises
 
 Seksjonen «Preparater» står rett under identiteten, lukket med en
