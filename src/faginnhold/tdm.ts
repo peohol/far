@@ -12,8 +12,8 @@
  *   (Tidsskr Nor Legeforen 2016): opioider, benzodiazepiner og z-hypnotika.
  * - Frost et al., «Nye anbefalinger ved serumkonsentrasjonsmålinger av
  *   sentralstimulerende legemidler» (Tidsskr Nor Legeforen 2019): amfetamin.
- * - Fortolkningskommentarene i FAR: prøvetakingen ved depotinjeksjon av
- *   antipsykotika.
+ * - Fortolkningskommentarene i FAR: prøvetakingen per legemiddelform —
+ *   depotinjeksjon av antipsykotika, og depottabletter av kvetiapin og morfin.
  *
  * Importen utvider sidene som finnes (`finnesFraFor: 'utvid'` i `import.ts`):
  * den legger til TDM-kortene, og kilden på referanseområdet når verdien er den

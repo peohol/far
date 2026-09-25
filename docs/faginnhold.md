@@ -538,8 +538,8 @@ opprettet først — og sjekker at sidene viser nøyaktig det datasettet har nå
 **Referanseområder og TDM.** `supabase/import/tdm/` bygger på tre kilder:
 sluttrapporten fra referanseområdeprosjektet (2008), Helland mfl. om
 vanedannende legemidler (Tidsskriftet 2016) og Frost mfl. om
-sentralstimulerende legemidler (Tidsskriftet 2019), og prøvetakingen ved
-depotinjeksjon fra fortolkningskommentarene i FAR. Filene har samme form som
+sentralstimulerende legemidler (Tidsskriftet 2019), og prøvetakingen per
+legemiddelform (depotinjeksjon, depottabletter) fra fortolkningskommentarene i FAR. Filene har samme form som
 psykofarmakafilene, pluss `kilde` (hva revisjonene sier de er importert fra,
 i stedet for dokument og sider, som da kan utelates) og panelet `tdm`. Den importen *utvider*
 sidene (`finnesFraFor = 'utvid'` i `importSql`): en side som mangler, lages;

@@ -4,7 +4,7 @@
     1,
     2
   ],
-  "kilde": "Serumkonsentrasjonsmålinger av vanedannende legemidler.pdf, side 1–2",
+  "kilde": "Serumkonsentrasjonsmålinger av vanedannende legemidler.pdf, side 1–2, og fortolkningskommentarene i FAR",
   "viktige_data": {
     "referanseomrade": {
       "nedre": null,
@@ -24,6 +24,20 @@
       ],
       "referanser": [
         "helland2016"
+      ]
+    },
+    {
+      "tittel": "Prøvetaking per legemiddelform",
+      "tekst": [
+        {
+          "punkter": [
+            "Vanlige tabletter: 4–6 timer etter inntak.",
+            "Depottabletter: 8–12 timer etter inntak."
+          ]
+        }
+      ],
+      "referanser": [
+        "ousfortolkning"
       ]
     },
     {

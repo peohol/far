@@ -27,11 +27,17 @@
       ]
     },
     {
-      "tittel": "Prøvetaking ved depotinjeksjon",
+      "tittel": "Prøvetaking per legemiddelform",
       "tekst": [
-        "0–2 dager før neste injeksjon."
+        {
+          "punkter": [
+            "Daglig dosering: rett før neste dose, det vil si 12–24 timer etter siste dose.",
+            "Depotinjeksjon: 0–2 dager før neste injeksjon."
+          ]
+        }
       ],
       "referanser": [
+        "referanseomradeprosjektet",
         "ousfortolkning"
       ]
     },

@@ -28,6 +28,6 @@ const plan = tdmplan()
 const elementer = plan.koder.reduce((sum, k) => sum + k.elementer.length, 0)
 mkdirSync(mappe, { recursive: true })
 // Uten linjeskift til slutt: apply_migration lagrer teksten uten, og filen skal være lik byte for byte.
-const filer = importmigrasjoner(plan, admin, 50_000, 'utvid')
+const filer = importmigrasjoner(plan, admin, 55_000, 'utvid')
 filer.forEach((sql, i) => writeFileSync(join(mappe, `tdm_referanseomrader_${String(i + 1).padStart(2, '0')}.sql`), sql))
 console.log(`${plan.koder.length} koder, ${elementer} innholdselementer og ${plan.referanser.length} referanser → ${filer.length} migrasjoner i ${mappe}`)
