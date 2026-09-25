@@ -426,7 +426,7 @@ describe('preparatene og interaksjonene på stoffsiden', () => {
     const visning = byggPreparatvisning(await leser.les([AMITRIPTYLIN]), [AMITRIPTYLIN])
     const ct = visning.preparater.get('53:Amitriptylin-CT')!
     expect(ct.styrker[0]!.pakninger).toEqual([
-      { id: expect.any(String), varenr: '342044', tekst: '100 stk, blisterpakning', midlertidig_utgatt: null },
+      { id: expect.any(String), varenr: '342044', tekst: '100 stk, blisterpakning', midlertidig_utgatt: null, byttegrupper: [] },
     ])
   })
 

@@ -51,6 +51,31 @@ export function festopphav(utvalg: Pick<Legemiddelutvalg, 'kildedato' | 'kontrol
     .join(', ')
 }
 
+/**
+ * Hvor lenge kopien kan stå uten en vellykket kontroll mot FEST før siden sier
+ * fra. Synkroniseringen går hver natt, så etter to døgn har minst én natt
+ * feilet eller ikke gått.
+ */
+export const FEST_FORELDET_ETTER_TIMER = 48
+
+/**
+ * Meldingen når kopien ikke er kontrollert mot FEST på lenge, ellers `null`.
+ * `kontrollert_kl` er siste synkronisering som gikk bra, så både en
+ * synkronisering som feiler og en som ikke kjører, gir meldingen.
+ */
+export function festForeldet(
+  utvalg: Pick<Legemiddelutvalg, 'kontrollert_kl'>,
+  na: Date = new Date(),
+): string | null {
+  const kontrollert = utvalg.kontrollert_kl ? new Date(utvalg.kontrollert_kl) : null
+  if (!kontrollert || Number.isNaN(kontrollert.getTime())) return null
+  if (na.getTime() - kontrollert.getTime() <= FEST_FORELDET_ETTER_TIMER * 3_600_000) return null
+  return (
+    `Legemiddeldataene ble sist kontrollert mot FEST ${dato(utvalg.kontrollert_kl)}. ` +
+    'Den nattlige oppdateringen har ikke gått siden, så nyere endringer i FEST kan mangle.'
+  )
+}
+
 /** Referansen for FEST selv, med sporbarheten for kopien. */
 export function festkilde(utvalg: Pick<Legemiddelutvalg, 'kildedato' | 'kontrollert_kl'>): Referanse {
   return {

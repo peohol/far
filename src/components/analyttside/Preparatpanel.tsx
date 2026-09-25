@@ -1,6 +1,7 @@
 import { ELEMENTTYPER, type Paneldefinisjon } from '../../faginnhold/paneler'
 import type { Tilleggstekst } from '../../faginnhold/sok'
 import { oppsummerPreparatvisning } from '../../legemiddeldata/preparatmodell'
+import { festForeldet } from '../../legemiddeldata/referanser'
 import { finnKobling, preparattekster } from '../../legemiddeldata/stoffside'
 import { Legemiddelformer } from '../preparater/Legemiddelformer'
 import { elementAnker, Panel, Redigerbar, type Panelkontekst } from './Paneler'
@@ -122,9 +123,15 @@ function Preparatvisning({ tilstand, sidenavn }: { tilstand: Legemiddeltilstand;
 
   const { utvalg, visning } = tilstand
   const utgatte = utvalg.virkestoff.filter((v) => v.utgatt)
+  const foreldet = festForeldet(utvalg)
 
   return (
     <>
+      {foreldet && (
+        <p className="preparater__melding" role="note">
+          {foreldet}
+        </p>
+      )}
       {utgatte.length > 0 && (
         <p className="preparater__melding" role="note">
           {utgatte.map((v) => v.navn).join(', ')} står ikke lenger i FEST. Koblingen bør kontrolleres.

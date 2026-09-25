@@ -26,6 +26,8 @@ export interface Preparatpakning {
   tekst: string
   /** Datoen pakningen er meldt midlertidig utgått, når den er det. */
   midlertidig_utgatt: string | null
+  /** Byttegruppene i FEST pakningen hører til. */
+  byttegrupper: string[]
 }
 
 /** En styrke som tall: `fra` og `til` er like når den ikke er et intervall. */
@@ -81,6 +83,7 @@ export function pakningerPerMerkevare(utvalg: Legemiddelutvalg): Map<string, Pre
           .filter(Boolean)
           .join(', '),
         midlertidig_utgatt: p.midlertidig_utgatt_dato,
+        byttegrupper: p.byttegrupper,
       })
       pakningerFor.set(innhold.merkevare_id, liste)
     }
