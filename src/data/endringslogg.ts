@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.28.6',
+    versjon: '1.32.1',
     dato: '2026-09-25',
     sammendrag: 'Redigering på stoffsidene skjer i et stort redigeringsvindu',
     typer: ['Design / layout', 'Funksjonalitet'],
@@ -21,6 +21,59 @@ export const ENDRINGSLOGG: Endring[] = [
       'Når du redigerer et kort eller et panel på en stoffside, åpnes skjemaet i et stort, luftig vindu over siden i stedet for inne i det smale kortet. Feltene får plass ved siden av hverandre, og teksteditoren er høyere.',
       '«Lagre utkast» og «Avbryt» står fast nederst i vinduet, så de alltid er synlige. På mobil kommer vinduet opp nedenfra.',
       'Esc, lukkeknappen eller et klikk utenfor lukker vinduet. Har du endret noe, spør vinduet først om du vil forkaste endringene eller fortsette å redigere.',
+    ],
+  },
+  {
+    versjon: '1.32.0',
+    dato: '2026-09-25',
+    sammendrag: 'THC-syrereglene og -tekstene kan redigeres på analyttsiden',
+    typer: ['Funksjonalitet', 'Fag'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Administratorer kan redigere THC-syrereglene i redigeringsmodus på siden for IRCAK: nivåene, sikkerhetsmarginene, måleusikkerheten, hvilke kurver som avgjør konklusjonen, utskillelseskurvene og varselgrensen.',
+      'Hver tekstbolk i kommentaren kan rettes der, med når den brukes og hvilke plassholdere den må ha.',
+      'Mens du redigerer, står det hva som må rettes før utkastet kan lagres, og «Prøv reglene» fortolker med utkastet slik det står.',
+      'Endringene lagres som utkast og publiseres sammen med resten av siden. Ingenting endres for andre før det er publisert, og historikken for reglene og hver tekst kan åpnes derfra.',
+    ],
+  },
+  {
+    versjon: '1.31.0',
+    dato: '2026-09-25',
+    sammendrag: 'THC-syre fortolkes med de publiserte reglene, og reglene kan prøves på analyttsiden',
+    typer: ['Funksjonalitet', 'Fag'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'THC-syremodulen henter reglene og kommentartekstene fra faginnholdet, slik de andre modulene gjør. Kommentarene, konklusjonene og forklaringen er nøyaktig som før.',
+      'Kan reglene ikke hentes eller brukes, sier modulen fra og tilbyr «Prøv igjen» i stedet for å gi en kommentar.',
+      'Analyttsiden for IRCAK har fått «Fortolkningsregler»: nivåene, sikkerhetsmarginene, måleusikkerheten og hvilke kurver som avgjør konklusjonen ved kronisk bruk og enkeltinntak.',
+      'Under står alle tekstbolkene kommentaren settes sammen av, med når hver brukes, og «Prøv reglene», der du fyller inn prøver og ser kommentaren, kurvene og hvilke tekstbolker som ble brukt.',
+    ],
+  },
+  {
+    versjon: '1.30.0',
+    dato: '2026-09-25',
+    sammendrag: 'Reglene for analyttgruppene i rusmiddelmodulene kan redigeres på analyttsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Administratorer kan redigere fortolkningsreglene for rusmiddelmodulene – som diazepam, desmetyldiazepam og oksazepam – i redigeringsmodus, under «Fortolkningsregler» på analyttsidene: grensene, kommentartekstene, notisene og meldingene ved manuell vurdering.',
+      'Brukes samme kommentartekst i flere scenarier, sier skjemaet hvor. En plassering kan få sin egen tekst eller bruke en annen, uten at de andre endres.',
+      '«Prøv utkastet» viser hva reglene i skjemaet gir før de lagres. Utkastet kontrolleres før det lagres, slik at hver kombinasjon av påviste analytter fortsatt gir nøyaktig ett scenario; feilene oppgis med scenarionummeret.',
+      'Reglene og tekstene lagres sammen, alt eller ingenting, og blir synlige for andre først når siden publiseres. Etterpå bruker fortolkningen de nye reglene.',
+      '«Sist redigert» viser historikken for reglene og for hver tekst, og hva som ikke er publisert. Har noen andre lagret mens du redigerte, kan du sammenligne og velge.',
+      'Reglene og kommentarene er uendret; fortolkningen gir det samme som før.',
+    ],
+  },
+  {
+    versjon: '1.29.0',
+    dato: '2026-09-25',
+    sammendrag: 'Preparatene viser byttbarhet i apotek og særlig overvåkning',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'I preparatvinduet står det ved hver styrke hvilke andre preparater den kan byttes med i apotek, etter byttegruppene i FEST. Gjelder det bare noen av pakningene, står det hvilke, og FESTs merknad til byttbarheten står under når gruppen har en.',
+      'Preparater under særlig overvåkning (svart trekant i FEST) har merket «▼ Særlig overvåkning», både i styrkelista og i preparatvinduet.',
+      'Har legemiddeldataene ikke vært kontrollert mot FEST på over to døgn, sier seksjonen «Preparater» fra om at nyere endringer i FEST kan mangle.',
     ],
   },
   {

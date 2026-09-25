@@ -52,6 +52,16 @@ export function lagThcModell(
   return { ok: false, feil: [...(r.ok ? [] : r.feil), ...(t.ok ? [] : t.feil)] }
 }
 
+/**
+ * Reglene fortolkningen bruker, slik appen har dem: på vei, ikke mulige å
+ * hente eller bruke, eller klare. Fortolkningen gir en kommentar bare når de
+ * er klare.
+ */
+export type ThcRegler =
+  | { status: 'laster' }
+  | { status: 'feil'; melding: string; provIgjen: () => void }
+  | { status: 'klar'; modell: ThcModell }
+
 /* --- Måleusikkerheten ----------------------------------------------------- */
 
 /** log-standardavviket for forholdet mellom to prøver: √(2·CV²). */
@@ -100,7 +110,9 @@ export function konsentrasjonsniva(r: ThcRegelsett, aktuell: number): ThcKonsent
   return funnet
 }
 
-export type ThcKonklusjon = 'uten_forrige' | 'ikke_nodvendigvis' | 'vanskelig' | 'nytt_inntak'
+/** Konklusjonene, fra uten sammenligning til sikkert nytt inntak. */
+export const THC_KONKLUSJONER = ['uten_forrige', 'ikke_nodvendigvis', 'vanskelig', 'nytt_inntak'] as const
+export type ThcKonklusjon = (typeof THC_KONKLUSJONER)[number]
 
 export type ThcForventet = Record<ThcKurverolle, number>
 

@@ -227,6 +227,8 @@ function side(tilstand: Tilstand = 'publisert'): Analyttsidedata {
     ],
     referanser: [REF_A, REF_B],
     regelsett: regelsettutgave(tilstand),
+    thcregelsett: null,
+    scenarioregelsett: null,
   }
 }
 
@@ -392,10 +394,12 @@ function kilde({
     lesReferanser: vi.fn(async () => [REF_A, REF_B]),
     finnInfosider: vi.fn(async () => []),
     finnIntervallregelsett: vi.fn(async (_kode: string, tilstand: Tilstand) => data(tilstand).regelsett),
+    finnScenarioregelsett: vi.fn(async () => null),
     lesIntervallregelsett: vi.fn(async (tilstand: Tilstand) => {
       const regelsett = data(tilstand).regelsett
       return regelsett ? [regelsett.regelsett] : []
     }),
+    lesThcRegelsett: vi.fn(async (tilstand: Tilstand) => data(tilstand).thcregelsett),
     lesKommentarer: vi.fn(async (tilstand: Tilstand) => data(tilstand).regelsett?.kommentarer ?? []),
     lesReferanseomrader: vi.fn(async () => new Map()),
     lesHistorikk: vi.fn(async (id: string) =>
@@ -407,6 +411,7 @@ function kilde({
     lagreUtkast: vi.fn(async (id: string) => status(id, 3)),
     gjenopprettRevisjon: vi.fn(async (id: string) => status(id, 3)),
     lagreIntervallregelsett: vi.fn(async (id: string) => status(id, 3)),
+    lagreScenarioregelsett: vi.fn(async (id: string) => status(id, 3)),
     publiserUtkast: vi.fn(async (id: string) => status(id)),
     slettReferanse: vi.fn(),
   }

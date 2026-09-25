@@ -1,4 +1,3 @@
-import { KURVE_GRONN, KURVE_GUL, KURVE_ROD } from './thc'
 import { forventetEndring, tidForVerdi, verdiPaaKurve, type Kurve } from './thcKurver'
 import type { ThcGrafgrunnlag } from './thcMotor'
 import { THC_KURVEROLLER, kurverI, type ThcKurverolle, type ThcRegelsett } from './thcRegelsett'
@@ -32,13 +31,6 @@ export function figurkurver(r: ThcRegelsett): Figurkurve[] {
   const kurver = kurverI(r)
   return THC_KURVEROLLER.map((rolle) => ({ navn: r.kurver[rolle].navn, tone: rolle, kurve: kurver[rolle] }))
 }
-
-/** Figurkurvene fra konstantene i den opprinnelige modulen. */
-const FIGURKURVER: Figurkurve[] = [
-  { navn: 'Normal utskillelse', tone: 'gronn', kurve: KURVE_GRONN },
-  { navn: 'Moderat utskillelse', tone: 'gul', kurve: KURVE_GUL },
-  { navn: 'Treg utskillelse', tone: 'rod', kurve: KURVE_ROD },
-]
 
 /** Punkter per kurve. Nok til at også den bratteste starten står jevn. */
 const OPPLOSNING = 160
@@ -104,7 +96,7 @@ function penYAkse(minst: number, storst: number): { yTopp: number; yBunn: number
 /** Bygger hele figuren fra fortolkningens grafgrunnlag. */
 export function byggGraf(
   { forrige, dager, korrigertEndring }: ThcGrafgrunnlag,
-  figur: Figurkurve[] = FIGURKURVER,
+  figur: Figurkurve[],
 ): Graf {
   const korrigertProsent = korrigertEndring * 100
 

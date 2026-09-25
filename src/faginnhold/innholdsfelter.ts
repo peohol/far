@@ -3,6 +3,7 @@
  * sammenligner to revisjoner (se `historikk.ts`). Strukturert innhold
  * sammenlignes felt for felt, ikke som én lang tekst.
  */
+import { scenariofelter } from '../regler/scenarioredigering'
 import { regelsettfelter } from '../regler/visning'
 import { jsonfelter, type Felt } from './historikk'
 import type { Innhold, Innholdselementinnhold, Objekttype } from './modell'
@@ -65,7 +66,8 @@ const FELTER: { [T in Objekttype]: (innhold: Innhold[T]) => Felt[] } = {
     { nokkel: 'plassholdere', navn: 'Plassholdere', verdi: innhold.plassholdere.join(', ') || 'Ingen' },
   ],
   thc_regelsett: (innhold) => jsonfelter(innhold),
-  scenarioregelsett: (innhold) => jsonfelter(innhold),
+  // Som for intervallregelsettene: redigeringen gir historikken tekstene.
+  scenarioregelsett: (innhold) => scenariofelter(innhold, (id) => id),
 }
 
 /** Feltene historikken sammenligner for et objekt av typen. */

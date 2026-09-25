@@ -83,6 +83,45 @@ start, med antall scenarier og grensene i oppsummeringen. Kommentartekstene
 (`tekster`) og simulatoren (`simulator`) er detaljkort i den, så en
 direktelenke som `#/analytt/DIAZ/fortolkning/simulator` åpner simulatoren.
 
+## Redigeringen
+
+Administratorer redigerer reglene i redigeringsmodus, i seksjonen
+`fortolkning` («Rediger reglene»), med `Scenarioredigering.tsx`. Endringene
+er rene funksjoner i `src/regler/scenarioredigering.ts`. Det som kan endres,
+er det en fagperson skriver og justerer:
+
+- grensene (i prosent) og navnene deres;
+- hjelpeteksten om konsentrasjonene og meldingen når et forholdstall ikke kan
+  regnes ut;
+- i hvert scenario: kommentarteksten for hver plassering, hvilken tekst
+  plasseringen bruker, notisene, og meldingen og veiledningen ved en manuell
+  vurdering.
+
+Hvilke scenarier som finnes, hva som er påvist i dem, vilkårene, merkene og
+kodene står fast: det er modellen, og redigeringen er ingen regelbygger.
+Brukes samme tekst flere steder, sier skjemaet hvor, og «Gi kommentaren egen
+tekst» lager en ny kommentar med samme tekst for akkurat den plasseringen.
+«Prøv utkastet» kjører skjemaet slik det står.
+
+Før lagringen tas mellomrom i endene bort, og utkastet kontrolleres med
+`validerScenarioregelsett` og kommentarreglene (`validerKommentar`).
+Feilene vises med scenarionumrene fra siden, ikke nøklene. Regelsettet og de
+nye og endrede kommentarene lagres som utkast i én transaksjon med
+`lagre_scenarioregelsett` (`*_lagre_scenarioregelsett.sql`), hver mot
+revisjonen redigeringen åpnet. Har noen andre lagret i mellomtiden, står det
+brukeren har gjort, og hen kan sammenligne før hen forkaster eller lagrer over
+(`Regelfelter.tsx`, felles med intervallreglene). En ny kommentar får navn
+etter modulen, hva som er påvist og merket.
+
+Under reglene står «Sist redigert» med historikken for regelsettet og for
+hver kommentar, og hva som ikke er publisert (`Regelhistorikk.tsx`, felles
+med intervallreglene). Historikken og oppsummeringen sammenligner feltene fra
+`scenariofelter`. Regelsettet publiseres med siden, kommentarene først, og
+appen henter reglene fortolkningen bruker på nytt etterpå.
+`src/__tests__/scenarioredigering.test.ts`, `scenarioregler.test.tsx` og
+`scenarioregelsett.test.ts` prøver endringene, skjemaet og at databasen
+godtar det redigeringen lager for hver modul.
+
 ## Lagringen
 
 Objekttypen `scenarioregelsett` (`supabase/migrations/*_scenarioregelsett.sql`)
@@ -117,7 +156,9 @@ modul: mens de hentes, viser steget det og har ingenting å kopiere; kunne de
 ikke hentes, eller mangler eller feiler modulens regelsett, sier steget
 hvorfor og tilbyr «Prøv igjen». Det fortolker aldri med regler som ikke er
 publisert og kontrollert. Analyttsiden bruker de samme hentede reglene
-(`src/components/regler/Scenarioreglerkilde.tsx`). Hvilke moduler som finnes,
+(`src/components/regler/Scenarioreglerkilde.tsx`), unntatt i redigeringen, som
+leser utkastet. Etter en publisering hentes de på nytt; reglene appen alt har,
+står til de nye er hentet. Hvilke moduler som finnes,
 og hvilke koder de dekker, står i `src/domain/rus.ts`.
 
 ## Paritet

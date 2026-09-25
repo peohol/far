@@ -1,12 +1,7 @@
-import {
-  formaterIrcak,
-  formaterTall,
-  INGEN_SIKKERHETSMARGIN,
-  konsentrasjonsniva,
-  ordEndring,
-  USIKKERHET_UNDER_CUTOFF,
-  type ThcGrunnlag,
-} from '../domain/thc'
+import { erUtenMargin, konsentrasjonsniva, type ThcGrunnlag, type ThcKonklusjon } from '../domain/thcMotor'
+import type { ThcRegelsett } from '../domain/thcRegelsett'
+import { formaterIrcak, formaterTall, ordEndring } from '../domain/thcTall'
+import { forventetNedgang, nivabeskrivelse, somProsent } from '../domain/thcVisning'
 
 /**
  * Grunnlaget for fortolkningen, i vanlig språk — til å lese for den som vil
@@ -19,6 +14,9 @@ import {
  * et nytt inntak, og konklusjonen — slik at leseren finner igjen leddene i
  * resonnementet uten å lese alt. Brødteksten rykkes inn under overskriften
  * sin, så det synes hva som hører sammen.
+ *
+ * Grensene, nivåene og faktoren under cut-off leses av regelsettet
+ * fortolkningen brukte, så forklaringen alltid stemmer med kommentaren.
  */
 
 /** «en nedgang på 74 %», «en økning på 5 %» eller «ingen endring». */
@@ -28,29 +26,35 @@ function endringsfrase(endring: number): string {
   return `en ${ord} på ${Math.round(Math.abs(endring) * 100)} %`
 }
 
-export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; kategori: number }) {
+export function ThcForklaring({
+  grunnlag,
+  konklusjon,
+  regler,
+}: {
+  grunnlag: ThcGrunnlag
+  konklusjon: ThcKonklusjon
+  regler: ThcRegelsett
+}) {
   const { forrige, aktuell, dager, kronisk, maltEndring, korrigertEndring, forventet, underCutoff } =
     grunnlag
 
-  // Grensene kommentaren faktisk bruker: ett trinn strengere uten kronisk
-  // bruk, slik kategorien også telles.
-  const hosFleste = Math.round(-(kronisk ? forventet.gul : forventet.gronn) * 100)
-  const ovreGrense = Math.round(-(kronisk ? forventet.rod : forventet.gul) * 100)
+  // Grensene kommentaren faktisk bruker for bruksmønsteret.
+  const { hosFleste, ovreGrense } = forventetNedgang(regler, kronisk, forventet)
 
   const dagene = dager === 1 ? '1 dag' : `${dager} dager`
-  const niva = konsentrasjonsniva(aktuell)
+  const niva = konsentrasjonsniva(regler, aktuell).navn
 
   // Uten sikkerhetsmargin er det den målte endringen selv som sammenlignes
   // med kurvene, og forklaringen må kalle den det den er.
-  const utenMargin = grunnlag.sikkerhetsmargin === INGEN_SIKKERHETSMARGIN
+  const utenMargin = erUtenMargin(grunnlag.sikkerhetsmargin)
   const endringen = utenMargin ? 'Den målte endringen' : 'Den usikkerhetskorrigerte endringen'
 
   const vurdering =
-    kategori >= 4
+    konklusjon === 'nytt_inntak'
       ? `${endringen} viser mindre nedgang enn det som anses mulig selv ved ` +
         'den tregeste dokumenterte utskillelsen. Kommentaren sier derfor at cannabis har vært ' +
         'inntatt etter forrige prøve.'
-      : kategori === 3
+      : konklusjon === 'vanskelig'
         ? `${endringen} viser mindre nedgang enn forventet, men er fortsatt ` +
           'mulig ved spesielt treg utskillelse. Kommentaren sier derfor at ' +
           (underCutoff
@@ -95,7 +99,7 @@ export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; k
             <p>
               Målinger har usikkerhet, så det sanne forholdstallet kan være noe høyere eller lavere
               enn det målte. Korrigert for måleusikkerhet kan vi med{' '}
-              {grunnlag.sikkerhetsmargin * 100} % sikkerhet si at det sanne forholdstallet er minst{' '}
+              {somProsent(grunnlag.sikkerhetsmargin)} % sikkerhet si at det sanne forholdstallet er minst{' '}
               {formaterTall(korrigertEndring + 1)} — tilsvarende {endringsfrase(korrigertEndring)}.
               Det er dette tallet, med tvilen i personens favør, som sammenlignes med
               utskillelseskurvene.
@@ -105,7 +109,7 @@ export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; k
             <p>
               Fordi forrige prøve fortolkes under påvisningsgrensen, er måleusikkerheten lagt{' '}
               {/* Hardt mellomrom: tallet og prosenttegnet skal ikke skilles av et linjeskift. */}
-              {`${Math.round((USIKKERHET_UNDER_CUTOFF - 1) * 100)}\u00a0%`} høyere til grunn enn
+              {`${Math.round((regler.maleusikkerhet.faktor_under_cutoff - 1) * 100)}\u00a0%`} høyere til grunn enn
               ellers. Det gjør fortolkningen mer forsiktig.
             </p>
           )}
@@ -138,9 +142,8 @@ export function ThcForklaring({ grunnlag, kategori }: { grunnlag: ThcGrunnlag; k
         <div className="thc-forklaring__kropp">
           <p>{vurdering}</p>
           <p>
-            Kommentarens åpning følger konsentrasjonen i denne prøven: under 20 omtales som lav,
-            20–40 som middels høy, og 40 eller mer som høy. {formaterIrcak(aktuell)} regnes derfor
-            som {niva} konsentrasjon.
+            Kommentarens åpning følger konsentrasjonen i denne prøven: {nivabeskrivelse(regler)}.{' '}
+            {formaterIrcak(aktuell)} regnes derfor som {niva} konsentrasjon.
           </p>
         </div>
       </section>

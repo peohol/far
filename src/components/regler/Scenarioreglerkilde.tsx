@@ -14,7 +14,8 @@ export interface Scenarioreglerkilde {
 
 /**
  * Henter de publiserte scenarioreglene én gang når appen starter, og på nytt
- * når noen ber om det. `les` er kallet mot databasen; testene gir sitt eget.
+ * når noen ber om det: etter en feil, eller når en administrator har
+ * publisert. `les` er kallet mot databasen; testene gir sitt eget.
  */
 export function useHentScenarioregler(les: () => Promise<Scenarioregeldata>): Scenarioreglerkilde {
   const [tilstand, setTilstand] = useState<Scenarioreglertilstand>({ status: 'laster' })
@@ -22,13 +23,18 @@ export function useHentScenarioregler(les: () => Promise<Scenarioregeldata>): Sc
 
   useEffect(() => {
     let gjelder = true
-    setTilstand({ status: 'laster' })
+    // Reglene appen alt har, står til de nye er hentet, og blir stående om
+    // hentingen feiler: fortolkningen skal ikke miste reglene underveis.
+    setTilstand((forrige) => (forrige.status === 'klar' ? forrige : { status: 'laster' }))
     les()
       .then((data) => {
         if (gjelder) setTilstand({ status: 'klar', regler: tilScenarioregler(data) })
       })
       .catch((e: Error) => {
-        if (gjelder) setTilstand({ status: 'feil', melding: `${REGLENE_KUNNE_IKKE_HENTES} ${e.message}` })
+        if (!gjelder) return
+        setTilstand((forrige) =>
+          forrige.status === 'klar' ? forrige : { status: 'feil', melding: `${REGLENE_KUNNE_IKKE_HENTES} ${e.message}` },
+        )
       })
     return () => {
       gjelder = false

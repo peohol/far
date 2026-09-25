@@ -12,6 +12,10 @@
  * (`data/referanseomrader.json`), slik steg 2 lager dem av de publiserte —
  * med den samme koden.
  *
+ * THC-syre fortolkes med regelsettet og tekstene som er publisert i Supabase.
+ * Uten database brukes det de ble importert fra (`fasit/thc-*-import.json`),
+ * som `thcRegelsettlagring.test.ts` viser at databasen gir tilbake uendret.
+ *
  * Rusmiddelmodulene fortolkes med regelsettene som er publisert i Supabase.
  * Uten database brukes grunnlaget de ble importert fra (`rusgrunnlag.ts`),
  * som `rusimport.test.ts` viser at databasen gir tilbake uendret. Rutenettet
@@ -23,11 +27,12 @@ import { ETG_ALTERNATIVER } from '../../domain/etg'
 import { grensepiller } from '../../domain/piller'
 import { RUS_MODULER } from '../../domain/rus'
 import { kjorScenarier, verdifelter } from '../../domain/scenario'
-import { beregnKategori, byggKommentar, type Konsentrasjonsniva } from '../../domain/thc'
+import { konklusjon, settSammen, velgTekstbolker, THC_KONKLUSJONER } from '../../domain/thcMotor'
 import { cutoffvalg, regelsettvalg } from '../../domain/valg'
 import { dagensRegelsett } from './dagensregler'
 import { referanseomradeFor } from './referanseomrader'
 import { RUS_KOMMENTARER, rusRegelsett } from './rusgrunnlag'
+import { THC_MODELL } from './thcgrunnlag'
 
 /** Konsentrasjonene som prøves i hvert felt en rusmiddelmodul ber om. */
 const RUSVERDIER = ['', '0', '0,05', '0,1', '0,19', '0,2', '0,21', '0,5', '0,99', '1', '1,01', '2', '10', '100']
@@ -70,19 +75,22 @@ export function fortolkningsutfall() {
     }
   })
 
-  const nivaer: Konsentrasjonsniva[] = ['lav', 'middels høy', 'høy']
-  const thc = nivaer.flatMap((niva) =>
-    [0, 1, 2, 3, 4, 5].flatMap((kategori) =>
-      [true, false].flatMap((medForrige) =>
-        [true, false].map((underCutoff) => byggKommentar(niva, kategori, medForrige, '01.02.2026', underCutoff)),
+  // Kommentaren for hvert nivå og hver konklusjon, med og uten at forrige
+  // prøve lå under cut-off — alle kombinasjonene tekstbolkene velges etter.
+  const { regler, tekster } = THC_MODELL
+  const thc = regler.konsentrasjonsnivaer.flatMap((niva) =>
+    THC_KONKLUSJONER.flatMap((utfall) =>
+      [true, false].map((underCutoff) =>
+        settSammen(tekster, velgTekstbolker(niva, utfall, underCutoff), {
+          niva: niva.navn,
+          forrigeDato: '01.02.2026',
+        }),
       ),
     ),
   )
   const forventet = { gronn: 1, gul: 2, rod: 3 }
-  const kategorier = [true, false].flatMap((medForrige) =>
-    [true, false].flatMap((kronisk) =>
-      [0.5, 1, 1.5, 2, 2.5, 3, 3.5].map((korrigert) => beregnKategori(medForrige, kronisk, korrigert, forventet)),
-    ),
+  const kategorier = [true, false].flatMap((kronisk) =>
+    [0.5, 1, 1.5, 2, 2.5, 3, 3.5].map((korrigert) => konklusjon(regler, kronisk, korrigert, forventet)),
   )
 
   return { band, etg: ETG_ALTERNATIVER, rus, thc, kategorier }

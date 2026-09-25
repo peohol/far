@@ -11,11 +11,13 @@ uleselige.
 
 ## Status
 
-Motoren, reglene og tekstene finnes som kode og data i appen, med fasit mot
-den opprinnelige modulen. Reglene og tekstene er lagret og publisert i
-Supabase, med historikk og kontroll på serveren (se [Lagringen](#lagringen)).
-Fortolkningen i appen bruker fortsatt den opprinnelige modulen
-(`src/domain/thc.ts`). Redigering og byttet av datakilde er ikke gjort ennå.
+Reglene og tekstene er lagret og publisert i Supabase, med historikk og
+kontroll på serveren (se [Lagringen](#lagringen)). Fortolkningsmodulen
+fortolker med motoren og det som er publisert (se [I appen](#i-appen)), og
+analyttsiden for IRCAK viser reglene, tekstene og en simulator. Den
+opprinnelige modulen er bare igjen som fasit i testene. Administratorer kan
+redigere reglene og tekstene på analyttsiden og publisere dem som resten av
+siden (se [Redigeringen](#redigeringen)).
 
 ## Delene
 
@@ -27,12 +29,20 @@ Fortolkningen i appen bruker fortsatt den opprinnelige modulen
 | `src/domain/thcMotor.ts` | Motoren: fra inndata, regler og tekster til kommentar, konklusjon og tallgrunnlag |
 | `src/domain/thcTall.ts` | Tall og datoer slik de tastes og skrives |
 | `src/domain/thcPlot.ts` | Figuren med kurvene og de to prøvene |
-| `src/domain/thc.ts` | Den opprinnelige modulen, med regnearkets konstanter i koden. Brukes av fortolkningen |
+| `src/domain/thcVisning.ts` | Det modulen og analyttsiden skriver om reglene: nivåene, marginene og kurvene per bruksmønster |
+| `src/domain/thc.ts` | Koden, analysemetoden og søkeoppføringen |
+| `src/faginnhold/thcregler.ts` | Fra det databasen gir til en kontrollert modell, eller feilen modulen viser |
+| `src/components/ThcStep.tsx`, `ThcSkjema.tsx`, `ThcUtfall.tsx` | Modulen: skjemaet, kommentaren og kurvene, delt med simulatoren |
+| `src/components/regler/Thcregler.tsx`, `Thcsimulator.tsx` | Reglene, tekstbolkene og simulatoren på analyttsiden |
+| `src/components/regler/Thcredigering.tsx` | Redigeringen av reglene og tekstene |
+| `src/domain/__tests__/hjelp/thcOpprinnelig.ts` | Den opprinnelige modulen, med regnearkets konstanter i koden. Bare fasit i testene |
 | `src/domain/__tests__/fasit/thc-regelsett-import.json`, `thc-tekster-import.json` | Reglene og tekstene slik de står i den opprinnelige modulen |
 | `src/domain/__tests__/fasit/thc-fasit.json` | Fasiten: utfallet av den opprinnelige modulen for over 4000 inndata |
 | `scripts/lag-thc-fasit.ts` | Lager fasiten på nytt, bare ved bevisst klinisk endring |
 | `supabase/migrations/*_thc_regelsett*.sql`, `*_thc_tekster_som_kommentarer.sql` | Lagringen: tabellene, kontrollen på serveren, importen og flyttingen av tekstene |
 | `src/__tests__/thcRegelsettlagring.test.ts` | Lagringen prøvd mot en ekte database bygd av migrasjonene |
+| `src/__tests__/thcsteg.test.tsx`, `thcregler.test.tsx` | Modulen og analyttsiden med reglene de får |
+| `src/__tests__/thcredigering.test.tsx`, `thcredigeringslagring.test.ts` | Redigeringen, og lagringen og publiseringen av den mot en ekte database |
 
 ## Fremgangsmåten
 
@@ -172,6 +182,46 @@ Revisjon 1 og 2 har tekstene i seg. Gjenopprettes en av dem, får regelsettet
 reglene derfra og beholder kommentarene det peker på nå; tekstene har sin egen
 historikk.
 
+## I appen
+
+Appen henter det publiserte regelsettet og tekstene når den åpnes
+(`Faginnholdsleser.lesThcRegelsett`), og på nytt når en administrator går fra
+en analyttside tilbake til fortolkningen. `thcReglerFra` kontrollerer dem og
+setter dem sammen til modellen motoren bruker. Modulen gir ingen kommentar før
+de er hentet, og sier fra i stedet om de ikke kunne hentes, ikke finnes eller
+ikke består kontrollen. Mens de hentes på nytt, står de gamle.
+
+Alt modulen viser om reglene kommer fra regelsettet: stoppene på
+sikkerhetsmarginen, varselgrensen, og nivåene, grensene per bruksmønster og
+faktoren under cut-off i forklaringen. Står skjemaet på en margin et nytt
+regelsett ikke har, gir motoren en mangel og ingen kommentar.
+
+Analyttsiden for IRCAK har seksjonen `fortolkning` med oversikten over
+reglene, detaljkortet `tekster` med hver tekstbolk og når den brukes, og
+detaljkortet `simulator`. Simulatoren bruker det samme skjemaet, den samme
+kommentaren og de samme kurvene som modulen, og viser hvilke tekstbolker
+kommentaren ble satt sammen av. I redigeringsmodus er det utkastet som vises.
+
+## Redigeringen
+
+I redigeringsmodus har seksjonen «Rediger reglene». Hvert tall har sitt eget
+felt, andelene som prosent, og et felt som ikke røres, beholder tallet helt
+ned til siste siffer. Nivåer og marginer kan legges til og fjernes; z for en
+ny margin regnes ut av marginen. Tekstene redigeres der bolken er beskrevet,
+med plassholderne den må ha.
+
+`thcUtkastfeil` samler feilene mens det skrives — `validerThcRegelsett`,
+`validerThcTekst` og plassholderne kommentaren har fra før, som ikke kan
+endres — og utkastet kan ikke lagres før de er rettet. Så lenge det er
+gyldig, fortolker simulatoren under med utkastet slik det står.
+
+`thcEndringer` avgjør hva som lagres: hver kommentar med endret tekst, og
+regelsettet bare når reglene er endret. Bolkene peker på de samme
+kommentarene som før, så lagringene er uavhengige av hverandre og går hver
+mot revisjonen som ble åpnet. Har noen andre lagret i mellomtiden, blir det
+en konflikt og siden leses på nytt. Publiseringsplanen tar de endrede
+kommentarene før regelsettet, som databasen krever.
+
 ## Fasiten
 
 Motoren er skrevet slik at regnestykkene skjer i nøyaktig samme rekkefølge som
@@ -186,8 +236,14 @@ To sett tester holder det slik:
   nivåene. De dekker også IRCAK 0, under cut-off, ingen tidligere prøve,
   varselgrensen og ugyldige felt. Beskrivelsen står i `hjelp/thcFasit.ts`.
 - `thcParitet.test.ts` kjører den opprinnelige modulen og motoren side om
-  side på 20 000 tilfeldige inndata. Den fjernes sammen med den opprinnelige
-  modulen; da står fasiten igjen.
+  side på 20 000 tilfeldige inndata, og sammenligner tekstbolkene og
+  konklusjonen for hver kombinasjon av nivå, utfall og under cut-off.
+- `fortolkningUendret.test.ts` holder alle kommentarene motoren kan gi med de
+  publiserte tekstene, og konklusjonen for et rutenett av endringer, fast med
+  SHA-256.
+- `thcRegelsettlagring.test.ts` leser regelsettet slik appen gjør, fra en
+  database bygd av migrasjonene, og krever nøyaktig den modellen fasiten er
+  laget med.
 
 Fasiten lages bare på nytt når den kliniske outputen endres med vilje, i samme
 PR som endringen, og da med merket «Fag» i endringsloggen.

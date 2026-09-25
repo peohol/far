@@ -260,6 +260,8 @@ function side(): Analyttsidedata {
         utgave('k1', { navn: 'TEST – under referanseområdet', tekst: 'Syntetisk lav.', plassholdere: [] }, 2, 1),
       ],
     },
+    thcregelsett: null,
+    scenarioregelsett: null,
   }
 }
 
