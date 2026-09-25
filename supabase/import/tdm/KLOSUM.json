@@ -1,0 +1,40 @@
+{
+  "kode": "KLOSUM",
+  "sider": [
+    9,
+    13,
+    14,
+    40
+  ],
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 700,
+      "ovre": 1500,
+      "enhet": "nmol/L",
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  },
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Rett før neste dose, det vil si 12–24 timer etter siste dose."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "For trisykliske antidepressiva er referanseområdet satt ut fra litteraturen, ikke ut fra laboratoriedata, og det videste av områdene de to laboratoriene brukte, ble valgt. Sammenhengen mellom konsentrasjon og effekt er best vist for nortriptylin, deretter amitriptylin og til en viss grad klomipramin. Øvre grense settes i stor grad av doseavhengig toksisitet.",
+        "Området gjelder summen av klomipramin og desmetylklomipramin."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  ]
+}

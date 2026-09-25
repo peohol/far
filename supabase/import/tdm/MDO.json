@@ -1,0 +1,37 @@
+{
+  "kode": "MDO",
+  "sider": [
+    37,
+    44
+  ],
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 600,
+      "ovre": 1200,
+      "enhet": "nmol/L",
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  },
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Rett før neste dose, det vil si 12–24 timer etter siste dose."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Referanseområdet er området preparatomtalen for metadon anbefaler, og det samme som brukes ved de andre store laboratoriene i Norge. Den kliniske vurderingen skal tillegges vesentlig vekt."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  ]
+}

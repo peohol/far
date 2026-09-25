@@ -350,6 +350,7 @@ describe('sidemodellen', () => {
       'farmakokinetikk',
       'farmakogenetikk',
       'interaksjoner',
+      'tdm',
       'serumkonsentrasjoner',
     ])
   })

@@ -1,0 +1,50 @@
+{
+  "kode": "AMF1",
+  "sider": [
+    3,
+    4
+  ],
+  "kilde": "Nye anbefalinger ved serumkonsentrasjonsmålinger av sentralstimulerende legemidler.pdf, side 2–4",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 100,
+      "ovre": 800,
+      "enhet": "nmol/L",
+      "referanser": [
+        "frost2019"
+      ]
+    }
+  },
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "4–8 timer etter siste perorale inntak, for alle midler og formuleringer.",
+        "Tidsrommet ligger rundt og like etter konsentrasjonsmaksimum, der samsvaret mellom konsentrasjon og ønsket effekt ved ADHD antas å være best, og innenfor tiden med ønsket effekt."
+      ],
+      "referanser": [
+        "frost2019"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Referanseområdet gjelder ved bruk av deksamfetamin eller lisdeksamfetamin. Det er ikke definert for racemisk amfetamin.",
+        "Det er definert på farmakokinetisk grunnlag og angir forventet konsentrasjon ved vanlige terapeutiske doser. Det er ikke funnet grunnlag for egne områder for barn og voksne."
+      ],
+      "referanser": [
+        "frost2019"
+      ]
+    },
+    {
+      "tittel": "Tolkning",
+      "tekst": [
+        "Sammenhengen mellom serumkonsentrasjon og effekt er ikke entydig eller godt klinisk dokumentert, og optimal konsentrasjon varierer mellom pasienter. Klinisk vurdering bør alltid avgjøre hva som er riktig dose, og om dosen bør endres.",
+        "Måling kan være aktuelt for å vurdere terapieffekt, etterlevelse og eventuelt misbruk."
+      ],
+      "referanser": [
+        "frost2019"
+      ]
+    }
+  ]
+}

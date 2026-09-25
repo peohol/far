@@ -1,0 +1,41 @@
+{
+  "kilde": "sluttrapporten fra referanseområdeprosjektet (2008)",
+  "rettinger": [
+    {
+      "kode": "ESCIT",
+      "rad": { "dose": "20–60 mg", "konsentrasjon": "10.–90. persentil: 19–109 nmol/L" },
+      "til": { "dose": "10–30 mg" },
+      "hvorfor": "doseringsintervallet for escitalopram er 10–30 mg, ikke 20–60 mg"
+    },
+    {
+      "kode": "FLUOSUM",
+      "rad": { "dose": "25–60 mg", "konsentrasjon": "10.–90. persentil: 410–2 406 nmol/L" },
+      "til": { "dose": "20–60 mg" },
+      "hvorfor": "doseringsintervallet for fluoksetin er 20–60 mg, ikke 25–60 mg"
+    },
+    {
+      "kode": "KLORP",
+      "rad": { "dose": "…?", "konsentrasjon": "10.–90. persentil: 5–103 nmol/L" },
+      "til": { "dose": "15–300 mg", "konsentrasjon": "10.–90. persentil: 5–64 nmol/L" },
+      "hvorfor": "doseringsintervallet er 15–300 mg, og 90-persentilen er 64 nmol/L (103 er 95-persentilen)"
+    },
+    {
+      "kode": "LMP",
+      "rad": { "dose": "…?", "konsentrasjon": "10.–90. persentil: 14–158 nmol/L" },
+      "til": { "dose": "25–400 mg" },
+      "hvorfor": "doseringsintervallet for levomepromazin er 25–400 mg"
+    },
+    {
+      "kode": "LURA",
+      "rad": { "dose": "…?", "konsentrasjon": "10.–90. persentil: 14–158 nmol/L" },
+      "til": null,
+      "hvorfor": "lurasidon er ikke med i rapporten, og raden var tallene for levomepromazin"
+    },
+    {
+      "kode": "SERT",
+      "rad": { "dose": "50–200 mg", "konsentrasjon": "10.–90. persentil: 26–291 nmol/L" },
+      "til": { "konsentrasjon": "10.–90. persentil: 26–219 nmol/L" },
+      "hvorfor": "90-persentilen er 219 nmol/L (291 er 95-persentilen)"
+    }
+  ]
+}

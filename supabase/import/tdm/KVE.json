@@ -1,0 +1,54 @@
+{
+  "kode": "KVE",
+  "sider": [
+    25,
+    41
+  ],
+  "kilde": "080401 - Sluttrapport referanseområder antipsykotika og antidepressiva.pdf, side 25, 41, og fortolkningskommentarene i FAR",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 50,
+      "ovre": 700,
+      "enhet": "nmol/L",
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  },
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Rett før neste dose, det vil si 12 timer ± 1 time etter siste dose."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    },
+    {
+      "tittel": "Prøvetaking per legemiddelform",
+      "tekst": [
+        {
+          "punkter": [
+            "Tabletter: 12 timer ± 1 time etter siste dose.",
+            "Depottabletter: 18–24 timer etter siste dose."
+          ]
+        }
+      ],
+      "referanser": [
+        "referanseomradeprosjektet",
+        "ousfortolkning"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Referanseområdet bygger på serumkonsentrasjoner målt hos pasienter som brukte 50–1000 mg daglig: 10- og 90-persentilen, rundet av, i data fra Diakonhjemmet sykehus og St. Olavs hospital (2005–2007).",
+        "Området viser hvilke konsentrasjoner som er vanlige ved anbefalte doser, og er ikke et dokumentert terapeutisk område."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  ]
+}

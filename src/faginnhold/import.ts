@@ -86,12 +86,22 @@ export interface Importserum {
 /** Innholdet for én analyttkode, fra én eller flere sider i kilden. */
 export interface Importfil {
   kode: string
-  sider: number[]
+  /** Sidene i dokumentet innholdet er hentet fra. Kan utelates når `kilde` står. */
+  sider?: number[]
+  /**
+   * Hvor innholdet er hentet fra, slik historikken skal vise det, når det er
+   * noe annet enn dokumentet importen gjelder (se {@link Importkilde}): f.eks.
+   * «Tidsskriftartikkel.pdf, side 1–2, og Rapport.pdf, side 36». Står det,
+   * brukes det i stedet for dokumentet og sidene.
+   */
+  kilde?: string
   viktige_data?: Record<string, Importverdi>
   farmakodynamikk?: Importtekst
   dosering?: Importtekst
   indikasjon?: Importtekst
   farmakokinetikk?: Importkinetikk[]
+  /** Kortene i seksjonen om terapeutisk legemiddelmonitorering, i rekkefølge. */
+  tdm?: Importkinetikk[]
   serumkonsentrasjoner?: Importserum
   /** Referansene filen bruker, utenom de felles. Nøkkel → referanse. */
   referanser?: Record<string, Referanseinnhold>
@@ -106,6 +116,32 @@ export interface Importkilde {
    * Står i kilden til revisjonene deres.
    */
   felleskatalogen: string
+}
+
+/** Filen med referansene flere filer i et datasett deler. */
+const FELLESFIL = 'felles.json'
+
+/** Et datasett: filene for hver analyttkode, sortert på koden, og de felles referansene. */
+export interface Datasett {
+  filer: Importfil[]
+  referanser: Record<string, Referanseinnhold>
+}
+
+/**
+ * Datasettet i en mappe, lest med `import.meta.glob` (filsti → innhold):
+ * én fil per analyttkode, og `felles.json` med referansene de deler.
+ */
+export function datasett(filer: Readonly<Record<string, unknown>>): Datasett {
+  const felles = Object.entries(filer).find(([sti]) => sti.endsWith(`/${FELLESFIL}`))?.[1] as
+    | { referanser?: Record<string, Referanseinnhold> }
+    | undefined
+  return {
+    filer: Object.entries(filer)
+      .filter(([sti]) => !sti.endsWith(`/${FELLESFIL}`))
+      .map(([, fil]) => fil as Importfil)
+      .sort((a, b) => a.kode.localeCompare(b.kode)),
+    referanser: felles?.referanser ?? {},
+  }
 }
 
 /* --- Planen --------------------------------------------------------------- */
@@ -246,15 +282,19 @@ export function kinetikktittel(tittel: string): string {
 const FILFELT = new Set([
   'kode',
   'sider',
+  'kilde',
   'viktige_data',
   'farmakodynamikk',
   'dosering',
   'indikasjon',
   'farmakokinetikk',
+  'tdm',
   'serumkonsentrasjoner',
   'referanser',
 ])
 const TEKSTPANELER = ['farmakodynamikk', 'dosering', 'indikasjon'] as const
+/** Panelene med en ordnet serie kort med overskrift og tekst. */
+const KORTPANELER = ['farmakokinetikk', 'tdm'] as const
 const DATAKORTTYPER = new Set<string>(DATAKORT.map((k) => k.type))
 /** Panelene som er hentet fra Felleskatalogen, ikke fra PDF-en. */
 const FELLESKATALOGPANELER = new Set<string>(['indikasjon'])
@@ -331,11 +371,15 @@ export function byggImportplan(
     if (brukteKoder.has(fil.kode)) feil.push(`${hvor}: koden står i flere filer.`)
     brukteKoder.add(fil.kode)
     for (const felt of Object.keys(fil)) if (!FILFELT.has(felt)) feil.push(`${hvor}: ukjent felt «${felt}».`)
-    if (!Array.isArray(fil.sider) || fil.sider.length === 0 || !fil.sider.every((s) => Number.isInteger(s) && s > 0)) {
-      feil.push(`${hvor}: «sider» må være en liste med sidetall.`)
+    const kanUtelateSider = fil.sider === undefined && typeof fil.kilde === 'string'
+    if (!kanUtelateSider && (!Array.isArray(fil.sider) || fil.sider.length === 0 || !fil.sider.every((s) => Number.isInteger(s) && s > 0))) {
+      feil.push(`${hvor}: «sider» må være en liste med sidetall, med mindre «kilde» står.`)
+    }
+    if (fil.kilde !== undefined && (typeof fil.kilde !== 'string' || fil.kilde.trim() === '')) {
+      feil.push(`${hvor}: «kilde» må være en tekst.`)
     }
 
-    const fraKilden = `${pdfkilde}, ${sidetekst(fil.sider ?? [])}`
+    const fraKilden = fil.kilde ? `Importert fra ${fil.kilde.trim()}` : `${pdfkilde}, ${sidetekst(fil.sider ?? [])}`
     const egne = fil.referanser ?? {}
     for (const [nokkel, innhold] of Object.entries(egne)) {
       leggTilReferanse(nokkel, innhold, hvor, nokkel.startsWith('fk-') ? fkkilde : fraKilden)
@@ -410,16 +454,21 @@ export function byggImportplan(
       element(panel, ELEMENTTYPER.riktekst, { dokument }, innhold.referanser)
     }
 
-    // Panel 6: farmakokinetikken, kort for kort.
-    ;(fil.farmakokinetikk ?? []).forEach((kort, posisjon) => {
-      const tittel = kinetikktittel(kort.tittel ?? '')
-      if (!tittel) feil.push(`${hvor} farmakokinetikk ${posisjon + 1}: kortet mangler overskrift.`)
-      const dokument = tekst(kort.tekst, `farmakokinetikk/${tittel}`)
-      if (!dokument) return
-      const data = { tittel, dokument }
-      if (!erLik(lesKinetikk(data), data)) feil.push(`${hvor} farmakokinetikk/${tittel}: kortet leses ikke tilbake likt.`)
-      element('farmakokinetikk', ELEMENTTYPER.kinetikk, data, kort.referanser, posisjon)
-    })
+    // Farmakokinetikken og TDM: kort for kort.
+    for (const panel of KORTPANELER) {
+      const titler = new Set<string>()
+      ;(fil[panel] ?? []).forEach((kort, posisjon) => {
+        const tittel = kinetikktittel(kort.tittel ?? '')
+        if (!tittel) feil.push(`${hvor} ${panel} ${posisjon + 1}: kortet mangler overskrift.`)
+        if (titler.has(tittel)) feil.push(`${hvor} ${panel}/${tittel}: to kort har samme overskrift.`)
+        titler.add(tittel)
+        const dokument = tekst(kort.tekst, `${panel}/${tittel}`)
+        if (!dokument) return
+        const data = { tittel, dokument }
+        if (!erLik(lesKinetikk(data), data)) feil.push(`${hvor} ${panel}/${tittel}: kortet leses ikke tilbake likt.`)
+        element(panel, ELEMENTTYPER.kinetikk, data, kort.referanser, posisjon)
+      })
+    }
 
     // Panel 7: serumkonsentrasjonene.
     if (fil.serumkonsentrasjoner) {
@@ -515,7 +564,7 @@ function finnReferanse(innhold: Referanseinnhold): string {
 export type UtenAdministrator = 'feil' | 'hopp over'
 
 /** Starten på hver blokk: administratoren som gjør importen, som innlogget. */
-function innlogging(admin: string, utenAdministrator: UtenAdministrator): string {
+export function innlogging(admin: string, utenAdministrator: UtenAdministrator): string {
   const mangler =
     utenAdministrator === 'feil'
       ? `    raise exception 'Fant ingen administrator med brukernavnet %.', ${lit(admin)};`
@@ -564,11 +613,37 @@ function referanseSql(ref: Planreferanse): string[] {
 const REFERANSER_PER_BLOKK = 25
 
 /**
+ * Hva en blokk gjør med en kode som alt har en side:
+ *
+ * - `hopp over` — lar den stå urørt. Slik kan en import kjøres igjen etter et
+ *   avbrudd uten å legge noe inn to ganger.
+ * - `utvid` — legger til det siden ikke har fra før, og lar alt den har stå.
+ *   Et kort står fra før når siden har et kort av samme type i samme panel,
+ *   med samme overskrift. Et datakort som står fra før, får kildene i
+ *   datasettet lagt til bare når verdien er nøyaktig den datasettet har; er
+ *   den en annen, røres det ikke, så en verdi aldri endres i stillhet. Da
+ *   sier blokken fra (`raise notice`). Et kort med et upublisert utkast røres
+ *   heller ikke, siden publiseringen ellers ville tatt utkastet med seg.
+ */
+export type FinnesFraFor = 'hopp over' | 'utvid'
+
+/** Kilden i historikken når kildene legges til på et kort som står fra før. */
+export function kildetilleggskilde(kilde: string): string {
+  return `Kilde lagt til: ${kilde.replace(/^Importert fra /, '')}`
+}
+
+/**
  * SQL-en for importen: blokker for referansene, så én per analyttkode. Hver
  * blokk er én transaksjon. `admin` er brukernavnet til administratoren
  * revisjonene føres på.
  */
-export function importSql(plan: Importplan, admin: string, utenAdministrator: UtenAdministrator = 'feil'): string[] {
+export function importSql(
+  plan: Importplan,
+  admin: string,
+  utenAdministrator: UtenAdministrator = 'feil',
+  finnesFraFor: FinnesFraFor = 'hopp over',
+): string[] {
+  const utvid = finnesFraFor === 'utvid'
   const referansegrupper = Array.from({ length: Math.ceil(plan.referanser.length / REFERANSER_PER_BLOKK) }, (_, i) =>
     plan.referanser.slice(i * REFERANSER_PER_BLOKK, (i + 1) * REFERANSER_PER_BLOKK),
   )
@@ -587,6 +662,7 @@ export function importSql(plan: Importplan, admin: string, utenAdministrator: Ut
       (s, i, alle) => alle.findIndex((a) => a.navn.toLocaleLowerCase('nb') === s.navn.toLocaleLowerCase('nb')) === i,
     )
     const sidevariabel = (navn: string) => `side_${sider.findIndex((s) => s.navn.toLocaleLowerCase('nb') === navn.toLocaleLowerCase('nb'))}`
+    const hovedside = sidevariabel(kode.hovedside.navn)
     const refnokler = [...new Set(kode.elementer.flatMap((e) => e.referanser))]
     const refvariabel = (nokkel: string) => `referanse_${refnokler.indexOf(nokkel)}`
     const referanseinnhold = new Map(plan.referanser.map((r) => [r.nokkel, r.innhold]))
@@ -594,25 +670,12 @@ export function importSql(plan: Importplan, admin: string, utenAdministrator: Ut
     const deklarasjoner = [
       ...sider.map((_, i) => `  side_${i} uuid;`),
       ...refnokler.map((_, i) => `  referanse_${i} uuid;`),
+      ...(utvid
+        ? ['  kort uuid;', '  revisjon integer;', '  publisert boolean;', '  innhold jsonb;', '  kilder jsonb;']
+        : []),
     ].join('\n')
 
-    const kropp: string[] = [
-      `  if exists (select 1 from public.laboratorieanalytter a where a.kode = ${lit(kode.kode)}) then`,
-      `    raise notice '${kode.kode} har alt en side og hoppes over.';`,
-      `    return;`,
-      `  end if;`,
-      '',
-      '  -- Referansene siden siterer. De er lagt inn og publisert i den første blokken.',
-      ...refnokler.flatMap((nokkel) => {
-        const innhold = referanseinnhold.get(nokkel)!
-        return [
-          `  ${refvariabel(nokkel)} := ${finnReferanse(innhold)};`,
-          `  if ${refvariabel(nokkel)} is null then`,
-          `    raise exception 'Referansen % er ikke publisert. Kjør blokken for referansene først.', ${lit(nokkel)};`,
-          `  end if;`,
-        ]
-      }),
-      '',
+    const nySide: string[] = [
       '  -- Sidene: en side med samme navn som alt finnes, brukes.',
       ...sider.flatMap((s, i) => [
         `  select s.objekt_id into side_${i} from public.infosider s`,
@@ -627,31 +690,112 @@ export function importSql(plan: Importplan, admin: string, utenAdministrator: Ut
       kildeSql(kode.kilde),
       `  objekt := (public.opprett_utkast('laboratorieanalytt', jsonb_build_object(`,
       `    'kode', ${lit(kode.kode)},`,
-      `    'hovedside', ${sidevariabel(kode.hovedside.navn)},`,
+      `    'hovedside', ${hovedside},`,
       `    'komponenter', jsonb_build_array(${(kode.komponenter.length > 0 ? kode.komponenter : [kode.hovedside]).map((k) => sidevariabel(k.navn)).join(', ')})`,
       `  ))).id;`,
       `  nye := nye || objekt;`,
     ]
 
+    const kropp: string[] = [
+      ...(utvid
+        ? [
+            '  -- Siden koden har fra før, eller en ny.',
+            `  select a.hovedside_id into ${hovedside} from public.laboratorieanalytter a`,
+            `    where a.kode = ${lit(kode.kode)} and a.tilstand = 'utkast';`,
+            '',
+          ]
+        : [
+            `  if exists (select 1 from public.laboratorieanalytter a where a.kode = ${lit(kode.kode)}) then`,
+            `    raise notice '${kode.kode} har alt en side og hoppes over.';`,
+            `    return;`,
+            `  end if;`,
+            '',
+          ]),
+      '  -- Referansene siden siterer. De er lagt inn og publisert i den første blokken.',
+      ...refnokler.flatMap((nokkel) => {
+        const innhold = referanseinnhold.get(nokkel)!
+        return [
+          `  ${refvariabel(nokkel)} := ${finnReferanse(innhold)};`,
+          `  if ${refvariabel(nokkel)} is null then`,
+          `    raise exception 'Referansen % er ikke publisert. Kjør blokken for referansene først.', ${lit(nokkel)};`,
+          `  end if;`,
+        ]
+      }),
+      '',
+      ...(utvid
+        ? [
+            `  if ${hovedside} is null then`,
+            ...nySide.map((l) => (l ? `  ${l}` : l)),
+            '  end if;',
+            // Kilden settes også når siden fantes: innstillingen gjelder hele transaksjonen.
+            kildeSql(kode.kilde),
+          ]
+        : nySide),
+    ]
+
     let forrigeKilde = kode.kilde
     for (const e of kode.elementer) {
-      kropp.push('', `  -- ${e.panel}/${e.elementtype}`)
+      kropp.push('', `  -- ${e.panel}/${e.elementtype}${typeof e.data.tittel === 'string' ? ` «${e.data.tittel}»` : ''}`)
       if (e.kilde !== forrigeKilde) kropp.push(kildeSql(e.kilde))
       forrigeKilde = e.kilde
       const felt = [
-        `'infoside', ${sidevariabel(kode.hovedside.navn)}`,
+        `'infoside', ${hovedside}`,
         `'panel', ${lit(e.panel)}`,
         `'posisjon', ${e.posisjon}`,
         `'elementtype', ${lit(e.elementtype)}`,
         `'data', ${jsonLit(e.data)}`,
         ...(e.referanser.length > 0 ? [`'referanser', jsonb_build_array(${e.referanser.map(refvariabel).join(', ')})`] : []),
       ]
-      kropp.push(
+      const opprett = [
         `  objekt := (public.opprett_utkast('innholdselement', jsonb_build_object(`,
         `    ${felt.join(',\n    ')}`,
         `  ))).id;`,
         `  nye := nye || objekt;`,
+      ]
+      if (!utvid) {
+        kropp.push(...opprett)
+        continue
+      }
+
+      // Kortet siden har fra før: av samme type i samme panel, med samme overskrift.
+      const tittel = typeof e.data.tittel === 'string' ? lit(e.data.tittel) : 'null'
+      kropp.push(
+        `  kort := null;`,
+        `  select e.objekt_id, u.revisjon, u.revisjon = p.revisjon, r.innhold into kort, revisjon, publisert, innhold`,
+        `    from public.innholdselementer e`,
+        `    join public.objekttilstander u on u.objekt_id = e.objekt_id and u.tilstand = 'utkast'`,
+        `    left join public.objekttilstander p on p.objekt_id = e.objekt_id and p.tilstand = 'publisert'`,
+        `    join public.objektrevisjoner r on r.objekt_id = e.objekt_id and r.revisjon = u.revisjon`,
+        `    where e.tilstand = 'utkast' and e.infoside_id = ${hovedside} and e.panel = ${lit(e.panel)}`,
+        `      and e.elementtype = ${lit(e.elementtype)} and (e.data ->> 'tittel') is not distinct from ${tittel}`,
+        `    order by e.posisjon, e.objekt_id limit 1;`,
+        `  if kort is null then`,
+        ...opprett.map((l) => `  ${l}`),
       )
+      if (e.panel === 'viktige_data' && e.referanser.length > 0) {
+        // Kildene legges til på et datakort med nøyaktig samme verdi.
+        const sammeVerdi = (['nedre', 'ovre'] as const)
+          .map((felt) => `coalesce(innhold -> 'data' -> '${felt}', 'null') = ${jsonLit(e.data[felt] ?? null)}`)
+          .concat(`coalesce(innhold -> 'data' ->> 'enhet', '') = ${lit(String(e.data.enhet ?? ''))}`)
+        kropp.push(
+          `  elsif not (${sammeVerdi.join('\n      and ')}) then`,
+          `    raise notice '%: verdien på kortet % er en annen enn i kilden, og kortet endres ikke.', ${lit(kode.kode)}, ${lit(e.elementtype)};`,
+          `  elsif not publisert then`,
+          `    raise notice '%: kortet % har et upublisert utkast, og endres ikke.', ${lit(kode.kode)}, ${lit(e.elementtype)};`,
+          `  else`,
+          `    kilder := coalesce(innhold -> 'referanser', '[]');`,
+          ...e.referanser.map(
+            (n) => `    if not kilder ? ${refvariabel(n)}::text then kilder := kilder || to_jsonb(${refvariabel(n)}::text); end if;`,
+          ),
+          `    if kilder is distinct from coalesce(innhold -> 'referanser', '[]') then`,
+          `    ${kildeSql(kildetilleggskilde(e.kilde))}`,
+          `      perform public.lagre_utkast(kort, revisjon, innhold || jsonb_build_object('referanser', kilder));`,
+          `      perform public.publiser_utkast(kort, revisjon + 1);`,
+          `    ${kildeSql(e.kilde)}`,
+          `    end if;`,
+        )
+      }
+      kropp.push(`  end if;`)
     }
     return blokk(kode.kode, deklarasjoner, admin, utenAdministrator, kropp)
   })
@@ -665,9 +809,14 @@ export function importSql(plan: Importplan, admin: string, utenAdministrator: Ut
  * Finnes ikke administratoren, gjør de ingenting — slik kan de kjøres i
  * testdatabasen og i nye grener, der importen ikke hører hjemme.
  */
-export function importmigrasjoner(plan: Importplan, admin: string, maksTegn = 50_000): string[] {
+export function importmigrasjoner(
+  plan: Importplan,
+  admin: string,
+  maksTegn = 50_000,
+  finnesFraFor: FinnesFraFor = 'hopp over',
+): string[] {
   const filer: string[][] = []
-  for (const blokk of importSql(plan, admin, 'hopp over')) {
+  for (const blokk of importSql(plan, admin, 'hopp over', finnesFraFor)) {
     const siste = filer.at(-1)
     if (siste && [...siste, blokk].join('\n\n').length <= maksTegn) siste.push(blokk)
     else filer.push([blokk])
