@@ -219,6 +219,7 @@ function side(tilstand: Tilstand = 'publisert'): Analyttsidedata {
     ],
     referanser: [REF_A, REF_B],
     regelsett: regelsettutgave(tilstand),
+    thcregelsett: null,
     scenarioregelsett: null,
   }
 }
@@ -390,6 +391,7 @@ function kilde({
       const regelsett = data(tilstand).regelsett
       return regelsett ? [regelsett.regelsett] : []
     }),
+    lesThcRegelsett: vi.fn(async (tilstand: Tilstand) => data(tilstand).thcregelsett),
     lesKommentarer: vi.fn(async (tilstand: Tilstand) => data(tilstand).regelsett?.kommentarer ?? []),
     lesReferanseomrader: vi.fn(async () => new Map()),
     lesHistorikk: vi.fn(async (id: string) =>

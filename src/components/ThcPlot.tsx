@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import { Tips } from './Tips'
-import { byggGraf, formaterProsent } from '../domain/thcPlot'
-import type { ThcGrafgrunnlag } from '../domain/thc'
+import { byggGraf, figurkurver, formaterProsent } from '../domain/thcPlot'
+import type { ThcGrafgrunnlag } from '../domain/thcMotor'
+import type { ThcRegelsett } from '../domain/thcRegelsett'
 
 /**
  * Visualiseringen av en fortolkning mot forrige prøve: de tre
@@ -32,8 +33,8 @@ const PROFILTIPS: Record<'gronn' | 'gul' | 'rod', string> = {
   rod: 'Dette er den mest ekstreme utskillelsesprofilen som noensinne har blitt dokumentert. Vi har per dags dato ikke sett eksempler på at THC-syre kan skilles ut saktere enn dette.',
 }
 
-export function ThcPlot({ grunnlag }: { grunnlag: ThcGrafgrunnlag }) {
-  const graf = useMemo(() => byggGraf(grunnlag), [grunnlag])
+export function ThcPlot({ grunnlag, regler }: { grunnlag: ThcGrafgrunnlag; regler: ThcRegelsett }) {
+  const graf = useMemo(() => byggGraf(grunnlag, figurkurver(regler)), [grunnlag, regler])
 
   const venstre = MARG.venstre
   const hoyre = BREDDE - MARG.hoyre
@@ -94,7 +95,7 @@ export function ThcPlot({ grunnlag }: { grunnlag: ThcGrafgrunnlag }) {
 
         {graf.kurver.map((kurve) => (
           <polyline
-            key={kurve.navn}
+            key={kurve.tone}
             className={`thc-plot__kurve thc-plot__kurve--${kurve.tone}`}
             points={kurve.punkter.map((p) => `${x(p.dag).toFixed(1)},${y(p.prosent).toFixed(1)}`).join(' ')}
           />

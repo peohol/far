@@ -6,7 +6,6 @@ import {
   beregnKategori,
   byggKommentar,
   dagerMellom,
-  erThcAnalytt,
   formaterDatoNorsk,
   formaterIrcak,
   fortolkThc,
@@ -21,12 +20,13 @@ import {
   KURVE_ROD,
   lesTall,
   STANDARD_SIKKERHETSMARGIN,
-  THC_ANALYTT,
   tidForVerdi,
   TOM_THC_INNDATA,
   USIKKERHET_UNDER_CUTOFF,
   verdiPaaKurve,
-} from '../thc'
+  FIGURKURVER,
+} from './hjelp/thcOpprinnelig'
+import { erThcAnalytt, THC_ANALYTT } from '../thc'
 import { byggGraf, formaterProsent } from '../thcPlot'
 import { initialState, reducer, stageOf } from '../../state'
 
@@ -626,7 +626,7 @@ describe('forrige prøve under påvisningsgrensen', () => {
 })
 
 describe('visualiseringen', () => {
-  const graf = byggGraf({ forrige: 6.5, dager: 23, korrigertEndring: -0.7352964402245712 })
+  const graf = byggGraf({ forrige: 6.5, dager: 23, korrigertEndring: -0.7352964402245712 }, FIGURKURVER)
 
   it('tegner de tre kurvene fortolkningen bruker, med navnene eieren har valgt', () => {
     expect(graf.kurver.map((k) => k.navn)).toEqual([
@@ -682,11 +682,11 @@ describe('visualiseringen', () => {
     // Uten en øvre grense på dager mellom prøvene (fjernet fra fortolkningen)
     // må x-aksen selv holde antall merker nede — også for en prøve flere år
     // gammel, eller en feiltastet årstall.
-    const langt = byggGraf({ forrige: 6.5, dager: 3650, korrigertEndring: -0.95 })
+    const langt = byggGraf({ forrige: 6.5, dager: 3650, korrigertEndring: -0.95 }, FIGURKURVER)
     expect(langt.xSteg).toBeGreaterThan(10)
     expect(langt.xMaks / langt.xSteg).toBeLessThan(20)
 
-    const ekstremt = byggGraf({ forrige: 6.5, dager: 36500, korrigertEndring: -0.95 })
+    const ekstremt = byggGraf({ forrige: 6.5, dager: 36500, korrigertEndring: -0.95 }, FIGURKURVER)
     expect(ekstremt.xMaks / ekstremt.xSteg).toBeLessThan(20)
   })
 

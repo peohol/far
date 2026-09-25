@@ -651,3 +651,37 @@ button.historikk__velg:hover {
   text-align: left;
   color: var(--blekk);
 }
+
+/* --- THC-syrereglene ------------------------------------------------------
+   Seksjonen «fortolkning» på siden for IRCAK: grensene som pillene over, og
+   kurvene hvert bruksmønster avgjøres av som et lite oppslag under. */
+.regler__monstre {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  width: 100%;
+  margin: 0;
+  font-size: var(--tekst-ui);
+  line-height: 1.5;
+  text-align: left;
+}
+
+.regler__monstre > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+}
+
+.regler__monstre dt {
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+}
+
+.regler__monstre dt::after {
+  content: ':';
+}
+
+.regler__monstre dd {
+  margin: 0;
+  color: var(--blekk-dempet);
+}

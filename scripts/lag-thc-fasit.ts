@@ -16,9 +16,10 @@ import {
   beregnIrcak,
   lesTall,
   dagerMellom,
+  FIGURKURVER,
   USIKKERHET_UNDER_CUTOFF,
   type Sikkerhetsmargin,
-} from '../src/domain/thc'
+} from '../src/domain/__tests__/hjelp/thcOpprinnelig'
 import { byggGraf } from '../src/domain/thcPlot'
 import {
   fasitSomTekst,
@@ -60,7 +61,7 @@ function utfall(inn: FasitInndata): FasitUtfall {
 }
 
 const inndata = fasittilfeller(kurvetreff)
-const fasit = lagFasit(inndata, inndata.map(utfall), byggGraf)
+const fasit = lagFasit(inndata, inndata.map(utfall), (g) => byggGraf(g, FIGURKURVER))
 const fil = fileURLToPath(new URL('../src/domain/__tests__/fasit/thc-fasit.json', import.meta.url))
 writeFileSync(fil, fasitSomTekst(fasit))
 console.log(`${fasit.tilfeller.length} tilfeller, ${fasit.kommentarer.length} ulike kommentarer`)

@@ -1,101 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Button } from './Button'
 import { Card } from './Card'
-import { Details } from './Details'
 import { Metalinje } from './Metalinje'
 import { Panelhode } from './Panelhode'
 import { StepBar } from './StepBar'
 import { ManualCopy } from './ManualCopy'
-import { Tallfelt } from './Tallfelt'
-import { ThcForklaring } from './ThcForklaring'
-import { ThcPlot } from './ThcPlot'
-import { Tips } from './Tips'
+import { ThcSkjema } from './ThcSkjema'
+import { ThcKommentar, ThcVisualisering } from './ThcUtfall'
 import { Ikon } from './ikon/Ikon'
-import {
-  beregnIrcak,
-  formaterIrcak,
-  fortolkThc,
-  THC_ANALYSEMETODE,
-  THC_KODE,
-  TOM_THC_INNDATA,
-  VARSEL_DAGER_MELLOM,
-  type Sikkerhetsmargin,
-} from '../domain/thc'
+import { THC_ANALYSEMETODE, THC_KODE } from '../domain/thc'
+import { fortolkThc, tomThcInndata, type ThcModell, type ThcRegler } from '../domain/thcMotor'
 import { erBekreftelse } from '../hooks/useKeyboard'
 import { rullTilKort, useKortHopp } from '../hooks/useKortHopp'
 
-/**
- * Stoppene på sikkerhetsmarginen, fra ingen margin til den strengeste. De står
- * i den rekkefølgen skalaen har dem, så plasseringen på skalaen er indeksen i
- * lista.
- */
-const MARGINSTOPP: { verdi: Sikkerhetsmargin; merke: string }[] = [
-  { verdi: 0.5, merke: 'Ingen' },
-  { verdi: 0.9, merke: '90 %' },
-  { verdi: 0.99, merke: '99 %' },
-]
-
-/**
- * Hva sikkerhetsmarginen er: først hvorfor en målt endring ikke er den sanne,
- * så hva marginen gjør med den. Ordlyden er eierens egen; bare de rette
- * anførselstegnene er satt inn, som ellers i appen.
- */
-const MARGINTIPS = (
-  <>
-    <section className="tipsboble__bolk">
-      <h3 className="tipsboble__tittel">Målinger ≠ sann verdi</h3>
-      <p>
-        Det er uunngåelig at det oppstår tilfeldige avvik mellom målinger og den sanne verdien.
-      </p>
-      <p>
-        Fordi enkeltmålingene er usikre, vil også endringen mellom to prøver være usikre. Den
-        målte endringen er altså forventet å avvike fra den sanne endringen.
-      </p>
-      <p>
-        Det er 50/50 om endringen måles høyere eller lavere enn den sanne endringen. I
-        halvparten av tilfellene vil grunnlaget vårt for fortolkning være for strengt – i den
-        andre halvparten vil det være for snilt.
-      </p>
-    </section>
-    <section className="tipsboble__bolk">
-      <h3 className="tipsboble__tittel">Sikkerhetsmargin</h3>
-      <p>
-        Hvis vi tolker prøvene direkte med de målingene vi har, er vi 50 % sikre på at endringen
-        vi bruker i fortolkningen, ikke er «for streng». «Ingen sikkerhetsmargin» betyr egentlig
-        bare at vi ikke har gjort noe for å kompensere for måleusikkerhet.
-      </p>
-      <p>
-        Men vi kan kompensere om vi ønsker. Ved hjelp av en statistisk modell av usikkerheten til
-        endringen, kan vi justere endringstallet til et lavere tall. Dette øker ikke
-        sannsynligheten for at fortolkningen vår er «riktig», men øker hvor sikre vi er på at vi
-        ikke bruker et for strengt endringstall.
-      </p>
-      <p>
-        Med 90 % sikkerhet (standard) justerer vi endringen som fortolkes så vi er 90 % sikre på
-        at endringen vi fortolker, ikke er for stor. I 1 av 10 tilfeller vil vi altså bruke en for
-        stor endring i fortolkningen – mot annethvert tilfelle hvis vi ikke hadde noen
-        sikkerhetsmargin.
-      </p>
-      <p>
-        Sikkerheten kan økes til 99 % i saker der man ønsker å være ekstra forsiktig, f.eks. i
-        saker der et nytt inntak av cannabis kan få store konsekvenser for prøvegiver.
-      </p>
-    </section>
-  </>
-)
-
-/** Fast id, så også skalaen kan peke på forklaringen over den. */
-const MARGINTIPS_ID = 'thc-margintips'
-
-/**
- * Banneret over sikkerhetsmarginen når forrige prøve fortolkes under
- * påvisningsgrensen. Ordlyden er eierens egen.
- */
-const UNDER_CUTOFF_BANNER =
-  'Fordi vi nå fortolker konsentrasjoner under påvisningsgrensen, legges større måleusikkerhet til grunn. ' +
-  'Dette gjør fortolkningen mer forsiktig.'
-
 export interface ThcStepProps {
+  /** Reglene og tekstene som er publisert, eller hvorfor de ikke kan brukes ennå. */
+  regler: ThcRegler
   onBack: () => void
   /** Legger teksten på utklippstavlen. Usant når utklippstavlen er utilgjengelig. */
   copy: (text: string) => Promise<boolean>
@@ -104,7 +24,69 @@ export interface ThcStepProps {
 }
 
 /**
- * Fortolkningsmodulen for THC-syre i urin. I motsetning til
+ * Fortolkningsmodulen for THC-syre i urin. Den fortolker med reglene og
+ * tekstene som er publisert i databasen, og gir ingen kommentar før de er
+ * hentet og har bestått kontrollen: mens de hentes, eller om de ikke kan
+ * brukes, sier modulen fra i stedet.
+ */
+export function ThcStep({ regler, onBack, copy, flashAt }: ThcStepProps) {
+  const seksjon = useRef<HTMLElement>(null)
+  useKortHopp(true, seksjon)
+
+  return (
+    <section className="steg steg--thc" aria-label="Fortolk THC-syre i urin" ref={seksjon}>
+      <StepBar onEsc={onBack}>Bytt analytt</StepBar>
+      {regler.status === 'klar' ? (
+        <ThcFortolkning modell={regler.modell} copy={copy} flashAt={flashAt} />
+      ) : (
+        <div className="thc">
+          <Card align="start" className="analyttkort">
+            <Korthode />
+          </Card>
+          <Card align="start" className="thc-resultat">
+            {regler.status === 'feil' ? (
+              <>
+                <Panelhode ikon="fallback" tone="toksisk">
+                  Reglene mangler
+                </Panelhode>
+                <ul className="mangelliste" role="alert">
+                  <li>{regler.melding}</li>
+                </ul>
+                <Button variant="subtle" icon={<Ikon navn="reset" />} onClick={regler.provIgjen}>
+                  Prøv igjen
+                </Button>
+              </>
+            ) : (
+              <>
+                <Panelhode>Henter reglene</Panelhode>
+                <p role="status">Fortolkningsreglene hentes …</p>
+              </>
+            )}
+          </Card>
+        </div>
+      )}
+    </section>
+  )
+}
+
+/** Ikonet, koden og navnet øverst i modulen, med plass til en handling i hjørnet. */
+function Korthode({ children }: { children?: ReactNode }) {
+  return (
+    <div className="thc-korthode">
+      <span className="thc-korthode__ikon" data-ih="">
+        <Ikon navn="cup" />
+      </span>
+      <div className="thc-korthode__tittel">
+        <Metalinje koder={[THC_KODE]} metode={THC_ANALYSEMETODE} lenker />
+        <h1 className="analytt__navn">THC-syre i urin</h1>
+      </div>
+      {children}
+    </div>
+  )
+}
+
+/**
+ * Selve fortolkningen, med reglene klare. I motsetning til
  * kommentarkopieringen for psykofarmaka brukes den gjerne mange prøver på
  * rad, og flyten er lagt opp etter det: kommentaren regnes ut fortløpende
  * mens feltene fylles. Kopieringen kvitteres med blinket, ruller tilbake til
@@ -112,8 +94,17 @@ export interface ThcStepProps {
  * fatt på uten omveier. Musehjulet og piltastene hopper mellom kortene i
  * stedet for å rulle jevnt.
  */
-export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
-  const [inndata, setInndata] = useState(TOM_THC_INNDATA)
+function ThcFortolkning({
+  modell,
+  copy,
+  flashAt,
+}: {
+  modell: ThcModell
+  copy: ThcStepProps['copy']
+  flashAt: ThcStepProps['flashAt']
+}) {
+  const { regler } = modell
+  const [inndata, setInndata] = useState(() => tomThcInndata(regler))
   const [failedCopy, setFailedCopy] = useState<string | null>(null)
   /** Sant rett etter en kopiering: tilbudet om å nullstille med Enter står. */
   const [nullstillTips, setNullstillTips] = useState(false)
@@ -125,7 +116,6 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
   // står øverst til venstre akkurat nå.
   const forsteFelt = useRef<HTMLInputElement>(null)
   const kopierKnapp = useRef<HTMLButtonElement>(null)
-  const seksjon = useRef<HTMLElement>(null)
   const inndatakort = useRef<HTMLElement>(null)
   const resultatkort = useRef<HTMLElement>(null)
 
@@ -135,19 +125,8 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
     forsteFelt.current?.focus()
   }, [fokusTeller])
 
-  useKortHopp(true, seksjon)
-
-  const resultat = useMemo(() => fortolkThc(inndata), [inndata])
+  const resultat = useMemo(() => fortolkThc(inndata, modell), [inndata, modell])
   const kommentar = resultat.type === 'kommentar' ? resultat.kommentar : null
-
-  // Avkryssingen står inne i «Forrige prøve», så den gjelder bare når det
-  // finnes en forrige prøve å fortolke.
-  const underCutoff = !inndata.ingenTidligere && inndata.forrigeUnderCutoff
-  const beregnetIrcak = underCutoff ? beregnIrcak(inndata.forrigeUcak, inndata.forrigeNkre) : null
-
-  // Stoppet skalaen står på. Stoppene dekker alle verdiene typen tillater,
-  // så oppslaget treffer.
-  const marginIndeks = MARGINSTOPP.findIndex((stopp) => stopp.verdi === inndata.sikkerhetsmargin)
 
   // Reserveteksten for manuell kopiering gjelder kommentaren slik den var da
   // kopieringen feilet. Endres noe i skjemaet, er den utdatert og må vekk —
@@ -158,7 +137,7 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
   }
 
   const nullstill = () => {
-    setInndata(TOM_THC_INNDATA)
+    setInndata(tomThcInndata(regler))
     setFailedCopy(null)
     setNullstillTips(false)
     // Fokuseringen skjer i effekten over, ikke her direkte: refen kan bytte
@@ -239,255 +218,47 @@ export function ThcStep({ onBack, copy, flashAt }: ThcStepProps) {
     }
   }, [nullstillTips])
 
-  // Visualiseringen trenger minst ett døgn mellom prøvene for å ha en
-  // utvikling å vise.
-  const grunnlag =
-    resultat.type === 'kommentar' && resultat.grunnlag && resultat.grunnlag.dager >= 1
-      ? resultat.grunnlag
-      : null
-  const kategori = resultat.type === 'kommentar' ? resultat.kategori : 0
-
   return (
-    <section className="steg steg--thc" aria-label="Fortolk THC-syre i urin" ref={seksjon}>
-      <StepBar onEsc={onBack}>Bytt analytt</StepBar>
-
-      <form
-        className="thc"
-        onSubmit={(e) => {
-          e.preventDefault()
-          void kopier()
-        }}
-      >
-        <Card ref={inndatakort} align="start" className="analyttkort">
-          <div className="thc-korthode">
-            <span className="thc-korthode__ikon" data-ih="">
-              <Ikon navn="cup" />
-            </span>
-            <div className="thc-korthode__tittel">
-              <Metalinje koder={[THC_KODE]} metode={THC_ANALYSEMETODE} lenker />
-              <h1 className="analytt__navn">THC-syre i urin</h1>
-            </div>
-            <div className="thc-nullstillhjorne" data-nullstill>
-              <Button variant="kant" icon={<Ikon navn="reset" />} onClick={nullstill}>
-                Nullstill
-              </Button>
-              {nullstillTips && (
-                <p className="thc-nullstilltips" role="status">
-                  Trykk <kbd className="hurtigtast">↵</kbd> for å nullstille nå
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="thc-skjema">
-            <div className="avkryssinger">
-              <label className="avkryssing">
-                <input
-                  type="checkbox"
-                  checked={inndata.kronisk}
-                  onChange={(e) => sett('kronisk', e.target.checked)}
-                />
-                Legg kronisk bruk til grunn
-              </label>
-              <label className="avkryssing">
-                <input
-                  type="checkbox"
-                  checked={inndata.ingenTidligere}
-                  onChange={(e) => sett('ingenTidligere', e.target.checked)}
-                />
-                Ingen tidligere prøve tilgjengelig
-              </label>
-            </div>
-
-            <div className="thc-prover">
-              {!inndata.ingenTidligere && (
-                <fieldset className="feltgruppe">
-                  <legend>Forrige prøve</legend>
-                  {/* Var urinen så fortynnet at THC-syre havnet under
-                      påvisningsgrensen, svarer labsystemet «ikke påvist» og
-                      regner ingen IRCAK. De to interne tallene tastes da i
-                      stedet, og IRCAK regnes ut av dem. */}
-                  <label className="avkryssing avkryssing--felt">
-                    <input
-                      type="checkbox"
-                      checked={inndata.forrigeUnderCutoff}
-                      onChange={(e) => sett('forrigeUnderCutoff', e.target.checked)}
-                    />
-                    Under cut-off
-                  </label>
-                  {inndata.forrigeUnderCutoff ? (
-                    <>
-                      <div className="feltrad feltrad--par">
-                        <label className="skjemafelt">
-                          <span>UCAK (THC-syre)</span>
-                          <Tallfelt
-                            ref={forsteFelt}
-                            value={inndata.forrigeUcak}
-                            onChange={(verdi) => sett('forrigeUcak', verdi)}
-                          />
-                        </label>
-                        <label className="skjemafelt">
-                          <span>NKRE (kreatinin)</span>
-                          <Tallfelt
-                            value={inndata.forrigeNkre}
-                            onChange={(verdi) => sett('forrigeNkre', verdi)}
-                          />
-                        </label>
-                      </div>
-                      <p className="thc-beregnet" role="status">
-                        Beregnet IRCAK:{' '}
-                        <strong>
-                          {beregnetIrcak === null ? '–' : formaterIrcak(beregnetIrcak)}
-                        </strong>
-                      </p>
-                    </>
-                  ) : (
-                    <label className="skjemafelt">
-                      <span>IRCAK</span>
-                      <Tallfelt
-                        ref={forsteFelt}
-                        value={inndata.forrigeVerdi}
-                        onChange={(verdi) => sett('forrigeVerdi', verdi)}
-                      />
-                    </label>
-                  )}
-                  <label className="skjemafelt">
-                    <span>Prøvedato</span>
-                    <input
-                      className="inndatafelt"
-                      type="date"
-                      value={inndata.forrigeDato}
-                      onChange={(e) => sett('forrigeDato', e.target.value)}
-                    />
-                  </label>
-                </fieldset>
-              )}
-
-              <fieldset className="feltgruppe">
-                <legend>Denne prøven</legend>
-                <label className="skjemafelt">
-                  <span>IRCAK</span>
-                  <Tallfelt
-                    ref={inndata.ingenTidligere ? forsteFelt : undefined}
-                    value={inndata.aktuellVerdi}
-                    onChange={(verdi) => sett('aktuellVerdi', verdi)}
-                  />
-                </label>
-                {/* Uten en tidligere prøve å telle døgn mot brukes ikke datoen,
-                    og da skal den heller ikke fylles ut. */}
-                {!inndata.ingenTidligere && (
-                  <label className="skjemafelt">
-                    <span>Prøvedato</span>
-                    <input
-                      className="inndatafelt"
-                      type="date"
-                      value={inndata.aktuellDato}
-                      onChange={(e) => sett('aktuellDato', e.target.value)}
-                    />
-                  </label>
-                )}
-              </fieldset>
-            </div>
-
-            {/* Sikkerhetsmarginen gjelder bare sammenligningen mot forrige
-                prøve, så uten en slik prøve er den ikke noe å ta stilling
-                til — samme grunn som datoene skjules av. */}
-            {!inndata.ingenTidligere && (
-              <div className="thc-margin">
-                {underCutoff && (
-                  <p className="notis" role="note">
-                    {UNDER_CUTOFF_BANNER}
-                  </p>
-                )}
-                <div className="thc-margin__hode">
-                  <Tips forklaring={MARGINTIPS} id={MARGINTIPS_ID}>
-                    Sikkerhetsmargin
-                  </Tips>
-                </div>
-                <input
-                  className="thc-margin__skala"
-                  type="range"
-                  min={0}
-                  max={MARGINSTOPP.length - 1}
-                  step={1}
-                  value={marginIndeks}
-                  aria-label="Sikkerhetsmargin"
-                  aria-describedby={MARGINTIPS_ID}
-                  aria-valuetext={MARGINSTOPP[marginIndeks]?.merke}
-                  onChange={(e) => {
-                    const stopp = MARGINSTOPP[Number(e.target.value)]
-                    if (stopp) sett('sikkerhetsmargin', stopp.verdi)
-                  }}
-                />
-                {/* Merkene er rene ledetekster — skalaen melder selv hvilket
-                    stopp den står på, gjennom aria-valuetext. */}
-                <div className="thc-margin__merker" aria-hidden="true">
-                  {MARGINSTOPP.map((stopp, i) => (
-                    <span
-                      key={stopp.verdi}
-                      className={`thc-margin__merke${i === marginIndeks ? ' thc-margin__merke--valgt' : ''}`}
-                    >
-                      {stopp.merke}
-                    </span>
-                  ))}
-                </div>
-              </div>
+    <form
+      className="thc"
+      onSubmit={(e) => {
+        e.preventDefault()
+        void kopier()
+      }}
+    >
+      <Card ref={inndatakort} align="start" className="analyttkort">
+        <Korthode>
+          <div className="thc-nullstillhjorne" data-nullstill>
+            <Button variant="kant" icon={<Ikon navn="reset" />} onClick={nullstill}>
+              Nullstill
+            </Button>
+            {nullstillTips && (
+              <p className="thc-nullstilltips" role="status">
+                Trykk <kbd className="hurtigtast">↵</kbd> for å nullstille nå
+              </p>
             )}
           </div>
-        </Card>
+        </Korthode>
+        <ThcSkjema inndata={inndata} onEndre={sett} regler={regler} forsteFelt={forsteFelt} />
+      </Card>
 
-        <Card ref={resultatkort} align="start" className="thc-resultat">
-          {resultat.type === 'mangler' ? (
-            <>
-              <Panelhode ikon="fallback" tone="toksisk">
-                Mangler
-              </Panelhode>
-              <ul className="mangelliste">
-                {resultat.mangler.map((melding) => (
-                  <li key={melding}>{melding}</li>
-                ))}
-              </ul>
-            </>
-          ) : (
-            <>
-              <Panelhode ikon="interp">Kommentar</Panelhode>
-              {resultat.merEnn30Dager && (
-                <div className="notis notis--handling" role="note">
-                  <p>
-                    Det er mer enn {VARSEL_DAGER_MELLOM} dager mellom prøvene. Vurder å huke av
-                    «Ingen tidligere prøve tilgjengelig».
-                  </p>
-                  <Button
-                    variant="kant"
-                    icon={<Ikon navn="done" />}
-                    onClick={() => sett('ingenTidligere', true)}
-                  >
-                    Huk av nå
-                  </Button>
-                </div>
-              )}
-              <p className="kommentartekst">{resultat.kommentar}</p>
-              <div className="handlingsrad handlingsrad--start">
-                <Button ref={kopierKnapp} type="submit" icon={<Ikon navn="copy" />} shortcut="↵">
-                  Kopier kommentar
-                </Button>
-              </div>
-            </>
-          )}
+      <Card ref={resultatkort} align="start" className="thc-resultat">
+        <ThcKommentar
+          resultat={resultat}
+          regler={regler}
+          onIngenTidligere={() => sett('ingenTidligere', true)}
+          handling={
+            <div className="handlingsrad handlingsrad--start">
+              <Button ref={kopierKnapp} type="submit" icon={<Ikon navn="copy" />} shortcut="↵">
+                Kopier kommentar
+              </Button>
+            </div>
+          }
+        />
+        {failedCopy && <ManualCopy comment={failedCopy} />}
+      </Card>
 
-          {failedCopy && <ManualCopy comment={failedCopy} />}
-        </Card>
-
-        {grunnlag && (
-          <Card align="start" className="thc-plot">
-            <Panelhode ikon="hl">Visualisering</Panelhode>
-            <ThcPlot grunnlag={grunnlag} />
-            <Details summary="Forklaring" ikon="fallback">
-              <ThcForklaring grunnlag={grunnlag} kategori={kategori} />
-            </Details>
-          </Card>
-        )}
-      </form>
-    </section>
+      <ThcVisualisering resultat={resultat} regler={regler} />
+    </form>
   )
 }

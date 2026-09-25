@@ -39,10 +39,12 @@ import {
 import { lagFaginnholdslager } from './faginnhold/lagring'
 import { lagFaginnholdsleser } from './faginnhold/lesing'
 import { lesScenarioregler, reglerForModul } from './faginnhold/scenarioregler'
+import { thcReglerFra } from './faginnhold/thcregler'
 import { lagSideleser, lesSokeindeks } from './faginnhold/globaltSok'
 import { lagLegemiddelleser } from './legemiddeldata/lesing'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
+import { useHenting } from './hooks/useHenting'
 import { usePubliserteRegler } from './hooks/usePubliserteRegler'
 import {
   digitToIndex,
@@ -145,6 +147,11 @@ export default function App() {
   }, [faginnhold.leser])
   const regler = usePubliserteRegler(hentRegler)
 
+  // THC-syremodulen fortolker med regelsettet og tekstene som er publisert.
+  const thc = useHenting(useCallback(() => faginnhold.leser.lesThcRegelsett('publisert'), [faginnhold.leser]))
+  const { hentPaNytt: hentThcPaNytt } = thc
+  const thcRegler = useMemo(() => thcReglerFra(thc.tilstand, hentThcPaNytt), [thc.tilstand, hentThcPaNytt])
+
   // Fagsøket: indeksen over alt publisert fagstoff, hentet første gang noen
   // søker. De andre navnene en kode er kjent under, kommer fra katalogen, så
   // fagsøket og analyttsøket kjenner de samme.
@@ -187,10 +194,11 @@ export default function App() {
   useEffect(() => {
     if (varPaInfoside.current && !paaInfoside && faginnhold.kanRedigere) {
       hentPaNytt()
+      hentThcPaNytt()
       foreldSokeindeks(paaSokeside)
     }
     varPaInfoside.current = paaInfoside
-  }, [paaInfoside, paaSokeside, faginnhold.kanRedigere, hentPaNytt, foreldSokeindeks])
+  }, [paaInfoside, paaSokeside, faginnhold.kanRedigere, hentPaNytt, hentThcPaNytt, foreldSokeindeks])
 
   // Tilstandsmaskinen trenger alternativene det nye søket gir for å se om det
   // smalner inn til én analytt, så søket kjøres her og ikke først når steget
@@ -550,7 +558,7 @@ export default function App() {
             />
           )}
 
-          {vist === 'thc' && <ThcStep onBack={back} copy={copy} flashAt={show} />}
+          {vist === 'thc' && <ThcStep regler={thcRegler} onBack={back} copy={copy} flashAt={show} />}
 
           {vist === 'rus' && rusModul && (
             <RusStep
