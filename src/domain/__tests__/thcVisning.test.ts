@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { THC_REGELSETT } from '../../__tests__/hjelp/thcgrunnlag'
 import type { ThcRegelsett } from '../thcRegelsett'
-import { forventetNedgang, marginmerke, nivabeskrivelse, somProsent } from '../thcVisning'
+import { forventetNedgang, marginmerke, marginvalg, nivabeskrivelse, somProsent } from '../thcVisning'
 
 describe('det fortolkningen viser om THC-syreregelsettet', () => {
   it('beskriver nivåene med nøyaktig den opprinnelige ordlyden for de publiserte reglene', () => {
@@ -22,6 +22,12 @@ describe('det fortolkningen viser om THC-syreregelsettet', () => {
   it('viser marginene som skalaen alltid har vist dem', () => {
     expect(THC_REGELSETT.sikkerhetsmarginer.map((m) => marginmerke(m.margin))).toEqual(['Ingen', '90 %', '99 %'])
     expect(marginmerke(0.995)).toBe('99,5 %')
+    // Valgene i skjemaet sier i tillegg hvor sikker «Ingen» er, med parentesen samlet.
+    expect(THC_REGELSETT.sikkerhetsmarginer.map((m) => marginvalg(m.margin))).toEqual([
+      'Ingen (50\u00a0%)',
+      '90 %',
+      '99 %',
+    ])
     expect(somProsent(0.9)).toBe('90')
   })
 

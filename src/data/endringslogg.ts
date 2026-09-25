@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.34.2',
+    dato: '2026-09-25',
+    sammendrag: 'Sikkerhetsmarginen i THC-modulen velges med en bryter',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Glidebryteren for sikkerhetsmargin er byttet ut med en midtstilt bryter med tre valg: Ingen (50 %), 90 % og 99 %. 90 % er fortsatt standard.',
+      'Trykk direkte på valget du vil ha, eller dra knotten til høyre eller venstre; slipper du den mellom to valg, legger den seg på det nærmeste. Knotten glir animert, og står stille om du har bedt om mindre bevegelse i systemet.',
+      'Tastaturet virker som før: piltastene flytter ett valg av gangen, og mellomrom og Enter kopierer kommentaren.',
+      'Kommentaren er den samme som før for hver margin.',
+    ],
+  },
+  {
     versjon: '1.34.1',
     dato: '2026-09-25',
     sammendrag: 'Opprydding etter at de nye stoffsidedataene ble tatt i bruk',

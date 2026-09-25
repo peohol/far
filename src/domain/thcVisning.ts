@@ -17,6 +17,17 @@ export function marginmerke(margin: number): string {
   return margin === INGEN_SIKKERHETSMARGIN ? 'Ingen' : `${somProsent(margin)} %`
 }
 
+/**
+ * Valget for marginen i skjemaet: som {@link marginmerke}, men «Ingen» får med
+ * hvor sikker den er, «Ingen (50 %)». Parentesen holdes samlet om merket må
+ * brytes.
+ */
+export function marginvalg(margin: number): string {
+  return margin === INGEN_SIKKERHETSMARGIN
+    ? `${marginmerke(margin)} (${somProsent(margin)}\u00a0%)`
+    : marginmerke(margin)
+}
+
 /** Hvert konsentrasjonsnivå med området det dekker: «under 20», «20–40», «40 eller mer». */
 export function nivaomrader(r: ThcRegelsett): { navn: string; omrade: string }[] {
   const nivaer = r.konsentrasjonsnivaer

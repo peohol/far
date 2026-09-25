@@ -90,11 +90,12 @@
   color: var(--blekk);
 }
 
-/* Sikkerhetsmarginen, nederst i inndatapanelet: en skala med tre stopp i en
-   hevet flate (Atlas `MarginScale`). */
+/* Sikkerhetsmarginen, nederst i inndatapanelet: overskriften og bryteren
+   midtstilt i en hevet flate (Atlas `MarginScale`). */
 .thc-margin {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--rom-4);
   width: 100%;
   padding: var(--rom-6) var(--rom-6) var(--rom-5);
@@ -106,6 +107,7 @@
    Det skal ikke gå an å stille på marginen uten å ha sett at fortolkningen alt
    regner med større måleusikkerhet. */
 .thc-margin > .notis {
+  align-self: stretch;
   background: var(--flate);
 }
 
@@ -113,37 +115,6 @@
 .thc-margin__hode {
   font-size: var(--tekst-ui);
   font-weight: var(--vekt-halvfet);
-}
-
-.thc-margin__skala {
-  width: 100%;
-  margin: 0;
-  accent-color: var(--aksent);
-  cursor: pointer;
-}
-
-/* Ett merke per stopp, med det første og siste ut mot hver sin ende av
-   skalaen — der stoppene faktisk ligger. Det valgte stoppet står i en
-   aksentpille, så det kan leses av på et blikk. */
-.thc-margin__merker {
-  display: flex;
-  justify-content: space-between;
-}
-
-.thc-margin__merke {
-  padding: var(--rom-1) var(--rom-3);
-  font-size: var(--tekst-liten);
-  font-weight: var(--vekt-medium);
-  line-height: var(--linjehoyde-tett);
-  font-variant-numeric: tabular-nums;
-  color: var(--blekk-dempet);
-  border-radius: var(--runding-pille);
-}
-
-.thc-margin__merke--valgt {
-  font-weight: var(--vekt-fet);
-  color: var(--paa-aksent);
-  background: var(--aksent);
 }
 
 /* --- Visualiseringen ------------------------------------------------------ */

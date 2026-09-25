@@ -17,6 +17,8 @@ import type { ThcRegelsett } from '../domain/thcRegelsett'
 import type { ThcTekster } from '../domain/thcTekster'
 import { thcReglerFra } from '../faginnhold/thcregler'
 import { ShortcutVisibilityProvider } from '../hooks/useShortcutVisibility'
+import { marginvalg } from '../domain/thcVisning'
+import { medPekerhendelser, trykkPaaValg } from './hjelp/pekerhendelser'
 import { THC_MODELL, THC_REGELSETT, THC_TEKSTER, thcRegelsettutgave } from './hjelp/thcgrunnlag'
 
 beforeAll(() => {
@@ -27,6 +29,7 @@ beforeAll(() => {
   }
   Element.prototype.scrollIntoView ??= function () {}
   window.scrollBy = () => {}
+  medPekerhendelser()
 })
 
 afterEach(cleanup)
@@ -97,6 +100,40 @@ describe('fortolkningsmodulen for THC-syre', () => {
     expect(copy).toHaveBeenCalledWith(forventet.kommentar)
   })
 
+  it('gir kommentaren motoren gir for hver margin som trykkes på bryteren, og kopierer med mellomrom der', async () => {
+    const user = userEvent.setup()
+    const copy = visSteg({ status: 'klar', modell: THC_MODELL })
+    const inn = {
+      ...tomThcInndata(THC_REGELSETT),
+      forrigeVerdi: '120',
+      forrigeDato: '2026-02-01',
+      aktuellVerdi: '95',
+      aktuellDato: '2026-02-04',
+    }
+    await user.type(gruppe('Forrige prøve').getByRole('textbox', { name: 'IRCAK' }), inn.forrigeVerdi)
+    await user.type(gruppe('Forrige prøve').getByLabelText('Prøvedato'), inn.forrigeDato)
+    await user.type(gruppe('Denne prøven').getByRole('textbox', { name: 'IRCAK' }), inn.aktuellVerdi)
+    await user.type(gruppe('Denne prøven').getByLabelText('Prøvedato'), inn.aktuellDato)
+
+    const skala = screen.getByRole('slider', { name: 'Sikkerhetsmargin' })
+    const kommentarer = new Set<string>()
+    for (const { margin } of THC_REGELSETT.sikkerhetsmarginer) {
+      trykkPaaValg(marginvalg(margin))
+      expect(skala.getAttribute('aria-valuetext')).toBe(marginvalg(margin))
+      const forventet = fortolkThc({ ...inn, sikkerhetsmargin: margin }, THC_MODELL)
+      if (forventet.type !== 'kommentar') throw new Error('Tilfellet skal gi en kommentar.')
+      expect(screen.getByText(forventet.kommentar)).toBeTruthy()
+      kommentarer.add(forventet.kommentar)
+
+      // Trykket gir skalaen fokus, og mellomrom kopierer derfra som før.
+      expect(document.activeElement).toBe(skala)
+      await user.keyboard(' ')
+      expect(copy).toHaveBeenLastCalledWith(forventet.kommentar)
+    }
+    // Tilfellet er valgt så marginen faktisk endrer konklusjonen.
+    expect(kommentarer.size).toBeGreaterThan(1)
+  })
+
   it('bruker tekstene, marginene og varselgrensen i regelsettet den får', async () => {
     const user = userEvent.setup()
     const regler: ThcRegelsett = {
@@ -118,10 +155,7 @@ describe('fortolkningsmodulen for THC-syre', () => {
     expect(screen.getByText(/^Syntetisk åpning: høy konsentrasjon\./)).toBeTruthy()
     expect(screen.getByRole('note').textContent).toContain('Det er mer enn 5 dager mellom prøvene.')
     await user.click(screen.getByRole('button', { name: 'Huk av nå' }))
-    expect(screen.getByRole('checkbox', { name: 'Ingen tidligere prøve tilgjengelig' })).toHaveProperty(
-      'checked',
-      true,
-    )
+    expect(screen.getByRole('checkbox', { name: 'Ingen tidligere prøve tilgjengelig' })).toHaveProperty('checked', true)
   })
 
   it('gir ingen kommentar når nye regler ikke har marginen skjemaet står på', async () => {

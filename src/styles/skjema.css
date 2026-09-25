@@ -1,8 +1,8 @@
 /**
  * Skjemaprimitivene fra Atlas: avkryssingen (`Checkbox`), feltgruppen
- * (`Fieldset`), tallfeltet og datofeltet (`NumberField`, `DateField`) og
- * bryteren (`Toggle`). Felles for fortolkningsmodulene, THC og simulatoren i
- * regelvisningen, så de spør likt.
+ * (`Fieldset`), tallfeltet og datofeltet (`NumberField`, `DateField`),
+ * bryteren (`Toggle`) og trinnbryteren (`MarginScale`). Felles for
+ * fortolkningsmodulene, THC og simulatoren i regelvisningen, så de spør likt.
  */
 
 /* --- Avkryssing -------------------------------------------------------------
@@ -207,4 +207,87 @@
 .bryter input:focus-visible + .bryter__spor {
   outline: var(--fokusring) solid var(--fokus);
   outline-offset: var(--fokusring);
+}
+
+/* --- Trinnbryter -------------------------------------------------------------
+   Noen få faste valg side om side, der en aksentknott glir til valget som står
+   (`Trinnbryter`). Valgene er like brede, så knotten er like stor overalt;
+   blir det trangt, brytes merkene over to linjer.
+   Skalaen under tar imot fokus og tastetrykk, men er usynlig og slipper
+   pekeren gjennom til sporet, som tar trykk og drag. */
+.trinnbryter {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+}
+
+.trinnbryter__felt {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.trinnbryter__spor {
+  --trinnbryter-innfelling: var(--rom-1);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--antall), minmax(0, 1fr));
+  min-height: var(--hoyde-kontroll);
+  padding: var(--trinnbryter-innfelling);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Fokusringen står når tastaturet brukes, ikke når bryteren trykkes eller dras. */
+.trinnbryter:not(.trinnbryter--peker) .trinnbryter__felt:focus-visible + .trinnbryter__spor {
+  outline: var(--fokusring) solid var(--fokus);
+  outline-offset: var(--fokusring);
+}
+
+.trinnbryter__knott {
+  position: absolute;
+  top: var(--trinnbryter-innfelling);
+  bottom: var(--trinnbryter-innfelling);
+  left: var(--trinnbryter-innfelling);
+  width: calc((100% - 2 * var(--trinnbryter-innfelling)) / var(--antall));
+  background: var(--aksent);
+  border-radius: var(--runding-pille);
+  transform: translateX(calc(var(--trinn) * 100%));
+  transition: transform var(--fart-glid) var(--kurve);
+  cursor: grab;
+}
+
+/* Mens knotten dras, følger den pekeren uten å henge etter. */
+.trinnbryter--drar .trinnbryter__knott {
+  transition: none;
+  cursor: grabbing;
+}
+
+.trinnbryter__valg {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--rom-2) var(--rom-5);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-tett);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: var(--blekk-dempet);
+  transition: color var(--fart-rask) var(--kurve);
+}
+
+.trinnbryter__valg--valgt {
+  color: var(--paa-aksent);
 }

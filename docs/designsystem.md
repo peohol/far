@@ -72,7 +72,7 @@ ikke møtes i én stor fil. De felles står i `main.tsx`, i denne rekkefølgen:
 - `handlinger.css`: knappene og hurtigtastmerket.
 - `flater.css`: panelet, panelhodet, metalinjen, pillene, kommentarteksten,
   varselet, mangellista, de sammenleggbare seksjonene og kopiering for hånd.
-- `skjema.css`: avkryssing, feltgruppe, feltrad, felt og bryter.
+- `skjema.css`: avkryssing, feltgruppe, feltrad, felt, bryter og trinnbryter.
 - `tips.css`: tooltipen.
 - `fortolkning.css` og `thc.css`: fortolkningsstegene og THC-modulen.
 - `sidemeny.css`, `infoside.css`, `redigering.css`, `ikon.css`,
@@ -148,6 +148,10 @@ er `primary` med ↵; de andre er `kant`.
   limes inn, teksten skrevet ut og kopiknappen. `Kopibevis` er knappen som
   ble brukt, og som følger med til limsteget.
 - **`Details`** er en sammenleggbar seksjon med ikon og pil.
+- **`Trinnbryter`** (Atlas `MarginScale`) er noen få faste valg side om side,
+  der en knott glir til valget. Valget trykkes eller dras dit; en usynlig
+  skala under tar tastaturet og skjermleserne. Brukes til sikkerhetsmarginen
+  i THC-modulen.
 - **Klasser uten egen komponent:** `.kommentartekst` (teksten som limes inn),
   `.notis` (forsiktighet, med `--handling` når den tilbyr handlingen),
   `.mangelliste`, og skjemaklassene `.avkryssinger`/`.avkryssing`,

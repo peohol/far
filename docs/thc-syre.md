@@ -191,8 +191,9 @@ setter dem sammen til modellen motoren bruker. Modulen gir ingen kommentar før
 de er hentet, og sier fra i stedet om de ikke kunne hentes, ikke finnes eller
 ikke består kontrollen. Mens de hentes på nytt, står de gamle.
 
-Alt modulen viser om reglene kommer fra regelsettet: stoppene på
-sikkerhetsmarginen, varselgrensen, og nivåene, grensene per bruksmønster og
+Alt modulen viser om reglene kommer fra regelsettet: valgene på bryteren for
+sikkerhetsmarginen (`Trinnbryter`, med «Ingen (50 %)» for ingen margin),
+varselgrensen, og nivåene, grensene per bruksmønster og
 faktoren under cut-off i forklaringen. Står skjemaet på en margin et nytt
 regelsett ikke har, gir motoren en mangel og ingen kommentar.
 
