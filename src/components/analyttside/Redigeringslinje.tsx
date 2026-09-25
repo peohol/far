@@ -139,8 +139,12 @@ export function beskrivSteg(
       )
       return endret.length > 0 ? `${navn} (${endret.join(', ')})` : navn
     }
+    case 'thc_regelsett':
+      return 'Fortolkningsreglene for THC-syre i urin'
     case 'kommentar': {
-      const kommentar = data.regelsett?.kommentarer.find((k) => k.id === steg.id)
+      const kommentar = [...(data.regelsett?.kommentarer ?? []), ...(data.thcregelsett?.kommentarer ?? [])].find(
+        (k) => k.id === steg.id,
+      )
       return `Kommentar: ${kommentar?.innhold.navn ?? 'en kommentar fortolkningsreglene bruker'}`
     }
     case 'referanse': {

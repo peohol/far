@@ -492,7 +492,7 @@ function oppramsing(deler: string[]): string {
   return `${deler.slice(0, -1).join(', ')} og ${deler.at(-1)}`
 }
 
-function Valgfelt({
+export function Valgfelt({
   merke,
   verdi,
   valg,
@@ -522,7 +522,7 @@ function Valgfelt({
   )
 }
 
-function Tekstomrade({
+export function Tekstomrade({
   merke,
   verdi,
   hjelp,

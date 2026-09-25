@@ -134,6 +134,7 @@ export type Publiseringsslag =
   | 'innholdselement'
   | 'kommentar'
   | 'intervallregelsett'
+  | 'thc_regelsett'
 
 export interface Publiseringssteg {
   slag: Publiseringsslag
@@ -152,7 +153,7 @@ export function upublisert(utgave: Utgave<unknown>): boolean {
  * rekkefølgen databasen krever: det publiserte kan bare peke på det som også
  * er publisert. Referansene først, så sidene — komponentsidene før
  * hovedsiden — så laboratorieanalytten og innholdselementene. Til sist
- * kommentarene regelsettet peker på, og så regelsettet.
+ * kommentarene hvert regelsett peker på, og så regelsettet.
  *
  * `data` er utkastet. Bare det som faktisk har upubliserte endringer, er med.
  * Referansene som er med, er dem siden siterer.
@@ -177,5 +178,7 @@ export function publiseringsplan(data: Analyttsidedata): Publiseringssteg[] {
   }
   for (const kommentar of data.regelsett?.kommentarer ?? []) legg('kommentar', kommentar)
   legg('intervallregelsett', data.regelsett?.regelsett ?? null)
+  for (const kommentar of data.thcregelsett?.kommentarer ?? []) legg('kommentar', kommentar)
+  legg('thc_regelsett', data.thcregelsett?.regelsett ?? null)
   return steg
 }

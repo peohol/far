@@ -1,18 +1,20 @@
 import { useMemo, useState } from 'react'
 import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../../domain/thcTekster'
-import { fortolkThc, tomThcInndata, type ThcModell } from '../../domain/thcMotor'
+import type { ThcModell } from '../../domain/thcMotor'
 import { bruksmonsterbeskrivelse, marginmerke, nivaomrader, somProsent } from '../../domain/thcVisning'
+import { upublisert } from '../../faginnhold/analyttside'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
-import { tilThcModell, type ThcRegelsettutgave } from '../../faginnhold/thcregler'
+import { thcUtkastFra, tilThcModell, type ThcRegelsettutgave } from '../../faginnhold/thcregler'
 import { Button } from '../Button'
+import { Ikon } from '../ikon/Ikon'
 import { Panelhode } from '../Panelhode'
-import { ThcKommentar, ThcKurvebilde } from '../ThcUtfall'
-import { ThcSkjema } from '../ThcSkjema'
 import { Uthev } from '../Uthev'
 import { seksjonsikon } from '../analyttside/panelvisning'
 import { Sistredigert } from '../historikk/Sistredigert'
 import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
 import { FORTOLKNING } from './Fortolkningsregler'
+import { Thcredigering, type ThcredigeringProps } from './Thcredigering'
+import { Thcsimulator } from './Thcsimulator'
 
 /**
  * Fortolkningsreglene for THC-syre i urin på analyttsiden for IRCAK
@@ -21,13 +23,32 @@ import { FORTOLKNING } from './Fortolkningsregler'
  * simulator som fortolker med akkurat disse reglene.
  *
  * I lesemodus er det de publiserte reglene, i redigeringsmodus utkastet. Et
- * regelsett som ikke består kontrollen, vises med feilene i stedet.
+ * regelsett som ikke består kontrollen, vises med feilene i stedet. I
+ * redigeringsmodus kan administratorer endre reglene og tekstene
+ * ({@link Thcredigering}), se hva som ikke er publisert og åpne historikken.
  *
  * Reglene er seksjonen `fortolkning` på siden, og tekstene og simulatoren
  * detaljkort i den (`docs/seksjoner.md`).
  */
-export function Thcregler({ utgave, redigerer }: { utgave: ThcRegelsettutgave; redigerer: boolean }) {
+export function Thcregler({
+  utgave,
+  redigerer,
+  onLagre,
+}: {
+  utgave: ThcRegelsettutgave
+  redigerer: boolean
+  onLagre?: ThcredigeringProps['onLagre']
+}) {
   const modell = useMemo(() => tilThcModell(utgave), [utgave])
+  const start = useMemo(() => thcUtkastFra(utgave), [utgave])
+  const [redigeres, setRedigeres] = useState(false)
+  const redigeringsmodus = redigeres && redigerer && start && onLagre
+  const upubliserte = redigerer
+    ? [
+        ...(upublisert(utgave.regelsett) ? ['reglene'] : []),
+        ...utgave.kommentarer.filter(upublisert).map((k) => `«${k.innhold.navn}»`),
+      ]
+    : []
 
   return (
     <Seksjon
@@ -42,9 +63,35 @@ export function Thcregler({ utgave, redigerer }: { utgave: ThcRegelsettutgave; r
             ])
           : 'Reglene er ikke gyldige'
       }
+      handlinger={
+        redigerer &&
+        start &&
+        onLagre &&
+        !redigeres && (
+          <Button
+            variant="kant"
+            icon={<Ikon navn="edit" />}
+            className="redigeringsknapp"
+            onClick={() => setRedigeres(true)}
+          >
+            Rediger reglene
+          </Button>
+        )
+      }
       className="regler"
     >
-      {modell.ok ? (
+      {redigeringsmodus ? (
+        <Thcredigering
+          key={[utgave.regelsett.revisjon, ...utgave.kommentarer.map((k) => k.revisjon)].join('-')}
+          utgave={utgave}
+          start={start}
+          onLagre={async (regler, tekster) => {
+            await onLagre(regler, tekster)
+            setRedigeres(false)
+          }}
+          onAvbryt={() => setRedigeres(false)}
+        />
+      ) : modell.ok ? (
         <Reglene modell={modell.modell} />
       ) : (
         <>
@@ -61,7 +108,24 @@ export function Thcregler({ utgave, redigerer }: { utgave: ThcRegelsettutgave; r
       {redigerer && (
         <div className="redigeringsrad regler__historikk">
           <Sistredigert utgave={utgave.regelsett} type="thc_regelsett" navn="THC-syrereglene" />
+          {upubliserte.length > 0 && <p className="sistredigert">Ikke publisert: {upubliserte.join(', ')}.</p>}
         </div>
+      )}
+      {redigerer && (
+        <Detaljkort
+          id="kommentarhistorikk"
+          tittel="Historikken for hver tekst"
+          oppsummering={antall(utgave.kommentarer.length, 'tekst', 'tekster')}
+        >
+          <ul className="regler__kommentarhistorikk">
+            {utgave.kommentarer.map((k) => (
+              <li key={k.id}>
+                <span className="sistredigert">{k.innhold.navn}: </span>
+                <Sistredigert utgave={k} type="kommentar" navn={`Teksten «${k.innhold.navn}»`} />
+              </li>
+            ))}
+          </ul>
+        </Detaljkort>
       )}
     </Seksjon>
   )
@@ -96,10 +160,7 @@ function Reglene({ modell }: { modell: ThcModell }) {
         <Grense navn="Standard" verdi={marginmerke(regler.standard_sikkerhetsmargin)} />
         <Grense navn="Måleusikkerhet THC-syre" verdi={`${somProsent(maleusikkerhet.cv_thc)} %`} />
         <Grense navn="Kreatinin" verdi={`${somProsent(maleusikkerhet.cv_kreatinin)} %`} />
-        <Grense
-          navn="Under cut-off"
-          verdi={`${somProsent(maleusikkerhet.faktor_under_cutoff - 1)} % høyere`}
-        />
+        <Grense navn="Under cut-off" verdi={`${somProsent(maleusikkerhet.faktor_under_cutoff - 1)} % høyere`} />
         <Grense navn="Varsel ved mer enn" verdi={antall(regler.varsel_dager_mellom, 'dag', 'dager')} />
       </dl>
       <dl className="regler__monstre">
@@ -129,7 +190,7 @@ function Reglene({ modell }: { modell: ThcModell }) {
         </ol>
       </Detaljkort>
 
-      <Simulator modell={modell} />
+      <Thcsimulator modell={modell} />
     </>
   )
 }
@@ -142,50 +203,5 @@ function Grense({ navn, verdi }: { navn: string; verdi: string }) {
       </dt>
       <dd>{verdi}</dd>
     </div>
-  )
-}
-
-/**
- * Fortolkningsmodulen i det små: det samme skjemaet og den samme kommentaren,
- * med reglene som vises over, og hvilke tekstbolker kommentaren ble satt
- * sammen av. Det er ingenting å kopiere.
- */
-function Simulator({ modell }: { modell: ThcModell }) {
-  const { regler } = modell
-  const [inndata, setInndata] = useState(() => tomThcInndata(regler))
-  const resultat = useMemo(() => fortolkThc(inndata, modell), [inndata, modell])
-
-  return (
-    <Detaljkort
-      id="simulator"
-      tittel="Prøv reglene"
-      oppsummering="Fyll inn en prøve"
-      handlinger={
-        <Button variant="subtle" className="redigeringsknapp" onClick={() => setInndata(tomThcInndata(regler))}>
-          Nullstill
-        </Button>
-      }
-      className="simulator"
-    >
-      <p className="regler__ingress">Fyll inn slik som i fortolkningen. Kommentaren regnes ut med reglene over.</p>
-      <ThcSkjema
-        inndata={inndata}
-        regler={regler}
-        onEndre={(felt, verdi) => setInndata((forrige) => ({ ...forrige, [felt]: verdi }))}
-      />
-      <div className="simulator__resultat">
-        {resultat.type === 'kommentar' && (
-          <p className="simulator__scenario" role="status">
-            Tekstbolker: {resultat.bolker.map((nokkel) => THC_TEKSTBOLKER[nokkel].tittel).join(', ')}.
-          </p>
-        )}
-        <ThcKommentar
-          resultat={resultat}
-          regler={regler}
-          onIngenTidligere={() => setInndata((forrige) => ({ ...forrige, ingenTidligere: true }))}
-        />
-        <ThcKurvebilde resultat={resultat} regler={regler} />
-      </div>
-    </Detaljkort>
   )
 }

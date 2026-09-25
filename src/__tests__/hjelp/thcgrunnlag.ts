@@ -2,7 +2,7 @@ import importertRegelsett from '../../domain/__tests__/fasit/thc-regelsett-impor
 import importerteTekster from '../../domain/__tests__/fasit/thc-tekster-import.json'
 import { lagThcModell, type ThcModell } from '../../domain/thcMotor'
 import type { ThcRegelsett } from '../../domain/thcRegelsett'
-import type { Kommentarinnhold } from '../../domain/kommentarobjekt'
+import { plassholdereI, type Kommentarinnhold } from '../../domain/kommentarobjekt'
 import { THC_TEKSTBOLKER, THC_TEKSTNOKLER, type ThcTekstbolker, type ThcTekster } from '../../domain/thcTekster'
 import type { Utgave } from '../../faginnhold/lesing'
 import type { ThcRegelsettutgave } from '../../faginnhold/thcregler'
@@ -50,7 +50,7 @@ export function thcRegelsettutgave({
       utgave<Kommentarinnhold>(`thc-${n}`, {
         navn: `THC-syre: ${THC_TEKSTBOLKER[n].tittel}`,
         tekst: tekster[n],
-        plassholdere: [...THC_TEKSTBOLKER[n].plassholdere].sort(),
+        plassholdere: plassholdereI(tekster[n]),
       }),
     ),
   }

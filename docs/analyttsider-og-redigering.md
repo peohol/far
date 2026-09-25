@@ -18,7 +18,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [ ] Arbeidspakke 4: import av psykofarmakainnhold (revidert 23.09.2026, omarbeides).
 - [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
 - [ ] Arbeidspakke 6: sammensatte analyttgrupper.
-- [ ] Arbeidspakke 7: THC-syre (motor, lagring, produksjonskilde og simulator ferdige; editoren gjenstår).
+- [x] Arbeidspakke 7: THC-syre (motor, lagring, produksjonskilde, simulator og editor).
 - [ ] Arbeidspakke 8: kartlegging av offentlige legemiddeldatakilder.
 - [x] Arbeidspakke 9: seksjoner og detaljkort (progressiv detaljering).
 - [ ] Arbeidspakke 10: ekstern legemiddelgrunnmur (lokal kopi og synkronisering).
@@ -988,9 +988,8 @@ Scenariomodellen, motoren, lagringen og fortolkningen står i `docs/scenarioregl
 
 ## Arbeidspakke 7 - THC-syre
 
-**Status:** [~] Pågår. Motoren, lagringen, byttet av produksjonskilde og
-simulatoren er ferdige; editoren gjenstår. Løsningen er beskrevet i
-`docs/thc-syre.md`.
+**Status:** [x] Ferdig. Motoren, lagringen, byttet av produksjonskilde,
+simulatoren og editoren. Løsningen er beskrevet i `docs/thc-syre.md`.
 
 Egen spesialisert regelmotor/editor for:
 
@@ -1010,7 +1009,7 @@ med validering på serveren. Gjenstår:
 - [x] Tekstbolkene lagret som egne kommentarer, som regelsettet peker på.
 - [x] Regelsettet og tekstene fra dagens modul importert og publisert.
 - [x] Simulator og visning av reglene og tekstene, bygd i seksjonsmodellen (arbeidspakke 13).
-- [ ] Editor for reglene og tekstene, i den samme seksjonen.
+- [x] Editor for reglene og tekstene, i den samme seksjonen.
 - [x] Produksjonsmodulen bytter til Supabase; den opprinnelige modulen er bare fasit i testene.
 
 ---

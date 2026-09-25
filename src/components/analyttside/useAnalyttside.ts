@@ -8,6 +8,9 @@ import type { Intervallregelsett } from '../../regler/modell'
 import { FJERNET, erEnkeltelement } from '../../faginnhold/paneler'
 import type { Referanse } from '../../faginnhold/referanser'
 import type { Katalogoppforing } from '../../domain/analyttkatalog'
+import type { ThcRegelsett } from '../../domain/thcRegelsett'
+import type { ThcTekster } from '../../domain/thcTekster'
+import { thcEndringer } from '../../faginnhold/thcregler'
 import { useFaginnholdskilde } from './Faginnholdskilde'
 
 export type Sidemodus = 'lese' | 'rediger'
@@ -279,6 +282,24 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
     [lager, utkastet],
   )
 
+  /**
+   * Lagrer THC-syrereglene og -tekstene som utkast: hver kommentar med endret
+   * tekst, og regelsettet om reglene er endret, mot revisjonene brukeren
+   * åpnet. Står noe av det på en nyere revisjon, blir det en konflikt som
+   * ellers, og siden leses på nytt.
+   */
+  const lagreThcRegelsett = useCallback(
+    (regler: ThcRegelsett, tekster: ThcTekster) =>
+      endre(async () => {
+        const apnet = utkastet().thcregelsett
+        if (!apnet) throw new Error(IKKE_KLAR)
+        const { kommentarer, regelsett } = thcEndringer(apnet, regler, tekster)
+        for (const k of kommentarer) await lager.lagreUtkast(k.id, k.revisjon, k.innhold)
+        if (regelsett) await lager.lagreUtkast(regelsett.id, regelsett.revisjon, regelsett.innhold)
+      }),
+    [endre, lager, utkastet],
+  )
+
   /** Regelsettet slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */
   const hentRegelsettutkast = useCallback(
     () => leser.finnIntervallregelsett(oppforing.kode, 'utkast'),
@@ -330,6 +351,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
     opprettReferanse,
     lagreRegelsett,
     hentRegelsettutkast,
+    lagreThcRegelsett,
     gjenopprett,
     publiser,
   }

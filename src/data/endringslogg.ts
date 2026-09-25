@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.30.0',
+    dato: '2026-09-25',
+    sammendrag: 'THC-syrereglene og -tekstene kan redigeres på analyttsiden',
+    typer: ['Funksjonalitet', 'Fag'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Administratorer kan redigere THC-syrereglene i redigeringsmodus på siden for IRCAK: nivåene, sikkerhetsmarginene, måleusikkerheten, hvilke kurver som avgjør konklusjonen, utskillelseskurvene og varselgrensen.',
+      'Hver tekstbolk i kommentaren kan rettes der, med når den brukes og hvilke plassholdere den må ha.',
+      'Mens du redigerer, står det hva som må rettes før utkastet kan lagres, og «Prøv reglene» fortolker med utkastet slik det står.',
+      'Endringene lagres som utkast og publiseres sammen med resten av siden. Ingenting endres for andre før det er publisert, og historikken for reglene og hver tekst kan åpnes derfra.',
+    ],
+  },
+  {
     versjon: '1.29.0',
     dato: '2026-09-25',
     sammendrag: 'THC-syre fortolkes med de publiserte reglene, og reglene kan prøves på analyttsiden',

@@ -15,8 +15,9 @@ Reglene og tekstene er lagret og publisert i Supabase, med historikk og
 kontroll på serveren (se [Lagringen](#lagringen)). Fortolkningsmodulen
 fortolker med motoren og det som er publisert (se [I appen](#i-appen)), og
 analyttsiden for IRCAK viser reglene, tekstene og en simulator. Den
-opprinnelige modulen er bare igjen som fasit i testene. Redigering av reglene
-og tekstene i appen er ikke gjort ennå.
+opprinnelige modulen er bare igjen som fasit i testene. Administratorer kan
+redigere reglene og tekstene på analyttsiden og publisere dem som resten av
+siden (se [Redigeringen](#redigeringen)).
 
 ## Delene
 
@@ -32,7 +33,8 @@ og tekstene i appen er ikke gjort ennå.
 | `src/domain/thc.ts` | Koden, analysemetoden og søkeoppføringen |
 | `src/faginnhold/thcregler.ts` | Fra det databasen gir til en kontrollert modell, eller feilen modulen viser |
 | `src/components/ThcStep.tsx`, `ThcSkjema.tsx`, `ThcUtfall.tsx` | Modulen: skjemaet, kommentaren og kurvene, delt med simulatoren |
-| `src/components/regler/Thcregler.tsx` | Reglene, tekstbolkene og simulatoren på analyttsiden |
+| `src/components/regler/Thcregler.tsx`, `Thcsimulator.tsx` | Reglene, tekstbolkene og simulatoren på analyttsiden |
+| `src/components/regler/Thcredigering.tsx` | Redigeringen av reglene og tekstene |
 | `src/domain/__tests__/hjelp/thcOpprinnelig.ts` | Den opprinnelige modulen, med regnearkets konstanter i koden. Bare fasit i testene |
 | `src/domain/__tests__/fasit/thc-regelsett-import.json`, `thc-tekster-import.json` | Reglene og tekstene slik de står i den opprinnelige modulen |
 | `src/domain/__tests__/fasit/thc-fasit.json` | Fasiten: utfallet av den opprinnelige modulen for over 4000 inndata |
@@ -40,6 +42,7 @@ og tekstene i appen er ikke gjort ennå.
 | `supabase/migrations/*_thc_regelsett*.sql`, `*_thc_tekster_som_kommentarer.sql` | Lagringen: tabellene, kontrollen på serveren, importen og flyttingen av tekstene |
 | `src/__tests__/thcRegelsettlagring.test.ts` | Lagringen prøvd mot en ekte database bygd av migrasjonene |
 | `src/__tests__/thcsteg.test.tsx`, `thcregler.test.tsx` | Modulen og analyttsiden med reglene de får |
+| `src/__tests__/thcredigering.test.tsx`, `thcredigeringslagring.test.ts` | Redigeringen, og lagringen og publiseringen av den mot en ekte database |
 
 ## Fremgangsmåten
 
@@ -198,6 +201,26 @@ reglene, detaljkortet `tekster` med hver tekstbolk og når den brukes, og
 detaljkortet `simulator`. Simulatoren bruker det samme skjemaet, den samme
 kommentaren og de samme kurvene som modulen, og viser hvilke tekstbolker
 kommentaren ble satt sammen av. I redigeringsmodus er det utkastet som vises.
+
+## Redigeringen
+
+I redigeringsmodus har seksjonen «Rediger reglene». Hvert tall har sitt eget
+felt, andelene som prosent, og et felt som ikke røres, beholder tallet helt
+ned til siste siffer. Nivåer og marginer kan legges til og fjernes; z for en
+ny margin regnes ut av marginen. Tekstene redigeres der bolken er beskrevet,
+med plassholderne den må ha.
+
+`thcUtkastfeil` samler feilene mens det skrives — `validerThcRegelsett`,
+`validerThcTekst` og plassholderne kommentaren har fra før, som ikke kan
+endres — og utkastet kan ikke lagres før de er rettet. Så lenge det er
+gyldig, fortolker simulatoren under med utkastet slik det står.
+
+`thcEndringer` avgjør hva som lagres: hver kommentar med endret tekst, og
+regelsettet bare når reglene er endret. Bolkene peker på de samme
+kommentarene som før, så lagringene er uavhengige av hverandre og går hver
+mot revisjonen som ble åpnet. Har noen andre lagret i mellomtiden, blir det
+en konflikt og siden leses på nytt. Publiseringsplanen tar de endrede
+kommentarene før regelsettet, som databasen krever.
 
 ## Fasiten
 
