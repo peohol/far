@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { Formikon } from '../../legemiddeldata/legemiddelformer'
 import type { Handtering, Handteringsvalg } from '../../legemiddeldata/preparater'
 import type { Preparatmerke } from '../../legemiddeldata/preparatmodell'
@@ -10,18 +11,20 @@ export function formikonnavn(ikon: Formikon): Ikonnavn {
   return ikon.ikon in IKONER ? (ikon.ikon as Ikonnavn) : 'fallback'
 }
 
-const MERKER: Record<Preparatmerke['type'], { tone: Merketone; tekst: (m: Preparatmerke) => string }> = {
+const MERKER: Record<Preparatmerke['type'], { tone: Merketone; tekst: (m: Preparatmerke) => string; ikon?: ReactNode }> = {
+  // Den svarte trekanten er FESTs og preparatomtalens eget tegn; teksten sier hva den betyr.
+  overvaking: { tone: 'noytral', tekst: (m) => m.tekst, ikon: <span aria-hidden="true">▼</span> },
   godkjenningsfritak: { tone: 'fritak', tekst: () => 'Godkjenningsfritak' },
   preparattype: { tone: 'noytral', tekst: (m) => m.tekst },
   kombinasjon: { tone: 'noytral', tekst: (m) => `Kombinasjon med ${m.tekst}` },
 }
 
-/** Merkene på et preparat: godkjenningsfritak, preparattype og kombinasjon. */
+/** Merkene på et preparat: særlig overvåkning, godkjenningsfritak, preparattype og kombinasjon. */
 export function Preparatmerker({ merker }: { merker: readonly Preparatmerke[] }) {
   return merker.map((m) => {
-    const { tone, tekst } = MERKER[m.type]
+    const { tone, tekst, ikon } = MERKER[m.type]
     return (
-      <Merke key={`${m.type}:${m.tekst}`} tone={tone}>
+      <Merke key={`${m.type}:${m.tekst}`} tone={tone} ikon={ikon}>
         {tekst(m)}
       </Merke>
     )

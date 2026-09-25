@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.29.0',
+    dato: '2026-09-25',
+    sammendrag: 'Preparatene viser byttbarhet i apotek og særlig overvåkning',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'I preparatvinduet står det ved hver styrke hvilke andre preparater den kan byttes med i apotek, etter byttegruppene i FEST. Gjelder det bare noen av pakningene, står det hvilke, og FESTs merknad til byttbarheten står under når gruppen har en.',
+      'Preparater under særlig overvåkning (svart trekant i FEST) har merket «▼ Særlig overvåkning», både i styrkelista og i preparatvinduet.',
+      'Har legemiddeldataene ikke vært kontrollert mot FEST på over to døgn, sier seksjonen «Preparater» fra om at nyere endringer i FEST kan mangle.',
+    ],
+  },
+  {
     versjon: '1.28.5',
     dato: '2026-09-24',
     sammendrag: 'Søkefeltene i toppmenyen overlapper ikke lenger i mellomstore vinduer',

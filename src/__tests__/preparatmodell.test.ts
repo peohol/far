@@ -8,11 +8,13 @@
  * operatorer. Navnene der er oppdiktet.
  */
 import { beforeAll, describe, expect, it } from 'vitest'
-import type { Kode, Merkevaredata, Styrkedata } from '../legemiddeldata/fest'
+import type { Byttegruppedata, Kode, Merkevaredata, Pakningsdata, Styrkedata } from '../legemiddeldata/fest'
 import type { Legemiddelutvalg, MedId } from '../legemiddeldata/lesing'
 import {
   byggPreparatvisning,
+  byttbarhetstekst,
   fordelMerker,
+  gyldigByttegruppe,
   oppsummerForm,
   oppsummerPreparatvisning,
   oppsummerStyrke,
@@ -136,6 +138,18 @@ describe('preparatmodellen med utdraget fra FEST', () => {
     expect(preparatkort('53')).toBe('form-53')
   })
 
+  it('sier hva hver styrke kan byttes med i apotek, etter byttegruppene i FEST', () => {
+    const bytte = (navn: string) =>
+      visning.preparater.get(navn)!.styrker.map((s) => [s.styrke, s.byttbarhet.map((b) => [b.gruppe, b.med, b.pakninger])])
+    expect(bytte('53:Sarotex')).toEqual([
+      ['10 mg', [['AMITRIPTYLIN TABLETT 10 MG', ['Amitriptylin Abcur tab 10 mg', 'Amitriptylin Orifarm tab 10 mg'], null]]],
+      ['25 mg', [['AMITRIPTYLIN TABLETT 25 MG', ['Amitriptylin Abcur tab 25 mg', 'Amitriptylin Orifarm tab 25 mg'], null]]],
+    ])
+    // Fritakspreparatet og styrken bare ett preparat har, er ikke i noen byttegruppe.
+    expect(bytte('53:Amitriptylin-CT')).toEqual([['25 mg', []]])
+    expect(bytte('53:Amitriptylin Abcur')[2]).toEqual(['50 mg', []])
+  })
+
   it('gir de samme, adressetrygge ID-ene hver gang', () => {
     const igjen = byggPreparatvisning({ ...amitriptylin, merkevarer: [...amitriptylin.merkevarer].reverse() }, [AMITRIPTYLIN])
     const ider = (v: Preparatvisning) => v.former.flatMap((f) => f.styrker.map((s) => s.id))
@@ -187,6 +201,36 @@ function merkevare(id: string, varenavn: string, styrker: string[], felt: Partia
     svart_trekant: false,
     virkestoff_med_styrke: styrker,
     virkestoff_uten_styrke: [],
+    ...felt,
+  }
+}
+
+function pakning(id: string, merkevare_id: string, byttegrupper: string[] = [], storrelse = 100): MedId<Pakningsdata> {
+  return {
+    id,
+    varenr: id.toUpperCase(),
+    navn_form_styrke: '',
+    innhold: [
+      { merkevare_id, pakningsstorrelse: storrelse, enhet: { kode: 'stk', tekst: 'stykk' }, pakningstype: null, mengde: null, antall: null },
+    ],
+    merkevarer: [merkevare_id],
+    markedsforingsdato: null,
+    midlertidig_utgatt_dato: null,
+    avregistrert_dato: null,
+    byttegrupper,
+    ean: [],
+  }
+}
+
+function byttegruppe(id: string, felt: Partial<Byttegruppedata> = {}): MedId<Byttegruppedata> {
+  return {
+    id,
+    kode: id,
+    tekst: `TESTMIDDEL TABLETT ${id}`,
+    merknad_til_byttbarhet: false,
+    beskrivelse: null,
+    gyldig_fra: '2020-01-01',
+    gyldig_til: null,
     ...felt,
   }
 }
@@ -354,5 +398,119 @@ describe('styrker som ser like ut, men ikke er det', () => {
     )
     expect(v.former[0]!.ikon).toMatchObject({ variant: 'generisk', kartlagt: false })
     expect(ukartlagteFormer(v)).toEqual([{ kode: '99999', tekst: 'Ny form' }])
+  })
+})
+
+/* --- Byttbarhet og særlig overvåkning ------------------------------------- */
+
+describe('byttbarhet i apotek', () => {
+  const IDAG = '2026-09-25'
+  const tre = [merkevare('m1', 'Alfa', ['s1']), merkevare('m2', 'Beta', ['s1']), merkevare('m3', 'Gamma', ['s1'])]
+  const bytte = (u: Legemiddelutvalg, preparat = '53:Alfa', idag = IDAG) =>
+    byggPreparatvisning(u, ['mor'], idag).preparater.get(preparat)!.styrker[0]!.byttbarhet
+
+  it('lister de andre preparatene i gruppen, ikke preparatet selv', () => {
+    const u = {
+      ...utvalg([styrke('s1', 'mor')], tre),
+      pakninger: [pakning('p1', 'm1', ['g1']), pakning('p2', 'm2', ['g1']), pakning('p3', 'm3', ['g1'])],
+      byttegrupper: [byttegruppe('g1')],
+    }
+    expect(bytte(u)).toEqual([
+      { kode: 'g1', gruppe: 'TESTMIDDEL TABLETT g1', med: ['Beta m2', 'Gamma m3'], pakninger: null, merknad: null },
+    ])
+    expect(bytte(u, '53:Gamma').map((b) => b.med)).toEqual([['Alfa m1', 'Beta m2']])
+  })
+
+  it('sier hvilke pakninger det gjelder når bare noen av dem er i gruppen', () => {
+    const u = {
+      ...utvalg([styrke('s1', 'mor')], tre),
+      pakninger: [
+        pakning('p1', 'm1', ['g1'], 20),
+        pakning('p1b', 'm1', ['g2'], 100),
+        pakning('p1c', 'm1', [], 30),
+        pakning('p2', 'm2', ['g1'], 20),
+        pakning('p3', 'm3', ['g2'], 100),
+      ],
+      byttegrupper: [byttegruppe('g1'), byttegruppe('g2')],
+    }
+    expect(bytte(u).map((b) => [b.gruppe, b.med, b.pakninger])).toEqual([
+      ['TESTMIDDEL TABLETT g1', ['Beta m2'], ['20 stk']],
+      ['TESTMIDDEL TABLETT g2', ['Gamma m3'], ['100 stk']],
+    ])
+  })
+
+  it('viser ikke en gruppe uten andre preparater, og ingenting uten gruppe', () => {
+    const u = {
+      ...utvalg([styrke('s1', 'mor')], tre),
+      // To merkevarer av samme preparat i samme styrke er ikke å bytte med noe annet.
+      pakninger: [pakning('p1', 'm1', ['g1']), pakning('p2', 'm2', [])],
+      byttegrupper: [byttegruppe('g1')],
+    }
+    expect(bytte(u)).toEqual([])
+    expect(bytte(u, '53:Beta')).toEqual([])
+    // Gruppen finnes ikke i utvalget.
+    expect(bytte({ ...u, pakninger: [pakning('p1', 'm1', ['g9']), pakning('p2', 'm2', ['g9'])] })).toEqual([])
+  })
+
+  it('bruker bare grupper som gjelder i dag, med første og siste gyldige dag', () => {
+    const u = (felt: Partial<Byttegruppedata>) => ({
+      ...utvalg([styrke('s1', 'mor')], tre),
+      pakninger: [pakning('p1', 'm1', ['g1']), pakning('p2', 'm2', ['g1'])],
+      byttegrupper: [byttegruppe('g1', felt)],
+    })
+    expect(bytte(u({ gyldig_fra: IDAG }))).toHaveLength(1)
+    expect(bytte(u({ gyldig_fra: '2026-09-26' }))).toEqual([])
+    expect(bytte(u({ gyldig_til: IDAG }))).toHaveLength(1)
+    expect(bytte(u({ gyldig_til: '2026-09-24' }))).toEqual([])
+    expect(bytte(u({ gyldig_fra: null, gyldig_til: null }))).toHaveLength(1)
+    expect(gyldigByttegruppe({ gyldig_fra: '2026-09-25T00:00:00', gyldig_til: null }, IDAG)).toBe(true)
+  })
+
+  it('tar med FESTs merknad bare når gruppen har merknad til byttbarheten', () => {
+    const u = (felt: Partial<Byttegruppedata>) => ({
+      ...utvalg([styrke('s1', 'mor')], tre),
+      pakninger: [pakning('p1', 'm1', ['g1']), pakning('p2', 'm2', ['g1'])],
+      byttegrupper: [byttegruppe('g1', felt)],
+    })
+    expect(bytte(u({ merknad_til_byttbarhet: true, beskrivelse: 'Gjelder ikke ved oppstart.' }))[0]!.merknad).toBe(
+      'Gjelder ikke ved oppstart.',
+    )
+    expect(bytte(u({ merknad_til_byttbarhet: false, beskrivelse: 'Gammel tekst.' }))[0]!.merknad).toBeNull()
+    expect(bytte(u({ merknad_til_byttbarhet: true, beskrivelse: '  ' }))[0]!.merknad).toBeNull()
+  })
+
+  it('skriver byttbarheten som en setning', () => {
+    expect(byttbarhetstekst({ med: ['Beta tab 25 mg'], pakninger: null })).toBe('Byttbar i apotek med Beta tab 25 mg.')
+    expect(byttbarhetstekst({ med: ['A', 'B', 'C'], pakninger: null })).toBe('Byttbar i apotek med A, B og C.')
+    expect(byttbarhetstekst({ med: ['A', 'B'], pakninger: ['20 stk'] })).toBe('Pakningen 20 stk er byttbar i apotek med A og B.')
+    expect(byttbarhetstekst({ med: ['A'], pakninger: ['20 stk', '100 stk'] })).toBe(
+      'Pakningene 20 stk og 100 stk er byttbare i apotek med A.',
+    )
+  })
+})
+
+describe('særlig overvåkning', () => {
+  it('merker preparatet i styrkene der FEST har svart trekant', () => {
+    const v = byggPreparatvisning(
+      utvalg(
+        [styrke('s1', 'mor'), styrke('s2', 'mor', { styrke: mengde(50, 'mg') })],
+        [
+          merkevare('m1', 'Alfa', ['s1'], { svart_trekant: true }),
+          merkevare('m2', 'Alfa', ['s2']),
+          merkevare('m3', 'Beta', ['s1'], { svart_trekant: true }),
+        ],
+      ),
+      ['mor'],
+    )
+    const overvaking = { type: 'overvaking', tekst: 'Særlig overvåkning' }
+    expect(v.former[0]!.styrker.map((s) => s.preparater.map((p) => [p.navn, p.merker]))).toEqual([
+      [
+        ['Alfa', [overvaking]],
+        ['Beta', [overvaking]],
+      ],
+      [['Alfa', []]],
+    ])
+    expect(fordelMerker(v.preparater.get('53:Alfa')!)).toEqual({ felles: [], egne: [[overvaking], []] })
+    expect(fordelMerker(v.preparater.get('53:Beta')!)).toEqual({ felles: [overvaking], egne: [[]] })
   })
 })
