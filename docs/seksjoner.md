@@ -46,7 +46,8 @@ offentlige kilder.
   skuffen åpnet og lukket, og siden rullet, uten glidning.
 - Det finnes ingen «Åpne alle». Heller ikke redigeringsmodus åpner alt:
   redaktøren åpner seksjonen som skal redigeres, og en handling i hodet åpner
-  seksjonen skjemaet står i.
+  seksjonen skjemaet står i. Selve skjemaet åpnes i et redigeringsvindu over
+  siden (`Modallag`), så det får plass også når kortet er smalt.
 - Ved utskrift står alt åpent.
 
 ## Hvordan det brukes i koden

@@ -83,8 +83,7 @@ export function Panel({
       tittel={<Uthev tekst={definisjon.tittel} />}
       oppsummering={tomt ? 'Ikke noe innhold ennå' : oppsummering}
       handlinger={
-        redigerer &&
-        !kilder && (
+        redigerer && (
           <Button variant="kant" icon={<Ikon navn="refs" />} className="redigeringsknapp" onClick={() => setKilder(true)}>
             Kilder for panelet
           </Button>
@@ -121,7 +120,8 @@ function tekstoppsummering(dokument: Riktekstdokument): string {
 
 /**
  * Ett element med lesevisningen, og i redigeringsmodus knappene rundt den.
- * `skjema` tegnes i stedet for visningen mens elementet redigeres.
+ * `skjema` er redigeringsvinduet, som legger seg over siden mens elementet
+ * redigeres; visningen står bak det som før.
  */
 export function Redigerbar({
   navn,
@@ -143,7 +143,6 @@ export function Redigerbar({
   leggTilTekst?: string
 }) {
   const [apen, setApen] = useState(false)
-  if (apen) return <>{skjema(() => setApen(false))}</>
   return (
     <>
       {visning}
@@ -162,6 +161,7 @@ export function Redigerbar({
           {element && <Sistredigert utgave={element.utgave} type="innholdselement" navn={navn} />}
         </div>
       )}
+      {apen && skjema(() => setApen(false))}
     </>
   )
 }
@@ -201,6 +201,7 @@ export function Tekstpanel({ definisjon, kontekst }: { definisjon: Paneldefinisj
           skjema={(lukk) => (
             <TekstSkjema
               tittel={definisjon.tittel}
+              ikon={seksjonsikon(definisjon.nokkel)}
               start={{ dokument }}
               referanser={element?.referanser ?? []}
               onAvbryt={lukk}
@@ -323,6 +324,7 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
                       skjema={(lukk) => (
                         <KinetikkSkjema
                           tittel={tittel}
+                          ikon={kinetikkikon(tittel)}
                           start={{ tittel, dokument }}
                           referanser={element.referanser}
                           onAvbryt={lukk}
@@ -347,31 +349,32 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
           })}
         </ul>
       )}
-      {redigerer &&
-        (nytt ? (
-          <KinetikkSkjema
-            tittel="Nytt kort"
-            start={{ tittel: '', dokument: tomtDokument() }}
-            referanser={[]}
-            onAvbryt={() => setNytt(false)}
-            onLagre={async ({ data, referanser }) => {
-              await handlinger.lagreElement(null, {
-                panel: definisjon.nokkel,
-                elementtype: ELEMENTTYPER.kinetikk,
-                posisjon: Math.max(-1, ...elementer.map((e) => e.posisjon)) + 1,
-                data,
-                referanser,
-              })
-              setNytt(false)
-            }}
-          />
-        ) : (
-          <div className="redigeringsrad">
-            <Button variant="kant" icon={<Ikon navn="plus" />} className="redigeringsknapp" onClick={() => setNytt(true)}>
-              Legg til kort
-            </Button>
-          </div>
-        ))}
+      {redigerer && (
+        <div className="redigeringsrad">
+          <Button variant="kant" icon={<Ikon navn="plus" />} className="redigeringsknapp" onClick={() => setNytt(true)}>
+            Legg til kort
+          </Button>
+        </div>
+      )}
+      {nytt && (
+        <KinetikkSkjema
+          tittel="Nytt kort"
+          ikon={seksjonsikon(definisjon.nokkel)}
+          start={{ tittel: '', dokument: tomtDokument() }}
+          referanser={[]}
+          onAvbryt={() => setNytt(false)}
+          onLagre={async ({ data, referanser }) => {
+            await handlinger.lagreElement(null, {
+              panel: definisjon.nokkel,
+              elementtype: ELEMENTTYPER.kinetikk,
+              posisjon: Math.max(-1, ...elementer.map((e) => e.posisjon)) + 1,
+              data,
+              referanser,
+            })
+            setNytt(false)
+          }}
+        />
+      )}
     </Panel>
   )
 }
@@ -431,6 +434,7 @@ export function Tabellpanel({ definisjon, kontekst }: { definisjon: Paneldefinis
           skjema={(lukk) => (
             <DosetabellSkjema
               tittel={definisjon.tittel}
+              ikon={seksjonsikon(definisjon.nokkel)}
               start={{ rader }}
               referanser={element?.referanser ?? []}
               onAvbryt={lukk}

@@ -1,4 +1,4 @@
-import { useEffect, useId, useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import {
   DOSEKOLONNER,
   kontrollerIntervall,
@@ -17,6 +17,8 @@ import { useFaginnholdskilde } from './Faginnholdskilde'
 import { erTomt, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { Samtidighetskonflikt } from '../../faginnhold/lagring'
 import { Button } from '../Button'
+import type { Ikonnavn } from '../ikon/register'
+import { Modallag } from '../Modallag'
 import { Felt } from '../konto/Felt'
 import { Referansevelger } from './Referansevelger'
 import { Rikteksteditor } from './Rikteksteditor'
@@ -24,7 +26,9 @@ import { Rikteksteditor } from './Rikteksteditor'
 /**
  * Skjemaene for hver elementtype på informasjonssiden.
  *
- * Alle har samme ramme: feltene, kildene for kortet, «Lagre» og «Avbryt».
+ * Alle har samme ramme: et stort redigeringsvindu over siden, med feltene,
+ * kildene for kortet og «Lagre» og «Avbryt» i en fot som står fast. Vinduet
+ * gir feltene plass selv når det som redigeres, står i et smalt kort.
  * Lagringen går gjennom siden (`onLagre`), som sender innholdet til databasen
  * mot revisjonen brukeren åpnet. Har noen andre lagret i mellomtiden, blir
  * skjemaet stående med det brukeren skrev, og siden sier fra.
@@ -43,14 +47,23 @@ export interface SkjemaProps<T> {
   referanser: readonly string[]
   onLagre: (resultat: Skjemaresultat<T>) => Promise<void>
   onAvbryt: () => void
+  /** Ikonet foran tittelen i redigeringsvinduet, som det redigerte har på siden. */
+  ikon?: Ikonnavn
 }
 
 const KONFLIKT =
   'Noen andre har lagret dette i mellomtiden. Det du skrev, står fortsatt her — hent den nyeste utgaven øverst på siden før du lagrer igjen.'
 
+/** Det første feltet i skjemaet, der fokus lander når vinduet åpnes. */
+const FORSTE_FELT = '.redigering :is(input, textarea, [contenteditable="true"])'
+
 /**
- * Rammen rundt feltene: kildene, knappene og feilmeldingene. `kontroller` gir
- * dataene som skal lagres, eller en feilmelding.
+ * Redigeringsvinduet rundt feltene: kildene, knappene og feilmeldingene.
+ * `kontroller` gir dataene som skal lagres, eller en feilmelding.
+ *
+ * Escape, lukkeknappen og et klikk utenfor lukker vinduet som «Avbryt» — men
+ * er noe endret, spør vinduet først, så en tast for mye ikke koster det
+ * brukeren skrev.
  */
 function Skjemaramme<T>({
   tittel,
@@ -58,15 +71,52 @@ function Skjemaramme<T>({
   onLagre,
   onAvbryt,
   kontroller,
+  ikon = 'edit',
+  meta = 'Rediger',
+  kildetittel = 'Kilder for hele kortet',
+  navn = `${meta}: ${tittel}`,
+  bred,
   children,
 }: Omit<SkjemaProps<T>, 'start'> & {
   kontroller: () => { data: T } | { feil: string }
-  children: ReactNode
+  /** Linjen over tittelen i vinduet. */
+  meta?: string
+  /** Overskriften på kildevelgeren. */
+  kildetittel?: string
+  /** Navnet skjemaet har for hjelpemidler. Ellers «Rediger: tittelen». */
+  navn?: string
+  /** Bredere vindu, for felt som står side om side. */
+  bred?: boolean
+  children?: ReactNode
 }) {
   const [kilder, setKilder] = useState<string[]>([...referanser])
   const [feil, setFeil] = useState<string | null>(null)
   const [lagrer, setLagrer] = useState(false)
-  const overskrift = useId()
+  const [forlater, setForlater] = useState(false)
+  const skjemaId = useId()
+
+  // Det skjemaet ville lagret, som tekst: slik det var da vinduet åpnet, og nå.
+  const signatur = () => JSON.stringify([kontroller(), kilder])
+  const start = useRef<string | null>(null)
+  start.current ??= signatur()
+
+  // Der fokus stod da brukeren ville lukke, så «Fortsett å redigere» kan føre det tilbake.
+  const fokusFor = useRef<HTMLElement | null>(null)
+  const vedLukking = () => {
+    if (lagrer) return false
+    if (signatur() === start.current) return true
+    if (!forlater && document.activeElement instanceof HTMLElement) fokusFor.current = document.activeElement
+    setForlater(true)
+    return false
+  }
+  const fortsett = () => {
+    setForlater(false)
+    // Knappen forsvinner; fokus går tilbake til feltet, eller til det første.
+    requestAnimationFrame(() => {
+      const tilbake = fokusFor.current?.isConnected ? fokusFor.current : document.querySelector<HTMLElement>(FORSTE_FELT)
+      tilbake?.focus()
+    })
+  }
 
   const lagre = async (event: FormEvent) => {
     event.preventDefault()
@@ -77,6 +127,7 @@ function Skjemaramme<T>({
     }
     setLagrer(true)
     setFeil(null)
+    setForlater(false)
     try {
       await onLagre({ data: resultat.data, referanser: kilder })
     } catch (e) {
@@ -86,26 +137,69 @@ function Skjemaramme<T>({
   }
 
   return (
-    <form className="redigering" aria-labelledby={overskrift} onSubmit={(e) => void lagre(e)} noValidate>
-      <p id={overskrift} className="redigering__tittel">
-        Rediger: {tittel}
-      </p>
-      {children}
-      <Referansevelger tittel="Kilder for hele kortet" valgte={kilder} onEndre={setKilder} />
-      {feil && (
-        <p className="skjemafeil" role="alert">
-          {feil}
-        </p>
-      )}
-      <div className="skjema__knapper">
-        <Button variant="subtle" onClick={onAvbryt}>
-          Avbryt
+    <Modallag
+      apen
+      tittel={tittel}
+      meta={meta}
+      ikon={ikon}
+      ark
+      bred={bred}
+      lukketekst="Lukk redigeringen"
+      autofokus={FORSTE_FELT}
+      onLukk={onAvbryt}
+      vedLukking={vedLukking}
+      fot={
+        <>
+          {feil && (
+            <p className="skjemafeil" role="alert">
+              {feil}
+            </p>
+          )}
+          {forlater ? (
+            <Forlatvarsel onForkast={onAvbryt} onFortsett={fortsett} />
+          ) : (
+            <div className="skjema__knapper redigering__knapper">
+              <Button variant="subtle" onClick={onAvbryt}>
+                Avbryt
+              </Button>
+              <Button type="submit" form={skjemaId} className="knapp--kompakt" disabled={lagrer}>
+                {lagrer ? 'Lagrer …' : 'Lagre utkast'}
+              </Button>
+            </div>
+          )}
+        </>
+      }
+    >
+      <form
+        id={skjemaId}
+        className="redigering"
+        aria-label={navn}
+        onSubmit={(e) => void lagre(e)}
+        noValidate
+      >
+        {children}
+        <Referansevelger tittel={kildetittel} valgte={kilder} onEndre={setKilder} />
+      </form>
+    </Modallag>
+  )
+}
+
+/** Spørsmålet når et skjema med endringer lukkes uten å lagres. */
+function Forlatvarsel({ onForkast, onFortsett }: { onForkast: () => void; onFortsett: () => void }) {
+  const fortsett = useRef<HTMLButtonElement>(null)
+  useEffect(() => fortsett.current?.focus(), [])
+  return (
+    <div className="redigering__forlat" role="alert">
+      <p className="redigering__forlattekst">Du har endringer som ikke er lagret.</p>
+      <div className="skjema__knapper redigering__knapper">
+        <Button variant="subtle" onClick={onForkast}>
+          Forkast endringene
         </Button>
-        <Button type="submit" className="knapp--kompakt" disabled={lagrer}>
-          {lagrer ? 'Lagrer …' : 'Lagre utkast'}
+        <Button ref={fortsett} className="knapp--kompakt" onClick={onFortsett}>
+          Fortsett å redigere
         </Button>
       </div>
-    </form>
+    </div>
   )
 }
 
@@ -334,7 +428,7 @@ export function DosetabellSkjema(props: SkjemaProps<{ rader: Doserad[] }>) {
   })
 
   return (
-    <Skjemaramme {...props} kontroller={kontroller}>
+    <Skjemaramme {...props} kontroller={kontroller} bred>
       {rader.map((rad, i) => (
         <fieldset key={i} className="doserad">
           <legend className="doserad__tittel">Rad {i + 1}</legend>
@@ -373,36 +467,17 @@ export function PanelkildeSkjema({
   onLagre: (ider: string[]) => Promise<void>
   onAvbryt: () => void
 }) {
-  const [kilder, setKilder] = useState<string[]>([...referanser])
-  const [feil, setFeil] = useState<string | null>(null)
-  const [lagrer, setLagrer] = useState(false)
-  const lagre = async (event: FormEvent) => {
-    event.preventDefault()
-    setLagrer(true)
-    setFeil(null)
-    try {
-      await onLagre(kilder)
-    } catch (e) {
-      setFeil(e instanceof Samtidighetskonflikt ? KONFLIKT : (e as Error).message)
-      setLagrer(false)
-    }
-  }
   return (
-    <form className="redigering" aria-label={`Kilder for ${tittel}`} onSubmit={(e) => void lagre(e)}>
-      <Referansevelger tittel={`Kilder for hele panelet «${tittel}»`} valgte={kilder} onEndre={setKilder} />
-      {feil && (
-        <p className="skjemafeil" role="alert">
-          {feil}
-        </p>
-      )}
-      <div className="skjema__knapper">
-        <Button variant="subtle" onClick={onAvbryt}>
-          Avbryt
-        </Button>
-        <Button type="submit" className="knapp--kompakt" disabled={lagrer}>
-          {lagrer ? 'Lagrer …' : 'Lagre utkast'}
-        </Button>
-      </div>
-    </form>
+    <Skjemaramme
+      tittel={tittel}
+      meta="Kilder for panelet"
+      navn={`Kilder for ${tittel}`}
+      ikon="refs"
+      kildetittel={`Kilder for hele panelet «${tittel}»`}
+      referanser={referanser}
+      kontroller={() => ({ data: null })}
+      onAvbryt={onAvbryt}
+      onLagre={({ referanser: ider }) => onLagre(ider)}
+    />
   )
 }
