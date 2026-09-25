@@ -31,6 +31,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `supabase/import/tdm/`, `src/faginnhold/tdm.ts`, `scripts/importer-tdm.ts` | Referanseområdene og TDM-kortene fra referanseområdeprosjektet og Tidsskriftet, og SQL-en som legger dem til på sidene |
 | `supabase/migrations/*_tdm_referanseomrader_*.sql` | Den importen slik den ble rullet ut |
 | `supabase/import/rettinger/`, `src/faginnhold/rettinger.ts`, `scripts/lag-rettinger.ts`, `supabase/migrations/*_rettinger.sql` | Rettinger av rader i tabellene over serumkonsentrasjoner, med kilden og begrunnelsen |
+| `supabase/import/oppdateringer/`, `src/faginnhold/kortoppdateringer.ts`, `scripts/lag-kortoppdateringer.ts` | Oppdateringer av kort på sidene etter en nyere kilde, som de nasjonale referanseområdene for antiepileptika fra 2017 |
 | `supabase/migrations/*_scenarioregelsett*.sql`, `*_rusregler_import.sql`, `*_scenarioregler_lesing.sql` | Scenarioregelsettene for analytter som vurderes samlet, importen av rusmiddelreglene og lesingen fortolkningen gjør (`docs/scenarioregler.md`) |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
@@ -51,7 +52,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/__tests__/analyttside.test.tsx`, `navigasjon.test.tsx`, `analyttsidemodell.test.ts` | Sidene, redigeringen og veiene mellom sidene og fortolkningen |
 | `src/__tests__/referansenummerering.test.ts`, `referansepille.test.tsx` | Nummereringen, og pillen med mus, berøring og tastatur |
 | `src/__tests__/festreferanser.test.ts`, `referansefelt.test.tsx` | FEST-referansene, referansefeltet, listen og at editoren aldri tilbyr en automatisk kilde |
-| `src/__tests__/psykofarmakaimport.test.ts`, `tdmimport.test.ts`, `rettinger.test.ts` | Datasettene, importene og rettingene, prøvd mot en ekte database |
+| `src/__tests__/psykofarmakaimport.test.ts`, `tdmimport.test.ts`, `rettinger.test.ts`, `kortoppdateringer.test.ts` | Datasettene, importene, rettingene og oppdateringene, prøvd mot en ekte database |
 | `src/__tests__/hjelp/testdatabase.ts` | Postgres i minnet, bygd av migrasjonene, og kallene testene gjør |
 
 ## Domenet
@@ -597,6 +598,22 @@ migrasjonen. Bare en rad som står nøyaktig som oppgitt, rettes; hver retting
 blir en ny, publisert revisjon med «Rettet etter <kilde>: <hvorfor>» i
 historikken, og en tabell som blir tom, tas bort fra siden. Importdatasettet
 røres ikke: det viser hva som ble importert.
+
+**Oppdateringer etter en nyere kilde.** Når en nyere kilde gir andre verdier
+eller ny kunnskap, føres den inn med en oppdateringsfil i
+`supabase/import/oppdateringer/`: kilden, referansene den bruker (en som
+mangler, legges inn), og per oppdatering siden (`kode` eller `side`), panelet,
+kortet (datakorttypen, eller overskriften i et kortpanel), innholdet slik det
+står (`fra`), det nye (`til`, eller `null` for å ta kortet bort), kildene som
+legges til først og tas bort, og hvorfor. `npx vite-node
+scripts/lag-kortoppdateringer.ts -- <brukernavn> <fil> <utfil>` lager
+migrasjonen. Som for rettingene oppdateres bare et kort som står nøyaktig som
+oppgitt og ikke har et upublisert utkast, med «Oppdatert etter <kilde>:
+<hvorfor>» i historikken, og importdatasettene røres ikke. Den første gjelder
+de felles nasjonale referanseområdene for antiepileptika (Reimers mfl.,
+Tidsskr Nor Legeforen 2017): områdene for topiramat og okskarbazepin,
+grunnlaget på alle antiepileptikasidene og lamotrigin, og området for
+klonazepam ved epilepsi.
 
 ## Tilgang
 

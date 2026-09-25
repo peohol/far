@@ -1,0 +1,561 @@
+{
+  "kilde": "Reimers A, Berg JA, Burns ML, Johannessen Landmark C. Felles referanseområder for antiepileptika. Tidsskr Nor Legeforen 2017; 137: 864–5",
+  "referanser": {
+    "reimers2017": {
+      "tittel": "Felles referanseområder for antiepileptika",
+      "forfattere": "Reimers A, Berg JA, Burns ML, Johannessen Landmark C",
+      "aar": "2017",
+      "lenke": "https://doi.org/10.4045/tidsskr.17.0392"
+    },
+    "referanseomradeprosjektet": {
+      "tittel": "Referanseområdeprosjektet 2005–2008: nasjonale kartleggings- og harmoniseringsprosjekter innen klinisk farmakologi – antidepressiva og antipsykotika",
+      "forfattere": "Diakonhjemmet sykehus og St. Olavs hospital",
+      "aar": "",
+      "lenke": "https://farmakologiportalen.no/nasjonale_referanseomrader/"
+    }
+  },
+  "oppdateringer": [
+    {
+      "side": "Fenobarbital",
+      "panel": "viktige_data",
+      "kort": "referanseomrade",
+      "fra": {
+        "nedre": 50,
+        "ovre": 130,
+        "enhet": "µmol/L"
+      },
+      "til": {
+        "nedre": 50,
+        "ovre": 130
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "det nasjonale referanseområdet fra 2017 er det samme, 50–130 µmol/L"
+    },
+    {
+      "side": "Fenobarbital",
+      "panel": "tdm",
+      "kort": "Grunnlag for referanseområdet",
+      "fra": {
+        "tekst": [
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Diakonhjemmet sykehus, St. Olavs hospital og Statens senter for epilepsi brukte alle 50–130 µmol/L, og området ble ikke endret."
+        ]
+      },
+      "til": {
+        "tekst": [
+          "Referanseområdet er det felles nasjonale referanseområdet for antiepileptika fra 2017, som styret i Norsk forening for klinisk farmakologi har godkjent. Det gjelder prøver tatt medikamentfastende, det vil si like før neste ordinære dose og 12–24 timer etter forrige inntak.",
+          "Området 50–130 µmol/L ble videreført uendret i 2017.",
+          "Før 2017 bygde området på referanseområdeprosjektet (2008):",
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Diakonhjemmet sykehus, St. Olavs hospital og Statens senter for epilepsi brukte alle 50–130 µmol/L, og området ble ikke endret."
+        ]
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "grunnlaget er de felles nasjonale referanseområdene for antiepileptika fra 2017"
+    },
+    {
+      "side": "Fenobarbital",
+      "panel": "tdm",
+      "kort": "Nyere nasjonale referanseområder",
+      "fra": {
+        "tekst": [
+          "Felles nasjonale referanseområder for antiepileptika ble etablert i 2017 (Reimers A, Berg JA, Burns ML mfl. Felles referanseområder for antiepileptika. Tidsskr Nor Legeforen 2017; 137: 864–5). De er ikke blant kildene for denne siden, og referanseområdet her er fra 2008."
+        ]
+      },
+      "til": null,
+      "hvorfor": "de nasjonale referanseområdene fra 2017 står nå i grunnlaget for referanseområdet"
+    },
+    {
+      "side": "Fenytoin",
+      "panel": "viktige_data",
+      "kort": "referanseomrade",
+      "fra": {
+        "nedre": 40,
+        "ovre": 80,
+        "enhet": "µmol/L"
+      },
+      "til": {
+        "nedre": 40,
+        "ovre": 80
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "det nasjonale referanseområdet fra 2017 er det samme, 40–80 µmol/L"
+    },
+    {
+      "side": "Fenytoin",
+      "panel": "tdm",
+      "kort": "Grunnlag for referanseområdet",
+      "fra": {
+        "tekst": [
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Diakonhjemmet sykehus, St. Olavs hospital og Statens senter for epilepsi brukte alle 40–80 µmol/L, og området ble ikke endret."
+        ]
+      },
+      "til": {
+        "tekst": [
+          "Referanseområdet er det felles nasjonale referanseområdet for antiepileptika fra 2017, som styret i Norsk forening for klinisk farmakologi har godkjent. Det gjelder prøver tatt medikamentfastende, det vil si like før neste ordinære dose og 12–24 timer etter forrige inntak.",
+          "Området 40–80 µmol/L ble videreført uendret i 2017. Det gjelder totalkonsentrasjonen; for fritt fenytoin oppgir de nasjonale områdene ca. 10 %.",
+          "Før 2017 bygde området på referanseområdeprosjektet (2008):",
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Diakonhjemmet sykehus, St. Olavs hospital og Statens senter for epilepsi brukte alle 40–80 µmol/L, og området ble ikke endret."
+        ]
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "grunnlaget er de felles nasjonale referanseområdene for antiepileptika fra 2017"
+    },
+    {
+      "side": "Fenytoin",
+      "panel": "tdm",
+      "kort": "Nyere nasjonale referanseområder",
+      "fra": {
+        "tekst": [
+          "Felles nasjonale referanseområder for antiepileptika ble etablert i 2017 (Reimers A, Berg JA, Burns ML mfl. Felles referanseområder for antiepileptika. Tidsskr Nor Legeforen 2017; 137: 864–5). De er ikke blant kildene for denne siden, og referanseområdet her er fra 2008."
+        ]
+      },
+      "til": null,
+      "hvorfor": "de nasjonale referanseområdene fra 2017 står nå i grunnlaget for referanseområdet"
+    },
+    {
+      "side": "Gabapentin",
+      "panel": "viktige_data",
+      "kort": "referanseomrade",
+      "fra": {
+        "nedre": 20,
+        "ovre": 120,
+        "enhet": "µmol/L"
+      },
+      "til": {
+        "nedre": 20,
+        "ovre": 120
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "det nasjonale referanseområdet fra 2017 er det samme, 20–120 µmol/L"
+    },
+    {
+      "side": "Gabapentin",
+      "panel": "tdm",
+      "kort": "Grunnlag for referanseområdet",
+      "fra": {
+        "tekst": [
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Området har fått en øvre grense. Diakonhjemmet sykehus brukte tidligere > 12 µmol/L, og Statens senter for epilepsi 70–120 µmol/L."
+        ]
+      },
+      "til": {
+        "tekst": [
+          "Referanseområdet er det felles nasjonale referanseområdet for antiepileptika fra 2017, som styret i Norsk forening for klinisk farmakologi har godkjent. Det gjelder prøver tatt medikamentfastende, det vil si like før neste ordinære dose og 12–24 timer etter forrige inntak.",
+          "Området 20–120 µmol/L ble videreført uendret i 2017.",
+          "Før 2017 bygde området på referanseområdeprosjektet (2008):",
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Området har fått en øvre grense. Diakonhjemmet sykehus brukte tidligere > 12 µmol/L, og Statens senter for epilepsi 70–120 µmol/L."
+        ]
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "grunnlaget er de felles nasjonale referanseområdene for antiepileptika fra 2017"
+    },
+    {
+      "side": "Gabapentin",
+      "panel": "tdm",
+      "kort": "Nyere nasjonale referanseområder",
+      "fra": {
+        "tekst": [
+          "Felles nasjonale referanseområder for antiepileptika ble etablert i 2017 (Reimers A, Berg JA, Burns ML mfl. Felles referanseområder for antiepileptika. Tidsskr Nor Legeforen 2017; 137: 864–5). De er ikke blant kildene for denne siden, og referanseområdet her er fra 2008."
+        ]
+      },
+      "til": null,
+      "hvorfor": "de nasjonale referanseområdene fra 2017 står nå i grunnlaget for referanseområdet"
+    },
+    {
+      "side": "Karbamazepin",
+      "panel": "viktige_data",
+      "kort": "referanseomrade",
+      "fra": {
+        "nedre": 15,
+        "ovre": 45,
+        "enhet": "µmol/L"
+      },
+      "til": {
+        "nedre": 15,
+        "ovre": 45
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "det nasjonale referanseområdet fra 2017 er det samme, 15–45 µmol/L"
+    },
+    {
+      "side": "Karbamazepin",
+      "panel": "tdm",
+      "kort": "Grunnlag for referanseområdet",
+      "fra": {
+        "tekst": [
+          "Referanseområdet gjelder summen av karbamazepin og den aktive metabolitten karbamazepinepoksid.",
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Området ble ikke endret, men gjelder nå for summen. Diakonhjemmet sykehus brukte det tidligere for karbamazepin alene. St. Olavs hospital og Statens senter for epilepsi brukte også 15–45 µmol/L."
+        ]
+      },
+      "til": {
+        "tekst": [
+          "Referanseområdet er det felles nasjonale referanseområdet for antiepileptika fra 2017, som styret i Norsk forening for klinisk farmakologi har godkjent. Det gjelder prøver tatt medikamentfastende, det vil si like før neste ordinære dose og 12–24 timer etter forrige inntak.",
+          "Området 15–45 µmol/L ble videreført uendret i 2017. For fritt karbamazepin oppgir de nasjonale områdene 24–33 % (= 4–12,5 µmol/L).",
+          "Tabellen fra 2017 sier ikke om området gjelder karbamazepin alene eller summen med den aktive metabolitten karbamazepinepoksid. I referanseområdeprosjektet (2008) gjaldt det summen.",
+          "Før 2017 bygde området på referanseområdeprosjektet (2008):",
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Området ble ikke endret, men gjelder nå for summen. Diakonhjemmet sykehus brukte det tidligere for karbamazepin alene. St. Olavs hospital og Statens senter for epilepsi brukte også 15–45 µmol/L."
+        ]
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "grunnlaget er de felles nasjonale referanseområdene for antiepileptika fra 2017"
+    },
+    {
+      "side": "Karbamazepin",
+      "panel": "tdm",
+      "kort": "Nyere nasjonale referanseområder",
+      "fra": {
+        "tekst": [
+          "Felles nasjonale referanseområder for antiepileptika ble etablert i 2017 (Reimers A, Berg JA, Burns ML mfl. Felles referanseområder for antiepileptika. Tidsskr Nor Legeforen 2017; 137: 864–5). De er ikke blant kildene for denne siden, og referanseområdet her er fra 2008."
+        ]
+      },
+      "til": null,
+      "hvorfor": "de nasjonale referanseområdene fra 2017 står nå i grunnlaget for referanseområdet"
+    },
+    {
+      "side": "Levetiracetam",
+      "panel": "viktige_data",
+      "kort": "referanseomrade",
+      "fra": {
+        "nedre": 30,
+        "ovre": 240,
+        "enhet": "µmol/L"
+      },
+      "til": {
+        "nedre": 30,
+        "ovre": 240
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "det nasjonale referanseområdet fra 2017 er det samme, 30–240 µmol/L"
+    },
+    {
+      "side": "Levetiracetam",
+      "panel": "tdm",
+      "kort": "Grunnlag for referanseområdet",
+      "fra": {
+        "tekst": [
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Diakonhjemmet sykehus og Statens senter for epilepsi brukte tidligere 35–120 µmol/L."
+        ]
+      },
+      "til": {
+        "tekst": [
+          "Referanseområdet er det felles nasjonale referanseområdet for antiepileptika fra 2017, som styret i Norsk forening for klinisk farmakologi har godkjent. Det gjelder prøver tatt medikamentfastende, det vil si like før neste ordinære dose og 12–24 timer etter forrige inntak.",
+          "Området 30–240 µmol/L ble videreført uendret i 2017.",
+          "Før 2017 bygde området på referanseområdeprosjektet (2008):",
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Diakonhjemmet sykehus og Statens senter for epilepsi brukte tidligere 35–120 µmol/L."
+        ]
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "grunnlaget er de felles nasjonale referanseområdene for antiepileptika fra 2017"
+    },
+    {
+      "side": "Levetiracetam",
+      "panel": "tdm",
+      "kort": "Nyere nasjonale referanseområder",
+      "fra": {
+        "tekst": [
+          "Felles nasjonale referanseområder for antiepileptika ble etablert i 2017 (Reimers A, Berg JA, Burns ML mfl. Felles referanseområder for antiepileptika. Tidsskr Nor Legeforen 2017; 137: 864–5). De er ikke blant kildene for denne siden, og referanseområdet her er fra 2008."
+        ]
+      },
+      "til": null,
+      "hvorfor": "de nasjonale referanseområdene fra 2017 står nå i grunnlaget for referanseområdet"
+    },
+    {
+      "side": "Okskarbazepin",
+      "panel": "viktige_data",
+      "kort": "referanseomrade",
+      "fra": {
+        "nedre": 45,
+        "ovre": 140,
+        "enhet": "µmol/L"
+      },
+      "til": {
+        "nedre": 12,
+        "ovre": 140
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ],
+        "ut": [
+          "referanseomradeprosjektet"
+        ]
+      },
+      "hvorfor": "det nasjonale referanseområdet er 12–140 µmol/L, ikke 45–140 µmol/L"
+    },
+    {
+      "side": "Okskarbazepin",
+      "panel": "tdm",
+      "kort": "Grunnlag for referanseområdet",
+      "fra": {
+        "tekst": [
+          "Referanseområdet gjelder den aktive metabolitten monohydroksyokskarbazepin (MHD).",
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Diakonhjemmet sykehus og Statens senter for epilepsi brukte tidligere 50–140 µmol/L."
+        ]
+      },
+      "til": {
+        "tekst": [
+          "Referanseområdet er det felles nasjonale referanseområdet for antiepileptika fra 2017, som styret i Norsk forening for klinisk farmakologi har godkjent. Det gjelder prøver tatt medikamentfastende, det vil si like før neste ordinære dose og 12–24 timer etter forrige inntak.",
+          "I 2017 ble området endret fra 45–140 til 12–140 µmol/L. Det gjelder den aktive metabolitten likarbazepin (opprinnelig kalt monohydroksyderivat, MHD).",
+          "Før 2017 bygde området på referanseområdeprosjektet (2008):",
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Diakonhjemmet sykehus og Statens senter for epilepsi brukte tidligere 50–140 µmol/L."
+        ]
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "grunnlaget er de felles nasjonale referanseområdene for antiepileptika fra 2017"
+    },
+    {
+      "side": "Okskarbazepin",
+      "panel": "tdm",
+      "kort": "Nyere nasjonale referanseområder",
+      "fra": {
+        "tekst": [
+          "Felles nasjonale referanseområder for antiepileptika ble etablert i 2017 (Reimers A, Berg JA, Burns ML mfl. Felles referanseområder for antiepileptika. Tidsskr Nor Legeforen 2017; 137: 864–5). De er ikke blant kildene for denne siden, og referanseområdet her er fra 2008."
+        ]
+      },
+      "til": null,
+      "hvorfor": "de nasjonale referanseområdene fra 2017 står nå i grunnlaget for referanseområdet"
+    },
+    {
+      "side": "Topiramat",
+      "panel": "viktige_data",
+      "kort": "referanseomrade",
+      "fra": {
+        "nedre": 15,
+        "ovre": 60,
+        "enhet": "µmol/L"
+      },
+      "til": {
+        "nedre": 6,
+        "ovre": 30
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ],
+        "ut": [
+          "referanseomradeprosjektet"
+        ]
+      },
+      "hvorfor": "det nasjonale referanseområdet er 6–30 µmol/L, ikke 15–60 µmol/L"
+    },
+    {
+      "side": "Topiramat",
+      "panel": "tdm",
+      "kort": "Grunnlag for referanseområdet",
+      "fra": {
+        "tekst": [
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Området har fått en øvre grense. Diakonhjemmet sykehus brukte tidligere > 10 µmol/L. Statens senter for epilepsi brukte også 15–60 µmol/L."
+        ]
+      },
+      "til": {
+        "tekst": [
+          "Referanseområdet er det felles nasjonale referanseområdet for antiepileptika fra 2017, som styret i Norsk forening for klinisk farmakologi har godkjent. Det gjelder prøver tatt medikamentfastende, det vil si like før neste ordinære dose og 12–24 timer etter forrige inntak.",
+          "I 2017 ble området endret fra 15–60 til 6–30 µmol/L.",
+          "Før 2017 bygde området på referanseområdeprosjektet (2008):",
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Området har fått en øvre grense. Diakonhjemmet sykehus brukte tidligere > 10 µmol/L. Statens senter for epilepsi brukte også 15–60 µmol/L."
+        ]
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "grunnlaget er de felles nasjonale referanseområdene for antiepileptika fra 2017"
+    },
+    {
+      "side": "Topiramat",
+      "panel": "tdm",
+      "kort": "Nyere nasjonale referanseområder",
+      "fra": {
+        "tekst": [
+          "Felles nasjonale referanseområder for antiepileptika ble etablert i 2017 (Reimers A, Berg JA, Burns ML mfl. Felles referanseområder for antiepileptika. Tidsskr Nor Legeforen 2017; 137: 864–5). De er ikke blant kildene for denne siden, og referanseområdet her er fra 2008."
+        ]
+      },
+      "til": null,
+      "hvorfor": "de nasjonale referanseområdene fra 2017 står nå i grunnlaget for referanseområdet"
+    },
+    {
+      "side": "Valproat",
+      "panel": "viktige_data",
+      "kort": "referanseomrade",
+      "fra": {
+        "nedre": 300,
+        "ovre": 700,
+        "enhet": "µmol/L"
+      },
+      "til": {
+        "nedre": 300,
+        "ovre": 700
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "det nasjonale referanseområdet fra 2017 er det samme, 300–700 µmol/L"
+    },
+    {
+      "side": "Valproat",
+      "panel": "tdm",
+      "kort": "Grunnlag for referanseområdet",
+      "fra": {
+        "tekst": [
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Diakonhjemmet sykehus brukte tidligere 300–900 µmol/L, som var veiledende ved psykiatrisk indikasjon; ved epilepsi ble 600 µmol/L anbefalt som øvre grense. Statens senter for epilepsi brukte 300–600 µmol/L."
+        ]
+      },
+      "til": {
+        "tekst": [
+          "Referanseområdet er det felles nasjonale referanseområdet for antiepileptika fra 2017, som styret i Norsk forening for klinisk farmakologi har godkjent. Det gjelder prøver tatt medikamentfastende, det vil si like før neste ordinære dose og 12–24 timer etter forrige inntak.",
+          "I 2017 ble området harmonisert til 300–700 µmol/L; laboratoriene brukte før det ulike grenser (250/300–600/700 µmol/L). Det gjelder totalkonsentrasjonen; for fritt valproat oppgir de nasjonale områdene ca. 10 %.",
+          "Før 2017 bygde området på referanseområdeprosjektet (2008):",
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+          "Diakonhjemmet sykehus brukte tidligere 300–900 µmol/L, som var veiledende ved psykiatrisk indikasjon; ved epilepsi ble 600 µmol/L anbefalt som øvre grense. Statens senter for epilepsi brukte 300–600 µmol/L."
+        ]
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "grunnlaget er de felles nasjonale referanseområdene for antiepileptika fra 2017"
+    },
+    {
+      "side": "Valproat",
+      "panel": "tdm",
+      "kort": "Nyere nasjonale referanseområder",
+      "fra": {
+        "tekst": [
+          "Felles nasjonale referanseområder for antiepileptika ble etablert i 2017 (Reimers A, Berg JA, Burns ML mfl. Felles referanseområder for antiepileptika. Tidsskr Nor Legeforen 2017; 137: 864–5). De er ikke blant kildene for denne siden, og referanseområdet her er fra 2008."
+        ]
+      },
+      "til": null,
+      "hvorfor": "de nasjonale referanseområdene fra 2017 står nå i grunnlaget for referanseområdet"
+    },
+    {
+      "kode": "LAM",
+      "panel": "viktige_data",
+      "kort": "referanseomrade",
+      "fra": {
+        "nedre": 10,
+        "ovre": 50,
+        "enhet": "µmol/L"
+      },
+      "til": {
+        "nedre": 10,
+        "ovre": 50
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "det nasjonale referanseområdet fra 2017 er det samme, 10–50 µmol/L"
+    },
+    {
+      "kode": "LAM",
+      "panel": "tdm",
+      "kort": "Grunnlag for referanseområdet",
+      "fra": {
+        "tekst": [
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk området St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der. Statens senter for epilepsi brukte da 10–60 µmol/L."
+        ]
+      },
+      "til": {
+        "tekst": [
+          "Referanseområdet er det felles nasjonale referanseområdet for antiepileptika fra 2017, som styret i Norsk forening for klinisk farmakologi har godkjent. Det gjelder prøver tatt medikamentfastende, det vil si like før neste ordinære dose og 12–24 timer etter forrige inntak.",
+          "I 2017 ble området harmonisert til 10–50 µmol/L. Laboratoriene brukte før det 10–50 eller 10–60 µmol/L.",
+          "Før 2017 bygde området på referanseområdeprosjektet (2008):",
+          "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk området St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der. Statens senter for epilepsi brukte da 10–60 µmol/L."
+        ]
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "grunnlaget er de felles nasjonale referanseområdene for antiepileptika fra 2017"
+    },
+    {
+      "kode": "CZP",
+      "panel": "tdm",
+      "kort": "Referansegrense",
+      "fra": {
+        "tekst": [
+          "Øvre referansegrense 50 nmol/L er den øvre forventede medikamentfastende konsentrasjonen ved døgndose 1,5 mg, høyeste døgndose ved angst, uro og/eller søvnvansker.",
+          "Ved epilepsi brukes høyere doser, og referanseområdet er da 60–220 nmol/L.",
+          "Det er ikke satt noen nedre grense, siden konsentrasjonen bør holdes så lav som mulig. Lavest mulig dosering og kortvarig eller periodevis bruk bør tilstrebes."
+        ]
+      },
+      "til": {
+        "tekst": [
+          "Øvre referansegrense 50 nmol/L er den øvre forventede medikamentfastende konsentrasjonen ved døgndose 1,5 mg, høyeste døgndose ved angst, uro og/eller søvnvansker.",
+          "Ved epilepsi brukes høyere doser, og referanseområdet er da 40–120 nmol/L. Det er det felles nasjonale referanseområdet for antiepileptika fra 2017; før det var området 60–220 nmol/L.",
+          "Det er ikke satt noen nedre grense, siden konsentrasjonen bør holdes så lav som mulig. Lavest mulig dosering og kortvarig eller periodevis bruk bør tilstrebes."
+        ]
+      },
+      "kilder": {
+        "inn": [
+          "reimers2017"
+        ]
+      },
+      "hvorfor": "referanseområdet ved epilepsi er 40–120 nmol/L, ikke 60–220 nmol/L"
+    }
+  ]
+}
