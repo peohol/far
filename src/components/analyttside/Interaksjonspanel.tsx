@@ -1,13 +1,13 @@
 import type { Paneldefinisjon } from '../../faginnhold/paneler'
 import type { Tilleggstekst } from '../../faginnhold/sok'
-import { forhandsvisning } from '../../faginnhold/oppsummering'
+import { forhandsvisning, ramsOpp } from '../../faginnhold/oppsummering'
 import { oppsummerInteraksjoner, type Interaksjon } from '../../legemiddeldata/interaksjoner'
 import { interaksjonsreferanser, interaksjonssted as kortsted } from '../../legemiddeldata/referanser'
 import { interaksjonstekster } from '../../legemiddeldata/stoffside'
 import { Detaljkort } from '../seksjoner/Seksjon'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { Uthev } from '../Uthev'
-import { elementAnker, Panel, type Panelkontekst } from './Paneler'
+import { elementAnker, Panel, Paneltekst, panelteksten, type Panelkontekst } from './Paneler'
 import type { Interaksjonstilstand } from './useInteraksjoner'
 
 /** Stoffene siden interagerer med, slik søket på siden finner dem, med detaljkortet de står i. */
@@ -16,9 +16,10 @@ export function interaksjonssoketekster(tilstand: Interaksjonstilstand): Tillegg
 }
 
 /**
- * Seksjonen «Interaksjoner»: DMPs interaksjoner i FEST for preparatene siden
- * er koblet til, én per detaljkort, de alvorligste først. Ingenting redigeres
- * her; koblingen står i «Preparater». DMPs referanser står i referansefeltet
+ * Seksjonen «Interaksjoner»: øverst en redaksjonell tekst om stoffets
+ * interaksjoner, som redigeres her, og under den DMPs interaksjoner i FEST for
+ * preparatene siden er koblet til, én per detaljkort, de alvorligste først.
+ * Koblingen står i «Preparater». DMPs referanser står i referansefeltet
  * nederst i hvert kort, og FEST som kilde i seksjonens (se
  * `src/legemiddeldata/referanser.ts`).
  */
@@ -33,8 +34,15 @@ export function Interaksjonspanel({
   koblet: boolean
   interaksjoner: Interaksjonstilstand
 }) {
+  const tekst = panelteksten(kontekst, definisjon.nokkel)
   return (
-    <Panel definisjon={definisjon} kontekst={kontekst} tomt={!koblet} oppsummering={oppsummering(interaksjoner)}>
+    <Panel
+      definisjon={definisjon}
+      kontekst={kontekst}
+      tomt={!koblet && tekst.tomt}
+      oppsummering={ramsOpp([oppsummering(interaksjoner), !tekst.tomt && tekst.oppsummering])}
+    >
+      <Paneltekst definisjon={definisjon} kontekst={kontekst} tekst={tekst} />
       {!koblet && kontekst.redigerer && (
         <p className="preparater__kobling">
           Interaksjonene hentes fra FEST når siden er koblet til legemiddeldataene under «Preparater».

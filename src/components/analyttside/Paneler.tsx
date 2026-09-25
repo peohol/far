@@ -13,6 +13,7 @@ import { NODER, erTomt, klartekst, tomtDokument, type Riktekstdokument } from '.
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
+import { Skuffrutenett } from '../seksjoner/Skuffrutenett'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { useSidereferanser } from '../referanser/Sidereferanser'
 import { Riktekst } from './Riktekst'
@@ -31,7 +32,8 @@ import '../../styles/monograf.css'
  *
  * Hvert panel er en seksjon som åpnes og lukkes (`src/components/seksjoner/`),
  * med en kort oppsummering av innholdet når den er lukket. Kortene i
- * farmakokinetikken er detaljkort i seksjonen.
+ * farmakokinetikken og farmakogenetikken er detaljkort i et rutenett
+ * (`Skuffrutenett`).
  *
  * I lesemodus vises bare det som har innhold: siden skal leses som et
  * oppslagsverk. I redigeringsmodus står alle panelene fram, med diskrete
@@ -174,52 +176,74 @@ function Kortreferanser({ element }: { element: Sideelement | null | undefined }
 
 /* --- Panel 3–5: én riktekst ----------------------------------------------- */
 
-export function Tekstpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
-  const elementer = (kontekst.modell.paneler.get(definisjon.nokkel) ?? []).filter(
-    (e) => e.elementtype === ELEMENTTYPER.riktekst,
-  )
-  const element = elementer[0] ?? null
+/** Rikteksten i et panel: elementet, dokumentet og om det er tomt. Et panel har høyst én. */
+export function panelteksten(kontekst: Panelkontekst, nokkel: string) {
+  const element =
+    (kontekst.modell.paneler.get(nokkel) ?? []).find((e) => e.elementtype === ELEMENTTYPER.riktekst) ?? null
   const dokument = element ? lesRiktekst(element.data).dokument : tomtDokument()
   const tomt = !element || (erTomt(dokument) && element.referanser.length === 0)
+  return { element, dokument, tomt, oppsummering: tekstoppsummering(dokument) }
+}
 
+export function Tekstpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
+  const tekst = panelteksten(kontekst, definisjon.nokkel)
   return (
-    <Panel definisjon={definisjon} kontekst={kontekst} tomt={tomt} oppsummering={tekstoppsummering(dokument)}>
-      <div className="infotekst" {...(element && { id: elementAnker(element.id) })}>
-        <Redigerbar
-          navn={definisjon.tittel}
-          element={element}
-          redigerer={kontekst.redigerer}
-          leggTilTekst="Skriv tekst"
-          visning={
-            !tomt && (
-              <>
-                <Tekstvisning nokkel={definisjon.nokkel} dokument={dokument} />
-                <Kortreferanser element={element} />
-              </>
-            )
-          }
-          skjema={(lukk) => (
-            <TekstSkjema
-              tittel={definisjon.tittel}
-              ikon={seksjonsikon(definisjon.nokkel)}
-              start={{ dokument }}
-              referanser={element?.referanser ?? []}
-              onAvbryt={lukk}
-              onLagre={async ({ data, referanser }) => {
-                await kontekst.handlinger.lagreElement(element, {
-                  panel: definisjon.nokkel,
-                  elementtype: ELEMENTTYPER.riktekst,
-                  posisjon: 0,
-                  data,
-                  referanser,
-                })
-                lukk()
-              }}
-            />
-          )}
-        />
-      </div>
+    <Panel definisjon={definisjon} kontekst={kontekst} tomt={tekst.tomt} oppsummering={tekst.oppsummering}>
+      <Paneltekst definisjon={definisjon} kontekst={kontekst} tekst={tekst} />
     </Panel>
+  )
+}
+
+/**
+ * Rikteksten i et panel, med knappen som redigerer den. I redigeringsmodus står
+ * den fram også når panelet ikke har noen tekst ennå, med «Skriv tekst».
+ */
+export function Paneltekst({
+  definisjon,
+  kontekst,
+  tekst: { element, dokument, tomt },
+}: {
+  definisjon: Paneldefinisjon
+  kontekst: Panelkontekst
+  tekst: ReturnType<typeof panelteksten>
+}) {
+  if (tomt && !kontekst.redigerer) return null
+  return (
+    <div className="infotekst" {...(element && { id: elementAnker(element.id) })}>
+      <Redigerbar
+        navn={definisjon.tittel}
+        element={element}
+        redigerer={kontekst.redigerer}
+        leggTilTekst="Skriv tekst"
+        visning={
+          !tomt && (
+            <>
+              <Tekstvisning nokkel={definisjon.nokkel} dokument={dokument} />
+              <Kortreferanser element={element} />
+            </>
+          )
+        }
+        skjema={(lukk) => (
+          <TekstSkjema
+            tittel={definisjon.tittel}
+            ikon={seksjonsikon(definisjon.nokkel)}
+            start={{ dokument }}
+            referanser={element?.referanser ?? []}
+            onAvbryt={lukk}
+            onLagre={async ({ data, referanser }) => {
+              await kontekst.handlinger.lagreElement(element, {
+                panel: definisjon.nokkel,
+                elementtype: ELEMENTTYPER.riktekst,
+                posisjon: 0,
+                data,
+                referanser,
+              })
+              lukk()
+            }}
+          />
+        )}
+      />
+    </div>
   )
 }
 
@@ -250,7 +274,7 @@ function Tekstvisning({ nokkel, dokument }: { nokkel: string; dokument: Riktekst
 /** Lengste verdi som vises med store tall i et doseringskort; lengre tekst vises som lesetekst. */
 const KORT_VERDI = 28
 
-/* --- Panel 6: kort med overskrift og tekst -------------------------------- */
+/* --- Kort med overskrift og tekst: farmakokinetikken og farmakogenetikken - */
 
 export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
   const elementer = (kontekst.modell.paneler.get(definisjon.nokkel) ?? []).filter(
@@ -268,13 +292,15 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
       oppsummering={ramsOpp(elementer.map((e) => lesKinetikk(e.data).tittel))}
     >
       {elementer.length > 0 && (
-        <ul className="infokort skuffrutenett">
+        <Skuffrutenett className="infokort">
           {elementer.map((element, i) => {
             const { tittel, dokument } = lesKinetikk(element.data)
             return (
               <li key={element.id} className="infokort__kort">
                 <Detaljkort
                   id={element.id}
+                  // Står det bare ett kort i seksjonen, er det ingenting å velge mellom.
+                  apenFraStart={elementer.length === 1}
                   ikon={kinetikkikon(tittel)}
                   tittel={<Kinetikktittel tittel={tittel} />}
                   oppsummering={tekstoppsummering(dokument)}
@@ -347,7 +373,7 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
               </li>
             )
           })}
-        </ul>
+        </Skuffrutenett>
       )}
       {redigerer && (
         <div className="redigeringsrad">

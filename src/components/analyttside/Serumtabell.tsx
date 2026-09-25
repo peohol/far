@@ -14,6 +14,7 @@ import { Uthev } from '../Uthev'
  * som i kilden (`originaldata/Psykofarmaka.pdf`): én kolonne per dose og én
  * rad hver for antall prøver, 10-persentil, median og 90-persentil, én tabell
  * per stoff, og referanseområdeprosjektet i en egen liten tabell under.
+ * Kildene står i panelets referansefelt, ikke som tekst over hver tabell.
  *
  * Tallene og tekstene er de lagrede, lest tilbake uten tap (`lesSerumtabell`).
  * Rader som ikke har den formen, vises som vanlige rader med kolonnene som er
@@ -85,9 +86,6 @@ function Persentiltabell({ blokk }: { blokk: Extract<Serumblokk, { slag: 'persen
         <h3 id={overskrift} className="serumtabell__stoff">
           <Uthev tekst={blokk.stoff} />
         </h3>
-        <p className="serumtabell__meta">
-          <Uthev tekst={blokk.kilde} />
-        </p>
       </header>
       <Rull etikett={overskrift}>
         <table className="serumtabell__tabell serumtabell__tabell--persentiler" aria-labelledby={overskrift}>
@@ -127,9 +125,6 @@ function Prosjekttabell({ blokk }: { blokk: Extract<Serumblokk, { slag: 'prosjek
         <h3 id={overskrift} className="serumtabell__stoff">
           <Uthev tekst={`${REFERANSEOMRADEPROSJEKTET.navn}, dose ${blokk.doser}`} />
         </h3>
-        <p className="serumtabell__meta">
-          <Uthev tekst={`(${REFERANSEOMRADEPROSJEKTET.sted})`} />
-        </p>
       </header>
       <table className="serumtabell__tabell serumtabell__tabell--prosjekt" aria-labelledby={overskrift}>
         <tbody>

@@ -182,12 +182,6 @@
   color: var(--blekk-sterk);
 }
 
-.serumtabell__meta {
-  margin: 0;
-  font: italic var(--vekt-normal) var(--tekst-ingress) / 1.35 var(--skrift-display);
-  color: var(--blekk-dempet);
-}
-
 .serumtabell__rull {
   max-width: 100%;
   overflow-x: auto;

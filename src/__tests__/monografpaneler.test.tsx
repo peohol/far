@@ -128,6 +128,8 @@ describe('serumtabellen på siden', () => {
     expect(antall.querySelector('td:last-child')!.textContent).toBe('5 853')
     expect(within(prosjekt!).getAllByRole('cell').map((td) => td.textContent)).toEqual(['57', '639'])
     expect(screen.getByRole('heading', { name: 'Referanseområdeprosjektet 2005–2008, dose 50–1000 mg' })).toBeTruthy()
+    // Kildene står i panelets referansefelt, ikke som tekst over tabellene.
+    expect(screen.queryByText(/Jönsson|Diakonhjemmet/)).toBeNull()
     // Tabellen kan rulles sidelengs med tastaturet.
     expect(matrise!.closest('[role="region"]')!.getAttribute('tabindex')).toBe('0')
   })
