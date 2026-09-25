@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.36.1',
+    versjon: '1.36.2',
     dato: '2026-09-25',
     sammendrag: 'De 15 nye stoffsidene er koblet til legemiddeldataene fra FEST',
     typer: ['Funksjonalitet'],
@@ -20,6 +20,16 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Antiepileptikasidene, litium, sertindol, atomoksetin, metylfenidat, ketobemidon, petidin og flunitrazepam viser nå preparatene og interaksjonene fra FEST, som de andre stoffsidene.',
       'Litium viser litiumpreparatene, og valproat preparatene med valproinsyre og natriumvalproat. Ketobemidon har ingen preparater i FEST, og siden sier det.',
+    ],
+  },
+  {
+    versjon: '1.36.1',
+    dato: '2026-09-25',
+    sammendrag: 'Stoffsidene uten labkode er lagt inn i databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Stoffsidene uten labkode og de 15 nye stoffsidene fra forrige versjon er lagt inn, og er ført i appens oversikt over databaseendringer slik de faktisk ble gjort.',
     ],
   },
   {
