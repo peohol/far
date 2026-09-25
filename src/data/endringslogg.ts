@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.34.1',
+    dato: '2026-09-25',
+    sammendrag: 'Opprydding etter at de nye stoffsidedataene ble tatt i bruk',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen synlig endring. Omleggingen av farmakogenetikken, interaksjonsteksten og kildene i serumkonsentrasjonene er ført i appens oversikt over databaseendringer slik den faktisk ble gjort.',
+    ],
+  },
+  {
     versjon: '1.34.0',
     dato: '2026-09-25',
     sammendrag: 'Farmakogenetikk som egen seksjon, interaksjonsteksten samlet, og animerte kortrutenett',
