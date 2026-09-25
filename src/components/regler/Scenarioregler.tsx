@@ -1,53 +1,68 @@
-import { useMemo, useState } from 'react'
-import {
-  rusModulFor,
-  rusVerdifelter,
-  TOM_RUS_INNDATA,
-  type RusInndata,
-  type RusModul,
-  type RusPlassering,
-} from '../../domain/rus'
+import { useCallback, useMemo, useState } from 'react'
+import { rusModulFor, TOM_RUS_INNDATA, type RusInndata, type RusModul } from '../../domain/rus'
 import type { Kommentaroppslag } from '../../domain/kommentarobjekt'
-import {
-  flettInn,
-  kjorScenarier,
-  verdifelter as verdifelterFor,
-  type Scenarioregelsett,
-  type Scenariotreff,
-} from '../../domain/scenario'
-import { beskrivForhold, beskrivRegelsett, formaterAndel, type Scenariobeskrivelse } from '../../domain/scenariovisning'
+import type { Scenarioregelsett } from '../../domain/scenario'
+import { beskrivRegelsett, type Scenariobeskrivelse } from '../../domain/scenariovisning'
+import type { Scenarioregelsettutgave } from '../../faginnhold/lesing'
+import { antall, ramsOpp } from '../../faginnhold/oppsummering'
+import { kommentaroppslag } from '../../regler/kommentarer'
+import { scenariofelter, tilScenarioutkast, utkastfelter, type Scenarioutkast } from '../../regler/scenarioredigering'
 import type { Analyte } from '../../types'
 import { Button } from '../Button'
-import { Rusutfall } from '../Rusutfall'
-import { Rusvalg } from '../Rusvalg'
+import { Ikon } from '../ikon/Ikon'
 import { Uthev } from '../Uthev'
 import { seksjonsikon } from '../analyttside/panelvisning'
 import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
-import { antall, ramsOpp } from '../../faginnhold/oppsummering'
+import { kommentarnavnoppslag, Regelhistorikk, upubliserteFelt } from './Regelhistorikk'
+import { Koder, provKjor, Scenariovilkar, Simulator } from './Scenariodeler'
+import { Scenarioredigering } from './Scenarioredigering'
 import { useScenarioreglerkilde } from './Scenarioreglerkilde'
 
+/** Det redigeringen av scenarioreglene trenger: utkastet, det publiserte og lagringen. */
+export interface Scenarioredigeringskilde {
+  utgave: Scenarioregelsettutgave
+  /** Det publiserte regelsettet, til å si hva som ikke er publisert ennå. */
+  publisert: Scenarioregelsettutgave | null
+  /**
+   * Lagrer utkastet med kommentarene, mot det brukeren åpnet, eller mot
+   * `grunnlag` når hen har sett en nyere utgave og valgt å lagre over den.
+   */
+  onLagre: (utkast: Scenarioutkast, grunnlag?: Scenarioregelsettutgave) => Promise<void>
+  /** Utkastet slik det står i databasen nå, med kommentarene. */
+  hentNyeste: () => Promise<Scenarioregelsettutgave | null>
+}
+
 /**
- * Det publiserte regelsettet fortolkningsmodulen bruker for denne analytten,
- * med navnene på analyttene og kommentarene regelsettet viser til. `null` når
- * modulen ikke fortolkes med scenarioregler, eller reglene ikke er hentet.
+ * Regelsettet fortolkningsmodulen bruker for denne analytten, med navnene på
+ * analyttene og kommentarene regelsettet viser til: det publiserte, eller
+ * utkastet når `redigering` er gitt. `null` når modulen ikke fortolkes med
+ * scenarioregler, eller reglene ikke er hentet.
  */
-export function useScenarioreglerFor(fortolkning: Analyte): ScenarioreglerProps | null {
+export function useScenarioreglerFor(
+  fortolkning: Analyte,
+  redigering: Scenarioredigeringskilde | null = null,
+): ScenarioreglerProps | null {
   const { tilstand } = useScenarioreglerkilde()
   return useMemo(() => {
     const modul = rusModulFor(fortolkning)
-    if (!modul || tilstand.status !== 'klar') return null
+    if (!modul) return null
+    if (redigering) {
+      const { utgave } = redigering
+      return { modul, regelsett: utgave.regelsett.innhold, kommentarer: kommentaroppslag(utgave.kommentarer), redigering }
+    }
+    if (tilstand.status !== 'klar') return null
     const utgave = tilstand.regler.regelsett.get(modul.id)
     return utgave ? { modul, regelsett: utgave.innhold, kommentarer: tilstand.regler.kommentarer } : null
-  }, [fortolkning, tilstand])
+  }, [fortolkning, tilstand, redigering])
 }
-
-const OG = new Intl.ListFormat('nb', { type: 'conjunction' })
 
 export interface ScenarioreglerProps {
   modul: RusModul
   regelsett: Scenarioregelsett
   /** Kommentarobjektene scenariene peker på. */
   kommentarer: Kommentaroppslag
+  /** For administratorer i redigeringsmodus. Da er det utkastet som vises. */
+  redigering?: Scenarioredigeringskilde
 }
 
 /**
@@ -62,13 +77,21 @@ export interface ScenarioreglerProps {
  * ingenting å kopiere.
  *
  * Reglene er seksjonen `fortolkning` på siden, og kommentartekstene og
- * simulatoren detaljkort i den (`docs/seksjoner.md`).
+ * simulatoren detaljkort i den (`docs/seksjoner.md`). I redigeringsmodus kan
+ * administratorer endre grensene og tekstene, se hva som ikke er publisert og
+ * åpne historikken — for regelsettet og for hver kommentar.
  */
-export function Scenarioregler({ modul, regelsett, kommentarer }: ScenarioreglerProps) {
+export function Scenarioregler({ modul, regelsett, kommentarer, redigering }: ScenarioreglerProps) {
   const beskrivelse = useMemo(() => beskrivRegelsett(regelsett, kommentarer), [regelsett, kommentarer])
   const [inndata, setInndata] = useState<RusInndata>(TOM_RUS_INNDATA)
+  const [redigeres, setRedigeres] = useState(false)
   const treff = useMemo(() => provKjor(regelsett, kommentarer, inndata), [regelsett, kommentarer, inndata])
   const simulerbar = regelsett.scenarier.length > 1
+  const redigeringsmodus = redigeres && redigering
+  const historikkfelter = useCallback(
+    (innhold: Scenarioregelsett) => scenariofelter(innhold, kommentarnavnoppslag(redigering?.utgave.kommentarer ?? [])),
+    [redigering],
+  )
 
   return (
     <Seksjon
@@ -79,87 +102,111 @@ export function Scenarioregler({ modul, regelsett, kommentarer }: Scenarioregler
         antall(beskrivelse.scenarier.length, 'scenario', 'scenarier'),
         ...beskrivelse.grenser.map((g) => `${g.navn}: ${g.prosent}`),
       ])}
+      handlinger={
+        redigering &&
+        !redigeres && (
+          <Button variant="kant" icon={<Ikon navn="edit" />} className="redigeringsknapp" onClick={() => setRedigeres(true)}>
+            Rediger reglene
+          </Button>
+        )
+      }
       className="regler"
     >
-      <p className="regler__ingress">
-        <Uthev
-          tekst={
-            simulerbar
-              ? `Slik kommenterer fortolkningen ${modul.navn}. Hvilke analytter som er påvist, avgjør hvilket scenario som gjelder.`
-              : `Slik kommenterer fortolkningen ${modul.navn}.`
-          }
-        />
-      </p>
-
-      {beskrivelse.grenser.length > 0 && (
-        <dl className="regler__grenser">
-          {beskrivelse.grenser.map((g) => (
-            <div key={g.nokkel} className="regler__grense">
-              <dt>
-                <Uthev tekst={g.navn} />
-              </dt>
-              <dd>{g.prosent}</dd>
-            </div>
-          ))}
-        </dl>
-      )}
-
-      <ol className="scenarioliste">
-        {beskrivelse.scenarier.map((b, i) => (
-          <Scenariorad
-            key={b.scenario.nokkel}
-            nummer={i + 1}
-            beskrivelse={b}
-            truffet={treff?.scenario === b.scenario}
-          />
-        ))}
-      </ol>
-
-      <Detaljkort
-        id="tekster"
-        tittel={beskrivelse.tekster.length > 1 ? 'Kommentartekstene' : 'Kommentarteksten'}
-        oppsummering={antall(beskrivelse.tekster.length, 'tekst', 'tekster')}
-      >
-        <ol className="regeltekster">
-          {beskrivelse.tekster.map((t, i) => (
-            <li key={t.id} className="regeltekst">
-              <p className="regeltekst__nummer">
-                Tekst {i + 1}
-                {t.brukesAv > 1 && <span className="regeltekst__bruk"> · brukes i {t.brukesAv} scenarier</span>}
-              </p>
-              <p className="kommentartekst">
-                <Uthev tekst={t.tekst} />
-              </p>
-            </li>
-          ))}
-        </ol>
-      </Detaljkort>
-
-      {simulerbar && (
-        <Simulator
+      {redigeringsmodus ? (
+        <Scenarioredigering
+          key={[redigering.utgave.regelsett.revisjon, ...redigering.utgave.kommentarer.map((k) => k.revisjon)].join('-')}
           modul={modul}
-          regelsett={regelsett}
-          beskrivelse={beskrivelse.scenarier}
-          inndata={inndata}
-          treff={treff}
-          onEndre={setInndata}
+          start={tilScenarioutkast(redigering.utgave)}
+          onLagre={async (utkast, grunnlag) => {
+            await redigering.onLagre(utkast, grunnlag)
+            setRedigeres(false)
+          }}
+          hentNyeste={redigering.hentNyeste}
+          onAvbryt={() => setRedigeres(false)}
+        />
+      ) : (
+        <>
+          <p className="regler__ingress">
+            <Uthev
+              tekst={
+                simulerbar
+                  ? `Slik kommenterer fortolkningen ${modul.navn}. Hvilke analytter som er påvist, avgjør hvilket scenario som gjelder.`
+                  : `Slik kommenterer fortolkningen ${modul.navn}.`
+              }
+            />
+          </p>
+
+          {beskrivelse.grenser.length > 0 && (
+            <dl className="regler__grenser">
+              {beskrivelse.grenser.map((g) => (
+                <div key={g.nokkel} className="regler__grense">
+                  <dt>
+                    <Uthev tekst={g.navn} />
+                  </dt>
+                  <dd>{g.prosent}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+
+          <ol className="scenarioliste">
+            {beskrivelse.scenarier.map((b, i) => (
+              <Scenariorad
+                key={b.scenario.nokkel}
+                nummer={i + 1}
+                beskrivelse={b}
+                truffet={treff?.scenario === b.scenario}
+              />
+            ))}
+          </ol>
+
+          <Detaljkort
+            id="tekster"
+            tittel={beskrivelse.tekster.length > 1 ? 'Kommentartekstene' : 'Kommentarteksten'}
+            oppsummering={antall(beskrivelse.tekster.length, 'tekst', 'tekster')}
+          >
+            <ol className="regeltekster">
+              {beskrivelse.tekster.map((t, i) => (
+                <li key={t.id} className="regeltekst">
+                  <p className="regeltekst__nummer">
+                    Tekst {i + 1}
+                    {t.brukesAv > 1 && <span className="regeltekst__bruk"> · brukes i {t.brukesAv} scenarier</span>}
+                  </p>
+                  <p className="kommentartekst">
+                    <Uthev tekst={t.tekst} />
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </Detaljkort>
+
+          {simulerbar && (
+            <Simulator
+              modul={modul}
+              regelsett={regelsett}
+              beskrivelse={beskrivelse.scenarier}
+              inndata={inndata}
+              treff={treff}
+              onEndre={setInndata}
+            />
+          )}
+        </>
+      )}
+      {redigering && (
+        <Regelhistorikk
+          utgave={redigering.utgave.regelsett}
+          type="scenarioregelsett"
+          felter={historikkfelter}
+          upubliserte={upubliserteFelt(
+            [redigering.utgave.regelsett, ...redigering.utgave.kommentarer],
+            redigering.publisert && utkastfelter(tilScenarioutkast(redigering.publisert)),
+            utkastfelter(tilScenarioutkast(redigering.utgave)),
+          )}
+          kommentarer={redigering.utgave.kommentarer}
         />
       )}
     </Seksjon>
   )
-}
-
-/** Kjører regelsettet, men lar et regelsett som ikke er gyldig, gi `null` i stedet for å velte siden. */
-function provKjor(
-  regelsett: Scenarioregelsett,
-  kommentarer: Kommentaroppslag,
-  inndata: RusInndata,
-): Scenariotreff | null {
-  try {
-    return kjorScenarier(regelsett, kommentarer, inndata)
-  } catch {
-    return null
-  }
 }
 
 function Scenariorad({
@@ -171,25 +218,11 @@ function Scenariorad({
   beskrivelse: Scenariobeskrivelse
   truffet: boolean
 }) {
-  const { pavist, ikkePavist, vilkar, utfall } = beskrivelse
+  const { utfall } = beskrivelse
   return (
     <li className={truffet ? 'scenario scenario--truffet' : 'scenario'} aria-current={truffet || undefined}>
       <p className="scenario__nummer">Scenario {nummer}</p>
-      <div className="scenario__vilkar">
-        <p>
-          <span className="scenario__etikett">Påvist</span> <Koder koder={pavist} />
-        </p>
-        {ikkePavist.length > 0 && (
-          <p>
-            <span className="scenario__etikett">Ikke påvist</span> <Koder koder={ikkePavist} />
-          </p>
-        )}
-        {vilkar.map((v) => (
-          <p key={v}>
-            <span className="scenario__etikett">Og</span> <span className="scenario__uttrykk">{v}</span>
-          </p>
-        ))}
-      </div>
+      <Scenariovilkar beskrivelse={beskrivelse} />
       {utfall.type === 'manuell' ? (
         <div className="scenario__utfall">
           <p className="scenario__manuell">
@@ -218,118 +251,5 @@ function Scenariorad({
         </div>
       )}
     </li>
-  )
-}
-
-function Koder({ koder }: { koder: readonly string[] }) {
-  const deler = OG.formatToParts(koder)
-  return (
-    <>
-      {deler.map((del, i) =>
-        del.type === 'element' ? (
-          <code key={i} className="scenario__kode">
-            {del.value}
-          </code>
-        ) : (
-          del.value
-        ),
-      )}
-    </>
-  )
-}
-
-function Simulator({
-  modul,
-  regelsett,
-  beskrivelse,
-  inndata,
-  treff,
-  onEndre,
-}: {
-  modul: RusModul
-  regelsett: Scenarioregelsett
-  beskrivelse: Scenariobeskrivelse[]
-  inndata: RusInndata
-  treff: Scenariotreff | null
-  onEndre: (inndata: RusInndata) => void
-}) {
-  const felter = rusVerdifelter(modul, verdifelterFor(regelsett, inndata.pavist))
-  const nummer = treff?.scenario ? beskrivelse.findIndex((b) => b.scenario === treff.scenario) + 1 : 0
-
-  return (
-    <Detaljkort
-      id="simulator"
-      tittel="Prøv reglene"
-      oppsummering={ramsOpp(modul.analytter.map((a) => a.kode))}
-      handlinger={
-        <Button variant="subtle" className="redigeringsknapp" onClick={() => onEndre(TOM_RUS_INNDATA)}>
-          Nullstill
-        </Button>
-      }
-      className="simulator"
-    >
-      <p className="regler__ingress">
-        Kryss av og fyll inn tall slik som i fortolkningen. Scenariet som gjelder, markeres i lista over.
-      </p>
-      <Rusvalg
-        analytter={modul.analytter}
-        pavist={inndata.pavist}
-        verdifelter={felter}
-        verdier={inndata.verdier}
-        verdihjelp={flettInn(regelsett.verdihjelp, regelsett.parametere)}
-        onPavist={(kode, pa) =>
-          onEndre({
-            ...inndata,
-            pavist: pa ? [...inndata.pavist, kode] : inndata.pavist.filter((k) => k !== kode),
-          })
-        }
-        onVerdi={(kode, verdi) => onEndre({ ...inndata, verdier: { ...inndata.verdier, [kode]: verdi } })}
-      />
-
-      <div className="simulator__resultat">
-        <p className="simulator__scenario" role="status">
-          {treff === null
-            ? 'Regelsettet gir ikke nøyaktig ett scenario for dette svaret.'
-            : nummer > 0
-              ? `Scenario ${nummer} gjelder${[...treff.forhold]
-                  .map(([nokkel, andel]) => {
-                    const forhold = regelsett.forhold.find((f) => f.nokkel === nokkel)
-                    return forhold ? `, ${beskrivForhold(forhold)} = ${formaterAndel(andel)}` : ''
-                  })
-                  .join('')}.`
-              : 'Ingen scenario gjelder ennå.'}
-        </p>
-        {treff && (
-          <Rusutfall
-            resultat={treff.resultat}
-            kommentarer={(plasseringer) => <Plasseringer plasseringer={plasseringer} />}
-          />
-        )}
-      </div>
-    </Detaljkort>
-  )
-}
-
-/** Kommentarene simulatoren fant, med kodene de limes inn på — bare til å lese. */
-function Plasseringer({ plasseringer }: { plasseringer: RusPlassering[] }) {
-  return (
-    <ol className="plasseringer">
-      {plasseringer.map((p) => (
-        <li key={p.merke} className={`plassering plassering--${p.rolle}`}>
-          <div className="plassering__innhold">
-            {plasseringer.length > 1 && <p className="plassering__merke">{p.merke}</p>}
-            <p className="plassering__sted">
-              <span className="plassering__instruks">Limes inn på</span>
-              <span className="plassering__koder">
-                {p.koder.map((kode) => (
-                  <span key={kode}>{kode}</span>
-                ))}
-              </span>
-            </p>
-            <p className="kommentartekst">{p.tekst}</p>
-          </div>
-        </li>
-      ))}
-    </ol>
   )
 }
