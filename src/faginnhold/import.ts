@@ -583,7 +583,7 @@ function kildeSql(kilde: string): string {
 }
 
 /** Den publiserte referansen med denne tittelen og lenken. */
-function finnReferanse(innhold: Referanseinnhold): string {
+export function finnReferanse(innhold: Referanseinnhold): string {
   return `(select r.objekt_id from public.referanser r
      where r.tilstand = 'publisert' and not r.arkivert
        and r.tittel = ${lit(innhold.tittel.trim())} and r.lenke = ${lit(innhold.lenke.trim())}

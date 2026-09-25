@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.36.6',
+    dato: '2026-09-25',
+    sammendrag: 'Antiepileptika har fått de nasjonale referanseområdene fra 2017',
+    typer: ['Fag'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Topiramat har fått referanseområdet 6–30 µmol/L (før 15–60), og okskarbazepin 12–140 µmol/L (før 45–140), etter de felles nasjonale referanseområdene for antiepileptika fra 2017.',
+      'Fenobarbital, fenytoin, gabapentin, karbamazepin, lamotrigin, levetiracetam og valproat har de samme områdene som før, men har fått 2017-tabellen som kilde, og grunnlaget for referanseområdet forteller hva som gjelder nå og hva som gjaldt før.',
+      'Klonazepam: referanseområdet ved epilepsi er 40–120 nmol/L (før 60–220). Grensen på 50 nmol/L ved angst, uro og søvnvansker står som før.',
+    ],
+  },
+  {
     versjon: '1.36.5',
     dato: '2026-09-25',
     sammendrag: 'Amfetaminsiden viser preparater og indikasjoner for deksamfetamin og lisdeksamfetamin',

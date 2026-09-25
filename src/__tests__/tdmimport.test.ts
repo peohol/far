@@ -142,7 +142,8 @@ describe('migrasjonene i databasen', () => {
     await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
     await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: TDM[0] })
     for_ = await kort(db)
-    await kjorMigrasjoner(db, { fra: TDM[0] })
+    // Bare importen: senere migrasjoner kan oppdatere kortene den la inn.
+    await kjorMigrasjoner(db, { bare: migrasjonsfiler().filter((f) => f >= TDM[0]! && f <= TDM.at(-1)!) })
     etter = await kort(db)
   }, 180_000)
 
