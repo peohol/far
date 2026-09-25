@@ -319,7 +319,13 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
                 <p className="analyttside__tom">Denne siden har ikke fått faginnhold ennå.</p>
               )}
               {regler && <Scenarioregler {...regler} />}
-              {side.data.thcregelsett && <Thcregler utgave={side.data.thcregelsett} redigerer={redigerer} />}
+              {side.data.thcregelsett && (
+                <Thcregler
+                  utgave={side.data.thcregelsett}
+                  redigerer={redigerer}
+                  onLagre={handlinger.lagreThcRegelsett}
+                />
+              )}
               <Fortolkningsregler
                 utgave={side.data.regelsett}
                 publisert={publisert.regelsett}

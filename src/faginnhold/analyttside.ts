@@ -135,6 +135,7 @@ export type Publiseringsslag =
   | 'kommentar'
   | 'intervallregelsett'
   | 'scenarioregelsett'
+  | 'thc_regelsett'
 
 export interface Publiseringssteg {
   slag: Publiseringsslag
@@ -180,5 +181,7 @@ export function publiseringsplan(data: Analyttsidedata): Publiseringssteg[] {
   legg('intervallregelsett', data.regelsett?.regelsett ?? null)
   for (const kommentar of data.scenarioregelsett?.kommentarer ?? []) legg('kommentar', kommentar)
   legg('scenarioregelsett', data.scenarioregelsett?.regelsett ?? null)
+  for (const kommentar of data.thcregelsett?.kommentarer ?? []) legg('kommentar', kommentar)
+  legg('thc_regelsett', data.thcregelsett?.regelsett ?? null)
   return steg
 }

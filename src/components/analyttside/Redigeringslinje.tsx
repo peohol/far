@@ -156,10 +156,14 @@ export function beskrivSteg(
           endredeFelt(utkastfelter(tilScenarioutkast(forrige)), utkastfelter(tilScenarioutkast(regelsett))),
       )
     }
+    case 'thc_regelsett':
+      return 'Fortolkningsreglene for THC-syre i urin'
     case 'kommentar': {
-      const kommentar = [...(data.regelsett?.kommentarer ?? []), ...(data.scenarioregelsett?.kommentarer ?? [])].find(
-        (k) => k.id === steg.id,
-      )
+      const kommentar = [
+        ...(data.regelsett?.kommentarer ?? []),
+        ...(data.scenarioregelsett?.kommentarer ?? []),
+        ...(data.thcregelsett?.kommentarer ?? []),
+      ].find((k) => k.id === steg.id)
       return `Kommentar: ${kommentar?.innhold.navn ?? 'en kommentar fortolkningsreglene bruker'}`
     }
     case 'referanse': {
