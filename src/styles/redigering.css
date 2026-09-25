@@ -108,6 +108,35 @@
   border-radius: var(--runding-underkort);
 }
 
+/* I redigeringsvinduet er vinduet selv rammen; skjemaet får hele bredden
+   og luften i vinduet. */
+.modallag .redigering {
+  gap: var(--rom-6);
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+
+.redigering__knapper {
+  justify-content: flex-end;
+}
+
+/* Spørsmålet når vinduet lukkes med endringer som ikke er lagret. */
+.redigering__forlat {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rom-3) var(--rom-5);
+}
+
+.redigering__forlattekst {
+  margin: 0;
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+}
+
 .redigering__tittel,
 .nyreferanse__tittel {
   margin: 0;
@@ -416,6 +445,11 @@
   background: transparent;
   border: 0;
   border-radius: 0 0 var(--runding-underkort) var(--runding-underkort);
+}
+
+/* I redigeringsvinduet er det plass til å se mer av teksten mens den skrives. */
+.modallag .riktekstfelt {
+  min-height: 14rem;
 }
 
 .riktekstfelt:focus {

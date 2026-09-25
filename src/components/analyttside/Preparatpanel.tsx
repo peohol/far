@@ -5,6 +5,7 @@ import { finnKobling, preparattekster } from '../../legemiddeldata/stoffside'
 import { Legemiddelformer } from '../preparater/Legemiddelformer'
 import { elementAnker, Panel, Redigerbar, type Panelkontekst } from './Paneler'
 import { LegemiddelkoblingSkjema } from './Skjemaer'
+import { seksjonsikon } from './panelvisning'
 import type { Legemiddeltilstand } from './useLegemidler'
 import '../../styles/preparater.css'
 
@@ -68,6 +69,7 @@ export function Preparatpanel({
           skjema={(lukk) => (
             <LegemiddelkoblingSkjema
               tittel="Koblingen til legemiddeldataene"
+              ikon={seksjonsikon(definisjon.nokkel)}
               sidenavn={sidenavn}
               start={kobling}
               referanser={element?.referanser ?? []}

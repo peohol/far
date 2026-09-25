@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.28.6',
+    dato: '2026-09-25',
+    sammendrag: 'Redigering på stoffsidene skjer i et stort redigeringsvindu',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Når du redigerer et kort eller et panel på en stoffside, åpnes skjemaet i et stort, luftig vindu over siden i stedet for inne i det smale kortet. Feltene får plass ved siden av hverandre, og teksteditoren er høyere.',
+      '«Lagre utkast» og «Avbryt» står fast nederst i vinduet, så de alltid er synlige. På mobil kommer vinduet opp nedenfra.',
+      'Esc, lukkeknappen eller et klikk utenfor lukker vinduet. Har du endret noe, spør vinduet først om du vil forkaste endringene eller fortsette å redigere.',
+    ],
+  },
+  {
     versjon: '1.28.5',
     dato: '2026-09-24',
     sammendrag: 'Søkefeltene i toppmenyen overlapper ikke lenger i mellomstore vinduer',

@@ -53,11 +53,19 @@ beforeAll(() => {
     this.removeAttribute('open')
     this.dispatchEvent(new Event('close'))
   }
+  // jsdom tegner ingenting, så rikteksteditoren får ingen rektangler å rulle etter.
+  Range.prototype.getClientRects ??= () => [] as unknown as DOMRectList
+  Range.prototype.getBoundingClientRect ??= () => new DOMRect()
 })
 
 afterEach(cleanup)
 
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
+
+/** Redigeringsvinduet med tittelen: skjemaet, knappene i foten og meldingene. */
+function redigeringsvindu(tittel: string): HTMLElement {
+  return screen.getByRole('dialog', { name: tittel })
+}
 
 function utgave<T>(id: string, innhold: T, revisjon = 1, publisert: number | null = 1): Utgave<T> {
   return {
@@ -1052,6 +1060,54 @@ describe('redigeringsmodus', () => {
     expect(screen.getByRole('button', { name: 'Legg til: Halveringstid' })).toBeTruthy()
   })
 
+  it('redigerer i et eget vindu over siden, med fokus i det første feltet', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    await finnVerdi('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
+
+    const vindu = redigeringsvindu('Referanseområde')
+    expect(within(vindu).getByRole('form', { name: 'Rediger: Referanseområde' })).toBeTruthy()
+    expect(document.activeElement).toBe(within(vindu).getByLabelText('Nedre grense'))
+    // Kortet står fortsatt på siden bak vinduet.
+    expect(hentVerdi('10–20 nmol/L')).toBeTruthy()
+
+    await user.click(within(vindu).getByRole('button', { name: 'Avbryt' }))
+    expect(screen.queryByRole('dialog', { name: 'Referanseområde' })).toBeNull()
+    // Fokuset går tilbake til knappen vinduet ble åpnet fra.
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Rediger: Referanseområde' }))
+  })
+
+  it('lukkes rett når ingenting er endret, men spør før endringer forkastes', async () => {
+    const user = userEvent.setup()
+    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    await finnVerdi('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    const rediger = await screen.findByRole('button', { name: 'Rediger: Referanseområde' })
+
+    await user.click(rediger)
+    await user.click(within(redigeringsvindu('Referanseområde')).getByRole('button', { name: 'Lukk redigeringen' }))
+    expect(screen.queryByRole('dialog', { name: 'Referanseområde' })).toBeNull()
+
+    await user.click(rediger)
+    const vindu = redigeringsvindu('Referanseområde')
+    await user.type(within(vindu).getByLabelText('Enhet'), 'x')
+    // Escape går gjennom nettleserens `cancel`, som vinduet stanser.
+    const escape = new Event('cancel', { cancelable: true })
+    act(() => void vindu.dispatchEvent(escape))
+    expect(escape.defaultPrevented).toBe(true)
+    expect(within(vindu).getByRole('alert').textContent).toMatch(/endringer som ikke er lagret/)
+    expect(document.activeElement).toBe(within(vindu).getByRole('button', { name: 'Fortsett å redigere' }))
+
+    await user.click(within(vindu).getByRole('button', { name: 'Fortsett å redigere' }))
+    expect((within(vindu).getByLabelText('Enhet') as HTMLInputElement).value).toBe('nmol/Lx')
+    await user.click(within(vindu).getByRole('button', { name: 'Lukk redigeringen' }))
+    await user.click(within(vindu).getByRole('button', { name: 'Forkast endringene' }))
+    expect(screen.queryByRole('dialog', { name: 'Referanseområde' })).toBeNull()
+    expect(lager.lagreUtkast).not.toHaveBeenCalled()
+  })
+
   it('lagrer et datakort mot revisjonen som ble åpnet', async () => {
     const user = userEvent.setup()
     const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
@@ -1059,7 +1115,7 @@ describe('redigeringsmodus', () => {
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
 
-    const skjema = screen.getByRole('form', { name: 'Rediger: Referanseområde' })
+    const skjema = redigeringsvindu('Referanseområde')
     const ovre = within(skjema).getByLabelText('Øvre grense')
     await user.clear(ovre)
     await user.type(ovre, '25,5')
@@ -1082,7 +1138,7 @@ describe('redigeringsmodus', () => {
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
-    const skjema = screen.getByRole('form', { name: 'Rediger: Referanseområde' })
+    const skjema = redigeringsvindu('Referanseområde')
     const nedre = within(skjema).getByLabelText('Nedre grense')
     await user.clear(nedre)
     await user.type(nedre, '30')
@@ -1101,7 +1157,7 @@ describe('redigeringsmodus', () => {
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
-    const skjema = screen.getByRole('form', { name: 'Rediger: Referanseområde' })
+    const skjema = redigeringsvindu('Referanseområde')
     await user.clear(within(skjema).getByLabelText('Enhet'))
     await user.type(within(skjema).getByLabelText('Enhet'), 'µmol/L')
     await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
@@ -1117,7 +1173,7 @@ describe('redigeringsmodus', () => {
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
-    const skjema = screen.getByRole('form', { name: 'Rediger: Referanseområde' })
+    const skjema = redigeringsvindu('Referanseområde')
 
     await user.type(within(skjema).getByLabelText('Finn en referanse'), 'hansen')
     await user.click(within(skjema).getByRole('button', { name: /Legg til: Andre kilde/ }))
@@ -1177,7 +1233,7 @@ describe('redigeringsmodus', () => {
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await apneSkuff(user, 'Preparater')
     await user.click(await screen.findByRole('button', { name: 'Legg til: Koblingen til legemiddeldataene' }))
-    const skjema = screen.getByRole('form', { name: 'Rediger: Koblingen til legemiddeldataene' })
+    const skjema = redigeringsvindu('Koblingen til legemiddeldataene')
     // Søket står ferdig utfylt med sidens navn, og likt navn er et forslag.
     expect((within(skjema).getByLabelText('Søk etter virkestoff') as HTMLInputElement).value).toBe('Amitriptylin')
     expect(await within(skjema).findByText(/Forslag: samme navn som siden/)).toBeTruthy()
@@ -1254,7 +1310,7 @@ describe('overgangen til redigering', () => {
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Legg til: Halveringstid' }))
-    const skjema = screen.getByRole('form', { name: 'Rediger: Halveringstid' })
+    const skjema = redigeringsvindu('Halveringstid')
     await user.type(within(skjema).getByLabelText('Nedre grense'), '3')
     await user.type(within(skjema).getByLabelText('Enhet'), 'timer')
     await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))

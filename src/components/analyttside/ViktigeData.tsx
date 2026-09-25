@@ -115,25 +115,23 @@ function Gruppe({ nokkel, tittel, children }: { nokkel: string; tittel: string; 
 function Panelkilder({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
   const [apen, setApen] = useState(false)
   const referanser = kontekst.modell.panelreferanser[definisjon.nokkel] ?? []
-  if (!apen) {
-    return (
-      <div className="redigeringsrad">
-        <Button variant="kant" icon={<Ikon navn="refs" />} className="redigeringsknapp" onClick={() => setApen(true)}>
-          Kilder for {definisjon.tittel.toLowerCase()}
-        </Button>
-      </div>
-    )
-  }
   return (
-    <PanelkildeSkjema
-      tittel={definisjon.tittel}
-      referanser={referanser}
-      onAvbryt={() => setApen(false)}
-      onLagre={async (ider) => {
-        await kontekst.handlinger.lagrePanelreferanser(definisjon.nokkel, ider)
-        setApen(false)
-      }}
-    />
+    <div className="redigeringsrad">
+      <Button variant="kant" icon={<Ikon navn="refs" />} className="redigeringsknapp" onClick={() => setApen(true)}>
+        Kilder for {definisjon.tittel.toLowerCase()}
+      </Button>
+      {apen && (
+        <PanelkildeSkjema
+          tittel={definisjon.tittel}
+          referanser={referanser}
+          onAvbryt={() => setApen(false)}
+          onLagre={async (ider) => {
+            await kontekst.handlinger.lagrePanelreferanser(definisjon.nokkel, ider)
+            setApen(false)
+          }}
+        />
+      )}
+    </div>
   )
 }
 
@@ -221,6 +219,7 @@ function Datakort({
           <DatakortSkjema
             kort={def}
             tittel={def.tittel}
+            ikon={ikon}
             start={verdi}
             referanser={element?.referanser ?? []}
             onAvbryt={lukk}

@@ -1,6 +1,7 @@
 /**
  * Det modale laget (`src/components/Modallag.tsx`): endringsloggen, kontoen,
- * brukerlista, historikken, publiseringen og preparatvinduet.
+ * brukerlista, historikken, publiseringen, preparatvinduet og
+ * redigeringsskjemaene.
  *
  * Laget følger Atlas: panelet er en flate med runding som et panel og
  * skygge som det eneste som svever, ikonet står i en sirkel foran tittelen,
@@ -113,6 +114,16 @@
   padding: var(--rom-3) var(--rom-5) var(--rom-6);
 }
 
+/* Foten står fast under kroppen, så knappene alltid kan nås. */
+.modallag__fot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  padding: var(--rom-5) var(--rom-7);
+  background: var(--flate-hevet);
+  border-top: var(--kant) solid var(--linje);
+}
+
 /* Bakgrunnen skal ikke rulle mens laget står over den.
    Låsen må stå på rotelementet, ikke på `.app`: `.app` har `min-height` og
    ikke fast høyde, så den vokser med innholdet i stedet for å rulle selv, og
@@ -138,6 +149,10 @@
 
   .modallag__kropp {
     padding: var(--rom-5);
+  }
+
+  .modallag__fot {
+    padding: var(--rom-4) var(--rom-5);
   }
 }
 

@@ -210,8 +210,8 @@ Ryddet bort i omleggingen:
   og `alvorlig`, og hver er et fargepar som `palette.test.ts` måler.
   Betydningen står alltid i teksten.
 - **`Modallag`** (`src/components/Modallag.tsx`) er det ene modale laget,
-  for endringsloggen, kontoen, brukerlista, historikken, publiseringen og
-  preparatvinduet. Det bygger på `<dialog>`: fokusfelle, Escape, trykk på
+  for endringsloggen, kontoen, brukerlista, historikken, publiseringen,
+  preparatvinduet og redigeringsskjemaene på stoffsiden. Det bygger på `<dialog>`: fokusfelle, Escape, trykk på
   bakgrunnen, låst rulling bak og fokuset tilbake. Tittelen er lagets navn,
   og lukkeknappen heter «Lukk» og tittelen, eller `lukketekst`.
   - `ikon`: ikonet i sirkelen foran tittelen.
@@ -222,6 +222,14 @@ Ryddet bort i omleggingen:
   - `meta`, `undertittel` og `merker` gir Atlas-hodet: en linje i versaler,
     ikonet, tittelen i Newsreader og merkene under, på en hevet flate.
   - `ark`: laget blir et ark nedenfra på smale flater.
+  - `fot`: en rad nederst som står fast mens kroppen ruller, som knappene i
+    et skjema (koble dem til skjemaet med `form`).
+  - `vedLukking`: spørres før laget lukkes med Escape, lukkeknappen eller et
+    trykk utenfor; gir den `false`, blir laget stående.
+
+  Redigeringsskjemaene på stoffsiden (`Skjemaramme` i `Skjemaer.tsx`) åpnes
+  alltid i laget, med ikonet til det som redigeres. Har brukeren endret noe,
+  spør vinduet før det lukkes uten å lagre.
 
   Stilen står i `modallag.css`. Endringsloggen og versjonspillen har sin
   egen i `endringslogg.css`.
