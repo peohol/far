@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.35.1',
+    dato: '2026-09-25',
+    sammendrag: 'Referanseområdene og TDM-seksjonen er lagt inn i databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Referanseområdene, TDM-seksjonen og rettingene i serumtabellene fra forrige versjon er lagt inn, og er ført i appens oversikt over databaseendringer slik de faktisk ble gjort.',
+    ],
+  },
+  {
     versjon: '1.35.0',
     dato: '2026-09-25',
     sammendrag: 'Referanseområder og ny TDM-seksjon med prøvetakingstidspunkt, med kildene oppgitt',
