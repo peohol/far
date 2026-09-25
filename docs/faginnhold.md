@@ -578,7 +578,12 @@ grunnlaget). Filene har `side` (navnet på siden) i stedet for `kode`; importen
 lager da bare informasjonssiden, og en fil med navnet til en side i katalogen
 avvises. Den utvider en side som finnes, som TDM-importen. `npx vite-node
 scripts/importer-stoffsider.ts -- <brukernavn> <mappe>` lager migrasjonene
-(`src/faginnhold/stoffsider.ts`).
+(`src/faginnhold/stoffsider.ts`). Indikasjonene deres står for seg i
+`supabase/import/indikasjoner/` (bare `indikasjon`, sammendraget av
+preparatomtalene i Felleskatalogen med dem som referanser), og legges til på
+samme måte med `scripts/importer-indikasjoner.ts`; et indikasjonskort som alt
+står på siden, røres ikke. Har Felleskatalogen ingen preparatomtale for
+stoffet, sier kortet det.
 
 **Rettinger.** En feil i det som ble importert, rettes med en rettingsfil i
 `supabase/import/rettinger/`: kilden, og per retting koden, raden slik den

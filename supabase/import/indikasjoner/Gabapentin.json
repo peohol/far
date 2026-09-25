@@ -1,0 +1,41 @@
+{
+  "side": "Gabapentin",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Epilepsi:",
+      {
+        "punkter": [
+          "Voksne og barn ≥6 år: tilleggsbehandling ved partiell epilepsi med og uten sekundær generalisering.",
+          "Voksne og ungdom ≥12 år: monoterapi ved partiell epilepsi med og uten sekundær generalisering."
+        ]
+      },
+      "Voksne: perifer nevropatisk smerte, f.eks. smertefull diabetisk nevropati og postherpetisk nevralgi."
+    ],
+    "referanser": [
+      "fk-neurontin",
+      "fk-neurisol",
+      "fk-shaktatin"
+    ]
+  },
+  "referanser": {
+    "fk-neurontin": {
+      "tittel": "Neurontin «Viatris»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/neurontin-viatris-561923"
+    },
+    "fk-neurisol": {
+      "tittel": "Neurisol «Oresund Pharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/neurisol-oresund-pharma-773963"
+    },
+    "fk-shaktatin": {
+      "tittel": "Shaktatin «2care4 Generics»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/shaktatin-2care4-generics-776078"
+    }
+  }
+}

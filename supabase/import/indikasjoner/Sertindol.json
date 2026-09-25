@@ -1,0 +1,21 @@
+{
+  "side": "Sertindol",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Schizofreni.",
+      "Av hensyn til kardiovaskulær sikkerhet bør sertindol bare brukes av pasienter som er intolerante overfor minst ett annet antipsykotisk legemiddel. Bør ikke brukes når hurtig lindring av symptomer hos akutt forstyrrede pasienter er nødvendig."
+    ],
+    "referanser": [
+      "fk-serdolect"
+    ]
+  },
+  "referanser": {
+    "fk-serdolect": {
+      "tittel": "Serdolect «Lundbeck»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/serdolect-lundbeck-563829"
+    }
+  }
+}

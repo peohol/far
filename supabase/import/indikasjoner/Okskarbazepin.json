@@ -1,0 +1,20 @@
+{
+  "side": "Okskarbazepin",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Epilepsi: partielle anfall med eller uten sekundære generaliserte tonisk-kloniske anfall, som monoterapi eller tilleggsbehandling hos voksne og barn >6 år."
+    ],
+    "referanser": [
+      "fk-trileptal"
+    ]
+  },
+  "referanser": {
+    "fk-trileptal": {
+      "tittel": "Trileptal «Novartis»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/trileptal-novartis-564828"
+    }
+  }
+}

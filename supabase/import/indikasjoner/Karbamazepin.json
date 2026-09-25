@@ -1,0 +1,45 @@
+{
+  "side": "Karbamazepin",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Tegretol, Tegretol Retard og Trimonil Retard:",
+      {
+        "punkter": [
+          "Epilepsi: komplekse og enkle partielle anfall, primærgeneraliserte anfall, sekundærgeneraliserte anfall med utvikling til tonisk-kloniske anfallstyper, og blandede epilepsiformer.",
+          "Genuin trigeminusnevralgi.",
+          "Alkoholabstinens.",
+          "Sentralt betinget diabetes insipidus.",
+          "Symptomatisk lindring av smerter ved diabetisk nevropati.",
+          "Akutt manisk episode, og profylaktisk behandling av bipolar affektiv lidelse."
+        ]
+      },
+      "Carbamazepine Essential Pharma: bare epilepsi."
+    ],
+    "referanser": [
+      "fk-tegretol",
+      "fk-trimonil-retard",
+      "fk-carbamazepine-essential-pharma"
+    ]
+  },
+  "referanser": {
+    "fk-tegretol": {
+      "tittel": "Tegretol, Tegretol Retard «Novartis»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/tegretol-tegretol-retard-novartis-564471"
+    },
+    "fk-trimonil-retard": {
+      "tittel": "Trimonil Retard «Desitin»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/trimonil-retard-desitin-564842"
+    },
+    "fk-carbamazepine-essential-pharma": {
+      "tittel": "Carbamazepine Essential Pharma «Essential Pharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/carbamazepine-essential-pharma-essential-pharma-640712"
+    }
+  }
+}

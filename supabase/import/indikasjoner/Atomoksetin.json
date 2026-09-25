@@ -1,0 +1,21 @@
+{
+  "side": "Atomoksetin",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Barn ≥6 år, ungdom og voksne: ADHD, som del av et omfattende behandlingsprogram. Behandlingen skal startes av lege med relevant kompetanse og erfaring i behandling av ADHD.",
+      "Hos voksne skal det bekreftes at symptomene på ADHD var til stede i barndommen. Pasienten skal minst ha ADHD av moderat alvorlighetsgrad, med minst moderat nedsatt funksjon i to eller flere situasjoner."
+    ],
+    "referanser": [
+      "fk-atomoxetine-medical-valley"
+    ]
+  },
+  "referanser": {
+    "fk-atomoxetine-medical-valley": {
+      "tittel": "Atomoxetine Medical Valley «Medical Valley»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/atomoxetine-medical-valley-medical-valley-663279"
+    }
+  }
+}

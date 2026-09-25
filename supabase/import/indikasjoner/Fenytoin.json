@@ -1,0 +1,21 @@
+{
+  "side": "Fenytoin",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Felleskatalogen har ingen preparatomtale for fenytoin.",
+      "Pro-Epanutin (fosfenytoin, et prodrug som omdannes til fenytoin): voksne og barn ≥5 år ved status epilepticus, og som anfallsprofylakse ved nevrokirurgiske inngrep."
+    ],
+    "referanser": [
+      "fk-pro-epanutin"
+    ]
+  },
+  "referanser": {
+    "fk-pro-epanutin": {
+      "tittel": "Pro-Epanutin «Pfizer»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/pro-epanutin-pfizer-562994"
+    }
+  }
+}

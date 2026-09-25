@@ -1,0 +1,35 @@
+{
+  "side": "Topiramat",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Topimax:",
+      {
+        "punkter": [
+          "Voksne, ungdom og barn >6 år: monoterapi ved partielle anfall med eller uten sekundær generalisering, og ved primære generaliserte tonisk-kloniske anfall.",
+          "Voksne, ungdom og barn ≥2 år: tilleggsbehandling ved partielle anfall med eller uten sekundær generalisering, primære generaliserte tonisk-kloniske anfall og anfall assosiert med Lennox-Gastaut syndrom.",
+          "Voksne: profylakse mot migrenehodepine etter nøye vurdering av mulige behandlingsalternativ. Ikke ment for akuttbehandling."
+        ]
+      },
+      "Qsiva (fentermin/topiramat): som supplement til kalorifattig kosthold og fysisk aktivitet for vektkontroll hos voksne med initial KMI ≥30 kg/m² (fedme), eller ≥27 kg/m² (overvekt) med vektrelaterte komorbiditeter som hypertensjon, diabetes type 2 eller dyslipidemi."
+    ],
+    "referanser": [
+      "fk-topimax",
+      "fk-qsiva"
+    ]
+  },
+  "referanser": {
+    "fk-topimax": {
+      "tittel": "Topimax «Janssen»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/topimax-janssen-564720"
+    },
+    "fk-qsiva": {
+      "tittel": "Qsiva «VIVUS»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/qsiva-vivus-731581"
+    }
+  }
+}

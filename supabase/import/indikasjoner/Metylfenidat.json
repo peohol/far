@@ -1,0 +1,96 @@
+{
+  "side": "Metylfenidat",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "ADHD, som del av et omfattende behandlingsprogram når det er vist at hjelpetiltak alene ikke er tilstrekkelig. Behandlingen skal startes og gjøres under tilsyn av spesialist.",
+      {
+        "punkter": [
+          "Barn ≥6 år og voksne: Concerta, Delmosart, Methylphenidate Sandoz og Methylphenidate Teva. Medikinet: barn >6 år, og voksne bare med depotkapsler. Ritalin: barn ≥6 år, og voksne bare med kapsler.",
+          "Bare barn og ungdom: Equasym Depot og Metylfenidat Medical Valley (barn ≥6 år), Methylphenidate Consilient Health (barn ≥6 år og ungdom) og Tuzulby (6–17 år)."
+        ]
+      },
+      "Narkolepsi:",
+      {
+        "punkter": [
+          "Ritalin tabletter.",
+          "Methylphenidate Consilient Health: voksne, som annenlinjebehandling for lindring av overdreven søvnighet på dagtid."
+        ]
+      }
+    ],
+    "referanser": [
+      "fk-concerta",
+      "fk-delmosart",
+      "fk-equasym-depot",
+      "fk-medikinet",
+      "fk-methylphenidate-consilient",
+      "fk-methylphenidate-sandoz",
+      "fk-methylphenidate-teva",
+      "fk-metylfenidat-medical-valley",
+      "fk-ritalin",
+      "fk-tuzulby"
+    ]
+  },
+  "referanser": {
+    "fk-concerta": {
+      "tittel": "Concerta «Janssen»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/concerta-janssen-547617"
+    },
+    "fk-delmosart": {
+      "tittel": "Delmosart «Teva»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/delmosart-teva-637791"
+    },
+    "fk-equasym-depot": {
+      "tittel": "Equasym Depot «Takeda»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/equasym-depot-takeda-558749"
+    },
+    "fk-medikinet": {
+      "tittel": "Medikinet «Medice»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/medikinet-medice-561284"
+    },
+    "fk-methylphenidate-consilient": {
+      "tittel": "Methylphenidate Consilient Health «Consilient Health»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/methylphenidate-consilient-health-consilient-health-771087"
+    },
+    "fk-methylphenidate-sandoz": {
+      "tittel": "Methylphenidate Sandoz «Sandoz»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/methylphenidate-sandoz-sandoz-576552"
+    },
+    "fk-methylphenidate-teva": {
+      "tittel": "Methylphenidate Teva «Teva»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/methylphenidate-teva-teva-664113"
+    },
+    "fk-metylfenidat-medical-valley": {
+      "tittel": "Metylfenidat Medical Valley «Medical Valley»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/metylfenidat-medical-valley-medical-valley-730020"
+    },
+    "fk-ritalin": {
+      "tittel": "Ritalin «Infectopharm»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/ritalin-infectopharm-563557"
+    },
+    "fk-tuzulby": {
+      "tittel": "Tuzulby «Neuraxpharm»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/tuzulby-neuraxpharm-772111"
+    }
+  }
+}

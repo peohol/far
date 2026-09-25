@@ -128,7 +128,8 @@ describe('migrasjonene i databasen', () => {
     db = await nyDatabase({ til: MIGRASJONER[0] })
     const admin = await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
     const bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lars', etternavn: 'Leser', rolle: 'user' })
-    await kjorMigrasjoner(db, { fra: MIGRASJONER[0] })
+    // Bare til og med stoffsideimporten: senere importer (som indikasjonene) utvider sidene.
+    await kjorMigrasjoner(db, { bare: migrasjonsfiler().filter((f) => f >= MIGRASJONER[0]! && f <= MIGRASJONER.at(-1)!) })
     leser = lagFaginnholdsleser(faginnholdskall(db, admin).klientFor(bruker))
     revisjoner = await antall('select count(*)::int as n from public.objektrevisjoner')
   }, 180_000)

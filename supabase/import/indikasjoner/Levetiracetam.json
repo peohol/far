@@ -1,0 +1,33 @@
+{
+  "side": "Levetiracetam",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Alle legemiddelformer:",
+      {
+        "punkter": [
+          "Voksne og ungdom >16 år med nylig diagnostisert epilepsi: monoterapi ved partielle anfall med eller uten sekundær generalisering.",
+          "Voksne og ungdom >12 år: tilleggsbehandling av myoklone anfall ved juvenil myoklon epilepsi, og av primære generaliserte tonisk-kloniske anfall ved idiopatisk generalisert epilepsi."
+        ]
+      },
+      "Tilleggsbehandling av partielle anfall med eller uten sekundær generalisering:",
+      {
+        "punkter": [
+          "Mikstur og tabletter: voksne, ungdom, barn og spedbarn >1 måned.",
+          "Konsentrat til infusjonsvæske: voksne, ungdom og barn >4 år, som alternativ når peroral administrering midlertidig ikke er mulig."
+        ]
+      }
+    ],
+    "referanser": [
+      "fk-keppra"
+    ]
+  },
+  "referanser": {
+    "fk-keppra": {
+      "tittel": "Keppra «UCB»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/keppra-ucb-560503"
+    }
+  }
+}
