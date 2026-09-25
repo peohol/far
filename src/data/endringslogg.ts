@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.35.1',
+    versjon: '1.35.2',
     dato: '2026-09-25',
     sammendrag: 'Sikkerhetsmarginen i THC-modulen velges med en bryter og forklares under den',
     typer: ['Design / layout', 'Funksjonalitet'],
@@ -24,6 +24,16 @@ export const ENDRINGSLOGG: Endring[] = [
       'Forklaringen av sikkerhetsmarginen er flyttet fra tooltipen på overskriften til «Hva er sikkerhetsmarginen?» under bryteren, som kan foldes ut. Teksten er delt i korte bolker, med hva hver margin gjør.',
       'Den har også et eksempel: to prøver fortolket med hver margin, med endringen som legges til grunn og konklusjonen hver av dem gir.',
       'Kommentaren er den samme som før for hver margin.',
+    ],
+  },
+  {
+    versjon: '1.35.1',
+    dato: '2026-09-25',
+    sammendrag: 'Referanseområdene og TDM-seksjonen er lagt inn i databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Referanseområdene, TDM-seksjonen og rettingene i serumtabellene fra forrige versjon er lagt inn, og er ført i appens oversikt over databaseendringer slik de faktisk ble gjort.',
     ],
   },
   {
