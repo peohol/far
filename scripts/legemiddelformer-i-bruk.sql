@@ -1,7 +1,9 @@
 -- Legemiddelformene som faktisk forekommer blant preparatene til de publiserte
 -- stoffsidene: de publiserte koblingene i «Preparater», virkestoffene og
 -- saltene deres, og merkevarene som ikke er utgått, slik les_legemidler finner
--- dem. Gir hele innholdet i src/legemiddeldata/legemiddelformer-i-bruk.json.
+-- dem. I tillegg alle formene i FEST blant merkevarene som ikke er utgått, så
+-- en ny stoffside ikke kan få en form uten ikon. Gir hele innholdet i
+-- src/legemiddeldata/legemiddelformer-i-bruk.json.
 --
 -- Bare lesing. Kjøres mot produksjonsdatabasen, f.eks. med Supabase-verktøyet
 -- for SQL, og svaret lagres i JSON-filen. Se docs/legemiddeldata.md.
@@ -37,6 +39,14 @@ former as (
          count(*) as merkevarer
   from merkevarer m
   group by 1, 2
+),
+alle as (
+  select m.data -> 'legemiddelform' ->> 'kode' as kode,
+         m.data -> 'legemiddelform' ->> 'tekst' as tekst,
+         count(*) as merkevarer
+  from legemiddeldata.merkevare m
+  where m.utgatt_kl is null
+  group by 1, 2
 )
 select jsonb_build_object(
   'hentet', current_date,
@@ -48,5 +58,9 @@ select jsonb_build_object(
   'former', coalesce((
     select jsonb_agg(jsonb_build_object('kode', f.kode, 'tekst', f.tekst, 'merkevarer', f.merkevarer)
                      order by length(f.kode), f.kode)
-    from former f), '[]')
+    from former f), '[]'),
+  'alle', coalesce((
+    select jsonb_agg(jsonb_build_object('kode', a.kode, 'tekst', a.tekst, 'merkevarer', a.merkevarer)
+                     order by length(a.kode), a.kode)
+    from alle a), '[]')
 ) as legemiddelformer;
