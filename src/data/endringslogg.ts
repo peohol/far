@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.36.3',
+    dato: '2026-09-25',
+    sammendrag: 'De 15 nye stoffsidene har fått indikasjoner fra Felleskatalogen',
+    typer: ['Fag'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Antiepileptikasidene, litium, sertindol, atomoksetin, metylfenidat, petidin og de andre nye stoffsidene har nå seksjonen «Indikasjon», med et kort sammendrag av indikasjonene i preparatomtalene og lenker til dem.',
+      'Der preparatene har ulike indikasjoner eller aldersgrenser, står det hvilket preparat eller hvilken legemiddelform som gjelder.',
+      'Fenytoin viser indikasjonen for fosfenytoin, som omdannes til fenytoin, siden Felleskatalogen ikke har noen preparatomtale for fenytoin. Flunitrazepam og ketobemidon sier at Felleskatalogen ikke har noen preparatomtale.',
+    ],
+  },
+  {
     versjon: '1.36.2',
     dato: '2026-09-25',
     sammendrag: 'De 15 nye stoffsidene er koblet til legemiddeldataene fra FEST',

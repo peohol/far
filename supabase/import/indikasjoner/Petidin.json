@@ -1,0 +1,20 @@
+{
+  "side": "Petidin",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Sterke smerter."
+    ],
+    "referanser": [
+      "fk-petidin"
+    ]
+  },
+  "referanser": {
+    "fk-petidin": {
+      "tittel": "Petidin «Evolan Pharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/petidin-evolan-pharma-562766"
+    }
+  }
+}

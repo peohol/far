@@ -1,0 +1,29 @@
+{
+  "side": "Valproat",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Epilepsi:",
+      {
+        "punkter": [
+          "Generaliserte anfall, f.eks. tonisk-kloniske anfall, absenser og myoklone anfall.",
+          "Partielle anfall.",
+          "Status epilepticus hos voksne (bare injeksjonsvæske)."
+        ]
+      },
+      "Manisk episode ved bipolar lidelse, når litium er kontraindisert eller ikke tolereres. Fortsatt behandling etter en manisk episode kan vurderes hos pasienter som har respondert på natriumvalproat for akutt mani.",
+      "Injeksjonsvæsken brukes bare til pasienter som ikke kan benytte peroral behandling."
+    ],
+    "referanser": [
+      "fk-orfiril"
+    ]
+  },
+  "referanser": {
+    "fk-orfiril": {
+      "tittel": "Orfiril, Orfiril long, Orfiril Retard «Desitin»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/orfiril-orfiril-retard-orfiril-long-desitin-562472"
+    }
+  }
+}

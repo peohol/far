@@ -1,0 +1,20 @@
+{
+  "side": "Fenobarbital",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Epilepsi, ved grand mal, særlig oppvåknings- og innsovningsanfall, fokalmotoriske og fokalsensoriske anfall."
+    ],
+    "referanser": [
+      "fk-fenemal"
+    ]
+  },
+  "referanser": {
+    "fk-fenemal": {
+      "tittel": "Fenemal «Orifarm Healthcare»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/fenemal-orifarm-healthcare-559027"
+    }
+  }
+}

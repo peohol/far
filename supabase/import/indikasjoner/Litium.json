@@ -1,0 +1,28 @@
+{
+  "side": "Litium",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Lithionit: profylaktisk ved maniske og depressive faser i manisk-depressiv sykdom, og terapeutisk ved maniske tilstander.",
+      "Carblit (voksne ≥18 år): mani; antimanisk behandling av bipolar lidelse og profylakse for å forebygge alvorlige, hyppige faser; forsterkning til et antidepressiv ved alvorlig depressiv lidelse."
+    ],
+    "referanser": [
+      "fk-lithionit",
+      "fk-carblit"
+    ]
+  },
+  "referanser": {
+    "fk-lithionit": {
+      "tittel": "Lithionit «Karo Pharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/lithionit-karo-pharma-561032"
+    },
+    "fk-carblit": {
+      "tittel": "Carblit «XGX Pharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/carblit-xgx-pharma-763921"
+    }
+  }
+}
