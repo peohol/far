@@ -1,5 +1,4 @@
 import { useCallback, useMemo, useState } from 'react'
-import { endredeFelt } from '../../faginnhold/historikk'
 import type { Regelsettutgave } from '../../faginnhold/lesing'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
 import { losRegelsett } from '../../regler/kommentarer'
@@ -7,10 +6,10 @@ import type { Intervallregelsett, Intervallregelsettinnhold } from '../../regler
 import { regelsettfelter, tekstene, visRingegrense } from '../../regler/visning'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
-import { Sistredigert } from '../historikk/Sistredigert'
 import { seksjonsikon } from '../analyttside/panelvisning'
 import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
 import { Uthev } from '../Uthev'
+import { kommentarnavnoppslag, Regelhistorikk, upubliserteFelt } from './Regelhistorikk'
 import { Regelredigering, type RegelredigeringProps } from './Regelredigering'
 import { Regelsimulator, Regeltabell } from './Regeltabell'
 
@@ -63,20 +62,11 @@ export function Fortolkningsregler({
   const [redigeres, setRedigeres] = useState(false)
   const regelsett = useMemo(() => utgave && losRegelsett(utgave), [utgave])
   const publiserte = useMemo(() => publisert && losRegelsett(publisert), [publisert])
-  /** Navnene på kommentarene, som regelsettets egen historikk viser i stedet for tekstene. */
-  const navn = useMemo(() => new Map(utgave?.kommentarer.map((k) => [k.id, k.innhold.navn])), [utgave])
   const historikkfelter = useCallback(
-    (innhold: Intervallregelsettinnhold) =>
-      regelsettfelter(innhold, (id) => navn.get(id) ?? 'En kommentar regelsettet ikke bruker nå'),
-    [navn],
+    (innhold: Intervallregelsettinnhold) => regelsettfelter(innhold, kommentarnavnoppslag(utgave?.kommentarer ?? [])),
+    [utgave],
   )
   if (!utgave || !regelsett) return null
-  const upubliserte =
-    redigerer && [utgave.regelsett, ...utgave.kommentarer].some((u) => u.publisert_revisjon !== u.revisjon)
-      ? publiserte
-        ? endredeFelt(regelsettfelterMedTekst(publiserte), regelsettfelterMedTekst(regelsett))
-        : ['Hele regelsettet']
-      : []
 
   const redigeringsmodus = redigeres && redigerer
 
@@ -119,33 +109,17 @@ export function Fortolkningsregler({
         </>
       )}
       {redigerer && (
-        <div className="redigeringsrad regler__historikk">
-          <Sistredigert
-            utgave={utgave.regelsett}
-            type="intervallregelsett"
-            navn="Fortolkningsreglene"
-            felter={historikkfelter}
-          />
-          {upubliserte.length > 0 && (
-            <p className="sistredigert">Ikke publisert: {upubliserte.join(', ')}.</p>
+        <Regelhistorikk
+          utgave={utgave.regelsett}
+          type="intervallregelsett"
+          felter={historikkfelter}
+          upubliserte={upubliserteFelt(
+            [utgave.regelsett, ...utgave.kommentarer],
+            publiserte && regelsettfelterMedTekst(publiserte),
+            regelsettfelterMedTekst(regelsett),
           )}
-        </div>
-      )}
-      {redigerer && (
-        <Detaljkort
-          id="kommentarhistorikk"
-          tittel="Historikken for hver kommentar"
-          oppsummering={antall(utgave.kommentarer.length, 'kommentar', 'kommentarer')}
-        >
-          <ul className="regler__kommentarhistorikk">
-            {utgave.kommentarer.map((k) => (
-              <li key={k.id}>
-                <span className="sistredigert">{k.innhold.navn}: </span>
-                <Sistredigert utgave={k} type="kommentar" navn={`Kommentaren «${k.innhold.navn}»`} />
-              </li>
-            ))}
-          </ul>
-        </Detaljkort>
+          kommentarer={utgave.kommentarer}
+        />
       )}
     </Seksjon>
   )

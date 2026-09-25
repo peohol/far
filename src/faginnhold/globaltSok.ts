@@ -45,7 +45,7 @@ export interface Sideleser {
 
 /** Formen `les_analyttsider` gir: sidene, og referansene de siterer, én gang. */
 interface Samletlesing {
-  sider: (Omit<Analyttsidedata, 'referanser' | 'regelsett'> & { referanser: string[] })[]
+  sider: (Omit<Analyttsidedata, 'referanser' | 'regelsett' | 'scenarioregelsett'> & { referanser: string[] })[]
   referanser: Utgave<Referanseinnhold>[]
 }
 

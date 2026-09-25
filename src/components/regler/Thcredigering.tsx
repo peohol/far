@@ -17,7 +17,7 @@ import { lesTallfelt, tallTilFelt } from '../../faginnhold/paneler'
 import { thcEndringer, thcUtkastfeil, type ThcRegelsettutgave } from '../../faginnhold/thcregler'
 import { Button } from '../Button'
 import { Tallfelt } from '../Tallfelt'
-import { Tekstomrade, Valgfelt } from './Regelredigering'
+import { Tekstomrade, Valgfelt } from './Regelfelter'
 import { Thcsimulator } from './Thcsimulator'
 
 export interface ThcredigeringProps {

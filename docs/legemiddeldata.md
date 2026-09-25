@@ -94,6 +94,17 @@ DMP tar ikke ansvar for integrasjoner av FEST. Brukeren av dataene skal:
   tar lenger. Serverrollen har derfor fått en grense på 2 minutter, satt i
   migrasjonen. Den første fulle kjøringen tok om lag 24 sekunder.
 
+### Når synkroniseringen feiler eller står stille
+
+- Hver kjøring logges i `legemiddeldata.synkroniseringer`. `kontrollert_kl`
+  i `les_legemidler` er den siste som gikk bra (`fullfort` eller `uendret`).
+- Har kopien ikke vært kontrollert mot FEST på over to døgn
+  (`FEST_FORELDET_ETTER_TIMER` i `src/legemiddeldata/referanser.ts`), står
+  det en melding øverst i «Preparater» om at nyere endringer i FEST kan
+  mangle. Da har minst én natt feilet eller ikke gått.
+- En daglig Claude-rutine leser de siste kjøringene og sier fra i prosjektet
+  når siste kjøring feilet, eller når ingen har gått bra det siste døgnet.
+
 ## Hva FEST inneholder
 
 Én XML-fil med én katalog per type. Antallet er fra filen 11.09.2026.
@@ -230,18 +241,29 @@ godkjenningsfritak». Visningen følger `docs/ux-reimagination.md`, del 9:
   Søket åpner et kort straks, uten glidning.
 - **Godkjenningsfritak** er ikke en egen gruppe, men et merke på preparatet i
   den samme lista. Andre preparattyper enn vanlige legemidler, f.eks.
-  «Sykehuspreparat», og kombinasjoner er også merker.
+  «Sykehuspreparat», og kombinasjoner er også merker. Det samme er
+  **særlig overvåkning** (FESTs svarte trekant): «▼ Særlig overvåkning», der
+  teksten og ikke trekanten bærer betydningen.
 - **Preparatvinduet** åpnes fra et preparatnavn. Det handler om preparatet,
   med alle styrkene: reseptgruppe, administrasjonsvei, virkestoff (saltet når
   styrken er oppgitt for et salt), ATC og den lange formen når den sier mer.
   Hver styrke har deling, knusing og åpning som merker (bare når FEST sier
   ja, nei eller at merkevarene sier ulikt; delingen med FESTs ord, «Delbar i
-  2»), FESTs navn med form og styrke, og pakningene med varenummer. Styrken
+  2»), FESTs navn med form og styrke, byttbarheten og pakningene med
+  varenummer. Styrken
   vinduet ble åpnet fra, står åpen og er merket; de andre glir opp og igjen
   som skuffene. Det som er likt for alle
   styrkene (reseptgruppe, produsent, preparatomtalen), står én gang; det som
   er ulikt, står ved hver styrke. Bare `https`-lenker vises. FEST står som
   kilde nederst. På smale flater er vinduet et ark nedenfra.
+- **Byttbarhet** følger byttegruppene i FEST: pakninger i samme gruppe kan
+  byttes i apotek. Ved hver styrke står «Byttbar i apotek med …» og de andre
+  preparatene i gruppen, med FESTs navn med form og styrke. Er bare noen av
+  pakningene i gruppen (f.eks. en 2 ml-ampulle og ikke en 4 ml), sier teksten
+  hvilke. Har gruppen merknad til byttbarheten, står FESTs merknad under. Bare
+  grupper som gjelder i dag (fra og med `GyldigFraDato`, til og med
+  `GyldigTilDato`) og har andre preparater, tas med. Står ingenting, er
+  styrken ikke byttbar med noe annet preparat i FEST.
 - **Refusjon** står ikke i OUSFARs kopi av FEST og vises ikke.
 - Nederst i seksjonen står FEST som referanse i referansefeltet, med datoen
   for uttrekket og når kopien sist ble kontrollert mot FEST.
@@ -349,9 +371,3 @@ kvetiapin 38 og 12, karbamazepin 180 og 169.
   behov, etter søknad til DMP.
 - **Navnebytte.** Når et preparat skifter navn, gir FEST bare det nye navnet,
   mens FHIR-tjenesten gir begge en periode.
-
-## Senere felter
-
-Tas inn når preparatvisningen er på plass, i egne endringer:
-
-- **Byttbarhet** i klartekst og **særlig overvåkning** i detaljkortene.

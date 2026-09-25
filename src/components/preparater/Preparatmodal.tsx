@@ -3,7 +3,9 @@ import { flushSync } from 'react-dom'
 import { ramsOpp } from '../../faginnhold/oppsummering'
 import type { Preparatpakning } from '../../legemiddeldata/preparater'
 import {
+  byttbarhetstekst,
   fordelMerker,
+  type Byttbarhet,
   type Preparatdetalj,
   type Preparatmerke,
   type Preparatstyrkedetalj,
@@ -196,12 +198,31 @@ function Styrkerad({
                 visProdusent && styrke.produsenter.join(', '),
               ])}
             </p>
+            {styrke.byttbarhet.length > 0 && <Byttbarhetsliste byttbarhet={styrke.byttbarhet} />}
             {pakninger > 0 && <Pakningstabell pakninger={styrke.pakninger} />}
             {visOmtaler && styrke.preparatomtaler.length > 0 && <Omtalelenker lenker={styrke.preparatomtaler} />}
           </div>
         </div>
       </div>
     </li>
+  )
+}
+
+/**
+ * Hva styrken kan byttes med i apotek, etter byttegruppene i FEST, med FESTs
+ * merknad når gruppen har en. Står ingenting, er ingen av pakningene i en
+ * byttegruppe med andre preparater.
+ */
+function Byttbarhetsliste({ byttbarhet }: { byttbarhet: readonly Byttbarhet[] }) {
+  return (
+    <ul className="preparatbytte">
+      {byttbarhet.map((b) => (
+        <li key={b.kode}>
+          {byttbarhetstekst(b)}
+          {b.merknad && <span className="preparatbytte__merknad">Merknad i FEST: {b.merknad}</span>}
+        </li>
+      ))}
+    </ul>
   )
 }
 

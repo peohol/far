@@ -18,6 +18,23 @@ import { RUS_KOMMENTARER, RUS_REGELSETT } from './hjelp/rusgrunnlag'
 import { validerScenarioregelsett, type Scenarioregelsett } from '../domain/scenario'
 import { KONFLIKT, type Objektstatus } from '../faginnhold/modell'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
+import { lagFaginnholdsleser } from '../faginnhold/lesing'
+import type { Kommentarendring } from '../regler/kommentarer'
+import {
+  egenKommentar,
+  klargjorScenarioutkast,
+  kontrollerScenarioutkast,
+  kommentarbrukere,
+  scenariokommentarendringer,
+  scenariokommentarer,
+  settGrense,
+  settGrensenavn,
+  settKommentartekst,
+  settMelding,
+  settTekstliste,
+  tilScenarioutkast,
+  type Scenarioutkast,
+} from '../regler/scenarioredigering'
 
 let db: PGlite
 let admin: string
@@ -335,5 +352,129 @@ describe('publisering, gjenoppretting og samtidighet', () => {
       kall.les(admin, `delete from public.scenarier where objekt_id = $1`, [id]),
     )
     expect(feil?.code).toBe('42501')
+  })
+})
+
+/* --- Redigeringen ------------------------------------------------------ */
+
+describe('redigeringen mot databasen', () => {
+  const leser = () => lagFaginnholdsleser(kall.klientFor(admin))
+  const objekter = async () =>
+    (await kall.fasit<{ n: number }>('select count(*)::int as n from public.redigerbare_objekter'))[0]!.n
+
+  /** Lagrer det redigeringen viser, slik appen gjør: regelsettet og kommentarene sammen. */
+  function lagreRedigert(objekt: string, revisjon: number, utkast: Scenarioutkast, kommentarer: Kommentarendring[], av = admin) {
+    return kall.rpc<Objektstatus>(av, 'lagre_scenarioregelsett', {
+      objekt,
+      forventet_revisjon: revisjon,
+      innhold: utkast.regelsett,
+      kommentarer,
+    })
+  }
+
+  it('lagrer regelsettet og de nye og endrede kommentarene sammen, alt eller ingenting', async () => {
+    const utgave = (await leser().finnScenarioregelsett('diazepamgruppen', 'utkast'))!
+    const start = tilScenarioutkast(utgave)
+    expect(start.regelsett).toEqual(regelsett('diazepamgruppen'))
+    expect(utgave.kommentarer.map((k) => k.id).sort()).toEqual(scenariokommentarer(start.regelsett).sort())
+
+    // Hovedkommentaren i «diazepam + oksazepam» får sin egen tekst, og den
+    // felles teksten for oksazepam endres.
+    const nyId = randomUUID()
+    const felles = uuid('oksazepam/hoved')
+    let u = egenKommentar(start, 'diaz_oxa', 'Hovedkommentar', () => nyId)
+    u = settKommentartekst(u, nyId, 'Syntetisk egen tekst.')
+    u = settKommentartekst(u, felles, 'Syntetisk endret tekst.')
+    const endringer = scenariokommentarendringer(u, 'Diazepam', utgave.kommentarer)
+    expect(endringer.map((e) => [e.id, e.revisjon])).toEqual([
+      [felles, 1],
+      [nyId, null],
+    ])
+
+    const for_ = await objekter()
+    // Med en kommentar som er endret i mellomtiden, lagres ingenting.
+    const gammel = endringer.map((e) => (e.revisjon === null ? e : { ...e, revisjon: 0 }))
+    expect((await feilFra(() => lagreRedigert(utgave.regelsett.id, 1, u, gammel)))?.code).toBe(KONFLIKT)
+    expect((await feilFra(() => lagreRedigert(utgave.regelsett.id, 0, u, endringer)))?.code).toBe(KONFLIKT)
+    expect(await objekter()).toBe(for_)
+    expect((await feilFra(() => lagreRedigert(utgave.regelsett.id, 1, u, endringer, bruker)))?.code).toBe('42501')
+    // Et regelsett som ikke er et scenarioregelsett, lagres ikke her.
+    expect((await feilFra(() => lagreRedigert(felles, 1, u, [])))?.code).toBe('PT404')
+
+    const status = await lagreRedigert(utgave.regelsett.id, 1, u, endringer)
+    expect(status.revisjon).toBe(2)
+    expect(await objekter()).toBe(for_ + 1)
+    const lest = (await leser().finnScenarioregelsett('diazepamgruppen', 'utkast'))!
+    expect(tilScenarioutkast(lest).regelsett).toEqual(u.regelsett)
+    expect(lest.kommentarer.find((k) => k.id === nyId)).toMatchObject({
+      revisjon: 1,
+      publisert_revisjon: null,
+      innhold: { navn: 'Diazepam – påvist DIAZ + OXA – Hovedkommentar', tekst: 'Syntetisk egen tekst.' },
+    })
+    expect(lest.kommentarer.find((k) => k.id === felles)).toMatchObject({ revisjon: 2, innhold: { tekst: 'Syntetisk endret tekst.' } })
+    await kall.forventSamsvar(utgave.regelsett.id)
+
+    // En ny kommentar kan ikke ta ID-en til noe som finnes, og en endret må være en kommentar.
+    const tatt = [{ id: nyId, revisjon: null, innhold: { navn: 'Syntetisk', tekst: 'Syntetisk.', plassholdere: [] } }]
+    expect((await feilFra(() => lagreRedigert(utgave.regelsett.id, 2, u, tatt)))?.message).toMatch(/alt et objekt/)
+    const feilType = [{ id: utgave.regelsett.id, revisjon: 2, innhold: tatt[0]!.innhold }]
+    expect((await feilFra(() => lagreRedigert(utgave.regelsett.id, 2, u, feilType)))?.code).toBe('PT404')
+    // Og et ugyldig regelsett stopper kommentarene også.
+    const hull = { ...u, regelsett: { ...u.regelsett, scenarier: u.regelsett.scenarier.slice(1) } }
+    const endret = [{ ...endringer[0]!, revisjon: 2, innhold: { ...endringer[0]!.innhold, tekst: 'Syntetisk igjen.' } }]
+    expect((await feilFra(() => lagreRedigert(utgave.regelsett.id, 2, hull, endret)))?.code).toBe('22023')
+    expect((await leser().finnScenarioregelsett('diazepamgruppen', 'utkast'))!.kommentarer.find((k) => k.id === felles))
+      .toMatchObject({ revisjon: 2 })
+  })
+
+  it('lager regelsett databasen godtar, for hver modul og hver slags endring', async () => {
+    for (const mal of RUS_REGELSETT) {
+      if (mal.modul === 'diazepamgruppen') continue
+      const utgave = (await leser().finnScenarioregelsett(mal.modul, 'utkast'))!
+      let u = tilScenarioutkast(utgave)
+      const r = u.regelsett
+      // Alle endringene redigeringen kan gjøre, etter hverandre, med
+      // mellomrom i endene som redigeringen tar bort.
+      const s = r.scenarier.find((x) => x.utfall.type === 'kommentarer')!
+      const p = s.utfall.type === 'kommentarer' ? s.utfall.plasseringer[0]! : null
+      if (p && kommentarbrukere(r, p.kommentar).length > 1) {
+        const nyId = randomUUID()
+        u = settKommentartekst(egenKommentar(u, s.nokkel, p.merke, () => nyId), nyId, ` Syntetisk ${mal.modul}. `)
+      } else if (p) {
+        u = settKommentartekst(u, p.kommentar, ` Syntetisk ${mal.modul}. `)
+      }
+      u = { ...u, regelsett: settTekstliste(u.regelsett, s.nokkel, 'notiser', [' Syntetisk notis. ']) }
+      const manuell = r.scenarier.find((x) => x.utfall.type === 'manuell')
+      if (manuell) {
+        u = { ...u, regelsett: settMelding(u.regelsett, manuell.nokkel, ' Syntetisk melding. ') }
+        u = { ...u, regelsett: settTekstliste(u.regelsett, manuell.nokkel, 'veiledning', []) }
+      }
+      const minste = [...r.parametere].sort((a, b) => a.verdi - b.verdi)[0]
+      if (minste) {
+        u = { ...u, regelsett: settGrense(u.regelsett, minste.nokkel, Math.round(minste.verdi * 9000) / 10000) }
+        u = { ...u, regelsett: settGrensenavn(u.regelsett, minste.nokkel, ' Syntetisk grense ') }
+      }
+      const klar = klargjorScenarioutkast(u)
+      expect(kontrollerScenarioutkast(klar, (id) => id), mal.modul).toEqual([])
+
+      const status = await lagreRedigert(
+        utgave.regelsett.id,
+        utgave.regelsett.revisjon,
+        klar,
+        scenariokommentarendringer(klar, mal.modul, utgave.kommentarer),
+      )
+      expect(status.revisjon, mal.modul).toBe(utgave.regelsett.revisjon + 1)
+      const lest = tilScenarioutkast((await leser().finnScenarioregelsett(mal.modul, 'utkast'))!)
+      expect(lest.regelsett, mal.modul).toEqual(klar.regelsett)
+      for (const id of scenariokommentarer(klar.regelsett)) expect(lest.tekster.get(id), mal.modul).toBe(klar.tekster.get(id))
+      // Og databasen er enig med appen i at det lagrede er gyldig.
+      expect(await sqlFeil(lest.regelsett), mal.modul).toEqual([])
+    }
+  }, 60_000)
+
+  it('lar vanlige brukere lese bare det publiserte, uten utkastene redigeringen lagret', async () => {
+    const vanlig = lagFaginnholdsleser(kall.klientFor(bruker))
+    expect(await vanlig.finnScenarioregelsett('diazepamgruppen', 'utkast')).toBeNull()
+    expect(await leser().finnScenarioregelsett('finnes-ikke', 'utkast')).toBeNull()
   })
 })

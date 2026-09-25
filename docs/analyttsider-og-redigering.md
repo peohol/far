@@ -17,7 +17,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [x] Arbeidspakke 3: analyttsider og navigasjon.
 - [ ] Arbeidspakke 4: import av psykofarmakainnhold (revidert 23.09.2026, omarbeides).
 - [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
-- [ ] Arbeidspakke 6: sammensatte analyttgrupper.
+- [x] Arbeidspakke 6: sammensatte analyttgrupper.
 - [x] Arbeidspakke 7: THC-syre (motor, lagring, produksjonskilde, simulator og editor).
 - [ ] Arbeidspakke 8: kartlegging av offentlige legemiddeldatakilder.
 - [x] Arbeidspakke 9: seksjoner og detaljkort (progressiv detaljering).
@@ -971,11 +971,11 @@ alltid viser det samme (del 5). Regelvisningen på analyttsiden er seksjonen
 
 ## Arbeidspakke 6 - Sammensatte analyttgrupper
 
-**Status:** [ ] Påbegynt
+**Status:** [x] Ferdig
 
-Scenariomodellen, motoren, lagringen og fortolkningen står i `docs/scenarioregler.md`. Reglene for alle rusmiddelmodulene ligger publisert i Supabase som scenarioregelsett som peker på egne kommentarobjekter, med utkast, publisering, historikk og gjenoppretting på serveren, og fortolkningen bruker dem. Paritetstester mot fasiten fra den opprinnelige motoren låser at resultatet er det samme. Analyttsidene viser reglene, med simulator. Det som gjenstår, er skjermbildene for å redigere regelsettene, med historikk og forskjeller, som bygges i seksjonsarkitekturen (arbeidspakke 13).
+Scenariomodellen, motoren, lagringen og fortolkningen står i `docs/scenarioregler.md`. Reglene for alle rusmiddelmodulene ligger publisert i Supabase som scenarioregelsett som peker på egne kommentarobjekter, med utkast, publisering, historikk og gjenoppretting på serveren, og fortolkningen bruker dem. Paritetstester mot fasiten fra den opprinnelige motoren låser at resultatet er det samme. Analyttsidene viser reglene, med simulator, og administratorer redigerer grensene og tekstene der, i seksjonen «Fortolkningsregler», med kontroll før lagring, konfliktvern, historikk og publisering sammen med siden. Hvilke scenarier som finnes, og vilkårene i dem, står fast.
 
-- [ ] Redigerbare scenarioer (lagring og kontroll på serveren er på plass; skjermbildet gjenstår).
+- [x] Redigerbare scenarioer.
 - [x] Påvist/ikke påvist-betingelser.
 - [x] Forholdstall/terskler.
 - [x] Hoved-/tilleggskommentarer og plassering.

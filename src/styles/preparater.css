@@ -437,6 +437,22 @@
   color: var(--blekk-dempet);
 }
 
+/* Byttbarheten i apotek, etter byttegruppene i FEST. */
+.preparatbytte {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--tekst-liten);
+}
+
+.preparatbytte__merknad {
+  display: block;
+  color: var(--blekk-dempet);
+}
+
 /* Deling, knusing og åpning (Atlas: HandlingChip). */
 .handteringsmerke {
   display: inline-flex;

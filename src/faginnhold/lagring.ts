@@ -13,6 +13,7 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { KONFLIKT, type Innhold, type Objektstatus, type Objekttype } from './modell'
 import type { Kommentarendring } from '../regler/kommentarer'
 import type { Intervallregelsettinnhold } from '../regler/modell'
+import type { Scenarioregelsett } from '../domain/scenario'
 
 const UVENTET_FEIL = 'Noe gikk galt. Prøv igjen.'
 const IKKE_GODTATT = 'Innholdet ble ikke godtatt. Kontroller feltene og prøv igjen.'
@@ -107,6 +108,13 @@ export interface Faginnholdslager {
     innhold: Intervallregelsettinnhold,
     kommentarer: Kommentarendring[],
   ): Promise<Objektstatus>
+  /** Det samme for et scenarioregelsett (`docs/scenarioregler.md`). */
+  lagreScenarioregelsett(
+    objekt: string,
+    forventetRevisjon: number,
+    innhold: Scenarioregelsett,
+    kommentarer: Kommentarendring[],
+  ): Promise<Objektstatus>
   /** Publiserer utkastet slik det står i `forventetRevisjon`. */
   publiserUtkast(objekt: string, forventetRevisjon: number): Promise<Objektstatus>
   /**
@@ -136,6 +144,8 @@ export function lagFaginnholdslager(klient: SupabaseClient): Faginnholdslager {
       }),
     lagreIntervallregelsett: (objekt, forventetRevisjon, innhold, kommentarer) =>
       kall('lagre_intervallregelsett', { objekt, forventet_revisjon: forventetRevisjon, innhold, kommentarer }),
+    lagreScenarioregelsett: (objekt, forventetRevisjon, innhold, kommentarer) =>
+      kall('lagre_scenarioregelsett', { objekt, forventet_revisjon: forventetRevisjon, innhold, kommentarer }),
     publiserUtkast: (objekt, forventetRevisjon) =>
       kall('publiser_utkast', { objekt, forventet_revisjon: forventetRevisjon }),
     slettReferanse: async (objekt, forventetRevisjon) => {

@@ -25,6 +25,7 @@ import { Redigeringskilde } from './Redigeringskontekst'
 import { Redigeringshandlinger } from './Redigeringslinje'
 import { Sidesok } from './Sidesok'
 import { Scenarioregler, useScenarioreglerFor } from '../regler/Scenarioregler'
+import { useScenarioreglerkilde } from '../regler/Scenarioreglerkilde'
 import { Uthevingskilde } from '../Uthev'
 import { Fortolkningsregler } from '../regler/Fortolkningsregler'
 import { Thcregler } from '../regler/Thcregler'
@@ -113,7 +114,7 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
   const overskrift = useId()
 
   const handlinger = useAnalyttside(oppforing, modus)
-  const { side, referansebase, publisertRegelsett, konflikt, plan } = handlinger
+  const { side, referansebase, publisert, konflikt, plan } = handlinger
   const modell = useMemo(() => byggSidemodell(side.data), [side.data])
   const navn = side.data.infoside?.innhold.navn ?? oppforing.sidenavn
   const komponenter = useMemo(() => komponenterFor(oppforing, side.data, katalog), [oppforing, side.data, katalog])
@@ -158,7 +159,23 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
     }),
     [redigerer, referansebase, handlinger.opprettReferanse, handlinger.gjenopprett],
   )
-  const regler = useScenarioreglerFor(oppforing.fortolkning)
+  // Scenarioreglene: i redigeringen utkastet, ellers de publiserte appen alt har.
+  const utkastregler = side.data.scenarioregelsett
+  const scenarioredigering = useMemo(
+    () =>
+      redigerer && utkastregler
+        ? {
+            utgave: utkastregler,
+            publisert: publisert.scenarioregelsett,
+            onLagre: handlinger.lagreScenarioregelsett,
+            hentNyeste: handlinger.hentScenarioregelsettutkast,
+          }
+        : null,
+    [redigerer, utkastregler, publisert.scenarioregelsett, handlinger.lagreScenarioregelsett, handlinger.hentScenarioregelsettutkast],
+  )
+  const regler = useScenarioreglerFor(oppforing.fortolkning, scenarioredigering)
+  // Etter en publisering skal fortolkningen bruke de nye reglene.
+  const { provIgjen: hentScenarioreglerPaNytt } = useScenarioreglerkilde()
   const harInnhold = modell.paneler.size > 0 || Object.keys(modell.panelreferanser).length > 0
 
   // En side som åpnes, begynner øverst, med fokus på navnet — så tastaturet og
@@ -189,10 +206,13 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
         {kanRedigere && modus === 'rediger' ? (
           <Redigeringshandlinger
             data={side.data}
-            publisertRegelsett={publisertRegelsett}
+            publisert={publisert}
             plan={plan}
             laster={!redigerer}
-            onPubliser={handlinger.publiser}
+            onPubliser={async () => {
+              await handlinger.publiser()
+              hentScenarioreglerPaNytt()
+            }}
             onAvslutt={() => setModus('lese')}
           />
         ) : (
@@ -308,7 +328,7 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
               )}
               <Fortolkningsregler
                 utgave={side.data.regelsett}
-                publisert={publisertRegelsett}
+                publisert={publisert.regelsett}
                 redigerer={redigerer}
                 onLagre={handlinger.lagreRegelsett}
                 hentNyeste={handlinger.hentRegelsettutkast}

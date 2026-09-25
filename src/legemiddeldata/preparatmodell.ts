@@ -21,14 +21,17 @@
  * - Et **preparat** er et varenavn i én legemiddelform, som før. Det er det
  *   preparatdetaljen (modalen) handler om, med alle styrkene sine.
  * - **Godkjenningsfritak** og andre preparattyper er merker på preparatet,
- *   ikke egne grupper.
+ *   ikke egne grupper. Det er også **særlig overvåkning** (FESTs svarte
+ *   trekant).
+ * - **Byttbarhet** er FESTs byttegrupper: pakninger i samme gruppe kan byttes
+ *   i apotek. Den står per styrke, med de andre preparatene i gruppen.
  */
 import { antall, ramsOpp } from '../faginnhold/oppsummering'
 import { alfabetisk } from '../faginnhold/paneler'
 import { iSetning } from '../domain/names'
-import type { Kode, Mengde, Merkevaredata, Styrkedata } from './fest'
+import type { Byttegruppedata, Kode, Mengde, Merkevaredata, Styrkedata } from './fest'
 import { formikon, type Formikon } from './legemiddelformer'
-import type { Legemiddelutvalg } from './lesing'
+import type { Legemiddelutvalg, MedId } from './lesing'
 import {
   egneVirkestoff,
   formaterMengde,
@@ -61,7 +64,7 @@ export interface Styrkeledd {
   alternativ: Styrkemengde | null
 }
 
-export type Preparatmerketype = 'godkjenningsfritak' | 'preparattype' | 'kombinasjon'
+export type Preparatmerketype = 'godkjenningsfritak' | 'preparattype' | 'kombinasjon' | 'overvaking'
 
 /** Et merke på et preparat. `tekst` er FESTs egen, eller virkestoffene for en kombinasjon. */
 export interface Preparatmerke {
@@ -106,6 +109,23 @@ export interface Formgruppe {
   styrker: Styrkegruppe[]
 }
 
+/**
+ * Én byttegruppe i FEST som pakninger av styrken hører til: pakningene i
+ * gruppen kan byttes med hverandre i apotek.
+ */
+export interface Byttbarhet {
+  /** FESTs kode for gruppen. */
+  kode: string
+  /** FESTs navn på gruppen, f.eks. «AMITRIPTYLIN TABLETT 25 MG». */
+  gruppe: string
+  /** De andre preparatene med pakninger i gruppen, med FESTs navn med form og styrke. Alfabetisk. */
+  med: string[]
+  /** Pakningene av styrken som er i gruppen, når det ikke er alle; ellers `null`. */
+  pakninger: string[] | null
+  /** FESTs merknad til byttbarheten, når den har en. */
+  merknad: string | null
+}
+
 /** Et preparat i én styrke: én eller flere merkevarer i FEST. */
 export interface Preparatstyrkedetalj {
   /** Samme ID som styrken i formen. */
@@ -125,6 +145,8 @@ export interface Preparatstyrkedetalj {
   /** Lenkene til preparatomtalen (SPC). */
   preparatomtaler: string[]
   pakninger: Preparatpakning[]
+  /** Byttegruppene pakningene hører til, med de andre preparatene i dem. Tom når ingen er byttbare. */
+  byttbarhet: Byttbarhet[]
 }
 
 /** Alt om ett preparat, til preparatdetaljen. */
@@ -170,7 +192,15 @@ const VANLIG_LEGEMIDDEL = '7'
 
 type Virkestoffoppslag = ReadonlyMap<string, { navn: string }>
 
-export function byggPreparatvisning(utvalg: Legemiddelutvalg, koblet: readonly string[]): Preparatvisning {
+/**
+ * @param idag Datoen byttegruppenes gyldighet måles mot (`ÅÅÅÅ-MM-DD`). Dagens
+ *   dato der brukeren er, om ikke annet er gitt.
+ */
+export function byggPreparatvisning(
+  utvalg: Legemiddelutvalg,
+  koblet: readonly string[],
+  idag: string = dagensDato(),
+): Preparatvisning {
   const virkestoff: Virkestoffoppslag = new Map(utvalg.virkestoff.map((v) => [v.id, v]))
   const styrker = new Map(utvalg.styrker.map((s) => [s.id, s]))
   const { egne, salter } = egneVirkestoff(utvalg, koblet)
@@ -262,6 +292,7 @@ export function byggPreparatvisning(utvalg: Legemiddelutvalg, koblet: readonly s
           handtering: handteringFor(m),
           preparatomtaler: [],
           pakninger: [],
+          byttbarhet: [],
         })
         .get(nokkel)!
     // Samme preparat i samme styrke kan være flere merkevarer i FEST, f.eks.
@@ -289,6 +320,7 @@ export function byggPreparatvisning(utvalg: Legemiddelutvalg, koblet: readonly s
   })
   const gruppeFor = new Map(ferdigeFormer.flatMap((f) => f.styrker.map((g, i) => [`${f.id}\n${g.nokkel}`, { g, i }] as const)))
 
+  const bytte = byttbarhetFor(utvalg, idag)
   const ferdigePreparater = new Map<string, Preparatdetalj>()
   for (const { perStyrke, ...preparat } of preparater.values()) {
     const styrkeliste = [...perStyrke.entries()]
@@ -297,6 +329,7 @@ export function byggPreparatvisning(utvalg: Legemiddelutvalg, koblet: readonly s
         s.styrke_id = g.id
         s.presisering = g.presisering
         s.pakninger.sort((a, b) => a.tekst.localeCompare(b.tekst, 'nb', { numeric: true }))
+        s.byttbarhet = bytte(s)
         g.preparater.push({ preparat: preparat.id, navn: preparat.navn, produsenter: s.produsenter, merker: s.merker })
         return { s, i }
       })
@@ -377,6 +410,7 @@ function styrketekst(ledd: readonly Styrkeledd[], kombinasjon: boolean): string 
 function merkerFor(m: Merkevaredata, kombinasjon: readonly string[]): Preparatmerke[] {
   const type = m.preparattype
   return [
+    m.svart_trekant && { type: 'overvaking' as const, tekst: 'Særlig overvåkning' },
     type?.kode === GODKJENNINGSFRITAK && { type: 'godkjenningsfritak' as const, tekst: type.tekst },
     type && type.kode !== GODKJENNINGSFRITAK && type.kode !== VANLIG_LEGEMIDDEL && { type: 'preparattype' as const, tekst: type.tekst },
     kombinasjon.length > 0 && { type: 'kombinasjon' as const, tekst: kombinasjon.map(iSetning).join(', ') },
@@ -428,6 +462,67 @@ function presiser(grupper: readonly Styrkegruppe[]) {
       const nummer = `variant ${i + 1}`
       g.presisering = presiseringer.filter((x) => x === p).length > 1 ? (p ? `${p}, ${nummer}` : nummer) : p
     })
+  }
+}
+
+/** Dagens dato der brukeren er, som `ÅÅÅÅ-MM-DD`. */
+function dagensDato(): string {
+  const d = new Date()
+  const to = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${to(d.getMonth() + 1)}-${to(d.getDate())}`
+}
+
+/** Om byttegruppen gjelder `idag`. Datoene er `ÅÅÅÅ-MM-DD` og sammenlignes som tekst. */
+export function gyldigByttegruppe(g: Pick<Byttegruppedata, 'gyldig_fra' | 'gyldig_til'>, idag: string): boolean {
+  const dag = (dato: string | null) => dato?.slice(0, 10) || null
+  const fra = dag(g.gyldig_fra)
+  const til = dag(g.gyldig_til)
+  return (!fra || fra <= idag) && (!til || til >= idag)
+}
+
+/**
+ * Byttbarheten for en styrke: hver gyldige byttegruppe pakningene hører til,
+ * med de andre preparatene som har pakninger i den. En gruppe uten andre
+ * preparater i utvalget sier ingenting om hva det kan byttes med, og vises
+ * ikke.
+ */
+function byttbarhetFor(utvalg: Legemiddelutvalg, idag: string) {
+  const grupper = new Map<string, MedId<Byttegruppedata>>(
+    utvalg.byttegrupper.filter((g) => gyldigByttegruppe(g, idag)).map((g) => [g.id, g]),
+  )
+  const navnFor = new Map(utvalg.merkevarer.map((m) => [m.id, m.navn_form_styrke]))
+  const merkevarerI = new Map<string, Set<string>>()
+  for (const p of utvalg.pakninger) {
+    for (const g of p.byttegrupper) {
+      if (!grupper.has(g)) continue
+      const merkevarer = merkevarerI.get(g) ?? merkevarerI.set(g, new Set()).get(g)!
+      for (const { merkevare_id } of p.innhold) merkevarer.add(merkevare_id)
+    }
+  }
+
+  return (s: Pick<Preparatstyrkedetalj, 'merkevarer' | 'navn_form_styrke' | 'pakninger'>): Byttbarhet[] => {
+    const egne = new Set(s.merkevarer)
+    const iStyrken = [...new Set(s.pakninger.flatMap((p) => p.byttegrupper))]
+    return iStyrken
+      .flatMap((id): Byttbarhet[] => {
+        const gruppe = grupper.get(id)
+        if (!gruppe) return []
+        const med: string[] = []
+        for (const m of merkevarerI.get(id) ?? []) if (!egne.has(m)) leggTil(med, [navnFor.get(m)])
+        const andre = med.filter((n) => !s.navn_form_styrke.includes(n)).sort(alfabetisk)
+        if (andre.length === 0) return []
+        const pakninger = s.pakninger.filter((p) => p.byttegrupper.includes(id))
+        return [
+          {
+            kode: gruppe.kode,
+            gruppe: gruppe.tekst,
+            med: andre,
+            pakninger: pakninger.length === s.pakninger.length ? null : [...new Set(pakninger.map((p) => p.tekst || p.varenr))],
+            merknad: (gruppe.merknad_til_byttbarhet && gruppe.beskrivelse?.trim()) || null,
+          },
+        ]
+      })
+      .sort((a, b) => a.gruppe.localeCompare(b.gruppe, 'nb', { numeric: true }))
   }
 }
 
@@ -539,6 +634,23 @@ export function oppsummerForm(form: Formgruppe): string {
 export function oppsummerStyrke(styrke: Styrkegruppe): string {
   return antall(styrke.preparater.length, 'preparat', 'preparater')
 }
+
+/**
+ * Byttbarheten i én gruppe som setning, f.eks. «Byttbar i apotek med
+ * Amitriptylin Abcur tab 25 mg og Sarotex tab 25 mg.», eller for bare noen
+ * av pakningene «Pakningen 2 ml ampulle er byttbar i apotek med …».
+ */
+export function byttbarhetstekst(b: Pick<Byttbarhet, 'med' | 'pakninger'>): string {
+  const med = `i apotek med ${ramsOppMed(b.med)}.`
+  if (!b.pakninger) return `Byttbar ${med}`
+  return b.pakninger.length === 1
+    ? `Pakningen ${b.pakninger[0]} er byttbar ${med}`
+    : `Pakningene ${ramsOppMed(b.pakninger)} er byttbare ${med}`
+}
+
+/** «A», «A og B», «A, B og C». */
+const OG = new Intl.ListFormat('nb', { type: 'conjunction' })
+const ramsOppMed = (deler: readonly string[]) => OG.format(deler)
 
 /** Formene som ikke står i ikonregisteret og vises med det generiske ikonet. */
 export function ukartlagteFormer(visning: Preparatvisning): { kode: string; tekst: string }[] {

@@ -1,8 +1,6 @@
 import { useId, useMemo, useState, type FormEvent, type ReactNode } from 'react'
 import { formatNumber, round } from '../../domain/bands'
 import { regelsettband } from '../../domain/intervallregler'
-import { sammenlignFelter } from '../../faginnhold/historikk'
-import { Samtidighetskonflikt } from '../../faginnhold/lagring'
 import type { Regelsettutgave } from '../../faginnhold/lesing'
 import { lesTallfelt, tallTilFelt } from '../../faginnhold/paneler'
 import { KONSENTRASJONSNIVAER, MALEENHETER, type Intervallregelsett } from '../../regler/modell'
@@ -28,8 +26,7 @@ import { losRegelsett } from '../../regler/kommentarer'
 import { NIVANAVN, regelsettfelter, tekstene } from '../../regler/visning'
 import type { Level } from '../../types'
 import { Button } from '../Button'
-import { Tallfelt } from '../Tallfelt'
-import { Endringsliste } from '../historikk/Historikkvindu'
+import { Grensefelt, Lagringskonflikt, oppramsing, Tekstomrade, useRegellagring, Valgfelt } from './Regelfelter'
 import { Regelsimulator } from './Regeltabell'
 
 export interface RegelredigeringProps {
@@ -62,9 +59,8 @@ export function Regelredigering({ start, onLagre, hentNyeste, onAvbryt }: Regelr
   const [regelsett, setRegelsett] = useState(start)
   /** Grensene slik de står i feltene, også mens et tall skrives. */
   const [grenser, setGrenser] = useState(() => start.skillepunkter.map(tallTilFelt))
-  const [feil, setFeil] = useState<string | null>(null)
-  const [lagrer, setLagrer] = useState(false)
-  const [konflikt, setKonflikt] = useState<{ nyeste: Regelsettutgave | null } | null>(null)
+  const lagring = useRegellagring(onLagre, hentNyeste)
+  const { feil, setFeil, lagrer, konflikt } = lagring
   const tittel = useId()
 
   const band = useMemo(() => regelsettband(regelsett), [regelsett])
@@ -92,15 +88,7 @@ export function Regelredigering({ start, onLagre, hentNyeste, onAvbryt }: Regelr
       setFeil(kontroll)
       return
     }
-    setLagrer(true)
-    setFeil(null)
-    try {
-      await onLagre(innhold, grunnlag)
-    } catch (e) {
-      if (e instanceof Samtidighetskonflikt) setKonflikt({ nyeste: null })
-      else setFeil((e as Error).message)
-      setLagrer(false)
-    }
+    await lagring.lagre(innhold, grunnlag)
   }
 
   const ring = ringstart(regelsett)
@@ -187,10 +175,14 @@ export function Regelredigering({ start, onLagre, hentNyeste, onAvbryt }: Regelr
         </p>
       )}
       {konflikt && (
-        <Konflikt
-          mine={regelsett}
+        <Lagringskonflikt
           nyeste={konflikt.nyeste}
-          onSammenlign={async () => setKonflikt({ nyeste: await hentNyeste() })}
+          sammenlign={(nyeste) => ({
+            revisjon: nyeste.regelsett.revisjon,
+            deres: felter(losRegelsett(nyeste)),
+            mine: felter(regelsett),
+          })}
+          onSammenlign={lagring.sammenlign}
           onLagreLikevel={(grunnlag) => void lagre(grunnlag)}
           onForkast={onAvbryt}
           lagrer={lagrer}
@@ -403,67 +395,6 @@ function Cutoffredigering({
   )
 }
 
-/* --- Konflikten ----------------------------------------------------------- */
-
-function Konflikt({
-  mine,
-  nyeste,
-  onSammenlign,
-  onLagreLikevel,
-  onForkast,
-  lagrer,
-}: {
-  mine: Intervallregelsett
-  nyeste: Regelsettutgave | null
-  onSammenlign: () => Promise<void>
-  onLagreLikevel: (grunnlag: Regelsettutgave) => void
-  onForkast: () => void
-  lagrer: boolean
-}) {
-  const [feil, setFeil] = useState<string | null>(null)
-  const deres = nyeste && losRegelsett(nyeste)
-  const felter = (r: Intervallregelsett) => regelsettfelter(r, tekstene(r))
-  const endringer = deres ? sammenlignFelter(felter(deres), felter(mine)) : []
-  return (
-    <div className="sidevarsel regelredigering__konflikt" role="alert">
-      <p>
-        Noen andre har lagret reglene mens du redigerte. Ingenting er skrevet over, og det du har gjort, står fortsatt
-        her.
-      </p>
-      {nyeste ? (
-        <>
-          <p>
-            Dette er forskjellen mellom det de lagret (revisjon {nyeste.regelsett.revisjon}) og ditt. Rødt er deres, grønt
-            er ditt{endringer.every((e) => !e.endret) && ' — de er like'}.
-          </p>
-          <Endringsliste endringer={endringer} forste={false} />
-          <div className="skjema__knapper">
-            <Button variant="subtle" onClick={onForkast}>
-              Forkast mine endringer
-            </Button>
-            <Button className="knapp--kompakt" disabled={lagrer} onClick={() => onLagreLikevel(nyeste)}>
-              Lagre mine over deres
-            </Button>
-          </div>
-        </>
-      ) : (
-        <div className="skjema__knapper">
-          <Button variant="subtle" onClick={onForkast}>
-            Forkast mine endringer
-          </Button>
-          <Button
-            className="knapp--kompakt"
-            onClick={() => onSammenlign().catch((e: Error) => setFeil(e.message))}
-          >
-            Sammenlign med deres
-          </Button>
-        </div>
-      )}
-      {feil && <p className="skjemafeil">{feil}</p>}
-    </div>
-  )
-}
-
 /* --- Felles biter ----------------------------------------------------------- */
 
 /** Hvem som bruker en kommentar: «intervall 2», «cut-off». */
@@ -487,102 +418,7 @@ function kommentarvalg(regelsett: Intervallregelsett, band?: string[]): { verdi:
   return valg
 }
 
-function oppramsing(deler: string[]): string {
-  if (deler.length < 2) return deler.join('')
-  return `${deler.slice(0, -1).join(', ')} og ${deler.at(-1)}`
-}
-
-export function Valgfelt({
-  merke,
-  verdi,
-  valg,
-  onEndre,
-  disabled,
-}: {
-  merke: string
-  verdi: string
-  valg: { verdi: string; tekst: string }[]
-  onEndre: (verdi: string) => void
-  disabled?: boolean
-}) {
-  const id = useId()
-  return (
-    <div className="felt">
-      <label className="felt__merkelapp" htmlFor={id}>
-        {merke}
-      </label>
-      <select id={id} className="felt__inndata" value={verdi} disabled={disabled} onChange={(e) => onEndre(e.target.value)}>
-        {valg.map((v) => (
-          <option key={v.verdi} value={v.verdi}>
-            {v.tekst}
-          </option>
-        ))}
-      </select>
-    </div>
-  )
-}
-
-export function Tekstomrade({
-  merke,
-  verdi,
-  hjelp,
-  onEndre,
-}: {
-  merke: string
-  verdi: string
-  hjelp?: string
-  onEndre: (verdi: string) => void
-}) {
-  const id = useId()
-  return (
-    <div className="felt">
-      <label className="felt__merkelapp" htmlFor={id}>
-        {merke}
-      </label>
-      <textarea
-        id={id}
-        className="felt__inndata felt__inndata--flerlinje"
-        rows={3}
-        value={verdi}
-        aria-describedby={hjelp ? `${id}-hjelp` : undefined}
-        onChange={(e) => onEndre(e.target.value)}
-      />
-      {hjelp && (
-        <span id={`${id}-hjelp`} className="felt__hjelp">
-          {hjelp}
-        </span>
-      )}
-    </div>
-  )
-}
-
-function Grensefelt({
-  merke,
-  hjelp,
-  verdi,
-  onEndre,
-}: {
-  merke: string
-  hjelp: string
-  verdi: string
-  onEndre: (verdi: string) => void
-}) {
-  const id = useId()
-  return (
-    <div className="felt">
-      <label className="felt__merkelapp" htmlFor={id}>
-        {merke}
-      </label>
-      <Tallfelt
-        id={id}
-        className="felt__inndata regelredigering__tall"
-        value={verdi}
-        aria-describedby={`${id}-hjelp`}
-        onChange={onEndre}
-      />
-      <span id={`${id}-hjelp`} className="felt__hjelp">
-        {hjelp}
-      </span>
-    </div>
-  )
+/** Feltene konflikten sammenligner, med tekstene regelsettet har slått opp. */
+function felter(regelsett: Intervallregelsett) {
+  return regelsettfelter(regelsett, tekstene(regelsett))
 }
