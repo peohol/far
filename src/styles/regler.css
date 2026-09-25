@@ -211,6 +211,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--rom-2);
+  min-width: 0;
   border: 0;
   padding: 0;
   margin: 0;
@@ -223,6 +224,56 @@
 .regelredigering__konflikt {
   flex-direction: column;
   align-items: stretch;
+}
+
+/* Kontrollen før lagringen kan finne flere feil på én gang; de står som en liste. */
+.regelredigering .skjemafeil ul {
+  margin: var(--rom-2) 0 0;
+  padding-left: 1.2em;
+}
+
+/* I redigeringen av scenarioreglene står vilkårene som i lista, men mindre
+   enn feltene; hver kommentar i utfallet er skilt fra den forrige med en
+   hårlinje, og grensen i prosent er et kort felt. */
+.regelredigering__intervall .scenario__vilkar {
+  font-size: var(--tekst-ui);
+  line-height: var(--linjehoyde-lesing);
+}
+
+.regelredigering__plassering {
+  padding-top: var(--rom-4);
+  border-top: var(--kant) solid var(--linje);
+}
+
+.regelredigering__plassering > legend {
+  float: left;
+  width: 100%;
+  margin-bottom: var(--rom-2);
+}
+
+.regelredigering__plassering > legend + * {
+  clear: both;
+}
+
+.regelredigering__grensepar + .regelredigering__grensepar {
+  padding-top: var(--rom-4);
+  border-top: var(--kant) solid var(--linje);
+}
+
+/* En valgliste med lange tekster skal ikke gjøre skjemaet bredere enn skjermen. */
+.regelredigering select.felt__inndata {
+  min-width: 0;
+  max-width: 100%;
+  text-overflow: ellipsis;
+}
+
+.regelredigering__grenseverdi {
+  max-width: 22rem;
+}
+
+/* Scenariet simulatoren treffer, markeres også mens reglene redigeres. */
+.regelredigering__intervall.scenario--truffet {
+  border-left-color: var(--aksent);
 }
 
 /* --- Historikken -------------------------------------------------------- */

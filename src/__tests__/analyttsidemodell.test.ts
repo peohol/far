@@ -261,6 +261,7 @@ function side(): Analyttsidedata {
       ],
     },
     thcregelsett: null,
+    scenarioregelsett: null,
   }
 }
 

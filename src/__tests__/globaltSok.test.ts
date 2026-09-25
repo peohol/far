@@ -390,5 +390,6 @@ function side(kode: string, navn: string, koblet: string[] = []): Analyttsidedat
     referanser: [],
     regelsett: null,
     thcregelsett: null,
+    scenarioregelsett: null,
   }
 }

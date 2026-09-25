@@ -146,6 +146,7 @@ gir tilbake objektets nye status.
 | `gjenopprett_revisjon(objekt, forventet_revisjon, fra_revisjon)` | Ny revisjon med innholdet fra en tidligere. Alt senere blir stående |
 | `publiser_utkast(objekt, forventet_revisjon)` | Publiserer utkastet slik det står. Lager ingen ny revisjon |
 | `lagre_intervallregelsett(objekt, forventet_revisjon, innhold, kommentarer)` | Et regelsett og de nye og endrede kommentarene det bruker, i én transaksjon (`docs/fortolkningsregler.md`) |
+| `lagre_scenarioregelsett(objekt, forventet_revisjon, innhold, kommentarer)` | Det samme for et scenarioregelsett (`docs/scenarioregler.md`) |
 
 `opprett_utkast` går gjennom `intern.opprett_objekt(type, id, innhold)`, som
 også brukes når ID-en alt er gitt: en import med faste ID-er, eller en ny
