@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.36.4',
+    versjon: '1.36.5',
     dato: '2026-09-25',
     sammendrag: 'Amfetaminsiden viser preparater og indikasjoner for deksamfetamin og lisdeksamfetamin',
     typer: ['Fag', 'Funksjonalitet'],
@@ -20,6 +20,19 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Amfetaminsiden er koblet til deksamfetamin og lisdeksamfetamin i FEST, og viser preparatene og interaksjonene for begge. Racemisk amfetamin er ikke med, siden referanseområdet ikke gjelder for det.',
       'Siden har fått seksjonen «Indikasjon», med indikasjonene for Attentin, Dexatin og Dexfarm og for Elvanse og generika, hentet fra Felleskatalogen, med lenker til preparatomtalene.',
+    ],
+  },
+  {
+    versjon: '1.36.4',
+    dato: '2026-09-25',
+    sammendrag: 'Alle legemiddelformene har fått egne ikoner',
+    typer: ['Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Nye ikoner i samme stil som de andre: infusjonspose, inhalator, sprayflaske, tube, plaster, dosepose, stikkpille, implantat og gassflaske.',
+      'Granulat, infusjonsvæske, konsentrat til infusjonsvæske, stikkpille, sirup og de andre formene som før fikk det generelle ikonet, har nå et ikon som viser formen.',
+      'Ikonet følger formen som gis til pasienten, så et pulver til injeksjonsvæske får sprøyten og et granulat til mikstur flasken. Det gjelder alle formene i FEST, også dem ingen stoffside bruker ennå.',
+      'Legemiddelformene på t½- og tss-kortene i «Viktige data» får de samme ikonene.',
     ],
   },
   {

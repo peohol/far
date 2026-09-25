@@ -306,25 +306,33 @@ kortet for legemiddelformen. Tekstene og stedene står i
 
 ### Legemiddelformene og ikonene
 
-`src/legemiddeldata/legemiddelformer.ts` kobler FESTs formkode til en
-semantisk variant (tablett, depottablett, kapsel, mikstur, injeksjon …) og
-varianten til et ikon i Atlas-registeret. Atlas har ikoner for tablett,
-depottablett og kapsel; de andre variantene bruker det generiske ikonet til
-designet har egne. En kode som ikke står i registeret, får det generiske ikonet
-og merkes `kartlagt: false`.
+`src/legemiddeldata/legemiddelformer.ts` gir hver legemiddelform en semantisk
+variant (tablett, kapsel, mikstur, injeksjon, infusjon, inhalasjon, spray,
+tube, plaster, dosepose, stikkpille, implantat, gass …) og varianten et ikon i
+Atlas-registeret. Varianten finnes med reglene i `FORMREGLER`, som leser navnet
+på formen: FEST har over 200 former, men navnene er bygd av de samme ordene, så
+noen få regler dekker alle, også former som kommer til senere. For «X til Y»
+er det Y som gis til pasienten og bestemmer ikonet («Pulver til
+injeksjonsvæske» får sprøyten). En form reglene ikke gir riktig, kan få en
+variant etter FEST-koden i `FORMKODER`. Former ingen regel passer for, får det
+generiske ikonet og merkes `kartlagt: false`. De samme reglene gir ikonene for
+formene redaktørene skriver på t½- og tss-kortene i «Viktige data».
 
-Hvilke former som faktisk brukes, er ikke en håndlaget liste.
-`scripts/legemiddelformer-i-bruk.sql` finner de distinkte formene blant
-preparatene til de publiserte stoffsidene, og svaret ligger i
-`src/legemiddeldata/legemiddelformer-i-bruk.json`. 24.09.2026 var det 17 former
-fra 35 koblede virkestoff. En prøve krever at hver av dem står i registeret.
+Hvilke former som finnes, er ikke en håndlaget liste.
+`scripts/legemiddelformer-i-bruk.sql` finner alle formene blant merkevarene i
+FEST som ikke er utgått, og formene blant preparatene til de publiserte
+stoffsidene. Svaret ligger i `src/legemiddeldata/legemiddelformer-i-bruk.json`.
+25.09.2026 var det 226 former i FEST og 27 i bruk, fra 50 koblede virkestoff.
+En prøve krever at hver av dem er kartlagt; bare medisinsk blodigle har med
+vilje det generiske ikonet.
 
 Slik fanges nye former opp etter en FEST-oppdatering eller nye koblinger:
 
 1. Kjør spørringen mot produksjonsdatabasen (bare lesing, f.eks. med
    Supabase-verktøyet for SQL) og lagre svaret i JSON-filen.
 2. Kjør prøvene. Feiler `legemiddelformer.test.ts`, står de nye formene med navn
-   og kode i feilmeldingen. Legg dem inn i `FORMKODER`.
+   og kode i feilmeldingen. Utvid et mønster i `FORMREGLER`, eller tegn et nytt
+   ikon og legg til en variant.
 
 ## Slik interaksjonene vises
 

@@ -1,3 +1,4 @@
+import { FORMVARIANTER, formvariant } from '../../legemiddeldata/legemiddelformer'
 import type { Ikonnavn } from '../ikon/register'
 
 /**
@@ -70,24 +71,14 @@ export function kinetikkikon(tittel: string): Ikonnavn {
 }
 
 /**
- * Ikonene for legemiddelformene på t₁/₂- og tₛₛ-kortene i «Viktige data»,
- * med mønstre for navnet redaktøren har gitt formen («Peroralt»,
- * «Depotinjeksjon (Xeplion)»). Den første som passer, vinner; passer ingen,
- * får formen det generiske ikonet. Samme tegninger som legemiddelformene i
- * «Preparater» (`src/legemiddeldata/legemiddelformer.ts`).
+ * Ikonet for en legemiddelform på t₁/₂- og tₛₛ-kortene i «Viktige data», etter
+ * navnet redaktøren har gitt formen («Peroralt», «Depotinjeksjon (Xeplion)»).
+ * Samme regler og tegninger som legemiddelformene i «Preparater»
+ * (`src/legemiddeldata/legemiddelformer.ts`). `fallback` når ingen regel passer.
  */
-const FORMKATEGORIER: readonly { ikon: Ikonnavn; monster: RegExp }[] = [
-  { ikon: 'dropper', monster: /draper/ },
-  { ikon: 'capsule', monster: /kapsel/ },
-  { ikon: 'tablet', monster: /peroral|^oralt?\b|tablett|\bp\.?o\b/ },
-  { ikon: 'syringe', monster: /injek|depot|infusj|\bi\.?[mv]\b|intramusk|intraven/ },
-  { ikon: 'bottle', monster: /mikstur|oppl[oø]sning/ },
-]
-
-/** Ikonet for en legemiddelform på et datakort, etter navnet. `fallback` når ingen kategori passer. */
 export function legemiddelformikon(form: string): Ikonnavn {
-  const normalisert = normaliserOverskrift(form)
-  return FORMKATEGORIER.find(({ monster }) => monster.test(normalisert))?.ikon ?? 'fallback'
+  const variant = formvariant(form)
+  return variant ? FORMVARIANTER[variant].ikon : 'fallback'
 }
 
 /**

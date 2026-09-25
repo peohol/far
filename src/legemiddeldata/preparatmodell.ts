@@ -218,7 +218,7 @@ export function byggPreparatvisning(
         .set(formId, {
           id: formId,
           form: m.legemiddelform?.tekst || 'Ukjent legemiddelform',
-          ikon: formikon(m.legemiddelform?.kode),
+          ikon: formikon(m.legemiddelform?.kode, m.legemiddelform?.tekst),
           styrker: [],
           grupper: new Map(),
         })

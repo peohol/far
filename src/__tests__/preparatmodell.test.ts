@@ -43,7 +43,7 @@ describe('preparatmodellen med utdraget fra FEST', () => {
 
   it('grupperer etter form og styrke, med fritakene i samme lister', () => {
     expect(visning.former.map((f) => [f.id, f.form, f.ikon.variant])).toEqual([
-      ['743', 'Depotkapsel, hard', 'depotkapsel'],
+      ['743', 'Depotkapsel, hard', 'kapsel'],
       ['842', 'Mikstur, oppløsning', 'mikstur'],
       ['53', 'Tablett', 'tablett'],
     ])

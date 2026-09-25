@@ -487,6 +487,112 @@ const REGISTER = {
     ],
     free: [P('M40.5 6.5c-1.8 2.2-2.7 3.5-2.7 4.5a2.7 2.7 0 0 0 5.4 0c0-1-.9-2.3-2.7-4.5z', 'f2', 'info', 'drop')],
   },
+  /* Infusjonspose (infusjon og dialyse): opphenget, posen med væsken og porten. */
+  infusion: {
+    vb: 48,
+    parts: [
+      P('M20.5 8V5.5a3.5 3.5 0 0 1 7 0V8', 'l', 'i-ink'),
+      P('M13 8h22a3 3 0 0 1 3 3v18c0 6-4 10-9 10H19c-5 0-9-4-9-10V11a3 3 0 0 1 3-3z', 'f1', 'glass'),
+      P('M10 22h28v7c0 6-4 10-9 10H19c-5 0-9-4-9-10z', 'f2', 'info', 'fill'),
+      P('M15 13.5h6M15 17.5h4', 'l'),
+      R(20.5, 39, 7, 4.5, 1.2, 'f2', 'accent2'),
+      P('M24 43.5V47', 'l', 'i-ink'),
+    ],
+  },
+  /* Inhalator: beholderen trykkes ned i hylsen med munnstykket. */
+  inhaler: {
+    vb: 48,
+    parts: [
+      R(17, 3, 12, 22, 4, 'f2', 'accent2', 'drop'),
+      P('M14 14h18v17h9a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H17a3 3 0 0 1-3-3z', 'f1', 'info'),
+      P('M38 35.5v5', 'l'),
+      P('M18 20h6', 'l'),
+    ],
+  },
+  /* Sprayflaske (nese-, munn- og hudspray, skum): pumpen og tåken. */
+  spray: {
+    vb: 48,
+    parts: [
+      P('M19.5 17V9l3.5-5 3.5 5v8z', 'f1', 'accent2'),
+      R(15.5, 17, 15, 5, 1.5, 'f2', 'accent2'),
+      R(13, 22, 20, 22, 4.5, 'f1', 'glass'),
+      P('M13 32h20v7.5a4.5 4.5 0 0 1-4.5 4.5h-11a4.5 4.5 0 0 1-4.5-4.5z', 'f2', 'info', 'fill'),
+      P('M17 27h6', 'l'),
+      G([C(31, 7, 1.6, 'h', 'info'), C(36, 3.5, 1.6, 'h', 'info'), C(36.5, 10, 1.6, 'h', 'info'), C(41.5, 6.5, 1.6, 'h', 'info')], 'pop'),
+    ],
+  },
+  /* Tube (krem, salve, gel og pasta): den flate enden, tuben og korken. */
+  tube: {
+    vb: 48,
+    rot: 'rotate(-35 24 24)',
+    ga: 'pulse',
+    parts: [
+      R(3.5, 16, 6, 16, 1.2, 'f2', 'accent2'),
+      P('M9.5 16.5h21l6.5 5v5l-6.5 5h-21z', 'f1', 'glass'),
+      R(37, 19.5, 8, 9, 2, 'f2', 'accent2'),
+      P('M14 22h11M14 26h7', 'l'),
+    ],
+  },
+  /* Plaster (depotplaster, plaster og kompress): puten og hjørnet som løsnes. */
+  patch: {
+    vb: 48,
+    rot: 'rotate(-12 24 24)',
+    parts: [
+      P('M13 9h22a6 6 0 0 1 6 6v16l-8 8H13a6 6 0 0 1-6-6V15a6 6 0 0 1 6-6z', 'f1', 'accent2'),
+      R(14, 16, 20, 16, 3, 'f2', 'info', 'pulse'),
+      P('M41 31h-4a4 4 0 0 0-4 4v4z', 'f2', 'accent2', 'pop'),
+    ],
+  },
+  /* Dosepose (granulat og pulver): den taggete kanten, rivestreken og kornene. */
+  sachet: {
+    vb: 48,
+    parts: [
+      P('M11 10h26v28a4 4 0 0 1-4 4H15a4 4 0 0 1-4-4z', 'f1', 'glass'),
+      P('M11 10l2.6-3.5 2.6 3.5 2.6-3.5 2.6 3.5 2.6-3.5 2.6 3.5 2.6-3.5 2.6 3.5 2.6-3.5 2.6 3.5', 'l', 'i-ink'),
+      P('M11 15h26', 'd', 'i-ink'),
+      G(
+        [
+          C(18, 29, 2.2, 'f2', 'warn'),
+          C(24.5, 25, 2.2, 'f2', 'warn'),
+          C(30, 30, 2.2, 'f2', 'warn'),
+          C(21, 35.5, 2.2, 'f2', 'warn'),
+          C(27.5, 36, 2.2, 'f2', 'warn'),
+        ],
+        'drop',
+      ),
+    ],
+  },
+  /* Stikkpille og vagitorie. */
+  suppository: {
+    vb: 48,
+    rot: 'rotate(-40 24 24)',
+    ga: 'pulse',
+    parts: [
+      P('M10 16h16c8 0 13 4 16 8-3 4-8 8-16 8H10a3 3 0 0 1-3-3V19a3 3 0 0 1 3-3z', 'f1', 'accent'),
+      P('M11 20h15c5 0 8.5 2 10.5 4-2 2-5.5 4-10.5 4H11z', 'f2', 'accent'),
+    ],
+  },
+  /* Implantat, innlegg og lamell: staven under huden. */
+  implant: {
+    vb: 48,
+    ga: 'pulse',
+    parts: [
+      P('M4 18h40', 'd', 'i-ink'),
+      R(7, 25, 34, 9, 4.5, 'f1', 'accent2'),
+      G([C(15, 29.5, 1.8, 'h', 'info'), C(21.5, 29.5, 1.8, 'h', 'info'), C(28, 29.5, 1.8, 'h', 'info'), C(34.5, 29.5, 1.8, 'h', 'info')], 'pop'),
+    ],
+  },
+  /* Gassflaske (medisinsk gass): ventilen, fargebåndet og flasken. */
+  gas: {
+    vb: 48,
+    parts: [
+      P('M16 5h16M24 5v4', 'l', 'i-ink'),
+      R(20, 9, 8, 6, 1.5, 'f2', 'accent2'),
+      P('M14 24a10 9 0 0 1 20 0v16a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4z', 'f1', 'glass'),
+      P('M14 26h20v7H14z', 'f2', 'info', 'fill'),
+      P('M18 38h5', 'l'),
+    ],
+  },
   /* Farmakogenetikk: en dobbelspiral med basepar. */
   dna: {
     vb: 48,

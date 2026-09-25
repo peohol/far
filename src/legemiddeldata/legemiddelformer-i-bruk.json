@@ -1,17 +1,37 @@
 {
-  "hentet": "2026-09-24",
+  "hentet": "2026-09-25",
   "kildedato": "2026-09-08T03:09:06",
-  "virkestoff": 35,
+  "virkestoff": 50,
   "former": [
     {
       "kode": "5",
       "tekst": "Dispergerbar tablett",
-      "merkevarer": 7
+      "merkevarer": 9
+    },
+    {
+      "kode": "7",
+      "tekst": "Granulat",
+      "merkevarer": 1
+    },
+    {
+      "kode": "14",
+      "tekst": "Sirup",
+      "merkevarer": 1
+    },
+    {
+      "kode": "23",
+      "tekst": "Depotgranulat",
+      "merkevarer": 2
     },
     {
       "kode": "25",
       "tekst": "Depottablett",
-      "merkevarer": 59
+      "merkevarer": 92
+    },
+    {
+      "kode": "28",
+      "tekst": "Enterotablett",
+      "merkevarer": 6
     },
     {
       "kode": "48",
@@ -21,12 +41,22 @@
     {
       "kode": "53",
       "tekst": "Tablett",
-      "merkevarer": 216
+      "merkevarer": 266
+    },
+    {
+      "kode": "112",
+      "tekst": "Stikkpille",
+      "merkevarer": 5
     },
     {
       "kode": "171",
       "tekst": "Konsentrat til mikstur",
       "merkevarer": 2
+    },
+    {
+      "kode": "449",
+      "tekst": "Tablett med modifisert frisetting",
+      "merkevarer": 1
     },
     {
       "kode": "524",
@@ -36,7 +66,7 @@
     {
       "kode": "743",
       "tekst": "Depotkapsel, hard",
-      "merkevarer": 8
+      "merkevarer": 11
     },
     {
       "kode": "748",
@@ -46,7 +76,7 @@
     {
       "kode": "769",
       "tekst": "Enterokapsel, hard",
-      "merkevarer": 8
+      "merkevarer": 9
     },
     {
       "kode": "789",
@@ -56,7 +86,7 @@
     {
       "kode": "816",
       "tekst": "Injeksjonsvæske, oppløsning",
-      "merkevarer": 15
+      "merkevarer": 25
     },
     {
       "kode": "819",
@@ -66,27 +96,1179 @@
     {
       "kode": "840",
       "tekst": "Mikstur, suspensjon",
-      "merkevarer": 1
+      "merkevarer": 10
     },
     {
       "kode": "842",
       "tekst": "Mikstur, oppløsning",
-      "merkevarer": 10
+      "merkevarer": 21
+    },
+    {
+      "kode": "858",
+      "tekst": "Infusjonsvæske, oppløsning",
+      "merkevarer": 2
+    },
+    {
+      "kode": "877",
+      "tekst": "Konsentrat til infusjonsvæske, oppløsning",
+      "merkevarer": 2
     },
     {
       "kode": "880",
       "tekst": "Injeksjons-/infusjonsvæske, oppløsning",
-      "merkevarer": 1
+      "merkevarer": 2
     },
     {
       "kode": "891",
       "tekst": "Kapsel, hard",
-      "merkevarer": 18
+      "merkevarer": 89
+    },
+    {
+      "kode": "893",
+      "tekst": "Kapsel med modifisert frisetting, hard",
+      "merkevarer": 26
     },
     {
       "kode": "913",
       "tekst": "Depotinjeksjonsvæske, suspensjon",
       "merkevarer": 25
+    },
+    {
+      "kode": "920",
+      "tekst": "Depottyggetablett",
+      "merkevarer": 3
+    }
+  ],
+  "alle": [
+    {
+      "kode": "2",
+      "tekst": "Plaster til provokasjonstest",
+      "merkevarer": 1
+    },
+    {
+      "kode": "3",
+      "tekst": "Brusegranulat",
+      "merkevarer": 1
+    },
+    {
+      "kode": "5",
+      "tekst": "Dispergerbar tablett",
+      "merkevarer": 37
+    },
+    {
+      "kode": "6",
+      "tekst": "Dråper",
+      "merkevarer": 13
+    },
+    {
+      "kode": "7",
+      "tekst": "Granulat",
+      "merkevarer": 15
+    },
+    {
+      "kode": "9",
+      "tekst": "Mikstur",
+      "merkevarer": 4
+    },
+    {
+      "kode": "10",
+      "tekst": "Oppløselig tablett",
+      "merkevarer": 6
+    },
+    {
+      "kode": "11",
+      "tekst": "Oralgel",
+      "merkevarer": 3
+    },
+    {
+      "kode": "12",
+      "tekst": "Oralpasta",
+      "merkevarer": 1
+    },
+    {
+      "kode": "14",
+      "tekst": "Sirup",
+      "merkevarer": 15
+    },
+    {
+      "kode": "15",
+      "tekst": "Urtete",
+      "merkevarer": 5
+    },
+    {
+      "kode": "16",
+      "tekst": "Brusetablett",
+      "merkevarer": 53
+    },
+    {
+      "kode": "18",
+      "tekst": "Dentalgel",
+      "merkevarer": 4
+    },
+    {
+      "kode": "23",
+      "tekst": "Depotgranulat",
+      "merkevarer": 7
+    },
+    {
+      "kode": "25",
+      "tekst": "Depottablett",
+      "merkevarer": 351
+    },
+    {
+      "kode": "26",
+      "tekst": "Enterogranulat",
+      "merkevarer": 4
+    },
+    {
+      "kode": "28",
+      "tekst": "Enterotablett",
+      "merkevarer": 63
+    },
+    {
+      "kode": "29",
+      "tekst": "Gel",
+      "merkevarer": 39
+    },
+    {
+      "kode": "30",
+      "tekst": "Granuler",
+      "merkevarer": 2
+    },
+    {
+      "kode": "32",
+      "tekst": "Kapsel",
+      "merkevarer": 52
+    },
+    {
+      "kode": "33",
+      "tekst": "Konsentrat til gurglevann",
+      "merkevarer": 2
+    },
+    {
+      "kode": "34",
+      "tekst": "Krem",
+      "merkevarer": 115
+    },
+    {
+      "kode": "36",
+      "tekst": "Munngel",
+      "merkevarer": 4
+    },
+    {
+      "kode": "38",
+      "tekst": "Munnpasta",
+      "merkevarer": 1
+    },
+    {
+      "kode": "39",
+      "tekst": "Munnskyllevæske",
+      "merkevarer": 5
+    },
+    {
+      "kode": "43",
+      "tekst": "Oppløsning til tannkjøtt",
+      "merkevarer": 1
+    },
+    {
+      "kode": "44",
+      "tekst": "Pasta",
+      "merkevarer": 1
+    },
+    {
+      "kode": "46",
+      "tekst": "Salve",
+      "merkevarer": 41
+    },
+    {
+      "kode": "47",
+      "tekst": "Skum",
+      "merkevarer": 1
+    },
+    {
+      "kode": "48",
+      "tekst": "Smeltetablett",
+      "merkevarer": 71
+    },
+    {
+      "kode": "49",
+      "tekst": "Sublingvalspray",
+      "merkevarer": 1
+    },
+    {
+      "kode": "50",
+      "tekst": "Sublingvaltablett",
+      "merkevarer": 50
+    },
+    {
+      "kode": "52",
+      "tekst": "Sugetablett",
+      "merkevarer": 39
+    },
+    {
+      "kode": "53",
+      "tekst": "Tablett",
+      "merkevarer": 2890
+    },
+    {
+      "kode": "54",
+      "tekst": "Tannpasta",
+      "merkevarer": 3
+    },
+    {
+      "kode": "55",
+      "tekst": "Tilsetning til badevann",
+      "merkevarer": 1
+    },
+    {
+      "kode": "56",
+      "tekst": "Medisinsk tyggegummi",
+      "merkevarer": 18
+    },
+    {
+      "kode": "57",
+      "tekst": "Tyggetablett",
+      "merkevarer": 56
+    },
+    {
+      "kode": "58",
+      "tekst": "Depotplaster",
+      "merkevarer": 87
+    },
+    {
+      "kode": "61",
+      "tekst": "Hudstift",
+      "merkevarer": 2
+    },
+    {
+      "kode": "64",
+      "tekst": "Kollodium",
+      "merkevarer": 1
+    },
+    {
+      "kode": "66",
+      "tekst": "Liniment",
+      "merkevarer": 3
+    },
+    {
+      "kode": "67",
+      "tekst": "Medisinsk neglelakk",
+      "merkevarer": 2
+    },
+    {
+      "kode": "71",
+      "tekst": "Nesepulver",
+      "merkevarer": 4
+    },
+    {
+      "kode": "72",
+      "tekst": "Nesesalve",
+      "merkevarer": 3
+    },
+    {
+      "kode": "77",
+      "tekst": "Pudder",
+      "merkevarer": 2
+    },
+    {
+      "kode": "79",
+      "tekst": "Sjampo",
+      "merkevarer": 7
+    },
+    {
+      "kode": "91",
+      "tekst": "Øyegel",
+      "merkevarer": 11
+    },
+    {
+      "kode": "93",
+      "tekst": "Øyelamell",
+      "merkevarer": 3
+    },
+    {
+      "kode": "94",
+      "tekst": "Øyesalve",
+      "merkevarer": 13
+    },
+    {
+      "kode": "95",
+      "tekst": "Infusjonsvæske",
+      "merkevarer": 1
+    },
+    {
+      "kode": "97",
+      "tekst": "Væske til inhalasjonsdamp",
+      "merkevarer": 7
+    },
+    {
+      "kode": "99",
+      "tekst": "Inhalasjonspulver",
+      "merkevarer": 26
+    },
+    {
+      "kode": "104",
+      "tekst": "Rektalgel",
+      "merkevarer": 3
+    },
+    {
+      "kode": "106",
+      "tekst": "Rektalkrem",
+      "merkevarer": 1
+    },
+    {
+      "kode": "107",
+      "tekst": "Rektalsalve",
+      "merkevarer": 5
+    },
+    {
+      "kode": "108",
+      "tekst": "Rektalskum",
+      "merkevarer": 4
+    },
+    {
+      "kode": "112",
+      "tekst": "Stikkpille",
+      "merkevarer": 64
+    },
+    {
+      "kode": "114",
+      "tekst": "Vaginalgel",
+      "merkevarer": 4
+    },
+    {
+      "kode": "115",
+      "tekst": "Vaginalinnlegg",
+      "merkevarer": 5
+    },
+    {
+      "kode": "117",
+      "tekst": "Vaginalkrem",
+      "merkevarer": 2
+    },
+    {
+      "kode": "120",
+      "tekst": "Vaginaltablett",
+      "merkevarer": 14
+    },
+    {
+      "kode": "123",
+      "tekst": "Vagitorie",
+      "merkevarer": 10
+    },
+    {
+      "kode": "124",
+      "tekst": "Blæreskyllevæske",
+      "merkevarer": 2
+    },
+    {
+      "kode": "131",
+      "tekst": "Hemofiltreringsvæske",
+      "merkevarer": 1
+    },
+    {
+      "kode": "132",
+      "tekst": "Implantat",
+      "merkevarer": 5
+    },
+    {
+      "kode": "133",
+      "tekst": "Intrauterint innlegg",
+      "merkevarer": 4
+    },
+    {
+      "kode": "138",
+      "tekst": "Peritonealdialysevæske",
+      "merkevarer": 20
+    },
+    {
+      "kode": "139",
+      "tekst": "Pulver",
+      "merkevarer": 24
+    },
+    {
+      "kode": "142",
+      "tekst": "Skyllevæske",
+      "merkevarer": 5
+    },
+    {
+      "kode": "152",
+      "tekst": "Spray",
+      "merkevarer": 2
+    },
+    {
+      "kode": "153",
+      "tekst": "Oppløsning til prikktest",
+      "merkevarer": 106
+    },
+    {
+      "kode": "171",
+      "tekst": "Konsentrat til mikstur",
+      "merkevarer": 3
+    },
+    {
+      "kode": "177",
+      "tekst": "Medisinert plaster",
+      "merkevarer": 8
+    },
+    {
+      "kode": "184",
+      "tekst": "Intravesikaloppløsning",
+      "merkevarer": 2
+    },
+    {
+      "kode": "193",
+      "tekst": "Impregnert kompress",
+      "merkevarer": 2
+    },
+    {
+      "kode": "206",
+      "tekst": "Pulver til sirup",
+      "merkevarer": 1
+    },
+    {
+      "kode": "209",
+      "tekst": "Periodontalgel",
+      "merkevarer": 1
+    },
+    {
+      "kode": "212",
+      "tekst": "Medisinert svamp",
+      "merkevarer": 1
+    },
+    {
+      "kode": "213",
+      "tekst": "Intestinalgel",
+      "merkevarer": 2
+    },
+    {
+      "kode": "219",
+      "tekst": "Medisinsk gass, kryogen",
+      "merkevarer": 2
+    },
+    {
+      "kode": "223",
+      "tekst": "Pulver til mikstur/rektalvæske, suspensjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "224",
+      "tekst": "Pulver til mikstur, suspensjon",
+      "merkevarer": 35
+    },
+    {
+      "kode": "225",
+      "tekst": "Enterodepottablett",
+      "merkevarer": 4
+    },
+    {
+      "kode": "234",
+      "tekst": "Pastill",
+      "merkevarer": 1
+    },
+    {
+      "kode": "241",
+      "tekst": "Medisinert tråd",
+      "merkevarer": 8
+    },
+    {
+      "kode": "248",
+      "tekst": "Oppløsning til provokasjonstest",
+      "merkevarer": 2
+    },
+    {
+      "kode": "252",
+      "tekst": "Oppløsning til risptest",
+      "merkevarer": 1
+    },
+    {
+      "kode": "320",
+      "tekst": "Injeksjonsvæske/konsentrat til infusjonsvæske, oppløsning",
+      "merkevarer": 5
+    },
+    {
+      "kode": "403",
+      "tekst": "Oppløsning til blodfraksjonsmodifisering",
+      "merkevarer": 1
+    },
+    {
+      "kode": "404",
+      "tekst": "Oppløsningsvæske til parenteral bruk",
+      "merkevarer": 6
+    },
+    {
+      "kode": "407",
+      "tekst": "Hemodialyse-/hemofiltreringsvæske",
+      "merkevarer": 7
+    },
+    {
+      "kode": "424",
+      "tekst": "Inhalasjonspulver, hard kapsel",
+      "merkevarer": 18
+    },
+    {
+      "kode": "426",
+      "tekst": "Injeksjonsvæske, suspensjon",
+      "merkevarer": 116
+    },
+    {
+      "kode": "429",
+      "tekst": "Preparasjonssett til radioaktive legemidler",
+      "merkevarer": 6
+    },
+    {
+      "kode": "430",
+      "tekst": "Mikstur/rektalvæske, oppløsning",
+      "merkevarer": 2
+    },
+    {
+      "kode": "435",
+      "tekst": "Pulver og væske til injeksjonsvæske",
+      "merkevarer": 2
+    },
+    {
+      "kode": "438",
+      "tekst": "Pulver og væske til intravesikaloppløsning",
+      "merkevarer": 2
+    },
+    {
+      "kode": "439",
+      "tekst": "Pulver og væske til intravesikalsuspensjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "441",
+      "tekst": "Oppløsning til vevslim",
+      "merkevarer": 2
+    },
+    {
+      "kode": "444",
+      "tekst": "Pulver og væske til konsentrat til infusjonsvæske, oppløsning",
+      "merkevarer": 7
+    },
+    {
+      "kode": "446",
+      "tekst": "Pulver til intravesikalsuspensjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "449",
+      "tekst": "Tablett med modifisert frisetting",
+      "merkevarer": 31
+    },
+    {
+      "kode": "453",
+      "tekst": "Intravitrealt implantat",
+      "merkevarer": 3
+    },
+    {
+      "kode": "460",
+      "tekst": "Konsentrat til infusjonsvæske",
+      "merkevarer": 1
+    },
+    {
+      "kode": "461",
+      "tekst": "Konsentrat til injeksjons-/infusjonsvæske, oppløsning",
+      "merkevarer": 12
+    },
+    {
+      "kode": "468",
+      "tekst": "Munnsalve",
+      "merkevarer": 1
+    },
+    {
+      "kode": "472",
+      "tekst": "Munnsmeltende film",
+      "merkevarer": 4
+    },
+    {
+      "kode": "478",
+      "tekst": "Liniment, oppløsning",
+      "merkevarer": 66
+    },
+    {
+      "kode": "479",
+      "tekst": "Liniment, suspensjon",
+      "merkevarer": 2
+    },
+    {
+      "kode": "480",
+      "tekst": "Liniment, emulsjon",
+      "merkevarer": 5
+    },
+    {
+      "kode": "484",
+      "tekst": "Sublingvalfilm",
+      "merkevarer": 2
+    },
+    {
+      "kode": "489",
+      "tekst": "Transdermaloppløsning",
+      "merkevarer": 1
+    },
+    {
+      "kode": "501",
+      "tekst": "Pulver og gel til gel",
+      "merkevarer": 1
+    },
+    {
+      "kode": "502",
+      "tekst": "Pulver og væske til intraokulær instillasjonsvæske, oppløsning",
+      "merkevarer": 3
+    },
+    {
+      "kode": "504",
+      "tekst": "Pulver til intravesikaloppløsning/injeksjons-/infusjonsvæske",
+      "merkevarer": 3
+    },
+    {
+      "kode": "505",
+      "tekst": "Pulver og væske til inhalasjonsvæske til nebulisator, oppløsning",
+      "merkevarer": 2
+    },
+    {
+      "kode": "507",
+      "tekst": "Matriks til vevslim",
+      "merkevarer": 1
+    },
+    {
+      "kode": "512",
+      "tekst": "Hudplaster",
+      "merkevarer": 1
+    },
+    {
+      "kode": "513",
+      "tekst": "Transdermalgel",
+      "merkevarer": 4
+    },
+    {
+      "kode": "522",
+      "tekst": "Pulver og væske til liniment, oppløsning",
+      "merkevarer": 3
+    },
+    {
+      "kode": "524",
+      "tekst": "Tyggetablett/dispergerbar tablett",
+      "merkevarer": 7
+    },
+    {
+      "kode": "526",
+      "tekst": "Transdermalspray, oppløsning",
+      "merkevarer": 2
+    },
+    {
+      "kode": "530",
+      "tekst": "Øre-/øye-/nesedråper, oppløsning",
+      "merkevarer": 3
+    },
+    {
+      "kode": "531",
+      "tekst": "Medisinsk blodigle",
+      "merkevarer": 1
+    },
+    {
+      "kode": "533",
+      "tekst": "Øredråper, oppløsning",
+      "merkevarer": 12
+    },
+    {
+      "kode": "541",
+      "tekst": "Pulver, væske og matriks til matriks til implantasjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "553",
+      "tekst": "Oppløsning til kardioplegi/organoppbevaring",
+      "merkevarer": 2
+    },
+    {
+      "kode": "567",
+      "tekst": "Granulat i kapsel som åpnes",
+      "merkevarer": 8
+    },
+    {
+      "kode": "571",
+      "tekst": "Tablett og væske til rektalvæske, suspensjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "572",
+      "tekst": "Granulat, drasjert",
+      "merkevarer": 11
+    },
+    {
+      "kode": "586",
+      "tekst": "Pulver til konsentrat og oppløsning til infusjonsvæske, oppløsning",
+      "merkevarer": 4
+    },
+    {
+      "kode": "589",
+      "tekst": "Konsentrat til mikstur/rektalvæske, oppløsning",
+      "merkevarer": 1
+    },
+    {
+      "kode": "614",
+      "tekst": "Nesedråper/munnvann, oppløsning",
+      "merkevarer": 1
+    },
+    {
+      "kode": "646",
+      "tekst": "Injeksjons-/infusjonsvæske, dispersjon",
+      "merkevarer": 3
+    },
+    {
+      "kode": "681",
+      "tekst": "Pulver og væske til injeksjonsvæske/prikktest, oppløsning",
+      "merkevarer": 2
+    },
+    {
+      "kode": "704",
+      "tekst": "Konsentrat til injeksjonsvæske, dispersjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "711",
+      "tekst": "Øredråper, suspensjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "719",
+      "tekst": "Øyedråper, emulsjon",
+      "merkevarer": 4
+    },
+    {
+      "kode": "720",
+      "tekst": "Øyedråper, oppløsning",
+      "merkevarer": 174
+    },
+    {
+      "kode": "721",
+      "tekst": "Øyedråper, suspensjon",
+      "merkevarer": 34
+    },
+    {
+      "kode": "722",
+      "tekst": "Vaginalkapsel, hard",
+      "merkevarer": 1
+    },
+    {
+      "kode": "723",
+      "tekst": "Vaginalkapsel, myk",
+      "merkevarer": 5
+    },
+    {
+      "kode": "725",
+      "tekst": "Vaginalvæske, oppløsning",
+      "merkevarer": 2
+    },
+    {
+      "kode": "733",
+      "tekst": "Dentalvæske, oppløsning",
+      "merkevarer": 6
+    },
+    {
+      "kode": "734",
+      "tekst": "Dentalvæske, suspensjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "737",
+      "tekst": "Sublingvalspray, oppløsning",
+      "merkevarer": 27
+    },
+    {
+      "kode": "743",
+      "tekst": "Depotkapsel, hard",
+      "merkevarer": 79
+    },
+    {
+      "kode": "745",
+      "tekst": "Depotøyedråper, oppløsning",
+      "merkevarer": 4
+    },
+    {
+      "kode": "746",
+      "tekst": "Pulver til mikstur, oppløsning",
+      "merkevarer": 32
+    },
+    {
+      "kode": "747",
+      "tekst": "Dråper, emulsjon",
+      "merkevarer": 4
+    },
+    {
+      "kode": "748",
+      "tekst": "Dråper, oppløsning",
+      "merkevarer": 62
+    },
+    {
+      "kode": "749",
+      "tekst": "Dråper, suspensjon",
+      "merkevarer": 2
+    },
+    {
+      "kode": "752",
+      "tekst": "Rektalvæske, emulsjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "753",
+      "tekst": "Rektalvæske, oppløsning",
+      "merkevarer": 8
+    },
+    {
+      "kode": "754",
+      "tekst": "Rektalvæske, suspensjon",
+      "merkevarer": 6
+    },
+    {
+      "kode": "766",
+      "tekst": "Endotrakeopulmonal instillasjonsvæske, suspensjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "769",
+      "tekst": "Enterokapsel, hard",
+      "merkevarer": 36
+    },
+    {
+      "kode": "781",
+      "tekst": "Granulat og væske til mikstur, suspensjon",
+      "merkevarer": 2
+    },
+    {
+      "kode": "783",
+      "tekst": "Pulver til konsentrat til infusjonsvæske, dispersjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "784",
+      "tekst": "Pulver til konsentrat til infusjonsvæske, oppløsning",
+      "merkevarer": 96
+    },
+    {
+      "kode": "785",
+      "tekst": "Pulver til konsentrat til injeksjons-/infusjonsvæske, oppløsning",
+      "merkevarer": 7
+    },
+    {
+      "kode": "786",
+      "tekst": "Granulat til mikstur, oppløsning",
+      "merkevarer": 9
+    },
+    {
+      "kode": "787",
+      "tekst": "Granulat til mikstur, suspensjon",
+      "merkevarer": 24
+    },
+    {
+      "kode": "789",
+      "tekst": "Pulver til injeksjonsvæske, oppløsning",
+      "merkevarer": 85
+    },
+    {
+      "kode": "790",
+      "tekst": "Pulver til injeksjonsvæske, suspensjon",
+      "merkevarer": 5
+    },
+    {
+      "kode": "792",
+      "tekst": "Pulver til injeksjons-/infusjonsvæske, oppløsning",
+      "merkevarer": 75
+    },
+    {
+      "kode": "794",
+      "tekst": "Pulver til infusjonsvæske, dispersjon",
+      "merkevarer": 4
+    },
+    {
+      "kode": "795",
+      "tekst": "Pulver til infusjonsvæske, oppløsning",
+      "merkevarer": 62
+    },
+    {
+      "kode": "798",
+      "tekst": "Pulver til inhalasjonsvæske til nebulisator, oppløsning",
+      "merkevarer": 2
+    },
+    {
+      "kode": "801",
+      "tekst": "Pulver og væske til øyedråper, oppløsning",
+      "merkevarer": 1
+    },
+    {
+      "kode": "807",
+      "tekst": "Nesedråper, oppløsning",
+      "merkevarer": 4
+    },
+    {
+      "kode": "808",
+      "tekst": "Nesedråper, suspensjon",
+      "merkevarer": 2
+    },
+    {
+      "kode": "810",
+      "tekst": "Pulver og væske til infusjonsvæske, oppløsning",
+      "merkevarer": 35
+    },
+    {
+      "kode": "811",
+      "tekst": "Pulver og væske til injeksjons-/infusjonsvæske, oppløsning",
+      "merkevarer": 19
+    },
+    {
+      "kode": "812",
+      "tekst": "Pulver og væske til injeksjonsvæske, dispersjon",
+      "merkevarer": 2
+    },
+    {
+      "kode": "814",
+      "tekst": "Pulver og væske til injeksjonsvæske, oppløsning",
+      "merkevarer": 172
+    },
+    {
+      "kode": "815",
+      "tekst": "Pulver og væske til injeksjonsvæske, suspensjon",
+      "merkevarer": 19
+    },
+    {
+      "kode": "816",
+      "tekst": "Injeksjonsvæske, oppløsning",
+      "merkevarer": 929
+    },
+    {
+      "kode": "817",
+      "tekst": "Injeksjonsvæske, emulsjon",
+      "merkevarer": 5
+    },
+    {
+      "kode": "818",
+      "tekst": "Pulver og væske til mikstur, oppløsning",
+      "merkevarer": 1
+    },
+    {
+      "kode": "819",
+      "tekst": "Pulver og væske til depotinjeksjonsvæske, suspensjon",
+      "merkevarer": 17
+    },
+    {
+      "kode": "821",
+      "tekst": "Pulver og suspensjon til injeksjonsvæske, suspensjon",
+      "merkevarer": 4
+    },
+    {
+      "kode": "832",
+      "tekst": "Nesespray, oppløsning",
+      "merkevarer": 50
+    },
+    {
+      "kode": "833",
+      "tekst": "Nesespray, suspensjon",
+      "merkevarer": 27
+    },
+    {
+      "kode": "835",
+      "tekst": "Munnspray, oppløsning",
+      "merkevarer": 11
+    },
+    {
+      "kode": "837",
+      "tekst": "Munnvann, oppløsning",
+      "merkevarer": 15
+    },
+    {
+      "kode": "839",
+      "tekst": "Mikstur/rektalvæske, suspensjon",
+      "merkevarer": 2
+    },
+    {
+      "kode": "840",
+      "tekst": "Mikstur, suspensjon",
+      "merkevarer": 107
+    },
+    {
+      "kode": "841",
+      "tekst": "Mikstur, emulsjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "842",
+      "tekst": "Mikstur, oppløsning",
+      "merkevarer": 296
+    },
+    {
+      "kode": "843",
+      "tekst": "Medisinsk gass, komprimert",
+      "merkevarer": 10
+    },
+    {
+      "kode": "844",
+      "tekst": "Medisinsk gass, flytende",
+      "merkevarer": 3
+    },
+    {
+      "kode": "846",
+      "tekst": "Hudspray, oppløsning",
+      "merkevarer": 2
+    },
+    {
+      "kode": "855",
+      "tekst": "Infusjonsvæske, dispersjon",
+      "merkevarer": 5
+    },
+    {
+      "kode": "856",
+      "tekst": "Infusjonsvæske, emulsjon",
+      "merkevarer": 37
+    },
+    {
+      "kode": "858",
+      "tekst": "Infusjonsvæske, oppløsning",
+      "merkevarer": 139
+    },
+    {
+      "kode": "860",
+      "tekst": "Inhalasjonsaerosol, oppløsning",
+      "merkevarer": 23
+    },
+    {
+      "kode": "861",
+      "tekst": "Inhalasjonsaerosol, suspensjon",
+      "merkevarer": 25
+    },
+    {
+      "kode": "863",
+      "tekst": "Inhalasjonspulver, dosedispensert",
+      "merkevarer": 31
+    },
+    {
+      "kode": "864",
+      "tekst": "Inhalasjonsvæske til nebulisator, dispersjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "869",
+      "tekst": "Inhalasjonsvæske til nebulisator, oppløsning",
+      "merkevarer": 28
+    },
+    {
+      "kode": "870",
+      "tekst": "Inhalasjonsvæske til nebulisator, suspensjon",
+      "merkevarer": 3
+    },
+    {
+      "kode": "871",
+      "tekst": "Inhalasjonsvæske, oppløsning",
+      "merkevarer": 9
+    },
+    {
+      "kode": "874",
+      "tekst": "Injeksjons-/infusjonsvæske, emulsjon",
+      "merkevarer": 9
+    },
+    {
+      "kode": "876",
+      "tekst": "Konsentrat til injeksjonsvæske, oppløsning",
+      "merkevarer": 3
+    },
+    {
+      "kode": "877",
+      "tekst": "Konsentrat til infusjonsvæske, oppløsning",
+      "merkevarer": 194
+    },
+    {
+      "kode": "878",
+      "tekst": "Konsentrat til infusjonsvæske, emulsjon",
+      "merkevarer": 2
+    },
+    {
+      "kode": "879",
+      "tekst": "Konsentrat til infusjonsvæske, dispersjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "880",
+      "tekst": "Injeksjons-/infusjonsvæske, oppløsning",
+      "merkevarer": 93
+    },
+    {
+      "kode": "887",
+      "tekst": "Konsentrat og væske til injeksjonsvæske, oppløsning",
+      "merkevarer": 2
+    },
+    {
+      "kode": "889",
+      "tekst": "Injeksjonsvæske, dispersjon",
+      "merkevarer": 6
+    },
+    {
+      "kode": "890",
+      "tekst": "Kapsel, myk",
+      "merkevarer": 136
+    },
+    {
+      "kode": "891",
+      "tekst": "Kapsel, hard",
+      "merkevarer": 630
+    },
+    {
+      "kode": "893",
+      "tekst": "Kapsel med modifisert frisetting, hard",
+      "merkevarer": 47
+    },
+    {
+      "kode": "906",
+      "tekst": "Brusepulver og suspensjon til mikstur, suspensjon",
+      "merkevarer": 1
+    },
+    {
+      "kode": "907",
+      "tekst": "Sublingvalt lyofilisat",
+      "merkevarer": 3
+    },
+    {
+      "kode": "909",
+      "tekst": "Granulat, filmdrasjert",
+      "merkevarer": 1
+    },
+    {
+      "kode": "912",
+      "tekst": "Depotinjeksjonsvæske, oppløsning",
+      "merkevarer": 8
+    },
+    {
+      "kode": "913",
+      "tekst": "Depotinjeksjonsvæske, suspensjon",
+      "merkevarer": 28
+    },
+    {
+      "kode": "918",
+      "tekst": "Øre-/øyedråper, oppløsning",
+      "merkevarer": 1
+    },
+    {
+      "kode": "919",
+      "tekst": "Granulat til enteromikstur, suspensjon",
+      "merkevarer": 2
+    },
+    {
+      "kode": "920",
+      "tekst": "Depottyggetablett",
+      "merkevarer": 3
+    },
+    {
+      "kode": "923",
+      "tekst": "Lyofilisattablett",
+      "merkevarer": 7
+    },
+    {
+      "kode": "930",
+      "tekst": "Munnhulepose",
+      "merkevarer": 2
+    },
+    {
+      "kode": "974",
+      "tekst": "Pulver og brusepulver til mikstur, suspensjon",
+      "merkevarer": 1
     }
   ]
 }
