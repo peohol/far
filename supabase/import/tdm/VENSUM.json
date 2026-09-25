@@ -1,0 +1,40 @@
+{
+  "kode": "VENSUM",
+  "sider": [
+    17,
+    18,
+    40
+  ],
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 400,
+      "ovre": 2000,
+      "enhet": "nmol/L",
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  },
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Rett før neste dose, det vil si 12–24 timer etter siste dose."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Referanseområdet bygger på serumkonsentrasjoner målt hos pasienter som brukte 75–375 mg daglig: 10- og 90-persentilen, rundet utover til runde tall, i data fra Diakonhjemmet sykehus og St. Olavs hospital (2005–2007).",
+        "Området gjelder summen av venlafaksin og O-desmetylvenlafaksin.",
+        "Området viser hvilke konsentrasjoner som er vanlige ved anbefalte doser, og er ikke et dokumentert terapeutisk område."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  ]
+}

@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.35.0',
+    dato: '2026-09-25',
+    sammendrag: 'Referanseområder og ny TDM-seksjon med prøvetakingstidspunkt, med kildene oppgitt',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Stoffsidene har en ny seksjon, Terapeutisk legemiddelmonitorering (TDM), med anbefalt prøvetakingstidspunkt og hva referanseområdet bygger på. Den redigeres som de andre seksjonene med kort.',
+      'Seksten legemidler får egen side med referansegrense, prøvetaking, tolkning og når måling er aktuelt: morfin, oksykodon, fentanyl, kodein, tramadol, O-desmetyltramadol, buprenorfin, metadon, diazepam, oksazepam, alprazolam, klonazepam, nitrazepam, zopiklon, zolpidem og amfetamin.',
+      'Referanseområdene på antidepressiva- og antipsykotikasidene viser nå kilden sin, sluttrapporten fra referanseområdeprosjektet.',
+      'Kildene er referanseområdeprosjektet (2008) og to artikler i Tidsskriftet om vanedannende (2016) og sentralstimulerende legemidler (2019). Verdier som allerede sto på sidene, er ikke endret.',
+    ],
+  },
+  {
     versjon: '1.34.1',
     dato: '2026-09-25',
     sammendrag: 'Opprydding etter at de nye stoffsidedataene ble tatt i bruk',

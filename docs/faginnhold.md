@@ -28,6 +28,8 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `supabase/import/psykofarmaka/` | Importdatasettet for psykofarmakasidene, én fil per analyttkode |
 | `src/faginnhold/import.ts`, `psykofarmaka.ts`, `scripts/importer-psykofarmaka.ts` | Kontrollen av datasettet, planen og SQL-en som legger det inn |
 | `supabase/migrations/*_psykofarmaka_import_*.sql`, `*_psykofarmaka_kursendring.sql` | Importen slik den ble rullet ut, og kursendringen som tok bort preparatnavnene etterpå |
+| `supabase/import/tdm/`, `src/faginnhold/tdm.ts`, `scripts/importer-tdm.ts` | Referanseområdene og TDM-kortene fra referanseområdeprosjektet og Tidsskriftet, og SQL-en som legger dem til på sidene |
+| `supabase/migrations/*_tdm_referanseomrader_*.sql` | Den importen slik den ble rullet ut |
 | `supabase/migrations/*_scenarioregelsett*.sql`, `*_rusregler_import.sql`, `*_scenarioregler_lesing.sql` | Scenarioregelsettene for analytter som vurderes samlet, importen av rusmiddelreglene og lesingen fortolkningen gjør (`docs/scenarioregler.md`) |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
@@ -48,7 +50,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/__tests__/analyttside.test.tsx`, `navigasjon.test.tsx`, `analyttsidemodell.test.ts` | Sidene, redigeringen og veiene mellom sidene og fortolkningen |
 | `src/__tests__/referansenummerering.test.ts`, `referansepille.test.tsx` | Nummereringen, og pillen med mus, berøring og tastatur |
 | `src/__tests__/festreferanser.test.ts`, `referansefelt.test.tsx` | FEST-referansene, referansefeltet, listen og at editoren aldri tilbyr en automatisk kilde |
-| `src/__tests__/psykofarmakaimport.test.ts` | Datasettet og importen, prøvd mot en ekte database |
+| `src/__tests__/psykofarmakaimport.test.ts`, `tdmimport.test.ts` | Datasettene og importene, prøvd mot en ekte database |
 | `src/__tests__/hjelp/testdatabase.ts` | Postgres i minnet, bygd av migrasjonene, og kallene testene gjør |
 
 ## Domenet
@@ -363,6 +365,7 @@ styrer søket og nummereringen av referansene):
 | Farmakokinetikk | `farmakokinetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge |
 | Farmakogenetikk | `farmakogenetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge (som regel ett, «CYP-enzymer (substrat)») |
 | Interaksjoner | `interaksjoner` | `riktekst`: `{ dokument }`, øverst; under den interaksjonene fra FEST for koblingen i «Preparater» |
+| Terapeutisk legemiddelmonitorering (TDM) | `tdm` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge — prøvetakingstidspunkt, grunnlaget for referanseområdet, tolkning og indikasjoner for måling |
 | Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }`. Kildene står på panelet, ikke på tabellen |
 
 Tallene i viktige data er tall, ikke tekst. Bare den ene grensen oppgitt vises
@@ -379,7 +382,7 @@ i databasen.
 tittel, men er et område med navnet for skjermlesere; kortene står i to
 grupper (`DATAKORTGRUPPER`), med konseptikon og etikett på hvert kort, og
 halveringstid og tid til steady state vises som t₁/₂ og tₛₛ. De andre panelene
-er seksjoner som åpnes og lukkes, og kortene i farmakokinetikken er detaljkort
+er seksjoner som åpnes og lukkes, og kortene i farmakokinetikken, farmakogenetikken og TDM er detaljkort
 i sin seksjon (se `docs/seksjoner.md`). En lukket seksjon viser en kort
 oppsummering med innholdets egne ord: titlene på kinetikkortene, dosene i
 tabellen eller begynnelsen av teksten. Redigeringsmodus åpner ikke alt;
@@ -530,6 +533,20 @@ deres til den produksjonen har registrert. Datasettet kan endre seg etter dem
 (som da preparatnavnene ble tatt ut), så testen prøver ikke om de kan lages på
 nytt, men kjører dem slik produksjonen gjorde — med administratoren
 opprettet først — og sjekker at sidene viser nøyaktig det datasettet har nå.
+
+**Referanseområder og TDM.** `supabase/import/tdm/` bygger på tre kilder:
+sluttrapporten fra referanseområdeprosjektet (2008), Helland mfl. om
+vanedannende legemidler (Tidsskriftet 2016) og Frost mfl. om
+sentralstimulerende legemidler (Tidsskriftet 2019). Filene har samme form som
+psykofarmakafilene, pluss `kilde` (hva revisjonene sier de er importert fra,
+i stedet for dokument og sider) og panelet `tdm`. Den importen *utvider*
+sidene (`finnesFraFor = 'utvid'` i `importSql`): en side som mangler, lages;
+et kort som mangler (samme panel, type og tittel), legges til; et
+referanseområde med nøyaktig de samme tallene får kildene det mangler; og et
+referanseområde med andre tall røres ikke, men meldes. Verdier som avviker fra
+det som står på sidene, rettes altså aldri av importen — de avgjøres av en
+fagperson og rettes for seg. `npx vite-node scripts/importer-tdm.ts --
+<brukernavn> <mappe>` lager migrasjonene.
 
 ## Tilgang
 

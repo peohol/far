@@ -1,0 +1,19 @@
+{
+  "kode": "ESCIT",
+  "sider": [
+    11,
+    12,
+    40
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Rett før neste dose, det vil si 12–24 timer etter siste dose."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  ]
+}
