@@ -152,7 +152,7 @@ describe('rettingen i databasen', () => {
   })
 
   it('gjør ingenting når den kjøres en gang til', async () => {
-    await kjorMigrasjoner(db, { fra: RETTING })
+    await kjorMigrasjoner(db, { bare: [RETTING] })
     expect(await tabeller(db)).toEqual(etter)
   })
 

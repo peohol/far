@@ -71,14 +71,14 @@ export function migrasjonsfiler(): string[] {
 
 /**
  * Kjører migrasjonene fra og med `fra` til, men ikke med, `til` — begge
- * filnavnprefikser. Uten grenser kjøres alle.
+ * filnavnprefikser — eller bare filene i `bare`. Uten grenser kjøres alle.
  */
 export async function kjorMigrasjoner(
   db: PGlite,
-  { fra = '', til }: { fra?: string; til?: string } = {},
+  { fra = '', til, bare }: { fra?: string; til?: string; bare?: readonly string[] } = {},
 ): Promise<void> {
   for (const fil of migrasjonsfiler()) {
-    if (fil < fra || (til !== undefined && fil >= til)) continue
+    if (bare ? !bare.includes(fil) : fil < fra || (til !== undefined && fil >= til)) continue
     try {
       await db.exec(readFileSync(`${MIGRASJONER}/${fil}`, 'utf8'))
     } catch (feil) {

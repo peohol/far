@@ -1,0 +1,83 @@
+{
+  "side": "Litium",
+  "sider": [
+    36,
+    37,
+    44
+  ],
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 0.5,
+      "ovre": 1.0,
+      "enhet": "mmol/L",
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 1.6,
+      "ovre": null,
+      "enhet": "mmol/L",
+      "referanser": [
+        "referanseomradeprosjektet",
+        "giftinfo-litium"
+      ]
+    },
+    "alvorlig_intoksikasjon": {
+      "nedre": 3.5,
+      "ovre": null,
+      "enhet": "mmol/L",
+      "referanser": [
+        "referanseomradeprosjektet",
+        "giftinfo-litium"
+      ]
+    }
+  },
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Rett før neste dose, det vil si 12 timer ± 30 minutter etter siste dose."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Området ble ikke endret i prosjektet. Diakonhjemmet sykehus og St. Olavs hospital brukte begge 0,5–1,0 mmol/L.",
+        "Preparatomtalen (Lithionit) og litteraturen oppgir 0,4–0,8 (1,2) mmol/L som terapeutisk område. Området 0,5–1,0 mmol/L er likevel godt innarbeidet i Norge og brukes ved Haukeland universitetssykehus, Universitetssykehuset Nord-Norge, St. Olavs hospital og Ullevål universitetssykehus, og ble derfor beholdt."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    },
+    {
+      "tittel": "Toksiske konsentrasjoner",
+      "tekst": [
+        "Alvorlighetsgrad ved litiumforgiftning hos brukere, utarbeidet av Giftinformasjonen:",
+        {
+          "punkter": [
+            "Fare for symptomer: > 1,6 mmol/L",
+            "Lette symptomer: 1,6–2,5 mmol/L",
+            "Middels alvorlige symptomer: 2,5–3,5 mmol/L",
+            "Alvorlige til meget alvorlige symptomer: > 3,5 mmol/L"
+          ]
+        }
+      ],
+      "referanser": [
+        "referanseomradeprosjektet",
+        "giftinfo-litium"
+      ]
+    }
+  ],
+  "referanser": {
+    "giftinfo-litium": {
+      "tittel": "Litium – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": ""
+    }
+  }
+}

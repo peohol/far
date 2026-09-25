@@ -39,12 +39,12 @@ export interface Scenarioredigeringskilde {
  * scenarioregler, eller reglene ikke er hentet.
  */
 export function useScenarioreglerFor(
-  fortolkning: Analyte,
+  fortolkning: Analyte | null,
   redigering: Scenarioredigeringskilde | null = null,
 ): ScenarioreglerProps | null {
   const { tilstand } = useScenarioreglerkilde()
   return useMemo(() => {
-    const modul = rusModulFor(fortolkning)
+    const modul = fortolkning && rusModulFor(fortolkning)
     if (!modul) return null
     if (redigering) {
       const { utgave } = redigering

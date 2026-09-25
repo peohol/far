@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { Analyttkatalog } from '../../domain/analyttkatalog'
 import { byggSidemodell, referanseunivers } from '../../faginnhold/analyttside'
 import { PANELER } from '../../faginnhold/paneler'
@@ -30,11 +30,10 @@ import { Uthevingskilde } from '../Uthev'
 import { Fortolkningsregler } from '../regler/Fortolkningsregler'
 import { Thcregler } from '../regler/Thcregler'
 import { festreferanser } from '../../legemiddeldata/referanser'
-import { useAnalyttside, type Sidemodus } from './useAnalyttside'
+import { useAnalyttside, type Sidemodus, type Sidenokkel } from './useAnalyttside'
+import { analyttadresse } from '../../domain/rute'
 
-export interface AnalyttsideProps {
-  /** Analyttkoden fra adressen. */
-  kode: string
+interface Sideprops {
   /** Seksjonen og eventuelt detaljkortet adressen peker på (se `src/domain/rute.ts`). */
   sted?: readonly string[]
   katalog: Analyttkatalog
@@ -44,8 +43,24 @@ export interface AnalyttsideProps {
   onLukk: () => void
 }
 
+export type AnalyttsideProps = Sideprops &
+  (
+    | {
+        /** Analyttkoden fra adressen. */
+        kode: string
+        stoff?: undefined
+      }
+    | {
+        /** Navnet på et stoff uten analyttkode, fra adressen. */
+        stoff: string
+        kode?: undefined
+      }
+  )
+
 /**
- * Informasjonssiden for en analyttkode.
+ * Informasjonssiden for en analyttkode, eller for et stoff som ikke har noen
+ * analyttkode (`stoff`, etter navnet). Har stoffet en side i katalogen, er det
+ * siden for koden som vises, og adressen går dit.
  *
  * Siden er et oppslagsverk: panelene i fast rekkefølge (se
  * `src/faginnhold/paneler.ts`), med referansene nummerert etter første
@@ -63,61 +78,87 @@ export interface AnalyttsideProps {
  * Tastene: `Escape` lukker siden, `Ctrl + B` eller `Cmd + B` går til søket på
  * siden, og `Ctrl + K` eller `Cmd + K` til fagsøket i toppmenyen.
  */
-export function Analyttside({ kode, sted, katalog, onApneFortolkning, onLukk }: AnalyttsideProps) {
-  const oppforing = katalog.finn(kode)
+export function Analyttside(props: AnalyttsideProps) {
+  const { sted, katalog, onApneFortolkning, onLukk } = props
+  // Et stoff med en side i katalogen er siden for koden.
+  const tilKode = props.stoff !== undefined ? katalog.kodeForSide(props.stoff) : undefined
+  const kode = props.kode ?? tilKode
+  const oppforing = kode ? katalog.finn(kode) : undefined
+  const nokkel: Sidenokkel | null = oppforing
+    ? { type: 'kode', oppforing }
+    : props.stoff !== undefined
+      ? { type: 'stoff', navn: props.stoff }
+      : null
+
+  useEffect(() => {
+    if (tilKode) window.location.replace(analyttadresse(tilKode, sted ?? []))
+  }, [tilKode, sted])
+
   useEffect(() => {
     const forrige = document.title
-    document.title = oppforing ? `${oppforing.sidenavn} (${oppforing.kode}) – OUSFAR` : `${kode} – OUSFAR`
+    document.title = oppforing
+      ? `${oppforing.sidenavn} (${oppforing.kode}) – OUSFAR`
+      : `${props.stoff ?? props.kode} – OUSFAR`
     return () => {
       document.title = forrige
     }
-  }, [kode, oppforing])
+  }, [props.kode, props.stoff, oppforing])
 
   useLukkMedEscape(onLukk)
 
-  if (!oppforing) {
-    return (
-      <section className="steg analyttside" aria-labelledby="ukjent-analytt">
-        <ToppmenyInnhold spor="handlinger">
-          <Lukkeknapp onLukk={onLukk} />
-        </ToppmenyInnhold>
-        <div className="kort kort--start">
-          <h1 id="ukjent-analytt" className="analytt__navn">
-            Fant ingen analytt med koden {kode}
-          </h1>
-          <p>Sjekk koden i adressen, eller finn analytten i menyen.</p>
-        </div>
-      </section>
-    )
+  if (!nokkel) {
+    return <Ikkefunnet onLukk={onLukk}>Fant ingen analytt med koden {props.kode}</Ikkefunnet>
   }
-  // Nøkkelen gir hver kode en frisk side: modus, søk, skjemaer og hvilke
+  // Nøkkelen gir hver side en frisk tilstand: modus, søk, skjemaer og hvilke
   // seksjoner som er åpne, hører til siden.
   return (
-    <SeksjonsstyringKilde key={oppforing.kode}>
-      <Innhold
-        kode={oppforing.kode}
-        sted={sted}
-        katalog={katalog}
-        onApneFortolkning={onApneFortolkning}
-        onLukk={onLukk}
-      />
+    <SeksjonsstyringKilde key={nokkel.type === 'kode' ? nokkel.oppforing.kode : `stoff:${nokkel.navn.toLocaleLowerCase('nb')}`}>
+      <Innhold nokkel={nokkel} sted={sted} katalog={katalog} onApneFortolkning={onApneFortolkning} onLukk={onLukk} />
     </SeksjonsstyringKilde>
   )
 }
 
-function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: AnalyttsideProps) {
-  const oppforing = katalog.finn(kode)!
+/** En side som ikke finnes. */
+function Ikkefunnet({ onLukk, children }: { onLukk: () => void; children: ReactNode }) {
+  return (
+    <section className="steg analyttside" aria-labelledby="ukjent-analytt">
+      <ToppmenyInnhold spor="handlinger">
+        <Lukkeknapp onLukk={onLukk} />
+      </ToppmenyInnhold>
+      <div className="kort kort--start">
+        <h1 id="ukjent-analytt" className="analytt__navn">
+          {children}
+        </h1>
+        <p>Sjekk adressen, eller finn stoffet i menyen.</p>
+      </div>
+    </section>
+  )
+}
+
+function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops & { nokkel: Sidenokkel }) {
+  const oppforing = nokkel.type === 'kode' ? nokkel.oppforing : null
   const { kanRedigere } = useFaginnholdskilde()
   const [modus, setModus] = useState<Sidemodus>('lese')
   const [sporring, setSporring] = useState('')
   const beholder = useRef<HTMLElement>(null)
   const overskrift = useId()
 
-  const handlinger = useAnalyttside(oppforing, modus)
+  const handlinger = useAnalyttside(nokkel, modus)
   const { side, referansebase, publisert, konflikt, plan } = handlinger
   const modell = useMemo(() => byggSidemodell(side.data), [side.data])
-  const navn = side.data.infoside?.innhold.navn ?? oppforing.sidenavn
-  const komponenter = useMemo(() => komponenterFor(oppforing, side.data, katalog), [oppforing, side.data, katalog])
+  const navn = side.data.infoside?.innhold.navn ?? oppforing?.sidenavn ?? (nokkel.type === 'stoff' ? nokkel.navn : '')
+  const komponenter = useMemo(
+    () => (oppforing ? komponenterFor(oppforing, side.data, katalog) : []),
+    [oppforing, side.data, katalog],
+  )
+  // Et stoff som viser seg å være hovedside for en kode appen kjenner, hører
+  // til siden for koden.
+  const tilKode = !oppforing && side.data.analytt ? katalog.finn(side.data.analytt.innhold.kode)?.kode : undefined
+  useEffect(() => {
+    if (tilKode) window.location.replace(analyttadresse(tilKode, sted ?? []))
+  }, [tilKode, sted])
+  // Et stoff uten side finnes ikke for andre enn redaktørene, som kan lage den.
+  const finnes = oppforing ? side.data.analytt !== null : side.data.infoside !== null
   // Knappene for å endre vises først når utkastet er hentet, så ingenting
   // lagres mot det publiserte som sto før redigeringen ble slått på.
   const redigerer = handlinger.kanEndres
@@ -141,11 +182,11 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
   const dokumenter = useMemo(
     () =>
       indekserSide(
-        { kode: oppforing.kode, navn, komponenter: komponenter.map((k) => k.navn) },
+        { ...(oppforing && { kode: oppforing.kode }), navn, komponenter: komponenter.map((k) => k.navn) },
         modell,
         [...preparatsoketekster(legemidler), ...interaksjonssoketekster(interaksjoner)],
       ),
-    [oppforing.kode, navn, komponenter, modell, legemidler, interaksjoner],
+    [oppforing, navn, komponenter, modell, legemidler, interaksjoner],
   )
   const ord = useMemo(() => sokeord(sporring), [sporring])
 
@@ -173,7 +214,7 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
         : null,
     [redigerer, utkastregler, publisert.scenarioregelsett, handlinger.lagreScenarioregelsett, handlinger.hentScenarioregelsettutkast],
   )
-  const regler = useScenarioreglerFor(oppforing.fortolkning, scenarioredigering)
+  const regler = useScenarioreglerFor(oppforing?.fortolkning ?? null, scenarioredigering)
   // Etter en publisering skal fortolkningen bruke de nye reglene.
   const { provIgjen: hentScenarioreglerPaNytt } = useScenarioreglerkilde()
   const harInnhold = modell.paneler.size > 0 || Object.keys(modell.panelreferanser).length > 0
@@ -197,6 +238,10 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
     if (stedsnokkel && stedet.current) apne?.(stedet.current)
   }, [stedsnokkel, apne])
 
+  if (!oppforing && !kanRedigere && side.status === 'klar' && !finnes) {
+    return <Ikkefunnet onLukk={onLukk}>Fant ingen stoffside som heter {navn}</Ikkefunnet>
+  }
+
   return (
     <section ref={beholder} className="analyttside" aria-labelledby={overskrift} data-modus={modus}>
       {/* Sidens handlinger står i toppmenyen (i dokken på smale flater). */}
@@ -217,13 +262,15 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
           />
         ) : (
           <>
-            <Toppmenyknapp
-              ikon="interp"
-              variant="primar"
-              onClick={() => onApneFortolkning(oppforing.fortolkning)}
-            >
-              Åpne fortolkning
-            </Toppmenyknapp>
+            {oppforing && (
+              <Toppmenyknapp
+                ikon="interp"
+                variant="primar"
+                onClick={() => onApneFortolkning(oppforing.fortolkning)}
+              >
+                Åpne fortolkning
+              </Toppmenyknapp>
+            )}
             {kanRedigere && (
               <Ikonknapp ikon="edit" etikett="Rediger" aria-pressed="false" onClick={() => setModus('rediger')} />
             )}
@@ -243,7 +290,7 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
         />
       </ToppmenyInnhold>
 
-      {modus === 'rediger' && redigerer && !side.data.analytt && (
+      {modus === 'rediger' && redigerer && !finnes && (
         <p className="redigeringsstripe">Siden opprettes i databasen første gang du lagrer noe på den.</p>
       )}
       {konflikt && (
@@ -290,7 +337,7 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
                         key={definisjon.nokkel}
                         definisjon={definisjon}
                         kontekst={kontekst}
-                        sidenavn={oppforing.sidenavn}
+                        sidenavn={oppforing?.sidenavn ?? navn}
                         legemidler={legemidler}
                       />
                     )

@@ -60,6 +60,8 @@ const HENTET: Scenarioreglerkilde = {
 function visSide(kode: string, { kilde = HENTET, sted }: { kilde?: Scenarioreglerkilde; sted?: readonly string[] } = {}) {
   const leser: Faginnholdsleser = {
     lesAnalyttside: vi.fn(async () => TOM_SIDE),
+    lesStoffside: vi.fn(async () => TOM_SIDE),
+    lesStoffsidenavn: vi.fn(async () => []),
     lesReferanser: vi.fn(async () => []),
     finnInfosider: vi.fn(async () => []),
     finnIntervallregelsett: vi.fn(async () => null),
@@ -282,6 +284,8 @@ describe('redigeringen', () => {
     const user = userEvent.setup()
     const leser: Faginnholdsleser = {
       lesAnalyttside: vi.fn(async () => TOM_SIDE),
+      lesStoffside: vi.fn(async () => TOM_SIDE),
+      lesStoffsidenavn: vi.fn(async () => []),
       lesReferanser: vi.fn(async () => []),
       finnInfosider: vi.fn(async () => []),
       finnIntervallregelsett: vi.fn(async () => null),

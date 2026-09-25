@@ -24,6 +24,14 @@
  *
  * Seksjonene og kortene har faste nøkler (se `src/components/seksjoner/`).
  *
+ * Et stoff som ikke har noen analyttkode, kan likevel ha en informasjonsside
+ * (en monografi). Den har adresse etter navnet, med sted som over:
+ *
+ *   #/stoff/Valproat
+ *   #/stoff/Valproat/tdm
+ *
+ * Får stoffet en kode senere, fører navnet til siden for koden.
+ *
  * Søket i fagstoffet har sin egen side, med søket i adressen, så et søk kan
  * bokmerkes og deles:
  *
@@ -39,6 +47,12 @@ export type Rute =
       sted?: readonly string[]
     }
   | {
+      side: 'stoff'
+      /** Navnet på informasjonssiden, slik adressen skriver det. */
+      navn: string
+      sted?: readonly string[]
+    }
+  | {
       side: 'sok'
       /** Søket, slik det ble skrevet. Tomt gir en side som ber om et søk. */
       q: string
@@ -47,6 +61,8 @@ export type Rute =
 export const FORTOLKNING: Rute = { side: 'fortolkning' }
 
 const ANALYTT = /^#\/analytt\/([^/?#]+)((?:\/[^/?#]+)*)\/?$/i
+
+const STOFF = /^#\/stoff\/([^/?#]+)((?:\/[^/?#]+)*)\/?$/i
 
 const SOK = /^#\/sok\/?(?:\?(.*))?$/i
 
@@ -57,18 +73,29 @@ const MAKS_STEDSLEDD = 2
 export function lesRute(hash: string): Rute {
   const sok = SOK.exec(hash)
   if (sok) return { side: 'sok', q: new URLSearchParams(sok[1] ?? '').get('q') ?? '' }
-  const treff = ANALYTT.exec(hash)
-  if (!treff?.[1]) return FORTOLKNING
-  let kode: string
-  try {
-    kode = decodeURIComponent(treff[1])
-  } catch {
-    return FORTOLKNING
+  const analytt = lesSide(ANALYTT, hash)
+  if (analytt) {
+    const kode = analytt.nokkel.toUpperCase()
+    return { side: 'analytt', kode, ...(analytt.sted && { sted: analytt.sted }) }
   }
-  kode = kode.trim().toUpperCase()
-  if (!kode) return FORTOLKNING
+  const stoff = lesSide(STOFF, hash)
+  if (stoff) return { side: 'stoff', navn: stoff.nokkel, ...(stoff.sted && { sted: stoff.sted }) }
+  return FORTOLKNING
+}
+
+/** Nøkkelen (koden eller navnet) og stedet i en adresse til en informasjonsside. */
+function lesSide(monster: RegExp, hash: string): { nokkel: string; sted?: string[] } | undefined {
+  const treff = monster.exec(hash)
+  if (!treff?.[1]) return undefined
+  let nokkel: string
+  try {
+    nokkel = decodeURIComponent(treff[1]).trim()
+  } catch {
+    return undefined
+  }
+  if (!nokkel) return undefined
   const sted = lesSted(treff[2] ?? '')
-  return sted ? { side: 'analytt', kode, sted } : { side: 'analytt', kode }
+  return sted ? { nokkel, sted } : { nokkel }
 }
 
 /**
@@ -90,6 +117,8 @@ export function adresse(rute: Rute): string {
   switch (rute.side) {
     case 'analytt':
       return analyttadresse(rute.kode, rute.sted)
+    case 'stoff':
+      return stoffadresse(rute.navn, rute.sted)
     case 'sok':
       return sokeside(rute.q)
     default:
@@ -104,7 +133,24 @@ export function sokeside(q: string): string {
 
 /** Adressen til informasjonssiden for en analyttkode, eventuelt til et sted på den. */
 export function analyttadresse(kode: string, sted: readonly string[] = []): string {
-  return ['#/analytt', kode.toUpperCase(), ...sted].map((l, i) => (i === 0 ? l : encodeURIComponent(l))).join('/')
+  return sideadresse('#/analytt', kode.toUpperCase(), sted)
+}
+
+/** Adressen til informasjonssiden for et stoff uten analyttkode, etter navnet. */
+export function stoffadresse(navn: string, sted: readonly string[] = []): string {
+  return sideadresse('#/stoff', navn.trim(), sted)
+}
+
+/**
+ * Adressen til en informasjonsside: siden for koden når den har en, ellers
+ * siden for stoffet etter navnet.
+ */
+export function informasjonsadresse(side: { kode?: string; navn: string }, sted: readonly string[] = []): string {
+  return side.kode ? analyttadresse(side.kode, sted) : stoffadresse(side.navn, sted)
+}
+
+function sideadresse(rot: string, nokkel: string, sted: readonly string[]): string {
+  return [rot, ...[nokkel, ...sted].map(encodeURIComponent)].join('/')
 }
 
 export function sammeRute(a: Rute, b: Rute): boolean {

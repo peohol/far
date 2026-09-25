@@ -453,3 +453,22 @@
   color: var(--blekk);
   background: var(--flate-hevet);
 }
+
+/* --- Stoffene uten analyttkode ----------------------------------------------
+   Skuffen har ikke noe filter; plassen etter radioknappen holdes, så titlene
+   står på linje med metodenes. */
+.menyskuff__utenfilter {
+  display: block;
+  width: 1.1em;
+}
+
+.menyny {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--rom-2);
+  margin-top: var(--rom-3);
+}
+
+.menyny .felt {
+  flex: 1;
+}

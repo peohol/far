@@ -1,5 +1,5 @@
 import { useEffect, useId, useMemo, useState } from 'react'
-import { TREFFGRUPPER, treffgruppe, type Treffgruppe } from '../../faginnhold/sok'
+import { TREFFGRUPPER, sidenokkel, treffgruppe, type Treffgruppe } from '../../faginnhold/sok'
 import { useLukkMedEscape } from '../../hooks/useLukkMedEscape'
 import type { Sokeindekstilstand } from '../../hooks/useSokeindeks'
 import { Button } from '../Button'
@@ -60,7 +60,7 @@ export function Sokeside({ q, indeks, onKrev, beskrivSide, onLukk }: SokesidePro
     for (const t of treff) per.get(treffgruppe(t.dokument.felt))!.push(t)
     return TREFFGRUPPER.map((gruppe) => ({ gruppe, treff: per.get(gruppe)! }))
   }, [treff])
-  const monografer = useMemo(() => new Set(treff.map((t) => t.dokument.sted.side.kode)).size, [treff])
+  const monografer = useMemo(() => new Set(treff.map((t) => sidenokkel(t.dokument.sted.side))).size, [treff])
   const viste = grupper.filter((g) => g.treff.length > 0 && (filter === 'alle' || g.gruppe === filter))
 
   return (

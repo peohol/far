@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { Button } from './Button'
+import { Felt } from './konto/Felt'
 import { Shortcut } from './Shortcut'
 import { Ikon } from './ikon/Ikon'
 import { useTips } from './Tips'
@@ -10,7 +12,7 @@ import {
   type Menyanalytt,
   type Menymetode,
 } from '../domain/analysemetoder'
-import { analyttadresse } from '../domain/rute'
+import { analyttadresse, stoffadresse } from '../domain/rute'
 import { fokusIFagsok, lagLiggerOver } from '../hooks/useKeyboard'
 import { rullefart } from '../hooks/useKortHopp'
 import type { Analyte } from '../types'
@@ -26,6 +28,10 @@ import type { Analyte } from '../types'
  * Innholdet bygges av de samme søkeoppføringene som søket bruker, så listene
  * kan ikke komme i utakt med det appen faktisk kan kommentere. Virkestoffene
  * er lenker, så de også kan åpnes i en ny fane.
+ *
+ * Stoffene som har en informasjonsside uten noen analyttkode, står i en egen
+ * skuff nederst. Den bygges av sidene i databasen, ikke av søkeoppføringene,
+ * og redaktørene kan lage en ny side derfra.
  *
  * Menyen er et lag over appen, på linje med endringsloggen: `data-lag` sier
  * fra til `lagLiggerOver()`, slik at appens egne taster holder seg i ro mens
@@ -60,9 +66,16 @@ export interface SidemenyProps {
   /** Analysemetoden søket er begrenset til. `null` er alle metodene. */
   metodefilter: string | null
   onFilter: (metode: string | null) => void
+  /** Navnene på stoffsidene uten analyttkode, alfabetisk. */
+  stoffsider?: readonly string[]
+  /** Sant når brukeren kan lage en ny stoffside. */
+  kanOpprette?: boolean
 }
 
-export function Sidemeny({ pool, metodefilter, onFilter }: SidemenyProps) {
+/** Nøkkelen til skuffen med stoffene uten analyttkode, ved siden av metodekodene. */
+const STOFFSKUFF = 'stoffer uten kode'
+
+export function Sidemeny({ pool, metodefilter, onFilter, stoffsider = [], kanOpprette = false }: SidemenyProps) {
   const [apen, setApen] = useState(false)
   /** Av gjemmer kategoriene og lister virkestoffene i én alfabetisk bolk. */
   const [visKategorier, setVisKategorier] = useState(true)
@@ -169,6 +182,7 @@ export function Sidemeny({ pool, metodefilter, onFilter }: SidemenyProps) {
   // Ikke `lukk()`: informasjonssiden tar fokus selv, og skal ikke få det revet
   // tilbake til menyknappen. Lenken gjør resten.
   const velg = useCallback(() => setApen(false), [])
+  const veksle = useCallback((skuff: string) => setApenSkuff((forrige) => (forrige === skuff ? null : skuff)), [])
 
   return (
     <>
@@ -255,19 +269,36 @@ export function Sidemeny({ pool, metodefilter, onFilter }: SidemenyProps) {
 
           <ul className="menyliste">
             {meny.map((metode) => (
-              <Skuff
+              <Metodeskuff
                 key={metode.kode}
                 metode={metode}
                 apen={apenSkuff === metode.kode}
                 valgt={metodefilter === metode.kode}
                 visKategorier={visKategorier}
-                onVeksle={() =>
-                  setApenSkuff((forrige) => (forrige === metode.kode ? null : metode.kode))
-                }
+                onVeksle={() => veksle(metode.kode)}
                 onFilter={() => onFilter(metode.kode)}
                 onVelgAnalytt={velg}
               />
             ))}
+            {(stoffsider.length > 0 || kanOpprette) && (
+              <Skuff
+                apen={apenSkuff === STOFFSKUFF}
+                onVeksle={() => veksle(STOFFSKUFF)}
+                filter={<span className="menyskuff__utenfilter" />}
+                tittel={<span className="menyskuff__beskrivelse">Stoffer uten labkode</span>}
+              >
+                <ul className="menyanalytter">
+                  {stoffsider.map((navn) => (
+                    <li key={navn}>
+                      <a className="menyanalytt" href={stoffadresse(navn)} onClick={velg}>
+                        <span className="menyanalytt__navn">{navn}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                {kanOpprette && <NyStoffside onOpprett={velg} />}
+              </Skuff>
+            )}
           </ul>
         </div>
       </nav>
@@ -281,12 +312,8 @@ export function Sidemeny({ pool, metodefilter, onFilter }: SidemenyProps) {
  *
  * Skuffen bærer metodens egen farge — den samme som pillen i analyttkortet og
  * menyknappen når filteret står på den.
- *
- * Selve skuffen glir opp og igjen med `grid-template-rows: 0fr ↔ 1fr`, som
- * ellers i appen. Lukket innhold settes usynlig når glidningen er over, så det
- * heller ikke nås med tabulator eller skjermleser.
  */
-function Skuff({
+function Metodeskuff({
   metode,
   apen,
   valgt,
@@ -303,10 +330,76 @@ function Skuff({
   onFilter: () => void
   onVelgAnalytt: () => void
 }) {
-  const id = useId()
-  const rad = useRef<HTMLLIElement>(null)
   const snarvei = metodesnarvei(metode.kode)
   const filtertips = useTips(`Vis bare treff fra ${metode.kode} i søket`, { skjermleser: false })
+  const kategorier = visKategorier ? metode.kategorier : []
+
+  return (
+    <Skuff
+      apen={apen}
+      onVeksle={onVeksle}
+      stil={metodefarger(metode.kode)}
+      filter={
+        // Tipset henger på selve radioknappen og ikke på etiketten rundt:
+        // etiketten får aldri fokus selv, og forklaringen ville da bare vært
+        // å få med pekeren.
+        <input
+          type="radio"
+          name="analysemetodefilter"
+          checked={valgt}
+          onChange={onFilter}
+          aria-label={`Vis bare treff fra ${metode.kode} – ${metode.beskrivelse}`}
+          {...(snarvei && { 'aria-keyshortcuts': snarvei.replace(/ /g, '') })}
+          {...filtertips.props}
+        />
+      }
+      tittel={
+        <>
+          <span className="menyskuff__kode">{metode.kode}</span>
+          <span className="menyskuff__beskrivelse">{metode.beskrivelse}</span>
+          {snarvei && <Shortcut>{snarvei}</Shortcut>}
+        </>
+      }
+    >
+      {kategorier.length > 0 ? (
+        kategorier.map((kategori) => (
+          <section className="menykategori" key={kategori.navn}>
+            <h3 className="menykategori__navn">{kategori.navn}</h3>
+            <Virkestoffer analytter={kategori.analytter} onVelg={onVelgAnalytt} />
+          </section>
+        ))
+      ) : (
+        <Virkestoffer analytter={metode.analytter} onVelg={onVelgAnalytt} />
+      )}
+    </Skuff>
+  )
+}
+
+/**
+ * En skuff i menyen: det som står foran tittelen (radioknappen for en
+ * analysemetode), tittelen som åpner skuffen, og innholdet.
+ *
+ * Selve skuffen glir opp og igjen med `grid-template-rows: 0fr ↔ 1fr`, som
+ * ellers i appen. Lukket innhold settes usynlig når glidningen er over, så det
+ * heller ikke nås med tabulator eller skjermleser.
+ */
+function Skuff({
+  apen,
+  onVeksle,
+  stil,
+  filter,
+  tittel,
+  children,
+}: {
+  apen: boolean
+  onVeksle: () => void
+  stil?: CSSProperties
+  filter: ReactNode
+  tittel: ReactNode
+  children: ReactNode
+}) {
+  const id = useId()
+  const rad = useRef<HTMLLIElement>(null)
 
   // En skuff som åpnes nederst i lista skal ikke bli stående utenfor bildet.
   // Rullingen venter til glidningen er over — først da vet vi hvor høy den ble.
@@ -323,30 +416,10 @@ function Skuff({
     return () => window.clearTimeout(frist)
   }, [apen])
 
-  const kategorier = visKategorier ? metode.kategorier : []
-
   return (
-    <li
-      ref={rad}
-      className="menyskuff"
-      data-apen={apen ? 'ja' : 'nei'}
-      style={metodefarger(metode.kode)}
-    >
+    <li ref={rad} className="menyskuff" data-apen={apen ? 'ja' : 'nei'} style={stil}>
       <div className="menyskuff__hode">
-        {/* Tipset henger på selve radioknappen og ikke på etiketten rundt:
-            etiketten får aldri fokus selv, og forklaringen ville da bare vært
-            å få med pekeren. */}
-        <label className="menyvalg menyvalg--skuff">
-          <input
-            type="radio"
-            name="analysemetodefilter"
-            checked={valgt}
-            onChange={onFilter}
-            aria-label={`Vis bare treff fra ${metode.kode} – ${metode.beskrivelse}`}
-            {...(snarvei && { 'aria-keyshortcuts': snarvei.replace(/ /g, '') })}
-            {...filtertips.props}
-          />
-        </label>
+        <label className="menyvalg menyvalg--skuff">{filter}</label>
 
         <button
           type="button"
@@ -355,28 +428,41 @@ function Skuff({
           aria-controls={id}
           onClick={onVeksle}
         >
-          <span className="menyskuff__kode">{metode.kode}</span>
-          <span className="menyskuff__beskrivelse">{metode.beskrivelse}</span>
-          {snarvei && <Shortcut>{snarvei}</Shortcut>}
+          {tittel}
           <Ikon navn="chev" className="menyskuff__pil" />
         </button>
       </div>
 
       <div id={id} className="menyskuff__kropp">
-        <div className="menyskuff__inner">
-          {kategorier.length > 0 ? (
-            kategorier.map((kategori) => (
-              <section className="menykategori" key={kategori.navn}>
-                <h3 className="menykategori__navn">{kategori.navn}</h3>
-                <Virkestoffer analytter={kategori.analytter} onVelg={onVelgAnalytt} />
-              </section>
-            ))
-          ) : (
-            <Virkestoffer analytter={metode.analytter} onVelg={onVelgAnalytt} />
-          )}
-        </div>
+        <div className="menyskuff__inner">{children}</div>
       </div>
     </li>
+  )
+}
+
+/**
+ * Feltet redaktørene lager en ny stoffside med. Siden åpnes med navnet, og
+ * opprettes i databasen første gang noe lagres på den.
+ */
+function NyStoffside({ onOpprett }: { onOpprett: () => void }) {
+  const [navn, setNavn] = useState('')
+  return (
+    <form
+      className="menyny"
+      onSubmit={(e) => {
+        e.preventDefault()
+        const renset = navn.trim()
+        if (!renset) return
+        onOpprett()
+        setNavn('')
+        window.location.hash = stoffadresse(renset)
+      }}
+    >
+      <Felt merkelapp="Ny stoffside" value={navn} maxLength={200} onChange={(e) => setNavn(e.target.value)} />
+      <Button type="submit" variant="kant" disabled={!navn.trim()}>
+        Åpne
+      </Button>
+    </form>
   )
 }
 

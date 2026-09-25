@@ -1,7 +1,8 @@
 /**
  * Lesingen av faginnholdet, slik appen gjør den.
  *
- * Hver side leses i ett kall (`les_analyttside` i databasen), med
+ * Hver side leses i ett kall (`les_analyttside` i databasen, eller
+ * `les_stoffside` for et stoff uten analyttkode), med
  * radsikkerheten som ellers: det publiserte for alle, utkastet bare for
  * administratorer. Hvert objekt kommer tilbake som en {@link Utgave} — innholdet
  * i én tilstand, revisjonen det står på, og hvem som laget den.
@@ -108,6 +109,14 @@ export interface Faginnholdsleser {
    * når ingen av delene finnes.
    */
   lesAnalyttside(kode: string, tilstand: Tilstand): Promise<Analyttsidedata>
+  /**
+   * Informasjonssiden med dette navnet, for et stoff uten analyttkode. Er
+   * siden hovedside for en kode, kommer siden for koden tilbake, med
+   * `analytt`. {@link TOM_SIDE} når ingen side har navnet.
+   */
+  lesStoffside(navn: string, tilstand: Tilstand): Promise<Analyttsidedata>
+  /** Navnene på stoffsidene uten analyttkode, alfabetisk. */
+  lesStoffsidenavn(tilstand: Tilstand): Promise<string[]>
   /** Hele referansebasen, til å velge kilder fra. */
   lesReferanser(tilstand: Tilstand): Promise<Utgave<Referanseinnhold>[]>
   /** Informasjonssidene med disse navnene, uten hensyn til store og små bokstaver. */
@@ -175,6 +184,12 @@ export function lagFaginnholdsleser(klient: SupabaseClient): Faginnholdsleser {
       ])
       return { ...TOM_SIDE, ...side, regelsett, thcregelsett }
     },
+    lesStoffside: async (navn, tilstand) => ({
+      ...TOM_SIDE,
+      ...(await kall<Partial<Analyttsidedata>>('les_stoffside', { sidenavn: navn, sidetilstand: tilstand })),
+    }),
+    lesStoffsidenavn: async (tilstand) =>
+      (await kall<string[]>('les_stoffsidenavn', { sidetilstand: tilstand })) ?? [],
     lesReferanser: async (tilstand) =>
       (await kall<Utgave<Referanseinnhold>[]>('les_referanser', { sidetilstand: tilstand })) ?? [],
     finnInfosider: async (navn, tilstand) =>

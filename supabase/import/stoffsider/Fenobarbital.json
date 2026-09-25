@@ -1,0 +1,49 @@
+{
+  "side": "Fenobarbital",
+  "sider": [
+    29,
+    30,
+    42
+  ],
+  "kilde": "080401 - Sluttrapport referanseområder antipsykotika og antidepressiva.pdf, side 29, 30, 42, og Nye anbefalinger ved serumkonsentrasjonsmålinger av sentralstimulerende legemidler.pdf, side 2, 4",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 50,
+      "ovre": 130,
+      "enhet": "µmol/L",
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    }
+  },
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Rett før neste dose, det vil si 12–24 timer etter siste dose."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Referanseområdene for antiepileptika ble ikke beregnet på nytt i prosjektet. Diakonhjemmet sykehus tok i 2008 i bruk områdene St. Olavs hospital har utarbeidet sammen med nevrologisk avdeling der.",
+        "Diakonhjemmet sykehus, St. Olavs hospital og Statens senter for epilepsi brukte alle 50–130 µmol/L, og området ble ikke endret."
+      ],
+      "referanser": [
+        "referanseomradeprosjektet"
+      ]
+    },
+    {
+      "tittel": "Nyere nasjonale referanseområder",
+      "tekst": [
+        "Felles nasjonale referanseområder for antiepileptika ble etablert i 2017 (Reimers A, Berg JA, Burns ML mfl. Felles referanseområder for antiepileptika. Tidsskr Nor Legeforen 2017; 137: 864–5). De er ikke blant kildene for denne siden, og referanseområdet her er fra 2008."
+      ],
+      "referanser": [
+        "frost2019"
+      ]
+    }
+  ]
+}

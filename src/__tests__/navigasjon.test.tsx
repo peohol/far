@@ -2,7 +2,8 @@
 /**
  * Veiene mellom fortolkningen og informasjonssidene, prøvd i hele appen.
  *
- * - Sidemenyen fører til informasjonssidene, ikke til fortolkningen.
+ * - Sidemenyen fører til informasjonssidene, ikke til fortolkningen — også
+ *   til stoffene uten analyttkode.
  * - Analyttkodene i fortolkningsmodulene er lenker til sidene sine.
  * - «Åpne fortolkning» fører tilbake til riktig modul.
  * - Hver side har sin egen adresse, som kan åpnes direkte.
@@ -12,7 +13,8 @@
  *   legger seg over fortolkningen som en informasjonsside.
  *
  * Innloggingen og databasen er erstattet: økten er en vanlig bruker, og
- * databasen har ingen sider ennå, bare regelsettene fra før byttet.
+ * databasen har ingen sider ennå, bare regelsettene fra før byttet og siden
+ * for ett stoff uten analyttkode.
  */
 import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -25,7 +27,28 @@ vi.mock('../auth/klient', async () => {
   const { DAGENS_REGELSETT, publiserteRader } = await import('./hjelp/dagensregler')
   const { rusScenarioregeldata } = await import('./hjelp/rusgrunnlag')
   // Reglene fortolkningen henter, er de publiserte regelsettene.
-  const rader: Record<string, unknown> = { ...publiserteRader(DAGENS_REGELSETT), les_scenarioregler: rusScenarioregeldata() }
+  // Og ett stoff uten analyttkode har en publisert side.
+  const stoffside = {
+    analytt: null,
+    infoside: {
+      id: 'stoff',
+      revisjon: 1,
+      publisert_revisjon: 1,
+      innhold: { navn: 'Teststoff' },
+      endret_av_fornavn: '',
+      endret_av_etternavn: '',
+      endret_kl: '',
+    },
+    elementer: [],
+    komponenter: [],
+    referanser: [],
+  }
+  const rader: Record<string, unknown> = {
+    ...publiserteRader(DAGENS_REGELSETT),
+    les_scenarioregler: rusScenarioregeldata(),
+    les_stoffsidenavn: ['Teststoff'],
+    les_stoffside: stoffside,
+  }
   return {
     klient: () => ({
       rpc: async (funksjon: string) => ({ data: rader[funksjon] ?? null, error: null }),
@@ -96,6 +119,25 @@ describe('sidemenyen', () => {
     expect(fortolkningen().hidden).toBe(true)
     // Siden starter med fokus på navnet, ikke igjen i menyen.
     expect(document.activeElement).toBe(screen.getByRole('heading', { level: 1 }))
+  })
+})
+
+describe('stoffene uten analyttkode', () => {
+  it('står i en egen skuff i sidemenyen, og fører til siden etter navnet', async () => {
+    const user = userEvent.setup()
+    visApp()
+    await user.click(screen.getByRole('button', { name: 'Vis analysemetoder' }))
+    await user.click(await screen.findByRole('button', { name: 'Stoffer uten labkode' }))
+    // En vanlig bruker kan ikke lage nye sider.
+    expect(screen.queryByLabelText('Ny stoffside')).toBeNull()
+    const lenke = screen.getByRole('link', { name: 'Teststoff' })
+    expect(lenke.getAttribute('href')).toBe('#/stoff/Teststoff')
+
+    await user.click(lenke)
+    await infosideFor('Teststoff')
+    expect(window.location.hash).toBe('#/stoff/Teststoff')
+    expect(fortolkningen().hidden).toBe(true)
+    expect(screen.queryByRole('button', { name: 'Åpne fortolkning' })).toBeNull()
   })
 })
 

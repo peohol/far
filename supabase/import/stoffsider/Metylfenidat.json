@@ -1,0 +1,54 @@
+{
+  "side": "Metylfenidat",
+  "sider": [
+    37,
+    38,
+    44,
+    45
+  ],
+  "kilde": "Nye anbefalinger ved serumkonsentrasjonsmålinger av sentralstimulerende legemidler.pdf, side 2–4, og 080401 - Sluttrapport referanseområder antipsykotika og antidepressiva.pdf, side 37–38, 44, 45",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 1000,
+      "ovre": 4000,
+      "enhet": "nmol/L",
+      "referanser": [
+        "frost2019"
+      ]
+    }
+  },
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "4–8 timer etter siste perorale inntak, for alle midler og formuleringer.",
+        "Tidsrommet ligger rundt og like etter konsentrasjonsmaksimum, der samsvaret mellom konsentrasjon og ønsket effekt ved ADHD antas å være best, og innenfor tiden med ønsket effekt."
+      ],
+      "referanser": [
+        "frost2019"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Referanseområdet gjelder metabolitten ritalinsyre, ikke metylfenidat selv.",
+        "Referanseområdet er det nasjonale fra 2019. Det er definert på farmakokinetisk grunnlag og angir forventet konsentrasjon ved vanlige terapeutiske doser. Det er ikke funnet grunnlag for egne områder for barn og voksne.",
+        "Referanseområdeprosjektet satte i 2008 et område for metylfenidat selv, 10–70 nmol/L, med prøvetaking 1–2 timer etter siste dose for tabletter, 4–6 timer for depotkapsler og 6–8 timer for Concerta. Anbefalingene fra 2019 gjelder nå."
+      ],
+      "referanser": [
+        "frost2019",
+        "referanseomradeprosjektet"
+      ]
+    },
+    {
+      "tittel": "Tolkning",
+      "tekst": [
+        "Ritalinsyre er en inaktiv metabolitt av metylfenidat, og sammenhengen mellom målt konsentrasjon og klinisk effekt er særlig usikker. Analyseresultatet bør hovedsakelig brukes til å kontrollere etterlevelse av behandlingen.",
+        "Klinisk vurdering bør alltid avgjøre hva som er riktig dose, og om dosen bør endres."
+      ],
+      "referanser": [
+        "frost2019"
+      ]
+    }
+  ]
+}
