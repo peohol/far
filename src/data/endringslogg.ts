@@ -27,6 +27,16 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
+    versjon: '1.32.2',
+    dato: '2026-09-25',
+    sammendrag: 'Fagsøket finner også analyttsider som ennå ikke har en monograf',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Søker du på et stoff som har en analyttside, men ennå ingen monograf – for eksempel diazepam – kommer siden nå opp som stofftreff i fagsøket og på søkesiden. Før kom bare stoffer med publisert monograf med.',
+    ],
+  },
+  {
     versjon: '1.32.1',
     dato: '2026-09-25',
     sammendrag: 'Redigering på stoffsidene skjer i et stort redigeringsvindu',

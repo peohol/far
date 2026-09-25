@@ -154,7 +154,8 @@ export default function App() {
 
   // Fagsøket: indeksen over alt publisert fagstoff, hentet første gang noen
   // søker. De andre navnene en kode er kjent under, kommer fra katalogen, så
-  // fagsøket og analyttsøket kjenner de samme.
+  // fagsøket og analyttsøket kjenner de samme. Katalogen gir også sidene som
+  // ennå ikke har noen informasjonsside, så søket finner dem på navnet.
   const hentSokeindeks = useCallback(
     () =>
       lesSokeindeks(lagSideleser(klient()), lagLegemiddelleser(klient()), {
@@ -162,6 +163,7 @@ export default function App() {
           const oppforing = katalog.finn(kode)
           return oppforing?.kode === oppforing?.fortolkning.kode ? oppforing?.fortolkning.aliaser : undefined
         },
+        sider: katalog.oppforinger.map(({ kode, sidenavn, komponenter }) => ({ kode, navn: sidenavn, komponenter })),
       }),
     [katalog],
   )
