@@ -162,6 +162,17 @@ describe('lesingen av kunnskapsbasen', () => {
     expect(base.festfeil).toBeUndefined()
   })
 
+  it('søker i analyttsidene selv om stoffsidene uten kode ikke kan leses', async () => {
+    const utenStoffsider: Sideleser = {
+      lesAnalyttsider: (tilstand) => sideleser.lesAnalyttsider(tilstand),
+      lesStoffsider: async () => {
+        throw new Error('Funksjonen finnes ikke')
+      },
+    }
+    const base = await lesKunnskapsbase(utenStoffsider, null)
+    expect(base.sider.map((s) => s.analytt?.innhold.kode)).toEqual(['AMTNORSUM', 'KOD', 'NORT'])
+  })
+
   it('gir hver side de samme søkedokumentene som søket på siden selv', async () => {
     const base = await lesKunnskapsbase(sideleser, legemidler)
     const globale = indekserKunnskapsbase(base)

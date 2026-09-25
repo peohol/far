@@ -89,7 +89,10 @@ export async function lesKunnskapsbase(
   legemidler: Legemiddelleser | null,
   tilstand: Tilstand = 'publisert',
 ): Promise<Kunnskapsbase> {
-  const lest = (await Promise.all([sider.lesAnalyttsider(tilstand), sider.lesStoffsider(tilstand)])).flat()
+  // Stoffsidene uten kode er et tillegg: kan de ikke leses, søkes det i resten.
+  const lest = (
+    await Promise.all([sider.lesAnalyttsider(tilstand), sider.lesStoffsider(tilstand).catch(() => [])])
+  ).flat()
   const tom: Kunnskapsbase = { sider: lest, legemidler: null, interaksjoner: null }
   const perSide = lest.map((s) => koblede(byggSidemodell(s))).filter((k) => k.length > 0)
   if (!legemidler || perSide.length === 0) return tom

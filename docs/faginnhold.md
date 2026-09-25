@@ -466,7 +466,8 @@ søket på hver side. Lesingen er fire kall uansett antall sider:
 referansene én gang, og `les_stoffsider` stoffsidene uten kode på samme form; `les_legemidler` gir legemiddeldataene for alle
 koblingene, og hver side får sin del av dem (`utvalgFor`); `les_interaksjoner`
 gir interaksjonene, delt i flere kall bare om nøklene er flere enn databasen
-tar imot. Kan ikke legemiddeldataene leses, indekseres faginnholdet likevel.
+tar imot. Kan ikke legemiddeldataene leses, indekseres faginnholdet likevel,
+og kan ikke stoffsidene uten kode leses, indekseres resten.
 `sokGlobalt` gir det beste treffet per sted, og lar ord som ikke står i
 teksten, stå i navnet eller koden til siden: «sertralin metabolisme» finner
 kortet «Metabolisme» på sertralinsiden. Aliasene til kodene gis av appen fra
