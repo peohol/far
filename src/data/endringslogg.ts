@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.29.0',
+    versjon: '1.30.0',
     dato: '2026-09-25',
     sammendrag: 'Reglene for analyttgruppene i rusmiddelmodulene kan redigeres på analyttsidene',
     typer: ['Funksjonalitet'],
@@ -24,6 +24,18 @@ export const ENDRINGSLOGG: Endring[] = [
       'Reglene og tekstene lagres sammen, alt eller ingenting, og blir synlige for andre først når siden publiseres. Etterpå bruker fortolkningen de nye reglene.',
       '«Sist redigert» viser historikken for reglene og for hver tekst, og hva som ikke er publisert. Har noen andre lagret mens du redigerte, kan du sammenligne og velge.',
       'Reglene og kommentarene er uendret; fortolkningen gir det samme som før.',
+    ],
+  },
+  {
+    versjon: '1.29.0',
+    dato: '2026-09-25',
+    sammendrag: 'Preparatene viser byttbarhet i apotek og særlig overvåkning',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'I preparatvinduet står det ved hver styrke hvilke andre preparater den kan byttes med i apotek, etter byttegruppene i FEST. Gjelder det bare noen av pakningene, står det hvilke, og FESTs merknad til byttbarheten står under når gruppen har en.',
+      'Preparater under særlig overvåkning (svart trekant i FEST) har merket «▼ Særlig overvåkning», både i styrkelista og i preparatvinduet.',
+      'Har legemiddeldataene ikke vært kontrollert mot FEST på over to døgn, sier seksjonen «Preparater» fra om at nyere endringer i FEST kan mangle.',
     ],
   },
   {

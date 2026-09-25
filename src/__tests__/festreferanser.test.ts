@@ -11,7 +11,9 @@ import { erAutomatisk, formaterReferanse } from '../faginnhold/referanser'
 import type { Interaksjon, Interaksjonsoversikt } from '../legemiddeldata/interaksjoner'
 import { TOMT_UTVALG, type Legemiddelutvalg } from '../legemiddeldata/lesing'
 import {
+  FEST_FORELDET_ETTER_TIMER,
   FEST_KILDE,
+  festForeldet,
   festkilde,
   festopphav,
   festreferanser,
@@ -64,6 +66,29 @@ describe('FEST som kilde', () => {
 
   it('hopper over datoer som mangler eller ikke kan leses', () => {
     expect(festopphav({ kildedato: null, kontrollert_kl: 'ikke en dato' })).toBe('Legemiddeldata fra FEST')
+  })
+})
+
+describe('når synkroniseringen har stått stille', () => {
+  const kontrollert = new Date(UTVALG.kontrollert_kl!)
+  const etter = (timer: number, ms = 0) => new Date(kontrollert.getTime() + timer * 3_600_000 + ms)
+
+  it('sier ingenting før det har gått to døgn siden siste vellykkede kontroll', () => {
+    expect(FEST_FORELDET_ETTER_TIMER).toBe(48)
+    expect(festForeldet(UTVALG, etter(1))).toBeNull()
+    expect(festForeldet(UTVALG, etter(48))).toBeNull()
+  })
+
+  it('sier fra, med datoen, så snart grensen er passert', () => {
+    expect(festForeldet(UTVALG, etter(48, 1))).toBe(
+      'Legemiddeldataene ble sist kontrollert mot FEST 23. september 2026. ' +
+        'Den nattlige oppdateringen har ikke gått siden, så nyere endringer i FEST kan mangle.',
+    )
+  })
+
+  it('sier ingenting uten en dato å måle fra', () => {
+    expect(festForeldet({ kontrollert_kl: null }, etter(1000))).toBeNull()
+    expect(festForeldet({ kontrollert_kl: 'ikke en dato' }, etter(1000))).toBeNull()
   })
 })
 
