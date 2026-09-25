@@ -16,12 +16,19 @@
  * {@link Kunnskapsbase.festfeil}.
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { byggSidemodell } from './analyttside'
+import { byggSidemodell, type Sidemodell } from './analyttside'
 import { tilFeil } from './lagring'
 import { TOM_SIDE, type Analyttsidedata, type Utgave } from './lesing'
 import type { Referanseinnhold, Tilstand } from './modell'
 import { alfabetisk } from './paneler'
-import { indekserSide, lagSokeindeks, type Sokedokument, type Sokeindeks, type Tilleggstekst } from './sok'
+import {
+  indekserSide,
+  lagSokeindeks,
+  type Sideidentitet,
+  type Sokedokument,
+  type Sokeindeks,
+  type Tilleggstekst,
+} from './sok'
 import { byggInteraksjoner, interaksjonsnokler } from '../legemiddeldata/interaksjoner'
 import type { Interaksjonsnokler, Interaksjonsutvalg, Legemiddelleser, Legemiddelutvalg } from '../legemiddeldata/lesing'
 import { byggPreparatvisning } from '../legemiddeldata/preparatmodell'
@@ -134,7 +141,25 @@ export interface Indekseringsvalg {
    * dem fra katalogen, så søkeordene vedlikeholdes ett sted.
    */
   aliaser?: (kode: string) => readonly string[] | undefined
+  /**
+   * Alle analyttsidene appen har, fra katalogen: koden, navnet siden vises med
+   * og komponentene. Hver kode har en side, også uten publisert
+   * informasjonsside — da viser siden navnet fra katalogen og
+   * fortolkningsreglene. Søket finner også de sidene, på navnet og koden.
+   */
+  sider?: readonly Omit<Sideidentitet, 'aliaser'>[]
 }
+
+/** En side slik søket indekserer den: navnet, kodene som viser den, og innholdet. */
+interface Indekseringsside {
+  navn: string
+  koder: [string, ...string[]]
+  komponenter: readonly string[]
+  modell: Sidemodell
+  tillegg: Tilleggstekst[]
+}
+
+const TOM_MODELL = byggSidemodell(TOM_SIDE)
 
 /**
  * Søkedokumentene for hele kunnskapsbasen: hver side indeksert med
@@ -142,25 +167,45 @@ export interface Indekseringsvalg {
  * treff kommer i en fast rekkefølge.
  *
  * Deler flere koder samme informasjonsside, indekseres siden én gang, under
- * den første koden, og de andre kodene er med som koder på den.
+ * den første koden, og de andre kodene er med som koder på den. En kode i
+ * `sider` som ingen informasjonsside viser, indekseres med navnet fra
+ * katalogen, som siden selv viser.
  */
-export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser }: Indekseringsvalg = {}): Sokedokument[] {
-  const perSide = new Map<string, { data: Analyttsidedata; koder: string[] }>()
+export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser, sider = [] }: Indekseringsvalg = {}): Sokedokument[] {
+  const perInfoside = new Map<string, { data: Analyttsidedata; koder: [string, ...string[]] }>()
   for (const data of base.sider) {
     if (!data.analytt || !data.infoside) continue
-    const side = perSide.get(data.infoside.id)
+    const side = perInfoside.get(data.infoside.id)
     if (side) side.koder.push(data.analytt.innhold.kode)
-    else perSide.set(data.infoside.id, { data, koder: [data.analytt.innhold.kode] })
+    else perInfoside.set(data.infoside.id, { data, koder: [data.analytt.innhold.kode] })
   }
 
-  const sider = [...perSide.values()].sort(
-    (a, b) => alfabetisk(a.data.infoside!.innhold.navn, b.data.infoside!.innhold.navn) || (a.koder[0]! < b.koder[0]! ? -1 : 1),
-  )
-  return sider.flatMap(({ data, koder }) => {
+  const medInfoside = [...perInfoside.values()].map(({ data, koder }): Indekseringsside => {
     const modell = byggSidemodell(data)
-    const [kode, ...andre] = koder as [string, ...string[]]
-    const navn = data.infoside!.innhold.navn
-    const komponenter = data.komponenter.map((k) => k.innhold.navn)
+    return {
+      navn: data.infoside!.innhold.navn,
+      koder,
+      komponenter: data.komponenter.map((k) => k.innhold.navn),
+      modell,
+      tillegg: legemiddeltekster(base, koblede(modell)),
+    }
+  })
+  const indekserte = new Set(medInfoside.flatMap((s) => s.koder))
+  const utenInfoside = sider
+    .filter((s) => !indekserte.has(s.kode))
+    .map(({ kode, navn, komponenter }): Indekseringsside => ({
+      navn,
+      koder: [kode],
+      komponenter,
+      modell: TOM_MODELL,
+      tillegg: [],
+    }))
+
+  const alle = [...medInfoside, ...utenInfoside].sort(
+    (a, b) => alfabetisk(a.navn, b.navn) || (a.koder[0] < b.koder[0] ? -1 : 1),
+  )
+  return alle.flatMap(({ navn, koder, komponenter, modell, tillegg }) => {
+    const [kode, ...andre] = koder
     const kjente = new Set([navn, ...komponenter].map((n) => n.toLocaleLowerCase('nb')))
     const andreNavn = [...new Set(koder.flatMap((k) => aliaser?.(k) ?? []))].filter(
       (a) => !kjente.has(a.toLocaleLowerCase('nb')),
@@ -168,7 +213,7 @@ export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser }: Indekser
     const dokumenter = indekserSide(
       { kode, navn, komponenter, ...(andreNavn.length > 0 && { aliaser: andreNavn }) },
       modell,
-      legemiddeltekster(base, koblede(modell)),
+      tillegg,
     )
     return [...dokumenter, ...andre.map((tekst): Sokedokument => ({ sted: { side: { kode, navn } }, felt: 'kode', tekst }))]
   })

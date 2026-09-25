@@ -363,6 +363,33 @@ describe('rangeringen', () => {
     const [treff] = sokGlobalt(lagSokeindeks(dokumenter), 'paliperidon')
     expect(treff!.dokument.sted.side.kode).toBe('RISPSUM')
   })
+
+  it('finner sidene i katalogen som ennå ikke har noen informasjonsside', () => {
+    const dokumenter = indekserKunnskapsbase(
+      { sider: [side('DELTA', 'Delt side'), side('DELTB', 'Delt side')], legemidler: null, interaksjoner: null },
+      {
+        aliaser: (kode) => (kode === 'NYTT' ? ['nyttalias'] : undefined),
+        sider: [
+          { kode: 'NYTT', navn: 'Nytt stoff', komponenter: ['Nytt stoff'] },
+          // Koder en informasjonsside alt viser, indekseres ikke én gang til.
+          { kode: 'DELTB', navn: 'Annet navn', komponenter: [] },
+        ],
+      },
+    )
+    expect(dokumenter.map((d) => [d.felt, d.tekst, d.sted.side.kode])).toEqual([
+      ['navn', 'Delt side', 'DELTA'],
+      ['kode', 'DELTA', 'DELTA'],
+      ['kode', 'DELTB', 'DELTA'],
+      ['navn', 'Nytt stoff', 'NYTT'],
+      ['kode', 'NYTT', 'NYTT'],
+      ['komponent', 'Nytt stoff', 'NYTT'],
+      ['alias', 'nyttalias', 'NYTT'],
+    ])
+    const indeks = lagSokeindeks(dokumenter)
+    const [treff] = sokGlobalt(indeks, 'nytt stoff')
+    expect(treff!.dokument).toMatchObject({ felt: 'navn', sted: { side: { kode: 'NYTT', navn: 'Nytt stoff' } } })
+    expect(sokeadresse(treff!.dokument.sted)).toBe('#/analytt/NYTT')
+  })
 })
 
 function utgave<T>(id: string, innhold: T) {
