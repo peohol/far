@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.36.1',
+    dato: '2026-09-25',
+    sammendrag: 'Stoffsidene uten labkode er lagt inn i databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Stoffsidene uten labkode og de 15 nye stoffsidene fra forrige versjon er lagt inn, og er ført i appens oversikt over databaseendringer slik de faktisk ble gjort.',
+    ],
+  },
+  {
     versjon: '1.36.0',
     dato: '2026-09-25',
     sammendrag: 'Stoffer uten labkode kan ha egen stoffside, og 15 nye stoffsider er lagt inn fra kildene om serumkonsentrasjoner',
