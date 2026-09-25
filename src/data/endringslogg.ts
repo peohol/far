@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.33.0',
+    dato: '2026-09-25',
+    sammendrag: 'Viktige data viser t½ og tss per legemiddelform, uten forbehold',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Kortene øverst på stoffsidene har innholdet midtstilt, og feltet med forbehold under verdien er borte.',
+      'Toksisk område og alvorlig/dødelig intoksikasjon viser «>» i stedet for «fra», i samme store skrift som tallet.',
+      'Halveringstid og tid til steady state står bare med symbolene t½ og tss, og viser en typisk verdi, et område eller begge, som «33 (29–37) timer».',
+      'Har stoffet ulike verdier for ulike legemiddelformer, står de side om side med ikon og navn, for eksempel peroralt 5 døgn og depotinjeksjon 2–4 måneder. Redaktøren legger inn én rad per form.',
+      'Eksisterende forbehold er gjort om til verdier per form, så det som sto der, vises i selve verdien. Det gamle står i historikken.',
+      'Nye ikoner: sprøyte for injeksjoner, flaske for mikstur og dråpeteller for dråper.',
+    ],
+  },
+  {
     versjon: '1.32.1',
     dato: '2026-09-25',
     sammendrag: 'Redigering på stoffsidene skjer i et stort redigeringsvindu',

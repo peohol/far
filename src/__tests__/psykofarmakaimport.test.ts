@@ -45,6 +45,11 @@ import {
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
 const MIGRASJONSMAPPE = new URL('../../supabase/migrations/', import.meta.url)
 const FORSTE_IMPORTMIGRASJON = '20260923072247'
+/**
+ * Den første senere omarbeidingen av sidene. Her prøves importen slik den sto
+ * før den; omarbeidingene prøves i `monografomarbeiding.test.ts`.
+ */
+const FORSTE_OMARBEIDING = migrasjonsfiler().find((f) => f.endsWith('_viktige_data_former.sql'))!
 
 /**
  * Migrasjonene importen og kursendringen ble rullet ut som, med md5-en
@@ -267,7 +272,7 @@ describe('importen i databasen', () => {
     db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
     admin = await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
     bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lars', etternavn: 'Leser', rolle: 'user' })
-    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON })
+    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: FORSTE_OMARBEIDING })
     kall = faginnholdskall(db, admin)
     plan = psykofarmakaplan(katalog)
 

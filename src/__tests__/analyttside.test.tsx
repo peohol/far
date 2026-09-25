@@ -471,7 +471,8 @@ describe('lesemodus', () => {
     expect(leser.lesAnalyttside).toHaveBeenCalledWith('AMTNORSUM', 'publisert')
 
     expect(screen.getByRole('heading', { level: 1, name: /Amitriptylin/ })).toBeTruthy()
-    expect(screen.getByText('Syntetisk forbehold')).toBeTruthy()
+    // Forbeholdet under verdien vises ikke lenger.
+    expect(screen.queryByText('Syntetisk forbehold')).toBeNull()
     expect(screen.getByText('gjenopptaket').tagName).toBe('STRONG')
 
     // Sumanalysen forklares, og komponenten med egen kode lenker dit.
@@ -508,7 +509,7 @@ describe('lesemodus', () => {
     )
   })
 
-  it('grupperer viktige data i konsentrasjoner og kinetikk, med t₁/₂ og tₛₛ som symboler', async () => {
+  it('grupperer viktige data i konsentrasjoner og kinetikk, med t₁/₂ og tₛₛ som symboler og en verdi per form', async () => {
     const kort = (id: string, elementtype: string, posisjon: number, data: Record<string, unknown>) =>
       utgave(id, {
         infoside: 'hs',
@@ -526,7 +527,12 @@ describe('lesemodus', () => {
           ...s.elementer,
           kort('tox', 'toksisk_omrade', 1, { nedre: 3600, enhet: 'nmol/L' }),
           kort('hl', 'halveringstid', 3, { nedre: 7, ovre: 7, enhet: 'timer' }),
-          kort('ss', 'steady_state', 4, { nedre: 2, ovre: 2, enhet: 'døgn', forbehold: 'Omtrentlig.' }),
+          kort('ss', 'steady_state', 4, {
+            former: [
+              { form: 'Peroralt', typisk: 5, min: null, maks: null, enhet: 'døgn' },
+              { form: 'Depotinjeksjon', typisk: null, min: 2, maks: 4, enhet: 'måneder' },
+            ],
+          }),
         ],
       }
     }
@@ -540,9 +546,11 @@ describe('lesemodus', () => {
     const konsentrasjoner = gruppe('Konsentrasjoner i serum')
     expect(titler(konsentrasjoner)).toEqual(['Referanseområde', 'Toksisk område'])
     for (const li of within(konsentrasjoner).getAllByRole('listitem')) expect(li.querySelector('svg.ikon')).not.toBeNull()
-    expect(within(konsentrasjoner).getByText(erVerdi(`fra ${formaterTall(3600)} nmol/L`))).toBeTruthy()
+    // En nedre grense alene står med «>» i samme store skrift som tallet.
+    const toksisk = within(konsentrasjoner).getByText(erVerdi(`> ${formaterTall(3600)} nmol/L`))
+    expect([...toksisk.querySelectorAll('.datakort__tall')].map((el) => el.textContent)).toEqual(['>', formaterTall(3600)])
 
-    // Kinetikken: symbolet med senket skrift, og etiketten for skjermlesere.
+    // Kinetikken: symbolet med senket skrift, og ordet bare for skjermlesere.
     const kinetikk = gruppe('Kinetikk')
     const overskrifter = within(kinetikk).getAllByRole('heading', { level: 3 })
     expect(overskrifter.map((h) => h.querySelector('.datakort__symbol')?.innerHTML)).toEqual([
@@ -553,12 +561,22 @@ describe('lesemodus', () => {
       'true',
       'true',
     ])
-    expect(overskrifter.map((h) => h.querySelector('.datakort__etikett')?.textContent)).toEqual([
+    expect(overskrifter.map((h) => h.querySelector('.kun-skjermleser')?.textContent)).toEqual([
       'Halveringstid',
       'Tid til steady state',
     ])
+    expect(overskrifter.map((h) => h.querySelector('.datakort__etikett'))).toEqual([null, null])
+    // Et eldre kort med ett tall står som før, uten form.
     expect(within(kinetikk).getByText(erVerdi('7 timer'))).toBeTruthy()
-    expect(within(kinetikk).getByText('Omtrentlig.')).toBeTruthy()
+    // Formene står side om side, med ikon og navn over verdien.
+    const former = overskrifter[1]!.closest('li')!.querySelectorAll('.datakort__form')
+    expect([...former].map((f) => f.querySelector('.datakort__formnavn')?.textContent)).toEqual([
+      'Peroralt: ',
+      'Depotinjeksjon: ',
+    ])
+    expect([...former].map((f) => f.querySelector('svg.ikon')?.getAttribute('data-ikon'))).toEqual(['tablet', 'syringe'])
+    expect(within(kinetikk).getByText(erVerdi('5 døgn'))).toBeTruthy()
+    expect(within(kinetikk).getByText(erVerdi('2–4 måneder'))).toBeTruthy()
   })
 
   it('går til viktige data fra en lenke uten å åpne eller lukke seksjoner', async () => {
@@ -659,7 +677,7 @@ describe('søket på siden', () => {
     expect(document.querySelector('mark.sidetreff--aktiv')?.textContent).toBe('kilde')
 
     await user.clear(sok)
-    await user.keyboard('forbehold')
+    await user.keyboard('nmol')
     await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
     expect(
       within(screen.getByRole('list', { name: 'Hvor treffene står' })).getByRole('button').textContent,
@@ -1132,7 +1150,7 @@ describe('redigeringsmodus', () => {
       panel: 'viktige_data',
       elementtype: 'referanseomrade',
       posisjon: 0,
-      data: { nedre: 10, ovre: 25.5, enhet: 'nmol/L', forbehold: 'Syntetisk forbehold' },
+      data: { nedre: 10, ovre: 25.5, enhet: 'nmol/L' },
       referanser: [REF_A.id],
     })
   })
@@ -1150,6 +1168,44 @@ describe('redigeringsmodus', () => {
     await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
     expect(within(skjema).getByRole('alert').textContent).toBe('Nedre grense kan ikke være høyere enn øvre.')
     expect(lager.lagreUtkast).not.toHaveBeenCalled()
+  })
+
+  it('legger inn tₛₛ for to legemiddelformer, og avviser en typisk verdi utenfor området', async () => {
+    const user = userEvent.setup()
+    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    await finnVerdi('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await user.click(await screen.findByRole('button', { name: 'Legg til: Tid til steady state' }))
+    const skjema = redigeringsvindu('Tid til steady state')
+    const fyll = async (rad: HTMLElement, felt: Record<string, string>) => {
+      for (const [merke, verdi] of Object.entries(felt)) await user.type(within(rad).getByLabelText(merke), verdi)
+    }
+    await fyll(within(skjema).getByRole('group', { name: 'Legemiddelform 1' }), {
+      Legemiddelform: 'Peroralt',
+      'Typisk verdi': '5',
+      Enhet: 'døgn',
+    })
+    await user.click(within(skjema).getByRole('button', { name: 'Legg til legemiddelform' }))
+    const depot = within(skjema).getByRole('group', { name: 'Legemiddelform 2' })
+    await fyll(depot, { Legemiddelform: 'Depotinjeksjon', 'Typisk verdi': '5', Minimum: '2', Maksimum: '4', Enhet: 'måneder' })
+
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+    expect(within(skjema).getByRole('alert').textContent).toMatch(/^Depotinjeksjon: /)
+    expect(lager.opprettUtkast).not.toHaveBeenCalled()
+
+    await user.clear(within(depot).getByLabelText('Typisk verdi'))
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+    await waitFor(() => expect(lager.opprettUtkast).toHaveBeenCalledTimes(1))
+    expect(vi.mocked(lager.opprettUtkast).mock.calls[0]![1]).toMatchObject({
+      panel: 'viktige_data',
+      elementtype: 'steady_state',
+      data: {
+        former: [
+          { form: 'Peroralt', typisk: 5, min: null, maks: null, enhet: 'døgn' },
+          { form: 'Depotinjeksjon', typisk: null, min: 2, maks: 4, enhet: 'måneder' },
+        ],
+      },
+    })
   })
 
   it('sier fra når noen andre har lagret i mellomtiden, og beholder det som ble skrevet', async () => {
@@ -1316,7 +1372,7 @@ describe('overgangen til redigering', () => {
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Legg til: Halveringstid' }))
     const skjema = redigeringsvindu('Halveringstid')
-    await user.type(within(skjema).getByLabelText('Nedre grense'), '3')
+    await user.type(within(skjema).getByLabelText('Typisk verdi'), '3')
     await user.type(within(skjema).getByLabelText('Enhet'), 'timer')
     await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
 

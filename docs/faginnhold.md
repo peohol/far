@@ -356,7 +356,7 @@ styrer søket og nummereringen av referansene):
 | Panel | Nøkkel | Elementer |
 | --- | --- | --- |
 | Identitet | `identitet` | Ingen; koden, navnet og kategorien kommer fra siden og katalogen |
-| Viktige data | `viktige_data` | Ett kort per type — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk) — med `{ nedre, ovre, enhet, forbehold }` |
+| Viktige data | `viktige_data` | Ett kort per type — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk). Konsentrasjonene har `{ nedre, ovre, enhet }`; t½ og tss har `{ former: [{ form, typisk, min, maks, enhet }] }`, én rad per legemiddelform |
 | Farmakodynamikk, indikasjon | `farmakodynamikk`, `indikasjon` | `riktekst`: `{ dokument }` |
 | Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
 | Dosering | `dosering` | `riktekst`: `{ dokument }` |
@@ -365,7 +365,11 @@ styrer søket og nummereringen av referansene):
 | Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }` |
 
 Tallene i viktige data er tall, ikke tekst. Bare den ene grensen oppgitt vises
-som «fra 10» eller «opptil 20», uten å si om grensen er med. Koden, navnet og
+som «> 10» eller «opptil 20», uten å si om grensen er med. t½ og tss viser
+«typisk (min–maks)», bare den typiske verdien eller bare området, per
+legemiddelform side om side; formen kan stå tom når det bare er én. Det
+tidligere feltet `forbehold` vises ikke lenger, men står i eldre revisjoner,
+og t½/tss uten `former` leses som ett område eller én typisk verdi. Koden, navnet og
 kategorien i identiteten kommer fra de statiske datasettene til siden finnes
 i databasen.
 

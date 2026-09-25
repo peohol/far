@@ -1,12 +1,17 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import {
   DOSEKOLONNER,
+  FORSLAG_LEGEMIDDELFORMER,
+  kontrollerFormverdier,
   kontrollerIntervall,
   lesTallfelt,
   tallTilFelt,
   tomDoserad,
+  tomFormverdi,
   type Datakortdefinisjon,
   type Doserad,
+  type Formverdi,
+  type Formverdier,
   type Intervallverdi,
   type KobletVirkestoff,
   type Legemiddelkoblingdata,
@@ -347,18 +352,17 @@ export function LegemiddelkoblingSkjema(props: SkjemaProps<Legemiddelkoblingdata
 
 /* --- Datakortene ---------------------------------------------------------- */
 
-export function DatakortSkjema(props: SkjemaProps<Intervallverdi> & { kort: Datakortdefinisjon }) {
+export function DatakortSkjema(props: SkjemaProps<Omit<Intervallverdi, 'forbehold'>> & { kort: Datakortdefinisjon }) {
   const [nedre, setNedre] = useState(tallTilFelt(props.start.nedre))
   const [ovre, setOvre] = useState(tallTilFelt(props.start.ovre))
   const [enhet, setEnhet] = useState(props.start.enhet)
-  const [forbehold, setForbehold] = useState(props.start.forbehold)
 
   const kontroller = () => {
     const n = lesTallfelt(nedre)
     const o = lesTallfelt(ovre)
     if (n === undefined || o === undefined) return { feil: 'Grensene må være tall, f.eks. 10 eller 0,5.' }
-    const verdi: Intervallverdi = { nedre: n, ovre: o, enhet: enhet.trim(), forbehold: forbehold.trim() }
-    const feil = kontrollerIntervall(verdi)
+    const verdi = { nedre: n, ovre: o, enhet: enhet.trim() }
+    const feil = kontrollerIntervall({ ...verdi, forbehold: '' })
     return feil ? { feil } : { data: verdi }
   }
 
@@ -373,7 +377,105 @@ export function DatakortSkjema(props: SkjemaProps<Intervallverdi> & { kort: Data
         Oppgi begge grensene for et område, eller bare den ene for en grense. Tom nedre og øvre grense
         betyr at kortet ikke vises.
       </p>
-      <Tekstfelt merke="Forbehold" verdi={forbehold} onEndre={setForbehold} />
+    </Skjemaramme>
+  )
+}
+
+/** En legemiddelform i skjemaet, med tallene slik de er skrevet. */
+interface Formfelt {
+  form: string
+  typisk: string
+  min: string
+  maks: string
+  enhet: string
+}
+
+const TALLFELT = [
+  { felt: 'typisk', merke: 'Typisk verdi' },
+  { felt: 'min', merke: 'Minimum' },
+  { felt: 'maks', merke: 'Maksimum' },
+] as const satisfies readonly { felt: keyof Formfelt & keyof Formverdi; merke: string }[]
+
+function tilFormfelt(verdi: Formverdi): Formfelt {
+  return {
+    form: verdi.form,
+    typisk: tallTilFelt(verdi.typisk),
+    min: tallTilFelt(verdi.min),
+    maks: tallTilFelt(verdi.maks),
+    enhet: verdi.enhet,
+  }
+}
+
+/**
+ * t₁/₂ og tₛₛ: en typisk verdi, et område fra minimum til maksimum, eller
+ * begge — for én eller flere legemiddelformer. Med én form kan navnet stå
+ * tomt; med flere trenger hver sitt.
+ */
+export function FormverdiSkjema(props: SkjemaProps<Formverdier>) {
+  const [rader, setRader] = useState<Formfelt[]>(() =>
+    (props.start.former.length > 0 ? props.start.former : [tomFormverdi()]).map(tilFormfelt),
+  )
+  const forslagId = useId()
+  const endre = (i: number, felt: keyof Formfelt, verdi: string) =>
+    setRader(rader.map((rad, j) => (j === i ? { ...rad, [felt]: verdi } : rad)))
+
+  const kontroller = () => {
+    const former: Formverdi[] = []
+    for (const rad of rader) {
+      const tall = TALLFELT.map(({ felt }) => lesTallfelt(rad[felt]))
+      if (tall.some((t) => t === undefined)) return { feil: 'Verdiene må være tall, f.eks. 33 eller 0,5.' }
+      const [typisk = null, min = null, maks = null] = tall as (number | null)[]
+      const verdi = { form: rad.form.trim(), typisk, min, maks, enhet: rad.enhet.trim() }
+      // En helt tom rad er ikke med.
+      if (verdi.form || verdi.enhet || typisk !== null || min !== null || maks !== null) former.push(verdi)
+    }
+    const data = { former }
+    const feil = kontrollerFormverdier(data)
+    return feil ? { feil } : { data }
+  }
+
+  return (
+    <Skjemaramme {...props} kontroller={kontroller} bred>
+      <datalist id={forslagId}>
+        {FORSLAG_LEGEMIDDELFORMER.map((f) => (
+          <option key={f} value={f} />
+        ))}
+      </datalist>
+      {rader.map((rad, i) => (
+        <fieldset key={i} className="doserad">
+          <legend className="doserad__tittel">{rad.form.trim() || `Legemiddelform ${i + 1}`}</legend>
+          <div className="feltrad">
+            <Felt
+              merkelapp="Legemiddelform"
+              type="text"
+              value={rad.form}
+              list={forslagId}
+              onChange={(e) => endre(i, 'form', e.target.value)}
+            />
+            {TALLFELT.map(({ felt, merke }) => (
+              <Tekstfelt key={felt} merke={merke} verdi={rad[felt]} onEndre={(v) => endre(i, felt, v)} inputMode="decimal" />
+            ))}
+            <Tekstfelt merke="Enhet" verdi={rad.enhet} onEndre={(v) => endre(i, 'enhet', v)} />
+          </div>
+          {rader.length > 1 && (
+            <Button
+              variant="subtle"
+              aria-label={`Fjern ${rad.form.trim() || `legemiddelform ${i + 1}`}`}
+              onClick={() => setRader(rader.filter((_, j) => j !== i))}
+            >
+              Fjern formen
+            </Button>
+          )}
+        </fieldset>
+      ))}
+      <Button variant="subtle" onClick={() => setRader([...rader, tilFormfelt(tomFormverdi())])}>
+        Legg til legemiddelform
+      </Button>
+      <p className="felt__hjelp">
+        Oppgi typisk verdi, minimum og maksimum, bare typisk verdi, eller bare minimum og maksimum. Kortet viser
+        «33 (29–37) timer», «33 timer» eller «29–37 timer». En kilde som sier «33 ± 4», skrives som 33, 29 og 37.
+        Legemiddelformen kan stå tom når kortet bare har én.
+      </p>
     </Skjemaramme>
   )
 }

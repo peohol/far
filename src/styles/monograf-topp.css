@@ -90,14 +90,18 @@
 }
 
 /* Ett kort. Konsentrasjonene er farget etter nivået, uten kant; kinetikken
-   står på flaten med kant og et miniplott øverst. */
+   står på flaten med kant og et miniplott øverst. Innholdet står midtstilt,
+   bortover og nedover. */
 .datakort {
   /* Tallet skaleres etter kortets bredde (se `.datakort__tall`). */
   container-type: inline-size;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: var(--rom-4);
   min-width: 0;
+  text-align: center;
   padding: var(--rom-6);
   background: var(--flate);
   border-radius: var(--runding-kort);
@@ -139,6 +143,7 @@
 .datakort__tittel {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   align-items: baseline;
   gap: var(--rom-2) var(--rom-3);
   font-family: var(--skrift-ui);
@@ -165,9 +170,14 @@
 .datakort__verdi {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   align-items: baseline;
   column-gap: var(--rom-2);
   color: var(--blekk-sterk);
+}
+
+.datakort__samlet {
+  white-space: nowrap;
 }
 
 .datakort__forledd {
@@ -185,6 +195,7 @@
   font-weight: var(--vekt-medium);
   line-height: var(--linjehoyde-tett);
   font-variant-numeric: lining-nums tabular-nums;
+  white-space: nowrap;
 }
 
 .datakort__enhet {
@@ -195,12 +206,72 @@
   color: var(--blekk-dempet);
 }
 
-.datakort__forbehold {
+/* Området etter den typiske verdien, «33 (29–37)»: samme skrift, mindre og dempet. */
+.datakort__spenn {
   font-family: var(--skrift-display);
-  font-size: var(--tekst-ingress);
-  font-style: italic;
-  line-height: 1.35;
+  font-size: calc(min(var(--tekst-tall), 27cqi) * 0.6);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-tett);
+  font-variant-numeric: lining-nums tabular-nums;
+  white-space: nowrap;
   color: var(--blekk-dempet);
+}
+
+/* Verdiene per legemiddelform står side om side, én celle per form. Blir
+   kortet for smalt, brytes de, og en form alene på raden står midt i kortet. */
+.datakort__former {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--rom-4) var(--rom-3);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.datakort__form {
+  flex: 1 1 5.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-1);
+  min-width: 0;
+}
+
+/* Med flere former deler de bredden: kortet får mindre luft på sidene, og
+   tallene skaleres ned sammen. */
+.datakort:has(.datakort__former:not([data-antall='1'])) {
+  padding-inline: var(--rom-4);
+}
+
+.datakort__former:not([data-antall='1']) .datakort__tall {
+  font-size: min(var(--tekst-seksjon), 18cqi);
+}
+
+.datakort__former:not([data-antall='1']) .datakort__spenn {
+  font-size: calc(min(var(--tekst-seksjon), 18cqi) * 0.65);
+}
+
+/* Ikonet over navnet, så navnet får hele cellens bredde. */
+.datakort__formnavn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-1);
+  max-width: 100%;
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  line-height: 1.25;
+  color: var(--blekk-dempet);
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+.datakort__formikon {
+  flex: none;
+  font-size: 1.5em;
 }
 
 .datakort__tom {
@@ -215,7 +286,7 @@
 }
 
 /* Smal flate: konsentrasjonene blir stablede rader med ikon, etikett og
-   verdi på linje; kinetikken står to i bredden med ikonet ved symbolet. */
+   verdi på linje; kinetikken står to i bredden, midtstilt med et mindre plott. */
 @media (max-width: 47.5em) {
   .viktige-data {
     /* Konseptikonene på smal flate (40 px i Atlas). */
@@ -242,11 +313,29 @@
     border-radius: var(--runding-panel);
   }
 
+  /* En rad med ikon, etikett og verdi leses fra venstre. */
   .datakort--konsentrasjon {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    /* Etiketten beholder plassen sin; blir det trangt, brytes enheten under tallet. */
+    grid-template-columns: auto minmax(min-content, 1fr) auto;
     align-items: center;
     column-gap: var(--rom-4);
+    text-align: start;
+  }
+
+  .datakort--konsentrasjon .datakort__verdi {
+    justify-content: flex-end;
+    text-align: end;
+  }
+
+  /* Har et kinetikkort flere legemiddelformer, tar kortene hele bredden, så formene får stå side om side. */
+  .viktige-data__gruppe--kinetikk .viktige-data__kort:has(.datakort__former:not([data-antall='1'])) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .datakort--konsentrasjon .datakort__tittel {
+    justify-content: flex-start;
+    hyphens: auto;
   }
 
   .datakort--konsentrasjon > :not(.datakort__ikon, .datakort__tittel, .datakort__verdi) {
@@ -259,37 +348,18 @@
     height: var(--datakort-ikon-smal);
   }
 
-  .datakort--kinetikk {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-  }
-
-  .datakort--kinetikk > :not(.datakort__plot, .datakort__tittel) {
-    grid-column: 1 / -1;
-  }
-
   .datakort--kinetikk .datakort__plot {
-    grid-area: 1 / 2;
     padding: 0;
     background: none;
   }
 
-  .datakort--kinetikk .datakort__tittel {
-    grid-area: 1 / 1;
-  }
-
-  /* Symbolet står alene; etiketten er der fortsatt for skjermlesere. */
-  .datakort--kinetikk .datakort__etikett {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
-  }
-
-  .datakort__tall {
+  .datakort__tall,
+  .datakort__former:not([data-antall='1']) .datakort__tall {
     font-size: var(--tekst-seksjon);
+  }
+
+  .datakort__spenn,
+  .datakort__former:not([data-antall='1']) .datakort__spenn {
+    font-size: calc(var(--tekst-seksjon) * 0.62);
   }
 }
