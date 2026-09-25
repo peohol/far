@@ -445,7 +445,10 @@ tar imot. Kan ikke legemiddeldataene leses, indekseres faginnholdet likevel.
 `sokGlobalt` gir det beste treffet per sted, og lar ord som ikke står i
 teksten, stå i navnet eller koden til siden: «sertralin metabolisme» finner
 kortet «Metabolisme» på sertralinsiden. Aliasene til kodene gis av appen fra
-analyttkatalogen. Deler flere koder én side, indekseres siden én gang.
+analyttkatalogen. Deler flere koder én side, indekseres siden én gang. Appen
+gir også alle kodene i katalogen: en kode som ingen publisert
+informasjonsside viser, har likevel en analyttside (med fortolkningsreglene),
+og indekseres med navnet og komponentene fra katalogen, som siden viser.
 
 Hvert treff har stedet det står: siden, seksjonen, ankeret på siden og — når
 teksten står i et detaljkort — nøkkelen til kortet. `sokeadresse` gjør stedet

@@ -214,8 +214,9 @@ describe('fagsøket i hele appen', () => {
     expect(await navigator.clipboard.readText()).toBe(urort)
     expect(screen.getByRole('region', { name: 'Velg konsentrasjon' })).toBeTruthy()
 
-    // Enter uten valgt treff går til søkesiden, over fortolkningen.
-    await user.keyboard('amitriptylin{Enter}')
+    // Enter uten valgt treff går til søkesiden, over fortolkningen. Pil opp
+    // fra det første treffet velger ingen.
+    await user.keyboard('amitriptylin{ArrowUp}{Enter}')
     expect(window.location.hash).toBe('#/sok?q=amitriptylin')
     expect(await screen.findByRole('heading', { level: 1, name: '«amitriptylin»' })).toBeTruthy()
     expect(fortolkningen().hidden).toBe(true)
@@ -234,7 +235,10 @@ describe('fagsøket i hele appen', () => {
     visApp()
     expect(await screen.findByRole('heading', { level: 1, name: '«kvetiapin»' })).toBeTruthy()
     expect((screen.getByRole('combobox', { name: 'Søk i fagstoffet' }) as HTMLInputElement).value).toBe('kvetiapin')
-    // Databasen her har ingen sider.
-    expect(await screen.findByText('Ingen treff')).toBeTruthy()
+    // Databasen her har ingen informasjonssider, men analyttsiden for koden
+    // finnes likevel, med navnet fra katalogen.
+    const sokesiden = screen.getByRole('region', { name: '«kvetiapin»' })
+    const treff = await within(sokesiden).findByRole('link', { name: /Kvetiapin/ })
+    expect(treff.getAttribute('href')).toBe('#/analytt/KVE')
   })
 })
