@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import importert from './fasit/thc-regelsett-import.json'
-import { tidForVerdi as opprinneligTidForVerdi } from '../thc'
+import { tidForVerdi as opprinneligTidForVerdi } from './hjelp/thcOpprinnelig'
 import {
   forventetEndring,
   sammenlign,

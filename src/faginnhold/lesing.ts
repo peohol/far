@@ -23,6 +23,8 @@ import type { Kommentarinnhold } from '../domain/kommentarobjekt'
 import { harVerdi, lesIntervallverdi, type Intervallverdi } from './paneler'
 import { kommentarIder } from '../regler/kommentarer'
 import type { Intervallregelsettinnhold } from '../regler/modell'
+import type { ThcRegelsettinnhold } from '../domain/thcTekster'
+import { THC_KODE } from '../domain/thc'
 
 /** Ett objekt i én tilstand: øyeblikksbildet tilstanden peker på. */
 export interface Utgave<T> {
@@ -46,8 +48,8 @@ export interface Utgave<T> {
  * Et regelsett med kommentarobjektene det peker på, i samme tilstand. Hver
  * har sin egen revisjon og publisering; se `src/regler/kommentarer.ts`.
  */
-export interface Regelsettutgave {
-  regelsett: Utgave<Intervallregelsettinnhold>
+export interface Regelsettutgave<T = Intervallregelsettinnhold> {
+  regelsett: Utgave<T>
   kommentarer: Utgave<Kommentarinnhold>[]
 }
 
@@ -66,6 +68,8 @@ export interface Analyttsidedata {
    * sitt eget objekt og peker på koden, ikke på siden.
    */
   regelsett: Regelsettutgave | null
+  /** THC-syreregelsettet, på siden for koden det fortolker ({@link THC_KODE}). */
+  thcregelsett: Regelsettutgave<ThcRegelsettinnhold> | null
 }
 
 /** En kode som ikke har noen side ennå, eller som leseren ikke har tilgang til. */
@@ -76,6 +80,7 @@ export const TOM_SIDE: Analyttsidedata = {
   komponenter: [],
   referanser: [],
   regelsett: null,
+  thcregelsett: null,
 }
 
 export interface Faginnholdsleser {
@@ -92,6 +97,8 @@ export interface Faginnholdsleser {
   finnIntervallregelsett(kode: string, tilstand: Tilstand): Promise<Regelsettutgave | null>
   /** Alle regelsettene i én tilstand, sortert på analyttkode. Fortolkningen bruker de publiserte. */
   lesIntervallregelsett(tilstand: Tilstand): Promise<Utgave<Intervallregelsettinnhold>[]>
+  /** THC-syreregelsettet med kommentarene tekstbolkene bruker, eller `null` når det ikke finnes. */
+  lesThcRegelsett(tilstand: Tilstand): Promise<Regelsettutgave<ThcRegelsettinnhold> | null>
   /** Kommentarene i én tilstand: alle, eller bare dem med disse ID-ene. */
   lesKommentarer(tilstand: Tilstand, ider?: string[]): Promise<Utgave<Kommentarinnhold>[]>
   /**
@@ -120,6 +127,12 @@ export function lagFaginnholdsleser(klient: SupabaseClient): Faginnholdsleser {
       ...(ider ? { ider } : {}),
     })) ?? []
 
+  const lesThcRegelsett: Faginnholdsleser['lesThcRegelsett'] = async (tilstand) => {
+    const regelsett = await kall<Utgave<ThcRegelsettinnhold>>('les_thc_regelsett', { regelsettilstand: tilstand })
+    if (!regelsett) return null
+    return { regelsett, kommentarer: await lesKommentarer(tilstand, Object.values(regelsett.innhold.tekstbolker)) }
+  }
+
   const finnIntervallregelsett: Faginnholdsleser['finnIntervallregelsett'] = async (kode, tilstand) => {
     const regelsett = await kall<Utgave<Intervallregelsettinnhold>>('finn_intervallregelsett', {
       analyttkode: kode,
@@ -131,11 +144,15 @@ export function lagFaginnholdsleser(klient: SupabaseClient): Faginnholdsleser {
 
   return {
     lesAnalyttside: async (kode, tilstand) => {
-      const [side, regelsett] = await Promise.all([
-        kall<Omit<Analyttsidedata, 'regelsett'>>('les_analyttside', { analyttkode: kode, sidetilstand: tilstand }),
+      const [side, regelsett, thcregelsett] = await Promise.all([
+        kall<Omit<Analyttsidedata, 'regelsett' | 'thcregelsett'>>('les_analyttside', {
+          analyttkode: kode,
+          sidetilstand: tilstand,
+        }),
         finnIntervallregelsett(kode, tilstand),
+        kode === THC_KODE ? lesThcRegelsett(tilstand) : null,
       ])
-      return { ...TOM_SIDE, ...side, regelsett }
+      return { ...TOM_SIDE, ...side, regelsett, thcregelsett }
     },
     lesReferanser: async (tilstand) =>
       (await kall<Utgave<Referanseinnhold>[]>('les_referanser', { sidetilstand: tilstand })) ?? [],
@@ -144,6 +161,7 @@ export function lagFaginnholdsleser(klient: SupabaseClient): Faginnholdsleser {
     finnIntervallregelsett,
     lesIntervallregelsett: async (tilstand) =>
       (await kall<Utgave<Intervallregelsettinnhold>[]>('les_intervallregelsett', { sidetilstand: tilstand })) ?? [],
+    lesThcRegelsett,
     lesKommentarer,
     lesReferanseomrader: async (tilstand) => {
       const rader =

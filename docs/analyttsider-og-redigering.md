@@ -18,7 +18,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [ ] Arbeidspakke 4: import av psykofarmakainnhold (revidert 23.09.2026, omarbeides).
 - [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
 - [ ] Arbeidspakke 6: sammensatte analyttgrupper.
-- [ ] Arbeidspakke 7: THC-syre (motor og lagring ferdige; editor og simulator i arbeidspakke 13).
+- [ ] Arbeidspakke 7: THC-syre (motor, lagring, produksjonskilde og simulator ferdige; editoren gjenstår).
 - [ ] Arbeidspakke 8: kartlegging av offentlige legemiddeldatakilder.
 - [x] Arbeidspakke 9: seksjoner og detaljkort (progressiv detaljering).
 - [ ] Arbeidspakke 10: ekstern legemiddelgrunnmur (lokal kopi og synkronisering).
@@ -988,8 +988,8 @@ Scenariomodellen, motoren, lagringen og fortolkningen står i `docs/scenarioregl
 
 ## Arbeidspakke 7 - THC-syre
 
-**Status:** [~] Pågår. Motoren og lagringen er ferdige; editoren, simulatoren
-og byttet av produksjonskilde gjenstår. Løsningen er beskrevet i
+**Status:** [~] Pågår. Motoren, lagringen, byttet av produksjonskilde og
+simulatoren er ferdige; editoren gjenstår. Løsningen er beskrevet i
 `docs/thc-syre.md`.
 
 Egen spesialisert regelmotor/editor for:
@@ -1000,7 +1000,7 @@ Egen spesialisert regelmotor/editor for:
 - [x] kreatininkorrigerte verdier
 - [x] dynamisk kommentarsammensetning
 - [x] øvrige THC-spesifikke parametere
-- [ ] simulator og regresjonstester (regresjonstestene og fasiten er ferdige)
+- [x] simulator og regresjonstester
 
 Punktene over er representert i regelsettet, motoren og lagringen i Supabase,
 med validering på serveren. Gjenstår:
@@ -1009,8 +1009,9 @@ med validering på serveren. Gjenstår:
 - [x] Server-side validering, også av kurvenes rekkefølge for alle prøveverdier.
 - [x] Tekstbolkene lagret som egne kommentarer, som regelsettet peker på.
 - [x] Regelsettet og tekstene fra dagens modul importert og publisert.
-- [ ] Editor og simulator, bygd i seksjonsmodellen (arbeidspakke 13).
-- [ ] Produksjonsmodulen bytter til Supabase.
+- [x] Simulator og visning av reglene og tekstene, bygd i seksjonsmodellen (arbeidspakke 13).
+- [ ] Editor for reglene og tekstene, i den samme seksjonen.
+- [x] Produksjonsmodulen bytter til Supabase; den opprinnelige modulen er bare fasit i testene.
 
 ---
 

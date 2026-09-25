@@ -27,6 +27,7 @@ import { Sidesok } from './Sidesok'
 import { Scenarioregler, useScenarioreglerFor } from '../regler/Scenarioregler'
 import { Uthevingskilde } from '../Uthev'
 import { Fortolkningsregler } from '../regler/Fortolkningsregler'
+import { Thcregler } from '../regler/Thcregler'
 import { festreferanser } from '../../legemiddeldata/referanser'
 import { useAnalyttside, type Sidemodus } from './useAnalyttside'
 
@@ -298,6 +299,7 @@ function Innhold({ kode, sted, katalog, onApneFortolkning, onLukk }: Analyttside
                 <p className="analyttside__tom">Denne siden har ikke fått faginnhold ennå.</p>
               )}
               {regler && <Scenarioregler {...regler} />}
+              {side.data.thcregelsett && <Thcregler utgave={side.data.thcregelsett} redigerer={redigerer} />}
               <Fortolkningsregler
                 utgave={side.data.regelsett}
                 publisert={publisertRegelsett}

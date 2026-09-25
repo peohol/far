@@ -64,13 +64,22 @@ const DATASETT: Record<string, string> = {
  * informasjonssidene: da ble det 50 – 350 for BREK (før 50 – 330), 180 – 550
  * for DOKSUM (før 18 – 550) og 10 – 300 for LMP (før < 300), og ingenting
  * annet endret seg. Kommentarene og knappene er de samme.
+ *
+ * Summene for THC-syre ble byttet da fortolkningen gikk over til regelsettet
+ * og tekstene i Supabase. Delene regnes nå av motoren (`thcMotor.ts`) over de
+ * kombinasjonene den kan gi — hvert nivå, hver konklusjon, med og uten
+ * cut-off — i stedet for av den opprinnelige modulen over kategoriene 0–5,
+ * der noen aldri kunne forekomme. At motoren gir nøyaktig den samme
+ * kommentaren og konklusjonen som den opprinnelige modulen for hver av dem,
+ * står i `thcParitet.test.ts`, og fasiten (`thcMotor.test.ts`) gjelder
+ * fortsatt uendret.
  */
 const FORTOLKNINGSUTFALL: Record<string, string> = {
   band: '0beefabadcb7f4dc7e1438c9feb7f9496c40e7a883336031a2f6f59648114779',
   etg: '9aa2aea633064367b24e4a9578c37fb5fde700f7b410c8710187769c62ef434c',
   rus: '33a3739b124621c0deca34f68675b10c5398598ca78f3f6775456e3981621078',
-  thc: 'fa7eb624ba7424585774af6033cf049d1887088eab781b0aadf39307ad27c20f',
-  kategorier: '50493eb7d4632a8e279174238aa78970cd2ee143ea0824e1178e6a9b0bfa9a53',
+  thc: '1d2c6c72838470e343b694eaaa0f880153c9eee6a628ff9cea492629b70ace9b',
+  kategorier: 'd6b8c44090aa62afd61f57bfa8ff317c6c6e6ade4498485c0a7cff1804786098',
 }
 
 /**
@@ -84,6 +93,7 @@ const FORTOLKNINGSKJERNEN = [
   'src/regler/modell.ts',
   'src/regler/publiserte.ts',
   'src/hooks/usePubliserteRegler.ts',
+  'src/hooks/useHenting.ts',
 ]
 
 /**
@@ -97,6 +107,10 @@ const FORTOLKNINGSSTEGENE = [
   'src/components/PasteStep.tsx',
   'src/components/RusStep.tsx',
   'src/components/ThcStep.tsx',
+  'src/components/ThcSkjema.tsx',
+  'src/components/ThcUtfall.tsx',
+  'src/components/ThcForklaring.tsx',
+  'src/components/ThcPlot.tsx',
   'src/components/EtgStep.tsx',
   'src/components/EtgPasteStep.tsx',
   'src/components/Kommentarliste.tsx',

@@ -14,6 +14,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import importert from '../domain/__tests__/fasit/thc-regelsett-import.json'
 import importerteTekster from '../domain/__tests__/fasit/thc-tekster-import.json'
 import type { Kommentarinnhold } from '../domain/kommentarobjekt'
+import { THC_KODE } from '../domain/thc'
 import { sammenlign, type Kurve } from '../domain/thcKurver'
 import { lagThcModell } from '../domain/thcMotor'
 import { validerThcRegelsett, visIrcak, type ThcRegelsett } from '../domain/thcRegelsett'
@@ -26,6 +27,9 @@ import {
   type ThcTekstbolker,
   type ThcTekster,
 } from '../domain/thcTekster'
+import { lagFaginnholdsleser } from '../faginnhold/lesing'
+import { thcReglerFra } from '../faginnhold/thcregler'
+import { THC_MODELL } from './hjelp/thcgrunnlag'
 import {
   faginnholdskall,
   feilFra,
@@ -144,6 +148,16 @@ describe('regelsettet etter migrasjonene', () => {
       expect({ ...modell.modell.regler }).toStrictEqual(REGLER)
       expect({ ...modell.modell.tekster }).toStrictEqual(TEKSTER)
     }
+  })
+
+  it('gir fortolkningsmodulen den samme modellen når appen leser det, for vanlige brukere', async () => {
+    const leser = lagFaginnholdsleser(k.klientFor(bruker))
+    const regler = thcReglerFra({ status: 'klar', data: await leser.lesThcRegelsett('publisert') }, () => {})
+    expect(regler).toEqual({ status: 'klar', modell: THC_MODELL })
+    // Analyttsiden for koden har det samme regelsettet med.
+    const side = await leser.lesAnalyttside(THC_KODE, 'publisert')
+    expect(side.thcregelsett).toEqual(await leser.lesThcRegelsett('publisert'))
+    expect((await leser.lesAnalyttside('AMTNORSUM', 'publisert')).thcregelsett).toBeNull()
   })
 
   it('har historikken urørt: importen, rettingen av tallene og flyttingen av tekstene', async () => {

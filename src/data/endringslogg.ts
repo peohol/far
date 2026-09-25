@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.29.0',
+    dato: '2026-09-25',
+    sammendrag: 'THC-syre fortolkes med de publiserte reglene, og reglene kan prøves på analyttsiden',
+    typer: ['Funksjonalitet', 'Fag'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'THC-syremodulen henter reglene og kommentartekstene fra faginnholdet, slik de andre modulene gjør. Kommentarene, konklusjonene og forklaringen er nøyaktig som før.',
+      'Kan reglene ikke hentes eller brukes, sier modulen fra og tilbyr «Prøv igjen» i stedet for å gi en kommentar.',
+      'Analyttsiden for IRCAK har fått «Fortolkningsregler»: nivåene, sikkerhetsmarginene, måleusikkerheten og hvilke kurver som avgjør konklusjonen ved kronisk bruk og enkeltinntak.',
+      'Under står alle tekstbolkene kommentaren settes sammen av, med når hver brukes, og «Prøv reglene», der du fyller inn prøver og ser kommentaren, kurvene og hvilke tekstbolker som ble brukt.',
+    ],
+  },
+  {
     versjon: '1.28.5',
     dato: '2026-09-24',
     sammendrag: 'Søkefeltene i toppmenyen overlapper ikke lenger i mellomstore vinduer',

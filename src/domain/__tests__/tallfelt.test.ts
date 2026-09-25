@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { renskTall } from '../tallfelt'
 import { lesKonsentrasjon } from '../scenario'
-import { lesTall } from '../thc'
+import { lesTall } from '../thcTall'
 
 describe('hva et konsentrasjonsfelt tar imot', () => {
   it('tar imot tall med både komma og punktum', () => {
