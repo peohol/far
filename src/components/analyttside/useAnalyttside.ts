@@ -1,10 +1,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { publiseringsplan, tilReferanse, type Sideelement } from '../../faginnhold/analyttside'
 import { Samtidighetskonflikt } from '../../faginnhold/lagring'
-import { TOM_SIDE, type Analyttsidedata, type Regelsettutgave, type Utgave } from '../../faginnhold/lesing'
+import {
+  TOM_SIDE,
+  type Analyttsidedata,
+  type Regelsettutgave,
+  type Scenarioregelsettutgave,
+  type Utgave,
+} from '../../faginnhold/lesing'
 import type { Infosideinnhold, Innholdselementinnhold, Referanseinnhold, Tilstand } from '../../faginnhold/modell'
 import { kommentarendringer, utenKommentarer } from '../../regler/kommentarer'
 import type { Intervallregelsett } from '../../regler/modell'
+import { scenariokommentarendringer, type Scenarioutkast } from '../../regler/scenarioredigering'
+import { rusModulFor } from '../../domain/rus'
 import { FJERNET, erEnkeltelement } from '../../faginnhold/paneler'
 import type { Referanse } from '../../faginnhold/referanser'
 import type { Katalogoppforing } from '../../domain/analyttkatalog'
@@ -32,6 +40,14 @@ export interface Sidetilstand {
   feil: string | null
 }
 
+/** Regelsettene slik de er publisert, til å vise hva som endres før publiseringen. */
+export interface Publiserteregler {
+  regelsett: Regelsettutgave | null
+  scenarioregelsett: Scenarioregelsettutgave | null
+}
+
+const INGEN_PUBLISERTE: Publiserteregler = { regelsett: null, scenarioregelsett: null }
+
 const IKKE_KLAR = 'Utkastet er ikke hentet ennå. Vent litt og prøv igjen.'
 const LAGT_INN_AV_ANDRE = 'Noen andre har lagt inn dette i mellomtiden.'
 
@@ -48,14 +64,17 @@ const LAGT_INN_AV_ANDRE = 'Noen andre har lagt inn dette i mellomtiden.'
  * datasettene sier om koden: sidens navn og stoffene analysen omfatter.
  * Finnes en side med samme navn fra før — for eksempel som komponent i en
  * sumanalyse — brukes den.
+ *
+ * Fortolkes koden med scenarioregler, hentes regelsettet for modulen også,
+ * men bare til redigeringen: lesemodusen viser reglene appen alt har hentet.
  */
 export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
   const { leser, lager } = useFaginnholdskilde()
   const tilstand: Tilstand = modus === 'rediger' ? 'utkast' : 'publisert'
+  const modul = useMemo(() => rusModulFor(oppforing.fortolkning) ?? null, [oppforing.fortolkning])
   const [side, setSide] = useState<Sidetilstand>({ status: 'laster', data: TOM_SIDE, tilstand: null, feil: null })
   const [referansebase, setReferansebase] = useState<Referanse[]>([])
-  /** Regelsettet slik det er publisert, til å vise hva som endres før publiseringen. */
-  const [publisertRegelsett, setPublisertRegelsett] = useState<Regelsettutgave | null>(null)
+  const [publisert, setPublisert] = useState<Publiserteregler>(INGEN_PUBLISERTE)
   const [konflikt, setKonflikt] = useState(false)
   const [runde, setRunde] = useState(0)
   /** Det siste som er lest, og fra hvilken tilstand, for endringene som trenger revisjonene. */
@@ -64,10 +83,13 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
   useEffect(() => {
     let gjelder = true
     setSide((forrige) => ({ ...forrige, status: 'laster' }))
-    leser
-      .lesAnalyttside(oppforing.kode, tilstand)
-      .then((data) => {
+    Promise.all([
+      leser.lesAnalyttside(oppforing.kode, tilstand),
+      tilstand === 'utkast' && modul ? leser.finnScenarioregelsett(modul.id, tilstand) : null,
+    ])
+      .then(([side, scenarioregelsett]) => {
         if (!gjelder) return
+        const data = { ...side, scenarioregelsett }
         siste.current = { tilstand, data }
         setSide({ status: 'klar', data, tilstand, feil: null })
       })
@@ -79,10 +101,10 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
     return () => {
       gjelder = false
     }
-  }, [leser, oppforing.kode, tilstand, runde])
+  }, [leser, oppforing.kode, modul, tilstand, runde])
 
-  // Referansebasen trengs bare for å velge kilder, og det publiserte
-  // regelsettet bare for å si hva som endres — altså bare i redigeringen.
+  // Referansebasen trengs bare for å velge kilder, og de publiserte
+  // regelsettene bare for å si hva som endres — altså bare i redigeringen.
   useEffect(() => {
     if (modus !== 'rediger') return
     let gjelder = true
@@ -94,18 +116,20 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
       .catch(() => {
         if (gjelder) setReferansebase([])
       })
-    leser
-      .finnIntervallregelsett(oppforing.kode, 'publisert')
-      .then((utgave) => {
-        if (gjelder) setPublisertRegelsett(utgave)
+    Promise.all([
+      leser.finnIntervallregelsett(oppforing.kode, 'publisert'),
+      modul ? leser.finnScenarioregelsett(modul.id, 'publisert') : null,
+    ])
+      .then(([regelsett, scenarioregelsett]) => {
+        if (gjelder) setPublisert({ regelsett, scenarioregelsett })
       })
       .catch(() => {
-        if (gjelder) setPublisertRegelsett(null)
+        if (gjelder) setPublisert(INGEN_PUBLISERTE)
       })
     return () => {
       gjelder = false
     }
-  }, [leser, modus, runde, oppforing.kode])
+  }, [leser, modus, runde, oppforing.kode, modul])
 
   const lastInn = useCallback(() => {
     setKonflikt(false)
@@ -285,6 +309,32 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
     [leser, oppforing.kode],
   )
 
+  /**
+   * Det samme for scenarioregelsettet: regelsettet og de nye og endrede
+   * kommentarene sammen, mot revisjonene brukeren åpnet eller mot `grunnlag`.
+   */
+  const lagreScenarioregelsett = useCallback(
+    async (utkast: Scenarioutkast, grunnlag?: Scenarioregelsettutgave) => {
+      const apnet = utkastet().scenarioregelsett
+      if (!apnet || !modul) throw new Error(IKKE_KLAR)
+      const mot = grunnlag ?? apnet
+      await lager.lagreScenarioregelsett(
+        mot.regelsett.id,
+        mot.regelsett.revisjon,
+        utkast.regelsett,
+        scenariokommentarendringer(utkast, modul.navn, mot.kommentarer, apnet.kommentarer),
+      )
+      setRunde((r) => r + 1)
+    },
+    [lager, utkastet, modul],
+  )
+
+  /** Scenarioregelsettet slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */
+  const hentScenarioregelsettutkast = useCallback(
+    async () => (modul ? leser.finnScenarioregelsett(modul.id, 'utkast') : null),
+    [leser, modul],
+  )
+
   /** Lager en ny revisjon av objektet med innholdet fra en tidligere. */
   const gjenopprett = useCallback(
     (utgave: Utgave<unknown>, fraRevisjon: number) =>
@@ -319,7 +369,7 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
      */
     kanEndres: modus === 'rediger' && side.tilstand === 'utkast',
     referansebase,
-    publisertRegelsett,
+    publisert,
     konflikt,
     plan,
     lastInn,
@@ -330,6 +380,8 @@ export function useAnalyttside(oppforing: Katalogoppforing, modus: Sidemodus) {
     opprettReferanse,
     lagreRegelsett,
     hentRegelsettutkast,
+    lagreScenarioregelsett,
+    hentScenarioregelsettutkast,
     gjenopprett,
     publiser,
   }

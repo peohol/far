@@ -1,18 +1,22 @@
 import { useState } from 'react'
 import type { Publiseringssteg } from '../../faginnhold/analyttside'
 import { endredeFelt } from '../../faginnhold/historikk'
-import type { Analyttsidedata, Regelsettutgave } from '../../faginnhold/lesing'
+import type { Analyttsidedata } from '../../faginnhold/lesing'
 import { lesKinetikk, panelFor } from '../../faginnhold/paneler'
+import { RUS_MODULER } from '../../domain/rus'
 import { losRegelsett } from '../../regler/kommentarer'
+import { tilScenarioutkast, utkastfelter } from '../../regler/scenarioredigering'
 import { regelsettfelterMedTekst } from '../regler/Fortolkningsregler'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Modallag } from '../Modallag'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
+import type { Publiserteregler } from './useAnalyttside'
 
 export interface RedigeringshandlingerProps {
   data: Analyttsidedata
-  publisertRegelsett: Regelsettutgave | null
+  /** Regelsettene slik de er publisert, til å si hva som endres. */
+  publisert: Publiserteregler
   plan: Publiseringssteg[]
   /** Sant mens utkastet hentes etter at redigeringen er slått på. */
   laster: boolean
@@ -28,7 +32,7 @@ export interface RedigeringshandlingerProps {
  */
 export function Redigeringshandlinger({
   data,
-  publisertRegelsett,
+  publisert,
   plan,
   laster,
   onPubliser,
@@ -91,7 +95,7 @@ export function Redigeringshandlinger({
         <p className="publisering__ingress">Dette blir publisert og synlig for alle:</p>
         <ul className="publisering__liste">
           {plan.map((steg) => (
-            <li key={steg.id}>{beskrivSteg(steg, data, publisertRegelsett)}</li>
+            <li key={steg.id}>{beskrivSteg(steg, data, publisert)}</li>
           ))}
         </ul>
         {feil && (
@@ -121,26 +125,41 @@ export function statustekst(laster: boolean, antall: number, ferdig: boolean): s
 
 /**
  * Hva et publiseringssteg gjelder, slik det står i oppsummeringen. For
- * regelsettet står også hva som er endret siden det som er publisert.
+ * regelsettene står også hva som er endret siden det som er publisert.
  */
 export function beskrivSteg(
   steg: Publiseringssteg,
   data: Analyttsidedata,
-  publisertRegelsett: Regelsettutgave | null = null,
+  publisert: Publiserteregler = { regelsett: null, scenarioregelsett: null },
 ): string {
+  const medEndringer = (navn: string, endret: string[] | null) =>
+    endret && endret.length > 0 ? `${navn} (${endret.join(', ')})` : navn
   switch (steg.slag) {
     case 'intervallregelsett': {
       const regelsett = data.regelsett
-      const navn = `Fortolkningsreglene for ${regelsett?.regelsett.innhold.analyttkode ?? 'koden'}`
-      if (!regelsett || !publisertRegelsett) return navn
-      const endret = endredeFelt(
-        regelsettfelterMedTekst(losRegelsett(publisertRegelsett)),
-        regelsettfelterMedTekst(losRegelsett(regelsett)),
+      const forrige = publisert.regelsett
+      return medEndringer(
+        `Fortolkningsreglene for ${regelsett?.regelsett.innhold.analyttkode ?? 'koden'}`,
+        regelsett &&
+          forrige &&
+          endredeFelt(regelsettfelterMedTekst(losRegelsett(forrige)), regelsettfelterMedTekst(losRegelsett(regelsett))),
       )
-      return endret.length > 0 ? `${navn} (${endret.join(', ')})` : navn
+    }
+    case 'scenarioregelsett': {
+      const regelsett = data.scenarioregelsett
+      const forrige = publisert.scenarioregelsett
+      const modul = regelsett?.regelsett.innhold.modul
+      return medEndringer(
+        `Fortolkningsreglene for ${RUS_MODULER.find((m) => m.id === modul)?.navn ?? 'modulen'}`,
+        regelsett &&
+          forrige &&
+          endredeFelt(utkastfelter(tilScenarioutkast(forrige)), utkastfelter(tilScenarioutkast(regelsett))),
+      )
     }
     case 'kommentar': {
-      const kommentar = data.regelsett?.kommentarer.find((k) => k.id === steg.id)
+      const kommentar = [...(data.regelsett?.kommentarer ?? []), ...(data.scenarioregelsett?.kommentarer ?? [])].find(
+        (k) => k.id === steg.id,
+      )
       return `Kommentar: ${kommentar?.innhold.navn ?? 'en kommentar fortolkningsreglene bruker'}`
     }
     case 'referanse': {

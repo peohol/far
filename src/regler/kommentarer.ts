@@ -104,13 +104,23 @@ export function kommentarendringer(
   regelsett: Intervallregelsett,
   ...lagrede: readonly (readonly Utgave<Kommentarinnhold>[])[]
 ): Kommentarendring[] {
+  return tekstendringer(regelsett.kommentarer, (id) => kommentarnavn(regelsett, id), ...lagrede)
+}
+
+/**
+ * Det samme for tekstene et hvilket som helst regelsett bruker, etter ID.
+ * `navn` gir navnet en ny kommentar får.
+ */
+export function tekstendringer(
+  tekster: readonly { id: string; tekst: string }[],
+  navn: (id: string) => string,
+  ...lagrede: readonly (readonly Utgave<Kommentarinnhold>[])[]
+): Kommentarendring[] {
   const kjente = new Map<string, Utgave<Kommentarinnhold>>()
   for (const liste of lagrede) for (const k of liste) if (!kjente.has(k.id)) kjente.set(k.id, k)
-  return regelsett.kommentarer.flatMap(({ id, tekst }): Kommentarendring[] => {
+  return tekster.flatMap(({ id, tekst }): Kommentarendring[] => {
     const lagret = kjente.get(id)
-    if (!lagret) {
-      return [{ id, revisjon: null, innhold: { navn: kommentarnavn(regelsett, id), tekst, plassholdere: [] } }]
-    }
+    if (!lagret) return [{ id, revisjon: null, innhold: { navn: navn(id), tekst, plassholdere: [] } }]
     if (lagret.innhold.tekst === tekst) return []
     return [{ id, revisjon: lagret.revisjon, innhold: { ...lagret.innhold, tekst } }]
   })

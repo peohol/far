@@ -17,7 +17,7 @@ rusmiddelreglene og THC-syre har egne regeltyper.
 | `supabase/migrations/*_intervallregelsett_objekttype.sql`, `*_intervallregelsett.sql` | Objekttypen, tabellene, valideringen og lesingen |
 | `supabase/migrations/*_importer_intervallregelsett_1.sql` … `_6.sql` | Importen av dagens regler, i seks porsjoner |
 | `supabase/migrations/*_regelredigering_lesing.sql` | `finn_intervallregelsett`: regelsettet for én kode, til analyttsiden |
-| `supabase/migrations/*_intervallregelsett_kommentarobjekter.sql`, `*_flytt_regelsettkommentarer.sql` | Reglene peker på de felles kommentarobjektene, `lagre_intervallregelsett`, og flyttingen av tekstene dit |
+| `supabase/migrations/*_intervallregelsett_kommentarobjekter.sql`, `*_flytt_regelsettkommentarer.sql` | Reglene peker på de felles kommentarobjektene, `lagre_intervallregelsett`, og flyttingen av tekstene dit. Lagringen av kommentarene er felles med scenarioreglene (`intern.lagre_kommentarendringer` i `*_lagre_scenarioregelsett.sql`) |
 | `supabase/import/intervallregelsett.json` | Importdatasettet: dagens regler, ett regelsett per linje, med kilden |
 | `src/regler/modell.ts` | Formen på et regelsett, felles for appen og databasen |
 | `src/regler/kommentarer.ts` | Regelsettet satt sammen med tekstene i kommentarobjektene, og tatt fra hverandre igjen når det lagres |
@@ -30,7 +30,7 @@ rusmiddelreglene og THC-syre har egne regeltyper.
 | `src/components/BandStep.tsx` | Steg 2: knappene, og hva som står i stedet mens reglene hentes eller mangler |
 | `src/regler/redigering.ts` | Endringene redigeringen gjør — grenser, deling, sammenslåing, kommentarer, ringing, cut-off — som rene funksjoner |
 | `src/regler/visning.ts` | Navnene på nivåer og handlinger, feltene historikken sammenligner, og simulatoren |
-| `src/components/regler/` | «Fortolkning» på analyttsiden: tabellen, simulatoren og redigeringen |
+| `src/components/regler/` | «Fortolkning» på analyttsiden: tabellen, simulatoren og redigeringen. Feltene, lagringen med konflikten (`Regelfelter.tsx`) og historikken under reglene (`Regelhistorikk.tsx`) er felles med scenarioreglene |
 | `src/__tests__/intervallregelsett.test.ts` | Import, paritet, validering, tilgang og versjonering, mot en ekte database |
 | `src/__tests__/kommentarflytting.test.ts` | Flyttingen av tekstene til kommentarobjekter, på de historiske importfilene |
 | `src/__tests__/hjelp/dagensregler.ts`, `src/__tests__/data/dagensgrenser.json` | Fasiten fra før byttet: regelsettene og grensene den gamle motoren ga |
