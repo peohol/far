@@ -3,7 +3,7 @@
  * legemiddelmonitorering (TDM).
  *
  * Datasettet ligger i `supabase/import/tdm/`: én fil per analyttkode, hentet
- * fra tre kilder, og referansene i `felles.json`:
+ * fra fire kilder, og referansene i `felles.json`:
  *
  * - Sluttrapporten fra referanseområdeprosjektet ved Diakonhjemmet sykehus og
  *   St. Olavs hospital (2008): antidepressiva, antipsykotika, lamotrigin og
@@ -12,6 +12,8 @@
  *   (Tidsskr Nor Legeforen 2016): opioider, benzodiazepiner og z-hypnotika.
  * - Frost et al., «Nye anbefalinger ved serumkonsentrasjonsmålinger av
  *   sentralstimulerende legemidler» (Tidsskr Nor Legeforen 2019): amfetamin.
+ * - Fortolkningskommentarene i FAR: prøvetakingen ved depotinjeksjon av
+ *   antipsykotika.
  *
  * Importen utvider sidene som finnes (`finnesFraFor: 'utvid'` i `import.ts`):
  * den legger til TDM-kortene, og kilden på referanseområdet når verdien er den

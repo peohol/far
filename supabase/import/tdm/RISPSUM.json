@@ -4,6 +4,7 @@
     26,
     41
   ],
+  "kilde": "080401 - Sluttrapport referanseområder antipsykotika og antidepressiva.pdf, side 26, 41, og fortolkningskommentarene i FAR",
   "viktige_data": {
     "referanseomrade": {
       "nedre": 20,
@@ -25,9 +26,18 @@
       ]
     },
     {
+      "tittel": "Prøvetaking ved depotinjeksjon",
+      "tekst": [
+        "0–2 dager før neste injeksjon."
+      ],
+      "referanser": [
+        "ousfortolkning"
+      ]
+    },
+    {
       "tittel": "Grunnlag for referanseområdet",
       "tekst": [
-        "Referanseområdet bygger på serumkonsentrasjoner målt hos pasienter som brukte 1–8 mg peroralt daglig: 10- og 90-persentilen, rundet utover til runde tall, i data fra Diakonhjemmet sykehus og St. Olavs hospital (2005–2007).",
+        "Referanseområdet bygger på serumkonsentrasjoner målt hos pasienter som brukte 1–8 mg peroralt daglig: 10- og 90-persentilen, rundet av, i data fra Diakonhjemmet sykehus og St. Olavs hospital (2005–2007).",
         "Området gjelder summen av risperidon og 9-hydroksyrisperidon (paliperidon).",
         "Området viser hvilke konsentrasjoner som er vanlige ved anbefalte doser, og er ikke et dokumentert terapeutisk område."
       ],

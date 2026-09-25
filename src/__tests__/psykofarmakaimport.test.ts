@@ -122,7 +122,7 @@ describe('datasettet', () => {
   it('fører innholdet fra PDF-en tilbake til sidene det står på', () => {
     for (const kode of plan.koder) {
       const fil = PSYKOFARMAKA_FILER.find((f) => f.kode === kode.kode)!
-      expect(kode.kilde).toBe(`Importert fra Psykofarmaka.pdf, ${sidetekst(fil.sider)}`)
+      expect(kode.kilde).toBe(`Importert fra Psykofarmaka.pdf, ${sidetekst(fil.sider ?? [])}`)
       for (const e of kode.elementer.filter((e) => e.panel !== 'indikasjon')) {
         expect(e.kilde).toBe(kode.kilde)
       }

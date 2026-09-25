@@ -64,8 +64,19 @@ describe('datasettet', () => {
     expect(plan.koder.map((k) => k.kode)).toEqual(
       expect.arrayContaining(['SERT', 'KVE', 'LAM', 'MOR', 'OKSY', 'BUP', 'DIAZ', 'CZP', 'ZOPI', 'MDO', 'AMF1']),
     )
-    expect(plan.koder).toHaveLength(43)
-    expect(plan.referanser.map((r) => r.nokkel).sort()).toEqual(['frost2019', 'helland2016', 'referanseomradeprosjektet'])
+    expect(plan.koder).toHaveLength(44)
+    expect(plan.referanser.map((r) => r.nokkel).sort()).toEqual(['frost2019', 'helland2016', 'ousfortolkning', 'referanseomradeprosjektet'])
+  })
+
+  it('har prøvetakingen ved depotinjeksjon fra fortolkningskommentarene for antipsykotikaene som gis som depot', () => {
+    const depot = plan.koder.filter((k) => k.elementer.some((e) => e.referanser.includes('ousfortolkning'))).map((k) => k.kode)
+    expect(depot).toEqual(['ARISUM', 'FLUP', 'HALO', 'OLAN', 'PALI', 'PERF', 'RISPSUM', 'ZUKLO'])
+    for (const kode of plan.koder.filter((k) => depot.includes(k.kode))) {
+      const kort = kode.elementer.filter((e) => e.referanser.includes('ousfortolkning'))
+      expect(kort, kode.kode).toHaveLength(1)
+      expect(klartekst(lesKinetikk(kort[0]!.data).dokument), kode.kode).toContain('0–2 dager før neste')
+      expect(kode.kilde, kode.kode).toMatch(/fortolkningskommentarene i FAR$/)
+    }
   })
 
   it('siterer en kilde på hvert kort det legger inn', () => {
@@ -97,6 +108,7 @@ describe('datasettet', () => {
     const kilde = (kode: string) => plan.koder.find((k) => k.kode === kode)!.kilde
     expect(kilde('SERT')).toBe(`Importert fra ${TDM_KILDE.dokument}, side 17, 40`)
     expect(kilde('MOR')).toBe('Importert fra Serumkonsentrasjonsmålinger av vanedannende legemidler.pdf, side 1–2')
+    expect(kilde('PALI')).toBe('Importert fra fortolkningskommentarene i FAR')
     expect(kildetilleggskilde(kilde('SERT'))).toBe(`Kilde lagt til: ${TDM_KILDE.dokument}, side 17, 40`)
   })
 
@@ -185,6 +197,16 @@ describe('migrasjonene i databasen', () => {
     const grense = (kode: string) => tdmkort(etter, kode).find((k) => lesKinetikk(k.data).tittel === 'Referansegrense')!
     expect(grense('BUP').referanser).toEqual([tittel('helland2016'), tittel('referanseomradeprosjektet')])
     expect(klartekst(lesKinetikk(grense('CZP').data).dokument)).toContain('60–220 nmol/L')
+  })
+
+  it('legger prøvetakingen ved depotinjeksjon under prøvetakingstidspunktet, med fortolkningskommentarene som kilde', () => {
+    const titler = (kode: string) => tdmkort(etter, kode).map((k) => lesKinetikk(k.data).tittel)
+    expect(titler('HALO')).toEqual(['Prøvetakingstidspunkt', 'Prøvetaking ved depotinjeksjon', 'Grunnlag for referanseområdet'])
+    const depot = tdmkort(etter, 'HALO')[1]!
+    expect(depot.referanser).toEqual([tittel('ousfortolkning')])
+    expect(klartekst(lesKinetikk(depot.data).dokument)).toBe('0–2 dager før neste injeksjon.')
+    expect(titler('PALI')).toEqual(['Prøvetakingstidspunkt'])
+    expect(tdmkort(etter, 'PALI')[0]!.kilde).toBe('Importert fra fortolkningskommentarene i FAR')
   })
 
   it('gjør ingenting når den kjøres en gang til', async () => {

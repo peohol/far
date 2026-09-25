@@ -5,6 +5,7 @@
     21,
     41
   ],
+  "kilde": "080401 - Sluttrapport referanseområder antipsykotika og antidepressiva.pdf, side 20, 21, 41, og fortolkningskommentarene i FAR",
   "viktige_data": {
     "referanseomrade": {
       "nedre": 200,
@@ -26,9 +27,18 @@
       ]
     },
     {
+      "tittel": "Prøvetaking ved depotinjeksjon",
+      "tekst": [
+        "0–2 dager før neste injeksjon."
+      ],
+      "referanser": [
+        "ousfortolkning"
+      ]
+    },
+    {
       "tittel": "Grunnlag for referanseområdet",
       "tekst": [
-        "Referanseområdet bygger på serumkonsentrasjoner målt hos pasienter som brukte 10–30 mg daglig: 10- og 90-persentilen, rundet utover til runde tall, i data fra Diakonhjemmet sykehus og St. Olavs hospital (2005–2007).",
+        "Referanseområdet bygger på serumkonsentrasjoner målt hos pasienter som brukte 10–30 mg daglig: 10- og 90-persentilen, rundet av, i data fra Diakonhjemmet sykehus og St. Olavs hospital (2005–2007).",
         "Området gjelder summen av aripiprazol og dehydroaripiprazol.",
         "Området viser hvilke konsentrasjoner som er vanlige ved anbefalte doser, og er ikke et dokumentert terapeutisk område."
       ],

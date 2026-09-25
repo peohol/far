@@ -86,7 +86,8 @@ export interface Importserum {
 /** Innholdet for én analyttkode, fra én eller flere sider i kilden. */
 export interface Importfil {
   kode: string
-  sider: number[]
+  /** Sidene i dokumentet innholdet er hentet fra. Kan utelates når `kilde` står. */
+  sider?: number[]
   /**
    * Hvor innholdet er hentet fra, slik historikken skal vise det, når det er
    * noe annet enn dokumentet importen gjelder (se {@link Importkilde}): f.eks.
@@ -370,8 +371,9 @@ export function byggImportplan(
     if (brukteKoder.has(fil.kode)) feil.push(`${hvor}: koden står i flere filer.`)
     brukteKoder.add(fil.kode)
     for (const felt of Object.keys(fil)) if (!FILFELT.has(felt)) feil.push(`${hvor}: ukjent felt «${felt}».`)
-    if (!Array.isArray(fil.sider) || fil.sider.length === 0 || !fil.sider.every((s) => Number.isInteger(s) && s > 0)) {
-      feil.push(`${hvor}: «sider» må være en liste med sidetall.`)
+    const kanUtelateSider = fil.sider === undefined && typeof fil.kilde === 'string'
+    if (!kanUtelateSider && (!Array.isArray(fil.sider) || fil.sider.length === 0 || !fil.sider.every((s) => Number.isInteger(s) && s > 0))) {
+      feil.push(`${hvor}: «sider» må være en liste med sidetall, med mindre «kilde» står.`)
     }
     if (fil.kilde !== undefined && (typeof fil.kilde !== 'string' || fil.kilde.trim() === '')) {
       feil.push(`${hvor}: «kilde» må være en tekst.`)
@@ -562,7 +564,7 @@ function finnReferanse(innhold: Referanseinnhold): string {
 export type UtenAdministrator = 'feil' | 'hopp over'
 
 /** Starten på hver blokk: administratoren som gjør importen, som innlogget. */
-function innlogging(admin: string, utenAdministrator: UtenAdministrator): string {
+export function innlogging(admin: string, utenAdministrator: UtenAdministrator): string {
   const mangler =
     utenAdministrator === 'feil'
       ? `    raise exception 'Fant ingen administrator med brukernavnet %.', ${lit(admin)};`

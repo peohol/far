@@ -30,6 +30,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `supabase/migrations/*_psykofarmaka_import_*.sql`, `*_psykofarmaka_kursendring.sql` | Importen slik den ble rullet ut, og kursendringen som tok bort preparatnavnene etterpå |
 | `supabase/import/tdm/`, `src/faginnhold/tdm.ts`, `scripts/importer-tdm.ts` | Referanseområdene og TDM-kortene fra referanseområdeprosjektet og Tidsskriftet, og SQL-en som legger dem til på sidene |
 | `supabase/migrations/*_tdm_referanseomrader_*.sql` | Den importen slik den ble rullet ut |
+| `supabase/import/rettinger/`, `src/faginnhold/rettinger.ts`, `scripts/lag-rettinger.ts`, `supabase/migrations/*_rettinger.sql` | Rettinger av rader i tabellene over serumkonsentrasjoner, med kilden og begrunnelsen |
 | `supabase/migrations/*_scenarioregelsett*.sql`, `*_rusregler_import.sql`, `*_scenarioregler_lesing.sql` | Scenarioregelsettene for analytter som vurderes samlet, importen av rusmiddelreglene og lesingen fortolkningen gjør (`docs/scenarioregler.md`) |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
@@ -50,7 +51,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/__tests__/analyttside.test.tsx`, `navigasjon.test.tsx`, `analyttsidemodell.test.ts` | Sidene, redigeringen og veiene mellom sidene og fortolkningen |
 | `src/__tests__/referansenummerering.test.ts`, `referansepille.test.tsx` | Nummereringen, og pillen med mus, berøring og tastatur |
 | `src/__tests__/festreferanser.test.ts`, `referansefelt.test.tsx` | FEST-referansene, referansefeltet, listen og at editoren aldri tilbyr en automatisk kilde |
-| `src/__tests__/psykofarmakaimport.test.ts`, `tdmimport.test.ts` | Datasettene og importene, prøvd mot en ekte database |
+| `src/__tests__/psykofarmakaimport.test.ts`, `tdmimport.test.ts`, `rettinger.test.ts` | Datasettene, importene og rettingene, prøvd mot en ekte database |
 | `src/__tests__/hjelp/testdatabase.ts` | Postgres i minnet, bygd av migrasjonene, og kallene testene gjør |
 
 ## Domenet
@@ -537,9 +538,10 @@ opprettet først — og sjekker at sidene viser nøyaktig det datasettet har nå
 **Referanseområder og TDM.** `supabase/import/tdm/` bygger på tre kilder:
 sluttrapporten fra referanseområdeprosjektet (2008), Helland mfl. om
 vanedannende legemidler (Tidsskriftet 2016) og Frost mfl. om
-sentralstimulerende legemidler (Tidsskriftet 2019). Filene har samme form som
+sentralstimulerende legemidler (Tidsskriftet 2019), og prøvetakingen ved
+depotinjeksjon fra fortolkningskommentarene i FAR. Filene har samme form som
 psykofarmakafilene, pluss `kilde` (hva revisjonene sier de er importert fra,
-i stedet for dokument og sider) og panelet `tdm`. Den importen *utvider*
+i stedet for dokument og sider, som da kan utelates) og panelet `tdm`. Den importen *utvider*
 sidene (`finnesFraFor = 'utvid'` i `importSql`): en side som mangler, lages;
 et kort som mangler (samme panel, type og tittel), legges til; et
 referanseområde med nøyaktig de samme tallene får kildene det mangler; og et
@@ -547,6 +549,15 @@ referanseområde med andre tall røres ikke, men meldes. Verdier som avviker fra
 det som står på sidene, rettes altså aldri av importen — de avgjøres av en
 fagperson og rettes for seg. `npx vite-node scripts/importer-tdm.ts --
 <brukernavn> <mappe>` lager migrasjonene.
+
+**Rettinger.** En feil i det som ble importert, rettes med en rettingsfil i
+`supabase/import/rettinger/`: kilden, og per retting koden, raden slik den
+står, feltene som endres (eller `null` for å ta bort raden) og hvorfor.
+`npx vite-node scripts/lag-rettinger.ts -- <brukernavn> <fil> <utfil>` lager
+migrasjonen. Bare en rad som står nøyaktig som oppgitt, rettes; hver retting
+blir en ny, publisert revisjon med «Rettet etter <kilde>: <hvorfor>» i
+historikken, og en tabell som blir tom, tas bort fra siden. Importdatasettet
+røres ikke: det viser hva som ble importert.
 
 ## Tilgang
 
