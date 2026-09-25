@@ -22,6 +22,7 @@ import {
   type Seksjonsstyring,
 } from './Seksjonsstyring'
 import { useSkjuling } from '../../hooks/useSkjuling'
+import { useRutenettflytting } from './Skuffrutenett'
 import '../../styles/seksjoner.css'
 
 /**
@@ -47,7 +48,8 @@ import '../../styles/seksjoner.css'
  *
  * Åpning og lukking glir raskt, med høyden fra 0fr til 1fr (samme grep som
  * `Details`), og skjer umiddelbart for den som har bedt om mindre bevegelse,
- * og når søket eller en lenke åpner skuffen.
+ * og når søket eller en lenke åpner skuffen. Detaljkort i et `Skuffrutenett`
+ * vokser og flytter seg sammen med naboene i stedet.
  */
 
 /** Klassen skuffene har; seksjon og detaljkort er varianter av den. */
@@ -182,7 +184,13 @@ function Skuff({
   stien.current = sti
   useEffect(() => registrer(stien.current, apenFraStart), [registrer, nokkel, apenFraStart])
   const { apen, animer } = styring.tilstand(sti, apenFraStart)
-  const sett = (apen: boolean) => styring.sett(sti, apen)
+  // Et detaljkort i et rutenett vokser og flytter seg med naboene i stedet for å gli opp (se `Skuffrutenett`).
+  const rutenett = useRutenettflytting()
+  const flyttes = slag === 'detalj' && rutenett !== null
+  const sett = (apen: boolean) => {
+    if (flyttes) rutenett()
+    styring.sett(sti, apen)
+  }
   const id = useId()
   const overskrift = `${id}-overskrift`
   const innholdId = `${id}-innhold`
@@ -192,7 +200,7 @@ function Skuff({
   const inner = useRef<HTMLDivElement>(null)
   const treff = useTreffI(inner)
 
-  useSkjuling(kropp, inner, apen, animer)
+  useSkjuling(kropp, inner, apen, animer && !flyttes)
 
   // Nettleserens eget søk fant noe i den lukkede skuffen. Skuffen åpnes, og
   // søsknene lukkes, før nettleseren ruller til treffet — så treffet står der
@@ -233,6 +241,7 @@ function Skuff({
       {...{ [SKUFFATTRIBUTT]: nokkel }}
       data-apen={apen || undefined}
       data-stille={!animer || undefined}
+      data-flyttes={flyttes || undefined}
       data-ikon={ikon ? '' : undefined}
     >
       {/* `data-ih`: ikonet spiller når hodet får pekeren eller fokus. */}

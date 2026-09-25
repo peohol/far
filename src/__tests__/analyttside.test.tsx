@@ -1032,6 +1032,38 @@ describe('interaksjonene', () => {
     expect(screen.getByText(/De der DMP mener ingen tiltak er nødvendig, vises ikke\./)).toBeTruthy()
   })
 
+  it('viser den redaksjonelle teksten over interaksjonene fra FEST, og lar redaktøren skrive den', async () => {
+    const user = userEvent.setup()
+    const medTekst = (tilstand: Tilstand): Analyttsidedata => {
+      const s = medKobling(tilstand)
+      const tekst = utgave('inter', {
+        infoside: 'hs',
+        panel: 'interaksjoner',
+        posisjon: 0,
+        elementtype: 'riktekst',
+        data: { dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Syntetisk: obs enzymhemmere.' }] }] } },
+      })
+      return { ...s, elementer: [...s.elementer, tekst] }
+    }
+    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medTekst }))
+    // Den lukkede seksjonen oppsummerer både FEST og teksten.
+    expect(await screen.findByText('1 bør unngås · 1 forholdsregler bør tas · Syntetisk: obs enzymhemmere.')).toBeTruthy()
+    await user.click(skuffknapp('Interaksjoner'))
+    const seksjon = screen.getByRole('region', { name: 'Interaksjoner' })
+    const tekst = within(seksjon).getByText('Syntetisk: obs enzymhemmere.')
+    const forsteKort = within(seksjon).getByRole('button', { name: /^Farligin/, hidden: true })
+    expect(tekst.compareDocumentPosition(forsteKort) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    // Detaljkortene med interaksjonene står i en liste, ikke i et rutenett som flytter dem.
+    expect(forsteKort.closest('.skuff--detalj')!.hasAttribute('data-flyttes')).toBe(false)
+
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await user.click(await screen.findByRole('button', { name: 'Rediger: Interaksjoner' }))
+    const skjema = redigeringsvindu('Interaksjoner')
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+    await waitFor(() => expect(lager.lagreUtkast).toHaveBeenCalledTimes(1))
+    expect(vi.mocked(lager.lagreUtkast).mock.calls[0]![2]).toMatchObject({ panel: 'interaksjoner', elementtype: 'riktekst', posisjon: 0 })
+  })
+
   it('finner stoffene i søket på siden, også i lukkede detaljkort', async () => {
     const user = userEvent.setup()
     vis('AMTNORSUM', kilde({ data: medKobling }))
@@ -1488,6 +1520,45 @@ describe('kortene i farmakokinetikken', () => {
     expect(aktivt.textContent?.toLowerCase()).toBe('metabolisme')
     expect(aktivt.closest('.skuff__knapp')?.closest('[data-skuff="farmakokinetikk/k2"]')).not.toBeNull()
     expect(aktivt.closest('[hidden]')).toBeNull()
+  })
+
+  it('flytter kortene i rutenettet synlig når brukeren åpner dem', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', kilde({ data: medKort() }))
+    await finnVerdi('10–20 nmol/L')
+    await apneSkuff(user, 'Farmakokinetikk')
+    const kort = document.querySelectorAll('.skuffrutenett > li > .skuff--detalj')
+    expect(kort).toHaveLength(2)
+    for (const k of kort) expect(k.hasAttribute('data-flyttes')).toBe(true)
+    await apneSkuff(user, 'Absorpsjon')
+    expect(skuffen('Absorpsjon').getAttribute('aria-expanded')).toBe('true')
+    // Kortet står åpent med én gang; det er rutenettet som flytter det.
+    expect(document.querySelector('[data-skuff="farmakokinetikk/k1"] .skuff__inner')!.hasAttribute('hidden')).toBe(false)
+  })
+
+  it('viser farmakogenetikken som en egen seksjon, med ett kort som står åpent', async () => {
+    const user = userEvent.setup()
+    const data = (tilstand: Tilstand): Analyttsidedata => {
+      const s = medKort()(tilstand)
+      const cyp = utgave('cyp', {
+        infoside: 'hs',
+        panel: 'farmakogenetikk',
+        posisjon: 0,
+        elementtype: 'kinetikkort',
+        data: {
+          tittel: 'CYP-enzymer (substrat)',
+          dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Syntetisk CYP2D6.' }] }] },
+        },
+      })
+      return { ...s, elementer: [...s.elementer, cyp] }
+    }
+    vis('AMTNORSUM', kilde({ data }))
+    await finnVerdi('10–20 nmol/L')
+    const seksjoner = [...document.querySelectorAll('.skuff--seksjon')].map((s) => s.getAttribute('data-skuff'))
+    expect(seksjoner.indexOf('farmakogenetikk')).toBe(seksjoner.indexOf('farmakokinetikk') + 1)
+    await apneSkuff(user, 'Farmakogenetikk')
+    expect(skuffen('CYP-enzymer (substrat)').getAttribute('aria-expanded')).toBe('true')
+    expect(screen.getByText('Syntetisk CYP2D6.')).toBeTruthy()
   })
 
   it('fjerner et kort først etter en bekreftelse, uten å slette det', async () => {

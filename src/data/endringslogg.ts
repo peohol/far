@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.34.0',
+    dato: '2026-09-25',
+    sammendrag: 'Farmakogenetikk som egen seksjon, interaksjonsteksten samlet, og animerte kortrutenett',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Kort i et rutenett åpnes, lukkes og flytter seg animert: kortet du åpner, vokser ut over hele bredden, og de andre glir til sine nye plasser. Det gjelder kortene i farmakokinetikken og farmakogenetikken, som styrkene i preparatene. Har du bedt om mindre bevegelse i systemet, skjer det uten animasjon.',
+      'CYP-enzymer (substrat) har flyttet fra farmakokinetikken til en egen seksjon, Farmakogenetikk.',
+      'Teksten som sto i kortet «Interaksjoner» under farmakokinetikken, står nå øverst i seksjonen Interaksjoner, over oppføringene fra FEST, og kan redigeres der.',
+      'I serumkonsentrasjonene står ikke kildene lenger som tekst over hver tabell. De står i kildefeltet for hele seksjonen.',
+      'Det som er flyttet, står som nye revisjoner, så det som sto før, kan hentes fram i historikken.',
+    ],
+  },
+  {
     versjon: '1.33.0',
     dato: '2026-09-25',
     sammendrag: 'Viktige data viser t½ og tss per legemiddelform, uten forbehold',

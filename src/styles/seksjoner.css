@@ -244,7 +244,10 @@
   grid-template-rows: 1fr;
 }
 
-/* Når søket eller en lenke åpner skuffen, skal den stå åpen med én gang. */
+/* Når søket eller en lenke åpner skuffen, skal den stå åpen med én gang. Et
+   detaljkort i et rutenett glir ikke opp: hele kortet vokser dit det skal stå
+   (`Skuffrutenett`). */
+.skuff[data-flyttes] > .skuff__kropp,
 .skuff[data-stille] > .skuff__kropp,
 .skuff[data-stille] > .skuff__hode > .skuff__pil {
   transition: none;

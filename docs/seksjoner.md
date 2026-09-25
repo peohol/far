@@ -44,6 +44,12 @@ offentlige kilder.
   overskriften (referansepillene) gjør det ikke.
 - Åpning glir raskt. Den som har bedt om mindre bevegelse i systemet, får
   skuffen åpnet og lukket, og siden rullet, uten glidning.
+- **Designregel:** kort i et rutenett åpnes, lukkes og flyttes animert. Når
+  brukeren åpner eller lukker et kort, vokser eller krymper det dit det skal
+  stå, og naboene glir til sine nye plasser, så øyet kan følge hva som gikk
+  hvor. Søket og direktelenker åpner straks. Detaljkort i et rutenett står i
+  `Skuffrutenett`, som gjør dette selv; en visning med egne kort, som
+  styrkene i «Preparater», bruker `useFlytting` direkte.
 - Det finnes ingen «Åpne alle». Heller ikke redigeringsmodus åpner alt:
   redaktøren åpner seksjonen som skal redigeres, og en handling i hodet åpner
   seksjonen skjemaet står i. Selve skjemaet åpnes i et redigeringsvindu over
@@ -100,10 +106,24 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   `VIS_HENDELSE` fra elementet som skal vises (`useSkjultTilFunnet`).
 - Glidningen er felles: `useSkjuling` (`src/hooks/`) skjuler og viser
   innholdet rundt en kropp som glir mellom `grid-template-rows: 0fr` og `1fr`,
-  og brukes av skuffene og styrkene i preparatvinduet. Kortene i et rutenett
-  som åpnes over hele bredden, flytter seg med `useFlytting` (FLIP): kortet
-  vokser dit det skal, og naboene glir til sin nye plass. Klipp innholdet ved
+  og brukes av skuffene og styrkene i preparatvinduet. Klipp innholdet ved
   kroppens kant, ikke radens; mens raden glir, er kroppen høyere enn den.
+- Kortene i et rutenett som åpnes over hele bredden, flytter seg med
+  `useFlytting` (FLIP): kortet vokser dit det skal, og naboene glir til sin
+  nye plass. Detaljkort legges i `Skuffrutenett`
+  (`src/components/seksjoner/Skuffrutenett.tsx`) i stedet for en `<ul>`:
+  kortene i det tar et opptak før de åpnes eller lukkes, og glir ikke opp
+  selv (`data-flyttes`), for det er rutenettet som flytter dem.
+
+  ```tsx
+  <Skuffrutenett className="infokort">
+    {kort.map((k) => (
+      <li key={k.id}>
+        <Detaljkort id={k.id} tittel={k.tittel}>…</Detaljkort>
+      </li>
+    ))}
+  </Skuffrutenett>
+  ```
 
 Stoffsidens paneler (`src/components/analyttside/Paneler.tsx`) er seksjoner med
 panelnøkkelen som `id`; om et panel står åpent fra start, står i `apen` i

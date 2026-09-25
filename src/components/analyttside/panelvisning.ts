@@ -17,6 +17,7 @@ const SEKSJONSIKONER: Readonly<Record<string, Ikonnavn>> = {
   preparater: 'prep',
   dosering: 'dose',
   farmakokinetikk: 'pk',
+  farmakogenetikk: 'dna',
   interaksjoner: 'inter',
   serumkonsentrasjoner: 'serum',
   fortolkning: 'interp',
