@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.36.4',
+    dato: '2026-09-25',
+    sammendrag: 'Alle legemiddelformene har fått egne ikoner',
+    typer: ['Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Nye ikoner i samme stil som de andre: infusjonspose, inhalator, sprayflaske, tube, plaster, dosepose, stikkpille, implantat og gassflaske.',
+      'Granulat, infusjonsvæske, konsentrat til infusjonsvæske, stikkpille, sirup og de andre formene som før fikk det generelle ikonet, har nå et ikon som viser formen.',
+      'Ikonet følger formen som gis til pasienten, så et pulver til injeksjonsvæske får sprøyten og et granulat til mikstur flasken. Det gjelder alle formene i FEST, også dem ingen stoffside bruker ennå.',
+      'Legemiddelformene på t½- og tss-kortene i «Viktige data» får de samme ikonene.',
+    ],
+  },
+  {
     versjon: '1.36.3',
     dato: '2026-09-25',
     sammendrag: 'De 15 nye stoffsidene har fått indikasjoner fra Felleskatalogen',
