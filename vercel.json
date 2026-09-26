@@ -3,7 +3,7 @@
   "crons": [
     { "path": "/api/legemiddeldata-synk", "schedule": "15 4 * * *" },
     { "path": "/api/clinpgx-synk", "schedule": "30 2 * * 1" },
-    { "path": "/api/cpic-synk", "schedule": "45 2 * * 2" }
+    { "path": "/api/cpic-synk", "schedule": "15 16 26 9 *" }
   ],
   "functions": {
     "api/legemiddeldata-synk.ts": { "maxDuration": 300 },
