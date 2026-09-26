@@ -98,9 +98,10 @@ export function Cpicoppslag({ utvalg }: { utvalg: Cpicutvalg }) {
                 {svar.uavklart.map((u) => (
                   <p key={`${u.populasjon}-${u.gen}`} className="interaksjoner__ikke-vurdert" role="note">
                     {g.populasjoner.length > 1 && u.populasjon ? `Populasjon ${u.populasjon}: ` : ''}
-                    CPIC har ulike anbefalinger for {resultattekst(u.gen, u.resultat)} avhengig av{' '}
-                    {verdinavn(g.metoder.get(u.gen) ?? null)} ({oppramsing(u.oppslagsverdier)}). Velg den for å se
-                    anbefalingen.
+                    {u.uten_anbefaling.length > 0
+                      ? `CPIC har ingen anbefaling for ${resultattekst(u.gen, u.resultat)} med ${verdinavn(g.metoder.get(u.gen) ?? null)} ${oppramsing(u.uten_anbefaling)} og disse valgene.`
+                      : `CPIC har ulike anbefalinger for ${resultattekst(u.gen, u.resultat)} avhengig av ${verdinavn(g.metoder.get(u.gen) ?? null)} (${oppramsing(u.oppslagsverdier)}).`}{' '}
+                    Velg {verdinavn(g.metoder.get(u.gen) ?? null)} for å se anbefalingen.
                   </p>
                 ))}
                 {svar.mangler.length > 0 && (
