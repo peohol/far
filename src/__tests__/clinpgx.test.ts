@@ -610,11 +610,18 @@ const SERTRALINUTVALG = lesFarmakogenetikkutvalg({
 })
 
 describe('referansene fra ClinPGx', () => {
-  it('oppgir ClinPGx med lisensen i seksjonen, og publikasjonene i kortet til hver retningslinje', () => {
+  it('oppgir ClinPGx med lisensen, lenke til den og bruksvilkårene i seksjonen, og publikasjonene i kortet til hver retningslinje', () => {
     const visning = byggFarmakogenetikkvisning(SERTRALINUTVALG)
     const kilder = clinpgxreferanser(SERTRALINUTVALG, visning)
     const clinpgx = kilder.referanser.find((r) => r.id === CLINPGX_KILDE)!
-    expect(clinpgx.automatisk).toEqual({ kilde: 'ClinPGx', opphav: 'Farmakogenetiske data fra ClinPGx, lisens CC BY-SA 4.0, sist hentet 21. september 2026' })
+    expect(clinpgx.automatisk).toEqual({
+      kilde: 'ClinPGx',
+      opphav: 'Utdrag av farmakogenetiske data fra ClinPGx, omformet av OUSFAR, lisens CC BY-SA 4.0, sist hentet 21. september 2026',
+      lenker: [
+        { tekst: 'Lisens: CC BY-SA 4.0', lenke: 'https://creativecommons.org/licenses/by-sa/4.0/' },
+        { tekst: 'Bruksvilkår hos ClinPGx', lenke: 'https://www.clinpgx.org/page/dataUsagePolicy' },
+      ],
+    })
     expect(kilder.panelreferanser).toEqual({ farmakogenetikk: [CLINPGX_KILDE] })
     const cpic = visning.retningslinjer.find((r) => r.kilde === 'CPIC')!
     expect(kilder.elementer).toContainEqual({

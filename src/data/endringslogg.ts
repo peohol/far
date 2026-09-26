@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.38.1',
+    versjon: '1.39.1',
     dato: '2026-09-26',
     sammendrag: 'Alle stoffsidene har fått en avklart ClinPGx-status, og 18 sider til er koblet',
     typer: ['Fag'],
@@ -22,6 +22,31 @@ export const ENDRINGSLOGG: Endring[] = [
       'Gabapentin, ketobemidon, levomepromazin og O-desmetylvenlafaksin er koblet etter kontroll mot WHOs ATC-register, RxNorm, PubChem og ChEBI.',
       'Metabolittene (som norfluoksetin og O-desmetyltramadol) kobles ikke til moderstoffet. Hvordan de skal vises, er en faglig vurdering.',
       'En kobling redaksjonen alt har laget, blir stående.',
+    ],
+  },
+  {
+    versjon: '1.39.0',
+    dato: '2026-09-26',
+    sammendrag: 'OUSFAR har en egen, ukentlig oppdatert kopi av CPICs farmakogenetiske anbefalinger',
+    typer: ['Funksjonalitet', 'Fag'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'CPICs database hentes hver uke: hvilke gen–legemiddel-par CPIC har vurdert, anbefalingene med styrken og hvilke genetiske resultater de gjelder, og hvilke diplotyper som gir hvilket resultat.',
+      'Anbefalinger som bygger på flere gener, på aktivitetsverdi eller på HLA-status, lagres som CPIC har dem, uten å presses inn i én modell.',
+      'Hvilken CPIC-release dataene kommer fra, og når de sist ble hentet, lagres sammen med dem.',
+      'Feiler en henting, eller ser svaret ufullstendig ut, beholdes forrige gyldige datasett.',
+      'Ingenting vises på stoffsidene ennå; visningen kommer i en egen endring.',
+    ],
+  },
+  {
+    versjon: '1.38.1',
+    dato: '2026-09-26',
+    sammendrag: 'ClinPGx oppgis med lenke til lisensen og bruksvilkårene',
+    typer: ['Design / layout'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Under ClinPGx i referanselisten står det nå lenker til lisensen (CC BY-SA 4.0) og til ClinPGx sine bruksvilkår.',
+      'Kildeteksten sier at det som vises, er et utdrag av ClinPGx-dataene som OUSFAR har omformet, slik lisensen krever.',
     ],
   },
   {

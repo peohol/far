@@ -2,7 +2,8 @@
 
 Leses når noe som har med preparater, virkestoff, pakninger eller andre
 legemiddelgrunndata på stoffsidene å gjøre skal endres. Farmakogenetikken fra
-ClinPGx følger det samme mønsteret og står i `docs/clinpgx.md`. Planen står i
+ClinPGx og CPIC følger det samme mønsteret og står i `docs/clinpgx.md` og
+`docs/cpic.md`. Planen står i
 `docs/analyttsider-og-redigering.md`; her står hvilke kilder som finnes, hva de
 faktisk inneholder, og hvilke valg OUSFAR har gjort.
 

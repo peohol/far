@@ -14,7 +14,8 @@ export function listeId(referanse: string): string {
  * Listen nederst på siden: alle referansene som faktisk brukes der, i samme
  * rekkefølge som numrene. Den bygges av nummereringen hver gang og redigeres
  * aldri for hånd. Redaksjonelle og automatiske referanser står sammen; de
- * automatiske er merket, med sporbarheten under teksten. Det er det eneste
+ * automatiske er merket, med sporbarheten og lenkene kilden krever (som
+ * lisensen) under teksten. Det er det eneste
  * stedet hele referanseteksten står fast på siden. Uten referanser vises
  * ingenting.
  */
@@ -38,6 +39,11 @@ export function Referanseliste({ tittel = 'Referanser' }: { tittel?: string }) {
               <span className="referanseliste__automatisk">
                 <span className="referansemerke">{laast(`Automatisk fra ${referanse.automatisk.kilde}`)}</span>
                 {referanse.automatisk.opphav && <span>{referanse.automatisk.opphav}</span>}
+                {referanse.automatisk.lenker?.map(({ tekst, lenke }) => (
+                  <a key={lenke} href={lenke} target="_blank" rel="noopener noreferrer">
+                    {tekst}
+                  </a>
+                ))}
               </span>
             )}
           </li>
