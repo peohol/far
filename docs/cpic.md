@@ -118,7 +118,7 @@ Funksjonene i `public`:
 | Funksjon | Hvem | Hva |
 | --- | --- | --- |
 | `cpic_forrige_synk`, `cpic_start_synk`, `cpic_last_inn`, `cpic_fullfor_synk`, `cpic_avbryt_synk` | Serveren (`service_role`) | Synkroniseringen |
-| `les_cpic(clinpgx_ider)` | Innloggede | For opptil 200 legemidler (etter ClinPGx-ID): legemidlene, parene (også fjernede, merket), retningslinjene med publikasjonene, anbefalingene, genene og de mulige resultatene for dem, og `kilde` (release, skjemaversjon, når dataene sist ble endret og kontrollert). Uten rådataene |
+| `les_cpic(clinpgx_ider)` | Innloggede | For opptil 200 legemidler (etter ClinPGx-ID): legemidlene, parene (også fjernede, merket), retningslinjene med publikasjonene, anbefalingene, genene og de mulige resultatene for dem, og `kilde` (release og skjemaversjon fra siste vellykkede kjøring som fikk dem oppgitt, når dataene sist ble endret og kontrollert). Uten rådataene |
 | `cpic_status()` | Innloggede | De 20 siste kjøringene |
 
 Koden:

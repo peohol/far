@@ -320,6 +320,20 @@ describe('synkroniseringen', () => {
     expect((await logg()).map((l) => l.status)).toEqual(['fullfort', 'uendret', 'fullfort'])
   })
 
+  it('oppgir releasen fra siste vellykkede kjøring, også når dataene var uendret', async () => {
+    await synkroniserCpic({ lager: lager(), api: falskApi({}, { ...KILDE, release: null }) })
+    expect((await les([AMITRIPTYLIN])).kilde.release).toBeNull()
+    const nyRelease = { ...KILDE, release: 'v1.61.0', skjemaversjon: '83' }
+    expect(await synkroniserCpic({ lager: lager(), api: falskApi({}, nyRelease) })).toMatchObject({ status: 'uendret' })
+    // En kjøring der GitHub ikke svarte, visker ikke ut releasen som er kjent.
+    await synkroniserCpic({ lager: lager(), api: falskApi({}, { ...nyRelease, release: null }) })
+    const { kilde } = await les([AMITRIPTYLIN])
+    expect(kilde).toMatchObject({ release: 'v1.61.0', skjemaversjon: '83' })
+    const [forste] = await logg()
+    expect(forste!.status).toBe('fullfort')
+    expect(kilde.endret_kl! < kilde.kontrollert_kl!).toBe(true)
+  })
+
   it('beholder siste gyldige datasett når CPIC feiler, uttrekket er for lite eller ikke henger sammen', async () => {
     await synkroniserCpic({ lager: lager(), api: falskApi() })
     const foer = await les([AMITRIPTYLIN, ABAKAVIR])

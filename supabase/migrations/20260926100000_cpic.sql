@@ -503,8 +503,9 @@ $$;
 -- --- Lesingen --------------------------------------------------------------
 
 -- Hvilken CPIC-database som ligger inne: release og skjemaversjon fra siste
--- bytte, når dataene sist ble byttet inn, og når de sist ble kontrollert mot
--- CPIC.
+-- vellykkede kjøring som fikk dem oppgitt (også en uendret kjøring: releasen
+-- kan komme etter dataene), når dataene sist ble byttet inn, og når de sist
+-- ble kontrollert mot CPIC.
 create function cpic.kilde()
 returns jsonb
 language sql
@@ -513,16 +514,22 @@ set search_path = ''
 as $$
   select jsonb_build_object(
     'navn', 'CPIC',
-    'release', s.release,
-    'release_dato', s.release_dato,
-    'skjemaversjon', s.skjemaversjon,
-    'endret_kl', s.avsluttet_kl,
+    'release', r.release,
+    'release_dato', r.release_dato,
+    'skjemaversjon', (
+      select s.skjemaversjon from cpic.synkroniseringer s
+      where s.status in ('fullfort', 'uendret') and s.skjemaversjon is not null
+      order by s.id desc limit 1),
+    'endret_kl', (
+      select max(s.avsluttet_kl) from cpic.synkroniseringer s where s.status = 'fullfort'),
     'kontrollert_kl', (
-      select max(k.avsluttet_kl) from cpic.synkroniseringer k where k.status in ('fullfort', 'uendret')))
+      select max(s.avsluttet_kl) from cpic.synkroniseringer s where s.status in ('fullfort', 'uendret')))
   from (select 1) x
   left join lateral (
-    select * from cpic.synkroniseringer s where s.status = 'fullfort' order by s.id desc limit 1
-  ) s on true
+    select s.release, s.release_dato from cpic.synkroniseringer s
+    where s.status in ('fullfort', 'uendret') and s.release is not null
+    order by s.id desc limit 1
+  ) r on true
 $$;
 
 -- Alt CPIC har om legemidlene med disse ClinPGx-ID-ene: legemidlene,
