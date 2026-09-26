@@ -148,6 +148,11 @@ export function oppslagsgrunnlag(utvalg: Cpicutvalg): Oppslagsgrunnlag[] {
 export interface Genvalg {
   resultat: string
   oppslagsverdi?: string
+  /**
+   * Diplotypen resultatet er oversatt fra med CPICs tabell (`src/cpic/diplotype.ts`),
+   * når det er det. Bare for å vise hvorfor; oppslaget bruker resultatet og verdien.
+   */
+  diplotype?: string
 }
 
 /** Valgene, per gen. Et gen som ikke står her, er ikke valgt. */

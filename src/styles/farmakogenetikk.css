@@ -197,7 +197,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
   gap: var(--rom-3) var(--rom-4);
-  align-items: end;
+  align-items: start;
 }
 
 .cpic-oppslag__gen {
@@ -208,6 +208,47 @@
 
 .cpic-oppslag__valg > .preparatlenker {
   grid-column: 1 / -1;
+  margin: 0;
+}
+
+/* Oversettelsen fra diplotype, under valget for genet: søket i CPICs tabell
+   og oversettelsen trinn for trinn. */
+.cpic-diplotype {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding-left: var(--rom-3);
+  border-left: var(--kant) solid var(--linje);
+}
+
+.cpic-diplotype > p,
+.cpic-diplotype__apne {
+  margin: 0;
+}
+
+.cpic-diplotype__treff {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cpic-diplotype__treff > li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--rom-2);
+}
+
+.cpic-diplotype__oversettelse {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+}
+
+.cpic-diplotype__oversettelse > p {
   margin: 0;
 }
 

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Farmakogenetikkutvalg } from '../../clinpgx/lesing'
 import { byggFarmakogenetikkvisning, type Farmakogenetikkvisning } from '../../clinpgx/stoffside'
+import { lagDiplotypeindeks, type Diplotypeindeks } from '../../cpic/diplotype'
 import type { Cpicutvalg } from '../../cpic/lesing'
 import { byggCpicvisning, type Cpicvisning } from '../../cpic/stoffside'
 import { useFaginnholdskilde } from './Faginnholdskilde'
@@ -64,4 +65,41 @@ export function useFarmakogenetikk(koblet: readonly string[]) {
 /** CPIC-dataene for de samme kjemikaliene, etter ClinPGx-ID-en CPIC oppgir for legemidlene. */
 export function useCpic(koblet: readonly string[]) {
   return useKilde(useFaginnholdskilde().cpic, koblet, byggCpicvisning)
+}
+
+export type Diplotypetilstand =
+  | { status: 'ingen' }
+  | { status: 'laster' }
+  | { status: 'klar'; indeks: Diplotypeindeks }
+  | { status: 'feil'; feil: string }
+
+/**
+ * CPICs tabell fra diplotype til resultat for genet, når `gen` er satt.
+ * Hentes én gang per gen (leseren husker den); bare gensymbolet sendes.
+ * `utgave` sier hvilke CPIC-data siden viser (`cpicutgave`): når den endres,
+ * etter at en administrator har hentet fra CPIC, leses tabellen på nytt.
+ */
+export function useDiplotyper(gen: string | null, utgave: string): Diplotypetilstand {
+  const leser = useFaginnholdskilde().cpic
+  const [tilstand, setTilstand] = useState<Diplotypetilstand>({ status: 'ingen' })
+  useEffect(() => {
+    if (!leser || !gen) {
+      setTilstand({ status: 'ingen' })
+      return
+    }
+    let gjelder = true
+    setTilstand({ status: 'laster' })
+    leser
+      .diplotyper(gen)
+      .then((grunnlag) => {
+        if (gjelder) setTilstand({ status: 'klar', indeks: lagDiplotypeindeks(grunnlag) })
+      })
+      .catch((e: Error) => {
+        if (gjelder) setTilstand({ status: 'feil', feil: e.message })
+      })
+    return () => {
+      gjelder = false
+    }
+  }, [leser, gen, utgave])
+  return tilstand
 }

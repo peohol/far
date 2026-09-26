@@ -37,7 +37,7 @@ import {
   type Legemiddelutvalg,
 } from '../legemiddeldata/lesing'
 import type { Farmakogenetikkleser, Farmakogenetikkutvalg } from '../clinpgx/lesing'
-import type { Cpicleser, Cpicutvalg } from '../cpic/lesing'
+import { lesDiplotypegrunnlag, type Cpicleser, type Cpicutvalg, type Diplotypegrunnlag } from '../cpic/lesing'
 import type { Anbefaling, Betingelse, Gen, Par } from '../cpic/modell'
 
 beforeAll(() => {
@@ -2261,8 +2261,54 @@ describe('farmakogenetikken fra ClinPGx', () => {
     genresultater: [],
   }
 
+  /** Syntetiske tabeller fra diplotype til resultat, i formen `les_cpic_diplotyper` gir. */
+  const resultat = (id: string, symbol: string, navn: string, aktivitetsverdi = 'n/a') => ({
+    id,
+    gen: symbol,
+    resultat: navn,
+    aktivitetsverdi,
+    ehr_prioritet: null,
+    konsultasjonstekst: null,
+  })
+  const kombinasjon = (id: string, genresultat: string, funksjoner: [string, string], verdier: [string, string, string], diplotyper: string[]) => ({
+    id,
+    genresultat_id: genresultat,
+    oppslagsnokkel: {},
+    funksjon1: funksjoner[0],
+    funksjon2: funksjoner[1],
+    aktivitetsverdi1: verdier[0],
+    aktivitetsverdi2: verdier[1],
+    total_aktivitetsverdi: verdier[2],
+    beskrivelse: null,
+    diplotyper,
+  })
+  const allel = (navn: string, funksjon: string, aktivitetsverdi: string | null) => ({ navn, funksjon, klinisk_funksjon: funksjon, aktivitetsverdi })
+  const DIPLOTYPER_CPIC: Record<string, Diplotypegrunnlag> = {
+    CYP2D6: {
+      kilde: UTVALG_CPIC.kilde,
+      gen: { ...gen('CYP2D6', 'ACTIVITY_SCORE'), merknad_diplotyper: 'Syntetisk merknad om diplotypene.' },
+      genresultater: [resultat('r1', 'CYP2D6', 'Intermediate Metabolizer', '1.0'), resultat('r2', 'CYP2D6', 'Ultrarapid Metabolizer', '3.0')],
+      oppslag: [
+        kombinasjon('o1', 'r1', ['Normal function', 'No function'], ['1.0', '0.0', '1.0'], ['*1/*4', '*2/*4']),
+        kombinasjon('o2', 'r2', ['Increased function', 'Normal function'], ['2.0', '1.0', '3.0'], ['*1/*1x2']),
+      ],
+      alleler: [allel('*1', 'Normal function', '1.0'), allel('*2', 'Normal function', '1.0'), allel('*4', 'No function', '0.0'), allel('*1x2', 'Increased function', '2.0')],
+    },
+    CYP2C19: {
+      kilde: UTVALG_CPIC.kilde,
+      gen: gen('CYP2C19', 'PHENOTYPE'),
+      genresultater: [resultat('r3', 'CYP2C19', 'Normal Metabolizer')],
+      oppslag: [kombinasjon('o3', 'r3', ['Normal function', 'Normal function'], ['n/a', 'n/a', 'n/a'], ['*1/*1'])],
+      alleler: [allel('*1', 'Normal function', null)],
+    },
+  }
+
   function cpicleser(utvalg: Cpicutvalg = UTVALG_CPIC): Cpicleser {
-    return { les: vi.fn(async () => utvalg), hent: vi.fn(async () => ({ status: 'uendret' as const, release: 'v1.60.1' })) }
+    return {
+      les: vi.fn(async () => utvalg),
+      diplotyper: vi.fn(async (symbol: string) => DIPLOTYPER_CPIC[symbol] ?? lesDiplotypegrunnlag(null)),
+      hent: vi.fn(async () => ({ status: 'uendret' as const, release: 'v1.60.1' })),
+    }
   }
 
   function medCpic(opp: Parameters<typeof kilde>[0] = {}, leser = cpicleser()) {
@@ -2394,6 +2440,92 @@ describe('farmakogenetikken fra ClinPGx', () => {
     expect((within(kort).getByLabelText('CYP2D6, resultat') as HTMLSelectElement).value).toBe('')
   })
 
+  it('oversetter en diplotype med CPICs tabell og viser oversettelsen før anbefalingen, uten å sende diplotypen', async () => {
+    const user = userEvent.setup()
+    const lagretFor = window.localStorage.length
+    const k = medCpic({ data: medPgx() })
+    vis('AMTNORSUM', k)
+    await screen.findByText(/3 CPIC-anbefalinger/)
+    await apneSkuff(user, 'Farmakogenetikk')
+    const seksjon = screen.getByRole('region', { name: 'Farmakogenetikk' })
+    await user.click(skuffen('Slå opp anbefaling etter kjent resultat'))
+    const kort = within(seksjon).getByLabelText('CYP2D6, resultat').closest('.interaksjon') as HTMLElement
+    // Tabellen hentes først når brukeren ber om den.
+    expect(k.cpic.diplotyper).not.toHaveBeenCalled()
+    const knapper = within(kort).getAllByRole('button', { name: 'Oversett fra diplotype' })
+    expect(knapper).toHaveLength(2)
+
+    await user.click(knapper[1]!)
+    const felt = await within(kort).findByLabelText('CYP2D6, diplotype')
+    expect(within(kort).getByText(/Søk i CPICs tabell \(3 diplotyper\)/)).toBeTruthy()
+    expect(within(kort).getByText('CPICs merknad om diplotypene: Syntetisk merknad om diplotypene.')).toBeTruthy()
+    // Rekkefølgen på allelene spiller ingen rolle, og hvert treff viser hva det blir.
+    await user.type(felt, '4/1')
+    const liste = within(kort).getByRole('list', { name: 'Diplotyper for CYP2D6 i CPIC' })
+    expect(within(liste).getAllByRole('button').map((b) => b.textContent)).toEqual(['*1/*4'])
+    expect(within(liste).getByText('Intermediate Metabolizer, aktivitetsverdi 1.0')).toBeTruthy()
+    await user.keyboard('{Enter}')
+
+    const oversettelse = within(kort).getByRole('region', { name: 'Oversettelsen av CYP2D6 *1/*4' })
+    expect(oversettelse.textContent).toContain('*1: Normal function, aktivitetsverdi 1.0; *4: No function, aktivitetsverdi 0.0')
+    expect(oversettelse.textContent).toContain('Normal function og No function (aktivitetsverdi 1.0 + 0.0 = 1.0)')
+    expect(oversettelse.textContent).toContain('Intermediate Metabolizer, aktivitetsverdi 1.0')
+    expect((within(kort).getByLabelText('CYP2D6, resultat') as HTMLSelectElement).value).toBe('Intermediate Metabolizer')
+    expect((within(kort).getByLabelText('CYP2D6, aktivitetsverdi') as HTMLSelectElement).value).toBe('1.0')
+    // Oversettelsen står før anbefalingen.
+    expect(within(kort).getByText(/Anbefalingene bygger også på CYP2C19\./)).toBeTruthy()
+
+    await user.click(within(kort).getByRole('button', { name: 'Oversett fra diplotype' }))
+    await user.type(await within(kort).findByLabelText('CYP2C19, diplotype'), '*1/*1{Enter}')
+    const treff = within(kort).getByRole('region', { name: 'Anbefaling fra CPIC' })
+    expect(oversettelse.compareDocumentPosition(treff) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(treff.textContent).toContain('Valgt: CYP2D6 *1/*4, som CPICs tabell oversetter til Intermediate Metabolizer, aktivitetsverdi 1.0.')
+    expect(treff.textContent).toContain('Valgt: CYP2C19 *1/*1, som CPICs tabell oversetter til Normal Metabolizer.')
+    expect(treff.textContent).toContain('Anbefaling 11 i CPIC')
+
+    // Bare gensymbolet gikk til databasen; diplotypen står verken i adressen eller i nettleseren.
+    expect(vi.mocked(k.cpic.diplotyper).mock.calls).toEqual([['CYP2D6'], ['CYP2C19']])
+    expect(window.location.hash).not.toMatch(/\*1|%2A1/)
+    expect(window.localStorage.length).toBe(lagretFor)
+
+    // Et resultat valgt for hånd erstatter diplotypen.
+    await user.selectOptions(within(kort).getByLabelText('CYP2D6, resultat'), 'Poor Metabolizer')
+    expect(within(kort).queryByRole('region', { name: 'Oversettelsen av CYP2D6 *1/*4' })).toBeNull()
+    expect(kort.querySelector('.cpic-oppslag__svar')!.textContent).not.toContain('*1/*4')
+  })
+
+  it('sier fra når CPIC ikke har diplotypen, eller ingen anbefaling for resultatet den gir', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', medCpic({ data: medPgx() }))
+    await screen.findByText(/3 CPIC-anbefalinger/)
+    await apneSkuff(user, 'Farmakogenetikk')
+    const seksjon = screen.getByRole('region', { name: 'Farmakogenetikk' })
+    await user.click(skuffen('Slå opp anbefaling etter kjent resultat'))
+    const kort = within(seksjon).getByLabelText('CYP2D6, resultat').closest('.interaksjon') as HTMLElement
+    await user.click(within(kort).getAllByRole('button', { name: 'Oversett fra diplotype' })[1]!)
+    const felt = await within(kort).findByLabelText('CYP2D6, diplotype')
+
+    // En skrivemåte CPIC ikke har, oversettes ikke, og Enter velger ingenting.
+    await user.type(felt, '*1/*1xN{Enter}')
+    expect(within(kort).getByText(/CPIC har ingen diplotype for CYP2D6 som passer «\*1\/\*1xN»\. Den oversettes ikke/)).toBeTruthy()
+    expect((within(kort).getByLabelText('CYP2D6, resultat') as HTMLSelectElement).value).toBe('')
+
+    // Ultrarapid Metabolizer har ingen anbefaling for legemiddelet her: oversettelsen vises, men ingenting velges.
+    await user.clear(felt)
+    await user.type(felt, '*1/*1x2')
+    await user.click(within(kort).getByRole('button', { name: '*1/*1x2' }))
+    const oversettelse = within(kort).getByRole('region', { name: 'Oversettelsen av CYP2D6 *1/*1x2' })
+    expect(oversettelse.textContent).toContain('Ultrarapid Metabolizer, aktivitetsverdi 3.0')
+    expect(oversettelse.textContent).toContain(
+      'CPIC har ingen anbefaling for amitriptyline ved CYP2D6 Ultrarapid Metabolizer med aktivitetsverdi 3.0. OUSFAR viser ingen anbefaling for det.',
+    )
+    expect((within(kort).getByLabelText('CYP2D6, resultat') as HTMLSelectElement).value).toBe('')
+
+    await user.click(within(kort).getByRole('button', { name: 'Fjern diplotypen' }))
+    expect(within(kort).queryByRole('region', { name: /Oversettelsen av/ })).toBeNull()
+    expect(within(kort).getAllByRole('button', { name: 'Oversett fra diplotype' })).toHaveLength(2)
+  })
+
   it('sier fra når CPIC ikke har legemiddelet, når dataene ikke er hentet, og når lesingen feiler', async () => {
     const tom = { ...UTVALG_CPIC, legemidler: [], par: [], retningslinjer: [], anbefalinger: [], gener: [] }
     vis('AMTNORSUM', medCpic({ data: medPgx({ redaksjonelt: false }) }, cpicleser(tom)))
@@ -2473,5 +2605,39 @@ describe('farmakogenetikken fra ClinPGx', () => {
     expect(await screen.findByText('CPIC-dataene er kontrollert og uendret.')).toBeTruthy()
     expect(k.cpic.hent).toHaveBeenCalledTimes(1)
     await waitFor(() => expect(k.cpic.les).toHaveBeenCalledTimes(2))
+  })
+
+  it('henter tabellen fra diplotype på nytt og oversetter igjen når administratoren har hentet fra CPIC', async () => {
+    const user = userEvent.setup()
+    const leser = cpicleser()
+    let hentet = false
+    leser.les = vi.fn(async () => (hentet ? { ...UTVALG_CPIC, kilde: { ...UTVALG_CPIC.kilde, kontrollert_kl: new Date().toISOString() } } : UTVALG_CPIC))
+    // Syntetisk: etter hentingen står *1/*4 under Poor Metabolizer i CPICs tabell.
+    const endret: Diplotypegrunnlag = {
+      ...DIPLOTYPER_CPIC.CYP2D6!,
+      genresultater: [resultat('r9', 'CYP2D6', 'Poor Metabolizer', '0.0')],
+      oppslag: [kombinasjon('o9', 'r9', ['No function', 'No function'], ['0.0', '0.0', '0.0'], ['*1/*4'])],
+    }
+    leser.diplotyper = vi.fn(async (symbol: string) => (hentet && symbol === 'CYP2D6' ? endret : DIPLOTYPER_CPIC[symbol]!))
+    leser.hent = vi.fn(async () => {
+      hentet = true
+      return { status: 'fullfort' as const, release: 'v1.60.1' }
+    })
+    vis('AMTNORSUM', medCpic({ kanRedigere: true, data: medPgx() }, leser))
+    await screen.findByText(/3 CPIC-anbefalinger/)
+    await apneSkuff(user, 'Farmakogenetikk')
+    const seksjon = screen.getByRole('region', { name: 'Farmakogenetikk' })
+    await user.click(skuffen('Slå opp anbefaling etter kjent resultat'))
+    const kort = within(seksjon).getByLabelText('CYP2D6, resultat').closest('.interaksjon') as HTMLElement
+    await user.click(within(kort).getAllByRole('button', { name: 'Oversett fra diplotype' })[1]!)
+    await user.type(await within(kort).findByLabelText('CYP2D6, diplotype'), '*1/*4{Enter}')
+    expect((within(kort).getByLabelText('CYP2D6, resultat') as HTMLSelectElement).value).toBe('Intermediate Metabolizer')
+
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await user.click(await screen.findByRole('button', { name: 'Hent fra CPIC nå' }))
+    await waitFor(() => expect(leser.diplotyper).toHaveBeenCalledTimes(2))
+    const nytt = screen.getByLabelText('CYP2D6, resultat').closest('.interaksjon') as HTMLElement
+    await waitFor(() => expect((within(nytt).getByLabelText('CYP2D6, resultat') as HTMLSelectElement).value).toBe('Poor Metabolizer'))
+    expect(within(nytt).getByRole('region', { name: 'Oversettelsen av CYP2D6 *1/*4' }).textContent).toContain('Poor Metabolizer, aktivitetsverdi 0.0')
   })
 })

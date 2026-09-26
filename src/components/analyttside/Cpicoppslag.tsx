@@ -1,9 +1,10 @@
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useEffect, useId, useMemo, useState } from 'react'
 import { ramsOpp } from '../../faginnhold/oppsummering'
 import { dato } from '../../legemiddeldata/referanser'
-import type { Cpicutvalg } from '../../cpic/lesing'
+import { kanOversettes, oversett, sokDiplotyper, valgFraOversettelse, type Diplotypeindeks, type Oversettelse } from '../../cpic/diplotype'
+import type { Cpickilde, Cpicutvalg } from '../../cpic/lesing'
 import type { Oppslagsmetode } from '../../cpic/modell'
-import { oppslagsgrunnlag, slaOpp, type Genvalg, type Oppslagsgen, type Oppslagstreff, type Uavklart, type Valg } from '../../cpic/oppslag'
+import { oppslagsgrunnlag, slaOpp, type Genvalg, type Oppslagsgen, type Oppslagsgrunnlag, type Oppslagstreff, type Uavklart, type Valg } from '../../cpic/oppslag'
 import { betingelsetekst, CPIC_OPPSLAG_KORT, cpicversjon, OPPSLAG_TITTEL, resultattekst } from '../../cpic/stoffside'
 import { Button } from '../Button'
 import { oppramsing, Valgfelt } from '../regler/Regelfelter'
@@ -11,6 +12,7 @@ import { Detaljkort } from '../seksjoner/Seksjon'
 import { Uthev } from '../Uthev'
 import { Kildelenke } from './Farmakogenetikkdeler'
 import { elementAnker } from './Paneler'
+import { useDiplotyper } from './useFarmakogenetikk'
 
 /**
  * Oppslaget etter et kjent farmakogenetisk resultat i «Farmakogenetikk»:
@@ -18,27 +20,40 @@ import { elementAnker } from './Paneler'
  *
  * Brukeren velger det allerede fortolkede resultatet for hvert gen, og kortet
  * viser anbefalingen CPIC har for nøyaktig den kombinasjonen, med styrken,
- * kilden, versjonen og hvorfor akkurat den ble valgt. Valgene står bare i
+ * kilden, versjonen og hvorfor akkurat den ble valgt. Resultatet kan også
+ * oversettes fra en diplotype med CPICs tabell (`src/cpic/diplotype.ts`); da
+ * står oversettelsen ved genet, før anbefalingen. Valgene står bare i
  * komponentens tilstand: de lagres ikke, sendes ikke noe sted og står ikke i
- * adressen.
+ * adressen. For diplotypen hentes CPICs tabell for genet, og søket skjer i
+ * nettleseren.
  */
 export function Cpicoppslag({ utvalg }: { utvalg: Cpicutvalg }) {
   const grunnlag = useMemo(() => oppslagsgrunnlag(utvalg), [utvalg])
   const [legemiddelId, setLegemiddelId] = useState<string | null>(null)
   const [valg, setValg] = useState<Valg>({})
+  // Diplotypen som er oversatt for hvert gen, også når anbefalingene ikke har resultatet den gir.
+  const [diplotyper, setDiplotyper] = useState<Readonly<Record<string, string>>>({})
   const g = grunnlag.find((x) => x.legemiddel.id === legemiddelId) ?? grunnlag[0]
   if (!g) return null
 
   const svar = slaOpp(g, valg)
   const retningslinjer = new Map(utvalg.retningslinjer.map((r) => [r.id, r]))
-  const velg = (gen: string, v: Genvalg | null) =>
-    setValg((forrige) => {
-      const neste = { ...forrige }
-      if (v) neste[gen] = v
-      else delete neste[gen]
-      return neste
-    })
-  const tomt = Object.keys(valg).length === 0
+  const settGen = <T,>(forrige: Readonly<Record<string, T>>, gen: string, verdi: T | null | undefined) => {
+    const neste = { ...forrige }
+    if (verdi) neste[gen] = verdi
+    else delete neste[gen]
+    return neste
+  }
+  // Et resultat valgt for hånd erstatter diplotypen; en oversatt diplotype gir resultatet, eller ingenting.
+  const velg = (gen: string, v: Genvalg | null, diplotype: string | null = null) => {
+    setValg((forrige) => settGen(forrige, gen, v))
+    setDiplotyper((forrige) => settGen(forrige, gen, diplotype))
+  }
+  const nullstill = () => {
+    setValg({})
+    setDiplotyper({})
+  }
+  const tomt = Object.keys(valg).length === 0 && Object.keys(diplotyper).length === 0
 
   return (
     <li>
@@ -54,8 +69,9 @@ export function Cpicoppslag({ utvalg }: { utvalg: Cpicutvalg }) {
         <div className="interaksjon cpic-oppslag" id={elementAnker(CPIC_OPPSLAG_KORT)}>
           <p className="farmakogenetikk__ingress">
             For et farmakogenetisk resultat som allerede er kjent og fortolket. Velg resultatet for hvert gen slik det står i
-            svaret. Oppslaget viser bare en anbefaling CPIC har for nøyaktig den kombinasjonen, og fyller aldri inn et
-            resultat som mangler. Valgene lagres ikke.
+            svaret, eller oversett diplotypen med CPICs tabell. Oppslaget viser bare en anbefaling CPIC har for nøyaktig den
+            kombinasjonen, og fyller aldri inn et resultat som mangler. Valgene lagres ikke, og diplotypen sendes ikke noe
+            sted.
           </p>
           <form className="cpic-oppslag__valg" autoComplete="off" onSubmit={(e) => e.preventDefault()}>
             {grunnlag.length > 1 && (
@@ -65,21 +81,29 @@ export function Cpicoppslag({ utvalg }: { utvalg: Cpicutvalg }) {
                 valg={grunnlag.map((x) => ({ verdi: x.legemiddel.id, tekst: x.legemiddel.navn }))}
                 onEndre={(id) => {
                   setLegemiddelId(id)
-                  setValg({})
+                  nullstill()
                 }}
               />
             )}
             {g.gener.map((gen) => (
-              <Genfelt key={`${g.legemiddel.id}-${gen.symbol}`} gen={gen} valgt={valg[gen.symbol]} onVelg={(v) => velg(gen.symbol, v)} />
+              <Genfelt
+                key={`${g.legemiddel.id}-${gen.symbol}`}
+                gen={gen}
+                grunnlag={g}
+                utgave={cpicutgave(utvalg.kilde)}
+                valgt={valg[gen.symbol]}
+                diplotype={diplotyper[gen.symbol] ?? null}
+                onVelg={(v, diplotype) => velg(gen.symbol, v, diplotype)}
+              />
             ))}
             <p className="preparatlenker">
-              <Button variant="subtle" className="redigeringsknapp" disabled={tomt} onClick={() => setValg({})}>
+              <Button variant="subtle" className="redigeringsknapp" disabled={tomt} onClick={nullstill}>
                 Nullstill valgene
               </Button>
             </p>
           </form>
           <div className="cpic-oppslag__svar" aria-live="polite">
-            {tomt ? (
+            {Object.keys(valg).length === 0 ? (
               <p className="preparater__melding">
                 Velg resultatet for {oppramsing(g.gener.map((x) => x.symbol))} for å se anbefalingen for {g.legemiddel.navn}.
               </p>
@@ -124,8 +148,26 @@ export function Cpicoppslag({ utvalg }: { utvalg: Cpicutvalg }) {
   )
 }
 
-/** Resultatet for ett gen, og den eksakte verdien når CPIC har flere for resultatet. */
-function Genfelt({ gen, valgt, onVelg }: { gen: Oppslagsgen; valgt: Genvalg | undefined; onVelg: (v: Genvalg | null) => void }) {
+/**
+ * Resultatet for ett gen, og den eksakte verdien når CPIC har flere for
+ * resultatet. For gener CPIC slår opp på fenotype eller aktivitetsverdi kan
+ * resultatet også oversettes fra diplotypen.
+ */
+function Genfelt({
+  gen,
+  grunnlag,
+  utgave,
+  valgt,
+  diplotype,
+  onVelg,
+}: {
+  gen: Oppslagsgen
+  grunnlag: Oppslagsgrunnlag
+  utgave: string
+  valgt: Genvalg | undefined
+  diplotype: string | null
+  onVelg: (v: Genvalg | null, diplotype?: string | null) => void
+}) {
   const alternativ = gen.alternativer.find((a) => a.resultat === valgt?.resultat)
   return (
     <div className="cpic-oppslag__gen">
@@ -143,7 +185,260 @@ function Genfelt({ gen, valgt, onVelg }: { gen: Oppslagsgen; valgt: Genvalg | un
           onEndre={(v) => onVelg({ resultat: alternativ.resultat, ...(v ? { oppslagsverdi: v } : {}) })}
         />
       )}
+      {kanOversettes(gen.metode) && (
+        <Diplotypefelt gen={gen} grunnlag={grunnlag} utgave={utgave} valgt={valgt} diplotype={diplotype} onVelg={onVelg} />
+      )}
     </div>
+  )
+}
+
+/** Hvilke CPIC-data siden viser: endres når en administrator har hentet fra CPIC. */
+function cpicutgave(kilde: Cpickilde): string {
+  return [kilde.release, kilde.endret_kl, kilde.kontrollert_kl].join('|')
+}
+
+/** Om to valg for et gen er de samme. */
+function sammeValg(a: Genvalg | null | undefined, b: Genvalg | null | undefined): boolean {
+  return (a?.resultat ?? null) === (b?.resultat ?? null) && (a?.oppslagsverdi ?? null) === (b?.oppslagsverdi ?? null)
+}
+
+/** Flest diplotyper søket viser om gangen. */
+const MAKS_DIPLOTYPETREFF = 8
+
+/**
+ * Oversettelsen fra diplotype for ett gen: søket i CPICs tabell for genet,
+ * og oversettelsen av diplotypen som er valgt, før anbefalingen. Tabellen
+ * hentes først når brukeren ber om det.
+ */
+function Diplotypefelt({
+  gen,
+  grunnlag,
+  utgave,
+  valgt,
+  diplotype,
+  onVelg,
+}: {
+  gen: Oppslagsgen
+  grunnlag: Oppslagsgrunnlag
+  utgave: string
+  valgt: Genvalg | undefined
+  diplotype: string | null
+  onVelg: (v: Genvalg | null, diplotype: string | null) => void
+}) {
+  const [apen, setApen] = useState(false)
+  const [sok, setSok] = useState('')
+  const tilstand = useDiplotyper(apen || diplotype ? gen.symbol : null, utgave)
+  const id = useId()
+  const lastet = tilstand.status === 'klar' ? tilstand.indeks : null
+
+  // Nye CPIC-data kan oversette diplotypen annerledes, eller ikke i det hele
+  // tatt: valget følger alltid tabellen som er lastet, og anbefalingene.
+  useEffect(() => {
+    if (!lastet || !diplotype) return
+    const svar = oversett(lastet, diplotype)
+    const ny = svar.status === 'oversatt' ? valgFraOversettelse(grunnlag, svar.oversettelse) : null
+    const nyttValg = ny?.status === 'valgt' ? ny.valg : null
+    if (!sammeValg(nyttValg, valgt)) onVelg(nyttValg, diplotype)
+  }, [lastet, gen, diplotype, valgt, onVelg])
+
+  if (!apen && !diplotype) {
+    return (
+      <p className="cpic-diplotype__apne">
+        <Button variant="subtle" className="redigeringsknapp" onClick={() => setApen(true)}>
+          Oversett fra diplotype
+        </Button>
+      </p>
+    )
+  }
+
+  const indeks = tilstand.status === 'klar' ? tilstand.indeks : null
+  const velgDiplotype = (d: string) => {
+    if (!indeks) return
+    const svar = oversett(indeks, d)
+    const valg = svar.status === 'oversatt' ? valgFraOversettelse(grunnlag, svar.oversettelse) : null
+    onVelg(valg?.status === 'valgt' ? valg.valg : null, d)
+    setSok('')
+  }
+  const funnet = indeks && sok ? sokDiplotyper(indeks, sok, MAKS_DIPLOTYPETREFF) : null
+  const antall = indeks?.oppforinger.length ?? 0
+
+  return (
+    <div className="cpic-diplotype">
+      {tilstand.status === 'laster' && <p className="felt__hjelp">Henter CPICs diplotyper for {gen.symbol} …</p>}
+      {tilstand.status === 'feil' && (
+        <p className="interaksjoner__ikke-vurdert" role="note">
+          Kunne ikke hente CPICs diplotyper for {gen.symbol}: {tilstand.feil}
+        </p>
+      )}
+      {indeks && antall === 0 && (
+        <p className="preparater__melding">CPIC har ingen diplotyper for {gen.symbol}. Velg resultatet slik det står i svaret.</p>
+      )}
+      {indeks && antall > 0 && (
+        <div className="felt">
+          <label className="felt__merkelapp" htmlFor={id}>
+            {gen.symbol}, diplotype
+          </label>
+          <input
+            id={id}
+            className="felt__inndata"
+            type="search"
+            value={sok}
+            placeholder={indeks.oppforinger[0] ? `f.eks. ${indeks.oppforinger[0].diplotype}` : undefined}
+            aria-describedby={`${id}-hjelp`}
+            onChange={(e) => setSok(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && funnet?.eksakt) {
+                e.preventDefault()
+                velgDiplotype(funnet.eksakt.diplotype)
+              }
+            }}
+          />
+          <span id={`${id}-hjelp`} className="felt__hjelp">
+            Søk i CPICs tabell ({antall.toLocaleString('nb-NO')} diplotyper) og velg diplotypen. Bare diplotyper CPIC har,
+            oversettes.
+          </span>
+        </div>
+      )}
+      {indeks && funnet && (
+        <>
+          {funnet.treff.length > 0 && (
+            <ul className="cpic-diplotype__treff" aria-label={`Diplotyper for ${gen.symbol} i CPIC`}>
+              {funnet.treff.map((o) => {
+                const svar = oversett(indeks, o.diplotype)
+                return (
+                  <li key={o.diplotype}>
+                    <Button variant="kant" onClick={() => velgDiplotype(o.diplotype)}>
+                      {o.diplotype}
+                    </Button>{' '}
+                    <span className="felt__hjelp">
+                      {svar.status === 'oversatt' ? resultatMedVerdi(svar.oversettelse) : 'kan ikke oversettes'}
+                    </span>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+          <p className="felt__hjelp" aria-live="polite">
+            {funnet.antall === 0
+              ? `CPIC har ingen diplotype for ${gen.symbol} som passer «${sok}». Den oversettes ikke; velg resultatet slik det står i svaret.`
+              : funnet.antall > funnet.treff.length
+                ? `Viser ${funnet.treff.length} av ${funnet.antall} diplotyper som passer.`
+                : ''}
+          </p>
+        </>
+      )}
+      {indeks && diplotype && <Diplotypeoversettelse indeks={indeks} gen={gen} grunnlag={grunnlag} diplotype={diplotype} />}
+      {indeks?.grunnlag.gen?.merknad_diplotyper && (
+        <p className="felt__hjelp">CPICs merknad om diplotypene: {indeks.grunnlag.gen.merknad_diplotyper}</p>
+      )}
+      <p className="cpic-diplotype__apne">
+        <Button
+          variant="subtle"
+          className="redigeringsknapp"
+          onClick={() => {
+            if (diplotype) onVelg(null, null)
+            setSok('')
+            setApen(false)
+          }}
+        >
+          {diplotype ? 'Fjern diplotypen' : 'Lukk'}
+        </Button>
+      </p>
+    </div>
+  )
+}
+
+/** «Intermediate Metabolizer, aktivitetsverdi 1.0», eller bare resultatet for gener CPIC slår opp på fenotype. */
+function resultatMedVerdi(o: Oversettelse): string {
+  return o.oppslagsverdi !== o.genresultat.resultat && aktuelt(o.oppslagsverdi)
+    ? `${o.genresultat.resultat}, aktivitetsverdi ${o.oppslagsverdi}`
+    : o.genresultat.resultat
+}
+
+/** CPICs «n/a» vises ikke som innhold. */
+function aktuelt(verdi: string | null | undefined): string | null {
+  const v = verdi?.trim()
+  return v && v.toLowerCase() !== 'n/a' ? v : null
+}
+
+/**
+ * Oversettelsen av den valgte diplotypen, trinn for trinn, slik CPICs tabell
+ * gjør den: allelene og funksjonen deres, kombinasjonen og resultatet. Så om
+ * anbefalingene for legemiddelet har resultatet.
+ */
+function Diplotypeoversettelse({
+  indeks,
+  gen,
+  grunnlag,
+  diplotype,
+}: {
+  indeks: Diplotypeindeks
+  gen: Oppslagsgen
+  grunnlag: Oppslagsgrunnlag
+  diplotype: string
+}) {
+  const svar = oversett(indeks, diplotype)
+  if (svar.status !== 'oversatt') {
+    return (
+      <p className="interaksjoner__ikke-vurdert" role="note">
+        {gen.symbol} {diplotype}:{' '}
+        {svar.status === 'ukjent'
+          ? 'CPIC har ikke denne diplotypen i tabellen for genet lenger. Den oversettes ikke.'
+          : 'CPICs tabell gir ikke ett entydig resultat for diplotypen. Den oversettes ikke.'}
+      </p>
+    )
+  }
+  const o = svar.oversettelse
+  const valg = valgFraOversettelse(grunnlag, o)
+  const funksjoner = [o.oppslag.funksjon1, o.oppslag.funksjon2].map(aktuelt).filter((f): f is string => f !== null)
+  const verdier = [o.oppslag.aktivitetsverdi1, o.oppslag.aktivitetsverdi2].map(aktuelt).filter((v): v is string => v !== null)
+  const total = aktuelt(o.oppslag.total_aktivitetsverdi)
+  return (
+    <section className="cpic-diplotype__oversettelse" aria-label={`Oversettelsen av ${gen.symbol} ${diplotype}`}>
+      <p>
+        <strong>
+          {gen.symbol} {o.diplotype}
+        </strong>{' '}
+        oversatt med CPICs tabell:
+      </p>
+      <dl className="interaksjon__felter">
+        {o.alleler.length > 0 && (
+          <>
+            <dt>Allelene</dt>
+            <dd>
+              {o.alleler
+                .map((a) => {
+                  const funksjon = aktuelt(a.klinisk_funksjon) ?? aktuelt(a.funksjon) ?? 'funksjon ikke oppgitt'
+                  const verdi = aktuelt(a.aktivitetsverdi)
+                  return `${a.navn}: ${funksjon}${verdi ? `, aktivitetsverdi ${verdi}` : ''}`
+                })
+                .join('; ')}
+            </dd>
+          </>
+        )}
+        {(funksjoner.length > 0 || o.oppslag.beskrivelse) && (
+          <>
+            <dt>Kombinasjonen</dt>
+            <dd>
+              {oppramsing(funksjoner)}
+              {verdier.length > 0 ? ` (aktivitetsverdi ${verdier.join(' + ')}${total ? ` = ${total}` : ''})` : ''}
+              {o.oppslag.beskrivelse ? `${funksjoner.length > 0 ? '. ' : ''}${o.oppslag.beskrivelse}` : ''}
+            </dd>
+          </>
+        )}
+        <dt>Resultat i CPIC</dt>
+        <dd>{resultatMedVerdi(o)}</dd>
+      </dl>
+      {valg.status === 'valgt' ? (
+        <p className="felt__hjelp">Resultatet er valgt for {gen.symbol} i oppslaget.</p>
+      ) : (
+        <p className="interaksjoner__ikke-vurdert" role="note">
+          CPIC har ingen anbefaling for {grunnlag.legemiddel.navn} ved {resultattekst(gen.symbol, o.genresultat.resultat)}
+          {o.oppslagsverdi !== o.genresultat.resultat && aktuelt(o.oppslagsverdi) ? ` med aktivitetsverdi ${o.oppslagsverdi}` : ''}. OUSFAR viser ingen
+          anbefaling for det.
+        </p>
+      )}
+    </section>
   )
 }
 
@@ -231,6 +526,10 @@ function Treff({
  * slår opp på, den samme som resultatet, og nevnes bare når den er valgt.
  */
 function begrunnelsetekst(b: Oppslagstreff['begrunnelser'][number], metode: Oppslagsmetode | null): string {
+  if (b.valgt.diplotype) {
+    const verdi = metode === 'ACTIVITY_SCORE' && aktuelt(b.valgt.oppslagsverdi) ? `, aktivitetsverdi ${b.valgt.oppslagsverdi}` : ''
+    return `Valgt: ${b.gen} ${b.valgt.diplotype}, som CPICs tabell oversetter til ${b.resultat}${verdi}.`
+  }
   const valgt = `Valgt: ${resultattekst(b.gen, b.resultat)}${b.valgt.oppslagsverdi ? `, ${verdinavn(metode)} ${b.valgt.oppslagsverdi}` : ''}.`
   if (metode !== 'ACTIVITY_SCORE' || b.valgt.oppslagsverdi) return valgt
   return b.oppslagsverdier.length > 1

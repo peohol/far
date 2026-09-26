@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs'
 import { describe, expect, it, vi } from 'vitest'
 import type { Litteratur } from '../clinpgx/modell'
 import { litteraturId } from '../clinpgx/referanser'
-import { lagCpicleser, slaSammenCpicutvalg, type Cpicleser, type Cpicutvalg } from '../cpic/lesing'
+import { lagCpicleser, lesDiplotypegrunnlag, slaSammenCpicutvalg, type Cpicleser, type Cpicutvalg } from '../cpic/lesing'
 import {
   lesAnbefaling,
   lesGen,
@@ -337,7 +337,7 @@ describe('søket', () => {
 
   it('finner anbefalingene i hele kunnskapsbasen, og peker på seksjonen og kortet', async () => {
     const les = vi.fn(async (ider: readonly string[]) => cpicFor(HELE, ider))
-    const cpic: Cpicleser = { les, hent: async () => ({ status: 'uendret' }) }
+    const cpic: Cpicleser = { les, diplotyper: async () => lesDiplotypegrunnlag(null), hent: async () => ({ status: 'uendret' }) }
     const sideleser = { lesAnalyttsider: async () => [amitriptylinside()], lesStoffsider: async () => [] }
     const indeks = await lesSokeindeks(sideleser, null, { cpic })
     expect(les).toHaveBeenCalledWith([AMITRIPTYLIN])
@@ -350,6 +350,7 @@ describe('søket', () => {
       les: async () => {
         throw new Error('CPIC-kopien svarer ikke')
       },
+      diplotyper: async () => lesDiplotypegrunnlag(null),
       hent: async () => ({ status: 'feilet' }),
     }
     const sideleser = { lesAnalyttsider: async () => [amitriptylinside()], lesStoffsider: async () => [] }

@@ -94,8 +94,8 @@ Diplotype → `genresultat_oppslag` → `genresultat`: diplotypen «*1/*17» for
 CYP2C19 hører til et oppslag (to allelfunksjoner), som gir resultatet «Rapid
 Metabolizer». For gener som slås opp på aktivitetsverdi, har resultatet også
 aktivitetsverdien anbefalingen slås opp på. Diplotypene er CPICs egne; OUSFAR
-regner ingenting ut selv. Hvor komplett dette er på tvers av genene, er
-arbeidspakke F sin sak.
+regner ingenting ut selv. Hvor godt tabellen dekker genene, og hvordan
+oppslaget bruker den, står under «Oversettelsen fra diplotype».
 
 ## Datamodellen
 
@@ -122,6 +122,7 @@ Funksjonene i `public`:
 | Funksjon | Hvem | Hva |
 | --- | --- | --- |
 | `cpic_forrige_synk`, `cpic_start_synk`, `cpic_last_inn`, `cpic_fullfor_synk`, `cpic_avbryt_synk` | Serveren (`service_role`) | Synkroniseringen |
+| `les_cpic_diplotyper(gensymbol)` | Innloggede | CPICs tabell fra diplotype til resultat for ett gen: resultatene, kombinasjonene med diplotypene sine, og allelenes funksjon og aktivitetsverdi (`*_cpic_diplotyper.sql`). Uten rådataene |
 | `les_cpic(clinpgx_ider)` | Innloggede | For opptil 200 legemidler (etter ClinPGx-ID): legemidlene, parene (også fjernede, merket), retningslinjene med publikasjonene, anbefalingene, genene og de mulige resultatene for dem, og `kilde` (release og skjemaversjon fra siste vellykkede kjøring som fikk dem oppgitt, når dataene sist ble endret og kontrollert). Uten rådataene |
 | `cpic_status()` | Innloggede | De 20 siste kjøringene |
 
@@ -137,9 +138,11 @@ Koden:
 | `src/cpic/lesing.ts` | Lesingen appen gjør (`lagCpicleser`), i deler når det er flere enn 200 legemidler |
 | `src/cpic/stoffside.ts` | Hva siden viser: utvalget for en side (`cpicFor`), kortene, grupperingen av anbefalingene, oppsummeringen og tekstene søket finner |
 | `src/cpic/oppslag.ts` | Oppslaget etter et kjent resultat (se under) |
+| `src/cpic/diplotype.ts` | Oversettelsen fra diplotype: hvilke gener, søket og oversettelsen (se under) |
 | `src/cpic/referanser.ts` | De automatiske referansene og meldingen om gamle data |
 | `src/components/analyttside/Cpicvisning.tsx`, `Cpicoppslag.tsx` | Gruppen i «Farmakogenetikk», og oppslaget i den |
 | `src/__tests__/cpic.test.ts`, `data/cpic-utdrag.json` | Lesingen, kallene, synkroniseringen mot en ekte database og endepunktet, med ekte rader fra CPIC |
+| `src/__tests__/cpicdiplotype.test.ts`, `data/cpic-diplotype-utdrag.json` | Oversettelsen og søket med ekte rader for CYP2D6, CYP2C19, CYP2C9, DPYD, G6PD og HLA-B, og videre til anbefalingen |
 | `src/__tests__/cpicvisning.test.ts`, `analyttside.test.tsx` | Kortene, grupperingen, referansene og søket med de ekte radene, og visningen på siden |
 
 ## Synkroniseringen
@@ -311,13 +314,82 @@ Logikken er rene funksjoner i `src/cpic/oppslag.ts` (`oppslagsgrunnlag`,
 blant annet at hver anbefaling finnes med sine egne verdier, og at et treff
 aldri er en anbefaling med andre verdier. Kortet er
 `src/components/analyttside/Cpicoppslag.tsx`. Søket finner kortet på navnet
-og genene. Diplotype → resultat (F) er ikke med ennå: resultatet velges slik
-det står i svaret.
+og genene. Resultatet kan også oversettes fra en diplotype (under).
+
+## Oversettelsen fra diplotype
+
+I oppslaget har hvert gen CPIC slår opp på fenotype eller aktivitetsverdi
+knappen «Oversett fra diplotype». Da hentes CPICs tabell for genet
+(`les_cpic_diplotyper`, én gang per gen), og brukeren søker opp og velger
+diplotypen. Oversettelsen står ved genet, før anbefalingen, trinn for trinn:
+allelene med funksjonen og aktivitetsverdien CPIC har gitt dem, kombinasjonen
+(funksjonene, aktivitetsverdiene og summen, og CPICs beskrivelse), og
+resultatet. Så velges resultatet og den eksakte verdien i oppslaget, og
+«Hvorfor denne anbefalingen» sier at de kom fra diplotypen.
+
+**Sannhetskilden er bare CPICs tabell** (`src/cpic/diplotype.ts`):
+
+- Bare en diplotype CPIC har for genet, oversettes. OUSFAR regner ikke ut
+  aktivitetsverdier, setter ikke sammen alleler og gjetter ikke på
+  skrivemåter. Kopitall, hybridalleler og andre sammensatte alleler
+  oversettes når, og bare når, CPIC har nøyaktig den diplotypen: for CYP2D6
+  gir «*1/*1x2» Ultrarapid Metabolizer (3.0) og «*1x2/*4» Normal Metabolizer
+  (2.0), og «*1/*1xN» finnes ikke og oversettes ikke.
+- Verdien anbefalingene slås opp på, er aktivitetsverdien for gener CPIC slår
+  opp på den (`oppslagsmetode`), ellers resultatet. Resultatet brukes bare når
+  anbefalingene for legemiddelet har det med nøyaktig den verdien; ellers
+  vises oversettelsen med beskjed om at CPIC ikke har en anbefaling for det,
+  og ingenting velges.
+- En diplotype CPIC har under flere kombinasjoner, eller uten resultat,
+  oversettes ikke (finnes ikke i dataene i dag, men kontrolleres).
+- Gener CPIC slår opp på allelstatus (HLA-A, HLA-B, IFNL3) oversettes ikke:
+  statusen er selve resultatet og velges direkte. Det samme gjelder et gen
+  uten kjent oppslagsmetode.
+- CPICs merknad om diplotypene for genet står ved søket, f.eks. for DPYD at
+  aktivitetsverdien er summen av de to variantene med lavest verdi, og at
+  flere varianter ikke kan skrives som én diplotype.
+- Et gen anbefalingen også bygger på, må fortsatt velges; det fylles aldri
+  inn.
+
+**Søket** skjer i nettleseren, i tabellen for genet: diplotypen sendes ikke
+noe sted, bare gensymbolet. Store og små bokstaver, mellomrom, stjerner og
+rekkefølgen på allelene spiller ingen rolle («4/1» finner «*1/*4»), og «>=»
+leses som «≥». Først står treffet som er nøyaktig det som ble skrevet, så de
+som begynner med det, så de som inneholder det. Enter velger bare et
+nøyaktig treff; ellers velges diplotypen i listen, der hvert treff viser
+resultatet. Et resultat valgt for hånd erstatter diplotypen, og «Nullstill
+valgene» tar begge.
+
+**Hvor komplett tabellen er** (kontrollert mot hele CPIC-databasen
+26.09.2026, 112 820 diplotyper): alle de 19 genene anbefalingene slås opp på,
+har diplotyper, og for alle gjelder at
+
+- hver diplotype hører til nøyaktig én kombinasjon og dermed ett resultat,
+  og står i én rekkefølge (aldri både «*1/*4» og «*4/*1»),
+- hvert resultat en diplotype gir, er en verdi anbefalingene slås opp på
+  (bare «No Result» finnes i anbefalingene uten diplotype, som ventet),
+- ingen allelnavn inneholder «/», og ingen diplotype gjelder mer enn ett gen.
+
+| Gen | Slås opp på | Diplotyper | Merknad |
+| --- | --- | --- | --- |
+| CYP2D6 | aktivitetsverdi | 16 836 | Kopitall («x2», «x≥3») og hybrider («*36+*10», «*13+*1»). 25 nyere alleler (fra *150) står ikke i tabellen |
+| CYP2C9 | aktivitetsverdi | 2 850 | 19 nyere alleler (fra *76) står ikke i tabellen |
+| DPYD | aktivitetsverdi | 3 570 | Par av varianter, med «Reference». CPICs merknad om flere varianter står ved søket |
+| CYP2C19 | fenotype | 666 | 13 nyere alleler (fra *40) står ikke i tabellen |
+| CYP2B6, CYP3A5, NUDT15, TPMT, UGT1A1, NAT2, SLCO1B1, ABCG2 | fenotype | 3–1 770 | Noen nyere alleler (CYP2B6 *50, CYP3A5 *10/*11, SLCO1B1 *50–*58) står ikke i tabellen |
+| G6PD | fenotype | 17 765 | X-bundet: også enkeltalleler (hemizygote), som «B (reference)» |
+| MT-RNR1 | fenotype | 24 | Mitokondrielt: enkeltvarianter, ikke par. «Reference» står ikke i tabellen |
+| CFTR, RYR1, CACNA1S | fenotype | 6–60 378 | Varianter i par, med «Reference» |
+| HLA-A, HLA-B | allelstatus | 8 | Statusen er resultatet; oversettes ikke |
+
+Et allel som ikke står i tabellen, gir ingen treff, og oppslaget sier at
+diplotypen ikke oversettes; da velges resultatet slik det står i svaret.
+Tallene endres med CPICs releaser; kontrollen over er ikke automatisk.
 
 ## Hva som bygger på dette
 
 Visningen på stoffsiden (D, over), oppslaget etter et kjent resultat (E),
-diplotype → resultat (F) og endringsloggen med driftstatusen (G,
+oversettelsen fra diplotype (F) og endringsloggen med driftstatusen (G,
 `docs/datakilder.md`) leser dette laget. Ingen av dem skriver til det, og
 endringsloggen fanger byttene med triggere på tabellene. Nye lesefunksjoner
 legges i en egen migrasjon med samme rettighetsmønster.
