@@ -289,7 +289,8 @@ ClinPGx (`src/clinpgx/referanser.ts`, se `docs/clinpgx.md`). FEST:
   interaksjoner som viser til den, og samme ID ved neste synkronisering.
 
 ClinPGx står på samme måte i referansefeltet til «Farmakogenetikk»
-(`clinpgx:kilde`, med lisensen CC BY-SA 4.0 og når dataene sist ble hentet),
+(`clinpgx:kilde`, med lisensen CC BY-SA 4.0 og når dataene sist ble hentet,
+og med lenke til lisensen og bruksvilkårene i referanselisten),
 og publikasjonene ClinPGx oppgir, i detaljkortet til hver retningslinje og
 preparatomtale (`clinpgx:` og en kontrollsum). `slaSammenAutomatiske` i
 `src/faginnhold/referanser.ts` slår kildene sammen for siden.

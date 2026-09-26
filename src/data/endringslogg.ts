@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.38.1',
+    dato: '2026-09-26',
+    sammendrag: 'ClinPGx oppgis med lenke til lisensen og bruksvilkårene',
+    typer: ['Design / layout'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Under ClinPGx i referanselisten står det nå lenker til lisensen (CC BY-SA 4.0) og til ClinPGx sine bruksvilkår.',
+      'Kildeteksten sier at det som vises, er et utdrag av ClinPGx-dataene som OUSFAR har omformet, slik lisensen krever.',
+    ],
+  },
+  {
     versjon: '1.38.0',
     dato: '2026-09-26',
     sammendrag: 'Fagsøket er raskt fra første stund, og appen viser når den henter noe',

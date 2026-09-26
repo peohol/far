@@ -2083,7 +2083,14 @@ describe('farmakogenetikken fra ClinPGx', () => {
     expect(within(cpic).getByRole('button', { name: /^Referanse \d+$/ })).toBeTruthy()
     const liste = screen.getByRole('region', { name: 'Referanser' })
     expect(within(liste).getAllByText('Automatisk fra ClinPGx').length).toBe(2)
-    expect(liste.textContent).toContain('Farmakogenetiske data fra ClinPGx, lisens CC BY-SA 4.0, sist hentet')
+    expect(liste.textContent).toContain('Utdrag av farmakogenetiske data fra ClinPGx, omformet av OUSFAR, lisens CC BY-SA 4.0, sist hentet')
+    // Lisensen krever lenke til seg; bruksvilkårene står ved siden av.
+    expect(within(liste).getByRole('link', { name: 'Lisens: CC BY-SA 4.0' }).getAttribute('href')).toBe(
+      'https://creativecommons.org/licenses/by-sa/4.0/',
+    )
+    expect(within(liste).getByRole('link', { name: 'Bruksvilkår hos ClinPGx' }).getAttribute('href')).toBe(
+      'https://www.clinpgx.org/page/dataUsagePolicy',
+    )
 
     await user.click(skuffen('Lavere evidensnivå'))
     const lavere = within(seksjon).getByRole('table')
