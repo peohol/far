@@ -20,5 +20,5 @@ if (!admin || !valgt || !fil) {
 }
 
 // Uten linjeskift til slutt: apply_migration lagrer teksten uten, og filen skal være lik byte for byte.
-writeFileSync(fil, clinpgxkoblingSql(valgt.koblinger, admin))
+writeFileSync(fil, clinpgxkoblingSql(valgt.koblinger, admin, valgt.festkrav))
 console.log(`${valgt.koblinger.length} koblinger → ${fil}`)
