@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.37.0',
+    dato: '2026-09-26',
+    sammendrag: 'Farmakogenetikken på stoffsidene viser retningslinjer og annotasjoner fra ClinPGx',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'En stoffside kan kobles til legemidlet i ClinPGx. Farmakogenetikk viser da retningslinjene fra CPIC og DPWG, de farmakogenetiske preparatomtalene og de kliniske annotasjonene, under den redaksjonelle teksten.',
+      'Annotasjonene med evidensnivå 1A og 1B står først; de svakere er samlet i ett kort.',
+      'Dataene hentes fra ClinPGx hver uke, og kan hentes med en gang ved koblingen i redigeringsmodus. ClinPGx står som kilde med lisensen og når dataene sist ble hentet.',
+      'Søket finner gener og retningslinjer og åpner kortet de står i.',
+      'Dette er referanseinformasjon, ikke råd for den enkelte pasient.',
+    ],
+  },
+  {
     versjon: '1.36.7',
     dato: '2026-09-26',
     sammendrag: 'De nasjonale referanseområdene for antiepileptika er lagt inn i databasen',

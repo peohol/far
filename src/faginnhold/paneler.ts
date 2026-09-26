@@ -83,6 +83,7 @@ export const FJERNET = 'fjernet'
 
 export const ELEMENTTYPER = {
   legemiddelkobling: 'legemiddelkobling',
+  clinpgxkobling: 'clinpgxkobling',
   riktekst: 'riktekst',
   kinetikk: 'kinetikkort',
   dosetabell: 'dosetabell',
@@ -118,6 +119,33 @@ export function lesLegemiddelkobling(data: unknown): Legemiddelkoblingdata {
     if (fest_id && !sett.has(fest_id)) sett.set(fest_id, { fest_id, navn: tekst(v.navn) })
   }
   return { virkestoff: [...sett.values()] }
+}
+
+/* Panelet «Farmakogenetikk»: koblingen til ClinPGx. */
+
+/** Et kjemikalie i ClinPGx, med ClinPGx' accession-ID og navnet det hadde da det ble valgt. */
+export interface KobletKjemikalie {
+  clinpgx_id: string
+  navn: string
+}
+
+/**
+ * Kjemikaliene i ClinPGx siden viser farmakogenetikken for. Koblingen er til
+ * ClinPGx' stabile ID (PA…), ikke til navnet; navnet er med så koblingen kan
+ * leses også om kjemikaliet forsvinner fra ClinPGx.
+ */
+export interface Clinpgxkoblingdata {
+  kjemikalier: KobletKjemikalie[]
+}
+
+export function lesClinpgxkobling(data: unknown): Clinpgxkoblingdata {
+  const liste = erObjekt(data) && Array.isArray(data.kjemikalier) ? data.kjemikalier : []
+  const sett = new Map<string, KobletKjemikalie>()
+  for (const k of liste.filter(erObjekt)) {
+    const clinpgx_id = tekst(k.clinpgx_id)
+    if (/^PA\d+$/.test(clinpgx_id) && !sett.has(clinpgx_id)) sett.set(clinpgx_id, { clinpgx_id, navn: tekst(k.navn) })
+  }
+  return { kjemikalier: [...sett.values()] }
 }
 
 /* «Viktige data»: datakortene. */
@@ -492,17 +520,18 @@ export function lesDosetabell(data: unknown): Dosetabelldata {
 /* --- Kort som bare kan finnes én gang ------------------------------------ */
 
 /**
- * Elementtypene som står én gang i panelet sitt: koblingen til
- * legemiddeldataene, hvert datakort, rikteksten i tekstpanelene og tabellen.
+ * Elementtypene som står én gang i panelet sitt: koblingene til
+ * legemiddeldataene og ClinPGx, hvert datakort, rikteksten i tekstpanelene og tabellen.
  * Farmakokinetikken kan ha mange kort.
  *
  * Databasen håndhever det samme (`innholdselementer_enkeltelement_idx` i
  * migrasjonen `legemiddelkobling`), så to som oppretter det samme kortet
- * samtidig, ikke begge får det lagret. Testene kontrollerer at listene
- * stemmer.
+ * samtidig, ikke begge får det lagret; `clinpgxkobling` kom til i migrasjonen
+ * `clinpgx`. Testene kontrollerer at listene stemmer.
  */
 export const ENKELTELEMENTER: readonly string[] = [
   ELEMENTTYPER.legemiddelkobling,
+  ELEMENTTYPER.clinpgxkobling,
   ELEMENTTYPER.riktekst,
   ELEMENTTYPER.dosetabell,
   ...DATAKORT.map((k) => k.type),

@@ -1,6 +1,7 @@
 import { createContext, useContext, type ReactNode } from 'react'
 import type { Faginnholdslager } from '../../faginnhold/lagring'
 import type { Faginnholdsleser } from '../../faginnhold/lesing'
+import type { Farmakogenetikkleser } from '../../clinpgx/lesing'
 import type { Legemiddelleser } from '../../legemiddeldata/lesing'
 
 /**
@@ -21,6 +22,12 @@ export interface Faginnholdskilde {
    * vises ingen preparater.
    */
   legemidler?: Legemiddelleser
+  /**
+   * De farmakogenetiske dataene fra ClinPGx, som seksjonen «Farmakogenetikk»
+   * viser ved siden av det redaksjonelle. Uten den vises bare det
+   * redaksjonelle.
+   */
+  farmakogenetikk?: Farmakogenetikkleser
 }
 
 const Kontekst = createContext<Faginnholdskilde | null>(null)

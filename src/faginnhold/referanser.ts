@@ -149,6 +149,25 @@ export interface Automatiskekilder extends Automatiskegrunnlag {
 
 export const INGEN_AUTOMATISKE: Automatiskekilder = { referanser: [] }
 
+/**
+ * De automatiske referansene fra flere kilder på samme side, som FEST og
+ * ClinPGx, slått sammen: hver referanse én gang, panelreferansene i kildenes
+ * rekkefølge og elementene etter hverandre.
+ */
+export function slaSammenAutomatiske(...kilder: readonly Automatiskekilder[]): Automatiskekilder {
+  const referanser = new Map<string, Referanse>()
+  const panelreferanser: Record<string, string[]> = {}
+  const elementer: Automatiskelement[] = []
+  for (const k of kilder) {
+    for (const r of k.referanser) if (!referanser.has(r.id)) referanser.set(r.id, r)
+    for (const [panel, ider] of Object.entries(k.panelreferanser ?? {})) {
+      panelreferanser[panel] = [...new Set([...(panelreferanser[panel] ?? []), ...ider])]
+    }
+    elementer.push(...(k.elementer ?? []))
+  }
+  return { referanser: [...referanser.values()], panelreferanser, elementer }
+}
+
 /** Det på en side som kan sitere referanser. */
 export interface Sidegrunnlag {
   panelreferanser?: Readonly<Record<string, readonly string[]>>

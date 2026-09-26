@@ -30,6 +30,11 @@ import { Uthevingskilde } from '../Uthev'
 import { Fortolkningsregler } from '../regler/Fortolkningsregler'
 import { Thcregler } from '../regler/Thcregler'
 import { festreferanser } from '../../legemiddeldata/referanser'
+import { slaSammenAutomatiske } from '../../faginnhold/referanser'
+import { clinpgxreferanser } from '../../clinpgx/referanser'
+import { FARMAKOGENETIKKPANEL, kobledeKjemikalier, koblingsgrunnlag } from '../../clinpgx/stoffside'
+import { Farmakogenetikkpanel, farmakogenetikksoketekster } from './Farmakogenetikkpanel'
+import { useFarmakogenetikk } from './useFarmakogenetikk'
 import { useAnalyttside, type Sidemodus, type Sidenokkel } from './useAnalyttside'
 import { analyttadresse } from '../../domain/rute'
 
@@ -166,17 +171,27 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
   const koblet = useMemo(() => finnKobling(modell).kobling.virkestoff.map((v) => v.fest_id), [modell])
   const legemidler = useLegemidler(koblet)
   const interaksjoner = useInteraksjoner(legemidler, koblet)
-  // Redaksjonelle og automatiske referanser (FEST) nummereres sammen.
+  const kjemikalier = useMemo(() => kobledeKjemikalier(modell), [modell])
+  const farmakogenetikk = useFarmakogenetikk(kjemikalier)
+  const pgx = farmakogenetikk.tilstand
+  // Redaksjonelle og automatiske referanser (FEST og ClinPGx) nummereres sammen.
   const univers = useMemo(
     () =>
       referanseunivers(
         modell,
-        festreferanser(
-          legemidler.status === 'klar' ? legemidler.utvalg : null,
-          interaksjoner.status === 'klar' ? interaksjoner.oversikt : null,
+        slaSammenAutomatiske(
+          festreferanser(
+            legemidler.status === 'klar' ? legemidler.utvalg : null,
+            interaksjoner.status === 'klar' ? interaksjoner.oversikt : null,
+          ),
+          clinpgxreferanser(pgx.status === 'klar' ? pgx.utvalg : null, pgx.status === 'klar' ? pgx.visning : null),
         ),
       ),
-    [modell, legemidler, interaksjoner],
+    [modell, legemidler, interaksjoner, pgx],
+  )
+  const grunnlag = useMemo(
+    () => koblingsgrunnlag(legemidler.status === 'klar' ? legemidler.utvalg : null, koblet),
+    [legemidler, koblet],
   )
 
   const dokumenter = useMemo(
@@ -184,9 +199,9 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
       indekserSide(
         { ...(oppforing && { kode: oppforing.kode }), navn, komponenter: komponenter.map((k) => k.navn) },
         modell,
-        [...preparatsoketekster(legemidler), ...interaksjonssoketekster(interaksjoner)],
+        [...preparatsoketekster(legemidler), ...interaksjonssoketekster(interaksjoner), ...farmakogenetikksoketekster(pgx)],
       ),
-    [oppforing, navn, komponenter, modell, legemidler, interaksjoner],
+    [oppforing, navn, komponenter, modell, legemidler, interaksjoner, pgx],
   )
   const ord = useMemo(() => sokeord(sporring), [sporring])
 
@@ -356,7 +371,19 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                   case 'tekst':
                     return <Tekstpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                   case 'kort':
-                    return <Kortpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
+                    return definisjon.nokkel === FARMAKOGENETIKKPANEL ? (
+                      <Farmakogenetikkpanel
+                        key={definisjon.nokkel}
+                        definisjon={definisjon}
+                        kontekst={kontekst}
+                        tilstand={pgx}
+                        grunnlag={grunnlag}
+                        sidenavn={oppforing?.sidenavn ?? navn}
+                        onHentet={farmakogenetikk.lesPaNytt}
+                      />
+                    ) : (
+                      <Kortpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
+                    )
                   case 'tabell':
                     return <Tabellpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                 }

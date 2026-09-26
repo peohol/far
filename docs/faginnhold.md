@@ -47,6 +47,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/components/analyttside/` | Siden, panelene, skjemaene, editoren, referansevelgeren og søket |
 | `src/faginnhold/referanser.ts` | Siteringer, nummerering, piller og referanseliste, for redaksjonelle og automatiske referanser — rene funksjoner |
 | `src/legemiddeldata/referanser.ts` | De automatiske referansene fra FEST |
+| `src/clinpgx/referanser.ts` | De automatiske referansene fra ClinPGx (se `docs/clinpgx.md`) |
 | `src/components/referanser/` | Referansepillen med boblen, referansefeltet og referanselisten |
 | `src/__tests__/faginnhold.test.ts`, `referanser.test.ts`, `analyttsidelesing.test.ts`, `kommentarer.test.ts` | Reglene og lesingen, prøvd mot en ekte database |
 | `src/__tests__/analyttside.test.tsx`, `navigasjon.test.tsx`, `analyttsidemodell.test.ts` | Sidene, redigeringen og veiene mellom sidene og fortolkningen |
@@ -275,7 +276,8 @@ Referansene har to opphav i samme nummerering, samme bobler og samme liste:
 | Redaksjonell | Objekter i databasen, som over | Redigeres, arkiveres og slettes gjennom den vanlige arbeidsflyten |
 | Automatisk | Lages av data OUSFAR henter fra andre, hver gang siden vises (`automatisk` på `Referanse`) | Aldri: de er ikke objekter, kan ikke velges i referansevelgeren (der står de låst når søket treffer dem) og forsvinner av seg selv når kilden ikke lenger har dem |
 
-Den eneste automatiske kilden nå er FEST (`src/legemiddeldata/referanser.ts`):
+De automatiske kildene er FEST (`src/legemiddeldata/referanser.ts`) og
+ClinPGx (`src/clinpgx/referanser.ts`, se `docs/clinpgx.md`). FEST:
 
 - **FEST selv** (ID `fest:kilde`) står i referansefeltet til «Preparater» og
   «Interaksjoner». Sporbarheten NLOD krever — uttrekket kopien bygger på og
@@ -285,6 +287,12 @@ Den eneste automatiske kilden nå er FEST (`src/legemiddeldata/referanser.ts`):
   interaksjonens detaljkort. ID-en er `fest:` og en kontrollsum av teksten og
   lenken DMP har gitt, så samme referanse får samme nummer uansett hvor mange
   interaksjoner som viser til den, og samme ID ved neste synkronisering.
+
+ClinPGx står på samme måte i referansefeltet til «Farmakogenetikk»
+(`clinpgx:kilde`, med lisensen CC BY-SA 4.0 og når dataene sist ble hentet),
+og publikasjonene ClinPGx oppgir, i detaljkortet til hver retningslinje og
+preparatomtale (`clinpgx:` og en kontrollsum). `slaSammenAutomatiske` i
+`src/faginnhold/referanser.ts` slår kildene sammen for siden.
 
 `referanseunivers` i `src/faginnhold/analyttside.ts` slår de redaksjonelle og
 de automatiske sammen for siden. Automatiske elementer kommer etter de
@@ -380,7 +388,7 @@ styrer søket og nummereringen av referansene):
 | Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
 | Dosering | `dosering` | `riktekst`: `{ dokument }` |
 | Farmakokinetikk | `farmakokinetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge |
-| Farmakogenetikk | `farmakogenetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge (som regel ett, «CYP-enzymer (substrat)») |
+| Farmakogenetikk | `farmakogenetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge (som regel ett, «CYP-enzymer (substrat)»); `clinpgxkobling`: `{ kjemikalier: [{ clinpgx_id, navn }] }` — hvilke kjemikalier i ClinPGx siden viser retningslinjene, preparatomtalene og de kliniske annotasjonene for, under kortene (se `docs/clinpgx.md`) |
 | Interaksjoner | `interaksjoner` | `riktekst`: `{ dokument }`, øverst; under den interaksjonene fra FEST for koblingen i «Preparater» |
 | Terapeutisk legemiddelmonitorering (TDM) | `tdm` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge — prøvetakingstidspunkt, grunnlaget for referanseområdet, tolkning og indikasjoner for måling |
 | Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }`. Kildene står på panelet, ikke på tabellen |

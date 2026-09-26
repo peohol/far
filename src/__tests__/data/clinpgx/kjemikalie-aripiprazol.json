@@ -1,0 +1,234 @@
+{
+ "data": {
+  "objCls": "Chemical",
+  "id": "PA10026",
+  "name": "aripiprazole",
+  "altNames": {
+   "generic": [
+    "OPC 31",
+    "OPC-14597",
+    "aripiprazole"
+   ],
+   "trade": [
+    "Abilify",
+    "Abilitat"
+   ]
+  },
+  "components": [],
+  "inChi": "InChI=1S/C23H27Cl2N3O2/c24-19-4-3-5-21(23(19)25)28-13-11-27(12-14-28)10-1-2-15-30-18-8-6-17-7-9-22(29)26-20(17)16-18/h3-6,8,16H,1-2,7,9-15H2,(H,26,29)",
+  "linkOuts": [
+   {
+    "id": 1452157719,
+    "name": "aripiprazole",
+    "resource": "ATC",
+    "resourceId": "N05AX12",
+    "_url": "https://www.whocc.no/atc_ddd_index/?showdescription=yes&code=N05AX12",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157702,
+    "resource": "ChEBI",
+    "resourceId": "CHEBI:31236",
+    "_url": "http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI%3A31236",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157703,
+    "resource": "ChemSpider",
+    "resourceId": "54790",
+    "_url": "http://www.chemspider.com/Chemical-Structure.54790.html",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157704,
+    "resource": "ClinicalTrials.gov",
+    "resourceId": "NCT00545467",
+    "_url": "https://clinicaltrials.gov/ct2/show/NCT00545467",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157705,
+    "resource": "ClinicalTrials.gov",
+    "resourceId": "NCT00712270",
+    "_url": "https://clinicaltrials.gov/ct2/show/NCT00712270",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157706,
+    "resource": "ClinicalTrials.gov",
+    "resourceId": "NCT01109147",
+    "_url": "https://clinicaltrials.gov/ct2/show/NCT01109147",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157723,
+    "name": "BPCA Drug",
+    "resource": "ClinPGx Tags",
+    "resourceId": "pgkbTags:1451314780",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157707,
+    "resource": "DrugBank",
+    "resourceId": "DB01238",
+    "_url": "https://www.drugbank.ca/drugs/DB01238",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157709,
+    "resource": "IUPHAR Ligand",
+    "resourceId": "34",
+    "_url": "http://www.guidetopharmacology.org/GRAC/LigandDisplayForward?tab=summary&ligandId=34",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157710,
+    "resource": "KEGG Compound",
+    "resourceId": "C12564",
+    "_url": "https://www.kegg.jp/entry/C12564",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157711,
+    "resource": "KEGG Drug",
+    "resourceId": "D01164",
+    "_url": "https://www.kegg.jp/entry/D01164",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157718,
+    "name": "Aripiprazole",
+    "resource": "MeSH",
+    "resourceId": "D000068180",
+    "_url": "https://id.nlm.nih.gov/mesh/D000068180",
+    "automatic": false,
+    "status": "Valid",
+    "version": 1
+   },
+   {
+    "id": 1452157712,
+    "resource": "NDC",
+    "resourceId": "59148-013-15",
+    "_url": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?adv=1&labeltype=all&query=NDC:59148-013-15",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157722,
+    "name": "ARIPIPRAZOLE",
+    "resource": "NDF-RT",
+    "resourceId": "N0000148786",
+    "_url": "https://purl.bioontology.org/ontology/NDFRT/N0000148786",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157713,
+    "resource": "PubChem Compound",
+    "resourceId": "60795",
+    "_url": "https://pubchem.ncbi.nlm.nih.gov/compound/60795",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157714,
+    "resource": "PubChem Substance",
+    "resourceId": "46505745",
+    "_url": "https://pubchem.ncbi.nlm.nih.gov/substance/46505745",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157715,
+    "resource": "PubChem Substance",
+    "resourceId": "582954",
+    "_url": "https://pubchem.ncbi.nlm.nih.gov/substance/582954",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157721,
+    "name": "aripiprazole",
+    "resource": "RxNorm",
+    "resourceId": "89013",
+    "_url": "https://purl.bioontology.org/ontology/RXNORM/89013",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157720,
+    "name": "aripiprazole",
+    "resource": "UMLS",
+    "resourceId": "C0299792",
+    "_url": "http://linkedlifedata.com/resource/umls/id/C0299792",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   },
+   {
+    "id": 1452157717,
+    "resource": "URL",
+    "resourceId": "http://en.wikipedia.org/wiki/Aripiprazole",
+    "_url": "http://en.wikipedia.org/wiki/Aripiprazole",
+    "automatic": false,
+    "status": "Valid",
+    "version": 0
+   }
+  ],
+  "metabolites": [
+   {
+    "objCls": "Chemical",
+    "id": "PA166246381",
+    "name": "1-(2,3-dichlorophenyl)piperazine",
+    "version": 4
+   },
+   {
+    "objCls": "Chemical",
+    "id": "PA166246361",
+    "name": "aripiprazole metabolite DM-1451",
+    "version": 4
+   },
+   {
+    "objCls": "Chemical",
+    "id": "PA166170895",
+    "name": "dehydroaripiprazole",
+    "version": 4
+   }
+  ],
+  "pediatric": true,
+  "smiles": "C1CC(=O)NC2=C1C=CC(=C2)OCCCCN3CCN(CC3)C4=C(C(=CC=C4)Cl)Cl",
+  "types": [
+   "Drug"
+  ],
+  "version": 12
+ },
+ "status": "success"
+}

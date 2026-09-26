@@ -1,7 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "crons": [{ "path": "/api/legemiddeldata-synk", "schedule": "15 4 * * *" }],
+  "crons": [
+    { "path": "/api/legemiddeldata-synk", "schedule": "15 4 * * *" },
+    { "path": "/api/clinpgx-synk", "schedule": "30 2 * * 1" }
+  ],
   "functions": {
-    "api/legemiddeldata-synk.ts": { "maxDuration": 300 }
+    "api/legemiddeldata-synk.ts": { "maxDuration": 300 },
+    "api/clinpgx-synk.ts": { "maxDuration": 300 }
   }
 }
