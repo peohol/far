@@ -10,12 +10,14 @@
  */
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
-import { ENTITETER, lesFest, PARSERVERSJON, type Festpost, type Interaksjonsdata } from '../legemiddeldata/fest'
+import { lesDatakildestatus, vurderKilder } from '../datakilder/status'
+import { ENTITETER, lesFest, PARSERVERSJON, type Festpost, type Interaksjonsdata, type Merkevaredata } from '../legemiddeldata/fest'
 import { lagLegemiddellager, type Databasekall } from '../legemiddeldata/lager'
 import { behandleSynk } from '../legemiddeldata/endepunkt'
 import { lagLegemiddelleser, type Legemiddelutvalg, type Virkestofftreff } from '../legemiddeldata/lesing'
 import { byggInteraksjoner, interaksjonsnokler, oppsummerInteraksjoner } from '../legemiddeldata/interaksjoner'
 import { byggPreparatvisning, oppsummerForm, oppsummerPreparatvisning } from '../legemiddeldata/preparatmodell'
+import { avvikstekst, Strukturvakt } from '../legemiddeldata/strukturvakt'
 import { synkroniserFest } from '../legemiddeldata/synk'
 import { pakkUt } from '../legemiddeldata/zip'
 import {
@@ -31,7 +33,7 @@ import {
   TERBINAFIN_AMITRIPTYLIN,
   UTDRAG,
 } from './hjelp/fest'
-import { feilFra, nyDatabase } from './hjelp/testdatabase'
+import { faginnholdskall, feilFra, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
 async function* biter(tekst: string, storrelse = 997): AsyncGenerator<string> {
   for (let i = 0; i < tekst.length; i += storrelse) yield tekst.slice(i, i + storrelse)
@@ -389,6 +391,130 @@ describe('synkroniseringen', () => {
   })
 })
 
+/* --- Strukturkontrollen ---------------------------------------------------- */
+
+/** Utdraget med et element omdøpt overalt, slik DMP kunne ha gjort det. */
+function omdopt(xml: string, fra: string, til: string): string {
+  const ut = xml.replaceAll(`<${fra}>`, `<${til}>`).replaceAll(`</${fra}>`, `</${til}>`).replaceAll(`<${fra} `, `<${til} `)
+  expect(ut).not.toBe(xml)
+  return ut
+}
+
+describe('strukturkontrollen av uttrekket', () => {
+  it('slipper gjennom utdraget, og enkeltposter som mangler et felt', async () => {
+    const { poster } = await les(UTDRAG)
+    const vakt = (endre: (poster: Festpost[]) => void = () => {}) => {
+      const kopi = structuredClone(poster)
+      endre(kopi)
+      const v = new Strukturvakt()
+      for (const p of kopi) v.se(p)
+      return v.avvik()
+    }
+    expect(vakt()).toEqual([])
+
+    const merkevarer = (p: Festpost[]) => p.filter((x) => x.entitet === 'merkevare').map((x) => x.data as Merkevaredata)
+    // Én av tolv merkevarer uten varenavn og tre uten ATC-kode er innenfor.
+    expect(
+      vakt((p) => {
+        merkevarer(p)[0]!.varenavn = ''
+        for (const m of merkevarer(p).slice(0, 3)) m.atc = null
+      }),
+    ).toEqual([])
+    // To av tolv uten varenavn er under 90 %.
+    expect(
+      vakt((p) => {
+        for (const m of merkevarer(p).slice(0, 2)) m.varenavn = ''
+      }),
+    ).toEqual([expect.objectContaining({ entitet: 'merkevare', tekst: 'merkevarene har varenavn', antall: 12, minsteAndel: 0.9 })])
+  })
+
+  it('oppdager at et felt har fått nytt navn, eller at koblingene ikke lenger henger sammen', async () => {
+    const avvik = async (xml: string) => {
+      const v = new Strukturvakt()
+      for (const p of (await les(xml)).poster) v.se(p)
+      return v.avvik().map((a) => a.tekst)
+    }
+    expect(await avvik(omdopt(UTDRAG, 'Varenavn', 'Handelsnavn'))).toEqual(['merkevarene har varenavn'])
+    expect(await avvik(omdopt(UTDRAG, 'LegemiddelformKort', 'Legemiddelform'))).toEqual(['merkevarene har legemiddelform'])
+    expect(await avvik(omdopt(UTDRAG, 'RefLegemiddelMerkevare', 'RefMerkevare'))).toEqual(['pakningene peker på en merkevare'])
+    expect(await avvik(omdopt(UTDRAG, 'Relevans', 'Alvorlighet'))).toEqual(['interaksjonene har relevans'])
+    // Samme antall poster, men ID-ene i koblingene har fått en annen form.
+    const nyeIder = UTDRAG.replace(/<RefVirkestoffMedStyrke>ID_/g, '<RefVirkestoffMedStyrke>urn:fest:')
+    expect(await avvik(nyeIder)).toEqual(['merkevarene peker på styrker som finnes i uttrekket'])
+  })
+
+  it('sier hvilken kontroll som slo ut, i klartekst', () => {
+    expect(
+      avvikstekst([{ entitet: 'merkevare', tekst: 'merkevarene har varenavn', andel: 0.004, minsteAndel: 0.9, antall: 8962 }]),
+    ).toBe(
+      'Strukturkontrollen stoppet FEST-uttrekket, trolig fordi DMP har endret formen på filen: ' +
+        'bare 0 % av de 8962 merkevarene har varenavn (krever minst 90 %). Ingenting er byttet inn.',
+    )
+  })
+
+  describe('i synkroniseringen', () => {
+    let db: PGlite
+    let tjeneste: Databasekall
+
+    beforeEach(async () => {
+      db = await nyDatabase()
+      tjeneste = kallSom(db, 'service_role')
+    })
+
+    const synk = (xml: string, etag: string, utlostAv?: 'cron' | 'manuell') =>
+      synkroniserFest({
+        lager: lagLegemiddellager(tjeneste),
+        hent: async () => svar(lagZip('fest251.xml', xml), 200, { etag }),
+        porsjon: 5,
+        ...(utlostAv && { utlostAv }),
+      })
+    const lesAmitriptylin = () => kallSom(db, 'authenticated')('les_legemidler', { virkestoff_ider: [AMITRIPTYLIN] })
+
+    it('avviser en fil som er stor nok, men der varenavnene er borte, og lar dataene fra før stå', async () => {
+      expect(await synk(UTDRAG, '"a"')).toMatchObject({ status: 'fullfort' })
+      const fore = await lesAmitriptylin()
+
+      const resultat = await synk(omdopt(UTDRAG, 'Varenavn', 'Handelsnavn'), '"b"')
+      expect(resultat).toMatchObject({ status: 'feilet' })
+      const feil = (resultat as { feil: string }).feil
+      expect(feil).toContain('Strukturkontrollen stoppet FEST-uttrekket')
+      expect(feil).toContain('bare 0 % av de 12 merkevarene har varenavn (krever minst 90 %)')
+
+      // Ingenting er byttet inn, mellomlageret er tomt, og kjøringen er logget som feilet med teksten.
+      expect(await lesAmitriptylin()).toEqual(fore)
+      const { rows } = await db.query<{ n: number }>('select count(*)::int as n from legemiddeldata.innlasting')
+      expect(rows[0]!.n).toBe(0)
+      const logg = (await kallSom(db, 'authenticated')('legemiddeldata_status', {})) as { status: string; feil: string | null }[]
+      expect(logg.map((k) => k.status)).toEqual(['feilet', 'fullfort'])
+      expect(logg[0]!.feil).toBe(feil)
+      // Neste natt spør ikke med ETag-en fra den feilede kjøringen.
+      expect(await tjeneste('legemiddeldata_forrige_synk', { kilde: 'FEST' })).toMatchObject({ etag: '"a"' })
+
+      // Administratoren ser feilen, og at de gamle dataene brukes, i «Datakilder».
+      const admin = await opprettBruker(db, { brukernavn: 'admin', fornavn: 'Ada', etternavn: 'Admin', rolle: 'admin' })
+      const { data } = await faginnholdskall(db, admin).klientFor(admin).rpc('datakilder_status', {})
+      const fest = vurderKilder(lesDatakildestatus(data), Date.now(), { fest: 1 }).find((v) => v.kilde === 'fest')!
+      expect(fest).toMatchObject({ tilstand: 'feil', versjon: '2026-09-08T03:09:06' })
+      expect(fest.melding).toBe(
+        `Siste henting feilet: ${feil.replace(/\.$/, '')}. OUSFAR bruker fortsatt siste gyldige FEST-data; ingenting fra den feilede hentingen er tatt i bruk.`,
+      )
+      expect(fest.sisteVellykkede).toMatchObject({ status: 'fullfort', rader: { nye: 45, endrede: 0, utgatte: 0 } })
+    })
+
+    it('noterer om kjøringen ble utløst av den nattlige jobben eller en administrator', async () => {
+      await synk(UTDRAG, '"a"')
+      await synk(UTDRAG, '"b"', 'manuell')
+      const { rows } = await db.query<{ utlost_av: string; status: string }>(
+        'select utlost_av, status from legemiddeldata.synkroniseringer order by id',
+      )
+      expect(rows).toEqual([
+        { utlost_av: 'cron', status: 'fullfort' },
+        { utlost_av: 'manuell', status: 'uendret' },
+      ])
+    })
+  })
+})
+
 describe('preparatene og interaksjonene på stoffsiden', () => {
   let leser: ReturnType<typeof lagLegemiddelleser>
   let anonym: Databasekall
@@ -624,34 +750,56 @@ describe('preparatene og interaksjonene på stoffsiden', () => {
   })
 })
 
-describe('endepunktet for den nattlige synkroniseringen', () => {
+describe('endepunktet for synkroniseringen', () => {
   const miljo = { CRON_SECRET: 'hemmelig', SUPABASE_URL: 'https://eksempel.supabase.co', SUPABASE_SECRET_KEY: 'sb_secret_test' }
-  const kall = (autorisasjon?: string) =>
+  const kall = (autorisasjon?: string, method = 'GET') =>
     new Request('https://ousfar.no/api/legemiddeldata-synk', {
+      method,
       headers: autorisasjon ? { authorization: autorisasjon } : {},
     })
+  const adminsjekk = async (token: string) => token === 'admin-token'
 
   it('avviser kall uten riktig hemmelighet, og når hemmeligheten mangler', async () => {
     let kjort = 0
-    const synk = async () => (kjort++, { status: 'uendret' as const, synk: 1 })
-    expect((await behandleSynk(kall(), miljo, synk)).status).toBe(401)
-    expect((await behandleSynk(kall('Bearer feil'), miljo, synk)).status).toBe(401)
-    expect((await behandleSynk(kall('Bearer '), { ...miljo, CRON_SECRET: '' }, synk)).status).toBe(401)
-    expect((await behandleSynk(kall('Bearer undefined'), { ...miljo, CRON_SECRET: undefined }, synk)).status).toBe(401)
+    const synkroniser = async () => (kjort++, { status: 'uendret' as const, synk: 1 })
+    expect((await behandleSynk(kall(), miljo, { synkroniser, adminsjekk })).status).toBe(401)
+    expect((await behandleSynk(kall('Bearer feil'), miljo, { synkroniser, adminsjekk })).status).toBe(401)
+    expect((await behandleSynk(kall('Bearer '), { ...miljo, CRON_SECRET: '' }, { synkroniser, adminsjekk })).status).toBe(401)
+    expect((await behandleSynk(kall('Bearer undefined'), { ...miljo, CRON_SECRET: undefined }, { synkroniser, adminsjekk })).status).toBe(401)
     expect(kjort).toBe(0)
   })
 
+  it('lar Vercel hente med hemmeligheten og en administrator med sin innlogging, men ikke omvendt', async () => {
+    const utlost: unknown[] = []
+    const synkroniser = async (valg: { utlostAv?: string }) => (utlost.push(valg.utlostAv), { status: 'uendret' as const, synk: 1 })
+    expect((await behandleSynk(kall('Bearer hemmelig'), miljo, { synkroniser, adminsjekk })).status).toBe(200)
+    expect((await behandleSynk(kall('Bearer admin-token', 'POST'), miljo, { synkroniser, adminsjekk })).status).toBe(200)
+    expect(utlost).toEqual(['cron', 'manuell'])
+    // Hemmeligheten gjelder bare Vercels GET, og en administrators innlogging bare POST.
+    expect((await behandleSynk(kall('Bearer hemmelig', 'POST'), miljo, { synkroniser, adminsjekk })).status).toBe(401)
+    expect((await behandleSynk(kall('Bearer admin-token'), miljo, { synkroniser, adminsjekk })).status).toBe(401)
+    expect((await behandleSynk(kall('Bearer bruker-token', 'POST'), miljo, { synkroniser, adminsjekk })).status).toBe(401)
+    expect((await behandleSynk(kall('Bearer hemmelig', 'DELETE'), miljo, { synkroniser, adminsjekk })).status).toBe(405)
+    expect(utlost).toHaveLength(2)
+  })
+
   it('kjører synkroniseringen og melder en feilet kjøring som feil', async () => {
-    const ok = await behandleSynk(kall('Bearer hemmelig'), miljo, async () => ({ status: 'uendret', synk: 7 }))
+    const ok = await behandleSynk(kall('Bearer hemmelig'), miljo, { synkroniser: async () => ({ status: 'uendret', synk: 7 }) })
     expect(ok.status).toBe(200)
     expect(await ok.json()).toEqual({ status: 'uendret', synk: 7 })
-    const feilet = await behandleSynk(kall('Bearer hemmelig'), miljo, async () => ({ status: 'feilet', synk: 8, feil: 'x' }))
+    const feilet = await behandleSynk(kall('Bearer hemmelig'), miljo, {
+      synkroniser: async () => ({ status: 'feilet', synk: 8, feil: 'x' }),
+    })
     expect(feilet.status).toBe(502)
+    // Svaret har ingen hemmeligheter, bare det som også står i loggen.
+    expect(JSON.stringify(await feilet.json())).not.toContain('sb_secret')
   })
 
   it('stopper før noe kjøres når oppkoblingen mangler', async () => {
-    const svar = await behandleSynk(kall('Bearer hemmelig'), { CRON_SECRET: 'hemmelig' }, async () => {
-      throw new Error('skal ikke kjøres')
+    const svar = await behandleSynk(kall('Bearer hemmelig'), { CRON_SECRET: 'hemmelig' }, {
+      synkroniser: async () => {
+        throw new Error('skal ikke kjøres')
+      },
     })
     expect(svar.status).toBe(500)
   })

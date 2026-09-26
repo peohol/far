@@ -4,6 +4,7 @@ import {
   endringstittel,
   feltendringer,
   feltnavn,
+  jobbnavn,
   KILDEOPPSETT,
   lagDatakildeleser,
   sporlinje,
@@ -40,10 +41,11 @@ const STATUSNAVN: Record<Kjoringsstatus, string> = {
 const MAKS_ENDRINGER = 50
 
 /**
- * Driftstatusen for de farmakogenetiske datakildene, for administratorer:
- * hvordan siste henting fra ClinPGx og CPIC gikk, de siste kjøringene, og hva
- * som er endret — de kliniske endringene først, metadataene på forespørsel.
- * «Hent nå» ber serveren hente med en gang, som den ukentlige jobben.
+ * Driftstatusen for datakildene, for administratorer: hvordan siste henting
+ * fra FEST, ClinPGx og CPIC gikk, de siste kjøringene, og hva som er endret —
+ * i ClinPGx og CPIC de kliniske endringene først, metadataene på
+ * forespørsel; i FEST antallet nye, endrede og utgåtte rader. «Hent nå» ber
+ * serveren hente med en gang, som den planlagte jobben.
  *
  * Tilgangen avgjøres i databasen (`datakilder_status()` er bare for
  * administratorer); dette er bare visningen.
@@ -95,8 +97,8 @@ export function Datakilder({ apen, onLukk, leser: egenLeser }: { apen: boolean; 
   return (
     <Modallag apen={apen} tittel="Datakilder" ikon="reset" bred onLukk={onLukk}>
       <p className="datakilder__ingress">
-        Farmakogenetiske data fra ClinPGx og CPIC: hvordan siste henting gikk, og hva som er endret siden forrige.
-        Ingenting her vises for andre enn administratorer.
+        Legemiddeldata fra FEST og farmakogenetiske data fra ClinPGx og CPIC: hvordan siste henting gikk, og hva som
+        er endret siden forrige. Ingenting her vises for andre enn administratorer.
       </p>
       <label className="datakilder__valg">
         <input type="checkbox" checked={metadata} onChange={(e) => setMetadata(e.target.checked)} />
@@ -135,9 +137,8 @@ function Kilde({
   kvittering: string | null
   onHent: () => void
 }) {
-  const { versjonsnavn } = KILDEOPPSETT[v.kilde]
+  const { versjonsnavn, visVersjon, endringslogg } = KILDEOPPSETT[v.kilde]
   const tilstand = TILSTAND[v.tilstand]
-  const synlige = v.endringer.filter((e) => metadata || e.niva === 'klinisk' || e.art === 'grunnlag')
   const vellykket = v.sisteVellykkede
 
   return (
@@ -175,7 +176,7 @@ function Kilde({
         )}
         <div>
           <dt>{versjonsnavn}</dt>
-          <dd>{v.versjon ?? '–'}</dd>
+          <dd>{v.versjon ? (visVersjon?.(v.versjon) ?? v.versjon) : '–'}</dd>
         </div>
       </dl>
 
@@ -188,8 +189,18 @@ function Kilde({
                 <th scope="col">Startet</th>
                 <th scope="col">Status</th>
                 <th scope="col">Utløst av</th>
-                <th scope="col">Kliniske</th>
-                <th scope="col">Metadata</th>
+                {endringslogg ? (
+                  <>
+                    <th scope="col">Kliniske</th>
+                    <th scope="col">Metadata</th>
+                  </>
+                ) : (
+                  <>
+                    <th scope="col">Nye</th>
+                    <th scope="col">Endrede</th>
+                    <th scope="col">Utgåtte</th>
+                  </>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -197,9 +208,19 @@ function Kilde({
                 <tr key={k.id}>
                   <td>{tidspunkt(k.startet_kl)}</td>
                   <td title={k.feil ?? undefined}>{STATUSNAVN[k.status]}</td>
-                  <td>{k.utlost_av === 'manuell' ? 'Administrator' : 'Ukentlig jobb'}</td>
-                  <td>{k.endringer.klinisk}</td>
-                  <td>{k.endringer.metadata}</td>
+                  <td>{k.utlost_av === 'manuell' ? 'Administrator' : jobbnavn(v.intervall)}</td>
+                  {endringslogg ? (
+                    <>
+                      <td>{k.endringer.klinisk}</td>
+                      <td>{k.endringer.metadata}</td>
+                    </>
+                  ) : (
+                    <>
+                      <td>{k.rader?.nye ?? '–'}</td>
+                      <td>{k.rader?.endrede ?? '–'}</td>
+                      <td>{k.rader?.utgatte ?? '–'}</td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>
@@ -207,6 +228,23 @@ function Kilde({
         </details>
       )}
 
+      {endringslogg ? (
+        <Endringsliste endringer={v.endringer} metadata={metadata} />
+      ) : (
+        <p className="datakilder__tomt">
+          Endringene i {v.navn} logges ikke enkeltvis; kjøringene over viser hvor mange rader som ble nye, endret eller
+          utgått.
+        </p>
+      )}
+    </section>
+  )
+}
+
+/** De loggede endringene fra en kilde, de kliniske først og metadataene når de slås på. */
+function Endringsliste({ endringer, metadata }: { endringer: Kildevurdering['endringer']; metadata: boolean }) {
+  const synlige = endringer.filter((e) => metadata || e.niva === 'klinisk' || e.art === 'grunnlag')
+  return (
+    <>
       <h4 className="datakilde__undertittel">{metadata ? 'Endringer' : 'Kliniske endringer'}</h4>
       {synlige.length === 0 ? (
         <p className="datakilder__tomt">Ingen {metadata ? '' : 'kliniske '}endringer er logget.</p>
@@ -253,6 +291,6 @@ function Kilde({
       {synlige.length > MAKS_ENDRINGER && (
         <p className="datakilder__tomt">Viser de {MAKS_ENDRINGER} nyeste av {synlige.length}.</p>
       )}
-    </section>
+    </>
   )
 }

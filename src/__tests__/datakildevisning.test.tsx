@@ -88,3 +88,63 @@ describe('datakildene', () => {
     expect(leser.status).toHaveBeenCalledTimes(2)
   })
 })
+
+describe('FEST sammen med ClinPGx og CPIC', () => {
+  const fest = (id: number, status: 'fullfort' | 'feilet', ekstra: Partial<Datakildestatus['kjoringer'][number]> = {}) => ({
+    kilde: 'fest' as const, id, status, utlost_av: 'cron' as const, startet_kl: nylig, avsluttet_kl: nylig,
+    release: null, versjon: null, feil: null, endringer: { klinisk: 0, metadata: 0, grunnlag: 0 }, rader: null,
+    ...ekstra,
+  })
+  const leserMed = (kjoringer: Datakildestatus['kjoringer']): Datakildeleser & { hentNa: ReturnType<typeof vi.fn> } => ({
+    status: vi.fn(async () => ({ ...STATUS, kjoringer: [...kjoringer, ...STATUS.kjoringer] })),
+    hentNa: vi.fn(async () => ({ status: 'uendret' })),
+  })
+
+  it('viser FEST først, med uttrekket, radene og den nattlige jobben, uten endringslogg', async () => {
+    const leser = leserMed([fest(9, 'fullfort', { versjon: '2026-09-08T03:09:06', rader: { nye: 3, endrede: 12, utgatte: 1 } })])
+    render(<Datakilder apen onLukk={() => {}} leser={leser} />)
+    const region = await screen.findByRole('region', { name: 'FEST' })
+    expect(screen.getAllByRole('region').map((r) => r.getAttribute('aria-labelledby'))).toEqual([
+      'datakilde-fest',
+      'datakilde-clinpgx',
+      'datakilde-cpic',
+    ])
+    expect(within(region).getByText('I orden', { selector: '.merke' })).toBeTruthy()
+    expect(within(region).getByText('Siste henting byttet inn et nytt uttrekk (rader nye: 3, endrede: 12, utgåtte: 1).')).toBeTruthy()
+    expect(within(region).getByText('Uttrekk fra DMP')).toBeTruthy()
+    expect(within(region).getByText('08.09.2026')).toBeTruthy()
+    expect(within(region).getByText('Nattlig jobb')).toBeTruthy()
+    expect(within(region).getByRole('columnheader', { name: 'Utgåtte' })).toBeTruthy()
+    expect(within(region).queryByText('Kliniske endringer')).toBeNull()
+    expect(within(region).getByText(/logges ikke enkeltvis/)).toBeTruthy()
+
+    // ClinPGx og CPIC vises som før.
+    const clinpgx = screen.getByRole('region', { name: 'ClinPGx' })
+    expect(within(clinpgx).getByText('Kliniske endringer')).toBeTruthy()
+    expect(within(clinpgx).getByText('Ukentlig jobb')).toBeTruthy()
+    expect(within(clinpgx).getByRole('columnheader', { name: 'Kliniske' })).toBeTruthy()
+
+    await userEvent.click(within(region).getByRole('button', { name: 'Hent fra FEST nå' }))
+    expect(leser.hentNa).toHaveBeenCalledWith('fest')
+  })
+
+  it('sier konkret hva som stoppet en FEST-henting, og at de gyldige dataene fortsatt brukes', async () => {
+    const feil = 'Strukturkontrollen stoppet FEST-uttrekket, trolig fordi DMP har endret formen på filen: bare 0 % av de 8962 merkevarene har varenavn (krever minst 90 %). Ingenting er byttet inn.'
+    render(
+      <Datakilder
+        apen
+        onLukk={() => {}}
+        leser={leserMed([fest(10, 'feilet', { feil, utlost_av: 'manuell' }), fest(9, 'fullfort', { versjon: '2026-09-08T03:09:06' })])}
+      />,
+    )
+    const region = await screen.findByRole('region', { name: 'FEST' })
+    expect(within(region).getByText('Feilet', { selector: '.merke' })).toBeTruthy()
+    expect(
+      within(region).getByText(
+        `Siste henting feilet: ${feil.replace(/\.$/, '')}. OUSFAR bruker fortsatt siste gyldige FEST-data; ingenting fra den feilede hentingen er tatt i bruk.`,
+      ),
+    ).toBeTruthy()
+    expect(within(region).getByText('Administrator')).toBeTruthy()
+    expect(within(region).getByText('08.09.2026')).toBeTruthy()
+  })
+})

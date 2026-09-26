@@ -1,16 +1,18 @@
 /**
- * Driftstatusen for de farmakogenetiske datakildene (ClinPGx og CPIC), slik
- * administratorene ser den: de siste kjøringene, om noe er galt, og hva som er
- * endret siden forrige henting.
+ * Driftstatusen for datakildene — legemiddeldataene fra FEST og de
+ * farmakogenetiske fra ClinPGx og CPIC — slik administratorene ser den: de
+ * siste kjøringene, om noe er galt, og hva som er endret siden forrige henting.
  *
- * Endringene oppdages i databasen (`*_datakilder_endringer.sql`,
- * `docs/datakilder.md`) og leses her med `datakilder_status()`. Alt her er
- * rene funksjoner, bortsett fra `lagDatakildeleser`.
+ * Endringene i ClinPGx og CPIC oppdages i databasen
+ * (`*_datakilder_endringer.sql`, `docs/datakilder.md`); FEST har ingen
+ * endringslogg, men hver kjøring teller nye, endrede og utgåtte rader. Alt
+ * leses med `datakilder_status()`. Alt her er rene funksjoner, bortsett fra
+ * `lagDatakildeleser`.
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
 import vercel from '../../vercel.json'
 
-export const DATAKILDER = ['clinpgx', 'cpic'] as const
+export const DATAKILDER = ['fest', 'clinpgx', 'cpic'] as const
 export type Datakilde = (typeof DATAKILDER)[number]
 
 export interface Kildeoppsett {
@@ -19,23 +21,48 @@ export interface Kildeoppsett {
   synk: string
   /** Hva `versjon` i en kjøring er for kilden. */
   versjonsnavn: string
+  /** Versjonen slik den vises, når den ikke skal stå som den er. */
+  visVersjon?: (versjon: string) => string
   /**
    * Hva som står etter en kjøring som feilet, når kilden ikke byttes inn
    * samlet. `null`: alt byttes inn i én transaksjon, så dataene fra siste
-   * vellykkede henting står.
+   * vellykkede henting står — med `beholdt` som teksten om det.
    */
   etterFeil: string | null
+  beholdt?: string
+  /**
+   * Om endringene logges i `datakilder.endringer`, som kliniske og metadata.
+   * Uten: kjøringen teller bare nye, endrede og utgåtte rader.
+   */
+  endringslogg: boolean
+}
+
+/** «2026-09-08T03:09:06» som «08.09.2026». */
+function dato(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso)
+  return m ? `${m[3]}.${m[2]}.${m[1]}` : iso
 }
 
 export const KILDEOPPSETT: Record<Datakilde, Kildeoppsett> = {
+  // Hele uttrekket byttes inn i én transaksjon (docs/legemiddeldata.md).
+  fest: {
+    navn: 'FEST',
+    synk: '/api/legemiddeldata-synk',
+    versjonsnavn: 'Uttrekk fra DMP',
+    visVersjon: dato,
+    etterFeil: null,
+    beholdt: 'OUSFAR bruker fortsatt siste gyldige FEST-data; ingenting fra den feilede hentingen er tatt i bruk.',
+    endringslogg: false,
+  },
   // Ett kjemikalie om gangen, hvert i sin transaksjon (docs/clinpgx.md).
   clinpgx: {
     navn: 'ClinPGx',
     synk: '/api/clinpgx-synk',
     versjonsnavn: 'Parserversjon',
     etterFeil: 'Kjemikalier som ble hentet før feilen, kan være oppdatert; de andre står som før.',
+    endringslogg: true,
   },
-  cpic: { navn: 'CPIC', synk: '/api/cpic-synk', versjonsnavn: 'Skjemaversjon', etterFeil: null },
+  cpic: { navn: 'CPIC', synk: '/api/cpic-synk', versjonsnavn: 'Skjemaversjon', etterFeil: null, endringslogg: true },
 }
 
 /* --- Formen fra databasen -------------------------------------------------- */
@@ -46,6 +73,13 @@ export interface Endringstall {
   klinisk: number
   metadata: number
   grunnlag: number
+}
+
+/** Radene en FEST-kjøring byttet inn, summert over typene. */
+export interface Radtall {
+  nye: number
+  endrede: number
+  utgatte: number
 }
 
 export interface Kjoring {
@@ -60,6 +94,8 @@ export interface Kjoring {
   versjon: string | null
   feil: string | null
   endringer: Endringstall
+  /** For kilder uten endringslogg (FEST): radene kjøringen byttet inn. `null` når den ikke byttet inn noe. */
+  rader?: Radtall | null
 }
 
 export type Endringsart = 'ny' | 'endret' | 'fjernet' | 'grunnlag'
@@ -119,6 +155,15 @@ function blant<T extends string>(verdier: readonly T[], v: unknown): T | null {
 const STATUSER: readonly Kjoringsstatus[] = ['pagar', 'fullfort', 'delvis', 'uendret', 'feilet']
 const ARTER: readonly Endringsart[] = ['ny', 'endret', 'fjernet', 'grunnlag']
 
+/** `antall` fra en FEST-kjøring, `{ type: { nye, endrede, utgatte } }`, summert. */
+function lesRader(antall: unknown): Radtall | null {
+  if (!erObjekt(antall)) return null
+  const typer = Object.values(antall).filter(erObjekt)
+  if (typer.length === 0) return null
+  const sum = (felt: keyof Radtall) => typer.reduce((n, t) => n + tall(t[felt]), 0)
+  return { nye: sum('nye'), endrede: sum('endrede'), utgatte: sum('utgatte') }
+}
+
 function lesKjoring(o: unknown): Kjoring | null {
   if (!erObjekt(o)) return null
   const kilde = blant(DATAKILDER, o.kilde)
@@ -137,6 +182,7 @@ function lesKjoring(o: unknown): Kjoring | null {
     versjon: tekst(o.versjon),
     feil: tekst(o.feil),
     endringer: { klinisk: tall(e.klinisk), metadata: tall(e.metadata), grunnlag: tall(e.grunnlag) },
+    ...(!KILDEOPPSETT[kilde].endringslogg && { rader: lesRader(o.antall) }),
   }
 }
 
@@ -227,6 +273,8 @@ export interface Kildevurdering {
   /** Siste kjente release og versjon, fra en vellykket kjøring. */
   release: string | null
   versjon: string | null
+  /** Døgn mellom de planlagte kjøringene, fra `vercel.json`. */
+  intervall: number | null
   /** Nyest først. */
   kjoringer: Kjoring[]
   /** Nyest først. */
@@ -236,6 +284,34 @@ export interface Kildevurdering {
 function dogn(ms: number): string {
   const antall = Math.floor(ms / DOGN_MS)
   return antall === 1 ? '1 døgn' : `${antall} døgn`
+}
+
+/** «Nattlig jobb», «Ukentlig jobb»: hva som kjører kilden når ingen ber om det. */
+export function jobbnavn(intervall: number | null): string {
+  return intervall === 1 ? 'Nattlig jobb' : intervall === 7 ? 'Ukentlig jobb' : 'Planlagt jobb'
+}
+
+/** Feilteksten uten punktum til slutt, så den kan stå inne i en setning. */
+function setning(tekst: string): string {
+  return tekst.replace(/[\s.]+$/, '')
+}
+
+function flertall(antall: number, en: string, flere: string): string {
+  return `${antall} ${antall === 1 ? en : flere}`
+}
+
+/** Hva en vellykket kjøring fant, for en kilde med endringslogg eller bare radtall. */
+function funnet(kjoring: Kjoring, endringslogg: boolean): string {
+  if (!endringslogg) {
+    const r = kjoring.rader
+    if (kjoring.status === 'uendret' || !r || r.nye + r.endrede + r.utgatte === 0) return 'Siste henting fant ingen endringer.'
+    return `Siste henting byttet inn et nytt uttrekk (rader nye: ${r.nye}, endrede: ${r.endrede}, utgåtte: ${r.utgatte}).`
+  }
+  const { klinisk, metadata } = kjoring.endringer
+  if (kjoring.status === 'uendret' || (klinisk === 0 && metadata === 0)) return 'Siste henting fant ingen endringer.'
+  return klinisk > 0
+    ? `Siste henting fant ${flertall(klinisk, 'klinisk endring', 'kliniske endringer')}.`
+    : 'Siste henting fant bare endringer i metadata.'
 }
 
 /**
@@ -249,7 +325,8 @@ export function vurderKilder(
   intervaller: Partial<Record<Datakilde, number>> = kildeintervaller(),
 ): Kildevurdering[] {
   return DATAKILDER.map((kilde) => {
-    const { navn, etterFeil } = KILDEOPPSETT[kilde]
+    const { navn, etterFeil, beholdt: beholdtTekst, endringslogg } = KILDEOPPSETT[kilde]
+    const intervall = intervaller[kilde] ?? null
     const kjoringer = status.kjoringer.filter((k) => k.kilde === kilde).sort((a, b) => b.id - a.id)
     const endringer = status.endringer.filter((e) => e.kilde === kilde)
     const siste = kjoringer[0] ?? null
@@ -260,36 +337,31 @@ export function vurderKilder(
     const release = kjent('release')
     const versjon = kjent('versjon')
     const vurdering = (tilstand: Tilstand, melding: string): Kildevurdering => ({
-      kilde, navn, tilstand, melding, siste, sisteVellykkede, release, versjon, kjoringer, endringer,
+      kilde, navn, tilstand, melding, siste, sisteVellykkede, release, versjon, intervall, kjoringer, endringer,
     })
 
     if (!siste) return vurdering('advarsel', `Ingen henting fra ${navn} er logget ennå.`)
     const beholdt =
-      etterFeil ?? (sisteVellykkede ? 'Dataene fra siste vellykkede henting står.' : 'Ingen henting har lyktes ennå.')
-    if (siste.status === 'feilet') return vurdering('feil', `Siste henting feilet: ${siste.feil ?? 'ukjent feil'}. ${beholdt}`)
+      etterFeil ??
+      (sisteVellykkede ? (beholdtTekst ?? 'Dataene fra siste vellykkede henting står.') : 'Ingen henting har lyktes ennå.')
+    if (siste.status === 'feilet') {
+      return vurdering('feil', `Siste henting feilet: ${setning(siste.feil ?? 'ukjent feil')}. ${beholdt}`)
+    }
     if (siste.status === 'pagar') {
       return na - Date.parse(siste.startet_kl) > HENGER_ETTER_MS
         ? vurdering('advarsel', 'En henting har stått uferdig i over en halvtime og regnes som avbrutt ved neste start.')
         : vurdering('ok', 'Henter nå.')
     }
 
-    const intervall = intervaller[kilde]
     const alder = sisteVellykkede ? na - Date.parse(sisteVellykkede.avsluttet_kl ?? sisteVellykkede.startet_kl) : Infinity
     if (intervall && alder > (intervall + 1) * DOGN_MS) {
       return vurdering('advarsel', `Ingen vellykket henting på ${dogn(alder)}; ${navn} hentes hver ${intervall === 7 ? 'uke' : 'natt'}.`)
     }
     if (siste.status === 'delvis') {
-      return vurdering('advarsel', 'Siste henting var delvis: det som feilet eller ble utsatt, står med dataene fra før.')
+      const delvis = 'Siste henting var delvis: det som feilet eller ble utsatt, står med dataene fra før.'
+      return vurdering('advarsel', siste.feil ? `${delvis} Feil: ${setning(siste.feil)}.` : delvis)
     }
-    const { klinisk } = siste.endringer
-    return vurdering(
-      'ok',
-      siste.status === 'uendret' || (klinisk === 0 && siste.endringer.metadata === 0)
-        ? 'Siste henting fant ingen endringer.'
-        : klinisk > 0
-          ? `Siste henting fant ${klinisk} ${klinisk === 1 ? 'klinisk endring' : 'kliniske endringer'}.`
-          : 'Siste henting fant bare endringer i metadata.',
-    )
+    return vurdering('ok', funnet(siste, endringslogg))
   })
 }
 

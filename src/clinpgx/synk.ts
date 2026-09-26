@@ -15,9 +15,10 @@
  *    kjemikaliet i én transaksjon.
  *
  * Feiler ett kjemikalie — et kall som feiler, et objekt i svaret som ikke kan
- * leses, eller et svar databasen avviser — noteres feilen på det, og det som lå
- * der fra før, står. De andre hentes som vanlig. Et objekt som ikke kan leses,
- * tyder på at svaret har endret form; da er det tryggere å beholde det gamle
+ * leses eller har en annen form enn ventet (`struktur.ts`), eller et svar
+ * databasen avviser — noteres feilen på det, og det som lå der fra før, står.
+ * De andre hentes som vanlig. Et objekt som ikke kan leses eller har endret
+ * form, tyder på at API-et er endret; da er det tryggere å beholde det gamle
  * enn å bytte inn et svar der noe mangler.
  * Blir tiden knapp, stopper jobben før neste kjemikalie; resten hentes neste
  * gang, først i køen.
@@ -33,6 +34,7 @@ import {
   PARSERVERSJON,
   type Annotasjonstype,
 } from './modell.js'
+import { strukturavvik, strukturfeiltekst, type Strukturtype } from './struktur.js'
 
 /** Hvor lenge en kjøring kan holde på. Vercel stopper funksjonen etter 300 sekunder. */
 export const TIDSBUDSJETT_MS = 240_000
@@ -58,6 +60,8 @@ interface Hentet {
   kjemikalie: { id: string; data: object; raa: unknown }
   annotasjoner: Lagringsannotasjon[]
   forkastet: number
+  /** Objektene i svaret som har en annen form enn ventet. */
+  avvik: { type: Strukturtype; id: string; avvik: string[] }[]
 }
 
 /** Endepunktene annotasjonene hentes fra, og hvordan hvert objekt leses. */
@@ -77,16 +81,27 @@ export async function hentKjemikalie(api: ClinpgxApi, id: string): Promise<Hente
   const kjemikalie = lesKjemikaliesvar(raaKjemikalie)
   if (!kjemikalie || kjemikalie.id !== id) throw new ClinpgxFeil(`ClinPGx ga et kjemikalie som ikke kunne leses for ${id}.`)
 
+  const avvik: Hentet['avvik'] = []
+  const kontroller = (type: Strukturtype, objektId: string, raa: unknown) => {
+    const funnet = strukturavvik(type, raa)
+    if (funnet.length > 0) avvik.push({ type, id: objektId, avvik: funnet })
+  }
+  kontroller('kjemikalie', id, raaKjemikalie)
+
   const annotasjoner: Lagringsannotasjon[] = []
   let forkastet = 0
   for (const { type, sti, les } of KILDER) {
     for (const raa of await api.liste(sti, { 'relatedChemicals.accessionId': id, view: 'base' })) {
       const data = les(raa)
-      if (data) annotasjoner.push({ type, id: data.id, data, raa })
-      else forkastet += 1
+      if (!data) {
+        forkastet += 1
+        continue
+      }
+      annotasjoner.push({ type, id: data.id, data, raa })
+      kontroller(type, data.id, raa)
     }
   }
-  return { kjemikalie: { id, data: kjemikalie, raa: raaKjemikalie }, annotasjoner, forkastet }
+  return { kjemikalie: { id, data: kjemikalie, raa: raaKjemikalie }, annotasjoner, forkastet, avvik }
 }
 
 export async function synkroniserClinpgx({
@@ -109,6 +124,7 @@ export async function synkroniserClinpgx({
       utsatt: 0,
       annotasjoner: {},
       forkastet: 0,
+      strukturavvik: 0,
     }
     const feil: string[] = []
 
@@ -120,11 +136,13 @@ export async function synkroniserClinpgx({
       try {
         const hentet = await hentKjemikalie(api, id)
         telling.forkastet += hentet.forkastet
+        telling.strukturavvik += hentet.avvik.length
         if (hentet.forkastet > 0) {
           throw new ClinpgxFeil(
             `${hentet.forkastet} ${hentet.forkastet === 1 ? 'objekt' : 'objekter'} i svaret kunne ikke leses. Dataene fra før står.`,
           )
         }
+        if (hentet.avvik.length > 0) throw new ClinpgxFeil(strukturfeiltekst(hentet.avvik))
         const lagret = await lager.lagre(synk, hentet.kjemikalie, hentet.annotasjoner)
         telling.hentet += 1
         for (const [type, antall] of Object.entries(lagret) as [Annotasjonstype, number][]) {
