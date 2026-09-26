@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.41.1',
+    dato: '2026-09-26',
+    sammendrag: 'Den ekstra hentingen fra ClinPGx er fjernet igjen',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'ClinPGx-dataene hentes igjen bare ved den ukentlige kjøringen.',
+    ],
+  },
+  {
     versjon: '1.41.0',
     dato: '2026-09-26',
     sammendrag: 'Administratorer ser hvordan hentingen fra ClinPGx og CPIC går, og hva som er endret i kildene',
