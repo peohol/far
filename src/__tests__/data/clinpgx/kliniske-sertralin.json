@@ -1,0 +1,647 @@
+{
+ "status": "success",
+ "data": [
+  {
+   "id": 1183619004,
+   "accessionId": "PA166135169",
+   "allelePhenotypes": [
+    {
+     "id": 1452015129,
+     "allele": "*1",
+     "limitedEvidence": false,
+     "phenotype": "The CYP2C19*1 allele is assigned as a normal function allele by CPIC. Patients carrying the CYP2C19*1 allele in combination with another normal function allele may have increased metabolism of sertraline as compared to patients with a no or decreased function allele in combination with a normal or increased function allele or with two no or decreased function alleles. Patients carrying the CYP2C19*1 allele in combination with another normal function allele may have decreased metabolism of sertraline as compared to patients with a normal function allele in combination with an increased function allele or two increased function alleles. However, conflicting evidence has been reported. This annotation only covers the pharmacokinetic relationship between CYP2C19 and sertraline and does not include evidence about clinical outcomes. Other genetic and clinical factors may also influence metabolism of sertraline."
+    },
+    {
+     "id": 1452015130,
+     "allele": "*2",
+     "limitedEvidence": false,
+     "phenotype": "The CYP2C19*2 allele is assigned as a no function allele by CPIC. Patients carrying the CYP2C19*2 allele in combination with a no, decreased, normal, or increased function allele may have decreased metabolism of sertraline as compared to patients with two normal function alleles. However, conflicting evidence has been reported. This annotation only covers the pharmacokinetic relationship between CYP2C19 and sertraline and does not include evidence about clinical outcomes. Other genetic and clinical factors may also influence metabolism of sertraline."
+    },
+    {
+     "id": 1452015131,
+     "allele": "*3",
+     "limitedEvidence": false,
+     "phenotype": "The CYP2C19*3 allele is assigned as a no function allele by CPIC. Patients carrying the CYP2C19*3 allele in combination with a no, decreased, normal, or increased function allele may have decreased metabolism of sertraline as compared to patients with two normal function alleles. This annotation only covers the pharmacokinetic relationship between CYP2C19 and sertraline and does not include evidence about clinical outcomes. Other genetic and clinical factors may also influence metabolism of sertraline."
+    },
+    {
+     "id": 1452015132,
+     "allele": "*17",
+     "limitedEvidence": false,
+     "phenotype": "The CYP2C19*17 allele is assigned as an increased function allele by CPIC. Patients carrying the CYP2C19*17 allele in combination with a normal or increased function allele may have increased metabolism of sertraline as compared to patients with two normal function alleles. Patients carrying the CYP2C19*17 allele in combination with a no or decreased function allele may have decreased metabolism of sertraline as compared to patients with two normal function alleles. However, conflicting evidence has been reported. This annotation only covers the pharmacokinetic relationship between CYP2C19 and sertraline and does not include evidence about clinical outcomes. Other genetic and clinical factors may also influence metabolism of sertraline."
+    }
+   ],
+   "conflictingVariantAnnotationIds": [],
+   "levelOfEvidence": {
+    "id": 827923052,
+    "resource": "Level of Evidence",
+    "synonyms": [],
+    "term": "1A",
+    "termId": "levelsOfEvidence:827923052",
+    "valid": true
+   },
+   "location": {
+    "id": 1452015128,
+    "copyNumber": "1",
+    "diplotypes": [],
+    "displayName": "CYP2C19*1, CYP2C19*2, CYP2C19*3, CYP2C19*17",
+    "genes": [
+     {
+      "objCls": "Gene",
+      "id": "PA124",
+      "symbol": "CYP2C19",
+      "name": "cytochrome P450 family 2 subfamily C member 19"
+     }
+    ],
+    "gpPosition": -1,
+    "haplotypes": [
+     {
+      "objCls": "Haplotype",
+      "id": "PA165980634",
+      "symbol": "CYP2C19*1",
+      "name": "*1"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165980635",
+      "symbol": "CYP2C19*2",
+      "name": "*2"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165980636",
+      "symbol": "CYP2C19*3",
+      "name": "*3"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165816533",
+      "symbol": "CYP2C19*17",
+      "name": "*17"
+     }
+    ],
+    "linkedObjects": [
+     {
+      "objCls": "Haplotype",
+      "id": "PA165980634",
+      "symbol": "CYP2C19*1",
+      "name": "*1"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165816533",
+      "symbol": "CYP2C19*17",
+      "name": "*17"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165980635",
+      "symbol": "CYP2C19*2",
+      "name": "*2"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165980636",
+      "symbol": "CYP2C19*3",
+      "name": "*3"
+     }
+    ],
+    "refSeqPosition": -1,
+    "tagGene": false,
+    "type": "haplotype"
+   },
+   "name": "CYP2C19*1, CYP2C19*2, CYP2C19*3, CYP2C19*17; sertraline; Mental Disorders (level 1A Metabolism/PK)",
+   "objCls": "Clinical Annotation",
+   "overrideLevel": false,
+   "pediatric": false,
+   "relatedChemicals": [
+    {
+     "objCls": "Chemical",
+     "id": "PA451333",
+     "name": "sertraline"
+    }
+   ],
+   "relatedChemicalsLogic": "Or",
+   "relatedDiseases": [
+    {
+     "objCls": "Disease",
+     "id": "PA447208",
+     "name": "Mental Disorders"
+    }
+   ],
+   "relatedGuidelines": [
+    {
+     "objCls": "Guideline Annotation",
+     "id": "PA166127639",
+     "name": "Annotation of CPIC Guideline for sertraline and CYP2B6, CYP2C19"
+    },
+    {
+     "objCls": "Guideline Annotation",
+     "id": "PA166104980",
+     "name": "Annotation of DPWG Guideline for sertraline and CYP2C19"
+    }
+   ],
+   "relatedLabels": [],
+   "relatedVariations": [],
+   "score": 212.125,
+   "scoreDetails": "{\"vaScores\": [{\"step5A\": 1.0, \"step5B\": 0.25, \"chosenSpId\": 1183617540, \"step1Score\": 0.5, \"step2Score\": 0.0, \"step3Score\": 0.0, \"step4Score\": 0.0, \"totalScore\": 0.125, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2023-02-21T15:31:43.849-08:00\", \"variantAnnotationId\": 1183617538}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1183698932, \"step1Score\": 0.5, \"step2Score\": 0.5, \"step3Score\": 0.0, \"step4Score\": 0.0, \"totalScore\": 1.0, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2023-02-21T15:31:43.851-08:00\", \"variantAnnotationId\": 1183698918}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1183699906, \"step1Score\": 0.5, \"step2Score\": 0.5, \"step3Score\": 0.25, \"step4Score\": 0.0, \"totalScore\": 1.25, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2023-02-21T15:31:43.851-08:00\", \"variantAnnotationId\": 1183699890}, {\"step5A\": 1.0, \"step5B\": -1.0, \"chosenSpId\": 1183699909, \"step1Score\": 0.5, \"step2Score\": 0.0, \"step3Score\": 0.25, \"step4Score\": 0.0, \"totalScore\": -0.75, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2023-02-21T15:31:43.851-08:00\", \"variantAnnotationId\": 1183699907}, {\"step5A\": 1.0, \"step5B\": -1.0, \"chosenSpId\": 1447950099, \"step1Score\": 0.5, \"step2Score\": 1.5, \"step3Score\": 0.0, \"step4Score\": 0.0, \"totalScore\": -2.0, \"chosenSpIndex\": \"1 of 2\", \"generatedDate\": \"2023-02-21T15:31:43.851-08:00\", \"variantAnnotationId\": 1447950096}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1450933328, \"step1Score\": 0.5, \"step2Score\": 1.0, \"step3Score\": 1.0, \"step4Score\": 0.0, \"totalScore\": 2.5, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2023-02-21T15:31:43.851-08:00\", \"variantAnnotationId\": 1450933318}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1450933353, \"step1Score\": 0.5, \"step2Score\": 0.5, \"step3Score\": 1.0, \"step4Score\": 0.0, \"totalScore\": 2.0, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2023-02-21T15:31:43.851-08:00\", \"variantAnnotationId\": 1450933348}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1450933347, \"step1Score\": 0.5, \"step2Score\": 1.0, \"step3Score\": 1.0, \"step4Score\": 0.0, \"totalScore\": 2.5, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2023-02-21T15:31:43.851-08:00\", \"variantAnnotationId\": 1450933341}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1452014780, \"step1Score\": 0.5, \"step2Score\": 1.5, \"step3Score\": 0.75, \"step4Score\": 0.0, \"totalScore\": 2.75, \"chosenSpIndex\": \"1 of 2\", \"generatedDate\": \"2023-02-21T15:31:43.852-08:00\", \"variantAnnotationId\": 1452014760}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1452014920, \"step1Score\": 0.5, \"step2Score\": 1.5, \"step3Score\": 0.75, \"step4Score\": 0.0, \"totalScore\": 2.75, \"chosenSpIndex\": \"1 of 3\", \"generatedDate\": \"2023-02-21T15:31:43.853-08:00\", \"variantAnnotationId\": 1452014820}], \"totalScore\": 212.125, \"vaScoreTotal\": 12.125, \"generatedDate\": \"2023-02-21T15:31:43.896-08:00\", \"labelScoreTotal\": 0.0, \"guidelineScoreTotal\": 200.0}",
+   "types": [
+    "Metabolism/PK"
+   ]
+  },
+  {
+   "id": 1183590959,
+   "accessionId": "PA166135028",
+   "allelePhenotypes": [
+    {
+     "id": 1183619582,
+     "allele": "AA",
+     "limitedEvidence": false,
+     "phenotype": "Patients with the AA genotype and major depressive disorder may be less likely to respond when treated with citalopram, fluoxetine, paroxetine or sertraline as compared to patients with the GG genotype. Other genetic and clinical factors may also influence response to citalopram, fluoxetine, paroxetine or sertraline. "
+    },
+    {
+     "id": 1183619583,
+     "allele": "AG",
+     "limitedEvidence": false,
+     "phenotype": "Patients with the AG genotype and major depressive disorder may be less likely to respond when treated with citalopram, fluoxetine, paroxetine or sertraline as compared to patients with the GG genotype, or more likely to respond when treated with citalopram, fluoxetine, paroxetine or sertraline as compared to patients with the AA genotype. Other genetic and clinical factors may also influence response to citalopram, fluoxetine, paroxetine or sertraline. "
+    },
+    {
+     "id": 1183619584,
+     "allele": "GG",
+     "limitedEvidence": false,
+     "phenotype": "Patients with the GG genotype and major depressive disorder may be more likely to respond when treated with citalopram, fluoxetine, paroxetine or sertraline as compared to patients with the AA genotype. Other genetic and clinical factors may also influence response to citalopram, fluoxetine, paroxetine or sertraline. "
+    }
+   ],
+   "conflictingVariantAnnotationIds": [],
+   "levelOfEvidence": {
+    "id": 827923056,
+    "resource": "Level of Evidence",
+    "synonyms": [],
+    "term": "3",
+    "termId": "levelsOfEvidence:827923056",
+    "valid": true
+   },
+   "location": {
+    "id": 1183619585,
+    "chromosomeName": "chr5",
+    "copyNumber": "1",
+    "diplotypes": [],
+    "displayName": "rs495794",
+    "genes": [
+     {
+      "objCls": "Gene",
+      "id": "PA36124",
+      "symbol": "SRP19",
+      "name": "signal recognition particle 19"
+     }
+    ],
+    "gpPosition": 112201094,
+    "haplotypes": [],
+    "linkedObjects": [
+     {
+      "objCls": "Variant",
+      "id": "PA166156736",
+      "symbol": "rs495794",
+      "name": "rs495794"
+     }
+    ],
+    "refSeqPosition": -1,
+    "rsid": "rs495794",
+    "tagGene": false,
+    "type": "SNP",
+    "variant": {
+     "objCls": "Variant",
+     "id": "PA166156736",
+     "symbol": "rs495794",
+     "name": "rs495794"
+    }
+   },
+   "name": "rs495794 (SRP19); citalopram, fluoxetine, paroxetine or sertraline; Depressive Disorder, Major (level 3 Efficacy)",
+   "objCls": "Clinical Annotation",
+   "overrideLevel": false,
+   "pediatric": false,
+   "relatedChemicals": [
+    {
+     "objCls": "Chemical",
+     "id": "PA449015",
+     "name": "citalopram"
+    },
+    {
+     "objCls": "Chemical",
+     "id": "PA449673",
+     "name": "fluoxetine"
+    },
+    {
+     "objCls": "Chemical",
+     "id": "PA450801",
+     "name": "paroxetine"
+    },
+    {
+     "objCls": "Chemical",
+     "id": "PA451333",
+     "name": "sertraline"
+    }
+   ],
+   "relatedChemicalsLogic": "Or",
+   "relatedDiseases": [
+    {
+     "objCls": "Disease",
+     "id": "PA447321",
+     "name": "Major Depressive Disorder"
+    }
+   ],
+   "relatedGuidelines": [],
+   "relatedLabels": [],
+   "relatedVariations": [
+    {
+     "objCls": "Allele",
+     "id": "PA166387981",
+     "symbol": "CA12007551",
+     "name": "NM_003135.3(SRP19):c.301+665A>G"
+    },
+    {
+     "objCls": "Allele",
+     "id": "PA166387967",
+     "symbol": "CA1573531774",
+     "name": "NM_003135.3(SRP19):c.301+665A="
+    }
+   ],
+   "score": 2.5,
+   "scoreDetails": "{\"vaScores\": [{\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 981502279, \"step1Score\": 1.0, \"step2Score\": 1.0, \"step3Score\": 0.5, \"step4Score\": 0.0, \"totalScore\": 2.5, \"chosenSpIndex\": \"1 of 2\", \"generatedDate\": \"2021-03-21T04:34:28.855-07:00\", \"variantAnnotationId\": 981502225}], \"totalScore\": 2.5, \"vaScoreTotal\": 2.5, \"generatedDate\": \"2021-03-21T04:34:28.855-07:00\", \"labelScoreTotal\": 0.0, \"guidelineScoreTotal\": 0.0}",
+   "types": [
+    "Efficacy"
+   ]
+  },
+  {
+   "id": 1184989970,
+   "accessionId": "PA166136070",
+   "allelePhenotypes": [
+    {
+     "id": 1452054789,
+     "allele": "HTTLPR long form (L allele)/HTTLPR long form (L allele)",
+     "limitedEvidence": false,
+     "phenotype": "Patients with the SLC6A4 HTTLPR long form (L allele)/HTTLPR long form (L allele) genotype who are treated with sertraline may have decreased response as compared to patients with the SLC6A4 HTTLPR short form (S allele)/SLC6A4 HTTLPR short form (S allele) genotype. However, contradictory findings for either no association or opposite effect have been published for this genotype and response to sertraline. Other genetic and clinical factors may also influence a patient's response to sertraline."
+    },
+    {
+     "id": 1452054790,
+     "allele": "HTTLPR long form (L allele)/HTTLPR short form (S allele)",
+     "limitedEvidence": false,
+     "phenotype": "Patients with the SLC6A4 HTTLPR long form (L allele)/HTTLPR short form (S allele) genotype who are treated with sertraline may have a decreased response as compared to patients with the SLC6A4 HTTLPR short form (S allele)/SLC6A4 HTTLPR short form (S allele) genotype. However, contradictory findings for either no association or opposite effect have been published for this genotype and response to sertraline. Other genetic and clinical factors may also influence a patient's response to sertraline."
+    },
+    {
+     "id": 1452054791,
+     "allele": "HTTLPR short form (S allele)/HTTLPR short form (S allele)",
+     "limitedEvidence": false,
+     "phenotype": "Patients with the SLC6A4 HTTLPR short form (S allele)/HTTLPR short form (S allele) genotype who are treated with sertraline may have increased response as compared to patients with the SLC6A4 HTTLPR long form (L allele)/HTTLPR long form (L allele) genotype. However, contradictory findings for either no association or opposite effect have been published for this genotype and response to sertraline. Other genetic and clinical factors may also influence a patient's response to sertraline."
+    }
+   ],
+   "conflictingVariantAnnotationIds": [
+    1184509540,
+    1184483446
+   ],
+   "levelOfEvidence": {
+    "id": 827923057,
+    "resource": "Level of Evidence",
+    "synonyms": [],
+    "term": "4",
+    "termId": "levelsOfEvidence:827923057",
+    "valid": true
+   },
+   "location": {
+    "id": 1452054785,
+    "copyNumber": "1",
+    "diplotypes": [
+     {
+      "id": 1452054786,
+      "allele1": "HTTLPR long form (L allele)",
+      "allele2": "HTTLPR long form (L allele)"
+     },
+     {
+      "id": 1452054787,
+      "allele1": "HTTLPR long form (L allele)",
+      "allele2": "HTTLPR short form (S allele)"
+     },
+     {
+      "id": 1452054788,
+      "allele1": "HTTLPR short form (S allele)",
+      "allele2": "HTTLPR short form (S allele)"
+     }
+    ],
+    "displayName": "SLC6A4 HTTLPR long form (L allele), SLC6A4 HTTLPR short form (S allele)",
+    "genes": [
+     {
+      "objCls": "Gene",
+      "id": "PA312",
+      "symbol": "SLC6A4",
+      "name": "solute carrier family 6 member 4"
+     }
+    ],
+    "gpPosition": -1,
+    "haplotypes": [
+     {
+      "objCls": "Haplotype",
+      "id": "PA166116465",
+      "symbol": "SLC6A4 HTTLPR long form (L allele)",
+      "name": "HTTLPR long form (L allele)"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA166116466",
+      "symbol": "SLC6A4 HTTLPR short form (S allele)",
+      "name": "HTTLPR short form (S allele)"
+     }
+    ],
+    "linkedObjects": [
+     {
+      "objCls": "Haplotype",
+      "id": "PA166116465",
+      "symbol": "SLC6A4 HTTLPR long form (L allele)",
+      "name": "HTTLPR long form (L allele)"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA166116466",
+      "symbol": "SLC6A4 HTTLPR short form (S allele)",
+      "name": "HTTLPR short form (S allele)"
+     }
+    ],
+    "refSeqPosition": -1,
+    "tagGene": false,
+    "type": "haplotype"
+   },
+   "name": "SLC6A4 HTTLPR long form (L allele), SLC6A4 HTTLPR short form (S allele); sertraline; Depressive Disorder, Major and Panic Disorder (level 4 Efficacy)",
+   "objCls": "Clinical Annotation",
+   "overrideLevel": false,
+   "pediatric": false,
+   "relatedChemicals": [
+    {
+     "objCls": "Chemical",
+     "id": "PA451333",
+     "name": "sertraline"
+    }
+   ],
+   "relatedChemicalsLogic": "Or",
+   "relatedDiseases": [
+    {
+     "objCls": "Disease",
+     "id": "PA447321",
+     "name": "Major Depressive Disorder"
+    },
+    {
+     "objCls": "Disease",
+     "id": "PA447212",
+     "name": "Panic Disorder"
+    }
+   ],
+   "relatedGuidelines": [
+    {
+     "objCls": "Guideline Annotation",
+     "id": "PA166288601",
+     "name": "Annotation of CPIC Guideline for citalopram, desvenlafaxine, duloxetine, escitalopram, fluoxetine, fluvoxamine, levomilnacipran, milnacipran, paroxetine, sertraline, venlafaxine, vilazodone, vortioxetine and SLC6A4"
+    }
+   ],
+   "relatedLabels": [],
+   "relatedVariations": [],
+   "score": -0.625,
+   "scoreDetails": "{\"vaScores\": [{\"step5A\": 1.0, \"step5B\": -1.0, \"chosenSpId\": 1183960126, \"step1Score\": 1.0, \"step2Score\": 0.0, \"step3Score\": 0.5, \"step4Score\": 0.0, \"totalScore\": -1.5, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2024-05-28T12:24:20.084-07:00\", \"variantAnnotationId\": 1183960116}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1184483471, \"step1Score\": 1.0, \"step2Score\": 0.5, \"step3Score\": 0.5, \"step4Score\": 0.0, \"totalScore\": 2.0, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2024-05-28T12:24:20.084-07:00\", \"variantAnnotationId\": 1184483446}, {\"step5A\": 1.0, \"step5B\": -1.0, \"chosenSpId\": 1184483600, \"step1Score\": 1.0, \"step2Score\": 0.0, \"step3Score\": 0.25, \"step4Score\": 0.0, \"totalScore\": -1.25, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2024-05-28T12:24:20.084-07:00\", \"variantAnnotationId\": 1184483570}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1184509820, \"step1Score\": 1.0, \"step2Score\": 1.0, \"step3Score\": 0.75, \"step4Score\": 0.0, \"totalScore\": 2.75, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2024-05-28T12:24:20.084-07:00\", \"variantAnnotationId\": 1184509540}, {\"step5A\": 1.0, \"step5B\": 0.0, \"chosenSpId\": 1184509875, \"step1Score\": 1.0, \"step2Score\": 0.0, \"step3Score\": 0.25, \"step4Score\": 0.0, \"totalScore\": 0.0, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2024-05-28T12:24:20.084-07:00\", \"variantAnnotationId\": 1184509867}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1184509888, \"step1Score\": 1.0, \"step2Score\": 1.0, \"step3Score\": 0.25, \"step4Score\": 0.0, \"totalScore\": 2.25, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2024-05-28T12:24:20.084-07:00\", \"variantAnnotationId\": 1184509880}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1184513239, \"step1Score\": 1.0, \"step2Score\": 1.0, \"step3Score\": 0.5, \"step4Score\": 0.0, \"totalScore\": 2.5, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2024-05-28T12:24:20.084-07:00\", \"variantAnnotationId\": 1184513231}, {\"step5A\": 1.0, \"step5B\": -0.25, \"chosenSpId\": 1449718362, \"step1Score\": 1.0, \"step2Score\": 0.0, \"step3Score\": 0.0, \"step4Score\": 0.0, \"totalScore\": -0.25, \"chosenSpIndex\": \"1 of 3\", \"generatedDate\": \"2024-05-28T12:24:20.084-07:00\", \"variantAnnotationId\": 1449718352}, {\"step5A\": 1.0, \"step5B\": -0.25, \"chosenSpId\": 1449718383, \"step1Score\": 0.5, \"step2Score\": 0.0, \"step3Score\": 0.0, \"step4Score\": 0.0, \"totalScore\": -0.125, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2024-05-28T12:24:20.084-07:00\", \"variantAnnotationId\": 1449718371}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1452054744, \"step1Score\": 1.0, \"step2Score\": 0.5, \"step3Score\": 0.5, \"step4Score\": 0.5, \"totalScore\": 2.5, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2024-05-28T12:24:20.084-07:00\", \"variantAnnotationId\": 1452054740}], \"totalScore\": -0.625, \"vaScoreTotal\": -0.625, \"generatedDate\": \"2024-05-28T12:24:20.235-07:00\", \"labelScoreTotal\": 0.0, \"guidelineScoreTotal\": 0.0}",
+   "types": [
+    "Efficacy"
+   ]
+  },
+  {
+   "id": 1451397920,
+   "accessionId": "PA166234961",
+   "allelePhenotypes": [
+    {
+     "id": 1451421006,
+     "allele": "*1",
+     "limitedEvidence": false,
+     "phenotype": "Patients carrying the CYP2D6*1 allele in combination with another normal function allele may require increased doses of sertraline as compared to patients with two no function alleles. This drug-variant pair has been assigned a “no recommendation” by DPWG, as it was determined to be not clinically actionable. Other genetic and clinical factors may also influence sertraline dosage requirements."
+    },
+    {
+     "id": 1451421007,
+     "allele": "*4",
+     "limitedEvidence": false,
+     "phenotype": "Patients carrying the CYP2D6*4 allele in combination with another no function allele may require decreased doses of sertraline as compared to patients with two normal function alleles. This drug-variant pair has been assigned a “no recommendation” by DPWG, as it was determined to be not clinically actionable. Other genetic and clinical factors may also influence sertraline dosage requirements."
+    }
+   ],
+   "conflictingVariantAnnotationIds": [],
+   "levelOfEvidence": {
+    "id": 827923056,
+    "resource": "Level of Evidence",
+    "synonyms": [],
+    "term": "3",
+    "termId": "levelsOfEvidence:827923056",
+    "valid": true
+   },
+   "location": {
+    "id": 1451421005,
+    "copyNumber": "1",
+    "diplotypes": [],
+    "displayName": "CYP2D6*1, CYP2D6*4",
+    "genes": [
+     {
+      "objCls": "Gene",
+      "id": "PA128",
+      "symbol": "CYP2D6",
+      "name": "cytochrome P450 family 2 subfamily D member 6"
+     }
+    ],
+    "gpPosition": -1,
+    "haplotypes": [
+     {
+      "objCls": "Haplotype",
+      "id": "PA165816576",
+      "symbol": "CYP2D6*1",
+      "name": "*1"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165816579",
+      "symbol": "CYP2D6*4",
+      "name": "*4"
+     }
+    ],
+    "linkedObjects": [
+     {
+      "objCls": "Haplotype",
+      "id": "PA165816576",
+      "symbol": "CYP2D6*1",
+      "name": "*1"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165816579",
+      "symbol": "CYP2D6*4",
+      "name": "*4"
+     }
+    ],
+    "refSeqPosition": -1,
+    "tagGene": false,
+    "type": "haplotype"
+   },
+   "name": "CYP2D6*1, CYP2D6*4; sertraline; Depression (level 3 Dosage)",
+   "objCls": "Clinical Annotation",
+   "overrideLevel": false,
+   "pediatric": false,
+   "relatedChemicals": [
+    {
+     "objCls": "Chemical",
+     "id": "PA451333",
+     "name": "sertraline"
+    }
+   ],
+   "relatedChemicalsLogic": "Or",
+   "relatedDiseases": [
+    {
+     "objCls": "Disease",
+     "id": "PA447278",
+     "name": "Depression"
+    }
+   ],
+   "relatedGuidelines": [],
+   "relatedLabels": [],
+   "relatedVariations": [],
+   "score": 2.5,
+   "scoreDetails": "{\"vaScores\": [{\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1183617436, \"step1Score\": 1.0, \"step2Score\": 0.5, \"step3Score\": 1.0, \"step4Score\": 0.0, \"totalScore\": 2.5, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2021-04-23T15:24:58.063-07:00\", \"variantAnnotationId\": 1183617434}], \"totalScore\": 2.5, \"vaScoreTotal\": 2.5, \"generatedDate\": \"2021-04-23T15:24:58.064-07:00\", \"labelScoreTotal\": 0.0, \"guidelineScoreTotal\": 0.0}",
+   "types": [
+    "Dosage"
+   ]
+  },
+  {
+   "id": 1452015000,
+   "accessionId": "PA166289101",
+   "allelePhenotypes": [
+    {
+     "id": 1452015161,
+     "allele": "*1",
+     "limitedEvidence": false,
+     "phenotype": "The CYP2B6*1 allele is assigned as a normal function allele by CPIC. Patients carrying CYP2B6*1 allele in combination with another normal function allele may have decreased serum concentrations of sertraline as compared to patients with a decreased function allele in combination with a normal or decreased function allele or may have increased serum concentrations of sertraline as compared to patients with an increased function allele in combination with a normal or increased function allele. Other genetic and clinical factors may also influence metabolism of sertraline. This annotation only covers the pharmacokinetic relationship between CYP2B6 and sertraline and does not include evidence about clinical outcomes."
+    },
+    {
+     "id": 1452015162,
+     "allele": "*4",
+     "limitedEvidence": false,
+     "phenotype": "The CYP2B6*4 allele is assigned as an increased function allele by CPIC. Patients carrying the CYP2B6*4 allele in combination with a normal function allele or another increased function allele may have decreased concentrations of sertraline as compared to patients with two normal function alleles. Other genetic and clinical factors may also influence metabolism of sertraline. This annotation only covers the pharmacokinetic relationship between CYP2B6 and sertraline and does not include evidence about clinical outcomes."
+    },
+    {
+     "id": 1452015163,
+     "allele": "*6",
+     "limitedEvidence": false,
+     "phenotype": "The CYP2B6*6 allele is assigned as a decreased function allele by CPIC. Patients carrying the CYP2B6*6 allele in combination with a normal function allele or another decreased function allele may have increased concentrations of sertraline as compared to patients with two normal function alleles. Other genetic and clinical factors may also influence metabolism of sertraline. This annotation only covers the pharmacokinetic relationship between CYP2B6 and sertraline and does not include evidence about clinical outcomes."
+    },
+    {
+     "id": 1452015164,
+     "allele": "*9",
+     "limitedEvidence": false,
+     "phenotype": "The CYP2B6*9 allele is assigned as a decreased function allele by CPIC. Patients carrying the CYP2B6*9 allele in combination with a normal function allele or another decreased function allele may have increased concentrations of sertraline as compared to patients with two normal function alleles. Other genetic and clinical factors may also influence metabolism of sertraline. This annotation only covers the pharmacokinetic relationship between CYP2B6 and sertraline and does not include evidence about clinical outcomes."
+    }
+   ],
+   "conflictingVariantAnnotationIds": [],
+   "levelOfEvidence": {
+    "id": 827923052,
+    "resource": "Level of Evidence",
+    "synonyms": [],
+    "term": "1A",
+    "termId": "levelsOfEvidence:827923052",
+    "valid": true
+   },
+   "location": {
+    "id": 1452015160,
+    "copyNumber": "1",
+    "diplotypes": [],
+    "displayName": "CYP2B6*1, CYP2B6*4, CYP2B6*6, CYP2B6*9",
+    "genes": [
+     {
+      "objCls": "Gene",
+      "id": "PA123",
+      "symbol": "CYP2B6",
+      "name": "cytochrome P450 family 2 subfamily B member 6"
+     }
+    ],
+    "gpPosition": -1,
+    "haplotypes": [
+     {
+      "objCls": "Haplotype",
+      "id": "PA165818750",
+      "symbol": "CYP2B6*1",
+      "name": "*1"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165818757",
+      "symbol": "CYP2B6*4",
+      "name": "*4"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165818762",
+      "symbol": "CYP2B6*6",
+      "name": "*6"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165818807",
+      "symbol": "CYP2B6*9",
+      "name": "*9"
+     }
+    ],
+    "linkedObjects": [
+     {
+      "objCls": "Haplotype",
+      "id": "PA165818750",
+      "symbol": "CYP2B6*1",
+      "name": "*1"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165818757",
+      "symbol": "CYP2B6*4",
+      "name": "*4"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165818762",
+      "symbol": "CYP2B6*6",
+      "name": "*6"
+     },
+     {
+      "objCls": "Haplotype",
+      "id": "PA165818807",
+      "symbol": "CYP2B6*9",
+      "name": "*9"
+     }
+    ],
+    "refSeqPosition": -1,
+    "tagGene": false,
+    "type": "haplotype"
+   },
+   "name": "CYP2B6*1, CYP2B6*4, CYP2B6*6, CYP2B6*9; sertraline (level 1A Metabolism/PK)",
+   "objCls": "Clinical Annotation",
+   "overrideLevel": false,
+   "pediatric": false,
+   "relatedChemicals": [
+    {
+     "objCls": "Chemical",
+     "id": "PA451333",
+     "name": "sertraline"
+    }
+   ],
+   "relatedChemicalsLogic": "Or",
+   "relatedDiseases": [],
+   "relatedGuidelines": [
+    {
+     "objCls": "Guideline Annotation",
+     "id": "PA166127639",
+     "name": "Annotation of CPIC Guideline for sertraline and CYP2B6, CYP2C19"
+    }
+   ],
+   "relatedLabels": [],
+   "relatedVariations": [],
+   "score": 109.0,
+   "scoreDetails": "{\"vaScores\": [{\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1447950079, \"step1Score\": 0.5, \"step2Score\": 1.5, \"step3Score\": 0.0, \"step4Score\": 0.0, \"totalScore\": 2.0, \"chosenSpIndex\": \"1 of 2\", \"generatedDate\": \"2023-02-21T15:28:54.482-08:00\", \"variantAnnotationId\": 1447950063}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1452014726, \"step1Score\": 0.5, \"step2Score\": 0.5, \"step3Score\": 0.75, \"step4Score\": 0.0, \"totalScore\": 1.75, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2023-02-21T15:28:54.483-08:00\", \"variantAnnotationId\": 1452014720}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1452014733, \"step1Score\": 0.5, \"step2Score\": 1.5, \"step3Score\": 1.0, \"step4Score\": 0.0, \"totalScore\": 3.0, \"chosenSpIndex\": \"1 of 2\", \"generatedDate\": \"2023-02-21T15:28:54.483-08:00\", \"variantAnnotationId\": 1452014728}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1452015070, \"step1Score\": 0.5, \"step2Score\": 0.5, \"step3Score\": 0.25, \"step4Score\": 0.0, \"totalScore\": 1.25, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2023-02-21T15:28:54.483-08:00\", \"variantAnnotationId\": 1452015060}, {\"step5A\": 1.0, \"step5B\": 1.0, \"chosenSpId\": 1452015126, \"step1Score\": 0.5, \"step2Score\": 0.5, \"step3Score\": 0.0, \"step4Score\": 0.0, \"totalScore\": 1.0, \"chosenSpIndex\": \"1 of 1\", \"generatedDate\": \"2023-02-21T15:28:54.483-08:00\", \"variantAnnotationId\": 1452015121}], \"totalScore\": 109.0, \"vaScoreTotal\": 9.0, \"generatedDate\": \"2023-02-21T15:28:54.522-08:00\", \"labelScoreTotal\": 0.0, \"guidelineScoreTotal\": 100.0}",
+   "types": [
+    "Metabolism/PK"
+   ]
+  }
+ ]
+}

@@ -13,9 +13,13 @@ import {
   type Formverdi,
   type Formverdier,
   type Intervallverdi,
+  type Clinpgxkoblingdata,
+  type KobletKjemikalie,
   type KobletVirkestoff,
   type Legemiddelkoblingdata,
 } from '../../faginnhold/paneler'
+import { kjemikalieadresse, type Kjemikalie } from '../../clinpgx/modell'
+import { koblingsforslag, type Koblingsgrunnlag } from '../../clinpgx/stoffside'
 import { fold } from '../../faginnhold/sok'
 import type { Virkestofftreff } from '../../legemiddeldata/lesing'
 import { useFaginnholdskilde } from './Faginnholdskilde'
@@ -344,6 +348,130 @@ export function LegemiddelkoblingSkjema(props: SkjemaProps<Legemiddelkoblingdata
               </Button>
             </li>
           ))}
+        </ul>
+      </div>
+    </Skjemaramme>
+  )
+}
+
+/**
+ * Hvilke kjemikalier i ClinPGx siden viser farmakogenetikken for.
+ * Administratoren slår opp på det engelske navnet eller ClinPGx-ID-en (PA…)
+ * og velger. Oppslaget går gjennom OUSFARs server, aldri fra nettleseren til
+ * ClinPGx. Et kjemikalie med samme ATC-kode som preparatene, eller samme
+ * engelske navn som virkestoffet i FEST, merkes som forslag; det gjelder ikke
+ * før det er valgt og lagret. Koblingen lagres med ClinPGx' stabile ID.
+ */
+export function ClinpgxkoblingSkjema(
+  props: SkjemaProps<Clinpgxkoblingdata> & { sidenavn: string; grunnlag: Koblingsgrunnlag },
+) {
+  const { farmakogenetikk } = useFaginnholdskilde()
+  const [valgte, setValgte] = useState<KobletKjemikalie[]>(props.start.kjemikalier)
+  const [sok, setSok] = useState(
+    props.start.kjemikalier.length === 0 ? (props.grunnlag.navn[0] ?? navnForForslag(props.sidenavn)) : '',
+  )
+  const [treff, setTreff] = useState<{ sok: string; liste: Kjemikalie[] } | null>(null)
+  const [soker, setSoker] = useState(false)
+  const [sokefeil, setSokefeil] = useState<string | null>(null)
+  const listeId = useId()
+
+  useEffect(() => {
+    if (!farmakogenetikk || sok.trim().length < 2) {
+      setTreff(null)
+      return
+    }
+    let gjelder = true
+    // Hvert oppslag går til ClinPGx, som tåler få kall i sekundet: vent til brukeren har skrevet ferdig.
+    const tidsur = setTimeout(() => {
+      setSoker(true)
+      farmakogenetikk
+        .sok(sok)
+        .then((liste) => {
+          if (!gjelder) return
+          setTreff({ sok, liste })
+          setSokefeil(null)
+        })
+        .catch((e: Error) => gjelder && setSokefeil(e.message))
+        .finally(() => gjelder && setSoker(false))
+    }, 600)
+    return () => {
+      gjelder = false
+      clearTimeout(tidsur)
+    }
+  }, [farmakogenetikk, sok])
+
+  const erValgt = (id: string) => valgte.some((v) => v.clinpgx_id === id)
+
+  return (
+    <Skjemaramme {...props} kontroller={() => ({ data: { kjemikalier: valgte } })}>
+      <div className="kobling">
+        <p className="kobling__merke">Kjemikalier i ClinPGx</p>
+        {valgte.length === 0 ? (
+          <p className="kobling__tom">Siden er ikke koblet. Uten kobling vises ingen data fra ClinPGx.</p>
+        ) : (
+          <ul className="kobling__valgte">
+            {valgte.map((v) => (
+              <li key={v.clinpgx_id}>
+                <span>
+                  {v.navn || v.clinpgx_id} ({v.clinpgx_id})
+                </span>
+                <Button
+                  variant="subtle"
+                  className="redigeringsknapp"
+                  aria-label={`Fjern koblingen til ${v.navn || v.clinpgx_id}`}
+                  onClick={() => setValgte(valgte.filter((x) => x.clinpgx_id !== v.clinpgx_id))}
+                >
+                  Fjern
+                </Button>
+              </li>
+            ))}
+          </ul>
+        )}
+        <Felt
+          merkelapp="Slå opp i ClinPGx"
+          type="search"
+          value={sok}
+          onChange={(e) => setSok(e.target.value)}
+          onKeyDown={(e) => {
+            // Enter i søket skal ikke lagre skjemaet.
+            if (e.key === 'Enter') e.preventDefault()
+          }}
+          aria-controls={listeId}
+          hjelp="Det engelske navnet, nøyaktig som ClinPGx skriver det (f.eks. «sertraline»), eller ClinPGx-ID-en (PA…)."
+        />
+        {sokefeil && (
+          <p className="skjemafeil" role="alert">
+            Oppslaget feilet: {sokefeil}
+          </p>
+        )}
+        <ul id={listeId} className="kobling__treff" aria-live="polite" aria-busy={soker}>
+          {treff?.liste.length === 0 && <li className="kobling__tom">ClinPGx har ingen kjemikalier som heter «{treff.sok}».</li>}
+          {treff?.liste.map((t) => {
+            const forslag = erValgt(t.id) ? null : koblingsforslag(t, props.grunnlag)
+            return (
+              <li key={t.id}>
+                <span className="kobling__navn">
+                  {t.navn}
+                  {forslag && <span className="kobling__forslag"> Forslag: {forslag}</span>}
+                </span>
+                <span className="kobling__detalj">
+                  {[t.id, t.atc.length > 0 && `ATC ${t.atc.join(', ')}`].filter(Boolean).join(' · ')}{' '}
+                  <a href={kjemikalieadresse(t.id)} target="_blank" rel="noopener noreferrer">
+                    Se i ClinPGx<span className="kun-skjermleser"> (åpnes i ny fane)</span>
+                  </a>
+                </span>
+                <Button
+                  variant="subtle"
+                  className="redigeringsknapp"
+                  disabled={erValgt(t.id)}
+                  aria-label={`Koble siden til ${t.navn} i ClinPGx`}
+                  onClick={() => setValgte([...valgte, { clinpgx_id: t.id, navn: t.navn }])}
+                >
+                  {erValgt(t.id) ? 'Valgt' : 'Velg'}
+                </Button>
+              </li>
+            )
+          })}
         </ul>
       </div>
     </Skjemaramme>

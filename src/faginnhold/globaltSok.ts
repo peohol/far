@@ -11,10 +11,13 @@
  *    preparatene som seksjonen «Preparater» viser.
  * 3. `les_interaksjoner` gir interaksjonene for alle sidene. Hver side får
  *    dem `byggInteraksjoner` velger for sidens egne nøkler.
+ * 4. `les_farmakogenetikk` gir ClinPGx-dataene for alle kjemikaliene sidene er
+ *    koblet til. Hver side får sin del (`farmakogenetikkFor`).
  *
  * Rangeringen skjer bare i `sok.ts`; databasen gir bare innholdet. Klarer ikke
- * legemiddeldataene å lese, indekseres faginnholdet likevel, og feilen står i
- * {@link Kunnskapsbase.festfeil}.
+ * legemiddeldataene eller ClinPGx-dataene å lese, indekseres faginnholdet
+ * likevel, og feilen står i {@link Kunnskapsbase.festfeil} eller
+ * {@link Kunnskapsbase.clinpgxfeil}.
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { byggSidemodell, type Sidemodell } from './analyttside'
@@ -34,6 +37,8 @@ import { byggInteraksjoner, interaksjonsnokler } from '../legemiddeldata/interak
 import type { Interaksjonsnokler, Interaksjonsutvalg, Legemiddelleser, Legemiddelutvalg } from '../legemiddeldata/lesing'
 import { byggPreparatvisning } from '../legemiddeldata/preparatmodell'
 import { interaksjonstekster, koblede, preparattekster, utvalgFor } from '../legemiddeldata/stoffside'
+import { farmakogenetikkFor, type Farmakogenetikkleser, type Farmakogenetikkutvalg } from '../clinpgx/lesing'
+import { byggFarmakogenetikkvisning, farmakogenetikktekster, kobledeKjemikalier } from '../clinpgx/stoffside'
 
 /** Alt søket i kunnskapsbasen indekserer. */
 export interface Kunnskapsbase {
@@ -44,6 +49,10 @@ export interface Kunnskapsbase {
   interaksjoner: Interaksjonsutvalg | null
   /** Hvorfor legemiddeldataene mangler, når lesingen av dem feilet. */
   festfeil?: string
+  /** ClinPGx-dataene for alle koblingene, eller `null` uten dem. */
+  farmakogenetikk?: Farmakogenetikkutvalg | null
+  /** Hvorfor ClinPGx-dataene mangler, når lesingen av dem feilet. */
+  clinpgxfeil?: string
 }
 
 export interface Sideleser {
@@ -88,22 +97,48 @@ export async function lesKunnskapsbase(
   sider: Sideleser,
   legemidler: Legemiddelleser | null,
   tilstand: Tilstand = 'publisert',
+  farmakogenetikk: Farmakogenetikkleser | null = null,
 ): Promise<Kunnskapsbase> {
   // Stoffsidene uten kode er et tillegg: kan de ikke leses, søkes det i resten.
   const lest = (
     await Promise.all([sider.lesAnalyttsider(tilstand), sider.lesStoffsider(tilstand).catch(() => [])])
   ).flat()
-  const tom: Kunnskapsbase = { sider: lest, legemidler: null, interaksjoner: null }
-  const perSide = lest.map((s) => koblede(byggSidemodell(s))).filter((k) => k.length > 0)
+  const modeller = lest.map((s) => byggSidemodell(s))
+  const [fest, clinpgx] = await Promise.all([
+    lesLegemiddeldata(legemidler, modeller),
+    lesClinpgxdata(farmakogenetikk, modeller),
+  ])
+  return { sider: lest, ...fest, ...clinpgx }
+}
+
+async function lesLegemiddeldata(
+  legemidler: Legemiddelleser | null,
+  modeller: readonly Sidemodell[],
+): Promise<Pick<Kunnskapsbase, 'legemidler' | 'interaksjoner' | 'festfeil'>> {
+  const tom = { legemidler: null, interaksjoner: null }
+  const perSide = modeller.map(koblede).filter((k) => k.length > 0)
   if (!legemidler || perSide.length === 0) return tom
 
   try {
     const utvalg = await legemidler.les([...new Set(perSide.flat())].sort())
     const nokler = slaSammen(perSide.map((k) => interaksjonsnokler(utvalgFor(utvalg, k), k)))
     const interaksjoner = await lesInteraksjoner(legemidler, nokler)
-    return { sider: lest, legemidler: utvalg, interaksjoner }
+    return { legemidler: utvalg, interaksjoner }
   } catch (e) {
     return { ...tom, festfeil: e instanceof Error ? e.message : String(e) }
+  }
+}
+
+async function lesClinpgxdata(
+  leser: Farmakogenetikkleser | null,
+  modeller: readonly Sidemodell[],
+): Promise<Pick<Kunnskapsbase, 'farmakogenetikk' | 'clinpgxfeil'>> {
+  const alle = [...new Set(modeller.flatMap(kobledeKjemikalier))].sort()
+  if (!leser || alle.length === 0) return { farmakogenetikk: null }
+  try {
+    return { farmakogenetikk: await leser.les(alle) }
+  } catch (e) {
+    return { farmakogenetikk: null, clinpgxfeil: e instanceof Error ? e.message : String(e) }
   }
 }
 
@@ -131,6 +166,13 @@ async function lesInteraksjoner(leser: Legemiddelleser, { atc, virkestoff }: Int
  * Tekstene fra legemiddeldataene på én side — preparatene og interaksjonene —
  * de samme som søket på siden får.
  */
+/** Tekstene fra ClinPGx på én side, de samme som søket på siden får. */
+function farmakogenetikktekstene(base: Kunnskapsbase, modell: Sidemodell): Tilleggstekst[] {
+  const koblet = kobledeKjemikalier(modell)
+  if (!base.farmakogenetikk || koblet.length === 0) return []
+  return farmakogenetikktekster(byggFarmakogenetikkvisning(farmakogenetikkFor(base.farmakogenetikk, koblet)))
+}
+
 function legemiddeltekster(base: Kunnskapsbase, koblet: readonly string[]): Tilleggstekst[] {
   if (!base.legemidler || koblet.length === 0) return []
   const utvalg = utvalgFor(base.legemidler, koblet)
@@ -198,7 +240,7 @@ export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser, sider = []
       koder,
       komponenter: data.komponenter.map((k) => k.innhold.navn),
       modell,
-      tillegg: legemiddeltekster(base, koblede(modell)),
+      tillegg: [...legemiddeltekster(base, koblede(modell)), ...farmakogenetikktekstene(base, modell)],
     }
   })
   const indekserte = new Set(medInfoside.flatMap((s) => s.koder))
@@ -234,8 +276,12 @@ export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser, sider = []
 export async function lesSokeindeks(
   sider: Sideleser,
   legemidler: Legemiddelleser | null,
-  valg: Indekseringsvalg & { tilstand?: Tilstand } = {},
-): Promise<Sokeindeks & { festfeil?: string }> {
-  const base = await lesKunnskapsbase(sider, legemidler, valg.tilstand)
-  return { ...lagSokeindeks(indekserKunnskapsbase(base, valg)), ...(base.festfeil && { festfeil: base.festfeil }) }
+  valg: Indekseringsvalg & { tilstand?: Tilstand; farmakogenetikk?: Farmakogenetikkleser } = {},
+): Promise<Sokeindeks & { festfeil?: string; clinpgxfeil?: string }> {
+  const base = await lesKunnskapsbase(sider, legemidler, valg.tilstand, valg.farmakogenetikk ?? null)
+  return {
+    ...lagSokeindeks(indekserKunnskapsbase(base, valg)),
+    ...(base.festfeil && { festfeil: base.festfeil }),
+    ...(base.clinpgxfeil && { clinpgxfeil: base.clinpgxfeil }),
+  }
 }

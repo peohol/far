@@ -42,6 +42,7 @@ import { lesScenarioregler, reglerForModul } from './faginnhold/scenarioregler'
 import { thcReglerFra } from './faginnhold/thcregler'
 import { lagSideleser, lesSokeindeks } from './faginnhold/globaltSok'
 import { lagLegemiddelleser } from './legemiddeldata/lesing'
+import { lagFarmakogenetikkleser } from './clinpgx/lesing'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
 import { useHenting } from './hooks/useHenting'
@@ -128,6 +129,7 @@ export default function App() {
       lager: lagFaginnholdslager(klient()),
       kanRedigere: profil.role === 'admin',
       legemidler: lagLegemiddelleser(klient()),
+      farmakogenetikk: lagFarmakogenetikkleser(klient()),
     }),
     [profil.role],
   )
@@ -169,6 +171,7 @@ export default function App() {
   const hentSokeindeks = useCallback(
     () =>
       lesSokeindeks(lagSideleser(klient()), lagLegemiddelleser(klient()), {
+        farmakogenetikk: lagFarmakogenetikkleser(klient()),
         aliaser: (kode) => {
           const oppforing = katalog.finn(kode)
           return oppforing?.kode === oppforing?.fortolkning.kode ? oppforing?.fortolkning.aliaser : undefined

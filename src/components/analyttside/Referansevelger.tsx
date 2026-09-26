@@ -12,7 +12,9 @@ import { useRedigering } from './Redigeringskontekst'
 const MAKS_FORSLAG = 8
 
 /** Hvorfor en automatisk kilde står låst i lista. */
-const AUTOMATISK_LAAST = 'Automatisk fra FEST – kan ikke velges eller redigeres'
+function automatiskLaast(referanse: Referanse): string {
+  return `Automatisk fra ${referanse.automatisk?.kilde ?? 'en datakilde'} – kan ikke velges eller redigeres`
+}
 
 export interface ReferansevelgerProps {
   /** Overskriften, f.eks. «Kilder for kortet». */
@@ -27,7 +29,7 @@ export interface ReferansevelgerProps {
  *
  * Kildene hentes fra den felles referansebasen, så samme referanse kan brukes
  * mange steder og rettes ett sted. Finnes den ikke, kan den legges inn her.
- * Arkiverte referanser kan ikke velges, og heller ikke automatiske (FEST): de
+ * Arkiverte referanser kan ikke velges, og heller ikke automatiske (FEST, ClinPGx): de
  * siteres bare av dataene de kommer fra, og kan verken redigeres eller
  * fjernes her. De står likevel låst i treffene, så det er tydelig hvorfor. Rekkefølgen er den de velges i; numrene på siden regnes ut når
  * den vises.
@@ -39,7 +41,7 @@ export function Referansevelger({ tittel, valgte, onEndre }: ReferansevelgerProp
   const sokId = useId()
 
   const perId = useMemo(() => new Map(referansebase.map((r) => [r.id, r])), [referansebase])
-  // De automatiske (FEST) som passer, står med i lista, låst: slik er det
+  // De automatiske (FEST, ClinPGx) som passer, står med i lista, låst: slik er det
   // tydelig at kilden finnes, men ikke kan velges eller endres her.
   const { forslag, laste } = useMemo(() => {
     const ord = sokeord(sporring)
@@ -136,7 +138,7 @@ export function Referansevelger({ tittel, valgte, onEndre }: ReferansevelgerProp
           {laste.map((referanse) => (
             <li key={referanse.id} className="referansevelger__last">
               <span>{formaterReferanse(referanse)}</span>
-              <Ikon navn="lock" storrelse="ui" etikett={AUTOMATISK_LAAST} />
+              <Ikon navn="lock" storrelse="ui" etikett={automatiskLaast(referanse)} />
             </li>
           ))}
           {forslag.length === 0 && laste.length === 0 && (

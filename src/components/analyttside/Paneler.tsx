@@ -276,21 +276,53 @@ const KORT_VERDI = 28
 
 /* --- Kort med overskrift og tekst: farmakokinetikken og farmakogenetikken - */
 
-export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
-  const elementer = (kontekst.modell.paneler.get(definisjon.nokkel) ?? []).filter(
-    (e) => e.elementtype === ELEMENTTYPER.kinetikk,
-  )
-  const [nytt, setNytt] = useState(false)
-  const [fjerner, setFjerner] = useState<string | null>(null)
-  const { handlinger, redigerer } = kontekst
+/** Kortene med overskrift og tekst i et panel. */
+export function kortelementer(kontekst: Panelkontekst, nokkel: string): Sideelement[] {
+  return (kontekst.modell.paneler.get(nokkel) ?? []).filter((e) => e.elementtype === ELEMENTTYPER.kinetikk)
+}
 
+/** Oppsummeringen av kortene: titlene deres. */
+export function kortoppsummering(elementer: readonly Sideelement[]): string {
+  return ramsOpp(elementer.map((e) => lesKinetikk(e.data).tittel))
+}
+
+export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
+  const elementer = kortelementer(kontekst, definisjon.nokkel)
   return (
     <Panel
       definisjon={definisjon}
       kontekst={kontekst}
       tomt={elementer.length === 0}
-      oppsummering={ramsOpp(elementer.map((e) => lesKinetikk(e.data).tittel))}
+      oppsummering={kortoppsummering(elementer)}
     >
+      <Redaksjonskort definisjon={definisjon} kontekst={kontekst} elementer={elementer} />
+    </Panel>
+  )
+}
+
+/**
+ * Kortene i et panel av kort, som detaljkort i et rutenett, med knappene for
+ * å legge til, flytte og fjerne i redigeringsmodus. `ettAlene` sier om et
+ * eneste kort skal stå åpent fra start; det skal det ikke når seksjonen har
+ * annet innhold ved siden av.
+ */
+export function Redaksjonskort({
+  definisjon,
+  kontekst,
+  elementer,
+  ettAlene = true,
+}: {
+  definisjon: Paneldefinisjon
+  kontekst: Panelkontekst
+  elementer: readonly Sideelement[]
+  ettAlene?: boolean
+}) {
+  const [nytt, setNytt] = useState(false)
+  const [fjerner, setFjerner] = useState<string | null>(null)
+  const { handlinger, redigerer } = kontekst
+
+  return (
+    <>
       {elementer.length > 0 && (
         <Skuffrutenett className="infokort">
           {elementer.map((element, i) => {
@@ -300,7 +332,7 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
                 <Detaljkort
                   id={element.id}
                   // Står det bare ett kort i seksjonen, er det ingenting å velge mellom.
-                  apenFraStart={elementer.length === 1}
+                  apenFraStart={ettAlene && elementer.length === 1}
                   ikon={kinetikkikon(tittel)}
                   tittel={<Kinetikktittel tittel={tittel} />}
                   oppsummering={tekstoppsummering(dokument)}
@@ -401,7 +433,7 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
           }}
         />
       )}
-    </Panel>
+    </>
   )
 }
 

@@ -29,7 +29,8 @@ export const FEST_KILDE = `${PREFIKS}kilde`
 
 const DATO = new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })
 
-function dato(tidspunkt: string | null): string | null {
+/** Et tidspunkt som dato på norsk, «11. september 2026». `null` når det mangler eller ikke kan leses. */
+export function dato(tidspunkt: string | null): string | null {
   if (!tidspunkt) return null
   const d = new Date(tidspunkt)
   return Number.isNaN(d.getTime()) ? null : DATO.format(d)
@@ -95,9 +96,10 @@ function normalisert(tekst: string): string {
 
 /**
  * En kort, stabil kontrollsum av teksten (cyrb53). Den skal bare skille
- * referansene på én side fra hverandre, ikke være hemmelig.
+ * referansene på én side fra hverandre, ikke være hemmelig. Brukes også av
+ * de automatiske referansene fra ClinPGx.
  */
-function kontrollsum(tekst: string): string {
+export function kontrollsum(tekst: string): string {
   let h1 = 0xdeadbeef
   let h2 = 0x41c6ce57
   for (let i = 0; i < tekst.length; i += 1) {

@@ -1,0 +1,236 @@
+{
+ "status": "success",
+ "data": [
+  {
+   "objCls": "Label Annotation",
+   "id": "PA166104899",
+   "name": "Annotation of EMA Label for aripiprazole and CYP2D6",
+   "alternateDrugAvailable": false,
+   "cancerGenome": false,
+   "crossReferences": [],
+   "dosingInformation": true,
+   "indication": false,
+   "labelApplications": [],
+   "labelDocumentAvailable": true,
+   "literature": [
+    {
+     "id": 15103632,
+     "title": "Abilify Maintena | European Medicines Agency",
+     "_sameAs": "https://www.ema.europa.eu/en/medicines/human/EPAR/abilify-maintena",
+     "crossReferences": [
+      {
+       "id": 1450932863,
+       "resource": "URL",
+       "resourceId": "https://www.ema.europa.eu/en/medicines/human/EPAR/abilify-maintena",
+       "_url": "https://www.ema.europa.eu/en/medicines/human/EPAR/abilify-maintena"
+      }
+     ],
+     "objCls": "Literature",
+     "terms": [
+      {
+       "id": 1452267780,
+       "resource": "ClinPGx Tags",
+       "term": "Has PGx",
+       "termId": "pgkbTags:1452267780"
+      }
+     ],
+     "type": "Drug Label"
+    },
+    {
+     "id": 15151762,
+     "title": "Abilify | European Medicines Agency",
+     "_sameAs": "https://www.ema.europa.eu/en/medicines/human/EPAR/abilify",
+     "crossReferences": [
+      {
+       "id": 1452323242,
+       "resource": "URL",
+       "resourceId": "https://www.ema.europa.eu/en/medicines/human/EPAR/abilify",
+       "_url": "https://www.ema.europa.eu/en/medicines/human/EPAR/abilify"
+      }
+     ],
+     "objCls": "Literature",
+     "terms": [
+      {
+       "id": 1452267780,
+       "resource": "ClinPGx Tags",
+       "term": "Has PGx",
+       "termId": "pgkbTags:1452267780"
+      }
+     ],
+     "type": "Drug Label"
+    }
+   ],
+   "otherPrescribingGuidance": false,
+   "pediatric": false,
+   "pgxRelated": true,
+   "prescribingGenes": [
+    {
+     "objCls": "Gene",
+     "id": "PA128",
+     "symbol": "CYP2D6",
+     "name": "cytochrome P450 family 2 subfamily D member 6"
+    },
+    {
+     "objCls": "Gene",
+     "id": "PA130",
+     "symbol": "CYP3A4",
+     "name": "cytochrome P450 family 3 subfamily A member 4"
+    }
+   ],
+   "prescribingMarkdown": {
+    "id": 1450416694,
+    "html": "<p>Excerpt from aripiprazole (Abilify Maintena) EPAR:</p>\n<p>&quot;Known CYP2D6 poor metabolisers...In patients who are known to be CYP2D6 poor metabolisers, the starting and maintenance dose should be 300 mg. When used concomitantly with strong CYP3A4 inhibitors the dose should be reduced to 200 mg...&quot;</p>\n"
+   },
+   "relatedAlleles": [],
+   "relatedChemicals": [
+    {
+     "objCls": "Chemical",
+     "id": "PA10026",
+     "name": "aripiprazole"
+    }
+   ],
+   "relatedGenes": [
+    {
+     "objCls": "Gene",
+     "id": "PA128",
+     "symbol": "CYP2D6",
+     "name": "cytochrome P450 family 2 subfamily D member 6"
+    }
+   ],
+   "source": "EMA",
+   "summaryMarkdown": {
+    "id": 1447981775,
+    "html": "<p>The EMA European Public Assessment Report (EPAR) for aripiprazole (Abilify Maintena) states that the starting and maintenance dose should be 300 mg in known CYP2D6 poor metabolizers. The EMA EPAR for aripiprazole (ABILIFY) states that the mean elimination half-life for the drug is approximately 75 hours in CYP2D6 extensive metabolizers and 146 hours in CYP2D6 poor metabolizers, but does not provide any dosing advice based on CYP2D6 metabolizer status.</p>\n"
+   },
+   "testing": {
+    "id": 1183672111,
+    "resource": "Genetic Testing Level",
+    "synonyms": [],
+    "term": "Actionable PGx",
+    "termId": "geneTestLevel:1183672111",
+    "valid": true
+   },
+   "textMarkdown": {
+    "id": 1447981774,
+    "html": "<p><strong>Excerpts from the aripiprazole (Abilify Maintena) EPAR:</strong></p>\n<blockquote class=\"blockquote\">\n<p>Known CYP2D6 poor metabolisers...In patients who are known to be CYP2D6 poor metabolisers, the starting and maintenance dose should be 300 mg. When used concomitantly with strong CYP3A4 inhibitors the dose should be reduced to 200 mg...</p>\n</blockquote>\n<blockquote class=\"blockquote\">\n<p>CYP2D6 poor metabolisers...Based on population pharmacokinetic evaluation of Abilify Maintena, "
+   }
+  },
+  {
+   "objCls": "Label Annotation",
+   "id": "PA166104839",
+   "name": "Annotation of FDA Label for aripiprazole and CYP2D6",
+   "alternateDrugAvailable": false,
+   "biomarkerStatus": "On FDA Biomarker List",
+   "cancerGenome": false,
+   "crossReferences": [],
+   "dosingInformation": true,
+   "highlightedLabelLink": "Aripiprazole_Abilify_01_17_19_FDA.pdf",
+   "indication": false,
+   "labelApplications": [],
+   "labelDocumentAvailable": true,
+   "literature": [
+    {
+     "id": 15177002,
+     "title": "Drugs@FDA: Drug Product Abilify Asimtufii (Aripiprazole), Otsuka America Pharmaceutical, Inc - NDA217006/SUPPL-2, 01/22/2025",
+     "_sameAs": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=217006",
+     "crossReferences": [
+      {
+       "id": 1453083080,
+       "resource": "FDA Application",
+       "resourceId": "NDA217006/SUPPL-2",
+       "_url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=217006"
+      }
+     ],
+     "notes": "ABILIFY ASIMTUFII",
+     "objCls": "Literature",
+     "pubDate": "2025-01-22T00:00:00-08:00",
+     "terms": [
+      {
+       "id": 1452267780,
+       "resource": "ClinPGx Tags",
+       "term": "Has PGx",
+       "termId": "pgkbTags:1452267780"
+      }
+     ],
+     "type": "Drug Label"
+    },
+    {
+     "id": 15101976,
+     "title": "Drugs@FDA: Drug Product ABILIFY (ARIPIPRAZOLE), NDA021436, Rebel Distributors Corp.",
+     "_sameAs": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=021436",
+     "crossReferences": [
+      {
+       "id": 1450043446,
+       "resource": "FDA Application",
+       "resourceId": "NDA021436",
+       "_url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&varApplNo=021436"
+      }
+     ],
+     "notes": "ABILIFY",
+     "objCls": "Literature",
+     "terms": [
+      {
+       "id": 1452267780,
+       "resource": "ClinPGx Tags",
+       "term": "Has PGx",
+       "termId": "pgkbTags:1452267780"
+      }
+     ],
+     "type": "Drug Label"
+    }
+   ],
+   "otherPrescribingGuidance": true,
+   "pediatric": true,
+   "pediatricMarkdown": {
+    "id": 1453083081,
+    "html": "<p>Excerpts from the ABILIFY (aripiprazole) drug label:</p>\n<blockquote class=\"blockquote\">\n<p><strong>Irritability Associated with Autistic Disorder</strong>\n<strong>Pediatric Patients (6 to 17 years)</strong>\nThe recommended dosage range for the treatment of pediatric patients with irritability associated with autistic disorder is 5 to 15 mg/day.</p>\n</blockquote>\n<blockquote class=\"blockquote\">\n<p><strong>Tourette’s Disorder</strong>\n<strong>Pediatric Patients (6 to 18 years)</strong>\nThe rec"
+   },
+   "pgxRelated": true,
+   "prescribingGenes": [
+    {
+     "objCls": "Gene",
+     "id": "PA128",
+     "symbol": "CYP2D6",
+     "name": "cytochrome P450 family 2 subfamily D member 6"
+    }
+   ],
+   "prescribingMarkdown": {
+    "id": 1450399507,
+    "html": "<p>Excerpt from the ABILIFY drug label:</p>\n<table class=\"table\">\n<thead>\n<tr>\n<th>Factors</th>\n<th>Dosage Adjustments for ABILIFY</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Known CYP2D6 Poor Metabolizers</td>\n<td>Administer half of usual dose</td>\n</tr>\n<tr>\n<td>Known CYP2D6 Poor Metabolizers taking concomitant strong CYP3A4 inhibitors (e.g., itraconazole, clarithromycin)</td>\n<td>Administer a quarter of usual dose</td>\n</tr>\n</tbody>\n</table>\n<p>Excerpt from the ABILIFY MAINTENA drug label (Table 1)"
+   },
+   "relatedAlleles": [],
+   "relatedChemicals": [
+    {
+     "objCls": "Chemical",
+     "id": "PA10026",
+     "name": "aripiprazole"
+    }
+   ],
+   "relatedGenes": [
+    {
+     "objCls": "Gene",
+     "id": "PA128",
+     "symbol": "CYP2D6",
+     "name": "cytochrome P450 family 2 subfamily D member 6"
+    }
+   ],
+   "source": "FDA",
+   "summaryMarkdown": {
+    "id": 1450043484,
+    "html": "<p>The FDA-approved drug labels for aripiprazole (ABILIFY, ABILIFY MAINTENA and ABILIFY ASIMTUFII) provide dosage adjustments for patients who are CYP2D6 poor metabolizers (PMs). CYP2D6 PMs taking ABILIFY should receive half the usual dose; CYP2D6 PMs taking ABILIFY MAINTENA should have their dose reduced to 300 mg from the recommended dose of 400 mg; CYP2D6 PMs taking ABILIFY ASIMTUFII should have their dose reduced to 720 mg from the recommended dose of 960 mg. Also, CYP2D6 PMs taking concomitant CYP3A4 inhibitors should not be given ABILIFY ASIMTUFII.</p>\n"
+   },
+   "testing": {
+    "id": 1183672111,
+    "resource": "Genetic Testing Level",
+    "synonyms": [],
+    "term": "Actionable PGx",
+    "termId": "geneTestLevel:1183672111",
+    "valid": true
+   },
+   "textMarkdown": {
+    "id": 1450043487,
+    "html": "<p>Aripiprazole (ABILIFY, ABILIFY MAINTENA and ABILIFY ASIMTUFII) is an atypical antipsychotic medication. ABILIFY formulations include tablet, solution, orally disintegrating tablet and injection. ABILIFY MAINTENA and ABILIFY ASIMTUFII are extended-release injectable suspensions for intramuscular use.</p>\n<p>Excerpts from the ABILIFY (aripiprazole) drug label:</p>\n<blockquote class=\"blockquote\">\n<p>Known CYP2D6 Poor Metabolizers...Administer half of usual dose...</p>\n</blockquote>\n<blockquote c"
+   }
+  }
+ ]
+}

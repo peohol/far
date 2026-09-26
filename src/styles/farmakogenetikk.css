@@ -1,0 +1,77 @@
+/* --- Farmakogenetikk: dataene fra ClinPGx ----------------------------------
+   Under de redaksjonelle kortene: retningslinjene, preparatomtalene og de
+   kliniske annotasjonene, hver gruppe med en liten overskrift og kortene som
+   detaljkort (`seksjoner.css`). Kortene selv lånes fra interaksjonene
+   (`.interaksjonsliste`, `.interaksjon__felter`). De kliniske annotasjonene
+   står dempet: de er grunnlaget, retningslinjene er det som leses først. */
+.farmakogenetikk {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+  width: 100%;
+}
+
+.farmakogenetikk__kobling {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  width: 100%;
+}
+
+.farmakogenetikk__gruppe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  width: 100%;
+}
+
+.farmakogenetikk__gruppetittel {
+  margin: 0;
+  font: var(--vekt-halvfet) var(--tekst-merke) / var(--linjehoyde-tett) var(--skrift-ui);
+  letter-spacing: var(--sperring-meta);
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.farmakogenetikk__gruppe[data-dempet] .skuff--detalj > .skuff__hode .skuff__tittel {
+  font-size: var(--tekst-ui);
+}
+
+.farmakogenetikk__sammendrag {
+  margin: 0;
+  font: var(--vekt-normal) var(--tekst-ingress) / 1.5 var(--skrift-display);
+}
+
+.farmakogenetikk__niva {
+  display: inline-block;
+  padding: 0 var(--rom-2);
+  font: var(--vekt-halvfet) var(--tekst-meta) / 1.5 var(--skrift-ui);
+  color: var(--blekk);
+  background: var(--flate-bunn);
+  border-radius: var(--runding-pille);
+}
+
+.farmakogenetikk__tabell {
+  width: 100%;
+  font: var(--vekt-normal) var(--tekst-etikett) / var(--linjehoyde-ui) var(--skrift-ui);
+  border-collapse: collapse;
+}
+
+.farmakogenetikk__tabell th {
+  padding: 0 var(--rom-1) var(--rom-2);
+  font: var(--vekt-halvfet) var(--tekst-merke) / var(--linjehoyde-tett) var(--skrift-ui);
+  letter-spacing: var(--sperring-meta);
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.farmakogenetikk__tabell td {
+  padding: var(--rom-2) var(--rom-1);
+  vertical-align: top;
+  border-top: var(--kant) solid var(--linje);
+}
+
+.farmakogenetikk__tabell a {
+  color: var(--aksent);
+}

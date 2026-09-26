@@ -1,0 +1,331 @@
+{
+ "status": "success",
+ "data": [
+  {
+   "objCls": "Guideline Annotation",
+   "id": "PA166182821",
+   "name": "Annotation of DPWG Guideline for sertraline and CYP2D6",
+   "alternateDrugAvailable": false,
+   "cancerGenome": false,
+   "crossReferences": [],
+   "dosingInformation": false,
+   "hasTestingInfo": false,
+   "literature": [
+    {
+     "id": 15126562,
+     "title": "Dutch Pharmacogenetics Working Group (DPWG) guideline for the gene-drug interaction between CYP2C19 and CYP2D6 and SSRIs.",
+     "_sameAs": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9553948",
+     "crossReferences": [
+      {
+       "id": 1452680280,
+       "resource": "PubMed Central",
+       "resourceId": "PMC9553948",
+       "_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9553948"
+      },
+      {
+       "id": 1451632760,
+       "resource": "PubMed",
+       "resourceId": "34782755",
+       "_url": "https://www.ncbi.nlm.nih.gov/pubmed/34782755"
+      },
+      {
+       "id": 1451632761,
+       "resource": "DOI",
+       "resourceId": "10.1038/s41431-021-01004-7",
+       "_url": "http://dx.doi.org/10.1038%2Fs41431-021-01004-7"
+      }
+     ],
+     "objCls": "Literature",
+     "pubDate": "2022-10-01T00:00:00-07:00",
+     "terms": [
+      {
+       "id": 1451577480,
+       "resource": "PGx Paper Types",
+       "term": "Implementation",
+       "termId": "pgxPaperTypes:1451577480"
+      }
+     ],
+     "type": "Literature"
+    },
+    {
+     "id": 15103288,
+     "title": "Dutch Pharmacogenetics Working Group Guidelines August 2019",
+     "_sameAs": "https://api.clinpgx.org/v1/preview/download/file/attachment/DPWG_August_2019.pdf",
+     "crossReferences": [
+      {
+       "id": 1450815695,
+       "resource": "URL",
+       "resourceId": "https://api.clinpgx.org/v1/preview/download/file/attachment/DPWG_August_2019.pdf",
+       "_url": "https://api.clinpgx.org/v1/preview/download/file/attachment/DPWG_August_2019.pdf"
+      }
+     ],
+     "objCls": "Literature",
+     "terms": [],
+     "type": "Literature"
+    }
+   ],
+   "otherPrescribingGuidance": false,
+   "pediatric": false,
+   "recommendation": false,
+   "relatedAlleles": [],
+   "relatedChemicals": [
+    {
+     "objCls": "Chemical",
+     "id": "PA451333",
+     "name": "sertraline"
+    }
+   ],
+   "relatedGenes": [
+    {
+     "objCls": "Gene",
+     "id": "PA128",
+     "symbol": "CYP2D6",
+     "name": "cytochrome P450 family 2 subfamily D member 6"
+    }
+   ],
+   "source": "DPWG",
+   "summaryMarkdown": {
+    "id": 1450415056,
+    "html": "<p>There are currently no dosing recommendations for sertraline based on CYP2D6 genotypes.</p>\n"
+   },
+   "textMarkdown": {
+    "id": 1450415057,
+    "html": "<h3 id=\"dutch-pharmacogenetics-working-group-dpwg-guideline-for-the-gene-drug-interaction-between-cyp2c19-and-cyp2d6-and-ssris-european-journal-of-human-genetics-2021\">Dutch Pharmacogenetics Working Group (DPWG) guideline for the gene-drug interaction between CYP2C19 and CYP2D6 and SSRIs. European journal of human genetics (2021)</h3>\n<p>The Royal Dutch Pharmacists Association - Pharmacogenetics Working Group published a paper which reiterates that no action is required for the interaction betwe"
+   }
+  },
+  {
+   "objCls": "Guideline Annotation",
+   "id": "PA166104980",
+   "name": "Annotation of DPWG Guideline for sertraline and CYP2C19",
+   "alternateDrugAvailable": false,
+   "cancerGenome": false,
+   "crossReferences": [],
+   "dosingInformation": true,
+   "hasTestingInfo": true,
+   "literature": [
+    {
+     "id": 15126562,
+     "title": "Dutch Pharmacogenetics Working Group (DPWG) guideline for the gene-drug interaction between CYP2C19 and CYP2D6 and SSRIs.",
+     "_sameAs": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9553948",
+     "crossReferences": [
+      {
+       "id": 1452680280,
+       "resource": "PubMed Central",
+       "resourceId": "PMC9553948",
+       "_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9553948"
+      },
+      {
+       "id": 1451632760,
+       "resource": "PubMed",
+       "resourceId": "34782755",
+       "_url": "https://www.ncbi.nlm.nih.gov/pubmed/34782755"
+      },
+      {
+       "id": 1451632761,
+       "resource": "DOI",
+       "resourceId": "10.1038/s41431-021-01004-7",
+       "_url": "http://dx.doi.org/10.1038%2Fs41431-021-01004-7"
+      }
+     ],
+     "objCls": "Literature",
+     "pubDate": "2022-10-01T00:00:00-07:00",
+     "terms": [
+      {
+       "id": 1451577480,
+       "resource": "PGx Paper Types",
+       "term": "Implementation",
+       "termId": "pgxPaperTypes:1451577480"
+      }
+     ],
+     "type": "Literature"
+    },
+    {
+     "id": 7283333,
+     "title": "Pharmacogenetics: from bench to byte--an update of guidelines.",
+     "_sameAs": "https://www.ncbi.nlm.nih.gov/pubmed/21412232",
+     "crossReferences": [
+      {
+       "id": 769250885,
+       "resource": "PubMed",
+       "resourceId": "21412232",
+       "_url": "https://www.ncbi.nlm.nih.gov/pubmed/21412232"
+      },
+      {
+       "id": 1449247827,
+       "resource": "DOI",
+       "resourceId": "10.1038/clpt.2011.34",
+       "_url": "http://dx.doi.org/10.1038%2Fclpt.2011.34"
+      }
+     ],
+     "objCls": "Literature",
+     "pubDate": "2011-05-01T00:00:00-07:00",
+     "terms": [],
+     "type": "Literature"
+    }
+   ],
+   "otherPrescribingGuidance": false,
+   "pediatric": false,
+   "recommendation": true,
+   "relatedAlleles": [],
+   "relatedChemicals": [
+    {
+     "objCls": "Chemical",
+     "id": "PA451333",
+     "name": "sertraline"
+    }
+   ],
+   "relatedGenes": [
+    {
+     "objCls": "Gene",
+     "id": "PA124",
+     "symbol": "CYP2C19",
+     "name": "cytochrome P450 family 2 subfamily C member 19"
+    }
+   ],
+   "source": "DPWG",
+   "summaryMarkdown": {
+    "id": 1447981948,
+    "html": "<p>Do not give doses exceeding 75 mg/day in patients with CYP2C19 poor metabolizer genotypes, and guide the dose by response and side effects and/or sertraline plasma concentration.</p>\n"
+   },
+   "textMarkdown": {
+    "id": 1447981947,
+    "html": "<h3 id=\"dutch-pharmacogenetics-working-group-dpwg-guideline-for-the-gene-drug-interaction-between-cyp2c19-and-cyp2d6-and-ssris-european-journal-of-human-genetics-2021\">Dutch Pharmacogenetics Working Group (DPWG) guideline for the gene-drug interaction between CYP2C19 and CYP2D6 and SSRIs. European journal of human genetics (2021)</h3>\n<p>The Royal Dutch Pharmacists Association - Pharmacogenetics Working Group published a paper with the guidelines as per the November 2018 update and further detai"
+   }
+  },
+  {
+   "objCls": "Guideline Annotation",
+   "id": "PA166127639",
+   "name": "Annotation of CPIC Guideline for sertraline and CYP2B6, CYP2C19",
+   "alternateDrugAvailable": true,
+   "cancerGenome": false,
+   "crossReferences": [],
+   "descriptiveVideoId": "J4UENwJWO5s",
+   "dosingInformation": true,
+   "hasTestingInfo": false,
+   "literature": [
+    {
+     "id": 15143242,
+     "title": "Clinical Pharmacogenetics Implementation Consortium (CPIC) Guideline for CYP2D6, CYP2C19, CYP2B6, SLC6A4, and HTR2A Genotypes and Serotonin Reuptake Inhibitor Antidepressants.",
+     "_sameAs": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10564324",
+     "crossReferences": [
+      {
+       "id": 1452680439,
+       "resource": "PubMed Central",
+       "resourceId": "PMC10564324",
+       "_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10564324"
+      },
+      {
+       "id": 1452064840,
+       "resource": "PubMed",
+       "resourceId": "37032427",
+       "_url": "https://www.ncbi.nlm.nih.gov/pubmed/37032427"
+      },
+      {
+       "id": 1452064841,
+       "resource": "DOI",
+       "resourceId": "10.1002/cpt.2903",
+       "_url": "http://dx.doi.org/10.1002%2Fcpt.2903"
+      }
+     ],
+     "objCls": "Literature",
+     "pubDate": "2023-07-01T00:00:00-07:00",
+     "terms": [
+      {
+       "id": 1454108620,
+       "resource": "ClinPGx Tags",
+       "term": "CPIC",
+       "termId": "pgkbTags:1454108620"
+      },
+      {
+       "id": 1451577480,
+       "resource": "PGx Paper Types",
+       "term": "Implementation",
+       "termId": "pgxPaperTypes:1451577480"
+      }
+     ],
+     "type": "Literature"
+    },
+    {
+     "id": 15089021,
+     "title": "Clinical Pharmacogenetics Implementation Consortium (CPIC) Guideline for CYP2D6 and CYP2C19 Genotypes and Dosing of Selective Serotonin Reuptake Inhibitors.",
+     "_sameAs": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4512908",
+     "crossReferences": [
+      {
+       "id": 1449285932,
+       "resource": "PubMed Central",
+       "resourceId": "PMC4512908",
+       "_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4512908"
+      },
+      {
+       "id": 1449285931,
+       "resource": "PubMed",
+       "resourceId": "25974703",
+       "_url": "https://www.ncbi.nlm.nih.gov/pubmed/25974703"
+      },
+      {
+       "id": 1449285933,
+       "resource": "DOI",
+       "resourceId": "10.1002/cpt.147",
+       "_url": "http://dx.doi.org/10.1002%2Fcpt.147"
+      }
+     ],
+     "objCls": "Literature",
+     "pubDate": "2015-08-01T00:00:00-07:00",
+     "terms": [
+      {
+       "id": 1454108620,
+       "resource": "ClinPGx Tags",
+       "term": "CPIC",
+       "termId": "pgkbTags:1454108620"
+      },
+      {
+       "id": 1451577480,
+       "resource": "PGx Paper Types",
+       "term": "Implementation",
+       "termId": "pgxPaperTypes:1451577480"
+      }
+     ],
+     "type": "Literature"
+    }
+   ],
+   "otherPrescribingGuidance": false,
+   "pediatric": true,
+   "pediatricMarkdown": {
+    "id": 1451266626,
+    "html": "<p>Guideline excerpt: &quot;Citalopram, escitalopram, and sertraline had the most pharmacogenetic data supporting potential genotype-guided prescribing changes in children (Table S1). Based on this evidence, the recommendations for these drugs are relevant to pediatric patients and are consistent with smaller pharmacokinetic studies available for this population.&quot;</p>\n"
+   },
+   "recommendation": true,
+   "relatedAlleles": [],
+   "relatedChemicals": [
+    {
+     "objCls": "Chemical",
+     "id": "PA451333",
+     "name": "sertraline"
+    }
+   ],
+   "relatedGenes": [
+    {
+     "objCls": "Gene",
+     "id": "PA123",
+     "symbol": "CYP2B6",
+     "name": "cytochrome P450 family 2 subfamily B member 6"
+    },
+    {
+     "objCls": "Gene",
+     "id": "PA124",
+     "symbol": "CYP2C19",
+     "name": "cytochrome P450 family 2 subfamily C member 19"
+    }
+   ],
+   "source": "CPIC",
+   "summaryMarkdown": {
+    "id": 1447982317,
+    "html": "<p>The CPIC Dosing Guideline for the selective serotonin reuptake inhibitor sertraline recommends to consider a 50% reduction of recommended starting dose and titrate to response or select alternative drug not predominantly metabolized by CYP2C19 for CYP2C19 poor metabolizers.</p>\n"
+   },
+   "textMarkdown": {
+    "id": 1451433663,
+    "html": "<h3 id=\"february-2023\">February 2023</h3>\n<ul>\n<li>The 2015 CPIC&reg; guideline for for Selective Serotonin Reuptake Inhibitors and CYP2D6 and CYP2C19 has been updated to include additional genes and drugs. It is now known as the CPIC&reg; guideline for CYP2D6, CYP2C19, CYP2B6, SLC6A4, and HTR2A Genotypes and Serotonin Reuptake Inhibitor Antidepressants. Literature pertaining to sertraline and CYP2C19  published between January 2015 to June 2022 was reviewed and the recommendations and supplemen"
+   }
+  }
+ ]
+}
