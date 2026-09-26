@@ -13,7 +13,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { lagCpicApi, totalFraContentRange, type CpicApi, type Kildeinfo } from '../cpic/api'
 import { behandleCpicSynk } from '../cpic/endepunkt'
 import { lagCpiclager } from '../cpic/lager'
-import { lesCpicutvalg, TOMT_CPICUTVALG } from '../cpic/lesing'
+import { lesCpicutvalg, lesDiplotypegrunnlag, TOMT_CPICUTVALG, type Diplotypegrunnlag } from '../cpic/lesing'
 import {
   ENTITETER,
   KILDETABELLER,
@@ -24,6 +24,7 @@ import {
   lesPar,
 } from '../cpic/modell'
 import { kontrollsum, lesTabell, synkroniserCpic } from '../cpic/synk'
+import { diplotypegrunnlagFra } from './hjelp/cpic'
 import { kallSom } from './hjelp/fest'
 import { feilFra, nyDatabase } from './hjelp/testdatabase'
 
@@ -293,6 +294,32 @@ describe('synkroniseringen', () => {
     expect(diplo.map((d) => d.resultat)).toEqual(['Rapid Metabolizer'])
   })
 
+  it('gir CPICs tabell fra diplotype til resultat for ett gen, uten rådataene', async () => {
+    await synkroniserCpic({ lager: lager(), api: falskApi() })
+    // Rekkefølgen i svaret er databasens; innholdet skal være det samme.
+    const etter = <T,>(liste: T[], nokkel: (x: T) => string) => [...liste].sort((a, b) => nokkel(a).localeCompare(nokkel(b)))
+    const ordnet = (g: Diplotypegrunnlag) => ({
+      ...g,
+      kilde: null,
+      genresultater: etter(g.genresultater, (r) => r.id),
+      oppslag: etter(g.oppslag, (o) => o.id),
+      alleler: etter(g.alleler, (a) => a.navn),
+    })
+    const les = async (gensymbol: string) => lesDiplotypegrunnlag(await kallSom(db, 'authenticated')('les_cpic_diplotyper', { gensymbol }))
+    for (const gen of ['CYP2C19', 'HLA-B']) {
+      const lest = await les(gen)
+      expect(lest.kilde).toMatchObject({ navn: 'CPIC', release: 'v1.60.1' })
+      expect(ordnet(lest)).toEqual(ordnet(diplotypegrunnlagFra(UTDRAG, gen)))
+    }
+    const cyp2c19 = await les('CYP2C19')
+    expect(cyp2c19.gen).toMatchObject({ symbol: 'CYP2C19', oppslagsmetode: 'PHENOTYPE' })
+    expect(cyp2c19.oppslag.flatMap((o) => o.diplotyper)).toEqual(expect.arrayContaining(['*1/*17', '*17/*17']))
+    expect(cyp2c19.alleler.map((a) => a.navn)).toEqual(expect.arrayContaining(['*1', '*17']))
+    expect(JSON.stringify(cyp2c19)).not.toMatch(/"functionphenotypeid"|"diplotypekey"|"citations"/)
+    // Et gen CPIC ikke har, gir ingenting, ikke en feil.
+    expect(await les('FINNES-IKKE')).toMatchObject({ gen: null, genresultater: [], oppslag: [], alleler: [] })
+  })
+
   it('laster ikke inn det som er uendret, og merker endrede og borte rader', async () => {
     await synkroniserCpic({ lager: lager(), api: falskApi() })
     const innlastet = vi.fn()
@@ -388,6 +415,8 @@ describe('synkroniseringen', () => {
     expect((await feilFra(() => anonym('cpic_status', {})))?.code).toBe('42501')
     expect(await innlogget('les_cpic', { clinpgx_ider: [AMITRIPTYLIN] })).toMatchObject({ kilde: { navn: 'CPIC' } })
     expect(await innlogget('cpic_status', {})).toEqual(expect.any(Array))
+    expect((await feilFra(() => anonym('les_cpic_diplotyper', { gensymbol: 'CYP2C19' })))?.code).toBe('42501')
+    expect(await innlogget('les_cpic_diplotyper', { gensymbol: 'CYP2C19' })).toMatchObject({ kilde: { navn: 'CPIC' } })
     for (const sporring of ['select * from cpic.anbefaling', 'select * from cpic.anbefalingsbetingelser']) {
       const tabell = await feilFra(() =>
         db.transaction(async (tx) => {

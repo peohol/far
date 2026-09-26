@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.42.0',
+    dato: '2026-09-26',
+    sammendrag: 'CPIC-oppslaget i Farmakogenetikk kan oversette en diplotype til resultatet anbefalingen slås opp på',
+    typer: ['Funksjonalitet', 'Fag'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'I «Slå opp anbefaling etter kjent resultat» har hvert gen som slås opp på fenotype eller aktivitetsverdi, som CYP2D6, CYP2C19, CYP2C9, DPYD og TPMT, knappen «Oversett fra diplotype». Skriv diplotypen, f.eks. «*1/*4», og velg den i listen.',
+      'Oversettelsen er CPICs egen tabell og vises trinn for trinn ved genet, før anbefalingen: allelene med funksjonen CPIC har gitt dem, kombinasjonen med aktivitetsverdiene, og resultatet. Resultatet og aktivitetsverdien velges så i oppslaget, og «Hvorfor denne anbefalingen» sier at de kom fra diplotypen.',
+      'Bare diplotyper CPIC har, oversettes, også med kopitall og sammensatte alleler (som «*1/*1x2» og «*4/*36+*10» for CYP2D6). Rekkefølgen på allelene og stjernene spiller ingen rolle i søket, men en skrivemåte CPIC ikke har, oversettes ikke.',
+      'Gir diplotypen et resultat CPIC ikke har anbefaling for ved legemiddelet, vises oversettelsen med beskjed om det, og ingen anbefaling. HLA-gener velges fortsatt direkte etter allelstatus.',
+      'Diplotypen sendes ikke noe sted og lagres ikke: tabellen for genet hentes, og søket skjer på maskinen.',
+    ],
+  },
+  {
     versjon: '1.41.0',
     dato: '2026-09-26',
     sammendrag: 'Farmakogenetikk kan slå opp CPICs anbefaling ut fra et allerede kjent genetisk resultat',
