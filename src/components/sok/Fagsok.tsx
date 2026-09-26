@@ -3,10 +3,12 @@ import { sokeside } from '../../domain/rute'
 import { FAGSOK_LAG } from '../../hooks/useKeyboard'
 import type { Sokeindekstilstand } from '../../hooks/useSokeindeks'
 import { Button } from '../Button'
+import { Lastesirkel } from '../Lasteindikator'
 import { Ikon } from '../ikon/Ikon'
 import { Fagsokfelt } from '../toppmeny/Fagsokfelt'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
 import { Markert } from './Markert'
+import { HENTER_MER } from './treffvisning'
 import { useFagsoketreff } from './useFagsoketreff'
 
 /** Flest treff i rullegardinen. Resten står på søkesiden. */
@@ -222,14 +224,22 @@ function Liste({
   if (indeks.status !== 'klar') {
     return (
       <p className="fagsok__melding" role="status">
+        <Lastesirkel />
         Henter fagstoffet …
       </p>
     )
   }
+  // Treffene i det som alt er hentet, står der mens resten hentes.
   return (
     <>
-      {antall === 0 && !forsinket && <p className="fagsok__melding">Ingen treff i fagstoffet.</p>}
+      {antall === 0 && !forsinket && !indeks.henterMer && <p className="fagsok__melding">Ingen treff i fagstoffet.</p>}
       {children}
+      {indeks.henterMer && (
+        <p className="fagsok__melding">
+          <Lastesirkel />
+          {HENTER_MER}
+        </p>
+      )}
       <p className="kun-skjermleser" role="status">
         {forsinket ? '' : antall === 1 ? '1 treff' : `${antall} treff`}
       </p>

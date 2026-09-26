@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { OktProvider } from './auth/okt'
+import { Lasteindikator } from './components/Lasteindikator'
 import { Port } from './components/konto/Port'
 import { TipsLag } from './components/Tips'
 import { ShortcutVisibilityProvider } from './hooks/useShortcutVisibility'
@@ -32,6 +33,8 @@ if (!root) throw new Error('Fant ikke #root i index.html')
 
 createRoot(root).render(
   <StrictMode>
+    {/* Streken øverst mens appen henter noe, også før innloggingen. */}
+    <Lasteindikator />
     {/* Tooltiplaget ligger ytterst, så boblen kan festes til vinduet uansett
         hvor i appen ankeret står. */}
     <TipsLag>

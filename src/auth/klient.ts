@@ -12,6 +12,7 @@
  */
 import { createBrowserClient } from '@supabase/ssr'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { sporetFetch } from './aktivitet'
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const publiserbarNokkel = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
@@ -29,6 +30,8 @@ const klienten: SupabaseClient | null =
           sameSite: 'lax',
           secure: window.location.protocol === 'https:',
         },
+        // Lasteindikatoren viser når appen henter noe (`aktivitet.ts`).
+        global: { fetch: sporetFetch },
         auth: {
           // Ingenting i innloggingen går gjennom adressefeltet, så
           // URL-gjenkjenning er slått av.

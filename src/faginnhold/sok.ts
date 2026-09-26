@@ -49,7 +49,16 @@ import { informasjonsadresse } from '../domain/rute'
 
 const ERSTATNINGER: Record<string, string> = { æ: 'a', ø: 'o', å: 'a' }
 
+/** Tegnene som alt er foldet. Et søk folder hele kunnskapsbasen, men den har få ulike tegn. */
+const FOLDET = new Map<string, string>()
+
 function foldTegn(tegn: string): string {
+  let foldet = FOLDET.get(tegn)
+  if (foldet === undefined) FOLDET.set(tegn, (foldet = foldEttTegn(tegn)))
+  return foldet
+}
+
+function foldEttTegn(tegn: string): string {
   const liten = tegn.toLowerCase()
   const erstattet = ERSTATNINGER[liten]
   if (erstattet) return erstattet
@@ -437,9 +446,14 @@ function finn(indeks: Sokeindeks, sporring: string, { maks = 50, sidekontekst = 
       const side = sidekontekst ? (indeks.identitet.get(sidenokkel(dokument.sted.side)) ?? '') : ''
       if (!ord.every((o) => iTeksten.includes(o) || side.includes(o))) return
     }
+    // Utdraget lages først når treffet vises: et kort ord treffer det meste,
+    // og bare de øverste treffene vises.
+    let lest: Utdrag | undefined
     treff.push({
       dokument,
-      utdrag: utdrag(dokument.tekst, iTeksten),
+      get utdrag() {
+        return (lest ??= utdrag(dokument.tekst, iTeksten))
+      },
       poeng: VEKT[dokument.felt] * KVALITETSTRINN + treffkvalitet(foldet, iTeksten, ordstart),
     })
   })

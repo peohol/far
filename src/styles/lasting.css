@@ -1,0 +1,67 @@
+/* --- Lasting ---------------------------------------------------------------
+   Lasteindikatoren øverst i vinduet mens appen henter noe, og sirkelen ved
+   teksten «Henter …» der noe venter på det som hentes. */
+
+.lasteindikator {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: calc(var(--lag-modal) + 1);
+  height: 3px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--fart-glid) var(--kurve);
+}
+
+.lasteindikator[data-vis='ja'] {
+  opacity: 1;
+}
+
+.lasteindikator::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  border-radius: var(--runding-pille);
+  background: var(--aksent);
+  animation: lasteindikator-gli 1.2s var(--kurve) infinite;
+}
+
+@keyframes lasteindikator-gli {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+
+.lastesirkel {
+  display: inline-block;
+  flex: none;
+  width: 1em;
+  height: 1em;
+  border: 2px solid var(--aksent-flate);
+  border-top-color: var(--aksent);
+  border-radius: 50%;
+  vertical-align: -0.15em;
+  animation: lastesirkel-snurr 0.8s linear infinite;
+}
+
+@keyframes lastesirkel-snurr {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Uten bevegelse står indikatoren som en rolig strek over hele bredden. */
+@media (prefers-reduced-motion: reduce) {
+  .lasteindikator::before {
+    width: 100%;
+    animation: none;
+  }
+
+  .lastesirkel {
+    animation: none;
+  }
+}

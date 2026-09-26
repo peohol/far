@@ -2,7 +2,8 @@
  * Grunnlaget for søket i hele kunnskapsbasen: alle de publiserte sidene,
  * lest i én omgang og indeksert med den samme koden som søket på én side.
  *
- * Lesingen er fire kall, uansett hvor mange sider det er:
+ * Lesingen er fire kall, uansett hvor mange sider det er, og søket kan brukes
+ * før de er ferdige (se {@link lesSokeindeks}):
  *
  * 1. `les_analyttsider` gir alle sidene på samme form som `les_analyttside`,
  *    og `les_stoffsider` sidene for stoffene uten analyttkode, på samme form.
@@ -99,10 +100,21 @@ export async function lesKunnskapsbase(
   tilstand: Tilstand = 'publisert',
   farmakogenetikk: Farmakogenetikkleser | null = null,
 ): Promise<Kunnskapsbase> {
+  return lesTillegg(await lesSidene(sider, tilstand), legemidler, farmakogenetikk)
+}
+
+/** Sidene i `tilstand`, uten legemiddeldataene. Det første søket kan gjøre. */
+async function lesSidene(sider: Sideleser, tilstand: Tilstand): Promise<Analyttsidedata[]> {
   // Stoffsidene uten kode er et tillegg: kan de ikke leses, søkes det i resten.
-  const lest = (
-    await Promise.all([sider.lesAnalyttsider(tilstand), sider.lesStoffsider(tilstand).catch(() => [])])
-  ).flat()
+  return (await Promise.all([sider.lesAnalyttsider(tilstand), sider.lesStoffsider(tilstand).catch(() => [])])).flat()
+}
+
+/** Sidene med legemiddeldataene og ClinPGx-dataene de er koblet til. */
+async function lesTillegg(
+  lest: Analyttsidedata[],
+  legemidler: Legemiddelleser | null,
+  farmakogenetikk: Farmakogenetikkleser | null,
+): Promise<Kunnskapsbase> {
   const modeller = lest.map((s) => byggSidemodell(s))
   const [fest, clinpgx] = await Promise.all([
     lesLegemiddeldata(legemidler, modeller),
@@ -272,16 +284,34 @@ export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser, sider = []
   })
 }
 
-/** Leser og indekserer hele kunnskapsbasen, klar til `sokGlobalt`. */
+/** En søkeindeks med feilene fra dataene som ikke kunne leses. */
+export type Kunnskapsindeks = Sokeindeks & { festfeil?: string; clinpgxfeil?: string }
+
+/**
+ * Leser og indekserer hele kunnskapsbasen, klar til `sokGlobalt`.
+ *
+ * Det tregeste er legemiddeldataene og interaksjonene, så søket slipper å
+ * vente på dem: `delvis` får først en indeks over sidene i katalogen — navnene,
+ * kodene og komponentene, uten å vente på noe — og så en over alt faginnholdet
+ * på sidene. Det som er lest, er det samme som i den endelige indeksen, så
+ * treffene på stoffene står fast, og treffene i preparatene og interaksjonene
+ * kommer til under dem.
+ */
 export async function lesSokeindeks(
   sider: Sideleser,
   legemidler: Legemiddelleser | null,
   valg: Indekseringsvalg & { tilstand?: Tilstand; farmakogenetikk?: Farmakogenetikkleser } = {},
-): Promise<Sokeindeks & { festfeil?: string; clinpgxfeil?: string }> {
-  const base = await lesKunnskapsbase(sider, legemidler, valg.tilstand, valg.farmakogenetikk ?? null)
-  return {
+  delvis?: (indeks: Kunnskapsindeks) => void,
+): Promise<Kunnskapsindeks> {
+  const indekser = (base: Kunnskapsbase): Kunnskapsindeks => ({
     ...lagSokeindeks(indekserKunnskapsbase(base, valg)),
     ...(base.festfeil && { festfeil: base.festfeil }),
     ...(base.clinpgxfeil && { clinpgxfeil: base.clinpgxfeil }),
-  }
+  })
+  const utenTillegg = (lest: Analyttsidedata[]): Kunnskapsbase => ({ sider: lest, legemidler: null, interaksjoner: null })
+
+  delvis?.(indekser(utenTillegg([])))
+  const lest = await lesSidene(sider, valg.tilstand ?? 'publisert')
+  delvis?.(indekser(utenTillegg(lest)))
+  return indekser(await lesTillegg(lest, legemidler, valg.farmakogenetikk ?? null))
 }

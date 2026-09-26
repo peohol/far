@@ -31,6 +31,7 @@ export const APNE_MODULER = new Map(
     'inngangen og økten, som avgjør om resten i det hele tatt lastes': [
       'src/main.tsx',
       'src/auth/klient.ts',
+      'src/auth/aktivitet.ts',
       'src/auth/api.ts',
       'src/auth/okt.tsx',
       'src/domain/tilgang.ts',
@@ -48,6 +49,7 @@ export const APNE_MODULER = new Map(
     ],
     'felles grensesnittdeler uten faglig innhold': [
       'src/components/Button.tsx',
+      'src/components/Lasteindikator.tsx',
       'src/components/Tips.tsx',
       'src/components/Shortcut.tsx',
       'src/components/Ikonknapp.tsx',
