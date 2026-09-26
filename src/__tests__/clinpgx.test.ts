@@ -228,6 +228,19 @@ describe('strukturkontrollen av svarene', () => {
     expect(strukturavvik('klinisk', 'tull')).toEqual(['er tekst, ventet objekt'])
   })
 
+  it('melder null i felt ClinPGx alltid gir en verdi, men godtar null i valgfrie felt', () => {
+    expect(strukturavvik('klinisk', med(KLINISK, { levelOfEvidence: null }))).toEqual(['levelOfEvidence er tomt (null), ventet objekt'])
+    expect(strukturavvik('klinisk', med(KLINISK, { location: null }))).toEqual(['location er tomt (null), ventet objekt'])
+    expect(strukturavvik('retningslinje', med(RETNINGSLINJE, { relatedGenes: null }))).toEqual(['relatedGenes er tomt (null), ventet liste'])
+    expect(strukturavvik('retningslinje', med(RETNINGSLINJE, { dosingInformation: null }))).toEqual([
+      'dosingInformation er tomt (null), ventet sann/usann',
+    ])
+    expect(strukturavvik('retningslinje', med(RETNINGSLINJE, { name: null }))).toEqual(['name er tomt (null), ventet tekst'])
+    const sted = KLINISK.location as Record<string, unknown>
+    expect(strukturavvik('klinisk', med(KLINISK, { location: med(sted, { rsid: null }), score: null }))).toEqual([])
+    expect(strukturavvik('preparatomtale', med(PREPARATOMTALE, { testing: null, summaryMarkdown: null }))).toEqual([])
+  })
+
   it('sier hvilke objekter som har feil form, og at dataene fra før står', () => {
     const tekst = strukturfeiltekst([
       { type: 'klinisk', id: 'PA1', avvik: ['levelOfEvidence mangler, ventet objekt'] },

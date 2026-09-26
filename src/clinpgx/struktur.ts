@@ -7,16 +7,18 @@
  * Det er riktig for innhold som legitimt kan være tomt, men skjuler at et felt
  * har fått nytt navn eller ny form. Kontrollen her skiller derfor mellom
  *
- * - **feltet finnes, men er tomt**: en tom liste, en tom tekst eller `null`.
- *   Det godtas alltid;
+ * - **feltet finnes, men er tomt**: en tom liste eller en tom tekst. Det
+ *   godtas alltid;
  * - **feltet er borte eller har en helt annen type**: en liste som er blitt
- *   tekst, et objekt som er blitt en liste, eller et felt ClinPGx alltid har
- *   sendt (også tomt), som ikke er der. Det er et avvik.
+ *   tekst, et objekt som er blitt en liste, `null` der ClinPGx sender en
+ *   verdi, eller et felt ClinPGx alltid har sendt (også tomt), som ikke er
+ *   der. Det er et avvik.
  *
  * Kravene gjelder bare felt OUSFAR leser, og bare de ClinPGx sender også når de
  * er tomme (sett i alle svarene fra 26.09.2026). Felt ClinPGx utelater når de er
- * tomme — sammendraget i en preparatomtale, testingen, rsID — er valgfrie: bare
- * typen kontrolleres når de er med.
+ * tomme — sammendraget i en preparatomtale, testingen, rsID — er valgfrie: de
+ * kan mangle eller være `null`, og bare typen kontrolleres når de har en verdi.
+ * Ingen av feltene var `null` i noe svar 26.09.2026.
  *
  * Alt her er rene funksjoner.
  */
@@ -30,7 +32,7 @@ interface Krav {
   /** Feltet, med punktum for et felt i et objekt: `location.genes`. Et objekt som mangler, gjør feltene i det valgfrie. */
   sti: string
   form: Form | readonly Form[]
-  /** Feltet kan mangle. Er det med, må det ha formen. */
+  /** Feltet kan mangle eller være `null`. Har det en verdi, må den ha formen. */
   valgfri?: boolean
   /** For en liste: feltene hvert element må ha (som tekst), eller `'tekst'` når elementene er tekster. */
   hver?: readonly string[] | 'tekst'
@@ -101,6 +103,7 @@ function formen(verdi: unknown): Form | null {
 
 function beskriv(verdi: unknown): string {
   if (verdi === undefined) return 'mangler'
+  if (verdi === null) return 'er tomt (null)'
   const form = formen(verdi)
   return form ? `er ${FORMNAVN[form]}` : `er ${typeof verdi}`
 }
@@ -127,7 +130,7 @@ export function strukturavvik(type: Strukturtype, objekt: unknown): string[] {
     const verdi = forelder[deler.at(-1)!]
     const former: readonly Form[] = typeof krav.form === 'string' ? [krav.form] : krav.form
     const ventet = former.map((f) => FORMNAVN[f]).join(' eller ')
-    if (verdi === null || (verdi === undefined && krav.valgfri)) continue
+    if (krav.valgfri && (verdi === undefined || verdi === null)) continue
     const form = formen(verdi)
     if (!form || !former.includes(form)) {
       avvik.push(`${krav.sti} ${beskriv(verdi)}, ventet ${ventet}`)

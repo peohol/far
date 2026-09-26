@@ -336,15 +336,16 @@ ville ellers bare blitt stille tomt — f.eks. evidensnivået eller flagget for
 dosering. `src/clinpgx/struktur.ts` kontrollerer derfor rådataene for hvert
 objekt før kjemikaliet byttes inn, og skiller mellom
 
-- **feltet finnes, men er tomt** (tom liste, tom tekst, `null`): godtas alltid;
+- **feltet finnes, men er tomt** (tom liste, tom tekst): godtas alltid;
 - **feltet er borte eller har en helt annen type** (en liste som er blitt
-  tekst, gener uten `id` og `symbol`, et objekt uten feltet det ventes å ha):
-  et avvik.
+  tekst, gener uten `id` og `symbol`, et objekt uten feltet det ventes å ha,
+  eller `null` i et felt ClinPGx alltid gir en verdi): et avvik. Bare de
+  valgfrie feltene kan være `null`; ingen av feltene var `null` 26.09.2026.
 
 Bare felt OUSFAR leser, kontrolleres, og bare de ClinPGx sender også når de er
 tomme (sett i alle 66 kjemikaliene og 1 179 annotasjonene 26.09.2026):
 
-| Type | Må finnes (kan være tomme) | Valgfrie, med riktig type |
+| Type | Må finnes (kan være tomme, ikke `null`) | Valgfrie (kan mangle eller være `null`), med riktig type |
 | --- | --- | --- |
 | Kjemikalie | `name` | `types`, `linkOuts` (med `resource`, `resourceId`) |
 | Retningslinje | `name`, `source`, `relatedGenes` (med `id`, `symbol`), `relatedChemicals` (med `id`), `literature`, flaggene `dosingInformation`, `alternateDrugAvailable`, `otherPrescribingGuidance`, `pediatric` | `summaryMarkdown` (med `html` eller `markdown`) |
