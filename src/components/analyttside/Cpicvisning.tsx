@@ -1,4 +1,4 @@
-import { Fragment, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useState, type ReactNode } from 'react'
 import type { Clinpgxkoblingdata } from '../../faginnhold/paneler'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
 import { treffIntervaller } from '../../faginnhold/sok'
@@ -47,6 +47,7 @@ export function Cpicvisning({
   kobling,
   litteratur,
   redigerer,
+  malkort,
   onHentet,
 }: {
   tilstand: Cpictilstand
@@ -54,6 +55,11 @@ export function Cpicvisning({
   /** Publikasjonene ClinPGx-dataene på siden oppgir, så samme publikasjon står én gang. */
   litteratur: readonly Litteratur[]
   redigerer: boolean
+  /**
+   * Kortet adressen peker på, som når brukeren kommer fra et treff i fagsøket.
+   * Delene i det står åpne, så det søket fant, ikke står skjult.
+   */
+  malkort?: string
   /** Etter at en administrator har hentet CPIC-dataene på nytt. */
   onHentet: () => void
 }) {
@@ -111,7 +117,13 @@ export function Cpicvisning({
       >
         <Cpicoppslag utvalg={tilstand.utvalg} />
         {visning.retningslinjer.map((k) => (
-          <Retningslinjekortet key={k.kort} kort={k} legemidler={legemidler} litteratur={litteratur} />
+          <Retningslinjekortet
+            key={k.kort}
+            kort={k}
+            legemidler={legemidler}
+            litteratur={litteratur}
+            apneDeler={k.kort === malkort}
+          />
         ))}
         {visning.andre_par.length > 0 && <AndrePar par={visning.andre_par} legemidler={legemidler} />}
       </Gruppe>
@@ -188,10 +200,12 @@ function Retningslinjekortet({
   kort: k,
   legemidler,
   litteratur,
+  apneDeler,
 }: {
   kort: Retningslinjekort
   legemidler: ReadonlyMap<string, Legemiddel>
   litteratur: readonly Litteratur[]
+  apneDeler: boolean
 }) {
   // Med flere legemidler på siden i samme retningslinje står anbefalingene under hvert av dem.
   const perLegemiddel =
@@ -271,7 +285,7 @@ function Retningslinjekortet({
                 <p className="cpic__overskrift" role="heading" aria-level={4}>
                   {legemiddel ? `Anbefalinger for ${legemiddel.navn}` : 'Anbefalinger'}
                 </p>
-                <Anbefalingsliste grupper={grupper} visPopulasjon={k.populasjoner.length > 1} />
+                <Anbefalingsliste grupper={grupper} visPopulasjon={k.populasjoner.length > 1} apneDeler={apneDeler} />
               </Fragment>
             ))
           )}
@@ -293,9 +307,19 @@ function Retningslinjekortet({
 /**
  * Anbefalingene i et kort. Er de mange, deles de opp etter resultatet for
  * ett gen (`delAnbefalinger`), hver del lukket til brukeren åpner den, så
- * kortet ikke blir én lang tabell.
+ * kortet ikke blir én lang tabell. Peker adressen på kortet (`apneDeler`),
+ * står delene åpne: fagsøket finner også teksten i dem, og treffet fører
+ * bare til kortet.
  */
-function Anbefalingsliste({ grupper, visPopulasjon }: { grupper: readonly Anbefalingsgruppe[]; visPopulasjon: boolean }) {
+function Anbefalingsliste({
+  grupper,
+  visPopulasjon,
+  apneDeler,
+}: {
+  grupper: readonly Anbefalingsgruppe[]
+  visPopulasjon: boolean
+  apneDeler: boolean
+}) {
   const liste = (rader: readonly Anbefalingsgruppe[]) => (
     <ol className="cpic__anbefalinger">
       {rader.map((g) => (
@@ -316,6 +340,7 @@ function Anbefalingsliste({ grupper, visPopulasjon }: { grupper: readonly Anbefa
             [...new Set(d.grupper.map((g) => g.klassifisering).filter(Boolean))].join(', '),
           ])}
           tekster={d.grupper.flatMap((g) => [...g.betingelser.map(betingelsetekst), g.anbefaling ?? ''])}
+          apenFraStart={apneDeler}
         >
           {liste(d.grupper)}
         </Del>
@@ -327,11 +352,27 @@ function Anbefalingsliste({ grupper, visPopulasjon }: { grupper: readonly Anbefa
 /**
  * En del av et langt kort, som `<details>`: nettleserens søk åpner den selv,
  * og den står åpen mens søket på siden har treff i den, så et fremhevet treff
- * aldri står skjult.
+ * aldri står skjult. `apenFraStart` åpner den, og brukeren kan lukke den igjen.
  */
-function Del({ tittel, oppsummering, tekster, children }: { tittel: string; oppsummering: string; tekster: readonly string[]; children: ReactNode }) {
+function Del({
+  tittel,
+  oppsummering,
+  tekster,
+  apenFraStart,
+  children,
+}: {
+  tittel: string
+  oppsummering: string
+  tekster: readonly string[]
+  apenFraStart: boolean
+  children: ReactNode
+}) {
   const ord = useSokeord()
-  const [apen, setApen] = useState(false)
+  const [apen, setApen] = useState(apenFraStart)
+  // En ny adresse til kortet, mens det alt står på siden, åpner delene igjen.
+  useEffect(() => {
+    if (apenFraStart) setApen(true)
+  }, [apenFraStart])
   const treff = ord.length > 0 && tekster.some((t) => treffIntervaller(t, ord).length > 0)
   return (
     // Mens søket holder delen åpen, er det ikke brukeren som åpnet den.

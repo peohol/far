@@ -127,7 +127,8 @@ describe('migrasjonene i databasen', () => {
       elementerFor.set(k.hovedside.navn, (await leser.lesStoffside(k.hovedside.navn, 'publisert')).elementer.length)
     }
     sider = await utkast()
-    await kjorMigrasjoner(db, { fra: MIGRASJONER[0] })
+    // Bare indikasjonene, så senere migrasjoner som legger til kort, ikke telles med.
+    await kjorMigrasjoner(db, { bare: MIGRASJONER })
     revisjoner = await antall('select count(*)::int as n from public.objektrevisjoner')
   }, 180_000)
 

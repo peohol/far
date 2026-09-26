@@ -68,6 +68,7 @@ export function Farmakogenetikkpanel({
   cpic,
   grunnlag,
   sidenavn,
+  sted,
   onHentet,
   onCpicHentet,
 }: {
@@ -78,6 +79,8 @@ export function Farmakogenetikkpanel({
   /** Sidens virkestoff i FEST, som forslagene i koblingen bygger på. */
   grunnlag: Koblingsgrunnlag
   sidenavn: string
+  /** Seksjonen og eventuelt detaljkortet adressen peker på. */
+  sted?: readonly string[]
   /** Etter at nye data er hentet fra ClinPGx, så siden leser dem. */
   onHentet: () => void
   /** Etter at CPIC-dataene er hentet på nytt. */
@@ -109,6 +112,7 @@ export function Farmakogenetikkpanel({
           kobling={kobling}
           litteratur={clinpgxlitteratur(visning)}
           redigerer={kontekst.redigerer}
+          malkort={sted?.[0] === definisjon.nokkel ? sted[1] : undefined}
           onHentet={onCpicHentet}
         />
       )}

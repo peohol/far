@@ -2318,6 +2318,10 @@ describe('farmakogenetikken fra ClinPGx', () => {
     )
     expect(within(liste).getByRole('link', { name: /Lisens: CC0 1\.0/ }).getAttribute('href')).toBe('https://creativecommons.org/publicdomain/zero/1.0/')
     expect(within(liste).getAllByText(/Syntetisk artikkel/)).toHaveLength(1)
+    // Numrene følger leserekkefølgen: CPIC står over ClinPGx i seksjonen.
+    const cpicNr = within(liste).getByText(/CPIC – Clinical Pharmacogenetics/).closest('li')!
+    const clinpgxNr = within(liste).getByText(/ClinPGx – PharmGKB, CPIC og PharmCAT/).closest('li')!
+    expect(cpicNr.compareDocumentPosition(clinpgxNr) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
 
     await user.click(skuffen('Andre gen–legemiddel-par i CPIC'))
     const tabell = within(seksjon).getByRole('table')
@@ -2437,6 +2441,19 @@ describe('farmakogenetikken fra ClinPGx', () => {
     await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'sjelden')
     await waitFor(() => expect(del('CYP2D6 Normal Metabolizer').open).toBe(true))
     expect(del('CYP2D6 Poor Metabolizer').open).toBe(false)
+  })
+
+  it('åpner delene i et langt CPIC-kort adressen peker på, så et treff fra fagsøket ikke står skjult', async () => {
+    const user = userEvent.setup()
+    const fenotyper = ['Poor Metabolizer', 'Normal Metabolizer', 'Ultrarapid Metabolizer']
+    const mange = Array.from({ length: 13 }, (_, i) => anbefaling(`2${i}`, [fenotyper[i % 3]!, `${i}.0`], `Syntetisk anbefaling nummer ${i}.`))
+    vis('AMTNORSUM', medCpic({ data: medPgx() }, cpicleser({ ...UTVALG_CPIC, anbefalinger: mange })), ['farmakogenetikk', 'cpic-900'])
+    const del = (tittel: string) => screen.getByText(tittel, { selector: '.cpic__deltittel' }).closest('details') as HTMLDetailsElement
+    await waitFor(() => expect(del('CYP2D6 Poor Metabolizer').open).toBe(true))
+    for (const f of fenotyper) expect(del(`CYP2D6 ${f}`).open).toBe(true)
+    // Brukeren kan lukke dem igjen.
+    await user.click(screen.getByText('CYP2D6 Poor Metabolizer', { selector: '.cpic__deltittel' }))
+    await waitFor(() => expect(del('CYP2D6 Poor Metabolizer').open).toBe(false))
   })
 
   it('åpner CPIC-kortet adressen peker på', async () => {
