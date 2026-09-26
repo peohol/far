@@ -187,11 +187,12 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
             legemidler.status === 'klar' ? legemidler.utvalg : null,
             interaksjoner.status === 'klar' ? interaksjoner.oversikt : null,
           ),
-          clinpgxreferanser(pgx.status === 'klar' ? pgx.utvalg : null, pgx.status === 'klar' ? pgx.visning : null),
+          // CPIC står over ClinPGx i «Farmakogenetikk», og elementene nummereres i denne rekkefølgen.
           cpicreferanser(
             cpictilstand.status === 'klar' ? cpictilstand.visning : null,
             clinpgxlitteratur(pgx.status === 'klar' ? pgx.visning : null),
           ),
+          clinpgxreferanser(pgx.status === 'klar' ? pgx.utvalg : null, pgx.status === 'klar' ? pgx.visning : null),
         ),
       ),
     [modell, legemidler, interaksjoner, pgx, cpictilstand],
@@ -391,6 +392,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                         cpic={cpictilstand}
                         grunnlag={grunnlag}
                         sidenavn={oppforing?.sidenavn ?? navn}
+                        sted={sted}
                         onHentet={farmakogenetikk.lesPaNytt}
                         onCpicHentet={cpic.lesPaNytt}
                       />

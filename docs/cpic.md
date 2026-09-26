@@ -233,7 +233,8 @@ legemiddel. Visningen avhenger altså ikke av FEST. Den er ikke interaktiv:
   resultater, f.eks.
   «CYP2D6 Poor Metabolizer · 9 anbefalinger · Optional, Strong». Delene er
   `<details>`, som nettleserens søk åpner selv, og en del står åpen mens søket
-  på siden har treff i den. Amitriptylin (206 anbefalinger i CPIC) blir 53
+  på siden har treff i den. Peker adressen på kortet (et treff i fagsøket
+  eller en direktelenke), står alle delene åpne. Amitriptylin (206 anbefalinger i CPIC) blir 53
   rader i seks deler.
 - **Retningslinjer uten strukturerte anbefalinger** (som warfarin) får kortet
   med CPICs merknad og en melding om at veiledningen står i selve
@@ -255,7 +256,10 @@ kontrollert på over ti døgn. En administrator kan hente CPIC på nytt med
 genene, resultattypene og resultatkategoriene, styrkene, hver anbefaling med
 betingelsene, og genene i de andre parene. Implikasjonene og kommentarene er
 ikke med, så et treff aldri peker på en tekst som er skjult. Et treff eller en
-direktelenke åpner seksjonen og kortet.
+direktelenke åpner seksjonen og kortet, og delene i det.
+
+**Referansene** fra CPIC slås sammen med ClinPGx' før dem, så numrene følger
+leserekkefølgen i seksjonen.
 
 ## Hva som bygger på dette
 
