@@ -9,7 +9,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { Fagsok, MAKS_I_RULLEGARDIN } from '../components/sok/Fagsok'
 import { GRUPPEGRENSE, Sokeside } from '../components/sok/Sokeside'
-import { visTreff } from '../components/sok/treffvisning'
+import { HENTER_MER, visTreff } from '../components/sok/treffvisning'
 import { TipsLag } from '../components/Tips'
 import { lagSokeindeks, sokeord, sokGlobalt, type Sokedokument, type Sokested } from '../faginnhold/sok'
 import { erBekreftelse, fokusIFagsok, lagLiggerOver, useKeyboard } from '../hooks/useKeyboard'
@@ -383,6 +383,39 @@ describe('visningen av et treff', () => {
   })
 })
 
+describe('søket mens fagstoffet hentes', () => {
+  const underveis: Sokeindekstilstand = { ...KLAR, henterMer: true }
+
+  it('viser treffene i det som er hentet, og at mer er på vei', async () => {
+    const user = userEvent.setup()
+    const { felt } = visFagsok(underveis)
+    await user.click(felt)
+    await user.keyboard('sertralin')
+    expect(rader()[0]!.textContent).toContain('Sertralin')
+    expect(screen.getByText(HENTER_MER)).toBeTruthy()
+
+    // Uten treff ennå står det ikke at det ikke finnes noen.
+    await user.clear(felt)
+    await user.keyboard('finnesikke')
+    expect(screen.queryByText('Ingen treff i fagstoffet.')).toBeNull()
+    expect(screen.getByText(HENTER_MER)).toBeTruthy()
+  })
+
+  it('sier det ikke når alt er hentet', async () => {
+    const user = userEvent.setup()
+    const { felt } = visFagsok()
+    await user.click(felt)
+    await user.keyboard('sertralin')
+    expect(screen.queryByText(HENTER_MER)).toBeNull()
+  })
+
+  it('sier på søkesiden at flere treff kan komme', () => {
+    visSokeside('sertralin', underveis)
+    expect(screen.getByText(new RegExp(HENTER_MER))).toBeTruthy()
+    expect(screen.getByRole('region', { name: /^Stoff/ })).toBeTruthy()
+  })
+})
+
 /* --- Indeksen ------------------------------------------------------------------- */
 
 describe('indeksen fagsøket bruker', () => {
@@ -419,6 +452,44 @@ describe('indeksen fagsøket bruker', () => {
     expect(hent).toHaveBeenCalledTimes(2)
     expect(result.current.tilstand.status).toBe('klar')
     const ny = lagSokeindeks(DOKUMENTER.slice(0, 1))
+    await act(async () => svar(ny))
+    expect(result.current.tilstand).toEqual({ status: 'klar', indeks: ny })
+  })
+
+  it('kan søkes i mens den hentes, med det som alt er lest', async () => {
+    const delvise = lagSokeindeks(DOKUMENTER.slice(0, 1))
+    let svar: (verdi: Lestsokeindeks) => void = () => {}
+    const hent = vi.fn((delvis: (indeks: Lestsokeindeks) => void) => {
+      delvis(delvise)
+      return new Promise<Lestsokeindeks>((r) => (svar = r))
+    })
+    const { result } = renderHook(() => useSokeindeks(hent))
+    act(() => result.current.krev())
+    expect(result.current.tilstand).toEqual({ status: 'klar', indeks: delvise, henterMer: true })
+    // Den hentes ikke én gang til mens resten er på vei.
+    act(() => result.current.krev())
+    expect(hent).toHaveBeenCalledTimes(1)
+    await act(async () => svar(indeks))
+    expect(result.current.tilstand).toEqual({ status: 'klar', indeks })
+  })
+
+  it('beholder en hel indeks framfor en delvis når den hentes på nytt', async () => {
+    const delvise = lagSokeindeks(DOKUMENTER.slice(0, 1))
+    let svar: (verdi: Lestsokeindeks) => void = () => {}
+    const hent = vi
+      .fn()
+      .mockResolvedValueOnce(indeks)
+      .mockImplementationOnce((delvis: (indeks: Lestsokeindeks) => void) => {
+        delvis(delvise)
+        return new Promise<Lestsokeindeks>((r) => (svar = r))
+      })
+    const { result } = renderHook(() => useSokeindeks(hent))
+    act(() => result.current.krev())
+    await waitFor(() => expect(result.current.tilstand.status).toBe('klar'))
+
+    act(() => result.current.foreld(true))
+    expect(result.current.tilstand).toEqual({ status: 'klar', indeks })
+    const ny = lagSokeindeks(DOKUMENTER.slice(0, 2))
     await act(async () => svar(ny))
     expect(result.current.tilstand).toEqual({ status: 'klar', indeks: ny })
   })

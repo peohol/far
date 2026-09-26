@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { useProfil } from './auth/okt'
+import { iBakgrunnen } from './auth/aktivitet'
 import { klient } from './auth/klient'
 import { Analyttside } from './components/analyttside/Analyttside'
 import { FaginnholdskildeProvider, type Faginnholdskilde } from './components/analyttside/Faginnholdskilde'
@@ -55,7 +56,8 @@ import {
   useKeyboard,
 } from './hooks/useKeyboard'
 import { useRute } from './hooks/useRute'
-import { useSokeindeks } from './hooks/useSokeindeks'
+import { useNaarLedig } from './hooks/useNaarLedig'
+import { useSokeindeks, type Sokeindekshenter } from './hooks/useSokeindeks'
 import { useTheme } from './hooks/useTheme'
 import { lesPubliserteRegelsett } from './regler/kommentarer'
 import { slaOpp } from './regler/publiserte'
@@ -164,23 +166,33 @@ export default function App() {
   )
   const { hentPaNytt: hentStoffsiderPaNytt } = stoffsider
 
-  // Fagsøket: indeksen over alt publisert fagstoff, hentet første gang noen
-  // søker. De andre navnene en kode er kjent under, kommer fra katalogen, så
-  // fagsøket og analyttsøket kjenner de samme. Katalogen gir også sidene som
-  // ennå ikke har noen informasjonsside, så søket finner dem på navnet.
-  const hentSokeindeks = useCallback(
-    () =>
-      lesSokeindeks(lagSideleser(klient()), lagLegemiddelleser(klient()), {
-        farmakogenetikk: lagFarmakogenetikkleser(klient()),
-        aliaser: (kode) => {
-          const oppforing = katalog.finn(kode)
-          return oppforing?.kode === oppforing?.fortolkning.kode ? oppforing?.fortolkning.aliaser : undefined
+  // Fagsøket: indeksen over alt publisert fagstoff, hentet når appen har tid
+  // til overs etter at den er åpnet, eller første gang noen søker før det. De
+  // andre navnene en kode er kjent under, kommer fra katalogen, så fagsøket og
+  // analyttsøket kjenner de samme. Katalogen gir også sidene som ennå ikke har
+  // noen informasjonsside, så søket finner dem på navnet. Søket viser selv at
+  // det henter, så hentingen står ikke i lasteindikatoren.
+  const hentSokeindeks = useCallback<Sokeindekshenter>(
+    (delvis) => {
+      const stille = iBakgrunnen(klient())
+      return lesSokeindeks(
+        lagSideleser(stille),
+        lagLegemiddelleser(stille),
+        {
+          farmakogenetikk: lagFarmakogenetikkleser(stille),
+          aliaser: (kode) => {
+            const oppforing = katalog.finn(kode)
+            return oppforing?.kode === oppforing?.fortolkning.kode ? oppforing?.fortolkning.aliaser : undefined
+          },
+          sider: katalog.oppforinger.map(({ kode, sidenavn, komponenter }) => ({ kode, navn: sidenavn, komponenter })),
         },
-        sider: katalog.oppforinger.map(({ kode, sidenavn, komponenter }) => ({ kode, navn: sidenavn, komponenter })),
-      }),
+        delvis,
+      )
+    },
     [katalog],
   )
   const sokeindeks = useSokeindeks(hentSokeindeks)
+  useNaarLedig(sokeindeks.krev)
   const beskrivSide = useCallback(
     (kode: string) => {
       const oppforing = katalog.finn(kode)

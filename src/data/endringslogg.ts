@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.38.0',
+    dato: '2026-09-26',
+    sammendrag: 'Fagsøket er raskt fra første stund, og appen viser når den henter noe',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Fagstoffet til søket hentes mens appen står ledig etter at den er åpnet, så søket er som regel klart før du begynner å skrive.',
+      'Søker du før alt er hentet, finner du stoffene med én gang, og teksten på sidene straks etter. Preparatene og interaksjonene kommer til under dem, og søket sier fra at mer er på vei.',
+      'Søket svarer mye raskere på hvert tastetrykk, også på korte søk som treffer mye.',
+      'En tynn strek øverst i vinduet viser at appen henter noe, når det tar mer enn et øyeblikk.',
+    ],
+  },
+  {
     versjon: '1.37.1',
     dato: '2026-09-26',
     sammendrag: '48 stoffsider er koblet til legemidlet i ClinPGx',

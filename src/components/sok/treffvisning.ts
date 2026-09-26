@@ -36,6 +36,9 @@ export interface Treffvisning {
   utdrag?: Utdrag
 }
 
+/** Det som står mens søket bare har en del av fagstoffet, og resten hentes. */
+export const HENTER_MER = 'Henter mer fagstoff …'
+
 /** Navnene på gruppene: fanen på søkesiden og overskriften over gruppen. */
 export const GRUPPENAVN: Record<Treffgruppe, { fane: string; overskrift: string }> = {
   stoff: { fane: 'Stoff', overskrift: 'Stoff' },

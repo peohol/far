@@ -1,13 +1,14 @@
 import { useEffect, useId, useMemo, useState } from 'react'
-import { TREFFGRUPPER, sidenokkel, treffgruppe, type Treffgruppe } from '../../faginnhold/sok'
+import { TREFFGRUPPER, sidenokkel, treffgruppe, type Soketreff, type Treffgruppe } from '../../faginnhold/sok'
 import { useLukkMedEscape } from '../../hooks/useLukkMedEscape'
 import type { Sokeindekstilstand } from '../../hooks/useSokeindeks'
 import { Button } from '../Button'
+import { Lastesirkel } from '../Lasteindikator'
 import { Ikon } from '../ikon/Ikon'
 import { Lukkeknapp } from '../Lukkeknapp'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
 import { Markert } from './Markert'
-import { GRUPPENAVN, type Treffvisning } from './treffvisning'
+import { GRUPPENAVN, HENTER_MER, type Treffvisning } from './treffvisning'
 import { useFagsoketreff } from './useFagsoketreff'
 
 /** Flest treff som vises i en gruppe før «Vis alle». */
@@ -94,10 +95,15 @@ export function Sokeside({ q, indeks, onKrev, beskrivSide, onLukk }: SokesidePro
         </div>
       ) : indeks.status !== 'klar' ? (
         <p className="sokeside__melding" role="status">
-          Henter fagstoffet …
+          <Lastesirkel /> Henter fagstoffet …
         </p>
       ) : (
         <>
+          {indeks.henterMer && (
+            <p className="sokeside__melding">
+              <Lastesirkel /> {HENTER_MER} Flere treff kan komme til.
+            </p>
+          )}
           {indeks.indeks.festfeil && (
             <p className="sidevarsel" role="note">
               Preparatene og interaksjonene fra FEST er ikke med i søket nå, fordi de ikke kunne hentes.
@@ -122,7 +128,8 @@ export function Sokeside({ q, indeks, onKrev, beskrivSide, onLukk }: SokesidePro
               // Et nytt søk eller filter viser de første treffene igjen.
               key={`${gruppe}\n${sporring}`}
               navn={GRUPPENAVN[gruppe].overskrift}
-              treff={gruppetreff.map(vis)}
+              treff={gruppetreff}
+              vis={vis}
             />
           ))}
         </>
@@ -144,10 +151,19 @@ function Filterknapp({ navn, antall, valgt, onVelg }: { navn: string; antall: nu
   )
 }
 
-function Treffgruppevisning({ navn, treff }: { navn: string; treff: Treffvisning[] }) {
+function Treffgruppevisning({
+  navn,
+  treff,
+  vis,
+}: {
+  navn: string
+  treff: Soketreff[]
+  vis: (treff: Soketreff) => Treffvisning
+}) {
   const overskrift = useId()
   const [alle, setAlle] = useState(false)
-  const viste = alle ? treff : treff.slice(0, GRUPPEGRENSE)
+  // Bare treffene som vises, gjøres klare til visning: et kort søk kan ha tusenvis.
+  const viste = (alle ? treff : treff.slice(0, GRUPPEGRENSE)).map(vis)
   return (
     <section className="treffgruppe" aria-labelledby={overskrift}>
       <h2 id={overskrift} className="treffgruppe__navn">

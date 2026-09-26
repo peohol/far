@@ -218,6 +218,23 @@ describe('lesingen av kunnskapsbasen', () => {
     expect(sokGlobalt(indeks, 'doseringstekst')).toHaveLength(1)
   })
 
+  it('gir indekser over det som er lest, før legemiddeldataene er der', async () => {
+    const delvise: Awaited<ReturnType<typeof lesSokeindeks>>[] = []
+    const katalog = [{ kode: 'KVE', navn: 'Kvetiapin', komponenter: ['Kvetiapin'] }]
+    const indeks = await lesSokeindeks(sideleser, legemidler, { sider: katalog }, (d) => delvise.push(d))
+    expect(delvise).toHaveLength(2)
+    const [forst, sa] = delvise as [(typeof delvise)[0], (typeof delvise)[0]]
+    // Først bare katalogen, uten å vente på noe.
+    expect(sokGlobalt(forst, 'kvetiapin').map((t) => t.dokument.sted.side.kode)).toEqual(['KVE'])
+    expect(sokGlobalt(forst, 'doseringstekst')).toEqual([])
+    // Så faginnholdet på sidene, men ikke preparatene.
+    expect(sokGlobalt(sa, 'doseringstekst')).toHaveLength(1)
+    expect(sokGlobalt(sa, 'sarotex')).toEqual([])
+    // Til sist alt, med de samme treffene på sidene som før.
+    expect(sokGlobalt(indeks, 'sarotex')).not.toEqual([])
+    expect(sokGlobalt(indeks, 'doseringstekst')).toEqual(sokGlobalt(sa, 'doseringstekst'))
+  })
+
   it('deler interaksjonsoppslaget i flere kall når nøklene er flere enn databasen tar imot', async () => {
     const antall = MAKS_INTERAKSJONSNOKLER + 20
     const sider = Array.from({ length: antall }, (_, i) => side(`K${i}`, `Side ${i}`, [`V${i}`]))

@@ -493,9 +493,16 @@ om til direktelenken, `#/analytt/<KODE>/<seksjon>/<kort>`, eller
 treffet viser «Stoffside uten labkode» der de andre viser koden og metoden.
 
 **Fagsøket** i toppmenyen (`src/components/sok/`) bruker dette uten egen
-rangering. Indeksen hentes første gang noen søker, ikke når appen åpnes
+rangering. Indeksen hentes når appen har tid til overs etter at den er
+åpnet (`useNaarLedig`), eller første gang noen søker før det
 (`useSokeindeks`), og hentes på nytt neste gang når en administrator går ut
-av en stoffside, der noe kan være publisert. `treffgruppe` deler treffene i
+av en stoffside, der noe kan være publisert. Det kan søkes før alt er
+hentet: `lesSokeindeks` gir først en indeks over katalogen, så over
+faginnholdet på sidene, og til sist med preparatene, interaksjonene og
+ClinPGx, som er det tregeste å hente. Hentingen går i bakgrunnen og står
+ikke i lasteindikatoren (`src/auth/aktivitet.ts`); søket viser selv at mer
+er på vei. Utdraget til et treff lages først når treffet vises, så et kort
+søk som treffer det meste, ikke blir tregt. `treffgruppe` deler treffene i
 stoff, preparater, tekst og referanser, i rangeringens rekkefølge;
 `treffvisning.ts` lager tittelen, stien og utdraget. Rullegardinen viser de
 første treffene, og søkesiden (`#/sok?q=…`) alle, gruppert og med filter.
