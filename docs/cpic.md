@@ -279,12 +279,18 @@ tolkningsmotor: brukeren kjenner allerede pasientens fortolkede resultat.
   inn; kortet sier hvilke gener som mangler. En kombinasjon CPIC ikke har,
   gir meldingen om at CPIC ikke har noen anbefaling for den.
 - **Aktivitetsverdien**: er bare fenotypen valgt, vises anbefalingen bare når
-  CPIC har en anbefaling for hver av aktivitetsverdiene til fenotypen, og den
+  CPIC har en anbefaling for hver aktivitetsverdi fenotypen kan ha, og den
   samme for alle (samme sammenslåing som i kortene: likt i alt annet enn
-  aktivitetsverdien). Ellers sier kortet at verdien må velges: at
-  anbefalingen avhenger av den, f.eks. fenytoin med CYP2C9 Intermediate
-  Metabolizer (1.0 eller 1.5), eller hvilke verdier CPIC ikke har noen
-  anbefaling for. En anbefaling gjelder aldri en verdi CPIC ikke har den for.
+  aktivitetsverdien). Hvilke verdier fenotypen kan ha, står i CPICs
+  resultatliste (`genresultater` fra `les_cpic`, CPICs `gene_result`), ikke i
+  anbefalingene som kontrolleres. Slik kan ikke en verdi CPIC mangler
+  anbefaling for, forsvinne fra kontrollen. Kjenner ikke resultatlisten
+  fenotypen, må verdien alltid velges. Unntaket er resultater der verdien CPIC
+  slår opp på er selve resultatet, som «No Result». Ellers sier kortet at
+  verdien må velges, og hvorfor: anbefalingen avhenger av den (f.eks.
+  fenytoin med CYP2C9 Intermediate Metabolizer, 1.0 eller 1.5), CPIC mangler
+  anbefaling for noen av verdiene, eller verdiene kan ikke kontrolleres. En
+  anbefaling gjelder aldri en verdi CPIC ikke har den for.
 - **Populasjonene** (fenytoin, klopidogrel, atomoksetin, vorikonazol …) står
   hver for seg, merket med populasjonen.
 - **Hvorfor**: hver anbefaling står med styrken, implikasjonene,

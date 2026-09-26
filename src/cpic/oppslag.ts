@@ -13,8 +13,9 @@
  *   kategorier (se `docs/cpic.md`). For et gen CPIC slår opp på
  *   aktivitetsverdi kan brukeren i tillegg velge verdien. Er den ikke valgt,
  *   vises en anbefaling bare når CPIC har en anbefaling for hver av
- *   aktivitetsverdiene til resultatet, og den samme for alle; ellers sier
- *   oppslaget at verdien må velges.
+ *   aktivitetsverdiene resultatet kan ha etter CPICs resultatliste
+ *   (`gene_result`), og den samme for alle; ellers sier oppslaget at verdien
+ *   må velges.
  * - Populasjonene (f.eks. barn og voksne) står hver for seg.
  *
  * Alt her er rene funksjoner uten tilstand. Valgene lagres ikke noe sted.
@@ -35,8 +36,20 @@ import {
 export interface Resultatalternativ {
   /** Fenotypen, allelstatusen eller kategorien, som CPIC skrev den. */
   resultat: string
-  /** Verdiene CPIC slår opp på for resultatet, stigende for aktivitetsverdier. */
+  /**
+   * Verdiene CPIC slår opp på for resultatet, stigende for aktivitetsverdier.
+   * For gener CPIC slår opp på aktivitetsverdi er det alle verdiene CPICs
+   * resultatliste (`gene_result`) gir resultatet, også dem ingen anbefaling
+   * for legemiddelet nevner.
+   */
   oppslagsverdier: string[]
+  /**
+   * Om listen over verdier er kjent uavhengig av anbefalingene som skal
+   * kontrolleres: fra CPICs resultatliste, eller fordi verdien CPIC slår opp
+   * på er selve resultatet (fenotype, allelstatus, «No Result»). Uten det kan
+   * en anbefaling aldri gjelde resultatet uten den eksakte verdien.
+   */
+  kontrollert: boolean
 }
 
 /** Et gen anbefalingene for legemiddelet bygger på. */
@@ -76,6 +89,13 @@ function unike<T>(liste: readonly T[]): T[] {
 export function oppslagsgrunnlag(utvalg: Cpicutvalg): Oppslagsgrunnlag[] {
   const metoder = new Map(utvalg.gener.map((g) => [g.symbol, g.oppslagsmetode]))
   const retningslinjegener = new Map(utvalg.retningslinjer.map((r) => [r.id, r.gener]))
+  // CPICs egen liste over resultatene for hvert gen og aktivitetsverdiene som gir dem.
+  const resultatliste = new Map<string, string[]>()
+  for (const r of utvalg.genresultater) {
+    if (!r.aktivitetsverdi) continue
+    const nokkel = JSON.stringify([r.gen, r.resultat])
+    resultatliste.set(nokkel, unike([...(resultatliste.get(nokkel) ?? []), r.aktivitetsverdi]))
+  }
   return utvalg.legemidler
     .map((legemiddel): Oppslagsgrunnlag => {
       const anbefalinger = utvalg.anbefalinger.filter((a) => a.legemiddel_id === legemiddel.id && nokkelgener(a).length > 0)
@@ -94,10 +114,15 @@ export function oppslagsgrunnlag(utvalg: Cpicutvalg): Oppslagsgrunnlag[] {
             if (!verdier.includes(verdi)) verdier.push(verdi)
             perResultat.set(resultatFor(b), verdier)
           }
-          const alternativer = [...perResultat].map(([resultat, verdier]) => ({
-            resultat,
-            oppslagsverdier: metode === 'ACTIVITY_SCORE' ? sorterAktivitetsverdier(verdier) : verdier,
-          }))
+          const alternativer = [...perResultat].map(([resultat, verdier]): Resultatalternativ => {
+            if (metode !== 'ACTIVITY_SCORE') return { resultat, oppslagsverdier: verdier, kontrollert: true }
+            const fraListen = resultatliste.get(JSON.stringify([symbol, resultat]))
+            return {
+              resultat,
+              oppslagsverdier: sorterAktivitetsverdier(unike([...verdier, ...(fraListen ?? [])])),
+              kontrollert: fraListen !== undefined || (verdier.length === 1 && verdier[0] === resultat),
+            }
+          })
           if (metode === 'ACTIVITY_SCORE') {
             // Etter laveste aktivitetsverdi; resultater uten tall («No Result») sist.
             const orden = sorterAktivitetsverdier(alternativer.map((a) => a.oppslagsverdier[0]!))
@@ -148,11 +173,17 @@ export interface Oppslagstreff {
   ubrukte: string[]
 }
 
-/** Når anbefalingen for et resultat avhenger av den eksakte verdien, og verdien ikke er valgt. */
+/**
+ * Når et resultat er valgt uten den eksakte verdien, og anbefalingen ikke kan
+ * gis uten den: CPIC har ulike anbefalinger for verdiene (`ulike`), mangler
+ * anbefaling for noen av dem (`mangler`), eller verdiene resultatet kan ha, er
+ * ikke kjent fra CPICs resultatliste (`ukontrollert`).
+ */
 export interface Uavklart {
   populasjon: string | null
   gen: string
   resultat: string
+  grunn: 'ulike' | 'mangler' | 'ukontrollert'
   /** Alle verdiene CPIC slår opp på for resultatet. */
   oppslagsverdier: string[]
   /** Verdiene CPIC ikke har noen anbefaling for med de andre valgene. */
@@ -168,9 +199,8 @@ export interface Oppslagssvar {
   ingen: boolean
 }
 
-/** Verdiene CPIC slår opp på for et resultat for genet, fra alle anbefalingene for legemiddelet. */
-function alleVerdier(grunnlag: Oppslagsgrunnlag, gen: string, resultat: string): string[] {
-  return grunnlag.gener.find((g) => g.symbol === gen)?.alternativer.find((a) => a.resultat === resultat)?.oppslagsverdier ?? []
+function alternativFor(grunnlag: Oppslagsgrunnlag, gen: string, resultat: string): Resultatalternativ | undefined {
+  return grunnlag.gener.find((g) => g.symbol === gen)?.alternativer.find((a) => a.resultat === resultat)
 }
 
 type Samsvar = 'passer' | 'ufullstendig' | 'passer ikke'
@@ -193,10 +223,12 @@ function samsvar(a: Anbefaling, valg: Valg): Samsvar {
 
 /**
  * Anbefalingene CPIC har for valgene. Anbefalingene som passer, grupperes per
- * retningslinje og populasjon. Er et gen valgt uten den eksakte verdien, og
- * CPIC mangler anbefaling for noen av verdiene til resultatet eller har ulikt
- * innhold for dem, vises ingen av dem, bare hva som må velges: en anbefaling
- * gjelder aldri en verdi CPIC ikke har den for.
+ * retningslinje og populasjon. Er et gen valgt uten den eksakte verdien,
+ * kontrolleres det mot alle verdiene resultatet kan ha etter CPICs
+ * resultatliste, ikke mot anbefalingene selv. Mangler CPIC anbefaling for noen
+ * av dem, har ulikt innhold for dem, eller er verdiene ikke kjent fra listen,
+ * vises ingen av dem, bare hva som må velges: en anbefaling gjelder aldri en
+ * verdi CPIC ikke har den for.
  */
 export function slaOpp(grunnlag: Oppslagsgrunnlag, valg: Valg): Oppslagssvar {
   const passer: Anbefaling[] = []
@@ -218,23 +250,36 @@ export function slaOpp(grunnlag: Oppslagsgrunnlag, valg: Valg): Oppslagssvar {
   for (const anbefalinger of deler.values()) {
     const forste = anbefalinger[0]!
     const grupper = grupperAnbefalinger(anbefalinger, grunnlag.metoder)
-    // Gener valgt uten eksakt verdi, der resultatet har flere verdier i CPIC.
+    // Gener valgt uten eksakt verdi, der verdiene ikke er gitt av resultatet alene.
     const apne = unike(anbefalinger.flatMap(nokkelgener))
       .filter((gen) => valg[gen]?.oppslagsverdi === undefined)
       .map((gen) => {
-        const alle = alleVerdier(grunnlag, gen, valg[gen]!.resultat)
+        const alternativ = alternativFor(grunnlag, gen, valg[gen]!.resultat)
+        const alle = alternativ?.oppslagsverdier ?? []
         const dekket = unike(anbefalinger.map((a) => a.oppslagsnokkel[gen]!))
-        return { gen, alle, dekket, uten: alle.filter((v) => !dekket.includes(v)) }
+        return { gen, alle, dekket, kontrollert: alternativ?.kontrollert ?? false, uten: alle.filter((v) => !dekket.includes(v)) }
       })
-      .filter((g) => g.alle.length > 1)
-    // Anbefalingen gjelder uten verdien bare når CPIC har én og samme for hver av dem.
-    const uklare = apne.filter((g) => g.uten.length > 0 || (grupper.length > 1 && g.dekket.length > 1))
+      .filter((g) => g.alle.length > 1 || !g.kontrollert)
+    // Anbefalingen gjelder uten verdien bare når hver verdi resultatet kan ha, er
+    // kjent uavhengig av anbefalingene, og CPIC har én og samme anbefaling for alle.
+    const grunner = apne.map((g) => ({
+      ...g,
+      grunn: !g.kontrollert
+        ? ('ukontrollert' as const)
+        : g.uten.length > 0
+          ? ('mangler' as const)
+          : grupper.length > 1 && g.dekket.length > 1
+            ? ('ulike' as const)
+            : null,
+    }))
+    const uklare = grunner.filter((g) => g.grunn !== null)
     if (uklare.length > 0 || (grupper.length > 1 && apne.length > 0)) {
-      for (const g of uklare.length > 0 ? uklare : apne) {
+      for (const g of uklare.length > 0 ? uklare : grunner) {
         uavklart.push({
           populasjon: forste.populasjon,
           gen: g.gen,
           resultat: valg[g.gen]!.resultat,
+          grunn: g.grunn ?? 'ulike',
           oppslagsverdier: g.alle,
           uten_anbefaling: g.uten,
         })

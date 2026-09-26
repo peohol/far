@@ -3,7 +3,7 @@ import { ramsOpp } from '../../faginnhold/oppsummering'
 import { dato } from '../../legemiddeldata/referanser'
 import type { Cpicutvalg } from '../../cpic/lesing'
 import type { Oppslagsmetode } from '../../cpic/modell'
-import { oppslagsgrunnlag, slaOpp, type Genvalg, type Oppslagsgen, type Oppslagstreff, type Valg } from '../../cpic/oppslag'
+import { oppslagsgrunnlag, slaOpp, type Genvalg, type Oppslagsgen, type Oppslagstreff, type Uavklart, type Valg } from '../../cpic/oppslag'
 import { betingelsetekst, CPIC_OPPSLAG_KORT, cpicversjon, OPPSLAG_TITTEL, resultattekst } from '../../cpic/stoffside'
 import { Button } from '../Button'
 import { oppramsing, Valgfelt } from '../regler/Regelfelter'
@@ -98,10 +98,8 @@ export function Cpicoppslag({ utvalg }: { utvalg: Cpicutvalg }) {
                 {svar.uavklart.map((u) => (
                   <p key={`${u.populasjon}-${u.gen}`} className="interaksjoner__ikke-vurdert" role="note">
                     {g.populasjoner.length > 1 && u.populasjon ? `Populasjon ${u.populasjon}: ` : ''}
-                    {u.uten_anbefaling.length > 0
-                      ? `CPIC har ingen anbefaling for ${resultattekst(u.gen, u.resultat)} med ${verdinavn(g.metoder.get(u.gen) ?? null)} ${oppramsing(u.uten_anbefaling)} og disse valgene.`
-                      : `CPIC har ulike anbefalinger for ${resultattekst(u.gen, u.resultat)} avhengig av ${verdinavn(g.metoder.get(u.gen) ?? null)} (${oppramsing(u.oppslagsverdier)}).`}{' '}
-                    Velg {verdinavn(g.metoder.get(u.gen) ?? null)} for å se anbefalingen.
+                    {uavklarttekst(u, verdinavn(g.metoder.get(u.gen) ?? null))} Velg {verdinavn(g.metoder.get(u.gen) ?? null)} for å
+                    se anbefalingen.
                   </p>
                 ))}
                 {svar.mangler.length > 0 && (
@@ -137,7 +135,7 @@ function Genfelt({ gen, valgt, onVelg }: { gen: Oppslagsgen; valgt: Genvalg | un
         valg={[{ verdi: '', tekst: 'Ikke valgt' }, ...gen.alternativer.map((a) => ({ verdi: a.resultat, tekst: a.resultat }))]}
         onEndre={(resultat) => onVelg(resultat ? { resultat } : null)}
       />
-      {alternativ && alternativ.oppslagsverdier.length > 1 && (
+      {alternativ && (alternativ.oppslagsverdier.length > 1 || !alternativ.kontrollert) && (
         <Valgfelt
           merke={`${gen.symbol}, ${verdinavn(gen.metode)}`}
           verdi={valgt?.oppslagsverdi ?? ''}
@@ -238,6 +236,19 @@ function begrunnelsetekst(b: Oppslagstreff['begrunnelser'][number], metode: Opps
   return b.oppslagsverdier.length > 1
     ? `${valgt} CPIC har samme anbefaling for aktivitetsverdi ${oppramsing(b.oppslagsverdier)}.`
     : `${valgt} CPIC slår opp på aktivitetsverdi ${b.oppslagsverdier[0]}.`
+}
+
+/** Hvorfor anbefalingen ikke kan gis uten den eksakte verdien. */
+function uavklarttekst(u: Uavklart, verdi: string): string {
+  const resultat = resultattekst(u.gen, u.resultat)
+  switch (u.grunn) {
+    case 'mangler':
+      return `CPIC har ingen anbefaling for ${resultat} med ${verdi} ${oppramsing(u.uten_anbefaling)} og disse valgene.`
+    case 'ukontrollert':
+      return `OUSFAR kan ikke kontrollere mot CPICs resultatliste hvilke verdier ${resultat} kan ha.`
+    default:
+      return `CPIC har ulike anbefalinger for ${resultat} avhengig av ${verdi} (${oppramsing(u.oppslagsverdier)}).`
+  }
 }
 
 function verdinavn(metode: Oppslagsmetode | null): string {

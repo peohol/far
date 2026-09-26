@@ -2,13 +2,14 @@
  * Oppslaget etter et kjent farmakogenetisk resultat (`src/cpic/oppslag.ts`),
  * med ekte rader fra CPIC (`data/cpic-oppslag-utdrag.json`): fenytoin (CYP2C9
  * på aktivitetsverdi og HLA-B på allelstatus, to populasjoner) og
- * amitriptylin med CYP2C19 Normal Metabolizer (CYP2D6 på aktivitetsverdi).
- * Hentet fra api.cpicpgx.org 26.09.2026.
+ * amitriptylin med CYP2C19 Normal Metabolizer (CYP2D6 på aktivitetsverdi),
+ * og CPICs resultatliste (`gene_result`) for genene. Hentet fra
+ * api.cpicpgx.org 26.09.2026.
  */
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { TOM_CPICKILDE, type Cpicutvalg } from '../cpic/lesing'
-import { lesAnbefaling, lesGen, lesLegemiddel, lesRetningslinje, type Anbefaling, type Lest } from '../cpic/modell'
+import { lesAnbefaling, lesGen, lesGenresultat, lesLegemiddel, lesRetningslinje, type Anbefaling, type Lest } from '../cpic/modell'
 import { oppslagsgrunnlag, slaOpp, type Oppslagsgrunnlag, type Valg } from '../cpic/oppslag'
 import { resultatFor } from '../cpic/stoffside'
 
@@ -26,7 +27,7 @@ const HELE: Cpicutvalg = {
   retningslinjer: alle('guideline', lesRetningslinje).map((r) => ({ ...r, publikasjoner: [] })),
   anbefalinger: alle('recommendation', lesAnbefaling),
   gener: alle('gene', lesGen),
-  genresultater: [],
+  genresultater: alle('gene_result', lesGenresultat),
 }
 
 function grunnlagFor(navn: string, utvalg: Cpicutvalg = HELE): Oppslagsgrunnlag {
@@ -50,11 +51,12 @@ describe('grunnlaget', () => {
   it('har resultatene CPIC bruker, med verdiene CPIC slår opp på, etter aktivitetsverdien', () => {
     const cyp2c9 = FENYTOIN.gener.find((g) => g.symbol === 'CYP2C9')!
     expect(cyp2c9.alternativer).toEqual([
-      { resultat: 'Poor Metabolizer', oppslagsverdier: ['0.0', '0.5'] },
-      { resultat: 'Intermediate Metabolizer', oppslagsverdier: ['1.0', '1.5'] },
-      { resultat: 'Normal Metabolizer', oppslagsverdier: ['2.0'] },
-      { resultat: 'Indeterminate', oppslagsverdier: ['n/a'] },
-      { resultat: 'No Result', oppslagsverdier: ['No Result'] },
+      { resultat: 'Poor Metabolizer', oppslagsverdier: ['0.0', '0.5'], kontrollert: true },
+      { resultat: 'Intermediate Metabolizer', oppslagsverdier: ['1.0', '1.5'], kontrollert: true },
+      { resultat: 'Normal Metabolizer', oppslagsverdier: ['2.0'], kontrollert: true },
+      { resultat: 'Indeterminate', oppslagsverdier: ['n/a'], kontrollert: true },
+      // «No Result» står ikke i resultatlisten, men er selve verdien CPIC slår opp på.
+      { resultat: 'No Result', oppslagsverdier: ['No Result'], kontrollert: true },
     ])
     const hlab = FENYTOIN.gener.find((g) => g.symbol === 'HLA-B')!
     expect(hlab.alternativer.map((a) => a.resultat)).toEqual(
@@ -117,8 +119,8 @@ describe('oppslaget', () => {
     })
     expect(svar.treff).toEqual([])
     expect(svar.uavklart).toEqual([
-      { populasjon: 'PHT naive', gen: 'CYP2C9', resultat: 'Intermediate Metabolizer', oppslagsverdier: ['1.0', '1.5'], uten_anbefaling: [] },
-      { populasjon: 'PHT use >3mos', gen: 'CYP2C9', resultat: 'Intermediate Metabolizer', oppslagsverdier: ['1.0', '1.5'], uten_anbefaling: [] },
+      { populasjon: 'PHT naive', gen: 'CYP2C9', resultat: 'Intermediate Metabolizer', grunn: 'ulike', oppslagsverdier: ['1.0', '1.5'], uten_anbefaling: [] },
+      { populasjon: 'PHT use >3mos', gen: 'CYP2C9', resultat: 'Intermediate Metabolizer', grunn: 'ulike', oppslagsverdier: ['1.0', '1.5'], uten_anbefaling: [] },
     ])
   })
 
@@ -137,13 +139,26 @@ describe('oppslaget', () => {
 
   it('bruker ikke anbefalingen uten aktivitetsverdien når CPIC mangler den for en av verdiene', () => {
     // De andre verdiene for CYP2D6 Intermediate Metabolizer har samme anbefaling, men 0.5 har ingen.
+    // Grunnlaget bygges som i appen: verdiene resultatet kan ha, kommer fra CPICs resultatliste.
     const uten = { ...HELE, anbefalinger: HELE.anbefalinger.filter((a) => !(a.legemiddel_id === 'RxNorm:704' && a.oppslagsnokkel.CYP2D6 === '0.5')) }
-    const grunnlag = { ...grunnlagFor('amitriptyline', uten), gener: AMITRIPTYLIN.gener }
+    const grunnlag = grunnlagFor('amitriptyline', uten)
+    expect(grunnlag.gener.find((g) => g.symbol === 'CYP2D6')!.alternativer.find((a) => a.resultat === 'Intermediate Metabolizer')).toEqual({
+      resultat: 'Intermediate Metabolizer',
+      oppslagsverdier: ['0.25', '0.5', '0.75', '1.0'],
+      kontrollert: true,
+    })
     const valg = { CYP2C19: { resultat: 'Normal Metabolizer' }, CYP2D6: { resultat: 'Intermediate Metabolizer' } }
     expect(slaOpp(grunnlag, valg)).toEqual({
       treff: [],
       uavklart: [
-        { populasjon: 'general', gen: 'CYP2D6', resultat: 'Intermediate Metabolizer', oppslagsverdier: ['0.25', '0.5', '0.75', '1.0'], uten_anbefaling: ['0.5'] },
+        {
+          populasjon: 'general',
+          gen: 'CYP2D6',
+          resultat: 'Intermediate Metabolizer',
+          grunn: 'mangler',
+          oppslagsverdier: ['0.25', '0.5', '0.75', '1.0'],
+          uten_anbefaling: ['0.5'],
+        },
       ],
       mangler: [],
       ingen: false,
@@ -153,10 +168,27 @@ describe('oppslaget', () => {
     expect(slaOpp(grunnlag, { ...valg, CYP2D6: { resultat: 'Intermediate Metabolizer', oppslagsverdi: '0.5' } })).toMatchObject({ treff: [], ingen: true })
   })
 
+  it('gir aldri anbefalingen uten aktivitetsverdien når resultatlisten ikke kjenner resultatet', () => {
+    // Uten CPICs resultatliste kan ikke anbefalingene selv vise at alle verdiene er med.
+    const grunnlag = grunnlagFor('amitriptyline', { ...HELE, genresultater: [] })
+    const im = grunnlag.gener.find((g) => g.symbol === 'CYP2D6')!.alternativer.find((a) => a.resultat === 'Intermediate Metabolizer')!
+    expect(im.kontrollert).toBe(false)
+    // Også en fenotype med én verdi i anbefalingene krever verdien.
+    const pm = grunnlag.gener.find((g) => g.symbol === 'CYP2D6')!.alternativer.find((a) => a.resultat === 'Poor Metabolizer')!
+    expect(pm).toEqual({ resultat: 'Poor Metabolizer', oppslagsverdier: ['0.0'], kontrollert: false })
+    const valg = { CYP2C19: { resultat: 'Normal Metabolizer' }, CYP2D6: { resultat: 'Poor Metabolizer' } }
+    expect(slaOpp(grunnlag, valg)).toMatchObject({ treff: [], uavklart: [{ gen: 'CYP2D6', grunn: 'ukontrollert' }] })
+    expect(slaOpp(grunnlag, { ...valg, CYP2D6: { resultat: 'Poor Metabolizer', oppslagsverdi: '0.0' } }).treff).toHaveLength(1)
+    // «No Result» er selve verdien CPIC slår opp på, og trenger ikke listen.
+    const ingenResultat = grunnlag.gener.find((g) => g.symbol === 'CYP2D6')!.alternativer.find((a) => a.resultat === 'No Result')!
+    expect(ingenResultat.kontrollert).toBe(true)
+    expect(slaOpp(grunnlag, { ...valg, CYP2D6: { resultat: 'No Result' } }).treff).toHaveLength(1)
+  })
+
   it('sier fra når CPIC ikke har kombinasjonen, i stedet for å velge en annen', () => {
     // Uten anbefalingen for CYP2D6 Poor Metabolizer finnes ingen for den kombinasjonen.
     const uten = { ...HELE, anbefalinger: HELE.anbefalinger.filter((a) => !(a.legemiddel_id === 'RxNorm:704' && a.oppslagsnokkel.CYP2D6 === '0.0')) }
-    const grunnlag = { ...grunnlagFor('amitriptyline', uten), gener: AMITRIPTYLIN.gener }
+    const grunnlag = grunnlagFor('amitriptyline', uten)
     expect(
       slaOpp(grunnlag, { CYP2C19: { resultat: 'Normal Metabolizer' }, CYP2D6: { resultat: 'Poor Metabolizer' } }),
     ).toEqual({ treff: [], uavklart: [], mangler: [], ingen: true })
@@ -182,6 +214,21 @@ describe('oppslaget', () => {
         }
         // Én per populasjon: CPIC har aldri to for samme kombinasjon og populasjon.
         expect(new Set(svar.treff.map((t) => t.populasjon)).size).toBe(svar.treff.length)
+      }
+    }
+  })
+
+  it('gir en anbefaling uten aktivitetsverdien bare når den dekker hver verdi i CPICs resultatliste', () => {
+    for (const grunnlag of [FENYTOIN, AMITRIPTYLIN]) {
+      for (const a of grunnlag.anbefalinger) {
+        const valg: Valg = Object.fromEntries(a.betingelser.filter((b) => b.gen in a.oppslagsnokkel).map((b) => [b.gen, { resultat: resultatFor(b) }]))
+        for (const t of slaOpp(grunnlag, valg).treff) {
+          for (const b of t.begrunnelser) {
+            if (grunnlag.metoder.get(b.gen) !== 'ACTIVITY_SCORE') continue
+            const liste = HELE.genresultater.filter((r) => r.gen === b.gen && r.resultat === b.resultat).map((r) => r.aktivitetsverdi)
+            expect(liste.every((v) => b.oppslagsverdier.includes(v!))).toBe(true)
+          }
+        }
       }
     }
   })
