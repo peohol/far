@@ -120,5 +120,8 @@ describe('mot sidene migrasjonene lager', () => {
     }
     expect(forventet.size).toBeGreaterThan(10)
     expect(koblinger).toEqual(forventet)
+    // De to sidene som bare har FEST-koblingen i produksjonen, kobles også fra repoet alene.
+    expect(koblinger.get('Levomepromazin')).toEqual(['PA164743234'])
+    expect(koblinger.get('O-desmetylvenlafaksin')).toEqual(['PA165958374'])
   })
 })
