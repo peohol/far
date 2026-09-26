@@ -20,6 +20,7 @@ import {
   type Retningslinjekort,
 } from '../../cpic/stoffside'
 import { Button } from '../Button'
+import { Cpicoppslag } from './Cpicoppslag'
 import { Detaljkort } from '../seksjoner/Seksjon'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { Uthev, useSokeord } from '../Uthev'
@@ -31,9 +32,11 @@ import type { Cpictilstand } from './useFarmakogenetikk'
 /**
  * CPICs strukturerte anbefalinger i «Farmakogenetikk»: ett detaljkort per
  * CPIC-retningslinje for legemidlene siden er koblet til, og ett for parene
- * CPIC har vurdert uten retningslinje. Ikke-interaktivt: kortet viser alle
- * anbefalingene CPIC har, med betingelsene, styrken, kilden og versjonen.
- * Implikasjonene og kommentarene står under «Mer om anbefalingen».
+ * CPIC har vurdert uten retningslinje. Retningslinjekortene er ikke
+ * interaktive: de viser alle anbefalingene CPIC har, med betingelsene,
+ * styrken, kilden og versjonen. Implikasjonene og kommentarene står under
+ * «Mer om anbefalingen». Øverst står oppslaget etter et kjent resultat
+ * (`Cpicoppslag`).
  *
  * CPIC-dataene er et eget lag ved siden av ClinPGx (`docs/cpic.md`), og
  * gruppen står for seg med sin egen kilde, så det er tydelig hva som er
@@ -112,6 +115,7 @@ export function Cpicvisning({
         tittel="Anbefalinger fra CPIC"
         ingress="CPICs strukturerte anbefalinger for forskrivning når pasientens farmakogenetiske resultat allerede er kjent. De sier ikke hvem som bør testes."
       >
+        <Cpicoppslag utvalg={tilstand.utvalg} />
         {visning.retningslinjer.map((k) => (
           <Retningslinjekortet
             key={k.kort}

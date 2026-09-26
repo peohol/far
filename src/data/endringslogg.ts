@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.42.0',
+    dato: '2026-09-26',
+    sammendrag: 'Farmakogenetikk kan slå opp CPICs anbefaling ut fra et allerede kjent genetisk resultat',
+    typer: ['Funksjonalitet', 'Fag'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Øverst i «Anbefalinger fra CPIC» står kortet «Slå opp anbefaling etter kjent resultat»: velg legemiddel (når siden har flere), så resultatet for hvert gen slik det står i svaret, og anbefalingen CPIC har for nøyaktig den kombinasjonen vises.',
+      'Resultatene er CPICs egne kategorier, også for HLA og andre allelstatuser, og retningslinjer med flere gener, som amitriptylin (CYP2D6 og CYP2C19), krever at alle genene er valgt. Et gen som ikke er valgt, fylles aldri inn.',
+      'For gener CPIC slår opp på aktivitetsverdi, som CYP2D6 og CYP2C9, kan også aktivitetsverdien velges. Uten den vises anbefalingen bare når CPIC har den samme for alle verdiene til fenotypen; ellers sier kortet at verdien må velges.',
+      'Har CPIC ingen anbefaling for kombinasjonen, sier kortet det i stedet for å vise en annen. Har retningslinjen flere populasjoner, som fenytoin, står anbefalingen for hver av dem.',
+      'Anbefalingen står med styrken, implikasjonene, kommentarene, CPIC-release og kilde, og «Hvorfor denne anbefalingen» viser hva som ble valgt for hvert gen og hvilke anbefalinger i CPIC det svarer til.',
+      'Valgene lagres ikke og står ikke i adressen. Oppslaget gjelder bruk av et resultat som allerede finnes, ikke hvem som bør testes.',
+    ],
+  },
+  {
     versjon: '1.41.1',
     dato: '2026-09-26',
     sammendrag: 'Den ekstra hentingen fra ClinPGx er fjernet igjen',
