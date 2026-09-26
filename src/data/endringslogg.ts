@@ -58,6 +58,39 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
+    versjon: '1.39.3',
+    dato: '2026-09-26',
+    sammendrag: 'Alle stoffsidene har fått en avklart ClinPGx-status, og 18 sider til er koblet',
+    typer: ['Fag'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Farmakogenetikk viser nå ClinPGx-dataene også for opioidene, benzodiazepinene, zopiklon og zolpidem, selv om sidene ikke er koblet til FEST. Koblingen er kontrollert mot ATC-koden og RxNorm i tillegg til navnet.',
+      'Gabapentin, ketobemidon, levomepromazin og O-desmetylvenlafaksin er koblet etter kontroll mot WHOs ATC-register, RxNorm, PubChem og ChEBI.',
+      'Metabolittene (som norfluoksetin og O-desmetyltramadol) kobles ikke til moderstoffet. Hvordan de skal vises, er en faglig vurdering.',
+      'En kobling redaksjonen alt har laget, blir stående.',
+    ],
+  },
+  {
+    versjon: '1.39.2',
+    dato: '2026-09-26',
+    sammendrag: 'Farmakogenetikken fra ClinPGx hentes første gang i dag',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'ClinPGx-dataene for de 48 koblede stoffsidene hentes én gang i dag, uten å vente på den ukentlige kjøringen.',
+    ],
+  },
+  {
+    versjon: '1.39.1',
+    dato: '2026-09-26',
+    sammendrag: 'Farmakogenetikken fra ClinPGx og koblingene til 48 stoffsider er lagt inn i databasen',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'De 48 stoffsidene er koblet til ClinPGx i produksjonen. Dataene vises etter den ukentlige hentingen, eller med en gang når en administrator trykker «Hent fra ClinPGx nå» på siden.',
+    ],
+  },
+  {
     versjon: '1.39.0',
     dato: '2026-09-26',
     sammendrag: 'OUSFAR har en egen, ukentlig oppdatert kopi av CPICs farmakogenetiske anbefalinger',

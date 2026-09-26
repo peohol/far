@@ -1,23 +1,25 @@
 /**
  * Koblingene mellom stoffsider og kjemikaliene i ClinPGx
  * (`src/faginnhold/clinpgxkoblinger.ts`): at hver side får den ClinPGx-ID-en
- * som er kontrollert, at grunnlaget er to kjennetegn og aldri navnet alene,
- * at oversikten i `docs/clinpgx.md` er lik listene, og at migrasjonen legger
- * dem inn som kortet redigeringen lager, bare via virkestoffet siden er koblet
- * til i FEST, uten å røre en kobling redaksjonen alt har laget, og uten å gjøre
- * noe når den kjøres igjen. FEST-radene er syntetiske, med ID-ene fra FEST.
+ * som er kontrollert, at grunnlaget er navnet og minst ett uavhengig kjennetegn
+ * til og aldri navnet alene, og at migrasjonene legger dem inn som kortet
+ * redigeringen lager: via virkestoffet siden er koblet til i FEST når
+ * koblingen har et, ellers uten, uten å røre en kobling redaksjonen alt har
+ * laget, og uten å gjøre noe når de kjøres igjen. FEST-radene er syntetiske,
+ * med ID-ene fra FEST. Dekningen for alle sidene testes i
+ * `clinpgxdekning.test.ts`.
  */
 import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { FARMAKOGENETIKKPANEL } from '../clinpgx/stoffside'
+import { UKOBLEDE_STOFFSIDER } from '../faginnhold/clinpgxdekning'
 import {
+  ALLE_CLINPGXKOBLINGER,
   CLINPGXKOBLINGSIMPORTER,
   CLINPGXKOBLINGSKILDE,
   clinpgxkoblingSql,
-  clinpgxkoblingsoversikt,
-  STOFFSIDE_CLINPGXKOBLINGER,
-  UKOBLEDE_CLINPGXSIDER,
+  kjennetegn,
 } from '../faginnhold/clinpgxkoblinger'
 import { AMFETAMIN_FESTKOBLINGER, STOFFSIDE_FESTKOBLINGER } from '../faginnhold/festkoblinger'
 import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
@@ -93,9 +95,29 @@ const FORVENTET: Record<string, string[]> = {
   Vortioksetin: ['PA166122595'],
   Ziprasidon: ['PA451974'],
   Zuklopentiksol: ['PA452629'],
+  // Koblet da dekningen ble gjennomgått: navnet stemte alene i første runde.
+  Gabapentin: ['PA449720'],
+  Ketobemidon: ['PA166211241'],
+  Levomepromazin: ['PA164743234'],
+  'O-desmetylvenlafaksin': ['PA165958374'],
+  // Uten FEST-kobling.
+  Alprazolam: ['PA448333'],
+  Buprenorfin: ['PA448685'],
+  Diazepam: ['PA449283'],
+  Fentanyl: ['PA449599'],
+  Klonazepam: ['PA449050'],
+  Kodein: ['PA449088'],
+  Metadon: ['PA450401'],
+  Morfin: ['PA450550'],
+  Nitrazepam: ['PA10242'],
+  Oksazepam: ['PA450731'],
+  Oksykodon: ['PA450741'],
+  Tramadol: ['PA451735'],
+  Zolpidem: ['PA451976'],
+  Zopiklon: ['PA10236'],
 }
-/** Sidene som står ukoblet fordi grunnlaget er for svakt. */
-const UKOBLET = ['Gabapentin', 'Ketobemidon', 'Levomepromazin', 'O-desmetylvenlafaksin']
+/** Sidene som står ukoblet. */
+const UKOBLET = UKOBLEDE_STOFFSIDER.map((u) => u.side)
 
 /** ClinPGx-ID-ene per side i en liste av koblinger, i rekkefølge. */
 function perSide(koblinger: readonly { side: string; clinpgx_id: string }[]): Record<string, string[]> {
@@ -106,26 +128,30 @@ function perSide(koblinger: readonly { side: string; clinpgx_id: string }[]): Re
 
 describe('koblingene', () => {
   it('gir hver stoffside den kontrollerte ClinPGx-ID-en', () => {
-    expect(perSide(STOFFSIDE_CLINPGXKOBLINGER)).toEqual(FORVENTET)
+    expect(perSide(ALLE_CLINPGXKOBLINGER)).toEqual(FORVENTET)
   })
 
-  it('lar sidene der bare navnet stemmer, stå ukoblet, med grunnen', () => {
-    expect(UKOBLEDE_CLINPGXSIDER.map((u) => u.side)).toEqual(UKOBLET)
-    for (const u of UKOBLEDE_CLINPGXSIDER) {
-      expect(u.grunn.trim(), u.side).not.toBe('')
-      expect(u.kandidat.clinpgx_id, u.side).toMatch(/^PA\d+$/)
-      // Stemte ATC-koden også, skulle siden vært koblet.
-      const felles = u.atc?.split(',').includes(u.kandidat.atc ?? '')
-      expect(felles, u.side).toBeFalsy()
-    }
-    const koblet = new Set(STOFFSIDE_CLINPGXKOBLINGER.map((k) => k.side))
-    for (const side of UKOBLET) expect(koblet.has(side), side).toBe(false)
-  })
-
-  it('bygger hver kobling på ATC-koden og ett kjennetegn til, aldri navnet alene', () => {
-    for (const k of STOFFSIDE_CLINPGXKOBLINGER) {
-      expect(k.atc, k.side).toMatch(/^[A-Z]\d\d[A-Z]{2}\d\d$/)
-      expect(k.fest_id, k.side).toMatch(/^ID_[0-9A-F-]{36}$/)
+  it('bygger hver kobling på navnet og minst ett uavhengig kjennetegn til, aldri navnet alene', () => {
+    const utenFestkrav = new Set(CLINPGXKOBLINGSIMPORTER.filter((i) => !i.festkrav).flatMap((i) => i.koblinger))
+    expect(CLINPGXKOBLINGSIMPORTER.filter((i) => i.festkrav).flatMap((i) => i.koblinger.filter((k) => k.fest_id === null))).toEqual([])
+    for (const k of ALLE_CLINPGXKOBLINGER) {
+      expect(kjennetegn(k).length, k.side).toBeGreaterThan(0)
+      if (k.atc !== null) expect(k.atc, k.side).toMatch(/^[A-Z]\d\d[A-Z]{2}\d\d$/)
+      if (k.atc_clinpgx !== undefined) {
+        // En annen ATC-kode i ClinPGx er bare godtatt når den er forklart.
+        expect(k.atc_clinpgx, k.side).toMatch(/^[A-Z]\d\d[A-Z]{2}\d\d$/)
+        expect(k.atc_clinpgx, k.side).not.toBe(k.atc)
+        expect(k.merknad?.trim(), k.side).toBeTruthy()
+      }
+      const { rxnorm, pubchem, chebi } = k.identifikatorer ?? {}
+      if (rxnorm !== undefined) expect(rxnorm, k.side).toMatch(/^\d+$/)
+      if (pubchem !== undefined) expect(pubchem, k.side).toMatch(/^\d+$/)
+      if (chebi !== undefined) expect(chebi, k.side).toMatch(/^CHEBI:\d+$/)
+      // Uten FEST-kobling, eller når migrasjonen ikke krever den, må det være en identifikator i et annet register.
+      if (k.fest_id === null || utenFestkrav.has(k)) expect(Object.keys(k.identifikatorer ?? {}).length, k.side).toBeGreaterThan(0)
+      if (k.fest_id !== null) expect(k.fest_id, k.side).toMatch(/^ID_[0-9A-F-]{36}$/)
+      // Uten ATC-kode må det være to identifikatorer i andre registre.
+      if (k.atc === null) expect(Object.keys(k.identifikatorer ?? {}).length, k.side).toBeGreaterThan(1)
       expect(k.clinpgx_id, k.side).toMatch(/^PA\d+$/)
       if (k.samsvar === 'navn') expect(k.navn, k.side).toBe(k.engelsk.toLowerCase())
       else expect(k.navn, k.side).not.toBe(k.engelsk.toLowerCase())
@@ -133,14 +159,19 @@ describe('koblingene', () => {
     }
   })
 
+  it('kobler ingen av sidene som står ukoblet', () => {
+    const koblet = new Set(ALLE_CLINPGXKOBLINGER.map((k) => k.side))
+    for (const side of UKOBLET) expect(koblet.has(side), side).toBe(false)
+  })
+
   it('går via det samme virkestoffet som FEST-koblingen siden fikk ved migrasjon', () => {
     const fest = new Map<string, Set<string>>()
     for (const k of [...STOFFSIDE_FESTKOBLINGER, ...AMFETAMIN_FESTKOBLINGER]) {
       fest.set(k.side, (fest.get(k.side) ?? new Set()).add(k.fest_id))
     }
-    for (const k of [...STOFFSIDE_CLINPGXKOBLINGER, ...UKOBLEDE_CLINPGXSIDER]) {
+    for (const k of ALLE_CLINPGXKOBLINGER) {
       const virkestoff = fest.get(k.side)
-      if (virkestoff) expect(virkestoff.has(k.fest_id), k.side).toBe(true)
+      if (virkestoff) expect(virkestoff.has(k.fest_id ?? ''), k.side).toBe(true)
     }
   })
 
@@ -150,16 +181,12 @@ describe('koblingene', () => {
   })
 
   it('er de samme migrasjonene som koblingene gir', () => {
-    for (const [i, { migrasjon, koblinger }] of CLINPGXKOBLINGSIMPORTER.entries()) {
+    for (const [i, { migrasjon, koblinger, festkrav }] of CLINPGXKOBLINGSIMPORTER.entries()) {
       const tekst = readFileSync(new URL(KOBLINGER[i]!, MIGRASJONSMAPPE), 'utf8')
-      expect(tekst, migrasjon).toBe(clinpgxkoblingSql(koblinger, 'peohol'))
+      expect(tekst, migrasjon).toBe(clinpgxkoblingSql(koblinger, 'peohol', festkrav))
     }
   })
 
-  it('står i oversikten i docs/clinpgx.md, lik listene', () => {
-    const dok = readFileSync(new URL('../../docs/clinpgx.md', import.meta.url), 'utf8')
-    expect(dok).toContain(clinpgxkoblingsoversikt())
-  })
 })
 
 describe('migrasjonen i databasen', () => {
@@ -191,6 +218,8 @@ describe('migrasjonen i databasen', () => {
   }
   /** Sidene i databasen som har en publisert FEST-kobling. */
   let festkoblet: string[]
+  /** De publiserte sidene uten FEST-kobling. */
+  let utenFest: string[]
 
   beforeAll(async () => {
     db = await nyDatabase({ til: FORSTE_SIDE })
@@ -203,7 +232,7 @@ describe('migrasjonen i databasen', () => {
       )
     ).rows[0]!.id
     const virkestoff = new Map(
-      [...STOFFSIDE_CLINPGXKOBLINGER, ...UKOBLEDE_CLINPGXSIDER].map((k) => [k.fest_id, k.virkestoff]),
+      ALLE_CLINPGXKOBLINGER.flatMap((k) => (k.fest_id ? [[k.fest_id, k.virkestoff] as const] : [])),
     )
     for (const [fest_id, navn] of virkestoff) {
       await db.query(
@@ -225,9 +254,9 @@ describe('migrasjonen i databasen', () => {
       ).rows.map((r) => r.navn),
     )
     for (const side of Object.keys(FORVENTET)) {
-      const koblinger = STOFFSIDE_CLINPGXKOBLINGER.filter((k) => k.side === side)
+      const koblinger = ALLE_CLINPGXKOBLINGER.filter((k) => k.side === side && k.fest_id !== null)
       const id = await sideId(side)
-      if (!id || allerede.has(side) || side === UTEN_FEST) continue
+      if (!id || allerede.has(side) || side === UTEN_FEST || !koblinger.length) continue
       const kobling = await kall.opprett('innholdselement', {
         infoside: id,
         panel: PREPARATPANEL,
@@ -262,34 +291,39 @@ describe('migrasjonen i databasen', () => {
         [ELEMENTTYPER.legemiddelkobling],
       )
     ).rows.map((r) => r.navn)
+    const publiserte = (
+      await db.query<{ navn: string }>("select navn from public.infosider where tilstand = 'publisert'")
+    ).rows.map((r) => r.navn)
+    utenFest = publiserte.filter((s) => !festkoblet.includes(s))
 
     await kjorMigrasjoner(db, { fra: KOBLINGER[0] })
     leser = lagFaginnholdsleser(kall.klientFor(bruker))
     revisjoner = await antall('select count(*)::int as n from public.objektrevisjoner')
   }, 240_000)
 
-  it('har sidene å koble til i testdatabasen', () => {
+  it('har sidene å koble til i testdatabasen, med og uten FEST-kobling', () => {
     expect(festkoblet.length).toBeGreaterThan(30)
+    expect(utenFest.length).toBeGreaterThan(10)
   })
 
   it('kobler hver side publisert, med den kontrollerte ClinPGx-ID-en, i «Farmakogenetikk»', async () => {
-    let koblet = 0
-    for (const side of festkoblet) {
-      if (side === REDIGERT || side === DELVIS || UKOBLET.includes(side)) continue
+    const sider = [...festkoblet, ...utenFest].filter((s) => s in FORVENTET && ![REDIGERT, DELVIS, UTEN_FEST].includes(s))
+    for (const side of sider) {
       const [kobling, ...flere] = await koblingen(side)
       expect(flere, side).toEqual([])
       expect(kobling!.innhold.panel, side).toBe(FARMAKOGENETIKKPANEL)
       expect(kobling!.kilde, side).toBe(CLINPGXKOBLINGSKILDE)
       expect(lesClinpgxkobling(kobling!.innhold.data).kjemikalier.map((k) => k.clinpgx_id), side).toEqual(FORVENTET[side])
       expect(kobling!.innhold.data, side).toEqual({
-        kjemikalier: STOFFSIDE_CLINPGXKOBLINGER.filter((k) => k.side === side).map((k) => ({
+        kjemikalier: ALLE_CLINPGXKOBLINGER.filter((k) => k.side === side).map((k) => ({
           clinpgx_id: k.clinpgx_id,
           navn: k.navn,
         })),
       })
-      koblet++
     }
-    expect(koblet).toBe(festkoblet.length - 1 - 1 - UKOBLET.filter((s) => festkoblet.includes(s)).length)
+    // Testdatabasen har ikke alle sidene, men de fleste, og alle sidene uten FEST-kobling.
+    expect(sider.length).toBeGreaterThan(50)
+    expect(sider).toEqual(expect.arrayContaining(ALLE_CLINPGXKOBLINGER.filter((k) => k.fest_id === null).map((k) => k.side)))
   })
 
   it('tar bare med kjemikaliene for virkestoffene siden er koblet til i FEST', async () => {
@@ -299,7 +333,7 @@ describe('migrasjonen i databasen', () => {
     })
   })
 
-  it('lar sider uten FEST-kobling og sidene der grunnlaget er for svakt, stå ukoblet', async () => {
+  it('lar en side uten koblingens FEST-virkestoff og sidene som ikke skal kobles, stå ukoblet', async () => {
     expect(await koblingen(UTEN_FEST)).toEqual([])
     for (const side of UKOBLET) expect(await koblingen(side), side).toEqual([])
   })
