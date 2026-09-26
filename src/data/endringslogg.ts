@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.37.1',
+    dato: '2026-09-26',
+    sammendrag: '48 stoffsider er koblet til legemidlet i ClinPGx',
+    typer: ['Fag'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Farmakogenetikk viser ClinPGx-dataene på alle stoffsidene som er koblet til FEST, når koblingen er kontrollert på både ATC-kode og virkestoffnavn.',
+      'Gabapentin, ketobemidon, levomepromazin og O-desmetylvenlafaksin står ukoblet, fordi bare navnet stemmer. De kan kobles for hånd.',
+      'En kobling redaksjonen alt har laget, blir stående.',
+    ],
+  },
+  {
     versjon: '1.37.0',
     dato: '2026-09-26',
     sammendrag: 'Farmakogenetikken på stoffsidene viser retningslinjer og annotasjoner fra ClinPGx',
