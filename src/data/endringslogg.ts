@@ -12,13 +12,23 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.40.1',
+    versjon: '1.40.2',
     dato: '2026-09-26',
     sammendrag: 'Den ekstra hentingen fra ClinPGx er fjernet igjen',
     typer: ['Fag'],
     omfang: 'Minimalt omfang',
     punkter: [
       'ClinPGx-dataene hentes igjen bare ved den ukentlige kjøringen.',
+    ],
+  },
+  {
+    versjon: '1.40.1',
+    dato: '2026-09-26',
+    sammendrag: 'De 18 nye ClinPGx-koblingene er lagt inn i databasen',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'De 18 sidene er koblet til ClinPGx i produksjonen, så 66 stoffsider er nå koblet. Dataene for de nye sidene vises etter neste henting fra ClinPGx.',
     ],
   },
   {
