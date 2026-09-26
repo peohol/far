@@ -2034,5 +2034,787 @@
    "alternatedrugavailable": false,
    "otherprescribingguidance": false
   }
+ ],
+ "gene_result": [
+  {
+   "id": 8368702,
+   "genesymbol": "CYP2C19",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has two copies of an increased function allele. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2C19 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2C19. To avoid an untoward drug response, dose adjustments or alternative therapeutic agents may be necessary for medications metabolized by CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.02774172,
+    "American": 0.0074097984,
+    "European": 0.04641379,
+    "Oceanian": 0.003249,
+    "East Asian": 0.00042194634,
+    "Near Eastern": 0.036642652,
+    "Central/South Asian": 0.029163336,
+    "Sub-Saharan African": 0.030045323,
+    "African American/Afro-Caribbean": 0.042943195
+   }
+  },
+  {
+   "id": 8368705,
+   "genesymbol": "CYP2C19",
+   "result": "Rapid Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has one copy of a normal function allele and one copy of an increased function allele. Based on the genotype result this patient is predicted to be a rapid metabolizer of CYP2C19 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2C19. To avoid an untoward drug response, dose adjustments or alternative therapeutic agents may be necessary for medications metabolized by CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.24136075,
+    "American": 0.13638271,
+    "European": 0.2711846,
+    "Oceanian": 0.021329276,
+    "East Asian": 0.025343522,
+    "Near Eastern": 0.2573682,
+    "Central/South Asian": 0.18567303,
+    "Sub-Saharan African": 0.21080859,
+    "African American/Afro-Caribbean": 0.2373838
+   }
+  },
+  {
+   "id": 8368714,
+   "genesymbol": "CYP2C19",
+   "result": "Normal Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Normal/Routine/Low Risk",
+   "consultationtext": "This result signifies that the patient has two copies of a normal function allele. Based on the genotype result this patient is predicted to be an normal metabolizer of CYP2C19 substrates. There is no reason to selectively adjust the dose of most medications that are metabolized by CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.5249766,
+    "American": 0.62755567,
+    "European": 0.39611652,
+    "Oceanian": 0.035006005,
+    "East Asian": 0.38055435,
+    "Near Eastern": 0.45192146,
+    "Central/South Asian": 0.29552925,
+    "Sub-Saharan African": 0.36977687,
+    "African American/Afro-Caribbean": 0.32805592
+   }
+  },
+  {
+   "id": 8368744,
+   "genesymbol": "CYP2C19",
+   "result": "Likely Intermediate Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has one copy of a normal function allele and one copy of a decreased function allele OR one copy of an increased function allele and one copy of a decreased function allele OR two copies of a decreased function allele. Based on the genotype result this patient MAY be an intermediate metabolizer of CYP2C19 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2C19. To avoid an untoward drug response, dose adjustments or alternative therapeutic agents may be necessary for medications metabolized by CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.003709162,
+    "American": 0.0,
+    "European": 0.0011160374,
+    "Oceanian": 0.0,
+    "East Asian": 0.00076989824,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.042863965,
+    "African American/Afro-Caribbean": 0.027788177
+   }
+  },
+  {
+   "id": 8368817,
+   "genesymbol": "CYP2C19",
+   "result": "Intermediate Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has one copy of a normal function allele and one copy of a no function allele OR one copy of an increased function and one copy of a no function allele. Based on the genotype result this patient is predicted to be an intermediate metabolizer of CYP2C19 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2C19. To avoid an untoward drug response, dose adjustments or alternative therapeutic agents may be necessary for medications metabolized by CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.19035932,
+    "American": 0.21383229,
+    "European": 0.26108757,
+    "Oceanian": 0.36902928,
+    "East Asian": 0.45928204,
+    "Near Eastern": 0.2354828,
+    "Central/South Asian": 0.40806636,
+    "Sub-Saharan African": 0.29945874,
+    "African American/Afro-Caribbean": 0.31398684
+   }
+  },
+  {
+   "id": 8368916,
+   "genesymbol": "CYP2C19",
+   "result": "Likely Poor Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has one copy of a decreased function allele and one copy of a no function allele. Based on the genotype result this patient MAY be a poor metabolizer of CYP2C19 substrates. This patient may be at a high risk for an adverse or poor response to medications that are metabolized by CYP2C19. To avoid an untoward drug response, dose adjustments or or alternative therapy may be necessary for medications metabolized by the CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0004440685,
+    "American": 0.0,
+    "European": 0.00020405183,
+    "Oceanian": 0.0,
+    "East Asian": 0.0004349198,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.010332189,
+    "African American/Afro-Caribbean": 0.007090685
+   }
+  },
+  {
+   "id": 8368990,
+   "genesymbol": "CYP2C19",
+   "result": "Poor Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has two copies of a no function allele. Based on the genotype result this patient is predicted to be a poor metabolizer of CYP2C19 substrates. This patient may be at a high risk for an adverse or poor response to medications that are metabolized by CYP2C19. To avoid an untoward drug response, dose adjustments or or alternative therapy may be necessary for medications metabolized by the CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.011408395,
+    "American": 0.014819587,
+    "European": 0.02387743,
+    "Oceanian": 0.5713864,
+    "East Asian": 0.12978691,
+    "Near Eastern": 0.018584846,
+    "Central/South Asian": 0.08156806,
+    "Sub-Saharan African": 0.036714304,
+    "African American/Afro-Caribbean": 0.040512204
+   }
+  },
+  {
+   "id": 8369070,
+   "genesymbol": "CYP2C19",
+   "result": "Indeterminate",
+   "activityscore": "n/a",
+   "ehrpriority": "none",
+   "consultationtext": "This result signifies that the patient has an allele combination with uncertain and/or unknown function alleles. The expected phenotype for this patient cannot be determined currently based on the CYP2C19 diplotype result. Please consult a clinical pharmacist for more specific information about how CYP2C19 function influences drug dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0,
+    "American": 0.0,
+    "European": 0.0,
+    "Oceanian": 0.0,
+    "East Asian": 0.0034064606,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.0,
+    "African American/Afro-Caribbean": 0.0022393465
+   }
+  },
+  {
+   "id": 8369391,
+   "genesymbol": "CYP2C9",
+   "result": "Normal Metabolizer",
+   "activityscore": "2.0",
+   "ehrpriority": "Normal/Routine/Low Risk",
+   "consultationtext": "This result signifies that the patient has two copies of a normal function allele. Based on the genotype result, this patient is predicted to be a CYP2C9 Normal metabolizer. Based only on the CYP2C9 genotype, there is no reason to adjust the dose of most medications that are affected by CYP2C9. Please consult a clinical pharmacist for more specific information about how CYP2C9 function influences drug dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.74342215,
+    "American": 0.83149743,
+    "European": 0.62845254,
+    "Oceanian": 0.9122409,
+    "East Asian": 0.8378542,
+    "Near Eastern": 0.61125296,
+    "Central/South Asian": 0.5961676,
+    "Sub-Saharan African": 0.73114437,
+    "African American/Afro-Caribbean": 0.75866354
+   }
+  },
+  {
+   "id": 8369396,
+   "genesymbol": "CYP2C9",
+   "result": "Intermediate Metabolizer",
+   "activityscore": "1.5",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has one copy of a normal function allele and one copy of a decreased function allele. Based on the genotype result, this patient is predicted to be a CYP2C9 intermediate metabolizer (activity score of 1.5). This patient may be at risk for an adverse response to medications that are affected by CYP2C9. Please consult a clinical pharmacist for more specific information about how CYP2C9 intermediate metabolizer status influences drug dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.1647683,
+    "American": 0.10592343,
+    "European": 0.20758142,
+    "Oceanian": 0.05599055,
+    "East Asian": 0.052658077,
+    "Near Eastern": 0.2097067,
+    "Central/South Asian": 0.17885593,
+    "Sub-Saharan African": 0.21372117,
+    "African American/Afro-Caribbean": 0.1863267
+   }
+  },
+  {
+   "id": 8369440,
+   "genesymbol": "CYP2C9",
+   "result": "Intermediate Metabolizer",
+   "activityscore": "1.0",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has one copy of a normal function allele and one copy of a no function allele OR two copies of decreased function alleles. Based on the genotype result, this patient is predicted to be a CYP2C9 intermediate metabolizer (activity score of 1). This patient may be at risk for an adverse response to medications that are affected by CYP2C9. Please consult a clinical pharmacist for more specific information about how CYP2C9 intermediate metabolizer status influences drug dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.08109343,
+    "American": 0.05818467,
+    "European": 0.13767911,
+    "Oceanian": 0.03061276,
+    "East Asian": 0.098925985,
+    "Near Eastern": 0.1494271,
+    "Central/South Asian": 0.18352722,
+    "Sub-Saharan African": 0.049747862,
+    "African American/Afro-Caribbean": 0.049812526
+   }
+  },
+  {
+   "id": 8369700,
+   "genesymbol": "CYP2C9",
+   "result": "Poor Metabolizer",
+   "activityscore": "0.5",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has one copy of a decreased function allele and one copy of a no function allele. Based on the genotype result, this patient is predicted to be a CYP2C9 poor metabolizer. This patient may be at high risk for an adverse response to medications that are affected by CYP2C9. Please consult a clinical pharmacist for more specific information about how CYP2C9 intermediate metabolizer status influences drug dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.007974847,
+    "American": 0.0034911723,
+    "European": 0.019907156,
+    "Oceanian": 0.0009130932,
+    "East Asian": 0.0030826868,
+    "Near Eastern": 0.022547128,
+    "Central/South Asian": 0.025517693,
+    "Sub-Saharan African": 0.0049882242,
+    "African American/Afro-Caribbean": 0.004712071
+   }
+  },
+  {
+   "id": 8369975,
+   "genesymbol": "CYP2C9",
+   "result": "Poor Metabolizer",
+   "activityscore": "0.0",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has two copies of no function alleles. Based on the genotype result, this patient is predicted to be a CYP2C9 poor metabolizer. This patient may be at high risk for an adverse response to medications that are affected by CYP2C9. Please consult a clinical pharmacist for more specific information about how CYP2C9 intermediate metabolizer status influences drug dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0017415384,
+    "American": 0.00090327376,
+    "European": 0.0057798154,
+    "Oceanian": 0.00024261088,
+    "East Asian": 0.0028714235,
+    "Near Eastern": 0.007066085,
+    "Central/South Asian": 0.012135133,
+    "Sub-Saharan African": 0.0003982905,
+    "African American/Afro-Caribbean": 0.00048520204
+   }
+  },
+  {
+   "id": 8370068,
+   "genesymbol": "CYP2C9",
+   "result": "Indeterminate",
+   "activityscore": "n/a",
+   "ehrpriority": "none",
+   "consultationtext": "This result signifies that the patient has an allele combination with uncertain and/or unknown function alleles. The expected phenotype for this patient cannot be determined currently based on the CYP2C9 diplotype result. Please consult a clinical pharmacist for more specific information about how CYP2C9 function influences drug dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0009997501,
+    "American": 0.0,
+    "European": 0.00059991,
+    "Oceanian": 0.0,
+    "East Asian": 0.0046076896,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0037963898,
+    "Sub-Saharan African": 0.0,
+    "African American/Afro-Caribbean": 0.0
+   }
+  },
+  {
+   "id": 8372262,
+   "genesymbol": "CYP2D6",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "≥6.0",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [X copies of a normal function allele (*_xN)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 1.0000001e-06,
+    "American": 1.0000001e-06,
+    "European": 2.8470035e-06,
+    "Oceanian": 0.0,
+    "East Asian": 1.0000001e-06,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 2.5000001e-05,
+    "African American/Afro-Caribbean": 0.0
+   }
+  },
+  {
+   "id": 8372267,
+   "genesymbol": "CYP2D6",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "≥5.0",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [X copies of a normal function allele (*_xN)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 5.5729302e-05,
+    "American": 6.450697e-05,
+    "European": 5.8472542e-05,
+    "Oceanian": 0.0,
+    "East Asian": 1.5887783e-05,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.00025361063,
+    "African American/Afro-Caribbean": 0.0
+   }
+  },
+  {
+   "id": 8372281,
+   "genesymbol": "CYP2D6",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "≥3.75",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [X copies of a normal function allele (*_xN)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0,
+    "American": 0.0,
+    "European": 0.0,
+    "Oceanian": 0.0,
+    "East Asian": 0.0,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.0,
+    "African American/Afro-Caribbean": 0.0
+   }
+  },
+  {
+   "id": 8372285,
+   "genesymbol": "CYP2D6",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "≥4.0",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [X copies of a normal function allele (*_xN)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0012809848,
+    "American": 0.0015109289,
+    "European": 0.0018874556,
+    "Oceanian": 0.0,
+    "East Asian": 0.0007779561,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.0038317435,
+    "African American/Afro-Caribbean": 0.0
+   }
+  },
+  {
+   "id": 8372319,
+   "genesymbol": "CYP2D6",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "≥3.5",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [X copies of a normal function allele (*_xN)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 8.051411e-05,
+    "American": 1.657463e-05,
+    "European": 3.1193038e-05,
+    "Oceanian": 0.0,
+    "East Asian": 4.386605e-05,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.0030223487,
+    "African American/Afro-Caribbean": 0.0
+   }
+  },
+  {
+   "id": 8372347,
+   "genesymbol": "CYP2D6",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "≥3.25",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [X copies of a normal function allele (*_xN)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.00018561553,
+    "American": 9.731066e-05,
+    "European": 0.00046782166,
+    "Oceanian": 0.0,
+    "East Asian": 0.0009120896,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.000952962,
+    "African American/Afro-Caribbean": 0.0
+   }
+  },
+  {
+   "id": 8372371,
+   "genesymbol": "CYP2D6",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "≥3.0",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [X copies of a normal function allele (*_xN)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.00035315607,
+    "American": 0.0002839765,
+    "European": 0.0008605249,
+    "Oceanian": 0.0,
+    "East Asian": 0.00018026348,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.001428226,
+    "African American/Afro-Caribbean": 0.0
+   }
+  },
+  {
+   "id": 8372469,
+   "genesymbol": "CYP2D6",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "4.0",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [X copies of a normal function allele (*_xN)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0007764387,
+    "American": 0.0010402872,
+    "European": 0.0003002313,
+    "Oceanian": 0.014133941,
+    "East Asian": 6.3105406e-05,
+    "Near Eastern": 0.0041771694,
+    "Central/South Asian": 0.00016144973,
+    "Sub-Saharan African": 0.0006431835,
+    "African American/Afro-Caribbean": 0.0007742127
+   }
+  },
+  {
+   "id": 8372492,
+   "genesymbol": "CYP2D6",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "2.75",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [X copies of a normal function allele (*_xN)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0,
+    "American": 0.0,
+    "European": 0.0,
+    "Oceanian": 0.0,
+    "East Asian": 0.0,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.0,
+    "African American/Afro-Caribbean": 0.0
+   }
+  },
+  {
+   "id": 8372500,
+   "genesymbol": "CYP2D6",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "3.0",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [X copies of a normal function allele (*_xN)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.035694193,
+    "American": 0.048732717,
+    "European": 0.019382542,
+    "Oceanian": 0.16405001,
+    "East Asian": 0.006179998,
+    "Near Eastern": 0.06435209,
+    "Central/South Asian": 0.014773737,
+    "Sub-Saharan African": 0.019435417,
+    "African American/Afro-Caribbean": 0.025694855
+   }
+  },
+  {
+   "id": 8372598,
+   "genesymbol": "CYP2D6",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "2.5",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [X copies of a normal function allele (*_xN)] [X copies of a decreased function allele (*_)]. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0022434974,
+    "American": 0.0005345896,
+    "European": 0.0003203256,
+    "Oceanian": 0.00024761492,
+    "East Asian": 0.00034846712,
+    "Near Eastern": 0.005864233,
+    "Central/South Asian": 6.554563e-05,
+    "Sub-Saharan African": 0.015329994,
+    "African American/Afro-Caribbean": 0.01435911
+   }
+  },
+  {
+   "id": 8372678,
+   "genesymbol": "CYP2D6",
+   "result": "Normal Metabolizer",
+   "activityscore": "2.25",
+   "ehrpriority": "Normal/Routine/ Low Risk",
+   "consultationtext": "This result signifies that this patient has two copies of a normal function allele (*_x2) and one copy of decreased function allele with an activity value of 0.25 (*_). Based on the genotype result this patient is predicted to be a normal metabolizer of CYP2D6 substrates. There is no reason to selectively adjust the dose of most medications that are metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.005172111,
+    "American": 0.0031386076,
+    "European": 0.004804125,
+    "Oceanian": 0.021296859,
+    "East Asian": 0.0072455397,
+    "Near Eastern": 0.029094387,
+    "Central/South Asian": 0.005050826,
+    "Sub-Saharan African": 0.0048336256,
+    "African American/Afro-Caribbean": 0.004428509
+   }
+  },
+  {
+   "id": 8372746,
+   "genesymbol": "CYP2D6",
+   "result": "Normal Metabolizer",
+   "activityscore": "2.0",
+   "ehrpriority": "Normal/Routine/ Low Risk",
+   "consultationtext": "This result signifies that this patient has [X copies of a normal function allele (*_xN)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be a normal metabolizer of CYP2D6 substrates. There is no reason to selectively adjust the dose of most medications that are metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.42007107,
+    "American": 0.57988566,
+    "European": 0.32166475,
+    "Oceanian": 0.48931405,
+    "East Asian": 0.1527359,
+    "Near Eastern": 0.2670007,
+    "Central/South Asian": 0.34187043,
+    "Sub-Saharan African": 0.15406683,
+    "African American/Afro-Caribbean": 0.22171879
+   }
+  },
+  {
+   "id": 8373036,
+   "genesymbol": "CYP2D6",
+   "result": "Normal Metabolizer",
+   "activityscore": "1.5",
+   "ehrpriority": "Normal/Routine/ Low Risk",
+   "consultationtext": "This result signifies that this patient has [1 copy of a normal function allele (*_)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be a normal metabolizer of CYP2D6 substrates. There is no reason to selectively adjust the dose of most medications that are metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.051568672,
+    "American": 0.012521543,
+    "European": 0.010339902,
+    "Oceanian": 0.00143701,
+    "East Asian": 0.017062929,
+    "Near Eastern": 0.045171212,
+    "Central/South Asian": 0.0029989334,
+    "Sub-Saharan African": 0.23161727,
+    "African American/Afro-Caribbean": 0.23827769
+   }
+  },
+  {
+   "id": 8373039,
+   "genesymbol": "CYP2D6",
+   "result": "Normal Metabolizer",
+   "activityscore": "1.75",
+   "ehrpriority": "Normal/Routine/ Low Risk",
+   "consultationtext": "This result signifies that this patient has three copies of *41 (*41x3) and one copy of a normal function allele (*_) or [2 copies of a decreased function allele with an activity value of 0.5 (*_x2)]. Based on the genotype result this patient is predicted to be a normal metabolizer of CYP2D6 substrates. There is no reason to selectively adjust the dose of most medications that are metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0,
+    "American": 0.0,
+    "European": 0.0,
+    "Oceanian": 0.0,
+    "East Asian": 0.0,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.0,
+    "African American/Afro-Caribbean": 0.0
+   }
+  },
+  {
+   "id": 8373057,
+   "genesymbol": "CYP2D6",
+   "result": "Normal Metabolizer",
+   "activityscore": "1.25",
+   "ehrpriority": "Normal/Routine/ Low Risk",
+   "consultationtext": "This result signifies that this patient has [1 copy of a normal function allele (*_)] or [2 copies of a decreased function allele with an activity value of 0.5 (*_x2)] and [1 copy of a decreased function allele with an activity value of 0.25 (*_)] OR *41x3 and [1 copy of a decreased function allele with an activity value of 0.5 (*_)] or [2 copies of a decreased function allele with an activity value of 0.25 (*_x2)]. Based on the genotype result this patient is predicted to be a normal metabolizer of CYP2D6 substrates. There is no reason to selectively adjust the dose of most medications that are metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.11888533,
+    "American": 0.07351474,
+    "European": 0.15507403,
+    "Oceanian": 0.12359433,
+    "East Asian": 0.3547828,
+    "Near Eastern": 0.22410923,
+    "Central/South Asian": 0.23109229,
+    "Sub-Saharan African": 0.073030114,
+    "African American/Afro-Caribbean": 0.07348749
+   }
+  },
+  {
+   "id": 8373072,
+   "genesymbol": "CYP2D6",
+   "result": "Intermediate Metabolizer",
+   "activityscore": "1.0",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [1 copy of a normal function allele (*_)] [X copies of a decreased function allele (*_)] [X copies of a no function allele (*_)]. Based on the genotype result this patient is predicted to be an intermediate metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.2278144,
+    "American": 0.21460281,
+    "European": 0.28533316,
+    "Oceanian": 0.077126324,
+    "East Asian": 0.070599586,
+    "Near Eastern": 0.14959782,
+    "Central/South Asian": 0.17827679,
+    "Sub-Saharan African": 0.20079781,
+    "African American/Afro-Caribbean": 0.2080644
+   }
+  },
+  {
+   "id": 8373085,
+   "genesymbol": "CYP2D6",
+   "result": "Intermediate Metabolizer",
+   "activityscore": "0.75",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has has three copies of *41 (*41x3) and one copy of a no function allele (*_) OR [1 copy of a decreased function allele with an activity value of 0.25 (*_)] and [1 copy of a decreased function allele with an activity value of 0.5 (*_)] or [2 copies of a decreased function allele with an activity value of 0.25 (*_x2)] . Based on the genotype result this patient is predicted to be an intermediate metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0074723335,
+    "American": 0.00080644403,
+    "European": 0.0025628314,
+    "Oceanian": 0.00018655165,
+    "East Asian": 0.020004882,
+    "Near Eastern": 0.02042247,
+    "Central/South Asian": 0.0010252715,
+    "Sub-Saharan African": 0.05760366,
+    "African American/Afro-Caribbean": 0.041067164
+   }
+  },
+  {
+   "id": 8374663,
+   "genesymbol": "CYP2D6",
+   "result": "Intermediate Metabolizer",
+   "activityscore": "0.5",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has [1 copy of a decreased function allele with an activity value of 0.5 (*_)] or [2 copies of a decreased function allele with an activity value of 0.25 (*_x2)] and one copy of a no function allele (*_) OR two copies for a decreased function allele with an activity value of 0.25 (*_/*_). Based on the genotype result this patient is predicted to be an intermediate metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.022830304,
+    "American": 0.0047207433,
+    "European": 0.023932345,
+    "Oceanian": 0.008138877,
+    "East Asian": 0.21193053,
+    "Near Eastern": 0.06410619,
+    "Central/South Asian": 0.040293686,
+    "Sub-Saharan African": 0.0954133,
+    "African American/Afro-Caribbean": 0.08539959
+   }
+  },
+  {
+   "id": 8375356,
+   "genesymbol": "CYP2D6",
+   "result": "Intermediate Metabolizer",
+   "activityscore": "0.25",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that this patient has one copy of a decreased function allele with an activity value of 0.25 (*_) and one copy of a no function allele (*_). Based on the genotype result this patient is predicted to be an intermediate metabolizer of CYP2D6 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments may be necessary for medications metabolized by CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.03277562,
+    "American": 0.0138169695,
+    "European": 0.07070104,
+    "Oceanian": 0.010012345,
+    "East Asian": 0.08220821,
+    "Near Eastern": 0.06670452,
+    "Central/South Asian": 0.060946763,
+    "Sub-Saharan African": 0.027220901,
+    "African American/Afro-Caribbean": 0.024385082
+   }
+  },
+  {
+   "id": 8375886,
+   "genesymbol": "CYP2D6",
+   "result": "Poor Metabolizer",
+   "activityscore": "0.0",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has two copies of a no function allele (*_/*_). Based on the genotype result this patient is predicted to be a poor metabolizer of CYP2D6 substrates. This patient may be at a high risk for an adverse or poor response to medications that are metabolized by CYP2D6. To avoid an untoward drug response, dose adjustments or alternative therapeutic agents may be necessary for medications metabolized by the CYP2D6. Please consult a clinical pharmacist for more information about how CYP2D6 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0311798,
+    "American": 0.020160662,
+    "European": 0.065024786,
+    "Oceanian": 0.0031239481,
+    "East Asian": 0.008123729,
+    "Near Eastern": 0.021957064,
+    "Central/South Asian": 0.023507897,
+    "Sub-Saharan African": 0.020398295,
+    "African American/Afro-Caribbean": 0.023474354
+   }
+  },
+  {
+   "id": 8377064,
+   "genesymbol": "CYP2D6",
+   "result": "Indeterminate",
+   "activityscore": "n/a",
+   "ehrpriority": "none",
+   "consultationtext": "This result signifies that the patient has an allele combination with uncertain and/or unknown function alleles. The expected phenotype for this patient cannot be determined currently based on the CYP2D6 diplotype result. Please consult a clinical pharmacist for more specific information about how CYP2D6 function influences drug dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.041558996,
+    "American": 0.02454997,
+    "European": 0.03725156,
+    "Oceanian": 0.087338224,
+    "East Asian": 0.066782884,
+    "Near Eastern": 0.03744279,
+    "Central/South Asian": 0.09993659,
+    "Sub-Saharan African": 0.09009597,
+    "African American/Afro-Caribbean": 0.038868744
+   }
+  },
+  {
+   "id": 8475131,
+   "genesymbol": "HLA-B",
+   "result": "*15:02 negative",
+   "activityscore": "n/a",
+   "ehrpriority": "Routine/Low-Risk",
+   "consultationtext": "The HLA-B*15:02 allele, which is associated with severe cutaneous adverse reactions among patients taking certain aromatic anticonvulsants, was not detected in this patient. No change in therapy is warranted based on these results. It should be noted that a negative HLA-B*15:02 result does not absolutely rule out the possibility of an adverse drug reaction. Please consult a clinical pharmacist for more information.",
+   "version": 1,
+   "frequency": null
+  },
+  {
+   "id": 8475134,
+   "genesymbol": "HLA-B",
+   "result": "*15:02 positive",
+   "activityscore": "n/a",
+   "ehrpriority": "Priority/High-Risk",
+   "consultationtext": "This result signifies that the patient has one or two copies of HLA-B*15:02. Patients with this genotype are at increased risk of severe cutaneous adverse reactions, including Stevens-Johnson syndrome/toxic epidermal necrolysis (SJS/TEN), with certain aromatic anticonvulsants (e.g., carbamazepine, oxcarbazepine, phenytoin/fosphenytoin). Alternative therapy may be warranted. Please consult a clinical pharmacist for more information.",
+   "version": 1,
+   "frequency": null
+  },
+  {
+   "id": 8475137,
+   "genesymbol": "HLA-B",
+   "result": "*57:01 negative",
+   "activityscore": "n/a",
+   "ehrpriority": "Normal/Routine/Low Risk",
+   "consultationtext": "The HLA-B*57:01 allele, associated with abacavir hypersensitivity, was not detected in this patient. The patient may be prescribed abacavir. Please refer to the hospital formulary guidelines for specific dosing information. It should be noted that a negative HLA-B*57:01 result does not absolutely rule out the possibility of some form of abacavir hypersensitivity. Administration of abacavir therapy requires close observation including immediate discontinuation of therapy should any signs or symptoms of hypersensitivity develop.",
+   "version": 1,
+   "frequency": null
+  },
+  {
+   "id": 8475140,
+   "genesymbol": "HLA-B",
+   "result": "*57:01 positive",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "The HLA-B*57:01 allele, associated with abacavir hypersensitivity, was detected in this patient. HLA-B*5701 positive patients should NOT be prescribed abacavir.",
+   "version": 1,
+   "frequency": null
+  },
+  {
+   "id": 8475143,
+   "genesymbol": "HLA-B",
+   "result": "*58:01 negative",
+   "activityscore": "n/a",
+   "ehrpriority": "Normal/Routine/Low Risk",
+   "consultationtext": "The HLA-B*58:01 allele, associated with allopurinol hypersensitivity, was not detected in this patient. Allopurinol can be used per standard dosing guidelines. Patients should be monitored closely for any signs of sensitivity reactions, especially those patients receiving allopurinol (of >300 mg/day), concomitant medications (i.e. thiazide diuretics or penicillin/cephalosporin) or with medical conditions (i.e. chronic kidney disease) that increase the non-genetic risk for allopurinol-related hypersensitivity reactions.",
+   "version": 1,
+   "frequency": null
+  },
+  {
+   "id": 8475146,
+   "genesymbol": "HLA-B",
+   "result": "*58:01 positive",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "The HLA-B*58:01 allele, associated with allopurinol hypersensitivity, was detected in this patient. Allopurinol is contraindicated.",
+   "version": 1,
+   "frequency": null
+  }
  ]
 }

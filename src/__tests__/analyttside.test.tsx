@@ -2374,7 +2374,24 @@ describe('farmakogenetikken fra ClinPGx', () => {
   it('slår opp CPICs anbefaling etter et kjent resultat, sier hvorfor, og lagrer ikke valgene', async () => {
     const user = userEvent.setup()
     const lagretFor = window.localStorage.length
-    vis('AMTNORSUM', medCpic({ data: medPgx() }))
+    // CPICs resultatliste for CYP2D6: Intermediate Metabolizer er 0.5 eller 1.0 i disse syntetiske dataene.
+    const genresultat = (id: string, resultat: string, aktivitetsverdi: string) => ({
+      id,
+      gen: 'CYP2D6',
+      resultat,
+      aktivitetsverdi,
+      ehr_prioritet: null,
+      konsultasjonstekst: null,
+    })
+    const utvalg: Cpicutvalg = {
+      ...UTVALG_CPIC,
+      genresultater: [
+        genresultat('1', 'Intermediate Metabolizer', '0.5'),
+        genresultat('2', 'Intermediate Metabolizer', '1.0'),
+        genresultat('3', 'Poor Metabolizer', '0.0'),
+      ],
+    }
+    vis('AMTNORSUM', medCpic({ data: medPgx() }, cpicleser(utvalg)))
     await screen.findByText(/3 CPIC-anbefalinger/)
     await apneSkuff(user, 'Farmakogenetikk')
     const seksjon = screen.getByRole('region', { name: 'Farmakogenetikk' })
