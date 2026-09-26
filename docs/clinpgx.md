@@ -104,6 +104,89 @@ ukentlige kjøringen. Synkroniseringen henter koblinger både i utkast og
 publisert, så dataene er klare når koblingen publiseres. En kobling som er
 fjernet fra siden, hentes ikke.
 
+### Koblingene som er lagt inn
+
+De publiserte stoffsidene som er koblet til et virkestoff i FEST, ble koblet
+til ClinPGx med en migrasjon (`stoffsider_clinpgx_kobling`), laget fra
+listene i `src/faginnhold/clinpgxkoblinger.ts` med
+`scripts/lag-clinpgxkoblinger.ts`. Hver kobling går via virkestoffet siden
+er koblet til i FEST, og er tatt med bare når to uavhengige kjennetegn stemmer:
+ATC-koden FEST og ClinPGx har felles, og det engelske navnet (likt, et synonym
+i ClinPGx, eller en annen skrivemåte av samme virkestoff). Et navn alene er
+ikke nok; da står siden ukoblet med grunnen, og kan kobles for hånd når det er
+bekreftet at det er samme legemiddel. Forslagene i redigeringen viser
+kandidaten.
+
+Migrasjonen legger inn kortet slik redigeringen gjør, publisert, med kilden
+«Koblet til kjemikaliet i ClinPGx» i historikken. Den hopper over en side som
+alt har en ClinPGx-kobling, også i et utkast, så den aldri overskriver en
+redaksjonell kobling, og et kjemikalie hvis virkestoff siden ikke (lenger) er
+koblet til i FEST. Den kan kjøres igjen uten å gjøre noe. Stoffsider uten
+FEST-kobling (som kodein, tramadol og benzodiazepinene) er ikke med; de må
+kobles til FEST først. Testene kontrollerer at tabellene under er lik listene.
+Kontrollert mot ClinPGx 26. september 2026.
+
+| Stoffside | FEST-virkestoff | ATC | ClinPGx-navn | ClinPGx-ID | Grunnlag |
+| --- | --- | --- | --- | --- | --- |
+| Amfetamin | Deksamfetamin (Dexamfetamine) | N06BA02 | dextroamphetamine | PA449269 | Samme ATC-kode (N06BA02). Engelsk navn er synonym i ClinPGx. |
+| Amfetamin | Lisdeksamfetamin (Lisdexamfetamine) | N06BA12 | lisdexamfetamine | PA164748975 | Samme ATC-kode (N06BA12). Samme navn. |
+| Amisulprid | Amisulprid (Amisulpride) | N05AL05 | amisulpride | PA162565877 | Samme ATC-kode (N05AL05). Samme navn. |
+| Amitriptylin | Amitriptylin (Amitriptyline) | N06AA09 | amitriptyline | PA448385 | Samme ATC-kode (N06AA09). Samme navn. |
+| Aripiprazol | Aripiprazol (Aripiprazole) | N05AX12 | aripiprazole | PA10026 | Samme ATC-kode (N05AX12). Samme navn. |
+| Atomoksetin | Atomoksetin (Atomoxetine) | N06BA09 | atomoxetine | PA134688071 | Samme ATC-kode (N06BA09). Samme navn. |
+| Brekspiprazol | Brekspiprazol (Brexpiprazole) | N05AX16 | brexpiprazole | PA166160053 | Samme ATC-kode (N05AX16). Samme navn. |
+| Citalopram | Citalopram (Citalopram) | N06AB04 | citalopram | PA449015 | Samme ATC-kode (N06AB04). Samme navn. |
+| Doksepin | Doksepin (Doxepin) | N06AA12 | doxepin | PA449409 | Samme ATC-kode (N06AA12). Samme navn. |
+| Duloksetin | Duloksetin (Duloxetine) | N06AX21 | duloxetine | PA10066 | Samme ATC-kode (N06AX21). Samme navn. |
+| Escitalopram | Escitalopram (Escitalopram) | N06AB10 | escitalopram | PA10074 | Samme ATC-kode (N06AB10). Samme navn. |
+| Fenobarbital | Fenobarbital (Phenobarbital) | N03AA02 | phenobarbital | PA450911 | Samme ATC-kode (N03AA02). Samme navn. |
+| Fenytoin | Fenytoin (Phenytoin) | N03AB02 | phenytoin | PA450947 | Samme ATC-kode (N03AB02). Samme navn. |
+| Flunitrazepam | Flunitrazepam (Flunitrazepam) | N05CD03 | flunitrazepam | PA164781320 | Samme ATC-kode (N05CD03). Samme navn. |
+| Fluoksetin | Fluoksetin (Fluoxetine) | N06AB03 | fluoxetine | PA449673 | Samme ATC-kode (N06AB03). Samme navn. |
+| Flupentiksol | Flupentiksol (Flupentixol) | N05AF01 | flupenthixol | PA10268 | Samme ATC-kode (N05AF01). Annen skrivemåte: ClinPGx skriver flupenthixol. |
+| Fluvoksamin | Fluvoksamin (Fluvoxamine) | N06AB08 | fluvoxamine | PA449690 | Samme ATC-kode (N06AB08). Samme navn. |
+| Haloperidol | Haloperidol (Haloperidol) | N05AD01 | haloperidol | PA449841 | Samme ATC-kode (N05AD01). Samme navn. |
+| Hydroksyrisperidon | Paliperidon (Paliperidone) | N05AX13 | paliperidone | PA163518919 | Samme ATC-kode (N05AX13). Samme navn. |
+| Karbamazepin | Karbamazepin (Carbamazepine) | N03AF01 | carbamazepine | PA448785 | Samme ATC-kode (N03AF01). Samme navn. |
+| Kariprazin | Kariprazin (Cariprazine) | N05AX15 | cariprazine | PA166177476 | Samme ATC-kode (N05AX15). Samme navn. |
+| Klomipramin | Klomipramin (Clomipramine) | N06AA04 | clomipramine | PA449048 | Samme ATC-kode (N06AA04). Samme navn. |
+| Klorprotiksen | Klorprotiksen (Chlorprothixene) | N05AF03 | chlorprothixene | PA164781400 | Samme ATC-kode (N05AF03). Samme navn. |
+| Klozapin | Klozapin (Clozapine) | N05AH02 | clozapine | PA449061 | Samme ATC-kode (N05AH02). Samme navn. |
+| Kvetiapin | Kvetiapin (Quetiapine) | N05AH04 | quetiapine | PA451201 | Samme ATC-kode (N05AH04). Samme navn. |
+| Lamotrigin | Lamotrigin (Lamotrigine) | N03AX09 | lamotrigine | PA450164 | Samme ATC-kode (N03AX09). Samme navn. |
+| Levetiracetam | Levetiracetam (Levetiracetam) | N03AX14 | levetiracetam | PA450206 | Samme ATC-kode (N03AX14). Samme navn. |
+| Litium | Litiumion (Lithium ion) | N05AN01 | lithium | PA450243 | Samme ATC-kode (N05AN01). Annen skrivemåte: ClinPGx kaller virkestoffet lithium, FEST litiumion. |
+| Lurasidon | Lurasidon (Lurasidone) | N05AE05 | lurasidone | PA166129557 | Samme ATC-kode (N05AE05). Samme navn. |
+| Metylfenidat | Metylfenidat (Methylphenidate) | N06BA04 | methylphenidate | PA450464 | Samme ATC-kode (N06BA04). Samme navn. |
+| Mianserin | Mianserin (Mianserin) | N06AX03 | mianserin | PA134687937 | Samme ATC-kode (N06AX03). Samme navn. |
+| Mirtazapin | Mirtazapin (Mirtazapine) | N06AX11 | mirtazapine | PA450522 | Samme ATC-kode (N06AX11). Samme navn. |
+| Nortriptylin | Nortriptylin (Nortriptyline) | N06AA10 | nortriptyline | PA450657 | Samme ATC-kode (N06AA10). Samme navn. |
+| Okskarbazepin | Okskarbazepin (Oxcarbazepine) | N03AF02 | oxcarbazepine | PA450732 | Samme ATC-kode (N03AF02). Samme navn. |
+| Olanzapin | Olanzapin (Olanzapine) | N05AH03 | olanzapine | PA450688 | Samme ATC-kode (N05AH03). Samme navn. |
+| Paliperidon (hydroksyrisperidon) | Paliperidon (Paliperidone) | N05AX13 | paliperidone | PA163518919 | Samme ATC-kode (N05AX13). Samme navn. |
+| Paroksetin | Paroksetin (Paroxetine) | N06AB05 | paroxetine | PA450801 | Samme ATC-kode (N06AB05). Samme navn. |
+| Perfenazin | Perfenazin (Perphenazine) | N05AB03 | perphenazine | PA450882 | Samme ATC-kode (N05AB03). Samme navn. |
+| Petidin | Petidin (Pethidine) | N02AB02 | meperidine | PA450369 | Samme ATC-kode (N02AB02). Annen skrivemåte: ClinPGx bruker det amerikanske navnet meperidine. |
+| Risperidon | Risperidon (Risperidone) | N05AX08 | risperidone | PA451257 | Samme ATC-kode (N05AX08). Samme navn. |
+| Sertindol | Sertindol (Sertindole) | N05AE03 | sertindole | PA164784002 | Samme ATC-kode (N05AE03). Samme navn. |
+| Sertralin | Sertralin (Sertraline) | N06AB06 | sertraline | PA451333 | Samme ATC-kode (N06AB06). Samme navn. |
+| Topiramat | Topiramat (Topiramate) | N03AX11 | topiramate | PA451728 | Samme ATC-kode (N03AX11). Samme navn. |
+| Trimipramin | Trimipramin (Trimipramine) | N06AA06 | trimipramine | PA451791 | Samme ATC-kode (N06AA06). Samme navn. |
+| Valproat | Valproinsyre (Valproic acid) | N03AG01 | valproic acid | PA451846 | Samme ATC-kode (N03AG01). Samme navn. |
+| Venlafaksin | Venlafaksin (Venlafaxine) | N06AX16 | venlafaxine | PA451866 | Samme ATC-kode (N06AX16). Samme navn. |
+| Vortioksetin | Vortioksetin (Vortioxetine) | N06AX26 | vortioxetine | PA166122595 | Samme ATC-kode (N06AX26). Samme navn. |
+| Ziprasidon | Ziprasidon (Ziprasidone) | N05AE04 | ziprasidone | PA451974 | Samme ATC-kode (N05AE04). Samme navn. |
+| Zuklopentiksol | Zuklopentiksol (Zuclopenthixol) | N05AF05 | zuclopenthixol | PA452629 | Samme ATC-kode (N05AF05). Samme navn. |
+
+Ukoblet:
+
+| Stoffside | FEST-virkestoff | ATC i FEST | Kandidat i ClinPGx | ATC i ClinPGx | Hvorfor ukoblet |
+| --- | --- | --- | --- | --- | --- |
+| Gabapentin | Gabapentin (Gabapentin) | N02BF01 | gabapentin (PA449720) | N03AX12 | Samme navn, men ulik ATC-kode i FEST og ClinPGx. |
+| Ketobemidon | Ketobemidon (Ketobemidone) | – | ketobemidone (PA166211241) | – | Bare navnet stemmer: verken FEST eller ClinPGx har ATC-kode for stoffet. |
+| Levomepromazin | Levomepromazin (Levomepromazine) | N05AA02 | levomepromazine (PA134687942) | – | Bare navnet stemmer: ClinPGx har ingen ATC-kode for stoffet. |
+| O-desmetylvenlafaksin | Desvenlafaksin (Desvenlafaxine) | – | desvenlafaxine (PA165958374) | N06AX23 | Bare navnet stemmer: FEST har ingen preparater med stoffet, og dermed ingen ATC-kode. |
+
 ## Synkroniseringen
 
 - **Ukentlig**: Vercel kaller `GET /api/clinpgx-synk` mandag 02:30 UTC med
