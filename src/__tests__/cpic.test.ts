@@ -372,6 +372,78 @@ describe('synkroniseringen', () => {
     await lager().avbryt(synk, 'Stoppet i testen')
   })
 
+  describe('endringsloggen', () => {
+    type Rad = { art: string; niva: string; type: string; objekt_id: string; felt: string[]; etikett: string; spor: Record<string, unknown>; synk_id: number | null }
+    const endringer = async () =>
+      (await db.query<Rad>(
+        `select art, niva, type, objekt_id, felt, etikett, spor, synk_id from datakilder.endringer
+         where kilde = 'cpic' order by id`,
+      )).rows
+
+    beforeEach(async () => {
+      await db.exec('truncate datakilder.endringer')
+    })
+
+    it('logger første innlasting som ett grunnlag per type, og ingenting når intet er endret', async () => {
+      const forste = await synkroniserCpic({ lager: lager(), api: falskApi() })
+      const logget = await endringer()
+      expect(logget.map((e) => e.type).sort()).toEqual([...ENTITETER].sort())
+      expect(logget.every((e) => e.art === 'grunnlag' && e.synk_id === forste.synk)).toBe(true)
+      expect(logget.find((e) => e.type === 'diplotype')!.spor).toEqual({ antall: UTDRAG.gene_result_diplotype!.length })
+
+      await db.exec('truncate datakilder.endringer')
+      await synkroniserCpic({ lager: lager(), api: falskApi() })
+      expect(await endringer()).toEqual([])
+    })
+
+    it('skiller en endret anbefaling fra en ny publikasjonstittel, og logger det som er borte', async () => {
+      await synkroniserCpic({ lager: lager(), api: falskApi() })
+      await db.exec('truncate datakilder.endringer')
+
+      const anbefalinger = UTDRAG.recommendation!
+      const endret = anbefalinger.slice(1).map((r, i) => (i === 0 ? { ...r, drugrecommendation: 'Endret tekst', version: Number(r.version) + 1 } : r))
+      const publikasjoner = UTDRAG.publication!.map((r, i) => (i === 0 ? { ...r, title: 'Ny tittel' } : r))
+      const resultat = await synkroniserCpic({ lager: lager(), api: falskApi({ recommendation: endret, publication: publikasjoner }) })
+
+      const logget = await endringer()
+      expect(logget.every((e) => e.synk_id === resultat.synk)).toBe(true)
+      const [anbefaling] = logget.filter((e) => e.type === 'anbefaling' && e.art === 'endret')
+      expect(anbefaling).toMatchObject({ niva: 'klinisk', objekt_id: String(anbefalinger[1]!.id), felt: ['anbefaling'] })
+      expect(anbefaling!.spor).toEqual({ cpic_versjon: { foer: anbefalinger[1]!.version, etter: Number(anbefalinger[1]!.version) + 1 } })
+      // Etiketten sier hvilket legemiddel og hvilke genresultater anbefalingen gjelder.
+      expect(anbefaling!.etikett).toMatch(/^(amitriptyline|abacavir) · /)
+      expect(logget.filter((e) => e.art === 'fjernet')).toEqual([
+        expect.objectContaining({ type: 'anbefaling', niva: 'klinisk', objekt_id: String(anbefalinger[0]!.id) }),
+      ])
+      expect(logget.filter((e) => e.type === 'publikasjon')).toEqual([
+        expect.objectContaining({ art: 'endret', niva: 'metadata', felt: ['tittel'], etikett: 'Ny tittel' }),
+      ])
+
+      // Kommer den tilbake, er den ny igjen.
+      await db.exec('truncate datakilder.endringer')
+      await synkroniserCpic({ lager: lager(), api: falskApi({ recommendation: [anbefalinger[0]!, ...endret], publication: publikasjoner }) })
+      expect(await endringer()).toEqual([
+        expect.objectContaining({ art: 'ny', type: 'anbefaling', niva: 'klinisk', objekt_id: String(anbefalinger[0]!.id), spor: expect.objectContaining({ tilbake: true }) }),
+      ])
+    })
+
+    it('logger en endring bare i rådataene som metadata, og ingenting fra en avvist kjøring', async () => {
+      await synkroniserCpic({ lager: lager(), api: falskApi() })
+      await db.exec('truncate datakilder.endringer')
+      const gener = UTDRAG.gene!.map((g, i) => (i === 0 ? { ...g, frequencymethods: 'Ny metode' } : g))
+      await synkroniserCpic({ lager: lager(), api: falskApi({ gene: gener }) })
+      expect(await endringer()).toEqual([
+        expect.objectContaining({ art: 'endret', niva: 'metadata', type: 'gen', felt: ['raa.frequencymethods'] }),
+      ])
+
+      await db.exec('truncate datakilder.endringer')
+      const endret = UTDRAG.recommendation!.map((r) => ({ ...r, drugrecommendation: 'Alt endret' }))
+      const brutt = await synkroniserCpic({ lager: lager(), api: falskApi({ recommendation: endret, gene: UTDRAG.gene!.filter((g) => g.symbol !== 'HLA-B') }) })
+      expect(brutt).toMatchObject({ status: 'feilet' })
+      expect(await endringer()).toEqual([])
+    })
+  })
+
   it('kjører én synkronisering om gangen', async () => {
     const forste = await lager().start('cron')
     expect((await feilFra(() => lager().start('manuell')))?.message).toContain('pågår allerede')
