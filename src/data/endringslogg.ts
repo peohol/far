@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.42.0',
+    versjon: '1.43.0',
     dato: '2026-09-26',
     sammendrag: 'CPIC-oppslaget i Farmakogenetikk kan oversette en diplotype til resultatet anbefalingen slås opp på',
     typer: ['Funksjonalitet', 'Fag'],
@@ -26,7 +26,7 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
-    versjon: '1.41.0',
+    versjon: '1.42.0',
     dato: '2026-09-26',
     sammendrag: 'Farmakogenetikk kan slå opp CPICs anbefaling ut fra et allerede kjent genetisk resultat',
     typer: ['Funksjonalitet', 'Fag'],
@@ -38,6 +38,40 @@ export const ENDRINGSLOGG: Endring[] = [
       'Har CPIC ingen anbefaling for kombinasjonen, sier kortet det i stedet for å vise en annen. Har retningslinjen flere populasjoner, som fenytoin, står anbefalingen for hver av dem.',
       'Anbefalingen står med styrken, implikasjonene, kommentarene, CPIC-release og kilde, og «Hvorfor denne anbefalingen» viser hva som ble valgt for hvert gen og hvilke anbefalinger i CPIC det svarer til.',
       'Valgene lagres ikke og står ikke i adressen. Oppslaget gjelder bruk av et resultat som allerede finnes, ikke hvem som bør testes.',
+    ],
+  },
+  {
+    versjon: '1.41.1',
+    dato: '2026-09-26',
+    sammendrag: 'Den ekstra hentingen fra ClinPGx er fjernet igjen',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'ClinPGx-dataene hentes igjen bare ved den ukentlige kjøringen.',
+    ],
+  },
+  {
+    versjon: '1.41.0',
+    dato: '2026-09-26',
+    sammendrag: 'Administratorer ser hvordan hentingen fra ClinPGx og CPIC går, og hva som er endret i kildene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Ny side «Datakilder» i kontomenyen, bare for administratorer: om siste henting fra ClinPGx og CPIC gikk bra, når dataene sist ble hentet, og hvilken CPIC-release de kommer fra.',
+      'Hver henting sammenlignes med forrige, og det som er nytt, endret eller borte, logges. Endringer i anbefalinger og retningslinjer skilles fra endringer i navn, lenker og litteratur, og kan ses med teksten før og etter.',
+      'Siden sier fra når en henting har feilet, bare delvis lyktes, eller når det har gått for lang tid siden forrige vellykkede henting, og en administrator kan be om en ny henting der.',
+      'Kan ett av objektene ClinPGx sender for et legemiddel ikke leses, beholdes dataene fra før for det legemiddelet.',
+      'Ingenting av dette vises for andre brukere.',
+    ],
+  },
+  {
+    versjon: '1.40.1',
+    dato: '2026-09-26',
+    sammendrag: 'De 18 nye ClinPGx-koblingene er lagt inn i databasen',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'De 18 sidene er koblet til ClinPGx i produksjonen, så 66 stoffsider er nå koblet. Dataene for de nye sidene vises etter neste henting fra ClinPGx.',
     ],
   },
   {

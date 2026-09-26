@@ -321,11 +321,15 @@ neste kjemikalie og henter resten neste gang.
   kilden enn at kunnskapen er borte.
 - Svarer ClinPGx at kjemikaliet ikke finnes, merkes det (`finnes = false`),
   og siden sier at koblingen bør kontrolleres. Dataene fra før står.
-- Et objekt uten ID hoppes over alene og telles (`forkastet`). Ukjente felt
-  overses. Øk `PARSERVERSJON` når lesingen endres.
+- Kan et objekt i svaret ikke leses (f.eks. uten ID), telles det
+  (`forkastet`), og kjemikaliet byttes ikke inn: et svar med ett objekt som
+  ikke kan leses, har trolig endret form, og da står dataene fra før. Ukjente
+  felt overses. Øk `PARSERVERSJON` når lesingen endres.
 
 Hver kjøring logges i `clinpgx.synkroniseringer`, og en feilet kjøring gir
-502, så den også synes i Vercel.
+502, så den også synes i Vercel. Hva som er nytt, endret eller borte siden
+forrige henting, og om det er klinisk eller bare metadata, står i
+endringsloggen (`docs/datakilder.md`).
 
 ## Visningen
 
