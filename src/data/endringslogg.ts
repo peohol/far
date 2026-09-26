@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.38.1',
+    dato: '2026-09-26',
+    sammendrag: 'Alle stoffsidene har fått en avklart ClinPGx-status, og 18 sider til er koblet',
+    typer: ['Fag'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Farmakogenetikk viser nå ClinPGx-dataene også for opioidene, benzodiazepinene, zopiklon og zolpidem, selv om sidene ikke er koblet til FEST. Koblingen er kontrollert mot ATC-koden og RxNorm i tillegg til navnet.',
+      'Gabapentin, ketobemidon, levomepromazin og O-desmetylvenlafaksin er koblet etter kontroll mot WHOs ATC-register, RxNorm, PubChem og ChEBI.',
+      'Metabolittene (som norfluoksetin og O-desmetyltramadol) kobles ikke til moderstoffet. Hvordan de skal vises, er en faglig vurdering.',
+      'En kobling redaksjonen alt har laget, blir stående.',
+    ],
+  },
+  {
     versjon: '1.38.0',
     dato: '2026-09-26',
     sammendrag: 'Fagsøket er raskt fra første stund, og appen viser når den henter noe',

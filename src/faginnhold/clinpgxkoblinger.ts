@@ -4,11 +4,12 @@
  *
  * En kobling er det samme kortet som redigeringen lager (`clinpgxkobling` i
  * panelet «Farmakogenetikk»): ClinPGx' ID for kjemikaliet og navnet ClinPGx
- * gir det (`docs/clinpgx.md`). Hver kobling går via virkestoffet siden alt er
- * koblet til i FEST, og er bare tatt med når to uavhengige kjennetegn stemmer:
- * ATC-koden FEST og ClinPGx har felles, og navnet (se {@link Samsvar}). Et
- * norsk navn alene er aldri nok. Sidene der det ikke går, står i
- * {@link UKOBLEDE_CLINPGXSIDER} med grunnen, og kan kobles for hånd.
+ * gir det (`docs/clinpgx.md`). En kobling er bare tatt med når navnet og minst
+ * ett uavhengig kjennetegn til stemmer: ATC-koden, eller en identifikator i et
+ * annet register som ClinPGx viser til (RxNorm, PubChem, ChEBI). Et navn alene
+ * er aldri nok. Er siden koblet til et virkestoff i FEST, går koblingen via
+ * det; ellers kommer den bare med sammen med kjennetegnene. Sidene som ikke
+ * kobles, står med grunnen i dekningsoversikten (`clinpgxdekning.ts`).
  *
  * Modulen brukes av skriptet som lager migrasjonen og av testene, ikke av
  * appen.
@@ -18,42 +19,47 @@ import { innlogging, lit } from './import'
 import { ELEMENTTYPER } from './paneler'
 
 /**
- * Hva som stemmer i tillegg til ATC-koden:
- * - `navn`: ClinPGx' navn er FESTs engelske navn på virkestoffet.
- * - `synonym`: FESTs engelske navn er et av ClinPGx' synonymer for kjemikaliet.
+ * Hva som stemmer med navnet:
+ * - `navn`: ClinPGx' navn er det engelske navnet på virkestoffet.
+ * - `synonym`: det engelske navnet er et av ClinPGx' synonymer for kjemikaliet.
  * - `skrivemåte`: navnet er en annen skrivemåte eller et annet lands navn på
  *   det samme virkestoffet; `merknad` sier hvilket.
  */
 export type Samsvar = 'navn' | 'synonym' | 'skrivemåte'
 
+/**
+ * Identifikatorer i andre registre som ClinPGx viser til for kjemikaliet, og
+ * som registeret selv gir for virkestoffets navn: RxNorm (RxCUI for
+ * virkestoffet), PubChem (CID) og ChEBI.
+ */
+export interface Identifikatorer {
+  rxnorm?: string
+  pubchem?: string
+  chebi?: string
+}
+
 export interface Clinpgxkobling {
   /** Navnet på stoffsiden. Har siden flere virkestoff, står den én gang for hvert. */
   side: string
-  /** FESTs ID for virkestoffet siden er koblet til. */
-  fest_id: string
-  /** FESTs norske og engelske navn på virkestoffet. */
+  /**
+   * FESTs ID for virkestoffet siden er koblet til, eller `null` når siden ikke
+   * er koblet til FEST. Da er navnene og ATC-koden fra virkestoffet med samme
+   * norske navn i FEST, og koblingen hviler også på {@link identifikatorer}.
+   */
+  fest_id: string | null
+  /** Det norske og engelske navnet på virkestoffet i FEST. */
   virkestoff: string
   engelsk: string
-  /** ATC-koden FEST og ClinPGx har felles. */
-  atc: string
+  /** ATC-koden stoffet har i FEST (eller hos WHO, se `merknad`) og ClinPGx, eller `null` når ClinPGx ikke har noen. */
+  atc: string | null
+  /** ATC-koden ClinPGx har, når den er en eldre kode WHO har byttet ut med {@link atc}. */
+  atc_clinpgx?: string
+  identifikatorer?: Identifikatorer
   /** ClinPGx' accession-ID og navn for kjemikaliet. */
   clinpgx_id: string
   navn: string
   samsvar: Samsvar
   merknad?: string
-}
-
-/** En side som har et virkestoff i FEST, men ikke kobles, og hvorfor. */
-export interface UkobletClinpgxside {
-  side: string
-  fest_id: string
-  virkestoff: string
-  engelsk: string
-  /** ATC-koden(e) FEST har for virkestoffet, om noen. */
-  atc: string | null
-  /** Kjemikaliet i ClinPGx med samme navn, og ATC-koden ClinPGx har for det. */
-  kandidat: { clinpgx_id: string; navn: string; atc: string | null }
-  grunn: string
 }
 
 /**
@@ -112,50 +118,57 @@ export const STOFFSIDE_CLINPGXKOBLINGER: readonly Clinpgxkobling[] = [
   { side: 'Zuklopentiksol', fest_id: 'ID_31472D31-DAB7-49DF-AB66-A7CDA5A8222B', virkestoff: 'Zuklopentiksol', engelsk: 'Zuclopenthixol', atc: 'N05AF05', clinpgx_id: 'PA452629', navn: 'zuclopenthixol', samsvar: 'navn' },
 ]
 
-/** Sidene som står ukoblet: navnet stemmer, men ikke ATC-koden, eller en av dem mangler den. */
-export const UKOBLEDE_CLINPGXSIDER: readonly UkobletClinpgxside[] = [
+/**
+ * Stoffsidene som ble koblet da dekningen ble gjennomgått for alle publiserte
+ * sider, kontrollert mot ClinPGx, WHOs ATC-register, RxNorm, PubChem og ChEBI
+ * 26. september 2026. Først de fire sidene med FEST-kobling der navnet alene
+ * stemte i første runde, så sidene uten FEST-kobling.
+ */
+export const DEKNINGSKOBLINGER: readonly Clinpgxkobling[] = [
   {
-    side: 'Gabapentin',
-    fest_id: 'ID_A46CFA9C-F01A-4F03-AF5C-28A5579898DB',
-    virkestoff: 'Gabapentin',
-    engelsk: 'Gabapentin',
-    atc: 'N02BF01',
-    kandidat: { clinpgx_id: 'PA449720', navn: 'gabapentin', atc: 'N03AX12' },
-    grunn: 'Samme navn, men ulik ATC-kode i FEST og ClinPGx.',
+    side: 'Gabapentin', fest_id: 'ID_A46CFA9C-F01A-4F03-AF5C-28A5579898DB', virkestoff: 'Gabapentin', engelsk: 'Gabapentin',
+    atc: 'N02BF01', atc_clinpgx: 'N03AX12', identifikatorer: { rxnorm: '25480' }, clinpgx_id: 'PA449720', navn: 'gabapentin', samsvar: 'navn',
+    merknad: 'WHO flyttet gabapentin fra N03AX12 til N02BF01 i 2023; ClinPGx har fortsatt den gamle koden.',
   },
   {
-    side: 'Ketobemidon',
-    fest_id: 'ID_0BFAF9DC-D8E2-4779-AB7E-2EF0473E4099',
-    virkestoff: 'Ketobemidon',
-    engelsk: 'Ketobemidone',
-    atc: null,
-    kandidat: { clinpgx_id: 'PA166211241', navn: 'ketobemidone', atc: null },
-    grunn: 'Bare navnet stemmer: verken FEST eller ClinPGx har ATC-kode for stoffet.',
+    side: 'Ketobemidon', fest_id: 'ID_0BFAF9DC-D8E2-4779-AB7E-2EF0473E4099', virkestoff: 'Ketobemidon', engelsk: 'Ketobemidone',
+    atc: null, identifikatorer: { pubchem: '10101', chebi: 'CHEBI:6125' }, clinpgx_id: 'PA166211241', navn: 'ketobemidone', samsvar: 'navn',
+    merknad: 'Verken FEST eller ClinPGx har ATC-kode for stoffet, og det er ikke i RxNorm.',
   },
   {
-    side: 'Levomepromazin',
-    fest_id: 'ID_B2FB1ECD-1329-4551-9A12-8C145BD12318',
-    virkestoff: 'Levomepromazin',
-    engelsk: 'Levomepromazine',
-    atc: 'N05AA02',
-    kandidat: { clinpgx_id: 'PA134687942', navn: 'levomepromazine', atc: null },
-    grunn: 'Bare navnet stemmer: ClinPGx har ingen ATC-kode for stoffet.',
+    side: 'Levomepromazin', fest_id: 'ID_B2FB1ECD-1329-4551-9A12-8C145BD12318', virkestoff: 'Levomepromazin', engelsk: 'Levomepromazine',
+    atc: 'N05AA02', identifikatorer: { rxnorm: '6852' }, clinpgx_id: 'PA164743234', navn: 'methotrimeprazine', samsvar: 'skrivemåte',
+    merknad: 'ClinPGx bruker det amerikanske navnet methotrimeprazine. ClinPGx har også «levomepromazine» (PA134687942), uten ATC-kode og med RxNorm for maleatsaltet (160372); det er ikke valgt.',
   },
   {
-    side: 'O-desmetylvenlafaksin',
-    fest_id: 'ID_DF83C642-14F8-4ACD-84EA-E5C6ED7BC162',
-    virkestoff: 'Desvenlafaksin',
-    engelsk: 'Desvenlafaxine',
-    atc: null,
-    kandidat: { clinpgx_id: 'PA165958374', navn: 'desvenlafaxine', atc: 'N06AX23' },
-    grunn: 'Bare navnet stemmer: FEST har ingen preparater med stoffet, og dermed ingen ATC-kode.',
+    side: 'O-desmetylvenlafaksin', fest_id: 'ID_DF83C642-14F8-4ACD-84EA-E5C6ED7BC162', virkestoff: 'Desvenlafaksin', engelsk: 'Desvenlafaxine',
+    atc: 'N06AX23', identifikatorer: { rxnorm: '734064' }, clinpgx_id: 'PA165958374', navn: 'desvenlafaxine', samsvar: 'navn',
+    merknad: 'FEST har ingen preparater med stoffet; ATC-koden er WHOs. O-desmethylvenlafaxine er synonym i ClinPGx.',
   },
+  { side: 'Alprazolam', fest_id: null, virkestoff: 'Alprazolam', engelsk: 'Alprazolam', atc: 'N05BA12', identifikatorer: { rxnorm: '596' }, clinpgx_id: 'PA448333', navn: 'alprazolam', samsvar: 'navn' },
+  { side: 'Buprenorfin', fest_id: null, virkestoff: 'Buprenorfin', engelsk: 'Buprenorphine', atc: 'N02AE01', identifikatorer: { rxnorm: '1819' }, clinpgx_id: 'PA448685', navn: 'buprenorphine', samsvar: 'navn' },
+  { side: 'Diazepam', fest_id: null, virkestoff: 'Diazepam', engelsk: 'Diazepam', atc: 'N05BA01', identifikatorer: { rxnorm: '3322' }, clinpgx_id: 'PA449283', navn: 'diazepam', samsvar: 'navn' },
+  { side: 'Fentanyl', fest_id: null, virkestoff: 'Fentanyl', engelsk: 'Fentanyl', atc: 'N02AB03', identifikatorer: { rxnorm: '4337' }, clinpgx_id: 'PA449599', navn: 'fentanyl', samsvar: 'navn' },
+  { side: 'Klonazepam', fest_id: null, virkestoff: 'Klonazepam', engelsk: 'Clonazepam', atc: 'N03AE01', identifikatorer: { rxnorm: '2598' }, clinpgx_id: 'PA449050', navn: 'clonazepam', samsvar: 'navn' },
+  { side: 'Kodein', fest_id: null, virkestoff: 'Kodein', engelsk: 'Codeine', atc: 'R05DA04', identifikatorer: { rxnorm: '2670' }, clinpgx_id: 'PA449088', navn: 'codeine', samsvar: 'navn' },
+  { side: 'Metadon', fest_id: null, virkestoff: 'Metadon', engelsk: 'Methadone', atc: 'N07BC02', identifikatorer: { rxnorm: '6813' }, clinpgx_id: 'PA450401', navn: 'methadone', samsvar: 'navn' },
+  { side: 'Morfin', fest_id: null, virkestoff: 'Morfin', engelsk: 'Morphine', atc: 'N02AA01', identifikatorer: { rxnorm: '7052' }, clinpgx_id: 'PA450550', navn: 'morphine', samsvar: 'navn' },
+  { side: 'Nitrazepam', fest_id: null, virkestoff: 'Nitrazepam', engelsk: 'Nitrazepam', atc: 'N05CD02', identifikatorer: { rxnorm: '7440' }, clinpgx_id: 'PA10242', navn: 'nitrazepam', samsvar: 'navn' },
+  { side: 'Oksazepam', fest_id: null, virkestoff: 'Oksazepam', engelsk: 'Oxazepam', atc: 'N05BA04', identifikatorer: { rxnorm: '7781' }, clinpgx_id: 'PA450731', navn: 'oxazepam', samsvar: 'navn' },
+  { side: 'Oksykodon', fest_id: null, virkestoff: 'Oksykodon', engelsk: 'Oxycodone', atc: 'N02AA05', identifikatorer: { rxnorm: '7804' }, clinpgx_id: 'PA450741', navn: 'oxycodone', samsvar: 'navn' },
+  { side: 'Tramadol', fest_id: null, virkestoff: 'Tramadol', engelsk: 'Tramadol', atc: 'N02AX02', identifikatorer: { rxnorm: '10689' }, clinpgx_id: 'PA451735', navn: 'tramadol', samsvar: 'navn' },
+  { side: 'Zolpidem', fest_id: null, virkestoff: 'Zolpidem', engelsk: 'Zolpidem', atc: 'N05CF02', identifikatorer: { rxnorm: '39993' }, clinpgx_id: 'PA451976', navn: 'zolpidem', samsvar: 'navn' },
+  { side: 'Zopiklon', fest_id: null, virkestoff: 'Zopiklon', engelsk: 'Zopiclone', atc: 'N05CF01', identifikatorer: { rxnorm: '40001' }, clinpgx_id: 'PA10236', navn: 'zopiclone', samsvar: 'navn' },
 ]
 
 /** Hver import av koblinger, i rekkefølge, med navnet migrasjonen fikk. */
 export const CLINPGXKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: readonly Clinpgxkobling[] }[] = [
   { migrasjon: 'stoffsider_clinpgx_kobling', koblinger: STOFFSIDE_CLINPGXKOBLINGER },
+  { migrasjon: 'stoffsider_clinpgx_dekning', koblinger: DEKNINGSKOBLINGER },
 ]
+
+/** Alle koblingene fra importene, i rekkefølge. */
+export const ALLE_CLINPGXKOBLINGER: readonly Clinpgxkobling[] = CLINPGXKOBLINGSIMPORTER.flatMap((i) => i.koblinger)
 
 /** Kilden revisjonene får i historikken. */
 export const CLINPGXKOBLINGSKILDE = 'Koblet til kjemikaliet i ClinPGx'
@@ -166,50 +179,29 @@ const SAMSVARTEKST: Record<Samsvar, string> = {
   skrivemåte: 'Annen skrivemåte',
 }
 
-/** Hvorfor koblingen er trygg, i én linje: ATC-koden og det andre som stemmer. */
-export function koblingsgrunnlagstekst(k: Clinpgxkobling): string {
-  return `Samme ATC-kode (${k.atc}). ${SAMSVARTEKST[k.samsvar]}${k.merknad ? `: ${k.merknad}` : '.'}`
+const IDENTIFIKATORNAVN: Record<keyof Identifikatorer, string> = { rxnorm: 'RxNorm', pubchem: 'PubChem', chebi: 'ChEBI' }
+
+/** De uavhengige kjennetegnene utenom navnet som stemmer: ATC-koden og identifikatorene. */
+export function kjennetegn(k: Clinpgxkobling): string[] {
+  const identifikatorer = Object.entries(k.identifikatorer ?? {}) as [keyof Identifikatorer, string][]
+  return [...(k.atc ? [`ATC ${k.atc}`] : []), ...identifikatorer.map(([register, id]) => `${IDENTIFIKATORNAVN[register]} ${id}`)]
 }
 
-const rad = (celler: readonly string[]) => `| ${celler.join(' | ')} |`
-const tabell = (hode: readonly string[], rader: readonly (readonly string[])[]) =>
-  [rad(hode), rad(hode.map(() => '---')), ...rader.map(rad)].join('\n')
-
-/**
- * Oversikten over koblingene og sidene som står ukoblet, som Markdown-tabeller.
- * Den står i `docs/clinpgx.md`, og testene kontrollerer at den er lik listene.
- */
-export function clinpgxkoblingsoversikt(): string {
-  const koblet = tabell(
-    ['Stoffside', 'FEST-virkestoff', 'ATC', 'ClinPGx-navn', 'ClinPGx-ID', 'Grunnlag'],
-    STOFFSIDE_CLINPGXKOBLINGER.map((k) => [
-      k.side,
-      `${k.virkestoff} (${k.engelsk})`,
-      k.atc,
-      k.navn,
-      k.clinpgx_id,
-      koblingsgrunnlagstekst(k),
-    ]),
-  )
-  const ukoblet = tabell(
-    ['Stoffside', 'FEST-virkestoff', 'ATC i FEST', 'Kandidat i ClinPGx', 'ATC i ClinPGx', 'Hvorfor ukoblet'],
-    UKOBLEDE_CLINPGXSIDER.map((u) => [
-      u.side,
-      `${u.virkestoff} (${u.engelsk})`,
-      u.atc ?? '–',
-      `${u.kandidat.navn} (${u.kandidat.clinpgx_id})`,
-      u.kandidat.atc ?? '–',
-      u.grunn,
-    ]),
-  )
-  return `${koblet}\n\nUkoblet:\n\n${ukoblet}`
+/** Hvorfor koblingen er trygg, i én linje: ATC-koden, identifikatorene og det andre som stemmer. */
+export function koblingsgrunnlagstekst(k: Clinpgxkobling): string {
+  const identifikatorer = kjennetegn(k).filter((t) => !t.startsWith('ATC '))
+  return [
+    ...(k.atc ? [k.atc_clinpgx ? `ATC-kode ${k.atc} i FEST, ${k.atc_clinpgx} i ClinPGx.` : `Samme ATC-kode (${k.atc}).`] : []),
+    ...(identifikatorer.length ? [`Samme ${identifikatorer.join(' og ')}.`] : []),
+    `${SAMSVARTEKST[k.samsvar]}${k.merknad ? `: ${k.merknad}` : '.'}`,
+  ].join(' ')
 }
 
 /**
  * SQL-en som legger inn koblingene, som administratoren `admin`, publisert:
  * ett kort per side, med kjemikaliene i den rekkefølgen de står. Et
- * kjemikalie tas bare med når den publiserte siden er koblet til virkestoffet
- * det hører til i FEST. Den hopper over — med en melding — en side som ikke
+ * kjemikalie med FEST-virkestoff tas bare med når den publiserte siden er
+ * koblet til det virkestoffet i FEST; ett uten tas med som det står. Den hopper over — med en melding — en side som ikke
  * finnes, som alt har en ClinPGx-kobling (også i et utkast, så en redaksjonell
  * kobling aldri overskrives), eller som ikke har noen av virkestoffene, så den
  * kan kjøres igjen uten å gjøre noe. Uten administratoren gjør den ingenting,
@@ -217,8 +209,10 @@ export function clinpgxkoblingsoversikt(): string {
  */
 export function clinpgxkoblingSql(koblinger: readonly Clinpgxkobling[], admin: string): string {
   const rader = koblinger
-    .map((k, i) => `      (${lit(k.side)}, ${lit(k.fest_id)}, ${lit(k.clinpgx_id)}, ${lit(k.navn)}, ${i})`)
+    .map((k, i) => `      (${lit(k.side)}, ${k.fest_id === null ? 'null' : lit(k.fest_id)}, ${lit(k.clinpgx_id)}, ${lit(k.navn)}, ${i})`)
     .join(',\n')
+  // Uten kjemikalier som mangler FEST-virkestoff blir SQL-en som i den første importen.
+  const utenFest = koblinger.some((k) => k.fest_id === null) ? "c.kandidat ->> 'fest_id' is null or " : ''
   return `-- Stoffsidene kobles til kjemikaliene i ClinPGx
 do $kobling$
 declare
@@ -255,7 +249,7 @@ ${rader}
     kjemikalier := (
       select jsonb_agg(jsonb_build_object('clinpgx_id', c.kandidat ->> 'clinpgx_id', 'navn', c.kandidat ->> 'navn') order by c.nr)
       from jsonb_array_elements(k.kandidater) with ordinality as c(kandidat, nr)
-      where exists (
+      where ${utenFest}exists (
         select 1
         from public.innholdselementer e,
              jsonb_array_elements(case when jsonb_typeof(e.data -> 'virkestoff') = 'array' then e.data -> 'virkestoff' else '[]' end) v
