@@ -8,6 +8,8 @@
 --     DMP laget uttrekket som versjon. FEST har ingen endringslogg i
 --     `datakilder.endringer`; antallet nye, endrede og utgåtte rader per type
 --     står i `antall` på kjøringen.
+--   * Det siste som er kjent om hver kilde, har også når siste vellykkede
+--     henting var, så panelet vet det selv om de ti siste kjøringene feilet.
 --   * Synkroniseringen og dataene er ellers uendret. Den nattlige jobben
 --     kaller `legemiddeldata_start_synk` uten `utlost_av`, som før.
 
@@ -118,7 +120,11 @@ begin
                       order by v.id desc limit 1),
           'versjon', (select v.versjon from kjoringer v
                       where v.kilde = k.kilde and v.status not in ('pagar', 'feilet') and v.versjon is not null
-                      order by v.id desc limit 1)))
+                      order by v.id desc limit 1),
+          -- Også når den er eldre enn de ti kjøringene over.
+          'sist_vellykket_kl', (select coalesce(v.avsluttet_kl, v.startet_kl) from kjoringer v
+                                where v.kilde = k.kilde and v.status in ('fullfort', 'delvis', 'uendret')
+                                order by v.id desc limit 1)))
         from (select distinct kilde from kjoringer) k), '{}'),
       -- Grensen gjelder hver kilde for seg, så en stor release i den ene ikke
       -- skyver den andre ut.

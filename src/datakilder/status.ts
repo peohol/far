@@ -123,6 +123,8 @@ export interface Endring {
 export interface Kildefakta {
   release: string | null
   versjon: string | null
+  /** Når siste vellykkede henting var, også når den er eldre enn kjøringene som følger med. */
+  sist_vellykket_kl?: string | null
 }
 
 export interface Datakildestatus {
@@ -221,7 +223,9 @@ export function lesDatakildestatus(svar: unknown): Datakildestatus {
   if (erObjekt(svar.kilder)) {
     for (const kilde of DATAKILDER) {
       const k = svar.kilder[kilde]
-      if (erObjekt(k)) kilder[kilde] = { release: tekst(k.release), versjon: tekst(k.versjon) }
+      if (erObjekt(k)) {
+        kilder[kilde] = { release: tekst(k.release), versjon: tekst(k.versjon), sist_vellykket_kl: tekst(k.sist_vellykket_kl) }
+      }
     }
   }
   return { kjoringer: liste(svar.kjoringer, lesKjoring), endringer: liste(svar.endringer, lesEndring), kilder }
@@ -270,6 +274,8 @@ export interface Kildevurdering {
   melding: string
   siste: Kjoring | null
   sisteVellykkede: Kjoring | null
+  /** Når siste vellykkede henting var, også når den er eldre enn kjøringene som er med. */
+  sistVellykketKl: string | null
   /** Siste kjente release og versjon, fra en vellykket kjøring. */
   release: string | null
   versjon: string | null
@@ -332,18 +338,21 @@ export function vurderKilder(
     const siste = kjoringer[0] ?? null
     const vellykkede = kjoringer.filter((k) => VELLYKKET.includes(k.status))
     const sisteVellykkede = vellykkede[0] ?? null
-    const kjent = (felt: keyof Kildefakta) =>
+    const kjent = (felt: 'release' | 'versjon') =>
       status.kilder?.[kilde]?.[felt] ?? vellykkede.find((k) => k[felt])?.[felt] ?? null
     const release = kjent('release')
     const versjon = kjent('versjon')
+    const sistVellykketKl = sisteVellykkede
+      ? (sisteVellykkede.avsluttet_kl ?? sisteVellykkede.startet_kl)
+      : (status.kilder?.[kilde]?.sist_vellykket_kl ?? null)
     const vurdering = (tilstand: Tilstand, melding: string): Kildevurdering => ({
-      kilde, navn, tilstand, melding, siste, sisteVellykkede, release, versjon, intervall, kjoringer, endringer,
+      kilde, navn, tilstand, melding, siste, sisteVellykkede, sistVellykketKl, release, versjon, intervall, kjoringer, endringer,
     })
 
     if (!siste) return vurdering('advarsel', `Ingen henting fra ${navn} er logget ennå.`)
     const beholdt =
       etterFeil ??
-      (sisteVellykkede ? (beholdtTekst ?? 'Dataene fra siste vellykkede henting står.') : 'Ingen henting har lyktes ennå.')
+      (sistVellykketKl ? (beholdtTekst ?? 'Dataene fra siste vellykkede henting står.') : 'Ingen henting har lyktes ennå.')
     if (siste.status === 'feilet') {
       return vurdering('feil', `Siste henting feilet: ${setning(siste.feil ?? 'ukjent feil')}. ${beholdt}`)
     }
@@ -353,7 +362,7 @@ export function vurderKilder(
         : vurdering('ok', 'Henter nå.')
     }
 
-    const alder = sisteVellykkede ? na - Date.parse(sisteVellykkede.avsluttet_kl ?? sisteVellykkede.startet_kl) : Infinity
+    const alder = sistVellykketKl ? na - Date.parse(sistVellykketKl) : Infinity
     if (intervall && alder > (intervall + 1) * DOGN_MS) {
       return vurdering('advarsel', `Ingen vellykket henting på ${dogn(alder)}; ${navn} hentes hver ${intervall === 7 ? 'uke' : 'natt'}.`)
     }

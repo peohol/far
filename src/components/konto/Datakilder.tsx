@@ -139,7 +139,6 @@ function Kilde({
 }) {
   const { versjonsnavn, visVersjon, endringslogg } = KILDEOPPSETT[v.kilde]
   const tilstand = TILSTAND[v.tilstand]
-  const vellykket = v.sisteVellykkede
 
   return (
     <section className="datakilde" aria-labelledby={`datakilde-${v.kilde}`}>
@@ -166,7 +165,7 @@ function Kilde({
       <dl className="datakilde__fakta">
         <div>
           <dt>Siste vellykkede henting</dt>
-          <dd>{vellykket ? tidspunkt(vellykket.avsluttet_kl ?? vellykket.startet_kl) : '–'}</dd>
+          <dd>{v.sistVellykketKl ? tidspunkt(v.sistVellykketKl) : '–'}</dd>
         </div>
         {v.kilde === 'cpic' && (
           <div>
