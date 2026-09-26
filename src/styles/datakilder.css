@@ -1,0 +1,192 @@
+/**
+ * Driftstatusen for datakildene (`src/components/konto/Datakilder.tsx`), for
+ * administratorer. Samme kort og linjer som brukerlista.
+ */
+
+.datakilder__ingress,
+.datakilder__tomt {
+  margin: 0;
+  font-size: var(--tekst-ui);
+  color: var(--blekk-dempet);
+}
+
+.datakilder__valg {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  font-size: var(--tekst-ui);
+  color: var(--blekk);
+}
+
+.datakilde {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  padding: var(--rom-6) var(--rom-7);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-kort);
+}
+
+.datakilde__hode {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3);
+}
+
+.datakilde__hode .knapp {
+  margin-left: auto;
+}
+
+.datakilde__navn {
+  margin: 0;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-seksjon);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-titler);
+  color: var(--blekk);
+}
+
+.datakilde__melding {
+  margin: 0;
+  font-size: var(--tekst-ui);
+  color: var(--blekk);
+}
+
+.datakilde__fakta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-3) var(--rom-8);
+  margin: 0;
+}
+
+.datakilde__fakta dt {
+  font-size: var(--tekst-meta);
+  letter-spacing: var(--sperring-meta);
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.datakilde__fakta dd {
+  margin: 0;
+  font-size: var(--tekst-ui);
+  color: var(--blekk);
+}
+
+.datakilde__bolk > summary,
+.endringsrad__detaljer > summary {
+  cursor: pointer;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.datakilde__tabell {
+  width: 100%;
+  margin-top: var(--rom-3);
+  border-collapse: collapse;
+  font-size: var(--tekst-liten);
+  color: var(--blekk);
+}
+
+.datakilde__tabell th,
+.datakilde__tabell td {
+  padding: var(--rom-2) var(--rom-3);
+  text-align: left;
+  border-bottom: var(--kant) solid var(--linje);
+}
+
+.datakilde__tabell th {
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+}
+
+.datakilde__undertittel {
+  margin: var(--rom-3) 0 0;
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+}
+
+.endringsliste {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.endringsrad {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  padding: var(--rom-3) 0;
+}
+
+.endringsrad + .endringsrad {
+  border-top: var(--kant) solid var(--linje);
+}
+
+.endringsrad__hode {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2) var(--rom-3);
+}
+
+.endringsrad__tittel {
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+}
+
+.endringsrad__tid {
+  margin-left: auto;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.endringsrad__etikett {
+  font-size: var(--tekst-ui);
+  color: var(--blekk);
+  overflow-wrap: anywhere;
+}
+
+.endringsrad__felt,
+.endringsrad__spor {
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+  overflow-wrap: anywhere;
+}
+
+.endringsrad--metadata .endringsrad__etikett {
+  color: var(--blekk-dempet);
+}
+
+.endringsrad__detaljer dl {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  margin: var(--rom-3) 0 0;
+}
+
+.endringsrad__detaljer dt {
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+}
+
+.endringsrad__detaljer dd {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  margin: 0;
+  font-size: var(--tekst-liten);
+  color: var(--blekk);
+  overflow-wrap: anywhere;
+}
+
+.endringsrad__verdinavn {
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+}

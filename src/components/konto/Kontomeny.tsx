@@ -10,9 +10,10 @@ import { Ikonknapp } from '../Ikonknapp'
 import { VERSJON } from '../Versjonspille'
 import { Avatar } from './Avatar'
 import { Brukerliste } from './Brukerliste'
+import { Datakilder } from './Datakilder'
 import { Kontopanel } from './Kontopanel'
 
-type Panel = 'konto' | 'brukere' | 'logg' | null
+type Panel = 'konto' | 'brukere' | 'datakilder' | 'logg' | null
 
 interface Valg {
   ikon: Ikonnavn
@@ -30,7 +31,8 @@ export interface KontomenyProps {
 
 /**
  * Kontoen, fra avataren helt til høyre i toppmenyen: hvem appen er logget inn
- * som, og veiene til egen profil, brukerlista, endringsloggen og utlogging.
+ * som, og veiene til egen profil, brukerlista, datakildene (administratorer),
+ * endringsloggen og utlogging.
  *
  * Menyen er et lag over appen, som sidemenyen: `data-lag` holder appens egne
  * taster i ro mens den står åpen. Escape, et klikk utenfor eller fokus som
@@ -66,6 +68,8 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
   const valg: Valg[] = [
     { ikon: 'user', tekst: 'Endre navn og profilbilde', velg: apnePanel('konto') },
     { ikon: 'shield', tekst: 'Brukere', hint: admin ? 'Admin' : undefined, velg: apnePanel('brukere') },
+    // Driftstatusen for datakildene er bare for administratorer; databasen avviser andre.
+    ...(admin ? [{ ikon: 'reset' as const, tekst: 'Datakilder', hint: 'Admin', velg: apnePanel('datakilder') }] : []),
     { ikon: 'history', tekst: 'Endringslogg', hint: `v${VERSJON}`, velg: apnePanel('logg') },
     {
       ikon: theme === 'moerkt' ? 'sun' : 'moon',
@@ -159,6 +163,7 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
 
       <Kontopanel apen={panel === 'konto'} onLukk={lukkPanel} />
       <Brukerliste apen={panel === 'brukere'} onLukk={lukkPanel} />
+      {admin && <Datakilder apen={panel === 'datakilder'} onLukk={lukkPanel} />}
       <Endringslogg apen={panel === 'logg'} onLukk={lukkPanel} />
     </div>
   )

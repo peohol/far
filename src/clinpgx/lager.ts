@@ -30,7 +30,7 @@ export interface Synkresultattelling {
   feilet: number
   utsatt: number
   annotasjoner: Annotasjonstelling
-  /** Objekter i svarene som ikke kunne leses og ble hoppet over. */
+  /** Objekter i svarene som ikke kunne leses. Kjemikaliet de kom for, ble ikke byttet inn. */
   forkastet: number
   /** Feilene per kjemikalie, samlet til én tekst for loggen. */
   feil?: string
