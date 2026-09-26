@@ -76,8 +76,10 @@ export type Diplotypetilstand =
 /**
  * CPICs tabell fra diplotype til resultat for genet, når `gen` er satt.
  * Hentes én gang per gen (leseren husker den); bare gensymbolet sendes.
+ * `utgave` sier hvilke CPIC-data siden viser (`cpicutgave`): når den endres,
+ * etter at en administrator har hentet fra CPIC, leses tabellen på nytt.
  */
-export function useDiplotyper(gen: string | null): Diplotypetilstand {
+export function useDiplotyper(gen: string | null, utgave: string): Diplotypetilstand {
   const leser = useFaginnholdskilde().cpic
   const [tilstand, setTilstand] = useState<Diplotypetilstand>({ status: 'ingen' })
   useEffect(() => {
@@ -98,6 +100,6 @@ export function useDiplotyper(gen: string | null): Diplotypetilstand {
     return () => {
       gjelder = false
     }
-  }, [leser, gen])
+  }, [leser, gen, utgave])
   return tilstand
 }

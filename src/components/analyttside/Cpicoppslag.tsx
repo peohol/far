@@ -1,8 +1,8 @@
-import { Fragment, useId, useMemo, useState } from 'react'
+import { Fragment, useEffect, useId, useMemo, useState } from 'react'
 import { ramsOpp } from '../../faginnhold/oppsummering'
 import { dato } from '../../legemiddeldata/referanser'
 import { kanOversettes, oversett, sokDiplotyper, valgFraOversettelse, type Diplotypeindeks, type Oversettelse } from '../../cpic/diplotype'
-import type { Cpicutvalg } from '../../cpic/lesing'
+import type { Cpickilde, Cpicutvalg } from '../../cpic/lesing'
 import type { Oppslagsmetode } from '../../cpic/modell'
 import { oppslagsgrunnlag, slaOpp, type Genvalg, type Oppslagsgen, type Oppslagstreff, type Valg } from '../../cpic/oppslag'
 import { betingelsetekst, CPIC_OPPSLAG_KORT, cpicversjon, OPPSLAG_TITTEL, resultattekst } from '../../cpic/stoffside'
@@ -90,6 +90,7 @@ export function Cpicoppslag({ utvalg }: { utvalg: Cpicutvalg }) {
                 key={`${g.legemiddel.id}-${gen.symbol}`}
                 gen={gen}
                 legemiddel={g.legemiddel.navn}
+                utgave={cpicutgave(utvalg.kilde)}
                 valgt={valg[gen.symbol]}
                 diplotype={diplotyper[gen.symbol] ?? null}
                 onVelg={(v, diplotype) => velg(gen.symbol, v, diplotype)}
@@ -157,12 +158,14 @@ export function Cpicoppslag({ utvalg }: { utvalg: Cpicutvalg }) {
 function Genfelt({
   gen,
   legemiddel,
+  utgave,
   valgt,
   diplotype,
   onVelg,
 }: {
   gen: Oppslagsgen
   legemiddel: string
+  utgave: string
   valgt: Genvalg | undefined
   diplotype: string | null
   onVelg: (v: Genvalg | null, diplotype?: string | null) => void
@@ -185,10 +188,20 @@ function Genfelt({
         />
       )}
       {kanOversettes(gen.metode) && (
-        <Diplotypefelt gen={gen} legemiddel={legemiddel} diplotype={diplotype} onVelg={onVelg} />
+        <Diplotypefelt gen={gen} legemiddel={legemiddel} utgave={utgave} valgt={valgt} diplotype={diplotype} onVelg={onVelg} />
       )}
     </div>
   )
+}
+
+/** Hvilke CPIC-data siden viser: endres når en administrator har hentet fra CPIC. */
+function cpicutgave(kilde: Cpickilde): string {
+  return [kilde.release, kilde.endret_kl, kilde.kontrollert_kl].join('|')
+}
+
+/** Om to valg for et gen er de samme. */
+function sammeValg(a: Genvalg | null | undefined, b: Genvalg | null | undefined): boolean {
+  return (a?.resultat ?? null) === (b?.resultat ?? null) && (a?.oppslagsverdi ?? null) === (b?.oppslagsverdi ?? null)
 }
 
 /** Flest diplotyper søket viser om gangen. */
@@ -202,18 +215,33 @@ const MAKS_DIPLOTYPETREFF = 8
 function Diplotypefelt({
   gen,
   legemiddel,
+  utgave,
+  valgt,
   diplotype,
   onVelg,
 }: {
   gen: Oppslagsgen
   legemiddel: string
+  utgave: string
+  valgt: Genvalg | undefined
   diplotype: string | null
   onVelg: (v: Genvalg | null, diplotype: string | null) => void
 }) {
   const [apen, setApen] = useState(false)
   const [sok, setSok] = useState('')
-  const tilstand = useDiplotyper(apen || diplotype ? gen.symbol : null)
+  const tilstand = useDiplotyper(apen || diplotype ? gen.symbol : null, utgave)
   const id = useId()
+  const lastet = tilstand.status === 'klar' ? tilstand.indeks : null
+
+  // Nye CPIC-data kan oversette diplotypen annerledes, eller ikke i det hele
+  // tatt: valget følger alltid tabellen som er lastet, og anbefalingene.
+  useEffect(() => {
+    if (!lastet || !diplotype) return
+    const svar = oversett(lastet, diplotype)
+    const ny = svar.status === 'oversatt' ? valgFraOversettelse(gen, svar.oversettelse) : null
+    const nyttValg = ny?.status === 'valgt' ? ny.valg : null
+    if (!sammeValg(nyttValg, valgt)) onVelg(nyttValg, diplotype)
+  }, [lastet, gen, diplotype, valgt, onVelg])
 
   if (!apen && !diplotype) {
     return (

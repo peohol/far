@@ -2572,4 +2572,38 @@ describe('farmakogenetikken fra ClinPGx', () => {
     expect(k.cpic.hent).toHaveBeenCalledTimes(1)
     await waitFor(() => expect(k.cpic.les).toHaveBeenCalledTimes(2))
   })
+
+  it('henter tabellen fra diplotype på nytt og oversetter igjen når administratoren har hentet fra CPIC', async () => {
+    const user = userEvent.setup()
+    const leser = cpicleser()
+    let hentet = false
+    leser.les = vi.fn(async () => (hentet ? { ...UTVALG_CPIC, kilde: { ...UTVALG_CPIC.kilde, kontrollert_kl: new Date().toISOString() } } : UTVALG_CPIC))
+    // Syntetisk: etter hentingen står *1/*4 under Poor Metabolizer i CPICs tabell.
+    const endret: Diplotypegrunnlag = {
+      ...DIPLOTYPER_CPIC.CYP2D6!,
+      genresultater: [resultat('r9', 'CYP2D6', 'Poor Metabolizer', '0.0')],
+      oppslag: [kombinasjon('o9', 'r9', ['No function', 'No function'], ['0.0', '0.0', '0.0'], ['*1/*4'])],
+    }
+    leser.diplotyper = vi.fn(async (symbol: string) => (hentet && symbol === 'CYP2D6' ? endret : DIPLOTYPER_CPIC[symbol]!))
+    leser.hent = vi.fn(async () => {
+      hentet = true
+      return { status: 'fullfort' as const, release: 'v1.60.1' }
+    })
+    vis('AMTNORSUM', medCpic({ kanRedigere: true, data: medPgx() }, leser))
+    await screen.findByText(/3 CPIC-anbefalinger/)
+    await apneSkuff(user, 'Farmakogenetikk')
+    const seksjon = screen.getByRole('region', { name: 'Farmakogenetikk' })
+    await user.click(skuffen('Slå opp anbefaling etter kjent resultat'))
+    const kort = within(seksjon).getByLabelText('CYP2D6, resultat').closest('.interaksjon') as HTMLElement
+    await user.click(within(kort).getAllByRole('button', { name: 'Oversett fra diplotype' })[1]!)
+    await user.type(await within(kort).findByLabelText('CYP2D6, diplotype'), '*1/*4{Enter}')
+    expect((within(kort).getByLabelText('CYP2D6, resultat') as HTMLSelectElement).value).toBe('Intermediate Metabolizer')
+
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await user.click(await screen.findByRole('button', { name: 'Hent fra CPIC nå' }))
+    await waitFor(() => expect(leser.diplotyper).toHaveBeenCalledTimes(2))
+    const nytt = screen.getByLabelText('CYP2D6, resultat').closest('.interaksjon') as HTMLElement
+    await waitFor(() => expect((within(nytt).getByLabelText('CYP2D6, resultat') as HTMLSelectElement).value).toBe('Poor Metabolizer'))
+    expect(within(nytt).getByRole('region', { name: 'Oversettelsen av CYP2D6 *1/*4' }).textContent).toContain('Poor Metabolizer, aktivitetsverdi 0.0')
+  })
 })
