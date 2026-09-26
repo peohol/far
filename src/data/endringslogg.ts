@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.39.0',
+    dato: '2026-09-26',
+    sammendrag: 'OUSFAR har en egen, ukentlig oppdatert kopi av CPICs farmakogenetiske anbefalinger',
+    typer: ['Funksjonalitet', 'Fag'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'CPICs database hentes hver uke: hvilke gen–legemiddel-par CPIC har vurdert, anbefalingene med styrken og hvilke genetiske resultater de gjelder, og hvilke diplotyper som gir hvilket resultat.',
+      'Anbefalinger som bygger på flere gener, på aktivitetsverdi eller på HLA-status, lagres som CPIC har dem, uten å presses inn i én modell.',
+      'Hvilken CPIC-release dataene kommer fra, og når de sist ble hentet, lagres sammen med dem.',
+      'Feiler en henting, eller ser svaret ufullstendig ut, beholdes forrige gyldige datasett.',
+      'Ingenting vises på stoffsidene ennå; visningen kommer i en egen endring.',
+    ],
+  },
+  {
     versjon: '1.38.0',
     dato: '2026-09-26',
     sammendrag: 'Fagsøket er raskt fra første stund, og appen viser når den henter noe',

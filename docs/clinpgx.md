@@ -260,10 +260,9 @@ i de svakere. Et treff åpner seksjonen og detaljkortet
 - ATC-kodene i ClinPGx er ikke alltid fullstendige, så et forslag kan mangle
   selv om kjemikaliet er riktig.
 
-## Ikke bygd, og hva som venter på CPIC
+## Ikke bygd, og CPIC
 
-Bevisst utelatt: velger for genotype eller diplotype, pasientspesifikke
-anbefalinger, doseringsbeslutninger og kobling til pasientdata. Det krever
-CPICs egne tabeller for allelfunksjon, diplotype → fenotype og anbefalinger
-(CPIC API, `api.cpicpgx.org`), og en egen faglig vurdering av hvordan slike
-råd skal vises. Det er neste arbeidspakke, ikke en utvidelse av denne.
+Bevisst utelatt her: velger for genotype eller diplotype, pasientspesifikke
+anbefalinger, doseringsbeslutninger og kobling til pasientdata. De
+strukturerte CPIC-dataene (allelfunksjon, diplotype → fenotype, anbefalinger)
+er et eget lag med egen synkronisering, beskrevet i `docs/cpic.md`.
