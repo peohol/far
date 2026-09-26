@@ -189,3 +189,38 @@
     content-visibility: visible;
   }
 }
+
+/* --- Farmakogenetikk: oppslaget etter et kjent resultat --------------------
+   Øverst i CPIC-gruppen: ett valg per gen (og aktivitetsverdien når CPIC
+   skiller på den), og under dem anbefalingen som passer, med hvorfor. */
+.cpic-oppslag__valg {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: var(--rom-3) var(--rom-4);
+  align-items: end;
+}
+
+.cpic-oppslag__gen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+}
+
+.cpic-oppslag__valg > .preparatlenker {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.cpic-oppslag__svar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.cpic-oppslag__treff {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding: var(--rom-3) 0;
+  border-top: var(--kant) solid var(--linje);
+}

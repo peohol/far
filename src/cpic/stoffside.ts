@@ -56,6 +56,9 @@ export function cpickort(retningslinjeId: string): string {
   return `cpic-${retningslinjeId}`
 }
 
+/** Detaljkortet med oppslaget etter et kjent resultat (`src/cpic/oppslag.ts`). */
+export const CPIC_OPPSLAG_KORT = 'cpic-oppslag'
+
 /** Detaljkortet med parene CPIC har vurdert uten retningslinje. */
 export const CPIC_ANDRE_PAR_KORT = 'cpic-andre-par'
 
@@ -168,7 +171,8 @@ function samlesPaFenotype(b: Betingelse, metode: Oppslagsmetode | null): boolean
   return metode === 'ACTIVITY_SCORE' && aktuell(b.fenotype) !== null
 }
 
-function resultatFor(b: Betingelse): string {
+/** Resultatet en betingelse gjelder, som CPIC skrev det: fenotypen, allelstatusen eller verdien CPIC slår opp på. */
+export function resultatFor(b: Betingelse): string {
   return aktuell(b.fenotype) ?? aktuell(b.allelstatus) ?? b.oppslagsverdi ?? 'Ikke oppgitt'
 }
 
@@ -419,7 +423,8 @@ export function cpicversjon(kilde: Pick<Cpickilde, 'release' | 'release_dato'>, 
 /* --- Søket ----------------------------------------------------------------- */
 
 /**
- * Tekstene fra CPIC søket finner, med detaljkortet de står i: retningslinjens
+ * Tekstene fra CPIC søket finner, med detaljkortet de står i: oppslaget etter
+ * et kjent resultat og genene det slår opp på, retningslinjens
  * navn og genene, resultattypene og resultatene, styrkene, hver anbefaling
  * med betingelsene, og genene i de andre parene. Implikasjonene og
  * kommentarene står under «Mer om anbefalingen» og er ikke med, så et treff
@@ -430,6 +435,10 @@ export function cpictekster(visning: Cpicvisning): Tilleggstekst[] {
   const legg = (kort: string, tittel: string, felt: Tilleggstekst['felt'], tekst: string) =>
     tekster.push({ panel: FARMAKOGENETIKKPANEL, element: { id: kort, tittel }, detaljkort: kort, felt, tekst })
 
+  const oppslagsgener = unike(visning.retningslinjer.filter((k) => k.grupper.length > 0).flatMap((k) => k.gener.map((g) => g.symbol)))
+  if (oppslagsgener.length > 0) {
+    legg(CPIC_OPPSLAG_KORT, OPPSLAG_TITTEL, 'overskrift', ramsOpp([OPPSLAG_TITTEL, 'CPIC', ...oppslagsgener]))
+  }
   for (const k of visning.retningslinjer) {
     const tittel = k.retningslinje.navn
     legg(k.kort, tittel, 'overskrift', ramsOpp([tittel, 'CPIC', ...k.gener.map((g) => g.symbol)]))
@@ -446,3 +455,5 @@ export function cpictekster(visning: Cpicvisning): Tilleggstekst[] {
 }
 
 export const ANDRE_PAR_TITTEL = 'Andre gen–legemiddel-par i CPIC'
+
+export const OPPSLAG_TITTEL = 'Slå opp anbefaling etter kjent resultat'

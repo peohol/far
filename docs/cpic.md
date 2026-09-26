@@ -136,8 +136,9 @@ Koden:
 | `src/server/tilgang.ts` | Cron-hemmeligheten, administratorsjekken og oppkoblingen, felles med ClinPGx |
 | `src/cpic/lesing.ts` | Lesingen appen gjør (`lagCpicleser`), i deler når det er flere enn 200 legemidler |
 | `src/cpic/stoffside.ts` | Hva siden viser: utvalget for en side (`cpicFor`), kortene, grupperingen av anbefalingene, oppsummeringen og tekstene søket finner |
+| `src/cpic/oppslag.ts` | Oppslaget etter et kjent resultat (se under) |
 | `src/cpic/referanser.ts` | De automatiske referansene og meldingen om gamle data |
-| `src/components/analyttside/Cpicvisning.tsx` | Gruppen i «Farmakogenetikk» |
+| `src/components/analyttside/Cpicvisning.tsx`, `Cpicoppslag.tsx` | Gruppen i «Farmakogenetikk», og oppslaget i den |
 | `src/__tests__/cpic.test.ts`, `data/cpic-utdrag.json` | Lesingen, kallene, synkroniseringen mot en ekte database og endepunktet, med ekte rader fra CPIC |
 | `src/__tests__/cpicvisning.test.ts`, `analyttside.test.tsx` | Kortene, grupperingen, referansene og søket med de ekte radene, og visningen på siden |
 
@@ -200,7 +201,7 @@ et allerede kjent resultat, og ikke hvem som bør testes.
 
 Siden leser CPIC-dataene for de samme ClinPGx-ID-ene som koblingen i
 «Farmakogenetikk» (`clinpgxkobling`); CPIC oppgir ClinPGx-ID-en for hvert
-legemiddel. Visningen avhenger altså ikke av FEST. Den er ikke interaktiv:
+legemiddel. Visningen avhenger altså ikke av FEST. Kortene for retningslinjene er ikke interaktive (oppslaget over dem er det, se «Oppslaget etter et kjent resultat»):
 
 - **Ett detaljkort per CPIC-retningslinje** (`cpic-<retningslinje-ID>`, f.eks.
   `cpic-100414`), med CPICs navn på retningslinjen som tittel. Oppsummeringen
@@ -251,11 +252,55 @@ legemiddelet (med releasen), når lesingen feilet, og når dataene ikke er
 kontrollert på over ti døgn. En administrator kan hente CPIC på nytt med
 «Hent fra CPIC nå» i redigeringen.
 
-**Søket** på siden og i hele kunnskapsbasen finner retningslinjens navn,
+**Søket** på siden og i hele kunnskapsbasen finner oppslagskortet (navnet og
+genene), retningslinjens navn,
 genene, resultattypene og resultatkategoriene, styrkene, hver anbefaling med
 betingelsene, og genene i de andre parene. Implikasjonene og kommentarene er
 ikke med, så et treff aldri peker på en tekst som er skjult. Et treff eller en
 direktelenke åpner seksjonen og kortet.
+
+## Oppslaget etter et kjent resultat
+
+Øverst i gruppen «Anbefalinger fra CPIC» står detaljkortet **«Slå opp
+anbefaling etter kjent resultat»** (`cpic-oppslag`), når CPIC har
+anbefalinger for legemidlene på siden. Flyten er legemiddel → gen →
+resultat → anbefaling. Det er ikke en pasientjournal eller en genetisk
+tolkningsmotor: brukeren kjenner allerede pasientens fortolkede resultat.
+
+- **Valgene**: legemiddelet (bare når siden har flere), så ett valg per gen
+  CPIC slår opp på for legemiddelet (`oppslagsnokkel`), med resultatene CPIC
+  bruker i anbefalingene: fenotype, allelstatus (HLA) eller andre kategorier,
+  også «Indeterminate» og «No Result». For et gen CPIC slår opp på
+  aktivitetsverdi kommer et valg til for verdien, når fenotypen har flere.
+  Genene står i retningslinjens rekkefølge, resultatene i CPICs rekkefølge,
+  eller etter aktivitetsverdien.
+- **Treffet**: en anbefaling vises bare når hvert gen i CPICs oppslagsnøkkel
+  er valgt, med verdien CPIC har. Et gen som ikke er valgt, fylles aldri
+  inn; kortet sier hvilke gener som mangler. En kombinasjon CPIC ikke har,
+  gir meldingen om at CPIC ikke har noen anbefaling for den.
+- **Aktivitetsverdien**: er bare fenotypen valgt, vises anbefalingen bare når
+  CPIC har den samme for alle aktivitetsverdiene til fenotypen (samme
+  sammenslåing som i kortene: likt i alt annet enn aktivitetsverdien). Ellers
+  sier kortet at anbefalingen avhenger av verdien og lister verdiene, f.eks.
+  fenytoin med CYP2C9 Intermediate Metabolizer (1.0 eller 1.5).
+- **Populasjonene** (fenytoin, klopidogrel, atomoksetin, vorikonazol …) står
+  hver for seg, merket med populasjonen.
+- **Hvorfor**: hver anbefaling står med styrken, implikasjonene,
+  kommentarene, CPIC-release og kilde, og «Hvorfor denne anbefalingen»: hva
+  som ble valgt for hvert gen, hvilke aktivitetsverdier i CPIC det svarer
+  til, valgte gener anbefalingen ikke bygger på, og CPICs ID-er for
+  anbefalingene og retningslinjen.
+- **Personvern**: valgene står bare i komponentens tilstand. De lagres ikke,
+  sendes ikke noe sted og står ikke i adressen. Ingen pasientidentifikatorer.
+
+Logikken er rene funksjoner i `src/cpic/oppslag.ts` (`oppslagsgrunnlag`,
+`slaOpp`), testet mot ekte CPIC-rader for fenytoin og amitriptylin
+(`src/__tests__/cpicoppslag.test.ts`, `data/cpic-oppslag-utdrag.json`),
+blant annet at hver anbefaling finnes med sine egne verdier, og at et treff
+aldri er en anbefaling med andre verdier. Kortet er
+`src/components/analyttside/Cpicoppslag.tsx`. Søket finner kortet på navnet
+og genene. Diplotype → resultat (F) er ikke med ennå: resultatet velges slik
+det står i svaret.
 
 ## Hva som bygger på dette
 

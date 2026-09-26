@@ -1,0 +1,2038 @@
+{
+ "drug": [
+  {
+   "drugid": "RxNorm:704",
+   "name": "amitriptyline",
+   "clinpgxid": "PA448385",
+   "rxnormid": "704",
+   "drugbankid": "DB00321",
+   "atcid": [
+    "N06AA09",
+    "N06CA01"
+   ],
+   "umlscui": null,
+   "flowchart": "https://files.cpicpgx.org/images/flow_chart/Amitriptyline_CDS_Flow_Chart.jpg",
+   "version": 356,
+   "guidelineid": 100414
+  },
+  {
+   "drugid": "RxNorm:8183",
+   "name": "phenytoin",
+   "clinpgxid": "PA450947",
+   "rxnormid": "8183",
+   "drugbankid": "DB00252",
+   "atcid": [
+    "N03AB02",
+    "N03AB52"
+   ],
+   "umlscui": null,
+   "flowchart": "https://files.cpicpgx.org/images/flow_chart/Phenytoin_CDS_Flow_Chart.jpg",
+   "version": 354,
+   "guidelineid": 100412
+  }
+ ],
+ "gene": [
+  {
+   "symbol": "CYP2C19",
+   "chr": "chr10",
+   "genesequenceid": "NG_008384.3",
+   "proteinsequenceid": "NP_000760.1",
+   "chromosequenceid": "NC_000010.11",
+   "mrnasequenceid": "NM_000069.2",
+   "hgncid": "HGNC:2621",
+   "ncbiid": "1557",
+   "ensemblid": "ENSG00000165841",
+   "clinpgxid": "PA124",
+   "frequencymethods": "Methods:\nThe CYP2C19 frequency table includes updates of those previously published in CPIC guidelines. Updates to the CYP2C19 frequency tables were made by searching the PubMed® database (1995 to 2015). The following criteria were used for CYP2C19: (CYP2C19 or 2C19 or cytochrome P4502C19) AND (genotype OR allele OR frequency OR minor allele OR variant OR ethnic OR race OR racial OR ethnicity) with filter limits set to retrieve \"full-text\" and \"English\" literature. In addition, reports were also identified from citations by others or review articles. Studies were considered for inclusion in the CYP2C19 frequency table if: (1) the ethnicity of the population was clearly indicated, (2) either allele frequencies or genotype frequencies were reported, (3) the method by which the genes were genotyped was indicated, (4) the sample population consisted of at least 50 individuals with a few exceptions (e.g., smaller cohorts that were part of larger studies) and (5) the study represented an original publication (no reviews or meta-analyses). Diplotype and phenotype frequencies were estimated using the equation describing Hardy Weinberg equilibrium based on reported allele frequencies.\n\nDiplotype and Phenotype Calculations. Diplotype and phenotype frequencies were estimated using the equation describing Hardy Weinberg equilibrium based on reported allele frequencies.\n\nCaveats to estimated allele, diplotype and phenotype frequencies:\n\nSampling. Allele frequencies collected by CPIC for the supplemental tables are based on published literature reports which typically study small groups of people based on a geographic location (e.g. Malaysia, Berlin, Cairo). Almost no studies use genetic markers to estimate ancestry. Manuscripts are often focused on a specific phenotype (e.g. disease) or study only individuals taking a particular drug. Such samples would not be considered a random sample of the general population. Another consideration is that sample size is important, and PGx studies are typically not large. The frequencies collected from these studies are then used to estimate general estimates of entire ethnic population allele frequencies. Therefore, frequencies from larger groups of subjects and frequencies averaged from many sample populations probably result in better estimates.\n\nEstimation of *1 frequency. In general, there are no population studies that test for all known variant alleles. Because *1 is not genotyped directly in many studies, all alleles that are negative for a sequence variation are defaulted to a *1 assignment. The inferred frequency for *1 is estimated as: 100 - (sum of averaged variant allele frequencies). For genes where many alleles are not tested for in any population, and frequency of 'common' alleles is not well documented in many understudied populations (Oceanian, Central/South Asian, Latino), the *1 frequency will deviate even more from true values.\n\nDiplotype/Phenotype frequency estimates. Diplotype and phenotype frequencies were estimated using the equation describing Hardy Weinberg equilibrium based on reported allele frequencies. When calculating diplotype frequencies from these allele frequencies, the margin of error is compounded based on the margin of error on each allele in the diplotype. So, the margin of error will necessarily increase for diplotype frequency estimates compared to allele frequency estimates. For allele frequencies with already large margins of error due to small and non-random sampling, the diplotype margin of error could potentially be quite large. On the other hand, for well-studied alleles, the margin of error is likely low.\n\nBiogeographical groups. Biogeographical groups are derived from PMID 30506572. Further details, including the definitions of each group, can be found at https://www.pharmgkb.org/page/biogeographicalGroups. We strongly recommend that users use either the publication or the PharmGKB link provided to familiarize themselves with the grouping system before using these allele frequencies. These tables group individuals from particular geographic locations into larger biogeographical groups. It is difficult to group populations with certainty, because some populations are often admixed, or at the least, a combination of different ethnicities. Therefore, the margin of error is increased when different subpopulations are grouped together.",
+   "lookupmethod": "PHENOTYPE",
+   "version": 459,
+   "notesondiplotype": null,
+   "url": "https://cpicpgx.org/gene/cyp2c19/",
+   "functionmethods": null,
+   "notesonallelenaming": "Legacy Name/Class",
+   "includephenotypefrequencies": true,
+   "includediplotypefrequencies": true
+  },
+  {
+   "symbol": "CYP2C9",
+   "chr": "chr10",
+   "genesequenceid": "NG_008385.2",
+   "proteinsequenceid": "NP_000762.2",
+   "chromosequenceid": "NC_000010.11",
+   "mrnasequenceid": "NM_000069.2",
+   "hgncid": "HGNC:2623",
+   "ncbiid": "1559",
+   "ensemblid": "ENSG00000138109",
+   "clinpgxid": "PA126",
+   "frequencymethods": "Methods\n\nThe allele frequency table was made by searching the PubMed® database (1995 to July 2019). The following criteria were used for CYP2C9: (CYP2C9 or 2C9 or cytochrome P4502C9) AND (genotype OR allele OR frequency OR minor allele OR variant OR ethnic OR race OR racial OR ethnicity OR population) with filter limits set to retrieve \"full-text\" and \"English\" literature. In addition, reports were also identified from citations by others or review articles. Studies were considered for inclusion in the CYP2C9 frequency table if: (1) the ethnicity of the population was clearly indicated, (2) either allele frequencies or genotype frequencies were reported, (3) the method by which the genes were genotyped was indicated, (4) the sample population consisted of at least 50 individuals with a few exceptions (e.g., smaller cohorts that were part of larger studies) and (5) the study represented an original publication (no reviews or meta-analyses). Allele frequencies reported in and gnomD browser and phase 3 1000 Genomes were also included (https://gnomad.broadinstitute.org/, http://browser.1000genomes.org/index.html) for alleles that contain single unique variant.\n\nDiplotype and Phenotype Calculations. Diplotype and phenotype frequencies were estimated using the equation describing Hardy Weinberg equilibrium based on reported allele frequencies.\n\nCaveats to estimated allele, diplotype and phenotype frequencies:\n\nSampling. Allele frequencies collected by CPIC for the supplemental tables are based on published literature reports which typically study small groups of people based on a geographic location (e.g. Malaysia, Berlin, Cairo). Almost no studies use genetic markers to estimate ancestry. Manuscripts are often focused on a specific phenotype (e.g. disease) or study only individuals taking a particular drug. Such samples would not be considered a random sample of the general population. Another consideration is that sample size is important, and PGx studies are typically not large. The frequencies collected from these studies are then used to estimate general estimates of entire ethnic population allele frequencies. Therefore, frequencies from larger groups of subjects and frequencies averaged from many sample populations probably result in better estimates.\n\nEstimation of *1 frequency. In general, there are no population studies that test for all known variant alleles. Because *1 is not genotyped directly in many studies, all alleles that are negative for a sequence variation are defaulted to a *1 assignment. Because CYP2C9*1 is not genotyped directly, all alleles that are negative for a sequence variation are defaulted to a CYP2C9*1 assignment. Likewise, sequence variations of alleles that are not tested may default to a CYP2C9*1 assignment and hence contribute to the frequencies reported for this allele. Therefore, the inferred frequency for CYP2C9*1 was calculated as an average from studies describing allele frequencies for the most common alleles found in a particular biogeographical group.\n\nDiplotype/Phenotype frequency estimates. When calculating diplotype frequencies from these allele frequencies, the margin of error is compounded based on the margin of error on each allele in the diplotype. So, the margin of error will necessarily increase for diplotype frequency estimates compared to allele frequency estimates. For allele frequencies with already large margins of error due to small and non-random sampling, the diplotype margin of error could potentially be quite large. On the other hand, for well-studied alleles, the margin of error is likely low.\n\nBiogeographical groups. Biogeographical groups are derived from PMID 30506572. Further details can be found at https://www.pharmgkb.org/page/biogeographicalGroups. These tables group individuals from particular geographic locations into larger biogeographical groups. It is difficult to group populations with certainty, because some populations are often admixed, or at the least, a combination of different ethnicities. Therefore, the margin of error is increased when different subpopulations are grouped together.",
+   "lookupmethod": "ACTIVITY_SCORE",
+   "version": 461,
+   "notesondiplotype": "CYP2C9 diplotype to phenotype translation is not applicable to the warfarin guideline.",
+   "url": "https://cpicpgx.org/gene/cyp2c9/",
+   "functionmethods": "Methods:\nThe PubMed and PharmGKB databases were searched for the following keywords: (CYP2C9 OR cytochrome p450 2c9)AND [genomic identifiers (e.g. dbSNP rs number, star alleles, additional common names)] AND English [Language]. Study inclusion criteria included publications that incorporated analyses for the association between CYP2C9 genotype and drug pharmacokinetic parameters, clinical outcomes, or allele function.",
+   "notesonallelenaming": "Legacy Name/Class",
+   "includephenotypefrequencies": true,
+   "includediplotypefrequencies": true
+  },
+  {
+   "symbol": "CYP2D6",
+   "chr": "chr22",
+   "genesequenceid": "NG_008376.4",
+   "proteinsequenceid": "NP_000097.3",
+   "chromosequenceid": "NC_000022.11",
+   "mrnasequenceid": "NM_000069.2",
+   "hgncid": "HGNC:2625",
+   "ncbiid": "1565",
+   "ensemblid": "ENSG00000100197",
+   "clinpgxid": "PA128",
+   "frequencymethods": "Methods:\n\nThe CYP2D6 allele frequency tables (CYP2D6 frequency table; link to PharmGKB) are updates of those previously published in CPIC guidelines (PMID: 25974703, 24458010). Updates to the CYP2D6 allele frequency tables were made by searching the PubMed® database (1995 to 2018). The following criteria were used for CYP2D6: (CYP2D6 or 2D6 or cytochrome P4502D6) AND (genotype OR allele OR frequency OR minor allele OR variant OR ethnic OR race OR racial OR ethnicity) with filter limits set to retrieve \"full-text\" and \"English\" literature. In addition, reports were also identified from citations by others or review articles. Studies were considered for inclusion in the CYP2D6 frequency table if: (1) the ethnicity of the population was clearly indicated, (2) either allele frequencies or genotype frequencies were reported, (3) the method by which the genes were genotyped was indicated, (4) the sample population consisted of at least 50 individuals with a few exceptions (e.g., smaller cohorts that were part of larger studies) and (5) the study represented an original publication (no reviews or meta-analyses).\nDiplotype and phenotype frequencies were estimated using the equation describing Hardy Weinberg equilibrium based on reported allele frequencies. Because the frequencies for each allele are averages from all studies for that population, allele frequencies may not add up to100%. To account for this in diplotype and phenotype frequencies calculations, *1 frequency was calculated as 1 - sum (non *1 allele frequency).\n\n\nCaveats to estimated allele, diplotype and phenotype frequencies:\n\nSampling. Allele frequencies collected by CPIC for the supplemental tables are based on published literature reports which typically study small groups of people based on a geographic location (e.g. Malaysia, Berlin, Cairo). Almost no studies use genetic markers to estimate ancestry. Manuscripts are often focused on a specific phenotype (e.g. disease) or study only individuals taking a particular drug. Such samples would not be considered a random sample of the general population. Another consideration is that sample size is important, and PGx studies are typically not large. The frequencies collected from these studies are then used to estimate general estimates of entire ethnic population allele frequencies. Therefore, frequencies from larger groups of subjects and frequencies averaged from many sample populations probably result in better estimates.\n\nEstimation of *1 frequency. In general, there are no population studies that test for all known variant alleles. Because CYP2D6*1 is not genotyped directly, all alleles that are negative for a sequence variation are defaulted to a CYP2D6*1 assignment. Likewise, sequence variations of alleles that are not tested may default to a CYP2D6*1 assignment and hence contribute to the frequencies reported for this allele. Therefore, the inferred frequency for CYP2D6*1 was calculated as an average from studies describing allele frequencies for the most common alleles found in a particular ethnic group.\n\nDiplotype/Phenotype frequency estimates. When calculating diplotype frequencies from these allele frequencies, the margin of error is compounded based on the margin of error on each allele in the diplotype. So, the margin of error will necessarily increase for diplotype frequency estimates compared to allele frequency estimates. For allele frequencies with already large margins of error due to small and non-random sampling, the diplotype margin of error could potentially be quite large. On the other hand, for well-studied alleles, the margin of error is likely low.\n\nBiogeographical groups. Biogeographical groups are derived from PMID 30506572. Further details, including the definitions of each group, can be found at https://www.pharmgkb.org/page/biogeographicalGroups. We strongly recommend that users use either the publication or the PharmGKB link provided to familiarize themselves with the grouping system before using these allele frequencies. These tables group individuals from particular geographic locations into larger biogeographical groups. It is difficult to group populations with certainty, because some populations are often admixed, or at the least, a combination of different ethnicities. Therefore, the margin of error is increased when different subpopulations are grouped together.\n\nOverestimation of allele frequencies. CYP2D6*2 is a 'default' assignment and, unless tested and discriminated for CYP2D6*8, *11, *17, *35,*41 and other variants, will default to a CYP2D6*2 assignment. The frequencies shown here may therefore be over-estimated. CYP2D6*10 is a 'default' assignment and, unless tested and discriminated for, CYP2D6*14 and *36 and other variants, will default to a CYP2D6*10 assignment. The frequencies shown here may therefore be over-estimated. CYP2D6*17 is a 'default' assignment and, unless tested and discriminated for, CYP2D6*40 and *58 will default to a CYP2D6*17 assignment. The frequencies shown here may therefore be over-estimated. CYP2D6*41 has not consistently been determined by its defining SNP (2988G>A) across studies; some platforms still use the -1584C>G SNP to discriminate between CYP2D6*2 and *41. This may lead to an overestimation of the CYP2D6*41 frequency, especially in those of African ancestry.\n\nCNV alleles. Many studies do not specify the exact copy number of duplicated alleles found in their study population and instead report the total frequency of observed CNVs as \"xN\". Where possible, these frequencies have been included in the CNV column for that allele (e.g. *1xN frequencies are included in the *1x2 column, *4xN frequencies are included in the *4x2 column). Users should be aware that this will lead to an overestimation of the frequency of that exact copy number in the population.",
+   "lookupmethod": "ACTIVITY_SCORE",
+   "version": 456,
+   "notesondiplotype": null,
+   "url": "https://cpicpgx.org/gene/cyp2d6/",
+   "functionmethods": null,
+   "notesonallelenaming": "Legacy Name/Class",
+   "includephenotypefrequencies": true,
+   "includediplotypefrequencies": true
+  },
+  {
+   "symbol": "HLA-B",
+   "chr": "chr6",
+   "genesequenceid": "NG_002397",
+   "proteinsequenceid": "NP_005505",
+   "chromosequenceid": null,
+   "mrnasequenceid": null,
+   "hgncid": "HGNC:4932",
+   "ncbiid": "3106",
+   "ensemblid": "ENSG00000234745",
+   "clinpgxid": "PA35056",
+   "frequencymethods": "Methods\n\nThe allele frequency table was made by searching the PubMed® database (1995 to September 2019). The following criteria were used for HLA-B: (HLA-B) AND (allele OR frequency). In addition, reports were also identified from citations by others or review articles. Studies were considered for inclusion in the HLA-B frequency table if: (1) the ethnicity of the population was clearly indicated, (2) either allele frequencies or genotype frequencies were reported, (3) the method by which the genes were genotyped was indicated, (4) the sample population consisted of at least 50 individuals with a few exceptions (e.g., smaller cohorts that were part of larger studies) and (5) the study represented an original publication (no reviews or meta-analyses). Allele frequencies reported in phase 3 1000 Genomes (http://browser.1000genomes.org/index.html) and from allelefrequencies.net (https://www.allelefrequencies.net) were also included .\nCaveats to estimated allele, diplotype and phenotype frequencies:\n\nSampling. Allele frequencies collected by CPIC for the supplemental tables are based on published literature reports which typically study small groups of people based on a geographic location (e.g. Malaysia, Berlin, Cairo). Almost no studies use genetic markers to estimate ancestry. Manuscripts are often focused on a specific phenotype (e.g. disease) or study only individuals taking a particular drug. Such samples would not be considered a random sample of the general population. Another consideration is that sample size is important, and PGx studies are typically not large. The frequencies collected from these studies are then used to estimate general estimates of entire ethnic population allele frequencies. Therefore, frequencies from larger groups of subjects and frequencies averaged from many sample populations probably result in better estimates.\n\nBiogeographical groups. Biogeographical groups are derived from PMID 30506572. Further details, including the definitions of each group, can be found at https://www.pharmgkb.org/page/biogeographicalGroups. We strongly recommend that users use either the publication or the PharmGKB link provided to familiarize themselves with the grouping system before using these allele frequencies. These tables group individuals from particular geographic locations into larger biogeographical groups. It is difficult to group populations with certainty, because some populations are often admixed, or at the least, a combination of different ethnicities. Therefore, the margin of error is increased when different subpopulations are grouped together.",
+   "lookupmethod": "ALLELE_STATUS",
+   "version": 230,
+   "notesondiplotype": null,
+   "url": "https://cpicpgx.org/gene/hla/",
+   "functionmethods": null,
+   "notesonallelenaming": null,
+   "includephenotypefrequencies": false,
+   "includediplotypefrequencies": false
+  }
+ ],
+ "guideline": [
+  {
+   "id": 100412,
+   "version": 71,
+   "name": "CYP2C9, HLA-B and Phenytoin",
+   "url": "https://www.clinpgx.org/guideline/PA166251461",
+   "genes": [
+    "CYP2C9",
+    "HLA-B"
+   ],
+   "notesonusage": null,
+   "clinpgxid": "PA166251461"
+  },
+  {
+   "id": 100414,
+   "version": 71,
+   "name": "CYP2D6, CYP2C19 and Tricyclic Antidepressants",
+   "url": "https://www.clinpgx.org/guideline/PA166251445",
+   "genes": [
+    "CYP2C19",
+    "CYP2D6"
+   ],
+   "notesonusage": null,
+   "clinpgxid": "PA166251445"
+  }
+ ],
+ "recommendation": [
+  {
+   "id": 8481252,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Normal phenytoin metabolism"
+   },
+   "drugrecommendation": "No adjustments needed from typical dosing strategies. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "2.0"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "2.0"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481253,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Slightly reduced phenytoin metabolism; however, this does not appear to translate into increased side effects."
+   },
+   "drugrecommendation": "No adjustments needed from typical dosing strategies. Subsequent doses should be adjusted according to therapeutic drug monitoring, response and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN and patients should be carefully monitored according to a usual standard.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2C9": "Intermediate Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "1.5"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "1.5"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481254,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "For first dose, use typical initial or loading dose. For subsequent doses, use approximately 25% less than typical maintenance dose. Subsequent doses should be adjusted according to therapeutic drug monitoring, response and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN, and patients should be carefully monitored according to a usual standard.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2C9": "Intermediate Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "1.0"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "1.0"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481255,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "For first dose, use typical initial or loading dose. For subsequent doses use approximately 50% less than typical maintenance dose. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN, and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "0.5"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "0.5"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481256,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "For first dose, use typical initial or loading dose. For subsequent doses use approximately 50% less than typical maintenance dose. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN, and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "0.0"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "0.0"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481257,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "n/a"
+   },
+   "drugrecommendation": "No recommendation",
+   "classification": "n/a",
+   "phenotypes": {
+    "CYP2C9": "Indeterminate"
+   },
+   "activityscore": {
+    "CYP2C9": "n/a"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "n/a"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481258,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "Normal phenytoin metabolism"
+   },
+   "drugrecommendation": "If patient is phenytoin-naive, do not use phenytoin/fosphenytoin. Avoid carbamazepine and oxcarbazepine.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "2.0"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "2.0"
+   },
+   "population": "PHT naive",
+   "comments": "Other aromatic anticonvulsants, including eslicarbazepine, lamotrigine, and phenobarbital, have weaker evidence linking SJS/TEN with the HLA-B*15:02 allele; however, caution should still be used in choosing an alternative agent.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481259,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "Slightly reduced phenytoin metabolism; however, this does not appear to translate into increased side effects."
+   },
+   "drugrecommendation": "If patient is phenytoin-naive, do not use phenytoin/fosphenytoin. Avoid carbamazepine and oxcarbazepine.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Intermediate Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "1.5"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "1.5"
+   },
+   "population": "PHT naive",
+   "comments": "Other aromatic anticonvulsants, including eslicarbazepine, lamotrigine, and phenobarbital, have weaker evidence linking SJS/TEN with the HLA-B*15:02 allele; however, caution should still be used in choosing an alternative agent.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481260,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "If patient is phenytoin-naive, do not use phenytoin/fosphenytoin. Avoid carbamazepine and oxcarbazepine.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Intermediate Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "1.0"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "1.0"
+   },
+   "population": "PHT naive",
+   "comments": "Other aromatic anticonvulsants, including eslicarbazepine, lamotrigine, and phenobarbital, have weaker evidence linking SJS/TEN with the HLA-B*15:02 allele; however, caution should still be used in choosing an alternative agent.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481261,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "If patient is phenytoin-naive, do not use phenytoin/fosphenytoin. Avoid carbamazepine and oxcarbazepine.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "0.5"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "0.5"
+   },
+   "population": "PHT naive",
+   "comments": "Other aromatic anticonvulsants, including eslicarbazepine, lamotrigine, and phenobarbital, have weaker evidence linking SJS/TEN with the HLA-B*15:02 allele; however, caution should still be used in choosing an alternative agent.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481262,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "If patient is phenytoin-naive, do not use phenytoin/fosphenytoin. Avoid carbamazepine and oxcarbazepine.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "0.0"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "0.0"
+   },
+   "population": "PHT naive",
+   "comments": "Other aromatic anticonvulsants, including eslicarbazepine, lamotrigine, and phenobarbital, have weaker evidence linking SJS/TEN with the HLA-B*15:02 allele; however, caution should still be used in choosing an alternative agent.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481263,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "n/a"
+   },
+   "drugrecommendation": "If patient is phenytoin-naive, do not use phenytoin/fosphenytoin. Avoid carbamazepine and oxcarbazepine.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Indeterminate"
+   },
+   "activityscore": {
+    "CYP2C9": "n/a"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "n/a"
+   },
+   "population": "PHT naive",
+   "comments": "Other aromatic anticonvulsants, including eslicarbazepine, lamotrigine, and phenobarbital, have weaker evidence linking SJS/TEN with the HLA-B*15:02 allele; however, caution should still be used in choosing an alternative agent.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481264,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Normal phenytoin metabolism"
+   },
+   "drugrecommendation": "No adjustments needed from typical dosing strategies. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "2.0"
+   },
+   "allelestatus": {
+    "HLA-B": "No HLA-B Result"
+   },
+   "lookupkey": {
+    "HLA-B": "No Result",
+    "CYP2C9": "2.0"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481265,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Slightly reduced phenytoin metabolism; however, this does not appear to translate into increased side effects."
+   },
+   "drugrecommendation": "No adjustments needed from typical dosing strategies. Subsequent doses should be adjusted according to therapeutic drug monitoring, response and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN and patients should be carefully monitored according to a usual standard.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2C9": "Intermediate Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "1.5"
+   },
+   "allelestatus": {
+    "HLA-B": "No HLA-B Result"
+   },
+   "lookupkey": {
+    "HLA-B": "No Result",
+    "CYP2C9": "1.5"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481266,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "For first dose, use typical initial or loading dose. For subsequent doses, use approximately 25% less than typical maintenance dose. Subsequent doses should be adjusted according to therapeutic drug monitoring, response and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN, and patients should be carefully monitored according to a usual standard.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2C9": "Intermediate Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "1.0"
+   },
+   "allelestatus": {
+    "HLA-B": "No HLA-B Result"
+   },
+   "lookupkey": {
+    "HLA-B": "No Result",
+    "CYP2C9": "1.0"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481267,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "For first dose, use typical initial or loading dose. For subsequent doses use approximately 50% less than typical maintenance dose. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN, and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "0.5"
+   },
+   "allelestatus": {
+    "HLA-B": "No HLA-B Result"
+   },
+   "lookupkey": {
+    "HLA-B": "No Result",
+    "CYP2C9": "0.5"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481268,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "For first dose, use typical initial or loading dose. For subsequent doses use approximately 50% less than typical maintenance dose. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN, and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "0.0"
+   },
+   "allelestatus": {
+    "HLA-B": "No HLA-B Result"
+   },
+   "lookupkey": {
+    "HLA-B": "No Result",
+    "CYP2C9": "0.0"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481269,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "n/a"
+   },
+   "drugrecommendation": "No recommendation",
+   "classification": "n/a",
+   "phenotypes": {
+    "CYP2C9": "Indeterminate"
+   },
+   "activityscore": {
+    "CYP2C9": "n/a"
+   },
+   "allelestatus": {
+    "HLA-B": "No HLA-B Result"
+   },
+   "lookupkey": {
+    "HLA-B": "No Result",
+    "CYP2C9": "n/a"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481270,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "n/a"
+   },
+   "drugrecommendation": "No adjustments needed from typical dosing strategies. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "No Result"
+   },
+   "activityscore": {
+    "CYP2C9": "No Result"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "No Result"
+   },
+   "population": "PHT naive",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481271,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "n/a"
+   },
+   "drugrecommendation": "If patient is phenytoin-naive, do not use phenytoin/fosphenytoin. Avoid carbamazepine and oxcarbazepine.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "No Result"
+   },
+   "activityscore": {
+    "CYP2C9": "No Result"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "No Result"
+   },
+   "population": "PHT naive",
+   "comments": "Other aromatic anticonvulsants, including eslicarbazepine, lamotrigine, and phenobarbital, have weaker evidence linking SJS/TEN with the HLA-B*15:02 allele; however, caution should still be used in choosing an alternative agent.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481272,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Normal phenytoin metabolism"
+   },
+   "drugrecommendation": "No adjustments needed from typical dosing strategies. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "2.0"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "2.0"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481273,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Slightly reduced phenytoin metabolism; however, this does not appear to translate into increased side effects."
+   },
+   "drugrecommendation": "No adjustments needed from typical dosing strategies. Subsequent doses should be adjusted according to therapeutic drug monitoring, response and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN and patients should be carefully monitored according to a usual standard.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2C9": "Intermediate Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "1.5"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "1.5"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481274,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "For first dose, use typical initial or loading dose. For subsequent doses, use approximately 25% less than typical maintenance dose. Subsequent doses should be adjusted according to therapeutic drug monitoring, response and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN, and patients should be carefully monitored according to a usual standard.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2C9": "Intermediate Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "1.0"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "1.0"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481275,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "For first dose, use typical initial or loading dose. For subsequent doses use approximately 50% less than typical maintenance dose. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN, and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "0.5"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "0.5"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481276,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "For first dose, use typical initial or loading dose. For subsequent doses use approximately 50% less than typical maintenance dose. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN, and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "0.0"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "0.0"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481277,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "n/a"
+   },
+   "drugrecommendation": "No recommendation",
+   "classification": "n/a",
+   "phenotypes": {
+    "CYP2C9": "Indeterminate"
+   },
+   "activityscore": {
+    "CYP2C9": "n/a"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "n/a"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481278,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "Normal phenytoin metabolism"
+   },
+   "drugrecommendation": "If the patient has previously used phenytoin continuously for longer than three months without incidence of cutaneous adverse reactions, cautiously consider use of phenytoin in the future. The latency period for drug-induced SJS/TEN is short with continuous dosing and adherence to therapy (4-28 days), and cases usually occur within three months of dosing.",
+   "classification": "Optional",
+   "phenotypes": {
+    "CYP2C9": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "2.0"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "2.0"
+   },
+   "population": "PHT use >3mos",
+   "comments": "Previous tolerance of phenytoin is not indicative of tolerance to other aromatic anticonvulsants.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481279,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "Slightly reduced phenytoin metabolism; however, this does not appear to translate into increased side effects."
+   },
+   "drugrecommendation": "If the patient has previously used phenytoin continuously for longer than three months without incidence of cutaneous adverse reactions, cautiously consider use of phenytoin in the future. The latency period for drug-induced SJS/TEN is short with continuous dosing and adherence to therapy (4-28 days), and cases usually occur within three months of dosing.",
+   "classification": "Optional",
+   "phenotypes": {
+    "CYP2C9": "Intermediate Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "1.5"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "1.5"
+   },
+   "population": "PHT use >3mos",
+   "comments": "Previous tolerance of phenytoin is not indicative of tolerance to other aromatic anticonvulsants.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481280,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "If the patient has previously used phenytoin continuously for longer than three months without incidence of cutaneous adverse reactions, cautiously consider use of phenytoin in the future. The latency period for drug-induced SJS/TEN is short with continuous dosing and adherence to therapy (4-28 days), and cases usually occur within three months of dosing.",
+   "classification": "Optional",
+   "phenotypes": {
+    "CYP2C9": "Intermediate Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "1.0"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "1.0"
+   },
+   "population": "PHT use >3mos",
+   "comments": "Previous tolerance of phenytoin is not indicative of tolerance to other aromatic anticonvulsants.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481281,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "If the patient has previously used phenytoin continuously for longer than three months without incidence of cutaneous adverse reactions, cautiously consider use of phenytoin in the future. The latency period for drug-induced SJS/TEN is short with continuous dosing and adherence to therapy (4-28 days), and cases usually occur within three months of dosing.",
+   "classification": "Optional",
+   "phenotypes": {
+    "CYP2C9": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "0.5"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "0.5"
+   },
+   "population": "PHT use >3mos",
+   "comments": "Previous tolerance of phenytoin is not indicative of tolerance to other aromatic anticonvulsants.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481282,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "If the patient has previously used phenytoin continuously for longer than three months without incidence of cutaneous adverse reactions, cautiously consider use of phenytoin in the future. The latency period for drug-induced SJS/TEN is short with continuous dosing and adherence to therapy (4-28 days), and cases usually occur within three months of dosing.",
+   "classification": "Optional",
+   "phenotypes": {
+    "CYP2C9": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "0.0"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "0.0"
+   },
+   "population": "PHT use >3mos",
+   "comments": "Previous tolerance of phenytoin is not indicative of tolerance to other aromatic anticonvulsants.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481283,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "n/a"
+   },
+   "drugrecommendation": "If the patient has previously used phenytoin continuously for longer than three months without incidence of cutaneous adverse reactions, cautiously consider use of phenytoin in the future. The latency period for drug-induced SJS/TEN is short with continuous dosing and adherence to therapy (4-28 days), and cases usually occur within three months of dosing.",
+   "classification": "Optional",
+   "phenotypes": {
+    "CYP2C9": "Indeterminate"
+   },
+   "activityscore": {
+    "CYP2C9": "n/a"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "n/a"
+   },
+   "population": "PHT use >3mos",
+   "comments": "Previous tolerance of phenytoin is not indicative of tolerance to other aromatic anticonvulsants.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481284,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Normal phenytoin metabolism"
+   },
+   "drugrecommendation": "No adjustments needed from typical dosing strategies. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "2.0"
+   },
+   "allelestatus": {
+    "HLA-B": "No HLA-B Result"
+   },
+   "lookupkey": {
+    "HLA-B": "No Result",
+    "CYP2C9": "2.0"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481285,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Slightly reduced phenytoin metabolism; however, this does not appear to translate into increased side effects."
+   },
+   "drugrecommendation": "No adjustments needed from typical dosing strategies. Subsequent doses should be adjusted according to therapeutic drug monitoring, response and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN and patients should be carefully monitored according to a usual standard.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2C9": "Intermediate Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "1.5"
+   },
+   "allelestatus": {
+    "HLA-B": "No HLA-B Result"
+   },
+   "lookupkey": {
+    "HLA-B": "No Result",
+    "CYP2C9": "1.5"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481286,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "For first dose, use typical initial or loading dose. For subsequent doses, use approximately 25% less than typical maintenance dose. Subsequent doses should be adjusted according to therapeutic drug monitoring, response and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN, and patients should be carefully monitored according to a usual standard.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2C9": "Intermediate Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "1.0"
+   },
+   "allelestatus": {
+    "HLA-B": "No HLA-B Result"
+   },
+   "lookupkey": {
+    "HLA-B": "No Result",
+    "CYP2C9": "1.0"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481287,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "For first dose, use typical initial or loading dose. For subsequent doses use approximately 50% less than typical maintenance dose. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN, and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "0.5"
+   },
+   "allelestatus": {
+    "HLA-B": "No HLA-B Result"
+   },
+   "lookupkey": {
+    "HLA-B": "No Result",
+    "CYP2C9": "0.5"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481288,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "Reduced phenytoin metabolism; Higher plasma concentrations will increase probability of toxicities."
+   },
+   "drugrecommendation": "For first dose, use typical initial or loading dose. For subsequent doses use approximately 50% less than typical maintenance dose. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN, and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2C9": "0.0"
+   },
+   "allelestatus": {
+    "HLA-B": "No HLA-B Result"
+   },
+   "lookupkey": {
+    "HLA-B": "No Result",
+    "CYP2C9": "0.0"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481289,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "n/a"
+   },
+   "drugrecommendation": "No recommendation",
+   "classification": "n/a",
+   "phenotypes": {
+    "CYP2C9": "Indeterminate"
+   },
+   "activityscore": {
+    "CYP2C9": "n/a"
+   },
+   "allelestatus": {
+    "HLA-B": "No HLA-B Result"
+   },
+   "lookupkey": {
+    "HLA-B": "No Result",
+    "CYP2C9": "n/a"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481290,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "n/a",
+    "CYP2C9": "n/a"
+   },
+   "drugrecommendation": "No adjustments needed from typical dosing strategies. Subsequent doses should be adjusted according to therapeutic drug monitoring, response, and side effects. An HLA-B*15:02 negative test does not eliminate the risk of phenytoin-induced SJS/TEN and patients should be carefully monitored according to a usual standard.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2C9": "No Result"
+   },
+   "activityscore": {
+    "CYP2C9": "No Result"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 negative",
+    "CYP2C9": "No Result"
+   },
+   "population": "PHT use >3mos",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8481291,
+   "guidelineid": 100412,
+   "drugid": "RxNorm:8183",
+   "implications": {
+    "HLA-B": "Increased risk of phenytoin-induced SJS/TEN",
+    "CYP2C9": "n/a"
+   },
+   "drugrecommendation": "If the patient has previously used phenytoin continuously for longer than three months without incidence of cutaneous adverse reactions, cautiously consider use of phenytoin in the future. The latency period for drug-induced SJS/TEN is short with continuous dosing and adherence to therapy (4-28 days), and cases usually occur within three months of dosing.",
+   "classification": "Optional",
+   "phenotypes": {
+    "CYP2C9": "No Result"
+   },
+   "activityscore": {
+    "CYP2C9": "No Result"
+   },
+   "allelestatus": {
+    "HLA-B": "HLA-B*15:02 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*15:02 positive",
+    "CYP2C9": "No Result"
+   },
+   "population": "PHT use >3mos",
+   "comments": "Previous tolerance of phenytoin is not indicative of tolerance to other aromatic anticonvulsants.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479811,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Reduced metabolism of TCAs to less active compounds compared to normal metabolizers; Higher plasma concentrations of active drug will increase the probability of side effects",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Consider a 25% reduction of recommended starting dose. Utilize therapeutic drug monitoring to guide dose adjustments.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2D6": "Intermediate Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "0.25",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "0.25",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose. Dosing recommendations only apply to higher initial doses of TCAs for treatment of conditions such as depression. See other considerations for dosing recommendations for conditions where lower initial doses are used, such as neuropathic pain.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479812,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Reduced metabolism of TCAs to less active compounds compared to normal metabolizers; Higher plasma concentrations of active drug will increase the probability of side effects",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Consider a 25% reduction of recommended starting dose. Utilize therapeutic drug monitoring to guide dose adjustments.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2D6": "Intermediate Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "0.5",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "0.5",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose. Dosing recommendations only apply to higher initial doses of TCAs for treatment of conditions such as depression. See other considerations for dosing recommendations for conditions where lower initial doses are used, such as neuropathic pain.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479813,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Reduced metabolism of TCAs to less active compounds compared to normal metabolizers; Higher plasma concentrations of active drug will increase the probability of side effects",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Consider a 25% reduction of recommended starting dose. Utilize therapeutic drug monitoring to guide dose adjustments.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2D6": "Intermediate Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "0.75",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "0.75",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose. Dosing recommendations only apply to higher initial doses of TCAs for treatment of conditions such as depression. See other considerations for dosing recommendations for conditions where lower initial doses are used, such as neuropathic pain.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479814,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Reduced metabolism of TCAs to less active compounds compared to normal metabolizers; Higher plasma concentrations of active drug will increase the probability of side effects",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Consider a 25% reduction of recommended starting dose. Utilize therapeutic drug monitoring to guide dose adjustments.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2D6": "Intermediate Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "1.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "1.0",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose. Dosing recommendations only apply to higher initial doses of TCAs for treatment of conditions such as depression. See other considerations for dosing recommendations for conditions where lower initial doses are used, such as neuropathic pain.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479815,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Normal metabolism of TCAs",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Initiate therapy with recommended starting dose.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Normal Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "1.25",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "1.25",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479816,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Normal metabolism of TCAs",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Initiate therapy with recommended starting dose.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Normal Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "1.5",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "1.5",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479817,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Normal metabolism of TCAs",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Initiate therapy with recommended starting dose.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Normal Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "2.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "2.0",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479818,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Normal metabolism of TCAs",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Initiate therapy with recommended starting dose.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Normal Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "2.25",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "2.25",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479819,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Normal metabolism of TCAs",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Initiate therapy with recommended starting dose.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Normal Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "1.75",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "1.75",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479820,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Greatly reduced metabolism of TCAs to less active compounds compared to normal metabolizers; Higher plasma concentrations of active drug will increase the probability of side effects",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use. If a amitripyline is warranted, consider a 50% reduction of recommended starting dose. Utilize therapeutic drug monitoring to guide dose adjustments.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Poor Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "0.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "0.0",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose. Dosing recommendations only apply to higher initial doses of TCAs for treatment of conditions such as depression. See other considerations for dosing recommendations for conditions where lower initial doses are used, such as neuropathic pain.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479821,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Increased metabolism of TCAs to less active compounds compared to normal metabolizers; Lower plasma concentrations of active drug will increase probability of pharmacotherapy failure",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, consider titrating to a higher target dose (compared to normal metabolizers). Utilize therapeutic drug monitoring to guide dose adjustment.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Ultrarapid Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "2.5",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "2.5",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479822,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Increased metabolism of TCAs to less active compounds compared to normal metabolizers; Lower plasma concentrations of active drug will increase probability of pharmacotherapy failure",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, consider titrating to a higher target dose (compared to normal metabolizers). Utilize therapeutic drug monitoring to guide dose adjustment.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Ultrarapid Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "3.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "3.0",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479823,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Increased metabolism of TCAs to less active compounds compared to normal metabolizers; Lower plasma concentrations of active drug will increase probability of pharmacotherapy failure",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, consider titrating to a higher target dose (compared to normal metabolizers). Utilize therapeutic drug monitoring to guide dose adjustment.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Ultrarapid Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "2.75",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "2.75",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479824,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Increased metabolism of TCAs to less active compounds compared to normal metabolizers; Lower plasma concentrations of active drug will increase probability of pharmacotherapy failure",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, consider titrating to a higher target dose (compared to normal metabolizers). Utilize therapeutic drug monitoring to guide dose adjustment.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Ultrarapid Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "4.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "4.0",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479825,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Increased metabolism of TCAs to less active compounds compared to normal metabolizers; Lower plasma concentrations of active drug will increase probability of pharmacotherapy failure",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, consider titrating to a higher target dose (compared to normal metabolizers). Utilize therapeutic drug monitoring to guide dose adjustment.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Ultrarapid Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "≥3.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "≥3.0",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479826,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Increased metabolism of TCAs to less active compounds compared to normal metabolizers; Lower plasma concentrations of active drug will increase probability of pharmacotherapy failure",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, consider titrating to a higher target dose (compared to normal metabolizers). Utilize therapeutic drug monitoring to guide dose adjustment.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Ultrarapid Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "≥3.25",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "≥3.25",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479827,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Increased metabolism of TCAs to less active compounds compared to normal metabolizers; Lower plasma concentrations of active drug will increase probability of pharmacotherapy failure",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, consider titrating to a higher target dose (compared to normal metabolizers). Utilize therapeutic drug monitoring to guide dose adjustment.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Ultrarapid Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "≥3.5",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "≥3.5",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479828,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Increased metabolism of TCAs to less active compounds compared to normal metabolizers; Lower plasma concentrations of active drug will increase probability of pharmacotherapy failure",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, consider titrating to a higher target dose (compared to normal metabolizers). Utilize therapeutic drug monitoring to guide dose adjustment.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Ultrarapid Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "≥4.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "≥4.0",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479829,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Increased metabolism of TCAs to less active compounds compared to normal metabolizers; Lower plasma concentrations of active drug will increase probability of pharmacotherapy failure",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, consider titrating to a higher target dose (compared to normal metabolizers). Utilize therapeutic drug monitoring to guide dose adjustment.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Ultrarapid Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "≥3.75",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "≥3.75",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479830,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Increased metabolism of TCAs to less active compounds compared to normal metabolizers; Lower plasma concentrations of active drug will increase probability of pharmacotherapy failure",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, consider titrating to a higher target dose (compared to normal metabolizers). Utilize therapeutic drug monitoring to guide dose adjustment.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Ultrarapid Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "≥5.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "≥5.0",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479831,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Increased metabolism of TCAs to less active compounds compared to normal metabolizers; Lower plasma concentrations of active drug will increase probability of pharmacotherapy failure",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, consider titrating to a higher target dose (compared to normal metabolizers). Utilize therapeutic drug monitoring to guide dose adjustment.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Ultrarapid Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "≥6.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "≥6.0",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479832,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "n/a",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "No recommendation",
+   "classification": "No Recommendation",
+   "phenotypes": {
+    "CYP2D6": "Indeterminate",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "n/a",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "n/a",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479833,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "n/a",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Initiate therapy with recommended starting dose.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "No Result",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "No Result",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "No Result",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  }
+ ]
+}

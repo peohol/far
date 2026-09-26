@@ -24,6 +24,7 @@ import {
   betingelsetekst,
   byggCpicvisning,
   CPIC_ANDRE_PAR_KORT,
+  CPIC_OPPSLAG_KORT,
   cpicFor,
   cpickort,
   cpictekster,
@@ -33,6 +34,7 @@ import {
   MAKS_RADER_UTEN_DELING,
   sorterAktivitetsverdier,
   harCpic,
+  OPPSLAG_TITTEL,
   oppsummerCpic,
   retningslinjeoppsummering,
 } from '../cpic/stoffside'
@@ -291,8 +293,13 @@ describe('referansene fra CPIC', () => {
 describe('søket', () => {
   it('peker på kortet for retningslinjen, med betingelsene og anbefalingene', () => {
     const tekster = cpictekster(visningFor(AMITRIPTYLIN, WARFARIN))
-    expect(new Set(tekster.map((t) => t.detaljkort))).toEqual(new Set([cpickort('100414'), cpickort('100425'), CPIC_ANDRE_PAR_KORT]))
+    expect(new Set(tekster.map((t) => t.detaljkort))).toEqual(
+      new Set([CPIC_OPPSLAG_KORT, cpickort('100414'), cpickort('100425'), CPIC_ANDRE_PAR_KORT]),
+    )
     expect(tekster.every((t) => t.panel === 'farmakogenetikk' && t.element.id === t.detaljkort)).toBe(true)
+    // Oppslaget finnes med navnet og genene det slår opp på, bare når det er anbefalinger å slå opp.
+    expect(tekster.find((t) => t.detaljkort === CPIC_OPPSLAG_KORT)!.tekst).toBe(`${OPPSLAG_TITTEL} · CPIC · CYP2C19 · CYP2D6`)
+    expect(cpictekster(visningFor(WARFARIN)).some((t) => t.detaljkort === CPIC_OPPSLAG_KORT)).toBe(false)
     expect(tekster.some((t) => t.detaljkort === cpickort('100414') && t.tekst.includes('CYP2D6 Poor Metabolizer, aktivitetsverdi 0.0'))).toBe(true)
     expect(tekster.some((t) => t.detaljkort === CPIC_ANDRE_PAR_KORT && t.tekst.includes('GGCX'))).toBe(true)
   })

@@ -2325,6 +2325,54 @@ describe('farmakogenetikken fra ClinPGx', () => {
     expect(within(tabell).getByText('D')).toBeTruthy()
   })
 
+  it('slår opp CPICs anbefaling etter et kjent resultat, sier hvorfor, og lagrer ikke valgene', async () => {
+    const user = userEvent.setup()
+    const lagretFor = window.localStorage.length
+    vis('AMTNORSUM', medCpic({ data: medPgx() }))
+    await screen.findByText(/3 CPIC-anbefalinger/)
+    await apneSkuff(user, 'Farmakogenetikk')
+    const seksjon = screen.getByRole('region', { name: 'Farmakogenetikk' })
+    // Oppslaget står øverst i CPIC-gruppen.
+    expect(
+      skuffen('Slå opp anbefaling etter kjent resultat').compareDocumentPosition(skuffen('Syntetisk CPIC-retningslinje')) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+    await user.click(skuffen('Slå opp anbefaling etter kjent resultat'))
+    const kort = within(seksjon).getByLabelText('CYP2D6, resultat').closest('.interaksjon') as HTMLElement
+    expect(within(kort).getByText(/allerede er kjent og fortolket/)).toBeTruthy()
+    expect(within(kort).getByText('Velg resultatet for CYP2C19 og CYP2D6 for å se anbefalingen for amitriptyline.')).toBeTruthy()
+
+    // Ett gen er ikke nok: det andre fylles ikke inn.
+    await user.selectOptions(within(kort).getByLabelText('CYP2D6, resultat'), 'Intermediate Metabolizer')
+    expect(within(kort).getByText(/Anbefalingene bygger også på CYP2C19\./)).toBeTruthy()
+    expect(within(kort).queryByRole('region', { name: 'Anbefaling fra CPIC' })).toBeNull()
+
+    await user.selectOptions(within(kort).getByLabelText('CYP2C19, resultat'), 'Normal Metabolizer')
+    let treff = within(kort).getByRole('region', { name: 'Anbefaling fra CPIC' })
+    expect(within(treff).getByText('Syntetisk anbefaling ved redusert aktivitet.')).toBeTruthy()
+    expect(within(treff).getByText('Styrke: Strong')).toBeTruthy()
+    expect(within(treff).getByText('Syntetisk implikasjon for Intermediate Metabolizer.')).toBeTruthy()
+    expect(treff.textContent).toContain('Valgt: CYP2C19 Normal Metabolizer.')
+    expect(treff.textContent).toContain('Valgt: CYP2D6 Intermediate Metabolizer. CPIC har samme anbefaling for aktivitetsverdi 0.5 og 1.0.')
+    expect(treff.textContent).toContain('Anbefalinger 11, 12 i CPIC, retningslinjen «Syntetisk CPIC-retningslinje»')
+    expect(treff.textContent).toContain('CPIC, release v1.60.1 av 12. august 2026. Gjelder bruk av et allerede kjent resultat, ikke hvem som bør testes.')
+    expect(within(treff).getByRole('link', { name: /Les retningslinjen/ }).getAttribute('href')).toBe('https://cpicpgx.org/guidelines/syntetisk')
+
+    // Med den eksakte aktivitetsverdien gjelder raden én anbefaling.
+    await user.selectOptions(within(kort).getByLabelText('CYP2D6, aktivitetsverdi'), '0.5')
+    treff = within(kort).getByRole('region', { name: 'Anbefaling fra CPIC' })
+    expect(treff.textContent).toContain('Valgt: CYP2D6 Intermediate Metabolizer, aktivitetsverdi 0.5.')
+    expect(treff.textContent).toContain('Anbefaling 12 i CPIC')
+
+    // Valgene står verken i adressen eller i nettleseren.
+    expect(window.location.hash).not.toMatch(/Metabolizer|0\.5/)
+    expect(window.localStorage.length).toBe(lagretFor)
+
+    await user.click(within(kort).getByRole('button', { name: 'Nullstill valgene' }))
+    expect(within(kort).queryByRole('region', { name: 'Anbefaling fra CPIC' })).toBeNull()
+    expect((within(kort).getByLabelText('CYP2D6, resultat') as HTMLSelectElement).value).toBe('')
+  })
+
   it('sier fra når CPIC ikke har legemiddelet, når dataene ikke er hentet, og når lesingen feiler', async () => {
     const tom = { ...UTVALG_CPIC, legemidler: [], par: [], retningslinjer: [], anbefalinger: [], gener: [] }
     vis('AMTNORSUM', medCpic({ data: medPgx({ redaksjonelt: false }) }, cpicleser(tom)))
