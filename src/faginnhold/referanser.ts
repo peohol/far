@@ -30,14 +30,23 @@ export const SITERING = 'sitering'
 /** Skilletegnet i referanseformatet, som i planen. */
 const SKILLE = ' · '
 
+/** En lenke som hører til sporbarheten, som lisensen eller bruksvilkårene. */
+export interface Opphavslenke {
+  tekst: string
+  lenke: string
+}
+
 /**
  * Hvor en automatisk referanse kommer fra. `kilde` er dataene den er laget av,
  * f.eks. «FEST». `opphav` er sporbarheten — uttrekket og kontrollen — når
  * referansen er selve datakilden; den står for seg, ikke i referanseteksten.
+ * `lenker` er det kilden krever lenke til, som lisensen, og står under
+ * referansen i listen.
  */
 export interface Automatiskopphav {
   kilde: string
   opphav?: string
+  lenker?: readonly Opphavslenke[]
 }
 
 /**

@@ -13,23 +13,66 @@ for et legemiddel, ikke råd for en bestemt pasient.
 | | |
 | --- | --- |
 | Kilde | [ClinPGx](https://www.clinpgx.org) (PharmGKB, CPIC og PharmCAT samlet), Stanford University |
-| API | `https://api.clinpgx.org/v1`, OpenAPI i `/openapi.json`. Åpent, uten nøkkel |
-| Lisens | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Kilden skal navngis, lisensen oppgis, og det som bygger på dataene, deles under samme lisens |
-| Grense | Høyst to kall i sekundet; ClinPGx svarer 429 på flere |
-| Forbehold | ClinPGx skriver at API-et er under utvikling, og at parametre og svar kan endres. `api.pharmgkb.org` skal slås av |
+| API | `https://api.clinpgx.org/v1` (OpenAPI 3.0.1 i `https://api.clinpgx.org/openapi.json`, «ClinPGx REST API» versjon 1.0). Åpent, uten nøkkel |
+| Lisens | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), ifølge både API-ets forside og bruksvilkårene. Ikke CC BY-NC-SA |
+| Bruksvilkår | [Data Usage Policy](https://www.clinpgx.org/page/dataUsagePolicy) (versjon 10 ved kontrollen). Se under |
+| Grense | Høyst to kall i sekundet; ClinPGx svarer 429 på flere. Svarene har ingen rate limit-hoder |
+| Forbehold | ClinPGx skriver at endepunktene er «pretty stable», men at parametre og svar kan endres mens API-et utvikles, og at den endelige versjonen varsles på bloggen. Det gamle vertsnavnet `api.pharmgkb.org` skulle slås av 20.07.2026 og svarte ikke ved kontrollen |
 
-Kontrollert 26.09.2026 mot API-ets forside og OpenAPI-beskrivelsen.
+**Hva lisensen og bruksvilkårene sier.** Gjengitt fra bruksvilkårene, uten
+juridisk vurdering utover det de sier:
 
-**Navngivingen.** ClinPGx står som en automatisk, ikke-redigerbar referanse i
-referansefeltet til «Farmakogenetikk» (ID `clinpgx:kilde`), med lisensen og
-når dataene sist ble hentet: «Farmakogenetiske data fra ClinPGx, lisens
-CC BY-SA 4.0, sist hentet …». Nederst i seksjonen står det diskret at dette
-er referanseinformasjon fra ClinPGx, og når det sist ble hentet.
+- *Navngiving*: ClinPGx/PharmGKB skal krediteres, det skal lenkes til
+  lisensen, og det skal sies fra om det er gjort endringer.
+- *Deling på samme vilkår*: den som endrer, bearbeider, gjenbruker eller på
+  annen måte forandrer ClinPGx-data, skal dele bidragene sine under samme
+  lisens.
+- *Vilkår for bruk* (i tillegg til lisensen): dataene er for forskningsformål;
+  brukeren godtar å bruke dem til forskning og ikke med sikte på å tilby hele
+  eller deler av dataene for salg som en kommersiell vare, og å ta hensyn til
+  at nøyaktigheten ikke kan garanteres. Retningslinjene er ment å støtte
+  klinikerens beslutning, og ansvaret for behandlingen ligger hos helsepersonellet.
+- *CPIC-innhold* har egne vilkår på samme side: CC0 1.0, med ønske om at CPIC
+  krediteres, og at det oppgis URL, dato og versjon for data fra CPICs
+  database og API. Det gjelder CPICs egne data; det OUSFAR henter fra
+  ClinPGx-API-et, er ClinPGx-data under lisensen over.
 
-**Deling på samme vilkår** gjelder det som bygger på ClinPGx-dataene, altså
-det seksjonen viser fra dem. OUSFARs redaksjonelle innhold er et eget verk ved
-siden av og berøres ikke. Derfor kopieres ClinPGx-data aldri inn i det
-redaksjonelle innholdet eller i referansebasen.
+**Navngivingen i OUSFAR.** ClinPGx står som en automatisk, ikke-redigerbar
+referanse i referansefeltet til «Farmakogenetikk» (ID `clinpgx:kilde`): «Utdrag
+av farmakogenetiske data fra ClinPGx, omformet av OUSFAR, lisens CC BY-SA 4.0,
+sist hentet …». «Omformet» er det lisensen krever om endringer: OUSFAR viser
+et utvalg av feltene og gjør HTML om til ren tekst. I referanselisten nederst
+på siden står i tillegg lenkene «Lisens: CC BY-SA 4.0» og «Bruksvilkår hos
+ClinPGx» (`CLINPGX_LENKER` i `src/clinpgx/referanser.ts`). Nederst i seksjonen
+står det diskret at dette er referanseinformasjon fra ClinPGx, og når det
+sist ble hentet.
+
+**Hva som omfattes av delingen på samme vilkår**, sier kilden ikke noe mer
+presist om enn det som står over, og det er ikke vurdert juridisk her. Det
+OUSFAR gjør i praksis, er å holde ClinPGx-dataene atskilt: de vises bare som
+eget, merket innhold i seksjonen, og kopieres aldri inn i det redaksjonelle
+innholdet eller i referansebasen. Om noe mer enn det seksjonen viser fra
+ClinPGx må deles på samme vilkår, er et spørsmål for en jurist, ikke for koden.
+
+### Kontrollen 26.09.2026
+
+Kontrollert mot API-ets forside, bruksvilkårene (versjon 10), OpenAPI-beskrivelsen
+og med ekte kall:
+
+- Lisensen er CC BY-SA 4.0 begge steder, ikke CC BY-NC-SA 4.0. Bruksvilkårenes
+  «ikke for salg som kommersiell vare» står ved siden av lisensen, som vilkår
+  for bruk, ikke som en del av den.
+- Vertsnavnet er `api.clinpgx.org`, og OpenAPI oppgir `https://api.clinpgx.org/v1`.
+- Endepunktene og parametrene OUSFAR bruker, finnes uendret i OpenAPI:
+  `/data/chemical/{id}` og `/data/chemical` (`name`, `view`), og
+  `/data/guidelineAnnotation`, `/data/label` og `/data/summaryAnnotation`
+  (`relatedChemicals.accessionId`, `view`).
+- Ekte kall for sertralin, aripiprazol, karbamazepin, amitriptylin og fenytoin
+  ga alle feltene OUSFAR leser, og lesingen i `src/clinpgx/modell.ts` fikk ut
+  ID, gener, sammendrag, publikasjoner og evidensnivå for alle
+  retningslinjene og de kliniske annotasjonene. Én preparatomtale (fenytoin)
+  hadde verken sammendrag eller testvurdering; det tåles allerede. «Ingen
+  treff» er fortsatt en tom liste.
 
 ## Hva som hentes
 

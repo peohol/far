@@ -1,7 +1,7 @@
 /**
- * Referansene som kommer fra ClinPGx: ClinPGx selv, med lisensen og når
- * dataene sist ble hentet, og publikasjonene ClinPGx oppgir for hver
- * retningslinje og preparatomtale.
+ * Referansene som kommer fra ClinPGx: ClinPGx selv, med lisensen, lenkene til
+ * lisensen og bruksvilkårene og når dataene sist ble hentet, og publikasjonene
+ * ClinPGx oppgir for hver retningslinje og preparatomtale.
  *
  * De er automatiske, som referansene fra FEST (`src/legemiddeldata/referanser.ts`):
  * de lages av det siden har hentet fra OUSFARs kopi, hver gang siden vises,
@@ -11,7 +11,7 @@
  *
  * Alt her er rene funksjoner.
  */
-import type { Automatiskekilder, Automatiskelement, Referanse } from '../faginnhold/referanser'
+import type { Automatiskekilder, Automatiskelement, Opphavslenke, Referanse } from '../faginnhold/referanser'
 import { dato, kontrollsum } from '../legemiddeldata/referanser'
 import type { Farmakogenetikkutvalg } from './lesing'
 import { CLINPGX_NETTSTED, type Litteratur } from './modell'
@@ -31,17 +31,34 @@ const PREFIKS = 'clinpgx:'
 /** ID-en til referansen for ClinPGx selv. */
 export const CLINPGX_KILDE = `${PREFIKS}kilde`
 
-/** Lisensen ClinPGx-dataene er gitt ut under, og hvor den står. */
+/**
+ * Lisensen ClinPGx-dataene er gitt ut under, og bruksvilkårene (Data Usage
+ * Policy) som gjelder i tillegg. Kontrollert mot ClinPGx 26.09.2026; se
+ * `docs/clinpgx.md`.
+ */
 export const CLINPGX_LISENS = 'CC BY-SA 4.0'
 export const CLINPGX_LISENSLENKE = 'https://creativecommons.org/licenses/by-sa/4.0/'
+export const CLINPGX_BRUKSVILKAR = 'https://www.clinpgx.org/page/dataUsagePolicy'
+
+/** Lenkene lisensen krever, og bruksvilkårene, under ClinPGx i referanselisten. */
+export const CLINPGX_LENKER: readonly Opphavslenke[] = [
+  { tekst: `Lisens: ${CLINPGX_LISENS}`, lenke: CLINPGX_LISENSLENKE },
+  { tekst: 'Bruksvilkår hos ClinPGx', lenke: CLINPGX_BRUKSVILKAR },
+]
 
 /**
- * Sporbarheten for kopien siden viser: kilden, lisensen og når dataene sist
- * ble hentet. Lisensen krever at ClinPGx navngis og at lisensen oppgis.
+ * Sporbarheten for kopien siden viser: kilden, at det er et utdrag OUSFAR har
+ * omformet (valgt ut felt, gjort HTML om til ren tekst), lisensen og når
+ * dataene sist ble hentet. Lisensen krever at ClinPGx navngis, at det lenkes
+ * til lisensen ({@link CLINPGX_LENKER}), og at det sies fra om endringer.
  */
 export function clinpgxopphav(utvalg: Pick<Farmakogenetikkutvalg, 'kjemikalier'>): string {
   const hentet = dato(sistHentet(utvalg))
-  return [`Farmakogenetiske data fra ClinPGx, lisens ${CLINPGX_LISENS}`, hentet && `sist hentet ${hentet}`]
+  return [
+    'Utdrag av farmakogenetiske data fra ClinPGx, omformet av OUSFAR',
+    `lisens ${CLINPGX_LISENS}`,
+    hentet && `sist hentet ${hentet}`,
+  ]
     .filter(Boolean)
     .join(', ')
 }
@@ -54,7 +71,7 @@ export function clinpgxkilde(utvalg: Pick<Farmakogenetikkutvalg, 'kjemikalier'>)
     forfattere: 'Stanford University',
     aar: '',
     lenke: CLINPGX_NETTSTED,
-    automatisk: { kilde: CLINPGX, opphav: clinpgxopphav(utvalg) },
+    automatisk: { kilde: CLINPGX, opphav: clinpgxopphav(utvalg), lenker: CLINPGX_LENKER },
   }
 }
 
