@@ -75,3 +75,87 @@
 .farmakogenetikk__tabell a {
   color: var(--aksent);
 }
+
+/* --- Farmakogenetikk: anbefalingene fra CPIC -------------------------------
+   Over ClinPGx-dataene: ett detaljkort per CPIC-retningslinje, med
+   anbefalingene som en rolig liste — betingelsene som små merker, styrken og
+   anbefalingen under, og implikasjonene og kommentarene bak «Mer om
+   anbefalingen» (`<details>`, som nettleserens søk åpner selv). */
+.farmakogenetikk__ingress {
+  margin: 0;
+  font: var(--vekt-normal) var(--tekst-etikett) / var(--linjehoyde-ui) var(--skrift-ui);
+  color: var(--blekk-dempet);
+}
+
+.cpic__overskrift {
+  margin: var(--rom-3) 0 0;
+  font: var(--vekt-halvfet) var(--tekst-merke) / var(--linjehoyde-tett) var(--skrift-ui);
+  letter-spacing: var(--sperring-meta);
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.cpic__anbefalinger {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cpic__anbefaling {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  padding: var(--rom-3) 0;
+  border-top: var(--kant) solid var(--linje);
+}
+
+.cpic__betingelser {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-1) var(--rom-2);
+  margin: 0;
+}
+
+.cpic__betingelse,
+.cpic__populasjon {
+  padding: 0 var(--rom-2);
+  font: var(--vekt-halvfet) var(--tekst-etikett) / 1.6 var(--skrift-ui);
+  color: var(--blekk);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-pille);
+}
+
+.cpic__populasjon {
+  font-weight: var(--vekt-normal);
+  color: var(--blekk-dempet);
+}
+
+.cpic__anbefalingstekst {
+  margin: 0;
+  font: var(--vekt-normal) var(--tekst-ui) / 1.5 var(--skrift-ui);
+}
+
+.cpic__mer > summary {
+  width: fit-content;
+  font: var(--vekt-normal) var(--tekst-etikett) / var(--linjehoyde-ui) var(--skrift-ui);
+  color: var(--aksent);
+  cursor: pointer;
+}
+
+.cpic__mer[open] > summary {
+  margin-bottom: var(--rom-2);
+}
+
+/* Ved utskrift står alt åpent, også «Mer om anbefalingen». */
+@media print {
+  .cpic__mer > summary {
+    display: none;
+  }
+
+  .cpic__mer::details-content {
+    display: block;
+    content-visibility: visible;
+  }
+}

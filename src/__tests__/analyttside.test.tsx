@@ -37,6 +37,8 @@ import {
   type Legemiddelutvalg,
 } from '../legemiddeldata/lesing'
 import type { Farmakogenetikkleser, Farmakogenetikkutvalg } from '../clinpgx/lesing'
+import type { Cpicleser, Cpicutvalg } from '../cpic/lesing'
+import type { Anbefaling, Betingelse, Gen, Par } from '../cpic/modell'
 
 beforeAll(() => {
   globalThis.ResizeObserver ??= class {
@@ -2161,5 +2163,212 @@ describe('farmakogenetikken fra ClinPGx', () => {
       data: { kjemikalier: [{ clinpgx_id: 'PA1', navn: 'amitriptyline' }] },
     })
     await waitFor(() => expect(k.farmakogenetikk.hent).toHaveBeenCalledWith(['PA1']))
+  })
+
+  /* --- Anbefalingene fra CPIC ------------------------------------------------ */
+
+  const naa = new Date().toISOString()
+  const betingelse = (gen: string, felt: Partial<Betingelse>): Betingelse => ({
+    gen,
+    oppslagsverdi: null,
+    fenotype: null,
+    aktivitetsverdi: null,
+    allelstatus: null,
+    implikasjon: null,
+    ...felt,
+  })
+  const anbefaling = (id: string, cyp2d6: [string, string], tekst: string): Anbefaling => ({
+    id,
+    retningslinje_id: '900',
+    legemiddel_id: 'RxNorm:1',
+    betingelser: [
+      betingelse('CYP2C19', { oppslagsverdi: 'Normal Metabolizer', fenotype: 'Normal Metabolizer', aktivitetsverdi: 'n/a' }),
+      betingelse('CYP2D6', { oppslagsverdi: cyp2d6[1], fenotype: cyp2d6[0], aktivitetsverdi: cyp2d6[1], implikasjon: `Syntetisk implikasjon for ${cyp2d6[0]}.` }),
+    ],
+    oppslagsnokkel: { CYP2C19: 'Normal Metabolizer', CYP2D6: cyp2d6[1] },
+    anbefaling: tekst,
+    klassifisering: 'Strong',
+    populasjon: 'general',
+    kommentarer: 'n/a',
+    dosejustering: true,
+    alternativt_legemiddel: false,
+    annen_veiledning: false,
+  })
+  const par = (id: string, gen: string, retningslinje: string | null, niva: string): Par => ({
+    id,
+    gen,
+    legemiddel_id: 'RxNorm:1',
+    retningslinje_id: retningslinje,
+    brukt_i_anbefaling: retningslinje !== null,
+    cpic_niva: niva,
+    clinpgx_niva: null,
+    pgx_testing: null,
+    pmid: [],
+    fjernet: false,
+    fjernet_dato: null,
+    fjernet_grunn: null,
+  })
+  const gen = (symbol: string, oppslagsmetode: Gen['oppslagsmetode']): Gen => ({
+    symbol,
+    kromosom: null,
+    clinpgx_id: null,
+    hgnc_id: null,
+    ncbi_id: null,
+    ensembl_id: null,
+    oppslagsmetode,
+    merknad_diplotyper: null,
+    merknad_allelnavn: null,
+    url: null,
+  })
+
+  /** Syntetiske data i formen `les_cpic` gir; tekstene er ikke kliniske. */
+  const UTVALG_CPIC: Cpicutvalg = {
+    kilde: { navn: 'CPIC', release: 'v1.60.1', release_dato: '2026-08-12T00:00:00Z', skjemaversjon: '82', endret_kl: naa, kontrollert_kl: naa },
+    legemidler: [
+      {
+        id: 'RxNorm:1',
+        navn: 'amitriptyline',
+        clinpgx_id: 'PA1',
+        rxnorm: '1',
+        drugbank: null,
+        atc: ['N06AA09'],
+        umls: null,
+        retningslinje_id: '900',
+        flytskjema_url: 'https://files.cpicpgx.org/syntetisk.jpg',
+      },
+    ],
+    par: [par('1', 'CYP2C19', '900', 'A'), par('2', 'CYP2D6', '900', 'A'), par('3', 'ABCB1', null, 'D')],
+    retningslinjer: [
+      {
+        id: '900',
+        navn: 'Syntetisk CPIC-retningslinje',
+        url: 'https://cpicpgx.org/guidelines/syntetisk',
+        gener: ['CYP2C19', 'CYP2D6'],
+        clinpgx_id: 'PA901',
+        bruksmerknad: null,
+        publikasjoner: [
+          // Den samme publikasjonen som ClinPGx oppgir for retningslinjen.
+          { id: '1', retningslinje_id: '900', tittel: 'Syntetisk artikkel', forfattere: [], tidsskrift: null, aar: 2016, maaned: null, volum: null, side: null, pmid: null, pmcid: null, doi: '10.0000/syntetisk', url: null },
+        ],
+      },
+    ],
+    anbefalinger: [
+      anbefaling('11', ['Intermediate Metabolizer', '1.0'], 'Syntetisk anbefaling ved redusert aktivitet.'),
+      anbefaling('12', ['Intermediate Metabolizer', '0.5'], 'Syntetisk anbefaling ved redusert aktivitet.'),
+      anbefaling('13', ['Poor Metabolizer', '0.0'], 'Syntetisk anbefaling ved manglende aktivitet.'),
+    ],
+    gener: [gen('ABCB1', 'PHENOTYPE'), gen('CYP2C19', 'PHENOTYPE'), gen('CYP2D6', 'ACTIVITY_SCORE')],
+    genresultater: [],
+  }
+
+  function cpicleser(utvalg: Cpicutvalg = UTVALG_CPIC): Cpicleser {
+    return { les: vi.fn(async () => utvalg), hent: vi.fn(async () => ({ status: 'uendret' as const, release: 'v1.60.1' })) }
+  }
+
+  function medCpic(opp: Parameters<typeof kilde>[0] = {}, leser = cpicleser()) {
+    return { ...pgxkilde(opp), cpic: leser }
+  }
+
+  it('viser CPICs anbefalinger for seg, over ClinPGx-dataene, med kilde og versjon', async () => {
+    const user = userEvent.setup()
+    const k = medCpic({ data: medPgx() })
+    vis('AMTNORSUM', k)
+    // Den lukkede seksjonen nevner anbefalingene fra CPIC.
+    expect(await screen.findByText('CYP2D6 · CYP2C19 · CPIC + DPWG · 3 CPIC-anbefalinger · CYP-enzymer (substrat)')).toBeTruthy()
+    expect(k.cpic.les).toHaveBeenCalledWith(['PA1'])
+    await apneSkuff(user, 'Farmakogenetikk')
+    const seksjon = screen.getByRole('region', { name: 'Farmakogenetikk' })
+    const rekkefolge = [
+      skuffen('CYP-enzymer (substrat)'),
+      within(seksjon).getByRole('heading', { name: 'Anbefalinger fra CPIC' }),
+      skuffen('Syntetisk CPIC-retningslinje'),
+      skuffen('Andre gen–legemiddel-par i CPIC'),
+      within(seksjon).getByRole('heading', { name: 'Retningslinjer' }),
+      skuffen('CPIC · CYP2D6, CYP2C19'),
+    ]
+    for (let i = 1; i < rekkefolge.length; i += 1) {
+      expect(rekkefolge[i - 1]!.compareDocumentPosition(rekkefolge[i]!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    }
+    expect(within(seksjon).getByText(/når pasientens farmakogenetiske resultat allerede er kjent\. De sier ikke hvem som bør testes\./)).toBeTruthy()
+    expect(within(seksjon).getByText(/^Anbefalinger fra CPIC, release v1\.60\.1 av 12\. august 2026 · sist kontrollert/)).toBeTruthy()
+
+    await user.click(skuffen('Syntetisk CPIC-retningslinje'))
+    const kort = screen.getByText('Gen og resultattype').closest('.interaksjon') as HTMLElement
+    expect(kort.textContent).toContain('CYP2D6: slås opp på aktivitetsverdi')
+    expect(kort.textContent).toContain('CYP2C19: slås opp på fenotype')
+    expect(kort.textContent).toContain('CYP2D6 – amitriptyline: CPIC-nivå A')
+    // De to anbefalingene som bare skiller seg i aktivitetsverdien, står i én rad.
+    const rader = within(kort).getAllByRole('listitem')
+    expect(rader).toHaveLength(2)
+    expect(within(rader[0]!).getByText('CYP2D6 Intermediate Metabolizer, aktivitetsverdi 1.0 eller 0.5')).toBeTruthy()
+    expect(within(rader[0]!).getByText('Styrke: Strong')).toBeTruthy()
+    expect(within(rader[0]!).getByText('Syntetisk anbefaling ved redusert aktivitet.')).toBeTruthy()
+    // Hvorfor raden gjelder: implikasjonen og CPICs ID-er står under «Mer om anbefalingen».
+    expect(within(rader[0]!).getByText('Mer om anbefalingen')).toBeTruthy()
+    expect(within(rader[0]!).getByText('Syntetisk implikasjon for Intermediate Metabolizer.')).toBeTruthy()
+    expect(within(rader[0]!).getByText('11, 12')).toBeTruthy()
+    expect(within(kort).getByRole('link', { name: /Les retningslinjen/ }).getAttribute('href')).toBe('https://cpicpgx.org/guidelines/syntetisk')
+    expect(within(kort).getByRole('link', { name: /Flytskjema fra CPIC/ }).getAttribute('href')).toBe('https://files.cpicpgx.org/syntetisk.jpg')
+
+    // CPIC står som kilde i seksjonen, og publikasjonen ClinPGx også oppgir, står én gang.
+    const liste = screen.getByRole('region', { name: 'Referanser' })
+    expect(within(liste).getAllByText('Automatisk fra CPIC')).toHaveLength(1)
+    expect(liste.textContent).toContain('Strukturerte farmakogenetiske anbefalinger fra CPIC, release v1.60.1 av 12. august 2026, lisens CC0 1.0')
+    expect(within(liste).getAllByText(/Syntetisk artikkel/)).toHaveLength(1)
+
+    await user.click(skuffen('Andre gen–legemiddel-par i CPIC'))
+    const tabell = within(seksjon).getByRole('table')
+    expect(within(tabell).getByText('ABCB1')).toBeTruthy()
+    expect(within(tabell).getByText('D')).toBeTruthy()
+  })
+
+  it('sier fra når CPIC ikke har legemiddelet, når dataene ikke er hentet, og når lesingen feiler', async () => {
+    const tom = { ...UTVALG_CPIC, legemidler: [], par: [], retningslinjer: [], anbefalinger: [], gener: [] }
+    vis('AMTNORSUM', medCpic({ data: medPgx({ redaksjonelt: false }) }, cpicleser(tom)))
+    expect(await screen.findByText('CPIC har ingen gen–legemiddel-par eller anbefalinger for amitriptyline (CPIC, release v1.60.1 av 12. august 2026).')).toBeTruthy()
+    cleanup()
+
+    vis('AMTNORSUM', medCpic({ data: medPgx({ redaksjonelt: false }) }, cpicleser({ ...tom, kilde: { ...tom.kilde, endret_kl: null, kontrollert_kl: null } })))
+    expect(await screen.findByText('Anbefalingene fra CPIC er ikke hentet ennå. Den ukentlige oppdateringen henter dem.')).toBeTruthy()
+    cleanup()
+
+    const feil = cpicleser()
+    feil.les = vi.fn(async () => {
+      throw new Error('Nettverksfeil')
+    })
+    vis('AMTNORSUM', medCpic({ data: medPgx() }, feil))
+    expect(await screen.findByText(/Fikk ikke hentet anbefalingene fra CPIC\. Nettverksfeil/)).toBeTruthy()
+    // ClinPGx-dataene står der fortsatt.
+    expect(await screen.findByText(/CPIC \+ DPWG/)).toBeTruthy()
+  })
+
+  it('finner CPICs resultatkategorier i søket på siden, og åpner kortet', async () => {
+    const user = userEvent.setup()
+    vis('AMTNORSUM', medCpic({ data: medPgx() }))
+    await screen.findByText(/3 CPIC-anbefalinger/)
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'Poor Metabolizer')
+    const steder = within(await screen.findByRole('list', { name: 'Hvor treffene står' }))
+    await user.click(steder.getAllByRole('button', { name: /Farmakogenetikk › Syntetisk CPIC-retningslinje/ })[0]!)
+    expect(skuffen('Farmakogenetikk').getAttribute('aria-expanded')).toBe('true')
+    expect(skuffen('Syntetisk CPIC-retningslinje').getAttribute('aria-expanded')).toBe('true')
+  })
+
+  it('åpner CPIC-kortet adressen peker på', async () => {
+    vis('AMTNORSUM', medCpic({ data: medPgx() }), ['farmakogenetikk', 'cpic-900'])
+    await waitFor(() => expect(skuffen('Syntetisk CPIC-retningslinje').getAttribute('aria-expanded')).toBe('true'))
+    expect(skuffen('Farmakogenetikk').getAttribute('aria-expanded')).toBe('true')
+  })
+
+  it('lar administratoren hente CPIC-dataene på nytt i redigeringen', async () => {
+    const user = userEvent.setup()
+    const k = medCpic({ kanRedigere: true, data: medPgx() })
+    vis('AMTNORSUM', k)
+    await screen.findByText(/3 CPIC-anbefalinger/)
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await apneSkuff(user, 'Farmakogenetikk')
+    await user.click(await screen.findByRole('button', { name: 'Hent fra CPIC nå' }))
+    expect(await screen.findByText('CPIC-dataene er kontrollert og uendret.')).toBeTruthy()
+    expect(k.cpic.hent).toHaveBeenCalledTimes(1)
+    await waitFor(() => expect(k.cpic.les).toHaveBeenCalledTimes(2))
   })
 })

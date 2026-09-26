@@ -27,9 +27,12 @@ Kontrollert 26.09.2026 mot API-et og ekte kall: siste release var v1.60.1
 fant i bruksvilkårene; CPIC-dataene hentes rett fra CPICs API, ikke gjennom
 ClinPGx-API-et, og er derfor CPIC-data under CC0.
 
-**Navngivingen** hører til visningen (arbeidspakke D): CPIC, lenke til
-cpicpgx.org, release og når dataene sist ble hentet. Alt dette leveres av
-`les_cpic` (`kilde`).
+**Navngivingen**: CPIC står som en automatisk, ikke-redigerbar referanse i
+referansefeltet til «Farmakogenetikk» (ID `cpic:kilde`), med lenke til
+cpicpgx.org, lisensen, releasen og når dataene sist ble kontrollert:
+«Strukturerte farmakogenetiske anbefalinger fra CPIC, release v1.60.1 av
+12. august 2026, lisens CC0 1.0, sist kontrollert …». Nederst i gruppen står
+det samme kort. Alt dette leveres av `les_cpic` (`kilde`).
 
 ## Hva som hentes
 
@@ -130,8 +133,12 @@ Koden:
 | `src/cpic/synk.ts`, `lager.ts` | Synkroniseringen og databasekallene den gjør |
 | `src/cpic/endepunkt.ts`, `api/cpic-synk.ts` | Serverendepunktet |
 | `src/server/tilgang.ts` | Cron-hemmeligheten, administratorsjekken og oppkoblingen, felles med ClinPGx |
-| `src/cpic/lesing.ts` | Lesingen appen gjør (`lagCpicleser`) |
+| `src/cpic/lesing.ts` | Lesingen appen gjør (`lagCpicleser`), i deler når det er flere enn 200 legemidler |
+| `src/cpic/stoffside.ts` | Hva siden viser: utvalget for en side (`cpicFor`), kortene, grupperingen av anbefalingene, oppsummeringen og tekstene søket finner |
+| `src/cpic/referanser.ts` | De automatiske referansene og meldingen om gamle data |
+| `src/components/analyttside/Cpicvisning.tsx` | Gruppen i «Farmakogenetikk» |
 | `src/__tests__/cpic.test.ts`, `data/cpic-utdrag.json` | Lesingen, kallene, synkroniseringen mot en ekte database og endepunktet, med ekte rader fra CPIC |
+| `src/__tests__/cpicvisning.test.ts`, `analyttside.test.tsx` | Kortene, grupperingen, referansene og søket med de ekte radene, og visningen på siden |
 
 ## Synkroniseringen
 
@@ -181,9 +188,69 @@ dataene tar om lag 50 MB, det meste diplotypene.
   resultat som mangler, og en kombinasjon som ikke står i CPIC, har ingen
   anbefaling.
 
+## Visningen på stoffsiden
+
+CPIC-dataene står i seksjonen «Farmakogenetikk», i gruppen **«Anbefalinger
+fra CPIC»**, under de redaksjonelle kortene og over ClinPGx-dataene
+(`docs/clinpgx.md`). Gruppen har sin egen overskrift, ingress og kilde, så det
+er tydelig hva som er CPICs strukturerte forskrivningsanbefalinger og hva som
+er ClinPGx' bredere kunnskapsoversikt. Ingressen sier at anbefalingene gjelder
+et allerede kjent resultat, og ikke hvem som bør testes.
+
+Siden leser CPIC-dataene for de samme ClinPGx-ID-ene som koblingen i
+«Farmakogenetikk» (`clinpgxkobling`); CPIC oppgir ClinPGx-ID-en for hvert
+legemiddel. Visningen avhenger altså ikke av FEST. Den er ikke interaktiv:
+
+- **Ett detaljkort per CPIC-retningslinje** (`cpic-<retningslinje-ID>`, f.eks.
+  `cpic-100414`), med CPICs navn på retningslinjen som tittel. Oppsummeringen
+  er genene med resultattypen, antallet anbefalinger og styrkene. Kortet viser
+  - hvert gen og hva CPIC slår opp på for det (fenotype, aktivitetsverdi,
+    allelstatus),
+  - resultatkategoriene anbefalingene gjelder, per gen,
+  - gen–legemiddel-parene med CPIC- og ClinPGx-nivået (og om CPIC har fjernet
+    et par, eller ikke bruker genet i anbefalingene),
+  - styrkene, populasjonene og CPICs merknad om bruken,
+  - anbefalingene, som en liste,
+  - lenken til retningslinjen og CPICs flytskjema, og publikasjonene i
+    referansefeltet (den nyeste først; en publikasjon ClinPGx alt oppgir på
+    siden, samme PMID eller DOI, står én gang).
+- **Hver anbefaling** er en rad: betingelsen for hvert gen («CYP2D6 Poor
+  Metabolizer, aktivitetsverdi 0.0», «HLA-B*57:01 positive»), styrken og
+  anbefalingen. Implikasjonene per gen, kommentarene, populasjonen, typen råd
+  og CPICs ID-er for anbefalingene står under «Mer om anbefalingen»
+  (`<details>`), så det går an å se nøyaktig hvilke anbefalinger raden står
+  for.
+- **Sammenslåingen**: anbefalinger som er like i alt annet enn
+  aktivitetsverdien for et gen CPIC slår opp på aktivitetsverdi (samme
+  fenotype, implikasjoner, anbefaling, styrke, populasjon og kommentarer), står
+  i én rad med verdiene listet. Ellers står hver anbefaling for seg. Ingen rad
+  står for en kombinasjon CPIC ikke har, og testene kontrollerer at hver
+  anbefaling står nøyaktig én gang.
+- **Retningslinjer uten strukturerte anbefalinger** (som warfarin) får kortet
+  med CPICs merknad og en melding om at veiledningen står i selve
+  retningslinjen.
+- **Par uten retningslinje** står i ett kort, «Andre gen–legemiddel-par i
+  CPIC» (`cpic-andre-par`), som en kompakt tabell med genet, nivåene og
+  testingen.
+
+Verdiene vises som CPIC skrev dem, på engelsk. Bare CPICs «n/a» vises ikke
+(som kommentar eller aktivitetsverdi for gener som ikke slås opp på den).
+
+Den lukkede seksjonen nevner antallet, f.eks. «32 CPIC-anbefalinger». Siden
+sier fra når dataene ikke er hentet ennå, når CPIC ikke har noe for
+legemiddelet (med releasen), når lesingen feilet, og når dataene ikke er
+kontrollert på over ti døgn. En administrator kan hente CPIC på nytt med
+«Hent fra CPIC nå» i redigeringen.
+
+**Søket** på siden og i hele kunnskapsbasen finner retningslinjens navn,
+genene, resultattypene og resultatkategoriene, styrkene, hver anbefaling med
+betingelsene, og genene i de andre parene. Implikasjonene og kommentarene er
+ikke med, så et treff aldri peker på en tekst som er skjult. Et treff eller en
+direktelenke åpner seksjonen og kortet.
+
 ## Hva som bygger på dette
 
-Visningen på stoffsiden (D), oppslaget etter et kjent resultat (E),
+Visningen på stoffsiden (D, over), oppslaget etter et kjent resultat (E),
 diplotype → resultat (F) og varsling om endringer (G) leser dette laget.
 Ingen av dem skriver til det; nye lesefunksjoner legges i en egen migrasjon
 med samme rettighetsmønster.

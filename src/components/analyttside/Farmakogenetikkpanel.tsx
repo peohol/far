@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useState } from 'react'
 import { ELEMENTTYPER, type Clinpgxkoblingdata, type Paneldefinisjon } from '../../faginnhold/paneler'
 import { antall, forhandsvisning, ramsOpp } from '../../faginnhold/oppsummering'
 import type { Tilleggstekst } from '../../faginnhold/sok'
@@ -12,7 +12,7 @@ import {
   type Preparatomtale,
   type Retningslinje,
 } from '../../clinpgx/modell'
-import { clinpgxForeldet, litteraturreferanser } from '../../clinpgx/referanser'
+import { clinpgxForeldet, clinpgxlitteratur, litteraturreferanser } from '../../clinpgx/referanser'
 import {
   annotasjonskort,
   annotasjonstittel,
@@ -31,45 +31,57 @@ import {
   type Koblingsgrunnlag,
 } from '../../clinpgx/stoffside'
 import { Button } from '../Button'
-import { Ikon } from '../ikon/Ikon'
 import { Detaljkort } from '../seksjoner/Seksjon'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { Uthev } from '../Uthev'
 import { useFaginnholdskilde } from './Faginnholdskilde'
 import { elementAnker, kortelementer, kortoppsummering, Panel, Redaksjonskort, Redigerbar, type Panelkontekst } from './Paneler'
 import { ClinpgxkoblingSkjema } from './Skjemaer'
-import type { Farmakogenetikktilstand } from './useFarmakogenetikk'
+import { Gruppe, Kildelenke } from './Farmakogenetikkdeler'
+import { cpictekster, oppsummerCpic } from '../../cpic/stoffside'
+import { Cpicvisning } from './Cpicvisning'
+import type { Cpictilstand, Farmakogenetikktilstand } from './useFarmakogenetikk'
 import '../../styles/farmakogenetikk.css'
 
-/** Tekstene fra ClinPGx søket på siden finner, med detaljkortet de står i. */
-export function farmakogenetikksoketekster(tilstand: Farmakogenetikktilstand): Tilleggstekst[] {
-  return tilstand.status === 'klar' ? farmakogenetikktekster(tilstand.visning) : []
+/** Tekstene fra ClinPGx og CPIC søket på siden finner, med detaljkortet de står i. */
+export function farmakogenetikksoketekster(tilstand: Farmakogenetikktilstand, cpic: Cpictilstand): Tilleggstekst[] {
+  return [
+    ...(cpic.status === 'klar' ? cpictekster(cpic.visning) : []),
+    ...(tilstand.status === 'klar' ? farmakogenetikktekster(tilstand.visning) : []),
+  ]
 }
 
 /**
  * Seksjonen «Farmakogenetikk»: øverst de redaksjonelle kortene, som redigeres
- * her, og under dem det OUSFARs kopi av ClinPGx har for kjemikaliene siden er
- * koblet til: retningslinjene, preparatomtalene og de kliniske annotasjonene,
- * hver i sitt detaljkort. ClinPGx-innholdet er referanseinformasjon; det kan
- * ikke redigeres, og ClinPGx står som kilde i seksjonens referansefelt (se
- * `src/clinpgx/referanser.ts`). Koblingen står her, i redigeringsmodus.
+ * her, så CPICs strukturerte anbefalinger for legemidlene siden er koblet til
+ * (`Cpicvisning`), og under dem det OUSFARs kopi av ClinPGx har for de samme:
+ * retningslinjene, preparatomtalene og de kliniske annotasjonene, hver i sitt
+ * detaljkort. Dataene fra CPIC og ClinPGx er referanseinformasjon; de kan
+ * ikke redigeres, og kildene står i seksjonens referansefelt (se
+ * `src/cpic/referanser.ts` og `src/clinpgx/referanser.ts`). Koblingen står
+ * her, i redigeringsmodus.
  */
 export function Farmakogenetikkpanel({
   definisjon,
   kontekst,
   tilstand,
+  cpic,
   grunnlag,
   sidenavn,
   onHentet,
+  onCpicHentet,
 }: {
   definisjon: Paneldefinisjon
   kontekst: Panelkontekst
   tilstand: Farmakogenetikktilstand
+  cpic: Cpictilstand
   /** Sidens virkestoff i FEST, som forslagene i koblingen bygger på. */
   grunnlag: Koblingsgrunnlag
   sidenavn: string
   /** Etter at nye data er hentet fra ClinPGx, så siden leser dem. */
   onHentet: () => void
+  /** Etter at CPIC-dataene er hentet på nytt. */
+  onCpicHentet: () => void
 }) {
   const elementer = kortelementer(kontekst, definisjon.nokkel)
   const { kobling } = finnClinpgxkobling(kontekst.modell)
@@ -80,12 +92,25 @@ export function Farmakogenetikkpanel({
       definisjon={definisjon}
       kontekst={kontekst}
       tomt={elementer.length === 0 && !koblet}
-      oppsummering={ramsOpp([visning && oppsummerFarmakogenetikk(visning), kortoppsummering(elementer)])}
+      oppsummering={ramsOpp([
+        visning && oppsummerFarmakogenetikk(visning),
+        cpic.status === 'klar' && oppsummerCpic(cpic.visning),
+        kortoppsummering(elementer),
+      ])}
     >
       {/* Står det bare ett redaksjonelt kort, åpnes det bare når ClinPGx ikke har noe ved siden av. */}
       <Redaksjonskort definisjon={definisjon} kontekst={kontekst} elementer={elementer} ettAlene={!koblet} />
       {kontekst.redigerer && (
         <Clinpgxkobling definisjon={definisjon} kontekst={kontekst} grunnlag={grunnlag} sidenavn={sidenavn} onHentet={onHentet} />
+      )}
+      {koblet && (
+        <Cpicvisning
+          tilstand={cpic}
+          kobling={kobling}
+          litteratur={clinpgxlitteratur(visning)}
+          redigerer={kontekst.redigerer}
+          onHentet={onCpicHentet}
+        />
       )}
       {koblet && <Clinpgxvisning tilstand={tilstand} kobling={kobling} redigerer={kontekst.redigerer} />}
     </Panel>
@@ -324,28 +349,6 @@ function Grupper({ visning }: { visning: Farmakogenetikkvisning }) {
   )
 }
 
-/** En gruppe detaljkort med en overskrift som ikke er en egen skuff; siden har bare to nivåer. */
-function Gruppe({ tittel, dempet, children }: { tittel: string; dempet?: boolean; children: ReactNode }) {
-  return (
-    <div className="farmakogenetikk__gruppe" data-dempet={dempet || undefined}>
-      <p className="farmakogenetikk__gruppetittel" role="heading" aria-level={3}>
-        <Uthev tekst={tittel} />
-      </p>
-      <ul className="interaksjonsliste">{children}</ul>
-    </div>
-  )
-}
-
-function Clinpgxlenke({ lenke, children }: { lenke: string; children: ReactNode }) {
-  return (
-    <a className="preparatlenke" href={lenke} target="_blank" rel="noopener noreferrer">
-      <Ikon navn="ext" />
-      {children}
-      <span className="kun-skjermleser"> (åpnes i ny fane)</span>
-    </a>
-  )
-}
-
 /** Merknadene ClinPGx gir en retningslinje eller preparatomtale, som «Dosering». */
 function merknader(a: Retningslinje): string[] {
   return [
@@ -427,7 +430,7 @@ function Annotasjonskort({
             )}
           </dl>
           <p className="preparatlenker">
-            <Clinpgxlenke lenke={lenke}>Les hele i ClinPGx</Clinpgxlenke>
+            <Kildelenke lenke={lenke}>Les hele i ClinPGx</Kildelenke>
           </p>
           <Referansefelt ider={litteraturreferanser(a)} />
         </div>
@@ -500,7 +503,7 @@ function Klinisk({ annotasjon: a }: { annotasjon: MedKjemikalier<KliniskAnnotasj
           </dl>
           {lenke && (
             <p className="preparatlenker">
-              <Clinpgxlenke lenke={lenke}>Se annotasjonen i ClinPGx</Clinpgxlenke>
+              <Kildelenke lenke={lenke}>Se annotasjonen i ClinPGx</Kildelenke>
             </p>
           )}
         </div>
