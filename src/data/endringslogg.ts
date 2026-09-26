@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.41.0',
+    dato: '2026-09-26',
+    sammendrag: 'Administratorer ser hvordan hentingen fra ClinPGx og CPIC går, og hva som er endret i kildene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Ny side «Datakilder» i kontomenyen, bare for administratorer: om siste henting fra ClinPGx og CPIC gikk bra, når dataene sist ble hentet, og hvilken CPIC-release de kommer fra.',
+      'Hver henting sammenlignes med forrige, og det som er nytt, endret eller borte, logges. Endringer i anbefalinger og retningslinjer skilles fra endringer i navn, lenker og litteratur, og kan ses med teksten før og etter.',
+      'Siden sier fra når en henting har feilet, bare delvis lyktes, eller når det har gått for lang tid siden forrige vellykkede henting, og en administrator kan be om en ny henting der.',
+      'Kan ett av objektene ClinPGx sender for et legemiddel ikke leses, beholdes dataene fra før for det legemiddelet.',
+      'Ingenting av dette vises for andre brukere.',
+    ],
+  },
+  {
     versjon: '1.40.1',
     dato: '2026-09-26',
     sammendrag: 'De 18 nye ClinPGx-koblingene er lagt inn i databasen',

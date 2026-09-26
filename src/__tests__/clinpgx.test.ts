@@ -38,6 +38,7 @@ import {
   oppsummerFarmakogenetikk,
 } from '../clinpgx/stoffside'
 import { synkroniserClinpgx } from '../clinpgx/synk'
+import { lesDatakildestatus, vurderKilder } from '../datakilder/status'
 import { byggSidemodell } from '../faginnhold/analyttside'
 import { indekserKunnskapsbase, lesKunnskapsbase, lesSokeindeks } from '../faginnhold/globaltSok'
 import type { Analyttsidedata } from '../faginnhold/lesing'
@@ -328,7 +329,8 @@ function falskApi(endre: Partial<Record<string, unknown[] | Error>> = {}): Clinp
       const feil = endre[sti]
       if (feil instanceof Error) throw feil
       // En tom liste i stedet for kjemikaliet: ClinPGx svarer at det ikke finnes.
-      if (feil) return null
+      // Ellers er første element svaret.
+      if (feil) return feil[0] ?? null
       if (sti.endsWith(SERTRALIN)) return SERTRALINSVAR
       if (sti.endsWith('PA10026')) return ARIPIPRAZOL
       return null
@@ -434,6 +436,140 @@ describe('synkroniseringen', () => {
     const [aripiprazol] = (await leser.les(['PA10026'])).kjemikalier
     expect(aripiprazol).toMatchObject({ finnes: false, feil: 'ClinPGx har ikke kjemikaliet PA10026.' })
     expect((await leser.les(['PA10026'])).preparatomtaler).toHaveLength(2)
+  })
+
+  it('bytter ikke inn et kjemikalie når et objekt i svaret ikke kan leses', async () => {
+    await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+    const resultat = await synkroniserClinpgx({
+      lager: lager(),
+      api: falskApi({ [`/data/guidelineAnnotation ${SERTRALIN}`]: [...RETNINGSLINJER.slice(1), { name: 'Uten ID' }] }),
+    })
+    expect(resultat).toMatchObject({ status: 'delvis', hentet: 1, feilet: 1, forkastet: 1 })
+    expect((resultat as { feil: string }).feil).toContain(`${SERTRALIN}: 1 objekt i svaret kunne ikke leses`)
+    expect((await leser.les([SERTRALIN])).retningslinjer).toHaveLength(RETNINGSLINJER.length)
+  })
+
+  describe('endringsloggen', () => {
+    type Rad = { art: string; niva: string; type: string; objekt_id: string; kontekst: string | null; felt: string[]; etikett: string; spor: Record<string, unknown>; synk_id: number | null }
+    const endringer = async () =>
+      (await db.query<Rad>(
+        `select art, niva, type, objekt_id, kontekst, felt, etikett, spor, synk_id from datakilder.endringer
+         where kilde = 'clinpgx' order by id`,
+      )).rows
+    const retningslinje = RETNINGSLINJER[0] as Record<string, unknown>
+    const retningslinjeId = retningslinje.id as string
+    // ClinPGx' egen historikk for annotasjonen, nyest sist.
+    const HISTORIKK = [
+      { id: 1, date: '2019-05-23T15:24:50.090-07:00', type: 'Update', description: 'Annotation current with November 2018 guideline' },
+      { id: 2, date: '2026-09-20T00:00:00-07:00', type: 'Update', description: 'Updated recommendation' },
+    ]
+    const medRetningslinje = (endret: Record<string, unknown>) => ({
+      [`/data/guidelineAnnotation ${SERTRALIN}`]: [{ ...retningslinje, ...endret }, ...RETNINGSLINJER.slice(1)],
+    })
+
+    beforeEach(async () => {
+      await db.exec('truncate datakilder.endringer')
+    })
+
+    it('logger første henting som grunnlag, ikke hver annotasjon som ny, og ingenting når intet er endret', async () => {
+      await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      const forste = await endringer()
+      expect(forste.map((e) => [e.art, e.objekt_id])).toEqual(
+        expect.arrayContaining([['grunnlag', SERTRALIN], ['grunnlag', 'PA10026']]),
+      )
+      expect(forste.every((e) => e.art === 'grunnlag' && e.synk_id !== null)).toBe(true)
+      await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      expect(await endringer()).toHaveLength(forste.length)
+    })
+
+    it('skiller en endret retningslinje fra en endring bare i navn og litteratur', async () => {
+      await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      await db.exec('truncate datakilder.endringer')
+
+      await synkroniserClinpgx({ lager: lager(), api: falskApi(medRetningslinje({ name: 'Nytt navn' })) })
+      const navn = await endringer()
+      expect(navn).toEqual([expect.objectContaining({ art: 'endret', niva: 'metadata', type: 'retningslinje', objekt_id: retningslinjeId, felt: ['navn'] })])
+
+      const sammendrag = { ...(retningslinje.summaryMarkdown as object), html: '<p>Ny anbefaling.</p>' }
+      await synkroniserClinpgx({
+        lager: lager(),
+        api: falskApi(medRetningslinje({ name: 'Nytt navn', summaryMarkdown: sammendrag, dosingInformation: true, history: HISTORIKK })),
+      })
+      const [, klinisk] = await endringer()
+      // Rådataene er også endret (historikken), men de kliniske feltene avgjør.
+      expect(klinisk).toMatchObject({ art: 'endret', niva: 'klinisk', felt: ['dosering', 'sammendrag'] })
+      // ClinPGx' egen siste merknad om annotasjonen følger med, til sporing.
+      expect(klinisk!.spor).toEqual({ kildenotat: { dato: '2026-09-20T00:00:00-07:00', type: 'Update', merknad: 'Updated recommendation' } })
+    })
+
+    it('logger en endring bare i rådataene som metadata', async () => {
+      await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      await db.exec('truncate datakilder.endringer')
+      await synkroniserClinpgx({ lager: lager(), api: falskApi(medRetningslinje({ history: HISTORIKK })) })
+      expect(await endringer()).toEqual([
+        expect.objectContaining({ art: 'endret', niva: 'metadata', felt: ['raa.history'], spor: { kildenotat: expect.objectContaining({ merknad: 'Updated recommendation' }) } }),
+      ])
+    })
+
+    it('logger et kjemikalie der bare rådataene er endret, som metadata', async () => {
+      await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      await db.exec('truncate datakilder.endringer')
+      await synkroniserClinpgx({
+        lager: lager(),
+        api: falskApi({ [`/data/chemical/${SERTRALIN}`]: [{ ...(SERTRALINSVAR as object), feltOusfarIkkeLeser: 1 }] }),
+      })
+      expect(await endringer()).toEqual([
+        expect.objectContaining({ art: 'endret', niva: 'metadata', type: 'kjemikalie', objekt_id: SERTRALIN, felt: ['raa.feltOusfarIkkeLeser'] }),
+      ])
+    })
+
+    it('logger en retningslinje som forsvinner fra et kjemikalie, og en som kommer til, med kjemikaliet', async () => {
+      await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      await db.exec('truncate datakilder.endringer')
+      await synkroniserClinpgx({ lager: lager(), api: falskApi({ [`/data/guidelineAnnotation ${SERTRALIN}`]: RETNINGSLINJER.slice(1) }) })
+      await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      expect((await endringer()).map((e) => [e.art, e.niva, e.type, e.objekt_id, e.kontekst])).toEqual([
+        ['fjernet', 'klinisk', 'retningslinje', retningslinjeId, SERTRALIN],
+        ['ny', 'klinisk', 'retningslinje', retningslinjeId, SERTRALIN],
+      ])
+      expect((await endringer())[0]!.etikett).toBe(retningslinje.name)
+    })
+
+    it('lover ikke at alt står fra før når kjøringen feiler etter at kjemikalier er byttet inn', async () => {
+      await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      // Kjemikaliene byttes inn hvert for seg; så feiler avslutningen av kjøringen.
+      const feilende = { ...lager(), fullfor: async () => { throw new Error('Forbindelsen til databasen brøt') } }
+      const resultat = await synkroniserClinpgx({ lager: feilende, api: falskApi(medRetningslinje({ name: 'Nytt navn' })) })
+      expect(resultat.status).toBe('feilet')
+
+      // Retningslinjen er likevel byttet inn av den feilede kjøringen, og logget på den.
+      const { rows } = await db.query<{ navn: string }>(
+        `select data ->> 'navn' as navn from clinpgx.annotasjoner where type = 'retningslinje' and clinpgx_id = $1`,
+        [retningslinjeId],
+      )
+      expect(rows[0]!.navn).toBe('Nytt navn')
+      expect((await endringer()).filter((e) => e.art === 'endret')).toEqual([
+        expect.objectContaining({ synk_id: resultat.synk, felt: ['navn'] }),
+      ])
+
+      const status = lesDatakildestatus((await kall.klientFor(admin).rpc('datakilder_status', {})).data)
+      const clinpgx = vurderKilder(status).find((v) => v.kilde === 'clinpgx')!
+      expect(clinpgx.tilstand).toBe('feil')
+      expect(clinpgx.melding).toContain('Kjemikalier som ble hentet før feilen, kan være oppdatert')
+      expect(clinpgx.melding).not.toContain('Dataene fra siste vellykkede henting står')
+    })
+
+    it('logger at et kjemikalie er borte fra ClinPGx som klinisk, og ingenting fra et avvist svar', async () => {
+      await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      await db.exec('truncate datakilder.endringer')
+      await synkroniserClinpgx({ lager: lager(), api: falskApi({ [`/data/summaryAnnotation ${SERTRALIN}`]: KLINISKE.slice(0, 1) }) })
+      expect(await endringer()).toEqual([])
+
+      await synkroniserClinpgx({ lager: lager(), api: falskApi({ '/data/chemical/PA10026': [] }), bare: ['PA10026'] })
+      expect(await endringer()).toEqual([
+        expect.objectContaining({ art: 'endret', niva: 'klinisk', type: 'kjemikalie', objekt_id: 'PA10026', felt: ['finnes'] }),
+      ])
+    })
   })
 
   it('henter de som aldri er hentet først, og utsetter resten når tiden er knapp', async () => {
