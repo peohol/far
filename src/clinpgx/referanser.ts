@@ -108,6 +108,11 @@ export function litteraturreferanse(l: Litteratur): Referanse {
   }
 }
 
+/** Publikasjonene retningslinjene og preparatomtalene på siden viser til. */
+export function clinpgxlitteratur(visning: Pick<Farmakogenetikkvisning, 'retningslinjer' | 'preparatomtaler'> | null): Litteratur[] {
+  return visning ? [...visning.retningslinjer, ...visning.preparatomtaler].flatMap((a) => a.litteratur) : []
+}
+
 /** Referanse-ID-ene til publikasjonene en annotasjon viser til, uten gjentakelser. */
 export function litteraturreferanser(a: { litteratur: readonly Litteratur[] }): string[] {
   return [...new Set(a.litteratur.map(litteraturId))]

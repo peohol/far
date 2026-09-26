@@ -99,6 +99,21 @@ export function lesCpicutvalg(svar: unknown): Cpicutvalg {
   }
 }
 
+/** Legger sammen utvalg lest i flere kall, uten gjentakelser. */
+export function slaSammenCpicutvalg(utvalg: readonly Cpicutvalg[]): Cpicutvalg {
+  const unike = <T>(lister: T[][], nokkel: (x: T) => string) => [...new Map(lister.flat().map((x) => [nokkel(x), x])).values()]
+  const medId = <T extends { id: string }>(felt: (u: Cpicutvalg) => T[]) => unike(utvalg.map(felt), (x) => x.id)
+  return {
+    kilde: utvalg[0]?.kilde ?? TOM_CPICKILDE,
+    legemidler: medId((u) => u.legemidler),
+    par: medId((u) => u.par),
+    retningslinjer: medId((u) => u.retningslinjer),
+    anbefalinger: medId((u) => u.anbefalinger),
+    gener: unike(utvalg.map((u) => u.gener), (g) => g.symbol),
+    genresultater: medId((u) => u.genresultater),
+  }
+}
+
 /** Resultatet av en henting en administrator ba om. */
 export interface Hentingsresultat {
   status: 'fullfort' | 'uendret' | 'feilet'
@@ -118,10 +133,17 @@ export function lagCpicleser(klient: SupabaseClient, hent: typeof fetch = (...a)
     les: async (clinpgxIder) => {
       const ider = [...new Set(clinpgxIder)]
       if (ider.length === 0) return TOMT_CPICUTVALG
-      if (ider.length > MAKS_LEGEMIDLER) throw new Error(`Høyst ${MAKS_LEGEMIDLER} legemidler om gangen.`)
-      const { data, error } = await klient.rpc('les_cpic', { clinpgx_ider: ider })
-      if (error) throw new Error(error.message)
-      return lesCpicutvalg(data)
+      // Flere enn databasen tar i ett kall (søket i hele kunnskapsbasen) leses i deler.
+      const deler: string[][] = []
+      for (let i = 0; i < ider.length; i += MAKS_LEGEMIDLER) deler.push(ider.slice(i, i + MAKS_LEGEMIDLER))
+      const svar = await Promise.all(
+        deler.map(async (del) => {
+          const { data, error } = await klient.rpc('les_cpic', { clinpgx_ider: del })
+          if (error) throw new Error(error.message)
+          return lesCpicutvalg(data)
+        }),
+      )
+      return svar.length === 1 ? svar[0]! : slaSammenCpicutvalg(svar)
     },
     hent: async () => {
       const { data } = await klient.auth.getSession()

@@ -12,6 +12,23 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.40.0',
+    dato: '2026-09-26',
+    sammendrag: 'Farmakogenetikk viser CPICs anbefalinger for forskrivning ved et kjent genetisk resultat',
+    typer: ['Funksjonalitet', 'Fag'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Seksjonen «Farmakogenetikk» har en egen gruppe «Anbefalinger fra CPIC» over ClinPGx-dataene, med ett kort per CPIC-retningslinje for legemiddelet.',
+      'Kortet viser genene og hva slags resultat anbefalingene bygger på (fenotype, aktivitetsverdi eller allelstatus, som ved HLA), resultatkategoriene, CPIC-nivået for hvert gen–legemiddel-par og styrken på anbefalingene.',
+      'Hver anbefaling står som en rad med betingelsene for hvert gen, styrken og anbefalingsteksten, som CPIC skrev dem. Anbefalinger som bare skiller seg i aktivitetsverdien, står i samme rad med verdiene listet. Implikasjonene, kommentarene og CPICs egne ID-er står under «Mer om anbefalingen».',
+      'Har en retningslinje mange anbefalinger, som amitriptylin, står de i lukkede deler etter resultatet for ett gen, f.eks. «CYP2D6 Poor Metabolizer», så kortet ikke blir én lang tabell.',
+      'Retningslinjer uten strukturerte anbefalinger hos CPIC, som warfarin, sier det, og par CPIC har vurdert uten retningslinje står samlet i et eget kort.',
+      'CPIC står som kilde med release og når dataene sist ble kontrollert, og retningslinjens publikasjoner står i kortets referansefelt.',
+      'Søket på siden og i hele kunnskapsbasen finner genene, resultatkategoriene og anbefalingene, og et treff eller en direktelenke åpner kortet.',
+      'Anbefalingene gjelder et allerede kjent resultat. Siden sier ikke hvem som bør testes, og det finnes ennå ikke noe oppslag på et bestemt resultat.',
+    ],
+  },
+  {
     versjon: '1.39.3',
     dato: '2026-09-26',
     sammendrag: 'Alle stoffsidene har fått en avklart ClinPGx-status, og 18 sider til er koblet',

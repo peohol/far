@@ -333,6 +333,8 @@ Seksjonen «Farmakogenetikk», i denne rekkefølgen:
 
 1. **De redaksjonelle kortene**, som før. Står det bare ett, åpnes det av seg
    selv bare når ClinPGx ikke har noe ved siden av.
+   Under dem står CPICs strukturerte anbefalinger for de samme kjemikaliene,
+   i en egen gruppe med egen kilde (se `docs/cpic.md`).
 2. **Retningslinjer**: ett detaljkort per retningslinje, CPIC først, så DPWG.
    Tittelen er organisasjonen og genene («CPIC · CYP2B6, CYP2C19»); kortet
    har sammendraget, organisasjonen, genene, merknadene, lenken til ClinPGx
@@ -344,7 +346,8 @@ Seksjonen «Farmakogenetikk», i denne rekkefølgen:
    kompakt tabell.
 
 Den lukkede seksjonen oppsummerer genene og organisasjonene, f.eks.
-«CYP2D6 · CYP2C19 · CPIC + DPWG», og så titlene på de redaksjonelle kortene.
+«CYP2D6 · CYP2C19 · CPIC + DPWG», så antallet CPIC-anbefalinger, og så titlene
+på de redaksjonelle kortene.
 
 Siden sier fra når et kjemikalie ikke er hentet ennå, når ClinPGx ikke har
 noe, når siste henting feilet (feilmeldingen bare i redigeringsmodus), og når

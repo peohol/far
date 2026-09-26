@@ -13,12 +13,13 @@
  * 3. `les_interaksjoner` gir interaksjonene for alle sidene. Hver side får
  *    dem `byggInteraksjoner` velger for sidens egne nøkler.
  * 4. `les_farmakogenetikk` gir ClinPGx-dataene for alle kjemikaliene sidene er
- *    koblet til. Hver side får sin del (`farmakogenetikkFor`).
+ *    koblet til, og `les_cpic` CPIC-anbefalingene for de samme. Hver side får
+ *    sin del (`farmakogenetikkFor`, `cpicFor`).
  *
  * Rangeringen skjer bare i `sok.ts`; databasen gir bare innholdet. Klarer ikke
- * legemiddeldataene eller ClinPGx-dataene å lese, indekseres faginnholdet
- * likevel, og feilen står i {@link Kunnskapsbase.festfeil} eller
- * {@link Kunnskapsbase.clinpgxfeil}.
+ * legemiddeldataene, ClinPGx-dataene eller CPIC-dataene å lese, indekseres
+ * faginnholdet likevel, og feilen står i {@link Kunnskapsbase.festfeil},
+ * {@link Kunnskapsbase.clinpgxfeil} eller {@link Kunnskapsbase.cpicfeil}.
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { byggSidemodell, type Sidemodell } from './analyttside'
@@ -40,6 +41,8 @@ import { byggPreparatvisning } from '../legemiddeldata/preparatmodell'
 import { interaksjonstekster, koblede, preparattekster, utvalgFor } from '../legemiddeldata/stoffside'
 import { farmakogenetikkFor, type Farmakogenetikkleser, type Farmakogenetikkutvalg } from '../clinpgx/lesing'
 import { byggFarmakogenetikkvisning, farmakogenetikktekster, kobledeKjemikalier } from '../clinpgx/stoffside'
+import type { Cpicleser, Cpicutvalg } from '../cpic/lesing'
+import { byggCpicvisning, cpicFor, cpictekster } from '../cpic/stoffside'
 
 /** Alt søket i kunnskapsbasen indekserer. */
 export interface Kunnskapsbase {
@@ -54,6 +57,10 @@ export interface Kunnskapsbase {
   farmakogenetikk?: Farmakogenetikkutvalg | null
   /** Hvorfor ClinPGx-dataene mangler, når lesingen av dem feilet. */
   clinpgxfeil?: string
+  /** CPIC-dataene for de samme koblingene, eller `null` uten dem. */
+  cpic?: Cpicutvalg | null
+  /** Hvorfor CPIC-dataene mangler, når lesingen av dem feilet. */
+  cpicfeil?: string
 }
 
 export interface Sideleser {
@@ -99,8 +106,9 @@ export async function lesKunnskapsbase(
   legemidler: Legemiddelleser | null,
   tilstand: Tilstand = 'publisert',
   farmakogenetikk: Farmakogenetikkleser | null = null,
+  cpic: Cpicleser | null = null,
 ): Promise<Kunnskapsbase> {
-  return lesTillegg(await lesSidene(sider, tilstand), legemidler, farmakogenetikk)
+  return lesTillegg(await lesSidene(sider, tilstand), legemidler, farmakogenetikk, cpic)
 }
 
 /** Sidene i `tilstand`, uten legemiddeldataene. Det første søket kan gjøre. */
@@ -109,18 +117,27 @@ async function lesSidene(sider: Sideleser, tilstand: Tilstand): Promise<Analytts
   return (await Promise.all([sider.lesAnalyttsider(tilstand), sider.lesStoffsider(tilstand).catch(() => [])])).flat()
 }
 
-/** Sidene med legemiddeldataene og ClinPGx-dataene de er koblet til. */
+/** Sidene med legemiddeldataene, ClinPGx-dataene og CPIC-dataene de er koblet til. */
 async function lesTillegg(
   lest: Analyttsidedata[],
   legemidler: Legemiddelleser | null,
   farmakogenetikk: Farmakogenetikkleser | null,
+  cpic: Cpicleser | null,
 ): Promise<Kunnskapsbase> {
   const modeller = lest.map((s) => byggSidemodell(s))
-  const [fest, clinpgx] = await Promise.all([
+  const [fest, clinpgx, cpicdata] = await Promise.all([
     lesLegemiddeldata(legemidler, modeller),
-    lesClinpgxdata(farmakogenetikk, modeller),
+    lesForKjemikalier(farmakogenetikk, modeller),
+    lesForKjemikalier(cpic, modeller),
   ])
-  return { sider: lest, ...fest, ...clinpgx }
+  return {
+    sider: lest,
+    ...fest,
+    farmakogenetikk: clinpgx.utvalg,
+    ...(clinpgx.feil && { clinpgxfeil: clinpgx.feil }),
+    cpic: cpicdata.utvalg,
+    ...(cpicdata.feil && { cpicfeil: cpicdata.feil }),
+  }
 }
 
 async function lesLegemiddeldata(
@@ -141,16 +158,20 @@ async function lesLegemiddeldata(
   }
 }
 
-async function lesClinpgxdata(
-  leser: Farmakogenetikkleser | null,
+/**
+ * Dataene fra en kilde for alle kjemikaliene sidene er koblet til i ClinPGx,
+ * i ett kall. Feiler lesingen, er dataene `null` og feilen med.
+ */
+async function lesForKjemikalier<U>(
+  leser: { les(ider: readonly string[]): Promise<U> } | null,
   modeller: readonly Sidemodell[],
-): Promise<Pick<Kunnskapsbase, 'farmakogenetikk' | 'clinpgxfeil'>> {
+): Promise<{ utvalg: U | null; feil?: string }> {
   const alle = [...new Set(modeller.flatMap(kobledeKjemikalier))].sort()
-  if (!leser || alle.length === 0) return { farmakogenetikk: null }
+  if (!leser || alle.length === 0) return { utvalg: null }
   try {
-    return { farmakogenetikk: await leser.les(alle) }
+    return { utvalg: await leser.les(alle) }
   } catch (e) {
-    return { farmakogenetikk: null, clinpgxfeil: e instanceof Error ? e.message : String(e) }
+    return { utvalg: null, feil: e instanceof Error ? e.message : String(e) }
   }
 }
 
@@ -183,6 +204,13 @@ function farmakogenetikktekstene(base: Kunnskapsbase, modell: Sidemodell): Tille
   const koblet = kobledeKjemikalier(modell)
   if (!base.farmakogenetikk || koblet.length === 0) return []
   return farmakogenetikktekster(byggFarmakogenetikkvisning(farmakogenetikkFor(base.farmakogenetikk, koblet)))
+}
+
+/** Tekstene fra CPIC på én side, de samme som søket på siden får. */
+function cpictekstene(base: Kunnskapsbase, modell: Sidemodell): Tilleggstekst[] {
+  const koblet = kobledeKjemikalier(modell)
+  if (!base.cpic || koblet.length === 0) return []
+  return cpictekster(byggCpicvisning(cpicFor(base.cpic, koblet)))
 }
 
 function legemiddeltekster(base: Kunnskapsbase, koblet: readonly string[]): Tilleggstekst[] {
@@ -252,7 +280,11 @@ export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser, sider = []
       koder,
       komponenter: data.komponenter.map((k) => k.innhold.navn),
       modell,
-      tillegg: [...legemiddeltekster(base, koblede(modell)), ...farmakogenetikktekstene(base, modell)],
+      tillegg: [
+        ...legemiddeltekster(base, koblede(modell)),
+        ...farmakogenetikktekstene(base, modell),
+        ...cpictekstene(base, modell),
+      ],
     }
   })
   const indekserte = new Set(medInfoside.flatMap((s) => s.koder))
@@ -285,7 +317,7 @@ export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser, sider = []
 }
 
 /** En søkeindeks med feilene fra dataene som ikke kunne leses. */
-export type Kunnskapsindeks = Sokeindeks & { festfeil?: string; clinpgxfeil?: string }
+export type Kunnskapsindeks = Sokeindeks & { festfeil?: string; clinpgxfeil?: string; cpicfeil?: string }
 
 /**
  * Leser og indekserer hele kunnskapsbasen, klar til `sokGlobalt`.
@@ -300,18 +332,19 @@ export type Kunnskapsindeks = Sokeindeks & { festfeil?: string; clinpgxfeil?: st
 export async function lesSokeindeks(
   sider: Sideleser,
   legemidler: Legemiddelleser | null,
-  valg: Indekseringsvalg & { tilstand?: Tilstand; farmakogenetikk?: Farmakogenetikkleser } = {},
+  valg: Indekseringsvalg & { tilstand?: Tilstand; farmakogenetikk?: Farmakogenetikkleser; cpic?: Cpicleser } = {},
   delvis?: (indeks: Kunnskapsindeks) => void,
 ): Promise<Kunnskapsindeks> {
   const indekser = (base: Kunnskapsbase): Kunnskapsindeks => ({
     ...lagSokeindeks(indekserKunnskapsbase(base, valg)),
     ...(base.festfeil && { festfeil: base.festfeil }),
     ...(base.clinpgxfeil && { clinpgxfeil: base.clinpgxfeil }),
+    ...(base.cpicfeil && { cpicfeil: base.cpicfeil }),
   })
   const utenTillegg = (lest: Analyttsidedata[]): Kunnskapsbase => ({ sider: lest, legemidler: null, interaksjoner: null })
 
   delvis?.(indekser(utenTillegg([])))
   const lest = await lesSidene(sider, valg.tilstand ?? 'publisert')
   delvis?.(indekser(utenTillegg(lest)))
-  return indekser(await lesTillegg(lest, legemidler, valg.farmakogenetikk ?? null))
+  return indekser(await lesTillegg(lest, legemidler, valg.farmakogenetikk ?? null, valg.cpic ?? null))
 }

@@ -2,6 +2,7 @@ import { createContext, useContext, type ReactNode } from 'react'
 import type { Faginnholdslager } from '../../faginnhold/lagring'
 import type { Faginnholdsleser } from '../../faginnhold/lesing'
 import type { Farmakogenetikkleser } from '../../clinpgx/lesing'
+import type { Cpicleser } from '../../cpic/lesing'
 import type { Legemiddelleser } from '../../legemiddeldata/lesing'
 
 /**
@@ -28,6 +29,11 @@ export interface Faginnholdskilde {
    * redaksjonelle.
    */
   farmakogenetikk?: Farmakogenetikkleser
+  /**
+   * De strukturerte anbefalingene fra CPIC, som «Farmakogenetikk» viser for
+   * legemidlene siden er koblet til i ClinPGx. Uten den vises de ikke.
+   */
+  cpic?: Cpicleser
 }
 
 const Kontekst = createContext<Faginnholdskilde | null>(null)
