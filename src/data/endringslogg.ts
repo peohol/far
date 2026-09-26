@@ -26,6 +26,16 @@ export const ENDRINGSLOGG: Endring[] = [
     ],
   },
   {
+    versjon: '1.40.1',
+    dato: '2026-09-26',
+    sammendrag: 'De 18 nye ClinPGx-koblingene er lagt inn i databasen',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'De 18 sidene er koblet til ClinPGx i produksjonen, så 66 stoffsider er nå koblet. Dataene for de nye sidene vises etter neste henting fra ClinPGx.',
+    ],
+  },
+  {
     versjon: '1.40.0',
     dato: '2026-09-26',
     sammendrag: 'Farmakogenetikk viser CPICs anbefalinger for forskrivning ved et kjent genetisk resultat',
