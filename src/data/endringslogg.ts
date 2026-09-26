@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.36.7',
+    dato: '2026-09-26',
+    sammendrag: 'De nasjonale referanseområdene for antiepileptika er lagt inn i databasen',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Endringene for topiramat, okskarbazepin, de andre antiepileptika og klonazepam ved epilepsi vises nå på sidene.',
+    ],
+  },
+  {
     versjon: '1.36.6',
     dato: '2026-09-25',
     sammendrag: 'Antiepileptika har fått de nasjonale referanseområdene fra 2017',
