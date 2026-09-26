@@ -34,14 +34,16 @@ describe('lesefunksjonen', () => {
     bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lea', etternavn: 'Leser', rolle: 'user' })
     kall = faginnholdskall(db, admin)
 
-    // To kjøringer fra hver kilde, og endringer til den siste av dem.
+    // Kjøringer fra hver kilde, og endringer til dem.
     await db.exec(`
       insert into clinpgx.synkroniseringer (status, utlost_av, startet_kl, avsluttet_kl, parserversjon, antall)
       values ('fullfort', 'cron', '2026-09-21T02:30:00Z', '2026-09-21T02:35:00Z', 1, '{"hentet": 2}'),
              ('delvis', 'manuell', '2026-09-26T08:00:00Z', '2026-09-26T08:04:00Z', 1, '{"hentet": 1, "feilet": 1}');
       insert into cpic.synkroniseringer (status, startet_kl, avsluttet_kl, release, skjemaversjon, parserversjon)
       values ('fullfort', '2026-09-22T02:45:00Z', '2026-09-22T02:46:00Z', 'v1.60.1', '82', 1),
-             ('feilet', '2026-09-26T09:00:00Z', '2026-09-26T09:00:10Z', null, null, null);
+             ('feilet', '2026-09-26T09:00:00Z', '2026-09-26T09:00:10Z', null, null, null),
+             -- Uendret, men uten release: CPICs releaseside svarte ikke.
+             ('uendret', '2026-09-26T10:00:00Z', '2026-09-26T10:00:05Z', null, null, 1);
       insert into datakilder.endringer (kilde, synk_id, type, objekt_id, kontekst, art, niva, etikett, felt, foer, etter, spor, registrert_kl)
       values
         ('clinpgx', 2, 'retningslinje', 'PA166104980', null, 'endret', 'klinisk', 'Annotation of CPIC Guideline for sertraline',
@@ -57,15 +59,22 @@ describe('lesefunksjonen', () => {
     expect(status.kjoringer.map((k) => [k.kilde, k.id, k.status])).toEqual([
       ['clinpgx', 2, 'delvis'],
       ['clinpgx', 1, 'fullfort'],
+      ['cpic', 3, 'uendret'],
       ['cpic', 2, 'feilet'],
       ['cpic', 1, 'fullfort'],
     ])
     expect(status.kjoringer[0]).toMatchObject({ utlost_av: 'manuell', versjon: '1', endringer: { klinisk: 2, metadata: 1, grunnlag: 0 } })
-    expect(status.kjoringer[3]).toMatchObject({ release: 'v1.60.1', versjon: '82', endringer: { klinisk: 0, metadata: 0, grunnlag: 1 } })
+    expect(status.kjoringer[4]).toMatchObject({ release: 'v1.60.1', versjon: '82', endringer: { klinisk: 0, metadata: 0, grunnlag: 1 } })
     expect(status.endringer.map((e) => e.objekt_id)).toEqual(['PA166104981', '1447954390', 'PA166104980', 'anbefaling'])
+    // Siste kjente release og versjon står selv om siste kjøring ikke fikk dem oppgitt.
+    expect(status.kilder).toEqual({ clinpgx: { release: null, versjon: '1' }, cpic: { release: 'v1.60.1', versjon: '82' } })
+    expect(vurderKilder(status).find((v) => v.kilde === 'cpic')).toMatchObject({ release: 'v1.60.1', versjon: '82' })
+
+    // Grensen gjelder hver kilde for seg: mange nye føringer i den ene skyver ikke den andre ut.
     const { data } = await kall.klientFor(admin).rpc('datakilder_status', { antall: 1 })
     expect(JSON.stringify(data)).not.toContain('txid')
-    expect(lesDatakildestatus(data).endringer).toHaveLength(1)
+    expect(JSON.stringify(data)).not.toContain('"nr"')
+    expect(lesDatakildestatus(data).endringer.map((e) => e.objekt_id)).toEqual(['PA166104981', 'anbefaling'])
   })
 
   it('er bare for administratorer, og ingen andre når tabellene', async () => {
@@ -90,7 +99,7 @@ describe('lesefunksjonen', () => {
       kalt.push({ url, init })
       return new Response(JSON.stringify({ status: 'uendret' }))
     }) as unknown as typeof fetch)
-    expect((await leser.status()).kjoringer).toHaveLength(4)
+    expect((await leser.status()).kjoringer).toHaveLength(5)
     expect(await leser.hentNa('cpic')).toEqual({ status: 'uendret' })
     expect(kalt).toEqual([{ url: '/api/cpic-synk', init: { method: 'POST', headers: { authorization: 'Bearer tokenet' } } }])
 
@@ -163,6 +172,16 @@ describe('vurderingen', () => {
     expect(vurder([]).clinpgx).toMatchObject({ tilstand: 'advarsel', melding: 'Ingen henting fra ClinPGx er logget ennå.' })
   })
 
+  it('viser siste kjente release fra en vellykket kjøring når den siste ikke fikk den oppgitt', () => {
+    const v = vurder([
+      kjoring('cpic', 4, 'feilet', '2026-09-26T09:00:00Z', { release: 'v9.9.9' }),
+      kjoring('cpic', 3, 'uendret', '2026-09-25T02:45:00Z'),
+      kjoring('cpic', 2, 'fullfort', '2026-09-22T02:45:00Z', { release: 'v1.60.1', versjon: '82' }),
+    ])
+    expect(v.cpic).toMatchObject({ release: 'v1.60.1', versjon: '82' })
+    expect(v.clinpgx).toMatchObject({ release: null, versjon: null })
+  })
+
   it('leser svaret defensivt', () => {
     expect(lesDatakildestatus(null)).toEqual(TOM_DATAKILDESTATUS)
     expect(
@@ -173,6 +192,7 @@ describe('vurderingen', () => {
     ).toEqual({
       kjoringer: [],
       endringer: [expect.objectContaining({ etikett: 'CYP2D6', niva: 'klinisk', felt: ['a'], spor: {} })],
+      kilder: {},
     })
   })
 })

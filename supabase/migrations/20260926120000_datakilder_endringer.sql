@@ -392,11 +392,14 @@ begin
       select jsonb_agg(jsonb_build_object(
         'id', n.clinpgx_id,
         'foer', g.data || jsonb_build_object('finnes', g.finnes),
-        'etter', coalesce(n.data, g.data) || jsonb_build_object('finnes', n.finnes)))
+        'etter', coalesce(n.data, g.data) || jsonb_build_object('finnes', n.finnes),
+        'foer_raa', g.raa,
+        'etter_raa', coalesce(n.raa, g.raa)))
       from gamle g
       join nye n on n.clinpgx_id = g.clinpgx_id
       where g.data is not null
-        and (g.finnes is distinct from n.finnes or (n.data is not null and g.hash is distinct from n.hash))), '[]'));
+        and (g.finnes is distinct from n.finnes
+             or (n.data is not null and (g.hash is distinct from n.hash or g.raa is distinct from n.raa)))), '[]'));
   end if;
   return null;
 end;
@@ -502,8 +505,9 @@ create trigger datakilder_ny after insert on clinpgx.kjemikalie_annotasjoner ref
 -- --- Lesingen ---------------------------------------------------------------
 
 -- Driftstatusen for administratorer: for hver kilde de siste kjøringene med
--- hvor mye som var klinisk endret, metadata og grunnlag, siste vellykkede
--- kjøring, og de siste endringene med sporet tilbake til kjøringen.
+-- hvor mye som var klinisk endret, metadata og grunnlag, siste kjente
+-- release og versjon, og de siste endringene per kilde med sporet tilbake til
+-- kjøringen.
 create function public.datakilder_status(antall integer default 200)
 returns jsonb
 language plpgsql
@@ -551,13 +555,26 @@ begin
         from siste s
         left join opptalt o on o.kilde = s.kilde and o.synk_id = s.id
         where s.nr <= 10), '[]'),
+      -- Det siste som er kjent om hver kilde, også når siste kjøring ikke
+      -- fikk oppgitt release eller versjon (CPIC-releasen er valgfri).
+      'kilder', coalesce((
+        select jsonb_object_agg(k.kilde, jsonb_build_object(
+          'release', (select v.release from kjoringer v
+                      where v.kilde = k.kilde and v.status not in ('pagar', 'feilet') and v.release is not null
+                      order by v.id desc limit 1),
+          'versjon', (select v.versjon from kjoringer v
+                      where v.kilde = k.kilde and v.status not in ('pagar', 'feilet') and v.versjon is not null
+                      order by v.id desc limit 1)))
+        from (select distinct kilde from kjoringer) k), '{}'),
+      -- Grensen gjelder hver kilde for seg, så en stor release i den ene ikke
+      -- skyver den andre ut.
       'endringer', coalesce((
-        select jsonb_agg(to_jsonb(e) - 'txid' order by e.registrert_kl desc, e.id desc)
+        select jsonb_agg(to_jsonb(e) - 'txid' - 'nr' order by e.registrert_kl desc, e.id desc)
         from (
-          select e.* from datakilder.endringer e
-          order by e.registrert_kl desc, e.id desc
-          limit least(greatest(coalesce(datakilder_status.antall, 200), 1), 1000)
-        ) e), '[]')
+          select e.*, row_number() over (partition by e.kilde order by e.registrert_kl desc, e.id desc) as nr
+          from datakilder.endringer e
+        ) e
+        where e.nr <= least(greatest(coalesce(datakilder_status.antall, 200), 1), 1000)), '[]')
     )
   );
 end;

@@ -71,12 +71,20 @@ export interface Endring {
   registrert_kl: string
 }
 
-export interface Datakildestatus {
-  kjoringer: Kjoring[]
-  endringer: Endring[]
+/** Det siste som er kjent om en kilde, også når siste kjøring ikke fikk det oppgitt. */
+export interface Kildefakta {
+  release: string | null
+  versjon: string | null
 }
 
-export const TOM_DATAKILDESTATUS: Datakildestatus = { kjoringer: [], endringer: [] }
+export interface Datakildestatus {
+  kjoringer: Kjoring[]
+  /** Nyest først; høyst `antall` per kilde. */
+  endringer: Endring[]
+  kilder?: Partial<Record<Datakilde, Kildefakta>>
+}
+
+export const TOM_DATAKILDESTATUS: Datakildestatus = { kjoringer: [], endringer: [], kilder: {} }
 
 /* --- Lesingen --------------------------------------------------------------- */
 
@@ -151,7 +159,14 @@ export function lesDatakildestatus(svar: unknown): Datakildestatus {
   if (!erObjekt(svar)) return TOM_DATAKILDESTATUS
   const liste = <T>(v: unknown, les: (o: unknown) => T | null) =>
     (Array.isArray(v) ? v : []).map(les).filter((x): x is T => x !== null)
-  return { kjoringer: liste(svar.kjoringer, lesKjoring), endringer: liste(svar.endringer, lesEndring) }
+  const kilder: Partial<Record<Datakilde, Kildefakta>> = {}
+  if (erObjekt(svar.kilder)) {
+    for (const kilde of DATAKILDER) {
+      const k = svar.kilder[kilde]
+      if (erObjekt(k)) kilder[kilde] = { release: tekst(k.release), versjon: tekst(k.versjon) }
+    }
+  }
+  return { kjoringer: liste(svar.kjoringer, lesKjoring), endringer: liste(svar.endringer, lesEndring), kilder }
 }
 
 /* --- Vurderingen ------------------------------------------------------------ */
@@ -197,6 +212,9 @@ export interface Kildevurdering {
   melding: string
   siste: Kjoring | null
   sisteVellykkede: Kjoring | null
+  /** Siste kjente release og versjon, fra en vellykket kjøring. */
+  release: string | null
+  versjon: string | null
   /** Nyest først. */
   kjoringer: Kjoring[]
   /** Nyest først. */
@@ -223,9 +241,14 @@ export function vurderKilder(
     const kjoringer = status.kjoringer.filter((k) => k.kilde === kilde).sort((a, b) => b.id - a.id)
     const endringer = status.endringer.filter((e) => e.kilde === kilde)
     const siste = kjoringer[0] ?? null
-    const sisteVellykkede = kjoringer.find((k) => VELLYKKET.includes(k.status)) ?? null
+    const vellykkede = kjoringer.filter((k) => VELLYKKET.includes(k.status))
+    const sisteVellykkede = vellykkede[0] ?? null
+    const kjent = (felt: keyof Kildefakta) =>
+      status.kilder?.[kilde]?.[felt] ?? vellykkede.find((k) => k[felt])?.[felt] ?? null
+    const release = kjent('release')
+    const versjon = kjent('versjon')
     const vurdering = (tilstand: Tilstand, melding: string): Kildevurdering => ({
-      kilde, navn, tilstand, melding, siste, sisteVellykkede, kjoringer, endringer,
+      kilde, navn, tilstand, melding, siste, sisteVellykkede, release, versjon, kjoringer, endringer,
     })
 
     if (!siste) return vurdering('advarsel', `Ingen henting fra ${navn} er logget ennå.`)

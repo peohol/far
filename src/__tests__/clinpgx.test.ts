@@ -328,7 +328,8 @@ function falskApi(endre: Partial<Record<string, unknown[] | Error>> = {}): Clinp
       const feil = endre[sti]
       if (feil instanceof Error) throw feil
       // En tom liste i stedet for kjemikaliet: ClinPGx svarer at det ikke finnes.
-      if (feil) return null
+      // Ellers er første element svaret.
+      if (feil) return feil[0] ?? null
       if (sti.endsWith(SERTRALIN)) return SERTRALINSVAR
       if (sti.endsWith('PA10026')) return ARIPIPRAZOL
       return null
@@ -506,6 +507,18 @@ describe('synkroniseringen', () => {
       await synkroniserClinpgx({ lager: lager(), api: falskApi(medRetningslinje({ history: HISTORIKK })) })
       expect(await endringer()).toEqual([
         expect.objectContaining({ art: 'endret', niva: 'metadata', felt: ['raa.history'], spor: { kildenotat: expect.objectContaining({ merknad: 'Updated recommendation' }) } }),
+      ])
+    })
+
+    it('logger et kjemikalie der bare rådataene er endret, som metadata', async () => {
+      await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      await db.exec('truncate datakilder.endringer')
+      await synkroniserClinpgx({
+        lager: lager(),
+        api: falskApi({ [`/data/chemical/${SERTRALIN}`]: [{ ...(SERTRALINSVAR as object), feltOusfarIkkeLeser: 1 }] }),
+      })
+      expect(await endringer()).toEqual([
+        expect.objectContaining({ art: 'endret', niva: 'metadata', type: 'kjemikalie', objekt_id: SERTRALIN, felt: ['raa.feltOusfarIkkeLeser'] }),
       ])
     })
 

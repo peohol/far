@@ -52,8 +52,8 @@ Avgjøres deterministisk av feltene som er endret, med reglene i
 3. Et felt som bare finnes på den ene siden, er en endring i OUSFARs lesing
    (ny `PARSERVERSJON`), ikke i kilden, og teller som metadata.
 4. Er de leste dataene like og bare rådataene ulike, er det metadata
-   (`raa.<felt>`), f.eks. ny historikk hos ClinPGx eller en kolonne OUSFAR ikke
-   leser.
+   (`raa.<felt>`), f.eks. ny historikk hos ClinPGx, et felt OUSFAR ikke leser
+   på et kjemikalie, eller en kolonne OUSFAR ikke leser i CPIC.
 5. At noe kommer til eller forsvinner, følger regelen for typen.
 
 Metadata er i dag:
@@ -97,7 +97,10 @@ borte — er en `fjernet`-føring, klinisk, og synes i panelet.
 
 `datakilder_status(antall)` (bare administratorer; andre får 42501) gir de ti
 siste kjøringene per kilde med antallet kliniske endringer, metadata og
-grunnlag, og de siste endringene (200 som standard, høyst 1000).
+grunnlag, siste kjente release og versjon per kilde (fra en vellykket kjøring,
+også når den siste ikke fikk dem oppgitt), og de siste endringene per kilde
+(200 som standard, høyst 1000), så en stor release i den ene kilden ikke
+skyver den andre ut.
 
 I appen: kontomenyen → «Datakilder» (bare for administratorer,
 `src/components/konto/Datakilder.tsx`). Per kilde:

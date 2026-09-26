@@ -170,12 +170,12 @@ function Kilde({
         {v.kilde === 'cpic' && (
           <div>
             <dt>Release</dt>
-            <dd>{vellykket?.release ?? '–'}</dd>
+            <dd>{v.release ?? '–'}</dd>
           </div>
         )}
         <div>
           <dt>{versjonsnavn}</dt>
-          <dd>{vellykket?.versjon ?? '–'}</dd>
+          <dd>{v.versjon ?? '–'}</dd>
         </div>
       </dl>
 
