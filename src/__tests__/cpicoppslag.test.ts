@@ -117,8 +117,8 @@ describe('oppslaget', () => {
     })
     expect(svar.treff).toEqual([])
     expect(svar.uavklart).toEqual([
-      { populasjon: 'PHT naive', gen: 'CYP2C9', resultat: 'Intermediate Metabolizer', oppslagsverdier: ['1.0', '1.5'] },
-      { populasjon: 'PHT use >3mos', gen: 'CYP2C9', resultat: 'Intermediate Metabolizer', oppslagsverdier: ['1.0', '1.5'] },
+      { populasjon: 'PHT naive', gen: 'CYP2C9', resultat: 'Intermediate Metabolizer', oppslagsverdier: ['1.0', '1.5'], uten_anbefaling: [] },
+      { populasjon: 'PHT use >3mos', gen: 'CYP2C9', resultat: 'Intermediate Metabolizer', oppslagsverdier: ['1.0', '1.5'], uten_anbefaling: [] },
     ])
   })
 
@@ -133,6 +133,24 @@ describe('oppslaget', () => {
     expect(t!.gruppe.anbefalinger).toHaveLength(4)
     expect(t!.gruppe.klassifisering).toBe('Moderate')
     expect(t!.begrunnelser.find((b) => b.gen === 'CYP2D6')!.oppslagsverdier).toEqual(['0.25', '0.5', '0.75', '1.0'])
+  })
+
+  it('bruker ikke anbefalingen uten aktivitetsverdien når CPIC mangler den for en av verdiene', () => {
+    // De andre verdiene for CYP2D6 Intermediate Metabolizer har samme anbefaling, men 0.5 har ingen.
+    const uten = { ...HELE, anbefalinger: HELE.anbefalinger.filter((a) => !(a.legemiddel_id === 'RxNorm:704' && a.oppslagsnokkel.CYP2D6 === '0.5')) }
+    const grunnlag = { ...grunnlagFor('amitriptyline', uten), gener: AMITRIPTYLIN.gener }
+    const valg = { CYP2C19: { resultat: 'Normal Metabolizer' }, CYP2D6: { resultat: 'Intermediate Metabolizer' } }
+    expect(slaOpp(grunnlag, valg)).toEqual({
+      treff: [],
+      uavklart: [
+        { populasjon: 'general', gen: 'CYP2D6', resultat: 'Intermediate Metabolizer', oppslagsverdier: ['0.25', '0.5', '0.75', '1.0'], uten_anbefaling: ['0.5'] },
+      ],
+      mangler: [],
+      ingen: false,
+    })
+    // Med en verdi CPIC har anbefaling for, vises den; med 0.5 finnes ingen.
+    expect(slaOpp(grunnlag, { ...valg, CYP2D6: { resultat: 'Intermediate Metabolizer', oppslagsverdi: '1.0' } }).treff).toHaveLength(1)
+    expect(slaOpp(grunnlag, { ...valg, CYP2D6: { resultat: 'Intermediate Metabolizer', oppslagsverdi: '0.5' } })).toMatchObject({ treff: [], ingen: true })
   })
 
   it('sier fra når CPIC ikke har kombinasjonen, i stedet for å velge en annen', () => {
