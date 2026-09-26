@@ -11,10 +11,10 @@
  *
  * Alt her er rene funksjoner.
  */
-import type { Automatiskekilder, Automatiskelement, Referanse } from '../faginnhold/referanser'
+import type { Automatiskekilder, Automatiskelement, Opphavslenke, Referanse } from '../faginnhold/referanser'
 import { dato } from '../legemiddeldata/referanser'
 import type { Litteratur } from '../clinpgx/modell'
-import { litteraturId } from '../clinpgx/referanser'
+import { CLINPGX_BRUKSVILKAR, litteraturId } from '../clinpgx/referanser'
 import { FARMAKOGENETIKKPANEL } from '../clinpgx/stoffside'
 import type { Cpickilde } from './lesing'
 import { CPIC_NETTSTED, pubmedUrl, type Publikasjon } from './modell'
@@ -33,15 +33,27 @@ export const CPIC_KILDE = `${PREFIKS}kilde`
  * kreditert, og om at adressen, datoen og versjonen oppgis.
  */
 export const CPIC_LISENS = 'CC0 1.0'
+export const CPIC_LISENSLENKE = 'https://creativecommons.org/publicdomain/zero/1.0/'
+
+/** Lisensen, og bruksvilkårene hos ClinPGx der CPIC-delen står, under CPIC i referanselisten. */
+export const CPIC_LENKER: readonly Opphavslenke[] = [
+  { tekst: `Lisens: ${CPIC_LISENS}`, lenke: CPIC_LISENSLENKE },
+  { tekst: 'Bruksvilkår hos ClinPGx (CPIC-delen)', lenke: CLINPGX_BRUKSVILKAR },
+]
 
 /** Hvor lenge dataene kan stå uten å bli kontrollert før siden sier fra. Synkroniseringen går hver uke. */
 export const CPIC_FORELDET_ETTER_DOGN = 10
 
-/** Sporbarheten: kilden, lisensen, releasen og når dataene sist ble kontrollert mot CPIC. */
+/**
+ * Sporbarheten, som CPIC ber om: kilden med releasen, at det er et utdrag
+ * OUSFAR har omformet (valgt ut felt, slått sammen rader som bare skiller seg
+ * i aktivitetsverdien), lisensen og når dataene sist ble kontrollert.
+ */
 export function cpicopphav(kilde: Cpickilde): string {
   const kontrollert = dato(kilde.kontrollert_kl ?? kilde.endret_kl)
   return [
-    `Strukturerte farmakogenetiske anbefalinger fra ${cpicversjon(kilde, dato)}, lisens ${CPIC_LISENS}`,
+    `Utdrag av strukturerte farmakogenetiske anbefalinger fra ${cpicversjon(kilde, dato)}, omformet av OUSFAR`,
+    `lisens ${CPIC_LISENS}`,
     kontrollert && `sist kontrollert ${kontrollert}`,
   ]
     .filter(Boolean)
@@ -55,7 +67,7 @@ export function cpickilde(kilde: Cpickilde): Referanse {
     forfattere: '',
     aar: '',
     lenke: CPIC_NETTSTED,
-    automatisk: { kilde: CPIC, opphav: cpicopphav(kilde) },
+    automatisk: { kilde: CPIC, opphav: cpicopphav(kilde), lenker: CPIC_LENKER },
   }
 }
 

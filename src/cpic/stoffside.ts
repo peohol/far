@@ -230,7 +230,69 @@ export function grupperAnbefalinger(
       radtyper: radtyper(a),
     })
   }
-  return [...grupper.values()]
+  return [...grupper.values()].map((g) => ({
+    ...g,
+    betingelser: g.betingelser.map((b) => ({ ...b, aktivitetsverdier: sorterAktivitetsverdier(b.aktivitetsverdier) })),
+  }))
+}
+
+/**
+ * Aktivitetsverdiene i stigende rekkefølge: «0.25, 0.5, 1.0», og «≥3.0» etter
+ * «3.0». En verdi uten tall beholder plassen sin bakerst.
+ */
+export function sorterAktivitetsverdier(verdier: readonly string[]): string[] {
+  const tall = (v: string) => Number.parseFloat(v.replace(/^[^\d.-]+/, ''))
+  return [...verdier].sort((a, b) => {
+    const [x, y] = [tall(a), tall(b)]
+    if (Number.isNaN(x) || Number.isNaN(y)) return Number.isNaN(x) === Number.isNaN(y) ? 0 : Number.isNaN(x) ? 1 : -1
+    return x - y || Number(/^\d/.test(b)) - Number(/^\d/.test(a))
+  })
+}
+
+/** Flest rader et kort viser i én liste før de deles opp etter resultatet for ett gen. */
+export const MAKS_RADER_UTEN_DELING = 12
+
+/** En del av anbefalingene i et kort: radene med ett bestemt resultat for ett gen. */
+export interface Anbefalingsdel {
+  gen: string
+  /** Resultatet for genet, eller `null` for radene uten genet. */
+  resultat: string | null
+  grupper: Anbefalingsgruppe[]
+}
+
+/**
+ * Deler et langt kort opp etter resultatet for ett gen, så brukeren går
+ * fra genet til radene i stedet for å møtes av alle på én gang. Genet er,
+ * blant dem minst halvparten av radene har, det med færrest ulike
+ * resultater; delene står i CPICs rekkefølge. `null` når kortet er kort nok
+ * til å vises samlet, eller ingen gen gir en meningsfull oppdeling.
+ */
+export function delAnbefalinger(grupper: readonly Anbefalingsgruppe[]): Anbefalingsdel[] | null {
+  if (grupper.length <= MAKS_RADER_UTEN_DELING) return null
+  const perGen = new Map<string, { rader: number; resultater: Set<string> }>()
+  for (const g of grupper) {
+    for (const b of g.betingelser) {
+      const gen = perGen.get(b.gen) ?? { rader: 0, resultater: new Set<string>() }
+      gen.rader += 1
+      gen.resultater.add(b.resultat)
+      perGen.set(b.gen, gen)
+    }
+  }
+  // Et gen de fleste radene har, med få nok ulike resultater til at delene blir færre enn radene.
+  const [gen] =
+    [...perGen]
+      .filter(([, g]) => g.rader * 2 >= grupper.length && g.resultater.size >= 2 && g.resultater.size < g.rader)
+      .sort(([a, x], [b, y]) => x.resultater.size - y.resultater.size || y.rader - x.rader || a.localeCompare(b))[0] ?? []
+  if (!gen) return null
+  const deler = new Map<string | null, Anbefalingsdel>()
+  for (const g of grupper) {
+    const resultat = g.betingelser.find((b) => b.gen === gen)?.resultat ?? null
+    const del = deler.get(resultat) ?? { gen, resultat, grupper: [] }
+    del.grupper.push(g)
+    deler.set(resultat, del)
+  }
+  // Radene uten genet står til sist.
+  return [...deler.values()].sort((a, b) => Number(a.resultat === null) - Number(b.resultat === null))
 }
 
 export function byggCpicvisning(utvalg: Cpicutvalg): Cpicvisning {
@@ -309,14 +371,23 @@ export function genmedtype(g: Pick<Genvisning, 'symbol' | 'resultattype'>): stri
   return g.resultattype ? `${g.symbol} (${g.resultattype})` : g.symbol
 }
 
+/** «CYP2D6 Poor Metabolizer»; allelstatusen nevner ofte genet selv («HLA-B*57:01 positive»). */
+export function resultattekst(gen: string, resultat: string): string {
+  return resultat.startsWith(gen) ? resultat : `${gen} ${resultat}`
+}
+
 /** «CYP2D6 Intermediate Metabolizer, aktivitetsverdi 0.5 eller 1.0»: betingelsen for ett gen. */
 export function betingelsetekst(b: Pick<Betingelsevisning, 'gen' | 'resultat' | 'aktivitetsverdier'>): string {
-  // Allelstatusen nevner ofte genet selv («HLA-B*57:01 positive»).
-  const hode = b.resultat.startsWith(b.gen) ? b.resultat : `${b.gen} ${b.resultat}`
+  const hode = resultattekst(b.gen, b.resultat)
   const verdier = b.aktivitetsverdier.filter((v) => v !== b.resultat)
   if (verdier.length === 0) return hode
   const liste = verdier.length === 1 ? verdier[0] : `${verdier.slice(0, -1).join(', ')} eller ${verdier[verdier.length - 1]}`
   return `${hode}, aktivitetsverdi ${liste}`
+}
+
+/** Overskriften på en del av et langt kort: «CYP2D6 Poor Metabolizer», eller «Uten CYP2D6». */
+export function deltittel(d: Pick<Anbefalingsdel, 'gen' | 'resultat'>): string {
+  return d.resultat === null ? `Uten ${d.gen}` : resultattekst(d.gen, d.resultat)
 }
 
 /** Oppsummeringen av et retningslinjekort: genene med resultattypen, antallet anbefalinger og styrkene. */

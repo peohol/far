@@ -148,12 +148,42 @@
   margin-bottom: var(--rom-2);
 }
 
-/* Ved utskrift står alt åpent, også «Mer om anbefalingen». */
+/* Et langt kort er delt opp etter resultatet for ett gen, hver del lukket. */
+.cpic__deler {
+  display: flex;
+  flex-direction: column;
+}
+
+.cpic__del {
+  border-top: var(--kant) solid var(--linje);
+}
+
+.cpic__del > summary {
+  padding: var(--rom-2) 0;
+  cursor: pointer;
+}
+
+.cpic__deltittel {
+  font: var(--vekt-halvfet) var(--tekst-ui) / var(--linjehoyde-ui) var(--skrift-ui);
+  color: var(--blekk);
+}
+
+.cpic__deloppsummering {
+  font: var(--vekt-normal) var(--tekst-etikett) / var(--linjehoyde-ui) var(--skrift-ui);
+  color: var(--blekk-dempet);
+}
+
+.cpic__del > .cpic__anbefalinger {
+  padding-left: var(--rom-4);
+}
+
+/* Ved utskrift står alt åpent, også delene og «Mer om anbefalingen». */
 @media print {
   .cpic__mer > summary {
     display: none;
   }
 
+  .cpic__del::details-content,
   .cpic__mer::details-content {
     display: block;
     content-visibility: visible;

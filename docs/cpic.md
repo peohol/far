@@ -30,9 +30,10 @@ ClinPGx-API-et, og er derfor CPIC-data under CC0.
 **Navngivingen**: CPIC står som en automatisk, ikke-redigerbar referanse i
 referansefeltet til «Farmakogenetikk» (ID `cpic:kilde`), med lenke til
 cpicpgx.org, lisensen, releasen og når dataene sist ble kontrollert:
-«Strukturerte farmakogenetiske anbefalinger fra CPIC, release v1.60.1 av
-12. august 2026, lisens CC0 1.0, sist kontrollert …». Nederst i gruppen står
-det samme kort. Alt dette leveres av `les_cpic` (`kilde`).
+«Utdrag av strukturerte farmakogenetiske anbefalinger fra CPIC, release
+v1.60.1 av 12. august 2026, omformet av OUSFAR, lisens CC0 1.0, sist
+kontrollert …», med lenke til lisensen og til bruksvilkårene hos ClinPGx, der
+CPIC-delen står. Nederst i gruppen står det samme kort. Alt dette leveres av `les_cpic` (`kilde`).
 
 ## Hva som hentes
 
@@ -223,9 +224,17 @@ legemiddel. Visningen avhenger altså ikke av FEST. Den er ikke interaktiv:
 - **Sammenslåingen**: anbefalinger som er like i alt annet enn
   aktivitetsverdien for et gen CPIC slår opp på aktivitetsverdi (samme
   fenotype, implikasjoner, anbefaling, styrke, populasjon og kommentarer), står
-  i én rad med verdiene listet. Ellers står hver anbefaling for seg. Ingen rad
+  i én rad med verdiene listet, stigende. Ellers står hver anbefaling for seg. Ingen rad
   står for en kombinasjon CPIC ikke har, og testene kontrollerer at hver
   anbefaling står nøyaktig én gang.
+- **Lange kort deles opp**: har kortet flere enn 12 rader
+  (`MAKS_RADER_UTEN_DELING`), står radene i lukkede deler etter resultatet for
+  ett gen: blant genene minst halvparten av radene har, det med færrest ulike
+  resultater, f.eks.
+  «CYP2D6 Poor Metabolizer · 9 anbefalinger · Optional, Strong». Delene er
+  `<details>`, som nettleserens søk åpner selv, og en del står åpen mens søket
+  på siden har treff i den. Amitriptylin (206 anbefalinger i CPIC) blir 53
+  rader i seks deler.
 - **Retningslinjer uten strukturerte anbefalinger** (som warfarin) får kortet
   med CPICs merknad og en melding om at veiledningen står i selve
   retningslinjen.

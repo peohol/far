@@ -2300,7 +2300,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
     // De to anbefalingene som bare skiller seg i aktivitetsverdien, står i én rad.
     const rader = within(kort).getAllByRole('listitem')
     expect(rader).toHaveLength(2)
-    expect(within(rader[0]!).getByText('CYP2D6 Intermediate Metabolizer, aktivitetsverdi 1.0 eller 0.5')).toBeTruthy()
+    expect(within(rader[0]!).getByText('CYP2D6 Intermediate Metabolizer, aktivitetsverdi 0.5 eller 1.0')).toBeTruthy()
     expect(within(rader[0]!).getByText('Styrke: Strong')).toBeTruthy()
     expect(within(rader[0]!).getByText('Syntetisk anbefaling ved redusert aktivitet.')).toBeTruthy()
     // Hvorfor raden gjelder: implikasjonen og CPICs ID-er står under «Mer om anbefalingen».
@@ -2313,7 +2313,10 @@ describe('farmakogenetikken fra ClinPGx', () => {
     // CPIC står som kilde i seksjonen, og publikasjonen ClinPGx også oppgir, står én gang.
     const liste = screen.getByRole('region', { name: 'Referanser' })
     expect(within(liste).getAllByText('Automatisk fra CPIC')).toHaveLength(1)
-    expect(liste.textContent).toContain('Strukturerte farmakogenetiske anbefalinger fra CPIC, release v1.60.1 av 12. august 2026, lisens CC0 1.0')
+    expect(liste.textContent).toContain(
+      'Utdrag av strukturerte farmakogenetiske anbefalinger fra CPIC, release v1.60.1 av 12. august 2026, omformet av OUSFAR, lisens CC0 1.0',
+    )
+    expect(within(liste).getByRole('link', { name: /Lisens: CC0 1\.0/ }).getAttribute('href')).toBe('https://creativecommons.org/publicdomain/zero/1.0/')
     expect(within(liste).getAllByText(/Syntetisk artikkel/)).toHaveLength(1)
 
     await user.click(skuffen('Andre gen–legemiddel-par i CPIC'))
@@ -2351,6 +2354,24 @@ describe('farmakogenetikken fra ClinPGx', () => {
     await user.click(steder.getAllByRole('button', { name: /Farmakogenetikk › Syntetisk CPIC-retningslinje/ })[0]!)
     expect(skuffen('Farmakogenetikk').getAttribute('aria-expanded')).toBe('true')
     expect(skuffen('Syntetisk CPIC-retningslinje').getAttribute('aria-expanded')).toBe('true')
+  })
+
+  it('deler et langt CPIC-kort etter gen-resultat, og åpner delen søket på siden har treff i', async () => {
+    const user = userEvent.setup()
+    const fenotyper = ['Poor Metabolizer', 'Normal Metabolizer', 'Ultrarapid Metabolizer']
+    const mange = Array.from({ length: 13 }, (_, i) =>
+      anbefaling(`2${i}`, [fenotyper[i % 3]!, `${i}.0`], i === 7 ? 'Syntetisk sjelden anbefaling.' : `Syntetisk anbefaling nummer ${i}.`),
+    )
+    vis('AMTNORSUM', medCpic({ data: medPgx() }, cpicleser({ ...UTVALG_CPIC, anbefalinger: mange })))
+    await screen.findByText(/13 CPIC-anbefalinger/)
+    await apneSkuff(user, 'Farmakogenetikk')
+    await user.click(skuffen('Syntetisk CPIC-retningslinje'))
+    const del = (tittel: string) => screen.getByText(tittel, { selector: '.cpic__deltittel' }).closest('details') as HTMLDetailsElement
+    expect(del('CYP2D6 Poor Metabolizer').open).toBe(false)
+    expect(del('CYP2D6 Normal Metabolizer').open).toBe(false)
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'sjelden')
+    await waitFor(() => expect(del('CYP2D6 Normal Metabolizer').open).toBe(true))
+    expect(del('CYP2D6 Poor Metabolizer').open).toBe(false)
   })
 
   it('åpner CPIC-kortet adressen peker på', async () => {

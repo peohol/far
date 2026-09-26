@@ -1,6 +1,7 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useState, type ReactNode } from 'react'
 import type { Clinpgxkoblingdata } from '../../faginnhold/paneler'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
+import { treffIntervaller } from '../../faginnhold/sok'
 import { dato } from '../../legemiddeldata/referanser'
 import type { Litteratur } from '../../clinpgx/modell'
 import type { Legemiddel, Par } from '../../cpic/modell'
@@ -11,6 +12,8 @@ import {
   CPIC_ANDRE_PAR_KORT,
   cpicHentet,
   cpicversjon,
+  delAnbefalinger,
+  deltittel,
   harCpic,
   retningslinjeoppsummering,
   type Anbefalingsgruppe,
@@ -19,7 +22,7 @@ import {
 import { Button } from '../Button'
 import { Detaljkort } from '../seksjoner/Seksjon'
 import { Referansefelt } from '../referanser/Referansefelt'
-import { Uthev } from '../Uthev'
+import { Uthev, useSokeord } from '../Uthev'
 import { useFaginnholdskilde } from './Faginnholdskilde'
 import { Gruppe, Kildelenke } from './Farmakogenetikkdeler'
 import { elementAnker } from './Paneler'
@@ -264,11 +267,7 @@ function Retningslinjekortet({
                 <p className="cpic__overskrift" role="heading" aria-level={4}>
                   {legemiddel ? `Anbefalinger for ${legemiddel.navn}` : 'Anbefalinger'}
                 </p>
-                <ol className="cpic__anbefalinger">
-                  {grupper.map((g) => (
-                    <Anbefalingsrad key={g.id} gruppe={g} visPopulasjon={k.populasjoner.length > 1} />
-                  ))}
-                </ol>
+                <Anbefalingsliste grupper={grupper} visPopulasjon={k.populasjoner.length > 1} />
               </Fragment>
             ))
           )}
@@ -284,6 +283,63 @@ function Retningslinjekortet({
         </div>
       </Detaljkort>
     </li>
+  )
+}
+
+/**
+ * Anbefalingene i et kort. Er de mange, deles de opp etter resultatet for
+ * ett gen (`delAnbefalinger`), hver del lukket til brukeren åpner den, så
+ * kortet ikke blir én lang tabell.
+ */
+function Anbefalingsliste({ grupper, visPopulasjon }: { grupper: readonly Anbefalingsgruppe[]; visPopulasjon: boolean }) {
+  const liste = (rader: readonly Anbefalingsgruppe[]) => (
+    <ol className="cpic__anbefalinger">
+      {rader.map((g) => (
+        <Anbefalingsrad key={g.id} gruppe={g} visPopulasjon={visPopulasjon} />
+      ))}
+    </ol>
+  )
+  const deler = delAnbefalinger(grupper)
+  if (!deler) return liste(grupper)
+  return (
+    <div className="cpic__deler">
+      {deler.map((d) => (
+        <Del
+          key={d.resultat ?? ''}
+          tittel={deltittel(d)}
+          oppsummering={ramsOpp([
+            antall(d.grupper.reduce((n, g) => n + g.anbefalinger.length, 0), 'anbefaling', 'anbefalinger'),
+            [...new Set(d.grupper.map((g) => g.klassifisering).filter(Boolean))].join(', '),
+          ])}
+          tekster={d.grupper.flatMap((g) => [...g.betingelser.map(betingelsetekst), g.anbefaling ?? ''])}
+        >
+          {liste(d.grupper)}
+        </Del>
+      ))}
+    </div>
+  )
+}
+
+/**
+ * En del av et langt kort, som `<details>`: nettleserens søk åpner den selv,
+ * og den står åpen mens søket på siden har treff i den, så et fremhevet treff
+ * aldri står skjult.
+ */
+function Del({ tittel, oppsummering, tekster, children }: { tittel: string; oppsummering: string; tekster: readonly string[]; children: ReactNode }) {
+  const ord = useSokeord()
+  const [apen, setApen] = useState(false)
+  const treff = ord.length > 0 && tekster.some((t) => treffIntervaller(t, ord).length > 0)
+  return (
+    // Mens søket holder delen åpen, er det ikke brukeren som åpnet den.
+    <details className="cpic__del" open={apen || treff} onToggle={(e) => !treff && setApen(e.currentTarget.open)}>
+      <summary>
+        <span className="cpic__deltittel">
+          <Uthev tekst={tittel} />
+        </span>{' '}
+        <span className="cpic__deloppsummering">{oppsummering}</span>
+      </summary>
+      {children}
+    </details>
   )
 }
 

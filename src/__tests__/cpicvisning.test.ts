@@ -27,7 +27,11 @@ import {
   cpicFor,
   cpickort,
   cpictekster,
+  delAnbefalinger,
+  deltittel,
   grupperAnbefalinger,
+  MAKS_RADER_UTEN_DELING,
+  sorterAktivitetsverdier,
   harCpic,
   oppsummerCpic,
   retningslinjeoppsummering,
@@ -198,7 +202,7 @@ describe('grupperingen av anbefalingene', () => {
     expect(grupper[0]!.anbefalinger).toEqual(['8479814', 'syntetisk-1', 'syntetisk-2'])
     expect(grupper[0]!.betingelser.map(betingelsetekst)).toEqual([
       'CYP2C19 Normal Metabolizer',
-      'CYP2D6 Intermediate Metabolizer, aktivitetsverdi 1.0, 0.5 eller 0.25',
+      'CYP2D6 Intermediate Metabolizer, aktivitetsverdi 0.25, 0.5 eller 1.0',
     ])
   })
 
@@ -220,6 +224,34 @@ describe('grupperingen av anbefalingene', () => {
   })
 })
 
+describe('lange kort', () => {
+  it('sorterer aktivitetsverdiene stigende, med «≥» etter samme tall', () => {
+    expect(sorterAktivitetsverdier(['2.0', '1.75', '≥3.0', '3.0', '0.25', 'n/a'])).toEqual(['0.25', '1.75', '2.0', '3.0', '≥3.0', 'n/a'])
+  })
+
+  it('deler et langt kort etter genet med færrest ulike resultater, og beholder hver rad', () => {
+    const [k] = visningFor(AMITRIPTYLIN).retningslinjer
+    // Utdraget har få anbefalinger; mange syntetiske rader med ulik CYP2D6-fenotype gjør kortet langt.
+    const fenotyper = ['Poor Metabolizer', 'Normal Metabolizer', 'Ultrarapid Metabolizer']
+    const grupper = Array.from({ length: MAKS_RADER_UTEN_DELING + 1 }, (_, i) => ({
+      ...k!.grupper[0]!,
+      id: `syntetisk-${i}`,
+      anbefalinger: [`syntetisk-${i}`],
+      betingelser: [
+        { gen: 'CYP2C19', resultat: `Syntetisk ${i}`, aktivitetsverdier: [], implikasjon: null },
+        { gen: 'CYP2D6', resultat: fenotyper[i % 3]!, aktivitetsverdier: [], implikasjon: null },
+      ],
+    }))
+    expect(delAnbefalinger(grupper.slice(0, MAKS_RADER_UTEN_DELING))).toBeNull()
+    const deler = delAnbefalinger(grupper)!
+    expect(deler.map(deltittel)).toEqual(['CYP2D6 Poor Metabolizer', 'CYP2D6 Normal Metabolizer', 'CYP2D6 Ultrarapid Metabolizer'])
+    expect(deler.flatMap((d) => d.grupper.map((g) => g.id)).sort()).toEqual(grupper.map((g) => g.id).sort())
+    // En rad uten genet står i en egen del til sist.
+    const uten = { ...grupper[0]!, id: 'uten', betingelser: [grupper[0]!.betingelser[0]!] }
+    expect(deltittel(delAnbefalinger([uten, ...grupper])!.at(-1)!)).toBe('Uten CYP2D6')
+  })
+})
+
 describe('referansene fra CPIC', () => {
   it('oppgir CPIC med lisensen, releasen og når dataene ble kontrollert, og publikasjonene i kortet', () => {
     const visning = visningFor(AMITRIPTYLIN)
@@ -228,7 +260,12 @@ describe('referansene fra CPIC', () => {
     expect(cpic.lenke).toBe('https://cpicpgx.org')
     expect(cpic.automatisk).toEqual({
       kilde: 'CPIC',
-      opphav: 'Strukturerte farmakogenetiske anbefalinger fra CPIC, release v1.60.1 av 12. august 2026, lisens CC0 1.0, sist kontrollert 22. september 2026',
+      opphav:
+        'Utdrag av strukturerte farmakogenetiske anbefalinger fra CPIC, release v1.60.1 av 12. august 2026, omformet av OUSFAR, lisens CC0 1.0, sist kontrollert 22. september 2026',
+      lenker: [
+        { tekst: 'Lisens: CC0 1.0', lenke: 'https://creativecommons.org/publicdomain/zero/1.0/' },
+        { tekst: 'Bruksvilkår hos ClinPGx (CPIC-delen)', lenke: 'https://www.clinpgx.org/page/dataUsagePolicy' },
+      ],
     })
     expect(kilder.panelreferanser).toEqual({ farmakogenetikk: [CPIC_KILDE] })
     expect(kilder.elementer).toEqual([
