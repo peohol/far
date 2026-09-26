@@ -133,12 +133,17 @@ stemmer:
 - en identifikator ClinPGx viser til, kontrollert mot registeret selv:
   RxNorm (RxCUI for virkestoffet), PubChem (CID) eller ChEBI.
 
-Et navn alene er ikke nok. Er siden koblet til et virkestoff i FEST, går
-koblingen via det, og kjemikaliet tas bare med når den publiserte siden
-fortsatt er koblet til det virkestoffet. Er siden ikke koblet til FEST, er
-navnene og ATC-koden fra virkestoffet med samme norske navn i FEST, og
-koblingen krever i tillegg en identifikator i et annet register. FEST er
-altså et godt grunnlag der det finnes, men ikke et krav.
+Et navn alene er ikke nok. Er siden ikke koblet til FEST, er navnene og
+ATC-koden fra virkestoffet med samme norske navn i FEST, og koblingen krever
+i tillegg en identifikator i et annet register. FEST er altså et godt
+grunnlag der det finnes, men ikke et krav.
+
+Den første migrasjonen tar et kjemikalie bare med når den publiserte siden
+er koblet til virkestoffet i FEST. Den andre krever ikke det: alle koblingene
+der har en identifikator i et annet register, og FEST-koblingene til noen av
+sidene (levomepromazin, O-desmetylvenlafaksin) er laget i produksjonen uten
+en migrasjon i repoet. Da gir migrasjonene det samme resultatet i en database
+bygd fra repoet alene.
 
 En **metabolitt** kobles ikke til moderstoffet: oversikten sier hvilket
 moderstoff og hvilke objekter ClinPGx har for metabolitten selv, og det er en

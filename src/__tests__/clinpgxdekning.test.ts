@@ -16,7 +16,7 @@ import {
   UKOBLEDE_STOFFSIDER,
   type Dekning,
 } from '../faginnhold/clinpgxdekning'
-import { ALLE_CLINPGXKOBLINGER } from '../faginnhold/clinpgxkoblinger'
+import { ALLE_CLINPGXKOBLINGER, CLINPGXKOBLINGSIMPORTER } from '../faginnhold/clinpgxkoblinger'
 import { ELEMENTTYPER, lesClinpgxkobling } from '../faginnhold/paneler'
 import { kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
@@ -112,11 +112,11 @@ describe('mot sidene migrasjonene lager', () => {
     expect(ukjente, 'Sidene i dekningsoversikten finnes ikke').toEqual([])
   })
 
-  it('kobler sidene uten FEST-kobling selv om FEST ikke er koblet, og ingen andre sider', () => {
-    // Testdatabasen har ingen FEST-koblinger, så bare koblingene uten FEST-virkestoff kommer inn.
+  it('legger inn koblingene som ikke krever FEST, bare fra migrasjonene i repoet', () => {
+    // Testdatabasen har ingen FEST-koblinger, så bare importene uten FEST-krav kommer inn, men de kommer helt.
     const forventet = new Map<string, string[]>()
-    for (const k of ALLE_CLINPGXKOBLINGER) {
-      if (k.fest_id === null) forventet.set(k.side, [...(forventet.get(k.side) ?? []), k.clinpgx_id])
+    for (const k of CLINPGXKOBLINGSIMPORTER.filter((i) => !i.festkrav).flatMap((i) => i.koblinger)) {
+      forventet.set(k.side, [...(forventet.get(k.side) ?? []), k.clinpgx_id])
     }
     expect(forventet.size).toBeGreaterThan(10)
     expect(koblinger).toEqual(forventet)

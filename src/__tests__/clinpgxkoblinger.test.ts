@@ -132,6 +132,8 @@ describe('koblingene', () => {
   })
 
   it('bygger hver kobling på navnet og minst ett uavhengig kjennetegn til, aldri navnet alene', () => {
+    const utenFestkrav = new Set(CLINPGXKOBLINGSIMPORTER.filter((i) => !i.festkrav).flatMap((i) => i.koblinger))
+    expect(CLINPGXKOBLINGSIMPORTER.filter((i) => i.festkrav).flatMap((i) => i.koblinger.filter((k) => k.fest_id === null))).toEqual([])
     for (const k of ALLE_CLINPGXKOBLINGER) {
       expect(kjennetegn(k).length, k.side).toBeGreaterThan(0)
       if (k.atc !== null) expect(k.atc, k.side).toMatch(/^[A-Z]\d\d[A-Z]{2}\d\d$/)
@@ -145,9 +147,9 @@ describe('koblingene', () => {
       if (rxnorm !== undefined) expect(rxnorm, k.side).toMatch(/^\d+$/)
       if (pubchem !== undefined) expect(pubchem, k.side).toMatch(/^\d+$/)
       if (chebi !== undefined) expect(chebi, k.side).toMatch(/^CHEBI:\d+$/)
-      // Uten FEST-kobling er ATC-koden fra et virkestoff siden ikke er koblet til, så det må være et kjennetegn til.
-      if (k.fest_id === null) expect(Object.keys(k.identifikatorer ?? {}).length, k.side).toBeGreaterThan(0)
-      else expect(k.fest_id, k.side).toMatch(/^ID_[0-9A-F-]{36}$/)
+      // Uten FEST-kobling, eller når migrasjonen ikke krever den, må det være en identifikator i et annet register.
+      if (k.fest_id === null || utenFestkrav.has(k)) expect(Object.keys(k.identifikatorer ?? {}).length, k.side).toBeGreaterThan(0)
+      if (k.fest_id !== null) expect(k.fest_id, k.side).toMatch(/^ID_[0-9A-F-]{36}$/)
       // Uten ATC-kode må det være to identifikatorer i andre registre.
       if (k.atc === null) expect(Object.keys(k.identifikatorer ?? {}).length, k.side).toBeGreaterThan(1)
       expect(k.clinpgx_id, k.side).toMatch(/^PA\d+$/)
@@ -179,9 +181,9 @@ describe('koblingene', () => {
   })
 
   it('er de samme migrasjonene som koblingene gir', () => {
-    for (const [i, { migrasjon, koblinger }] of CLINPGXKOBLINGSIMPORTER.entries()) {
+    for (const [i, { migrasjon, koblinger, festkrav }] of CLINPGXKOBLINGSIMPORTER.entries()) {
       const tekst = readFileSync(new URL(KOBLINGER[i]!, MIGRASJONSMAPPE), 'utf8')
-      expect(tekst, migrasjon).toBe(clinpgxkoblingSql(koblinger, 'peohol'))
+      expect(tekst, migrasjon).toBe(clinpgxkoblingSql(koblinger, 'peohol', festkrav))
     }
   })
 

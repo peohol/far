@@ -161,10 +161,16 @@ export const DEKNINGSKOBLINGER: readonly Clinpgxkobling[] = [
   { side: 'Zopiklon', fest_id: null, virkestoff: 'Zopiklon', engelsk: 'Zopiclone', atc: 'N05CF01', identifikatorer: { rxnorm: '40001' }, clinpgx_id: 'PA10236', navn: 'zopiclone', samsvar: 'navn' },
 ]
 
-/** Hver import av koblinger, i rekkefølge, med navnet migrasjonen fikk. */
-export const CLINPGXKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: readonly Clinpgxkobling[] }[] = [
-  { migrasjon: 'stoffsider_clinpgx_kobling', koblinger: STOFFSIDE_CLINPGXKOBLINGER },
-  { migrasjon: 'stoffsider_clinpgx_dekning', koblinger: DEKNINGSKOBLINGER },
+/**
+ * Hver import av koblinger, i rekkefølge, med navnet migrasjonen fikk.
+ * `festkrav` sier om migrasjonen krever at siden er koblet til virkestoffet i
+ * FEST. Den andre gjør ikke det: FEST-koblingene til flere av sidene er ikke
+ * laget med en migrasjon i repoet, og koblingene hviler på identifikatorer i
+ * andre registre.
+ */
+export const CLINPGXKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: readonly Clinpgxkobling[]; festkrav: boolean }[] = [
+  { migrasjon: 'stoffsider_clinpgx_kobling', koblinger: STOFFSIDE_CLINPGXKOBLINGER, festkrav: true },
+  { migrasjon: 'stoffsider_clinpgx_dekning', koblinger: DEKNINGSKOBLINGER, festkrav: false },
 ]
 
 /** Alle koblingene fra importene, i rekkefølge. */
@@ -199,20 +205,32 @@ export function koblingsgrunnlagstekst(k: Clinpgxkobling): string {
 
 /**
  * SQL-en som legger inn koblingene, som administratoren `admin`, publisert:
- * ett kort per side, med kjemikaliene i den rekkefølgen de står. Et
- * kjemikalie med FEST-virkestoff tas bare med når den publiserte siden er
- * koblet til det virkestoffet i FEST; ett uten tas med som det står. Den hopper over — med en melding — en side som ikke
+ * ett kort per side, med kjemikaliene i den rekkefølgen de står. Med
+ * `festkrav` tas et kjemikalie bare med når den publiserte siden er koblet
+ * til virkestoffet det hører til i FEST; uten tas alle med, fordi koblingene
+ * alt er kontrollert mot identifikatorer i andre registre. Den hopper over — med en melding — en side som ikke
  * finnes, som alt har en ClinPGx-kobling (også i et utkast, så en redaksjonell
  * kobling aldri overskrives), eller som ikke har noen av virkestoffene, så den
  * kan kjøres igjen uten å gjøre noe. Uten administratoren gjør den ingenting,
  * som i testdatabasen.
  */
-export function clinpgxkoblingSql(koblinger: readonly Clinpgxkobling[], admin: string): string {
+export function clinpgxkoblingSql(koblinger: readonly Clinpgxkobling[], admin: string, festkrav = true): string {
   const rader = koblinger
     .map((k, i) => `      (${lit(k.side)}, ${k.fest_id === null ? 'null' : lit(k.fest_id)}, ${lit(k.clinpgx_id)}, ${lit(k.navn)}, ${i})`)
     .join(',\n')
-  // Uten kjemikalier som mangler FEST-virkestoff blir SQL-en som i den første importen.
-  const utenFest = koblinger.some((k) => k.fest_id === null) ? "c.kandidat ->> 'fest_id' is null or " : ''
+  const festvilkar = festkrav
+    ? `
+      where exists (
+        select 1
+        from public.innholdselementer e,
+             jsonb_array_elements(case when jsonb_typeof(e.data -> 'virkestoff') = 'array' then e.data -> 'virkestoff' else '[]' end) v
+        where e.infoside_id = side
+          and e.tilstand = 'publisert'
+          and e.elementtype = ${lit(ELEMENTTYPER.legemiddelkobling)}
+          and e.panel <> 'fjernet'
+          and v ->> 'fest_id' = c.kandidat ->> 'fest_id'
+      )`
+    : ''
   return `-- Stoffsidene kobles til kjemikaliene i ClinPGx
 do $kobling$
 declare
@@ -248,17 +266,7 @@ ${rader}
     end if;
     kjemikalier := (
       select jsonb_agg(jsonb_build_object('clinpgx_id', c.kandidat ->> 'clinpgx_id', 'navn', c.kandidat ->> 'navn') order by c.nr)
-      from jsonb_array_elements(k.kandidater) with ordinality as c(kandidat, nr)
-      where ${utenFest}exists (
-        select 1
-        from public.innholdselementer e,
-             jsonb_array_elements(case when jsonb_typeof(e.data -> 'virkestoff') = 'array' then e.data -> 'virkestoff' else '[]' end) v
-        where e.infoside_id = side
-          and e.tilstand = 'publisert'
-          and e.elementtype = ${lit(ELEMENTTYPER.legemiddelkobling)}
-          and e.panel <> 'fjernet'
-          and v ->> 'fest_id' = c.kandidat ->> 'fest_id'
-      )
+      from jsonb_array_elements(k.kandidater) with ordinality as c(kandidat, nr)${festvilkar}
     );
     if coalesce(jsonb_array_length(kjemikalier), 0) < jsonb_array_length(k.kandidater) then
       raise notice '% er ikke koblet til alle virkestoffene % i FEST.', k.side, k.kandidater;

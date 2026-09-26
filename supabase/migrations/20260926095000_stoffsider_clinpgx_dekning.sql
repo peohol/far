@@ -56,16 +56,6 @@ begin
     kjemikalier := (
       select jsonb_agg(jsonb_build_object('clinpgx_id', c.kandidat ->> 'clinpgx_id', 'navn', c.kandidat ->> 'navn') order by c.nr)
       from jsonb_array_elements(k.kandidater) with ordinality as c(kandidat, nr)
-      where c.kandidat ->> 'fest_id' is null or exists (
-        select 1
-        from public.innholdselementer e,
-             jsonb_array_elements(case when jsonb_typeof(e.data -> 'virkestoff') = 'array' then e.data -> 'virkestoff' else '[]' end) v
-        where e.infoside_id = side
-          and e.tilstand = 'publisert'
-          and e.elementtype = 'legemiddelkobling'
-          and e.panel <> 'fjernet'
-          and v ->> 'fest_id' = c.kandidat ->> 'fest_id'
-      )
     );
     if coalesce(jsonb_array_length(kjemikalier), 0) < jsonb_array_length(k.kandidater) then
       raise notice '% er ikke koblet til alle virkestoffene % i FEST.', k.side, k.kandidater;
