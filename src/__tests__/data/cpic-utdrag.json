@@ -1,0 +1,2166 @@
+{
+ "drug": [
+  {
+   "drugid": "RxNorm:704",
+   "name": "amitriptyline",
+   "clinpgxid": "PA448385",
+   "rxnormid": "704",
+   "drugbankid": "DB00321",
+   "atcid": [
+    "N06AA09",
+    "N06CA01"
+   ],
+   "umlscui": null,
+   "flowchart": "https://files.cpicpgx.org/images/flow_chart/Amitriptyline_CDS_Flow_Chart.jpg",
+   "version": 356,
+   "guidelineid": 100414
+  },
+  {
+   "drugid": "RxNorm:11289",
+   "name": "warfarin",
+   "clinpgxid": "PA451906",
+   "rxnormid": "11289",
+   "drugbankid": "DB00682",
+   "atcid": [
+    "B01AA03"
+   ],
+   "umlscui": null,
+   "flowchart": null,
+   "version": 439,
+   "guidelineid": 100425
+  },
+  {
+   "drugid": "RxNorm:190521",
+   "name": "abacavir",
+   "clinpgxid": "PA448004",
+   "rxnormid": "190521",
+   "drugbankid": "DB01048",
+   "atcid": [
+    "J05AF06",
+    "J05AR02",
+    "J05AR13",
+    "J05AR04"
+   ],
+   "umlscui": null,
+   "flowchart": "https://files.cpicpgx.org/images/flow_chart/Abacavir_CDS_Flow_Chart.jpg",
+   "version": 268,
+   "guidelineid": 100421
+  }
+ ],
+ "gene": [
+  {
+   "symbol": "CALU",
+   "chr": "chr7",
+   "genesequenceid": null,
+   "proteinsequenceid": "NP_001210",
+   "chromosequenceid": null,
+   "mrnasequenceid": null,
+   "hgncid": "HGNC:1458",
+   "ncbiid": "813",
+   "ensemblid": "ENSG00000128595",
+   "clinpgxid": "PA26047",
+   "frequencymethods": null,
+   "lookupmethod": "PHENOTYPE",
+   "version": 118,
+   "notesondiplotype": null,
+   "url": null,
+   "functionmethods": null,
+   "notesonallelenaming": null,
+   "includephenotypefrequencies": true,
+   "includediplotypefrequencies": true
+  },
+  {
+   "symbol": "GGCX",
+   "chr": "chr2",
+   "genesequenceid": "NG_011811",
+   "proteinsequenceid": "NP_000812",
+   "chromosequenceid": null,
+   "mrnasequenceid": null,
+   "hgncid": "HGNC:4247",
+   "ncbiid": "2677",
+   "ensemblid": "ENSG00000115486",
+   "clinpgxid": "PA28660",
+   "frequencymethods": null,
+   "lookupmethod": "PHENOTYPE",
+   "version": 117,
+   "notesondiplotype": null,
+   "url": null,
+   "functionmethods": null,
+   "notesonallelenaming": null,
+   "includephenotypefrequencies": true,
+   "includediplotypefrequencies": true
+  },
+  {
+   "symbol": "PROC",
+   "chr": "chr2",
+   "genesequenceid": "NG_016323",
+   "proteinsequenceid": "NP_000303",
+   "chromosequenceid": null,
+   "mrnasequenceid": null,
+   "hgncid": "HGNC:9451",
+   "ncbiid": "5624",
+   "ensemblid": "ENSG00000115718",
+   "clinpgxid": "PA33799",
+   "frequencymethods": null,
+   "lookupmethod": "PHENOTYPE",
+   "version": 117,
+   "notesondiplotype": null,
+   "url": null,
+   "functionmethods": null,
+   "notesonallelenaming": null,
+   "includephenotypefrequencies": true,
+   "includediplotypefrequencies": true
+  },
+  {
+   "symbol": "PROS1",
+   "chr": "chr3",
+   "genesequenceid": "NG_009813",
+   "proteinsequenceid": "NP_000304",
+   "chromosequenceid": null,
+   "mrnasequenceid": null,
+   "hgncid": "HGNC:9456",
+   "ncbiid": "5627",
+   "ensemblid": "ENSG00000184500",
+   "clinpgxid": "PA33809",
+   "frequencymethods": null,
+   "lookupmethod": "PHENOTYPE",
+   "version": 117,
+   "notesondiplotype": null,
+   "url": null,
+   "functionmethods": null,
+   "notesonallelenaming": null,
+   "includephenotypefrequencies": true,
+   "includediplotypefrequencies": true
+  },
+  {
+   "symbol": "CYP2C19",
+   "chr": "chr10",
+   "genesequenceid": "NG_008384.3",
+   "proteinsequenceid": "NP_000760.1",
+   "chromosequenceid": "NC_000010.11",
+   "mrnasequenceid": "NM_000069.2",
+   "hgncid": "HGNC:2621",
+   "ncbiid": "1557",
+   "ensemblid": "ENSG00000165841",
+   "clinpgxid": "PA124",
+   "frequencymethods": "Methods:\nThe CYP2C19 frequency table includes updates of those previously published in CPIC guidelines. Updates to the CYP2C19 frequency tables were made by searching the PubMed® database (1995 to 2015). The following criteria were used for CYP2C19: (CYP2C19 or 2C19 or cytochrome P4502C19) AND (genotype OR allele OR frequency OR minor allele OR variant OR ethnic OR race OR racial OR ethnicity) with filter limits set to retrieve \"full-text\" and \"English\" literature. In addition, reports were also identified from citations by others or review articles. Studies were considered for inclusion in the CYP2C19 frequency table if: (1) the ethnicity of the population was clearly indicated, (2) either allele frequencies or genotype frequencies were reported, (3) the method by which the genes were genotyped was indicated, (4) the sample population consisted of at least 50 individuals with a few exceptions (e.g., smaller cohorts that were part of larger studies) and (5) the study represented an original publication (no reviews or meta-analyses). Diplotype and phenotype frequencies were estimated using the equation describing Hardy Weinberg equilibrium based on reported allele frequencies.\n\nDiplotype and Phenotype Calculations. Diplotype and phenotype frequencies were estimated using the equation describing Hardy Weinberg equilibrium based on reported allele frequencies.\n\nCaveats to estimated allele, diplotype and phenotype frequencies:\n\nSampling. Allele frequencies collected by CPIC for the supplemental tables are based on published literature reports which typically study small groups of people based on a geographic location (e.g. Malaysia, Berlin, Cairo). Almost no studies use genetic markers to estimate ancestry. Manuscripts are often focused on a specific phenotype (e.g. disease) or study only individuals taking a particular drug. Such samples would not be considered a random sample of the general population. Another consideration is that sample size is important, and PGx studies are typically not large. The frequencies collected from these studies are then used to estimate general estimates of entire ethnic population allele frequencies. Therefore, frequencies from larger groups of subjects and frequencies averaged from many sample populations probably result in better estimates.\n\nEstimation of *1 frequency. In general, there are no population studies that test for all known variant alleles. Because *1 is not genotyped directly in many studies, all alleles that are negative for a sequence variation are defaulted to a *1 assignment. The inferred frequency for *1 is estimated as: 100 - (sum of averaged variant allele frequencies). For genes where many alleles are not tested for in any population, and frequency of 'common' alleles is not well documented in many understudied populations (Oceanian, Central/South Asian, Latino), the *1 frequency will deviate even more from true values.\n\nDiplotype/Phenotype frequency estimates. Diplotype and phenotype frequencies were estimated using the equation describing Hardy Weinberg equilibrium based on reported allele frequencies. When calculating diplotype frequencies from these allele frequencies, the margin of error is compounded based on the margin of error on each allele in the diplotype. So, the margin of error will necessarily increase for diplotype frequency estimates compared to allele frequency estimates. For allele frequencies with already large margins of error due to small and non-random sampling, the diplotype margin of error could potentially be quite large. On the other hand, for well-studied alleles, the margin of error is likely low.\n\nBiogeographical groups. Biogeographical groups are derived from PMID 30506572. Further details, including the definitions of each group, can be found at https://www.pharmgkb.org/page/biogeographicalGroups. We strongly recommend that users use either the publication or the PharmGKB link provided to familiarize themselves with the grouping system before using these allele frequencies. These tables group individuals from particular geographic locations into larger biogeographical groups. It is difficult to group populations with certainty, because some populations are often admixed, or at the least, a combination of different ethnicities. Therefore, the margin of error is increased when different subpopulations are grouped together.",
+   "lookupmethod": "PHENOTYPE",
+   "version": 459,
+   "notesondiplotype": null,
+   "url": "https://cpicpgx.org/gene/cyp2c19/",
+   "functionmethods": null,
+   "notesonallelenaming": "Legacy Name/Class",
+   "includephenotypefrequencies": true,
+   "includediplotypefrequencies": true
+  },
+  {
+   "symbol": "HLA-B",
+   "chr": "chr6",
+   "genesequenceid": "NG_002397",
+   "proteinsequenceid": "NP_005505",
+   "chromosequenceid": null,
+   "mrnasequenceid": null,
+   "hgncid": "HGNC:4932",
+   "ncbiid": "3106",
+   "ensemblid": "ENSG00000234745",
+   "clinpgxid": "PA35056",
+   "frequencymethods": "Methods\n\nThe allele frequency table was made by searching the PubMed® database (1995 to September 2019). The following criteria were used for HLA-B: (HLA-B) AND (allele OR frequency). In addition, reports were also identified from citations by others or review articles. Studies were considered for inclusion in the HLA-B frequency table if: (1) the ethnicity of the population was clearly indicated, (2) either allele frequencies or genotype frequencies were reported, (3) the method by which the genes were genotyped was indicated, (4) the sample population consisted of at least 50 individuals with a few exceptions (e.g., smaller cohorts that were part of larger studies) and (5) the study represented an original publication (no reviews or meta-analyses). Allele frequencies reported in phase 3 1000 Genomes (http://browser.1000genomes.org/index.html) and from allelefrequencies.net (https://www.allelefrequencies.net) were also included .\nCaveats to estimated allele, diplotype and phenotype frequencies:\n\nSampling. Allele frequencies collected by CPIC for the supplemental tables are based on published literature reports which typically study small groups of people based on a geographic location (e.g. Malaysia, Berlin, Cairo). Almost no studies use genetic markers to estimate ancestry. Manuscripts are often focused on a specific phenotype (e.g. disease) or study only individuals taking a particular drug. Such samples would not be considered a random sample of the general population. Another consideration is that sample size is important, and PGx studies are typically not large. The frequencies collected from these studies are then used to estimate general estimates of entire ethnic population allele frequencies. Therefore, frequencies from larger groups of subjects and frequencies averaged from many sample populations probably result in better estimates.\n\nBiogeographical groups. Biogeographical groups are derived from PMID 30506572. Further details, including the definitions of each group, can be found at https://www.pharmgkb.org/page/biogeographicalGroups. We strongly recommend that users use either the publication or the PharmGKB link provided to familiarize themselves with the grouping system before using these allele frequencies. These tables group individuals from particular geographic locations into larger biogeographical groups. It is difficult to group populations with certainty, because some populations are often admixed, or at the least, a combination of different ethnicities. Therefore, the margin of error is increased when different subpopulations are grouped together.",
+   "lookupmethod": "ALLELE_STATUS",
+   "version": 230,
+   "notesondiplotype": null,
+   "url": "https://cpicpgx.org/gene/hla/",
+   "functionmethods": null,
+   "notesonallelenaming": null,
+   "includephenotypefrequencies": false,
+   "includediplotypefrequencies": false
+  },
+  {
+   "symbol": "CYP2C9",
+   "chr": "chr10",
+   "genesequenceid": "NG_008385.2",
+   "proteinsequenceid": "NP_000762.2",
+   "chromosequenceid": "NC_000010.11",
+   "mrnasequenceid": "NM_000069.2",
+   "hgncid": "HGNC:2623",
+   "ncbiid": "1559",
+   "ensemblid": "ENSG00000138109",
+   "clinpgxid": "PA126",
+   "frequencymethods": "Methods\n\nThe allele frequency table was made by searching the PubMed® database (1995 to July 2019). The following criteria were used for CYP2C9: (CYP2C9 or 2C9 or cytochrome P4502C9) AND (genotype OR allele OR frequency OR minor allele OR variant OR ethnic OR race OR racial OR ethnicity OR population) with filter limits set to retrieve \"full-text\" and \"English\" literature. In addition, reports were also identified from citations by others or review articles. Studies were considered for inclusion in the CYP2C9 frequency table if: (1) the ethnicity of the population was clearly indicated, (2) either allele frequencies or genotype frequencies were reported, (3) the method by which the genes were genotyped was indicated, (4) the sample population consisted of at least 50 individuals with a few exceptions (e.g., smaller cohorts that were part of larger studies) and (5) the study represented an original publication (no reviews or meta-analyses). Allele frequencies reported in and gnomD browser and phase 3 1000 Genomes were also included (https://gnomad.broadinstitute.org/, http://browser.1000genomes.org/index.html) for alleles that contain single unique variant.\n\nDiplotype and Phenotype Calculations. Diplotype and phenotype frequencies were estimated using the equation describing Hardy Weinberg equilibrium based on reported allele frequencies.\n\nCaveats to estimated allele, diplotype and phenotype frequencies:\n\nSampling. Allele frequencies collected by CPIC for the supplemental tables are based on published literature reports which typically study small groups of people based on a geographic location (e.g. Malaysia, Berlin, Cairo). Almost no studies use genetic markers to estimate ancestry. Manuscripts are often focused on a specific phenotype (e.g. disease) or study only individuals taking a particular drug. Such samples would not be considered a random sample of the general population. Another consideration is that sample size is important, and PGx studies are typically not large. The frequencies collected from these studies are then used to estimate general estimates of entire ethnic population allele frequencies. Therefore, frequencies from larger groups of subjects and frequencies averaged from many sample populations probably result in better estimates.\n\nEstimation of *1 frequency. In general, there are no population studies that test for all known variant alleles. Because *1 is not genotyped directly in many studies, all alleles that are negative for a sequence variation are defaulted to a *1 assignment. Because CYP2C9*1 is not genotyped directly, all alleles that are negative for a sequence variation are defaulted to a CYP2C9*1 assignment. Likewise, sequence variations of alleles that are not tested may default to a CYP2C9*1 assignment and hence contribute to the frequencies reported for this allele. Therefore, the inferred frequency for CYP2C9*1 was calculated as an average from studies describing allele frequencies for the most common alleles found in a particular biogeographical group.\n\nDiplotype/Phenotype frequency estimates. When calculating diplotype frequencies from these allele frequencies, the margin of error is compounded based on the margin of error on each allele in the diplotype. So, the margin of error will necessarily increase for diplotype frequency estimates compared to allele frequency estimates. For allele frequencies with already large margins of error due to small and non-random sampling, the diplotype margin of error could potentially be quite large. On the other hand, for well-studied alleles, the margin of error is likely low.\n\nBiogeographical groups. Biogeographical groups are derived from PMID 30506572. Further details can be found at https://www.pharmgkb.org/page/biogeographicalGroups. These tables group individuals from particular geographic locations into larger biogeographical groups. It is difficult to group populations with certainty, because some populations are often admixed, or at the least, a combination of different ethnicities. Therefore, the margin of error is increased when different subpopulations are grouped together.",
+   "lookupmethod": "ACTIVITY_SCORE",
+   "version": 461,
+   "notesondiplotype": "CYP2C9 diplotype to phenotype translation is not applicable to the warfarin guideline.",
+   "url": "https://cpicpgx.org/gene/cyp2c9/",
+   "functionmethods": "Methods:\nThe PubMed and PharmGKB databases were searched for the following keywords: (CYP2C9 OR cytochrome p450 2c9)AND [genomic identifiers (e.g. dbSNP rs number, star alleles, additional common names)] AND English [Language]. Study inclusion criteria included publications that incorporated analyses for the association between CYP2C9 genotype and drug pharmacokinetic parameters, clinical outcomes, or allele function.",
+   "notesonallelenaming": "Legacy Name/Class",
+   "includephenotypefrequencies": true,
+   "includediplotypefrequencies": true
+  },
+  {
+   "symbol": "CYP2D6",
+   "chr": "chr22",
+   "genesequenceid": "NG_008376.4",
+   "proteinsequenceid": "NP_000097.3",
+   "chromosequenceid": "NC_000022.11",
+   "mrnasequenceid": "NM_000069.2",
+   "hgncid": "HGNC:2625",
+   "ncbiid": "1565",
+   "ensemblid": "ENSG00000100197",
+   "clinpgxid": "PA128",
+   "frequencymethods": "Methods:\n\nThe CYP2D6 allele frequency tables (CYP2D6 frequency table; link to PharmGKB) are updates of those previously published in CPIC guidelines (PMID: 25974703, 24458010). Updates to the CYP2D6 allele frequency tables were made by searching the PubMed® database (1995 to 2018). The following criteria were used for CYP2D6: (CYP2D6 or 2D6 or cytochrome P4502D6) AND (genotype OR allele OR frequency OR minor allele OR variant OR ethnic OR race OR racial OR ethnicity) with filter limits set to retrieve \"full-text\" and \"English\" literature. In addition, reports were also identified from citations by others or review articles. Studies were considered for inclusion in the CYP2D6 frequency table if: (1) the ethnicity of the population was clearly indicated, (2) either allele frequencies or genotype frequencies were reported, (3) the method by which the genes were genotyped was indicated, (4) the sample population consisted of at least 50 individuals with a few exceptions (e.g., smaller cohorts that were part of larger studies) and (5) the study represented an original publication (no reviews or meta-analyses).\nDiplotype and phenotype frequencies were estimated using the equation describing Hardy Weinberg equilibrium based on reported allele frequencies. Because the frequencies for each allele are averages from all studies for that population, allele frequencies may not add up to100%. To account for this in diplotype and phenotype frequencies calculations, *1 frequency was calculated as 1 - sum (non *1 allele frequency).\n\n\nCaveats to estimated allele, diplotype and phenotype frequencies:\n\nSampling. Allele frequencies collected by CPIC for the supplemental tables are based on published literature reports which typically study small groups of people based on a geographic location (e.g. Malaysia, Berlin, Cairo). Almost no studies use genetic markers to estimate ancestry. Manuscripts are often focused on a specific phenotype (e.g. disease) or study only individuals taking a particular drug. Such samples would not be considered a random sample of the general population. Another consideration is that sample size is important, and PGx studies are typically not large. The frequencies collected from these studies are then used to estimate general estimates of entire ethnic population allele frequencies. Therefore, frequencies from larger groups of subjects and frequencies averaged from many sample populations probably result in better estimates.\n\nEstimation of *1 frequency. In general, there are no population studies that test for all known variant alleles. Because CYP2D6*1 is not genotyped directly, all alleles that are negative for a sequence variation are defaulted to a CYP2D6*1 assignment. Likewise, sequence variations of alleles that are not tested may default to a CYP2D6*1 assignment and hence contribute to the frequencies reported for this allele. Therefore, the inferred frequency for CYP2D6*1 was calculated as an average from studies describing allele frequencies for the most common alleles found in a particular ethnic group.\n\nDiplotype/Phenotype frequency estimates. When calculating diplotype frequencies from these allele frequencies, the margin of error is compounded based on the margin of error on each allele in the diplotype. So, the margin of error will necessarily increase for diplotype frequency estimates compared to allele frequency estimates. For allele frequencies with already large margins of error due to small and non-random sampling, the diplotype margin of error could potentially be quite large. On the other hand, for well-studied alleles, the margin of error is likely low.\n\nBiogeographical groups. Biogeographical groups are derived from PMID 30506572. Further details, including the definitions of each group, can be found at https://www.pharmgkb.org/page/biogeographicalGroups. We strongly recommend that users use either the publication or the PharmGKB link provided to familiarize themselves with the grouping system before using these allele frequencies. These tables group individuals from particular geographic locations into larger biogeographical groups. It is difficult to group populations with certainty, because some populations are often admixed, or at the least, a combination of different ethnicities. Therefore, the margin of error is increased when different subpopulations are grouped together.\n\nOverestimation of allele frequencies. CYP2D6*2 is a 'default' assignment and, unless tested and discriminated for CYP2D6*8, *11, *17, *35,*41 and other variants, will default to a CYP2D6*2 assignment. The frequencies shown here may therefore be over-estimated. CYP2D6*10 is a 'default' assignment and, unless tested and discriminated for, CYP2D6*14 and *36 and other variants, will default to a CYP2D6*10 assignment. The frequencies shown here may therefore be over-estimated. CYP2D6*17 is a 'default' assignment and, unless tested and discriminated for, CYP2D6*40 and *58 will default to a CYP2D6*17 assignment. The frequencies shown here may therefore be over-estimated. CYP2D6*41 has not consistently been determined by its defining SNP (2988G>A) across studies; some platforms still use the -1584C>G SNP to discriminate between CYP2D6*2 and *41. This may lead to an overestimation of the CYP2D6*41 frequency, especially in those of African ancestry.\n\nCNV alleles. Many studies do not specify the exact copy number of duplicated alleles found in their study population and instead report the total frequency of observed CNVs as \"xN\". Where possible, these frequencies have been included in the CNV column for that allele (e.g. *1xN frequencies are included in the *1x2 column, *4xN frequencies are included in the *4x2 column). Users should be aware that this will lead to an overestimation of the frequency of that exact copy number in the population.",
+   "lookupmethod": "ACTIVITY_SCORE",
+   "version": 456,
+   "notesondiplotype": null,
+   "url": "https://cpicpgx.org/gene/cyp2d6/",
+   "functionmethods": null,
+   "notesonallelenaming": "Legacy Name/Class",
+   "includephenotypefrequencies": true,
+   "includediplotypefrequencies": true
+  },
+  {
+   "symbol": "CYP4F2",
+   "chr": "chr19",
+   "genesequenceid": "NG_007971.2",
+   "proteinsequenceid": "NP_001073.3",
+   "chromosequenceid": "NC_000019.10",
+   "mrnasequenceid": "NM_000069.2",
+   "hgncid": "HGNC:2645",
+   "ncbiid": "8529",
+   "ensemblid": "ENSG00000186115",
+   "clinpgxid": "PA27121",
+   "frequencymethods": "Methods\n\nThe allele frequency table was made by searching the PubMed® database (1995 to 2016). Allele frequencies reported in and gnomD browser and phase 3 1000 Genomes were also included (https://gnomad.broadinstitute.org/, http://browser.1000genomes.org/index.html) for alleles that contain single unique variant.\n\nCaveats to estimated allele, diplotype and phenotype frequencies:\n\nSampling. Allele frequencies collected by CPIC for the supplemental tables are based on published literature reports which typically study small groups of people based on a geographic location (e.g. Malaysia, Berlin, Cairo). Almost no studies use genetic markers to estimate ancestry. Manuscripts are often focused on a specific phenotype (e.g. disease) or study only individuals taking a particular drug. Such samples would not be considered a random sample of the general population. Another consideration is that sample size is important, and PGx studies are typically not large. The frequencies collected from these studies are then used to estimate general estimates of entire ethnic population allele frequencies. Therefore, frequencies from larger groups of subjects and frequencies averaged from many sample populations probably result in better estimates.\n\nEstimation of *1 frequency. In general, there are no population studies that test for all known variant alleles. Because *1 is not genotyped directly in many studies, all alleles that are negative for a sequence variation are defaulted to a *1 assignment. Because CYP4F2*1 is not genotyped directly, all alleles that are negative for a sequence variation are defaulted to a CYP4F2*1 assignment. Likewise, sequence variations of alleles that are not tested may default to a CYP4F2*1 assignment and hence contribute to the frequencies reported for this allele. Therefore, the inferred frequency for CYP4F2*1 was calculated as an average from studies describing allele frequencies for the most common alleles found in a particular biogeographical group.\n\nBiogeographical groups. Biogeographical groups are derived from PMID 30506572. Further details can be found at https://www.pharmgkb.org/page/biogeographicalGroups. These tables group individuals from particular geographic locations into larger biogeographical groups. It is difficult to group populations with certainty, because some populations are often admixed, or at the least, a combination of different ethnicities. Therefore, the margin of error is increased when different subpopulations are grouped together.",
+   "lookupmethod": "PHENOTYPE",
+   "version": 357,
+   "notesondiplotype": "CYP4F2 diplotype to phenotype translation is not applicable to the warfarin guideline.",
+   "url": "https://cpicpgx.org/gene/cyp4f2/",
+   "functionmethods": null,
+   "notesonallelenaming": "Legacy Name/Class",
+   "includephenotypefrequencies": false,
+   "includediplotypefrequencies": false
+  },
+  {
+   "symbol": "VKORC1",
+   "chr": "chr16",
+   "genesequenceid": "NG_011564.1",
+   "proteinsequenceid": "NP_076869.1",
+   "chromosequenceid": "NC_000016.10",
+   "mrnasequenceid": "NM_000540.2",
+   "hgncid": "HGNC:23663",
+   "ncbiid": "79001",
+   "ensemblid": "ENSG00000167397",
+   "clinpgxid": "PA133787052",
+   "frequencymethods": "Methods\n\nThe allele frequency table was made by searching the PubMed® database (1995 to 2016). Allele frequencies reported in phase 3 1000 Genomes were also included (http://browser.1000genomes.org/index.html).\n\nCaveats to estimated allele, diplotype and phenotype frequencies:\n\nSampling. Allele frequencies collected by CPIC for the supplemental tables are based on published literature reports which typically study small groups of people based on a geographic location (e.g. Malaysia, Berlin, Cairo). Almost no studies use genetic markers to estimate ancestry. Manuscripts are often focused on a specific phenotype (e.g. disease) or study only individuals taking a particular drug. Such samples would not be considered a random sample of the general population. Another consideration is that sample size is important, and PGx studies are typically not large. The frequencies collected from these studies are then used to estimate general estimates of entire ethnic population allele frequencies. Therefore, frequencies from larger groups of subjects and frequencies averaged from many sample populations probably result in better estimates.\n\nBiogeographical groups. Biogeographical groups are derived from PMID 30506572. Further details can be found at https://www.pharmgkb.org/page/biogeographicalGroups. These tables group individuals from particular geographic locations into larger biogeographical groups. It is difficult to group populations with certainty, because some populations are often admixed, or at the least, a combination of different ethnicities. Therefore, the margin of error is increased when different subpopulations are grouped together.",
+   "lookupmethod": "PHENOTYPE",
+   "version": 352,
+   "notesondiplotype": "VKORC1 diplotype to phenotype translation is not applicable to the warfarin guideline.",
+   "url": "https://cpicpgx.org/gene/vkorc1/",
+   "functionmethods": null,
+   "notesonallelenaming": "Common Name",
+   "includephenotypefrequencies": false,
+   "includediplotypefrequencies": false
+  }
+ ],
+ "guideline": [
+  {
+   "id": 100421,
+   "version": 71,
+   "name": "HLA-B and Abacavir",
+   "url": "https://www.clinpgx.org/guideline/PA166251444",
+   "genes": [
+    "HLA-B"
+   ],
+   "notesonusage": null,
+   "clinpgxid": "PA166251444"
+  },
+  {
+   "id": 100425,
+   "version": 72,
+   "name": "CYP2C9, VKORC1, CYP4F2 and Warfarin",
+   "url": "https://www.clinpgx.org/guideline/PA166251465",
+   "genes": [
+    "CYP2C9",
+    "CYP4F2",
+    "VKORC1"
+   ],
+   "notesonusage": "Warfarin recommendation does not follow simple diplotype to phenotype translation. Read the guideline text and follow the recommendation diagram found at http://files.cpicpgx.org/images/warfarin/warfarin_recommendation_diagram.png",
+   "clinpgxid": "PA166251465"
+  },
+  {
+   "id": 100414,
+   "version": 71,
+   "name": "CYP2D6, CYP2C19 and Tricyclic Antidepressants",
+   "url": "https://www.clinpgx.org/guideline/PA166251445",
+   "genes": [
+    "CYP2C19",
+    "CYP2D6"
+   ],
+   "notesonusage": null,
+   "clinpgxid": "PA166251445"
+  }
+ ],
+ "pair": [
+  {
+   "pairid": 110149,
+   "genesymbol": "CYP4F2",
+   "drugid": "RxNorm:11289",
+   "guidelineid": 100425,
+   "usedforrecommendation": true,
+   "version": 87,
+   "cpiclevel": "A",
+   "clinpgxlevel": "1A",
+   "pgxtesting": null,
+   "citations": [
+    "21900891",
+    "28198005"
+   ],
+   "removed": false,
+   "removeddate": null,
+   "removedreason": null
+  },
+  {
+   "pairid": 110150,
+   "genesymbol": "VKORC1",
+   "drugid": "RxNorm:11289",
+   "guidelineid": 100425,
+   "usedforrecommendation": true,
+   "version": 87,
+   "cpiclevel": "A",
+   "clinpgxlevel": "1A",
+   "pgxtesting": "Actionable PGx",
+   "citations": [
+    "21900891",
+    "28198005"
+   ],
+   "removed": false,
+   "removeddate": null,
+   "removedreason": null
+  },
+  {
+   "pairid": 110080,
+   "genesymbol": "CYP2C19",
+   "drugid": "RxNorm:704",
+   "guidelineid": 100414,
+   "usedforrecommendation": true,
+   "version": 88,
+   "cpiclevel": "A",
+   "clinpgxlevel": "1A",
+   "pgxtesting": null,
+   "citations": [
+    "23486447",
+    "27997040"
+   ],
+   "removed": false,
+   "removeddate": null,
+   "removedreason": null
+  },
+  {
+   "pairid": 110148,
+   "genesymbol": "CYP2C9",
+   "drugid": "RxNorm:11289",
+   "guidelineid": 100425,
+   "usedforrecommendation": true,
+   "version": 87,
+   "cpiclevel": "A",
+   "clinpgxlevel": "1A",
+   "pgxtesting": "Actionable PGx",
+   "citations": [
+    "21900891",
+    "28198005"
+   ],
+   "removed": false,
+   "removeddate": null,
+   "removedreason": null
+  },
+  {
+   "pairid": 110551,
+   "genesymbol": "CALU",
+   "drugid": "RxNorm:11289",
+   "guidelineid": null,
+   "usedforrecommendation": false,
+   "version": 86,
+   "cpiclevel": "D",
+   "clinpgxlevel": "3",
+   "pgxtesting": null,
+   "citations": null,
+   "removed": false,
+   "removeddate": null,
+   "removedreason": null
+  },
+  {
+   "pairid": 110552,
+   "genesymbol": "GGCX",
+   "drugid": "RxNorm:11289",
+   "guidelineid": null,
+   "usedforrecommendation": false,
+   "version": 86,
+   "cpiclevel": "D",
+   "clinpgxlevel": "3",
+   "pgxtesting": null,
+   "citations": null,
+   "removed": false,
+   "removeddate": null,
+   "removedreason": null
+  },
+  {
+   "pairid": 110553,
+   "genesymbol": "PROC",
+   "drugid": "RxNorm:11289",
+   "guidelineid": null,
+   "usedforrecommendation": false,
+   "version": 86,
+   "cpiclevel": "D",
+   "clinpgxlevel": null,
+   "pgxtesting": "Actionable PGx",
+   "citations": null,
+   "removed": false,
+   "removeddate": null,
+   "removedreason": null
+  },
+  {
+   "pairid": 110554,
+   "genesymbol": "PROS1",
+   "drugid": "RxNorm:11289",
+   "guidelineid": null,
+   "usedforrecommendation": false,
+   "version": 86,
+   "cpiclevel": "D",
+   "clinpgxlevel": null,
+   "pgxtesting": "Actionable PGx",
+   "citations": null,
+   "removed": false,
+   "removeddate": null,
+   "removedreason": null
+  },
+  {
+   "pairid": 110078,
+   "genesymbol": "HLA-B",
+   "drugid": "RxNorm:190521",
+   "guidelineid": 100421,
+   "usedforrecommendation": true,
+   "version": 90,
+   "cpiclevel": "A",
+   "clinpgxlevel": "1A",
+   "pgxtesting": "Testing Required",
+   "citations": [
+    "24561393",
+    "22378157"
+   ],
+   "removed": false,
+   "removeddate": null,
+   "removedreason": null
+  },
+  {
+   "pairid": 110081,
+   "genesymbol": "CYP2D6",
+   "drugid": "RxNorm:704",
+   "guidelineid": 100414,
+   "usedforrecommendation": true,
+   "version": 91,
+   "cpiclevel": "A",
+   "clinpgxlevel": "1A",
+   "pgxtesting": "Informative PGx",
+   "citations": [
+    "23486447",
+    "27997040"
+   ],
+   "removed": false,
+   "removeddate": null,
+   "removedreason": null
+  }
+ ],
+ "recommendation": [
+  {
+   "id": 8479701,
+   "guidelineid": 100421,
+   "drugid": "RxNorm:190521",
+   "implications": {
+    "HLA-B": "Low or reduced risk of abacavir hypersensitivity"
+   },
+   "drugrecommendation": "Use abacavir per standard dosing guidelines",
+   "classification": "Strong",
+   "phenotypes": {},
+   "activityscore": {},
+   "allelestatus": {
+    "HLA-B": "HLA-B*57:01 negative"
+   },
+   "lookupkey": {
+    "HLA-B": "*57:01 negative"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479702,
+   "guidelineid": 100421,
+   "drugid": "RxNorm:190521",
+   "implications": {
+    "HLA-B": "Significantly increased risk of abacavir hypersensitivity"
+   },
+   "drugrecommendation": "Abacavir is not recommended",
+   "classification": "Strong",
+   "phenotypes": {},
+   "activityscore": {},
+   "allelestatus": {
+    "HLA-B": "HLA-B*57:01 positive"
+   },
+   "lookupkey": {
+    "HLA-B": "*57:01 positive"
+   },
+   "population": "general",
+   "comments": "n/a",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479814,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Reduced metabolism of TCAs to less active compounds compared to normal metabolizers; Higher plasma concentrations of active drug will increase the probability of side effects",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Consider a 25% reduction of recommended starting dose. Utilize therapeutic drug monitoring to guide dose adjustments.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2D6": "Intermediate Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "1.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "1.0",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose. Dosing recommendations only apply to higher initial doses of TCAs for treatment of conditions such as depression. See other considerations for dosing recommendations for conditions where lower initial doses are used, such as neuropathic pain.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479817,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Normal metabolism of TCAs",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Initiate therapy with recommended starting dose.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Normal Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "2.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "2.0",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479820,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Greatly reduced metabolism of TCAs to less active compounds compared to normal metabolizers; Higher plasma concentrations of active drug will increase the probability of side effects",
+    "CYP2C19": "Normal metabolism of tertiary amines"
+   },
+   "drugrecommendation": "Avoid amitriptyline use. If a amitripyline is warranted, consider a 50% reduction of recommended starting dose. Utilize therapeutic drug monitoring to guide dose adjustments.",
+   "classification": "Strong",
+   "phenotypes": {
+    "CYP2D6": "Poor Metabolizer",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "0.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "0.0",
+    "CYP2C19": "Normal Metabolizer"
+   },
+   "population": "general",
+   "comments": "Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose. Dosing recommendations only apply to higher initial doses of TCAs for treatment of conditions such as depression. See other considerations for dosing recommendations for conditions where lower initial doses are used, such as neuropathic pain.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479837,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Reduced metabolism of TCAs to less active compounds compared to normal metabolizers; Higher plasma concentrations of active drug will increase the probability of side effects",
+    "CYP2C19": "Greatly reduced metabolism of tertiary amines compared to normal metabolizers; Decreased conversion of tertiary amines to secondary amines may affect response or side effects"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, utilize therapeutic drug monitoring to guide dose adjustment. Utilizing therapeutic drug monitoring to guide dose adjustments is strongly recommended.",
+   "classification": "Optional",
+   "phenotypes": {
+    "CYP2D6": "Intermediate Metabolizer",
+    "CYP2C19": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "1.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "1.0",
+    "CYP2C19": "Poor Metabolizer"
+   },
+   "population": "general",
+   "comments": "Dosing recommendations only apply to higher initial doses of TCAs for treatment of conditions such as depression. See other considerations for dosing recommendations\nfor conditions where lower initial doses are used, such as neuropathic pain. Titrate dose to observed clinical response with symptom improvement and minimal (if any) side effects. Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose. Utilizing therapeutic drug monitoring if a tricyclic is prescribed to a patient with CYP2D6 ultrarapid, intermediate or poor metabolism in combination with CYP2C19 ultrarapid, intermediate or poor metabolism is strongly recommended.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479840,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Normal metabolism of TCAs",
+    "CYP2C19": "Greatly reduced metabolism of tertiary amines compared to normal metabolizers; Decreased conversion of tertiary amines to secondary amines may affect response or side effects"
+   },
+   "drugrecommendation": "Avoid amitriptyline use. If amitripyline is warranted, consider a 50% reduction of recommended starting dose. Utilize therapeutic drug monitoring to guide dose adjustments.",
+   "classification": "Moderate",
+   "phenotypes": {
+    "CYP2D6": "Normal Metabolizer",
+    "CYP2C19": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "2.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "2.0",
+    "CYP2C19": "Poor Metabolizer"
+   },
+   "population": "general",
+   "comments": "Dosing recommendations only apply to higher initial doses of TCAs for treatment of conditions such as depression. See other considerations for dosing recommendations\n for conditions where lower initial doses are used, such as neuropathic pain. Titrate dose to observed clinical response with symptom improvement and minimal (if any) side effects. Patients may receive an initial low dose of a tricyclic, which is then increased over several days to the recommended steady-state dose. The starting dose in this guideline refers to the recommended steady-state dose.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  },
+  {
+   "id": 8479843,
+   "guidelineid": 100414,
+   "drugid": "RxNorm:704",
+   "implications": {
+    "CYP2D6": "Greatly reduced metabolism of TCAs to less active compounds compared to normal metabolizers; Higher plasma concentrations of active drug will increase the probability of side effects",
+    "CYP2C19": "Greatly reduced metabolism of tertiary amines compared to normal metabolizers; Decreased conversion of tertiary amines to secondary amines may affect response or side effects"
+   },
+   "drugrecommendation": "Avoid amitriptyline use; If amitriptyline is warranted, utilize therapeutic drug monitoring to guide dose adjustment. Utilizing therapeutic drug monitoring to guide dose adjustments is strongly recommended.",
+   "classification": "Optional",
+   "phenotypes": {
+    "CYP2D6": "Poor Metabolizer",
+    "CYP2C19": "Poor Metabolizer"
+   },
+   "activityscore": {
+    "CYP2D6": "0.0",
+    "CYP2C19": "n/a"
+   },
+   "allelestatus": {},
+   "lookupkey": {
+    "CYP2D6": "0.0",
+    "CYP2C19": "Poor Metabolizer"
+   },
+   "population": "general",
+   "comments": "Dosing recommendations only apply to higher initial doses of TCAs for treatment of conditions such as depression. See other considerations for dosing recommendations \nfor conditions where lower initial doses are used, such as neuropathic pain. Utilizing therapeutic drug monitoring if a tricyclic is prescribed to a patient with CYP2D6 ultrarapid, intermediate or poor metabolism in combination with CYP2C19 ultrarapid, intermediate or poor metabolism is strongly recommended.",
+   "version": 1,
+   "dosinginformation": false,
+   "alternatedrugavailable": false,
+   "otherprescribingguidance": false
+  }
+ ],
+ "gene_result": [
+  {
+   "id": 8475131,
+   "genesymbol": "HLA-B",
+   "result": "*15:02 negative",
+   "activityscore": "n/a",
+   "ehrpriority": "Routine/Low-Risk",
+   "consultationtext": "The HLA-B*15:02 allele, which is associated with severe cutaneous adverse reactions among patients taking certain aromatic anticonvulsants, was not detected in this patient. No change in therapy is warranted based on these results. It should be noted that a negative HLA-B*15:02 result does not absolutely rule out the possibility of an adverse drug reaction. Please consult a clinical pharmacist for more information.",
+   "version": 1,
+   "frequency": null
+  },
+  {
+   "id": 8475134,
+   "genesymbol": "HLA-B",
+   "result": "*15:02 positive",
+   "activityscore": "n/a",
+   "ehrpriority": "Priority/High-Risk",
+   "consultationtext": "This result signifies that the patient has one or two copies of HLA-B*15:02. Patients with this genotype are at increased risk of severe cutaneous adverse reactions, including Stevens-Johnson syndrome/toxic epidermal necrolysis (SJS/TEN), with certain aromatic anticonvulsants (e.g., carbamazepine, oxcarbazepine, phenytoin/fosphenytoin). Alternative therapy may be warranted. Please consult a clinical pharmacist for more information.",
+   "version": 1,
+   "frequency": null
+  },
+  {
+   "id": 8475137,
+   "genesymbol": "HLA-B",
+   "result": "*57:01 negative",
+   "activityscore": "n/a",
+   "ehrpriority": "Normal/Routine/Low Risk",
+   "consultationtext": "The HLA-B*57:01 allele, associated with abacavir hypersensitivity, was not detected in this patient. The patient may be prescribed abacavir. Please refer to the hospital formulary guidelines for specific dosing information. It should be noted that a negative HLA-B*57:01 result does not absolutely rule out the possibility of some form of abacavir hypersensitivity. Administration of abacavir therapy requires close observation including immediate discontinuation of therapy should any signs or symptoms of hypersensitivity develop.",
+   "version": 1,
+   "frequency": null
+  },
+  {
+   "id": 8475140,
+   "genesymbol": "HLA-B",
+   "result": "*57:01 positive",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "The HLA-B*57:01 allele, associated with abacavir hypersensitivity, was detected in this patient. HLA-B*5701 positive patients should NOT be prescribed abacavir.",
+   "version": 1,
+   "frequency": null
+  },
+  {
+   "id": 8475143,
+   "genesymbol": "HLA-B",
+   "result": "*58:01 negative",
+   "activityscore": "n/a",
+   "ehrpriority": "Normal/Routine/Low Risk",
+   "consultationtext": "The HLA-B*58:01 allele, associated with allopurinol hypersensitivity, was not detected in this patient. Allopurinol can be used per standard dosing guidelines. Patients should be monitored closely for any signs of sensitivity reactions, especially those patients receiving allopurinol (of >300 mg/day), concomitant medications (i.e. thiazide diuretics or penicillin/cephalosporin) or with medical conditions (i.e. chronic kidney disease) that increase the non-genetic risk for allopurinol-related hypersensitivity reactions.",
+   "version": 1,
+   "frequency": null
+  },
+  {
+   "id": 8475146,
+   "genesymbol": "HLA-B",
+   "result": "*58:01 positive",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "The HLA-B*58:01 allele, associated with allopurinol hypersensitivity, was detected in this patient. Allopurinol is contraindicated.",
+   "version": 1,
+   "frequency": null
+  },
+  {
+   "id": 8368990,
+   "genesymbol": "CYP2C19",
+   "result": "Poor Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has two copies of a no function allele. Based on the genotype result this patient is predicted to be a poor metabolizer of CYP2C19 substrates. This patient may be at a high risk for an adverse or poor response to medications that are metabolized by CYP2C19. To avoid an untoward drug response, dose adjustments or or alternative therapy may be necessary for medications metabolized by the CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.011408395,
+    "American": 0.014819587,
+    "European": 0.02387743,
+    "Oceanian": 0.5713864,
+    "East Asian": 0.12978691,
+    "Near Eastern": 0.018584846,
+    "Central/South Asian": 0.08156806,
+    "Sub-Saharan African": 0.036714304,
+    "African American/Afro-Caribbean": 0.040512204
+   }
+  },
+  {
+   "id": 8368817,
+   "genesymbol": "CYP2C19",
+   "result": "Intermediate Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has one copy of a normal function allele and one copy of a no function allele OR one copy of an increased function and one copy of a no function allele. Based on the genotype result this patient is predicted to be an intermediate metabolizer of CYP2C19 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2C19. To avoid an untoward drug response, dose adjustments or alternative therapeutic agents may be necessary for medications metabolized by CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.19035932,
+    "American": 0.21383229,
+    "European": 0.26108757,
+    "Oceanian": 0.36902928,
+    "East Asian": 0.45928204,
+    "Near Eastern": 0.2354828,
+    "Central/South Asian": 0.40806636,
+    "Sub-Saharan African": 0.29945874,
+    "African American/Afro-Caribbean": 0.31398684
+   }
+  },
+  {
+   "id": 8369070,
+   "genesymbol": "CYP2C19",
+   "result": "Indeterminate",
+   "activityscore": "n/a",
+   "ehrpriority": "none",
+   "consultationtext": "This result signifies that the patient has an allele combination with uncertain and/or unknown function alleles. The expected phenotype for this patient cannot be determined currently based on the CYP2C19 diplotype result. Please consult a clinical pharmacist for more specific information about how CYP2C19 function influences drug dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0,
+    "American": 0.0,
+    "European": 0.0,
+    "Oceanian": 0.0,
+    "East Asian": 0.0034064606,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.0,
+    "African American/Afro-Caribbean": 0.0022393465
+   }
+  },
+  {
+   "id": 8368744,
+   "genesymbol": "CYP2C19",
+   "result": "Likely Intermediate Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has one copy of a normal function allele and one copy of a decreased function allele OR one copy of an increased function allele and one copy of a decreased function allele OR two copies of a decreased function allele. Based on the genotype result this patient MAY be an intermediate metabolizer of CYP2C19 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2C19. To avoid an untoward drug response, dose adjustments or alternative therapeutic agents may be necessary for medications metabolized by CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.003709162,
+    "American": 0.0,
+    "European": 0.0011160374,
+    "Oceanian": 0.0,
+    "East Asian": 0.00076989824,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.042863965,
+    "African American/Afro-Caribbean": 0.027788177
+   }
+  },
+  {
+   "id": 8368705,
+   "genesymbol": "CYP2C19",
+   "result": "Rapid Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has one copy of a normal function allele and one copy of an increased function allele. Based on the genotype result this patient is predicted to be a rapid metabolizer of CYP2C19 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2C19. To avoid an untoward drug response, dose adjustments or alternative therapeutic agents may be necessary for medications metabolized by CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.24136075,
+    "American": 0.13638271,
+    "European": 0.2711846,
+    "Oceanian": 0.021329276,
+    "East Asian": 0.025343522,
+    "Near Eastern": 0.2573682,
+    "Central/South Asian": 0.18567303,
+    "Sub-Saharan African": 0.21080859,
+    "African American/Afro-Caribbean": 0.2373838
+   }
+  },
+  {
+   "id": 8368714,
+   "genesymbol": "CYP2C19",
+   "result": "Normal Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Normal/Routine/Low Risk",
+   "consultationtext": "This result signifies that the patient has two copies of a normal function allele. Based on the genotype result this patient is predicted to be an normal metabolizer of CYP2C19 substrates. There is no reason to selectively adjust the dose of most medications that are metabolized by CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.5249766,
+    "American": 0.62755567,
+    "European": 0.39611652,
+    "Oceanian": 0.035006005,
+    "East Asian": 0.38055435,
+    "Near Eastern": 0.45192146,
+    "Central/South Asian": 0.29552925,
+    "Sub-Saharan African": 0.36977687,
+    "African American/Afro-Caribbean": 0.32805592
+   }
+  },
+  {
+   "id": 8368702,
+   "genesymbol": "CYP2C19",
+   "result": "Ultrarapid Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has two copies of an increased function allele. Based on the genotype result this patient is predicted to be an ultrarapid metabolizer of CYP2C19 substrates. This patient may be at risk for an adverse or poor response to medications that are metabolized by CYP2C19. To avoid an untoward drug response, dose adjustments or alternative therapeutic agents may be necessary for medications metabolized by CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.02774172,
+    "American": 0.0074097984,
+    "European": 0.04641379,
+    "Oceanian": 0.003249,
+    "East Asian": 0.00042194634,
+    "Near Eastern": 0.036642652,
+    "Central/South Asian": 0.029163336,
+    "Sub-Saharan African": 0.030045323,
+    "African American/Afro-Caribbean": 0.042943195
+   }
+  },
+  {
+   "id": 8368916,
+   "genesymbol": "CYP2C19",
+   "result": "Likely Poor Metabolizer",
+   "activityscore": "n/a",
+   "ehrpriority": "Abnormal/Priority/High Risk",
+   "consultationtext": "This result signifies that the patient has one copy of a decreased function allele and one copy of a no function allele. Based on the genotype result this patient MAY be a poor metabolizer of CYP2C19 substrates. This patient may be at a high risk for an adverse or poor response to medications that are metabolized by CYP2C19. To avoid an untoward drug response, dose adjustments or or alternative therapy may be necessary for medications metabolized by the CYP2C19. Please consult a clinical pharmacist for more information about how CYP2C19 metabolic status influences drug selection and dosing.",
+   "version": 3,
+   "frequency": {
+    "Latino": 0.0004440685,
+    "American": 0.0,
+    "European": 0.00020405183,
+    "Oceanian": 0.0,
+    "East Asian": 0.0004349198,
+    "Near Eastern": 0.0,
+    "Central/South Asian": 0.0,
+    "Sub-Saharan African": 0.010332189,
+    "African American/Afro-Caribbean": 0.007090685
+   }
+  }
+ ],
+ "gene_result_lookup": [
+  {
+   "id": 8368703,
+   "phenotypeid": 8368702,
+   "lookupkey": {
+    "Increased function": 2
+   },
+   "function1": "Increased function",
+   "function2": "Increased function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying two increased function alleles"
+  },
+  {
+   "id": 8368706,
+   "phenotypeid": 8368705,
+   "lookupkey": {
+    "Normal function": 1,
+    "Increased function": 1
+   },
+   "function1": "Increased function",
+   "function2": "Normal function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying one normal function allele and one increased function allele"
+  },
+  {
+   "id": 8368715,
+   "phenotypeid": 8368714,
+   "lookupkey": {
+    "Normal function": 2
+   },
+   "function1": "Normal function",
+   "function2": "Normal function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying two normal function alleles"
+  },
+  {
+   "id": 8368745,
+   "phenotypeid": 8368744,
+   "lookupkey": {
+    "Normal function": 1,
+    "Decreased function": 1
+   },
+   "function1": "Decreased function",
+   "function2": "Normal function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying one normal function allele and one decreased function allele"
+  },
+  {
+   "id": 8368788,
+   "phenotypeid": 8368744,
+   "lookupkey": {
+    "Decreased function": 1,
+    "Increased function": 1
+   },
+   "function1": "Decreased function",
+   "function2": "Increased function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying one increased function allele and one decreased function allele"
+  },
+  {
+   "id": 8368795,
+   "phenotypeid": 8368744,
+   "lookupkey": {
+    "Decreased function": 2
+   },
+   "function1": "Decreased function",
+   "function2": "Decreased function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying two decreased function alleles"
+  },
+  {
+   "id": 8368818,
+   "phenotypeid": 8368817,
+   "lookupkey": {
+    "No function": 1,
+    "Normal function": 1
+   },
+   "function1": "Normal function",
+   "function2": "No function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying one normal function allele and one no function allele"
+  },
+  {
+   "id": 8368903,
+   "phenotypeid": 8368817,
+   "lookupkey": {
+    "No function": 1,
+    "Increased function": 1
+   },
+   "function1": "Increased function",
+   "function2": "No function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying one increased function allele and one no function allele"
+  },
+  {
+   "id": 8368917,
+   "phenotypeid": 8368916,
+   "lookupkey": {
+    "No function": 1,
+    "Decreased function": 1
+   },
+   "function1": "Decreased function",
+   "function2": "No function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying one decreased function allele and one no function allele"
+  },
+  {
+   "id": 8368991,
+   "phenotypeid": 8368990,
+   "lookupkey": {
+    "No function": 2
+   },
+   "function1": "No function",
+   "function2": "No function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying two no function alleles"
+  },
+  {
+   "id": 8369071,
+   "phenotypeid": 8369070,
+   "lookupkey": {
+    "Uncertain function": 2
+   },
+   "function1": "Uncertain function",
+   "function2": "Uncertain function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying two uncertain function alleles"
+  },
+  {
+   "id": 8369127,
+   "phenotypeid": 8369070,
+   "lookupkey": {
+    "Increased function": 1,
+    "Uncertain function": 1
+   },
+   "function1": "Uncertain function",
+   "function2": "Increased function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying one increased function allele and one uncertain function allele"
+  },
+  {
+   "id": 8369138,
+   "phenotypeid": 8369070,
+   "lookupkey": {
+    "Normal function": 1,
+    "Uncertain function": 1
+   },
+   "function1": "Uncertain function",
+   "function2": "Normal function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying one normal function allele and one uncertain function allele"
+  },
+  {
+   "id": 8369209,
+   "phenotypeid": 8369070,
+   "lookupkey": {
+    "Decreased function": 1,
+    "Uncertain function": 1
+   },
+   "function1": "Uncertain function",
+   "function2": "Decreased function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying one decreased function allele and one uncertain function allele"
+  },
+  {
+   "id": 8369270,
+   "phenotypeid": 8369070,
+   "lookupkey": {
+    "No function": 1,
+    "Uncertain function": 1
+   },
+   "function1": "Uncertain function",
+   "function2": "No function",
+   "activityvalue1": "n/a",
+   "activityvalue2": "n/a",
+   "totalactivityscore": "n/a",
+   "description": "An individual carrying one no function allele and one uncertain function allele"
+  },
+  {
+   "id": 8475132,
+   "phenotypeid": 8475131,
+   "lookupkey": {
+    "*15:02 negative": 1
+   },
+   "function1": null,
+   "function2": null,
+   "activityvalue1": null,
+   "activityvalue2": null,
+   "totalactivityscore": null,
+   "description": null
+  },
+  {
+   "id": 8475135,
+   "phenotypeid": 8475134,
+   "lookupkey": {
+    "*15:02 positive": 1
+   },
+   "function1": null,
+   "function2": null,
+   "activityvalue1": null,
+   "activityvalue2": null,
+   "totalactivityscore": null,
+   "description": null
+  },
+  {
+   "id": 8475138,
+   "phenotypeid": 8475137,
+   "lookupkey": {
+    "*57:01 negative": 1
+   },
+   "function1": null,
+   "function2": null,
+   "activityvalue1": null,
+   "activityvalue2": null,
+   "totalactivityscore": null,
+   "description": null
+  },
+  {
+   "id": 8475141,
+   "phenotypeid": 8475140,
+   "lookupkey": {
+    "*57:01 positive": 1
+   },
+   "function1": null,
+   "function2": null,
+   "activityvalue1": null,
+   "activityvalue2": null,
+   "totalactivityscore": null,
+   "description": null
+  },
+  {
+   "id": 8475144,
+   "phenotypeid": 8475143,
+   "lookupkey": {
+    "*58:01 negative": 1
+   },
+   "function1": null,
+   "function2": null,
+   "activityvalue1": null,
+   "activityvalue2": null,
+   "totalactivityscore": null,
+   "description": null
+  },
+  {
+   "id": 8475147,
+   "phenotypeid": 8475146,
+   "lookupkey": {
+    "*58:01 positive": 1
+   },
+   "function1": null,
+   "function2": null,
+   "activityvalue1": null,
+   "activityvalue2": null,
+   "totalactivityscore": null,
+   "description": null
+  }
+ ],
+ "gene_result_diplotype": [
+  {
+   "id": 8368709,
+   "functionphenotypeid": 8368706,
+   "diplotype": "*17/*38",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*17": 1,
+     "*38": 1
+    }
+   }
+  },
+  {
+   "id": 8368713,
+   "functionphenotypeid": 8368706,
+   "diplotype": "*1/*17",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*1": 1,
+     "*17": 1
+    }
+   }
+  },
+  {
+   "id": 8368718,
+   "functionphenotypeid": 8368715,
+   "diplotype": "*13/*38",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*13": 1,
+     "*38": 1
+    }
+   }
+  },
+  {
+   "id": 8368721,
+   "functionphenotypeid": 8368715,
+   "diplotype": "*11/*38",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*11": 1,
+     "*38": 1
+    }
+   }
+  },
+  {
+   "id": 8368724,
+   "functionphenotypeid": 8368715,
+   "diplotype": "*11/*11",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*11": 2
+    }
+   }
+  },
+  {
+   "id": 8368746,
+   "functionphenotypeid": 8368745,
+   "diplotype": "*9/*28",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*9": 1,
+     "*28": 1
+    }
+   }
+  },
+  {
+   "id": 8368749,
+   "functionphenotypeid": 8368745,
+   "diplotype": "*19/*28",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*19": 1,
+     "*28": 1
+    }
+   }
+  },
+  {
+   "id": 8368752,
+   "functionphenotypeid": 8368745,
+   "diplotype": "*11/*16",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*11": 1,
+     "*16": 1
+    }
+   }
+  },
+  {
+   "id": 8368791,
+   "functionphenotypeid": 8368788,
+   "diplotype": "*17/*19",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*17": 1,
+     "*19": 1
+    }
+   }
+  },
+  {
+   "id": 8368793,
+   "functionphenotypeid": 8368788,
+   "diplotype": "*17/*26",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*17": 1,
+     "*26": 1
+    }
+   }
+  },
+  {
+   "id": 8368797,
+   "functionphenotypeid": 8368795,
+   "diplotype": "*9/*26",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*9": 1,
+     "*26": 1
+    }
+   }
+  },
+  {
+   "id": 8368801,
+   "functionphenotypeid": 8368795,
+   "diplotype": "*19/*26",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*19": 1,
+     "*26": 1
+    }
+   }
+  },
+  {
+   "id": 8368803,
+   "functionphenotypeid": 8368795,
+   "diplotype": "*16/*19",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*16": 1,
+     "*19": 1
+    }
+   }
+  },
+  {
+   "id": 8368822,
+   "functionphenotypeid": 8368818,
+   "diplotype": "*4/*15",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*4": 1,
+     "*15": 1
+    }
+   }
+  },
+  {
+   "id": 8368825,
+   "functionphenotypeid": 8368818,
+   "diplotype": "*6/*38",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*6": 1,
+     "*38": 1
+    }
+   }
+  },
+  {
+   "id": 8368828,
+   "functionphenotypeid": 8368818,
+   "diplotype": "*18/*36",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*18": 1,
+     "*36": 1
+    }
+   }
+  },
+  {
+   "id": 8368906,
+   "functionphenotypeid": 8368903,
+   "diplotype": "*7/*17",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*7": 1,
+     "*17": 1
+    }
+   }
+  },
+  {
+   "id": 8368910,
+   "functionphenotypeid": 8368903,
+   "diplotype": "*17/*24",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*17": 1,
+     "*24": 1
+    }
+   }
+  },
+  {
+   "id": 8368912,
+   "functionphenotypeid": 8368903,
+   "diplotype": "*17/*35",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*17": 1,
+     "*35": 1
+    }
+   }
+  },
+  {
+   "id": 8368921,
+   "functionphenotypeid": 8368917,
+   "diplotype": "*8/*16",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*8": 1,
+     "*16": 1
+    }
+   }
+  },
+  {
+   "id": 8368924,
+   "functionphenotypeid": 8368917,
+   "diplotype": "*3/*25",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*3": 1,
+     "*25": 1
+    }
+   }
+  },
+  {
+   "id": 8368927,
+   "functionphenotypeid": 8368917,
+   "diplotype": "*3/*26",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*3": 1,
+     "*26": 1
+    }
+   }
+  },
+  {
+   "id": 8368992,
+   "functionphenotypeid": 8368991,
+   "diplotype": "*6/*35",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*6": 1,
+     "*35": 1
+    }
+   }
+  },
+  {
+   "id": 8368995,
+   "functionphenotypeid": 8368991,
+   "diplotype": "*8/*8",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*8": 2
+    }
+   }
+  },
+  {
+   "id": 8368999,
+   "functionphenotypeid": 8368991,
+   "diplotype": "*6/*36",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*6": 1,
+     "*36": 1
+    }
+   }
+  },
+  {
+   "id": 8369073,
+   "functionphenotypeid": 8369071,
+   "diplotype": "*14/*32",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*14": 1,
+     "*32": 1
+    }
+   }
+  },
+  {
+   "id": 8369076,
+   "functionphenotypeid": 8369071,
+   "diplotype": "*14/*30",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*14": 1,
+     "*30": 1
+    }
+   }
+  },
+  {
+   "id": 8369079,
+   "functionphenotypeid": 8369071,
+   "diplotype": "*29/*39",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*29": 1,
+     "*39": 1
+    }
+   }
+  },
+  {
+   "id": 8369130,
+   "functionphenotypeid": 8369127,
+   "diplotype": "*17/*39",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*17": 1,
+     "*39": 1
+    }
+   }
+  },
+  {
+   "id": 8369133,
+   "functionphenotypeid": 8369127,
+   "diplotype": "*17/*34",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*17": 1,
+     "*34": 1
+    }
+   }
+  },
+  {
+   "id": 8369136,
+   "functionphenotypeid": 8369127,
+   "diplotype": "*17/*32",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*17": 1,
+     "*32": 1
+    }
+   }
+  },
+  {
+   "id": 8369140,
+   "functionphenotypeid": 8369138,
+   "diplotype": "*15/*23",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*15": 1,
+     "*23": 1
+    }
+   }
+  },
+  {
+   "id": 8369143,
+   "functionphenotypeid": 8369138,
+   "diplotype": "*18/*33",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*18": 1,
+     "*33": 1
+    }
+   }
+  },
+  {
+   "id": 8369146,
+   "functionphenotypeid": 8369138,
+   "diplotype": "*14/*28",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*14": 1,
+     "*28": 1
+    }
+   }
+  },
+  {
+   "id": 8369210,
+   "functionphenotypeid": 8369209,
+   "diplotype": "*26/*32",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*26": 1,
+     "*32": 1
+    }
+   }
+  },
+  {
+   "id": 8369213,
+   "functionphenotypeid": 8369209,
+   "diplotype": "*10/*30",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*10": 1,
+     "*30": 1
+    }
+   }
+  },
+  {
+   "id": 8369215,
+   "functionphenotypeid": 8369209,
+   "diplotype": "*26/*30",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*26": 1,
+     "*30": 1
+    }
+   }
+  },
+  {
+   "id": 8369273,
+   "functionphenotypeid": 8369270,
+   "diplotype": "*7/*29",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*7": 1,
+     "*29": 1
+    }
+   }
+  },
+  {
+   "id": 8369276,
+   "functionphenotypeid": 8369270,
+   "diplotype": "*22/*31",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*22": 1,
+     "*31": 1
+    }
+   }
+  },
+  {
+   "id": 8369279,
+   "functionphenotypeid": 8369270,
+   "diplotype": "*22/*23",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*22": 1,
+     "*23": 1
+    }
+   }
+  },
+  {
+   "id": 8475133,
+   "functionphenotypeid": 8475132,
+   "diplotype": "*15:02 negative",
+   "diplotypekey": {
+    "HLA-B": {
+     "*15:02 negative": 1
+    }
+   }
+  },
+  {
+   "id": 8475136,
+   "functionphenotypeid": 8475135,
+   "diplotype": "*15:02 positive",
+   "diplotypekey": {
+    "HLA-B": {
+     "*15:02 positive": 1
+    }
+   }
+  },
+  {
+   "id": 8475139,
+   "functionphenotypeid": 8475138,
+   "diplotype": "*57:01 negative",
+   "diplotypekey": {
+    "HLA-B": {
+     "*57:01 negative": 1
+    }
+   }
+  },
+  {
+   "id": 8475142,
+   "functionphenotypeid": 8475141,
+   "diplotype": "*57:01 positive",
+   "diplotypekey": {
+    "HLA-B": {
+     "*57:01 positive": 1
+    }
+   }
+  },
+  {
+   "id": 8475145,
+   "functionphenotypeid": 8475144,
+   "diplotype": "*58:01 negative",
+   "diplotypekey": {
+    "HLA-B": {
+     "*58:01 negative": 1
+    }
+   }
+  },
+  {
+   "id": 8475148,
+   "functionphenotypeid": 8475147,
+   "diplotype": "*58:01 positive",
+   "diplotypekey": {
+    "HLA-B": {
+     "*58:01 positive": 1
+    }
+   }
+  },
+  {
+   "id": 8368704,
+   "functionphenotypeid": 8368703,
+   "diplotype": "*17/*17",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*17": 2
+    }
+   }
+  },
+  {
+   "id": 8368707,
+   "functionphenotypeid": 8368706,
+   "diplotype": "*13/*17",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*13": 1,
+     "*17": 1
+    }
+   }
+  },
+  {
+   "id": 8368789,
+   "functionphenotypeid": 8368788,
+   "diplotype": "*9/*17",
+   "diplotypekey": {
+    "CYP2C19": {
+     "*9": 1,
+     "*17": 1
+    }
+   }
+  }
+ ],
+ "allele": [
+  {
+   "id": 777533,
+   "version": 409,
+   "genesymbol": "CYP2C19",
+   "name": "*1",
+   "functionalstatus": null,
+   "clinicalfunctionalstatus": "Normal function",
+   "clinicalfunctionalsubstrate": null,
+   "activityvalue": null,
+   "definitionid": 777532,
+   "citations": [
+    "7487078",
+    "32602114",
+    "22027650",
+    "29325448",
+    "33237321"
+   ],
+   "strength": "Definitve",
+   "functioncomments": null,
+   "findings": "CYP2C19*1 is assigned normal function based on definitive evidence. CYP2C19*1 has been studied for more than 20 years and is the most frequently observed allele (7487078, 32602114). CYP2C19*1 has repeatedly demonstrated normal function with numerous substrates and its association with normal function is well-established (22027650, 29325448, 33237321).",
+   "frequency": {
+    "Latino": 0.7165527,
+    "American": 0.7921841,
+    "European": 0.62514144,
+    "Oceanian": 0.18709892,
+    "East Asian": 0.59554905,
+    "Near Eastern": 0.67225105,
+    "Central/South Asian": 0.543626,
+    "Sub-Saharan African": 0.55150676,
+    "African American/Afro-Caribbean": 0.54676163
+   },
+   "inferredfrequency": true
+  },
+  {
+   "id": 777565,
+   "version": 409,
+   "genesymbol": "CYP2C19",
+   "name": "*17",
+   "functionalstatus": null,
+   "clinicalfunctionalstatus": "Increased function",
+   "clinicalfunctionalsubstrate": null,
+   "activityvalue": null,
+   "definitionid": 777564,
+   "citations": [
+    "16413245",
+    "17625515",
+    "20083681",
+    "17625515",
+    "32857933",
+    "29325448",
+    "29136336",
+    "31649299",
+    "20083681"
+   ],
+   "strength": "Definitive",
+   "functioncomments": null,
+   "findings": "CYP2C19*17 is assigned increased function based on strong evidence in homozygous and heterozygous subjects. Subjects with CYP2C19 *1/*17 and CYP2C19 *17/*17 genotype demonstrated increased omeprazole metabolism compared to wildtype subjects based on plasma metabolite measurements. The predicted AUC of omeprazole in CYP2C19*17/*17 patients was 63% of the predicted AUC in wildtype subjects. Additionally, in a separate population, CYP2C19*17/*17 subjects demonstrated increased mephenytoin metabolism compared to wildtype and CYP2C19 *1/*17 subjects. A murine study found increased gene transcription of CYP2C19*17 likely results in the observed increased enzyme activity (16413245). CYP2C19 *17/*17 patients taking escitalopram had 42% serum escitalopram concentrations compared to wildtype (17625515). Also, in adolescents with generalized anxiety disorder, patients with *4/*17 or *17/*17 had lower AUC/CMAX compared to normal (*1/*1) and poor metabolizers and expected differences in the ratios of s-citalopram to its metabolite, desmethylcitalopram (PMID 32857933). Additionally, CYP2C19 *1/*17 and *17/*17 carriers in naturalistically studied depressed adults had 10% and 20% lower serum concentration compared to CYP2C19 NMs (29325448). In healthy adults, *17/*17 was associated with lower sertraline AUC vs normal metabolizers (29136336), although in a separate study involving more than 1200 patients, the CYP2C19*17 allele was associated with 8% lower serum concentration compared to NMs (31649299). CYP2C19 *17/*17 patients taking clopidogrel had lower ADP induced platelet aggregation likely as a result of increased clopidogrel metabolism to its active metabolite compared to wildtype and CYP2C19 *1/*17 patients (20083681). Therefore, consensus among experts was increased function based on strong evidence.",
+   "frequency": {
+    "Latino": 0.16655846,
+    "American": 0.086080186,
+    "European": 0.2154386,
+    "Oceanian": 0.057,
+    "East Asian": 0.020541333,
+    "Near Eastern": 0.1914227,
+    "Central/South Asian": 0.17077276,
+    "Sub-Saharan African": 0.17333587,
+    "African American/Afro-Caribbean": 0.2072274
+   },
+   "inferredfrequency": false
+  },
+  {
+   "id": 777537,
+   "version": 409,
+   "genesymbol": "CYP2C19",
+   "name": "*3",
+   "functionalstatus": null,
+   "clinicalfunctionalstatus": "No function",
+   "clinicalfunctionalsubstrate": null,
+   "activityvalue": null,
+   "definitionid": 777536,
+   "citations": [
+    "7969038",
+    "9103550",
+    "22027650"
+   ],
+   "strength": "Definitve",
+   "functioncomments": null,
+   "findings": "CYP2C19*3 is assigned no function based on definitive evidence. CYP2C19*3 has been studied for more than 20 years and its association with impaired function is well-established (7969038, 9103550, 22027650). CYP2C19*3 is defined by an early stop codon resulting in a truncated protein lacking a heme binding region and a majority of the substrate binding region, making it a nonfunctional protein. CYP2C19*3 was first identified in a homozygous subject demonstrating decreased mephenytoin metabolism and was subsequently identified in six additional subjects demonstrating decreased mephenytoin metabolism (7969038).",
+   "frequency": {
+    "Latino": 0.00082841824,
+    "American": 0.00035169988,
+    "European": 0.0016180738,
+    "Oceanian": 0.14638089,
+    "East Asian": 0.07247335,
+    "Near Eastern": 0.016479162,
+    "Central/South Asian": 0.015685236,
+    "Sub-Saharan African": 0.0026677323,
+    "African American/Afro-Caribbean": 0.0027567567
+   },
+   "inferredfrequency": false
+  },
+  {
+   "id": 777535,
+   "version": 409,
+   "genesymbol": "CYP2C19",
+   "name": "*2",
+   "functionalstatus": null,
+   "clinicalfunctionalstatus": "No function",
+   "clinicalfunctionalsubstrate": null,
+   "activityvalue": null,
+   "definitionid": 777534,
+   "citations": [
+    "8195181",
+    "22027650"
+   ],
+   "strength": "Definitve",
+   "functioncomments": null,
+   "findings": "CYP2C19*2 is assigned no function based on definitive evidence. CYP2C19*2 has been studied for more than 20 years and its association with impaired function is well-established (8195181, 22027650). CYP2C19*2 is defined by splicing defects resulting in a truncated protein lacking a heme binding region, making it a nonfunctional protein. CYP2C19*2 was first identified in a homozygous subject demonstrating decreased mephenytoin metabolism and was subsequently identified in seventeen additional subjects demonstrating decreased mephenytoin metabolism (8195181). Therefore, consensus among experts was no function based on definitive evidence.",
+   "frequency": {
+    "Latino": 0.104187496,
+    "American": 0.121365316,
+    "European": 0.14685704,
+    "Oceanian": 0.6095202,
+    "East Asian": 0.28352264,
+    "Near Eastern": 0.11984708,
+    "Central/South Asian": 0.269916,
+    "Sub-Saharan African": 0.15684253,
+    "African American/Afro-Caribbean": 0.18149492
+   },
+   "inferredfrequency": false
+  }
+ ],
+ "allele_definition": [
+  {
+   "id": 777532,
+   "version": 188,
+   "genesymbol": "CYP2C19",
+   "name": "*1",
+   "pharmvarid": null,
+   "matchesreferencesequence": false,
+   "structuralvariation": false
+  },
+  {
+   "id": 777534,
+   "version": 188,
+   "genesymbol": "CYP2C19",
+   "name": "*2",
+   "pharmvarid": null,
+   "matchesreferencesequence": false,
+   "structuralvariation": false
+  },
+  {
+   "id": 777536,
+   "version": 188,
+   "genesymbol": "CYP2C19",
+   "name": "*3",
+   "pharmvarid": null,
+   "matchesreferencesequence": false,
+   "structuralvariation": false
+  },
+  {
+   "id": 777564,
+   "version": 188,
+   "genesymbol": "CYP2C19",
+   "name": "*17",
+   "pharmvarid": null,
+   "matchesreferencesequence": false,
+   "structuralvariation": false
+  }
+ ],
+ "publication": [
+  {
+   "id": 110030,
+   "guidelineid": 100425,
+   "title": "Clinical pharmacogenetics implementation consortium (cpic) guideline for pharmacogenetics-guided warfarin dosing: 2017 update",
+   "authors": [
+    "Johnson Julie A",
+    "Caudle Kelly E",
+    "Gong Li",
+    "Whirl-Carrillo Michelle",
+    "Stein C Michael",
+    "Scott Stuart A",
+    "Lee Ming Ta Michael",
+    "Gage Brian F",
+    "Kimmel Stephen E",
+    "Perera Minoli A",
+    "Anderson Jeffrey L",
+    "Pirmohamed Munir",
+    "Klein Teri E",
+    "Limdi Nita A",
+    "Cavallari Larisa H",
+    "Wadelius Mia"
+   ],
+   "journal": "Clinical pharmacology and therapeutics",
+   "month": 2,
+   "page": "",
+   "volume": "",
+   "year": 2017,
+   "pmid": "28198005",
+   "pmcid": "PMC5546947",
+   "doi": "10.1002/cpt.668",
+   "url": null,
+   "version": 68,
+   "highlightedonsite": false,
+   "fulltextfile": "https://files.cpicpgx.org/data/guideline/publication/warfarin/2017/28198005.pdf"
+  },
+  {
+   "id": 110014,
+   "guidelineid": 100421,
+   "title": "Clinical Pharmacogenetics Implementation Consortium Guidelines for HLA-B Genotype and Abacavir Dosing",
+   "authors": [
+    "Martin M A",
+    "Klein T E",
+    "Dong B J",
+    "Pirmohamed M",
+    "Haas D W",
+    "Kroetz D L"
+   ],
+   "journal": "Clinical pharmacology and therapeutics",
+   "month": 2,
+   "page": "",
+   "volume": "",
+   "year": 2012,
+   "pmid": "22378157",
+   "pmcid": "PMC3374459",
+   "doi": "10.1038/clpt.2011.355",
+   "url": null,
+   "version": 68,
+   "highlightedonsite": false,
+   "fulltextfile": "https://files.cpicpgx.org/data/guideline/publication/abacavir/2012/22378157.pdf"
+  },
+  {
+   "id": 110015,
+   "guidelineid": 100421,
+   "title": "Clinical Pharmacogenetics Implementation Consortium (CPIC) Guidelines for HLA-B Genotype and Abacavir Dosing: 2014 update",
+   "authors": [
+    "Martin Michael A",
+    "Hoffman James M",
+    "Freimuth Robert R",
+    "Klein Teri E",
+    "Dong Betty J",
+    "Pirmohamed Munir",
+    "Hicks J Kevin",
+    "Wilkinson Mark R",
+    "Haas David W",
+    "Kroetz Deanna L"
+   ],
+   "journal": "Clinical pharmacology and therapeutics",
+   "month": 2,
+   "page": "",
+   "volume": "",
+   "year": 2014,
+   "pmid": "24561393",
+   "pmcid": "PMC3994233",
+   "doi": "10.1038/clpt.2014.38",
+   "url": null,
+   "version": 68,
+   "highlightedonsite": false,
+   "fulltextfile": "https://files.cpicpgx.org/data/guideline/publication/abacavir/2014/24561393.pdf"
+  },
+  {
+   "id": 110011,
+   "guidelineid": 100414,
+   "title": "Clinical Pharmacogenetics Implementation Consortium Guideline for CYP2D6 and CYP2C19 Genotypes and Dosing of Tricyclic Antidepressants",
+   "authors": [
+    "Hicks J K",
+    "Swen J J",
+    "Thorn C F",
+    "Sangkuhl K",
+    "Kharasch E D",
+    "Ellingrod V L",
+    "Skaar T C",
+    "Müller D J",
+    "Gaedigk A",
+    "Stingl J C"
+   ],
+   "journal": "Clinical pharmacology and therapeutics",
+   "month": 1,
+   "page": "",
+   "volume": "",
+   "year": 2013,
+   "pmid": "23486447",
+   "pmcid": "PMC3689226",
+   "doi": "10.1038/clpt.2013.2",
+   "url": null,
+   "version": 68,
+   "highlightedonsite": false,
+   "fulltextfile": "https://files.cpicpgx.org/data/guideline/publication/TCA/2013/23486447.pdf"
+  },
+  {
+   "id": 110016,
+   "guidelineid": 100425,
+   "title": "Clinical Pharmacogenetics Implementation Consortium Guidelines for CYP2C9 and VKORC1 Genotypes and Warfarin Dosing",
+   "authors": [
+    "Johnson J A",
+    "Gong L",
+    "Whirl-Carrillo M",
+    "Gage B F",
+    "Scott S A",
+    "Stein C M",
+    "Anderson J L",
+    "Kimmel S E",
+    "Lee M T M",
+    "Pirmohamed M",
+    "Wadelius M",
+    "Klein T E",
+    "Altman R B"
+   ],
+   "journal": "Clinical pharmacology and therapeutics",
+   "month": 9,
+   "page": "",
+   "volume": "",
+   "year": 2011,
+   "pmid": "21900891",
+   "pmcid": "PMC3187550",
+   "doi": "10.1038/clpt.2011.185",
+   "url": null,
+   "version": 68,
+   "highlightedonsite": false,
+   "fulltextfile": "https://files.cpicpgx.org/data/guideline/publication/warfarin/2011/21900891.pdf"
+  },
+  {
+   "id": 110004,
+   "guidelineid": 100414,
+   "title": "Clinical Pharmacogenetics Implementation Consortium Guideline (CPIC®) for CYP2D6 and CYP2C19 Genotypes and Dosing of Tricyclic Antidepressants: 2016 Update",
+   "authors": [
+    "Kevin Hicks J",
+    "Sangkuhl Katrin",
+    "Swen Jesse J",
+    "Ellingrod Vicki L",
+    "Müller Daniel J",
+    "Shimoda Kazutaka",
+    "Bishop Jeffrey R",
+    "Kharasch Evan D",
+    "Skaar Todd C",
+    "Gaedigk Andrea",
+    "Dunnenberger Henry M",
+    "Klein Teri E",
+    "Caudle Kelly E",
+    "Stingl Julia C"
+   ],
+   "journal": "Clinical pharmacology and therapeutics",
+   "month": 12,
+   "page": "",
+   "volume": "",
+   "year": 2016,
+   "pmid": "27997040",
+   "pmcid": "PMC5478479",
+   "doi": "10.1002/cpt.597",
+   "url": null,
+   "version": 68,
+   "highlightedonsite": false,
+   "fulltextfile": "https://files.cpicpgx.org/data/guideline/publication/TCA/2016/27997040.pdf"
+  }
+ ],
+ "term": [
+  {
+   "id": 110037,
+   "category": "Allele functional status: all genes",
+   "term": "Increased function",
+   "functionaldef": "Function greater than normal function",
+   "geneticdef": "N/A",
+   "loinc": null,
+   "version": 1
+  },
+  {
+   "id": 110038,
+   "category": "Allele functional status: all genes",
+   "term": "Normal function",
+   "functionaldef": "Fully functional/wild-type",
+   "geneticdef": "N/A",
+   "loinc": null,
+   "version": 1
+  },
+  {
+   "id": 110039,
+   "category": "Allele functional status: all genes",
+   "term": "Decreased function",
+   "functionaldef": "Function less than normal function",
+   "geneticdef": "N/A",
+   "loinc": null,
+   "version": 1
+  },
+  {
+   "id": 110040,
+   "category": "Allele functional status: all genes",
+   "term": "No function",
+   "functionaldef": "Nonfunctional",
+   "geneticdef": "N/A",
+   "loinc": null,
+   "version": 1
+  }
+ ],
+ "change_log": [
+  {
+   "date": "2026-08-03",
+   "type": "ALLELE_DEFINITION",
+   "entityid": "CYP2C19",
+   "note": "added *43-*52; *2 core allele definition changed, see Notes tab row 12",
+   "version": 1,
+   "deployedrelease": null
+  },
+  {
+   "date": "2026-07-19",
+   "type": "FREQUENCY",
+   "entityid": "NAT2",
+   "note": "file created",
+   "version": 1,
+   "deployedrelease": null
+  },
+  {
+   "date": "2026-07-09",
+   "type": "ALLELE_DEFINITION",
+   "entityid": "CYP2C9",
+   "note": "added *89-*94",
+   "version": 1,
+   "deployedrelease": null
+  }
+ ],
+ "flyway_schema_history": [
+  {
+   "version": "82",
+   "installed_on": "2026-08-12T22:08:18.192754",
+   "success": true
+  }
+ ]
+}
