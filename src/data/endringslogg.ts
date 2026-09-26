@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.39.2',
+    versjon: '1.39.3',
     dato: '2026-09-26',
     sammendrag: 'Alle stoffsidene har fått en avklart ClinPGx-status, og 18 sider til er koblet',
     typer: ['Fag'],
@@ -22,6 +22,16 @@ export const ENDRINGSLOGG: Endring[] = [
       'Gabapentin, ketobemidon, levomepromazin og O-desmetylvenlafaksin er koblet etter kontroll mot WHOs ATC-register, RxNorm, PubChem og ChEBI.',
       'Metabolittene (som norfluoksetin og O-desmetyltramadol) kobles ikke til moderstoffet. Hvordan de skal vises, er en faglig vurdering.',
       'En kobling redaksjonen alt har laget, blir stående.',
+    ],
+  },
+  {
+    versjon: '1.39.2',
+    dato: '2026-09-26',
+    sammendrag: 'Farmakogenetikken fra ClinPGx hentes første gang i dag',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'ClinPGx-dataene for de 48 koblede stoffsidene hentes én gang i dag, uten å vente på den ukentlige kjøringen.',
     ],
   },
   {
