@@ -14,9 +14,11 @@
  * 4. leser svarene (`modell.ts`) og ber databasen bytte inn alt for
  *    kjemikaliet i én transaksjon.
  *
- * Feiler ett kjemikalie — et kall som feiler, eller et svar databasen avviser
- * — noteres feilen på det, og det som lå der fra før, står. De andre hentes som
- * vanlig. Et objekt i et svar som ikke kan leses, hoppes over alene og telles.
+ * Feiler ett kjemikalie — et kall som feiler, et objekt i svaret som ikke kan
+ * leses, eller et svar databasen avviser — noteres feilen på det, og det som lå
+ * der fra før, står. De andre hentes som vanlig. Et objekt som ikke kan leses,
+ * tyder på at svaret har endret form; da er det tryggere å beholde det gamle
+ * enn å bytte inn et svar der noe mangler.
  * Blir tiden knapp, stopper jobben før neste kjemikalie; resten hentes neste
  * gang, først i køen.
  */
@@ -117,9 +119,14 @@ export async function synkroniserClinpgx({
       }
       try {
         const hentet = await hentKjemikalie(api, id)
+        telling.forkastet += hentet.forkastet
+        if (hentet.forkastet > 0) {
+          throw new ClinpgxFeil(
+            `${hentet.forkastet} ${hentet.forkastet === 1 ? 'objekt' : 'objekter'} i svaret kunne ikke leses. Dataene fra før står.`,
+          )
+        }
         const lagret = await lager.lagre(synk, hentet.kjemikalie, hentet.annotasjoner)
         telling.hentet += 1
-        telling.forkastet += hentet.forkastet
         for (const [type, antall] of Object.entries(lagret) as [Annotasjonstype, number][]) {
           telling.annotasjoner[type] = (telling.annotasjoner[type] ?? 0) + antall
         }

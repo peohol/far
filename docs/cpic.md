@@ -317,6 +317,7 @@ det står i svaret.
 ## Hva som bygger på dette
 
 Visningen på stoffsiden (D, over), oppslaget etter et kjent resultat (E),
-diplotype → resultat (F) og varsling om endringer (G) leser dette laget.
-Ingen av dem skriver til det; nye lesefunksjoner legges i en egen migrasjon
-med samme rettighetsmønster.
+diplotype → resultat (F) og endringsloggen med driftstatusen (G,
+`docs/datakilder.md`) leser dette laget. Ingen av dem skriver til det, og
+endringsloggen fanger byttene med triggere på tabellene. Nye lesefunksjoner
+legges i en egen migrasjon med samme rettighetsmønster.
