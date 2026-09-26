@@ -160,8 +160,8 @@ describe('søket', () => {
 
 describe('videre til anbefalingen', () => {
   it('velger resultatet og den eksakte aktivitetsverdien, og anbefalingen sier at den kom fra diplotypen', () => {
-    const cyp2d6 = valgFraOversettelse(gen(AMITRIPTYLIN, 'CYP2D6'), oversatt(CYP2D6, '*1/*4'))
-    const cyp2c19 = valgFraOversettelse(gen(AMITRIPTYLIN, 'CYP2C19'), oversatt(CYP2C19, '*1/*1'))
+    const cyp2d6 = valgFraOversettelse(AMITRIPTYLIN, oversatt(CYP2D6, '*1/*4'))
+    const cyp2c19 = valgFraOversettelse(AMITRIPTYLIN, oversatt(CYP2C19, '*1/*1'))
     expect(cyp2d6).toEqual({
       status: 'valgt',
       valg: { resultat: 'Intermediate Metabolizer', oppslagsverdi: '1.0', diplotype: '*1/*4' },
@@ -181,7 +181,7 @@ describe('videre til anbefalingen', () => {
   })
 
   it('krever fortsatt hvert gen anbefalingen bygger på: HLA-B fylles ikke inn for fenytoin', () => {
-    const cyp2c9 = valgFraOversettelse(gen(FENYTOIN, 'CYP2C9'), oversatt(CYP2C9, '*1/*3'))
+    const cyp2c9 = valgFraOversettelse(FENYTOIN, oversatt(CYP2C9, '*1/*3'))
     if (cyp2c9.status !== 'valgt') throw new Error('ikke valgt')
     expect(cyp2c9.valg).toMatchObject({ resultat: 'Intermediate Metabolizer', oppslagsverdi: '1.0' })
     const svar = slaOpp(FENYTOIN, { CYP2C9: cyp2c9.valg })
@@ -189,10 +189,24 @@ describe('videre til anbefalingen', () => {
     expect(svar.mangler).toEqual(['HLA-B'])
   })
 
-  it('velger ingenting når anbefalingene for legemiddelet ikke har resultatet, eller genet er et annet', () => {
+  it('velger ingenting når anbefalingene for legemiddelet ikke har resultatet, eller ikke bygger på genet', () => {
     // Utdraget har amitriptylin bare med CYP2C19 Normal Metabolizer.
-    expect(valgFraOversettelse(gen(AMITRIPTYLIN, 'CYP2C19'), oversatt(CYP2C19, '*1/*17'))).toEqual({ status: 'ingen anbefaling' })
-    expect(valgFraOversettelse(gen(AMITRIPTYLIN, 'CYP2D6'), oversatt(CYP2C19, '*1/*1'))).toEqual({ status: 'ingen anbefaling' })
+    expect(valgFraOversettelse(AMITRIPTYLIN, oversatt(CYP2C19, '*1/*17'))).toEqual({ status: 'ingen anbefaling' })
+    expect(valgFraOversettelse(FENYTOIN, oversatt(CYP2C19, '*1/*1'))).toEqual({ status: 'ingen anbefaling' })
+  })
+
+  it('velger ingenting for en aktivitetsverdi CPICs resultatliste har, men ingen anbefaling for legemiddelet', () => {
+    // Uten anbefalingen for CYP2D6 1.0 har resultatlisten fortsatt verdien for Intermediate Metabolizer.
+    const utvalg: Cpicutvalg = {
+      ...UTVALG,
+      anbefalinger: UTVALG.anbefalinger.filter((a) => a.oppslagsnokkel.CYP2D6 !== '1.0'),
+      genresultater: alle(DIPLOTYPER.gene_result!, lesGenresultat),
+    }
+    const amitriptylin = oppslagsgrunnlag(utvalg).find((g) => g.legemiddel.navn === 'amitriptyline')!
+    const im = gen(amitriptylin, 'CYP2D6').alternativer.find((a) => a.resultat === 'Intermediate Metabolizer')!
+    expect(im.oppslagsverdier).toContain('1.0')
+    expect(valgFraOversettelse(amitriptylin, oversatt(CYP2D6, '*1/*4'))).toEqual({ status: 'ingen anbefaling' })
+    expect(valgFraOversettelse(amitriptylin, oversatt(CYP2D6, '*4/*36+*10')).status).toBe('valgt')
   })
 
   it('bruker hver oversatt aktivitetsverdi slik den står i CPICs anbefalinger for CYP2D6', () => {
@@ -202,7 +216,7 @@ describe('videre til anbefalingen', () => {
       const svar = oversett(CYP2D6, o.diplotype)
       if (svar.status !== 'oversatt') throw new Error(o.diplotype)
       expect(verdier.has(svar.oversettelse.oppslagsverdi)).toBe(true)
-      expect(valgFraOversettelse(cyp2d6, svar.oversettelse).status).toBe('valgt')
+      expect(valgFraOversettelse(AMITRIPTYLIN, svar.oversettelse).status).toBe('valgt')
     }
   })
 })

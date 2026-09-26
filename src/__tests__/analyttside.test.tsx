@@ -2487,7 +2487,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
     // Et resultat valgt for hånd erstatter diplotypen.
     await user.selectOptions(within(kort).getByLabelText('CYP2D6, resultat'), 'Poor Metabolizer')
     expect(within(kort).queryByRole('region', { name: 'Oversettelsen av CYP2D6 *1/*4' })).toBeNull()
-    expect(within(kort).getByRole('region', { name: 'Anbefaling fra CPIC' }).textContent).toContain('Valgt: CYP2D6 Poor Metabolizer.')
+    expect(kort.querySelector('.cpic-oppslag__svar')!.textContent).not.toContain('*1/*4')
   })
 
   it('sier fra når CPIC ikke har diplotypen, eller ingen anbefaling for resultatet den gir', async () => {

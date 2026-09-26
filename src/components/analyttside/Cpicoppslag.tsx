@@ -4,7 +4,7 @@ import { dato } from '../../legemiddeldata/referanser'
 import { kanOversettes, oversett, sokDiplotyper, valgFraOversettelse, type Diplotypeindeks, type Oversettelse } from '../../cpic/diplotype'
 import type { Cpickilde, Cpicutvalg } from '../../cpic/lesing'
 import type { Oppslagsmetode } from '../../cpic/modell'
-import { oppslagsgrunnlag, slaOpp, type Genvalg, type Oppslagsgen, type Oppslagstreff, type Uavklart, type Valg } from '../../cpic/oppslag'
+import { oppslagsgrunnlag, slaOpp, type Genvalg, type Oppslagsgen, type Oppslagsgrunnlag, type Oppslagstreff, type Uavklart, type Valg } from '../../cpic/oppslag'
 import { betingelsetekst, CPIC_OPPSLAG_KORT, cpicversjon, OPPSLAG_TITTEL, resultattekst } from '../../cpic/stoffside'
 import { Button } from '../Button'
 import { oppramsing, Valgfelt } from '../regler/Regelfelter'
@@ -89,7 +89,7 @@ export function Cpicoppslag({ utvalg }: { utvalg: Cpicutvalg }) {
               <Genfelt
                 key={`${g.legemiddel.id}-${gen.symbol}`}
                 gen={gen}
-                legemiddel={g.legemiddel.navn}
+                grunnlag={g}
                 utgave={cpicutgave(utvalg.kilde)}
                 valgt={valg[gen.symbol]}
                 diplotype={diplotyper[gen.symbol] ?? null}
@@ -155,14 +155,14 @@ export function Cpicoppslag({ utvalg }: { utvalg: Cpicutvalg }) {
  */
 function Genfelt({
   gen,
-  legemiddel,
+  grunnlag,
   utgave,
   valgt,
   diplotype,
   onVelg,
 }: {
   gen: Oppslagsgen
-  legemiddel: string
+  grunnlag: Oppslagsgrunnlag
   utgave: string
   valgt: Genvalg | undefined
   diplotype: string | null
@@ -186,7 +186,7 @@ function Genfelt({
         />
       )}
       {kanOversettes(gen.metode) && (
-        <Diplotypefelt gen={gen} legemiddel={legemiddel} utgave={utgave} valgt={valgt} diplotype={diplotype} onVelg={onVelg} />
+        <Diplotypefelt gen={gen} grunnlag={grunnlag} utgave={utgave} valgt={valgt} diplotype={diplotype} onVelg={onVelg} />
       )}
     </div>
   )
@@ -212,14 +212,14 @@ const MAKS_DIPLOTYPETREFF = 8
  */
 function Diplotypefelt({
   gen,
-  legemiddel,
+  grunnlag,
   utgave,
   valgt,
   diplotype,
   onVelg,
 }: {
   gen: Oppslagsgen
-  legemiddel: string
+  grunnlag: Oppslagsgrunnlag
   utgave: string
   valgt: Genvalg | undefined
   diplotype: string | null
@@ -236,7 +236,7 @@ function Diplotypefelt({
   useEffect(() => {
     if (!lastet || !diplotype) return
     const svar = oversett(lastet, diplotype)
-    const ny = svar.status === 'oversatt' ? valgFraOversettelse(gen, svar.oversettelse) : null
+    const ny = svar.status === 'oversatt' ? valgFraOversettelse(grunnlag, svar.oversettelse) : null
     const nyttValg = ny?.status === 'valgt' ? ny.valg : null
     if (!sammeValg(nyttValg, valgt)) onVelg(nyttValg, diplotype)
   }, [lastet, gen, diplotype, valgt, onVelg])
@@ -255,7 +255,7 @@ function Diplotypefelt({
   const velgDiplotype = (d: string) => {
     if (!indeks) return
     const svar = oversett(indeks, d)
-    const valg = svar.status === 'oversatt' ? valgFraOversettelse(gen, svar.oversettelse) : null
+    const valg = svar.status === 'oversatt' ? valgFraOversettelse(grunnlag, svar.oversettelse) : null
     onVelg(valg?.status === 'valgt' ? valg.valg : null, d)
     setSok('')
   }
@@ -327,7 +327,7 @@ function Diplotypefelt({
           </p>
         </>
       )}
-      {indeks && diplotype && <Diplotypeoversettelse indeks={indeks} gen={gen} legemiddel={legemiddel} diplotype={diplotype} />}
+      {indeks && diplotype && <Diplotypeoversettelse indeks={indeks} gen={gen} grunnlag={grunnlag} diplotype={diplotype} />}
       {indeks?.grunnlag.gen?.merknad_diplotyper && (
         <p className="felt__hjelp">CPICs merknad om diplotypene: {indeks.grunnlag.gen.merknad_diplotyper}</p>
       )}
@@ -369,12 +369,12 @@ function aktuelt(verdi: string | null | undefined): string | null {
 function Diplotypeoversettelse({
   indeks,
   gen,
-  legemiddel,
+  grunnlag,
   diplotype,
 }: {
   indeks: Diplotypeindeks
   gen: Oppslagsgen
-  legemiddel: string
+  grunnlag: Oppslagsgrunnlag
   diplotype: string
 }) {
   const svar = oversett(indeks, diplotype)
@@ -389,7 +389,7 @@ function Diplotypeoversettelse({
     )
   }
   const o = svar.oversettelse
-  const valg = valgFraOversettelse(gen, o)
+  const valg = valgFraOversettelse(grunnlag, o)
   const funksjoner = [o.oppslag.funksjon1, o.oppslag.funksjon2].map(aktuelt).filter((f): f is string => f !== null)
   const verdier = [o.oppslag.aktivitetsverdi1, o.oppslag.aktivitetsverdi2].map(aktuelt).filter((v): v is string => v !== null)
   const total = aktuelt(o.oppslag.total_aktivitetsverdi)
@@ -433,7 +433,7 @@ function Diplotypeoversettelse({
         <p className="felt__hjelp">Resultatet er valgt for {gen.symbol} i oppslaget.</p>
       ) : (
         <p className="interaksjoner__ikke-vurdert" role="note">
-          CPIC har ingen anbefaling for {legemiddel} ved {resultattekst(gen.symbol, o.genresultat.resultat)}
+          CPIC har ingen anbefaling for {grunnlag.legemiddel.navn} ved {resultattekst(gen.symbol, o.genresultat.resultat)}
           {o.oppslagsverdi !== o.genresultat.resultat && aktuelt(o.oppslagsverdi) ? ` med aktivitetsverdi ${o.oppslagsverdi}` : ''}. OUSFAR viser ingen
           anbefaling for det.
         </p>

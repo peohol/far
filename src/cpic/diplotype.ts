@@ -23,7 +23,8 @@
  */
 import type { Allelfunksjon, Diplotypegrunnlag, Diplotypeoppslag } from './lesing'
 import type { Genresultat, Oppslagsmetode } from './modell'
-import type { Genvalg, Oppslagsgen } from './oppslag'
+import type { Genvalg, Oppslagsgrunnlag } from './oppslag'
+import { resultatFor } from './stoffside'
 
 /**
  * Om resultatet for et gen kan oversettes fra en diplotype: bare for gener
@@ -180,12 +181,17 @@ export type Diplotypevalg =
 
 /**
  * Valget oversettelsen gir i oppslaget for et legemiddel: resultatet og den
- * eksakte verdien, når anbefalingene har nøyaktig dem. Ellers ingen valg.
+ * eksakte verdien, når minst én av CPICs anbefalinger for legemiddelet har
+ * nøyaktig dem for genet. Ellers ingen valg.
  */
-export function valgFraOversettelse(gen: Oppslagsgen, o: Oversettelse): Diplotypevalg {
-  const alternativ = gen.alternativer.find(
-    (a) => a.resultat === o.genresultat.resultat && a.oppslagsverdier.includes(o.oppslagsverdi),
-  )
-  if (!alternativ || gen.symbol !== o.gen) return { status: 'ingen anbefaling' }
+export function valgFraOversettelse(grunnlag: Oppslagsgrunnlag, o: Oversettelse): Diplotypevalg {
+  const alternativ = grunnlag.gener
+    .find((g) => g.symbol === o.gen)
+    ?.alternativer.find((a) => a.resultat === o.genresultat.resultat)
+  const harAnbefaling = grunnlag.anbefalinger.some((a) => {
+    const b = a.betingelser.find((x) => x.gen === o.gen)
+    return b !== undefined && a.oppslagsnokkel[o.gen] === o.oppslagsverdi && resultatFor(b) === o.genresultat.resultat
+  })
+  if (!alternativ || !harAnbefaling) return { status: 'ingen anbefaling' }
   return { status: 'valgt', valg: { resultat: alternativ.resultat, oppslagsverdi: o.oppslagsverdi, diplotype: o.diplotype } }
 }
