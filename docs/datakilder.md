@@ -108,7 +108,10 @@ I appen: kontomenyen → «Datakilder» (bare for administratorer,
 - tilstanden (`src/datakilder/status.ts`, `vurderKilder`): **Feilet** når
   siste kjøring feilet; **Se over** når den var delvis, har stått uferdig i
   over en halvtime, eller når siste vellykkede henting er eldre enn intervallet
-  og ett døgn til. Intervallet leses av cron-uttrykket i `vercel.json`;
+  og ett døgn til. Intervallet leses av cron-uttrykket i `vercel.json`.
+  Meldingen ved en feil følger måten kilden byttes inn på (`etterFeil` i
+  `KILDEOPPSETT`). I CPIC står dataene fra siste vellykkede henting. I ClinPGx
+  kan kjemikalier som ble hentet før feilen, være oppdatert;
 - siste vellykkede henting, releasen (CPIC) og versjonen;
 - de siste kjøringene;
 - de kliniske endringene, nyest først, med feltene, sporet og verdiene før og

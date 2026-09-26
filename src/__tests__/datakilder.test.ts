@@ -156,9 +156,26 @@ describe('vurderingen', () => {
       kjoring('cpic', 3, 'feilet', '2026-09-26T09:00:00Z', { feil: 'CPIC svarte 500' }),
       kjoring('cpic', 2, 'fullfort', '2026-09-22T02:45:00Z'),
     ])
-    expect(v.clinpgx).toMatchObject({ tilstand: 'advarsel', melding: expect.stringMatching(/^Siste henting var delvis/) })
+    expect(v.clinpgx).toMatchObject({
+      tilstand: 'advarsel',
+      melding: 'Siste henting var delvis: det som feilet eller ble utsatt, står med dataene fra før.',
+    })
     expect(v.cpic).toMatchObject({ tilstand: 'feil', melding: 'Siste henting feilet: CPIC svarte 500. Dataene fra siste vellykkede henting står.' })
     expect(v.cpic!.sisteVellykkede!.id).toBe(2)
+
+    // ClinPGx byttes inn ett kjemikalie om gangen, så en feil midt i kjøringen
+    // kan ha latt noen av dem bli oppdatert. CPIC byttes inn samlet.
+    const clinpgx = vurder([
+      kjoring('clinpgx', 3, 'feilet', '2026-09-26T09:00:00Z', { feil: 'Forbindelsen brøt' }),
+      kjoring('clinpgx', 2, 'fullfort', '2026-09-22T02:30:00Z'),
+    ]).clinpgx
+    expect(clinpgx).toMatchObject({
+      tilstand: 'feil',
+      melding: 'Siste henting feilet: Forbindelsen brøt. Kjemikalier som ble hentet før feilen, kan være oppdatert; de andre står som før.',
+    })
+    expect(vurder([kjoring('cpic', 1, 'feilet', '2026-09-26T09:00:00Z', { feil: 'x' })]).cpic!.melding).toBe(
+      'Siste henting feilet: x. Ingen henting har lyktes ennå.',
+    )
 
     // Grensen er intervallet og ett døgn til.
     const akkurat = vurder([kjoring('cpic', 1, 'fullfort', '2026-09-18T12:00:00Z')])

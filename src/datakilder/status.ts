@@ -19,11 +19,23 @@ export interface Kildeoppsett {
   synk: string
   /** Hva `versjon` i en kjøring er for kilden. */
   versjonsnavn: string
+  /**
+   * Hva som står etter en kjøring som feilet, når kilden ikke byttes inn
+   * samlet. `null`: alt byttes inn i én transaksjon, så dataene fra siste
+   * vellykkede henting står.
+   */
+  etterFeil: string | null
 }
 
 export const KILDEOPPSETT: Record<Datakilde, Kildeoppsett> = {
-  clinpgx: { navn: 'ClinPGx', synk: '/api/clinpgx-synk', versjonsnavn: 'Parserversjon' },
-  cpic: { navn: 'CPIC', synk: '/api/cpic-synk', versjonsnavn: 'Skjemaversjon' },
+  // Ett kjemikalie om gangen, hvert i sin transaksjon (docs/clinpgx.md).
+  clinpgx: {
+    navn: 'ClinPGx',
+    synk: '/api/clinpgx-synk',
+    versjonsnavn: 'Parserversjon',
+    etterFeil: 'Kjemikalier som ble hentet før feilen, kan være oppdatert; de andre står som før.',
+  },
+  cpic: { navn: 'CPIC', synk: '/api/cpic-synk', versjonsnavn: 'Skjemaversjon', etterFeil: null },
 }
 
 /* --- Formen fra databasen -------------------------------------------------- */
@@ -237,7 +249,7 @@ export function vurderKilder(
   intervaller: Partial<Record<Datakilde, number>> = kildeintervaller(),
 ): Kildevurdering[] {
   return DATAKILDER.map((kilde) => {
-    const { navn } = KILDEOPPSETT[kilde]
+    const { navn, etterFeil } = KILDEOPPSETT[kilde]
     const kjoringer = status.kjoringer.filter((k) => k.kilde === kilde).sort((a, b) => b.id - a.id)
     const endringer = status.endringer.filter((e) => e.kilde === kilde)
     const siste = kjoringer[0] ?? null
@@ -252,10 +264,9 @@ export function vurderKilder(
     })
 
     if (!siste) return vurdering('advarsel', `Ingen henting fra ${navn} er logget ennå.`)
-    const beholdt = sisteVellykkede
-      ? ' Dataene fra siste vellykkede henting står.'
-      : ' Ingen henting har lyktes ennå.'
-    if (siste.status === 'feilet') return vurdering('feil', `Siste henting feilet: ${siste.feil ?? 'ukjent feil'}.${beholdt}`)
+    const beholdt =
+      etterFeil ?? (sisteVellykkede ? 'Dataene fra siste vellykkede henting står.' : 'Ingen henting har lyktes ennå.')
+    if (siste.status === 'feilet') return vurdering('feil', `Siste henting feilet: ${siste.feil ?? 'ukjent feil'}. ${beholdt}`)
     if (siste.status === 'pagar') {
       return na - Date.parse(siste.startet_kl) > HENGER_ETTER_MS
         ? vurdering('advarsel', 'En henting har stått uferdig i over en halvtime og regnes som avbrutt ved neste start.')
@@ -268,7 +279,7 @@ export function vurderKilder(
       return vurdering('advarsel', `Ingen vellykket henting på ${dogn(alder)}; ${navn} hentes hver ${intervall === 7 ? 'uke' : 'natt'}.`)
     }
     if (siste.status === 'delvis') {
-      return vurdering('advarsel', `Siste henting var delvis: noe feilet eller ble utsatt.${beholdt}`)
+      return vurdering('advarsel', 'Siste henting var delvis: det som feilet eller ble utsatt, står med dataene fra før.')
     }
     const { klinisk } = siste.endringer
     return vurdering(

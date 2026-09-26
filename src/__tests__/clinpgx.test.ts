@@ -38,6 +38,7 @@ import {
   oppsummerFarmakogenetikk,
 } from '../clinpgx/stoffside'
 import { synkroniserClinpgx } from '../clinpgx/synk'
+import { lesDatakildestatus, vurderKilder } from '../datakilder/status'
 import { byggSidemodell } from '../faginnhold/analyttside'
 import { indekserKunnskapsbase, lesKunnskapsbase, lesSokeindeks } from '../faginnhold/globaltSok'
 import type { Analyttsidedata } from '../faginnhold/lesing'
@@ -532,6 +533,30 @@ describe('synkroniseringen', () => {
         ['ny', 'klinisk', 'retningslinje', retningslinjeId, SERTRALIN],
       ])
       expect((await endringer())[0]!.etikett).toBe(retningslinje.name)
+    })
+
+    it('lover ikke at alt står fra før når kjøringen feiler etter at kjemikalier er byttet inn', async () => {
+      await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      // Kjemikaliene byttes inn hvert for seg; så feiler avslutningen av kjøringen.
+      const feilende = { ...lager(), fullfor: async () => { throw new Error('Forbindelsen til databasen brøt') } }
+      const resultat = await synkroniserClinpgx({ lager: feilende, api: falskApi(medRetningslinje({ name: 'Nytt navn' })) })
+      expect(resultat.status).toBe('feilet')
+
+      // Retningslinjen er likevel byttet inn av den feilede kjøringen, og logget på den.
+      const { rows } = await db.query<{ navn: string }>(
+        `select data ->> 'navn' as navn from clinpgx.annotasjoner where type = 'retningslinje' and clinpgx_id = $1`,
+        [retningslinjeId],
+      )
+      expect(rows[0]!.navn).toBe('Nytt navn')
+      expect((await endringer()).filter((e) => e.art === 'endret')).toEqual([
+        expect.objectContaining({ synk_id: resultat.synk, felt: ['navn'] }),
+      ])
+
+      const status = lesDatakildestatus((await kall.klientFor(admin).rpc('datakilder_status', {})).data)
+      const clinpgx = vurderKilder(status).find((v) => v.kilde === 'clinpgx')!
+      expect(clinpgx.tilstand).toBe('feil')
+      expect(clinpgx.melding).toContain('Kjemikalier som ble hentet før feilen, kan være oppdatert')
+      expect(clinpgx.melding).not.toContain('Dataene fra siste vellykkede henting står')
     })
 
     it('logger at et kjemikalie er borte fra ClinPGx som klinisk, og ingenting fra et avvist svar', async () => {

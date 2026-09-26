@@ -31,10 +31,11 @@ import { Fortolkningsregler } from '../regler/Fortolkningsregler'
 import { Thcregler } from '../regler/Thcregler'
 import { festreferanser } from '../../legemiddeldata/referanser'
 import { slaSammenAutomatiske } from '../../faginnhold/referanser'
-import { clinpgxreferanser } from '../../clinpgx/referanser'
+import { clinpgxlitteratur, clinpgxreferanser } from '../../clinpgx/referanser'
+import { cpicreferanser } from '../../cpic/referanser'
 import { FARMAKOGENETIKKPANEL, kobledeKjemikalier, koblingsgrunnlag } from '../../clinpgx/stoffside'
 import { Farmakogenetikkpanel, farmakogenetikksoketekster } from './Farmakogenetikkpanel'
-import { useFarmakogenetikk } from './useFarmakogenetikk'
+import { useCpic, useFarmakogenetikk } from './useFarmakogenetikk'
 import { useAnalyttside, type Sidemodus, type Sidenokkel } from './useAnalyttside'
 import { analyttadresse } from '../../domain/rute'
 
@@ -174,7 +175,9 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
   const kjemikalier = useMemo(() => kobledeKjemikalier(modell), [modell])
   const farmakogenetikk = useFarmakogenetikk(kjemikalier)
   const pgx = farmakogenetikk.tilstand
-  // Redaksjonelle og automatiske referanser (FEST og ClinPGx) nummereres sammen.
+  const cpic = useCpic(kjemikalier)
+  const cpictilstand = cpic.tilstand
+  // Redaksjonelle og automatiske referanser (FEST, ClinPGx og CPIC) nummereres sammen.
   const univers = useMemo(
     () =>
       referanseunivers(
@@ -184,10 +187,15 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
             legemidler.status === 'klar' ? legemidler.utvalg : null,
             interaksjoner.status === 'klar' ? interaksjoner.oversikt : null,
           ),
+          // CPIC står over ClinPGx i «Farmakogenetikk», og elementene nummereres i denne rekkefølgen.
+          cpicreferanser(
+            cpictilstand.status === 'klar' ? cpictilstand.visning : null,
+            clinpgxlitteratur(pgx.status === 'klar' ? pgx.visning : null),
+          ),
           clinpgxreferanser(pgx.status === 'klar' ? pgx.utvalg : null, pgx.status === 'klar' ? pgx.visning : null),
         ),
       ),
-    [modell, legemidler, interaksjoner, pgx],
+    [modell, legemidler, interaksjoner, pgx, cpictilstand],
   )
   const grunnlag = useMemo(
     () => koblingsgrunnlag(legemidler.status === 'klar' ? legemidler.utvalg : null, koblet),
@@ -199,9 +207,13 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
       indekserSide(
         { ...(oppforing && { kode: oppforing.kode }), navn, komponenter: komponenter.map((k) => k.navn) },
         modell,
-        [...preparatsoketekster(legemidler), ...interaksjonssoketekster(interaksjoner), ...farmakogenetikksoketekster(pgx)],
+        [
+          ...preparatsoketekster(legemidler),
+          ...interaksjonssoketekster(interaksjoner),
+          ...farmakogenetikksoketekster(pgx, cpictilstand),
+        ],
       ),
-    [oppforing, navn, komponenter, modell, legemidler, interaksjoner, pgx],
+    [oppforing, navn, komponenter, modell, legemidler, interaksjoner, pgx, cpictilstand],
   )
   const ord = useMemo(() => sokeord(sporring), [sporring])
 
@@ -377,9 +389,12 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                         definisjon={definisjon}
                         kontekst={kontekst}
                         tilstand={pgx}
+                        cpic={cpictilstand}
                         grunnlag={grunnlag}
                         sidenavn={oppforing?.sidenavn ?? navn}
+                        sted={sted}
                         onHentet={farmakogenetikk.lesPaNytt}
+                        onCpicHentet={cpic.lesPaNytt}
                       />
                     ) : (
                       <Kortpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />

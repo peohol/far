@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.40.0',
+    versjon: '1.41.0',
     dato: '2026-09-26',
     sammendrag: 'Administratorer ser hvordan hentingen fra ClinPGx og CPIC går, og hva som er endret i kildene',
     typer: ['Funksjonalitet'],
@@ -23,6 +23,56 @@ export const ENDRINGSLOGG: Endring[] = [
       'Siden sier fra når en henting har feilet, bare delvis lyktes, eller når det har gått for lang tid siden forrige vellykkede henting, og en administrator kan be om en ny henting der.',
       'Kan ett av objektene ClinPGx sender for et legemiddel ikke leses, beholdes dataene fra før for det legemiddelet.',
       'Ingenting av dette vises for andre brukere.',
+    ],
+  },
+  {
+    versjon: '1.40.0',
+    dato: '2026-09-26',
+    sammendrag: 'Farmakogenetikk viser CPICs anbefalinger for forskrivning ved et kjent genetisk resultat',
+    typer: ['Funksjonalitet', 'Fag'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Seksjonen «Farmakogenetikk» har en egen gruppe «Anbefalinger fra CPIC» over ClinPGx-dataene, med ett kort per CPIC-retningslinje for legemiddelet.',
+      'Kortet viser genene og hva slags resultat anbefalingene bygger på (fenotype, aktivitetsverdi eller allelstatus, som ved HLA), resultatkategoriene, CPIC-nivået for hvert gen–legemiddel-par og styrken på anbefalingene.',
+      'Hver anbefaling står som en rad med betingelsene for hvert gen, styrken og anbefalingsteksten, som CPIC skrev dem. Anbefalinger som bare skiller seg i aktivitetsverdien, står i samme rad med verdiene listet. Implikasjonene, kommentarene og CPICs egne ID-er står under «Mer om anbefalingen».',
+      'Har en retningslinje mange anbefalinger, som amitriptylin, står de i lukkede deler etter resultatet for ett gen, f.eks. «CYP2D6 Poor Metabolizer», så kortet ikke blir én lang tabell.',
+      'Retningslinjer uten strukturerte anbefalinger hos CPIC, som warfarin, sier det, og par CPIC har vurdert uten retningslinje står samlet i et eget kort.',
+      'CPIC står som kilde med release og når dataene sist ble kontrollert, og retningslinjens publikasjoner står i kortets referansefelt.',
+      'Søket på siden og i hele kunnskapsbasen finner genene, resultatkategoriene og anbefalingene, og et treff eller en direktelenke åpner kortet.',
+      'Anbefalingene gjelder et allerede kjent resultat. Siden sier ikke hvem som bør testes, og det finnes ennå ikke noe oppslag på et bestemt resultat.',
+    ],
+  },
+  {
+    versjon: '1.39.3',
+    dato: '2026-09-26',
+    sammendrag: 'Alle stoffsidene har fått en avklart ClinPGx-status, og 18 sider til er koblet',
+    typer: ['Fag'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Farmakogenetikk viser nå ClinPGx-dataene også for opioidene, benzodiazepinene, zopiklon og zolpidem, selv om sidene ikke er koblet til FEST. Koblingen er kontrollert mot ATC-koden og RxNorm i tillegg til navnet.',
+      'Gabapentin, ketobemidon, levomepromazin og O-desmetylvenlafaksin er koblet etter kontroll mot WHOs ATC-register, RxNorm, PubChem og ChEBI.',
+      'Metabolittene (som norfluoksetin og O-desmetyltramadol) kobles ikke til moderstoffet. Hvordan de skal vises, er en faglig vurdering.',
+      'En kobling redaksjonen alt har laget, blir stående.',
+    ],
+  },
+  {
+    versjon: '1.39.2',
+    dato: '2026-09-26',
+    sammendrag: 'Farmakogenetikken fra ClinPGx hentes første gang i dag',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'ClinPGx-dataene for de 48 koblede stoffsidene hentes én gang i dag, uten å vente på den ukentlige kjøringen.',
+    ],
+  },
+  {
+    versjon: '1.39.1',
+    dato: '2026-09-26',
+    sammendrag: 'Farmakogenetikken fra ClinPGx og koblingene til 48 stoffsider er lagt inn i databasen',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'De 48 stoffsidene er koblet til ClinPGx i produksjonen. Dataene vises etter den ukentlige hentingen, eller med en gang når en administrator trykker «Hent fra ClinPGx nå» på siden.',
     ],
   },
   {

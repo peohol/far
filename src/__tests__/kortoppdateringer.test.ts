@@ -136,7 +136,8 @@ describe('oppdateringen i databasen', () => {
     await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
     await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: OPPDATERING })
     for_ = await kort(db)
-    await kjorMigrasjoner(db, { fra: OPPDATERING })
+    // Bare oppdateringen, så senere migrasjoner som legger til kort, ikke telles med.
+    await kjorMigrasjoner(db, { bare: [OPPDATERING] })
     etter = await kort(db)
   }, 240_000)
 
