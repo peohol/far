@@ -44,6 +44,7 @@ import { thcReglerFra } from './faginnhold/thcregler'
 import { lagSideleser, lesSokeindeks } from './faginnhold/globaltSok'
 import { lagLegemiddelleser } from './legemiddeldata/lesing'
 import { lagFarmakogenetikkleser } from './clinpgx/lesing'
+import { lagCpicleser } from './cpic/lesing'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
 import { useHenting } from './hooks/useHenting'
@@ -132,6 +133,7 @@ export default function App() {
       kanRedigere: profil.role === 'admin',
       legemidler: lagLegemiddelleser(klient()),
       farmakogenetikk: lagFarmakogenetikkleser(klient()),
+      cpic: lagCpicleser(klient()),
     }),
     [profil.role],
   )
@@ -180,6 +182,7 @@ export default function App() {
         lagLegemiddelleser(stille),
         {
           farmakogenetikk: lagFarmakogenetikkleser(stille),
+          cpic: lagCpicleser(stille),
           aliaser: (kode) => {
             const oppforing = katalog.finn(kode)
             return oppforing?.kode === oppforing?.fortolkning.kode ? oppforing?.fortolkning.aliaser : undefined
