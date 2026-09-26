@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.39.2',
+    dato: '2026-09-26',
+    sammendrag: 'Farmakogenetikken fra ClinPGx hentes første gang i dag',
+    typer: ['Fag'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'ClinPGx-dataene for de 48 koblede stoffsidene hentes én gang i dag, uten å vente på den ukentlige kjøringen.',
+    ],
+  },
+  {
     versjon: '1.39.1',
     dato: '2026-09-26',
     sammendrag: 'Farmakogenetikken fra ClinPGx og koblingene til 48 stoffsider er lagt inn i databasen',
