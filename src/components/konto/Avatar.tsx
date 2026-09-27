@@ -1,6 +1,6 @@
 import { initialer, type Profil } from '@delt/profil'
 
-export type Avatarstorrelse = 'liten' | 'middels' | 'stor'
+export type Avatarstorrelse = 'mini' | 'liten' | 'middels' | 'stor'
 
 export interface AvatarProps {
   profil: Pick<Profil, 'first_name' | 'last_name' | 'username' | 'avatar_path'>

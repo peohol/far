@@ -1,0 +1,48 @@
+# Idéene
+
+Leses når noe ved idévinduet skal endres. Idéene er brukernes forslag til
+OUSFAR, med hjerter og kommentartråder; de berører ikke den kliniske delen.
+
+## Hvor det ligger
+
+| Hvor | Hva |
+| --- | --- |
+| `supabase/migrations/*_ideer.sql` | Tabellene, radsikkerheten, reglene for sletting og de to lesefunksjonene |
+| `src/ideer/modell.ts` | Sorteringen, kommentartreet, tidspunktene og lesingen av svarene (rene funksjoner) |
+| `src/ideer/api.ts` | Kallene mot Supabase |
+| `src/components/ideer/` | Vinduet: lista, siden for én idé, skjemaet og tråden |
+| `src/styles/ideer.css` | Utseendet |
+
+Vinduet åpnes fra kontomenyen og bruker `Modallag`, med `tilbake` i hodet på
+sidene inni det.
+
+## Hvem som får gjøre hva
+
+Alt håndheves av radsikkerheten og kolonnerettighetene i databasen:
+
+- Alle innloggede leser alt, skriver idéer og kommentarer og gir hjerter.
+- Forfatter og tidspunkt settes av databasen og kan ikke velges fra nettleseren.
+- Bare forfatteren endrer en idé eller kommentar.
+- Forfatteren eller en administrator sletter den.
+- Et hjerte kan bare tas tilbake av den som ga det.
+
+## Sletting i tråden
+
+En kommentar som har svar, slettes ikke helt. Teksten, forfatteren og hjertene
+fjernes, og plassen står igjen som «Slettet», så svarene beholder
+sammenhengen. Når det siste svaret under en slik kommentar forsvinner, ryddes
+den bort, og det samme oppover i tråden. Det er utløsere i databasen som gjør
+dette, så appen bare ber om å slette.
+
+## Sorteringen
+
+Førstekriteriet (kategori eller bruker, aldri tid) gir overskriftene;
+andrekriteriet og det tredje, som er det som er igjen, gir rekkefølgen under
+dem. Tid står med de nyeste først. Valget lagres i `brukerinnstillinger` under
+nøkkelen `ideer.sortering`, en liten tabell for valg som følger brukeren.
+
+## Riktekst
+
+Beskrivelsen og kommentarene bruker den samme editoren som stoffsidene,
+med `referanser={false}`: verktøyraden har ikke referanseknappen, og
+siteringer fjernes når teksten leses (`rensIdetekst`).

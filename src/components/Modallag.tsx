@@ -5,7 +5,7 @@ import { Ikonknapp } from './Ikonknapp'
 import '../styles/modallag.css'
 
 /**
- * Et modalt lag over appen — endringsloggen, kontopanelet, brukerlista,
+ * Et modalt lag over appen — endringsloggen, idéene, kontopanelet, brukerlista,
  * historikken, publiseringen, preparatvinduet og redigeringsskjemaene på
  * stoffsiden.
  *
@@ -29,6 +29,11 @@ export interface ModallagProps {
   onLukk: () => void
   /** Ikonet i sirkelen foran tittelen. */
   ikon?: Ikonnavn
+  /**
+   * En side inni laget, som en idé i idélista: en tilbakeknapp står der
+   * ikonet ellers står, med dette navnet.
+   */
+  tilbake?: { etikett: string; onTilbake: () => void }
   /** Ekstra innhold øverst til høyre, ved siden av lukkeknappen. */
   handling?: ReactNode
   /** Bredere panel, for innhold som står side om side. */
@@ -65,6 +70,7 @@ export function Modallag({
   tittel,
   onLukk,
   ikon,
+  tilbake,
   handling,
   bred,
   meta,
@@ -145,10 +151,14 @@ export function Modallag({
     lukk()
   }
 
-  const ikonsirkel = ikon && (
-    <span className="modallag__ikon">
-      <Ikon navn={ikon} storrelse="underpunkt" />
-    </span>
+  const ikonsirkel = tilbake ? (
+    <Ikonknapp ikon="back" etikett={tilbake.etikett} variant="stille" utenTips onClick={tilbake.onTilbake} />
+  ) : (
+    ikon && (
+      <span className="modallag__ikon">
+        <Ikon navn={ikon} storrelse="underpunkt" />
+      </span>
+    )
   )
   const overskrift = (
     <h2 id={tittelId} className="modallag__tittel">

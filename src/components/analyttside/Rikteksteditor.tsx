@@ -107,13 +107,30 @@ export interface RikteksteditorProps {
   onEndre: (dokument: Riktekstdokument) => void
   /** Navnet på feltet for skjermlesere, f.eks. «Farmakodynamikk». */
   etikett: string
+  /**
+   * Med referansesystemet (standard): siteringer kan settes inn. Uten, som i
+   * idéene, er verktøyraden bare formateringen.
+   */
+  referanser?: boolean
+  /** Markøren står i teksten når editoren åpnes. */
+  autofokus?: boolean
+  /** Lavere tekstfelt, til korte tekster som kommentarer. */
+  kompakt?: boolean
 }
 
 type Verktoypanel = 'lenke' | 'symbol' | 'referanse' | null
 
-export function Rikteksteditor({ dokument, onEndre, etikett }: RikteksteditorProps) {
+export function Rikteksteditor({
+  dokument,
+  onEndre,
+  etikett,
+  referanser = true,
+  autofokus = false,
+  kompakt = false,
+}: RikteksteditorProps) {
   const [panel, setPanel] = useState<Verktoypanel>(null)
   const editor = useEditor({
+    autofocus: autofokus ? 'end' : false,
     extensions: [
       StarterKit.configure({
         heading: false,
@@ -132,12 +149,12 @@ export function Rikteksteditor({ dokument, onEndre, etikett }: RikteksteditorPro
       }),
       Subscript,
       Superscript,
-      Sitering,
+      ...(referanser ? [Sitering] : []),
     ],
     content: dokument,
     editorProps: {
       attributes: {
-        class: 'riktekst riktekstfelt',
+        class: kompakt ? 'riktekst riktekstfelt riktekstfelt--kompakt' : 'riktekst riktekstfelt',
         'aria-label': etikett,
         'aria-multiline': 'true',
         role: 'textbox',
@@ -150,7 +167,7 @@ export function Rikteksteditor({ dokument, onEndre, etikett }: RikteksteditorPro
 
   return (
     <div className="rikteksteditor">
-      <Verktoylinje editor={editor} panel={panel} onPanel={setPanel} etikett={etikett} />
+      <Verktoylinje editor={editor} panel={panel} onPanel={setPanel} etikett={etikett} referanser={referanser} />
       {panel === 'lenke' && <Lenkepanel editor={editor} onLukk={() => setPanel(null)} />}
       {panel === 'symbol' && <Symbolpanel editor={editor} onLukk={() => setPanel(null)} />}
       {panel === 'referanse' && <Siteringspanel editor={editor} onLukk={() => setPanel(null)} />}
@@ -184,11 +201,13 @@ function Verktoylinje({
   panel,
   onPanel,
   etikett,
+  referanser,
 }: {
   editor: Editor
   panel: Verktoypanel
   onPanel: (p: Verktoypanel) => void
   etikett: string
+  referanser: boolean
 }) {
   // Knappene viser hva som står på der markøren er, og tegnes på nytt når det endres.
   const aktive = useEditorState({
@@ -218,15 +237,17 @@ function Verktoylinje({
       <Verktoyknapp navn="Sett inn symbol" apner={panel === 'symbol'} onClick={() => veksle('symbol')}>
         Ω
       </Verktoyknapp>
-      <Verktoyknapp
-        navn="Sett inn referanse"
-        stil="referanse"
-        apner={panel === 'referanse'}
-        onClick={() => veksle('referanse')}
-      >
-        <Ikon navn="refs" storrelse="ui" />
-        Referanse
-      </Verktoyknapp>
+      {referanser && (
+        <Verktoyknapp
+          navn="Sett inn referanse"
+          stil="referanse"
+          apner={panel === 'referanse'}
+          onClick={() => veksle('referanse')}
+        >
+          <Ikon navn="refs" storrelse="ui" />
+          Referanse
+        </Verktoyknapp>
+      )}
     </div>
   )
 }

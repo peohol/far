@@ -194,7 +194,7 @@ function Skjemaramme<T>({
 }
 
 /** Spørsmålet når et skjema med endringer lukkes uten å lagres. */
-function Forlatvarsel({ onForkast, onFortsett }: { onForkast: () => void; onFortsett: () => void }) {
+export function Forlatvarsel({ onForkast, onFortsett }: { onForkast: () => void; onFortsett: () => void }) {
   const fortsett = useRef<HTMLButtonElement>(null)
   useEffect(() => fortsett.current?.focus(), [])
   return (

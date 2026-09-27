@@ -1,0 +1,610 @@
+/**
+ * Idéene (`src/components/ideer/`): lista med kort under overskrifter, siden
+ * for én idé og kommentartråden med svar i svar.
+ *
+ * Atlas: kortene er nøytrale flater med hårlinje, gruppeetikettene står i
+ * kursiv serif, og overskriftene i serif. Tråden rykker inn som på Reddit,
+ * med en loddrett linje under profilbildet som viser hvilken kommentar
+ * svarene hører til, og som legger den sammen når den trykkes på. Glidningen
+ * er den samme som i skuffene (`useSkjuling`, 0fr ↔ 1fr).
+ */
+
+.idevindu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-6);
+  animation: idevindu-inn var(--fart-glid) var(--kurve);
+}
+
+@keyframes idevindu-inn {
+  from {
+    opacity: 0;
+    transform: translateY(0.375rem);
+  }
+}
+
+/* --- Sorteringen ------------------------------------------------------------ */
+
+.idesortering {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-4) var(--rom-8);
+}
+
+.idesortering__rad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
+.idesortering__navn {
+  margin-right: var(--rom-2);
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-halvfet);
+  letter-spacing: var(--sperring-meta);
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.idesortering .sokefilter {
+  padding: 0 var(--rom-5);
+}
+
+/* --- Gruppene og kortene ------------------------------------------------- */
+
+.ideliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-7);
+}
+
+.idegruppe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.idegruppe__navn {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  margin: 0;
+  padding-inline: var(--rom-1);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-style: italic;
+  font-weight: var(--vekt-normal);
+  color: var(--blekk-dempet);
+}
+
+.idegruppe__navn .avatar {
+  font-style: normal;
+}
+
+.idegruppe__antall {
+  margin-left: auto;
+  padding: var(--rom-1) var(--rom-2);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-merke);
+  font-style: normal;
+  font-weight: var(--vekt-halvfet);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.idekortliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.idekort {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--rom-2) var(--rom-5);
+  width: 100%;
+  padding: var(--rom-4) var(--rom-5) var(--rom-4) var(--rom-6);
+  font: inherit;
+  text-align: left;
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort);
+  cursor: pointer;
+  transition: border-color var(--fart-rask) var(--kurve);
+}
+
+.idekort:hover {
+  border-color: var(--linje-kontroll);
+}
+
+.idekort__tittel {
+  grid-column: 1;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-titler);
+  overflow-wrap: anywhere;
+}
+
+.idekort__meta {
+  grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2);
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.idekort__navn {
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+}
+
+.idekort__meta .loggmerke {
+  margin-left: var(--rom-1);
+}
+
+.idekort__tall {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  gap: var(--rom-4);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk-dempet);
+}
+
+.idekort__tal {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-1);
+}
+
+.idekort__pil {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+/* En tom kategori, eller en tom liste: et stiplet kort som starter en ny idé. */
+.idekort--ny {
+  display: flex;
+  justify-content: center;
+  gap: var(--rom-2);
+  min-height: var(--hoyde-felt);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--linje-sterk);
+}
+
+.idekort--ny:hover {
+  color: var(--blekk);
+}
+
+/* --- Hjertet og handlingene ----------------------------------------------- */
+
+.idehandlinger {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-1);
+  margin-left: calc(-1 * var(--rom-2));
+}
+
+.idehandling {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  min-height: 2.125rem;
+  padding: 0 var(--rom-3) 0 var(--rom-2);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    color var(--fart-rask) var(--kurve);
+}
+
+.idehandling:hover,
+.idehandling[aria-expanded='true'] {
+  color: var(--blekk);
+  background: var(--flate-hevet);
+}
+
+/* Et gitt hjerte er fylt. Tallet og `aria-pressed` sier det samme. */
+.hjerteknapp[aria-pressed='true'] {
+  color: var(--alvorlig-blekk);
+}
+
+.hjerteknapp[aria-pressed='true'] .ikon [data-rolle^='f'],
+.idekort__tal[data-gitt] .ikon [data-rolle^='f'] {
+  fill-opacity: 0.85;
+}
+
+.idehandling--slett[data-bekreft] {
+  color: var(--alvorlig-blekk);
+  background: var(--alvorlig-flate);
+}
+
+@media (max-width: 47.5em) {
+  .idehandling {
+    min-height: var(--hoyde-trykk);
+  }
+}
+
+/* --- Siden for én idé ---------------------------------------------------- */
+
+.ideside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+}
+
+.ideside__hode {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-3);
+}
+
+.ideside__tittel {
+  margin: 0;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-seksjon);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-titler);
+  color: var(--blekk);
+  overflow-wrap: anywhere;
+}
+
+/* Overskriften får fokus når siden åpnes, for skjermlesere; ringen trengs ikke. */
+.ideside__tittel:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.ideside > .riktekst {
+  font-size: var(--tekst-ingress);
+}
+
+.forfatterlinje {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2);
+  margin: 0;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.forfatterlinje__navn {
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+}
+
+.ide-endret {
+  font-style: italic;
+}
+
+/* En slettet kommentar har ingen forfatter: en tom sirkel står der bildet var. */
+.avatar--tom {
+  background: transparent;
+  border: var(--kant) dashed var(--linje-sterk);
+}
+
+/* --- Skjemaet ------------------------------------------------------------- */
+
+.ideskjema {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-6);
+}
+
+.ideskjema__kategorier {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.ideskjema__kategorier legend {
+  padding: 0;
+}
+
+.ideskjema__valg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+  margin-top: var(--rom-1);
+}
+
+/* Kategoriene er radioknapper som ser ut som merkene de blir til. */
+.kategorivalg {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hoyde-liten);
+  padding: 0 var(--rom-5);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+  border: var(--kant) solid var(--linje-kontroll);
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve);
+}
+
+.kategorivalg input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.kategorivalg:hover {
+  background: var(--flate-hevet);
+}
+
+.kategorivalg:has(input:focus-visible) {
+  outline: var(--fokusring) solid var(--fokus);
+  outline-offset: 2px;
+}
+
+.kategorivalg[data-kategori='fag']:has(input:checked) {
+  color: var(--merke-fag);
+  background: var(--merke-fag-flate);
+  border-color: var(--merke-fag);
+}
+
+.kategorivalg[data-kategori='funksjonalitet']:has(input:checked) {
+  color: var(--merke-funksjon);
+  background: var(--merke-funksjon-flate);
+  border-color: var(--merke-funksjon);
+}
+
+.kategorivalg[data-kategori='annet']:has(input:checked) {
+  color: var(--flate);
+  background: var(--blekk);
+  border-color: var(--blekk);
+}
+
+.ideskjema__knapper,
+.kommentarskriver__knapper {
+  justify-content: flex-end;
+}
+
+/* --- Kommentartråden ---------------------------------------------------- */
+
+.idetraad {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+  padding-top: var(--rom-6);
+  border-top: var(--kant) solid var(--linje);
+}
+
+.idetraad__tittel {
+  margin: 0;
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-halvfet);
+  letter-spacing: var(--sperring-meta);
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+/* Den nye kommentaren står sammenlagt som et felt til noen trykker i det. */
+.kommentarfelt {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  width: 100%;
+  min-height: var(--hoyde-felt);
+  padding: 0 var(--rom-5);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-ui);
+  text-align: left;
+  color: var(--blekk-dempet);
+  background: var(--flate-bunn);
+  border: var(--kant) solid var(--linje-kontroll);
+  border-radius: var(--runding-felt);
+  cursor: text;
+  transition: border-color var(--fart-rask) var(--kurve);
+}
+
+.kommentarfelt:hover {
+  border-color: var(--aksent);
+}
+
+.kommentarskriver {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.kommentarer {
+  --kommentar-skinne: 1.5rem;
+  --kommentar-luft: var(--rom-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kommentar__inner > .kommentarer {
+  margin-top: var(--rom-2);
+}
+
+/* To kolonner: skinnen med bildet og linja, og kommentaren. Hvert svar er en
+   ny kommentar inni den forrige, så innrykket og linjene vokser med nivået. */
+.kommentar {
+  display: grid;
+  grid-template-columns: var(--kommentar-skinne) minmax(0, 1fr);
+  column-gap: var(--kommentar-luft);
+}
+
+.kommentar__hode {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-1) var(--kommentar-luft);
+  min-height: 1.75rem;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.kommentar__hode > .avatar {
+  width: var(--kommentar-skinne);
+  height: var(--kommentar-skinne);
+}
+
+.kommentar__navn {
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+}
+
+.kommentar[data-slettet] .kommentar__navn {
+  font-style: italic;
+  font-weight: var(--vekt-normal);
+  color: var(--blekk-dempet);
+}
+
+.kommentar__skjult {
+  padding: var(--rom-1) var(--rom-2);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.kommentar__veksle {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-left: auto;
+  padding: 0;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: var(--kant) solid var(--linje);
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    transform var(--fart-glid) var(--kurve),
+    background-color var(--fart-rask) var(--kurve);
+}
+
+.kommentar__veksle:hover {
+  background: var(--flate-hevet);
+}
+
+.kommentar[data-apen] > .kommentar__hode > .kommentar__veksle {
+  transform: rotate(90deg);
+}
+
+/* Linja under bildet. Hele skinnen er trykkflaten; streken er midt i den. */
+.kommentar__linje {
+  grid-column: 1;
+  grid-row: 2;
+  position: relative;
+  width: 100%;
+  margin: var(--rom-2) 0 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.kommentar__linje::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 50%;
+  width: var(--kant-tykk);
+  translate: -50% 0;
+  background: var(--linje-sterk);
+  border-radius: var(--runding-pille);
+  transition: background-color var(--fart-rask) var(--kurve);
+}
+
+.kommentar__linje:hover::before {
+  background: var(--aksent);
+}
+
+.kommentar__kropp {
+  grid-column: 2;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--fart-glid) var(--kurve);
+}
+
+.kommentar[data-apen] > .kommentar__kropp {
+  grid-template-rows: 1fr;
+}
+
+.kommentar:not([data-apen]) > .kommentar__kropp,
+.kommentar__kropp[data-glir] {
+  overflow: hidden;
+}
+
+.kommentar__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  min-width: 0;
+  min-height: 0;
+  padding-top: var(--rom-1);
+}
+
+.kommentar__inner > .riktekst {
+  overflow-wrap: anywhere;
+}
+
+.idehandlinger--kommentar {
+  margin-top: calc(-1 * var(--rom-1));
+}
+
+/* Smalt: mindre innrykk per nivå, så en dyp tråd fortsatt får plass. */
+@media (max-width: 47.5em) {
+  .kommentarer {
+    --kommentar-skinne: 1.25rem;
+    --kommentar-luft: var(--rom-2);
+  }
+
+  .idekort {
+    padding-left: var(--rom-5);
+  }
+
+  .kommentar__veksle {
+    width: var(--hoyde-liten);
+    height: var(--hoyde-liten);
+  }
+}

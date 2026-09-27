@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.48.0',
+    dato: '2026-09-27',
+    sammendrag: 'Nytt vindu for idéer, der alle kan foreslå forbedringer, gi hjerter og diskutere i kommentartråder',
+    typer: ['Funksjonalitet'],
+    omfang: 'Betydelig omfang',
+    punkter: [
+      '«Idéer» i menyen under profilbildet øverst til høyre åpner et vindu med idéene alle brukerne har lagt inn, som kort med overskrift, tidspunkt og hvem som skrev dem.',
+      'Lista grupperes etter kategori (Fag, Funksjonalitet og Annet) eller etter bruker, og sorteres deretter etter tid, bruker eller kategori. Valget huskes på brukeren din.',
+      'En ny idé får kategori, overskrift og en valgfri beskrivelse med den samme formateringen som på stoffsidene. Den som skrev idéen, kan endre og slette den; administratorer kan slette alle idéer og kommentarer.',
+      'Et trykk på et kort åpner idéen med beskrivelsen og kommentartråden. Idéer og kommentarer kan få hjerter, og kommentarene kan besvares i flere nivåer, med innrykk og linjer som viser hva som svarer på hva. Et trykk på linja eller pilen legger en kommentar og svarene under den sammen.',
+      'En kommentar som slettes etter at noen har svart på den, blir stående som «Slettet», så svarene beholder sammenhengen.',
+    ],
+  },
+  {
     versjon: '1.47.0',
     dato: '2026-09-27',
     sammendrag: 'Stoffsidene viser kategorien fra stoffregisteret over navnet, og analyttkoden og analysemetoden under',
