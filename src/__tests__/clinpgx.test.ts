@@ -37,6 +37,7 @@ import {
   LAVERE_EVIDENS_KORT,
   oppsummerFarmakogenetikk,
 } from '../clinpgx/stoffside'
+import { strukturavvik, strukturfeiltekst } from '../clinpgx/struktur'
 import { synkroniserClinpgx } from '../clinpgx/synk'
 import { lesDatakildestatus, vurderKilder } from '../datakilder/status'
 import { byggSidemodell } from '../faginnhold/analyttside'
@@ -174,6 +175,86 @@ function klinisk(id: string, niva: string | null, poeng: number | null, gen = 'C
     kjemikalier: ['PA1'],
   }
 }
+
+describe('strukturkontrollen av svarene', () => {
+  const [RETNINGSLINJE, KLINISK, PREPARATOMTALE] = [RETNINGSLINJER[0], KLINISKE[0], PREPARATOMTALER[0]] as [
+    Record<string, unknown>,
+    Record<string, unknown>,
+    Record<string, unknown>,
+  ]
+  const med = (o: Record<string, unknown>, endring: Record<string, unknown>) => ({ ...o, ...endring })
+  const uten = (o: Record<string, unknown>, felt: string) => Object.fromEntries(Object.entries(o).filter(([k]) => k !== felt))
+
+  it('godtar svarene slik ClinPGx gir dem', () => {
+    expect(RETNINGSLINJER.map((o) => strukturavvik('retningslinje', o))).toEqual(RETNINGSLINJER.map(() => []))
+    expect(KLINISKE.map((o) => strukturavvik('klinisk', o))).toEqual(KLINISKE.map(() => []))
+    expect(PREPARATOMTALER.map((o) => strukturavvik('preparatomtale', o))).toEqual(PREPARATOMTALER.map(() => []))
+    expect(strukturavvik('kjemikalie', ARIPIPRAZOL)).toEqual([])
+    expect(strukturavvik('kjemikalie', SERTRALINSVAR)).toEqual([])
+  })
+
+  it('godtar felt som finnes, men er tomme, og valgfrie felt som mangler', () => {
+    expect(strukturavvik('retningslinje', med(RETNINGSLINJE, { relatedGenes: [], literature: [], name: '', summaryMarkdown: null }))).toEqual([])
+    expect(strukturavvik('retningslinje', uten(RETNINGSLINJE, 'summaryMarkdown'))).toEqual([])
+    expect(strukturavvik('preparatomtale', uten(uten(PREPARATOMTALE, 'testing'), 'summaryMarkdown'))).toEqual([])
+    const sted = KLINISK.location as Record<string, unknown>
+    expect(
+      strukturavvik('klinisk', med(KLINISK, { location: uten(sted, 'rsid'), allelePhenotypes: [], relatedGuidelines: [], score: null })),
+    ).toEqual([])
+    expect(strukturavvik('kjemikalie', { id: 'PA1', name: 'x' })).toEqual([])
+  })
+
+  it('melder felt som er borte eller har en helt annen form', () => {
+    expect(strukturavvik('retningslinje', uten(RETNINGSLINJE, 'relatedGenes'))).toEqual(['relatedGenes mangler, ventet liste'])
+    expect(strukturavvik('retningslinje', med(RETNINGSLINJE, { relatedGenes: 'CYP2C19' }))).toEqual(['relatedGenes er tekst, ventet liste'])
+    expect(strukturavvik('retningslinje', med(RETNINGSLINJE, { relatedGenes: ['CYP2C19'] }))).toEqual([
+      'relatedGenes har elementer som ikke er objekter med id og symbol',
+    ])
+    expect(strukturavvik('retningslinje', uten(RETNINGSLINJE, 'dosingInformation'))).toEqual([
+      'dosingInformation mangler, ventet sann/usann',
+    ])
+    expect(strukturavvik('retningslinje', med(RETNINGSLINJE, { summaryMarkdown: { innhold: '<p>Tekst</p>' } }))).toEqual([
+      'summaryMarkdown mangler html eller markdown',
+    ])
+    expect(strukturavvik('klinisk', uten(KLINISK, 'levelOfEvidence'))).toEqual(['levelOfEvidence mangler, ventet objekt'])
+    expect(strukturavvik('klinisk', med(KLINISK, { levelOfEvidence: { level: '1A' } }))).toEqual(['levelOfEvidence mangler term'])
+    const sted = KLINISK.location as Record<string, unknown>
+    expect(strukturavvik('klinisk', med(KLINISK, { location: med(sted, { genes: [{ gene: 'CYP2C19' }] }) }))).toEqual([
+      'location.genes har elementer som ikke er objekter med id og symbol',
+    ])
+    // Et objekt som mangler, er ett avvik; feltene i det meldes ikke hver for seg.
+    expect(strukturavvik('klinisk', uten(KLINISK, 'location'))).toEqual(['location mangler, ventet objekt'])
+    expect(strukturavvik('kjemikalie', med(SERTRALINSVAR, { linkOuts: { ATC: 'N06AB06' } }))).toEqual(['linkOuts er objekt, ventet liste'])
+    expect(strukturavvik('klinisk', 'tull')).toEqual(['er tekst, ventet objekt'])
+  })
+
+  it('melder null i felt ClinPGx alltid gir en verdi, men godtar null i valgfrie felt', () => {
+    expect(strukturavvik('klinisk', med(KLINISK, { levelOfEvidence: null }))).toEqual(['levelOfEvidence er tomt (null), ventet objekt'])
+    expect(strukturavvik('klinisk', med(KLINISK, { location: null }))).toEqual(['location er tomt (null), ventet objekt'])
+    expect(strukturavvik('retningslinje', med(RETNINGSLINJE, { relatedGenes: null }))).toEqual(['relatedGenes er tomt (null), ventet liste'])
+    expect(strukturavvik('retningslinje', med(RETNINGSLINJE, { dosingInformation: null }))).toEqual([
+      'dosingInformation er tomt (null), ventet sann/usann',
+    ])
+    expect(strukturavvik('retningslinje', med(RETNINGSLINJE, { name: null }))).toEqual(['name er tomt (null), ventet tekst'])
+    const sted = KLINISK.location as Record<string, unknown>
+    expect(strukturavvik('klinisk', med(KLINISK, { location: med(sted, { rsid: null }), score: null }))).toEqual([])
+    expect(strukturavvik('preparatomtale', med(PREPARATOMTALE, { testing: null, summaryMarkdown: null }))).toEqual([])
+  })
+
+  it('sier hvilke objekter som har feil form, og at dataene fra før står', () => {
+    const tekst = strukturfeiltekst([
+      { type: 'klinisk', id: 'PA1', avvik: ['levelOfEvidence mangler, ventet objekt'] },
+      { type: 'retningslinje', id: 'PA2', avvik: ['relatedGenes er tekst, ventet liste', 'source mangler, ventet tekst'] },
+      { type: 'klinisk', id: 'PA3', avvik: ['x'] },
+      { type: 'klinisk', id: 'PA4', avvik: ['y'] },
+    ])
+    expect(tekst).toBe(
+      'Svaret fra ClinPGx har trolig endret form: den kliniske annotasjonen PA1: levelOfEvidence mangler, ventet objekt; ' +
+        'retningslinjen PA2: relatedGenes er tekst, ventet liste, source mangler, ventet tekst; den kliniske annotasjonen PA3: x ' +
+        '(og 1 til). Kjemikaliet er ikke byttet inn; dataene fra før står.',
+    )
+  })
+})
 
 describe('rekkefølgen i seksjonen', () => {
   it('sorterer de kliniske annotasjonene etter evidensnivå, så poengsum, med ukjente nivåer sist', () => {
@@ -385,6 +466,7 @@ describe('synkroniseringen', () => {
       feilet: 0,
       annotasjoner: { retningslinje: 3, preparatomtale: 2, klinisk: 5 },
       forkastet: 0,
+      strukturavvik: 0,
     })
     // Ett kjemikalie om gangen: kjemikaliet, så de tre listene.
     expect(api.kall.filter((k) => k.includes(SERTRALIN))).toHaveLength(4)
@@ -447,6 +529,42 @@ describe('synkroniseringen', () => {
     expect(resultat).toMatchObject({ status: 'delvis', hentet: 1, feilet: 1, forkastet: 1 })
     expect((resultat as { feil: string }).feil).toContain(`${SERTRALIN}: 1 objekt i svaret kunne ikke leses`)
     expect((await leser.les([SERTRALIN])).retningslinjer).toHaveLength(RETNINGSLINJER.length)
+  })
+
+  it('bytter ikke inn et kjemikalie når et objekt har endret form, men henter de andre, og viser det i «Datakilder»', async () => {
+    await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+    const fore = await leser.les([SERTRALIN])
+    await db.query(`update clinpgx.kjemikalier set sist_hentet_kl = now() - interval '1 day'`)
+
+    // ID-en kan fortsatt leses, men evidensnivået har flyttet seg.
+    const flyttet = KLINISKE.map((o, i) => {
+      if (i > 0) return o
+      const { levelOfEvidence, ...resten } = o as Record<string, unknown>
+      return { ...resten, evidence: levelOfEvidence }
+    })
+    const resultat = await synkroniserClinpgx({ lager: lager(), api: falskApi({ [`/data/summaryAnnotation ${SERTRALIN}`]: flyttet }) })
+    expect(resultat).toMatchObject({ status: 'delvis', hentet: 1, feilet: 1, forkastet: 0, strukturavvik: 1 })
+    const feil = (resultat as { feil: string }).feil
+    expect(feil).toContain(`${SERTRALIN}: Svaret fra ClinPGx har trolig endret form: den kliniske annotasjonen`)
+    expect(feil).toContain('levelOfEvidence mangler, ventet objekt')
+
+    // Sertralin står som før, med feilen på seg; aripiprazol er hentet på nytt.
+    const etter = await leser.les([SERTRALIN])
+    expect(etter.kliniske).toEqual(fore.kliniske)
+    expect(etter.kjemikalier[0]!.feil).toContain('Svaret fra ClinPGx har trolig endret form')
+    const { rows } = await db.query<{ clinpgx_id: string; nylig: boolean }>(
+      `select clinpgx_id, sist_hentet_kl > now() - interval '1 hour' as nylig from clinpgx.kjemikalier order by clinpgx_id`,
+    )
+    expect(rows).toEqual([
+      { clinpgx_id: 'PA10026', nylig: true },
+      { clinpgx_id: SERTRALIN, nylig: false },
+    ])
+
+    const { data } = await kall.klientFor(admin).rpc('datakilder_status', {})
+    const vurdering = vurderKilder(lesDatakildestatus(data)).find((v) => v.kilde === 'clinpgx')!
+    expect(vurdering.tilstand).toBe('advarsel')
+    expect(vurdering.melding).toContain('Siste henting var delvis')
+    expect(vurdering.melding).toContain('levelOfEvidence mangler, ventet objekt')
   })
 
   describe('endringsloggen', () => {
@@ -647,7 +765,7 @@ describe('synkroniseringen', () => {
 
 describe('endepunktene', () => {
   const MILJO = { CRON_SECRET: 'hemmelig', SUPABASE_URL: 'https://db.example', SUPABASE_SECRET_KEY: 'sb_secret_x' }
-  const ferdig = { status: 'fullfort' as const, synk: 1, kjemikalier: 0, hentet: 0, feilet: 0, utsatt: 0, annotasjoner: {}, forkastet: 0 }
+  const ferdig = { status: 'fullfort' as const, synk: 1, kjemikalier: 0, hentet: 0, feilet: 0, utsatt: 0, annotasjoner: {}, forkastet: 0, strukturavvik: 0 }
 
   function foresporsel(metode: string, token?: string, body?: unknown, sti = '/api/clinpgx-synk') {
     return new Request(`https://ousfar.example${sti}`, {

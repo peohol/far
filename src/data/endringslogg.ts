@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.44.0',
+    dato: '2026-09-26',
+    sammendrag: 'Legemiddeldataene fra FEST står i «Datakilder», og hentingene fra FEST og ClinPGx stanser når kilden endrer form',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Administratorer ser nå FEST i «Datakilder» ved siden av ClinPGx og CPIC: om det er i orden, når siste vellykkede henting var, datoen for uttrekket fra DMP, de siste kjøringene med hvor mange rader som ble nye, endret og utgått, og feilen når en henting feilet.',
+      'FEST regnes som gammel etter to døgn, siden den hentes hver natt, og «Hent nå» henter FEST med en gang, som for de andre kildene.',
+      'Den nattlige FEST-hentingen stanser nå også når antallet poster er normalt, men sentrale felt som navn, varenavn, legemiddelform, varenummer eller koblingen mellom pakning og preparat plutselig mangler i nesten hele filen. Da brukes fortsatt siste gyldige FEST-data, og «Datakilder» sier hvilken kontroll som slo ut.',
+      'Et legemiddel fra ClinPGx byttes ikke inn når et svar har endret form, f.eks. at evidensnivået eller genene har flyttet seg. Dataene fra før står, feilen står på legemiddelet og i «Datakilder», og de andre legemidlene hentes som vanlig. Felt som bare er tomme, godtas.',
+    ],
+  },
+  {
     versjon: '1.43.0',
     dato: '2026-09-26',
     sammendrag: 'CPIC-oppslaget i Farmakogenetikk kan oversette en diplotype til resultatet anbefalingen slås opp på',

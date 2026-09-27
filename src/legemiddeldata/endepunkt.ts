@@ -1,41 +1,32 @@
 /**
- * Endepunktet Vercel kaller hver natt for å synkronisere legemiddeldataene.
- *
- * Vercel sender `Authorization: Bearer <CRON_SECRET>`; alt annet avvises. Den
- * hemmelige Supabase-nøkkelen leses fra miljøet her på serveren og forlater
- * den aldri. Selve jobben står i `synk.ts`.
+ * Endepunktet som synkroniserer legemiddeldataene fra FEST:
+ * `/api/legemiddeldata-synk`. Vercel kaller det hver natt med `GET` og
+ * `Authorization: Bearer <CRON_SECRET>`. En administrator kan be om det samme
+ * med `POST` og sin egen innlogging («Hent nå» i «Datakilder»). Tilgangen og
+ * oppkoblingen står i `src/server/tilgang.ts`; den hemmelige Supabase-nøkkelen
+ * forlater aldri serveren. Selve jobben står i `synk.ts`.
  */
-import { createClient } from '@supabase/supabase-js'
+import { erAdmin, hvem, serverklient, svar, type Adminsjekk, type Miljo } from '../server/tilgang.js'
 import { kallMot, lagLegemiddellager } from './lager.js'
 import { synkroniserFest, type Synkresultat, type Synkvalg } from './synk.js'
 
-export type Miljo = Record<string, string | undefined>
+export type { Miljo }
 
-type Synkroniser = (valg: Pick<Synkvalg, 'lager'>) => Promise<Synkresultat>
+type Synkroniser = (valg: Pick<Synkvalg, 'lager' | 'utlostAv'>) => Promise<Synkresultat>
 
 export async function behandleSynk(
   foresporsel: Request,
   miljo: Miljo,
-  synkroniser: Synkroniser = synkroniserFest,
+  { synkroniser = synkroniserFest, adminsjekk = erAdmin }: { synkroniser?: Synkroniser; adminsjekk?: Adminsjekk } = {},
 ): Promise<Response> {
-  const hemmelighet = miljo.CRON_SECRET
-  if (!hemmelighet || foresporsel.headers.get('authorization') !== `Bearer ${hemmelighet}`) {
-    return svar(401, { feil: 'Ikke tilgang.' })
-  }
+  if (foresporsel.method !== 'GET' && foresporsel.method !== 'POST') return svar(405, { feil: 'Bare GET og POST.' })
+  const utlostAv = await hvem(foresporsel, miljo, adminsjekk)
+  if (!utlostAv) return svar(401, { feil: 'Ikke tilgang.' })
 
-  const url = miljo.SUPABASE_URL ?? miljo.VITE_SUPABASE_URL
-  const nokkel = miljo.SUPABASE_SECRET_KEY
-  if (!url || !nokkel) return svar(500, { feil: 'Mangler oppkoblingen mot databasen.' })
+  const klient = serverklient(miljo)
+  if (!klient) return svar(500, { feil: 'Mangler oppkoblingen mot databasen.' })
 
-  const klient = createClient(url, nokkel, { auth: { persistSession: false, autoRefreshToken: false } })
-  const resultat = await synkroniser({ lager: lagLegemiddellager(kallMot(klient)) })
+  const resultat = await synkroniser({ lager: lagLegemiddellager(kallMot(klient)), utlostAv })
   // En feilet kjøring er logget i databasen; statuskoden gjør den synlig i Vercel også.
   return svar(resultat.status === 'feilet' ? 502 : 200, resultat)
-}
-
-function svar(status: number, innhold: unknown): Response {
-  return new Response(JSON.stringify(innhold), {
-    status,
-    headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' },
-  })
 }

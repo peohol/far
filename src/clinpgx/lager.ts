@@ -32,6 +32,8 @@ export interface Synkresultattelling {
   annotasjoner: Annotasjonstelling
   /** Objekter i svarene som ikke kunne leses. Kjemikaliet de kom for, ble ikke byttet inn. */
   forkastet: number
+  /** Objekter som kunne leses, men hadde en annen form enn ventet (`struktur.ts`). Kjemikaliet ble ikke byttet inn. */
+  strukturavvik: number
   /** Feilene per kjemikalie, samlet til én tekst for loggen. */
   feil?: string
 }

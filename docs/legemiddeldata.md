@@ -85,8 +85,13 @@ DMP tar ikke ansvar for integrasjoner av FEST. Brukeren av dataene skal:
   transaksjon. Nye rader legges til, endrede oppdateres, og rader som er borte,
   merkes som utgått, men slettes ikke. Et uttrekk som har under 80 % av radene
   for en type, avvises, og da endres ingenting. Det samme gjelder en avkuttet
-  nedlasting eller en fil som ikke kan leses. Da viser sidene det som var der
-  fra før.
+  nedlasting, en fil som ikke kan leses, og en fil som ikke består
+  [strukturkontrollen](#strukturkontrollen). Da viser sidene det som var der
+  fra før, mellomlageret tømmes, og kjøringen logges som feilet med grunnen.
+- En administrator kan be om en henting med «Hent nå» i «Datakilder»
+  (`POST /api/legemiddeldata-synk` med sin egen innlogging; serveren sjekker
+  `er_admin()`). Den gjør det samme som den nattlige jobben, og kjøringen
+  merkes med hvem som utløste den (`utlost_av`).
 - Endres måten filen leses på, økes `PARSERVERSJON` i `fest.ts`. Neste kjøring
   leser da filen på nytt selv om den er uendret.
 - Vercel trenger to hemmelige innstillinger i produksjon: `SUPABASE_SECRET_KEY`
@@ -95,6 +100,56 @@ DMP tar ikke ansvar for integrasjoner av FEST. Brukeren av dataene skal:
 - API-et avbryter spørringer etter 8 sekunder, og å bytte inn et helt uttrekk
   tar lenger. Serverrollen har derfor fått en grense på 2 minutter, satt i
   migrasjonen. Den første fulle kjøringen tok om lag 24 sekunder.
+
+### Strukturkontrollen
+
+Antallskontrollen fanger en fil som er for liten, men ikke en fil der DMP har
+gitt et felt nytt navn eller flyttet det: da blir alle postene lest, men feltet
+blir stille tomt. `src/legemiddeldata/strukturvakt.ts` teller derfor, mens
+filen leses, hvor stor andel av postene av hver type som har de sentrale
+feltene og koblingene, og avviser uttrekket før noe byttes inn når en andel
+er usannsynlig lav:
+
+| Type | Kontroll | I dag | Krav |
+| --- | --- | --- | --- |
+| Virkestoff | har navn | 100 % | 90 % |
+| Styrke | peker på et virkestoff, som finnes i uttrekket; har en verdi | 100 % | 90 % / 80 % |
+| Merkevare | har varenavn, navn med form og styrke, legemiddelform, virkestoff | 100 % | 90 % |
+| Merkevare | styrkene den peker på, finnes i uttrekket | 100 % | 90 % |
+| Merkevare | har ATC-kode / reseptgruppe / administrasjonsvei | 97 / 100 / 100 % | 70 / 80 / 80 % |
+| Pakning | har varenummer; peker på merkevarer, som finnes i uttrekket | 100 % | 90 % |
+| Pakning | hører til en byttegruppe; byttegruppene finnes i uttrekket | 43 % / 100 % | 15 % / 90 % |
+| Byttegruppe | har kode | 100 % | 90 % |
+| Interaksjon | har relevans; to substansgrupper med stoffer | 100 % | 90 % |
+| Interaksjon | har klinisk konsekvens | 100 % | 80 % |
+| Ikke vurdert | har ATC-kode | 100 % | 90 % |
+
+«I dag» er målt i produksjonskopien 26.09.2026 (FEST 08.09.2026). Tersklene er
+satt godt under, så enkeltposter som mangler noe, og vanlige endringer i FEST
+aldri stanser synkroniseringen; felt som ofte mangler (preparatomtale, deling,
+knusing, produsent), kontrolleres ikke. En type uten poster avvises av
+antallskontrollen, med dens melding.
+
+Slår en kontroll ut, feiler hele kjøringen, som ved andre feil. Feilen sier
+hvilke kontroller som slo ut, f.eks. «Strukturkontrollen stoppet
+FEST-uttrekket, trolig fordi DMP har endret formen på filen: bare 0 % av de
+8962 merkevarene har varenavn (krever minst 90 %). Ingenting er byttet inn.»
+Den står i `legemiddeldata.synkroniseringer`, gir 502 i Vercel og vises i
+«Datakilder» (`docs/datakilder.md`).
+
+Kontrollen er et heuristisk sikkerhetsnett mot sannsynlige strukturelle brudd,
+ikke en fullstendig validering av filen. Den fanger ikke:
+
+- et felt som får ny betydning, men beholder navn og form (f.eks. en kode som
+  endrer mening);
+- et felt som ikke er i tabellen, når det forsvinner (f.eks. deling eller
+  preparatomtale);
+- at et felt forsvinner fra bare en del av postene, under tersklene;
+- feil verdier i ellers riktig form.
+
+Gjør DMP en slik endring med vilje, må lesingen i `fest.ts` endres, og da
+økes `PARSERVERSJON`. Endrer en ny fil andelene varig (f.eks. at en
+kobling blir sjeldnere), justeres terskelen i `strukturvakt.ts`.
 
 ### Når synkroniseringen feiler eller står stille
 
@@ -106,6 +161,9 @@ DMP tar ikke ansvar for integrasjoner av FEST. Brukeren av dataene skal:
   mangle. Da har minst én natt feilet eller ikke gått.
 - En daglig Claude-rutine leser de siste kjøringene og sier fra i prosjektet
   når siste kjøring feilet, eller når ingen har gått bra det siste døgnet.
+- Administratorene ser FEST i «Datakilder» (kontomenyen): tilstanden, siste
+  vellykkede henting, datoen for uttrekket, de siste kjøringene og feilen fra
+  siste som feilet (`docs/datakilder.md`).
 
 ## Hva FEST inneholder
 

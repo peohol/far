@@ -10,6 +10,8 @@ import {
   endringstittel,
   feltendringer,
   intervallDogn,
+  jobbnavn,
+  KILDEOPPSETT,
   kildeintervaller,
   lagDatakildeleser,
   lesDatakildestatus,
@@ -67,7 +69,10 @@ describe('lesefunksjonen', () => {
     expect(status.kjoringer[4]).toMatchObject({ release: 'v1.60.1', versjon: '82', endringer: { klinisk: 0, metadata: 0, grunnlag: 1 } })
     expect(status.endringer.map((e) => e.objekt_id)).toEqual(['PA166104981', '1447954390', 'PA166104980', 'anbefaling'])
     // Siste kjente release og versjon står selv om siste kjøring ikke fikk dem oppgitt.
-    expect(status.kilder).toEqual({ clinpgx: { release: null, versjon: '1' }, cpic: { release: 'v1.60.1', versjon: '82' } })
+    expect(status.kilder).toEqual({
+      clinpgx: { release: null, versjon: '1', sist_vellykket_kl: expect.stringMatching(/^2026-09-26T08:04:00/) },
+      cpic: { release: 'v1.60.1', versjon: '82', sist_vellykket_kl: expect.stringMatching(/^2026-09-26T10:00:05/) },
+    })
     expect(vurderKilder(status).find((v) => v.kilde === 'cpic')).toMatchObject({ release: 'v1.60.1', versjon: '82' })
 
     // Grensen gjelder hver kilde for seg: mange nye føringer i den ene skyver ikke den andre ut.
@@ -105,7 +110,56 @@ describe('lesefunksjonen', () => {
 
     const avvist = lagDatakildeleser(klient, (async () => new Response(JSON.stringify({ feil: 'Ikke tilgang.' }), { status: 401 })) as unknown as typeof fetch)
     await expect(avvist.hentNa('clinpgx')).rejects.toThrow('Ikke tilgang.')
+
+    // FEST hentes med samme innlogging, fra sitt eget endepunkt.
+    await leser.hentNa('fest')
+    expect(kalt.at(-1)).toEqual({ url: '/api/legemiddeldata-synk', init: { method: 'POST', headers: { authorization: 'Bearer tokenet' } } })
   })
+})
+
+describe('FEST i lesefunksjonen', () => {
+  it('gir FEST-kjøringene med uttrekksdatoen som versjon og radene som ble byttet inn', async () => {
+    const db = await nyDatabase()
+    const admin = await opprettBruker(db, { brukernavn: 'admin', fornavn: 'Ada', etternavn: 'Admin', rolle: 'admin' })
+    await db.exec(`
+      insert into legemiddeldata.synkroniseringer (kilde, status, utlost_av, startet_kl, avsluttet_kl, kildedato, antall, feil)
+      values ('FEST', 'fullfort', 'cron', '2026-09-24T04:15:00Z', '2026-09-24T04:16:00Z', '2026-09-08T03:09:06',
+              '{"merkevare": {"inn": 8962, "nye": 3, "endrede": 10, "utgatte": 1}, "pakning": {"inn": 10828, "nye": 2, "endrede": 0, "utgatte": 0}}', null),
+             ('FEST', 'uendret', 'cron', '2026-09-25T04:15:00Z', '2026-09-25T04:15:05Z', null, null, null),
+             ('FEST', 'feilet', 'manuell', '2026-09-26T08:00:00Z', '2026-09-26T08:00:40Z', null, null, 'Strukturkontrollen stoppet FEST-uttrekket.');
+    `)
+    const status = lesDatakildestatus((await faginnholdskall(db, admin).klientFor(admin).rpc('datakilder_status', {})).data)
+    expect(status.kjoringer.map((k) => [k.kilde, k.id, k.status, k.utlost_av])).toEqual([
+      ['fest', 3, 'feilet', 'manuell'],
+      ['fest', 2, 'uendret', 'cron'],
+      ['fest', 1, 'fullfort', 'cron'],
+    ])
+    expect(status.kjoringer[2]).toMatchObject({ versjon: '2026-09-08T03:09:06', rader: { nye: 5, endrede: 10, utgatte: 1 } })
+    expect(status.kjoringer[0]).toMatchObject({ feil: 'Strukturkontrollen stoppet FEST-uttrekket.', rader: null })
+    expect(status.kilder).toEqual({
+      fest: { release: null, versjon: '2026-09-08T03:09:06', sist_vellykket_kl: expect.stringMatching(/^2026-09-25T04:15:05/) },
+    })
+  }, 60_000)
+
+  it('vet når siste vellykkede henting var, også etter flere feilede enn kjøringene som følger med', async () => {
+    const db = await nyDatabase()
+    const admin = await opprettBruker(db, { brukernavn: 'admin', fornavn: 'Ada', etternavn: 'Admin', rolle: 'admin' })
+    await db.exec(`
+      insert into legemiddeldata.synkroniseringer (kilde, status, startet_kl, avsluttet_kl, kildedato, antall)
+      values ('FEST', 'fullfort', '2026-09-10T04:15:00Z', '2026-09-10T04:16:00Z', '2026-09-08T03:09:06', '{}');
+      insert into legemiddeldata.synkroniseringer (kilde, status, startet_kl, avsluttet_kl, feil)
+      select 'FEST', 'feilet', t, t + interval '1 minute', 'Strukturkontrollen stoppet FEST-uttrekket.'
+      from generate_series(timestamptz '2026-09-14T04:15:00Z', timestamptz '2026-09-25T04:15:00Z', interval '1 day') t;
+    `)
+    const status = lesDatakildestatus((await faginnholdskall(db, admin).klientFor(admin).rpc('datakilder_status', {})).data)
+    expect(status.kjoringer.map((k) => k.status)).toEqual(Array(10).fill('feilet'))
+    const fest = vurderKilder(status, Date.parse('2026-09-26T12:00:00Z'), { fest: 1, clinpgx: 7, cpic: 7 }).find((v) => v.kilde === 'fest')!
+    expect(fest.sisteVellykkede).toBeNull()
+    expect(fest.sistVellykketKl).toMatch(/^2026-09-10T04:16:00/)
+    expect(fest).toMatchObject({ tilstand: 'feil', versjon: '2026-09-08T03:09:06' })
+    expect(fest.melding).toContain('OUSFAR bruker fortsatt siste gyldige FEST-data')
+    expect(fest.melding).not.toContain('Ingen henting har lyktes ennå')
+  }, 60_000)
 })
 
 /* --- Vurderingen og tekstene ------------------------------------------------ */
@@ -128,9 +182,9 @@ function endring(ekstra: Partial<Endring>): Endring {
   }
 }
 
-const vurder = (kjoringer: Kjoring[]) => {
-  const status: Datakildestatus = { kjoringer, endringer: [] }
-  return Object.fromEntries(vurderKilder(status, NA, { clinpgx: 7, cpic: 7 }).map((v) => [v.kilde, v]))
+const vurder = (kjoringer: Kjoring[], kilder?: Datakildestatus['kilder']) => {
+  const status: Datakildestatus = { kjoringer, endringer: [], kilder }
+  return Object.fromEntries(vurderKilder(status, NA, { fest: 1, clinpgx: 7, cpic: 7 }).map((v) => [v.kilde, v]))
 }
 
 describe('vurderingen', () => {
@@ -138,7 +192,8 @@ describe('vurderingen', () => {
     expect(intervallDogn('30 2 * * 1')).toBe(7)
     expect(intervallDogn('15 4 * * *')).toBe(1)
     expect(intervallDogn('0 3 1 * *')).toBeNull()
-    expect(kildeintervaller()).toEqual({ clinpgx: 7, cpic: 7 })
+    expect(kildeintervaller()).toEqual({ fest: 1, clinpgx: 7, cpic: 7 })
+    expect([jobbnavn(1), jobbnavn(7), jobbnavn(null)]).toEqual(['Nattlig jobb', 'Ukentlig jobb', 'Planlagt jobb'])
   })
 
   it('er i orden når siste kjøring gikk bra innenfor intervallet, og sier hva den fant', () => {
@@ -189,6 +244,52 @@ describe('vurderingen', () => {
     expect(vurder([]).clinpgx).toMatchObject({ tilstand: 'advarsel', melding: 'Ingen henting fra ClinPGx er logget ennå.' })
   })
 
+  it('vurderer FEST etter den nattlige jobben, med radene og teksten om at de gyldige dataene brukes', () => {
+    const rader = { nye: 3, endrede: 12, utgatte: 1 }
+    expect(vurder([kjoring('fest', 1, 'fullfort', '2026-09-26T04:15:00Z', { rader })]).fest).toMatchObject({
+      tilstand: 'ok',
+      intervall: 1,
+      melding: 'Siste henting byttet inn et nytt uttrekk (rader nye: 3, endrede: 12, utgåtte: 1).',
+    })
+    expect(vurder([kjoring('fest', 2, 'uendret', '2026-09-26T04:15:00Z')]).fest!.melding).toBe('Siste henting fant ingen endringer.')
+
+    // Hver natt: gammel etter to døgn, ikke etter en uke som ClinPGx og CPIC.
+    expect(vurder([kjoring('fest', 1, 'uendret', '2026-09-24T12:00:00Z')]).fest!.tilstand).toBe('ok')
+    expect(vurder([kjoring('fest', 1, 'uendret', '2026-09-24T11:59:00Z')]).fest).toMatchObject({
+      tilstand: 'advarsel',
+      melding: 'Ingen vellykket henting på 2 døgn; FEST hentes hver natt.',
+    })
+
+    const feilet = vurder([
+      kjoring('fest', 2, 'feilet', '2026-09-26T04:15:00Z', { feil: 'Uttrekket ser ufullstendig ut: 0 rader av typen merkevare, mot 8962 i dag.' }),
+      kjoring('fest', 1, 'fullfort', '2026-09-25T04:15:00Z', { versjon: '2026-09-08T03:09:06' }),
+    ]).fest!
+    expect(feilet).toMatchObject({
+      tilstand: 'feil',
+      versjon: '2026-09-08T03:09:06',
+      melding:
+        'Siste henting feilet: Uttrekket ser ufullstendig ut: 0 rader av typen merkevare, mot 8962 i dag. ' +
+        'OUSFAR bruker fortsatt siste gyldige FEST-data; ingenting fra den feilede hentingen er tatt i bruk.',
+    })
+    expect(feilet.sisteVellykkede!.id).toBe(1)
+    expect(feilet.sistVellykketKl).toBe('2026-09-25T04:15:00Z')
+
+    // Er den vellykkede eldre enn kjøringene som følger med, står den i det siste kjente om kilden.
+    const eldre = vurder([kjoring('fest', 20, 'feilet', '2026-09-26T04:15:00Z', { feil: 'x' })], {
+      fest: { release: null, versjon: null, sist_vellykket_kl: '2026-09-10T04:16:00Z' },
+    }).fest!
+    expect(eldre).toMatchObject({ sisteVellykkede: null, sistVellykketKl: '2026-09-10T04:16:00Z' })
+    expect(eldre.melding).toBe('Siste henting feilet: x. ' + KILDEOPPSETT.fest.beholdt)
+    expect(KILDEOPPSETT.fest.visVersjon!('2026-09-08T03:09:06')).toBe('08.09.2026')
+  })
+
+  it('tar med feilene når en ClinPGx-kjøring var delvis', () => {
+    const v = vurder([kjoring('clinpgx', 2, 'delvis', '2026-09-26T02:30:00Z', { feil: 'PA451333: Svaret fra ClinPGx har trolig endret form.' })])
+    expect(v.clinpgx!.melding).toBe(
+      'Siste henting var delvis: det som feilet eller ble utsatt, står med dataene fra før. Feil: PA451333: Svaret fra ClinPGx har trolig endret form.',
+    )
+  })
+
   it('viser siste kjente release fra en vellykket kjøring når den siste ikke fikk den oppgitt', () => {
     const v = vurder([
       kjoring('cpic', 4, 'feilet', '2026-09-26T09:00:00Z', { release: 'v9.9.9' }),
@@ -203,7 +304,7 @@ describe('vurderingen', () => {
     expect(lesDatakildestatus(null)).toEqual(TOM_DATAKILDESTATUS)
     expect(
       lesDatakildestatus({
-        kjoringer: [{ kilde: 'fest', id: 1, status: 'fullfort', startet_kl: 'x' }, { kilde: 'cpic', id: 2, status: 'rar', startet_kl: 'x' }],
+        kjoringer: [{ kilde: 'ukjent', id: 1, status: 'fullfort', startet_kl: 'x' }, { kilde: 'cpic', id: 2, status: 'rar', startet_kl: 'x' }],
         endringer: [{ id: 1, kilde: 'cpic', art: 'endret', type: 'gen', objekt_id: 'CYP2D6', registrert_kl: 'x', felt: ['a', 3] }, 'tull'],
       }),
     ).toEqual({

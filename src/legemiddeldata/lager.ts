@@ -23,7 +23,10 @@ export function kallMot(klient: SupabaseClient): Databasekall {
 export function lagLegemiddellager(kall: Databasekall): Legemiddellager {
   return {
     forrige: async (kilde) => ((await kall('legemiddeldata_forrige_synk', { kilde })) as ForrigeSynk | null) ?? null,
-    start: async (kilde) => Number(await kall('legemiddeldata_start_synk', { kilde })),
+    // Den nattlige jobben kaller uten `utlost_av`, så den virker også mot en
+    // database som ennå ikke har kolonnen.
+    start: async (kilde, utlostAv) =>
+      Number(await kall('legemiddeldata_start_synk', utlostAv === 'manuell' ? { kilde, utlost_av: utlostAv } : { kilde })),
     lastInn: async (synk: number, entitet: Entitetnavn, rader: Innlastingsrad[]) => {
       await kall('legemiddeldata_last_inn', { synk, entitet, rader })
     },

@@ -325,6 +325,46 @@ neste kjemikalie og henter resten neste gang.
   (`forkastet`), og kjemikaliet byttes ikke inn: et svar med ett objekt som
   ikke kan leses, har trolig endret form, og da står dataene fra før. Ukjente
   felt overses. Øk `PARSERVERSJON` når lesingen endres.
+- Et objekt som kan leses, men har en annen form enn ventet, byttes heller
+  ikke inn (`strukturavvik`, se under).
+
+### Strukturkontrollen
+
+At ID-en kan leses, er ikke nok. Lesingen i `modell.ts` gjør et felt som
+mangler, om til et tomt felt, så et felt ClinPGx gir nytt navn eller ny form,
+ville ellers bare blitt stille tomt — f.eks. evidensnivået eller flagget for
+dosering. `src/clinpgx/struktur.ts` kontrollerer derfor rådataene for hvert
+objekt før kjemikaliet byttes inn, og skiller mellom
+
+- **feltet finnes, men er tomt** (tom liste, tom tekst): godtas alltid;
+- **feltet er borte eller har en helt annen type** (en liste som er blitt
+  tekst, gener uten `id` og `symbol`, et objekt uten feltet det ventes å ha,
+  eller `null` i et felt ClinPGx alltid gir en verdi): et avvik. Bare de
+  valgfrie feltene kan være `null`; ingen av feltene var `null` 26.09.2026.
+
+Bare felt OUSFAR leser, kontrolleres, og bare de ClinPGx sender også når de er
+tomme (sett i alle 66 kjemikaliene og 1 179 annotasjonene 26.09.2026):
+
+| Type | Må finnes (kan være tomme, ikke `null`) | Valgfrie (kan mangle eller være `null`), med riktig type |
+| --- | --- | --- |
+| Kjemikalie | `name` | `types`, `linkOuts` (med `resource`, `resourceId`) |
+| Retningslinje | `name`, `source`, `relatedGenes` (med `id`, `symbol`), `relatedChemicals` (med `id`), `literature`, flaggene `dosingInformation`, `alternateDrugAvailable`, `otherPrescribingGuidance`, `pediatric` | `summaryMarkdown` (med `html` eller `markdown`) |
+| Preparatomtale | som retningslinjen, og `prescribingGenes` | `summaryMarkdown`, `testing` (med `term`) |
+| Klinisk annotasjon | `accessionId`, `name`, `levelOfEvidence` (med `term`), `location` (med `displayName` eller `name`, og `genes`), `types`, `allelePhenotypes` (med `allele`, `phenotype`), `relatedChemicals`, `relatedDiseases`, `relatedGuidelines`, `relatedLabels` | `location.rsid`, `score` |
+
+Har ett objekt avvik, feiler kjemikaliet som ved andre feil: det byttes ikke
+inn, dataene fra før står, feilen noteres på kjemikaliet og i kjøringen (f.eks.
+«PA451333: Svaret fra ClinPGx har trolig endret form: den kliniske annotasjonen
+PA…: levelOfEvidence mangler, ventet objekt. Kjemikaliet er ikke byttet inn;
+dataene fra før står.»), og kjøringen blir `delvis`. De andre kjemikaliene
+hentes som vanlig. I «Datakilder» står ClinPGx da som «Se over» med feilene.
+
+Kontrollen er et heuristisk sikkerhetsnett mot sannsynlige brudd, ikke en
+fullstendig validering av API-et. Den fanger ikke at en verdi har fått ny
+betydning med samme navn og type, at ClinPGx slutter å sende objekter (det
+fanger vernet mot færre annotasjoner, delvis), eller endringer i felt OUSFAR
+ikke leser. Et felt som blir valgfritt hos ClinPGx, stanser kjemikaliene som
+mangler det, til kravet endres i `struktur.ts`.
 
 Hver kjøring logges i `clinpgx.synkroniseringer`, og en feilet kjøring gir
 502, så den også synes i Vercel. Hva som er nytt, endret eller borte siden
@@ -367,7 +407,8 @@ i de svakere. Et treff åpner seksjonen og detaljkortet
 ## Begrensninger
 
 - API-et kan endres uten varsel. Lesingen tåler det meste, rådataene lagres,
-  og loggen viser om svarene plutselig ikke kan leses.
+  strukturkontrollen stanser sannsynlige formendringer, og loggen og
+  «Datakilder» viser om svarene plutselig ikke kan leses.
 - Navnesøket i ClinPGx er nøyaktig og på engelsk; norske navn gir ingen treff.
   ID-en virker alltid.
 - Sammendragene er på engelsk, som hos ClinPGx.
