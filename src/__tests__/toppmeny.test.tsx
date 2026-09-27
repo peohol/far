@@ -15,6 +15,8 @@ vi.mock('../auth/okt', () => ({
   useOkt: () => ({ loggUt }),
 }))
 vi.mock('../auth/avatarer', () => ({ useAvatarlenker: () => new Map() }))
+const ideerMedNytt = vi.hoisted(() => ({ antall: 0 }))
+vi.mock('../ideer/api', () => ({ hentIdeerMedNytt: async () => ideerMedNytt.antall }))
 // Dialogene bak valgene har egne tester; her holder det at riktig åpnes.
 vi.mock('../components/konto/Kontopanel', () => ({
   Kontopanel: ({ apen }: { apen: boolean }) => (apen ? <p>Kontopanelet</p> : null),
@@ -252,6 +254,23 @@ describe('kontomenyen', () => {
     expect(meny.hidden).toBe(true)
     expect(meny.hasAttribute('data-lag')).toBe(false)
     expect(document.activeElement).toBe(knapp)
+  })
+
+  it('har en prikk på avataren og på idéene når noen har kommentert noe nytt', async () => {
+    ideerMedNytt.antall = 2
+    try {
+      render(
+        <Ramme>
+          <Kontomeny theme="lyst" onToggleTheme={() => {}} />
+        </Ramme>,
+      )
+      const knapp = await screen.findByRole('button', { name: 'Kontoen din – Anne Admin (nye kommentarer på 2 idéer)' })
+      await userEvent.click(knapp)
+      const ideer = within(panel(knapp)).getByRole('button', { name: /Idéer/ })
+      expect(within(ideer).getByRole('img', { name: 'nye kommentarer på 2 idéer' })).toBeTruthy()
+    } finally {
+      ideerMedNytt.antall = 0
+    }
   })
 
   it('lukkes av et trykk utenfor', async () => {

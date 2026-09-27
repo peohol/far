@@ -36,6 +36,8 @@ describe('idéene i databasen', () => {
 
   interface Traad {
     tittel: string
+    status: string | null
+    sist_sett: string | null
     hjerter: number
     mitt_hjerte: boolean
     kommentarer: { id: string; forelder_id: string | null; forfatter_id: string | null; slettet: boolean; tekst: unknown; hjerter: number }[]
@@ -196,6 +198,57 @@ describe('idéene i databasen', () => {
     expect(rad).not.toHaveProperty('tekst')
     expect((await traad(bo, ide))!.tittel).toBe('Talt')
     expect(await traad(bo, '00000000-0000-0000-0000-000000000001')).toBeNull()
+  })
+
+  it('lar bare en administrator gi status, uten at idéen regnes som endret', async () => {
+    const ide = await nyIde(ada, 'Med status')
+    const status = async () =>
+      (await sql<{ status: string | null; endret_kl: string | null; status_kl: string | null }>(
+        bo,
+        'select status, endret_kl, status_kl from public.ideer where id = $1',
+        [ide],
+      ))[0]!
+    expect(await feilFra(() => sql(ada, `select public.sett_idestatus($1, 'planlagt')`, [ide]))).toMatchObject({ code: '42501' })
+    expect(await feilFra(() => sql(ada, `update public.ideer set status = 'planlagt' where id = $1`, [ide]))).toMatchObject({ code: '42501' })
+
+    await sql(admin, `select public.sett_idestatus($1, 'under_arbeid')`, [ide])
+    expect(await status()).toMatchObject({ status: 'under_arbeid', endret_kl: null, status_kl: expect.anything() })
+    expect((await traad(bo, ide))!.status).toBe('under_arbeid')
+
+    await sql(admin, 'select public.sett_idestatus($1, null)', [ide])
+    expect((await status()).status).toBeNull()
+  })
+
+  it('teller kommentarer fra andre som nye til idéen er åpnet', async () => {
+    const ide = await nyIde(ada, 'Nytt')
+    const nye = async (bruker: string) =>
+      ((await sql<{ ideoversikt: { id: string; nye_kommentarer: number }[] }>(bruker, 'select public.ideoversikt()'))[0]!
+        .ideoversikt.find((i) => i.id === ide)!).nye_kommentarer
+    const medNytt = async (bruker: string) =>
+      (await sql<{ ideer_med_nytt: number }>(bruker, 'select public.ideer_med_nytt()'))[0]!.ideer_med_nytt
+
+    await nyKommentar(ada, ide, null, 'Egen')
+    expect(await nye(ada)).toBe(0)
+    const fra = await medNytt(ada)
+
+    const bos = await nyKommentar(bo, ide, null, 'Fra Bo')
+    expect(await nye(ada)).toBe(1)
+    expect(await medNytt(ada)).toBe(fra + 1)
+    // Svar i tråden teller også.
+    await nyKommentar(bo, ide, bos, 'Svar')
+    expect(await nye(ada)).toBe(2)
+
+    expect((await traad(ada, ide))!.sist_sett).toBeNull()
+    await sql(ada, 'select public.merk_ide_sett($1)', [ide])
+    expect(await nye(ada)).toBe(0)
+    expect(await medNytt(ada)).toBe(fra)
+    expect((await traad(ada, ide))!.sist_sett).toEqual(expect.any(String))
+
+    // Besøkene er private, og settes bare gjennom funksjonen.
+    expect(await sql(bo, 'select * from public.idebesok where bruker_id = $1', [ada])).toEqual([])
+    expect(
+      await feilFra(() => sql(bo, 'insert into public.idebesok (bruker_id, ide_id) values ($1, $2)', [bo, ide])),
+    ).toMatchObject({ code: '42501' })
   })
 
   it('lagrer brukerinnstillinger for brukeren selv, og bare der', async () => {

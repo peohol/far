@@ -12,6 +12,7 @@ import {
   lesSortering,
   type Ide,
   type Idekategori,
+  type Idestatus,
   type Idetraad,
   type Sortering,
 } from './modell'
@@ -30,6 +31,22 @@ export async function hentIdeer(): Promise<Ide[]> {
 
 export async function hentIdetraad(id: string): Promise<Idetraad | null> {
   return lesIdetraad(sjekk(await klient().rpc('idetraad', { ide: id })))
+}
+
+/** Merker at den innloggede har åpnet idéen nå, så kommentarene i den ikke lenger er nye. */
+export async function merkIdeSett(id: string): Promise<void> {
+  sjekk(await klient().rpc('merk_ide_sett', { ide: id }))
+}
+
+/** Hvor mange idéer som har kommentarer den innloggede ikke har sett. */
+export async function hentIdeerMedNytt(): Promise<number> {
+  const antall = sjekk(await klient().rpc('ideer_med_nytt'))
+  return typeof antall === 'number' ? antall : 0
+}
+
+/** Gir idéen status, eller fjerner den. Databasen avviser andre enn administratorer. */
+export async function settIdestatus(id: string, status: Idestatus | null): Promise<void> {
+  sjekk(await klient().rpc('sett_idestatus', { ide: id, status }))
 }
 
 export interface Ideinnhold {

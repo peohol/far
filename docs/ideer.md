@@ -25,6 +25,7 @@ Alt håndheves av radsikkerheten og kolonnerettighetene i databasen:
 - Bare forfatteren endrer en idé eller kommentar.
 - Forfatteren eller en administrator sletter den.
 - Et hjerte kan bare tas tilbake av den som ga det.
+- Bare en administrator gir en idé status, gjennom `sett_idestatus()`.
 
 ## Sletting i tråden
 
@@ -33,6 +34,17 @@ fjernes, og plassen står igjen som «Slettet», så svarene beholder
 sammenhengen. Når det siste svaret under en slik kommentar forsvinner, ryddes
 den bort, og det samme oppover i tråden. Det er utløsere i databasen som gjør
 dette, så appen bare ber om å slette.
+
+## Status og det nye
+
+Statusen (`public.idestatus`) er valgfri og settes av en administrator. Å gi
+status regnes ikke som å endre idéen.
+
+`idebesok` husker når hver bruker sist åpnet hver idé (`merk_ide_sett()`).
+Kommentarer fra andre etter det er nye: `ideoversikt()` teller dem per idé,
+`ideer_med_nytt()` teller idéene til prikken i kontomenyen, og `idetraad()`
+gir tidspunktet, så siden kan merke dem «Ny». Regelen står også i
+`erNyKommentar` i `modell.ts`; endres den ett sted, endres den begge.
 
 ## Sorteringen
 

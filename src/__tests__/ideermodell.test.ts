@@ -8,9 +8,11 @@ import {
   STANDARDSORTERING,
   andrevalg,
   byggTraad,
+  erNyKommentar,
   grupperIdeer,
   kortTid,
   kriterierFor,
+  lesIdeoversikt,
   lesIdetraad,
   lesSortering,
   tekstTilLagring,
@@ -35,7 +37,9 @@ function ide(id: string, forfatter: string, kategori: Ide['kategori'], opprettet
     endret_kl: null,
     hjerter: 0,
     mitt_hjerte: false,
+    status: null,
     kommentarer: 0,
+    nye_kommentarer: 0,
   }
 }
 
@@ -147,8 +151,37 @@ describe('lesingen', () => {
     })
     expect(traad?.tekst).toEqual({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Hei' }] }] })
     expect(traad?.kommentarer[0]).toMatchObject({ id: 'k', slettet: true, forfatter_id: null })
+    expect(traad?.sist_sett).toBeNull()
     expect(lesIdetraad(null)).toBeNull()
     expect(tekstTilLagring({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: '  ' }] }] })).toBeNull()
+  })
+})
+
+describe('status og det nye', () => {
+  it('leser statusen og de nye kommentarene, og godtar ingen ukjent status', () => {
+    const rad = { id: 'x', forfatter_id: 'u-ada', kategori: 'fag', tittel: 'T', opprettet_kl: '2026-09-27T10:00:00Z', kommentarer: 3 }
+    expect(lesIdeoversikt([{ ...rad, status: 'under_arbeid', nye_kommentarer: 2 }])[0]).toMatchObject({ status: 'under_arbeid', nye_kommentarer: 2 })
+    expect(lesIdeoversikt([{ ...rad, status: 'avvist' }])[0]).toMatchObject({ status: null, nye_kommentarer: 0 })
+  })
+
+  it('regner kommentarer fra andre etter forrige besøk som nye', () => {
+    const k = (forfatter: string | null, tid: string, slettet = false): Kommentar => ({
+      id: tid,
+      forelder_id: null,
+      forfatter_id: forfatter,
+      tekst: { type: 'doc', content: [] },
+      slettet,
+      opprettet_kl: `2026-09-27T${tid}:00Z`,
+      endret_kl: null,
+      hjerter: 0,
+      mitt_hjerte: false,
+    })
+    const sett = '2026-09-27T12:00:00Z'
+    expect(erNyKommentar(k('u-bo', '12:30'), sett, 'u-ada')).toBe(true)
+    expect(erNyKommentar(k('u-bo', '11:30'), sett, 'u-ada')).toBe(false)
+    expect(erNyKommentar(k('u-ada', '12:30'), sett, 'u-ada')).toBe(false)
+    expect(erNyKommentar(k(null, '12:30', true), sett, 'u-ada')).toBe(false)
+    expect(erNyKommentar(k('u-bo', '11:30'), null, 'u-ada')).toBe(true)
   })
 })
 

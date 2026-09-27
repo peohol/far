@@ -31,14 +31,14 @@
   gap: var(--rom-4) var(--rom-8);
 }
 
-.idesortering__rad {
+.idevalg {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--rom-2);
 }
 
-.idesortering__navn {
+.idevalg__navn {
   margin-right: var(--rom-2);
   font-size: var(--tekst-meta);
   font-weight: var(--vekt-halvfet);
@@ -47,7 +47,7 @@
   color: var(--blekk-dempet);
 }
 
-.idesortering .sokefilter {
+.idevalg .sokefilter {
   padding: 0 var(--rom-5);
 }
 
@@ -490,7 +490,7 @@
   color: var(--blekk);
 }
 
-.kommentar[data-slettet] .kommentar__navn {
+.kommentar[data-slettet] > .kommentar__hode .kommentar__navn {
   font-style: italic;
   font-weight: var(--vekt-normal);
   color: var(--blekk-dempet);
@@ -607,4 +607,81 @@
     width: var(--hoyde-liten);
     height: var(--hoyde-liten);
   }
+}
+
+/* --- Status og det nye ------------------------------------------------------ */
+
+.ideside__merker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+  margin: 0;
+}
+
+/* Nøytralt merke med en farget prikk, så statusen ikke leses som en
+   kategori eller en klinisk vurdering. */
+.statusmerke {
+  --status: var(--linje-kontroll);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  padding: var(--rom-2) var(--rom-3);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--blekk);
+  border: var(--kant) solid var(--linje-sterk);
+  border-radius: var(--runding-pille);
+}
+
+.statusmerke::before {
+  content: '';
+  width: 0.5em;
+  height: 0.5em;
+  background: var(--status);
+  border-radius: 50%;
+}
+
+.statusmerke[data-status='planlagt'] {
+  --status: var(--merke-design);
+}
+
+.statusmerke[data-status='under_arbeid'] {
+  --status: var(--info);
+}
+
+.statusmerke[data-status='gjennomfort'] {
+  --status: var(--aksent);
+}
+
+.statusmerke[data-status='ikke_aktuelt'] {
+  color: var(--blekk-dempet);
+}
+
+.idekort__meta .statusmerke {
+  margin-left: var(--rom-1);
+}
+
+/* Prikken for det brukeren ikke har sett: på kortet, i kontomenyen og på
+   avataren (plassert i `toppmeny.css`). */
+.nyprikk {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--aksent);
+  border-radius: 50%;
+}
+
+.idekort__tal[data-nytt] {
+  color: var(--aksent);
+}
+
+.kommentar__ny {
+  padding: var(--rom-1) var(--rom-2);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  color: var(--aksent);
+  background: var(--aksent-flate);
+  border-radius: var(--runding-pille);
 }

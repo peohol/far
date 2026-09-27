@@ -320,6 +320,17 @@
   overflow: hidden;
 }
 
+/* Nye kommentarer på idéene: prikken fra `ideer.css`, i hjørnet av avataren. */
+.kontomeny > .kontomeny__prikk {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0.875rem;
+  height: 0.875rem;
+  border: var(--kant-tykk) solid var(--flate-bunn);
+  pointer-events: none;
+}
+
 .kontomeny__panel {
   position: absolute;
   top: calc(100% + var(--rom-5));

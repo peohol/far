@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.49.0',
+    dato: '2026-09-27',
+    sammendrag: 'Idéene kan få status av en administrator, og en prikk viser hvor det er kommet nye kommentarer',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Administratorer kan gi en idé status: Planlagt, Under arbeid, Gjennomført eller Ikke aktuelt. Statusen står på kortet i lista og øverst på idéen.',
+      'Idéer med kommentarer fra andre som du ikke har sett, har en prikk ved antallet kommentarer. Når du åpner idéen, står de nye kommentarene merket «Ny».',
+      'Profilbildet øverst til høyre og «Idéer» i menyen får en prikk når det er kommet nye kommentarer på idéene.',
+    ],
+  },
+  {
     versjon: '1.48.0',
     dato: '2026-09-27',
     sammendrag: 'Nytt vindu for idéer, der alle kan foreslå forbedringer, gi hjerter og diskutere i kommentartråder',
