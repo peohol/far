@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { fullTid, kortTid } from '../../ideer/modell'
 import { Ikon } from '../ikon/Ikon'
 import type { Ikonnavn } from '../ikon/register'
@@ -48,6 +48,38 @@ export function Hjerteknapp({
       <Ikon navn="heart" storrelse="ui" />
       <span aria-hidden="true">{antall}</span>
     </button>
+  )
+}
+
+/**
+ * En rad med piller der én er valgt, med navnet på raden foran: sorteringen
+ * i lista og statusen på en idé.
+ */
+export function Valgrad<T extends string>({
+  navn,
+  valg,
+  valgt,
+  etiketter,
+  onVelg,
+}: {
+  navn: string
+  valg: readonly T[]
+  valgt: T
+  etiketter: Record<T, string>
+  onVelg: (verdi: T) => void
+}) {
+  const id = useId()
+  return (
+    <div className="idevalg" role="group" aria-labelledby={id}>
+      <span id={id} className="idevalg__navn">
+        {navn}
+      </span>
+      {valg.map((v) => (
+        <button key={v} type="button" className="sokefilter" aria-pressed={v === valgt} onClick={() => onVelg(v)}>
+          {etiketter[v]}
+        </button>
+      ))}
+    </div>
   )
 }
 

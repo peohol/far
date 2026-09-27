@@ -3,6 +3,7 @@ import { visningsnavn } from '@delt/profil'
 import { useAvatarlenker } from '../../auth/avatarer'
 import { useOkt, useProfil } from '../../auth/okt'
 import type { Theme } from '../../hooks/useTheme'
+import { hentIdeerMedNytt } from '../../ideer/api'
 import { Endringslogg } from '../Endringslogg'
 import { Ideer } from '../ideer/Ideer'
 import { Ikon } from '../ikon/Ikon'
@@ -14,6 +15,9 @@ import { Brukerliste } from './Brukerliste'
 import { Datakilder } from './Datakilder'
 import { Kontopanel } from './Kontopanel'
 
+/** Hvor ofte appen ser etter nye kommentarer på idéene mens den står åpen. */
+const NYTT_HVER = 5 * 60_000
+
 type Panel = 'konto' | 'brukere' | 'datakilder' | 'logg' | 'ideer' | null
 
 interface Valg {
@@ -22,6 +26,8 @@ interface Valg {
   hint?: string
   /** Står bare i menyen på smale flater, der knappen ellers ikke får plass. */
   smal?: boolean
+  /** Noe nytt venter bak valget, og det får en prikk. */
+  nytt?: string
   velg: () => void
 }
 
@@ -33,7 +39,8 @@ export interface KontomenyProps {
 /**
  * Kontoen, fra avataren helt til høyre i toppmenyen: hvem appen er logget inn
  * som, og veiene til egen profil, brukerlista, datakildene (administratorer),
- * endringsloggen, idéene og utlogging.
+ * endringsloggen, idéene og utlogging. Har idéene kommentarer brukeren ikke
+ * har sett, står det en prikk på avataren og på valget.
  *
  * Menyen er et lag over appen, som sidemenyen: `data-lag` holder appens egne
  * taster i ro mens den står åpen. Escape, et klikk utenfor eller fokus som
@@ -52,8 +59,33 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
   const knapp = useRef<HTMLButtonElement>(null)
   const meny = useRef<HTMLDivElement>(null)
   const menyId = useId()
+  /** Antall idéer med kommentarer brukeren ikke har sett. Sjekkes når appen, fanen og menyen åpnes, etter et panel og jevnlig. */
+  const [ideerMedNytt, setIdeerMedNytt] = useState(0)
+  const sjekkNytt = useCallback(() => {
+    hentIdeerMedNytt().then(setIdeerMedNytt, () => undefined)
+  }, [])
+  useEffect(() => {
+    sjekkNytt()
+    // Også mens appen står åpen: når fanen får fokus igjen, og jevnlig mens den er synlig.
+    const naarSynlig = () => {
+      if (document.visibilityState === 'visible') sjekkNytt()
+    }
+    const jevnlig = window.setInterval(naarSynlig, NYTT_HVER)
+    window.addEventListener('focus', naarSynlig)
+    document.addEventListener('visibilitychange', naarSynlig)
+    return () => {
+      window.clearInterval(jevnlig)
+      window.removeEventListener('focus', naarSynlig)
+      document.removeEventListener('visibilitychange', naarSynlig)
+    }
+  }, [sjekkNytt])
+  const nytt = ideerMedNytt > 0 ? `nye kommentarer på ${ideerMedNytt === 1 ? 'én idé' : `${ideerMedNytt} idéer`}` : undefined
+
   // Fast identitet: `Modallag` kobler den til lukkehendelsen på dialogen.
-  const lukkPanel = useCallback(() => setPanel(null), [])
+  const lukkPanel = useCallback(() => {
+    setPanel(null)
+    sjekkNytt()
+  }, [sjekkNytt])
 
   const lukk = useCallback((tilbake = true) => {
     setApen(false)
@@ -72,7 +104,7 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
     // Driftstatusen for datakildene er bare for administratorer; databasen avviser andre.
     ...(admin ? [{ ikon: 'reset' as const, tekst: 'Datakilder', hint: 'Admin', velg: apnePanel('datakilder') }] : []),
     { ikon: 'history', tekst: 'Endringslogg', hint: `v${VERSJON}`, velg: apnePanel('logg') },
-    { ikon: 'idea', tekst: 'Idéer', velg: apnePanel('ideer') },
+    { ikon: 'idea', tekst: 'Idéer', nytt, velg: apnePanel('ideer') },
     {
       ikon: theme === 'moerkt' ? 'sun' : 'moon',
       tekst: theme === 'moerkt' ? 'Bytt til lyst tema' : 'Bytt til mørkt tema',
@@ -113,14 +145,19 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
       <Ikonknapp
         ref={knapp}
         ikon="user"
-        etikett={`Kontoen din – ${navn}`}
+        etikett={`Kontoen din – ${navn}${nytt ? ` (${nytt})` : ''}`}
         variant="aksent"
         className="kontomeny__knapp"
         innhold={<Avatar profil={profil} lenke={lenke} storrelse="liten" />}
         aria-expanded={apen}
         aria-controls={menyId}
-        onClick={() => (apen ? lukk() : setApen(true))}
+        onClick={() => {
+          if (apen) return lukk()
+          setApen(true)
+          sjekkNytt()
+        }}
       />
+      {nytt && <span className="nyprikk kontomeny__prikk" aria-hidden="true" />}
 
       <div
         ref={meny}
@@ -151,11 +188,14 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
           )}
         </div>
         <ul className="kontomeny__valg">
-          {valg.map(({ ikon, tekst, hint, smal, velg }) => (
+          {valg.map(({ ikon, tekst, hint, smal, nytt, velg }) => (
             <li key={tekst} className={smal ? 'kontomeny__bare-smal' : undefined}>
               <button type="button" className="kontomeny__valgknapp" data-ih="" onClick={velg}>
                 <Ikon navn={ikon} storrelse="ui" />
                 <span className="kontomeny__tekst">{tekst}</span>
+                {nytt && (
+                  <span className="nyprikk" role="img" aria-label={nytt} />
+                )}
                 {hint && <span className="kontomeny__hint">{hint}</span>}
               </button>
             </li>

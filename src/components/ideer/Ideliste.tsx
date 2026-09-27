@@ -9,13 +9,12 @@ import {
   type Ide,
   type Idegruppe,
   type Idekategori,
-  type Kriterium,
   type Sortering,
 } from '../../ideer/modell'
 import { Ikon } from '../ikon/Ikon'
 import { Forfatterbilde, useForfatternavn, useIdekontekst } from './Idekontekst'
-import { Kategorimerke } from './Kategorimerke'
-import { Tidspunkt } from './Smadeler'
+import { Kategorimerke, Statusmerke } from './Merker'
+import { Tidspunkt, Valgrad } from './Smadeler'
 
 /**
  * Lista over idéene: kort under overskrifter, med sorteringen øverst.
@@ -53,50 +52,22 @@ export function Ideliste({
 }
 
 function Sorteringsvalg({ sortering, onEndre }: { sortering: Sortering; onEndre: (s: Sortering) => void }) {
-  const id = useId()
   return (
     <div className="idesortering">
       <Valgrad
-        id={`${id}-forst`}
         navn="Grupper etter"
         valg={GRUPPEKRITERIER}
         valgt={sortering.forst}
-        onVelg={(k) => onEndre(velgForst(sortering, k as (typeof GRUPPEKRITERIER)[number]))}
+        etiketter={KRITERIENAVN}
+        onVelg={(k) => onEndre(velgForst(sortering, k))}
       />
       <Valgrad
-        id={`${id}-deretter`}
         navn="Sorter etter"
         valg={andrevalg(sortering.forst)}
         valgt={sortering.deretter}
+        etiketter={KRITERIENAVN}
         onVelg={(k) => onEndre({ ...sortering, deretter: k })}
       />
-    </div>
-  )
-}
-
-function Valgrad({
-  id,
-  navn,
-  valg,
-  valgt,
-  onVelg,
-}: {
-  id: string
-  navn: string
-  valg: readonly Kriterium[]
-  valgt: Kriterium
-  onVelg: (k: Kriterium) => void
-}) {
-  return (
-    <div className="idesortering__rad" role="group" aria-labelledby={id}>
-      <span id={id} className="idesortering__navn">
-        {navn}
-      </span>
-      {valg.map((k) => (
-        <button key={k} type="button" className="sokefilter" aria-pressed={k === valgt} onClick={() => onVelg(k)}>
-          {KRITERIENAVN[k]}
-        </button>
-      ))}
     </div>
   )
 }
@@ -153,6 +124,7 @@ function Idekort({
   onApne: () => void
 }) {
   const navn = useForfatternavn(ide.forfatter_id)
+  const nye = ide.nye_kommentarer
   return (
     <button type="button" className="idekort" data-ide={ide.id} data-ih="" onClick={onApne}>
       <span className="idekort__tittel">{ide.tittel}</span>
@@ -166,15 +138,21 @@ function Idekort({
         )}
         <Tidspunkt iso={ide.opprettet_kl} />
         {visKategori && <Kategorimerke kategori={ide.kategori} />}
+        {ide.status && <Statusmerke status={ide.status} />}
       </span>
       <span className="idekort__tall">
         <span className="idekort__tal" data-gitt={ide.mitt_hjerte || undefined}>
           <Ikon navn="heart" storrelse="ui" etikett={`${ide.hjerter} ${ide.hjerter === 1 ? 'hjerte' : 'hjerter'}`} />
           <span aria-hidden="true">{ide.hjerter}</span>
         </span>
-        <span className="idekort__tal">
-          <Ikon navn="comment" storrelse="ui" etikett={`${ide.kommentarer} ${ide.kommentarer === 1 ? 'kommentar' : 'kommentarer'}`} />
+        <span className="idekort__tal" data-nytt={nye > 0 || undefined}>
+          <Ikon
+            navn="comment"
+            storrelse="ui"
+            etikett={`${ide.kommentarer} ${ide.kommentarer === 1 ? 'kommentar' : 'kommentarer'}${nye > 0 ? `, ${nye} ${nye === 1 ? 'ny' : 'nye'}` : ''}`}
+          />
           <span aria-hidden="true">{ide.kommentarer}</span>
+          {nye > 0 && <span className="nyprikk" aria-hidden="true" />}
         </span>
       </span>
       <span className="idekort__pil" aria-hidden="true">

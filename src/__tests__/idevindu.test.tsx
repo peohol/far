@@ -35,8 +35,8 @@ const ADMIN = profil('admin', 'Anne', 'Admin', { role: 'admin' })
 const DOK = (tekst: string) => ({ type: 'doc' as const, content: [{ type: 'paragraph', content: [{ type: 'text', text: tekst }] }] })
 
 const IDEER: Ide[] = [
-  { id: 'i1', forfatter_id: 'kari', kategori: 'fag', tittel: 'Flere TDM-kilder', opprettet_kl: '2026-09-26T10:00:00Z', endret_kl: null, hjerter: 2, mitt_hjerte: false, kommentarer: 3 },
-  { id: 'i2', forfatter_id: 'ola', kategori: 'funksjonalitet', tittel: 'Hurtigtast for kopiering', opprettet_kl: '2026-09-27T10:00:00Z', endret_kl: null, hjerter: 0, mitt_hjerte: false, kommentarer: 0 },
+  { id: 'i1', forfatter_id: 'kari', kategori: 'fag', tittel: 'Flere TDM-kilder', opprettet_kl: '2026-09-26T10:00:00Z', endret_kl: null, hjerter: 2, mitt_hjerte: false, status: 'planlagt', kommentarer: 3, nye_kommentarer: 1 },
+  { id: 'i2', forfatter_id: 'ola', kategori: 'funksjonalitet', tittel: 'Hurtigtast for kopiering', opprettet_kl: '2026-09-27T10:00:00Z', endret_kl: null, hjerter: 0, mitt_hjerte: false, status: null, kommentarer: 0, nye_kommentarer: 0 },
 ]
 
 const TRAAD: Idetraad = {
@@ -49,6 +49,10 @@ const TRAAD: Idetraad = {
   endret_kl: null,
   hjerter: 2,
   mitt_hjerte: false,
+  status: 'planlagt',
+  // Kari var sist inne før Olas siste svar.
+  sist_sett: '2026-09-26T12:30:00Z',
+  lest_kl: '2026-09-27T09:00:00Z',
   kommentarer: [
     { id: 'k1', forelder_id: null, forfatter_id: 'ola', tekst: DOK('Enig!'), slettet: false, opprettet_kl: '2026-09-26T11:00:00Z', endret_kl: null, hjerter: 1, mitt_hjerte: false },
     { id: 'k2', forelder_id: 'k1', forfatter_id: 'kari', tekst: DOK('Takk, Ola'), slettet: false, opprettet_kl: '2026-09-26T12:00:00Z', endret_kl: null, hjerter: 0, mitt_hjerte: false },
@@ -68,6 +72,9 @@ const api = vi.hoisted(() => ({
   endreKommentar: vi.fn(async () => {}),
   slettKommentar: vi.fn(async () => {}),
   settHjerte: vi.fn(async () => {}),
+  settIdestatus: vi.fn(async () => {}),
+  merkIdeSett: vi.fn(async () => {}),
+  hentIdeerMedNytt: vi.fn(async () => 0),
 }))
 
 vi.mock('../ideer/api', () => api)
@@ -198,6 +205,41 @@ describe('én idé', () => {
     await bruker.click(screen.getByRole('button', { name: 'Bekreft sletting av idéen' }))
     expect(api.slettIde).toHaveBeenCalledWith('i1')
     expect(await screen.findByRole('region', { name: /^Fag/ })).toBeTruthy()
+  })
+})
+
+describe('status og det nye', () => {
+  it('viser statusen og de nye kommentarene på kortet', async () => {
+    apne()
+    const kort = await screen.findByRole('button', { name: /Flere TDM-kilder/ })
+    expect(within(kort).getByText('Planlagt')).toBeTruthy()
+    expect(within(kort).getByRole('img', { name: '3 kommentarer, 1 ny' })).toBeTruthy()
+  })
+
+  it('merker idéen som sett, og viser hvilke kommentarer som var nye', async () => {
+    const bruker = userEvent.setup()
+    apne()
+    await bruker.click(await screen.findByRole('button', { name: /Flere TDM-kilder/ }))
+    await screen.findByRole('heading', { name: 'Flere TDM-kilder', level: 3 })
+    await waitFor(() => expect(api.merkIdeSett).toHaveBeenCalledWith(expect.objectContaining({ id: 'i1', lest_kl: '2026-09-27T09:00:00Z' })))
+    // Bare Olas svar etter forrige besøk er nytt; Karis egne er aldri det.
+    expect(screen.getAllByText('Ny')).toHaveLength(1)
+    // Ingen andre enn administratorer ser statusvalgene.
+    expect(screen.queryByRole('group', { name: 'Status' })).toBeNull()
+  })
+
+  it('lar en administrator gi idéen status', async () => {
+    const bruker = userEvent.setup()
+    tilstand.meg = ADMIN
+    apne()
+    await bruker.click(await screen.findByRole('button', { name: /Flere TDM-kilder/ }))
+    const status = await screen.findByRole('group', { name: 'Status' })
+    expect(within(status).getByRole('button', { name: 'Planlagt' }).getAttribute('aria-pressed')).toBe('true')
+    await bruker.click(within(status).getByRole('button', { name: 'Gjennomført' }))
+    expect(api.settIdestatus).toHaveBeenCalledWith('i1', 'gjennomfort')
+    expect(within(status).getByRole('button', { name: 'Gjennomført' }).getAttribute('aria-pressed')).toBe('true')
+    await bruker.click(within(status).getByRole('button', { name: 'Ingen' }))
+    expect(api.settIdestatus).toHaveBeenLastCalledWith('i1', null)
   })
 })
 

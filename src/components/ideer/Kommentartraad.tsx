@@ -1,7 +1,7 @@
 import { useId, useMemo, useRef, useState } from 'react'
 import { tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { endreKommentar, opprettKommentar, slettKommentar } from '../../ideer/api'
-import { byggTraad, tekstTilLagring, type Idetraad, type Kommentar, type Kommentarnode } from '../../ideer/modell'
+import { byggTraad, erNyKommentar, tekstTilLagring, type Idetraad, type Kommentar, type Kommentarnode } from '../../ideer/modell'
 import { useSkjuling } from '../../hooks/useSkjuling'
 import { Riktekst } from '../analyttside/Riktekst'
 import { Rikteksteditor } from '../analyttside/Rikteksteditor'
@@ -18,14 +18,19 @@ import { Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from './Smadeler'
  */
 export function Kommentartraad({
   traad,
+  sistSett,
   onEndret,
   onHjerte,
 }: {
   traad: Idetraad
+  /** Når idéen sist var åpnet før nå; kommentarer fra andre etter det er nye. */
+  sistSett: string | null
   /** Tråden er endret, og hentes på nytt. */
-  onEndret: () => Promise<void>
+  onEndret: () => Promise<unknown>
   onHjerte: (kommentar: Kommentar) => void
 }) {
+  const { meg } = useIdekontekst()
+  const erNy = (kommentar: Kommentar) => erNyKommentar(kommentar, sistSett, meg.id)
   const noder = useMemo(() => byggTraad(traad.kommentarer), [traad.kommentarer])
   const antall = traad.kommentarer.filter((k) => !k.slettet).length
   const id = useId()
@@ -39,7 +44,7 @@ export function Kommentartraad({
       {noder.length > 0 && (
         <ol className="kommentarer">
           {noder.map((node) => (
-            <Kommentarvisning key={node.kommentar.id} node={node} ide={traad.id} onEndret={onEndret} onHjerte={onHjerte} />
+            <Kommentarvisning key={node.kommentar.id} node={node} ide={traad.id} erNy={erNy} onEndret={onEndret} onHjerte={onHjerte} />
           ))}
         </ol>
       )}
@@ -50,12 +55,14 @@ export function Kommentartraad({
 function Kommentarvisning({
   node,
   ide,
+  erNy,
   onEndret,
   onHjerte,
 }: {
   node: Kommentarnode
   ide: string
-  onEndret: () => Promise<void>
+  erNy: (kommentar: Kommentar) => boolean
+  onEndret: () => Promise<unknown>
   onHjerte: (kommentar: Kommentar) => void
 }) {
   const { kommentar, svar, antallSvar } = node
@@ -93,6 +100,7 @@ function Kommentarvisning({
             <Tidspunkt iso={kommentar.opprettet_kl} endret={kommentar.endret_kl} />
           </span>
         )}
+        {erNy(kommentar) && <span className="kommentar__ny">Ny</span>}
         {skjulteSvar && (
           <span className="kommentar__skjult">{antallSvar} svar</span>
         )}
@@ -158,7 +166,7 @@ function Kommentarvisning({
           {svar.length > 0 && (
             <ol className="kommentarer">
               {svar.map((barn) => (
-                <Kommentarvisning key={barn.kommentar.id} node={barn} ide={ide} onEndret={onEndret} onHjerte={onHjerte} />
+                <Kommentarvisning key={barn.kommentar.id} node={barn} ide={ide} erNy={erNy} onEndret={onEndret} onHjerte={onHjerte} />
               ))}
             </ol>
           )}
@@ -184,7 +192,7 @@ function Kommentarskriver({
   forelder: string | null
   /** Kommentaren som endres. Uten: en ny. */
   kommentar?: Kommentar
-  onSendt: () => Promise<void>
+  onSendt: () => Promise<unknown>
   /** Uten: feltet legger seg sammen igjen i stedet for å forsvinne. */
   onAvbryt?: () => void
 }) {

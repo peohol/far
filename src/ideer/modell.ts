@@ -23,6 +23,23 @@ export function erKategori(verdi: unknown): verdi is Idekategori {
   return typeof verdi === 'string' && (KATEGORIER as readonly string[]).includes(verdi)
 }
 
+/* --- Statusen ------------------------------------------------------------- */
+
+/** Statusene en administrator kan gi en idé, i rekkefølge. Samme verdier som `public.idestatus`. */
+export const STATUSER = ['planlagt', 'under_arbeid', 'gjennomfort', 'ikke_aktuelt'] as const
+export type Idestatus = (typeof STATUSER)[number]
+
+export const STATUSNAVN: Record<Idestatus, string> = {
+  planlagt: 'Planlagt',
+  under_arbeid: 'Under arbeid',
+  gjennomfort: 'Gjennomført',
+  ikke_aktuelt: 'Ikke aktuelt',
+}
+
+export function erStatus(verdi: unknown): verdi is Idestatus {
+  return typeof verdi === 'string' && (STATUSER as readonly string[]).includes(verdi)
+}
+
 /** Lengste overskrift. Samme grense som databasen setter. */
 export const TITTEL_MEST = 140
 
@@ -43,7 +60,11 @@ export interface Ide extends Felles {
   forfatter_id: string
   kategori: Idekategori
   tittel: string
+  /** Satt av en administrator, eller `null`. */
+  status: Idestatus | null
   kommentarer: number
+  /** Kommentarer fra andre siden den innloggede sist åpnet idéen. */
+  nye_kommentarer: number
 }
 
 export interface Kommentar extends Felles {
@@ -54,10 +75,24 @@ export interface Kommentar extends Felles {
 }
 
 /** Én idé med beskrivelsen og hele kommentartråden. */
-export interface Idetraad extends Omit<Ide, 'kommentarer'> {
+export interface Idetraad extends Omit<Ide, 'kommentarer' | 'nye_kommentarer'> {
   /** Renset for visning, eller `null` uten beskrivelse. */
   tekst: Riktekstdokument | null
   kommentarer: Kommentar[]
+  /** Når den innloggede sist åpnet idéen, eller `null` om aldri. */
+  sist_sett: string | null
+  /** Når databasen leste tråden. Det er dette som merkes som sett. */
+  lest_kl: string | null
+}
+
+/**
+ * Om kommentaren er ny for den innloggede: skrevet av noen andre etter at
+ * idéen sist ble åpnet, eller når den aldri er åpnet. Samme regel som
+ * `ideoversikt()` teller etter.
+ */
+export function erNyKommentar(kommentar: Kommentar, sistSett: string | null, meg: string): boolean {
+  if (kommentar.slettet || kommentar.forfatter_id === meg) return false
+  return sistSett === null || Date.parse(kommentar.opprettet_kl) > Date.parse(sistSett)
 }
 
 /**
@@ -105,7 +140,15 @@ function lesIde(rad: unknown): Ide | null {
   if (!erObjekt(rad) || !erKategori(rad.kategori)) return null
   const felles = lesFelles(rad)
   if (!felles.id || !felles.forfatter_id) return null
-  return { ...felles, forfatter_id: felles.forfatter_id, kategori: rad.kategori, tittel: tekst(rad.tittel), kommentarer: tall(rad.kommentarer) }
+  return {
+    ...felles,
+    forfatter_id: felles.forfatter_id,
+    kategori: rad.kategori,
+    tittel: tekst(rad.tittel),
+    status: erStatus(rad.status) ? rad.status : null,
+    kommentarer: tall(rad.kommentarer),
+    nye_kommentarer: tall(rad.nye_kommentarer),
+  }
 }
 
 /** Idélista fra `ideoversikt()`. Rader som ikke har formen, utelates. */
@@ -133,8 +176,14 @@ export function lesIdetraad(data: unknown): Idetraad | null {
         ]
       })
     : []
-  const { kommentarer: _antall, ...resten } = ide
-  return { ...resten, tekst: data.tekst == null ? null : rensIdetekst(data.tekst), kommentarer }
+  const { kommentarer: _antall, nye_kommentarer: _nye, ...resten } = ide
+  return {
+    ...resten,
+    tekst: data.tekst == null ? null : rensIdetekst(data.tekst),
+    kommentarer,
+    sist_sett: tekstEllerNull(data.sist_sett),
+    lest_kl: tekstEllerNull(data.lest_kl),
+  }
 }
 
 /* --- Sorteringen ------------------------------------------------------------- */
