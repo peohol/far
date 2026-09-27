@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.46.0',
+    dato: '2026-09-27',
+    sammendrag: 'THC-siden har fått Sativex: indikasjonen fra Felleskatalogen og preparatene fra FEST',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Siden for THC har fått indikasjonen for Sativex (THC og cannabidiol munnspray) fra Felleskatalogen: spastisitet ved multippel sklerose hos voksne.',
+      'Under «Preparater» vises nå preparatene med THC fra FEST: Sativex, Marinol og cannabispreparatene på godkjenningsfritak, med pakninger, interaksjoner og det andre FEST har. FEST kaller THC dronabinol. Preparater med bare cannabidiol vises ikke.',
+    ],
+  },
+  {
     versjon: '1.45.0',
     dato: '2026-09-27',
     sammendrag: 'Sidemenyen er nå «Stoffregister», ordnet etter legemiddelgruppe, og det er nye sider for GHB og ketamin',

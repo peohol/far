@@ -1,7 +1,8 @@
 /**
  * Koblingene mellom stoffsider og virkestoffene i FEST
  * (`src/faginnhold/festkoblinger.ts`): at hver stoffside uten analyttkode har
- * én, at amfetaminsiden har deksamfetamin og lisdeksamfetamin, og at
+ * én, at amfetaminsiden har deksamfetamin og lisdeksamfetamin, at THC-siden
+ * har dronabinol, og at
  * migrasjonene legger dem inn som kortet redigeringen lager, hopper over det
  * de ikke kan koble, og ikke gjør noe når de kjøres igjen. FEST-radene er
  * syntetiske, med ID-ene og navnene fra FEST.
@@ -16,6 +17,7 @@ import {
   FESTKOBLINGSKILDE,
   festkoblingSql,
   STOFFSIDE_FESTKOBLINGER,
+  THC_FESTKOBLINGER,
 } from '../faginnhold/festkoblinger'
 import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import { ELEMENTTYPER, lesLegemiddelkobling } from '../faginnhold/paneler'
@@ -78,6 +80,10 @@ describe('koblingene', () => {
     ])
   })
 
+  it('kobler THC-siden til dronabinol, som er THC i FEST, og ikke til cannabidiol', () => {
+    expect(THC_FESTKOBLINGER.map((k) => [k.side, k.fest_id])).toEqual([['THC', 'ID_83377FF5-A0F5-4CB1-9BF3-0606A68958D7']])
+  })
+
   it('kobler aldri samme side til samme virkestoff to ganger', () => {
     const alle = FESTKOBLINGSIMPORTER.flatMap((i) => i.koblinger.map((k) => `${k.side}|${k.fest_id}`))
     expect(new Set(alle).size).toBe(alle.length)
@@ -116,6 +122,7 @@ describe('migrasjonen i databasen', () => {
     const virkestoff = [
       ...STOFFSIDE_FESTKOBLINGER.filter((k) => k.side !== MANGLER).map((k) => [k.fest_id, FESTNAVN[k.side], k.side === UTGATT] as const),
       ...AMFETAMIN_FESTKOBLINGER.map((k, i) => [k.fest_id, AMFETAMINNAVN[i], false] as const),
+      ...THC_FESTKOBLINGER.map((k) => [k.fest_id, 'Dronabinol', false] as const),
     ]
     for (const [fest_id, navn, utgatt] of virkestoff) {
       await db.query(
@@ -152,6 +159,17 @@ describe('migrasjonen i databasen', () => {
     })
     const side = await leser.lesStoffside('Amfetamin', 'publisert')
     expect(side.elementer.some((e) => e.innhold.panel === 'tdm')).toBe(true)
+  })
+
+  it('kobler THC-siden, som indikasjonsimporten lager, til dronabinol', async () => {
+    const [kobling, ...flere] = await koblingen('THC')
+    expect(flere).toEqual([])
+    expect(kobling!.innhold.panel).toBe(PREPARATPANEL)
+    expect(lesLegemiddelkobling(kobling!.innhold.data)).toEqual({
+      virkestoff: [{ fest_id: THC_FESTKOBLINGER[0]!.fest_id, navn: 'Dronabinol' }],
+    })
+    const side = await leser.lesAnalyttside('THC', 'publisert')
+    expect(side.elementer.map((e) => e.innhold.panel).sort()).toEqual(['indikasjon', PREPARATPANEL].sort())
   })
 
   it('hopper over et virkestoff som mangler eller er utgått i FEST', async () => {

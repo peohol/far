@@ -1,0 +1,28 @@
+{
+  "kode": "THC",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "THC (delta-9-tetrahydrocannabinol, i FEST kalt dronabinol) finnes som godkjent legemiddel i Sativex munnspray, sammen med cannabidiol (CBD): 2,7 mg THC og 2,5 mg CBD per dose.",
+      "Sativex: behandling for symptomforbedring hos voksne med moderat til alvorlig spastisitet grunnet multippel sklerose (MS) som ikke har respondert tilstrekkelig på andre antispastiske midler, og som viser klinisk signifikant forbedring av spastisitetsrelaterte symptomer under en initial prøvebehandling."
+    ],
+    "referanser": [
+      "fk-sativex-cnx",
+      "fk-sativex-2care4"
+    ]
+  },
+  "referanser": {
+    "fk-sativex-cnx": {
+      "tittel": "Sativex «CNX Therapeutics»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/sativex-cnx-therapeutics-578991"
+    },
+    "fk-sativex-2care4": {
+      "tittel": "Sativex «2care4»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/sativex-2care4-596276"
+    }
+  }
+}

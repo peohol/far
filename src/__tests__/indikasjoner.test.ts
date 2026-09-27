@@ -1,13 +1,14 @@
 /**
  * Indikasjonene hentet fra Felleskatalogen (`supabase/import/indikasjoner/`),
- * for stoffsidene uten analyttkode og for amfetaminsiden: datasettet, og
+ * for stoffsidene uten analyttkode, amfetaminsiden og de nye sidene for GHB,
+ * ketamin og THC: datasettet, og
  * migrasjonene kjørt på sidene som finnes, lest slik appen leser dem.
  */
 import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { filnokkel, importmigrasjoner } from '../faginnhold/import'
-import { INDIKASJONSDATASETT, INDIKASJONSIMPORTER, indikasjonskilde, indikasjonsplan, NYE_STOFFSIDER } from '../faginnhold/indikasjoner'
+import { INDIKASJONSDATASETT, INDIKASJONSIMPORTER, indikasjonskilde, indikasjonsplan, NYE_ANALYTTSIDER, NYE_STOFFSIDER } from '../faginnhold/indikasjoner'
 import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import { ELEMENTTYPER, lesRiktekst } from '../faginnhold/paneler'
 import { klartekst } from '../faginnhold/riktekst'
@@ -20,6 +21,7 @@ const omgang = (migrasjon: string) => INDIKASJONSIMPORTER.find((i) => i.migrasjo
 const plan = indikasjonsplan(omgang('stoffsider_indikasjoner'))
 const amfetamin = indikasjonsplan(omgang('amfetamin_indikasjoner'))
 const nye = indikasjonsplan(omgang('ghb_ketamin_indikasjoner'))
+const thc = indikasjonsplan(omgang('thc_indikasjoner'))
 const PLANER = INDIKASJONSIMPORTER.map((i) => ({ migrasjon: i.migrasjon, plan: indikasjonsplan(i), kilde: fkkilde(i.hentet) }))
 const migrasjonene = (migrasjon: string) => migrasjonsfiler().filter((f) => new RegExp(`_${migrasjon}_\\d+\\.sql$`).test(f))
 const MIGRASJONER = PLANER.flatMap((p) => migrasjonene(p.migrasjon))
@@ -29,6 +31,9 @@ const MIGRASJONSMAPPE = new URL('../../supabase/migrations/', import.meta.url)
 const FK_KILDE = fkkilde('2026-09-25')
 /** Stoffene Felleskatalogen ikke har noen preparatomtale for. */
 const UTEN_OMTALE = ['Flunitrazepam', 'Ketobemidon']
+
+/** Sidene importen lager, fordi de ikke fantes fra før. */
+const NYE_SIDER = [...NYE_STOFFSIDER, ...thc.koder.map((k) => k.hovedside.navn)]
 
 const tekst = (navn: string, p = plan) =>
   klartekst(lesRiktekst(p.koder.find((k) => k.hovedside.navn === navn)!.elementer[0]!.data).dokument)
@@ -124,6 +129,20 @@ describe('datasettet', () => {
     ])
   })
 
+  it('lager THC-siden med koden THC og indikasjonen for Sativex', () => {
+    expect(NYE_ANALYTTSIDER).toEqual(['THC'])
+    const [k, ...flere] = thc.koder
+    expect(flere).toEqual([])
+    expect([k!.kode, k!.hovedside.navn]).toEqual(['THC', 'THC'])
+    expect(k!.elementer.map((e) => [e.panel, e.elementtype, e.kilde])).toEqual([['indikasjon', ELEMENTTYPER.riktekst, fkkilde('2026-09-27')]])
+    const t = tekst('THC', thc)
+    expect(t).toContain('i FEST kalt dronabinol')
+    expect(t).toContain('2,7 mg THC og 2,5 mg CBD per dose')
+    expect(t).toContain('moderat til alvorlig spastisitet grunnet multippel sklerose (MS)')
+    expect(t).toContain('under en initial prøvebehandling')
+    expect(k!.elementer[0]!.referanser).toEqual(['fk-sativex-cnx', 'fk-sativex-2care4'])
+  })
+
   it('er de samme migrasjonene som datasettet gir', () => {
     for (const p of PLANER) {
       const filer = importmigrasjoner(p.plan, 'peohol', 55_000, 'utvid')
@@ -170,13 +189,13 @@ describe('migrasjonene i databasen', () => {
         expect(indikasjon!.kilde, navn).toBe(kilde)
         const titler = (indikasjon!.innhold.referanser ?? []).map((id) => side.referanser.find((r) => r.id === id)!.innhold.tittel)
         expect(titler, navn).toEqual(k.elementer[0]!.referanser.map((n) => p.referanser.find((r) => r.nokkel === n)!.innhold.tittel))
-        // GHB og ketamin får siden sin av importen; de andre fantes med kort fra før.
-        if (NYE_STOFFSIDER.includes(navn)) expect(elementerFor.get(navn), navn).toBe(0)
+        // GHB, ketamin og THC får siden sin av importen; de andre fantes med kort fra før.
+        if (NYE_SIDER.includes(navn)) expect(elementerFor.get(navn), navn).toBe(0)
         else expect(elementerFor.get(navn), navn).toBeGreaterThan(0)
         expect(side.elementer.length, navn).toBe(elementerFor.get(navn)! + 1)
       }
     }
-    expect(await utkast()).toBe(sider + NYE_STOFFSIDER.length)
+    expect(await utkast()).toBe(sider + NYE_SIDER.length)
   })
 
   it('gjør ingenting når de kjøres en gang til', async () => {

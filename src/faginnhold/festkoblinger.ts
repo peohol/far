@@ -86,11 +86,24 @@ export const GHB_KETAMIN_FESTKOBLINGER: readonly Festkobling[] = [
   { side: 'Ketamin', fest_id: 'ID_6C27065E-76FB-4EEA-B045-DE70AB6D7A06', merknad: 'Esketamin (Ketanest, Spravato).' },
 ]
 
+/**
+ * THC-siden. FEST kaller THC (delta-9-tetrahydrocannabinol) dronabinol.
+ * Cannabidiol kobles ikke: da ville siden også vist preparater med bare CBD.
+ */
+export const THC_FESTKOBLINGER: readonly Festkobling[] = [
+  {
+    side: 'THC',
+    fest_id: 'ID_83377FF5-A0F5-4CB1-9BF3-0606A68958D7',
+    merknad: 'Dronabinol, i Sativex (sammen med cannabidiol), Marinol og cannabispreparatene på godkjenningsfritak.',
+  },
+]
+
 /** Hver import av koblinger, i rekkefølge, med navnet migrasjonen fikk. */
 export const FESTKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: readonly Festkobling[] }[] = [
   { migrasjon: 'stoffsider_fest_kobling', koblinger: STOFFSIDE_FESTKOBLINGER },
   { migrasjon: 'amfetamin_fest_kobling', koblinger: AMFETAMIN_FESTKOBLINGER },
   { migrasjon: 'ghb_ketamin_fest_kobling', koblinger: GHB_KETAMIN_FESTKOBLINGER },
+  { migrasjon: 'thc_fest_kobling', koblinger: THC_FESTKOBLINGER },
 ]
 
 /** Kilden revisjonene får i historikken. */

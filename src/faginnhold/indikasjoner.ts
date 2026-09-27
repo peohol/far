@@ -28,6 +28,14 @@ import { STOFFSIDE_DATASETT } from './stoffsider'
  */
 export const NYE_STOFFSIDER: readonly string[] = ['GHB', 'Ketamin']
 
+/**
+ * Analyttkodene indikasjonsimporten lager siden for, fordi koden ikke hadde
+ * noen: THC, der indikasjonen er Sativex (THC og cannabidiol), og preparatene
+ * kobles etterpå (`festkoblinger.ts`). Siden får navnet og koden fra
+ * analyttkatalogen.
+ */
+export const NYE_ANALYTTSIDER: readonly string[] = ['THC']
+
 export const INDIKASJONSDATASETT = datasett(
   import.meta.glob<Record<string, unknown>>('../../supabase/import/indikasjoner/*.json', { eager: true, import: 'default' }),
 )
@@ -43,6 +51,7 @@ export const INDIKASJONSIMPORTER: readonly Indikasjonsimport[] = [
   { migrasjon: 'stoffsider_indikasjoner', hentet: '2026-09-25', filer: STOFFSIDE_DATASETT.filer.map(filnokkel) },
   { migrasjon: 'amfetamin_indikasjoner', hentet: '2026-09-25', filer: ['AMF1'] },
   { migrasjon: 'ghb_ketamin_indikasjoner', hentet: '2026-09-27', filer: NYE_STOFFSIDER },
+  { migrasjon: 'thc_indikasjoner', hentet: '2026-09-27', filer: NYE_ANALYTTSIDER },
 ]
 
 export function indikasjonskilde(omgang: Indikasjonsimport): Importkilde {

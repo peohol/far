@@ -134,6 +134,13 @@ export const UKOBLEDE_STOFFSIDER: readonly UkobletSide[] = [
     grunn:
       'Aktiv metabolitt av tramadol. ClinPGx har metabolitten som eget kjemikalie med kliniske annotasjoner; om siden skal vise dem, tramadols data eller begge, er en faglig vurdering.',
   },
+  {
+    side: 'THC',
+    status: 'krever_kuratering',
+    kandidater: [{ clinpgx_id: 'PA449421', navn: 'dronabinol' }],
+    grunn:
+      'Siden ble laget 27. september 2026 for å vise Sativex fra FEST. ClinPGx har THC som dronabinol (kontrollert samme dag); koblingen er ikke lagt inn ennå.',
+  },
 ]
 
 /** Hver publiserte stoffside med status, sortert etter navnet. */
