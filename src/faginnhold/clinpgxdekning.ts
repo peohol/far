@@ -141,6 +141,13 @@ export const UKOBLEDE_STOFFSIDER: readonly UkobletSide[] = [
     grunn:
       'Siden ble laget 27. september 2026 for å vise Sativex fra FEST. ClinPGx har THC som dronabinol (kontrollert samme dag); koblingen er ikke lagt inn ennå.',
   },
+  {
+    side: 'Cannabidiol',
+    status: 'krever_kuratering',
+    kandidater: [{ clinpgx_id: 'PA166175791', navn: 'cannabidiol' }],
+    grunn:
+      'Siden ble laget 27. september 2026 for å vise Epidyolex fra FEST. ClinPGx har cannabidiol (kontrollert samme dag); koblingen er ikke lagt inn ennå.',
+  },
 ]
 
 /** Hver publiserte stoffside med status, sortert etter navnet. */

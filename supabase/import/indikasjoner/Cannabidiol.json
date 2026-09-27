@@ -1,0 +1,27 @@
+{
+  "side": "Cannabidiol",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Cannabidiol (CBD) er godkjent som legemiddel alene i Epidyolex mikstur (100 mg/ml), og sammen med THC i Sativex munnspray (se THC).",
+      "Epidyolex, hos pasienter ≥2 år:",
+      {
+        "punkter": [
+          "Tilleggsbehandling, sammen med klobazam, mot anfall forbundet med Lennox-Gastaut syndrom (LGS) eller Dravet syndrom (DS).",
+          "Tilleggsbehandling mot anfall forbundet med tuberøs sklerose-kompleks (TSC)."
+        ]
+      }
+    ],
+    "referanser": [
+      "fk-epidyolex"
+    ]
+  },
+  "referanser": {
+    "fk-epidyolex": {
+      "tittel": "Epidyolex «Jazz Pharmaceuticals»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/epidyolex-jazz-pharmaceuticals-688420"
+    }
+  }
+}

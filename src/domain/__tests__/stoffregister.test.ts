@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { filnokkel } from '../../faginnhold/import'
-import { NYE_STOFFSIDER } from '../../faginnhold/indikasjoner'
+import { CBD_STOFFSIDER, NYE_STOFFSIDER } from '../../faginnhold/indikasjoner'
 import { STOFFSIDE_DATASETT } from '../../faginnhold/stoffsider'
 import { byggKatalog, FORTOLKNINGSOPPFORINGER } from '../analyttkatalog'
 import { ANDRE_STOFFER, byggStoffregister, STOFFREGISTER, type Registerkategori } from '../stoffregister'
@@ -14,10 +14,10 @@ import { ANDRE_STOFFER, byggStoffregister, STOFFREGISTER, type Registerkategori 
 
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
 /** Stoffsidene uten kode som importene lager. */
-const STOFFSIDER = [...STOFFSIDE_DATASETT.filer.map(filnokkel), ...NYE_STOFFSIDER]
+const STOFFSIDER = [...STOFFSIDE_DATASETT.filer.map(filnokkel), ...NYE_STOFFSIDER, ...CBD_STOFFSIDER]
 const register = byggStoffregister(katalog, STOFFSIDER)
-/** Stoffsidene før GHB- og ketaminsidene er laget. */
-const STOFFSIDER_UTEN_NYE = STOFFSIDER.filter((s) => !NYE_STOFFSIDER.includes(s))
+/** Stoffsidene før GHB-, ketamin- og cannabidiolsidene er laget. */
+const STOFFSIDER_UTEN_NYE = STOFFSIDER.filter((s) => ![...NYE_STOFFSIDER, ...CBD_STOFFSIDER].includes(s))
 
 function kategori(navn: string, r: Registerkategori[] = register): Registerkategori {
   const funnet = r.find((k) => k.navn === navn)
@@ -157,6 +157,8 @@ describe('sider som mangler eller ikke er plassert', () => {
     const utenNye = byggStoffregister(katalog, STOFFSIDER_UTEN_NYE)
     expect(utenNye.map((k) => k.navn)).not.toContain('Hallusinogene stoffer')
     expect(navnI(kategori('Alkohol og GHB', utenNye))).toEqual(['EtG', 'EtS'])
+    expect(navnI(kategori('Cannabinoider', utenNye))).not.toContain('Cannabidiol')
+    expect(navnI(kategori('Cannabinoider'))).toContain('Cannabidiol')
     expect(kategori('Antidepressiver', utenNye).underkategorier.map((u) => u.navn)).not.toContain('NMDA-reseptorantagonister')
   })
 

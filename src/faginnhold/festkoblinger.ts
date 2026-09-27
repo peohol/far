@@ -98,12 +98,21 @@ export const THC_FESTKOBLINGER: readonly Festkobling[] = [
   },
 ]
 
+/**
+ * Cannabidiolsiden (CBD). Viser Epidyolex, Sativex (sammen med THC) og
+ * cannabispreparatene på godkjenningsfritak som inneholder CBD.
+ */
+export const CBD_FESTKOBLINGER: readonly Festkobling[] = [
+  { side: 'Cannabidiol', fest_id: 'ID_FFF3536F-BE29-4191-A09A-ABC119C37984' },
+]
+
 /** Hver import av koblinger, i rekkefølge, med navnet migrasjonen fikk. */
 export const FESTKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: readonly Festkobling[] }[] = [
   { migrasjon: 'stoffsider_fest_kobling', koblinger: STOFFSIDE_FESTKOBLINGER },
   { migrasjon: 'amfetamin_fest_kobling', koblinger: AMFETAMIN_FESTKOBLINGER },
   { migrasjon: 'ghb_ketamin_fest_kobling', koblinger: GHB_KETAMIN_FESTKOBLINGER },
   { migrasjon: 'thc_fest_kobling', koblinger: THC_FESTKOBLINGER },
+  { migrasjon: 'cbd_fest_kobling', koblinger: CBD_FESTKOBLINGER },
 ]
 
 /** Kilden revisjonene får i historikken. */

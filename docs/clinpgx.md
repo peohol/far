@@ -206,11 +206,11 @@ WHOs ATC-register, RxNorm, PubChem og ChEBI 26. september 2026.
 | Status | Sider |
 | --- | --- |
 | Koblet til ClinPGx og verifisert | 68 |
-| Relevant objekt finnes i ClinPGx, men krever kuratert kobling | 1 |
+| Relevant objekt finnes i ClinPGx, men krever kuratert kobling | 2 |
 | ClinPGx har ikke relevant objekt | 0 |
 | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | 9 |
 | Uavklart, krever faglig vurdering | 0 |
-| Til sammen | 78 |
+| Til sammen | 79 |
 
 Koblet:
 
@@ -291,6 +291,7 @@ Ikke koblet:
 
 | Stoffside | Status | ClinPGx | Grunn |
 | --- | --- | --- | --- |
+| Cannabidiol | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | Kandidater: cannabidiol (PA166175791) | Siden ble laget 27. september 2026 for å vise Epidyolex fra FEST. ClinPGx har cannabidiol (kontrollert samme dag); koblingen er ikke lagt inn ennå. |
 | Dehydroaripiprazol | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: aripiprazole (PA10026), side: Aripiprazol. Metabolitten selv: dehydroaripiprazole (PA166170895) | Aktiv metabolitt av aripiprazol. ClinPGx har metabolitten som eget kjemikalie, uten annotasjoner. |
 | Desmetyldoksepin | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: doxepin (PA449409), side: Doksepin. Metabolitten selv: desmethyldoxepin (PA166131337) | Aktiv metabolitt av doksepin. ClinPGx har metabolitten som eget kjemikalie, uten annotasjoner. |
 | Desmetylkariprazin | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: cariprazine (PA166177476), side: Kariprazin. Metabolitten selv: desmethyl cariprazine (PA166356841) | Aktiv metabolitt av kariprazin. ClinPGx har metabolitten som eget kjemikalie, uten annotasjoner. |
