@@ -101,6 +101,10 @@ describe('idéene i databasen', () => {
       [svar, false, bo, DOK('Svar'), 0],
       [svarPaaSvar, false, ada, DOK('Svar på svar'), 0],
     ])
+    // Heller ikke raden selv røper hvem som skrev den.
+    expect(await sql(bo, 'select forfatter_id, tekst from public.idekommentarer where id = $1', [topp])).toEqual([
+      { forfatter_id: null, tekst: null },
+    ])
 
     // Det svares ikke på en slettet kommentar, og den kan ikke endres eller få hjerter.
     expect(await feilFra(() => nyKommentar(bo, ide, topp))).toMatchObject({ code: '23503' })

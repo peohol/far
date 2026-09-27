@@ -9,7 +9,7 @@ import { Modallag } from '../Modallag'
 import { Idekilde } from './Idekontekst'
 import { Ideliste } from './Ideliste'
 import { Ideside } from './Ideside'
-import { Ideskjema } from './Ideskjema'
+import { Ideskjema, type Skjemastatus } from './Ideskjema'
 import '../../styles/ideer.css'
 
 /**
@@ -33,7 +33,7 @@ export function Ideer({ apen, onLukk }: { apen: boolean; onLukk: () => void }) {
   const [profiler, setProfiler] = useState<Profil[]>([])
   const [sortering, setSortering] = useState<Sortering>(STANDARDSORTERING)
   const [feil, setFeil] = useState<string | null>(null)
-  const [ulagret, setUlagret] = useState(false)
+  const [skjemastatus, setSkjemastatus] = useState<Skjemastatus>('uendret')
   /** Det som skal skje om brukeren forkaster et skjema med endringer. */
   const [forlater, setForlater] = useState<(() => void) | null>(null)
   const rot = useRef<HTMLDivElement>(null)
@@ -63,7 +63,7 @@ export function Ideer({ apen, onLukk }: { apen: boolean; onLukk: () => void }) {
 
   const gaaTil = (neste: Visning) => {
     if (visning.side === 'liste') listeplass.current.rulling = kropp()?.scrollTop ?? 0
-    setUlagret(false)
+    setSkjemastatus('uendret')
     setForlater(null)
     setVisning(neste)
   }
@@ -88,10 +88,13 @@ export function Ideer({ apen, onLukk }: { apen: boolean; onLukk: () => void }) {
     gaaTil(LISTE)
   }
 
-  /** Skjemaet med endringer spør før det forlates, enten det er tilbake eller ut. */
+  /**
+   * Skjemaet med endringer spør før det forlates, enten det er tilbake eller
+   * ut. Mens det lagrer, blir det stående til svaret har kommet.
+   */
   const forlat = (handling: () => void) => {
-    if (visning.side === 'skjema' && ulagret) setForlater(() => handling)
-    else handling()
+    if (visning.side !== 'skjema' || skjemastatus === 'uendret') handling()
+    else if (skjemastatus === 'ulagret') setForlater(() => handling)
   }
 
   const endreSortering = (neste: Sortering) => {
@@ -117,8 +120,8 @@ export function Ideer({ apen, onLukk }: { apen: boolean; onLukk: () => void }) {
       tilbake={tilbake}
       onLukk={onLukk}
       vedLukking={() => {
-        if (visning.side !== 'skjema' || !ulagret) return true
-        setForlater(() => onLukk)
+        if (visning.side !== 'skjema' || skjemastatus === 'uendret') return true
+        if (skjemastatus === 'ulagret') setForlater(() => onLukk)
         return false
       }}
       handling={
@@ -159,7 +162,7 @@ export function Ideer({ apen, onLukk }: { apen: boolean; onLukk: () => void }) {
             <Ideskjema
               ide={visning.ide}
               kategori={visning.kategori}
-              onUlagret={setUlagret}
+              onStatus={setSkjemastatus}
               forlater={forlater !== null}
               onForkast={() => forlater?.()}
               onFortsett={() => setForlater(null)}

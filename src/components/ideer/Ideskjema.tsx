@@ -15,6 +15,12 @@ import { Button } from '../Button'
 import { Felt } from '../konto/Felt'
 
 /**
+ * `lagrer`: lagringen er sendt, og skjemaet kan ikke forlates før svaret har
+ * kommet — ellers ville idéen blitt lagret etter at brukeren forkastet den.
+ */
+export type Skjemastatus = 'uendret' | 'ulagret' | 'lagrer'
+
+/**
  * Skjemaet for en ny idé, eller for å endre en: kategori og overskrift må
  * fylles ut, beskrivelsen er valgfri og har den samme verktøyraden som
  * stoffsidene, uten referansene.
@@ -22,7 +28,7 @@ import { Felt } from '../konto/Felt'
 export function Ideskjema({
   ide,
   kategori: startkategori,
-  onUlagret,
+  onStatus,
   forlater,
   onForkast,
   onFortsett,
@@ -33,7 +39,8 @@ export function Ideskjema({
   ide?: Idetraad
   /** Kategorien en ny idé begynner med, når den ble startet fra en tom kategori. */
   kategori?: Idekategori
-  onUlagret: (ulagret: boolean) => void
+  /** Om skjemaet har endringer som ikke er lagret, eller lagrer nå. */
+  onStatus: (status: Skjemastatus) => void
   /** Brukeren vil forlate skjemaet med endringer som ikke er lagret. */
   forlater: boolean
   onForkast: () => void
@@ -52,8 +59,8 @@ export function Ideskjema({
   // Det skjemaet ville lagret, slik det var da det åpnet, og nå.
   const signatur = JSON.stringify([kategori, tittel.trim(), tekstTilLagring(tekst)])
   const start = useRef(signatur)
-  const ulagret = signatur !== start.current
-  useEffect(() => onUlagret(ulagret), [ulagret, onUlagret])
+  const status: Skjemastatus = lagrer ? 'lagrer' : signatur !== start.current ? 'ulagret' : 'uendret'
+  useEffect(() => onStatus(status), [status, onStatus])
 
   const lagre = async (event: FormEvent) => {
     event.preventDefault()
@@ -61,6 +68,8 @@ export function Ideskjema({
     if (!kategori) return setFeil('Velg en kategori.')
     if (renTittel === '') return setFeil('Skriv en overskrift.')
     setFeil(null)
+    // En lagring svarer også på spørsmålet om å forkaste.
+    onFortsett()
     setLagrer(true)
     try {
       const innhold = { kategori, tittel: renTittel, tekst: tekstTilLagring(tekst) }
@@ -122,7 +131,7 @@ export function Ideskjema({
         <Forlatvarsel onForkast={onForkast} onFortsett={onFortsett} />
       ) : (
         <div className="skjema__knapper ideskjema__knapper">
-          <Button variant="subtle" onClick={onAvbryt}>
+          <Button variant="subtle" onClick={onAvbryt} disabled={lagrer}>
             Avbryt
           </Button>
           <Button type="submit" className="knapp--kompakt" disabled={lagrer}>

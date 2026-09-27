@@ -42,15 +42,17 @@ create table public.idekommentarer (
   ide_id uuid not null references public.ideer (id) on delete cascade,
   -- Kommentaren dette er et svar på, eller null for et svar rett på idéen.
   forelder_id uuid references public.idekommentarer (id) on delete cascade,
-  forfatter_id uuid not null default auth.uid() references public.profiles (id) on delete cascade,
-  -- Null når kommentaren er slettet, men står igjen for svarene under den.
+  -- Tekst og forfatter er null når kommentaren er slettet, men står igjen for
+  -- svarene under den: da skal heller ikke databasen si hvem som skrev den.
+  forfatter_id uuid default auth.uid() references public.profiles (id) on delete cascade,
   tekst jsonb,
   slettet boolean not null default false,
   opprettet_kl timestamptz not null default now(),
   endret_kl timestamptz,
   constraint idekommentarer_tekst check (
-    case when slettet then tekst is null
-    else tekst is not null and jsonb_typeof(tekst) = 'object' and octet_length(tekst::text) <= 50000 end
+    case when slettet then tekst is null and forfatter_id is null
+    else forfatter_id is not null and tekst is not null
+      and jsonb_typeof(tekst) = 'object' and octet_length(tekst::text) <= 50000 end
   )
 );
 
@@ -182,7 +184,8 @@ create trigger brukerinnstillinger_merk_endret
 before update on public.brukerinnstillinger
 for each row execute function intern.brukerinnstilling_merk_endret();
 
--- En kommentar med svar tømmes i stedet for å slettes, så svarene står igjen.
+-- En kommentar med svar tømmes for tekst, forfatter og hjerter i stedet for å
+-- slettes, så svarene står igjen.
 -- Sletting som følger av at idéen eller en bruker slettes (en utløser inni en
 -- utløser), går sin gang.
 create function intern.idekommentar_slett()
@@ -196,7 +199,7 @@ begin
     return old;
   end if;
   if exists (select 1 from public.idekommentarer s where s.forelder_id = old.id) then
-    update public.idekommentarer set tekst = null, slettet = true where id = old.id;
+    update public.idekommentarer set tekst = null, forfatter_id = null, slettet = true where id = old.id;
     delete from public.idehjerter where kommentar_id = old.id;
     return null;
   end if;
@@ -299,8 +302,7 @@ as $$
       select jsonb_agg(jsonb_build_object(
           'id', k.id,
           'forelder_id', k.forelder_id,
-          -- En slettet kommentar sier ikke hvem som skrev den.
-          'forfatter_id', case when k.slettet then null else k.forfatter_id end,
+          'forfatter_id', k.forfatter_id,
           'tekst', k.tekst,
           'slettet', k.slettet,
           'opprettet_kl', k.opprettet_kl,

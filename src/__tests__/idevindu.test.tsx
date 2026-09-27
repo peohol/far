@@ -220,4 +220,22 @@ describe('en ny idé', () => {
     )
     expect(api.hentIdetraad).toHaveBeenCalledWith('ny')
   })
+
+  it('kan ikke forlates mens den lagres', async () => {
+    const bruker = userEvent.setup()
+    let svar!: (id: string) => void
+    api.opprettIde.mockImplementationOnce(() => new Promise<string>((r) => (svar = r)))
+    apne()
+    await bruker.click(await screen.findByRole('button', { name: 'Ny idé' }))
+    await bruker.click(screen.getByRole('radio', { name: 'Fag' }))
+    await bruker.type(screen.getByLabelText('Overskrift'), 'Underveis')
+    await bruker.click(screen.getByRole('button', { name: 'Publiser' }))
+
+    await bruker.click(screen.getByRole('button', { name: 'Tilbake til idéene' }))
+    expect(screen.getByRole('button', { name: 'Lagrer …' })).toBeTruthy()
+    expect(screen.queryByRole('button', { name: /Forkast/ })).toBeNull()
+
+    svar('ny')
+    expect(await screen.findByRole('heading', { name: 'Flere TDM-kilder', level: 3 })).toBeTruthy()
+  })
 })
