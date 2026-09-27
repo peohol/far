@@ -610,7 +610,10 @@ lisdeksamfetamin. En omgang kan også lage sider som ennå ikke finnes
 (`NYE_STOFFSIDER`): slik ble GHB-siden (natriumoksybat) og ketaminsiden
 (racemisk ketamin og esketamin på samme side) laget
 (`*_ghb_ketamin_indikasjoner_01.sql`), og koblet til FEST og ClinPGx med hver
-sin import. Et indikasjonskort som alt står på siden, røres ikke. Har
+sin import. En kode uten side får den på samme måte (`NYE_ANALYTTSIDER`), med
+navnet og koden fra analyttkatalogen: slik fikk THC side, med indikasjonen for
+Sativex (`*_thc_indikasjoner_01.sql`). Cannabidiolsiden (CBD, med Epidyolex)
+er laget uten kode, som GHB og ketamin (`*_cbd_indikasjoner_01.sql`). Et indikasjonskort som alt står på siden, røres ikke. Har
 Felleskatalogen ingen preparatomtale for stoffet, sier kortet det.
 
 **Rettinger.** En feil i det som ble importert, rettes med en rettingsfil i

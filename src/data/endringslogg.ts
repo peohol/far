@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.46.0',
+    dato: '2026-09-27',
+    sammendrag: 'THC-siden har fått Sativex, og det er en ny side for cannabidiol (CBD) med Epidyolex',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Siden for THC har fått indikasjonen for Sativex (THC og cannabidiol munnspray) fra Felleskatalogen: spastisitet ved multippel sklerose hos voksne.',
+      'Under «Preparater» vises nå preparatene med THC fra FEST: Sativex, Marinol og cannabispreparatene på godkjenningsfritak, med pakninger, interaksjoner og det andre FEST har. FEST kaller THC dronabinol. Preparater med bare cannabidiol vises ikke der.',
+      'Ny side for cannabidiol (CBD) under «Cannabinoider» i Stoffregisteret: indikasjonene for Epidyolex fra Felleskatalogen (Lennox-Gastaut syndrom, Dravet syndrom og tuberøs sklerose-kompleks), og preparatene med CBD fra FEST, blant dem Epidyolex og Sativex.',
+    ],
+  },
+  {
     versjon: '1.45.0',
     dato: '2026-09-27',
     sammendrag: 'Sidemenyen er nå «Stoffregister», ordnet etter legemiddelgruppe, og det er nye sider for GHB og ketamin',
