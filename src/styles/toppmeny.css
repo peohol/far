@@ -106,9 +106,7 @@
 }
 
 /* --- Sidemenyknappen ----------------------------------------------------------
-   Rund som de andre knappene. Står filteret på, utvider den seg til en pille
-   med metodekoden i metodens egen farge, så det går fram av menyen alene hva
-   søket er begrenset til. */
+   Rund som de andre knappene; åpner stoffregisteret. */
 .menyknapp {
   display: flex;
   flex: none;
@@ -129,22 +127,6 @@
 
 .menyknapp:hover {
   border-color: var(--linje-sterk);
-}
-
-.menyknapp[data-filter='ja'] {
-  color: var(--alt-ink);
-  background: var(--alt-solid);
-}
-
-.menyknapp[data-filter='ja']:hover {
-  border-color: var(--alt-ink);
-}
-
-.menyknapp__filter {
-  font-size: var(--tekst-meta);
-  font-weight: var(--vekt-fet);
-  letter-spacing: 0.04em;
-  line-height: 1;
 }
 
 /* --- Handling med tekst -------------------------------------------------------

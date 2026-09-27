@@ -21,7 +21,7 @@ import {
   clinpgxkoblingSql,
   kjennetegn,
 } from '../faginnhold/clinpgxkoblinger'
-import { AMFETAMIN_FESTKOBLINGER, STOFFSIDE_FESTKOBLINGER } from '../faginnhold/festkoblinger'
+import { AMFETAMIN_FESTKOBLINGER, FESTKOBLINGSIMPORTER } from '../faginnhold/festkoblinger'
 import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import { ELEMENTTYPER, lesClinpgxkobling } from '../faginnhold/paneler'
 import { PREPARATPANEL } from '../legemiddeldata/stoffside'
@@ -115,6 +115,9 @@ const FORVENTET: Record<string, string[]> = {
   Tramadol: ['PA451735'],
   Zolpidem: ['PA451976'],
   Zopiklon: ['PA10236'],
+  // Sidene som ble laget sammen med stoffregisteret.
+  GHB: ['PA166236501'],
+  Ketamin: ['PA450144', 'PA166364961'],
 }
 /** Sidene som står ukoblet. */
 const UKOBLET = UKOBLEDE_STOFFSIDER.map((u) => u.side)
@@ -143,10 +146,11 @@ describe('koblingene', () => {
         expect(k.atc_clinpgx, k.side).not.toBe(k.atc)
         expect(k.merknad?.trim(), k.side).toBeTruthy()
       }
-      const { rxnorm, pubchem, chebi } = k.identifikatorer ?? {}
+      const { rxnorm, pubchem, chebi, inchikey } = k.identifikatorer ?? {}
       if (rxnorm !== undefined) expect(rxnorm, k.side).toMatch(/^\d+$/)
       if (pubchem !== undefined) expect(pubchem, k.side).toMatch(/^\d+$/)
       if (chebi !== undefined) expect(chebi, k.side).toMatch(/^CHEBI:\d+$/)
+      if (inchikey !== undefined) expect(inchikey, k.side).toMatch(/^[A-Z]{14}-[A-Z]{10}-[A-Z]$/)
       // Uten FEST-kobling, eller når migrasjonen ikke krever den, må det være en identifikator i et annet register.
       if (k.fest_id === null || utenFestkrav.has(k)) expect(Object.keys(k.identifikatorer ?? {}).length, k.side).toBeGreaterThan(0)
       if (k.fest_id !== null) expect(k.fest_id, k.side).toMatch(/^ID_[0-9A-F-]{36}$/)
@@ -166,7 +170,7 @@ describe('koblingene', () => {
 
   it('går via det samme virkestoffet som FEST-koblingen siden fikk ved migrasjon', () => {
     const fest = new Map<string, Set<string>>()
-    for (const k of [...STOFFSIDE_FESTKOBLINGER, ...AMFETAMIN_FESTKOBLINGER]) {
+    for (const k of FESTKOBLINGSIMPORTER.flatMap((i) => i.koblinger)) {
       fest.set(k.side, (fest.get(k.side) ?? new Set()).add(k.fest_id))
     }
     for (const k of ALLE_CLINPGXKOBLINGER) {

@@ -354,9 +354,12 @@ til.
 `#/stoff/<navn>`: en informasjonsside som verken er hovedside eller komponent
 for noen analytt (visningen `stoffsider_uten_kode`). Den har de samme panelene,
 men ingen kode i identiteten, ingen «Åpne fortolkning» og ingen regelsett.
-Sidemenyen lister dem i skuffen «Stoffer uten labkode», fra databasen
-(`les_stoffsidenavn`); redaktørene ser også dem som ikke er publisert, og kan
-åpne en ny side med et navn derfra. Et navn som hører til en kode i katalogen,
+Stoffregisteret i sidemenyen setter dem inn i de farmakologiske kategoriene
+sammen med stoffene som har kode (se README, «Stoffregisteret og
+analysemetodene»), med navnene fra databasen (`les_stoffsidenavn`);
+redaktørene ser også dem som ikke er publisert, og kan åpne en ny side med et
+navn nederst i menyen. En ny side som ikke står i `src/data/stoffregister.json`,
+havner i «Andre stoffer» til den føres inn der. Et navn som hører til en kode i katalogen,
 fører til siden for koden. Får stoffet en kode senere, opprettes
 laboratorieanalytten med siden som finnes som hovedside, og siden leses
 gjennom koden som de andre.
@@ -603,7 +606,11 @@ med sin migrasjon og datoen de ble hentet, så en ny omgang ikke endrer
 migrasjonene som er kjørt: `scripts/importer-indikasjoner.ts -- <brukernavn>
 <migrasjon> <mappe>`. En fil kan gjelde en side med analyttkode (`kode`), som
 amfetaminsiden (AMF1), med indikasjonene for deksamfetamin og
-lisdeksamfetamin. Et indikasjonskort som alt står på siden, røres ikke. Har
+lisdeksamfetamin. En omgang kan også lage sider som ennå ikke finnes
+(`NYE_STOFFSIDER`): slik ble GHB-siden (natriumoksybat) og ketaminsiden
+(racemisk ketamin og esketamin på samme side) laget
+(`*_ghb_ketamin_indikasjoner_01.sql`), og koblet til FEST og ClinPGx med hver
+sin import. Et indikasjonskort som alt står på siden, røres ikke. Har
 Felleskatalogen ingen preparatomtale for stoffet, sier kortet det.
 
 **Rettinger.** En feil i det som ble importert, rettes med en rettingsfil i

@@ -165,8 +165,8 @@ listen er lik de publiserte sidene. En ny stoffside feiler altså testene til
 den har fått en status. Sider som lages i redigeringen, fanges ikke av
 testene; der viser koblingen forslag som før.
 
-**Koblingene** legges inn med migrasjoner (`stoffsider_clinpgx_kobling` og
-`stoffsider_clinpgx_dekning`), laget fra listene i
+**Koblingene** legges inn med migrasjoner (`stoffsider_clinpgx_kobling`,
+`stoffsider_clinpgx_dekning` og `ghb_ketamin_clinpgx_kobling`), laget fra listene i
 `src/faginnhold/clinpgxkoblinger.ts` med `scripts/lag-clinpgxkoblinger.ts`.
 En kobling er bare tatt med når navnet og minst ett uavhengig kjennetegn til
 stemmer:
@@ -174,7 +174,8 @@ stemmer:
 - ATC-koden (fra FEST, eller fra WHO når FEST ikke har preparater med
   stoffet), eller
 - en identifikator ClinPGx viser til, kontrollert mot registeret selv:
-  RxNorm (RxCUI for virkestoffet), PubChem (CID) eller ChEBI.
+  RxNorm (RxCUI for virkestoffet), PubChem (CID), ChEBI eller InChIKey
+  (esketamin, der ClinPGx bare har PubChem og ingen ATC-kode).
 
 Et navn alene er ikke nok. Er siden ikke koblet til FEST, er navnene og
 ATC-koden fra virkestoffet med samme norske navn i FEST, og koblingen krever
@@ -182,7 +183,8 @@ i tillegg en identifikator i et annet register. FEST er altså et godt
 grunnlag der det finnes, men ikke et krav.
 
 Den første migrasjonen tar et kjemikalie bare med når den publiserte siden
-er koblet til virkestoffet i FEST. Den andre krever ikke det: alle koblingene
+er koblet til virkestoffet i FEST, og det gjør også den for GHB- og
+ketaminsiden, som FEST-koblingen deres kommer foran. Den andre krever ikke det: alle koblingene
 der har en identifikator i et annet register, og FEST-koblingene til noen av
 sidene (levomepromazin, O-desmetylvenlafaksin) er laget i produksjonen uten
 en migrasjon i repoet. Da gir migrasjonene det samme resultatet i en database
@@ -203,12 +205,12 @@ WHOs ATC-register, RxNorm, PubChem og ChEBI 26. september 2026.
 
 | Status | Sider |
 | --- | --- |
-| Koblet til ClinPGx og verifisert | 66 |
+| Koblet til ClinPGx og verifisert | 68 |
 | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | 0 |
 | ClinPGx har ikke relevant objekt | 0 |
 | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | 9 |
 | Uavklart, krever faglig vurdering | 0 |
-| Til sammen | 75 |
+| Til sammen | 77 |
 
 Koblet:
 
@@ -281,6 +283,9 @@ Koblet:
 | Tramadol | Tramadol (Tramadol) | nei | tramadol | PA451735 | Samme ATC-kode (N02AX02). Samme RxNorm 10689. Samme navn. | stoffsider_clinpgx_dekning |
 | Zolpidem | Zolpidem (Zolpidem) | nei | zolpidem | PA451976 | Samme ATC-kode (N05CF02). Samme RxNorm 39993. Samme navn. | stoffsider_clinpgx_dekning |
 | Zopiklon | Zopiklon (Zopiclone) | nei | zopiclone | PA10236 | Samme ATC-kode (N05CF01). Samme RxNorm 40001. Samme navn. | stoffsider_clinpgx_dekning |
+| GHB | Natriumoksybat (Sodium Oxybate) | ja | sodium oxybate | PA166236501 | ATC-kode N07XX04 i FEST, N01AX11 i ClinPGx. Samme RxNorm 9899 og PubChem 23663870. Samme navn: WHO har to ATC-koder for natriumoksybat: N07XX04 (Xyrem) og N01AX11 (anestetikum), som ClinPGx bruker. | ghb_ketamin_clinpgx_kobling |
+| Ketamin | Ketamin (Ketamine) | ja | ketamine | PA450144 | Samme ATC-kode (N01AX03). Samme RxNorm 6130 og PubChem 3821. Samme navn. | ghb_ketamin_clinpgx_kobling |
+| Ketamin | Esketamin (Esketamine) | ja | esketamine | PA166364961 | Samme PubChem 182137 og InChIKey YQEZLKZALYSWHR-ZDUSSCGKSA-N. Samme navn: ClinPGx har ingen ATC-kode for esketamin (FEST har N01AX14 for Ketanest og N06AX27 for Spravato). InChI-en ClinPGx oppgir, er S-enantiomeren, lik PubChems for esketamin. | ghb_ketamin_clinpgx_kobling |
 
 Ikke koblet:
 

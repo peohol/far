@@ -1,0 +1,41 @@
+{
+  "side": "GHB",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "GHB (gammahydroksybutyrat) er det samme stoffet som natriumoksybat, natriumsaltet av GHB, som er godkjent som legemiddel.",
+      "Natriumoksybat: behandling av narkolepsi med katapleksi.",
+      {
+        "punkter": [
+          "Xyrem og Oxiore: voksne, ungdom og barn ≥7 år.",
+          "Natriumoksybat Kalceks: voksne."
+        ]
+      }
+    ],
+    "referanser": [
+      "fk-xyrem",
+      "fk-oxiore",
+      "fk-natriumoksybat-kalceks"
+    ]
+  },
+  "referanser": {
+    "fk-xyrem": {
+      "tittel": "Xyrem «UCB»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/xyrem-ucb-565556"
+    },
+    "fk-oxiore": {
+      "tittel": "Oxiore «Oresund Pharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/oxiore-oresund-pharma-784015"
+    },
+    "fk-natriumoksybat-kalceks": {
+      "tittel": "Natriumoksybat Kalceks «Kalceks»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/natriumoksybat-kalceks-kalceks-669766"
+    }
+  }
+}

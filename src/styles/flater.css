@@ -161,8 +161,8 @@
 }
 
 /* Analysemetoden bærer sin egen farge, den samme overalt i appen. Fargen
-   settes på elementet av `metodefarger()`, så pillen, skuffen i menyen og
-   menyknappen ikke kan komme i utakt. */
+   settes på elementet av `metodefarger()`, så pillene og filteret for søket
+   ikke kan komme i utakt. */
 .pille--metode {
   padding: var(--rom-2) var(--rom-3);
   font-size: var(--tekst-meta);

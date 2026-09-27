@@ -1,0 +1,139 @@
+import registerdata from '../data/stoffregister.json'
+import type { Analyttkatalog } from './analyttkatalog'
+
+/**
+ * Stoffregisteret: sidemenyens inndeling av stoffene etter farmakologisk
+ * klasse, med og uten analyttkode om hverandre.
+ *
+ * Inndelingen er data, ikke kode. Den står i `src/data/stoffregister.json`:
+ * kategoriene i den rekkefølgen menyen viser dem, eventuelt delt i
+ * underkategorier, og stoffene i hver ved navnet på informasjonssiden. Et
+ * stoff kan stå i flere kategorier — lamotrigin er både antiepileptikum og
+ * stemningsstabiliserende. En kategori med `metode` tar med alle analyttene i
+ * analysemetoden, med kategoriene fra datasettet som underkategorier, så et
+ * nytt antihypertensivum havner på plass av seg selv.
+ *
+ * Navnene slås opp i katalogen (kodene appen kan fortolke) og i stoffsidene
+ * uten kode. Et navn som ikke finnes der, utelates — en side som ennå ikke er
+ * publisert, dukker opp når den er det. Et stoff som finnes, men ikke står i
+ * registeret (en ny stoffside en redaktør har laget), havner i
+ * {@link ANDRE_STOFFER} til noen plasserer det, så menyen aldri viser færre
+ * stoffer enn appen har.
+ */
+
+/** Én kategori slik den står i datafilen. */
+export interface Registerkategoridata {
+  navn: string
+  /** Stoffene direkte i kategorien, ved sidenavnet. */
+  stoffer?: string[]
+  underkategorier?: { navn: string; stoffer: string[] }[]
+  /** Alle analyttene i analysemetoden, delt etter kategorien i datasettet. */
+  metode?: string
+}
+
+export interface Registerdata {
+  kategorier: Registerkategoridata[]
+}
+
+export const STOFFREGISTER: Registerdata = registerdata
+
+/** Kategorien for stoffene som ikke står i registeret. */
+export const ANDRE_STOFFER = 'Andre stoffer'
+
+/** Ett stoff i menyen, og siden det fører til. */
+export interface Registerstoff {
+  /** Navnet i lista, f.eks. «Amitriptylin + nortriptylin». */
+  navn: string
+  /** Informasjonssiden, f.eks. «Amitriptylin». */
+  side: string
+  /** Analyttkoden, eller `null` for et stoff laboratoriet ikke har noen analyse for. */
+  kode: string | null
+}
+
+export interface Registerunderkategori {
+  navn: string
+  stoffer: Registerstoff[]
+}
+
+export interface Registerkategori {
+  navn: string
+  /** Underkategoriene i registerets rekkefølge. Tom når kategorien ikke er delt opp. */
+  underkategorier: Registerunderkategori[]
+  /** Alle stoffene i kategorien alfabetisk, uten underkategoriene og hvert én gang. */
+  stoffer: Registerstoff[]
+}
+
+function nokkel(navn: string): string {
+  return navn.trim().toLocaleLowerCase('nb')
+}
+
+function paaNavn(a: Registerstoff, b: Registerstoff): number {
+  return a.navn.localeCompare(b.navn, 'nb')
+}
+
+/** Stoffene alfabetisk, hvert én gang. */
+function ordnet(stoffer: readonly Registerstoff[]): Registerstoff[] {
+  const sett = new Map(stoffer.map((s) => [s.kode ?? `side:${nokkel(s.side)}`, s]))
+  return [...sett.values()].sort(paaNavn)
+}
+
+/**
+ * En kategori med `metode` slik den ville stått i datafilen: analyttene i
+ * metoden, delt etter kategorien de har i datasettet, eller direkte i
+ * kategorien når metoden ikke er delt opp.
+ */
+function utvidMetode(k: Registerkategoridata, katalog: Analyttkatalog): Registerkategoridata {
+  if (!k.metode) return k
+  const iMetoden = katalog.oppforinger.filter((o) => o.analysemetode === k.metode)
+  const sider = (kategori: string) => iMetoden.filter((o) => o.kategori === kategori).map((o) => o.sidenavn)
+  const navn = [...new Set(iMetoden.map((o) => o.kategori))].filter(Boolean).sort((a, b) => a.localeCompare(b, 'nb'))
+  return {
+    navn: k.navn,
+    stoffer: [...(k.stoffer ?? []), ...sider('')],
+    underkategorier: [...(k.underkategorier ?? []), ...navn.map((n) => ({ navn: n, stoffer: sider(n) }))],
+  }
+}
+
+/**
+ * Bygger menyen av registeret, katalogen og navnene på stoffsidene uten kode.
+ * Kategorier og underkategorier uten noen stoffer som finnes, utelates.
+ */
+export function byggStoffregister(
+  katalog: Analyttkatalog,
+  stoffsider: readonly string[],
+  register: Registerdata = STOFFREGISTER,
+): Registerkategori[] {
+  // Alt appen har en side for, etter sidenavnet: kodene (flere kan dele en
+  // side) og stoffsidene uten kode.
+  const perSide = new Map<string, Registerstoff[]>()
+  const leggTil = (stoff: Registerstoff) =>
+    perSide.set(nokkel(stoff.side), [...(perSide.get(nokkel(stoff.side)) ?? []), stoff])
+  for (const o of katalog.oppforinger) leggTil({ navn: o.navn, side: o.sidenavn, kode: o.kode })
+  for (const navn of stoffsider) if (!perSide.has(nokkel(navn))) leggTil({ navn, side: navn, kode: null })
+
+  const plassert = new Set<string>()
+  const slaaOpp = (navn: readonly string[]) =>
+    ordnet(
+      navn.flatMap((n) => {
+        plassert.add(nokkel(n))
+        return perSide.get(nokkel(n)) ?? []
+      }),
+    )
+
+  const kategorier = register.kategorier.map((data): Registerkategori => {
+    const k = utvidMetode(data, katalog)
+    const underkategorier = (k.underkategorier ?? [])
+      .map((u) => ({ navn: u.navn, stoffer: slaaOpp(u.stoffer) }))
+      .filter((u) => u.stoffer.length > 0)
+    return {
+      navn: k.navn,
+      underkategorier,
+      stoffer: ordnet([...slaaOpp(k.stoffer ?? []), ...underkategorier.flatMap((u) => u.stoffer)]),
+    }
+  })
+
+  const andre = ordnet([...perSide.entries()].filter(([side]) => !plassert.has(side)).flatMap(([, stoffer]) => stoffer))
+  if (andre.length > 0) kategorier.push({ navn: ANDRE_STOFFER, underkategorier: [], stoffer: andre })
+
+  return kategorier.filter((k) => k.stoffer.length > 0)
+}

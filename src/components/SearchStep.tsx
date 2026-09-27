@@ -11,7 +11,7 @@ import type { Analyte } from '../types'
 export interface SearchStepProps {
   query: string
   hits: SearchHit[]
-  /** Analysemetoden søket er begrenset til, valgt i sidemenyen. */
+  /** Analysemetoden søket er begrenset til, valgt i filteret under alternativene. */
   metodefilter: string | null
   /** Endrer filteret; `null` slår det av, så alle analyttene finnes igjen. */
   onFilter: (metode: string | null) => void

@@ -19,6 +19,15 @@ import { byggKatalog, FORTOLKNINGSOPPFORINGER, type Analyttkatalog } from '../do
 import { byggImportplan, datasett, filnokkel, type Importkilde, type Importplan } from './import'
 import { STOFFSIDE_DATASETT } from './stoffsider'
 
+/**
+ * Stoffsidene indikasjonsimporten lager, fordi de ikke fantes fra før: GHB
+ * (natriumoksybat) og ketamin (racemisk ketamin og esketamin). De har ingen
+ * analyttkode og ingen referanseområder i kildene, så indikasjonen er det
+ * første kortet på siden; preparatene og farmakogenetikken kobles etterpå
+ * (`festkoblinger.ts`, `clinpgxkoblinger.ts`).
+ */
+export const NYE_STOFFSIDER: readonly string[] = ['GHB', 'Ketamin']
+
 export const INDIKASJONSDATASETT = datasett(
   import.meta.glob<Record<string, unknown>>('../../supabase/import/indikasjoner/*.json', { eager: true, import: 'default' }),
 )
@@ -33,6 +42,7 @@ export interface Indikasjonsimport {
 export const INDIKASJONSIMPORTER: readonly Indikasjonsimport[] = [
   { migrasjon: 'stoffsider_indikasjoner', hentet: '2026-09-25', filer: STOFFSIDE_DATASETT.filer.map(filnokkel) },
   { migrasjon: 'amfetamin_indikasjoner', hentet: '2026-09-25', filer: ['AMF1'] },
+  { migrasjon: 'ghb_ketamin_indikasjoner', hentet: '2026-09-27', filer: NYE_STOFFSIDER },
 ]
 
 export function indikasjonskilde(omgang: Indikasjonsimport): Importkilde {

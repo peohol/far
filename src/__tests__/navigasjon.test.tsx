@@ -2,8 +2,9 @@
 /**
  * Veiene mellom fortolkningen og informasjonssidene, prøvd i hele appen.
  *
- * - Sidemenyen fører til informasjonssidene, ikke til fortolkningen — også
- *   til stoffene uten analyttkode.
+ * - Sidemenyen er stoffregisteret. Den fører til informasjonssidene, ikke til
+ *   fortolkningen — også til stoffene uten analyttkode — og filtrerer ikke
+ *   søket.
  * - Analyttkodene i fortolkningsmodulene er lenker til sidene sine.
  * - «Åpne fortolkning» fører tilbake til riktig modul.
  * - Hver side har sin egen adresse, som kan åpnes direkte.
@@ -105,12 +106,16 @@ async function infosideFor(navn: string) {
 }
 
 describe('sidemenyen', () => {
-  it('fører til informasjonssiden, med egen adresse', async () => {
+  it('er stoffregisteret, og fører til informasjonssiden, med egen adresse', async () => {
     const user = userEvent.setup()
     visApp()
-    await user.click(screen.getByRole('button', { name: 'Vis analysemetoder' }))
-    await user.click(screen.getByRole('button', { name: /SPFA/ }))
-    const lenke = screen.getByRole('link', { name: /Amitriptylin \+ nortriptylin/ })
+    await user.click(screen.getByRole('button', { name: 'Vis stoffregisteret' }))
+    const meny = screen.getByRole('navigation', { name: 'Stoffregister' })
+    // Søket i fortolkningen filtreres fra hovedsiden, ikke herfra.
+    expect(within(meny).queryByRole('radio')).toBeNull()
+    await user.click(within(meny).getByRole('button', { name: /^Antidepressiver/ }))
+    expect(within(meny).getByRole('heading', { name: 'TCA' })).toBeTruthy()
+    const lenke = within(meny).getByRole('link', { name: /Amitriptylin \+ nortriptylin/ })
     expect(lenke.getAttribute('href')).toBe('#/analytt/AMTNORSUM')
 
     await user.click(lenke)
@@ -120,14 +125,25 @@ describe('sidemenyen', () => {
     // Siden starter med fokus på navnet, ikke igjen i menyen.
     expect(document.activeElement).toBe(screen.getByRole('heading', { level: 1 }))
   })
+
+  it('lar filteret for søket stå som det er', async () => {
+    const user = userEvent.setup()
+    visApp()
+    await user.click(screen.getByRole('button', { name: 'Vis stoffregisteret' }))
+    // Alt + tall setter filteret på hovedsiden, men ikke mens registeret står åpent.
+    await user.keyboard('{Alt>}1{/Alt}')
+    await user.keyboard('{Escape}')
+    expect(screen.queryByText('Søket er begrenset til')).toBeNull()
+  })
 })
 
 describe('stoffene uten analyttkode', () => {
-  it('står i en egen skuff i sidemenyen, og fører til siden etter navnet', async () => {
+  it('står i registeret, og fører til siden etter navnet', async () => {
     const user = userEvent.setup()
     visApp()
-    await user.click(screen.getByRole('button', { name: 'Vis analysemetoder' }))
-    await user.click(await screen.findByRole('button', { name: 'Stoffer uten labkode' }))
+    await user.click(screen.getByRole('button', { name: 'Vis stoffregisteret' }))
+    // Teststoffet står ikke i registeret, og havner derfor i «Andre stoffer».
+    await user.click(await screen.findByRole('button', { name: /^Andre stoffer/ }))
     // En vanlig bruker kan ikke lage nye sider.
     expect(screen.queryByLabelText('Ny stoffside')).toBeNull()
     const lenke = screen.getByRole('link', { name: 'Teststoff' })

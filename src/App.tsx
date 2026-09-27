@@ -12,7 +12,7 @@ import { KontrollStep } from './components/KontrollStep'
 import { PasteStep } from './components/PasteStep'
 import { RusStep } from './components/RusStep'
 import { ScenarioreglerProvider, useHentScenarioregler } from './components/regler/Scenarioreglerkilde'
-import { Sidemeny } from './components/Sidemeny'
+import { Sidemeny, sidemenyenErApen } from './components/Sidemeny'
 import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
 import { ruteAv } from './components/Kopibevis'
@@ -79,6 +79,9 @@ const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
  * kommentaren er kopiert, slik at et tastetrykk i mellomtiden gjør det samme
  * som ellers i limsteget i stedet for å falle på gulvet.
  */
+/** Stoffsidene uten kode før de er hentet — én og samme liste, så stoffregisteret ikke bygges på nytt. */
+const INGEN_STOFFSIDER: readonly string[] = []
+
 const BLINK = 500
 const STEGBYTTE = 130
 
@@ -111,8 +114,7 @@ export default function App() {
   staaende.current = stage
   // Søket dekker alt appen kan fortolke — se `FORTOLKNINGSOPPFORINGER`.
   const alleAnalytter = FORTOLKNINGSOPPFORINGER
-  // Filteret fra sidemenyen smalner inn hva søket kan finne. Menyen selv viser
-  // alltid alt, siden det er der filteret velges.
+  // Filteret på hovedsiden smalner inn hva søket kan finne.
   const pool = useMemo(
     () => filtrertPool(alleAnalytter, state.metodefilter),
     [alleAnalytter, state.metodefilter],
@@ -158,8 +160,9 @@ export default function App() {
   const { hentPaNytt: hentThcPaNytt } = thc
   const thcRegler = useMemo(() => thcReglerFra(thc.tilstand, hentThcPaNytt), [thc.tilstand, hentThcPaNytt])
 
-  // Stoffene uten analyttkode har ingen plass i katalogen; sidemenyen lister
-  // sidene deres fra databasen. Redaktørene ser også dem som ikke er publisert.
+  // Stoffene uten analyttkode har ingen plass i katalogen; stoffregisteret i
+  // sidemenyen tar sidene deres fra databasen. Redaktørene ser også dem som
+  // ikke er publisert.
   const stoffsider = useHenting(
     useCallback(
       () => faginnhold.leser.lesStoffsidenavn(faginnhold.kanRedigere ? 'utkast' : 'publisert'),
@@ -167,6 +170,10 @@ export default function App() {
     ),
   )
   const { hentPaNytt: hentStoffsiderPaNytt } = stoffsider
+  const stoffsidenavn = useMemo(
+    () => (stoffsider.tilstand.status === 'klar' ? stoffsider.tilstand.data : INGEN_STOFFSIDER),
+    [stoffsider.tilstand],
+  )
 
   // Fagsøket: indeksen over alt publisert fagstoff, hentet når appen har tid
   // til overs etter at den er åpnet, eller første gang noen søker før det. De
@@ -391,8 +398,9 @@ export default function App() {
    * og ikke `event.key`, siden Alt gjør om tegnet på flere tastaturoppsett —
    * det er den fysiske talltasten som gjelder.
    *
-   * Filteret kan settes mens sidemenyen eller filtermenyen står åpen; de viser
-   * nettopp metodene. Endringsloggen fanger derimot tastaturet for seg.
+   * Filteret kan settes mens filtermenyen står åpen; den viser nettopp
+   * metodene. Endringsloggen fanger derimot tastaturet for seg, og
+   * sidemenyen — stoffregisteret — filtrerer ikke søket.
    */
   useEffect(() => {
     function paaTast(event: KeyboardEvent) {
@@ -400,7 +408,7 @@ export default function App() {
       const truffet = /^Digit(\d)$/.exec(event.code)
       if (!truffet?.[1]) return
       const tall = Number(truffet[1])
-      if (tall > ANALYSEMETODER.length || modaltLagLiggerOver()) return
+      if (tall > ANALYSEMETODER.length || modaltLagLiggerOver() || sidemenyenErApen()) return
       event.preventDefault()
       dispatch({
         type: 'sett-metodefilter',
@@ -503,13 +511,7 @@ export default function App() {
       >
         <Toppmeny
           meny={
-            <Sidemeny
-              pool={alleAnalytter}
-              metodefilter={state.metodefilter}
-              onFilter={settMetodefilter}
-              stoffsider={stoffsider.tilstand.status === 'klar' ? stoffsider.tilstand.data : []}
-              kanOpprette={faginnhold.kanRedigere}
-            />
+            <Sidemeny katalog={katalog} stoffsider={stoffsidenavn} kanOpprette={faginnhold.kanRedigere} />
           }
           sok={
             <Fagsok

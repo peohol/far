@@ -30,12 +30,15 @@ export type Samsvar = 'navn' | 'synonym' | 'skrivemåte'
 /**
  * Identifikatorer i andre registre som ClinPGx viser til for kjemikaliet, og
  * som registeret selv gir for virkestoffets navn: RxNorm (RxCUI for
- * virkestoffet), PubChem (CID) og ChEBI.
+ * virkestoffet), PubChem (CID) og ChEBI. `inchikey` er strukturen: nøkkelen
+ * til InChI-en ClinPGx oppgir, som må være lik den PubChem gir for navnet —
+ * med stereokjemien, så en enantiomer ikke kan forveksles med racematet.
  */
 export interface Identifikatorer {
   rxnorm?: string
   pubchem?: string
   chebi?: string
+  inchikey?: string
 }
 
 export interface Clinpgxkobling {
@@ -162,6 +165,30 @@ export const DEKNINGSKOBLINGER: readonly Clinpgxkobling[] = [
 ]
 
 /**
+ * GHB- og ketaminsidene, kontrollert mot ClinPGx, RxNorm og PubChem
+ * 27. september 2026. ClinPGx har ATC-koden for natriumoksybat som
+ * anestetikum (N01AX11); FEST har koden for Xyrem (N07XX04), og RxNorm
+ * stemmer. Esketamin har ingen ATC-kode i ClinPGx, men samme PubChem-CID og
+ * samme struktur, med stereokjemien.
+ */
+export const GHB_KETAMIN_CLINPGXKOBLINGER: readonly Clinpgxkobling[] = [
+  {
+    side: 'GHB', fest_id: 'ID_E5DA647E-762B-47A9-AABF-1DF049027829', virkestoff: 'Natriumoksybat', engelsk: 'Sodium Oxybate',
+    atc: 'N07XX04', atc_clinpgx: 'N01AX11', identifikatorer: { rxnorm: '9899', pubchem: '23663870' }, clinpgx_id: 'PA166236501', navn: 'sodium oxybate', samsvar: 'navn',
+    merknad: 'WHO har to ATC-koder for natriumoksybat: N07XX04 (Xyrem) og N01AX11 (anestetikum), som ClinPGx bruker.',
+  },
+  {
+    side: 'Ketamin', fest_id: 'ID_BE99AE1B-6C05-4E5F-A879-E7251B67947B', virkestoff: 'Ketamin', engelsk: 'Ketamine',
+    atc: 'N01AX03', identifikatorer: { rxnorm: '6130', pubchem: '3821' }, clinpgx_id: 'PA450144', navn: 'ketamine', samsvar: 'navn',
+  },
+  {
+    side: 'Ketamin', fest_id: 'ID_6C27065E-76FB-4EEA-B045-DE70AB6D7A06', virkestoff: 'Esketamin', engelsk: 'Esketamine',
+    atc: null, identifikatorer: { pubchem: '182137', inchikey: 'YQEZLKZALYSWHR-ZDUSSCGKSA-N' }, clinpgx_id: 'PA166364961', navn: 'esketamine', samsvar: 'navn',
+    merknad: 'ClinPGx har ingen ATC-kode for esketamin (FEST har N01AX14 for Ketanest og N06AX27 for Spravato). InChI-en ClinPGx oppgir, er S-enantiomeren, lik PubChems for esketamin.',
+  },
+]
+
+/**
  * Hver import av koblinger, i rekkefølge, med navnet migrasjonen fikk.
  * `festkrav` sier om migrasjonen krever at siden er koblet til virkestoffet i
  * FEST. Den andre gjør ikke det: FEST-koblingene til flere av sidene er ikke
@@ -171,6 +198,7 @@ export const DEKNINGSKOBLINGER: readonly Clinpgxkobling[] = [
 export const CLINPGXKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: readonly Clinpgxkobling[]; festkrav: boolean }[] = [
   { migrasjon: 'stoffsider_clinpgx_kobling', koblinger: STOFFSIDE_CLINPGXKOBLINGER, festkrav: true },
   { migrasjon: 'stoffsider_clinpgx_dekning', koblinger: DEKNINGSKOBLINGER, festkrav: false },
+  { migrasjon: 'ghb_ketamin_clinpgx_kobling', koblinger: GHB_KETAMIN_CLINPGXKOBLINGER, festkrav: true },
 ]
 
 /** Alle koblingene fra importene, i rekkefølge. */
@@ -185,7 +213,7 @@ const SAMSVARTEKST: Record<Samsvar, string> = {
   skrivemåte: 'Annen skrivemåte',
 }
 
-const IDENTIFIKATORNAVN: Record<keyof Identifikatorer, string> = { rxnorm: 'RxNorm', pubchem: 'PubChem', chebi: 'ChEBI' }
+const IDENTIFIKATORNAVN: Record<keyof Identifikatorer, string> = { rxnorm: 'RxNorm', pubchem: 'PubChem', chebi: 'ChEBI', inchikey: 'InChIKey' }
 
 /** De uavhengige kjennetegnene utenom navnet som stemmer: ATC-koden og identifikatorene. */
 export function kjennetegn(k: Clinpgxkobling): string[] {

@@ -10,8 +10,8 @@ import type { Analyte } from '../types'
  * Alle oppføringene appen kan fortolke: analyttene fra datasettet pluss
  * kategoriene som har egne fortolkningsmoduler i stedet for
  * konsentrasjonsbånd — THC-syre i urin, stoffene med ruspotensial i serum og
- * etanolmarkørene EtG og EtS i urin. Søket, sidemenyen og katalogen under
- * bygges alle av denne lista.
+ * etanolmarkørene EtG og EtS i urin. Søket, stoffregisteret i sidemenyen og
+ * katalogen under bygges alle av denne lista.
  */
 export const FORTOLKNINGSOPPFORINGER: Analyte[] = [...analytes, THC_ANALYTT, ...RUS_ANALYTTER, ETG_ANALYTT]
 
@@ -19,8 +19,9 @@ export const FORTOLKNINGSOPPFORINGER: Analyte[] = [...analytes, THC_ANALYTT, ...
  * Analyttkodene appen kjenner, med det informasjonssidene trenger å vite om
  * dem fra de statiske datasettene.
  *
- * Katalogen bygges av de samme søkeoppføringene som søket og sidemenyen, så en
- * kode har en informasjonsside nøyaktig når den står i menyen. Hver kode
+ * Katalogen bygges av de samme søkeoppføringene som søket, og sidemenyen
+ * (stoffregisteret) bygges av katalogen, så en kode har en informasjonsside
+ * nøyaktig når den står i menyen. Hver kode
  * peker også på fortolkningsmodulen den hører til — oppføringen søket ville
  * valgt — slik at informasjonssiden kan åpne fortolkningen igjen.
  *
@@ -38,7 +39,7 @@ export interface Katalogoppforing {
   /** Informasjonssiden koden hører til, f.eks. «Amitriptylin». */
   sidenavn: string
   analysemetode: string
-  /** Kategorien i menyen. Tom når metoden ikke er delt opp. */
+  /** Kategorien i datasettet, f.eks. «ARB». Tom når metoden ikke er delt opp. */
   kategori: string
   /**
    * Stoffene analysen omfatter, slik datasettet navngir dem. Én for de fleste,

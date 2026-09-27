@@ -54,8 +54,8 @@ export interface Analyte {
   gruppe: string
   /**
    * Koden til analysemetoden analytten rekvireres under, f.eks. «SPFA».
-   * Sidemenyen grupperer etter denne, og kommenteringsmodulen viser den som
-   * pille over analyttkoden.
+   * Filteret for søket velger etter denne, og kommenteringsmodulen viser den
+   * som pille over analyttkoden.
    */
   analysemetode: string
   /**

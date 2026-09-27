@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { byggMeny } from '../analysemetoder'
+import { menyanalytter } from '../analysemetoder'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from '../analyttkatalog'
 import { search } from '../search'
 
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
 
 describe('katalogen over informasjonssidene', () => {
-  it('har én side per kode i menyen, og ingen andre', () => {
-    const imenyen = byggMeny(FORTOLKNINGSOPPFORINGER).flatMap((m) => m.analytter.map((a) => a.kode))
-    expect(katalog.oppforinger.map((o) => o.kode).sort()).toEqual([...imenyen].sort())
-    expect(new Set(imenyen).size).toBe(imenyen.length)
+  it('har én side per kode appen kan fortolke, og ingen andre', () => {
+    const koder = FORTOLKNINGSOPPFORINGER.flatMap((a) => menyanalytter(a).map((o) => o.kode))
+    expect(katalog.oppforinger.map((o) => o.kode).sort()).toEqual([...koder].sort())
+    expect(new Set(koder).size).toBe(koder.length)
   })
 
   it('gir hver kode gyldig for databasen', () => {

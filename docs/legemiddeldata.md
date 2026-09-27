@@ -292,7 +292,9 @@ Slik ble de 15 stoffsidene uten analyttkode koblet
 Valproinsyre, som preparatenes salter hører til. Ketobemidon har ingen
 preparater i FEST, så siden sier det. Amfetaminsiden (AMF1) er koblet til
 deksamfetamin og lisdeksamfetamin (`*_amfetamin_fest_kobling.sql`), som
-referanseområdet gjelder for; racemisk amfetamin er ikke med. En ny import
+referanseområdet gjelder for; racemisk amfetamin er ikke med. GHB-siden er
+koblet til natriumoksybat, og ketaminsiden til ketamin og esketamin
+(`*_ghb_ketamin_fest_kobling.sql`). En ny import
 legges til som en ny oppføring, så migrasjonene som er kjørt, står;
 `stoffsider_fest_kobling` ble laget med en tidligere utgave av skriptet, og
 testen låser md5-en dens.
