@@ -48,11 +48,11 @@ man bytter analytt.
 hva som er påvist i stedet for et konsentrasjonsbånd i steg 3, og kan gi to
 kommentarer i limsteget. Se [EtG og EtS i urin](#etg-og-ets-i-urin).
 
-Menyknappen øverst til venstre åpner sidemenyen, som er veien inn til
-oppslagsverket: der ligger alle analysemetodene med virkestoffene sine, og et
-trykk på et virkestoff åpner **informasjonssiden** for koden. Menyen styrer også
-hvilken analysemetode søket leter i. Se
-[Sidemenyen og analysemetodene](#sidemenyen-og-analysemetodene) og
+Menyknappen øverst til venstre åpner **stoffregisteret**, som er veien inn til
+oppslagsverket: alle stoffene appen har sider for, ordnet etter farmakologisk
+klasse, og et trykk på et stoff åpner **informasjonssiden** for det. Hvilken
+analysemetode søket leter i, velges på hovedsiden. Se
+[Stoffregisteret og analysemetodene](#stoffregisteret-og-analysemetodene) og
 [Informasjonssidene](#informasjonssidene).
 
 Smalner søket inn til én eneste analytt, er valget i praksis allerede tatt, og
@@ -131,7 +131,8 @@ src/data/endringslogg.ts    Endringsloggen appen viser (håndholdt)
 src/types.ts                Datamodellen
 src/state.ts                Tilstandsmaskinen for stegene
 src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, kontrast,
-                            analysemetodene og menytreet (analysemetoder.ts),
+                            analysemetodene (analysemetoder.ts), stoffregisteret
+                            i sidemenyen (stoffregister.ts),
                             referansetallene analyttkortet viser (piller.ts),
                             tooltipplassering (tipsplassering.ts), flukten til
                             kopibeviset (flytting.ts), THC-fortolkning (thc.ts) med
@@ -149,7 +150,7 @@ src/components/analyttside/ Informasjonssidene: panelene, redigeringen,
 docs/faginnhold.md          Hvordan faginnholdet lagres, versjoneres, publiseres og vises
 src/hooks/                  Tastatur, tema, hurtigtastmerker, utklippstavle,
                             kopieringen av kommentarene (useKommentarflyt.ts)
-src/components/             Stegene, sidemenyen (Sidemeny.tsx), kommentarblokkene
+src/components/             Stegene, stoffregisteret (Sidemeny.tsx), kommentarblokkene
                             (Kommentarliste.tsx), felles
                             kort/pille/knapp/tallfelt/tooltip/ikoner
 src/styles/                 tokens.css (design) + base.css + ett stilark per
@@ -189,7 +190,7 @@ stående igjen ved teksten, så det fortsatt går fram hva boblen hører til.
 Reglene ligger i `src/domain/tipsplassering.ts` og er dekket av tester;
 `TipsLag` i `src/main.tsx` er selve laget og må ligge rundt hele appen.
 
-### Sidemenyen og analysemetodene
+### Stoffregisteret og analysemetodene
 
 Hver analytt hører til en **analysemetode** — koden analysen rekvireres med —
 og de fleste metodene er delt i **kategorier**. Begge deler står på analytten i
@@ -208,27 +209,39 @@ analyttkoden: «SPFA › Antidepressiver». De hører sammen — kategorien bety
 ingenting uten metoden — og deler derfor pille i stedet for å stå som to.
 Analyttkoden beholder aksentfargen sin under. Pillen bærer ingen forklaring:
 de som kommenterer analysene kjenner kodene sine, og hva en kode betyr står i
-sidemenyen for den som trenger det.
+filtermenyen for den som trenger det.
 
 Hver metode har **én farge**, gitt av plassen i `ANALYSEMETODER` og slått opp
-med `metodefarger()`. Den samme fargen bærer skuffen i menyen, pillen i
-analyttkortet, pillen i søket og menyknappen når filteret står på metoden, så
-SPFA er den samme fargen overalt. Fargene kommer fra det samme settet som
+med `metodefarger()`. Den samme fargen bærer pillen i analyttkortet og
+pillene i søket og filtermenyen, så SPFA er den samme fargen overalt. Fargene kommer fra det samme settet som
 søkealternativene bruker, og kontrasten deres måles i
 `domain/__tests__/optionColours.test.ts`.
 
-Sidemenyen bygges av de samme søkeoppføringene som søket leter i
-(`byggMeny()` i `src/domain/analysemetoder.ts`), så listene kan ikke komme i
-utakt med det appen faktisk kan kommentere. Én skuff per metode, én av gangen
-åpen. Virkestoffene står alfabetisk, og bryteren «Vis kategorier» slår
-kategoriskillene av og lister dem i én bolk i stedet. Bryteren og
-«Inkluder alle analysemetoder» står fast øverst i panelet — de gjelder hele
-lista og skal ikke kunne rulles bort fra den.
+Sidemenyen er **stoffregisteret**: stoffene ordnet etter farmakologisk
+klasse, ikke etter analysemetode, med og uten analyttkode om hverandre.
+Inndelingen er data, ikke kode — `src/data/stoffregister.json` har
+kategoriene i rekkefølge, eventuelt delt i underkategorier (antidepressivene
+etter farmakodynamisk klasse, antipsykotika i første- og
+andregenerasjonsmidler), og stoffene ved navnet på informasjonssiden.
+Antihypertensivene tar underkategoriene sine fra datasettet (`"metode": "AHT"`),
+så et nytt antihypertensivum havner på plass av seg selv. Et stoff kan stå i
+flere kategorier, som lamotrigin under både antiepileptika og
+stemningsstabiliserende.
 
-Én linje per **analyttkode**: en sumanalyse som `AMTNORSUM` er én linje, mens
-en modul som dekker flere koder — diazepamgruppen, morfin og kodein, EtG og
-EtS — får én linje per virkestoff. Hver linje er en lenke til
-informasjonssiden for koden; fortolkningen åpnes derfra med «Åpne
+`byggStoffregister()` i `src/domain/stoffregister.ts` slår navnene opp i de
+samme søkeoppføringene som søket leter i og i stoffsidene uten kode fra
+databasen, så lista ikke kan komme i utakt med det appen har sider for. Et navn
+uten side utelates, og en side som ikke står i registeret — en ny stoffside en
+redaktør har laget — havner i «Andre stoffer» nederst til noen plasserer den.
+Én skuff per kategori, én av gangen åpen, med antallet stoffer. Stoffene står
+alfabetisk, og bryteren «Vis underkategorier» slår underkategoriene av og
+lister hver kategori i én bolk. Bryteren står fast øverst og «Ny stoffside»
+(for redaktørene) fast nederst.
+
+Én linje per **analyttkode**, med koden ved navnet: en sumanalyse som
+`AMTNORSUM` er én linje, mens diazepamgruppen, morfin og kodein, EtG og EtS
+får én linje per virkestoff. Stoffer uten kode står uten. Hver linje er en
+lenke til informasjonssiden; fortolkningen åpnes derfra med «Åpne
 fortolkning», eller fra søket som før.
 
 ### Informasjonssidene
@@ -256,24 +269,18 @@ tastene i fortolkningen bak.
 Administratorer kan slå på redigeringsmodus. Hvordan sidene er bygget, står i
 `docs/faginnhold.md`.
 
-Radioknappen til venstre for en metode begrenser søket til den metoden;
-«Inkluder alle analysemetoder» slår filteret av. `Alt + 1` … `Alt + 5` gjør det
-samme uten å åpne noe: tallet er metodens plass i lista, den samme som gir den
-fargen, og `metodesnarvei()` leser begge av det ene registeret. `Alt + 0` slår
-filteret av — null hører ikke til noen metode, og står derfor for «ingen av
-dem». Snarveiene virker overalt i appen — også mens menyene står åpne, siden det
-er der metodene vises — men ikke mens endringsloggen fanger tastaturet. Filteret gjelder bare søket:
-menyen viser alltid alt, og et virkestoff kan velges derfra uansett hva
-filteret står på. Et filter som står på, kan gjøre at en analytt man vet
-finnes ikke dukker opp i søket, så det vises to steder utenfor menyen:
-menyknappen utvider seg til en pille med metodekoden i metodens farge
-(«≡ SPFA»), og under søkealternativene står «Søket er begrenset til» med den
-samme pillen — også når søket gir treff.
-
-Den pillen er samtidig knappen som endrer filteret. Et trykk åpner en liten
-meny med alle metodene som piller under hverandre — med hurtigtasten sin ved
-siden av — og «Skru av filter» nederst, slik at man kan bytte metode eller slå
-filteret av uten å gå veien om sidemenyen.
+**Filteret for søket** settes bare på hovedsiden. Pillen under
+søkealternativene — «Velg analysemetode», eller metodekoden i metodens farge
+når filteret står på — åpner en liten meny med alle metodene som piller under
+hverandre, med hurtigtasten sin ved siden av, og «Skru av filter» nederst.
+`Alt + 1` … `Alt + 5` gjør det samme uten å åpne noe: tallet er metodens plass
+i lista, den samme som gir den fargen, og `metodesnarvei()` leser begge av det
+ene registeret. `Alt + 0` slår filteret av — null hører ikke til noen metode,
+og står derfor for «ingen av dem». Snarveiene virker overalt i appen, men ikke
+mens endringsloggen fanger tastaturet eller stoffregisteret står åpent, siden
+det ikke har noe med søket å gjøre. Et filter som står på, kan gjøre at en
+analytt man vet finnes ikke dukker opp i søket, så pillen står der med
+«Søket er begrenset til» — også når søket gir treff.
 
 Menyen legger seg under pillen når den får plass der, ellers på den siden som
 har mest plass; får den ikke plass på noen av dem, ruller den innenfor plassen
@@ -897,11 +904,10 @@ over dem sier hvilken kommentar de gjelder. For skjermlesere sier hver knapp
 hele sitt eget navn — «Kopier tilleggskommentar» — så de kan skilles fra
 hverandre uten å lese omgivelsene.
 
-Sidemenyen er merket som `<nav>` med navn, menyknappen melder om den er åpen
-med `aria-expanded` og om snarveien med `aria-keyshortcuts`, og radioknappene
-er ekte radioknapper i en gruppe med navn, så filteret kan settes med
-piltastene. Hver metode melder sin egen `Alt`-snarvei på samme måte, både i
-sidemenyen og i filtermenyen. Skuffene melder seg med `aria-expanded` og `aria-controls`, og
+Stoffregisteret er merket som `<nav>` med navnet «Stoffregister», og
+menyknappen melder om den er åpen med `aria-expanded` og om snarveien med
+`aria-keyshortcuts`. Hver metode melder sin egen `Alt`-snarvei på samme måte i
+filtermenyen. Skuffene melder seg med `aria-expanded` og `aria-controls`, og
 innholdet i en lukket skuff er satt usynlig når glidningen er over, så det
 verken nås med tabulator eller leses opp.
 

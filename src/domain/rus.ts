@@ -59,7 +59,7 @@ export interface RusModul {
   /** Nøkkelen, den samme som regelsettets `modul`. */
   id: string
   gruppe: string
-  /** Kategorien i sidemenyen. */
+  /** Kategorien i datasettet, som metalinjen på siden viser. */
   kategori: string
   /** Navnet modulen vises og søkes opp med. */
   navn: string

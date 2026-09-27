@@ -72,10 +72,25 @@ export const AMFETAMIN_FESTKOBLINGER: readonly Festkobling[] = [
   },
 ]
 
+/**
+ * GHB- og ketaminsidene. GHB er det samme stoffet som natriumoksybat, som er
+ * legemiddelet. Ketaminsiden viser både racemisk ketamin og esketamin.
+ */
+export const GHB_KETAMIN_FESTKOBLINGER: readonly Festkobling[] = [
+  {
+    side: 'GHB',
+    fest_id: 'ID_E5DA647E-762B-47A9-AABF-1DF049027829',
+    merknad: 'Natriumoksybat, natriumsaltet av GHB, i Xyrem og generika.',
+  },
+  { side: 'Ketamin', fest_id: 'ID_BE99AE1B-6C05-4E5F-A879-E7251B67947B', merknad: 'Racemisk ketamin (Ketalar, Ketamin Abcur).' },
+  { side: 'Ketamin', fest_id: 'ID_6C27065E-76FB-4EEA-B045-DE70AB6D7A06', merknad: 'Esketamin (Ketanest, Spravato).' },
+]
+
 /** Hver import av koblinger, i rekkefølge, med navnet migrasjonen fikk. */
 export const FESTKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: readonly Festkobling[] }[] = [
   { migrasjon: 'stoffsider_fest_kobling', koblinger: STOFFSIDE_FESTKOBLINGER },
   { migrasjon: 'amfetamin_fest_kobling', koblinger: AMFETAMIN_FESTKOBLINGER },
+  { migrasjon: 'ghb_ketamin_fest_kobling', koblinger: GHB_KETAMIN_FESTKOBLINGER },
 ]
 
 /** Kilden revisjonene får i historikken. */

@@ -1,0 +1,50 @@
+{
+  "side": "Ketamin",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Racemisk ketamin (Ketalar, Ketamin Abcur), barn og voksne: anestetikum ved diagnostiske og kirurgiske inngrep, til innledning og vedlikehold av generell anestesi, alene eller sammen med andre anestetika, og før induksjon eller som supplement ved regional anestesi.",
+      "Esketamin som injeksjon (Ketanest): innledning og vedlikehold av generell anestesi, alene eller sammen med et annet anestetikum; anestesi og smertelindring under akuttmedisinsk behandling; supplement til regional eller lokal anestesi.",
+      "Esketamin som nesespray (Spravato), voksne med moderat til alvorlig klinisk depresjon:",
+      {
+        "punkter": [
+          "i kombinasjon med et SSRI eller SNRI ved behandlingsresistent depresjon som ikke har respondert på minst 2 forskjellige behandlinger med antidepressiver i den pågående episoden;",
+          "i kombinasjon med oral antidepressiv behandling, som akutt korttidsbehandling for rask reduksjon av depressive symptomer som etter klinisk vurdering utgjør en psykiatrisk nødsituasjon."
+        ]
+      },
+      "Nye metoder, slik Felleskatalogen gjengir det: racemisk ketamin er innført med vilkår ved behandlingsresistent depresjon (ID2022_018) og til pasienter med akutt suicidfare (ID2025_034). Esketamin nesespray er ikke innført ved behandlingsresistent depresjon (ID2023_013)."
+    ],
+    "referanser": [
+      "fk-ketalar",
+      "fk-ketamin-abcur",
+      "fk-ketanest",
+      "fk-spravato"
+    ]
+  },
+  "referanser": {
+    "fk-ketalar": {
+      "tittel": "Ketalar «Pfizer»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/ketalar-pfizer-560507"
+    },
+    "fk-ketamin-abcur": {
+      "tittel": "Ketamin Abcur «Abcur»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/ketamin-abcur-abcur-631315"
+    },
+    "fk-ketanest": {
+      "tittel": "Ketanest «Pfizer»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/ketanest-pfizer-585463"
+    },
+    "fk-spravato": {
+      "tittel": "Spravato «Janssen»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/spravato-janssen-670393"
+    }
+  }
+}

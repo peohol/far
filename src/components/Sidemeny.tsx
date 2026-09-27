@@ -1,37 +1,27 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Button } from './Button'
 import { Felt } from './konto/Felt'
 import { Shortcut } from './Shortcut'
 import { Ikon } from './ikon/Ikon'
 import { useTips } from './Tips'
-import {
-  AV_SNARVEI,
-  byggMeny,
-  metodefarger,
-  metodesnarvei,
-  type Menyanalytt,
-  type Menymetode,
-} from '../domain/analysemetoder'
+import type { Analyttkatalog } from '../domain/analyttkatalog'
 import { analyttadresse, stoffadresse } from '../domain/rute'
+import { byggStoffregister, type Registerkategori, type Registerstoff } from '../domain/stoffregister'
 import { fokusIFagsok, lagLiggerOver } from '../hooks/useKeyboard'
 import { rullefart } from '../hooks/useKortHopp'
-import type { Analyte } from '../types'
 
 /**
- * Sidemenyen: oversikten over analysemetodene, og filteret for søket.
+ * Sidemenyen: stoffregisteret.
  *
- * Menyen har to jobber. Den er veien inn til informasjonssiden for hver
- * analyttkode — oppslagsverket, ordnet etter analysemetode og kategori — og
- * den avgjør hvilken analysemetode søket leter i. Fortolkningen startes fra
- * søket, eller med «Åpne fortolkning» på informasjonssiden.
+ * Menyen er veien inn til informasjonssiden for hvert stoff, ordnet etter
+ * farmakologisk klasse (`src/domain/stoffregister.ts`). Stoffene med og uten
+ * analyttkode står om hverandre; de med kode viser koden. Søket i
+ * fortolkningen filtreres ikke herfra, men fra hovedsiden (`Filterbytte`).
  *
- * Innholdet bygges av de samme søkeoppføringene som søket bruker, så listene
- * kan ikke komme i utakt med det appen faktisk kan kommentere. Virkestoffene
- * er lenker, så de også kan åpnes i en ny fane.
- *
- * Stoffene som har en informasjonsside uten noen analyttkode, står i en egen
- * skuff nederst. Den bygges av sidene i databasen, ikke av søkeoppføringene,
- * og redaktørene kan lage en ny side derfra.
+ * Innholdet bygges av katalogen — de samme søkeoppføringene som søket bruker
+ * — og stoffsidene uten kode i databasen, så lista ikke kan komme i utakt med
+ * det appen har sider for. Stoffene er lenker, så de også kan åpnes i en ny
+ * fane. Redaktørene kan lage en ny stoffside nederst.
  *
  * Menyen er et lag over appen, på linje med endringsloggen: `data-lag` sier
  * fra til `lagLiggerOver()`, slik at appens egne taster holder seg i ro mens
@@ -43,6 +33,17 @@ const ETTER_GLIDNING = 300
 
 /** Tasten som åpner og lukker menyen. */
 const MENY_SNARVEI = 'Ctrl + M'
+
+/** Navnet på menyen, i tittelen og for skjermlesere. */
+const TITTEL = 'Stoffregister'
+
+/** Merket menyen bærer som `data-lag` mens den står åpen. */
+const MENY_LAG = 'meny'
+
+/** Sant mens sidemenyen står åpen over appen. */
+export function sidemenyenErApen(): boolean {
+  return document.querySelector(`[data-lag="${MENY_LAG}"]`) !== null
+}
 
 /** Alt som kan få fokus i panelet. */
 const FOKUSERBART = 'button, input, [href], [tabindex]:not([tabindex="-1"])'
@@ -61,40 +62,27 @@ function naabare(panel: HTMLElement | null): HTMLElement[] {
 }
 
 export interface SidemenyProps {
-  /** Søkeoppføringene menyen bygges av — de samme som søket leter i. */
-  pool: Analyte[]
-  /** Analysemetoden søket er begrenset til. `null` er alle metodene. */
-  metodefilter: string | null
-  onFilter: (metode: string | null) => void
-  /** Navnene på stoffsidene uten analyttkode, alfabetisk. */
+  /** Kodene appen har sider for — de samme som søket leter i. */
+  katalog: Analyttkatalog
+  /** Navnene på stoffsidene uten analyttkode. */
   stoffsider?: readonly string[]
   /** Sant når brukeren kan lage en ny stoffside. */
   kanOpprette?: boolean
 }
 
-/** Nøkkelen til skuffen med stoffene uten analyttkode, ved siden av metodekodene. */
-const STOFFSKUFF = 'stoffer uten kode'
-
-export function Sidemeny({ pool, metodefilter, onFilter, stoffsider = [], kanOpprette = false }: SidemenyProps) {
+export function Sidemeny({ katalog, stoffsider = [], kanOpprette = false }: SidemenyProps) {
   const [apen, setApen] = useState(false)
-  /** Av gjemmer kategoriene og lister virkestoffene i én alfabetisk bolk. */
-  const [visKategorier, setVisKategorier] = useState(true)
-  /** Metoden med åpen skuff — bare én av gangen. */
+  /** Av gjemmer underkategoriene og lister stoffene i hver kategori i én alfabetisk bolk. */
+  const [visUnderkategorier, setVisUnderkategorier] = useState(true)
+  /** Kategorien med åpen skuff — bare én av gangen. */
   const [apenSkuff, setApenSkuff] = useState<string | null>(null)
   const panelId = useId()
   const panel = useRef<HTMLElement>(null)
   const knapp = useRef<HTMLButtonElement | null>(null)
 
-  const meny = useMemo(() => byggMeny(pool), [pool])
+  const register = useMemo(() => byggStoffregister(katalog, stoffsider), [katalog, stoffsider])
 
-  /**
-   * Knappens navn sier fra når filteret står på. Et filter brukeren har
-   * glemt, gjør at analytter ikke lenger kan søkes opp, og det skal ikke være
-   * noe man må åpne menyen for å oppdage.
-   */
-  const knappenavn = metodefilter
-    ? `Vis analysemetoder – søket er begrenset til ${metodefilter}`
-    : 'Vis analysemetoder'
+  const knappenavn = 'Vis stoffregisteret'
   const knappetips = useTips(knappenavn, { skjermleser: false })
   // Tipset og fokuset skal på det samme elementet, så de to ref-ene slås sammen.
   const { ref: tipsRef, ...knappeprops } = knappetips.props
@@ -186,15 +174,10 @@ export function Sidemeny({ pool, metodefilter, onFilter, stoffsider = [], kanOpp
 
   return (
     <>
-      {/* Står filteret på, utvider knappen seg til en pille med metodekoden i
-          metodens egen farge. Da går det fram av hjørnet alene hva søket er
-          begrenset til, uten at menyen må åpnes. */}
       <button
         ref={settKnapp}
         type="button"
         className="menyknapp"
-        data-filter={metodefilter ? 'ja' : 'nei'}
-        style={metodefilter ? metodefarger(metodefilter) : undefined}
         aria-label={knappenavn}
         aria-expanded={apen}
         aria-controls={panelId}
@@ -203,7 +186,6 @@ export function Sidemeny({ pool, metodefilter, onFilter, stoffsider = [], kanOpp
         {...knappeprops}
       >
         <Ikon navn="menu" storrelse="ui" />
-        {metodefilter && <span className="menyknapp__filter">{metodefilter}</span>}
         <Shortcut>{MENY_SNARVEI}</Shortcut>
       </button>
 
@@ -214,19 +196,19 @@ export function Sidemeny({ pool, metodefilter, onFilter, stoffsider = [], kanOpp
         className="menylag"
         onClick={lukk}
         aria-hidden="true"
-        {...(apen && { 'data-lag': 'meny' })}
+        {...(apen && { 'data-lag': MENY_LAG })}
       />
 
       <nav
         ref={panel}
         id={panelId}
         className="sidemeny"
-        aria-label="Analysemetoder"
+        aria-label={TITTEL}
         data-apen={apen ? 'ja' : 'nei'}
         tabIndex={-1}
       >
         <div className="sidemeny__topp">
-          <h2 className="sidemeny__tittel">Analysemetoder</h2>
+          <h2 className="sidemeny__tittel">{TITTEL}</h2>
           <button
             type="button"
             className="sidemeny__lukk"
@@ -237,147 +219,84 @@ export function Sidemeny({ pool, metodefilter, onFilter, stoffsider = [], kanOpp
           </button>
         </div>
 
-        {/* Bryteren og «alle»-valget står fast øverst. De gjelder hele lista,
-            og skal ikke kunne rulles bort fra den. */}
+        {/* Bryteren gjelder hele lista, og står fast øverst i stedet for å
+            rulle bort med den. */}
         <label className="bryter menyveksle">
           <input
             type="checkbox"
             role="switch"
-            checked={visKategorier}
-            onChange={(e) => setVisKategorier(e.target.checked)}
+            checked={visUnderkategorier}
+            onChange={(e) => setVisUnderkategorier(e.target.checked)}
           />
           <span className="bryter__spor" aria-hidden="true" />
-          <span>Vis kategorier</span>
+          <span>Vis underkategorier</span>
         </label>
 
-        <div
-          className="menyfilter"
-          role="radiogroup"
-          aria-label="Begrens søket til én analysemetode"
-        >
-          <label className="menyvalg menyvalg--alle">
-            <input
-              type="radio"
-              name="analysemetodefilter"
-              checked={metodefilter === null}
-              aria-keyshortcuts={AV_SNARVEI.replace(/ /g, '')}
-              onChange={() => onFilter(null)}
+        <ul className="menyliste">
+          {register.map((kategori) => (
+            <Kategoriskuff
+              key={kategori.navn}
+              kategori={kategori}
+              apen={apenSkuff === kategori.navn}
+              visUnderkategorier={visUnderkategorier}
+              onVeksle={() => veksle(kategori.navn)}
+              onVelg={velg}
             />
-            <span className="menyvalg__merke">Inkluder alle analysemetoder</span>
-            <Shortcut>{AV_SNARVEI}</Shortcut>
-          </label>
+          ))}
+        </ul>
 
-          <ul className="menyliste">
-            {meny.map((metode) => (
-              <Metodeskuff
-                key={metode.kode}
-                metode={metode}
-                apen={apenSkuff === metode.kode}
-                valgt={metodefilter === metode.kode}
-                visKategorier={visKategorier}
-                onVeksle={() => veksle(metode.kode)}
-                onFilter={() => onFilter(metode.kode)}
-                onVelgAnalytt={velg}
-              />
-            ))}
-            {(stoffsider.length > 0 || kanOpprette) && (
-              <Skuff
-                apen={apenSkuff === STOFFSKUFF}
-                onVeksle={() => veksle(STOFFSKUFF)}
-                filter={<span className="menyskuff__utenfilter" />}
-                tittel={<span className="menyskuff__beskrivelse">Stoffer uten labkode</span>}
-              >
-                <ul className="menyanalytter">
-                  {stoffsider.map((navn) => (
-                    <li key={navn}>
-                      <a className="menyanalytt" href={stoffadresse(navn)} onClick={velg}>
-                        <span className="menyanalytt__navn">{navn}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-                {kanOpprette && <NyStoffside onOpprett={velg} />}
-              </Skuff>
-            )}
-          </ul>
-        </div>
+        {kanOpprette && <NyStoffside onOpprett={velg} />}
       </nav>
     </>
   )
 }
 
-/**
- * Én analysemetode: radioknappen som filtrerer søket, tittelen som åpner
- * skuffen, og virkestoffene i den.
- *
- * Skuffen bærer metodens egen farge — den samme som pillen i analyttkortet og
- * menyknappen når filteret står på den.
- */
-function Metodeskuff({
-  metode,
+/** Én kategori: tittelen som åpner skuffen, og stoffene i den, med eller uten underkategoriene. */
+function Kategoriskuff({
+  kategori,
   apen,
-  valgt,
-  visKategorier,
+  visUnderkategorier,
   onVeksle,
-  onFilter,
-  onVelgAnalytt,
+  onVelg,
 }: {
-  metode: Menymetode
+  kategori: Registerkategori
   apen: boolean
-  valgt: boolean
-  visKategorier: boolean
+  visUnderkategorier: boolean
   onVeksle: () => void
-  onFilter: () => void
-  onVelgAnalytt: () => void
+  onVelg: () => void
 }) {
-  const snarvei = metodesnarvei(metode.kode)
-  const filtertips = useTips(`Vis bare treff fra ${metode.kode} i søket`, { skjermleser: false })
-  const kategorier = visKategorier ? metode.kategorier : []
+  const underkategorier = visUnderkategorier ? kategori.underkategorier : []
+  // Står noen stoffer direkte i kategorien ved siden av underkategoriene, står
+  // de først, uten overskrift.
+  const iUnder = new Set(underkategorier.flatMap((u) => u.stoffer))
+  const direkte = underkategorier.length > 0 ? kategori.stoffer.filter((s) => !iUnder.has(s)) : kategori.stoffer
 
   return (
     <Skuff
       apen={apen}
       onVeksle={onVeksle}
-      stil={metodefarger(metode.kode)}
-      filter={
-        // Tipset henger på selve radioknappen og ikke på etiketten rundt:
-        // etiketten får aldri fokus selv, og forklaringen ville da bare vært
-        // å få med pekeren.
-        <input
-          type="radio"
-          name="analysemetodefilter"
-          checked={valgt}
-          onChange={onFilter}
-          aria-label={`Vis bare treff fra ${metode.kode} – ${metode.beskrivelse}`}
-          {...(snarvei && { 'aria-keyshortcuts': snarvei.replace(/ /g, '') })}
-          {...filtertips.props}
-        />
-      }
       tittel={
         <>
-          <span className="menyskuff__kode">{metode.kode}</span>
-          <span className="menyskuff__beskrivelse">{metode.beskrivelse}</span>
-          {snarvei && <Shortcut>{snarvei}</Shortcut>}
+          <span className="menyskuff__beskrivelse">{kategori.navn}</span>
+          <span className="menyskuff__antall" aria-label={`${kategori.stoffer.length} stoffer`}>
+            {kategori.stoffer.length}
+          </span>
         </>
       }
     >
-      {kategorier.length > 0 ? (
-        kategorier.map((kategori) => (
-          <section className="menykategori" key={kategori.navn}>
-            <h3 className="menykategori__navn">{kategori.navn}</h3>
-            <Virkestoffer analytter={kategori.analytter} onVelg={onVelgAnalytt} />
-          </section>
-        ))
-      ) : (
-        <Virkestoffer analytter={metode.analytter} onVelg={onVelgAnalytt} />
-      )}
+      {direkte.length > 0 && <Stoffer stoffer={direkte} onVelg={onVelg} />}
+      {underkategorier.map((u) => (
+        <section className="menykategori" key={u.navn}>
+          <h3 className="menykategori__navn">{u.navn}</h3>
+          <Stoffer stoffer={u.stoffer} onVelg={onVelg} />
+        </section>
+      ))}
     </Skuff>
   )
 }
 
 /**
- * En skuff i menyen: det som står foran tittelen (radioknappen for en
- * analysemetode), tittelen som åpner skuffen, og innholdet.
+ * En skuff i menyen: tittelen som åpner skuffen, og innholdet.
  *
  * Selve skuffen glir opp og igjen med `grid-template-rows: 0fr ↔ 1fr`, som
  * ellers i appen. Lukket innhold settes usynlig når glidningen er over, så det
@@ -386,15 +305,11 @@ function Metodeskuff({
 function Skuff({
   apen,
   onVeksle,
-  stil,
-  filter,
   tittel,
   children,
 }: {
   apen: boolean
   onVeksle: () => void
-  stil?: CSSProperties
-  filter: ReactNode
   tittel: ReactNode
   children: ReactNode
 }) {
@@ -417,10 +332,8 @@ function Skuff({
   }, [apen])
 
   return (
-    <li ref={rad} className="menyskuff" data-apen={apen ? 'ja' : 'nei'} style={stil}>
+    <li ref={rad} className="menyskuff" data-apen={apen ? 'ja' : 'nei'}>
       <div className="menyskuff__hode">
-        <label className="menyvalg menyvalg--skuff">{filter}</label>
-
         <button
           type="button"
           className="menyskuff__tittel"
@@ -466,15 +379,19 @@ function NyStoffside({ onOpprett }: { onOpprett: () => void }) {
   )
 }
 
-/** Virkestoffene i en skuff eller en kategori, alfabetisk, som lenker til informasjonssidene. */
-function Virkestoffer({ analytter, onVelg }: { analytter: Menyanalytt[]; onVelg: () => void }) {
+/** Stoffene i en kategori eller underkategori, alfabetisk, som lenker til informasjonssidene. */
+function Stoffer({ stoffer, onVelg }: { stoffer: readonly Registerstoff[]; onVelg: () => void }) {
   return (
     <ul className="menyanalytter">
-      {analytter.map((oppforing) => (
-        <li key={oppforing.kode}>
-          <a className="menyanalytt" href={analyttadresse(oppforing.kode)} onClick={onVelg}>
-            <span className="menyanalytt__navn">{oppforing.navn}</span>
-            <span className="menyanalytt__kode">{oppforing.kode}</span>
+      {stoffer.map((stoff) => (
+        <li key={stoff.kode ?? stoff.side}>
+          <a
+            className="menyanalytt"
+            href={stoff.kode ? analyttadresse(stoff.kode) : stoffadresse(stoff.side)}
+            onClick={onVelg}
+          >
+            <span className="menyanalytt__navn">{stoff.navn}</span>
+            {stoff.kode && <span className="menyanalytt__kode">{stoff.kode}</span>}
           </a>
         </li>
       ))}

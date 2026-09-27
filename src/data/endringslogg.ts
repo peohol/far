@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.45.0',
+    dato: '2026-09-27',
+    sammendrag: 'Sidemenyen er nå «Stoffregister», ordnet etter legemiddelgruppe, og det er nye sider for GHB og ketamin',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Større omfang',
+    punkter: [
+      'Sidemenyen heter nå «Stoffregister» og ordner stoffene etter farmakologisk gruppe i stedet for analysemetode: antidepressiver, stemningsstabiliserende, antipsykotika, antiepileptika, alkohol og GHB, benzodiazepiner og Z-hypnotika, opioider, stimulanter, cannabinoider, hallusinogene stoffer og antihypertensiver.',
+      'Antidepressivene er delt etter virkningsmekanisme (SSRI, SNRI, NDRI, TCA, reseptorantagonister, multimodale og NMDA-reseptorantagonister), antipsykotika i første- og andregenerasjonsmidler, og antihypertensivene har de samme undergruppene som før. «Vis underkategorier» slår undergruppene av.',
+      'Stoffer med og uten labkode står nå sammen, og labkoden vises ved navnet når stoffet har en. Et stoff kan stå i flere grupper, f.eks. lamotrigin under både antiepileptika og stemningsstabiliserende. En ny stoffside som ikke er plassert ennå, står under «Andre stoffer».',
+      'Menyen filtrerer ikke lenger fortolkningssøket. Filteret på analysemetode settes bare på hovedsiden, med pillen under søkealternativene eller Alt + tall.',
+      'Ny side for GHB (natriumoksybat) med indikasjoner fra Felleskatalogen, preparatene fra FEST og farmakogenetikk fra ClinPGx.',
+      'Ny side for ketamin med racemisk ketamin og esketamin samlet: indikasjoner fra Felleskatalogen, preparatene fra FEST for begge, og farmakogenetikk fra ClinPGx.',
+    ],
+  },
+  {
     versjon: '1.44.0',
     dato: '2026-09-26',
     sammendrag: 'Legemiddeldataene fra FEST står i «Datakilder», og hentingene fra FEST og ClinPGx stanser når kilden endrer form',

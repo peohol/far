@@ -13,16 +13,15 @@ import { ANALYSEMETODER, AV_SNARVEI, metodesnarvei } from '../domain/analysemeto
 
 /**
  * Pillen som viser hvilken analysemetode søket er begrenset til, og som åpner
- * en liten meny for å bytte eller slå filteret av.
+ * en liten meny for å sette, bytte eller slå filteret av.
  *
- * Filteret settes i sidemenyen, men å endre det derfra krever at hele menyen
- * åpnes. Her ligger de samme valgene der filteret allerede vises: metodene som
- * piller under hverandre, og «Skru av filter» nederst.
+ * Dette er stedet filteret settes, på hovedsiden der det virker — ellers bare
+ * med Alt + tall. Sidemenyen er stoffregisteret og filtrerer ikke søket. Her
+ * står metodene som piller under hverandre, og «Skru av filter» nederst.
  *
  * Uten filter viser pillen «Velg analysemetode» i stedet for en metodekode.
- * Den åpner den samme menyen, så filteret kan settes derfra også — ikke bare
- * fra sidemenyen. Med mus åpnes menyen straks pekeren holdes over pillen;
- * klikk og tastatur virker fortsatt for berøring og tastaturnavigasjon.
+ * Med mus åpnes menyen straks pekeren holdes over pillen; klikk og tastatur
+ * virker fortsatt for berøring og tastaturnavigasjon.
  *
  * Menyen er et lag over appen, som sidemenyen og endringsloggen: `data-lag`
  * sier fra til `lagLiggerOver()`, så talltastene i søket ikke velger et

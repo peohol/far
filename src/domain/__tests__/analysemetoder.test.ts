@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest'
 import {
   ANALYSEMETODER,
   AV_SNARVEI,
-  byggMeny,
   filtrertPool,
   menyanalytter,
   metodefarger,
@@ -16,33 +15,33 @@ import { THC_ANALYTT, THC_KODE } from '../thc'
 import type { Analyte } from '../../types'
 
 /**
- * Sidemenyen og filteret leser analysemetode og kategori av datasettene, ikke
+ * Filteret og metalinjen leser analysemetode og kategori av datasettene, ikke
  * av lister i koden. Testene her holder den koblingen: at hver analytt hører
  * til en metode appen kjenner, at inndelingen er den klinikeren har bedt om,
- * og at ingen analytt blir borte på veien fra datasettet til menyen.
+ * og at hver kode kommer med når en oppføring deles i virkestoffene sine.
+ * Stoffregisteret i sidemenyen testes i `stoffregister.test.ts`.
  */
 
 /** De samme oppføringene appen søker i. */
 const pool: Analyte[] = [...analytes, THC_ANALYTT, ...RUS_ANALYTTER, ETG_ANALYTT]
 
-const meny = byggMeny(pool)
-
-function metode(kode: string) {
-  const funnet = meny.find((m) => m.kode === kode)
-  if (!funnet) throw new Error(`fant ikke ${kode} i menyen`)
-  return funnet
+/** Virkestoffene med kode i en metode, slik katalogen deler oppføringene. */
+function oppforinger(metode: string) {
+  return pool.filter((a) => a.analysemetode === metode).flatMap(menyanalytter)
 }
 
-/** Kategorinavnene i en metode, i den rekkefølgen menyen viser dem. */
-function kategorier(kode: string): string[] {
-  return metode(kode).kategorier.map((k) => k.navn)
+/** Kategoriene i en metode i datasettet, alfabetisk. */
+function kategorier(metode: string): string[] {
+  return [...new Set(oppforinger(metode).map((o) => o.analyte.kategori))]
+    .filter(Boolean)
+    .sort((a, b) => a.localeCompare(b, 'nb'))
 }
 
-/** Virkestoffnavnene i en kategori, i rekkefølge. */
-function navnI(metodekode: string, kategori: string): string[] {
-  const funnet = metode(metodekode).kategorier.find((k) => k.navn === kategori)
-  if (!funnet) throw new Error(`fant ikke kategorien ${kategori} i ${metodekode}`)
-  return funnet.analytter.map((a) => a.navn)
+/** Virkestoffnavnene i en kategori. */
+function navnI(metode: string, kategori: string): string[] {
+  return oppforinger(metode)
+    .filter((o) => o.analyte.kategori === kategori)
+    .map((o) => o.navn)
 }
 
 describe('analysemetoden på analyttene', () => {
@@ -87,53 +86,16 @@ describe('fargen en metode bærer', () => {
   })
 })
 
-describe('menyen', () => {
-  it('viser metodene i den avtalte rekkefølgen', () => {
-    expect(meny.map((m) => m.kode)).toEqual(['SPFA', 'SRUS', 'UCAK', 'UETGHB', 'AHT'])
-  })
-
-  it('mister ingen analyttkode på veien fra datasettene', () => {
-    const iMenyen = meny.flatMap((m) => m.analytter.map((a) => a.kode))
-    const forventet = pool.flatMap((a) => menyanalytter(a).map((o) => o.kode))
-    expect(iMenyen.slice().sort()).toEqual(forventet.slice().sort())
+describe('oppføringene delt i virkestoffer', () => {
+  it('gir hver kode én gang', () => {
+    const koder = pool.flatMap((a) => menyanalytter(a).map((o) => o.kode))
     // Ingen kode skal stå to steder — da ville et virkestoff hatt to veier inn.
-    expect(new Set(iMenyen).size).toBe(iMenyen.length)
-  })
-
-  it('har de samme virkestoffene med og uten kategorier', () => {
-    for (const m of meny) {
-      if (m.kategorier.length === 0) continue
-      const iKategoriene = m.kategorier.flatMap((k) => k.analytter.map((a) => a.kode))
-      expect(iKategoriene.slice().sort()).toEqual(m.analytter.map((a) => a.kode).sort())
-    }
-  })
-
-  it('lister virkestoffene alfabetisk, både samlet og i hver kategori', () => {
-    for (const m of meny) {
-      const navn = m.analytter.map((a) => a.navn)
-      expect(navn).toEqual(navn.slice().sort((a, b) => a.localeCompare(b, 'nb')))
-      for (const k of m.kategorier) {
-        const iKategorien = k.analytter.map((a) => a.navn)
-        expect(iKategorien).toEqual(
-          iKategorien.slice().sort((a, b) => a.localeCompare(b, 'nb')),
-        )
-      }
-    }
-  })
-
-  it('lister kategoriene alfabetisk', () => {
-    for (const m of meny) {
-      expect(m.kategorier.map((k) => k.navn)).toEqual(
-        m.kategorier.map((k) => k.navn).sort((a, b) => a.localeCompare(b, 'nb')),
-      )
-    }
+    expect(new Set(koder).size).toBe(koder.length)
   })
 
   it('fører hvert virkestoff til den modulen søket ville gitt', () => {
-    for (const m of meny) {
-      for (const oppforing of m.analytter) {
-        expect(pool).toContain(oppforing.analyte)
-      }
+    for (const analyte of pool) {
+      for (const oppforing of menyanalytter(analyte)) expect(oppforing.analyte).toBe(analyte)
     }
   })
 })
@@ -148,7 +110,7 @@ describe('SPFA', () => {
   })
 
   it('lar sumanalyser stå som én oppføring', () => {
-    const summen = metode('SPFA').analytter.find((a) => a.kode === 'AMTNORSUM')
+    const summen = oppforinger('SPFA').find((a) => a.kode === 'AMTNORSUM')
     expect(summen?.navn).toBe('Amitriptylin + nortriptylin')
   })
 })
@@ -180,19 +142,19 @@ describe('SRUS', () => {
 describe('UCAK', () => {
   it('lister IRCAK som den eneste komponenten, uten kategorier', () => {
     expect(kategorier('UCAK')).toEqual([])
-    expect(metode('UCAK').analytter.map((a) => a.kode)).toEqual([THC_KODE])
+    expect(oppforinger('UCAK').map((a) => a.kode)).toEqual([THC_KODE])
   })
 })
 
 describe('UETGHB', () => {
   it('lister EtG og EtS hver for seg, uten kategorier', () => {
     expect(kategorier('UETGHB')).toEqual([])
-    expect(metode('UETGHB').analytter.map((a) => a.navn)).toEqual(['EtG', 'EtS'])
-    expect(metode('UETGHB').analytter.map((a) => a.kode)).toEqual([ETG_KODE, ETS_KODE])
+    expect(oppforinger('UETGHB').map((a) => a.navn)).toEqual(['EtG', 'EtS'])
+    expect(oppforinger('UETGHB').map((a) => a.kode)).toEqual([ETG_KODE, ETS_KODE])
   })
 
   it('fører begge til den samme modulen', () => {
-    for (const oppforing of metode('UETGHB').analytter) {
+    for (const oppforing of oppforinger('UETGHB')) {
       expect(oppforing.analyte).toBe(ETG_ANALYTT)
     }
   })
@@ -246,9 +208,7 @@ describe('AHT', () => {
   })
 
   it('plasserer hvert virkestoff der klinikeren plasserte det', () => {
-    const funnet = Object.fromEntries(
-      metode('AHT').kategorier.flatMap((k) => k.analytter.map((a) => [a.kode, k.navn])),
-    )
+    const funnet = Object.fromEntries(oppforinger('AHT').map((a) => [a.kode, a.analyte.kategori]))
     expect(funnet).toEqual(FASIT)
   })
 })

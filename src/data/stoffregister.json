@@ -1,0 +1,111 @@
+{
+  "kategorier": [
+    {
+      "navn": "Antidepressiver",
+      "underkategorier": [
+        { "navn": "SSRI", "stoffer": ["Citalopram", "Escitalopram", "Fluoksetin", "Fluvoksamin", "Paroksetin", "Sertralin"] },
+        { "navn": "SNRI", "stoffer": ["Duloksetin", "Venlafaksin"] },
+        { "navn": "NDRI", "stoffer": ["Hydroksybupropion"] },
+        { "navn": "TCA", "stoffer": ["Amitriptylin", "Doksepin", "Klomipramin", "Nortriptylin", "Trimipramin"] },
+        { "navn": "Reseptorantagonister (NaSSA)", "stoffer": ["Mianserin", "Mirtazapin"] },
+        { "navn": "Multimodale", "stoffer": ["Vortioksetin"] },
+        { "navn": "NMDA-reseptorantagonister", "stoffer": ["Ketamin"] }
+      ]
+    },
+    {
+      "navn": "Stemningsstabiliserende",
+      "stoffer": ["Karbamazepin", "Lamotrigin", "Litium", "Valproat"]
+    },
+    {
+      "navn": "Antipsykotika",
+      "underkategorier": [
+        {
+          "navn": "Førstegenerasjonsmidler",
+          "stoffer": ["Flupentiksol", "Haloperidol", "Klorprotiksen", "Levomepromazin", "Perfenazin", "Zuklopentiksol"]
+        },
+        {
+          "navn": "Andregenerasjonsmidler",
+          "stoffer": [
+            "Amisulprid",
+            "Aripiprazol",
+            "Brekspiprazol",
+            "Kariprazin",
+            "Klozapin",
+            "Kvetiapin",
+            "Lurasidon",
+            "Olanzapin",
+            "Paliperidon (hydroksyrisperidon)",
+            "Risperidon",
+            "Sertindol",
+            "Ziprasidon"
+          ]
+        }
+      ]
+    },
+    {
+      "navn": "Antiepileptika",
+      "stoffer": [
+        "Fenobarbital",
+        "Fenytoin",
+        "Gabapentin",
+        "Karbamazepin",
+        "Klonazepam",
+        "Lamotrigin",
+        "Levetiracetam",
+        "Okskarbazepin",
+        "Topiramat",
+        "Valproat"
+      ]
+    },
+    {
+      "navn": "Alkohol og GHB",
+      "stoffer": ["EtG", "EtS", "GHB"]
+    },
+    {
+      "navn": "Benzodiazepiner og Z-hypnotika",
+      "stoffer": [
+        "Alprazolam",
+        "Diazepam",
+        "Flunitrazepam",
+        "Klonazepam",
+        "N-desmetyldiazepam",
+        "Nitrazepam",
+        "Oksazepam",
+        "Zolpidem",
+        "Zopiklon"
+      ]
+    },
+    {
+      "navn": "Opioider",
+      "stoffer": [
+        "Buprenorfin",
+        "Fentanyl",
+        "Ketobemidon",
+        "Kodein",
+        "Metadon",
+        "Morfin",
+        "O-desmetyltramadol",
+        "Oksykodon",
+        "Petidin",
+        "Tapentadol",
+        "Tramadol"
+      ]
+    },
+    {
+      "navn": "Stimulanter",
+      "stoffer": ["Amfetamin", "Atomoksetin", "Benzoylekgonin", "MDMA", "Metamfetamin", "Metylfenidat"]
+    },
+    {
+      "navn": "Cannabinoider",
+      "stoffer": ["THC", "THC-syre"]
+    },
+    {
+      "navn": "Hallusinogene stoffer",
+      "stoffer": ["Ketamin"]
+    },
+    {
+      "navn": "Antihypertensiver",
+      "metode": "AHT"
+    }
+  ]
+}

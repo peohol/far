@@ -89,11 +89,9 @@ Eksempel: diazepam, N-desmetyldiazepam og oksazepam har egne analyttkoder og inf
 
 ### Sidemenyen
 
-Analyttoppføringene i venstremenyen skal etter hvert åpne informasjonssiden for analytten, ikke starte samme fortolkningsflyt som hovedsøket.
+Venstremenyen er stoffregisteret: den åpner informasjonssiden for stoffet, ikke fortolkningsflyten, og er ordnet etter farmakologisk klasse med og uten analyttkode om hverandre (`src/data/stoffregister.json`). Den filtrerer ikke søket.
 
-Eksisterende inndeling etter analysemetode og kategori beholdes.
-
-Hovedsidens søk kan fortsatt være inngangen til fortolkningsarbeidsflyten.
+Hovedsidens søk er inngangen til fortolkningsarbeidsflyten, og filteret på analysemetode settes der.
 
 ### Fra fortolkningsmodulen
 

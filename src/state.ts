@@ -51,8 +51,8 @@ export interface State {
   /** Om et enslig alternativ får velge seg selv. Se {@link narrow}. */
   autoPick: boolean
   /**
-   * Analysemetoden søket er begrenset til, valgt i sidemenyen. `null` er
-   * «Inkluder alle analysemetoder», altså filteret slått av.
+   * Analysemetoden søket er begrenset til, valgt i filteret på hovedsiden
+   * (`Filterbytte`). `null` er filteret slått av.
    *
    * Den lever utenom arbeidsflyten: et valg her skal stå til brukeren selv
    * endrer det, og overlever både Esc og at en kommentar er ferdig limt inn.

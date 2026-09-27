@@ -1,8 +1,9 @@
 /**
- * Sidemenyen og filteret for søket, fra Atlas (`SideMenu`): én skuff per
- * analysemetode, radioknappen som begrenser søket til metoden, «Vis
- * kategorier» som bryter og «Inkluder alle analysemetoder» fast øverst.
- * Menyknappen står først i toppmenyen (`toppmeny.css`).
+ * Sidemenyen — stoffregisteret — fra Atlas (`SideMenu`): én skuff per
+ * farmakologisk kategori, med «Vis underkategorier» som bryter fast øverst og
+ * «Ny stoffside» for redaktørene fast nederst. Menyknappen står først i
+ * toppmenyen (`toppmeny.css`). Filteret for søket i fortolkningen
+ * (`Filterbytte`) står nederst i denne fila.
  *
  * Menyen er tre lag: knappen, panelet over den, og et lag mellom panelet og
  * appen som mørklegger og slører innholdet bak. Mørkleggingen ligger som sitt
@@ -106,19 +107,11 @@
   border-color: var(--linje-sterk);
 }
 
-/* Bryteren for kategoriene og «alle»-valget gjelder hele lista, og står fast
-   øverst i stedet for å rulle bort med den. */
+/* Bryteren gjelder hele lista, og står fast øverst i stedet for å rulle bort
+   med den. */
 .menyveksle {
   flex: none;
   margin: 0 var(--rom-6) var(--rom-4);
-}
-
-/* Den faste raden øverst og den rullende lista under. */
-.menyfilter {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
 }
 
 .menyliste {
@@ -126,57 +119,15 @@
   flex: 1;
   flex-direction: column;
   gap: var(--rom-1);
+  min-height: 0;
   margin: 0;
   overflow-y: auto;
   padding: var(--rom-2) var(--rom-4) var(--rom-4);
+  border-top: var(--kant) solid var(--linje);
 }
 
-.menyvalg {
-  display: flex;
-  align-items: center;
-  gap: var(--rom-3);
-  font-size: var(--tekst-etikett);
-  font-weight: var(--vekt-medium);
-  color: var(--blekk);
-  cursor: pointer;
-}
-
-/* Merkelappen skyves til høyre; teksten mellom tar plassen som blir igjen. */
-.menyvalg__merke {
-  flex: 1;
-}
-
-.menyvalg input[type='radio'] {
-  flex: none;
-  width: 1.1em;
-  height: 1.1em;
-  margin: 0;
-  accent-color: var(--aksent);
-  cursor: pointer;
-}
-
-/* Radioknappen som slår filteret av gjelder alle metodene, og står derfor over
-   dem med en linje under som skiller den fra skuffene. */
-.menyvalg--alle {
-  flex: none;
-  padding: 0 var(--rom-6) var(--rom-5);
-  border-bottom: var(--kant) solid var(--linje);
-}
-
-.menyvalg--alle .hurtigtast {
-  background: var(--flate-hevet);
-}
-
-/* I skuffehodet er radioknappen alene: tittelen ved siden av er en egen knapp
-   som åpner skuffen, og de to kan ikke ligge inni hverandre. */
-.menyvalg--skuff {
-  flex: none;
-  padding: 0 var(--rom-1);
-}
-
-/* --- Én analysemetode -------------------------------------------------------
-   Skuffen står på den hevede flaten når den er åpen. Metodekoden bærer
-   metodens egen farge, fra det samme settet som søkealternativene bruker. */
+/* --- Én kategori --------------------------------------------------------------
+   Skuffen står på den hevede flaten når den er åpen. */
 .menyskuff {
   border-radius: var(--runding-underkort);
   transition: background-color var(--fart-rask) var(--kurve);
@@ -208,18 +159,6 @@
   cursor: pointer;
 }
 
-.menyskuff__kode {
-  flex: none;
-  padding: var(--rom-2) var(--rom-3);
-  font-size: var(--tekst-meta);
-  font-weight: var(--vekt-fet);
-  line-height: var(--linjehoyde-tett);
-  letter-spacing: 0.04em;
-  color: var(--alt-ink);
-  background: var(--alt-solid);
-  border-radius: var(--runding-pille);
-}
-
 .menyskuff__beskrivelse {
   flex: 1;
   min-width: 0;
@@ -229,10 +168,12 @@
   color: var(--blekk);
 }
 
-/* Hurtigtasten står som ren tekst i raden, ikke som et merke. */
-.menyskuff__tittel .hurtigtast {
-  padding: 0;
-  background: transparent;
+/* Hvor mange stoffer kategorien har, dempet ved siden av navnet. */
+.menyskuff__antall {
+  flex: none;
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
 }
 
 /* Pilen peker mot høyre når skuffen er lukket, ned når den er åpen. */
@@ -257,11 +198,11 @@
 }
 
 /* Lukket innhold settes usynlig når glidningen er over, så det heller ikke nås
-   med tabulator eller skjermleser. Innholdet rykkes inn under radioknappen. */
+   med tabulator eller skjermleser. Innholdet rykkes litt inn under tittelen. */
 .menyskuff__inner {
   overflow: hidden;
   min-height: 0;
-  padding: 0 var(--rom-2) var(--rom-3) var(--rom-8);
+  padding: 0 var(--rom-2) var(--rom-3) var(--rom-5);
   visibility: hidden;
   transition: visibility 0s linear var(--fart-glid);
 }
@@ -454,19 +395,15 @@
   background: var(--flate-hevet);
 }
 
-/* --- Stoffene uten analyttkode ----------------------------------------------
-   Skuffen har ikke noe filter; plassen etter radioknappen holdes, så titlene
-   står på linje med metodenes. */
-.menyskuff__utenfilter {
-  display: block;
-  width: 1.1em;
-}
-
+/* --- Ny stoffside ------------------------------------------------------------
+   Står fast nederst i panelet, under lista, for redaktørene. */
 .menyny {
+  flex: none;
   display: flex;
   align-items: flex-end;
   gap: var(--rom-2);
-  margin-top: var(--rom-3);
+  padding: var(--rom-4) var(--rom-6) var(--rom-6);
+  border-top: var(--kant) solid var(--linje);
 }
 
 .menyny .felt {

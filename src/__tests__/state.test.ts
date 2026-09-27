@@ -175,7 +175,7 @@ describe('veien tilbake når det bare fantes ett alternativ fra første tegn', (
   })
 })
 
-describe('filteret fra sidemenyen', () => {
+describe('filteret for søket', () => {
   const medFilter = reducer(initialState, { type: 'sett-metodefilter', metode: 'AHT' })
 
   it('holder på metoden som er valgt', () => {
@@ -184,7 +184,7 @@ describe('filteret fra sidemenyen', () => {
   })
 
   it('overlever at søket nullstilles', () => {
-    // Filteret er et valg brukeren har tatt i menyen, ikke et steg i
+    // Filteret er et valg brukeren har tatt i filtermenyen, ikke et steg i
     // arbeidsflyten: verken Esc fra første steg eller en ferdig kommentar
     // skal slå det av.
     expect(reducer(medFilter, { type: 'nullstill' }).metodefilter).toBe('AHT')
