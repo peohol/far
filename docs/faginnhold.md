@@ -353,7 +353,9 @@ til.
 **Stoffsider uten kode.** Et stoff uten analyttkode kan ha en side på
 `#/stoff/<navn>`: en informasjonsside som verken er hovedside eller komponent
 for noen analytt (visningen `stoffsider_uten_kode`). Den har de samme panelene,
-men ingen kode i identiteten, ingen «Åpne fortolkning» og ingen regelsett.
+men ingen kode og analysemetode under navnet, ingen «Åpne fortolkning» og
+ingen regelsett. Over navnet står kategoriene fra stoffregisteret, som på
+sidene med kode (`kategorierFor` i `src/domain/stoffregister.ts`).
 Stoffregisteret i sidemenyen setter dem inn i de farmakologiske kategoriene
 sammen med stoffene som har kode (se README, «Stoffregisteret og
 analysemetodene»), med navnene fra databasen (`les_stoffsidenavn`);

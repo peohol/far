@@ -508,8 +508,11 @@ describe('stoffside uten analyttkode', () => {
     expect(leser.lesAnalyttside).not.toHaveBeenCalled()
     expect(leser.finnIntervallregelsett).not.toHaveBeenCalled()
     expect(screen.getByRole('heading', { level: 1, name: 'Teststoff' })).toBeTruthy()
-    expect(screen.getByText('Stoffside uten labkode')).toBeTruthy()
-    expect(screen.queryByRole('button', { name: /Åpne fortolkning/ })).toBeNull()
+    // Kategorien fra stoffregisteret over navnet, og ingen analyse under det.
+    const identitet = screen.getByRole('heading', { level: 1 }).closest('section')!
+    expect(identitet.querySelector('.metalinje')!.textContent).toBe('Andre stoffer')
+    expect(identitet.querySelector('.identitet__analyse')).toBeNull()
+    expect(screen.queryByRole('button', { name: /åpne fortolkning/i })).toBeNull()
     expect(document.title).toBe('Teststoff – OUSFAR')
   })
 
@@ -581,18 +584,30 @@ describe('lesemodus', () => {
     ])
   })
 
-  it('viser koden, metoden og kategorien i metalinjen over navnet', async () => {
-    vis('AMTNORSUM')
+  it('viser kategoriene fra stoffregisteret over navnet, og koden og metoden under', async () => {
+    const user = userEvent.setup()
+    const { onApneFortolkning } = vis('AMTNORSUM')
     await finnVerdi('10–20 nmol/L')
-    const identitet = screen.getByRole('heading', { level: 1 }).closest('section')!
+    const overskrift = screen.getByRole('heading', { level: 1 })
+    const identitet = overskrift.closest('section')!
     const oppforing = katalog.finn('AMTNORSUM')!
+    // Over navnet: de samme kategoriene som i sidemenyen.
     const metalinje = identitet.querySelector('.metalinje')!
-    expect(within(metalinje as HTMLElement).getByText('AMTNORSUM').className).toBe('metalinje__kode')
-    expect(metalinje.textContent).toContain(oppforing.analysemetode)
-    // Linjen står før navnet.
-    expect(metalinje.compareDocumentPosition(screen.getByRole('heading', { level: 1 }))).toBe(
-      Node.DOCUMENT_POSITION_FOLLOWING,
-    )
+    expect(metalinje.textContent).toBe('Antidepressiver › TCA')
+    expect(metalinje.compareDocumentPosition(overskrift)).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+    // Under navnet: koden og analysemetoden den inngår i.
+    const analyse = identitet.querySelector('.identitet__analyse')!
+    expect(overskrift.compareDocumentPosition(analyse)).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+    expect(analyse.textContent).toBe(`AMTNORSUM·Inngår i${oppforing.analysemetode}`)
+    // Koden åpner fortolkningen, som «Åpne fortolkning» i toppmenyen.
+    await user.click(within(analyse as HTMLElement).getByRole('button', { name: 'AMTNORSUM – åpne fortolkningen' }))
+    expect(onApneFortolkning).toHaveBeenCalledWith(oppforing.fortolkning)
+  })
+
+  it('viser hver kategori et stoff står i', async () => {
+    vis('LAM', kilde({ data: () => TOM_SIDE }))
+    const identitet = (await screen.findByRole('heading', { level: 1 })).closest('section')!
+    expect(identitet.querySelector('.metalinje')!.textContent).toBe('Stemningsstabiliserende·Antiepileptika')
   })
 
   it('grupperer viktige data i konsentrasjoner og kinetikk, med t₁/₂ og tₛₛ som symboler og en verdi per form', async () => {

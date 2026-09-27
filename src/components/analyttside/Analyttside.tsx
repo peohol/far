@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { Analyttkatalog } from '../../domain/analyttkatalog'
 import { byggSidemodell, referanseunivers } from '../../faginnhold/analyttside'
 import { PANELER } from '../../faginnhold/paneler'
@@ -38,6 +38,7 @@ import { Farmakogenetikkpanel, farmakogenetikksoketekster } from './Farmakogenet
 import { useCpic, useFarmakogenetikk } from './useFarmakogenetikk'
 import { useAnalyttside, type Sidemodus, type Sidenokkel } from './useAnalyttside'
 import { analyttadresse } from '../../domain/rute'
+import { kategorierFor } from '../../domain/stoffregister'
 
 interface Sideprops {
   /** Seksjonen og eventuelt detaljkortet adressen peker på (se `src/domain/rute.ts`). */
@@ -157,6 +158,10 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
     () => (oppforing ? komponenterFor(oppforing, side.data, katalog) : []),
     [oppforing, side.data, katalog],
   )
+  const kategorier = useMemo(() => kategorierFor(oppforing?.sidenavn ?? navn, katalog), [oppforing, navn, katalog])
+  const apneFortolkning = useCallback(() => {
+    if (oppforing) onApneFortolkning(oppforing.fortolkning)
+  }, [oppforing, onApneFortolkning])
   // Et stoff som viser seg å være hovedside for en kode appen kjenner, hører
   // til siden for koden.
   const tilKode = !oppforing && side.data.analytt ? katalog.finn(side.data.analytt.innhold.kode)?.kode : undefined
@@ -293,7 +298,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
               <Toppmenyknapp
                 ikon="interp"
                 variant="primar"
-                onClick={() => onApneFortolkning(oppforing.fortolkning)}
+                onClick={apneFortolkning}
               >
                 Åpne fortolkning
               </Toppmenyknapp>
@@ -355,7 +360,9 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                         oppforing={oppforing}
                         navn={navn}
                         komponenter={komponenter}
+                        kategorier={kategorier}
                         overskriftId={overskrift}
+                        onApneFortolkning={apneFortolkning}
                       />
                     )
                   case 'legemidler':

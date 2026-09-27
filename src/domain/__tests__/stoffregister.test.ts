@@ -3,7 +3,7 @@ import { filnokkel } from '../../faginnhold/import'
 import { CBD_STOFFSIDER, NYE_STOFFSIDER } from '../../faginnhold/indikasjoner'
 import { STOFFSIDE_DATASETT } from '../../faginnhold/stoffsider'
 import { byggKatalog, FORTOLKNINGSOPPFORINGER } from '../analyttkatalog'
-import { ANDRE_STOFFER, byggStoffregister, STOFFREGISTER, type Registerkategori } from '../stoffregister'
+import { ANDRE_STOFFER, byggStoffregister, kategorierFor, STOFFREGISTER, type Registerkategori } from '../stoffregister'
 
 /**
  * Stoffregisteret i sidemenyen (`src/data/stoffregister.json`): at hvert
@@ -169,5 +169,43 @@ describe('sider som mangler eller ikke er plassert', () => {
       underkategorier: [],
       stoffer: [{ navn: 'Teststoff', side: 'Teststoff', kode: null }],
     })
+  })
+})
+
+describe('kategoriene til én stoffside', () => {
+  it('gir underkategorien når kategorien er delt opp', () => {
+    expect(kategorierFor('Sertralin', katalog)).toEqual([{ kategori: 'Antidepressiver', underkategori: 'SSRI' }])
+    expect(kategorierFor('Klozapin', katalog)).toEqual([
+      { kategori: 'Antipsykotika', underkategori: 'Andregenerasjonsmidler' },
+    ])
+  })
+
+  it('gir hver kategori stoffet står i, i registerets rekkefølge', () => {
+    expect(kategorierFor('Lamotrigin', katalog)).toEqual([
+      { kategori: 'Stemningsstabiliserende' },
+      { kategori: 'Antiepileptika' },
+    ])
+    expect(kategorierFor('ketamin', katalog)).toEqual([
+      { kategori: 'Antidepressiver', underkategori: 'NMDA-reseptorantagonister' },
+      { kategori: 'Hallusinogene stoffer' },
+    ])
+  })
+
+  it('stemmer med sidemenyen for hver side, også antihypertensivene', () => {
+    for (const side of [...new Set(katalog.oppforinger.map((o) => o.sidenavn)), ...STOFFSIDER]) {
+      const iMenyen = register.flatMap((k) =>
+        k.underkategorier.length > 0
+          ? k.underkategorier.filter((u) => u.stoffer.some((s) => s.side === side)).map((u) => `${k.navn} › ${u.navn}`)
+          : k.stoffer.some((s) => s.side === side)
+            ? [k.navn]
+            : [],
+      )
+      const stier = kategorierFor(side, katalog).map((k) => (k.underkategori ? `${k.kategori} › ${k.underkategori}` : k.kategori))
+      expect(stier, side).toEqual(iMenyen)
+    }
+  })
+
+  it('gir «Andre stoffer» for en side registeret ikke plasserer', () => {
+    expect(kategorierFor('Teststoff', katalog)).toEqual([{ kategori: ANDRE_STOFFER }])
   })
 })

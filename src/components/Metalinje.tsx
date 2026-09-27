@@ -16,10 +16,11 @@ export interface MetalinjeProps {
 }
 
 /**
- * Linjen over et stoffnavn: «KVE · SPFA › Antipsykotika». Kodene står i
- * aksentfargen; metoden og kategorien hører sammen, som i sidemenyen. Felles
- * for analyttkortene i fortolkningen og identiteten på informasjonssiden, så
- * de to leses likt (Atlas `MetaLine`).
+ * Linjen over et stoffnavn i fortolkningsmodulene: «KVE · SPFA ›
+ * Antipsykotika». Kodene står i aksentfargen; metoden og kategorien hører
+ * sammen (Atlas `MetaLine`). Informasjonssiden har kategoriene fra
+ * stoffregisteret over navnet i stedet, og koden og metoden under
+ * (`Identitetspanel.tsx`).
  */
 export function Metalinje({ koder, metode, kategori, lenker = false }: MetalinjeProps) {
   return (
