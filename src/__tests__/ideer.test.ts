@@ -38,6 +38,7 @@ describe('idéene i databasen', () => {
     tittel: string
     status: string | null
     sist_sett: string | null
+    lest_kl: string
     hjerter: number
     mitt_hjerte: boolean
     kommentarer: { id: string; forelder_id: string | null; forfatter_id: string | null; slettet: boolean; tekst: unknown; hjerter: number }[]
@@ -238,11 +239,25 @@ describe('idéene i databasen', () => {
     await nyKommentar(bo, ide, bos, 'Svar')
     expect(await nye(ada)).toBe(2)
 
-    expect((await traad(ada, ide))!.sist_sett).toBeNull()
-    await sql(ada, 'select public.merk_ide_sett($1)', [ide])
+    const lest = (await traad(ada, ide))!
+    expect(lest.sist_sett).toBeNull()
+    // En kommentar som kommer etter at tråden ble lest, er fortsatt ny når den merkes som sett.
+    await nyKommentar(bo, ide, null, 'Imellom')
+    await sql(ada, 'select public.merk_ide_sett($1, $2)', [ide, lest.lest_kl])
+    expect(await nye(ada)).toBe(1)
+    expect(await medNytt(ada)).toBe(fra + 1)
+
+    const igjen = (await traad(ada, ide))!
+    expect(igjen.sist_sett).toEqual(expect.any(String))
+    await sql(ada, 'select public.merk_ide_sett($1, $2)', [ide, igjen.lest_kl])
     expect(await nye(ada)).toBe(0)
     expect(await medNytt(ada)).toBe(fra)
-    expect((await traad(ada, ide))!.sist_sett).toEqual(expect.any(String))
+    // Et gammelt tidspunkt flytter ikke «sett» bakover, og et i framtiden gjelder ikke.
+    await sql(ada, 'select public.merk_ide_sett($1, $2)', [ide, lest.lest_kl])
+    await sql(ada, `select public.merk_ide_sett($1, now() + interval '1 day')`, [ide])
+    expect(await nye(ada)).toBe(0)
+    const [{ sett_kl }] = (await sql<{ sett_kl: string }>(ada, 'select sett_kl::text from public.idebesok where ide_id = $1', [ide])) as [{ sett_kl: string }]
+    expect(Date.parse(sett_kl)).toBeLessThanOrEqual(Date.now() + 1000)
 
     // Besøkene er private, og settes bare gjennom funksjonen.
     expect(await sql(bo, 'select * from public.idebesok where bruker_id = $1', [ada])).toEqual([])

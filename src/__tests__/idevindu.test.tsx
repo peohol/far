@@ -52,6 +52,7 @@ const TRAAD: Idetraad = {
   status: 'planlagt',
   // Kari var sist inne før Olas siste svar.
   sist_sett: '2026-09-26T12:30:00Z',
+  lest_kl: '2026-09-27T09:00:00Z',
   kommentarer: [
     { id: 'k1', forelder_id: null, forfatter_id: 'ola', tekst: DOK('Enig!'), slettet: false, opprettet_kl: '2026-09-26T11:00:00Z', endret_kl: null, hjerter: 1, mitt_hjerte: false },
     { id: 'k2', forelder_id: 'k1', forfatter_id: 'kari', tekst: DOK('Takk, Ola'), slettet: false, opprettet_kl: '2026-09-26T12:00:00Z', endret_kl: null, hjerter: 0, mitt_hjerte: false },
@@ -220,7 +221,7 @@ describe('status og det nye', () => {
     apne()
     await bruker.click(await screen.findByRole('button', { name: /Flere TDM-kilder/ }))
     await screen.findByRole('heading', { name: 'Flere TDM-kilder', level: 3 })
-    await waitFor(() => expect(api.merkIdeSett).toHaveBeenCalledWith('i1'))
+    await waitFor(() => expect(api.merkIdeSett).toHaveBeenCalledWith(expect.objectContaining({ id: 'i1', lest_kl: '2026-09-27T09:00:00Z' })))
     // Bare Olas svar etter forrige besøk er nytt; Karis egne er aldri det.
     expect(screen.getAllByText('Ny')).toHaveLength(1)
     // Ingen andre enn administratorer ser statusvalgene.

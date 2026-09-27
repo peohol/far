@@ -15,6 +15,9 @@ import { Brukerliste } from './Brukerliste'
 import { Datakilder } from './Datakilder'
 import { Kontopanel } from './Kontopanel'
 
+/** Hvor ofte appen ser etter nye kommentarer på idéene mens den står åpen. */
+const NYTT_HVER = 5 * 60_000
+
 type Panel = 'konto' | 'brukere' | 'datakilder' | 'logg' | 'ideer' | null
 
 interface Valg {
@@ -56,12 +59,26 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
   const knapp = useRef<HTMLButtonElement>(null)
   const meny = useRef<HTMLDivElement>(null)
   const menyId = useId()
-  /** Antall idéer med kommentarer brukeren ikke har sett. Sjekkes når appen og menyen åpnes, og etter et panel. */
+  /** Antall idéer med kommentarer brukeren ikke har sett. Sjekkes når appen, fanen og menyen åpnes, etter et panel og jevnlig. */
   const [ideerMedNytt, setIdeerMedNytt] = useState(0)
   const sjekkNytt = useCallback(() => {
     hentIdeerMedNytt().then(setIdeerMedNytt, () => undefined)
   }, [])
-  useEffect(sjekkNytt, [sjekkNytt])
+  useEffect(() => {
+    sjekkNytt()
+    // Også mens appen står åpen: når fanen får fokus igjen, og jevnlig mens den er synlig.
+    const naarSynlig = () => {
+      if (document.visibilityState === 'visible') sjekkNytt()
+    }
+    const jevnlig = window.setInterval(naarSynlig, NYTT_HVER)
+    window.addEventListener('focus', naarSynlig)
+    document.addEventListener('visibilitychange', naarSynlig)
+    return () => {
+      window.clearInterval(jevnlig)
+      window.removeEventListener('focus', naarSynlig)
+      document.removeEventListener('visibilitychange', naarSynlig)
+    }
+  }, [sjekkNytt])
   const nytt = ideerMedNytt > 0 ? `nye kommentarer på ${ideerMedNytt === 1 ? 'én idé' : `${ideerMedNytt} idéer`}` : undefined
 
   // Fast identitet: `Modallag` kobler den til lukkehendelsen på dialogen.

@@ -40,7 +40,10 @@ dette, så appen bare ber om å slette.
 Statusen (`public.idestatus`) er valgfri og settes av en administrator. Å gi
 status regnes ikke som å endre idéen.
 
-`idebesok` husker når hver bruker sist åpnet hver idé (`merk_ide_sett()`).
+`idebesok` husker når hver bruker sist åpnet hver idé. Siden merker idéen
+som sett med tidspunktet tråden ble lest (`lest_kl` fra `idetraad()`), så en
+kommentar som kom imellom, forblir ny (`merk_ide_sett()`). Kontomenyen ser
+etter nytt når appen åpnes, når fanen får fokus og hvert femte minutt.
 Kommentarer fra andre etter det er nye: `ideoversikt()` teller dem per idé,
 `ideer_med_nytt()` teller idéene til prikken i kontomenyen, og `idetraad()`
 gir tidspunktet, så siden kan merke dem «Ny». Regelen står også i

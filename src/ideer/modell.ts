@@ -81,6 +81,8 @@ export interface Idetraad extends Omit<Ide, 'kommentarer' | 'nye_kommentarer'> {
   kommentarer: Kommentar[]
   /** Når den innloggede sist åpnet idéen, eller `null` om aldri. */
   sist_sett: string | null
+  /** Når databasen leste tråden. Det er dette som merkes som sett. */
+  lest_kl: string | null
 }
 
 /**
@@ -180,6 +182,7 @@ export function lesIdetraad(data: unknown): Idetraad | null {
     tekst: data.tekst == null ? null : rensIdetekst(data.tekst),
     kommentarer,
     sist_sett: tekstEllerNull(data.sist_sett),
+    lest_kl: tekstEllerNull(data.lest_kl),
   }
 }
 

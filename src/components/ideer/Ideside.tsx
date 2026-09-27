@@ -52,7 +52,7 @@ export function Ideside({
     void hent().then((hentet) => {
       if (!hentet) return
       setSistSett((forrige) => (forrige === undefined ? hentet.sist_sett : forrige))
-      void merkIdeSett(hentet.id).catch(() => undefined)
+      void merkIdeSett(hentet).catch(() => undefined)
     })
   }, [hent])
 

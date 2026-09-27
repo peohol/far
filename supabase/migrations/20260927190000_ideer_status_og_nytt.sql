@@ -78,22 +78,25 @@ for select to authenticated using (bruker_id = (select auth.uid()));
 revoke all on public.idebesok from anon, authenticated;
 grant select on public.idebesok to authenticated;
 
--- Tidspunktet settes av databasen, så det bare kan flyttes til nå.
-create function public.merk_ide_sett(ide uuid)
+-- Idéen er sett slik den var da tråden ble lest (`lest_kl` fra idetraad), ikke
+-- slik den er når dette kalles: en kommentar som kom imellom, er fortsatt ny.
+-- Tidspunktet kan ikke settes fram i tid eller flyttes bakover.
+create function public.merk_ide_sett(ide uuid, lest_kl timestamptz)
 returns void
 language sql
 security definer
 set search_path = ''
 as $$
-  insert into public.idebesok (bruker_id, ide_id)
-  select (select auth.uid()), i.id
+  insert into public.idebesok (bruker_id, ide_id, sett_kl)
+  select (select auth.uid()), i.id, least(merk_ide_sett.lest_kl, now())
   from public.ideer i
   where i.id = merk_ide_sett.ide and (select auth.uid()) is not null
-  on conflict (bruker_id, ide_id) do update set sett_kl = now()
+  on conflict (bruker_id, ide_id) do update
+    set sett_kl = greatest(public.idebesok.sett_kl, excluded.sett_kl)
 $$;
 
-comment on function public.merk_ide_sett(uuid) is
-  'Merker at den innloggede har åpnet idéen nå.';
+comment on function public.merk_ide_sett(uuid, timestamptz) is
+  'Merker at den innloggede har sett idéen slik den var da tråden ble lest.';
 
 -- --- Lesing, med status og det nye ---------------------------------------------
 
@@ -163,6 +166,7 @@ as $$
     'status', i.status,
     'opprettet_kl', i.opprettet_kl,
     'endret_kl', i.endret_kl,
+    'lest_kl', now(),
     'sist_sett', (
       select b.sett_kl from public.idebesok b
       where b.ide_id = i.id and b.bruker_id = (select auth.uid())
@@ -208,15 +212,15 @@ comment on function public.ideer_med_nytt() is
 comment on function public.ideoversikt() is
   'Idélista: alle idéene med status, antall hjerter og kommentarer, og hvor mange kommentarer som er nye for den innloggede.';
 comment on function public.idetraad(uuid) is
-  'Én idé med beskrivelsen, statusen, hjertene og hele kommentartråden, og når den innloggede sist åpnet den. Null når idéen ikke finnes.';
+  'Én idé med beskrivelsen, statusen, hjertene og hele kommentartråden, når den innloggede sist åpnet den og når tråden ble lest. Null når idéen ikke finnes.';
 
 -- --- Rettigheter ----------------------------------------------------------------
 
 revoke all on function public.sett_idestatus(uuid, public.idestatus) from public, anon, authenticated, service_role;
-revoke all on function public.merk_ide_sett(uuid) from public, anon, authenticated, service_role;
+revoke all on function public.merk_ide_sett(uuid, timestamptz) from public, anon, authenticated, service_role;
 revoke all on function public.ideer_med_nytt() from public, anon, authenticated, service_role;
 grant execute on function public.sett_idestatus(uuid, public.idestatus) to authenticated;
-grant execute on function public.merk_ide_sett(uuid) to authenticated;
+grant execute on function public.merk_ide_sett(uuid, timestamptz) to authenticated;
 grant execute on function public.ideer_med_nytt() to authenticated;
 
 revoke all on all functions in schema intern from public, anon, authenticated, service_role;

@@ -33,9 +33,13 @@ export async function hentIdetraad(id: string): Promise<Idetraad | null> {
   return lesIdetraad(sjekk(await klient().rpc('idetraad', { ide: id })))
 }
 
-/** Merker at den innloggede har åpnet idéen nå, så kommentarene i den ikke lenger er nye. */
-export async function merkIdeSett(id: string): Promise<void> {
-  sjekk(await klient().rpc('merk_ide_sett', { ide: id }))
+/**
+ * Merker idéen som sett slik tråden var da den ble lest, så kommentarene i den
+ * ikke lenger er nye. En kommentar som kom etterpå, forblir ny.
+ */
+export async function merkIdeSett(traad: Pick<Idetraad, 'id' | 'lest_kl'>): Promise<void> {
+  if (!traad.lest_kl) return
+  sjekk(await klient().rpc('merk_ide_sett', { ide: traad.id, lest_kl: traad.lest_kl }))
 }
 
 /** Hvor mange idéer som har kommentarer den innloggede ikke har sett. */

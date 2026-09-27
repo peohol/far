@@ -273,6 +273,24 @@ describe('kontomenyen', () => {
     }
   })
 
+  it('ser etter nye kommentarer igjen når fanen får fokus', async () => {
+    render(
+      <Ramme>
+        <Kontomeny theme="lyst" onToggleTheme={() => {}} />
+      </Ramme>,
+    )
+    const knapp = screen.getByRole('button', { name: 'Kontoen din – Anne Admin' })
+    ideerMedNytt.antall = 1
+    try {
+      await act(async () => {
+        window.dispatchEvent(new Event('focus'))
+      })
+      expect(knapp.getAttribute('aria-label')).toBe('Kontoen din – Anne Admin (nye kommentarer på én idé)')
+    } finally {
+      ideerMedNytt.antall = 0
+    }
+  })
+
   it('lukkes av et trykk utenfor', async () => {
     const knapp = vis()
     await userEvent.click(knapp)
