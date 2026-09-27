@@ -4,6 +4,7 @@ import { useAvatarlenker } from '../../auth/avatarer'
 import { useOkt, useProfil } from '../../auth/okt'
 import type { Theme } from '../../hooks/useTheme'
 import { Endringslogg } from '../Endringslogg'
+import { Ideer } from '../ideer/Ideer'
 import { Ikon } from '../ikon/Ikon'
 import type { Ikonnavn } from '../ikon/register'
 import { Ikonknapp } from '../Ikonknapp'
@@ -13,7 +14,7 @@ import { Brukerliste } from './Brukerliste'
 import { Datakilder } from './Datakilder'
 import { Kontopanel } from './Kontopanel'
 
-type Panel = 'konto' | 'brukere' | 'datakilder' | 'logg' | null
+type Panel = 'konto' | 'brukere' | 'datakilder' | 'logg' | 'ideer' | null
 
 interface Valg {
   ikon: Ikonnavn
@@ -32,7 +33,7 @@ export interface KontomenyProps {
 /**
  * Kontoen, fra avataren helt til høyre i toppmenyen: hvem appen er logget inn
  * som, og veiene til egen profil, brukerlista, datakildene (administratorer),
- * endringsloggen og utlogging.
+ * endringsloggen, idéene og utlogging.
  *
  * Menyen er et lag over appen, som sidemenyen: `data-lag` holder appens egne
  * taster i ro mens den står åpen. Escape, et klikk utenfor eller fokus som
@@ -71,6 +72,7 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
     // Driftstatusen for datakildene er bare for administratorer; databasen avviser andre.
     ...(admin ? [{ ikon: 'reset' as const, tekst: 'Datakilder', hint: 'Admin', velg: apnePanel('datakilder') }] : []),
     { ikon: 'history', tekst: 'Endringslogg', hint: `v${VERSJON}`, velg: apnePanel('logg') },
+    { ikon: 'idea', tekst: 'Idéer', velg: apnePanel('ideer') },
     {
       ikon: theme === 'moerkt' ? 'sun' : 'moon',
       tekst: theme === 'moerkt' ? 'Bytt til lyst tema' : 'Bytt til mørkt tema',
@@ -165,6 +167,7 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
       <Brukerliste apen={panel === 'brukere'} onLukk={lukkPanel} />
       {admin && <Datakilder apen={panel === 'datakilder'} onLukk={lukkPanel} />}
       <Endringslogg apen={panel === 'logg'} onLukk={lukkPanel} />
+      <Ideer apen={panel === 'ideer'} onLukk={lukkPanel} />
     </div>
   )
 }

@@ -1,0 +1,215 @@
+/**
+ * Idéene i databasen: hvem som får lese, skrive, endre og slette, kommentar-
+ * trådene med svar i svar, hjertene og brukerinnstillingene — mot en ekte
+ * database bygd av migrasjonene.
+ */
+import type { PGlite } from '@electric-sql/pglite'
+import { beforeAll, describe, expect, it } from 'vitest'
+import { feilFra, nyDatabase, opprettBruker, som } from './hjelp/testdatabase'
+
+const DOK = (tekst: string) => ({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: tekst }] }] })
+
+describe('idéene i databasen', () => {
+  let db: PGlite
+  let admin: string
+  let ada: string
+  let bo: string
+
+  /** Kjører én spørring som brukeren og gir radene tilbake. */
+  const sql = <T = Record<string, unknown>>(bruker: string | null, tekst: string, parametre: unknown[] = []) =>
+    som(db, bruker, async (tx) => (await tx.query<T>(tekst, parametre)).rows)
+
+  const nyIde = async (bruker: string, tittel = 'En idé', kategori = 'fag') =>
+    (await sql<{ id: string }>(bruker, 'insert into public.ideer (kategori, tittel) values ($1, $2) returning id', [kategori, tittel]))[0]!.id
+
+  const nyKommentar = async (bruker: string, ide: string, forelder: string | null = null, tekst = 'Svar') =>
+    (
+      await sql<{ id: string }>(
+        bruker,
+        'insert into public.idekommentarer (ide_id, forelder_id, tekst) values ($1, $2, $3) returning id',
+        [ide, forelder, JSON.stringify(DOK(tekst))],
+      )
+    )[0]!.id
+
+  const traad = async (bruker: string, ide: string) =>
+    (await sql<{ idetraad: Traad | null }>(bruker, 'select public.idetraad($1)', [ide]))[0]!.idetraad
+
+  interface Traad {
+    tittel: string
+    hjerter: number
+    mitt_hjerte: boolean
+    kommentarer: { id: string; forelder_id: string | null; forfatter_id: string | null; slettet: boolean; tekst: unknown; hjerter: number }[]
+  }
+
+  beforeAll(async () => {
+    db = await nyDatabase()
+    admin = await opprettBruker(db, { brukernavn: 'admin', fornavn: 'Ada', etternavn: 'Admin', rolle: 'admin' })
+    ada = await opprettBruker(db, { brukernavn: 'ada.l', fornavn: 'Ada', etternavn: 'Lovelace', rolle: 'user' })
+    bo = await opprettBruker(db, { brukernavn: 'bob', fornavn: 'Bo', etternavn: 'Bruker', rolle: 'user' })
+  }, 60_000)
+
+  it('lar alle innloggede skrive idéer som forfatter og lese alle, men ikke anonyme', async () => {
+    const id = await nyIde(ada, 'Mørk modus i PDF-en', 'funksjonalitet')
+    const [rad] = await sql<{ forfatter_id: string; endret_kl: string | null }>(bo, 'select * from public.ideer where id = $1', [id])
+    expect(rad).toMatchObject({ forfatter_id: ada, endret_kl: null })
+    expect(await feilFra(() => sql(null, 'select * from public.ideer'))).toMatchObject({ code: '42501' })
+
+    // Forfatteren settes av databasen og kan ikke velges.
+    const juks = await feilFra(() =>
+      sql(bo, `insert into public.ideer (kategori, tittel, forfatter_id) values ('fag', 'Juks', $1)`, [ada]),
+    )
+    expect(juks).toMatchObject({ code: '42501' })
+  })
+
+  it('krever kategori og en trimmet overskrift', async () => {
+    expect(await feilFra(() => sql(ada, `insert into public.ideer (tittel) values ('Uten kategori')`))).toMatchObject({ code: '23502' })
+    expect(await feilFra(() => sql(ada, `insert into public.ideer (kategori, tittel) values ('fag', '')`))).toMatchObject({ code: '23514' })
+    expect(await feilFra(() => sql(ada, `insert into public.ideer (kategori, tittel) values ('fag', ' mellomrom ')`))).toMatchObject({ code: '23514' })
+    expect(await feilFra(() => sql(ada, `insert into public.ideer (kategori, tittel) values ('ukjent', 'x')`))).toMatchObject({ code: '22P02' })
+  })
+
+  it('lar bare forfatteren endre, og forfatteren eller en administrator slette', async () => {
+    const id = await nyIde(ada, 'Før')
+    expect(await sql(bo, `update public.ideer set tittel = 'Kapret' where id = $1 returning id`, [id])).toEqual([])
+    expect(await sql(admin, `update public.ideer set tittel = 'Kapret' where id = $1 returning id`, [id])).toEqual([])
+    const [endret] = await sql<{ tittel: string; endret_kl: string | null }>(
+      ada,
+      `update public.ideer set tittel = 'Etter' where id = $1 returning tittel, endret_kl`,
+      [id],
+    )
+    expect(endret).toMatchObject({ tittel: 'Etter', endret_kl: expect.anything() })
+
+    expect(await sql(bo, 'delete from public.ideer where id = $1 returning id', [id])).toEqual([])
+    expect(await sql(admin, 'delete from public.ideer where id = $1 returning id', [id])).toHaveLength(1)
+
+    const egen = await nyIde(bo)
+    expect(await sql(bo, 'delete from public.ideer where id = $1 returning id', [egen])).toHaveLength(1)
+  })
+
+  it('tar vare på svarene når en kommentar med svar slettes, og rydder når det siste svaret går', async () => {
+    const ide = await nyIde(ada)
+    const topp = await nyKommentar(ada, ide, null, 'Topp')
+    const svar = await nyKommentar(bo, ide, topp, 'Svar')
+    const svarPaaSvar = await nyKommentar(ada, ide, svar, 'Svar på svar')
+    await sql(bo, 'insert into public.idehjerter (ide_id, kommentar_id) values ($1, $2)', [ide, topp])
+
+    // Ada sletter toppkommentaren: den står igjen uten tekst, forfatter og hjerter.
+    await sql(ada, 'delete from public.idekommentarer where id = $1', [topp])
+    let kommentarer = (await traad(bo, ide))!.kommentarer
+    expect(kommentarer.map((k) => [k.id, k.slettet, k.forfatter_id, k.tekst, k.hjerter])).toEqual([
+      [topp, true, null, null, 0],
+      [svar, false, bo, DOK('Svar'), 0],
+      [svarPaaSvar, false, ada, DOK('Svar på svar'), 0],
+    ])
+
+    // Det svares ikke på en slettet kommentar, og den kan ikke endres eller få hjerter.
+    expect(await feilFra(() => nyKommentar(bo, ide, topp))).toMatchObject({ code: '23503' })
+    expect(await sql(ada, `update public.idekommentarer set tekst = '{}' where id = $1 returning id`, [topp])).toEqual([])
+    expect(
+      await feilFra(() => sql(bo, 'insert into public.idehjerter (ide_id, kommentar_id) values ($1, $2)', [ide, topp])),
+    ).toMatchObject({ code: '23503' })
+
+    // Bo sletter svaret sitt, som har et svar under seg: også det står igjen.
+    await sql(bo, 'delete from public.idekommentarer where id = $1', [svar])
+    kommentarer = (await traad(bo, ide))!.kommentarer
+    expect(kommentarer.map((k) => k.slettet)).toEqual([true, true, false])
+
+    // Når det siste svaret slettes, ryddes hele den tomme grenen bort.
+    await sql(ada, 'delete from public.idekommentarer where id = $1', [svarPaaSvar])
+    expect((await traad(bo, ide))!.kommentarer).toEqual([])
+  })
+
+  it('lar bare forfatteren endre en kommentar, og en administrator slette andres', async () => {
+    const ide = await nyIde(ada)
+    const k = await nyKommentar(bo, ide)
+    expect(await sql(ada, `update public.idekommentarer set tekst = $2 where id = $1 returning id`, [k, DOK('x')])).toEqual([])
+    expect(await sql(ada, 'delete from public.idekommentarer where id = $1 returning id', [k])).toEqual([])
+    const [endret] = await sql<{ endret_kl: string | null }>(
+      bo,
+      'update public.idekommentarer set tekst = $2 where id = $1 returning endret_kl',
+      [k, DOK('Rettet')],
+    )
+    expect(endret!.endret_kl).not.toBeNull()
+    expect(await sql(admin, 'delete from public.idekommentarer where id = $1 returning id', [k])).toHaveLength(1)
+  })
+
+  it('holder svarene under samme idé', async () => {
+    const en = await nyIde(ada)
+    const annen = await nyIde(ada)
+    const k = await nyKommentar(ada, en)
+    expect(await feilFra(() => nyKommentar(bo, annen, k))).toMatchObject({ code: '23503' })
+  })
+
+  it('sletter hele tråden med idéen, også grener med svar', async () => {
+    const ide = await nyIde(bo)
+    const a = await nyKommentar(ada, ide)
+    const b = await nyKommentar(bo, ide, a)
+    await nyKommentar(ada, ide, b)
+    await sql(ada, 'insert into public.idehjerter (ide_id, kommentar_id) values ($1, $2)', [ide, b])
+    await sql(bo, 'delete from public.ideer where id = $1', [ide])
+    const [igjen] = await db.query<{ n: number }>(
+      `select (select count(*) from public.idekommentarer where ide_id = $1)
+            + (select count(*) from public.idehjerter where ide_id = $1) as n`,
+      [ide],
+    )
+      .then((r) => r.rows)
+    expect(Number(igjen!.n)).toBe(0)
+  })
+
+  it('gir ett hjerte per bruker, og bare brukeren selv kan ta det tilbake', async () => {
+    const ide = await nyIde(ada)
+    await sql(bo, 'insert into public.idehjerter (ide_id) values ($1)', [ide])
+    expect(await feilFra(() => sql(bo, 'insert into public.idehjerter (ide_id) values ($1)', [ide]))).toMatchObject({ code: '23505' })
+    expect(
+      await feilFra(() => sql(bo, 'insert into public.idehjerter (ide_id, bruker_id) values ($1, $2)', [ide, ada])),
+    ).toMatchObject({ code: '42501' })
+    await sql(ada, 'insert into public.idehjerter (ide_id) values ($1)', [ide])
+
+    const oversikt = async (bruker: string) =>
+      (await sql<{ ideoversikt: { id: string; hjerter: number; mitt_hjerte: boolean; kommentarer: number }[] }>(
+        bruker,
+        'select public.ideoversikt()',
+      ))[0]!.ideoversikt.find((i) => i.id === ide)
+    expect(await oversikt(bo)).toMatchObject({ hjerter: 2, mitt_hjerte: true, kommentarer: 0 })
+
+    expect(await sql(ada, 'delete from public.idehjerter where ide_id = $1 and bruker_id = $2 returning 1', [ide, bo])).toEqual([])
+    await sql(bo, 'delete from public.idehjerter where ide_id = $1 and bruker_id = $2', [ide, bo])
+    expect(await oversikt(bo)).toMatchObject({ hjerter: 1, mitt_hjerte: false })
+    expect(await oversikt(ada)).toMatchObject({ hjerter: 1, mitt_hjerte: true })
+  })
+
+  it('teller bare kommentarer som ikke er slettet i oversikten, og gir tråden uten beskrivelse der', async () => {
+    const ide = await nyIde(ada, 'Talt')
+    await sql(ada, 'update public.ideer set tekst = $2 where id = $1', [ide, DOK('Beskrivelse')])
+    const a = await nyKommentar(bo, ide)
+    await nyKommentar(ada, ide, a)
+    await sql(bo, 'delete from public.idekommentarer where id = $1', [a])
+    const [{ ideoversikt }] = (await sql<{ ideoversikt: Record<string, unknown>[] }>(bo, 'select public.ideoversikt()')) as [
+      { ideoversikt: Record<string, unknown>[] },
+    ]
+    const rad = ideoversikt.find((i) => i.id === ide)!
+    expect(rad).toMatchObject({ tittel: 'Talt', kommentarer: 1, forfatter_id: ada })
+    expect(rad).not.toHaveProperty('tekst')
+    expect((await traad(bo, ide))!.tittel).toBe('Talt')
+    expect(await traad(bo, '00000000-0000-0000-0000-000000000001')).toBeNull()
+  })
+
+  it('lagrer brukerinnstillinger for brukeren selv, og bare der', async () => {
+    const lagre = (bruker: string, verdi: unknown) =>
+      sql(
+        bruker,
+        `insert into public.brukerinnstillinger (nokkel, verdi) values ('ideer.sortering', $1)
+         on conflict (bruker_id, nokkel) do update set nokkel = excluded.nokkel, verdi = excluded.verdi`,
+        [JSON.stringify(verdi)],
+      )
+    await lagre(ada, { forst: 'bruker', deretter: 'kategori' })
+    await lagre(ada, { forst: 'kategori', deretter: 'bruker' })
+    await lagre(bo, { forst: 'kategori', deretter: 'tid' })
+    const les = (bruker: string) => sql<{ bruker_id: string; verdi: unknown }>(bruker, 'select bruker_id, verdi from public.brukerinnstillinger')
+    expect(await les(ada)).toEqual([{ bruker_id: ada, verdi: { forst: 'kategori', deretter: 'bruker' } }])
+    expect(await les(bo)).toEqual([{ bruker_id: bo, verdi: { forst: 'kategori', deretter: 'tid' } }])
+    expect(
+      await feilFra(() => sql(bo, `insert into public.brukerinnstillinger (bruker_id, nokkel, verdi) values ($1, 'x', '1')`, [ada])),
+    ).toMatchObject({ code: '42501' })
+  })
+})

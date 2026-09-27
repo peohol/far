@@ -452,6 +452,13 @@
   min-height: 14rem;
 }
 
+/* Kompakt: korte tekster som kommentarene til idéene. */
+.riktekstfelt.riktekstfelt--kompakt {
+  min-height: 4.5rem;
+  padding: var(--rom-4) var(--rom-5);
+  font-size: var(--tekst-ingress);
+}
+
 .riktekstfelt:focus {
   outline: none;
 }

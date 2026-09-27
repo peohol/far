@@ -720,6 +720,42 @@ const REGISTER = {
     ga: 'spin45',
     parts: [C(12, 12, 3, 'f2', 'accent'), P('M19.4 13.5A7.6 7.6 0 1 1 17.4 6.6L20 9.2', 'l', 'i-ink'), P('M20 4.8v4.4h-4.4', 'l', 'i-ink')],
   },
+  // Tegnet i OUSFAR for idéene, i samme stil som resten av registeret.
+  idea: {
+    vb: 24,
+    parts: [
+      P('M12 2.8a6.2 6.2 0 0 0-3.7 11.2c.8.6 1.2 1.4 1.2 2.3v.7h5v-.7c0-.9.4-1.7 1.2-2.3A6.2 6.2 0 0 0 12 2.8z', 'f1', 'warn'),
+      C(12, 9, 2.4, 'f2', 'warn', 'flash'),
+      P('M9.7 19.6h4.6M10.6 21.6h2.8', 'l', 'i-ink'),
+    ],
+  },
+  heart: {
+    vb: 24,
+    ga: 'pulse',
+    parts: [P('M12 20.2s-7.8-4.7-7.8-10.3A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.8 2.6c0 5.6-7.8 10.3-7.8 10.3z', 'f1', 'danger')],
+  },
+  comment: {
+    vb: 24,
+    parts: [
+      P('M6.5 4.5h11A2.5 2.5 0 0 1 20 7v6.5a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 3.8V16A2.5 2.5 0 0 1 4 13.5V7a2.5 2.5 0 0 1 2.5-2.5z', 'f1', 'info'),
+      G([C(8.5, 10.3, 1, 'h', 'i-ink'), C(12, 10.3, 1, 'h', 'i-ink'), C(15.5, 10.3, 1, 'h', 'i-ink')], 'pop'),
+    ],
+  },
+  reply: {
+    vb: 24,
+    parts: [
+      C(12, 12, 9, 'f1', 'accent'),
+      G([P('M10.5 8 6.5 12l4 4', 'l', 'i-ink'), P('M7 12h6.5a4 4 0 0 1 4 4v.5', 'l', 'i-ink')], 'bumpL'),
+    ],
+  },
+  trash: {
+    vb: 24,
+    ga: 'shake',
+    parts: [
+      P('M6.5 7.5l.9 11.2a2 2 0 0 0 2 1.8h5.2a2 2 0 0 0 2-1.8l.9-11.2z', 'f1', 'danger'),
+      P('M4.5 7.5h15M9.5 7.5V5.3a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2.2M10.3 11v5.5M13.7 11v5.5', 'l', 'i-ink'),
+    ],
+  },
 } satisfies Record<string, Ikondefinisjon>
 
 export type Ikonnavn = keyof typeof REGISTER
