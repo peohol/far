@@ -27,6 +27,16 @@
   outline: none;
 }
 
+/* Under navnet, når stoffet har en analyttkode: «[KODE] · Inngår i [SPFA]». */
+.identitet__analyse {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3);
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
 .identitet__komponenter {
   font-size: var(--tekst-liten);
   color: var(--blekk-dempet);

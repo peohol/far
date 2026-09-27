@@ -139,9 +139,12 @@ er `primary` med ↵; de andre er `kant`.
   venstrestiller innholdet.
 - **`Panelhode`** (`src/components/Panelhode.tsx`) er overskriften i et panel:
   ikon og kursiv serif. `tone="toksisk"` er for det som mangler.
-- **`Metalinje`** (`src/components/Metalinje.tsx`) er linja over et stoffnavn,
-  som «KVE · SPFA › Antipsykotika». Med `lenker` er kodene lenker til
-  informasjonssiden (`Kodepille`).
+- **`Metalinje`** (`src/components/Metalinje.tsx`) er linja over et stoffnavn
+  i fortolkningen, som «KVE · SPFA › Antipsykotika». Med `lenker` er kodene
+  lenker til informasjonssiden (`Kodepille`). På informasjonssiden har linja
+  over navnet i stedet kategoriene fra stoffregisteret («Antidepressiver ›
+  SSRI»), og under navnet står analyttkoden som pille (`pille--kode`, en knapp
+  til fortolkningen) og «Inngår i» med `Metodepille`.
 - **`StepBar`** er raden øverst i hvert fortolkningssteg. Esc-handlingen står
   alltid der, med ikon og tastemerke.
 - **`Kommentarliste`** er kommentarblokkene i modulene: hvor kommentaren skal

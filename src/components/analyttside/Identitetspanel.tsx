@@ -1,13 +1,15 @@
 import type { Analyttkatalog, Katalogoppforing } from '../../domain/analyttkatalog'
 import { analyttadresse } from '../../domain/rute'
 import { iSetning } from '../../domain/names'
+import type { Kategoristi } from '../../domain/stoffregister'
 import type { Analyttsidedata } from '../../faginnhold/lesing'
 import type { Paneldefinisjon } from '../../faginnhold/paneler'
-import { useRef } from 'react'
+import { Fragment, useRef } from 'react'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { useSidereferanser } from '../referanser/Sidereferanser'
 import { useFastSted } from '../seksjoner/Seksjonsstyring'
-import { Metalinje } from '../Metalinje'
+import { Metodepille } from '../Metodepille'
+import { useTips } from '../Tips'
 import { Uthev } from '../Uthev'
 import { panelAnker } from './Paneler'
 import '../../styles/monograf-topp.css'
@@ -37,25 +39,32 @@ export function komponenterFor(
 }
 
 /**
- * Panel 1: hva siden handler om. Metalinjen med analyttkoden, metoden og
- * kategorien, virkestoffet som hovedoverskrift, og for sumanalysene hvilke
+ * Panel 1: hva siden handler om. Over navnet står kategoriene stoffet har i
+ * stoffregisteret, de samme som i sidemenyen («Antidepressiver › SSRI»), for
+ * stoffer med og uten analyttkode. Virkestoffet er hovedoverskriften. Under
+ * den står analysen når stoffet har en: analyttkoden, som åpner fortolkningen,
+ * og analysemetoden den inngår i. For sumanalysene står til sist hvilke
  * stoffer koden omfatter — med lenker til sidene deres, uten å gjøre dem til
  * hovedanalytt. Står alltid fram, over viktige data (`ViktigeData.tsx`).
- * Et stoff uten analyttkode (`oppforing` er `null`) har ingen metalinje, men
- * sier fra om at laboratoriet ikke har noen analyse for det.
  */
 export function Identitetspanel({
   definisjon,
   oppforing,
   navn,
   komponenter,
+  kategorier,
   overskriftId,
+  onApneFortolkning,
 }: {
   definisjon: Paneldefinisjon
   oppforing: Katalogoppforing | null
   navn: string
   komponenter: Komponent[]
+  /** Kategoriene i stoffregisteret (`kategorierFor`). */
+  kategorier: Kategoristi[]
   overskriftId: string
+  /** Åpner fortolkningsmodulen analyttkoden hører til. */
+  onApneFortolkning: () => void
 }) {
   const panelreferanser = useSidereferanser().panelreferanser[definisjon.nokkel] ?? []
   const sum = komponenter.length > 1
@@ -64,14 +73,33 @@ export function Identitetspanel({
 
   return (
     <section ref={flate} id={panelAnker(definisjon.nokkel)} className="identitet" aria-labelledby={overskriftId}>
-      {oppforing ? (
-        <Metalinje koder={[oppforing.kode]} metode={oppforing.analysemetode} kategori={oppforing.kategori} />
-      ) : (
-        <p className="metalinje">Stoffside uten labkode</p>
-      )}
+      <p className="metalinje">
+        {kategorier.map((k, i) => (
+          <Fragment key={nokkel(k)}>
+            {i > 0 && <span aria-hidden="true">·</span>}
+            <span>
+              {k.kategori}
+              {k.underkategori && (
+                <>
+                  {' '}
+                  <span aria-hidden="true">›</span> {k.underkategori}
+                </>
+              )}
+            </span>
+          </Fragment>
+        ))}
+      </p>
       <h1 id={overskriftId} className="identitet__navn" tabIndex={-1}>
         <Uthev tekst={navn} />
       </h1>
+      {oppforing && (
+        <p className="identitet__analyse">
+          <Analyttkodeknapp kode={oppforing.kode} onApne={onApneFortolkning} />
+          <span aria-hidden="true">·</span>
+          <span>Inngår i</span>
+          <Metodepille metode={oppforing.analysemetode} />
+        </p>
+      )}
 
       {sum && oppforing && (
         <p className="identitet__komponenter">
@@ -87,6 +115,29 @@ export function Identitetspanel({
       )}
       <Referansefelt ider={panelreferanser} niva="panel" />
     </section>
+  )
+}
+
+function nokkel(k: Kategoristi): string {
+  return `${k.kategori}/${k.underkategori ?? ''}`
+}
+
+/**
+ * Analyttkoden som pille, og veien til fortolkningen: den samme handlingen som
+ * «Åpne fortolkning» i toppmenyen, der koden står.
+ */
+function Analyttkodeknapp({ kode, onApne }: { kode: string; onApne: () => void }) {
+  const tips = useTips(`Åpne fortolkningen for ${kode}`, { skjermleser: false })
+  return (
+    <button
+      type="button"
+      className="pille pille--kode"
+      aria-label={`${kode} – åpne fortolkningen`}
+      onClick={onApne}
+      {...tips.props}
+    >
+      <span className="pille__verdi">{kode}</span>
+    </button>
   )
 }
 

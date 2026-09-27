@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.47.0',
+    dato: '2026-09-27',
+    sammendrag: 'Stoffsidene viser kategorien fra stoffregisteret over navnet, og analyttkoden og analysemetoden under',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Øverst på hver stoffside står nå kategorien stoffet har i stoffregisteret i sidemenyen, f.eks. «Antidepressiver › SSRI» eller «Cannabinoider». Står stoffet i flere kategorier, vises alle. «Stoffside uten labkode» er borte.',
+      'Under navnet står analysen når stoffet har en labkode: analyttkoden som en pille, og «Inngår i» med analysemetoden, f.eks. SPFA eller SRUS. Stoffer uten labkode har ingen slik linje.',
+      'Et trykk på analyttkoden åpner fortolkningen for analytten, som «Åpne fortolkning» i toppmenyen.',
+    ],
+  },
+  {
     versjon: '1.46.0',
     dato: '2026-09-27',
     sammendrag: 'THC-siden har fått Sativex, og det er en ny side for cannabidiol (CBD) med Epidyolex',

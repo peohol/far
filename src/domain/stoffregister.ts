@@ -94,6 +94,33 @@ function utvidMetode(k: Registerkategoridata, katalog: Analyttkatalog): Register
   }
 }
 
+/** Hvor et stoff står i registeret: kategorien, og underkategorien når kategorien er delt opp. */
+export interface Kategoristi {
+  kategori: string
+  underkategori?: string
+}
+
+/**
+ * Kategoriene stoffsiden står i, i registerets rekkefølge — de samme som
+ * sidemenyen viser den under. Står stoffet i en underkategori, er det den som
+ * gjelder. En side registeret ikke plasserer, står i {@link ANDRE_STOFFER},
+ * som i menyen.
+ */
+export function kategorierFor(
+  side: string,
+  katalog: Analyttkatalog,
+  register: Registerdata = STOFFREGISTER,
+): Kategoristi[] {
+  const har = (stoffer: readonly string[] = []) => stoffer.some((s) => nokkel(s) === nokkel(side))
+  const stier = register.kategorier.flatMap((data): Kategoristi[] => {
+    const k = utvidMetode(data, katalog)
+    const under = (k.underkategorier ?? []).filter((u) => har(u.stoffer))
+    if (under.length > 0) return under.map((u) => ({ kategori: k.navn, underkategori: u.navn }))
+    return har(k.stoffer) ? [{ kategori: k.navn }] : []
+  })
+  return stier.length > 0 ? stier : [{ kategori: ANDRE_STOFFER }]
+}
+
 /**
  * Bygger menyen av registeret, katalogen og navnene på stoffsidene uten kode.
  * Kategorier og underkategorier uten noen stoffer som finnes, utelates.
