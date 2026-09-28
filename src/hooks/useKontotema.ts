@@ -22,10 +22,18 @@ export function useKontotema(brukerId: string) {
   const bytter = useRef(0)
   /** Lagringer på vei. Mens noen er ute, kan kontoen ennå vise det gamle valget. */
   const underveis = useRef(0)
+  /**
+   * Lagringene går én og én, så et eldre valg aldri kan nå fram etter et
+   * nyere. Venter flere, er det bare det siste som sendes.
+   */
+  const ko = useRef<Promise<void>>(Promise.resolve())
+  const sisteValg = useRef<Theme | null>(null)
 
   const lagre = useCallback((tema: Theme) => {
+    sisteValg.current = tema
     underveis.current += 1
-    void lagreInnstilling(TEMANOKKEL, tema)
+    ko.current = ko.current
+      .then(() => (sisteValg.current === tema ? lagreInnstilling(TEMANOKKEL, tema) : undefined))
       .catch(() => undefined)
       .finally(() => {
         underveis.current -= 1

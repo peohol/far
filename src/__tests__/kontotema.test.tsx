@@ -71,11 +71,11 @@ describe('temaet på kontoen', () => {
 
     act(() => result.current.toggle())
     expect(result.current.theme).toBe('lyst')
-    expect(innstillinger.lagreInnstilling).toHaveBeenLastCalledWith('tema', 'lyst')
+    await waitFor(() => expect(innstillinger.lagreInnstilling).toHaveBeenLastCalledWith('tema', 'lyst'))
 
     act(() => result.current.toggle())
     expect(result.current.theme).toBe('moerkt')
-    expect(innstillinger.lagreInnstilling).toHaveBeenLastCalledWith('tema', 'moerkt')
+    await waitFor(() => expect(innstillinger.lagreInnstilling).toHaveBeenLastCalledWith('tema', 'moerkt'))
   })
 
   it('et svar som ble bedt om før brukeren byttet, overstyrer ikke byttet', async () => {
@@ -114,5 +114,27 @@ describe('temaet på kontoen', () => {
     })
     expect(result.current.theme).toBe('lyst')
     await act(async () => lagring.loes())
+  })
+
+  it('lagrer byttene etter hverandre, så det siste valget blir stående', async () => {
+    innstillinger.hentInnstilling.mockResolvedValue('moerkt')
+    const forste = utsatt<void>()
+    const { result } = renderHook(() => useKontotema('ada'))
+    await waitFor(() => expect(innstillinger.hentInnstilling).toHaveBeenCalledTimes(1))
+
+    innstillinger.lagreInnstilling.mockReturnValueOnce(forste.lovnad)
+    act(() => result.current.toggle())
+    await waitFor(() => expect(innstillinger.lagreInnstilling).toHaveBeenCalledTimes(1))
+    act(() => result.current.toggle())
+    act(() => result.current.toggle())
+    // Den neste lagringen venter til den første har svart, og bare det siste
+    // av valgene som ventet, sendes.
+    await act(async () => {})
+    expect(innstillinger.lagreInnstilling).toHaveBeenCalledTimes(1)
+
+    await act(async () => forste.loes())
+    await waitFor(() => expect(innstillinger.lagreInnstilling).toHaveBeenCalledTimes(2))
+    expect(innstillinger.lagreInnstilling.mock.calls.map(([, verdi]) => verdi)).toEqual(['lyst', 'lyst'])
+    expect(result.current.theme).toBe('lyst')
   })
 })
