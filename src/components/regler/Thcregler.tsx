@@ -34,10 +34,16 @@ export function Thcregler({
   utgave,
   redigerer,
   onLagre,
+  seksjonsid = FORTOLKNING,
+  tittel = 'Fortolkningsregler',
 }: {
   utgave: ThcRegelsettutgave
   redigerer: boolean
   onLagre?: ThcredigeringProps['onLagre']
+  /** Egen seksjons-ID når THC-syrereglene deler fagsside med et annet regelsett. */
+  seksjonsid?: string
+  /** Egen tittel når det må fremgå at reglene gjelder THC-syre i urin. */
+  tittel?: string
 }) {
   const modell = useMemo(() => tilThcModell(utgave), [utgave])
   const start = useMemo(() => thcUtkastFra(utgave), [utgave])
@@ -52,9 +58,9 @@ export function Thcregler({
 
   return (
     <Seksjon
-      id={FORTOLKNING}
+      id={seksjonsid}
       ikon={seksjonsikon(FORTOLKNING)}
-      tittel={<Uthev tekst="Fortolkningsregler" />}
+      tittel={<Uthev tekst={tittel} />}
       oppsummering={
         modell.ok
           ? ramsOpp([
