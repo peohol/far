@@ -457,7 +457,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                 <Scenarioregler
                   {...regler}
                   delesMed={delesMed}
-                  {...(side.data.thcregelsett ? { tittel: 'Fortolkningsregler – THC i serum' } : {})}
+                  {...(inkluderThcSyre ? { tittel: 'Fortolkningsregler – THC i serum' } : {})}
                 />
               )}
               {side.data.thcregelsett && (
@@ -465,7 +465,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                   utgave={side.data.thcregelsett}
                   redigerer={redigerer}
                   onLagre={handlinger.lagreThcRegelsett}
-                  {...(regler
+                  {...(inkluderThcSyre
                     ? { seksjonsid: 'fortolkning-thc-syre', tittel: 'Fortolkningsregler – THC-syre i urin' }
                     : {})}
                 />
