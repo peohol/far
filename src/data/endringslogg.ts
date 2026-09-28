@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.50.0',
+    dato: '2026-09-28',
+    sammendrag: 'Lyst eller mørkt tema lagres på brukeren',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Velger du lyst eller mørkt tema, huskes valget på brukeren din, så det følger med når du logger inn på en annen maskin eller i en annen nettleser.',
+      'Temaet du alt hadde valgt på denne maskinen, blir tatt vare på første gang du logger inn.',
+      'Bytter du tema et annet sted, slår det gjennom her når du går tilbake til fanen.',
+    ],
+  },
+  {
     versjon: '1.49.0',
     dato: '2026-09-27',
     sammendrag: 'Idéene kan få status av en administrator, og en prikk viser hvor det er kommet nye kommentarer',

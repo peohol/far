@@ -3,6 +3,7 @@
  * `idetraad()`, som teller opp hjertene og kommentarene; skrivingen går rett
  * mot tabellene, der radsikkerheten avgjør hvem som får gjøre hva.
  */
+import { hentInnstilling, lagreInnstilling } from '../auth/innstillinger'
 import { klient } from '../auth/klient'
 import type { Riktekstdokument } from '../faginnhold/riktekst'
 import {
@@ -107,18 +108,9 @@ export async function settHjerte(
 }
 
 export async function hentSortering(): Promise<Sortering> {
-  const { data, error } = await klient()
-    .from('brukerinnstillinger')
-    .select('verdi')
-    .eq('nokkel', SORTERINGSNOKKEL)
-    .maybeSingle()
-  return lesSortering(error ? null : (data as { verdi?: unknown } | null)?.verdi)
+  return lesSortering(await hentInnstilling(SORTERINGSNOKKEL).catch(() => null))
 }
 
-export async function lagreSortering(sortering: Sortering): Promise<void> {
-  sjekk(
-    await klient()
-      .from('brukerinnstillinger')
-      .upsert({ nokkel: SORTERINGSNOKKEL, verdi: sortering }, { onConflict: 'bruker_id,nokkel' }),
-  )
+export function lagreSortering(sortering: Sortering): Promise<void> {
+  return lagreInnstilling(SORTERINGSNOKKEL, sortering)
 }

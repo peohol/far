@@ -59,7 +59,7 @@ import {
 import { useRute } from './hooks/useRute'
 import { useNaarLedig } from './hooks/useNaarLedig'
 import { useSokeindeks, type Sokeindekshenter } from './hooks/useSokeindeks'
-import { useTheme } from './hooks/useTheme'
+import { useKontotema } from './hooks/useKontotema'
 import { lesPubliserteRegelsett } from './regler/kommentarer'
 import { slaOpp } from './regler/publiserte'
 import { initialState, isIdle, reducer, stageOf, type Action, type Stage } from './state'
@@ -93,7 +93,8 @@ function buttonHasFocus(): boolean {
 export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [failedCopy, setFailedCopy] = useState<string | null>(null)
-  const { theme, toggle } = useTheme()
+  const profil = useProfil()
+  const { theme, toggle } = useKontotema(profil.id)
   const copy = useClipboard()
   const { flash, show } = useCopyFlash(BLINK)
   /**
@@ -127,7 +128,6 @@ export default function App() {
   // Stoffsidene og søkesiden legger seg over fortolkningen, som står skjult bak.
   const fortolkningSkjult = rute.side !== 'fortolkning'
 
-  const profil = useProfil()
   const faginnhold = useMemo<Faginnholdskilde>(
     () => ({
       leser: lagFaginnholdsleser(klient()),

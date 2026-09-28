@@ -54,7 +54,9 @@ gir tidspunktet, så siden kan merke dem «Ny». Regelen står også i
 Førstekriteriet (kategori eller bruker, aldri tid) gir overskriftene;
 andrekriteriet og det tredje, som er det som er igjen, gir rekkefølgen under
 dem. Tid står med de nyeste først. Valget lagres i `brukerinnstillinger` under
-nøkkelen `ideer.sortering`, en liten tabell for valg som følger brukeren.
+nøkkelen `ideer.sortering`, en liten tabell for valg som følger brukeren. Den
+brukes også til andre slike valg, som temaet (`tema`, se `hooks/useKontotema.ts`);
+lesing og skriving går gjennom `auth/innstillinger.ts`.
 
 ## Riktekst
 
