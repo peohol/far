@@ -6,7 +6,7 @@
   "description": "Verktøy for å kommentere farmakologiske analyser",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && node scripts/kontroller-vegg.mjs",
+    "build": "vitest run src/domain/__tests__/analyttkatalog.test.ts src/domain/__tests__/stoffregister.test.ts src/__tests__/analyttside.test.tsx src/__tests__/navigasjon.test.tsx src/__tests__/scenarioregler.test.tsx src/__tests__/thcregler.test.tsx src/__tests__/russteg.test.tsx src/__tests__/thcsteg.test.tsx && tsc --noEmit && vite build && node scripts/kontroller-vegg.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
