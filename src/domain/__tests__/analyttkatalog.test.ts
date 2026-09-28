@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { menyanalytter } from '../analysemetoder'
-import { ANALYTTKOBLINGER, FORTOLKNINGSOPPFORINGER, SAMMENSLATTE, SIDETITLER, byggKatalog, sideFor } from '../analyttkatalog'
+import { ANALYTTKOBLINGER, ANALYTTMERKNADER, FORTOLKNINGSOPPFORINGER, SAMMENSLATTE, SIDETITLER, byggKatalog, sideFor } from '../analyttkatalog'
 import { search } from '../search'
 
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
@@ -59,6 +59,7 @@ describe('katalogen over informasjonssidene', () => {
       UETS: 'Etanol',
     })
     expect(SIDETITLER).toEqual({ THC: 'THC og THC-syre' })
+    expect(ANALYTTMERKNADER.HBUP).toBe('Analytten er hydroksybupropion. Referanseområdet gjelder bupropion.')
     expect(katalog.finn('DMI')!.sidenavn).toBe('Diazepam')
     expect(katalog.finn('OTRAM')!.sidenavn).toBe('Tramadol')
     expect(katalog.finn('IRCAK')!.sidenavn).toBe('THC')
@@ -69,6 +70,7 @@ describe('katalogen over informasjonssidene', () => {
     expect(katalog.finn('AMTNORSUM')!.sidenavn).toBe('Amitriptylin')
     expect(katalog.finn('RISPSUM')!.sidenavn).toBe('Risperidon')
     expect(katalog.finn('HBUP')!.sidenavn).toBe('Bupropion')
+    expect(katalog.finn('HBUP')!.merknad).toBe('Analytten er hydroksybupropion. Referanseområdet gjelder bupropion.')
     expect(katalog.finn('PALI')!.sidenavn).toBe('Paliperidon')
     // Hovedkoden står først, og alle aliasene peker til den.
     expect(katalog.paSiden('diazepam').map((o) => o.kode)).toEqual(['DIAZ', 'DMI'])
