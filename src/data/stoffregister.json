@@ -2,31 +2,97 @@
   "sammenslatte": {
     "N-desmetyldiazepam": "Diazepam",
     "O-desmetyltramadol": "Tramadol",
-    "THC-syre": "THC"
+    "THC-syre": "THC",
+    "Dehydroaripiprazol": "Aripiprazol",
+    "Desmetyldoksepin": "Doksepin",
+    "Desmetylkariprazin": "Kariprazin",
+    "Didesmetylkariprazin": "Kariprazin",
+    "Desmetylklomipramin": "Klomipramin",
+    "Desmetylmianserin": "Mianserin",
+    "Norfluoksetin": "Fluoksetin",
+    "EtS": "EtG"
   },
   "kategorier": [
     {
       "navn": "Antidepressiver",
       "underkategorier": [
-        { "navn": "SSRI", "stoffer": ["Citalopram", "Escitalopram", "Fluoksetin", "Fluvoksamin", "Paroksetin", "Sertralin"] },
-        { "navn": "SNRI", "stoffer": ["Duloksetin", "Venlafaksin"] },
-        { "navn": "NDRI", "stoffer": ["Hydroksybupropion"] },
-        { "navn": "TCA", "stoffer": ["Amitriptylin", "Doksepin", "Klomipramin", "Nortriptylin", "Trimipramin"] },
-        { "navn": "Reseptorantagonister (NaSSA)", "stoffer": ["Mianserin", "Mirtazapin"] },
-        { "navn": "Multimodale", "stoffer": ["Vortioksetin"] },
-        { "navn": "NMDA-reseptorantagonister", "stoffer": ["Ketamin"] }
+        {
+          "navn": "SSRI",
+          "stoffer": [
+            "Citalopram",
+            "Escitalopram",
+            "Fluoksetin",
+            "Fluvoksamin",
+            "Paroksetin",
+            "Sertralin"
+          ]
+        },
+        {
+          "navn": "SNRI",
+          "stoffer": [
+            "Duloksetin",
+            "Venlafaksin"
+          ]
+        },
+        {
+          "navn": "NDRI",
+          "stoffer": [
+            "Hydroksybupropion"
+          ]
+        },
+        {
+          "navn": "TCA",
+          "stoffer": [
+            "Amitriptylin",
+            "Doksepin",
+            "Klomipramin",
+            "Nortriptylin",
+            "Trimipramin"
+          ]
+        },
+        {
+          "navn": "Reseptorantagonister (NaSSA)",
+          "stoffer": [
+            "Mianserin",
+            "Mirtazapin"
+          ]
+        },
+        {
+          "navn": "Multimodale",
+          "stoffer": [
+            "Vortioksetin"
+          ]
+        },
+        {
+          "navn": "NMDA-reseptorantagonister",
+          "stoffer": [
+            "Ketamin"
+          ]
+        }
       ]
     },
     {
       "navn": "Stemningsstabiliserende",
-      "stoffer": ["Karbamazepin", "Lamotrigin", "Litium", "Valproat"]
+      "stoffer": [
+        "Karbamazepin",
+        "Lamotrigin",
+        "Litium",
+        "Valproat"
+      ]
     },
     {
       "navn": "Antipsykotika",
       "underkategorier": [
         {
           "navn": "Førstegenerasjonsmidler",
-          "stoffer": ["Flupentiksol", "Haloperidol", "Klorprotiksen", "Levomepromazin", "Perfenazin", "Zuklopentiksol"]
+          "stoffer": [
+            "Flupentiksol",
+            "Haloperidol",
+            "Klorprotiksen",
+            "Levomepromazin",
+            "Perfenazin",
+            "Zuklopentiksol"
+          ]
         },
         {
           "navn": "Andregenerasjonsmidler",
@@ -64,7 +130,11 @@
     },
     {
       "navn": "Alkohol og GHB",
-      "stoffer": ["EtG", "EtS", "GHB"]
+      "stoffer": [
+        "EtG",
+        "EtS",
+        "GHB"
+      ]
     },
     {
       "navn": "Benzodiazepiner og Z-hypnotika",
@@ -96,19 +166,35 @@
     },
     {
       "navn": "Stimulanter",
-      "stoffer": ["Amfetamin", "Atomoksetin", "Benzoylekgonin", "MDMA", "Metamfetamin", "Metylfenidat"]
+      "stoffer": [
+        "Amfetamin",
+        "Atomoksetin",
+        "Benzoylekgonin",
+        "MDMA",
+        "Metamfetamin",
+        "Metylfenidat"
+      ]
     },
     {
       "navn": "Cannabinoider",
-      "stoffer": ["THC", "Cannabidiol"]
+      "stoffer": [
+        "THC",
+        "Cannabidiol"
+      ]
     },
     {
       "navn": "Hallusinogene stoffer",
-      "stoffer": ["Ketamin"]
+      "stoffer": [
+        "Ketamin"
+      ]
     },
     {
       "navn": "Antihypertensiver",
       "metode": "AHT"
     }
-  ]
+  ],
+  "sidetitler": {
+    "THC": "THC og THC-syre",
+    "EtG": "Etanol"
+  }
 }
