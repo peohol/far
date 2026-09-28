@@ -10,11 +10,27 @@
     "Desmetylklomipramin": "Klomipramin",
     "Desmetylmianserin": "Mianserin",
     "Norfluoksetin": "Fluoksetin",
-    "EtS": "EtG"
+    "O-desmetylvenlafaksin": "Venlafaksin",
+    "Hydroksybupropion": "Bupropion",
+    "Hydroksyrisperidon": "Risperidon",
+    "Paliperidon (hydroksyrisperidon)": "Paliperidon",
+    "EtG": "Etanol",
+    "EtS": "Etanol"
+  },
+  "analyttkoblinger": {
+    "AMTNORSUM": "Amitriptylin",
+    "VENSUM": "Venlafaksin",
+    "RISPSUM": "Risperidon",
+    "HBUP": "Bupropion",
+    "PALI": "Paliperidon",
+    "DMI": "Diazepam",
+    "OTRAM": "Tramadol",
+    "IRCAK": "THC",
+    "UETGS": "Etanol",
+    "UETS": "Etanol"
   },
   "sidetitler": {
-    "THC": "THC og THC-syre",
-    "EtG": "Etanol"
+    "THC": "THC og THC-syre"
   },
   "kategorier": [
     {
@@ -22,7 +38,7 @@
       "underkategorier": [
         { "navn": "SSRI", "stoffer": ["Citalopram", "Escitalopram", "Fluoksetin", "Fluvoksamin", "Paroksetin", "Sertralin"] },
         { "navn": "SNRI", "stoffer": ["Duloksetin", "Venlafaksin"] },
-        { "navn": "NDRI", "stoffer": ["Hydroksybupropion"] },
+        { "navn": "NDRI", "stoffer": ["Bupropion"] },
         { "navn": "TCA", "stoffer": ["Amitriptylin", "Doksepin", "Klomipramin", "Nortriptylin", "Trimipramin"] },
         { "navn": "Reseptorantagonister (NaSSA)", "stoffer": ["Mianserin", "Mirtazapin"] },
         { "navn": "Multimodale", "stoffer": ["Vortioksetin"] },
@@ -51,7 +67,7 @@
             "Kvetiapin",
             "Lurasidon",
             "Olanzapin",
-            "Paliperidon (hydroksyrisperidon)",
+            "Paliperidon",
             "Risperidon",
             "Sertindol",
             "Ziprasidon"
@@ -76,7 +92,7 @@
     },
     {
       "navn": "Alkohol og GHB",
-      "stoffer": ["EtG", "EtS", "GHB"]
+      "stoffer": ["Etanol", "GHB"]
     },
     {
       "navn": "Benzodiazepiner og Z-hypnotika",
