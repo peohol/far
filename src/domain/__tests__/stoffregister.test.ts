@@ -104,8 +104,9 @@ describe('registeret', () => {
       'NMDA-reseptorantagonister',
     ])
     expect(navnI(k, 'SSRI')).toEqual(['Citalopram', 'Escitalopram', 'Fluoksetin', 'Fluvoksamin', 'Paroksetin', 'Sertralin'])
-    expect(navnI(k, 'SNRI')).toEqual(['Duloksetin', 'Venlafaksin'])
+    expect(navnI(k, 'SNRI')).toEqual(['Duloksetin', 'Venlafaksin + O-desmetylvenlafaksin'])
     expect(navnI(k, 'NDRI')).toEqual(['Hydroksybupropion (kun aktiv metabolitt)'])
+    expect(navnI(k, 'TCA')).toContain('Amitriptylin + nortriptylin')
     expect(navnI(k, 'NMDA-reseptorantagonister')).toEqual(['Ketamin'])
   })
 
@@ -114,6 +115,8 @@ describe('registeret', () => {
     expect(k.underkategorier.map((u) => u.navn)).toEqual(['Førstegenerasjonsmidler', 'Andregenerasjonsmidler'])
     expect(navnI(k, 'Førstegenerasjonsmidler')).toContain('Haloperidol')
     expect(navnI(k, 'Andregenerasjonsmidler')).toContain('Klozapin')
+    expect(navnI(k, 'Andregenerasjonsmidler')).toContain('Kariprazin')
+    expect(navnI(k, 'Andregenerasjonsmidler')).toContain('Risperidon + hydroksyrisperidon')
     // Sertindol har ingen kode, men står sammen med dem som har.
     expect(navnI(k, 'Andregenerasjonsmidler')).toContain('Sertindol')
   })
