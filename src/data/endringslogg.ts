@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.51.1',
+    dato: '2026-09-28',
+    sammendrag: 'Sammenslåtte stoffer har nå én faktisk fagsside og én adresse',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Metabolitter som ikke er egne legemidler, åpner nå bokstavelig talt samme fagsside og samme adresse som moderstoffet, i stedet for parallelle sider med samme innhold.',
+      'Sum-analyser som kariprazin, fluoksetin og aripiprazol bruker moderstoffets navn som sidetittel; metabolittene står fortsatt som del av analysen.',
+      'THC og THC-syre står på én side som heter «THC og THC-syre», med separate fortolkningsregler for THC i serum og THC-syre i urin på samme side.',
+      'EtG og EtS står på én side som heter «Etanol». Sekundære analyttkoder og gamle adresser fører til den kanoniske siden.',
+    ],
+  },
+  {
     versjon: '1.51.0',
     dato: '2026-09-28',
     sammendrag: 'Metabolitter som ikke er legemidler, står på moderstoffets side, og flere rusmidler har fått indikasjoner og preparater',
