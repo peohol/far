@@ -34,11 +34,16 @@ export interface Registerkategoridata {
 export interface Registerdata {
   kategorier: Registerkategoridata[]
   /**
-   * Metabolittene som står på moderstoffets side (metabolitt → moderstoff).
-   * Katalogen bruker dem (`SAMMENSLATTE` i `analyttkatalog.ts`); i
-   * kategoriene står bare moderstoffet.
+   * Stoffnavn/aliaser som skal åpne en annen kanonisk stoffside.
+   * Dette er navnenavigasjon, ikke selve koblingen mellom labkode og stoff.
    */
   sammenslatte?: Record<string, string>
+  /**
+   * Eksplisitt kobling fra laboratorieanalytt til stoffside. Denne brukes når
+   * analyttens navn ikke er identisk med stoffet siden handler om, for eksempel
+   * HBUP → Bupropion og VENSUM → Venlafaksin.
+   */
+  analyttkoblinger?: Record<string, string>
   /** Visningstittel for kanoniske sider som samler flere nært beslektede analytter. */
   sidetitler?: Record<string, string>
 }
@@ -159,14 +164,10 @@ export function byggStoffregister(
   for (const o of katalog.oppforinger) {
     const paSiden = katalog.paSiden(o.sidenavn)
     if (paSiden[0]?.kode === o.kode) {
-      const alleKomponenterPaSiden =
-        o.komponenter.length > 1 &&
-        o.komponenter.every((navn) => {
-          const kode = katalog.kodeForSide(navn)
-          return kode ? katalog.finn(kode)?.sidenavn === o.sidenavn : false
-        })
-      const fellesSide = paSiden.length > 1 || alleKomponenterPaSiden
-      leggTil({ navn: fellesSide ? o.sidetittel : o.navn, side: o.sidenavn, kode: o.kode, koder: paSiden.map((p) => p.kode) })
+      // Stoffregisteret lister fagssidene, ikke laboratoriets analyttnavn.
+      // Sumanalysen AMTNORSUM heter derfor «Amitriptylin» her, mens
+      // «amitriptylin + nortriptylin» fortsatt beskriver analysen på siden.
+      leggTil({ navn: o.sidetittel, side: o.sidenavn, kode: o.kode, koder: paSiden.map((p) => p.kode) })
     }
   }
   // En database-side som katalogen allerede kan sende til en kanonisk side,
