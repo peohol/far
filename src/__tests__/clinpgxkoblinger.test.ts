@@ -13,7 +13,7 @@ import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { FARMAKOGENETIKKPANEL } from '../clinpgx/stoffside'
-import { UKOBLEDE_STOFFSIDER } from '../faginnhold/clinpgxdekning'
+import { gjeldendeClinpgxside, UKOBLEDE_STOFFSIDER } from '../faginnhold/clinpgxdekning'
 import {
   ALLE_CLINPGXKOBLINGER,
   CLINPGXKOBLINGSIMPORTER,
@@ -313,14 +313,15 @@ describe('migrasjonen i databasen', () => {
 
   it('kobler hver side publisert, med den kontrollerte ClinPGx-ID-en, i «Farmakogenetikk»', async () => {
     const sider = [...festkoblet, ...utenFest].filter((s) => s in FORVENTET && ![REDIGERT, DELVIS, UTEN_FEST].includes(s))
-    for (const side of sider) {
+    for (const historiskSide of sider) {
+      const side = gjeldendeClinpgxside(historiskSide)
       const [kobling, ...flere] = await koblingen(side)
       expect(flere, side).toEqual([])
       expect(kobling!.innhold.panel, side).toBe(FARMAKOGENETIKKPANEL)
       expect(kobling!.kilde, side).toBe(CLINPGXKOBLINGSKILDE)
-      expect(lesClinpgxkobling(kobling!.innhold.data).kjemikalier.map((k) => k.clinpgx_id), side).toEqual(FORVENTET[side])
+      expect(lesClinpgxkobling(kobling!.innhold.data).kjemikalier.map((k) => k.clinpgx_id), side).toEqual(FORVENTET[historiskSide])
       expect(kobling!.innhold.data, side).toEqual({
-        kjemikalier: ALLE_CLINPGXKOBLINGER.filter((k) => k.side === side).map((k) => ({
+        kjemikalier: ALLE_CLINPGXKOBLINGER.filter((k) => k.side === historiskSide).map((k) => ({
           clinpgx_id: k.clinpgx_id,
           navn: k.navn,
         })),
