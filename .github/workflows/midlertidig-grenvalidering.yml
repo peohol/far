@@ -5,6 +5,10 @@ on:
     branches:
       - fix/kanoniske-fagsider
 
+concurrency:
+  group: kanoniske-fagsider-validering
+  cancel-in-progress: true
+
 jobs:
   validate:
     runs-on: ubuntu-latest
