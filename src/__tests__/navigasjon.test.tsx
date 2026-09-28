@@ -207,6 +207,13 @@ describe('kanoniske fagssider', () => {
     expect(window.location.hash).toBe(`#/analytt/${kode}`)
   })
 
+  it('forklarer forholdet mellom bupropionsiden og HBUP', async () => {
+    window.location.hash = '#/analytt/HBUP'
+    visApp()
+    await infosideFor('Bupropion')
+    expect(screen.getByText('Analytten er hydroksybupropion. Referanseområdet gjelder bupropion.')).toBeTruthy()
+  })
+
   it('samler THC og THC-syre på én side med begge fortolkningssystemene', async () => {
     window.location.hash = '#/analytt/IRCAK'
     visApp()
