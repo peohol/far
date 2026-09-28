@@ -13,6 +13,20 @@
  */
 import { CLINPGXKOBLINGSIMPORTER, koblingsgrunnlagstekst } from './clinpgxkoblinger'
 
+
+/**
+ * Noen ClinPGx-koblinger ble importert før fagsiden fikk sitt kanoniske
+ * virkestoffnavn. Migrasjonsgrunnlaget beholder det historiske navnet, mens
+ * dekningsoversikten bruker navnet siden har i dagens stoffregister.
+ */
+const KANONISKE_KOBLINGSSIDENAVN: Readonly<Record<string, string>> = {
+  'Paliperidon (hydroksyrisperidon)': 'Paliperidon',
+}
+
+export function gjeldendeClinpgxside(navn: string): string {
+  return KANONISKE_KOBLINGSSIDENAVN[navn] ?? navn
+}
+
 /** Statusene en side kan ha, med teksten oversikten bruker. */
 export const DEKNINGSSTATUSER = {
   koblet: 'Koblet til ClinPGx og verifisert',
@@ -107,14 +121,21 @@ export const UKOBLEDE_STOFFSIDER: readonly UkobletSide[] = [
     grunn: 'Aktiv metabolitt av kariprazin. ClinPGx har metabolitten som eget kjemikalie, uten annotasjoner.',
   },
   {
+    side: 'Bupropion',
+    status: 'krever_kuratering',
+    kandidater: [{ clinpgx_id: 'PA448687', navn: 'bupropion' }],
+    grunn:
+      'Fagsiden gjelder nå virkestoffet bupropion. ClinPGx har bupropion som eget kjemikalie; koblingen er ikke lagt inn ennå.',
+  },
+  {
     side: 'Hydroksybupropion',
     status: 'metabolitt',
-    moderstoff: { side: null, clinpgx_id: 'PA448687', navn: 'bupropion' },
+    moderstoff: { side: 'Bupropion', clinpgx_id: 'PA448687', navn: 'bupropion' },
     egne: [
       { clinpgx_id: 'PA166226561', navn: 'hydroxybupropion' },
       { clinpgx_id: 'PA166170175', navn: '4-hydroxybupropion' },
     ],
-    grunn: 'Aktiv metabolitt av bupropion, som ikke har egen side. ClinPGx har to kjemikalier for metabolitten, begge uten annotasjoner.',
+    grunn: 'Aktiv metabolitt av bupropion. ClinPGx har to kjemikalier for metabolitten, begge uten annotasjoner.',
   },
   {
     side: 'Norfluoksetin',
@@ -162,10 +183,11 @@ export function clinpgxdekning(): Dekning[] {
   const koblet = new Map<string, KobletSide>()
   for (const { migrasjon, koblinger } of CLINPGXKOBLINGSIMPORTER) {
     for (const k of koblinger) {
-      const side = koblet.get(k.side) ?? { side: k.side, status: 'koblet', kjemikalier: [], grunn: '', migrasjon }
+      const sidenavn = gjeldendeClinpgxside(k.side)
+      const side = koblet.get(sidenavn) ?? { side: sidenavn, status: 'koblet', kjemikalier: [], grunn: '', migrasjon }
       side.kjemikalier.push({ clinpgx_id: k.clinpgx_id, navn: k.navn })
       side.grunn = [side.grunn, `${k.navn}: ${koblingsgrunnlagstekst(k)}`].filter(Boolean).join(' ')
-      koblet.set(k.side, side)
+      koblet.set(sidenavn, side)
     }
   }
   return [...koblet.values(), ...UKOBLEDE_STOFFSIDER].sort((a, b) => a.side.localeCompare(b.side, 'nb'))
@@ -211,7 +233,9 @@ export function clinpgxdekningsoversikt(): string {
     ['Status', 'Sider'],
     [...statuser.map((s) => [DEKNINGSSTATUSER[s], String(telling[s])]), ['Til sammen', String(dekning.length)]],
   )
-  const koblinger = CLINPGXKOBLINGSIMPORTER.flatMap(({ migrasjon, koblinger }) => koblinger.map((k) => ({ ...k, migrasjon })))
+  const koblinger = CLINPGXKOBLINGSIMPORTER.flatMap(({ migrasjon, koblinger }) =>
+    koblinger.map((k) => ({ ...k, side: gjeldendeClinpgxside(k.side), migrasjon })),
+  )
   const koblet = tabell(
     ['Stoffside', 'FEST-virkestoff', 'Siden koblet til FEST', 'ClinPGx-navn', 'ClinPGx-ID', 'Grunnlag', 'Migrasjon'],
     koblinger.map((k) => [
