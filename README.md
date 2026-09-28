@@ -238,27 +238,34 @@ alfabetisk, og bryteren «Vis underkategorier» slår underkategoriene av og
 lister hver kategori i én bolk. Bryteren står fast øverst og «Ny stoffside»
 (for redaktørene) fast nederst.
 
-Én linje per **side**, med kodene på siden ved navnet: en sumanalyse som
-`AMTNORSUM` er én linje, og diazepamgruppen, morfin og kodein, EtG og EtS
-får én linje per virkestoff. En metabolitt som ikke er et legemiddel selv,
-står på moderstoffets side (`"sammenslatte"` i `src/data/stoffregister.json`):
-N-desmetyldiazepam på diazepamsiden (`DIAZ · DMI`), O-desmetyltramadol på
-tramadolsiden og THC-syre på THC-siden. Koden beholder sin adresse, sin
-fortolkning og sine egne tall på siden (se `docs/faginnhold.md`). Oksazepam er
-et legemiddel og har sin egen side, men deler fortolkningsreglene og
-kommentartekstene med diazepam; seksjonen «Fortolkningsregler» sier det, med
-lenke til de andre sidene. Stoffer uten kode står uten. Hver linje er en
-lenke til informasjonssiden; fortolkningen åpnes derfra med «Åpne
-fortolkning», eller fra søket som før.
+Én linje per **fagsside**, med alle laboratoriekodene som hører til siden.
+En sumanalyse vises med moderstoffets navn, ikke hele analysenavnet. Metabolitter
+som ikke er egne legemidler, står på moderstoffets side
+(`"sammenslatte"` i `src/data/stoffregister.json`): blant annet
+N-desmetyldiazepam på «Diazepam», O-desmetyltramadol på «Tramadol»,
+norfluoksetin på «Fluoksetin» og desmetyl-/didesmetylkariprazin på
+«Kariprazin». EtG og EtS deler siden «Etanol». THC og THC-syre deler siden
+«THC og THC-syre», der serum- og urinfortolkningen har hver sin redigerbare
+regel-seksjon. Oksazepam, nortriptylin, paliperidon og andre metabolitter som
+selv er legemidler, beholder egne sider.
+
+Kodene på en felles fagsside beholder sine fortolkningssystemer og eventuelle
+kode-spesifikke tall, men **ikke hver sin sideadresse**: alle lenker peker på
+den kanoniske URL-en. Gamle bokmerker til en sekundærkode videresendes dit.
+Hver linje i registeret er en lenke til fagssiden; fortolkningen åpnes derfra
+med «Åpne fortolkning», eller fra kodepillene på siden.
 
 ### Informasjonssidene
 
-Hver analyttkode har en informasjonsside med sin egen adresse, for eksempel
-`#/analytt/AMTNORSUM`, som kan bokmerkes og åpnes direkte. Sidene nås fra
-sidemenyen, fra analyttkodepillene i fortolkningsmodulene (de er lenker, én
-per kode) og fra lenkene mellom sidene. «Åpne fortolkning» fører tilbake til
-modulen koden hører til. Fortolkningen blir stående som den var bak en åpen
-side, og tastene dens ligger i ro så lenge siden vises; `Esc` lukker siden.
+Hver fagsside har én kanonisk adresse, for eksempel
+`#/analytt/AMTNORSUM`, som kan bokmerkes og åpnes direkte. Flere analyttkoder
+kan høre til den samme siden; da peker kodepillene direkte på samme URL, mens
+gamle sekundæradresser videresendes. Sidene nås fra sidemenyen og fra
+analyttkodepillene i fortolkningsmodulene. På siden vises alle kodene og
+analysemetodene den omfatter. «Åpne fortolkning» fører til hovedfortolkningen,
+mens hver kodepille kan åpne den fortolkningen akkurat den koden hører til.
+Fortolkningen blir stående som den var bak en åpen side, og tastene dens ligger
+i ro så lenge siden vises; `Esc` lukker siden.
 
 Siden har sju paneler — identitet, viktige data, farmakodynamikk, dosering,
 indikasjon, farmakokinetikk og serumkonsentrasjoner — med referansene
