@@ -37,8 +37,10 @@ export interface Katalogoppforing {
   kode: string
   /** Navnet i menyen, f.eks. «Amitriptylin + nortriptylin». */
   navn: string
-  /** Informasjonssiden koden hører til, f.eks. «Amitriptylin». */
+  /** Den kanoniske informasjonssiden koden hører til, f.eks. «Amitriptylin». */
   sidenavn: string
+  /** Tittelen siden vises med. Er vanligvis sidenavnet, men kan samle flere analytter under et faglig navn. */
+  sidetittel: string
   analysemetode: string
   /** Kategorien i datasettet, f.eks. «ARB». Tom når metoden ikke er delt opp. */
   kategori: string
@@ -56,38 +58,45 @@ export interface Analyttkatalog {
   oppforinger: Katalogoppforing[]
   finn: (kode: string) => Katalogoppforing | undefined
   /**
-   * Koden et stoffnavn fører til: hovedkoden for siden med det navnet, eller
-   * koden til en metabolitt som er slått sammen med moderstoffets side
-   * («O-desmetyltramadol» fører til OTRAM, som viser tramadolsiden). Brukes
-   * til å lenke komponentene i en sumanalyse videre og til å sende en
-   * stoffadresse til siden for koden.
+   * Den kanoniske koden et stoff- eller sidenavn fører til. Alle navn som
+   * deler fagsside gir den samme koden og dermed den samme URL-en.
    */
   kodeForSide: (sidenavn: string) => string | undefined
   /**
-   * Oppføringene som deler informasjonssiden, med hovedkoden først: den som
-   * har samme navn som siden. Én for de fleste sider; flere når en metabolitt
-   * er slått sammen med moderstoffets side ({@link SAMMENSLATTE}).
+   * Oppføringene som deler informasjonssiden, med den kanoniske koden først.
+   * Én for de fleste sider; flere når flere analytter hører til samme fagsside.
    */
   paSiden: (sidenavn: string) => Katalogoppforing[]
 }
 
 /**
- * Metabolittene som står på moderstoffets informasjonsside i stedet for å ha
- * sin egen, fordi de ikke er legemidler selv: metabolittens navn → moderstoffets
- * side. Kodene beholder hver sin adresse og sine fortolkningsregler, men viser
- * den samme siden. Står i `src/data/stoffregister.json`.
+ * Stoffnavn som ikke skal ha en egen fagsside: navnet → den kanoniske siden.
+ * Det gjelder hovedsakelig metabolitter uten selvstendig legemiddelidentitet,
+ * men også EtS, som hører til den felles etanolsiden. Står i
+ * `src/data/stoffregister.json`.
  */
 export const SAMMENSLATTE: Readonly<Record<string, string>> = registerdata.sammenslatte
+
+/** Sider som vises med en annen faglig tittel enn det interne sidenavnet. */
+export const SIDETITLER: Readonly<Record<string, string>> = registerdata.sidetitler
 
 function nokkel(navn: string): string {
   return navn.trim().toLocaleLowerCase('nb')
 }
 
-const SAMMENSLATT_PER_NOKKEL = new Map(Object.entries(SAMMENSLATTE).map(([metabolitt, side]) => [nokkel(metabolitt), side]))
+const SAMMENSLATT_PER_NOKKEL = new Map(Object.entries(SAMMENSLATTE).map(([stoff, side]) => [nokkel(stoff), side]))
+const SIDETITTEL_PER_NOKKEL = new Map(Object.entries(SIDETITLER).map(([side, tittel]) => [nokkel(side), tittel]))
+const SIDE_PER_TITTEL = new Map(Object.entries(SIDETITLER).map(([side, tittel]) => [nokkel(tittel), side]))
 
-/** Siden et stoff står på: moderstoffets når stoffet er slått sammen med det. */
+/** Den kanoniske siden et stoff eller en sidetittel hører til. */
 export function sideFor(navn: string, sammenslatte: ReadonlyMap<string, string> = SAMMENSLATT_PER_NOKKEL): string {
-  return sammenslatte.get(nokkel(navn)) ?? navn
+  return SIDE_PER_TITTEL.get(nokkel(navn)) ?? sammenslatte.get(nokkel(navn)) ?? navn
+}
+
+/** Tittelen den kanoniske siden skal vises med. */
+export function sidetittelFor(navn: string): string {
+  const side = sideFor(navn)
+  return SIDETITTEL_PER_NOKKEL.get(nokkel(side)) ?? side
 }
 
 function oppforingerFor(analyte: Analyte): Katalogoppforing[] {
@@ -96,10 +105,12 @@ function oppforingerFor(analyte: Analyte): Katalogoppforing[] {
     // metabolitter, og siden er moderstoffets. Modulene som dekker flere koder,
     // deles opp i én oppføring per kode, med virkestoffets eget navn.
     const hele = kode === analyte.kode
+    const sidenavn = sideFor(hele ? splitName(analyte).moderstoff : navn)
     return {
       kode,
       navn,
-      sidenavn: sideFor(hele ? splitName(analyte).moderstoff : navn),
+      sidenavn,
+      sidetittel: sidetittelFor(sidenavn),
       analysemetode: analyte.analysemetode,
       kategori: analyte.kategori,
       komponenter: hele && analyte.komponenter.length > 0 ? [...analyte.komponenter] : [navn],
@@ -112,25 +123,21 @@ export function byggKatalog(pool: Analyte[]): Analyttkatalog {
   const oppforinger = pool.flatMap(oppforingerFor)
   const perKode = new Map(oppforinger.map((o) => [o.kode, o]))
 
-  // Oppføringene per side, med hovedkoden — den som har sidens navn — først.
+  // Oppføringene per side, med den kanoniske koden først. Et navn som selv
+  // er slått inn på en annen side er alltid sekundært; resten beholder
+  // katalogrekkefølgen.
   const perSide = new Map<string, Katalogoppforing[]>()
   for (const o of oppforinger) {
     const liste = perSide.get(nokkel(o.sidenavn)) ?? []
-    if (nokkel(o.navn) === nokkel(o.sidenavn)) liste.unshift(o)
-    else liste.push(o)
+    if (SAMMENSLATT_PER_NOKKEL.has(nokkel(o.navn))) liste.push(o)
+    else liste.unshift(o)
     perSide.set(nokkel(o.sidenavn), liste)
   }
-  const perNavn = new Map(oppforinger.map((o) => [nokkel(o.navn), o]))
 
   return {
     oppforinger,
     finn: (kode) => perKode.get(kode.trim().toUpperCase()),
-    kodeForSide: (sidenavn) => {
-      const [forste, ...andre] = perSide.get(nokkel(sidenavn)) ?? []
-      if (forste) return andre.length === 0 || nokkel(forste.navn) === nokkel(sidenavn) ? forste.kode : undefined
-      // En metabolitt uten egen side fører til sin egen kode på moderstoffets side.
-      return SAMMENSLATT_PER_NOKKEL.has(nokkel(sidenavn)) ? perNavn.get(nokkel(sidenavn))?.kode : undefined
-    },
-    paSiden: (sidenavn) => perSide.get(nokkel(sidenavn)) ?? [],
+    kodeForSide: (sidenavn) => perSide.get(nokkel(sideFor(sidenavn)))?.[0]?.kode,
+    paSiden: (sidenavn) => perSide.get(nokkel(sideFor(sidenavn))) ?? [],
   }
 }
