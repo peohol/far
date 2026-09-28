@@ -17,7 +17,20 @@
  */
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { KLINISK_PAKKE } from '../src/auth/vegg.ts'
+
+/**
+ * Node kjører dette skriptet direkte etter Vite-bygget og kan derfor ikke
+ * importere TypeScript-kilden på alle støttede Node-versjoner. Les den ene
+ * byggekonstanten fra kilden i stedet for å duplisere den her.
+ */
+function lesKliniskPakkenavn() {
+  const kilde = readFileSync(fileURLToPath(new URL('../src/auth/vegg.ts', import.meta.url)), 'utf8')
+  const treff = kilde.match(/export const KLINISK_PAKKE\s*=\s*['"]([^'"]+)['"]/)
+  if (!treff?.[1]) throw new Error('Fant ikke KLINISK_PAKKE i src/auth/vegg.ts')
+  return treff[1]
+}
+
+const KLINISK_PAKKE = lesKliniskPakkenavn()
 
 /**
  * Egne moduler som har lov til å ligge utenfor veggen, med grunnen til det.
