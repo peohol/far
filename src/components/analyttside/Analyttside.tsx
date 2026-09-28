@@ -134,7 +134,13 @@ export function Analyttside(props: AnalyttsideProps) {
   // seksjoner som er åpne, hører til siden.
   return (
     <SeksjonsstyringKilde key={nokkel.type === 'kode' ? nokkel.oppforing.kode : `stoff:${nokkel.navn.toLocaleLowerCase('nb')}`}>
-      <Innhold nokkel={nokkel} sted={sted} katalog={katalog} onApneFortolkning={onApneFortolkning} onLukk={onLukk} />
+      <Innhold
+        nokkel={nokkel}
+        sted={videresendTil ? videresendtSted : sted}
+        katalog={katalog}
+        onApneFortolkning={onApneFortolkning}
+        onLukk={onLukk}
+      />
     </SeksjonsstyringKilde>
   )
 }
