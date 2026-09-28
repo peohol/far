@@ -86,6 +86,8 @@ describe('registeret', () => {
     expect(kategori('Opioider').stoffer.find((s) => s.navn === 'Tramadol')?.koder).toEqual(['TRAM', 'OTRAM'])
     expect(kategori('Cannabinoider').stoffer.find((s) => s.navn === 'THC og THC-syre')?.koder).toEqual(['THC', 'IRCAK'])
     expect(kategori('Alkohol og GHB').stoffer.find((s) => s.navn === 'Etanol')?.koder).toEqual(['UETGS', 'UETS'])
+    expect(kategori('Antidepressiver').stoffer.find((s) => s.navn === 'Bupropion')).toMatchObject({ side: 'Bupropion', kode: 'HBUP' })
+    expect(kategori('Antipsykotika').stoffer.find((s) => s.navn === 'Paliperidon')).toMatchObject({ side: 'Paliperidon', kode: 'PALI' })
     for (const k of register) {
       const sider = k.stoffer.map((s) => s.side)
       expect(new Set(sider).size, k.navn).toBe(sider.length)
@@ -104,9 +106,10 @@ describe('registeret', () => {
       'NMDA-reseptorantagonister',
     ])
     expect(navnI(k, 'SSRI')).toEqual(['Citalopram', 'Escitalopram', 'Fluoksetin', 'Fluvoksamin', 'Paroksetin', 'Sertralin'])
-    expect(navnI(k, 'SNRI')).toEqual(['Duloksetin', 'Venlafaksin + O-desmetylvenlafaksin'])
-    expect(navnI(k, 'NDRI')).toEqual(['Hydroksybupropion (kun aktiv metabolitt)'])
-    expect(navnI(k, 'TCA')).toContain('Amitriptylin + nortriptylin')
+    expect(navnI(k, 'SNRI')).toEqual(['Duloksetin', 'Venlafaksin'])
+    expect(navnI(k, 'NDRI')).toEqual(['Bupropion'])
+    expect(navnI(k, 'TCA')).toContain('Amitriptylin')
+    expect(navnI(k, 'TCA')).toContain('Nortriptylin')
     expect(navnI(k, 'NMDA-reseptorantagonister')).toEqual(['Ketamin'])
   })
 
@@ -116,7 +119,8 @@ describe('registeret', () => {
     expect(navnI(k, 'Førstegenerasjonsmidler')).toContain('Haloperidol')
     expect(navnI(k, 'Andregenerasjonsmidler')).toContain('Klozapin')
     expect(navnI(k, 'Andregenerasjonsmidler')).toContain('Kariprazin')
-    expect(navnI(k, 'Andregenerasjonsmidler')).toContain('Risperidon + hydroksyrisperidon')
+    expect(navnI(k, 'Andregenerasjonsmidler')).toContain('Paliperidon')
+    expect(navnI(k, 'Andregenerasjonsmidler')).toContain('Risperidon')
     // Sertindol har ingen kode, men står sammen med dem som har.
     expect(navnI(k, 'Andregenerasjonsmidler')).toContain('Sertindol')
   })
