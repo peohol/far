@@ -52,6 +52,16 @@ const FORSTE_IMPORTMIGRASJON = '20260923072247'
 const FORSTE_OMARBEIDING = migrasjonsfiler().find((f) => f.endsWith('_viktige_data_former.sql'))!
 
 /**
+ * Importtesten under gjenskaper den historiske tilstanden før senere
+ * omarbeidinger. Disse to sidene het da analytten, selv om dagens
+ * stoffregister bruker det kanoniske virkestoffnavnet.
+ */
+const HISTORISKE_HOVEDSIDE_NAVN: Readonly<Record<string, string>> = {
+  HBUP: 'Hydroksybupropion',
+  PALI: 'Paliperidon (hydroksyrisperidon)',
+}
+
+/**
  * Migrasjonene importen og kursendringen ble rullet ut som, med md5-en
  * produksjonen har registrert for dem (`supabase_migrations.schema_migrations`).
  * De er kjørt og skal aldri endres; datasettet kan endre seg etter dem.
@@ -288,7 +298,7 @@ describe('importen i databasen', () => {
     for (const kode of plan.koder) {
       const side = sider.get(kode.kode!)!
       expect(side.analytt?.innhold.kode, kode.kode!).toBe(kode.kode)
-      expect(side.infoside?.innhold.navn).toBe(kode.hovedside.navn)
+      expect(side.infoside?.innhold.navn).toBe(HISTORISKE_HOVEDSIDE_NAVN[kode.kode!] ?? kode.hovedside.navn)
       expect(side.komponenter.map((k) => k.innhold.navn)).toEqual(kode.komponenter.map((k) => k.navn))
       const iDatabasen = new Map(side.referanser.map((r) => [r.id, r.innhold]))
       const vist = synlige(side).map(({ innhold: { panel, posisjon, elementtype, data, referanser = [] } }) => ({
