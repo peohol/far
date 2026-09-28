@@ -12,6 +12,7 @@ import {
   clinpgxdekning,
   clinpgxdekningsoversikt,
   DEKNINGSSTATUSER,
+  gjeldendeClinpgxside,
   dekningstelling,
   UKOBLEDE_STOFFSIDER,
   type Dekning,
@@ -38,13 +39,15 @@ describe('dekningsoversikten', () => {
     }
   })
 
-  it('er koblet for nøyaktig sidene som har en kobling i importene', () => {
+  it('er koblet for nøyaktig sidene som har en kobling i importene, med dagens sidenavn', () => {
     const koblet = DEKNING.filter((d) => d.status === 'koblet').map((d) => d.side)
-    expect(new Set(koblet)).toEqual(new Set(ALLE_CLINPGXKOBLINGER.map((k) => k.side)))
+    expect(new Set(koblet)).toEqual(new Set(ALLE_CLINPGXKOBLINGER.map((k) => gjeldendeClinpgxside(k.side))))
     for (const d of DEKNING) {
       if (d.status !== 'koblet') continue
       expect(d.kjemikalier, d.side).toEqual(
-        ALLE_CLINPGXKOBLINGER.filter((k) => k.side === d.side).map((k) => ({ clinpgx_id: k.clinpgx_id, navn: k.navn })),
+        ALLE_CLINPGXKOBLINGER
+          .filter((k) => gjeldendeClinpgxside(k.side) === d.side)
+          .map((k) => ({ clinpgx_id: k.clinpgx_id, navn: k.navn })),
       )
     }
   })
