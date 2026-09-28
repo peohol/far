@@ -78,7 +78,7 @@ const LAGT_INN_AV_ANDRE = 'Noen andre har lagt inn dette i mellomtiden.'
  * Fortolkes koden med scenarioregler, hentes regelsettet for modulen også,
  * men bare til redigeringen: lesemodusen viser reglene appen alt har hentet.
  */
-export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
+export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus, inkluderThcSyre = false) {
   const { leser, lager } = useFaginnholdskilde()
   const tilstand: Tilstand = modus === 'rediger' ? 'utkast' : 'publisert'
   const oppforing = nokkel.type === 'kode' ? nokkel.oppforing : null
@@ -106,12 +106,18 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
   const lesSide = useCallback(
     async (t: Tilstand): Promise<Analyttsidedata> => {
       if (kode === null) return leser.lesStoffside(stoffnavn ?? '', t)
-      const egen = await leser.lesAnalyttside(kode, t)
-      if (egen.analytt || !deltSide) return egen
-      const delt = await leser.lesStoffside(deltSide, t)
-      return delt.analytt ? { ...delt, regelsett: egen.regelsett, thcregelsett: egen.thcregelsett } : egen
+      const [egen, thcSyre] = await Promise.all([
+        leser.lesAnalyttside(kode, t),
+        inkluderThcSyre ? leser.lesThcRegelsett(t) : null,
+      ])
+      let resultat = egen
+      if (!egen.analytt && deltSide) {
+        const delt = await leser.lesStoffside(deltSide, t)
+        resultat = delt.analytt ? { ...delt, regelsett: egen.regelsett, thcregelsett: egen.thcregelsett } : egen
+      }
+      return inkluderThcSyre ? { ...resultat, thcregelsett: thcSyre } : resultat
     },
-    [leser, kode, stoffnavn, deltSide],
+    [leser, kode, stoffnavn, deltSide, inkluderThcSyre],
   )
 
   useEffect(() => {
