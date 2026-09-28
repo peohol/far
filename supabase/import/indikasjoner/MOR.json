@@ -1,0 +1,56 @@
+{
+  "kode": "MOR",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Sterke smerter (Dolcontin, Malfin, Morfin Abcur, Morfin «Orifarm Healthcare», Oramorph), blant annet kreftsmerter og postoperative smerter. Oramorph til voksne og barn over 2 år.",
+      "Epidural injeksjon (Morfin Epidural): postoperative, posttraumatiske og kreftrelaterte smerter."
+    ],
+    "referanser": [
+      "fk-dolcontin",
+      "fk-malfin",
+      "fk-morfin-abcur",
+      "fk-morfin-orifarm",
+      "fk-oramorph",
+      "fk-morfin-epidural"
+    ]
+  },
+  "referanser": {
+    "fk-dolcontin": {
+      "tittel": "Dolcontin «Mundipharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/dolcontin-mundipharma-548098"
+    },
+    "fk-malfin": {
+      "tittel": "Malfin «Teva»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/malfin-teva-569134"
+    },
+    "fk-morfin-abcur": {
+      "tittel": "Morfin Abcur «Abcur»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/morfin-abcur-abcur-588167"
+    },
+    "fk-morfin-orifarm": {
+      "tittel": "Morfin «Orifarm Healthcare»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/morfin-orifarm-healthcare-561671"
+    },
+    "fk-oramorph": {
+      "tittel": "Oramorph «Molteni»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/oramorph-molteni-573631"
+    },
+    "fk-morfin-epidural": {
+      "tittel": "Morfin Epidural «Orifarm Healthcare»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/morfin-epidural-orifarm-healthcare-561666"
+    }
+  }
+}

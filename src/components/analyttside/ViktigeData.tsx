@@ -1,9 +1,11 @@
 import { useId, useRef, useState, type ReactNode } from 'react'
+import type { Katalogoppforing } from '../../domain/analyttkatalog'
 import type { Sideelement } from '../../faginnhold/analyttside'
 import {
   DATAKORT,
   DATAKORTGRUPPER,
   OVER,
+  datakortGjelder,
   datakortHarVerdi,
   delFormverdi,
   delIntervall,
@@ -51,15 +53,45 @@ const UTSEENDE: Record<Datakorttype, { ikon: Ikonnavn; tone?: 'referanse' | 'tok
  * Innholdet i hvert kort står midtstilt. Kinetikken viser symbolet og ikke
  * ordet (det står for skjermlesere), og en verdi per legemiddelform, side om
  * side, når kortet har flere.
+ *
+ * Deler flere koder siden — en metabolitt slått sammen med moderstoffet — har
+ * hver kode sine egne kort, merket med stoffnavnet: tramadolsiden viser både
+ * referanseområdet for tramadol og for O-desmetyltramadol. Kortene til
+ * hovedkoden (den første i `analytter`) lagres uten `gjelder`, de andre med
+ * koden (`datakortGjelder`).
  */
-export function ViktigeData({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
+export function ViktigeData({
+  definisjon,
+  kontekst,
+  analytter = [],
+}: {
+  definisjon: Paneldefinisjon
+  kontekst: Panelkontekst
+  /** Kodene som viser siden, hovedkoden først. */
+  analytter?: readonly Katalogoppforing[]
+}) {
   const elementer = kontekst.modell.paneler.get(definisjon.nokkel) ?? []
-  const kort = DATAKORT.map((def, plass) => ({
-    def: def as Datakortdefinisjon,
-    type: def.type,
-    plass,
-    element: elementer.find((e) => e.elementtype === def.type) ?? null,
-  }))
+  const flere = analytter.length > 1
+  const hovedkode = analytter[0]?.kode ?? null
+  const eiere = flere ? analytter : [null]
+  const kort = DATAKORT.flatMap((def, plass) =>
+    eiere.map((eier): Kortplass => {
+      const gjelder = eier && eier.kode !== hovedkode ? eier.kode : null
+      return {
+        def: def as Datakortdefinisjon,
+        type: def.type,
+        plass,
+        gjelder,
+        etikett: eier?.navn ?? null,
+        element:
+          elementer.find((e) => {
+            if (e.elementtype !== def.type) return false
+            const kode = datakortGjelder(e.data)
+            return gjelder ? kode === gjelder : kode === null || kode === hovedkode
+          }) ?? null,
+      }
+    }),
+  )
   const synlige = kort.filter(({ def, element }) => element && datakortHarVerdi(def, element.data))
   if (synlige.length === 0 && !kontekst.redigerer) return null
   return <Flate definisjon={definisjon} kontekst={kontekst} kort={kontekst.redigerer ? kort : synlige} />
@@ -70,6 +102,10 @@ interface Kortplass {
   type: Datakorttype
   /** Plassen i `DATAKORT`, som kortet lagres med. */
   plass: number
+  /** Koden kortet gjelder når det ikke er hovedkodens, som lagres i kortet. */
+  gjelder: string | null
+  /** Stoffet kortet gjelder, når siden har kort for flere. */
+  etikett: string | null
   element: Sideelement | null
 }
 
@@ -96,7 +132,7 @@ function Flate({
             iGruppen.length > 0 && (
               <Gruppe key={gruppe.nokkel} nokkel={gruppe.nokkel} tittel={gruppe.tittel}>
                 {iGruppen.map((k) => (
-                  <Datakort key={k.type} {...k} definisjon={definisjon} kontekst={kontekst} />
+                  <Datakort key={`${k.type}:${k.gjelder ?? ''}`} {...k} definisjon={definisjon} kontekst={kontekst} />
                 ))}
               </Gruppe>
             )
@@ -159,6 +195,8 @@ function Datakort({
   def,
   type,
   plass,
+  gjelder,
+  etikett,
   element,
   definisjon,
   kontekst,
@@ -171,12 +209,13 @@ function Datakort({
         panel: definisjon.nokkel,
         elementtype: type,
         posisjon: plass,
-        data: data as Record<string, unknown>,
+        data: { ...(data as Record<string, unknown>), ...(gjelder && { gjelder }) },
         referanser,
       })
       lukk()
     }
-  const skjemaProps = { tittel: def.tittel, ikon, referanser: element?.referanser ?? [] }
+  const navn = etikett ? `${def.tittel}, ${etikett}` : def.tittel
+  const skjemaProps = { tittel: navn, ikon, referanser: element?.referanser ?? [] }
 
   return (
     <li
@@ -197,10 +236,16 @@ function Datakort({
         <span className={def.symbol ? 'kun-skjermleser' : 'datakort__etikett'}>
           <Uthev tekst={def.tittel} />
         </span>
+        {etikett && (
+          <span className="datakort__gjelder">
+            <span className="kun-skjermleser">, </span>
+            <Uthev tekst={etikett} />
+          </span>
+        )}
       </h3>
       {def.verdi === 'formvis' ? (
         <Redigerbar
-          navn={def.tittel}
+          navn={navn}
           element={element}
           redigerer={kontekst.redigerer}
           visning={<Formverdivisning former={lesFormverdier(element?.data).former} />}
@@ -210,7 +255,7 @@ function Datakort({
         />
       ) : (
         <Redigerbar
-          navn={def.tittel}
+          navn={navn}
           element={element}
           redigerer={kontekst.redigerer}
           visning={<Intervallvisning data={element?.data} />}

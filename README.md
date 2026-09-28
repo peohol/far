@@ -238,9 +238,16 @@ alfabetisk, og bryteren «Vis underkategorier» slår underkategoriene av og
 lister hver kategori i én bolk. Bryteren står fast øverst og «Ny stoffside»
 (for redaktørene) fast nederst.
 
-Én linje per **analyttkode**, med koden ved navnet: en sumanalyse som
-`AMTNORSUM` er én linje, mens diazepamgruppen, morfin og kodein, EtG og EtS
-får én linje per virkestoff. Stoffer uten kode står uten. Hver linje er en
+Én linje per **side**, med kodene på siden ved navnet: en sumanalyse som
+`AMTNORSUM` er én linje, og diazepamgruppen, morfin og kodein, EtG og EtS
+får én linje per virkestoff. En metabolitt som ikke er et legemiddel selv,
+står på moderstoffets side (`"sammenslatte"` i `src/data/stoffregister.json`):
+N-desmetyldiazepam på diazepamsiden (`DIAZ · DMI`), O-desmetyltramadol på
+tramadolsiden og THC-syre på THC-siden. Koden beholder sin adresse, sin
+fortolkning og sine egne tall på siden (se `docs/faginnhold.md`). Oksazepam er
+et legemiddel og har sin egen side, men deler fortolkningsreglene og
+kommentartekstene med diazepam; seksjonen «Fortolkningsregler» sier det, med
+lenke til de andre sidene. Stoffer uten kode står uten. Hver linje er en
 lenke til informasjonssiden; fortolkningen åpnes derfra med «Åpne
 fortolkning», eller fra søket som før.
 

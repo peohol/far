@@ -1,0 +1,28 @@
+{
+  "kode": "ZOPI",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Imovane, voksne: forbigående og kortvarig behandling av søvnvansker, og støtteterapi i begrenset tid ved kroniske søvnvansker.",
+      "Zopiclone Grindeks, voksne: forbigående, kortvarige og kroniske søvnvansker, også vansker med å sovne, nattlige oppvåkninger og tidlig oppvåkning."
+    ],
+    "referanser": [
+      "fk-imovane",
+      "fk-zopiclone-grindeks"
+    ]
+  },
+  "referanser": {
+    "fk-imovane": {
+      "tittel": "Imovane «sanofi-aventis»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/imovane-sanofi-aventis-560033"
+    },
+    "fk-zopiclone-grindeks": {
+      "tittel": "Zopiclone Grindeks «Grindeks»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/zopiclone-grindeks-grindeks-759296"
+    }
+  }
+}

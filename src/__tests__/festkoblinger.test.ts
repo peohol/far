@@ -2,7 +2,8 @@
  * Koblingene mellom stoffsider og virkestoffene i FEST
  * (`src/faginnhold/festkoblinger.ts`): at hver stoffside uten analyttkode har
  * én, at amfetaminsiden har deksamfetamin og lisdeksamfetamin, at THC-siden
- * har dronabinol, at cannabidiolsiden har cannabidiol, og at
+ * har dronabinol, at cannabidiolsiden har cannabidiol, at rusmiddelsidene som
+ * er legemidler har sine, og at
  * migrasjonene legger dem inn som kortet redigeringen lager, hopper over det
  * de ikke kan koble, og ikke gjør noe når de kjøres igjen. FEST-radene er
  * syntetiske, med ID-ene og navnene fra FEST.
@@ -17,6 +18,7 @@ import {
   FESTKOBLINGSIMPORTER,
   FESTKOBLINGSKILDE,
   festkoblingSql,
+  RUSMIDLER_FESTKOBLINGER,
   STOFFSIDE_FESTKOBLINGER,
   THC_FESTKOBLINGER,
 } from '../faginnhold/festkoblinger'
@@ -60,6 +62,17 @@ const FESTNAVN: Record<string, string> = {
 }
 /** Navnene FEST gir virkestoffene amfetaminsiden kobles til, i rekkefølge. */
 const AMFETAMINNAVN = ['Deksamfetamin', 'Lisdeksamfetamin']
+/** Rusmiddelkoblingene der FEST gir virkestoffet et annet navn enn siden. */
+const RUSNAVN: Record<string, string> = {
+  'ID_4FE84EA2-FC1B-44A6-8D70-2A118B211697': 'Bupropion',
+  'ID_7A7394E3-2826-4CDE-8AB1-538BB8DB1AD5': 'Levometadon',
+}
+const rusnavn = (k: { side: string; fest_id: string }) => RUSNAVN[k.fest_id] ?? k.side
+/**
+ * Siden psykofarmakaimporten lager, før testen oppretter administratoren; den
+ * finnes ikke i testdatabasen, så koblingen hoppes over.
+ */
+const UTEN_SIDE = 'Hydroksybupropion'
 /** Mangler i FEST-kopien i testen. */
 const MANGLER = 'Fenytoin'
 /** Er utgått i FEST-kopien i testen. */
@@ -87,6 +100,16 @@ describe('koblingene', () => {
 
   it('kobler cannabidiolsiden til cannabidiol', () => {
     expect(CBD_FESTKOBLINGER.map((k) => [k.side, k.fest_id])).toEqual([['Cannabidiol', 'ID_FFF3536F-BE29-4191-A09A-ABC119C37984']])
+  })
+
+  it('kobler rusmiddelsidene som er legemidler, metadon også til levometadon og hydroksybupropion til bupropion', () => {
+    const sider = [...new Set(RUSMIDLER_FESTKOBLINGER.map((k) => k.side))]
+    expect(sider).toEqual([...sider].sort((a, b) => a.localeCompare(b, 'nb')))
+    expect(sider).not.toContain('O-desmetyltramadol')
+    expect(sider).not.toContain('N-desmetyldiazepam')
+    expect(RUSMIDLER_FESTKOBLINGER.filter((k) => k.side === 'Metadon').map(rusnavn)).toEqual(['Metadon', 'Levometadon'])
+    expect(RUSMIDLER_FESTKOBLINGER.filter((k) => k.side === 'Hydroksybupropion').map(rusnavn)).toEqual(['Bupropion'])
+    for (const k of RUSMIDLER_FESTKOBLINGER) expect(k.fest_id, k.side).toMatch(/^ID_[0-9A-F-]{36}$/)
   })
 
   it('kobler aldri samme side til samme virkestoff to ganger', () => {
@@ -129,6 +152,7 @@ describe('migrasjonen i databasen', () => {
       ...AMFETAMIN_FESTKOBLINGER.map((k, i) => [k.fest_id, AMFETAMINNAVN[i], false] as const),
       ...THC_FESTKOBLINGER.map((k) => [k.fest_id, 'Dronabinol', false] as const),
       ...CBD_FESTKOBLINGER.map((k) => [k.fest_id, 'Cannabidiol', false] as const),
+      ...RUSMIDLER_FESTKOBLINGER.map((k) => [k.fest_id, rusnavn(k), false] as const),
     ]
     for (const [fest_id, navn, utgatt] of virkestoff) {
       await db.query(
@@ -187,9 +211,22 @@ describe('migrasjonen i databasen', () => {
     })
   })
 
-  it('hopper over et virkestoff som mangler eller er utgått i FEST', async () => {
+  it('kobler rusmiddelsidene, også tapentadolsiden som indikasjonsimporten lager, med ett kort per side', async () => {
+    for (const side of new Set(RUSMIDLER_FESTKOBLINGER.map((k) => k.side))) {
+      if (side === UTEN_SIDE) continue
+      const [kobling, ...flere] = await koblingen(side)
+      expect(flere, side).toEqual([])
+      expect(kobling!.innhold.panel, side).toBe(PREPARATPANEL)
+      expect(lesLegemiddelkobling(kobling!.innhold.data), side).toEqual({
+        virkestoff: RUSMIDLER_FESTKOBLINGER.filter((k) => k.side === side).map((k) => ({ fest_id: k.fest_id, navn: rusnavn(k) })),
+      })
+    }
+  })
+
+  it('hopper over et virkestoff som mangler eller er utgått i FEST, og en side som ikke finnes', async () => {
     expect(await koblingen(MANGLER)).toEqual([])
     expect(await koblingen(UTGATT)).toEqual([])
+    expect(await koblingen(UTEN_SIDE)).toEqual([])
   })
 
   it('gjør ingenting når den kjøres en gang til', async () => {

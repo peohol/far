@@ -168,14 +168,15 @@ describe('koblingene', () => {
     for (const side of UKOBLET) expect(koblet.has(side), side).toBe(false)
   })
 
-  it('går via det samme virkestoffet som FEST-koblingen siden fikk ved migrasjon', () => {
+  it('går via det samme virkestoffet som FEST-koblingen siden fikk ved migrasjon, når koblingen gikk via FEST', () => {
     const fest = new Map<string, Set<string>>()
     for (const k of FESTKOBLINGSIMPORTER.flatMap((i) => i.koblinger)) {
       fest.set(k.side, (fest.get(k.side) ?? new Set()).add(k.fest_id))
     }
     for (const k of ALLE_CLINPGXKOBLINGER) {
       const virkestoff = fest.get(k.side)
-      if (virkestoff) expect(virkestoff.has(k.fest_id ?? ''), k.side).toBe(true)
+      // Uten FEST-ID ble kjemikaliet valgt før siden ble koblet til FEST (rusmiddelsidene).
+      if (virkestoff && k.fest_id) expect(virkestoff.has(k.fest_id), k.side).toBe(true)
     }
   })
 

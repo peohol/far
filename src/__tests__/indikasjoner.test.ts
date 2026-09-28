@@ -1,14 +1,24 @@
 /**
  * Indikasjonene hentet fra Felleskatalogen (`supabase/import/indikasjoner/`),
  * for stoffsidene uten analyttkode, amfetaminsiden og de nye sidene for GHB,
- * ketamin, THC og cannabidiol: datasettet, og
+ * ketamin, THC og cannabidiol, og rusmiddelsidene som er legemidler: datasettet, og
  * migrasjonene kjørt på sidene som finnes, lest slik appen leser dem.
  */
 import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { filnokkel, importmigrasjoner } from '../faginnhold/import'
-import { INDIKASJONSDATASETT, INDIKASJONSIMPORTER, indikasjonskilde, indikasjonsplan, CBD_STOFFSIDER, NYE_ANALYTTSIDER, NYE_STOFFSIDER } from '../faginnhold/indikasjoner'
+import {
+  INDIKASJONSDATASETT,
+  INDIKASJONSIMPORTER,
+  indikasjonskilde,
+  indikasjonsplan,
+  CBD_STOFFSIDER,
+  NYE_ANALYTTSIDER,
+  NYE_STOFFSIDER,
+  RUSMIDLER_INDIKASJONER,
+} from '../faginnhold/indikasjoner'
+import { SAMMENSLATTE } from '../domain/analyttkatalog'
 import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import { ELEMENTTYPER, lesRiktekst } from '../faginnhold/paneler'
 import { klartekst } from '../faginnhold/riktekst'
@@ -23,6 +33,7 @@ const amfetamin = indikasjonsplan(omgang('amfetamin_indikasjoner'))
 const nye = indikasjonsplan(omgang('ghb_ketamin_indikasjoner'))
 const thc = indikasjonsplan(omgang('thc_indikasjoner'))
 const cbd = indikasjonsplan(omgang('cbd_indikasjoner'))
+const rus = indikasjonsplan(omgang('rusmidler_indikasjoner'))
 const PLANER = INDIKASJONSIMPORTER.map((i) => ({ migrasjon: i.migrasjon, plan: indikasjonsplan(i), kilde: fkkilde(i.hentet) }))
 const migrasjonene = (migrasjon: string) => migrasjonsfiler().filter((f) => new RegExp(`_${migrasjon}_\\d+\\.sql$`).test(f))
 const MIGRASJONER = PLANER.flatMap((p) => migrasjonene(p.migrasjon))
@@ -34,7 +45,7 @@ const FK_KILDE = fkkilde('2026-09-25')
 const UTEN_OMTALE = ['Flunitrazepam', 'Ketobemidon']
 
 /** Sidene importen lager, fordi de ikke fantes fra før. */
-const NYE_SIDER = [...NYE_STOFFSIDER, ...thc.koder.map((k) => k.hovedside.navn), ...CBD_STOFFSIDER]
+const NYE_SIDER = [...NYE_STOFFSIDER, ...thc.koder.map((k) => k.hovedside.navn), ...CBD_STOFFSIDER, 'Tapentadol']
 
 const tekst = (navn: string, p = plan) =>
   klartekst(lesRiktekst(p.koder.find((k) => k.hovedside.navn === navn)!.elementer[0]!.data).dokument)
@@ -154,6 +165,21 @@ describe('datasettet', () => {
     expect(t).toContain('tuberøs sklerose-kompleks (TSC)')
     expect(t).toContain('Epidyolex, hos pasienter ≥2 år:')
     expect(k!.elementer[0]!.referanser).toEqual(['fk-epidyolex'])
+  })
+
+  it('legger indikasjonene på rusmiddelsidene som er legemidler, og lager tapentadolsiden med koden TAP', () => {
+    expect(rus.koder.map((k) => k.kode).sort()).toEqual([...RUSMIDLER_INDIKASJONER].sort())
+    for (const k of rus.koder) {
+      expect(k.elementer.map((e) => [e.panel, e.elementtype, e.kilde]), k.hovedside.navn).toEqual([
+        ['indikasjon', ELEMENTTYPER.riktekst, fkkilde('2026-09-28')],
+      ])
+      expect(k.elementer[0]!.referanser.length, k.hovedside.navn).toBeGreaterThan(0)
+    }
+    expect(rus.koder.find((k) => k.kode === 'TAP')!.hovedside.navn).toBe('Tapentadol')
+    // Metabolittene som er slått sammen med moderstoffet, får ikke egne indikasjoner.
+    for (const metabolitt of Object.keys(SAMMENSLATTE)) expect(rus.koder.map((k) => k.hovedside.navn)).not.toContain(metabolitt)
+    expect(tekst('Buprenorfin', rus)).toContain('opioidavhengighet')
+    expect(tekst('Metadon', rus)).toContain('Levopidon')
   })
 
   it('er de samme migrasjonene som datasettet gir', () => {

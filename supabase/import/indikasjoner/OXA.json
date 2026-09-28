@@ -1,0 +1,28 @@
+{
+  "kode": "OXA",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Sobril: nevroser og psykosomatiske lidelser preget av angst, uro og spenning; søvnvansker; premedisinering før operasjoner eller tannbehandling; delirium tremens og akutte abstinenssymptomer; sammen med trisykliske antidepressiver ved engstelige eller agiterte depresjoner.",
+      "Delipam: vanlige symptomer på angstlidelse (frykt, angst, rastløshet og søvnvansker), også sammen med vanlige antidepressiver ved depresjon med slike symptomer; delirium tremens, predeliriøse tilstander og akutte abstinenssymptomer som angst, agitasjon og eksitasjon ved alkoholmisbruk."
+    ],
+    "referanser": [
+      "fk-sobril",
+      "fk-delipam"
+    ]
+  },
+  "referanser": {
+    "fk-sobril": {
+      "tittel": "Sobril «Pfizer»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/sobril-pfizer-563995"
+    },
+    "fk-delipam": {
+      "tittel": "Delipam «2care4 Generics»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/delipam-2care4-generics-740382"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "kode": "TRAM",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Moderate smerter (Nobligan, Nobligan Retard, Tramadol HEXAL, Tramagetic OD, Tramagetic Retard). Tramadol Actavis: moderate til sterke smerter.",
+      "Med paracetamol (Tramadol/Paracetamol Orion): symptomatisk behandling av moderate til sterke smerter når analgetika med bare perifer effekt ikke er tilstrekkelig."
+    ],
+    "referanser": [
+      "fk-nobligan",
+      "fk-tramadol-hexal",
+      "fk-tramagetic",
+      "fk-tramadol-actavis",
+      "fk-tramadol-paracetamol-orion"
+    ]
+  },
+  "referanser": {
+    "fk-nobligan": {
+      "tittel": "Nobligan, Nobligan Retard «Grünenthal»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/nobligan-nobligan-retard-gruunenthal-562037"
+    },
+    "fk-tramadol-hexal": {
+      "tittel": "Tramadol HEXAL «HEXAL»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/tramadol-hexal-hexal-564758"
+    },
+    "fk-tramagetic": {
+      "tittel": "Tramagetic OD, Tramagetic Retard «Mundipharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/tramagetic-od-tramagetic-retard-mundipharma-564764"
+    },
+    "fk-tramadol-actavis": {
+      "tittel": "Tramadol Actavis «Actavis»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/tramadol-actavis-actavis-587676"
+    },
+    "fk-tramadol-paracetamol-orion": {
+      "tittel": "Tramadol/Paracetamol Orion «Orion»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/tramadol-paracetamol-orion-orion-631463"
+    }
+  }
+}

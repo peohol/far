@@ -163,6 +163,13 @@
   color: var(--datakort-blekk, var(--blekk-dempet));
 }
 
+/* Stoffet kortet gjelder, når siden har kort for flere (en metabolitt slått sammen med moderstoffet). */
+.datakort__gjelder {
+  flex-basis: 100%;
+  font-weight: var(--vekt-normal);
+  color: var(--blekk-dempet);
+}
+
 /* t₁/₂ og tₛₛ: symbolet i kursiv serif foran etiketten. */
 .datakort__symbol {
   font-family: var(--skrift-display);

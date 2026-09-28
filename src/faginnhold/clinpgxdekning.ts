@@ -148,6 +148,13 @@ export const UKOBLEDE_STOFFSIDER: readonly UkobletSide[] = [
     grunn:
       'Siden ble laget 27. september 2026 for å vise Epidyolex fra FEST. ClinPGx har cannabidiol (kontrollert samme dag); koblingen er ikke lagt inn ennå.',
   },
+  {
+    side: 'Tapentadol',
+    status: 'krever_kuratering',
+    kandidater: [{ clinpgx_id: 'PA166179720', navn: 'tapentadol' }],
+    grunn:
+      'Siden ble laget 28. september 2026 med indikasjonen og preparatene fra FEST. ClinPGx har tapentadol (kontrollert samme dag); koblingen er ikke lagt inn ennå.',
+  },
 ]
 
 /** Hver publiserte stoffside med status, sortert etter navnet. */

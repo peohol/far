@@ -33,6 +33,12 @@ export interface Registerkategoridata {
 
 export interface Registerdata {
   kategorier: Registerkategoridata[]
+  /**
+   * Metabolittene som står på moderstoffets side (metabolitt → moderstoff).
+   * Katalogen bruker dem (`SAMMENSLATTE` i `analyttkatalog.ts`); i
+   * kategoriene står bare moderstoffet.
+   */
+  sammenslatte?: Record<string, string>
 }
 
 export const STOFFREGISTER: Registerdata = registerdata
@@ -48,6 +54,11 @@ export interface Registerstoff {
   side: string
   /** Analyttkoden, eller `null` for et stoff laboratoriet ikke har noen analyse for. */
   kode: string | null
+  /**
+   * Alle kodene som viser siden, med `kode` først. Flere når en metabolitt er
+   * slått sammen med moderstoffets side: tramadol har TRAM og OTRAM.
+   */
+  koder: string[]
 }
 
 export interface Registerunderkategori {
@@ -130,13 +141,17 @@ export function byggStoffregister(
   stoffsider: readonly string[],
   register: Registerdata = STOFFREGISTER,
 ): Registerkategori[] {
-  // Alt appen har en side for, etter sidenavnet: kodene (flere kan dele en
-  // side) og stoffsidene uten kode.
+  // Alt appen har en side for, etter sidenavnet: kodene og stoffsidene uten
+  // kode. Deler flere koder en side — en metabolitt slått sammen med
+  // moderstoffet — står siden én gang, ved hovedkoden.
   const perSide = new Map<string, Registerstoff[]>()
   const leggTil = (stoff: Registerstoff) =>
     perSide.set(nokkel(stoff.side), [...(perSide.get(nokkel(stoff.side)) ?? []), stoff])
-  for (const o of katalog.oppforinger) leggTil({ navn: o.navn, side: o.sidenavn, kode: o.kode })
-  for (const navn of stoffsider) if (!perSide.has(nokkel(navn))) leggTil({ navn, side: navn, kode: null })
+  for (const o of katalog.oppforinger) {
+    const paSiden = katalog.paSiden(o.sidenavn)
+    if (paSiden[0]?.kode === o.kode) leggTil({ navn: o.navn, side: o.sidenavn, kode: o.kode, koder: paSiden.map((p) => p.kode) })
+  }
+  for (const navn of stoffsider) if (!perSide.has(nokkel(navn))) leggTil({ navn, side: navn, kode: null, koder: [] })
 
   const plassert = new Set<string>()
   const slaaOpp = (navn: readonly string[]) =>

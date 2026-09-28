@@ -494,6 +494,18 @@ button.historikk__velg:hover {
   color: var(--blekk-dempet);
 }
 
+/* Reglene er felles med andre stoffsider (samme fortolkningsmodul). */
+.regler__deling {
+  margin-block-end: var(--rom-3);
+  padding: var(--rom-2) var(--rom-3);
+  border-inline-start: 3px solid var(--aksent);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-felt);
+  font-size: var(--tekst-ui);
+  line-height: 1.5;
+  color: var(--blekk);
+}
+
 .regler__grenser {
   display: flex;
   flex-wrap: wrap;

@@ -43,6 +43,16 @@ export const NYE_ANALYTTSIDER: readonly string[] = ['THC']
  */
 export const CBD_STOFFSIDER: readonly string[] = ['Cannabidiol']
 
+/**
+ * Rusmiddelkodene som er legemidler, uten indikasjon til nå: benzodiazepinene,
+ * z-hypnotikaene og opioidene. Tapentadol hadde ingen side, så importen lager
+ * den, som THC. Metabolittene som er slått sammen med moderstoffets side
+ * (`sammenslatte` i `src/data/stoffregister.json`), får moderstoffets.
+ */
+export const RUSMIDLER_INDIKASJONER: readonly string[] = [
+  'APR', 'DIAZ', 'OXA', 'CZP', 'NIT', 'ZOLP', 'ZOPI', 'BUP', 'FYL', 'KOD', 'MDO', 'MOR', 'OKSY', 'TRAM', 'TAP',
+]
+
 export const INDIKASJONSDATASETT = datasett(
   import.meta.glob<Record<string, unknown>>('../../supabase/import/indikasjoner/*.json', { eager: true, import: 'default' }),
 )
@@ -60,6 +70,7 @@ export const INDIKASJONSIMPORTER: readonly Indikasjonsimport[] = [
   { migrasjon: 'ghb_ketamin_indikasjoner', hentet: '2026-09-27', filer: NYE_STOFFSIDER },
   { migrasjon: 'thc_indikasjoner', hentet: '2026-09-27', filer: NYE_ANALYTTSIDER },
   { migrasjon: 'cbd_indikasjoner', hentet: '2026-09-27', filer: CBD_STOFFSIDER },
+  { migrasjon: 'rusmidler_indikasjoner', hentet: '2026-09-28', filer: RUSMIDLER_INDIKASJONER },
 ]
 
 export function indikasjonskilde(omgang: Indikasjonsimport): Importkilde {

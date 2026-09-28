@@ -1,0 +1,42 @@
+{
+  "kode": "KOD",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Kodein alene (Kodein «Orifarm Healthcare»), voksne over 18 år: tørrhoste og annen uproduktiv hoste; middels sterke smerter.",
+      "Kodein med paracetamol (Paralgin forte, Paralgin major, Pinex Forte, Altermol): moderate til sterke smerter hos voksne. Til barn og ungdom fra 12 år bare ved akutte, moderate smerter som ikke anses å kunne lindres med andre analgetika som paracetamol eller ibuprofen alene."
+    ],
+    "referanser": [
+      "fk-kodein-orifarm",
+      "fk-paralgin",
+      "fk-pinex-forte",
+      "fk-altermol"
+    ]
+  },
+  "referanser": {
+    "fk-kodein-orifarm": {
+      "tittel": "Kodein «Orifarm Healthcare»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/kodein-orifarm-healthcare-560677"
+    },
+    "fk-paralgin": {
+      "tittel": "Paralgin forte, Paralgin major «Karo Pharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/paralgin-forte-paralgin-major-karo-pharma-562631"
+    },
+    "fk-pinex-forte": {
+      "tittel": "Pinex Forte «Teva»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/pinex-forte-teva-562841"
+    },
+    "fk-altermol": {
+      "tittel": "Altermol «Alternova»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/altermol-alternova-613735"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "kode": "ZOLP",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Stilnoct, voksne: forbigående og kortvarig behandling av søvnvansker, og støtteterapi i begrenset tid ved kroniske søvnvansker."
+    ],
+    "referanser": [
+      "fk-stilnoct"
+    ]
+  },
+  "referanser": {
+    "fk-stilnoct": {
+      "tittel": "Stilnoct «sanofi-aventis»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/stilnoct-sanofi-aventis-564177"
+    }
+  }
+}

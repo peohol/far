@@ -13,7 +13,7 @@ import { kommentarendringer, utenKommentarer } from '../../regler/kommentarer'
 import type { Intervallregelsett } from '../../regler/modell'
 import { scenariokommentarendringer, type Scenarioutkast } from '../../regler/scenarioredigering'
 import { rusModulFor } from '../../domain/rus'
-import { FJERNET, erEnkeltelement } from '../../faginnhold/paneler'
+import { FJERNET, datakortGjelder, erEnkeltelement } from '../../faginnhold/paneler'
 import type { Referanse } from '../../faginnhold/referanser'
 import type { Katalogoppforing } from '../../domain/analyttkatalog'
 import type { ThcRegelsett } from '../../domain/thcRegelsett'
@@ -93,10 +93,25 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
   /** Det siste som er lest, og fra hvilken tilstand, for endringene som trenger revisjonene. */
   const siste = useRef<{ tilstand: Tilstand | null; data: Analyttsidedata }>({ tilstand: null, data: TOM_SIDE })
 
-  /** Siden i én tilstand: gjennom koden når den har en, ellers etter navnet. */
+  // En metabolitt som er slått sammen med moderstoffet, viser moderstoffets side.
+  const deltSide = oppforing && oppforing.sidenavn !== oppforing.navn ? oppforing.sidenavn : null
+
+  /**
+   * Siden i én tilstand: gjennom koden når den har en, ellers etter navnet.
+   * Har koden ingen side i databasen ennå, men siden den hører til er
+   * hovedside for en annen kode — en metabolitt slått sammen med
+   * moderstoffet — vises den siden, med reglene for denne koden. Da lagres
+   * også endringene der.
+   */
   const lesSide = useCallback(
-    (t: Tilstand) => (kode !== null ? leser.lesAnalyttside(kode, t) : leser.lesStoffside(stoffnavn ?? '', t)),
-    [leser, kode, stoffnavn],
+    async (t: Tilstand): Promise<Analyttsidedata> => {
+      if (kode === null) return leser.lesStoffside(stoffnavn ?? '', t)
+      const egen = await leser.lesAnalyttside(kode, t)
+      if (egen.analytt || !deltSide) return egen
+      const delt = await leser.lesStoffside(deltSide, t)
+      return delt.analytt ? { ...delt, regelsett: egen.regelsett, thcregelsett: egen.thcregelsett } : egen
+    },
+    [leser, kode, stoffnavn, deltSide],
   )
 
   useEffect(() => {
@@ -239,7 +254,10 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
           if (!erEnkeltelement(endring.elementtype)) throw feil
           const na = await lesSide('utkast')
           const finnes = na.elementer.some(
-            (e) => e.innhold.panel === endring.panel && e.innhold.elementtype === endring.elementtype,
+            (e) =>
+              e.innhold.panel === endring.panel &&
+              e.innhold.elementtype === endring.elementtype &&
+              datakortGjelder(e.innhold.data) === datakortGjelder(endring.data),
           )
           if (!finnes) throw feil
           throw Object.assign(new Samtidighetskonflikt(null, null), { message: LAGT_INN_AV_ANDRE })

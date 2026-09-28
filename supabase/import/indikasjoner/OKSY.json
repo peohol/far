@@ -1,0 +1,64 @@
+{
+  "kode": "OKSY",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Sterke smerter som bare kan behandles tilfredsstillende med opioider, hos voksne og ungdom fra 12 år (OxyContin, OxyNorm, Oxycodone Actavis, Reltebon Depot).",
+      "Injeksjonsvæske (Oxycodone Hameln), voksne: moderate til alvorlige smerter ved kreft og postoperative smerter, og alvorlige smerter som krever sterke opioider.",
+      "Med nalokson (Targiniq, Tanonalla), voksne: sterke smerter som bare kan behandles tilfredsstillende med opioider. Nalokson skal motvirke opioidindusert obstipasjon. Også som andrelinjebehandling ved alvorlig til svært alvorlig idiopatisk restless legs-syndrom etter at dopaminerg behandling har sviktet (Targiniq bare i styrkene 5/2,5 mg, 10/5 mg og 20/10 mg)."
+    ],
+    "referanser": [
+      "fk-oxycontin",
+      "fk-oxynorm",
+      "fk-oxycodone-actavis",
+      "fk-reltebon-depot",
+      "fk-oxycodone-hameln",
+      "fk-targiniq",
+      "fk-tanonalla"
+    ]
+  },
+  "referanser": {
+    "fk-oxycontin": {
+      "tittel": "OxyContin «Mundipharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/oxycontin-mundipharma-562548"
+    },
+    "fk-oxynorm": {
+      "tittel": "OxyNorm «Mundipharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/oxynorm-mundipharma-562551"
+    },
+    "fk-oxycodone-actavis": {
+      "tittel": "Oxycodone Actavis «Actavis»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/oxycodone-actavis-actavis-585277"
+    },
+    "fk-reltebon-depot": {
+      "tittel": "Reltebon Depot «Teva»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/reltebon-depot-teva-589342"
+    },
+    "fk-oxycodone-hameln": {
+      "tittel": "Oxycodone Hameln «Hameln»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/oxycodone-hameln-hameln-657543"
+    },
+    "fk-targiniq": {
+      "tittel": "Targiniq «Mundipharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/targiniq-mundipharma-564421"
+    },
+    "fk-tanonalla": {
+      "tittel": "Tanonalla «Sandoz»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/tanonalla-sandoz-697368"
+    }
+  }
+}

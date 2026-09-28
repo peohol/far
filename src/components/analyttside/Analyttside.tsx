@@ -24,7 +24,7 @@ import { ViktigeData } from './ViktigeData'
 import { Redigeringskilde } from './Redigeringskontekst'
 import { Redigeringshandlinger } from './Redigeringslinje'
 import { Sidesok } from './Sidesok'
-import { Scenarioregler, useScenarioreglerFor } from '../regler/Scenarioregler'
+import { Scenarioregler, useScenarioreglerFor, type Delingsside } from '../regler/Scenarioregler'
 import { useScenarioreglerkilde } from '../regler/Scenarioreglerkilde'
 import { Uthevingskilde } from '../Uthev'
 import { Fortolkningsregler } from '../regler/Fortolkningsregler'
@@ -159,6 +159,9 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
     [oppforing, side.data, katalog],
   )
   const kategorier = useMemo(() => kategorierFor(oppforing?.sidenavn ?? navn, katalog), [oppforing, navn, katalog])
+  // Kodene som viser siden, hovedkoden først: flere når en metabolitt er slått sammen med moderstoffet.
+  const paSiden = useMemo(() => (oppforing ? katalog.paSiden(oppforing.sidenavn) : []), [oppforing, katalog])
+  const samme = useMemo(() => paSiden.filter((o) => o.kode !== oppforing?.kode), [paSiden, oppforing])
   const apneFortolkning = useCallback(() => {
     if (oppforing) onApneFortolkning(oppforing.fortolkning)
   }, [oppforing, onApneFortolkning])
@@ -247,6 +250,16 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
     [redigerer, utkastregler, publisert.scenarioregelsett, handlinger.lagreScenarioregelsett, handlinger.hentScenarioregelsettutkast],
   )
   const regler = useScenarioreglerFor(oppforing?.fortolkning ?? null, scenarioredigering)
+  // De andre sidene med koder i samme fortolkningsmodul deler reglene og kommentarene.
+  const delesMed = useMemo(() => {
+    if (!oppforing) return []
+    const sider = new Map<string, Delingsside>()
+    for (const o of katalog.oppforinger) {
+      if (o.fortolkning !== oppforing.fortolkning || o.sidenavn === oppforing.sidenavn || sider.has(o.sidenavn)) continue
+      sider.set(o.sidenavn, { navn: o.sidenavn, kode: katalog.paSiden(o.sidenavn)[0]?.kode ?? o.kode })
+    }
+    return [...sider.values()]
+  }, [oppforing, katalog])
   // Etter en publisering skal fortolkningen bruke de nye reglene.
   const { provIgjen: hentScenarioreglerPaNytt } = useScenarioreglerkilde()
   const harInnhold = modell.paneler.size > 0 || Object.keys(modell.panelreferanser).length > 0
@@ -361,6 +374,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                         navn={navn}
                         komponenter={komponenter}
                         kategorier={kategorier}
+                        samme={samme}
                         overskriftId={overskrift}
                         onApneFortolkning={apneFortolkning}
                       />
@@ -386,7 +400,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                       />
                     )
                   case 'datakort':
-                    return <ViktigeData key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
+                    return <ViktigeData key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} analytter={paSiden} />
                   case 'tekst':
                     return <Tekstpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                   case 'kort':
@@ -414,7 +428,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
               {!redigerer && side.status === 'klar' && !harInnhold && (
                 <p className="analyttside__tom">Denne siden har ikke fått faginnhold ennå.</p>
               )}
-              {regler && <Scenarioregler {...regler} />}
+              {regler && <Scenarioregler {...regler} delesMed={delesMed} />}
               {side.data.thcregelsett && (
                 <Thcregler
                   utgave={side.data.thcregelsett}

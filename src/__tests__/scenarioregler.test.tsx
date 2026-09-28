@@ -106,6 +106,23 @@ describe('på analyttsiden', () => {
     expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeNull()
   })
 
+  it('sier hvilke andre sider som deler reglene og kommentartekstene, med lenker dit', async () => {
+    const user = userEvent.setup()
+    visSide('OXA')
+    await user.click(await screen.findByRole('button', { name: 'Fortolkningsregler' }))
+    const merknad = screen.getByText(/Reglene og kommentartekstene er felles med/).closest('p')!
+    expect(merknad.textContent).toBe('Reglene og kommentartekstene er felles med Diazepam.')
+    expect(within(merknad).getByRole('link').getAttribute('href')).toBe('#/analytt/DIAZ')
+    cleanup()
+    // Metabolitten står på diazepamsiden og er ikke en annen side.
+    visSide('DMI')
+    expect((await screen.findByRole('heading', { level: 1 })).textContent).toBe('Diazepam')
+    await user.click(await screen.findByRole('button', { name: 'Fortolkningsregler' }))
+    const fraDiazepam = screen.getByText(/Reglene og kommentartekstene er felles med/).closest('p')!
+    expect(within(fraDiazepam).getAllByRole('link').map((a) => a.getAttribute('href'))).toEqual(['#/analytt/OXA'])
+    expect(screen.getByText(/Siden gjelder også/).closest('p')!.textContent).toBe('Siden gjelder også diazepam (DIAZ).')
+  })
+
   it('viser ingen regler før de er hentet, eller når de ikke kunne hentes', async () => {
     for (const tilstand of [{ status: 'laster' }, { status: 'feil', melding: 'Nede.' }] as const) {
       visSide('OXA', { kilde: { tilstand, provIgjen: () => {} } })

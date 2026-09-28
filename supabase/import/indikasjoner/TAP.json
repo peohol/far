@@ -1,0 +1,49 @@
+{
+  "kode": "TAP",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Tabletter (Palexia, Tapentadol G.L. Pharma), voksne: lindring av moderate til sterke, akutte smerter som bare kan behandles tilstrekkelig med opioidanalgetika. Palexia mikstur også til ungdom og barn over 2 år.",
+      "Depottabletter: sterke, kroniske smerter som bare kan behandles tilstrekkelig med opioidanalgetika — Palexia depot til voksne, ungdom og barn over 6 år, Tapentadol Medical Valley til voksne."
+    ],
+    "referanser": [
+      "fk-palexia",
+      "fk-palexia-mikstur",
+      "fk-tapentadol-gl",
+      "fk-palexia-depot",
+      "fk-tapentadol-medical-valley"
+    ]
+  },
+  "referanser": {
+    "fk-palexia": {
+      "tittel": "Palexia «Grünenthal»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/palexia-gruunenthal-587504"
+    },
+    "fk-palexia-mikstur": {
+      "tittel": "Palexia mikstur «Grünenthal»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/palexia-gruunenthal-674878"
+    },
+    "fk-tapentadol-gl": {
+      "tittel": "Tapentadol G.L. Pharma «G.L. Pharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/tapentadol-g-l-pharma-g-l-pharma-771810"
+    },
+    "fk-palexia-depot": {
+      "tittel": "Palexia depot «Grünenthal»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/palexia-depot-gruunenthal-570394"
+    },
+    "fk-tapentadol-medical-valley": {
+      "tittel": "Tapentadol Medical Valley «Medical Valley»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/tapentadol-medical-valley-medical-valley-731870"
+    }
+  }
+}
