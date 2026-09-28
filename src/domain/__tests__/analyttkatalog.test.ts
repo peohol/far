@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { menyanalytter } from '../analysemetoder'
-import { FORTOLKNINGSOPPFORINGER, SAMMENSLATTE, byggKatalog, sideFor } from '../analyttkatalog'
+import { FORTOLKNINGSOPPFORINGER, SAMMENSLATTE, SIDETITLER, byggKatalog, sideFor } from '../analyttkatalog'
 import { search } from '../search'
 
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
@@ -33,19 +33,37 @@ describe('katalogen over informasjonssidene', () => {
     expect(katalog.finn('UETS')!.fortolkning).toBe(katalog.finn('UETGS')!.fortolkning)
   })
 
-  it('legger en metabolitt som ikke er legemiddel selv, på moderstoffets side, med sin egen kode', () => {
-    expect(SAMMENSLATTE).toEqual({ 'N-desmetyldiazepam': 'Diazepam', 'O-desmetyltramadol': 'Tramadol', 'THC-syre': 'THC' })
+  it('gir stoffer som deler fagsside én kanonisk kode og én kanonisk adresse', () => {
+    expect(SAMMENSLATTE).toMatchObject({
+      'N-desmetyldiazepam': 'Diazepam',
+      'O-desmetyltramadol': 'Tramadol',
+      'THC-syre': 'THC',
+      Dehydroaripiprazol: 'Aripiprazol',
+      Desmetylkariprazin: 'Kariprazin',
+      Didesmetylkariprazin: 'Kariprazin',
+      Norfluoksetin: 'Fluoksetin',
+      EtS: 'EtG',
+    })
+    expect(SIDETITLER).toEqual({ THC: 'THC og THC-syre', EtG: 'Etanol' })
     expect(katalog.finn('DMI')!.sidenavn).toBe('Diazepam')
     expect(katalog.finn('OTRAM')!.sidenavn).toBe('Tramadol')
     expect(katalog.finn('IRCAK')!.sidenavn).toBe('THC')
-    // Moderstoffets kode står først.
+    expect(katalog.finn('IRCAK')!.sidetittel).toBe('THC og THC-syre')
+    expect(katalog.finn('UETS')!.sidenavn).toBe('EtG')
+    expect(katalog.finn('UETS')!.sidetittel).toBe('Etanol')
+    // Hovedkoden står først, og alle aliasene peker til den.
     expect(katalog.paSiden('diazepam').map((o) => o.kode)).toEqual(['DIAZ', 'DMI'])
     expect(katalog.paSiden('Tramadol').map((o) => o.kode)).toEqual(['TRAM', 'OTRAM'])
-    expect(katalog.paSiden('THC').map((o) => o.kode)).toEqual(['THC', 'IRCAK'])
+    expect(katalog.paSiden('THC og THC-syre').map((o) => o.kode)).toEqual(['THC', 'IRCAK'])
+    expect(katalog.paSiden('Etanol').map((o) => o.kode)).toEqual(['UETGS', 'UETS'])
     expect(katalog.kodeForSide('Diazepam')).toBe('DIAZ')
-    expect(katalog.kodeForSide('N-desmetyldiazepam')).toBe('DMI')
-    expect(katalog.kodeForSide('o-desmetyltramadol')).toBe('OTRAM')
-    // Oksazepam er et legemiddel selv og beholder sin egen side.
+    expect(katalog.kodeForSide('N-desmetyldiazepam')).toBe('DIAZ')
+    expect(katalog.kodeForSide('o-desmetyltramadol')).toBe('TRAM')
+    expect(katalog.kodeForSide('THC-syre')).toBe('THC')
+    expect(katalog.kodeForSide('EtS')).toBe('UETGS')
+    expect(katalog.kodeForSide('Desmetylkariprazin')).toBe('KARSUM')
+    // Metabolitter som er egne legemidler beholder sin egen side.
+    expect(katalog.kodeForSide('Nortriptylin')).toBe('NOR')
     expect(katalog.finn('OXA')!.sidenavn).toBe('Oksazepam')
     expect(katalog.paSiden('Oksazepam').map((o) => o.kode)).toEqual(['OXA'])
     expect(sideFor('Sertralin')).toBe('Sertralin')
