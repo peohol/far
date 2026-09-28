@@ -81,7 +81,7 @@ Dette er logikken som bestemmer hvilken eller hvilke kommentarer som skal brukes
 
 For enkle analytter svarer én fortolkningsmodul omtrent til én laboratorieanalytt. For andre gjør den ikke det.
 
-Eksempel: diazepam, N-desmetyldiazepam og oksazepam har egne analyttkoder og informasjonssider, men inngår i felles fortolkningslogikk.
+Eksempel: diazepam, N-desmetyldiazepam og oksazepam har egne analyttkoder og inngår i felles fortolkningslogikk. Diazepam og N-desmetyldiazepam deler én fagsside og én URL; oksazepam er et eget legemiddel og beholder sin egen fagsside.
 
 ---
 
@@ -101,13 +101,13 @@ Eksempel:
 
 `AMTNORSUM` -> informasjonssiden for AMTNORSUM/Amitriptylin.
 
-For moduler som omfatter flere koder, skal hver kode kunne føre til sin egen informasjonsside.
+For moduler som omfatter flere koder, skal hver kode føre til den kanoniske fagssiden den hører til. Flere koder kan derfor ha samme mål-URL.
 
 ### Fra informasjonssiden
 
 Siden bør ha en sekundær handling «Åpne fortolkning» slik at det er enkelt å gå begge veier.
 
-Alle informasjonssider bør ha egne URL-er slik at de kan bokmerkes og åpnes direkte.
+Alle fagssider skal ha én kanonisk URL slik at de kan bokmerkes og åpnes direkte. Sekundærkoder som deler siden, skal ikke få parallelle kopier av siden; gamle URL-er til dem videresendes til den kanoniske adressen.
 
 ---
 
@@ -119,7 +119,7 @@ Innholdet i panelene under beholdes, men vises fra arbeidspakke 9 som **hovedsek
 
 Vis:
 
-1. Analyttkode som pille.
+1. Analyttkode(r) som piller. Når flere koder deler fagsside, vises alle her, gruppert etter analysemetode.
 2. Legemiddelkategori som pille, med samme kategorier som dagens sidemeny.
 3. Virkestoff/analyttnavn som hovedoverskrift.
 4. ~~Preparatnavn, alfabetisk sortert.~~ **Erstattet 23.09.2026:** preparatene vises i hovedseksjonen «Preparater», med data fra de eksterne kildene, gruppert som legemiddelform → preparat → styrker (del 23 og 24).
