@@ -13,11 +13,13 @@ uleselige.
 
 Reglene og tekstene er lagret og publisert i Supabase, med historikk og
 kontroll på serveren (se [Lagringen](#lagringen)). Fortolkningsmodulen
-fortolker med motoren og det som er publisert (se [I appen](#i-appen)), og
-analyttsiden for IRCAK viser reglene, tekstene og en simulator. Den
-opprinnelige modulen er bare igjen som fasit i testene. Administratorer kan
-redigere reglene og tekstene på analyttsiden og publisere dem som resten av
-siden (se [Redigeringen](#redigeringen)).
+fortolker med motoren og det som er publisert (se [I appen](#i-appen)).
+THC-syre deler nå fagssiden «THC og THC-syre» med THC i serum, på den
+kanoniske THC-adressen. Siden viser to separate fortolkningsseksjoner:
+scenarioreglene for THC i serum og THC-syrereglene for urin med tekstbolker
+og simulator. Administratorer kan redigere og publisere de to regelsettene
+uavhengig fra den samme siden. Den opprinnelige THC-syremodulen er bare igjen
+som fasit i testene (se [Redigeringen](#redigeringen)).
 
 ## Delene
 
