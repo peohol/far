@@ -1,4 +1,5 @@
 import { useTips } from './Tips'
+import { kanoniskAnalyttkode } from '../domain/analyttkatalog'
 import { analyttadresse } from '../domain/rute'
 
 /**
@@ -15,7 +16,7 @@ export function Kodepille({ kode }: { kode: string }) {
   const tips = useTips(`Åpne informasjonssiden for ${kode}`, { skjermleser: false })
   return (
     <a
-      href={analyttadresse(kode)}
+      href={analyttadresse(kanoniskAnalyttkode(kode))}
       className="metalinje__kode metalinje__lenke"
       aria-label={`${kode} – åpne informasjonssiden`}
       {...tips.props}
