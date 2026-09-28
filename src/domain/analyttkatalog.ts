@@ -70,12 +70,19 @@ export interface Analyttkatalog {
 }
 
 /**
- * Stoffnavn som ikke skal ha en egen fagsside: navnet → den kanoniske siden.
- * Det gjelder hovedsakelig metabolitter uten selvstendig legemiddelidentitet,
- * men også EtS, som hører til den felles etanolsiden. Står i
- * `src/data/stoffregister.json`.
+ * Stoffnavn/aliaser som ikke skal åpne en egen fagsside: navnet → den
+ * kanoniske siden. Dette brukes blant annet for gamle metabolittsider og gamle
+ * sidenavn. Selve koblingen fra laboratorieanalytt til stoffside ligger i
+ * `ANALYTTKOBLINGER`. Begge står i `src/data/stoffregister.json`.
  */
 export const SAMMENSLATTE: Readonly<Record<string, string>> = registerdata.sammenslatte
+
+/**
+ * Eksplisitt kobling fra laboratorieanalytt til stoffside. Dette er skillet
+ * mellom labsystemet og stoffregisteret: analyttens navn avgjør ikke hvilken
+ * fagsside den tilhører når en kobling er oppgitt her.
+ */
+export const ANALYTTKOBLINGER: Readonly<Record<string, string>> = registerdata.analyttkoblinger ?? {}
 
 /** Sider som vises med en annen faglig tittel enn det interne sidenavnet. */
 export const SIDETITLER: Readonly<Record<string, string>> = registerdata.sidetitler
@@ -85,6 +92,7 @@ function nokkel(navn: string): string {
 }
 
 const SAMMENSLATT_PER_NOKKEL = new Map(Object.entries(SAMMENSLATTE).map(([stoff, side]) => [nokkel(stoff), side]))
+const SIDE_PER_KODE = new Map(Object.entries(ANALYTTKOBLINGER).map(([kode, side]) => [kode.trim().toUpperCase(), side]))
 const SIDETITTEL_PER_NOKKEL = new Map(Object.entries(SIDETITLER).map(([side, tittel]) => [nokkel(side), tittel]))
 const SIDE_PER_TITTEL = new Map(Object.entries(SIDETITLER).map(([side, tittel]) => [nokkel(tittel), side]))
 
@@ -105,7 +113,8 @@ function oppforingerFor(analyte: Analyte): Katalogoppforing[] {
     // metabolitter, og siden er moderstoffets. Modulene som dekker flere koder,
     // deles opp i én oppføring per kode, med virkestoffets eget navn.
     const hele = kode === analyte.kode
-    const sidenavn = sideFor(hele ? splitName(analyte).moderstoff : navn)
+    const utledetSide = sideFor(hele ? splitName(analyte).moderstoff : navn)
+    const sidenavn = SIDE_PER_KODE.get(kode.trim().toUpperCase()) ?? utledetSide
     return {
       kode,
       navn,
