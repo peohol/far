@@ -122,6 +122,12 @@ export function Identitetspanel({
           </p>
         ))}
 
+      {oppforing?.merknad && (
+        <p className="identitet__komponenter">
+          <Uthev tekst={oppforing.merknad} />
+        </p>
+      )}
+
       {sum && oppforing && (
         <p className="identitet__komponenter">
           <Uthev tekst={`${oppforing.kode} er en sumanalyse og omfatter `} />
