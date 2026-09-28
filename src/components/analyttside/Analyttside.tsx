@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
-import type { Analyttkatalog } from '../../domain/analyttkatalog'
+import type { Analyttkatalog, Katalogoppforing } from '../../domain/analyttkatalog'
 import { byggSidemodell, referanseunivers } from '../../faginnhold/analyttside'
 import { PANELER } from '../../faginnhold/paneler'
 import { indekserSide, sokeord } from '../../faginnhold/sok'
@@ -39,6 +39,7 @@ import { useCpic, useFarmakogenetikk } from './useFarmakogenetikk'
 import { useAnalyttside, type Sidemodus, type Sidenokkel } from './useAnalyttside'
 import { analyttadresse } from '../../domain/rute'
 import { kategorierFor } from '../../domain/stoffregister'
+import { THC_KODE } from '../../domain/thc'
 
 interface Sideprops {
   /** Seksjonen og eventuelt detaljkortet adressen peker på (se `src/domain/rute.ts`). */
@@ -87,9 +88,11 @@ export type AnalyttsideProps = Sideprops &
  */
 export function Analyttside(props: AnalyttsideProps) {
   const { sted, katalog, onApneFortolkning, onLukk } = props
-  // Et stoff med en side i katalogen er siden for koden.
+  // Alle aliaser og sekundærkoder ender på den samme kanoniske analyttadressen.
   const tilKode = props.stoff !== undefined ? katalog.kodeForSide(props.stoff) : undefined
-  const kode = props.kode ?? tilKode
+  const forespurtOppforing = props.kode !== undefined ? katalog.finn(props.kode) : undefined
+  const kanoniskKode = forespurtOppforing ? katalog.kodeForSide(forespurtOppforing.sidenavn) : undefined
+  const kode = props.stoff !== undefined ? tilKode : (kanoniskKode ?? props.kode)
   const oppforing = kode ? katalog.finn(kode) : undefined
   const nokkel: Sidenokkel | null = oppforing
     ? { type: 'kode', oppforing }
@@ -97,14 +100,25 @@ export function Analyttside(props: AnalyttsideProps) {
       ? { type: 'stoff', navn: props.stoff }
       : null
 
+  const videresendTil =
+    props.stoff !== undefined
+      ? tilKode
+      : props.kode && kanoniskKode && props.kode.trim().toUpperCase() !== kanoniskKode
+        ? kanoniskKode
+        : undefined
+  const videresendtSted =
+    props.kode?.trim().toUpperCase() === THC_KODE && sted?.[0] === 'fortolkning'
+      ? ['fortolkning-thc-syre', ...sted.slice(1)]
+      : (sted ?? [])
+
   useEffect(() => {
-    if (tilKode) window.location.replace(analyttadresse(tilKode, sted ?? []))
-  }, [tilKode, sted])
+    if (videresendTil) window.location.replace(analyttadresse(videresendTil, videresendtSted))
+  }, [videresendTil, videresendtSted])
 
   useEffect(() => {
     const forrige = document.title
     document.title = oppforing
-      ? `${oppforing.sidenavn} (${oppforing.kode}) – OUSFAR`
+      ? `${oppforing.sidetittel} (${oppforing.kode}) – OUSFAR`
       : `${props.stoff ?? props.kode} – OUSFAR`
     return () => {
       document.title = forrige
@@ -150,21 +164,26 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
   const beholder = useRef<HTMLElement>(null)
   const overskrift = useId()
 
-  const handlinger = useAnalyttside(nokkel, modus)
+  // Kodene som hører til siden, med den kanoniske først.
+  const paSiden = useMemo(() => (oppforing ? katalog.paSiden(oppforing.sidenavn) : []), [oppforing, katalog])
+  const inkluderThcSyre = paSiden.some((o) => o.kode === THC_KODE)
+  const handlinger = useAnalyttside(nokkel, modus, inkluderThcSyre)
   const { side, referansebase, publisert, konflikt, plan } = handlinger
   const modell = useMemo(() => byggSidemodell(side.data), [side.data])
-  const navn = side.data.infoside?.innhold.navn ?? oppforing?.sidenavn ?? (nokkel.type === 'stoff' ? nokkel.navn : '')
+  const navn = oppforing?.sidetittel ?? side.data.infoside?.innhold.navn ?? (nokkel.type === 'stoff' ? nokkel.navn : '')
   const komponenter = useMemo(
     () => (oppforing ? komponenterFor(oppforing, side.data, katalog) : []),
     [oppforing, side.data, katalog],
   )
   const kategorier = useMemo(() => kategorierFor(oppforing?.sidenavn ?? navn, katalog), [oppforing, navn, katalog])
-  // Kodene som viser siden, hovedkoden først: flere når en metabolitt er slått sammen med moderstoffet.
-  const paSiden = useMemo(() => (oppforing ? katalog.paSiden(oppforing.sidenavn) : []), [oppforing, katalog])
   const samme = useMemo(() => paSiden.filter((o) => o.kode !== oppforing?.kode), [paSiden, oppforing])
+  const apneFortolkningFor = useCallback(
+    (o: Katalogoppforing) => onApneFortolkning(o.fortolkning),
+    [onApneFortolkning],
+  )
   const apneFortolkning = useCallback(() => {
-    if (oppforing) onApneFortolkning(oppforing.fortolkning)
-  }, [oppforing, onApneFortolkning])
+    if (oppforing) apneFortolkningFor(oppforing)
+  }, [oppforing, apneFortolkningFor])
   // Et stoff som viser seg å være hovedside for en kode appen kjenner, hører
   // til siden for koden.
   const tilKode = !oppforing && side.data.analytt ? katalog.finn(side.data.analytt.innhold.kode)?.kode : undefined
@@ -376,7 +395,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                         kategorier={kategorier}
                         samme={samme}
                         overskriftId={overskrift}
-                        onApneFortolkning={apneFortolkning}
+                        onApneFortolkning={apneFortolkningFor}
                       />
                     )
                   case 'legemidler':
@@ -428,12 +447,21 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
               {!redigerer && side.status === 'klar' && !harInnhold && (
                 <p className="analyttside__tom">Denne siden har ikke fått faginnhold ennå.</p>
               )}
-              {regler && <Scenarioregler {...regler} delesMed={delesMed} />}
+              {regler && (
+                <Scenarioregler
+                  {...regler}
+                  delesMed={delesMed}
+                  {...(side.data.thcregelsett ? { tittel: 'Fortolkningsregler – THC i serum' } : {})}
+                />
+              )}
               {side.data.thcregelsett && (
                 <Thcregler
                   utgave={side.data.thcregelsett}
                   redigerer={redigerer}
                   onLagre={handlinger.lagreThcRegelsett}
+                  {...(regler
+                    ? { seksjonsid: 'fortolkning-thc-syre', tittel: 'Fortolkningsregler – THC-syre i urin' }
+                    : {})}
                 />
               )}
               <Fortolkningsregler
