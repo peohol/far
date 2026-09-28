@@ -22,7 +22,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `supabase/migrations/*_analyttsider_samlet_lesing.sql` | Alle sidene i én tilstand i ett kall, for søket i hele kunnskapsbasen |
 | `supabase/migrations/*_enkeltelementer.sql` | At kortene som står én gang i panelet sitt, ikke kan opprettes to ganger |
 | `supabase/migrations/*_datakort_per_analytt.sql` | Datakortene én gang per kode på en side flere koder deler, og referanseområdet til hver kode (`les_referanseomrader`) |
-| `src/faginnhold/sammenslatte.ts`, `scripts/lag-sammenslaing.ts`, `supabase/migrations/*_sammenslatte_stoffsider.sql` | Metabolittsidene som slås sammen med moderstoffets side |
+| `src/faginnhold/sammenslatte.ts`, `scripts/lag-sammenslaing.ts`, `supabase/migrations/*_sammenslatte_stoffsider.sql` | Den historiske datamigrasjonen for sammenslåinger som måtte flytte innhold; kanoniske aliaser i UI står i `stoffregister.json` |
 | `supabase/migrations/*_regelredigering_lesing.sql` | Historikken til ett objekt (`les_historikk`) og regelsettet for én kode |
 | `supabase/migrations/*_kommentar_objekttype.sql`, `*_kommentarer.sql` | Fortolkningskommentarene som egne objekter |
 | `src/domain/kommentarobjekt.ts` | Formen på en kommentar og kontrollen av den, lik databasens |
@@ -343,14 +343,15 @@ databasen, med samme ordlyd, så redigeringen kan si fra før lagring.
 
 ## Informasjonssidene
 
-**Adressene.** Hver analyttkode appen kan fortolke, har en side på
-`#/analytt/<KODE>` (`src/domain/rute.ts`). Adressen står etter `#`, så
-nettleseren alene leser den: siden som lastes, og innloggingsveggen, er de
-samme. Hvilke koder som finnes, gir katalogen (`analyttkatalog.ts`), bygd av
-de samme søkeoppføringene som søket og sidemenyen. Katalogen sier også hvilken
-informasjonsside koden hører til (moderstoffet for sumanalysene), hvilke
-stoffer den omfatter, og hvilken fortolkningsmodul «Åpne fortolkning» fører
-til.
+**Adressene.** Hver fagsside med analyttkode har én kanonisk adresse på
+`#/analytt/<KODE>` (`src/domain/rute.ts`). Flere laboratoriekoder kan høre
+til samme fagsside; katalogen (`analyttkatalog.ts`) velger da én kode som
+adresse for dem alle. Nye lenker peker direkte dit, mens gamle adresser med en
+sekundærkode videresendes. Adressen står etter `#`, så nettleseren alene leser
+den: siden som lastes, og innloggingsveggen, er de samme. Katalogen bygges av
+de samme søkeoppføringene som søket og sidemenyen og sier hvilken fagsside
+koden hører til, hvilke stoffer og laboratoriekoder siden omfatter, og hvilken
+fortolkningsmodul hver kode åpner.
 
 **Stoffsider uten kode.** Et stoff uten analyttkode kan ha en side på
 `#/stoff/<navn>`: en informasjonsside som verken er hovedside eller komponent
@@ -448,24 +449,41 @@ panelet sitt (`ENKELTELEMENTER`). Databasen håndhever det med en unik indeks,
 så to som oppretter det samme kortet samtidig, ikke begge får det lagret —
 den andre får en konflikt.
 
-**Sammenslåtte sider.** En metabolitt som ikke er et legemiddel selv, har
-ingen egen side, men står på moderstoffets (`"sammenslatte"` i
-`src/data/stoffregister.json`, `SAMMENSLATTE` i `analyttkatalog.ts`):
-DMI på diazepamsiden, OTRAM på tramadolsiden og IRCAK på THC-siden. Koden
-beholder adressen (`#/analytt/OTRAM` viser tramadolsiden med OTRAMs
-fortolkning), og identiteten sier hvilke andre koder siden gjelder. Tallene
-som er kodens egne, står som egne datakort på den felles siden, merket med
-koden i `data.gjelder` (`datakortGjelder`); kortene uten `gjelder` er
-moderstoffets. Databasen lar hvert datakort stå én gang per kode, og
-`les_referanseomrader` gir hver kode sitt kort: det med koden i `gjelder`,
-eller det uten når hovedsiden er en av analyttens komponenter. En metabolitt
-får altså aldri moderstoffets referanseområde. Hadde metabolitten en egen
-side i databasen (O-desmetyltramadol), flyttet `*_sammenslatte_stoffsider.sql`
-den over: datakortene med `gjelder`, like kort til `fjernet`, et ulikt
-kinetikkort sist i panelet med metabolitten i tittelen, og analytten fikk
-moderstoffets side som hovedside, med metabolittsiden som komponent. En ny
-sammenslåing er en linje i `stoffregister.json` og en ny migrasjon fra
-`scripts/lag-sammenslaing.ts`.
+**Sammenslåtte sider.** `"sammenslatte"` i
+`src/data/stoffregister.json` (`SAMMENSLATTE` i `analyttkatalog.ts`) er
+runtime-regelen for hvilke navn som deler én fagsside og én URL. Den brukes
+blant annet for DMI → Diazepam, OTRAM → Tramadol, IRCAK → THC,
+dehydroaripiprazol → Aripiprazol, norfluoksetin → Fluoksetin,
+desmetyl-/didesmetylkariprazin → Kariprazin og EtS → EtG. Visningstitler kan
+overstyres separat: THC-siden heter «THC og THC-syre», og EtG/EtS-siden
+«Etanol». Metabolitter som selv er legemidler, som nortriptylin, paliperidon
+og O-desmetylvenlafaksin, står ikke i denne lista og beholder egne fagssider.
+
+En sekundærkode beholder altså **ikke** en parallell sideadresse. Identiteten
+på den felles siden viser alle laboratoriekodene, gruppert etter
+analysemetode, og hver kodepille åpner fortolkningsmodulen den koden hører
+til. Regelsettene forblir selvstendige objekter: på «THC og THC-syre» står
+derfor scenarioreglene for THC i serum og THC-syrereglene for urin i hver sin
+redigerbare seksjon.
+
+Tall som er kode-spesifikke, står fortsatt som egne datakort på den felles
+siden, merket med koden i `data.gjelder` (`datakortGjelder`); kortene uten
+`gjelder` er hovedsidens. Databasen lar hvert datakort stå én gang per kode,
+og `les_referanseomrader` gir hver kode sitt kort: det med koden i
+`gjelder`, eller det uten når hovedsiden er en av analyttens komponenter. En
+metabolitt får altså aldri moderstoffets referanseområde.
+
+PR #111 måtte også flytte reelt innhold i databasen, særlig for
+O-desmetyltramadol. Den historiske flyttingen ligger i
+`*_sammenslatte_stoffsider.sql` og kan gjenskapes fra
+`MIGRERTE_SAMMENSLATTE` i `src/faginnhold/sammenslatte.ts`: datakort ble
+flyttet med `gjelder`, like kort satt til `fjernet`, og analyttens hovedside
+ble endret. Den lista er med vilje adskilt fra runtime-lista over kanoniske
+aliaser, slik at en senere navigasjonsendring ikke omskriver en migrasjon som
+allerede er kjørt. Tomme komponentsider/aliaser trenger ingen ny
+datamigrasjon; de historiske objektene kan bli stående i databasen uten å
+vises som egne fagssider. Hvis en framtidig sammenslåing faktisk må flytte
+redigerbart innhold, skal den få en ny migrasjon i stedet.
 Første gang noe lagres på en kode uten side, opprettes informasjonssiden og
 laboratorieanalytten av katalogens opplysninger; sider med samme navn som
 finnes fra før — for eksempel en komponent — gjenbrukes. På en stoffside uten
