@@ -141,3 +141,17 @@ export function byggKatalog(pool: Analyte[]): Analyttkatalog {
     paSiden: (sidenavn) => perSide.get(nokkel(sideFor(sidenavn))) ?? [],
   }
 }
+
+
+/** Standardkatalogen brukes av lenker som bare kjenner analyttkoden. */
+const STANDARDKATALOG = byggKatalog(FORTOLKNINGSOPPFORINGER)
+
+/**
+ * Den ene koden som skal stå i URL-en for fagssiden en analyttkode tilhører.
+ * Gamle/sekundære koder kan fortsatt leses fra adressen, men nye lenker peker
+ * direkte på den kanoniske adressen.
+ */
+export function kanoniskAnalyttkode(kode: string): string {
+  const oppforing = STANDARDKATALOG.finn(kode)
+  return oppforing ? (STANDARDKATALOG.kodeForSide(oppforing.sidenavn) ?? oppforing.kode) : kode.trim().toUpperCase()
+}
