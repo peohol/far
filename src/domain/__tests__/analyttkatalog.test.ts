@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { menyanalytter } from '../analysemetoder'
-import { FORTOLKNINGSOPPFORINGER, SAMMENSLATTE, SIDETITLER, byggKatalog, sideFor } from '../analyttkatalog'
+import { ANALYTTKOBLINGER, FORTOLKNINGSOPPFORINGER, SAMMENSLATTE, SIDETITLER, byggKatalog, sideFor } from '../analyttkatalog'
 import { search } from '../search'
 
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
@@ -42,15 +42,34 @@ describe('katalogen over informasjonssidene', () => {
       Desmetylkariprazin: 'Kariprazin',
       Didesmetylkariprazin: 'Kariprazin',
       Norfluoksetin: 'Fluoksetin',
-      EtS: 'EtG',
+      'O-desmetylvenlafaksin': 'Venlafaksin',
+      Hydroksybupropion: 'Bupropion',
+      Hydroksyrisperidon: 'Risperidon',
+      'Paliperidon (hydroksyrisperidon)': 'Paliperidon',
+      EtG: 'Etanol',
+      EtS: 'Etanol',
     })
-    expect(SIDETITLER).toEqual({ THC: 'THC og THC-syre', EtG: 'Etanol' })
+    expect(ANALYTTKOBLINGER).toMatchObject({
+      AMTNORSUM: 'Amitriptylin',
+      VENSUM: 'Venlafaksin',
+      RISPSUM: 'Risperidon',
+      HBUP: 'Bupropion',
+      PALI: 'Paliperidon',
+      UETGS: 'Etanol',
+      UETS: 'Etanol',
+    })
+    expect(SIDETITLER).toEqual({ THC: 'THC og THC-syre' })
     expect(katalog.finn('DMI')!.sidenavn).toBe('Diazepam')
     expect(katalog.finn('OTRAM')!.sidenavn).toBe('Tramadol')
     expect(katalog.finn('IRCAK')!.sidenavn).toBe('THC')
     expect(katalog.finn('IRCAK')!.sidetittel).toBe('THC og THC-syre')
-    expect(katalog.finn('UETS')!.sidenavn).toBe('EtG')
+    expect(katalog.finn('UETS')!.sidenavn).toBe('Etanol')
     expect(katalog.finn('UETS')!.sidetittel).toBe('Etanol')
+    expect(katalog.finn('VENSUM')!.sidenavn).toBe('Venlafaksin')
+    expect(katalog.finn('AMTNORSUM')!.sidenavn).toBe('Amitriptylin')
+    expect(katalog.finn('RISPSUM')!.sidenavn).toBe('Risperidon')
+    expect(katalog.finn('HBUP')!.sidenavn).toBe('Bupropion')
+    expect(katalog.finn('PALI')!.sidenavn).toBe('Paliperidon')
     // Hovedkoden står først, og alle aliasene peker til den.
     expect(katalog.paSiden('diazepam').map((o) => o.kode)).toEqual(['DIAZ', 'DMI'])
     expect(katalog.paSiden('Tramadol').map((o) => o.kode)).toEqual(['TRAM', 'OTRAM'])
@@ -61,6 +80,9 @@ describe('katalogen over informasjonssidene', () => {
     expect(katalog.kodeForSide('o-desmetyltramadol')).toBe('TRAM')
     expect(katalog.kodeForSide('THC-syre')).toBe('THC')
     expect(katalog.kodeForSide('EtS')).toBe('UETGS')
+    expect(katalog.kodeForSide('Hydroksybupropion')).toBe('HBUP')
+    expect(katalog.kodeForSide('Hydroksyrisperidon')).toBe('RISPSUM')
+    expect(katalog.kodeForSide('Paliperidon (hydroksyrisperidon)')).toBe('PALI')
     expect(katalog.kodeForSide('Desmetylkariprazin')).toBe('KARSUM')
     // Metabolitter som er egne legemidler beholder sin egen side.
     expect(katalog.kodeForSide('Nortriptylin')).toBe('NOR')
