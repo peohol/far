@@ -32,7 +32,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 
 OUSFAR skal utvikles fra et fortolkningsverktøy med innhold i kode og statiske datafiler til et internt farmakologisk kunnskaps- og beslutningsstøttesystem der:
 
-- hver analytt har en egen informasjonsside
+- stoffregisteret består av informasjonssider for stoffer/virkestoffer, og laboratorieanalytter kobles eksplisitt til disse sidene
 - fortolkningskommentarer og etter hvert fortolkningsregler lagres i Supabase
 - faglig innhold kan redigeres direkte i UI
 - endringer er versjonerte, attribuert til bruker og reversible
@@ -70,8 +70,11 @@ Eksempel:
 
 - `AMTNORSUM`: hovedside = Amitriptylin; analysen omfatter amitriptylin + nortriptylin.
 - `NOR`: hovedside = Nortriptylin.
+- `VENSUM`: hovedside = Venlafaksin; O-desmetylvenlafaksin er en analyttkomponent, ikke navnet på fagssiden.
+- `RISPSUM`: hovedside = Risperidon; hydroksyrisperidon er en analyttkomponent i sumanalysen.
+- `HBUP`: hovedside = Bupropion, selv om laboratoriet analyserer hydroksybupropion. Siden skal uttrykkelig forklare dette og at referanseområdet gjelder bupropion.
 
-Datamodellen skal derfor ikke anta at «én analyttkode = ett virkestoff».
+Datamodellen skal derfor ikke anta at «én analyttkode = ett virkestoff», og den skal heller ikke utlede stoffsidens identitet fra analyttnavnet når en eksplisitt kobling finnes.
 
 For sumanalyser skal siden kunne opplyse hvilke komponenter analysen omfatter og lenke til andre relevante informasjonssider.
 
@@ -89,7 +92,7 @@ Eksempel: diazepam, N-desmetyldiazepam og oksazepam har egne analyttkoder og inn
 
 ### Sidemenyen
 
-Venstremenyen er stoffregisteret: den åpner informasjonssiden for stoffet, ikke fortolkningsflyten, og er ordnet etter farmakologisk klasse med og uten analyttkode om hverandre (`src/data/stoffregister.json`). Den filtrerer ikke søket.
+Venstremenyen er stoffregisteret: den åpner informasjonssiden for stoffet, ikke fortolkningsflyten, og er ordnet etter farmakologisk klasse med og uten analyttkode om hverandre (`src/data/stoffregister.json`). Registerlinjen navngis alltid etter stoffet/fagssiden, aldri etter laboratoriets analyttnavn. «Amitriptylin + nortriptylin», «Venlafaksin + O-desmetylvenlafaksin» og «Risperidon + hydroksyrisperidon» hører derfor til analyttbeskrivelsen, mens registeret viser henholdsvis Amitriptylin, Venlafaksin og Risperidon. Den filtrerer ikke søket.
 
 Hovedsidens søk er inngangen til fortolkningsarbeidsflyten, og filteret på analysemetode settes der.
 
@@ -121,7 +124,7 @@ Vis:
 
 1. Analyttkode(r) som piller. Når flere koder deler fagsside, vises alle her, gruppert etter analysemetode.
 2. Legemiddelkategori som pille, med samme kategorier som dagens sidemeny.
-3. Virkestoff/analyttnavn som hovedoverskrift.
+3. Stoff-/virkestoffnavnet som hovedoverskrift. Analyttnavn og analyttkomponenter beskrives separat og brukes ikke som sidetittel.
 4. ~~Preparatnavn, alfabetisk sortert.~~ **Erstattet 23.09.2026:** preparatene vises i hovedseksjonen «Preparater», med data fra de eksterne kildene, gruppert som legemiddelform → preparat → styrker (del 23 og 24).
 
 ~~Preparatnavn skal lagres som strukturerte enkeltoppføringer, ikke som én kommaseparert fritekst.~~ **Erstattet:** preparatnavn er ikke lenger et manuelt redigerbart element (`{ navn: string[] }`). De er strukturerte rader i den synkroniserte kopien av kildedataene.
@@ -751,8 +754,8 @@ Koblingen mellom en informasjonsside og de eksterne dataene er eksplisitt: infor
 
 - Navnelikhet kan gi **forslag**, men en kobling tas i bruk først når en administrator har bekreftet den. Usikre koblinger gjøres ikke automatisk.
 - **Salter og estere** (f.eks. hydroklorid, dekanoat) knyttes til siden for virkestoffet, med saltformen synlig på preparatet.
-- **Metabolitter** (f.eks. nortriptylin fra amitriptylin, O-desmetylvenlafaksin fra venlafaksin) får bare preparater når metabolitten selv er et markedsført virkestoff, og da på sin egen side. Moderstoffets preparater vises ikke som metabolittens.
-- **Sumanalyser** (f.eks. `AMTNORSUM`) viser preparatene for hovedsidens virkestoff. Komponentene har sine egne sider med sine egne preparater.
+- **Metabolitter/analyttkomponenter** blir ikke automatisk egne stoffer i registeret bare fordi laboratoriet måler dem. Dersom forbindelsen også finnes som et selvstendig virkestoff i stoffregisteret, kan den ha sin egen side med egne preparater; dette er en separat, eksplisitt kobling. Moderstoffets preparater vises ikke som metabolittens.
+- **Sumanalyser** (f.eks. `AMTNORSUM`) viser preparatene for hovedsidens virkestoff. At analysen også måler andre komponenter, endrer ikke navnet eller identiteten til hovedsiden. En komponent som også er et selvstendig virkestoff, som nortriptylin, kan samtidig ha sin egen stoffside via en annen analyttkobling.
 - **Kombinasjonspreparater og flere virkestoffer** vises på siden for hvert virkestoff de inneholder, tydelig merket som kombinasjon med de øvrige virkestoffene.
 - **Samme virkestoff i flere former** grupperes etter legemiddelform (del 24).
 
