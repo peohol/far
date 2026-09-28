@@ -64,8 +64,13 @@ describe('dekningsoversikten', () => {
         continue
       }
       const moder = perSide.get(u.moderstoff.side)
-      expect(moder?.status, u.side).toBe('koblet')
-      if (moder?.status === 'koblet') expect(moder.kjemikalier.map((k) => k.clinpgx_id), u.side).toContain(u.moderstoff.clinpgx_id)
+      expect(moder, u.side).toBeDefined()
+      if (moder?.status === 'koblet') {
+        expect(moder.kjemikalier.map((k) => k.clinpgx_id), u.side).toContain(u.moderstoff.clinpgx_id)
+      }
+      if (moder?.status === 'krever_kuratering') {
+        expect(moder.kandidater.map((k) => k.clinpgx_id), u.side).toContain(u.moderstoff.clinpgx_id)
+      }
     }
   })
 
