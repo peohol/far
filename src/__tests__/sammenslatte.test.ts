@@ -18,14 +18,14 @@ import { ELEMENTTYPER, FJERNET } from '../faginnhold/paneler'
 import { SAMMENSLAINGSKILDE, sammenslaingSql } from '../faginnhold/sammenslatte'
 import { faginnholdskall, feilFra, migrasjonsfiler, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
-const SAMMENSLATTE = { Testmetabolitt: 'Testmoderstoff' }
+const SAMMENSLATTE = { Testmetabolitt: 'Testmoderstoff', Utkastmetabolitt: 'Testmoderstoff' }
 const MIGRASJONSFIL = migrasjonsfiler().find((f) => f.endsWith('_sammenslatte_stoffsider.sql'))!
 
 let db: PGlite
 let kall: Faginnholdskall
 let lager: Faginnholdslager
 let leser: Faginnholdsleser
-const ider = { moder: '', metabolitt: '', analytt: '', likt: '', ulikt: '', fritekst: '' }
+const ider = { moder: '', metabolitt: '', analytt: '', likt: '', ulikt: '', fritekst: '', utkastside: '', utkastkort: '' }
 
 const antall = async (sql: string) => (await db.query<{ n: number }>(sql)).rows[0]!.n
 const revisjoner = () => antall('select count(*)::int as n from public.objektrevisjoner')
@@ -72,6 +72,17 @@ beforeAll(async () => {
   ider.fritekst = kortene[5]!.id
   await publiser(moder, metabolitt, ...analytter, ...kortene)
 
+  // En metabolitt med et kort som har et upublisert utkast.
+  const utkastside = await lager.opprettUtkast('infoside', { navn: 'Utkastmetabolitt' })
+  const utkastanalytt = await lager.opprettUtkast('laboratorieanalytt', { kode: 'TUTK', hovedside: utkastside.id, komponenter: [utkastside.id] })
+  const utkastkort = await kort(utkastside.id, 'viktige_data', 'referanseomrade', omrade(50))
+  await publiser(utkastside, utkastanalytt, utkastkort)
+  await lager.lagreUtkast(utkastkort.id, utkastkort.revisjon!, {
+    infoside: utkastside.id, panel: 'viktige_data', posisjon: 0, elementtype: 'referanseomrade', data: omrade(60), referanser: [],
+  })
+  ider.utkastside = utkastside.id
+  ider.utkastkort = utkastkort.id
+
   await db.exec(sammenslaingSql('redaktor', SAMMENSLATTE))
 }, 120_000)
 
@@ -99,6 +110,7 @@ describe('sammenslåingen i databasen', () => {
     expect([...(await leser.lesReferanseomrader('publisert'))].map(([kode, o]) => [kode, o.ovre])).toEqual([
       ['TMET', 400],
       ['TMOD', 3000],
+      ['TUTK', 50],
     ])
   })
 
@@ -119,6 +131,17 @@ describe('sammenslåingen i databasen', () => {
       [ider.fritekst],
     )
     expect(rad.rows[0]).toEqual({ infoside_id: ider.metabolitt, panel: 'farmakodynamikk' })
+  })
+
+  it('flytter ingenting for en kode når et kort på metabolittsiden har et upublisert utkast', async () => {
+    const side = await leser.lesAnalyttside('TUTK', 'publisert')
+    expect(side.infoside?.innhold.navn).toBe('Utkastmetabolitt')
+    expect(side.elementer.map((e) => [e.id, e.innhold.data.ovre])).toEqual([[ider.utkastkort, 50]])
+    const rader = await db.query<{ tilstand: string; infoside_id: string }>(
+      'select tilstand, infoside_id from public.innholdselementer where objekt_id = $1 order by tilstand',
+      [ider.utkastkort],
+    )
+    expect(rader.rows.map((r) => r.infoside_id)).toEqual([ider.utkastside, ider.utkastside])
   })
 
   it('gjør ingenting når den kjøres igjen', async () => {

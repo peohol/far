@@ -18,7 +18,9 @@
  *   stående som komponent, så analysen fortsatt sier hvilket stoff den måler.
  *
  * Alt skjer som nye, publiserte revisjoner, så det står i historikken og kan
- * hentes tilbake. Et objekt med et upublisert utkast røres ikke. Kjøres den
+ * hentes tilbake. Et objekt med et upublisert utkast røres ikke, og har et
+ * kort på metabolittsiden et upublisert utkast, flyttes ingenting for koden,
+ * så ingenting blir stående igjen på en side som ikke vises. Kjøres den
  * igjen, gjør den ingenting. Uten administratoren gjør den ingenting, som i
  * testdatabasen før importene. Modulen brukes av skriptet som lager
  * migrasjonen og av testene, ikke av appen.
@@ -72,6 +74,19 @@ ${rader}
       join public.objektrevisjoner r on r.objekt_id = la.objekt_id and r.revisjon = u.revisjon
       where la.tilstand = 'utkast' and la.hovedside_id = metabolittside
     loop
+      -- Et kort med et upublisert utkast ville blitt stående igjen: da flyttes ingenting.
+      if exists (
+        select 1 from public.innholdselementer el
+        join public.objekttilstander u on u.objekt_id = el.objekt_id and u.tilstand = 'utkast'
+        where el.tilstand = 'utkast' and el.infoside_id = metabolittside and el.panel <> ${lit(FJERNET)}
+          and not exists (
+            select 1 from public.objekttilstander p
+            where p.objekt_id = el.objekt_id and p.tilstand = 'publisert' and p.revisjon = u.revisjon)
+      ) then
+        raise notice '%: et kort på siden har et upublisert utkast, så % slås ikke sammen ennå.', m.metabolitt, a.kode;
+        continue;
+      end if;
+
       for e in
         select el.objekt_id as id, u.revisjon, r.innhold
         from public.innholdselementer el

@@ -42,6 +42,19 @@ begin
       join public.objektrevisjoner r on r.objekt_id = la.objekt_id and r.revisjon = u.revisjon
       where la.tilstand = 'utkast' and la.hovedside_id = metabolittside
     loop
+      -- Et kort med et upublisert utkast ville blitt stående igjen: da flyttes ingenting.
+      if exists (
+        select 1 from public.innholdselementer el
+        join public.objekttilstander u on u.objekt_id = el.objekt_id and u.tilstand = 'utkast'
+        where el.tilstand = 'utkast' and el.infoside_id = metabolittside and el.panel <> 'fjernet'
+          and not exists (
+            select 1 from public.objekttilstander p
+            where p.objekt_id = el.objekt_id and p.tilstand = 'publisert' and p.revisjon = u.revisjon)
+      ) then
+        raise notice '%: et kort på siden har et upublisert utkast, så % slås ikke sammen ennå.', m.metabolitt, a.kode;
+        continue;
+      end if;
+
       for e in
         select el.objekt_id as id, u.revisjon, r.innhold
         from public.innholdselementer el
