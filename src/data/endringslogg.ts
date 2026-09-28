@@ -19,6 +19,9 @@ export const ENDRINGSLOGG: Endring[] = [
     omfang: 'Moderat omfang',
     punkter: [
       'Metabolitter som ikke er egne legemidler, åpner nå bokstavelig talt samme fagsside og samme adresse som moderstoffet, i stedet for parallelle sider med samme innhold.',
+      'Stoffregisteret viser nå stoffet fagssiden handler om, ikke laboratoriets analyttnavn. Sumanalysene vises derfor som «Amitriptylin», «Venlafaksin» og «Risperidon», mens komponentene fortsatt står tydelig på selve siden.',
+      'Bupropion har nå fagssiden «Bupropion» selv om laboratorieanalytten HBUP måler hydroksybupropion. Siden forklarer forholdet og at referanseområdet gjelder bupropion.',
+      'Paliperidon vises som «Paliperidon» i stoffregisteret; analyttbetegnelsen hydroksyrisperidon holdes separat fra stoffnavnet.',
       'Sum-analyser som kariprazin, fluoksetin og aripiprazol bruker moderstoffets navn som sidetittel; metabolittene står fortsatt som del av analysen.',
       'THC og THC-syre står på én side som heter «THC og THC-syre», med separate fortolkningsregler for THC i serum og THC-syre i urin på samme side.',
       'EtG og EtS står på én side som heter «Etanol». Sekundære analyttkoder og gamle adresser fører til den kanoniske siden.',
