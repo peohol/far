@@ -173,9 +173,6 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
   // Kodene som hører til siden, med den kanoniske først.
   const paSiden = useMemo(() => (oppforing ? katalog.paSiden(oppforing.sidenavn) : []), [oppforing, katalog])
   const inkluderThcSyre = paSiden.some((o) => o.kode === THC_KODE)
-  // THC-syre-seksjonen skal ha stabil identitet også mens serumreglene lastes
-  // eller hvis de ikke kan hentes.
-  const deltThcSide = inkluderThcSyre && oppforing?.sidenavn === 'THC'
   const handlinger = useAnalyttside(nokkel, modus, inkluderThcSyre)
   const { side, referansebase, publisert, konflikt, plan } = handlinger
   const modell = useMemo(() => byggSidemodell(side.data), [side.data])
