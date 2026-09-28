@@ -159,7 +159,8 @@ export function byggStoffregister(
   for (const o of katalog.oppforinger) {
     const paSiden = katalog.paSiden(o.sidenavn)
     if (paSiden[0]?.kode === o.kode) {
-      leggTil({ navn: o.sidetittel, side: o.sidenavn, kode: o.kode, koder: paSiden.map((p) => p.kode) })
+      const fellesSide = paSiden.length > 1 || o.komponenter.length > 1
+      leggTil({ navn: fellesSide ? o.sidetittel : o.navn, side: o.sidenavn, kode: o.kode, koder: paSiden.map((p) => p.kode) })
     }
   }
   // En database-side som katalogen allerede kan sende til en kanonisk side,
