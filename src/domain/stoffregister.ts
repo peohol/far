@@ -44,6 +44,8 @@ export interface Registerdata {
    * HBUP → Bupropion og VENSUM → Venlafaksin.
    */
   analyttkoblinger?: Record<string, string>
+  /** Kort forklaring som vises på stoffsiden for en bestemt laboratorieanalytt. */
+  analyttmerknader?: Record<string, string>
   /** Visningstittel for kanoniske sider som samler flere nært beslektede analytter. */
   sidetitler?: Record<string, string>
 }
