@@ -15,6 +15,7 @@ import { ANDRE_STOFFER, byggStoffregister, kategorierFor, STOFFREGISTER, type Re
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
 /** Stoffsidene uten kode som importene lager. */
 const STOFFSIDER = [...STOFFSIDE_DATASETT.filer.map(filnokkel), ...NYE_STOFFSIDER, ...CBD_STOFFSIDER]
+const SELVSTENDIGE_STOFFSIDER = STOFFSIDER.filter((navn) => !katalog.kodeForSide(navn))
 const register = byggStoffregister(katalog, STOFFSIDER)
 /** Stoffsidene før GHB-, ketamin- og cannabidiolsidene er laget. */
 const STOFFSIDER_UTEN_NYE = STOFFSIDER.filter((s) => ![...NYE_STOFFSIDER, ...CBD_STOFFSIDER].includes(s))
@@ -35,7 +36,7 @@ describe('datafilen', () => {
     const kjente = new Set([...katalog.oppforinger.map((o) => o.sidenavn), ...STOFFSIDER].map((n) => n.toLocaleLowerCase('nb')))
     for (const k of STOFFREGISTER.kategorier) {
       for (const navn of [...(k.stoffer ?? []), ...(k.underkategorier ?? []).flatMap((u) => u.stoffer)]) {
-        expect(kjente.has(navn.toLocaleLowerCase('nb')), `${k.navn}: ${navn}`).toBe(true)
+        expect(kjente.has(navn.toLocaleLowerCase('nb')) || Boolean(katalog.kodeForSide(navn)), `${k.navn}: ${navn}`).toBe(true)
       }
     }
   })
@@ -74,7 +75,7 @@ describe('registeret', () => {
     const koder = new Set(register.flatMap((k) => k.stoffer.flatMap((s) => s.koder)))
     expect([...koder].sort()).toEqual(katalog.oppforinger.map((o) => o.kode).sort())
     const sider = new Set(register.flatMap((k) => k.stoffer.filter((s) => s.kode === null).map((s) => s.side)))
-    expect([...sider].sort()).toEqual([...STOFFSIDER].sort())
+    expect([...sider].sort()).toEqual([...SELVSTENDIGE_STOFFSIDER].sort())
   })
 
   it('har én linje per side, med alle kodene på siden, når en metabolitt er slått sammen med moderstoffet', () => {
@@ -83,7 +84,8 @@ describe('registeret', () => {
     expect(benzo.find((s) => s.navn === 'Oksazepam')?.koder).toEqual(['OXA'])
     expect(navnI(kategori('Opioider'))).not.toContain('O-desmetyltramadol')
     expect(kategori('Opioider').stoffer.find((s) => s.navn === 'Tramadol')?.koder).toEqual(['TRAM', 'OTRAM'])
-    expect(kategori('Cannabinoider').stoffer.find((s) => s.navn === 'THC')?.koder).toEqual(['THC', 'IRCAK'])
+    expect(kategori('Cannabinoider').stoffer.find((s) => s.navn === 'THC og THC-syre')?.koder).toEqual(['THC', 'IRCAK'])
+    expect(kategori('Alkohol og GHB').stoffer.find((s) => s.navn === 'Etanol')?.koder).toEqual(['UETGS', 'UETS'])
     for (const k of register) {
       const sider = k.stoffer.map((s) => s.side)
       expect(new Set(sider).size, k.navn).toBe(sider.length)
@@ -101,8 +103,8 @@ describe('registeret', () => {
       'Multimodale',
       'NMDA-reseptorantagonister',
     ])
-    expect(navnI(k, 'SSRI')).toEqual(['Citalopram', 'Escitalopram', 'Fluoksetin + norfluoksetin', 'Fluvoksamin', 'Paroksetin', 'Sertralin'])
-    expect(navnI(k, 'SNRI')).toEqual(['Duloksetin', 'Venlafaksin + O-desmetylvenlafaksin'])
+    expect(navnI(k, 'SSRI')).toEqual(['Citalopram', 'Escitalopram', 'Fluoksetin', 'Fluvoksamin', 'Paroksetin', 'Sertralin'])
+    expect(navnI(k, 'SNRI')).toEqual(['Duloksetin', 'Venlafaksin'])
     expect(navnI(k, 'NDRI')).toEqual(['Hydroksybupropion (kun aktiv metabolitt)'])
     expect(navnI(k, 'NMDA-reseptorantagonister')).toEqual(['Ketamin'])
   })
@@ -136,7 +138,7 @@ describe('registeret', () => {
     const k = kategori('Antiepileptika')
     expect(k.stoffer.find((s) => s.navn === 'Lamotrigin')?.kode).toBe('LAM')
     expect(k.stoffer.find((s) => s.navn === 'Karbamazepin')?.kode).toBeNull()
-    expect(navnI(kategori('Alkohol og GHB'))).toEqual(['EtG', 'EtS', 'GHB'])
+    expect(navnI(kategori('Alkohol og GHB'))).toEqual(['Etanol', 'GHB'])
     expect(navnI(kategori('Hallusinogene stoffer'))).toEqual(['Ketamin'])
   })
 
@@ -169,7 +171,7 @@ describe('sider som mangler eller ikke er plassert', () => {
   it('utelater et stoff som ennå ikke har noen side, og en kategori som blir tom', () => {
     const utenNye = byggStoffregister(katalog, STOFFSIDER_UTEN_NYE)
     expect(utenNye.map((k) => k.navn)).not.toContain('Hallusinogene stoffer')
-    expect(navnI(kategori('Alkohol og GHB', utenNye))).toEqual(['EtG', 'EtS'])
+    expect(navnI(kategori('Alkohol og GHB', utenNye))).toEqual(['Etanol'])
     expect(navnI(kategori('Cannabinoider', utenNye))).not.toContain('Cannabidiol')
     expect(navnI(kategori('Cannabinoider'))).toContain('Cannabidiol')
     expect(kategori('Antidepressiver', utenNye).underkategorier.map((u) => u.navn)).not.toContain('NMDA-reseptorantagonister')
@@ -205,7 +207,7 @@ describe('kategoriene til én stoffside', () => {
   })
 
   it('stemmer med sidemenyen for hver side, også antihypertensivene', () => {
-    for (const side of [...new Set(katalog.oppforinger.map((o) => o.sidenavn)), ...STOFFSIDER]) {
+    for (const side of [...new Set(katalog.oppforinger.map((o) => o.sidenavn)), ...SELVSTENDIGE_STOFFSIDER]) {
       const iMenyen = register.flatMap((k) =>
         k.underkategorier.length > 0
           ? k.underkategorier.filter((u) => u.stoffer.some((s) => s.side === side)).map((u) => `${k.navn} › ${u.navn}`)
