@@ -70,6 +70,10 @@ export interface ScenarioreglerProps {
    * kodeinsiden. Én side per navn, med koden som åpner den.
    */
   delesMed?: readonly Delingsside[]
+  /** Egen seksjons-ID når flere fortolkningssystemer står på samme fagsside. */
+  seksjonsid?: string
+  /** Egen tittel når det må fremgå hvilken analytt regelsettet gjelder. */
+  tittel?: string
 }
 
 /** En annen side som deler reglene og kommentarene. */
@@ -94,7 +98,15 @@ export interface Delingsside {
  * administratorer endre grensene og tekstene, se hva som ikke er publisert og
  * åpne historikken — for regelsettet og for hver kommentar.
  */
-export function Scenarioregler({ modul, regelsett, kommentarer, redigering, delesMed = [] }: ScenarioreglerProps) {
+export function Scenarioregler({
+  modul,
+  regelsett,
+  kommentarer,
+  redigering,
+  delesMed = [],
+  seksjonsid = 'fortolkning',
+  tittel = 'Fortolkningsregler',
+}: ScenarioreglerProps) {
   const beskrivelse = useMemo(() => beskrivRegelsett(regelsett, kommentarer), [regelsett, kommentarer])
   const [inndata, setInndata] = useState<RusInndata>(TOM_RUS_INNDATA)
   const [redigeres, setRedigeres] = useState(false)
@@ -108,9 +120,9 @@ export function Scenarioregler({ modul, regelsett, kommentarer, redigering, dele
 
   return (
     <Seksjon
-      id="fortolkning"
+      id={seksjonsid}
       ikon={seksjonsikon('fortolkning')}
-      tittel={<Uthev tekst="Fortolkningsregler" />}
+      tittel={<Uthev tekst={tittel} />}
       oppsummering={ramsOpp([
         antall(beskrivelse.scenarier.length, 'scenario', 'scenarier'),
         ...beskrivelse.grenser.map((g) => `${g.navn}: ${g.prosent}`),
