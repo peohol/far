@@ -71,11 +71,18 @@ export function Identitetspanel({
   /** Kategoriene i stoffregisteret (`kategorierFor`). */
   kategorier: Kategoristi[]
   overskriftId: string
-  /** Åpner fortolkningsmodulen analyttkoden hører til. */
-  onApneFortolkning: () => void
+  /** Åpner fortolkningsmodulen den valgte analyttkoden hører til. */
+  onApneFortolkning: (oppforing: Katalogoppforing) => void
 }) {
   const panelreferanser = useSidereferanser().panelreferanser[definisjon.nokkel] ?? []
   const sum = komponenter.length > 1
+  const analyser = oppforing ? [oppforing, ...samme] : []
+  const metodegrupper = analyser.reduce<Katalogoppforing[][]>((grupper, o) => {
+    const gruppe = grupper.find((g) => g[0]?.analysemetode === o.analysemetode)
+    if (gruppe) gruppe.push(o)
+    else grupper.push([o])
+    return grupper
+  }, [])
   const flate = useRef<HTMLElement>(null)
   useFastSted(definisjon.nokkel, flate)
 
@@ -100,14 +107,20 @@ export function Identitetspanel({
       <h1 id={overskriftId} className="identitet__navn" tabIndex={-1}>
         <Uthev tekst={navn} />
       </h1>
-      {oppforing && (
-        <p className="identitet__analyse">
-          <Analyttkodeknapp kode={oppforing.kode} onApne={onApneFortolkning} />
-          <span aria-hidden="true">·</span>
-          <span>Inngår i</span>
-          <Metodepille metode={oppforing.analysemetode} />
-        </p>
-      )}
+      {oppforing &&
+        metodegrupper.map((gruppe) => (
+          <p className="identitet__analyse" key={gruppe[0]!.analysemetode}>
+            {gruppe.map((o, i) => (
+              <Fragment key={o.kode}>
+                {i > 0 && <span aria-hidden="true">·</span>}
+                <Analyttkodeknapp kode={o.kode} onApne={() => onApneFortolkning(o)} />
+              </Fragment>
+            ))}
+            <span aria-hidden="true">·</span>
+            <span>Inngår i</span>
+            <Metodepille metode={gruppe[0]!.analysemetode} />
+          </p>
+        ))}
 
       {sum && oppforing && (
         <p className="identitet__komponenter">
@@ -116,21 +129,6 @@ export function Identitetspanel({
             <span key={k.navn}>
               {i > 0 && (i === komponenter.length - 1 ? ' og ' : ', ')}
               <Komponentlenke komponent={k} gjeldende={oppforing.kode} />
-            </span>
-          ))}
-          .
-        </p>
-      )}
-      {samme.length > 0 && (
-        <p className="identitet__komponenter">
-          <Uthev tekst="Siden gjelder også " />
-          {samme.map((o, i) => (
-            <span key={o.kode}>
-              {i > 0 && (i === samme.length - 1 ? ' og ' : ', ')}
-              <Uthev tekst={iSetning(o.navn)} />{' '}
-              <a className="komponentlenke" href={analyttadresse(o.kode)} aria-label={`${o.navn}: åpne siden for ${o.kode}`}>
-                ({o.kode})
-              </a>
             </span>
           ))}
           .
