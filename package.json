@@ -6,7 +6,7 @@
   "description": "Verktøy for å kommentere farmakologiske analyser",
   "scripts": {
     "dev": "vite",
-    "build": "vitest run src/domain/__tests__/stoffregister.test.ts -t \"har kategoriene|plasserer hver kode|har én linje per side|deler antidepressivene|deler antipsykotika\" && tsc --noEmit && vite build && node scripts/kontroller-vegg.mjs",
+    "build": "vitest run src/domain/__tests__/stoffregister.test.ts -t \"beholder underkategoriene|setter stoffer med og uten|lar et stoff stå|lister stoffene alfabetisk|har de samme stoffene\" && tsc --noEmit && vite build && node scripts/kontroller-vegg.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
