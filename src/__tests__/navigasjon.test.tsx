@@ -194,6 +194,19 @@ describe('kanoniske fagssider', () => {
     await waitFor(() => expect(window.location.hash).toBe(`#/analytt/${til}`))
   })
 
+  it.each([
+    ['VENSUM', 'Venlafaksin'],
+    ['AMTNORSUM', 'Amitriptylin'],
+    ['RISPSUM', 'Risperidon'],
+    ['HBUP', 'Bupropion'],
+    ['PALI', 'Paliperidon'],
+  ])('bruker stoffnavnet %s hører til som sidetittel', async (kode, navn) => {
+    window.location.hash = `#/analytt/${kode}`
+    visApp()
+    await infosideFor(navn)
+    expect(window.location.hash).toBe(`#/analytt/${kode}`)
+  })
+
   it('samler THC og THC-syre på én side med begge fortolkningssystemene', async () => {
     window.location.hash = '#/analytt/IRCAK'
     visApp()
