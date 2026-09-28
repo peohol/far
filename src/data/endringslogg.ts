@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.51.0',
+    dato: '2026-09-28',
+    sammendrag: 'Metabolitter som ikke er legemidler, står på moderstoffets side, og flere rusmidler har fått indikasjoner og preparater',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'N-desmetyldiazepam står nå på diazepamsiden, O-desmetyltramadol på tramadolsiden og THC-syre på THC-siden. Stoffregisteret viser én linje med begge kodene, og hver kode har fortsatt sin egen adresse og sin egen fortolkning.',
+      'Metabolittens egne tall, som referanseområdet for O-desmetyltramadol, står som egne kort på den felles siden, merket med stoffet de gjelder.',
+      'Sider som deler fortolkningsregler og kommentartekster, som diazepam og oksazepam, sier det i «Fortolkningsregler», med lenke til de andre sidene. En endring der gjelder alle sidene.',
+      'Benzodiazepinene, z-hypnotikaene og opioidene har fått indikasjonene fra Felleskatalogen og preparatene fra FEST. Metadonsiden viser også levometadon, og hydroksybupropion viser bupropionpreparatene.',
+      'Tapentadol har fått sin egen side.',
+    ],
+  },
+  {
     versjon: '1.50.0',
     dato: '2026-09-28',
     sammendrag: 'Lyst eller mørkt tema lagres på brukeren',

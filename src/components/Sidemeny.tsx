@@ -391,7 +391,7 @@ function Stoffer({ stoffer, onVelg }: { stoffer: readonly Registerstoff[]; onVel
             onClick={onVelg}
           >
             <span className="menyanalytt__navn">{stoff.navn}</span>
-            {stoff.kode && <span className="menyanalytt__kode">{stoff.kode}</span>}
+            {stoff.kode && <span className="menyanalytt__kode">{stoff.koder.join(' · ')}</span>}
           </a>
         </li>
       ))}

@@ -1,0 +1,28 @@
+{
+  "kode": "CZP",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Rivotril: først og fremst som tilleggsbehandling eller ved refraktære tilfeller for de fleste former for epilepsi, særlig absenser (også atypiske), Lennox-Gastaut syndrom og myokloniske og atoniske anfall. Ved infantile spasmer (også West-syndrom) og tonisk-kloniske anfall bare som tilleggsbehandling eller ved refraktære tilfeller.",
+      "Iqtopam, voksne og ungdom fra 12 år: epilepsi, generaliserte krampeanfall (absenser, myokloniske og tonisk-kloniske anfall), partielle anfall og status epilepticus."
+    ],
+    "referanser": [
+      "fk-rivotril",
+      "fk-iqtopam"
+    ]
+  },
+  "referanser": {
+    "fk-rivotril": {
+      "tittel": "Rivotril «Cheplapharm»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/rivotril-cheplapharm-563568"
+    },
+    "fk-iqtopam": {
+      "tittel": "Iqtopam «XGX Pharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/iqtopam-xgx-pharma-771776"
+    }
+  }
+}

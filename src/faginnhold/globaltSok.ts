@@ -233,7 +233,7 @@ export interface Indekseringsvalg {
   aliaser?: (kode: string) => readonly string[] | undefined
   /**
    * Alle analyttsidene appen har, fra katalogen: koden, navnet siden vises med
-   * og komponentene. Hver kode har en side, også uten publisert
+   * og komponentene, med hovedkoden først for sider flere koder deler. Hver kode har en side, også uten publisert
    * informasjonsside — da viser siden navnet fra katalogen og
    * fortolkningsreglene. Søket finner også de sidene, på navnet og koden.
    */
@@ -245,7 +245,7 @@ interface Indekseringsside {
   navn: string
   /** Tom for et stoff uten analyttkode. */
   koder: string[]
-  komponenter: readonly string[]
+  komponenter: string[]
   modell: Sidemodell
   tillegg: Tilleggstekst[]
 }
@@ -258,27 +258,31 @@ const TOM_MODELL = byggSidemodell(TOM_SIDE)
  * treff kommer i en fast rekkefølge.
  *
  * Deler flere koder samme informasjonsside, indekseres siden én gang, under
- * den første koden, og de andre kodene er med som koder på den. En kode i
- * `sider` som ingen informasjonsside viser, indekseres med navnet fra
- * katalogen, som siden selv viser. Et stoff uten analyttkode indekseres
+ * den første koden i `sider` (hovedkoden), og de andre kodene er med som
+ * koder på den. En kode i `sider` som ingen informasjonsside viser,
+ * indekseres med navnet fra katalogen, som siden selv viser — sammen med
+ * siden med det navnet, når den er med. Et stoff uten analyttkode indekseres
  * under navnet.
  */
 export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser, sider = [] }: Indekseringsvalg = {}): Sokedokument[] {
-  const perInfoside = new Map<string, { data: Analyttsidedata; koder: string[] }>()
+  const perInfoside = new Map<string, { data: Analyttsidedata; koder: string[]; komponenter: string[] }>()
   for (const data of base.sider) {
     if (!data.infoside) continue
     const koder = data.analytt ? [data.analytt.innhold.kode] : []
+    const komponenter = data.komponenter.map((k) => k.innhold.navn)
     const side = perInfoside.get(data.infoside.id)
-    if (side) side.koder.push(...koder)
-    else perInfoside.set(data.infoside.id, { data, koder })
+    if (side) {
+      side.koder.push(...koder)
+      side.komponenter.push(...komponenter.filter((k) => !side.komponenter.includes(k)))
+    } else perInfoside.set(data.infoside.id, { data, koder, komponenter })
   }
 
-  const medInfoside = [...perInfoside.values()].map(({ data, koder }): Indekseringsside => {
+  const medInfoside = [...perInfoside.values()].map(({ data, koder, komponenter }): Indekseringsside => {
     const modell = byggSidemodell(data)
     return {
       navn: data.infoside!.innhold.navn,
       koder,
-      komponenter: data.komponenter.map((k) => k.innhold.navn),
+      komponenter,
       modell,
       tillegg: [
         ...legemiddeltekster(base, koblede(modell)),
@@ -287,17 +291,30 @@ export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser, sider = []
       ],
     }
   })
+  // En kode uten egen informasjonsside som viser en side som alt er med — en
+  // metabolitt slått sammen med moderstoffet — blir en kode til på den siden.
   const indekserte = new Set(medInfoside.flatMap((s) => s.koder))
-  const utenInfoside = sider
-    .filter((s) => !indekserte.has(s.kode))
-    .map(({ kode, navn, komponenter }): Indekseringsside => ({
-      navn,
-      koder: [kode],
-      komponenter,
-      modell: TOM_MODELL,
-      tillegg: [],
-    }))
+  const perNavn = new Map(medInfoside.map((s) => [s.navn.toLocaleLowerCase('nb'), s]))
+  const utenInfoside: Indekseringsside[] = []
+  for (const { kode, navn, komponenter } of sider) {
+    if (indekserte.has(kode)) continue
+    const side = perNavn.get(navn.toLocaleLowerCase('nb'))
+    if (side) {
+      side.koder.push(kode)
+      side.komponenter = [...side.komponenter, ...komponenter.filter((k) => !side.komponenter.includes(k))]
+      continue
+    }
+    const ny: Indekseringsside = { navn, koder: [kode], komponenter: [...komponenter], modell: TOM_MODELL, tillegg: [] }
+    perNavn.set(navn.toLocaleLowerCase('nb'), ny)
+    utenInfoside.push(ny)
+  }
 
+  // Kodene på hver side i den rekkefølgen `sider` har dem: hovedkoden først.
+  // En kode `sider` ikke har, beholder plassen databasen ga den, foran.
+  const plass = new Map(sider.map((s, i) => [s.kode, i]))
+  for (const side of [...medInfoside, ...utenInfoside]) {
+    side.koder.sort((a, b) => (plass.get(a) ?? -1) - (plass.get(b) ?? -1))
+  }
   const alle = [...medInfoside, ...utenInfoside].sort(
     (a, b) => alfabetisk(a.navn, b.navn) || ((a.koder[0] ?? '') < (b.koder[0] ?? '') ? -1 : 1),
   )

@@ -194,7 +194,9 @@ export default function App() {
             const oppforing = katalog.finn(kode)
             return oppforing?.kode === oppforing?.fortolkning.kode ? oppforing?.fortolkning.aliaser : undefined
           },
-          sider: katalog.oppforinger.map(({ kode, sidenavn, komponenter }) => ({ kode, navn: sidenavn, komponenter })),
+          sider: katalog.oppforinger
+            .flatMap((o) => (katalog.paSiden(o.sidenavn)[0] === o ? katalog.paSiden(o.sidenavn) : []))
+            .map(({ kode, sidenavn, komponenter }) => ({ kode, navn: sidenavn, komponenter })),
         },
         delvis,
       )

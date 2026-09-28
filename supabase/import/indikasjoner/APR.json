@@ -1,0 +1,20 @@
+{
+  "kode": "APR",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Xanor og Xanor Depot: symptomatisk korttidsbehandling av angst hos voksne, bare når lidelsen er alvorlig, hemmende eller utsetter personen for ekstremt ubehag."
+    ],
+    "referanser": [
+      "fk-xanor"
+    ]
+  },
+  "referanser": {
+    "fk-xanor": {
+      "tittel": "Xanor, Xanor Depot «Viatris»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/xanor-xanor-depot-viatris-565512"
+    }
+  }
+}

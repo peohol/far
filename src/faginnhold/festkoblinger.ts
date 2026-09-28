@@ -106,6 +106,36 @@ export const CBD_FESTKOBLINGER: readonly Festkobling[] = [
   { side: 'Cannabidiol', fest_id: 'ID_FFF3536F-BE29-4191-A09A-ABC119C37984' },
 ]
 
+/**
+ * Rusmiddelkodene som er legemidler (se `RUSMIDLER_INDIKASJONER` i
+ * `indikasjoner.ts`). Metadonsiden viser også levometadon, den virksomme
+ * enantiomeren, og hydroksybupropion, som bare er en metabolitt, viser
+ * preparatene med bupropion.
+ */
+export const RUSMIDLER_FESTKOBLINGER: readonly Festkobling[] = [
+  { side: 'Alprazolam', fest_id: 'ID_0C2B08A1-B726-4C1C-988F-D1DDD0DAACEC' },
+  { side: 'Buprenorfin', fest_id: 'ID_F5C79CF4-0293-448F-92E1-B8136F3A138F' },
+  { side: 'Diazepam', fest_id: 'ID_30219EB4-5E5B-486A-BC91-3FFC69096ED5' },
+  { side: 'Fentanyl', fest_id: 'ID_2EC14444-4ECE-442A-BCBA-40A2173750B3' },
+  {
+    side: 'Hydroksybupropion',
+    fest_id: 'ID_4FE84EA2-FC1B-44A6-8D70-2A118B211697',
+    merknad: 'Bupropion: hydroksybupropion er den aktive metabolitten og finnes ikke som legemiddel selv.',
+  },
+  { side: 'Klonazepam', fest_id: 'ID_76C0CD6C-AFB4-4346-8387-09573B2CDBDD' },
+  { side: 'Kodein', fest_id: 'ID_82E89E1B-9C06-4E57-BB4D-AB3DA8B33FD4' },
+  { side: 'Metadon', fest_id: 'ID_335943E0-9530-4E09-9A5C-116D9BA35468', merknad: 'Racemisk metadon.' },
+  { side: 'Metadon', fest_id: 'ID_7A7394E3-2826-4CDE-8AB1-538BB8DB1AD5', merknad: 'Levometadon (Levopidon).' },
+  { side: 'Morfin', fest_id: 'ID_3EAD2C2E-9707-44CF-99A0-1FB6BE599975' },
+  { side: 'Nitrazepam', fest_id: 'ID_130EEA0C-93B8-41C6-8938-A7DC9AEDEBCF' },
+  { side: 'Oksazepam', fest_id: 'ID_68C8AD1D-5261-42DE-9DBE-E8103D4D7E44' },
+  { side: 'Oksykodon', fest_id: 'ID_A6032CF1-3E82-48B3-9D92-937838527447' },
+  { side: 'Tapentadol', fest_id: 'ID_54B6DB98-E83E-43AB-A259-BCFE879BBC46' },
+  { side: 'Tramadol', fest_id: 'ID_9A7618F7-90F5-44EE-89E8-29BF06A684EA' },
+  { side: 'Zolpidem', fest_id: 'ID_9EAED86D-1D9F-458A-B626-DB9EEA5A7731' },
+  { side: 'Zopiklon', fest_id: 'ID_8B254174-7197-4AF9-8A78-739A805012BE' },
+]
+
 /** Hver import av koblinger, i rekkefølge, med navnet migrasjonen fikk. */
 export const FESTKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: readonly Festkobling[] }[] = [
   { migrasjon: 'stoffsider_fest_kobling', koblinger: STOFFSIDE_FESTKOBLINGER },
@@ -113,6 +143,7 @@ export const FESTKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: read
   { migrasjon: 'ghb_ketamin_fest_kobling', koblinger: GHB_KETAMIN_FESTKOBLINGER },
   { migrasjon: 'thc_fest_kobling', koblinger: THC_FESTKOBLINGER },
   { migrasjon: 'cbd_fest_kobling', koblinger: CBD_FESTKOBLINGER },
+  { migrasjon: 'rusmidler_fest_kobling', koblinger: RUSMIDLER_FESTKOBLINGER },
 ]
 
 /** Kilden revisjonene får i historikken. */

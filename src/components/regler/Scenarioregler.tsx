@@ -7,6 +7,7 @@ import type { Scenarioregelsettutgave } from '../../faginnhold/lesing'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
 import { kommentaroppslag } from '../../regler/kommentarer'
 import { scenariofelter, tilScenarioutkast, utkastfelter, type Scenarioutkast } from '../../regler/scenarioredigering'
+import { analyttadresse } from '../../domain/rute'
 import type { Analyte } from '../../types'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
@@ -63,6 +64,18 @@ export interface ScenarioreglerProps {
   kommentarer: Kommentaroppslag
   /** For administratorer i redigeringsmodus. Da er det utkastet som vises. */
   redigering?: Scenarioredigeringskilde
+  /**
+   * De andre stoffsidene som viser de samme reglene, fordi kodene deres
+   * fortolkes i samme modul: oksazepam på diazepamsiden, morfin på
+   * kodeinsiden. Én side per navn, med koden som åpner den.
+   */
+  delesMed?: readonly Delingsside[]
+}
+
+/** En annen side som deler reglene og kommentarene. */
+export interface Delingsside {
+  navn: string
+  kode: string
 }
 
 /**
@@ -81,7 +94,7 @@ export interface ScenarioreglerProps {
  * administratorer endre grensene og tekstene, se hva som ikke er publisert og
  * åpne historikken — for regelsettet og for hver kommentar.
  */
-export function Scenarioregler({ modul, regelsett, kommentarer, redigering }: ScenarioreglerProps) {
+export function Scenarioregler({ modul, regelsett, kommentarer, redigering, delesMed = [] }: ScenarioreglerProps) {
   const beskrivelse = useMemo(() => beskrivRegelsett(regelsett, kommentarer), [regelsett, kommentarer])
   const [inndata, setInndata] = useState<RusInndata>(TOM_RUS_INNDATA)
   const [redigeres, setRedigeres] = useState(false)
@@ -112,6 +125,7 @@ export function Scenarioregler({ modul, regelsett, kommentarer, redigering }: Sc
       }
       className="regler"
     >
+      {delesMed.length > 0 && <Delingsmerknad sider={delesMed} redigering={Boolean(redigering)} />}
       {redigeringsmodus ? (
         <Scenarioredigering
           key={[redigering.utgave.regelsett.revisjon, ...redigering.utgave.kommentarer.map((k) => k.revisjon)].join('-')}
@@ -206,6 +220,34 @@ export function Scenarioregler({ modul, regelsett, kommentarer, redigering }: Sc
         />
       )}
     </Seksjon>
+  )
+}
+
+/**
+ * Sier at reglene og kommentartekstene er de samme på de andre sidene, med
+ * lenker dit. De er ett objekt i databasen, så det finnes bare ett sted å
+ * redigere dem, uansett hvilken av sidene redaktøren står på.
+ */
+function Delingsmerknad({ sider, redigering }: { sider: readonly Delingsside[]; redigering: boolean }) {
+  return (
+    <p className="regler__deling">
+      <Uthev tekst="Reglene og kommentartekstene er felles med " />
+      {sider.map((s, i) => (
+        <span key={s.kode}>
+          {i > 0 && (i === sider.length - 1 ? ' og ' : ', ')}
+          <a href={analyttadresse(s.kode)}>
+            <Uthev tekst={s.navn} />
+          </a>
+        </span>
+      ))}
+      <Uthev
+        tekst={
+          redigering
+            ? '. En endring her gjelder også der, og det er de samme tekstene som redigeres fra alle sidene.'
+            : '.'
+        }
+      />
+    </p>
   )
 }
 

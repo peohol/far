@@ -21,6 +21,8 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `supabase/migrations/*_analyttsider_lesing.sql` | Lesingen av en hel side, referansebasen og sider etter navn |
 | `supabase/migrations/*_analyttsider_samlet_lesing.sql` | Alle sidene i én tilstand i ett kall, for søket i hele kunnskapsbasen |
 | `supabase/migrations/*_enkeltelementer.sql` | At kortene som står én gang i panelet sitt, ikke kan opprettes to ganger |
+| `supabase/migrations/*_datakort_per_analytt.sql` | Datakortene én gang per kode på en side flere koder deler, og referanseområdet til hver kode (`les_referanseomrader`) |
+| `src/faginnhold/sammenslatte.ts`, `scripts/lag-sammenslaing.ts`, `supabase/migrations/*_sammenslatte_stoffsider.sql` | Metabolittsidene som slås sammen med moderstoffets side |
 | `supabase/migrations/*_regelredigering_lesing.sql` | Historikken til ett objekt (`les_historikk`) og regelsettet for én kode |
 | `supabase/migrations/*_kommentar_objekttype.sql`, `*_kommentarer.sql` | Fortolkningskommentarene som egne objekter |
 | `src/domain/kommentarobjekt.ts` | Formen på en kommentar og kontrollen av den, lik databasens |
@@ -389,7 +391,7 @@ styrer søket og nummereringen av referansene):
 | Panel | Nøkkel | Elementer |
 | --- | --- | --- |
 | Identitet | `identitet` | Ingen; koden, navnet og kategorien kommer fra siden og katalogen |
-| Viktige data | `viktige_data` | Ett kort per type — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk). Konsentrasjonene har `{ nedre, ovre, enhet }`; t½ og tss har `{ former: [{ form, typisk, min, maks, enhet }] }`, én rad per legemiddelform |
+| Viktige data | `viktige_data` | Ett kort per type og kode (`gjelder`, se «Sammenslåtte sider») — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk). Konsentrasjonene har `{ nedre, ovre, enhet }`; t½ og tss har `{ former: [{ form, typisk, min, maks, enhet }] }`, én rad per legemiddelform |
 | Farmakodynamikk, indikasjon | `farmakodynamikk`, `indikasjon` | `riktekst`: `{ dokument }` |
 | Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
 | Dosering | `dosering` | `riktekst`: `{ dokument }` |
@@ -445,6 +447,25 @@ legemiddeldataene, hvert datakort, rikteksten i tekstpanelene og tabellen kan ba
 panelet sitt (`ENKELTELEMENTER`). Databasen håndhever det med en unik indeks,
 så to som oppretter det samme kortet samtidig, ikke begge får det lagret —
 den andre får en konflikt.
+
+**Sammenslåtte sider.** En metabolitt som ikke er et legemiddel selv, har
+ingen egen side, men står på moderstoffets (`"sammenslatte"` i
+`src/data/stoffregister.json`, `SAMMENSLATTE` i `analyttkatalog.ts`):
+DMI på diazepamsiden, OTRAM på tramadolsiden og IRCAK på THC-siden. Koden
+beholder adressen (`#/analytt/OTRAM` viser tramadolsiden med OTRAMs
+fortolkning), og identiteten sier hvilke andre koder siden gjelder. Tallene
+som er kodens egne, står som egne datakort på den felles siden, merket med
+koden i `data.gjelder` (`datakortGjelder`); kortene uten `gjelder` er
+moderstoffets. Databasen lar hvert datakort stå én gang per kode, og
+`les_referanseomrader` gir hver kode sitt kort: det med koden i `gjelder`,
+eller det uten når hovedsiden er en av analyttens komponenter. En metabolitt
+får altså aldri moderstoffets referanseområde. Hadde metabolitten en egen
+side i databasen (O-desmetyltramadol), flyttet `*_sammenslatte_stoffsider.sql`
+den over: datakortene med `gjelder`, like kort til `fjernet`, et ulikt
+kinetikkort sist i panelet med metabolitten i tittelen, og analytten fikk
+moderstoffets side som hovedside, med metabolittsiden som komponent. En ny
+sammenslåing er en linje i `stoffregister.json` og en ny migrasjon fra
+`scripts/lag-sammenslaing.ts`.
 Første gang noe lagres på en kode uten side, opprettes informasjonssiden og
 laboratorieanalytten av katalogens opplysninger; sider med samme navn som
 finnes fra før — for eksempel en komponent — gjenbrukes. På en stoffside uten
@@ -615,7 +636,10 @@ lisdeksamfetamin. En omgang kan også lage sider som ennå ikke finnes
 sin import. En kode uten side får den på samme måte (`NYE_ANALYTTSIDER`), med
 navnet og koden fra analyttkatalogen: slik fikk THC side, med indikasjonen for
 Sativex (`*_thc_indikasjoner_01.sql`). Cannabidiolsiden (CBD, med Epidyolex)
-er laget uten kode, som GHB og ketamin (`*_cbd_indikasjoner_01.sql`). Et indikasjonskort som alt står på siden, røres ikke. Har
+er laget uten kode, som GHB og ketamin (`*_cbd_indikasjoner_01.sql`). Rusmiddelkodene som er legemidler
+(benzodiazepinene, z-hypnotikaene og opioidene, `RUSMIDLER_INDIKASJONER`)
+fikk indikasjonene sine i `*_rusmidler_indikasjoner_*.sql`, og tapentadol
+(TAP) fikk siden sin samme vei, som THC. Et indikasjonskort som alt står på siden, røres ikke. Har
 Felleskatalogen ingen preparatomtale for stoffet, sier kortet det.
 
 **Rettinger.** En feil i det som ble importert, rettes med en rettingsfil i

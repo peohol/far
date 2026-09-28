@@ -1,0 +1,43 @@
+{
+  "kode": "DIAZ",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Tabletter (Stesolid, Valium, Vival): nevroser og psykosomatiske tilstander preget av angst, fobier, uro, spenning og aggresjon; søvnvansker; forsøksvis ved cerebralt og perifert betingede muskelspasmer. Valium også sammen med trisykliske antidepressiver de første 2–3 ukene ved depresjoner med angst og agitasjon.",
+      "Injeksjonsvæske og rektalvæske (Stesolid):",
+      {
+        "punkter": [
+          "akutte uro- og agitasjonstilstander;",
+          "manifeste kramper: feberkramper, epileptiske kramper, eklampsi, tetanus og medikamentbetingede kramper (lokalanestetika, forgiftning med trisykliske antidepressiver o.a.), og forebyggende mot feberkramper;",
+          "premedikasjon ved diagnostiske og operative inngrep, endoskopier, innledning til narkose, luksasjoner og dislokerte frakturer, og sedasjon ved diagnostiske inngrep og regional anestesi;",
+          "akutte muskelspasmer, og forsøksvis ved delirium tremens."
+        ]
+      }
+    ],
+    "referanser": [
+      "fk-stesolid",
+      "fk-valium",
+      "fk-vival"
+    ]
+  },
+  "referanser": {
+    "fk-stesolid": {
+      "tittel": "Stesolid «Actavis»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/stesolid-actavis-564172"
+    },
+    "fk-valium": {
+      "tittel": "Valium «Atnahs»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/valium-atnahs-564977"
+    },
+    "fk-vival": {
+      "tittel": "Vival «Actavis»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/vival-actavis-565421"
+    }
+  }
+}

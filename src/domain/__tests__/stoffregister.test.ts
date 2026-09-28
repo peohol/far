@@ -71,10 +71,23 @@ describe('registeret', () => {
   })
 
   it('plasserer hver kode og hver stoffside, så ingenting havner i «Andre stoffer»', () => {
-    const koder = new Set(register.flatMap((k) => k.stoffer.flatMap((s) => (s.kode ? [s.kode] : []))))
+    const koder = new Set(register.flatMap((k) => k.stoffer.flatMap((s) => s.koder)))
     expect([...koder].sort()).toEqual(katalog.oppforinger.map((o) => o.kode).sort())
     const sider = new Set(register.flatMap((k) => k.stoffer.filter((s) => s.kode === null).map((s) => s.side)))
     expect([...sider].sort()).toEqual([...STOFFSIDER].sort())
+  })
+
+  it('har én linje per side, med alle kodene på siden, når en metabolitt er slått sammen med moderstoffet', () => {
+    const benzo = kategori('Benzodiazepiner og Z-hypnotika').stoffer
+    expect(benzo.find((s) => s.navn === 'Diazepam')).toEqual({ navn: 'Diazepam', side: 'Diazepam', kode: 'DIAZ', koder: ['DIAZ', 'DMI'] })
+    expect(benzo.find((s) => s.navn === 'Oksazepam')?.koder).toEqual(['OXA'])
+    expect(navnI(kategori('Opioider'))).not.toContain('O-desmetyltramadol')
+    expect(kategori('Opioider').stoffer.find((s) => s.navn === 'Tramadol')?.koder).toEqual(['TRAM', 'OTRAM'])
+    expect(kategori('Cannabinoider').stoffer.find((s) => s.navn === 'THC')?.koder).toEqual(['THC', 'IRCAK'])
+    for (const k of register) {
+      const sider = k.stoffer.map((s) => s.side)
+      expect(new Set(sider).size, k.navn).toBe(sider.length)
+    }
   })
 
   it('deler antidepressivene etter farmakodynamisk klasse', () => {
@@ -167,7 +180,7 @@ describe('sider som mangler eller ikke er plassert', () => {
     expect(medNy.at(-1)).toEqual({
       navn: ANDRE_STOFFER,
       underkategorier: [],
-      stoffer: [{ navn: 'Teststoff', side: 'Teststoff', kode: null }],
+      stoffer: [{ navn: 'Teststoff', side: 'Teststoff', kode: null, koder: [] }],
     })
   })
 })

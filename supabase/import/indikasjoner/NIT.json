@@ -1,0 +1,20 @@
+{
+  "kode": "NIT",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Apodorm: søvnvansker; epilepsi med absenser og atypiske absenser; hypsarytmier."
+    ],
+    "referanser": [
+      "fk-apodorm"
+    ]
+  },
+  "referanser": {
+    "fk-apodorm": {
+      "tittel": "Apodorm «Actavis»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/apodorm-actavis-546120"
+    }
+  }
+}

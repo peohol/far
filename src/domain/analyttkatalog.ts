@@ -1,3 +1,4 @@
+import registerdata from '../data/stoffregister.json'
 import { menyanalytter } from './analysemetoder'
 import { analytes } from './analytes'
 import { ETG_ANALYTT } from './etg'
@@ -55,14 +56,38 @@ export interface Analyttkatalog {
   oppforinger: Katalogoppforing[]
   finn: (kode: string) => Katalogoppforing | undefined
   /**
-   * Koden som har siden med dette navnet som sin, når det finnes nøyaktig
-   * én. Brukes til å lenke komponentene i en sumanalyse videre.
+   * Koden et stoffnavn fører til: hovedkoden for siden med det navnet, eller
+   * koden til en metabolitt som er slått sammen med moderstoffets side
+   * («O-desmetyltramadol» fører til OTRAM, som viser tramadolsiden). Brukes
+   * til å lenke komponentene i en sumanalyse videre og til å sende en
+   * stoffadresse til siden for koden.
    */
   kodeForSide: (sidenavn: string) => string | undefined
+  /**
+   * Oppføringene som deler informasjonssiden, med hovedkoden først: den som
+   * har samme navn som siden. Én for de fleste sider; flere når en metabolitt
+   * er slått sammen med moderstoffets side ({@link SAMMENSLATTE}).
+   */
+  paSiden: (sidenavn: string) => Katalogoppforing[]
 }
+
+/**
+ * Metabolittene som står på moderstoffets informasjonsside i stedet for å ha
+ * sin egen, fordi de ikke er legemidler selv: metabolittens navn → moderstoffets
+ * side. Kodene beholder hver sin adresse og sine fortolkningsregler, men viser
+ * den samme siden. Står i `src/data/stoffregister.json`.
+ */
+export const SAMMENSLATTE: Readonly<Record<string, string>> = registerdata.sammenslatte
 
 function nokkel(navn: string): string {
   return navn.trim().toLocaleLowerCase('nb')
+}
+
+const SAMMENSLATT_PER_NOKKEL = new Map(Object.entries(SAMMENSLATTE).map(([metabolitt, side]) => [nokkel(metabolitt), side]))
+
+/** Siden et stoff står på: moderstoffets når stoffet er slått sammen med det. */
+export function sideFor(navn: string, sammenslatte: ReadonlyMap<string, string> = SAMMENSLATT_PER_NOKKEL): string {
+  return sammenslatte.get(nokkel(navn)) ?? navn
 }
 
 function oppforingerFor(analyte: Analyte): Katalogoppforing[] {
@@ -74,7 +99,7 @@ function oppforingerFor(analyte: Analyte): Katalogoppforing[] {
     return {
       kode,
       navn,
-      sidenavn: hele ? splitName(analyte).moderstoff : navn,
+      sidenavn: sideFor(hele ? splitName(analyte).moderstoff : navn),
       analysemetode: analyte.analysemetode,
       kategori: analyte.kategori,
       komponenter: hele && analyte.komponenter.length > 0 ? [...analyte.komponenter] : [navn],
@@ -87,19 +112,25 @@ export function byggKatalog(pool: Analyte[]): Analyttkatalog {
   const oppforinger = pool.flatMap(oppforingerFor)
   const perKode = new Map(oppforinger.map((o) => [o.kode, o]))
 
-  const perSide = new Map<string, string[]>()
+  // Oppføringene per side, med hovedkoden — den som har sidens navn — først.
+  const perSide = new Map<string, Katalogoppforing[]>()
   for (const o of oppforinger) {
-    const koder = perSide.get(nokkel(o.sidenavn)) ?? []
-    koder.push(o.kode)
-    perSide.set(nokkel(o.sidenavn), koder)
+    const liste = perSide.get(nokkel(o.sidenavn)) ?? []
+    if (nokkel(o.navn) === nokkel(o.sidenavn)) liste.unshift(o)
+    else liste.push(o)
+    perSide.set(nokkel(o.sidenavn), liste)
   }
+  const perNavn = new Map(oppforinger.map((o) => [nokkel(o.navn), o]))
 
   return {
     oppforinger,
     finn: (kode) => perKode.get(kode.trim().toUpperCase()),
     kodeForSide: (sidenavn) => {
-      const koder = perSide.get(nokkel(sidenavn))
-      return koder?.length === 1 ? koder[0] : undefined
+      const [forste, ...andre] = perSide.get(nokkel(sidenavn)) ?? []
+      if (forste) return andre.length === 0 || nokkel(forste.navn) === nokkel(sidenavn) ? forste.kode : undefined
+      // En metabolitt uten egen side fører til sin egen kode på moderstoffets side.
+      return SAMMENSLATT_PER_NOKKEL.has(nokkel(sidenavn)) ? perNavn.get(nokkel(sidenavn))?.kode : undefined
     },
+    paSiden: (sidenavn) => perSide.get(nokkel(sidenavn)) ?? [],
   }
 }

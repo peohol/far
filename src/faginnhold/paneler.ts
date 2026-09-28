@@ -214,6 +214,19 @@ export function datakortFor(type: string): Datakortdefinisjon | undefined {
   return DATAKORT_PER_TYPE.get(type)
 }
 
+/**
+ * Analyttkoden et datakort gjelder, på en side flere koder deler — når en
+ * metabolitt er slått sammen med moderstoffet, har den egne tall:
+ * O-desmetyltramadol har sitt eget referanseområde på tramadolsiden. Står i
+ * `data.gjelder`. `null` for kortene til hovedkoden, og på alle andre sider.
+ * Hvert datakort kan stå én gang per kode; databasen håndhever det
+ * (`innholdselementer_enkeltelement_idx`), og `les_referanseomrader` gir hver
+ * kode sitt kort.
+ */
+export function datakortGjelder(data: unknown): string | null {
+  return erObjekt(data) && typeof data.gjelder === 'string' && data.gjelder.trim() !== '' ? data.gjelder.trim() : null
+}
+
 export const TOM_INTERVALLVERDI: Intervallverdi = { nedre: null, ovre: null, enhet: '', forbehold: '' }
 
 function tallEllerNull(verdi: unknown): number | null {
@@ -521,7 +534,8 @@ export function lesDosetabell(data: unknown): Dosetabelldata {
 
 /**
  * Elementtypene som står én gang i panelet sitt: koblingene til
- * legemiddeldataene og ClinPGx, hvert datakort, rikteksten i tekstpanelene og tabellen.
+ * legemiddeldataene og ClinPGx, hvert datakort (én gang per kode, se
+ * {@link datakortGjelder}), rikteksten i tekstpanelene og tabellen.
  * Farmakokinetikken kan ha mange kort.
  *
  * Databasen håndhever det samme (`innholdselementer_enkeltelement_idx` i

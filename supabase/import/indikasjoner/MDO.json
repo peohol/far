@@ -1,0 +1,43 @@
+{
+  "kode": "MDO",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Substitusjonsbehandling ved opioidavhengighet, sammen med medisinsk, psykologisk og sosial behandling (legemiddelassistert rehabilitering, LAR): Metadon DnE, Metadon Nordic Drugs, og Metadon Abcur 5 mg og 10 mg.",
+      "Metadon Abcur (alle styrker): sterke kroniske smerter som bare kan håndteres tilfredsstillende med opioidanalgetika.",
+      "Levometadon (Levopidon): substitusjonsbehandling hos voksne ved opioidavhengighet, sammen med medisinsk, psykologisk og sosial behandling. Nye metoder har innført det som et alternativ for voksne som av ulike årsaker ikke kan behandles med racemisk metadon (ID2018_085)."
+    ],
+    "referanser": [
+      "fk-metadon-dne",
+      "fk-metadon-nordic-drugs",
+      "fk-metadon-abcur",
+      "fk-levopidon"
+    ]
+  },
+  "referanser": {
+    "fk-metadon-dne": {
+      "tittel": "Metadon DnE «dne pharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/metadon-dne-dne-pharma-561385"
+    },
+    "fk-metadon-nordic-drugs": {
+      "tittel": "Metadon Nordic Drugs «Nordic Drugs»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/metadon-nordic-drugs-nordic-drugs-590291"
+    },
+    "fk-metadon-abcur": {
+      "tittel": "Metadon Abcur «Abcur»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/metadon-abcur-abcur-581374"
+    },
+    "fk-levopidon": {
+      "tittel": "Levopidon «Navamedic»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/levopidon-navamedic-654472"
+    }
+  }
+}

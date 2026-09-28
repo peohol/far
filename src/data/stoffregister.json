@@ -1,4 +1,9 @@
 {
+  "sammenslatte": {
+    "N-desmetyldiazepam": "Diazepam",
+    "O-desmetyltramadol": "Tramadol",
+    "THC-syre": "THC"
+  },
   "kategorier": [
     {
       "navn": "Antidepressiver",
@@ -68,7 +73,6 @@
         "Diazepam",
         "Flunitrazepam",
         "Klonazepam",
-        "N-desmetyldiazepam",
         "Nitrazepam",
         "Oksazepam",
         "Zolpidem",
@@ -84,7 +88,6 @@
         "Kodein",
         "Metadon",
         "Morfin",
-        "O-desmetyltramadol",
         "Oksykodon",
         "Petidin",
         "Tapentadol",
@@ -97,7 +100,7 @@
     },
     {
       "navn": "Cannabinoider",
-      "stoffer": ["THC", "THC-syre", "Cannabidiol"]
+      "stoffer": ["THC", "Cannabidiol"]
     },
     {
       "navn": "Hallusinogene stoffer",

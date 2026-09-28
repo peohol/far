@@ -45,7 +45,9 @@ export function komponenterFor(
  * den står analysen når stoffet har en: analyttkoden, som åpner fortolkningen,
  * og analysemetoden den inngår i. For sumanalysene står til sist hvilke
  * stoffer koden omfatter — med lenker til sidene deres, uten å gjøre dem til
- * hovedanalytt. Står alltid fram, over viktige data (`ViktigeData.tsx`).
+ * hovedanalytt. Deler flere koder siden (en metabolitt slått sammen med
+ * moderstoffet), står de andre kodene med lenke. Står alltid fram, over
+ * viktige data (`ViktigeData.tsx`).
  */
 export function Identitetspanel({
   definisjon,
@@ -53,6 +55,7 @@ export function Identitetspanel({
   navn,
   komponenter,
   kategorier,
+  samme = [],
   overskriftId,
   onApneFortolkning,
 }: {
@@ -60,6 +63,11 @@ export function Identitetspanel({
   oppforing: Katalogoppforing | null
   navn: string
   komponenter: Komponent[]
+  /**
+   * De andre kodene som viser den samme siden: en metabolitt slått sammen
+   * med moderstoffet, eller moderstoffet sett fra metabolitten.
+   */
+  samme?: readonly Katalogoppforing[]
   /** Kategoriene i stoffregisteret (`kategorierFor`). */
   kategorier: Kategoristi[]
   overskriftId: string
@@ -108,6 +116,21 @@ export function Identitetspanel({
             <span key={k.navn}>
               {i > 0 && (i === komponenter.length - 1 ? ' og ' : ', ')}
               <Komponentlenke komponent={k} gjeldende={oppforing.kode} />
+            </span>
+          ))}
+          .
+        </p>
+      )}
+      {samme.length > 0 && (
+        <p className="identitet__komponenter">
+          <Uthev tekst="Siden gjelder også " />
+          {samme.map((o, i) => (
+            <span key={o.kode}>
+              {i > 0 && (i === samme.length - 1 ? ' og ' : ', ')}
+              <Uthev tekst={iSetning(o.navn)} />{' '}
+              <a className="komponentlenke" href={analyttadresse(o.kode)} aria-label={`${o.navn}: åpne siden for ${o.kode}`}>
+                ({o.kode})
+              </a>
             </span>
           ))}
           .

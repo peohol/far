@@ -1,0 +1,50 @@
+{
+  "kode": "FYL",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Depotplaster (Fentanyl ratiopharm, Fentanyl Sandoz): voksne med sterke, kroniske smerter som krever kontinuerlig, langvarig opioidbehandling, og langtidsbehandling av sterke, kroniske smerter hos barn fra 2 år som får opioidbehandling.",
+      "Sublingvaltabletter (Abstral) og nesespray (Instanyl): gjennombruddssmerter hos voksne som alt får vedlikeholdsbehandling med opioider for kroniske kreftsmerter.",
+      "Injeksjonsvæske (Fentanyl Hameln): nevroleptanalgesi og nevroleptanestesi; smertestillende komponent ved generell anestesi hos intuberte, ventilerte pasienter; smertebehandling hos ventilerte pasienter i intensivavdeling."
+    ],
+    "referanser": [
+      "fk-fentanyl-ratiopharm",
+      "fk-fentanyl-sandoz",
+      "fk-abstral",
+      "fk-instanyl",
+      "fk-fentanyl-hameln"
+    ]
+  },
+  "referanser": {
+    "fk-fentanyl-ratiopharm": {
+      "tittel": "Fentanyl ratiopharm «ratiopharm»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/fentanyl-ratiopharm-ratiopharm-686322"
+    },
+    "fk-fentanyl-sandoz": {
+      "tittel": "Fentanyl Sandoz «Sandoz»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/fentanyl-sandoz-sandoz-573660"
+    },
+    "fk-abstral": {
+      "tittel": "Abstral «Grünenthal»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/abstral-gruunenthal-545659"
+    },
+    "fk-instanyl": {
+      "tittel": "Instanyl DoseGuard «Gentili»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/instanyl-doseguard-gentili-560085"
+    },
+    "fk-fentanyl-hameln": {
+      "tittel": "Fentanyl Hameln «Hameln»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/fentanyl-hameln-hameln-559044"
+    }
+  }
+}

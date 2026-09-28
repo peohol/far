@@ -1,0 +1,105 @@
+{
+  "kode": "BUP",
+  "kilde": "Felleskatalogen",
+  "indikasjon": {
+    "tekst": [
+      "Substitusjonsbehandling ved opioidavhengighet, innenfor medisinsk, sosial og psykologisk behandling (legemiddelassistert rehabilitering, LAR):",
+      {
+        "punkter": [
+          "sublingvaltabletter (Buprenorphine Orifarm, Buprenorphine Sandoz) og frysetørkede tabletter (Espranor); Buprenorphine Sandoz og Espranor til voksne og ungdom fra 15 år som har samtykket til behandling;",
+          "depotinjeksjon (Buvidal) til voksne og ungdom fra 16 år;",
+          "med nalokson, som skal hindre intravenøst misbruk (Bunalict, Zubsolv), til voksne og ungdom over 15 år som har samtykket til behandling."
+        ]
+      },
+      "Smerter:",
+      {
+        "punkter": [
+          "Temgesic: postoperative smerter og kreftsmerter;",
+          "Buprenorphine G.L. Pharma, voksne: alvorlige postoperative smerter;",
+          "depotplaster (Norspan, Bugnanto, Buprefarm), voksne: moderate ikke-maligne smerter der opioid er nødvendig for tilstrekkelig smertelindring. Ikke egnet ved akutte smerter."
+        ]
+      }
+    ],
+    "referanser": [
+      "fk-buprenorphine-orifarm",
+      "fk-buprenorphine-sandoz",
+      "fk-espranor",
+      "fk-buvidal",
+      "fk-bunalict",
+      "fk-zubsolv",
+      "fk-temgesic",
+      "fk-buprenorphine-gl",
+      "fk-norspan",
+      "fk-bugnanto",
+      "fk-buprefarm"
+    ]
+  },
+  "referanser": {
+    "fk-buprenorphine-orifarm": {
+      "tittel": "Buprenorphine Orifarm «Orifarm Generics»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/buprenorphine-orifarm-orifarm-generics-571141"
+    },
+    "fk-buprenorphine-sandoz": {
+      "tittel": "Buprenorphine Sandoz «Sandoz»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/buprenorphine-sandoz-sandoz-580062"
+    },
+    "fk-espranor": {
+      "tittel": "Espranor «Ethypharm»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/espranor-ethypharm-745102"
+    },
+    "fk-buvidal": {
+      "tittel": "Buvidal «Camurus»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/buvidal-camurus-657698"
+    },
+    "fk-bunalict": {
+      "tittel": "Bunalict «Sandoz»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/bunalict-sandoz-646365"
+    },
+    "fk-zubsolv": {
+      "tittel": "Zubsolv «Accord»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/zubsolv-accord-714286"
+    },
+    "fk-temgesic": {
+      "tittel": "Temgesic «Eumedica Pharmaceuticals»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/temgesic-eumedica-pharmaceuticals-564488"
+    },
+    "fk-buprenorphine-gl": {
+      "tittel": "Buprenorphine G.L. Pharma «G.L. Pharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/buprenorphine-g-l-pharma-g-l-pharma-774000"
+    },
+    "fk-norspan": {
+      "tittel": "Norspan «Mundipharma»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/norspan-mundipharma-562137"
+    },
+    "fk-bugnanto": {
+      "tittel": "Bugnanto «Sandoz»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/bugnanto-sandoz-646364"
+    },
+    "fk-buprefarm": {
+      "tittel": "Buprefarm «Orifarm Generics»",
+      "forfattere": "Felleskatalogen",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/buprefarm-orifarm-generics-641311"
+    }
+  }
+}
