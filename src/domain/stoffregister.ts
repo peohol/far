@@ -39,6 +39,8 @@ export interface Registerdata {
    * kategoriene står bare moderstoffet.
    */
   sammenslatte?: Record<string, string>
+  /** Visningstittel for kanoniske sider som samler flere nært beslektede analytter. */
+  sidetitler?: Record<string, string>
 }
 
 export const STOFFREGISTER: Registerdata = registerdata
@@ -48,7 +50,7 @@ export const ANDRE_STOFFER = 'Andre stoffer'
 
 /** Ett stoff i menyen, og siden det fører til. */
 export interface Registerstoff {
-  /** Navnet i lista, f.eks. «Amitriptylin + nortriptylin». */
+  /** Fagssidens navn i lista, f.eks. «Amitriptylin» eller «Etanol». */
   navn: string
   /** Informasjonssiden, f.eks. «Amitriptylin». */
   side: string
@@ -122,7 +124,14 @@ export function kategorierFor(
   katalog: Analyttkatalog,
   register: Registerdata = STOFFREGISTER,
 ): Kategoristi[] {
-  const har = (stoffer: readonly string[] = []) => stoffer.some((s) => nokkel(s) === nokkel(side))
+  const kode = katalog.kodeForSide(side)
+  const kanonisk = (kode && katalog.finn(kode)?.sidenavn) || side
+  const har = (stoffer: readonly string[] = []) =>
+    stoffer.some((s) => {
+      const k = katalog.kodeForSide(s)
+      const sammenlign = (k && katalog.finn(k)?.sidenavn) || s
+      return nokkel(sammenlign) === nokkel(kanonisk)
+    })
   const stier = register.kategorier.flatMap((data): Kategoristi[] => {
     const k = utvidMetode(data, katalog)
     const under = (k.underkategorier ?? []).filter((u) => har(u.stoffer))
@@ -149,16 +158,27 @@ export function byggStoffregister(
     perSide.set(nokkel(stoff.side), [...(perSide.get(nokkel(stoff.side)) ?? []), stoff])
   for (const o of katalog.oppforinger) {
     const paSiden = katalog.paSiden(o.sidenavn)
-    if (paSiden[0]?.kode === o.kode) leggTil({ navn: o.navn, side: o.sidenavn, kode: o.kode, koder: paSiden.map((p) => p.kode) })
+    if (paSiden[0]?.kode === o.kode) {
+      leggTil({ navn: o.sidetittel, side: o.sidenavn, kode: o.kode, koder: paSiden.map((p) => p.kode) })
+    }
   }
-  for (const navn of stoffsider) if (!perSide.has(nokkel(navn))) leggTil({ navn, side: navn, kode: null, koder: [] })
+  // En database-side som katalogen allerede kan sende til en kanonisk side,
+  // er en komponent/alias og skal ikke dukke opp som en egen menylinje.
+  for (const navn of stoffsider) {
+    if (!perSide.has(nokkel(navn)) && !katalog.kodeForSide(navn)) leggTil({ navn, side: navn, kode: null, koder: [] })
+  }
 
+  const katalogside = (navn: string) => {
+    const kode = katalog.kodeForSide(navn)
+    return (kode && katalog.finn(kode)?.sidenavn) || navn
+  }
   const plassert = new Set<string>()
   const slaaOpp = (navn: readonly string[]) =>
     ordnet(
       navn.flatMap((n) => {
-        plassert.add(nokkel(n))
-        return perSide.get(nokkel(n)) ?? []
+        const side = katalogside(n)
+        plassert.add(nokkel(side))
+        return perSide.get(nokkel(side)) ?? []
       }),
     )
 
