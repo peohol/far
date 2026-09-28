@@ -49,6 +49,8 @@ export interface Katalogoppforing {
    * flere for sumanalysene.
    */
   komponenter: string[]
+  /** Kort forklaring på forholdet mellom analytten og stoffet siden handler om. */
+  merknad?: string
   /** Oppføringen som åpner fortolkningen — den samme som søket gir. */
   fortolkning: Analyte
 }
@@ -83,6 +85,9 @@ export const SAMMENSLATTE: Readonly<Record<string, string>> = registerdata.samme
  * fagsside den tilhører når en kobling er oppgitt her.
  */
 export const ANALYTTKOBLINGER: Readonly<Record<string, string>> = registerdata.analyttkoblinger ?? {}
+
+/** Forklaringer som hører til én bestemt laboratorieanalytt på stoffets fagsside. */
+export const ANALYTTMERKNADER: Readonly<Record<string, string>> = registerdata.analyttmerknader ?? {}
 
 /** Sider som vises med en annen faglig tittel enn det interne sidenavnet. */
 export const SIDETITLER: Readonly<Record<string, string>> = registerdata.sidetitler
@@ -123,6 +128,7 @@ function oppforingerFor(analyte: Analyte): Katalogoppforing[] {
       analysemetode: analyte.analysemetode,
       kategori: analyte.kategori,
       komponenter: hele && analyte.komponenter.length > 0 ? [...analyte.komponenter] : [navn],
+      merknad: ANALYTTMERKNADER[kode.trim().toUpperCase()],
       fortolkning: analyte,
     }
   })
