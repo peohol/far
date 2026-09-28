@@ -7,7 +7,7 @@
  *   søket.
  * - Analyttkodene i fortolkningsmodulene er lenker til sidene sine.
  * - «Åpne fortolkning» fører tilbake til riktig modul.
- * - Hver side har sin egen adresse, som kan åpnes direkte.
+ * - Stoffer som deler fagsside, har én kanonisk adresse; gamle sekundæradresser videresendes.
  * - Fortolkningen står uendret bak en åpen informasjonsside, og tastene dens
  *   ligger i ro så lenge den er skjult.
  * - Fagsøket i toppmenyen når tastene i fortolkningen aldri, og søkesiden
@@ -27,6 +27,7 @@ vi.mock('../auth/okt', () => ({
 vi.mock('../auth/klient', async () => {
   const { DAGENS_REGELSETT, publiserteRader } = await import('./hjelp/dagensregler')
   const { rusScenarioregeldata } = await import('./hjelp/rusgrunnlag')
+  const { thcRegelsettutgave } = await import('./hjelp/thcgrunnlag')
   // Reglene fortolkningen henter, er de publiserte regelsettene.
   // Og ett stoff uten analyttkode har en publisert side.
   const stoffside = {
@@ -44,8 +45,12 @@ vi.mock('../auth/klient', async () => {
     komponenter: [],
     referanser: [],
   }
+  const vanlige = publiserteRader(DAGENS_REGELSETT)
+  const thc = thcRegelsettutgave()
   const rader: Record<string, unknown> = {
-    ...publiserteRader(DAGENS_REGELSETT),
+    ...vanlige,
+    les_kommentarer: [...vanlige.les_kommentarer, ...thc.kommentarer],
+    les_thc_regelsett: thc.regelsett,
     les_scenarioregler: rusScenarioregeldata(),
     les_stoffsidenavn: ['Teststoff'],
     les_stoffside: stoffside,
@@ -115,7 +120,7 @@ describe('sidemenyen', () => {
     expect(within(meny).queryByRole('radio')).toBeNull()
     await user.click(within(meny).getByRole('button', { name: /^Antidepressiver/ }))
     expect(within(meny).getByRole('heading', { name: 'TCA' })).toBeTruthy()
-    const lenke = within(meny).getByRole('link', { name: /Amitriptylin \+ nortriptylin/ })
+    const lenke = within(meny).getByRole('link', { name: /Amitriptylin/ })
     expect(lenke.getAttribute('href')).toBe('#/analytt/AMTNORSUM')
 
     await user.click(lenke)
@@ -176,6 +181,29 @@ describe('adressene', () => {
   })
 })
 
+
+describe('kanoniske fagssider', () => {
+  it.each([
+    ['DMI', 'DIAZ', 'Diazepam'],
+    ['OTRAM', 'TRAM', 'Tramadol'],
+    ['UETS', 'UETGS', 'Etanol'],
+  ])('sender %s til den felles siden %s', async (fra, til, navn) => {
+    window.location.hash = `#/analytt/${fra}`
+    visApp()
+    await infosideFor(navn)
+    await waitFor(() => expect(window.location.hash).toBe(`#/analytt/${til}`))
+  })
+
+  it('samler THC og THC-syre på én side med begge fortolkningssystemene', async () => {
+    window.location.hash = '#/analytt/IRCAK'
+    visApp()
+    await infosideFor('THC og THC-syre')
+    await waitFor(() => expect(window.location.hash).toBe('#/analytt/THC'))
+    expect(await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler – THC i serum' })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 2, name: 'Fortolkningsregler – THC-syre i urin' })).toBeTruthy()
+  })
+})
+
 describe('mellom fortolkningen og informasjonssiden', () => {
   it('går fra kodepillen til siden og tilbake til samme modul', async () => {
     const user = userEvent.setup()
@@ -219,12 +247,16 @@ describe('mellom fortolkningen og informasjonssiden', () => {
     await infosideFor('Oksazepam')
     await user.click(screen.getByRole('button', { name: 'Åpne fortolkning' }))
     await waitFor(() => expect(fortolkningen().hidden).toBe(false))
-    // Diazepamgruppen har én pille per kode, hver til sin egen side.
-    for (const kode of ['DIAZ', 'DMI', 'OXA']) {
-      expect(
-        within(fortolkningen()).getByRole('link', { name: `${kode} – åpne informasjonssiden` }).getAttribute('href'),
-      ).toBe(`#/analytt/${kode}`)
-    }
+    // Diazepam og N-desmetyldiazepam deler fagsside; oksazepam har sin egen.
+    expect(
+      within(fortolkningen()).getByRole('link', { name: 'DIAZ – åpne informasjonssiden' }).getAttribute('href'),
+    ).toBe('#/analytt/DIAZ')
+    expect(
+      within(fortolkningen()).getByRole('link', { name: 'DMI – åpne informasjonssiden' }).getAttribute('href'),
+    ).toBe('#/analytt/DIAZ')
+    expect(
+      within(fortolkningen()).getByRole('link', { name: 'OXA – åpne informasjonssiden' }).getAttribute('href'),
+    ).toBe('#/analytt/OXA')
     // Modulen fortolker med reglene appen hentet.
     await user.click(within(fortolkningen()).getByRole('checkbox', { name: /Oksazepam/ }))
     expect(within(fortolkningen()).getByRole('button', { name: 'Kopier hovedkommentar' })).toBeTruthy()
