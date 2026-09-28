@@ -29,6 +29,9 @@
     "UETGS": "Etanol",
     "UETS": "Etanol"
   },
+  "analyttmerknader": {
+    "HBUP": "Analytten er hydroksybupropion. Referanseområdet gjelder bupropion."
+  },
   "sidetitler": {
     "THC": "THC og THC-syre"
   },
