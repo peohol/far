@@ -16,6 +16,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Generer migrasjonsnavn
+        run: |
+          npm exec supabase -- migration new kanonisk_bupropionside
+          find supabase/migrations -maxdepth 1 -name '*_kanonisk_bupropionside.sql' -print
       - name: Typecheck
         run: npm run typecheck
       - name: Full testsuite
