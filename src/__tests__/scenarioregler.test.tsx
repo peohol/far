@@ -120,7 +120,10 @@ describe('på analyttsiden', () => {
     await user.click(await screen.findByRole('button', { name: 'Fortolkningsregler' }))
     const fraDiazepam = screen.getByText(/Reglene og kommentartekstene er felles med/).closest('p')!
     expect(within(fraDiazepam).getAllByRole('link').map((a) => a.getAttribute('href'))).toEqual(['#/analytt/OXA'])
-    expect(screen.getByText(/Siden gjelder også/).closest('p')!.textContent).toBe('Siden gjelder også diazepam (DIAZ).')
+    // DMI og DIAZ er nå samme fagsside, ikke to sider som viser til hverandre.
+    expect(screen.queryByText(/Siden gjelder også/)).toBeNull()
+    expect(screen.getByRole('button', { name: 'DIAZ – åpne fortolkningen' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'DMI – åpne fortolkningen' })).toBeTruthy()
   })
 
   it('viser ingen regler før de er hentet, eller når de ikke kunne hentes', async () => {
