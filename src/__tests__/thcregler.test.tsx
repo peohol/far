@@ -73,20 +73,20 @@ function visRegler(utgave: ThcRegelsettutgave = thcRegelsettutgave()) {
 const gruppe = (navn: string) => within(screen.getByRole('group', { name: navn }))
 
 describe('THC-syrereglene på analyttsiden', () => {
-  it('står på siden for IRCAK, og ikke på andre sider', async () => {
-    visSide(THC_KODE)
-    expect(await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeTruthy()
+  it('står på den felles THC-siden, og ikke på andre sider', async () => {
+    visSide('THC')
+    expect(await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler – THC-syre i urin' })).toBeTruthy()
     cleanup()
     visSide('NOR')
     await screen.findByText('Denne siden har ikke fått faginnhold ennå.')
-    expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeNull()
+    expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkningsregler – THC-syre i urin' })).toBeNull()
   })
 
-  it('åpner simulatoren fra en direktelenke', async () => {
-    visSide(THC_KODE, ['fortolkning', 'simulator'])
+  it('åpner simulatoren fra en direktelenke på den felles siden', async () => {
+    visSide('THC', ['fortolkning-thc-syre', 'simulator'])
     const simulator = await screen.findByRole('button', { name: 'Prøv reglene' })
     expect(simulator.getAttribute('aria-expanded')).toBe('true')
-    expect(screen.getByRole('button', { name: 'Fortolkningsregler' }).getAttribute('aria-expanded')).toBe('true')
+    expect(screen.getByRole('button', { name: 'Fortolkningsregler – THC-syre i urin' }).getAttribute('aria-expanded')).toBe('true')
   })
 
   it('oppsummerer reglene og viser grensene, marginene og kurvene hvert bruksmønster avgjøres av', () => {
