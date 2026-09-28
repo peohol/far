@@ -206,11 +206,11 @@ WHOs ATC-register, RxNorm, PubChem og ChEBI 26. september 2026.
 | Status | Sider |
 | --- | --- |
 | Koblet til ClinPGx og verifisert | 68 |
-| Relevant objekt finnes i ClinPGx, men krever kuratert kobling | 3 |
+| Relevant objekt finnes i ClinPGx, men krever kuratert kobling | 4 |
 | ClinPGx har ikke relevant objekt | 0 |
 | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | 9 |
 | Uavklart, krever faglig vurdering | 0 |
-| Til sammen | 80 |
+| Til sammen | 81 |
 
 Koblet:
 
@@ -251,7 +251,7 @@ Koblet:
 | Nortriptylin | Nortriptylin (Nortriptyline) | ja | nortriptyline | PA450657 | Samme ATC-kode (N06AA10). Samme navn. | stoffsider_clinpgx_kobling |
 | Okskarbazepin | Okskarbazepin (Oxcarbazepine) | ja | oxcarbazepine | PA450732 | Samme ATC-kode (N03AF02). Samme navn. | stoffsider_clinpgx_kobling |
 | Olanzapin | Olanzapin (Olanzapine) | ja | olanzapine | PA450688 | Samme ATC-kode (N05AH03). Samme navn. | stoffsider_clinpgx_kobling |
-| Paliperidon (hydroksyrisperidon) | Paliperidon (Paliperidone) | ja | paliperidone | PA163518919 | Samme ATC-kode (N05AX13). Samme navn. | stoffsider_clinpgx_kobling |
+| Paliperidon | Paliperidon (Paliperidone) | ja | paliperidone | PA163518919 | Samme ATC-kode (N05AX13). Samme navn. | stoffsider_clinpgx_kobling |
 | Paroksetin | Paroksetin (Paroxetine) | ja | paroxetine | PA450801 | Samme ATC-kode (N06AB05). Samme navn. | stoffsider_clinpgx_kobling |
 | Perfenazin | Perfenazin (Perphenazine) | ja | perphenazine | PA450882 | Samme ATC-kode (N05AB03). Samme navn. | stoffsider_clinpgx_kobling |
 | Petidin | Petidin (Pethidine) | ja | meperidine | PA450369 | Samme ATC-kode (N02AB02). Annen skrivemåte: ClinPGx bruker det amerikanske navnet meperidine. | stoffsider_clinpgx_kobling |
@@ -291,6 +291,7 @@ Ikke koblet:
 
 | Stoffside | Status | ClinPGx | Grunn |
 | --- | --- | --- | --- |
+| Bupropion | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | Kandidater: bupropion (PA448687) | Fagsiden gjelder nå virkestoffet bupropion. ClinPGx har bupropion som eget kjemikalie; koblingen er ikke lagt inn ennå. |
 | Cannabidiol | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | Kandidater: cannabidiol (PA166175791) | Siden ble laget 27. september 2026 for å vise Epidyolex fra FEST. ClinPGx har cannabidiol (kontrollert samme dag); koblingen er ikke lagt inn ennå. |
 | Dehydroaripiprazol | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: aripiprazole (PA10026), side: Aripiprazol. Metabolitten selv: dehydroaripiprazole (PA166170895) | Aktiv metabolitt av aripiprazol. ClinPGx har metabolitten som eget kjemikalie, uten annotasjoner. |
 | Desmetyldoksepin | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: doxepin (PA449409), side: Doksepin. Metabolitten selv: desmethyldoxepin (PA166131337) | Aktiv metabolitt av doksepin. ClinPGx har metabolitten som eget kjemikalie, uten annotasjoner. |
@@ -298,7 +299,7 @@ Ikke koblet:
 | Desmetylklomipramin | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: clomipramine (PA449048), side: Klomipramin. Metabolitten selv: desmethyl clomipramine (PA166131507) | Aktiv metabolitt av klomipramin. ClinPGx har metabolitten som eget kjemikalie, uten annotasjoner. |
 | Desmetylmianserin | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: mianserin (PA134687937), side: Mianserin. Metabolitten selv: – | Metabolitt av mianserin. ClinPGx har ikke metabolitten som eget kjemikalie. |
 | Didesmetylkariprazin | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: cariprazine (PA166177476), side: Kariprazin. Metabolitten selv: didesmethyl cariprazine (PA166356881) | Aktiv metabolitt av kariprazin. ClinPGx har metabolitten som eget kjemikalie, uten annotasjoner. |
-| Hydroksybupropion | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: bupropion (PA448687), side: ingen. Metabolitten selv: hydroxybupropion (PA166226561), 4-hydroxybupropion (PA166170175) | Aktiv metabolitt av bupropion, som ikke har egen side. ClinPGx har to kjemikalier for metabolitten, begge uten annotasjoner. |
+| Hydroksybupropion | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: bupropion (PA448687), side: Bupropion. Metabolitten selv: hydroxybupropion (PA166226561), 4-hydroxybupropion (PA166170175) | Aktiv metabolitt av bupropion. ClinPGx har to kjemikalier for metabolitten, begge uten annotasjoner. |
 | Norfluoksetin | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: fluoxetine (PA449673), side: Fluoksetin. Metabolitten selv: r-norfluoxetine (PA166131377), s-norfluoxetine (PA166131313) | Aktiv metabolitt av fluoksetin. ClinPGx har bare de to enantiomerene hver for seg, uten annotasjoner. |
 | O-desmetyltramadol | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: tramadol (PA451735), side: Tramadol. Metabolitten selv: o-desmethyltramadol (PA166131379) | Aktiv metabolitt av tramadol. ClinPGx har metabolitten som eget kjemikalie med kliniske annotasjoner; om siden skal vise dem, tramadols data eller begge, er en faglig vurdering. |
 | Tapentadol | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | Kandidater: tapentadol (PA166179720) | Siden ble laget 28. september 2026 med indikasjonen og preparatene fra FEST. ClinPGx har tapentadol (kontrollert samme dag); koblingen er ikke lagt inn ennå. |
