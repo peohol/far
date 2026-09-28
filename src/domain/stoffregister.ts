@@ -159,7 +159,13 @@ export function byggStoffregister(
   for (const o of katalog.oppforinger) {
     const paSiden = katalog.paSiden(o.sidenavn)
     if (paSiden[0]?.kode === o.kode) {
-      const fellesSide = paSiden.length > 1 || o.komponenter.length > 1
+      const alleKomponenterPaSiden =
+        o.komponenter.length > 1 &&
+        o.komponenter.every((navn) => {
+          const kode = katalog.kodeForSide(navn)
+          return kode ? katalog.finn(kode)?.sidenavn === o.sidenavn : false
+        })
+      const fellesSide = paSiden.length > 1 || alleKomponenterPaSiden
       leggTil({ navn: fellesSide ? o.sidetittel : o.navn, side: o.sidenavn, kode: o.kode, koder: paSiden.map((p) => p.kode) })
     }
   }
