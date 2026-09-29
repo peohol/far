@@ -39,7 +39,6 @@ export function Oppgaveliste({
         tittel="Utførte oppgaver"
         ikon="done"
         antall={utforte.length}
-        forklaring="Oppgavene Claude har utført. Nummeret kan brukes når det trengs mer arbeid med det samme senere."
         apen={apneSkuffer.has(SKUFF_UTFORTE)}
         onVeksle={() => onVeksleSkuff(SKUFF_UTFORTE)}
       >

@@ -15,8 +15,9 @@ OUSFAR, med hjerter og kommentartråder; de berører ikke den kliniske delen.
 | `src/styles/ideer.css` | Utseendet |
 | `.claude/skills/utfor-planlagte-oppgaver/` | Hvordan Claude utfører oppgavene og merker dem utført |
 
-Idéer åpnes fra idéknappen i toppmenyen, og Planlagte oppgaver fra en knapp
-øverst i Idéer. Begge bruker `Modallag`, med `tilbake` i hodet på sidene inni.
+Idéer og Planlagte oppgaver åpnes fra idémenyen i toppmenyen (`Ideknapp`, en
+`Nedtrekksmeny` med ett valg for hvert), og hvert av lagene har en knapp øverst
+til det andre. Begge bruker `Modallag`, med `tilbake` i hodet på sidene inni.
 `Ideknapp` eier begge lagene, og bare ett står åpent om gangen.
 
 ## Hvem som får gjøre hva
@@ -89,10 +90,10 @@ Slik Claude utfører oppgavene, står i skillen
 
 `idebesok` husker når hver bruker sist åpnet hver idé. Siden merker idéen
 som sett med tidspunktet tråden ble lest (`lest_kl` fra `idetraad()`), så en
-kommentar som kom imellom, forblir ny (`merk_ide_sett()`). Idéknappen ser
+kommentar som kom imellom, forblir ny (`merk_ide_sett()`). Idémenyen ser
 etter nytt når appen åpnes, når fanen får fokus og hvert femte minutt.
 Kommentarer fra andre etter det er nye: `ideoversikt()` teller dem per idé,
-`ideer_med_nytt()` teller idéene til prikken på idéknappen, og `idetraad()`
+`ideer_med_nytt()` teller idéene til prikken på idémenyen og valget «Idéer», og `idetraad()`
 gir tidspunktet, så siden kan merke dem «Ny». Regelen står også i
 `erNyKommentar` i `modell.ts`; endres den ett sted, endres den begge.
 

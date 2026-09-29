@@ -761,6 +761,20 @@ const REGISTER = {
       P('M8 17h8M14.5 12h1.5', 'l', 'i-ink'),
     ],
   },
+  // Idéer og planlagte oppgaver sammen: lyspæren fra `idea` i mindre størrelse
+  // foran utklippstavla, som har et hakk rundt pæren så de ikke går i hverandre.
+  ideoppgaver: {
+    vb: 24,
+    parts: [
+      P('M12.64 6.5H19.3a2.2 2.2 0 0 1 2.2 2.2V19.3a2.2 2.2 0 0 1-2.2 2.2H11.2a2.2 2.2 0 0 1-2.2-2.2V11.86A6 6 0 0 0 12.64 6.5z', 'f1', 'accent'),
+      R(13.5, 5, 5, 3, 1, 'f2', 'paper'),
+      P('M13 13l1.4 1.4 2.8-2.8', 'l', 'i-ink', 'pop'),
+      P('M13 18h5.5', 'l', 'i-ink'),
+      P('M6.64 1.5a4.84 4.84 0 0 0-2.89 8.74c.62.47.94 1.09.94 1.79v.55h3.9v-.55c0-.7.31-1.33.94-1.79A4.84 4.84 0 0 0 6.64 1.5z', 'f1', 'warn'),
+      C(6.64, 6.34, 1.87, 'f2', 'warn', 'flash'),
+      P('M4.85 14.7h3.6M5.55 16.5h2.2', 'l', 'i-ink'),
+    ],
+  },
   arkiv: {
     vb: 24,
     parts: [

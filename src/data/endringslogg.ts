@@ -18,6 +18,7 @@ export const ENDRINGSLOGG: Endring[] = [
     typer: ['Funksjonalitet', 'Design / layout'],
     omfang: 'Større omfang',
     punkter: [
+      'Idéer og Planlagte oppgaver har fått en felles knapp i toppmenyen, med ett valg for hver. Prikken for nye kommentarer står på knappen og ved «Idéer».',
       'Hver kategori i Idéer har en knapp for ny idé nederst, som foreslår den kategorien.',
       'Statusene på idéene er borte. En administrator har i stedet to knapper på idéen: «Ikke aktuelt» og «Overfør til planlagte oppgaver». Begge kan angres i ti sekunder.',
       'Idéer som ikke er aktuelle, ligger i en egen skuff nederst i Idéer som alle kan åpne. En administrator kan hente dem tilbake eller slette dem, og etter 60 dager slettes de av seg selv.',
