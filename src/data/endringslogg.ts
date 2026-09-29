@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.59.0',
+    versjon: '1.60.0',
     dato: '2026-09-29',
     sammendrag: 'Appen sier fra når en ny versjon er klar',
     typer: ['Funksjonalitet'],
