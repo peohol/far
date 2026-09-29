@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.51.1',
+    dato: '2026-09-29',
+    sammendrag: 'Kategoriene i stoffregisteret har jevn luft og kan trykkes i hele feltet',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Det fargede feltet rundt en kategori i stoffregisteret har like mye luft over, under og på sidene av navnet.',
+      'Luften mellom kategoriene ligger mellom feltene, ikke nederst i dem.',
+      'Hele det fargede feltet åpner kategorien, ikke bare linja med navnet.',
+    ],
+  },
+  {
     versjon: '1.51.0',
     dato: '2026-09-28',
     sammendrag: 'Metabolitter som ikke er legemidler, står på moderstoffets side, og flere rusmidler har fått indikasjoner og preparater',
