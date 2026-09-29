@@ -6,6 +6,7 @@ import { indekserSide, sokeord, stoffidentitet } from '../../faginnhold/sok'
 import { useLukkMedEscape } from '../../hooks/useLukkMedEscape'
 import type { Analyte } from '../../types'
 import { Button } from '../Button'
+import { Favorittknapp } from '../Favorittknapp'
 import { Ikonknapp } from '../Ikonknapp'
 import { Lukkeknapp } from '../Lukkeknapp'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
@@ -14,6 +15,7 @@ import { Referanseliste } from '../referanser/Referanseliste'
 import { SeksjonsstyringKilde, skuffnokkel, useSeksjonsstyring } from '../seksjoner/Seksjonsstyring'
 import { Sidereferanser } from '../referanser/Sidereferanser'
 import { useFaginnholdskilde } from './Faginnholdskilde'
+import { useFavoritter } from '../../favoritter/Favorittkilde'
 import { Identitetspanel } from './Identitetspanel'
 import { finnKobling, Preparatpanel, preparatsoketekster } from './Preparatpanel'
 import { useLegemidler } from './useLegemidler'
@@ -118,6 +120,7 @@ function Ikkefunnet({ onLukk, children }: { onLukk: () => void; children: ReactN
 
 function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLukk }: StoffsideProps) {
   const { kanRedigere } = useFaginnholdskilde()
+  const favoritter = useFavoritter()
   const [modus, setModus] = useState<Sidemodus>('lese')
   const [sporring, setSporring] = useState('')
   const beholder = useRef<HTMLElement>(null)
@@ -263,6 +266,9 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
               <Toppmenyknapp ikon="interp" variant="primar" onClick={() => onApneFortolkning(fortolkning)}>
                 Åpne fortolkning
               </Toppmenyknapp>
+            )}
+            {favoritter && finnes && (
+              <Favorittknapp stoff={slug} favoritt={favoritter.erFavoritt(slug)} onSett={favoritter.sett} />
             )}
             {kanRedigere && (
               <Ikonknapp ikon="edit" etikett="Rediger" aria-pressed="false" onClick={() => setModus('rediger')} />
