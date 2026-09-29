@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.58.0',
+    dato: '2026-09-29',
+    sammendrag: 'Varsler om endringer på favorittsidene dine',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Når noen publiserer endringer på en fagside du har som favoritt, får du et varsel i bjella. Varselet sier hvem som endret siden og hvilke deler som ble endret, for eksempel «Dosering og Farmakokinetikk», og leder rett dit.',
+      'Mange endringer på samme side før du har lest varselet, blir ett samlet varsel.',
+      'Varselet kommer først når endringene er publisert, ikke mens noen redigerer.',
+      'Varslene er av til du slår dem på under «Varselinnstillinger» (tannhjulet i varselvinduet).',
+    ],
+  },
+  {
     versjon: '1.57.2',
     dato: '2026-09-29',
     sammendrag: 'Oppgaven «Varslingssystem» er merket utført',
