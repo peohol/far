@@ -2,6 +2,7 @@ import { Component, Suspense, lazy, useId, type ReactNode } from 'react'
 import { useOkt } from '../../auth/okt'
 import type { Tilgang } from '../../domain/tilgang'
 import { useTheme } from '../../hooks/useTheme'
+import { Bevaringseier } from '../../oppdatering/Bevaring'
 import { Button } from '../Button'
 import { Temaknapp } from '../toppmeny/Temaknapp'
 import { Forstegangsoppsett } from './Forstegangsoppsett'
@@ -26,14 +27,17 @@ const App = lazy(() => import('../../App'))
  * `domain/tilgang.ts`.
  */
 export function Port() {
-  const { tilgang } = useOkt()
+  const { tilgang, profil } = useOkt()
 
   if (tilgang === 'app') {
+    // Det som ble tatt vare på gjennom en oppdatering, hører til brukeren.
     return (
       <Hentefeil>
-        <Suspense fallback={<div className="port" aria-busy="true" />}>
-          <App />
-        </Suspense>
+        <Bevaringseier id={profil?.id ?? null}>
+          <Suspense fallback={<div className="port" aria-busy="true" />}>
+            <App />
+          </Suspense>
+        </Bevaringseier>
       </Hentefeil>
     )
   }

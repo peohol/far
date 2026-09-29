@@ -15,7 +15,7 @@ import type { Profil } from '@delt/profil'
 import { Oppdateringsmelding } from '../components/Oppdateringsmelding'
 import { FORTOLKNINGSOPPFORINGER } from '../domain/analyttkatalog'
 import type { Ide } from '../ideer/modell'
-import { Bevaringsomrade, useBevart, type Bevaringsform } from '../oppdatering/Bevaring'
+import { Bevaringseier, Bevaringsomrade, useBevart, type Bevaringsform } from '../oppdatering/Bevaring'
 import { GYLDIG_I, LAGRINGSNOKKEL, glemBildet, oppdaterOgTaVare, taBilde } from '../oppdatering/bevaring'
 import { BYGG, hentUtlagtBygg, nyVersjon } from '../oppdatering/versjon'
 import { fortolkningsform, initialState, type State } from '../state'
@@ -253,6 +253,49 @@ describe('det som tas vare på gjennom en oppdatering', () => {
     vi.setSystemTime(Date.now() + GYLDIG_I + 1)
     render(<Teller />)
     expect(screen.getAllByRole('button').map((b) => b.textContent)).toEqual(['0', '0'])
+  })
+
+  it('kommer bare tilbake til brukeren som var logget inn, og kastes når en annen logger inn i fanen', async () => {
+    render(
+      <Bevaringseier id="kari">
+        <Teller />
+      </Bevaringseier>,
+    )
+    await userEvent.click(screen.getByRole('button'))
+    lastInnPaNytt()
+    expect(JSON.parse(sessionStorage.getItem(LAGRINGSNOKKEL) ?? '{}')).toMatchObject({ eier: 'kari' })
+
+    // Økten gikk ut, og en annen logget inn i den samme fanen.
+    const { unmount } = render(
+      <Bevaringseier id="ola">
+        <Teller />
+      </Bevaringseier>,
+    )
+    expect(screen.getByRole('button').textContent).toBe('0')
+    unmount()
+    // Bildet er kastet, også om den første brukeren logger inn igjen.
+    render(
+      <Bevaringseier id="kari">
+        <Teller />
+      </Bevaringseier>,
+    )
+    expect(screen.getByRole('button').textContent).toBe('0')
+  })
+
+  it('kommer tilbake til den samme brukeren', async () => {
+    render(
+      <Bevaringseier id="kari">
+        <Teller />
+      </Bevaringseier>,
+    )
+    await userEvent.click(screen.getByRole('button'))
+    lastInnPaNytt()
+    render(
+      <Bevaringseier id="kari">
+        <Teller />
+      </Bevaringseier>,
+    )
+    expect(screen.getByRole('button').textContent).toBe('1')
   })
 
   it('tar ikke vare på det som ikke tåler JSON, men gjør det med en egen form', async () => {

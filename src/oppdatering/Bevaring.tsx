@@ -8,7 +8,7 @@ import {
   type ReactNode,
   type SetStateAction,
 } from 'react'
-import { hentUtBevart, registrer, sePaBevart } from './bevaring'
+import { hentUtBevart, registrer, sePaBevart, settEier } from './bevaring'
 
 /**
  * Tilstand som overlever en oppdatering til en ny versjon (se `bevaring.ts`).
@@ -24,6 +24,16 @@ import { hentUtBevart, registrer, sePaBevart } from './bevaring'
  */
 
 const Omrade = createContext('')
+const Eier = createContext<string | null>(null)
+
+/**
+ * Brukeren det som tas vare på inni, hører til. Står rundt appen når noen er
+ * logget inn, så et bilde bare kommer tilbake til den som tok det.
+ */
+export function Bevaringseier({ id, children }: { id: string | null; children: ReactNode }) {
+  useEffect(() => settEier(id), [id])
+  return <Eier.Provider value={id}>{children}</Eier.Provider>
+}
 
 /** Et område som navnene inni hører til, f.eks. én stoffside eller ett element på den. */
 export function Bevaringsomrade({ navn, children }: { navn: string; children: ReactNode }) {
@@ -74,10 +84,11 @@ export function useBevart<T>(
   form?: Bevaringsform<T>,
 ): [T, Dispatch<SetStateAction<T>>, boolean] {
   const omrade = useContext(Omrade)
+  const eier = useContext(Eier)
   const nokkel = navn === null ? null : omrade ? `${omrade}/${navn}` : navn
   const [forste] = useState(() => {
     const utgangspunkt = typeof start === 'function' ? (start as () => T)() : start
-    const bevart = nokkel === null ? undefined : tolk(sePaBevart(nokkel), utgangspunkt, form)
+    const bevart = nokkel === null ? undefined : tolk(sePaBevart(nokkel, eier), utgangspunkt, form)
     return bevart ? { verdi: bevart.verdi, gjenopprettet: true } : { verdi: utgangspunkt, gjenopprettet: false }
   })
   const [verdi, setVerdi] = useState<T>(forste.verdi)
@@ -95,7 +106,7 @@ export function useBevart<T>(
     if (nokkel === null) return
     if (forrige.current !== nokkel) {
       forrige.current = nokkel
-      const bevart = tolk(sePaBevart(nokkel), startverdi.current, formen.current)
+      const bevart = tolk(sePaBevart(nokkel, eier), startverdi.current, formen.current)
       if (bevart) setVerdi(bevart.verdi)
     }
     hentUtBevart(nokkel)
@@ -103,7 +114,7 @@ export function useBevart<T>(
       const lagre = formen.current?.lagre
       return lagre ? lagre(siste.current) : siste.current
     })
-  }, [nokkel])
+  }, [nokkel, eier])
 
   return [verdi, setVerdi, forste.gjenopprettet]
 }

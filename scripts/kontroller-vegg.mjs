@@ -77,6 +77,7 @@ export const APNE_MODULER = new Map(
       'src/components/Oppdateringsmelding.tsx',
       'src/oppdatering/versjon.ts',
       'src/oppdatering/bevaring.ts',
+      'src/oppdatering/Bevaring.tsx',
       'src/hooks/useJevnligSjekk.ts',
     ],
     'reglene for brukernavn og passord, delt med Edge-funksjonene': [

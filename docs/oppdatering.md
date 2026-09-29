@@ -20,7 +20,7 @@ fortolkningen, åpne seksjoner og hvor langt ned siden og vinduet var rullet.
 | `src/oppdatering/versjon.ts` | Leser `versjon.json` og avgjør om bygget som er lagt ut, er et annet enn det som kjører |
 | `src/components/Oppdateringsmelding.tsx` | Meldingen. Spør hvert minutt mens fanen er synlig, når fanen får fokus, og når en del av appen ikke lar seg laste |
 | `src/oppdatering/bevaring.ts` | Bildet av det som tas vare på, i fanens `sessionStorage`, og rullingen tilbake |
-| `src/oppdatering/Bevaring.tsx` | `useBevart` og `Bevaringsomrade` |
+| `src/oppdatering/Bevaring.tsx` | `useBevart`, `Bevaringsomrade` og `Bevaringseier` (brukeren det hører til, satt i `Port.tsx`) |
 
 `versjon.json` ligger utenfor innloggingsveggen, sammen med meldingen, så den
 virker også på innloggingssiden. Fila sier bare hvilket bygg og hvilken versjon
@@ -49,4 +49,6 @@ et skjema, et valg — bruker `useBevart(navn, start)` i stedet for `useState`.
   regnes som ulagret.
 
 Det som tas vare på, ligger bare i fanen, og slettes så snart den nye
-versjonen har lest det.
+versjonen har lest det. Det hører til brukeren som var logget inn: er en annen
+logget inn når den nye versjonen starter (økten gikk ut, og noen andre logget
+inn i den samme fanen), kastes alt.

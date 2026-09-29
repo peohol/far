@@ -14,6 +14,11 @@
  *   kort stund etter oppstarten, så et gammelt utkast ikke dukker opp igjen
  *   langt senere.
  *
+ * - Bildet hører til brukeren som var logget inn da det ble tatt. Er en annen
+ *   logget inn når den nye versjonen starter — fordi økten gikk ut og noen
+ *   andre logget inn i den samme fanen — kastes det, så ingen får se eller
+ *   lagre det en annen holdt på med.
+ *
  * Bare det som tåler JSON (tall, tekst, lister og vanlige objekter) tas vare
  * på. En verdi som ikke gjør det, som et `Map`, må få en egen form
  * (`Bevaringsform`), ellers blir den stående igjen i stedet for å komme
@@ -38,12 +43,25 @@ export interface Rulleplass {
 export interface Oppdateringsbilde {
   /** Når bildet ble tatt, i millisekunder. */
   tatt: number
+  /** Brukeren som var logget inn, eller `null` uten innlogging. */
+  eier: string | null
   verdier: Record<string, unknown>
   rulling: Rulleplass[]
 }
 
 /** Den levende tilstanden: nøkkelen og veien til verdien slik den er nå. */
 const levende = new Map<string, () => unknown>()
+
+/** Brukeren som er logget inn nå, satt av `Bevaringseier`. */
+let eier: string | null = null
+
+/** Setter brukeren den levende tilstanden hører til, og gir tilbake nullstillingen. */
+export function settEier(id: string | null): () => void {
+  eier = id
+  return () => {
+    if (eier === id) eier = null
+  }
+}
 
 /**
  * Registrerer en verdi som skal tas vare på, og gir tilbake avregistreringen.
@@ -98,7 +116,7 @@ export function taBilde(): Oppdateringsbilde {
   }
   const rulling: Rulleplass[] = [{ lag: null, topp: window.scrollY }]
   for (const { tittel, kropp } of modaleLag()) rulling.push({ lag: tittel, topp: kropp.scrollTop })
-  return { tatt: Date.now(), verdier, rulling: rulling.filter((r) => r.topp > 0) }
+  return { tatt: Date.now(), eier, verdier, rulling: rulling.filter((r) => r.topp > 0) }
 }
 
 /** Tar bildet, legger det i fanen og laster siden på nytt, med den nye versjonen. */
@@ -114,6 +132,7 @@ export function oppdaterOgTaVare(lastInn: () => void = () => window.location.rel
 /* --- Etter oppdateringen -------------------------------------------------- */
 
 interface Gjenopprettet {
+  eier: string | null
   verdier: Map<string, unknown>
   rulling: Rulleplass[]
   /** Når bildet ble lest, altså når den nye versjonen startet. */
@@ -125,13 +144,14 @@ let gjenopprettet: Gjenopprettet | null = null
 /** Leser bildet fanen fikk før oppdateringen, én gang, og sletter det straks. */
 function lesBildet(): Gjenopprettet {
   if (gjenopprettet) return gjenopprettet
-  gjenopprettet = { verdier: new Map(), rulling: [], lest: Date.now() }
+  gjenopprettet = { eier: null, verdier: new Map(), rulling: [], lest: Date.now() }
   try {
     const tekst = sessionStorage.getItem(LAGRINGSNOKKEL)
     sessionStorage.removeItem(LAGRINGSNOKKEL)
     if (!tekst) return gjenopprettet
     const bilde = JSON.parse(tekst) as Partial<Oppdateringsbilde>
     if (typeof bilde.tatt !== 'number' || Date.now() - bilde.tatt > FORELDET_ETTER) return gjenopprettet
+    gjenopprettet.eier = typeof bilde.eier === 'string' ? bilde.eier : null
     gjenopprettet.verdier = new Map(Object.entries(bilde.verdier ?? {}))
     gjenopprettet.rulling = Array.isArray(bilde.rulling) ? bilde.rulling : []
   } catch {
@@ -145,9 +165,14 @@ function gyldig(bilde: Gjenopprettet): boolean {
   return Date.now() - bilde.lest <= GYLDIG_I
 }
 
-/** Verdien som ble tatt vare på under nøkkelen, uten å hente den ut. `undefined` når det ikke er noen. */
-export function sePaBevart(nokkel: string): { verdi: unknown } | undefined {
+/**
+ * Verdien som ble tatt vare på under nøkkelen for brukeren som er logget inn
+ * (`hvem`), uten å hente den ut. `undefined` når det ikke er noen. Ber en annen
+ * bruker enn den bildet hører til, kastes hele bildet.
+ */
+export function sePaBevart(nokkel: string, hvem: string | null): { verdi: unknown } | undefined {
   const bilde = lesBildet()
+  if (bilde.eier !== hvem) bilde.verdier.clear()
   if (!gyldig(bilde) || !bilde.verdier.has(nokkel)) return undefined
   return { verdi: bilde.verdier.get(nokkel) }
 }
@@ -202,5 +227,6 @@ export function gjenopprettRulling(): () => void {
 /** Bare for testene: glemmer bildet, så det leses på nytt. */
 export function glemBildet(): void {
   gjenopprettet = null
+  eier = null
   levende.clear()
 }
