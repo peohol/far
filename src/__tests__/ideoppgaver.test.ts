@@ -11,7 +11,7 @@ import { feilFra, kjorMigrasjoner, nyDatabase, opprettBruker, som } from './hjel
 
 const MIGRASJON = '20260929103534_ideer_arkiv_og_oppgaver.sql'
 const TITTELMIGRASJON = '20260929113630_oppgavetittel.sql'
-const AGENTMIGRASJON = '20260929131000_oppgaver_agentstatus.sql'
+const AGENTMIGRASJON = '20260929140333_oppgaver_agentstatus.sql'
 const DOK = JSON.stringify({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Hei' }] }] })
 
 interface Oversiktsrad {
