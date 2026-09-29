@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.54.0',
+    versjon: '1.55.0',
     dato: '2026-09-29',
     sammendrag: 'Stoffsidene handler om stoffet, og laboratorieanalyttene kobles til dem',
     typer: ['Funksjonalitet'],
@@ -25,6 +25,18 @@ export const ENDRINGSLOGG: Endring[] = [
       'Et stoff med analyser i flere fortolkningsmoduler, som THC i serum og THC-syre i urin, får én regelseksjon per modul på samme side.',
       'O-desmetylvenlafaksin har fått sin egen side, og hydroksyrisperidon finnes nå under Paliperidon.',
       'Fortolkningen og kommentarene er uendret.',
+    ],
+  },
+  {
+    versjon: '1.54.0',
+    dato: '2026-09-29',
+    sammendrag: 'Planlagte oppgaver kan få sin egen overskrift',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'En administrator kan endre overskriften på en planlagt oppgave, i samme skjema som prompten. Oppgaven begynner med overskriften på idéen den kom fra.',
+      'Overskriften er det oppgaven heter i lista og når Claude viser til den. Idéen under beholder sin egen overskrift.',
+      'Oppgavene som er klare, utføres med kommandoen /utfor-oppgaver i Claude Code, uten at du trenger å skrive noe mer.',
     ],
   },
   {

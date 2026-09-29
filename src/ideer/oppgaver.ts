@@ -11,7 +11,7 @@ import { erKategori, erOppgavestatus, type Idekategori, type Oppgavestatus } fro
 export interface Oppgave {
   id: string
   ide_id: string
-  /** Overskriften på idéen oppgaven kom fra. */
+  /** Overskriften på oppgaven: idéens til å begynne med, men den kan endres. */
   tittel: string
   kategori: Idekategori
   forfatter_id: string
