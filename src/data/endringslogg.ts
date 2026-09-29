@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.60.1',
+    dato: '2026-09-29',
+    sammendrag: 'Oppgaven «Oppdatering av siden når en ny versjon er tilgjengelig» er merket utført',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Den planlagte oppgaven «Oppdatering av siden når en ny versjon er tilgjengelig» (OPG-002) er merket utført med versjon 1.60.0, og det er ført inn i appens oversikt over databaseendringer.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.60.0',
     dato: '2026-09-29',
     sammendrag: 'Appen sier fra når en ny versjon er klar',
