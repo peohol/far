@@ -72,7 +72,8 @@ ikke. `merkEndringerLest` flytter `fra` forbi de eldste leste som har passert
 fristen, så lista over leste ikke vokser.
 
 En føring er `funksjonalitet`, eller `fortolkning` når den har
-`endrerFortolkning: true` (se `docs/endringslogg.md`).
+`endrerFortolkning: true` (se `docs/endringslogg.md`). En føring med
+`utenVarsel: true` merkes ikke i appen og er ikke noe varsel.
 
 ## Bjella og vinduet
 

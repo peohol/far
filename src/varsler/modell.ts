@@ -123,12 +123,18 @@ export function lesEndringsloggstatus(verdi: unknown): Endringsloggstatus | null
   return { fra: verdi.fra, lest }
 }
 
+/** Føringer uten `utenVarsel` er varsler; de andre merkes ikke i appen. */
+function varsles(endring: Endring): boolean {
+  return !endring.utenVarsel
+}
+
 /**
- * Der en ny bruker begynner: den nyeste føringen er et varsel, resten er
- * historie. Da får alle med seg det siste som er gjort, men ikke hele loggen.
+ * Der en ny bruker begynner: den nyeste føringen som varsles, er et varsel,
+ * resten er historie. Da får alle med seg det siste som er gjort, men ikke
+ * hele loggen.
  */
 export function startstatus(logg: readonly Endring[]): Endringsloggstatus {
-  return { fra: logg[1]?.versjon ?? '0.0.0', lest: [] }
+  return { fra: logg.filter(varsles)[1]?.versjon ?? '0.0.0', lest: [] }
 }
 
 /** En føring som endrer fortolkningen, varsles som det; resten som funksjonalitet. */
@@ -155,12 +161,12 @@ export interface Endringsvarsel {
 }
 
 /**
- * Føringene som er varsler: de nyere enn `fra`, uleste, og leste fra de
- * siste 30 dagene.
+ * Føringene som er varsler: de nyere enn `fra` som varsles, uleste, og leste
+ * fra de siste 30 dagene.
  */
 export function endringsvarsler(logg: readonly Endring[], status: Endringsloggstatus, naa: Date = new Date()): Endringsvarsel[] {
   return logg
-    .filter((endring) => sammenlignVersjon(endring.versjon, status.fra) > 0)
+    .filter((endring) => varsles(endring) && sammenlignVersjon(endring.versjon, status.fra) > 0)
     .map((endring) => ({
       kilde: 'endringslogg' as const,
       id: `endring:${endring.versjon}`,
@@ -173,8 +179,8 @@ export function endringsvarsler(logg: readonly Endring[], status: Endringsloggst
 }
 
 /**
- * Statusen med `versjoner` merket lest. `fra` flyttes forbi de eldste leste som
- * har passert fristen, så lista over leste ikke vokser.
+ * Statusen med `versjoner` merket lest. `fra` flyttes forbi de eldste leste (og
+ * de som ikke varsles) som har passert fristen, så lista over leste ikke vokser.
  */
 export function merkEndringerLest(
   logg: readonly Endring[],
@@ -186,7 +192,7 @@ export function merkEndringerLest(
   let fra = status.fra
   const nyere = logg.filter((e) => sammenlignVersjon(e.versjon, fra) > 0).reverse()
   for (const endring of nyere) {
-    if (!lest.has(endring.versjon) || !erGammel(endring, naa)) break
+    if ((varsles(endring) && !lest.has(endring.versjon)) || !erGammel(endring, naa)) break
     fra = endring.versjon
   }
   return {

@@ -94,6 +94,18 @@ describe('endringsloggen', () => {
     expect(merkEndringerLest(LOGG, status, ['1.2.0'], NAA)).toEqual({ fra: '1.1.0', lest: ['1.3.0', '1.2.0'] })
   })
 
+  it('varsler ikke føringer som ikke merkes i appen, og lar dem ikke holde starten igjen', () => {
+    const logg = [
+      endring('1.3.1', '2026-09-29', { utenVarsel: true }),
+      ...LOGG.slice(0, 2),
+      endring('1.1.1', '2026-08-02', { utenVarsel: true }),
+      ...LOGG.slice(2),
+    ]
+    expect(startstatus(logg)).toEqual({ fra: '1.2.0', lest: [] })
+    expect(endringsvarsler(logg, { fra: '1.0.0', lest: [] }, NAA).map((v) => v.endring.versjon)).toEqual(['1.3.0', '1.2.0', '1.1.0'])
+    expect(merkEndringerLest(logg, { fra: '1.0.0', lest: [] }, ['1.1.0'], NAA)).toEqual({ fra: '1.1.1', lest: [] })
+  })
+
   it('leser bare en gyldig status', () => {
     expect(lesEndringsloggstatus({ fra: '1.2.0', lest: ['1.3.0', 'x', 4] })).toEqual({ fra: '1.2.0', lest: ['1.3.0'] })
     expect(lesEndringsloggstatus({ fra: 'x' })).toBeNull()

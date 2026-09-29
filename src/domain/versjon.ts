@@ -45,6 +45,11 @@ export interface Endring {
    * varsles alle om den som en endring i fortolkningen, som ingen kan slå av.
    */
   endrerFortolkning?: true
+  /**
+   * Endringen merkes ikke i appen, som når en databaseendring som alt er gjort,
+   * føres inn i koden. Da blir den ikke et varsel.
+   */
+  utenVarsel?: true
 }
 
 /**
