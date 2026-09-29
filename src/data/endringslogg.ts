@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.57.1',
+    versjon: '1.57.2',
     dato: '2026-09-29',
     sammendrag: 'Oppgaven «Varslingssystem» er merket utført',
     typer: ['Funksjonalitet'],
@@ -22,6 +22,16 @@ export const ENDRINGSLOGG: Endring[] = [
       'Føringer som denne, uten noe nytt å merke i appen, blir ikke lenger varsler.',
     ],
     utenVarsel: true,
+  },
+  {
+    versjon: '1.57.1',
+    dato: '2026-09-29',
+    sammendrag: 'Tråder fra /utfor-oppgaver får navn etter oppgavene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Når /utfor-oppgaver har funnet oppgavene som skal gjøres, gir Claude tråden navn etter overskriften deres i stedet for «utfor-oppgaver». Flere oppgaver blir for eksempel «Oppgaver: A, B».',
+    ],
   },
   {
     versjon: '1.57.0',
