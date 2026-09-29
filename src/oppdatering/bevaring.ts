@@ -166,13 +166,25 @@ function gyldig(bilde: Gjenopprettet): boolean {
 }
 
 /**
+ * Bildet, når det hører til brukeren som er logget inn (`hvem`). Er det en
+ * annen, kastes hele bildet — verdiene og rulleplassene — så ingenting av det
+ * kommer tilbake, heller ikke om den første brukeren logger inn igjen.
+ */
+function bildetTil(hvem: string | null): Gjenopprettet {
+  const bilde = lesBildet()
+  if (bilde.eier !== hvem) {
+    bilde.verdier.clear()
+    bilde.rulling = []
+  }
+  return bilde
+}
+
+/**
  * Verdien som ble tatt vare på under nøkkelen for brukeren som er logget inn
- * (`hvem`), uten å hente den ut. `undefined` når det ikke er noen. Ber en annen
- * bruker enn den bildet hører til, kastes hele bildet.
+ * (`hvem`), uten å hente den ut. `undefined` når det ikke er noen.
  */
 export function sePaBevart(nokkel: string, hvem: string | null): { verdi: unknown } | undefined {
-  const bilde = lesBildet()
-  if (bilde.eier !== hvem) bilde.verdier.clear()
+  const bilde = bildetTil(hvem)
   if (!gyldig(bilde) || !bilde.verdier.has(nokkel)) return undefined
   return { verdi: bilde.verdier.get(nokkel) }
 }
@@ -190,10 +202,11 @@ const STABIL_ETTER = 3
  * hentet og siden har blitt lang nok. En side som selv ruller til toppen når
  * den åpnes, rulles tilbake igjen: plassen må ha stått noen forsøk på rad før
  * den er ferdig. Gir opp når brukeren selv ruller, klikker eller skriver, eller
- * når tiden er ute. Kalles én gang, når appen starter.
+ * når tiden er ute. Kalles når det er avklart hvem som er logget inn (`hvem`),
+ * og ruller bare for den som tok bildet. Gjør ingenting etter første gang.
  */
-export function gjenopprettRulling(): () => void {
-  const bilde = lesBildet()
+export function gjenopprettRulling(hvem: string | null): () => void {
+  const bilde = bildetTil(hvem)
   let igjen = bilde.rulling.map((plass) => ({ ...plass, stabil: 0 }))
   bilde.rulling = []
   if (igjen.length === 0) return () => undefined

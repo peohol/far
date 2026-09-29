@@ -282,6 +282,27 @@ describe('det som tas vare på gjennom en oppdatering', () => {
     expect(screen.getByRole('button').textContent).toBe('0')
   })
 
+  it('ruller bare tilbake for brukeren som tok bildet', async () => {
+    const side = { scrollHeight: 3000, clientHeight: 500, scrollTop: 0 }
+    Object.defineProperty(document, 'scrollingElement', { value: side, configurable: true })
+    const bilde = { tatt: Date.now(), eier: 'kari', verdier: {}, rulling: [{ lag: null, topp: 1200 }] }
+    try {
+      // Økten gikk ut, og en annen logget inn i den samme fanen.
+      sessionStorage.setItem(LAGRINGSNOKKEL, JSON.stringify(bilde))
+      render(<Bevaringseier id="ola">{null}</Bevaringseier>)
+      await new Promise((ferdig) => setTimeout(ferdig, 400))
+      expect(side.scrollTop).toBe(0)
+      cleanup()
+
+      glemBildet()
+      sessionStorage.setItem(LAGRINGSNOKKEL, JSON.stringify(bilde))
+      render(<Bevaringseier id="kari">{null}</Bevaringseier>)
+      await waitFor(() => expect(side.scrollTop).toBe(1200))
+    } finally {
+      Reflect.deleteProperty(document, 'scrollingElement')
+    }
+  })
+
   it('kommer tilbake til den samme brukeren', async () => {
     render(
       <Bevaringseier id="kari">

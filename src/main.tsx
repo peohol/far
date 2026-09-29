@@ -6,7 +6,6 @@ import { Oppdateringsmelding } from './components/Oppdateringsmelding'
 import { Port } from './components/konto/Port'
 import { TipsLag } from './components/Tips'
 import { ShortcutVisibilityProvider } from './hooks/useShortcutVisibility'
-import { gjenopprettRulling } from './oppdatering/bevaring'
 // Skriftene ligger i appen selv, så et klinisk verktøy ikke er avhengig av en
 // ekstern skrifttjeneste. Newsreader med optisk størrelse, som i designet.
 import '@fontsource-variable/newsreader/opsz.css'
@@ -52,7 +51,3 @@ createRoot(root).render(
     </TipsLag>
   </StrictMode>,
 )
-
-// Kom appen hit fra «Oppdater nå», rulles siden og vinduene tilbake dit de
-// sto, etter hvert som innholdet er hentet.
-gjenopprettRulling()

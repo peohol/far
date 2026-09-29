@@ -8,7 +8,7 @@ import {
   type ReactNode,
   type SetStateAction,
 } from 'react'
-import { hentUtBevart, registrer, sePaBevart, settEier } from './bevaring'
+import { gjenopprettRulling, hentUtBevart, registrer, sePaBevart, settEier } from './bevaring'
 
 /**
  * Tilstand som overlever en oppdatering til en ny versjon (se `bevaring.ts`).
@@ -28,10 +28,14 @@ const Eier = createContext<string | null>(null)
 
 /**
  * Brukeren det som tas vare på inni, hører til. Står rundt appen når noen er
- * logget inn, så et bilde bare kommer tilbake til den som tok det.
+ * logget inn, så et bilde — verdiene og hvor langt siden var rullet — bare
+ * kommer tilbake til den som tok det.
  */
 export function Bevaringseier({ id, children }: { id: string | null; children: ReactNode }) {
   useEffect(() => settEier(id), [id])
+  // Rulleplassene hører også til brukeren, så rullingen tilbake begynner først
+  // her. Den stopper selv, når plassene står eller brukeren tar over.
+  useEffect(() => void gjenopprettRulling(id), [id])
   return <Eier.Provider value={id}>{children}</Eier.Provider>
 }
 
