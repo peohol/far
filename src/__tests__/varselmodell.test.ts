@@ -2,7 +2,7 @@
  * Varslene som rene funksjoner: valgene, føringene i endringsloggen som
  * varsler, tallet på bjella og tekstene.
  */
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import type { Endring } from '../domain/versjon'
@@ -46,10 +46,9 @@ const NAA = new Date('2026-09-29T15:00:00')
 
 describe('kategoriene og valgene', () => {
   it('har de samme kategoriene som databasen', () => {
-    const sql = readFileSync(
-      fileURLToPath(new URL('../../supabase/migrations/20260929130000_varsler.sql', import.meta.url)),
-      'utf8',
-    )
+    const mappe = fileURLToPath(new URL('../../supabase/migrations/', import.meta.url))
+    const fil = readdirSync(mappe).find((navn) => navn.endsWith('_varsler.sql'))!
+    const sql = readFileSync(mappe + fil, 'utf8')
     const verdier = /create type public\.varselkategori as enum \(([^)]*)\)/.exec(sql)![1]!.match(/'([^']+)'/g)!
     expect(verdier.map((v) => v.slice(1, -1))).toEqual([...DATABASEKATEGORIER])
     expect(KATEGORIREKKEFOLGE).toEqual(expect.arrayContaining([...DATABASEKATEGORIER, 'funksjonalitet']))
