@@ -21,7 +21,7 @@ import '../../styles/ideer.css'
  * Alle kan lese. Bare en administrator arbeider med oppgavene: skriver
  * prompten en språkmodell skal utføre oppgaven etter, merker den klar, eller
  * flytter den tilbake til idéene. Claude merker den utført når arbeidet er
- * gjort (se `.claude/skills/utfor-planlagte-oppgaver`).
+ * gjort (se `.claude/skills/utfor-oppgaver`).
  */
 type Visning = { side: 'liste' } | { side: 'oppgave'; id: string }
 

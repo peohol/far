@@ -83,7 +83,7 @@ const IDEEN: Idetraad = {
 const api = vi.hoisted(() => ({
   hentOppgaver: vi.fn(),
   hentOppgave: vi.fn(),
-  lagreOppgaveprompt: vi.fn(async () => {}),
+  lagreOppgave: vi.fn(async () => {}),
   settOppgaveKlar: vi.fn(async () => {}),
   flyttOppgaveTilbake: vi.fn(async () => {}),
   hentIdetraad: vi.fn(),
@@ -180,6 +180,7 @@ describe('én oppgave', () => {
     apne('b')
     expect(await screen.findByText('Legg til en knapp.')).toBeTruthy()
     expect(screen.queryByRole('textbox', { name: 'Prompt' })).toBeNull()
+    expect(screen.queryByRole('textbox', { name: 'Overskrift' })).toBeNull()
     expect(screen.queryByRole('button', { name: 'Klar til implementering' })).toBeNull()
     expect(screen.queryByRole('button', { name: /Flytt tilbake/ })).toBeNull()
   })
@@ -195,13 +196,47 @@ describe('én oppgave', () => {
     await bruker.type(felt, 'Legg til en knapp.')
     expect(klar.disabled).toBe(true)
     api.hentOppgave.mockResolvedValue(detaljer({ ...OPPGAVER[0]!, status: 'under_arbeid', har_prompt: true }, 'Legg til en knapp.'))
-    await bruker.click(screen.getByRole('button', { name: 'Lagre prompten' }))
-    expect(api.lagreOppgaveprompt).toHaveBeenCalledWith('a', 'Legg til en knapp.')
+    await bruker.click(screen.getByRole('button', { name: 'Lagre endringene' }))
+    expect(api.lagreOppgave).toHaveBeenCalledWith('a', { tittel: 'Oppgave a', prompt: 'Legg til en knapp.' })
     await waitFor(() => expect((screen.getByRole('button', { name: 'Klar til implementering' }) as HTMLButtonElement).disabled).toBe(false))
-    expect(screen.queryByRole('button', { name: 'Lagre prompten' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Lagre endringene' })).toBeNull()
 
     await bruker.click(screen.getByRole('button', { name: 'Klar til implementering' }))
     expect(api.settOppgaveKlar).toHaveBeenCalledWith('a', true)
+  })
+
+  it('lar en administrator gi oppgaven en egen overskrift, mens idéen beholder sin', async () => {
+    const bruker = userEvent.setup()
+    tilstand.meg = ADMIN
+    apne('a')
+    const felt = await screen.findByRole('textbox', { name: 'Overskrift' })
+    expect((felt as HTMLInputElement).value).toBe('Oppgave a')
+
+    await bruker.clear(felt)
+    await bruker.keyboard('{Enter}')
+    expect((await screen.findByRole('alert')).textContent).toBe('Skriv en overskrift.')
+    expect(api.lagreOppgave).not.toHaveBeenCalled()
+
+    api.hentOppgave.mockResolvedValue(detaljer({ ...OPPGAVER[0]!, tittel: 'Knapp for å kopiere', status: 'under_arbeid' }))
+    await bruker.type(felt, '  Knapp for å kopiere {Enter}')
+    expect(api.lagreOppgave).toHaveBeenCalledWith('a', { tittel: 'Knapp for å kopiere', prompt: '' })
+    expect(await screen.findByRole('heading', { level: 3, name: 'Knapp for å kopiere' })).toBeTruthy()
+    // Idéen står under med sin egen overskrift.
+    expect(within(screen.getByRole('region', { name: 'Idéen oppgaven kom fra' })).getByText('Oppgave a')).toBeTruthy()
+  })
+
+  it('beholder det som skrives i overskriften mens den lagres', async () => {
+    const bruker = userEvent.setup()
+    tilstand.meg = ADMIN
+    let svar: () => void = () => {}
+    api.lagreOppgave.mockImplementationOnce(() => new Promise<void>((ja) => (svar = ja)))
+    apne('a')
+    const felt = (await screen.findByRole('textbox', { name: 'Overskrift' })) as HTMLInputElement
+    await bruker.type(felt, ' b {Enter}')
+    expect(api.lagreOppgave).toHaveBeenCalledWith('a', { tittel: 'Oppgave a b', prompt: '' })
+    await bruker.type(felt, 'c')
+    await act(async () => svar())
+    expect(felt.value).toBe('Oppgave a b c')
   })
 
   it('spør før prompten forlates med endringer som ikke er lagret', async () => {

@@ -1,6 +1,6 @@
 ---
-name: utfor-planlagte-oppgaver
-description: Utfører de planlagte oppgavene i FAR som en administrator har merket «Klar til implementering», og merker dem «Utført». Brukes når brukeren ber om å utføre, implementere eller gå løs på de planlagte oppgavene (f.eks. «Utfør de planlagte oppgavene»), eller viser til en oppgave med nummer som OPG-007.
+name: utfor-oppgaver
+description: Utfører de planlagte oppgavene i FAR som en administrator har merket «Klar til implementering», og merker dem «Utført». Kjøres med /utfor-oppgaver uten noe mer, eller når brukeren ber om å utføre, implementere eller gå løs på de planlagte oppgavene (f.eks. «Utfør de planlagte oppgavene»), eller viser til en planlagt oppgave med overskriften eller med nummer som OPG-007.
 ---
 
 # Utfør de planlagte oppgavene
@@ -12,6 +12,12 @@ er uklart, og vent på administratorens svar der reglene i `CLAUDE.md` krever
 det, som før databaseendringer i produksjon. Det finnes ingen automatikk som
 gjør dette i bakgrunnen, og det skal det heller ikke.
 
+Oppdraget står i databasen, ikke i meldingen fra brukeren. `/utfor-oppgaver`
+uten noe mer, eller en kort beskjed som «Utfør de planlagte oppgavene», er
+nok: les alle oppgavene som er klare, med overskriften og hele prompten til
+hver, og utfør dem. Nevner brukeren én eller
+flere oppgaver med overskriften eller nummeret, gjør bare dem.
+
 Bakgrunnen står i `docs/ideer.md` under «Planlagte oppgaver».
 
 ## 1. Les oppgavene som er klare
@@ -20,7 +26,7 @@ Bruk Supabase-MCP-en (`execute_sql`, som bare kan lese) mot prosjektet
 `jfzqowsmjtthpbipnxnf`:
 
 ```sql
-select o.id, i.tittel, o.prompt, o.klar_kl, i.id as ide_id
+select o.id, o.tittel, o.prompt, o.klar_kl, i.id as ide_id
 from public.oppgaver o
 join public.ideer i on i.id = o.ide_id
 where o.status = 'klar'
@@ -38,16 +44,17 @@ where i.id = '<ide_id>'
 order by k.opprettet_kl;
 ```
 
-Når brukeren viser til en utført oppgave, som «OPG-007», er det
-`nummer = 7` i `public.oppgaver`. Kolonnen `endringslogg` sier hvilken versjon
-arbeidet kom i.
+Brukeren viser til oppgavene med overskriften (`tittel` i `public.oppgaver`),
+eller til en utført oppgave med nummeret: «OPG-007» er `nummer = 7`.
+Kolonnen `endringslogg` sier hvilken versjon arbeidet kom i.
 
 Finnes ingen klare oppgaver, si det og stopp. Mangler Supabase-MCP-en, si at
 den må kobles til, og stopp.
 
 ## 2. Vis planen før du begynner
 
-List oppgavene med tittel og én linje om hva du forstår at prompten ber om.
+List oppgavene med overskriften (`oppgaver.tittel`, som administratoren kan ha
+endret fra idéens) og én linje om hva du forstår at prompten ber om.
 Si hvilke du vil gjøre sammen og hvilke hver for seg. Er en prompt uklar eller
 motsier noe i appen, spør administratoren før du gjør den oppgaven. Gjett ikke,
 og særlig ikke når det gjelder klinisk innhold (se `CLAUDE.md`).

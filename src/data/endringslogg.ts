@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.54.0',
+    dato: '2026-09-29',
+    sammendrag: 'Planlagte oppgaver kan få sin egen overskrift',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'En administrator kan endre overskriften på en planlagt oppgave, i samme skjema som prompten. Oppgaven begynner med overskriften på idéen den kom fra.',
+      'Overskriften er det oppgaven heter i lista og når Claude viser til den. Idéen under beholder sin egen overskrift.',
+      'Oppgavene som er klare, utføres med kommandoen /utfor-oppgaver i Claude Code, uten at du trenger å skrive noe mer.',
+    ],
+  },
+  {
     versjon: '1.53.0',
     dato: '2026-09-29',
     sammendrag: 'Idéer kan legges i «Ikke aktuelt» eller overføres til et nytt vindu for planlagte oppgaver',
