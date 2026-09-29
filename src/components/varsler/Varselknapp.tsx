@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
+import { useBevart } from '../../oppdatering/Bevaring'
 import { merketall } from '../../varsler/modell'
 import { Ikonknapp } from '../Ikonknapp'
 import { useVarsler } from './useVarsler'
@@ -11,7 +12,7 @@ import { Varsler } from './Varsler'
  */
 export function Varselknapp() {
   const status = useVarsler()
-  const [apen, setApen] = useState(false)
+  const [apen, setApen] = useBevart('varsler', false)
   // Fast identitet: `Modallag` kobler den til lukkehendelsen på dialogen.
   const lukk = useCallback(() => setApen(false), [])
   const { antall } = status

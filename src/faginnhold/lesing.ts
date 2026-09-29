@@ -55,6 +55,15 @@ export interface Regelsettutgave<T = Intervallregelsettinnhold> {
 }
 
 /**
+ * Revisjonene i et regelsett og kommentarene det peker på, som én nøkkel. Den
+ * skifter når noe av det er lagret på nytt, så en redigering som er i gang,
+ * aldri fortsetter på et eldre grunnlag enn det som står.
+ */
+export function revisjonsnokkel(utgave: { regelsett: Utgave<unknown>; kommentarer: readonly Utgave<unknown>[] }): string {
+  return [utgave.regelsett.revisjon, ...utgave.kommentarer.map((k) => k.revisjon)].join('-')
+}
+
+/**
  * Et scenarioregelsett med kommentarobjektene det peker på, i samme tilstand,
  * som {@link Regelsettutgave} for intervallregelsettene.
  */

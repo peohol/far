@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react'
+import { useBevart, type Bevaringsform } from '../../oppdatering/Bevaring'
 import { rullefart } from '../../hooks/useKortHopp'
 import { MAKS_GLIDETID } from '../../hooks/useSkjuling'
 
@@ -118,12 +119,35 @@ function kjedeFor(sti: readonly string[]): string[] {
 }
 
 /**
+ * De åpne skuffene slik de tas vare på når appen oppdateres: forelderen og den
+ * åpne skuffen i hver søskenflokk. De kommer tilbake uten å gli.
+ */
+const VALGFORM: Bevaringsform<ReadonlyMap<string, Valg>> = {
+  lagre: (valgt) => [...valgt].map(([forelder, { nokkel }]) => [forelder, nokkel]),
+  les: (lagret) => {
+    if (!Array.isArray(lagret)) return undefined
+    const valgt = new Map<string, Valg>()
+    for (const par of lagret) {
+      if (!Array.isArray(par)) continue
+      const [forelder, nokkel] = par as unknown[]
+      if (typeof forelder === 'string' && (typeof nokkel === 'string' || nokkel === null)) {
+        valgt.set(forelder, { nokkel, animer: false })
+      }
+    }
+    return valgt
+  },
+}
+
+/**
  * Rammen for en side med seksjoner. Legges rundt hele siden, søket medregnet.
  * En seksjon uten en slik ramme rundt seg lager sin egen (se `Seksjon`).
+ *
+ * Med `bevares` står de samme skuffene åpne etter at appen er oppdatert til en
+ * ny versjon; rammen må da stå i et eget område (`Bevaringsomrade`).
  */
-export function SeksjonsstyringKilde({ children }: { children: ReactNode }) {
+export function SeksjonsstyringKilde({ bevares = false, children }: { bevares?: boolean; children: ReactNode }) {
   /** Den åpne skuffen i hver søskenflokk som er åpnet eller lukket, med forelderens nøkkel. */
-  const [valgt, setValgt] = useState<ReadonlyMap<string, Valg>>(() => new Map())
+  const [valgt, setValgt] = useBevart<ReadonlyMap<string, Valg>>(bevares ? 'seksjoner' : null, () => new Map(), VALGFORM)
   const [registrert, setRegistrert] = useState<ReadonlyMap<string, Registrering>>(() => new Map())
   /** Stedet en direktelenke peker på, mens det venter på at skuffen skal tegnes. */
   const venter = useRef<{ nokkel: string; plass: Rullemal } | null>(null)

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react'
+import { useBevart } from '../oppdatering/Bevaring'
 import { Bryter } from './Bryter'
 import { Button } from './Button'
 import { Felt } from './konto/Felt'
@@ -77,13 +78,13 @@ export interface SidemenyProps {
 }
 
 export function Sidemeny({ register, onOpprett }: SidemenyProps) {
-  const [apen, setApen] = useState(false)
+  const [apen, setApen] = useBevart('sidemeny', false)
   /** Av gjemmer underkategoriene og lister stoffene i hver kategori i én alfabetisk bolk. */
   const [visUnderkategorier, setVisUnderkategorier] = useState(true)
   /** Kategorien med åpen skuff — bare én av gangen. */
-  const [apenSkuff, setApenSkuff] = useState<string | null>(null)
+  const [apenSkuff, setApenSkuff] = useBevart<string | null>('sidemeny/skuff', null)
   const favoritter = useFavoritter()
-  const [favoritterApen, setFavoritterApen] = useState(false)
+  const [favoritterApen, setFavoritterApen] = useBevart('sidemeny/favoritter', false)
   const panelId = useId()
   const panel = useRef<HTMLElement>(null)
   const knapp = useRef<HTMLButtonElement | null>(null)

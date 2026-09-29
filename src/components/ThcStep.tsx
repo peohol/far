@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useBevart } from '../oppdatering/Bevaring'
 import { Button } from './Button'
 import { Card } from './Card'
 import { Metalinje } from './Metalinje'
@@ -104,7 +105,8 @@ function ThcFortolkning({
   flashAt: ThcStepProps['flashAt']
 }) {
   const { regler } = modell
-  const [inndata, setInndata] = useState(() => tomThcInndata(regler))
+  // Det som er fylt inn, overlever en oppdatering av appen.
+  const [inndata, setInndata] = useBevart('fortolkning/thc', () => tomThcInndata(regler))
   const [failedCopy, setFailedCopy] = useState<string | null>(null)
   /** Sant rett etter en kopiering: tilbudet om å nullstille med Enter står. */
   const [nullstillTips, setNullstillTips] = useState(false)

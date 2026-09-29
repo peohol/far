@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import type { Profil } from '@delt/profil'
 import { hentAlleProfiler } from '../../auth/api'
 import { hentOppgaver } from '../../ideer/api'
@@ -40,7 +41,8 @@ export function Oppgaver({
   /** Til Idéer. */
   onIdeer: () => void
 }) {
-  const [visning, setVisning] = useState<Visning>(LISTE)
+  // Siden i laget, og det som skrives på den, overlever en oppdatering av appen.
+  const [visning, setVisning, visningGjenopprettet] = useBevart<Visning>('oppgaver', LISTE)
   const [oppgaver, setOppgaver] = useState<Oppgave[]>([])
   const [profiler, setProfiler] = useState<Profil[]>([])
   const [feil, setFeil] = useState<string | null>(null)
@@ -52,6 +54,8 @@ export function Oppgaver({
   const rot = useRef<HTMLDivElement>(null)
   /** Kortet man gikk inn på, så tilbake lander på det. */
   const fra = useRef<string | null>(null)
+  /** Laget stod åpent da appen ble oppdatert: den første åpningen fortsetter der den var. */
+  const fortsetter = useRef(visningGjenopprettet)
 
   const hentListe = useCallback(async () => {
     try {
@@ -63,14 +67,20 @@ export function Oppgaver({
   }, [])
 
   // Hver åpning begynner på lista, eller på oppgaven laget ble åpnet på, uten
-  // endringer som ble forkastet sist.
+  // endringer som ble forkastet sist — bortsett fra når laget stod åpent da
+  // appen ble oppdatert: da fortsetter det der det var.
   useEffect(() => {
-    if (!apen) return
-    nullstill()
-    setApning((n) => n + 1)
-    fra.current = oppgave ?? null
-    setVisning(oppgave ? { side: 'oppgave', id: oppgave } : LISTE)
-    setApneSkuffer(new Set())
+    if (!apen) {
+      fortsetter.current = false
+      return
+    }
+    if (!fortsetter.current) {
+      nullstill()
+      setApning((n) => n + 1)
+      fra.current = oppgave ?? null
+      setVisning(oppgave ? { side: 'oppgave', id: oppgave } : LISTE)
+      setApneSkuffer(new Set())
+    }
     void hentListe()
     void hentAlleProfiler().then(setProfiler, () => undefined)
   }, [apen, oppgave, hentListe, nullstill])
@@ -117,35 +127,37 @@ export function Oppgaver({
       }
     >
       <Idekilde profiler={profiler}>
-        <div ref={rot} className="idevindu" key={`${apning}:${visning.side === 'oppgave' ? visning.id : visning.side}`}>
-          {feil && visning.side === 'liste' && (
-            <p className="skjemafeil" role="alert">
-              {feil}
-            </p>
-          )}
-          {visning.side === 'liste' && (
-            <Oppgaveliste
-              oppgaver={oppgaver}
-              onApne={apneOppgave}
-              apneSkuffer={apneSkuffer}
-              onVeksleSkuff={(navn) => setApneSkuffer((apne) => veksleSkuff(apne, navn))}
-            />
-          )}
-          {visning.side === 'oppgave' && (
-            <Oppgaveside
-              id={visning.id}
-              onStatus={vakt.setStatus}
-              forlater={vakt.forlater}
-              onForkast={vakt.forkast}
-              onFortsett={vakt.fortsett}
-              onFlyttetTilbake={() => {
-                fra.current = null
-                tilListe()
-              }}
-              onEndret={hentListe}
-            />
-          )}
-        </div>
+        <Bevaringsomrade navn="oppgaver">
+          <div ref={rot} className="idevindu" key={`${apning}:${visning.side === 'oppgave' ? visning.id : visning.side}`}>
+            {feil && visning.side === 'liste' && (
+              <p className="skjemafeil" role="alert">
+                {feil}
+              </p>
+            )}
+            {visning.side === 'liste' && (
+              <Oppgaveliste
+                oppgaver={oppgaver}
+                onApne={apneOppgave}
+                apneSkuffer={apneSkuffer}
+                onVeksleSkuff={(navn) => setApneSkuffer((apne) => veksleSkuff(apne, navn))}
+              />
+            )}
+            {visning.side === 'oppgave' && (
+              <Oppgaveside
+                id={visning.id}
+                onStatus={vakt.setStatus}
+                forlater={vakt.forlater}
+                onForkast={vakt.forkast}
+                onFortsett={vakt.fortsett}
+                onFlyttetTilbake={() => {
+                  fra.current = null
+                  tilListe()
+                }}
+                onEndret={hentListe}
+              />
+            )}
+          </div>
+        </Bevaringsomrade>
       </Idekilde>
     </Modallag>
   )

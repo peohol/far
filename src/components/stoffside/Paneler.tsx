@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react'
+import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import type { Sideelement, Sidemodell } from '../../faginnhold/stoffside'
 import {
   ELEMENTTYPER,
@@ -70,7 +71,7 @@ export function Panel({
   oppsummering: string
   children: ReactNode
 }) {
-  const [kilder, setKilder] = useState(false)
+  const [kilder, setKilder] = useBevart(`kilder:${definisjon.nokkel}`, false)
   const { modell, redigerer, handlinger } = kontekst
   // De redaksjonelle redigeres her; feltet viser dem sammen med de automatiske.
   const panelreferanser = modell.panelreferanser[definisjon.nokkel] ?? []
@@ -93,15 +94,17 @@ export function Panel({
       }
     >
       {kilder && (
-        <PanelkildeSkjema
-          tittel={definisjon.tittel}
-          referanser={panelreferanser}
-          onAvbryt={() => setKilder(false)}
-          onLagre={async (ider) => {
-            await handlinger.lagrePanelreferanser(definisjon.nokkel, ider)
-            setKilder(false)
-          }}
-        />
+        <Bevaringsomrade navn={`kilder:${definisjon.nokkel}`}>
+          <PanelkildeSkjema
+            tittel={definisjon.tittel}
+            referanser={panelreferanser}
+            onAvbryt={() => setKilder(false)}
+            onLagre={async (ider) => {
+              await handlinger.lagrePanelreferanser(definisjon.nokkel, ider)
+              setKilder(false)
+            }}
+          />
+        </Bevaringsomrade>
       )}
       {tomt && redigerer && <p className="infopanel__tomt">Panelet har ikke noe innhold ennå.</p>}
       {children}
@@ -124,6 +127,10 @@ function tekstoppsummering(dokument: Riktekstdokument): string {
  * Ett element med lesevisningen, og i redigeringsmodus knappene rundt den.
  * `skjema` er redigeringsvinduet, som legger seg over siden mens elementet
  * redigeres; visningen står bak det som før.
+ *
+ * Et vindu som står åpent, og det som er skrevet i det, overlever en
+ * oppdatering av appen — men bare mot den samme revisjonen av elementet, så et
+ * gammelt utkast aldri lagres over noe andre har lagret i mellomtiden.
  */
 export function Redigerbar({
   navn,
@@ -144,7 +151,8 @@ export function Redigerbar({
   /** Teksten på knappen når elementet ikke finnes ennå. */
   leggTilTekst?: string
 }) {
-  const [apen, setApen] = useState(false)
+  const skjemanavn = `rediger:${element ? `${element.id}@${element.utgave.revisjon}` : navn}`
+  const [apen, setApen] = useBevart(skjemanavn, false)
   return (
     <>
       {visning}
@@ -163,7 +171,7 @@ export function Redigerbar({
           {element && <Sistredigert utgave={element.utgave} type="innholdselement" navn={navn} />}
         </div>
       )}
-      {apen && skjema(() => setApen(false))}
+      {apen && <Bevaringsomrade navn={skjemanavn}>{skjema(() => setApen(false))}</Bevaringsomrade>}
     </>
   )
 }
@@ -317,7 +325,7 @@ export function Redaksjonskort({
   elementer: readonly Sideelement[]
   ettAlene?: boolean
 }) {
-  const [nytt, setNytt] = useState(false)
+  const [nytt, setNytt] = useBevart(`nytt:${definisjon.nokkel}`, false)
   const [fjerner, setFjerner] = useState<string | null>(null)
   const { handlinger, redigerer } = kontekst
 
@@ -415,23 +423,25 @@ export function Redaksjonskort({
         </div>
       )}
       {nytt && (
-        <KinetikkSkjema
-          tittel="Nytt kort"
-          ikon={seksjonsikon(definisjon.nokkel)}
-          start={{ tittel: '', dokument: tomtDokument() }}
-          referanser={[]}
-          onAvbryt={() => setNytt(false)}
-          onLagre={async ({ data, referanser }) => {
-            await handlinger.lagreElement(null, {
-              panel: definisjon.nokkel,
-              elementtype: ELEMENTTYPER.kinetikk,
-              posisjon: Math.max(-1, ...elementer.map((e) => e.posisjon)) + 1,
-              data,
-              referanser,
-            })
-            setNytt(false)
-          }}
-        />
+        <Bevaringsomrade navn={`nytt:${definisjon.nokkel}`}>
+          <KinetikkSkjema
+            tittel="Nytt kort"
+            ikon={seksjonsikon(definisjon.nokkel)}
+            start={{ tittel: '', dokument: tomtDokument() }}
+            referanser={[]}
+            onAvbryt={() => setNytt(false)}
+            onLagre={async ({ data, referanser }) => {
+              await handlinger.lagreElement(null, {
+                panel: definisjon.nokkel,
+                elementtype: ELEMENTTYPER.kinetikk,
+                posisjon: Math.max(-1, ...elementer.map((e) => e.posisjon)) + 1,
+                data,
+                referanser,
+              })
+              setNytt(false)
+            }}
+          />
+        </Bevaringsomrade>
       )}
     </>
   )

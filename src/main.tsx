@@ -2,9 +2,11 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { OktProvider } from './auth/okt'
 import { Lasteindikator } from './components/Lasteindikator'
+import { Oppdateringsmelding } from './components/Oppdateringsmelding'
 import { Port } from './components/konto/Port'
 import { TipsLag } from './components/Tips'
 import { ShortcutVisibilityProvider } from './hooks/useShortcutVisibility'
+import { gjenopprettRulling } from './oppdatering/bevaring'
 // Skriftene ligger i appen selv, så et klinisk verktøy ikke er avhengig av en
 // ekstern skrifttjeneste. Newsreader med optisk størrelse, som i designet.
 import '@fontsource-variable/newsreader/opsz.css'
@@ -35,6 +37,8 @@ createRoot(root).render(
   <StrictMode>
     {/* Streken øverst mens appen henter noe, også før innloggingen. */}
     <Lasteindikator />
+    {/* Meldingen om en ny versjon, også før innloggingen. */}
+    <Oppdateringsmelding />
     {/* Tooltiplaget ligger ytterst, så boblen kan festes til vinduet uansett
         hvor i appen ankeret står. */}
     <TipsLag>
@@ -48,3 +52,7 @@ createRoot(root).render(
     </TipsLag>
   </StrictMode>,
 )
+
+// Kom appen hit fra «Oppdater nå», rulles siden og vinduene tilbake dit de
+// sto, etter hvert som innholdet er hentet.
+gjenopprettRulling()

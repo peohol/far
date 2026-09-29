@@ -20,6 +20,7 @@ FAR er et verktøy for fortolkning og kommentering av farmakologiske analyser. B
 - Bruk `npm run data` bare når kildedataene som bygger det genererte datasettet faktisk skal endres.
 - Ikke svekk eller slett tester bare for å få grønt resultat. Når tilsiktet atferd endres, oppdater testene slik at den nye atferden blir eksplisitt verifisert.
 - FAR er laget for rask tastaturbruk. Bevar eksisterende tastaturflyt, tilgjengelighet og fungerende peker-/berøringsbruk med mindre oppgaven uttrykkelig endrer dette.
+- Nye vinduer, skjemaer og valg brukeren ville savnet etter en oppdatering av appen, bruker `useBevart` i stedet for `useState` (se `docs/oppdatering.md`).
 
 ## Klinisk innhold og data
 

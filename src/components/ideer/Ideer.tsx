@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import type { Profil } from '@delt/profil'
 import { hentAlleProfiler } from '../../auth/api'
 import { flyttOppgaveTilbake, gjenopprettIde, hentIdeer, hentSortering, lagreSortering, ryddIdearkiv } from '../../ideer/api'
@@ -47,7 +48,8 @@ export function Ideer({
   /** Til Planlagte oppgaver, eventuelt rett til én oppgave. */
   onOppgaver: (oppgave?: string) => void
 }) {
-  const [visning, setVisning] = useState<Visning>(LISTE)
+  // Siden i laget, og det som skrives på den, overlever en oppdatering av appen.
+  const [visning, setVisning, visningGjenopprettet] = useBevart<Visning>('ideer', LISTE)
   const [ideer, setIdeer] = useState<Ide[]>([])
   const [profiler, setProfiler] = useState<Profil[]>([])
   const [sortering, setSortering] = useState<Sortering>(STANDARDSORTERING)
@@ -59,6 +61,8 @@ export function Ideer({
   const rot = useRef<HTMLDivElement>(null)
   /** Hvor lista stod, og kortet man gikk inn på, så tilbake lander samme sted. */
   const listeplass = useRef<{ rulling: number; ide: string | null }>({ rulling: 0, ide: null })
+  /** Laget stod åpent da appen ble oppdatert: den første åpningen fortsetter der den var. */
+  const fortsetter = useRef(visningGjenopprettet)
 
   const hentListe = useCallback(async () => {
     try {
@@ -71,16 +75,20 @@ export function Ideer({
 
   // Hver åpning begynner på lista, eller på idéen laget ble åpnet på, med alt
   // hentet på nytt. Arkivet ryddes for idéer som har passert fristen, før
-  // lista hentes.
+  // lista hentes. Stod laget åpent da appen ble oppdatert, fortsetter det der
+  // det var.
   useEffect(() => {
     if (!apen) {
+      fortsetter.current = false
       setAngring(null)
       return
     }
-    nullstill()
-    setVisning(ide ? { side: 'ide', id: ide } : LISTE)
-    setApneSkuffer(new Set())
-    listeplass.current = { rulling: 0, ide: ide ?? null }
+    if (!fortsetter.current) {
+      nullstill()
+      setVisning(ide ? { side: 'ide', id: ide } : LISTE)
+      setApneSkuffer(new Set())
+      listeplass.current = { rulling: 0, ide: ide ?? null }
+    }
     void ryddIdearkiv()
       .catch(() => undefined)
       .then(hentListe)
@@ -172,53 +180,55 @@ export function Ideer({
       fot={angring ? <Angretoast key={angring.nokkel} angring={angring} onFerdig={() => setAngring(null)} /> : undefined}
     >
       <Idekilde profiler={profiler}>
-        <div ref={rot} className="idevindu" key={visning.side === 'ide' ? visning.id : visning.side}>
-          {feil && visning.side === 'liste' && (
-            <p className="skjemafeil" role="alert">
-              {feil}
-            </p>
-          )}
-          {visning.side === 'liste' && (
-            <Ideliste
-              ideer={ideer}
-              sortering={sortering}
-              onSortering={endreSortering}
-              onApne={apneIde}
-              onNy={(kategori) => gaaTil({ side: 'skjema', kategori })}
-              onOppgave={onOppgaver}
-              apneSkuffer={apneSkuffer}
-              onVeksleSkuff={(navn) => setApneSkuffer((apne) => veksleSkuff(apne, navn))}
-            />
-          )}
-          {visning.side === 'ide' && (
-            <Ideside
-              id={visning.id}
-              onEndre={(ide) => gaaTil({ side: 'skjema', ide })}
-              onSlettet={() => {
-                listeplass.current.ide = null
-                tilListe()
-              }}
-              onArkivert={(ide) => flyttet('Idéen er lagt i «Ikke aktuelt».', () => gjenopprettIde(ide.id))}
-              onOverfort={(_ide, oppgave) => flyttet('Idéen er overført til planlagte oppgaver.', () => flyttOppgaveTilbake(oppgave))}
-              onOppgave={onOppgaver}
-            />
-          )}
-          {visning.side === 'skjema' && (
-            <Ideskjema
-              ide={visning.ide}
-              kategori={visning.kategori}
-              onStatus={vakt.setStatus}
-              forlater={vakt.forlater}
-              onForkast={vakt.forkast}
-              onFortsett={vakt.fortsett}
-              onAvbryt={() => (visning.ide ? gaaTil({ side: 'ide', id: visning.ide.id }) : tilListe())}
-              onLagret={(id) => {
-                listeplass.current.ide = id
-                gaaTil({ side: 'ide', id })
-              }}
-            />
-          )}
-        </div>
+        <Bevaringsomrade navn="ideer">
+          <div ref={rot} className="idevindu" key={visning.side === 'ide' ? visning.id : visning.side}>
+            {feil && visning.side === 'liste' && (
+              <p className="skjemafeil" role="alert">
+                {feil}
+              </p>
+            )}
+            {visning.side === 'liste' && (
+              <Ideliste
+                ideer={ideer}
+                sortering={sortering}
+                onSortering={endreSortering}
+                onApne={apneIde}
+                onNy={(kategori) => gaaTil({ side: 'skjema', kategori })}
+                onOppgave={onOppgaver}
+                apneSkuffer={apneSkuffer}
+                onVeksleSkuff={(navn) => setApneSkuffer((apne) => veksleSkuff(apne, navn))}
+              />
+            )}
+            {visning.side === 'ide' && (
+              <Ideside
+                id={visning.id}
+                onEndre={(ide) => gaaTil({ side: 'skjema', ide })}
+                onSlettet={() => {
+                  listeplass.current.ide = null
+                  tilListe()
+                }}
+                onArkivert={(ide) => flyttet('Idéen er lagt i «Ikke aktuelt».', () => gjenopprettIde(ide.id))}
+                onOverfort={(_ide, oppgave) => flyttet('Idéen er overført til planlagte oppgaver.', () => flyttOppgaveTilbake(oppgave))}
+                onOppgave={onOppgaver}
+              />
+            )}
+            {visning.side === 'skjema' && (
+              <Ideskjema
+                ide={visning.ide}
+                kategori={visning.kategori}
+                onStatus={vakt.setStatus}
+                forlater={vakt.forlater}
+                onForkast={vakt.forkast}
+                onFortsett={vakt.fortsett}
+                onAvbryt={() => (visning.ide ? gaaTil({ side: 'ide', id: visning.ide.id }) : tilListe())}
+                onLagret={(id) => {
+                  listeplass.current.ide = id
+                  gaaTil({ side: 'ide', id })
+                }}
+              />
+            )}
+          </div>
+        </Bevaringsomrade>
       </Idekilde>
     </Modallag>
   )

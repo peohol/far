@@ -1,4 +1,5 @@
 import { useId, useMemo, useState, type FormEvent } from 'react'
+import { useBevart } from '../../oppdatering/Bevaring'
 import { lagThcModell } from '../../domain/thcMotor'
 import {
   KURVEFARGE,
@@ -44,8 +45,8 @@ const KURVEFELT = ['a1', 'k1', 'a2', 'k2'] as const
  * lagres bare når de er endret. Plassholderne i en tekst kan ikke endres.
  */
 export function Thcredigering({ utgave, start, onLagre, onAvbryt }: ThcredigeringProps) {
-  const [regler, setRegler] = useState(start.regler)
-  const [tekster, setTekster] = useState(start.tekster)
+  const [regler, setRegler] = useBevart('regler', start.regler)
+  const [tekster, setTekster] = useBevart('tekster', start.tekster)
   const [lagrer, setLagrer] = useState(false)
   const [feil, setFeil] = useState<string | null>(null)
   const tittel = useId()

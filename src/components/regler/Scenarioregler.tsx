@@ -1,9 +1,10 @@
 import { useCallback, useMemo, useState } from 'react'
+import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import { rusModulFor, TOM_RUS_INNDATA, type RusInndata, type RusModul } from '../../domain/rus'
 import type { Kommentaroppslag } from '../../domain/kommentarobjekt'
 import type { Scenarioregelsett } from '../../domain/scenario'
 import { beskrivRegelsett, type Scenariobeskrivelse } from '../../domain/scenariovisning'
-import type { Scenarioregelsettutgave } from '../../faginnhold/lesing'
+import { revisjonsnokkel, type Scenarioregelsettutgave } from '../../faginnhold/lesing'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
 import { kommentaroppslag } from '../../regler/kommentarer'
 import { scenariofelter, tilScenarioutkast, utkastfelter, type Scenarioutkast } from '../../regler/scenarioredigering'
@@ -110,7 +111,8 @@ export function Scenarioregler({
 }: ScenarioreglerProps) {
   const beskrivelse = useMemo(() => beskrivRegelsett(regelsett, kommentarer), [regelsett, kommentarer])
   const [inndata, setInndata] = useState<RusInndata>(TOM_RUS_INNDATA)
-  const [redigeres, setRedigeres] = useState(false)
+  // En redigering som er i gang, overlever en oppdatering av appen.
+  const [redigeres, setRedigeres] = useBevart(`scenarioregler:${modul.id}`, false)
   const treff = useMemo(() => provKjor(regelsett, kommentarer, inndata), [regelsett, kommentarer, inndata])
   const simulerbar = regelsett.scenarier.length > 1
   const redigeringsmodus = redigeres && redigering
@@ -140,17 +142,21 @@ export function Scenarioregler({
     >
       {delesMed.length > 0 && <Delingsmerknad sider={delesMed} redigering={Boolean(redigering)} />}
       {redigeringsmodus ? (
-        <Scenarioredigering
-          key={[redigering.utgave.regelsett.revisjon, ...redigering.utgave.kommentarer.map((k) => k.revisjon)].join('-')}
-          modul={modul}
-          start={tilScenarioutkast(redigering.utgave)}
-          onLagre={async (utkast, grunnlag) => {
-            await redigering.onLagre(utkast, grunnlag)
-            setRedigeres(false)
-          }}
-          hentNyeste={redigering.hentNyeste}
-          onAvbryt={() => setRedigeres(false)}
-        />
+        // Utkastet tas vare på mot revisjonene det bygger på, og kommer bare
+        // tilbake så lenge ingen andre har lagret i mellomtiden.
+        <Bevaringsomrade navn={`scenarioregler:${modul.id}@${revisjonsnokkel(redigering.utgave)}`}>
+          <Scenarioredigering
+            key={revisjonsnokkel(redigering.utgave)}
+            modul={modul}
+            start={tilScenarioutkast(redigering.utgave)}
+            onLagre={async (utkast, grunnlag) => {
+              await redigering.onLagre(utkast, grunnlag)
+              setRedigeres(false)
+            }}
+            hentNyeste={redigering.hentNyeste}
+            onAvbryt={() => setRedigeres(false)}
+          />
+        </Bevaringsomrade>
       ) : (
         <>
           <p className="regler__ingress">

@@ -1,4 +1,5 @@
 import { useId, useMemo, useState, type FormEvent } from 'react'
+import { useBevart, type Bevaringsform } from '../../oppdatering/Bevaring'
 import { TOM_RUS_INNDATA, type RusInndata, type RusModul } from '../../domain/rus'
 import { fraProsent, somProsent, type Scenarioregelsett } from '../../domain/scenario'
 import { beskrivForhold, beskrivRegelsett, type Scenariobeskrivelse } from '../../domain/scenariovisning'
@@ -42,6 +43,15 @@ export interface ScenarioredigeringProps {
   onAvbryt: () => void
 }
 
+/** Grensene i feltene, tatt vare på som par når appen oppdateres. */
+const TEKSTKART: Bevaringsform<Map<string, string>> = {
+  lagre: (kart) => [...kart],
+  les: (lagret) =>
+    Array.isArray(lagret) && lagret.every((par) => Array.isArray(par) && par.every((del) => typeof del === 'string'))
+      ? new Map(lagret as [string, string][])
+      : undefined,
+}
+
 /** En endring i regelsettet, slik skjemaet gjør dem. */
 type Endring = (regelsett: Scenarioregelsett) => Scenarioregelsett
 
@@ -70,10 +80,12 @@ function forkort(tekst: string): string {
  * sammenligne med det de lagret før hen velger.
  */
 export function Scenarioredigering({ modul, start, onLagre, hentNyeste, onAvbryt }: ScenarioredigeringProps) {
-  const [utkast, setUtkast] = useState(start)
+  const [utkast, setUtkast] = useBevart('utkast', start)
   /** Grensene i prosent slik de står i feltene, også mens et tall skrives. */
-  const [grenser, setGrenser] = useState(
+  const [grenser, setGrenser] = useBevart(
+    'grenser',
     () => new Map(start.regelsett.parametere.map((p) => [p.nokkel, somProsent(p.verdi)])),
+    TEKSTKART,
   )
   const [kontrollfeil, setKontrollfeil] = useState<string[]>([])
   const [inndata, setInndata] = useState<RusInndata>(TOM_RUS_INNDATA)

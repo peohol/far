@@ -1,4 +1,5 @@
-import { useId, useRef, useState, type ReactNode } from 'react'
+import { useId, useRef, type ReactNode } from 'react'
+import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import type { Laboratorieanalytt } from '../../domain/analyttkatalog'
 import type { Sideelement } from '../../faginnhold/stoffside'
 import {
@@ -158,7 +159,7 @@ function Gruppe({ nokkel, tittel, children }: { nokkel: string; tittel: string; 
 
 /** Kildene for hele området, som i de andre panelene — bare i redigeringsmodus. */
 function Panelkilder({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
-  const [apen, setApen] = useState(false)
+  const [apen, setApen] = useBevart(`kilder:${definisjon.nokkel}`, false)
   const referanser = kontekst.modell.panelreferanser[definisjon.nokkel] ?? []
   return (
     <div className="redigeringsrad">
@@ -166,15 +167,17 @@ function Panelkilder({ definisjon, kontekst }: { definisjon: Paneldefinisjon; ko
         Kilder for {definisjon.tittel.toLowerCase()}
       </Button>
       {apen && (
-        <PanelkildeSkjema
-          tittel={definisjon.tittel}
-          referanser={referanser}
-          onAvbryt={() => setApen(false)}
-          onLagre={async (ider) => {
-            await kontekst.handlinger.lagrePanelreferanser(definisjon.nokkel, ider)
-            setApen(false)
-          }}
-        />
+        <Bevaringsomrade navn={`kilder:${definisjon.nokkel}`}>
+          <PanelkildeSkjema
+            tittel={definisjon.tittel}
+            referanser={referanser}
+            onAvbryt={() => setApen(false)}
+            onLagre={async (ider) => {
+              await kontekst.handlinger.lagrePanelreferanser(definisjon.nokkel, ider)
+              setApen(false)
+            }}
+          />
+        </Bevaringsomrade>
       )}
     </div>
   )

@@ -1,4 +1,5 @@
 import { useCallback, useId, useRef, useState } from 'react'
+import { useBevart } from '../../oppdatering/Bevaring'
 import { visningsnavn } from '@delt/profil'
 import { useAvatarlenker } from '../../auth/avatarer'
 import { useOkt, useProfil } from '../../auth/okt'
@@ -27,7 +28,7 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
   const lenke = profil.avatar_path ? (lenker.get(profil.avatar_path) ?? null) : null
   const navn = visningsnavn(profil)
 
-  const [kontopanel, setKontopanel] = useState(false)
+  const [kontopanel, setKontopanel] = useBevart('kontopanel', false)
   const [preferanser, setPreferanser] = useState(false)
   // Fast identitet: `Modallag` kobler den til lukkehendelsen på dialogen.
   const lukkKontopanel = useCallback(() => setKontopanel(false), [])

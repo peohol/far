@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useId, useMemo, useRef, type ReactNode } from 'react'
+import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import type { Analyttkatalog, Laboratorieanalytt } from '../../domain/analyttkatalog'
 import { byggSidemodell, referanseunivers } from '../../faginnhold/stoffside'
 import { PANELER } from '../../faginnhold/paneler'
@@ -93,11 +94,14 @@ export interface StoffsideProps {
 export function Stoffside(props: StoffsideProps) {
   useLukkMedEscape(props.onLukk)
   // Nøkkelen gir hver side en frisk tilstand: modus, søk, skjemaer og hvilke
-  // seksjoner som er åpne, hører til siden.
+  // seksjoner som er åpne, hører til siden. Det samme tas vare på når appen
+  // oppdateres, under sidens eget område.
   return (
-    <SeksjonsstyringKilde key={props.stoff}>
-      <Innhold {...props} />
-    </SeksjonsstyringKilde>
+    <Bevaringsomrade navn={`stoff:${props.stoff}`}>
+      <SeksjonsstyringKilde key={props.stoff} bevares>
+        <Innhold {...props} />
+      </SeksjonsstyringKilde>
+    </Bevaringsomrade>
   )
 }
 
@@ -121,8 +125,8 @@ function Ikkefunnet({ onLukk, children }: { onLukk: () => void; children: ReactN
 function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLukk }: StoffsideProps) {
   const { kanRedigere } = useFaginnholdskilde()
   const favoritter = useFavoritter()
-  const [modus, setModus] = useState<Sidemodus>('lese')
-  const [sporring, setSporring] = useState('')
+  const [modus, setModus] = useBevart<Sidemodus>('modus', 'lese')
+  const [sporring, setSporring] = useBevart('sok', '')
   const beholder = useRef<HTMLElement>(null)
   const overskrift = useId()
 

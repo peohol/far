@@ -1,6 +1,7 @@
-import { erEtgAnalytt, type EtgValg } from './domain/etg'
+import { alternativFor, erEtgAnalytt, type EtgValg } from './domain/etg'
 import { erRusAnalytt } from './domain/rus'
 import { erThcAnalytt } from './domain/thc'
+import type { Bevaringsform } from './oppdatering/Bevaring'
 import type { Analyte } from './types'
 
 /**
@@ -178,4 +179,33 @@ function stepBack(state: State): State {
  */
 function nullstilt(state: State): State {
   return { ...initialState, metodefilter: state.metodefilter }
+}
+
+/**
+ * Hvordan fortolkningen tas vare på når appen oppdateres til en ny versjon
+ * (`src/oppdatering/`): analytten som koden sin, og tilbake som analytten med
+ * den koden i den nye versjonen. Det som ikke lenger finnes der, som en
+ * analytt som er fjernet, begynner på nytt i stedet for å bli gjettet på.
+ */
+export function fortolkningsform(analytter: readonly Analyte[]): Bevaringsform<State> {
+  return {
+    lagre: (state) => ({ ...state, analyte: state.analyte?.kode ?? null }),
+    les: (lagret) => {
+      if (typeof lagret !== 'object' || lagret === null) return undefined
+      const l = lagret as Partial<Record<keyof State, unknown>>
+      const tekstEllerNull = (v: unknown) => (typeof v === 'string' ? v : null)
+      const analyte = typeof l.analyte === 'string' ? analytter.find((a) => a.kode === l.analyte) : undefined
+      if (l.analyte !== null && !analyte) return { ...initialState, metodefilter: tekstEllerNull(l.metodefilter) }
+      const etgValg = tekstEllerNull(l.etgValg) as EtgValg | null
+      return {
+        query: typeof l.query === 'string' ? l.query : '',
+        analyte: analyte ?? null,
+        bandKey: tekstEllerNull(l.bandKey),
+        kontroll: l.kontroll === 'cutoff' ? 'cutoff' : null,
+        etgValg: etgValg && alternativFor(etgValg) ? etgValg : null,
+        autoPick: typeof l.autoPick === 'boolean' ? l.autoPick : true,
+        metodefilter: tekstEllerNull(l.metodefilter),
+      }
+    },
+  }
 }

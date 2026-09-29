@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useBevart } from '../oppdatering/Bevaring'
 import { Button } from './Button'
 import { Card } from './Card'
 import { Kommentarliste } from './Kommentarliste'
@@ -50,7 +51,8 @@ export interface RusStepProps {
  * ligger i {@link Kommentarliste}.
  */
 export function RusStep({ modul, regler, onBack, onFinish, copy, flashAt }: RusStepProps) {
-  const [inndata, setInndata] = useState(TOM_RUS_INNDATA)
+  // Svarene overlever en oppdatering av appen.
+  const [inndata, setInndata] = useBevart(`fortolkning/rus/${modul.id}`, TOM_RUS_INNDATA)
   /**
    * Teller opp for hver endring i skjemaet. Et nytt svar gir en ny
    * fortolkning, og det som var kopiert gjaldt den forrige.

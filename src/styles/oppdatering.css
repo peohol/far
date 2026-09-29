@@ -1,0 +1,94 @@
+/**
+ * Meldingen om at en ny versjon er klar (`Oppdateringsmelding`). Den har de
+ * snudde fargene fra tooltipen og angremeldingen, så den leses som noe som
+ * ligger over innholdet, men er større og står midt nederst i vinduet til
+ * brukeren har oppdatert. Står et modalt lag åpent, legges den i det, så den
+ * fortsatt ligger øverst.
+ */
+.oppdateringsmelding {
+  position: fixed;
+  left: 50%;
+  bottom: var(--rom-6);
+  z-index: calc(var(--lag-modal) + 1);
+  display: flex;
+  align-items: center;
+  gap: var(--rom-4);
+  width: min(38rem, 100vw - 2 * var(--rom-side));
+  padding: var(--rom-4) var(--rom-4) var(--rom-4) var(--rom-6);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-liten);
+  line-height: var(--linjehoyde-ui);
+  color: var(--tips-blekk);
+  background: var(--tips-flate);
+  border-radius: var(--runding-kort);
+  box-shadow: var(--skygge-modal);
+  transform: translateX(-50%);
+  animation: oppdateringsmelding-inn var(--fart-glid) var(--kurve);
+}
+
+@keyframes oppdateringsmelding-inn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 0.75rem);
+  }
+}
+
+.oppdateringsmelding__tekst {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.oppdateringsmelding__tekst strong {
+  font-weight: var(--vekt-halvfet);
+}
+
+.oppdateringsmelding__knapp {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rom-2);
+  min-height: var(--hoyde-kontroll);
+  padding: 0 var(--rom-6);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+  color: var(--tips-flate);
+  background: var(--tips-blekk);
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+}
+
+.oppdateringsmelding__knapp:focus-visible {
+  outline: 2px solid var(--tips-blekk);
+  outline-offset: 2px;
+}
+
+.oppdateringsmelding__knapp:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+/* På smale flater står knappen under teksten, og meldingen legger seg over
+   dokken når sidene har en. */
+@media (max-width: 47.5em) {
+  .oppdateringsmelding {
+    flex-wrap: wrap;
+  }
+
+  .oppdateringsmelding__knapp {
+    width: 100%;
+  }
+
+  body:has(.app:not([data-side='fortolkning']) .toppmeny__spor > *) > .oppdateringsmelding {
+    bottom: calc(var(--rom-4) + var(--hoyde-dokk) + var(--rom-3));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oppdateringsmelding {
+    animation: none;
+  }
+}

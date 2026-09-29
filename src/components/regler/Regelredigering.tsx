@@ -1,4 +1,5 @@
 import { useId, useMemo, useState, type FormEvent, type ReactNode } from 'react'
+import { useBevart } from '../../oppdatering/Bevaring'
 import { formatNumber, round } from '../../domain/bands'
 import { regelsettband } from '../../domain/intervallregler'
 import type { Regelsettutgave } from '../../faginnhold/lesing'
@@ -56,9 +57,9 @@ export interface RegelredigeringProps {
  * hen velger.
  */
 export function Regelredigering({ start, onLagre, hentNyeste, onAvbryt }: RegelredigeringProps) {
-  const [regelsett, setRegelsett] = useState(start)
+  const [regelsett, setRegelsett] = useBevart('regelsett', start)
   /** Grensene slik de står i feltene, også mens et tall skrives. */
-  const [grenser, setGrenser] = useState(() => start.skillepunkter.map(tallTilFelt))
+  const [grenser, setGrenser] = useBevart('grenser', () => start.skillepunkter.map(tallTilFelt))
   const lagring = useRegellagring(onLagre, hentNyeste)
   const { feil, setFeil, lagrer, konflikt } = lagring
   const tittel = useId()

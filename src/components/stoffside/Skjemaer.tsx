@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { useBevart } from '../../oppdatering/Bevaring'
 import {
   DOSEKOLONNER,
   FORSLAG_LEGEMIDDELFORMER,
@@ -98,22 +99,23 @@ function Skjemaramme<T>({
   bred?: boolean
   children?: ReactNode
 }) {
-  const [kilder, setKilder] = useState<string[]>([...referanser])
+  const [kilder, setKilder] = useBevart<string[]>('kilder', () => [...referanser])
   const [feil, setFeil] = useState<string | null>(null)
   const [lagrer, setLagrer] = useState(false)
   const [forlater, setForlater] = useState(false)
   const skjemaId = useId()
 
   // Det skjemaet ville lagret, som tekst: slik det var da vinduet åpnet, og nå.
+  // Utgangspunktet tas vare på sammen med det som er skrevet, så et utkast
+  // som kom tilbake etter en oppdatering av appen, fortsatt regnes som endret.
   const signatur = () => JSON.stringify([kontroller(), kilder])
-  const start = useRef<string | null>(null)
-  start.current ??= signatur()
+  const [start] = useBevart<string>('utgangspunkt', signatur)
 
   // Der fokus stod da brukeren ville lukke, så «Fortsett å redigere» kan føre det tilbake.
   const fokusFor = useRef<HTMLElement | null>(null)
   const vedLukking = () => {
     if (lagrer) return false
-    if (signatur() === start.current) return true
+    if (signatur() === start) return true
     if (!forlater && document.activeElement instanceof HTMLElement) fokusFor.current = document.activeElement
     setForlater(true)
     return false
@@ -249,7 +251,7 @@ export function navnForForslag(sidenavn: string): string {
  */
 export function LegemiddelkoblingSkjema(props: SkjemaProps<Legemiddelkoblingdata> & { sidenavn: string }) {
   const { legemidler } = useFaginnholdskilde()
-  const [valgte, setValgte] = useState<KobletVirkestoff[]>(props.start.virkestoff)
+  const [valgte, setValgte] = useBevart<KobletVirkestoff[]>('virkestoff', props.start.virkestoff)
   const forslag = navnForForslag(props.sidenavn)
   const [sok, setSok] = useState(props.start.virkestoff.length === 0 ? forslag : '')
   const [treff, setTreff] = useState<{ sok: string; liste: Virkestofftreff[] } | null>(null)
@@ -366,7 +368,7 @@ export function ClinpgxkoblingSkjema(
   props: SkjemaProps<Clinpgxkoblingdata> & { sidenavn: string; grunnlag: Koblingsgrunnlag },
 ) {
   const { farmakogenetikk } = useFaginnholdskilde()
-  const [valgte, setValgte] = useState<KobletKjemikalie[]>(props.start.kjemikalier)
+  const [valgte, setValgte] = useBevart<KobletKjemikalie[]>('kjemikalier', props.start.kjemikalier)
   const [sok, setSok] = useState(
     props.start.kjemikalier.length === 0 ? (props.grunnlag.navn[0] ?? navnForForslag(props.sidenavn)) : '',
   )
@@ -481,9 +483,9 @@ export function ClinpgxkoblingSkjema(
 /* --- Datakortene ---------------------------------------------------------- */
 
 export function DatakortSkjema(props: SkjemaProps<Omit<Intervallverdi, 'forbehold'>> & { kort: Datakortdefinisjon }) {
-  const [nedre, setNedre] = useState(tallTilFelt(props.start.nedre))
-  const [ovre, setOvre] = useState(tallTilFelt(props.start.ovre))
-  const [enhet, setEnhet] = useState(props.start.enhet)
+  const [nedre, setNedre] = useBevart('nedre', tallTilFelt(props.start.nedre))
+  const [ovre, setOvre] = useBevart('ovre', tallTilFelt(props.start.ovre))
+  const [enhet, setEnhet] = useBevart('enhet', props.start.enhet)
 
   const kontroller = () => {
     const n = lesTallfelt(nedre)
@@ -540,7 +542,7 @@ function tilFormfelt(verdi: Formverdi): Formfelt {
  * tomt; med flere trenger hver sitt.
  */
 export function FormverdiSkjema(props: SkjemaProps<Formverdier>) {
-  const [rader, setRader] = useState<Formfelt[]>(() =>
+  const [rader, setRader] = useBevart<Formfelt[]>('former', () =>
     (props.start.former.length > 0 ? props.start.former : [tomFormverdi()]).map(tilFormfelt),
   )
   const forslagId = useId()
@@ -611,10 +613,11 @@ export function FormverdiSkjema(props: SkjemaProps<Formverdier>) {
 /* --- Rikteksten ----------------------------------------------------------- */
 
 export function TekstSkjema(props: SkjemaProps<{ dokument: Riktekstdokument }>) {
-  const [dokument, setDokument] = useState(props.start.dokument)
+  const [dokument, setDokument] = useBevart('dokument', props.start.dokument)
   return (
     <Skjemaramme {...props} kontroller={() => ({ data: { dokument } })}>
-      <Rikteksteditor dokument={props.start.dokument} onEndre={setDokument} etikett={props.tittel} />
+      {/* Editoren leser dokumentet bare når den åpnes: det lagrede, eller utkastet etter en oppdatering. */}
+      <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett={props.tittel} />
     </Skjemaramme>
   )
 }
@@ -622,8 +625,8 @@ export function TekstSkjema(props: SkjemaProps<{ dokument: Riktekstdokument }>) 
 /* --- Farmakokinetikken ---------------------------------------------------- */
 
 export function KinetikkSkjema(props: SkjemaProps<{ tittel: string; dokument: Riktekstdokument }>) {
-  const [tittel, setTittel] = useState(props.start.tittel)
-  const [dokument, setDokument] = useState(props.start.dokument)
+  const [tittel, setTittel] = useBevart('tittel', props.start.tittel)
+  const [dokument, setDokument] = useBevart('dokument', props.start.dokument)
   const kontroller = () => {
     if (!tittel.trim()) return { feil: 'Kortet trenger en overskrift.' }
     if (erTomt(dokument)) return { feil: 'Kortet trenger en tekst.' }
@@ -632,7 +635,7 @@ export function KinetikkSkjema(props: SkjemaProps<{ tittel: string; dokument: Ri
   return (
     <Skjemaramme {...props} kontroller={kontroller}>
       <Tekstfelt merke="Overskrift" verdi={tittel} onEndre={setTittel} />
-      <Rikteksteditor dokument={props.start.dokument} onEndre={setDokument} etikett={tittel || props.tittel} />
+      <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett={tittel || props.tittel} />
     </Skjemaramme>
   )
 }
@@ -640,7 +643,7 @@ export function KinetikkSkjema(props: SkjemaProps<{ tittel: string; dokument: Ri
 /* --- Serumkonsentrasjonene ------------------------------------------------ */
 
 export function DosetabellSkjema(props: SkjemaProps<{ rader: Doserad[] }>) {
-  const [rader, setRader] = useState<Doserad[]>(props.start.rader.length > 0 ? props.start.rader : [tomDoserad()])
+  const [rader, setRader] = useBevart<Doserad[]>('rader', () => (props.start.rader.length > 0 ? props.start.rader : [tomDoserad()]))
   const endre = (i: number, felt: keyof Doserad, verdi: string) =>
     setRader(rader.map((rad, j) => (j === i ? { ...rad, [felt]: verdi } : rad)))
 

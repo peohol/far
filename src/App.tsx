@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useProfil } from './auth/okt'
 import { iBakgrunnen } from './auth/aktivitet'
 import { klient } from './auth/klient'
@@ -69,7 +69,8 @@ import { useSokeindeks, type Sokeindekshenter } from './hooks/useSokeindeks'
 import { useKontotema } from './hooks/useKontotema'
 import { lesPubliserteRegelsett } from './regler/kommentarer'
 import { slaOpp } from './regler/publiserte'
-import { initialState, isIdle, reducer, stageOf, type Action, type Stage } from './state'
+import { useBevart } from './oppdatering/Bevaring'
+import { fortolkningsform, initialState, isIdle, reducer, stageOf, type Action, type Stage } from './state'
 import type { Analyte } from './types'
 
 const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
@@ -89,6 +90,9 @@ const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
 /** Stoffsidene i databasen før de er hentet — én og samme liste, så stoffregisteret ikke bygges på nytt. */
 const INGEN_STOFFSIDER: readonly Stoffoppforing[] = []
 
+/** Fortolkningen overlever en oppdatering av appen, med analytten lest tilbake etter koden. */
+const FORTOLKNINGSFORM = fortolkningsform(FORTOLKNINGSOPPFORINGER)
+
 const BLINK = 500
 const STEGBYTTE = 130
 
@@ -98,7 +102,8 @@ function buttonHasFocus(): boolean {
 }
 
 export default function App() {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, setState] = useBevart('fortolkning', initialState, FORTOLKNINGSFORM)
+  const dispatch = useCallback((action: Action) => setState((forrige) => reducer(forrige, action)), [setState])
   const [failedCopy, setFailedCopy] = useState<string | null>(null)
   const profil = useProfil()
   const { theme, toggle } = useKontotema(profil.id)
