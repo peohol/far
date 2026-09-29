@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.61.1',
+    dato: '2026-09-29',
+    sammendrag: 'Oppgaven «Søk skal være sensitivt for stoff-alias og forkortelser» er merket utført',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Den planlagte oppgaven «Søk skal være sensitivt for stoff-alias og forkortelser» (OPG-003) er merket utført med versjon 1.61.0, og det er ført inn i appens oversikt over databaseendringer.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.61.0',
     dato: '2026-09-29',
     sammendrag: 'Fagsøket finner stoffene også på engelske navn, forkortelser og andre skrivemåter',
