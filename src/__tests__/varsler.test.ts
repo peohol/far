@@ -16,6 +16,8 @@ interface Hendelse {
   kommentar?: string
   svar_til?: string | null
   objekt?: { id: string; type: string; navn: string | null; analyttkode: string | null }
+  side?: { id: string; navn: string; stoff: string }
+  deler?: string[]
 }
 
 interface Varsel {
@@ -178,6 +180,59 @@ describe('varslene', () => {
     expect((await fortolkning(bo))[0]!.hendelser).toHaveLength(2)
   })
 
+  it('varsler dem som har siden som favoritt når den publiseres, med delene som er endret, samlet per side', async () => {
+    const favoritt = (bruker: string, stoff: string) =>
+      sql(bruker, 'select public.sett_stoffavoritt($1, true)', [stoff])
+    const omSide = async (bruker: string, side: string) =>
+      (await varsler(bruker)).filter((v) => v.kategori === 'favoritter' && v.hendelser[0]?.side?.id === side)
+    const element = (side: string, panel: string, ekstra: Record<string, unknown> = {}) =>
+      ({ infoside: side, panel, posisjon: 0, elementtype: 'tekst', data: {}, ...ekstra }) as never
+
+    await favoritt(ada, 'favorittstoff')
+    await favoritt(admin, 'favorittstoff')
+    const side = await kall.opprett('infoside', { navn: 'Favorittstoff' })
+    await kall.publiser(side.id, 1)
+    // En ny side uten innhold har ikke endret noe å si fra om ennå.
+    expect(await omSide(ada, side.id)).toEqual([])
+
+    const ref = await kall.opprett('referanse', { tittel: 'Kilde', forfattere: 'Nordmann O', aar: '2020', lenke: 'https://example.org' } as never)
+    await kall.publiser(ref.id, 1)
+    const dosering = await kall.opprett('innholdselement', element(side.id, 'dosering', { referanser: [ref.id] }))
+    await kall.publiser(dosering.id, 1)
+    const kinetikk = await kall.opprett('innholdselement', element(side.id, 'farmakokinetikk'))
+    await kall.publiser(kinetikk.id, 1)
+
+    // Ada har siden som favoritt; admin publiserte selv, og Bo har den ikke.
+    const [varsel] = await omSide(ada, side.id)
+    expect(varsel!.hendelser.map((h) => [h.av, h.side, h.deler])).toEqual([
+      [admin, { id: side.id, navn: 'Favorittstoff', stoff: 'favorittstoff' }, ['dosering']],
+      [admin, { id: side.id, navn: 'Favorittstoff', stoff: 'favorittstoff' }, ['farmakokinetikk']],
+    ])
+    expect(await omSide(admin, side.id)).toEqual([])
+    expect(await omSide(bo, side.id)).toEqual([])
+    expect(await uleste(ada)).toMatchObject({ favoritter: 1 })
+
+    // Et kort som fjernes, er en endring i panelet det sto i; navnet og en
+    // referanse som er rettet, er endringer der de står. Alt i det samme uleste varselet.
+    await kall.publiser((await kall.lagre(kinetikk.id, 1, element(side.id, 'fjernet'))).id, 2)
+    await kall.publiser((await kall.lagre(side.id, 1, { navn: 'Favorittstoffet' } as never)).id, 2)
+    await kall.publiser((await kall.lagre(ref.id, 1, { tittel: 'Kilden', forfattere: 'Nordmann O', aar: '2020', lenke: 'https://example.org' } as never)).id, 2)
+    const [samlet] = await omSide(ada, side.id)
+    expect(samlet!.id).toBe(varsel!.id)
+    expect(samlet!.hendelser.slice(2).map((h) => h.deler)).toEqual([['farmakokinetikk'], ['navn'], ['dosering']])
+    // Nøkkelen står når navnet endres, så favoritten følger siden.
+    expect(samlet!.hendelser.at(-1)!.side).toEqual({ id: side.id, navn: 'Favorittstoffet', stoff: 'favorittstoff' })
+
+    // Når varselet er lest, begynner neste endring på et nytt.
+    const { lest_kl } = await mine(ada)
+    await merkLest(ada, [varsel!.id], lest_kl)
+    await kall.publiser((await kall.lagre(dosering.id, 1, element(side.id, 'dosering', { posisjon: 1, referanser: [ref.id] }))).id, 2)
+    expect((await omSide(ada, side.id)).map((v) => [v.lest_kl === null, v.hendelser.length])).toEqual([
+      [true, 1],
+      [false, 5],
+    ])
+  })
+
   it('viser bare den innloggedes egne varsler, og bare gjennom funksjonene', async () => {
     const ide = await nyIde(ada)
     await nyKommentar(bo, ide)
@@ -194,6 +249,23 @@ describe('varslene', () => {
     await merkLest(bo, null, lest_kl)
     expect(await uleste(bo)).toEqual({})
     expect((await omIde(ada, ide))[0]!.lest_kl).toBeNull()
+  })
+
+  it('tar med alle uleste også når det er flere enn 200 leste', async () => {
+    const ny = await opprettBruker(db, { brukernavn: 'mange', fornavn: 'Mia', etternavn: 'Mange', rolle: 'user' })
+    await db.query(
+      `insert into public.varsler (mottaker_id, kategori, gruppe, hendelser, oppdatert_kl, lest_kl)
+       select $1, 'fortolkning', 'lest:' || n, '[{"kl": "x", "av": null}]', now() - interval '1 hour' + n * interval '1 second', now()
+       from generate_series(1, 210) n`,
+      [ny],
+    )
+    await db.query(
+      `insert into public.varsler (mottaker_id, kategori, gruppe, hendelser, oppdatert_kl)
+       values ($1, 'fortolkning', 'ulest', '[{"kl": "x", "av": null}]', now() - interval '2 days')`,
+      [ny],
+    )
+    expect(await uleste(ny)).toEqual({ fortolkning: 1 })
+    expect((await varsler(ny)).filter((v) => v.lest_kl === null)).toHaveLength(1)
   })
 
   it('rydder bort leste varsler etter 30 dager', async () => {

@@ -76,6 +76,18 @@ const LISTE: Varselliste = {
       oppdatert_kl: '2026-09-28T10:00:00Z',
       lest: true,
     },
+    {
+      kilde: 'database',
+      id: 'v-favoritt',
+      kategori: 'favoritter',
+      ide: null,
+      hendelser: [
+        { kl: '2026-09-29T09:00:00Z', av: 'ola', side: { id: 's1', navn: 'Litium', stoff: 'litium' }, deler: ['tdm'] },
+        { kl: '2026-09-29T09:30:00Z', av: 'ola', side: { id: 's1', navn: 'Litium', stoff: 'litium' }, deler: ['navn', 'dosering'] },
+      ],
+      oppdatert_kl: '2026-09-29T09:30:00Z',
+      lest: false,
+    },
   ],
 }
 
@@ -197,13 +209,30 @@ describe('vinduet', () => {
     expect(within(within(vindu).getByRole('region', { name: 'Tidligere' })).getByText(/kommenterte en idé du har kommentert/)).toBeTruthy()
 
     await bruker.click(within(vindu).getByRole('button', { name: 'Merk alle som lest' }))
-    expect(api.merkVarslerLest).toHaveBeenLastCalledWith(null, LISTE.lest_kl)
+    // Bare det brukeren ser: favorittene er av og står urørt.
+    expect(api.merkVarslerLest).toHaveBeenLastCalledWith(['v-ide'], LISTE.lest_kl)
     expect(api.lagreEndringsloggstatus).toHaveBeenLastCalledWith({ fra: '2.0.0', lest: ['2.1.0'] })
     expect(within(vindu).queryByRole('region', { name: 'Nye' })).toBeNull()
     expect((within(vindu).getByRole('button', { name: 'Merk alle som lest' }) as HTMLButtonElement).disabled).toBe(true)
   })
 
-  it('lar brukeren slå av de valgfrie kategoriene, men ikke de obligatoriske, og skjuler favorittene', async () => {
+  it('viser endringene på favorittsidene når brukeren har slått dem på, og leder til siden', async () => {
+    api.hentVarselvalg.mockResolvedValue({ favoritter: true })
+    api.hentUleste.mockResolvedValue({ mine_ideer: 1, aktive_ideer: 1, favoritter: 1 })
+    const bruker = userEvent.setup()
+    render(<Varselknapp />)
+    await waitFor(() => expect(bjella().getAttribute('aria-label')).toBe('Varsler (4 uleste)'))
+    await bruker.click(bjella())
+    const vindu = await screen.findByRole('dialog', { name: 'Varsler' })
+    const lenke = await within(vindu).findByRole('link', { name: 'Ola Nordmann endret Litium' })
+    expect(lenke.getAttribute('href')).toBe('#/stoff/litium/dosering')
+    expect(lenke.closest('li')!.textContent).toContain('Navnet, Dosering og Terapeutisk legemiddelmonitorering (TDM)')
+    lenke.addEventListener('click', (e) => e.preventDefault())
+    await bruker.click(lenke)
+    expect(api.merkVarslerLest).toHaveBeenCalledWith(['v-favoritt'], LISTE.lest_kl)
+  })
+
+  it('lar brukeren slå av og på de valgfrie kategoriene, men ikke de obligatoriske', async () => {
     const { bruker, vindu } = await apne()
     await bruker.click(within(vindu).getByRole('button', { name: 'Varselinnstillinger' }))
     const innstillinger = await screen.findByRole('dialog', { name: 'Varselinnstillinger' })
@@ -213,6 +242,7 @@ describe('vinduet', () => {
       ['Kommentarer til mine idéer og kommentarer', true, true],
       ['Kommentarer til idéer jeg har vært aktiv i', true, false],
       ['Ny eller endret funksjonalitet i appen', true, false],
+      ['Endringer på mine favorittsider', false, false],
     ])
     await bruker.click(brytere[2]!)
     expect(api.lagreVarselvalg).toHaveBeenCalledWith({ aktive_ideer: false })

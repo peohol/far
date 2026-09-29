@@ -8,6 +8,7 @@ Varslene berører ikke fortolkningen; de forteller bare at noe er endret.
 | Hvor | Hva |
 | --- | --- |
 | `supabase/migrations/*_varsler.sql` | Tabellen, utløserne som lager varslene, og funksjonene som leser og merker dem lest |
+| `supabase/migrations/*_favorittvarsler.sql` | Varslene om endringer på favorittsidene, og hvordan hendelsene leses |
 | `src/varsler/modell.ts` | Kategoriene, valgene, føringene i endringsloggen som varsler, sorteringen og tekstene (rene funksjoner) |
 | `src/varsler/api.ts` | Kallene mot Supabase og brukerinnstillingene |
 | `src/components/varsler/` | Bjella (`Varselknapp`), tilstanden (`useVarsler`) og vinduet (`Varsler`) |
@@ -21,7 +22,7 @@ Varslene berører ikke fortolkningen; de forteller bare at noe er endret.
 | `mine_ideer` | Noen kommenterer en idé du skrev, eller svarer på en kommentar du skrev | Nei |
 | `aktive_ideer` | Noen kommenterer en idé du har kommentert, uten at det er et svar til deg | Ja, på som standard |
 | `funksjonalitet` | En ny føring i endringsloggen | Ja, på som standard |
-| `favoritter` | En side du har som favoritt, er endret | Ja, av som standard. Skjult til favorittene finnes |
+| `favoritter` | Noen publiserer endringer på en fagside du har som favoritt | Ja, av som standard |
 
 Kategoriene står i `VARSELKATEGORIER`. De som lages av databasen, er de
 samme som `public.varselkategori`; en test passer på at de stemmer.
@@ -86,13 +87,28 @@ Vinduet viser de uleste under «Nye» og resten under «Tidligere». Et varsel
 leder dit det gjelder, og er lest når man går dit: idéen (`visIde`, som
 `Ideknapp` hører etter), føringen i endringsloggen (`visEndringslogg`) eller
 reglene på stoffsiden. «Merk som lest» og «Merk alle som lest» gjør det
-samme uten å gå noe sted. Tannhjulet åpner innstillingene, der de
+samme uten å gå noe sted; «Merk alle som lest» gjelder bare kategoriene brukeren har slått på. Tannhjulet åpner innstillingene, der de
 obligatoriske kategoriene står låst.
 
 ## Favorittene
 
-Kategorien `favoritter` finnes, men ingenting lager slike varsler ennå, og den
-er skjult i innstillingene (`skjult`). Når favorittene finnes, lages varslene
-av en utløser på `objektpubliseringer` for sidens objekter, med gruppen
-`favoritter:<stoff>`, så alt som publiseres på en side før brukeren har lest
-varselet, blir ett varsel. Da tas `skjult` bort.
+Når en redaktør publiserer endringer på en fagside, får alle som har stoffet
+som favoritt (`stoffavoritter`, etter nøkkelen) et varsel, unntatt redaktøren.
+Det er publiseringen som varsler, ikke lagringen: utkastene underveis varsler
+ingen, så varselet kommer først når redigeringen er ferdig.
+
+Utløseren på `objektpubliseringer` (`intern.varsle_favoritter`) ser på sidens
+objekter og finner delene som er endret (`intern.endrede_sidedeler`):
+
+- et innholdselement: panelet det står i, og panelet det sto i før (et kort som
+  fjernes, flyttes til `fjernet`, som ikke telles);
+- siden selv: `navn` når navnet eller nøkkelen er endret, og panelene der
+  panelreferansene er endret;
+- en referanse som er endret: panelene der de publiserte sidene siterer den.
+
+Gruppen er `favoritter:<sidens ID>`, så alt som publiseres på en side før
+brukeren har lest varselet, blir ett varsel. Hendelsene har `side` og `deler`;
+`mine_varsler` gir siden med navnet og nøkkelen slik de er nå
+(`intern.varselside`). Vinduet viser «Ola Nordmann endret Litium» med delene
+under, i sidens rekkefølge, og lenker til den første delen som er et sted på
+siden. Reglene siden viser, varsles som endringer i fortolkningen.

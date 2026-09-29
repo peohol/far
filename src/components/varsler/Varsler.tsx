@@ -3,12 +3,17 @@ import { visningsnavn, type Profil } from '@delt/profil'
 import { hentAlleProfiler } from '../../auth/api'
 import { useProfil } from '../../auth/okt'
 import { FORTOLKNINGSSEKSJON, fortolkningsseksjonFor, stoffadresseForAnalytt } from '../../domain/koblinger'
+import { stoffadresse } from '../../domain/rute'
 import { formaterDato } from '../../domain/versjon'
 import {
   KATEGORIREKKEFOLGE,
   VARSELKATEGORIER,
   aktorer,
+  deletekst,
+  endredeDeler,
   erValgt,
+  favorittside,
+  favorittsted,
   fortolkningsobjekter,
   idetekst,
   navneliste,
@@ -140,7 +145,7 @@ const KATEGORIIKON: Record<Varsel['kategori'], Ikonnavn> = {
   mine_ideer: 'comment',
   aktive_ideer: 'comment',
   funksjonalitet: 'history',
-  favoritter: 'refs',
+  favoritter: 'star',
 }
 
 interface RadProps {
@@ -209,6 +214,27 @@ function Databaseinnhold({ varsel, meg, navn, onGa }: RadProps & { varsel: Datab
     )
   }
 
+  if (varsel.kategori === 'favoritter') {
+    const side = favorittside(varsel)
+    const deler = endredeDeler(varsel)
+    const tittel = `${hvem} endret ${side?.navn ?? 'en favorittside'}`
+    return (
+      <>
+        {side ? (
+          <a className="varsel__tittel" data-ih="" href={stoffadresse(side.stoff, favorittsted(deler))} onClick={() => onGa(varsel)}>
+            {tittel}
+          </a>
+        ) : (
+          <p className="varsel__tittel">{tittel}</p>
+        )}
+        <p className="varsel__meta">
+          {deler.length > 0 && <>{deletekst(deler)} · </>}
+          {tid}
+        </p>
+      </>
+    )
+  }
+
   const ide = varsel.ide
   const antall = varsel.hendelser.length
   return (
@@ -243,12 +269,11 @@ function Objektlenke({ objekt, onGa }: { objekt: Fortolkningsobjekt; onGa: () =>
 
 /** Hvilke kategorier brukeren får varsel om. De obligatoriske står på og kan ikke slås av. */
 function Innstillinger({ status }: { status: Varselstatus }) {
-  const kategorier = KATEGORIREKKEFOLGE.filter((k) => !('skjult' in VARSELKATEGORIER[k]))
   return (
     <div className="varselinnstillinger">
       <p className="varselinnstillinger__ingress">Velg hva du vil få varsel om. Endringer i fortolkningen og svar til deg får alle.</p>
       <ul className="varselinnstillinger__liste">
-        {kategorier.map((kategori) => {
+        {KATEGORIREKKEFOLGE.map((kategori) => {
           const { tittel, forklaring, obligatorisk } = VARSELKATEGORIER[kategori]
           return (
             <li key={kategori} className="varselinnstilling">

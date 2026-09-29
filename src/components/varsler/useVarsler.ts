@@ -104,9 +104,9 @@ export function useVarsler(): Varselstatus {
 
   /** Merker lest i lista med én gang, og i databasen etterpå. */
   const lesIDatabasen = useCallback(
-    (ider: string[] | null) => {
+    (ider: string[]) => {
       if (!liste) return
-      setListe({ ...liste, varsler: liste.varsler.map((v) => (ider === null || ider.includes(v.id) ? { ...v, lest: true } : v)) })
+      setListe({ ...liste, varsler: liste.varsler.map((v) => (ider.includes(v.id) ? { ...v, lest: true } : v)) })
       merkVarslerLest(ider, liste.lest_kl).then(sjekk, () => undefined)
     },
     [liste, sjekk],
@@ -121,10 +121,15 @@ export function useVarsler(): Varselstatus {
     [lesEndringer, lesIDatabasen],
   )
 
+  const varsler = useMemo(() => (liste ? samleVarsler([...liste.varsler, ...endringer], valg) : null), [liste, endringer, valg])
+
+  /** Merker det brukeren ser, lest: kategoriene som er slått av, står urørt. */
   const merkAlleLest = useCallback(() => {
-    lesEndringer(endringer.filter((e) => !e.lest).map((e) => e.endring.versjon))
-    lesIDatabasen(null)
-  }, [endringer, lesEndringer, lesIDatabasen])
+    const uleste = (varsler ?? []).filter((v) => !v.lest)
+    lesEndringer(uleste.flatMap((v) => (v.kilde === 'endringslogg' ? [v.endring.versjon] : [])))
+    const ider = uleste.flatMap((v) => (v.kilde === 'database' ? [v.id] : []))
+    if (ider.length > 0) lesIDatabasen(ider)
+  }, [varsler, lesEndringer, lesIDatabasen])
 
   const endreValg = useCallback((kategori: Varselkategori, pa: boolean) => {
     const neste = { ...valgene.current, [kategori]: pa }
@@ -132,8 +137,6 @@ export function useVarsler(): Varselstatus {
     setValg(neste)
     void lagreVarselvalg(neste).catch(() => undefined)
   }, [])
-
-  const varsler = useMemo(() => (liste ? samleVarsler([...liste.varsler, ...endringer], valg) : null), [liste, endringer, valg])
 
   return {
     antall: antallUleste(uleste, endringer, valg),

@@ -63,10 +63,12 @@ const SUPABASE_GRUNNLAG = /* sql */ `
 `
 
 /**
- * Migrasjonene som bare merker planlagte oppgaver utført i produksjon
- * (`fullfor_oppgave`). Oppgavene finnes ikke i en ny database, så de kjøres ikke der.
+ * Migrasjonene som bare kan kjøres i produksjon: den første som merket en
+ * planlagt oppgave utført, kaller `fullfor_oppgave` for en oppgave som ikke
+ * finnes i en ny database. De senere gjør ingenting der (se skillen
+ * `utfor-oppgaver`), og kjøres som alle andre.
  */
-const BARE_I_PRODUKSJON = /_oppgaver_utfort_\w+\.sql$/
+const BARE_I_PRODUKSJON = /_oppgaver_utfort_1_56_0\.sql$/
 
 /** Migrasjonsfilene, i den rekkefølgen prosjektet kjører dem. */
 export function migrasjonsfiler(): string[] {

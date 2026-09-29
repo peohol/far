@@ -9,10 +9,13 @@ import type { Endring } from '../domain/versjon'
 import {
   DATABASEKATEGORIER,
   KATEGORIREKKEFOLGE,
-  VARSELKATEGORIER,
   antallUleste,
   endringsvarsler,
   erValgt,
+  deletekst,
+  endredeDeler,
+  favorittside,
+  favorittsted,
   idetekst,
   lesEndringsloggstatus,
   lesVarselliste,
@@ -66,8 +69,9 @@ describe('kategoriene og valgene', () => {
     expect(lesVarselvalg(null)).toEqual({})
   })
 
-  it('skjuler favorittene til de finnes', () => {
-    expect(Object.entries(VARSELKATEGORIER).filter(([, k]) => 'skjult' in k).map(([id]) => id)).toEqual(['favoritter'])
+  it('har favorittene av til brukeren slår dem på', () => {
+    expect(erValgt('favoritter', {})).toBe(false)
+    expect(erValgt('favoritter', { favoritter: true })).toBe(true)
   })
 })
 
@@ -104,6 +108,9 @@ describe('endringsloggen', () => {
     expect(startstatus(logg)).toEqual({ fra: '1.2.0', lest: [] })
     expect(endringsvarsler(logg, { fra: '1.0.0', lest: [] }, NAA).map((v) => v.endring.versjon)).toEqual(['1.3.0', '1.2.0', '1.1.0'])
     expect(merkEndringerLest(logg, { fra: '1.0.0', lest: [] }, ['1.1.0'], NAA)).toEqual({ fra: '1.1.1', lest: [] })
+    // En endring i fortolkningen varsles alltid.
+    const begge = [endring('1.4.0', '2026-09-29', { utenVarsel: true, endrerFortolkning: true }), ...LOGG]
+    expect(endringsvarsler(begge, { fra: '1.3.0', lest: [] }, NAA).map((v) => [v.endring.versjon, v.kategori])).toEqual([['1.4.0', 'fortolkning']])
   })
 
   it('leser bare en gyldig status', () => {
@@ -151,6 +158,26 @@ describe('tekstene', () => {
     expect(objekttekst({ id: '2', type: 'scenarioregelsett', navn: 'DIAZ · DMI', analyttkode: 'DIAZ' })).toBe('Reglene for DIAZ · DMI')
   })
 
+  it('sier hvilken favorittside som er endret, og hvilke deler, i sidens rekkefølge', () => {
+    const side = (navn: string) => ({ id: 's1', navn, stoff: 'bupropion' })
+    const varsel = ideVarsel({
+      kategori: 'favoritter',
+      ide: null,
+      hendelser: [
+        { kl: '', av: 'ola', side: side('Bupropion'), deler: ['farmakokinetikk'] },
+        { kl: '', av: 'per', side: side('Bupropion'), deler: ['dosering', 'navn'] },
+        { kl: '', av: 'ola', side: side('Bupropion XL'), deler: ['farmakokinetikk', 'identitet'] },
+      ],
+    })
+    expect(favorittside(varsel)?.navn).toBe('Bupropion XL')
+    const deler = endredeDeler(varsel)
+    expect(deler).toEqual(['navn', 'identitet', 'dosering', 'farmakokinetikk'])
+    expect(deletekst(deler)).toBe('Navnet, Identitet, Dosering og Farmakokinetikk')
+    // Lenken går til den første delen som er et sted på siden.
+    expect(favorittsted(deler)).toEqual(['dosering'])
+    expect(favorittsted(['navn'])).toEqual([])
+  })
+
   it('viser over ni som «9+»', () => {
     expect(merketall(3)).toBe('3')
     expect(merketall(10)).toBe('9+')
@@ -187,10 +214,22 @@ describe('samlet', () => {
           oppdatert_kl: 'x',
           lest_kl: null,
         },
+        {
+          id: 'v4',
+          kategori: 'favoritter',
+          ide: null,
+          hendelser: [{ kl: 'x', av: 'a', side: { id: 's', navn: 'Litium', stoff: 'litium' }, deler: ['tdm', 4] }],
+          oppdatert_kl: 'x',
+          lest_kl: 'x',
+        },
         { id: 'v2', kategori: 'ukjent', hendelser: [{}] },
         { id: 'v3', kategori: 'mine_ideer', hendelser: [] },
       ],
     })
-    expect(liste.varsler.map((v) => [v.id, v.lest, v.hendelser[0]!.objekt?.navn])).toEqual([['v1', false, 'N']])
+    expect(liste.varsler.map((v) => [v.id, v.lest, v.hendelser[0]!.objekt?.navn])).toEqual([
+      ['v1', false, 'N'],
+      ['v4', true, undefined],
+    ])
+    expect(liste.varsler[1]!.hendelser[0]).toMatchObject({ side: { id: 's', navn: 'Litium', stoff: 'litium' }, deler: ['tdm'] })
   })
 })

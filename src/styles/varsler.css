@@ -89,7 +89,13 @@ button.varsel__tittel {
   cursor: pointer;
 }
 
-button.varsel__tittel:hover {
+a.varsel__tittel {
+  display: block;
+  text-decoration: none;
+}
+
+button.varsel__tittel:hover,
+a.varsel__tittel:hover {
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }

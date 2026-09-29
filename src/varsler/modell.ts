@@ -5,6 +5,7 @@
  * `*_varsler.sql` og i `docs/varsler.md`.
  */
 import { sammenlignVersjon, type Endring } from '../domain/versjon'
+import { PANELREKKEFOLGE, panelFor } from '../faginnhold/paneler'
 import { erObjekt, tekst, tekstEllerNull } from '../ideer/lesing'
 
 /* --- Kategoriene ----------------------------------------------------------- */
@@ -17,8 +18,6 @@ export interface Varselkategoridefinisjon {
   obligatorisk: boolean
   /** Om kategorien er på før brukeren har valgt noe. */
   standard: boolean
-  /** Vises ikke i innstillingene ennå, fordi ingenting kan gi slike varsler. */
-  skjult?: boolean
 }
 
 /**
@@ -53,10 +52,9 @@ export const VARSELKATEGORIER = {
   },
   favoritter: {
     tittel: 'Endringer på mine favorittsider',
-    forklaring: 'Når en side du har som favoritt, er endret.',
+    forklaring: 'Når noen har publisert endringer på en fagside du har som favoritt.',
     obligatorisk: false,
     standard: false,
-    skjult: true,
   },
 } as const satisfies Record<string, Varselkategoridefinisjon>
 
@@ -123,9 +121,12 @@ export function lesEndringsloggstatus(verdi: unknown): Endringsloggstatus | null
   return { fra: verdi.fra, lest }
 }
 
-/** Føringer uten `utenVarsel` er varsler; de andre merkes ikke i appen. */
+/**
+ * Føringer uten `utenVarsel` er varsler; de andre merkes ikke i appen. En
+ * endring i fortolkningen varsles alltid, så den vinner om begge står.
+ */
 function varsles(endring: Endring): boolean {
-  return !endring.utenVarsel
+  return !endring.utenVarsel || endring.endrerFortolkning === true
 }
 
 /**
@@ -222,6 +223,16 @@ export interface Hendelse {
   svarTil?: string | null
   /** Det som ble publisert i fortolkningen. */
   objekt?: Fortolkningsobjekt | null
+  /** Favorittsiden som ble endret, og delene av den (`SIDENAVN` eller panelnøkler). */
+  side?: Favorittside | null
+  deler?: string[]
+}
+
+/** En fagside slik et favorittvarsel viser den: navnet og stoffets nøkkel. */
+export interface Favorittside {
+  id: string
+  navn: string
+  stoff: string
 }
 
 export interface Databasevarsel {
@@ -255,6 +266,12 @@ function lesObjekt(verdi: unknown): Fortolkningsobjekt | null {
   }
 }
 
+function lesSide(verdi: unknown): Favorittside | null {
+  if (!erObjekt(verdi)) return null
+  const side = { id: tekst(verdi.id), navn: tekst(verdi.navn), stoff: tekst(verdi.stoff) }
+  return side.id && side.stoff ? side : null
+}
+
 function lesHendelse(verdi: unknown): Hendelse | null {
   if (!erObjekt(verdi)) return null
   const hendelse: Hendelse = { kl: tekst(verdi.kl), av: tekstEllerNull(verdi.av) }
@@ -263,6 +280,10 @@ function lesHendelse(verdi: unknown): Hendelse | null {
     hendelse.svarTil = tekstEllerNull(verdi.svar_til)
   }
   if ('objekt' in verdi) hendelse.objekt = lesObjekt(verdi.objekt)
+  if ('side' in verdi) {
+    hendelse.side = lesSide(verdi.side)
+    hendelse.deler = Array.isArray(verdi.deler) ? verdi.deler.filter((d): d is string => typeof d === 'string') : []
+  }
   return hendelse
 }
 
@@ -332,11 +353,14 @@ export function merketall(antall: number): string {
 
 /* --- Tekstene -------------------------------------------------------------- */
 
+/** «A», «A og B», «A, B og C». */
+export function oppramsing(ledd: readonly string[]): string {
+  return ledd.length <= 1 ? (ledd[0] ?? '') : `${ledd.slice(0, -1).join(', ')} og ${ledd.at(-1)}`
+}
+
 /** «Ada», «Ada og Bo», «Ada, Bo og Cy», «Ada, Bo og 2 andre». */
 export function navneliste(navn: readonly string[]): string {
-  if (navn.length <= 1) return navn[0] ?? ''
-  if (navn.length <= 3) return `${navn.slice(0, -1).join(', ')} og ${navn.at(-1)}`
-  return `${navn.slice(0, 2).join(', ')} og ${navn.length - 2} andre`
+  return navn.length <= 3 ? oppramsing(navn) : `${navn.slice(0, 2).join(', ')} og ${navn.length - 2} andre`
 }
 
 /** Hvem som står bak hendelsene, den siste først, hver én gang. */
@@ -367,4 +391,38 @@ export function fortolkningsobjekter(varsel: Databasevarsel): Fortolkningsobjekt
     .reverse()
     .map((h) => h.objekt)
     .filter((o): o is Fortolkningsobjekt => o != null)
+}
+
+/** Delen av en favorittside som står for sidens navn og nøkkel (`intern.endrede_sidedeler`). */
+export const SIDENAVN = 'navn'
+
+/** Favorittsiden varselet gjelder, slik den heter nå. */
+export function favorittside(varsel: Databasevarsel): Favorittside | null {
+  return [...varsel.hendelser].reverse().find((h) => h.side)?.side ?? null
+}
+
+/** Delene av siden som er endret i varselet, hver én gang: navnet først, så panelene i sidens rekkefølge. */
+export function endredeDeler(varsel: Databasevarsel): string[] {
+  const rekkefolge = [SIDENAVN, ...PANELREKKEFOLGE]
+  const plass = (del: string) => (rekkefolge.includes(del) ? rekkefolge.indexOf(del) : rekkefolge.length)
+  return [...new Set(varsel.hendelser.flatMap((h) => h.deler ?? []))].sort((a, b) => plass(a) - plass(b) || a.localeCompare(b))
+}
+
+/** «Navnet», eller tittelen på panelet. */
+export function deltittel(del: string): string {
+  return del === SIDENAVN ? 'Navnet' : (panelFor(del)?.tittel ?? del)
+}
+
+/** «Navnet, Dosering og Farmakokinetikk». */
+export function deletekst(deler: readonly string[]): string {
+  return oppramsing(deler.map(deltittel))
+}
+
+/**
+ * Stedet på siden varselet leder til: den første endrede delen som er et sted
+ * på siden (navnet og identiteten står øverst uansett), eller toppen.
+ */
+export function favorittsted(deler: readonly string[]): string[] {
+  const del = deler.find((d) => d !== SIDENAVN && panelFor(d)?.form !== 'identitet')
+  return del ? [del] : []
 }
