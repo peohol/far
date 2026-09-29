@@ -351,6 +351,10 @@
   display: none;
 }
 
+.nedtrekk__panel:focus {
+  outline: none;
+}
+
 /* Adminmenyen har bare korte valg. */
 .adminmeny .nedtrekk__panel {
   width: min(15rem, calc(100vw - 2 * var(--rom-side)));

@@ -27,6 +27,7 @@ export interface NedtrekksmenyProps {
  */
 export function Nedtrekksmeny({ knapp: knappProps, etikett, lag, className, onApne, ved, children }: NedtrekksmenyProps) {
   const [apen, setApen] = useState(false)
+  const rot = useRef<HTMLDivElement>(null)
   const knapp = useRef<HTMLButtonElement>(null)
   const meny = useRef<HTMLDivElement>(null)
   const menyId = useId()
@@ -64,7 +65,15 @@ export function Nedtrekksmeny({ knapp: knappProps, etikett, lag, className, onAp
   }, [apen, lukk])
 
   return (
-    <div className={['nedtrekk', className].filter(Boolean).join(' ')}>
+    <div
+      ref={rot}
+      className={['nedtrekk', className].filter(Boolean).join(' ')}
+      onBlur={(event) => {
+        // Fokus som går ut av menyen og knappen, med tabulator fram eller
+        // tilbake, lukker menyen, men får gå dit det skulle.
+        if (apen && !rot.current?.contains(event.relatedTarget as Node | null)) lukk(false)
+      }}
+    >
       <Ikonknapp
         ref={knapp}
         {...knappProps}
@@ -85,13 +94,10 @@ export function Nedtrekksmeny({ knapp: knappProps, etikett, lag, className, onAp
         role="group"
         aria-label={etikett}
         hidden={!apen}
+        // Et trykk på noe som ikke tar fokus i panelet, som navnet, holder
+        // fokus i menyen i stedet for å slippe det ut av den.
+        tabIndex={-1}
         {...(apen && { 'data-lag': lag })}
-        onBlur={(event) => {
-          // Tabulator ut av menyen lukker den, men lar fokus gå videre.
-          if (apen && !event.currentTarget.contains(event.relatedTarget as Node | null)) {
-            if (event.relatedTarget !== knapp.current) lukk(false)
-          }
-        }}
       >
         {children(lukkMedFokus)}
       </div>

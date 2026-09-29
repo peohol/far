@@ -339,6 +339,25 @@ describe('kontomenyen', () => {
     expect(preferanser.getAttribute('aria-expanded')).toBe('false')
   })
 
+  it('lukkes når fokus tabuleres ut av den, også bakover forbi avataren', async () => {
+    const knapp = vis()
+    await userEvent.click(knapp)
+    const meny = panel(knapp)
+    await userEvent.tab({ shift: true })
+    expect(document.activeElement).toBe(knapp)
+    expect(meny.hidden).toBe(false)
+    await userEvent.tab({ shift: true })
+    expect(meny.hidden).toBe(true)
+    expect(meny.hasAttribute('data-lag')).toBe(false)
+  })
+
+  it('står åpen når noe i den som ikke tar fokus trykkes, som navnet', async () => {
+    const knapp = vis()
+    await userEvent.click(knapp)
+    await userEvent.click(screen.getByText('aadmin'))
+    expect(panel(knapp).hidden).toBe(false)
+  })
+
   it('lukkes av et trykk utenfor', async () => {
     const knapp = vis()
     await userEvent.click(knapp)
