@@ -11,7 +11,7 @@ import { visTreff, type Treffvisning } from './treffvisning'
 export function useFagsoketreff(
   tilstand: Sokeindekstilstand,
   sporring: string,
-  beskrivSide?: (kode: string) => string | undefined,
+  beskrivSide?: (stoff: string) => string | undefined,
 ): { treff: Soketreff[]; vis: (treff: Soketreff) => Treffvisning } {
   const ord = useMemo(() => sokeord(sporring), [sporring])
   const treff = useMemo(

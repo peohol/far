@@ -1,11 +1,13 @@
 /**
  * Lesingen av faginnholdet, slik appen gjør den.
  *
- * Hver side leses i ett kall (`les_analyttside` i databasen, eller
- * `les_stoffside` for et stoff uten analyttkode), med
+ * Hver stoffside leses i ett kall etter stoffets nøkkel (`les_stoff`), med
  * radsikkerheten som ellers: det publiserte for alle, utkastet bare for
  * administratorer. Hvert objekt kommer tilbake som en {@link Utgave} — innholdet
  * i én tilstand, revisjonen det står på, og hvem som laget den.
+ *
+ * Fortolkningsreglene leses for seg, etter analyttkoden eller modulen, og
+ * kobles inn på stoffsiden bare der koblingene i stoffregisteret sier det.
  *
  * Klienten sendes inn, som i `lagring.ts`, slik at modulen ikke binder seg til
  * én bestemt oppkobling.
@@ -13,19 +15,14 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { tilFeil } from './lagring'
 import type { Historikk } from './historikk'
-import type {
-  Infosideinnhold,
-  Innholdselementinnhold,
-  Laboratorieanalyttinnhold,
-  Referanseinnhold,
-  Tilstand,
-} from './modell'
+import type { Infosideinnhold, Innholdselementinnhold, Referanseinnhold, Tilstand } from './modell'
+import { referanseomraderPerAnalytt, type Stoffreferanseomrade } from '../domain/koblinger'
+import type { Stoffoppforing } from '../domain/stoffregister'
 import type { Kommentarinnhold } from '../domain/kommentarobjekt'
 import { harVerdi, lesIntervallverdi, type Intervallverdi } from './paneler'
 import { kommentarIder } from '../regler/kommentarer'
 import type { Intervallregelsettinnhold } from '../regler/modell'
 import type { ThcRegelsettinnhold } from '../domain/thcTekster'
-import { THC_KODE } from '../domain/thc'
 import { scenariokommentarer } from '../regler/scenarioredigering'
 import type { Scenarioregelsett } from '../domain/scenario'
 import type { Scenarioregeldata } from './scenarioregler'
@@ -66,61 +63,46 @@ export interface Scenarioregelsettutgave {
   kommentarer: Utgave<Kommentarinnhold>[]
 }
 
-/** En komponentside i en sumanalyse, med kodene som har den som hovedside. */
-export type Komponentutgave = Utgave<Infosideinnhold> & { koder: string[] }
-
-/** Alt på én analyttside, i én tilstand. */
-export interface Analyttsidedata {
-  analytt: Utgave<Laboratorieanalyttinnhold> | null
+/** Alt på én stoffside — monografien — i én tilstand. */
+export interface Stoffsidedata {
+  /** Stoffet siden handler om, slik databasen har det. `null` når siden ikke finnes ennå. */
+  stoff: Stoffoppforing | null
   infoside: Utgave<Infosideinnhold> | null
   elementer: Utgave<Innholdselementinnhold>[]
-  komponenter: Komponentutgave[]
   referanser: Utgave<Referanseinnhold>[]
-  /**
-   * Fortolkningsreglene for koden, når den har et regelsett. Regelsettet er
-   * sitt eget objekt og peker på koden, ikke på siden.
-   */
-  regelsett: Regelsettutgave | null
-  /** THC-syreregelsettet, på siden for koden det fortolker ({@link THC_KODE}). */
+}
+
+/** Et stoff som ikke har noen side ennå, eller som leseren ikke har tilgang til. */
+export const TOM_STOFFSIDE: Stoffsidedata = { stoff: null, infoside: null, elementer: [], referanser: [] }
+
+/**
+ * Fortolkningsreglene for laboratorieanalyttene en stoffside viser, lest for
+ * seg etter analyttkoden og fortolkningsmodulen — aldri gjennom siden. De hører
+ * til fortolkningssystemet; stoffsiden viser og redigerer dem der koblingen i
+ * stoffregisteret sier at stoffet er analyttens primære stoff.
+ */
+export interface Regeldata {
+  /** Intervallregelsettet for hver analyttkode som har et. */
+  regelsett: Readonly<Record<string, Regelsettutgave>>
+  /** THC-syreregelsettet, når en av analyttene er THC-syre (`THC_KODE`). */
   thcregelsett: Regelsettutgave<ThcRegelsettinnhold> | null
   /**
-   * Scenarioreglene for modulen koden fortolkes i, når den fortolkes med
-   * scenarioregler. Hentes bare til redigeringen; lesemodusen viser dem appen
-   * alt har hentet (`Scenarioreglerkilde`).
+   * Scenarioregelsettet for hver modul analyttene fortolkes i med
+   * scenarioregler, etter modulens ID. Hentes bare til redigeringen;
+   * lesemodusen viser dem appen alt har hentet (`Scenarioreglerkilde`).
    */
-  scenarioregelsett: Scenarioregelsettutgave | null
+  scenarioregelsett: Readonly<Record<string, Scenarioregelsettutgave>>
 }
 
-/** En kode som ikke har noen side ennå, eller som leseren ikke har tilgang til. */
-export const TOM_SIDE: Analyttsidedata = {
-  analytt: null,
-  infoside: null,
-  elementer: [],
-  komponenter: [],
-  referanser: [],
-  regelsett: null,
-  thcregelsett: null,
-  scenarioregelsett: null,
-}
+export const INGEN_REGLER: Regeldata = { regelsett: {}, thcregelsett: null, scenarioregelsett: {} }
 
 export interface Faginnholdsleser {
-  /**
-   * Siden for en analyttkode, med regelsettet for koden. {@link TOM_SIDE}
-   * når ingen av delene finnes.
-   */
-  lesAnalyttside(kode: string, tilstand: Tilstand): Promise<Analyttsidedata>
-  /**
-   * Informasjonssiden med dette navnet, for et stoff uten analyttkode. Er
-   * siden hovedside for en kode, kommer siden for koden tilbake, med
-   * `analytt`. {@link TOM_SIDE} når ingen side har navnet.
-   */
-  lesStoffside(navn: string, tilstand: Tilstand): Promise<Analyttsidedata>
-  /** Navnene på stoffsidene uten analyttkode, alfabetisk. */
-  lesStoffsidenavn(tilstand: Tilstand): Promise<string[]>
+  /** Stoffsiden for stoffet med denne nøkkelen. {@link TOM_STOFFSIDE} når siden ikke finnes. */
+  lesStoffside(slug: string, tilstand: Tilstand): Promise<Stoffsidedata>
+  /** Nøkkelen og navnet til hver stoffside i databasen, alfabetisk. */
+  lesStoffliste(tilstand: Tilstand): Promise<Stoffoppforing[]>
   /** Hele referansebasen, til å velge kilder fra. */
   lesReferanser(tilstand: Tilstand): Promise<Utgave<Referanseinnhold>[]>
-  /** Informasjonssidene med disse navnene, uten hensyn til store og små bokstaver. */
-  finnInfosider(navn: string[], tilstand: Tilstand): Promise<Utgave<Infosideinnhold>[]>
   /** Regelsettet for en analyttkode med kommentarene det bruker, eller `null` når koden ikke har noe. */
   finnIntervallregelsett(kode: string, tilstand: Tilstand): Promise<Regelsettutgave | null>
   /** Scenarioregelsettet for en fortolkningsmodul med kommentarene det bruker, eller `null` når modulen ikke har noe. */
@@ -132,8 +114,9 @@ export interface Faginnholdsleser {
   /** Kommentarene i én tilstand: alle, eller bare dem med disse ID-ene. */
   lesKommentarer(tilstand: Tilstand, ider?: string[]): Promise<Utgave<Kommentarinnhold>[]>
   /**
-   * Referanseområdet på informasjonssiden for hver analyttkode som har det,
-   * i én tilstand. Fortolkningen viser det samme tallet under analyttnavnet.
+   * Referanseområdet for hver analyttkode som har et, i én tilstand: kortet
+   * på det primære stoffets side (se `referanseomraderPerAnalytt`).
+   * Fortolkningen viser det samme tallet under analyttnavnet.
    */
   lesReferanseomrader(tilstand: Tilstand): Promise<ReadonlyMap<string, Intervallverdi>>
   /**
@@ -173,27 +156,13 @@ export function lagFaginnholdsleser(klient: SupabaseClient): Faginnholdsleser {
   }
 
   return {
-    lesAnalyttside: async (kode, tilstand) => {
-      const [side, regelsett, thcregelsett] = await Promise.all([
-        kall<Omit<Analyttsidedata, 'regelsett' | 'thcregelsett' | 'scenarioregelsett'>>('les_analyttside', {
-          analyttkode: kode,
-          sidetilstand: tilstand,
-        }),
-        finnIntervallregelsett(kode, tilstand),
-        kode === THC_KODE ? lesThcRegelsett(tilstand) : null,
-      ])
-      return { ...TOM_SIDE, ...side, regelsett, thcregelsett }
-    },
-    lesStoffside: async (navn, tilstand) => ({
-      ...TOM_SIDE,
-      ...(await kall<Partial<Analyttsidedata>>('les_stoffside', { sidenavn: navn, sidetilstand: tilstand })),
+    lesStoffside: async (slug, tilstand) => ({
+      ...TOM_STOFFSIDE,
+      ...(await kall<Partial<Stoffsidedata>>('les_stoff', { stoff: slug, sidetilstand: tilstand })),
     }),
-    lesStoffsidenavn: async (tilstand) =>
-      (await kall<string[]>('les_stoffsidenavn', { sidetilstand: tilstand })) ?? [],
+    lesStoffliste: async (tilstand) => (await kall<Stoffoppforing[]>('les_stoffliste', { sidetilstand: tilstand })) ?? [],
     lesReferanser: async (tilstand) =>
       (await kall<Utgave<Referanseinnhold>[]>('les_referanser', { sidetilstand: tilstand })) ?? [],
-    finnInfosider: async (navn, tilstand) =>
-      (await kall<Utgave<Infosideinnhold>[]>('finn_infosider', { navn, sidetilstand: tilstand })) ?? [],
     finnIntervallregelsett,
     finnScenarioregelsett: async (modul, tilstand) => {
       // Alle regelsettene kommer i ett kall; det er få av dem.
@@ -208,12 +177,11 @@ export function lagFaginnholdsleser(klient: SupabaseClient): Faginnholdsleser {
     lesThcRegelsett,
     lesKommentarer,
     lesReferanseomrader: async (tilstand) => {
-      const rader =
-        (await kall<{ analyttkode: string; verdi: unknown }[]>('les_referanseomrader', { sidetilstand: tilstand })) ?? []
+      const kort = (await kall<Stoffreferanseomrade[]>('les_stoffreferanseomrader', { sidetilstand: tilstand })) ?? []
       return new Map(
-        rader.flatMap(({ analyttkode, verdi }) => {
+        [...referanseomraderPerAnalytt(kort)].flatMap(([kode, verdi]) => {
           const omrade = lesIntervallverdi(verdi)
-          return harVerdi(omrade) ? [[analyttkode, omrade] as const] : []
+          return harVerdi(omrade) ? [[kode, omrade] as const] : []
         }),
       )
     },

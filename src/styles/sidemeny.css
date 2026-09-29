@@ -410,6 +410,7 @@
 .menyny {
   flex: none;
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   gap: var(--rom-2);
   padding: var(--rom-4) var(--rom-6) var(--rom-6);
@@ -418,4 +419,9 @@
 
 .menyny .felt {
   flex: 1;
+}
+
+.menyny .skjemafeil {
+  flex-basis: 100%;
+  margin: 0;
 }

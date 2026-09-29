@@ -1,12 +1,12 @@
 /**
- * En analyttside satt sammen av det databasen gir: elementene sortert i
+ * En stoffside satt sammen av det databasen gir: elementene sortert i
  * panelene sine, referansene nummerert, og rekkefølgen endringene må
  * publiseres i.
  *
  * Alt her er rene funksjoner. Visningen, redigeringen og søket bygger på den
  * samme modellen, så de kan ikke se ulike utgaver av siden.
  */
-import type { Analyttsidedata, Utgave } from './lesing'
+import type { Regeldata, Stoffsidedata, Utgave } from './lesing'
 import type { Innholdselementinnhold, Referanseinnhold } from './modell'
 import { FJERNET, PANELREKKEFOLGE, panelFor } from './paneler'
 import {
@@ -69,7 +69,7 @@ export function tilReferanse(utgave: Utgave<Referanseinnhold>): Referanse {
  * Modellen for siden. Elementer i paneler siden ikke har — også de som er
  * fjernet — er ikke med, verken i panelene eller i nummereringen.
  */
-export function byggSidemodell(data: Analyttsidedata): Sidemodell {
+export function byggSidemodell(data: Stoffsidedata): Sidemodell {
   const paneler = new Map<string, Sideelement[]>()
   for (const utgave of data.elementer) {
     const { panel, posisjon, elementtype, data: innhold, referanser } = utgave.innhold
@@ -128,9 +128,7 @@ export function referanseunivers(
 
 export type Publiseringsslag =
   | 'referanse'
-  | 'komponent'
   | 'infoside'
-  | 'laboratorieanalytt'
   | 'innholdselement'
   | 'kommentar'
   | 'intervallregelsett'
@@ -149,39 +147,44 @@ export function upublisert(utgave: Utgave<unknown>): boolean {
   return utgave.publisert_revisjon !== utgave.revisjon
 }
 
+/** Etter ID, så rekkefølgen ikke avhenger av hvordan databasen ga dem. */
+function etterId<T extends { id: string }>(liste: readonly T[]): T[] {
+  return [...liste].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+}
+
 /**
- * Det som må publiseres for at siden skal bli slik utkastet viser den, i den
- * rekkefølgen databasen krever: det publiserte kan bare peke på det som også
- * er publisert. Referansene først, så sidene — komponentsidene før
- * hovedsiden — så laboratorieanalytten og innholdselementene. Til sist
- * regelsettene, hvert etter kommentarene det peker på.
+ * Det som må publiseres for at stoffsiden og reglene den viser skal bli slik
+ * utkastet viser dem, i den rekkefølgen databasen krever: det publiserte kan
+ * bare peke på det som også er publisert. Referansene først, så siden og
+ * innholdselementene. Til sist regelsettene, hvert etter kommentarene det
+ * peker på.
  *
- * `data` er utkastet. Bare det som faktisk har upubliserte endringer, er med.
- * Referansene som er med, er dem siden siterer.
+ * `side` og `regler` er utkastet. Bare det som faktisk har upubliserte
+ * endringer, er med. Referansene som er med, er dem siden siterer.
  */
-export function publiseringsplan(data: Analyttsidedata): Publiseringssteg[] {
+export function publiseringsplan(side: Stoffsidedata, regler: Regeldata): Publiseringssteg[] {
   const steg: Publiseringssteg[] = []
   const sett = new Set<string>()
-  const legg = (slag: Publiseringsslag, utgave: Utgave<unknown> | null) => {
+  const legg = (slag: Publiseringsslag, utgave: Utgave<unknown> | null | undefined) => {
     if (!utgave || sett.has(utgave.id) || !upublisert(utgave)) return
     sett.add(utgave.id)
     steg.push({ slag, id: utgave.id, revisjon: utgave.revisjon })
   }
+  const leggRegelsett = (
+    slag: Publiseringsslag,
+    utgave: { regelsett: Utgave<unknown>; kommentarer: Utgave<unknown>[] } | null | undefined,
+  ) => {
+    for (const kommentar of utgave?.kommentarer ?? []) legg('kommentar', kommentar)
+    legg(slag, utgave?.regelsett)
+  }
 
-  for (const referanse of data.referanser) legg('referanse', referanse)
-  for (const komponent of data.komponenter) {
-    if (komponent.id !== data.infoside?.id) legg('komponent', komponent)
+  for (const referanse of side.referanser) legg('referanse', referanse)
+  legg('infoside', side.infoside)
+  for (const element of etterId(side.elementer)) legg('innholdselement', element)
+  for (const kode of Object.keys(regler.regelsett).sort()) leggRegelsett('intervallregelsett', regler.regelsett[kode])
+  for (const modul of Object.keys(regler.scenarioregelsett).sort()) {
+    leggRegelsett('scenarioregelsett', regler.scenarioregelsett[modul])
   }
-  legg('infoside', data.infoside)
-  legg('laboratorieanalytt', data.analytt)
-  for (const element of [...data.elementer].sort((a, b) => (a.id < b.id ? -1 : 1))) {
-    legg('innholdselement', element)
-  }
-  for (const kommentar of data.regelsett?.kommentarer ?? []) legg('kommentar', kommentar)
-  legg('intervallregelsett', data.regelsett?.regelsett ?? null)
-  for (const kommentar of data.scenarioregelsett?.kommentarer ?? []) legg('kommentar', kommentar)
-  legg('scenarioregelsett', data.scenarioregelsett?.regelsett ?? null)
-  for (const kommentar of data.thcregelsett?.kommentarer ?? []) legg('kommentar', kommentar)
-  legg('thc_regelsett', data.thcregelsett?.regelsett ?? null)
+  leggRegelsett('thc_regelsett', regler.thcregelsett)
   return steg
 }

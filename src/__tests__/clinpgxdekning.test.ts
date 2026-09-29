@@ -12,6 +12,7 @@ import {
   clinpgxdekning,
   clinpgxdekningsoversikt,
   DEKNINGSSTATUSER,
+  gjeldendeClinpgxside,
   dekningstelling,
   UKOBLEDE_STOFFSIDER,
   type Dekning,
@@ -38,13 +39,15 @@ describe('dekningsoversikten', () => {
     }
   })
 
-  it('er koblet for nøyaktig sidene som har en kobling i importene', () => {
+  it('er koblet for nøyaktig sidene som har en kobling i importene, med dagens sidenavn', () => {
     const koblet = DEKNING.filter((d) => d.status === 'koblet').map((d) => d.side)
-    expect(new Set(koblet)).toEqual(new Set(ALLE_CLINPGXKOBLINGER.map((k) => k.side)))
+    expect(new Set(koblet)).toEqual(new Set(ALLE_CLINPGXKOBLINGER.map((k) => gjeldendeClinpgxside(k.side))))
     for (const d of DEKNING) {
       if (d.status !== 'koblet') continue
       expect(d.kjemikalier, d.side).toEqual(
-        ALLE_CLINPGXKOBLINGER.filter((k) => k.side === d.side).map((k) => ({ clinpgx_id: k.clinpgx_id, navn: k.navn })),
+        ALLE_CLINPGXKOBLINGER
+          .filter((k) => gjeldendeClinpgxside(k.side) === d.side)
+          .map((k) => ({ clinpgx_id: k.clinpgx_id, navn: k.navn })),
       )
     }
   })
@@ -61,8 +64,13 @@ describe('dekningsoversikten', () => {
         continue
       }
       const moder = perSide.get(u.moderstoff.side)
-      expect(moder?.status, u.side).toBe('koblet')
-      if (moder?.status === 'koblet') expect(moder.kjemikalier.map((k) => k.clinpgx_id), u.side).toContain(u.moderstoff.clinpgx_id)
+      expect(moder, u.side).toBeDefined()
+      if (moder?.status === 'koblet') {
+        expect(moder.kjemikalier.map((k) => k.clinpgx_id), u.side).toContain(u.moderstoff.clinpgx_id)
+      }
+      if (moder?.status === 'krever_kuratering') {
+        expect(moder.kandidater.map((k) => k.clinpgx_id), u.side).toContain(u.moderstoff.clinpgx_id)
+      }
     }
   })
 

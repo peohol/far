@@ -9,8 +9,8 @@ export interface MetalinjeProps {
   /** Kategorien innenfor metoden. Utelates når metoden ikke er delt opp. */
   kategori?: string
   /**
-   * Sant når kodene skal føre til informasjonssiden — i fortolkningsmodulene.
-   * På informasjonssiden selv står koden som tekst.
+   * Sant når kodene skal føre til stoffsiden — i fortolkningsmodulene.
+   * På stoffsiden selv står koden som tekst.
    */
   lenker?: boolean
 }

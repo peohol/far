@@ -1,5 +1,5 @@
 /**
- * Panelene på en informasjonsside og innholdet i dem.
+ * Panelene på en stoffside og innholdet i dem.
  *
  * Siden er bygd av panelene i fast rekkefølge (`docs/ux-reimagination.md`,
  * del 8): identiteten, viktige data, og så seksjonene. Hvert panel har en form som

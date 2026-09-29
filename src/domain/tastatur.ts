@@ -83,7 +83,7 @@ export function mellomromErLedig(fokus: Fokusert | null | undefined): boolean {
  * Sant når `Enter` er ledig der fokus står, og derfor skal bekrefte.
  *
  * En lenke har `Enter` som sin egen tast: den følger lenken. Analyttkodene i
- * fortolkningsmodulene er lenker til informasjonssidene, og en bruker som
+ * fortolkningsmodulene er lenker til stoffsidene, og en bruker som
  * står på en av dem og trykker `Enter`, vil dit — ikke kopiere kommentaren.
  */
 export function enterErLedig(fokus: Fokusert | null | undefined): boolean {

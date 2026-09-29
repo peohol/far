@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { arkiverIde, gjenopprettIde, hentIdetraad, merkIdeSett, overforIde, settHjerte, slettIde } from '../../ideer/api'
 import { idetilstand, slettesKl, type Idetraad, type Kommentar } from '../../ideer/modell'
-import { Riktekst } from '../analyttside/Riktekst'
+import { Riktekst } from '../stoffside/Riktekst'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Forfatterbilde, useForfatternavn, useIdekontekst } from './Idekontekst'

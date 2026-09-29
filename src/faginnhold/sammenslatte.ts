@@ -1,8 +1,9 @@
 /**
- * Metabolittsidene som slås sammen med moderstoffets side
- * (`SAMMENSLATTE` i `src/domain/analyttkatalog.ts`), i databasen.
- *
- * Appen viser alt moderstoffets side for metabolittens kode. Hadde
+ * Metabolittsidene som den historiske migrasjonen slår sammen med
+ * moderstoffets side, i databasen (`MIGRERTE_SAMMENSLATTE`). I dag er
+ * metabolittene aliaser for moderstoffet i stoffregisteret, og analyttkoden
+ * er koblet til det der.
+ * Hadde
  * metabolitten en egen side i databasen — O-desmetyltramadol, med
  * referanseområdet og TDM-kortene fra Tidsskriftet — flyttes den over:
  *
@@ -25,14 +26,19 @@
  * testdatabasen før importene. Modulen brukes av skriptet som lager
  * migrasjonen og av testene, ikke av appen.
  */
-import { SAMMENSLATTE } from '../domain/analyttkatalog'
 import { innlogging, lit } from './import'
 import { DATAKORT, ELEMENTTYPER, FJERNET } from './paneler'
+import { MIGRERTE_SAMMENSLATTE } from './historiskesider'
+
+export { MIGRERTE_SAMMENSLATTE }
 
 /** Kilden revisjonene får i historikken. */
 export const SAMMENSLAINGSKILDE = 'Slått sammen med moderstoffets side'
 
-export function sammenslaingSql(admin: string, sammenslatte: Readonly<Record<string, string>> = SAMMENSLATTE): string {
+export function sammenslaingSql(
+  admin: string,
+  sammenslatte: Readonly<Record<string, string>> = MIGRERTE_SAMMENSLATTE,
+): string {
   const rader = Object.entries(sammenslatte)
     .map(([metabolitt, moderstoff]) => `      (${lit(metabolitt)}, ${lit(moderstoff)})`)
     .join(',\n')

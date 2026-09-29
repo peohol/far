@@ -14,9 +14,10 @@
  * - Frost et al. (Tidsskr Nor Legeforen 2019): atomoksetin og metylfenidat,
  *   og at det kom nasjonale referanseområder for antiepileptika i 2017.
  *
- * Sidene får bare informasjonssiden, uten laboratorieanalytt, og vises på
- * `#/stoff/<navn>`. Får et stoff en kode senere, kobles koden til siden som
- * finnes. Importen utvider en side som alt finnes, som TDM-importen.
+ * Sidene ble importert som stoffsider uten laboratorieanalytt, og vises på
+ * `#/stoff/<nøkkel>` som alle stoffsider. Får et stoff en analyttkode senere,
+ * kobles koden til stoffet i stoffregisteret. Importen utvider en side som
+ * alt finnes, som TDM-importen.
  *
  * Modulen brukes av importskriptet og testene, ikke av appen.
  */

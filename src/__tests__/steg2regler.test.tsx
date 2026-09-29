@@ -5,8 +5,10 @@
  * - Knappene, pillene og kommentarene kommer fra regelsettet databasen gir,
  *   ikke fra noe som ligger i appen: et publisert regelsett med en annen
  *   grense og kommentar gir andre knapper og kopierer den nye teksten.
- * - Referanseområdet under analyttnavnet er det informasjonssiden har, lest
- *   fra databasen sammen med regelsettene.
+ * - Referanseområdet under analyttnavnet er kortet på stoffsiden koden
+ *   primært er koblet til i stoffregisteret, lest fra databasen sammen med
+ *   regelsettene (`les_stoffreferanseomrader`, knyttet til koden gjennom
+ *   koblingene): HBUP får kortet på Bupropion-siden.
  * - Mens regelsettene hentes, og når hentingen feiler eller koden ikke har
  *   noe regelsett, er det ingen knapper og ingenting å kopiere.
  * - «Prøv igjen» henter regelsettene på nytt.
@@ -36,7 +38,7 @@ vi.mock('../auth/klient', () => ({
   klient: () => ({
     rpc: async (funksjon: string) => {
       if (funksjon === 'les_intervallregelsett' && svar.neste.length > 0) svar.aktivt = svar.neste.shift()!()
-      if (!['les_intervallregelsett', 'les_kommentarer', 'les_referanseomrader'].includes(funksjon) || !svar.aktivt) {
+      if (!['les_intervallregelsett', 'les_kommentarer', 'les_stoffreferanseomrader'].includes(funksjon) || !svar.aktivt) {
         return { data: null, error: null }
       }
       const { data, error } = await svar.aktivt
@@ -49,7 +51,8 @@ vi.mock('../components/konto/Kontomeny', () => ({ Kontomeny: () => null }))
 const { default: App } = await import('../App')
 const { TipsLag } = await import('../components/Tips')
 const { ShortcutVisibilityProvider } = await import('../hooks/useShortcutVisibility')
-const { DAGENS_REGELSETT, dagensKommentar, dagensRegelsett, publiserteRader } = await import('./hjelp/dagensregler')
+const { DAGENS_REGELSETT, dagensKommentar, dagensRegelsett } = await import('./hjelp/dagensregler')
+const { publiserteStoffrader } = await import('./hjelp/stoffreferanseomrader')
 const { regelsettvalg } = await import('../domain/valg')
 
 /** Teksten på knappene regelsettet fra før byttet gir for NOR. */
@@ -72,9 +75,13 @@ afterEach(() => {
   window.location.hash = ''
 })
 
-/** Databasen svarer med disse regelsettene, kommentarene og referanseområdene som de publiserte. */
-function publisert(regelsett: Intervallregelsett[], referanseomrader?: Parameters<typeof publiserteRader>[1]) {
-  return () => Promise.resolve({ data: publiserteRader(regelsett, referanseomrader), error: null })
+/**
+ * Databasen svarer med disse regelsettene, kommentarene og referanseområdene
+ * som de publiserte. Referanseområdene er kortene på stoffsidene, gitt som
+ * kortene selv eller etter koden (på siden til kodens primære stoff).
+ */
+function publisert(regelsett: Intervallregelsett[], referanseomrader?: Parameters<typeof publiserteStoffrader>[1]) {
+  return () => Promise.resolve({ data: publiserteStoffrader(regelsett, referanseomrader), error: null })
 }
 
 /** Databasen svarer når testen sier fra. */
@@ -129,10 +136,48 @@ describe('steg 2 på regelsettene i databasen', () => {
     await waitFor(async () => expect(await navigator.clipboard.readText()).toBe(ny.tekst))
   })
 
-  it('viser referanseområdet informasjonssiden har, også når det er endret der', async () => {
+  it('viser referanseområdet stoffsiden har, også når det er endret der', async () => {
     svar.neste.push(publisert(DAGENS_REGELSETT, { NOR: { nedre: 210, ovre: 590, enhet: 'nmol/L' } }))
     const { steg } = await tilSteg2('NOR')
     await waitFor(() => expect(within(steg).getByText('210 – 590 nmol/L')).toBeTruthy())
+  })
+
+  it('gir HBUP referanseområdet fra kortet på Bupropion-siden, gjennom koblingen i stoffregisteret', async () => {
+    // Kortene slik databasen har dem: etter stoffets nøkkel, ikke etter koden.
+    // Kortet på Bupropion-siden gjelder stoffets hovedanalytt, HBUP.
+    const kort = (nedre: number, ovre: number) => ({ nedre, ovre, enhet: 'nmol/L', forbehold: '' })
+    svar.neste.push(
+      publisert(DAGENS_REGELSETT, [
+        { stoff: 'bupropion', gjelder: null, verdi: kort(510, 3900) },
+        // En side med et navn som ligner analytten, er ikke koblet til HBUP.
+        { stoff: 'hydroksybupropion', gjelder: null, verdi: kort(1, 2) },
+        { stoff: 'nortriptylin', gjelder: null, verdi: kort(200, 600) },
+      ]),
+    )
+    const { steg } = await tilSteg2('HBUP')
+    await waitFor(() => expect(knappene(steg).length).toBeGreaterThan(0))
+    // Fortolkningen står på analytten, og koden lenker til stoffet kortet står på.
+    expect(within(steg).getByRole('heading', { level: 1 }).textContent).toMatch(/^Hydroksybupropion/)
+    expect(
+      within(steg).getByRole('link', { name: 'HBUP – åpne stoffsiden for Bupropion' }).getAttribute('href'),
+    ).toBe('#/stoff/bupropion')
+    expect(within(steg).getByText('510 – 3900 nmol/L')).toBeTruthy()
+    expect(within(steg).queryByText('1 – 2 nmol/L')).toBeNull()
+    expect(within(steg).queryByText('200 – 600 nmol/L')).toBeNull()
+  })
+
+  it('gir en analytt uten kort på stoffsiden sin ikke noe referanseområde', async () => {
+    // Bare Amitriptylin-siden har et kort. Nortriptylin er koblet til
+    // sumanalysen AMTNORSUM som sekundært stoff, men NOR får ikke kortet derfra.
+    svar.neste.push(
+      publisert(DAGENS_REGELSETT, [
+        { stoff: 'amitriptylin', gjelder: null, verdi: { nedre: 300, ovre: 900, enhet: 'nmol/L', forbehold: '' } },
+      ]),
+    )
+    const { steg } = await tilSteg2('NOR')
+    await waitFor(() => expect(knappene(steg)).toEqual(NOR_KNAPPER))
+    expect(within(steg).queryByText('Referanseområde')).toBeNull()
+    expect(within(steg).queryByText('300 – 900 nmol/L')).toBeNull()
   })
 
   it('har ingen knapper mens regelsettene hentes, og viser referanseområdet når det er hentet', async () => {
@@ -173,7 +218,7 @@ describe('steg 2 på regelsettene i databasen', () => {
       'Det finnes ingen publiserte fortolkningsregler for NOR.',
     )
     expect(knappene(steg)).toEqual([])
-    // Referanseområdet er informasjonssidens, og står likevel.
+    // Referanseområdet er stoffsidens, og står likevel.
     expect(within(steg).getByText('200 – 600 nmol/L')).toBeTruthy()
   })
 })

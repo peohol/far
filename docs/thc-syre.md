@@ -2,7 +2,7 @@
 
 Leses når noe ved fortolkningen av THC-syre (IRCAK) skal endres: motoren,
 reglene, tekstene eller fasiten. Planen står i
-`docs/analyttsider-og-redigering.md` (arbeidspakke 7).
+`docs/stoffsider-og-redigering.md` (arbeidspakke 7).
 
 THC-syre er en egen regelmotor, ikke en variant av konsentrasjonsbåndene eller
 scenarioene for analyttgruppene. Kurvene, måleusikkerheten og den dynamisk
@@ -13,11 +13,13 @@ uleselige.
 
 Reglene og tekstene er lagret og publisert i Supabase, med historikk og
 kontroll på serveren (se [Lagringen](#lagringen)). Fortolkningsmodulen
-fortolker med motoren og det som er publisert (se [I appen](#i-appen)), og
-analyttsiden for IRCAK viser reglene, tekstene og en simulator. Den
-opprinnelige modulen er bare igjen som fasit i testene. Administratorer kan
-redigere reglene og tekstene på analyttsiden og publisere dem som resten av
-siden (se [Redigeringen](#redigeringen)).
+fortolker med motoren og det som er publisert (se [I appen](#i-appen)).
+THC-syre (IRCAK) er koblet til stoffet THC (`#/stoff/thc`), sammen med THC i
+serum. Siden viser to separate fortolkningsseksjoner:
+scenarioreglene for THC i serum og THC-syrereglene for urin med tekstbolker
+og simulator. Administratorer kan redigere og publisere de to regelsettene
+uavhengig fra den samme siden. Den opprinnelige THC-syremodulen er bare igjen
+som fasit i testene (se [Redigeringen](#redigeringen)).
 
 ## Delene
 
@@ -29,11 +31,11 @@ siden (se [Redigeringen](#redigeringen)).
 | `src/domain/thcMotor.ts` | Motoren: fra inndata, regler og tekster til kommentar, konklusjon og tallgrunnlag |
 | `src/domain/thcTall.ts` | Tall og datoer slik de tastes og skrives |
 | `src/domain/thcPlot.ts` | Figuren med kurvene og de to prøvene |
-| `src/domain/thcVisning.ts` | Det modulen og analyttsiden skriver om reglene: nivåene, marginene og kurvene per bruksmønster |
+| `src/domain/thcVisning.ts` | Det modulen og stoffsiden skriver om reglene: nivåene, marginene og kurvene per bruksmønster |
 | `src/domain/thc.ts` | Koden, analysemetoden og søkeoppføringen |
 | `src/faginnhold/thcregler.ts` | Fra det databasen gir til en kontrollert modell, eller feilen modulen viser |
 | `src/components/ThcStep.tsx`, `ThcSkjema.tsx`, `ThcUtfall.tsx` | Modulen: skjemaet, kommentaren og kurvene, delt med simulatoren |
-| `src/components/regler/Thcregler.tsx`, `Thcsimulator.tsx` | Reglene, tekstbolkene og simulatoren på analyttsiden |
+| `src/components/regler/Thcregler.tsx`, `Thcsimulator.tsx` | Reglene, tekstbolkene og simulatoren på stoffsiden |
 | `src/components/regler/Thcredigering.tsx` | Redigeringen av reglene og tekstene |
 | `src/domain/__tests__/hjelp/thcOpprinnelig.ts` | Den opprinnelige modulen, med regnearkets konstanter i koden. Bare fasit i testene |
 | `src/domain/__tests__/fasit/thc-regelsett-import.json`, `thc-tekster-import.json` | Reglene og tekstene slik de står i den opprinnelige modulen |
@@ -41,7 +43,7 @@ siden (se [Redigeringen](#redigeringen)).
 | `scripts/lag-thc-fasit.ts` | Lager fasiten på nytt, bare ved bevisst klinisk endring |
 | `supabase/migrations/*_thc_regelsett*.sql`, `*_thc_tekster_som_kommentarer.sql` | Lagringen: tabellene, kontrollen på serveren, importen og flyttingen av tekstene |
 | `src/__tests__/thcRegelsettlagring.test.ts` | Lagringen prøvd mot en ekte database bygd av migrasjonene |
-| `src/__tests__/thcsteg.test.tsx`, `thcregler.test.tsx` | Modulen og analyttsiden med reglene de får |
+| `src/__tests__/thcsteg.test.tsx`, `thcregler.test.tsx` | Modulen og stoffsiden med reglene de får |
 | `src/__tests__/thcredigering.test.tsx`, `thcredigeringslagring.test.ts` | Redigeringen, og lagringen og publiseringen av den mot en ekte database |
 
 ## Fremgangsmåten
@@ -186,7 +188,7 @@ historikk.
 
 Appen henter det publiserte regelsettet og tekstene når den åpnes
 (`Faginnholdsleser.lesThcRegelsett`), og på nytt når en administrator går fra
-en analyttside tilbake til fortolkningen. `thcReglerFra` kontrollerer dem og
+en stoffside tilbake til fortolkningen. `thcReglerFra` kontrollerer dem og
 setter dem sammen til modellen motoren bruker. Modulen gir ingen kommentar før
 de er hentet, og sier fra i stedet om de ikke kunne hentes, ikke finnes eller
 ikke består kontrollen. Mens de hentes på nytt, står de gamle.
@@ -200,7 +202,7 @@ hver margin av `sammenlignMedForrige`, det samme steget fortolkningen bruker.
 Står skjemaet på en margin et nytt regelsett ikke har, gir motoren en mangel
 og ingen kommentar.
 
-Analyttsiden for IRCAK har seksjonen `fortolkning` med oversikten over
+Stoffsiden til THC har seksjonen `fortolkning-ircak` med oversikten over
 reglene, detaljkortet `tekster` med hver tekstbolk og når den brukes, og
 detaljkortet `simulator`. Simulatoren bruker det samme skjemaet, den samme
 kommentaren og de samme kurvene som modulen, og viser hvilke tekstbolker

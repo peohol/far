@@ -4,7 +4,7 @@ Leses når noe som har med preparater, virkestoff, pakninger eller andre
 legemiddelgrunndata på stoffsidene å gjøre skal endres. Farmakogenetikken fra
 ClinPGx og CPIC følger det samme mønsteret og står i `docs/clinpgx.md` og
 `docs/cpic.md`. Planen står i
-`docs/analyttsider-og-redigering.md`; her står hvilke kilder som finnes, hva de
+`docs/stoffsider-og-redigering.md`; her står hvilke kilder som finnes, hva de
 faktisk inneholder, og hvilke valg OUSFAR har gjort.
 
 Kartleggingen bygger på faktiske svar og filer hentet 23.09.2026, ikke på
@@ -315,7 +315,7 @@ godkjenningsfritak». Visningen følger `docs/ux-reimagination.md`, del 9:
   fra registeret under. Hver form er et detaljkort som vises som en stor
   overskrift med ikonet og en oppsummering som «3 styrker · 10–50 mg ·
   4 preparater». Står det bare én form, er den åpen når seksjonen åpnes.
-  Direktelenken er `#/analytt/KODE/preparater/form-<kode>`.
+  Direktelenken er `#/stoff/<nøkkel>/preparater/form-<kode>`.
 - **Styrkene** i en form står som like store kort, ett per styrke uansett
   hvor mange preparater som har den. Bare ett kort er åpent om gangen; det
   fyller bredden og lister preparatnavnene alfabetisk. En form med bare én

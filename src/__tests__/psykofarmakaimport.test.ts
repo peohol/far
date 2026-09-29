@@ -14,7 +14,7 @@ import { readFileSync } from 'node:fs'
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { byggKatalog, FORTOLKNINGSOPPFORINGER } from '../domain/analyttkatalog'
-import { byggSidemodell } from '../faginnhold/analyttside'
+import { byggSidemodell } from '../faginnhold/stoffside'
 import {
   byggImportplan,
   doserader,
@@ -30,9 +30,11 @@ import {
   type Importfil,
   type Importplan,
 } from '../faginnhold/import'
-import { lagFaginnholdsleser, type Analyttsidedata } from '../faginnhold/lesing'
+import { historiskSidenavn } from '../faginnhold/historiskesider'
+import { STOFFREGISTER } from '../domain/stoffregister'
 import { lesIntervallverdi, lesRiktekst } from '../faginnhold/paneler'
 import { PSYKOFARMAKA_FILER, PSYKOFARMAKA_KILDE, PSYKOFARMAKA_REFERANSER, psykofarmakaplan } from '../faginnhold/psykofarmaka'
+import { lesSideEtterKode, type Historiskside } from './hjelp/historisklesing'
 import {
   faginnholdskall,
   kjorMigrasjoner,
@@ -50,6 +52,16 @@ const FORSTE_IMPORTMIGRASJON = '20260923072247'
  * før den; omarbeidingene prøves i `monografomarbeiding.test.ts`.
  */
 const FORSTE_OMARBEIDING = migrasjonsfiler().find((f) => f.endsWith('_viktige_data_former.sql'))!
+
+/**
+ * Importen lagde disse to sidene med analyttens navn (`historiskSidenavn`).
+ * I dag er de stoffsidene for virkestoffet analytten er koblet til i
+ * stoffregisteret (`20260929112004_kanoniske_stoffsider.sql`).
+ */
+const HISTORISKE_HOVEDSIDE_NAVN: Readonly<Record<string, string>> = {
+  HBUP: 'Hydroksybupropion',
+  PALI: 'Paliperidon (hydroksyrisperidon)',
+}
 
 /**
  * Migrasjonene importen og kursendringen ble rullet ut som, med md5-en
@@ -89,11 +101,16 @@ describe('datasettet', () => {
     expect(plan.koder.map((k) => k.kode).sort()).toEqual(forventet)
   })
 
-  it('knytter hver kode til siden og stoffene katalogen sier', () => {
+  it('knytter hver kode til siden den hadde da, og stoffene katalogen sier', () => {
     for (const kode of plan.koder) {
-      const oppforing = katalog.finn(kode.kode!)!
-      expect(kode.hovedside.navn).toBe(oppforing.sidenavn)
-      expect(kode.komponenter.map((k) => k.navn)).toEqual(oppforing.komponenter)
+      const analytt = katalog.finn(kode.kode!)!
+      expect(kode.hovedside.navn, kode.kode!).toBe(historiskSidenavn(analytt))
+      expect(kode.komponenter.map((k) => k.navn), kode.kode!).toEqual(analytt.komponenter)
+    }
+    // Sidene med analyttens navn er i dag et annet navn på stoffet koden er koblet til.
+    for (const [kode, navn] of Object.entries(HISTORISKE_HOVEDSIDE_NAVN)) {
+      expect(plan.koder.find((k) => k.kode === kode)?.hovedside.navn, kode).toBe(navn)
+      expect(STOFFREGISTER.kanonisk(navn)?.slug, kode).toBe(STOFFREGISTER.primartStoffFor(kode)?.slug)
     }
   })
 
@@ -258,13 +275,14 @@ describe('importen i databasen', () => {
   let bruker: string
   let kall: Faginnholdskall
   let plan: Importplan
-  let sider: Map<string, Analyttsidedata>
+  /** Siden for hver kode, lest med den utgåtte `les_analyttside`: sidene har ingen nøkkel ennå. */
+  let sider: Map<string, Historiskside>
 
   const antallObjekter = async () =>
     (await kall.fasit<{ n: number }>('select count(*)::int as n from public.redigerbare_objekter'))[0]!.n
   const antallRevisjoner = async () =>
     (await kall.fasit<{ n: number }>('select count(*)::int as n from public.objektrevisjoner'))[0]!.n
-  const synlige = (side: Analyttsidedata) => side.elementer.filter((e) => e.innhold.panel !== 'fjernet')
+  const synlige = (side: Historiskside) => side.elementer.filter((e) => e.innhold.panel !== 'fjernet')
 
   beforeAll(async () => {
     // Slik produksjonen fikk den: administratoren fantes da importen og
@@ -276,9 +294,8 @@ describe('importen i databasen', () => {
     kall = faginnholdskall(db, admin)
     plan = psykofarmakaplan(katalog)
 
-    const leser = lagFaginnholdsleser(kall.klientFor(bruker))
     sider = new Map()
-    for (const { kode } of plan.koder) sider.set(kode!, await leser.lesAnalyttside(kode!, 'publisert'))
+    for (const { kode } of plan.koder) sider.set(kode!, await lesSideEtterKode(kall, bruker, kode!, 'publisert'))
   }, 120_000)
 
   it('viser nøyaktig det datasettet har, side for side, synlig for vanlige brukere', () => {
@@ -378,7 +395,7 @@ describe('importen i databasen', () => {
     for (const { innhold } of plan.referanser) {
       expect(referanser.filter((r) => r.tittel === innhold.tittel), innhold.tittel).toHaveLength(1)
     }
-    const liste = byggSidemodell(sider.get('AMTNORSUM')!).referanseliste
+    const liste = byggSidemodell({ stoff: null, ...sider.get('AMTNORSUM')! }).referanseliste
     expect(liste.map((r) => r.referanse.tittel)).toContain(PSYKOFARMAKA_REFERANSER.reis2009!.tittel)
   })
 
@@ -416,7 +433,7 @@ describe('importen i databasen', () => {
       [element.id],
     )
     expect(rad!.kilde).toBeNull()
-    const utkast = await lagFaginnholdsleser(kall.klientFor(admin)).lesAnalyttside('AMTNORSUM', 'utkast')
+    const utkast = await lesSideEtterKode(kall, admin, 'AMTNORSUM', 'utkast')
     expect(utkast.elementer.find((e) => e.id === element.id)).not.toHaveProperty('kilde')
   })
 })

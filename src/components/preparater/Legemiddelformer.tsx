@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react'
 import { oppsummerForm, type Preparatvisning } from '../../legemiddeldata/preparatmodell'
 import { preparatkort, preparatsted } from '../../legemiddeldata/stoffside'
-import { elementAnker } from '../analyttside/Paneler'
+import { elementAnker } from '../stoffside/Paneler'
 import { Ikon } from '../ikon/Ikon'
 import { Detaljkort } from '../seksjoner/Seksjon'
 import { Uthev } from '../Uthev'

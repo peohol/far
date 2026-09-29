@@ -14,7 +14,7 @@ export function useLukkMedEscape(onLukk: () => void) {
       if (event.key !== 'Escape' || event.defaultPrevented) return
       if (event.ctrlKey || event.metaKey || event.altKey) return
       if (lagLiggerOver() || skrivesIFelt()) return
-      if (document.querySelector('.analyttside .redigering')) return
+      if (document.querySelector('.stoffside .redigering')) return
       event.preventDefault()
       lukk.current()
     }

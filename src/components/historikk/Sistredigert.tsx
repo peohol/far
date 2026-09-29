@@ -3,7 +3,7 @@ import { fulltNavn, tidspunkt, type Felt } from '../../faginnhold/historikk'
 import { innholdsfelter } from '../../faginnhold/innholdsfelter'
 import type { Utgave } from '../../faginnhold/lesing'
 import type { Innhold, Objekttype } from '../../faginnhold/modell'
-import { useRedigering } from '../analyttside/Redigeringskontekst'
+import { useRedigering } from '../stoffside/Redigeringskontekst'
 import { Historikkvindu } from './Historikkvindu'
 
 /**

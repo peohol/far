@@ -18,28 +18,28 @@
   width: min(100%, 64rem);
 }
 
-.analyttside {
+.stoffside {
   display: flex;
   flex-direction: column;
   gap: var(--rom-7);
 }
 
-.analyttside__paneler {
+.stoffside__paneler {
   display: flex;
   flex-direction: column;
   gap: var(--rom-7);
 }
 
-.analyttside__paneler[aria-busy='true'] {
+.stoffside__paneler[aria-busy='true'] {
   opacity: 0.7;
   transition: opacity var(--fart-rask) var(--kurve);
 }
 
-.analyttside .kort {
+.stoffside .kort {
   width: 100%;
 }
 
-.analyttside__tom,
+.stoffside__tom,
 .infopanel__tomt {
   font-size: var(--tekst-ui);
   color: var(--blekk-dempet);

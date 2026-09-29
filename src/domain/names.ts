@@ -40,9 +40,10 @@ export function splitName(analyte: Analyte): SplitName {
 
 /**
  * Et stoffnavn slik det står midt i en setning: et vanlig ord får liten
- * forbokstav («Kodein» blir «kodein»), mens navn som «O-desmetylvenlafaksin»
- * og «MDMA» står som de er.
+ * forbokstav («Kodein» blir «kodein»), mens navn som «O-desmetylvenlafaksin»,
+ * «MDMA» og «EtG» står som de er: bare et første ord med stor forbokstav og
+ * ellers små bokstaver skrives om.
  */
 export function iSetning(navn: string): string {
-  return /^\p{Lu}\p{Ll}/u.test(navn) ? navn.charAt(0).toLocaleLowerCase('nb') + navn.slice(1) : navn
+  return /^\p{Lu}\p{Ll}+(?!\p{L})/u.test(navn) ? navn.charAt(0).toLocaleLowerCase('nb') + navn.slice(1) : navn
 }

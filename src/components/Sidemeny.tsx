@@ -1,28 +1,28 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { Bryter } from './Bryter'
 import { Button } from './Button'
 import { Felt } from './konto/Felt'
 import { Shortcut } from './Shortcut'
 import { Ikon } from './ikon/Ikon'
 import { useTips } from './Tips'
-import type { Analyttkatalog } from '../domain/analyttkatalog'
-import { analyttadresse, stoffadresse } from '../domain/rute'
-import { byggStoffregister, type Registerkategori, type Registerstoff } from '../domain/stoffregister'
+import { stoffadresse } from '../domain/rute'
+import type { Registerkategori, Registerstoff, Stoffregister } from '../domain/stoffregister'
 import { fokusIFagsok, lagLiggerOver } from '../hooks/useKeyboard'
 import { rullefart } from '../hooks/useKortHopp'
 
 /**
  * Sidemenyen: stoffregisteret.
  *
- * Menyen er veien inn til informasjonssiden for hvert stoff, ordnet etter
- * farmakologisk klasse (`src/domain/stoffregister.ts`). Stoffene med og uten
- * analyttkode står om hverandre; de med kode viser koden. Søket i
+ * Menyen er veien inn til stoffsiden for hvert stoff, ordnet etter
+ * farmakologisk klasse (`src/domain/stoffregister.ts`). Hvert stoff lenker
+ * alltid til `#/stoff/<nøkkel>`; kodene til laboratorieanalyttene stoffet er
+ * primært koblet til, står ved siden av som sekundær informasjon. Søket i
  * fortolkningen filtreres ikke herfra, men fra hovedsiden (`Filterbytte`).
  *
- * Innholdet bygges av katalogen — de samme søkeoppføringene som søket bruker
- * — og stoffsidene uten kode i databasen, så lista ikke kan komme i utakt med
- * det appen har sider for. Stoffene er lenker, så de også kan åpnes i en ny
- * fane. Redaktørene kan lage en ny stoffside nederst.
+ * Innholdet er stoffregisteret, med stoffsidene i databasen som registeret
+ * ikke kjenner, så lista ikke kan komme i utakt med det appen har sider for.
+ * Stoffene er lenker, så de også kan åpnes i en ny fane. Redaktørene kan lage
+ * en ny stoffside nederst.
  *
  * Menyen er et lag over appen, på linje med endringsloggen: `data-lag` sier
  * fra til `lagLiggerOver()`, slik at appens egne taster holder seg i ro mens
@@ -63,15 +63,16 @@ function naabare(panel: HTMLElement | null): HTMLElement[] {
 }
 
 export interface SidemenyProps {
-  /** Kodene appen har sider for — de samme som søket leter i. */
-  katalog: Analyttkatalog
-  /** Navnene på stoffsidene uten analyttkode. */
-  stoffsider?: readonly string[]
-  /** Sant når brukeren kan lage en ny stoffside. */
-  kanOpprette?: boolean
+  /** Stoffregisteret med stoffsidene i databasen (`byggStoffregister`). */
+  register: Stoffregister
+  /**
+   * Lager en ny stoffside med navnet og gir tilbake nøkkelen den fikk. Bare
+   * for dem som kan lage en; uten den står ikke feltet i menyen.
+   */
+  onOpprett?: (navn: string) => Promise<string>
 }
 
-export function Sidemeny({ katalog, stoffsider = [], kanOpprette = false }: SidemenyProps) {
+export function Sidemeny({ register, onOpprett }: SidemenyProps) {
   const [apen, setApen] = useState(false)
   /** Av gjemmer underkategoriene og lister stoffene i hver kategori i én alfabetisk bolk. */
   const [visUnderkategorier, setVisUnderkategorier] = useState(true)
@@ -80,8 +81,6 @@ export function Sidemeny({ katalog, stoffsider = [], kanOpprette = false }: Side
   const panelId = useId()
   const panel = useRef<HTMLElement>(null)
   const knapp = useRef<HTMLButtonElement | null>(null)
-
-  const register = useMemo(() => byggStoffregister(katalog, stoffsider), [katalog, stoffsider])
 
   const knappenavn = 'Vis stoffregisteret'
   const knappetips = useTips(knappenavn, { skjermleser: false })
@@ -168,7 +167,7 @@ export function Sidemeny({ katalog, stoffsider = [], kanOpprette = false }: Side
     if (apen) panel.current?.focus()
   }, [apen])
 
-  // Ikke `lukk()`: informasjonssiden tar fokus selv, og skal ikke få det revet
+  // Ikke `lukk()`: stoffsiden tar fokus selv, og skal ikke få det revet
   // tilbake til menyknappen. Lenken gjør resten.
   const velg = useCallback(() => setApen(false), [])
   const veksle = useCallback((skuff: string) => setApenSkuff((forrige) => (forrige === skuff ? null : skuff)), [])
@@ -227,7 +226,7 @@ export function Sidemeny({ katalog, stoffsider = [], kanOpprette = false }: Side
         </Bryter>
 
         <ul className="menyliste">
-          {register.map((kategori) => (
+          {register.kategorier.map((kategori) => (
             <Kategoriskuff
               key={kategori.navn}
               kategori={kategori}
@@ -239,7 +238,7 @@ export function Sidemeny({ katalog, stoffsider = [], kanOpprette = false }: Side
           ))}
         </ul>
 
-        {kanOpprette && <NyStoffside onOpprett={velg} />}
+        {onOpprett && <NyStoffside register={register} onOpprett={onOpprett} onApne={velg} />}
       </nav>
     </>
   )
@@ -262,8 +261,8 @@ function Kategoriskuff({
   const underkategorier = visUnderkategorier ? kategori.underkategorier : []
   // Står noen stoffer direkte i kategorien ved siden av underkategoriene, står
   // de først, uten overskrift.
-  const iUnder = new Set(underkategorier.flatMap((u) => u.stoffer))
-  const direkte = underkategorier.length > 0 ? kategori.stoffer.filter((s) => !iUnder.has(s)) : kategori.stoffer
+  const iUnder = new Set(underkategorier.flatMap((u) => u.stoffer.map((s) => s.slug)))
+  const direkte = underkategorier.length > 0 ? kategori.stoffer.filter((s) => !iUnder.has(s.slug)) : kategori.stoffer
 
   return (
     <Skuff
@@ -348,44 +347,72 @@ function Skuff({
 }
 
 /**
- * Feltet redaktørene lager en ny stoffside med. Siden åpnes med navnet, og
- * opprettes i databasen første gang noe lagres på den.
+ * Feltet redaktørene lager en ny stoffside med. Finnes stoffet alt — etter
+ * navnet eller et alias — åpnes siden det har. Ellers lages siden i databasen
+ * med navnet og en nøkkel av det, og åpnes.
  */
-function NyStoffside({ onOpprett }: { onOpprett: () => void }) {
+function NyStoffside({
+  register,
+  onOpprett,
+  onApne,
+}: {
+  register: Stoffregister
+  onOpprett: (navn: string) => Promise<string>
+  onApne: () => void
+}) {
   const [navn, setNavn] = useState('')
+  const [lager, setLager] = useState(false)
+  const [feil, setFeil] = useState<string | null>(null)
+  const apne = (slug: string) => {
+    onApne()
+    setNavn('')
+    window.location.hash = stoffadresse(slug)
+  }
   return (
     <form
       className="menyny"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault()
         const renset = navn.trim()
-        if (!renset) return
-        onOpprett()
-        setNavn('')
-        window.location.hash = stoffadresse(renset)
+        if (!renset || lager) return
+        const kjent = register.kanonisk(renset)
+        if (kjent) {
+          apne(kjent.slug)
+          return
+        }
+        setLager(true)
+        setFeil(null)
+        try {
+          apne(await onOpprett(renset))
+        } catch (feil) {
+          setFeil(feil instanceof Error ? feil.message : String(feil))
+        } finally {
+          setLager(false)
+        }
       }}
     >
       <Felt merkelapp="Ny stoffside" value={navn} maxLength={200} onChange={(e) => setNavn(e.target.value)} />
-      <Button type="submit" variant="kant" disabled={!navn.trim()}>
-        Åpne
+      <Button type="submit" variant="kant" disabled={!navn.trim() || lager}>
+        {lager ? 'Lager …' : 'Åpne'}
       </Button>
+      {feil && (
+        <p className="skjemafeil" role="alert">
+          {feil}
+        </p>
+      )}
     </form>
   )
 }
 
-/** Stoffene i en kategori eller underkategori, alfabetisk, som lenker til informasjonssidene. */
+/** Stoffene i en kategori eller underkategori, alfabetisk, som lenker til stoffsidene. */
 function Stoffer({ stoffer, onVelg }: { stoffer: readonly Registerstoff[]; onVelg: () => void }) {
   return (
     <ul className="menyanalytter">
       {stoffer.map((stoff) => (
-        <li key={stoff.kode ?? stoff.side}>
-          <a
-            className="menyanalytt"
-            href={stoff.kode ? analyttadresse(stoff.kode) : stoffadresse(stoff.side)}
-            onClick={onVelg}
-          >
+        <li key={stoff.slug}>
+          <a className="menyanalytt" href={stoffadresse(stoff.slug)} onClick={onVelg}>
             <span className="menyanalytt__navn">{stoff.navn}</span>
-            {stoff.kode && <span className="menyanalytt__kode">{stoff.koder.join(' · ')}</span>}
+            {stoff.koder.length > 0 && <span className="menyanalytt__kode">{stoff.koder.join(' · ')}</span>}
           </a>
         </li>
       ))}

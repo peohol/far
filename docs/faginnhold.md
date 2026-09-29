@@ -1,11 +1,11 @@
 # Redigerbart faginnhold i OUSFAR
 
-Leses når noe som har med informasjonssider, laboratorieanalytter,
+Leses når noe som har med stoffsider, laboratorieanalytter, koblingene mellom dem,
 innholdselementer, referanser, fortolkningskommentarer, revisjoner eller
-publisering å gjøre skal endres. Planen og fremdriften står i `docs/analyttsider-og-redigering.md`; her står hvordan
+publisering å gjøre skal endres. Planen og fremdriften står i `docs/stoffsider-og-redigering.md`; her står hvordan
 fundamentet faktisk er bygget.
 
-Informasjonssidene (arbeidspakke 3) bygger på dette, og det gjør de enkle
+Stoffsidene (arbeidspakke 3) bygger på dette, og det gjør de enkle
 konsentrasjonsreglene også: de er regelsett, og steg 2 i fortolkningen bruker
 de publiserte (se `docs/fortolkningsregler.md`). Rusmiddelmodulene, EtG/EtS og
 THC-syre står fortsatt i `src/domain/`. `src/__tests__/fortolkningUendret.test.ts`
@@ -22,7 +22,10 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `supabase/migrations/*_analyttsider_samlet_lesing.sql` | Alle sidene i én tilstand i ett kall, for søket i hele kunnskapsbasen |
 | `supabase/migrations/*_enkeltelementer.sql` | At kortene som står én gang i panelet sitt, ikke kan opprettes to ganger |
 | `supabase/migrations/*_datakort_per_analytt.sql` | Datakortene én gang per kode på en side flere koder deler, og referanseområdet til hver kode (`les_referanseomrader`) |
-| `src/faginnhold/sammenslatte.ts`, `scripts/lag-sammenslaing.ts`, `supabase/migrations/*_sammenslatte_stoffsider.sql` | Metabolittsidene som slås sammen med moderstoffets side |
+| `src/faginnhold/sammenslatte.ts`, `scripts/lag-sammenslaing.ts`, `supabase/migrations/*_sammenslatte_stoffsider.sql` | Den historiske datamigrasjonen for sammenslåinger som måtte flytte innhold |
+| `supabase/migrations/*_stoffidentitet.sql` | Stoffets nøkkel (`slug`) på sidene, og lesingen etter stoffet: `les_stoff`, `les_stoffer`, `les_stoffliste`, `les_stoffreferanseomrader` |
+| `supabase/migrations/*_kanoniske_stoffsider.sql` | Datamigrasjonen som ga sidene «Hydroksybupropion» og «Paliperidon (hydroksyrisperidon)» stoffets navn og nøkkel, og HBUP en egen komponent for hydroksybupropion |
+| `src/faginnhold/historiskesider.ts` | Hvordan sidene var lagt opp per analyttkode før, for importene som lager historiske migrasjoner |
 | `supabase/migrations/*_regelredigering_lesing.sql` | Historikken til ett objekt (`les_historikk`) og regelsettet for én kode |
 | `supabase/migrations/*_kommentar_objekttype.sql`, `*_kommentarer.sql` | Fortolkningskommentarene som egne objekter |
 | `src/domain/kommentarobjekt.ts` | Formen på en kommentar og kontrollen av den, lik databasens |
@@ -39,20 +42,24 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
 | `src/faginnhold/paneler.ts` | Panelene 1–7 og formen på hver elementtype |
 | `src/faginnhold/riktekst.ts` | Rikteksten: nodene og merkene som er tillatt, rensing og ren tekst |
-| `src/faginnhold/analyttside.ts` | En side satt sammen: panelene, nummereringen og publiseringsrekkefølgen |
+| `src/faginnhold/stoffside.ts` | En stoffside satt sammen: panelene, nummereringen og publiseringsrekkefølgen |
 | `src/faginnhold/sok.ts` | Indekseringen, rangeringen og søket, for siden og hele kunnskapsbasen |
 | `src/faginnhold/globaltSok.ts` | Lesingen og indekseringen av hele kunnskapsbasen for det globale søket |
 | `src/legemiddeldata/stoffside.ts` | Hvor preparatene og interaksjonene står på siden, og tekstene søket finner der |
 | `src/faginnhold/historikk.ts`, `innholdsfelter.ts` | Historikken: tidslinjen, sammenligningen felt for felt og ord for ord, og feltene hver objekttype deles i |
 | `src/components/historikk/` | Historikkvinduet og «Sist redigert», som åpner det |
-| `src/domain/analyttkatalog.ts`, `rute.ts` | Kodene som har en side, og adressene til dem |
-| `src/components/analyttside/` | Siden, panelene, skjemaene, editoren, referansevelgeren og søket |
+| `src/data/stoffregister.json`, `src/domain/stoffregister.ts` | Stoffregisteret: stoffene med nøkkel, navn og aliaser, koblingene til laboratorieanalyttene og kategoriene |
+| `src/domain/analyttkatalog.ts` | Laboratorieanalyttene fortolkningen kjenner |
+| `src/domain/koblinger.ts` | Veiene mellom stoffene og analyttene, bare gjennom koblingene |
+| `src/domain/rute.ts` | Adressene, `#/stoff/<nøkkel>`, og videresendingen av de gamle |
+| `src/components/stoffside/` | Siden, panelene, skjemaene, editoren, referansevelgeren og søket |
 | `src/faginnhold/referanser.ts` | Siteringer, nummerering, piller og referanseliste, for redaksjonelle og automatiske referanser — rene funksjoner |
 | `src/legemiddeldata/referanser.ts` | De automatiske referansene fra FEST |
 | `src/clinpgx/referanser.ts` | De automatiske referansene fra ClinPGx (se `docs/clinpgx.md`) |
 | `src/components/referanser/` | Referansepillen med boblen, referansefeltet og referanselisten |
-| `src/__tests__/faginnhold.test.ts`, `referanser.test.ts`, `analyttsidelesing.test.ts`, `kommentarer.test.ts` | Reglene og lesingen, prøvd mot en ekte database |
-| `src/__tests__/analyttside.test.tsx`, `navigasjon.test.tsx`, `analyttsidemodell.test.ts` | Sidene, redigeringen og veiene mellom sidene og fortolkningen |
+| `src/__tests__/faginnhold.test.ts`, `referanser.test.ts`, `stoffsidelesing.test.ts`, `kommentarer.test.ts` | Reglene og lesingen, prøvd mot en ekte database |
+| `src/__tests__/stoffside.test.tsx`, `navigasjon.test.tsx`, `stoffsidemodell.test.ts` | Sidene, redigeringen og veiene mellom sidene og fortolkningen |
+| `src/domain/__tests__/stoffregister.test.ts`, `koblinger.test.ts`, `rute.test.ts` | Registeret, koblingene og adressene |
 | `src/__tests__/referansenummerering.test.ts`, `referansepille.test.tsx` | Nummereringen, og pillen med mus, berøring og tastatur |
 | `src/__tests__/festreferanser.test.ts`, `referansefelt.test.tsx` | FEST-referansene, referansefeltet, listen og at editoren aldri tilbyr en automatisk kilde |
 | `src/__tests__/psykofarmakaimport.test.ts`, `tdmimport.test.ts`, `rettinger.test.ts`, `kortoppdateringer.test.ts` | Datasettene, importene, rettingene og oppdateringene, prøvd mot en ekte database |
@@ -60,21 +67,34 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 
 ## Domenet
 
-Tre begreper holdes fra hverandre, som planen krever:
+Begrepene holdes fra hverandre:
 
-- **Informasjonsside** (`infoside`) — siden om et virkestoff, f.eks.
-  Amitriptylin. Har foreløpig bare et navn; innholdet på siden er
-  innholdselementer. En side trenger ingen laboratorieanalytt: et stoff
-  laboratoriet ikke har noen kode for, kan likevel ha en side (se
-  [Informasjonssidene](#informasjonssidene)).
-- **Laboratorieanalytt** — koden laboratoriet rapporterer, f.eks.
-  `AMTNORSUM`. Har nøyaktig én hovedside og en ordnet liste med
-  **komponenter**: informasjonssidene for stoffene analysen omfatter. For
-  `AMTNORSUM` er hovedsiden Amitriptylin og komponentene amitriptylin og
-  nortriptylin. Minst én komponent, ingen to like, og hver kode brukes av bare
-  én analytt.
+- **Stoff** — et virkestoff eller rusmiddel i stoffregisteret
+  (`src/data/stoffregister.json`), med en stabil nøkkel (`slug`, f.eks.
+  `bupropion`), et navn og eventuelle aliaser (f.eks. «Hydroksybupropion»).
+  Stoffet er den eneste identiteten en fagside har. Registeret er fasit for
+  hvilke stoffer som finnes, uavhengig av analyttkatalogen.
+- **Stoffside** (`infoside` i databasen) — fagsiden om ett stoff: navnet,
+  nøkkelen og innholdselementene. Siden finnes etter nøkkelen, aldri gjennom en
+  analyttkode. Se [Stoffsidene](#stoffsidene).
+- **Laboratorieanalytt** — koden laboratoriet rapporterer, f.eks. `HBUP`, og
+  det fortolkningen trenger å vite om den (`src/domain/analyttkatalog.ts`).
+  Den er ikke en fagside, og fortolkningen av den går ikke veien om noe stoff:
+  HBUP fortolkes med HBUP-reglene.
+- **Kobling** (`StoffAnalyttKobling`) — den eksplisitte forbindelsen mellom et
+  stoff og en analytt, i stoffregisteret: koden, stoffet, relasjonen
+  (`selve_stoffet`, `metabolitt` eller `sumanalyse`), om stoffet er analyttens
+  **primære** stoff (det navigasjonen går til; høyst ett per kode) og en
+  eventuell merknad. Koblingene er mange-til-mange: AMTNORSUM er koblet til
+  amitriptylin (primært) og nortriptylin, og nortriptylin også til NOR. Et stoff
+  kan mangle analytt, og en analytt kan mangle stoff. Ingen kobling utledes av
+  at navnene ligner.
+- **Laboratorieanalytt i databasen** (`laboratorieanalytter`,
+  `analyttkomponenter`) — tabellene fra før, med hovedside og komponenter. De
+  står med sin historikk, men appen bruker dem ikke lenger til å finne eller
+  lage sider.
 - **Innholdselement** — et kort, felt eller tekststykke på en
-  informasjonsside. `panel` og `elementtype` er nøkler (små bokstaver, tall og
+  stoffside. `panel` og `elementtype` er nøkler (små bokstaver, tall og
   understrek), og `data` er et JSON-objekt hvis form bestemmes av
   elementtypen. Panelene og elementtypene defineres når sidene bygges.
   Rekkefølgen i et panel er `posisjon`, deretter objekt-ID-en. Posisjonen er
@@ -179,8 +199,8 @@ gjennom den samme veien som vanlig lagring. Publiseringen avbrytes om det
 publiserte ikke blir nøyaktig likt utkastet.
 
 **Rekkefølgen ved publisering.** Det publiserte kan bare peke på det som også
-er publisert. En laboratorieanalytt publiseres derfor etter hovedsiden og
-komponentene, og et innholdselement etter siden det står på. Ellers avvises
+er publisert. Et innholdselement publiseres derfor etter siden det står på, og
+et regelsett etter kommentarene det peker på. Ellers avvises
 publiseringen, og ingenting blir halvveis publisert.
 
 **Kjente begrensninger.**
@@ -297,7 +317,7 @@ og publikasjonene ClinPGx oppgir, i detaljkortet til hver retningslinje og
 preparatomtale (`clinpgx:` og en kontrollsum). `slaSammenAutomatiske` i
 `src/faginnhold/referanser.ts` slår kildene sammen for siden.
 
-`referanseunivers` i `src/faginnhold/analyttside.ts` slår de redaksjonelle og
+`referanseunivers` i `src/faginnhold/stoffside.ts` slår de redaksjonelle og
 de automatiske sammen for siden. Automatiske elementer kommer etter de
 redaksjonelle i panelet, og automatiske panelreferanser etter panelets
 redaksjonelle. Redaksjonelt innhold kan ikke sitere en automatisk referanse;
@@ -341,48 +361,60 @@ sted.
 databasen, med samme ordlyd, så redigeringen kan si fra før lagring.
 `kommentarer.test.ts` kjører de samme tilfellene gjennom begge.
 
-## Informasjonssidene
+## Stoffsidene
 
-**Adressene.** Hver analyttkode appen kan fortolke, har en side på
-`#/analytt/<KODE>` (`src/domain/rute.ts`). Adressen står etter `#`, så
-nettleseren alene leser den: siden som lastes, og innloggingsveggen, er de
-samme. Hvilke koder som finnes, gir katalogen (`analyttkatalog.ts`), bygd av
-de samme søkeoppføringene som søket og sidemenyen. Katalogen sier også hvilken
-informasjonsside koden hører til (moderstoffet for sumanalysene), hvilke
-stoffer den omfatter, og hvilken fortolkningsmodul «Åpne fortolkning» fører
-til.
+**Adressene.** Hver fagside er en stoffside med adressen `#/stoff/<nøkkel>`,
+f.eks. `#/stoff/bupropion`, og `#/stoff/bupropion/farmakokinetikk` for en
+seksjon (`src/domain/rute.ts`). Adressen står etter `#`, så nettleseren alene
+leser den: siden som lastes, og innloggingsveggen, er de samme. Et navn eller
+et alias i adressen (`#/stoff/Hydroksybupropion`) fører til stoffets nøkkel.
+De gamle analyttadressene (`#/analytt/HBUP`) leses bare for å sende videre:
+til stoffsiden koden primært er koblet til, med `history.replaceState`, så den
+gamle adressen ikke blir stående i historikken. En kode uten et slikt stoff har
+ingen fagside, og adressen åpner fortolkningen.
 
-**Stoffsider uten kode.** Et stoff uten analyttkode kan ha en side på
-`#/stoff/<navn>`: en informasjonsside som verken er hovedside eller komponent
-for noen analytt (visningen `stoffsider_uten_kode`). Den har de samme panelene,
-men ingen kode og analysemetode under navnet, ingen «Åpne fortolkning» og
-ingen regelsett. Over navnet står kategoriene fra stoffregisteret, som på
-sidene med kode (`kategorierFor` i `src/domain/stoffregister.ts`).
-Stoffregisteret i sidemenyen setter dem inn i de farmakologiske kategoriene
-sammen med stoffene som har kode (se README, «Stoffregisteret og
-analysemetodene»), med navnene fra databasen (`les_stoffsidenavn`);
-redaktørene ser også dem som ikke er publisert, og kan åpne en ny side med et
-navn nederst i menyen. En ny side som ikke står i `src/data/stoffregister.json`,
-havner i «Andre stoffer» til den føres inn der. Et navn som hører til en kode i katalogen,
-fører til siden for koden. Får stoffet en kode senere, opprettes
-laboratorieanalytten med siden som finnes som hovedside, og siden leses
-gjennom koden som de andre.
+**Stoffregisteret** i sidemenyen er datafilen, med navnene sidene har i
+databasen (`les_stoffliste`) og sidene registeret ikke kjenner, som havner i
+«Andre stoffer» til de føres inn. Hvert stoff lenker til `#/stoff/<nøkkel>`,
+med kodene det primært er koblet til som sekundær tekst. Redaktørene kan lage
+en ny stoffside nederst i menyen: finnes stoffet alt, etter navn eller alias,
+åpnes det; ellers lages siden med navnet og en nøkkel av det.
 
-**Lesingen.** En side leses i ett kall: `les_analyttside(analyttkode,
-sidetilstand)` gir laboratorieanalytten, hovedsiden, innholdselementene,
-komponentsidene med kodene deres og referansene siden siterer — hvert objekt
-som en utgave med revisjonen tilstanden peker på, den publiserte revisjonen,
-øyeblikksbildet og hvem som laget det. Lesemodus leser det publiserte;
-redigeringsmodus utkastet. Regelsettet for koden (`finn_intervallregelsett`,
-se `docs/fortolkningsregler.md`) leses samtidig, med kommentarobjektene det
-peker på, og står i sidedataene som `regelsett`; det er sitt eget objekt og
-peker på koden, ikke på siden.
-`les_stoffside(sidenavn, sidetilstand)` gir siden for et stoff uten kode på
-samme form, med `analytt` som `null` — eller siden for koden, når navnet er
-hovedside for en. `les_referanser` gir referansebasen og `finn_infosider`
-sidene med gitte navn. Alle disse, og visningen
-`objektutgaver` de bygger på, kjører med rettighetene til den som leser, så
-radsikkerheten gjelder som ellers.
+**Nøkkelen** (`infosider.slug`) er unik og URL-vennlig (små bokstaver a–z, tall
+og enkle bindestreker; `stoffslug` i `src/domain/stoffregister.ts` og
+`intern.stoffslug` i databasen gjør det samme). Den settes av navnet når
+siden lages, og står når navnet endres; den endres bare når innholdet sier
+det uttrykkelig. Sidene som fantes, fikk nøkkelen av navnet i
+`*_stoffidentitet.sql`. Innholdet har den bare med når den er en annen enn den
+navnet gir, så de gamle sidene står likt revisjonen sin og ingen historikk er
+skrevet om. En side i databasen hvis nøkkel er et alias for et stoff i
+registeret (en gammel komponentside som «Norfluoksetin»), er ikke et eget
+stoff og vises ikke.
+
+**Lesingen.** En side leses i ett kall: `les_stoff(stoff, sidetilstand)` gir
+stoffet (ID, nøkkel og navn), siden, innholdselementene og referansene siden
+siterer — hvert objekt som en utgave med revisjonen tilstanden peker på, den
+publiserte revisjonen, øyeblikksbildet og hvem som laget det. Lesemodus leser
+det publiserte; redigeringsmodus utkastet. `les_stoffer` gir alle sidene på
+samme form, til søket, og `les_stoffliste` nøkkelen og navnet til hver side.
+`les_referanser` gir referansebasen. Alle kjører med rettighetene til den som
+leser, så radsikkerheten gjelder som ellers.
+
+Fortolkningsreglene leses for seg, etter analyttkoden og modulen
+(`finn_intervallregelsett`, `les_thc_regelsett`, `les_scenarioregler`; se
+`docs/fortolkningsregler.md`), og aldri gjennom siden. Stoffsiden viser reglene
+for analyttene stoffet er **primært** stoff for, én seksjon per
+fortolkningsmodul (`regelseksjoner` i `src/domain/koblinger.ts`): den første
+heter `fortolkning`, de neste `fortolkning-<kode>`. THC-siden har derfor
+scenarioreglene for THC i serum i `fortolkning` og THC-syrereglene for IRCAK i
+`fortolkning-ircak`. Nortriptylin-siden viser reglene for NOR; AMTNORSUM står
+der bare som sekundær kobling, med «Se også» til amitriptylin.
+
+Funksjonene som leste en side gjennom en analyttkode eller etter navnet
+(`les_analyttside`, `les_analyttsider`, `les_stoffside`, `les_stoffsider`,
+`les_stoffsidenavn`, `les_referanseomrader`, `finn_infosider`), står i
+databasen som utgått, for eldre utgaver av appen som fortsatt er åpne, men
+brukes ikke.
 
 **Panelene** står i `paneler.ts`, med formen på `data` for hver elementtype.
 Tabellen står i den rekkefølgen siden viser panelene (`PANELER`, som også
@@ -390,7 +422,7 @@ styrer søket og nummereringen av referansene):
 
 | Panel | Nøkkel | Elementer |
 | --- | --- | --- |
-| Identitet | `identitet` | Ingen; koden, navnet og kategorien kommer fra siden og katalogen |
+| Identitet | `identitet` | Ingen; navnet, kategoriene og de koblede analyttene kommer fra siden og stoffregisteret |
 | Viktige data | `viktige_data` | Ett kort per type og kode (`gjelder`, se «Sammenslåtte sider») — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk). Konsentrasjonene har `{ nedre, ovre, enhet }`; t½ og tss har `{ former: [{ form, typisk, min, maks, enhet }] }`, én rad per legemiddelform |
 | Farmakodynamikk, indikasjon | `farmakodynamikk`, `indikasjon` | `riktekst`: `{ dokument }` |
 | Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
@@ -407,8 +439,8 @@ som «> 10» eller «opptil 20», uten å si om grensen er med. t½ og tss viser
 legemiddelform side om side; formen kan stå tom når det bare er én. Det
 tidligere feltet `forbehold` vises ikke lenger, men står i eldre revisjoner,
 og t½/tss uten `former` leses som ett område eller én typisk verdi. Koden, navnet og
-kategorien i identiteten kommer fra de statiske datasettene til siden finnes
-i databasen.
+kategorien i identiteten kommer fra stoffregisteret og koblingene; navnet fra
+databasen når siden finnes der.
 
 **Visningen.** Identiteten og viktige data står alltid fram øverst
 (`Identitetspanel.tsx`, `ViktigeData.tsx`). Viktige data har ingen synlig
@@ -448,31 +480,51 @@ panelet sitt (`ENKELTELEMENTER`). Databasen håndhever det med en unik indeks,
 så to som oppretter det samme kortet samtidig, ikke begge får det lagret —
 den andre får en konflikt.
 
-**Sammenslåtte sider.** En metabolitt som ikke er et legemiddel selv, har
-ingen egen side, men står på moderstoffets (`"sammenslatte"` i
-`src/data/stoffregister.json`, `SAMMENSLATTE` i `analyttkatalog.ts`):
-DMI på diazepamsiden, OTRAM på tramadolsiden og IRCAK på THC-siden. Koden
-beholder adressen (`#/analytt/OTRAM` viser tramadolsiden med OTRAMs
-fortolkning), og identiteten sier hvilke andre koder siden gjelder. Tallene
-som er kodens egne, står som egne datakort på den felles siden, merket med
-koden i `data.gjelder` (`datakortGjelder`); kortene uten `gjelder` er
-moderstoffets. Databasen lar hvert datakort stå én gang per kode, og
-`les_referanseomrader` gir hver kode sitt kort: det med koden i `gjelder`,
-eller det uten når hovedsiden er en av analyttens komponenter. En metabolitt
-får altså aldri moderstoffets referanseområde. Hadde metabolitten en egen
-side i databasen (O-desmetyltramadol), flyttet `*_sammenslatte_stoffsider.sql`
-den over: datakortene med `gjelder`, like kort til `fjernet`, et ulikt
-kinetikkort sist i panelet med metabolitten i tittelen, og analytten fikk
-moderstoffets side som hovedside, med metabolittsiden som komponent. En ny
-sammenslåing er en linje i `stoffregister.json` og en ny migrasjon fra
-`scripts/lag-sammenslaing.ts`.
-Første gang noe lagres på en kode uten side, opprettes informasjonssiden og
-laboratorieanalytten av katalogens opplysninger; sider med samme navn som
-finnes fra før — for eksempel en komponent — gjenbrukes. På en stoffside uten
-kode opprettes bare informasjonssiden, med navnet fra adressen. «Publiser endringene»
-viser hva som blir synlig, og publiserer i den rekkefølgen databasen krever
-(`publiseringsplan`): referanser, komponentsider, hovedsiden, analytten,
-elementene, og til sist regelsettet, med feltene som er endret i det.
+**Identiteten** (`Identitetspanel.tsx`) har stoffet som overskrift, med
+kategoriene over. Under står analyttene stoffet er koblet til, som sekundær
+informasjon: kodene gruppert etter analysemetode, hver som knapp som åpner
+fortolkningsmodulen koden hører til, og en setning for relasjonen («HBUP måler
+hydroksybupropion (kun aktiv metabolitt), en metabolitt av bupropion.»,
+«AMTNORSUM er en sumanalyse og omfatter amitriptylin og nortriptylin.»), med
+merknaden koblingen har. Er koden koblet til andre stoffer også, lenker «Se
+også» til sidene deres. «Åpne fortolkning» i toppmenyen står bare når stoffets
+primære analytter hører til én modul.
+
+**Datakortene per analytt.** Er stoffet primært stoff for flere analytter —
+DIAZ og DMI på diazepamsiden, TRAM og OTRAM på tramadolsiden — har hver analytt
+sine egne kort i viktige data, merket med analyttens navn. Kortene til
+hovedanalytten (den første primære koblingen) står uten `gjelder`, de andre
+med koden i `data.gjelder` (`datakortGjelder`). Databasen lar hvert datakort
+stå én gang per kode. Referanseområdet fortolkningen viser for en kode
+(`les_stoffreferanseomrader` og `referanseomraderPerAnalytt`), er kortet på
+det primære stoffets side med koden i `gjelder`, eller kortet uten når koden er
+stoffets hovedanalytt. HBUP får altså kortet på bupropionsiden, og en
+metabolitt får aldri moderstoffets referanseområde.
+
+**Historikken.** Før stoffet ble identiteten, hørte hver side til en
+analyttkode, og noen metabolitter var slått sammen med moderstoffets side.
+PR #111 flyttet innhold i databasen for dem (`*_sammenslatte_stoffsider.sql`,
+fra `MIGRERTE_SAMMENSLATTE` i `src/faginnhold/historiskesider.ts`): datakort
+med `gjelder`, like kort satt til `fjernet`. `*_kanoniske_stoffsider.sql` ga
+siden «Hydroksybupropion» navnet Bupropion og nøkkelen `bupropion`, og siden
+«Paliperidon (hydroksyrisperidon)» navnet Paliperidon, på de samme
+sideobjektene, så innholdet og historikken står. Den gamle koblingen fra HBUP
+beholder det analytten faktisk måler: komponenten er et eget objekt,
+«Hydroksybupropion», og ikke Bupropion-siden. PALI måler paliperidon, så
+komponenten dens er stoffet selv. Metabolittnavnene er i dag aliaser i
+registeret, og komponentsidene blir stående i databasen uten å vises som
+stoffsider. Importene som lager
+historiske migrasjoner, bruker `historiskSidenavn`, så SQL-en de lager, er den
+samme som da migrasjonene ble kjørt.
+
+**Første lagring.** Et stoff i registeret som ennå ikke har noen side i
+databasen, vises likevel — med navnet, kategoriene, analyttene og reglene.
+Første gang noe lagres på det, opprettes siden med stoffets navn og nøkkel.
+Ingen laboratorieanalytt opprettes. «Publiser endringene» viser hva som blir
+synlig, og publiserer i den rekkefølgen databasen krever
+(`publiseringsplan`): referansene, siden, elementene, og til sist
+regelsettene for analyttene siden viser, hvert etter kommentarene det peker
+på, med feltene som er endret.
 
 Et objekt kan ikke slettes. Et kort som fjernes, flyttes derfor til panelet
 `fjernet`: det vises ikke, søkes ikke i og nummereres ikke, men står i
@@ -495,36 +547,36 @@ referanser. Innen samme felt kommer en tekst som begynner med søket foran en
 der søket begynner et ord, og den foran en der det står inne i et ord. Ellers
 står treffene i sidens rekkefølge.
 
-**Søket i hele kunnskapsbasen** (`globaltSok.ts`) indekserer alle de
-publiserte sidene med den samme `indekserSide`, så det finner det samme som
-søket på hver side. Lesingen er fire kall uansett antall sider:
-`les_analyttsider` gir alle sidene på samme form som `les_analyttside`, med
-referansene én gang, og `les_stoffsider` stoffsidene uten kode på samme form; `les_legemidler` gir legemiddeldataene for alle
+**Søket i hele kunnskapsbasen** (`globaltSok.ts`) indekserer hvert stoff i
+stoffregisteret, med den publiserte siden når det har en, med den samme
+`indekserSide`, så det finner det samme som søket på hver side. Treffet er
+alltid stoffet: koden, navnet og komponentene til analyttene det er koblet
+til, er bare andre veier dit (`stoffidentitet` i `sok.ts`). «bupropion»,
+«hydroksybupropion» og «HBUP» gir alle Bupropion på `#/stoff/bupropion`.
+Lesingen er fire kall uansett antall sider: `les_stoffer` gir alle sidene på
+samme form som `les_stoff`, med referansene én gang; `les_legemidler` gir legemiddeldataene for alle
 koblingene, og hver side får sin del av dem (`utvalgFor`); `les_interaksjoner`
 gir interaksjonene, delt i flere kall bare om nøklene er flere enn databasen
 tar imot. Kan ikke legemiddeldataene leses, indekseres faginnholdet likevel,
-og kan ikke stoffsidene uten kode leses, indekseres resten.
 `sokGlobalt` gir det beste treffet per sted, og lar ord som ikke står i
 teksten, stå i navnet eller koden til siden: «sertralin metabolisme» finner
 kortet «Metabolisme» på sertralinsiden. Aliasene til kodene gis av appen fra
-analyttkatalogen. Deler flere koder én side, indekseres siden én gang. Appen
-gir også alle kodene i katalogen: en kode som ingen publisert
-informasjonsside viser, har likevel en analyttside (med fortolkningsreglene),
-og indekseres med navnet og komponentene fra katalogen, som siden viser.
+analyttkatalogen, og blir andre navn på stoffet koden primært hører til. Et
+stoff uten publisert side indekseres med navnet, aliasene og analyttene.
 
 Hvert treff har stedet det står: siden, seksjonen, ankeret på siden og — når
 teksten står i et detaljkort — nøkkelen til kortet. `sokeadresse` gjør stedet
-om til direktelenken, `#/analytt/<KODE>/<seksjon>/<kort>`, eller
-`#/stoff/<navn>/<seksjon>/<kort>` for et stoff uten kode (se
-`docs/seksjoner.md`). En stoffside uten kode indekseres under navnet, og
-treffet viser «Stoffside uten labkode» der de andre viser koden og metoden.
+om til direktelenken, `#/stoff/<nøkkel>/<seksjon>/<kort>` (se
+`docs/seksjoner.md`). Under navnet på et stofftreff står kategorien og
+analyttene som sekundær informasjon (`stoffbeskrivelse`), f.eks. «Antidepressiver ›
+NDRI · analytt HBUP · hydroksybupropion (kun aktiv metabolitt)».
 
 **Fagsøket** i toppmenyen (`src/components/sok/`) bruker dette uten egen
 rangering. Indeksen hentes når appen har tid til overs etter at den er
 åpnet (`useNaarLedig`), eller første gang noen søker før det
 (`useSokeindeks`), og hentes på nytt neste gang når en administrator går ut
 av en stoffside, der noe kan være publisert. Det kan søkes før alt er
-hentet: `lesSokeindeks` gir først en indeks over katalogen, så over
+hentet: `lesSokeindeks` gir først en indeks over stoffregisteret, så over
 faginnholdet på sidene, og til sist med preparatene, interaksjonene og
 ClinPGx, som er det tregeste å hente. Hentingen går i bakgrunnen og står
 ikke i lasteindikatoren (`src/auth/aktivitet.ts`); søket viser selv at mer
@@ -618,8 +670,8 @@ antiepileptika, sertindol og litium fra rapporten, ketobemidon, petidin og
 flunitrazepam fra Helland mfl., og atomoksetin og metylfenidat fra Frost mfl.
 (de nasjonale områdene fra 2019, med rapportens tidligere område i
 grunnlaget). Filene har `side` (navnet på siden) i stedet for `kode`; importen
-lager da bare informasjonssiden, og en fil med navnet til en side i katalogen
-avvises. Den utvider en side som finnes, som TDM-importen. `npx vite-node
+lager da bare stoffsiden, og en fil med navnet til en side en analyttkode alt
+hadde, avvises. Den utvider en side som finnes, som TDM-importen. `npx vite-node
 scripts/importer-stoffsider.ts -- <brukernavn> <mappe>` lager migrasjonene
 (`src/faginnhold/stoffsider.ts`). Indikasjonene deres står for seg i
 `supabase/import/indikasjoner/` (bare `indikasjon`, sammendraget av

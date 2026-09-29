@@ -2,7 +2,7 @@ import type { Kommentaroppslag } from './kommentarobjekt'
 import { flettInn, somProsent, type Forhold, type Operator, type Scenario, type Scenarioregelsett } from './scenario'
 
 /**
- * Et scenarioregelsett skrevet ut slik analyttsiden viser det: vilkårene som
+ * Et scenarioregelsett skrevet ut slik stoffsiden viser det: vilkårene som
  * lesbar tekst, og kommentarene regelsettet viser til nummerert, så en regel
  * kan vise til «tekst 2» i stedet for å gjenta hele teksten.
  */
@@ -64,7 +64,7 @@ function sammenlign(a: readonly number[], b: readonly number[]): number {
 }
 
 /**
- * Regelsettet slik analyttsiden viser det. Scenariene sorteres etter
+ * Regelsettet slik stoffsiden viser det. Scenariene sorteres etter
  * kombinasjonen av påviste analytter — rekkefølgen i regelsettet betyr ikke
  * noe for utfallet — og innenfor en kombinasjon står de som i regelsettet.
  */

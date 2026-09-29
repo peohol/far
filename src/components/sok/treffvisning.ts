@@ -12,7 +12,7 @@ import {
   type Utdrag,
 } from '../../faginnhold/sok'
 import type { Ikonnavn } from '../ikon/register'
-import { seksjonsikon } from '../analyttside/panelvisning'
+import { seksjonsikon } from '../stoffside/panelvisning'
 
 /**
  * Hvordan et treff i fagsøket vises, i rullegardinen og på søkesiden: en
@@ -66,8 +66,8 @@ const STOFFIKON: Ikonnavn = 'pk'
 /** Stien til referansene nederst på siden, som ikke er en seksjon. */
 const REFERANSER = 'Referanser'
 
-/** Stien under navnet for en stoffside uten analyttkode, der de andre har koden og metoden. */
-const UTEN_KODE = 'Stoffside uten labkode'
+/** Linja under navnet på et stoff når det ikke er noe å si om det. */
+const STOFFSIDE = 'Stoffside'
 
 /** Teksten med ordene fra søket markert. */
 export function markert(tekst: string, ord: readonly string[]): Utdrag {
@@ -75,13 +75,13 @@ export function markert(tekst: string, ord: readonly string[]): Utdrag {
 }
 
 /**
- * Visningen av et treff. `beskrivSide` gir linja under et stoff — koden,
- * analysemetoden og kategorien, fra katalogen.
+ * Visningen av et treff. `beskrivSide` gir linja under et stoff, etter
+ * nøkkelen — kategorien og analyttene det er koblet til (`stoffbeskrivelse`).
  */
 export function visTreff(
   { dokument, utdrag }: Soketreff,
   ord: readonly string[],
-  beskrivSide?: (kode: string) => string | undefined,
+  beskrivSide?: (stoff: string) => string | undefined,
 ): Treffvisning {
   const { sted, felt, tekst } = dokument
   const gruppe = treffgruppe(felt)
@@ -101,7 +101,7 @@ export function visTreff(
       ...felles,
       ikon: STOFFIKON,
       tittel: markert(sted.side.navn, ord),
-      sti: [sted.side.kode ? (beskrivSide?.(sted.side.kode) ?? sted.side.kode) : UTEN_KODE],
+      sti: [beskrivSide?.(sted.side.stoff) ?? STOFFSIDE],
       ...(annetNavn && { utdrag }),
     }
   }

@@ -25,7 +25,7 @@
  * Hvert tegn gjøres om til nøyaktig ett tegn, så treffene kan pekes tilbake
  * på den opprinnelige teksten.
  */
-import type { Sidemodell, Sideelement } from './analyttside'
+import type { Sidemodell, Sideelement } from './stoffside'
 import {
   DATAKORT,
   DOSEKOLONNER,
@@ -43,7 +43,8 @@ import {
 } from './paneler'
 import { formaterReferanse } from './referanser'
 import { klartekst } from './riktekst'
-import { informasjonsadresse } from '../domain/rute'
+import { stoffadresse } from '../domain/rute'
+import type { KobletAnalytt } from '../domain/koblinger'
 
 /* --- Sammenligningen ------------------------------------------------------ */
 
@@ -175,8 +176,8 @@ export function erIdentitetsfelt(felt: Sokefelt): boolean {
 
 /** Hvor en tekst står, fra siden og innover. */
 export interface Sokested {
-  /** Siden: koden den har, eller bare navnet for et stoff uten analyttkode. */
-  side: { kode?: string; navn: string }
+  /** Stoffsiden: stoffets nøkkel i stoffregisteret og navnet. */
+  side: { stoff: string; navn: string }
   panel?: { nokkel: string; tittel: string }
   /** Kortet teksten står i, med overskriften når kortet har en. `id` er ankeret på siden. */
   element?: { id: string; tittel?: string }
@@ -203,17 +204,14 @@ export function stedsledd(sted: Sokested): string[] {
   return sted.panel ? [sted.panel.nokkel, ...(sted.detaljkort ? [sted.detaljkort] : [])] : []
 }
 
-/**
- * Adressen treffet peker på, f.eks. `#/analytt/AMTNORSUM/farmakokinetikk/<kort-ID>`,
- * eller `#/stoff/<navn>/…` for et stoff uten analyttkode.
- */
+/** Adressen treffet peker på, f.eks. `#/stoff/amitriptylin/farmakokinetikk/<kort-ID>`. */
 export function sokeadresse(sted: Sokested): string {
-  return informasjonsadresse(sted.side, stedsledd(sted))
+  return stoffadresse(sted.side.stoff, stedsledd(sted))
 }
 
-/** Nøkkelen til siden: koden, eller navnet når siden ikke har noen kode. */
+/** Nøkkelen til siden: stoffets. */
 export function sidenokkel(side: Sokested['side']): string {
-  return side.kode ?? `stoff:${side.navn.toLocaleLowerCase('nb')}`
+  return side.stoff
 }
 
 /** Nøkkelen til stedet, så flere treff på samme sted kan slås sammen. */
@@ -221,15 +219,44 @@ export function stedsnokkel(sted: Sokested): string {
   return [sidenokkel(sted.side), sted.panel?.nokkel ?? '', sted.element?.id ?? ''].join('\n')
 }
 
-/** Det siden er, uavhengig av innholdet i panelene. */
+/**
+ * Det siden er, uavhengig av innholdet i panelene: stoffet, og navnene det
+ * også kan finnes under. Kodene og navnene til laboratorieanalyttene stoffet
+ * er koblet til, er bare andre veier til det samme stoffet — treffet er
+ * alltid stoffsiden.
+ */
 export interface Sideidentitet {
-  /** Analyttkoden. Utelatt for et stoff uten kode. */
-  kode?: string
+  /** Stoffets nøkkel i stoffregisteret. */
+  stoff: string
   navn: string
-  /** Stoffene analysen omfatter. */
-  komponenter: readonly string[]
-  /** Andre navn siden er kjent under. Rangeres med komponentene. */
+  /** Kodene til analyttene stoffet er primært stoff for. Rangeres med navnet. */
+  koder?: readonly string[]
+  /**
+   * Analyttenes navn og stoffene de omfatter (`Laboratorieanalytt.komponenter`),
+   * for alle analyttene stoffet er koblet til.
+   */
+  komponenter?: readonly string[]
+  /**
+   * Andre navn stoffet er kjent under, og kodene til analytter det er koblet
+   * til uten å være deres primære stoff. Rangeres med komponentene.
+   */
   aliaser?: readonly string[]
+}
+
+/** Identiteten til et stoff i søket, av registeret og koblingene i det. */
+export function stoffidentitet(
+  stoff: { slug: string; navn: string; aliaser?: readonly string[] },
+  analytter: readonly KobletAnalytt[],
+): Sideidentitet {
+  const primare = analytter.filter((a) => a.kobling.primar)
+  const sekundare = analytter.filter((a) => !a.kobling.primar)
+  return {
+    stoff: stoff.slug,
+    navn: stoff.navn,
+    koder: primare.map((a) => a.analytt.kode),
+    komponenter: analytter.flatMap(({ analytt }) => [analytt.navn, ...analytt.komponenter]),
+    aliaser: [...(stoff.aliaser ?? []), ...sekundare.map((a) => a.analytt.kode)],
+  }
 }
 
 /** Én tekst i et innholdselement, med hva slags felt det er og kortets overskrift. */
@@ -301,7 +328,7 @@ export interface Tilleggstekst {
 }
 
 /**
- * Søkedokumentene for én side: navnet, koden, komponentene og aliasene, og
+ * Søkedokumentene for én side: navnet, kodene, komponentene og aliasene, og
  * alt innholdet i panelene — overskrifter, verdier, tabeller og fritekst —
  * sammen med tilleggstekstene, panel for panel. Referansene siden bruker, er
  * med som egne dokumenter.
@@ -311,12 +338,21 @@ export function indekserSide(
   modell: Sidemodell,
   tillegg: readonly Tilleggstekst[] = [],
 ): Sokedokument[] {
-  const side = identitet.kode ? { kode: identitet.kode, navn: identitet.navn } : { navn: identitet.navn }
+  const side = { stoff: identitet.stoff, navn: identitet.navn }
+  // Hver tekst én gang, i det sterkeste feltet den står i.
+  const sett = new Set<string>()
+  const identitetsdokumenter = (felt: Sokefelt, tekster: readonly string[] = []): Sokedokument[] =>
+    tekster.flatMap((tekst) => {
+      const nokkel = fold(tekst.trim())
+      if (!nokkel || sett.has(nokkel)) return []
+      sett.add(nokkel)
+      return [{ sted: { side }, felt, tekst }]
+    })
   const dokumenter: Sokedokument[] = [
-    { sted: { side }, felt: 'navn', tekst: identitet.navn },
-    ...(identitet.kode ? [{ sted: { side }, felt: 'kode', tekst: identitet.kode } satisfies Sokedokument] : []),
-    ...identitet.komponenter.map((tekst): Sokedokument => ({ sted: { side }, felt: 'komponent', tekst })),
-    ...(identitet.aliaser ?? []).map((tekst): Sokedokument => ({ sted: { side }, felt: 'alias', tekst })),
+    ...identitetsdokumenter('navn', [identitet.navn]),
+    ...identitetsdokumenter('kode', identitet.koder),
+    ...identitetsdokumenter('komponent', identitet.komponenter),
+    ...identitetsdokumenter('alias', identitet.aliaser),
   ]
 
   const perPanel = new Map<string, Sokedokument[]>()

@@ -12,6 +12,22 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.55.0',
+    dato: '2026-09-29',
+    sammendrag: 'Stoffsidene handler om stoffet, og laboratorieanalyttene kobles til dem',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Hver stoffside har nå en fast adresse etter stoffets navn, for eksempel «#/stoff/bupropion», i stedet for etter laboratoriets analysekode. Gamle bokmerker til en analysekode fører fortsatt til riktig stoff.',
+      'Stoffregisteret viser bare stoffer, med analysekodene som tilleggsinformasjon.',
+      'Søket i kunnskapsbasen finner stoffet også på analysekoden og på navnet til det laboratoriet måler: «HBUP» og «hydroksybupropion» finner begge Bupropion.',
+      'Stoffsiden forklarer hva hver analyse måler, for eksempel at HBUP måler hydroksybupropion, en metabolitt av bupropion, og lenker til andre stoffer en sumanalyse omfatter.',
+      'Et stoff med analyser i flere fortolkningsmoduler, som THC i serum og THC-syre i urin, får én regelseksjon per modul på samme side.',
+      'O-desmetylvenlafaksin har fått sin egen side, og hydroksyrisperidon finnes nå under Paliperidon.',
+      'Fortolkningen og kommentarene er uendret.',
+    ],
+  },
+  {
     versjon: '1.54.0',
     dato: '2026-09-29',
     sammendrag: 'Planlagte oppgaver kan få sin egen overskrift',

@@ -3,7 +3,7 @@
  *
  * Innholdet ligger først i et importdatasett — én JSON-fil per analyttkode,
  * eller per stoff uten analyttkode (`side`), skrevet så tett på kilden at hvert tall kan kontrolleres mot den — og gjøres
- * her om til objektene databasen lagrer: referanser, informasjonssider,
+ * her om til objektene databasen lagrer: referanser, stoffsider,
  * laboratorieanalytter og innholdselementer. Datasettet kontrolleres først, og
  * alt som ikke har formen appen leser, stopper importen.
  *
@@ -17,6 +17,7 @@
  * Alt her er rene funksjoner. Bakgrunnen står i docs/faginnhold.md.
  */
 import type { Analyttkatalog } from '../domain/analyttkatalog'
+import { historiskSidenavn } from './historiskesider'
 import type { Referanseinnhold } from './modell'
 import {
   DATAKORT,
@@ -91,7 +92,7 @@ export interface Importfil {
   /** Analyttkoden siden hører til, som katalogen kjenner den. */
   kode?: string
   /**
-   * Navnet på informasjonssiden for et stoff som ikke har noen analyttkode.
+   * Navnet på stoffsiden for et stoff som ikke har noen analyttkode.
    * Siden lages uten laboratorieanalytt; se `docs/faginnhold.md`.
    */
   side?: string
@@ -375,7 +376,7 @@ export function byggImportplan(
 
   const koder: Plankode[] = []
   const brukteKoder = new Set<string>()
-  const katalogsider = new Set(katalog.oppforinger.map((o) => o.sidenavn.toLocaleLowerCase('nb')))
+  const katalogsider = new Set(katalog.oppforinger.map((o) => historiskSidenavn(o).toLocaleLowerCase('nb')))
   const sorterte = [...filer].sort((a, b) => filnokkel(a).localeCompare(filnokkel(b)))
 
   for (const fil of sorterte) {
@@ -399,7 +400,7 @@ export function byggImportplan(
         feil.push(`${hvor}: koden finnes ikke i katalogen.`)
         continue
       }
-      sider = { kode: fil.kode, hovedside: oppforing.sidenavn, komponenter: oppforing.komponenter }
+      sider = { kode: fil.kode, hovedside: historiskSidenavn(oppforing), komponenter: oppforing.komponenter }
     }
     const nokkel = hvor.toLocaleLowerCase('nb')
     if (brukteKoder.has(nokkel)) feil.push(`${hvor}: ${sider.kode ? 'koden' : 'siden'} står i flere filer.`)

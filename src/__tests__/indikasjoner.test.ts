@@ -2,7 +2,9 @@
  * Indikasjonene hentet fra Felleskatalogen (`supabase/import/indikasjoner/`),
  * for stoffsidene uten analyttkode, amfetaminsiden og de nye sidene for GHB,
  * ketamin, THC og cannabidiol, og rusmiddelsidene som er legemidler: datasettet, og
- * migrasjonene kjørt på sidene som finnes, lest slik appen leser dem.
+ * migrasjonene kjørt på sidene som finnes. Databasen bygges bare til og med
+ * indikasjonene, før sidene fikk stoffets nøkkel, så sidene leses etter navnet
+ * med funksjonene appen brukte da (`hjelp/historisklesing.ts`).
  */
 import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
@@ -18,12 +20,20 @@ import {
   NYE_STOFFSIDER,
   RUSMIDLER_INDIKASJONER,
 } from '../faginnhold/indikasjoner'
-import { SAMMENSLATTE } from '../domain/analyttkatalog'
-import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
+import { MIGRERTE_SAMMENSLATTE } from '../faginnhold/historiskesider'
+import { STOFFREGISTER } from '../domain/stoffregister'
 import { ELEMENTTYPER, lesRiktekst } from '../faginnhold/paneler'
 import { klartekst } from '../faginnhold/riktekst'
 import { stoffsideplan } from '../faginnhold/stoffsider'
-import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
+import { lesSideEtterNavn } from './hjelp/historisklesing'
+import {
+  faginnholdskall,
+  kjorMigrasjoner,
+  migrasjonsfiler,
+  nyDatabase,
+  opprettBruker,
+  type Faginnholdskall,
+} from './hjelp/testdatabase'
 
 /** Kilden revisjonene får, med datoen omgangen ble hentet. */
 const fkkilde = (hentet: string) => `Hentet fra Felleskatalogen ${hentet.split('-').reverse().join('.')}`
@@ -177,7 +187,11 @@ describe('datasettet', () => {
     }
     expect(rus.koder.find((k) => k.kode === 'TAP')!.hovedside.navn).toBe('Tapentadol')
     // Metabolittene som er slått sammen med moderstoffet, får ikke egne indikasjoner.
-    for (const metabolitt of Object.keys(SAMMENSLATTE)) expect(rus.koder.map((k) => k.hovedside.navn)).not.toContain(metabolitt)
+    for (const [metabolitt, moderstoff] of Object.entries(MIGRERTE_SAMMENSLATTE)) {
+      expect(rus.koder.map((k) => k.hovedside.navn)).not.toContain(metabolitt)
+      // I stoffregisteret er metabolitten et annet navn på moderstoffet.
+      expect(STOFFREGISTER.kanonisk(metabolitt)?.navn, metabolitt).toBe(moderstoff)
+    }
     expect(tekst('Buprenorfin', rus)).toContain('opioidavhengighet')
     expect(tekst('Metadon', rus)).toContain('Levopidon')
   })
@@ -194,7 +208,8 @@ describe('datasettet', () => {
 
 describe('migrasjonene i databasen', () => {
   let db: PGlite
-  let leser: Faginnholdsleser
+  let kall: Faginnholdskall
+  let bruker: string
   let revisjoner: number
   let sider: number
   const elementerFor = new Map<string, number>()
@@ -205,11 +220,11 @@ describe('migrasjonene i databasen', () => {
   beforeAll(async () => {
     db = await nyDatabase({ til: FORSTE_SIDE })
     const admin = await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
-    const bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lars', etternavn: 'Leser', rolle: 'user' })
+    bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lars', etternavn: 'Leser', rolle: 'user' })
     await kjorMigrasjoner(db, { fra: FORSTE_SIDE, til: MIGRASJONER[0] })
-    leser = lagFaginnholdsleser(faginnholdskall(db, admin).klientFor(bruker))
+    kall = faginnholdskall(db, admin)
     for (const k of PLANER.flatMap((p) => p.plan.koder)) {
-      elementerFor.set(k.hovedside.navn, (await leser.lesStoffside(k.hovedside.navn, 'publisert')).elementer.length)
+      elementerFor.set(k.hovedside.navn, (await lesSideEtterNavn(kall, bruker, k.hovedside.navn, 'publisert')).elementer.length)
     }
     sider = await utkast()
     // Bare indikasjonene, så senere migrasjoner som legger til kort, ikke telles med.
@@ -221,7 +236,7 @@ describe('migrasjonene i databasen', () => {
     for (const { plan: p, kilde } of PLANER) {
       for (const k of p.koder) {
         const navn = k.hovedside.navn
-        const side = await leser.lesStoffside(navn, 'publisert')
+        const side = await lesSideEtterNavn(kall, bruker, navn, 'publisert')
         const [indikasjon, ...flere] = side.elementer.filter((e) => e.innhold.panel === 'indikasjon')
         expect(flere, navn).toEqual([])
         expect(indikasjon!.innhold.data, navn).toEqual(k.elementer[0]!.data)

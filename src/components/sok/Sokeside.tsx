@@ -19,7 +19,7 @@ export interface SokesideProps {
   q: string
   indeks: Sokeindekstilstand
   onKrev: () => void
-  beskrivSide?: (kode: string) => string | undefined
+  beskrivSide?: (stoff: string) => string | undefined
   /** Tilbake til fortolkningen slik den sto. */
   onLukk: () => void
 }

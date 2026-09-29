@@ -12,7 +12,7 @@ import {
 import { Samtidighetskonflikt } from '../../faginnhold/lagring'
 import { Button } from '../Button'
 import { Modallag } from '../Modallag'
-import { useFaginnholdskilde } from '../analyttside/Faginnholdskilde'
+import { useFaginnholdskilde } from '../stoffside/Faginnholdskilde'
 
 export interface HistorikkvinduProps<T> {
   apen: boolean

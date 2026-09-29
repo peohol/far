@@ -9,8 +9,8 @@ import {
   type Idekategori,
   type Idetraad,
 } from '../../ideer/modell'
-import { Rikteksteditor } from '../analyttside/Rikteksteditor'
-import { Forlatvarsel } from '../analyttside/Skjemaer'
+import { Rikteksteditor } from '../stoffside/Rikteksteditor'
+import { Forlatvarsel } from '../stoffside/Skjemaer'
 import { Button } from '../Button'
 import { Felt } from '../konto/Felt'
 import type { Skjemastatus } from './useForlatvakt'

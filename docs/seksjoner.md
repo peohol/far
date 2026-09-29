@@ -92,7 +92,7 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
 - `ikon` er et navn fra ikonregisteret (`src/components/ikon/register.ts`).
   Det er pynt ved siden av tittelen og skjult for skjermlesere. Stoffsidens
   seksjonsikoner, og ikonene for kortene i farmakokinetikken og TDM, velges i
-  `src/components/analyttside/panelvisning.ts`: kortene får ikon etter
+  `src/components/stoffside/panelvisning.ts`: kortene får ikon etter
   hva overskriften handler om (absorpsjon, halveringstid, CYP, prøvetaking …), og et
   generisk ikon når ingen kategori passer, så en ny overskrift aldri feiler.
 - En seksjon i en seksjon, eller et detaljkort utenfor en seksjon eller i et
@@ -125,7 +125,7 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   </Skuffrutenett>
   ```
 
-Stoffsidens paneler (`src/components/analyttside/Paneler.tsx`) er seksjoner med
+Stoffsidens paneler (`src/components/stoffside/Paneler.tsx`) er seksjoner med
 panelnøkkelen som `id`; om et panel står åpent fra start, står i `apen` i
 `src/faginnhold/paneler.ts`.
 
@@ -147,15 +147,15 @@ Innholdet i en lukket skuff står i dokumentet, skjult med
 En **direktelenke** peker på en seksjon eller et detaljkort:
 
 ```
-#/analytt/AMTNORSUM/farmakokinetikk
-#/analytt/AMTNORSUM/farmakokinetikk/<kort-ID>
+#/stoff/amitriptylin/farmakokinetikk
+#/stoff/amitriptylin/farmakokinetikk/<kort-ID>
 ```
 
 Siden åpner da stedet og ruller dit — også når innholdet først kommer etter at
-siden er hentet. En lenke til noe som alltid står fram (`#/analytt/KODE/viktige_data`)
-ruller bare dit, uten å åpne eller lukke noe. Adressene lages med `analyttadresse(kode, sted)` i
-`src/domain/rute.ts`, og for et stoff uten kode med `stoffadresse(navn, sted)`
-(`#/stoff/<navn>/<seksjon>/<kort>`). Å åpne og lukke skuffer endrer ikke adressen.
+siden er hentet. En lenke til noe som alltid står fram (`#/stoff/<nøkkel>/viktige_data`)
+ruller bare dit, uten å åpne eller lukke noe. Adressene lages med
+`stoffadresse(nøkkel, sted)` i `src/domain/rute.ts`, for alle stoffer, med og
+uten analyttkode. Å åpne og lukke skuffer endrer ikke adressen.
 
 ## Styringen for siden
 

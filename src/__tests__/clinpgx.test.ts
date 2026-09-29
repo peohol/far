@@ -40,9 +40,9 @@ import {
 import { strukturavvik, strukturfeiltekst } from '../clinpgx/struktur'
 import { synkroniserClinpgx } from '../clinpgx/synk'
 import { lesDatakildestatus, vurderKilder } from '../datakilder/status'
-import { byggSidemodell } from '../faginnhold/analyttside'
+import { byggSidemodell } from '../faginnhold/stoffside'
 import { indekserKunnskapsbase, lesKunnskapsbase, lesSokeindeks } from '../faginnhold/globaltSok'
-import type { Analyttsidedata } from '../faginnhold/lesing'
+import type { Stoffsidedata } from '../faginnhold/lesing'
 import { ENKELTELEMENTER, ELEMENTTYPER, lesClinpgxkobling } from '../faginnhold/paneler'
 import { sokeadresse, sokGlobalt } from '../faginnhold/sok'
 import { TOMT_UTVALG } from '../legemiddeldata/lesing'
@@ -824,10 +824,10 @@ function utgave<T>(id: string, innhold: T) {
   return { id, revisjon: 1, publisert_revisjon: 1, innhold, endret_av_fornavn: '', endret_av_etternavn: '', endret_kl: '' }
 }
 
-/** En side koblet til sertralin i ClinPGx, med et redaksjonelt kort i «Farmakogenetikk». */
-function sertralinside(): Analyttsidedata {
+/** Stoffsiden for sertralin, koblet til sertralin i ClinPGx, med et redaksjonelt kort i «Farmakogenetikk». */
+function sertralinside(): Stoffsidedata {
   return {
-    analytt: utgave('analytt-SERT', { kode: 'SERT', hovedside: 'side-sert', komponenter: ['side-sert'] }),
+    stoff: { id: 'side-sert', slug: 'sertralin', navn: 'Sertralin' },
     infoside: utgave('side-sert', { navn: 'Sertralin' }),
     elementer: [
       utgave('pgx', {
@@ -848,11 +848,7 @@ function sertralinside(): Analyttsidedata {
         },
       }),
     ],
-    komponenter: [],
     referanser: [],
-    regelsett: null,
-    thcregelsett: null,
-    scenarioregelsett: null,
   }
 }
 
@@ -917,14 +913,14 @@ describe('søket', () => {
   it('finner gener og organisasjoner i hele kunnskapsbasen, og peker på seksjonen og kortet', async () => {
     const les = vi.fn(async () => SERTRALINUTVALG)
     const farmakogenetikk: Farmakogenetikkleser = { les, sok: async () => [], hent: async () => ({ status: 'fullfort' }) }
-    const sideleser = { lesAnalyttsider: async () => [sertralinside()], lesStoffsider: async () => [] }
+    const sideleser = { lesStoffsider: async () => [sertralinside()] }
     const indeks = await lesSokeindeks(sideleser, null, { farmakogenetikk })
     expect(les).toHaveBeenCalledWith([SERTRALIN])
 
     const [treff] = sokGlobalt(indeks, 'CPIC CYP2B6')
-    expect(sokeadresse(treff!.dokument.sted)).toBe(`#/analytt/SERT/farmakogenetikk/${annotasjonskort('PA166127639')}`)
+    expect(sokeadresse(treff!.dokument.sted)).toBe(`#/stoff/sertralin/farmakogenetikk/${annotasjonskort('PA166127639')}`)
     const [dpwg] = sokGlobalt(indeks, 'DPWG CYP2D6')
-    expect(sokeadresse(dpwg!.dokument.sted)).toBe(`#/analytt/SERT/farmakogenetikk/${annotasjonskort('PA166182821')}`)
+    expect(sokeadresse(dpwg!.dokument.sted)).toBe(`#/stoff/sertralin/farmakogenetikk/${annotasjonskort('PA166182821')}`)
     // Det redaksjonelle står i den samme seksjonen, og finnes som før.
     expect(sokGlobalt(indeks, 'redaksjonell')).toHaveLength(1)
   })
@@ -937,7 +933,7 @@ describe('søket', () => {
       sok: async () => [],
       hent: async () => ({ status: 'feilet' }),
     }
-    const sideleser = { lesAnalyttsider: async () => [sertralinside()], lesStoffsider: async () => [] }
+    const sideleser = { lesStoffsider: async () => [sertralinside()] }
     const base = await lesKunnskapsbase(sideleser, null, 'publisert', nede)
     expect(base.clinpgxfeil).toBe('ClinPGx-kopien svarer ikke')
     const dokumenter = indekserKunnskapsbase(base)
@@ -945,7 +941,7 @@ describe('søket', () => {
     expect(dokumenter.some((d) => d.tekst.includes('CYP2B6'))).toBe(false)
     // En side uten kobling spør ikke ClinPGx.
     const uten = vi.fn(nede.les)
-    await lesKunnskapsbase({ lesAnalyttsider: async () => [{ ...sertralinside(), elementer: [] }], lesStoffsider: async () => [] }, null, 'publisert', { ...nede, les: uten })
+    await lesKunnskapsbase({ lesStoffsider: async () => [{ ...sertralinside(), elementer: [] }] }, null, 'publisert', { ...nede, les: uten })
     expect(uten).not.toHaveBeenCalled()
     expect(byggSidemodell(sertralinside()).paneler.get('farmakogenetikk')).toHaveLength(2)
   })

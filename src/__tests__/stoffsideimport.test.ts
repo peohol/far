@@ -1,19 +1,30 @@
 /**
  * Stoffsidene uten analyttkode fra kildene om serumkonsentrasjoner
  * (`supabase/import/stoffsider/`): datasettet, og migrasjonene kjørt med
- * administratoren som bestilte dem, lest slik appen leser sidene.
+ * administratoren som bestilte dem. Databasen bygges bare til og med
+ * importen, før sidene fikk stoffets nøkkel, så sidene leses etter navnet med
+ * funksjonene appen brukte da (`hjelp/historisklesing.ts`).
  */
 import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { byggKatalog, FORTOLKNINGSOPPFORINGER } from '../domain/analyttkatalog'
 import { byggImportplan, importmigrasjoner, type Importfil } from '../faginnhold/import'
-import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import { lesKinetikk } from '../faginnhold/paneler'
 import { klartekst } from '../faginnhold/riktekst'
 import { STOFFSIDE_DATASETT, stoffsideplan } from '../faginnhold/stoffsider'
 import { TDM_KILDE } from '../faginnhold/tdm'
-import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
+import { historiskSidenavn } from '../faginnhold/historiskesider'
+import { STOFFREGISTER } from '../domain/stoffregister'
+import { lesSideEtterNavn, lesSidenavnUtenKode } from './hjelp/historisklesing'
+import {
+  faginnholdskall,
+  kjorMigrasjoner,
+  migrasjonsfiler,
+  nyDatabase,
+  opprettBruker,
+  type Faginnholdskall,
+} from './hjelp/testdatabase'
 
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
 const plan = stoffsideplan(katalog)
@@ -50,7 +61,14 @@ describe('datasettet', () => {
     for (const k of plan.koder) {
       expect(k.kode, k.hovedside.navn).toBeNull()
       expect(k.komponenter, k.hovedside.navn).toEqual([])
-      expect(katalog.kodeForSide(k.hovedside.navn), k.hovedside.navn).toBeUndefined()
+      // Ingen analyttkode hadde siden som sin …
+      expect(
+        katalog.oppforinger.filter((o) => historiskSidenavn(o) === k.hovedside.navn).map((o) => o.kode),
+        k.hovedside.navn,
+      ).toEqual([])
+      // … og i stoffregisteret er stoffet et stoff uten laboratorieanalytt.
+      expect(STOFFREGISTER.kanonisk(k.hovedside.navn)?.navn, k.hovedside.navn).toBe(k.hovedside.navn)
+      expect(STOFFREGISTER.analytterFor(STOFFREGISTER.kanonisk(k.hovedside.navn)!.slug), k.hovedside.navn).toEqual([])
     }
   })
 
@@ -119,7 +137,8 @@ describe('datasettet', () => {
 
 describe('migrasjonene i databasen', () => {
   let db: PGlite
-  let leser: Faginnholdsleser
+  let kall: Faginnholdskall
+  let bruker: string
   let revisjoner: number
 
   const antall = async (sql: string) => (await db.query<{ n: number }>(sql)).rows[0]!.n
@@ -127,21 +146,21 @@ describe('migrasjonene i databasen', () => {
   beforeAll(async () => {
     db = await nyDatabase({ til: MIGRASJONER[0] })
     const admin = await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
-    const bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lars', etternavn: 'Leser', rolle: 'user' })
+    bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lars', etternavn: 'Leser', rolle: 'user' })
     // Bare til og med stoffsideimporten: senere importer (som indikasjonene) utvider sidene.
     await kjorMigrasjoner(db, { bare: migrasjonsfiler().filter((f) => f >= MIGRASJONER[0]! && f <= MIGRASJONER.at(-1)!) })
-    leser = lagFaginnholdsleser(faginnholdskall(db, admin).klientFor(bruker))
+    kall = faginnholdskall(db, admin)
     revisjoner = await antall('select count(*)::int as n from public.objektrevisjoner')
   }, 180_000)
 
   it('legger inn stoffsidene publisert, uten noen laboratorieanalytt', async () => {
-    expect(await leser.lesStoffsidenavn('publisert')).toEqual(STOFFER)
+    expect(await lesSidenavnUtenKode(kall, bruker, 'publisert')).toEqual(STOFFER)
     expect(await antall('select count(*)::int as n from public.laboratorieanalytter')).toBe(0)
   })
 
   it('viser kortene datasettet har, med kildene, på hver side', async () => {
     for (const k of plan.koder) {
-      const side = await leser.lesStoffside(k.hovedside.navn, 'publisert')
+      const side = await lesSideEtterNavn(kall, bruker, k.hovedside.navn, 'publisert')
       expect(side.analytt, k.hovedside.navn).toBeNull()
       const vist = side.elementer
         .map((e) => ({

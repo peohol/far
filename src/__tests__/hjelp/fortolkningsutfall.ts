@@ -8,7 +8,7 @@
  * THC-syrekommentarene over alle kombinasjonene av det de bygges av.
  *
  * Knappene og pillene for konsentrasjonsbåndene lages av regelsettene fra før
- * byttet (se `dagensregler.ts`) og referanseområdene på informasjonssidene
+ * byttet (se `dagensregler.ts`) og referanseområdene på stoffsidene
  * (`data/referanseomrader.json`), slik steg 2 lager dem av de publiserte —
  * med den samme koden.
  *

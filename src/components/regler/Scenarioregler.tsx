@@ -7,12 +7,12 @@ import type { Scenarioregelsettutgave } from '../../faginnhold/lesing'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
 import { kommentaroppslag } from '../../regler/kommentarer'
 import { scenariofelter, tilScenarioutkast, utkastfelter, type Scenarioutkast } from '../../regler/scenarioredigering'
-import { analyttadresse } from '../../domain/rute'
+import { stoffadresse } from '../../domain/rute'
 import type { Analyte } from '../../types'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Uthev } from '../Uthev'
-import { seksjonsikon } from '../analyttside/panelvisning'
+import { seksjonsikon } from '../stoffside/panelvisning'
 import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
 import { kommentarnavnoppslag, Regelhistorikk, upubliserteFelt } from './Regelhistorikk'
 import { Koder, provKjor, Scenariovilkar, Simulator } from './Scenariodeler'
@@ -70,16 +70,21 @@ export interface ScenarioreglerProps {
    * kodeinsiden. Én side per navn, med koden som åpner den.
    */
   delesMed?: readonly Delingsside[]
+  /** Egen seksjons-ID når flere fortolkningsmoduler står på samme stoffside. */
+  seksjonsid?: string
+  /** Egen tittel når det må fremgå hvilken analytt regelsettet gjelder. */
+  tittel?: string
 }
 
 /** En annen side som deler reglene og kommentarene. */
 export interface Delingsside {
   navn: string
-  kode: string
+  /** Stoffets nøkkel i stoffregisteret. */
+  slug: string
 }
 
 /**
- * Fortolkningsreglene på analyttsiden, for moduler som fortolkes med
+ * Fortolkningsreglene på stoffsiden, for moduler som fortolkes med
  * scenarioregler (`docs/scenarioregler.md`): grensene, scenariene — hva som er
  * påvist, vilkårene og utfallet — og kommentarene scenariene viser til,
  * nummerert, så hver står bare én gang.
@@ -94,7 +99,15 @@ export interface Delingsside {
  * administratorer endre grensene og tekstene, se hva som ikke er publisert og
  * åpne historikken — for regelsettet og for hver kommentar.
  */
-export function Scenarioregler({ modul, regelsett, kommentarer, redigering, delesMed = [] }: ScenarioreglerProps) {
+export function Scenarioregler({
+  modul,
+  regelsett,
+  kommentarer,
+  redigering,
+  delesMed = [],
+  seksjonsid = 'fortolkning',
+  tittel = 'Fortolkningsregler',
+}: ScenarioreglerProps) {
   const beskrivelse = useMemo(() => beskrivRegelsett(regelsett, kommentarer), [regelsett, kommentarer])
   const [inndata, setInndata] = useState<RusInndata>(TOM_RUS_INNDATA)
   const [redigeres, setRedigeres] = useState(false)
@@ -108,9 +121,9 @@ export function Scenarioregler({ modul, regelsett, kommentarer, redigering, dele
 
   return (
     <Seksjon
-      id="fortolkning"
+      id={seksjonsid}
       ikon={seksjonsikon('fortolkning')}
-      tittel={<Uthev tekst="Fortolkningsregler" />}
+      tittel={<Uthev tekst={tittel} />}
       oppsummering={ramsOpp([
         antall(beskrivelse.scenarier.length, 'scenario', 'scenarier'),
         ...beskrivelse.grenser.map((g) => `${g.navn}: ${g.prosent}`),
@@ -233,9 +246,9 @@ function Delingsmerknad({ sider, redigering }: { sider: readonly Delingsside[]; 
     <p className="regler__deling">
       <Uthev tekst="Reglene og kommentartekstene er felles med " />
       {sider.map((s, i) => (
-        <span key={s.kode}>
+        <span key={s.slug}>
           {i > 0 && (i === sider.length - 1 ? ' og ' : ', ')}
-          <a href={analyttadresse(s.kode)}>
+          <a href={stoffadresse(s.slug)}>
             <Uthev tekst={s.navn} />
           </a>
         </span>

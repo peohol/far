@@ -2,14 +2,14 @@ import { useMemo, useState } from 'react'
 import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../../domain/thcTekster'
 import type { ThcModell } from '../../domain/thcMotor'
 import { bruksmonsterbeskrivelse, marginmerke, nivaomrader, somProsent } from '../../domain/thcVisning'
-import { upublisert } from '../../faginnhold/analyttside'
+import { upublisert } from '../../faginnhold/stoffside'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
 import { thcUtkastFra, tilThcModell, type ThcRegelsettutgave } from '../../faginnhold/thcregler'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Panelhode } from '../Panelhode'
 import { Uthev } from '../Uthev'
-import { seksjonsikon } from '../analyttside/panelvisning'
+import { seksjonsikon } from '../stoffside/panelvisning'
 import { Sistredigert } from '../historikk/Sistredigert'
 import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
 import { FORTOLKNING } from './Fortolkningsregler'
@@ -17,7 +17,7 @@ import { Thcredigering, type ThcredigeringProps } from './Thcredigering'
 import { Thcsimulator } from './Thcsimulator'
 
 /**
- * Fortolkningsreglene for THC-syre i urin på analyttsiden for IRCAK
+ * Fortolkningsreglene for THC-syre i urin (IRCAK) på stoffsiden for THC
  * (`docs/thc-syre.md`): nivåene, marginene, måleusikkerheten og kurvene
  * konklusjonen avgjøres av, tekstbolkene kommentaren settes sammen av, og en
  * simulator som fortolker med akkurat disse reglene.
@@ -34,10 +34,16 @@ export function Thcregler({
   utgave,
   redigerer,
   onLagre,
+  seksjonsid = FORTOLKNING,
+  tittel = 'Fortolkningsregler',
 }: {
   utgave: ThcRegelsettutgave
   redigerer: boolean
   onLagre?: ThcredigeringProps['onLagre']
+  /** Egen seksjons-ID når THC-syrereglene deler stoffside med et annet regelsett. */
+  seksjonsid?: string
+  /** Egen tittel når det må fremgå at reglene gjelder THC-syre i urin. */
+  tittel?: string
 }) {
   const modell = useMemo(() => tilThcModell(utgave), [utgave])
   const start = useMemo(() => thcUtkastFra(utgave), [utgave])
@@ -52,9 +58,9 @@ export function Thcregler({
 
   return (
     <Seksjon
-      id={FORTOLKNING}
+      id={seksjonsid}
       ikon={seksjonsikon(FORTOLKNING)}
-      tittel={<Uthev tekst="Fortolkningsregler" />}
+      tittel={<Uthev tekst={tittel} />}
       oppsummering={
         modell.ok
           ? ramsOpp([

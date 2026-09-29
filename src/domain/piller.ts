@@ -15,7 +15,7 @@ import type { Analyte } from '../types'
  */
 
 /**
- * Referanseområdet slik informasjonssiden har det: kortet «Referanseområde» i
+ * Referanseområdet slik stoffsiden har det: kortet «Referanseområde» i
  * «Viktige data». Fortolkningen får det fra samme sted, så steg 2 og siden
  * alltid viser det samme. `null` er en grense som ikke er oppgitt.
  */
@@ -56,7 +56,7 @@ function tall(verdi: number): string {
 
 /**
  * Referanseområdet slik pillen viser det: «10 – 300», eller «fra 10» og
- * «opptil 300» når bare den ene grensen er oppgitt — som på informasjonssiden,
+ * «opptil 300» når bare den ene grensen er oppgitt — som på stoffsiden,
  * uten å si om grensen er med.
  */
 function omrade({ nedre, ovre }: Referanseomrade): string {
@@ -92,7 +92,7 @@ function regelpiller(regelsett: Intervallregelsett, antihypertensiv: boolean): P
 /**
  * Pillene analyttkortet viser, i den rekkefølgen de skal stå.
  *
- * Referanseområdet er det informasjonssiden har; påvisningsgrensen og
+ * Referanseområdet er det stoffsiden har; påvisningsgrensen og
  * terapiområdet står i datasettet; ringegrensen og den toksiske grensen hører
  * til fortolkningsreglene og leses av regelsettet. Mens referanseområdet og
  * regelsettet hentes, står bare det som er i datasettet.

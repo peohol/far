@@ -1,6 +1,6 @@
 import { useId, useRef, useState, type ReactNode } from 'react'
-import type { Katalogoppforing } from '../../domain/analyttkatalog'
-import type { Sideelement } from '../../faginnhold/analyttside'
+import type { Laboratorieanalytt } from '../../domain/analyttkatalog'
+import type { Sideelement } from '../../faginnhold/stoffside'
 import {
   DATAKORT,
   DATAKORTGRUPPER,
@@ -54,11 +54,11 @@ const UTSEENDE: Record<Datakorttype, { ikon: Ikonnavn; tone?: 'referanse' | 'tok
  * ordet (det står for skjermlesere), og en verdi per legemiddelform, side om
  * side, når kortet har flere.
  *
- * Deler flere koder siden — en metabolitt slått sammen med moderstoffet — har
- * hver kode sine egne kort, merket med stoffnavnet: tramadolsiden viser både
- * referanseområdet for tramadol og for O-desmetyltramadol. Kortene til
- * hovedkoden (den første i `analytter`) lagres uten `gjelder`, de andre med
- * koden (`datakortGjelder`).
+ * Er stoffet primært stoff for flere analytter — moderstoffet og en metabolitt
+ * — har hver analytt sine egne kort, merket med analyttens navn: tramadolsiden
+ * viser både referanseområdet for tramadol og for O-desmetyltramadol. Kortene
+ * til hovedanalytten (den første i `analytter`) lagres uten `gjelder`, de
+ * andre med koden (`datakortGjelder`).
  */
 export function ViktigeData({
   definisjon,
@@ -67,8 +67,8 @@ export function ViktigeData({
 }: {
   definisjon: Paneldefinisjon
   kontekst: Panelkontekst
-  /** Kodene som viser siden, hovedkoden først. */
-  analytter?: readonly Katalogoppforing[]
+  /** Analyttene stoffet er primært stoff for, hovedanalytten først (`primareAnalytter`). */
+  analytter?: readonly Laboratorieanalytt[]
 }) {
   const elementer = kontekst.modell.paneler.get(definisjon.nokkel) ?? []
   const flere = analytter.length > 1

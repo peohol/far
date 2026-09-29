@@ -80,7 +80,7 @@ ikke møtes i én stor fil. De felles står i `main.tsx`, i denne rekkefølgen:
 - `sok.css`: fagsøkets rullegardin, søkesiden, søket på siden og
   fremhevingen av treff i teksten (`.sidetreff`).
 
-Komponentene i informasjonssiden, seksjonene, referansene, merkene og det
+Komponentene i stoffsiden, seksjonene, referansene, merkene og det
 modale laget henter sitt eget stilark selv.
 
 ## Ikoner
@@ -141,7 +141,7 @@ er `primary` med ↵; de andre er `kant`.
   ikon og kursiv serif. `tone="toksisk"` er for det som mangler.
 - **`Metalinje`** (`src/components/Metalinje.tsx`) er linja over et stoffnavn
   i fortolkningen, som «KVE · SPFA › Antipsykotika». Med `lenker` er kodene
-  lenker til informasjonssiden (`Kodepille`). På informasjonssiden har linja
+  lenker til stoffsiden (`Kodepille`). På stoffsiden har linja
   over navnet i stedet kategoriene fra stoffregisteret («Antidepressiver ›
   SSRI»), og under navnet står analyttkoden som pille (`pille--kode`, en knapp
   til fortolkningen) og «Inngår i» med `Metodepille`.

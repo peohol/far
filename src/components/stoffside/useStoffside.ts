@@ -1,33 +1,31 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { publiseringsplan, tilReferanse, type Sideelement } from '../../faginnhold/analyttside'
+import { publiseringsplan, tilReferanse, type Sideelement } from '../../faginnhold/stoffside'
 import { Samtidighetskonflikt } from '../../faginnhold/lagring'
 import {
-  TOM_SIDE,
-  type Analyttsidedata,
+  INGEN_REGLER,
+  TOM_STOFFSIDE,
+  type Regeldata,
   type Regelsettutgave,
   type Scenarioregelsettutgave,
+  type Stoffsidedata,
   type Utgave,
 } from '../../faginnhold/lesing'
 import type { Infosideinnhold, Innholdselementinnhold, Referanseinnhold, Tilstand } from '../../faginnhold/modell'
 import { kommentarendringer, utenKommentarer } from '../../regler/kommentarer'
 import type { Intervallregelsett } from '../../regler/modell'
 import { scenariokommentarendringer, type Scenarioutkast } from '../../regler/scenarioredigering'
-import { rusModulFor } from '../../domain/rus'
+import { RUS_MODULER, rusModulFor, type RusModul } from '../../domain/rus'
 import { FJERNET, datakortGjelder, erEnkeltelement } from '../../faginnhold/paneler'
 import type { Referanse } from '../../faginnhold/referanser'
-import type { Katalogoppforing } from '../../domain/analyttkatalog'
+import type { Laboratorieanalytt } from '../../domain/analyttkatalog'
+import type { Stoff } from '../../domain/stoffregister'
+import { THC_KODE } from '../../domain/thc'
 import type { ThcRegelsett } from '../../domain/thcRegelsett'
 import type { ThcTekster } from '../../domain/thcTekster'
 import { thcEndringer } from '../../faginnhold/thcregler'
 import { useFaginnholdskilde } from './Faginnholdskilde'
 
 export type Sidemodus = 'lese' | 'rediger'
-
-/**
- * Hvilken side: siden for en analyttkode i katalogen, eller siden for et stoff
- * som ikke har noen analyttkode, etter navnet.
- */
-export type Sidenokkel = { type: 'kode'; oppforing: Katalogoppforing } | { type: 'stoff'; navn: string }
 
 /** Det et innholdselement lagres med, utenom siden det står på. */
 export interface Elementendring {
@@ -40,7 +38,10 @@ export interface Elementendring {
 
 export interface Sidetilstand {
   status: 'laster' | 'klar' | 'feil'
-  data: Analyttsidedata
+  /** Monografien: stoffsiden i databasen. */
+  data: Stoffsidedata
+  /** Fortolkningsreglene for analyttene siden viser, i samme tilstand. */
+  regler: Regeldata
   /**
    * Tilstanden `data` er lest fra. Står modusen nettopp byttet, er det den
    * forrige til den nye er hentet.
@@ -49,93 +50,107 @@ export interface Sidetilstand {
   feil: string | null
 }
 
-/** Regelsettene slik de er publisert, til å vise hva som endres før publiseringen. */
-export interface Publiserteregler {
-  regelsett: Regelsettutgave | null
-  scenarioregelsett: Scenarioregelsettutgave | null
-}
-
-const INGEN_PUBLISERTE: Publiserteregler = { regelsett: null, scenarioregelsett: null }
-
 const IKKE_KLAR = 'Utkastet er ikke hentet ennå. Vent litt og prøv igjen.'
 const LAGT_INN_AV_ANDRE = 'Noen andre har lagt inn dette i mellomtiden.'
 
+/** Scenariomodulene analyttene fortolkes i, hver én gang. */
+function scenariomoduler(analytter: readonly Laboratorieanalytt[]): RusModul[] {
+  const moduler = new Map<string, RusModul>()
+  for (const { fortolkning } of analytter) {
+    const modul = rusModulFor(fortolkning)
+    if (modul) moduler.set(modul.id, modul)
+  }
+  return [...moduler.values()]
+}
+
+function modulMedId(id: string): RusModul | undefined {
+  return RUS_MODULER.find((m) => m.id === id)
+}
+
 /**
- * En analyttside: innholdet i den tilstanden modusen viser, og endringene som
- * kan gjøres på den.
+ * En stoffside: monografien i den tilstanden modusen viser, fortolkningsreglene
+ * for analyttene stoffet er primært stoff for, og endringene som kan gjøres på
+ * dem.
  *
  * Lesemodus viser det publiserte — det alle innloggede ser. Redigeringsmodus
  * viser utkastet, og der lagres alt som utkast mot revisjonen brukeren så.
  * Ingenting blir synlig for andre før det publiseres.
  *
- * Siden finnes ikke i databasen før noe er lagret på den første gang. Da
- * opprettes informasjonssiden og laboratorieanalytten av det de statiske
- * datasettene sier om koden: sidens navn og stoffene analysen omfatter.
- * Finnes en side med samme navn fra før — for eksempel som komponent i en
- * sumanalyse — brukes den. Et stoff uten analyttkode får bare
- * informasjonssiden, med navnet fra adressen; regelsett har det ikke.
+ * Monografien leses etter stoffets nøkkel, og ingenting annet. Reglene hører
+ * til fortolkningssystemet og leses for seg etter analyttkoden og modulen
+ * (`analytter`, fra koblingene i stoffregisteret). Et stoff i registeret som
+ * ikke har noen side i databasen ennå, får den første gang noe lagres på den,
+ * med stoffets navn og nøkkel.
  *
- * Fortolkes koden med scenarioregler, hentes regelsettet for modulen også,
- * men bare til redigeringen: lesemodusen viser reglene appen alt har hentet.
+ * Scenarioreglene hentes bare til redigeringen: lesemodusen viser reglene appen
+ * alt har hentet.
  */
-export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
+export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, analytter: readonly Laboratorieanalytt[], modus: Sidemodus) {
   const { leser, lager } = useFaginnholdskilde()
   const tilstand: Tilstand = modus === 'rediger' ? 'utkast' : 'publisert'
-  const oppforing = nokkel.type === 'kode' ? nokkel.oppforing : null
-  const stoffnavn = nokkel.type === 'stoff' ? nokkel.navn : null
-  const kode = oppforing?.kode ?? null
-  const modul = useMemo(() => (oppforing ? (rusModulFor(oppforing.fortolkning) ?? null) : null), [oppforing])
-  const [side, setSide] = useState<Sidetilstand>({ status: 'laster', data: TOM_SIDE, tilstand: null, feil: null })
+  const { slug, navn } = stoff
+  // Kodene og modulene som tekst, så en ny liste med de samme ikke leser alt på nytt.
+  const kodeliste = analytter.map((a) => a.kode).join(' ')
+  const koder = useMemo(() => (kodeliste ? kodeliste.split(' ') : []), [kodeliste])
+  const modulliste = scenariomoduler(analytter)
+    .map((m) => m.id)
+    .join(' ')
+  const moduler = useMemo(() => (modulliste ? modulliste.split(' ') : []), [modulliste])
+  const [side, setSide] = useState<Sidetilstand>({
+    status: 'laster',
+    data: TOM_STOFFSIDE,
+    regler: INGEN_REGLER,
+    tilstand: null,
+    feil: null,
+  })
   const [referansebase, setReferansebase] = useState<Referanse[]>([])
-  const [publisert, setPublisert] = useState<Publiserteregler>(INGEN_PUBLISERTE)
+  const [publisert, setPublisert] = useState<Regeldata>(INGEN_REGLER)
   const [konflikt, setKonflikt] = useState(false)
   const [runde, setRunde] = useState(0)
   /** Det siste som er lest, og fra hvilken tilstand, for endringene som trenger revisjonene. */
-  const siste = useRef<{ tilstand: Tilstand | null; data: Analyttsidedata }>({ tilstand: null, data: TOM_SIDE })
+  const siste = useRef<Pick<Sidetilstand, 'tilstand' | 'data' | 'regler'>>({
+    tilstand: null,
+    data: TOM_STOFFSIDE,
+    regler: INGEN_REGLER,
+  })
 
-  // En metabolitt som er slått sammen med moderstoffet, viser moderstoffets side.
-  const deltSide = oppforing && oppforing.sidenavn !== oppforing.navn ? oppforing.sidenavn : null
+  const lesSide = useCallback((t: Tilstand) => leser.lesStoffside(slug, t), [leser, slug])
 
-  /**
-   * Siden i én tilstand: gjennom koden når den har en, ellers etter navnet.
-   * Har koden ingen side i databasen ennå, men siden den hører til er
-   * hovedside for en annen kode — en metabolitt slått sammen med
-   * moderstoffet — vises den siden, med reglene for denne koden. Da lagres
-   * også endringene der.
-   */
-  const lesSide = useCallback(
-    async (t: Tilstand): Promise<Analyttsidedata> => {
-      if (kode === null) return leser.lesStoffside(stoffnavn ?? '', t)
-      const egen = await leser.lesAnalyttside(kode, t)
-      if (egen.analytt || !deltSide) return egen
-      const delt = await leser.lesStoffside(deltSide, t)
-      return delt.analytt ? { ...delt, regelsett: egen.regelsett, thcregelsett: egen.thcregelsett } : egen
+  /** Reglene for analyttene i én tilstand; scenarioreglene bare når de trengs. */
+  const lesRegler = useCallback(
+    async (t: Tilstand, medScenarioregler: boolean): Promise<Regeldata> => {
+      const [intervall, thcregelsett, scenario] = await Promise.all([
+        Promise.all(koder.map(async (kode) => [kode, await leser.finnIntervallregelsett(kode, t)] as const)),
+        koder.includes(THC_KODE) ? leser.lesThcRegelsett(t) : null,
+        medScenarioregler
+          ? Promise.all(moduler.map(async (id) => [id, await leser.finnScenarioregelsett(id, t)] as const))
+          : [],
+      ])
+      const utfylt = <T,>(par: readonly (readonly [string, T | null])[]) =>
+        Object.fromEntries(par.filter((p): p is readonly [string, T] => p[1] !== null))
+      return { regelsett: utfylt(intervall), thcregelsett, scenarioregelsett: utfylt(scenario) }
     },
-    [leser, kode, stoffnavn, deltSide],
+    [leser, koder, moduler],
   )
 
   useEffect(() => {
     let gjelder = true
     setSide((forrige) => ({ ...forrige, status: 'laster' }))
-    Promise.all([
-      lesSide(tilstand),
-      tilstand === 'utkast' && modul ? leser.finnScenarioregelsett(modul.id, tilstand) : null,
-    ])
-      .then(([side, scenarioregelsett]) => {
+    Promise.all([lesSide(tilstand), lesRegler(tilstand, tilstand === 'utkast')])
+      .then(([data, regler]) => {
         if (!gjelder) return
-        const data = { ...side, scenarioregelsett }
-        siste.current = { tilstand, data }
-        setSide({ status: 'klar', data, tilstand, feil: null })
+        siste.current = { tilstand, data, regler }
+        setSide({ status: 'klar', data, regler, tilstand, feil: null })
       })
       .catch((e: Error) => {
         if (!gjelder) return
-        siste.current = { tilstand: null, data: TOM_SIDE }
-        setSide({ status: 'feil', data: TOM_SIDE, tilstand: null, feil: e.message })
+        siste.current = { tilstand: null, data: TOM_STOFFSIDE, regler: INGEN_REGLER }
+        setSide({ status: 'feil', data: TOM_STOFFSIDE, regler: INGEN_REGLER, tilstand: null, feil: e.message })
       })
     return () => {
       gjelder = false
     }
-  }, [leser, lesSide, modul, tilstand, runde])
+  }, [lesSide, lesRegler, tilstand, runde])
 
   // Referansebasen trengs bare for å velge kilder, og de publiserte
   // regelsettene bare for å si hva som endres — altså bare i redigeringen.
@@ -150,20 +165,17 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
       .catch(() => {
         if (gjelder) setReferansebase([])
       })
-    Promise.all([
-      kode !== null ? leser.finnIntervallregelsett(kode, 'publisert') : null,
-      modul ? leser.finnScenarioregelsett(modul.id, 'publisert') : null,
-    ])
-      .then(([regelsett, scenarioregelsett]) => {
-        if (gjelder) setPublisert({ regelsett, scenarioregelsett })
+    lesRegler('publisert', true)
+      .then((regler) => {
+        if (gjelder) setPublisert(regler)
       })
       .catch(() => {
-        if (gjelder) setPublisert(INGEN_PUBLISERTE)
+        if (gjelder) setPublisert(INGEN_REGLER)
       })
     return () => {
       gjelder = false
     }
-  }, [leser, modus, runde, kode, modul])
+  }, [leser, lesRegler, modus, runde])
 
   const lastInn = useCallback(() => {
     setKonflikt(false)
@@ -189,50 +201,30 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
    * Utkastet slik det sist ble lest. Endringene lagres alltid mot utkastets
    * revisjoner, aldri mot det publiserte som sto før modusen ble byttet.
    */
-  const utkastet = useCallback((): Analyttsidedata => {
+  const utkastet = useCallback((): Pick<Sidetilstand, 'data' | 'regler'> => {
     if (siste.current.tilstand !== 'utkast') throw new Error(IKKE_KLAR)
-    return siste.current.data
+    return siste.current
   }, [])
 
   /**
-   * Informasjonssiden koden eller stoffet hører til, opprettet først om den
+   * Stoffsiden i databasen, opprettet med stoffets navn og nøkkel først om den
    * ikke finnes. Gir tilbake utkastet slik det står nå.
    */
   const sikreSide = useCallback(async (): Promise<Utgave<Infosideinnhold>> => {
-    const data = utkastet()
-    if (data.infoside && (data.analytt || !oppforing)) return data.infoside
-
-    const navn = oppforing ? [...new Set([oppforing.sidenavn, ...oppforing.komponenter])] : [stoffnavn ?? '']
-    const finnes = await leser.finnInfosider(navn, 'utkast')
-    const perNavn = new Map(finnes.map((u) => [u.innhold.navn.toLocaleLowerCase('nb'), u]))
-    const hent = async (n: string): Promise<Utgave<Infosideinnhold>> => {
-      const kjent = perNavn.get(n.toLocaleLowerCase('nb'))
-      if (kjent) return kjent
-      const status = await lager.opprettUtkast('infoside', { navn: n })
-      const ny: Utgave<Infosideinnhold> = {
-        id: status.id,
-        revisjon: status.revisjon ?? 1,
-        publisert_revisjon: null,
-        innhold: { navn: n },
-        endret_av_fornavn: '',
-        endret_av_etternavn: '',
-        endret_kl: status.endret_kl ?? '',
-      }
-      perNavn.set(n.toLocaleLowerCase('nb'), ny)
-      return ny
+    const { data } = utkastet()
+    if (data.infoside) return data.infoside
+    const innhold: Infosideinnhold = { navn, slug }
+    const status = await lager.opprettUtkast('infoside', innhold)
+    return {
+      id: status.id,
+      revisjon: status.revisjon ?? 1,
+      publisert_revisjon: null,
+      innhold,
+      endret_av_fornavn: '',
+      endret_av_etternavn: '',
+      endret_kl: status.endret_kl ?? '',
     }
-
-    if (!oppforing) return hent(navn[0]!)
-    const hovedside = await hent(oppforing.sidenavn)
-    const komponenter: string[] = []
-    for (const n of oppforing.komponenter) komponenter.push((await hent(n)).id)
-    await lager.opprettUtkast('laboratorieanalytt', {
-      kode: oppforing.kode,
-      hovedside: hovedside.id,
-      komponenter: komponenter.length > 0 ? komponenter : [hovedside.id],
-    })
-    return hovedside
-  }, [leser, lager, oppforing, stoffnavn, utkastet])
+  }, [lager, navn, slug, utkastet])
 
   /**
    * Lagrer et element, eller oppretter det. Et kort som bare kan finnes én
@@ -242,8 +234,8 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
   const lagreElement = useCallback(
     (element: Sideelement | null, endring: Elementendring) =>
       endre(async () => {
-        const hovedside = await sikreSide()
-        const innhold: Innholdselementinnhold = { infoside: hovedside.id, ...endring }
+        const side = await sikreSide()
+        const innhold: Innholdselementinnhold = { infoside: side.id, ...endring }
         if (element) {
           await lager.lagreUtkast(element.id, element.utgave.revisjon, innhold)
           return
@@ -304,7 +296,7 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
         const panelreferanser = { ...(side.innhold.panelreferanser ?? {}) }
         if (ider.length > 0) panelreferanser[panel] = ider
         else delete panelreferanser[panel]
-        await lager.lagreUtkast(side.id, side.revisjon, { navn: side.innhold.navn, panelreferanser })
+        await lager.lagreUtkast(side.id, side.revisjon, { navn: side.innhold.navn, slug: side.innhold.slug, panelreferanser })
       }),
     [endre, sikreSide, lager],
   )
@@ -320,14 +312,15 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
   )
 
   /**
-   * Lagrer regelsettet og de nye og endrede kommentarene som utkast, på én
-   * gang, mot revisjonene brukeren åpnet — eller mot `grunnlag` når brukeren
-   * har sett en nyere utgave og velger å lagre over den. En konflikt kastes
-   * videre til redigeringen, som lar brukeren sammenligne før noe lagres.
+   * Lagrer regelsettet for koden og de nye og endrede kommentarene som utkast,
+   * på én gang, mot revisjonene brukeren åpnet — eller mot `grunnlag` når
+   * brukeren har sett en nyere utgave og velger å lagre over den. En konflikt
+   * kastes videre til redigeringen, som lar brukeren sammenligne før noe
+   * lagres.
    */
   const lagreRegelsett = useCallback(
-    async (innhold: Intervallregelsett, grunnlag?: Regelsettutgave) => {
-      const apnet = utkastet().regelsett
+    async (kode: string, innhold: Intervallregelsett, grunnlag?: Regelsettutgave) => {
+      const apnet = utkastet().regler.regelsett[kode]
       if (!apnet) throw new Error(IKKE_KLAR)
       const mot = grunnlag ?? apnet
       await lager.lagreIntervallregelsett(
@@ -350,7 +343,7 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
   const lagreThcRegelsett = useCallback(
     (regler: ThcRegelsett, tekster: ThcTekster) =>
       endre(async () => {
-        const apnet = utkastet().thcregelsett
+        const apnet = utkastet().regler.thcregelsett
         if (!apnet) throw new Error(IKKE_KLAR)
         const { kommentarer, regelsett } = thcEndringer(apnet, regler, tekster)
         for (const k of kommentarer) await lager.lagreUtkast(k.id, k.revisjon, k.innhold)
@@ -359,19 +352,18 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
     [endre, lager, utkastet],
   )
 
-  /** Regelsettet slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */
-  const hentRegelsettutkast = useCallback(
-    async () => (kode !== null ? leser.finnIntervallregelsett(kode, 'utkast') : null),
-    [leser, kode],
-  )
+  /** Regelsettet for koden slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */
+  const hentRegelsettutkast = useCallback((kode: string) => leser.finnIntervallregelsett(kode, 'utkast'), [leser])
 
   /**
-   * Det samme for scenarioregelsettet: regelsettet og de nye og endrede
-   * kommentarene sammen, mot revisjonene brukeren åpnet eller mot `grunnlag`.
+   * Det samme for scenarioregelsettet til en modul: regelsettet og de nye og
+   * endrede kommentarene sammen, mot revisjonene brukeren åpnet eller mot
+   * `grunnlag`.
    */
   const lagreScenarioregelsett = useCallback(
-    async (utkast: Scenarioutkast, grunnlag?: Scenarioregelsettutgave) => {
-      const apnet = utkastet().scenarioregelsett
+    async (modulId: string, utkast: Scenarioutkast, grunnlag?: Scenarioregelsettutgave) => {
+      const apnet = utkastet().regler.scenarioregelsett[modulId]
+      const modul = modulMedId(modulId)
       if (!apnet || !modul) throw new Error(IKKE_KLAR)
       const mot = grunnlag ?? apnet
       await lager.lagreScenarioregelsett(
@@ -382,13 +374,13 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
       )
       setRunde((r) => r + 1)
     },
-    [lager, utkastet, modul],
+    [lager, utkastet],
   )
 
-  /** Scenarioregelsettet slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */
+  /** Scenarioregelsettet til modulen slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */
   const hentScenarioregelsettutkast = useCallback(
-    async () => (modul ? leser.finnScenarioregelsett(modul.id, 'utkast') : null),
-    [leser, modul],
+    (modulId: string) => leser.finnScenarioregelsett(modulId, 'utkast'),
+    [leser],
   )
 
   /** Lager en ny revisjon av objektet med innholdet fra en tidligere. */
@@ -401,7 +393,10 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
     [endre, lager, utkastet],
   )
 
-  const plan = useMemo(() => (modus === 'rediger' ? publiseringsplan(side.data) : []), [modus, side.data])
+  const plan = useMemo(
+    () => (modus === 'rediger' ? publiseringsplan(side.data, side.regler) : []),
+    [modus, side.data, side.regler],
+  )
 
   /**
    * Publiserer alt på siden som har upubliserte endringer, i den rekkefølgen
@@ -410,7 +405,8 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
   const publiser = useCallback(
     () =>
       endre(async () => {
-        for (const steg of publiseringsplan(utkastet())) {
+        const { data, regler } = utkastet()
+        for (const steg of publiseringsplan(data, regler)) {
           await lager.publiserUtkast(steg.id, steg.revisjon)
         }
       }),
@@ -444,4 +440,4 @@ export function useAnalyttside(nokkel: Sidenokkel, modus: Sidemodus) {
   }
 }
 
-export type Analyttsidehandlinger = ReturnType<typeof useAnalyttside>
+export type Stoffsidehandlinger = ReturnType<typeof useStoffside>

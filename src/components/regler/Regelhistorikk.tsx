@@ -1,5 +1,5 @@
 import type { Kommentarinnhold } from '../../domain/kommentarobjekt'
-import { upublisert } from '../../faginnhold/analyttside'
+import { upublisert } from '../../faginnhold/stoffside'
 import { endredeFelt, type Felt } from '../../faginnhold/historikk'
 import type { Utgave } from '../../faginnhold/lesing'
 import type { Innhold } from '../../faginnhold/modell'

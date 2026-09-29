@@ -348,7 +348,7 @@ function Plasseringsskjema({
     ...andre.filter((b) => b.scenario === scenario).map((b) => `«${b.merke}» i samme scenario`),
     ...(andre.some((b) => b.scenario !== scenario) ? [`scenario ${scenarierMed(andre, numre, scenario)}`] : []),
   ]
-  // Tekstene regelsettet bruker, nummerert som på analyttsiden og med hvor de
+  // Tekstene regelsettet bruker, nummerert som på stoffsiden og med hvor de
   // brukes, og dem redigeringen har sett, så et valg kan gjøres om.
   const valg = [...utkast.tekster.entries()]
     .map(([id, tekst]) => ({ id, tekst, nummer: tekstnummer.get(id) }))

@@ -22,7 +22,7 @@ export interface FagsokProps {
   /** Søket i adressen mens søkesiden står åpen, så feltet viser det samme. */
   sporring?: string
   /** Linja under et stoff: koden, analysemetoden og kategorien. */
-  beskrivSide?: (kode: string) => string | undefined
+  beskrivSide?: (stoff: string) => string | undefined
   /** Går til adressen: et treff, eller søkesiden. */
   onGaaTil: (adresse: string) => void
 }

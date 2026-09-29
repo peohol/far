@@ -5,8 +5,7 @@
  * Lesingen er fire kall, uansett hvor mange sider det er, og søket kan brukes
  * før de er ferdige (se {@link lesSokeindeks}):
  *
- * 1. `les_analyttsider` gir alle sidene på samme form som `les_analyttside`,
- *    og `les_stoffsider` sidene for stoffene uten analyttkode, på samme form.
+ * 1. `les_stoffer` gir alle stoffsidene på samme form som `les_stoff`.
  * 2. `les_legemidler` gir legemiddeldataene for alle virkestoffene sidene er
  *    koblet til. Hver side får sin del (`utvalgFor`), med de samme
  *    preparatene som seksjonen «Preparater» viser.
@@ -16,25 +15,24 @@
  *    koblet til, og `les_cpic` CPIC-anbefalingene for de samme. Hver side får
  *    sin del (`farmakogenetikkFor`, `cpicFor`).
  *
+ * Hvert treff er et stoff i stoffregisteret. Kodene og navnene til
+ * laboratorieanalyttene stoffet er koblet til, er andre veier til det samme
+ * stoffet (se `stoffidentitet` i `sok.ts`).
+ *
  * Rangeringen skjer bare i `sok.ts`; databasen gir bare innholdet. Klarer ikke
  * legemiddeldataene, ClinPGx-dataene eller CPIC-dataene å lese, indekseres
  * faginnholdet likevel, og feilen står i {@link Kunnskapsbase.festfeil},
  * {@link Kunnskapsbase.clinpgxfeil} eller {@link Kunnskapsbase.cpicfeil}.
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { byggSidemodell, type Sidemodell } from './analyttside'
+import { byggSidemodell, type Sidemodell } from './stoffside'
 import { tilFeil } from './lagring'
-import { TOM_SIDE, type Analyttsidedata, type Utgave } from './lesing'
+import { TOM_STOFFSIDE, type Stoffsidedata, type Utgave } from './lesing'
 import type { Referanseinnhold, Tilstand } from './modell'
-import { alfabetisk } from './paneler'
-import {
-  indekserSide,
-  lagSokeindeks,
-  type Sideidentitet,
-  type Sokedokument,
-  type Sokeindeks,
-  type Tilleggstekst,
-} from './sok'
+import { indekserSide, lagSokeindeks, stoffidentitet, type Sokedokument, type Sokeindeks, type Tilleggstekst } from './sok'
+import { ANALYTTKATALOG, type Analyttkatalog } from '../domain/analyttkatalog'
+import { analytterForStoff } from '../domain/koblinger'
+import { byggStoffregister, STOFFREGISTERDATA, type Registerdata } from '../domain/stoffregister'
 import { byggInteraksjoner, interaksjonsnokler } from '../legemiddeldata/interaksjoner'
 import type { Interaksjonsnokler, Interaksjonsutvalg, Legemiddelleser, Legemiddelutvalg } from '../legemiddeldata/lesing'
 import { byggPreparatvisning } from '../legemiddeldata/preparatmodell'
@@ -46,7 +44,7 @@ import { byggCpicvisning, cpicFor, cpictekster } from '../cpic/stoffside'
 
 /** Alt søket i kunnskapsbasen indekserer. */
 export interface Kunnskapsbase {
-  sider: Analyttsidedata[]
+  sider: Stoffsidedata[]
   /** Legemiddeldataene for alle koblingene, eller `null` uten dem. */
   legemidler: Legemiddelutvalg | null
   /** Interaksjonene for alle koblingene, eller `null` uten dem. */
@@ -64,33 +62,29 @@ export interface Kunnskapsbase {
 }
 
 export interface Sideleser {
-  /** Alle analyttsidene i én tilstand, sortert på koden. */
-  lesAnalyttsider(tilstand: Tilstand): Promise<Analyttsidedata[]>
-  /** Sidene for stoffene uten analyttkode i én tilstand, alfabetisk. `analytt` er `null`. */
-  lesStoffsider(tilstand: Tilstand): Promise<Analyttsidedata[]>
+  /** Alle stoffsidene i én tilstand, alfabetisk. */
+  lesStoffsider(tilstand: Tilstand): Promise<Stoffsidedata[]>
 }
 
-/** Formen `les_analyttsider` og `les_stoffsider` gir: sidene, og referansene de siterer, én gang. */
+/** Formen `les_stoffer` gir: sidene, og referansene de siterer, én gang. */
 interface Samletlesing {
-  sider: (Omit<Analyttsidedata, 'referanser' | 'regelsett' | 'scenarioregelsett'> & { referanser: string[] })[]
+  sider: (Omit<Stoffsidedata, 'referanser'> & { referanser: string[] })[]
   referanser: Utgave<Referanseinnhold>[]
 }
 
 export function lagSideleser(klient: SupabaseClient): Sideleser {
-  async function les(funksjon: string, tilstand: Tilstand): Promise<Analyttsidedata[]> {
-    const { data, error } = await klient.rpc(funksjon, { sidetilstand: tilstand })
-    if (error) throw tilFeil(error)
-    const { sider = [], referanser = [] } = (data ?? {}) as Partial<Samletlesing>
-    const perId = new Map(referanser.map((r) => [r.id, r]))
-    return sider.map((side) => ({
-      ...TOM_SIDE,
-      ...side,
-      referanser: side.referanser.flatMap((id) => perId.get(id) ?? []),
-    }))
-  }
   return {
-    lesAnalyttsider: (tilstand) => les('les_analyttsider', tilstand),
-    lesStoffsider: (tilstand) => les('les_stoffsider', tilstand),
+    async lesStoffsider(tilstand) {
+      const { data, error } = await klient.rpc('les_stoffer', { sidetilstand: tilstand })
+      if (error) throw tilFeil(error)
+      const { sider = [], referanser = [] } = (data ?? {}) as Partial<Samletlesing>
+      const perId = new Map(referanser.map((r) => [r.id, r]))
+      return sider.map((side) => ({
+        ...TOM_STOFFSIDE,
+        ...side,
+        referanser: side.referanser.flatMap((id) => perId.get(id) ?? []),
+      }))
+    },
   }
 }
 
@@ -112,14 +106,13 @@ export async function lesKunnskapsbase(
 }
 
 /** Sidene i `tilstand`, uten legemiddeldataene. Det første søket kan gjøre. */
-async function lesSidene(sider: Sideleser, tilstand: Tilstand): Promise<Analyttsidedata[]> {
-  // Stoffsidene uten kode er et tillegg: kan de ikke leses, søkes det i resten.
-  return (await Promise.all([sider.lesAnalyttsider(tilstand), sider.lesStoffsider(tilstand).catch(() => [])])).flat()
+function lesSidene(sider: Sideleser, tilstand: Tilstand): Promise<Stoffsidedata[]> {
+  return sider.lesStoffsider(tilstand)
 }
 
 /** Sidene med legemiddeldataene, ClinPGx-dataene og CPIC-dataene de er koblet til. */
 async function lesTillegg(
-  lest: Analyttsidedata[],
+  lest: Stoffsidedata[],
   legemidler: Legemiddelleser | null,
   farmakogenetikk: Farmakogenetikkleser | null,
   cpic: Cpicleser | null,
@@ -228,108 +221,51 @@ export interface Indekseringsvalg {
   /**
    * Andre navn en analyttkode er kjent under, som søket etter analytter
    * bruker (`aliaser` på analytten, fra `src/data/aliaser.json`). Appen gir
-   * dem fra katalogen, så søkeordene vedlikeholdes ett sted.
+   * dem fra katalogen, så søkeordene vedlikeholdes ett sted. De blir andre
+   * navn på stoffet koden primært hører til.
    */
   aliaser?: (kode: string) => readonly string[] | undefined
-  /**
-   * Alle analyttsidene appen har, fra katalogen: koden, navnet siden vises med
-   * og komponentene, med hovedkoden først for sider flere koder deler. Hver kode har en side, også uten publisert
-   * informasjonsside — da viser siden navnet fra katalogen og
-   * fortolkningsreglene. Søket finner også de sidene, på navnet og koden.
-   */
-  sider?: readonly (Omit<Sideidentitet, 'aliaser' | 'kode'> & { kode: string })[]
+  /** Stoffregisteret sidene hører til. Datafilen når det ikke er gitt. */
+  registerdata?: Registerdata
+  /** Laboratorieanalyttene koblingene peker på. */
+  katalog?: Analyttkatalog
 }
 
-/** En side slik søket indekserer den: navnet, kodene som viser den, og innholdet. */
-interface Indekseringsside {
-  navn: string
-  /** Tom for et stoff uten analyttkode. */
-  koder: string[]
-  komponenter: string[]
-  modell: Sidemodell
-  tillegg: Tilleggstekst[]
-}
-
-const TOM_MODELL = byggSidemodell(TOM_SIDE)
+const TOM_MODELL = byggSidemodell(TOM_STOFFSIDE)
 
 /**
- * Søkedokumentene for hele kunnskapsbasen: hver side indeksert med
- * `indekserSide`, som på siden selv. Sidene står alfabetisk, så like gode
+ * Søkedokumentene for hele kunnskapsbasen: hvert stoff i stoffregisteret —
+ * med stoffsidene i databasen som registeret ikke kjenner — indeksert med
+ * `indekserSide`, som på siden selv. Stoffene står alfabetisk, så like gode
  * treff kommer i en fast rekkefølge.
  *
- * Deler flere koder samme informasjonsside, indekseres siden én gang, under
- * den første koden i `sider` (hovedkoden), og de andre kodene er med som
- * koder på den. En kode i `sider` som ingen informasjonsside viser,
- * indekseres med navnet fra katalogen, som siden selv viser — sammen med
- * siden med det navnet, når den er med. Et stoff uten analyttkode indekseres
- * under navnet.
+ * Et stoff uten side i databasen indekseres med navnet, aliasene og
+ * analyttene det er koblet til, så søket finner det som menyen gjør. En side
+ * i databasen hvis nøkkel er et alias for et stoff i registeret, er ikke en
+ * egen side og indekseres ikke.
  */
-export function indekserKunnskapsbase(base: Kunnskapsbase, { aliaser, sider = [] }: Indekseringsvalg = {}): Sokedokument[] {
-  const perInfoside = new Map<string, { data: Analyttsidedata; koder: string[]; komponenter: string[] }>()
-  for (const data of base.sider) {
-    if (!data.infoside) continue
-    const koder = data.analytt ? [data.analytt.innhold.kode] : []
-    const komponenter = data.komponenter.map((k) => k.innhold.navn)
-    const side = perInfoside.get(data.infoside.id)
-    if (side) {
-      side.koder.push(...koder)
-      side.komponenter.push(...komponenter.filter((k) => !side.komponenter.includes(k)))
-    } else perInfoside.set(data.infoside.id, { data, koder, komponenter })
-  }
-
-  const medInfoside = [...perInfoside.values()].map(({ data, koder, komponenter }): Indekseringsside => {
-    const modell = byggSidemodell(data)
-    return {
-      navn: data.infoside!.innhold.navn,
-      koder,
-      komponenter,
-      modell,
-      tillegg: [
-        ...legemiddeltekster(base, koblede(modell)),
-        ...farmakogenetikktekstene(base, modell),
-        ...cpictekstene(base, modell),
-      ],
-    }
-  })
-  // En kode uten egen informasjonsside som viser en side som alt er med — en
-  // metabolitt slått sammen med moderstoffet — blir en kode til på den siden.
-  const indekserte = new Set(medInfoside.flatMap((s) => s.koder))
-  const perNavn = new Map(medInfoside.map((s) => [s.navn.toLocaleLowerCase('nb'), s]))
-  const utenInfoside: Indekseringsside[] = []
-  for (const { kode, navn, komponenter } of sider) {
-    if (indekserte.has(kode)) continue
-    const side = perNavn.get(navn.toLocaleLowerCase('nb'))
-    if (side) {
-      side.koder.push(kode)
-      side.komponenter = [...side.komponenter, ...komponenter.filter((k) => !side.komponenter.includes(k))]
-      continue
-    }
-    const ny: Indekseringsside = { navn, koder: [kode], komponenter: [...komponenter], modell: TOM_MODELL, tillegg: [] }
-    perNavn.set(navn.toLocaleLowerCase('nb'), ny)
-    utenInfoside.push(ny)
-  }
-
-  // Kodene på hver side i den rekkefølgen `sider` har dem: hovedkoden først.
-  // En kode `sider` ikke har, beholder plassen databasen ga den, foran.
-  const plass = new Map(sider.map((s, i) => [s.kode, i]))
-  for (const side of [...medInfoside, ...utenInfoside]) {
-    side.koder.sort((a, b) => (plass.get(a) ?? -1) - (plass.get(b) ?? -1))
-  }
-  const alle = [...medInfoside, ...utenInfoside].sort(
-    (a, b) => alfabetisk(a.navn, b.navn) || ((a.koder[0] ?? '') < (b.koder[0] ?? '') ? -1 : 1),
+export function indekserKunnskapsbase(
+  base: Kunnskapsbase,
+  { aliaser, registerdata = STOFFREGISTERDATA, katalog = ANALYTTKATALOG }: Indekseringsvalg = {},
+): Sokedokument[] {
+  const register = byggStoffregister(
+    base.sider.flatMap((s) => s.stoff ?? []),
+    registerdata,
   )
-  return alle.flatMap(({ navn, koder, komponenter, modell, tillegg }) => {
-    const [kode, ...andre] = koder
-    const kjente = new Set([navn, ...komponenter].map((n) => n.toLocaleLowerCase('nb')))
-    const andreNavn = [...new Set(koder.flatMap((k) => aliaser?.(k) ?? []))].filter(
-      (a) => !kjente.has(a.toLocaleLowerCase('nb')),
-    )
-    const dokumenter = indekserSide(
-      { ...(kode && { kode }), navn, komponenter, ...(andreNavn.length > 0 && { aliaser: andreNavn }) },
-      modell,
-      tillegg,
-    )
-    return [...dokumenter, ...andre.map((tekst): Sokedokument => ({ sted: { side: { kode, navn } }, felt: 'kode', tekst }))]
+  const perSlug = new Map(base.sider.flatMap((s) => (s.stoff && s.infoside ? [[s.stoff.slug, s] as const] : [])))
+  return register.stoffer.flatMap((stoff) => {
+    const data = perSlug.get(stoff.slug)
+    const modell = data ? byggSidemodell(data) : TOM_MODELL
+    const identitet = stoffidentitet(stoff, analytterForStoff(stoff.slug, register, katalog))
+    const andreNavn = (identitet.koder ?? []).flatMap((kode) => aliaser?.(kode) ?? [])
+    const tillegg = data
+      ? [
+          ...legemiddeltekster(base, koblede(modell)),
+          ...farmakogenetikktekstene(base, modell),
+          ...cpictekstene(base, modell),
+        ]
+      : []
+    return indekserSide({ ...identitet, aliaser: [...(identitet.aliaser ?? []), ...andreNavn] }, modell, tillegg)
   })
 }
 
@@ -340,8 +276,8 @@ export type Kunnskapsindeks = Sokeindeks & { festfeil?: string; clinpgxfeil?: st
  * Leser og indekserer hele kunnskapsbasen, klar til `sokGlobalt`.
  *
  * Det tregeste er legemiddeldataene og interaksjonene, så søket slipper å
- * vente på dem: `delvis` får først en indeks over sidene i katalogen — navnene,
- * kodene og komponentene, uten å vente på noe — og så en over alt faginnholdet
+ * vente på dem: `delvis` får først en indeks over stoffene i registeret —
+ * navnene, aliasene og analyttene, uten å vente på noe — og så en over alt faginnholdet
  * på sidene. Det som er lest, er det samme som i den endelige indeksen, så
  * treffene på stoffene står fast, og treffene i preparatene og interaksjonene
  * kommer til under dem.
@@ -358,7 +294,7 @@ export async function lesSokeindeks(
     ...(base.clinpgxfeil && { clinpgxfeil: base.clinpgxfeil }),
     ...(base.cpicfeil && { cpicfeil: base.cpicfeil }),
   })
-  const utenTillegg = (lest: Analyttsidedata[]): Kunnskapsbase => ({ sider: lest, legemidler: null, interaksjoner: null })
+  const utenTillegg = (lest: Stoffsidedata[]): Kunnskapsbase => ({ sider: lest, legemidler: null, interaksjoner: null })
 
   delvis?.(indekser(utenTillegg([])))
   const lest = await lesSidene(sider, valg.tilstand ?? 'publisert')

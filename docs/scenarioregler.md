@@ -1,7 +1,7 @@
 # Scenarioregler for sammensatte analyttgrupper
 
 Leses når fortolkningen av rusmiddelmodulene — særlig analytter som vurderes
-samlet — skal endres. Planen står i `docs/analyttsider-og-redigering.md`
+samlet — skal endres. Planen står i `docs/stoffsider-og-redigering.md`
 (del 11 og arbeidspakke 6).
 
 ## Modellen
@@ -68,10 +68,10 @@ traff og forholdstallene, som simulatoren viser. Rekkefølgen:
 3. En nevner på 0 gir forholdets melding.
 4. Scenariet der alle vilkårene holder, gir utfallet.
 
-## På analyttsiden
+## På stoffsiden
 
-`src/components/regler/Scenarioregler.tsx` viser regelsettet på siden til
-hver analytt i modulen: grensene, scenariene sortert etter hva som er påvist,
+`src/components/regler/Scenarioregler.tsx` viser regelsettet på stoffsiden til
+hver analytt i modulen som har et primært stoff: grensene, scenariene sortert etter hva som er påvist,
 med vilkår og utfall, og kommentarene regelsettet viser til, nummerert, så
 hver tekst står én gang (`src/domain/scenariovisning.ts`). Med mer enn ett scenario følger
 «Prøv reglene», som bruker samme skjema (`Rusvalg`) og samme visning av
@@ -81,7 +81,7 @@ markerer scenariet som traff.
 Reglene er seksjonen `fortolkning` på siden (`docs/seksjoner.md`), lukket fra
 start, med antall scenarier og grensene i oppsummeringen. Kommentartekstene
 (`tekster`) og simulatoren (`simulator`) er detaljkort i den, så en
-direktelenke som `#/analytt/DIAZ/fortolkning/simulator` åpner simulatoren.
+direktelenke som `#/stoff/diazepam/fortolkning/simulator` åpner simulatoren.
 
 ## Redigeringen
 
@@ -155,7 +155,7 @@ tilstand, og kommentarene de viser til), og `tilScenarioregler`
 modul: mens de hentes, viser steget det og har ingenting å kopiere; kunne de
 ikke hentes, eller mangler eller feiler modulens regelsett, sier steget
 hvorfor og tilbyr «Prøv igjen». Det fortolker aldri med regler som ikke er
-publisert og kontrollert. Analyttsiden bruker de samme hentede reglene
+publisert og kontrollert. Stoffsiden bruker de samme hentede reglene
 (`src/components/regler/Scenarioreglerkilde.tsx`), unntatt i redigeringen, som
 leser utkastet. Etter en publisering hentes de på nytt; reglene appen alt har,
 står til de nye er hentet. Hvilke moduler som finnes,
