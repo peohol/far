@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import { flyttOppgaveTilbake, hentOppgave, lagreOppgaveprompt, settOppgaveKlar } from '../../ideer/api'
-import { oppgavekode } from '../../ideer/modell'
+import { flyttOppgaveTilbake, hentOppgave, lagreOppgave, settOppgaveKlar } from '../../ideer/api'
+import { TITTEL_MEST, oppgavekode } from '../../ideer/modell'
 import { PROMPT_MEST, iEndringsloggen, type Oppgavedetaljer } from '../../ideer/oppgaver'
 import { Forlatvarsel } from '../analyttside/Skjemaer'
 import { Button } from '../Button'
 import { visEndringslogg } from '../endringsloggvisning'
 import { Ikon } from '../ikon/Ikon'
+import { Felt } from '../konto/Felt'
 import { useIdekontekst } from './Idekontekst'
 import { Ideside } from './Ideside'
 import { Kategorimerke, Oppgavekode, Oppgavestatusmerke } from './Merker'
@@ -16,10 +17,10 @@ import type { Skjemastatus } from './useForlatvakt'
  * Én planlagt oppgave: statusen, prompten og idéen den kom fra, med den
  * frosne kommentartråden.
  *
- * En administrator skriver prompten — oppgaven formulert så godt at en
- * språkmodell kan lese den og utføre den — og merker oppgaven klar til
- * implementering når den er det. Den første lagringen setter oppgaven under
- * arbeid. Oppgaven kan også flyttes tilbake til idéene, som er den eneste
+ * En administrator gir oppgaven en overskrift og skriver prompten — oppgaven
+ * formulert så godt at en språkmodell kan lese den og utføre den — og merker
+ * oppgaven klar til implementering når den er det. Den første lagringen setter
+ * oppgaven under arbeid. Oppgaven kan også flyttes tilbake til idéene, som er den eneste
  * måten å ta den bort på. Andre leser.
  *
  * En utført oppgave har nummeret sitt og en knapp til føringen i
@@ -35,7 +36,7 @@ export function Oppgaveside({
   onEndret,
 }: {
   id: string
-  /** Om prompten har endringer som ikke er lagret, eller lagres nå. */
+  /** Om overskriften eller prompten har endringer som ikke er lagret, eller lagres nå. */
   onStatus: (status: Skjemastatus) => void
   /** Brukeren vil forlate siden med endringer som ikke er lagret. */
   forlater: boolean
@@ -49,7 +50,7 @@ export function Oppgaveside({
   const [oppgave, setOppgave] = useState<Oppgavedetaljer | null>(null)
   const [feil, setFeil] = useState<string | null>(null)
   const [arbeider, setArbeider] = useState(false)
-  const [promptstatus, setPromptstatus] = useState<Skjemastatus>('uendret')
+  const [skjemastatus, setSkjemastatus] = useState<Skjemastatus>('uendret')
   const tittel = useRef<HTMLHeadingElement>(null)
 
   const hent = useCallback(async () => {
@@ -66,7 +67,7 @@ export function Oppgaveside({
     void hent()
   }, [hent])
 
-  useEffect(() => onStatus(promptstatus), [promptstatus, onStatus])
+  useEffect(() => onStatus(skjemastatus), [skjemastatus, onStatus])
 
   // Fokus på overskriften når oppgaven er hentet, så skjermlesere leser hvor man er.
   const lastet = oppgave !== null
@@ -123,7 +124,7 @@ export function Oppgaveside({
             <>
               <span aria-hidden="true">·</span>
               <span>
-                prompten endret <Tidspunkt iso={oppgave.endret_kl} />
+                endret <Tidspunkt iso={oppgave.endret_kl} />
               </span>
             </>
           )}
@@ -157,15 +158,18 @@ export function Oppgaveside({
         </div>
       )}
 
-      <Prompt
-        prompt={oppgave.prompt}
-        redigerer={redigerer}
-        forlater={forlater}
-        onForkast={onForkast}
-        onFortsett={onFortsett}
-        onStatus={setPromptstatus}
-        onLagre={(tekst) => utfor(() => lagreOppgaveprompt(oppgave.id, tekst))}
-      />
+      {redigerer ? (
+        <Oppgaveskjema
+          lagret={{ tittel: oppgave.tittel, prompt: oppgave.prompt }}
+          forlater={forlater}
+          onForkast={onForkast}
+          onFortsett={onFortsett}
+          onStatus={setSkjemastatus}
+          onLagre={(innhold) => utfor(() => lagreOppgave(oppgave.id, innhold))}
+        />
+      ) : (
+        <Prompt prompt={oppgave.prompt} />
+      )}
 
       {feil && (
         <p className="skjemafeil" role="alert">
@@ -188,8 +192,8 @@ export function Oppgaveside({
             <Button
               variant="kant"
               icon={<Ikon navn="yes" storrelse="ui" />}
-              disabled={arbeider || !oppgave.har_prompt || promptstatus !== 'uendret'}
-              title={!oppgave.har_prompt ? 'Skriv og lagre prompten først.' : promptstatus !== 'uendret' ? 'Lagre prompten først.' : undefined}
+              disabled={arbeider || !oppgave.har_prompt || skjemastatus !== 'uendret'}
+              title={!oppgave.har_prompt ? 'Skriv og lagre prompten først.' : skjemastatus !== 'uendret' ? 'Lagre endringene først.' : undefined}
               onClick={() => void utfor(() => settOppgaveKlar(oppgave.id, true))}
             >
               Klar til implementering
@@ -219,90 +223,119 @@ export function Oppgaveside({
   )
 }
 
+/** Prompten: det en språkmodell skal utføre oppgaven etter, som ren tekst. */
+function Prompt({ prompt }: { prompt: string }) {
+  const id = useId()
+  return (
+    <section className="oppgaveprompt" aria-labelledby={id}>
+      <h4 id={id} className="idetraad__tittel">
+        Prompt
+      </h4>
+      {prompt.trim() ? <p className="oppgaveprompt__tekst">{prompt}</p> : <p className="idegruppe__tom">Ingen prompt ennå.</p>}
+    </section>
+  )
+}
+
+interface Oppgaveinnhold {
+  tittel: string
+  prompt: string
+}
+
 /**
- * Prompten: det en språkmodell skal utføre oppgaven etter, som ren tekst.
- * En administrator skriver i feltet og lagrer; andre leser den.
+ * Det en administrator skriver på oppgaven: overskriften, som oppgaven vises
+ * og omtales med, og prompten. De lagres sammen.
  */
-function Prompt({
-  prompt,
-  redigerer,
+function Oppgaveskjema({
+  lagret,
   forlater,
   onForkast,
   onFortsett,
   onStatus,
   onLagre,
 }: {
-  prompt: string
-  redigerer: boolean
+  lagret: Oppgaveinnhold
   forlater: boolean
   onForkast: () => void
   onFortsett: () => void
   onStatus: (status: Skjemastatus) => void
-  onLagre: (tekst: string) => Promise<boolean>
+  onLagre: (innhold: Oppgaveinnhold) => Promise<boolean>
 }) {
-  const [tekst, setTekst] = useState(prompt)
+  const [tittel, setTittel] = useState(lagret.tittel)
+  const [prompt, setPrompt] = useState(lagret.prompt)
+  const [feil, setFeil] = useState<string | null>(null)
   const [lagrer, setLagrer] = useState(false)
   const id = useId()
-  const endret = tekst !== prompt
+  const endret = tittel.trim() !== lagret.tittel || prompt !== lagret.prompt
   const status: Skjemastatus = lagrer ? 'lagrer' : endret ? 'ulagret' : 'uendret'
   useEffect(() => onStatus(status), [status, onStatus])
 
   const lagre = async () => {
     if (!endret || lagrer) return
+    if (tittel.trim() === '') return setFeil('Skriv en overskrift.')
+    setFeil(null)
     onFortsett()
     setLagrer(true)
-    await onLagre(tekst)
+    if (await onLagre({ tittel: tittel.trim(), prompt })) setTittel(tittel.trim())
     setLagrer(false)
   }
 
-  if (!redigerer) {
-    return (
-      <section className="oppgaveprompt" aria-labelledby={id}>
-        <h4 id={id} className="idetraad__tittel">
-          Prompt
-        </h4>
-        {prompt.trim() ? <p className="oppgaveprompt__tekst">{prompt}</p> : <p className="idegruppe__tom">Ingen prompt ennå.</p>}
-      </section>
-    )
+  const forkast = () => {
+    setTittel(lagret.tittel)
+    setPrompt(lagret.prompt)
+    setFeil(null)
   }
 
   return (
     <div
-      className="felt oppgaveprompt"
+      className="oppgaveskjema"
       onKeyDown={(e) => {
-        // Ctrl/Cmd + Enter lagrer, som i kommentarfeltene.
-        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        // Ctrl/Cmd + Enter lagrer, som i kommentarfeltene; Enter gjør det i overskriften.
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey || (e.target as HTMLElement).tagName === 'INPUT')) {
           e.preventDefault()
           void lagre()
         }
       }}
     >
-      <label className="felt__merkelapp" htmlFor={id}>
-        Prompt
-      </label>
-      <textarea
-        id={id}
-        className="felt__inndata felt__inndata--flerlinje oppgaveprompt__felt"
-        rows={Math.max(8, tekst.split('\n').length + 1)}
-        maxLength={PROMPT_MEST}
-        value={tekst}
-        aria-describedby={`${id}-hjelp`}
-        onChange={(e) => setTekst(e.target.value)}
+      <Felt
+        merkelapp="Overskrift"
+        value={tittel}
+        maxLength={TITTEL_MEST}
+        hjelp="Det oppgaven heter i lista og når Claude viser til den. Idéens egen overskrift står under."
+        onChange={(e) => setTittel(e.target.value)}
       />
-      <span id={`${id}-hjelp`} className="felt__hjelp">
-        Skriv oppgaven slik at en språkmodell kan utføre den uten å spørre: hva som skal endres, hvor i appen, og hvordan
-        resultatet skal se ut og oppføre seg. Den første lagringen setter oppgaven under arbeid.
-      </span>
+      <div className="felt oppgaveprompt">
+        <label className="felt__merkelapp" htmlFor={id}>
+          Prompt
+        </label>
+        <textarea
+          id={id}
+          className="felt__inndata felt__inndata--flerlinje oppgaveprompt__felt"
+          rows={Math.max(8, prompt.split('\n').length + 1)}
+          maxLength={PROMPT_MEST}
+          value={prompt}
+          aria-describedby={`${id}-hjelp`}
+          onChange={(e) => setPrompt(e.target.value)}
+        />
+        <span id={`${id}-hjelp`} className="felt__hjelp">
+          Skriv oppgaven slik at en språkmodell kan utføre den uten å spørre: hva som skal endres, hvor i appen, og hvordan
+          resultatet skal se ut og oppføre seg. Den første lagringen setter oppgaven under arbeid.
+        </span>
+      </div>
+      {feil && (
+        <p className="skjemafeil" role="alert">
+          {feil}
+        </p>
+      )}
       {forlater ? (
         <Forlatvarsel onForkast={onForkast} onFortsett={onFortsett} />
       ) : (
         endret && (
           <div className="skjema__knapper ideskjema__knapper">
-            <Button variant="subtle" disabled={lagrer} onClick={() => setTekst(prompt)}>
+            <Button variant="subtle" disabled={lagrer} onClick={forkast}>
               Forkast endringene
             </Button>
             <Button className="knapp--kompakt" disabled={lagrer} onClick={() => void lagre()}>
-              {lagrer ? 'Lagrer …' : 'Lagre prompten'}
+              {lagrer ? 'Lagrer …' : 'Lagre endringene'}
             </Button>
           </div>
         )

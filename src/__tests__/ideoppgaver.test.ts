@@ -10,6 +10,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { feilFra, kjorMigrasjoner, nyDatabase, opprettBruker, som } from './hjelp/testdatabase'
 
 const MIGRASJON = '20260929103534_ideer_arkiv_og_oppgaver.sql'
+const TITTELMIGRASJON = '20260929113000_oppgavetittel.sql'
 const DOK = JSON.stringify({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Hei' }] }] })
 
 interface Oversiktsrad {
@@ -134,31 +135,55 @@ describe('arkivet og de planlagte oppgavene', () => {
 
   it('setter oppgaven under arbeid ved første endring, og klar bare med prompt', async () => {
     const id = await overfor(await nyIde(ada))
-    expect(await feilFra(() => sql(bo, 'select public.lagre_oppgaveprompt($1, $2)', [id, 'Gjør det']))).toMatchObject({ code: '42501' })
+    expect(await feilFra(() => sql(bo, 'select public.lagre_oppgave($1, $$En oppgave$$, $2)', [id, 'Gjør det']))).toMatchObject({ code: '42501' })
     expect(await feilFra(() => sql(admin, 'select public.sett_oppgave_klar($1, true)', [id]))).toMatchObject({ code: '23514' })
 
-    await sql(admin, 'select public.lagre_oppgaveprompt($1, $2)', [id, 'Legg til en knapp.'])
+    await sql(admin, 'select public.lagre_oppgave($1, $$En oppgave$$, $2)', [id, 'Legg til en knapp.'])
     expect(await oppgave(bo, id)).toMatchObject({ status: 'under_arbeid', prompt: 'Legg til en knapp.', har_prompt: true, klar_kl: null })
 
     expect(await feilFra(() => sql(bo, 'select public.sett_oppgave_klar($1, true)', [id]))).toMatchObject({ code: '42501' })
     await sql(admin, 'select public.sett_oppgave_klar($1, true)', [id])
     expect(await oppgave(bo, id)).toMatchObject({ status: 'klar', klar_kl: expect.any(String) })
     // En endring i prompten holder den klar; en tom prompt gjør det ikke.
-    await sql(admin, 'select public.lagre_oppgaveprompt($1, $2)', [id, 'Legg til to knapper.'])
+    await sql(admin, 'select public.lagre_oppgave($1, $$En oppgave$$, $2)', [id, 'Legg til to knapper.'])
     expect((await oppgave(bo, id))!.status).toBe('klar')
-    await sql(admin, 'select public.lagre_oppgaveprompt($1, $2)', [id, '  '])
+    await sql(admin, 'select public.lagre_oppgave($1, $$En oppgave$$, $2)', [id, '  '])
     expect(await oppgave(bo, id)).toMatchObject({ status: 'under_arbeid', klar_kl: null })
 
-    await sql(admin, 'select public.lagre_oppgaveprompt($1, $2)', [id, 'Legg til en knapp.'])
+    await sql(admin, 'select public.lagre_oppgave($1, $$En oppgave$$, $2)', [id, 'Legg til en knapp.'])
     await sql(admin, 'select public.sett_oppgave_klar($1, true)', [id])
     await sql(admin, 'select public.sett_oppgave_klar($1, false)', [id])
     expect(await oppgave(bo, id)).toMatchObject({ status: 'under_arbeid', klar_kl: null })
   })
 
+  it('gir oppgaven idéens overskrift, som bare en administrator kan endre uten at idéen endres', async () => {
+    const ide = await nyIde(ada, 'Mørk modus i PDF')
+    const id = await overfor(ide)
+    expect(await oppgave(bo, id)).toMatchObject({ tittel: 'Mørk modus i PDF' })
+
+    const lagre = (bruker: string, tittel: string, prompt = '') =>
+      sql(bruker, 'select public.lagre_oppgave($1, $2, $3)', [id, tittel, prompt])
+    expect(await feilFra(() => lagre(bo, 'Nytt navn'))).toMatchObject({ code: '42501' })
+    expect(await feilFra(() => lagre(admin, '   '))).toMatchObject({ code: '23514' })
+    expect(await feilFra(() => lagre(admin, 'x'.repeat(141)))).toMatchObject({ code: '23514' })
+
+    await lagre(admin, '  Mørkt tema i utskriften  ')
+    expect(await oppgave(bo, id)).toMatchObject({ tittel: 'Mørkt tema i utskriften', status: 'under_arbeid' })
+    const liste = await en<{ id: string; tittel: string }[]>(bo, 'select public.oppgaveoversikt()')
+    expect(liste.find((o) => o.id === id)!.tittel).toBe('Mørkt tema i utskriften')
+    expect(await en(bo, 'select tittel from public.ideer where id = $1', [ide])).toBe('Mørk modus i PDF')
+
+    // En ny overskrift holder en klar oppgave klar.
+    await lagre(admin, 'Mørkt tema i utskriften', 'Gjør det.')
+    await sql(admin, 'select public.sett_oppgave_klar($1, true)', [id])
+    await lagre(admin, 'Mørkt tema i PDF-en', 'Gjør det.')
+    expect(await oppgave(bo, id)).toMatchObject({ tittel: 'Mørkt tema i PDF-en', status: 'klar' })
+  })
+
   it('lar bare en migrering merke en klar oppgave utført, med nummer og endringslogg', async () => {
     const id = await overfor(await nyIde(ada))
     expect(await feilFra(() => db.query(`select public.fullfor_oppgave($1, '1.53.0')`, [id]))).toMatchObject({ code: '55000' })
-    await sql(admin, 'select public.lagre_oppgaveprompt($1, $2)', [id, 'Gjør det.'])
+    await sql(admin, 'select public.lagre_oppgave($1, $$En oppgave$$, $2)', [id, 'Gjør det.'])
     await sql(admin, 'select public.sett_oppgave_klar($1, true)', [id])
 
     expect(await feilFra(() => sql(admin, `select public.fullfor_oppgave($1, '1.53.0')`, [id]))).toMatchObject({ code: '42501' })
@@ -170,12 +195,12 @@ describe('arkivet og de planlagte oppgavene', () => {
 
     // En utført oppgave står for alltid.
     expect(await feilFra(() => sql(admin, 'select public.flytt_oppgave_tilbake($1)', [id]))).toMatchObject({ code: '55000' })
-    expect(await feilFra(() => sql(admin, 'select public.lagre_oppgaveprompt($1, $2)', [id, 'Mer']))).toMatchObject({ code: '55000' })
+    expect(await feilFra(() => sql(admin, 'select public.lagre_oppgave($1, $$En oppgave$$, $2)', [id, 'Mer']))).toMatchObject({ code: '55000' })
     expect(await feilFra(() => sql(admin, 'select public.sett_oppgave_klar($1, false)', [id]))).toMatchObject({ code: '55000' })
 
     // Nummeret øker for hver utførte oppgave.
     const neste = await overfor(await nyIde(ada))
-    await sql(admin, 'select public.lagre_oppgaveprompt($1, $2)', [neste, 'Og dette.'])
+    await sql(admin, 'select public.lagre_oppgave($1, $$En oppgave$$, $2)', [neste, 'Og dette.'])
     await sql(admin, 'select public.sett_oppgave_klar($1, true)', [neste])
     const { rows: andre } = await db.query<{ nummer: number }>(`select public.fullfor_oppgave($1, '1.53.0') as nummer`, [neste])
     expect(andre[0]!.nummer).toBe(rows[0]!.nummer + 1)
@@ -233,5 +258,18 @@ describe('overgangen fra statusene', () => {
     expect(ideer.find((i) => i.id === ikkeAktuelt)!.arkivert_kl?.toISOString()).toBe('2026-09-28T10:00:00.000Z')
     expect(ideer.find((i) => i.id === uten)!.arkivert_kl).toBeNull()
     expect(await db.query(`select 1 from pg_type where typname = 'idestatus'`)).toMatchObject({ rows: [] })
+  }, 60_000)
+})
+
+describe('overskriften på oppgavene som fantes', () => {
+  it('blir overskriften på idéen de kom fra', async () => {
+    const db = await nyDatabase({ til: TITTELMIGRASJON })
+    const ada = await opprettBruker(db, { brukernavn: 'ada.l', fornavn: 'Ada', etternavn: 'Lovelace', rolle: 'user' })
+    const { rows } = await db.query<{ id: string }>(`insert into public.ideer (forfatter_id, kategori, tittel) values ($1, 'fag', 'Gammel idé') returning id`, [ada])
+    await db.query('insert into public.oppgaver (ide_id) values ($1)', [rows[0]!.id])
+
+    await kjorMigrasjoner(db, { bare: [TITTELMIGRASJON] })
+
+    expect((await db.query('select tittel from public.oppgaver')).rows).toEqual([{ tittel: 'Gammel idé' }])
   }, 60_000)
 })

@@ -313,7 +313,8 @@
 
 /* --- Skjemaet ------------------------------------------------------------- */
 
-.ideskjema {
+.ideskjema,
+.oppgaveskjema {
   display: flex;
   flex-direction: column;
   gap: var(--rom-6);

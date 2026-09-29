@@ -86,8 +86,9 @@ export async function hentOppgave(id: string): Promise<Oppgavedetaljer | null> {
   return lesOppgave(sjekk(await klient().rpc('oppgave', { oppgave: id })))
 }
 
-export async function lagreOppgaveprompt(id: string, prompt: string): Promise<void> {
-  sjekk(await klient().rpc('lagre_oppgaveprompt', { oppgave: id, prompt }))
+/** Lagrer overskriften og prompten til oppgaven. */
+export async function lagreOppgave(id: string, innhold: { tittel: string; prompt: string }): Promise<void> {
+  sjekk(await klient().rpc('lagre_oppgave', { oppgave: id, ...innhold }))
 }
 
 /** Klar til implementering, eller tilbake til under arbeid. */

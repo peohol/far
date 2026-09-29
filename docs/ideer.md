@@ -61,10 +61,13 @@ Fristen står både i `intern.arkivfrist()` og i `ARKIVFRIST_DAGER`.
 
 **Overfør til planlagte oppgaver** (`overfor_ide()`) lager en rad i
 `oppgaver`. Idéen står i skuffen «Planlagte oppgaver» i lista, og et kort der
-åpner oppgaven. En oppgave går gjennom disse statusene:
+åpner oppgaven. Oppgaven får idéens overskrift, men har sin egen
+(`oppgaver.tittel`) som en administrator kan endre. Det er den oppgaven vises
+og omtales med; idéen beholder sin. En oppgave går gjennom disse statusene:
 
 1. `ikke_paabegynt`: rett etter overføringen.
-2. `under_arbeid`: fra første gang prompten lagres (`lagre_oppgaveprompt()`).
+2. `under_arbeid`: fra første gang overskriften eller prompten lagres
+   (`lagre_oppgave()`).
 3. `klar`: satt av en administrator (`sett_oppgave_klar()`), og bare med en
    prompt. Blir prompten tømt, er den under arbeid igjen.
 4. `utfort`: satt av Claude med `fullfor_oppgave()`, som ingen i appen kan
