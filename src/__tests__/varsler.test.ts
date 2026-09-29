@@ -251,6 +251,30 @@ describe('varslene', () => {
     expect((await omIde(ada, ide))[0]!.lest_kl).toBeNull()
   })
 
+  it('varsler begge sidene når et kort flyttes fra én side til en annen', async () => {
+    const element = (side: string, panel: string) =>
+      ({ infoside: side, panel, posisjon: 0, elementtype: 'tekst', data: {} }) as never
+    const nySide = async (navn: string) => {
+      const side = await kall.opprett('infoside', { navn })
+      await kall.publiser(side.id, 1)
+      return side.id
+    }
+    const fra = await nySide('Flyttefra')
+    const til = await nySide('Flyttetil')
+    await sql(ada, 'select public.sett_stoffavoritt($1, true)', ['flyttefra'])
+    await sql(bo, 'select public.sett_stoffavoritt($1, true)', ['flyttetil'])
+    const kort = await kall.opprett('innholdselement', element(fra, 'dosering'))
+    await kall.publiser(kort.id, 1)
+    await kall.publiser((await kall.lagre(kort.id, 1, element(til, 'farmakokinetikk'))).id, 2)
+
+    const deler = async (bruker: string, side: string) =>
+      (await varsler(bruker))
+        .filter((v) => v.kategori === 'favoritter' && v.hendelser[0]?.side?.id === side)
+        .flatMap((v) => v.hendelser.map((h) => h.deler))
+    expect(await deler(ada, fra)).toEqual([['dosering'], ['dosering']])
+    expect(await deler(bo, til)).toEqual([['farmakokinetikk']])
+  })
+
   it('tar med alle uleste også når det er flere enn 200 leste', async () => {
     const ny = await opprettBruker(db, { brukernavn: 'mange', fornavn: 'Mia', etternavn: 'Mange', rolle: 'user' })
     await db.query(
