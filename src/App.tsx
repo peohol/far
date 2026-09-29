@@ -26,6 +26,8 @@ import { Toppmeny } from './components/toppmeny/Toppmeny'
 import { ToppmenyInnhold, ToppmenyKilde } from './components/toppmeny/Toppmenykilde'
 import { Toppmenyknapp } from './components/toppmeny/Toppmenyknapp'
 import { Versjonspille } from './components/Versjonspille'
+import { FavorittkildeProvider } from './favoritter/Favorittkilde'
+import { lagFavorittlager } from './favoritter/lagring'
 import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from './domain/analyttkatalog'
 import { alternativFor, ETG_ALTERNATIVER, type EtgAlternativ } from './domain/etg'
@@ -177,6 +179,10 @@ export default function App() {
   const { hentPaNytt: hentStoffsiderPaNytt } = stoffsider
   const stoffliste = stoffsider.tilstand.status === 'klar' ? stoffsider.tilstand.data : INGEN_STOFFSIDER
   const register = useMemo(() => byggStoffregister(stoffliste), [stoffliste])
+  // Favorittene står både på stoffsidene og i menyen, med stoffets egen
+  // nøkkel også for en gammel adresse til det.
+  const favorittlager = useMemo(() => lagFavorittlager(klient()), [])
+  const kanoniskStoff = useCallback((nokkel: string) => register.kanonisk(nokkel)?.slug ?? nokkel, [register])
   const opprettStoffside = useCallback(
     async (navn: string) => {
       const slug = stoffslug(navn)
@@ -510,173 +516,175 @@ export default function App() {
 
   return (
     <ToppmenyKilde>
-      <div
-        className="app"
-        data-steg={vist}
-        data-tomt={isIdle(state) && !fortolkningSkjult ? 'ja' : 'nei'}
-        data-side={rute.side}
-      >
-        <Toppmeny
-          meny={
-            <Sidemeny register={register} {...(faginnhold.kanRedigere && { onOpprett: opprettStoffside })} />
-          }
-          sok={
-            <Fagsok
-              indeks={sokeindeks.tilstand}
-              onKrev={sokeindeks.krev}
-              sporring={rute.side === 'sok' ? rute.q : undefined}
-              beskrivSide={beskrivSide}
-              onGaaTil={gaaTilAdresse}
-            />
-          }
-          verktoy={
-            <>
-              <Ideknapp />
-              <Adminmeny />
-              <Varselknapp />
-            </>
-          }
-          konto={<Kontomeny theme={theme} onToggleTheme={toggle} />}
-        />
-
-        {/* Fortolkningens handling i toppmenyen. Stoffsiden og søkesiden
-            har sine egne mens de vises. */}
-        {!fortolkningSkjult && stoffside && (
-          <ToppmenyInnhold spor="handlinger">
-            <Toppmenyknapp ikon="indik" onClick={() => gaaTil({ side: 'stoff', stoff: stoffside })}>
-              Åpne stoffside
-            </Toppmenyknapp>
-          </ToppmenyInnhold>
-        )}
-
-        {rute.side === 'stoff' && (
-          <main className="scene scene--infoside">
-            <FaginnholdskildeProvider kilde={faginnhold}>
-              <ScenarioreglerProvider kilde={scenarioregler}>
-                <Stoffside
-                  stoff={rute.stoff}
-                  sted={rute.sted}
-                  register={register}
-                  katalog={katalog}
-                  onApneFortolkning={apneFortolkning}
-                  onLukk={lukkInfoside}
-                />
-              </ScenarioreglerProvider>
-            </FaginnholdskildeProvider>
-          </main>
-        )}
-
-        {rute.side === 'sok' && (
-          <main className="scene scene--sokeside">
-            <Sokeside
-              q={rute.q}
-              indeks={sokeindeks.tilstand}
-              onKrev={sokeindeks.krev}
-              beskrivSide={beskrivSide}
-              onLukk={lukkInfoside}
-            />
-          </main>
-        )}
-
-        {/* Fortolkningen blir stående bak en åpen stoffside, så det
-            brukeren har fylt inn, er der når hen kommer tilbake. Tastene dens
-            ligger i ro så lenge den er skjult — se `fortolkningenErSkjult`. */}
-        <main
-          className="scene"
-          hidden={fortolkningSkjult}
-          {...(fortolkningSkjult && { 'data-fortolkning': SKJULT_FORTOLKNING })}
+      <FavorittkildeProvider lager={favorittlager} brukerId={profil.id} kanonisk={kanoniskStoff}>
+        <div
+          className="app"
+          data-steg={vist}
+          data-tomt={isIdle(state) && !fortolkningSkjult ? 'ja' : 'nei'}
+          data-side={rute.side}
         >
-          {vist === 'search' && (
-            <SearchStep
-              query={state.query}
-              hits={hits}
-              metodefilter={state.metodefilter}
-              onFilter={settMetodefilter}
-              onQueryChange={setQuery}
-              onSelect={velgAnalytt}
-              onReset={reset}
-            />
+          <Toppmeny
+            meny={
+              <Sidemeny register={register} {...(faginnhold.kanRedigere && { onOpprett: opprettStoffside })} />
+            }
+            sok={
+              <Fagsok
+                indeks={sokeindeks.tilstand}
+                onKrev={sokeindeks.krev}
+                sporring={rute.side === 'sok' ? rute.q : undefined}
+                beskrivSide={beskrivSide}
+                onGaaTil={gaaTilAdresse}
+              />
+            }
+            verktoy={
+              <>
+                <Ideknapp />
+                <Adminmeny />
+                <Varselknapp />
+              </>
+            }
+            konto={<Kontomeny theme={theme} onToggleTheme={toggle} />}
+          />
+
+          {/* Fortolkningens handling i toppmenyen. Stoffsiden og søkesiden
+              har sine egne mens de vises. */}
+          {!fortolkningSkjult && stoffside && (
+            <ToppmenyInnhold spor="handlinger">
+              <Toppmenyknapp ikon="indik" onClick={() => gaaTil({ side: 'stoff', stoff: stoffside })}>
+                Åpne stoffside
+              </Toppmenyknapp>
+            </ToppmenyInnhold>
           )}
 
-          {vist === 'band' && state.analyte && regeloppslag && (
-            <BandStep
-              analyte={state.analyte}
-              regler={regeloppslag}
-              valg={valgene}
-              onPick={velgValg}
-              onBack={back}
-              onProvIgjen={hentPaNytt}
-              failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
-            />
+          {rute.side === 'stoff' && (
+            <main className="scene scene--infoside">
+              <FaginnholdskildeProvider kilde={faginnhold}>
+                <ScenarioreglerProvider kilde={scenarioregler}>
+                  <Stoffside
+                    stoff={rute.stoff}
+                    sted={rute.sted}
+                    register={register}
+                    katalog={katalog}
+                    onApneFortolkning={apneFortolkning}
+                    onLukk={lukkInfoside}
+                  />
+                </ScenarioreglerProvider>
+              </FaginnholdskildeProvider>
+            </main>
           )}
 
-          {vist === 'kontroll' && kontrollvalg && (
-            <KontrollStep
-              valg={kontrollvalg}
-              sporsmal={CUTOFF_SPORSMAL}
-              onJa={bekreftKontroll}
-              onNei={back}
-              failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
-            />
+          {rute.side === 'sok' && (
+            <main className="scene scene--sokeside">
+              <Sokeside
+                q={rute.q}
+                indeks={sokeindeks.tilstand}
+                onKrev={sokeindeks.krev}
+                beskrivSide={beskrivSide}
+                onLukk={lukkInfoside}
+              />
+            </main>
           )}
 
-          {vist === 'thc' && <ThcStep regler={thcRegler} onBack={back} copy={copy} flashAt={show} />}
+          {/* Fortolkningen blir stående bak en åpen stoffside, så det
+              brukeren har fylt inn, er der når hen kommer tilbake. Tastene dens
+              ligger i ro så lenge den er skjult — se `fortolkningenErSkjult`. */}
+          <main
+            className="scene"
+            hidden={fortolkningSkjult}
+            {...(fortolkningSkjult && { 'data-fortolkning': SKJULT_FORTOLKNING })}
+          >
+            {vist === 'search' && (
+              <SearchStep
+                query={state.query}
+                hits={hits}
+                metodefilter={state.metodefilter}
+                onFilter={settMetodefilter}
+                onQueryChange={setQuery}
+                onSelect={velgAnalytt}
+                onReset={reset}
+              />
+            )}
 
-          {vist === 'rus' && rusModul && (
-            <RusStep
-              // Modulen holder sine egne valg. Bytter analytten, skal de nulles,
-              // og nøkkelen gir modulen en frisk tilstand i stedet for å måtte
-              // rydde i den fra utsiden.
-              key={rusModul.id}
-              modul={rusModul}
-              regler={reglerForModul(scenarioregler.tilstand, rusModul, scenarioregler.provIgjen)}
-              onBack={back}
-              onFinish={reset}
-              copy={copy}
-              flashAt={show}
-            />
-          )}
+            {vist === 'band' && state.analyte && regeloppslag && (
+              <BandStep
+                analyte={state.analyte}
+                regler={regeloppslag}
+                valg={valgene}
+                onPick={velgValg}
+                onBack={back}
+                onProvIgjen={hentPaNytt}
+                failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
+              />
+            )}
 
-          {vist === 'etg' && (
-            <EtgStep
-              onPick={(alternativ) => void pickEtg(alternativ)}
-              onBack={back}
-              failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
-            />
-          )}
+            {vist === 'kontroll' && kontrollvalg && (
+              <KontrollStep
+                valg={kontrollvalg}
+                sporsmal={CUTOFF_SPORSMAL}
+                onJa={bekreftKontroll}
+                onNei={back}
+                failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
+              />
+            )}
 
-          {vist === 'etg-paste' && etgAlternativ && (
-            <EtgPasteStep
-              alternativ={etgAlternativ}
-              fra={bevisFra}
-              onBack={back}
-              onFinish={reset}
-              copy={copy}
-              flashAt={show}
-            />
-          )}
+            {vist === 'thc' && <ThcStep regler={thcRegler} onBack={back} copy={copy} flashAt={show} />}
 
-          {vist === 'paste' && state.analyte && valgtValg && (
-            <PasteStep
-              analyte={state.analyte}
-              valg={valgtValg}
-              fra={bevisFra}
-              onBack={back}
-              onFinish={reset}
-            />
-          )}
-        </main>
+            {vist === 'rus' && rusModul && (
+              <RusStep
+                // Modulen holder sine egne valg. Bytter analytten, skal de nulles,
+                // og nøkkelen gir modulen en frisk tilstand i stedet for å måtte
+                // rydde i den fra utsiden.
+                key={rusModul.id}
+                modul={rusModul}
+                regler={reglerForModul(scenarioregler.tilstand, rusModul, scenarioregler.provIgjen)}
+                onBack={back}
+                onFinish={reset}
+                copy={copy}
+                flashAt={show}
+              />
+            )}
 
-        {/* Versjonen og veien inn til endringsloggen, fast nederst i hjørnet. */}
-        <Versjonspille />
+            {vist === 'etg' && (
+              <EtgStep
+                onPick={(alternativ) => void pickEtg(alternativ)}
+                onBack={back}
+                failed={failedCopy ? { message: KOPIFEIL, comment: failedCopy } : null}
+              />
+            )}
 
-        {/* Kvitteringen ligger utenfor stegene, så den overlever stegbyttet. */}
-        {flash && <CopyFlash key={flash.id} flash={flash} varighet={BLINK} />}
-        {/* Blinket er visuelt; dette er den samme beskjeden for skjermlesere. */}
-        <p className="kun-skjermleser" role="status">
-          {flash ? 'Kommentaren er kopiert' : ''}
-        </p>
-      </div>
+            {vist === 'etg-paste' && etgAlternativ && (
+              <EtgPasteStep
+                alternativ={etgAlternativ}
+                fra={bevisFra}
+                onBack={back}
+                onFinish={reset}
+                copy={copy}
+                flashAt={show}
+              />
+            )}
+
+            {vist === 'paste' && state.analyte && valgtValg && (
+              <PasteStep
+                analyte={state.analyte}
+                valg={valgtValg}
+                fra={bevisFra}
+                onBack={back}
+                onFinish={reset}
+              />
+            )}
+          </main>
+
+          {/* Versjonen og veien inn til endringsloggen, fast nederst i hjørnet. */}
+          <Versjonspille />
+
+          {/* Kvitteringen ligger utenfor stegene, så den overlever stegbyttet. */}
+          {flash && <CopyFlash key={flash.id} flash={flash} varighet={BLINK} />}
+          {/* Blinket er visuelt; dette er den samme beskjeden for skjermlesere. */}
+          <p className="kun-skjermleser" role="status">
+            {flash ? 'Kommentaren er kopiert' : ''}
+          </p>
+        </div>
+      </FavorittkildeProvider>
     </ToppmenyKilde>
   )
 }
