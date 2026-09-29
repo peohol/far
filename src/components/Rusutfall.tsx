@@ -11,7 +11,7 @@ export interface RusutfallProps {
 /**
  * Utfallet av en rusmiddelfortolkning: hva som mangler, en sak til plenum,
  * eller kommentarene med notisene over. Felles for fortolkningsmodulen og
- * simulatoren på analyttsiden, så simulatoren viser det samme som modulen.
+ * simulatoren på stoffsiden, så simulatoren viser det samme som modulen.
  */
 export function Rusutfall({ resultat, kommentarer }: RusutfallProps) {
   switch (resultat.type) {

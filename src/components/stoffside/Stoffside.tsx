@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
-import type { Analyttkatalog, Katalogoppforing } from '../../domain/analyttkatalog'
-import { byggSidemodell, referanseunivers } from '../../faginnhold/analyttside'
+import type { Analyttkatalog, Laboratorieanalytt } from '../../domain/analyttkatalog'
+import { byggSidemodell, referanseunivers } from '../../faginnhold/stoffside'
 import { PANELER } from '../../faginnhold/paneler'
-import { indekserSide, sokeord } from '../../faginnhold/sok'
+import { indekserSide, sokeord, stoffidentitet } from '../../faginnhold/sok'
 import { useLukkMedEscape } from '../../hooks/useLukkMedEscape'
 import type { Analyte } from '../../types'
 import { Button } from '../Button'
@@ -14,7 +14,7 @@ import { Referanseliste } from '../referanser/Referanseliste'
 import { SeksjonsstyringKilde, skuffnokkel, useSeksjonsstyring } from '../seksjoner/Seksjonsstyring'
 import { Sidereferanser } from '../referanser/Sidereferanser'
 import { useFaginnholdskilde } from './Faginnholdskilde'
-import { Identitetspanel, komponenterFor } from './Identitetspanel'
+import { Identitetspanel } from './Identitetspanel'
 import { finnKobling, Preparatpanel, preparatsoketekster } from './Preparatpanel'
 import { useLegemidler } from './useLegemidler'
 import { Interaksjonspanel, interaksjonssoketekster } from './Interaksjonspanel'
@@ -36,48 +36,50 @@ import { cpicreferanser } from '../../cpic/referanser'
 import { FARMAKOGENETIKKPANEL, kobledeKjemikalier, koblingsgrunnlag } from '../../clinpgx/stoffside'
 import { Farmakogenetikkpanel, farmakogenetikksoketekster } from './Farmakogenetikkpanel'
 import { useCpic, useFarmakogenetikk } from './useFarmakogenetikk'
-import { useAnalyttside, type Sidemodus, type Sidenokkel } from './useAnalyttside'
-import { analyttadresse } from '../../domain/rute'
-import { kategorierFor } from '../../domain/stoffregister'
+import { useStoffside, type Sidemodus, type Stoffsidehandlinger } from './useStoffside'
+import type { Stoff, Stoffregister } from '../../domain/stoffregister'
+import {
+  analytterForStoff,
+  fortolkningForStoff,
+  regelseksjoner,
+  type Regelseksjon,
+} from '../../domain/koblinger'
+import { rusModulFor } from '../../domain/rus'
 import { THC_KODE } from '../../domain/thc'
+import type { Regeldata } from '../../faginnhold/lesing'
 
-interface Sideprops {
+export interface StoffsideProps {
+  /** Stoffets nøkkel fra adressen (`#/stoff/<nøkkel>`). */
+  stoff: string
   /** Seksjonen og eventuelt detaljkortet adressen peker på (se `src/domain/rute.ts`). */
   sted?: readonly string[]
+  /** Stoffregisteret, med stoffsidene i databasen. */
+  register: Stoffregister
+  /** Laboratorieanalyttene koblingene i registeret peker på. */
   katalog: Analyttkatalog
-  /** Åpner fortolkningsmodulen koden hører til. */
+  /** Åpner fortolkningsmodulen analytten hører til. */
   onApneFortolkning: (analyte: Analyte) => void
   /** Tilbake til fortolkningen slik den sto. */
   onLukk: () => void
 }
 
-export type AnalyttsideProps = Sideprops &
-  (
-    | {
-        /** Analyttkoden fra adressen. */
-        kode: string
-        stoff?: undefined
-      }
-    | {
-        /** Navnet på et stoff uten analyttkode, fra adressen. */
-        stoff: string
-        kode?: undefined
-      }
-  )
-
 /**
- * Informasjonssiden for en analyttkode, eller for et stoff som ikke har noen
- * analyttkode (`stoff`, etter navnet). Har stoffet en side i katalogen, er det
- * siden for koden som vises, og adressen går dit.
+ * Stoffsiden: den eneste fagsiden appen har. Hvert stoff i stoffregisteret har
+ * én, etter nøkkelen, og den handler alltid om stoffet — aldri om en
+ * laboratorieanalytt.
  *
  * Siden er et oppslagsverk: panelene i fast rekkefølge (se
  * `src/faginnhold/paneler.ts`), med referansene nummerert etter første
  * forekomst og listet nederst. Identiteten og viktige data står alltid fram
- * øverst; de andre panelene er seksjoner som åpnes og lukkes, med en kort oppsummering når de
- * er lukket (`src/components/seksjoner/`). En adresse med et sted etter koden
- * åpner seksjonen eller detaljkortet den peker på. Den åpnes fra sidemenyen, fra kodepillene i
- * fortolkningsmodulene og fra sin egen adresse, og har «Åpne fortolkning» for
- * veien tilbake til arbeidsflyten.
+ * øverst; de andre panelene er seksjoner som åpnes og lukkes, med en kort
+ * oppsummering når de er lukket (`src/components/seksjoner/`). En adresse med
+ * et sted etter nøkkelen åpner seksjonen eller detaljkortet den peker på.
+ *
+ * Laboratorieanalyttene stoffet er koblet til i registeret, står som sekundær
+ * informasjon i identitetspanelet. Fortolkningsreglene for analyttene stoffet
+ * er primært stoff for, står nederst, lest for seg fra fortolkningssystemet
+ * (`src/domain/koblinger.ts`). Har stoffet analytter i én fortolkningsmodul,
+ * har siden «Åpne fortolkning» i toppmenyen; ellers åpnes hver fra koden sin.
  *
  * Normalt står siden i lesemodus og viser det publiserte. Administratorer kan
  * slå på redigeringsmodus, som viser utkastet med diskrete knapper for å endre
@@ -86,61 +88,13 @@ export type AnalyttsideProps = Sideprops &
  * Tastene: `Escape` lukker siden, `Ctrl + B` eller `Cmd + B` går til søket på
  * siden, og `Ctrl + K` eller `Cmd + K` til fagsøket i toppmenyen.
  */
-export function Analyttside(props: AnalyttsideProps) {
-  const { sted, katalog, onApneFortolkning, onLukk } = props
-  // Alle aliaser og sekundærkoder ender på den samme kanoniske analyttadressen.
-  const tilKode = props.stoff !== undefined ? katalog.kodeForSide(props.stoff) : undefined
-  const forespurtOppforing = props.kode !== undefined ? katalog.finn(props.kode) : undefined
-  const kanoniskKode = forespurtOppforing ? katalog.kodeForSide(forespurtOppforing.sidenavn) : undefined
-  const kode = props.stoff !== undefined ? tilKode : (kanoniskKode ?? props.kode)
-  const oppforing = kode ? katalog.finn(kode) : undefined
-  const nokkel: Sidenokkel | null = oppforing
-    ? { type: 'kode', oppforing }
-    : props.stoff !== undefined
-      ? { type: 'stoff', navn: props.stoff }
-      : null
-
-  const videresendTil =
-    props.stoff !== undefined
-      ? tilKode
-      : props.kode && kanoniskKode && props.kode.trim().toUpperCase() !== kanoniskKode
-        ? kanoniskKode
-        : undefined
-  const videresendtSted =
-    props.kode?.trim().toUpperCase() === THC_KODE && sted?.[0] === 'fortolkning'
-      ? ['fortolkning-thc-syre', ...sted.slice(1)]
-      : (sted ?? [])
-
-  useEffect(() => {
-    if (videresendTil) window.location.replace(analyttadresse(videresendTil, videresendtSted))
-  }, [videresendTil, videresendtSted])
-
-  useEffect(() => {
-    const forrige = document.title
-    document.title = oppforing
-      ? `${oppforing.sidetittel} (${oppforing.kode}) – OUSFAR`
-      : `${props.stoff ?? props.kode} – OUSFAR`
-    return () => {
-      document.title = forrige
-    }
-  }, [props.kode, props.stoff, oppforing])
-
-  useLukkMedEscape(onLukk)
-
-  if (!nokkel) {
-    return <Ikkefunnet onLukk={onLukk}>Fant ingen analytt med koden {props.kode}</Ikkefunnet>
-  }
+export function Stoffside(props: StoffsideProps) {
+  useLukkMedEscape(props.onLukk)
   // Nøkkelen gir hver side en frisk tilstand: modus, søk, skjemaer og hvilke
   // seksjoner som er åpne, hører til siden.
   return (
-    <SeksjonsstyringKilde key={nokkel.type === 'kode' ? nokkel.oppforing.kode : `stoff:${nokkel.navn.toLocaleLowerCase('nb')}`}>
-      <Innhold
-        nokkel={nokkel}
-        sted={videresendTil ? videresendtSted : sted}
-        katalog={katalog}
-        onApneFortolkning={onApneFortolkning}
-        onLukk={onLukk}
-      />
+    <SeksjonsstyringKilde key={props.stoff}>
+      <Innhold {...props} />
     </SeksjonsstyringKilde>
   )
 }
@@ -148,12 +102,12 @@ export function Analyttside(props: AnalyttsideProps) {
 /** En side som ikke finnes. */
 function Ikkefunnet({ onLukk, children }: { onLukk: () => void; children: ReactNode }) {
   return (
-    <section className="steg analyttside" aria-labelledby="ukjent-analytt">
+    <section className="steg stoffside" aria-labelledby="ukjent-stoff">
       <ToppmenyInnhold spor="handlinger">
         <Lukkeknapp onLukk={onLukk} />
       </ToppmenyInnhold>
       <div className="kort kort--start">
-        <h1 id="ukjent-analytt" className="analytt__navn">
+        <h1 id="ukjent-stoff" className="identitet__navn">
           {children}
         </h1>
         <p>Sjekk adressen, eller finn stoffet i menyen.</p>
@@ -162,45 +116,42 @@ function Ikkefunnet({ onLukk, children }: { onLukk: () => void; children: ReactN
   )
 }
 
-function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops & { nokkel: Sidenokkel }) {
-  const oppforing = nokkel.type === 'kode' ? nokkel.oppforing : null
+function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLukk }: StoffsideProps) {
   const { kanRedigere } = useFaginnholdskilde()
   const [modus, setModus] = useState<Sidemodus>('lese')
   const [sporring, setSporring] = useState('')
   const beholder = useRef<HTMLElement>(null)
   const overskrift = useId()
 
-  // Kodene som hører til siden, med den kanoniske først.
-  const paSiden = useMemo(() => (oppforing ? katalog.paSiden(oppforing.sidenavn) : []), [oppforing, katalog])
-  const inkluderThcSyre = paSiden.some((o) => o.kode === THC_KODE)
-  const handlinger = useAnalyttside(nokkel, modus, inkluderThcSyre)
+  const kjent = register.finn(slug)
+  const analytter = useMemo(() => analytterForStoff(slug, register, katalog), [slug, register, katalog])
+  const primare = useMemo(() => analytter.filter((a) => a.kobling.primar).map((a) => a.analytt), [analytter])
+  const seksjoner = useMemo(() => regelseksjoner(slug, register, katalog), [slug, register, katalog])
+  const fortolkning = useMemo(() => fortolkningForStoff(slug, register, katalog), [slug, register, katalog])
+  const stoffet = useMemo<Pick<Stoff, 'slug' | 'navn'>>(() => ({ slug, navn: kjent?.navn ?? slug }), [slug, kjent])
+  const handlinger = useStoffside(stoffet, primare, modus)
   const { side, referansebase, publisert, konflikt, plan } = handlinger
   const modell = useMemo(() => byggSidemodell(side.data), [side.data])
-  const navn = oppforing?.sidetittel ?? side.data.infoside?.innhold.navn ?? (nokkel.type === 'stoff' ? nokkel.navn : '')
-  const komponenter = useMemo(
-    () => (oppforing ? komponenterFor(oppforing, side.data, katalog) : []),
-    [oppforing, side.data, katalog],
-  )
-  const kategorier = useMemo(() => kategorierFor(oppforing?.sidenavn ?? navn, katalog), [oppforing, navn, katalog])
-  const samme = useMemo(() => paSiden.filter((o) => o.kode !== oppforing?.kode), [paSiden, oppforing])
+  const navn = side.data.stoff?.navn ?? kjent?.navn ?? ''
+  const kategorier = useMemo(() => register.kategorierFor(slug), [register, slug])
   const apneFortolkningFor = useCallback(
-    (o: Katalogoppforing) => onApneFortolkning(o.fortolkning),
+    (analytt: Laboratorieanalytt) => onApneFortolkning(analytt.fortolkning),
     [onApneFortolkning],
   )
-  const apneFortolkning = useCallback(() => {
-    if (oppforing) apneFortolkningFor(oppforing)
-  }, [oppforing, apneFortolkningFor])
-  // Et stoff som viser seg å være hovedside for en kode appen kjenner, hører
-  // til siden for koden.
-  const tilKode = !oppforing && side.data.analytt ? katalog.finn(side.data.analytt.innhold.kode)?.kode : undefined
-  useEffect(() => {
-    if (tilKode) window.location.replace(analyttadresse(tilKode, sted ?? []))
-  }, [tilKode, sted])
-  // Et stoff uten side finnes ikke for andre enn redaktørene, som kan lage den.
-  const finnes = oppforing ? side.data.analytt !== null : side.data.infoside !== null
+  // Et stoff finnes når registeret har det, eller databasen har en side med nøkkelen.
+  const finnes = Boolean(kjent || side.data.stoff)
   // Knappene for å endre vises først når utkastet er hentet, så ingenting
   // lagres mot det publiserte som sto før redigeringen ble slått på.
   const redigerer = handlinger.kanEndres
+
+  useEffect(() => {
+    if (!navn) return
+    const forrige = document.title
+    document.title = `${navn} – OUSFAR`
+    return () => {
+      document.title = forrige
+    }
+  }, [navn])
 
   const koblet = useMemo(() => finnKobling(modell).kobling.virkestoff.map((v) => v.fest_id), [modell])
   const legemidler = useLegemidler(koblet)
@@ -238,7 +189,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
   const dokumenter = useMemo(
     () =>
       indekserSide(
-        { ...(oppforing && { kode: oppforing.kode }), navn, komponenter: komponenter.map((k) => k.navn) },
+        stoffidentitet({ slug, navn, aliaser: kjent?.aliaser ?? [] }, analytter),
         modell,
         [
           ...preparatsoketekster(legemidler),
@@ -246,7 +197,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
           ...farmakogenetikksoketekster(pgx, cpictilstand),
         ],
       ),
-    [oppforing, navn, komponenter, modell, legemidler, interaksjoner, pgx, cpictilstand],
+    [slug, navn, kjent, analytter, modell, legemidler, interaksjoner, pgx, cpictilstand],
   )
   const ord = useMemo(() => sokeord(sporring), [sporring])
 
@@ -260,31 +211,6 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
     }),
     [redigerer, referansebase, handlinger.opprettReferanse, handlinger.gjenopprett],
   )
-  // Scenarioreglene: i redigeringen utkastet, ellers de publiserte appen alt har.
-  const utkastregler = side.data.scenarioregelsett
-  const scenarioredigering = useMemo(
-    () =>
-      redigerer && utkastregler
-        ? {
-            utgave: utkastregler,
-            publisert: publisert.scenarioregelsett,
-            onLagre: handlinger.lagreScenarioregelsett,
-            hentNyeste: handlinger.hentScenarioregelsettutkast,
-          }
-        : null,
-    [redigerer, utkastregler, publisert.scenarioregelsett, handlinger.lagreScenarioregelsett, handlinger.hentScenarioregelsettutkast],
-  )
-  const regler = useScenarioreglerFor(oppforing?.fortolkning ?? null, scenarioredigering)
-  // De andre sidene med koder i samme fortolkningsmodul deler reglene og kommentarene.
-  const delesMed = useMemo(() => {
-    if (!oppforing) return []
-    const sider = new Map<string, Delingsside>()
-    for (const o of katalog.oppforinger) {
-      if (o.fortolkning !== oppforing.fortolkning || o.sidenavn === oppforing.sidenavn || sider.has(o.sidenavn)) continue
-      sider.set(o.sidenavn, { navn: o.sidenavn, kode: katalog.paSiden(o.sidenavn)[0]?.kode ?? o.kode })
-    }
-    return [...sider.values()]
-  }, [oppforing, katalog])
   // Etter en publisering skal fortolkningen bruke de nye reglene.
   const { provIgjen: hentScenarioreglerPaNytt } = useScenarioreglerkilde()
   const harInnhold = modell.paneler.size > 0 || Object.keys(modell.panelreferanser).length > 0
@@ -308,12 +234,12 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
     if (stedsnokkel && stedet.current) apne?.(stedet.current)
   }, [stedsnokkel, apne])
 
-  if (!oppforing && !kanRedigere && side.status === 'klar' && !finnes) {
-    return <Ikkefunnet onLukk={onLukk}>Fant ingen stoffside som heter {navn}</Ikkefunnet>
+  if (side.status === 'klar' && !finnes) {
+    return <Ikkefunnet onLukk={onLukk}>Fant ingen stoffside for «{slug}»</Ikkefunnet>
   }
 
   return (
-    <section ref={beholder} className="analyttside" aria-labelledby={overskrift} data-modus={modus}>
+    <section ref={beholder} className="stoffside" aria-labelledby={overskrift} data-modus={modus}>
       {/* Sidens handlinger står i toppmenyen (i dokken på smale flater). */}
       <ToppmenyInnhold spor="handlinger">
         {/* Mens siden redigeres, er det redigeringen som står i menyen; veien
@@ -321,6 +247,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
         {kanRedigere && modus === 'rediger' ? (
           <Redigeringshandlinger
             data={side.data}
+            regler={side.regler}
             publisert={publisert}
             plan={plan}
             laster={!redigerer}
@@ -332,12 +259,8 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
           />
         ) : (
           <>
-            {oppforing && (
-              <Toppmenyknapp
-                ikon="interp"
-                variant="primar"
-                onClick={apneFortolkning}
-              >
+            {fortolkning && (
+              <Toppmenyknapp ikon="interp" variant="primar" onClick={() => onApneFortolkning(fortolkning)}>
                 Åpne fortolkning
               </Toppmenyknapp>
             )}
@@ -360,7 +283,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
         />
       </ToppmenyInnhold>
 
-      {modus === 'rediger' && redigerer && !finnes && (
+      {modus === 'rediger' && redigerer && !side.data.infoside && (
         <p className="redigeringsstripe">Siden opprettes i databasen første gang du lagrer noe på den.</p>
       )}
       {konflikt && (
@@ -387,7 +310,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
           panelreferanser={univers.panelreferanser}
         >
           <Redigeringskilde verdi={redigeringsverdi}>
-            <div className="analyttside__paneler" aria-busy={side.status === 'laster'}>
+            <div className="stoffside__paneler" aria-busy={side.status === 'laster'}>
               {PANELER.map((definisjon) => {
                 switch (definisjon.form) {
                   case 'identitet':
@@ -395,11 +318,11 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                       <Identitetspanel
                         key={definisjon.nokkel}
                         definisjon={definisjon}
-                        oppforing={oppforing}
                         navn={navn}
-                        komponenter={komponenter}
+                        slug={slug}
+                        analytter={analytter}
+                        register={register}
                         kategorier={kategorier}
-                        samme={samme}
                         overskriftId={overskrift}
                         onApneFortolkning={apneFortolkningFor}
                       />
@@ -410,7 +333,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                         key={definisjon.nokkel}
                         definisjon={definisjon}
                         kontekst={kontekst}
-                        sidenavn={oppforing?.sidenavn ?? navn}
+                        sidenavn={navn}
                         legemidler={legemidler}
                       />
                     )
@@ -425,7 +348,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                       />
                     )
                   case 'datakort':
-                    return <ViktigeData key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} analytter={paSiden} />
+                    return <ViktigeData key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} analytter={primare} />
                   case 'tekst':
                     return <Tekstpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                   case 'kort':
@@ -437,7 +360,7 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
                         tilstand={pgx}
                         cpic={cpictilstand}
                         grunnlag={grunnlag}
-                        sidenavn={oppforing?.sidenavn ?? navn}
+                        sidenavn={navn}
                         sted={sted}
                         onHentet={farmakogenetikk.lesPaNytt}
                         onCpicHentet={cpic.lesPaNytt}
@@ -451,32 +374,22 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
               })}
 
               {!redigerer && side.status === 'klar' && !harInnhold && (
-                <p className="analyttside__tom">Denne siden har ikke fått faginnhold ennå.</p>
+                <p className="stoffside__tom">Denne siden har ikke fått faginnhold ennå.</p>
               )}
-              {regler && (
-                <Scenarioregler
-                  {...regler}
-                  delesMed={delesMed}
-                  {...(inkluderThcSyre ? { tittel: 'Fortolkningsregler – THC i serum' } : {})}
-                />
-              )}
-              {side.data.thcregelsett && (
-                <Thcregler
-                  utgave={side.data.thcregelsett}
+              {seksjoner.map((seksjon) => (
+                <Regelseksjonsvisning
+                  key={seksjon.seksjon}
+                  seksjon={seksjon}
+                  tittel={seksjoner.length > 1 ? `Fortolkningsregler – ${seksjon.fortolkning.visningsnavn}` : undefined}
+                  slug={slug}
+                  register={register}
+                  katalog={katalog}
+                  regler={side.regler}
+                  publisert={publisert}
                   redigerer={redigerer}
-                  onLagre={handlinger.lagreThcRegelsett}
-                  {...(inkluderThcSyre
-                    ? { seksjonsid: 'fortolkning-thc-syre', tittel: 'Fortolkningsregler – THC-syre i urin' }
-                    : {})}
+                  handlinger={handlinger}
                 />
-              )}
-              <Fortolkningsregler
-                utgave={side.data.regelsett}
-                publisert={publisert.regelsett}
-                redigerer={redigerer}
-                onLagre={handlinger.lagreRegelsett}
-                hentNyeste={handlinger.hentRegelsettutkast}
-              />
+              ))}
               <Referanseliste />
             </div>
           </Redigeringskilde>
@@ -485,3 +398,99 @@ function Innhold({ nokkel, sted, katalog, onApneFortolkning, onLukk }: Sideprops
     </section>
   )
 }
+
+/**
+ * Fortolkningsreglene for én modul på stoffsiden: scenarioreglene når modulen
+ * fortolkes med dem, THC-syrereglene for IRCAK, og intervallreglene for hver
+ * analytt som har et regelsett. Reglene er lest etter analyttkoden og modulen,
+ * aldri gjennom stoffet.
+ */
+function Regelseksjonsvisning({
+  seksjon,
+  tittel,
+  slug,
+  register,
+  katalog,
+  regler,
+  publisert,
+  redigerer,
+  handlinger,
+}: {
+  seksjon: Regelseksjon
+  /** Tittelen når siden har regler for flere moduler. */
+  tittel: string | undefined
+  slug: string
+  register: Stoffregister
+  katalog: Analyttkatalog
+  /** Reglene i tilstanden siden viser. */
+  regler: Regeldata
+  publisert: Regeldata
+  redigerer: boolean
+  handlinger: Stoffsidehandlinger
+}) {
+  const { fortolkning, analytter } = seksjon
+  const modul = rusModulFor(fortolkning)
+  // Scenarioreglene: i redigeringen utkastet, ellers de publiserte appen alt har.
+  const utkast = modul ? regler.scenarioregelsett[modul.id] : undefined
+  const { lagreScenarioregelsett, hentScenarioregelsettutkast } = handlinger
+  const scenarioredigering = useMemo(
+    () =>
+      redigerer && utkast && modul
+        ? {
+            utgave: utkast,
+            publisert: publisert.scenarioregelsett[modul.id] ?? null,
+            onLagre: (u: Parameters<typeof lagreScenarioregelsett>[1], g?: Parameters<typeof lagreScenarioregelsett>[2]) =>
+              lagreScenarioregelsett(modul.id, u, g),
+            hentNyeste: () => hentScenarioregelsettutkast(modul.id),
+          }
+        : null,
+    [redigerer, utkast, modul, publisert.scenarioregelsett, lagreScenarioregelsett, hentScenarioregelsettutkast],
+  )
+  const scenarioregler = useScenarioreglerFor(fortolkning, scenarioredigering)
+  // De andre stoffene med analytter i samme modul deler reglene og kommentarene.
+  const delesMed = useMemo(() => {
+    const sider = new Map<string, Delingsside>()
+    for (const analytt of katalog.oppforinger) {
+      if (analytt.fortolkning !== fortolkning) continue
+      const stoff = register.primartStoffFor(analytt.kode)
+      if (stoff && stoff.slug !== slug) sider.set(stoff.slug, { navn: stoff.navn, slug: stoff.slug })
+    }
+    return [...sider.values()]
+  }, [katalog, register, fortolkning, slug])
+  const thc = analytter.some((a) => a.kode === THC_KODE) ? regler.thcregelsett : null
+
+  return (
+    <>
+      {scenarioregler && (
+        <Scenarioregler
+          {...scenarioregler}
+          delesMed={delesMed}
+          seksjonsid={seksjon.seksjon}
+          {...(tittel && { tittel })}
+        />
+      )}
+      {thc && (
+        <Thcregler
+          utgave={thc}
+          redigerer={redigerer}
+          onLagre={handlinger.lagreThcRegelsett}
+          seksjonsid={seksjon.seksjon}
+          {...(tittel && { tittel })}
+        />
+      )}
+      {analytter.map((analytt) => (
+        <Fortolkningsregler
+          key={analytt.kode}
+          utgave={regler.regelsett[analytt.kode] ?? null}
+          publisert={publisert.regelsett[analytt.kode] ?? null}
+          redigerer={redigerer}
+          onLagre={(innhold, grunnlag) => handlinger.lagreRegelsett(analytt.kode, innhold, grunnlag)}
+          hentNyeste={() => handlinger.hentRegelsettutkast(analytt.kode)}
+          seksjonsid={seksjon.seksjon}
+          {...(tittel && { tittel })}
+        />
+      ))}
+    </>
+  )
+}
+

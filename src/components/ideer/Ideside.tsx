@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { hentIdetraad, merkIdeSett, settHjerte, settIdestatus, slettIde } from '../../ideer/api'
 import { STATUSER, STATUSNAVN, type Idestatus, type Idetraad, type Kommentar } from '../../ideer/modell'
-import { Riktekst } from '../analyttside/Riktekst'
+import { Riktekst } from '../stoffside/Riktekst'
 import { Forfatterbilde, useForfatternavn, useIdekontekst } from './Idekontekst'
 import { Kategorimerke, Statusmerke } from './Merker'
 import { Kommentartraad } from './Kommentartraad'

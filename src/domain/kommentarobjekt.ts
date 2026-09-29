@@ -5,7 +5,7 @@
  * redigerbart objekt (objekttypen `kommentar`), med stabil ID, egen historikk
  * og egen publisering. Reglene peker på kommentarene med ID-en og eier ikke
  * teksten: kommentar og regel er separate objekter
- * (`docs/analyttsider-og-redigering.md`, avsnitt 10). Samme kommentar kan
+ * (`docs/stoffsider-og-redigering.md`, avsnitt 10). Samme kommentar kan
  * dermed brukes av flere regler og regelsett, og en tekst rettes ett sted.
  *
  * **Plassholdere** er de navngitte hullene en regeltype fyller inn når

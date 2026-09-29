@@ -1,4 +1,4 @@
-# Plan: analyttsider, redigerbart faginnhold og fortolkningsregler
+# Plan: stoffsider, redigerbart faginnhold og fortolkningsregler
 
 Denne planen beskriver overgangen fra dagens hovedsakelig statiske/hardkodede faginnhold til et redigerbart, kildebelagt og fullt versjonert kunnskapssystem i OUSFAR.
 
@@ -14,7 +14,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [x] Brukersystem med profiler og roller er etablert.
 - [x] Arbeidspakke 1: fundament for redigerbart faginnhold.
 - [x] Arbeidspakke 2: referansesystem.
-- [x] Arbeidspakke 3: analyttsider og navigasjon.
+- [x] Arbeidspakke 3: stoffsider og navigasjon (omarbeidet 29.09.2026: stoffet er sidens identitet, analyttene kobles eksplisitt).
 - [ ] Arbeidspakke 4: import av psykofarmakainnhold (revidert 23.09.2026, omarbeides).
 - [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
 - [x] Arbeidspakke 6: sammensatte analyttgrupper.
@@ -32,14 +32,14 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 
 OUSFAR skal utvikles fra et fortolkningsverktøy med innhold i kode og statiske datafiler til et internt farmakologisk kunnskaps- og beslutningsstøttesystem der:
 
-- stoffregisteret består av informasjonssider for stoffer/virkestoffer, og laboratorieanalytter kobles eksplisitt til disse sidene
+- stoffregisteret består av stoffsider for stoffer/virkestoffer, og laboratorieanalytter kobles eksplisitt til stoffene
 - fortolkningskommentarer og etter hvert fortolkningsregler lagres i Supabase
 - faglig innhold kan redigeres direkte i UI
 - endringer er versjonerte, attribuert til bruker og reversible
 - innhold kan kildebelegges på flere nivåer
 - referanser lagres sentralt og gjenbrukes på tvers av appen
 - fortolkningsmodulene bruker samme publiserte datagrunnlag som redigeringsgrensesnittet
-- søk fungerer både på én analyttside og på tvers av hele kunnskapsbasen
+- søk fungerer både på én stoffside og på tvers av hele kunnskapsbasen
 
 Arbeidet skal bygges trinnvis. Enkle konsentrasjonsregler, sammensatte rusmiddelregler og THC-syre skal ikke presses inn i én felles regeleditor.
 
@@ -47,44 +47,44 @@ Arbeidet skal bygges trinnvis. Enkle konsentrasjonsregler, sammensatte rusmiddel
 
 ## 2. Domenemodellen må skille tre begreper
 
-Dette skillet er grunnleggende og må ligge i fundamentet.
+Dette skillet er grunnleggende og må ligge i fundamentet. Hvordan det er bygget, står i `docs/faginnhold.md` under «Domenet» og «Stoffsidene».
 
-### 2.1 Informasjonsside / virkestoff
+### 2.1 Stoff
 
-Dette er siden brukeren leser om, for eksempel:
+Stoffet er det brukeren leser om, og den eneste identiteten en fagside har, for eksempel:
 
 - Amitriptylin
 - Nortriptylin
 - Sertralin
 - Risperidon
 
-Siden inneholder farmakologi, preparatnavn, dosering, referanseområder, kommentarer osv.
+Hvert stoff har en nøkkel (`bupropion`), et navn og en plass i stoffregisteret (`src/data/stoffregister.json`), som er autoritativt og uavhengig av analyttkatalogen. Stoffsiden inneholder farmakologi, preparater, dosering, referanseområder, kommentarer osv., og har adressen `#/stoff/<nøkkel>`.
 
 ### 2.2 Laboratorieanalytt
 
-Dette er det laboratoriet faktisk analyserer og rapporterer, med kode som `AMTNORSUM`, `NOR`, `KVE` osv.
+Dette er det laboratoriet faktisk analyserer og rapporterer, med kode som `AMTNORSUM`, `NOR`, `KVE` osv. Analytten hører til fortolkningen og er ikke en fagside.
 
-Én laboratorieanalytt kan representere flere kjemiske komponenter.
+En analytt kobles til stoffer bare med en eksplisitt kobling i stoffregisteret: koden, stoffet, relasjonen (`selve_stoffet`, `metabolitt` eller `sumanalyse`) og om stoffet er analyttens primære. Koblingene er mange-til-mange, og både et stoff uten analytt og en analytt uten stoff er gyldig. Ingen kobling utledes av navnelikhet.
 
 Eksempel:
 
-- `AMTNORSUM`: hovedside = Amitriptylin; analysen omfatter amitriptylin + nortriptylin.
-- `NOR`: hovedside = Nortriptylin.
-- `VENSUM`: hovedside = Venlafaksin; O-desmetylvenlafaksin er en analyttkomponent, ikke navnet på fagssiden.
-- `RISPSUM`: hovedside = Risperidon; hydroksyrisperidon er en analyttkomponent i sumanalysen.
-- `HBUP`: hovedside = Bupropion, selv om laboratoriet analyserer hydroksybupropion. Siden skal uttrykkelig forklare dette og at referanseområdet gjelder bupropion.
+- `AMTNORSUM` → Amitriptylin (sumanalyse, omfatter amitriptylin og nortriptylin). Nortriptylin er et eget stoff.
+- `NOR` → Nortriptylin (selve stoffet).
+- `VENSUM` → Venlafaksin (sumanalyse). O-desmetylvenlafaksin er et eget stoff med en sekundær kobling til den samme analysen.
+- `RISPSUM` → Risperidon (sumanalyse), og sekundært til Paliperidon (hydroksyrisperidon).
+- `HBUP` → Bupropion (metabolitt): laboratoriet måler hydroksybupropion, og siden forklarer det. Hydroksybupropion er et søkeord, ikke en side.
 
-Datamodellen skal derfor ikke anta at «én analyttkode = ett virkestoff», og den skal heller ikke utlede stoffsidens identitet fra analyttnavnet når en eksplisitt kobling finnes.
+Datamodellen antar derfor ikke at «én analyttkode = ett virkestoff», og stoffsidens identitet utledes aldri av analyttnavnet.
 
-For sumanalyser skal siden kunne opplyse hvilke komponenter analysen omfatter og lenke til andre relevante informasjonssider.
+For sumanalyser opplyser siden hvilke komponenter analysen omfatter og lenker til de andre stoffene koblingene nevner.
 
 ### 2.3 Fortolkningsmodul
 
-Dette er logikken som bestemmer hvilken eller hvilke kommentarer som skal brukes.
+Dette er logikken som bestemmer hvilken eller hvilke kommentarer som skal brukes. Den bruker analyttkodene og deres regler (HBUP-reglene hører til HBUP), aldri stoffsiden.
 
 For enkle analytter svarer én fortolkningsmodul omtrent til én laboratorieanalytt. For andre gjør den ikke det.
 
-Eksempel: diazepam, N-desmetyldiazepam og oksazepam har egne analyttkoder og inngår i felles fortolkningslogikk. Diazepam og N-desmetyldiazepam deler én fagsside og én URL; oksazepam er et eget legemiddel og beholder sin egen fagsside.
+Eksempel: diazepam, N-desmetyldiazepam og oksazepam har egne analyttkoder og inngår i felles fortolkningslogikk. DIAZ og DMI er begge koblet til stoffet Diazepam; oksazepam er et eget legemiddel med sin egen stoffside.
 
 ---
 
@@ -92,29 +92,29 @@ Eksempel: diazepam, N-desmetyldiazepam og oksazepam har egne analyttkoder og inn
 
 ### Sidemenyen
 
-Venstremenyen er stoffregisteret: den åpner informasjonssiden for stoffet, ikke fortolkningsflyten, og er ordnet etter farmakologisk klasse med og uten analyttkode om hverandre (`src/data/stoffregister.json`). Registerlinjen navngis alltid etter stoffet/fagssiden, aldri etter laboratoriets analyttnavn. «Amitriptylin + nortriptylin», «Venlafaksin + O-desmetylvenlafaksin» og «Risperidon + hydroksyrisperidon» hører derfor til analyttbeskrivelsen, mens registeret viser henholdsvis Amitriptylin, Venlafaksin og Risperidon. Den filtrerer ikke søket.
+Venstremenyen er stoffregisteret: den åpner stoffsiden (`#/stoff/<nøkkel>`), ikke fortolkningsflyten, og er ordnet etter farmakologisk klasse med og uten analyttkode om hverandre. Linjen navngis alltid etter stoffet, aldri etter laboratoriets analyttnavn; kodene står som sekundær informasjon. Den filtrerer ikke søket.
 
 Hovedsidens søk er inngangen til fortolkningsarbeidsflyten, og filteret på analysemetode settes der.
 
 ### Fra fortolkningsmodulen
 
-Analyttkodepillene gjøres klikkbare.
+Analyttkodepillene er klikkbare og fører til stoffsiden til analyttens primære stoff, når koden har et.
 
 Eksempel:
 
-`AMTNORSUM` -> informasjonssiden for AMTNORSUM/Amitriptylin.
+`AMTNORSUM` → `#/stoff/amitriptylin`.
 
-For moduler som omfatter flere koder, skal hver kode føre til den kanoniske fagssiden den hører til. Flere koder kan derfor ha samme mål-URL.
+Flere koder kan ha samme mål. En kode uten koblet stoff er ikke en lenke.
 
-### Fra informasjonssiden
+### Fra stoffsiden
 
-Siden bør ha en sekundær handling «Åpne fortolkning» slik at det er enkelt å gå begge veier.
+Siden har en sekundær handling «Åpne fortolkning» når et av stoffets analytter har en fortolkningsmodul.
 
-Alle fagssider skal ha én kanonisk URL slik at de kan bokmerkes og åpnes direkte. Sekundærkoder som deler siden, skal ikke få parallelle kopier av siden; gamle URL-er til dem videresendes til den kanoniske adressen.
+Hver stoffside har én kanonisk adresse som kan bokmerkes og åpnes direkte. Gamle adresser (`#/analytt/<KODE>`) sendes videre til stoffet når koden har ett primært stoff; ellers vises ingen fagside.
 
 ---
 
-## 4. Oppbygning av informasjonssiden
+## 4. Oppbygning av stoffsiden
 
 Innholdet i panelene under beholdes, men vises fra arbeidspakke 9 som **hovedseksjoner** i modellen for progressiv detaljering (del 24): lukket med en minioppsummering, åpnet med innholdet og eventuelle detaljkort. «Panel» og «hovedseksjon» betyr det samme i resten av planen. Preparatene blir en egen hovedseksjon med data fra de eksterne kildene (del 23).
 
@@ -122,7 +122,7 @@ Innholdet i panelene under beholdes, men vises fra arbeidspakke 9 som **hovedsek
 
 Vis:
 
-1. Analyttkode(r) som piller. Når flere koder deler fagsside, vises alle her, gruppert etter analysemetode.
+1. Analyttkodene koblet til stoffet, som piller gruppert etter analysemetode, med hva hver av dem måler.
 2. Legemiddelkategori som pille, med samme kategorier som dagens sidemeny.
 3. Stoff-/virkestoffnavnet som hovedoverskrift. Analyttnavn og analyttkomponenter beskrives separat og brukes ikke som sidetittel.
 4. ~~Preparatnavn, alfabetisk sortert.~~ **Erstattet 23.09.2026:** preparatene vises i hovedseksjonen «Preparater», med data fra de eksterne kildene, gruppert som legemiddelform → preparat → styrker (del 23 og 24).
@@ -795,7 +795,7 @@ Identiteten (panel 1) og kritiske varsler skjules ikke.
 
 - **Minioppsummeringen** avledes av innholdet der det er mulig (antall, spenn, nøkkeltall), slik at den ikke kan bli stående utdatert.
 - **Animasjon:** rask og diskret åpning og lukking, og ingen animasjon når brukeren har valgt redusert bevegelse (`prefers-reduced-motion`).
-- **Adresser:** hver hovedseksjon og hvert detaljkort har en stabil adresse under sidens adresse (`#/analytt/<KODE>`). En direktelenke åpner riktig seksjon og eventuelt detaljkort og ruller dit.
+- **Adresser:** hver hovedseksjon og hvert detaljkort har en stabil adresse under sidens adresse (`#/stoff/<nøkkel>`). En direktelenke åpner riktig seksjon og eventuelt detaljkort og ruller dit.
 - **Søk på siden** finner innhold i lukkede seksjoner og detaljkort, og åpner, ruller til og markerer treffet (del 17).
 - **Referanser:** nummereringen følger fortsatt leseordenen (del 6), uavhengig av hva som er åpent eller lukket.
 - **Redigering:** redigeringshandlingene ligger i den åpne seksjonen. Å gå til redigering av et element åpner seksjonen det står i.
@@ -1049,7 +1049,7 @@ Ingen databasemodell lages i denne arbeidspakken.
 
 **Status:** [x] Ferdig
 
-Stoffsidene bruker progressiv detaljering: seksjon → detaljkort, beskrevet i `docs/seksjoner.md`. Identiteten og Viktige data står alltid fram og er ikke seksjoner; de andre seksjonene er lukket med en kort oppsummering av innholdet, og bare én står åpen om gangen. Direktelenker: `#/analytt/<KODE>/<seksjon>/<kort>`. Rekkefølgen og visningen er fra `docs/ux-reimagination.md` del 8.
+Stoffsidene bruker progressiv detaljering: seksjon → detaljkort, beskrevet i `docs/seksjoner.md`. Identiteten og Viktige data står alltid fram og er ikke seksjoner; de andre seksjonene er lukket med en kort oppsummering av innholdet, og bare én står åpen om gangen. Direktelenker: `#/stoff/<nøkkel>/<seksjon>/<kort>`. Rekkefølgen og visningen er fra `docs/ux-reimagination.md` del 8.
 
 Del 1, komponenten:
 
@@ -1113,7 +1113,7 @@ Ta inn de øvrige feltene i del 23 én etter én, der arbeidspakke 8 viser at ki
 
 ## Viktige arkitekturregler for hele prosjektet
 
-1. Informasjonsside, laboratorieanalytt og fortolkningsmodul er separate konsepter.
+1. Stoff, laboratorieanalytt og fortolkningsmodul er separate konsepter. Stoffet er stoffsidens eneste identitet; analytter kobles til stoffer bare eksplisitt.
 2. Kommentar og regel er separate objekter.
 3. Kommentarer som kopieres til laboratoriesystemet er ren tekst.
 4. Delte intervallgrenser redigeres som skillepunkter, slik at hull ikke kan oppstå.

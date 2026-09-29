@@ -27,8 +27,8 @@ afterEach(() => {
 const KLAR = {
   status: 'klar' as const,
   indeks: lagSokeindeks([
-    { sted: { side: { kode: 'SERT', navn: 'Sertralin' } }, felt: 'navn', tekst: 'Sertralin' },
-    { sted: { side: { kode: 'KVE', navn: 'Kvetiapin' } }, felt: 'navn', tekst: 'Kvetiapin' },
+    { sted: { side: { stoff: 'sertralin', navn: 'Sertralin' } }, felt: 'navn', tekst: 'Sertralin' },
+    { sted: { side: { stoff: 'kvetiapin', navn: 'Kvetiapin' } }, felt: 'navn', tekst: 'Kvetiapin' },
   ]),
 }
 

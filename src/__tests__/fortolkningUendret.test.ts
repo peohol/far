@@ -123,7 +123,7 @@ const FORTOLKNINGSSTEGENE = [
 /** Det fortolkningen ikke skal hente noe fra: regelsettene kommer som argumenter. */
 const REDIGERBART = [
   resolve(ROT, 'src/faginnhold'),
-  resolve(ROT, 'src/components/analyttside'),
+  resolve(ROT, 'src/components/stoffside'),
   resolve(ROT, 'src/components/referanser'),
   resolve(ROT, 'src/auth'),
 ]

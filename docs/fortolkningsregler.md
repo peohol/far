@@ -2,7 +2,7 @@
 
 Leses når noe som har med konsentrasjonsreglene, kommentarene fortolkningen
 gir, «ring rekvirent» eller cut-off å gjøre skal endres. Planen og fremdriften
-står i `docs/analyttsider-og-redigering.md` (arbeidspakke 5); maskineriet med
+står i `docs/stoffsider-og-redigering.md` (arbeidspakke 5); maskineriet med
 utkast, publisering og revisjoner i `docs/faginnhold.md`. Her står hvordan
 reglene faktisk er bygget.
 
@@ -16,7 +16,7 @@ rusmiddelreglene og THC-syre har egne regeltyper.
 | --- | --- |
 | `supabase/migrations/*_intervallregelsett_objekttype.sql`, `*_intervallregelsett.sql` | Objekttypen, tabellene, valideringen og lesingen |
 | `supabase/migrations/*_importer_intervallregelsett_1.sql` … `_6.sql` | Importen av dagens regler, i seks porsjoner |
-| `supabase/migrations/*_regelredigering_lesing.sql` | `finn_intervallregelsett`: regelsettet for én kode, til analyttsiden |
+| `supabase/migrations/*_regelredigering_lesing.sql` | `finn_intervallregelsett`: regelsettet for én kode, til stoffsiden |
 | `supabase/migrations/*_intervallregelsett_kommentarobjekter.sql`, `*_flytt_regelsettkommentarer.sql` | Reglene peker på de felles kommentarobjektene, `lagre_intervallregelsett`, og flyttingen av tekstene dit. Lagringen av kommentarene er felles med scenarioreglene (`intern.lagre_kommentarendringer` i `*_lagre_scenarioregelsett.sql`) |
 | `supabase/import/intervallregelsett.json` | Importdatasettet: dagens regler, ett regelsett per linje, med kilden |
 | `src/regler/modell.ts` | Formen på et regelsett, felles for appen og databasen |
@@ -24,19 +24,19 @@ rusmiddelreglene og THC-syre har egne regeltyper.
 | `src/regler/import.ts`, `scripts/importer-intervallregelsett.ts` | SQL-en som legger inn datasettet, og porsjoneringen |
 | `src/domain/intervallregler.ts` | Motoren: intervallene, regelen en verdi treffer, cut-off og båndene steg 2 viser |
 | `src/domain/valg.ts` | `regelsettvalg`: valgene på steg 2 fra et regelsett, med «Til stede under cut-off» sist |
-| `src/domain/piller.ts` | Tallene over knappene: referanseområdet fra informasjonssiden, ringegrensen og den toksiske grensen fra regelsettet, resten fra datasettet |
-| `supabase/migrations/*_referanseomrader_lesing.sql` | `les_referanseomrader`: referanseområdet på informasjonssiden for hver kode |
+| `src/domain/piller.ts` | Tallene over knappene: referanseområdet fra stoffsiden, ringegrensen og den toksiske grensen fra regelsettet, resten fra datasettet |
+| `supabase/migrations/*_referanseomrader_lesing.sql` | `les_referanseomrader`: referanseområdet på stoffsiden for hver kode |
 | `src/regler/publiserte.ts`, `src/hooks/usePubliserteRegler.ts` | De publiserte regelsettene fortolkningen bruker: hentingen (`lesPubliserteRegelsett` i `kommentarer.ts`), og oppslaget for én kode |
 | `src/components/BandStep.tsx` | Steg 2: knappene, og hva som står i stedet mens reglene hentes eller mangler |
 | `src/regler/redigering.ts` | Endringene redigeringen gjør — grenser, deling, sammenslåing, kommentarer, ringing, cut-off — som rene funksjoner |
 | `src/regler/visning.ts` | Navnene på nivåer og handlinger, feltene historikken sammenligner, og simulatoren |
-| `src/components/regler/` | «Fortolkning» på analyttsiden: tabellen, simulatoren og redigeringen. Feltene, lagringen med konflikten (`Regelfelter.tsx`) og historikken under reglene (`Regelhistorikk.tsx`) er felles med scenarioreglene |
+| `src/components/regler/` | «Fortolkning» på stoffsiden: tabellen, simulatoren og redigeringen. Feltene, lagringen med konflikten (`Regelfelter.tsx`) og historikken under reglene (`Regelhistorikk.tsx`) er felles med scenarioreglene |
 | `src/__tests__/intervallregelsett.test.ts` | Import, paritet, validering, tilgang og versjonering, mot en ekte database |
 | `src/__tests__/kommentarflytting.test.ts` | Flyttingen av tekstene til kommentarobjekter, på de historiske importfilene |
 | `src/__tests__/hjelp/dagensregler.ts`, `src/__tests__/data/dagensgrenser.json` | Fasiten fra før byttet: regelsettene og grensene den gamle motoren ga |
 | `src/__tests__/fortolkningUendret.test.ts`, `steg2regler.test.tsx` | At klinisk output er den samme som før byttet, og steg 2 på regelsettene i appen |
 | `src/__tests__/referanseomrader.test.ts`, `src/__tests__/data/referanseomrader.json` | Lesingen av referanseområdene, og referanseområdene fasiten bruker |
-| `src/__tests__/regelredigering.test.ts`, `analyttside.test.tsx` | Redigeringen, simulatoren og historikken, som rene funksjoner og i siden |
+| `src/__tests__/regelredigering.test.ts`, `stoffside.test.tsx` | Redigeringen, simulatoren og historikken, som rene funksjoner og i siden |
 
 ## Modellen
 
@@ -99,9 +99,9 @@ sin egen historikk og publisering.
   gå nedover.
 
 `intervallregelsett` peker på analyttkoden som tekst, ikke på
-laboratorieanalytten. Informasjonsside, laboratorieanalytt og
-fortolkningsmodul er separate begreper, og regelsettet skal kunne finnes også
-for koder som ikke har en side.
+laboratorieanalytten. Stoff, laboratorieanalytt og fortolkningsmodul er
+separate begreper: regelsettet hører til koden (HBUP-reglene til HBUP), og
+finnes også for koder som ikke er koblet til noe stoff.
 
 ## Valideringen
 
@@ -200,7 +200,7 @@ analytt:
 `src/__tests__/fortolkningUendret.test.ts` lager steg 2 — knappene,
 kommentarene, cut-off og pillene — for alle analyttene av fasiten, med den
 samme koden appen bruker, og krever den samme kontrollsummen over all
-klinisk output som før analyttsidene kom. Den ble ikke endret av byttet, men
+klinisk output som før stoffsidene kom. Den ble ikke endret av byttet, men
 én gang senere, med vilje, for referanseområdet (se «I fortolkningen»).
 
 ## I fortolkningen
@@ -219,7 +219,7 @@ ikke tar inn noe fra databasen eller faginnholdet.
   enn de publiserte. En feil har «Prøv igjen». Påvisningsgrensen og
   terapiområdet står likevel; de er fra datasettet.
 - **Nye regler** gjelder fra neste gang appen åpnes. En administrator som går
-  fra en analyttside tilbake til fortolkningen, får dem hentet på nytt med en
+  fra en stoffside tilbake til fortolkningen, får dem hentet på nytt med en
   gang. Har appen alt regelsettene, blir de stående til de nye er hentet.
 - **Tallene over knappene:** ringegrensen, og for antihypertensiver den
   toksiske grensen — der det første intervallet på nivået «over» begynner —
@@ -227,13 +227,13 @@ ikke tar inn noe fra databasen eller faginnholdet.
   bare når den har en annen enhet.
 - **Referanseområdet** under analyttnavnet er kortet «Referanseområde» i
   «Viktige data» på hovedsiden til koden — de samme tallene som
-  informasjonssiden viser, fra samme rad i databasen, og endret når kortet
+  stoffsiden viser, fra samme rad i databasen, og endret når kortet
   endres og publiseres. Det står når det er hentet, og ikke for en kode uten
   kortet. Med dette ble tre av tallene steg 2 viste, annerledes enn før:
   BREK 50–350 (før 50–330), DOKSUM 180–550 (før 18–550) og LMP 10–300 (før
   «< 300»), slik Peder bestemte. Fasiten for klinisk output
   (`fortolkningUendret.test.ts`) ble endret for akkurat det, og bruker
-  referanseområdene slik de står på informasjonssidene
+  referanseområdene slik de står på stoffsidene
   (`src/__tests__/data/referanseomrader.json`).
 - **Datasettene** (`analytter.json`, `antihypertensiver.json`) har ikke lenger
   grensene, ringegrensen, kommentarene eller referanseområdet, og
@@ -242,11 +242,14 @@ ikke tar inn noe fra databasen eller faginnholdet.
   kildedokumentene; det er grunnen til at de står igjen. Resten av
   datasettene er uendret.
 
-## På analyttsiden
+## På stoffsiden
 
-Regelsettet vises på analyttsiden for koden, under panelene, som seksjonen
-«Fortolkning» i den felles seksjonsmodellen (`docs/seksjoner.md`, adressen
-`#/analytt/KODE/fortolkning`). Lukket sier den hvor mange områder det er, og
+Regelsettet vises på stoffsiden til analyttens primære stoff (koblingen i
+stoffregisteret), under panelene, som seksjonen «Fortolkning» i den felles
+seksjonsmodellen (`docs/seksjoner.md`, adressen `#/stoff/bupropion/fortolkning`
+for HBUP). Har stoffet analytter i flere fortolkningsmoduler, får de neste
+sin egen seksjon, `fortolkning-<kode>` (`regelseksjoner` i
+`src/domain/koblinger.ts`). Lukket sier den hvor mange områder det er, og
 ringegrensen og cut-off når de finnes. Åpnet viser den en tabell med
 konsentrasjonen, kommentaren og «Ring rekvirent» — de samme radene, fargene og
 tekstene som knappene på steg 2 — med ringegrensen under. Under tabellen er

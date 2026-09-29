@@ -11,8 +11,8 @@
  */
 import { cleanup, render, screen, within } from '@testing-library/react'
 import { afterEach, beforeAll, describe, expect, it } from 'vitest'
-import { Serumtabell } from '../components/analyttside/Serumtabell'
-import { kinetikkikon, seksjonsikon, tekstvisning } from '../components/analyttside/panelvisning'
+import { Serumtabell } from '../components/stoffside/Serumtabell'
+import { kinetikkikon, seksjonsikon, tekstvisning } from '../components/stoffside/panelvisning'
 import { IKONNAVN } from '../components/ikon/register'
 import { Detaljkort, Seksjon } from '../components/seksjoner/Seksjon'
 import { doseringskort } from '../faginnhold/doseringskort'

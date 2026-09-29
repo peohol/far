@@ -11,7 +11,7 @@ import type { ThcRegelsett } from '../domain/thcRegelsett'
 
 /**
  * Utfallet av en THC-fortolkning, slik fortolkningsmodulen og simulatoren på
- * analyttsiden viser det: kommentaren eller det som mangler, og kurvene med
+ * stoffsiden viser det: kommentaren eller det som mangler, og kurvene med
  * forklaringen. Modulen legger til kopieringen; simulatoren har ingenting å
  * kopiere.
  */

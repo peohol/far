@@ -3,11 +3,11 @@
  * seksjonene og detaljkortene preparatene og interaksjonene står i, og
  * tekstene søket finner der.
  *
- * Alt her er rene funksjoner. Søket på siden (`Analyttside.tsx`) og søket i
+ * Alt her er rene funksjoner. Søket på siden (`Stoffside.tsx`) og søket i
  * hele kunnskapsbasen (`src/faginnhold/globaltSok.ts`) bruker de samme, så et
  * treff peker på det samme stedet uansett hvilket søk som fant det.
  */
-import type { Sideelement, Sidemodell } from '../faginnhold/analyttside'
+import type { Sideelement, Sidemodell } from '../faginnhold/stoffside'
 import { ELEMENTTYPER, lesLegemiddelkobling, type Legemiddelkoblingdata, type Panelnokkel } from '../faginnhold/paneler'
 import type { Tilleggstekst } from '../faginnhold/sok'
 import type { Interaksjonsoversikt } from './interaksjoner'

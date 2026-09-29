@@ -1,5 +1,5 @@
 /**
- * Referansene på en informasjonsside: siteringer, nummerering, piller og
+ * Referansene på en stoffside: siteringer, nummerering, piller og
  * referanseliste.
  *
  * Siteringene lagrer bare referanse-ID-er. Numrene regnes ut her, hver gang

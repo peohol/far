@@ -1,25 +1,29 @@
 // @vitest-environment jsdom
 /**
- * THC-syrereglene på analyttsiden for IRCAK, prøvd i en nettleser i minnet:
- * oversikten, tekstbolkene og simulatoren. Simulatoren fortolker med den
+ * THC-syrereglene på stoffsiden for THC (`#/stoff/thc`), prøvd i en nettleser
+ * i minnet: oversikten, tekstbolkene og simulatoren. IRCAK er koblet til THC
+ * som metabolitt i stoffregisteret, og reglene for koden står på THC-siden i
+ * sin egen seksjon (`fortolkning-ircak`), lest etter koden og ikke gjennom
+ * siden. Simulatoren fortolker med den
  * samme motoren og de samme komponentene som fortolkningsmodulen
  * (`thcsteg.test.tsx`), med reglene siden viser.
  */
 import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
-import { Analyttside } from '../components/analyttside/Analyttside'
-import { FaginnholdskildeProvider } from '../components/analyttside/Faginnholdskilde'
+import { Stoffside } from '../components/stoffside/Stoffside'
+import { FaginnholdskildeProvider } from '../components/stoffside/Faginnholdskilde'
 import { Thcregler } from '../components/regler/Thcregler'
 import { TipsLag } from '../components/Tips'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from '../domain/analyttkatalog'
-import { THC_KODE } from '../domain/thc'
+import { STOFFREGISTER } from '../domain/stoffregister'
 import { fortolkThc, tomThcInndata } from '../domain/thcMotor'
 import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../domain/thcTekster'
 import type { Faginnholdslager } from '../faginnhold/lagring'
-import { TOM_SIDE, type Faginnholdsleser } from '../faginnhold/lesing'
+import type { Faginnholdsleser } from '../faginnhold/lesing'
 import type { ThcRegelsettutgave } from '../faginnhold/thcregler'
 import { THC_MODELL, THC_REGELSETT, THC_TEKSTER, thcRegelsettutgave } from './hjelp/thcgrunnlag'
+import { falskLeser } from './hjelp/falskleser'
 
 beforeAll(() => {
   globalThis.ResizeObserver ??= class {
@@ -35,31 +39,24 @@ afterEach(cleanup)
 
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
 
-function visSide(kode: string, sted?: readonly string[]) {
-  const thcregelsett = thcRegelsettutgave()
-  const leser: Faginnholdsleser = {
-    lesAnalyttside: vi.fn(async (k: string) => ({ ...TOM_SIDE, thcregelsett: k === THC_KODE ? thcregelsett : null })),
-    lesStoffside: vi.fn(async () => TOM_SIDE),
-    lesStoffsidenavn: vi.fn(async () => []),
-    lesReferanser: vi.fn(async () => []),
-    finnInfosider: vi.fn(async () => []),
-    finnIntervallregelsett: vi.fn(async () => null),
-    finnScenarioregelsett: vi.fn(async () => null),
-    lesIntervallregelsett: vi.fn(async () => []),
-    lesThcRegelsett: vi.fn(async () => thcregelsett),
-    lesKommentarer: vi.fn(async () => []),
-    lesReferanseomrader: vi.fn(async () => new Map()),
-    lesHistorikk: vi.fn(async () => {
-      throw new Error('ikke i bruk')
-    }),
-  }
+/** Stoffsiden for stoffet med nøkkelen, med THC-syreregelsettet i databasen. Gir leseren tilbake. */
+function visSide(stoff: string, sted?: readonly string[]): Faginnholdsleser {
+  const leser = falskLeser({ lesThcRegelsett: vi.fn(async () => thcRegelsettutgave()) })
   render(
     <TipsLag>
       <FaginnholdskildeProvider kilde={{ leser, lager: {} as Faginnholdslager, kanRedigere: false }}>
-        <Analyttside kode={kode} sted={sted} katalog={katalog} onApneFortolkning={vi.fn()} onLukk={vi.fn()} />
+        <Stoffside
+          stoff={stoff}
+          sted={sted}
+          register={STOFFREGISTER}
+          katalog={katalog}
+          onApneFortolkning={vi.fn()}
+          onLukk={vi.fn()}
+        />
       </FaginnholdskildeProvider>
     </TipsLag>,
   )
+  return leser
 }
 
 function visRegler(utgave: ThcRegelsettutgave = thcRegelsettutgave()) {
@@ -72,18 +69,27 @@ function visRegler(utgave: ThcRegelsettutgave = thcRegelsettutgave()) {
 
 const gruppe = (navn: string) => within(screen.getByRole('group', { name: navn }))
 
-describe('THC-syrereglene på analyttsiden', () => {
-  it('står på den felles THC-siden, og ikke på andre sider', async () => {
-    visSide('THC')
-    expect(await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler – THC-syre i urin' })).toBeTruthy()
+describe('THC-syrereglene på stoffsiden', () => {
+  it('står på THC-siden, i seksjonen for IRCAK, og ikke på andre sider', async () => {
+    const thc = visSide('thc')
+    expect((await screen.findByRole('heading', { level: 1 })).textContent).toBe('THC')
+    const overskrift = await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler – THC-syre i urin' })
+    // THC og IRCAK fortolkes i hver sin modul, og hver har sin seksjon på siden.
+    expect(overskrift.closest('section')?.id).toBe('panel-fortolkning-ircak')
+    // Siden leses etter stoffets nøkkel, reglene etter koden.
+    expect(thc.lesStoffside).toHaveBeenCalledWith('thc', 'publisert')
+    expect(thc.lesThcRegelsett).toHaveBeenCalledWith('publisert')
+    expect(vi.mocked(thc.finnIntervallregelsett).mock.calls.map(([kode]) => kode).sort()).toEqual(['IRCAK', 'THC'])
     cleanup()
-    visSide('NOR')
+
+    const nortriptylin = visSide('nortriptylin')
     await screen.findByText('Denne siden har ikke fått faginnhold ennå.')
     expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkningsregler – THC-syre i urin' })).toBeNull()
+    expect(nortriptylin.lesThcRegelsett).not.toHaveBeenCalled()
   })
 
-  it('åpner simulatoren fra en direktelenke på den felles siden', async () => {
-    visSide('THC', ['fortolkning-thc-syre', 'simulator'])
+  it('åpner simulatoren fra en direktelenke til seksjonen for IRCAK', async () => {
+    visSide('thc', ['fortolkning-ircak', 'simulator'])
     const simulator = await screen.findByRole('button', { name: 'Prøv reglene' })
     expect(simulator.getAttribute('aria-expanded')).toBe('true')
     expect(screen.getByRole('button', { name: 'Fortolkningsregler – THC-syre i urin' }).getAttribute('aria-expanded')).toBe('true')

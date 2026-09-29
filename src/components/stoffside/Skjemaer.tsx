@@ -33,7 +33,7 @@ import { Referansevelger } from './Referansevelger'
 import { Rikteksteditor } from './Rikteksteditor'
 
 /**
- * Skjemaene for hver elementtype på informasjonssiden.
+ * Skjemaene for hver elementtype på stoffsiden.
  *
  * Alle har samme ramme: et stort redigeringsvindu over siden, med feltene,
  * kildene for kortet og «Lagre» og «Avbryt» i en fot som står fast. Vinduet
@@ -685,7 +685,7 @@ export function DosetabellSkjema(props: SkjemaProps<{ rader: Doserad[] }>) {
 
 /* --- Panelets kilder ------------------------------------------------------ */
 
-/** Kildene for et helt panel. Lagres på informasjonssiden. */
+/** Kildene for et helt panel. Lagres på stoffsiden. */
 export function PanelkildeSkjema({
   tittel,
   referanser,

@@ -39,7 +39,7 @@ import {
   retningslinjeoppsummering,
 } from '../cpic/stoffside'
 import { indekserKunnskapsbase, lesKunnskapsbase, lesSokeindeks } from '../faginnhold/globaltSok'
-import type { Analyttsidedata } from '../faginnhold/lesing'
+import type { Stoffsidedata } from '../faginnhold/lesing'
 import { sokeadresse, sokGlobalt } from '../faginnhold/sok'
 
 type Rad = Record<string, unknown>
@@ -304,8 +304,8 @@ describe('søket', () => {
     expect(tekster.some((t) => t.detaljkort === CPIC_ANDRE_PAR_KORT && t.tekst.includes('GGCX'))).toBe(true)
   })
 
-  /** En side koblet til amitriptylin i ClinPGx, uten annet innhold. */
-  function amitriptylinside(): Analyttsidedata {
+  /** Stoffsiden for amitriptylin, koblet til amitriptylin i ClinPGx, uten annet innhold. */
+  function amitriptylinside(): Stoffsidedata {
     const utgave = <T,>(id: string, innhold: T) => ({
       id,
       revisjon: 1,
@@ -316,7 +316,7 @@ describe('søket', () => {
       endret_kl: '',
     })
     return {
-      analytt: utgave('analytt-AMI', { kode: 'AMI', hovedside: 'side-ami', komponenter: ['side-ami'] }),
+      stoff: { id: 'side-ami', slug: 'amitriptylin', navn: 'Amitriptylin' },
       infoside: utgave('side-ami', { navn: 'Amitriptylin' }),
       elementer: [
         utgave('pgx', {
@@ -327,22 +327,18 @@ describe('søket', () => {
           data: { kjemikalier: [{ clinpgx_id: AMITRIPTYLIN, navn: 'amitriptyline' }] },
         }),
       ],
-      komponenter: [],
       referanser: [],
-      regelsett: null,
-      thcregelsett: null,
-      scenarioregelsett: null,
     }
   }
 
   it('finner anbefalingene i hele kunnskapsbasen, og peker på seksjonen og kortet', async () => {
     const les = vi.fn(async (ider: readonly string[]) => cpicFor(HELE, ider))
     const cpic: Cpicleser = { les, diplotyper: async () => lesDiplotypegrunnlag(null), hent: async () => ({ status: 'uendret' }) }
-    const sideleser = { lesAnalyttsider: async () => [amitriptylinside()], lesStoffsider: async () => [] }
+    const sideleser = { lesStoffsider: async () => [amitriptylinside()] }
     const indeks = await lesSokeindeks(sideleser, null, { cpic })
     expect(les).toHaveBeenCalledWith([AMITRIPTYLIN])
     const [treff] = sokGlobalt(indeks, 'CYP2D6 poor metabolizer')
-    expect(sokeadresse(treff!.dokument.sted)).toBe(`#/analytt/AMI/farmakogenetikk/${cpickort('100414')}`)
+    expect(sokeadresse(treff!.dokument.sted)).toBe(`#/stoff/amitriptylin/farmakogenetikk/${cpickort('100414')}`)
   })
 
   it('indekserer faginnholdet også når CPIC-dataene ikke kan leses', async () => {
@@ -353,7 +349,7 @@ describe('søket', () => {
       diplotyper: async () => lesDiplotypegrunnlag(null),
       hent: async () => ({ status: 'feilet' }),
     }
-    const sideleser = { lesAnalyttsider: async () => [amitriptylinside()], lesStoffsider: async () => [] }
+    const sideleser = { lesStoffsider: async () => [amitriptylinside()] }
     const base = await lesKunnskapsbase(sideleser, null, 'publisert', null, nede)
     expect(base.cpicfeil).toBe('CPIC-kopien svarer ikke')
     expect(indekserKunnskapsbase(base).some((d) => d.tekst.includes('Metabolizer'))).toBe(false)

@@ -2,7 +2,7 @@ import { createContext, useContext, type ReactNode } from 'react'
 import { treffIntervaller } from '../faginnhold/sok'
 
 /**
- * Fremhevingen av søketreff på informasjonssiden.
+ * Fremhevingen av søketreff på stoffsiden.
  *
  * Ordene det søkes etter, deles med all tekst på siden gjennom denne
  * konteksten. Hver tekst som vises, går gjennom {@link Uthev}, som setter

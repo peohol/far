@@ -6,7 +6,7 @@ import type { Cpicleser } from '../../cpic/lesing'
 import type { Legemiddelleser } from '../../legemiddeldata/lesing'
 
 /**
- * Hvor informasjonssidene henter og lagrer faginnholdet, og om den innloggede
+ * Hvor stoffsidene henter og lagrer faginnholdet, og om den innloggede
  * får redigere.
  *
  * Appen setter den opp én gang med Supabase-klienten og rollen i profilen;

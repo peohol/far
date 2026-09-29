@@ -1,36 +1,38 @@
+import { FORTOLKNINGSSEKSJON, fortolkningsseksjonFor } from './koblinger'
+import { STOFFREGISTER, stoffslug, type Stoffregister } from './stoffregister'
+
 /**
  * Adressene i appen.
  *
  * Fortolkningen har ingen egen adresse: den er arbeidsflyten appen åpner i,
- * og tilstanden i den lever i appen, ikke i adressefeltet. Informasjonssidene
- * har derimot hver sin, slik at de kan bokmerkes, deles og åpnes direkte:
+ * og tilstanden i den lever i appen, ikke i adressefeltet. Fagsidene har
+ * derimot hver sin, slik at de kan bokmerkes, deles og åpnes direkte.
  *
- *   #/analytt/AMTNORSUM
+ * En fagside er alltid en stoffside, og adressen er stoffets stabile nøkkel i
+ * stoffregisteret (`src/domain/stoffregister.ts`) — aldri en analyttkode:
+ *
+ *   #/stoff/bupropion
  *
  * Adressen står etter `#`. Da er det nettleseren alene som leser den: siden
  * som lastes, er den samme uansett adresse, innloggingsveggen på kanten ser
  * den aldri, og ingenting på serveren må vite at sidene finnes. En side åpnet
  * fra et bokmerke før innlogging, står der fortsatt etterpå.
  *
- * Nøkkelen er analyttkoden laboratoriet rapporterer. Den er stabil og kjent
- * for brukerne, og det er koden fortolkningsmodulene viser — også når flere
- * koder deler en informasjonsside eller en fortolkningsmodul.
+ * Etter nøkkelen kan adressen peke på et sted på siden: en seksjon, og
+ * eventuelt et detaljkort i den. Siden åpner da stedet og ruller dit:
  *
- * Etter koden kan adressen peke på et sted på siden: en seksjon, og eventuelt
- * et detaljkort i den. Siden åpner da stedet og ruller dit:
- *
- *   #/analytt/AMTNORSUM/farmakokinetikk
- *   #/analytt/AMTNORSUM/farmakokinetikk/<kort-ID>
+ *   #/stoff/bupropion/farmakokinetikk
+ *   #/stoff/bupropion/farmakokinetikk/<kort-ID>
  *
  * Seksjonene og kortene har faste nøkler (se `src/components/seksjoner/`).
  *
- * Et stoff som ikke har noen analyttkode, kan likevel ha en informasjonsside
- * (en monografi). Den har adresse etter navnet, med sted som over:
+ * Eldre adresser leses fortsatt, men bare for å sende videre til den
+ * kanoniske ({@link kanoniskAdresse}):
  *
- *   #/stoff/Valproat
- *   #/stoff/Valproat/tdm
- *
- * Får stoffet en kode senere, fører navnet til siden for koden.
+ * - `#/stoff/Valproat`, etter navnet eller et alias, går til stoffets nøkkel.
+ * - `#/analytt/HBUP` går til stoffsiden analytten primært er koblet til,
+ *   `#/stoff/bupropion`. En analytt uten et slikt stoff har ingen fagside, og
+ *   adressen åpner fortolkningen.
  *
  * Søket i fagstoffet har sin egen side, med søket i adressen, så et søk kan
  * bokmerkes og deles:
@@ -41,15 +43,10 @@
 export type Rute =
   | { side: 'fortolkning' }
   | {
-      side: 'analytt'
-      kode: string
-      /** Seksjonen og eventuelt detaljkortet adressen peker på. Utelatt når den peker på siden. */
-      sted?: readonly string[]
-    }
-  | {
       side: 'stoff'
-      /** Navnet på informasjonssiden, slik adressen skriver det. */
-      navn: string
+      /** Stoffets nøkkel i stoffregisteret, f.eks. «bupropion». */
+      stoff: string
+      /** Seksjonen og eventuelt detaljkortet adressen peker på. Utelatt når den peker på siden. */
       sted?: readonly string[]
     }
   | {
@@ -60,30 +57,67 @@ export type Rute =
 
 export const FORTOLKNING: Rute = { side: 'fortolkning' }
 
-const ANALYTT = /^#\/analytt\/([^/?#]+)((?:\/[^/?#]+)*)\/?$/i
-
 const STOFF = /^#\/stoff\/([^/?#]+)((?:\/[^/?#]+)*)\/?$/i
+
+/** Adressene fra før fagsidene fikk stoffets nøkkel. Leses bare for å sende videre. */
+const GAMMEL_ANALYTT = /^#\/analytt\/([^/?#]+)((?:\/[^/?#]+)*)\/?$/i
 
 const SOK = /^#\/sok\/?(?:\?(.*))?$/i
 
 /** Flest ledd i stedet: seksjonen og detaljkortet. */
 const MAKS_STEDSLEDD = 2
 
-/** Ruten adressen peker på. Alt som ikke er en informasjonsside eller søket, er fortolkningen. */
-export function lesRute(hash: string): Rute {
+/**
+ * Ruten adressen peker på. Alt som ikke er en fagside eller søket, er
+ * fortolkningen. Et navn, et alias eller en gammel analyttadresse gir ruten til
+ * stoffet de fører til; {@link kanoniskAdresse} sier om adressefeltet bør
+ * skrives om.
+ */
+export function lesRute(hash: string, register: Stoffregister = STOFFREGISTER): Rute {
   const sok = SOK.exec(hash)
   if (sok) return { side: 'sok', q: new URLSearchParams(sok[1] ?? '').get('q') ?? '' }
-  const analytt = lesSide(ANALYTT, hash)
-  if (analytt) {
-    const kode = analytt.nokkel.toUpperCase()
-    return { side: 'analytt', kode, ...(analytt.sted && { sted: analytt.sted }) }
-  }
   const stoff = lesSide(STOFF, hash)
-  if (stoff) return { side: 'stoff', navn: stoff.nokkel, ...(stoff.sted && { sted: stoff.sted }) }
+  if (stoff) {
+    // Et kjent navn eller alias fører til stoffets nøkkel; en nøkkel
+    // registeret ikke har (en ny side i databasen), står som den er.
+    const slug = register.kanonisk(stoff.nokkel)?.slug ?? stoffslug(stoff.nokkel)
+    return slug ? stoffrute(slug, stoff.sted) : FORTOLKNING
+  }
+  const analytt = lesSide(GAMMEL_ANALYTT, hash)
+  if (analytt) {
+    const tilStoff = register.primartStoffFor(analytt.nokkel)
+    if (!tilStoff) return FORTOLKNING
+    // Seksjonen med fortolkningsreglene het «fortolkning» på den gamle
+    // siden for koden; på stoffsiden står reglene for koden i sin seksjon.
+    const [forste, ...resten] = analytt.sted ?? []
+    const sted =
+      forste === FORTOLKNINGSSEKSJON
+        ? [fortolkningsseksjonFor(analytt.nokkel, register) ?? FORTOLKNINGSSEKSJON, ...resten]
+        : analytt.sted
+    return stoffrute(tilStoff.slug, sted)
+  }
   return FORTOLKNING
 }
 
-/** Nøkkelen (koden eller navnet) og stedet i en adresse til en informasjonsside. */
+function stoffrute(stoff: string, sted?: readonly string[]): Rute {
+  return sted && sted.length > 0 ? { side: 'stoff', stoff, sted } : { side: 'stoff', stoff }
+}
+
+/**
+ * Den kanoniske adressen når `hash` er en adresse til en fagside skrevet på en
+ * annen måte — et navn, et alias eller en gammel analyttadresse — ellers
+ * `null`. Appen skriver adressefeltet om til den uten å legge noe nytt i
+ * historikken, så den gamle adressen ikke blir stående.
+ */
+export function kanoniskAdresse(hash: string, register: Stoffregister = STOFFREGISTER): string | null {
+  if (!STOFF.test(hash) && !GAMMEL_ANALYTT.test(hash)) return null
+  const rute = lesRute(hash, register)
+  if (rute.side !== 'stoff') return null
+  const kanonisk = adresse(rute)
+  return kanonisk === hash || kanonisk === hash.replace(/\/$/, '') ? null : kanonisk
+}
+
+/** Nøkkelen og stedet i en adresse til en fagside. */
 function lesSide(monster: RegExp, hash: string): { nokkel: string; sted?: string[] } | undefined {
   const treff = monster.exec(hash)
   if (!treff?.[1]) return undefined
@@ -99,8 +133,8 @@ function lesSide(monster: RegExp, hash: string): { nokkel: string; sted?: string
 }
 
 /**
- * Stedsleddene etter koden. Et sted med flere ledd enn siden har nivåer, eller
- * som ikke lar seg lese, gir siden uten sted — ikke en annen side.
+ * Stedsleddene etter nøkkelen. Et sted med flere ledd enn siden har nivåer,
+ * eller som ikke lar seg lese, gir siden uten sted — ikke en annen side.
  */
 function lesSted(hale: string): string[] | undefined {
   const ledd = hale.split('/').filter(Boolean)
@@ -115,10 +149,8 @@ function lesSted(hale: string): string[] | undefined {
 /** Adressen til en rute, slik den står i adressefeltet. */
 export function adresse(rute: Rute): string {
   switch (rute.side) {
-    case 'analytt':
-      return analyttadresse(rute.kode, rute.sted)
     case 'stoff':
-      return stoffadresse(rute.navn, rute.sted)
+      return stoffadresse(rute.stoff, rute.sted)
     case 'sok':
       return sokeside(rute.q)
     default:
@@ -131,26 +163,9 @@ export function sokeside(q: string): string {
   return q ? `#/sok?${new URLSearchParams({ q })}` : '#/sok'
 }
 
-/** Adressen til informasjonssiden for en analyttkode, eventuelt til et sted på den. */
-export function analyttadresse(kode: string, sted: readonly string[] = []): string {
-  return sideadresse('#/analytt', kode.toUpperCase(), sted)
-}
-
-/** Adressen til informasjonssiden for et stoff uten analyttkode, etter navnet. */
-export function stoffadresse(navn: string, sted: readonly string[] = []): string {
-  return sideadresse('#/stoff', navn.trim(), sted)
-}
-
-/**
- * Adressen til en informasjonsside: siden for koden når den har en, ellers
- * siden for stoffet etter navnet.
- */
-export function informasjonsadresse(side: { kode?: string; navn: string }, sted: readonly string[] = []): string {
-  return side.kode ? analyttadresse(side.kode, sted) : stoffadresse(side.navn, sted)
-}
-
-function sideadresse(rot: string, nokkel: string, sted: readonly string[]): string {
-  return [rot, ...[nokkel, ...sted].map(encodeURIComponent)].join('/')
+/** Adressen til fagsiden for et stoff, etter nøkkelen, eventuelt til et sted på den. */
+export function stoffadresse(slug: string, sted: readonly string[] = []): string {
+  return ['#/stoff', ...[slug, ...sted].map(encodeURIComponent)].join('/')
 }
 
 export function sammeRute(a: Rute, b: Rute): boolean {

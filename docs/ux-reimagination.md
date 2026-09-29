@@ -25,7 +25,7 @@ Repoet har allerede flere gode byggesteiner:
 
 - src/styles/tokens.css har skalaer for typografi, mellomrom, radius, farger og bevegelse. Disse skal utvikles videre til semantiske designtokens, ikke erstattes av tilfeldige nye verdier.
 - src/components/Toolbar.tsx og src/components/Sidemeny.tsx utgjør i praksis dagens globale toppkontroller, men ligger separat til høyre og venstre.
-- src/components/analyttside/Analyttside.tsx legger i tillegg inn en egen StepBar og Sidesok, som er årsaken til kollisjoner på smale flater.
+- src/components/stoffside/Stoffside.tsx legger i tillegg inn en egen StepBar og Sidesok, som er årsaken til kollisjoner på smale flater.
 - src/components/seksjoner/ har allerede animert, nestet progressiv detaljering, støtte for direktelenker, nettlesersøk via beforematch og prefers-reduced-motion.
 - src/faginnhold/sok.ts har allerede den felles søkemodellen som var tenkt brukt både lokalt og globalt: indekserSide, feltvekter, rangering, utdrag og sted på siden.
 - src/faginnhold/referanser.ts har allerede nummerering etter første forekomst, og Referansepille viser inline-referanser som superscript.

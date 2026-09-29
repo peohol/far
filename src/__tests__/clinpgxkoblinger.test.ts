@@ -25,6 +25,8 @@ import { AMFETAMIN_FESTKOBLINGER, FESTKOBLINGSIMPORTER } from '../faginnhold/fes
 import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import { ELEMENTTYPER, lesClinpgxkobling } from '../faginnhold/paneler'
 import { PREPARATPANEL } from '../legemiddeldata/stoffside'
+import { stoffslug } from '../domain/stoffregister'
+import { lesSideEtterNavn } from './hjelp/historisklesing'
 import {
   faginnholdskall,
   kjorMigrasjoner,
@@ -199,6 +201,7 @@ describe('migrasjonen i databasen', () => {
   let kall: Faginnholdskall
   let leser: Faginnholdsleser
   let redaktor: Faginnholdsleser
+  let admin: string
   let revisjoner: number
 
   /** Har ingen FEST-kobling når ClinPGx-koblingen kjøres. */
@@ -217,8 +220,12 @@ describe('migrasjonen i databasen', () => {
         [navn],
       )
     ).rows[0]?.id
+  /**
+   * ClinPGx-koblingene på siden med dette navnet, etter migrasjonene, lest som
+   * appen gjør: etter nøkkelen navnet gir.
+   */
   const koblingen = async (side: string) => {
-    const s = await leser.lesStoffside(side, 'publisert')
+    const s = await leser.lesStoffside(stoffslug(side), 'publisert')
     return s.elementer.filter((e) => e.innhold.elementtype === ELEMENTTYPER.clinpgxkobling)
   }
   /** Sidene i databasen som har en publisert FEST-kobling. */
@@ -228,7 +235,7 @@ describe('migrasjonen i databasen', () => {
 
   beforeAll(async () => {
     db = await nyDatabase({ til: FORSTE_SIDE })
-    const admin = await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
+    admin = await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
     const bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lars', etternavn: 'Leser', rolle: 'user' })
     kall = faginnholdskall(db, admin)
     const synk = (
@@ -278,9 +285,9 @@ describe('migrasjonen i databasen', () => {
       elementtype: ELEMENTTYPER.clinpgxkobling,
       data: REDIGERT_DATA,
     })
-    // Deksamfetamin er ikke lenger på amfetaminsidens FEST-kobling.
-    redaktor = lagFaginnholdsleser(kall.klientFor(admin))
-    const [amfetamin] = (await redaktor.lesStoffside(DELVIS, 'utkast')).elementer.filter(
+    // Deksamfetamin er ikke lenger på amfetaminsidens FEST-kobling. Sidene har
+    // ingen nøkkel ennå, så siden leses etter navnet, som appen gjorde da.
+    const [amfetamin] = (await lesSideEtterNavn(kall, admin, DELVIS, 'utkast')).elementer.filter(
       (e) => e.innhold.elementtype === ELEMENTTYPER.legemiddelkobling,
     )
     const lagret = await kall.lagre(amfetamin!.id, amfetamin!.revisjon, {
@@ -303,6 +310,7 @@ describe('migrasjonen i databasen', () => {
 
     await kjorMigrasjoner(db, { fra: KOBLINGER[0] })
     leser = lagFaginnholdsleser(kall.klientFor(bruker))
+    redaktor = lagFaginnholdsleser(kall.klientFor(admin))
     revisjoner = await antall('select count(*)::int as n from public.objektrevisjoner')
   }, 240_000)
 
@@ -346,7 +354,8 @@ describe('migrasjonen i databasen', () => {
 
   it('rører ikke en kobling redaksjonen alt har laget', async () => {
     expect(await koblingen(REDIGERT)).toEqual([])
-    const utkast = await redaktor.lesStoffside(REDIGERT, 'utkast')
+    const utkast = await redaktor.lesStoffside(stoffslug(REDIGERT), 'utkast')
+    expect(utkast.stoff?.navn).toBe(REDIGERT)
     const kobling = utkast.elementer.filter((e) => e.innhold.elementtype === ELEMENTTYPER.clinpgxkobling)
     expect(kobling.map((e) => e.innhold.data)).toEqual([REDIGERT_DATA])
   })

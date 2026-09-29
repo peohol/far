@@ -1,27 +1,30 @@
 // @vitest-environment jsdom
 /**
- * Fortolkningsreglene og simulatoren på analyttsiden, prøvd i en nettleser i
- * minnet. Reglene er de publiserte rusmiddelreglene (grunnlaget de ble
+ * Fortolkningsreglene og simulatoren på stoffsiden, prøvd i en nettleser i
+ * minnet. Reglene står på siden til stoffet analyttene i modulen primært er
+ * koblet til i stoffregisteret, lest etter modulen og ikke gjennom siden. Reglene er de publiserte rusmiddelreglene (grunnlaget de ble
  * importert fra); at de gir det samme som den opprinnelige fortolkningen,
  * prøves i `rusparitet.test.ts`.
  */
 import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
-import { Analyttside } from '../components/analyttside/Analyttside'
-import { FaginnholdskildeProvider } from '../components/analyttside/Faginnholdskilde'
+import { Stoffside } from '../components/stoffside/Stoffside'
+import { FaginnholdskildeProvider } from '../components/stoffside/Faginnholdskilde'
 import { Scenarioregler } from '../components/regler/Scenarioregler'
 import { ScenarioreglerProvider, type Scenarioreglerkilde } from '../components/regler/Scenarioreglerkilde'
 import { TipsLag } from '../components/Tips'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from '../domain/analyttkatalog'
 import { Samtidighetskonflikt, type Faginnholdslager } from '../faginnhold/lagring'
 import { rusModulFor } from '../domain/rus'
-import { TOM_SIDE, type Faginnholdsleser, type Scenarioregelsettutgave, type Utgave } from '../faginnhold/lesing'
+import { STOFFREGISTER } from '../domain/stoffregister'
+import type { Faginnholdsleser, Scenarioregelsettutgave, Utgave } from '../faginnhold/lesing'
 import type { Objektstatus, Tilstand } from '../faginnhold/modell'
 import type { Scenarioregelsett } from '../domain/scenario'
 import { tilScenarioregler } from '../faginnhold/scenarioregler'
 import { RUS_GRUNNLAG, RUS_KOMMENTARER, rusRegelsett, rusScenarioregeldata } from './hjelp/rusgrunnlag'
 import { scenariokommentarer } from '../regler/scenarioredigering'
+import { falskLeser } from './hjelp/falskleser'
 
 beforeAll(() => {
   globalThis.ResizeObserver ??= class {
@@ -57,29 +60,22 @@ const HENTET: Scenarioreglerkilde = {
   provIgjen: () => {},
 }
 
-function visSide(kode: string, { kilde = HENTET, sted }: { kilde?: Scenarioreglerkilde; sted?: readonly string[] } = {}) {
-  const leser: Faginnholdsleser = {
-    lesAnalyttside: vi.fn(async () => TOM_SIDE),
-    lesStoffside: vi.fn(async () => TOM_SIDE),
-    lesStoffsidenavn: vi.fn(async () => []),
-    lesReferanser: vi.fn(async () => []),
-    finnInfosider: vi.fn(async () => []),
-    finnIntervallregelsett: vi.fn(async () => null),
-    finnScenarioregelsett: vi.fn(async () => null),
-    lesIntervallregelsett: vi.fn(async () => []),
-    lesThcRegelsett: vi.fn(async () => null),
-    lesKommentarer: vi.fn(async () => []),
-    lesReferanseomrader: vi.fn(async () => new Map()),
-    lesHistorikk: vi.fn(async () => {
-      throw new Error('ikke i bruk')
-    }),
-  }
+/** Stoffsiden for stoffet med nøkkelen, uten noe i databasen. */
+function visSide(stoff: string, { kilde = HENTET, sted }: { kilde?: Scenarioreglerkilde; sted?: readonly string[] } = {}) {
+  const leser = falskLeser()
   const lager = {} as Faginnholdslager
   render(
     <TipsLag>
       <FaginnholdskildeProvider kilde={{ leser, lager, kanRedigere: false }}>
         <ScenarioreglerProvider kilde={kilde}>
-          <Analyttside kode={kode} sted={sted} katalog={katalog} onApneFortolkning={vi.fn()} onLukk={vi.fn()} />
+          <Stoffside
+            stoff={stoff}
+            sted={sted}
+            register={STOFFREGISTER}
+            katalog={katalog}
+            onApneFortolkning={vi.fn()}
+            onLukk={vi.fn()}
+          />
         </ScenarioreglerProvider>
       </FaginnholdskildeProvider>
     </TipsLag>,
@@ -96,31 +92,36 @@ async function visSimulator(user: ReturnType<typeof userEvent.setup>, kode: stri
 const truffet = () => document.querySelector('.scenario[aria-current="true"]')
 const status = () => screen.getByRole('status').textContent
 
-describe('på analyttsiden', () => {
-  it('står reglene på sidene til hver analytt i modulen, og ikke på andre sider', async () => {
-    visSide('OXA')
+describe('på stoffsiden', () => {
+  it('står reglene på sidene til stoffene analyttene i modulen er koblet til, og ikke på andre sider', async () => {
+    visSide('oksazepam')
     expect(await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeTruthy()
     cleanup()
-    visSide('NOR')
+    visSide('diazepam')
+    expect(await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeTruthy()
+    cleanup()
+    visSide('nortriptylin')
     await screen.findByText('Denne siden har ikke fått faginnhold ennå.')
     expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeNull()
   })
 
   it('sier hvilke andre sider som deler reglene og kommentartekstene, med lenker dit', async () => {
     const user = userEvent.setup()
-    visSide('OXA')
+    visSide('oksazepam')
     await user.click(await screen.findByRole('button', { name: 'Fortolkningsregler' }))
     const merknad = screen.getByText(/Reglene og kommentartekstene er felles med/).closest('p')!
     expect(merknad.textContent).toBe('Reglene og kommentartekstene er felles med Diazepam.')
-    expect(within(merknad).getByRole('link').getAttribute('href')).toBe('#/analytt/DIAZ')
+    // Lenken går til stoffsiden etter stoffets nøkkel, aldri til en analyttkode.
+    expect(within(merknad).getByRole('link').getAttribute('href')).toBe('#/stoff/diazepam')
     cleanup()
-    // Metabolitten står på diazepamsiden og er ikke en annen side.
-    visSide('DMI')
+    // DIAZ og metabolitten DMI er begge koblet til diazepam, og står på den ene siden.
+    visSide('diazepam')
     expect((await screen.findByRole('heading', { level: 1 })).textContent).toBe('Diazepam')
     await user.click(await screen.findByRole('button', { name: 'Fortolkningsregler' }))
     const fraDiazepam = screen.getByText(/Reglene og kommentartekstene er felles med/).closest('p')!
-    expect(within(fraDiazepam).getAllByRole('link').map((a) => a.getAttribute('href'))).toEqual(['#/analytt/OXA'])
-    // DMI og DIAZ er nå samme fagsside, ikke to sider som viser til hverandre.
+    expect(fraDiazepam.textContent).toBe('Reglene og kommentartekstene er felles med Oksazepam.')
+    expect(within(fraDiazepam).getAllByRole('link').map((a) => a.getAttribute('href'))).toEqual(['#/stoff/oksazepam'])
+    // Diazepam deler ikke reglene med seg selv, selv om to av kodene står her.
     expect(screen.queryByText(/Siden gjelder også/)).toBeNull()
     expect(screen.getByRole('button', { name: 'DIAZ – åpne fortolkningen' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'DMI – åpne fortolkningen' })).toBeTruthy()
@@ -128,7 +129,7 @@ describe('på analyttsiden', () => {
 
   it('viser ingen regler før de er hentet, eller når de ikke kunne hentes', async () => {
     for (const tilstand of [{ status: 'laster' }, { status: 'feil', melding: 'Nede.' }] as const) {
-      visSide('OXA', { kilde: { tilstand, provIgjen: () => {} } })
+      visSide('oksazepam', { kilde: { tilstand, provIgjen: () => {} } })
       await screen.findByRole('heading', { level: 1 })
       expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeNull()
       cleanup()
@@ -153,7 +154,7 @@ describe('på analyttsiden', () => {
   })
 
   it('åpner simulatoren fra en direktelenke', async () => {
-    visSide('OXA', { sted: ['fortolkning', 'simulator'] })
+    visSide('oksazepam', { sted: ['fortolkning', 'simulator'] })
     const simulator = await screen.findByRole('button', { name: 'Prøv reglene' })
     expect(simulator.getAttribute('aria-expanded')).toBe('true')
     expect(screen.getByRole('button', { name: 'Fortolkningsregler' }).getAttribute('aria-expanded')).toBe('true')
@@ -302,20 +303,10 @@ describe('redigeringen', () => {
 
   async function visRedigering() {
     const user = userEvent.setup()
-    const leser: Faginnholdsleser = {
-      lesAnalyttside: vi.fn(async () => TOM_SIDE),
-      lesStoffside: vi.fn(async () => TOM_SIDE),
-      lesStoffsidenavn: vi.fn(async () => []),
-      lesReferanser: vi.fn(async () => []),
-      finnInfosider: vi.fn(async () => []),
-      finnIntervallregelsett: vi.fn(async () => null),
+    const leser: Faginnholdsleser = falskLeser({
       finnScenarioregelsett: vi.fn(async (_modul: string, tilstand: Tilstand) => scenarioutgave(tilstand)),
-      lesIntervallregelsett: vi.fn(async () => []),
-      lesThcRegelsett: vi.fn(async () => null),
-      lesKommentarer: vi.fn(async () => []),
-      lesReferanseomrader: vi.fn(async () => new Map()),
       lesHistorikk: vi.fn(async () => ({ hendelser: [], revisjoner: [] })),
-    }
+    })
     const lager = {
       lagreScenarioregelsett: vi.fn(async (id: string) => status(id)),
       publiserUtkast: vi.fn(async (id: string) => status(id)),
@@ -325,7 +316,13 @@ describe('redigeringen', () => {
       <TipsLag>
         <FaginnholdskildeProvider kilde={{ leser, lager, kanRedigere: true }}>
           <ScenarioreglerProvider kilde={kilde}>
-            <Analyttside kode="OXA" katalog={katalog} onApneFortolkning={vi.fn()} onLukk={vi.fn()} />
+            <Stoffside
+              stoff="oksazepam"
+              register={STOFFREGISTER}
+              katalog={katalog}
+              onApneFortolkning={vi.fn()}
+              onLukk={vi.fn()}
+            />
           </ScenarioreglerProvider>
         </FaginnholdskildeProvider>
       </TipsLag>,
@@ -349,7 +346,7 @@ describe('redigeringen', () => {
     expect(within(seksjon).getByRole('button', { name: /^Sist redigert av Rita Redaktør/ })).toBeTruthy()
     expect(within(seksjon).getByRole('button', { name: 'Historikken for hver kommentar' })).toBeTruthy()
     cleanup()
-    visSide('OXA')
+    visSide('oksazepam')
     await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler' })
     expect(screen.queryByRole('button', { name: 'Rediger reglene' })).toBeNull()
   })

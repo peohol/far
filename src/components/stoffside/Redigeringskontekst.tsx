@@ -4,7 +4,7 @@ import type { Referanseinnhold } from '../../faginnhold/modell'
 import type { Referanse } from '../../faginnhold/referanser'
 
 /**
- * Det redigeringen på en informasjonsside deler: om siden står i redigering,
+ * Det redigeringen på en stoffside deler: om siden står i redigering,
  * referansebasen det kan velges kilder fra, veien til å legge inn en ny
  * referanse, og gjenopprettingen av en tidligere revisjon fra historikken.
  *

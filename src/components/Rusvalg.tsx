@@ -22,7 +22,7 @@ export interface RusvalgProps {
 /**
  * Spørsmålene rusmiddelmodulen stiller: hvilke analytter som er påvist, og
  * konsentrasjonene regelen trenger for å avgjøre. Felles for
- * fortolkningsmodulen og simulatoren på analyttsiden, så de spør likt.
+ * fortolkningsmodulen og simulatoren på stoffsiden, så de spør likt.
  */
 export function Rusvalg({
   analytter,

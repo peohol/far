@@ -1,5 +1,5 @@
 /**
- * Rikteksten på informasjonssidene: formen den lagres på, og det som kan
+ * Rikteksten på stoffsidene: formen den lagres på, og det som kan
  * leses ut av den.
  *
  * Teksten lagres som et ProseMirror-dokument i JSON — samme form som editoren

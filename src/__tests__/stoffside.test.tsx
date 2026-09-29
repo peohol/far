@@ -1,29 +1,40 @@
 // @vitest-environment jsdom
 /**
- * Informasjonssiden, prøvd i en nettleser i minnet: lesemodus, søket på
- * siden, referansene, redigeringen, publiseringen og tilgjengeligheten.
+ * Stoffsiden, prøvd i en nettleser i minnet: lesemodus, søket på siden,
+ * referansene, redigeringen, publiseringen og tilgjengeligheten.
+ *
+ * Siden er identifisert av stoffets nøkkel (`<Stoffside stoff="bupropion">`),
+ * aldri av en analyttkode. Laboratorieanalyttene står som sekundær
+ * informasjon etter koblingene i stoffregisteret, og fortolkningsreglene leses
+ * for seg etter analyttkoden og modulen.
  *
  * Databasen er erstattet av en enkel leser og et lager som husker kallene;
- * at databasen selv gjør det den skal, prøves i `analyttsidelesing.test.ts`.
+ * at databasen selv gjør det den skal, prøves i `stoffsidelesing.test.ts`.
  * Innholdet er syntetisk. Tallene og tekstene er ikke kliniske verdier.
  */
+import type { ReactNode } from 'react'
 import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
-import { Analyttside } from '../components/analyttside/Analyttside'
-import { FaginnholdskildeProvider } from '../components/analyttside/Faginnholdskilde'
+import { Stoffside } from '../components/stoffside/Stoffside'
+import { FaginnholdskildeProvider } from '../components/stoffside/Faginnholdskilde'
+import { ScenarioreglerProvider, type Scenarioreglerkilde } from '../components/regler/Scenarioreglerkilde'
 import { TipsLag } from '../components/Tips'
-import { FORTOLKNINGSOPPFORINGER, byggKatalog } from '../domain/analyttkatalog'
+import { ANALYTTKATALOG } from '../domain/analyttkatalog'
+import { STOFFREGISTER, byggStoffregister, type Stoffregister } from '../domain/stoffregister'
+import { THC_KODE } from '../domain/thc'
 import { Samtidighetskonflikt, type Faginnholdslager } from '../faginnhold/lagring'
 import {
-  TOM_SIDE,
-  type Analyttsidedata,
+  TOM_STOFFSIDE,
   type Faginnholdsleser,
   type Regelsettutgave,
+  type Stoffsidedata,
   type Utgave,
 } from '../faginnhold/lesing'
 import type { Historikk } from '../faginnhold/historikk'
 import type { Objektstatus, Tilstand } from '../faginnhold/modell'
+import { tilScenarioregler } from '../faginnhold/scenarioregler'
+import type { ThcRegelsettutgave } from '../faginnhold/thcregler'
 import { kommentarnavn, utenKommentarer } from '../regler/kommentarer'
 import type { Intervallregelsett, Intervallregelsettinnhold } from '../regler/modell'
 import { SITERING } from '../faginnhold/referanser'
@@ -39,6 +50,8 @@ import {
 import type { Farmakogenetikkleser, Farmakogenetikkutvalg } from '../clinpgx/lesing'
 import { lesDiplotypegrunnlag, type Cpicleser, type Cpicutvalg, type Diplotypegrunnlag } from '../cpic/lesing'
 import type { Anbefaling, Betingelse, Gen, Par } from '../cpic/modell'
+import { rusScenarioregeldata } from './hjelp/rusgrunnlag'
+import { thcRegelsettutgave } from './hjelp/thcgrunnlag'
 
 beforeAll(() => {
   globalThis.ResizeObserver ??= class {
@@ -63,7 +76,8 @@ beforeAll(() => {
 
 afterEach(cleanup)
 
-const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
+/** Laboratorieanalyttene koblingene i registeret peker på. */
+const katalog = ANALYTTKATALOG
 
 /** Redigeringsvinduet med tittelen: skjemaet, knappene i foten og meldingene. */
 function redigeringsvindu(tittel: string): HTMLElement {
@@ -96,12 +110,12 @@ const REF_B = utgave('bbbbbbbb-0000-4000-8000-000000000002', {
 })
 
 /**
- * Et syntetisk regelsett for AMTNORSUM. Utkastet har en endret kommentar i
- * det øverste intervallet.
+ * Et syntetisk regelsett for analyttkoden, AMTNORSUM om ingen annen er gitt.
+ * Utkastet har en endret kommentar i det øverste intervallet.
  */
-function regelsett(tilstand: Tilstand = 'publisert'): Intervallregelsett {
+function regelsett(tilstand: Tilstand = 'publisert', kode = 'AMTNORSUM'): Intervallregelsett {
   return {
-    analyttkode: 'AMTNORSUM',
+    analyttkode: kode,
     enhet: 'nmol/L',
     desimaler: 0,
     skillepunkter: [10, 1800],
@@ -131,10 +145,10 @@ const HOY_NAVN = 'AMTNORSUM – over referanseområdet, ring rekvirent'
  * publisert i revisjon 2; kommentaren i det øverste intervallet er endret i
  * utkastet og ikke publisert.
  */
-function regelsettutgave(tilstand: Tilstand, revisjon = 2): Regelsettutgave {
-  const r = regelsett(tilstand)
+function regelsettutgave(tilstand: Tilstand, revisjon = 2, kode = 'AMTNORSUM'): Regelsettutgave {
+  const r = regelsett(tilstand, kode)
   return {
-    regelsett: utgave(REGELSETT_ID, utenKommentarer(r), revisjon, 2),
+    regelsett: utgave(kode === 'AMTNORSUM' ? REGELSETT_ID : `regelsett-${kode}`, utenKommentarer(r), revisjon, 2),
     kommentarer: r.kommentarer.map(({ id, tekst }) =>
       utgave(
         id,
@@ -144,6 +158,11 @@ function regelsettutgave(tilstand: Tilstand, revisjon = 2): Regelsettutgave {
       ),
     ),
   }
+}
+
+/** Standard for reglene: bare AMTNORSUM har et intervallregelsett. */
+function amtnorsumregler(kode: string, tilstand: Tilstand): Regelsettutgave | null {
+  return kode === 'AMTNORSUM' ? regelsettutgave(tilstand) : null
 }
 
 const IMPORTERT = { utfort_av_fornavn: 'Ada', utfort_av_etternavn: 'Adminsen', utfort_kl: '2026-09-22T08:00:00Z' }
@@ -182,16 +201,18 @@ const KOMMENTARHISTORIKK: Historikk<unknown> = {
   })),
 }
 
-/** En side for AMTNORSUM med et datakort, en tekst, tre siteringer og et regelsett. */
-function side(tilstand: Tilstand = 'publisert'): Analyttsidedata {
+/** Stoffet siden handler om, slik databasen har det. */
+const AMITRIPTYLIN = { id: 'hs', slug: 'amitriptylin', navn: 'Amitriptylin' }
+
+/**
+ * Stoffsiden for Amitriptylin med et datakort, en tekst og tre siteringer.
+ * Reglene for AMTNORSUM hører ikke til siden; de leses for seg.
+ */
+function side(tilstand: Tilstand = 'publisert'): Stoffsidedata {
   const utk = tilstand === 'utkast'
   return {
-    analytt: utgave('an', { kode: 'AMTNORSUM', hovedside: 'hs', komponenter: ['hs', 'ns'] }),
-    infoside: utgave('hs', { navn: 'Amitriptylin', panelreferanser: { farmakodynamikk: [REF_B.id] } }),
-    komponenter: [
-      { ...utgave('hs', { navn: 'Amitriptylin' }), koder: ['AMTNORSUM'] },
-      { ...utgave('ns', { navn: 'Nortriptylin' }), koder: ['NOR'] },
-    ],
+    stoff: AMITRIPTYLIN,
+    infoside: utgave('hs', { navn: 'Amitriptylin', slug: 'amitriptylin', panelreferanser: { farmakodynamikk: [REF_B.id] } }),
     elementer: [
       utgave(
         'kort',
@@ -229,10 +250,26 @@ function side(tilstand: Tilstand = 'publisert'): Analyttsidedata {
       }),
     ],
     referanser: [REF_A, REF_B],
-    regelsett: regelsettutgave(tilstand),
-    thcregelsett: null,
-    scenarioregelsett: null,
   }
+}
+
+/** En stoffside i databasen med ett syntetisk referanseområde og ingenting annet. */
+function enkelSide(stoff: { id: string; slug: string; navn: string }, data: Record<string, unknown>) {
+  return (): Stoffsidedata => ({
+    stoff,
+    infoside: utgave(stoff.id, { navn: stoff.navn, slug: stoff.slug }),
+    elementer: [
+      utgave(`${stoff.id}-kort`, {
+        infoside: stoff.id,
+        panel: 'viktige_data',
+        posisjon: 0,
+        elementtype: 'referanseomrade',
+        data,
+        referanser: [],
+      }),
+    ],
+    referanser: [],
+  })
 }
 
 function status(id: string, revisjon = 1): Objektstatus {
@@ -358,7 +395,7 @@ const INTERAKSJONER: Interaksjonsutvalg = {
 }
 
 /** En side med koblingen til legemiddeldataene. */
-function medKobling(tilstand: Tilstand): Analyttsidedata {
+function medKobling(tilstand: Tilstand): Stoffsidedata {
   const data = side(tilstand)
   return {
     ...data,
@@ -387,25 +424,37 @@ function legemiddelleser(): Legemiddelleser {
   }
 }
 
-function kilde({
-  data = side,
-  kanRedigere = false,
-}: { data?: (t: Tilstand) => Analyttsidedata; kanRedigere?: boolean } = {}) {
+interface Kildevalg {
+  /** Stoffsiden databasen har, i hver tilstand. Andre nøkler gir {@link TOM_STOFFSIDE}. */
+  data?: (t: Tilstand) => Stoffsidedata
+  /** Intervallregelsettet for en analyttkode, lest for seg etter koden. */
+  regler?: (kode: string, t: Tilstand) => Regelsettutgave | null
+  /** THC-syreregelsettet, lest for seg. */
+  thc?: (t: Tilstand) => ThcRegelsettutgave | null
+  kanRedigere?: boolean
+}
+
+/**
+ * En falsk leser og et lager som husker kallene. Leseren svarer som
+ * `les_stoff`: siden etter stoffets nøkkel, og ingenting for andre nøkler.
+ */
+function kilde({ data = side, regler = amtnorsumregler, thc = () => null, kanRedigere = false }: Kildevalg = {}) {
   let nr = 0
   const leser: Faginnholdsleser = {
-    lesAnalyttside: vi.fn(async (_kode: string, tilstand: Tilstand) => data(tilstand)),
-    lesStoffside: vi.fn(async () => TOM_SIDE),
-    lesStoffsidenavn: vi.fn(async () => []),
+    lesStoffside: vi.fn(async (slug: string, tilstand: Tilstand) => {
+      const s = data(tilstand)
+      return s.stoff === null || s.stoff.slug === slug ? s : TOM_STOFFSIDE
+    }),
+    lesStoffliste: vi.fn(async () => []),
     lesReferanser: vi.fn(async () => [REF_A, REF_B]),
-    finnInfosider: vi.fn(async () => []),
-    finnIntervallregelsett: vi.fn(async (_kode: string, tilstand: Tilstand) => data(tilstand).regelsett),
+    finnIntervallregelsett: vi.fn(async (kode: string, tilstand: Tilstand) => regler(kode, tilstand)),
     finnScenarioregelsett: vi.fn(async () => null),
     lesIntervallregelsett: vi.fn(async (tilstand: Tilstand) => {
-      const regelsett = data(tilstand).regelsett
-      return regelsett ? [regelsett.regelsett] : []
+      const r = regler('AMTNORSUM', tilstand)
+      return r ? [r.regelsett] : []
     }),
-    lesThcRegelsett: vi.fn(async (tilstand: Tilstand) => data(tilstand).thcregelsett),
-    lesKommentarer: vi.fn(async (tilstand: Tilstand) => data(tilstand).regelsett?.kommentarer ?? []),
+    lesThcRegelsett: vi.fn(async (tilstand: Tilstand) => thc(tilstand)),
+    lesKommentarer: vi.fn(async (tilstand: Tilstand) => regler('AMTNORSUM', tilstand)?.kommentarer ?? []),
     lesReferanseomrader: vi.fn(async () => new Map()),
     lesHistorikk: vi.fn(async (id: string) =>
       id === HOY ? KOMMENTARHISTORIKK : REGELHISTORIKK,
@@ -449,90 +498,115 @@ function erVerdi(tekst: string) {
 const finnVerdi = (tekst: string) => screen.findByText(erVerdi(tekst))
 const hentVerdi = (tekst: string) => screen.getByText(erVerdi(tekst))
 
-function vis(kode: string, k = kilde(), sted?: string[]) {
+/** Scenarioreglene appen har hentet, som fortolkningen og stoffsiden viser i lesemodus. */
+const SCENARIOREGLER: Scenarioreglerkilde = {
+  tilstand: { status: 'klar', regler: tilScenarioregler(rusScenarioregeldata()) },
+  provIgjen: () => {},
+}
+
+interface Visningsvalg {
+  sted?: string[]
+  /** Stoffregisteret siden slår opp i; standard er registeret uten databasen. */
+  register?: Stoffregister
+  /** Scenarioreglene appen har hentet. Uten dem vises ingen scenarioregler. */
+  scenarioregler?: Scenarioreglerkilde
+}
+
+/** Stoffsiden for stoffet med nøkkelen, slik appen viser den på `#/stoff/<nøkkel>`. */
+function vis(stoff: string, k = kilde(), { sted, register = STOFFREGISTER, scenarioregler }: Visningsvalg = {}) {
   const onApneFortolkning = vi.fn()
   const onLukk = vi.fn()
+  const medRegler = (barn: ReactNode) =>
+    scenarioregler ? <ScenarioreglerProvider kilde={scenarioregler}>{barn}</ScenarioreglerProvider> : barn
   render(
     <TipsLag>
       <FaginnholdskildeProvider kilde={k}>
-        <Analyttside
-          kode={kode}
-          sted={sted}
-          katalog={katalog}
-          onApneFortolkning={onApneFortolkning}
-          onLukk={onLukk}
-        />
+        {medRegler(
+          <Stoffside
+            stoff={stoff}
+            sted={sted}
+            register={register}
+            katalog={katalog}
+            onApneFortolkning={onApneFortolkning}
+            onLukk={onLukk}
+          />,
+        )}
       </FaginnholdskildeProvider>
     </TipsLag>,
   )
   return { onApneFortolkning, onLukk, ...k }
 }
 
-/** Siden for et stoff uten analyttkode, som `vis` for en kode. */
-function visStoff(stoff: string, k = kilde()) {
-  const onLukk = vi.fn()
-  render(
-    <TipsLag>
-      <FaginnholdskildeProvider kilde={k}>
-        <Analyttside stoff={stoff} katalog={katalog} onApneFortolkning={vi.fn()} onLukk={onLukk} />
-      </FaginnholdskildeProvider>
-    </TipsLag>,
-  )
-  return { onLukk, ...k }
+/** Identitetspanelet: overskriften og det som står rundt den. */
+function identiteten(): HTMLElement {
+  return screen.getByRole('heading', { level: 1 }).closest('section')!
 }
 
-/** En stoffside uten kode, med ett datakort. */
-function stoffside(): Analyttsidedata {
-  return {
-    ...TOM_SIDE,
-    infoside: utgave('stoff', { navn: 'Teststoff' }),
-    elementer: [
-      utgave('stoffkort', {
-        infoside: 'stoff',
-        panel: 'viktige_data',
-        posisjon: 0,
-        elementtype: 'referanseomrade',
-        data: { nedre: 30, ovre: 60, enhet: 'µmol/L' },
-      }),
-    ],
-  }
-}
+describe('stoffet er sidens identitet', () => {
+  it('leser siden etter stoffets nøkkel og reglene for seg etter analyttkoden', async () => {
+    const { leser } = vis('amitriptylin')
+    expect(await finnVerdi('10–20 nmol/L')).toBeTruthy()
+    expect(leser.lesStoffside).toHaveBeenCalledWith('amitriptylin', 'publisert')
+    // Reglene for analytten amitriptylin er primært stoff for, og ingen andre.
+    await waitFor(() => expect(leser.finnIntervallregelsett).toHaveBeenCalledWith('AMTNORSUM', 'publisert'))
+    expect(vi.mocked(leser.finnIntervallregelsett).mock.calls.map(([kode]) => kode)).toEqual(['AMTNORSUM'])
+    const stoffside = document.querySelector('section.stoffside')!
+    expect(stoffside.getAttribute('data-modus')).toBe('lese')
+    expect(stoffside.querySelector('.stoffside__paneler')).not.toBeNull()
+    expect(document.querySelector('[class*="analyttside"]')).toBeNull()
+    expect(document.title).toBe('Amitriptylin – OUSFAR')
+  })
 
-describe('stoffside uten analyttkode', () => {
-  it('viser siden etter navnet, uten kode og uten veien til fortolkningen', async () => {
-    const k = kilde()
-    k.leser.lesStoffside = vi.fn(async () => stoffside())
-    const { leser } = visStoff('Teststoff', k)
+  it('viser et stoff i databasen som registeret ikke kjenner, uten kode og uten veien til fortolkningen', async () => {
+    const teststoff = { id: 'stoff', slug: 'teststoff', navn: 'Teststoff' }
+    const register = byggStoffregister([teststoff])
+    const { leser } = vis('teststoff', kilde({ data: enkelSide(teststoff, { nedre: 30, ovre: 60, enhet: 'µmol/L' }) }), {
+      register,
+    })
     expect(await finnVerdi('30–60 µmol/L')).toBeTruthy()
-    expect(leser.lesStoffside).toHaveBeenCalledWith('Teststoff', 'publisert')
-    expect(leser.lesAnalyttside).not.toHaveBeenCalled()
+    expect(leser.lesStoffside).toHaveBeenCalledWith('teststoff', 'publisert')
     expect(leser.finnIntervallregelsett).not.toHaveBeenCalled()
     expect(screen.getByRole('heading', { level: 1, name: 'Teststoff' })).toBeTruthy()
-    // Kategorien fra stoffregisteret over navnet, og ingen analyse under det.
-    const identitet = screen.getByRole('heading', { level: 1 }).closest('section')!
-    expect(identitet.querySelector('.metalinje')!.textContent).toBe('Andre stoffer')
-    expect(identitet.querySelector('.identitet__analyse')).toBeNull()
+    // Kategorien for stoffene registeret ikke har plassert, og ingen analyse under navnet.
+    expect(identiteten().querySelector('.metalinje')!.textContent).toBe('Andre stoffer')
+    expect(identiteten().querySelector('.identitet__analyse')).toBeNull()
     expect(screen.queryByRole('button', { name: /åpne fortolkning/i })).toBeNull()
+    expect(document.querySelector('.regler')).toBeNull()
     expect(document.title).toBe('Teststoff – OUSFAR')
   })
 
-  it('sier fra til en vanlig bruker når stoffet ikke har noen side', async () => {
-    visStoff('Finnesikke')
-    expect(await screen.findByRole('heading', { name: 'Fant ingen stoffside som heter Finnesikke' })).toBeTruthy()
+  it('sier fra når nøkkelen ikke er et stoff, også når den er en analyttkode', async () => {
+    vis('finnesikke')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Fant ingen stoffside for «finnesikke»' })).toBeTruthy()
+    cleanup()
+    // En analyttkode er ingen stoffnøkkel: HBUP har ingen side av sin egen.
+    const { leser } = vis('HBUP')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Fant ingen stoffside for «HBUP»' })).toBeTruthy()
+    expect(leser.lesStoffside).toHaveBeenCalledWith('HBUP', 'publisert')
+    expect(document.querySelector('section.stoffside')).not.toBeNull()
   })
 
-  it('går til siden for koden når stoffet har en side i katalogen', async () => {
-    window.location.hash = '#/stoff/amitriptylin'
-    const { leser } = visStoff('amitriptylin')
-    expect(await finnVerdi('10–20 nmol/L')).toBeTruthy()
-    expect(leser.lesAnalyttside).toHaveBeenCalledWith('AMTNORSUM', 'publisert')
-    await waitFor(() => expect(window.location.hash).toBe('#/analytt/AMTNORSUM'))
+  it('viser et stoff i registeret som ikke har noen side i databasen: tom monografi og reglene', async () => {
+    const user = userEvent.setup()
+    window.location.hash = '#/stoff/nortriptylin'
+    const { leser } = vis(
+      'nortriptylin',
+      kilde({ data: () => TOM_STOFFSIDE, regler: (kode, t) => (kode === 'NOR' ? regelsettutgave(t, 2, 'NOR') : null) }),
+    )
+    expect(await screen.findByText('Denne siden har ikke fått faginnhold ennå.')).toBeTruthy()
+    expect(document.querySelector('.stoffside__tom')).not.toBeNull()
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Nortriptylin')
+    expect(leser.lesStoffside).toHaveBeenCalledWith('nortriptylin', 'publisert')
+    // Reglene står likevel, og adressen blir stående på stoffet.
+    await user.click(await within(await screen.findByRole('region', { name: 'Fortolkning' })).findByRole('button', { name: 'Fortolkning' }))
+    expect(screen.getByText('Syntetisk lav kommentar.')).toBeTruthy()
+    expect(window.location.hash).toBe('#/stoff/nortriptylin')
     window.location.hash = ''
   })
 
-  it('oppretter bare informasjonssiden, med navnet fra adressen, første gang noe lagres', async () => {
+  it('oppretter infosiden med stoffets navn og nøkkel første gang noe lagres, og ingen laboratorieanalytt', async () => {
     const user = userEvent.setup()
-    const { lager, leser } = visStoff('Nytt stoff', kilde({ kanRedigere: true, data: () => TOM_SIDE }))
+    const { lager } = vis('lamotrigin', kilde({ kanRedigere: true, data: () => TOM_STOFFSIDE }))
     await user.click(await screen.findByRole('button', { name: 'Rediger' }))
     expect(await screen.findByText('Siden opprettes i databasen første gang du lagrer noe på den.')).toBeTruthy()
     await user.click(await screen.findByRole('button', { name: 'Legg til: Referanseområde' }))
@@ -543,31 +617,272 @@ describe('stoffside uten analyttkode', () => {
     await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
 
     await waitFor(() => expect(lager.opprettUtkast).toHaveBeenCalledTimes(2))
-    expect(leser.finnInfosider).toHaveBeenCalledWith(['Nytt stoff'], 'utkast')
     const kall = vi.mocked(lager.opprettUtkast).mock.calls
-    expect(kall[0]).toEqual(['infoside', { navn: 'Nytt stoff' }])
+    expect(kall[0]).toEqual(['infoside', { navn: 'Lamotrigin', slug: 'lamotrigin' }])
     expect(kall[1]![0]).toBe('innholdselement')
     expect(kall[1]![1]).toMatchObject({ infoside: 'ny-1', panel: 'viktige_data', elementtype: 'referanseomrade' })
-    expect(kall.some(([type]) => type === 'laboratorieanalytt')).toBe(false)
+    expect(kall.map(([type]) => type)).toEqual(['infoside', 'innholdselement'])
+  })
+})
+
+describe('Bupropion: metabolitten er sekundær informasjon', () => {
+  const BUPROPION = { id: 'bup', slug: 'bupropion', navn: 'Bupropion' }
+  const hbupregler = (kode: string, t: Tilstand) => (kode === 'HBUP' ? regelsettutgave(t, 2, 'HBUP') : null)
+
+  it('har tittelen Bupropion, aldri Hydroksybupropion, og viser HBUP med merknaden', async () => {
+    const user = userEvent.setup()
+    const { leser, onApneFortolkning } = vis(
+      'bupropion',
+      kilde({ data: enkelSide(BUPROPION, { nedre: 1000, ovre: 2000, enhet: 'nmol/L' }), regler: hbupregler }),
+    )
+    expect(await finnVerdi(`${formaterTall(1000)}–${formaterTall(2000)} nmol/L`)).toBeTruthy()
+    expect(leser.lesStoffside).toHaveBeenCalledWith('bupropion', 'publisert')
+    const overskrift = screen.getByRole('heading', { level: 1 })
+    expect(overskrift.textContent).toBe('Bupropion')
+    expect(screen.queryByRole('heading', { name: /Hydroksybupropion/i })).toBeNull()
+    expect(document.title).toBe('Bupropion – OUSFAR')
+    expect(identiteten().querySelector('.metalinje')!.textContent).toBe('Antidepressiver › NDRI')
+
+    // HBUP står under navnet som koden, med metoden den inngår i.
+    const analyse = identiteten().querySelector('.identitet__analyse') as HTMLElement
+    expect(overskrift.compareDocumentPosition(analyse)).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+    expect(analyse.textContent).toBe(`HBUP·Inngår i${katalog.finn('HBUP')!.analysemetode}`)
+    // Hva analytten er for stoffet, og merknaden koblingen har.
+    const setning = identiteten().querySelector('.identitet__komponenter')!
+    expect(setning.textContent).toBe(
+      'HBUP måler hydroksybupropion (kun aktiv metabolitt), en metabolitt av bupropion. ' +
+        'Analytten er hydroksybupropion. Referanseområdet gjelder behandling med bupropion.',
+    )
+    // Ingen andre stoffer er koblet til HBUP, så det er ingen «Se også».
+    expect(within(setning as HTMLElement).queryByRole('link')).toBeNull()
+
+    // Reglene for HBUP står på siden, lest etter koden.
+    expect(vi.mocked(leser.finnIntervallregelsett).mock.calls.map(([kode]) => kode)).toEqual(['HBUP'])
+    expect(await screen.findByRole('region', { name: 'Fortolkning' })).toBeTruthy()
+    // Koden og «Åpne fortolkning» åpner begge fortolkningen for HBUP.
+    await user.click(within(analyse).getByRole('button', { name: 'HBUP – åpne fortolkningen' }))
+    await user.click(screen.getByRole('button', { name: 'Åpne fortolkning' }))
+    expect(onApneFortolkning.mock.calls).toEqual([[katalog.finn('HBUP')!.fortolkning], [katalog.finn('HBUP')!.fortolkning]])
+  })
+
+  it('har tittelen Bupropion også uten side i databasen', async () => {
+    vis('bupropion', kilde({ data: () => TOM_STOFFSIDE, regler: hbupregler }))
+    expect(await screen.findByText('Denne siden har ikke fått faginnhold ennå.')).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Bupropion')
+    expect(document.title).toBe('Bupropion – OUSFAR')
+  })
+
+  it('gir ikke en gammel side for metabolitten en egen stoffside', () => {
+    // En side som fortsatt heter etter metabolitten, er et alias og ikke et stoff.
+    const register = byggStoffregister([BUPROPION, { id: 'gammel', slug: 'hydroksybupropion', navn: 'Hydroksybupropion' }])
+    expect(register.finn('hydroksybupropion')).toBeUndefined()
+    expect(register.kanonisk('Hydroksybupropion')?.slug).toBe('bupropion')
+    expect(register.primartStoffFor('HBUP')?.navn).toBe('Bupropion')
+  })
+})
+
+describe('Nortriptylin: sumanalysen er bare en sekundær kobling', () => {
+  const norregler = (kode: string, t: Tilstand) =>
+    kode === 'NOR' ? regelsettutgave(t, 2, 'NOR') : kode === 'AMTNORSUM' ? regelsettutgave(t) : null
+
+  it('viser reglene for NOR, og AMTNORSUM bare som kode med «Se også» Amitriptylin', async () => {
+    const user = userEvent.setup()
+    const { leser, onApneFortolkning } = vis('nortriptylin', kilde({ data: () => TOM_STOFFSIDE, regler: norregler }))
+    const seksjon = await screen.findByRole('region', { name: 'Fortolkning' })
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Nortriptylin')
+
+    // Bare reglene for NOR er lest; AMTNORSUM-reglene står på Amitriptylin-siden.
+    expect(vi.mocked(leser.finnIntervallregelsett).mock.calls.map(([kode]) => kode)).toEqual(['NOR'])
+    expect(document.querySelectorAll('.regler')).toHaveLength(1)
+    await user.click(within(seksjon).getByRole('button', { name: 'Fortolkning' }))
+    expect(within(seksjon).getByText('Ringegrense: 1800 nmol/L')).toBeTruthy()
+
+    // Begge kodene står under navnet, NOR først.
+    const analyse = identiteten().querySelector('.identitet__analyse') as HTMLElement
+    expect(analyse.textContent).toBe(`NOR·AMTNORSUM·Inngår i${katalog.finn('NOR')!.analysemetode}`)
+    // Sumanalysen forklares, og lenker til stoffet den primært hører til.
+    const setninger = [...identiteten().querySelectorAll('.identitet__komponenter')]
+    expect(setninger.map((p) => p.textContent)).toEqual([
+      'AMTNORSUM er en sumanalyse og omfatter amitriptylin og nortriptylin. Se også Amitriptylin.',
+    ])
+    const lenke = within(setninger[0] as HTMLElement).getByRole('link', {
+      name: 'Amitriptylin: åpne stoffsiden, som også er koblet til AMTNORSUM',
+    })
+    expect(lenke.getAttribute('href')).toBe('#/stoff/amitriptylin')
+
+    // «Åpne fortolkning» åpner NOR; AMTNORSUM åpnes bare fra koden sin.
+    await user.click(screen.getByRole('button', { name: 'Åpne fortolkning' }))
+    expect(onApneFortolkning).toHaveBeenLastCalledWith(katalog.finn('NOR')!.fortolkning)
+    await user.click(within(analyse).getByRole('button', { name: 'AMTNORSUM – åpne fortolkningen' }))
+    expect(onApneFortolkning).toHaveBeenLastCalledWith(katalog.finn('AMTNORSUM')!.fortolkning)
+  })
+
+  it('viser datakortene uten merking, siden NOR er den eneste primære analytten', async () => {
+    const NORTRIPTYLIN = { id: 'nor', slug: 'nortriptylin', navn: 'Nortriptylin' }
+    vis('nortriptylin', kilde({ data: enkelSide(NORTRIPTYLIN, { nedre: 200, ovre: 600, enhet: 'nmol/L' }), regler: norregler }))
+    await finnVerdi('200–600 nmol/L')
+    const konsentrasjoner = within(screen.getByRole('region', { name: 'Viktige data' })).getByRole('group', {
+      name: 'Konsentrasjoner i serum',
+    })
+    expect(within(konsentrasjoner).getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual([
+      'Referanseområde',
+    ])
+    expect(document.querySelector('.datakort__gjelder')).toBeNull()
+  })
+})
+
+describe('THC: to fortolkningsmoduler på samme side', () => {
+  it('har én regelseksjon for THC og én for THC-syre i urin, og ingen felles «Åpne fortolkning»', async () => {
+    const user = userEvent.setup()
+    const thcregelsett = thcRegelsettutgave()
+    const { leser, onApneFortolkning } = vis(
+      'thc',
+      kilde({ data: () => TOM_STOFFSIDE, regler: () => null, thc: () => thcregelsett }),
+      { scenarioregler: SCENARIOREGLER },
+    )
+    expect(await screen.findByRole('region', { name: 'Fortolkningsregler – THC-syre i urin' })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('THC')
+    expect(document.title).toBe('THC – OUSFAR')
+    expect(identiteten().querySelector('.metalinje')!.textContent).toBe('Cannabinoider')
+
+    // Seksjonene: `fortolkning` for den første modulen, `fortolkning-ircak` for THC-syre.
+    const thc = screen.getByRole('region', { name: 'Fortolkningsregler – THC' })
+    const ircak = screen.getByRole('region', { name: 'Fortolkningsregler – THC-syre i urin' })
+    expect(thc.id).toBe('panel-fortolkning')
+    expect(ircak.id).toBe('panel-fortolkning-ircak')
+    expect(thc.compareDocumentPosition(ircak) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    // THC-syrereglene er lest for seg, fordi IRCAK er en av stoffets analytter.
+    expect(leser.lesThcRegelsett).toHaveBeenCalledWith('publisert')
+    expect(vi.mocked(leser.finnIntervallregelsett).mock.calls.map(([kode]) => kode).sort()).toEqual(['IRCAK', 'THC'])
+
+    // Modulene er to, så hver åpnes fra koden sin.
+    expect(screen.queryByRole('button', { name: 'Åpne fortolkning' })).toBeNull()
+    const analyser = [...identiteten().querySelectorAll('.identitet__analyse')].map((p) => p.textContent)
+    expect(analyser).toEqual([
+      `THC·Inngår i${katalog.finn('THC')!.analysemetode}`,
+      `IRCAK·Inngår i${katalog.finn(THC_KODE)!.analysemetode}`,
+    ])
+    await user.click(screen.getByRole('button', { name: 'IRCAK – åpne fortolkningen' }))
+    expect(onApneFortolkning).toHaveBeenLastCalledWith(katalog.finn(THC_KODE)!.fortolkning)
+    await user.click(screen.getByRole('button', { name: 'THC – åpne fortolkningen' }))
+    expect(onApneFortolkning).toHaveBeenLastCalledWith(katalog.finn('THC')!.fortolkning)
+    // THC-syre er en metabolitt av stoffet, og det sies.
+    expect(identiteten().querySelector('.identitet__komponenter')!.textContent).toBe(
+      'IRCAK måler THC-syre, en metabolitt av THC.',
+    )
+  })
+
+  it('åpner seksjonen for THC-syre når adressen peker dit', async () => {
+    vis('thc', kilde({ data: () => TOM_STOFFSIDE, regler: () => null, thc: () => thcRegelsettutgave() }), {
+      sted: ['fortolkning-ircak'],
+      scenarioregler: SCENARIOREGLER,
+    })
+    await screen.findByRole('region', { name: 'Fortolkningsregler – THC-syre i urin' })
+    await waitFor(() => expect(skuffen('Fortolkningsregler – THC-syre i urin').getAttribute('aria-expanded')).toBe('true'))
+    expect(skuffen('Fortolkningsregler – THC').getAttribute('aria-expanded')).toBe('false')
+  })
+})
+
+describe('Diazepam: datakort for hver primære analytt', () => {
+  const DIAZEPAM = { id: 'diaz', slug: 'diazepam', navn: 'Diazepam' }
+  const kort = (id: string, data: Record<string, unknown>) =>
+    utgave(id, { infoside: 'diaz', panel: 'viktige_data', posisjon: 0, elementtype: 'referanseomrade', data, referanser: [] })
+  /** Referanseområdet for diazepam (uten `gjelder`) og for N-desmetyldiazepam (`gjelder: 'DMI'`). */
+  const diazepamside = (): Stoffsidedata => ({
+    stoff: DIAZEPAM,
+    infoside: utgave('diaz', { navn: 'Diazepam', slug: 'diazepam' }),
+    elementer: [
+      kort('diaz-kort', { nedre: 100, ovre: 200, enhet: 'nmol/L' }),
+      kort('dmi-kort', { nedre: 300, ovre: 400, enhet: 'nmol/L', gjelder: 'DMI' }),
+    ],
+    referanser: [],
+  })
+
+  it('viser referanseområdet for DIAZ og for DMI, merket med analyttens navn', async () => {
+    const { leser } = vis('diazepam', kilde({ data: diazepamside, regler: () => null }))
+    await finnVerdi('100–200 nmol/L')
+    const konsentrasjoner = within(screen.getByRole('region', { name: 'Viktige data' })).getByRole('group', {
+      name: 'Konsentrasjoner i serum',
+    })
+    const kortene = within(konsentrasjoner).getAllByRole('listitem')
+    expect(kortene.map((li) => li.querySelector('h3')!.textContent)).toEqual([
+      'Referanseområde, Diazepam',
+      'Referanseområde, N-desmetyldiazepam',
+    ])
+    expect(kortene.map((li) => li.querySelector('.datakort__verdi')!.textContent)).toEqual([
+      '100–200 nmol/L',
+      '300–400 nmol/L',
+    ])
+    // Reglene for begge kodene er lest, og ikke for oksazepam, som har sin egen side.
+    expect(vi.mocked(leser.finnIntervallregelsett).mock.calls.map(([kode]) => kode)).toEqual(['DIAZ', 'DMI'])
+    const analyse = identiteten().querySelector('.identitet__analyse')!
+    expect(analyse.textContent).toBe(`DIAZ·DMI·Inngår i${katalog.finn('DIAZ')!.analysemetode}`)
+    expect(identiteten().querySelector('.identitet__komponenter')!.textContent).toBe(
+      'DMI måler N-desmetyldiazepam, en metabolitt av diazepam.',
+    )
+  })
+
+  it('åpner den felles modulen, med reglene som deles med oksazepam', async () => {
+    const user = userEvent.setup()
+    const { onApneFortolkning } = vis('diazepam', kilde({ data: diazepamside, regler: () => null }), {
+      scenarioregler: SCENARIOREGLER,
+    })
+    await finnVerdi('100–200 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Åpne fortolkning' }))
+    expect(onApneFortolkning.mock.calls[0]![0].kode).toBe('DIAZ · DMI · OXA')
+    // Én regelseksjon for modulen, som sier at Oksazepam-siden viser de samme reglene.
+    const seksjon = document.getElementById('panel-fortolkning')!
+    expect(seksjon).not.toBeNull()
+    expect(document.getElementById('panel-fortolkning-dmi')).toBeNull()
+    await apneSkuff(user, 'Fortolkningsregler')
+    expect(within(seksjon).getByText(/Reglene og kommentartekstene er felles med/).textContent).toBe(
+      'Reglene og kommentartekstene er felles med Oksazepam.',
+    )
+    expect(within(seksjon).getByRole('link', { name: 'Oksazepam' }).getAttribute('href')).toBe('#/stoff/oksazepam')
+  })
+
+  it('lagrer kortet for DMI med koden det gjelder', async () => {
+    const user = userEvent.setup()
+    const { lager } = vis('diazepam', kilde({ kanRedigere: true, data: diazepamside, regler: () => null }))
+    await finnVerdi('100–200 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde, N-desmetyldiazepam' }))
+    const skjema = redigeringsvindu('Referanseområde, N-desmetyldiazepam')
+    const ovre = within(skjema).getByLabelText('Øvre grense')
+    await user.clear(ovre)
+    await user.type(ovre, '450')
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+    await waitFor(() => expect(lager.lagreUtkast).toHaveBeenCalledTimes(1))
+    expect(lager.lagreUtkast).toHaveBeenCalledWith('dmi-kort', 1, {
+      infoside: 'diaz',
+      panel: 'viktige_data',
+      elementtype: 'referanseomrade',
+      posisjon: 0,
+      data: { nedre: 300, ovre: 450, enhet: 'nmol/L', gjelder: 'DMI' },
+      referanser: [],
+    })
   })
 })
 
 describe('lesemodus', () => {
   it('viser identiteten, datakortet, teksten og referansene', async () => {
     const user = userEvent.setup()
-    const { leser } = vis('AMTNORSUM')
+    const { leser } = vis('amitriptylin')
     expect(await finnVerdi('10–20 nmol/L')).toBeTruthy()
-    expect(leser.lesAnalyttside).toHaveBeenCalledWith('AMTNORSUM', 'publisert')
+    expect(leser.lesStoffside).toHaveBeenCalledWith('amitriptylin', 'publisert')
 
-    expect(screen.getByRole('heading', { level: 1, name: /Amitriptylin/ })).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 1, name: 'Amitriptylin' })).toBeTruthy()
     // Forbeholdet under verdien vises ikke lenger.
     expect(screen.queryByText('Syntetisk forbehold')).toBeNull()
     expect(screen.getByText('gjenopptaket').tagName).toBe('STRONG')
 
-    // Sumanalysen forklares, og komponenten med egen kode lenker dit.
+    // Sumanalysen forklares, og det andre stoffet den er koblet til, lenkes til
+    // etter nøkkelen — ikke etter en analyttkode.
     const setning = screen.getByText(/er en sumanalyse og omfatter/).closest('p')!
-    expect(setning.textContent).toBe('AMTNORSUM er en sumanalyse og omfatter amitriptylin og nortriptylin (NOR).')
-    expect(within(setning).getByRole('link', { name: /NOR/ }).getAttribute('href')).toBe('#/analytt/NOR')
+    expect(setning.textContent).toBe(
+      'AMTNORSUM er en sumanalyse og omfatter amitriptylin og nortriptylin. Se også Nortriptylin.',
+    )
+    expect(within(setning).getByRole('link', { name: /Nortriptylin/ }).getAttribute('href')).toBe('#/stoff/nortriptylin')
 
     // Datakortet (panel 2) siterer A, teksten i panel 3 A og B, panelet B:
     // A blir 1 og B blir 2, og listen nederst følger numrene.
@@ -586,7 +901,7 @@ describe('lesemodus', () => {
 
   it('viser kategoriene fra stoffregisteret over navnet, og koden og metoden under', async () => {
     const user = userEvent.setup()
-    const { onApneFortolkning } = vis('AMTNORSUM')
+    const { onApneFortolkning } = vis('amitriptylin')
     await finnVerdi('10–20 nmol/L')
     const overskrift = screen.getByRole('heading', { level: 1 })
     const identitet = overskrift.closest('section')!
@@ -605,7 +920,7 @@ describe('lesemodus', () => {
   })
 
   it('viser hver kategori et stoff står i', async () => {
-    vis('LAM', kilde({ data: () => TOM_SIDE }))
+    vis('lamotrigin', kilde({ data: () => TOM_STOFFSIDE }))
     const identitet = (await screen.findByRole('heading', { level: 1 })).closest('section')!
     expect(identitet.querySelector('.metalinje')!.textContent).toBe('Stemningsstabiliserende·Antiepileptika')
   })
@@ -620,7 +935,7 @@ describe('lesemodus', () => {
         data: { nedre: null, ovre: null, forbehold: '', ...data },
         referanser: [],
       })
-    const alle = (t: Tilstand): Analyttsidedata => {
+    const alle = (t: Tilstand): Stoffsidedata => {
       const s = side(t)
       return {
         ...s,
@@ -637,7 +952,7 @@ describe('lesemodus', () => {
         ],
       }
     }
-    vis('AMTNORSUM', kilde({ data: alle }))
+    vis('amitriptylin', kilde({ data: alle }))
     await finnVerdi('10–20 nmol/L')
     const viktige = screen.getByRole('region', { name: 'Viktige data' })
     const gruppe = (navn: string) => within(viktige).getByRole('group', { name: navn })
@@ -682,7 +997,7 @@ describe('lesemodus', () => {
 
   it('går til viktige data fra en lenke uten å åpne eller lukke seksjoner', async () => {
     const rull = vi.spyOn(Element.prototype, 'scrollIntoView')
-    vis('AMTNORSUM', kilde(), ['viktige_data'])
+    vis('amitriptylin', kilde(), { sted: ['viktige_data'] })
     await finnVerdi('10–20 nmol/L')
     const viktige = screen.getByRole('region', { name: 'Viktige data' })
     await waitFor(() => expect(rull.mock.contexts).toContain(viktige))
@@ -691,7 +1006,7 @@ describe('lesemodus', () => {
   })
 
   it('viser bare panelene som har innhold, og ingen redigering for vanlige brukere', async () => {
-    vis('AMTNORSUM')
+    vis('amitriptylin')
     await finnVerdi('10–20 nmol/L')
     // Viktige data står fram, uten tittel.
     expect(screen.getByRole('region', { name: 'Viktige data' })).toBeTruthy()
@@ -706,38 +1021,44 @@ describe('lesemodus', () => {
     expect(screen.queryByRole('button', { name: 'Rediger' })).toBeNull()
   })
 
-  it('viser koden fra datasettene og sier fra når siden ikke har innhold ennå', async () => {
-    vis('NOR', kilde({ data: () => TOM_SIDE }))
+  it('viser navnet fra registeret og sier fra når siden ikke har innhold ennå', async () => {
+    vis('nortriptylin', kilde({ data: () => TOM_STOFFSIDE }))
     expect(await screen.findByText('Denne siden har ikke fått faginnhold ennå.')).toBeTruthy()
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Nortriptylin')
   })
 
-  it('sier fra om en kode som ikke finnes', () => {
-    vis('FINNESIKKE')
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toMatch(/Fant ingen analytt med koden FINNESIKKE/)
+  it('sier ikke at et ukjent stoff mangler før databasen har svart', async () => {
+    const k = kilde()
+    let svar: (d: Stoffsidedata) => void = () => {}
+    k.leser.lesStoffside = vi.fn(() => new Promise<Stoffsidedata>((r) => (svar = r)))
+    vis('finnesikke', k)
+    // Databasen kan ha en side registeret ikke kjenner ennå.
+    expect(screen.queryByRole('heading', { name: /Fant ingen stoffside/ })).toBeNull()
+    await act(async () => svar(TOM_STOFFSIDE))
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Fant ingen stoffside for «finnesikke»')
   })
 
   it('sier fra når innholdet ikke lar seg hente', async () => {
     const k = kilde()
-    k.leser.lesAnalyttside = vi.fn(async () => {
+    k.leser.lesStoffside = vi.fn(async () => {
       throw new Error('Faginnholdet er ikke satt opp i databasen ennå.')
     })
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     expect((await screen.findByRole('alert')).textContent).toMatch(/ikke satt opp i databasen/)
   })
 })
 
 describe('veiene ut av siden', () => {
-  it('åpner fortolkningen koden hører til', async () => {
+  it('åpner fortolkningen stoffets analytt hører til', async () => {
     const user = userEvent.setup()
-    const { onApneFortolkning } = vis('NOR')
+    const { onApneFortolkning } = vis('nortriptylin')
     await user.click(screen.getByRole('button', { name: 'Åpne fortolkning' }))
     expect(onApneFortolkning).toHaveBeenCalledWith(katalog.finn('NOR')!.fortolkning)
   })
 
-  it('åpner modulen for en kode som deler fortolkning med andre', async () => {
+  it('åpner modulen for et stoff som deler fortolkning med andre', async () => {
     const user = userEvent.setup()
-    const { onApneFortolkning } = vis('OXA', kilde({ data: () => TOM_SIDE }))
+    const { onApneFortolkning } = vis('oksazepam', kilde({ data: () => TOM_STOFFSIDE }))
     await user.click(screen.getByRole('button', { name: 'Åpne fortolkning' }))
     // Oksazepam fortolkes i diazepamgruppen.
     expect(onApneFortolkning.mock.calls[0]![0].kode).toBe('DIAZ · DMI · OXA')
@@ -745,7 +1066,7 @@ describe('veiene ut av siden', () => {
 
   it('lukkes med Esc, men ikke mens det skrives i søket', async () => {
     const user = userEvent.setup()
-    const { onLukk } = vis('AMTNORSUM')
+    const { onLukk } = vis('amitriptylin')
     await finnVerdi('10–20 nmol/L')
     const sok = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
     await user.click(sok)
@@ -763,7 +1084,7 @@ describe('veiene ut av siden', () => {
 describe('søket på siden', () => {
   it('fremhever og teller treffene, og viser hvor de står', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM')
+    vis('amitriptylin')
     await finnVerdi('10–20 nmol/L')
     await user.keyboard('{Control>}b{/Control}')
     const sok = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
@@ -787,7 +1108,7 @@ describe('søket på siden', () => {
 
   it('hentes fram med Ctrl B og Cmd B, men ikke fra et redigeringsfelt', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM')
+    vis('amitriptylin')
     await finnVerdi('10–20 nmol/L')
     const sok = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
     await user.keyboard('{Meta>}b{/Meta}')
@@ -813,7 +1134,7 @@ describe('søket på siden', () => {
 
   it('ser bort fra store og små bokstaver og aksenter', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM')
+    vis('amitriptylin')
     await finnVerdi('10–20 nmol/L')
     await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'GJENOPPTAKET')
     await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
@@ -828,7 +1149,7 @@ describe('seksjonene', () => {
   const apen = (navn: string) => skuffknapp(navn).getAttribute('aria-expanded') === 'true'
 
   it('viser viktige data alltid, utenfor trekkspillet, og resten lukket med en oppsummering', async () => {
-    vis('AMTNORSUM')
+    vis('amitriptylin')
     await finnVerdi('10–20 nmol/L')
     const viktige = screen.getByRole('region', { name: 'Viktige data' })
     expect(viktige.closest('[data-skuff], [hidden]')).toBeNull()
@@ -841,7 +1162,7 @@ describe('seksjonene', () => {
 
   it('åpner seksjonen søket finner et treff i, og gjør treffet aktivt', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM')
+    vis('amitriptylin')
     await finnVerdi('10–20 nmol/L')
     await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'hemmer')
     await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
@@ -858,14 +1179,14 @@ describe('seksjonene', () => {
   })
 
   it('åpner stedet adressen peker på', async () => {
-    vis('AMTNORSUM', kilde(), ['farmakodynamikk'])
+    vis('amitriptylin', kilde(), { sted: ['farmakodynamikk'] })
     await finnVerdi('10–20 nmol/L')
     await waitFor(() => expect(apen('Farmakodynamikk')).toBe(true))
   })
 
   it('holder bare én seksjon åpen, og har ingen knapp for å åpne alle', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM')
+    vis('amitriptylin')
     await finnVerdi('10–20 nmol/L')
     expect(screen.queryByRole('button', { name: 'Åpne alle' })).toBeNull()
     await user.click(skuffknapp('Farmakodynamikk'))
@@ -876,7 +1197,7 @@ describe('seksjonene', () => {
 
   it('åpner søkets treff i én seksjon om gangen', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM')
+    vis('amitriptylin')
     await finnVerdi('10–20 nmol/L')
     await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'hemmer')
     await user.click(within(await screen.findByRole('list', { name: 'Hvor treffene står' })).getByRole('button'))
@@ -886,7 +1207,7 @@ describe('seksjonene', () => {
 
   it('åpner ikke alt i redigeringsmodus; redaktøren åpner seksjonen, også de som bare vises der', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    vis('amitriptylin', kilde({ kanRedigere: true }))
     await finnVerdi('10–20 nmol/L')
     await user.click(skuffknapp('Farmakodynamikk'))
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
@@ -915,7 +1236,7 @@ describe('preparatene', () => {
 
   it('viser ikke seksjonen når siden ikke er koblet', async () => {
     const k = kilde()
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     await finnVerdi('10–20 nmol/L')
     expect(screen.queryByRole('region', { name: 'Preparater' })).toBeNull()
     expect(k.legemidler.les).not.toHaveBeenCalled()
@@ -924,7 +1245,7 @@ describe('preparatene', () => {
   it('viser formene som overskrifter, styrkene som kort og preparatene i den åpne styrken, med kilden', async () => {
     const user = userEvent.setup()
     const k = kilde({ data: medKobling })
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     // Lukket står oppsummeringen. Fritaket telles, men er ikke en egen gruppe.
     expect(
       await screen.findByText('3 preparater · 2 legemiddelformer · 3 styrker · 1 med godkjenningsfritak'),
@@ -974,7 +1295,7 @@ describe('preparatene', () => {
 
   it('åpner preparatvinduet med alle styrkene, og gir fokuset tilbake når det lukkes', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', kilde({ data: medKobling }))
+    vis('amitriptylin', kilde({ data: medKobling }))
     await apneSkuff(user, 'Preparater')
     await apneSkuff(user, 'Tablett')
     await user.click(screen.getByRole('button', { name: /^25 mg/ }))
@@ -1031,7 +1352,7 @@ describe('preparatene', () => {
   })
 
   it('åpner legemiddelformen fra en direktelenke', async () => {
-    vis('AMTNORSUM', kilde({ data: medKobling }), ['preparater', 'form-53'])
+    vis('amitriptylin', kilde({ data: medKobling }), { sted: ['preparater', 'form-53'] })
     await waitFor(() => expect(skuffknapp('Tablett').getAttribute('aria-expanded')).toBe('true'))
     expect(skuffknapp('Preparater').getAttribute('aria-expanded')).toBe('true')
     expect(skuffknapp('Depotkapsel, hard').getAttribute('aria-expanded')).toBe('false')
@@ -1039,7 +1360,7 @@ describe('preparatene', () => {
 
   it('finner preparatene i søket på siden, og åpner formen og styrken treffet står i', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', kilde({ data: medKobling }))
+    vis('amitriptylin', kilde({ data: medKobling }))
     await screen.findByText(/3 preparater/)
     const felt = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
     await user.type(felt, 'retardo')
@@ -1058,7 +1379,7 @@ describe('preparatene', () => {
 
   it('åpner styrken når nettleserens eget søk finner noe i den', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', kilde({ data: medKobling }))
+    vis('amitriptylin', kilde({ data: medKobling }))
     await apneSkuff(user, 'Preparater')
     await apneSkuff(user, 'Tablett')
     const knapp = screen.getByRole('button', { name: /^10 mg/ })
@@ -1076,7 +1397,7 @@ describe('preparatene', () => {
     k.legemidler.les = vi.fn(async () => {
       throw new Error('Nettverksfeil')
     })
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     expect(await screen.findByText('Fikk ikke hentet preparatene')).toBeTruthy()
     expect(hentVerdi('10–20 nmol/L')).toBeTruthy()
   })
@@ -1088,7 +1409,7 @@ describe('interaksjonene', () => {
 
   it('viser ikke seksjonen når siden ikke er koblet', async () => {
     const k = kilde()
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     await finnVerdi('10–20 nmol/L')
     expect(screen.queryByRole('region', { name: 'Interaksjoner' })).toBeNull()
     expect(k.legemidler.interaksjoner).not.toHaveBeenCalled()
@@ -1097,7 +1418,7 @@ describe('interaksjonene', () => {
   it('slår opp på ATC-koden til preparatene, og viser de alvorligste først', async () => {
     const user = userEvent.setup()
     const k = kilde({ data: medKobling })
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     // «Ingen tiltak nødvendig» telles ikke og vises ikke.
     expect(await screen.findByText('1 bør unngås · 1 forholdsregler bør tas')).toBeTruthy()
     expect(k.legemidler.interaksjoner).toHaveBeenCalledWith({ atc: ['N06AA09'], virkestoff: ['ID_AMI', 'ID_AMISALT'] })
@@ -1135,7 +1456,7 @@ describe('interaksjonene', () => {
 
   it('viser den redaksjonelle teksten over interaksjonene fra FEST, og lar redaktøren skrive den', async () => {
     const user = userEvent.setup()
-    const medTekst = (tilstand: Tilstand): Analyttsidedata => {
+    const medTekst = (tilstand: Tilstand): Stoffsidedata => {
       const s = medKobling(tilstand)
       const tekst = utgave('inter', {
         infoside: 'hs',
@@ -1146,7 +1467,7 @@ describe('interaksjonene', () => {
       })
       return { ...s, elementer: [...s.elementer, tekst] }
     }
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medTekst }))
+    const { lager } = vis('amitriptylin', kilde({ kanRedigere: true, data: medTekst }))
     // Den lukkede seksjonen oppsummerer både FEST og teksten.
     expect(await screen.findByText('1 bør unngås · 1 forholdsregler bør tas · Syntetisk: obs enzymhemmere.')).toBeTruthy()
     await user.click(skuffknapp('Interaksjoner'))
@@ -1167,7 +1488,7 @@ describe('interaksjonene', () => {
 
   it('finner stoffene i søket på siden, også i lukkede detaljkort', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', kilde({ data: medKobling }))
+    vis('amitriptylin', kilde({ data: medKobling }))
     await screen.findByText(/1 bør unngås/)
     await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'farligin')
     await waitFor(() => expect(screen.getByRole('status').textContent).toMatch(/^Treff 1 av/))
@@ -1182,7 +1503,7 @@ describe('interaksjonene', () => {
       interaksjoner: [],
       ikke_vurdert: [{ id: 'ID_V', atc: [{ kode: 'N06AA09', tekst: 'Amitriptylin' }] }],
     }))
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     expect(await screen.findByText('Ikke vurdert av DMP')).toBeTruthy()
     expect(screen.getByText(/DMP har ikke vurdert interaksjonene for Amitriptylin \(N06AA09\) ennå/)).toBeTruthy()
     cleanup()
@@ -1191,7 +1512,7 @@ describe('interaksjonene', () => {
     feil.legemidler.interaksjoner = vi.fn(async () => {
       throw new Error('Nettverksfeil')
     })
-    vis('AMTNORSUM', feil)
+    vis('amitriptylin', feil)
     expect(await screen.findByText('Fikk ikke hentet interaksjonene')).toBeTruthy()
     expect(hentVerdi('10–20 nmol/L')).toBeTruthy()
   })
@@ -1200,10 +1521,10 @@ describe('interaksjonene', () => {
 describe('redigeringsmodus', () => {
   it('viser utkastet og alle panelene, med «Sist redigert»', async () => {
     const user = userEvent.setup()
-    const { leser } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    const { leser } = vis('amitriptylin', kilde({ kanRedigere: true }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
-    await waitFor(() => expect(leser.lesAnalyttside).toHaveBeenLastCalledWith('AMTNORSUM', 'utkast'))
+    await waitFor(() => expect(leser.lesStoffside).toHaveBeenLastCalledWith('amitriptylin', 'utkast'))
     expect(screen.getByRole('button', { name: 'Avslutt redigering' }).getAttribute('aria-pressed')).toBe('true')
     // I redigeringsmodus står bare redigeringen i menyen.
     for (const navn of ['Åpne fortolkning', 'Rediger', 'Lukk']) {
@@ -1218,7 +1539,7 @@ describe('redigeringsmodus', () => {
 
   it('redigerer i et eget vindu over siden, med fokus i det første feltet', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    vis('amitriptylin', kilde({ kanRedigere: true }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
@@ -1237,7 +1558,7 @@ describe('redigeringsmodus', () => {
 
   it('lukkes rett når ingenting er endret, men spør før endringer forkastes', async () => {
     const user = userEvent.setup()
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    const { lager } = vis('amitriptylin', kilde({ kanRedigere: true }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     const rediger = await screen.findByRole('button', { name: 'Rediger: Referanseområde' })
@@ -1266,7 +1587,7 @@ describe('redigeringsmodus', () => {
 
   it('lagrer et datakort mot revisjonen som ble åpnet', async () => {
     const user = userEvent.setup()
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    const { lager } = vis('amitriptylin', kilde({ kanRedigere: true }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
@@ -1290,7 +1611,7 @@ describe('redigeringsmodus', () => {
 
   it('avviser en nedre grense over den øvre, uten å lagre', async () => {
     const user = userEvent.setup()
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    const { lager } = vis('amitriptylin', kilde({ kanRedigere: true }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
@@ -1305,7 +1626,7 @@ describe('redigeringsmodus', () => {
 
   it('legger inn tₛₛ for to legemiddelformer, og avviser en typisk verdi utenfor området', async () => {
     const user = userEvent.setup()
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    const { lager } = vis('amitriptylin', kilde({ kanRedigere: true }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Legg til: Tid til steady state' }))
@@ -1347,7 +1668,7 @@ describe('redigeringsmodus', () => {
     k.lager.lagreUtkast = vi.fn(async () => {
       throw new Samtidighetskonflikt(3, 2)
     })
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
@@ -1363,7 +1684,7 @@ describe('redigeringsmodus', () => {
 
   it('velger kilder fra referansebasen og legger inn nye', async () => {
     const user = userEvent.setup()
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    const { lager } = vis('amitriptylin', kilde({ kanRedigere: true }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Rediger: Referanseområde' }))
@@ -1395,7 +1716,7 @@ describe('redigeringsmodus', () => {
 
   it('publiserer de upubliserte endringene etter en oppsummering', async () => {
     const user = userEvent.setup()
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    const { lager } = vis('amitriptylin', kilde({ kanRedigere: true }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     // Datakortet og en kommentar regelsettet peker på, har revisjoner som ikke
@@ -1419,33 +1740,62 @@ describe('redigeringsmodus', () => {
     ])
   })
 
-  it('oppretter siden, med komponentene, første gang noe lagres', async () => {
+  it('publiserer en ny side med siden først, uten steg for analytter eller komponenter', async () => {
     const user = userEvent.setup()
-    const k = kilde({ kanRedigere: true, data: () => TOM_SIDE })
-    k.leser.finnInfosider = vi.fn(async () => [utgave('nortriptylin', { navn: 'Nortriptylin' })])
-    const { lager, leser } = vis('AMTNORSUM', k)
+    // Siden er opprettet i redigeringen og aldri publisert; reglene er uendret.
+    const ny = (tilstand: Tilstand): Stoffsidedata => {
+      const s = side(tilstand)
+      return {
+        ...s,
+        infoside: utgave('hs', { navn: 'Amitriptylin', slug: 'amitriptylin' }, 1, null),
+        elementer: [{ ...s.elementer[0]!, revisjon: 1, publisert_revisjon: null }],
+        referanser: [],
+      }
+    }
+    const { lager } = vis(
+      'amitriptylin',
+      kilde({ kanRedigere: true, data: ny, regler: (kode) => (kode === 'AMTNORSUM' ? regelsettutgave('publisert') : null) }),
+    )
+    await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    expect(await screen.findByText('Redigerer · utkast med 2 endringer')).toBeTruthy()
+    await user.click(screen.getByRole('button', { name: 'Publiser' }))
+    const oppsummering = screen.getByRole('dialog', { name: 'Publiser endringene' })
+    expect(within(oppsummering).getAllByRole('listitem').map((li) => li.textContent)).toEqual([
+      'Siden Amitriptylin og kildene for panelene',
+      'Viktige data',
+    ])
+    await user.click(screen.getByRole('button', { name: 'Publiser nå' }))
+    await waitFor(() => expect(lager.publiserUtkast).toHaveBeenCalledTimes(2))
+    // Siden før kortet på den, og ingenting annet.
+    expect(vi.mocked(lager.publiserUtkast).mock.calls).toEqual([
+      ['hs', 1],
+      ['kort', 1],
+    ])
+  })
+
+  it('oppretter bare stoffets egen side første gang noe lagres, med navnet og nøkkelen', async () => {
+    const user = userEvent.setup()
+    const k = kilde({ kanRedigere: true, data: () => TOM_STOFFSIDE })
+    const { lager } = vis('amitriptylin', k)
+    await user.click(await screen.findByRole('button', { name: 'Rediger' }))
     await apneSkuff(user, 'Preparater')
     await user.click(await screen.findByRole('button', { name: 'Legg til: Koblingen til legemiddeldataene' }))
     const skjema = redigeringsvindu('Koblingen til legemiddeldataene')
-    // Søket står ferdig utfylt med sidens navn, og likt navn er et forslag.
+    // Søket står ferdig utfylt med stoffets navn, og likt navn er et forslag.
     expect((within(skjema).getByLabelText('Søk etter virkestoff') as HTMLInputElement).value).toBe('Amitriptylin')
     expect(await within(skjema).findByText(/Forslag: samme navn som siden/)).toBeTruthy()
     expect(within(skjema).getByText(/salt eller ester av Amitriptylin/)).toBeTruthy()
     await user.click(within(skjema).getByRole('button', { name: 'Koble siden til Amitriptylin' }))
     await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
 
-    await waitFor(() => expect(lager.opprettUtkast).toHaveBeenCalledTimes(3))
-    expect(leser.finnInfosider).toHaveBeenCalledWith(['Amitriptylin', 'Nortriptylin'], 'utkast')
+    await waitFor(() => expect(lager.opprettUtkast).toHaveBeenCalledTimes(2))
     const kall = vi.mocked(lager.opprettUtkast).mock.calls
-    // Nortriptylin finnes alt og gjenbrukes; Amitriptylin lages.
-    expect(kall[0]).toEqual(['infoside', { navn: 'Amitriptylin' }])
-    expect(kall[1]).toEqual([
-      'laboratorieanalytt',
-      { kode: 'AMTNORSUM', hovedside: 'ny-1', komponenter: ['ny-1', 'nortriptylin'] },
-    ])
+    // Amitriptylin-siden lages med nøkkelen fra registeret. Nortriptylin, som
+    // også er koblet til AMTNORSUM, får ingen side, og ingen analytt lagres.
+    expect(kall[0]).toEqual(['infoside', { navn: 'Amitriptylin', slug: 'amitriptylin' }])
     // Koblingen lagres med FESTs ID; navnet er med for historikken.
-    expect(kall[2]).toEqual([
+    expect(kall[1]).toEqual([
       'innholdselement',
       {
         infoside: 'ny-1',
@@ -1462,12 +1812,12 @@ describe('redigeringsmodus', () => {
 describe('overgangen til redigering', () => {
   it('viser ingen redigeringsknapper før utkastet er hentet', async () => {
     const user = userEvent.setup()
-    let slipp: (d: Analyttsidedata) => void = () => {}
+    let slipp: (d: Stoffsidedata) => void = () => {}
     const k = kilde({ kanRedigere: true })
-    k.leser.lesAnalyttside = vi.fn((_kode: string, tilstand: Tilstand) =>
-      tilstand === 'utkast' ? new Promise<Analyttsidedata>((r) => (slipp = r)) : Promise.resolve(side('publisert')),
+    k.leser.lesStoffside = vi.fn((_slug: string, tilstand: Tilstand) =>
+      tilstand === 'utkast' ? new Promise<Stoffsidedata>((r) => (slipp = r)) : Promise.resolve(side('publisert')),
     )
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
 
@@ -1484,7 +1834,7 @@ describe('overgangen til redigering', () => {
     const user = userEvent.setup()
     const k = kilde({ kanRedigere: true })
     let andreHarLagret = false
-    k.leser.lesAnalyttside = vi.fn(async (_kode: string, tilstand: Tilstand) => {
+    k.leser.lesStoffside = vi.fn(async (_slug: string, tilstand: Tilstand) => {
       const data = side(tilstand)
       if (!andreHarLagret) return data
       const halveringstid = utgave('ht', {
@@ -1500,7 +1850,7 @@ describe('overgangen til redigering', () => {
       andreHarLagret = true
       throw new Error('Innholdet ble ikke godtatt. Kontroller feltene og prøv igjen.')
     })
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await user.click(await screen.findByRole('button', { name: 'Legg til: Halveringstid' }))
@@ -1517,7 +1867,7 @@ describe('overgangen til redigering', () => {
 describe('rikteksteditoren', () => {
   it('har en verktøyrad med bare den tillatte formateringen', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', kilde({ kanRedigere: true }))
+    vis('amitriptylin', kilde({ kanRedigere: true }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await apneSkuff(user, 'Farmakodynamikk')
@@ -1547,7 +1897,7 @@ describe('kortene i farmakokinetikken', () => {
   /** To kinetikkort, Absorpsjon og Metabolisme, med teksten i `tekster` (eller «Syntetisk»). */
   const medKort =
     (tekster: Partial<Record<'k1' | 'k2', string>> = {}) =>
-    (tilstand: Tilstand): Analyttsidedata => {
+    (tilstand: Tilstand): Stoffsidedata => {
       const data = side(tilstand)
       const kort = (id: 'k1' | 'k2', tittel: string, posisjon: number) =>
         utgave(id, {
@@ -1565,7 +1915,7 @@ describe('kortene i farmakokinetikken', () => {
 
   it('flytter et kort, og lagrer bare det som får ny plass', async () => {
     const user = userEvent.setup()
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort() }))
+    const { lager } = vis('amitriptylin', kilde({ kanRedigere: true, data: medKort() }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await apneSkuff(user, 'Farmakokinetikk')
@@ -1579,7 +1929,7 @@ describe('kortene i farmakokinetikken', () => {
 
   it('åpner både seksjonen og kortet når søket går til et treff i et lukket kort', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', kilde({ data: medKort() }))
+    vis('amitriptylin', kilde({ data: medKort() }))
     await finnVerdi('10–20 nmol/L')
     const skuffknapp = (navn: string) =>
       screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
@@ -1602,7 +1952,7 @@ describe('kortene i farmakokinetikken', () => {
   it('går til titteltreffet når søket treffer tittelen på et lukket kort', async () => {
     const user = userEvent.setup()
     // «metabolisme» står i teksten i Absorpsjon og i tittelen på Metabolisme.
-    vis('AMTNORSUM', kilde({ data: medKort({ k1: 'Syntetisk metabolisme.' }) }))
+    vis('amitriptylin', kilde({ data: medKort({ k1: 'Syntetisk metabolisme.' }) }))
     await finnVerdi('10–20 nmol/L')
     const skuffknapp = (navn: string) =>
       screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
@@ -1625,7 +1975,7 @@ describe('kortene i farmakokinetikken', () => {
 
   it('flytter kortene i rutenettet synlig når brukeren åpner dem', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', kilde({ data: medKort() }))
+    vis('amitriptylin', kilde({ data: medKort() }))
     await finnVerdi('10–20 nmol/L')
     await apneSkuff(user, 'Farmakokinetikk')
     const kort = document.querySelectorAll('.skuffrutenett > li > .skuff--detalj')
@@ -1639,7 +1989,7 @@ describe('kortene i farmakokinetikken', () => {
 
   it('viser farmakogenetikken som en egen seksjon, med ett kort som står åpent', async () => {
     const user = userEvent.setup()
-    const data = (tilstand: Tilstand): Analyttsidedata => {
+    const data = (tilstand: Tilstand): Stoffsidedata => {
       const s = medKort()(tilstand)
       const cyp = utgave('cyp', {
         infoside: 'hs',
@@ -1653,7 +2003,7 @@ describe('kortene i farmakokinetikken', () => {
       })
       return { ...s, elementer: [...s.elementer, cyp] }
     }
-    vis('AMTNORSUM', kilde({ data }))
+    vis('amitriptylin', kilde({ data }))
     await finnVerdi('10–20 nmol/L')
     const seksjoner = [...document.querySelectorAll('.skuff--seksjon')].map((s) => s.getAttribute('data-skuff'))
     expect(seksjoner.indexOf('farmakogenetikk')).toBe(seksjoner.indexOf('farmakokinetikk') + 1)
@@ -1664,7 +2014,7 @@ describe('kortene i farmakokinetikken', () => {
 
   it('fjerner et kort først etter en bekreftelse, uten å slette det', async () => {
     const user = userEvent.setup()
-    const { lager } = vis('AMTNORSUM', kilde({ kanRedigere: true, data: medKort() }))
+    const { lager } = vis('amitriptylin', kilde({ kanRedigere: true, data: medKort() }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await apneSkuff(user, 'Farmakokinetikk')
@@ -1681,7 +2031,7 @@ describe('fortolkningsreglene', () => {
   /** Siden i redigeringsmodus, med reglene fra utkastet. */
   async function redigerer(k = kilde({ kanRedigere: true })) {
     const user = userEvent.setup()
-    const verdier = vis('AMTNORSUM', k)
+    const verdier = vis('amitriptylin', k)
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await screen.findByText('Endret syntetisk høy kommentar.')
@@ -1698,7 +2048,7 @@ describe('fortolkningsreglene', () => {
   }
 
   it('viser reglene som en tabell, med ringegrensen og cut-off', async () => {
-    vis('AMTNORSUM')
+    vis('amitriptylin')
     // Lukket sier seksjonen hva den inneholder.
     expect((await screen.findByText('3 områder · Ringegrense 1800 nmol/L · Cut-off')).textContent).toBeTruthy()
     const seksjon = await apneFortolkning()
@@ -1719,7 +2069,7 @@ describe('fortolkningsreglene', () => {
 
   it('simulerer en verdi på og rundt grensene, og cut-off', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM')
+    vis('amitriptylin')
     const seksjon = await apneFortolkning(user)
     // Simulatoren er et detaljkort i seksjonen, med sin egen adresse.
     const simulator = within(seksjon).getByRole('group', { name: 'Simulator' })
@@ -1890,7 +2240,7 @@ describe('fortolkningsreglene', () => {
 
 describe('innhold hentet fra en kilde', () => {
   /** Siden etter importen: innhold fra PDF-en og et indikasjonssammendrag fra Felleskatalogen. */
-  function importert(tilstand: Tilstand): Analyttsidedata {
+  function importert(tilstand: Tilstand): Stoffsidedata {
     const grunn = side(tilstand)
     const fraKilde = <T,>(u: Utgave<T>, kilde: string): Utgave<T> => ({ ...u, kilde })
     return {
@@ -1915,7 +2265,7 @@ describe('innhold hentet fra en kilde', () => {
 
   it('viser kilden ved «Sist redigert»', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', kilde({ data: importert, kanRedigere: true }))
+    vis('amitriptylin', kilde({ data: importert, kanRedigere: true }))
     // Teksten står både i den lukkede seksjonens oppsummering og i innholdet.
     await screen.findAllByText('Syntetisk indikasjon.')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
@@ -2012,7 +2362,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
 
   /** Siden koblet til ClinPGx, med et redaksjonelt kort i «Farmakogenetikk». */
   function medPgx({ redaksjonelt = true, kjemikalier = [{ clinpgx_id: 'PA1', navn: 'amitriptyline' }] } = {}) {
-    return (tilstand: Tilstand): Analyttsidedata => {
+    return (tilstand: Tilstand): Stoffsidedata => {
       const s = medKobling(tilstand)
       return {
         ...s,
@@ -2055,7 +2405,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
 
   it('leser ikke ClinPGx når siden ikke er koblet', async () => {
     const k = pgxkilde({ data: medPgx({ kjemikalier: [], redaksjonelt: false }) })
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     await finnVerdi('10–20 nmol/L')
     expect(screen.queryByRole('region', { name: 'Farmakogenetikk' })).toBeNull()
     expect(k.farmakogenetikk.les).not.toHaveBeenCalled()
@@ -2064,7 +2414,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
   it('viser de redaksjonelle kortene først, så retningslinjene, preparatomtalene og de kliniske annotasjonene', async () => {
     const user = userEvent.setup()
     const k = pgxkilde({ data: medPgx() })
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     // Den lukkede seksjonen oppsummerer genene og organisasjonene, så de redaksjonelle kortene.
     expect(await screen.findByText('CYP2D6 · CYP2C19 · CPIC + DPWG · CYP-enzymer (substrat)')).toBeTruthy()
     expect(k.farmakogenetikk.les).toHaveBeenCalledWith(['PA1'])
@@ -2118,11 +2468,11 @@ describe('farmakogenetikken fra ClinPGx', () => {
   })
 
   it('sier fra når ClinPGx ikke har noe, når kjemikaliet ikke er hentet, og når lesingen feiler', async () => {
-    vis('AMTNORSUM', pgxkilde({ data: medPgx({ redaksjonelt: false }) }, pgxleser({ ...UTVALG_PGX, retningslinjer: [], preparatomtaler: [], kliniske: [] })))
+    vis('amitriptylin', pgxkilde({ data: medPgx({ redaksjonelt: false }) }, pgxleser({ ...UTVALG_PGX, retningslinjer: [], preparatomtaler: [], kliniske: [] })))
     expect(await screen.findByText(/ClinPGx har ingen retningslinjer, preparatomtaler eller kliniske annotasjoner for amitriptyline/)).toBeTruthy()
     cleanup()
 
-    vis('AMTNORSUM', pgxkilde({ data: medPgx({ redaksjonelt: false }) }, pgxleser({ ...UTVALG_PGX, kjemikalier: [], retningslinjer: [], preparatomtaler: [], kliniske: [] })))
+    vis('amitriptylin', pgxkilde({ data: medPgx({ redaksjonelt: false }) }, pgxleser({ ...UTVALG_PGX, kjemikalier: [], retningslinjer: [], preparatomtaler: [], kliniske: [] })))
     expect(await screen.findByText('amitriptyline (PA1) er ikke hentet fra ClinPGx ennå. Den ukentlige oppdateringen henter det.')).toBeTruthy()
     cleanup()
 
@@ -2130,7 +2480,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
     feil.les = vi.fn(async () => {
       throw new Error('Nettverksfeil')
     })
-    vis('AMTNORSUM', pgxkilde({ data: medPgx() }, feil))
+    vis('amitriptylin', pgxkilde({ data: medPgx() }, feil))
     expect(await screen.findByText(/Fikk ikke hentet farmakogenetikken fra ClinPGx\. Nettverksfeil/)).toBeTruthy()
     // Det redaksjonelle står der fortsatt.
     expect(screen.getAllByText('Syntetisk redaksjonell tekst.').length).toBeGreaterThan(0)
@@ -2138,7 +2488,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
 
   it('finner gener og organisasjoner i søket på siden, og åpner kortet treffet står i', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', pgxkilde({ data: medPgx() }))
+    vis('amitriptylin', pgxkilde({ data: medPgx() }))
     await screen.findByText(/CPIC \+ DPWG/)
     await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'CYP2C19')
     const steder = within(await screen.findByRole('list', { name: 'Hvor treffene står' }))
@@ -2148,7 +2498,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
   })
 
   it('åpner kortet adressen peker på', async () => {
-    vis('AMTNORSUM', pgxkilde({ data: medPgx() }), ['farmakogenetikk', 'clinpgx-klinisk-PA910'])
+    vis('amitriptylin', pgxkilde({ data: medPgx() }), { sted: ['farmakogenetikk', 'clinpgx-klinisk-PA910'] })
     await waitFor(() => expect(skuffen('CYP2D6*1, CYP2D6*4').getAttribute('aria-expanded')).toBe('true'))
     expect(skuffen('Farmakogenetikk').getAttribute('aria-expanded')).toBe('true')
     expect(screen.getByText('Syntetisk fenotype.')).toBeTruthy()
@@ -2157,7 +2507,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
   it('kobler siden med ID-en fra ClinPGx, foreslår på ATC-koden, og henter dataene etter lagringen', async () => {
     const user = userEvent.setup()
     const k = pgxkilde({ kanRedigere: true, data: medPgx({ kjemikalier: [] }) })
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     await screen.findByText(/1 bør unngås/)
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await apneSkuff(user, 'Farmakogenetikk')
@@ -2333,7 +2683,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
   it('viser CPICs anbefalinger for seg, over ClinPGx-dataene, med kilde og versjon', async () => {
     const user = userEvent.setup()
     const k = medCpic({ data: medPgx() })
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     // Den lukkede seksjonen nevner anbefalingene fra CPIC.
     expect(await screen.findByText('CYP2D6 · CYP2C19 · CPIC + DPWG · 3 CPIC-anbefalinger · CYP-enzymer (substrat)')).toBeTruthy()
     expect(k.cpic.les).toHaveBeenCalledWith(['PA1'])
@@ -2410,7 +2760,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
         genresultat('3', 'Poor Metabolizer', '0.0'),
       ],
     }
-    vis('AMTNORSUM', medCpic({ data: medPgx() }, cpicleser(utvalg)))
+    vis('amitriptylin', medCpic({ data: medPgx() }, cpicleser(utvalg)))
     await screen.findByText(/3 CPIC-anbefalinger/)
     await apneSkuff(user, 'Farmakogenetikk')
     const seksjon = screen.getByRole('region', { name: 'Farmakogenetikk' })
@@ -2459,7 +2809,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
     const user = userEvent.setup()
     const lagretFor = window.localStorage.length
     const k = medCpic({ data: medPgx() })
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     await screen.findByText(/3 CPIC-anbefalinger/)
     await apneSkuff(user, 'Farmakogenetikk')
     const seksjon = screen.getByRole('region', { name: 'Farmakogenetikk' })
@@ -2511,7 +2861,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
 
   it('sier fra når CPIC ikke har diplotypen, eller ingen anbefaling for resultatet den gir', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', medCpic({ data: medPgx() }))
+    vis('amitriptylin', medCpic({ data: medPgx() }))
     await screen.findByText(/3 CPIC-anbefalinger/)
     await apneSkuff(user, 'Farmakogenetikk')
     const seksjon = screen.getByRole('region', { name: 'Farmakogenetikk' })
@@ -2543,11 +2893,11 @@ describe('farmakogenetikken fra ClinPGx', () => {
 
   it('sier fra når CPIC ikke har legemiddelet, når dataene ikke er hentet, og når lesingen feiler', async () => {
     const tom = { ...UTVALG_CPIC, legemidler: [], par: [], retningslinjer: [], anbefalinger: [], gener: [] }
-    vis('AMTNORSUM', medCpic({ data: medPgx({ redaksjonelt: false }) }, cpicleser(tom)))
+    vis('amitriptylin', medCpic({ data: medPgx({ redaksjonelt: false }) }, cpicleser(tom)))
     expect(await screen.findByText('CPIC har ingen gen–legemiddel-par eller anbefalinger for amitriptyline (CPIC, release v1.60.1 av 12. august 2026).')).toBeTruthy()
     cleanup()
 
-    vis('AMTNORSUM', medCpic({ data: medPgx({ redaksjonelt: false }) }, cpicleser({ ...tom, kilde: { ...tom.kilde, endret_kl: null, kontrollert_kl: null } })))
+    vis('amitriptylin', medCpic({ data: medPgx({ redaksjonelt: false }) }, cpicleser({ ...tom, kilde: { ...tom.kilde, endret_kl: null, kontrollert_kl: null } })))
     expect(await screen.findByText('Anbefalingene fra CPIC er ikke hentet ennå. Den ukentlige oppdateringen henter dem.')).toBeTruthy()
     cleanup()
 
@@ -2555,7 +2905,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
     feil.les = vi.fn(async () => {
       throw new Error('Nettverksfeil')
     })
-    vis('AMTNORSUM', medCpic({ data: medPgx() }, feil))
+    vis('amitriptylin', medCpic({ data: medPgx() }, feil))
     expect(await screen.findByText(/Fikk ikke hentet anbefalingene fra CPIC\. Nettverksfeil/)).toBeTruthy()
     // ClinPGx-dataene står der fortsatt.
     expect(await screen.findByText(/CPIC \+ DPWG/)).toBeTruthy()
@@ -2563,7 +2913,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
 
   it('finner CPICs resultatkategorier i søket på siden, og åpner kortet', async () => {
     const user = userEvent.setup()
-    vis('AMTNORSUM', medCpic({ data: medPgx() }))
+    vis('amitriptylin', medCpic({ data: medPgx() }))
     await screen.findByText(/3 CPIC-anbefalinger/)
     await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'Poor Metabolizer')
     const steder = within(await screen.findByRole('list', { name: 'Hvor treffene står' }))
@@ -2578,7 +2928,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
     const mange = Array.from({ length: 13 }, (_, i) =>
       anbefaling(`2${i}`, [fenotyper[i % 3]!, `${i}.0`], i === 7 ? 'Syntetisk sjelden anbefaling.' : `Syntetisk anbefaling nummer ${i}.`),
     )
-    vis('AMTNORSUM', medCpic({ data: medPgx() }, cpicleser({ ...UTVALG_CPIC, anbefalinger: mange })))
+    vis('amitriptylin', medCpic({ data: medPgx() }, cpicleser({ ...UTVALG_CPIC, anbefalinger: mange })))
     await screen.findByText(/13 CPIC-anbefalinger/)
     await apneSkuff(user, 'Farmakogenetikk')
     await user.click(skuffen('Syntetisk CPIC-retningslinje'))
@@ -2594,7 +2944,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
     const user = userEvent.setup()
     const fenotyper = ['Poor Metabolizer', 'Normal Metabolizer', 'Ultrarapid Metabolizer']
     const mange = Array.from({ length: 13 }, (_, i) => anbefaling(`2${i}`, [fenotyper[i % 3]!, `${i}.0`], `Syntetisk anbefaling nummer ${i}.`))
-    vis('AMTNORSUM', medCpic({ data: medPgx() }, cpicleser({ ...UTVALG_CPIC, anbefalinger: mange })), ['farmakogenetikk', 'cpic-900'])
+    vis('amitriptylin', medCpic({ data: medPgx() }, cpicleser({ ...UTVALG_CPIC, anbefalinger: mange })), { sted: ['farmakogenetikk', 'cpic-900'] })
     const del = (tittel: string) => screen.getByText(tittel, { selector: '.cpic__deltittel' }).closest('details') as HTMLDetailsElement
     await waitFor(() => expect(del('CYP2D6 Poor Metabolizer').open).toBe(true))
     for (const f of fenotyper) expect(del(`CYP2D6 ${f}`).open).toBe(true)
@@ -2604,7 +2954,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
   })
 
   it('åpner CPIC-kortet adressen peker på', async () => {
-    vis('AMTNORSUM', medCpic({ data: medPgx() }), ['farmakogenetikk', 'cpic-900'])
+    vis('amitriptylin', medCpic({ data: medPgx() }), { sted: ['farmakogenetikk', 'cpic-900'] })
     await waitFor(() => expect(skuffen('Syntetisk CPIC-retningslinje').getAttribute('aria-expanded')).toBe('true'))
     expect(skuffen('Farmakogenetikk').getAttribute('aria-expanded')).toBe('true')
   })
@@ -2612,7 +2962,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
   it('lar administratoren hente CPIC-dataene på nytt i redigeringen', async () => {
     const user = userEvent.setup()
     const k = medCpic({ kanRedigere: true, data: medPgx() })
-    vis('AMTNORSUM', k)
+    vis('amitriptylin', k)
     await screen.findByText(/3 CPIC-anbefalinger/)
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await apneSkuff(user, 'Farmakogenetikk')
@@ -2638,7 +2988,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
       hentet = true
       return { status: 'fullfort' as const, release: 'v1.60.1' }
     })
-    vis('AMTNORSUM', medCpic({ kanRedigere: true, data: medPgx() }, leser))
+    vis('amitriptylin', medCpic({ kanRedigere: true, data: medPgx() }, leser))
     await screen.findByText(/3 CPIC-anbefalinger/)
     await apneSkuff(user, 'Farmakogenetikk')
     const seksjon = screen.getByRole('region', { name: 'Farmakogenetikk' })

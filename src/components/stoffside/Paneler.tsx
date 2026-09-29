@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import type { Sideelement, Sidemodell } from '../../faginnhold/analyttside'
+import type { Sideelement, Sidemodell } from '../../faginnhold/stoffside'
 import {
   ELEMENTTYPER,
   lesDosetabell,
@@ -20,13 +20,13 @@ import { Riktekst } from './Riktekst'
 import { DosetabellSkjema, KinetikkSkjema, PanelkildeSkjema, TekstSkjema } from './Skjemaer'
 import { Uthev } from '../Uthev'
 import { Sistredigert } from '../historikk/Sistredigert'
-import type { Analyttsidehandlinger } from './useAnalyttside'
+import type { Stoffsidehandlinger } from './useStoffside'
 import { kinetikkikon, seksjonsikon, tekstvisning } from './panelvisning'
 import { Serumtabell } from './Serumtabell'
 import '../../styles/monograf.css'
 
 /**
- * Seksjonene på informasjonssiden, i lese- og redigeringsmodus. Identiteten
+ * Seksjonene på stoffsiden, i lese- og redigeringsmodus. Identiteten
  * og viktige data står alltid fram og har egne filer (`Identitetspanel.tsx`,
  * `ViktigeData.tsx`).
  *
@@ -43,7 +43,7 @@ import '../../styles/monograf.css'
 export interface Panelkontekst {
   modell: Sidemodell
   redigerer: boolean
-  handlinger: Analyttsidehandlinger
+  handlinger: Stoffsidehandlinger
 }
 
 /** ID-en et element har på siden, så søket kan peke dit. */

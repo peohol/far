@@ -207,7 +207,7 @@ export function scenariokommentarendringer(
 
 /* --- Feltene ------------------------------------------------------------------ */
 
-/** Scenariene i den rekkefølgen og med de numrene analyttsiden viser dem. */
+/** Scenariene i den rekkefølgen og med de numrene stoffsiden viser dem. */
 export function scenarionumre(regelsett: Scenarioregelsett): Map<string, number> {
   return new Map(beskrivRegelsett(regelsett, new Map()).scenarier.map((b, i) => [b.scenario.nokkel, i + 1]))
 }
@@ -217,7 +217,7 @@ export function scenarionumre(regelsett: Scenarioregelsett): Map<string, number>
  * oppsummeringen før publiseringen sammenligner dem: hjelpeteksten, grensene,
  * meldingene når et forholdstall ikke kan regnes ut, og for hvert scenario
  * vilkårene og utfallet. Scenariene kjennes igjen på nøkkelen og nummereres
- * som på analyttsiden; tekstene står slik de er skrevet, med `{grense}`.
+ * som på stoffsiden; tekstene står slik de er skrevet, med `{grense}`.
  */
 export function scenariofelter(regelsett: Scenarioregelsett, kommentar: Kommentarvisning): Felt[] {
   const grense = new Map(regelsett.parametere.map((p) => [p.nokkel, p]))

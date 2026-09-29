@@ -44,7 +44,7 @@ const { Endringslogg } = await import('../components/Endringslogg')
 const { ENDRINGSLOGG } = await import('../data/endringslogg')
 const { Port } = await import('../components/konto/Port')
 const { Brukerliste } = await import('../components/konto/Brukerliste')
-const { statustekst } = await import('../components/analyttside/Redigeringslinje')
+const { statustekst } = await import('../components/stoffside/Redigeringslinje')
 const { TipsLag } = await import('../components/Tips')
 
 function profil(id: string, fornavn: string, etternavn: string, ekstra: Partial<Profil> = {}): Profil {

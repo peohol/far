@@ -1,4 +1,4 @@
-import { useRedigering } from '../analyttside/Redigeringskontekst'
+import { useRedigering } from '../stoffside/Redigeringskontekst'
 
 /**
  * Teksten om en automatisk kilde, med merknaden om at den ikke kan redigeres

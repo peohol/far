@@ -1,5 +1,5 @@
 /**
- * THC-syreregelsettet slik fortolkningen og analyttsiden bruker det: reglene
+ * THC-syreregelsettet slik fortolkningen og stoffsiden bruker det: reglene
  * og teksten til hver tekstbolk, kontrollert og satt sammen til en
  * {@link ThcModell}.
  *

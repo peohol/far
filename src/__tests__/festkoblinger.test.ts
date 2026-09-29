@@ -26,6 +26,7 @@ import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing
 import { ELEMENTTYPER, lesLegemiddelkobling } from '../faginnhold/paneler'
 import { stoffsideplan } from '../faginnhold/stoffsider'
 import { PREPARATPANEL } from '../legemiddeldata/stoffside'
+import { stoffslug } from '../domain/stoffregister'
 import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
 const MIGRASJONER = migrasjonsfiler()
@@ -133,8 +134,9 @@ describe('migrasjonen i databasen', () => {
   let revisjoner: number
 
   const antall = async (sql: string) => (await db.query<{ n: number }>(sql)).rows[0]!.n
+  /** Koblingene på siden med dette navnet, lest som appen gjør: etter nøkkelen navnet gir. */
   const koblingen = async (side: string) => {
-    const s = await leser.lesStoffside(side, 'publisert')
+    const s = await leser.lesStoffside(stoffslug(side), 'publisert')
     return s.elementer.filter((e) => e.innhold.elementtype === ELEMENTTYPER.legemiddelkobling)
   }
 
@@ -187,7 +189,8 @@ describe('migrasjonen i databasen', () => {
     expect(lesLegemiddelkobling(kobling!.innhold.data)).toEqual({
       virkestoff: AMFETAMIN_FESTKOBLINGER.map((k, i) => ({ fest_id: k.fest_id, navn: AMFETAMINNAVN[i] })),
     })
-    const side = await leser.lesStoffside('Amfetamin', 'publisert')
+    const side = await leser.lesStoffside('amfetamin', 'publisert')
+    expect(side.stoff).toMatchObject({ slug: 'amfetamin', navn: 'Amfetamin' })
     expect(side.elementer.some((e) => e.innhold.panel === 'tdm')).toBe(true)
   })
 
@@ -198,7 +201,8 @@ describe('migrasjonen i databasen', () => {
     expect(lesLegemiddelkobling(kobling!.innhold.data)).toEqual({
       virkestoff: [{ fest_id: THC_FESTKOBLINGER[0]!.fest_id, navn: 'Dronabinol' }],
     })
-    const side = await leser.lesAnalyttside('THC', 'publisert')
+    const side = await leser.lesStoffside('thc', 'publisert')
+    expect(side.stoff).toMatchObject({ slug: 'thc', navn: 'THC' })
     expect(side.elementer.map((e) => e.innhold.panel).sort()).toEqual(['indikasjon', PREPARATPANEL].sort())
   })
 

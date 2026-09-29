@@ -140,10 +140,10 @@ Koden:
 | `src/cpic/oppslag.ts` | Oppslaget etter et kjent resultat (se under) |
 | `src/cpic/diplotype.ts` | Oversettelsen fra diplotype: hvilke gener, søket og oversettelsen (se under) |
 | `src/cpic/referanser.ts` | De automatiske referansene og meldingen om gamle data |
-| `src/components/analyttside/Cpicvisning.tsx`, `Cpicoppslag.tsx` | Gruppen i «Farmakogenetikk», og oppslaget i den |
+| `src/components/stoffside/Cpicvisning.tsx`, `Cpicoppslag.tsx` | Gruppen i «Farmakogenetikk», og oppslaget i den |
 | `src/__tests__/cpic.test.ts`, `data/cpic-utdrag.json` | Lesingen, kallene, synkroniseringen mot en ekte database og endepunktet, med ekte rader fra CPIC |
 | `src/__tests__/cpicdiplotype.test.ts`, `data/cpic-diplotype-utdrag.json` | Oversettelsen og søket med ekte rader for CYP2D6, CYP2C19, CYP2C9, DPYD, G6PD og HLA-B, og videre til anbefalingen |
-| `src/__tests__/cpicvisning.test.ts`, `analyttside.test.tsx` | Kortene, grupperingen, referansene og søket med de ekte radene, og visningen på siden |
+| `src/__tests__/cpicvisning.test.ts`, `stoffside.test.tsx` | Kortene, grupperingen, referansene og søket med de ekte radene, og visningen på siden |
 
 ## Synkroniseringen
 
@@ -313,7 +313,7 @@ Logikken er rene funksjoner i `src/cpic/oppslag.ts` (`oppslagsgrunnlag`,
 (`src/__tests__/cpicoppslag.test.ts`, `data/cpic-oppslag-utdrag.json`),
 blant annet at hver anbefaling finnes med sine egne verdier, og at et treff
 aldri er en anbefaling med andre verdier. Kortet er
-`src/components/analyttside/Cpicoppslag.tsx`. Søket finner kortet på navnet
+`src/components/stoffside/Cpicoppslag.tsx`. Søket finner kortet på navnet
 og genene. Resultatet kan også oversettes fra en diplotype (under).
 
 ## Oversettelsen fra diplotype

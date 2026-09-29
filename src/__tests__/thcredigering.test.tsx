@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 /**
- * Redigeringen av THC-syrereglene og -tekstene på analyttsiden: hva som
+ * Redigeringen av THC-syrereglene og -tekstene på THC-siden: hva som
  * lagres, hva som stoppes før det når databasen, og at simulatoren prøver
  * utkastet slik det står. At databasen godtar og avviser det samme, prøves i
  * `thcRegelsettlagring.test.ts`.
@@ -10,9 +10,9 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { Thcregler } from '../components/regler/Thcregler'
 import { TipsLag } from '../components/Tips'
-import { publiseringsplan } from '../faginnhold/analyttside'
+import { publiseringsplan } from '../faginnhold/stoffside'
 import { THC_TEKSTBOLKER } from '../domain/thcTekster'
-import { TOM_SIDE } from '../faginnhold/lesing'
+import { INGEN_REGLER, TOM_STOFFSIDE } from '../faginnhold/lesing'
 import { thcEndringer, thcUtkastfeil, type ThcRegelsettutgave } from '../faginnhold/thcregler'
 import { THC_REGELSETT, THC_TEKSTER, thcRegelsettutgave } from './hjelp/thcgrunnlag'
 
@@ -82,15 +82,17 @@ describe('publiseringen', () => {
     const utgave: ThcRegelsettutgave = thcRegelsettutgave()
     utgave.regelsett = { ...utgave.regelsett, revisjon: 4 }
     utgave.kommentarer = utgave.kommentarer.map((k) => (k.id === 'thc-apning' ? { ...k, revisjon: 2 } : k))
-    expect(publiseringsplan({ ...TOM_SIDE, thcregelsett: utgave })).toEqual([
+    // Reglene hører til fortolkningssystemet og kommer for seg, ikke gjennom
+    // stoffsiden; en side uten upubliserte endringer gir bare reglene.
+    expect(publiseringsplan(TOM_STOFFSIDE, { ...INGEN_REGLER, thcregelsett: utgave })).toEqual([
       { slag: 'kommentar', id: 'thc-apning', revisjon: 2 },
       { slag: 'thc_regelsett', id: 'thc-regelsett', revisjon: 4 },
     ])
-    expect(publiseringsplan({ ...TOM_SIDE, thcregelsett: thcRegelsettutgave() })).toEqual([])
+    expect(publiseringsplan(TOM_STOFFSIDE, { ...INGEN_REGLER, thcregelsett: thcRegelsettutgave() })).toEqual([])
   })
 })
 
-describe('redigeringen på analyttsiden', () => {
+describe('redigeringen på THC-siden', () => {
   function visRedigering(utgave = thcRegelsettutgave()) {
     const onLagre = vi.fn(async () => {})
     render(

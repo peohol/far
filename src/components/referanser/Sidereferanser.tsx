@@ -2,11 +2,11 @@ import { createContext, useContext, useMemo, type ReactNode } from 'react'
 import type { Nummerering, Referanse } from '../../faginnhold/referanser'
 
 /**
- * Referansene på én informasjonsside: numrene, selve referansene og hva hvert
+ * Referansene på én stoffside: numrene, selve referansene og hva hvert
  * panels referansefelt viser — redaksjonelle og automatiske sammen.
  *
  * Numrene regnes ut én gang for hele siden (`referanseunivers` i
- * `src/faginnhold/analyttside.ts`) og deles med alle pillene gjennom denne
+ * `src/faginnhold/stoffside.ts`) og deles med alle pillene gjennom denne
  * konteksten, så en sitering dypt inne i en tekst ikke må få dem sendt ned.
  */
 export interface Referansekilde {

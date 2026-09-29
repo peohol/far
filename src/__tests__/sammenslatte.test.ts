@@ -6,6 +6,12 @@
  * referanseområdet steg 2 viser, fortsatt er kodens eget, og at migrasjonen
  * ikke gjør noe når den kjøres igjen.
  *
+ * Migrasjonen er historisk og virker på laboratorieanalyttenes hovedside i
+ * databasen; det leses med de utgåtte funksjonene. Moderstoffets side leses
+ * som appen gjør, etter stoffets nøkkel, og referanseområdene gjennom
+ * koblingene i et syntetisk stoffregister, der metabolitten er et annet navn
+ * på moderstoffet.
+ *
  * Navnene, kodene og tallene er syntetiske.
  */
 import type { PGlite } from '@electric-sql/pglite'
@@ -15,16 +21,30 @@ import { lagFaginnholdslager, type Faginnholdslager } from '../faginnhold/lagrin
 import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import type { Objektstatus } from '../faginnhold/modell'
 import { ELEMENTTYPER, FJERNET } from '../faginnhold/paneler'
-import { SAMMENSLAINGSKILDE, sammenslaingSql } from '../faginnhold/sammenslatte'
+import { MIGRERTE_SAMMENSLATTE, SAMMENSLAINGSKILDE, sammenslaingSql } from '../faginnhold/sammenslatte'
+import { referanseomraderPerAnalytt, type Stoffreferanseomrade } from '../domain/koblinger'
+import { byggStoffregister, STOFFREGISTER } from '../domain/stoffregister'
+import { lesSideEtterKode } from './hjelp/historisklesing'
 import { faginnholdskall, feilFra, migrasjonsfiler, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
 const SAMMENSLATTE = { Testmetabolitt: 'Testmoderstoff', Utkastmetabolitt: 'Testmoderstoff' }
 const MIGRASJONSFIL = migrasjonsfiler().find((f) => f.endsWith('_sammenslatte_stoffsider.sql'))!
 
+/** Stoffregisteret etter sammenslåingen: metabolitten er et annet navn på moderstoffet, og begge kodene er koblet dit. */
+const REGISTER = byggStoffregister([], {
+  stoffer: [{ slug: 'testmoderstoff', navn: 'Testmoderstoff', aliaser: ['Testmetabolitt'] }],
+  analyttkoblinger: [
+    { kode: 'TMOD', stoff: 'testmoderstoff', relasjon: 'selve_stoffet' },
+    { kode: 'TMET', stoff: 'testmoderstoff', relasjon: 'metabolitt' },
+  ],
+  kategorier: [],
+})
+
 let db: PGlite
 let kall: Faginnholdskall
 let lager: Faginnholdslager
 let leser: Faginnholdsleser
+let bruker: string
 const ider = { moder: '', metabolitt: '', analytt: '', likt: '', ulikt: '', fritekst: '', utkastside: '', utkastkort: '' }
 
 const antall = async (sql: string) => (await db.query<{ n: number }>(sql)).rows[0]!.n
@@ -45,7 +65,7 @@ const kinetikk = (tittel: string, tekst: string) => ({ tittel, dokument: dokumen
 beforeAll(async () => {
   db = await nyDatabase()
   const admin = await opprettBruker(db, { brukernavn: 'redaktor', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
-  const bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lars', etternavn: 'Leser', rolle: 'user' })
+  bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lars', etternavn: 'Leser', rolle: 'user' })
   kall = faginnholdskall(db, admin)
   lager = lagFaginnholdslager(kall.klientFor(admin))
   leser = lagFaginnholdsleser(kall.klientFor(bruker))
@@ -87,27 +107,53 @@ beforeAll(async () => {
 }, 120_000)
 
 describe('migrasjonen', () => {
-  it('er den samme som generatoren gir for sidene i stoffregisteret', () => {
+  it('er den samme som generatoren gir for metabolittsidene den slo sammen', () => {
     const fil = readFileSync(new URL(`../../supabase/migrations/${MIGRASJONSFIL}`, import.meta.url), 'utf8')
     expect(fil).toBe(sammenslaingSql('peohol'))
+  })
+
+  it('slo sammen metabolittene som i dag er et annet navn på moderstoffet i stoffregisteret', () => {
+    for (const [metabolitt, moderstoff] of Object.entries(MIGRERTE_SAMMENSLATTE)) {
+      const stoff = STOFFREGISTER.kanonisk(metabolitt)
+      expect(stoff?.navn, metabolitt).toBe(moderstoff)
+      expect(stoff?.aliaser, metabolitt).toContain(metabolitt)
+    }
   })
 })
 
 describe('sammenslåingen i databasen', () => {
   it('gir metabolittens kode moderstoffets side, og lar metabolittsiden stå som komponent', async () => {
-    const side = await leser.lesAnalyttside('TMET', 'publisert')
+    const side = await lesSideEtterKode(kall, bruker, 'TMET', 'publisert')
     expect(side.infoside?.innhold.navn).toBe('Testmoderstoff')
     expect(side.analytt?.innhold).toMatchObject({ hovedside: ider.moder, komponenter: [ider.metabolitt] })
     expect(side.analytt?.kilde).toBe(SAMMENSLAINGSKILDE)
   })
 
   it('flytter datakortet med koden det gjelder, så begge kodene beholder sitt eget referanseområde', async () => {
-    const side = await leser.lesAnalyttside('TMOD', 'publisert')
+    const side = await leser.lesStoffside('testmoderstoff', 'publisert')
+    expect(side.stoff).toEqual({ id: ider.moder, slug: 'testmoderstoff', navn: 'Testmoderstoff' })
     const omrader = side.elementer
       .filter((e) => e.innhold.elementtype === 'referanseomrade')
       .map((e) => [e.innhold.data.gjelder ?? null, e.innhold.data.ovre])
     expect(omrader.sort()).toEqual([['TMET', 400], [null, 3000]].sort())
-    expect([...(await leser.lesReferanseomrader('publisert'))].map(([kode, o]) => [kode, o.ovre])).toEqual([
+
+    // Slik appen gir dem: kortene per stoff, knyttet til kodene gjennom koblingene.
+    const { les_stoffreferanseomrader: kort } = await kall.rpc<{ les_stoffreferanseomrader: Stoffreferanseomrade[] }>(
+      bruker,
+      'les_stoffreferanseomrader',
+      { sidetilstand: 'publisert' },
+    )
+    const perKode = referanseomraderPerAnalytt(kort, REGISTER) as Map<string, { ovre: number }>
+    expect([...perKode].map(([kode, o]) => [kode, o.ovre]).sort()).toEqual([
+      ['TMET', 400],
+      ['TMOD', 3000],
+    ])
+
+    // Og slik den utgåtte funksjonen ga dem, etter analyttenes hovedside.
+    const { les_referanseomrader: utgatt } = await kall.rpc<{
+      les_referanseomrader: { analyttkode: string; verdi: { ovre: number } }[]
+    }>(bruker, 'les_referanseomrader', { sidetilstand: 'publisert' })
+    expect(utgatt.map((r) => [r.analyttkode, r.verdi.ovre])).toEqual([
       ['TMET', 400],
       ['TMOD', 3000],
       ['TUTK', 50],
@@ -115,7 +161,7 @@ describe('sammenslåingen i databasen', () => {
   })
 
   it('tar bort et kort som står likt på moderstoffets side, og flytter et ulikt kinetikkort sist, med metabolitten i tittelen', async () => {
-    const side = await leser.lesAnalyttside('TMOD', 'publisert')
+    const side = await leser.lesStoffside('testmoderstoff', 'publisert')
     const tdm = side.elementer.filter((e) => e.innhold.panel === 'tdm').sort((a, b) => a.innhold.posisjon - b.innhold.posisjon)
     expect(tdm.map((e) => [e.id, e.innhold.data.tittel])).toEqual([
       [expect.any(String), 'Metode'],
@@ -134,8 +180,9 @@ describe('sammenslåingen i databasen', () => {
   })
 
   it('flytter ingenting for en kode når et kort på metabolittsiden har et upublisert utkast', async () => {
-    const side = await leser.lesAnalyttside('TUTK', 'publisert')
-    expect(side.infoside?.innhold.navn).toBe('Utkastmetabolitt')
+    const analyttside = await lesSideEtterKode(kall, bruker, 'TUTK', 'publisert')
+    expect(analyttside.infoside?.innhold.navn).toBe('Utkastmetabolitt')
+    const side = await leser.lesStoffside('utkastmetabolitt', 'publisert')
     expect(side.elementer.map((e) => [e.id, e.innhold.data.ovre])).toEqual([[ider.utkastkort, 50]])
     const rader = await db.query<{ tilstand: string; infoside_id: string }>(
       'select tilstand, infoside_id from public.innholdselementer where objekt_id = $1 order by tilstand',

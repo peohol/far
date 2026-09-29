@@ -17,7 +17,7 @@ const FORSTE_IMPORTMIGRASJON = '20260923072247'
 const migrasjon = (navn: string) => migrasjonsfiler().find((f) => f.endsWith(`_${navn}.sql`))!
 const VIKTIGE_DATA = migrasjon('viktige_data_former')
 const SEKSJONER = migrasjon('monograf_seksjoner')
-const KANONISKE_STOFFSIDER = migrasjon('kanonisk_bupropionside')
+const KANONISKE_STOFFSIDER = migrasjon('kanoniske_stoffsider')
 
 /** Importen slik produksjonen har den, med omarbeidingene før `til`. */
 async function importert(til: string): Promise<PGlite> {
@@ -274,8 +274,8 @@ describe('kanoniske stoffsider skiller virkestoff fra laboratorieanalytt', () =>
 
   const hovedsider = async () =>
     (
-      await db.query<{ kode: string; objekt_id: string; navn: string }>(
-        `select a.kode, i.objekt_id, i.navn
+      await db.query<{ kode: string; objekt_id: string; navn: string; slug: string }>(
+        `select a.kode, i.objekt_id, i.navn, i.slug
          from public.laboratorieanalytter a
          join public.infosider i on i.objekt_id = a.hovedside_id and i.tilstand = a.tilstand
          where a.tilstand = 'publisert' and a.kode in ('HBUP', 'PALI')
@@ -294,25 +294,33 @@ describe('kanoniske stoffsider skiller virkestoff fra laboratorieanalytt', () =>
     await kjorBare(db, KANONISKE_STOFFSIDER)
   }, 180_000)
 
-  it('beholder sideobjektene og gir dem virkestoffets kanoniske navn', async () => {
+  it('beholder sideobjektene og gir dem stoffets navn og nøkkel', async () => {
     expect(await hovedsider()).toEqual([
-      { kode: 'HBUP', objekt_id: sideider.HBUP, navn: 'Bupropion' },
-      { kode: 'PALI', objekt_id: sideider.PALI, navn: 'Paliperidon' },
+      { kode: 'HBUP', objekt_id: sideider.HBUP, navn: 'Bupropion', slug: 'bupropion' },
+      { kode: 'PALI', objekt_id: sideider.PALI, navn: 'Paliperidon', slug: 'paliperidon' },
     ])
   })
 
-  it('lar HBUP fortsatt måle hydroksybupropion som en separat analyttkomponent', async () => {
-    const { rows } = await db.query<{ navn: string; objekt_id: string }>(
-      `select i.navn, i.objekt_id
-       from public.laboratorieanalytter a
-       join public.analyttkomponenter k on k.analytt_id = a.objekt_id and k.tilstand = a.tilstand
-       join public.infosider i on i.objekt_id = k.infoside_id and i.tilstand = a.tilstand
-       where a.tilstand = 'publisert' and a.kode = 'HBUP'
-       order by k.posisjon`,
+  it('gjør sidene lesbare etter stoffets nøkkel, ikke etter analytten', async () => {
+    const { rows } = await db.query<{ side: { stoff: { id: string; slug: string; navn: string } } }>(
+      `select public.les_stoff('bupropion', 'publisert') as side`,
     )
-    expect(rows).toHaveLength(1)
-    expect(rows[0]).toMatchObject({ navn: 'Hydroksybupropion' })
-    expect(rows[0]!.objekt_id).not.toBe(sideider.HBUP)
+    expect(rows[0]!.side.stoff).toEqual({ id: sideider.HBUP, slug: 'bupropion', navn: 'Bupropion' })
+  })
+
+  it('lager ingen side for metabolitten og rører ikke analyttene', async () => {
+    const { rows } = await db.query<{ n: number }>(
+      `select count(*)::int as n from public.infosider where lower(navn) = 'hydroksybupropion'`,
+    )
+    expect(rows[0]!.n).toBe(0)
+    const endret = await db.query<{ kode: string }>(
+      `select a.kode
+       from public.laboratorieanalytter a
+       join public.objektrevisjoner r on r.objekt_id = a.objekt_id
+       where a.tilstand = 'publisert' and a.kode in ('HBUP', 'PALI')
+         and r.kilde like 'Stoffside:%'`,
+    )
+    expect(endret.rows).toEqual([])
   })
 
   it('beholder faginnholdet på de samme sideobjektene', async () => {

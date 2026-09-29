@@ -60,15 +60,15 @@ export function erSokesnarvei(event: KeyboardEvent, tast: string): boolean {
   return !lagLiggerOver() || fokusIFagsok()
 }
 
-/** Merket fortolkningen bærer mens den står skjult bak en informasjonsside. */
+/** Merket fortolkningen bærer mens den står skjult bak en stoffside. */
 export const SKJULT_FORTOLKNING = 'skjult'
 
 /**
- * Sant mens fortolkningen står skjult bak en informasjonsside eller søkesiden.
+ * Sant mens fortolkningen står skjult bak en stoffside eller søkesiden.
  *
- * Fortolkningen blir stående montert når en informasjonsside åpnes, så det
+ * Fortolkningen blir stående montert når en stoffside åpnes, så det
  * brukeren har fylt inn, er der når hen kommer tilbake. Tastene dens skal
- * derimot ligge i ro så lenge den ikke vises: `Enter` på informasjonssiden
+ * derimot ligge i ro så lenge den ikke vises: `Enter` på stoffsiden
  * skal ikke kopiere en kommentar ingen ser. Alle som lytter på vinduet på
  * vegne av fortolkningen, spør her — samme mønster som {@link lagLiggerOver}.
  */

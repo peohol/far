@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'r
 import { useProfil } from './auth/okt'
 import { iBakgrunnen } from './auth/aktivitet'
 import { klient } from './auth/klient'
-import { Analyttside } from './components/analyttside/Analyttside'
-import { FaginnholdskildeProvider, type Faginnholdskilde } from './components/analyttside/Faginnholdskilde'
+import { Stoffside } from './components/stoffside/Stoffside'
+import { FaginnholdskildeProvider, type Faginnholdskilde } from './components/stoffside/Faginnholdskilde'
 import { SearchStep } from './components/SearchStep'
 import { BandStep } from './components/BandStep'
 import { EtgPasteStep } from './components/EtgPasteStep'
@@ -27,7 +27,9 @@ import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from './domain/analyttkatalog'
 import { alternativFor, ETG_ALTERNATIVER, type EtgAlternativ } from './domain/etg'
 import type { Rute } from './domain/flytting'
-import { FORTOLKNING, analyttadresse, lesRute } from './domain/rute'
+import { FORTOLKNING, lesRute } from './domain/rute'
+import { stoffbeskrivelse, stoffForFortolkning } from './domain/koblinger'
+import { byggStoffregister, stoffslug, type Stoffoppforing } from './domain/stoffregister'
 import { rusModulFor } from './domain/rus'
 import { search } from './domain/search'
 import {
@@ -79,8 +81,8 @@ const KOPIFEIL = 'Fikk ikke tilgang til utklippstavlen. Kopier teksten manuelt.'
  * kommentaren er kopiert, slik at et tastetrykk i mellomtiden gjør det samme
  * som ellers i limsteget i stedet for å falle på gulvet.
  */
-/** Stoffsidene uten kode før de er hentet — én og samme liste, så stoffregisteret ikke bygges på nytt. */
-const INGEN_STOFFSIDER: readonly string[] = []
+/** Stoffsidene i databasen før de er hentet — én og samme liste, så stoffregisteret ikke bygges på nytt. */
+const INGEN_STOFFSIDER: readonly Stoffoppforing[] = []
 
 const BLINK = 500
 const STEGBYTTE = 130
@@ -120,11 +122,11 @@ export default function App() {
     () => filtrertPool(alleAnalytter, state.metodefilter),
     [alleAnalytter, state.metodefilter],
   )
-  // Informasjonssidene: én per analyttkode i søkeoppføringene, så menyen,
-  // kodepillene og adressene peker på de samme sidene.
+  // Laboratorieanalyttene: én per analyttkode i søkeoppføringene. Fagsidene er
+  // stoffenes, i stoffregisteret; koblingene der er veien mellom de to.
   const katalog = useMemo(() => byggKatalog(alleAnalytter), [alleAnalytter])
   const [rute, gaaTil] = useRute()
-  const paaInfoside = rute.side === 'analytt' || rute.side === 'stoff'
+  const paaInfoside = rute.side === 'stoff'
   // Stoffsidene og søkesiden legger seg over fortolkningen, som står skjult bak.
   const fortolkningSkjult = rute.side !== 'fortolkning'
 
@@ -144,7 +146,7 @@ export default function App() {
   const hits = useMemo(() => search(state.query, pool), [state.query, pool])
 
   // Fortolkningsreglene er de publiserte regelsettene i databasen, hentet
-  // når appen åpnes, sammen med referanseområdet informasjonssidene har for
+  // når appen åpnes, sammen med referanseområdet stoffsidene har for
   // hver analytt. Steg 2 og tastene bruker det som gjelder analytten.
   const hentRegler = useCallback(async () => {
     const [regelsett, referanseomrader] = await Promise.all([
@@ -160,27 +162,35 @@ export default function App() {
   const { hentPaNytt: hentThcPaNytt } = thc
   const thcRegler = useMemo(() => thcReglerFra(thc.tilstand, hentThcPaNytt), [thc.tilstand, hentThcPaNytt])
 
-  // Stoffene uten analyttkode har ingen plass i katalogen; stoffregisteret i
-  // sidemenyen tar sidene deres fra databasen. Redaktørene ser også dem som
-  // ikke er publisert.
+  // Stoffregisteret: datafilen, med navnene stoffsidene i databasen har og
+  // sidene registeret ikke kjenner. Redaktørene ser også dem som ikke er
+  // publisert.
   const stoffsider = useHenting(
     useCallback(
-      () => faginnhold.leser.lesStoffsidenavn(faginnhold.kanRedigere ? 'utkast' : 'publisert'),
+      () => faginnhold.leser.lesStoffliste(faginnhold.kanRedigere ? 'utkast' : 'publisert'),
       [faginnhold],
     ),
   )
   const { hentPaNytt: hentStoffsiderPaNytt } = stoffsider
-  const stoffsidenavn = useMemo(
-    () => (stoffsider.tilstand.status === 'klar' ? stoffsider.tilstand.data : INGEN_STOFFSIDER),
-    [stoffsider.tilstand],
+  const stoffliste = stoffsider.tilstand.status === 'klar' ? stoffsider.tilstand.data : INGEN_STOFFSIDER
+  const register = useMemo(() => byggStoffregister(stoffliste), [stoffliste])
+  const opprettStoffside = useCallback(
+    async (navn: string) => {
+      const slug = stoffslug(navn)
+      if (!slug) throw new Error('Navnet må ha minst én bokstav eller ett tall.')
+      await faginnhold.lager.opprettUtkast('infoside', { navn, slug })
+      hentStoffsiderPaNytt()
+      return slug
+    },
+    [faginnhold.lager, hentStoffsiderPaNytt],
   )
 
   // Fagsøket: indeksen over alt publisert fagstoff, hentet når appen har tid
   // til overs etter at den er åpnet, eller første gang noen søker før det. De
   // andre navnene en kode er kjent under, kommer fra katalogen, så fagsøket og
-  // analyttsøket kjenner de samme. Katalogen gir også sidene som ennå ikke har
-  // noen informasjonsside, så søket finner dem på navnet. Søket viser selv at
-  // det henter, så hentingen står ikke i lasteindikatoren.
+  // analyttsøket kjenner de samme; de blir andre navn på stoffet koden
+  // primært hører til. Søket viser selv at det henter, så hentingen står ikke
+  // i lasteindikatoren.
   const hentSokeindeks = useCallback<Sokeindekshenter>(
     (delvis) => {
       const stille = iBakgrunnen(klient())
@@ -194,9 +204,7 @@ export default function App() {
             const oppforing = katalog.finn(kode)
             return oppforing?.kode === oppforing?.fortolkning.kode ? oppforing?.fortolkning.aliaser : undefined
           },
-          sider: katalog.oppforinger
-            .flatMap((o) => (katalog.paSiden(o.sidenavn)[0] === o ? katalog.paSiden(o.sidenavn) : []))
-            .map(({ kode, sidenavn, komponenter }) => ({ kode, navn: sidenavn, komponenter })),
+          katalog,
         },
         delvis,
       )
@@ -205,14 +213,7 @@ export default function App() {
   )
   const sokeindeks = useSokeindeks(hentSokeindeks)
   useNaarLedig(sokeindeks.krev)
-  const beskrivSide = useCallback(
-    (kode: string) => {
-      const oppforing = katalog.finn(kode)
-      if (!oppforing) return undefined
-      return [oppforing.kode, [oppforing.analysemetode, oppforing.kategori].filter(Boolean).join(' › ')].join(' · ')
-    },
-    [katalog],
-  )
+  const beskrivSide = useCallback((stoff: string) => stoffbeskrivelse(stoff, register, katalog), [register, katalog])
   const gaaTilAdresse = useCallback((adresse: string) => gaaTil(lesRute(adresse)), [gaaTil])
   const regeloppslag = useMemo(
     () => (state.analyte ? slaOpp(regler.tilstand, state.analyte.kode) : null),
@@ -221,7 +222,7 @@ export default function App() {
   const regelsett = regeloppslag?.status === 'klar' ? regeloppslag.regelsett : null
   const valgene = useMemo(() => (regelsett ? regelsettvalg(regelsett) : []), [regelsett])
 
-  // En administrator kan ha publisert nye regler på en informasjonsside. De
+  // En administrator kan ha publisert nye regler på en stoffside. De
   // hentes når hen går tilbake til fortolkningen.
   const varPaInfoside = useRef(paaInfoside)
   // Det samme gjelder fagsøket, som henter indeksen på nytt neste gang det
@@ -345,7 +346,7 @@ export default function App() {
   )
 
   /**
-   * «Åpne fortolkning» på en informasjonsside: modulen koden hører til, som
+   * «Åpne fortolkning» på en stoffside: modulen koden hører til, som
    * om den var valgt i søket. Var den alt åpen, står den som den sto.
    */
   const apneFortolkning = useCallback(
@@ -359,11 +360,12 @@ export default function App() {
   const lukkInfoside = useCallback(() => gaaTil(FORTOLKNING), [gaaTil])
 
   /**
-   * Stoffsiden til modulen som fortolkes, når den har én: toppmenyens
-   * «Åpne stoffside». Moduler uten en egen kode i katalogen (som EtG/EtS) har
-   * bare kodepillene, én per side.
+   * Stoffsiden til modulen som fortolkes, når kodene i den primært hører til
+   * ett stoff: toppmenyens «Åpne stoffside». EtG og EtS fører begge til
+   * etanol; moduler med koder for flere stoffer (DIAZ · DMI · OXA) har bare
+   * kodepillene, én per kode.
    */
-  const stoffside = state.analyte ? katalog.finn(state.analyte.kode)?.kode : undefined
+  const stoffside = state.analyte ? stoffForFortolkning(state.analyte, register)?.slug : undefined
 
   const settMetodefilter = useCallback((metode: string | null) => {
     dispatch({ type: 'sett-metodefilter', metode })
@@ -513,7 +515,7 @@ export default function App() {
       >
         <Toppmeny
           meny={
-            <Sidemeny katalog={katalog} stoffsider={stoffsidenavn} kanOpprette={faginnhold.kanRedigere} />
+            <Sidemeny register={register} {...(faginnhold.kanRedigere && { onOpprett: opprettStoffside })} />
           }
           sok={
             <Fagsok
@@ -533,19 +535,20 @@ export default function App() {
             har sine egne mens de vises. */}
         {!fortolkningSkjult && stoffside && (
           <ToppmenyInnhold spor="handlinger">
-            <Toppmenyknapp ikon="indik" onClick={() => gaaTilAdresse(analyttadresse(stoffside))}>
+            <Toppmenyknapp ikon="indik" onClick={() => gaaTil({ side: 'stoff', stoff: stoffside })}>
               Åpne stoffside
             </Toppmenyknapp>
           </ToppmenyInnhold>
         )}
 
-        {(rute.side === 'analytt' || rute.side === 'stoff') && (
+        {rute.side === 'stoff' && (
           <main className="scene scene--infoside">
             <FaginnholdskildeProvider kilde={faginnhold}>
               <ScenarioreglerProvider kilde={scenarioregler}>
-                <Analyttside
-                  {...(rute.side === 'analytt' ? { kode: rute.kode } : { stoff: rute.navn })}
+                <Stoffside
+                  stoff={rute.stoff}
                   sted={rute.sted}
+                  register={register}
                   katalog={katalog}
                   onApneFortolkning={apneFortolkning}
                   onLukk={lukkInfoside}
@@ -567,7 +570,7 @@ export default function App() {
           </main>
         )}
 
-        {/* Fortolkningen blir stående bak en åpen informasjonsside, så det
+        {/* Fortolkningen blir stående bak en åpen stoffside, så det
             brukeren har fylt inn, er der når hen kommer tilbake. Tastene dens
             ligger i ro så lenge den er skjult — se `fortolkningenErSkjult`. */}
         <main

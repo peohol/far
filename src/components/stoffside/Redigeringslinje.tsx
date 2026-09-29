@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import type { Publiseringssteg } from '../../faginnhold/analyttside'
+import type { Publiseringssteg } from '../../faginnhold/stoffside'
 import { endredeFelt } from '../../faginnhold/historikk'
-import type { Analyttsidedata } from '../../faginnhold/lesing'
+import { INGEN_REGLER, type Regeldata, type Stoffsidedata } from '../../faginnhold/lesing'
 import { lesKinetikk, panelFor } from '../../faginnhold/paneler'
 import { RUS_MODULER } from '../../domain/rus'
 import { losRegelsett } from '../../regler/kommentarer'
@@ -11,12 +11,13 @@ import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Modallag } from '../Modallag'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
-import type { Publiserteregler } from './useAnalyttside'
 
 export interface RedigeringshandlingerProps {
-  data: Analyttsidedata
+  data: Stoffsidedata
+  /** Utkastet til fortolkningsreglene siden viser. */
+  regler: Regeldata
   /** Regelsettene slik de er publisert, til å si hva som endres. */
-  publisert: Publiserteregler
+  publisert: Regeldata
   plan: Publiseringssteg[]
   /** Sant mens utkastet hentes etter at redigeringen er slått på. */
   laster: boolean
@@ -32,6 +33,7 @@ export interface RedigeringshandlingerProps {
  */
 export function Redigeringshandlinger({
   data,
+  regler,
   publisert,
   plan,
   laster,
@@ -95,7 +97,7 @@ export function Redigeringshandlinger({
         <p className="publisering__ingress">Dette blir publisert og synlig for alle:</p>
         <ul className="publisering__liste">
           {plan.map((steg) => (
-            <li key={steg.id}>{beskrivSteg(steg, data, publisert)}</li>
+            <li key={steg.id}>{beskrivSteg(steg, data, regler, publisert)}</li>
           ))}
         </ul>
         {feil && (
@@ -129,55 +131,52 @@ export function statustekst(laster: boolean, antall: number, ferdig: boolean): s
  */
 export function beskrivSteg(
   steg: Publiseringssteg,
-  data: Analyttsidedata,
-  publisert: Publiserteregler = { regelsett: null, scenarioregelsett: null },
+  data: Stoffsidedata,
+  regler: Regeldata = INGEN_REGLER,
+  publisert: Regeldata = INGEN_REGLER,
 ): string {
   const medEndringer = (navn: string, endret: string[] | null) =>
     endret && endret.length > 0 ? `${navn} (${endret.join(', ')})` : navn
   switch (steg.slag) {
     case 'intervallregelsett': {
-      const regelsett = data.regelsett
-      const forrige = publisert.regelsett
+      const [kode, regelsett] = Object.entries(regler.regelsett).find(([, r]) => r.regelsett.id === steg.id) ?? []
+      const forrige = kode ? publisert.regelsett[kode] : undefined
       return medEndringer(
-        `Fortolkningsreglene for ${regelsett?.regelsett.innhold.analyttkode ?? 'koden'}`,
-        regelsett &&
-          forrige &&
-          endredeFelt(regelsettfelterMedTekst(losRegelsett(forrige)), regelsettfelterMedTekst(losRegelsett(regelsett))),
+        `Fortolkningsreglene for ${kode ?? 'koden'}`,
+        regelsett && forrige
+          ? endredeFelt(regelsettfelterMedTekst(losRegelsett(forrige)), regelsettfelterMedTekst(losRegelsett(regelsett)))
+          : null,
       )
     }
     case 'scenarioregelsett': {
-      const regelsett = data.scenarioregelsett
-      const forrige = publisert.scenarioregelsett
-      const modul = regelsett?.regelsett.innhold.modul
+      const [modul, regelsett] =
+        Object.entries(regler.scenarioregelsett).find(([, r]) => r.regelsett.id === steg.id) ?? []
+      const forrige = modul ? publisert.scenarioregelsett[modul] : undefined
       return medEndringer(
         `Fortolkningsreglene for ${RUS_MODULER.find((m) => m.id === modul)?.navn ?? 'modulen'}`,
-        regelsett &&
-          forrige &&
-          endredeFelt(utkastfelter(tilScenarioutkast(forrige)), utkastfelter(tilScenarioutkast(regelsett))),
+        regelsett && forrige
+          ? endredeFelt(utkastfelter(tilScenarioutkast(forrige)), utkastfelter(tilScenarioutkast(regelsett)))
+          : null,
       )
     }
     case 'thc_regelsett':
       return 'Fortolkningsreglene for THC-syre i urin'
     case 'kommentar': {
       const kommentar = [
-        ...(data.regelsett?.kommentarer ?? []),
-        ...(data.scenarioregelsett?.kommentarer ?? []),
-        ...(data.thcregelsett?.kommentarer ?? []),
-      ].find((k) => k.id === steg.id)
+        ...Object.values(regler.regelsett),
+        ...Object.values(regler.scenarioregelsett),
+        ...(regler.thcregelsett ? [regler.thcregelsett] : []),
+      ]
+        .flatMap((r) => r.kommentarer)
+        .find((k) => k.id === steg.id)
       return `Kommentar: ${kommentar?.innhold.navn ?? 'en kommentar fortolkningsreglene bruker'}`
     }
     case 'referanse': {
       const referanse = data.referanser.find((r) => r.id === steg.id)
       return `Referanse: ${referanse?.innhold.tittel || referanse?.innhold.forfattere || 'uten tittel'}`
     }
-    case 'komponent': {
-      const side = data.komponenter.find((k) => k.id === steg.id)
-      return `Siden for ${side?.innhold.navn ?? 'en komponent'}`
-    }
     case 'infoside':
       return `Siden ${data.infoside?.innhold.navn ?? ''} og kildene for panelene`.replace('  ', ' ')
-    case 'laboratorieanalytt':
-      return `Analyttkoden ${data.analytt?.innhold.kode ?? ''}`
     case 'innholdselement': {
       const element = data.elementer.find((e) => e.id === steg.id)
       if (!element) return 'Et kort'

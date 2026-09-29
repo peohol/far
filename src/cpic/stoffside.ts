@@ -3,7 +3,7 @@
  * seksjonen «Farmakogenetikk», med ett detaljkort per CPIC-retningslinje og
  * ett for parene CPIC har vurdert uten retningslinje.
  *
- * Alt her er rene funksjoner. Søket på siden (`Analyttside.tsx`) og søket i
+ * Alt her er rene funksjoner. Søket på siden (`Stoffside.tsx`) og søket i
  * hele kunnskapsbasen (`src/faginnhold/globaltSok.ts`) bruker de samme, så et
  * treff peker på det samme stedet uansett hvilket søk som fant det.
  *

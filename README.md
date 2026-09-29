@@ -50,10 +50,10 @@ kommentarer i limsteget. Se [EtG og EtS i urin](#etg-og-ets-i-urin).
 
 Menyknappen øverst til venstre åpner **stoffregisteret**, som er veien inn til
 oppslagsverket: alle stoffene appen har sider for, ordnet etter farmakologisk
-klasse, og et trykk på et stoff åpner **informasjonssiden** for det. Hvilken
+klasse, og et trykk på et stoff åpner **stoffsiden** for det. Hvilken
 analysemetode søket leter i, velges på hovedsiden. Se
 [Stoffregisteret og analysemetodene](#stoffregisteret-og-analysemetodene) og
-[Informasjonssidene](#informasjonssidene).
+[Stoffsidene](#stoffsidene).
 
 Smalner søket inn til én eneste analytt, er valget i praksis allerede tatt, og
 appen går videre uten at det trengs et tastetrykk til. Det skjer bare i selve
@@ -132,7 +132,8 @@ src/types.ts                Datamodellen
 src/state.ts                Tilstandsmaskinen for stegene
 src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, kontrast,
                             analysemetodene (analysemetoder.ts), stoffregisteret
-                            i sidemenyen (stoffregister.ts),
+                            og koblingene til analyttene (stoffregister.ts,
+                            koblinger.ts), adressene (rute.ts),
                             referansetallene analyttkortet viser (piller.ts),
                             tooltipplassering (tipsplassering.ts), flukten til
                             kopibeviset (flytting.ts), THC-fortolkning (thc.ts) med
@@ -144,8 +145,8 @@ src/domain/                 Bånd, klassifisering, søk, navn, fargespredning, k
 docs/endringslogg.md        Rutinen for å føre loggen ved hver endring
 src/faginnhold/             Det redigerbare faginnholdet: formen, lesingen og
                             lagringen, panelene, rikteksten, referansene og søket.
-                            Brukes av informasjonssidene, ikke av fortolkningen
-src/components/analyttside/ Informasjonssidene: panelene, redigeringen,
+                            Brukes av stoffsidene, ikke av fortolkningen
+src/components/stoffside/   Stoffsidene: panelene, redigeringen,
                             rikteksteditoren, referansevelgeren og søket på siden
 docs/faginnhold.md          Hvordan faginnholdet lagres, versjoneres, publiseres og vises
 src/hooks/                  Tastatur, tema, hurtigtastmerker, utklippstavle,
@@ -219,53 +220,55 @@ søkealternativene bruker, og kontrasten deres måles i
 
 Sidemenyen er **stoffregisteret**: stoffene ordnet etter farmakologisk
 klasse, ikke etter analysemetode, med og uten analyttkode om hverandre.
-Inndelingen er data, ikke kode — `src/data/stoffregister.json` har
-kategoriene i rekkefølge, eventuelt delt i underkategorier (antidepressivene
-etter farmakodynamisk klasse, antipsykotika i første- og
-andregenerasjonsmidler), og stoffene ved navnet på informasjonssiden.
-Antihypertensivene tar underkategoriene sine fra datasettet (`"metode": "AHT"`),
-så et nytt antihypertensivum havner på plass av seg selv. Et stoff kan stå i
+Registeret er data, ikke kode, og det er autoritativt:
+`src/data/stoffregister.json` har stoffene (nøkkel, navn og eventuelle andre
+navn), koblingene til laboratorieanalyttene og kategoriene i rekkefølge,
+eventuelt delt i underkategorier (antidepressivene etter farmakodynamisk
+klasse, antipsykotika i første- og andregenerasjonsmidler). Et stoff kan stå i
 flere kategorier, som lamotrigin under både antiepileptika og
 stemningsstabiliserende.
 
-`byggStoffregister()` i `src/domain/stoffregister.ts` slår navnene opp i de
-samme søkeoppføringene som søket leter i og i stoffsidene uten kode fra
-databasen, så lista ikke kan komme i utakt med det appen har sider for. Et navn
-uten side utelates, og en side som ikke står i registeret — en ny stoffside en
-redaktør har laget — havner i «Andre stoffer» nederst til noen plasserer den.
-Én skuff per kategori, én av gangen åpen, med antallet stoffer. Stoffene står
-alfabetisk, og bryteren «Vis underkategorier» slår underkategoriene av og
-lister hver kategori i én bolk. Bryteren står fast øverst og «Ny stoffside»
-(for redaktørene) fast nederst.
+`byggStoffregister()` i `src/domain/stoffregister.ts` legger til stoffsidene
+redaktørene har laget i databasen: en side registeret ikke kjenner, havner i
+«Andre stoffer» nederst til noen plasserer den. Én skuff per kategori, én av
+gangen åpen, med antallet stoffer. Stoffene står alfabetisk, og bryteren «Vis
+underkategorier» slår underkategoriene av og lister hver kategori i én bolk.
+Bryteren står fast øverst og «Ny stoffside» (for redaktørene) fast nederst.
 
-Én linje per **fagsside**, med alle laboratoriekodene som hører til siden.
-En sumanalyse vises med moderstoffets navn, ikke hele analysenavnet. Metabolitter
-som ikke er egne legemidler, står på moderstoffets side
-(`"sammenslatte"` i `src/data/stoffregister.json`): blant annet
-N-desmetyldiazepam på «Diazepam», O-desmetyltramadol på «Tramadol»,
-norfluoksetin på «Fluoksetin» og desmetyl-/didesmetylkariprazin på
-«Kariprazin». EtG og EtS deler siden «Etanol». THC og THC-syre deler siden
-«THC og THC-syre», der serum- og urinfortolkningen har hver sin redigerbare
-regel-seksjon. Oksazepam, nortriptylin, paliperidon og andre metabolitter som
-selv er legemidler, beholder egne sider.
+Én linje per **stoff**, navngitt etter stoffet, med analyttkodene som er
+koblet til det som sekundær informasjon. **Stoffet er sidens eneste
+identitet**; en laboratorieanalytt er noe fortolkningen bruker, og kobles til
+ett eller flere stoffer bare med en eksplisitt kobling i registeret: koden,
+stoffet, hva analytten er for stoffet (selve stoffet, en metabolitt eller en
+sumanalyse) og om stoffet er analyttens primære. Eksempler:
 
-Kodene på en felles fagsside beholder sine fortolkningssystemer og eventuelle
-kode-spesifikke tall, men **ikke hver sin sideadresse**: alle lenker peker på
-den kanoniske URL-en. Gamle bokmerker til en sekundærkode videresendes dit.
-Hver linje i registeret er en lenke til fagssiden; fortolkningen åpnes derfra
-med «Åpne fortolkning», eller fra kodepillene på siden.
+- HBUP (hydroksybupropion) → Bupropion, som metabolitt.
+- AMTNORSUM → Amitriptylin, som sumanalyse. Nortriptylin er et eget stoff med
+  NOR.
+- VENSUM → Venlafaksin, RISPSUM → Risperidon, PALI → Paliperidon.
+- DIAZ og DMI → Diazepam, TRAM og OTRAM → Tramadol, UETGS og UETS → Etanol,
+  THC og IRCAK → THC.
 
-### Informasjonssidene
+Metabolitter som ikke er egne legemidler, er andre navn på stoffet
+(hydroksybupropion, norfluoksetin, N-desmetyldiazepam), ikke egne sider.
+Koblingene utledes aldri av navnelikhet, og både et stoff uten analytt og en
+analytt uten stoff er gyldig. Hver analytt beholder sine egne
+fortolkningsregler (HBUP-reglene hører til HBUP); stoffsiden viser dem der
+koblingen sier at stoffet er analyttens primære.
 
-Hver fagsside har én kanonisk adresse, for eksempel
-`#/analytt/AMTNORSUM`, som kan bokmerkes og åpnes direkte. Flere analyttkoder
-kan høre til den samme siden; da peker kodepillene direkte på samme URL, mens
-gamle sekundæradresser videresendes. Sidene nås fra sidemenyen og fra
-analyttkodepillene i fortolkningsmodulene. På siden vises alle kodene og
-analysemetodene den omfatter. «Åpne fortolkning» fører til hovedfortolkningen,
-mens hver kodepille kan åpne den fortolkningen akkurat den koden hører til.
-Fortolkningen blir stående som den var bak en åpen side, og tastene dens ligger
-i ro så lenge siden vises; `Esc` lukker siden.
+### Stoffsidene
+
+Hver stoffside har én kanonisk adresse etter stoffets nøkkel, for eksempel
+`#/stoff/bupropion` eller `#/stoff/bupropion/farmakokinetikk`, som kan
+bokmerkes og åpnes direkte. Sidene nås fra sidemenyen, fra fagsøket og fra
+analyttkodepillene i fortolkningsmodulene, som fører til stoffsiden til
+analyttens primære stoff. Gamle adresser som `#/analytt/HBUP` sendes videre
+til stoffet når koden har ett primært stoff; ellers vises ingen fagside.
+
+På siden forklarer identiteten hva hver analytt måler, med lenker til andre
+stoffer koblingene nevner. «Åpne fortolkning» fører til fortolkningen for
+analyttene stoffet har. Fortolkningen blir stående som den var bak en åpen
+side, og tastene dens ligger i ro så lenge siden vises; `Esc` lukker siden.
 
 Siden har sju paneler — identitet, viktige data, farmakodynamikk, dosering,
 indikasjon, farmakokinetikk og serumkonsentrasjoner — med referansene
@@ -273,8 +276,9 @@ nummerert etter første forekomst og listet nederst. `Ctrl + B` (`Cmd + B` på
 Mac) går til søket på siden i toppmenyen, som fremhever og teller treffene
 (`Enter` og `Shift + Enter` blar).
 
-Fagsøket i toppmenyen (`Ctrl + K`, `Cmd + K` på Mac) søker i alle de
-publiserte stoffsidene, og er noe annet enn analyttsøket som driver
+Fagsøket i toppmenyen (`Ctrl + K`, `Cmd + K` på Mac) søker i alle stoffene
+og de publiserte stoffsidene — på stoffnavnet, andre navn, analyttkodene og
+analyttnavnene, så «HBUP» og «hydroksybupropion» begge finner Bupropion — og er noe annet enn analyttsøket som driver
 fortolkningen. Rullegardinen viser de beste treffene med stien på siden
 (piltastene velger, `Enter` åpner, `Esc` lukker), og «Vis alle treff» åpner
 søkesiden `#/sok?q=…`, som kan bokmerkes og deles. Hvert treff går rett til
@@ -931,7 +935,7 @@ fokuset når menyen åpnes, og tabulator går rundt inne i det så lenge den st�
 tilbake til menyknappen, som da er synlig igjen. `Esc` lukker menyen, og appens
 egne taster ligger i ro så lenge den står åpen.
 
-Informasjonssidene er seksjoner med overskrifter i fast nivå: navnet er `h1`,
+Stoffsidene er seksjoner med overskrifter i fast nivå: navnet er `h1`,
 panelene `h2` og kortene `h3`, og fokus flyttes til navnet når en side åpnes.
 Søket på siden er en `search`-region med navn, og antallet treff meldes som
 status. Fagsøket er en kombinasjonsboks med en navngitt liste, der det valgte

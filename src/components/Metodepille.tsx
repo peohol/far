@@ -15,7 +15,7 @@ export interface MetodepilleProps {
  * Metoden og kategorien hører sammen — kategorien betyr ingenting uten
  * metoden den ligger i — så de deler pille i stedet for å stå som to.
  * Pillen bærer metodens egen farge, den samme i filteret for søket, i
- * analyttkortet og øverst på informasjonssiden, slik at fargen alene sier
+ * analyttkortet og øverst på stoffsiden, slik at fargen alene sier
  * hvilken analyse dette er.
  *
  * Koden står alene, uten forklaring bak seg: de som kommenterer analysene

@@ -125,17 +125,7 @@ export const UKOBLEDE_STOFFSIDER: readonly UkobletSide[] = [
     status: 'krever_kuratering',
     kandidater: [{ clinpgx_id: 'PA448687', navn: 'bupropion' }],
     grunn:
-      'Fagsiden gjelder nå virkestoffet bupropion. ClinPGx har bupropion som eget kjemikalie; koblingen er ikke lagt inn ennå.',
-  },
-  {
-    side: 'Hydroksybupropion',
-    status: 'metabolitt',
-    moderstoff: { side: 'Bupropion', clinpgx_id: 'PA448687', navn: 'bupropion' },
-    egne: [
-      { clinpgx_id: 'PA166226561', navn: 'hydroxybupropion' },
-      { clinpgx_id: 'PA166170175', navn: '4-hydroxybupropion' },
-    ],
-    grunn: 'Aktiv metabolitt av bupropion. ClinPGx har to kjemikalier for metabolitten, begge uten annotasjoner.',
+      'Fagsiden gjelder virkestoffet bupropion; laboratoriet måler metabolitten hydroksybupropion (HBUP). ClinPGx har bupropion som eget kjemikalie; koblingen er ikke lagt inn ennå. Metabolitten har to egne kjemikalier i ClinPGx (PA166226561, PA166170175), begge uten annotasjoner.',
   },
   {
     side: 'Norfluoksetin',

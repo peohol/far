@@ -4,8 +4,8 @@
  * redaksjonelle — og forsvinner av seg selv når FEST ikke lenger har dem.
  */
 import { describe, expect, it } from 'vitest'
-import { byggSidemodell, referanseunivers } from '../faginnhold/analyttside'
-import { TOM_SIDE } from '../faginnhold/lesing'
+import { byggSidemodell, referanseunivers } from '../faginnhold/stoffside'
+import { TOM_STOFFSIDE } from '../faginnhold/lesing'
 import { PANELER } from '../faginnhold/paneler'
 import { erAutomatisk, formaterReferanse } from '../faginnhold/referanser'
 import type { Interaksjon, Interaksjonsoversikt } from '../legemiddeldata/interaksjoner'
@@ -147,7 +147,7 @@ describe('de automatiske referansene på en side', () => {
   })
 
   it('nummereres sammen med de redaksjonelle, og forsvinner når FEST ikke lenger har dem', () => {
-    const modell = byggSidemodell(TOM_SIDE)
+    const modell = byggSidemodell(TOM_STOFFSIDE)
     const med = referanseunivers(modell, festreferanser(UTVALG, oversikt(interaksjon('1', [{ kilde: 'Borte snart' }]))))
     expect(med.liste.map((o) => [o.nummer, o.referanse.tittel])).toEqual([
       [1, 'FEST – Forskrivnings- og ekspedisjonsstøtte'],
@@ -165,7 +165,7 @@ describe('de automatiske referansene på en side', () => {
   })
 
   it('tar ikke med automatiske referanser i paneler siden ikke kjenner', () => {
-    const univers = referanseunivers(byggSidemodell(TOM_SIDE), {
+    const univers = referanseunivers(byggSidemodell(TOM_STOFFSIDE), {
       referanser: [festkilde(UTVALG)],
       panelreferanser: { ukjent: [FEST_KILDE] },
       elementer: [{ panel: 'ukjent', id: 'x', referanser: [FEST_KILDE] }],

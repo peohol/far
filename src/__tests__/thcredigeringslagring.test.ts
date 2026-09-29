@@ -10,10 +10,12 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { THC_KODE } from '../domain/thc'
 import { fortolkThc, tomThcInndata } from '../domain/thcMotor'
 import { normalkvantil } from '../domain/thcRegelsett'
-import { publiseringsplan } from '../faginnhold/analyttside'
+import { publiseringsplan } from '../faginnhold/stoffside'
 import { lagFaginnholdslager, Samtidighetskonflikt } from '../faginnhold/lagring'
 import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import { thcEndringer, thcReglerFra, thcUtkastFra, thcUtkastfeil } from '../faginnhold/thcregler'
+import { primareAnalytter } from '../domain/koblinger'
+import { lesRegeldata } from './hjelp/regeldata'
 import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
 const IMPORT = migrasjonsfiler().find((f) => f.endsWith('_thc_regelsett_import.sql'))!
@@ -60,8 +62,12 @@ describe('redigeringen av THC-syrereglene', () => {
     // Vanlige brukere ser fortsatt det publiserte.
     expect(await bruker.lesThcRegelsett('publisert')).toStrictEqual(publisertFor)
 
-    const side = await admin.lesAnalyttside(THC_KODE, 'utkast')
-    const plan = publiseringsplan(side)
+    // Reglene står på THC-siden, fordi THC-syre (IRCAK) er koblet til stoffet
+    // THC i stoffregisteret — ikke fordi siden hører til koden.
+    expect(primareAnalytter('thc').map((a) => a.kode)).toContain(THC_KODE)
+    const side = await admin.lesStoffside('thc', 'utkast')
+    expect(side.stoff).toMatchObject({ slug: 'thc', navn: 'THC' })
+    const plan = publiseringsplan(side, await lesRegeldata(admin, 'thc', 'utkast'))
     expect(plan.map((s) => s.slag)).toEqual(['kommentar', 'thc_regelsett'])
     for (const steg of plan) await lager.publiserUtkast(steg.id, steg.revisjon)
 
@@ -73,7 +79,9 @@ describe('redigeringen av THC-syrereglene', () => {
       hentet.modell,
     )
     expect(resultat.type === 'kommentar' && resultat.kommentar).toContain('Syntetisk tillegg.')
-    expect(publiseringsplan(await admin.lesAnalyttside(THC_KODE, 'utkast'))).toEqual([])
+    expect(
+      publiseringsplan(await admin.lesStoffside('thc', 'utkast'), await lesRegeldata(admin, 'thc', 'utkast')),
+    ).toEqual([])
   })
 
   it('gir en konflikt når noen andre har lagret i mellomtiden, og skriver ikke over', async () => {

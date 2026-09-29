@@ -3,7 +3,7 @@ import type { Intervallregelsett } from './modell'
 
 /**
  * Det fortolkningen henter fra databasen når appen åpnes: de publiserte
- * regelsettene, og referanseområdet informasjonssiden har for hver kode.
+ * regelsettene, og referanseområdet stoffsiden har for hver kode.
  */
 export interface Publisertgrunnlag {
   regelsett: Intervallregelsett[]

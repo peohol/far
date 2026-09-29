@@ -11,10 +11,10 @@ import { Fagsok, MAKS_I_RULLEGARDIN } from '../components/sok/Fagsok'
 import { GRUPPEGRENSE, Sokeside } from '../components/sok/Sokeside'
 import { HENTER_MER, visTreff } from '../components/sok/treffvisning'
 import { TipsLag } from '../components/Tips'
-import { lagSokeindeks, sokeord, sokGlobalt, type Sokedokument, type Sokested } from '../faginnhold/sok'
+import { lagSokeindeks, sok, sokeord, sokGlobalt, type Sokedokument, type Sokested } from '../faginnhold/sok'
 import { erBekreftelse, fokusIFagsok, lagLiggerOver, useKeyboard } from '../hooks/useKeyboard'
 import { useSokeindeks, type Lestsokeindeks, type Sokeindekstilstand } from '../hooks/useSokeindeks'
-import { erSidesokSnarvei } from '../components/analyttside/Sidesok'
+import { erSidesokSnarvei } from '../components/stoffside/Sidesok'
 import { erFagsokSnarvei } from '../components/toppmeny/Fagsokfelt'
 
 beforeAll(() => {
@@ -34,8 +34,9 @@ afterEach(() => {
 
 /* --- Et lite, syntetisk fagstoff ---------------------------------------------- */
 
-const SERTRALIN = { kode: 'SERT', navn: 'Sertralin' }
-const KVETIAPIN = { kode: 'KVE', navn: 'Kvetiapin' }
+// Hvert sted er på en stoffside, etter stoffets nøkkel. Koden er bare en vei inn.
+const SERTRALIN = { stoff: 'sertralin', navn: 'Sertralin' }
+const KVETIAPIN = { stoff: 'kvetiapin', navn: 'Kvetiapin' }
 
 const i = (side: Sokested['side'], rest: Omit<Sokested, 'side'> = {}): Sokested => ({ side, ...rest })
 const FARMAKOKINETIKK = { nokkel: 'farmakokinetikk', tittel: 'Farmakokinetikk' }
@@ -45,6 +46,7 @@ const INDIKASJON = { nokkel: 'indikasjon', tittel: 'Indikasjon' }
 const DOKUMENTER: Sokedokument[] = [
   { sted: i(SERTRALIN), felt: 'navn', tekst: 'Sertralin' },
   { sted: i(SERTRALIN), felt: 'kode', tekst: 'SERT' },
+  { sted: i(SERTRALIN), felt: 'komponent', tekst: 'Desmetylsertralin' },
   { sted: i(SERTRALIN), felt: 'alias', tekst: 'Zoloft-stoffet' },
   {
     sted: i(SERTRALIN, { panel: PREPARATER, element: { id: 'form-t', tittel: 'Tablett' }, detaljkort: 'preparat-t' }),
@@ -73,7 +75,9 @@ const DOKUMENTER: Sokedokument[] = [
 
 const KLAR: Sokeindekstilstand = { status: 'klar', indeks: lagSokeindeks(DOKUMENTER) }
 
-const beskrivSide = (kode: string) => (kode === 'SERT' ? 'SERT · SPFA › Antidepressiva' : undefined)
+/** Linja under et stoff, som `stoffbeskrivelse` gir den: kategorien og analyttene. */
+const BESKRIVELSE = 'Antidepressiver › SSRI · analytt SERT'
+const beskrivSide = (stoff: string) => (stoff === 'sertralin' ? BESKRIVELSE : undefined)
 
 function visFagsok(indeks: Sokeindekstilstand = KLAR, sporring?: string) {
   const onKrev = vi.fn()
@@ -102,9 +106,10 @@ describe('rullegardinen under fagsøket', () => {
     expect(felt.getAttribute('aria-expanded')).toBe('true')
     const alle = rader()
     expect(alle.length).toBe(Math.min(MAKS_I_RULLEGARDIN, sokGlobalt(KLAR.indeks, 'sertralin').length))
-    // Stoffet først, med katalogens linje under navnet.
+    // Stoffet først, med kategorien og analytten under navnet.
     expect(alle[0]!.textContent).toContain('Sertralin')
-    expect(alle[0]!.textContent).toContain('SERT · SPFA › Antidepressiva')
+    expect(alle[0]!.textContent).toContain(BESKRIVELSE)
+    expect(alle[0]!.getAttribute('href')).toBe('#/stoff/sertralin')
     expect(alle[0]!.getAttribute('aria-selected')).toBe('true')
     expect(felt.getAttribute('aria-activedescendant')).toBe(alle[0]!.id)
     expect(alle[0]!.querySelector('mark')?.textContent).toBe('Sertralin')
@@ -112,9 +117,9 @@ describe('rullegardinen under fagsøket', () => {
     await user.keyboard('{ArrowDown}')
     const andre = rader()[1]!
     expect(andre.getAttribute('aria-selected')).toBe('true')
-    expect(andre.getAttribute('href')).toBe('#/analytt/SERT/preparater/preparat-t')
+    expect(andre.getAttribute('href')).toBe('#/stoff/sertralin/preparater/preparat-t')
     await user.keyboard('{Enter}')
-    expect(onGaaTil).toHaveBeenCalledWith('#/analytt/SERT/preparater/preparat-t')
+    expect(onGaaTil).toHaveBeenCalledWith('#/stoff/sertralin/preparater/preparat-t')
     // Rullegardinen lukkes, og fokus går ut av feltet.
     expect(felt.getAttribute('aria-expanded')).toBe('false')
     expect(document.activeElement).not.toBe(felt)
@@ -153,7 +158,7 @@ describe('rullegardinen under fagsøket', () => {
     await user.click(felt)
     await user.keyboard('bipolar')
     await user.click(rader()[0]!)
-    expect(onGaaTil).toHaveBeenCalledWith('#/analytt/KVE/indikasjon')
+    expect(onGaaTil).toHaveBeenCalledWith('#/stoff/kvetiapin/indikasjon')
     expect(document.activeElement).not.toBe(felt)
   })
 
@@ -271,11 +276,11 @@ describe('søkesiden', () => {
     expect(grupper).toEqual(['Stoff', 'Preparater', 'I teksten'])
 
     const stoff = screen.getByRole('region', { name: /^Stoff/ })
-    expect(within(stoff).getByRole('link').getAttribute('href')).toBe('#/analytt/SERT')
+    expect(within(stoff).getByRole('link').getAttribute('href')).toBe('#/stoff/sertralin')
     const tekst = screen.getByRole('region', { name: /^I teksten/ })
     const lenker = within(tekst).getAllByRole('link').map((a) => a.getAttribute('href'))
-    expect(lenker).toContain('#/analytt/SERT/farmakokinetikk/k1')
-    expect(lenker).toContain('#/analytt/KVE/indikasjon')
+    expect(lenker).toContain('#/stoff/sertralin/farmakokinetikk/k1')
+    expect(lenker).toContain('#/stoff/kvetiapin/indikasjon')
   })
 
   it('filtrerer på gruppe med knappene øverst', async () => {
@@ -293,13 +298,13 @@ describe('søkesiden', () => {
   it('viser referansene i en egen gruppe når det bare er de som treffer', () => {
     visSokeside('felleskatalogen')
     const referanser = screen.getByRole('region', { name: /^Referanser/ })
-    expect(within(referanser).getByRole('link').getAttribute('href')).toBe('#/analytt/SERT')
+    expect(within(referanser).getByRole('link').getAttribute('href')).toBe('#/stoff/sertralin')
   })
 
   it('viser de første treffene i en stor gruppe, og resten på forespørsel', async () => {
     const user = userEvent.setup()
     const mange: Sokedokument[] = Array.from({ length: GRUPPEGRENSE + 5 }, (_, n) => ({
-      sted: i({ kode: `K${n}`, navn: `Stoff ${n}` }, { panel: INDIKASJON, element: { id: `e${n}` } }),
+      sted: i({ stoff: `stoff-${n}`, navn: `Stoff ${n}` }, { panel: INDIKASJON, element: { id: `e${n}` } }),
       felt: 'fritekst',
       tekst: `Tekst om depresjon nummer ${n}`,
     }))
@@ -346,15 +351,35 @@ describe('visningen av et treff', () => {
     const treff = sokGlobalt(KLAR.indeks, sporring, Infinity).find((t) => t.dokument.felt === felt)!
     return visTreff(treff, sokeord(sporring), beskrivSide)
   }
+  /** Som `vis`, men for treffet i feltet selv om et bedre treff står på samme sted. */
+  const visFelt = (sporring: string, felt: Sokedokument['felt']) => {
+    const treff = sok(DOKUMENTER, sporring, Infinity).find((t) => t.dokument.felt === felt)!
+    return visTreff(treff, sokeord(sporring), beskrivSide)
+  }
 
   it('viser stoffet med navnet som tittel, og et annet navn i utdraget', () => {
     const alias = vis('zoloft', 'alias')
     expect(alias.tittel.tekst).toBe('Sertralin')
     expect(alias.utdrag?.tekst).toBe('Zoloft-stoffet')
-    expect(alias.sti).toEqual(['SERT · SPFA › Antidepressiva'])
+    expect(alias.sti).toEqual([BESKRIVELSE])
     expect(alias.gruppe).toBe('stoff')
-    // Uten linje fra katalogen står koden.
-    expect(vis('kve', 'navn').sti).toEqual(['KVE'])
+    expect(alias.adresse).toBe('#/stoff/sertralin')
+    // Uten noe å si om stoffet står det at det er en stoffside — aldri koden.
+    expect(visFelt('kve', 'kode').sti).toEqual(['Stoffside'])
+    expect(visFelt('kve', 'kode').tittel.tekst).toBe('Kvetiapin')
+  })
+
+  it('viser en analytts komponent under stoffets navn, og peker på stoffsiden', () => {
+    const komponent = vis('desmetylsertralin', 'komponent')
+    expect(komponent.tittel.tekst).toBe('Sertralin')
+    expect(komponent.utdrag?.tekst).toBe('Desmetylsertralin')
+    expect(komponent.sti).toEqual([BESKRIVELSE])
+    expect(komponent.adresse).toBe('#/stoff/sertralin')
+    expect(komponent.nokkel).toBe(vis('sertralin', 'navn').nokkel)
+    // Koden er stoffets egen vei inn, og gjentas ikke under navnet.
+    expect(visFelt('sert', 'kode').tittel.tekst).toBe('Sertralin')
+    expect(visFelt('sert', 'kode').utdrag).toBeUndefined()
+    expect(visFelt('sert', 'kode').adresse).toBe('#/stoff/sertralin')
   })
 
   it('viser preparatnavnet som tittel og formen i stien', () => {
@@ -370,7 +395,7 @@ describe('visningen av et treff', () => {
     expect(tekst.tittel.tekst).toBe('Metabolisme')
     expect(tekst.sti).toEqual(['Sertralin', 'Farmakokinetikk'])
     expect(tekst.utdrag?.tekst).toContain('CYP2C19')
-    expect(tekst.adresse).toBe('#/analytt/SERT/farmakokinetikk/k1')
+    expect(tekst.adresse).toBe('#/stoff/sertralin/farmakokinetikk/k1')
     // Uten kort er det seksjonen som er tittelen.
     expect(vis('bipolar', 'fritekst').tittel.tekst).toBe('Indikasjon')
   })

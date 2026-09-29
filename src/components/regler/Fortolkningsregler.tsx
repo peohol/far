@@ -6,7 +6,7 @@ import type { Intervallregelsett, Intervallregelsettinnhold } from '../../regler
 import { regelsettfelter, tekstene, visRingegrense } from '../../regler/visning'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
-import { seksjonsikon } from '../analyttside/panelvisning'
+import { seksjonsikon } from '../stoffside/panelvisning'
 import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
 import { Uthev } from '../Uthev'
 import { kommentarnavnoppslag, Regelhistorikk, upubliserteFelt } from './Regelhistorikk'
@@ -35,12 +35,13 @@ export function regeloppsummering(regelsett: Intervallregelsettinnhold): string 
 }
 
 /**
- * Fortolkningsreglene for koden, på informasjonssiden: seksjonen «Fortolkning»
- * med kommentaren hver konsentrasjon gir, og detaljkortet «Simulator» for å
- * prøve en verdi (se `docs/seksjoner.md`).
+ * Fortolkningsreglene for en analyttkode, på stoffsiden: seksjonen
+ * «Fortolkning» med kommentaren hver konsentrasjon gir, og detaljkortet
+ * «Simulator» for å prøve en verdi (se `docs/seksjoner.md`).
  *
- * Regelsettet er et eget objekt og ikke en del av informasjonssiden; det
- * vises her fordi det gjelder koden siden hører til. Kommentarene det peker
+ * Regelsettet hører til fortolkningssystemet, etter koden, og er ikke en del
+ * av stoffsiden; det vises her fordi koblingen i stoffregisteret sier at
+ * stoffet er analyttens primære stoff. Kommentarene det peker
  * på, er egne objekter igjen. I redigeringsmodus kan administratorer endre
  * reglene og tekstene, se hva som ikke er publisert og åpne historikken — for
  * regelsettet og for hver kommentar.
@@ -51,6 +52,8 @@ export function Fortolkningsregler({
   redigerer,
   onLagre,
   hentNyeste,
+  seksjonsid = FORTOLKNING,
+  tittel = 'Fortolkning',
 }: {
   utgave: Regelsettutgave | null
   /** Det publiserte regelsettet, til å si hva som ikke er publisert ennå. */
@@ -58,6 +61,10 @@ export function Fortolkningsregler({
   redigerer: boolean
   onLagre: RegelredigeringProps['onLagre']
   hentNyeste: RegelredigeringProps['hentNyeste']
+  /** Egen seksjons-ID når flere fortolkningsmoduler står på samme stoffside. */
+  seksjonsid?: string
+  /** Egen tittel når det må fremgå hvilken analytt regelsettet gjelder. */
+  tittel?: string
 }) {
   const [redigeres, setRedigeres] = useState(false)
   const regelsett = useMemo(() => utgave && losRegelsett(utgave), [utgave])
@@ -72,9 +79,9 @@ export function Fortolkningsregler({
 
   return (
     <Seksjon
-      id={FORTOLKNING}
+      id={seksjonsid}
       ikon={seksjonsikon(FORTOLKNING)}
-      tittel={<Uthev tekst="Fortolkning" />}
+      tittel={<Uthev tekst={tittel} />}
       oppsummering={regeloppsummering(regelsett)}
       handlinger={
         redigerer &&

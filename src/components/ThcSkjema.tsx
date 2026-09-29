@@ -28,7 +28,7 @@ export interface ThcSkjemaProps {
 /**
  * Feltene i THC-syrefortolkningen: bruksmønsteret, forrige og denne prøven og
  * sikkerhetsmarginen. Brukes både i fortolkningsmodulen og i simulatoren på
- * analyttsiden, så de spør på samme måte.
+ * stoffsiden, så de spør på samme måte.
  */
 export function ThcSkjema({ inndata, onEndre, regler, forsteFelt }: ThcSkjemaProps) {
   // Avkryssingen står inne i «Forrige prøve», så den gjelder bare når det

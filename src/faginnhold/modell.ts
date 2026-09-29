@@ -60,13 +60,21 @@ export type Referanseniva = (typeof REFERANSENIVAER)[number]
  */
 export interface Infosideinnhold {
   navn: string
+  /**
+   * Stoffets nøkkel, den samme som i adressen (`#/stoff/<slug>`) og i
+   * stoffregisteret. Står bare med når den er en annen enn den navnet gir
+   * (`stoffslug`); utelatt gir databasen siden den nøkkelen den alt har, eller
+   * den navnet gir for en ny side. Nøkkelen endres bare når den står her.
+   */
+  slug?: string
   panelreferanser?: Record<string, string[]>
 }
 
 /**
- * Analyttkoden laboratoriet rapporterer. Hovedsiden er den ene siden koden
- * hører til; komponentene er stoffene analysen omfatter, i rekkefølge — for
- * en sumanalyse flere enn ett. ID-ene er informasjonssidenes.
+ * Den gamle koblingen fra en analyttkode til sidene i databasen: hovedsiden og
+ * komponentene, ID-ene er stoffsidenes. Objektene står med historikken sin,
+ * men appen bruker dem ikke: hvilke stoffer en analytt gjelder, står i de
+ * eksplisitte koblingene i stoffregisteret (`src/domain/stoffregister.ts`).
  */
 export interface Laboratorieanalyttinnhold {
   kode: string
@@ -75,7 +83,7 @@ export interface Laboratorieanalyttinnhold {
 }
 
 /**
- * Et kort, felt eller tekststykke på en informasjonsside. `panel` og
+ * Et kort, felt eller tekststykke på en stoffside. `panel` og
  * `elementtype` er nøkler (små bokstaver, tall og understrek); hva `data`
  * inneholder, bestemmes av elementtypen. Rekkefølgen i et panel er
  * `posisjon`, deretter objekt-ID-en — to elementer kan stå på samme plass.

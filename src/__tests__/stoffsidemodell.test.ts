@@ -1,10 +1,10 @@
 /**
- * De rene delene av analyttsidene: rikteksten, panelenes data, søket og
+ * De rene delene av stoffsidene: rikteksten, panelenes data, søket og
  * sidemodellen. Innholdet er syntetisk.
  */
 import { describe, expect, it } from 'vitest'
-import { byggSidemodell, publiseringsplan } from '../faginnhold/analyttside'
-import { TOM_SIDE, type Analyttsidedata, type Utgave } from '../faginnhold/lesing'
+import { byggSidemodell, publiseringsplan } from '../faginnhold/stoffside'
+import { INGEN_REGLER, TOM_STOFFSIDE, type Regeldata, type Stoffsidedata, type Utgave } from '../faginnhold/lesing'
 import type { Innholdselementinnhold } from '../faginnhold/modell'
 import {
   DATAKORT,
@@ -28,7 +28,11 @@ import {
 } from '../faginnhold/paneler'
 import { SITERING, kortnavn } from '../faginnhold/referanser'
 import { erTomt, klartekst, rensDokument, tomtDokument } from '../faginnhold/riktekst'
-import { fold, indekserSide, sok, sokeord, sti, treffIntervaller, utdrag } from '../faginnhold/sok'
+import { fold, indekserSide, sok, sokeord, sti, stoffidentitet, treffIntervaller, utdrag } from '../faginnhold/sok'
+import { analytterForStoff } from '../domain/koblinger'
+import { STOFFREGISTER } from '../domain/stoffregister'
+import type { ThcRegelsettinnhold } from '../domain/thcTekster'
+import type { Kommentarinnhold } from '../domain/kommentarobjekt'
 
 describe('rikteksten', () => {
   it('beholder den tillatte formateringen og siteringene', () => {
@@ -291,11 +295,11 @@ function tekstMed(...referanser: string[]) {
 const ref = (id: string, tittel: string, publisert: number | null = 1) =>
   utgave(id, { tittel, forfattere: 'Nordmann O', aar: '2020', lenke: '' }, 1, publisert)
 
-function side(): Analyttsidedata {
+/** En stoffside med et utkast som har endringer: siden, ett element og en referanse. */
+function side(): Stoffsidedata {
   return {
-    analytt: utgave('an', { kode: 'TEST', hovedside: 's', komponenter: ['s', 'k'] }),
+    stoff: { id: 's', slug: 'testmiddel', navn: 'Testmiddel' },
     infoside: utgave('s', { navn: 'Testmiddel', panelreferanser: { farmakokinetikk: ['c'] } }, 2, 1),
-    komponenter: [{ ...utgave('s', { navn: 'Testmiddel' }), koder: ['TEST'] }, { ...utgave('k', { navn: 'Komponent' }, 1, null), koder: [] }],
     elementer: [
       element('e3', { panel: 'farmakokinetikk', posisjon: 1, elementtype: 'kinetikkort', data: { tittel: 'Metabolisme', ...tekstMed('a') } }),
       element('e2', { panel: 'farmakokinetikk', posisjon: 0, elementtype: 'kinetikkort', data: { tittel: 'Absorpsjon', ...tekstMed('b') } }),
@@ -303,32 +307,64 @@ function side(): Analyttsidedata {
       element('fjernet', { panel: FJERNET, data: tekstMed('d') }, 2, 1),
     ],
     referanser: [ref('a', 'Kilde A'), ref('b', 'Kilde B', null), ref('c', 'Kilde C'), ref('d', 'Fjernetkilde')],
-    regelsett: {
-      regelsett: utgave(
-        'rs',
-        {
-          analyttkode: 'TEST',
-          enhet: 'nmol/L',
-          desimaler: 0,
-          skillepunkter: [10],
-          intervaller: [
-            { niva: 'under', handling: null, kommentar: 'k1' },
-            { niva: 'innenfor', handling: null, kommentar: 'k2' },
-          ],
-          ringegrense: null,
-          cutoff: null,
-        },
-        2,
-        1,
-      ),
-      // Den ene kommentaren er endret, den andre ikke.
-      kommentarer: [
-        utgave('k2', { navn: 'TEST – innenfor referanseområdet', tekst: 'Syntetisk middels.', plassholdere: [] }, 1, 1),
-        utgave('k1', { navn: 'TEST – under referanseområdet', tekst: 'Syntetisk lav.', plassholdere: [] }, 2, 1),
+  }
+}
+
+const kommentar = (id: string, revisjon: number, publisert: number | null) =>
+  utgave<Kommentarinnhold>(id, { navn: `Syntetisk ${id}`, tekst: 'Syntetisk tekst.', plassholdere: [] }, revisjon, publisert)
+
+function intervallregelsett(id: string, kode: string, revisjon: number, publisert: number | null) {
+  return utgave(
+    id,
+    {
+      analyttkode: kode,
+      enhet: 'nmol/L',
+      desimaler: 0,
+      skillepunkter: [10],
+      intervaller: [
+        { niva: 'under' as const, handling: null, kommentar: 'k1' },
+        { niva: 'innenfor' as const, handling: null, kommentar: 'k2' },
       ],
+      ringegrense: null,
+      cutoff: null,
     },
-    thcregelsett: null,
-    scenarioregelsett: null,
+    revisjon,
+    publisert,
+  )
+}
+
+function scenarioregelsett(id: string, modul: string, revisjon: number, publisert: number | null) {
+  return utgave(id, { modul, analytter: ['TEST'], verdihjelp: '', forhold: [], parametere: [], scenarier: [] }, revisjon, publisert)
+}
+
+/**
+ * Reglene stoffsiden viser, lest for seg etter analyttkoden og modulen:
+ * ett regelsett per kode, ett scenarioregelsett per modul og THC-syrereglene.
+ */
+function regler(): Regeldata {
+  return {
+    regelsett: {
+      TEST: {
+        regelsett: intervallregelsett('rs-test', 'TEST', 2, 1),
+        // Den ene kommentaren er endret, den andre ikke.
+        kommentarer: [kommentar('k2', 1, 1), kommentar('k1', 2, 1)],
+      },
+      // Står foran TEST: kodene tas i alfabetisk rekkefølge. Deler kommentaren k1 med TEST.
+      ANDRE: {
+        regelsett: intervallregelsett('rs-andre', 'ANDRE', 1, null),
+        kommentarer: [kommentar('k1', 2, 1), kommentar('k3', 1, null)],
+      },
+    },
+    scenarioregelsett: {
+      testgruppen: { regelsett: scenarioregelsett('sc-test', 'testgruppen', 3, 2), kommentarer: [kommentar('k4', 2, 1)] },
+      // Uendret, med en uendret kommentar: ingenting å publisere.
+      annengruppe: { regelsett: scenarioregelsett('sc-annen', 'annengruppe', 1, 1), kommentarer: [kommentar('k5', 1, 1)] },
+    },
+    thcregelsett: {
+      // Innholdet leses ikke av publiseringsplanen.
+      regelsett: utgave('thc', {} as ThcRegelsettinnhold, 2, 1),
+      kommentarer: [kommentar('k6', 1, null)],
+    },
   }
 }
 
@@ -370,27 +406,66 @@ describe('sidemodellen', () => {
   })
 
   it('publiserer i den rekkefølgen databasen krever, og bare det som er endret', () => {
-    expect(publiseringsplan(side())).toEqual([
+    expect(publiseringsplan(side(), regler())).toEqual([
       { slag: 'referanse', id: 'b', revisjon: 1 },
-      { slag: 'komponent', id: 'k', revisjon: 1 },
       { slag: 'infoside', id: 's', revisjon: 2 },
       { slag: 'innholdselement', id: 'e1', revisjon: 3 },
       { slag: 'innholdselement', id: 'fjernet', revisjon: 2 },
-      // Kommentarene regelsettet peker på, før regelsettet.
+      // Regelsettene per analyttkode, i kodenes rekkefølge, hvert etter kommentarene det peker på.
       { slag: 'kommentar', id: 'k1', revisjon: 2 },
-      { slag: 'intervallregelsett', id: 'rs', revisjon: 2 },
+      { slag: 'kommentar', id: 'k3', revisjon: 1 },
+      { slag: 'intervallregelsett', id: 'rs-andre', revisjon: 1 },
+      // k1 er alt med, og k2 er uendret.
+      { slag: 'intervallregelsett', id: 'rs-test', revisjon: 2 },
+      // Så scenarioregelsettene per modul; den uendrede modulen gir ingenting.
+      { slag: 'kommentar', id: 'k4', revisjon: 2 },
+      { slag: 'scenarioregelsett', id: 'sc-test', revisjon: 3 },
+      // Til sist THC-syrereglene.
+      { slag: 'kommentar', id: 'k6', revisjon: 1 },
+      { slag: 'thc_regelsett', id: 'thc', revisjon: 2 },
     ])
-    expect(publiseringsplan(TOM_SIDE)).toEqual([])
+    expect(publiseringsplan(TOM_STOFFSIDE, INGEN_REGLER)).toEqual([])
+  })
+
+  it('publiserer stoffsiden uten noe om analyttene, og reglene uten noen side', () => {
+    const plan = publiseringsplan(side(), INGEN_REGLER)
+    // Stoffsiden har ingen laboratorieanalytt eller komponentsider å publisere.
+    expect([...new Set(plan.map((s) => s.slag))]).toEqual(['referanse', 'infoside', 'innholdselement'])
+    // Et stoff i registeret uten side i databasen kan likevel få reglene sine publisert.
+    expect(publiseringsplan(TOM_STOFFSIDE, regler()).map((s) => s.id)).toEqual([
+      'k1',
+      'k3',
+      'rs-andre',
+      'rs-test',
+      'k4',
+      'sc-test',
+      'k6',
+      'thc',
+    ])
+  })
+
+  it('publiserer ingenting når utkastet er det samme som det publiserte', () => {
+    const publisert = <T,>(u: Utgave<T>): Utgave<T> => ({ ...u, publisert_revisjon: u.revisjon })
+    const data = side()
+    const uendret: Stoffsidedata = {
+      ...data,
+      infoside: publisert(data.infoside!),
+      elementer: data.elementer.map(publisert),
+      referanser: data.referanser.map(publisert),
+    }
+    expect(publiseringsplan(uendret, INGEN_REGLER)).toEqual([])
   })
 
   it('indekserer siden for søket, med stien til hvert treff', () => {
     const modell = byggSidemodell(side())
-    const dokumenter = indekserSide({ kode: 'TEST', navn: 'Testmiddel', komponenter: ['Testmiddel', 'Komponent'] }, modell)
+    const dokumenter = indekserSide({ stoff: 'testmiddel', navn: 'Testmiddel', koder: ['TEST'], komponenter: ['Testmiddel', 'Komponent'] }, modell)
     const treff = sok(dokumenter, 'metabol')
     expect(treff.map((t) => sti(t.dokument.sted))).toEqual([['Testmiddel', 'Farmakokinetikk', 'Metabolisme']])
     // Navnet og koden rangeres foran fritekst.
     const alle = sok(dokumenter, 'test')
-    expect(alle[0]!.dokument.felt).toBe('navn')
+    expect(alle.slice(0, 2).map((t) => t.dokument.felt)).toEqual(['navn', 'kode'])
+    // Alle treffene er på stoffet, også koden og komponenten.
+    expect(new Set(sok(dokumenter, 'komponent').map((t) => t.dokument.sted.side.stoff))).toEqual(new Set(['testmiddel']))
     // Det fjernede kortet søkes ikke i.
     expect(sok(dokumenter, 'fjernetkilde')).toEqual([])
     expect(sok(dokumenter, '')).toEqual([])
@@ -398,7 +473,7 @@ describe('sidemodellen', () => {
 
   it('tar med preparatene fra legemiddeldataene i panelets plass i rekkefølgen', () => {
     const modell = byggSidemodell(side())
-    const dokumenter = indekserSide({ kode: 'TEST', navn: 'Testmiddel', komponenter: [] }, modell, [
+    const dokumenter = indekserSide({ stoff: 'testmiddel', navn: 'Testmiddel' }, modell, [
       { panel: 'preparater', element: { id: 'preparater-53', tittel: 'Tablett' }, felt: 'preparat', tekst: 'Syntetin' },
       { panel: 'ukjent', element: { id: 'x' }, felt: 'preparat', tekst: 'Står ikke på siden' },
     ])
@@ -407,6 +482,30 @@ describe('sidemodellen', () => {
     // Preparatene står rett etter identiteten, foran panelene med faginnhold.
     const paneler = dokumenter.map((d) => d.sted.panel?.nokkel).filter(Boolean)
     expect(paneler[0]).toBe('preparater')
+  })
+
+  it('gir stoffet identiteten sin fra koblingene: primære koder, analyttenes navn og sekundære koder som alias', () => {
+    const nortriptylin = STOFFREGISTER.finn('nortriptylin')!
+    const identitet = stoffidentitet(nortriptylin, analytterForStoff('nortriptylin'))
+    expect(identitet).toEqual({
+      stoff: 'nortriptylin',
+      navn: 'Nortriptylin',
+      koder: ['NOR'],
+      komponenter: ['Nortriptylin', 'Nortriptylin', 'Amitriptylin + nortriptylin', 'Amitriptylin', 'Nortriptylin'],
+      // AMTNORSUM hører primært til Amitriptylin; her er koden bare en annen vei inn.
+      aliaser: ['AMTNORSUM'],
+    })
+    const bupropion = stoffidentitet(STOFFREGISTER.finn('bupropion')!, analytterForStoff('bupropion'))
+    expect(bupropion).toMatchObject({ stoff: 'bupropion', navn: 'Bupropion', koder: ['HBUP'], aliaser: ['Hydroksybupropion'] })
+    // Indeksert står metabolittens navn bare én gang, og alt peker på Bupropion.
+    const dokumenter = indekserSide(bupropion, byggSidemodell(TOM_STOFFSIDE))
+    expect(dokumenter.map((d) => [d.felt, d.tekst])).toEqual([
+      ['navn', 'Bupropion'],
+      ['kode', 'HBUP'],
+      ['komponent', 'Hydroksybupropion (kun aktiv metabolitt)'],
+      ['komponent', 'Hydroksybupropion'],
+    ])
+    expect(new Set(dokumenter.map((d) => d.sted.side.stoff))).toEqual(new Set(['bupropion']))
   })
 
   it('gir referansene en kort betegnelse til editoren', () => {
