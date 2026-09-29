@@ -732,6 +732,12 @@ const REGISTER = {
       P('M9.7 19.6h4.6M10.6 21.6h2.8', 'l', 'i-ink'),
     ],
   },
+  // Tegnet i OUSFAR for favorittene, i samme stil som hjertet.
+  star: {
+    vb: 24,
+    ga: 'pop',
+    parts: [P('M12 3.6l2.4 5.8 6.2.4-4.8 4 1.5 6.1-5.3-3.3-5.3 3.3 1.5-6.1-4.8-4 6.2-.4z', 'f1', 'warn')],
+  },
   heart: {
     vb: 24,
     ga: 'pulse',

@@ -114,6 +114,77 @@
   margin: 0 var(--rom-6) var(--rom-4);
 }
 
+/* Favorittene står fast mellom bryteren og lista, i én skuff som ikke ruller
+   bort. Åpen blir den aldri høyere enn at kategoriene fortsatt får plass:
+   har den mange favoritter, ruller innholdet i skuffen i stedet. */
+.menyfavoritter {
+  flex: none;
+  margin: 0;
+  padding: 0 var(--rom-4) var(--rom-2);
+}
+
+.menyfavoritter .menyskuff__inner {
+  max-height: 40dvh;
+  overflow-y: auto;
+}
+
+/* Stjernen foran «Favoritter» er alltid fylt, som på en side som er favoritt. */
+.menyskuff__ikon {
+  flex: none;
+}
+
+.menyskuff__tittel .menyskuff__ikon [data-rolle^='f'] {
+  fill-opacity: 0.85;
+}
+
+.menyfavoritter__tom {
+  margin: 0;
+  padding: 0 var(--rom-2) var(--rom-1);
+  font-size: var(--tekst-ui);
+  color: var(--blekk-dempet);
+}
+
+/* En favoritt: lenken fyller raden, og knappen som fjerner den står til høyre. */
+.menyanalytter__rad {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-1);
+}
+
+.menyanalytter__rad .menyanalytt {
+  flex: 1;
+  min-width: 0;
+}
+
+.menyanalytt__fjern {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: calc(var(--hoyde-liten) - var(--rom-1));
+  height: calc(var(--hoyde-liten) - var(--rom-1));
+  padding: 0;
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    color var(--fart-rask) var(--kurve);
+}
+
+.menyanalytt__fjern:hover {
+  color: var(--blekk);
+  background: var(--flate);
+}
+
+@media (max-width: 47.5em) {
+  .menyanalytt__fjern {
+    width: var(--hoyde-trykk);
+    height: var(--hoyde-trykk);
+  }
+}
+
 .menyliste {
   display: flex;
   flex: 1;
