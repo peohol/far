@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.58.1',
+    dato: '2026-09-29',
+    sammendrag: 'Favorittvarsler når et kort flyttes mellom fagsider',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Flyttes et kort fra én fagside til en annen, får de som har den gamle siden som favoritt, også varsel om det, og varselet på den nye siden nevner bare delen kortet havnet i.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.58.0',
     dato: '2026-09-29',
     sammendrag: 'Varsler om endringer på favorittsidene dine',
