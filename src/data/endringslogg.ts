@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.57.0',
+    dato: '2026-09-29',
+    sammendrag: 'Fagsidene kan lagres som favoritter',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'En stjerne øverst på hver fagside legger siden til i favorittene dine. Trykk på den igjen for å fjerne den.',
+      'Favorittene står i en egen skuff øverst i stoffregisteret, under «Vis underkategorier». Skuffen er lukket til du åpner den, og ruller ikke bort med resten av menyen.',
+      'Krysset ved en favoritt i skuffen fjerner den.',
+      'Favorittene lagres på kontoen din, så de følger deg til andre maskiner.',
+    ],
+  },
+  {
     versjon: '1.56.0',
     dato: '2026-09-29',
     sammendrag: 'Varsler: en bjelle i toppmenyen samler det som er nytt for deg',
