@@ -208,9 +208,9 @@ WHOs ATC-register, RxNorm, PubChem og ChEBI 26. september 2026.
 | Koblet til ClinPGx og verifisert | 68 |
 | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | 4 |
 | ClinPGx har ikke relevant objekt | 0 |
-| Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | 8 |
+| Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | 9 |
 | Uavklart, krever faglig vurdering | 0 |
-| Til sammen | 80 |
+| Til sammen | 81 |
 
 Koblet:
 
@@ -291,7 +291,7 @@ Ikke koblet:
 
 | Stoffside | Status | ClinPGx | Grunn |
 | --- | --- | --- | --- |
-| Bupropion | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | Kandidater: bupropion (PA448687) | Fagsiden gjelder virkestoffet bupropion; laboratoriet måler metabolitten hydroksybupropion (HBUP). ClinPGx har bupropion som eget kjemikalie; koblingen er ikke lagt inn ennå. Metabolitten har to egne kjemikalier i ClinPGx (PA166226561, PA166170175), begge uten annotasjoner. |
+| Bupropion | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | Kandidater: bupropion (PA448687) | Fagsiden gjelder virkestoffet bupropion; laboratoriet måler metabolitten hydroksybupropion (HBUP). ClinPGx har bupropion som eget kjemikalie; koblingen er ikke lagt inn ennå. |
 | Cannabidiol | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | Kandidater: cannabidiol (PA166175791) | Siden ble laget 27. september 2026 for å vise Epidyolex fra FEST. ClinPGx har cannabidiol (kontrollert samme dag); koblingen er ikke lagt inn ennå. |
 | Dehydroaripiprazol | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: aripiprazole (PA10026), side: Aripiprazol. Metabolitten selv: dehydroaripiprazole (PA166170895) | Aktiv metabolitt av aripiprazol. ClinPGx har metabolitten som eget kjemikalie, uten annotasjoner. |
 | Desmetyldoksepin | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: doxepin (PA449409), side: Doksepin. Metabolitten selv: desmethyldoxepin (PA166131337) | Aktiv metabolitt av doksepin. ClinPGx har metabolitten som eget kjemikalie, uten annotasjoner. |
@@ -299,6 +299,7 @@ Ikke koblet:
 | Desmetylklomipramin | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: clomipramine (PA449048), side: Klomipramin. Metabolitten selv: desmethyl clomipramine (PA166131507) | Aktiv metabolitt av klomipramin. ClinPGx har metabolitten som eget kjemikalie, uten annotasjoner. |
 | Desmetylmianserin | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: mianserin (PA134687937), side: Mianserin. Metabolitten selv: – | Metabolitt av mianserin. ClinPGx har ikke metabolitten som eget kjemikalie. |
 | Didesmetylkariprazin | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: cariprazine (PA166177476), side: Kariprazin. Metabolitten selv: didesmethyl cariprazine (PA166356881) | Aktiv metabolitt av kariprazin. ClinPGx har metabolitten som eget kjemikalie, uten annotasjoner. |
+| Hydroksybupropion | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: bupropion (PA448687), side: Bupropion. Metabolitten selv: hydroxybupropion (PA166226561), 4-hydroxybupropion (PA166170175) | Komponenten HBUP måler, ikke en egen fagside. Aktiv metabolitt av bupropion. ClinPGx har to kjemikalier for metabolitten, begge uten annotasjoner. |
 | Norfluoksetin | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: fluoxetine (PA449673), side: Fluoksetin. Metabolitten selv: r-norfluoxetine (PA166131377), s-norfluoxetine (PA166131313) | Aktiv metabolitt av fluoksetin. ClinPGx har bare de to enantiomerene hver for seg, uten annotasjoner. |
 | O-desmetyltramadol | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | Moderstoff: tramadol (PA451735), side: Tramadol. Metabolitten selv: o-desmethyltramadol (PA166131379) | Aktiv metabolitt av tramadol. ClinPGx har metabolitten som eget kjemikalie med kliniske annotasjoner; om siden skal vise dem, tramadols data eller begge, er en faglig vurdering. |
 | Tapentadol | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | Kandidater: tapentadol (PA166179720) | Siden ble laget 28. september 2026 med indikasjonen og preparatene fra FEST. ClinPGx har tapentadol (kontrollert samme dag); koblingen er ikke lagt inn ennå. |

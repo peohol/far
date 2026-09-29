@@ -11,6 +11,7 @@ import {
   kontrollerFormverdier,
   lesFormverdier,
 } from '../faginnhold/paneler'
+import { STOFFREGISTER } from '../domain/stoffregister'
 import { kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
 const FORSTE_IMPORTMIGRASJON = '20260923072247'
@@ -308,19 +309,49 @@ describe('kanoniske stoffsider skiller virkestoff fra laboratorieanalytt', () =>
     expect(rows[0]!.side.stoff).toEqual({ id: sideider.HBUP, slug: 'bupropion', navn: 'Bupropion' })
   })
 
-  it('lager ingen side for metabolitten og rører ikke analyttene', async () => {
-    const { rows } = await db.query<{ n: number }>(
-      `select count(*)::int as n from public.infosider where lower(navn) = 'hydroksybupropion'`,
-    )
-    expect(rows[0]!.n).toBe(0)
-    const endret = await db.query<{ kode: string }>(
-      `select a.kode
+  it('lar HBUP fortsatt måle hydroksybupropion, som et eget objekt fra Bupropion-siden', async () => {
+    const { rows } = await db.query<{ navn: string; objekt_id: string; tilstand: string }>(
+      `select i.navn, i.objekt_id, a.tilstand
        from public.laboratorieanalytter a
-       join public.objektrevisjoner r on r.objekt_id = a.objekt_id
-       where a.tilstand = 'publisert' and a.kode in ('HBUP', 'PALI')
-         and r.kilde like 'Stoffside:%'`,
+       join public.analyttkomponenter k on k.analytt_id = a.objekt_id and k.tilstand = a.tilstand
+       join public.infosider i on i.objekt_id = k.infoside_id and i.tilstand = a.tilstand
+       where a.kode = 'HBUP'
+       order by a.tilstand, k.posisjon`,
     )
-    expect(endret.rows).toEqual([])
+    expect(rows.map((r) => [r.tilstand, r.navn])).toEqual([
+      ['utkast', 'Hydroksybupropion'],
+      ['publisert', 'Hydroksybupropion'],
+    ])
+    expect(rows[0]!.objekt_id).toBe(rows[1]!.objekt_id)
+    expect(rows[0]!.objekt_id).not.toBe(sideider.HBUP)
+  })
+
+  it('gir de gamle lesefunksjonene riktig hovedside og målt komponent', async () => {
+    type Utgave = { id: string; innhold: { navn: string } }
+    const side = async (kode: string) =>
+      (
+        await db.query<{ side: { infoside: Utgave; komponenter: Utgave[] } }>(
+          `select public.les_analyttside($1, 'publisert') as side`,
+          [kode],
+        )
+      ).rows[0]!.side
+    const hbup = await side('HBUP')
+    expect(hbup.infoside).toMatchObject({ id: sideider.HBUP, innhold: { navn: 'Bupropion' } })
+    expect(hbup.komponenter.map((k) => k.innhold.navn)).toEqual(['Hydroksybupropion'])
+    expect(hbup.komponenter[0]!.id).not.toBe(sideider.HBUP)
+    // PALI måler paliperidon, som er hydroksyrisperidon: komponenten er stoffet selv.
+    const pali = await side('PALI')
+    expect(pali.infoside).toMatchObject({ id: sideider.PALI, innhold: { navn: 'Paliperidon' } })
+    expect(pali.komponenter.map((k) => [k.id, k.innhold.navn])).toEqual([[sideider.PALI, 'Paliperidon']])
+  })
+
+  it('lar komponentsiden være et annet navn på Bupropion i stoffregisteret, ikke et eget stoff', async () => {
+    const { rows } = await db.query<{ slug: string }>(
+      `select slug from public.infosider where tilstand = 'publisert' and navn = 'Hydroksybupropion'`,
+    )
+    expect(rows.map((r) => r.slug)).toEqual(['hydroksybupropion'])
+    expect(STOFFREGISTER.finn('hydroksybupropion')).toBeUndefined()
+    expect(STOFFREGISTER.kanonisk('hydroksybupropion')?.slug).toBe('bupropion')
   })
 
   it('beholder faginnholdet på de samme sideobjektene', async () => {

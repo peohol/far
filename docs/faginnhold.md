@@ -24,7 +24,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `supabase/migrations/*_datakort_per_analytt.sql` | Datakortene én gang per kode på en side flere koder deler, og referanseområdet til hver kode (`les_referanseomrader`) |
 | `src/faginnhold/sammenslatte.ts`, `scripts/lag-sammenslaing.ts`, `supabase/migrations/*_sammenslatte_stoffsider.sql` | Den historiske datamigrasjonen for sammenslåinger som måtte flytte innhold |
 | `supabase/migrations/*_stoffidentitet.sql` | Stoffets nøkkel (`slug`) på sidene, og lesingen etter stoffet: `les_stoff`, `les_stoffer`, `les_stoffliste`, `les_stoffreferanseomrader` |
-| `supabase/migrations/*_kanoniske_stoffsider.sql` | Datamigrasjonen som ga sidene «Hydroksybupropion» og «Paliperidon (hydroksyrisperidon)» stoffets navn og nøkkel |
+| `supabase/migrations/*_kanoniske_stoffsider.sql` | Datamigrasjonen som ga sidene «Hydroksybupropion» og «Paliperidon (hydroksyrisperidon)» stoffets navn og nøkkel, og HBUP en egen komponent for hydroksybupropion |
 | `src/faginnhold/historiskesider.ts` | Hvordan sidene var lagt opp per analyttkode før, for importene som lager historiske migrasjoner |
 | `supabase/migrations/*_regelredigering_lesing.sql` | Historikken til ett objekt (`les_historikk`) og regelsettet for én kode |
 | `supabase/migrations/*_kommentar_objekttype.sql`, `*_kommentarer.sql` | Fortolkningskommentarene som egne objekter |
@@ -506,10 +506,14 @@ analyttkode, og noen metabolitter var slått sammen med moderstoffets side.
 PR #111 flyttet innhold i databasen for dem (`*_sammenslatte_stoffsider.sql`,
 fra `MIGRERTE_SAMMENSLATTE` i `src/faginnhold/historiskesider.ts`): datakort
 med `gjelder`, like kort satt til `fjernet`. `*_kanoniske_stoffsider.sql` ga
-HBUP-siden («Hydroksybupropion») navnet Bupropion og nøkkelen `bupropion`, og
-PALI-siden navnet Paliperidon, på de samme sideobjektene, så innholdet og
-historikken står. Metabolittnavnene er i dag aliaser i registeret, og de gamle
-komponentsidene blir stående i databasen uten å vises. Importene som lager
+siden «Hydroksybupropion» navnet Bupropion og nøkkelen `bupropion`, og siden
+«Paliperidon (hydroksyrisperidon)» navnet Paliperidon, på de samme
+sideobjektene, så innholdet og historikken står. Den gamle koblingen fra HBUP
+beholder det analytten faktisk måler: komponenten er et eget objekt,
+«Hydroksybupropion», og ikke Bupropion-siden. PALI måler paliperidon, så
+komponenten dens er stoffet selv. Metabolittnavnene er i dag aliaser i
+registeret, og komponentsidene blir stående i databasen uten å vises som
+stoffsider. Importene som lager
 historiske migrasjoner, bruker `historiskSidenavn`, så SQL-en de lager, er den
 samme som da migrasjonene ble kjørt.
 
