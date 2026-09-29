@@ -10,7 +10,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { feilFra, kjorMigrasjoner, nyDatabase, opprettBruker, som } from './hjelp/testdatabase'
 
 const MIGRASJON = '20260929103534_ideer_arkiv_og_oppgaver.sql'
-const TITTELMIGRASJON = '20260929113000_oppgavetittel.sql'
+const TITTELMIGRASJON = '20260929113630_oppgavetittel.sql'
 const DOK = JSON.stringify({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Hei' }] }] })
 
 interface Oversiktsrad {
