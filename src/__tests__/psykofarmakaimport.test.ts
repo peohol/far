@@ -56,7 +56,7 @@ const FORSTE_OMARBEIDING = migrasjonsfiler().find((f) => f.endsWith('_viktige_da
 /**
  * Importen lagde disse to sidene med analyttens navn (`historiskSidenavn`).
  * I dag er de stoffsidene for virkestoffet analytten er koblet til i
- * stoffregisteret (`20260929080100_kanoniske_stoffsider.sql`).
+ * stoffregisteret (`20260929112004_kanoniske_stoffsider.sql`).
  */
 const HISTORISKE_HOVEDSIDE_NAVN: Readonly<Record<string, string>> = {
   HBUP: 'Hydroksybupropion',

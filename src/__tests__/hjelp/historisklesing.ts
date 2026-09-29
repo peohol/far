@@ -1,7 +1,7 @@
 /**
  * Lesingen av sidene i en database der migrasjonene bare er kjørt til en gitt
  * migrasjon, før stoffet ble fagsidens identitet
- * (`20260929080000_stoffidentitet.sql`): der har sidene ingen nøkkel, og
+ * (`20260929111940_stoffidentitet.sql`): der har sidene ingen nøkkel, og
  * `les_stoff` finnes ikke. Testene av de historiske importene leser da med de
  * utgåtte funksjonene — etter sidens navn eller analyttkoden — som appen
  * brukte da migrasjonene ble skrevet. Appen selv leser etter stoffets nøkkel
