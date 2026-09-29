@@ -441,7 +441,10 @@ export interface Sokeindeks {
   foldet: readonly string[]
   /** Navnenøkkelen til hvert dokument som sier hva siden er; tom for de andre. */
   nokler: readonly string[]
-  /** Navnet, koden, aliasene og komponentene til hver side, etter {@link sidenokkel}. */
+  /**
+   * Navnet, koden, aliasene og komponentene til hver side, etter
+   * {@link sidenokkel}: foldet, og med navnenøkkelen til hver.
+   */
   identitet: ReadonlyMap<string, string>
 }
 
@@ -452,7 +455,7 @@ export function lagSokeindeks(dokumenter: readonly Sokedokument[]): Sokeindeks {
   dokumenter.forEach((d, i) => {
     if (!IDENTITETSFELT.has(d.felt)) return
     const nokkel = sidenokkel(d.sted.side)
-    identitet.set(nokkel, [identitet.get(nokkel), foldet[i]].filter(Boolean).join('\n'))
+    identitet.set(nokkel, [identitet.get(nokkel), foldet[i], nokler[i]].filter(Boolean).join('\n'))
   })
   return { dokumenter, foldet, nokler, identitet }
 }
@@ -500,6 +503,12 @@ function finn(indeks: Sokeindeks, sporring: string, { maks = 50, sidekontekst = 
   const ord = sokeord(sporring)
   if (ord.length === 0) return []
   const nokkel = navnenokkel(sporring)
+  // Et ord som ikke står i dokumentet, kan stå i sidens navn slik det er skrevet, eller skrevet på en annen måte.
+  const ordnokler = new Map(ord.map((o) => [o, navnenokkel(o)]))
+  const iSiden = (side: string, o: string) => {
+    const k = ordnokler.get(o)
+    return side.includes(o) || (!!k && side.includes(k))
+  }
   const ordstart = new Map(ord.map((o) => [o, new RegExp(`(^|[^\\p{L}\\p{N}])${escape(o)}`, 'u')]))
   const treff: Soketreff[] = []
   indeks.dokumenter.forEach((dokument, i) => {
@@ -509,7 +518,7 @@ function finn(indeks: Sokeindeks, sporring: string, { maks = 50, sidekontekst = 
     let iOrdene = iTeksten.length > 0
     if (iOrdene && iTeksten.length < ord.length) {
       const side = sidekontekst ? (indeks.identitet.get(sidenokkel(dokument.sted.side)) ?? '') : ''
-      iOrdene = ord.every((o) => iTeksten.includes(o) || side.includes(o))
+      iOrdene = ord.every((o) => iTeksten.includes(o) || iSiden(side, o))
     }
     if (!iOrdene && somNavn === null) return
     const somTekst = iOrdene

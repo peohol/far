@@ -2,9 +2,16 @@ import { describe, expect, it } from 'vitest'
 import { ANALYTTKATALOG, FORTOLKNINGSOPPFORINGER } from '../domain/analyttkatalog'
 import { search } from '../domain/search'
 import { navnenokkel } from '../domain/sokenavn'
-import { STOFFREGISTER, STOFFREGISTERDATA, kontrollerStoffregister, type Registerdata } from '../domain/stoffregister'
+import {
+  STOFFREGISTER,
+  STOFFREGISTERDATA,
+  byggStoffregister,
+  kontrollerStoffregister,
+  type Registerdata,
+} from '../domain/stoffregister'
+import type { Sidemodell } from '../faginnhold/stoffside'
 import { indekserKunnskapsbase } from '../faginnhold/globaltSok'
-import { lagSokeindeks, sokGlobalt } from '../faginnhold/sok'
+import { indekserSide, lagSokeindeks, sokGlobalt, type Sokedokument } from '../faginnhold/sok'
 
 /**
  * Aliasene i stoffregisteret er likestilte søkenavn for stoffet i fagsøket:
@@ -106,6 +113,21 @@ describe('aliasene i fagsøket', () => {
     }
   })
 
+  it('lar et annet navn på stoffet gi sammenhengen for ord som står på siden', () => {
+    const side = { stoff: 'kvetiapin', navn: 'Kvetiapin' }
+    const metabolisme: Sokedokument = {
+      sted: { side, panel: { nokkel: 'farmakokinetikk', tittel: 'Farmakokinetikk' }, element: { id: 'k1', tittel: 'Metabolisme' } },
+      felt: 'overskrift',
+      tekst: 'Metabolisme',
+    }
+    const tom = { paneler: new Map(), referanseliste: [] } as unknown as Sidemodell
+    const dokumenter = [...indekserSide({ ...side, aliaser: ['quetiapine'] }, tom), metabolisme]
+    const indeks = lagSokeindeks(dokumenter)
+    for (const sporring of ['kvetiapin metabolisme', 'kvetiapine metabolisme', 'quetiapin metabolisme']) {
+      expect(sokGlobalt(indeks, sporring).map((t) => t.dokument.tekst), sporring).toContain('Metabolisme')
+    }
+  })
+
   it('lar Risperidon-siden være uten hydroksyrisperidon som alias', () => {
     const risperidon = indeks.dokumenter.filter((d) => d.sted.side.stoff === 'risperidon' && d.felt === 'alias')
     expect(risperidon.map((d) => d.tekst)).toEqual(['risperidone'])
@@ -164,5 +186,9 @@ describe('kollisjonskontrollen', () => {
     expect(STOFFREGISTER.kanonisk('delta 9 THC')?.slug).toBe('thc')
     expect(STOFFREGISTER.kanonisk('hydroksyrisperidon')?.slug).toBe('paliperidon')
     expect(STOFFREGISTER.kanonisk('ukjentstoff')).toBeUndefined()
+    // En side som har fått nytt navn i databasen, finnes på det nye navnet, skrevet på hvilken som helst måte.
+    const omdopt = byggStoffregister([{ id: '1', slug: 'kvetiapin', navn: 'Kvetiapinfumarat' }])
+    expect(omdopt.kanonisk('Kvetiapin-fumarat')?.slug).toBe('kvetiapin')
+    expect(omdopt.kanonisk('quetiapine')?.slug).toBe('kvetiapin')
   })
 })

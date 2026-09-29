@@ -208,15 +208,20 @@ export function byggStoffregister(
   // Aliasene, og de kanoniske nøklene selv, etter nøkkelen de gir.
   const aliasTil = new Map<string, string>()
   for (const s of perSlug.values()) for (const a of s.aliaser) aliasTil.set(stoffslug(a), s.slug)
-  // Navnene og aliasene etter navnenøkkelen, for navn som er skrevet på en annen måte.
+  // Navnene og aliasene etter navnenøkkelen, for navn som er skrevet på en annen måte:
+  // registerets navn først, så navnene sidene har i databasen, som går foran.
   const perNokkel = new Map<string, string>()
-  for (const s of perSlug.values()) for (const n of [s.navn, ...s.aliaser]) perNokkel.set(navnenokkel(n), s.slug)
+  const leggTilNavn = () => {
+    for (const s of perSlug.values()) for (const n of [s.navn, ...s.aliaser]) perNokkel.set(navnenokkel(n), s.slug)
+  }
+  leggTilNavn()
 
   for (const d of databasestoffer) {
     const kjent = perSlug.get(d.slug)
     if (kjent) perSlug.set(d.slug, { ...kjent, navn: d.navn })
     else if (!aliasTil.has(d.slug)) perSlug.set(d.slug, { slug: d.slug, navn: d.navn, aliaser: [] })
   }
+  leggTilNavn()
 
   const koblinger: StoffAnalyttKobling[] = data.analyttkoblinger.map((k) => ({
     kode: k.kode,
