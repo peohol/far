@@ -1,0 +1,97 @@
+# Varslene
+
+Leses når noe ved bjella, varselvinduet eller hva som gir varsel skal endres.
+Varslene berører ikke fortolkningen; de forteller bare at noe er endret.
+
+## Hvor det ligger
+
+| Hvor | Hva |
+| --- | --- |
+| `supabase/migrations/*_varsler.sql` | Tabellen, utløserne som lager varslene, og funksjonene som leser og merker dem lest |
+| `src/varsler/modell.ts` | Kategoriene, valgene, føringene i endringsloggen som varsler, sorteringen og tekstene (rene funksjoner) |
+| `src/varsler/api.ts` | Kallene mot Supabase og brukerinnstillingene |
+| `src/components/varsler/` | Bjella (`Varselknapp`), tilstanden (`useVarsler`) og vinduet (`Varsler`) |
+| `src/styles/varsler.css` | Vinduet. Tallet på bjella står i `toppmeny.css` |
+
+## Kategoriene
+
+| Kategori | Når | Kan slås av |
+| --- | --- | --- |
+| `fortolkning` | En kommentar eller et regelsett publiseres, eller en føring i endringsloggen har `endrerFortolkning` | Nei |
+| `mine_ideer` | Noen kommenterer en idé du skrev, eller svarer på en kommentar du skrev | Nei |
+| `aktive_ideer` | Noen kommenterer en idé du har kommentert, uten at det er et svar til deg | Ja, på som standard |
+| `funksjonalitet` | En ny føring i endringsloggen | Ja, på som standard |
+| `favoritter` | En side du har som favoritt, er endret | Ja, av som standard. Skjult til favorittene finnes |
+
+Kategoriene står i `VARSELKATEGORIER`. De som lages av databasen, er de
+samme som `public.varselkategori`; en test passer på at de stemmer.
+Brukerens valg lagres i `brukerinnstillinger` under `varsler.valg`, og
+databasen lager varsler i alle kategoriene: det er appen som viser dem
+brukeren har valgt. Å slå en kategori av og på igjen gir dem tilbake.
+
+## Varslene i databasen
+
+Utløsere lager varslene når noe skjer, gjennom `intern.varsle()`. Den som
+gjorde det, varsles ikke.
+
+- **Idékommentarer** (`idekommentarer_varsle`): idéens forfatter og den som
+  fikk svar får `mine_ideer`, de andre som har kommentert i tråden
+  `aktive_ideer`.
+- **Fortolkningen** (`objektpubliseringer_varsle`): hver publisering av en
+  kommentar eller et regelsett (`intern.er_fortolkning`) varsler alle andre.
+  Et utkast som lagres, varsler ingen: varselet kommer når endringen er
+  publisert.
+
+Uleste varsler om det samme er **ett varsel**: ett om fortolkningen, og ett
+per idé og kategori (`gruppe`). En ny hendelse legges i det uleste varselet;
+når varselet er lest, begynner neste på et nytt. Samme fortolkningsobjekt
+står bare én gang, med den siste publiseringen.
+
+Hendelsene lagrer ID-er, og navnene slås opp når varslene leses
+(`mine_varsler()`): en kommentar med navnet sitt, et regelsett med
+analyttkodene, og analyttkoden reglene står under på stoffsiden, så varselet
+kan lenke dit. En idékommentar som er slettet, forsvinner fra varselet, og et
+varsel uten hendelser vises ikke. Slettes idéen, går varslene med.
+
+`mine_varsler()` gir alle uleste og de leste fra de siste 30 dagene
+(`intern.varselfrist()`, og `VARSELFRIST_DAGER` i appen), med `lest_kl`.
+`merk_varsler_lest(varsler, til)` merker dem lest slik de var da lista ble
+lest, så et varsel som har fått noe nytt imens, står ulest. Den rydder også
+bort leste varsler eldre enn fristen. Å åpne en idé (`merk_ide_sett`) merker
+varslene om den lest. `uleste_varsler()` teller de uleste per kategori, til
+tallet på bjella. Tabellen kan bare leses, og bare egne rader.
+
+## Endringsloggen
+
+Føringene i `src/data/endringslogg.ts` er varsler i appen, ikke i databasen:
+de kommer med appen selv. Hvor langt brukeren er kommet, lagres i
+`brukerinnstillinger` under `varsler.endringslogg`: `fra` (føringene til og
+med denne er historie) og `lest` (de nyere som er lest). Første gang
+begynner brukeren rett før den nyeste føringen, så den er et varsel og resten
+ikke. `merkEndringerLest` flytter `fra` forbi de eldste leste som har passert
+fristen, så lista over leste ikke vokser.
+
+En føring er `funksjonalitet`, eller `fortolkning` når den har
+`endrerFortolkning: true` (se `docs/endringslogg.md`).
+
+## Bjella og vinduet
+
+`Varselknapp` står rett til venstre for profilbildet. Tallet er de uleste i
+de valgte kategoriene, med «9+» over ni, og hentes når appen og fanen åpnes og
+hvert femte minutt (`useJevnligSjekk`, som idémenyen også bruker), og når
+noe annet i appen ber om det (`oppfriskVarsler`, når Idéer lukkes).
+
+Vinduet viser de uleste under «Nye» og resten under «Tidligere». Et varsel
+leder dit det gjelder, og er lest når man går dit: idéen (`visIde`, som
+`Ideknapp` hører etter), føringen i endringsloggen (`visEndringslogg`) eller
+reglene på stoffsiden. «Merk som lest» og «Merk alle som lest» gjør det
+samme uten å gå noe sted. Tannhjulet åpner innstillingene, der de
+obligatoriske kategoriene står låst.
+
+## Favorittene
+
+Kategorien `favoritter` finnes, men ingenting lager slike varsler ennå, og den
+er skjult i innstillingene (`skjult`). Når favorittene finnes, lages varslene
+av en utløser på `objektpubliseringer` for sidens objekter, med gruppen
+`favoritter:<stoff>`, så alt som publiseres på en side før brukeren har lest
+varselet, blir ett varsel. Da tas `skjult` bort.

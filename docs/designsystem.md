@@ -51,7 +51,8 @@ settes på et enkelt element.
   bakgrunnen. Atlas sin `--linje-sterk` er for svak til det.
 - **Aksent:** `--aksent`, `--aksent-2`, `--aksent-flate`, `--paa-aksent`,
   `--fokus`.
-- **Merker:** `--fritak-blekk` og `--fritak-flate` for godkjenningsfritak.
+- **Merker:** `--fritak-blekk` og `--fritak-flate` for godkjenningsfritak,
+  og `--varsel` med `--paa-varsel` for tallet på bjella.
 - **Nivåer:** `--referanse`, `--toksisk`, `--alvorlig`, `--under` og `--blod`,
   hver med `-blekk`, `-flate` og `-kant`. `-kant` er for kanter og streker som
   må holde 3:1. Farge er aldri alene om å bære betydning: nivået står også i

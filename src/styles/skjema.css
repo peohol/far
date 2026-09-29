@@ -209,6 +209,16 @@
   outline-offset: var(--fokusring);
 }
 
+/* Låst (`laast`): står som den er. Teksten ved den sier hvorfor. */
+.bryter:has(input:disabled),
+.bryter input:disabled {
+  cursor: default;
+}
+
+.bryter input:disabled + .bryter__spor {
+  opacity: 0.55;
+}
+
 /* --- Trinnbryter -------------------------------------------------------------
    Noen få faste valg side om side, der en aksentknott glir til valget som står
    (`Trinnbryter`). Valgene er like brede, så knotten er like stor overalt;

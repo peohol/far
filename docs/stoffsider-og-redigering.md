@@ -96,6 +96,10 @@ Venstremenyen er stoffregisteret: den åpner stoffsiden (`#/stoff/<nøkkel>`), i
 
 Hovedsidens søk er inngangen til fortolkningsarbeidsflyten, og filteret på analysemetode settes der.
 
+### Favoritter
+
+Stjernen blant sidens handlinger i toppmenyen gjør stoffet til favoritt for den innloggede, eller fjerner det igjen. Favorittene står i skuffen «Favoritter» i sidemenyen, fast mellom «Vis underkategorier» og kategoriene og lukket til den åpnes, alfabetisk og med et kryss som fjerner hver. De lagres i `public.stoffavoritter` etter stoffets nøkkel (så også stoffer uten side i databasen kan merkes), følger siden når den publiseres med ny nøkkel, og hver bruker ser bare sine egne (`les_stoffavoritter`, `sett_stoffavoritt`). En favoritt under et gammelt navn for stoffet (et alias) vises som stoffet. Stjernen og skuffen deler `FavorittkildeProvider` (`src/favoritter/`). Varslene om endringer på favorittsidene hører til varslingssystemet, som finner mottakerne i tabellen etter nøkkelen.
+
 ### Fra fortolkningsmodulen
 
 Analyttkodepillene er klikkbare og fører til stoffsiden til analyttens primære stoff, når koden har et.

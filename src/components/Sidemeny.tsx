@@ -6,6 +6,7 @@ import { Shortcut } from './Shortcut'
 import { Ikon } from './ikon/Ikon'
 import { useTips } from './Tips'
 import { stoffadresse } from '../domain/rute'
+import { useFavoritter, type Favoritter } from '../favoritter/Favorittkilde'
 import type { Registerkategori, Registerstoff, Stoffregister } from '../domain/stoffregister'
 import { fokusIFagsok, lagLiggerOver } from '../hooks/useKeyboard'
 import { rullefart } from '../hooks/useKortHopp'
@@ -23,6 +24,9 @@ import { rullefart } from '../hooks/useKortHopp'
  * ikke kjenner, så lista ikke kan komme i utakt med det appen har sider for.
  * Stoffene er lenker, så de også kan åpnes i en ny fane. Redaktørene kan lage
  * en ny stoffside nederst.
+ *
+ * Øverst, fast over lista, står brukerens favoritter i en egen skuff, lukket
+ * til den åpnes. Den lukkes ikke av kategoriene, og de ikke av den.
  *
  * Menyen er et lag over appen, på linje med endringsloggen: `data-lag` sier
  * fra til `lagLiggerOver()`, slik at appens egne taster holder seg i ro mens
@@ -78,6 +82,8 @@ export function Sidemeny({ register, onOpprett }: SidemenyProps) {
   const [visUnderkategorier, setVisUnderkategorier] = useState(true)
   /** Kategorien med åpen skuff — bare én av gangen. */
   const [apenSkuff, setApenSkuff] = useState<string | null>(null)
+  const favoritter = useFavoritter()
+  const [favoritterApen, setFavoritterApen] = useState(false)
   const panelId = useId()
   const panel = useRef<HTMLElement>(null)
   const knapp = useRef<HTMLButtonElement | null>(null)
@@ -225,6 +231,19 @@ export function Sidemeny({ register, onOpprett }: SidemenyProps) {
           Vis underkategorier
         </Bryter>
 
+        {/* Favorittene står også fast, under bryteren og over kategoriene. */}
+        {favoritter && (
+          <ul className="menyfavoritter">
+            <Favorittskuff
+              favoritter={favoritter}
+              register={register}
+              apen={favoritterApen}
+              onVeksle={() => setFavoritterApen((apen) => !apen)}
+              onVelg={velg}
+            />
+          </ul>
+        )}
+
         <ul className="menyliste">
           {register.kategorier.map((kategori) => (
             <Kategoriskuff
@@ -289,6 +308,65 @@ function Kategoriskuff({
 }
 
 /**
+ * Brukerens favoritter, alfabetisk, hver med en knapp som fjerner den. Et stoff
+ * registeret ikke kjenner (lenger), står med nøkkelen, så det fortsatt kan
+ * fjernes.
+ */
+function Favorittskuff({
+  favoritter,
+  register,
+  apen,
+  onVeksle,
+  onVelg,
+}: {
+  favoritter: Favoritter
+  register: Stoffregister
+  apen: boolean
+  onVeksle: () => void
+  onVelg: () => void
+}) {
+  const stoffer = favoritter.stoffer
+    .map((slug): Registerstoff => register.menystoff(slug) ?? { slug, navn: slug, koder: [] })
+    .sort((a, b) => a.navn.localeCompare(b.navn, 'nb'))
+
+  return (
+    <Skuff
+      apen={apen}
+      onVeksle={onVeksle}
+      rullInn={false}
+      tittel={
+        <>
+          <Ikon navn="star" storrelse="ui" className="menyskuff__ikon" />
+          <span className="menyskuff__beskrivelse">Favoritter</span>
+          <span className="menyskuff__antall" aria-label={`${stoffer.length} stoffer`}>
+            {stoffer.length}
+          </span>
+        </>
+      }
+    >
+      {stoffer.length === 0 ? (
+        <p className="menyfavoritter__tom">Trykk på stjernen på en fagside for å legge den til her.</p>
+      ) : (
+        <Stoffer
+          stoffer={stoffer}
+          onVelg={onVelg}
+          handling={(stoff) => (
+            <button
+              type="button"
+              className="menyanalytt__fjern"
+              aria-label={`Fjern ${stoff.navn} fra favoritter`}
+              onClick={() => favoritter.sett(stoff.slug, false)}
+            >
+              <Ikon navn="close" storrelse="ui" />
+            </button>
+          )}
+        />
+      )}
+    </Skuff>
+  )
+}
+
+/**
  * En skuff i menyen: tittelen som åpner skuffen, og innholdet.
  *
  * Selve skuffen glir opp og igjen med `grid-template-rows: 0fr ↔ 1fr`, som
@@ -298,11 +376,14 @@ function Kategoriskuff({
 function Skuff({
   apen,
   onVeksle,
+  rullInn = true,
   tittel,
   children,
 }: {
   apen: boolean
   onVeksle: () => void
+  /** Hentes fram i lista når den åpnes. Av for en skuff som står fast. */
+  rullInn?: boolean
   tittel: ReactNode
   children: ReactNode
 }) {
@@ -312,7 +393,7 @@ function Skuff({
   // En skuff som åpnes nederst i lista skal ikke bli stående utenfor bildet.
   // Rullingen venter til glidningen er over — først da vet vi hvor høy den ble.
   useEffect(() => {
-    if (!apen) return
+    if (!apen || !rullInn) return
     const el = rad.current
     if (!el) return
     const frist = window.setTimeout(
@@ -322,7 +403,7 @@ function Skuff({
       ETTER_GLIDNING,
     )
     return () => window.clearTimeout(frist)
-  }, [apen])
+  }, [apen, rullInn])
 
   return (
     <li ref={rad} className="menyskuff" data-apen={apen ? 'ja' : 'nei'}>
@@ -404,16 +485,29 @@ function NyStoffside({
   )
 }
 
-/** Stoffene i en kategori eller underkategori, alfabetisk, som lenker til stoffsidene. */
-function Stoffer({ stoffer, onVelg }: { stoffer: readonly Registerstoff[]; onVelg: () => void }) {
+/**
+ * Stoffene i en kategori eller underkategori, alfabetisk, som lenker til
+ * stoffsidene. `handling` er en knapp ved siden av hvert stoff, som den som
+ * fjerner en favoritt.
+ */
+function Stoffer({
+  stoffer,
+  onVelg,
+  handling,
+}: {
+  stoffer: readonly Registerstoff[]
+  onVelg: () => void
+  handling?: (stoff: Registerstoff) => ReactNode
+}) {
   return (
     <ul className="menyanalytter">
       {stoffer.map((stoff) => (
-        <li key={stoff.slug}>
+        <li key={stoff.slug} className={handling && 'menyanalytter__rad'}>
           <a className="menyanalytt" href={stoffadresse(stoff.slug)} onClick={onVelg}>
             <span className="menyanalytt__navn">{stoff.navn}</span>
             {stoff.koder.length > 0 && <span className="menyanalytt__kode">{stoff.koder.join(' · ')}</span>}
           </a>
+          {handling?.(stoff)}
         </li>
       ))}
     </ul>

@@ -732,6 +732,12 @@ const REGISTER = {
       P('M9.7 19.6h4.6M10.6 21.6h2.8', 'l', 'i-ink'),
     ],
   },
+  // Tegnet i OUSFAR for favorittene, i samme stil som hjertet.
+  star: {
+    vb: 24,
+    ga: 'pop',
+    parts: [P('M12 3.6l2.4 5.8 6.2.4-4.8 4 1.5 6.1-5.3-3.3-5.3 3.3 1.5-6.1-4.8-4 6.2-.4z', 'f1', 'warn')],
+  },
   heart: {
     vb: 24,
     ga: 'pulse',
@@ -773,6 +779,16 @@ const REGISTER = {
       P('M6.64 1.5a4.84 4.84 0 0 0-2.89 8.74c.62.47.94 1.09.94 1.79v.55h3.9v-.55c0-.7.31-1.33.94-1.79A4.84 4.84 0 0 0 6.64 1.5z', 'f1', 'warn'),
       C(6.64, 6.34, 1.87, 'f2', 'warn', 'flash'),
       P('M4.85 14.7h3.6M5.55 16.5h2.2', 'l', 'i-ink'),
+    ],
+  },
+  // Tegnet i OUSFAR for varslene, i samme stil som resten av registeret.
+  bell: {
+    vb: 24,
+    ga: 'shake',
+    parts: [
+      P('M12 3.2a6 6 0 0 0-6 6v3.4c0 1-.3 1.9-.9 2.7L4 16.8h16l-1.1-1.5c-.6-.8-.9-1.7-.9-2.7V9.2a6 6 0 0 0-6-6z', 'f1', 'warn'),
+      G([P('M9.8 19.2a2.3 2.3 0 0 0 4.4 0', 'l', 'i-ink')], 'bumpR'),
+      P('M4 16.8h16', 'l', 'i-ink'),
     ],
   },
   arkiv: {

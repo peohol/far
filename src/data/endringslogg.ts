@@ -12,13 +12,41 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.55.1',
+    versjon: '1.57.1',
     dato: '2026-09-29',
     sammendrag: 'Tråder fra /utfor-oppgaver får navn etter oppgavene',
     typer: ['Funksjonalitet'],
     omfang: 'Minimalt omfang',
     punkter: [
       'Når /utfor-oppgaver har funnet oppgavene som skal gjøres, gir Claude tråden navn etter overskriften deres i stedet for «utfor-oppgaver». Flere oppgaver blir for eksempel «Oppgaver: A, B».',
+    ],
+  },
+  {
+    versjon: '1.57.0',
+    dato: '2026-09-29',
+    sammendrag: 'Fagsidene kan lagres som favoritter',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'En stjerne øverst på hver fagside legger siden til i favorittene dine. Trykk på den igjen for å fjerne den.',
+      'Favorittene står i en egen skuff øverst i stoffregisteret, under «Vis underkategorier». Skuffen er lukket til du åpner den, og ruller ikke bort med resten av menyen.',
+      'Krysset ved en favoritt i skuffen fjerner den.',
+      'Favorittene lagres på kontoen din, så de følger deg til andre maskiner.',
+    ],
+  },
+  {
+    versjon: '1.56.0',
+    dato: '2026-09-29',
+    sammendrag: 'Varsler: en bjelle i toppmenyen samler det som er nytt for deg',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Større omfang',
+    punkter: [
+      'En bjelle rett til venstre for profilbildet åpner varslene. Et lite rødt tall viser hvor mange du ikke har lest.',
+      'Du får alltid varsel når fortolkningen er endret: når en kommentartekst eller reglene for hvilke kommentarer som brukes, publiseres. Varselet lenker til reglene på stoffsiden.',
+      'Du får alltid varsel når noen kommenterer en idé du har skrevet, eller svarer på en kommentar du har skrevet. Et trykk på varselet åpner idéen.',
+      'Du kan også få varsel når noen kommenterer en idé du har kommentert, og når appen har fått en ny versjon. Begge er på som standard og kan slås av under tannhjulet i varselvinduet.',
+      'Flere kommentarer på samme idé, eller flere endringer i fortolkningen, samles i ett varsel så lenge du ikke har lest det.',
+      'Varslene kan merkes lest ett og ett eller alle på én gang. Leste varsler blir stående i 30 dager.',
     ],
   },
   {

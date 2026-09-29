@@ -213,6 +213,10 @@
   --merke-fag: #8e2f6b;
   --merke-fag-flate: #f6e3ee;
 
+  /* Tallet for uleste varsler på bjella. Holdes utenfor de kliniske nivåfargene. */
+  --varsel: #c42b2b;
+  --paa-varsel: #ffffff;
+
   /* Tooltip. Snudd i forhold til resten av appen, så boblen leses som noe
      som ligger over siden og ikke som enda et kort i den. */
   --tips-flate: #1f1b15;
@@ -281,6 +285,9 @@
   --merke-funksjon-flate: #10292a;
   --merke-fag: #f0a6d2;
   --merke-fag-flate: #33182a;
+
+  --varsel: #ff7b72;
+  --paa-varsel: #0e1217;
 
   --tips-flate: #e6ecf2;
   --tips-blekk: #0e1217;

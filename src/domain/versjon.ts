@@ -40,6 +40,11 @@ export interface Endring {
   omfang: Omfang
   /** Det konkrete, i vanlig språk — punktene som avdekkes når skuffen åpnes. */
   punkter: string[]
+  /**
+   * Endringen gir andre kommentarer eller vurderinger i fortolkningen. Da
+   * varsles alle om den som en endring i fortolkningen, som ingen kan slå av.
+   */
+  endrerFortolkning?: true
 }
 
 /**

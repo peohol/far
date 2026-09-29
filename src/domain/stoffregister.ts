@@ -173,6 +173,8 @@ export interface Stoffregister {
   stofferFor: (kode: string) => StoffAnalyttKobling[]
   /** Analyttens primære stoff: dit koden lenker. `undefined` når analytten ikke har noe. */
   primartStoffFor: (kode: string) => Stoff | undefined
+  /** Stoffet slik menyen viser det, med kodene. `undefined` når registeret ikke kjenner nøkkelen. */
+  menystoff: (slug: string) => Registerstoff | undefined
   /** Menyen: kategoriene med stoffene, uten tomme kategorier. */
   kategorier: Registerkategori[]
   /** Kategoriene stoffet står i, i registerets rekkefølge; {@link ANDRE_STOFFER} når ingen. */
@@ -286,6 +288,10 @@ export function byggStoffregister(
     analytterFor,
     stofferFor,
     primartStoffFor,
+    menystoff: (slug) => {
+      const s = perSlug.get(slug)
+      return s && menystoff(s)
+    },
     kategorier: kategorier.filter((k) => k.stoffer.length > 0),
     kategorierFor,
   }

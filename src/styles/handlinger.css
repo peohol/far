@@ -167,6 +167,11 @@
   border-color: var(--aksent);
 }
 
+/* Favorittstjernen er fylt mens stoffet er favoritt. */
+.favorittknapp[data-favoritt='ja'] .ikon [data-rolle^='f'] {
+  fill-opacity: 0.85;
+}
+
 .ikonknapp:disabled {
   opacity: 0.45;
   cursor: default;

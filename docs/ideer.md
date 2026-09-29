@@ -101,6 +101,9 @@ Kommentarer fra andre etter det er nye: `ideoversikt()` teller dem per idé,
 gir tidspunktet, så siden kan merke dem «Ny». Regelen står også i
 `erNyKommentar` i `modell.ts`; endres den ett sted, endres den begge.
 
+Varslene om nye kommentarer (bjella i toppmenyen) lages av databasen og står
+i `docs/varsler.md`. Å åpne en idé merker også dem lest.
+
 ## Sorteringen
 
 Førstekriteriet (kategori eller bruker, aldri tid) gir overskriftene;

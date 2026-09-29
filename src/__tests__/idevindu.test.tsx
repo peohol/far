@@ -223,6 +223,16 @@ describe('én idé', () => {
     expect(await screen.findByRole('region', { name: /^Fag/ })).toBeTruthy()
   })
 
+  it('kan åpnes rett på idéen, som fra et varsel, og tilbake går til lista med fokus på kortet', async () => {
+    const bruker = userEvent.setup()
+    render(<Ideer apen ide="i1" onLukk={() => {}} onOppgaver={onOppgaver} />)
+    expect(await screen.findByRole('heading', { name: 'Flere TDM-kilder', level: 3 })).toBeTruthy()
+    expect(api.hentIdetraad).toHaveBeenCalledWith('i1')
+
+    await bruker.click(screen.getByRole('button', { name: 'Tilbake til idéene' }))
+    await waitFor(() => expect(document.activeElement?.getAttribute('data-ide')).toBe('i1'))
+  })
+
   it('legger en kommentar og svarene under den sammen', async () => {
     const bruker = userEvent.setup()
     apne()
