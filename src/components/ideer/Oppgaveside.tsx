@@ -271,11 +271,14 @@ function Oppgaveskjema({
 
   const lagre = async () => {
     if (!endret || lagrer) return
-    if (tittel.trim() === '') return setFeil('Skriv en overskrift.')
+    const skrevet = tittel
+    const ren = skrevet.trim()
+    if (ren === '') return setFeil('Skriv en overskrift.')
     setFeil(null)
     onFortsett()
     setLagrer(true)
-    if (await onLagre({ tittel: tittel.trim(), prompt })) setTittel(tittel.trim())
+    // Mellomrom rundt overskriften tas bort, men ikke over noe som er skrevet mens den ble lagret.
+    if (await onLagre({ tittel: ren, prompt })) setTittel((naa) => (naa === skrevet ? ren : naa))
     setLagrer(false)
   }
 

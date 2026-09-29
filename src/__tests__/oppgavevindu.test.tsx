@@ -225,6 +225,20 @@ describe('én oppgave', () => {
     expect(within(screen.getByRole('region', { name: 'Idéen oppgaven kom fra' })).getByText('Oppgave a')).toBeTruthy()
   })
 
+  it('beholder det som skrives i overskriften mens den lagres', async () => {
+    const bruker = userEvent.setup()
+    tilstand.meg = ADMIN
+    let svar: () => void = () => {}
+    api.lagreOppgave.mockImplementationOnce(() => new Promise<void>((ja) => (svar = ja)))
+    apne('a')
+    const felt = (await screen.findByRole('textbox', { name: 'Overskrift' })) as HTMLInputElement
+    await bruker.type(felt, ' b {Enter}')
+    expect(api.lagreOppgave).toHaveBeenCalledWith('a', { tittel: 'Oppgave a b', prompt: '' })
+    await bruker.type(felt, 'c')
+    await act(async () => svar())
+    expect(felt.value).toBe('Oppgave a b c')
+  })
+
   it('spør før prompten forlates med endringer som ikke er lagret', async () => {
     const bruker = userEvent.setup()
     tilstand.meg = ADMIN
