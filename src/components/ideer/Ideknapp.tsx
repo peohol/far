@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useBevart } from '../../oppdatering/Bevaring'
 import { useJevnligSjekk } from '../../hooks/useJevnligSjekk'
 import { hentIdeerMedNytt } from '../../ideer/api'
 import { oppfriskVarsler } from '../../varsler/api'
@@ -19,7 +20,7 @@ type Vindu = { lag: 'ideer'; ide?: string } | { lag: 'oppgaver'; oppgave?: strin
  * lagene selv. Et varsel kan åpne Idéer rett på en idé (`visIde`).
  */
 export function Ideknapp() {
-  const [vindu, setVindu] = useState<Vindu>(null)
+  const [vindu, setVindu] = useBevart<Vindu>('ideknapp', null)
   /** Antall idéer med kommentarer brukeren ikke har sett. Sjekkes når appen og fanen åpnes, etter vinduet og jevnlig. */
   const [medNytt, setMedNytt] = useState(0)
   const sjekkNytt = useCallback(() => {

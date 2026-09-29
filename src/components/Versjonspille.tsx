@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
+import { useBevart } from '../oppdatering/Bevaring'
 import { ENDRINGSLOGG } from '../data/endringslogg'
 import { nyesteVersjon } from '../domain/versjon'
 import { Endringslogg } from './Endringslogg'
@@ -20,9 +21,9 @@ export const VERSJON = nyesteVersjon(ENDRINGSLOGG)
  * appen tilhører den kliniske flyten.
  */
 export function Versjonspille() {
-  const [apen, setApen] = useState(false)
+  const [apen, setApen] = useBevart('endringslogg', false)
   /** Føringen loggen åpnes på, når den ble åpnet fra en lenke. */
-  const [versjon, setVersjon] = useState<string | null>(null)
+  const [versjon, setVersjon] = useBevart<string | null>('endringslogg/versjon', null)
   useEffect(
     () =>
       lyttEtterEndringslogg((ny) => {

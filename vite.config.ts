@@ -1,10 +1,33 @@
 import { fileURLToPath } from 'node:url'
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { KLINISK_PAKKE } from './src/auth/vegg'
+import { ENDRINGSLOGG } from './src/data/endringslogg'
+import { nyesteVersjon } from './src/domain/versjon'
+import { VERSJONSFIL, type Byggopplysninger } from './src/oppdatering/versjon'
+
+/**
+ * Identiteten til bygget, i appen som `__BYGG__` og i `versjon.json` ved siden
+ * av `index.html`. Appen som kjører, spør etter fila og sier fra når et annet
+ * bygg er lagt ut (`src/oppdatering/versjon.ts`). På Vercel er det commiten
+ * bygget kommer fra; ellers tidspunktet, så hvert lokale bygg er nytt.
+ */
+function versjonsfil(): Plugin {
+  const opplysninger: Byggopplysninger = {
+    bygg: process.env.VERCEL_GIT_COMMIT_SHA || Date.now().toString(36),
+    versjon: nyesteVersjon(ENDRINGSLOGG),
+  }
+  return {
+    name: 'ousfar-versjonsfil',
+    config: () => ({ define: { __BYGG__: JSON.stringify(opplysninger.bygg) } }),
+    generateBundle() {
+      this.emitFile({ type: 'asset', fileName: VERSJONSFIL, source: JSON.stringify(opplysninger) })
+    },
+  }
+}
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), versjonsfil()],
   base: './',
   build: {
     outDir: 'dist',

@@ -1,4 +1,5 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef } from 'react'
+import { useBevart } from '../../oppdatering/Bevaring'
 import { oppsummerForm, type Preparatvisning } from '../../legemiddeldata/preparatmodell'
 import { preparatkort, preparatsted } from '../../legemiddeldata/stoffside'
 import { elementAnker } from '../stoffside/Paneler'
@@ -19,7 +20,8 @@ import { Styrkerutenett, type Preparatvalg } from './Styrkerutenett'
  * kort, og et preparatnavn åpner preparatvinduet.
  */
 export function Legemiddelformer({ visning, sidenavn }: { visning: Preparatvisning; sidenavn: string }) {
-  const [valgt, setValgt] = useState<Preparatvalg | null>(null)
+  // Preparatvinduet som står åpent, overlever en oppdatering av appen.
+  const [valgt, setValgt] = useBevart<Preparatvalg | null>('preparatvindu', null)
   // Fokuset går tilbake til preparatnavnet vinduet ble åpnet fra.
   const tilbake = useRef<HTMLElement | null>(null)
   const velg = useCallback((valg: Preparatvalg) => {

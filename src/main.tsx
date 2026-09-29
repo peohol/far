@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { OktProvider } from './auth/okt'
 import { Lasteindikator } from './components/Lasteindikator'
+import { Oppdateringsmelding } from './components/Oppdateringsmelding'
 import { Port } from './components/konto/Port'
 import { TipsLag } from './components/Tips'
 import { ShortcutVisibilityProvider } from './hooks/useShortcutVisibility'
@@ -35,6 +36,8 @@ createRoot(root).render(
   <StrictMode>
     {/* Streken øverst mens appen henter noe, også før innloggingen. */}
     <Lasteindikator />
+    {/* Meldingen om en ny versjon, også før innloggingen. */}
+    <Oppdateringsmelding />
     {/* Tooltiplaget ligger ytterst, så boblen kan festes til vinduet uansett
         hvor i appen ankeret står. */}
     <TipsLag>

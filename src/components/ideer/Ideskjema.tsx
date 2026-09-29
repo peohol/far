@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef, useState, type FormEvent } from 'react'
+import { useEffect, useId, useState, type FormEvent } from 'react'
+import { useBevart } from '../../oppdatering/Bevaring'
 import { tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { endreIde, opprettIde } from '../../ideer/api'
 import {
@@ -43,18 +44,22 @@ export function Ideskjema({
   onAvbryt: () => void
   onLagret: (id: string) => void
 }) {
-  const [kategori, setKategori] = useState<Idekategori | null>(ide?.kategori ?? startkategori ?? null)
-  const [tittel, setTittel] = useState(ide?.tittel ?? '')
-  const [tekst, setTekst] = useState<Riktekstdokument>(ide?.tekst ?? tomtDokument())
+  // Det som er skrevet, overlever en oppdatering av appen.
+  const skjema = `skjema:${ide?.id ?? 'ny'}`
+  const [kategori, setKategori] = useBevart<Idekategori | null>(`${skjema}/kategori`, ide?.kategori ?? startkategori ?? null)
+  const [tittel, setTittel] = useBevart(`${skjema}/tittel`, ide?.tittel ?? '')
+  const [tekst, setTekst] = useBevart<Riktekstdokument>(`${skjema}/tekst`, () => ide?.tekst ?? tomtDokument())
   const [feil, setFeil] = useState<string | null>(null)
   const [lagrer, setLagrer] = useState(false)
   const kategoriId = useId()
   const beskrivelseId = useId()
 
-  // Det skjemaet ville lagret, slik det var da det åpnet, og nå.
+  // Det skjemaet ville lagret, slik det var da det åpnet, og nå. Utgangspunktet
+  // tas vare på sammen med det som er skrevet, så et utkast som kom tilbake
+  // etter en oppdatering, fortsatt regnes som ulagret.
   const signatur = JSON.stringify([kategori, tittel.trim(), tekstTilLagring(tekst)])
-  const start = useRef(signatur)
-  const status: Skjemastatus = lagrer ? 'lagrer' : signatur !== start.current ? 'ulagret' : 'uendret'
+  const [start] = useBevart(`${skjema}/utgangspunkt`, signatur)
+  const status: Skjemastatus = lagrer ? 'lagrer' : signatur !== start ? 'ulagret' : 'uendret'
   useEffect(() => onStatus(status), [status, onStatus])
 
   const lagre = async (event: FormEvent) => {

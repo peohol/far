@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.60.0',
+    dato: '2026-09-29',
+    sammendrag: 'Appen sier fra når en ny versjon er klar',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Når en ny versjon av OUSFAR er lagt ut, står det en melding nederst i vinduet med knappen «Oppdater nå». Den blir stående til du har oppdatert, også når et vindu er åpent.',
+      'Det du holder på med, blir stående etter oppdateringen: vinduer som var åpne, tekst du holdt på å skrive, valgene i fortolkningen, åpne seksjoner og hvor langt ned du var på siden.',
+      'Et redigeringsvindu på en stoffside kommer tilbake med det du hadde skrevet, men bare hvis ingen andre har lagret det samme i mellomtiden.',
+    ],
+  },
+  {
     versjon: '1.59.0',
     dato: '2026-09-29',
     sammendrag: 'Planlagte oppgaver viser når en agent arbeider med dem, og har nummer fra start',

@@ -1,4 +1,5 @@
 import { useId, useMemo, useRef, useState } from 'react'
+import { useBevart } from '../../oppdatering/Bevaring'
 import { tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { endreKommentar, opprettKommentar, slettKommentar } from '../../ideer/api'
 import { byggTraad, erNyKommentar, tekstTilLagring, type Idetraad, type Kommentar, type Kommentarnode } from '../../ideer/modell'
@@ -83,8 +84,9 @@ function Kommentarvisning({
   const { meg, admin } = useIdekontekst()
   const navn = useForfatternavn(kommentar.forfatter_id)
   const [apen, setApen] = useState(true)
-  const [svarer, setSvarer] = useState(false)
-  const [endrer, setEndrer] = useState(false)
+  // Et svar eller en endring som skrives, overlever en oppdatering av appen.
+  const [svarer, setSvarer] = useBevart(`kommentar:${kommentar.id}/svarer`, false)
+  const [endrer, setEndrer] = useBevart(`kommentar:${kommentar.id}/endrer`, false)
   const [feil, setFeil] = useState<string | null>(null)
   const kropp = useRef<HTMLDivElement>(null)
   const inner = useRef<HTMLDivElement>(null)
@@ -212,8 +214,10 @@ function Kommentarskriver({
   /** Uten: feltet legger seg sammen igjen i stedet for å forsvinne. */
   onAvbryt?: () => void
 }) {
-  const [apen, setApen] = useState(Boolean(onAvbryt))
-  const [tekst, setTekst] = useState<Riktekstdokument>(kommentar?.tekst ?? tomtDokument())
+  // Det som skrives, overlever en oppdatering av appen.
+  const skriver = `skriver:${ide}:${kommentar ? `endre:${kommentar.id}` : `svar:${forelder ?? 'ny'}`}`
+  const [apen, setApen] = useBevart(`${skriver}/apen`, Boolean(onAvbryt))
+  const [tekst, setTekst] = useBevart<Riktekstdokument>(`${skriver}/tekst`, () => kommentar?.tekst ?? tomtDokument())
   /** Øker for hver sending, så editoren begynner tom igjen. */
   const [runde, setRunde] = useState(0)
   const [sender, setSender] = useState(false)

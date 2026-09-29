@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
+import { useBevart } from '../../oppdatering/Bevaring'
 import { useProfil } from '../../auth/okt'
 import { Menyvalg, Nedtrekksmeny } from '../toppmeny/Nedtrekksmeny'
 import { Brukerliste } from './Brukerliste'
@@ -13,7 +14,7 @@ type Panel = 'brukere' | 'datakilder' | null
  */
 export function Adminmeny() {
   const admin = useProfil().role === 'admin'
-  const [panel, setPanel] = useState<Panel>(null)
+  const [panel, setPanel] = useBevart<Panel>('adminmeny', null)
   const lukkPanel = useCallback(() => setPanel(null), [])
 
   if (!admin) return null

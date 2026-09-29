@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import { flyttOppgaveTilbake, frigiOppgave, hentOppgave, lagreOppgave, settOppgaveKlar } from '../../ideer/api'
 import { TITTEL_MEST, oppgavekode } from '../../ideer/modell'
 import { PROMPT_MEST, iEndringsloggen, type Oppgavedetaljer } from '../../ideer/oppgaver'
@@ -190,14 +191,16 @@ export function Oppgaveside({
       )}
 
       {redigerer ? (
-        <Oppgaveskjema
-          lagret={{ tittel: oppgave.tittel, prompt: oppgave.prompt }}
-          forlater={forlater}
-          onForkast={onForkast}
-          onFortsett={onFortsett}
-          onStatus={setSkjemastatus}
-          onLagre={(innhold) => utfor(() => lagreOppgave(oppgave.id, innhold))}
-        />
+        <Bevaringsomrade navn={`oppgave:${oppgave.id}`}>
+          <Oppgaveskjema
+            lagret={{ tittel: oppgave.tittel, prompt: oppgave.prompt }}
+            forlater={forlater}
+            onForkast={onForkast}
+            onFortsett={onFortsett}
+            onStatus={setSkjemastatus}
+            onLagre={(innhold) => utfor(() => lagreOppgave(oppgave.id, innhold))}
+          />
+        </Bevaringsomrade>
       ) : (
         <Prompt prompt={oppgave.prompt} />
       )}
@@ -291,8 +294,9 @@ function Oppgaveskjema({
   onStatus: (status: Skjemastatus) => void
   onLagre: (innhold: Oppgaveinnhold) => Promise<boolean>
 }) {
-  const [tittel, setTittel] = useState(lagret.tittel)
-  const [prompt, setPrompt] = useState(lagret.prompt)
+  // Det som er skrevet, overlever en oppdatering av appen.
+  const [tittel, setTittel] = useBevart('tittel', lagret.tittel)
+  const [prompt, setPrompt] = useBevart('prompt', lagret.prompt)
   const [feil, setFeil] = useState<string | null>(null)
   const [lagrer, setLagrer] = useState(false)
   const id = useId()

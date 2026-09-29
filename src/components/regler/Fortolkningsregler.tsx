@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useState } from 'react'
-import type { Regelsettutgave } from '../../faginnhold/lesing'
+import { useCallback, useMemo } from 'react'
+import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
+import { revisjonsnokkel, type Regelsettutgave } from '../../faginnhold/lesing'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
 import { losRegelsett } from '../../regler/kommentarer'
 import type { Intervallregelsett, Intervallregelsettinnhold } from '../../regler/modell'
@@ -66,7 +67,9 @@ export function Fortolkningsregler({
   /** Egen tittel når det må fremgå hvilken analytt regelsettet gjelder. */
   tittel?: string
 }) {
-  const [redigeres, setRedigeres] = useState(false)
+  // En redigering som er i gang, overlever en oppdatering av appen.
+  const redigeringsnavn = utgave ? `regler:${utgave.regelsett.id}` : null
+  const [redigeres, setRedigeres] = useBevart(redigeringsnavn, false)
   const regelsett = useMemo(() => utgave && losRegelsett(utgave), [utgave])
   const publiserte = useMemo(() => publisert && losRegelsett(publisert), [publisert])
   const historikkfelter = useCallback(
@@ -94,16 +97,20 @@ export function Fortolkningsregler({
       className="regler"
     >
       {redigeringsmodus ? (
-        <Regelredigering
-          key={[utgave.regelsett.revisjon, ...utgave.kommentarer.map((k) => k.revisjon)].join('-')}
-          start={regelsett}
-          onLagre={async (innhold, grunnlag) => {
-            await onLagre(innhold, grunnlag)
-            setRedigeres(false)
-          }}
-          hentNyeste={hentNyeste}
-          onAvbryt={() => setRedigeres(false)}
-        />
+        // Utkastet tas vare på mot revisjonene det bygger på, og kommer bare
+        // tilbake så lenge ingen andre har lagret i mellomtiden.
+        <Bevaringsomrade navn={`${redigeringsnavn}@${revisjonsnokkel(utgave)}`}>
+          <Regelredigering
+            key={revisjonsnokkel(utgave)}
+            start={regelsett}
+            onLagre={async (innhold, grunnlag) => {
+              await onLagre(innhold, grunnlag)
+              setRedigeres(false)
+            }}
+            hentNyeste={hentNyeste}
+            onAvbryt={() => setRedigeres(false)}
+          />
+        </Bevaringsomrade>
       ) : (
         <>
           <p className="regler__ingress">

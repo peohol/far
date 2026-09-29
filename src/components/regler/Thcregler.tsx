@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../../domain/thcTekster'
 import type { ThcModell } from '../../domain/thcMotor'
 import { bruksmonsterbeskrivelse, marginmerke, nivaomrader, somProsent } from '../../domain/thcVisning'
+import { revisjonsnokkel } from '../../faginnhold/lesing'
 import { upublisert } from '../../faginnhold/stoffside'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
 import { thcUtkastFra, tilThcModell, type ThcRegelsettutgave } from '../../faginnhold/thcregler'
@@ -47,7 +49,8 @@ export function Thcregler({
 }) {
   const modell = useMemo(() => tilThcModell(utgave), [utgave])
   const start = useMemo(() => thcUtkastFra(utgave), [utgave])
-  const [redigeres, setRedigeres] = useState(false)
+  // En redigering som er i gang, overlever en oppdatering av appen.
+  const [redigeres, setRedigeres] = useBevart(`thcregler:${utgave.regelsett.id}`, false)
   const redigeringsmodus = redigeres && redigerer && start && onLagre
   const upubliserte = redigerer
     ? [
@@ -87,16 +90,20 @@ export function Thcregler({
       className="regler"
     >
       {redigeringsmodus ? (
-        <Thcredigering
-          key={[utgave.regelsett.revisjon, ...utgave.kommentarer.map((k) => k.revisjon)].join('-')}
-          utgave={utgave}
-          start={start}
-          onLagre={async (regler, tekster) => {
-            await onLagre(regler, tekster)
-            setRedigeres(false)
-          }}
-          onAvbryt={() => setRedigeres(false)}
-        />
+        // Utkastet tas vare på mot revisjonene det bygger på, og kommer bare
+        // tilbake så lenge ingen andre har lagret i mellomtiden.
+        <Bevaringsomrade navn={`thcregler:${utgave.regelsett.id}@${revisjonsnokkel(utgave)}`}>
+          <Thcredigering
+            key={revisjonsnokkel(utgave)}
+            utgave={utgave}
+            start={start}
+            onLagre={async (regler, tekster) => {
+              await onLagre(regler, tekster)
+              setRedigeres(false)
+            }}
+            onAvbryt={() => setRedigeres(false)}
+          />
+        </Bevaringsomrade>
       ) : modell.ok ? (
         <Reglene modell={modell.modell} />
       ) : (
