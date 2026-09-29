@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.56.0',
+    dato: '2026-09-29',
+    sammendrag: 'Varsler: en bjelle i toppmenyen samler det som er nytt for deg',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Større omfang',
+    punkter: [
+      'En bjelle rett til venstre for profilbildet åpner varslene. Et lite rødt tall viser hvor mange du ikke har lest.',
+      'Du får alltid varsel når fortolkningen er endret: når en kommentartekst eller reglene for hvilke kommentarer som brukes, publiseres. Varselet lenker til reglene på stoffsiden.',
+      'Du får alltid varsel når noen kommenterer en idé du har skrevet, eller svarer på en kommentar du har skrevet. Et trykk på varselet åpner idéen.',
+      'Du kan også få varsel når noen kommenterer en idé du har kommentert, og når appen har fått en ny versjon. Begge er på som standard og kan slås av under tannhjulet i varselvinduet.',
+      'Flere kommentarer på samme idé, eller flere endringer i fortolkningen, samles i ett varsel så lenge du ikke har lest det.',
+      'Varslene kan merkes lest ett og ett eller alle på én gang. Leste varsler blir stående i 30 dager.',
+    ],
+  },
+  {
     versjon: '1.55.0',
     dato: '2026-09-29',
     sammendrag: 'Stoffsidene handler om stoffet, og laboratorieanalyttene kobles til dem',

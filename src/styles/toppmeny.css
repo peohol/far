@@ -333,6 +333,33 @@
   pointer-events: none;
 }
 
+/* --- Bjella ---------------------------------------------------------------------
+   Tallet for uleste varsler (`Varselknapp`) i hjørnet av knappen, med en ring
+   i bakgrunnsfargen så det skiller seg fra ikonet. */
+.varselknapp {
+  position: relative;
+  flex: none;
+}
+
+.varselmerke {
+  position: absolute;
+  top: calc(-1 * var(--rom-1));
+  right: calc(-1 * var(--rom-1));
+  min-width: 1.125rem;
+  height: 1.125rem;
+  padding: 0 var(--rom-1);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-fet);
+  font-variant-numeric: tabular-nums;
+  line-height: calc(1.125rem - 2 * var(--kant-tykk));
+  text-align: center;
+  color: var(--paa-varsel);
+  background: var(--varsel);
+  border: var(--kant-tykk) solid var(--flate-bunn);
+  border-radius: var(--runding-pille);
+  pointer-events: none;
+}
+
 .nedtrekk__panel {
   position: absolute;
   top: calc(100% + var(--rom-5));

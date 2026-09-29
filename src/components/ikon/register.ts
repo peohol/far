@@ -775,6 +775,16 @@ const REGISTER = {
       P('M4.85 14.7h3.6M5.55 16.5h2.2', 'l', 'i-ink'),
     ],
   },
+  // Tegnet i OUSFAR for varslene, i samme stil som resten av registeret.
+  bell: {
+    vb: 24,
+    ga: 'shake',
+    parts: [
+      P('M12 3.2a6 6 0 0 0-6 6v3.4c0 1-.3 1.9-.9 2.7L4 16.8h16l-1.1-1.5c-.6-.8-.9-1.7-.9-2.7V9.2a6 6 0 0 0-6-6z', 'f1', 'warn'),
+      G([P('M9.8 19.2a2.3 2.3 0 0 0 4.4 0', 'l', 'i-ink')], 'bumpR'),
+      P('M4 16.8h16', 'l', 'i-ink'),
+    ],
+  },
   arkiv: {
     vb: 24,
     parts: [

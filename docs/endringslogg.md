@@ -56,6 +56,12 @@ Ledd til høyre nullstilles: `0.5.4` → `0.6.0` → `1.0.0`.
 `Fag` settes når endringen **kan endre kommentaren eller vurderingen** — også
 når den bare retter opp noe som var feil.
 
+**`endrerFortolkning: true`** settes i tillegg når endringen faktisk gir andre
+kommentarer eller vurderinger i fortolkningen, som en endret regel i koden.
+Da får alle et varsel om den som en endring i fortolkningen, og det kan ikke
+slås av (se `docs/varsler.md`). Innhold som publiseres i appen, varsler av
+seg selv og trenger det ikke.
+
 **Omfang** — ett merke, vurdert skjønnsmessig. Beskrivelsene er veiledende:
 
 | Merke | Omtrent |

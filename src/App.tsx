@@ -19,6 +19,7 @@ import { ruteAv } from './components/Kopibevis'
 import { Ideknapp } from './components/ideer/Ideknapp'
 import { Adminmeny } from './components/konto/Adminmeny'
 import { Kontomeny } from './components/konto/Kontomeny'
+import { Varselknapp } from './components/varsler/Varselknapp'
 import { Fagsok } from './components/sok/Fagsok'
 import { Sokeside } from './components/sok/Sokeside'
 import { Toppmeny } from './components/toppmeny/Toppmeny'
@@ -532,6 +533,7 @@ export default function App() {
             <>
               <Ideknapp />
               <Adminmeny />
+              <Varselknapp />
             </>
           }
           konto={<Kontomeny theme={theme} onToggleTheme={toggle} />}

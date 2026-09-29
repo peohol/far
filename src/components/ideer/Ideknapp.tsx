@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useJevnligSjekk } from '../../hooks/useJevnligSjekk'
 import { hentIdeerMedNytt } from '../../ideer/api'
+import { oppfriskVarsler } from '../../varsler/api'
 import { Menyvalg, Nedtrekksmeny } from '../toppmeny/Nedtrekksmeny'
 import { Ideer } from './Ideer'
+import { lyttEtterIde } from './idevisning'
 import { Oppgaver } from './Oppgaver'
 
-/** Hvor ofte appen ser etter nye kommentarer på idéene mens den står åpen. */
-const NYTT_HVER = 5 * 60_000
-
-/** Laget som står åpent: Idéer, eller Planlagte oppgaver, kanskje på én oppgave. */
-type Vindu = { lag: 'ideer' } | { lag: 'oppgaver'; oppgave?: string } | null
+/** Laget som står åpent: Idéer, kanskje på én idé, eller Planlagte oppgaver, kanskje på én oppgave. */
+type Vindu = { lag: 'ideer'; ide?: string } | { lag: 'oppgaver'; oppgave?: string } | null
 
 /**
  * Idéer og Planlagte oppgaver, fra en egen meny i toppmenyen med ett valg for
@@ -16,7 +16,7 @@ type Vindu = { lag: 'ideer' } | { lag: 'oppgaver'; oppgave?: string } | null
  * knappen og på valget, og antallet i navnet.
  *
  * Bare ett av de to lagene står åpent om gangen; man går også mellom dem fra
- * lagene selv.
+ * lagene selv. Et varsel kan åpne Idéer rett på en idé (`visIde`).
  */
 export function Ideknapp() {
   const [vindu, setVindu] = useState<Vindu>(null)
@@ -25,21 +25,8 @@ export function Ideknapp() {
   const sjekkNytt = useCallback(() => {
     hentIdeerMedNytt().then(setMedNytt, () => undefined)
   }, [])
-  useEffect(() => {
-    sjekkNytt()
-    // Også mens appen står åpen: når fanen får fokus igjen, og jevnlig mens den er synlig.
-    const naarSynlig = () => {
-      if (document.visibilityState === 'visible') sjekkNytt()
-    }
-    const jevnlig = window.setInterval(naarSynlig, NYTT_HVER)
-    window.addEventListener('focus', naarSynlig)
-    document.addEventListener('visibilitychange', naarSynlig)
-    return () => {
-      window.clearInterval(jevnlig)
-      window.removeEventListener('focus', naarSynlig)
-      document.removeEventListener('visibilitychange', naarSynlig)
-    }
-  }, [sjekkNytt])
+  useJevnligSjekk(sjekkNytt)
+  useEffect(() => lyttEtterIde((ide) => setVindu({ lag: 'ideer', ide })), [])
   const nytt = medNytt > 0 ? `nye kommentarer på ${medNytt === 1 ? 'én idé' : `${medNytt} idéer`}` : undefined
 
   // Fast identitet: `Modallag` kobler den til lukkehendelsen på dialogen.
@@ -49,6 +36,8 @@ export function Ideknapp() {
     (lag: NonNullable<Vindu>['lag']) => {
       setVindu((naa) => (naa?.lag === lag ? null : naa))
       sjekkNytt()
+      // Å lese en idé merker varslene om den lest.
+      oppfriskVarsler()
     },
     [sjekkNytt],
   )
@@ -87,7 +76,10 @@ export function Ideknapp() {
           )
         }}
       </Nedtrekksmeny>
-      <Ideer apen={vindu?.lag === 'ideer'} onLukk={lukkIdeer} onOppgaver={(oppgave) => setVindu({ lag: 'oppgaver', oppgave })} />
+      <Ideer
+        apen={vindu?.lag === 'ideer'}
+        ide={vindu?.lag === 'ideer' ? vindu.ide : undefined}
+        onLukk={lukkIdeer} onOppgaver={(oppgave) => setVindu({ lag: 'oppgaver', oppgave })} />
       <Oppgaver
         apen={vindu?.lag === 'oppgaver'}
         oppgave={vindu?.lag === 'oppgaver' ? vindu.oppgave : undefined}
