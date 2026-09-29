@@ -8,7 +8,7 @@ Varslene berører ikke fortolkningen; de forteller bare at noe er endret.
 | Hvor | Hva |
 | --- | --- |
 | `supabase/migrations/*_varsler.sql` | Tabellen, utløserne som lager varslene, og funksjonene som leser og merker dem lest |
-| `supabase/migrations/*_favorittvarsler.sql` | Varslene om endringer på favorittsidene, og hvordan hendelsene leses |
+| `supabase/migrations/*_favorittvarsler*.sql` | Varslene om endringer på favorittsidene, og hvordan hendelsene leses |
 | `src/varsler/modell.ts` | Kategoriene, valgene, føringene i endringsloggen som varsler, sorteringen og tekstene (rene funksjoner) |
 | `src/varsler/api.ts` | Kallene mot Supabase og brukerinnstillingene |
 | `src/components/varsler/` | Bjella (`Varselknapp`), tilstanden (`useVarsler`) og vinduet (`Varsler`) |
@@ -100,8 +100,9 @@ ingen, så varselet kommer først når redigeringen er ferdig.
 Utløseren på `objektpubliseringer` (`intern.varsle_favoritter`) ser på sidens
 objekter og finner delene som er endret (`intern.endrede_sidedeler`):
 
-- et innholdselement: panelet det står i, og panelet det sto i før (et kort som
-  fjernes, flyttes til `fjernet`, som ikke telles);
+- et innholdselement: panelet det står i, og panelet det sto i før, hver på sin
+  side (et kort som fjernes, flyttes til `fjernet`, som ikke telles; et kort
+  som flyttes til en annen side, er en endring på begge);
 - siden selv: `navn` når navnet eller nøkkelen er endret, og panelene der
   panelreferansene er endret;
 - en referanse som er endret: panelene der de publiserte sidene siterer den.

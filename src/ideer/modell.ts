@@ -33,13 +33,14 @@ export function erKategori(verdi: unknown): verdi is Idekategori {
 export const ARKIVFRIST_DAGER = 60
 
 /** Statusene en planlagt oppgave går gjennom, i rekkefølge. Samme verdier som `public.oppgavestatus`. */
-export const OPPGAVESTATUSER = ['ikke_paabegynt', 'under_arbeid', 'klar', 'utfort'] as const
+export const OPPGAVESTATUSER = ['ikke_paabegynt', 'under_arbeid', 'klar', 'haandteres', 'utfort'] as const
 export type Oppgavestatus = (typeof OPPGAVESTATUSER)[number]
 
 export const OPPGAVESTATUSNAVN: Record<Oppgavestatus, string> = {
   ikke_paabegynt: 'Ikke påbegynt',
-  under_arbeid: 'Under arbeid',
+  under_arbeid: 'Påbegynt',
   klar: 'Klar til implementering',
+  haandteres: 'Håndteres nå av en agent',
   utfort: 'Utført',
 }
 
@@ -51,7 +52,7 @@ export function erOppgavestatus(verdi: unknown): verdi is Oppgavestatus {
 export interface Ideoppgave {
   id: string
   status: Oppgavestatus
-  /** Settes når oppgaven er utført. */
+  /** Nummeret oppgaven fikk da den ble overført. */
   nummer: number | null
 }
 
@@ -74,7 +75,7 @@ export function dagerTilSletting(arkivertKl: string, naa: Date = new Date()): nu
   return Math.max(0, Math.ceil((slettesKl(arkivertKl).getTime() - naa.getTime()) / DOGN))
 }
 
-/** Nummeret en utført oppgave refereres med, som «OPG-007». */
+/** Nummeret en oppgave omtales med, som «OPG-007». Samme som `intern.oppgavekode()` i databasen. */
 export function oppgavekode(nummer: number): string {
   return `OPG-${String(nummer).padStart(3, '0')}`
 }

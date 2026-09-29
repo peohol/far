@@ -63,17 +63,30 @@ Fristen står både i `intern.arkivfrist()` og i `ARKIVFRIST_DAGER`.
 `oppgaver`. Idéen står i skuffen «Planlagte oppgaver» i lista, og et kort der
 åpner oppgaven. Oppgaven får idéens overskrift, men har sin egen
 (`oppgaver.tittel`) som en administrator kan endre. Det er den oppgaven vises
-og omtales med; idéen beholder sin. En oppgave går gjennom disse statusene:
+og omtales med; idéen beholder sin. Oppgaven får også et løpenummer når den
+overføres (`oppgaver.nummer`, vist som «OPG-001»), så den kan omtales og
+gjenopptas med det hele veien. `overfor_ide()` gir neste nummer fra sekvensen
+`intern.oppgavenummer`. Et nummer gis aldri igjen, heller ikke når oppgaven
+flyttes tilbake, så en migrering som nevner det, kan ikke treffe en annen
+oppgave. En oppgave går gjennom disse statusene:
 
 1. `ikke_paabegynt`: rett etter overføringen.
-2. `under_arbeid`: fra første gang overskriften eller prompten lagres
-   (`lagre_oppgave()`).
+2. `under_arbeid` («Påbegynt»): fra første gang overskriften eller prompten
+   lagres (`lagre_oppgave()`).
 3. `klar`: satt av en administrator (`sett_oppgave_klar()`), og bare med en
-   prompt. Blir prompten tømt, er den under arbeid igjen.
-4. `utfort`: satt av Claude med `fullfor_oppgave()`, som ingen i appen kan
-   kalle. Den kjøres som en migrering etter administratorens ja, når arbeidet
-   er slått sammen. Oppgaven får da et løpenummer, vist som «OPG-001», og
-   versjonen i endringsloggen.
+   prompt. Blir prompten tømt, er den påbegynt igjen.
+4. `haandteres` («Håndteres nå av en agent»): satt av Claude med
+   `ta_oppgaver(numre)` når arbeidet begynner, med `tatt_kl`. Alle numrene tas,
+   eller ingen, så to økter kan ikke ta samme oppgave. Imens kan oppgaven ikke
+   endres, merkes eller flyttes; en administrator kan frigi den
+   (`frigi_oppgave()`), så den er klar igjen.
+5. `utfort`: satt av Claude med `fullfor_oppgave(nummer, versjon)` når arbeidet
+   er slått sammen, med versjonen i endringsloggen.
+
+`ta_oppgaver()` og `fullfor_oppgave()` kan ingen i appen kalle. De kjøres som
+migreringer etter administratorens ja (`*_oppgaver_tatt_*.sql` og
+`*_oppgaver_utfort_*.sql`). Oppgavene de nevner, finnes bare i produksjon, så
+migreringene gjør ingenting i en database uten oppgaver.
 
 Prompten er ren tekst: den skal leses av en språkmodell. `flytt_oppgave_tilbake()`
 er den eneste måten å fjerne en oppgave på, og gjør idéen åpen igjen. En

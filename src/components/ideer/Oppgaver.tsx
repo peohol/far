@@ -16,13 +16,13 @@ import '../../styles/ideer.css'
 
 /**
  * Planlagte oppgaver: idéene en administrator har overført fra Idéer, under
- * statusene «Ikke påbegynt», «Under arbeid» og «Klar til implementering», og
- * de utførte i en skuff nederst.
+ * statusene «Ikke påbegynt», «Påbegynt», «Klar til implementering» og
+ * «Håndteres nå av en agent», og de utførte i en skuff nederst.
  *
  * Alle kan lese. Bare en administrator arbeider med oppgavene: skriver
  * prompten en språkmodell skal utføre oppgaven etter, merker den klar, eller
- * flytter den tilbake til idéene. Claude merker den utført når arbeidet er
- * gjort (se `.claude/skills/utfor-oppgaver`).
+ * flytter den tilbake til idéene. Claude tar oppgaven når arbeidet begynner,
+ * og merker den utført når det er gjort (se `.claude/skills/utfor-oppgaver`).
  */
 type Visning = { side: 'liste' } | { side: 'oppgave'; id: string }
 

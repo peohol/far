@@ -16,8 +16,9 @@ export function Kategorimerke({ kategori }: { kategori: Idekategori }) {
 
 /**
  * Statusen til en planlagt oppgave: et nøytralt merke med en farget prikk —
- * rød før arbeidet er begynt, gul under arbeid, grønn når den er klar til
- * implementering. Teksten sier alltid det samme som fargen.
+ * rød før arbeidet er begynt, gul når det er påbegynt, grønn når den er klar
+ * til implementering og blå mens en agent håndterer den. Teksten sier alltid
+ * det samme som fargen.
  */
 export function Oppgavestatusmerke({ status }: { status: Oppgavestatus }) {
   return (
@@ -27,7 +28,7 @@ export function Oppgavestatusmerke({ status }: { status: Oppgavestatus }) {
   )
 }
 
-/** Nummeret en utført oppgave refereres med, som «OPG-007». */
+/** Nummeret oppgaven omtales med, som «OPG-007». */
 export function Oppgavekode({ nummer }: { nummer: number }) {
   return <span className="oppgavekode">{oppgavekode(nummer)}</span>
 }

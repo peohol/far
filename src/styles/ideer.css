@@ -665,6 +665,10 @@
   --status: var(--referanse);
 }
 
+:is(.statusmerke, .statusprikk)[data-status='haandteres'] {
+  --status: var(--info);
+}
+
 :is(.statusmerke, .statusprikk)[data-status='utfort'] {
   --status: var(--aksent);
 }
