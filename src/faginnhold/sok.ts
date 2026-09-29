@@ -23,7 +23,10 @@
  * Sammenligningen ser bort fra store og små bokstaver og aksenter, og leser
  * æ, ø og å som a, o og a — som søket etter analytter i `src/domain/search.ts`.
  * Hvert tegn gjøres om til nøyaktig ett tegn, så treffene kan pekes tilbake
- * på den opprinnelige teksten.
+ * på den opprinnelige teksten. Navnene, kodene og aliasene til en side
+ * sammenlignes i tillegg på navnenøkkelen (`src/domain/sokenavn.ts`), som ser
+ * bort fra skilletegn og norsk og engelsk stavemåte: «quetiapine» finner
+ * Kvetiapin, og «delta 9 thc» finner THC.
  */
 import type { Sidemodell, Sideelement } from './stoffside'
 import {
@@ -44,6 +47,7 @@ import {
 import { formaterReferanse } from './referanser'
 import { klartekst } from './riktekst'
 import { stoffadresse } from '../domain/rute'
+import { navnenokkel } from '../domain/sokenavn'
 import type { KobletAnalytt } from '../domain/koblinger'
 
 /* --- Sammenligningen ------------------------------------------------------ */
@@ -233,12 +237,13 @@ export interface Sideidentitet {
   koder?: readonly string[]
   /**
    * Analyttenes navn og stoffene de omfatter (`Laboratorieanalytt.komponenter`),
-   * for alle analyttene stoffet er koblet til.
+   * for alle analyttene stoffet er koblet til, og kodene til analyttene det er
+   * koblet til uten å være deres primære stoff.
    */
   komponenter?: readonly string[]
   /**
-   * Andre navn stoffet er kjent under, og kodene til analytter det er koblet
-   * til uten å være deres primære stoff. Rangeres med komponentene.
+   * Andre navn stoffet er kjent under: aliasene i stoffregisteret. Et eksakt
+   * alias rangeres som et eksakt navn.
    */
   aliaser?: readonly string[]
 }
@@ -254,8 +259,11 @@ export function stoffidentitet(
     stoff: stoff.slug,
     navn: stoff.navn,
     koder: primare.map((a) => a.analytt.kode),
-    komponenter: analytter.flatMap(({ analytt }) => [analytt.navn, ...analytt.komponenter]),
-    aliaser: [...(stoff.aliaser ?? []), ...sekundare.map((a) => a.analytt.kode)],
+    komponenter: [
+      ...analytter.flatMap(({ analytt }) => [analytt.navn, ...analytt.komponenter]),
+      ...sekundare.map((a) => a.analytt.kode),
+    ],
+    aliaser: stoff.aliaser ?? [],
   }
 }
 
@@ -351,8 +359,8 @@ export function indekserSide(
   const dokumenter: Sokedokument[] = [
     ...identitetsdokumenter('navn', [identitet.navn]),
     ...identitetsdokumenter('kode', identitet.koder),
-    ...identitetsdokumenter('komponent', identitet.komponenter),
     ...identitetsdokumenter('alias', identitet.aliaser),
+    ...identitetsdokumenter('komponent', identitet.komponenter),
   ]
 
   const perPanel = new Map<string, Sokedokument[]>()
@@ -431,19 +439,25 @@ export interface Sokeindeks {
   dokumenter: readonly Sokedokument[]
   /** Teksten i hvert dokument, foldet og med mellomrommene slått sammen. */
   foldet: readonly string[]
-  /** Navnet, koden, aliasene og komponentene til hver side, etter {@link sidenokkel}. */
+  /** Navnenøkkelen til hvert dokument som sier hva siden er; tom for de andre. */
+  nokler: readonly string[]
+  /**
+   * Navnet, koden, aliasene og komponentene til hver side, etter
+   * {@link sidenokkel}: foldet, og med navnenøkkelen til hver.
+   */
   identitet: ReadonlyMap<string, string>
 }
 
 export function lagSokeindeks(dokumenter: readonly Sokedokument[]): Sokeindeks {
   const foldet = dokumenter.map((d) => fold(d.tekst).replace(/\s+/g, ' ').trim())
+  const nokler = dokumenter.map((d) => (IDENTITETSFELT.has(d.felt) ? navnenokkel(d.tekst) : ''))
   const identitet = new Map<string, string>()
   dokumenter.forEach((d, i) => {
     if (!IDENTITETSFELT.has(d.felt)) return
     const nokkel = sidenokkel(d.sted.side)
-    identitet.set(nokkel, [identitet.get(nokkel), foldet[i]].filter(Boolean).join('\n'))
+    identitet.set(nokkel, [identitet.get(nokkel), foldet[i], nokler[i]].filter(Boolean).join('\n'))
   })
-  return { dokumenter, foldet, identitet }
+  return { dokumenter, foldet, nokler, identitet }
 }
 
 export interface Sokevalg {
@@ -462,26 +476,56 @@ export interface Sokevalg {
  * begynner med det, ordene begynner et ord i teksten, eller de står inne i et.
  */
 function treffkvalitet(foldet: string, ord: readonly string[], ordstart: ReadonlyMap<string, RegExp>): number {
-  if (foldet.startsWith(ord.join(' '))) return 0
-  return ord.every((o) => ordstart.get(o)!.test(foldet)) ? 1 : 2
+  if (foldet.startsWith(ord.join(' '))) return 1
+  return ord.every((o) => ordstart.get(o)!.test(foldet)) ? 2 : 3
 }
 
 /** Plasser mellom feltene, så feltet alltid teller mer enn hvor godt ordene treffer. */
-const KVALITETSTRINN = 3
+const KVALITETSTRINN = 4
+
+/**
+ * Feltene der et eksakt treff er det beste treffet som finnes, uansett felt:
+ * et eksakt alias er like godt som et eksakt navn eller en eksakt kode.
+ */
+const EKSAKTE_FELT: ReadonlySet<Sokefelt> = new Set(['navn', 'kode', 'alias'])
+
+/**
+ * Poengene for et navn, en kode eller et alias sammenlignet på navnenøkkelen:
+ * 0 når de er like og feltet er et av {@link EKSAKTE_FELT}, ellers som et
+ * treff som begynner teksten. `null` når nøkkelen ikke begynner med søket.
+ */
+function nokkelpoeng(nokkel: string, sok: string, felt: Sokefelt): number | null {
+  if (!sok || !nokkel.startsWith(sok)) return null
+  return nokkel === sok && EKSAKTE_FELT.has(felt) ? 0 : VEKT[felt] * KVALITETSTRINN + 1
+}
 
 function finn(indeks: Sokeindeks, sporring: string, { maks = 50, sidekontekst = false }: Sokevalg): Soketreff[] {
   const ord = sokeord(sporring)
   if (ord.length === 0) return []
+  const nokkel = navnenokkel(sporring)
+  // Et ord som ikke står i dokumentet, kan stå i sidens navn slik det er skrevet, eller skrevet på en annen måte.
+  const ordnokler = new Map(ord.map((o) => [o, navnenokkel(o)]))
+  const iSiden = (side: string, o: string) => {
+    const k = ordnokler.get(o)
+    return side.includes(o) || (!!k && side.includes(k))
+  }
   const ordstart = new Map(ord.map((o) => [o, new RegExp(`(^|[^\\p{L}\\p{N}])${escape(o)}`, 'u')]))
   const treff: Soketreff[] = []
   indeks.dokumenter.forEach((dokument, i) => {
     const foldet = indeks.foldet[i]!
     const iTeksten = ord.filter((o) => foldet.includes(o))
-    if (iTeksten.length === 0) return
-    if (iTeksten.length < ord.length) {
+    const somNavn = nokkelpoeng(indeks.nokler[i]!, nokkel, dokument.felt)
+    let iOrdene = iTeksten.length > 0
+    if (iOrdene && iTeksten.length < ord.length) {
       const side = sidekontekst ? (indeks.identitet.get(sidenokkel(dokument.sted.side)) ?? '') : ''
-      if (!ord.every((o) => iTeksten.includes(o) || side.includes(o))) return
+      iOrdene = ord.every((o) => iTeksten.includes(o) || iSiden(side, o))
     }
+    if (!iOrdene && somNavn === null) return
+    const somTekst = iOrdene
+      ? foldet === ord.join(' ') && EKSAKTE_FELT.has(dokument.felt)
+        ? 0
+        : VEKT[dokument.felt] * KVALITETSTRINN + treffkvalitet(foldet, iTeksten, ordstart)
+      : Infinity
     // Utdraget lages først når treffet vises: et kort ord treffer det meste,
     // og bare de øverste treffene vises.
     let lest: Utdrag | undefined
@@ -490,7 +534,7 @@ function finn(indeks: Sokeindeks, sporring: string, { maks = 50, sidekontekst = 
       get utdrag() {
         return (lest ??= utdrag(dokument.tekst, iTeksten))
       },
-      poeng: VEKT[dokument.felt] * KVALITETSTRINN + treffkvalitet(foldet, iTeksten, ordstart),
+      poeng: Math.min(somTekst, somNavn ?? Infinity),
     })
   })
   return treff.sort((a, b) => a.poeng - b.poeng).slice(0, maks)

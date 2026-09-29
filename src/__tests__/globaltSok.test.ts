@@ -17,7 +17,6 @@ import type { PGlite } from '@electric-sql/pglite'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { visTreff } from '../components/sok/treffvisning'
-import { ANALYTTKATALOG } from '../domain/analyttkatalog'
 import { analytterForStoff, stoffbeskrivelse } from '../domain/koblinger'
 import { STOFFREGISTER, stoffslug, type Registerdata } from '../domain/stoffregister'
 import { byggSidemodell, publiseringsplan } from '../faginnhold/stoffside'
@@ -27,7 +26,6 @@ import {
   lagSideleser,
   lesKunnskapsbase,
   lesSokeindeks,
-  type Indekseringsvalg,
   type Sideleser,
 } from '../faginnhold/globaltSok'
 import { lagFaginnholdslager } from '../faginnhold/lagring'
@@ -88,12 +86,6 @@ async function publisertSide(
     await lager.publiserUtkast(steg.id, steg.revisjon)
   }
   return { side, ...laget }
-}
-
-/** Andre navn en kode er kjent under, slik appen gir dem fra katalogen (`App.tsx`). */
-const katalogaliaser: Indekseringsvalg['aliaser'] = (kode) => {
-  const oppforing = ANALYTTKATALOG.finn(kode)
-  return oppforing?.kode === oppforing?.fortolkning.kode ? oppforing?.fortolkning.aliaser : undefined
 }
 
 beforeAll(async () => {
@@ -265,7 +257,7 @@ describe('lesingen av kunnskapsbasen', () => {
 describe('søket i kunnskapsbasen', () => {
   let indeks: Awaited<ReturnType<typeof lesSokeindeks>>
   beforeAll(async () => {
-    indeks = await lesSokeindeks(sideleser, legemidler, { aliaser: katalogaliaser })
+    indeks = await lesSokeindeks(sideleser, legemidler)
   })
 
   it('finner et preparat og peker på detaljkortet for legemiddelformen', async () => {
@@ -358,7 +350,7 @@ describe('hvert treff er et stoff, og analytten er sekundær kontekst', () => {
       side('hydroksybupropion', 'Hydroksybupropion', { tekst: 'Syntetisk tekst på den gamle komponentsiden.' }),
     ]
     indeks = lagSokeindeks(
-      indekserKunnskapsbase({ sider, legemidler: null, interaksjoner: null }, { aliaser: katalogaliaser }),
+      indekserKunnskapsbase({ sider, legemidler: null, interaksjoner: null }),
     )
   })
 
@@ -388,7 +380,7 @@ describe('hvert treff er et stoff, og analytten er sekundær kontekst', () => {
 
   it('viser et annet navn stoffet ble funnet under, som utdrag under navnet', () => {
     const { treff, visning } = forste('hydroksybupropion')
-    expect(treff.dokument.felt).toBe('komponent')
+    expect(treff.dokument.felt).toBe('alias')
     expect(visning.utdrag?.tekst).toMatch(/^Hydroksybupropion/)
     // Koden er selve stoffets vei inn, og gjentas ikke under navnet.
     expect(forste('HBUP').treff.dokument.felt).toBe('kode')
@@ -399,7 +391,7 @@ describe('hvert treff er et stoff, og analytten er sekundær kontekst', () => {
     const treff = sokGlobalt(indeks, 'AMTNORSUM')
     expect(treff.map((t) => [t.dokument.sted.side.stoff, t.dokument.felt])).toEqual([
       ['amitriptylin', 'kode'],
-      ['nortriptylin', 'alias'],
+      ['nortriptylin', 'komponent'],
     ])
     expect(treff.map((t) => sokeadresse(t.dokument.sted))).toEqual(['#/stoff/amitriptylin', '#/stoff/nortriptylin'])
   })
@@ -510,7 +502,7 @@ describe('rangeringen', () => {
     ])
   })
 
-  it('gir en analytt som gjelder flere stoffer, det primære stoffet som kode og de andre som alias', () => {
+  it('gir en analytt som gjelder flere stoffer, det primære stoffet som kode og de andre som komponent', () => {
     const dokumenter = indekserKunnskapsbase(utenTillegg([]), {
       registerdata: register(
         [
@@ -533,27 +525,12 @@ describe('rangeringen', () => {
       ['kode', 'NOR', 'nortriptylin'],
       ['komponent', 'Amitriptylin + nortriptylin', 'nortriptylin'],
       ['komponent', 'Amitriptylin', 'nortriptylin'],
-      ['alias', 'AMTNORSUM', 'nortriptylin'],
+      ['komponent', 'AMTNORSUM', 'nortriptylin'],
     ])
-  })
-
-  it('tar med aliasene til kodene, uten å gjenta navnet', () => {
-    const aliaser: Record<string, string[]> = { RISPSUM: ['paliperidon', 'Risperidon'] }
-    const dokumenter = indekserKunnskapsbase(utenTillegg([side('risperidon', 'Risperidon')]), {
-      aliaser: (kode) => aliaser[kode],
-      registerdata: register(
-        [{ slug: 'risperidon', navn: 'Risperidon' }],
-        [{ kode: 'RISPSUM', stoff: 'risperidon', relasjon: 'sumanalyse' }],
-      ),
-    })
-    expect(dokumenter.filter((d) => d.felt === 'alias').map((d) => d.tekst)).toEqual(['paliperidon'])
-    const [treff] = sokGlobalt(lagSokeindeks(dokumenter), 'paliperidon')
-    expect(treff!.dokument.sted.side.stoff).toBe('risperidon')
   })
 
   it('finner stoffene i registeret som ennå ikke har noen side', () => {
     const dokumenter = indekserKunnskapsbase(utenTillegg([side('diazepam', 'Diazepam')]), {
-      aliaser: (kode) => (kode === 'KVE' ? ['kvetiapinalias'] : undefined),
       registerdata: register(
         [
           { slug: 'diazepam', navn: 'Diazepam' },
@@ -571,7 +548,6 @@ describe('rangeringen', () => {
       ['navn', 'Kvetiapin', 'kvetiapin'],
       ['kode', 'KVE', 'kvetiapin'],
       ['alias', 'Norkvetiapin', 'kvetiapin'],
-      ['alias', 'kvetiapinalias', 'kvetiapin'],
     ])
     const indeks = lagSokeindeks(dokumenter)
     const [treff] = sokGlobalt(indeks, 'kvetiapin')
@@ -597,8 +573,8 @@ describe('rangeringen', () => {
     expect(dokumenter.map((d) => [d.felt, d.tekst, d.sted.side.stoff])).toEqual([
       ['navn', 'Bupropion', 'bupropion'],
       ['kode', 'HBUP', 'bupropion'],
+      ['alias', 'Hydroksybupropion', 'bupropion'],
       ['komponent', 'Hydroksybupropion (kun aktiv metabolitt)', 'bupropion'],
-      ['komponent', 'Hydroksybupropion', 'bupropion'],
     ])
   })
 

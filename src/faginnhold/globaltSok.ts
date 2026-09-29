@@ -15,9 +15,9 @@
  *    koblet til, og `les_cpic` CPIC-anbefalingene for de samme. Hver side får
  *    sin del (`farmakogenetikkFor`, `cpicFor`).
  *
- * Hvert treff er et stoff i stoffregisteret. Kodene og navnene til
- * laboratorieanalyttene stoffet er koblet til, er andre veier til det samme
- * stoffet (se `stoffidentitet` i `sok.ts`).
+ * Hvert treff er et stoff i stoffregisteret. Aliasene i registeret, og kodene
+ * og navnene til laboratorieanalyttene stoffet er koblet til, er andre veier
+ * til det samme stoffet (se `stoffidentitet` i `sok.ts`).
  *
  * Rangeringen skjer bare i `sok.ts`; databasen gir bare innholdet. Klarer ikke
  * legemiddeldataene, ClinPGx-dataene eller CPIC-dataene å lese, indekseres
@@ -218,13 +218,6 @@ function legemiddeltekster(base: Kunnskapsbase, koblet: readonly string[]): Till
 }
 
 export interface Indekseringsvalg {
-  /**
-   * Andre navn en analyttkode er kjent under, som søket etter analytter
-   * bruker (`aliaser` på analytten, fra `src/data/aliaser.json`). Appen gir
-   * dem fra katalogen, så søkeordene vedlikeholdes ett sted. De blir andre
-   * navn på stoffet koden primært hører til.
-   */
-  aliaser?: (kode: string) => readonly string[] | undefined
   /** Stoffregisteret sidene hører til. Datafilen når det ikke er gitt. */
   registerdata?: Registerdata
   /** Laboratorieanalyttene koblingene peker på. */
@@ -246,7 +239,7 @@ const TOM_MODELL = byggSidemodell(TOM_STOFFSIDE)
  */
 export function indekserKunnskapsbase(
   base: Kunnskapsbase,
-  { aliaser, registerdata = STOFFREGISTERDATA, katalog = ANALYTTKATALOG }: Indekseringsvalg = {},
+  { registerdata = STOFFREGISTERDATA, katalog = ANALYTTKATALOG }: Indekseringsvalg = {},
 ): Sokedokument[] {
   const register = byggStoffregister(
     base.sider.flatMap((s) => s.stoff ?? []),
@@ -257,7 +250,6 @@ export function indekserKunnskapsbase(
     const data = perSlug.get(stoff.slug)
     const modell = data ? byggSidemodell(data) : TOM_MODELL
     const identitet = stoffidentitet(stoff, analytterForStoff(stoff.slug, register, katalog))
-    const andreNavn = (identitet.koder ?? []).flatMap((kode) => aliaser?.(kode) ?? [])
     const tillegg = data
       ? [
           ...legemiddeltekster(base, koblede(modell)),
@@ -265,7 +257,7 @@ export function indekserKunnskapsbase(
           ...cpictekstene(base, modell),
         ]
       : []
-    return indekserSide({ ...identitet, aliaser: [...(identitet.aliaser ?? []), ...andreNavn] }, modell, tillegg)
+    return indekserSide(identitet, modell, tillegg)
   })
 }
 
