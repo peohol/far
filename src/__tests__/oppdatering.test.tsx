@@ -8,6 +8,7 @@
  * En omlasting er her: bildet tas og legges i fanen, alt tas ned, modulen
  * glemmer det den har lest, og appen tegnes opp på nytt.
  */
+import { StrictMode } from 'react'
 import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -296,8 +297,39 @@ describe('det som tas vare på gjennom en oppdatering', () => {
 
       glemBildet()
       sessionStorage.setItem(LAGRINGSNOKKEL, JSON.stringify(bilde))
-      render(<Bevaringseier id="kari">{null}</Bevaringseier>)
+      // Også når effekten kjøres, ryddes og kjøres igjen, som i StrictMode, og
+      // siden først blir lang nok etterpå.
+      side.scrollHeight = 800
+      render(
+        <StrictMode>
+          <Bevaringseier id="kari">{null}</Bevaringseier>
+        </StrictMode>,
+      )
+      side.scrollHeight = 3000
       await waitFor(() => expect(side.scrollTop).toBe(1200))
+    } finally {
+      Reflect.deleteProperty(document, 'scrollingElement')
+    }
+  })
+
+  it('slutter å rulle for den første brukeren når en annen tar over mens siden fortsatt er for kort', async () => {
+    // Siden er for kort til plassen ennå, så rullingen venter.
+    const side = { scrollHeight: 800, clientHeight: 500, scrollTop: 0 }
+    Object.defineProperty(document, 'scrollingElement', { value: side, configurable: true })
+    try {
+      sessionStorage.setItem(
+        LAGRINGSNOKKEL,
+        JSON.stringify({ tatt: Date.now(), eier: 'kari', verdier: {}, rulling: [{ lag: null, topp: 1200 }] }),
+      )
+      const { rerender } = render(<Bevaringseier id="kari">{null}</Bevaringseier>)
+      await new Promise((ferdig) => setTimeout(ferdig, 200))
+      expect(side.scrollTop).toBe(0)
+
+      // En annen er logget inn i fanen, og så blir siden lang nok.
+      rerender(<Bevaringseier id="ola">{null}</Bevaringseier>)
+      side.scrollHeight = 3000
+      await new Promise((ferdig) => setTimeout(ferdig, 500))
+      expect(side.scrollTop).toBe(0)
     } finally {
       Reflect.deleteProperty(document, 'scrollingElement')
     }

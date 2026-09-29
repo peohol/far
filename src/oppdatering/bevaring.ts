@@ -203,7 +203,12 @@ const STABIL_ETTER = 3
  * den åpnes, rulles tilbake igjen: plassen må ha stått noen forsøk på rad før
  * den er ferdig. Gir opp når brukeren selv ruller, klikker eller skriver, eller
  * når tiden er ute. Kalles når det er avklart hvem som er logget inn (`hvem`),
- * og ruller bare for den som tok bildet. Gjør ingenting etter første gang.
+ * og ruller bare for den som tok bildet.
+ *
+ * Gir tilbake avbrytelsen, for når brukeren logger ut eller byttes ut. Da
+ * stopper rullingen straks, og plassene som ikke er nådd, legges tilbake i
+ * bildet. Der hører de fortsatt til den som tok det: logger en annen inn,
+ * kastes de, og logger den samme inn igjen, fortsetter rullingen.
  */
 export function gjenopprettRulling(hvem: string | null): () => void {
   const bilde = bildetTil(hvem)
@@ -215,6 +220,7 @@ export function gjenopprettRulling(hvem: string | null): () => void {
   const stopp = () => {
     window.clearInterval(forsok)
     for (const h of hendelser) window.removeEventListener(h, stopp, true)
+    igjen = []
   }
   const prov = () => {
     if (!gyldig(bilde)) return stopp()
@@ -234,7 +240,11 @@ export function gjenopprettRulling(hvem: string | null): () => void {
   const forsok = window.setInterval(prov, 150)
   for (const h of hendelser) window.addEventListener(h, stopp, { capture: true, passive: true })
   prov()
-  return stopp
+  return () => {
+    const uferdige = igjen.map(({ lag, topp }) => ({ lag, topp }))
+    stopp()
+    bilde.rulling = [...uferdige, ...bilde.rulling]
+  }
 }
 
 /** Bare for testene: glemmer bildet, så det leses på nytt. */

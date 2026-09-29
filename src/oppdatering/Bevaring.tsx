@@ -34,8 +34,8 @@ const Eier = createContext<string | null>(null)
 export function Bevaringseier({ id, children }: { id: string | null; children: ReactNode }) {
   useEffect(() => settEier(id), [id])
   // Rulleplassene hører også til brukeren, så rullingen tilbake begynner først
-  // her. Den stopper selv, når plassene står eller brukeren tar over.
-  useEffect(() => void gjenopprettRulling(id), [id])
+  // her, og stopper når brukeren logger ut eller byttes ut.
+  useEffect(() => gjenopprettRulling(id), [id])
   return <Eier.Provider value={id}>{children}</Eier.Provider>
 }
 

@@ -51,4 +51,5 @@ et skjema, et valg — bruker `useBevart(navn, start)` i stedet for `useState`.
 Det som tas vare på, ligger bare i fanen, og slettes så snart den nye
 versjonen har lest det. Det hører til brukeren som var logget inn: er en annen
 logget inn når den nye versjonen starter (økten gikk ut, og noen andre logget
-inn i den samme fanen), kastes alt, også hvor langt siden var rullet.
+inn i den samme fanen), kastes alt, også hvor langt siden var rullet. Rullingen
+tilbake stopper straks brukeren logger ut eller byttes ut.
