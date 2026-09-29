@@ -96,6 +96,11 @@ export async function settOppgaveKlar(id: string, klar: boolean): Promise<void> 
   sjekk(await klient().rpc('sett_oppgave_klar', { oppgave: id, klar }))
 }
 
+/** En oppgave en agent har tatt, blir klar igjen. */
+export async function frigiOppgave(id: string): Promise<void> {
+  sjekk(await klient().rpc('frigi_oppgave', { oppgave: id }))
+}
+
 export interface Ideinnhold {
   kategori: Idekategori
   tittel: string

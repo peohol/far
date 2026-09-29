@@ -48,13 +48,20 @@ const oppgave = (id: string, status: Oppgave['status'], ekstra: Partial<Oppgave>
   overfort_kl: '2026-09-28T10:00:00Z',
   endret_kl: null,
   klar_kl: null,
+  tatt_kl: null,
   utfort_kl: null,
   ...ekstra,
 })
 
 const OPPGAVER: Oppgave[] = [
-  oppgave('a', 'ikke_paabegynt'),
-  oppgave('b', 'under_arbeid', { har_prompt: true, endret_kl: '2026-09-28T11:00:00Z' }),
+  oppgave('a', 'ikke_paabegynt', { nummer: 3 }),
+  oppgave('b', 'under_arbeid', { nummer: 4, har_prompt: true, endret_kl: '2026-09-28T11:00:00Z' }),
+  oppgave('e', 'haandteres', {
+    nummer: 5,
+    har_prompt: true,
+    klar_kl: '2026-09-28T12:00:00Z',
+    tatt_kl: '2026-09-28T12:30:00Z',
+  }),
   oppgave('c', 'utfort', { har_prompt: true, nummer: 1, endringslogg: PUBLISERT, klar_kl: '2026-09-28T12:00:00Z', utfort_kl: '2026-09-28T13:00:00Z' }),
   oppgave('d', 'utfort', { har_prompt: true, nummer: 2, endringslogg: '99.0.0', klar_kl: '2026-09-28T12:00:00Z', utfort_kl: '2026-09-28T14:00:00Z' }),
 ]
@@ -86,6 +93,7 @@ const api = vi.hoisted(() => ({
   lagreOppgave: vi.fn(async () => {}),
   settOppgaveKlar: vi.fn(async () => {}),
   flyttOppgaveTilbake: vi.fn(async () => {}),
+  frigiOppgave: vi.fn(async () => {}),
   hentIdetraad: vi.fn(),
   merkIdeSett: vi.fn(async () => {}),
   settHjerte: vi.fn(async () => {}),
@@ -127,13 +135,15 @@ afterEach(() => {
 const apne = (oppgave?: string) => render(<Oppgaver apen oppgave={oppgave} onLukk={() => {}} onIdeer={() => {}} />)
 
 describe('lista', () => {
-  it('viser oppgavene under de tre statusene, og de utførte i en lukket skuff', async () => {
+  it('viser oppgavene med nummeret under statusene, og de utførte i en lukket skuff', async () => {
     apne()
     const ikke = await screen.findByRole('region', { name: /^Ikke påbegynt/ })
-    expect(within(ikke).getByRole('button', { name: /Oppgave a/ })).toBeTruthy()
+    expect(within(ikke).getByRole('button', { name: /^OPG-003 ?Oppgave a/ })).toBeTruthy()
     expect(within(ikke).getByText('Ingen prompt ennå')).toBeTruthy()
-    expect(within(screen.getByRole('region', { name: /^Under arbeid/ })).getByRole('button', { name: /Oppgave b/ })).toBeTruthy()
+    expect(within(screen.getByRole('region', { name: /^Påbegynt/ })).getByRole('button', { name: /^OPG-004 ?Oppgave b/ })).toBeTruthy()
     expect(within(screen.getByRole('region', { name: /^Klar til implementering/ })).getByText('Ingen oppgaver.')).toBeTruthy()
+    const agent = within(screen.getByRole('region', { name: /^Håndteres nå av en agent/ })).getByRole('button', { name: /^OPG-005 ?Oppgave e/ })
+    expect(agent.textContent).toMatch(/tatt av en agent/)
 
     const skuff = screen.getByRole('button', { name: /Utførte oppgaver 2/ })
     expect(skuff.getAttribute('aria-expanded')).toBe('false')
@@ -159,7 +169,7 @@ describe('lista', () => {
     await bruker.click(await screen.findByRole('button', { name: /Oppgave b/ }))
     expect(await screen.findByRole('heading', { name: 'Oppgave b', level: 3 })).toBeTruthy()
     await bruker.click(screen.getByRole('button', { name: 'Tilbake til oppgavene' }))
-    expect(await screen.findByRole('region', { name: /^Under arbeid/ })).toBeTruthy()
+    expect(await screen.findByRole('region', { name: /^Påbegynt/ })).toBeTruthy()
   })
 })
 
@@ -284,13 +294,41 @@ describe('én oppgave', () => {
     expect(api.flyttOppgaveTilbake).not.toHaveBeenCalled()
     await bruker.click(screen.getByRole('button', { name: 'Bekreft: flytt tilbake til idéer' }))
     expect(api.flyttOppgaveTilbake).toHaveBeenCalledWith('b')
-    expect(await screen.findByRole('region', { name: /^Under arbeid/ })).toBeTruthy()
+    expect(await screen.findByRole('region', { name: /^Påbegynt/ })).toBeTruthy()
+  })
+
+  it('låser en oppgave en agent håndterer, og sier hvordan den gjenopptas', async () => {
+    api.hentOppgave.mockResolvedValue(detaljer(OPPGAVER[2]!, 'Legg til en knapp.'))
+    apne('e')
+    const merknad = await screen.findByRole('note')
+    expect(merknad.textContent).toMatch(/Håndteres nå av en agent\./)
+    expect(merknad.textContent).toMatch(/\/utfor-oppgaver OPG-005/)
+    expect(merknad.textContent).not.toMatch(/frigi/)
+    expect(screen.getByText('Legg til en knapp.')).toBeTruthy()
+    expect(screen.queryByRole('button', { name: /Frigi/ })).toBeNull()
+  })
+
+  it('lar en administrator frigi en oppgave en agent har tatt, i to trykk, men ikke endre den imens', async () => {
+    const bruker = userEvent.setup()
+    tilstand.meg = ADMIN
+    api.hentOppgave.mockResolvedValue(detaljer(OPPGAVER[2]!, 'Legg til en knapp.'))
+    apne('e')
+    await bruker.click(await screen.findByRole('button', { name: 'Frigi oppgaven' }))
+    expect(screen.queryByRole('textbox', { name: 'Prompt' })).toBeNull()
+    expect(screen.queryByRole('button', { name: /Klar til implementering|Ikke klar likevel|Flytt tilbake/ })).toBeNull()
+    expect(api.frigiOppgave).not.toHaveBeenCalled()
+
+    api.hentOppgave.mockResolvedValue(detaljer({ ...OPPGAVER[2]!, status: 'klar', tatt_kl: null }, 'Legg til en knapp.'))
+    await bruker.click(screen.getByRole('button', { name: 'Bekreft: frigi oppgaven' }))
+    expect(api.frigiOppgave).toHaveBeenCalledWith('e')
+    expect(await screen.findByRole('button', { name: 'Ikke klar likevel' })).toBeTruthy()
+    expect(screen.getByRole('textbox', { name: 'Prompt' })).toBeTruthy()
   })
 
   it('viser en utført oppgave med nummeret og knappen til endringsloggen, og uten noe å endre', async () => {
     const bruker = userEvent.setup()
     tilstand.meg = ADMIN
-    api.hentOppgave.mockResolvedValue(detaljer(OPPGAVER[2]!, 'Gjort.'))
+    api.hentOppgave.mockResolvedValue(detaljer(OPPGAVER.find((o) => o.id === 'c')!, 'Gjort.'))
     apne('c')
     expect((await screen.findByRole('note')).textContent).toMatch(/Utført som OPG-001/)
     expect(screen.queryByRole('textbox', { name: 'Prompt' })).toBeNull()

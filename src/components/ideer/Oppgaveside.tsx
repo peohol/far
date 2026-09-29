@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import { flyttOppgaveTilbake, hentOppgave, lagreOppgave, settOppgaveKlar } from '../../ideer/api'
+import { flyttOppgaveTilbake, frigiOppgave, hentOppgave, lagreOppgave, settOppgaveKlar } from '../../ideer/api'
 import { TITTEL_MEST, oppgavekode } from '../../ideer/modell'
 import { PROMPT_MEST, iEndringsloggen, type Oppgavedetaljer } from '../../ideer/oppgaver'
 import { Forlatvarsel } from '../stoffside/Skjemaer'
@@ -19,12 +19,13 @@ import type { Skjemastatus } from './useForlatvakt'
  *
  * En administrator gir oppgaven en overskrift og skriver prompten — oppgaven
  * formulert så godt at en språkmodell kan lese den og utføre den — og merker
- * oppgaven klar til implementering når den er det. Den første lagringen setter
- * oppgaven under arbeid. Oppgaven kan også flyttes tilbake til idéene, som er den eneste
+ * oppgaven klar til implementering når den er det. Den første lagringen gjør
+ * oppgaven påbegynt. Oppgaven kan også flyttes tilbake til idéene, som er den eneste
  * måten å ta den bort på. Andre leser.
  *
- * En utført oppgave har nummeret sitt og en knapp til føringen i
- * endringsloggen, og kan ikke endres.
+ * Mens en agent håndterer oppgaven, kan den ikke endres. En administrator kan
+ * frigi den, så den blir klar igjen. En utført oppgave har en knapp til
+ * føringen i endringsloggen, og kan ikke endres.
  */
 export function Oppgaveside({
   id,
@@ -102,7 +103,8 @@ export function Oppgaveside({
   }
 
   const utfort = oppgave.status === 'utfort'
-  const redigerer = admin && !utfort
+  const handteres = oppgave.status === 'haandteres'
+  const redigerer = admin && !utfort && !handteres
   const publisert = iEndringsloggen(oppgave.endringslogg)
 
   return (
@@ -125,6 +127,14 @@ export function Oppgaveside({
               <span aria-hidden="true">·</span>
               <span>
                 endret <Tidspunkt iso={oppgave.endret_kl} />
+              </span>
+            </>
+          )}
+          {oppgave.tatt_kl && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>
+                tatt av en agent <Tidspunkt iso={oppgave.tatt_kl} />
               </span>
             </>
           )}
@@ -153,6 +163,27 @@ export function Oppgaveside({
               <Button variant="kant" icon={<Ikon navn="history" storrelse="ui" />} onClick={() => visEndringslogg(oppgave.endringslogg)}>
                 Se i endringsloggen
               </Button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {handteres && (
+        <div className="idemerknad" role="note">
+          <Ikon navn="gears" storrelse="ui" />
+          <p>
+            <strong>Håndteres nå av en agent.</strong> Oppgaven kan ikke endres imens.
+            {oppgave.nummer !== null && ` En avbrutt økt fortsetter med /utfor-oppgaver ${oppgavekode(oppgave.nummer)}.`}
+            {admin && ' Er agenten stoppet, kan du frigi oppgaven, så den blir klar igjen.'}
+          </p>
+          {admin && (
+            <div className="idemerknad__handlinger">
+              <Bekreftknapp
+                ikon="reset"
+                tekst="Frigi oppgaven"
+                bekreftTekst="Bekreft: frigi oppgaven"
+                onBekreft={() => void utfor(() => frigiOppgave(oppgave.id))}
+              />
             </div>
           )}
         </div>
@@ -321,7 +352,7 @@ function Oppgaveskjema({
         />
         <span id={`${id}-hjelp`} className="felt__hjelp">
           Skriv oppgaven slik at en språkmodell kan utføre den uten å spørre: hva som skal endres, hvor i appen, og hvordan
-          resultatet skal se ut og oppføre seg. Den første lagringen setter oppgaven under arbeid.
+          resultatet skal se ut og oppføre seg. Den første lagringen gjør oppgaven påbegynt.
         </span>
       </div>
       {feil && (

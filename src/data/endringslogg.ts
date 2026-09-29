@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.59.0',
+    dato: '2026-09-29',
+    sammendrag: 'Planlagte oppgaver viser når en agent arbeider med dem, og har nummer fra start',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      '«Under arbeid» heter nå «Påbegynt».',
+      'Når Claude begynner på en oppgave med /utfor-oppgaver, står den som «Håndteres nå av en agent» med en blå prikk. Da kan ikke en annen økt ta den samme oppgaven, og den kan ikke endres imens.',
+      'Er agenten stoppet før arbeidet ble ferdig, kan en administrator trykke «Frigi oppgaven», så den blir klar igjen.',
+      'Hver oppgave får nummeret sitt (for eksempel OPG-002) med en gang den overføres. En avbrutt oppgave fortsetter med /utfor-oppgaver og nummeret.',
+    ],
+  },
+  {
     versjon: '1.58.0',
     dato: '2026-09-29',
     sammendrag: 'Varsler om endringer på favorittsidene dine',
