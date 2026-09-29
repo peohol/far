@@ -663,8 +663,8 @@
   margin-left: var(--rom-1);
 }
 
-/* Prikken for det brukeren ikke har sett: på kortet, i kontomenyen og på
-   avataren (plassert i `toppmeny.css`). */
+/* Prikken for det brukeren ikke har sett: på kortet og på
+   idéknappen (plassert i `toppmeny.css`). */
 .nyprikk {
   flex: none;
   width: 0.5rem;

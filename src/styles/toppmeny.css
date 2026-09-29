@@ -1,6 +1,7 @@
 /**
  * Appskallet: den ene faste toppmenyen, dokken på smale flater og
- * kontomenyen (`src/components/toppmeny/`, `Kontomeny`).
+ * nedtrekksmenyene i den, kontoen og adminmenyen (`src/components/toppmeny/`,
+ * `Nedtrekksmeny`).
  *
  * Menyen er en svevende pille øverst i vinduet. Flaten er delvis
  * gjennomsiktig med uskarphet bak, og helt dekkende der nettleseren ikke kan
@@ -71,7 +72,7 @@
 
 .toppmeny__kontekst,
 .toppmeny__spor,
-.toppmeny__innstillinger,
+.toppmeny__verktoy,
 .toppmeny__reserve {
   display: flex;
   flex: none;
@@ -303,8 +304,10 @@
   }
 }
 
-/* --- Kontomenyen -------------------------------------------------------------- */
-.kontomeny {
+/* --- Nedtrekksmenyene og idéknappen --------------------------------------------
+   Kontoen og adminmenyen (`Nedtrekksmeny`) henger et panel under knappen. */
+.nedtrekk,
+.toppmeny__merket {
   position: relative;
   flex: none;
 }
@@ -320,18 +323,18 @@
   overflow: hidden;
 }
 
-/* Nye kommentarer på idéene: prikken fra `ideer.css`, i hjørnet av avataren. */
-.kontomeny > .kontomeny__prikk {
+/* Nye kommentarer på idéene: prikken fra `ideer.css`, i hjørnet av knappen. */
+.toppmeny__prikk {
   position: absolute;
   top: 0;
   right: 0;
-  width: 0.875rem;
-  height: 0.875rem;
+  width: 0.75rem;
+  height: 0.75rem;
   border: var(--kant-tykk) solid var(--flate-bunn);
   pointer-events: none;
 }
 
-.kontomeny__panel {
+.nedtrekk__panel {
   position: absolute;
   top: calc(100% + var(--rom-5));
   right: 0;
@@ -344,8 +347,13 @@
   box-shadow: var(--skygge-modal);
 }
 
-.kontomeny__panel[hidden] {
+.nedtrekk__panel[hidden] {
   display: none;
+}
+
+/* Adminmenyen har bare korte valg. */
+.adminmeny .nedtrekk__panel {
+  width: min(15rem, calc(100vw - 2 * var(--rom-side)));
 }
 
 .kontomeny__hode {
@@ -402,13 +410,15 @@
   height: 0.875rem;
 }
 
-.kontomeny__valg {
+.nedtrekk__valg {
   display: flex;
   flex-direction: column;
+  margin: 0;
   padding: var(--rom-2);
+  list-style: none;
 }
 
-.kontomeny__valgknapp {
+.nedtrekk__valgknapp {
   display: flex;
   align-items: center;
   gap: var(--rom-4);
@@ -417,6 +427,7 @@
   padding: 0 var(--rom-4);
   font-size: var(--tekst-ui);
   font-weight: var(--vekt-medium);
+  color: var(--blekk);
   text-align: left;
   background: transparent;
   border: 0;
@@ -424,28 +435,93 @@
   cursor: pointer;
 }
 
-.kontomeny__valgknapp:hover {
+.nedtrekk__valgknapp:hover,
+.nedtrekk__skuff[data-apen] > .nedtrekk__valgknapp {
   background: var(--flate-hevet);
 }
 
-.kontomeny__valgknapp .ikon {
+.nedtrekk__valgknapp .ikon,
+.nedtrekk__bryter .ikon {
   width: 1.375rem;
   height: 1.375rem;
 }
 
-.kontomeny__tekst {
+.nedtrekk__tekst {
   flex: 1;
 }
 
-.kontomeny__hint {
+.nedtrekk__hint {
   font-size: var(--tekst-merke);
   font-weight: var(--vekt-halvfet);
   color: var(--blekk-dempet);
 }
 
-/* Temaet står i kontomenyen bare når knappen i menyen har veket for søket. */
-.kontomeny__bare-smal {
-  display: none;
+/* Pilen på et valg med skuff snur seg ned når skuffen står åpen, som i
+   endringsloggen og skuffene ellers. */
+.nedtrekk__pil {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--blekk-dempet);
+  transition: transform var(--fart-glid) var(--kurve);
+}
+
+.nedtrekk__skuff[data-apen] .nedtrekk__pil {
+  transform: rotate(90deg);
+}
+
+/* Skuffen glir opp og igjen med `useSkjuling` (0fr ↔ 1fr). */
+.nedtrekk__skuffkropp {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--fart-glid) var(--kurve);
+}
+
+.nedtrekk__skuff[data-apen] > .nedtrekk__skuffkropp {
+  grid-template-rows: 1fr;
+}
+
+.nedtrekk__skuff:not([data-apen]) > .nedtrekk__skuffkropp,
+.nedtrekk__skuffkropp[data-glir] {
+  overflow: hidden;
+}
+
+.nedtrekk__skuffinner {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: var(--rom-2) 0 var(--rom-3);
+}
+
+/* Bryterne i skuffen står i flukt med valgene over: ikon og tekst til
+   venstre, bryteren helt til høyre. */
+.nedtrekk__bryter {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  gap: var(--rom-4);
+  min-height: var(--hoyde-felt);
+  /* Ikonet står under teksten til valget over. */
+  padding: 0 var(--rom-4) 0 calc(2 * var(--rom-4) + 1.375rem);
+  font-size: var(--tekst-ui);
+  border-radius: var(--runding-felt);
+}
+
+.nedtrekk__bryter:hover {
+  background: var(--flate-hevet);
+}
+
+.nedtrekk__bryter .bryter__tekst {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--rom-4);
+}
+
+.nedtrekk__bryter:has(input:focus-visible) {
+  outline: var(--fokusring) solid var(--fokus);
+  outline-offset: calc(-1 * var(--fokusring));
 }
 
 /* --- Smale flater ---------------------------------------------------------------
@@ -456,13 +532,17 @@
     padding: var(--rom-3) var(--rom-3) 0;
   }
 
-  .toppmeny__skille,
-  .toppmeny__innstillinger {
+  .toppmeny__skille {
     display: none;
   }
 
-  .kontomeny__bare-smal {
-    display: block;
+  /* Panelene henger under pillen, ved vinduets høyre kant, så en meny fra en
+     knapp lenger inn ikke går ut over venstre kant. */
+  .nedtrekk__panel {
+    position: fixed;
+    top: calc(var(--rom-3) + var(--hoyde-toppmeny) + var(--rom-3));
+    right: var(--rom-3);
+    width: min(21.25rem, calc(100vw - 2 * var(--rom-3)));
   }
 
   .menyknapp {
@@ -530,12 +610,12 @@
   }
 
   /* Dokken skal ikke dekke det nederste av innholdet, og versjonen i hjørnet
-     viker for den (endringsloggen ligger i kontomenyen). */
+     legger seg over den. */
   .app:not([data-side='fortolkning']):has(.toppmeny__spor > *) {
     padding-bottom: var(--dokk-offset);
   }
 
   .app:not([data-side='fortolkning']):has(.toppmeny__spor > *) .versjonspille {
-    display: none;
+    bottom: calc(var(--rom-4) + var(--hoyde-dokk) + var(--rom-3));
   }
 }

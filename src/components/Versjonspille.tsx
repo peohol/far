@@ -2,14 +2,15 @@ import { useCallback, useState } from 'react'
 import { ENDRINGSLOGG } from '../data/endringslogg'
 import { nyesteVersjon } from '../domain/versjon'
 import { Endringslogg } from './Endringslogg'
+import { Ikon } from './ikon/Ikon'
 import { useTips } from './Tips'
 
 /** Versjonen appen kjører — den øverste føringen i endringsloggen. */
 export const VERSJON = nyesteVersjon(ENDRINGSLOGG)
 
 /**
- * Versjonsnummeret, fast nederst til høyre i vinduet, og veien inn til
- * endringsloggen.
+ * Versjonsnummeret med klokka, fast nederst til høyre i vinduet, og den ene
+ * veien inn til endringsloggen.
  *
  * Den ligger med vilje lavt i synsfeltet og lavt i kontrast: den skal kunne
  * finnes når noen lurer på hva som er nytt, uten å ta oppmerksomhet fra
@@ -27,12 +28,13 @@ export function Versjonspille() {
       <button
         type="button"
         className="versjonspille"
+        data-ih=""
         aria-label={`Versjon ${VERSJON} – vis endringslogg`}
         aria-haspopup="dialog"
         onClick={() => setApen(true)}
         {...tips.props}
       >
-        v{VERSJON}
+        <Ikon navn="history" storrelse={14} />v{VERSJON}
       </button>
 
       <Endringslogg apen={apen} onLukk={lukk} />

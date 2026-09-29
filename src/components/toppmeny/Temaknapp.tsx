@@ -1,7 +1,7 @@
 import type { Theme } from '../../hooks/useTheme'
 import { Ikonknapp, type IkonknappProps, type Ikonknappvariant } from '../Ikonknapp'
 
-/** Lyst eller mørkt tema. Står også på innloggingssiden, utenfor appen. */
+/** Lyst eller mørkt tema på innloggingssiden, utenfor appen. Inne i appen står valget under «Preferanser» i kontomenyen. */
 export function Temaknapp({
   theme,
   onToggleTheme,

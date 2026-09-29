@@ -13,7 +13,7 @@ import { Ideskjema, type Skjemastatus } from './Ideskjema'
 import '../../styles/ideer.css'
 
 /**
- * Idéene, fra kontomenyen: et lag over appen der alle brukerne kan legge inn
+ * Idéene, fra idéknappen i toppmenyen: et lag over appen der alle brukerne kan legge inn
  * idéer, gi hjerter og kommentere.
  *
  * Laget har tre sider: lista med idéene som kort, én idé med beskrivelsen og

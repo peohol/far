@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react'
+import { Bryter } from './Bryter'
 import { Button } from './Button'
 import { Felt } from './konto/Felt'
 import { Shortcut } from './Shortcut'
@@ -221,16 +222,9 @@ export function Sidemeny({ katalog, stoffsider = [], kanOpprette = false }: Side
 
         {/* Bryteren gjelder hele lista, og står fast øverst i stedet for å
             rulle bort med den. */}
-        <label className="bryter menyveksle">
-          <input
-            type="checkbox"
-            role="switch"
-            checked={visUnderkategorier}
-            onChange={(e) => setVisUnderkategorier(e.target.checked)}
-          />
-          <span className="bryter__spor" aria-hidden="true" />
-          <span>Vis underkategorier</span>
-        </label>
+        <Bryter className="menyveksle" pa={visUnderkategorier} onEndre={setVisUnderkategorier}>
+          Vis underkategorier
+        </Bryter>
 
         <ul className="menyliste">
           {register.map((kategori) => (

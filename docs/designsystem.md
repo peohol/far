@@ -198,7 +198,8 @@ Resten av grensesnitteksten:
 | Viktige data | «Konsentrasjoner i serum», «Kinetikk», «Ikke oppgitt» |
 | Fagsøket | «↑ ↓ velg · Enter åpne · Esc lukk», «Vis alle treff (N)», «Ingen treff i fagstoffet.» |
 | Søkesiden | «Søk i fagstoff», fanene «Alle», «Stoff», «Preparater», «Tekst», «Referanser», og gruppen «I teksten» |
-| Kontomenyen | «Endre navn og profilbilde», «Brukere», «Endringslogg» med versjonen, «Logg ut» |
+| Toppmenyen, høyre side | «Idéer», «Administrasjon» med «Brukere» og «Datakilder», og kontomenyen med «Endre navn og profilbilde», «Preferanser» («Vis hurtigtaster», «Mørkt tema») og «Logg ut» |
+| Versjonspillen | klokka og versjonen, «Vis endringslogg» |
 
 Hurtigtastmerkene vises ikke i søkefeltene på smale flater: der er det
 sjelden et tastatur.
@@ -252,7 +253,7 @@ venstre inneholder den:
 2. globalt fagsøk (`sok`)
 3. sidens egne plasser, `sidesok` og `handlinger`
 4. et skille
-5. hurtigtaster og tema
+5. idéene og, bare for administratorer, adminmenyen (`verktoy`)
 6. kontoen
 
 ### Plassene sidene fyller
@@ -324,7 +325,7 @@ menyen, bruker den:
 Under 760 px bredde gjelder dette:
 
 - Søket får all plassen i pillen.
-- Knappene for hurtigtaster og tema viker. Temaet ligger da i kontomenyen.
+- Skillet viker. Nedtrekksmenyene henger ved vinduets høyre kant.
 - Sidens plasser flytter til en **dokk** nederst i vinduet, og siden får
   `--dokk-offset` luft nederst. Søket på siden står som en rund lupeknapp til
   det brukes, og hovedhandlingen korter teksten heller enn å skyve de andre
@@ -333,21 +334,27 @@ Under 760 px bredde gjelder dette:
 - Fortolkningen har ingen dokk. «Åpne stoffside» står bare i toppmenyen på
   brede flater; på smale fører kodepillen i steget til stoffsiden.
 
-### Kontomenyen
+### Idéene, adminmenyen og kontoen
 
-`src/components/konto/Kontomeny.tsx` åpnes fra avataren helt til høyre. Den
-viser hvem som er logget inn, og fører til:
+Helt til høyre står tre knapper:
 
-- profilen
-- brukerlista
-- endringsloggen
-- tema, bare på smale flater
-- utlogging
+- **Idéer** (`src/components/ideer/Ideknapp.tsx`) åpner idéene. Har noen
+  kommentert noe brukeren ikke har sett, står det en prikk på knappen.
+- **Administrasjon** (`src/components/konto/Adminmeny.tsx`), bare for
+  administratorer: brukerne og datakildene.
+- **Kontoen** (`src/components/konto/Kontomeny.tsx`), avataren: hvem som er
+  logget inn, «Endre navn og profilbilde», «Preferanser» og «Logg ut».
+  «Preferanser» er en skuff i menyen med bryterne for hurtigtastene og det
+  mørke temaet (`Bryter`), og glir opp som skuffene ellers (`useSkjuling`).
 
-Valgene er en liste med ikon, tekst og eventuelt et hint. Nye konto- og
-redigeringsvalg legges inn i den samme lista. Menyen er et lag (`data-lag`),
-så appens egne taster ligger i ro mens den står åpen. Escape, et trykk
-utenfor eller fokus som går ut av menyen, lukker den.
+Adminmenyen og kontoen bygger på `Nedtrekksmeny`
+(`src/components/toppmeny/Nedtrekksmeny.tsx`), med valgene som `Menyvalg`.
+Nye valg legges inn der. Menyen er et lag (`data-lag`), så appens egne taster
+ligger i ro mens den står åpen. Escape, et trykk utenfor eller fokus som går
+ut av menyen, lukker den.
+
+Endringsloggen åpnes bare fra versjonspillen nederst til høyre. På smale
+flater med dokk legger pillen seg over dokken.
 
 Innloggingssiden har ingen toppmeny, bare temaknappen. De delene den bruker,
 står oppført som åpne i `scripts/kontroller-vegg.mjs`.

@@ -161,7 +161,7 @@ kobling blir sjeldnere), justeres terskelen i `strukturvakt.ts`.
   mangle. Da har minst én natt feilet eller ikke gått.
 - En daglig Claude-rutine leser de siste kjøringene og sier fra i prosjektet
   når siste kjøring feilet, eller når ingen har gått bra det siste døgnet.
-- Administratorene ser FEST i «Datakilder» (kontomenyen): tilstanden, siste
+- Administratorene ser FEST i «Datakilder» (adminmenyen): tilstanden, siste
   vellykkede henting, datoen for uttrekket, de siste kjøringene og feilen fra
   siste som feilet (`docs/datakilder.md`).
 
