@@ -51,7 +51,20 @@ Kolonnen `endringslogg` sier hvilken versjon arbeidet kom i.
 Finnes ingen klare oppgaver, si det og stopp. Mangler Supabase-MCP-en, si at
 den må kobles til, og stopp.
 
-## 2. Vis planen før du begynner
+## 2. Gi tråden navn etter oppgavene
+
+Så snart det er klart hvilke oppgaver som skal gjøres, får tråden eller økten
+navnet deres i stedet for «utfor-oppgaver». Bruk det verktøyet økten har: i en
+tråd i et Claude-prosjekt `set_thread_label`, ellers `set_session_title` i
+Claude Code på nettet. Har økten ingen av dem, hopp over steget uten å si noe.
+
+- Én oppgave: overskriften, for eksempel «Varslingssystem».
+- Flere: «Oppgaver: A, B». Blir navnet lengre enn 80 tegn, kort det ned til
+  de første overskriftene og antallet resten, som «Oppgaver: A, B + 3 til».
+- Endres utvalget senere, for eksempel fordi administratoren vil vente med én
+  av dem, gi tråden nytt navn etter de oppgavene som faktisk gjøres.
+
+## 3. Vis planen før du begynner
 
 List oppgavene med overskriften (`oppgaver.tittel`, som administratoren kan ha
 endret fra idéens) og én linje om hva du forstår at prompten ber om.
@@ -59,7 +72,7 @@ Si hvilke du vil gjøre sammen og hvilke hver for seg. Er en prompt uklar eller
 motsier noe i appen, spør administratoren før du gjør den oppgaven. Gjett ikke,
 og særlig ikke når det gjelder klinisk innhold (se `CLAUDE.md`).
 
-## 3. Utfør oppgavene
+## 4. Utfør oppgavene
 
 Følg `CLAUDE.md` som i alt annet arbeid: les koden først, test, og kjør
 `npm test` og `npm run build`.
@@ -69,7 +82,7 @@ Følg `CLAUDE.md` som i alt annet arbeid: les koden først, test, og kjør
 - Databaseendringer rulles ut i produksjon først etter at administratoren har
   skrevet et eksplisitt ja som nevner migrasjonene.
 
-## 4. Merk oppgaven utført
+## 5. Merk oppgaven utført
 
 En oppgave er utført når endringen er slått sammen i `main`, slik at føringen i
 endringsloggen er publisert. Da merkes den med en migrering som bare kaller

@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.55.1',
+    dato: '2026-09-29',
+    sammendrag: 'Tråder fra /utfor-oppgaver får navn etter oppgavene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Når /utfor-oppgaver har funnet oppgavene som skal gjøres, gir Claude tråden navn etter overskriften deres i stedet for «utfor-oppgaver». Flere oppgaver blir for eksempel «Oppgaver: A, B».',
+    ],
+  },
+  {
     versjon: '1.55.0',
     dato: '2026-09-29',
     sammendrag: 'Stoffsidene handler om stoffet, og laboratorieanalyttene kobles til dem',
