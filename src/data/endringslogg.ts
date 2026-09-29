@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.56.1',
+    dato: '2026-09-29',
+    sammendrag: 'Oppgaven «Varslingssystem» er merket utført',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Den planlagte oppgaven «Varslingssystem» (OPG-001) er merket utført med versjon 1.56.0, og det er ført inn i appens oversikt over databaseendringer.',
+      'Føringer som denne, uten noe nytt å merke i appen, blir ikke lenger varsler.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.56.0',
     dato: '2026-09-29',
     sammendrag: 'Varsler: en bjelle i toppmenyen samler det som er nytt for deg',

@@ -62,6 +62,12 @@ const SUPABASE_GRUNNLAG = /* sql */ `
   create table supabase_migrations.schema_migrations (version text primary key, name text);
 `
 
+/**
+ * Migrasjonene som bare merker planlagte oppgaver utført i produksjon
+ * (`fullfor_oppgave`). Oppgavene finnes ikke i en ny database, så de kjøres ikke der.
+ */
+const BARE_I_PRODUKSJON = /_oppgaver_utfort_\w+\.sql$/
+
 /** Migrasjonsfilene, i den rekkefølgen prosjektet kjører dem. */
 export function migrasjonsfiler(): string[] {
   return readdirSync(MIGRASJONER)
@@ -78,6 +84,7 @@ export async function kjorMigrasjoner(
   { fra = '', til, bare }: { fra?: string; til?: string; bare?: readonly string[] } = {},
 ): Promise<void> {
   for (const fil of migrasjonsfiler()) {
+    if (BARE_I_PRODUKSJON.test(fil)) continue
     if (bare ? !bare.includes(fil) : fil < fra || (til !== undefined && fil >= til)) continue
     try {
       await db.exec(readFileSync(`${MIGRASJONER}/${fil}`, 'utf8'))

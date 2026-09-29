@@ -62,6 +62,10 @@ Da får alle et varsel om den som en endring i fortolkningen, og det kan ikke
 slås av (se `docs/varsler.md`). Innhold som publiseres i appen, varsler av
 seg selv og trenger det ikke.
 
+**`utenVarsel: true`** settes når PR-en ikke endrer noe brukerne merker, som
+når en databaseendring som alt er rullet ut, føres inn i koden (for eksempel
+`oppgaver_utfort_*`). Da blir føringen ikke et varsel.
+
 **Omfang** — ett merke, vurdert skjønnsmessig. Beskrivelsene er veiledende:
 
 | Merke | Omtrent |

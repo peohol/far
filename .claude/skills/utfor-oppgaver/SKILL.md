@@ -87,7 +87,9 @@ select public.fullfor_oppgave('<oppgave-id>', '<x.y.z>');
   etter at administratoren har skrevet et eksplisitt ja som nevner den.
 - Legg deretter fila i `supabase/migrations/` med versjonen prosjektet
   registrerte (`list_migrations`), uten linjeskift til slutt, så den er lik
-  byte for byte. Den kan gå i PR-en for oppgaven eller i en egen liten PR.
+  byte for byte. Den går i en egen liten PR, med en føring som har
+  `utenVarsel: true`. Testdatabasen hopper over slike filer, siden oppgavene
+  bare finnes i produksjon.
 - Funksjonen stopper hvis oppgaven ikke er `klar`, for eksempel hvis
   administratoren har flyttet den tilbake i mellomtiden. Si det, og merk den
   ikke.
