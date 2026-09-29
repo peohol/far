@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 /**
  * Appskallet fra designsystemet: ikonene, den faste toppmenyen med plassene
- * sidene fyller, fagsøkfeltets snarvei og kontomenyen.
+ * sidene fyller, fagsøkfeltets snarvei, idéknappen, adminmenyen og kontomenyen.
  */
 import { readFileSync } from 'node:fs'
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
@@ -10,8 +10,9 @@ import { useState } from 'react'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 
 const loggUt = vi.fn(async () => {})
+const rolle = vi.hoisted(() => ({ verdi: 'admin' }))
 vi.mock('../auth/okt', () => ({
-  useProfil: () => ({ role: 'admin', first_name: 'Anne', last_name: 'Admin', username: 'aadmin', avatar_path: null }),
+  useProfil: () => ({ role: rolle.verdi, first_name: 'Anne', last_name: 'Admin', username: 'aadmin', avatar_path: null }),
   useOkt: () => ({ loggUt }),
 }))
 vi.mock('../auth/avatarer', () => ({ useAvatarlenker: () => new Map() }))
@@ -24,6 +25,12 @@ vi.mock('../components/konto/Kontopanel', () => ({
 vi.mock('../components/konto/Brukerliste', () => ({
   Brukerliste: ({ apen }: { apen: boolean }) => (apen ? <p>Brukerlista</p> : null),
 }))
+vi.mock('../components/konto/Datakilder', () => ({
+  Datakilder: ({ apen }: { apen: boolean }) => (apen ? <p>Datakildene</p> : null),
+}))
+vi.mock('../components/ideer/Ideer', () => ({
+  Ideer: ({ apen }: { apen: boolean }) => (apen ? <p>Idéene</p> : null),
+}))
 
 const { Ikon } = await import('../components/ikon/Ikon')
 const { IKONER, IKONFARGER, IKONNAVN } = await import('../components/ikon/register')
@@ -31,8 +38,10 @@ const { Toppmeny } = await import('../components/toppmeny/Toppmeny')
 const { ToppmenyKilde, ToppmenyInnhold } = await import('../components/toppmeny/Toppmenykilde')
 const { Fagsokfelt, erFagsokSnarvei } = await import('../components/toppmeny/Fagsokfelt')
 const { Kontomeny } = await import('../components/konto/Kontomeny')
+const { Adminmeny } = await import('../components/konto/Adminmeny')
+const { Ideknapp } = await import('../components/ideer/Ideknapp')
 const { TipsLag } = await import('../components/Tips')
-const { ShortcutVisibilityProvider } = await import('../hooks/useShortcutVisibility')
+const { ShortcutVisibilityProvider, useShortcutVisibility } = await import('../hooks/useShortcutVisibility')
 
 beforeAll(() => {
   globalThis.ResizeObserver ??= class {
@@ -46,6 +55,7 @@ afterEach(() => {
   cleanup()
   vi.unstubAllGlobals()
   loggUt.mockClear()
+  rolle.verdi = 'admin'
 })
 
 function Ramme({ children }: { children: React.ReactNode }) {
@@ -129,6 +139,16 @@ describe('ikonene', () => {
   })
 })
 
+/** Knappene foran kontoen, slik appen legger dem i toppmenyen. */
+function Verktoy() {
+  return (
+    <>
+      <Ideknapp />
+      <Adminmeny />
+    </>
+  )
+}
+
 describe('plassene i toppmenyen', () => {
   function Side() {
     const [trykk, setTrykk] = useState(0)
@@ -145,7 +165,7 @@ describe('plassene i toppmenyen', () => {
     render(
       <Ramme>
         <ToppmenyKilde>
-          <Toppmeny meny={null} konto={null} theme="lyst" onToggleTheme={() => {}} />
+          <Toppmeny meny={null} konto={null} />
           <main>
             <Side />
           </main>
@@ -168,13 +188,26 @@ describe('plassene i toppmenyen', () => {
     render(
       <Ramme>
         <ToppmenyKilde>
-          <Toppmeny meny={null} konto={null} theme="moerkt" onToggleTheme={() => {}} />
+          <Toppmeny meny={null} verktoy={<Verktoy />} konto={null} />
         </ToppmenyKilde>
       </Ramme>,
     )
     const knapper = within(screen.getByRole('navigation', { name: 'Toppmeny' })).getAllByRole('button')
-    expect(knapper.map((k) => k.getAttribute('aria-label'))).toEqual(['Vis hurtigtaster', 'Bytt til lyst tema'])
+    expect(knapper.map((k) => k.getAttribute('aria-label'))).toEqual(['Idéer', 'Administrasjon'])
     for (const knapp of knapper) expect(knapp.querySelector('svg.ikon')).not.toBeNull()
+  })
+
+  it('viser ikke adminmenyen for andre enn administratorer', () => {
+    rolle.verdi = 'user'
+    render(
+      <Ramme>
+        <ToppmenyKilde>
+          <Toppmeny meny={null} verktoy={<Verktoy />} konto={null} />
+        </ToppmenyKilde>
+      </Ramme>,
+    )
+    const knapper = within(screen.getByRole('navigation', { name: 'Toppmeny' })).getAllByRole('button')
+    expect(knapper.map((k) => k.getAttribute('aria-label'))).toEqual(['Idéer'])
   })
 })
 
@@ -224,18 +257,32 @@ describe('fagsøkfeltet', () => {
   })
 })
 
+/** Menyen en knapp styrer. Den står skjult når den er lukket, og har da ikke noe navn å finne den på. */
+const panel = (knapp: HTMLElement) => document.getElementById(knapp.getAttribute('aria-controls')!)!
+
 describe('kontomenyen', () => {
+  /** Temaet og hurtigtastene slik appen holder dem, så bryterne kan prøves. */
+  function Konto() {
+    const [theme, setTheme] = useState<'lyst' | 'moerkt'>('lyst')
+    const { visible } = useShortcutVisibility()
+    return (
+      <>
+        <Kontomeny theme={theme} onToggleTheme={() => setTheme((t) => (t === 'lyst' ? 'moerkt' : 'lyst'))} />
+        <output>
+          {theme} {visible ? 'med' : 'uten'} hurtigtaster
+        </output>
+      </>
+    )
+  }
+
   function vis() {
     render(
       <Ramme>
-        <Kontomeny theme="lyst" onToggleTheme={() => {}} />
+        <Konto />
       </Ramme>,
     )
     return screen.getByRole('button', { name: 'Kontoen din – Anne Admin' })
   }
-
-  /** Menyen avataren styrer. Den står skjult når den er lukket, og har da ikke noe navn å finne den på. */
-  const panel = (knapp: HTMLElement) => document.getElementById(knapp.getAttribute('aria-controls')!)!
 
   it('åpnes fra avataren, er et lag mens den står åpen, og lukkes med Escape', async () => {
     const knapp = vis()
@@ -256,39 +303,59 @@ describe('kontomenyen', () => {
     expect(document.activeElement).toBe(knapp)
   })
 
-  it('har en prikk på avataren og på idéene når noen har kommentert noe nytt', async () => {
-    ideerMedNytt.antall = 2
-    try {
-      render(
-        <Ramme>
-          <Kontomeny theme="lyst" onToggleTheme={() => {}} />
-        </Ramme>,
-      )
-      const knapp = await screen.findByRole('button', { name: 'Kontoen din – Anne Admin (nye kommentarer på 2 idéer)' })
-      await userEvent.click(knapp)
-      const ideer = within(panel(knapp)).getByRole('button', { name: /Idéer/ })
-      expect(within(ideer).getByRole('img', { name: 'nye kommentarer på 2 idéer' })).toBeTruthy()
-    } finally {
-      ideerMedNytt.antall = 0
-    }
+  it('har bare profilen, preferansene og utloggingen', async () => {
+    const knapp = vis()
+    await userEvent.click(knapp)
+    const valg = within(panel(knapp)).getAllByRole('button')
+    expect(valg.map((v) => v.textContent)).toEqual(['Endre navn og profilbilde', 'Preferanser', 'Logg ut'])
   })
 
-  it('ser etter nye kommentarer igjen når fanen får fokus', async () => {
-    render(
-      <Ramme>
-        <Kontomeny theme="lyst" onToggleTheme={() => {}} />
-      </Ramme>,
-    )
-    const knapp = screen.getByRole('button', { name: 'Kontoen din – Anne Admin' })
-    ideerMedNytt.antall = 1
-    try {
-      await act(async () => {
-        window.dispatchEvent(new Event('focus'))
-      })
-      expect(knapp.getAttribute('aria-label')).toBe('Kontoen din – Anne Admin (nye kommentarer på én idé)')
-    } finally {
-      ideerMedNytt.antall = 0
-    }
+  it('folder ut preferansene med hurtigtastene og temaet, og de virker derfra', async () => {
+    const knapp = vis()
+    await userEvent.click(knapp)
+    const meny = panel(knapp)
+    const preferanser = within(meny).getByRole('button', { name: 'Preferanser' })
+    const skuff = document.getElementById(preferanser.getAttribute('aria-controls')!)!
+    expect(preferanser.getAttribute('aria-expanded')).toBe('false')
+    expect(skuff.hasAttribute('hidden')).toBe(true)
+
+    await userEvent.click(preferanser)
+    expect(preferanser.getAttribute('aria-expanded')).toBe('true')
+    expect(skuff.hasAttribute('hidden')).toBe(false)
+
+    const hurtigtaster = within(skuff).getByRole('switch', { name: 'Vis hurtigtaster' }) as HTMLInputElement
+    const tema = within(skuff).getByRole('switch', { name: 'Mørkt tema' }) as HTMLInputElement
+    expect([hurtigtaster.checked, tema.checked]).toEqual([false, false])
+    await userEvent.click(tema)
+    await userEvent.click(hurtigtaster)
+    expect([hurtigtaster.checked, tema.checked]).toEqual([true, true])
+    expect(screen.getByRole('status').textContent).toBe('moerkt med hurtigtaster')
+    // Bryterne er inni menyen: den står åpen.
+    expect(meny.hidden).toBe(false)
+
+    // Neste gang menyen åpnes, står skuffen lukket igjen.
+    await userEvent.keyboard('{Escape}')
+    await userEvent.click(knapp)
+    expect(preferanser.getAttribute('aria-expanded')).toBe('false')
+  })
+
+  it('lukkes når fokus tabuleres ut av den, også bakover forbi avataren', async () => {
+    const knapp = vis()
+    await userEvent.click(knapp)
+    const meny = panel(knapp)
+    await userEvent.tab({ shift: true })
+    expect(document.activeElement).toBe(knapp)
+    expect(meny.hidden).toBe(false)
+    await userEvent.tab({ shift: true })
+    expect(meny.hidden).toBe(true)
+    expect(meny.hasAttribute('data-lag')).toBe(false)
+  })
+
+  it('står åpen når noe i den som ikke tar fokus trykkes, som navnet', async () => {
+    const knapp = vis()
+    await userEvent.click(knapp)
+    await userEvent.click(screen.getByText('aadmin'))
+    expect(panel(knapp).hidden).toBe(false)
   })
 
   it('lukkes av et trykk utenfor', async () => {
@@ -298,19 +365,83 @@ describe('kontomenyen', () => {
     expect(panel(knapp).hidden).toBe(true)
   })
 
-  it('fører til profilen, brukerne og utloggingen', async () => {
+  it('fører til profilen og utloggingen', async () => {
     const knapp = vis()
-    await userEvent.click(knapp)
-    await userEvent.click(screen.getByRole('button', { name: /Brukere/ }))
-    expect(screen.getByText('Brukerlista')).toBeTruthy()
-    expect(panel(knapp).hidden).toBe(true)
-
     await userEvent.click(knapp)
     await userEvent.click(screen.getByRole('button', { name: /Endre navn og profilbilde/ }))
     expect(screen.getByText('Kontopanelet')).toBeTruthy()
+    expect(panel(knapp).hidden).toBe(true)
 
     await userEvent.click(knapp)
     await userEvent.click(screen.getByRole('button', { name: 'Logg ut' }))
     expect(loggUt).toHaveBeenCalledOnce()
+  })
+})
+
+describe('adminmenyen', () => {
+  it('fører til brukerne og datakildene, og er et eget lag', async () => {
+    render(
+      <Ramme>
+        <Adminmeny />
+      </Ramme>,
+    )
+    const knapp = screen.getByRole('button', { name: 'Administrasjon' })
+    await userEvent.click(knapp)
+    const meny = panel(knapp)
+    expect(meny.getAttribute('data-lag')).toBe('adminmeny')
+    expect(within(meny).getAllByRole('button').map((v) => v.textContent)).toEqual(['Brukere', 'Datakilder'])
+
+    await userEvent.click(within(meny).getByRole('button', { name: 'Brukere' }))
+    expect(screen.getByText('Brukerlista')).toBeTruthy()
+    expect(meny.hidden).toBe(true)
+
+    await userEvent.click(knapp)
+    await userEvent.click(within(meny).getByRole('button', { name: 'Datakilder' }))
+    expect(screen.getByText('Datakildene')).toBeTruthy()
+  })
+})
+
+describe('idéknappen', () => {
+  it('åpner idéene', async () => {
+    render(
+      <Ramme>
+        <Ideknapp />
+      </Ramme>,
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Idéer' }))
+    expect(screen.getByText('Idéene')).toBeTruthy()
+  })
+
+  it('har en prikk og antallet i navnet når noen har kommentert noe nytt', async () => {
+    ideerMedNytt.antall = 2
+    try {
+      const { container } = render(
+        <Ramme>
+          <Ideknapp />
+        </Ramme>,
+      )
+      expect(await screen.findByRole('button', { name: 'Idéer (nye kommentarer på 2 idéer)' })).toBeTruthy()
+      expect(container.querySelector('.nyprikk')).not.toBeNull()
+    } finally {
+      ideerMedNytt.antall = 0
+    }
+  })
+
+  it('ser etter nye kommentarer igjen når fanen får fokus', async () => {
+    render(
+      <Ramme>
+        <Ideknapp />
+      </Ramme>,
+    )
+    const knapp = screen.getByRole('button', { name: 'Idéer' })
+    ideerMedNytt.antall = 1
+    try {
+      await act(async () => {
+        window.dispatchEvent(new Event('focus'))
+      })
+      expect(knapp.getAttribute('aria-label')).toBe('Idéer (nye kommentarer på én idé)')
+    } finally {
+      ideerMedNytt.antall = 0
+    }
   })
 })

@@ -16,6 +16,8 @@ import { Sidemeny, sidemenyenErApen } from './components/Sidemeny'
 import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
 import { ruteAv } from './components/Kopibevis'
+import { Ideknapp } from './components/ideer/Ideknapp'
+import { Adminmeny } from './components/konto/Adminmeny'
 import { Kontomeny } from './components/konto/Kontomeny'
 import { Fagsok } from './components/sok/Fagsok'
 import { Sokeside } from './components/sok/Sokeside'
@@ -526,9 +528,13 @@ export default function App() {
               onGaaTil={gaaTilAdresse}
             />
           }
+          verktoy={
+            <>
+              <Ideknapp />
+              <Adminmeny />
+            </>
+          }
           konto={<Kontomeny theme={theme} onToggleTheme={toggle} />}
-          theme={theme}
-          onToggleTheme={toggle}
         />
 
         {/* Fortolkningens handling i toppmenyen. Stoffsiden og søkesiden
