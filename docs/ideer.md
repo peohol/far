@@ -13,7 +13,7 @@ OUSFAR, med hjerter og kommentartråder; de berører ikke den kliniske delen.
 | `src/components/ideer/` | Vinduet: lista, siden for én idé, skjemaet og tråden |
 | `src/styles/ideer.css` | Utseendet |
 
-Vinduet åpnes fra kontomenyen og bruker `Modallag`, med `tilbake` i hodet på
+Vinduet åpnes fra idéknappen i toppmenyen og bruker `Modallag`, med `tilbake` i hodet på
 sidene inni det.
 
 ## Hvem som får gjøre hva
@@ -45,7 +45,7 @@ som sett med tidspunktet tråden ble lest (`lest_kl` fra `idetraad()`), så en
 kommentar som kom imellom, forblir ny (`merk_ide_sett()`). Kontomenyen ser
 etter nytt når appen åpnes, når fanen får fokus og hvert femte minutt.
 Kommentarer fra andre etter det er nye: `ideoversikt()` teller dem per idé,
-`ideer_med_nytt()` teller idéene til prikken i kontomenyen, og `idetraad()`
+`ideer_med_nytt()` teller idéene til prikken på idéknappen, og `idetraad()`
 gir tidspunktet, så siden kan merke dem «Ny». Regelen står også i
 `erNyKommentar` i `modell.ts`; endres den ett sted, endres den begge.
 

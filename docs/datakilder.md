@@ -110,7 +110,7 @@ også når den siste ikke fikk dem oppgitt), og de siste endringene per kilde
 (200 som standard, høyst 1000), så en stor release i den ene kilden ikke
 skyver den andre ut.
 
-I appen: kontomenyen → «Datakilder» (bare for administratorer,
+I appen: adminmenyen → «Datakilder» (bare for administratorer,
 `src/components/konto/Datakilder.tsx`). Per kilde:
 
 - tilstanden (`src/datakilder/status.ts`, `vurderKilder`): **Feilet** når

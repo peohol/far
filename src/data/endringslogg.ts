@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.52.0',
+    dato: '2026-09-29',
+    sammendrag: 'Ryddigere toppmeny: egen knapp for idéer, egen adminmeny og preferansene i kontomenyen',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Idéene har fått sin egen knapp i toppmenyen, der hurtigtastene og temaet stod før. Prikken for nye kommentarer står på den knappen.',
+      'Administratorer har fått en egen adminmeny til venstre for profilbildet, med «Brukere» og «Datakilder».',
+      'Menyen under profilbildet har nå «Endre navn og profilbilde», «Preferanser» og «Logg ut». «Preferanser» folder ut brytere for å vise hurtigtaster og for mørkt tema.',
+      'Endringsloggen åpnes fra versjonen nederst til høyre, som nå har et klokkeikon. På mobil legger den seg over knappene nederst i stedet for å forsvinne.',
+    ],
+  },
+  {
     versjon: '1.51.2',
     dato: '2026-09-29',
     sammendrag: 'Ikonene er skarpe også når knappen står i ro',

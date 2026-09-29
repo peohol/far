@@ -8,6 +8,9 @@
    med kontrast: teksten holder samme lesbarhetskrav som resten av appen. */
 .versjonspille {
   position: fixed;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
   right: var(--rom-5);
   bottom: var(--rom-5);
   z-index: 10;
