@@ -12,19 +12,42 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.51.1',
-    dato: '2026-09-28',
-    sammendrag: 'Sammenslåtte stoffer har nå én faktisk fagsside og én adresse',
-    typer: ['Funksjonalitet', 'Design / layout'],
+    versjon: '1.52.0',
+    dato: '2026-09-29',
+    sammendrag: 'Stoffsidene handler om stoffet, og laboratorieanalyttene kobles til dem',
+    typer: ['Funksjonalitet'],
     omfang: 'Moderat omfang',
     punkter: [
-      'Metabolitter som ikke er egne legemidler, åpner nå bokstavelig talt samme fagsside og samme adresse som moderstoffet, i stedet for parallelle sider med samme innhold.',
-      'Stoffregisteret viser nå stoffet fagssiden handler om, ikke laboratoriets analyttnavn. Sumanalysene vises derfor som «Amitriptylin», «Venlafaksin» og «Risperidon», mens komponentene fortsatt står tydelig på selve siden.',
-      'Bupropion har nå fagssiden «Bupropion» selv om laboratorieanalytten HBUP måler hydroksybupropion. Siden forklarer forholdet og at referanseområdet gjelder bupropion.',
-      'Paliperidon vises som «Paliperidon» i stoffregisteret; analyttbetegnelsen hydroksyrisperidon holdes separat fra stoffnavnet.',
-      'Sum-analyser som kariprazin, fluoksetin og aripiprazol bruker moderstoffets navn som sidetittel; metabolittene står fortsatt som del av analysen.',
-      'THC og THC-syre står på én side som heter «THC og THC-syre», med separate fortolkningsregler for THC i serum og THC-syre i urin på samme side.',
-      'EtG og EtS står på én side som heter «Etanol». Sekundære analyttkoder og gamle adresser fører til den kanoniske siden.',
+      'Hver stoffside har nå en fast adresse etter stoffets navn, for eksempel «#/stoff/bupropion», i stedet for etter laboratoriets analysekode. Gamle bokmerker til en analysekode fører fortsatt til riktig stoff.',
+      'Stoffregisteret viser bare stoffer, med analysekodene som tilleggsinformasjon.',
+      'Søket i kunnskapsbasen finner stoffet også på analysekoden og på navnet til det laboratoriet måler: «HBUP» og «hydroksybupropion» finner begge Bupropion.',
+      'Stoffsiden forklarer hva hver analyse måler, for eksempel at HBUP måler hydroksybupropion, en metabolitt av bupropion, og lenker til andre stoffer en sumanalyse omfatter.',
+      'Et stoff med analyser i flere fortolkningsmoduler, som THC i serum og THC-syre i urin, får én regelseksjon per modul på samme side.',
+      'O-desmetylvenlafaksin har fått sin egen side, og hydroksyrisperidon finnes nå under Paliperidon.',
+      'Fortolkningen og kommentarene er uendret.',
+    ],
+  },
+  {
+    versjon: '1.51.2',
+    dato: '2026-09-29',
+    sammendrag: 'Ikonene er skarpe også når knappen står i ro',
+    typer: ['Design / layout'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ikoner som lukkekrysset og blyanten ble litt uskarpe etter den korte animasjonen og ble bare skarpe igjen når pekeren var over knappen. Nå er de skarpe hele tiden, i hele appen.',
+      'Ikonet for å rotere et bilde snurrer nå en hel runde i stedet for en åttendedels runde, så det ender der det startet.',
+    ],
+  },
+  {
+    versjon: '1.51.1',
+    dato: '2026-09-29',
+    sammendrag: 'Kategoriene i stoffregisteret har jevn luft og kan trykkes i hele feltet',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Det fargede feltet rundt en kategori i stoffregisteret har like mye luft over, under og på sidene av navnet.',
+      'Luften mellom kategoriene ligger mellom feltene, ikke nederst i dem.',
+      'Hele det fargede feltet åpner kategorien, ikke bare linja med navnet.',
     ],
   },
   {

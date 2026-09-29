@@ -114,10 +114,14 @@
 
 /* --- Animasjon --------------------------------------------------------------
    Spilles én gang ved hover eller fokus og første gang ikonet kommer i
-   bildet (se `Ikon`). Aldri kontinuerlig. */
+   bildet (se `Ikon`). Aldri kontinuerlig.
+
+   Ingen `animation-fill-mode`: en ferdig animasjon som holdt sluttverdien,
+   lot nettleseren tegne delen som et bilde i stedet for som vektor, og ikonet
+   ble uskarpt i hvile. Derfor slutter hver animasjon der tegningen står
+   (eller i en vinkel der formen ser lik ut), og ingenting blir holdt igjen. */
 .ikon[data-spiller] [data-anim] {
   animation-timing-function: var(--kurve-ikon);
-  animation-fill-mode: both;
   transform-box: fill-box;
   transform-origin: center;
 }
@@ -126,6 +130,7 @@
 .ikon[data-spiller] [data-anim='spinm60'] { animation-name: o-spinm60; animation-duration: 900ms; }
 .ikon[data-spiller] [data-anim='spin240'] { animation-name: o-spin240; animation-duration: 1100ms; transform-box: view-box; }
 .ikon[data-spiller] [data-anim='spinback'] { animation-name: o-spinback; animation-duration: 800ms; transform-box: view-box; }
+.ikon[data-spiller] [data-anim='spin360'] { animation-name: o-spin360; animation-duration: 900ms; transform-box: view-box; }
 .ikon[data-spiller] [data-anim='rayL'] { animation-name: o-rayL; animation-duration: 900ms; }
 .ikon[data-spiller] [data-anim='rayS'] { animation-name: o-rayS; animation-duration: 900ms; }
 .ikon[data-spiller] [data-anim='wink'] { animation-name: o-wink; animation-duration: 520ms; }
@@ -150,6 +155,7 @@
 @keyframes o-spinm60 { from { transform: rotate(0); } to { transform: rotate(-60deg); } }
 @keyframes o-spin240 { from { transform: rotate(0); } to { transform: rotate(240deg); } }
 @keyframes o-spinback { from { transform: rotate(0); } to { transform: rotate(-360deg); } }
+@keyframes o-spin360 { from { transform: rotate(0); } to { transform: rotate(360deg); } }
 @keyframes o-rayL { 0%, 100% { stroke-dasharray: 1 1; } 50% { stroke-dasharray: 0.42 1; } }
 @keyframes o-rayS { 0%, 100% { stroke-dasharray: 0.42 1; } 50% { stroke-dasharray: 1 1; } }
 @keyframes o-wink { 0%, 100% { transform: scaleY(1); } 45%, 60% { transform: scaleY(0.12); } }

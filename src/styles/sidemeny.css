@@ -118,7 +118,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: var(--rom-1);
+  gap: var(--rom-2);
   min-height: 0;
   margin: 0;
   overflow-y: auto;
@@ -127,7 +127,9 @@
 }
 
 /* --- Én kategori --------------------------------------------------------------
-   Skuffen står på den hevede flaten når den er åpen. */
+   Skuffen står på den hevede flaten når den er åpen. Luften mellom kategoriene
+   kommer fra `gap` i lista, ikke fra polstring i skuffen, så feltet som farges
+   har lik polstring rundt tittelen i alle retninger. */
 .menyskuff {
   border-radius: var(--runding-underkort);
   transition: background-color var(--fart-rask) var(--kurve);
@@ -140,20 +142,19 @@
 
 .menyskuff__hode {
   display: flex;
-  align-items: center;
-  gap: var(--rom-3);
-  min-height: var(--hoyde-felt);
-  padding: var(--rom-1) var(--rom-2);
 }
 
+/* Knappen fyller hele hodet, så hele feltet som farges ved hover kan trykkes,
+   og ikke bare linja med navnet. */
 .menyskuff__tittel {
   display: flex;
   flex: 1;
   align-items: center;
   gap: var(--rom-3);
   min-width: 0;
-  padding: 0;
+  padding: var(--rom-4);
   text-align: left;
+  border-radius: var(--runding-underkort);
   background: transparent;
   border: 0;
   cursor: pointer;
@@ -198,13 +199,22 @@
 }
 
 /* Lukket innhold settes usynlig når glidningen er over, så det heller ikke nås
-   med tabulator eller skjermleser. Innholdet rykkes litt inn under tittelen. */
+   med tabulator eller skjermleser. Innholdet rykkes litt inn under tittelen.
+
+   Luften under innholdet er et eget element i stedet for polstring: polstring
+   ville blitt stående igjen under tittelen også når skuffen er lukket. */
 .menyskuff__inner {
   overflow: hidden;
   min-height: 0;
-  padding: 0 var(--rom-2) var(--rom-3) var(--rom-5);
+  padding: 0 var(--rom-2) 0 var(--rom-5);
   visibility: hidden;
   transition: visibility 0s linear var(--fart-glid);
+}
+
+.menyskuff__inner::after {
+  content: '';
+  display: block;
+  height: var(--rom-3);
 }
 
 .menyskuff[data-apen='ja'] .menyskuff__inner {
