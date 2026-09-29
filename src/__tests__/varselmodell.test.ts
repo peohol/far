@@ -108,6 +108,9 @@ describe('endringsloggen', () => {
     expect(startstatus(logg)).toEqual({ fra: '1.2.0', lest: [] })
     expect(endringsvarsler(logg, { fra: '1.0.0', lest: [] }, NAA).map((v) => v.endring.versjon)).toEqual(['1.3.0', '1.2.0', '1.1.0'])
     expect(merkEndringerLest(logg, { fra: '1.0.0', lest: [] }, ['1.1.0'], NAA)).toEqual({ fra: '1.1.1', lest: [] })
+    // En endring i fortolkningen varsles alltid.
+    const begge = [endring('1.4.0', '2026-09-29', { utenVarsel: true, endrerFortolkning: true }), ...LOGG]
+    expect(endringsvarsler(begge, { fra: '1.3.0', lest: [] }, NAA).map((v) => [v.endring.versjon, v.kategori])).toEqual([['1.4.0', 'fortolkning']])
   })
 
   it('leser bare en gyldig status', () => {

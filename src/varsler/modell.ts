@@ -121,9 +121,12 @@ export function lesEndringsloggstatus(verdi: unknown): Endringsloggstatus | null
   return { fra: verdi.fra, lest }
 }
 
-/** Føringer uten `utenVarsel` er varsler; de andre merkes ikke i appen. */
+/**
+ * Føringer uten `utenVarsel` er varsler; de andre merkes ikke i appen. En
+ * endring i fortolkningen varsles alltid, så den vinner om begge står.
+ */
 function varsles(endring: Endring): boolean {
-  return !endring.utenVarsel
+  return !endring.utenVarsel || endring.endrerFortolkning === true
 }
 
 /**

@@ -209,7 +209,8 @@ describe('vinduet', () => {
     expect(within(within(vindu).getByRole('region', { name: 'Tidligere' })).getByText(/kommenterte en idé du har kommentert/)).toBeTruthy()
 
     await bruker.click(within(vindu).getByRole('button', { name: 'Merk alle som lest' }))
-    expect(api.merkVarslerLest).toHaveBeenLastCalledWith(null, LISTE.lest_kl)
+    // Bare det brukeren ser: favorittene er av og står urørt.
+    expect(api.merkVarslerLest).toHaveBeenLastCalledWith(['v-ide'], LISTE.lest_kl)
     expect(api.lagreEndringsloggstatus).toHaveBeenLastCalledWith({ fra: '2.0.0', lest: ['2.1.0'] })
     expect(within(vindu).queryByRole('region', { name: 'Nye' })).toBeNull()
     expect((within(vindu).getByRole('button', { name: 'Merk alle som lest' }) as HTMLButtonElement).disabled).toBe(true)

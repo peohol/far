@@ -22,6 +22,7 @@ export const ENDRINGSLOGG: Endring[] = [
       'Mange endringer på samme side før du har lest varselet, blir ett samlet varsel.',
       'Varselet kommer først når endringene er publisert, ikke mens noen redigerer.',
       'Varslene er av til du slår dem på under «Varselinnstillinger» (tannhjulet i varselvinduet).',
+      '«Merk alle som lest» rører ikke lenger varsler i kategorier du har slått av, og uleste varsler blir ikke lenger borte når du har svært mange leste.',
     ],
   },
   {

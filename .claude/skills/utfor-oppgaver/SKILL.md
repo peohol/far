@@ -91,8 +91,9 @@ veien til «Utført». Funksjonen gir oppgaven nummeret sitt og lagrer versjonen
 endringsloggen, der knappen «Se i endringsloggen» leder.
 
 ```sql
--- Oppgaven «<tittel>» er utført i versjon <x.y.z>.
-select public.fullfor_oppgave('<oppgave-id>', '<x.y.z>');
+-- Oppgaven «<tittel>» er utført i versjon <x.y.z>. Oppgavene finnes bare i
+-- produksjon; i en ny database gjør migrasjonen ingenting.
+select public.fullfor_oppgave(o.id, '<x.y.z>') from public.oppgaver o where o.id = '<oppgave-id>';
 ```
 
 - Én migrering kan merke flere oppgaver.
@@ -101,8 +102,9 @@ select public.fullfor_oppgave('<oppgave-id>', '<x.y.z>');
 - Legg deretter fila i `supabase/migrations/` med versjonen prosjektet
   registrerte (`list_migrations`), uten linjeskift til slutt, så den er lik
   byte for byte. Den går i en egen liten PR, med en føring som har
-  `utenVarsel: true`. Testdatabasen hopper over slike filer, siden oppgavene
-  bare finnes i produksjon.
+  `utenVarsel: true`.
+- Finnes ikke oppgaven (feil ID), gjør migrasjonen ingenting; det viser
+  seg når nummeret leses tilbake nedenfor.
 - Funksjonen stopper hvis oppgaven ikke er `klar`, for eksempel hvis
   administratoren har flyttet den tilbake i mellomtiden. Si det, og merk den
   ikke.

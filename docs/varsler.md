@@ -87,7 +87,7 @@ Vinduet viser de uleste under «Nye» og resten under «Tidligere». Et varsel
 leder dit det gjelder, og er lest når man går dit: idéen (`visIde`, som
 `Ideknapp` hører etter), føringen i endringsloggen (`visEndringslogg`) eller
 reglene på stoffsiden. «Merk som lest» og «Merk alle som lest» gjør det
-samme uten å gå noe sted. Tannhjulet åpner innstillingene, der de
+samme uten å gå noe sted; «Merk alle som lest» gjelder bare kategoriene brukeren har slått på. Tannhjulet åpner innstillingene, der de
 obligatoriske kategoriene står låst.
 
 ## Favorittene

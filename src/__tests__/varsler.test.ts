@@ -251,6 +251,23 @@ describe('varslene', () => {
     expect((await omIde(ada, ide))[0]!.lest_kl).toBeNull()
   })
 
+  it('tar med alle uleste også når det er flere enn 200 leste', async () => {
+    const ny = await opprettBruker(db, { brukernavn: 'mange', fornavn: 'Mia', etternavn: 'Mange', rolle: 'user' })
+    await db.query(
+      `insert into public.varsler (mottaker_id, kategori, gruppe, hendelser, oppdatert_kl, lest_kl)
+       select $1, 'fortolkning', 'lest:' || n, '[{"kl": "x", "av": null}]', now() - interval '1 hour' + n * interval '1 second', now()
+       from generate_series(1, 210) n`,
+      [ny],
+    )
+    await db.query(
+      `insert into public.varsler (mottaker_id, kategori, gruppe, hendelser, oppdatert_kl)
+       values ($1, 'fortolkning', 'ulest', '[{"kl": "x", "av": null}]', now() - interval '2 days')`,
+      [ny],
+    )
+    expect(await uleste(ny)).toEqual({ fortolkning: 1 })
+    expect((await varsler(ny)).filter((v) => v.lest_kl === null)).toHaveLength(1)
+  })
+
   it('rydder bort leste varsler etter 30 dager', async () => {
     const ide = await nyIde(ada)
     await nyKommentar(bo, ide)

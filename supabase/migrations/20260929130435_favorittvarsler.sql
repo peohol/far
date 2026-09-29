@@ -132,4 +132,41 @@ as $$
   )
 $$;
 
+-- Varslene til den innloggede: alle uleste, og de leste fra de siste 30
+-- dagene. De uleste tas med først, så taket på 200 aldri skjuler et ulest
+-- varsel (eller tallet på bjella, som telles herfra) bak leste.
+create or replace function public.mine_varsler()
+returns jsonb
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select jsonb_build_object(
+    'lest_kl', now(),
+    'varsler', coalesce((
+      select jsonb_agg(jsonb_build_object(
+          'id', v.id,
+          'kategori', v.kategori,
+          'ide', (select jsonb_build_object('id', i.id, 'tittel', i.tittel, 'forfatter_id', i.forfatter_id)
+                  from public.ideer i where i.id = v.ide_id),
+          'hendelser', v.hendelser,
+          'opprettet_kl', v.opprettet_kl,
+          'oppdatert_kl', v.oppdatert_kl,
+          'lest_kl', v.lest_kl
+        ) order by v.oppdatert_kl desc, v.id)
+      from (
+        select v.id, v.kategori, v.ide_id, v.opprettet_kl, v.oppdatert_kl, v.lest_kl,
+               intern.varselhendelser(v.hendelser) as hendelser
+        from public.varsler v
+        where v.mottaker_id = (select auth.uid())
+          and (v.lest_kl is null or v.lest_kl > now() - intern.varselfrist())
+        order by v.lest_kl is not null, v.oppdatert_kl desc, v.id
+        limit 200
+      ) v
+      where jsonb_array_length(v.hendelser) > 0
+    ), '[]'::jsonb)
+  )
+$$;
+
 revoke all on all functions in schema intern from public, anon, authenticated, service_role;
