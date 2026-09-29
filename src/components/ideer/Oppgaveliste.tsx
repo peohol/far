@@ -13,8 +13,8 @@ import { Tidspunkt } from './Smadeler'
 export const SKUFF_UTFORTE = 'utforte'
 
 /**
- * Oppgavene under de tre statusene med arbeid igjen, og de utførte i en
- * lukket skuff nederst. Hver utførte oppgave har nummeret sitt og en knapp til
+ * Oppgavene under statusene med arbeid igjen, og de utførte i en lukket skuff
+ * nederst. Hver oppgave har nummeret sitt, og hver utførte en knapp til
  * føringen i endringsloggen.
  */
 export function Oppgaveliste({
@@ -106,22 +106,14 @@ function Oppgavekort({ oppgave, onApne }: { oppgave: Oppgave; onApne: () => void
   return (
     <button type="button" className="idekort" data-oppgave={oppgave.id} data-ih="" onClick={onApne}>
       <span className="idekort__tittel">
-        {utfort && oppgave.nummer !== null && <Oppgavekode nummer={oppgave.nummer} />}
+        {oppgave.nummer !== null && <Oppgavekode nummer={oppgave.nummer} />}
         {oppgave.tittel}
       </span>
       <span className="idekort__meta">
         <Forfatterbilde id={oppgave.forfatter_id} storrelse="mini" />
         <span className="idekort__navn">{navn}</span>
         <span aria-hidden="true">·</span>
-        {utfort && oppgave.utfort_kl ? (
-          <span>
-            utført <Tidspunkt iso={oppgave.utfort_kl} />
-          </span>
-        ) : (
-          <span>
-            overført <Tidspunkt iso={oppgave.overfort_kl} />
-          </span>
-        )}
+        <Hendelse oppgave={oppgave} />
         <Kategorimerke kategori={oppgave.kategori} />
         {!utfort && !oppgave.har_prompt && <span className="idekort__slettes">Ingen prompt ennå</span>}
       </span>
@@ -129,5 +121,20 @@ function Oppgavekort({ oppgave, onApne }: { oppgave: Oppgave; onApne: () => void
         <Ikon navn="chev" />
       </span>
     </button>
+  )
+}
+
+/** Det siste som skjedde med oppgaven, med tiden: utført, tatt av en agent eller overført. */
+function Hendelse({ oppgave }: { oppgave: Oppgave }) {
+  const [hva, iso] =
+    oppgave.status === 'utfort' && oppgave.utfort_kl
+      ? ['utført', oppgave.utfort_kl]
+      : oppgave.status === 'haandteres' && oppgave.tatt_kl
+        ? ['tatt av en agent', oppgave.tatt_kl]
+        : ['overført', oppgave.overfort_kl]
+  return (
+    <span>
+      {hva} <Tidspunkt iso={iso} />
+    </span>
   )
 }

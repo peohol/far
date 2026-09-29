@@ -16,7 +16,7 @@ export interface Oppgave {
   kategori: Idekategori
   forfatter_id: string
   status: Oppgavestatus
-  /** Settes når oppgaven er utført, og vises som «OPG-001». */
+  /** Gis når oppgaven overføres, og vises som «OPG-001». */
   nummer: number | null
   /** Versjonen i endringsloggen der det står hva som ble gjort. */
   endringslogg: string | null
@@ -24,6 +24,8 @@ export interface Oppgave {
   overfort_kl: string
   endret_kl: string | null
   klar_kl: string | null
+  /** Når en agent tok oppgaven. */
+  tatt_kl: string | null
   utfort_kl: string | null
 }
 
@@ -32,7 +34,7 @@ export interface Oppgavedetaljer extends Oppgave {
 }
 
 /** Statusene som er arbeid som gjenstår, i den rekkefølgen lista viser dem. */
-export const AKTIVE_STATUSER = ['ikke_paabegynt', 'under_arbeid', 'klar'] as const satisfies readonly Oppgavestatus[]
+export const AKTIVE_STATUSER = ['ikke_paabegynt', 'under_arbeid', 'klar', 'haandteres'] as const satisfies readonly Oppgavestatus[]
 
 /** Lengste prompt. Samme grense som databasen setter. */
 export const PROMPT_MEST = 50_000
@@ -55,6 +57,7 @@ function lesOppgaverad(rad: unknown): Oppgave | null {
     overfort_kl: tekst(rad.overfort_kl),
     endret_kl: tekstEllerNull(rad.endret_kl),
     klar_kl: tekstEllerNull(rad.klar_kl),
+    tatt_kl: tekstEllerNull(rad.tatt_kl),
     utfort_kl: tekstEllerNull(rad.utfort_kl),
   }
 }
@@ -71,7 +74,7 @@ export function lesOppgave(data: unknown): Oppgavedetaljer | null {
 }
 
 export interface Oppgavegrupper {
-  /** De tre statusene med arbeid igjen, også de uten oppgaver. */
+  /** Statusene med arbeid igjen, også de uten oppgaver. */
   aktive: { status: (typeof AKTIVE_STATUSER)[number]; oppgaver: Oppgave[] }[]
   /** De utførte, de sist utførte først. */
   utforte: Oppgave[]
