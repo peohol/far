@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.51.1',
+    versjon: '1.51.2',
     dato: '2026-09-29',
     sammendrag: 'Ikonene er skarpe også når knappen står i ro',
     typer: ['Design / layout'],
@@ -20,6 +20,18 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Ikoner som lukkekrysset og blyanten ble litt uskarpe etter den korte animasjonen og ble bare skarpe igjen når pekeren var over knappen. Nå er de skarpe hele tiden, i hele appen.',
       'Ikonet for å rotere et bilde snurrer nå en hel runde i stedet for en åttendedels runde, så det ender der det startet.',
+    ],
+  },
+  {
+    versjon: '1.51.1',
+    dato: '2026-09-29',
+    sammendrag: 'Kategoriene i stoffregisteret har jevn luft og kan trykkes i hele feltet',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Det fargede feltet rundt en kategori i stoffregisteret har like mye luft over, under og på sidene av navnet.',
+      'Luften mellom kategoriene ligger mellom feltene, ikke nederst i dem.',
+      'Hele det fargede feltet åpner kategorien, ikke bare linja med navnet.',
     ],
   },
   {
