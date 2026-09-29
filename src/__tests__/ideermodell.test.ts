@@ -5,7 +5,12 @@
 import { describe, expect, it } from 'vitest'
 import type { Profil } from '@delt/profil'
 import {
+  ARKIVFRIST_DAGER,
   STANDARDSORTERING,
+  dagerTilSletting,
+  idetilstand,
+  oppgavekode,
+  slettesKl,
   andrevalg,
   byggTraad,
   erNyKommentar,
@@ -37,7 +42,8 @@ function ide(id: string, forfatter: string, kategori: Ide['kategori'], opprettet
     endret_kl: null,
     hjerter: 0,
     mitt_hjerte: false,
-    status: null,
+    arkivert_kl: null,
+    oppgave: null,
     kommentarer: 0,
     nye_kommentarer: 0,
   }
@@ -157,11 +163,34 @@ describe('lesingen', () => {
   })
 })
 
-describe('status og det nye', () => {
-  it('leser statusen og de nye kommentarene, og godtar ingen ukjent status', () => {
-    const rad = { id: 'x', forfatter_id: 'u-ada', kategori: 'fag', tittel: 'T', opprettet_kl: '2026-09-27T10:00:00Z', kommentarer: 3 }
-    expect(lesIdeoversikt([{ ...rad, status: 'under_arbeid', nye_kommentarer: 2 }])[0]).toMatchObject({ status: 'under_arbeid', nye_kommentarer: 2 })
-    expect(lesIdeoversikt([{ ...rad, status: 'avvist' }])[0]).toMatchObject({ status: null, nye_kommentarer: 0 })
+describe('arkivet, oppgaven og det nye', () => {
+  const rad = { id: 'x', forfatter_id: 'u-ada', kategori: 'fag', tittel: 'T', opprettet_kl: '2026-09-27T10:00:00Z', kommentarer: 3 }
+
+  it('leser arkivtiden, oppgaven og de nye kommentarene, og godtar ingen ukjent oppgavestatus', () => {
+    const [arkivert] = lesIdeoversikt([{ ...rad, arkivert_kl: '2026-09-28T10:00:00Z', oppgave: null, nye_kommentarer: 2 }])
+    expect(arkivert).toMatchObject({ arkivert_kl: '2026-09-28T10:00:00Z', oppgave: null, nye_kommentarer: 2 })
+    expect(idetilstand(arkivert!)).toBe('arkivert')
+
+    const [overfort] = lesIdeoversikt([{ ...rad, oppgave: { id: 'o1', status: 'utfort', nummer: 7 } }])
+    expect(overfort!.oppgave).toEqual({ id: 'o1', status: 'utfort', nummer: 7 })
+    expect(idetilstand(overfort!)).toBe('overfort')
+
+    const [ukjent] = lesIdeoversikt([{ ...rad, oppgave: { id: 'o1', status: 'avvist' } }])
+    expect(ukjent).toMatchObject({ arkivert_kl: null, oppgave: null, nye_kommentarer: 0 })
+    expect(idetilstand(ukjent!)).toBe('apen')
+  })
+
+  it('regner ut når en arkivert idé slettes', () => {
+    const arkivert = '2026-09-01T10:00:00Z'
+    expect(slettesKl(arkivert).toISOString()).toBe('2026-10-31T10:00:00.000Z')
+    expect(dagerTilSletting(arkivert, new Date('2026-09-01T10:00:00Z'))).toBe(ARKIVFRIST_DAGER)
+    expect(dagerTilSletting(arkivert, new Date('2026-10-30T12:00:00Z'))).toBe(1)
+    expect(dagerTilSletting(arkivert, new Date('2026-11-05T12:00:00Z'))).toBe(0)
+  })
+
+  it('skriver nummeret til en utført oppgave med tre sifre', () => {
+    expect(oppgavekode(7)).toBe('OPG-007')
+    expect(oppgavekode(1234)).toBe('OPG-1234')
   })
 
   it('regner kommentarer fra andre etter forrige besøk som nye', () => {

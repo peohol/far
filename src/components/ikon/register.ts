@@ -751,6 +751,38 @@ const REGISTER = {
       G([P('M10.5 8 6.5 12l4 4', 'l', 'i-ink'), P('M7 12h6.5a4 4 0 0 1 4 4v.5', 'l', 'i-ink')], 'bumpL'),
     ],
   },
+  // Tegnet i OUSFAR for planlagte oppgaver og arkivet, i samme stil som resten av registeret.
+  oppgaver: {
+    vb: 24,
+    parts: [
+      R(4.5, 4.5, 15, 17, 2.5, 'f1', 'accent'),
+      R(8.5, 2.8, 7, 3.6, 1.2, 'f2', 'paper'),
+      P('M8 12l1.6 1.6L12.5 10.7', 'l', 'i-ink', 'pop'),
+      P('M8 17h8M14.5 12h1.5', 'l', 'i-ink'),
+    ],
+  },
+  // Idéer og planlagte oppgaver sammen: lyspæren fra `idea` i mindre størrelse
+  // foran utklippstavla, som har et hakk rundt pæren så de ikke går i hverandre.
+  ideoppgaver: {
+    vb: 24,
+    parts: [
+      P('M12.64 6.5H19.3a2.2 2.2 0 0 1 2.2 2.2V19.3a2.2 2.2 0 0 1-2.2 2.2H11.2a2.2 2.2 0 0 1-2.2-2.2V11.86A6 6 0 0 0 12.64 6.5z', 'f1', 'accent'),
+      R(13.5, 5, 5, 3, 1, 'f2', 'paper'),
+      P('M13 13l1.4 1.4 2.8-2.8', 'l', 'i-ink', 'pop'),
+      P('M13 18h5.5', 'l', 'i-ink'),
+      P('M6.64 1.5a4.84 4.84 0 0 0-2.89 8.74c.62.47.94 1.09.94 1.79v.55h3.9v-.55c0-.7.31-1.33.94-1.79A4.84 4.84 0 0 0 6.64 1.5z', 'f1', 'warn'),
+      C(6.64, 6.34, 1.87, 'f2', 'warn', 'flash'),
+      P('M4.85 14.7h3.6M5.55 16.5h2.2', 'l', 'i-ink'),
+    ],
+  },
+  arkiv: {
+    vb: 24,
+    parts: [
+      P('M5 9.5v8.5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9.5z', 'f1', 'glass'),
+      G([R(3.5, 4.5, 17, 5, 1.5, 'f2', 'glass')], 'pop'),
+      P('M10 13.5h4', 'l', 'i-ink'),
+    ],
+  },
   trash: {
     vb: 24,
     ga: 'shake',

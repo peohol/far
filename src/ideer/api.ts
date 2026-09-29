@@ -13,10 +13,10 @@ import {
   lesSortering,
   type Ide,
   type Idekategori,
-  type Idestatus,
   type Idetraad,
   type Sortering,
 } from './modell'
+import { lesOppgave, lesOppgaveoversikt, type Oppgave, type Oppgavedetaljer } from './oppgaver'
 
 const FEIL = 'Noe gikk galt. Prøv igjen.'
 
@@ -49,9 +49,50 @@ export async function hentIdeerMedNytt(): Promise<number> {
   return typeof antall === 'number' ? antall : 0
 }
 
-/** Gir idéen status, eller fjerner den. Databasen avviser andre enn administratorer. */
-export async function settIdestatus(id: string, status: Idestatus | null): Promise<void> {
-  sjekk(await klient().rpc('sett_idestatus', { ide: id, status }))
+/* --- Arkivet og oppgavene: databasen avviser andre enn administratorer ------- */
+
+/** «Ikke aktuelt»: idéen legges i arkivet. */
+export async function arkiverIde(id: string): Promise<void> {
+  sjekk(await klient().rpc('arkiver_ide', { ide: id }))
+}
+
+/** Henter idéen tilbake fra arkivet. */
+export async function gjenopprettIde(id: string): Promise<void> {
+  sjekk(await klient().rpc('gjenopprett_ide', { ide: id }))
+}
+
+/** Sletter idéer som har stått i arkivet lenger enn fristen. */
+export async function ryddIdearkiv(): Promise<void> {
+  sjekk(await klient().rpc('rydd_idearkiv'))
+}
+
+/** Gjør idéen til en planlagt oppgave og gir ID-en til oppgaven. */
+export async function overforIde(id: string): Promise<string> {
+  const oppgave = sjekk(await klient().rpc('overfor_ide', { ide: id }))
+  if (typeof oppgave !== 'string') throw new Error(FEIL)
+  return oppgave
+}
+
+/** Flytter oppgaven tilbake til idélista. */
+export async function flyttOppgaveTilbake(id: string): Promise<void> {
+  sjekk(await klient().rpc('flytt_oppgave_tilbake', { oppgave: id }))
+}
+
+export async function hentOppgaver(): Promise<Oppgave[]> {
+  return lesOppgaveoversikt(sjekk(await klient().rpc('oppgaveoversikt')))
+}
+
+export async function hentOppgave(id: string): Promise<Oppgavedetaljer | null> {
+  return lesOppgave(sjekk(await klient().rpc('oppgave', { oppgave: id })))
+}
+
+export async function lagreOppgaveprompt(id: string, prompt: string): Promise<void> {
+  sjekk(await klient().rpc('lagre_oppgaveprompt', { oppgave: id, prompt }))
+}
+
+/** Klar til implementering, eller tilbake til under arbeid. */
+export async function settOppgaveKlar(id: string, klar: boolean): Promise<void> {
+  sjekk(await klient().rpc('sett_oppgave_klar', { oppgave: id, klar }))
 }
 
 export interface Ideinnhold {

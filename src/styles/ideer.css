@@ -618,8 +618,9 @@
   margin: 0;
 }
 
-/* Nøytralt merke med en farget prikk, så statusen ikke leses som en
-   kategori eller en klinisk vurdering. */
+/* Statusen til en planlagt oppgave: et nøytralt merke med en farget prikk —
+   rød, gul og grønn for arbeidet som gjenstår, aksent for det utførte.
+   Teksten sier alltid det samme som fargen. */
 .statusmerke {
   --status: var(--linje-kontroll);
   display: inline-flex;
@@ -635,28 +636,36 @@
   border-radius: var(--runding-pille);
 }
 
-.statusmerke::before {
+.statusmerke::before,
+.statusprikk {
   content: '';
+  flex: none;
   width: 0.5em;
   height: 0.5em;
   background: var(--status);
   border-radius: 50%;
 }
 
-.statusmerke[data-status='planlagt'] {
-  --status: var(--merke-design);
+.statusprikk {
+  --status: var(--linje-kontroll);
+  width: 0.625rem;
+  height: 0.625rem;
 }
 
-.statusmerke[data-status='under_arbeid'] {
-  --status: var(--info);
+:is(.statusmerke, .statusprikk)[data-status='ikke_paabegynt'] {
+  --status: var(--alvorlig);
 }
 
-.statusmerke[data-status='gjennomfort'] {
+:is(.statusmerke, .statusprikk)[data-status='under_arbeid'] {
+  --status: var(--toksisk);
+}
+
+:is(.statusmerke, .statusprikk)[data-status='klar'] {
+  --status: var(--referanse);
+}
+
+:is(.statusmerke, .statusprikk)[data-status='utfort'] {
   --status: var(--aksent);
-}
-
-.statusmerke[data-status='ikke_aktuelt'] {
-  color: var(--blekk-dempet);
 }
 
 .idekort__meta .statusmerke {
@@ -684,4 +693,212 @@
   color: var(--aksent);
   background: var(--aksent-flate);
   border-radius: var(--runding-pille);
+}
+
+/* --- Arkivet, de overførte og de utførte ------------------------------------ */
+
+/* En trekkspillskuff nederst i laget: lukket er den en rad med hårlinje over. */
+.ideskuff {
+  display: flex;
+  flex-direction: column;
+  border-top: var(--kant) solid var(--linje);
+}
+
+.ideskuff__hode {
+  margin: 0;
+  font: inherit;
+}
+
+.ideskuff__knapp {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  width: 100%;
+  min-height: var(--hoyde-felt);
+  padding: var(--rom-3) var(--rom-1);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-style: italic;
+  text-align: left;
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: color var(--fart-rask) var(--kurve);
+}
+
+.ideskuff__knapp:hover,
+.ideskuff[data-apen] .ideskuff__knapp {
+  color: var(--blekk);
+}
+
+.ideskuff__knapp .idegruppe__antall {
+  margin-left: auto;
+}
+
+.ideskuff__pil {
+  display: grid;
+  place-items: center;
+  font-size: var(--tekst-liten);
+  transition: transform var(--fart-glid) var(--kurve);
+}
+
+.ideskuff[data-apen] .ideskuff__pil {
+  transform: rotate(90deg);
+}
+
+.ideskuff__kropp {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--fart-glid) var(--kurve);
+}
+
+.ideskuff[data-apen] > .ideskuff__kropp {
+  grid-template-rows: 1fr;
+}
+
+.ideskuff:not([data-apen]) > .ideskuff__kropp,
+.ideskuff__kropp[data-glir] {
+  overflow: hidden;
+}
+
+.ideskuff__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  min-height: 0;
+  padding: var(--rom-1) 0 var(--rom-3);
+}
+
+.ideskuff__forklaring,
+.idegruppe__tom {
+  margin: 0;
+  padding-inline: var(--rom-1);
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.idekort__slettes {
+  font-style: italic;
+}
+
+/* En merknad øverst på en frosset idé eller en utført oppgave, med handlingene til høyre. */
+.idemerknad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3) var(--rom-4);
+  padding: var(--rom-4) var(--rom-5);
+  font-size: var(--tekst-liten);
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort);
+}
+
+.idemerknad > p {
+  flex: 1 1 16rem;
+  margin: 0;
+}
+
+.idemerknad__handlinger,
+.idevalgknapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2) var(--rom-3);
+}
+
+.idevalgknapper {
+  padding-top: var(--rom-2);
+}
+
+.idetraad__laast {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  margin: 0;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+/* Et hjerte på en frosset idé står, men kan ikke trykkes på. */
+.hjerteknapp:disabled {
+  cursor: default;
+}
+
+.hjerteknapp:disabled:hover {
+  color: var(--blekk-dempet);
+  background: transparent;
+}
+
+.hjerteknapp[aria-pressed='true']:disabled:hover {
+  color: var(--alvorlig-blekk);
+}
+
+/* --- Planlagte oppgaver ------------------------------------------------------ */
+
+.oppgavekode {
+  margin-right: var(--rom-2);
+  padding: var(--rom-1) var(--rom-2);
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  font-variant-numeric: tabular-nums;
+  vertical-align: 0.1em;
+  color: var(--aksent);
+  background: var(--aksent-flate);
+  border-radius: var(--runding-pille);
+}
+
+.ideside__merker .oppgavekode {
+  margin-right: 0;
+  align-self: center;
+}
+
+/* En utført oppgave: kortet, og knappen til endringsloggen ved siden av. */
+.oppgaverad {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
+.oppgaveprompt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.oppgaveprompt__tekst {
+  margin: 0;
+  padding: var(--rom-4) var(--rom-5);
+  font-size: var(--tekst-ui);
+  line-height: var(--linjehoyde-lesing);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: var(--flate-bunn);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-felt);
+}
+
+.oppgaveprompt__felt {
+  resize: vertical;
+}
+
+/* Idéen står under oppgaven som bakgrunn, litt mindre enn på sin egen side. */
+.oppgaveside__ide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  padding-top: var(--rom-6);
+  border-top: var(--kant) solid var(--linje);
+}
+
+.ideside[data-innebygd] .ideside__tittel {
+  font-size: var(--tekst-lesing);
+}
+
+.ideside[data-innebygd] > .riktekst {
+  font-size: var(--tekst-ui);
 }
