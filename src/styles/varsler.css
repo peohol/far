@@ -1,0 +1,173 @@
+/* Varselvinduet (`Varsler`): varslene i to grupper, «Nye» og «Tidligere»,
+   og innstillingene. Tallet på bjella står i `toppmeny.css`. */
+
+.varsler {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-7);
+}
+
+.varsler__tom {
+  margin: 0;
+  font-size: var(--tekst-etikett);
+  color: var(--blekk-dempet);
+}
+
+.varselgruppe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.varselgruppe__navn {
+  margin: 0;
+  padding-inline: var(--rom-1);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-style: italic;
+  font-weight: var(--vekt-normal);
+  color: var(--blekk-dempet);
+}
+
+.varselliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.varsel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--rom-4);
+  padding: var(--rom-4) var(--rom-4) var(--rom-4) var(--rom-5);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort);
+}
+
+.varsel[data-ulest] {
+  background: var(--aksent-flate);
+  border-color: transparent;
+}
+
+.varsel__ikon {
+  display: grid;
+  place-items: center;
+  width: var(--hoyde-liten);
+  height: var(--hoyde-liten);
+  background: var(--flate-hevet);
+  border-radius: 50%;
+}
+
+.varsel__innhold {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  min-width: 0;
+  padding-top: var(--rom-1);
+}
+
+.varsel__tittel {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-ui);
+  text-align: left;
+  color: var(--blekk);
+  background: none;
+  border: 0;
+  overflow-wrap: anywhere;
+}
+
+button.varsel__tittel {
+  cursor: pointer;
+}
+
+button.varsel__tittel:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.varsel__meta {
+  margin: 0;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+  overflow-wrap: anywhere;
+}
+
+.varsel__ide {
+  color: var(--blekk);
+}
+
+.varsel__objekter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  margin: 0;
+  padding: 0;
+  font-size: var(--tekst-etikett);
+  list-style: none;
+}
+
+.varsel__lenke {
+  color: var(--aksent);
+  text-underline-offset: 0.2em;
+}
+
+/* --- Innstillingene ---------------------------------------------------------- */
+
+.varselinnstillinger {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+}
+
+.varselinnstillinger__ingress {
+  margin: 0;
+  font-size: var(--tekst-etikett);
+  color: var(--blekk-dempet);
+}
+
+.varselinnstillinger__liste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.varselinnstilling {
+  padding: var(--rom-4) var(--rom-5);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort);
+}
+
+.varselinnstilling .bryter {
+  display: flex;
+  width: 100%;
+}
+
+.varselinnstilling .bryter__tekst {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+}
+
+.varselinnstilling__tittel {
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+}
+
+.varselinnstilling__forklaring {
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-normal);
+  color: var(--blekk-dempet);
+}

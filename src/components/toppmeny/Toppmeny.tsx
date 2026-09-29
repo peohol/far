@@ -6,7 +6,7 @@ export interface ToppmenyProps {
   meny: ReactNode
   /** Globalt fagsøk. Tar resten av bredden, og har forrang på smale flater. */
   sok?: ReactNode
-  /** Knappene foran kontoen: idéene og adminmenyen. */
+  /** Knappene foran kontoen: idéene, adminmenyen og varslene. */
   verktoy?: ReactNode
   /** Kontoen, sist i menyen. */
   konto: ReactNode
@@ -15,7 +15,7 @@ export interface ToppmenyProps {
 /**
  * Den ene faste toppmenyen: en svevende pille øverst i vinduet, over alt
  * innhold, i rekkefølgen sidemeny · fagsøk · sidens egne handlinger · skille
- * · idéer, adminmeny og konto. Ingen logo.
+ * · idéer, adminmeny, varsler og konto. Ingen logo.
  *
  * Sidene fyller sine plasser i menyen med `ToppmenyInnhold`. På smale flater
  * flyttes de til en dokk nederst i vinduet.

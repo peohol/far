@@ -36,10 +36,13 @@ const LISTE: Visning = { side: 'liste' }
 
 export function Ideer({
   apen,
+  ide,
   onLukk,
   onOppgaver,
 }: {
   apen: boolean
+  /** Idéen laget åpnes på, som fra et varsel. Ellers begynner det på lista. */
+  ide?: string
   onLukk: () => void
   /** Til Planlagte oppgaver, eventuelt rett til én oppgave. */
   onOppgaver: (oppgave?: string) => void
@@ -66,23 +69,24 @@ export function Ideer({
     }
   }, [])
 
-  // Hver åpning begynner på lista, med alt hentet på nytt. Arkivet ryddes for
-  // idéer som har passert fristen, før lista hentes.
+  // Hver åpning begynner på lista, eller på idéen laget ble åpnet på, med alt
+  // hentet på nytt. Arkivet ryddes for idéer som har passert fristen, før
+  // lista hentes.
   useEffect(() => {
     if (!apen) {
       setAngring(null)
       return
     }
     nullstill()
-    setVisning(LISTE)
+    setVisning(ide ? { side: 'ide', id: ide } : LISTE)
     setApneSkuffer(new Set())
-    listeplass.current = { rulling: 0, ide: null }
+    listeplass.current = { rulling: 0, ide: ide ?? null }
     void ryddIdearkiv()
       .catch(() => undefined)
       .then(hentListe)
     void hentAlleProfiler().then(setProfiler, () => undefined)
     void hentSortering().then(setSortering, () => undefined)
-  }, [apen, hentListe, nullstill])
+  }, [apen, ide, hentListe, nullstill])
 
   const kropp = () => rot.current?.closest<HTMLElement>('.modallag__kropp') ?? null
 

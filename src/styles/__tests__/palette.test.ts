@@ -71,6 +71,11 @@ const KRAV: [string, string, number, string][] = [
   ['--blekk-dempet', '--flate', 3, 'kant rundt nøytral knapp'],
   ['--toksisk-blekk', '--toksisk-flate', 4.5, 'advarsel om måleområde'],
   ['--fritak-blekk', '--fritak-flate', 4.5, 'merket for godkjenningsfritak i Preparater'],
+  ['--paa-varsel', '--varsel', 4.5, 'tallet for uleste varsler på bjella'],
+  ['--varsel', '--flate-bunn', 3, 'merket for uleste varsler mot sidebakgrunnen'],
+  // Et ulest varsel står på aksentflaten, med dempet tekst og lenker.
+  ['--blekk-dempet', '--aksent-flate', 4.5, 'dempet tekst i et ulest varsel'],
+  ['--blekk', '--aksent-flate', 4.5, 'tekst i et ulest varsel'],
   ['--referanse-kant', '--flate-bunn', 3, 'kant rundt «innenfor»'],
   ['--toksisk-kant', '--flate-bunn', 3, 'kant rundt gult bånd'],
   ['--alvorlig-kant', '--flate-bunn', 3, 'kant rundt «over»'],
