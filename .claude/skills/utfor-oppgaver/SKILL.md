@@ -1,6 +1,6 @@
 ---
-name: utfor-planlagte-oppgaver
-description: Utfører de planlagte oppgavene i FAR som en administrator har merket «Klar til implementering», og merker dem «Utført». Brukes når brukeren ber om å utføre, implementere eller gå løs på de planlagte oppgavene (f.eks. «Utfør de planlagte oppgavene»), eller viser til en planlagt oppgave med overskriften eller med nummer som OPG-007.
+name: utfor-oppgaver
+description: Utfører de planlagte oppgavene i FAR som en administrator har merket «Klar til implementering», og merker dem «Utført». Kjøres med /utfor-oppgaver uten noe mer, eller når brukeren ber om å utføre, implementere eller gå løs på de planlagte oppgavene (f.eks. «Utfør de planlagte oppgavene»), eller viser til en planlagt oppgave med overskriften eller med nummer som OPG-007.
 ---
 
 # Utfør de planlagte oppgavene
@@ -12,9 +12,10 @@ er uklart, og vent på administratorens svar der reglene i `CLAUDE.md` krever
 det, som før databaseendringer i produksjon. Det finnes ingen automatikk som
 gjør dette i bakgrunnen, og det skal det heller ikke.
 
-Oppdraget står i databasen, ikke i meldingen fra brukeren. En kort beskjed som
-«Utfør de planlagte oppgavene» er nok: les alle oppgavene som er klare, med
-overskriften og hele prompten til hver, og utfør dem. Nevner brukeren én eller
+Oppdraget står i databasen, ikke i meldingen fra brukeren. `/utfor-oppgaver`
+uten noe mer, eller en kort beskjed som «Utfør de planlagte oppgavene», er
+nok: les alle oppgavene som er klare, med overskriften og hele prompten til
+hver, og utfør dem. Nevner brukeren én eller
 flere oppgaver med overskriften eller nummeret, gjør bare dem.
 
 Bakgrunnen står i `docs/ideer.md` under «Planlagte oppgaver».

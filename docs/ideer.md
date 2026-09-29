@@ -13,7 +13,7 @@ OUSFAR, med hjerter og kommentartråder; de berører ikke den kliniske delen.
 | `src/ideer/api.ts` | Kallene mot Supabase |
 | `src/components/ideer/` | Vinduene: Idéer (lista, én idé, skjemaet, tråden) og Planlagte oppgaver |
 | `src/styles/ideer.css` | Utseendet |
-| `.claude/skills/utfor-planlagte-oppgaver/` | Hvordan Claude utfører oppgavene og merker dem utført |
+| `.claude/skills/utfor-oppgaver/` | Hvordan Claude utfører oppgavene og merker dem utført |
 
 Idéer og Planlagte oppgaver åpnes fra idémenyen i toppmenyen (`Ideknapp`, en
 `Nedtrekksmeny` med ett valg for hvert), og hvert av lagene har en knapp øverst
@@ -87,7 +87,8 @@ laget med føringen utfoldet. Knappen står bare når versjonen er publisert i
 appen.
 
 Slik Claude utfører oppgavene, står i skillen
-`.claude/skills/utfor-planlagte-oppgaver/`.
+`.claude/skills/utfor-oppgaver/`, som administratoren kjører med
+`/utfor-oppgaver` i Claude Code.
 
 ## Det nye
 

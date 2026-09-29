@@ -20,6 +20,7 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'En administrator kan endre overskriften på en planlagt oppgave, i samme skjema som prompten. Oppgaven begynner med overskriften på idéen den kom fra.',
       'Overskriften er det oppgaven heter i lista og når Claude viser til den. Idéen under beholder sin egen overskrift.',
+      'Oppgavene som er klare, utføres med kommandoen /utfor-oppgaver i Claude Code, uten at du trenger å skrive noe mer.',
     ],
   },
   {
