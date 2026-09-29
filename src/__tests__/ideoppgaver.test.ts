@@ -191,17 +191,17 @@ describe('arkivet og de planlagte oppgavene', () => {
     expect(await oppgave(bo, id)).toMatchObject({ tittel: 'Mørkt tema i PDF-en', status: 'klar' })
   })
 
-  it('gir hver oppgave neste nummer når den overføres, og det samme igjen når den siste angres', async () => {
+  it('gir hver oppgave neste nummer når den overføres, og gir aldri et nummer igjen', async () => {
     const forste = await overfor(await nyIde(ada))
     const nummer = (await oppgave(bo, forste))!.nummer!
     expect(nummer).toBeGreaterThan(0)
     const andre = await overfor(await nyIde(ada))
     expect((await oppgave(bo, andre))!.nummer).toBe(nummer + 1)
 
-    // «Angre» rett etter overføringen: den neste får nummeret som ble ledig.
+    // En oppgave som flyttes tilbake, tar ikke nummeret med seg til en annen.
     await sql(admin, 'select public.flytt_oppgave_tilbake($1)', [andre])
     const tredje = await overfor(await nyIde(ada))
-    expect((await oppgave(bo, tredje))!.nummer).toBe(nummer + 1)
+    expect((await oppgave(bo, tredje))!.nummer).toBe(nummer + 2)
   })
 
   it('lar bare en migrering ta klare oppgaver, alle eller ingen, så to økter ikke tar den samme', async () => {
@@ -370,6 +370,10 @@ describe('numrene på oppgavene som fantes', () => {
       { tittel: 'Tidligere', nummer: 2, status: 'ikke_paabegynt' },
       { tittel: 'Senere', nummer: 3, status: 'klar' },
     ])
+    // Neste overføring fortsetter etter det høyeste nummeret.
+    const { rows: ide } = await db.query<{ id: string }>(`insert into public.ideer (forfatter_id, kategori, tittel) values ($1, 'fag', 'Ny') returning id`, [ada])
+    await db.query(`insert into public.oppgaver (ide_id, tittel, nummer) values ($1, 'Ny', nextval('intern.oppgavenummer'))`, [ide[0]!.id])
+    expect((await db.query(`select nummer from public.oppgaver where tittel = 'Ny'`)).rows).toEqual([{ nummer: 4 }])
   }, 60_000)
 })
 

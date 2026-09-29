@@ -299,6 +299,9 @@ function Oppgaveskjema({
   const endret = tittel.trim() !== lagret.tittel || prompt !== lagret.prompt
   const status: Skjemastatus = lagrer ? 'lagrer' : endret ? 'ulagret' : 'uendret'
   useEffect(() => onStatus(status), [status, onStatus])
+  // Forsvinner skjemaet midt i en lagring, fordi en agent tok oppgaven i
+  // mellomtiden, er det ikke noe igjen å vokte.
+  useEffect(() => () => onStatus('uendret'), [onStatus])
 
   const lagre = async () => {
     if (!endret || lagrer) return

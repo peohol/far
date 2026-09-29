@@ -65,9 +65,10 @@ Fristen står både i `intern.arkivfrist()` og i `ARKIVFRIST_DAGER`.
 (`oppgaver.tittel`) som en administrator kan endre. Det er den oppgaven vises
 og omtales med; idéen beholder sin. Oppgaven får også et løpenummer når den
 overføres (`oppgaver.nummer`, vist som «OPG-001»), så den kan omtales og
-gjenopptas med det hele veien. `overfor_ide()` gir neste nummer under en lås;
-flyttes den siste tilbake med én gang («Angre»), får neste oppgave samme
-nummer. En oppgave går gjennom disse statusene:
+gjenopptas med det hele veien. `overfor_ide()` gir neste nummer fra sekvensen
+`intern.oppgavenummer`. Et nummer gis aldri igjen, heller ikke når oppgaven
+flyttes tilbake, så en migrering som nevner det, kan ikke treffe en annen
+oppgave. En oppgave går gjennom disse statusene:
 
 1. `ikke_paabegynt`: rett etter overføringen.
 2. `under_arbeid` («Påbegynt»): fra første gang overskriften eller prompten

@@ -325,6 +325,22 @@ describe('én oppgave', () => {
     expect(screen.getByRole('textbox', { name: 'Prompt' })).toBeTruthy()
   })
 
+  it('slipper vakten når en agent tar oppgaven mens den lagres, så siden kan forlates', async () => {
+    const bruker = userEvent.setup()
+    tilstand.meg = ADMIN
+    apne('a')
+    await bruker.type(await screen.findByRole('textbox', { name: 'Prompt' }), 'Legg til en knapp.')
+    api.lagreOppgave.mockRejectedValueOnce(new Error('Oppgaven håndteres av en agent. Frigi den først.'))
+    api.hentOppgave.mockResolvedValue(detaljer({ ...OPPGAVER[0]!, status: 'haandteres', tatt_kl: '2026-09-28T12:30:00Z' }))
+    await bruker.click(screen.getByRole('button', { name: 'Lagre endringene' }))
+    expect(await screen.findByText(/Håndteres nå av en agent\./)).toBeTruthy()
+    expect(screen.queryByRole('textbox', { name: 'Prompt' })).toBeNull()
+
+    await bruker.click(screen.getByRole('button', { name: 'Tilbake til oppgavene' }))
+    expect(await screen.findByRole('region', { name: /^Ikke påbegynt/ })).toBeTruthy()
+    expect(screen.queryByText('Du har endringer som ikke er lagret.')).toBeNull()
+  })
+
   it('viser en utført oppgave med nummeret og knappen til endringsloggen, og uten noe å endre', async () => {
     const bruker = userEvent.setup()
     tilstand.meg = ADMIN

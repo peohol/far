@@ -19,7 +19,9 @@ alter table public.oppgaver add column tatt_kl timestamptz;
 comment on column public.oppgaver.tatt_kl is
   'Når en agent tok oppgaven og den ble «Håndteres nå av en agent», eller null.';
 
--- Nummeret for oppgavene som fantes, i den rekkefølgen de ble overført.
+-- Nummeret for oppgavene som fantes, i den rekkefølgen de ble overført. Et
+-- nummer brukes aldri på nytt, så en migrering som nevner det, kan ikke treffe
+-- en annen oppgave; sekvensen fortsetter etter det høyeste.
 with nye as (
   select o.id,
     (select coalesce(max(u.nummer), 0) from public.oppgaver u)
@@ -29,7 +31,7 @@ with nye as (
 )
 update public.oppgaver o set nummer = nye.nummer from nye where nye.id = o.id;
 
-drop sequence intern.oppgavenummer;
+select setval('intern.oppgavenummer', coalesce(max(nummer), 1), max(nummer) is not null) from public.oppgaver;
 
 alter table public.oppgaver
   alter column nummer set not null,
@@ -50,8 +52,8 @@ comment on column public.oppgaver.nummer is
 -- --- Overføringen gir nummeret ------------------------------------------------
 
 -- «Overfør til planlagte oppgaver»: idéen blir en oppgave som ikke er påbegynt,
--- med idéens overskrift og neste nummer. Låsen gjør at to overføringer ikke kan
--- få samme nummer; flyttes den siste tilbake med én gang, får neste det samme.
+-- med idéens overskrift og neste nummer. Et nummer som er gitt, gis aldri
+-- igjen, heller ikke når oppgaven flyttes tilbake.
 create or replace function public.overfor_ide(ide uuid)
 returns uuid
 language plpgsql
@@ -63,9 +65,8 @@ declare
 begin
   perform intern.krev_idevalg_admin();
   perform intern.las_apen_ide(overfor_ide.ide);
-  lock table public.oppgaver in share row exclusive mode;
   insert into public.oppgaver (ide_id, tittel, nummer)
-  select i.id, i.tittel, (select coalesce(max(o.nummer), 0) + 1 from public.oppgaver o)
+  select i.id, i.tittel, nextval('intern.oppgavenummer')
   from public.ideer i where i.id = overfor_ide.ide
   returning id into ny;
   return ny;
