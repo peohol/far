@@ -24,8 +24,8 @@ import { navnenokkel } from './sokenavn'
  *   hører til Fluoksetin, og engelske navn og forkortelser: «quetiapine»,
  *   «CBD»). Et alias gir ingen egen side; en gammel adresse eller et søk på
  *   det fører til stoffet, og i søket teller et eksakt alias som et eksakt
- *   navn. Det er den eneste lista over søkenavn for stoffene: fagsøket og
- *   søket etter analytter i fortolkningen bruker begge den.
+ *   navn. Det er den eneste lista over søkenavn for stoffsidene i fagsøket.
+ *   Søket etter analytter i fortolkningen bruker den ikke.
  * - `analyttkoblinger`: analyttkoden, stoffet, hva analytten er for stoffet
  *   ({@link Analyttrelasjon}) og om stoffet er analyttens primære stoff
  *   (`primar`, standard sann). Hver kode har høyst ett primært stoff: det er

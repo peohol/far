@@ -46,6 +46,7 @@ from xml.etree import ElementTree
 ROT = Path(__file__).resolve().parent.parent
 DOKUMENT = ROT / "originaldata" / "AHT.docx"
 UT = ROT / "src" / "data" / "antihypertensiver.json"
+ALIAS_FIL = ROT / "src" / "data" / "aliaser.json"
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
 
@@ -504,6 +505,10 @@ def bygg() -> dict:
     ubrukte = sorted(set(KATEGORI) - set(koder))
     if ubrukte:
         raise SystemExit(f"KATEGORI har koder som ikke finnes i kilden: {', '.join(ubrukte)}")
+
+    aliaser = json.loads(ALIAS_FIL.read_text("utf-8")) if ALIAS_FIL.exists() else {}
+    for a in resultat:
+        a["aliaser"] = aliaser.get(a["kode"], [])
 
     return {
         "meta": {

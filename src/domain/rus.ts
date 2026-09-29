@@ -133,6 +133,7 @@ export const RUS_MODULER: RusModul[] = [
       ['DMI', 'N-desmetyldiazepam'],
       ['OXA', 'Oksazepam'],
     ],
+    { aliaser: ['desmetyldiazepam'] },
   ),
   enkelt('klonazepam', 'CZP', 'Klonazepam', BENZO),
   enkelt('nitrazepam', 'NIT', 'Nitrazepam', BENZO),
@@ -162,8 +163,8 @@ export const RUS_MODULER: RusModul[] = [
     ['AMF1', 'Amfetamin'],
     ['MAF1', 'Metamfetamin'],
   ]),
-  enkelt('benzoylekgonin', 'BEZ1', 'Benzoylekgonin', STIMULERENDE),
-  enkelt('mdma', 'ECS1', 'MDMA', STIMULERENDE),
+  enkelt('benzoylekgonin', 'BEZ1', 'Benzoylekgonin', STIMULERENDE, ['kokain']),
+  enkelt('mdma', 'ECS1', 'MDMA', STIMULERENDE, ['ecstasy']),
 ]
 
 /* --- Oppføringene i søket ------------------------------------------------ */

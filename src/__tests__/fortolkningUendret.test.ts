@@ -45,14 +45,12 @@ const ROT = fileURLToPath(new URL('../../', import.meta.url))
  * fortolkningen ble byttet over til regelsettene: grensene, ringegrensen og
  * kommentarene ble tatt ut, og ingenting annet. De ble endret igjen da
  * referanseområdet ble tatt ut, fordi fortolkningen nå viser det
- * informasjonssiden har. De ble endret en tredje gang da søkeordene per
- * analytt (`aliaser`, fra den nå slettede `src/data/aliaser.json`) ble tatt
- * ut: søkenavnene står nå i stoffregisteret, og ingenting annet ble endret.
- * Resten av innholdet er det samme som før.
+ * informasjonssiden har. Resten av innholdet er det samme som før.
  */
 const DATASETT: Record<string, string> = {
-  'src/data/analytter.json': '50ef1b2ccc7577dcc42bbb2c8bb25675cee92b4487ce9f45d6f95f74066cc9da',
-  'src/data/antihypertensiver.json': 'dffb266a64b042c3eefd75ab457a68c4128400fbd9cbd95695e38de65d7034de',
+  'src/data/analytter.json': 'fd88b5cb103e2bbd43e76e8072fe77cbf3ecb6258fcb5e5c236fdfa34e2cace4',
+  'src/data/antihypertensiver.json': '75b4b688155a1ac03876c469ba98628c1d78f8d3ce408a6bce2482868421e33e',
+  'src/data/aliaser.json': 'ab5f4ae6284d81cc32762a0da1709131d8b814138a302623b6ab60b00366ccfd',
 }
 
 /**

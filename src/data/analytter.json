@@ -1499,7 +1499,8 @@
             "tekst": "10 – 2000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "CITAL",
@@ -1523,7 +1524,8 @@
             "tekst": "10 – 2000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "DOKSUM",
@@ -1555,7 +1557,8 @@
             "tekst": "20 – 2000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "DULO",
@@ -1579,7 +1582,8 @@
             "tekst": "20 – 600"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "ESCIT",
@@ -1603,7 +1607,8 @@
             "tekst": "10 – 2000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "FLUOSUM",
@@ -1635,7 +1640,8 @@
             "tekst": "50 – 3000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "FLUV",
@@ -1659,7 +1665,8 @@
             "tekst": "20 – 2000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "HBUP",
@@ -1683,7 +1690,10 @@
             "tekst": "100 – 10000"
           }
         ]
-      }
+      },
+      "aliaser": [
+        "bupropion"
+      ]
     },
     {
       "kode": "KLOSUM",
@@ -1715,7 +1725,8 @@
             "tekst": "20 – 2000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "MIASUM",
@@ -1747,7 +1758,8 @@
             "tekst": "20 – 600"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "MTZ",
@@ -1771,7 +1783,8 @@
             "tekst": "10 – 2000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "NOR",
@@ -1795,7 +1808,8 @@
             "tekst": "10 – 2000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "PARO",
@@ -1819,7 +1833,8 @@
             "tekst": "10 – 1000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "SERT",
@@ -1843,7 +1858,8 @@
             "tekst": "5 – 1000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "TRIM",
@@ -1867,7 +1883,8 @@
             "tekst": "10 – 2000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "VENSUM",
@@ -1899,7 +1916,8 @@
             "tekst": "20 – 3000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "VOR",
@@ -1923,7 +1941,8 @@
             "tekst": "5 – 500"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "AMIS",
@@ -1947,7 +1966,8 @@
             "tekst": "10 – 2000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "ARISUM",
@@ -1979,7 +1999,8 @@
             "tekst": "20 – 600"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "BREK",
@@ -2003,7 +2024,8 @@
             "tekst": "10 – 600"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "FLUP",
@@ -2027,7 +2049,8 @@
             "tekst": "0,6 – 36"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "HALO",
@@ -2051,7 +2074,8 @@
             "tekst": "1 – 60"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "KARSUM",
@@ -2091,7 +2115,8 @@
             "tekst": "10 – 300"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "KLORP",
@@ -2115,7 +2140,8 @@
             "tekst": "5 – 500 (Obs lavere enn ringegrense)"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "KLOZ",
@@ -2139,7 +2165,8 @@
             "tekst": "30 – 6000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "KVE",
@@ -2163,7 +2190,8 @@
             "tekst": "15 – 3000"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "LMP",
@@ -2187,7 +2215,8 @@
             "tekst": "5 – 500 (Obs lavere enn ringegrense)"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "LURA",
@@ -2211,7 +2240,8 @@
             "tekst": "2 – 200"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "OLAN",
@@ -2235,7 +2265,8 @@
             "tekst": "10 – 600"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "PALI",
@@ -2259,7 +2290,10 @@
             "tekst": "10 – 600"
           }
         ]
-      }
+      },
+      "aliaser": [
+        "hydroksyrisperidon"
+      ]
     },
     {
       "kode": "PERF",
@@ -2283,7 +2317,8 @@
             "tekst": "0,6 – 36"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "RISPSUM",
@@ -2315,7 +2350,11 @@
             "tekst": "10 – 600"
           }
         ]
-      }
+      },
+      "aliaser": [
+        "paliperidon",
+        "hydroksyrisperidon"
+      ]
     },
     {
       "kode": "ZIPRA",
@@ -2339,7 +2378,8 @@
             "tekst": "10 – 600"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "ZUKLO",
@@ -2363,7 +2403,8 @@
             "tekst": "1 – 200"
           }
         ]
-      }
+      },
+      "aliaser": []
     },
     {
       "kode": "LAM",
@@ -2387,7 +2428,8 @@
             "tekst": "2 – 75"
           }
         ]
-      }
+      },
+      "aliaser": []
     }
   ]
 }

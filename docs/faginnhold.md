@@ -73,8 +73,10 @@ Begrepene holdes fra hverandre:
   (`src/data/stoffregister.json`), med en stabil nøkkel (`slug`, f.eks.
   `bupropion`), et navn og eventuelle aliaser (f.eks. «Hydroksybupropion»,
   «quetiapine», «CBD»). Aliasene er den eneste lista over søkenavn for
-  stoffene: fagsøket og søket etter analytter i fortolkningen bruker begge
-  den, og et eksakt alias rangeres som et eksakt navn. Et alias kan være et
+  stoffsidene i fagsøket, og et eksakt alias rangeres som et eksakt navn.
+  Søket etter analytter i fortolkningen bruker dem ikke; det har sine egne
+  søkeord per analyttkode (`src/data/aliaser.json`), som fagsøket ikke
+  bruker. Et alias kan være et
   moderstoff eller en metabolitt uten egen fagside, men aldri et navn et
   annet stoff har — heller ikke skrevet på en annen måte, som
   `kontrollerStoffregister` sjekker. Preparatnavn er ikke aliaser; de kommer

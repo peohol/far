@@ -7,9 +7,9 @@ import { indekserKunnskapsbase } from '../faginnhold/globaltSok'
 import { lagSokeindeks, sokGlobalt } from '../faginnhold/sok'
 
 /**
- * Aliasene i stoffregisteret er likestilte søkenavn for stoffet: et eksakt
- * alias finner stoffsiden like direkte som navnet, både i fagsøket og i
- * søket etter analytter i fortolkningen, og aldri en annen side.
+ * Aliasene i stoffregisteret er likestilte søkenavn for stoffet i fagsøket:
+ * et eksakt alias finner stoffsiden like direkte som navnet, og aldri en
+ * annen side. Søket etter analytter i fortolkningen bruker dem ikke.
  */
 
 const indeks = lagSokeindeks(indekserKunnskapsbase({ sider: [], legemidler: null, interaksjoner: null }))
@@ -112,26 +112,14 @@ describe('aliasene i fagsøket', () => {
   })
 })
 
-describe('aliasene i søket etter analytter', () => {
-  it.each([
-    ['quetiapine', 'KVE'],
-    ['kvetiapin', 'KVE'],
-    ['paliperidone', 'PALI'],
-    ['9-hydroxyrisperidone', 'PALI'],
-    ['spironolakton', 'KANR'],
-    ['THC-COOH', 'IRCAK'],
-    ['delta 9 thc', 'THC'],
-    ['alcohol', 'UETGS · UETS'],
-    ['nordazepam', 'DIAZ · DMI · OXA'],
-    ['cocaine', 'BEZ1'],
-    ['ecstasy', 'ECS1'],
-  ])('«%s» gir %s først', (sporring, kode) => {
-    expect(koder(sporring)[0]).toBe(kode)
-  })
-
-  it('finner både analysen for stoffet og sumanalysen det inngår i', () => {
-    // Sumanalysen har hydroksyrisperidon som delanalytt, så begge er eksakte treff.
-    expect(koder('hydroksyrisperidon').slice(0, 2).sort()).toEqual(['PALI', 'RISPSUM'])
+describe('søket etter analytter i fortolkningen', () => {
+  it('bruker ikke aliasene i stoffregisteret', () => {
+    // Fortolkningssøket er det samme som før: bare koder, navn, delanalytter
+    // og sine egne søkeord.
+    for (const sporring of ['quetiapine', 'CBD', 'alcohol', 'nordazepam', 'paliperidone', 'THCCOOH', 'meth']) {
+      expect(koder(sporring), sporring).toEqual([])
+    }
+    expect(koder('kvetiapin')).toEqual(['KVE'])
   })
 })
 

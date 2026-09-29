@@ -36,6 +36,7 @@ import pdfplumber
 ROT = Path(__file__).resolve().parent.parent
 PDF = ROT / "originaldata" / "kommentarer.pdf"
 UT = ROT / "src" / "data" / "analytter.json"
+ALIAS_FIL = ROT / "src" / "data" / "aliaser.json"
 
 NIVAER = ("under", "innenfor", "over")
 
@@ -393,6 +394,10 @@ def bygg() -> dict:
         })
 
     resultat.sort(key=lambda a: (a["gruppe"], a["navn"]))
+    aliaser = json.loads(ALIAS_FIL.read_text("utf-8")) if ALIAS_FIL.exists() else {}
+    for a in resultat:
+        a["aliaser"] = aliaser.get(a["kode"], [])
+
     return {
         "meta": {
             "kilde": PDF.name,

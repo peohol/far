@@ -111,28 +111,6 @@ export function stoffForFortolkning(analyte: Analyte, register: Stoffregister = 
   return stoffer.size === 1 ? [...stoffer.values()][0] : undefined
 }
 
-/** Et navn et stoff er kjent under, og om stoffet er det primære for analytten. */
-export interface Stoffnavn {
-  navn: string
-  primar: boolean
-}
-
-/**
- * Navnene og aliasene i stoffregisteret til stoffene fortolkningsmodulen er
- * koblet til, så søket etter analytter kjenner de samme navnene som fagsøket:
- * «quetiapine» finner KVE, og «spironolakton» KANR. Stoffene analytten
- * primært hører til, kommer først.
- */
-export function stoffnavnForFortolkning(analyte: Analyte, register: Stoffregister = STOFFREGISTER): Stoffnavn[] {
-  const koblinger = menyanalytter(analyte).flatMap(({ kode }) => register.stofferFor(kode))
-  return [...koblinger]
-    .sort((a, b) => Number(b.primar) - Number(a.primar))
-    .flatMap(({ stoff, primar }) => {
-      const s = register.finn(stoff)
-      return s ? [s.navn, ...s.aliaser].map((navn) => ({ navn, primar })) : []
-    })
-}
-
 /**
  * Seksjonen på stoffsiden der reglene for koden står, eller `undefined` når
  * koden ikke har noe primært stoff.

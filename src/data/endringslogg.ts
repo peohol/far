@@ -14,14 +14,15 @@ export const ENDRINGSLOGG: Endring[] = [
   {
     versjon: '1.61.0',
     dato: '2026-09-29',
-    sammendrag: 'Søket finner stoffene også på engelske navn, forkortelser og andre skrivemåter',
-    typer: ['Funksjonalitet', 'Fag'],
+    sammendrag: 'Fagsøket finner stoffene også på engelske navn, forkortelser og andre skrivemåter',
+    typer: ['Funksjonalitet'],
     omfang: 'Moderat omfang',
     punkter: [
-      'Vanlige andre navn på et stoff finner stoffsiden like direkte som navnet på siden, både i fagsøket og i søket etter analytter i fortolkningen: «CBD» gir Cannabidiol, «quetiapine» Kvetiapin, «alcohol» Etanol, «sodium oxybate» GHB, «nordazepam» Diazepam og «THC-COOH» THC.',
+      'Vanlige andre navn på et stoff finner stoffsiden i fagsøket like direkte som navnet på siden: «CBD» gir Cannabidiol, «quetiapine» Kvetiapin, «alcohol» Etanol, «sodium oxybate» GHB, «nordazepam» Diazepam og «THC-COOH» THC.',
       'Et eksakt treff på et slikt navn står like høyt som et eksakt treff på stoffnavnet, men siden heter fortsatt det samme.',
-      'Søket ser bort fra store og små bokstaver, bindestrek og mellomrom, greske bokstaver («Δ9-THC» og «delta 9 THC») og vanlige forskjeller mellom norsk og engelsk stavemåte («klozapin» og «clozapine»).',
+      'Fagsøket ser bort fra store og små bokstaver, bindestrek og mellomrom, greske bokstaver («Δ9-THC» og «delta 9 THC») og vanlige forskjeller mellom norsk og engelsk stavemåte («klozapin» og «clozapine»).',
       'Hydroksyrisperidon og 9-hydroxyrisperidone fører nå til Paliperidon, ikke til Risperidon.',
+      'Søket etter analytter i fortolkningen er uendret.',
     ],
   },
   {
