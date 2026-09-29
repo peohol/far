@@ -6,6 +6,7 @@
  */
 import { visningsnavn, type Profil } from '@delt/profil'
 import { NODER, erTomt, rensDokument, type Riktekstdokument, type Riktekstnode } from '../faginnhold/riktekst'
+import { erObjekt, tall, tallEllerNull, tekst, tekstEllerNull } from './lesing'
 
 /* --- Kategoriene ----------------------------------------------------------- */
 
@@ -23,21 +24,59 @@ export function erKategori(verdi: unknown): verdi is Idekategori {
   return typeof verdi === 'string' && (KATEGORIER as readonly string[]).includes(verdi)
 }
 
-/* --- Statusen ------------------------------------------------------------- */
+/* --- Arkivet og oppgavene ------------------------------------------------ */
 
-/** Statusene en administrator kan gi en idé, i rekkefølge. Samme verdier som `public.idestatus`. */
-export const STATUSER = ['planlagt', 'under_arbeid', 'gjennomfort', 'ikke_aktuelt'] as const
-export type Idestatus = (typeof STATUSER)[number]
+/**
+ * Hvor lenge en idé står i arkivet («Ikke aktuelt») før den slettes. Samme
+ * frist som `intern.arkivfrist()` i databasen.
+ */
+export const ARKIVFRIST_DAGER = 60
 
-export const STATUSNAVN: Record<Idestatus, string> = {
-  planlagt: 'Planlagt',
+/** Statusene en planlagt oppgave går gjennom, i rekkefølge. Samme verdier som `public.oppgavestatus`. */
+export const OPPGAVESTATUSER = ['ikke_paabegynt', 'under_arbeid', 'klar', 'utfort'] as const
+export type Oppgavestatus = (typeof OPPGAVESTATUSER)[number]
+
+export const OPPGAVESTATUSNAVN: Record<Oppgavestatus, string> = {
+  ikke_paabegynt: 'Ikke påbegynt',
   under_arbeid: 'Under arbeid',
-  gjennomfort: 'Gjennomført',
-  ikke_aktuelt: 'Ikke aktuelt',
+  klar: 'Klar til implementering',
+  utfort: 'Utført',
 }
 
-export function erStatus(verdi: unknown): verdi is Idestatus {
-  return typeof verdi === 'string' && (STATUSER as readonly string[]).includes(verdi)
+export function erOppgavestatus(verdi: unknown): verdi is Oppgavestatus {
+  return typeof verdi === 'string' && (OPPGAVESTATUSER as readonly string[]).includes(verdi)
+}
+
+/** Oppgaven en overført idé ble til, slik idélista trenger den. */
+export interface Ideoppgave {
+  id: string
+  status: Oppgavestatus
+  /** Settes når oppgaven er utført. */
+  nummer: number | null
+}
+
+/** Hvor idéen står: åpen i lista, i arkivet eller overført til oppgavene. */
+export type Idetilstand = 'apen' | 'arkivert' | 'overfort'
+
+export function idetilstand(ide: Pick<Ide, 'arkivert_kl' | 'oppgave'>): Idetilstand {
+  return ide.oppgave ? 'overfort' : ide.arkivert_kl ? 'arkivert' : 'apen'
+}
+
+const DOGN = 86_400_000
+
+/** Når en arkivert idé slettes. Databasen regner i UTC, der alle døgn er like lange. */
+export function slettesKl(arkivertKl: string): Date {
+  return new Date(Date.parse(arkivertKl) + ARKIVFRIST_DAGER * DOGN)
+}
+
+/** Hele dager til en arkivert idé slettes, aldri under null. */
+export function dagerTilSletting(arkivertKl: string, naa: Date = new Date()): number {
+  return Math.max(0, Math.ceil((slettesKl(arkivertKl).getTime() - naa.getTime()) / DOGN))
+}
+
+/** Nummeret en utført oppgave refereres med, som «OPG-007». */
+export function oppgavekode(nummer: number): string {
+  return `OPG-${String(nummer).padStart(3, '0')}`
 }
 
 /** Lengste overskrift. Samme grense som databasen setter. */
@@ -60,8 +99,10 @@ export interface Ide extends Felles {
   forfatter_id: string
   kategori: Idekategori
   tittel: string
-  /** Satt av en administrator, eller `null`. */
-  status: Idestatus | null
+  /** Når idéen ble lagt i arkivet («Ikke aktuelt»), eller `null`. */
+  arkivert_kl: string | null
+  /** Oppgaven idéen er overført til, eller `null`. */
+  oppgave: Ideoppgave | null
   kommentarer: number
   /** Kommentarer fra andre siden den innloggede sist åpnet idéen. */
   nye_kommentarer: number
@@ -117,14 +158,6 @@ export function tekstTilLagring(dokument: Riktekstdokument): Riktekstdokument | 
 
 /* --- Lesing av det databasen svarer ------------------------------------------ */
 
-function erObjekt(verdi: unknown): verdi is Record<string, unknown> {
-  return typeof verdi === 'object' && verdi !== null && !Array.isArray(verdi)
-}
-
-const tekst = (verdi: unknown): string => (typeof verdi === 'string' ? verdi : '')
-const tekstEllerNull = (verdi: unknown): string | null => (typeof verdi === 'string' ? verdi : null)
-const tall = (verdi: unknown): number => (typeof verdi === 'number' && Number.isFinite(verdi) ? verdi : Number(verdi) || 0)
-
 function lesFelles(rad: Record<string, unknown>): Felles {
   return {
     id: tekst(rad.id),
@@ -136,6 +169,12 @@ function lesFelles(rad: Record<string, unknown>): Felles {
   }
 }
 
+function lesIdeoppgave(verdi: unknown): Ideoppgave | null {
+  if (!erObjekt(verdi) || !erOppgavestatus(verdi.status)) return null
+  const id = tekst(verdi.id)
+  return id ? { id, status: verdi.status, nummer: tallEllerNull(verdi.nummer) } : null
+}
+
 function lesIde(rad: unknown): Ide | null {
   if (!erObjekt(rad) || !erKategori(rad.kategori)) return null
   const felles = lesFelles(rad)
@@ -145,7 +184,8 @@ function lesIde(rad: unknown): Ide | null {
     forfatter_id: felles.forfatter_id,
     kategori: rad.kategori,
     tittel: tekst(rad.tittel),
-    status: erStatus(rad.status) ? rad.status : null,
+    arkivert_kl: tekstEllerNull(rad.arkivert_kl),
+    oppgave: lesIdeoppgave(rad.oppgave),
     kommentarer: tall(rad.kommentarer),
     nye_kommentarer: tall(rad.nye_kommentarer),
   }

@@ -29,7 +29,22 @@ vi.mock('../components/konto/Datakilder', () => ({
   Datakilder: ({ apen }: { apen: boolean }) => (apen ? <p>Datakildene</p> : null),
 }))
 vi.mock('../components/ideer/Ideer', () => ({
-  Ideer: ({ apen }: { apen: boolean }) => (apen ? <p>Idéene</p> : null),
+  Ideer: ({ apen, onOppgaver }: { apen: boolean; onOppgaver: (oppgave?: string) => void }) =>
+    apen ? (
+      <>
+        <p>Idéene</p>
+        <button onClick={() => onOppgaver('o1')}>Til oppgaven</button>
+      </>
+    ) : null,
+}))
+vi.mock('../components/ideer/Oppgaver', () => ({
+  Oppgaver: ({ apen, oppgave, onIdeer }: { apen: boolean; oppgave?: string; onIdeer: () => void }) =>
+    apen ? (
+      <>
+        <p>Oppgavene {oppgave}</p>
+        <button onClick={onIdeer}>Til idéene</button>
+      </>
+    ) : null,
 }))
 
 const { Ikon } = await import('../components/ikon/Ikon')
@@ -410,6 +425,21 @@ describe('idéknappen', () => {
     )
     await userEvent.click(screen.getByRole('button', { name: 'Idéer' }))
     expect(screen.getByText('Idéene')).toBeTruthy()
+  })
+
+  it('går mellom idéene og de planlagte oppgavene, med bare ett av lagene åpent', async () => {
+    render(
+      <Ramme>
+        <Ideknapp />
+      </Ramme>,
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Idéer' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Til oppgaven' }))
+    expect(screen.getByText('Oppgavene o1')).toBeTruthy()
+    expect(screen.queryByText('Idéene')).toBeNull()
+    await userEvent.click(screen.getByRole('button', { name: 'Til idéene' }))
+    expect(screen.getByText('Idéene')).toBeTruthy()
+    expect(screen.queryByText(/Oppgavene/)).toBeNull()
   })
 
   it('har en prikk og antallet i navnet når noen har kommentert noe nytt', async () => {

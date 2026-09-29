@@ -751,6 +751,24 @@ const REGISTER = {
       G([P('M10.5 8 6.5 12l4 4', 'l', 'i-ink'), P('M7 12h6.5a4 4 0 0 1 4 4v.5', 'l', 'i-ink')], 'bumpL'),
     ],
   },
+  // Tegnet i OUSFAR for planlagte oppgaver og arkivet, i samme stil som resten av registeret.
+  oppgaver: {
+    vb: 24,
+    parts: [
+      R(4.5, 4.5, 15, 17, 2.5, 'f1', 'accent'),
+      R(8.5, 2.8, 7, 3.6, 1.2, 'f2', 'paper'),
+      P('M8 12l1.6 1.6L12.5 10.7', 'l', 'i-ink', 'pop'),
+      P('M8 17h8M14.5 12h1.5', 'l', 'i-ink'),
+    ],
+  },
+  arkiv: {
+    vb: 24,
+    parts: [
+      P('M5 9.5v8.5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9.5z', 'f1', 'glass'),
+      G([R(3.5, 4.5, 17, 5, 1.5, 'f2', 'glass')], 'pop'),
+      P('M10 13.5h4', 'l', 'i-ink'),
+    ],
+  },
   trash: {
     vb: 24,
     ga: 'shake',

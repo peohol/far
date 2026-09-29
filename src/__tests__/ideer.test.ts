@@ -36,7 +36,6 @@ describe('idéene i databasen', () => {
 
   interface Traad {
     tittel: string
-    status: string | null
     sist_sett: string | null
     lest_kl: string
     hjerter: number
@@ -199,25 +198,6 @@ describe('idéene i databasen', () => {
     expect(rad).not.toHaveProperty('tekst')
     expect((await traad(bo, ide))!.tittel).toBe('Talt')
     expect(await traad(bo, '00000000-0000-0000-0000-000000000001')).toBeNull()
-  })
-
-  it('lar bare en administrator gi status, uten at idéen regnes som endret', async () => {
-    const ide = await nyIde(ada, 'Med status')
-    const status = async () =>
-      (await sql<{ status: string | null; endret_kl: string | null; status_kl: string | null }>(
-        bo,
-        'select status, endret_kl, status_kl from public.ideer where id = $1',
-        [ide],
-      ))[0]!
-    expect(await feilFra(() => sql(ada, `select public.sett_idestatus($1, 'planlagt')`, [ide]))).toMatchObject({ code: '42501' })
-    expect(await feilFra(() => sql(ada, `update public.ideer set status = 'planlagt' where id = $1`, [ide]))).toMatchObject({ code: '42501' })
-
-    await sql(admin, `select public.sett_idestatus($1, 'under_arbeid')`, [ide])
-    expect(await status()).toMatchObject({ status: 'under_arbeid', endret_kl: null, status_kl: expect.anything() })
-    expect((await traad(bo, ide))!.status).toBe('under_arbeid')
-
-    await sql(admin, 'select public.sett_idestatus($1, null)', [ide])
-    expect((await status()).status).toBeNull()
   })
 
   it('teller kommentarer fra andre som nye til idéen er åpnet', async () => {

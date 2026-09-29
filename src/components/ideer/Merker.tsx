@@ -1,4 +1,4 @@
-import { KATEGORINAVN, STATUSNAVN, type Idekategori, type Idestatus } from '../../ideer/modell'
+import { KATEGORINAVN, OPPGAVESTATUSNAVN, oppgavekode, type Idekategori, type Oppgavestatus } from '../../ideer/modell'
 
 /**
  * Kategorien som merke, i samme toner som typemerkene i endringsloggen: fag
@@ -15,13 +15,19 @@ export function Kategorimerke({ kategori }: { kategori: Idekategori }) {
 }
 
 /**
- * Statusen en administrator har gitt idéen: et nøytralt merke med en farget
- * prikk, så det ikke kan forveksles med kategorien eller en klinisk farge.
+ * Statusen til en planlagt oppgave: et nøytralt merke med en farget prikk —
+ * rød før arbeidet er begynt, gul under arbeid, grønn når den er klar til
+ * implementering. Teksten sier alltid det samme som fargen.
  */
-export function Statusmerke({ status }: { status: Idestatus }) {
+export function Oppgavestatusmerke({ status }: { status: Oppgavestatus }) {
   return (
     <span className="statusmerke" data-status={status}>
-      {STATUSNAVN[status]}
+      {OPPGAVESTATUSNAVN[status]}
     </span>
   )
+}
+
+/** Nummeret en utført oppgave refereres med, som «OPG-007». */
+export function Oppgavekode({ nummer }: { nummer: number }) {
+  return <span className="oppgavekode">{oppgavekode(nummer)}</span>
 }

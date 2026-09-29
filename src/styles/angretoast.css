@@ -1,0 +1,75 @@
+/**
+ * Meldingen om det som nettopp ble gjort, med «Angre» (`Angretoast`). Den
+ * står i foten på laget og har de snudde fargene fra tooltipen, så den leses
+ * som noe som ligger over innholdet. Streken under krymper mens fristen går,
+ * og står stille for den som har bedt om mindre bevegelse.
+ */
+.angretoast {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  min-height: var(--hoyde-felt);
+  padding: var(--rom-2) var(--rom-2) var(--rom-2) var(--rom-5);
+  overflow: hidden;
+  font-size: var(--tekst-liten);
+  color: var(--tips-blekk);
+  background: var(--tips-flate);
+  border-radius: var(--runding-underkort);
+  animation: angretoast-inn var(--fart-glid) var(--kurve);
+}
+
+@keyframes angretoast-inn {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+}
+
+.angretoast__melding {
+  flex: 1;
+  min-width: 0;
+}
+
+.angretoast__knapp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  min-height: var(--hoyde-liten);
+  padding: 0 var(--rom-4);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+  color: var(--tips-flate);
+  background: var(--tips-blekk);
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+}
+
+.angretoast__knapp:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.angretoast__tid {
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: var(--tips-blekk-dempet);
+  transform-origin: left;
+  animation: angretoast-tid var(--angrefrist) linear forwards;
+}
+
+@keyframes angretoast-tid {
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .angretoast,
+  .angretoast__tid {
+    animation: none;
+  }
+}
