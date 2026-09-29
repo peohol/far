@@ -1,4 +1,5 @@
 import registerdata from '../data/stoffregister.json'
+import { navnenokkel } from './sokenavn'
 
 /**
  * Stoffregisteret: den autoritative lista over stoffene appen har fagsider
@@ -20,8 +21,11 @@ import registerdata from '../data/stoffregister.json'
  *
  * - `stoffer`: nøkkelen, navnet og eventuelle andre navn stoffet er kjent
  *   under (`aliaser`, som metabolittene uten egen fagside: «Norfluoksetin»
- *   hører til Fluoksetin). Et alias gir ingen egen side; en gammel adresse
- *   eller et søk på det fører til stoffet.
+ *   hører til Fluoksetin, og engelske navn og forkortelser: «quetiapine»,
+ *   «CBD»). Et alias gir ingen egen side; en gammel adresse eller et søk på
+ *   det fører til stoffet, og i søket teller et eksakt alias som et eksakt
+ *   navn. Det er den eneste lista over søkenavn for stoffene: fagsøket og
+ *   søket etter analytter i fortolkningen bruker begge den.
  * - `analyttkoblinger`: analyttkoden, stoffet, hva analytten er for stoffet
  *   ({@link Analyttrelasjon}) og om stoffet er analyttens primære stoff
  *   (`primar`, standard sann). Hver kode har høyst ett primært stoff: det er
@@ -162,7 +166,8 @@ export interface Stoffregister {
   finn: (slug: string) => Stoff | undefined
   /**
    * Stoffet en nøkkel eller et navn fører til: stoffets egen nøkkel, eller
-   * stoffet et alias hører til. Brukes for gamle adresser og navn.
+   * stoffet et alias hører til, også når navnet er skrevet på en annen måte
+   * ({@link navnenokkel}). Brukes for gamle adresser og navn.
    */
   kanonisk: (nokkelEllerNavn: string) => Stoff | undefined
   /** Alle koblingene, i registerets rekkefølge. */
@@ -203,6 +208,9 @@ export function byggStoffregister(
   // Aliasene, og de kanoniske nøklene selv, etter nøkkelen de gir.
   const aliasTil = new Map<string, string>()
   for (const s of perSlug.values()) for (const a of s.aliaser) aliasTil.set(stoffslug(a), s.slug)
+  // Navnene og aliasene etter navnenøkkelen, for navn som er skrevet på en annen måte.
+  const perNokkel = new Map<string, string>()
+  for (const s of perSlug.values()) for (const n of [s.navn, ...s.aliaser]) perNokkel.set(navnenokkel(n), s.slug)
 
   for (const d of databasestoffer) {
     const kjent = perSlug.get(d.slug)
@@ -230,7 +238,7 @@ export function byggStoffregister(
   const finn = (slug: string) => perSlug.get(slug)
   const kanonisk = (nokkel: string) => {
     const s = stoffslug(nokkel)
-    return perSlug.get(s) ?? perSlug.get(aliasTil.get(s) ?? '')
+    return perSlug.get(s) ?? perSlug.get(aliasTil.get(s) ?? perNokkel.get(navnenokkel(nokkel)) ?? '')
   }
   const analytterFor = (slug: string) => perStoff.get(slug) ?? []
   const stofferFor = (kode: string) => perKode.get(kode.trim().toUpperCase()) ?? []
@@ -302,9 +310,10 @@ export const STOFFREGISTER = byggStoffregister()
 
 /**
  * Feilene i datafilen: nøkler som ikke har riktig form eller står flere ganger,
- * alias som kolliderer, koblinger til stoffer som ikke finnes, koder med mer
- * enn ett primært stoff, og kategorier som nevner ukjente stoffer. Tom når
- * alt er i orden. Testene holder den tom.
+ * navn og alias som kolliderer — også når de bare er skrevet ulikt, som
+ * «Quetiapine» og «kvetiapin» ({@link navnenokkel}) — koblinger til stoffer
+ * som ikke finnes, koder med mer enn ett primært stoff, og kategorier som
+ * nevner ukjente stoffer. Tom når alt er i orden. Testene holder den tom.
  */
 export function kontrollerStoffregister(data: Registerdata = STOFFREGISTERDATA): string[] {
   const feil: string[] = []
@@ -316,12 +325,23 @@ export function kontrollerStoffregister(data: Registerdata = STOFFREGISTERDATA):
     if (!s.navn.trim()) feil.push(`Stoffet «${s.slug}» mangler navn.`)
   }
   const aliaser = new Map<string, string>()
+  const navn = new Map<string, string>()
+  for (const s of data.stoffer) navn.set(navnenokkel(s.navn), s.slug)
   for (const s of data.stoffer) {
     for (const a of s.aliaser ?? []) {
       const n = stoffslug(a)
       if (slugs.has(n)) feil.push(`Aliaset «${a}» (${s.slug}) er nøkkelen til et annet stoff.`)
       if (aliaser.has(n) && aliaser.get(n) !== s.slug) feil.push(`Aliaset «${a}» står på flere stoffer.`)
       aliaser.set(n, s.slug)
+    }
+  }
+  const eier = new Map(navn)
+  for (const s of data.stoffer) {
+    for (const a of s.aliaser ?? []) {
+      const n = navnenokkel(a)
+      if (!n) feil.push(`Aliaset «${a}» (${s.slug}) har ingen bokstaver eller tall.`)
+      else if (eier.has(n) && eier.get(n) !== s.slug) feil.push(`Aliaset «${a}» (${s.slug}) er det samme navnet som et annet stoff har.`)
+      else eier.set(n, s.slug)
     }
   }
   const primare = new Map<string, number>()

@@ -244,8 +244,7 @@
           "merknad": "",
           "tekst": "10 – 300"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "LISI",
@@ -270,8 +269,7 @@
           "merknad": "",
           "tekst": "10 – 300"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "RAMAT",
@@ -296,8 +294,7 @@
           "merknad": "",
           "tekst": "4 – 60"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "EPLR",
@@ -322,8 +319,7 @@
           "merknad": "",
           "tekst": "3,5 – 350"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "KANR",
@@ -348,10 +344,7 @@
           "merknad": "",
           "tekst": "15 – 300"
         }
-      },
-      "aliaser": [
-        "spironolakton"
-      ]
+      }
     },
     {
       "kode": "KARV",
@@ -376,8 +369,7 @@
           "merknad": "",
           "tekst": "2,5 – 50"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "LABE",
@@ -402,8 +394,7 @@
           "merknad": "",
           "tekst": "50 – 1000"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "DOKSA",
@@ -428,8 +419,7 @@
           "merknad": "",
           "tekst": "5 – 80"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "IRBE",
@@ -454,8 +444,7 @@
           "merknad": "",
           "tekst": "300 – 3000"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "KAND",
@@ -480,8 +469,7 @@
           "merknad": "",
           "tekst": "15 – 200"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "LOSYR",
@@ -506,8 +494,7 @@
           "merknad": "",
           "tekst": "30 – 350"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "TELM",
@@ -532,8 +519,7 @@
           "merknad": "",
           "tekst": "8 – 80"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "VALS",
@@ -558,8 +544,7 @@
           "merknad": "",
           "tekst": "300 – 4000"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "ATEN",
@@ -584,8 +569,7 @@
           "merknad": "",
           "tekst": "75 – 750"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "BISO",
@@ -610,8 +594,7 @@
           "merknad": "",
           "tekst": "10 – 200"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "METOP",
@@ -636,8 +619,7 @@
           "merknad": "",
           "tekst": "10 – 500"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "BEND",
@@ -662,8 +644,7 @@
           "merknad": "",
           "tekst": "1,5 – 30"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "BUME",
@@ -683,8 +664,7 @@
       "antihypertensiv": {
         "pavisningsgrense": 10,
         "terapiomrade": null
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "FURO",
@@ -704,8 +684,7 @@
       "antihypertensiv": {
         "pavisningsgrense": 50,
         "terapiomrade": null
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "HYDR",
@@ -730,8 +709,7 @@
           "merknad": "",
           "tekst": "15 – 300"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "AMLO",
@@ -756,8 +734,7 @@
           "merknad": "",
           "tekst": "10 – 70"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "DIL",
@@ -782,8 +759,7 @@
           "merknad": "",
           "tekst": "100 – 500"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "LERK",
@@ -808,8 +784,7 @@
           "merknad": "",
           "tekst": "0,2 – 5"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "NIFE",
@@ -834,8 +809,7 @@
           "merknad": "",
           "tekst": "20 – 150"
         }
-      },
-      "aliaser": []
+      }
     },
     {
       "kode": "VER",
@@ -860,8 +834,7 @@
           "merknad": "",
           "tekst": "40 – 400"
         }
-      },
-      "aliaser": []
+      }
     }
   ]
 }

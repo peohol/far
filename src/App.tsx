@@ -201,10 +201,9 @@ export default function App() {
 
   // Fagsøket: indeksen over alt publisert fagstoff, hentet når appen har tid
   // til overs etter at den er åpnet, eller første gang noen søker før det. De
-  // andre navnene en kode er kjent under, kommer fra katalogen, så fagsøket og
-  // analyttsøket kjenner de samme; de blir andre navn på stoffet koden
-  // primært hører til. Søket viser selv at det henter, så hentingen står ikke
-  // i lasteindikatoren.
+  // andre navnene et stoff er kjent under, står i stoffregisteret, som både
+  // fagsøket og analyttsøket bruker. Søket viser selv at det henter, så
+  // hentingen står ikke i lasteindikatoren.
   const hentSokeindeks = useCallback<Sokeindekshenter>(
     (delvis) => {
       const stille = iBakgrunnen(klient())
@@ -214,10 +213,6 @@ export default function App() {
         {
           farmakogenetikk: lagFarmakogenetikkleser(stille),
           cpic: lagCpicleser(stille),
-          aliaser: (kode) => {
-            const oppforing = katalog.finn(kode)
-            return oppforing?.kode === oppforing?.fortolkning.kode ? oppforing?.fortolkning.aliaser : undefined
-          },
           katalog,
         },
         delvis,

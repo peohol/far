@@ -135,7 +135,7 @@ export const ETG_ANALYTT: Analyte = {
   kategori: '',
   enhet: '',
   maleomrade: { tekst: '', deler: [] },
-  aliaser: [ETG_KODE, ETS_KODE, 'EtG', 'EtS', 'etanol', 'alkohol'],
+  aliaser: [ETG_KODE, ETS_KODE],
 }
 
 export function erEtgAnalytt(analyte: Analyte): boolean {

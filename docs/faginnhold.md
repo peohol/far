@@ -71,8 +71,14 @@ Begrepene holdes fra hverandre:
 
 - **Stoff** — et virkestoff eller rusmiddel i stoffregisteret
   (`src/data/stoffregister.json`), med en stabil nøkkel (`slug`, f.eks.
-  `bupropion`), et navn og eventuelle aliaser (f.eks. «Hydroksybupropion»).
-  Stoffet er den eneste identiteten en fagside har. Registeret er fasit for
+  `bupropion`), et navn og eventuelle aliaser (f.eks. «Hydroksybupropion»,
+  «quetiapine», «CBD»). Aliasene er den eneste lista over søkenavn for
+  stoffene: fagsøket og søket etter analytter i fortolkningen bruker begge
+  den, og et eksakt alias rangeres som et eksakt navn. Et alias kan være et
+  moderstoff eller en metabolitt uten egen fagside, men aldri et navn et
+  annet stoff har — heller ikke skrevet på en annen måte, som
+  `kontrollerStoffregister` sjekker. Preparatnavn er ikke aliaser; de kommer
+  fra legemiddeldataene. Stoffet er den eneste identiteten en fagside har. Registeret er fasit for
   hvilke stoffer som finnes, uavhengig av analyttkatalogen.
 - **Stoffside** (`infoside` i databasen) — fagsiden om ett stoff: navnet,
   nøkkelen og innholdselementene. Siden finnes etter nøkkelen, aldri gjennom en
@@ -540,19 +546,27 @@ seksjoner, som åpnes når brukeren går til et treff der.
 
 **Rangeringen** er fast og forklarbar, uten uklar likhetssøk. Alle ordene i
 søket må treffe; æ, ø og å leses som a, o og a, og aksenter og store
-bokstaver teller ikke. Først avgjør feltet, i planens rekkefølge
-(`docs/ux-reimagination.md`, 6.2): stoffnavn og kode, så alias og komponent,
-preparatnavn, overskrifter, verdier og tabeller, fritekst og til sist
-referanser. Innen samme felt kommer en tekst som begynner med søket foran en
-der søket begynner et ord, og den foran en der det står inne i et ord. Ellers
-står treffene i sidens rekkefølge.
+bokstaver teller ikke. Navnet, koden, aliasene og komponentene sammenlignes i
+tillegg på navnenøkkelen (`src/domain/sokenavn.ts`), som også ser bort fra
+skilletegn, greske bokstaver (Δ9/delta-9) og norsk og engelsk stavemåte
+(ph/f, th/t, ch/k, qu/kv, x/ks, c/k og en stum e til slutt): «quetiapine»
+finner Kvetiapin og «THC COOH» finner THC. Et eksakt navn, en eksakt kode og
+et eksakt alias er det beste treffet som finnes. Ellers avgjør feltet, i
+planens rekkefølge (`docs/ux-reimagination.md`, 6.2): stoffnavn og kode, så
+alias og komponent, preparatnavn, overskrifter, verdier og tabeller, fritekst
+og til sist referanser. Innen samme felt kommer en tekst som begynner med
+søket foran en der søket begynner et ord, og den foran en der det står inne i
+et ord. Ellers står treffene i sidens rekkefølge.
 
 **Søket i hele kunnskapsbasen** (`globaltSok.ts`) indekserer hvert stoff i
 stoffregisteret, med den publiserte siden når det har en, med den samme
 `indekserSide`, så det finner det samme som søket på hver side. Treffet er
-alltid stoffet: koden, navnet og komponentene til analyttene det er koblet
-til, er bare andre veier dit (`stoffidentitet` i `sok.ts`). «bupropion»,
-«hydroksybupropion» og «HBUP» gir alle Bupropion på `#/stoff/bupropion`.
+alltid stoffet: aliasene i registeret, og koden, navnet og komponentene til
+analyttene det er koblet til, er bare andre veier dit (`stoffidentitet` i
+`sok.ts`). «bupropion», «hydroksybupropion» og «HBUP» gir alle Bupropion på
+`#/stoff/bupropion`. Koden til en analytt stoffet bare er sekundært koblet til
+(AMTNORSUM på Nortriptylin), er en komponent, ikke et alias, så den ikke
+rangeres som stoffets eget navn.
 Lesingen er fire kall uansett antall sider: `les_stoffer` gir alle sidene på
 samme form som `les_stoff`, med referansene én gang; `les_legemidler` gir legemiddeldataene for alle
 koblingene, og hver side får sin del av dem (`utvalgFor`); `les_interaksjoner`

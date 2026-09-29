@@ -126,7 +126,6 @@ scripts/build_antihypertensiver.py
 src/data/analytter.json     Generert datasett (sjekket inn)
 src/data/antihypertensiver.json
                             Generert datasett (sjekket inn)
-src/data/aliaser.json       Håndholdte ekstra søkeord per analyttkode
 src/data/endringslogg.ts    Endringsloggen appen viser (håndholdt)
 src/types.ts                Datamodellen
 src/state.ts                Tilstandsmaskinen for stegene
@@ -490,10 +489,10 @@ tallet.
 | BUME (Bumetanid, uten terapiområde) | 10 nmol/L · `≥ 1600` | `< 10` · `10 – 1599` · `≥ 1600` |
 
 Kanrenon er den aktive metabolitten av spironolakton, og det er moderstoffet
-som står på rekvisisjonen. Analytten har derfor «spironolakton» som søkeord i
-`src/data/aliaser.json`. Enalaprilat, ramiprilat og losartansyre trenger
-ingenting tilsvarende: navnene begynner på moderstoffet, og søket treffer på
-begynnelsen av navnet.
+som står på rekvisisjonen. Stoffet Kanrenon har derfor «spironolakton» som
+alias i stoffregisteret (`src/data/stoffregister.json`), og søket finner
+analytten på det. Enalaprilat, ramiprilat og losartansyre har moderstoffet som
+alias på samme måte.
 
 ### Rettelser gjort i teksten
 

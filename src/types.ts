@@ -67,8 +67,12 @@ export interface Analyte {
   maleomrade: MeasuringRange
   /** Satt for antihypertensiver, som viser andre referansetall enn psykofarmaka. */
   antihypertensiv?: Antihypertensivgrenser
-  /** Ekstra søkeord, vedlikeholdt i `src/data/aliaser.json`. */
-  aliaser: string[]
+  /**
+   * Modulens egne søkeord, som «cannabis». Navnene og aliasene til stoffene
+   * analytten er koblet til, står i stoffregisteret og trengs bare her når
+   * de skal skille modulen fra en annen for det samme stoffet.
+   */
+  aliaser?: string[]
 }
 
 /** En rettelse gjort i teksten fra kilden, for etterprøving. */
