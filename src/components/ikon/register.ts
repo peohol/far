@@ -36,6 +36,7 @@ export type Ikonanimasjon =
   | 'spinm60'
   | 'spin240'
   | 'spinback'
+  | 'spin360'
   | 'rayL'
   | 'rayS'
   | 'wink'
@@ -717,7 +718,9 @@ const REGISTER = {
   },
   rotate: {
     vb: 24,
-    ga: 'spin45',
+    // En hel runde: animasjonene holder ikke sluttvinkelen (se ikon.css), og
+    // pila er ikke symmetrisk, så en kvart runde ville hoppet tilbake.
+    ga: 'spin360',
     parts: [C(12, 12, 3, 'f2', 'accent'), P('M19.4 13.5A7.6 7.6 0 1 1 17.4 6.6L20 9.2', 'l', 'i-ink'), P('M20 4.8v4.4h-4.4', 'l', 'i-ink')],
   },
   // Tegnet i OUSFAR for idéene, i samme stil som resten av registeret.
