@@ -1,6 +1,6 @@
 /**
  * Appskallet: den ene faste toppmenyen, dokken på smale flater og
- * nedtrekksmenyene i den, kontoen og adminmenyen (`src/components/toppmeny/`,
+ * nedtrekksmenyene i den, idéene, kontoen og adminmenyen (`src/components/toppmeny/`,
  * `Nedtrekksmeny`).
  *
  * Menyen er en svevende pille øverst i vinduet. Flaten er delvis
@@ -304,10 +304,9 @@
   }
 }
 
-/* --- Nedtrekksmenyene og idéknappen --------------------------------------------
-   Kontoen og adminmenyen (`Nedtrekksmeny`) henger et panel under knappen. */
-.nedtrekk,
-.toppmeny__merket {
+/* --- Nedtrekksmenyene ------------------------------------------------------------
+   Idéene, kontoen og adminmenyen (`Nedtrekksmeny`) henger et panel under knappen. */
+.nedtrekk {
   position: relative;
   flex: none;
 }
@@ -355,8 +354,9 @@
   outline: none;
 }
 
-/* Adminmenyen har bare korte valg. */
-.adminmeny .nedtrekk__panel {
+/* Adminmenyen og idémenyen har bare korte valg. */
+.adminmeny .nedtrekk__panel,
+.idemeny .nedtrekk__panel {
   width: min(15rem, calc(100vw - 2 * var(--rom-side)));
 }
 

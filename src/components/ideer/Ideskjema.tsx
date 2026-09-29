@@ -13,12 +13,7 @@ import { Rikteksteditor } from '../stoffside/Rikteksteditor'
 import { Forlatvarsel } from '../stoffside/Skjemaer'
 import { Button } from '../Button'
 import { Felt } from '../konto/Felt'
-
-/**
- * `lagrer`: lagringen er sendt, og skjemaet kan ikke forlates før svaret har
- * kommet — ellers ville idéen blitt lagret etter at brukeren forkastet den.
- */
-export type Skjemastatus = 'uendret' | 'ulagret' | 'lagrer'
+import type { Skjemastatus } from './useForlatvakt'
 
 /**
  * Skjemaet for en ny idé, eller for å endre en: kategori og overskrift må

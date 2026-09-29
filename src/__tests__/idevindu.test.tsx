@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 /**
- * Idévinduet: lista med sorteringen, siden for én idé med kommentartråden,
- * hjertene, skjemaet for en ny idé og hvem som ser slettknappene.
+ * Idévinduet: lista med sorteringen og skuffene for de overførte og de
+ * arkiverte, siden for én idé med kommentartråden, hjertene, skjemaet for en
+ * ny idé, hvem som ser slettknappene, og det en administrator gjør med en idé.
  *
  * Økten og kallene mot databasen er erstattet; det er skjermbildene som prøves.
  */
@@ -35,8 +36,10 @@ const ADMIN = profil('admin', 'Anne', 'Admin', { role: 'admin' })
 const DOK = (tekst: string) => ({ type: 'doc' as const, content: [{ type: 'paragraph', content: [{ type: 'text', text: tekst }] }] })
 
 const IDEER: Ide[] = [
-  { id: 'i1', forfatter_id: 'kari', kategori: 'fag', tittel: 'Flere TDM-kilder', opprettet_kl: '2026-09-26T10:00:00Z', endret_kl: null, hjerter: 2, mitt_hjerte: false, status: 'planlagt', kommentarer: 3, nye_kommentarer: 1 },
-  { id: 'i2', forfatter_id: 'ola', kategori: 'funksjonalitet', tittel: 'Hurtigtast for kopiering', opprettet_kl: '2026-09-27T10:00:00Z', endret_kl: null, hjerter: 0, mitt_hjerte: false, status: null, kommentarer: 0, nye_kommentarer: 0 },
+  { id: 'i1', forfatter_id: 'kari', kategori: 'fag', tittel: 'Flere TDM-kilder', opprettet_kl: '2026-09-26T10:00:00Z', endret_kl: null, hjerter: 2, mitt_hjerte: false, arkivert_kl: null, oppgave: null, kommentarer: 3, nye_kommentarer: 1 },
+  { id: 'i2', forfatter_id: 'ola', kategori: 'funksjonalitet', tittel: 'Hurtigtast for kopiering', opprettet_kl: '2026-09-27T10:00:00Z', endret_kl: null, hjerter: 0, mitt_hjerte: false, arkivert_kl: null, oppgave: null, kommentarer: 0, nye_kommentarer: 0 },
+  { id: 'i3', forfatter_id: 'ola', kategori: 'fag', tittel: 'Overført idé', opprettet_kl: '2026-09-20T10:00:00Z', endret_kl: null, hjerter: 1, mitt_hjerte: false, arkivert_kl: null, oppgave: { id: 'o1', status: 'under_arbeid', nummer: null }, kommentarer: 0, nye_kommentarer: 0 },
+  { id: 'i4', forfatter_id: 'kari', kategori: 'annet', tittel: 'Arkivert idé', opprettet_kl: '2026-09-21T10:00:00Z', endret_kl: null, hjerter: 0, mitt_hjerte: false, arkivert_kl: new Date(Date.now() - 20 * 86_400_000).toISOString(), oppgave: null, kommentarer: 1, nye_kommentarer: 0 },
 ]
 
 const TRAAD: Idetraad = {
@@ -49,7 +52,8 @@ const TRAAD: Idetraad = {
   endret_kl: null,
   hjerter: 2,
   mitt_hjerte: false,
-  status: 'planlagt',
+  arkivert_kl: null,
+  oppgave: null,
   // Kari var sist inne før Olas siste svar.
   sist_sett: '2026-09-26T12:30:00Z',
   lest_kl: '2026-09-27T09:00:00Z',
@@ -72,7 +76,11 @@ const api = vi.hoisted(() => ({
   endreKommentar: vi.fn(async () => {}),
   slettKommentar: vi.fn(async () => {}),
   settHjerte: vi.fn(async () => {}),
-  settIdestatus: vi.fn(async () => {}),
+  arkiverIde: vi.fn(async () => {}),
+  gjenopprettIde: vi.fn(async () => {}),
+  ryddIdearkiv: vi.fn(async () => {}),
+  overforIde: vi.fn(async () => 'o-ny'),
+  flyttOppgaveTilbake: vi.fn(async () => {}),
   merkIdeSett: vi.fn(async () => {}),
   hentIdeerMedNytt: vi.fn(async () => 0),
 }))
@@ -111,7 +119,8 @@ afterEach(() => {
   vi.clearAllMocks()
 })
 
-const apne = () => render(<Ideer apen onLukk={() => {}} />)
+const onOppgaver = vi.fn()
+const apne = () => render(<Ideer apen onLukk={() => {}} onOppgaver={onOppgaver} />)
 
 describe('lista', () => {
   it('viser idéene som kort under de tre kategoriene', async () => {
@@ -119,8 +128,62 @@ describe('lista', () => {
     const fag = await screen.findByRole('region', { name: /^Fag/ })
     expect(within(fag).getByRole('button', { name: /Flere TDM-kilder/ })).toBeTruthy()
     expect(screen.getByRole('region', { name: /^Funksjonalitet/ })).toBeTruthy()
-    // En tom kategori har et kort som starter en ny idé i den.
+    // Overførte og arkiverte idéer står ikke under kategoriene.
+    expect(within(fag).queryByRole('button', { name: /Overført idé/ })).toBeNull()
+    expect(within(screen.getByRole('region', { name: /^Annet/ })).queryByRole('button', { name: /Arkivert idé/ })).toBeNull()
+  })
+
+  it('har en knapp for en ny idé under hver kategori, også når den har idéer, som starter med kategorien valgt', async () => {
+    const bruker = userEvent.setup()
+    apne()
+    const fag = await screen.findByRole('region', { name: /^Fag/ })
+    const knapper = within(fag).getAllByRole('button')
+    expect(knapper.at(-1)!.getAttribute('aria-label')).toBe('Ny idé i fag')
     expect(within(screen.getByRole('region', { name: /^Annet/ })).getByRole('button', { name: 'Ny idé i annet' })).toBeTruthy()
+
+    await bruker.click(knapper.at(-1)!)
+    expect((screen.getByRole('radio', { name: 'Fag' }) as HTMLInputElement).checked).toBe(true)
+  })
+
+  it('har ingen knapp for en ny idé under hver bruker', async () => {
+    api.hentSortering.mockResolvedValue({ forst: 'bruker', deretter: 'tid' })
+    apne()
+    const ola = await screen.findByRole('region', { name: /Ola Svendsen/ })
+    expect(within(ola).queryByRole('button', { name: /Ny idé/ })).toBeNull()
+  })
+
+  it('har de overførte idéene i en lukket skuff, der et kort åpner oppgaven', async () => {
+    const bruker = userEvent.setup()
+    apne()
+    const skuff = await screen.findByRole('button', { name: /Planlagte oppgaver 1/ })
+    expect(skuff.getAttribute('aria-expanded')).toBe('false')
+    await bruker.click(skuff)
+    expect(skuff.getAttribute('aria-expanded')).toBe('true')
+    const kort = screen.getByRole('button', { name: /Overført idé/ })
+    expect(within(kort).getByText('Under arbeid')).toBeTruthy()
+    await bruker.click(kort)
+    expect(onOppgaver).toHaveBeenCalledWith('o1')
+  })
+
+  it('har arkivet i en lukket skuff nederst, med når idéene slettes, og arkiverte idéer kan leses men ikke kommenteres', async () => {
+    const bruker = userEvent.setup()
+    api.hentIdetraad.mockResolvedValue({ ...TRAAD, id: 'i4', tittel: 'Arkivert idé', arkivert_kl: IDEER[3]!.arkivert_kl })
+    apne()
+    const knapper = await screen.findAllByRole('button', { name: /^(Planlagte oppgaver|Ikke aktuelt) \d/ })
+    expect(knapper.map((k) => k.textContent)).toEqual(['Planlagte oppgaver1', 'Ikke aktuelt1'])
+    await bruker.click(knapper[1]!)
+    const kort = screen.getByRole('button', { name: /Arkivert idé/ })
+    expect(within(kort).getByText('Slettes om 40 dager')).toBeTruthy()
+
+    await bruker.click(kort)
+    expect(await screen.findByRole('heading', { name: 'Arkivert idé', level: 3 })).toBeTruthy()
+    expect(screen.getByRole('note').textContent).toMatch(/Ikke aktuelt\. Idéen slettes automatisk/)
+    expect(screen.queryByRole('button', { name: 'Skriv en kommentar' })).toBeNull()
+    expect(screen.getByText(/Tråden er frosset/)).toBeTruthy()
+    expect(screen.queryByRole('button', { name: 'Svar' })).toBeNull()
+    expect((screen.getByRole('button', { name: '2 hjerter på idéen' }) as HTMLButtonElement).disabled).toBe(true)
+    // Bare en administrator kan gjenopprette.
+    expect(screen.queryByRole('button', { name: 'Gjenopprett' })).toBeNull()
   })
 
   it('grupperer etter bruker og lagrer valget, og tid kan ikke velges først', async () => {
@@ -208,11 +271,10 @@ describe('én idé', () => {
   })
 })
 
-describe('status og det nye', () => {
-  it('viser statusen og de nye kommentarene på kortet', async () => {
+describe('det nye', () => {
+  it('viser de nye kommentarene på kortet', async () => {
     apne()
     const kort = await screen.findByRole('button', { name: /Flere TDM-kilder/ })
-    expect(within(kort).getByText('Planlagt')).toBeTruthy()
     expect(within(kort).getByRole('img', { name: '3 kommentarer, 1 ny' })).toBeTruthy()
   })
 
@@ -224,22 +286,73 @@ describe('status og det nye', () => {
     await waitFor(() => expect(api.merkIdeSett).toHaveBeenCalledWith(expect.objectContaining({ id: 'i1', lest_kl: '2026-09-27T09:00:00Z' })))
     // Bare Olas svar etter forrige besøk er nytt; Karis egne er aldri det.
     expect(screen.getAllByText('Ny')).toHaveLength(1)
-    // Ingen andre enn administratorer ser statusvalgene.
-    expect(screen.queryByRole('group', { name: 'Status' })).toBeNull()
+    // Ingen andre enn administratorer kan arkivere eller overføre.
+    expect(screen.queryByRole('button', { name: 'Ikke aktuelt' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Overfør til planlagte oppgaver' })).toBeNull()
   })
+})
 
-  it('lar en administrator gi idéen status', async () => {
-    const bruker = userEvent.setup()
+describe('det en administrator gjør med en idé', () => {
+  const tilIdeen = async (bruker: ReturnType<typeof userEvent.setup>) => {
     tilstand.meg = ADMIN
     apne()
     await bruker.click(await screen.findByRole('button', { name: /Flere TDM-kilder/ }))
-    const status = await screen.findByRole('group', { name: 'Status' })
-    expect(within(status).getByRole('button', { name: 'Planlagt' }).getAttribute('aria-pressed')).toBe('true')
-    await bruker.click(within(status).getByRole('button', { name: 'Gjennomført' }))
-    expect(api.settIdestatus).toHaveBeenCalledWith('i1', 'gjennomfort')
-    expect(within(status).getByRole('button', { name: 'Gjennomført' }).getAttribute('aria-pressed')).toBe('true')
-    await bruker.click(within(status).getByRole('button', { name: 'Ingen' }))
-    expect(api.settIdestatus).toHaveBeenLastCalledWith('i1', null)
+    await screen.findByRole('heading', { name: 'Flere TDM-kilder', level: 3 })
+  }
+
+  it('legger den i «Ikke aktuelt», og kan angre fra meldingen nederst', async () => {
+    const bruker = userEvent.setup()
+    await tilIdeen(bruker)
+    await bruker.click(screen.getByRole('button', { name: 'Ikke aktuelt' }))
+    expect(api.arkiverIde).toHaveBeenCalledWith('i1')
+    expect(await screen.findByRole('region', { name: /^Fag/ })).toBeTruthy()
+    const melding = screen.getByRole('status')
+    expect(melding.textContent).toMatch(/Idéen er lagt i «Ikke aktuelt»/)
+
+    const hentinger = api.hentIdeer.mock.calls.length
+    await bruker.click(within(melding).getByRole('button', { name: 'Angre' }))
+    expect(api.gjenopprettIde).toHaveBeenCalledWith('i1')
+    await waitFor(() => expect(screen.queryByRole('status')).toBeNull())
+    expect(api.hentIdeer.mock.calls.length).toBeGreaterThan(hentinger)
+  })
+
+  it('overfører den til planlagte oppgaver, og kan angre fra meldingen nederst', async () => {
+    const bruker = userEvent.setup()
+    await tilIdeen(bruker)
+    await bruker.click(screen.getByRole('button', { name: 'Overfør til planlagte oppgaver' }))
+    expect(api.overforIde).toHaveBeenCalledWith('i1')
+    const melding = await screen.findByRole('status')
+    expect(melding.textContent).toMatch(/overført til planlagte oppgaver/)
+    await bruker.click(within(melding).getByRole('button', { name: 'Angre' }))
+    expect(api.flyttOppgaveTilbake).toHaveBeenCalledWith('o-ny')
+  })
+
+  it('blir stående på idéen med feilen når det ikke gikk', async () => {
+    const bruker = userEvent.setup()
+    api.arkiverIde.mockRejectedValueOnce(new Error('Noe gikk galt. Prøv igjen.'))
+    await tilIdeen(bruker)
+    await bruker.click(screen.getByRole('button', { name: 'Ikke aktuelt' }))
+    expect(await screen.findByRole('alert')).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Flere TDM-kilder', level: 3 })).toBeTruthy()
+    expect(screen.queryByRole('status')).toBeNull()
+  })
+
+  it('gjenoppretter en arkivert idé, eller sletter den for godt', async () => {
+    const bruker = userEvent.setup()
+    const arkivert = { ...TRAAD, arkivert_kl: '2026-09-28T10:00:00Z' }
+    api.hentIdetraad.mockResolvedValueOnce(arkivert).mockResolvedValueOnce(TRAAD)
+    await tilIdeen(bruker)
+    await bruker.click(screen.getByRole('button', { name: 'Gjenopprett' }))
+    expect(api.gjenopprettIde).toHaveBeenCalledWith('i1')
+    // Hentet på nytt: åpen igjen, med knappene for å arkivere og overføre.
+    expect(await screen.findByRole('button', { name: 'Ikke aktuelt' })).toBeTruthy()
+
+    cleanup()
+    api.hentIdetraad.mockResolvedValue(arkivert)
+    await tilIdeen(bruker)
+    await bruker.click(screen.getByRole('button', { name: 'Slett idéen for godt' }))
+    await bruker.click(screen.getByRole('button', { name: 'Bekreft sletting av idéen for godt' }))
+    expect(api.slettIde).toHaveBeenCalledWith('i1')
   })
 })
 

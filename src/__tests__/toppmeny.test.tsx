@@ -29,7 +29,22 @@ vi.mock('../components/konto/Datakilder', () => ({
   Datakilder: ({ apen }: { apen: boolean }) => (apen ? <p>Datakildene</p> : null),
 }))
 vi.mock('../components/ideer/Ideer', () => ({
-  Ideer: ({ apen }: { apen: boolean }) => (apen ? <p>Idéene</p> : null),
+  Ideer: ({ apen, onOppgaver }: { apen: boolean; onOppgaver: (oppgave?: string) => void }) =>
+    apen ? (
+      <>
+        <p>Idéene</p>
+        <button onClick={() => onOppgaver('o1')}>Til oppgaven</button>
+      </>
+    ) : null,
+}))
+vi.mock('../components/ideer/Oppgaver', () => ({
+  Oppgaver: ({ apen, oppgave, onIdeer }: { apen: boolean; oppgave?: string; onIdeer: () => void }) =>
+    apen ? (
+      <>
+        <p>Oppgavene {oppgave}</p>
+        <button onClick={onIdeer}>Til idéene</button>
+      </>
+    ) : null,
 }))
 
 const { Ikon } = await import('../components/ikon/Ikon')
@@ -193,7 +208,7 @@ describe('plassene i toppmenyen', () => {
       </Ramme>,
     )
     const knapper = within(screen.getByRole('navigation', { name: 'Toppmeny' })).getAllByRole('button')
-    expect(knapper.map((k) => k.getAttribute('aria-label'))).toEqual(['Idéer', 'Administrasjon'])
+    expect(knapper.map((k) => k.getAttribute('aria-label'))).toEqual(['Idéer og planlagte oppgaver', 'Administrasjon'])
     for (const knapp of knapper) expect(knapp.querySelector('svg.ikon')).not.toBeNull()
   })
 
@@ -207,7 +222,7 @@ describe('plassene i toppmenyen', () => {
       </Ramme>,
     )
     const knapper = within(screen.getByRole('navigation', { name: 'Toppmeny' })).getAllByRole('button')
-    expect(knapper.map((k) => k.getAttribute('aria-label'))).toEqual(['Idéer'])
+    expect(knapper.map((k) => k.getAttribute('aria-label'))).toEqual(['Idéer og planlagte oppgaver'])
   })
 })
 
@@ -401,18 +416,47 @@ describe('adminmenyen', () => {
   })
 })
 
-describe('idéknappen', () => {
-  it('åpner idéene', async () => {
+describe('idémenyen', () => {
+  const MENY = 'Idéer og planlagte oppgaver'
+  const velg = async (valg: string, knapp = screen.getByRole('button', { name: new RegExp(`^${MENY}`) })) => {
+    await userEvent.click(knapp)
+    await userEvent.click(within(panel(knapp)).getByRole('button', { name: new RegExp(`^${valg}`) }))
+  }
+
+  it('har ett valg for idéene og ett for de planlagte oppgavene', async () => {
     render(
       <Ramme>
         <Ideknapp />
       </Ramme>,
     )
-    await userEvent.click(screen.getByRole('button', { name: 'Idéer' }))
+    const knapp = screen.getByRole('button', { name: MENY })
+    await userEvent.click(knapp)
+    const meny = panel(knapp)
+    expect(meny.getAttribute('data-lag')).toBe('idemeny')
+    expect(within(meny).getAllByRole('button').map((v) => v.textContent)).toEqual(['Idéer', 'Planlagte oppgaver'])
+
+    await userEvent.click(within(meny).getByRole('button', { name: 'Idéer' }))
     expect(screen.getByText('Idéene')).toBeTruthy()
+    expect(meny.hidden).toBe(true)
   })
 
-  it('har en prikk og antallet i navnet når noen har kommentert noe nytt', async () => {
+  it('åpner de planlagte oppgavene rett fra menyen, og går mellom lagene med bare ett åpent', async () => {
+    render(
+      <Ramme>
+        <Ideknapp />
+      </Ramme>,
+    )
+    await velg('Planlagte oppgaver')
+    expect(screen.getByText('Oppgavene')).toBeTruthy()
+    expect(screen.queryByText('Idéene')).toBeNull()
+    await userEvent.click(screen.getByRole('button', { name: 'Til idéene' }))
+    expect(screen.getByText('Idéene')).toBeTruthy()
+    await userEvent.click(screen.getByRole('button', { name: 'Til oppgaven' }))
+    expect(screen.getByText('Oppgavene o1')).toBeTruthy()
+    expect(screen.queryByText('Idéene')).toBeNull()
+  })
+
+  it('har en prikk og antallet i navnet, på knappen og valget, når noen har kommentert noe nytt', async () => {
     ideerMedNytt.antall = 2
     try {
       const { container } = render(
@@ -420,8 +464,10 @@ describe('idéknappen', () => {
           <Ideknapp />
         </Ramme>,
       )
-      expect(await screen.findByRole('button', { name: 'Idéer (nye kommentarer på 2 idéer)' })).toBeTruthy()
-      expect(container.querySelector('.nyprikk')).not.toBeNull()
+      const knapp = await screen.findByRole('button', { name: `${MENY} (nye kommentarer på 2 idéer)` })
+      expect(container.querySelector('.toppmeny__prikk')).not.toBeNull()
+      await userEvent.click(knapp)
+      expect(within(panel(knapp)).getByRole('img', { name: 'nye kommentarer på 2 idéer' })).toBeTruthy()
     } finally {
       ideerMedNytt.antall = 0
     }
@@ -433,13 +479,13 @@ describe('idéknappen', () => {
         <Ideknapp />
       </Ramme>,
     )
-    const knapp = screen.getByRole('button', { name: 'Idéer' })
+    const knapp = screen.getByRole('button', { name: MENY })
     ideerMedNytt.antall = 1
     try {
       await act(async () => {
         window.dispatchEvent(new Event('focus'))
       })
-      expect(knapp.getAttribute('aria-label')).toBe('Idéer (nye kommentarer på én idé)')
+      expect(knapp.getAttribute('aria-label')).toBe(`${MENY} (nye kommentarer på én idé)`)
     } finally {
       ideerMedNytt.antall = 0
     }

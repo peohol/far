@@ -6,7 +6,7 @@
  *
  * Økten og brukerdatabasen er erstattet; det er skjermbildene som prøves.
  */
-import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
+import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import type { Profil } from '@delt/profil'
@@ -46,6 +46,8 @@ const { Port } = await import('../components/konto/Port')
 const { Brukerliste } = await import('../components/konto/Brukerliste')
 const { statustekst } = await import('../components/stoffside/Redigeringslinje')
 const { TipsLag } = await import('../components/Tips')
+const { Versjonspille } = await import('../components/Versjonspille')
+const { visEndringslogg } = await import('../components/endringsloggvisning')
 
 function profil(id: string, fornavn: string, etternavn: string, ekstra: Partial<Profil> = {}): Profil {
   return {
@@ -144,6 +146,21 @@ describe('endringsloggen', () => {
     await userEvent.click(andre!)
     expect(andre!.getAttribute('aria-expanded')).toBe('true')
     expect(forste!.getAttribute('aria-expanded')).toBe('false')
+  })
+
+  it('åpnes fra andre steder på en bestemt føring, utfoldet og med fokus', () => {
+    render(
+      <TipsLag>
+        <Versjonspille />
+      </TipsLag>,
+    )
+    expect(screen.queryByRole('dialog', { name: 'Endringslogg' })).toBeNull()
+    const versjon = ENDRINGSLOGG[2]!
+    act(() => visEndringslogg(versjon.versjon))
+    const lag = screen.getByRole('dialog', { name: 'Endringslogg' })
+    const foring = within(lag).getByRole('button', { name: new RegExp(versjon.sammendrag.slice(0, 30)) })
+    expect(foring.getAttribute('aria-expanded')).toBe('true')
+    expect(document.activeElement).toBe(foring)
   })
 })
 

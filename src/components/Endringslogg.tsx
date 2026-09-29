@@ -33,14 +33,24 @@ const ETTER_GLIDNING = 300
  */
 const FORSTE_FORING = '.loggskuff__tittel'
 
-export function Endringslogg({ apen, onLukk }: { apen: boolean; onLukk: () => void }) {
+export function Endringslogg({
+  apen,
+  versjon = null,
+  onLukk,
+}: {
+  apen: boolean
+  /** Føringen som foldes ut og hentes fram når loggen åpnes, som fra en utført oppgave. */
+  versjon?: string | null
+  onLukk: () => void
+}) {
   /** Versjonen til skuffen som står åpen — bare én av gangen. */
   const [apenSkuff, setApenSkuff] = useState<string | null>(null)
 
   // Lukket lag: neste åpning skal begynne på toppen, med alle skuffer igjen.
+  // Åpnet på en føring: den står utfoldet og fram i bildet.
   useEffect(() => {
-    if (!apen) setApenSkuff(null)
-  }, [apen])
+    setApenSkuff(apen ? versjon : null)
+  }, [apen, versjon])
 
   const veksle = useCallback((versjon: string) => {
     setApenSkuff((forrige) => (forrige === versjon ? null : versjon))
@@ -52,7 +62,7 @@ export function Endringslogg({ apen, onLukk }: { apen: boolean; onLukk: () => vo
       tittel="Endringslogg"
       ikon="history"
       onLukk={onLukk}
-      autofokus={FORSTE_FORING}
+      autofokus={versjon ? `[data-versjon="${versjon}"] ${FORSTE_FORING}` : FORSTE_FORING}
       tettKropp
     >
       <ul className="logg__liste">
@@ -106,7 +116,7 @@ function Skuff({
   }, [apen])
 
   return (
-    <li ref={rad} className="loggskuff" data-apen={apen ? 'ja' : 'nei'}>
+    <li ref={rad} className="loggskuff" data-apen={apen ? 'ja' : 'nei'} data-versjon={endring.versjon}>
       <button
         type="button"
         className="loggskuff__tittel"

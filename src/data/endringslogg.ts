@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.53.0',
+    versjon: '1.54.0',
     dato: '2026-09-29',
     sammendrag: 'Stoffsidene handler om stoffet, og laboratorieanalyttene kobles til dem',
     typer: ['Funksjonalitet'],
@@ -25,6 +25,23 @@ export const ENDRINGSLOGG: Endring[] = [
       'Et stoff med analyser i flere fortolkningsmoduler, som THC i serum og THC-syre i urin, får én regelseksjon per modul på samme side.',
       'O-desmetylvenlafaksin har fått sin egen side, og hydroksyrisperidon finnes nå under Paliperidon.',
       'Fortolkningen og kommentarene er uendret.',
+    ],
+  },
+  {
+    versjon: '1.53.0',
+    dato: '2026-09-29',
+    sammendrag: 'Idéer kan legges i «Ikke aktuelt» eller overføres til et nytt vindu for planlagte oppgaver',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Større omfang',
+    punkter: [
+      'Idéer og Planlagte oppgaver har fått en felles knapp i toppmenyen, med ett valg for hver. Prikken for nye kommentarer står på knappen og ved «Idéer».',
+      'Hver kategori i Idéer har en knapp for ny idé nederst, som foreslår den kategorien.',
+      'Statusene på idéene er borte. En administrator har i stedet to knapper på idéen: «Ikke aktuelt» og «Overfør til planlagte oppgaver». Begge kan angres i ti sekunder.',
+      'Idéer som ikke er aktuelle, ligger i en egen skuff nederst i Idéer som alle kan åpne. En administrator kan hente dem tilbake eller slette dem, og etter 60 dager slettes de av seg selv.',
+      'Overførte idéer ligger i en egen skuff over «Ikke aktuelt». Et trykk på dem åpner oppgaven.',
+      'Det nye vinduet «Planlagte oppgaver» samler oppgavene etter status: ikke påbegynt, under arbeid og klar til implementering. Alle kan lese, men bare en administrator skriver prompten og setter statusen.',
+      'Kommentartråden følger med oppgaven, men er frosset, så den kan leses og ikke kommenteres. En oppgave kan flyttes tilbake til Idéer.',
+      'Utførte oppgaver får et nummer som OPG-001 og ligger i en egen skuff med en knapp som åpner føringen i endringsloggen.',
     ],
   },
   {

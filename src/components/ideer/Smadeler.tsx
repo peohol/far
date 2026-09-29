@@ -29,20 +29,24 @@ export function Hjerteknapp({
   gitt,
   onVeksle,
   hva,
+  laast = false,
 }: {
   antall: number
   gitt: boolean
   onVeksle: () => void
   /** «idéen» eller «kommentaren», til navnet på knappen. */
   hva: string
+  /** Idéen er frosset: hjertene står, men kan ikke gis eller tas tilbake. */
+  laast?: boolean
 }) {
   return (
     <button
       type="button"
       className="idehandling hjerteknapp"
       aria-pressed={gitt}
-      aria-label={`${gitt ? 'Ta tilbake hjertet på' : 'Gi hjerte til'} ${hva} (${antall})`}
+      aria-label={laast ? `${antall} ${antall === 1 ? 'hjerte' : 'hjerter'} på ${hva}` : `${gitt ? 'Ta tilbake hjertet på' : 'Gi hjerte til'} ${hva} (${antall})`}
       data-ih=""
+      disabled={laast}
       onClick={onVeksle}
     >
       <Ikon navn="heart" storrelse="ui" />
@@ -103,14 +107,30 @@ export function Idehandling({
   )
 }
 
-/** Hvor lenge «Bekreft» står før knappen går tilbake til «Slett». */
+/** Hvor lenge «Bekreft» står før knappen går tilbake. */
 const BEKREFT_I = 4000
 
 /**
- * Sletting i to trykk: det første gjør knappen om til «Bekreft sletting», det
- * andre sletter. Går fokus ut, eller går det noen sekunder, er den tilbake.
+ * En handling i to trykk, som sletting: det første gjør knappen om til
+ * «Bekreft …», det andre gjør det. Går fokus ut, eller går det noen
+ * sekunder, er den tilbake.
  */
-export function Slettknapp({ onSlett, hva }: { onSlett: () => void; hva: string }) {
+export function Bekreftknapp({
+  ikon,
+  tekst,
+  bekreftTekst,
+  etikett = tekst,
+  bekreftEtikett = bekreftTekst,
+  onBekreft,
+}: {
+  ikon: Ikonnavn
+  tekst: string
+  bekreftTekst: string
+  /** Navnet på knappen, når teksten alene ikke sier hva den gjelder. */
+  etikett?: string
+  bekreftEtikett?: string
+  onBekreft: () => void
+}) {
   const [bekreft, setBekreft] = useState(false)
   useEffect(() => {
     if (!bekreft) return
@@ -123,13 +143,27 @@ export function Slettknapp({ onSlett, hva }: { onSlett: () => void; hva: string 
       type="button"
       className="idehandling idehandling--slett"
       data-bekreft={bekreft || undefined}
-      aria-label={bekreft ? `Bekreft sletting av ${hva}` : `Slett ${hva}`}
+      aria-label={bekreft ? bekreftEtikett : etikett}
       data-ih=""
       onBlur={() => setBekreft(false)}
-      onClick={() => (bekreft ? onSlett() : setBekreft(true))}
+      onClick={() => (bekreft ? onBekreft() : setBekreft(true))}
     >
-      <Ikon navn="trash" storrelse="ui" />
-      <span aria-live="polite">{bekreft ? 'Bekreft sletting' : 'Slett'}</span>
+      <Ikon navn={ikon} storrelse="ui" />
+      <span aria-live="polite">{bekreft ? bekreftTekst : tekst}</span>
     </button>
+  )
+}
+
+/** Sletting i to trykk. */
+export function Slettknapp({ onSlett, hva }: { onSlett: () => void; hva: string }) {
+  return (
+    <Bekreftknapp
+      ikon="trash"
+      tekst="Slett"
+      bekreftTekst="Bekreft sletting"
+      etikett={`Slett ${hva}`}
+      bekreftEtikett={`Bekreft sletting av ${hva}`}
+      onBekreft={onSlett}
+    />
   )
 }

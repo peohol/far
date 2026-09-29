@@ -15,12 +15,16 @@ import { Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from './Smadeler'
  * rykker inn, og en loddrett linje viser hvilken kommentar svarene hører til.
  * Et trykk på linja, eller på pilen i hodet, legger kommentaren og svarene
  * under den sammen — med den samme glidningen som skuffene på stoffsidene.
+ *
+ * En arkivert eller overført idé har en frosset tråd: den kan leses, men
+ * ingen kan kommentere, svare, endre, slette eller gi hjerter.
  */
 export function Kommentartraad({
   traad,
   sistSett,
   onEndret,
   onHjerte,
+  laast = false,
 }: {
   traad: Idetraad
   /** Når idéen sist var åpnet før nå; kommentarer fra andre etter det er nye. */
@@ -28,6 +32,7 @@ export function Kommentartraad({
   /** Tråden er endret, og hentes på nytt. */
   onEndret: () => Promise<unknown>
   onHjerte: (kommentar: Kommentar) => void
+  laast?: boolean
 }) {
   const { meg } = useIdekontekst()
   const erNy = (kommentar: Kommentar) => erNyKommentar(kommentar, sistSett, meg.id)
@@ -40,11 +45,18 @@ export function Kommentartraad({
       <h4 id={id} className="idetraad__tittel">
         {antall === 0 ? 'Kommentarer' : `${antall} ${antall === 1 ? 'kommentar' : 'kommentarer'}`}
       </h4>
-      <Kommentarskriver ide={traad.id} forelder={null} onSendt={onEndret} />
+      {laast ? (
+        <p className="idetraad__laast">
+          <Ikon navn="lock" storrelse="ui" />
+          Tråden er frosset. Den kan leses, men ikke kommenteres.
+        </p>
+      ) : (
+        <Kommentarskriver ide={traad.id} forelder={null} onSendt={onEndret} />
+      )}
       {noder.length > 0 && (
         <ol className="kommentarer">
           {noder.map((node) => (
-            <Kommentarvisning key={node.kommentar.id} node={node} ide={traad.id} erNy={erNy} onEndret={onEndret} onHjerte={onHjerte} />
+            <Kommentarvisning key={node.kommentar.id} node={node} ide={traad.id} erNy={erNy} onEndret={onEndret} onHjerte={onHjerte} laast={laast} />
           ))}
         </ol>
       )}
@@ -58,12 +70,14 @@ function Kommentarvisning({
   erNy,
   onEndret,
   onHjerte,
+  laast,
 }: {
   node: Kommentarnode
   ide: string
   erNy: (kommentar: Kommentar) => boolean
   onEndret: () => Promise<unknown>
   onHjerte: (kommentar: Kommentar) => void
+  laast: boolean
 }) {
   const { kommentar, svar, antallSvar } = node
   const { meg, admin } = useIdekontekst()
@@ -77,7 +91,7 @@ function Kommentarvisning({
   const innholdId = useId()
   useSkjuling(kropp, inner, apen)
 
-  const eier = !kommentar.slettet && kommentar.forfatter_id === meg.id
+  const eier = !laast && !kommentar.slettet && kommentar.forfatter_id === meg.id
   const veksle = () => setApen((a) => !a)
   const skjulteSvar = !apen && antallSvar > 0
 
@@ -140,16 +154,18 @@ function Kommentarvisning({
           )}
           {!kommentar.slettet && !endrer && (
             <div className="idehandlinger idehandlinger--kommentar">
-              <Hjerteknapp antall={kommentar.hjerter} gitt={kommentar.mitt_hjerte} onVeksle={() => onHjerte(kommentar)} hva="kommentaren" />
-              <Idehandling ikon="reply" aria-expanded={svarer} onClick={() => setSvarer((s) => !s)}>
-                Svar
-              </Idehandling>
+              <Hjerteknapp antall={kommentar.hjerter} gitt={kommentar.mitt_hjerte} onVeksle={() => onHjerte(kommentar)} hva="kommentaren" laast={laast} />
+              {!laast && (
+                <Idehandling ikon="reply" aria-expanded={svarer} onClick={() => setSvarer((s) => !s)}>
+                  Svar
+                </Idehandling>
+              )}
               {eier && (
                 <Idehandling ikon="edit" onClick={() => setEndrer(true)}>
                   Rediger
                 </Idehandling>
               )}
-              {(eier || admin) && <Slettknapp hva="kommentaren" onSlett={() => void slett()} />}
+              {!laast && (eier || admin) && <Slettknapp hva="kommentaren" onSlett={() => void slett()} />}
             </div>
           )}
           {svarer && (
@@ -166,7 +182,7 @@ function Kommentarvisning({
           {svar.length > 0 && (
             <ol className="kommentarer">
               {svar.map((barn) => (
-                <Kommentarvisning key={barn.kommentar.id} node={barn} ide={ide} erNy={erNy} onEndret={onEndret} onHjerte={onHjerte} />
+                <Kommentarvisning key={barn.kommentar.id} node={barn} ide={ide} erNy={erNy} onEndret={onEndret} onHjerte={onHjerte} laast={laast} />
               ))}
             </ol>
           )}
