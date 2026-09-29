@@ -17,6 +17,11 @@ export function useForlatvakt() {
   /** Det som skal skje om brukeren forkaster endringene. */
   const [forlater, setForlater] = useState<(() => void) | null>(null)
 
+  const nullstill = useCallback(() => {
+    setStatus('uendret')
+    setForlater(null)
+  }, [])
+
   /** Gjør `handling` nå, eller spør først når skjemaet har endringer. */
   const forlat = (handling: () => void) => {
     if (status === 'uendret') handling()
@@ -29,7 +34,12 @@ export function useForlatvakt() {
     /** Om brukeren står og skal velge mellom å forkaste og å fortsette. */
     forlater: forlater !== null,
     forlat,
-    forkast: () => forlater?.(),
+    /** Endringene er forkastet, så vakten slipper før det brukeren ville, skjer. */
+    forkast: () => {
+      const handling = forlater
+      nullstill()
+      handling?.()
+    },
     fortsett: useCallback(() => setForlater(null), []),
     /** Til `vedLukking` på laget: holder det åpent og spør, når det trengs. */
     vedLukking: (onLukk: () => void) => () => {
@@ -37,10 +47,7 @@ export function useForlatvakt() {
       if (status === 'ulagret') setForlater(() => onLukk)
       return false
     },
-    /** En ny side begynner uten endringer. */
-    nullstill: useCallback(() => {
-      setStatus('uendret')
-      setForlater(null)
-    }, []),
+    /** En ny side, eller en ny åpning av laget, begynner uten endringer. */
+    nullstill,
   }
 }

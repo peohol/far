@@ -46,6 +46,9 @@ export function Oppgaver({
   const [feil, setFeil] = useState<string | null>(null)
   const [apneSkuffer, setApneSkuffer] = useState<ReadonlySet<string>>(new Set())
   const vakt = useForlatvakt()
+  const { nullstill } = vakt
+  /** Teller åpningene, så hver åpning begynner med sidene montert på nytt. */
+  const [apning, setApning] = useState(0)
   const rot = useRef<HTMLDivElement>(null)
   /** Kortet man gikk inn på, så tilbake lander på det. */
   const fra = useRef<string | null>(null)
@@ -59,15 +62,18 @@ export function Oppgaver({
     }
   }, [])
 
-  // Hver åpning begynner på lista, eller på oppgaven laget ble åpnet på.
+  // Hver åpning begynner på lista, eller på oppgaven laget ble åpnet på, uten
+  // endringer som ble forkastet sist.
   useEffect(() => {
     if (!apen) return
+    nullstill()
+    setApning((n) => n + 1)
     fra.current = oppgave ?? null
     setVisning(oppgave ? { side: 'oppgave', id: oppgave } : LISTE)
     setApneSkuffer(new Set())
     void hentListe()
     void hentAlleProfiler().then(setProfiler, () => undefined)
-  }, [apen, oppgave, hentListe])
+  }, [apen, oppgave, hentListe, nullstill])
 
   const gaaTil = (neste: Visning) => {
     vakt.nullstill()
@@ -111,7 +117,7 @@ export function Oppgaver({
       }
     >
       <Idekilde profiler={profiler}>
-        <div ref={rot} className="idevindu" key={visning.side === 'oppgave' ? visning.id : visning.side}>
+        <div ref={rot} className="idevindu" key={`${apning}:${visning.side === 'oppgave' ? visning.id : visning.side}`}>
           {feil && visning.side === 'liste' && (
             <p className="skjemafeil" role="alert">
               {feil}

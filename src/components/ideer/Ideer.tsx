@@ -52,6 +52,7 @@ export function Ideer({
   const [apneSkuffer, setApneSkuffer] = useState<ReadonlySet<string>>(new Set())
   const [angring, setAngring] = useState<Angring | null>(null)
   const vakt = useForlatvakt()
+  const { nullstill } = vakt
   const rot = useRef<HTMLDivElement>(null)
   /** Hvor lista stod, og kortet man gikk inn på, så tilbake lander samme sted. */
   const listeplass = useRef<{ rulling: number; ide: string | null }>({ rulling: 0, ide: null })
@@ -72,6 +73,7 @@ export function Ideer({
       setAngring(null)
       return
     }
+    nullstill()
     setVisning(LISTE)
     setApneSkuffer(new Set())
     listeplass.current = { rulling: 0, ide: null }
@@ -80,7 +82,7 @@ export function Ideer({
       .then(hentListe)
     void hentAlleProfiler().then(setProfiler, () => undefined)
     void hentSortering().then(setSortering, () => undefined)
-  }, [apen, hentListe])
+  }, [apen, hentListe, nullstill])
 
   const kropp = () => rot.current?.closest<HTMLElement>('.modallag__kropp') ?? null
 

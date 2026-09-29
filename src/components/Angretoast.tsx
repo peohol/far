@@ -22,16 +22,24 @@ export interface Angring {
  */
 export function Angretoast({ angring, onFerdig }: { angring: Angring; onFerdig: () => void }) {
   const [angrer, setAngrer] = useState(false)
-  const [feil, setFeil] = useState(false)
+  /** Hvor mange ganger angringen har feilet; fristen og streken begynner på nytt for hver. */
+  const [feil, setFeil] = useState(0)
   const ferdig = useRef(onFerdig)
   ferdig.current = onFerdig
 
   useEffect(() => {
     setAngrer(false)
-    setFeil(false)
+    setFeil(0)
+  }, [angring.nokkel])
+
+  // Fristen står stille mens angringen pågår, så meldingen blir stående til
+  // svaret er kommet. Feiler den, begynner fristen på nytt, så det går an å
+  // prøve igjen.
+  useEffect(() => {
+    if (angrer) return
     const frist = window.setTimeout(() => ferdig.current(), ANGREFRIST)
     return () => window.clearTimeout(frist)
-  }, [angring.nokkel])
+  }, [angring.nokkel, angrer])
 
   const angre = async () => {
     setAngrer(true)
@@ -39,19 +47,19 @@ export function Angretoast({ angring, onFerdig }: { angring: Angring; onFerdig: 
       await angring.angre()
       ferdig.current()
     } catch {
-      setFeil(true)
+      setFeil((n) => n + 1)
       setAngrer(false)
     }
   }
 
   return (
     <div className="angretoast" role="status" style={{ '--angrefrist': `${ANGREFRIST}ms` } as CSSProperties}>
-      <span className="angretoast__melding">{feil ? 'Fikk ikke angret. Prøv igjen.' : angring.melding}</span>
+      <span className="angretoast__melding">{feil > 0 ? 'Fikk ikke angret. Prøv igjen.' : angring.melding}</span>
       <button type="button" className="angretoast__knapp" disabled={angrer} onClick={() => void angre()}>
         <Ikon navn="reset" storrelse="ui" />
         {angrer ? 'Angrer …' : 'Angre'}
       </button>
-      <span className="angretoast__tid" aria-hidden="true" />
+      <span key={feil} className="angretoast__tid" data-venter={angrer || undefined} aria-hidden="true" />
     </div>
   )
 }

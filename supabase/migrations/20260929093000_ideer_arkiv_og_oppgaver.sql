@@ -178,6 +178,22 @@ begin
 end;
 $$;
 
+-- Låser idéen og krever at den står åpen. Låsen gjør at «Ikke aktuelt» og
+-- «Overfør» for samme idé ikke kan gå gjennom samtidig: den som kommer sist,
+-- venter og ser da at idéen alt er flyttet.
+create function intern.las_apen_ide(ide uuid)
+returns void
+language plpgsql
+set search_path = ''
+as $$
+begin
+  perform 1 from public.ideer i where i.id = las_apen_ide.ide for update;
+  if not public.ide_er_apen(las_apen_ide.ide) then
+    raise exception 'Idéen er alt arkivert eller overført.' using errcode = '55000';
+  end if;
+end;
+$$;
+
 -- «Ikke aktuelt»: idéen legges i arkivet.
 create function public.arkiver_ide(ide uuid)
 returns void
@@ -187,9 +203,7 @@ set search_path = ''
 as $$
 begin
   perform intern.krev_idevalg_admin();
-  if not public.ide_er_apen(arkiver_ide.ide) then
-    raise exception 'Idéen er alt arkivert eller overført.' using errcode = '55000';
-  end if;
+  perform intern.las_apen_ide(arkiver_ide.ide);
   update public.ideer set arkivert_kl = now() where id = arkiver_ide.ide;
 end;
 $$;
@@ -239,9 +253,7 @@ declare
   ny uuid;
 begin
   perform intern.krev_idevalg_admin();
-  if not public.ide_er_apen(overfor_ide.ide) then
-    raise exception 'Idéen er alt arkivert eller overført.' using errcode = '55000';
-  end if;
+  perform intern.las_apen_ide(overfor_ide.ide);
   insert into public.oppgaver (ide_id) values (overfor_ide.ide) returning id into ny;
   return ny;
 end;

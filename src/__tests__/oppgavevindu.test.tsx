@@ -215,6 +215,32 @@ describe('én oppgave', () => {
     expect(await screen.findByRole('region', { name: /^Ikke påbegynt/ })).toBeTruthy()
   })
 
+  it('slipper vakten når endringene er forkastet ved lukking, så laget kan lukkes neste gang', async () => {
+    const bruker = userEvent.setup()
+    tilstand.meg = ADMIN
+    const lukk = vi.fn()
+    const vis = (apen: boolean, oppgave?: string) => <Oppgaver apen={apen} oppgave={oppgave} onLukk={lukk} onIdeer={() => {}} />
+    const { rerender } = render(vis(true, 'a'))
+    await bruker.type(await screen.findByRole('textbox', { name: 'Prompt' }), 'Halvferdig')
+    await bruker.click(screen.getByRole('button', { name: 'Lukk planlagte oppgaver' }))
+    expect(lukk).not.toHaveBeenCalled()
+    await bruker.click(screen.getByRole('button', { name: 'Forkast endringene' }))
+    expect(lukk).toHaveBeenCalledOnce()
+
+    rerender(vis(false))
+    rerender(vis(true))
+    await screen.findByRole('region', { name: /^Ikke påbegynt/ })
+    lukk.mockClear()
+    await bruker.click(screen.getByRole('button', { name: 'Lukk planlagte oppgaver' }))
+    expect(lukk).toHaveBeenCalled()
+    expect(screen.queryByText('Du har endringer som ikke er lagret.')).toBeNull()
+
+    // Samme oppgave åpnes igjen uten det som ble forkastet.
+    rerender(vis(false))
+    rerender(vis(true, 'a'))
+    await waitFor(() => expect((screen.getByRole('textbox', { name: 'Prompt' }) as HTMLTextAreaElement).value).toBe(''))
+  })
+
   it('lar en administrator flytte oppgaven tilbake til idéene, i to trykk', async () => {
     const bruker = userEvent.setup()
     tilstand.meg = ADMIN
@@ -260,5 +286,29 @@ describe('meldingen med «Angre»', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Angre' }))
     expect(await screen.findByText('Fikk ikke angret. Prøv igjen.')).toBeTruthy()
     expect(ferdig).not.toHaveBeenCalled()
+  })
+
+  it('står stille mens angringen pågår, og begynner på nytt om den feiler', async () => {
+    vi.useFakeTimers()
+    try {
+      const ferdig = vi.fn()
+      let avvis: (grunn: Error) => void = () => {}
+      const angre = () => new Promise<void>((_, nei) => (avvis = nei))
+      render(<Angretoast angring={{ nokkel: 1, melding: 'Gjort.', angre }} onFerdig={ferdig} />)
+      act(() => vi.advanceTimersByTime(9_000))
+      fireEvent.click(screen.getByRole('button', { name: 'Angre' }))
+      act(() => vi.advanceTimersByTime(5_000))
+      expect(ferdig).not.toHaveBeenCalled()
+      expect(screen.getByRole('button', { name: 'Angrer …' })).toBeTruthy()
+
+      await act(async () => avvis(new Error('nei')))
+      expect(screen.getByText('Fikk ikke angret. Prøv igjen.')).toBeTruthy()
+      act(() => vi.advanceTimersByTime(9_900))
+      expect(ferdig).not.toHaveBeenCalled()
+      act(() => vi.advanceTimersByTime(200))
+      expect(ferdig).toHaveBeenCalledOnce()
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })

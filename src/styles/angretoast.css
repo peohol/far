@@ -61,6 +61,10 @@
   animation: angretoast-tid var(--angrefrist) linear forwards;
 }
 
+.angretoast__tid[data-venter] {
+  animation-play-state: paused;
+}
+
 @keyframes angretoast-tid {
   to {
     transform: scaleX(0);
