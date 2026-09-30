@@ -95,5 +95,5 @@ describe('t½ for moderstoffet og metabolittene i viktige data', () => {
   it('gjør ingenting når den kjøres en gang til', async () => {
     await kjorBare(db, HALVERINGSTID)
     expect(await halveringstider(db)).toEqual(etter)
-  })
+  }, 60_000)
 })

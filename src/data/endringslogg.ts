@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.62.0',
+    dato: '2026-09-30',
+    sammendrag: 'Halveringstiden står øverst på alle fagsider som har den, også for aktive metabolitter',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Fagsidene for venlafaksin, doksepin, fluoksetin, kariprazin, klomipramin og risperidon viser nå t½ øverst, med én verdi for moderstoffet og én for hver aktiv metabolitt, side om side — slik det står i farmakokinetikken.',
+      'På bupropionsiden står det nå at halveringstiden øverst er hydroksybupropions.',
+      'Redaktører kan oppgi hvilket stoff hver verdi for t½ og tss gjelder, på samme måte som legemiddelformen.',
+    ],
+  },
+  {
     versjon: '1.61.3',
     dato: '2026-09-30',
     sammendrag: 'Oppgaven «Søk skal være sensitivt for stoff-alias og forkortelser» er merket utført',

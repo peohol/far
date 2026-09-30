@@ -1634,13 +1634,13 @@ describe('redigeringsmodus', () => {
     const fyll = async (rad: HTMLElement, felt: Record<string, string>) => {
       for (const [merke, verdi] of Object.entries(felt)) await user.type(within(rad).getByLabelText(merke), verdi)
     }
-    await fyll(within(skjema).getByRole('group', { name: 'Legemiddelform 1' }), {
+    await fyll(within(skjema).getByRole('group', { name: 'Rad 1' }), {
       Legemiddelform: 'Peroralt',
       'Typisk verdi': '5',
       Enhet: 'døgn',
     })
-    await user.click(within(skjema).getByRole('button', { name: 'Legg til legemiddelform' }))
-    const depot = within(skjema).getByRole('group', { name: 'Legemiddelform 2' })
+    await user.click(within(skjema).getByRole('button', { name: 'Legg til rad' }))
+    const depot = within(skjema).getByRole('group', { name: 'Rad 2' })
     await fyll(depot, { Legemiddelform: 'Depotinjeksjon', 'Typisk verdi': '5', Minimum: '2', Maksimum: '4', Enhet: 'måneder' })
 
     await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
@@ -1657,6 +1657,39 @@ describe('redigeringsmodus', () => {
         former: [
           { form: 'Peroralt', typisk: 5, min: null, maks: null, enhet: 'døgn' },
           { form: 'Depotinjeksjon', typisk: null, min: 2, maks: 4, enhet: 'måneder' },
+        ],
+      },
+    })
+  })
+
+  it('legger inn t½ for moderstoffet og en metabolitt, med stoffet på hver rad', async () => {
+    const user = userEvent.setup()
+    const { lager } = vis('amitriptylin', kilde({ kanRedigere: true }))
+    await finnVerdi('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await user.click(await screen.findByRole('button', { name: 'Legg til: Halveringstid' }))
+    const skjema = redigeringsvindu('Halveringstid')
+    const fyll = async (rad: HTMLElement, felt: Record<string, string>) => {
+      for (const [merke, verdi] of Object.entries(felt)) await user.type(within(rad).getByLabelText(merke), verdi)
+    }
+    await fyll(within(skjema).getByRole('group', { name: 'Rad 1' }), { 'Typisk verdi': '25', Enhet: 'timer' })
+    await user.click(within(skjema).getByRole('button', { name: 'Legg til rad' }))
+    await fyll(within(skjema).getByRole('group', { name: 'Rad 2' }), { Stoff: 'Nortriptylin', 'Typisk verdi': '26', Enhet: 'timer' })
+
+    // Med flere rader må hver si hva den gjelder.
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+    expect(within(skjema).getByRole('alert').textContent).toBe('Rad 1: Oppgi legemiddelformen eller stoffet når kortet har flere.')
+    await user.type(within(within(skjema).getByRole('group', { name: 'Rad 1' })).getByLabelText('Stoff'), 'Amitriptylin')
+
+    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
+    await waitFor(() => expect(lager.opprettUtkast).toHaveBeenCalledTimes(1))
+    expect(vi.mocked(lager.opprettUtkast).mock.calls[0]![1]).toMatchObject({
+      panel: 'viktige_data',
+      elementtype: 'halveringstid',
+      data: {
+        former: [
+          { stoff: 'Amitriptylin', form: '', typisk: 25, min: null, maks: null, enhet: 'timer' },
+          { stoff: 'Nortriptylin', form: '', typisk: 26, min: null, maks: null, enhet: 'timer' },
         ],
       },
     })

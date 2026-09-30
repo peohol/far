@@ -431,7 +431,7 @@ styrer søket og nummereringen av referansene):
 | Panel | Nøkkel | Elementer |
 | --- | --- | --- |
 | Identitet | `identitet` | Ingen; navnet, kategoriene og de koblede analyttene kommer fra siden og stoffregisteret |
-| Viktige data | `viktige_data` | Ett kort per type og kode (`gjelder`, se «Sammenslåtte sider») — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk). Konsentrasjonene har `{ nedre, ovre, enhet }`; t½ og tss har `{ former: [{ form, typisk, min, maks, enhet }] }`, én rad per legemiddelform |
+| Viktige data | `viktige_data` | Ett kort per type og kode (`gjelder`, se «Sammenslåtte sider») — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk). Konsentrasjonene har `{ nedre, ovre, enhet }`; t½ og tss har `{ former: [{ stoff?, form, typisk, min, maks, enhet }] }`, én rad per legemiddelform eller stoff |
 | Farmakodynamikk, indikasjon | `farmakodynamikk`, `indikasjon` | `riktekst`: `{ dokument }` |
 | Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
 | Dosering | `dosering` | `riktekst`: `{ dokument }` |
@@ -444,7 +444,12 @@ styrer søket og nummereringen av referansene):
 Tallene i viktige data er tall, ikke tekst. Bare den ene grensen oppgitt vises
 som «> 10» eller «opptil 20», uten å si om grensen er med. t½ og tss viser
 «typisk (min–maks)», bare den typiske verdien eller bare området, per
-legemiddelform side om side; formen kan stå tom når det bare er én. Det
+legemiddelform side om side; formen kan stå tom når det bare er én. Oppgir
+kilden verdien for flere stoffer — moderstoffet og en aktiv metabolitt, som
+venlafaksin og O-desmetylvenlafaksin — har hver rad stoffet i `stoff`, og det
+står over verdien; uten `stoff` gjelder verdien sidens stoff. Er t½ eller tss
+oppgitt i farmakokinetikken, skal kortet stå i viktige data også
+(`*_halveringstid_metabolitter.sql` la til de som manglet). Det
 tidligere feltet `forbehold` vises ikke lenger, men står i eldre revisjoner,
 og t½/tss uten `former` leses som ett område eller én typisk verdi. Koden, navnet og
 kategorien i identiteten kommer fra stoffregisteret og koblingene; navnet fra
