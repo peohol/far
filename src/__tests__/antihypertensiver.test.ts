@@ -19,7 +19,11 @@ import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettB
 
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
 const plan = antihypertensivplan(katalog)
-const MIGRASJONER = migrasjonsfiler().filter((f) => /_antihypertensiver_import_\d+\.sql$/.test(f))
+// I nummerrekkefølgen importen lager dem: i produksjonen ble de rullet ut fem om gangen, så versjonene står ikke i samme rekkefølge.
+const nummer = (f: string) => Number(/_antihypertensiver_import_(\d+)\.sql$/.exec(f)?.[1])
+const MIGRASJONER = migrasjonsfiler()
+  .filter((f) => nummer(f) > 0)
+  .sort((a, b) => nummer(a) - nummer(b))
 const MIGRASJONSMAPPE = new URL('../../supabase/migrations/', import.meta.url)
 
 /** Panelene hver side har, som sidene om antidepressiva. */
