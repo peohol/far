@@ -5,9 +5,14 @@ import {
   ELEMENTTYPER,
   lesDosetabell,
   lesKinetikk,
+  lesMekanismekort,
   lesRiktekst,
+  mekanismekortTilData,
+  type Kinetikkdata,
+  type Mekanismekortdata,
   type Paneldefinisjon,
 } from '../../faginnhold/paneler'
+import { INGEN_EFFEKT, mekanismeFor, retningFor } from '../../faginnhold/mekanismer'
 import { doseringskort } from '../../faginnhold/doseringskort'
 import { OPPSUMMERINGSSKILLE, antall, forhandsvisning, ramsOpp } from '../../faginnhold/oppsummering'
 import { NODER, erTomt, klartekst, tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
@@ -18,11 +23,12 @@ import { Skuffrutenett } from '../seksjoner/Skuffrutenett'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { useSidereferanser } from '../referanser/Sidereferanser'
 import { Riktekst } from './Riktekst'
-import { DosetabellSkjema, KinetikkSkjema, PanelkildeSkjema, TekstSkjema } from './Skjemaer'
+import { DosetabellSkjema, KinetikkSkjema, MekanismekortSkjema, PanelkildeSkjema, TekstSkjema, type SkjemaProps } from './Skjemaer'
+import type { Ikonnavn } from '../ikon/register'
 import { Uthev } from '../Uthev'
 import { Sistredigert } from '../historikk/Sistredigert'
 import type { Stoffsidehandlinger } from './useStoffside'
-import { kinetikkikon, seksjonsikon, tekstvisning } from './panelvisning'
+import { kinetikkikon, mekanismeikon, seksjonsikon, tekstvisning } from './panelvisning'
 import { Serumtabell } from './Serumtabell'
 import '../../styles/monograf.css'
 
@@ -33,8 +39,8 @@ import '../../styles/monograf.css'
  *
  * Hvert panel er en seksjon som åpnes og lukkes (`src/components/seksjoner/`),
  * med en kort oppsummering av innholdet når den er lukket. Kortene i
- * farmakokinetikken og farmakogenetikken er detaljkort i et rutenett
- * (`Skuffrutenett`).
+ * farmakodynamikken, farmakokinetikken og farmakogenetikken er detaljkort i
+ * et rutenett (`Skuffrutenett`).
  *
  * I lesemodus vises bare det som har innhold: siden skal leses som et
  * oppslagsverk. I redigeringsmodus står alle panelene fram, med diskrete
@@ -282,11 +288,52 @@ function Tekstvisning({ nokkel, dokument }: { nokkel: string; dokument: Riktekst
 /** Lengste verdi som vises med store tall i et doseringskort; lengre tekst vises som lesetekst. */
 const KORT_VERDI = 28
 
-/* --- Kort med overskrift og tekst: farmakokinetikken og farmakogenetikken - */
+/* --- Kortseriene: farmakodynamikken, farmakokinetikken og de andre ------ */
+
+/**
+ * Hvordan en elementtype vises og redigeres som kort i en kortserie: hodet
+ * på det lukkede kortet, innholdet i det åpnede, og skjemaet. Kinetikkortene
+ * og mekanismekortene deler resten — rutenettet, knappene for å legge til,
+ * flytte og fjerne, og kildene nederst.
+ */
+interface Korttype<T> {
+  elementtype: string
+  les: (data: unknown) => T
+  tilData: (kort: T) => Record<string, unknown>
+  /** Et nytt, tomt kort. */
+  tomt: () => T
+  /** Navnet på kortet i knappene og redigeringsvinduet. */
+  navn: (kort: T) => string
+  ikon: (kort: T) => Ikonnavn | undefined
+  tittel: (kort: T) => ReactNode
+  oppsummering: (kort: T) => ReactNode
+  /** Klassen på detaljkortet, f.eks. for retningen på et mekanismekort. */
+  klasse?: (kort: T) => string | undefined
+  visning: (kort: T) => ReactNode
+  Skjema: (props: SkjemaProps<T>) => ReactNode
+}
+
+const KINETIKKORT: Korttype<Kinetikkdata> = {
+  elementtype: ELEMENTTYPER.kinetikk,
+  les: lesKinetikk,
+  tilData: (kort) => ({ ...kort }),
+  tomt: () => ({ tittel: '', dokument: tomtDokument() }),
+  navn: (kort) => kort.tittel,
+  ikon: (kort) => kinetikkikon(kort.tittel),
+  tittel: (kort) => <Kinetikktittel tittel={kort.tittel} />,
+  oppsummering: (kort) => tekstoppsummering(kort.dokument),
+  visning: (kort) => <Riktekst dokument={kort.dokument} />,
+  Skjema: KinetikkSkjema,
+}
+
+/** Kortene av en type i et panel, i rekkefølge. */
+function kortAvType(kontekst: Panelkontekst, nokkel: string, elementtype: string): Sideelement[] {
+  return (kontekst.modell.paneler.get(nokkel) ?? []).filter((e) => e.elementtype === elementtype)
+}
 
 /** Kortene med overskrift og tekst i et panel. */
 export function kortelementer(kontekst: Panelkontekst, nokkel: string): Sideelement[] {
-  return (kontekst.modell.paneler.get(nokkel) ?? []).filter((e) => e.elementtype === ELEMENTTYPER.kinetikk)
+  return kortAvType(kontekst, nokkel, ELEMENTTYPER.kinetikk)
 }
 
 /** Oppsummeringen av kortene: titlene deres. */
@@ -309,58 +356,77 @@ export function Kortpanel({ definisjon, kontekst }: { definisjon: Paneldefinisjo
 }
 
 /**
- * Kortene i et panel av kort, som detaljkort i et rutenett, med knappene for
- * å legge til, flytte og fjerne i redigeringsmodus. `ettAlene` sier om et
- * eneste kort skal stå åpent fra start; det skal det ikke når seksjonen har
- * annet innhold ved siden av.
+ * Kinetikkortene i et panel, som detaljkort i et rutenett. `ettAlene` sier om
+ * et eneste kort skal stå åpent fra start; det skal det ikke når seksjonen
+ * har annet innhold ved siden av.
  */
-export function Redaksjonskort({
-  definisjon,
-  kontekst,
-  elementer,
-  ettAlene = true,
-}: {
+export function Redaksjonskort(props: {
   definisjon: Paneldefinisjon
   kontekst: Panelkontekst
   elementer: readonly Sideelement[]
   ettAlene?: boolean
 }) {
+  return <Kortserie {...props} type={KINETIKKORT} />
+}
+
+/**
+ * En serie kort i et panel, som detaljkort i et rutenett, med knappene for å
+ * legge til, flytte og fjerne i redigeringsmodus.
+ */
+function Kortserie<T>({
+  definisjon,
+  kontekst,
+  elementer,
+  type,
+  ettAlene = true,
+  leggTilTekst = 'Legg til kort',
+}: {
+  definisjon: Paneldefinisjon
+  kontekst: Panelkontekst
+  elementer: readonly Sideelement[]
+  type: Korttype<T>
+  ettAlene?: boolean
+  leggTilTekst?: string
+}) {
   const [nytt, setNytt] = useBevart(`nytt:${definisjon.nokkel}`, false)
   const [fjerner, setFjerner] = useState<string | null>(null)
   const { handlinger, redigerer } = kontekst
+  const { Skjema } = type
 
   return (
     <>
       {elementer.length > 0 && (
         <Skuffrutenett className="infokort">
           {elementer.map((element, i) => {
-            const { tittel, dokument } = lesKinetikk(element.data)
+            const kort = type.les(element.data)
+            const navn = type.navn(kort)
             return (
               <li key={element.id} className="infokort__kort">
                 <Detaljkort
                   id={element.id}
                   // Står det bare ett kort i seksjonen, er det ingenting å velge mellom.
                   apenFraStart={ettAlene && elementer.length === 1}
-                  ikon={kinetikkikon(tittel)}
-                  tittel={<Kinetikktittel tittel={tittel} />}
-                  oppsummering={tekstoppsummering(dokument)}
+                  ikon={type.ikon(kort)}
+                  tittel={type.tittel(kort)}
+                  oppsummering={type.oppsummering(kort)}
+                  className={type.klasse?.(kort)}
                 >
                   {/* Ankeret søket peker på står inne i detaljkortet, så å gå dit åpner også kortet. */}
                   <div id={elementAnker(element.id)} className="infokort__innhold">
                     <Redigerbar
-                      navn={tittel}
+                      navn={navn}
                       element={element}
                       redigerer={redigerer}
-                      visning={<Riktekst dokument={dokument} />}
+                      visning={type.visning(kort)}
                       ekstra={
                         <>
                           {i > 0 && (
-                            <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt opp: ${tittel}`} onClick={() => void handlinger.flyttElement(element, elementer, -1)}>
+                            <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt opp: ${navn}`} onClick={() => void handlinger.flyttElement(element, elementer, -1)}>
                               Flytt opp
                             </Button>
                           )}
                           {i < elementer.length - 1 && (
-                            <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt ned: ${tittel}`} onClick={() => void handlinger.flyttElement(element, elementer, 1)}>
+                            <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt ned: ${navn}`} onClick={() => void handlinger.flyttElement(element, elementer, 1)}>
                               Flytt ned
                             </Button>
                           )}
@@ -370,7 +436,7 @@ export function Redaksjonskort({
                             <Button
                               variant="subtle"
                               className="redigeringsknapp"
-                              aria-label={`Bekreft: fjern ${tittel}`}
+                              aria-label={`Bekreft: fjern ${navn}`}
                               onClick={() => void handlinger.fjernElement(element)}
                             >
                               Bekreft fjerning
@@ -379,7 +445,7 @@ export function Redaksjonskort({
                             <Button
                               variant="subtle"
                               className="redigeringsknapp"
-                              aria-label={`Fjern: ${tittel}`}
+                              aria-label={`Fjern: ${navn}`}
                               onClick={() => setFjerner(element.id)}
                             >
                               Fjern
@@ -388,18 +454,18 @@ export function Redaksjonskort({
                         </>
                       }
                       skjema={(lukk) => (
-                        <KinetikkSkjema
-                          tittel={tittel}
-                          ikon={kinetikkikon(tittel)}
-                          start={{ tittel, dokument }}
+                        <Skjema
+                          tittel={navn}
+                          ikon={type.ikon(kort) ?? seksjonsikon(definisjon.nokkel)}
+                          start={kort}
                           referanser={element.referanser}
                           onAvbryt={lukk}
                           onLagre={async ({ data, referanser }) => {
                             await handlinger.lagreElement(element, {
                               panel: definisjon.nokkel,
-                              elementtype: ELEMENTTYPER.kinetikk,
+                              elementtype: type.elementtype,
                               posisjon: element.posisjon,
-                              data,
+                              data: type.tilData(data),
                               referanser,
                             })
                             lukk()
@@ -418,24 +484,24 @@ export function Redaksjonskort({
       {redigerer && (
         <div className="redigeringsrad">
           <Button variant="kant" icon={<Ikon navn="plus" />} className="redigeringsknapp" onClick={() => setNytt(true)}>
-            Legg til kort
+            {leggTilTekst}
           </Button>
         </div>
       )}
       {nytt && (
         <Bevaringsomrade navn={`nytt:${definisjon.nokkel}`}>
-          <KinetikkSkjema
+          <Skjema
             tittel="Nytt kort"
             ikon={seksjonsikon(definisjon.nokkel)}
-            start={{ tittel: '', dokument: tomtDokument() }}
+            start={type.tomt()}
             referanser={[]}
             onAvbryt={() => setNytt(false)}
             onLagre={async ({ data, referanser }) => {
               await handlinger.lagreElement(null, {
                 panel: definisjon.nokkel,
-                elementtype: ELEMENTTYPER.kinetikk,
+                elementtype: type.elementtype,
                 posisjon: Math.max(-1, ...elementer.map((e) => e.posisjon)) + 1,
-                data,
+                data: type.tilData(data),
                 referanser,
               })
               setNytt(false)
@@ -444,6 +510,124 @@ export function Redaksjonskort({
         </Bevaringsomrade>
       )}
     </>
+  )
+}
+
+/* --- Farmakodynamikken: mekanismekortene --------------------------------- */
+
+const MEKANISMEKORT: Korttype<Mekanismekortdata> = {
+  elementtype: ELEMENTTYPER.mekanisme,
+  les: lesMekanismekort,
+  tilData: mekanismekortTilData,
+  tomt: () => ({
+    maal: '',
+    effekt: '',
+    mekanisme: null,
+    retning: 'ukjent',
+    kvalifikasjon: '',
+    merknad: '',
+    dokument: tomtDokument(),
+  }),
+  navn: (kort) => kort.maal,
+  ikon: (kort) => mekanismeikon(kort.mekanisme),
+  tittel: (kort) => <Uthev tekst={kort.maal} />,
+  oppsummering: (kort) => <Mekanismeeffekt kort={kort} />,
+  klasse: (kort) =>
+    ['mekanismekort', `mekanismekort--${retningFor(kort.retning).tone}`, kort.mekanisme === INGEN_EFFEKT && 'mekanismekort--ingen']
+      .filter(Boolean)
+      .join(' '),
+  visning: (kort) => <Mekanismedetaljer kort={kort} />,
+  Skjema: MekanismekortSkjema,
+}
+
+/**
+ * Oppsummeringen av farmakodynamikken: målene stoffet virker på. Målene der
+ * kilden sier at stoffet ikke har noen effekt, tas med bare når det ikke er
+ * noe annet.
+ */
+export function mekanismeoppsummering(elementer: readonly Sideelement[]): string {
+  const kort = elementer.map((e) => lesMekanismekort(e.data))
+  const virker = kort.filter((k) => k.mekanisme !== INGEN_EFFEKT)
+  return ramsOpp((virker.length > 0 ? virker : kort).map((k) => k.maal))
+}
+
+/**
+ * Farmakodynamikken: ett mekanismekort per mål og mekanisme. En riktekst
+ * som står i panelet fra før kortene kom (fra en import), vises under
+ * kortene, så ingenting skjules; datamigreringen gjorde alle de gamle
+ * tekstene om til kort.
+ */
+export function Mekanismepanel({ definisjon, kontekst }: { definisjon: Paneldefinisjon; kontekst: Panelkontekst }) {
+  const elementer = kortAvType(kontekst, definisjon.nokkel, ELEMENTTYPER.mekanisme)
+  const tekst = panelteksten(kontekst, definisjon.nokkel)
+  return (
+    <Panel
+      definisjon={definisjon}
+      kontekst={kontekst}
+      tomt={elementer.length === 0 && tekst.tomt}
+      oppsummering={mekanismeoppsummering(elementer) || tekst.oppsummering}
+    >
+      <Kortserie definisjon={definisjon} kontekst={kontekst} elementer={elementer} type={MEKANISMEKORT} leggTilTekst="Legg til mekanismekort" />
+      {!tekst.tomt && <Paneltekst definisjon={definisjon} kontekst={kontekst} tekst={tekst} />}
+    </Panel>
+  )
+}
+
+/** Effekten på det lukkede kortet: effekten, og kvalifikasjonen dempet etter den. */
+function Mekanismeeffekt({ kort }: { kort: Mekanismekortdata }) {
+  return (
+    <>
+      <span className="mekanismekort__effekt">{kort.effekt}</span>
+      {kort.kvalifikasjon && <span className="mekanismekort__kvalifikasjon"> · {kort.kvalifikasjon}</span>}
+    </>
+  )
+}
+
+/**
+ * Det åpnede kortet: effekten, mekanismetypen og retningen, så merknaden og
+ * den utdypende teksten. Retningen står alltid i tekst; fargen følger den.
+ */
+function Mekanismedetaljer({ kort }: { kort: Mekanismekortdata }) {
+  const retning = retningFor(kort.retning)
+  const mekanisme = mekanismeFor(kort.mekanisme)
+  return (
+    <div className="mekanismekort__detaljer">
+      <dl className="mekanismekort__fakta">
+        <div>
+          <dt>Effekt</dt>
+          <dd>
+            <Uthev tekst={kort.effekt} />
+            {kort.kvalifikasjon && (
+              <span className="mekanismekort__kvalifikasjon">
+                {' · '}
+                <Uthev tekst={kort.kvalifikasjon} />
+              </span>
+            )}
+          </dd>
+        </div>
+        <div>
+          <dt>Mekanisme</dt>
+          <dd>
+            <Uthev tekst={mekanisme?.navn ?? 'Ikke angitt'} />
+          </dd>
+        </div>
+        <div>
+          <dt>Retning</dt>
+          <dd className="mekanismekort__retning">
+            <span className="mekanismekort__symbol" aria-hidden="true">
+              {retning.symbol}
+            </span>
+            <Uthev tekst={retning.navn} />
+          </dd>
+        </div>
+      </dl>
+      {kort.merknad && (
+        <p className="mekanismekort__merknad">
+          <Uthev tekst={kort.merknad} />
+        </p>
+      )}
+      {!erTomt(kort.dokument) && <Riktekst dokument={kort.dokument} />}
+    </div>
   )
 }
 

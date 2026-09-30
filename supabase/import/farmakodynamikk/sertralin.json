@@ -1,0 +1,77 @@
+{
+  "stoff": "sertralin",
+  "kilde": "psykofarmaka/SERT.json",
+  "kort": [
+    {
+      "maal": "Serotoninreopptak / SERT",
+      "effekt": "Hemmer reopptak",
+      "mekanisme": "reopptakshemming",
+      "retning": "ned",
+      "kvalifikasjon": "Potent"
+    },
+    {
+      "maal": "Noradrenalinreopptak / NET",
+      "effekt": "Svak reopptakshemming",
+      "mekanisme": "reopptakshemming",
+      "retning": "ned",
+      "kvalifikasjon": "Svak effekt",
+      "utdyping": [
+        "Øker ikke katekolaminerg aktivitet."
+      ]
+    },
+    {
+      "maal": "Dopaminreopptak / DAT",
+      "effekt": "Svak reopptakshemming",
+      "mekanisme": "reopptakshemming",
+      "retning": "ned",
+      "kvalifikasjon": "Svak effekt"
+    },
+    {
+      "maal": "Muskarinreseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "Serotoninreseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "Dopaminreseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "Adrenerge reseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "Histaminreseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "GABA-reseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    }
+  ],
+  "dekket": [
+    "Potent hemmer av reopptak av serotonin (SSRI).",
+    "Svak effekt på reopptak av noradrenalin og dopamin.",
+    "Har ingen affinitet til muskarin-, serotonin-, dopamin-, adrenerge-, histamin- eller GABA-reseptorer."
+  ]
+}

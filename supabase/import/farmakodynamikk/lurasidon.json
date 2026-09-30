@@ -1,0 +1,58 @@
+{
+  "stoff": "lurasidon",
+  "kilde": "psykofarmaka/LURA.json",
+  "kort": [
+    {
+      "maal": "D2-reseptor",
+      "effekt": "Blokkerende/antagonistisk effekt",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Høy affinitet",
+      "utdyping": [
+        "Aktive metabolitter: ID-14283 og 14326."
+      ]
+    },
+    {
+      "maal": "5-HT2A-reseptor",
+      "effekt": "Blokkerende/antagonistisk effekt",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Høy affinitet",
+      "merknad": "Kilden uttrykker blokade samlet som monoaminerg blokade"
+    },
+    {
+      "maal": "5-HT7-reseptor",
+      "effekt": "Blokkerende/antagonistisk effekt",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Høy affinitet",
+      "merknad": "Kilden uttrykker blokade samlet som monoaminerg blokade"
+    },
+    {
+      "maal": "5-HT1A-reseptor",
+      "effekt": "Partiell agonist",
+      "mekanisme": "partiell_agonisme",
+      "retning": "opp"
+    },
+    {
+      "maal": "Histaminreseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Bindes ikke"
+    },
+    {
+      "maal": "Muskarinreseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Bindes ikke"
+    }
+  ],
+  "dekket": [
+    "Blokkerer dopaminerge og monoaminerge effekter.",
+    "Høy affinitet til D_{2}-resptorer, 5-HT_{2A}- og 5-HT_{7}-reseptorer.",
+    "Partiell agonist av 5-HT_{1A}-reseptorer.",
+    "Bindes ikke til histaminerge eller muskarine reseptorer."
+  ]
+}

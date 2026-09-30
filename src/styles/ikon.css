@@ -64,6 +64,8 @@
 .ikon [data-farge='papir'] { --ikon-farge: var(--papir); }
 .ikon [data-farge='ikon-blekk'] { --ikon-farge: var(--ikon-blekk); }
 .ikon [data-farge='ikon-linje'] { --ikon-farge: var(--ikon-linje); }
+/* Mekanismeikonene: målet får retningen til kortet rundt, ellers nøytral linjefarge. */
+.ikon [data-farge='retning'] { --ikon-farge: var(--retning-farge, var(--ikon-linje)); }
 
 /* --- Roller ---------------------------------------------------------------- */
 .ikon [data-rolle^='f'] {

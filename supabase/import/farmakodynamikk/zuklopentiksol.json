@@ -1,0 +1,47 @@
+{
+  "stoff": "zuklopentiksol",
+  "kilde": "psykofarmaka/ZUKLO.json",
+  "kort": [
+    {
+      "maal": "D1-reseptor",
+      "effekt": "Blokade / antagonistisk effekt",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Høy affinitet",
+      "utdyping": [
+        "Virker hovedsakelig gjennom blokade av sentrale monaminerge reseptorer, spesielt i det dopaminerge system."
+      ]
+    },
+    {
+      "maal": "D2-reseptor",
+      "effekt": "Blokade / antagonistisk effekt",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Høy affinitet"
+    },
+    {
+      "maal": "α1-reseptor",
+      "effekt": "Blokade / antagonistisk effekt",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Høy affinitet"
+    },
+    {
+      "maal": "5-HT2-reseptor",
+      "effekt": "Blokade / antagonistisk effekt",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Høy affinitet"
+    },
+    {
+      "maal": "Histaminreseptorer",
+      "effekt": "Svak antihistaminerg effekt",
+      "mekanisme": "reseptorpavirkning",
+      "retning": "ukjent"
+    }
+  ],
+  "dekket": [
+    "Høy affinitet for D_{1}-, D_{2}-, α_{1}- og 5-HT_{2}-reseptorer.",
+    "Kun svak antihistaminerg effekt."
+  ]
+}

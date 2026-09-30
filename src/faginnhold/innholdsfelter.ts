@@ -28,7 +28,9 @@ function elementfelter(innhold: Innholdselementinnhold): Felt[] {
   const tekster = elementtekster(innhold.elementtype, innhold.data)
   const flere = (felt: Elementtekst['felt']) => tekster.filter((t) => t.felt === felt).length > 1
   const nummer = new Map<string, number>()
-  const felter = tekster.map(({ felt, tekst }): Felt => {
+  const felter = tekster.map(({ felt, tekst, navn: egetNavn }): Felt => {
+    // Et felt med eget navn («Mål», «Effekt») sammenlignes med samme felt i den andre revisjonen.
+    if (egetNavn) return { nokkel: egetNavn, navn: egetNavn, verdi: tekst, tekst: true }
     const nr = (nummer.get(felt) ?? 0) + 1
     nummer.set(felt, nr)
     const navn = TEKSTNAVN[felt] ?? felt

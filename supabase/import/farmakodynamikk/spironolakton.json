@@ -1,0 +1,27 @@
+{
+  "stoff": "spironolakton",
+  "kilde": "antihypertensiver/Spironolakton.json",
+  "kort": [
+    {
+      "maal": "Aldosteron-/mineralokortikoidreseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "merknad": "Mindre Na+/væskereabsorpsjon og mindre K+-utskillelse; beskyttende effekt mot remodellering i hjertet",
+      "utdyping": [
+        "Aldosteronantagonist, som resulterer i mindre reabsorpsjon av natrium og væske og mindre kaliumutskillelse, altså mer kalium tilbake til blod. Den viktigste effekten er den beskyttende effekten mot remodeleringen i hjerte, ved å blokkere aldosteronens langtidsvirkning i hjertet som har vist seg å være skadelig. Spironolakton har derfor som betablokkere og ACE-hemmere beskyttende effekt mot langtidsskade av aktivering av RAAS-systemet i hjertet."
+      ]
+    },
+    {
+      "maal": "Kjønnshormonreseptorer",
+      "effekt": "Påvirker",
+      "mekanisme": "reseptorpavirkning",
+      "retning": "ukjent",
+      "kvalifikasjon": "Mindre selektiv enn eplerenon",
+      "merknad": "Teksten sier bare at dette kan gi en viss effekt",
+      "utdyping": [
+        "Spironolakton er mindre selektiv enn eplerenon, så kan også gi en viss effekt på kjønnshormonreseptorene med andre bivirkninger som følger av det."
+      ]
+    }
+  ]
+}

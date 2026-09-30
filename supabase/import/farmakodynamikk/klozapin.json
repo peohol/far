@@ -1,0 +1,70 @@
+{
+  "stoff": "klozapin",
+  "kilde": "psykofarmaka/KLOZ.json",
+  "kort": [
+    {
+      "maal": "5-HT2A-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "α-adrenerge reseptorer",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "merknad": "Subtype ikke oppgitt"
+    },
+    {
+      "maal": "Kolinerge reseptorer",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "Histaminerge reseptorer",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "D1-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Lav affinitet"
+    },
+    {
+      "maal": "D2-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Lav affinitet"
+    },
+    {
+      "maal": "D3-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Lav affinitet"
+    },
+    {
+      "maal": "D4-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Høy affinitet"
+    },
+    {
+      "maal": "D5-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Lav affinitet"
+    }
+  ],
+  "dekket": [
+    "Antagonist på serotonerge (5-HT_{2A}), alfa-adrenerge, kolinerge, histaminerge og dopaminerge reseptorer.",
+    "Lav affinitet til D_{1}-, D_{2}-, D_{3}- og D_{5}-reseptorer, men viser høy affinitet til D_{4}-reseptorer."
+  ]
+}

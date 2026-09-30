@@ -1,0 +1,41 @@
+{
+  "stoff": "brekspiprazol",
+  "kilde": "psykofarmaka/BREK.json",
+  "kort": [
+    {
+      "maal": "D2-reseptor",
+      "effekt": "Partiell agonist",
+      "mekanisme": "partiell_agonisme",
+      "retning": "opp",
+      "kvalifikasjon": "Høy affinitet",
+      "utdyping": [
+        "Bytte fra potent D_{2}-antagonist til brekspiprazol kan paradoksalt gi redusert D_{2}-blokkade og økt symptomtrykk, på samme måte som for aripiprazol.",
+        "Metabolitt: DM-3411, bidrar ikke til den terapeutiske effekten."
+      ]
+    },
+    {
+      "maal": "5-HT1A-reseptor",
+      "effekt": "Partiell agonist",
+      "mekanisme": "partiell_agonisme",
+      "retning": "opp"
+    },
+    {
+      "maal": "5-HT2A-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "Noradrenerge reseptorer",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "merknad": "Subtype ikke oppgitt"
+    }
+  ],
+  "dekket": [
+    "Partiell agonist på D_{2}- og 5-HT_{1A}-reseptorer.",
+    "Antagonist på 5-HT_{2A}- og noradrenerge reseptorer.",
+    "Binder med høy affinitet til D_{2}-reseptoren."
+  ]
+}

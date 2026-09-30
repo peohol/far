@@ -1,0 +1,62 @@
+{
+  "stoff": "fluoksetin",
+  "kilde": "psykofarmaka/FLUOSUM.json",
+  "kort": [
+    {
+      "maal": "Serotoninreopptak / SERT",
+      "effekt": "Hemmer reopptak",
+      "mekanisme": "reopptakshemming",
+      "retning": "ned",
+      "kvalifikasjon": "Selektiv",
+      "utdyping": [
+        "Aktiv metabolitt: norfluoksetin."
+      ]
+    },
+    {
+      "maal": "Adrenerge reseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "Serotonerge reseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "Dopaminerge reseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "Histaminerge reseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "Muskarine reseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "GABA-reseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    }
+  ],
+  "dekket": [
+    "Selektiv reopptakshemmer av serotonin (SSRI).",
+    "Ingen affinitet til adrenerge, serotonerge, dopaminerge, histaminerge, muskarine eller GABA-reseptorer."
+  ]
+}

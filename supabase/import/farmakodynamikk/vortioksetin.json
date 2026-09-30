@@ -1,0 +1,52 @@
+{
+  "stoff": "vortioksetin",
+  "kilde": "psykofarmaka/VOR.json",
+  "kort": [
+    {
+      "maal": "Serotonintransportør / SERT",
+      "effekt": "Hemmer transportøren",
+      "mekanisme": "transporterhemming",
+      "retning": "ned",
+      "utdyping": [
+        "I tillegg sannsynligvis multimodal påvirkning av noradrenalin, dopamin, histamin, acetylkolin, GABA og glutamat."
+      ]
+    },
+    {
+      "maal": "5-HT3-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "5-HT7-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "5-HT1D-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "5-HT1B-reseptor",
+      "effekt": "Partiell agonist",
+      "mekanisme": "partiell_agonisme",
+      "retning": "opp"
+    },
+    {
+      "maal": "5-HT1A-reseptor",
+      "effekt": "Agonist",
+      "mekanisme": "agonisme",
+      "retning": "opp",
+      "merknad": "Ikke klassifiser som full agonist uten mer dokumentasjon"
+    }
+  ],
+  "dekket": [
+    "Modulerer serotonerg reseptoraktivitet og hemmer serotonin-transportøren.",
+    "Antagonist på 5-HT_{3}-, 5-HT_{7} - og 5-HT_{1D}-reseptorer.",
+    "Partiell agonist på 5-HT_{1B}-reseptor.",
+    "Agonist på 5-HT_{1A}-reseptor."
+  ]
+}

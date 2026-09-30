@@ -95,6 +95,8 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   `src/components/stoffside/panelvisning.ts`: kortene får ikon etter
   hva overskriften handler om (absorpsjon, halveringstid, CYP, prøvetaking …), og et
   generisk ikon når ingen kategori passer, så en ny overskrift aldri feiler.
+  Mekanismekortene i farmakodynamikken får ikon etter mekanismetypen
+  (`mekanismeikon`), og et kort uten effekt har ikke noe ikon.
 - En seksjon i en seksjon, eller et detaljkort utenfor en seksjon eller i et
   annet detaljkort, stopper tegningen med en feil. Trenger innholdet et
   tredje nivå, skal det heller deles opp.

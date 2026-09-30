@@ -1,0 +1,25 @@
+{
+  "stoff": "irbesartan",
+  "kilde": "antihypertensiver/Irbesartan.json",
+  "kort": [
+    {
+      "maal": "Angiotensin II AT1-reseptor",
+      "effekt": "Blokkerer / antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "merknad": "Gir vasodilatasjon; reduserer aldosteron, ADH-frigjøring og renal reabsorpsjon av Na+/vann som nedstrøms effekter",
+      "utdyping": [
+        "Irbesartan blokkerer reseptoren (angiotensin 2- reseptor type 1) til angiotensin 2. Angiotensin 2 er en kraftig vasokonstriktor. Ved å blokkere denne reseptoren oppnår man vasodilatasjon og påfølgende fall i blodtrykk. Den spesifikke hemmingen av AT1-reseptorer fører til økning av plasma renin og angiotensin-II nivå og reduksjon i konsentrasjon av plasma aldosteron.",
+        "Reseptorer for angiotensin 2 finnes også i:",
+        {
+          "punkter": [
+            "bakre hypofyselapp: blokkering via irbesartan medfører redusert frigjøring av antidiuretisk hormon (ADH).",
+            "binyrebarken: blokkering via irbesartan medfører redusert frigjøring av aldosteron.",
+            "nyren: blokkering via irbesartan medfører redusert gjenopptak av vann og natrium."
+          ]
+        },
+        "Forventet blodtrykkseffekt av monopreparat på systolisk og diastolisk kontorblodtrykk som for ACEI, se Wu et al. (2005)."
+      ]
+    }
+  ]
+}

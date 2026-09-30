@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { Publiseringssteg } from '../../faginnhold/stoffside'
 import { endredeFelt } from '../../faginnhold/historikk'
 import { INGEN_REGLER, type Regeldata, type Stoffsidedata } from '../../faginnhold/lesing'
-import { lesKinetikk, panelFor } from '../../faginnhold/paneler'
+import { korttittel, panelFor } from '../../faginnhold/paneler'
 import { RUS_MODULER } from '../../domain/rus'
 import { losRegelsett } from '../../regler/kommentarer'
 import { tilScenarioutkast, utkastfelter } from '../../regler/scenarioredigering'
@@ -181,7 +181,7 @@ export function beskrivSteg(
       const element = data.elementer.find((e) => e.id === steg.id)
       if (!element) return 'Et kort'
       const panel = panelFor(element.innhold.panel)
-      const tittel = lesKinetikk(element.innhold.data).tittel
+      const tittel = korttittel(element.innhold.elementtype, element.innhold.data)
       if (!panel) return tittel ? `Fjernet: ${tittel}` : 'Et fjernet kort'
       return [panel.tittel, tittel].filter(Boolean).join(' › ')
     }

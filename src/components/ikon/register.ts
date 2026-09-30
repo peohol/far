@@ -25,6 +25,8 @@ export const IKONFARGER = {
   paper: 'papir',
   'i-ink': 'ikon-blekk',
   'i-line': 'ikon-linje',
+  /** Retningen et mekanismekort viser: settes av kortet rundt ikonet (`--retning-farge`). */
+  retning: 'retning',
 } as const
 
 export type Ikonfarge = keyof typeof IKONFARGER
@@ -158,6 +160,32 @@ const sat = [90, 210, 330].map((d): [number, number, number] => {
   return [24 + 16 * Math.cos(a), 24 + 16 * Math.sin(a), a]
 })
 const axes = P('M7 5v36h37', 'l', 'i-ink')
+
+/*
+ * Mekanismeikonene i farmakodynamikken. Målet (reseptoren, kanalen,
+ * transportøren eller enzymet) tegnes i fargen `retning`, som kortet rundt
+ * setter: rødt når prosessen reduseres, grønt når den økes, grått ellers.
+ * Stoffet tegnes i aksentfargen.
+ *
+ * De spesifikke ikonene viser selve mekanismen: en partiell agonist halvt
+ * fylt i bindingsstedet, en antagonist som fortrenger agonisten, en propp i
+ * kanalen. De generelle bruker bare den nøytrale notasjonen for «virker på»
+ * (→) og «hemmer» (⊣) eller viser målet alene, så de ikke sier mer enn kilden.
+ */
+const membran = R(2, 31, 44, 7, 2, 'f1', 'glass')
+/** Reseptoren i membranen, med bindingsstedet øverst mellom x 21 og 27. */
+const reseptor = P('M13 41V17h8v9h6v-9h8v24z', 'f1', 'retning')
+/** Stoffet virker på målet: en pil ned mot bindingsstedet. */
+const virkerPaa = G([P('M24 3v12', 'l', 'i-ink'), P('M20.5 11.5 24 15l3.5-3.5', 'l', 'i-ink')], 'drop')
+/** Stoffet hemmer målet: en strek med tverrstrek. */
+const hemmer = (x1: number, y1: number, x2: number, y2: number, tverr: string): Ikondel =>
+  G([P(`M${x1} ${y1}L${x2} ${y2}`, 'l', 'i-ink'), P(tverr, 'l', 'i-ink')], 'pop')
+/** Ionekanalen: to underenheter med poren mellom x 21 og 27. */
+const kanal = [R(12, 17, 9, 25, 3, 'f1', 'retning'), R(27, 17, 9, 25, 3, 'f1', 'retning')]
+/** Transportøren: én kropp tvers gjennom membranen. */
+const transportor = R(15, 16, 18, 27, 8, 'f1', 'retning')
+/** Stoffet som hemmer en kanal eller transportør, som en propp. */
+const propp = (y: number): Ikondel => R(21, y, 6, 8, 1.8, 'f2', 'accent', 'pop')
 
 const REGISTER = {
   menu: { vb: 24, parts: [P('M4 7h16M4 12h16M4 17h9', 'l', 'i-ink'), C(18, 17, 2, 'f2', 'accent', 'pop')] },
@@ -834,6 +862,68 @@ const REGISTER = {
       P('M2.8 12S6.2 5.8 12 5.8 21.2 12 21.2 12 17.8 18.2 12 18.2 2.8 12 2.8 12z', 'f1', 'glass'),
       C(12, 12, 2.6, 'h', 'i-ink'),
       P('M4.5 19.5 19.5 4.5', 'l', 'danger', 'pop'),
+    ],
+  },
+  // --- Mekanismene i farmakodynamikken (se over REGISTER) ---
+  mekReseptor: { vb: 48, parts: [membran, reseptor] },
+  mekAgonisme: { vb: 48, parts: [membran, reseptor, virkerPaa] },
+  mekPartiellAgonisme: {
+    vb: 48,
+    parts: [
+      membran,
+      reseptor,
+      C(24, 21, 4, 'f1', 'accent'),
+      P('M24 17a4 4 0 0 0 0 8z', 'f2', 'accent', 'pop'),
+    ],
+  },
+  mekAntagonisme: { vb: 48, parts: [membran, reseptor, hemmer(24, 3, 24, 13, 'M18.5 13h11')] },
+  mekKompetitivAntagonisme: {
+    vb: 48,
+    parts: [membran, reseptor, R(21, 17, 6, 10, 1.5, 'f2', 'accent', 'pop'), C(37, 9, 4, 'd', 'accent', 'bumpR')],
+  },
+  mekIonekanal: { vb: 48, parts: [membran, ...kanal, C(24, 9, 3, 'f2', 'info')] },
+  mekKanalblokkering: { vb: 48, parts: [membran, ...kanal, propp(20), C(24, 8, 3, 'f2', 'info')] },
+  mekBruksavhengigBlokkering: {
+    vb: 48,
+    parts: [
+      membran,
+      ...kanal,
+      propp(20),
+      P('M3 11h6l2.5-7 2.5 12 2.5-5h6l2.5-7 2.5 12 2.5-5h6l2.5-7 2.5 12 2.5-5h3', 'l', 'i-ink', 'draw', { w: 0.8 }),
+    ],
+  },
+  mekTransportor: { vb: 48, parts: [membran, transportor, P('M24 4v40', 'd', 'i-ink')] },
+  mekTransporterhemming: {
+    vb: 48,
+    parts: [membran, transportor, P('M24 46V30', 'l', 'i-ink'), propp(21), C(24, 8, 3, 'f2', 'info')],
+  },
+  mekReopptakshemming: {
+    vb: 48,
+    parts: [
+      P('M3 3h42v10c0 4-3 6-7 6H10c-4 0-7-2-7-6z', 'f1', 'glass'),
+      R(18, 11, 12, 14, 5, 'f1', 'retning'),
+      P('M40 44c0-9-5-14-12-14', 'l', 'i-ink'),
+      propp(15),
+      C(10, 36, 2.6, 'f2', 'info'),
+      C(20, 42, 2.6, 'f2', 'info'),
+    ],
+  },
+  mekKotransporterhemming: {
+    vb: 48,
+    parts: [
+      membran,
+      transportor,
+      P('M24 46V30', 'l', 'i-ink'),
+      propp(21),
+      C(19, 8, 3, 'f2', 'info'),
+      R(26, 5, 6, 6, 1.2, 'f2', 'warn'),
+    ],
+  },
+  mekEnzymhemming: {
+    vb: 48,
+    parts: [
+      P('M24 10a14 14 0 1 0 12.1 21L25 24l11.1-7A14 14 0 0 0 24 10z', 'f1', 'retning'),
+      hemmer(46, 24, 38, 24, 'M38 18.5v11'),
     ],
   },
   opp: { vb: 24, parts: [C(12, 12, 9, 'f1', 'glass'), P('M12 16.5V7.5M7.5 12 12 7.5l4.5 4.5', 'l', 'i-ink', 'pop')] },

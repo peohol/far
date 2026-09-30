@@ -1,0 +1,16 @@
+{
+  "stoff": "ramipril",
+  "kilde": "antihypertensiver/Ramipril.json",
+  "kort": [
+    {
+      "maal": "ACE (angiotensinkonverterende enzym)",
+      "effekt": "Hemmer",
+      "mekanisme": "enzymhemming",
+      "retning": "ned",
+      "merknad": "Reduserer angiotensin II og aldosteron; øker bradykinin ved redusert nedbrytning",
+      "utdyping": [
+        "ACE-hemmer (angiotensinkonverterende enzymhemmer). ACE katalyserer omdannelse av angiotensin I til den aktive vasokonstriktoren angiotensin II, samt nedbrytning av den aktive vasodilatatoren bradykinin. Da angiotensin II også stimulerer frisettingen av aldosteron, fører ramiprilat til redusert aldosteronsekresjon. Ramipril gir en markant redusert perifer arteriell motstand, og økt bradykinin."
+      ]
+    }
+  ]
+}

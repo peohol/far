@@ -22,7 +22,7 @@ import { finnKobling, Preparatpanel, preparatsoketekster } from './Preparatpanel
 import { useLegemidler } from './useLegemidler'
 import { Interaksjonspanel, interaksjonssoketekster } from './Interaksjonspanel'
 import { useInteraksjoner } from './useInteraksjoner'
-import { Kortpanel, Tabellpanel, Tekstpanel, type Panelkontekst } from './Paneler'
+import { Kortpanel, Mekanismepanel, Tabellpanel, Tekstpanel, type Panelkontekst } from './Paneler'
 import { ViktigeData } from './ViktigeData'
 import { Redigeringskilde } from './Redigeringskontekst'
 import { Redigeringshandlinger } from './Redigeringslinje'
@@ -378,6 +378,8 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
                     ) : (
                       <Kortpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                     )
+                  case 'mekanismer':
+                    return <Mekanismepanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                   case 'tabell':
                     return <Tabellpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                 }

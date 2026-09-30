@@ -1,0 +1,17 @@
+{
+  "stoff": "eplerenon",
+  "kilde": "antihypertensiver/Eplerenon.json",
+  "kort": [
+    {
+      "maal": "Aldosteron-/mineralokortikoidreseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "merknad": "Mindre Na+/væskereabsorpsjon og mindre K+-utskillelse; beskyttende effekt mot remodellering i hjertet",
+      "utdyping": [
+        "Aldosteronantagonist, som resulterer i mindre reabsorpsjon av natrium og væske, og mindre kaliumutskillelse, altså mer kalium tilbake til blod. Den viktigste effekten er den beskyttende effekten mot remodeleringen i hjerte, ved å blokkere aldosteronens langtidsvirkning i hjertet som har vist seg å være skadelig. Eplerenon har derfor som betablokkere og ACE-hemmere en beskyttende effekt mot langtidsskade av aktivering av RAAS-systemet i hjertet.",
+        "Full antihypertensiv effekt innen fire uker."
+      ]
+    }
+  ]
+}

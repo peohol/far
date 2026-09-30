@@ -1,0 +1,76 @@
+{
+  "stoff": "amisulprid",
+  "kilde": "psykofarmaka/AMIS.json",
+  "kort": [
+    {
+      "maal": "D2-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Høy affinitet"
+    },
+    {
+      "maal": "D3-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Høy affinitet"
+    },
+    {
+      "maal": "D1-reseptor",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "D4-reseptor",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "D5-reseptor",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "5-HT-reseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet",
+      "merknad": "Subtype ikke oppgitt"
+    },
+    {
+      "maal": "α-adrenerge reseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet",
+      "merknad": "Subtype ikke oppgitt"
+    },
+    {
+      "maal": "H1-reseptor",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet"
+    },
+    {
+      "maal": "Kolinerge reseptorer",
+      "effekt": "Ingen effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ingen affinitet",
+      "merknad": "Subtype ikke oppgitt"
+    }
+  ],
+  "dekket": [
+    "Høy affinitet til D_{2}- og D_{3}-reseptorer (antagonist).",
+    "Ingen affinitet til D_{1}-, D_{4}-, D_{5}-, 5-HT-, α-, eller H_{1}-reseptorer, eller kolinerge reseptorer."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "stoff": "labetalol",
+  "kilde": "antihypertensiver/Labetalol.json",
+  "kort": [
+    {
+      "maal": "α1-adrenerg reseptor",
+      "effekt": "Antagonist / blokkerer",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Selektiv α1-blokkade",
+      "utdyping": [
+        "Labetalol senker blodtrykket ved å blokkere perifere arteriolære alfa-adrenoseptorer.",
+        "Den reduserte perifere motstanden senker den myokardiale etterbelastningen og oksygenbehovet."
+      ]
+    },
+    {
+      "maal": "β1-adrenerg reseptor",
+      "effekt": "Antagonist / blokkerer",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Ikke-selektiv betablokkade",
+      "utdyping": [
+        "Blokkeringen reduserer perifer motstand, og gjennom samtidig beta-blokkering beskyttes hjertet mot reflekssympatisk arbeid som ellers ville oppstå."
+      ]
+    },
+    {
+      "maal": "β2-adrenerg reseptor",
+      "effekt": "Antagonist / blokkerer",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Ikke-selektiv betablokkade"
+    }
+  ],
+  "dekket": [
+    "Selektiv alfa-1-adrenerg reseptorantagonist og ikke-selektiv beta-1-reseptorantagonist."
+  ]
+}

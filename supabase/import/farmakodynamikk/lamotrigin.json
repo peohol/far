@@ -1,0 +1,16 @@
+{
+  "stoff": "lamotrigin",
+  "kilde": "psykofarmaka/LAM.json",
+  "kort": [
+    {
+      "maal": "Spenningsstyrte natriumkanaler",
+      "effekt": "Hemmer / blokkerer",
+      "mekanisme": "bruksavhengig_blokkering",
+      "retning": "ned",
+      "kvalifikasjon": "Bruks- og spenningsavhengig",
+      "utdyping": [
+        "Bruks- og spenningsavhengig hemmer av spenningsstyrte natriumkanaler, hemmer frigjøring av glutamat."
+      ]
+    }
+  ]
+}

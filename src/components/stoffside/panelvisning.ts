@@ -1,5 +1,6 @@
 import { FORMVARIANTER, formvariant } from '../../legemiddeldata/legemiddelformer'
 import type { Ikonnavn } from '../ikon/register'
+import type { Mekanisme } from '../../faginnhold/mekanismer'
 
 /**
  * Ikonene på stoffsiden: seksjonsikonet for hvert panel, og ikonet for hvert
@@ -94,4 +95,32 @@ const TEKSTVISNINGER: Readonly<Record<string, Tekstvisning>> = {
 
 export function tekstvisning(nokkel: string): Tekstvisning {
   return TEKSTVISNINGER[nokkel] ?? 'lesing'
+}
+
+/**
+ * Ikonet for hver mekanisme i farmakodynamikken. De spesifikke mekanismene
+ * har sitt eget; de generelle har et nøytralt ikon for familien, som ikke
+ * later som kilden sier mer. «Ingen effekt» har bevisst ikke noe ikon.
+ */
+const MEKANISMEIKONER: Readonly<Record<Mekanisme, Ikonnavn | null>> = {
+  antagonisme: 'mekAntagonisme',
+  kompetitiv_antagonisme: 'mekKompetitivAntagonisme',
+  agonisme: 'mekAgonisme',
+  partiell_agonisme: 'mekPartiellAgonisme',
+  reseptorbinding: 'mekReseptor',
+  reseptorpavirkning: 'mekReseptor',
+  kanalblokkering: 'mekKanalblokkering',
+  bruksavhengig_blokkering: 'mekBruksavhengigBlokkering',
+  ionekanalpavirkning: 'mekIonekanal',
+  reopptakshemming: 'mekReopptakshemming',
+  transporterhemming: 'mekTransporterhemming',
+  kotransporterhemming: 'mekKotransporterhemming',
+  transportorpavirkning: 'mekTransportor',
+  enzymhemming: 'mekEnzymhemming',
+  ingen_effekt: null,
+}
+
+/** Ikonet for mekanismen, eller ingen for «Ingen effekt» og en mekanisme som mangler. */
+export function mekanismeikon(mekanisme: Mekanisme | null): Ikonnavn | undefined {
+  return (mekanisme && MEKANISMEIKONER[mekanisme]) || undefined
 }

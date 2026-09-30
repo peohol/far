@@ -1,0 +1,19 @@
+{
+  "stoff": "diltiazem",
+  "kilde": "antihypertensiver/Diltiazem.json",
+  "kort": [
+    {
+      "maal": "Spenningsstyrte L-type Ca2+-kanaler",
+      "effekt": "Hemmer / blokkerer",
+      "mekanisme": "kanalblokkering",
+      "retning": "ned",
+      "merknad": "Gjelder både hjertemuskelceller og glatt muskulatur; gir vasodilatasjon og påvirker AV- og sinusknute",
+      "utdyping": [
+        "Kalsiumantagonist, benzotiazepintype. Hemmer selektivt langsomme spenningstyrte L-type kalsiumkanaler i sarcolemma i både hjertemuskelceller og glatte muskelceller. Dette fører også til mindre frigivelse av kalsiumioner intracellulært. Effekten er vasodilatasjon, nedsatt perifer motstand og reduksjon i blodtrykk. Vasodilatasjon skjer også i kransarteriene.",
+        "Redusert smerte ved angina pectoris fordi diltiazem reduserer hjertets pumpekraft som betyr redusert oksygenbehov og samtidig øker blodforsyningen til hjertemuskelen pga. vasodilatasjon.",
+        "Antiarytmisk effekt fordi diltiazem spesifikt påvirker hjertes ledningssystem: forsinker ledningstid i AV-knuten og setter ned frekvens i sinusknuten.",
+        "Blodtrykksreduksjon ved monoterapi, sittende systolisk/diastolisk blodtrykk: 14,4 ± 2,1 / 12,1 ± 2,8 mmHg (gjennomsnitt ± SD), ifølge metastudien fra Wu et al. (2005)."
+      ]
+    }
+  ]
+}

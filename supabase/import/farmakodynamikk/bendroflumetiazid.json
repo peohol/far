@@ -1,0 +1,17 @@
+{
+  "stoff": "bendroflumetiazid",
+  "kilde": "antihypertensiver/Bendroflumetiazid.json",
+  "kort": [
+    {
+      "maal": "Na+/Cl−-kotransportør i distale tubuli",
+      "effekt": "Hemmer",
+      "mekanisme": "kotransporterhemming",
+      "retning": "ned",
+      "merknad": "Øker diurese; reduserer kalsiumutskillelse i urin og nyrenes evne til å fortynne urin",
+      "utdyping": [
+        "Tiazid som hemmer Na+/Cl- transporter i distale tubuli. Økt diurese (tap av blodvolum initialt) og venedilatasjon. Gir mindre diurese sammenlignet med slyngediuretika, ettersom reabsorpsjonen er mindre i distale tubuli. Nedsetter kalsiumutskillelsen i urinen (kan derfor forebygge nyresten). Nedsetter nyrenes evne til å fortynne urinen, som til vanlig skjer i distale tubuli. Tilsatt kaliumklorid minsker risiko for kaliummangel.",
+        "Siden tiazider virker mer distalt i nefronet, hvor mye av saltene og vannet allerede er reabsorbert, gir tiazider en mindre kraftig vanndrivende effekt sammenlignet med slyngediuretika."
+      ]
+    }
+  ]
+}
