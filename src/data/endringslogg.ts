@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.64.1',
+    dato: '2026-09-30',
+    sammendrag: 'Oppgaven «Diskusjonstråder på alle sider» er merket utført',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Den planlagte oppgaven «Diskusjonstråder på alle sider» (OPG-004) er merket utført med versjon 1.64.0, og det er ført inn i appens oversikt over databaseendringer.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.64.0',
     dato: '2026-09-30',
     sammendrag: 'Diskusjonstråder på fagsidene og fortolkningssidene',
