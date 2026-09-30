@@ -111,14 +111,9 @@ export function SearchStep({
         <Options hits={hits} onSelect={onSelect} query={query} />
 
         {/* Filteret er lett å glemme, og et glemt filter ser ut som at en
-            analytt ikke finnes. Derfor står linja under alternativene uansett
-            om filteret er på eller av, og ikke bare når det er på. Pillen er
-            samtidig veien til å sette, bytte eller slå av filteret, så menyen
-            ikke må åpnes for det. */}
-        <p className="sokfilter">
-          {metodefilter && 'Søket er begrenset til'}
-          <Filterbytte metodefilter={metodefilter} onFilter={onFilter} />
-        </p>
+            analytt ikke finnes. Derfor står alle metodene framme under
+            alternativene, med det aktive valget fylt i sin farge. */}
+        <Filterbytte metodefilter={metodefilter} onFilter={onFilter} />
       </div>
     </section>
   )

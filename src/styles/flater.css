@@ -206,15 +206,6 @@
   text-underline-offset: 0.3em;
 }
 
-/* Pillen som står i stedet for metodekoden når søket ikke har noe filter:
-   nøytral, fordi det ikke finnes noen metode å farge den etter ennå. */
-.metodepille--tom {
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--blekk-dempet);
-  background: var(--flate-hevet);
-}
-
 /* --- Kommentaren skrevet ut -------------------------------------------------
    Teksten som kopieres, skrevet ut i sin helhet. Kursiv serif og en loddrett
    aksentlinje skiller den fra alt annet på siden: dette er ikke appens ord,

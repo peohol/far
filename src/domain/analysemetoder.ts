@@ -23,7 +23,7 @@ export interface Analysemetode {
 }
 
 /**
- * Metodene i den rekkefølgen filtermenyen viser dem. Beskrivelsene er metodenes
+ * Metodene i den rekkefølgen filterraden viser dem. Beskrivelsene er metodenes
  * egne navn i labsystemet.
  *
  * Rekkefølgen her bestemmer også fargen hver metode bærer — se
@@ -57,7 +57,7 @@ export function metodefarger(kode: string): Record<string, string> {
  * `null` for en metode som ligger utenfor talltastene, og for ukjente koder.
  *
  * Tasten leses av det samme registeret som fargen og rekkefølgen, så merket i
- * filtermenyen og tasten som faktisk virker ikke kan komme i utakt.
+ * filterraden og tasten som faktisk virker ikke kan komme i utakt.
  */
 export function metodesnarvei(kode: string): string | null {
   const plass = ANALYSEMETODER.findIndex((m) => m.kode === kode)

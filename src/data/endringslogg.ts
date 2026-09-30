@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.61.3',
+    dato: '2026-09-30',
+    sammendrag: 'Alle analysemetodene står nå framme som piller under søket',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Under søket står alle analysemetodene på én rad, med «Alle» lengst til venstre. Du trenger ikke lenger holde pekeren over «Velg analysemetode» for å få fram metodene.',
+      'Filteret som gjelder, har fylt farge. De andre står bare med en tynn kant i sin farge, så du ser med én gang hvilket filter som er aktivt. «Alle» er valgt når søket ikke er begrenset.',
+      'Et trykk på en pille setter filteret, og «Alle» slår det av. Markøren blir stående i søkefeltet, så du kan skrive videre med én gang. Hurtigtastene Alt + 1 til Alt + 5 og Alt + 0 virker som før.',
+      'Holder du pekeren over en pille, står det hva metoden er.',
+    ],
+  },
+  {
     versjon: '1.61.2',
     dato: '2026-09-30',
     sammendrag: 'Små justeringer av utseendet ber ikke lenger om at siden oppdateres',
