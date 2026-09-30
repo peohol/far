@@ -81,6 +81,8 @@ export type Action =
   | { type: 'velg-etg'; valg: EtgValg }
   | { type: 'sett-metodefilter'; metode: string | null }
   | { type: 'tilbake' }
+  /** Ut av analytten og tilbake til søket, med søket i behold — som når adressen går tilbake til `#/`. */
+  | { type: 'forlat-analytt' }
   | { type: 'nullstill' }
 
 export function stageOf(state: State): Stage {
@@ -120,6 +122,9 @@ export function reducer(state: State, action: Action): State {
 
     case 'tilbake':
       return stepBack(state)
+
+    case 'forlat-analytt':
+      return state.analyte ? { ...state, analyte: null, bandKey: null, kontroll: null, etgValg: null } : state
 
     case 'nullstill':
       return nullstilt(state)

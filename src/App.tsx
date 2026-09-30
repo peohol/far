@@ -26,13 +26,15 @@ import { Toppmeny } from './components/toppmeny/Toppmeny'
 import { ToppmenyInnhold, ToppmenyKilde } from './components/toppmeny/Toppmenykilde'
 import { Toppmenyknapp } from './components/toppmeny/Toppmenyknapp'
 import { Versjonspille } from './components/Versjonspille'
+import { Diskusjonsmeny } from './components/diskusjoner/Diskusjonsmeny'
+import { diskusjonssideFor } from './diskusjoner/modell'
 import { FavorittkildeProvider } from './favoritter/Favorittkilde'
 import { lagFavorittlager } from './favoritter/lagring'
 import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from './domain/analyttkatalog'
 import { alternativFor, ETG_ALTERNATIVER, type EtgAlternativ } from './domain/etg'
 import type { Rute } from './domain/flytting'
-import { FORTOLKNING, lesRute } from './domain/rute'
+import { fortolkningsnokkel, fortolkningsrute, lesRute } from './domain/rute'
 import { stoffbeskrivelse, stoffForFortolkning } from './domain/koblinger'
 import { byggStoffregister, stoffslug, type Stoffoppforing } from './domain/stoffregister'
 import { rusModulFor } from './domain/rus'
@@ -92,6 +94,9 @@ const INGEN_STOFFSIDER: readonly Stoffoppforing[] = []
 
 /** Fortolkningen overlever en oppdatering av appen, med analytten lest tilbake etter koden. */
 const FORTOLKNINGSFORM = fortolkningsform(FORTOLKNINGSOPPFORINGER)
+
+/** Analyttene etter nøkkelen fortolkningssiden deres har i adressen. */
+const ANALYTT_ETTER_NOKKEL = new Map(FORTOLKNINGSOPPFORINGER.map((a) => [fortolkningsnokkel(a.kode), a]))
 
 const BLINK = 500
 const STEGBYTTE = 130
@@ -361,12 +366,47 @@ export default function App() {
   const apneFortolkning = useCallback(
     (analyte: Analyte) => {
       if (state.analyte?.kode !== analyte.kode) velgAnalytt(analyte)
-      gaaTil(FORTOLKNING)
+      gaaTil(fortolkningsrute(analyte.kode))
     },
     [state.analyte, velgAnalytt, gaaTil],
   )
 
-  const lukkInfoside = useCallback(() => gaaTil(FORTOLKNING), [gaaTil])
+  /** Tilbake til fortolkningen slik den sto. */
+  const lukkInfoside = useCallback(() => gaaTil(fortolkningsrute(state.analyte?.kode)), [gaaTil, state.analyte])
+
+  /**
+   * Fortolkningen av en analytt har sin egen adresse (`#/fortolkning/<nøkkel>`),
+   * og adressen og analytten følger hverandre. Velges en analytt i appen, går
+   * adressen dit, så tilbakeknappen i nettleseren går til der man var. Endres
+   * adressen utenfra — tilbake- og framknappen, et bokmerke, en lenke fra et
+   * varsel — åpnes analytten den peker på, eller søket når den ikke peker på
+   * noen. Ved oppstart vinner adressen når den har en analytt; ellers skrives
+   * den om til analytten som alt er åpen (fortolkningen overlevde en
+   * oppdatering av appen).
+   */
+  const analyttnokkel = state.analyte ? fortolkningsnokkel(state.analyte.kode) : undefined
+  const forrigeAdresse = useRef<string | null>(null)
+  const forrigeAnalytt = useRef(analyttnokkel)
+  useEffect(() => {
+    const oppstart = forrigeAdresse.current === null
+    const adresseEndret = !oppstart && forrigeAdresse.current !== (rute.side === 'fortolkning' ? (rute.analytt ?? '') : null)
+    const analyttEndret = analyttnokkel !== forrigeAnalytt.current
+    forrigeAdresse.current = rute.side === 'fortolkning' ? (rute.analytt ?? '') : null
+    forrigeAnalytt.current = analyttnokkel
+    if (rute.side !== 'fortolkning' || rute.analytt === analyttnokkel) return
+    if ((oppstart && rute.analytt) || (adresseEndret && !analyttEndret)) {
+      const analytt = rute.analytt ? ANALYTT_ETTER_NOKKEL.get(rute.analytt) : undefined
+      if (analytt) velgAnalytt(analytt)
+      else if (rute.analytt) gaaTil(fortolkningsrute(state.analyte?.kode), { erstatt: true })
+      else {
+        slippBildet()
+        setFailedCopy(null)
+        dispatch({ type: 'forlat-analytt' })
+      }
+      return
+    }
+    gaaTil(fortolkningsrute(state.analyte?.kode), { erstatt: oppstart })
+  }, [rute, analyttnokkel, state.analyte, velgAnalytt, gaaTil, slippBildet, dispatch])
 
   /**
    * Stoffsiden til modulen som fortolkes, når kodene i den primært hører til
@@ -512,6 +552,16 @@ export default function App() {
    * sto. Tastene følger `stage` og venter ikke på bildet.
    */
   const vist = dveler ?? stage
+
+  // Diskusjonene hører til siden som står åpen: en fagside, eller
+  // fortolkningen av én analytt. Forsiden har ingen.
+  const diskusjonsside = diskusjonssideFor(rute)
+  const sidenavn =
+    rute.side === 'stoff'
+      ? (register.menystoff(rute.stoff)?.navn ?? rute.stoff)
+      : state.analyte
+        ? `Fortolkning av ${state.analyte.visningsnavn || state.analyte.kode}`
+        : 'Fortolkningen'
 
   return (
     <ToppmenyKilde>
@@ -672,6 +722,8 @@ export default function App() {
               />
             )}
           </main>
+
+          {diskusjonsside && <Diskusjonsmeny side={diskusjonsside} sidenavn={sidenavn} />}
 
           {/* Versjonen og veien inn til endringsloggen, fast nederst i hjørnet. */}
           <Versjonspille />

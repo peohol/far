@@ -8,11 +8,12 @@ OUSFAR, med hjerter og kommentartråder; de berører ikke den kliniske delen.
 | Hvor | Hva |
 | --- | --- |
 | `supabase/migrations/*_ideer*.sql` | Tabellene, radsikkerheten, reglene for sletting og frysing, og funksjonene |
-| `src/ideer/modell.ts` | Sorteringen, kommentartreet, arkivet, tidspunktene og lesingen av svarene (rene funksjoner) |
+| `src/ideer/modell.ts` | Sorteringen, arkivet og lesingen av svarene (rene funksjoner) |
 | `src/ideer/oppgaver.ts` | Planlagte oppgaver: lesingen og grupperingen etter status |
 | `src/ideer/api.ts` | Kallene mot Supabase |
-| `src/components/ideer/` | Vinduene: Idéer (lista, én idé, skjemaet, tråden) og Planlagte oppgaver |
-| `src/styles/ideer.css` | Utseendet |
+| `src/components/ideer/` | Vinduene: Idéer (lista, én idé, skjemaet) og Planlagte oppgaver |
+| `src/traad/modell.ts`, `src/components/traad/` | Kommentartråden, felles med diskusjonene (`docs/diskusjoner.md`): treet, tidspunktene, hjertene og det nye |
+| `src/styles/ideer.css`, `src/styles/traad.css` | Utseendet |
 | `.claude/skills/utfor-oppgaver/` | Hvordan Claude utfører oppgavene og merker dem utført |
 
 Idéer og Planlagte oppgaver åpnes fra idémenyen i toppmenyen (`Ideknapp`, en
@@ -116,7 +117,7 @@ etter nytt når appen åpnes, når fanen får fokus og hvert femte minutt.
 Kommentarer fra andre etter det er nye: `ideoversikt()` teller dem per idé,
 `ideer_med_nytt()` teller idéene til prikken på idémenyen og valget «Idéer», og `idetraad()`
 gir tidspunktet, så siden kan merke dem «Ny». Regelen står også i
-`erNyKommentar` i `modell.ts`; endres den ett sted, endres den begge.
+`erNyKommentar` i `src/traad/modell.ts`; endres den ett sted, endres den begge.
 
 Varslene om nye kommentarer (bjella i toppmenyen) lages av databasen og står
 i `docs/varsler.md`. Å åpne en idé merker også dem lest.

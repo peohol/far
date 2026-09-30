@@ -1,7 +1,8 @@
 import { useEffect, useId, useState } from 'react'
-import { fullTid, kortTid } from '../../ideer/modell'
+import { fullTid, kortTid } from '../../traad/modell'
 import { Ikon } from '../ikon/Ikon'
 import type { Ikonnavn } from '../ikon/register'
+import '../../styles/traad.css'
 
 /** Et tidspunkt kort, med hele datoen og klokkeslettet ved peker og for skjermlesere. */
 export function Tidspunkt({ iso, endret }: { iso: string; endret?: string | null }) {

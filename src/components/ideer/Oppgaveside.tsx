@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import { flyttOppgaveTilbake, frigiOppgave, hentOppgave, lagreOppgave, settOppgaveKlar } from '../../ideer/api'
-import { TITTEL_MEST, oppgavekode } from '../../ideer/modell'
+import { oppgavekode } from '../../ideer/modell'
+import { TITTEL_MEST } from '../../traad/modell'
 import { PROMPT_MEST, iEndringsloggen, type Oppgavedetaljer } from '../../ideer/oppgaver'
 import { Forlatvarsel } from '../stoffside/Skjemaer'
 import { Button } from '../Button'
 import { visEndringslogg } from '../endringsloggvisning'
 import { Ikon } from '../ikon/Ikon'
 import { Felt } from '../konto/Felt'
-import { useIdekontekst } from './Idekontekst'
+import { useForfatterkontekst } from '../traad/Forfatterkontekst'
 import { Ideside } from './Ideside'
 import { Kategorimerke, Oppgavekode, Oppgavestatusmerke } from './Merker'
-import { Bekreftknapp, Tidspunkt } from './Smadeler'
+import { Bekreftknapp, Tidspunkt } from '../traad/Smadeler'
 import type { Skjemastatus } from './useForlatvakt'
 
 /**
@@ -48,7 +49,7 @@ export function Oppgaveside({
   /** Oppgaven er endret, så lista bør hentes på nytt. */
   onEndret: () => void
 }) {
-  const { admin } = useIdekontekst()
+  const { admin } = useForfatterkontekst()
   const [oppgave, setOppgave] = useState<Oppgavedetaljer | null>(null)
   const [feil, setFeil] = useState<string | null>(null)
   const [arbeider, setArbeider] = useState(false)

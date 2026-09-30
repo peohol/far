@@ -12,19 +12,15 @@ import {
   oppgavekode,
   slettesKl,
   andrevalg,
-  byggTraad,
-  erNyKommentar,
   grupperIdeer,
-  kortTid,
   kriterierFor,
   lesIdeoversikt,
   lesIdetraad,
   lesSortering,
-  tekstTilLagring,
   velgForst,
   type Ide,
-  type Kommentar,
 } from '../ideer/modell'
+import { byggTraad, erNyKommentar, kortTid, tekstTilLagring, type Kommentar } from '../traad/modell'
 
 const profiler = new Map<string, Pick<Profil, 'first_name' | 'last_name' | 'username'>>([
   ['u-ada', { first_name: 'Ada', last_name: 'Lovelace', username: 'ada' }],

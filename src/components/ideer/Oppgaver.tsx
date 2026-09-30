@@ -7,7 +7,7 @@ import type { Oppgave } from '../../ideer/oppgaver'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Modallag } from '../Modallag'
-import { Idekilde } from './Idekontekst'
+import { Forfatterkilde } from '../traad/Forfatterkontekst'
 import { veksleSkuff } from './Ideskuff'
 import { Oppgaveliste } from './Oppgaveliste'
 import { Oppgaveside } from './Oppgaveside'
@@ -126,7 +126,7 @@ export function Oppgaver({
         ) : null
       }
     >
-      <Idekilde profiler={profiler}>
+      <Forfatterkilde profiler={profiler}>
         <Bevaringsomrade navn="oppgaver">
           <div ref={rot} className="idevindu" key={`${apning}:${visning.side === 'oppgave' ? visning.id : visning.side}`}>
             {feil && visning.side === 'liste' && (
@@ -158,7 +158,7 @@ export function Oppgaver({
             )}
           </div>
         </Bevaringsomrade>
-      </Idekilde>
+      </Forfatterkilde>
     </Modallag>
   )
 }

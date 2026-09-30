@@ -7,6 +7,7 @@
 import { sammenlignVersjon, varsles, type Endring } from '../domain/versjon'
 import { PANELREKKEFOLGE, panelFor } from '../faginnhold/paneler'
 import { erObjekt, tekst, tekstEllerNull } from '../ideer/lesing'
+import { lesDiskusjonsside, type Diskusjonsside } from '../diskusjoner/modell'
 
 /* --- Kategoriene ----------------------------------------------------------- */
 
@@ -50,6 +51,18 @@ export const VARSELKATEGORIER = {
     obligatorisk: false,
     standard: false,
   },
+  mine_diskusjoner: {
+    tittel: 'Kommentarer i mine diskusjoner',
+    forklaring: 'Når noen kommenterer en tråd du har startet, eller svarer på en kommentar du har skrevet i en diskusjon.',
+    obligatorisk: true,
+    standard: true,
+  },
+  aktive_diskusjoner: {
+    tittel: 'Kommentarer i diskusjoner jeg har vært aktiv i',
+    forklaring: 'Når noen kommenterer en tråd du har kommentert, uten at det er et svar til deg.',
+    obligatorisk: false,
+    standard: true,
+  },
   funksjonalitet: {
     tittel: 'Ny eller endret funksjonalitet i appen',
     forklaring: 'Når appen har fått en ny versjon, med det som står om den i endringsloggen.',
@@ -62,6 +75,12 @@ export const VARSELKATEGORIER = {
     obligatorisk: false,
     standard: false,
   },
+  favorittdiskusjoner: {
+    tittel: 'Nye diskusjoner på mine favorittsider',
+    forklaring: 'Når noen starter en ny tråd på en fagside du har som favoritt.',
+    obligatorisk: false,
+    standard: false,
+  },
 } as const satisfies Record<string, Varselkategoridefinisjon>
 
 export type Varselkategori = keyof typeof VARSELKATEGORIER
@@ -69,7 +88,16 @@ export type Varselkategori = keyof typeof VARSELKATEGORIER
 export const KATEGORIREKKEFOLGE = Object.keys(VARSELKATEGORIER) as Varselkategori[]
 
 /** Kategoriene databasen lager varsler i. Samme verdier, i samme rekkefølge, som `public.varselkategori`. */
-export const DATABASEKATEGORIER = ['fortolkning', 'mine_ideer', 'aktive_ideer', 'favoritter', 'nye_ideer'] as const satisfies readonly Varselkategori[]
+export const DATABASEKATEGORIER = [
+  'fortolkning',
+  'mine_ideer',
+  'aktive_ideer',
+  'favoritter',
+  'nye_ideer',
+  'mine_diskusjoner',
+  'aktive_diskusjoner',
+  'favorittdiskusjoner',
+] as const satisfies readonly Varselkategori[]
 export type Databasekategori = (typeof DATABASEKATEGORIER)[number]
 
 function erDatabasekategori(verdi: unknown): verdi is Databasekategori {
@@ -216,7 +244,7 @@ export interface Hendelse {
   kl: string
   /** Hvem som gjorde det. */
   av: string | null
-  /** En ny kommentar på idéen, og hvem den svarer. */
+  /** En ny kommentar på idéen eller i diskusjonen, og hvem den svarer. */
   kommentar?: string
   svarTil?: string | null
   /** Det som ble publisert i fortolkningen. */
@@ -238,10 +266,20 @@ export interface Databasevarsel {
   id: string
   kategori: Databasekategori
   ide: { id: string; tittel: string; forfatterId: string | null } | null
+  /** Tråden varselet gjelder, i kategoriene for diskusjonene. */
+  diskusjon?: Varseldiskusjon | null
   /** Eldste først. */
   hendelser: Hendelse[]
   oppdatert_kl: string
   lest: boolean
+}
+
+/** En tråd slik et varsel viser den: overskriften, og siden den står på. */
+export interface Varseldiskusjon {
+  id: string
+  tittel: string
+  side: Diskusjonsside
+  forfatterId: string | null
 }
 
 export type Varsel = Databasevarsel | Endringsvarsel
@@ -273,8 +311,10 @@ function lesSide(verdi: unknown): Favorittside | null {
 function lesHendelse(verdi: unknown): Hendelse | null {
   if (!erObjekt(verdi)) return null
   const hendelse: Hendelse = { kl: tekst(verdi.kl), av: tekstEllerNull(verdi.av) }
-  if ('kommentar' in verdi) {
-    hendelse.kommentar = tekst(verdi.kommentar)
+  // Idéene sier `kommentar`, diskusjonene `innlegg`: begge er en ny kommentar.
+  const kommentar = 'kommentar' in verdi ? verdi.kommentar : 'innlegg' in verdi ? verdi.innlegg : undefined
+  if (kommentar !== undefined) {
+    hendelse.kommentar = tekst(kommentar)
     hendelse.svarTil = tekstEllerNull(verdi.svar_til)
   }
   if ('objekt' in verdi) hendelse.objekt = lesObjekt(verdi.objekt)
@@ -294,11 +334,17 @@ function lesDatabasevarsel(verdi: unknown): Databasevarsel | null {
   const ide = erObjekt(verdi.ide)
     ? { id: tekst(verdi.ide.id), tittel: tekst(verdi.ide.tittel), forfatterId: tekstEllerNull(verdi.ide.forfatter_id) }
     : null
+  const side = erObjekt(verdi.diskusjon) ? lesDiskusjonsside(verdi.diskusjon.side) : null
+  const diskusjon =
+    erObjekt(verdi.diskusjon) && side
+      ? { id: tekst(verdi.diskusjon.id), tittel: tekst(verdi.diskusjon.tittel), side, forfatterId: tekstEllerNull(verdi.diskusjon.forfatter_id) }
+      : null
   return {
     kilde: 'database',
     id: tekst(verdi.id),
     kategori: verdi.kategori,
     ide,
+    diskusjon,
     hendelser,
     oppdatert_kl: tekst(verdi.oppdatert_kl),
     lest: verdi.lest_kl != null,
@@ -368,14 +414,46 @@ export function aktorer(hendelser: readonly Hendelse[]): string[] {
   return ider
 }
 
+/**
+ * Hva som har skjedd i en tråd — en idé eller en diskusjon — med navnene
+ * foran: «Ada og Bo kommenterte idéen din», «Bo svarte på kommentaren din».
+ */
+function kommentartekst(
+  varsel: Databasevarsel,
+  forfatterId: string | null | undefined,
+  meg: string,
+  navn: (id: string) => string,
+  ord: { egen: string; aktiv: string },
+): string {
+  const hvem = navneliste(aktorer(varsel.hendelser).map(navn))
+  if (varsel.kategori === 'aktive_ideer' || varsel.kategori === 'aktive_diskusjoner') return `${hvem} ${ord.aktiv}`
+  const barSvar = varsel.hendelser.every((h) => h.svarTil === meg)
+  return forfatterId !== meg || barSvar ? `${hvem} svarte på kommentaren din` : `${hvem} ${ord.egen}`
+}
+
 /** Hva som har skjedd med idéen, med navnene foran: «Ada og Bo kommenterte idéen din». */
 export function idetekst(varsel: Databasevarsel, meg: string, navn: (id: string) => string): string {
-  const hvem = navneliste(aktorer(varsel.hendelser).map(navn))
-  if (varsel.kategori === 'nye_ideer') return `${hvem} skrev en ny idé`
-  if (varsel.kategori === 'aktive_ideer') return `${hvem} kommenterte en idé du har kommentert`
-  const egen = varsel.ide?.forfatterId === meg
-  const barSvar = varsel.hendelser.every((h) => h.svarTil === meg)
-  return !egen || barSvar ? `${hvem} svarte på kommentaren din` : `${hvem} kommenterte idéen din`
+  if (varsel.kategori === 'nye_ideer') return `${navneliste(aktorer(varsel.hendelser).map(navn))} skrev en ny idé`
+  return kommentartekst(varsel, varsel.ide?.forfatterId, meg, navn, {
+    egen: 'kommenterte idéen din',
+    aktiv: 'kommenterte en idé du har kommentert',
+  })
+}
+
+/** Hva som har skjedd i diskusjonen: «Ada kommenterte tråden din», «Bo startet en ny tråd på en favorittside». */
+export function diskusjonstekst(varsel: Databasevarsel, meg: string, navn: (id: string) => string): string {
+  if (varsel.kategori === 'favorittdiskusjoner') {
+    return `${navneliste(aktorer(varsel.hendelser).map(navn))} startet en ny tråd på en favorittside`
+  }
+  return kommentartekst(varsel, varsel.diskusjon?.forfatterId, meg, navn, {
+    egen: 'kommenterte tråden din',
+    aktiv: 'kommenterte en tråd du har kommentert',
+  })
+}
+
+/** Om varselet gjelder en diskusjon. */
+export function erDiskusjonsvarsel(varsel: Databasevarsel): boolean {
+  return varsel.kategori === 'mine_diskusjoner' || varsel.kategori === 'aktive_diskusjoner' || varsel.kategori === 'favorittdiskusjoner'
 }
 
 /** «Kommentaren «AMIS – innenfor»» eller «Reglene for AMIS». */

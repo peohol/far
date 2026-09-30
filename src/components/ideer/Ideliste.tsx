@@ -15,10 +15,10 @@ import {
   type Sortering,
 } from '../../ideer/modell'
 import { Ikon } from '../ikon/Ikon'
-import { Forfatterbilde, useForfatternavn, useIdekontekst } from './Idekontekst'
+import { Forfatterbilde, useForfatternavn, useForfatterkontekst } from '../traad/Forfatterkontekst'
 import { Ideskuff } from './Ideskuff'
 import { Kategorimerke, Oppgavekode, Oppgavestatusmerke } from './Merker'
-import { Tidspunkt, Valgrad } from './Smadeler'
+import { Tidspunkt, Valgrad } from '../traad/Smadeler'
 
 /** Skuffene nederst i lista, etter navnet laget husker dem under. */
 export const SKUFF_OVERFORT = 'overfort'
@@ -53,7 +53,7 @@ export function Ideliste({
   apneSkuffer: ReadonlySet<string>
   onVeksleSkuff: (navn: string) => void
 }) {
-  const { profiler } = useIdekontekst()
+  const { profiler } = useForfatterkontekst()
   const { apne, overforte, arkiverte } = useMemo(() => {
     const etter = (tilstand: ReturnType<typeof idetilstand>) => ideer.filter((i) => idetilstand(i) === tilstand)
     return {
