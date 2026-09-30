@@ -40,15 +40,17 @@ function Valgknapp({
   valg,
   snarvei,
   onPick,
+  className,
 }: {
   valg: Kommentarvalg
   snarvei: string
   onPick: () => void
+  className?: string
 }) {
   const tips = useTips(valg.kommentar)
 
   return (
-    <li>
+    <li className={className}>
       <button
         type="button"
         // Kvitteringen legges der knappen står, og beviset i neste steg flyter
@@ -123,7 +125,7 @@ function Regelmelding({
  *
  * Regelsett med «Til stede under cut-off» har ett valg til, som ikke er en
  * konsentrasjon: stoffet er til stede, men under påvisningsgrensen. Det står
- * under båndene, i sin egen rad, og fortsetter nummereringen deres.
+ * etter båndene, i sin egen skrift, og fortsetter nummereringen deres.
  */
 export function BandStep({ analyte, regler, valg: alle, onPick, onBack, onProvIgjen, failed }: BandStepProps) {
   const { visible: merker } = useShortcutVisibility()
@@ -160,14 +162,15 @@ export function BandStep({ analyte, regler, valg: alle, onPick, onBack, onProvIg
         {regler.status !== 'klar' && (
           <Regelmelding regler={regler} kode={analyte.kode} onProvIgjen={onProvIgjen} />
         )}
-        {/* Antallet bånd varierer med analytten, og knappene skal stå på én
+        {/* Antallet bånd varierer med analytten, og båndene skal stå på én
             linje. CSS-en deler bredden på antallet for å finne hvor stor
             skriften kan være — og trenger å vite om hurtigtastmerkene tar plass
-            inne i knappene. */}
-        {bands.length > 0 && (
+            inne i knappene. Cut-off-valget er ikke med i antallet: det står
+            på samme linje bare når det er plass til overs. */}
+        {alle.length > 0 && (
           <ul
             className={`band${merker ? ' band--merker' : ''}`}
-            style={{ '--antall': bands.length } as CSSProperties}
+            style={{ '--antall': Math.max(bands.length, 1) } as CSSProperties}
           >
             {bands.map((valg, i) => (
               <Valgknapp
@@ -177,18 +180,14 @@ export function BandStep({ analyte, regler, valg: alle, onPick, onBack, onProvIg
                 onPick={() => onPick(valg)}
               />
             ))}
-          </ul>
-        )}
-
-        {/* Egen rad: valget er ingen konsentrasjon, og skal verken dele
-            bredden med båndene eller leses som en del av skalaen. */}
-        {cutoff && (
-          <ul className="band bandkort__ekstra">
-            <Valgknapp
-              valg={cutoff}
-              snarvei={indexToDigit(bands.length)}
-              onPick={() => onPick(cutoff)}
-            />
+            {cutoff && (
+              <Valgknapp
+                valg={cutoff}
+                snarvei={indexToDigit(bands.length)}
+                onPick={() => onPick(cutoff)}
+                className="bandkort__ekstra"
+              />
+            )}
           </ul>
         )}
       </Card>

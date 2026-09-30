@@ -18,6 +18,13 @@
   --skrift-display: 'Newsreader Variable', 'Newsreader', 'Iowan Old Style', Georgia, serif;
   --skrift-ui: 'Public Sans Variable', 'Public Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --skrift-mono: 'JetBrains Mono', 'SFMono-Regular', 'Cascadia Mono', Consolas, monospace;
+  /* Newsreader setter av mer luft under grunnlinjen (til g, j, p og y) enn
+     over tallene. Med tett linjehøyde står tall og versaler derfor for høyt i
+     en boks som midtstiller dem. Så mye senkes tekst som skal stå midt i en
+     knapp eller et merke — målt på båndknappene i nettleseren, slik at luften
+     over og under tallene er lik innen en kvart piksel. Public Sans har like
+     mye luft over og under og trenger ingenting. */
+  --skrift-display-senk: 0.115em;
 
   --vekt-normal: 400;
   --vekt-medium: 500;

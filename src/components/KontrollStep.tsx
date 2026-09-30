@@ -45,7 +45,7 @@ export function KontrollStep({ valg, sporsmal, onJa, onNei, failed }: KontrollSt
             opp fra den samme ruten — samme feste som knappene i steget foran. */}
         <p className={`valgmerke valgmerke--${valg.tone}`} data-band={valg.key}>
           <Ikon navn={bandIkon(valg)} className="valgmerke__ikon" />
-          {valg.label}
+          <span className="valgmerke__verdi">{valg.label}</span>
         </p>
 
         <h1 className="kontrollkort__sporsmal">{sporsmal}</h1>
