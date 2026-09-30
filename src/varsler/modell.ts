@@ -4,7 +4,7 @@
  * kallene står i `api.ts`, og hvordan databasen lager varslene, i migrasjonen
  * `*_varsler.sql` og i `docs/varsler.md`.
  */
-import { sammenlignVersjon, type Endring } from '../domain/versjon'
+import { sammenlignVersjon, varsles, type Endring } from '../domain/versjon'
 import { PANELREKKEFOLGE, panelFor } from '../faginnhold/paneler'
 import { erObjekt, tekst, tekstEllerNull } from '../ideer/lesing'
 
@@ -119,14 +119,6 @@ export function lesEndringsloggstatus(verdi: unknown): Endringsloggstatus | null
   if (!erObjekt(verdi) || !erVersjon(verdi.fra)) return null
   const lest = Array.isArray(verdi.lest) ? verdi.lest.filter(erVersjon) : []
   return { fra: verdi.fra, lest }
-}
-
-/**
- * Føringer uten `utenVarsel` er varsler; de andre merkes ikke i appen. En
- * endring i fortolkningen varsles alltid, så den vinner om begge står.
- */
-function varsles(endring: Endring): boolean {
-  return !endring.utenVarsel || endring.endrerFortolkning === true
 }
 
 /**

@@ -64,6 +64,26 @@ export function nyesteVersjon(logg: Endring[]): string {
   return nyeste.versjon
 }
 
+/**
+ * Føringer uten `utenVarsel` varsles; de andre merkes ikke i appen. En
+ * endring i fortolkningen varsles alltid, så den vinner om begge står.
+ */
+export function varsles(endring: Endring): boolean {
+  return !endring.utenVarsel || endring.endrerFortolkning === true
+}
+
+/**
+ * Versjonen brukerne bes om å oppdatere til: den nyeste føringen som varsles.
+ * En føring med `utenVarsel` endrer ingenting brukerne merker, og en stille
+ * designjustering har ingen føring i det hele tatt (`docs/endringslogg.md`),
+ * så ingen av dem ber noen laste siden på nytt.
+ */
+export function oppdateringsversjon(logg: readonly Endring[]): string {
+  const nyeste = logg.find(varsles)
+  if (!nyeste) throw new Error('Endringsloggen har ingen føring som varsles')
+  return nyeste.versjon
+}
+
 /** `2026-08-17` → `17.08.2026`. Formen føringene merkes med i loggen. */
 export function formaterDato(iso: string): string {
   const treff = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso)

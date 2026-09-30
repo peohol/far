@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.61.2',
+    dato: '2026-09-30',
+    sammendrag: 'Små justeringer av utseendet ber ikke lenger om at siden oppdateres',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Meldingen «En ny versjon av OUSFAR er klar» kommer bare når det er gjort noe som står i endringsloggen. Små justeringer av luft, størrelser og overganger kommer i stedet med neste gang siden lastes, uten melding og uten varsel.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.61.0',
     dato: '2026-09-29',
     sammendrag: 'Fagsøket finner stoffene også på engelske navn, forkortelser og andre skrivemåter',
