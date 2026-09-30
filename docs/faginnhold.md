@@ -708,8 +708,8 @@ lisdeksamfetamin. En omgang kan også lage sider som ennå ikke finnes
 (`*_ghb_ketamin_indikasjoner_01.sql`), og koblet til FEST og ClinPGx med hver
 sin import. En kode uten side får den på samme måte (`NYE_ANALYTTSIDER`), med
 navnet og koden fra analyttkatalogen: slik fikk THC side, med indikasjonen for
-Sativex (`*_thc_indikasjoner_01.sql`). Cannabidiolsiden (CBD, med Epidyolex)
-er laget uten kode, som GHB og ketamin (`*_cbd_indikasjoner_01.sql`). Rusmiddelkodene som er legemidler
+Sativex (`*_thc_indikasjoner_01.sql`). Cannabidiolsiden (med Epidyolex)
+er laget uten kode, som GHB og ketamin (`*_cbd_indikasjoner_01.sql`), og heter «CBD» som THC-siden (`*_cbd_stoffside.sql`). Rusmiddelkodene som er legemidler
 (benzodiazepinene, z-hypnotikaene og opioidene, `RUSMIDLER_INDIKASJONER`)
 fikk indikasjonene sine i `*_rusmidler_indikasjoner_*.sql`, og tapentadol
 (TAP) fikk siden sin samme vei, som THC. Et indikasjonskort som alt står på siden, røres ikke. Har

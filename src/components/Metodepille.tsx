@@ -20,7 +20,7 @@ export interface MetodepilleProps {
  *
  * Koden står alene, uten forklaring bak seg: de som kommenterer analysene
  * kjenner kodene sine, og en boble som gjentar dem ville bare vært i veien.
- * Hva koden betyr, står i filtermenyen for den som trenger det.
+ * Hva koden betyr, står i tipset på filterpillen for den som trenger det.
  */
 export function Metodepille({ metode, kategori }: MetodepilleProps) {
   return (

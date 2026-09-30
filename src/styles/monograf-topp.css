@@ -48,9 +48,10 @@
   color: var(--aksent);
 }
 
-/* Viktige data: konsentrasjonene (3 deler) ved siden av kinetikken (2 deler).
-   Gruppene brytes under hverandre når det blir trangt, og en gruppe alene
-   tar hele bredden. */
+/* Viktige data: konsentrasjonene ved siden av kinetikken. Gruppene og kortene
+   er aldri bredere enn innholdet trenger, og et kort blir heller bredere enn
+   at et stort tall renner ut: det som ikke får plass, brytes ned på neste rad.
+   Dekker ikke raden hele bredden, står den midt i. */
 .viktige-data {
   display: flex;
   flex-direction: column;
@@ -62,22 +63,16 @@
 .viktige-data__grupper {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: var(--rom-7);
 }
 
 .viktige-data__gruppe {
+  flex: 0 1 auto;
   display: flex;
   flex-direction: column;
   gap: var(--rom-3);
   min-width: 0;
-}
-
-.viktige-data__gruppe--konsentrasjon {
-  flex: 3 1 30rem;
-}
-
-.viktige-data__gruppe--kinetikk {
-  flex: 2 1 20rem;
 }
 
 .viktige-data__gruppetittel {
@@ -92,8 +87,9 @@
 
 .viktige-data__kort {
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--rom-4);
   padding: 0;
   list-style: none;
@@ -101,16 +97,19 @@
 
 /* Ett kort. Konsentrasjonene er farget etter nivået, uten kant; kinetikken
    står på flaten med kant og et miniplott øverst. Innholdet står midtstilt,
-   bortover og nedover. */
+   bortover og nedover. Kortet er så bredt som innholdet (tallet, formene,
+   kildefeltet) trenger, men aldri smalere enn `--datakort-min`; kortene i en
+   rad er like høye. */
 .datakort {
-  /* Tallet skaleres etter kortets bredde (se `.datakort__tall`). */
-  container-type: inline-size;
+  --datakort-min: 9rem;
+  flex: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: var(--rom-4);
-  min-width: 0;
+  min-inline-size: var(--datakort-min);
+  max-inline-size: 100%;
   text-align: center;
   padding: var(--rom-6);
   background: var(--flate);
@@ -151,6 +150,10 @@
 }
 
 .datakort__tittel {
+  /* Etiketten gjør ikke kortet bredere enn det lengste ordet: den brytes i den
+     bredden tallet gir kortet («Alvorlig/dødelig» over «intoksikasjon»). */
+  inline-size: min-content;
+  min-inline-size: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -207,8 +210,7 @@
 
 .datakort__tall {
   font-family: var(--skrift-display);
-  /* Smale kort på bred skjerm: et område som «50–700» skal stå på én linje. */
-  font-size: min(var(--tekst-tall), 27cqi);
+  font-size: var(--tekst-tall);
   font-weight: var(--vekt-medium);
   line-height: var(--linjehoyde-tett);
   font-variant-numeric: lining-nums tabular-nums;
@@ -223,10 +225,17 @@
   color: var(--blekk-dempet);
 }
 
+/* Konsentrasjonene har enheten på en egen linje under tallet, så det er
+   tallet som bestemmer bredden på kortet. */
+.datakort--konsentrasjon .datakort__verdi {
+  flex-direction: column;
+  align-items: center;
+}
+
 /* Området etter den typiske verdien, «33 (29–37)»: samme skrift, mindre og dempet. */
 .datakort__spenn {
   font-family: var(--skrift-display);
-  font-size: calc(min(var(--tekst-tall), 27cqi) * 0.6);
+  font-size: calc(var(--tekst-tall) * 0.6);
   font-weight: var(--vekt-medium);
   line-height: var(--linjehoyde-tett);
   font-variant-numeric: lining-nums tabular-nums;
@@ -234,8 +243,9 @@
   color: var(--blekk-dempet);
 }
 
-/* Verdiene per legemiddelform står side om side, én celle per form. Blir
-   kortet for smalt, brytes de, og en form alene på raden står midt i kortet. */
+/* Verdiene per legemiddelform står side om side, én celle per form, og kortet
+   blir så bredt som de trenger. Er det ikke plass, brytes de, og en form alene
+   på raden står midt i kortet. */
 .datakort__former {
   display: flex;
   flex-wrap: wrap;
@@ -248,7 +258,7 @@
 }
 
 .datakort__form {
-  flex: 1 1 5.5rem;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -256,18 +266,18 @@
   min-width: 0;
 }
 
-/* Med flere former deler de bredden: kortet får mindre luft på sidene, og
-   tallene skaleres ned sammen. */
+/* Med flere former står de tettere: kortet får mindre luft på sidene, og
+   tallene er mindre. */
 .datakort:has(.datakort__former:not([data-antall='1'])) {
   padding-inline: var(--rom-4);
 }
 
 .datakort__former:not([data-antall='1']) .datakort__tall {
-  font-size: min(var(--tekst-seksjon), 18cqi);
+  font-size: var(--tekst-seksjon);
 }
 
 .datakort__former:not([data-antall='1']) .datakort__spenn {
-  font-size: calc(min(var(--tekst-seksjon), 18cqi) * 0.65);
+  font-size: calc(var(--tekst-seksjon) * 0.65);
 }
 
 /* Stoffet verdien gjelder, når kortet har verdier for flere (moderstoffet og
@@ -327,14 +337,23 @@
     gap: var(--rom-5);
   }
 
-  .viktige-data__gruppe--konsentrasjon .viktige-data__kort {
-    grid-template-columns: minmax(0, 1fr);
+  .viktige-data__gruppe {
+    flex-basis: 100%;
+  }
+
+  .viktige-data__kort {
     gap: var(--rom-3);
   }
 
-  .viktige-data__gruppe--kinetikk .viktige-data__kort {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--rom-3);
+  .viktige-data__gruppe--konsentrasjon .viktige-data__kort {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Kinetikkortene deler raden og fyller den; får de ikke plass ved siden av
+     hverandre (flere legemiddelformer), står de under hverandre. */
+  .viktige-data__gruppe--kinetikk .datakort {
+    flex: 1 1 auto;
   }
 
   .datakort {
@@ -354,13 +373,10 @@
   }
 
   .datakort--konsentrasjon .datakort__verdi {
+    flex-direction: row;
     justify-content: flex-end;
+    align-items: baseline;
     text-align: end;
-  }
-
-  /* Har et kinetikkort flere legemiddelformer, tar kortene hele bredden, så formene får stå side om side. */
-  .viktige-data__gruppe--kinetikk .viktige-data__kort:has(.datakort__former:not([data-antall='1'])) {
-    grid-template-columns: minmax(0, 1fr);
   }
 
   .datakort--konsentrasjon .datakort__tittel {

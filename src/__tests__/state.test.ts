@@ -184,7 +184,7 @@ describe('filteret for søket', () => {
   })
 
   it('overlever at søket nullstilles', () => {
-    // Filteret er et valg brukeren har tatt i filtermenyen, ikke et steg i
+    // Filteret er et valg brukeren har tatt i filterraden, ikke et steg i
     // arbeidsflyten: verken Esc fra første steg eller en ferdig kommentar
     // skal slå det av.
     expect(reducer(medFilter, { type: 'nullstill' }).metodefilter).toBe('AHT')
