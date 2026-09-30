@@ -623,7 +623,7 @@ export function TekstSkjema(props: SkjemaProps<{ dokument: Riktekstdokument }>) 
   return (
     <Skjemaramme {...props} kontroller={() => ({ data: { dokument } })}>
       {/* Editoren leser dokumentet bare når den åpnes: det lagrede, eller utkastet etter en oppdatering. */}
-      <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett={props.tittel} />
+      <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett={props.tittel} fyll />
     </Skjemaramme>
   )
 }
@@ -641,7 +641,7 @@ export function KinetikkSkjema(props: SkjemaProps<{ tittel: string; dokument: Ri
   return (
     <Skjemaramme {...props} kontroller={kontroller}>
       <Tekstfelt merke="Overskrift" verdi={tittel} onEndre={setTittel} />
-      <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett={tittel || props.tittel} />
+      <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett={tittel || props.tittel} fyll />
     </Skjemaramme>
   )
 }

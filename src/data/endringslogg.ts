@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.62.4',
+    versjon: '1.62.6',
     dato: '2026-09-30',
     sammendrag: 'En idé som overføres til Planlagte oppgaver, får teksten sin som prompt',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,28 @@ export const ENDRINGSLOGG: Endring[] = [
       'Når en idé overføres til Planlagte oppgaver, starter prompten med den samme teksten som idéen hadde, i stedet for å være tom. Den kan redigeres som før.',
       'Avsnitt, lister og lenker følger med som ren tekst. Har idéen ingen beskrivelse, starter prompten med overskriften.',
       'Oppgaver som alt er overført, er ikke endret.',
+    ],
+  },
+  {
+    versjon: '1.62.5',
+    dato: '2026-09-30',
+    sammendrag: 'Vinduene lukkes heller ikke når et trykk utenfor slippes inne i dem',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Trykker du ned utenfor et vindu og slipper museknappen inne i det, blir vinduet stående. Bare et klikk som både begynner og slutter utenfor, lukker det.',
+    ],
+  },
+  {
+    versjon: '1.62.4',
+    dato: '2026-09-30',
+    sammendrag: 'Lange tekster ruller i sitt eget felt i redigeringsvinduene',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Når beskrivelsen av en idé eller teksten i et kort på en fagside blir lang, er det bare selve tekstfeltet som ruller. Verktøylinjen for formatering, feltene over og knappene under står fast i vinduet.',
+      'Tekstfeltet fyller vinduet, så det er plass til å se mest mulig av teksten mens den skrives.',
+      'Andre lange tekstfelt i vinduene, som prompten til en planlagt oppgave og kommentarene til idéene, vokser ikke lenger forbi omtrent halve skjermhøyden, men ruller selv.',
     ],
   },
   {
