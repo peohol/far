@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.61.6',
+    dato: '2026-09-30',
+    sammendrag: 'Nøkkeltallene øverst på fagsidene får alltid plass i kortene sine',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Kortene med referanseområde, toksisk område, alvorlig intoksikasjon, t½ og tss øverst på fagsidene blir bredere når tallet er stort, i stedet for at tallet renner ut av kortet.',
+      'Kortene er heller ikke bredere enn de trenger: et kort med et kort tall, som «3 dager», tar mindre plass enn før. Dekker kortene ikke hele bredden, står de midt på siden.',
+    ],
+  },
+  {
     versjon: '1.61.5',
     dato: '2026-09-30',
     sammendrag: 'Alle analysemetodene står nå framme som piller under søket',
