@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.62.5',
+    dato: '2026-09-30',
+    sammendrag: 'Vinduene lukkes heller ikke når et trykk utenfor slippes inne i dem',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Trykker du ned utenfor et vindu og slipper museknappen inne i det, blir vinduet stående. Bare et klikk som både begynner og slutter utenfor, lukker det.',
+    ],
+  },
+  {
     versjon: '1.62.4',
     dato: '2026-09-30',
     sammendrag: 'Lange tekster ruller i sitt eget felt i redigeringsvinduene',
