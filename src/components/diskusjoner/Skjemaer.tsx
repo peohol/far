@@ -1,13 +1,15 @@
-import { useId, useState, type FormEvent } from 'react'
+import { useEffect, useId, useState, type FormEvent } from 'react'
 import { useBevart } from '../../oppdatering/Bevaring'
 import { tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
-import { endreKategori, opprettDiskusjon, opprettKategori } from '../../diskusjoner/api'
+import { endreKategori, flyttDiskusjonTilSide, hentDiskusjoner, opprettDiskusjon, opprettKategori, type Kategorivalg } from '../../diskusjoner/api'
 import {
   KATEGORINAVN_MEST,
   emojiFeil,
+  grupper,
   kategorinavnFeil,
   type Diskusjonskategori,
   type Diskusjonsside,
+  type Diskusjonssider,
 } from '../../diskusjoner/modell'
 import { TITTEL_MEST, tekstTilLagring } from '../../traad/modell'
 import { Rikteksteditor } from '../stoffside/Rikteksteditor'
@@ -168,6 +170,54 @@ export function Kategoriskjema({
 const NY_KATEGORI = ''
 
 /**
+ * Hvilken kategori tråden skal i: en på siden, eller en ny, med feltene for
+ * den. `valgt` er ID-en, eller {@link NY_KATEGORI}.
+ */
+function Kategorivelger({
+  valgt,
+  onVelg,
+  ny,
+  onNy,
+  kategorier,
+  visFeil,
+  disabled = false,
+}: {
+  valgt: string
+  onVelg: (valgt: string) => void
+  ny: Kategoriverdier
+  onNy: (ny: Kategoriverdier) => void
+  kategorier: readonly Diskusjonskategori[]
+  visFeil: boolean
+  disabled?: boolean
+}) {
+  const id = useId()
+  return (
+    <>
+      <div className="felt">
+        <label className="felt__merkelapp" htmlFor={id}>
+          Kategori
+        </label>
+        <select id={id} className="felt__inndata" value={valgt} disabled={disabled} onChange={(e) => onVelg(e.target.value)}>
+          {kategorier.map((k) => (
+            <option key={k.id} value={k.id}>
+              {k.emoji} {k.navn}
+            </option>
+          ))}
+          <option value={NY_KATEGORI}>＋ Ny kategori …</option>
+        </select>
+      </div>
+      {valgt === NY_KATEGORI && <Kategorifelter verdier={ny} onEndre={onNy} kategorier={kategorier} visFeil={visFeil} />}
+    </>
+  )
+}
+
+/** Kategorien slik funksjonene i databasen tar den, eller `null` når den nye ikke er gyldig på siden. */
+function kategorivalg(valgt: string, ny: Kategoriverdier, kategorier: readonly Diskusjonskategori[]): Kategorivalg | null {
+  if (valgt !== NY_KATEGORI) return { id: valgt }
+  return kategorinavnFeil(ny.navn, kategorier) || emojiFeil(ny.emoji, kategorier) ? null : ny
+}
+
+/**
  * En ny tråd: overskrift og første innlegg, som en idé, i en kategori på
  * siden eller i en ny kategori som lages sammen med tråden.
  */
@@ -192,27 +242,20 @@ export function Traadskjema({
   const [provd, setProvd] = useState(false)
   const [feil, setFeil] = useState<string | null>(null)
   const [lagrer, setLagrer] = useState(false)
-  const kategoriId = useId()
   const tekstId = useId()
 
   const valgt = kategorier.some((k) => k.id === kategori) ? kategori : NY_KATEGORI
-  const nyKategori = valgt === NY_KATEGORI
 
   const lagre = async (event: FormEvent) => {
     event.preventDefault()
     setProvd(true)
-    if (nyKategori && (kategorinavnFeil(ny.navn, kategorier) || emojiFeil(ny.emoji, kategorier))) return
+    const maal = kategorivalg(valgt, ny, kategorier)
+    if (!maal) return
     if (!tittel.trim()) return setFeil('Skriv en overskrift.')
     setLagrer(true)
     setFeil(null)
     try {
-      onLagret(
-        await opprettDiskusjon(side, {
-          tittel,
-          tekst: tekstTilLagring(tekst),
-          kategori: nyKategori ? ny : { id: valgt },
-        }),
-      )
+      onLagret(await opprettDiskusjon(side, { tittel, tekst: tekstTilLagring(tekst), kategori: maal }))
     } catch (e) {
       setFeil((e as Error).message)
       setLagrer(false)
@@ -222,25 +265,12 @@ export function Traadskjema({
   return (
     <form className="diskusjonsskjema" onSubmit={(e) => void lagre(e)} noValidate aria-label="Ny tråd">
       <h3 className="diskusjonsskjema__tittel">Ny tråd</h3>
-      <div className="felt">
-        <label className="felt__merkelapp" htmlFor={kategoriId}>
-          Kategori
-        </label>
-        <select id={kategoriId} className="felt__inndata" value={valgt} onChange={(e) => setKategori(e.target.value)}>
-          {kategorier.map((k) => (
-            <option key={k.id} value={k.id}>
-              {k.emoji} {k.navn}
-            </option>
-          ))}
-          <option value={NY_KATEGORI}>＋ Ny kategori …</option>
-        </select>
-      </div>
-      {nyKategori && <Kategorifelter verdier={ny} onEndre={setNy} kategorier={kategorier} visFeil={provd} />}
+      <Kategorivelger valgt={valgt} onVelg={setKategori} ny={ny} onNy={setNy} kategorier={kategorier} visFeil={provd} />
       <Felt
         merkelapp="Overskrift"
         value={tittel}
         maxLength={TITTEL_MEST}
-        autoFocus={!nyKategori}
+        autoFocus={valgt !== NY_KATEGORI}
         onChange={(e) => setTittel(e.target.value)}
       />
       <div className="felt">
@@ -260,6 +290,135 @@ export function Traadskjema({
         </Button>
         <Button type="submit" className="knapp--kompakt" disabled={lagrer}>
           {lagrer ? 'Lagrer …' : 'Publiser'}
+        </Button>
+      </div>
+    </form>
+  )
+}
+
+/**
+ * Flytter tråden til en annen side: en fagside eller fortolkningen av en
+ * analytt, i en kategori der eller i en ny. Kommentarene følger med.
+ */
+export function Flytteskjema({
+  id,
+  side,
+  sider,
+  onAvbryt,
+  onFlyttet,
+}: {
+  /** Tråden. */
+  id: string
+  /** Siden tråden står på nå. */
+  side: Diskusjonsside
+  sider: Diskusjonssider
+  onAvbryt: () => void
+  onFlyttet: (til: Diskusjonsside) => void
+}) {
+  const [til, setTil] = useBevart<Diskusjonsside | ''>(`traad:${id}/flytt/side`, '')
+  const [kategori, setKategori] = useBevart<string | null>(`traad:${id}/flytt/kategori`, null)
+  const [ny, setNy] = useBevart<Kategoriverdier>(`traad:${id}/flytt/ny-kategori`, { navn: '', emoji: '' })
+  // Kategoriene på siden tråden skal til, når de er hentet.
+  const [kategorier, setKategorier] = useState<{ side: Diskusjonsside; liste: Diskusjonskategori[] } | null>(null)
+  const [provd, setProvd] = useState(false)
+  const [feil, setFeil] = useState<string | null>(null)
+  const [lagrer, setLagrer] = useState(false)
+  const sideId = useId()
+
+  useEffect(() => {
+    if (!til) return
+    let aktuell = true
+    hentDiskusjoner(til).then(
+      (oversikt) => aktuell && setKategorier({ side: til, liste: grupper(oversikt).kategorier.map((g) => g.kategori) }),
+      () => aktuell && setFeil('Fikk ikke hentet kategoriene på siden.'),
+    )
+    return () => {
+      aktuell = false
+    }
+  }, [til])
+
+  const hentet = til && kategorier?.side === til ? kategorier.liste : null
+  const valgt =
+    hentet && (kategori === NY_KATEGORI || hentet.some((k) => k.id === kategori)) ? (kategori as string) : (hentet?.[0]?.id ?? NY_KATEGORI)
+
+  const velgSide = (side: string) => {
+    setTil(side as Diskusjonsside | '')
+    setKategori(null)
+    setProvd(false)
+    setFeil(null)
+  }
+
+  const flytt = async (event: FormEvent) => {
+    event.preventDefault()
+    setProvd(true)
+    if (!til) return setFeil('Velg siden tråden skal flyttes til.')
+    if (!hentet) return
+    const maal = kategorivalg(valgt, ny, hentet)
+    if (!maal) return
+    setLagrer(true)
+    setFeil(null)
+    try {
+      await flyttDiskusjonTilSide(id, til, maal)
+      onFlyttet(til)
+    } catch (e) {
+      setFeil((e as Error).message)
+      setLagrer(false)
+    }
+  }
+
+  const gruppe = (etikett: string, valg: Diskusjonssider['fagsider']) => {
+    const andre = valg.filter((v) => v.side !== side)
+    return (
+      andre.length > 0 && (
+        <optgroup label={etikett}>
+          {andre.map((v) => (
+            <option key={v.side} value={v.side}>
+              {v.navn}
+            </option>
+          ))}
+        </optgroup>
+      )
+    )
+  }
+
+  return (
+    <form className="diskusjonsskjema diskusjonsskjema--flytt" onSubmit={(e) => void flytt(e)} noValidate aria-label="Flytt tråden">
+      <h4 className="diskusjonsskjema__tittel">Flytt til en annen side</h4>
+      <div className="felt">
+        <label className="felt__merkelapp" htmlFor={sideId}>
+          Side
+        </label>
+        <select id={sideId} className="felt__inndata" value={til} autoFocus disabled={lagrer} onChange={(e) => velgSide(e.target.value)}>
+          <option value="" disabled>
+            Velg en side …
+          </option>
+          {gruppe('Fagsider', sider.fagsider)}
+          {gruppe('Fortolkning', sider.fortolkninger)}
+        </select>
+      </div>
+      {til && !hentet && !feil && <p className="felt__hjelp">Henter kategoriene …</p>}
+      {hentet && (
+        <Kategorivelger
+          valgt={valgt}
+          onVelg={setKategori}
+          ny={ny}
+          onNy={setNy}
+          kategorier={hentet}
+          visFeil={provd}
+          disabled={lagrer}
+        />
+      )}
+      {feil && (
+        <p className="skjemafeil" role="alert">
+          {feil}
+        </p>
+      )}
+      <div className="skjema__knapper">
+        <Button variant="subtle" onClick={onAvbryt} disabled={lagrer}>
+          Avbryt
+        </Button>
+        <Button type="submit" className="knapp--kompakt" disabled={lagrer || !hentet}>
+          {lagrer ? 'Flytter …' : 'Flytt'}
         </Button>
       </div>
     </form>

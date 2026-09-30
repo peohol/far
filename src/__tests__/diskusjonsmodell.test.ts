@@ -1,6 +1,6 @@
 /**
- * Diskusjonene uten database: sidene trådene står på, lesingen av det
- * databasen svarer, grupperingen i kategorier, flyttingene slik lista viser
+ * Diskusjonene uten database: sidene trådene står på og kan flyttes til,
+ * hvem som kan slette en tråd, lesingen av det databasen svarer, grupperingen i kategorier, flyttingene slik lista viser
  * dem før de er lagret, reglene for navn og emoji, og søket.
  */
 import { describe, expect, it } from 'vitest'
@@ -8,11 +8,13 @@ import {
   UKATEGORISERTE,
   adresseForSide,
   diskusjonssideFor,
+  diskusjonssider,
   emojiFeil,
   erEnEmoji,
   flyttDiskusjon,
   flyttKategori,
   grupper,
+  kanSletteDiskusjon,
   kategorinavnFeil,
   lesDiskusjonsoversikt,
   lesDiskusjonsside,
@@ -76,6 +78,47 @@ describe('sidene', () => {
     for (const ugyldig of ['stoff:', 'stoff:Bupropion', 'annet:x', 'fortolkning:a--b', 42, null]) {
       expect(lesDiskusjonsside(ugyldig)).toBeNull()
     }
+  })
+
+  it('lister sidene en tråd kan flyttes til, alfabetisk og hver én gang', () => {
+    const sider = diskusjonssider(
+      [
+        { slug: 'litium', navn: 'Litium' },
+        { slug: 'alprazolam', navn: 'Alprazolam' },
+        { slug: 'litium', navn: 'Litium igjen' },
+        { slug: 'Ugyldig nøkkel', navn: 'Ugyldig' },
+      ],
+      [
+        { kode: 'LI', visningsnavn: 'Litium' },
+        { kode: 'DIAZ+DMI', visningsnavn: '' },
+      ],
+    )
+    expect(sider.fagsider).toEqual([
+      { side: 'stoff:alprazolam', navn: 'Alprazolam' },
+      { side: 'stoff:litium', navn: 'Litium' },
+    ])
+    expect(sider.fortolkninger).toEqual([
+      { side: 'fortolkning:diaz-dmi', navn: 'Fortolkning av DIAZ+DMI' },
+      { side: 'fortolkning:li', navn: 'Fortolkning av Litium' },
+    ])
+  })
+})
+
+describe('slettingen', () => {
+  const kommentar = (forfatter_id: string | null, slettet = false) => ({ forfatter_id, slettet })
+  const traadMed = (ekstra: Partial<{ forfatter_id: string | null; arkivert_kl: string | null; kommentarer: { forfatter_id: string | null; slettet: boolean }[] }> = {}) =>
+    ({ forfatter_id: 'ada', arkivert_kl: null, kommentarer: [], ...ekstra }) as Parameters<typeof kanSletteDiskusjon>[0]
+
+  it('lar den som startet tråden slette den før andre har skrevet i den', () => {
+    expect(kanSletteDiskusjon(traadMed(), 'ada', false)).toBe(true)
+    expect(kanSletteDiskusjon(traadMed({ kommentarer: [kommentar('ada'), kommentar(null, true)] }), 'ada', false)).toBe(true)
+    expect(kanSletteDiskusjon(traadMed({ kommentarer: [kommentar('ada'), kommentar('bo')] }), 'ada', false)).toBe(false)
+    expect(kanSletteDiskusjon(traadMed(), 'bo', false)).toBe(false)
+    expect(kanSletteDiskusjon(traadMed({ arkivert_kl: '2026-09-29T10:00:00Z' }), 'ada', false)).toBe(false)
+  })
+
+  it('lar en administrator slette alle tråder, også arkiverte med andres innlegg', () => {
+    expect(kanSletteDiskusjon(traadMed({ arkivert_kl: '2026-09-29T10:00:00Z', kommentarer: [kommentar('bo')] }), 'admin', true)).toBe(true)
   })
 })
 

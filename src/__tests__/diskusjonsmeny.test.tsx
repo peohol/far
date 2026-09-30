@@ -3,7 +3,8 @@
  * Diskusjonsmenyen til høyre på en fagside eller fortolkningsside: kolonnen
  * med «Hold åpen» og emojiene, åpning og lukking med pekeren, kategoriene og
  * trådene, en ny tråd med ny kategori, søket, arkivet, én tråd med det bare
- * forfatteren eller en administrator ser, og en tråd åpnet fra et varsel.
+ * forfatteren eller en administrator ser, sletting og flytting til en annen
+ * side, og en tråd åpnet fra et varsel.
  *
  * Økten og kallene mot databasen er erstattet; det er skjermbildene som prøves.
  * Dra-og-slipp prøves ikke her: testmiljøet har ingen peker (se `useSortering`).
@@ -12,7 +13,7 @@ import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testi
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Profil } from '@delt/profil'
-import type { Diskusjonsoversikt, Diskusjonstraad } from '../diskusjoner/modell'
+import type { Diskusjonsoversikt, Diskusjonssider, Diskusjonstraad } from '../diskusjoner/modell'
 
 function profil(id: string, fornavn: string, ekstra: Partial<Profil> = {}): Profil {
   return {
@@ -90,6 +91,20 @@ const TRAAD: Diskusjonstraad = {
   ],
 }
 
+const SIDER: Diskusjonssider = {
+  fagsider: [
+    { side: 'stoff:litium', navn: 'Litium' },
+    { side: 'stoff:valproat', navn: 'Valproat' },
+  ],
+  fortolkninger: [{ side: 'fortolkning:li', navn: 'Fortolkning av Litium' }],
+}
+
+/** Diskusjonene på siden en tråd flyttes til. */
+const VALPROAT: Diskusjonsoversikt = {
+  kategorier: [{ id: 'vdos', navn: 'Dosering', emoji: '💊', posisjon: 0 }],
+  diskusjoner: [],
+}
+
 const api = vi.hoisted(() => ({
   hentDiskusjoner: vi.fn(),
   hentDiskusjonstraad: vi.fn(),
@@ -104,6 +119,8 @@ const api = vi.hoisted(() => ({
   settTekst: vi.fn(async () => {}),
   flyttDiskusjonTil: vi.fn(async () => {}),
   arkiverDiskusjon: vi.fn(async () => {}),
+  flyttDiskusjonTilSide: vi.fn(async () => {}),
+  slettDiskusjon: vi.fn(async () => {}),
   skjulInnhold: vi.fn(async () => {}),
   opprettKommentar: vi.fn(async () => {}),
   endreKommentar: vi.fn(async () => {}),
@@ -119,7 +136,7 @@ vi.mock('../auth/avatarer', () => ({ useAvatarlenker: () => new Map() }))
 vi.mock('../auth/api', () => ({ hentAlleProfiler: vi.fn(async () => [KARI, OLA, ADMIN]) }))
 
 const { Diskusjonsmeny } = await import('../components/diskusjoner/Diskusjonsmeny')
-const { visDiskusjon } = await import('../components/diskusjoner/diskusjonsvisning')
+const { taDiskusjon, visDiskusjon } = await import('../components/diskusjoner/diskusjonsvisning')
 
 beforeAll(() => {
   Element.prototype.scrollIntoView ??= function () {}
@@ -132,7 +149,7 @@ beforeAll(() => {
 
 beforeEach(() => {
   tilstand.meg = KARI
-  api.hentDiskusjoner.mockResolvedValue(OVERSIKT)
+  api.hentDiskusjoner.mockImplementation(async (side: string) => (side === 'stoff:valproat' ? VALPROAT : OVERSIKT))
   api.hentDiskusjonstraad.mockResolvedValue(TRAAD)
   api.hentDiskusjonstekster.mockResolvedValue([
     { id: 't2', tittel: 'Barn', tekster: ['Dosering hos barn under 12 år'] },
@@ -152,7 +169,7 @@ const stolpe = () => meny().querySelector<HTMLElement>('.diskusjonsstolpe')!
 
 async function vis() {
   const bruker = userEvent.setup()
-  render(<Diskusjonsmeny side="stoff:litium" sidenavn="Litium" />)
+  render(<Diskusjonsmeny side="stoff:litium" sidenavn="Litium" sider={SIDER} />)
   await within(stolpe()).findByRole('button', { name: 'Dosering, 1 med nytt' })
   return bruker
 }
@@ -191,7 +208,7 @@ describe('kolonnen', () => {
 
   it('står åpen fra start når brukeren har valgt det', async () => {
     api.hentLaast.mockResolvedValue(true)
-    render(<Diskusjonsmeny side="stoff:litium" sidenavn="Litium" />)
+    render(<Diskusjonsmeny side="stoff:litium" sidenavn="Litium" sider={SIDER} />)
     await waitFor(() => expect(panel().hidden).toBe(false))
   })
 })
@@ -328,6 +345,89 @@ describe('én tråd', () => {
     await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
     await within(panel()).findByText(/Tråden kan leses, men ikke endres/)
     expect(within(panel()).queryByRole('button', { name: /^Skjul innholdet/ })).toBeNull()
+  })
+
+  it('kan slettes av den som startet den bare til andre har skrevet i den', async () => {
+    tilstand.meg = OLA
+    const bruker = await apne()
+    await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    // Kari har kommentert.
+    expect(within(panel()).queryByRole('button', { name: 'Slett tråden' })).toBeNull()
+    cleanup()
+
+    api.hentDiskusjonstraad.mockResolvedValue({ ...TRAAD, kommentarer: TRAAD.kommentarer.filter((k) => k.forfatter_id === 'ola') })
+    const igjen = await apne()
+    await igjen.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    await igjen.click(within(panel()).getByRole('button', { name: 'Slett tråden' }))
+    expect(api.slettDiskusjon).not.toHaveBeenCalled()
+    const hentinger = api.hentDiskusjonstraad.mock.calls.length
+    await igjen.click(within(panel()).getByRole('button', { name: 'Bekreft sletting av tråden' }))
+    expect(api.slettDiskusjon).toHaveBeenCalledWith('t1')
+    // Tilbake i lista, uten å prøve å hente den slettede tråden igjen.
+    await within(panel()).findByRole('heading', { name: /^Dosering/ })
+    expect(api.hentDiskusjonstraad).toHaveBeenCalledTimes(hentinger)
+  })
+
+  it('kan ikke slettes av andre, men av en administrator, også i arkivet', async () => {
+    const bruker = await apne()
+    await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    expect(within(panel()).queryByRole('button', { name: 'Slett tråden' })).toBeNull()
+    cleanup()
+
+    tilstand.meg = ADMIN
+    api.hentDiskusjonstraad.mockResolvedValue({ ...TRAAD, arkivert_kl: '2026-09-29T10:00:00Z' })
+    const admin = await apne()
+    await admin.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText(/Tråden kan leses, men ikke endres/)
+    expect(within(panel()).getByRole('button', { name: 'Slett tråden' })).toBeTruthy()
+    // En arkivert tråd flyttes ikke til en annen side.
+    expect(within(panel()).queryByRole('button', { name: 'Flytt til en annen side' })).toBeNull()
+  })
+
+  it('flyttes til en annen side, i en kategori der, og følges dit', async () => {
+    const bruker = await apne()
+    await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    await bruker.click(within(panel()).getByRole('button', { name: 'Flytt til en annen side' }))
+    const skjema = within(panel()).getByRole('form', { name: 'Flytt tråden' })
+    const sidevalg = within(skjema).getByRole('combobox', { name: 'Side' }) as HTMLSelectElement
+    // Siden tråden står på, er ikke blant valgene.
+    expect([...sidevalg.options].map((o) => o.value)).toEqual(['', 'stoff:valproat', 'fortolkning:li'])
+    expect(within(skjema).getByRole('button', { name: 'Flytt' })).toHaveProperty('disabled', true)
+
+    await bruker.selectOptions(sidevalg, 'Valproat')
+    const kategori = (await within(skjema).findByRole('combobox', { name: 'Kategori' })) as HTMLSelectElement
+    expect(api.hentDiskusjoner).toHaveBeenCalledWith('stoff:valproat')
+    expect(kategori.value).toBe('vdos')
+    await bruker.click(within(skjema).getByRole('button', { name: 'Flytt' }))
+    expect(api.flyttDiskusjonTilSide).toHaveBeenCalledWith('t1', 'stoff:valproat', { id: 'vdos' })
+    await waitFor(() => expect(window.location.hash).toBe('#/stoff/valproat'))
+    // Menyen på den siden åpner tråden.
+    expect(taDiskusjon('stoff:valproat')).toBe('t1')
+  })
+
+  it('flyttes til en ny kategori på den andre siden, med samme regler for navn og emoji', async () => {
+    const bruker = await apne()
+    await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    await bruker.click(within(panel()).getByRole('button', { name: 'Flytt til en annen side' }))
+    const skjema = within(panel()).getByRole('form', { name: 'Flytt tråden' })
+    await bruker.selectOptions(within(skjema).getByRole('combobox', { name: 'Side' }), 'Valproat')
+    await bruker.selectOptions(await within(skjema).findByRole('combobox', { name: 'Kategori' }), '＋ Ny kategori …')
+    await bruker.type(within(skjema).getByRole('textbox', { name: 'Kategori' }), 'Dosering')
+    await bruker.click(within(skjema).getByRole('button', { name: '🧪' }))
+    await bruker.click(within(skjema).getByRole('button', { name: 'Flytt' }))
+    expect(within(skjema).getByRole('alert').textContent).toBe('En annen kategori på siden har det navnet.')
+    expect(api.flyttDiskusjonTilSide).not.toHaveBeenCalled()
+
+    const navn = within(skjema).getByRole('textbox', { name: 'Kategori' })
+    await bruker.clear(navn)
+    await bruker.type(navn, 'Graviditet')
+    await bruker.click(within(skjema).getByRole('button', { name: 'Flytt' }))
+    expect(api.flyttDiskusjonTilSide).toHaveBeenCalledWith('t1', 'stoff:valproat', { navn: 'Graviditet', emoji: '🧪' })
   })
 
   it('åpnes fra et varsel når menyen for siden står', async () => {

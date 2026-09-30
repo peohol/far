@@ -14,6 +14,7 @@ import {
 import {
   TOM_OVERSIKT,
   UKATEGORISERTE,
+  adresseForSide,
   antallNye,
   flyttDiskusjon,
   flyttKategori,
@@ -22,6 +23,7 @@ import {
   type Diskusjonskategori,
   type Diskusjonsoversikt as Oversikt,
   type Diskusjonsside,
+  type Diskusjonssider,
   type Diskusjonstekster,
 } from '../../diskusjoner/modell'
 import { useJevnligSjekk } from '../../hooks/useJevnligSjekk'
@@ -33,7 +35,7 @@ import { Forfatterkilde } from '../traad/Forfatterkontekst'
 import { Diskusjonsoversikt, Traadknapp } from './Diskusjonsoversikt'
 import { Diskusjonsside as Traadside } from './Diskusjonsside'
 import { Kategoriskjema, Traadskjema } from './Skjemaer'
-import { lyttEtterDiskusjon, taDiskusjon } from './diskusjonsvisning'
+import { lyttEtterDiskusjon, taDiskusjon, visDiskusjon } from './diskusjonsvisning'
 import '../../styles/diskusjoner.css'
 
 /** Merket menyen bærer som `data-lag` mens fokus står i den (se `lagLiggerOver()`). */
@@ -71,7 +73,16 @@ const LISTE: Visning = { side: 'liste' }
  * Mens fokus står i menyen, er den et lag over appen: tastene i fortolkningen
  * ligger i ro, så det som skrives her, ikke velger eller kopierer noe bak.
  */
-export function Diskusjonsmeny({ side, sidenavn }: { side: Diskusjonsside; sidenavn: string }) {
+export function Diskusjonsmeny({
+  side,
+  sidenavn,
+  sider,
+}: {
+  side: Diskusjonsside
+  sidenavn: string
+  /** Sidene en tråd kan flyttes til. */
+  sider: Diskusjonssider
+}) {
   const [laast, setLaast] = useBevart('diskusjoner/laast', false)
   const [mobilApen, setMobilApen] = useBevart('diskusjoner/mobil', false)
   const [svever, setSvever] = useState(false)
@@ -171,6 +182,7 @@ export function Diskusjonsmeny({ side, sidenavn }: { side: Diskusjonsside; siden
             key={side}
             side={side}
             sidenavn={sidenavn}
+            sider={sider}
             apen={apen}
             laast={laast}
             onLaas={veksleLaas}
@@ -189,6 +201,7 @@ export function Diskusjonsmeny({ side, sidenavn }: { side: Diskusjonsside; siden
 function Diskusjonsflate({
   side,
   sidenavn,
+  sider,
   apen,
   laast,
   onLaas,
@@ -199,6 +212,7 @@ function Diskusjonsflate({
 }: {
   side: Diskusjonsside
   sidenavn: string
+  sider: Diskusjonssider
   apen: boolean
   laast: boolean
   onLaas: () => void
@@ -316,12 +330,21 @@ function Diskusjonsflate({
       <Traadside
         key={visning.id}
         id={visning.id}
+        side={side}
+        sider={sider}
         kategorier={kategorier}
         plassering={liste && indeks >= 0 ? { indeks, antall: liste.length } : null}
         onTilbake={tilListe}
         onEndret={hent}
         onSett={merkSett}
         onFlytt={(kategori, til) => flyttTraad(visning.id, kategori, til)}
+        onFlyttetTilSide={(til) => {
+          // Tråden følges til siden den er flyttet til, der menyen åpner den.
+          setVisning(LISTE)
+          visDiskusjon(til, visning.id)
+          window.location.hash = adresseForSide(til)
+        }}
+        onSlettet={tilListe}
       />
     )
   } else if (visning.side === 'ny-traad') {

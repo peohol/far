@@ -27,7 +27,7 @@ import { ToppmenyInnhold, ToppmenyKilde } from './components/toppmeny/Toppmenyki
 import { Toppmenyknapp } from './components/toppmeny/Toppmenyknapp'
 import { Versjonspille } from './components/Versjonspille'
 import { Diskusjonsmeny } from './components/diskusjoner/Diskusjonsmeny'
-import { diskusjonssideFor } from './diskusjoner/modell'
+import { diskusjonssideFor, diskusjonssider, fortolkningssidenavn } from './diskusjoner/modell'
 import { FavorittkildeProvider } from './favoritter/Favorittkilde'
 import { lagFavorittlager } from './favoritter/lagring'
 import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
@@ -560,8 +560,10 @@ export default function App() {
     rute.side === 'stoff'
       ? (register.menystoff(rute.stoff)?.navn ?? rute.stoff)
       : state.analyte
-        ? `Fortolkning av ${state.analyte.visningsnavn || state.analyte.kode}`
+        ? fortolkningssidenavn(state.analyte)
         : 'Fortolkningen'
+  // Sidene en tråd kan flyttes til.
+  const sider = useMemo(() => diskusjonssider(register.stoffer, FORTOLKNINGSOPPFORINGER), [register])
 
   return (
     <ToppmenyKilde>
@@ -723,7 +725,7 @@ export default function App() {
             )}
           </main>
 
-          {diskusjonsside && <Diskusjonsmeny side={diskusjonsside} sidenavn={sidenavn} />}
+          {diskusjonsside && <Diskusjonsmeny side={diskusjonsside} sidenavn={sidenavn} sider={sider} />}
 
           {/* Versjonen og veien inn til endringsloggen, fast nederst i hjørnet. */}
           <Versjonspille />

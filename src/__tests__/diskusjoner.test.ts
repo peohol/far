@@ -274,6 +274,88 @@ describe('diskusjonene i databasen', () => {
     expect(await traad(cy, id)).toMatchObject({ skjult: false })
   })
 
+  it('lar den som startet tråden slette den før andre har skrevet i den, og en administrator alltid', async () => {
+    const side = nySide()
+    const kategori = await nyKategori(ada, side, 'K', '🧹')
+    const slett = (bruker: string, id: string) => sql(bruker, 'select public.slett_diskusjon($1)', [id])
+    const forste = await nyTraad(ada, side, kategori, 'Første')
+    const egen = await nyTraad(ada, side, kategori, 'Egen')
+    const tredje = await nyTraad(ada, side, kategori, 'Tredje')
+
+    // Egne kommentarer hindrer ikke, og andre kan ikke slette den.
+    await nyKommentar(ada, egen)
+    expect(await feilFra(() => slett(bo, egen))).toMatchObject({ code: '42501' })
+    await slett(ada, egen)
+    expect(await traad(bo, egen)).toBeNull()
+    expect(await rekkefolge(ada, side, kategori)).toEqual(['Første', 'Tredje'])
+    expect((await oversikt(ada, side)).diskusjoner.map((d) => d.posisjon)).toEqual([0, 1])
+
+    // Når noen andre har skrevet, er det for sent, til de har slettet det selv.
+    const bos = await nyKommentar(bo, forste)
+    expect(await feilFra(() => slett(ada, forste))).toMatchObject({ code: '42501' })
+    await sql(bo, 'delete from public.diskusjonskommentarer where id = $1', [bos])
+    // Et svar fra andre under en egen kommentar teller også; «Slettet» teller ikke.
+    const adas = await nyKommentar(ada, forste)
+    const cys = await nyKommentar(cy, forste, adas)
+    await sql(ada, 'delete from public.diskusjonskommentarer where id = $1', [adas])
+    expect(await feilFra(() => slett(ada, forste))).toMatchObject({ code: '42501' })
+    await sql(cy, 'delete from public.diskusjonskommentarer where id = $1', [cys])
+    await slett(ada, forste)
+
+    // En arkivert tråd sletter bare en administrator, også med andres innlegg.
+    await nyKommentar(bo, tredje)
+    await arkiver(ada, tredje)
+    const nyEgen = await nyTraad(ada, side, kategori, 'Arkivert')
+    await arkiver(ada, nyEgen)
+    expect(await feilFra(() => slett(ada, nyEgen))).toMatchObject({ code: '42501' })
+    await slett(admin, tredje)
+    await slett(admin, nyEgen)
+    expect((await oversikt(ada, side)).diskusjoner).toEqual([])
+    expect(await sql(admin, 'select 1 from public.diskusjonskommentarer k where k.diskusjon_id = any($1)', [[tredje, nyEgen]])).toEqual([])
+
+    expect(await feilFra(() => slett(admin, tredje))).toMatchObject({ code: 'P0002' })
+    expect(await feilFra(() => sql(null, 'select public.slett_diskusjon($1)', [forste]))).toMatchObject({ code: '42501' })
+  })
+
+  it('flytter tråden sist i en kategori på en annen side, med kommentarene', async () => {
+    const fra = nySide()
+    const til = nySide()
+    const kategori = await nyKategori(ada, fra, 'Feil stoff', '🧭')
+    const id = await nyTraad(ada, fra, kategori, 'Flyttes')
+    await nyTraad(ada, fra, kategori, 'Blir')
+    const der = await nyKategori(bo, til, 'Der', '🛬')
+    await nyTraad(bo, til, der, 'Var der')
+    const kommentar = await nyKommentar(cy, id)
+    const flyttTil = (bruker: string, side: string, kategori: string | null, ny: [string, string] | null = null) =>
+      sql(bruker, 'select public.flytt_diskusjon_til_side($1, $2, $3, $4, $5)', [id, side, kategori, ny?.[0] ?? null, ny?.[1] ?? null])
+
+    // Kategorien må være på siden tråden flyttes til, og siden må være en annen.
+    expect(await feilFra(() => flyttTil(bo, til, kategori))).toMatchObject({ code: '23503' })
+    expect(await feilFra(() => flyttTil(bo, til, null))).toMatchObject({ code: '23503' })
+    expect(await feilFra(() => flyttTil(bo, fra, kategori))).toMatchObject({ code: '22023' })
+    expect(await feilFra(() => sql(null, 'select public.flytt_diskusjon_til_side($1, $2, $3)', [id, til, der]))).toMatchObject({ code: '42501' })
+
+    await flyttTil(bo, til, der)
+    expect(await rekkefolge(ada, fra, kategori)).toEqual(['Blir'])
+    expect((await oversikt(ada, fra)).diskusjoner[0]).toMatchObject({ posisjon: 0 })
+    expect(await rekkefolge(ada, til, der)).toEqual(['Var der', 'Flyttes'])
+    expect((await traad(ada, id))!.kommentarer.map((k) => k.id)).toEqual([kommentar])
+
+    // Tilbake, i en ny kategori der.
+    await flyttTil(ada, fra, null, ['Riktig stoff', '🎯'])
+    const liste = await oversikt(ada, fra)
+    const ny = liste.kategorier.find((k) => k.navn === 'Riktig stoff')!
+    expect(ny).toMatchObject({ emoji: '🎯', posisjon: 1 })
+    expect(await rekkefolge(ada, fra, ny.id)).toEqual(['Flyttes'])
+    expect(await rekkefolge(ada, til, der)).toEqual(['Var der'])
+    // Navnet må fortsatt være ledig der.
+    expect(await feilFra(() => flyttTil(ada, til, null, ['der', '🆕']))).toMatchObject({ code: '23505' })
+
+    // En arkivert tråd flyttes ikke.
+    await arkiver(ada, id)
+    expect(await feilFra(() => flyttTil(ada, til, der))).toMatchObject({ code: '42501' })
+  })
+
   it('viser hva som er nytt til tråden er åpnet', async () => {
     const side = nySide()
     const kategori = await nyKategori(ada, side, 'K', '🆕')
