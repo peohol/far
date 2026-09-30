@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.62.4',
+    versjon: '1.62.5',
     dato: '2026-09-30',
     sammendrag: 'Vinduene lukkes heller ikke når et trykk utenfor slippes inne i dem',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,18 @@ export const ENDRINGSLOGG: Endring[] = [
       'Trykker du ned utenfor et vindu og slipper museknappen inne i det, blir vinduet stående. Bare et klikk som både begynner og slutter utenfor, lukker det.',
     ],
     utenVarsel: true,
+  },
+  {
+    versjon: '1.62.4',
+    dato: '2026-09-30',
+    sammendrag: 'Lange tekster ruller i sitt eget felt i redigeringsvinduene',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Når beskrivelsen av en idé eller teksten i et kort på en fagside blir lang, er det bare selve tekstfeltet som ruller. Verktøylinjen for formatering, feltene over og knappene under står fast i vinduet.',
+      'Tekstfeltet fyller vinduet, så det er plass til å se mest mulig av teksten mens den skrives.',
+      'Andre lange tekstfelt i vinduene, som prompten til en planlagt oppgave og kommentarene til idéene, vokser ikke lenger forbi omtrent halve skjermhøyden, men ruller selv.',
+    ],
   },
   {
     versjon: '1.62.3',
