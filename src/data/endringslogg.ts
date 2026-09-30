@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.61.3',
+    versjon: '1.61.4',
     dato: '2026-09-30',
     sammendrag: 'Alle analysemetodene står nå framme som piller under søket',
     typer: ['Funksjonalitet', 'Design / layout'],
@@ -23,6 +23,17 @@ export const ENDRINGSLOGG: Endring[] = [
       'Et trykk på en pille setter filteret, og «Alle» slår det av. Markøren blir stående i søkefeltet, så du kan skrive videre med én gang. Hurtigtastene Alt + 1 til Alt + 5 og Alt + 0 virker som før.',
       'Holder du pekeren over en pille, står det hva metoden er.',
     ],
+  },
+  {
+    versjon: '1.61.3',
+    dato: '2026-09-30',
+    sammendrag: 'Oppgaven «Søk skal være sensitivt for stoff-alias og forkortelser» er merket utført',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Den planlagte oppgaven «Søk skal være sensitivt for stoff-alias og forkortelser» (OPG-003) er merket utført med versjon 1.61.0, og det er ført inn i appens oversikt over databaseendringer.',
+    ],
+    utenVarsel: true,
   },
   {
     versjon: '1.61.2',
