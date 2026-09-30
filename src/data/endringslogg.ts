@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.61.3',
+    versjon: '1.61.4',
     dato: '2026-09-30',
     sammendrag: 'Fagsidene heter etter legemidlet eller rusmidlet, ikke etter metabolitten laboratoriet måler',
     typer: ['Funksjonalitet'],
@@ -23,6 +23,17 @@ export const ENDRINGSLOGG: Endring[] = [
       'Cannabidiol heter CBD, som THC, og «cannabidiol» finner fortsatt siden.',
       'De gamle navnene fungerer som søkeord, og gamle lenker og bokmerker fører til den nye siden.',
     ],
+  },
+  {
+    versjon: '1.61.3',
+    dato: '2026-09-30',
+    sammendrag: 'Oppgaven «Søk skal være sensitivt for stoff-alias og forkortelser» er merket utført',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Den planlagte oppgaven «Søk skal være sensitivt for stoff-alias og forkortelser» (OPG-003) er merket utført med versjon 1.61.0, og det er ført inn i appens oversikt over databaseendringer.',
+    ],
+    utenVarsel: true,
   },
   {
     versjon: '1.61.2',
