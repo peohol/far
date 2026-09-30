@@ -278,9 +278,10 @@
 /* --- Konsentrasjonsbåndene --------------------------------------------------
    Båndene er én sammenhengende skala, og et bånd som havner alene på linje to
    leses lett som noe annet enn de andre. Raden holdes derfor på én linje:
-   knappene deler bredden i kortet likt mellom seg, og skriften følger ruta hver
-   av dem får. `cqi` er 1 % av bredden på raden, og `--antall` settes av
-   BandStep.
+   skriften følger ruta hver knapp ville fått om de delte bredden i kortet likt
+   mellom seg, så selv det lengste tallet får plass. Selve knappene er ikke
+   bredere enn innholdet, og raden står midt i kortet. `cqi` er 1 % av bredden
+   på raden, og `--antall` settes av BandStep.
 
    Grensen går ved `--band-minst`. Under den ville tallene måttet krympe under
    det lesbare for å holde linja, og da er det bedre å bryte raden enn å gjøre
@@ -297,9 +298,10 @@
   position: relative;
   container-type: inline-size;
   display: flex;
-  /* Bryting er tillatt, men `min-width` under gjør at det først slår inn når
+  /* Bryting er tillatt, men skriften over gjør at det først slår inn når
      én linje ikke lenger kan holdes med lesbare tall. */
   flex-wrap: wrap;
+  justify-content: center;
   gap: var(--band-luft);
   margin: 0;
   width: 100%;
@@ -312,10 +314,8 @@
 
 .band > li {
   display: flex;
-  /* Knappene deler bredden likt, men aldri i mindre biter enn tallene trenger
-     for å stå lesbare. Det er den grensen som avgjør når raden brytes. */
-  flex: 1 1 0;
-  min-width: min(100%, calc(var(--band-innhold) * var(--band-minst)));
+  flex: none;
+  max-width: 100%;
 }
 
 /* Formen et bånd har. Knappen i båndsteget, merket i kontrollsteget og beviset
@@ -334,12 +334,20 @@
   white-space: nowrap;
   border: var(--kant-aktiv) solid var(--band-farge);
   border-radius: var(--runding-knapp);
+  --senk: var(--skrift-display-senk);
+}
+
+/* Tallene står midt i knappen for øyet, ikke bare for fontens mål. */
+.bandknapp__verdi,
+.valgmerke__verdi,
+.kopibevis__verdi {
+  translate: 0 var(--senk);
 }
 
 .bandknapp {
   flex: 1;
   min-height: calc(var(--hoyde-felt) * 1.5);
-  padding: 0 0.5em 0 0.57em;
+  padding: 0 0.64em 0 0.57em;
   font-size: clamp(
     var(--band-minst),
     calc(var(--band-rute) / var(--band-innhold)),
@@ -435,16 +443,11 @@
   background: var(--flate-hevet);
 }
 
-/* Egen rad under båndene. Valget er ingen konsentrasjon og skal verken dele
-   bredden med skalaen eller leses som en del av den, så knappen tar bare den
-   plassen teksten trenger, i UI-skriften. */
-.bandkort__ekstra > li {
-  flex: 0 1 auto;
-  min-width: 0;
-  max-width: 100%;
-}
-
+/* Valget etter båndene. Det er ingen konsentrasjon og skal ikke leses som en
+   del av skalaen, så det står i UI-skriften. Det følger båndene på raden når
+   det er plass, og får ellers en rad for seg selv. */
 .bandkort__ekstra .bandknapp {
+  --senk: 0em;
   min-height: calc(var(--hoyde-felt) + var(--rom-2));
   padding: 0 var(--rom-4) 0 var(--rom-5);
   font-family: var(--skrift-ui);
