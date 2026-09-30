@@ -20,7 +20,6 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Trykker du ned utenfor et vindu og slipper museknappen inne i det, blir vinduet stående. Bare et klikk som både begynner og slutter utenfor, lukker det.',
     ],
-    utenVarsel: true,
   },
   {
     versjon: '1.62.4',
