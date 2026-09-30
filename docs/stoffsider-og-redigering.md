@@ -70,9 +70,10 @@ Eksempel:
 
 - `AMTNORSUM` → Amitriptylin (sumanalyse, omfatter amitriptylin og nortriptylin). Nortriptylin er et eget stoff.
 - `NOR` → Nortriptylin (selve stoffet).
-- `VENSUM` → Venlafaksin (sumanalyse). O-desmetylvenlafaksin er et eget stoff med en sekundær kobling til den samme analysen.
+- `VENSUM` → Venlafaksin (sumanalyse av venlafaksin og O-desmetylvenlafaksin). O-desmetylvenlafaksin er et søkeord, ikke en side.
 - `RISPSUM` → Risperidon (sumanalyse), og sekundært til Paliperidon (hydroksyrisperidon).
 - `HBUP` → Bupropion (metabolitt): laboratoriet måler hydroksybupropion, og siden forklarer det. Hydroksybupropion er et søkeord, ikke en side.
+- `ENAT`, `RAMAT`, `LOSYR`, `KANR` og `BEZ1` → Enalapril, Ramipril, Losartan, Spironolakton og Kokain (metabolitt), på samme måte. En side heter alltid etter legemidlet eller rusmidlet, aldri etter metabolitten laboratoriet måler; testene holder det slik.
 
 Datamodellen antar derfor ikke at «én analyttkode = ett virkestoff», og stoffsidens identitet utledes aldri av analyttnavnet.
 

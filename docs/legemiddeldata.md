@@ -296,7 +296,7 @@ referanseområdet gjelder for; racemisk amfetamin er ikke med. GHB-siden er
 koblet til natriumoksybat, og ketaminsiden til ketamin og esketamin
 (`*_ghb_ketamin_fest_kobling.sql`). THC-siden er koblet til dronabinol, som er
 FESTs navn på THC, og ikke til cannabidiol, så Sativex vises uten preparatene
-med bare CBD (`*_thc_fest_kobling.sql`). Cannabidiolsiden er koblet til
+med bare CBD (`*_thc_fest_kobling.sql`). CBD-siden (først «Cannabidiol») er koblet til
 cannabidiol (`*_cbd_fest_kobling.sql`). En ny import
 legges til som en ny oppføring, så migrasjonene som er kjørt, står;
 `stoffsider_fest_kobling` ble laget med en tidligere utgave av skriptet, og
