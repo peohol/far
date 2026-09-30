@@ -12,6 +12,23 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.64.0',
+    dato: '2026-09-30',
+    sammendrag: 'Diskusjonstråder på fagsidene og fortolkningssidene',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Betydelig omfang',
+    punkter: [
+      'Hver fagside og fortolkningen av hver analytt har fått sine egne diskusjoner, i en meny til høyre. Lukket er den en smal stolpe med en emoji for hver kategori og et blått tall når det er noe nytt; den åpnes når du holder pekeren over den, og nålen øverst holder den åpen på alle sider.',
+      'Trådene står i kategorier med navn og emoji som dere lager selv. Start en ny tråd nederst i en kategori eller med «Ny tråd», og svar, gi hjerter, rediger og slett dine egne kommentarer som under idéene.',
+      'Alle kan gi nytt navn, flytte, arkivere og hente tilbake tråder og kategorier. Dra dem opp og ned med håndtaket, med tastaturet (mellomrom og piltastene) eller med knappene for å flytte. Tråder slettes aldri, bare arkiveres.',
+      'Å løse opp en kategori legger trådene i den under «Ukategoriserte», der de venter på en ny kategori.',
+      'Søkefeltet i menyen finner tråder på siden etter ord i overskriften og innleggene, også de arkiverte.',
+      'Fortolkningen av en analytt har fått sin egen adresse, så den kan bokmerkes og lenkes til.',
+      'Varselinnstillingene har fått tre nye valg: kommentarer i dine tråder (alltid på), i tråder du har kommentert (på til du slår det av) og nye tråder på favorittsidene dine (av til du slår det på).',
+      'En administrator kan skjule en kommentar eller et innlegg som er skrevet ved en feil. Teksten fjernes for godt, og det står en merknad igjen.',
+    ],
+  },
+  {
     versjon: '1.63.1',
     dato: '2026-09-30',
     sammendrag: 'En idé som overføres til Planlagte oppgaver, får teksten sin som prompt',
