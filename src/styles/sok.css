@@ -410,9 +410,7 @@
 .sidesok__input {
   width: 5.25rem;
   min-width: 0;
-  padding: 0;
   font-size: var(--tekst-ui);
-  line-height: 1.2;
   color: var(--blekk);
   background: transparent;
   border: 0;
