@@ -4,19 +4,38 @@
  */
 
 /* --- Hurtigtastmerke --------------------------------------------------------
-   Liten pille i UI-skriften, som «Ctrl K» i søkefeltet og «Esc» ved
-   tilbakeknappen. Står den på en aksentflate, blandes flaten inn i aksenten. */
+   Snarveien tegnet som tastaturtaster i UI-skriften, som «Ctrl + K» i
+   søkefeltet og «Esc» ved tilbakeknappen: én `.tast` per tast, med «+» mellom.
+   Flaten merket står på bestemmer fargene gjennom `--tast-*`; tasten selv
+   tegnes likt overalt. Målene er i em, så tasten følger skriften den står i. */
 .hurtigtast {
+  --tast-flate: var(--flate);
+  --tast-blekk: var(--blekk-dempet);
+  --tast-kant: var(--linje-sterk);
+
+  display: inline-flex;
   flex: none;
-  padding: var(--rom-1) var(--rom-3);
+  align-items: center;
+  gap: 0.3em;
   font-family: var(--skrift-ui);
   font-size: var(--tekst-merke);
   font-weight: var(--vekt-halvfet);
   line-height: var(--linjehoyde-tett);
   white-space: nowrap;
-  color: var(--blekk-dempet);
-  background: var(--flate);
-  border-radius: var(--runding-pille);
+  color: var(--tast-blekk);
+}
+
+.tast {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.9em;
+  padding: 0.3em 0.45em 0.25em;
+  font: inherit;
+  color: inherit;
+  background: var(--tast-flate);
+  border: var(--kant) solid var(--tast-kant);
+  border-bottom-width: 0.2em;
+  border-radius: 0.4em;
 }
 
 /* --- Knapp ------------------------------------------------------------------
@@ -82,8 +101,9 @@
 }
 
 .knapp--primary .hurtigtast {
-  color: var(--paa-aksent);
-  background: color-mix(in oklab, var(--paa-aksent) 22%, transparent);
+  --tast-flate: color-mix(in oklab, var(--paa-aksent) 22%, transparent);
+  --tast-blekk: var(--paa-aksent);
+  --tast-kant: color-mix(in oklab, var(--paa-aksent) 55%, transparent);
 }
 
 /* En kompakt hovedknapp, til skjemaene på informasjonssidene. */
@@ -103,11 +123,11 @@
 }
 
 .knapp--subtle .hurtigtast {
-  background: var(--flate-hevet);
+  --tast-flate: var(--flate-hevet);
 }
 
 .knapp--subtle:hover .hurtigtast {
-  background: var(--flate);
+  --tast-flate: var(--flate);
 }
 
 /* En avslått knapp skal kunne stå uten å friste. */
@@ -201,7 +221,7 @@
 }
 
 .knapp--kant .hurtigtast {
-  background: var(--flate-hevet);
+  --tast-flate: var(--flate-hevet);
 }
 
 .knapp--kant:hover {

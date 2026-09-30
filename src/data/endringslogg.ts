@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.62.2',
+    dato: '2026-09-30',
+    sammendrag: 'Hurtigtastene ser ut som tastaturtaster',
+    typer: ['Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Alle hurtigtastmerker i appen er tegnet som små tastaturtaster i stedet for piller og sirkler: i søkefeltene, på knappene, på båndknappene og på tallene foran søkealternativene.',
+      'Snarveier med flere taster viser én tast per tast med «+» mellom, slik at søket skrives «Ctrl + K» og søket på siden «Ctrl + B», som menyen alt var («Ctrl + M»).',
+    ],
+  },
+  {
     versjon: '1.62.1',
     dato: '2026-09-30',
     sammendrag: 'Halveringstidene øverst på fagsidene er lagt inn i produksjonen',

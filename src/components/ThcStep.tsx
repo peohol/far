@@ -6,6 +6,7 @@ import { Metalinje } from './Metalinje'
 import { Panelhode } from './Panelhode'
 import { StepBar } from './StepBar'
 import { ManualCopy } from './ManualCopy'
+import { Shortcut } from './Shortcut'
 import { ThcSkjema } from './ThcSkjema'
 import { ThcKommentar, ThcVisualisering } from './ThcUtfall'
 import { Ikon } from './ikon/Ikon'
@@ -236,7 +237,7 @@ function ThcFortolkning({
             </Button>
             {nullstillTips && (
               <p className="thc-nullstilltips" role="status">
-                Trykk <kbd className="hurtigtast">↵</kbd> for å nullstille nå
+                Trykk <Shortcut always>↵</Shortcut> for å nullstille nå
               </p>
             )}
           </div>

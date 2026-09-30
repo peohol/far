@@ -10,7 +10,7 @@ import { elementAnker, panelAnker } from './Paneler'
 import { TREFFKLASSE } from '../Uthev'
 
 /** Snarveien som henter søket på siden fram, som den står i merket i feltet. */
-export const SIDESOK_SNARVEI = 'Ctrl B'
+export const SIDESOK_SNARVEI = 'Ctrl + B'
 
 /** Ctrl + B, eller Cmd + B på macOS (se `erSokesnarvei`). */
 export function erSidesokSnarvei(event: KeyboardEvent): boolean {

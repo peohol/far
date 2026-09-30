@@ -141,17 +141,14 @@
   border-color: var(--alt-solid);
 }
 
+/* Tallet som velger alternativet, som en tast i alternativets egen farge. */
 .alternativ__tall {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: var(--hoyde-trykk);
-  height: var(--hoyde-trykk);
+  --tast-flate: var(--alt-solid);
+  --tast-blekk: var(--alt-ink);
+  --tast-kant: color-mix(in oklab, var(--alt-solid), var(--blekk-sterk) 28%);
+
   font-size: var(--tekst-lesing);
   font-weight: var(--vekt-fet);
-  color: var(--alt-ink);
-  background: var(--alt-solid);
-  border-radius: var(--runding-pille);
 }
 
 .alternativ__tekst {
@@ -378,17 +375,18 @@
   font-size: 1.07em;
 }
 
-/* Tallet som velger båndet, som et rundt merke inne i knappen. */
+/* Tallet som velger båndet, som en tast inne i knappen, kantet i båndets farge. */
 .bandknapp .hurtigtast {
-  display: grid;
-  place-items: center;
-  min-width: 2em;
-  height: 2em;
-  padding: 0 var(--rom-1);
+  --tast-blekk: var(--blekk);
+  --tast-kant: var(--band-farge, var(--linje-sterk));
+
   font-size: max(var(--tekst-merke), 0.43em);
   font-weight: var(--vekt-fet);
-  color: var(--blekk);
-  background: var(--flate);
+}
+
+.bandknapp .tast {
+  min-width: 2.2em;
+  padding-block: 0.5em 0.4em;
 }
 
 /* Fargene hører til båndet, ikke til knappen, og følger derfor med beviset. */
