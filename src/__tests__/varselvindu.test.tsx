@@ -78,6 +78,15 @@ const LISTE: Varselliste = {
     },
     {
       kilde: 'database',
+      id: 'v-ny-ide',
+      kategori: 'nye_ideer',
+      ide: { id: 'i3', tittel: 'Utskrift av svaret', forfatterId: 'ola' },
+      hendelser: [{ kl: '2026-09-29T08:00:00Z', av: 'ola' }],
+      oppdatert_kl: '2026-09-29T08:00:00Z',
+      lest: false,
+    },
+    {
+      kilde: 'database',
       id: 'v-favoritt',
       kategori: 'favoritter',
       ide: null,
@@ -232,6 +241,21 @@ describe('vinduet', () => {
     expect(api.merkVarslerLest).toHaveBeenCalledWith(['v-favoritt'], LISTE.lest_kl)
   })
 
+  it('viser nye idéer når brukeren har slått dem på, og leder til idéen', async () => {
+    api.hentVarselvalg.mockResolvedValue({ nye_ideer: true })
+    api.hentUleste.mockResolvedValue({ mine_ideer: 1, aktive_ideer: 1, nye_ideer: 1 })
+    const bruker = userEvent.setup()
+    render(<Varselknapp />)
+    await waitFor(() => expect(bjella().getAttribute('aria-label')).toBe('Varsler (4 uleste)'))
+    await bruker.click(bjella())
+    const vindu = await screen.findByRole('dialog', { name: 'Varsler' })
+    const knapp = await within(vindu).findByRole('button', { name: 'Ola Nordmann skrev en ny idé' })
+    expect(knapp.closest('li')!.textContent).toContain('«Utskrift av svaret»')
+    await bruker.click(knapp)
+    expect(api.merkVarslerLest).toHaveBeenCalledWith(['v-ny-ide'], LISTE.lest_kl)
+    expect(visIde).toHaveBeenCalledWith('i3')
+  })
+
   it('lar brukeren slå av og på de valgfrie kategoriene, men ikke de obligatoriske', async () => {
     const { bruker, vindu } = await apne()
     await bruker.click(within(vindu).getByRole('button', { name: 'Varselinnstillinger' }))
@@ -241,6 +265,7 @@ describe('vinduet', () => {
       ['Endringer i fortolkningen', true, true],
       ['Kommentarer til mine idéer og kommentarer', true, true],
       ['Kommentarer til idéer jeg har vært aktiv i', true, false],
+      ['Nye idéer', false, false],
       ['Ny eller endret funksjonalitet i appen', true, false],
       ['Endringer på mine favorittsider', false, false],
     ])

@@ -144,6 +144,7 @@ const KATEGORIIKON: Record<Varsel['kategori'], Ikonnavn> = {
   fortolkning: 'interp',
   mine_ideer: 'comment',
   aktive_ideer: 'comment',
+  nye_ideer: 'idea',
   funksjonalitet: 'history',
   favoritter: 'star',
 }

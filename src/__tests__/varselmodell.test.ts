@@ -53,7 +53,12 @@ describe('kategoriene og valgene', () => {
     const fil = readdirSync(mappe).find((navn) => navn.endsWith('_varsler.sql'))!
     const sql = readFileSync(mappe + fil, 'utf8')
     const verdier = /create type public\.varselkategori as enum \(([^)]*)\)/.exec(sql)![1]!.match(/'([^']+)'/g)!
-    expect(verdier.map((v) => v.slice(1, -1))).toEqual([...DATABASEKATEGORIER])
+    // Verdiene som er lagt til senere, i rekkefølgen migrasjonene kjører.
+    const lagtTil = readdirSync(mappe)
+      .sort()
+      .flatMap((navn) => [...readFileSync(mappe + navn, 'utf8').matchAll(/alter type public\.varselkategori add value '([^']+)'/g)])
+      .map((treff) => treff[1]!)
+    expect([...verdier.map((v) => v.slice(1, -1)), ...lagtTil]).toEqual([...DATABASEKATEGORIER])
     expect(KATEGORIREKKEFOLGE).toEqual(expect.arrayContaining([...DATABASEKATEGORIER, 'funksjonalitet']))
   })
 
@@ -69,9 +74,11 @@ describe('kategoriene og valgene', () => {
     expect(lesVarselvalg(null)).toEqual({})
   })
 
-  it('har favorittene av til brukeren slår dem på', () => {
-    expect(erValgt('favoritter', {})).toBe(false)
-    expect(erValgt('favoritter', { favoritter: true })).toBe(true)
+  it('har favorittene og de nye idéene av til brukeren slår dem på', () => {
+    for (const kategori of ['favoritter', 'nye_ideer'] as const) {
+      expect(erValgt(kategori, {})).toBe(false)
+      expect(erValgt(kategori, { [kategori]: true })).toBe(true)
+    }
   })
 })
 
@@ -151,6 +158,11 @@ describe('tekstene', () => {
     const svar = ideVarsel({ ide: { id: 'i1', tittel: 'x', forfatterId: 'ola' }, hendelser: [{ kl: '', av: 'per', kommentar: 'k', svarTil: 'kari' }] })
     expect(idetekst(svar, 'kari', navn)).toBe('Per svarte på kommentaren din')
     expect(idetekst({ ...svar, kategori: 'aktive_ideer' }, 'kari', navn)).toBe('Per kommenterte en idé du har kommentert')
+  })
+
+  it('sier hvem som skrev en ny idé', () => {
+    const ny = ideVarsel({ kategori: 'nye_ideer', ide: { id: 'i2', tittel: 'Utskrift', forfatterId: 'ola' }, hendelser: [{ kl: '', av: 'ola' }] })
+    expect(idetekst(ny, 'kari', navn)).toBe('Ola skrev en ny idé')
   })
 
   it('navngir kommentarer og regelsett', () => {

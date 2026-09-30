@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.63.0',
+    dato: '2026-09-30',
+    sammendrag: 'Varsel om nye idéer',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Varselinnstillingene har fått valget «Nye idéer». Er det slått på, får du et varsel når noen har skrevet en ny idé, og varselet åpner idéen.',
+      'Valget er av til du slår det på. Du får aldri varsel om idéer du har skrevet selv.',
+    ],
+  },
+  {
     versjon: '1.62.3',
     dato: '2026-09-30',
     sammendrag: 'Vinduene lukkes ikke lenger når en tekstmarkering slippes utenfor dem',
