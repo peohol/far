@@ -4,9 +4,41 @@ Leses som **siste steg før en PR er klar til å slås sammen** — ikke underve
 arbeidet. Da er det klart hva endringen faktisk ble, og føringen kan skrives én
 gang i stedet for å måtte rettes for hver push.
 
+## 0. Er det en stille designjustering?
+
+En PR som **bare** justerer hvordan appen ser ut, uten at det betyr noe for hva
+den gjør eller hva den viser, er stille: den får **ingen føring**, ingen ny
+versjon (`package.json` står urørt), intet varsel og ingen melding om å
+oppdatere siden. Slikt er bare støy for brukerne, og de får endringen neste
+gang de laster siden uansett.
+
+Stille er for eksempel:
+
+- luft: margin, padding, gap, linjeavstand, justering av plassering
+- størrelser: bredder, høyder, ikoner, avrundinger, skygger
+- overganger og animasjoner
+
+Ikke stille — skal ha føring etter resten av protokollen:
+
+- all tekst i grensesnittet, og alt faglig innhold
+- farger, fordi de kan bære betydning (som «over» og «cut-off»)
+- noe som vises, skjules, flyttes til et annet sted eller får en ny rekkefølge
+- tastatur, fokus, tilgjengelighet eller noe annet ved hvordan appen brukes
+- en retting av noe brukerne har meldt eller merket som feil
+
+Er du i tvil, er det ikke stille. En PR som ellers har en føring, tar med
+designjusteringene sine i den. Er PR-en stille, skriv «Stille
+designjustering: ingen føring i endringsloggen» i beskrivelsen av den i stedet
+for punktet om endringsloggen, og hopp over resten av denne protokollen.
+
+Appen ber bare brukerne oppdatere når versjonen de skal oppdatere til — den
+nyeste føringen som varsles — er ny (`docs/oppdatering.md`). En stille PR
+endrer ikke den, og det gjør heller ikke en føring med `utenVarsel`.
+
 ## 1. Har denne grenen alt en føring?
 
-Det skal være **nøyaktig én føring per PR**, uansett hvor mange pushes den har.
+Det skal være **nøyaktig én føring per PR** som ikke er stille (steg 0),
+uansett hvor mange pushes den har.
 
 ```
 git show origin/main:src/data/endringslogg.ts | grep -m1 versjon
@@ -39,7 +71,7 @@ alt inne på grenen: **rediger den**. Legg aldri til en føring nummer to.
 | --- | --- |
 | MAJOR | Arbeidsflyten legges om slik at den som kan appen må lære den på nytt, eller fortolkningsgrunnlaget byttes ut. Sjelden. |
 | MINOR | Appen kan noe den ikke kunne før: ny modul, ny kategori, ny valgmulighet, ny snarvei. |
-| PATCH | Retting eller justering av noe som fantes fra før — utseende, ordlyd, tastaturdetaljer, og feil i eksisterende fortolkning. |
+| PATCH | Retting eller justering av noe som fantes fra før — utseende, ordlyd, tastaturdetaljer, og feil i eksisterende fortolkning. En ren designjustering er stille og får ingen versjon (steg 0). |
 
 Ledd til høyre nullstilles: `0.5.4` → `0.6.0` → `1.0.0`.
 
@@ -64,7 +96,8 @@ seg selv og trenger det ikke.
 
 **`utenVarsel: true`** settes når PR-en ikke endrer noe brukerne merker, som
 når en databaseendring som alt er rullet ut, føres inn i koden (for eksempel
-`oppgaver_utfort_*`). Da blir føringen ikke et varsel.
+`oppgaver_utfort_*`). Da blir føringen ikke et varsel, og appen ber ingen
+oppdatere siden for den.
 
 **Omfang** — ett merke, vurdert skjønnsmessig. Beskrivelsene er veiledende:
 

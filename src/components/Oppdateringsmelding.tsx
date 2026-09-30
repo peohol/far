@@ -33,10 +33,11 @@ function useOversteLag(aktiv: boolean): HTMLElement | null {
 /**
  * Meldingen om at en ny versjon av appen er lagt ut, med «Oppdater nå».
  *
- * Appen spør jevnlig, og når fanen får fokus igjen, om bygget som er lagt ut,
- * er et annet enn det som kjører (`src/oppdatering/versjon.ts`). Den spør også
- * med én gang en del av appen ikke lar seg laste, som skjer når filene til den
- * gamle versjonen er borte.
+ * Appen spør jevnlig, og når fanen får fokus igjen, om versjonen som er lagt
+ * ut, er en annen enn den som kjører (`src/oppdatering/versjon.ts`). En stille
+ * designjustering gir ingen melding. Den spør også med én gang en del av appen
+ * ikke lar seg laste, som skjer når filene til det gamle bygget er borte; da
+ * holder det at bygget er et annet.
  *
  * Meldingen forsvinner ikke av seg selv og kan ikke lukkes: den gamle
  * versjonen skal ikke brukes videre. «Oppdater nå» tar vare på det brukeren
@@ -59,21 +60,27 @@ export function Oppdateringsmelding({
   const [ny, setNy] = useState<Byggopplysninger | null>(null)
   const [oppdaterer, setOppdaterer] = useState(false)
 
-  const sjekk = useCallback(() => {
-    if (!aktiv) return
-    void hent().then((utlagt) => {
-      const funnet = nyVersjon(utlagt)
-      if (funnet) setNy(funnet)
-    })
-  }, [aktiv, hent])
+  const spor = useCallback(
+    (alleBygg: boolean) => {
+      if (!aktiv) return
+      void hent().then((utlagt) => {
+        const funnet = nyVersjon(utlagt, undefined, { alleBygg })
+        if (funnet) setNy(funnet)
+      })
+    },
+    [aktiv, hent],
+  )
+  const sjekk = useCallback(() => spor(false), [spor])
   useJevnligSjekk(sjekk, SJEKK_VERSJON_HVER)
 
-  // En del av appen som ikke lar seg laste, er ofte en fil fra en versjon som
-  // er byttet ut. Da spørres det med én gang, i stedet for ved neste runde.
+  // En del av appen som ikke lar seg laste, er ofte en fil fra et bygg som er
+  // byttet ut. Da spørres det med én gang, i stedet for ved neste runde, og
+  // et hvilket som helst annet bygg er grunn nok, også en stille endring.
   useEffect(() => {
-    window.addEventListener('vite:preloadError', sjekk)
-    return () => window.removeEventListener('vite:preloadError', sjekk)
-  }, [sjekk])
+    const lastefeil = () => spor(true)
+    window.addEventListener('vite:preloadError', lastefeil)
+    return () => window.removeEventListener('vite:preloadError', lastefeil)
+  }, [spor])
 
   const lag = useOversteLag(ny !== null)
   if (!ny || !lag) return null

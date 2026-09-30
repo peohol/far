@@ -107,7 +107,10 @@ Følg `CLAUDE.md` som i alt annet arbeid: les koden først, test, og kjør
 `npm test` og `npm run build`.
 
 - Som standard blir hver oppgave én PR med én føring i endringsloggen. Oppgaver
-  som henger tett sammen, kan dele PR og føring.
+  som henger tett sammen, kan dele PR og føring. En planlagt oppgave får alltid
+  en føring, også når den bare er en designjustering, fordi den merkes utført
+  med versjonen (steg 5); de stille designjusteringene i `docs/endringslogg.md`
+  gjelder annet arbeid.
 - Ha nummeret i grenen og i tittelen på PR-en, som `claude/opg-007-varsler` og
   «OPG-007: Varslingssystem», så en avbrutt oppgave kan finnes igjen.
 - Databaseendringer rulles ut i produksjon først etter at administratoren har
