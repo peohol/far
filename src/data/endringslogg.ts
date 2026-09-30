@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.62.3',
+    versjon: '1.62.4',
     dato: '2026-09-30',
     sammendrag: 'Lange tekster ruller i sitt eget felt i redigeringsvinduene',
     typer: ['Design / layout', 'Funksjonalitet'],
@@ -21,6 +21,17 @@ export const ENDRINGSLOGG: Endring[] = [
       'Når beskrivelsen av en idé eller teksten i et kort på en fagside blir lang, er det bare selve tekstfeltet som ruller. Verktøylinjen for formatering, feltene over og knappene under står fast i vinduet.',
       'Tekstfeltet fyller vinduet, så det er plass til å se mest mulig av teksten mens den skrives.',
       'Andre lange tekstfelt i vinduene, som prompten til en planlagt oppgave og kommentarene til idéene, vokser ikke lenger forbi omtrent halve skjermhøyden, men ruller selv.',
+    ],
+  },
+  {
+    versjon: '1.62.3',
+    dato: '2026-09-30',
+    sammendrag: 'Vinduene lukkes ikke lenger når en tekstmarkering slippes utenfor dem',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Markerer du tekst i et vindu, som Idéer eller Planlagte oppgaver, og slipper museknappen utenfor vinduet, blir vinduet stående.',
+      'Et klikk utenfor lukker fortsatt vinduet, men bare når klikket både begynner og slutter utenfor. Det gjelder alle vinduene i appen, og mørkleggingen bak sidemenyen.',
     ],
   },
   {
