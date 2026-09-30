@@ -226,6 +226,39 @@ describe('stoffene uten analyttkode', () => {
   })
 })
 
+describe('fortolkningssidene', () => {
+  it('gir analytten som fortolkes, sin egen adresse, og tilbakeknappen går til søket med søket i behold', async () => {
+    const user = userEvent.setup()
+    visApp()
+    await velgNortriptylin(user)
+    expect(window.location.hash).toBe('#/fortolkning/nor')
+
+    window.location.hash = '#/'
+    window.dispatchEvent(new HashChangeEvent('hashchange'))
+    await waitFor(() => expect(screen.queryByRole('region', { name: 'Velg konsentrasjon' })).toBeNull())
+    expect(within(fortolkningen()).getByRole('textbox', { name: 'Søk etter analytt eller kode' })).toHaveProperty('value', 'nor')
+  })
+
+  it('åpner analytten direkte fra adressen, også en modul med flere koder', async () => {
+    window.location.hash = '#/fortolkning/nor'
+    visApp()
+    await screen.findByRole('region', { name: 'Velg konsentrasjon' })
+    cleanup()
+
+    window.location.hash = '#/fortolkning/diaz-dmi-oxa'
+    visApp()
+    await waitFor(() => expect(window.location.hash).toBe('#/fortolkning/diaz-dmi-oxa'))
+    expect(await within(fortolkningen()).findByRole('link', { name: pillenavn('DMI', 'Diazepam') })).toBeTruthy()
+  })
+
+  it('går til søket for en analytt som ikke finnes, uten å legge noe i historikken', async () => {
+    window.location.hash = '#/fortolkning/finnesikke'
+    visApp()
+    await waitFor(() => expect(window.location.hash).toBe('#/'))
+    expect(within(fortolkningen()).getByRole('textbox', { name: 'Søk etter analytt eller kode' })).toBeTruthy()
+  })
+})
+
 describe('adressene', () => {
   it('åpner en stoffside direkte fra adressen, med stoffnavnet som tittel', async () => {
     window.location.hash = '#/stoff/nortriptylin'
@@ -362,7 +395,7 @@ describe('mellom fortolkningen og stoffsiden', () => {
 
     await user.click(screen.getByRole('button', { name: 'Åpne fortolkning' }))
     await waitFor(() => expect(fortolkningen().hidden).toBe(false))
-    expect(window.location.hash).toBe('#/')
+    expect(window.location.hash).toBe('#/fortolkning/nor')
     expect(within(fortolkningen()).getByRole('link', { name: pillenavn('NOR', 'Nortriptylin') })).toBeTruthy()
   })
 
@@ -411,7 +444,7 @@ describe('mellom fortolkningen og stoffsiden', () => {
 
     await user.click(screen.getByRole('button', { name: 'Åpne fortolkning' }))
     await waitFor(() => expect(fortolkningen().hidden).toBe(false))
-    expect(window.location.hash).toBe('#/')
+    expect(window.location.hash).toBe('#/fortolkning/hbup')
     const steg = within(fortolkningen()).getByRole('region', { name: 'Velg konsentrasjon' })
     expect(within(steg).getByRole('heading', { level: 1 }).textContent).toMatch(/^Hydroksybupropion/)
     expect(within(steg).getByRole('link', { name: pillenavn('HBUP', 'Bupropion') })).toBeTruthy()

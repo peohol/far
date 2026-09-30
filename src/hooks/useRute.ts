@@ -18,9 +18,10 @@ function rettAdressen(): void {
  * Adressefeltet er fasit: tilbake- og framknappene i nettleseren, et bokmerke
  * og en lenke åpnet i samme fane går alle gjennom `hashchange`, og appen
  * følger med. En ny rute legges i historikken, så tilbakeknappen går dit man
- * kom fra.
+ * kom fra. Med `erstatt` skrives adressen om uten å legge noe i historikken,
+ * for en adresse som bare skal følge med på noe som alt har skjedd.
  */
-export function useRute(): [Rute, (rute: Rute) => void] {
+export function useRute(): [Rute, (rute: Rute, valg?: { erstatt?: boolean }) => void] {
   const [rute, setRute] = useState<Rute>(() => lesRute(window.location.hash))
 
   useEffect(() => {
@@ -36,9 +37,12 @@ export function useRute(): [Rute, (rute: Rute) => void] {
     return () => window.removeEventListener('hashchange', oppdater)
   }, [])
 
-  const gaaTil = useCallback((ny: Rute) => {
-    if (window.location.hash !== adresse(ny)) window.location.hash = adresse(ny)
-    setRute(ny)
+  const gaaTil = useCallback((ny: Rute, { erstatt = false }: { erstatt?: boolean } = {}) => {
+    if (window.location.hash !== adresse(ny)) {
+      if (erstatt) window.history.replaceState(window.history.state, '', adresse(ny))
+      else window.location.hash = adresse(ny)
+    }
+    setRute((forrige) => (sammeRute(forrige, ny) ? forrige : ny))
   }, [])
 
   return [rute, gaaTil]

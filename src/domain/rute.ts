@@ -4,9 +4,16 @@ import { STOFFREGISTER, stoffslug, type Stoffregister } from './stoffregister'
 /**
  * Adressene i appen.
  *
- * Fortolkningen har ingen egen adresse: den er arbeidsflyten appen åpner i,
- * og tilstanden i den lever i appen, ikke i adressefeltet. Fagsidene har
- * derimot hver sin, slik at de kan bokmerkes, deles og åpnes direkte.
+ * Fortolkningen er arbeidsflyten appen åpner i, på `#/`. Når en analytt er
+ * valgt, er fortolkningen av den en side med sin egen adresse, etter
+ * analyttens nøkkel ({@link fortolkningsnokkel}), så den kan ha sine egne
+ * diskusjoner og et varsel kan lede dit:
+ *
+ *   #/fortolkning/hbup
+ *
+ * Resten av tilstanden i fortolkningen — søket, valget i steg 2 — lever i
+ * appen, ikke i adressefeltet. Fagsidene har hver sin adresse, slik at de kan
+ * bokmerkes, deles og åpnes direkte.
  *
  * En fagside er alltid en stoffside, og adressen er stoffets stabile nøkkel i
  * stoffregisteret (`src/domain/stoffregister.ts`) — aldri en analyttkode:
@@ -41,7 +48,11 @@ import { STOFFREGISTER, stoffslug, type Stoffregister } from './stoffregister'
  */
 
 export type Rute =
-  | { side: 'fortolkning' }
+  | {
+      side: 'fortolkning'
+      /** Nøkkelen til analytten som fortolkes ({@link fortolkningsnokkel}). Utelatt uten analytt. */
+      analytt?: string
+    }
   | {
       side: 'stoff'
       /** Stoffets nøkkel i stoffregisteret, f.eks. «bupropion». */
@@ -56,6 +67,27 @@ export type Rute =
     }
 
 export const FORTOLKNING: Rute = { side: 'fortolkning' }
+
+const FORTOLKNINGSSIDE = /^#\/fortolkning\/([a-z0-9]+(?:-[a-z0-9]+)*)\/?$/i
+
+/**
+ * Nøkkelen til fortolkningssiden for en analyttkode, slik den står i adressen
+ * og i diskusjonene: små bokstaver, og ledd som «DIAZ · DMI · OXA» bundet med
+ * bindestrek («diaz-dmi-oxa»).
+ */
+export function fortolkningsnokkel(kode: string): string {
+  return kode
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean)
+    .join('-')
+}
+
+/** Ruten til fortolkningen, med analytten som fortolkes når det er en. */
+export function fortolkningsrute(kode?: string | null): Rute {
+  const analytt = kode ? fortolkningsnokkel(kode) : ''
+  return analytt ? { side: 'fortolkning', analytt } : FORTOLKNING
+}
 
 const STOFF = /^#\/stoff\/([^/?#]+)((?:\/[^/?#]+)*)\/?$/i
 
@@ -76,6 +108,8 @@ const MAKS_STEDSLEDD = 2
 export function lesRute(hash: string, register: Stoffregister = STOFFREGISTER): Rute {
   const sok = SOK.exec(hash)
   if (sok) return { side: 'sok', q: new URLSearchParams(sok[1] ?? '').get('q') ?? '' }
+  const fortolkning = FORTOLKNINGSSIDE.exec(hash)
+  if (fortolkning?.[1]) return { side: 'fortolkning', analytt: fortolkning[1].toLowerCase() }
   const stoff = lesSide(STOFF, hash)
   if (stoff) {
     // Et kjent navn eller alias fører til stoffets nøkkel; en nøkkel
@@ -154,7 +188,7 @@ export function adresse(rute: Rute): string {
     case 'sok':
       return sokeside(rute.q)
     default:
-      return '#/'
+      return rute.analytt ? `#/fortolkning/${rute.analytt}` : '#/'
   }
 }
 
