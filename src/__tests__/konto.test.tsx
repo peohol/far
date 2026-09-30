@@ -6,7 +6,7 @@
  *
  * Økten og brukerdatabasen er erstattet; det er skjermbildene som prøves.
  */
-import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import type { Profil } from '@delt/profil'
@@ -117,6 +117,31 @@ describe('det modale laget', () => {
     await userEvent.hover(lukk)
     expect(document.querySelector('.tipsboble')).toBeNull()
     await userEvent.click(lukk)
+    expect(onLukk).toHaveBeenCalledOnce()
+  })
+
+  it('lukkes av et trykk utenfor panelet, men ikke av en markering som slippes utenfor', async () => {
+    const onLukk = vi.fn()
+    render(
+      <Modallag apen tittel="Idéer" onLukk={onLukk}>
+        <p>Tekst som markeres</p>
+      </Modallag>,
+    )
+    const lag = screen.getByRole('dialog', { name: 'Idéer' })
+    const tekst = screen.getByText('Tekst som markeres')
+
+    // Trykket begynner i panelet og slipper utenfor: nettleseren sender
+    // klikket til den felles forelderen, som er selve bakgrunnen.
+    fireEvent.pointerDown(tekst)
+    fireEvent.click(lag)
+    expect(onLukk).not.toHaveBeenCalled()
+
+    // Og motsatt: begynner utenfor og slipper i panelet.
+    fireEvent.pointerDown(lag)
+    fireEvent.click(tekst)
+    expect(onLukk).not.toHaveBeenCalled()
+
+    await userEvent.click(lag)
     expect(onLukk).toHaveBeenCalledOnce()
   })
 

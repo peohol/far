@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, type ReactNode } from 'react'
 import { Ikon } from './ikon/Ikon'
 import type { Ikonnavn } from './ikon/register'
 import { Ikonknapp } from './Ikonknapp'
+import { useTrykkUtenfor } from '../hooks/useTrykkUtenfor'
 import '../styles/modallag.css'
 
 /**
@@ -130,11 +131,10 @@ export function Modallag({
     if (kanLukkes()) dialog.current?.close()
   }
 
-  // Et klikk utenfor panelet treffer selve `<dialog>`, som fyller hele
-  // vinduet. Panelet inni fanger sine egne klikk.
-  const paaTrykk = (hendelse: React.MouseEvent<HTMLDialogElement>) => {
-    if (hendelse.target === dialog.current) lukk()
-  }
+  // Et trykk utenfor panelet treffer selve `<dialog>`, som fyller hele
+  // vinduet. Det lukker bare når det både begynner og slutter der, så en
+  // tekstmarkering som slippes utenfor panelet lar laget stå.
+  const trykkUtenfor = useTrykkUtenfor<HTMLDialogElement>(lukk)
 
   // Escape går gjennom nettleserens `cancel`, som kan stanses før laget lukkes.
   const paaAvbryt = (hendelse: React.SyntheticEvent<HTMLDialogElement>) => {
@@ -184,7 +184,7 @@ export function Modallag({
       ref={dialog}
       className={['modallag', ark && 'modallag--ark'].filter(Boolean).join(' ')}
       aria-labelledby={tittelId}
-      onClick={paaTrykk}
+      {...trykkUtenfor}
       onCancel={paaAvbryt}
       onKeyDown={paaTast}
     >
