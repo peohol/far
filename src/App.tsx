@@ -402,18 +402,17 @@ export default function App() {
   }, [state.kontroll, kontrollvalg, kopierValg])
 
   /**
-   * Alt + 1 … Alt + 5 setter filteret på hver sin analysemetode, i den
-   * rekkefølgen menyen viser dem. Alt + 0 slår det av: null hører ikke til
-   * noen metode, og står derfor for «ingen av dem».
+   * Alt + 1, Alt + 2 osv. setter filteret på hver sin analysemetode, i den
+   * rekkefølgen filterraden viser dem. Alt + 0 velger «Alle»: null hører ikke
+   * til noen metode, og står derfor for «ingen av dem».
    *
    * Snarveien ligger utenom `useKeyboard`, som med vilje slipper alle
    * modifikatorkombinasjoner gjennom til nettleseren. Den leser `event.code`
    * og ikke `event.key`, siden Alt gjør om tegnet på flere tastaturoppsett —
    * det er den fysiske talltasten som gjelder.
    *
-   * Filteret kan settes mens filtermenyen står åpen; den viser nettopp
-   * metodene. Endringsloggen fanger derimot tastaturet for seg, og
-   * sidemenyen — stoffregisteret — filtrerer ikke søket.
+   * Endringsloggen fanger tastaturet for seg, og sidemenyen —
+   * stoffregisteret — filtrerer ikke søket.
    */
   useEffect(() => {
     function paaTast(event: KeyboardEvent) {

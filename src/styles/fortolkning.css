@@ -201,16 +201,60 @@
   color: var(--blekk-dempet);
 }
 
-/* Filteret under alternativene. Det står så lenge filteret er på, også når
-   søket gir treff: et glemt filter ser ut som at et stoff ikke finnes. */
+/* Filteret under alternativene: alle analysemetodene på én rad, «Alle»
+   først. Det aktive valget har metodens fargefyll; de andre står med bare en
+   kant i sin farge, så fyllet alene sier hvilket filter som gjelder. */
 .sokfilter {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: var(--rom-3);
-  font-size: var(--tekst-ui);
+  gap: var(--rom-2);
+}
+
+.sokfilter__valg {
+  display: inline-flex;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  transition: transform var(--fart-rask) var(--kurve);
+}
+
+.sokfilter__valg .pille {
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    box-shadow var(--fart-rask) var(--kurve),
+    color var(--fart-rask) var(--kurve);
+}
+
+.sokfilter__valg[aria-pressed='false'] .pille {
   color: var(--blekk-dempet);
+  background: transparent;
+  box-shadow: inset 0 0 0 var(--kant-aktiv) var(--alt-kant);
+}
+
+.sokfilter__valg[aria-pressed='false']:hover {
+  transform: translateY(-1px);
+}
+
+.sokfilter__valg[aria-pressed='false']:hover .pille {
+  color: var(--blekk);
+  background: var(--alt-soft);
+}
+
+/* «Alle» hører ikke til noen metode og har derfor ingen metodefarge. Den
+   låner aksentfargen, så den aktive pillen er like tydelig fylt som de
+   andre. */
+.metodepille--alle {
+  --alt-solid: var(--aksent);
+  --alt-ink: var(--paa-aksent);
+  --alt-kant: var(--linje-kontroll);
+  --alt-soft: var(--aksent-flate);
+  font-weight: var(--vekt-fet);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 /* --- Analyttkortet ------------------------------------------------------------ */
