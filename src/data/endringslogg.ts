@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.61.3',
+    dato: '2026-09-30',
+    sammendrag: 'Fagsidene heter etter legemidlet eller rusmidlet, ikke etter metabolitten laboratoriet måler',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Fagsidene Benzoylekgonin, Enalaprilat, Ramiprilat, Losartansyre og Kanrenon heter nå Kokain, Enalapril, Ramipril, Losartan og Spironolakton, i sidemenyen, fagsøket og som overskrift. Siden sier fortsatt hvilken metabolitt analysen måler.',
+      'Den egne fagsiden for O-desmetylvenlafaksin er tatt bort. Venlafaksin er siden for VENSUM, og et søk på O-desmetylvenlafaksin eller desvenlafaksin fører dit.',
+      'Cannabidiol heter CBD, som THC, og «cannabidiol» finner fortsatt siden.',
+      'De gamle navnene fungerer som søkeord, og gamle lenker og bokmerker fører til den nye siden.',
+    ],
+  },
+  {
     versjon: '1.61.2',
     dato: '2026-09-30',
     sammendrag: 'Små justeringer av utseendet ber ikke lenger om at siden oppdateres',

@@ -55,8 +55,8 @@ describe('navnenøkkelen', () => {
 
 describe('aliasene i fagsøket', () => {
   it.each([
-    ['CBD', 'cannabidiol'],
-    ['cannabidiol', 'cannabidiol'],
+    ['CBD', 'cbd'],
+    ['cannabidiol', 'cbd'],
     ['quetiapine', 'kvetiapin'],
     ['kvetiapin', 'kvetiapin'],
     ['alcohol', 'etanol'],
@@ -78,8 +78,15 @@ describe('aliasene i fagsøket', () => {
     ['9-hydroksyrisperidon', 'paliperidon'],
     ['hydroksyrisperidon', 'paliperidon'],
     ['paliperidon', 'paliperidon'],
-    ['spironolactone', 'kanrenon'],
-    ['kokain', 'benzoylekgonin'],
+    ['spironolactone', 'spironolakton'],
+    ['kanrenon', 'spironolakton'],
+    ['kokain', 'kokain'],
+    ['benzoylekgonin', 'kokain'],
+    ['enalaprilat', 'enalapril'],
+    ['ramiprilat', 'ramipril'],
+    ['losartansyre', 'losartan'],
+    ['O-desmetylvenlafaksin', 'venlafaksin'],
+    ['desvenlafaxine', 'venlafaksin'],
   ])('«%s» gir %s først, som et eksakt navn', (sporring, stoff) => {
     expect(forste(sporring)).toEqual({ stoff, poeng: 0 })
   })
@@ -92,7 +99,7 @@ describe('aliasene i fagsøket', () => {
 
   it('er ufølsom for store bokstaver, bindestrek og mellomrom, og norsk og engelsk stavemåte', () => {
     for (const sporring of ['QUETIAPINE', 'Quetiapin', 'kvetiapine']) expect(forste(sporring)?.stoff).toBe('kvetiapin')
-    for (const sporring of ['EXP 3174', 'exp3174', 'EXP-3174']) expect(forste(sporring)?.stoff).toBe('losartansyre')
+    for (const sporring of ['EXP 3174', 'exp3174', 'EXP-3174']) expect(forste(sporring)?.stoff).toBe('losartan')
     for (const sporring of ['o desmetyltramadol', 'O-DSMT', 'odsmt']) expect(forste(sporring)?.stoff).toBe('tramadol')
   })
 
