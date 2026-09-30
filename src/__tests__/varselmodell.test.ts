@@ -50,14 +50,14 @@ const NAA = new Date('2026-09-29T15:00:00')
 describe('kategoriene og valgene', () => {
   it('har de samme kategoriene som databasen', () => {
     const mappe = fileURLToPath(new URL('../../supabase/migrations/', import.meta.url))
-    const fil = readdirSync(mappe).find((navn) => navn.endsWith('_varsler.sql'))!
-    const sql = readFileSync(mappe + fil, 'utf8')
-    const verdier = /create type public\.varselkategori as enum \(([^)]*)\)/.exec(sql)![1]!.match(/'([^']+)'/g)!
-    // Verdiene som er lagt til senere, i rekkefølgen migrasjonene kjører.
-    const lagtTil = readdirSync(mappe)
+    // Alle migrasjonene i den rekkefølgen de kjører: typen, så verdiene som er lagt til senere.
+    const sql = readdirSync(mappe)
+      .filter((navn) => navn.endsWith('.sql'))
       .sort()
-      .flatMap((navn) => [...readFileSync(mappe + navn, 'utf8').matchAll(/alter type public\.varselkategori add value '([^']+)'/g)])
-      .map((treff) => treff[1]!)
+      .map((navn) => readFileSync(mappe + navn, 'utf8'))
+      .join('\n')
+    const verdier = /create type public\.varselkategori as enum \(([^)]*)\)/.exec(sql)![1]!.match(/'([^']+)'/g)!
+    const lagtTil = [...sql.matchAll(/alter type public\.varselkategori add value '([^']+)'/g)].map((treff) => treff[1]!)
     expect([...verdier.map((v) => v.slice(1, -1)), ...lagtTil]).toEqual([...DATABASEKATEGORIER])
     expect(KATEGORIREKKEFOLGE).toEqual(expect.arrayContaining([...DATABASEKATEGORIER, 'funksjonalitet']))
   })
