@@ -16,7 +16,7 @@ import { lesDiskusjonsside, type Diskusjonsside } from '../diskusjoner/modell'
  * gruppe får sin overskrift, med kategoriene sine under.
  */
 export const VARSELGRUPPER = {
-  fortolkning: { tittel: 'Fortolkningen' },
+  fortolkning: { tittel: 'Fortolkning' },
   ideer: { tittel: 'Idéer' },
   diskusjoner: { tittel: 'Diskusjoner' },
   favoritter: { tittel: 'Favorittsider' },

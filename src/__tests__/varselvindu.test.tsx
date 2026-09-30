@@ -297,7 +297,7 @@ describe('vinduet', () => {
         (within(g).getAllByRole('switch') as HTMLInputElement[]).map(tilstand),
       ]),
     ).toEqual([
-      ['Fortolkningen', [['Endringer i fortolkningen', true, true]]],
+      ['Fortolkning', [['Endringer i fortolkningen', true, true]]],
       [
         'Idéer',
         [

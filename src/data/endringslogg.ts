@@ -18,7 +18,7 @@ export const ENDRINGSLOGG: Endring[] = [
     typer: ['Design / layout'],
     omfang: 'Mindre omfang',
     punkter: [
-      'Innstillingene for varsler står nå under overskriftene Fortolkningen, Idéer, Diskusjoner, Favorittsider og Appen, hver med sitt ikon, så det er lettere å finne riktig valg.',
+      'Innstillingene for varsler står nå under overskriftene Fortolkning, Idéer, Diskusjoner, Favorittsider og Appen, hver med sitt ikon, så det er lettere å finne riktig valg.',
     ],
   },
   {

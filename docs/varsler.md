@@ -31,7 +31,7 @@ Varslene berører ikke fortolkningen; de forteller bare at noe er endret.
 | `favorittdiskusjoner` | Noen starter en ny tråd på en fagside du har som favoritt | Ja, av som standard |
 
 Kategoriene står i `VARSELKATEGORIER`. Hver har en `gruppe` fra
-`VARSELGRUPPER` (Fortolkningen, Idéer, Diskusjoner, Favorittsider, Appen):
+`VARSELGRUPPER` (Fortolkning, Idéer, Diskusjoner, Favorittsider, Appen):
 innstillingene viser gruppene i den rekkefølgen, hver med ikon og overskrift
 og kategoriene sine under. Ikonene for gruppene står i `Varsler.tsx`. En ny
 kategori får en gruppe; den trenger ingen ny gruppe med mindre den gjelder
