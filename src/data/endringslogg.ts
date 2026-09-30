@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.65.1',
+    dato: '2026-09-30',
+    sammendrag: 'Varselinnstillingene er gruppert etter hva de gjelder',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Innstillingene for varsler står nå under overskriftene Fortolkning, Idéer, Diskusjoner, Favorittsider og Appen, hver med sitt ikon, så det er lettere å finne riktig valg.',
+    ],
+  },
+  {
     versjon: '1.65.0',
     dato: '2026-09-30',
     sammendrag: 'Fagsider for 25 antihypertensiver',

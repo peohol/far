@@ -6,7 +6,7 @@ import { FORTOLKNINGSSEKSJON, fortolkningsseksjonFor, stoffadresseForAnalytt } f
 import { stoffadresse } from '../../domain/rute'
 import { formaterDato } from '../../domain/versjon'
 import {
-  KATEGORIREKKEFOLGE,
+  VARSELGRUPPER,
   VARSELKATEGORIER,
   aktorer,
   deletekst,
@@ -18,12 +18,14 @@ import {
   favorittsted,
   fortolkningsobjekter,
   idetekst,
+  kategorierIGrupper,
   navneliste,
   objekttekst,
   type Databasevarsel,
   type Endringsvarsel,
   type Fortolkningsobjekt,
   type Varsel,
+  type Varselgruppe,
 } from '../../varsler/modell'
 import { Bryter } from '../Bryter'
 import { Button } from '../Button'
@@ -301,27 +303,55 @@ function Objektlenke({ objekt, onGa }: { objekt: Fortolkningsobjekt; onGa: () =>
   )
 }
 
-/** Hvilke kategorier brukeren får varsel om. De obligatoriske står på og kan ikke slås av. */
+const GRUPPEIKON: Record<Varselgruppe, Ikonnavn> = {
+  fortolkning: 'interp',
+  ideer: 'idea',
+  diskusjoner: 'diskusjon',
+  favoritter: 'star',
+  appen: 'history',
+}
+
+/**
+ * Hvilke kategorier brukeren får varsel om, gruppert etter hva de gjelder,
+ * med ikon og overskrift. De obligatoriske står på og kan ikke slås av.
+ */
 function Innstillinger({ status }: { status: Varselstatus }) {
   return (
     <div className="varselinnstillinger">
       <p className="varselinnstillinger__ingress">Velg hva du vil få varsel om. Endringer i fortolkningen og svar til deg får alle.</p>
-      <ul className="varselinnstillinger__liste">
-        {KATEGORIREKKEFOLGE.map((kategori) => {
-          const { tittel, forklaring, obligatorisk } = VARSELKATEGORIER[kategori]
-          return (
-            <li key={kategori} className="varselinnstilling">
-              <Bryter pa={erValgt(kategori, status.valg)} laast={obligatorisk} onEndre={(pa) => status.endreValg(kategori, pa)}>
-                <span className="varselinnstilling__tittel">{tittel}</span>
-                <span className="varselinnstilling__forklaring">
-                  {forklaring}
-                  {obligatorisk && ' Kan ikke slås av.'}
-                </span>
-              </Bryter>
-            </li>
-          )
-        })}
-      </ul>
+      {kategorierIGrupper().map(({ gruppe, kategorier }) => (
+        <Innstillingsgruppe key={gruppe} gruppe={gruppe}>
+          {kategorier.map((kategori) => {
+            const { tittel, forklaring, obligatorisk } = VARSELKATEGORIER[kategori]
+            return (
+              <li key={kategori} className="varselinnstilling">
+                <Bryter pa={erValgt(kategori, status.valg)} laast={obligatorisk} onEndre={(pa) => status.endreValg(kategori, pa)}>
+                  <span className="varselinnstilling__tittel">{tittel}</span>
+                  <span className="varselinnstilling__forklaring">
+                    {forklaring}
+                    {obligatorisk && ' Kan ikke slås av.'}
+                  </span>
+                </Bryter>
+              </li>
+            )
+          })}
+        </Innstillingsgruppe>
+      ))}
     </div>
+  )
+}
+
+function Innstillingsgruppe({ gruppe, children }: { gruppe: Varselgruppe; children: React.ReactNode }) {
+  const id = useId()
+  return (
+    <section className="varselinnstillinger__gruppe" aria-labelledby={id}>
+      <h3 id={id} className="varselinnstillinger__overskrift">
+        <span className="varselinnstillinger__ikon" aria-hidden="true">
+          <Ikon navn={GRUPPEIKON[gruppe]} storrelse="ui" />
+        </span>
+        {VARSELGRUPPER[gruppe].tittel}
+      </h3>
+      <ul className="varselinnstillinger__liste">{children}</ul>
+    </section>
   )
 }
