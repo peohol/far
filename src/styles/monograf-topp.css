@@ -270,6 +270,19 @@
   font-size: calc(min(var(--tekst-seksjon), 18cqi) * 0.65);
 }
 
+/* Stoffet verdien gjelder, når kortet har verdier for flere (moderstoffet og
+   en metabolitt): over formen og verdien, i samme stil som formnavnet. */
+.datakort__stoff {
+  max-width: 100%;
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  line-height: 1.25;
+  color: var(--blekk-dempet);
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
 /* Ikonet over navnet, så navnet får hele cellens bredde. */
 .datakort__formnavn {
   display: flex;

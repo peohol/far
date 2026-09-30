@@ -324,14 +324,18 @@ export function kontrollerIntervall(verdi: Intervallverdi): string | null {
   return null
 }
 
-/* «Viktige data»: t₁/₂ og tₛₛ, per legemiddelform. */
+/* «Viktige data»: t₁/₂ og tₛₛ, per legemiddelform og stoff. */
 
 /**
- * Verdien for én legemiddelform: en typisk verdi, et område fra minimum til
- * maksimum, eller begge. `form` er det formen heter på kortet («Peroralt»,
- * «Depotinjeksjon»), og tom når verdien ikke gjelder en bestemt form.
+ * Verdien for én legemiddelform eller ett stoff: en typisk verdi, et område
+ * fra minimum til maksimum, eller begge. `form` er det formen heter på kortet
+ * («Peroralt», «Depotinjeksjon»), og tom når verdien ikke gjelder en bestemt
+ * form. `stoff` er stoffet verdien gjelder når kilden oppgir den for flere,
+ * som moderstoffet og en aktiv metabolitt («Venlafaksin», «O-desmetylvenlafaksin»),
+ * og står ikke når den gjelder sidens stoff alene.
  */
 export interface Formverdi {
+  stoff?: string
   form: string
   typisk: number | null
   min: number | null
@@ -339,7 +343,7 @@ export interface Formverdi {
   enhet: string
 }
 
-/** Verdiene på et formvis datakort, én per legemiddelform, i rekkefølgen de står. */
+/** Verdiene på et formvis datakort, én per legemiddelform eller stoff, i rekkefølgen de står. */
 export interface Formverdier {
   former: Formverdi[]
 }
@@ -364,6 +368,7 @@ export function lesFormverdier(data: unknown): Formverdier {
       former: data.former
         .filter(erObjekt)
         .map((f) => ({
+          ...(tekst(f.stoff) && { stoff: tekst(f.stoff) }),
           form: tekst(f.form),
           typisk: tallEllerNull(f.typisk),
           min: tallEllerNull(f.min),
@@ -415,15 +420,25 @@ export function formverditall({ typisk, omrade }: Formverdideler): string {
 }
 
 /**
- * Verdiene slik de leses og søkes i: «33 (29–37) timer», og med formene
- * foran når det er flere: «Peroralt: 5 døgn · Depotinjeksjon: 2–4 måneder».
+ * Hva en verdi gjelder, slik den er merket på kortet: stoffet, formen eller
+ * begge («O-desmetylvenlafaksin», «Depotinjeksjon», «Paliperidon, Depotinjeksjon»).
+ * Tom når verdien gjelder sidens stoff uten en bestemt form.
+ */
+export function formverdimerke({ stoff, form }: Pick<Formverdi, 'stoff' | 'form'>): string {
+  return [stoff, form].filter(Boolean).join(', ')
+}
+
+/**
+ * Verdiene slik de leses og søkes i: «33 (29–37) timer», og med formene eller
+ * stoffene foran når det er flere: «Peroralt: 5 døgn · Depotinjeksjon: 2–4 måneder».
  */
 export function formaterFormverdier({ former }: Formverdier): string {
   return former
     .map((f) => {
       const deler = delFormverdi(f)!
       const verdi = [formverditall(deler), deler.enhet].filter(Boolean).join(' ')
-      return f.form ? `${f.form}: ${verdi}` : verdi
+      const merke = formverdimerke(f)
+      return merke ? `${merke}: ${verdi}` : verdi
     })
     .join(' · ')
 }
@@ -441,7 +456,7 @@ export function fraPlussMinus(midt: number, avvik: number): Pick<Formverdi, 'typ
 /** Feilen i verdiene som skal lagres, eller `null` når de er gyldige. */
 export function kontrollerFormverdier({ former }: Formverdier): string | null {
   for (const [i, f] of former.entries()) {
-    const hvor = former.length > 1 ? `${f.form || `Rad ${i + 1}`}: ` : ''
+    const hvor = former.length > 1 ? `${formverdimerke(f) || `Rad ${i + 1}`}: ` : ''
     if (!harFormverdi(f)) return `${hvor}Oppgi en typisk verdi, et område eller begge.`
     if ((f.min === null) !== (f.maks === null)) return `${hvor}Oppgi både minimum og maksimum, eller ingen av dem.`
     if (f.min !== null && f.maks !== null && f.min > f.maks) return `${hvor}Minimum kan ikke være høyere enn maksimum.`
@@ -449,11 +464,11 @@ export function kontrollerFormverdier({ former }: Formverdier): string | null {
       return `${hvor}Den typiske verdien må ligge mellom minimum og maksimum.`
     }
     if (!f.enhet) return `${hvor}Oppgi enheten.`
-    if (former.length > 1 && !f.form) return `Rad ${i + 1}: Oppgi legemiddelformen når kortet har flere.`
+    if (former.length > 1 && !formverdimerke(f)) return `Rad ${i + 1}: Oppgi legemiddelformen eller stoffet når kortet har flere.`
   }
-  const navn = former.map((f) => f.form.toLocaleLowerCase('nb'))
+  const navn = former.map((f) => formverdimerke(f).toLocaleLowerCase('nb'))
   const dobbel = navn.find((n, i) => navn.indexOf(n) !== i)
-  if (dobbel !== undefined) return `Legemiddelformen «${former[navn.indexOf(dobbel)]!.form}» står to ganger.`
+  if (dobbel !== undefined) return `«${formverdimerke(former[navn.indexOf(dobbel)]!)}» står to ganger.`
   return null
 }
 
