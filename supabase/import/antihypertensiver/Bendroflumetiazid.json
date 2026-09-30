@@ -1,0 +1,232 @@
+{
+  "stoff": "bendroflumetiazid",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 1.5,
+      "ovre": 30,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 120,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": 9,
+          "min": 3,
+          "maks": 9,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Tiazid som hemmer Na+/Cl- transporter i distale tubuli. Økt diurese (tap av blodvolum initialt) og venedilatasjon. Gir mindre diurese sammenlignet med slyngediuretika, ettersom reabsorpsjonen er mindre i distale tubuli. Nedsetter kalsiumutskillelsen i urinen (kan derfor forebygge nyresten). Nedsetter nyrenes evne til å fortynne urinen, som til vanlig skjer i distale tubuli. Tilsatt kaliumklorid minsker risiko for kaliummangel.",
+      "Siden tiazider virker mer distalt i nefronet, hvor mye av saltene og vannet allerede er reabsorbert, gir tiazider en mindre kraftig vanndrivende effekt sammenlignet med slyngediuretika."
+    ],
+    "referanser": [
+      "spc-bendroflumetiazid"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Hypertensjon",
+          "Ødemer",
+          "Diabetes insipidus",
+          "Profylaktisk behandling av pasienter med idiopatiske residiverende kalsiumholdige nyre-/ureterstener"
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-bendroflumetiazid"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Hypertensjon: 1,25–5 mg daglig, fortrinnsvis om morgenen.",
+      "Ødemer: 2,5–5 mg.",
+      "Profylakse ved residiverende kalsiumoksalatsteiner: 2,5 mg × 2.",
+      "Nedsatt lever- og nyrefunksjon: Brukes med forsiktighet ved lett til moderat nedsatt nyre- eller leverfunksjon."
+    ],
+    "referanser": [
+      "spc-bendroflumetiazid"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Bendroflumetiazid kan redusere litiumutskillelsen, og dermed gi økte serumkonsentrasjoner med risiko for toksisitet. NSAID: Samtidig bruk kan motvirke den antihypertensive effekten av tiazider. NSAID kan motvirke den diuretiske effekten av bendroflumetiazid trolig ved å redusere renal prostaglandinproduksjon. Se preparatomtalen for flere eksempler."
+    ],
+    "referanser": [
+      "spc-bendroflumetiazid"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "Absorpsjonen er fullstendig."
+      ],
+      "referanser": [
+        "spc-bendroflumetiazid"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "2 timer (oralt inntak)."
+      ],
+      "referanser": [
+        "spc-bendroflumetiazid"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Ca. 9 timer i preparatomtalen, 3 timer i Micromedex."
+      ],
+      "referanser": [
+        "spc-bendroflumetiazid"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Ca. 94 %."
+      ],
+      "referanser": [
+        "spc-bendroflumetiazid"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "1, 48 L/kg."
+      ],
+      "referanser": [
+        "spc-bendroflumetiazid"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "70 % metaboliseres (ukjente enzymer).",
+        "30 % skilles ut uforandret gjennom nyrene."
+      ],
+      "referanser": [
+        "spc-bendroflumetiazid"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 421,4 g/mol."
+      ],
+      "referanser": [
+        "spc-bendroflumetiazid"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Generelt for tiazider: Væske- og elektrolyttforstyrrelser er vanlig. Tørste og metabolsk alkalose. Initialt polyuri, ved store væsketap oliguri og anuri. Sekundært til væske- og elektrolyttforstyrrelser hodepine, forvirring, svimmelhet, ortostatisk hypotensjon, muskelsvakhet, ev. kramper og koma. EKG-forandringer og arytmier.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 120 nmol/L), en felles grense for alle antihypertensivene.",
+        "Ingen forslag til toksisk konsentrasjon verken i Clarke, Schulz, Baselt, Micromedex eller ved frisøk i PubMed. Grensen er derfor ikke kjent fra litteraturen."
+      ],
+      "referanser": [
+        "legemiddelhandboka"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "1,25 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "1,5–2,6 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "1,25 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "3,8–6,6 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "1,25 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "4–8 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "5 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "6–10,4 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "5 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "15–26 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "5 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "17–31 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "2,5 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "10 nmol/L",
+        "merknad": "Målt i IDA-studien, n = 1."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-bendroflumetiazid": {
+      "tittel": "Centyl med kaliumklorid / Centyl mite med kaliumklorid «Karo Pharma»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/centyl-med-kaliumklorid-centyl-mite-med-kaliumklorid-karo-pharma-547387"
+    }
+  }
+}

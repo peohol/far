@@ -1,0 +1,242 @@
+{
+  "stoff": "diltiazem",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 100,
+      "ovre": 500,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 2000,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "Depot",
+          "typisk": null,
+          "min": 4,
+          "maks": 10,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Kalsiumantagonist, benzotiazepintype. Hemmer selektivt langsomme spenningstyrte L-type kalsiumkanaler i sarcolemma i både hjertemuskelceller og glatte muskelceller. Dette fører også til mindre frigivelse av kalsiumioner intracellulært. Effekten er vasodilatasjon, nedsatt perifer motstand og reduksjon i blodtrykk. Vasodilatasjon skjer også i kransarteriene.",
+      "Redusert smerte ved angina pectoris fordi diltiazem reduserer hjertets pumpekraft som betyr redusert oksygenbehov og samtidig øker blodforsyningen til hjertemuskelen pga. vasodilatasjon.",
+      "Antiarytmisk effekt fordi diltiazem spesifikt påvirker hjertes ledningssystem: forsinker ledningstid i AV-knuten og setter ned frekvens i sinusknuten.",
+      "Blodtrykksreduksjon ved monoterapi, sittende systolisk/diastolisk blodtrykk: 14,4 ± 2,1 / 12,1 ± 2,8 mmHg (gjennomsnitt ± SD), ifølge metastudien fra Wu et al. (2005)."
+    ],
+    "referanser": [
+      "felleskatalogen",
+      "wu2005"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Hypertensjon (primær og sekundær profylakse), supraventrikulær takykardi, atrieflimmer og angina pectoris. I Norge er indikasjonen hypertensjon og angina pectoris."
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Depottablett én gang daglig: 240–360 mg. Dosen kan ved behov økes til 480 mg én gang daglig.",
+      "Depottablett to ganger daglig: 180–360 mg ved angina pectoris og 240–360 mg ved hypertensjon.",
+      "Nedsatt lever- og nyrefunksjon: Økt plasmakonsentrasjon av diltiazem kan ses hos eldre og ved nedsatt nyre- eller leverfunksjon; doseres med forsiktighet. Dosereduksjon anbefales ved nedsatt leverfunksjon. Micromedex og UpToDate har ingen doseanbefaling ved moderat til alvorlig nedsatt nyrefunksjon.",
+      "Diltiazem ble avregistrert i Norge i desember 2024 på grunn av lite bruk. Analysen beholdes fordi pasientprøver fra IDA- og BETAMI-prosjektene er tatt før denne datoen."
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "På grunn av risikoen for additive effekter, er varsomhet og nøyaktig titrering nødvendig hos pasienter som får diltiazem sammen med andre legemidler som også påvirker hjertets kontraktilitet og/eller ledningsevne.",
+      "Forsiktighet ved kombinasjon med digitalis og betablokkere, pga fare for additiv effekt på ledningssystemet med for lav hjertefrekvens eller AV-blokk.",
+      "Samtidig behandling med amiodarone/digoksin/digitoksin gir økt risiko for bradykardi og forsiktighet bør utvises, særlig hos eldre og ved høye doser.",
+      "Nitratderivater: Økte hypotensive effekter og svimmelhet (additive vasodilaterende effekter).",
+      "En moderat (mindre enn 2 ganger) økning i plasmakonsentrasjon av diltiazem har blitt dokumentert ved samtidig administrering med en kraftigere CYP3A4-hemmer. Diltiazem er også en moderat CYP3A4-hemmer. Samtidig administrering med andre CYP3A4-substrater kan resultere i en økning i plasmakonsentrasjon av begge legemidlene. Når diltiazem administreres samtidig med en CYP3A4-induser kan det føre til redusert plasmakonsentrasjon av diltiazem. OBS! Det er rapportert økt serumkonsentrasjon av ciclosporin og karbamazepin ved samtidig bruk.",
+      "Diltiazem gir økt risiko for litiumindusert neurotoksisitet.",
+      "Som andre kalsiumkanalblokkere har diltiazem hemmende effekt på tarmmotilitet og skal derfor brukes med forsiktighet av pasienter med risiko for å utvikle tarmobstruksjon."
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "40 % pga førstepassasje effekt i lever"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "Varierer: 3–6 timer (depottablett to ganger daglig) og 6–7 timer (depottablett én gang daglig) i Felleskatalogen, og 11–18 timer for depottabletter i amerikanske kilder."
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Varierer: 3–6 timer i Felleskatalogen, 4–10 timer i Legemiddelhåndboka og 6,5–9,5 timer i amerikanske kilder."
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "70–80 % (40 % til alfa-1-glykoprotein og 30 % til albumin)"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "3 L/kg"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Via CYP3A4 i lever til N-monodesmetyldiltiazem, via esterase til deacetyldiltiazem og CYP2D6 til O-desmetyldiltiazem. Siden blir metabolittene konjugert.",
+        "Ved terapeutisk dosering er plasmakonsentrasjonene av metabolittene henholdsvis 40 % og 10–20 % av modersubstansens konsentrasjon. Metabolittene har mindre enn halvparten av modersubstansens effekt.",
+        "Variert informasjon i ulike kilder. I felleskatalogen og Baselt står det at 70 % av modersubstans og metabolitter har utskillelse i urin.",
+        "2–4 % uendret ut i urin, 35 prosent metabolitter i urin og 65 % i feces i en frisøkkilde."
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 414,5 g/mol."
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    }
+  ],
+  "farmakogenetikk": [
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "3A4 (2D6)"
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Hypotensjon, nyreskade, bradykardi, AV-overledning forstyrrelser, hjertesvikt.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 2000 nmol/L), en felles grense for alle antihypertensivene.",
+        "Toksisitet er rapportert fra ca. 1930 nmol/L. Komatøse/fatale tilfeller er rapportert i området 4825–14 475 nmol/L; én pasient har overlevd med 10 856 nmol/L i serum.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "schulz2020",
+        "baselt2017",
+        "helsebiblioteket-diltiazem"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "240 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "42–62 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "240 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "128–187 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "240 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "156–227 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "480 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "84–123 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "480 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "256–373 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "480 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "312–455 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "120–360 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "412 (246–449) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 5."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  }
+}

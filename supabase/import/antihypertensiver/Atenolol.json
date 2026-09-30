@@ -1,0 +1,253 @@
+{
+  "stoff": "atenolol",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 75,
+      "ovre": 750,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 3000,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": null,
+          "min": 6,
+          "maks": 9,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Selektiv beta-1-adrenerg reseptorantagonist.",
+      "Hovedmekanismen er konkurrerende hemming av katekolaminer ved adrenerge betareseptorer i hjerte-karsystemet.",
+      "Ved reduksjon av hjertefrekvens og kontraktilitet, nedsettes hjertets arbeid og derved også oksygenbehovet. Beta2-reseptorer i lunger og kar påvirkes lite. Beta2-mediert bronkodilatasjon og den vasodilaterende effekt av adrenalin blokkeres ikke."
+    ],
+    "referanser": [
+      "spc-atenolol"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Hypertensjon",
+          "Angina pectoris",
+          "Sekundærprofylakse etter hjerteinfarkt",
+          "Arytmier, migreneprofylakse",
+          "Tyreotoksikose (symptomatisk behandling)"
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-atenolol"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Hypertensjon, arytmier, migreneprofylakse: 50–100 mg daglig.",
+      "Angina pectoris: 50 mg × 2 eller 100 mg × 1.",
+      "Sekundærprofylakse etter hjerteinfarkt: 100 mg × 1.",
+      "Tyreotoksikose: 200 mg/døgn fordelt på 4 eller færre enkeltdoser.",
+      "Nedsatt lever- og nyrefunksjon: Ved nedsatt nyrefunksjon kan halveringstiden øke betydelig og behov for dosereduksjon bør vurderes. Doseres som normalt ved nedsatt leverfunksjon."
+    ],
+    "referanser": [
+      "spc-atenolol"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      {
+        "punkter": [
+          "Forsterket blodtrykksfall kan oppstå ved samtidig behandling med f.eks. α-blokkere, nitrater, antipsykotika (fentiazinderivater som f.eks. klorpromazin) og antidepressiva (tricykliske, og de fleste SSRI).",
+          "Fare for uttalt bradykardi og hypotensjon ved kombinasjon med kalsiumantagonister med negativ inotrop effekt (f.eks. verapamil, diltiazem).",
+          "Samtidig bruk av ikke-steroide antiinflammatoriske midler (NSAIDs) og beta-adrenerge blokkere kan føre til en økning av blodtrykket og dårligere kontroll over blodtrykket.",
+          "Midler med β-reseptor-blokkerende egenskaper kan forsterke den blodsukkerreduserende effekten av insulin og orale antidiabetika samtidig som det kan maskere symptomer på hypoglykemi som takykardi og tremor.",
+          "Forsiktighet må utvises ved generell anestesi av pasienter som bruker betablokkere. Betablokkere reduserer risikoen for arytmier ved anestesi men kan føre til nedsettelse av den reflektoriske takykardi og øke risikoen for hypotensjon ved anestesi.",
+          "Samtidig behandling med α-stimulerende adrenergika kan gi økt risiko for blodtrykksstigning (f.eks. fenylpropanolamin og adrenalin) mens samtidig behandling med β-stimulerende adrenergika gir gjensidig redusert effekt (antidot effekt)",
+          "Samtidig bruk av klonidin, reserpin, guanetidin, metyldopa eller guanfacin med beta-reseptorblokkere kan ha en ekstra hypotensiv og hjertefrekvenssenkende effekt.",
+          "Ikke-kardioselektive β-reseptorblokkere motvirker bronkodilatoriske effekter av beta-agonistiske bronkodilatorer.",
+          "Steroider kan gi nedsatt blodtrykkssenkende effekt av β-blokkere."
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-atenolol"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "40–50 %"
+      ],
+      "referanser": [
+        "spc-atenolol"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "2–4 timer"
+      ],
+      "referanser": [
+        "spc-atenolol"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "6–9 timer."
+      ],
+      "referanser": [
+        "spc-atenolol"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Ca. 3 %"
+      ],
+      "referanser": [
+        "spc-atenolol"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "0,7 L/kg"
+      ],
+      "referanser": [
+        "spc-atenolol"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Atenolol metaboliseres i liten grad (< 10 % av tilført mengde). Hovedmetabolitten har ikke farmakologisk virkning av klinisk betydning.",
+        "Legemiddelet utskilles både via nyrene i urin (ca. 50 %) og i fæces (ca. 50 %), hovedsakelig som uforandret moderstoff."
+      ],
+      "referanser": [
+        "spc-atenolol"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 266,34 g/mol."
+      ],
+      "referanser": [
+        "spc-atenolol"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Selektiv betablokker og den eneste betablokkeren som utelukkende skilles ut uendret renalt. Betydelig økt toksisitet ved nedsatt nyrefunksjon.",
+        {
+          "punkter": [
+            "Ved overdosering av betablokkere er bradykardi, hypotensjon og AV-blokk er vanlig. Ved alvorlig forgiftning kan man utvikle behandlingsresistent sirkulasjonssvikt.",
+            "Det er stor individuell følsomhet for toksisiteten til betablokkere. Relativt lave doser kan gi alvorlig forgiftning hos risikopasienter (hjertesyke), mens friske voksne og barn ofte tolererer større doser godt."
+          ]
+        },
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 3000 nmol/L), en felles grense for alle antihypertensivene.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "helsebiblioteket-betablokkere"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "50 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "76–98 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "299–384 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "400–514 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "100 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "153–196 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "100 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "597–768 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "100 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "800–1029 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "25–150 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "1303 (366–2055) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 3."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-atenolol": {
+      "tittel": "Atenolol «Viatris»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/atenolol-viatris-viatris-546528"
+    }
+  }
+}

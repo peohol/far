@@ -123,7 +123,7 @@ describe('datasettet', () => {
   it('avviser et stoff som har en side for en kode, og en fil med både kode og side', () => {
     const med = (fil: Partial<Importfil>): Importfil => ({ sider: [1], tdm: [{ tittel: 'Tolkning', tekst: ['a'] }], ...fil })
     expect(() => byggImportplan([med({ side: 'Amitriptylin' })], {}, katalog, TDM_KILDE)).toThrow(/har en side for en analyttkode/)
-    expect(() => byggImportplan([med({ side: 'Teststoff', kode: 'MOR' })], {}, katalog, TDM_KILDE)).toThrow(/«kode» eller «side», ikke begge/)
+    expect(() => byggImportplan([med({ side: 'Teststoff', kode: 'MOR' })], {}, katalog, TDM_KILDE)).toThrow(/bare én av «kode», «side» og «stoff»/)
     expect(() => byggImportplan([med({ side: ' Teststoff' })], {}, katalog, TDM_KILDE)).toThrow(/«side» må være navnet/)
     expect(() => byggImportplan([med({ side: 'Teststoff' }), med({ side: 'teststoff' })], {}, katalog, TDM_KILDE)).toThrow(/siden står i flere filer/)
   })

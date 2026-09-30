@@ -1,0 +1,281 @@
+{
+  "stoff": "metoprolol",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 10,
+      "ovre": 500,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 2000,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": 3.5,
+          "min": null,
+          "maks": null,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Selektiv beta-1-adrenerg reseptorantagonist.",
+      "Metoprolol reduserer eller hemmer katekolaminenes (frigjøres ved fysisk og psykisk stress) agonistiske effekt på hjertet.",
+      "Dette fører til at den vanlige økningen i hjertefrekvens, hjertets arbeidsmengde og kontraktilitet, og blodtrykk, som er en følge av akutt økning i katekolaminer, blir redusert av metoprolol."
+    ],
+    "referanser": [
+      "spc-metoprolol"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Hypertensjon",
+          "Angina pectoris",
+          "Hjertesvikt",
+          "Sekundærprofylakse etter hjerteinfarkt",
+          "Arytmier",
+          "Migreneprofylakse",
+          "Hypertyreose (symptomatisk behandling)",
+          "For barn og ungdom (6–18 år) brukes legemiddelet ved behandling av hypertensjon"
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-metoprolol"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Hypertensjon: Vanlig dosering er 50–100 mg × 1. Kan økes opp til 200 mg/døgn.",
+      "Angina pectoris/arytmier/migreneprofylakse: Vanlig dosering er 100–200 mg/døgn.",
+      "Hjertesvikt: I titreringsfase øker man styrke ukentlig til tolerert vedlikeholdsdose, se Felleskatalogen. Maks anbefalt dose er 200 mg × 1. I praksis tolerer ikke alltid eldre pasienter så høy dose, må dosejusteres eller seponeres.",
+      "Sekundærprofylakse etter hjerteinfarkt: 200 mg × 1, men i praksis bruker pasienter langt lavere vedlikeholdsdoser, 50–60 mg (BETAMI-studien og Bruun et al. 2025).",
+      "Hypertyreose: 150–200 mg/døgn. Ved behov kan dosen økes.",
+      "Nedsatt lever- og nyrefunksjon: Ved alvorlig nedsatt leverfunksjon kan dosereduksjon være nødvendig. Doseres som normalt ved nedsatt nyrefunksjon."
+    ],
+    "referanser": [
+      "spc-metoprolol",
+      "bruun2025"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      {
+        "punkter": [
+          "Forsterket blodtrykksfall kan oppstå ved samtidig behandling med f.eks. α-blokkere, nitrater, antipsykotika (fentiazinderivater som f.eks. klorpromazin) og antidepressiva (tricykliske, og de fleste SSRI).",
+          "Fare for uttalt bradykardi og hypotensjon ved kombinasjon med kalsiumantagonister med negativ inotrop effekt (f.eks. verapamil, diltiazem).",
+          "Samtidig bruk av ikke-steroide antiinflammatoriske midler (NSAIDs) og beta-adrenerge blokkere kan føre til en økning av blodtrykket og dårligere kontroll over blodtrykket.",
+          "Midler med β-reseptor-blokkerende egenskaper kan forsterke den blodsukkerreduserende effekten av insulin og orale antidiabetika samtidig som det kan maskere symptomer på hypoglykemi som takykardi og tremor.",
+          "Forsiktighet må utvises ved generell anestesi av pasienter som bruker betablokkere. Betablokkere reduserer risikoen for arytmier ved anestesi men kan føre til nedsettelse av den reflektoriske takykardi og øke risikoen for hypotensjon ved anestesi.",
+          "Samtidig behandling med α-stimulerende adrenergika kan gi økt risiko for blodtrykksstigning (f.eks. fenylpropanolamin og adrenalin) mens samtidig behandling med β-stimulerende adrenergika gir gjensidig redusert effekt (antidot effekt)",
+          "Samtidig bruk av klonidin, reserpin, guanetidin, metyldopa eller guanfacin med beta-reseptorblokkere kan ha en ekstra hypotensiv og hjertefrekvenssenkende effekt.",
+          "Ikke-kardioselektive β-reseptorblokkere motvirker bronkodilatoriske effekter av beta-agonistiske bronkodilatorer.",
+          "Steroider kan gi nedsatt blodtrykkssenkende effekt av β-blokkere."
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-metoprolol"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "30–40 % (depot)"
+      ],
+      "referanser": [
+        "spc-metoprolol"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "10 timer (depot)"
+      ],
+      "referanser": [
+        "spc-metoprolol"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Ca. 3,5 timer"
+      ],
+      "referanser": [
+        "spc-metoprolol"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Ca. 5–10 %"
+      ],
+      "referanser": [
+        "spc-metoprolol"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "5,6 L/kg"
+      ],
+      "referanser": [
+        "spc-metoprolol"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Metoprolol metaboliseres i lever hovedsakelig via CYP2D6 til tre inaktive hovedmetabolitter. Ingen av metabolittene har farmakologisk virkning av klinisk betydning. Legemidler som hemmer eller induserer CYP2D6 kan gi henholdsvis økt eller redusert konsentrasjon av metoprolol.",
+        "Legemiddelet utskilles via nyrene i urin ( >95 %) som metabolitter og moderstoff. Rundt 5 % utskilles som uendret moderstoff i urin, kan øke ved nedsatt CYP2D6-aktivitet."
+      ],
+      "referanser": [
+        "spc-metoprolol"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 267,36 g/mol."
+      ],
+      "referanser": [
+        "spc-metoprolol"
+      ]
+    }
+  ],
+  "farmakogenetikk": [
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "2D6"
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Selektiv betablokker og ikke av de mest toksiske.",
+        {
+          "punkter": [
+            "Ved overdosering av betablokkere er bradykardi, hypotensjon og AV-blokk er vanlig. Ved alvorlig forgiftning kan man utvikle behandlingsresistent sirkulasjonssvikt.",
+            "Det er stor individuell følsomhet for toksisiteten til betablokkere. Relativt lave doser kan gi alvorlig forgiftning hos risikopasienter (hjertesyke), mens friske voksne og barn ofte tolererer større doser godt."
+          ]
+        },
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 2000 nmol/L), en felles grense for alle antihypertensivene.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "helsebiblioteket-betablokkere"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "50 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "1,6–2,4 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "17–26 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "39–59 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "200 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "6,5–9,7 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "200 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "70–105 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "200 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "157–235 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "25–200 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "106 (12–984) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 84."
+      },
+      {
+        "dose": "25–200 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "59 (13–853) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 11."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "bruun2025": {
+      "tittel": "Effect of metoprolol exposure following myocardial infarction on future cardiovascular events: a Mendelian randomization study",
+      "forfattere": "Bruun LD et al.",
+      "aar": "2025",
+      "lenke": "https://doi.org/10.1007/s00228-025-03806-w"
+    },
+    "spc-metoprolol": {
+      "tittel": "Selo-Zok «Recordati»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/selo-zok-recordati-563801"
+    }
+  }
+}

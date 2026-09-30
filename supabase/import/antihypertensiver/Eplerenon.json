@@ -1,0 +1,252 @@
+{
+  "stoff": "eplerenon",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 3.5,
+      "ovre": 350,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 1400,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": null,
+          "min": 3,
+          "maks": 6,
+          "enhet": "timer"
+        }
+      ]
+    },
+    "steady_state": {
+      "former": [
+        {
+          "form": "",
+          "typisk": 2,
+          "min": null,
+          "maks": null,
+          "enhet": "dager"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Aldosteronantagonist, som resulterer i mindre reabsorpsjon av natrium og væske, og mindre kaliumutskillelse, altså mer kalium tilbake til blod. Den viktigste effekten er den beskyttende effekten mot remodeleringen i hjerte, ved å blokkere aldosteronens langtidsvirkning i hjertet som har vist seg å være skadelig. Eplerenon har derfor som betablokkere og ACE-hemmere en beskyttende effekt mot langtidsskade av aktivering av RAAS-systemet i hjertet.",
+      "Full antihypertensiv effekt innen fire uker."
+    ],
+    "referanser": [
+      "spc-eplerenon"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Tilleggsbehandling til standardbehandling etter hjerteinfarkt med klinisk hjertesvikt ved stabil venstre ventrikkeldysfunksjon (LVEF ≤ 40 %)",
+          "Tilleggsbehandling ved hjertesvikt"
+        ]
+      },
+      "Se preparatomtalen for detaljer."
+    ],
+    "referanser": [
+      "spc-eplerenon"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Anbefalt dosering etter gjennomgått hjerteinfarkt eller ved hjertesvikt er 50 mg × 1 daglig, med justering ut fra serumkalium etter tabell i preparatomtalen. Maks. dosering 50 mg daglig.",
+      "Nedsatt lever- og nyrefunksjon: Dosen reduseres ved moderat nyresvikt og titreres etter serumkaliumnivå. Ved nedsatt leverfunksjon og samtidig behandling med milde til moderate CYP3A4-hemmere, kreves dosejustering. Eplerenon er kontraindisert ved alvorlig nyre- og leversvikt."
+    ],
+    "referanser": [
+      "spc-eplerenon"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Dosejustering ved samtidig behandling med milde til moderate CYP3A4-hemmere. Kombinasjon med sterke CYP3A4-induktorer frarådes. Forsiktighet ved bruk av andre legemidler som kan gi hyperkalemi, for eksempel ACE-hemmere, angiotensin reseptor blokkere, cyklosporin og takrolimus. Når alfa-1-blokkere kombineres med eplerenon, kan det oppstå en økt hypotensiv effekt og/eller postural hypotensjon. Litium bør unngås, ev. følges med s-kons. Se preparatomtalen for flere eksempler."
+    ],
+    "referanser": [
+      "spc-eplerenon"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "69 %"
+      ],
+      "referanser": [
+        "spc-eplerenon"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "1,5–2 t."
+      ],
+      "referanser": [
+        "spc-eplerenon"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Ca. 3–6 timer."
+      ],
+      "referanser": [
+        "spc-eplerenon"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "Steady state nås innen 2 dager."
+      ],
+      "referanser": [
+        "spc-eplerenon"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Ca. 50 % (primært til α1-syreglykoprotein)"
+      ],
+      "referanser": [
+        "spc-eplerenon"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "0,6–1,3 L/kg."
+      ],
+      "referanser": [
+        "spc-eplerenon"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Eplerenon metaboliseres hovedsakelig i leveren via CYP3A4.",
+        "Ca. 32 % av dosen utskilles i feces, og ca. 67 % i urin. < 5 % utskilles uendret."
+      ],
+      "referanser": [
+        "spc-eplerenon"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 414,5 g/mol.",
+        "Cmaks og AUC er proporsjonale for doser fra 10 mg til 100 mg."
+      ],
+      "referanser": [
+        "spc-eplerenon"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Ingen rapporterte tilfeller av overdosering. Mest sannsynlige tegn på overdosering antas å være hypotensjon eller hyperkalemi. Kan ikke fjernes ved hemodialyse, men har vist seg å bindes godt til medisinsk kull.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 1400 nmol/L), en felles grense for alle antihypertensivene."
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "25 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "3–11 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "25 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "55–171 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "25 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "158–490 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "7–21 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "110–341 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "316–980 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "25–50 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "2468 (2455–2480) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 2."
+      },
+      {
+        "dose": "25–50 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "367 (131–604) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 2."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-eplerenon": {
+      "tittel": "Inspra «Viatris»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/inspra-viatris-560083"
+    }
+  }
+}

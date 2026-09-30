@@ -1,0 +1,264 @@
+{
+  "stoff": "valsartan",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 300,
+      "ovre": 4000,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 16000,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": 6,
+          "min": null,
+          "maks": null,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Valsartan blokkerer reseptoren (angiotensin 2- reseptor type 1) til angiotensin 2. Angiotensin 2 er en kraftig vasokonstriktor. Ved å blokkere denne reseptoren oppnår man vasodilatasjon og påfølgende fall i blodtrykk.",
+      "Reseptorer for angiotensin 2 finnes også i:",
+      {
+        "punkter": [
+          "bakre hypofyselapp: blokkering via valsartan medfører redusert frigjøring av antidiuretisk hormon (ADH).",
+          "binyrebarken: blokkering via valsartan medfører redusert frigjøring av aldosteron.",
+          "nyren: blokkering via valsartan medfører redusert gjenopptak av vann og natrium."
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-valsartan"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Hypertensjon",
+          "Nylig gjennomgått hjerteinfarkt",
+          "Hjertesvikt"
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-valsartan"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Hypertensjon: 80 mg × 1. Ved behov kan dosen økes opp til maks anbefalt dose på 320 mg × 1.",
+      "Nylig gjennomgått hjerteinfarkt, hjertesvikt: I titreringsfase øker man styrke ukentlig til tolerert vedlikeholdsdose, se Felleskatalogen. Maks anbefalt dose er 160 mg × 2.",
+      "Nedsatt lever- og nyrefunksjon: Ved alvorlig nedsatt leverfunksjon er valsartan kontraindisert. Ved mild til moderat nedsatt leverfunksjon uten kolestase bør det brukes med forsiktighet, dosen bør ikke overstige 80 mg. Dosejustering er ikke nødvendig hos pasienter med nedsatt nyrefunksjon (kreatininclearance > 10 ml/min)."
+    ],
+    "referanser": [
+      "spc-valsartan"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      {
+        "punkter": [
+          "Andre antihypertensiva kan øke valsartans hypotensive effekt. Samtidig bruk av andre substanser som kan indusere hypotensjon som en bivirkning (som trisykliske antidepressiva, antipsykotika, baklofen og amifostin), kan øke risikoen for hypotensjon.",
+          "Data fra kliniske studier har vist at dobbel blokade av renin-angiotensin-aldosteronsystemet (RAAS) ved kombinasjon av ACE-hemmere, angiotensin-II reseptorantagonister eller aliskiren er forbundet med høyere frekvens av bivirkninger som hypotensjon, hyperkalemi og nedsatt nyrefunksjon (inkludert akutt nyresvikt), sammenlignet med behandling med ett enkelt legemiddel som påvirker RAAS.",
+          "Den antihypertensive effekten kan svekkes når angiotensin II-antagonister gis sammen med NSAIDS (dvs. selektive COX-2-hemmere, acetylsalisylsyre i antiinflammatoriske doser og ikke-selektive NSAIDS).",
+          "Som med andre legemidler som blokkerer angiotensin II eller dets effekter, kan samtidig bruk av andre legemidler som holder tilbake kalium (f.eks. kaliumsparende diuretika: amilorid, triamteren, spironolakton) eller kan øke kaliumnivået (f.eks. heparin, legemidler som inneholder trimetoprim), kaliumtilskudd eller kaliumholdige salterstatninger, gi økninger i serumkalium. Samtidig behandling anbefales ikke."
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-valsartan"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "23 %"
+      ],
+      "referanser": [
+        "spc-valsartan"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "2–4 timer (oralt inntak)"
+      ],
+      "referanser": [
+        "spc-valsartan"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Ca. 6 timer"
+      ],
+      "referanser": [
+        "spc-valsartan"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Ca. 94–97 %"
+      ],
+      "referanser": [
+        "spc-valsartan"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "1,48 L/kg"
+      ],
+      "referanser": [
+        "spc-valsartan"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Valsartan metaboliseres i liten grad muligens med involvering av cytokrom (CYP2C9) hvor omtrent 20 % av dosen omdannes til inaktive metabolitter.",
+        "Utskilles primært i feces (ca. 83 % av dosen) og urin (ca. 13 % av dosen), hovedsakelig som uforandret legemiddel."
+      ],
+      "referanser": [
+        "spc-valsartan"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 435,5 g/mol."
+      ],
+      "referanser": [
+        "spc-valsartan"
+      ]
+    }
+  ],
+  "farmakogenetikk": [
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "2C9 (liten andel)"
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "For gruppen angiotensin II-reseptorantagonister:",
+        "Relativt lav toksisitet. Få rapporter om alvorlige forgiftninger grunnet angiotensin II-reseptorantagonister alene. Hypotensjon er hovedproblemet ved forgiftning. Personer med hjertesykdom (ofte eldre) tolererer mindre enn friske personer.",
+        "Kombinasjon med andre legemidler som påvirker sirkulasjonen kan potensere forgiftningen.",
+        "Klinikk for gruppen: Hodepine, svimmelhet og somnolens. Hypotensjon og takykardi, ev. bradykardi. Hyperkalemi, ev. nyre- og leverpåvirkning.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 16 000 nmol/L), en felles grense for alle antihypertensivene.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "helsebiblioteket-angiotensin-2-antagonister"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "80 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "263–381 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "80 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "636–923 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "80 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "723–1048 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "320 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "1051–1524 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "320 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "2554–3691 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "320 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "2891–4191 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "80–320 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "8013 (50–28 605) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 63."
+      },
+      {
+        "dose": "80–320 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "1255 (86–3989) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 18."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-valsartan": {
+      "tittel": "Diovan «Novartis»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/diovan-novartis-548015"
+    }
+  }
+}

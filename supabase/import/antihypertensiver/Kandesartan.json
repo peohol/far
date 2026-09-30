@@ -1,0 +1,257 @@
+{
+  "stoff": "kandesartan",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 15,
+      "ovre": 200,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 800,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": 9,
+          "min": null,
+          "maks": null,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Kandesartan blokkerer reseptoren (angiotensin 2- reseptor type 1) til angiotensin 2. Angiotensin 2 er en kraftig vasokonstriktor. Ved å blokkere denne reseptoren oppnår man vasodilatasjon og påfølgende fall i blodtrykk. Antagonismen av angiotensin II-reseptorer resulterer i en doserelatert økning i plasma reninnivået, av angiotensin I- og angiotensin II-nivået og en reduksjon av plasma aldosteron-konsentrasjonen.",
+      "Reseptorer for angiotensin 2 finnes også i:",
+      {
+        "punkter": [
+          "bakre hypofyselapp: blokkering via kandesartan medfører redusert frigjøring av antidiuretisk hormon (ADH).",
+          "binyrebarken: blokkering via kandesartan medfører redusert frigjøring av aldosteron.",
+          "nyren: blokkering via kandesartan medfører redusert gjenopptak av vann og natrium."
+        ]
+      },
+      "Forventet blodtrykkseffekt av monopreparat på systolisk og diastolisk kontorblodtrykk som for ACEI, se Wu et al. (2005)."
+    ],
+    "referanser": [
+      "felleskatalogen",
+      "wu2005"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Indikasjon for bruk av kandesartan (usammensatt preparat) hos voksne:",
+      {
+        "punkter": [
+          "behandling av primær hypertensjon",
+          "behandling av voksne med hjertesvikt og nedsatt systolisk venstre ventrikkelfunksjon (venstre ventrikkels ejeksjonsfraksjon ≤ 40 %) når ACE-hemmer ikke tolereres",
+          "som tilleggsbehandling til ACE-hemmere hos pasienter med symptomatisk hjertesvikt til tross for optimal behandling når mineralkortikoidreseptorantagonister ikke tolereres"
+        ]
+      }
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Hypertensjon: Vanlig startdose 8 mg én gang daglig, som kan økes til 16 mg, ev. til maks. 32 mg daglig.",
+      "Nedsatt nyrefunksjon: Ved hypertensjon er startdosen 4 mg, også for pasienter på hemodialyse. Dosen bør titreres etter respons. Begrenset erfaring ved svært alvorlig nedsatt nyrefunksjon eller terminal nyresvikt (ClCR < 15 ml/minutt). Ved hjertesvikt er det ikke nødvendig med spesiell startdose ved nedsatt nyrefunksjon.",
+      "Nedsatt leverfunksjon: Kontraindisert ved alvorlig nedsatt leverfunksjon og/eller kolestase."
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Samtidig bruk av ACE-hemmere, angiotensin-II reseptorantagonister eller aliskiren er vist å gi økt risiko for hypotensjon, hyperkalemi og nedsatt nyrefunksjon (inkludert akutt nyresvikt). Dobbel blokade av RAAS ved kombinasjon av ACE-hemmere, angiotensin-II reseptorantagonister eller aliskiren er derfor ikke anbefalt.",
+      "Som med ACE-hemmere kan samtidig bruk av angiotensin-II antagonister og NSAIDs føre til økt risiko for forverring av nyrefunksjonen, eventuelt akutt nyresvikt, og økning av serumkalium, spesielt hos pasienter som allerede har dårlig nyrefunksjon. Kombinasjonen bør gis med forsiktighet, spesielt hos eldre.",
+      "Til hypertensive pasienter med nedsatt nyrefunksjon, anbefales regelmessig overvåkning av serumkalium- og kreatininnivåer.",
+      "OBS! Økt kalium sammen med kaliumtilskudd.",
+      "Kombinasjon av ARB med ACEH og renin hemmer gir mer effekt og bivirkninger. ACE-hemmere og angiotensin-II reseptorantagonister bør derfor ikke brukes samtidig hos pasienter med diabetisk nefropati."
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "Lav biotilgjengelighet (14 %)"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "3–4 timer (etter tablettinntak)"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Ca. 9 timer"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        ">99 %"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "0,13 L/kg"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Kandesartancileksetil spaltes ved hydrolyse til kandesartan i tarmveggen.",
+        "Kandesartan omdannes bare i liten grad ved CYP2C9 i lever til inaktiv metabolitt.",
+        "Mesteparten utskilles uforandret gjennom urin og galle: etter en peroral dose av ^{14}C-merket kandesartancileksetil blir ca. 26 % utskilt i urin som kandesartan og 7 % som inaktiv metabolitt, mens ca. 56 % gjenfinnes i feces som kandesartan og 10 % som inaktiv metabolitt"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 610,7 g/mol (kandesartancileksetil, prodrug) og 440,5 g/mol (kandesartan)."
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    }
+  ],
+  "farmakogenetikk": [
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "2C9 (liten andel)"
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Hodepine og svimmelhet.",
+        "Hypotensjon og takykardi, ev. bradykardi. Hyperkalemi, ev. nyre- og leverpåvirkning.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 800 nmol/L), en felles grense for alle antihypertensivene.",
+        "Schulz et al. oppgir toksisk konsentrasjon fra 0,54 mg/L (1226 nmol/L).",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "schulz2020",
+        "helsebiblioteket-angiotensin-2-antagonister"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "8 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "20–31 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "8 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "48–72 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "8 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "54–81 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "32 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "81–123 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "32 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "191–289 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "32 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "215–325 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "4–32 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "454 (39–1733) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 125."
+      },
+      {
+        "dose": "4–32 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "84 (14–490) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 17."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  }
+}

@@ -1,0 +1,252 @@
+{
+  "stoff": "verapamil",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 40,
+      "ovre": 400,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 1600,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": null,
+          "min": 3,
+          "maks": 7,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Kalsiumantagonist, fenylalkylaminderivat. Hemmer selektivt langsomme spenningstyrte L-type kalsiumkanaler i sarcolemma i både hjertemuskelceller og glatte muskelceller. Dette fører også til mindre frigivelse av kalsiumioner intracellulært. Effekten er vasodilatasjon (redusert afterload), nedsatt perifer motstand og reduksjon i blodtrykk. Vasodilatasjon skjer også i kransarteriene.",
+      "Redusert smerte ved angina pectoris fordi verapamil reduserer hjertets pumpekraft som betyr redusert oksygenbehov og samtidig øker blodforsyningen til hjertemuskelen pga. vasodilatasjon.",
+      "Antiarytmisk effekt fordi verapamil spesifikt påvirker hjertes ledningssystem: forsinker ledningstid i AV-knuten og setter ned frekvens i sinusknuten.",
+      "Blodtrykksreduksjon ved monoterapi, sittende systolisk/diastolisk blodtrykk: 14,4 ± 2,1 / 12,1 ± 2,8 mmHg (gjennomsnitt ± SD), ifølge metastudien fra Wu et al. (2005)."
+    ],
+    "referanser": [
+      "felleskatalogen",
+      "wu2005"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Hypertensjon",
+          "Angina pectoris",
+          "Paroksysmal supraventrikulær takykardi",
+          "Atrieflimmer og -flutter hvor en rask reduksjon av ventrikkelfrekvensen er ønskelig"
+        ]
+      }
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Hypertensjon: Depot 120–240 mg.",
+      "Maks. dose er 480 mg.",
+      "Nedsatt leverfunksjon: Startdosen bør være lav, og dosen justeres med forsiktighet.",
+      "Nedsatt nyrefunksjon: Bør brukes med forsiktighet og med tett oppfølging."
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Verapamil er vist å være en hemmer av CYP3A4-enzymer og P-glykoprotein (P-gp).",
+      "Det er rapportert klinisk signifikante interaksjoner med andre CYP3A4-hemmere som gir økt plasmanivå av verapamil (som f.eks. klotrimazol, ketokonazol, cimetidin, proteaseinhibitorer: ritonavir, indinavir, makrolider: erytromycin, klaritromycin), mens CYP3A4-induserende midler har gitt redusert plasmanivå av verapamil (som f.eks. fenytoin, rifampicin, fenobarbital, karbamazepin). Legemidler som metaboliseres hovedsakelig over CYP3A4 (som f.eks. statiner, midazolam, ciclosporin, teofyllin, prazosin og antiarytmika: amiodaron, kinidin) vil ha økt plasmanivå når de brukes samtidig med verapamil. Pasienter bør derfor overvåkes for legemiddelinteraksjoner.",
+      "Samtidig administrering av verapamil og et legemiddel som metaboliseres hovedsakelig av CYP3A4 eller som er et P-gp-substrat, kan være assosiert med økning i legemiddelkonsentrasjoner som kan øke eller forlenge både terapeutiske effekter og bivirkninger av legemidlet som tas samtidig. F.eks verapamil hemmer P-glykoprotein og er rapportert å gi økt nivå av dabigatran.",
+      "Sammen med litium økt nevrotoksisitet."
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "33 %, førstepassasje effekt i lever"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "Depottabletter: 4–5 timer (Micromedex: 7–9 timer).",
+        "Tabletter: 1–2 timer."
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "3–7 timer for både tabletter og depottabletter i Felleskatalogen; 12–17 timer for depottabletter i andre kilder."
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "90 %"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "1,8–6,8 liter/kg."
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Omfattende metabolisme via CYP3A4, CYP1A2, CYP2C8, CYP2C9 og CYP2C18, bl.a. til norverapamil med noe farmakologisk aktivitet.",
+        "Verapamil er vist å være en moderat hemmer av CYP3A4-enzymer og P-glykoprotein (P-gp).",
+        "3–4 % uendret ut i urin og ca. 70 % metabolitter ut i urin"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 454,6 g/mol."
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    }
+  ],
+  "farmakogenetikk": [
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "3A4 (1A2, 2C8, 2C19, 2C18)"
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Lett forgiftning: kvalme, svimmelhet, hodepine, hudrødme, hypotermi, lett somnolens. Ved alvorlige forgiftninger: hypotensjon med kompensatorisk takykardi, senere bradykardi inkludert høygradig AV-blokk og sinusarrest, hyperglykemi, sløvhet og metabolsk acidose. Akutt lungesviktsyndrom (ADRS). Forstoppelse.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 1600 nmol/L), en felles grense for alle antihypertensivene.",
+        "Toksisitet er rapportert fra 2200 nmol/L. Fatale/komatøse tilfeller er rapportert i området 5000–8579 nmol/L.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "schulz2020",
+        "baselt2017",
+        "helsebiblioteket-verapamil"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "120 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "20–47 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "120 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "40–94 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "120 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "44–102 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "480 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "81–188 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "480 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "161–377 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "480 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "175–407 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "120 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "205 nmol/L",
+        "merknad": "Målt i IDA-studien, n = 1."
+      },
+      {
+        "dose": "120 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "60 nmol/L",
+        "merknad": "Målt i IDA-studien, n = 1."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  }
+}

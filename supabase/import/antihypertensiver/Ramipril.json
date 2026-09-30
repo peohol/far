@@ -1,0 +1,260 @@
+{
+  "stoff": "ramipril",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 4,
+      "ovre": 60,
+      "enhet": "nmol/L",
+      "forbehold": "Gjelder ramiprilat, som laboratoriet måler.",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 240,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "stoff": "Ramiprilat",
+          "form": "",
+          "typisk": null,
+          "min": 13,
+          "maks": 17,
+          "enhet": "timer"
+        }
+      ]
+    },
+    "steady_state": {
+      "former": [
+        {
+          "form": "",
+          "typisk": 4,
+          "min": null,
+          "maks": null,
+          "enhet": "dager"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "ACE-hemmer (angiotensinkonverterende enzymhemmer). ACE katalyserer omdannelse av angiotensin I til den aktive vasokonstriktoren angiotensin II, samt nedbrytning av den aktive vasodilatatoren bradykinin. Da angiotensin II også stimulerer frisettingen av aldosteron, fører ramiprilat til redusert aldosteronsekresjon. Ramipril gir en markant redusert perifer arteriell motstand, og økt bradykinin."
+    ],
+    "referanser": [
+      "spc-ramipril"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Behandling av hypertensjon",
+          "Kardiovaskulær profylakse",
+          "Behandling av nyresykdom",
+          "Behandling av symptomatisk hjertesvikt",
+          "Sekundærprofylakse etter akutt hjerteinfarkt"
+        ]
+      },
+      "Se preparatomtalen for detaljer."
+    ],
+    "referanser": [
+      "spc-ramipril"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Individuell dosering ved antihypertensiv behandling, må ikke overstige 10 mg daglig.",
+      "Nedsatt lever- og nyrefunksjon: Dosen må reduseres ved redusert lever- og nyrefunksjon."
+    ],
+    "referanser": [
+      "spc-ramipril"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Samtidig bruk av ramipril og legemidler som inneholder aliskiren er kontraindisert hos pasienter med diabetes mellitus eller nedsatt nyrefunksjon (GFR < 60 ml/min/1,73 m^{2}). Samtidig bruk med sakubitril/valsartan-behandling er også kontraindisert. Se preparatomtalen for flere relevante interaksjoner."
+    ],
+    "referanser": [
+      "spc-ramipril"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "45 %."
+      ],
+      "referanser": [
+        "spc-ramipril"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "Innen 1 t for ramipril, 2–4 t for ramiprilat."
+      ],
+      "referanser": [
+        "spc-ramipril"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Etter gjentatte daglige doser er den effektive halveringstiden for ramiprilat 13–17 timer ved dosering 5–10 mg, og lenger (35–60 timer) ved dosering 1–2 mg. Forlenges ved redusert nyrefunksjon."
+      ],
+      "referanser": [
+        "spc-ramipril"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "Steady state nås etter ca. 4 døgn."
+      ],
+      "referanser": [
+        "spc-ramipril"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Ca. 73 % ramipril og ca. 56 % ramiprilat."
+      ],
+      "referanser": [
+        "spc-ramipril"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "5–9 L/kg (ramiprilat)."
+      ],
+      "referanser": [
+        "spc-ramipril"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Ramipril er et prodrug som omdannes nesten fullstendig i lever. Ramiprilat er den eneste aktive metabolitten (mer potent enn moderstoff, 6 ganger modersubstansen). Ved nedsatt leverfunksjon kan dannelsen av aktivt ramiprilat bli forsinket og plasmakonsentrasjonene av ramipril bli høyere. Det er ramiprilat som måles i serum ved laboratoriet.",
+        "Via nyrer (ca. 60 %), resten i feces."
+      ],
+      "referanser": [
+        "spc-ramipril"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 388,5 g/mol (ramiprilat)."
+      ],
+      "referanser": [
+        "spc-ramipril"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner.",
+        "Laboratoriet måler ramiprilat, den aktive metabolitten av ramipril, og området gjelder ramiprilat."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "ACE-hemmere har relativt lav akutt toksisitet, men massive overdoser kan gi behandlingstrengende hypotensjon med ledsagende sentralnervøse effekter. Bradykardi, hyperkalemi og nyresvikt er beskrevet. Få rapporter om dødsfall. Alvorlighetsgraden ved overdoser er mer avhengig av pasientens kardiovaskulære status og alder enn av inntatt mengde. Eldre med uttalt hjertesvikt er særlig utsatt.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 240 nmol/L), en felles grense for alle antihypertensivene.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "helsebiblioteket-ace-hemmere"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "1,25 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "4–8 nmol/L",
+        "merknad": "Ramiprilat. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "1,25 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "8–14 nmol/L",
+        "merknad": "Ramiprilat. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "1,25 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "8–15 nmol/L",
+        "merknad": "Ramiprilat. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "10 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "17–31 nmol/L",
+        "merknad": "Ramiprilat. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "10 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "31–55 nmol/L",
+        "merknad": "Ramiprilat. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "10 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "33–59 nmol/L",
+        "merknad": "Ramiprilat. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "1,25–10 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "68 (4–303) nmol/L",
+        "merknad": "Ramiprilat. Målt i IDA-studien, median (min–maks), n = 12."
+      },
+      {
+        "dose": "1,25–10 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "11 (9–15) nmol/L",
+        "merknad": "Ramiprilat. Målt i IDA-studien, median (min–maks), n = 3."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-ramipril": {
+      "tittel": "Ramipril HEXAL «HEXAL»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/ramipril-hexal-hexal-563204"
+    }
+  }
+}

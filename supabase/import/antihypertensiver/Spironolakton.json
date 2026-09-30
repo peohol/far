@@ -1,0 +1,254 @@
+{
+  "stoff": "spironolakton",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 15,
+      "ovre": 300,
+      "enhet": "nmol/L",
+      "forbehold": "Gjelder kanrenon, som laboratoriet måler.",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 1200,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "stoff": "Kanrenon",
+          "form": "",
+          "typisk": null,
+          "min": 10,
+          "maks": 35,
+          "enhet": "timer"
+        }
+      ]
+    },
+    "steady_state": {
+      "former": [
+        {
+          "form": "",
+          "typisk": null,
+          "min": 3,
+          "maks": 4,
+          "enhet": "dager"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Aldosteronantagonist, som resulterer i mindre reabsorpsjon av natrium og væske og mindre kaliumutskillelse, altså mer kalium tilbake til blod. Den viktigste effekten er den beskyttende effekten mot remodeleringen i hjerte, ved å blokkere aldosteronens langtidsvirkning i hjertet som har vist seg å være skadelig. Spironolakton har derfor som betablokkere og ACE-hemmere beskyttende effekt mot langtidsskade av aktivering av RAAS-systemet i hjertet. Spironolakton er mindre selektiv enn eplerenon, så kan også gi en viss effekt på kjønnshormonreseptorene med andre bivirkninger som følger av det."
+    ],
+    "referanser": [
+      "spc-spironolakton"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Ødemtilstander",
+          "Essensiell hypertensjon, hvor annen antihypertensiv behandling ikke fører frem",
+          "Tilleggsbehandling til standardbehandling ved kronisk hjertesvikt"
+        ]
+      },
+      "Se preparatomtalen for detaljer."
+    ],
+    "referanser": [
+      "spc-spironolakton"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Anvendes ofte som tillegg til andre antihypertensiva. Det oppnås ikke økende blodtrykkseffekt over 200 mg daglig (unntak ved primær aldosteronisme, hvor dagsdoser opptil 400 mg kan være indisert). Dosen kan tas én eller to ganger i døgnet.",
+      "Nedsatt lever- og nyrefunksjon: Spironolakton brukes med forsiktighet hos hypertensive barn med lett nedsatt nyrefunksjon (pga. risiko for hyperkalemi), og er kontraindisert hos barn med moderat til alvorlig nedsatt nyrefunksjon, og hos voksne med kronisk eller akutt nyreinsuffisiens."
+    ],
+    "referanser": [
+      "spc-spironolakton"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Samtidig bruk av andre legemidler som er kjent for å forårsake hyperkalemi, kan føre til alvorlig hyperkalemi. Spironolakton øker halveringstiden av digoksin og kan også interferere med prøver for plasma-digoksin-konsentrasjon."
+    ],
+    "referanser": [
+      "spc-spironolakton"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "60–100 %."
+      ],
+      "referanser": [
+        "spc-spironolakton"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "1–3 t for spironolakton, 2–4 t for kanrenon."
+      ],
+      "referanser": [
+        "spc-spironolakton"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "10–35 t (kanrenon)."
+      ],
+      "referanser": [
+        "spc-spironolakton"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "Steady state nås etter 3–4 dager. Ved gjentatt dosering kan kanrenon akkumuleres."
+      ],
+      "referanser": [
+        "spc-spironolakton"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Over 90 %."
+      ],
+      "referanser": [
+        "spc-spironolakton"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "0,05 L/kg (spironolakton)."
+      ],
+      "referanser": [
+        "spc-spironolakton"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Ca. 80 % av spironolakton omdannes til den aktive metabolitten kanrenon. Kanrenon er den som måles i serum ved laboratoriet.",
+        "Moderstoff, kanrenon og andre metabolitter utskilles i urin (ca. 50 %) og i feces."
+      ],
+      "referanser": [
+        "spc-spironolakton"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 340,5 g/mol (kanrenon)."
+      ],
+      "referanser": [
+        "spc-spironolakton"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner.",
+        "Laboratoriet måler kanrenon, den aktive metabolitten av spironolakton, og området gjelder kanrenon."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Sedasjon, mental konfusjon, hudreaksjoner, kvalme, oppkast eller diaré. Hyperkalemi manifesterer seg ved fornemmelse av parestesi, svakhet og muskelspasmer, samt karakteristiske EKG-forandringer.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 1200 nmol/L), en felles grense for alle antihypertensivene."
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "25 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "17–43 nmol/L",
+        "merknad": "Kanrenon. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "25 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "28–71 nmol/L",
+        "merknad": "Kanrenon. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "25 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "30–75 nmol/L",
+        "merknad": "Kanrenon. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "100 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "68–170 nmol/L",
+        "merknad": "Kanrenon. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "100 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "113–285 nmol/L",
+        "merknad": "Kanrenon. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "100 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "118–298 nmol/L",
+        "merknad": "Kanrenon. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "12,5–100 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "109 (23–301) nmol/L",
+        "merknad": "Kanrenon. Målt i IDA-studien, median (min–maks), n = 14."
+      },
+      {
+        "dose": "12,5–100 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "52 (13–135) nmol/L",
+        "merknad": "Kanrenon. Målt i IDA-studien, median (min–maks), n = 3."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-spironolakton": {
+      "tittel": "Spirix «Orifarm Healthcare»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/spirix-orifarm-healthcare-564122"
+    }
+  }
+}

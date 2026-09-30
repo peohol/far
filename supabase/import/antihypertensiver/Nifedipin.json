@@ -1,0 +1,246 @@
+{
+  "stoff": "nifedipin",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 20,
+      "ovre": 150,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 600,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "Depot",
+          "typisk": null,
+          "min": 6,
+          "maks": 11,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Nifedipin binder seg til spenningstyrte L(low)-type kalsiumkanaler i sarcolemma i glatte muskelceller i perifere motstandskar (inkludert koronarkar) og hemmer kalsiuminnstrømming i cellene. Dette fører til ytterligere redusert kalsiumfrigivelse fra sarkoplasmatisk retikulum til cytosol. Reduksjon i intracellulært fritt kalsium reduserer glatt muskelkontraksjon, dvs. vil gi vasodilatasjon, derved redusert perifer resistens og fall i blodtrykk.",
+      "Ved veldig høye nifedipin serumkonsentrasjoner bindes også legemiddelet til hjertemuskelceller.",
+      "Kalsiumantagonister av dihydropyridintype reduserer sittende systolisk blodtrykk og diastolisk blodtrykk med ca. 15,6 ± 5,3 / 10,3 ± 2,6 mmHg (gjennomsnitt ± SD), ifølge metastudie fra Wu et al. (2005)"
+    ],
+    "referanser": [
+      "felleskatalogen",
+      "wu2005"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Hypertensjon",
+          "Angina pectoris",
+          "Spasmeangina"
+        ]
+      },
+      "Nifedipin skal ikke brukes under graviditet, men brukes av og til hos gravide med svært høyt blodtrykk innlagt i sykehus når det er klinisk helt nødvendig og annen behandling ikke virker. Man innleder da med kortidsvirkende nifedipin."
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Hypertensjon: 30–60 mg. Maksimal dose er 60 mg daglig ved hypertensjon og 120 mg daglig ved angina pectoris.",
+      "Nedsatt lever- og nyrefunksjon: Ved redusert leverfunksjon kan serumkonsentrasjonen øke. Hos eldre er det rapportert redusert clearance med økt serumkonsentrasjon."
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Grunnet metabolisme via CYP3A4 øker serumkonsentrasjonen og derved effekten ved samtidig anvendelse av kraftige og moderate hemmere av CYP3A4 (grapefruktjuice, makrolider, proteasehemmere, soppmidler, verapamil eller diltiazem) og senkes ved samtidig bruk av kraftige indusere (rifampicin m.fl.). Samtidig administrering med digoksin, kan gi redusert clearance av digoksin og økning i digoksin nivået."
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "75–92 % (depot)"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "Immediate release ca. 30 min, depot 6–12 timer"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "6–11 timer (depot)"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "95 %"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "1,47 L/kg"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Via CYP3A4 i lever og tarmvegg til inaktive metabolitter",
+        "80 % renal utskillelse, 0,1 % ut uendret i urin, rest i feces"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 346,3 g/mol."
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    }
+  ],
+  "farmakogenetikk": [
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "3A4"
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas.",
+        "Serumkonsentrasjonen er nærmest lik gjennom hele doseringsintervallet."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Overdose kan gi blodtrykksfall, takykardi, bradykardi, hyperglykemi, metabolsk acidose, kardiogent sjokk med lungeødem.",
+        "Pga. høy proteinbinding er nifedipin ikke dialyserbart.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 600 nmol/L), en felles grense for alle antihypertensivene.",
+        "Toksisitet er rapportert fra ca. 433 nmol/L. Komatøse/fatale tilfeller er rapportert i området 433–15 593 nmol/L.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "schulz2020",
+        "baselt2017",
+        "helsebiblioteket-nifedipin"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "20 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "10–18 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "20 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "28–47 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "20 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "33–55 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "60 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "31–53 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "60 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "84–142 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "60 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "98–165 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "30–60 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "177 (2–1913) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 24."
+      },
+      {
+        "dose": "30–60 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "100 (33–292) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 6."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  }
+}
