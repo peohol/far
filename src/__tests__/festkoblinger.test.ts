@@ -206,8 +206,8 @@ describe('migrasjonen i databasen', () => {
     expect(side.elementer.map((e) => e.innhold.panel).sort()).toEqual(['indikasjon', PREPARATPANEL].sort())
   })
 
-  it('kobler cannabidiolsiden, som indikasjonsimporten lager, til cannabidiol', async () => {
-    const [kobling, ...flere] = await koblingen('Cannabidiol')
+  it('kobler cannabidiolsiden, som indikasjonsimporten lager og som nå heter CBD, til cannabidiol', async () => {
+    const [kobling, ...flere] = await koblingen('CBD')
     expect(flere).toEqual([])
     expect(kobling!.innhold.panel).toBe(PREPARATPANEL)
     expect(lesLegemiddelkobling(kobling!.innhold.data)).toEqual({
