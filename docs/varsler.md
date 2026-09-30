@@ -10,6 +10,7 @@ Varslene berører ikke fortolkningen; de forteller bare at noe er endret.
 | `supabase/migrations/*_varsler.sql` | Tabellen, utløserne som lager varslene, og funksjonene som leser og merker dem lest |
 | `supabase/migrations/*_favorittvarsler*.sql` | Varslene om endringer på favorittsidene, og hvordan hendelsene leses |
 | `supabase/migrations/*_nye_ideer_varsler.sql` | Varslene om nye idéer |
+| `supabase/migrations/*_diskusjoner.sql` | Varslene om diskusjonene (se `docs/diskusjoner.md`) |
 | `src/varsler/modell.ts` | Kategoriene, valgene, føringene i endringsloggen som varsler, sorteringen og tekstene (rene funksjoner) |
 | `src/varsler/api.ts` | Kallene mot Supabase og brukerinnstillingene |
 | `src/components/varsler/` | Bjella (`Varselknapp`), tilstanden (`useVarsler`) og vinduet (`Varsler`) |
@@ -23,8 +24,11 @@ Varslene berører ikke fortolkningen; de forteller bare at noe er endret.
 | `mine_ideer` | Noen kommenterer en idé du skrev, eller svarer på en kommentar du skrev | Nei |
 | `aktive_ideer` | Noen kommenterer en idé du har kommentert, uten at det er et svar til deg | Ja, på som standard |
 | `nye_ideer` | Noen skriver en ny idé | Ja, av som standard |
+| `mine_diskusjoner` | Noen kommenterer en tråd du startet, eller svarer på en kommentar du skrev i en tråd | Nei |
+| `aktive_diskusjoner` | Noen kommenterer en tråd du har kommentert, uten at det er et svar til deg | Ja, på som standard |
 | `funksjonalitet` | En ny føring i endringsloggen | Ja, på som standard |
 | `favoritter` | Noen publiserer endringer på en fagside du har som favoritt | Ja, av som standard |
+| `favorittdiskusjoner` | Noen starter en ny tråd på en fagside du har som favoritt | Ja, av som standard |
 
 Kategoriene står i `VARSELKATEGORIER`. De som lages av databasen, er de
 samme som `public.varselkategori`; en test passer på at de stemmer. En ny
@@ -46,13 +50,18 @@ gjorde det, varsles ikke.
 - **Nye idéer** (`ideer_varsle`): alle andre enn den som skrev idéen, får
   `nye_ideer`, ett varsel per idé. Det er lest når idéen åpnes, som varslene
   om kommentarene.
+- **Diskusjonskommentarer** (`diskusjonskommentarer_varsle`): som
+  idékommentarene, med `mine_diskusjoner` og `aktive_diskusjoner`.
+- **Nye tråder** (`diskusjoner_varsle`): en ny tråd på en fagside gir
+  `favorittdiskusjoner` til dem som har siden som favoritt, ett varsel per
+  tråd. Å åpne tråden merker varslene om den lest.
 - **Fortolkningen** (`objektpubliseringer_varsle`): hver publisering av en
   kommentar eller et regelsett (`intern.er_fortolkning`) varsler alle andre.
   Et utkast som lagres, varsler ingen: varselet kommer når endringen er
   publisert.
 
 Uleste varsler om det samme er **ett varsel**: ett om fortolkningen, og ett
-per idé og kategori (`gruppe`). En ny hendelse legges i det uleste varselet;
+per idé eller tråd og kategori (`gruppe`). En ny hendelse legges i det uleste varselet;
 når varselet er lest, begynner neste på et nytt. Samme fortolkningsobjekt
 står bare én gang, med den siste publiseringen.
 
@@ -94,7 +103,8 @@ noe annet i appen ber om det (`oppfriskVarsler`, når Idéer lukkes).
 
 Vinduet viser de uleste under «Nye» og resten under «Tidligere». Et varsel
 leder dit det gjelder, og er lest når man går dit: idéen (`visIde`, som
-`Ideknapp` hører etter), føringen i endringsloggen (`visEndringslogg`) eller
+`Ideknapp` hører etter), tråden på siden den står på (`visDiskusjon`, som
+`Diskusjonsmeny` hører etter), føringen i endringsloggen (`visEndringslogg`) eller
 reglene på stoffsiden. «Merk som lest» og «Merk alle som lest» gjør det
 samme uten å gå noe sted; «Merk alle som lest» gjelder bare kategoriene brukeren har slått på. Tannhjulet åpner innstillingene, der de
 obligatoriske kategoriene står låst.

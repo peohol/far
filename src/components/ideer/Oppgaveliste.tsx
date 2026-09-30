@@ -4,10 +4,10 @@ import { grupperOppgaver, iEndringsloggen, type Oppgave } from '../../ideer/oppg
 import { visEndringslogg } from '../endringsloggvisning'
 import { Ikon } from '../ikon/Ikon'
 import { Ikonknapp } from '../Ikonknapp'
-import { Forfatterbilde, useForfatternavn } from './Idekontekst'
+import { Forfatterbilde, useForfatternavn } from '../traad/Forfatterkontekst'
 import { Ideskuff } from './Ideskuff'
 import { Kategorimerke, Oppgavekode } from './Merker'
-import { Tidspunkt } from './Smadeler'
+import { Tidspunkt } from '../traad/Smadeler'
 
 /** Skuffen med de utførte, etter navnet laget husker den under. */
 export const SKUFF_UTFORTE = 'utforte'

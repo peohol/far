@@ -13,6 +13,7 @@ import {
   endringsvarsler,
   erValgt,
   deletekst,
+  diskusjonstekst,
   endredeDeler,
   favorittside,
   favorittsted,
@@ -243,5 +244,53 @@ describe('samlet', () => {
       ['v4', true, undefined],
     ])
     expect(liste.varsler[1]!.hendelser[0]).toMatchObject({ side: { id: 's', navn: 'Litium', stoff: 'litium' }, deler: ['tdm'] })
+  })
+
+  it('leser tråden i et diskusjonsvarsel og den nye kommentaren i den', () => {
+    const [varsel, utenSide] = lesVarselliste({
+      lest_kl: 'x',
+      varsler: [
+        {
+          id: 'd1',
+          kategori: 'mine_diskusjoner',
+          ide: null,
+          diskusjon: { id: 't', tittel: 'Dosering ved nyresvikt', side: 'stoff:litium', forfatter_id: 'kari' },
+          hendelser: [{ kl: 'x', av: 'per', innlegg: 'k1', svar_til: null }],
+          oppdatert_kl: 'x',
+          lest_kl: null,
+        },
+        {
+          id: 'd2',
+          kategori: 'aktive_diskusjoner',
+          diskusjon: { id: 't', tittel: 'T', side: 'ugyldig' },
+          hendelser: [{ kl: 'x', av: 'per', innlegg: 'k2' }],
+          oppdatert_kl: 'x',
+        },
+      ],
+    }).varsler
+    expect(varsel!.diskusjon).toEqual({ id: 't', tittel: 'Dosering ved nyresvikt', side: 'stoff:litium', forfatterId: 'kari' })
+    expect(varsel!.hendelser[0]).toMatchObject({ kommentar: 'k1', svarTil: null })
+    expect(utenSide!.diskusjon).toBeNull()
+  })
+})
+
+describe('tekstene for diskusjonene', () => {
+  const traadvarsel = (ekstra: Partial<Databasevarsel> = {}): Databasevarsel =>
+    ideVarsel({ kategori: 'mine_diskusjoner', ide: null, diskusjon: { id: 't', tittel: 'T', side: 'stoff:litium', forfatterId: 'kari' }, ...ekstra })
+
+  it('sier om det er tråden din, et svar til deg, en tråd du har vært med i, eller en ny tråd på en favorittside', () => {
+    expect(diskusjonstekst(traadvarsel(), 'kari', navn)).toBe('Ola og Per kommenterte tråden din')
+    const svar = traadvarsel({ hendelser: [{ kl: '', av: 'per', kommentar: 'k', svarTil: 'kari' }] })
+    expect(diskusjonstekst(svar, 'kari', navn)).toBe('Per svarte på kommentaren din')
+    expect(diskusjonstekst({ ...svar, kategori: 'aktive_diskusjoner' }, 'kari', navn)).toBe('Per kommenterte en tråd du har kommentert')
+    const ny = traadvarsel({ kategori: 'favorittdiskusjoner', hendelser: [{ kl: '', av: 'ola' }] })
+    expect(diskusjonstekst(ny, 'kari', navn)).toBe('Ola startet en ny tråd på en favorittside')
+  })
+
+  it('har kommentarer i egne diskusjoner som obligatoriske, og nye tråder på favorittsider av til de slås på', () => {
+    expect(erValgt('mine_diskusjoner', { mine_diskusjoner: false })).toBe(true)
+    expect(erValgt('aktive_diskusjoner', {})).toBe(true)
+    expect(erValgt('favorittdiskusjoner', {})).toBe(false)
+    expect(erValgt('favorittdiskusjoner', { favorittdiskusjoner: true })).toBe(true)
   })
 })

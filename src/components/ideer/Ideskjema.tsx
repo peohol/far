@@ -5,11 +5,10 @@ import { endreIde, opprettIde } from '../../ideer/api'
 import {
   KATEGORIER,
   KATEGORINAVN,
-  TITTEL_MEST,
-  tekstTilLagring,
   type Idekategori,
   type Idetraad,
 } from '../../ideer/modell'
+import { TITTEL_MEST, tekstTilLagring } from '../../traad/modell'
 import { Rikteksteditor } from '../stoffside/Rikteksteditor'
 import { Forlatvarsel } from '../stoffside/Skjemaer'
 import { Button } from '../Button'
