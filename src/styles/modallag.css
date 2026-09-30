@@ -32,13 +32,11 @@
   place-items: start center;
 }
 
-/* `::backdrop` arver ikke tokens pålitelig, så fargen står her. */
+/* Siden bak mørklegges og sløres med det samme sløret som bak sidemenyen. */
 .modallag::backdrop {
-  background: rgb(6 9 12 / 0.62);
-}
-
-:root[data-tema='lyst'] .modallag::backdrop {
-  background: rgb(60 48 30 / 0.38);
+  background: var(--slor);
+  -webkit-backdrop-filter: blur(var(--slor-blur));
+  backdrop-filter: blur(var(--slor-blur));
 }
 
 .modallag__panel {

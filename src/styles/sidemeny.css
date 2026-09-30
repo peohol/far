@@ -6,7 +6,8 @@
  * (`Filterbytte`) står nederst i denne fila.
  *
  * Menyen er tre lag: knappen, panelet over den, og et lag mellom panelet og
- * appen som mørklegger og slører innholdet bak. Mørkleggingen ligger som sitt
+ * appen som mørklegger og slører innholdet bak, med samme slør som de modale
+ * vinduene (`--slor` i `tokens.css`). Mørkleggingen ligger som sitt
  * eget lag i stedet for som et filter på appen, fordi et filter ville gjort
  * toppmenyen og versjonspilla om til noe de flyter i stedet for å ligge fast
  * i vinduet.
@@ -16,17 +17,14 @@
   position: fixed;
   inset: 0;
   z-index: calc(var(--lag-toppmeny) - 10);
-  background: hsl(216 45% 5% / 0.55);
-  backdrop-filter: blur(3px);
+  background: var(--slor);
+  -webkit-backdrop-filter: blur(var(--slor-blur));
+  backdrop-filter: blur(var(--slor-blur));
   opacity: 0;
   visibility: hidden;
   transition:
     opacity var(--fart-glid) var(--kurve),
     visibility 0s linear var(--fart-glid);
-}
-
-:root[data-tema='lyst'] .menylag {
-  background: hsl(215 30% 20% / 0.34);
 }
 
 .menylag[data-lag] {
