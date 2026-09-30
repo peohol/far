@@ -3,6 +3,7 @@ import { useBevart } from '../../oppdatering/Bevaring'
 import {
   DOSEKOLONNER,
   FORSLAG_LEGEMIDDELFORMER,
+  formverdimerke,
   kontrollerFormverdier,
   kontrollerIntervall,
   lesTallfelt,
@@ -513,6 +514,7 @@ export function DatakortSkjema(props: SkjemaProps<Omit<Intervallverdi, 'forbehol
 
 /** En legemiddelform i skjemaet, med tallene slik de er skrevet. */
 interface Formfelt {
+  stoff: string
   form: string
   typisk: string
   min: string
@@ -528,6 +530,7 @@ const TALLFELT = [
 
 function tilFormfelt(verdi: Formverdi): Formfelt {
   return {
+    stoff: verdi.stoff ?? '',
     form: verdi.form,
     typisk: tallTilFelt(verdi.typisk),
     min: tallTilFelt(verdi.min),
@@ -555,9 +558,10 @@ export function FormverdiSkjema(props: SkjemaProps<Formverdier>) {
       const tall = TALLFELT.map(({ felt }) => lesTallfelt(rad[felt]))
       if (tall.some((t) => t === undefined)) return { feil: 'Verdiene må være tall, f.eks. 33 eller 0,5.' }
       const [typisk = null, min = null, maks = null] = tall as (number | null)[]
-      const verdi = { form: rad.form.trim(), typisk, min, maks, enhet: rad.enhet.trim() }
+      const stoff = rad.stoff.trim()
+      const verdi = { ...(stoff && { stoff }), form: rad.form.trim(), typisk, min, maks, enhet: rad.enhet.trim() }
       // En helt tom rad er ikke med.
-      if (verdi.form || verdi.enhet || typisk !== null || min !== null || maks !== null) former.push(verdi)
+      if (stoff || verdi.form || verdi.enhet || typisk !== null || min !== null || maks !== null) former.push(verdi)
     }
     const data = { former }
     const feil = kontrollerFormverdier(data)
@@ -573,8 +577,9 @@ export function FormverdiSkjema(props: SkjemaProps<Formverdier>) {
       </datalist>
       {rader.map((rad, i) => (
         <fieldset key={i} className="doserad">
-          <legend className="doserad__tittel">{rad.form.trim() || `Legemiddelform ${i + 1}`}</legend>
+          <legend className="doserad__tittel">{formverdimerke({ stoff: rad.stoff.trim(), form: rad.form.trim() }) || `Rad ${i + 1}`}</legend>
           <div className="feltrad">
+            <Tekstfelt merke="Stoff" verdi={rad.stoff} onEndre={(v) => endre(i, 'stoff', v)} />
             <Felt
               merkelapp="Legemiddelform"
               type="text"
@@ -590,21 +595,22 @@ export function FormverdiSkjema(props: SkjemaProps<Formverdier>) {
           {rader.length > 1 && (
             <Button
               variant="subtle"
-              aria-label={`Fjern ${rad.form.trim() || `legemiddelform ${i + 1}`}`}
+              aria-label={`Fjern ${formverdimerke({ stoff: rad.stoff.trim(), form: rad.form.trim() }) || `rad ${i + 1}`}`}
               onClick={() => setRader(rader.filter((_, j) => j !== i))}
             >
-              Fjern formen
+              Fjern raden
             </Button>
           )}
         </fieldset>
       ))}
       <Button variant="subtle" onClick={() => setRader([...rader, tilFormfelt(tomFormverdi())])}>
-        Legg til legemiddelform
+        Legg til rad
       </Button>
       <p className="felt__hjelp">
         Oppgi typisk verdi, minimum og maksimum, bare typisk verdi, eller bare minimum og maksimum. Kortet viser
         «33 (29–37) timer», «33 timer» eller «29–37 timer». En kilde som sier «33 ± 4», skrives som 33, 29 og 37.
-        Legemiddelformen kan stå tom når kortet bare har én.
+        Legemiddelformen kan stå tom når kortet bare har én. Oppgir kilden verdien for flere stoffer, som
+        moderstoffet og en aktiv metabolitt, får hvert stoff sin rad med navnet i «Stoff».
       </p>
     </Skjemaramme>
   )

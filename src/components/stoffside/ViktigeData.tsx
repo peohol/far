@@ -10,6 +10,7 @@ import {
   datakortHarVerdi,
   delFormverdi,
   delIntervall,
+  formverdimerke,
   lesFormverdier,
   lesIntervallverdi,
   type Datakortdefinisjon,
@@ -52,8 +53,8 @@ const UTSEENDE: Record<Datakorttype, { ikon: Ikonnavn; tone?: 'referanse' | 'tok
  * og ingenting når ingen har det; i redigeringsmodus står alle kortene fram.
  *
  * Innholdet i hvert kort står midtstilt. Kinetikken viser symbolet og ikke
- * ordet (det står for skjermlesere), og en verdi per legemiddelform, side om
- * side, når kortet har flere.
+ * ordet (det står for skjermlesere), og en verdi per legemiddelform eller
+ * stoff (moderstoffet og en aktiv metabolitt), side om side, når kortet har flere.
  *
  * Er stoffet primært stoff for flere analytter — moderstoffet og en metabolitt
  * — har hver analytt sine egne kort, merket med analyttens navn: tramadolsiden
@@ -319,16 +320,22 @@ function Enhet({ enhet }: { enhet: string }) {
 }
 
 /**
- * Verdiene per legemiddelform, side om side: ikonet og navnet på formen, og
- * under den verdien — «33 (29–37) timer», «33 timer» eller «29–37 timer».
- * En verdi uten form står alene, som et vanlig tall.
+ * Verdiene per legemiddelform eller stoff, side om side: stoffet, ikonet og
+ * navnet på formen, og under dem verdien — «33 (29–37) timer», «33 timer»
+ * eller «29–37 timer». En verdi uten form og stoff står alene, som et vanlig tall.
  */
 function Formverdivisning({ former }: { former: readonly Formverdi[] }) {
   if (former.length === 0) return IKKE_OPPGITT
   return (
     <ul className="datakort__former" data-antall={former.length}>
       {former.map((f, i) => (
-        <li key={`${i}:${f.form}`} className="datakort__form">
+        <li key={`${i}:${formverdimerke(f)}`} className="datakort__form">
+          {f.stoff && (
+            <span className="datakort__stoff">
+              <Uthev tekst={f.stoff} />
+              <span className="kun-skjermleser">{f.form ? ', ' : ': '}</span>
+            </span>
+          )}
           {f.form && (
             <span className="datakort__formnavn">
               <Ikon navn={legemiddelformikon(f.form)} className="datakort__formikon" />

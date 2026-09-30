@@ -221,6 +221,22 @@ describe('t₁/₂ og tₛₛ per legemiddelform', () => {
     expect(k(f(5, null, null, 'døgn', 'Peroralt'), f(3, null, null, 'døgn', 'peroralt'))).toMatch(/står to ganger/)
     expect(k()).toBeNull()
   })
+
+  it('merker verdiene med stoffet når kilden oppgir moderstoffet og en metabolitt', () => {
+    const s = (stoff: string, typisk: number, form = '') => ({ ...f(typisk, null, null, 'timer', form), stoff })
+    const venlafaksin = { former: [s('Venlafaksin', 5), s('O-desmetylvenlafaksin', 11)] }
+    expect(formaterFormverdier(venlafaksin)).toBe('Venlafaksin: 5 timer · O-desmetylvenlafaksin: 11 timer')
+    expect(formaterFormverdier({ former: [s('Paliperidon', 24, 'Depotinjeksjon')] })).toBe('Paliperidon, Depotinjeksjon: 24 timer')
+    expect(lesFormverdier(venlafaksin)).toEqual(venlafaksin)
+    // Et tomt stoff lagres ikke: kortet gjelder da sidens stoff.
+    expect(lesFormverdier({ former: [{ ...f(5, null, null), stoff: ' ' }] })).toEqual({ former: [f(5, null, null)] })
+
+    const k = (...former: ReturnType<typeof f>[]) => kontrollerFormverdier({ former })
+    expect(k(...venlafaksin.former)).toBeNull()
+    expect(k(s('Venlafaksin', 5), f(11, null, null))).toMatch(/^Rad 2: Oppgi legemiddelformen eller stoffet/)
+    expect(k(s('Venlafaksin', 5), s('venlafaksin', 6))).toMatch(/«Venlafaksin» står to ganger/)
+    expect(k(s('Paliperidon', 5, 'Peroralt'), s('Paliperidon', 6, 'Depotinjeksjon'))).toBeNull()
+  })
 })
 
 describe('koblingen til legemiddeldataene og tabellen', () => {
