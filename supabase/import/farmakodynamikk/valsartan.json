@@ -1,0 +1,24 @@
+{
+  "stoff": "valsartan",
+  "kilde": "antihypertensiver/Valsartan.json",
+  "kort": [
+    {
+      "maal": "Angiotensin II AT1-reseptor",
+      "effekt": "Blokkerer / antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "merknad": "Gir vasodilatasjon; reduserer ADH, aldosteron og renal reabsorpsjon av Na+/vann som nedstrøms effekter",
+      "utdyping": [
+        "Valsartan blokkerer reseptoren (angiotensin 2- reseptor type 1) til angiotensin 2. Angiotensin 2 er en kraftig vasokonstriktor. Ved å blokkere denne reseptoren oppnår man vasodilatasjon og påfølgende fall i blodtrykk.",
+        "Reseptorer for angiotensin 2 finnes også i:",
+        {
+          "punkter": [
+            "bakre hypofyselapp: blokkering via valsartan medfører redusert frigjøring av antidiuretisk hormon (ADH).",
+            "binyrebarken: blokkering via valsartan medfører redusert frigjøring av aldosteron.",
+            "nyren: blokkering via valsartan medfører redusert gjenopptak av vann og natrium."
+          ]
+        }
+      ]
+    }
+  ]
+}

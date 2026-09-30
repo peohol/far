@@ -200,6 +200,13 @@
   --under-blekk: #1d4e86;
   --under-kant: #3f7fc2;
 
+  /* Retningen på et mekanismekort i farmakodynamikken: prosessen på målet
+     reduseres, økes, eller ingen effekt / ikke angitt. Brukes dempet, i
+     ikonet og en smal kant, aldri som flate. */
+  --retning-ned: var(--alvorlig);
+  --retning-opp: var(--referanse);
+  --retning-noytral: var(--glass);
+
   /* Ikonfarger */
   --blod: #c22e45;
   --info: #4c7fc4;
@@ -276,6 +283,10 @@
   --under-flate: #14233a;
   --under-blekk: #a9ccf5;
   --under-kant: #7fb4ee;
+
+  --retning-ned: var(--alvorlig);
+  --retning-opp: var(--referanse);
+  --retning-noytral: var(--glass);
 
   --blod: #f2708a;
   --info: #8cb5ee;

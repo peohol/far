@@ -1,0 +1,16 @@
+{
+  "stoff": "lisinopril",
+  "kilde": "antihypertensiver/Lisinopril.json",
+  "kort": [
+    {
+      "maal": "ACE (angiotensinkonverterende enzym)",
+      "effekt": "Hemmer",
+      "mekanisme": "enzymhemming",
+      "retning": "ned",
+      "merknad": "Reduserer angiotensin II og aldosteron; reduserer nedbrytning av bradykinin",
+      "utdyping": [
+        "ACE-hemmer (angiotensinkonverterende enzymhemmer). Hemming av ACE gir redusert angiotensin II-konsentrasjon, som igjen resulterer i redusert vasopressoraktivitet og aldosteronutskillelse. Blodtrykkssenkende effekt antas å skyldes hemming av RAAS. Blokkerer nedbrytningen av bradykinin."
+      ]
+    }
+  ]
+}

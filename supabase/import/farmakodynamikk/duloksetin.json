@@ -1,0 +1,61 @@
+{
+  "stoff": "duloksetin",
+  "kilde": "psykofarmaka/DULO.json",
+  "kort": [
+    {
+      "maal": "Serotoninreopptak / SERT",
+      "effekt": "Hemmer reopptak",
+      "mekanisme": "reopptakshemming",
+      "retning": "ned",
+      "utdyping": [
+        "Smertehemmende effekt antas å skyldes potensering av nedadgående smertehemmende baner i CNS."
+      ]
+    },
+    {
+      "maal": "Noradrenalinreopptak / NET",
+      "effekt": "Hemmer reopptak",
+      "mekanisme": "reopptakshemming",
+      "retning": "ned"
+    },
+    {
+      "maal": "Dopaminreopptak / DAT",
+      "effekt": "Hemmer reopptak svakt",
+      "mekanisme": "reopptakshemming",
+      "retning": "ned",
+      "kvalifikasjon": "Svak effekt"
+    },
+    {
+      "maal": "Histaminreseptorer",
+      "effekt": "Ingen signifikant effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ikke signifikant affinitet"
+    },
+    {
+      "maal": "Dopaminreseptorer",
+      "effekt": "Ingen signifikant effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ikke signifikant affinitet"
+    },
+    {
+      "maal": "Kolinerge reseptorer",
+      "effekt": "Ingen signifikant effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ikke signifikant affinitet"
+    },
+    {
+      "maal": "Adrenerge reseptorer",
+      "effekt": "Ingen signifikant effekt",
+      "mekanisme": "ingen_effekt",
+      "retning": "ingen",
+      "kvalifikasjon": "Ikke signifikant affinitet"
+    }
+  ],
+  "dekket": [
+    "Hemmer reopptak av serotonin og noradrenalin (SNRI).",
+    "Svak hemmer av reopptak av dopamin.",
+    "Ikke signifikant affinitet for histaminerge, dopaminerge, kolinerge eller adrenerge reseptorer."
+  ]
+}

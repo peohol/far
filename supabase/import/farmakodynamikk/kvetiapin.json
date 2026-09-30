@@ -1,0 +1,70 @@
+{
+  "stoff": "kvetiapin",
+  "kilde": "psykofarmaka/KVE.json",
+  "kort": [
+    {
+      "maal": "5-HT2-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Høyere affinitet enn til D2"
+    },
+    {
+      "maal": "D1-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "D2-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "H1-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "α1-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "α2-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "Muskarinreseptorer (norkvetiapin)",
+      "effekt": "Binder / har affinitet",
+      "mekanisme": "reseptorbinding",
+      "retning": "ukjent",
+      "merknad": "Aktiv metabolitt norkvetiapin"
+    },
+    {
+      "maal": "Noradrenalintransportør / NET (norkvetiapin)",
+      "effekt": "Hemmer transportøren",
+      "mekanisme": "transporterhemming",
+      "retning": "ned",
+      "merknad": "Aktiv metabolitt norkvetiapin"
+    },
+    {
+      "maal": "5-HT1A-reseptor (norkvetiapin)",
+      "effekt": "Partiell agonist",
+      "mekanisme": "partiell_agonisme",
+      "retning": "opp",
+      "merknad": "Aktiv metabolitt norkvetiapin"
+    }
+  ],
+  "dekket": [
+    "Antagonist til 5-HT_{2}-, D_{1}- og D_{2}-reseptorer.",
+    "Høyere affinitet til 5-HT_{2} enn D_{2}.",
+    "Antagonist også på H_{1}-, α_{1}- og α_{2}-reseptorer.",
+    "Aktiv metabolitt: norkvetiapin, som har affinitet til muskarinerge reseptorer, hemmer noradrenalintransportøren og er en partiell agonist av 5-HT_{1A}-reseptoren."
+  ]
+}

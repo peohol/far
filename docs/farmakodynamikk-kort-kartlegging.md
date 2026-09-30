@@ -107,7 +107,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/AMTNORSUM.json_
 
 ### Amlodipin
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Amlodipin.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Amlodipin.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -125,7 +125,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/ARISUM.json_
 
 ### Atenolol
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Atenolol.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Atenolol.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -134,7 +134,7 @@ _Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Atenolol.json_
 
 ### Bendroflumetiazid
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Bendroflumetiazid.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Bendroflumetiazid.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -142,7 +142,7 @@ _Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Bendroflumetiazid.jso
 
 ### Bisoprolol
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Bisoprolol.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Bisoprolol.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -162,7 +162,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/BREK.json_
 
 ### Bumetanid
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Bumetanid.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Bumetanid.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -194,7 +194,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/CITAL.json_
 
 ### Diltiazem
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Diltiazem.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Diltiazem.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -202,7 +202,7 @@ _Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Diltiazem.json_
 
 ### Doksazosin
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Doksazosin.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Doksazosin.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -234,7 +234,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/DULO.json_
 
 ### Enalapril
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Enalapril.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Enalapril.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -242,7 +242,7 @@ _Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Enalapril.json_
 
 ### Eplerenon
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Eplerenon.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Eplerenon.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -307,7 +307,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/FLUV.json_
 
 ### Furosemid
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Furosemid.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Furosemid.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -323,7 +323,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/HALO.json_
 
 ### Hydroklortiazid
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Hydroklortiazid.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Hydroklortiazid.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -331,7 +331,7 @@ _Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Hydroklortiazid.json_
 
 ### Irbesartan
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Irbesartan.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Irbesartan.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -339,7 +339,7 @@ _Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Irbesartan.json_
 
 ### Kandesartan
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Kandesartan.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Kandesartan.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -360,7 +360,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/KARSUM.json_
 
 ### Karvedilol
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Karvedilol.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Karvedilol.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -427,7 +427,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/KVE.json_
 
 ### Labetalol
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Labetalol.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Labetalol.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -447,7 +447,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/LAM.json_
 
 ### Lerkanidipin
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Lerkanidipin.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Lerkanidipin.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -465,7 +465,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/LMP.json_
 
 ### Lisinopril
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Lisinopril.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Lisinopril.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -473,7 +473,7 @@ _Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Lisinopril.json_
 
 ### Losartan
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Losartan.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Losartan.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -494,7 +494,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/LURA.json_
 
 ### Metoprolol
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Metoprolol.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Metoprolol.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -527,7 +527,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/MTZ.json_
 
 ### Nifedipin
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Nifedipin.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Nifedipin.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -599,7 +599,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/PERF.json_
 
 ### Ramipril
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Ramipril.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Ramipril.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -633,7 +633,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/SERT.json_
 
 ### Spironolakton
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Spironolakton.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Spironolakton.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -642,7 +642,7 @@ _Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Spironolakton.json_
 
 ### Telmisartan
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Telmisartan.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Telmisartan.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -662,7 +662,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/TRIM.json_
 
 ### Valsartan
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Valsartan.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Valsartan.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |
@@ -681,7 +681,7 @@ _Kildegrunnlag: main: supabase/import/psykofarmaka/VENSUM.json_
 
 ### Verapamil
 
-_Kildegrunnlag: PR #145: supabase/import/antihypertensiver/Verapamil.json_
+_Kildegrunnlag: main: supabase/import/antihypertensiver/Verapamil.json_
 
 | Målprotein/prosess | Effekt | Kategori | Retning | Utdypende tekst / forbehold |
 | --- | --- | --- | :---: | --- |

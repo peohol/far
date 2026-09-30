@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.67.0',
+    dato: '2026-09-30',
+    sammendrag: 'Farmakodynamikken vises som mekanismekort',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Farmakodynamikken på fagsidene er ikke lenger én tekst, men ett kort per mål, som farmakokinetikken. Det lukkede kortet viser målet og effekten, for eksempel «D2-reseptor» og «Antagonist · Høy affinitet».',
+      'Det åpnede kortet viser mekanismen, retningen og den utdypende teksten, med kildene nederst.',
+      'Fargen og ikonet viser retningen på målet: dempet rødt når aktiviteten reduseres, grønt når den økes, og grått når kilden sier at stoffet ikke virker på målet, eller ikke sier hvilken vei. Mål kilden uttrykkelig sier at stoffet ikke virker på, står som egne kort.',
+      'Teksten på de 60 sidene med farmakodynamikk er fordelt på kortene ord for ord, med de samme kildene. Ingenting er lagt til, og kortene sier aldri mer enn kilden, så en antagonist der kilden ikke sier hvilken type, står som «Antagonisme (subtype ikke angitt)».',
+      'Redaktører kan legge til, endre, flytte og fjerne mekanismekort som de andre kortene, med utkast, publisering og historikk.',
+    ],
+  },
+  {
     versjon: '1.66.0',
     dato: '2026-09-30',
     sammendrag: 'Diskusjonstråder kan slettes og flyttes til en annen side',

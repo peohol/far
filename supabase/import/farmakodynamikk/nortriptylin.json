@@ -1,0 +1,39 @@
+{
+  "stoff": "nortriptylin",
+  "kilde": "psykofarmaka/NOR.json",
+  "kort": [
+    {
+      "maal": "Noradrenalinreopptak / NET",
+      "effekt": "Hemmer reopptak",
+      "mekanisme": "reopptakshemming",
+      "retning": "ned",
+      "kvalifikasjon": "Potent"
+    },
+    {
+      "maal": "Serotoninreopptak / SERT",
+      "effekt": "Hemmer reopptak",
+      "mekanisme": "reopptakshemming",
+      "retning": "ned"
+    },
+    {
+      "maal": "Histaminreseptorer",
+      "effekt": "Antihistaminerg effekt",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Betydelig"
+    },
+    {
+      "maal": "Muskarinreseptorer",
+      "effekt": "Antikolinerg effekt",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "merknad": "Mindre antikolinergt enn amitriptylin"
+    }
+  ],
+  "dekket": [
+    "Potent hemmer av reopptak av noradrenalin.",
+    "Hemmer også reopptak av serotonin.",
+    "Betydelig antihistaminerg effekt.",
+    "Mindre antikolinergt enn amitriptylin."
+  ]
+}

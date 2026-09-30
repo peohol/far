@@ -1,0 +1,49 @@
+{
+  "stoff": "kariprazin",
+  "kilde": "psykofarmaka/KARSUM.json",
+  "kort": [
+    {
+      "maal": "D2-reseptor",
+      "effekt": "Partiell agonist",
+      "mekanisme": "partiell_agonisme",
+      "retning": "opp",
+      "utdyping": [
+        "Aktive metabolitter: desmetylkariprazin og didesmetylkariprazin"
+      ]
+    },
+    {
+      "maal": "D3-reseptor",
+      "effekt": "Partiell agonist",
+      "mekanisme": "partiell_agonisme",
+      "retning": "opp"
+    },
+    {
+      "maal": "5-HT1A-reseptor",
+      "effekt": "Partiell agonist",
+      "mekanisme": "partiell_agonisme",
+      "retning": "opp"
+    },
+    {
+      "maal": "5-HT2B-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "5-HT2A-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "H1-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    }
+  ],
+  "dekket": [
+    "Partiell agonist av D_{2}-, D_{3}- og 5-HT_{1A}-reseptorene.",
+    "Antagonist av 5-HT_{2B}-, 5-HT_{2A}- og H_{1}-reseptorene."
+  ]
+}

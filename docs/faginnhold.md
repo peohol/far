@@ -37,6 +37,8 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `supabase/migrations/*_tdm_referanseomrader_*.sql` | Den importen slik den ble rullet ut |
 | `supabase/import/rettinger/`, `src/faginnhold/rettinger.ts`, `scripts/lag-rettinger.ts`, `supabase/migrations/*_rettinger.sql` | Rettinger av rader i tabellene over serumkonsentrasjoner, med kilden og begrunnelsen |
 | `supabase/import/oppdateringer/`, `src/faginnhold/kortoppdateringer.ts`, `scripts/lag-kortoppdateringer.ts` | Oppdateringer av kort på sidene etter en nyere kilde, som de nasjonale referanseområdene for antiepileptika fra 2017 |
+| `supabase/import/farmakodynamikk/`, `src/faginnhold/farmakodynamikk.ts`, `scripts/lag-farmakodynamikkort.ts`, `supabase/migrations/*_farmakodynamikk_mekanismekort_*.sql` | Farmakodynamikktekstene gjort om til mekanismekort etter `docs/farmakodynamikk-kort-kartlegging.md` |
+| `src/faginnhold/mekanismer.ts` | Mekanismetypene og retningene i farmakodynamikken |
 | `supabase/migrations/*_scenarioregelsett*.sql`, `*_rusregler_import.sql`, `*_scenarioregler_lesing.sql` | Scenarioregelsettene for analytter som vurderes samlet, importen av rusmiddelreglene og lesingen fortolkningen gjør (`docs/scenarioregler.md`) |
 | `src/faginnhold/modell.ts` | Formen på innholdet per objekttype, og typene appen bruker |
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
@@ -63,6 +65,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/__tests__/referansenummerering.test.ts`, `referansepille.test.tsx` | Nummereringen, og pillen med mus, berøring og tastatur |
 | `src/__tests__/festreferanser.test.ts`, `referansefelt.test.tsx` | FEST-referansene, referansefeltet, listen og at editoren aldri tilbyr en automatisk kilde |
 | `src/__tests__/psykofarmakaimport.test.ts`, `tdmimport.test.ts`, `rettinger.test.ts`, `kortoppdateringer.test.ts` | Datasettene, importene, rettingene og oppdateringene, prøvd mot en ekte database |
+| `src/__tests__/farmakodynamikk.test.ts`, `farmakodynamikkmigrering.test.ts` | Mekanismekortene mot kartleggingen, ikonene, fargene og søket, og omgjøringen prøvd mot en ekte database |
 | `src/__tests__/hjelp/testdatabase.ts` | Postgres i minnet, bygd av migrasjonene, og kallene testene gjør |
 
 ## Domenet
@@ -434,7 +437,8 @@ styrer søket og nummereringen av referansene):
 | --- | --- | --- |
 | Identitet | `identitet` | Ingen; navnet, kategoriene og de koblede analyttene kommer fra siden og stoffregisteret |
 | Viktige data | `viktige_data` | Ett kort per type og kode (`gjelder`, se «Sammenslåtte sider») — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk). Konsentrasjonene har `{ nedre, ovre, enhet }`; t½ og tss har `{ former: [{ stoff?, form, typisk, min, maks, enhet }] }`, én rad per legemiddelform eller stoff |
-| Farmakodynamikk, indikasjon | `farmakodynamikk`, `indikasjon` | `riktekst`: `{ dokument }` |
+| Farmakodynamikk | `farmakodynamikk` | `mekanismekort`: `{ maal, effekt, mekanisme, retning, kvalifikasjon?, merknad?, dokument? }`, i rekkefølge, som regel ett per målprotein eller mekanisme (se «Farmakodynamikken som mekanismekort»). En `riktekst` fra en senere import vises under kortene |
+| Indikasjon | `indikasjon` | `riktekst`: `{ dokument }` |
 | Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
 | Dosering | `dosering` | `riktekst`: `{ dokument }` |
 | Farmakokinetikk | `farmakokinetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge |
@@ -462,9 +466,9 @@ databasen når siden finnes der.
 tittel, men er et område med navnet for skjermlesere; kortene står i to
 grupper (`DATAKORTGRUPPER`), med konseptikon og etikett på hvert kort, og
 halveringstid og tid til steady state vises som t₁/₂ og tₛₛ. De andre panelene
-er seksjoner som åpnes og lukkes, og kortene i farmakokinetikken, farmakogenetikken og TDM er detaljkort
+er seksjoner som åpnes og lukkes, og kortene i farmakodynamikken, farmakokinetikken, farmakogenetikken og TDM er detaljkort
 i sin seksjon (se `docs/seksjoner.md`). En lukket seksjon viser en kort
-oppsummering med innholdets egne ord: titlene på kinetikkortene, dosene i
+oppsummering med innholdets egne ord: målene i farmakodynamikken, titlene på kinetikkortene, dosene i
 tabellen eller begynnelsen av teksten. Redigeringsmodus åpner ikke alt;
 redaktøren åpner seksjonen som skal redigeres.
 
@@ -761,6 +765,39 @@ de felles nasjonale referanseområdene for antiepileptika (Reimers mfl.,
 Tidsskr Nor Legeforen 2017): områdene for topiramat og okskarbazepin,
 grunnlaget på alle antiepileptikasidene og lamotrigin, og området for
 klonazepam ved epilepsi.
+
+**Farmakodynamikken som mekanismekort.** Farmakodynamikken er ett
+detaljkort per mål: målproteinet eller prosessen som tittel, effekten under
+(«Antagonist», «Hemmer reopptak») og eventuelt en kort kvalifikasjon dempet
+etter den («Høy affinitet», høyst 40 tegn). Det åpnede kortet viser effekten,
+mekanismetypen og retningen, så merknaden og den utdypende teksten, og kildene
+nederst som på de andre kortene. Mekanismetypene (`mekanismer.ts`) har både
+spesifikke typer og generelle typer for en kilde som ikke sier mer
+(«Antagonisme (subtype ikke angitt)», «Enzymhemming (subtype ikke angitt)»,
+«Binding/affinitet (funksjonell effekt ikke angitt)»), så kortet aldri blir
+mer presist enn kilden. Retningen gjelder den direkte prosessen på målet,
+ikke nedstrøms virkninger: ↓ farges dempet rødt, ↑ grønt, og «Ingen effekt»
+og «Retning ikke angitt» grått, i ikonet og en tynn stripe langs kanten. Et
+mål kilden sier uttrykkelig at stoffet ikke virker på, er et eget kort med
+mekanismen «Ingen effekt», uten ikon. Ikonene finnes bare for typene som er i
+bruk, og de generelle typene deler et nøytralt ikon for familien
+(`mekanismeikon` i `src/components/stoffside/panelvisning.ts`). Kortene
+redigeres, flyttes, fjernes og publiseres som kinetikkortene.
+
+De importerte farmakodynamikktekstene ble gjort om etter
+`docs/farmakodynamikk-kort-kartlegging.md`. Datasettet
+(`supabase/import/farmakodynamikk/<stoff>.json`) har én fil per stoff med
+tekst: filen teksten ble importert fra, kortene, og den utdypende teksten på
+hvert kort som setningene fra kilden, ordrett. Kontrollen stopper om en
+setning i kilden ikke står på noe kort (eller i `dekket`, setningene
+kortfeltene alene gjengir), eller om et kort har en setning som ikke står i
+kilden. `npx vite-node scripts/lag-farmakodynamikkort.ts -- <brukernavn>
+<mappe>` lager migrasjonene. De gjør om bare en tekst som står nøyaktig som
+den ble importert og ikke har et upublisert utkast; kortene får kildene til
+teksten, og teksten flyttes til «fjernet», så den står i historikken, men ikke
+vises ved siden av kortene. Stoffene uten farmakodynamikktekst får ingen kort.
+En senere import legger fortsatt farmakodynamikken inn som tekst; den vises
+under kortene til den gjøres om på samme måte.
 
 ## Tilgang
 

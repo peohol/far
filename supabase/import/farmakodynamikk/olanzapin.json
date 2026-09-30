@@ -1,0 +1,65 @@
+{
+  "stoff": "olanzapin",
+  "kilde": "psykofarmaka/OLAN.json",
+  "kort": [
+    {
+      "maal": "5-HT2A-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "5-HT2C-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "D1-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "D2-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Lavere affinitet enn til 5-HT2"
+    },
+    {
+      "maal": "D3-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "D4-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "α1-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "H1-reseptor",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    },
+    {
+      "maal": "Kolinerge reseptorer",
+      "effekt": "Antagonist",
+      "mekanisme": "antagonisme",
+      "retning": "ned"
+    }
+  ],
+  "dekket": [
+    "Antagonist på 5-HT_{2A/2C}-, D_{1-4}-, α_{1}- og H_{1}-reseptorer, samt kolinerge reseptorer.",
+    "Høyere affinitet til 5-HT_{2} enn D_{2}."
+  ]
+}

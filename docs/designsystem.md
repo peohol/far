@@ -57,6 +57,10 @@ settes på et enkelt element.
   hver med `-blekk`, `-flate` og `-kant`. `-kant` er for kanter og streker som
   må holde 3:1. Farge er aldri alene om å bære betydning: nivået står også i
   tekst eller ikon.
+- **Retning:** `--retning-ned`, `--retning-opp` og `--retning-noytral` er den
+  diskrete fargen på et mekanismekort i farmakodynamikken (dempet rødt når
+  prosessen på målet reduseres, grønt når den økes, grått ellers), i ikonet og
+  en tynn stripe langs kanten. Retningen står alltid også i tekst.
 
 `src/styles/__tests__/palette.test.ts` sjekker kontrasten til alle par som
 brukes sammen, i begge temaer. Et nytt fargepar skal inn der.

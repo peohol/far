@@ -35,15 +35,18 @@ import {
   ELEMENTTYPER,
   PANELREKKEFOLGE,
   datakortFor,
+  erKortserie,
   formaterFormverdier,
   formaterIntervall,
   lesDosetabell,
   lesFormverdier,
   lesIntervallverdi,
   lesKinetikk,
+  lesMekanismekort,
   lesRiktekst,
   panelFor,
 } from './paneler'
+import { mekanismeFor, retningFor } from './mekanismer'
 import { formaterReferanse } from './referanser'
 import { klartekst } from './riktekst'
 import { stoffadresse } from '../domain/rute'
@@ -267,11 +270,16 @@ export function stoffidentitet(
   }
 }
 
-/** Én tekst i et innholdselement, med hva slags felt det er og kortets overskrift. */
+/**
+ * Én tekst i et innholdselement, med hva slags felt det er og kortets
+ * overskrift. `navn` er det historikken kaller feltet, når det er et annet
+ * enn felttypen sier («Mål», «Effekt»).
+ */
 export interface Elementtekst {
   felt: Sokefelt
   tekst: string
   tittel?: string
+  navn?: string
 }
 
 /**
@@ -280,8 +288,8 @@ export interface Elementtekst {
  * Søket og historikken bruker de samme.
  */
 export function elementtekster(elementtype: string, data: unknown): Elementtekst[] {
-  const tekst = (felt: Sokefelt, t: string, tittel?: string): Elementtekst[] =>
-    t.trim() ? [{ felt, tekst: t, ...(tittel && { tittel }) }] : []
+  const tekst = (felt: Sokefelt, t: string, tittel?: string, navn?: string): Elementtekst[] =>
+    t.trim() ? [{ felt, tekst: t, ...(tittel && { tittel }), ...(navn && { navn }) }] : []
 
   switch (elementtype) {
     case ELEMENTTYPER.riktekst:
@@ -289,6 +297,19 @@ export function elementtekster(elementtype: string, data: unknown): Elementtekst
     case ELEMENTTYPER.kinetikk: {
       const { tittel, dokument } = lesKinetikk(data)
       return [...tekst('overskrift', tittel, tittel), ...tekst('fritekst', klartekst(dokument), tittel)]
+    }
+    case ELEMENTTYPER.mekanisme: {
+      const kort = lesMekanismekort(data)
+      const t = kort.maal
+      return [
+        ...tekst('overskrift', kort.maal, t, 'Mål'),
+        ...tekst('verdi', kort.effekt, t, 'Effekt'),
+        ...tekst('verdi', kort.kvalifikasjon, t, 'Kvalifikasjon'),
+        ...tekst('verdi', mekanismeFor(kort.mekanisme)?.navn ?? '', t, 'Mekanisme'),
+        ...tekst('verdi', retningFor(kort.retning).navn, t, 'Retning'),
+        ...tekst('fritekst', kort.merknad, t, 'Merknad'),
+        ...tekst('fritekst', klartekst(kort.dokument), t, 'Utdypende tekst'),
+      ]
     }
     case ELEMENTTYPER.dosetabell:
       return lesDosetabell(data).rader.flatMap((rad) =>
@@ -307,8 +328,9 @@ export function elementtekster(elementtype: string, data: unknown): Elementtekst
 function elementdokumenter(side: Sokested['side'], element: Sideelement): Sokedokument[] {
   const panelDef = panelFor(element.panel)
   const panel = panelDef && { nokkel: panelDef.nokkel, tittel: panelDef.tittel }
-  // I et panel av kort er hvert element sitt eget detaljkort.
-  const detaljkort = panelDef?.form === 'kort' ? element.id : undefined
+  // I et panel av kort er hvert kort sitt eget detaljkort. En tekst som står
+  // i farmakodynamikken fra før mekanismekortene, står under kortene.
+  const detaljkort = erKortserie(panelDef?.form) && element.elementtype !== ELEMENTTYPER.riktekst ? element.id : undefined
   return elementtekster(element.elementtype, element.data).map(({ felt, tekst, tittel }) => ({
     sted: {
       side,

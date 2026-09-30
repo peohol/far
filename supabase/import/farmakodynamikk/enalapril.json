@@ -1,0 +1,17 @@
+{
+  "stoff": "enalapril",
+  "kilde": "antihypertensiver/Enalapril.json",
+  "kort": [
+    {
+      "maal": "ACE (angiotensinkonverterende enzym)",
+      "effekt": "Hemmer",
+      "mekanisme": "enzymhemming",
+      "retning": "ned",
+      "merknad": "Reduserer angiotensin II og aldosteron; reduserer også nedbrytning av bradykinin",
+      "utdyping": [
+        "ACE-hemmer (angiotensinkonverterende enzymhemmer). Hemming av ACE reduserer mengden angiotensin II i plasma, som igjen gir økt reninaktivitet (pga. opphør av negativ feedback på reninfrisetting) og redusert aldosteronutskillelse. Reduserer den perifere arterielle karmotstanden. Blokkerer nedbrytningen av bradykinin.",
+        "ACE-hemmere senker ikke blodtrykket like effektivt hos pasienter av afrikansk opprinnelse pga. en høyere prevalens av mulig lavere reninnivåer hos hypertonikere av afrikansk opprinnelse."
+      ]
+    }
+  ]
+}

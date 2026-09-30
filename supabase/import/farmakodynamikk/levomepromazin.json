@@ -1,0 +1,27 @@
+{
+  "stoff": "levomepromazin",
+  "kilde": "psykofarmaka/LMP.json",
+  "kort": [
+    {
+      "maal": "Dopaminerg transmisjon",
+      "effekt": "Blokade",
+      "mekanisme": "reseptorpavirkning",
+      "retning": "ned",
+      "utdyping": [
+        "Blokade av monoaminerg transmisjon, særlig dopaminerg, adrenerg og noradrenerg."
+      ]
+    },
+    {
+      "maal": "Adrenerg transmisjon",
+      "effekt": "Blokade",
+      "mekanisme": "reseptorpavirkning",
+      "retning": "ned"
+    },
+    {
+      "maal": "Noradrenerg transmisjon",
+      "effekt": "Blokade",
+      "mekanisme": "reseptorpavirkning",
+      "retning": "ned"
+    }
+  ]
+}

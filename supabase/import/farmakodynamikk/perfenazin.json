@@ -1,0 +1,17 @@
+{
+  "stoff": "perfenazin",
+  "kilde": "psykofarmaka/PERF.json",
+  "kort": [
+    {
+      "maal": "Dopaminreseptorer (subtype ikke oppgitt)",
+      "effekt": "Reseptorblokade",
+      "mekanisme": "antagonisme",
+      "retning": "ned",
+      "kvalifikasjon": "Særlig dopamin",
+      "merknad": "Kilden omtaler også bredere katekolaminreseptorblokade"
+    }
+  ],
+  "dekket": [
+    "Reseptorblokade av katekolaminer, særlig dopamin."
+  ]
+}

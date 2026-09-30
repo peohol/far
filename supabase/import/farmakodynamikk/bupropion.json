@@ -1,0 +1,31 @@
+{
+  "stoff": "bupropion",
+  "kilde": "psykofarmaka/HBUP.json",
+  "kort": [
+    {
+      "maal": "Noradrenalinreopptak / NET",
+      "effekt": "Hemmer reopptak",
+      "mekanisme": "reopptakshemming",
+      "retning": "ned",
+      "kvalifikasjon": "Selektiv NDRI"
+    },
+    {
+      "maal": "Dopaminreopptak / DAT",
+      "effekt": "Hemmer reopptak",
+      "mekanisme": "reopptakshemming",
+      "retning": "ned",
+      "kvalifikasjon": "Selektiv NDRI"
+    },
+    {
+      "maal": "Serotoninreopptak / SERT",
+      "effekt": "Minimal effekt",
+      "mekanisme": "transportorpavirkning",
+      "retning": "ukjent",
+      "kvalifikasjon": "Minimal effekt på reopptak"
+    }
+  ],
+  "dekket": [
+    "Selektiv noradrenalin- og dopamin-reopptakshemmer (NDRI).",
+    "Minimal effekt på reopptak av serotonin."
+  ]
+}

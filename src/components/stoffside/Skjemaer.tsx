@@ -6,6 +6,8 @@ import {
   formverdimerke,
   kontrollerFormverdier,
   kontrollerIntervall,
+  kontrollerMekanismekort,
+  KVALIFIKASJON_MAKS,
   lesTallfelt,
   tallTilFelt,
   tomDoserad,
@@ -19,7 +21,9 @@ import {
   type KobletKjemikalie,
   type KobletVirkestoff,
   type Legemiddelkoblingdata,
+  type Mekanismekortdata,
 } from '../../faginnhold/paneler'
+import { INGEN_EFFEKT, MEKANISMEFAMILIER, MEKANISMER, RETNINGER, erMekanisme, type Retning } from '../../faginnhold/mekanismer'
 import { kjemikalieadresse, type Kjemikalie } from '../../clinpgx/modell'
 import { koblingsforslag, type Koblingsgrunnlag } from '../../clinpgx/stoffside'
 import { fold } from '../../faginnhold/sok'
@@ -642,6 +646,112 @@ export function KinetikkSkjema(props: SkjemaProps<{ tittel: string; dokument: Ri
     <Skjemaramme {...props} kontroller={kontroller}>
       <Tekstfelt merke="Overskrift" verdi={tittel} onEndre={setTittel} />
       <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett={tittel || props.tittel} fyll />
+    </Skjemaramme>
+  )
+}
+
+/* --- Farmakodynamikken ---------------------------------------------------- */
+
+/**
+ * Et mekanismekort: målet og effekten øverst, så mekanismetypen og retningen,
+ * og til sist merknaden og den utdypende teksten. Typen velges fra de
+ * generelle og de spesifikke typene i `mekanismer.ts`; «Ingen effekt» gir
+ * retningen «Ingen effekt», og omvendt.
+ */
+export function MekanismekortSkjema(props: SkjemaProps<Mekanismekortdata>) {
+  const [maal, setMaal] = useBevart('maal', props.start.maal)
+  const [effekt, setEffekt] = useBevart('effekt', props.start.effekt)
+  const [kvalifikasjon, setKvalifikasjon] = useBevart('kvalifikasjon', props.start.kvalifikasjon)
+  const [mekanisme, setMekanisme] = useBevart('mekanisme', props.start.mekanisme)
+  const [retning, setRetning] = useBevart<Retning>('retning', props.start.retning)
+  const [merknad, setMerknad] = useBevart('merknad', props.start.merknad)
+  const [dokument, setDokument] = useBevart('dokument', props.start.dokument)
+  const mekanismeId = useId()
+  const retningId = useId()
+  const tekstId = useId()
+
+  const velgMekanisme = (verdi: string) => {
+    const ny = erMekanisme(verdi) ? verdi : null
+    setMekanisme(ny)
+    // «Ingen effekt» har ingen retning; et kort som får en mekanisme, får tilbake «ikke angitt».
+    if (ny === INGEN_EFFEKT) setRetning('ingen')
+    else if (retning === 'ingen') setRetning('ukjent')
+  }
+
+  const kontroller = () => {
+    const data: Mekanismekortdata = { maal, effekt, kvalifikasjon, mekanisme, retning, merknad, dokument }
+    const feil = kontrollerMekanismekort(data)
+    return feil ? { feil } : { data }
+  }
+
+  return (
+    <Skjemaramme {...props} kontroller={kontroller} bred>
+      <div className="mekanismeskjema__rad">
+        <Tekstfelt merke="Målprotein eller prosess" verdi={maal} onEndre={setMaal} />
+        <Tekstfelt merke="Effekt" verdi={effekt} onEndre={setEffekt} />
+      </div>
+      <Felt
+        merkelapp="Kort kvalifikasjon (valgfri)"
+        type="text"
+        value={kvalifikasjon}
+        maxLength={KVALIFIKASJON_MAKS}
+        onChange={(e) => setKvalifikasjon(e.target.value)}
+        hjelp="Står på det lukkede kortet, f.eks. «Høy affinitet» eller «Potent»."
+      />
+      <div className="mekanismeskjema__rad">
+        <div className="felt">
+          <label className="felt__merkelapp" htmlFor={mekanismeId}>
+            Mekanismetype
+          </label>
+          <select id={mekanismeId} className="felt__inndata" value={mekanisme ?? ''} onChange={(e) => velgMekanisme(e.target.value)}>
+            <option value="">Velg …</option>
+            {MEKANISMEFAMILIER.map((f) => (
+              <optgroup key={f.nokkel} label={f.navn}>
+                {MEKANISMER.filter((m) => m.familie === f.nokkel).map((m) => (
+                  <option key={m.nokkel} value={m.nokkel}>
+                    {m.navn}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+          <span className="felt__hjelp">Velg den generelle typen når kilden ikke sier mer.</span>
+        </div>
+        <fieldset className="mekanismeskjema__retning">
+          <legend className="felt__merkelapp" id={retningId}>
+            Retning på målet
+          </legend>
+          {RETNINGER.map((r) => (
+            <label key={r.nokkel} className="mekanismeskjema__retningsvalg" data-tone={r.tone}>
+              <input
+                type="radio"
+                name={retningId}
+                value={r.nokkel}
+                checked={retning === r.nokkel}
+                disabled={(mekanisme === INGEN_EFFEKT) !== (r.nokkel === 'ingen')}
+                onChange={() => setRetning(r.nokkel)}
+              />
+              <span aria-hidden="true" className="mekanismeskjema__symbol">
+                {r.symbol}
+              </span>
+              <span>{r.navn}</span>
+            </label>
+          ))}
+        </fieldset>
+      </div>
+      <Felt
+        merkelapp="Merknad (valgfri)"
+        type="text"
+        value={merknad}
+        onChange={(e) => setMerknad(e.target.value)}
+        hjelp="Et kort forbehold eller en presisering, vist øverst i det åpnede kortet."
+      />
+      <div className="felt">
+        <span className="felt__merkelapp" id={tekstId}>
+          Utdypende tekst (valgfri)
+        </span>
+        <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett="Utdypende tekst" />
+      </div>
     </Skjemaramme>
   )
 }
