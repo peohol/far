@@ -130,15 +130,18 @@ describe('det modale laget', () => {
     const lag = screen.getByRole('dialog', { name: 'Idéer' })
     const tekst = screen.getByText('Tekst som markeres')
 
-    // Trykket begynner i panelet og slipper utenfor: nettleseren sender
-    // klikket til den felles forelderen, som er selve bakgrunnen.
-    fireEvent.pointerDown(tekst)
-    fireEvent.click(lag)
+    // Nettleseren sender klikket til den nærmeste felles forelderen for der
+    // trykket begynte og sluttet — som er selve bakgrunnen, begge veier.
+    const dra = (fra: Element, til: Element) => {
+      fireEvent.pointerDown(fra)
+      fireEvent.pointerUp(til)
+      fireEvent.click(lag)
+    }
+    // Begynner i panelet og slipper utenfor.
+    dra(tekst, lag)
     expect(onLukk).not.toHaveBeenCalled()
-
-    // Og motsatt: begynner utenfor og slipper i panelet.
-    fireEvent.pointerDown(lag)
-    fireEvent.click(tekst)
+    // Begynner utenfor og slipper i panelet.
+    dra(lag, tekst)
     expect(onLukk).not.toHaveBeenCalled()
 
     await userEvent.click(lag)
