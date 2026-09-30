@@ -5,20 +5,20 @@ import { useProfil } from '../../auth/okt'
 import { Avatar, type Avatarstorrelse } from '../konto/Avatar'
 
 /**
- * Det alle delene av idévinduet trenger: hvem som er logget inn, om det er en
- * administrator, og profilene og profilbildene til dem som har skrevet noe.
- * Profilene hentes én gang når vinduet åpnes.
+ * Det trådene trenger — i idévinduet og i diskusjonene: hvem som er logget
+ * inn, om det er en administrator, og profilene og profilbildene til dem som
+ * har skrevet noe. Profilene hentes av den som viser trådene.
  */
-interface Idekontekst {
+interface Forfatterkontekst {
   meg: Profil
   admin: boolean
   profiler: ReadonlyMap<string, Profil>
   lenker: ReadonlyMap<string, string>
 }
 
-const Kontekst = createContext<Idekontekst | null>(null)
+const Kontekst = createContext<Forfatterkontekst | null>(null)
 
-export function Idekilde({ profiler, children }: { profiler: readonly Profil[]; children: ReactNode }) {
+export function Forfatterkilde({ profiler, children }: { profiler: readonly Profil[]; children: ReactNode }) {
   const meg = useProfil()
   const lenker = useAvatarlenker(profiler as Profil[])
   const verdi = useMemo(
@@ -28,22 +28,22 @@ export function Idekilde({ profiler, children }: { profiler: readonly Profil[]; 
   return <Kontekst.Provider value={verdi}>{children}</Kontekst.Provider>
 }
 
-export function useIdekontekst(): Idekontekst {
+export function useForfatterkontekst(): Forfatterkontekst {
   const verdi = useContext(Kontekst)
-  if (!verdi) throw new Error('Idévinduet mangler konteksten sin.')
+  if (!verdi) throw new Error('Tråden mangler forfatterkonteksten sin.')
   return verdi
 }
 
 /** Profilen til en forfatter. Den innloggede er alltid med, også før profilene er hentet. */
 export function useForfatter(id: string | null): Profil | null {
-  const { meg, profiler } = useIdekontekst()
+  const { meg, profiler } = useForfatterkontekst()
   if (id === null) return null
   return profiler.get(id) ?? (id === meg.id ? meg : null)
 }
 
 /** Profilbildet til en forfatter, eller en tom sirkel for en slettet kommentar. */
 export function Forfatterbilde({ id, storrelse }: { id: string | null; storrelse: Avatarstorrelse }) {
-  const { lenker } = useIdekontekst()
+  const { lenker } = useForfatterkontekst()
   const profil = useForfatter(id)
   if (!profil) return <span className={`avatar avatar--${storrelse} avatar--tom`} aria-hidden="true" />
   const lenke = profil.avatar_path ? (lenker.get(profil.avatar_path) ?? null) : null

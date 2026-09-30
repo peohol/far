@@ -1,44 +1,64 @@
 import { useId, useMemo, useRef, useState } from 'react'
 import { useBevart } from '../../oppdatering/Bevaring'
 import { tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
-import { endreKommentar, opprettKommentar, slettKommentar } from '../../ideer/api'
-import { byggTraad, erNyKommentar, tekstTilLagring, type Idetraad, type Kommentar, type Kommentarnode } from '../../ideer/modell'
+import { byggTraad, erNyKommentar, tekstTilLagring, type Kommentar, type Kommentarnode } from '../../traad/modell'
 import { useSkjuling } from '../../hooks/useSkjuling'
 import { Riktekst } from '../stoffside/Riktekst'
 import { Rikteksteditor } from '../stoffside/Rikteksteditor'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
-import { Forfatterbilde, useForfatternavn, useIdekontekst } from './Idekontekst'
-import { Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from './Smadeler'
+import { Forfatterbilde, useForfatternavn, useForfatterkontekst } from './Forfatterkontekst'
+import { Bekreftknapp, Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from './Smadeler'
 
 /**
- * Kommentartråden under en idé, med svar i svar som på Reddit: hvert nivå
- * rykker inn, og en loddrett linje viser hvilken kommentar svarene hører til.
- * Et trykk på linja, eller på pilen i hodet, legger kommentaren og svarene
- * under den sammen — med den samme glidningen som skuffene på stoffsidene.
+ * Veien kommentarene i én tråd lagres: under en idé eller i en diskusjon.
+ * Databasen avgjør hvem som får gjøre hva; kanalen sier hva knappene skal
+ * tilby.
+ */
+export interface Kommentarkanal {
+  /** Tråden, til navnene det som skrives, tas vare på under (`useBevart`). */
+  traad: string
+  opprett: (forelder: string | null, tekst: Riktekstdokument) => Promise<void>
+  endre: (kommentar: string, tekst: Riktekstdokument) => Promise<void>
+  /** En kommentar med svar står igjen uten tekst; databasen avgjør det. */
+  slett: (kommentar: string) => Promise<void>
+  /** En administrator kan slette andres kommentarer (idéene). */
+  adminSletter: boolean
+  /** En administrator kan skjule innholdet i en kommentar (diskusjonene). */
+  skjul?: (kommentar: string) => Promise<void>
+}
+
+/**
+ * Kommentartråden under en idé eller i en diskusjon, med svar i svar som på
+ * Reddit: hvert nivå rykker inn, og en loddrett linje viser hvilken kommentar
+ * svarene hører til. Et trykk på linja, eller på pilen i hodet, legger
+ * kommentaren og svarene under den sammen — med den samme glidningen som
+ * skuffene på stoffsidene.
  *
- * En arkivert eller overført idé har en frosset tråd: den kan leses, men
- * ingen kan kommentere, svare, endre, slette eller gi hjerter.
+ * En frosset tråd (en arkivert eller overført idé, en arkivert diskusjon) kan
+ * leses, men ingen kan kommentere, svare, endre, slette eller gi hjerter.
  */
 export function Kommentartraad({
-  traad,
+  kanal,
+  kommentarer,
   sistSett,
   onEndret,
   onHjerte,
   laast = false,
 }: {
-  traad: Idetraad
-  /** Når idéen sist var åpnet før nå; kommentarer fra andre etter det er nye. */
+  kanal: Kommentarkanal
+  kommentarer: readonly Kommentar[]
+  /** Når tråden sist var åpnet før nå; kommentarer fra andre etter det er nye. */
   sistSett: string | null
   /** Tråden er endret, og hentes på nytt. */
   onEndret: () => Promise<unknown>
   onHjerte: (kommentar: Kommentar) => void
   laast?: boolean
 }) {
-  const { meg } = useIdekontekst()
+  const { meg } = useForfatterkontekst()
   const erNy = (kommentar: Kommentar) => erNyKommentar(kommentar, sistSett, meg.id)
-  const noder = useMemo(() => byggTraad(traad.kommentarer), [traad.kommentarer])
-  const antall = traad.kommentarer.filter((k) => !k.slettet).length
+  const noder = useMemo(() => byggTraad(kommentarer), [kommentarer])
+  const antall = kommentarer.filter((k) => !k.slettet).length
   const id = useId()
 
   return (
@@ -52,12 +72,12 @@ export function Kommentartraad({
           Tråden er frosset. Den kan leses, men ikke kommenteres.
         </p>
       ) : (
-        <Kommentarskriver ide={traad.id} forelder={null} onSendt={onEndret} />
+        <Kommentarskriver kanal={kanal} forelder={null} onSendt={onEndret} />
       )}
       {noder.length > 0 && (
         <ol className="kommentarer">
           {noder.map((node) => (
-            <Kommentarvisning key={node.kommentar.id} node={node} ide={traad.id} erNy={erNy} onEndret={onEndret} onHjerte={onHjerte} laast={laast} />
+            <Kommentarvisning key={node.kommentar.id} node={node} kanal={kanal} erNy={erNy} onEndret={onEndret} onHjerte={onHjerte} laast={laast} />
           ))}
         </ol>
       )}
@@ -67,21 +87,21 @@ export function Kommentartraad({
 
 function Kommentarvisning({
   node,
-  ide,
+  kanal,
   erNy,
   onEndret,
   onHjerte,
   laast,
 }: {
   node: Kommentarnode
-  ide: string
+  kanal: Kommentarkanal
   erNy: (kommentar: Kommentar) => boolean
   onEndret: () => Promise<unknown>
   onHjerte: (kommentar: Kommentar) => void
   laast: boolean
 }) {
   const { kommentar, svar, antallSvar } = node
-  const { meg, admin } = useIdekontekst()
+  const { meg, admin } = useForfatterkontekst()
   const navn = useForfatternavn(kommentar.forfatter_id)
   const [apen, setApen] = useState(true)
   // Et svar eller en endring som skrives, overlever en oppdatering av appen.
@@ -94,12 +114,13 @@ function Kommentarvisning({
   useSkjuling(kropp, inner, apen)
 
   const eier = !laast && !kommentar.slettet && kommentar.forfatter_id === meg.id
+  const skjult = Boolean(kommentar.skjult)
   const veksle = () => setApen((a) => !a)
   const skjulteSvar = !apen && antallSvar > 0
 
-  const slett = async () => {
+  const utfor = async (handling: (kommentar: string) => Promise<void>) => {
     try {
-      await slettKommentar(kommentar.id)
+      await handling(kommentar.id)
       await onEndret()
     } catch (e) {
       setFeil((e as Error).message)
@@ -137,7 +158,7 @@ function Kommentarvisning({
         <div ref={inner} id={innholdId} className="kommentar__inner">
           {endrer ? (
             <Kommentarskriver
-              ide={ide}
+              kanal={kanal}
               forelder={kommentar.forelder_id}
               kommentar={kommentar}
               onSendt={async () => {
@@ -146,6 +167,8 @@ function Kommentarvisning({
               }}
               onAvbryt={() => setEndrer(false)}
             />
+          ) : skjult ? (
+            <p className="kommentar__skjultmerknad">Innholdet er skjult av en administrator.</p>
           ) : (
             !kommentar.slettet && <Riktekst dokument={kommentar.tekst} />
           )}
@@ -162,17 +185,27 @@ function Kommentarvisning({
                   Svar
                 </Idehandling>
               )}
-              {eier && (
+              {eier && !skjult && (
                 <Idehandling ikon="edit" onClick={() => setEndrer(true)}>
                   Rediger
                 </Idehandling>
               )}
-              {!laast && (eier || admin) && <Slettknapp hva="kommentaren" onSlett={() => void slett()} />}
+              {!laast && (eier || (admin && kanal.adminSletter)) && <Slettknapp hva="kommentaren" onSlett={() => void utfor(kanal.slett)} />}
+              {admin && kanal.skjul && !skjult && !eier && (
+                <Bekreftknapp
+                  ikon="skjul"
+                  tekst="Skjul"
+                  bekreftTekst="Bekreft skjuling"
+                  etikett="Skjul innholdet i kommentaren"
+                  bekreftEtikett="Bekreft at innholdet i kommentaren skjules for godt"
+                  onBekreft={() => void utfor(kanal.skjul!)}
+                />
+              )}
             </div>
           )}
           {svarer && (
             <Kommentarskriver
-              ide={ide}
+              kanal={kanal}
               forelder={kommentar.id}
               onSendt={async () => {
                 setSvarer(false)
@@ -184,7 +217,7 @@ function Kommentarvisning({
           {svar.length > 0 && (
             <ol className="kommentarer">
               {svar.map((barn) => (
-                <Kommentarvisning key={barn.kommentar.id} node={barn} ide={ide} erNy={erNy} onEndret={onEndret} onHjerte={onHjerte} laast={laast} />
+                <Kommentarvisning key={barn.kommentar.id} node={barn} kanal={kanal} erNy={erNy} onEndret={onEndret} onHjerte={onHjerte} laast={laast} />
               ))}
             </ol>
           )}
@@ -200,13 +233,13 @@ function Kommentarvisning({
  * endringen åpnes ferdig til å skrive i.
  */
 function Kommentarskriver({
-  ide,
+  kanal,
   forelder,
   kommentar,
   onSendt,
   onAvbryt,
 }: {
-  ide: string
+  kanal: Kommentarkanal
   forelder: string | null
   /** Kommentaren som endres. Uten: en ny. */
   kommentar?: Kommentar
@@ -215,7 +248,7 @@ function Kommentarskriver({
   onAvbryt?: () => void
 }) {
   // Det som skrives, overlever en oppdatering av appen.
-  const skriver = `skriver:${ide}:${kommentar ? `endre:${kommentar.id}` : `svar:${forelder ?? 'ny'}`}`
+  const skriver = `skriver:${kanal.traad}:${kommentar ? `endre:${kommentar.id}` : `svar:${forelder ?? 'ny'}`}`
   const [apen, setApen] = useBevart(`${skriver}/apen`, Boolean(onAvbryt))
   const [tekst, setTekst] = useBevart<Riktekstdokument>(`${skriver}/tekst`, () => kommentar?.tekst ?? tomtDokument())
   /** Øker for hver sending, så editoren begynner tom igjen. */
@@ -238,8 +271,8 @@ function Kommentarskriver({
     setSender(true)
     setFeil(null)
     try {
-      if (kommentar) await endreKommentar(kommentar.id, innhold)
-      else await opprettKommentar(ide, forelder, innhold)
+      if (kommentar) await kanal.endre(kommentar.id, innhold)
+      else await kanal.opprett(forelder, innhold)
       setTekst(tomtDokument())
       setRunde((r) => r + 1)
       if (!onAvbryt) setApen(false)

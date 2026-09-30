@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from 'react'
-import { fullTid, kortTid } from '../../ideer/modell'
+import { fullTid, kortTid } from '../../traad/modell'
 import { Ikon } from '../ikon/Ikon'
 import type { Ikonnavn } from '../ikon/register'
 

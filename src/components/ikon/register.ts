@@ -808,6 +808,34 @@ const REGISTER = {
       P('M4.5 7.5h15M9.5 7.5V5.3a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v2.2M10.3 11v5.5M13.7 11v5.5', 'l', 'i-ink'),
     ],
   },
+  // Tegnet i OUSFAR for diskusjonene, i samme stil som resten av registeret.
+  diskusjon: {
+    vb: 24,
+    parts: [
+      P('M9.5 8.5h9A2.5 2.5 0 0 1 21 11v5a2.5 2.5 0 0 1-2.5 2.5H18v2.5l-3.5-2.5h-5A2.5 2.5 0 0 1 7 16v-5a2.5 2.5 0 0 1 2.5-2.5z', 'f1', 'accent'),
+      G(
+        [
+          P('M5.5 3.5h8A2.5 2.5 0 0 1 16 6v2.5H9.5A2.5 2.5 0 0 0 7 11v2.2l-2 1.6V12.9A2.5 2.5 0 0 1 3 10.5V6a2.5 2.5 0 0 1 2.5-2.5z', 'f2', 'info'),
+        ],
+        'pop',
+      ),
+    ],
+  },
+  feste: {
+    vb: 24,
+    parts: [
+      G([P('M9 3.5h6l-.8 5.2 3.3 3.3v1.5h-11V12l3.3-3.3z', 'f1', 'accent')], 'pop'),
+      P('M12 13.5v7', 'l', 'i-ink'),
+    ],
+  },
+  skjul: {
+    vb: 24,
+    parts: [
+      P('M2.8 12S6.2 5.8 12 5.8 21.2 12 21.2 12 17.8 18.2 12 18.2 2.8 12 2.8 12z', 'f1', 'glass'),
+      C(12, 12, 2.6, 'h', 'i-ink'),
+      P('M4.5 19.5 19.5 4.5', 'l', 'danger', 'pop'),
+    ],
+  },
 } satisfies Record<string, Ikondefinisjon>
 
 export type Ikonnavn = keyof typeof REGISTER

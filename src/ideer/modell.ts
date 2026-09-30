@@ -1,11 +1,12 @@
 /**
- * Idéene: formen de har i appen, sorteringen av lista, kommentartråden som
- * tre og tidspunktene slik de vises. Alt her er rene funksjoner; kallene mot
- * databasen står i `api.ts`, og reglene for hvem som får gjøre hva, i
- * migrasjonen `*_ideer.sql`.
+ * Idéene: formen de har i appen og sorteringen av lista. Kommentartråden og
+ * tidspunktene deler de med diskusjonene (`src/traad/modell.ts`). Alt her er
+ * rene funksjoner; kallene mot databasen står i `api.ts`, og reglene for hvem
+ * som får gjøre hva, i migrasjonen `*_ideer.sql`.
  */
 import { visningsnavn, type Profil } from '@delt/profil'
-import { NODER, erTomt, rensDokument, type Riktekstdokument, type Riktekstnode } from '../faginnhold/riktekst'
+import type { Riktekstdokument } from '../faginnhold/riktekst'
+import { lesInnlegg, lesKommentarer, rensInnleggstekst, type Innlegg, type Kommentar } from '../traad/modell'
 import { erObjekt, tall, tallEllerNull, tekst, tekstEllerNull } from './lesing'
 
 /* --- Kategoriene ----------------------------------------------------------- */
@@ -80,23 +81,10 @@ export function oppgavekode(nummer: number): string {
   return `OPG-${String(nummer).padStart(3, '0')}`
 }
 
-/** Lengste overskrift. Samme grense som databasen setter. */
-export const TITTEL_MEST = 140
-
 /* --- Formen dataene har ------------------------------------------------------ */
 
-interface Felles {
-  id: string
-  /** `null` for en slettet kommentar, som ikke sier hvem som skrev den. */
-  forfatter_id: string | null
-  opprettet_kl: string
-  endret_kl: string | null
-  hjerter: number
-  mitt_hjerte: boolean
-}
-
 /** En idé slik lista viser den, uten beskrivelsen. */
-export interface Ide extends Felles {
+export interface Ide extends Innlegg {
   forfatter_id: string
   kategori: Idekategori
   tittel: string
@@ -107,13 +95,6 @@ export interface Ide extends Felles {
   kommentarer: number
   /** Kommentarer fra andre siden den innloggede sist åpnet idéen. */
   nye_kommentarer: number
-}
-
-export interface Kommentar extends Felles {
-  forelder_id: string | null
-  /** Renset for visning. Tomt for en slettet kommentar. */
-  tekst: Riktekstdokument
-  slettet: boolean
 }
 
 /** Én idé med beskrivelsen og hele kommentartråden. */
@@ -127,48 +108,7 @@ export interface Idetraad extends Omit<Ide, 'kommentarer' | 'nye_kommentarer'> {
   lest_kl: string | null
 }
 
-/**
- * Om kommentaren er ny for den innloggede: skrevet av noen andre etter at
- * idéen sist ble åpnet, eller når den aldri er åpnet. Samme regel som
- * `ideoversikt()` teller etter.
- */
-export function erNyKommentar(kommentar: Kommentar, sistSett: string | null, meg: string): boolean {
-  if (kommentar.slettet || kommentar.forfatter_id === meg) return false
-  return sistSett === null || Date.parse(kommentar.opprettet_kl) > Date.parse(sistSett)
-}
-
-/**
- * Rikteksten i en idé eller kommentar, renset for visning. Idéene har ikke
- * referansesystemet, så siteringer blir ikke stående selv om noen skulle
- * sende dem.
- */
-export function rensIdetekst(verdi: unknown): Riktekstdokument {
-  return utenSiteringer(rensDokument(verdi))
-}
-
-function utenSiteringer<T extends Riktekstnode>(node: T): T {
-  if (!node.content) return node
-  return { ...node, content: node.content.filter((n) => n.type !== NODER.sitering).map(utenSiteringer) }
-}
-
-/** Teksten som skal lagres: renset, eller `null` når den er tom. */
-export function tekstTilLagring(dokument: Riktekstdokument): Riktekstdokument | null {
-  const renset = rensIdetekst(dokument)
-  return erTomt(renset) ? null : renset
-}
-
 /* --- Lesing av det databasen svarer ------------------------------------------ */
-
-function lesFelles(rad: Record<string, unknown>): Felles {
-  return {
-    id: tekst(rad.id),
-    forfatter_id: tekstEllerNull(rad.forfatter_id),
-    opprettet_kl: tekst(rad.opprettet_kl),
-    endret_kl: tekstEllerNull(rad.endret_kl),
-    hjerter: tall(rad.hjerter),
-    mitt_hjerte: rad.mitt_hjerte === true,
-  }
-}
 
 function lesIdeoppgave(verdi: unknown): Ideoppgave | null {
   if (!erObjekt(verdi) || !erOppgavestatus(verdi.status)) return null
@@ -178,7 +118,7 @@ function lesIdeoppgave(verdi: unknown): Ideoppgave | null {
 
 function lesIde(rad: unknown): Ide | null {
   if (!erObjekt(rad) || !erKategori(rad.kategori)) return null
-  const felles = lesFelles(rad)
+  const felles = lesInnlegg(rad)
   if (!felles.id || !felles.forfatter_id) return null
   return {
     ...felles,
@@ -201,26 +141,11 @@ export function lesIdeoversikt(data: unknown): Ide[] {
 export function lesIdetraad(data: unknown): Idetraad | null {
   const ide = lesIde({ ...(erObjekt(data) ? data : {}), kommentarer: 0 })
   if (!ide || !erObjekt(data)) return null
-  const kommentarer = Array.isArray(data.kommentarer)
-    ? data.kommentarer.flatMap((rad): Kommentar[] => {
-        if (!erObjekt(rad)) return []
-        const felles = lesFelles(rad)
-        if (!felles.id) return []
-        const slettet = rad.slettet === true
-        return [
-          {
-            ...felles,
-            forelder_id: tekstEllerNull(rad.forelder_id),
-            slettet,
-            tekst: slettet ? rensIdetekst(null) : rensIdetekst(rad.tekst),
-          },
-        ]
-      })
-    : []
+  const kommentarer = lesKommentarer(data.kommentarer)
   const { kommentarer: _antall, nye_kommentarer: _nye, ...resten } = ide
   return {
     ...resten,
-    tekst: data.tekst == null ? null : rensIdetekst(data.tekst),
+    tekst: data.tekst == null ? null : rensInnleggstekst(data.tekst),
     kommentarer,
     sist_sett: tekstEllerNull(data.sist_sett),
     lest_kl: tekstEllerNull(data.lest_kl),
@@ -346,73 +271,4 @@ export function grupperIdeer(ideer: readonly Ide[], sortering: Sortering, profil
     else grupper.set(ide.forfatter_id, { kriterium: 'bruker', nokkel: ide.forfatter_id, navn: brukernavn(ide.forfatter_id, profiler) || 'Ukjent bruker', ideer: [ide] })
   }
   return [...grupper.values()]
-}
-
-/* --- Kommentartråden ------------------------------------------------------ */
-
-export interface Kommentarnode {
-  kommentar: Kommentar
-  svar: Kommentarnode[]
-  /** Alle svarene under, også svar på svar, som ikke er slettet. */
-  antallSvar: number
-}
-
-/**
- * Kommentarene som et tre, med de eldste først på hvert nivå, slik en samtale
- * leses. Et svar hvis forelder ikke finnes (den ble borte mellom to
- * hentinger), står øverst i stedet for å forsvinne.
- */
-export function byggTraad(kommentarer: readonly Kommentar[]): Kommentarnode[] {
-  const noder = new Map(kommentarer.map((k) => [k.id, { kommentar: k, svar: [] as Kommentarnode[], antallSvar: 0 }]))
-  const topp: Kommentarnode[] = []
-  const eldstForst = (a: Kommentarnode, b: Kommentarnode) =>
-    Date.parse(a.kommentar.opprettet_kl) - Date.parse(b.kommentar.opprettet_kl) || a.kommentar.id.localeCompare(b.kommentar.id)
-
-  for (const node of noder.values()) {
-    const forelder = node.kommentar.forelder_id ? noder.get(node.kommentar.forelder_id) : undefined
-    ;(forelder ? forelder.svar : topp).push(node)
-  }
-  const ordne = (liste: Kommentarnode[]): number => {
-    liste.sort(eldstForst)
-    return liste.reduce((sum, node) => {
-      node.antallSvar = ordne(node.svar)
-      return sum + node.antallSvar + (node.kommentar.slettet ? 0 : 1)
-    }, 0)
-  }
-  ordne(topp)
-  return topp
-}
-
-/* --- Tidspunktene ---------------------------------------------------------- */
-
-const KLOKKE = new Intl.DateTimeFormat('nb-NO', { hour: '2-digit', minute: '2-digit' })
-const DAG = new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'short' })
-const DAG_OG_AAR = new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' })
-const FULLT = new Intl.DateTimeFormat('nb-NO', { dateStyle: 'long', timeStyle: 'short' })
-
-function sammeDag(a: Date, b: Date): boolean {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
-}
-
-/**
- * Tidspunktet kort, slik lista og tråden viser det: «nå», «for 5 min siden»,
- * «i dag 14:32», «i går 09:10», «12. sep.» og «12. sep. 2025».
- */
-export function kortTid(iso: string, naa: Date = new Date()): string {
-  const tid = new Date(iso)
-  if (Number.isNaN(tid.getTime())) return ''
-  const minutter = Math.floor((naa.getTime() - tid.getTime()) / 60_000)
-  if (minutter < 1) return 'nå'
-  if (minutter < 60) return `for ${minutter} min siden`
-  if (sammeDag(tid, naa)) return `i dag ${KLOKKE.format(tid)}`
-  const igaar = new Date(naa)
-  igaar.setDate(naa.getDate() - 1)
-  if (sammeDag(tid, igaar)) return `i går ${KLOKKE.format(tid)}`
-  return (tid.getFullYear() === naa.getFullYear() ? DAG : DAG_OG_AAR).format(tid)
-}
-
-/** Tidspunktet i sin helhet, til `title` og skjermlesere. */
-export function fullTid(iso: string): string {
-  const tid = new Date(iso)
-  return Number.isNaN(tid.getTime()) ? '' : FULLT.format(tid)
 }

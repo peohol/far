@@ -8,7 +8,7 @@ import { Angretoast, type Angring } from '../Angretoast'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Modallag } from '../Modallag'
-import { Idekilde } from './Idekontekst'
+import { Forfatterkilde } from '../traad/Forfatterkontekst'
 import { Ideliste } from './Ideliste'
 import { Ideside } from './Ideside'
 import { Ideskjema } from './Ideskjema'
@@ -179,7 +179,7 @@ export function Ideer({
       }
       fot={angring ? <Angretoast key={angring.nokkel} angring={angring} onFerdig={() => setAngring(null)} /> : undefined}
     >
-      <Idekilde profiler={profiler}>
+      <Forfatterkilde profiler={profiler}>
         <Bevaringsomrade navn="ideer">
           <div ref={rot} className="idevindu" key={visning.side === 'ide' ? visning.id : visning.side}>
             {feil && visning.side === 'liste' && (
@@ -229,7 +229,7 @@ export function Ideer({
             )}
           </div>
         </Bevaringsomrade>
-      </Idekilde>
+      </Forfatterkilde>
     </Modallag>
   )
 }

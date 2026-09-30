@@ -1,13 +1,25 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { arkiverIde, gjenopprettIde, hentIdetraad, merkIdeSett, overforIde, settHjerte, slettIde } from '../../ideer/api'
-import { idetilstand, slettesKl, type Idetraad, type Kommentar } from '../../ideer/modell'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  arkiverIde,
+  endreKommentar,
+  gjenopprettIde,
+  hentIdetraad,
+  merkIdeSett,
+  opprettKommentar,
+  overforIde,
+  settHjerte,
+  slettIde,
+  slettKommentar,
+} from '../../ideer/api'
+import { idetilstand, slettesKl, type Idetraad } from '../../ideer/modell'
+import type { Kommentar } from '../../traad/modell'
 import { Riktekst } from '../stoffside/Riktekst'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
-import { Forfatterbilde, useForfatternavn, useIdekontekst } from './Idekontekst'
+import { Forfatterbilde, useForfatternavn, useForfatterkontekst } from '../traad/Forfatterkontekst'
 import { Kategorimerke } from './Merker'
-import { Kommentartraad } from './Kommentartraad'
-import { Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from './Smadeler'
+import { Kommentartraad, type Kommentarkanal } from '../traad/Kommentartraad'
+import { Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from '../traad/Smadeler'
 
 const DATO = new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })
 
@@ -47,7 +59,7 @@ export function Ideside({
   /** Til oppgaven en overført idé ble til. */
   onOppgave?: (oppgave: string) => void
 }) {
-  const { meg, admin } = useIdekontekst()
+  const { meg, admin } = useForfatterkontekst()
   const [traad, setTraad] = useState<Idetraad | null>(null)
   const [feil, setFeil] = useState<string | null>(null)
   const [arbeider, setArbeider] = useState(false)
@@ -82,6 +94,18 @@ export function Ideside({
   }, [lastet, innebygd])
 
   const forfatter = useForfatternavn(traad?.forfatter_id ?? null)
+
+  /** Kommentarene under idéen. En administrator kan slette alle, slik idéene alltid har latt dem. */
+  const kanal = useMemo<Kommentarkanal>(
+    () => ({
+      traad: id,
+      opprett: (forelder, tekst) => opprettKommentar(id, forelder, tekst),
+      endre: (kommentar, tekst) => endreKommentar(kommentar, tekst),
+      slett: (kommentar) => slettKommentar(kommentar),
+      adminSletter: true,
+    }),
+    [id],
+  )
 
   /**
    * Hjertet vises med én gang; lagringen går etter. Går den galt, hentes
@@ -246,7 +270,7 @@ export function Ideside({
         </div>
       )}
 
-      <Kommentartraad traad={traad} sistSett={sistSett ?? null} onEndret={hent} onHjerte={veksleHjerte} laast={laast} />
+      <Kommentartraad kanal={kanal} kommentarer={traad.kommentarer} sistSett={sistSett ?? null} onEndret={hent} onHjerte={veksleHjerte} laast={laast} />
     </article>
   )
 }
