@@ -289,18 +289,40 @@ describe('vinduet', () => {
     const { bruker, vindu } = await apne()
     await bruker.click(within(vindu).getByRole('button', { name: 'Varselinnstillinger' }))
     const innstillinger = await screen.findByRole('dialog', { name: 'Varselinnstillinger' })
-    const brytere = within(innstillinger).getAllByRole('switch') as HTMLInputElement[]
-    expect(brytere.map((b) => [b.closest('label')!.querySelector('.varselinnstilling__tittel')!.textContent, b.checked, b.disabled])).toEqual([
-      ['Endringer i fortolkningen', true, true],
-      ['Kommentarer til mine idéer og kommentarer', true, true],
-      ['Kommentarer til idéer jeg har vært aktiv i', true, false],
-      ['Nye idéer', false, false],
-      ['Kommentarer i mine diskusjoner', true, true],
-      ['Kommentarer i diskusjoner jeg har vært aktiv i', true, false],
-      ['Ny eller endret funksjonalitet i appen', true, false],
-      ['Endringer på mine favorittsider', false, false],
-      ['Nye diskusjoner på mine favorittsider', false, false],
+    const grupper = within(innstillinger).getAllByRole('region')
+    const tilstand = (b: HTMLInputElement) => [b.closest('label')!.querySelector('.varselinnstilling__tittel')!.textContent, b.checked, b.disabled]
+    expect(
+      grupper.map((g) => [
+        within(g).getByRole('heading').textContent,
+        (within(g).getAllByRole('switch') as HTMLInputElement[]).map(tilstand),
+      ]),
+    ).toEqual([
+      ['Fortolkning', [['Endringer i fortolkningen', true, true]]],
+      [
+        'Idéer',
+        [
+          ['Kommentarer til mine idéer og kommentarer', true, true],
+          ['Kommentarer til idéer jeg har vært aktiv i', true, false],
+          ['Nye idéer', false, false],
+        ],
+      ],
+      [
+        'Diskusjoner',
+        [
+          ['Kommentarer i mine diskusjoner', true, true],
+          ['Kommentarer i diskusjoner jeg har vært aktiv i', true, false],
+        ],
+      ],
+      [
+        'Favorittsider',
+        [
+          ['Endringer på mine favorittsider', false, false],
+          ['Nye diskusjoner på mine favorittsider', false, false],
+        ],
+      ],
+      ['Appen', [['Ny eller endret funksjonalitet i appen', true, false]]],
     ])
+    const brytere = within(innstillinger).getAllByRole('switch') as HTMLInputElement[]
     await bruker.click(brytere[2]!)
     expect(api.lagreVarselvalg).toHaveBeenCalledWith({ aktive_ideer: false })
     await waitFor(() => expect(bjella().getAttribute('aria-label')).toBe('Varsler (2 uleste)'))

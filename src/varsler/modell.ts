@@ -11,7 +11,25 @@ import { lesDiskusjonsside, type Diskusjonsside } from '../diskusjoner/modell'
 
 /* --- Kategoriene ----------------------------------------------------------- */
 
+/**
+ * Det kategoriene gjelder, i den rekkefølgen innstillingene viser dem: hver
+ * gruppe får sin overskrift, med kategoriene sine under.
+ */
+export const VARSELGRUPPER = {
+  fortolkning: { tittel: 'Fortolkning' },
+  ideer: { tittel: 'Idéer' },
+  diskusjoner: { tittel: 'Diskusjoner' },
+  favoritter: { tittel: 'Favorittsider' },
+  appen: { tittel: 'Appen' },
+} as const satisfies Record<string, { tittel: string }>
+
+export type Varselgruppe = keyof typeof VARSELGRUPPER
+
+export const GRUPPEREKKEFOLGE = Object.keys(VARSELGRUPPER) as Varselgruppe[]
+
 export interface Varselkategoridefinisjon {
+  /** Hva kategorien gjelder: overskriften den står under i innstillingene. */
+  gruppe: Varselgruppe
   /** Det brukeren leser i innstillingene. */
   tittel: string
   forklaring: string
@@ -22,60 +40,69 @@ export interface Varselkategoridefinisjon {
 }
 
 /**
- * Kategoriene, i den rekkefølgen innstillingene viser dem. Alle unntatt
+ * Kategoriene, i den rekkefølgen innstillingene viser dem innenfor gruppen. Alle unntatt
  * `funksjonalitet` lages av databasen (`public.varselkategori`);
  * `funksjonalitet` er nye føringer i endringsloggen.
  */
 export const VARSELKATEGORIER = {
   fortolkning: {
+    gruppe: 'fortolkning',
     tittel: 'Endringer i fortolkningen',
     forklaring: 'Når en kommentartekst eller reglene for hvilke kommentarer som brukes, er endret.',
     obligatorisk: true,
     standard: true,
   },
   mine_ideer: {
+    gruppe: 'ideer',
     tittel: 'Kommentarer til mine idéer og kommentarer',
     forklaring: 'Når noen kommenterer en idé du har skrevet, eller svarer på en kommentar du har skrevet.',
     obligatorisk: true,
     standard: true,
   },
   aktive_ideer: {
+    gruppe: 'ideer',
     tittel: 'Kommentarer til idéer jeg har vært aktiv i',
     forklaring: 'Når noen kommenterer en idé du har kommentert, uten at det er et svar til deg.',
     obligatorisk: false,
     standard: true,
   },
   nye_ideer: {
+    gruppe: 'ideer',
     tittel: 'Nye idéer',
     forklaring: 'Når noen har skrevet en ny idé.',
     obligatorisk: false,
     standard: false,
   },
   mine_diskusjoner: {
+    gruppe: 'diskusjoner',
     tittel: 'Kommentarer i mine diskusjoner',
     forklaring: 'Når noen kommenterer en tråd du har startet, eller svarer på en kommentar du har skrevet i en diskusjon.',
     obligatorisk: true,
     standard: true,
   },
   aktive_diskusjoner: {
+    gruppe: 'diskusjoner',
     tittel: 'Kommentarer i diskusjoner jeg har vært aktiv i',
     forklaring: 'Når noen kommenterer en tråd du har kommentert, uten at det er et svar til deg.',
     obligatorisk: false,
     standard: true,
   },
   funksjonalitet: {
+    gruppe: 'appen',
     tittel: 'Ny eller endret funksjonalitet i appen',
     forklaring: 'Når appen har fått en ny versjon, med det som står om den i endringsloggen.',
     obligatorisk: false,
     standard: true,
   },
   favoritter: {
+    gruppe: 'favoritter',
     tittel: 'Endringer på mine favorittsider',
     forklaring: 'Når noen har publisert endringer på en fagside du har som favoritt.',
     obligatorisk: false,
     standard: false,
   },
   favorittdiskusjoner: {
+    gruppe: 'favoritter',
     tittel: 'Nye diskusjoner på mine favorittsider',
     forklaring: 'Når noen starter en ny tråd på en fagside du har som favoritt.',
     obligatorisk: false,
@@ -86,6 +113,14 @@ export const VARSELKATEGORIER = {
 export type Varselkategori = keyof typeof VARSELKATEGORIER
 
 export const KATEGORIREKKEFOLGE = Object.keys(VARSELKATEGORIER) as Varselkategori[]
+
+/** Gruppene med kategoriene sine, slik innstillingene viser dem. Grupper uten kategorier er utelatt. */
+export function kategorierIGrupper(): { gruppe: Varselgruppe; kategorier: Varselkategori[] }[] {
+  return GRUPPEREKKEFOLGE.map((gruppe) => ({
+    gruppe,
+    kategorier: KATEGORIREKKEFOLGE.filter((k) => VARSELKATEGORIER[k].gruppe === gruppe),
+  })).filter((g) => g.kategorier.length > 0)
+}
 
 /** Kategoriene databasen lager varsler i. Samme verdier, i samme rekkefølge, som `public.varselkategori`. */
 export const DATABASEKATEGORIER = [

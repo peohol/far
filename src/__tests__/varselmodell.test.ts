@@ -9,6 +9,7 @@ import type { Endring } from '../domain/versjon'
 import {
   DATABASEKATEGORIER,
   KATEGORIREKKEFOLGE,
+  kategorierIGrupper,
   antallUleste,
   endringsvarsler,
   erValgt,
@@ -61,6 +62,14 @@ describe('kategoriene og valgene', () => {
     const lagtTil = [...sql.matchAll(/alter type public\.varselkategori add value '([^']+)'/g)].map((treff) => treff[1]!)
     expect([...verdier.map((v) => v.slice(1, -1)), ...lagtTil]).toEqual([...DATABASEKATEGORIER])
     expect(KATEGORIREKKEFOLGE).toEqual(expect.arrayContaining([...DATABASEKATEGORIER, 'funksjonalitet']))
+  })
+
+  it('grupperer kategoriene etter hva de gjelder, hver kategori i én gruppe', () => {
+    const grupper = kategorierIGrupper()
+    expect(grupper.map((g) => g.gruppe)).toEqual(['fortolkning', 'ideer', 'diskusjoner', 'favoritter', 'appen'])
+    expect(grupper.flatMap((g) => g.kategorier).sort()).toEqual([...KATEGORIREKKEFOLGE].sort())
+    expect(grupper.find((g) => g.gruppe === 'ideer')!.kategorier).toEqual(['mine_ideer', 'aktive_ideer', 'nye_ideer'])
+    expect(grupper.find((g) => g.gruppe === 'favoritter')!.kategorier).toEqual(['favoritter', 'favorittdiskusjoner'])
   })
 
   it('holder de obligatoriske på, og bruker standarden til brukeren har valgt', () => {
