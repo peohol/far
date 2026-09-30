@@ -26,6 +26,8 @@ import { Toppmeny } from './components/toppmeny/Toppmeny'
 import { ToppmenyInnhold, ToppmenyKilde } from './components/toppmeny/Toppmenykilde'
 import { Toppmenyknapp } from './components/toppmeny/Toppmenyknapp'
 import { Versjonspille } from './components/Versjonspille'
+import { Diskusjonsmeny } from './components/diskusjoner/Diskusjonsmeny'
+import { diskusjonssideFor } from './diskusjoner/modell'
 import { FavorittkildeProvider } from './favoritter/Favorittkilde'
 import { lagFavorittlager } from './favoritter/lagring'
 import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
@@ -551,6 +553,16 @@ export default function App() {
    */
   const vist = dveler ?? stage
 
+  // Diskusjonene hører til siden som står åpen: en fagside, eller
+  // fortolkningen av én analytt. Forsiden har ingen.
+  const diskusjonsside = diskusjonssideFor(rute)
+  const sidenavn =
+    rute.side === 'stoff'
+      ? (register.menystoff(rute.stoff)?.navn ?? rute.stoff)
+      : state.analyte
+        ? `Fortolkning av ${state.analyte.visningsnavn || state.analyte.kode}`
+        : 'Fortolkningen'
+
   return (
     <ToppmenyKilde>
       <FavorittkildeProvider lager={favorittlager} brukerId={profil.id} kanonisk={kanoniskStoff}>
@@ -710,6 +722,8 @@ export default function App() {
               />
             )}
           </main>
+
+          {diskusjonsside && <Diskusjonsmeny side={diskusjonsside} sidenavn={sidenavn} />}
 
           {/* Versjonen og veien inn til endringsloggen, fast nederst i hjørnet. */}
           <Versjonspille />

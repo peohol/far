@@ -112,12 +112,14 @@ const api = vi.hoisted(() => ({
 }))
 const visIde = vi.hoisted(() => vi.fn())
 const visEndringslogg = vi.hoisted(() => vi.fn())
+const visDiskusjon = vi.hoisted(() => vi.fn())
 
 vi.mock('../varsler/api', () => api)
 vi.mock('../auth/okt', () => ({ useProfil: () => KARI }))
 vi.mock('../auth/api', () => ({ hentAlleProfiler: vi.fn(async () => [KARI, OLA]) }))
 vi.mock('../components/ideer/idevisning', () => ({ visIde }))
 vi.mock('../components/endringsloggvisning', () => ({ visEndringslogg }))
+vi.mock('../components/diskusjoner/diskusjonsvisning', () => ({ visDiskusjon }))
 vi.mock('../data/endringslogg', () => ({
   ENDRINGSLOGG: [endring('2.1.0', 'Varsler i toppmenyen'), endring('2.0.0', 'Noe eldre')],
 }))
@@ -241,6 +243,33 @@ describe('vinduet', () => {
     expect(api.merkVarslerLest).toHaveBeenCalledWith(['v-favoritt'], LISTE.lest_kl)
   })
 
+  it('leder et varsel om en kommentar i en diskusjon til siden tråden står på, og åpner tråden', async () => {
+    const traad: Varselliste['varsler'][number] = {
+      kilde: 'database',
+      id: 'v-diskusjon',
+      kategori: 'mine_diskusjoner',
+      ide: null,
+      diskusjon: { id: 't1', tittel: 'Dosering ved nyresvikt', side: 'fortolkning:hbup', forfatterId: 'kari' },
+      hendelser: [{ kl: '2026-09-29T11:30:00Z', av: 'ola', kommentar: 'k9', svarTil: null }],
+      oppdatert_kl: '2026-09-29T11:30:00Z',
+      lest: false,
+    }
+    api.hentVarsler.mockResolvedValue({ ...LISTE, varsler: [traad, ...LISTE.varsler] })
+    api.hentUleste.mockResolvedValue({ mine_ideer: 1, aktive_ideer: 1, mine_diskusjoner: 1 })
+    const bruker = userEvent.setup()
+    render(<Varselknapp />)
+    await waitFor(() => expect(bjella().getAttribute('aria-label')).toBe('Varsler (4 uleste)'))
+    await bruker.click(bjella())
+    const vindu = await screen.findByRole('dialog', { name: 'Varsler' })
+    const lenke = await within(vindu).findByRole('link', { name: 'Ola Nordmann kommenterte tråden din' })
+    expect(lenke.getAttribute('href')).toBe('#/fortolkning/hbup')
+    expect(lenke.closest('li')!.textContent).toContain('«Dosering ved nyresvikt»')
+    lenke.addEventListener('click', (e) => e.preventDefault())
+    await bruker.click(lenke)
+    expect(api.merkVarslerLest).toHaveBeenCalledWith(['v-diskusjon'], LISTE.lest_kl)
+    expect(visDiskusjon).toHaveBeenCalledWith('fortolkning:hbup', 't1')
+  })
+
   it('viser nye idéer når brukeren har slått dem på, og leder til idéen', async () => {
     api.hentVarselvalg.mockResolvedValue({ nye_ideer: true })
     api.hentUleste.mockResolvedValue({ mine_ideer: 1, aktive_ideer: 1, nye_ideer: 1 })
@@ -266,8 +295,11 @@ describe('vinduet', () => {
       ['Kommentarer til mine idéer og kommentarer', true, true],
       ['Kommentarer til idéer jeg har vært aktiv i', true, false],
       ['Nye idéer', false, false],
+      ['Kommentarer i mine diskusjoner', true, true],
+      ['Kommentarer i diskusjoner jeg har vært aktiv i', true, false],
       ['Ny eller endret funksjonalitet i appen', true, false],
       ['Endringer på mine favorittsider', false, false],
+      ['Nye diskusjoner på mine favorittsider', false, false],
     ])
     await bruker.click(brytere[2]!)
     expect(api.lagreVarselvalg).toHaveBeenCalledWith({ aktive_ideer: false })

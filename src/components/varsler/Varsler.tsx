@@ -10,7 +10,9 @@ import {
   VARSELKATEGORIER,
   aktorer,
   deletekst,
+  diskusjonstekst,
   endredeDeler,
+  erDiskusjonsvarsel,
   erValgt,
   favorittside,
   favorittsted,
@@ -27,6 +29,8 @@ import { Bryter } from '../Bryter'
 import { Button } from '../Button'
 import { visEndringslogg } from '../endringsloggvisning'
 import { visIde } from '../ideer/idevisning'
+import { visDiskusjon } from '../diskusjoner/diskusjonsvisning'
+import { adresseForSide } from '../../diskusjoner/modell'
 import { Tidspunkt } from '../traad/Smadeler'
 import { Ikon } from '../ikon/Ikon'
 import type { Ikonnavn } from '../ikon/register'
@@ -44,9 +48,9 @@ type Side = 'liste' | 'innstillinger'
  * Varselvinduet, fra bjella i toppmenyen: varslene brukeren har valgt, de
  * uleste først, og innstillingene for hvilke kategorier som varsles.
  *
- * Et varsel leder dit det gjelder — idéen, stoffsiden med reglene eller
- * føringen i endringsloggen — og er lest når man går dit, eller når det
- * merkes lest her.
+ * Et varsel leder dit det gjelder — idéen, tråden i diskusjonene på siden
+ * den står på, stoffsiden med reglene eller føringen i endringsloggen — og
+ * er lest når man går dit, eller når det merkes lest her.
  */
 export function Varsler({ apen, onLukk, status }: { apen: boolean; onLukk: () => void; status: Varselstatus }) {
   const [side, setSide] = useState<Side>('liste')
@@ -147,6 +151,9 @@ const KATEGORIIKON: Record<Varsel['kategori'], Ikonnavn> = {
   nye_ideer: 'idea',
   funksjonalitet: 'history',
   favoritter: 'star',
+  mine_diskusjoner: 'diskusjon',
+  aktive_diskusjoner: 'diskusjon',
+  favorittdiskusjoner: 'diskusjon',
 }
 
 interface RadProps {
@@ -231,6 +238,32 @@ function Databaseinnhold({ varsel, meg, navn, onGa }: RadProps & { varsel: Datab
         <p className="varsel__meta">
           {deler.length > 0 && <>{deletekst(deler)} · </>}
           {tid}
+        </p>
+      </>
+    )
+  }
+
+  if (erDiskusjonsvarsel(varsel)) {
+    const diskusjon = varsel.diskusjon
+    const tekst = diskusjonstekst(varsel, meg, navn)
+    const kommentarer = varsel.hendelser.filter((h) => h.kommentar).length
+    return (
+      <>
+        {diskusjon ? (
+          <a
+            className="varsel__tittel"
+            data-ih=""
+            href={adresseForSide(diskusjon.side)}
+            onClick={() => onGa(varsel, () => visDiskusjon(diskusjon.side, diskusjon.id))}
+          >
+            {tekst}
+          </a>
+        ) : (
+          <p className="varsel__tittel">{tekst}</p>
+        )}
+        <p className="varsel__meta">
+          {diskusjon && <span className="varsel__ide">«{diskusjon.tittel}»</span>}
+          {kommentarer > 1 && <> · {kommentarer} kommentarer</>} · {tid}
         </p>
       </>
     )

@@ -9,6 +9,7 @@ import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Forfatterbilde, useForfatternavn, useForfatterkontekst } from './Forfatterkontekst'
 import { Bekreftknapp, Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from './Smadeler'
+import '../../styles/traad.css'
 
 /**
  * Veien kommentarene i én tråd lagres: under en idé eller i en diskusjon.

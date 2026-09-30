@@ -836,6 +836,8 @@ const REGISTER = {
       P('M4.5 19.5 19.5 4.5', 'l', 'danger', 'pop'),
     ],
   },
+  opp: { vb: 24, parts: [C(12, 12, 9, 'f1', 'glass'), P('M12 16.5V7.5M7.5 12 12 7.5l4.5 4.5', 'l', 'i-ink', 'pop')] },
+  ned: { vb: 24, parts: [C(12, 12, 9, 'f1', 'glass'), P('M12 7.5v9M7.5 12l4.5 4.5 4.5-4.5', 'l', 'i-ink', 'pop')] },
 } satisfies Record<string, Ikondefinisjon>
 
 export type Ikonnavn = keyof typeof REGISTER

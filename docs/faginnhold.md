@@ -379,7 +379,9 @@ et alias i adressen (`#/stoff/Hydroksybupropion`) fører til stoffets nøkkel.
 De gamle analyttadressene (`#/analytt/HBUP`) leses bare for å sende videre:
 til stoffsiden koden primært er koblet til, med `history.replaceState`, så den
 gamle adressen ikke blir stående i historikken. En kode uten et slikt stoff har
-ingen fagside, og adressen åpner fortolkningen.
+ingen fagside, og adressen åpner fortolkningen. Fortolkningen av en valgt analytt har
+sin egen adresse, `#/fortolkning/<nøkkel>` (`fortolkningsnokkel`), så den kan
+ha diskusjoner (`docs/diskusjoner.md`).
 
 **Stoffregisteret** i sidemenyen er datafilen, med navnene sidene har i
 databasen (`les_stoffliste`) og sidene registeret ikke kjenner, som havner i

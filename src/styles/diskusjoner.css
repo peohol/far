@@ -1,0 +1,785 @@
+/**
+ * Diskusjonsmenyen (`src/components/diskusjoner/`): den faste menyen til høyre
+ * på fagsidene og fortolkningssidene, med kategoriene, trådene, søket og
+ * arkivet. Selve tråden bruker `traad.css`, som idéene.
+ *
+ * På brede flater er menyen en smal kolonne som svever til høyre under
+ * toppmenyen. Åpen blir den et panel på samme sted; holdes den åpen, gir
+ * resten av appen plass til den (`data-diskusjonsmeny` på rotelementet). På
+ * smale flater er den skjult til knappen i dokken åpner den over siden.
+ *
+ * Grensen for smal flate (47,5em ≈ 760 px) står i hver media query; CSS kan
+ * ikke lese den fra et token.
+ */
+
+:root {
+  --diskusjonsstolpe: 3.25rem;
+  --diskusjonspanel: min(28rem, 100vw - 2 * var(--rom-side));
+  /* Avstanden fra kanten av vinduet, og plassen versjonspilla trenger under. */
+  --diskusjonskant: var(--rom-5);
+  --diskusjonsbunn: calc(var(--rom-5) * 2 + 1.875rem);
+}
+
+/* --- Plassen resten av appen gir ------------------------------------------ */
+
+@media (width > 47.5em) {
+  :root[data-diskusjonsmeny='smal'] .app {
+    padding-right: calc(var(--diskusjonsstolpe) + var(--diskusjonskant));
+  }
+
+  :root[data-diskusjonsmeny='laast'] .app {
+    padding-right: calc(var(--diskusjonspanel) + var(--diskusjonskant));
+  }
+}
+
+/* --- Menyen ------------------------------------------------------------------- */
+
+.diskusjonsmeny {
+  position: fixed;
+  top: var(--toppmeny-offset);
+  right: var(--diskusjonskant);
+  bottom: var(--diskusjonsbunn);
+  z-index: var(--lag-innhold);
+  display: flex;
+  flex-direction: column;
+  width: var(--diskusjonsstolpe);
+  text-align: left;
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-panel);
+  transition:
+    width var(--fart-glid) var(--kurve),
+    box-shadow var(--fart-glid) var(--kurve);
+}
+
+.diskusjonsmeny[data-apen] {
+  width: var(--diskusjonspanel);
+  box-shadow: var(--skygge-modal);
+}
+
+/* Holdt åpen står den ved siden av innholdet, ikke over det. */
+.diskusjonsmeny[data-laast] {
+  box-shadow: none;
+}
+
+.diskusjonsknapp {
+  display: none;
+}
+
+@media (max-width: 47.5em) {
+  .diskusjonsknapp {
+    display: inline-flex;
+  }
+
+  /* Smalt: over siden, fra toppmenyen ned til dokken, og bare når den er bedt om. */
+  .diskusjonsmeny {
+    inset: var(--toppmeny-offset) var(--rom-3) var(--dokk-offset);
+    z-index: var(--lag-popover);
+    width: auto;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition:
+      opacity var(--fart-glid) var(--kurve),
+      transform var(--fart-glid) var(--kurve),
+      visibility 0s linear var(--fart-glid);
+  }
+
+  .diskusjonsmeny[data-mobil],
+  .diskusjonsmeny[data-apen][data-mobil] {
+    width: auto;
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition-delay: 0s;
+  }
+}
+
+/* --- Kolonnen ----------------------------------------------------------------- */
+
+.diskusjonsstolpe {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-2);
+  min-height: 0;
+  padding: var(--rom-3) 0;
+}
+
+.diskusjonsstolpe[hidden] {
+  display: none;
+}
+
+.diskusjonsstolpe__kategorier {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--rom-2);
+  min-height: 0;
+  margin: 0;
+  padding: var(--rom-2) 0 0;
+  overflow-y: auto;
+  list-style: none;
+  border-top: var(--kant) solid var(--linje);
+}
+
+.diskusjonsmeny__laas,
+.diskusjonsstolpe__knapp,
+.diskusjonsstolpe__kategori,
+.diskusjonspanel__lukk {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--hoyde-liten);
+  height: var(--hoyde-liten);
+  padding: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--blekk);
+  background: transparent;
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve);
+}
+
+:is(.diskusjonsmeny__laas, .diskusjonsstolpe__knapp, .diskusjonsstolpe__kategori, .diskusjonspanel__lukk):hover {
+  background: var(--flate-hevet);
+}
+
+/* Holdt åpen: nålen står på en fylt flate. */
+.diskusjonsmeny__laas[aria-pressed='true'] {
+  background: var(--aksent-flate);
+  border-color: var(--aksent);
+}
+
+.diskusjonspanel__lukk {
+  display: none;
+}
+
+@media (max-width: 47.5em) {
+  .diskusjonspanel__lukk {
+    display: grid;
+  }
+
+  .diskusjonspanel .diskusjonsmeny__laas {
+    display: none;
+  }
+}
+
+/* Det blå merket for noe nytt: i kolonnen og ved kategorinavnet. */
+.nyttmerke {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.125rem;
+  height: 1.125rem;
+  padding: 0 var(--rom-1);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-fet);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--flate);
+  background: var(--under-blekk);
+  border-radius: var(--runding-pille);
+}
+
+.nyttmerke--stolpe {
+  position: absolute;
+  top: -0.125rem;
+  right: -0.25rem;
+  box-shadow: 0 0 0 2px var(--flate);
+}
+
+.nyttprikk {
+  display: inline-block;
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: var(--rom-2);
+  vertical-align: 0.1em;
+  background: var(--under-blekk);
+  border-radius: 50%;
+}
+
+/* --- Panelet -------------------------------------------------------------------- */
+
+.diskusjonspanel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  animation: diskusjonspanel-inn var(--fart-glid) var(--kurve);
+}
+
+.diskusjonspanel[hidden] {
+  display: none;
+}
+
+@keyframes diskusjonspanel-inn {
+  from {
+    opacity: 0;
+  }
+}
+
+.diskusjonspanel__topp {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--rom-2);
+  padding: var(--rom-4) var(--rom-4) 0 var(--rom-6);
+}
+
+.diskusjonspanel__tittel {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--rom-3);
+  margin: 0;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
+}
+
+.diskusjonspanel__side {
+  flex: none;
+  margin: 0;
+  padding: 0 var(--rom-6);
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.diskusjonspanel__sok {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--rom-2);
+  margin: var(--rom-4) var(--rom-4) 0;
+  padding: 0 var(--rom-4);
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+  border: var(--kant) solid transparent;
+  border-radius: var(--runding-pille);
+}
+
+.diskusjonspanel__sok:focus-within {
+  border-color: var(--aksent);
+}
+
+.diskusjonspanel__sokefelt {
+  flex: 1;
+  min-width: 0;
+  height: var(--hoyde-liten);
+  padding: 0;
+  font: inherit;
+  font-size: var(--tekst-ui);
+  color: var(--blekk);
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.diskusjonspanel > .skjemafeil {
+  margin: var(--rom-3) var(--rom-6) 0;
+}
+
+.diskusjonspanel__kropp {
+  flex: 1;
+  min-height: 0;
+  padding: var(--rom-4) var(--rom-4) var(--rom-6);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* --- Oversikten ------------------------------------------------------------------ */
+
+.diskusjonsoversikt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+}
+
+.diskusjonsoversikt__tom {
+  margin: 0;
+  padding: var(--rom-2);
+  font-size: var(--tekst-ui);
+  color: var(--blekk-dempet);
+}
+
+.diskusjonsbrett {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+}
+
+.kategoriliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.diskusjonskategori {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  padding: var(--rom-2);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-underkort);
+  scroll-margin-top: var(--rom-3);
+}
+
+.diskusjonskategori--ukategorisert {
+  border-style: dashed;
+}
+
+.diskusjonskategori__hode {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  margin: 0;
+  padding: var(--rom-1) var(--rom-1) var(--rom-1) 0;
+  font: inherit;
+}
+
+.diskusjonskategori--ukategorisert > .diskusjonskategori__hode {
+  padding-left: var(--rom-3);
+}
+
+.diskusjonskategori__tittel {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--rom-2);
+  min-width: 0;
+  margin: 0;
+  font: inherit;
+}
+
+.diskusjonskategori__emoji {
+  flex: none;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.diskusjonskategori__navn {
+  min-width: 0;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-ingress);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
+  overflow-wrap: anywhere;
+}
+
+.diskusjonskategori__merknad {
+  margin: 0;
+  padding: 0 var(--rom-3);
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.diskusjonskategori__mer {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--hoyde-liten);
+  height: var(--hoyde-liten);
+  padding: 0;
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+}
+
+.diskusjonskategori__mer:hover,
+.diskusjonskategori__mer[aria-expanded='true'] {
+  color: var(--blekk);
+  background: var(--flate-hevet);
+}
+
+.diskusjonskategori__handlinger {
+  margin: 0 0 var(--rom-1) var(--rom-3);
+}
+
+/* Håndtaket en kategori eller tråd dras i, med mus og finger. Tastaturet
+   løfter hele raden (mellomrom), så håndtaket er bare for pekeren. */
+.draghandtak {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.5rem;
+  height: var(--hoyde-liten);
+  color: var(--blekk-dempet);
+  opacity: 0.35;
+  cursor: grab;
+  touch-action: none;
+  transition: opacity var(--fart-rask) var(--kurve);
+}
+
+.draghandtak .ikon {
+  transform: rotate(90deg);
+}
+
+:is(.traadrad, .diskusjonskategori__hode):hover > .draghandtak,
+.diskusjonskategori:hover > .diskusjonskategori__hode > .draghandtak {
+  opacity: 1;
+}
+
+/* Trådene i en kategori. En tom liste står likevel, så en tråd kan slippes i den. */
+.traadliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  min-height: var(--rom-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: var(--runding-felt);
+}
+
+.traadliste[data-dnd-over] {
+  background: var(--aksent-flate);
+}
+
+.traadrad {
+  display: flex;
+  align-items: stretch;
+  border-radius: var(--runding-felt);
+}
+
+.traadliste--treff > .traadrad,
+.diskusjonsarkiv .traadrad {
+  padding-left: var(--rom-2);
+}
+
+.traadrad[data-arkivert] {
+  opacity: 0.75;
+}
+
+.traadknapp {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--rom-1);
+  min-width: 0;
+  padding: var(--rom-2) var(--rom-3);
+  font: inherit;
+  text-align: left;
+  color: var(--blekk);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-felt);
+  cursor: pointer;
+  transition: background-color var(--fart-rask) var(--kurve);
+}
+
+.traadknapp:hover {
+  background: var(--flate-hevet);
+}
+
+.traadknapp__tittel {
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+  overflow-wrap: anywhere;
+}
+
+.traadknapp__utdrag {
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+  overflow-wrap: anywhere;
+}
+
+.traadknapp__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-1);
+  font-size: var(--tekst-meta);
+  font-variant-numeric: tabular-nums;
+  color: var(--blekk-dempet);
+}
+
+.traadknapp__meta .ikon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* Det som dras, og plassen det holder. */
+:is(.traadrad, .diskusjonskategori)[data-dnd-dragging] {
+  background: var(--flate);
+  box-shadow: var(--skygge-modal);
+  cursor: grabbing;
+}
+
+:is(.traadrad, .diskusjonskategori)[data-dnd-placeholder] {
+  visibility: visible;
+  background: var(--flate-hevet);
+  border: var(--kant-tykk) dashed var(--linje-sterk);
+}
+
+:is(.traadrad, .diskusjonskategori)[data-dnd-placeholder] > * {
+  visibility: hidden;
+}
+
+.nytraadknapp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  min-height: var(--hoyde-liten);
+  padding: 0 var(--rom-4) 0 var(--rom-3);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  color: var(--aksent);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+}
+
+.nytraadknapp:hover {
+  background: var(--aksent-flate);
+}
+
+.nytraadknapp--kategori {
+  align-self: flex-start;
+}
+
+.diskusjonsoversikt__nye {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+}
+
+/* --- Arkivet --------------------------------------------------------------------- */
+
+.diskusjonsarkiv {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding-top: var(--rom-3);
+  border-top: var(--kant) solid var(--linje);
+}
+
+.diskusjonsarkiv__hode {
+  margin: 0;
+  font: inherit;
+}
+
+.diskusjonsarkiv__hode > button {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  width: 100%;
+  min-height: var(--hoyde-kontroll);
+  padding: 0 var(--rom-3);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-felt);
+  cursor: pointer;
+}
+
+.diskusjonsarkiv__hode > button:hover {
+  color: var(--blekk);
+  background: var(--flate-hevet);
+}
+
+.diskusjonsarkiv__antall {
+  padding: var(--rom-1) var(--rom-2);
+  font-size: var(--tekst-merke);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.diskusjonsarkiv__pil {
+  margin-left: auto;
+  transition: transform var(--fart-glid) var(--kurve);
+}
+
+.diskusjonsarkiv[data-apen] .diskusjonsarkiv__pil {
+  transform: rotate(90deg);
+}
+
+/* --- Én tråd ----------------------------------------------------------------------- */
+
+.diskusjonsside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  padding-inline: var(--rom-2);
+}
+
+.diskusjonsside__tilbake {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: var(--rom-1);
+  min-height: var(--hoyde-liten);
+  margin-left: calc(-1 * var(--rom-2));
+  padding: 0 var(--rom-3) 0 var(--rom-1);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+}
+
+.diskusjonsside__tilbake:hover {
+  color: var(--blekk);
+  background: var(--flate-hevet);
+}
+
+.diskusjonsside__tilbake .ikon {
+  transform: rotate(180deg);
+}
+
+.diskusjonsside__hode {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+}
+
+.diskusjonsside__tittel {
+  margin: 0;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-titler);
+  color: var(--blekk);
+  overflow-wrap: anywhere;
+}
+
+.diskusjonsside__tittel:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.diskusjonsside__tittelskjema {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+}
+
+.diskusjonsside > .riktekst {
+  font-size: var(--tekst-ui);
+}
+
+.diskusjonsside__plass {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-1) var(--rom-2);
+}
+
+.diskusjonsside__kategori {
+  flex: 1 1 10rem;
+}
+
+.diskusjonsside__kategori .felt__inndata {
+  min-height: var(--hoyde-liten);
+  padding-block: var(--rom-1);
+  font-size: var(--tekst-liten);
+}
+
+/* Tråden i et smalt panel: mindre innrykk per nivå. */
+.diskusjonsside .kommentarer {
+  --kommentar-skinne: 1.25rem;
+  --kommentar-luft: var(--rom-2);
+}
+
+/* --- Skjemaene --------------------------------------------------------------------- */
+
+.diskusjonsskjema {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-5);
+  padding-inline: var(--rom-2);
+}
+
+.diskusjonsskjema__tittel {
+  margin: 0;
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-lesing);
+  font-weight: var(--vekt-medium);
+  color: var(--blekk);
+}
+
+.diskusjonsskjema .skjema__knapper {
+  justify-content: flex-end;
+}
+
+.kategorifelter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.kategorifelter__rad {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: var(--rom-3);
+}
+
+.kategorifelter__emoji {
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.kategorifelter .felt__hjelp {
+  margin: 0;
+}
+
+.emojiforslag {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-1);
+}
+
+.emojiforslag__valg {
+  display: grid;
+  place-items: center;
+  width: var(--hoyde-liten);
+  height: var(--hoyde-liten);
+  padding: 0;
+  font-size: 1.125rem;
+  line-height: 1;
+  background: transparent;
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-felt);
+  cursor: pointer;
+}
+
+.emojiforslag__valg:hover {
+  background: var(--flate-hevet);
+}
+
+.emojiforslag__valg[aria-pressed='true'] {
+  background: var(--aksent-flate);
+  border-color: var(--aksent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diskusjonsmeny,
+  .diskusjonspanel,
+  .diskusjonsarkiv__pil {
+    animation: none;
+    transition: none;
+  }
+}
