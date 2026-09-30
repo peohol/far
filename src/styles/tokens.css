@@ -318,6 +318,21 @@
   --alt-kant-alfa: 0.55;
 }
 
+/* --- Sløret bak lag som legger seg over appen ------------------------------
+   Sidemenyen og de modale vinduene mørklegger og slører siden bak med de
+   samme to verdiene. Blokken gjelder også `::backdrop` direkte, fordi eldre
+   nettlesere ikke lar den arve tokens fra dokumentet. */
+:root,
+::backdrop {
+  --slor: hsl(215 30% 20% / 0.34);
+  --slor-blur: 3px;
+}
+
+:root[data-tema='moerkt'],
+:root[data-tema='moerkt'] ::backdrop {
+  --slor: hsl(216 45% 5% / 0.55);
+}
+
 /* --- Redusert bevegelse ----------------------------------------------------
    Alle varigheter blir 0, og ikonene ligger i ro. */
 @media (prefers-reduced-motion: reduce) {

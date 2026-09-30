@@ -28,8 +28,15 @@ flytter trådene og kategoriene med.
 
 - Alle innloggede lager, endrer, flytter, arkiverer og henter tilbake tråder, og
   lager, endrer, flytter og løser opp kategorier.
-- En tråd slettes aldri. En arkivert tråd kan leses, men er frosset til den er
-  hentet tilbake, og står i arkivet nederst i lista.
+- En tråd kan flyttes til en annen side (en annen fagside eller fortolkning),
+  sist i en kategori der eller i en ny, med kommentarene og hjertene
+  (`flytt_diskusjon_til_side()`). Appen følger tråden dit.
+- Den som startet en tråd, kan slette den så lenge den ikke er arkivert og
+  ingen andre har skrevet i den; en kommentar som står igjen som «Slettet»,
+  teller ikke. En administrator kan slette alle tråder, også arkiverte
+  (`slett_diskusjon()`, `kanSletteDiskusjon`). Alt i tråden går med.
+- En arkivert tråd kan leses, men er frosset til den er hentet tilbake, og står
+  i arkivet nederst i lista. Arkivet er lukket til man åpner det.
 - Alle kan endre overskriften; bare den som skrev tråden, endrer det første
   innlegget.
 - Kommentarene er som under idéene (svar i svar, hjerter, «Slettet» der det er
@@ -86,6 +93,9 @@ også mellom kategoriene. Hvilke lister som tar imot hva, står i markeringen
 mellomrom og flytter den med piltastene. Alle flyttinger kan også gjøres med
 knapper: «Flytt opp»/«Flytt ned» på kategoriene, og kategorivalget og
 «Flytt opp»/«Flytt ned» inne i en tråd.
+
+Når man drar mot kanten av lista, ruller lista, aldri siden bak menyen
+(`holdRullingenInne`): dnd-kit ruller ellers også siden for noe som står fast.
 
 React eier rekkefølgen i DOM-en. Når man slipper, venter `useSortering` til
 dnd-kit er helt ferdig (også animasjonen), legger radene tilbake der React

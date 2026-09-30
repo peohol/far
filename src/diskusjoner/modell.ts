@@ -7,7 +7,7 @@
  */
 import { klartekst, type Riktekstdokument } from '../faginnhold/riktekst'
 import { erObjekt, tall, tekst, tekstEllerNull } from '../ideer/lesing'
-import { fortolkningsrute, stoffadresse, type Rute } from '../domain/rute'
+import { fortolkningsnokkel, fortolkningsrute, stoffadresse, type Rute } from '../domain/rute'
 import { lesInnlegg, lesKommentarer, rensInnleggstekst, type Innlegg, type Kommentar } from '../traad/modell'
 
 /* --- Sidene ------------------------------------------------------------------- */
@@ -44,6 +44,43 @@ export function adresseForSide(side: Diskusjonsside): string {
 export function ruteForSide(side: Diskusjonsside): Rute {
   const [, type, nokkel = ''] = SIDE.exec(side) ?? []
   return type === 'stoff' ? { side: 'stoff', stoff: nokkel } : fortolkningsrute(nokkel)
+}
+
+/** En side med diskusjoner, med navnet brukerne kjenner den på. */
+export interface Sidevalg {
+  side: Diskusjonsside
+  navn: string
+}
+
+/** Alle sidene med diskusjoner, delt i fagsidene og fortolkningene, hver alfabetisk. */
+export interface Diskusjonssider {
+  fagsider: Sidevalg[]
+  fortolkninger: Sidevalg[]
+}
+
+/** Navnet på fortolkningssiden til en analytt. */
+export function fortolkningssidenavn(analytt: { kode: string; visningsnavn?: string | null }): string {
+  return `Fortolkning av ${analytt.visningsnavn || analytt.kode}`
+}
+
+/**
+ * Sidene en tråd kan stå på: fagsiden til hvert stoff og fortolkningen av hver
+ * analytt. En nøkkel som ikke kan være en side, og en side som går igjen, tas
+ * med én gang.
+ */
+export function diskusjonssider(
+  stoffer: readonly { slug: string; navn: string }[],
+  analytter: readonly { kode: string; visningsnavn?: string | null }[],
+): Diskusjonssider {
+  const valg = (par: [string, string][]): Sidevalg[] => {
+    const sider = new Map<string, Sidevalg>()
+    for (const [side, navn] of par) if (lesDiskusjonsside(side) && !sider.has(side)) sider.set(side, { side: side as Diskusjonsside, navn })
+    return [...sider.values()].sort((a, b) => a.navn.localeCompare(b.navn, 'nb'))
+  }
+  return {
+    fagsider: valg(stoffer.map((s) => [`stoff:${s.slug}`, s.navn])),
+    fortolkninger: valg(analytter.map((a) => [`fortolkning:${fortolkningsnokkel(a.kode)}`, fortolkningssidenavn(a)])),
+  }
 }
 
 /* --- Formen dataene har ------------------------------------------------------ */
@@ -95,6 +132,25 @@ export interface Diskusjonstraad extends Innlegg {
   /** Når den innloggede sist åpnet tråden, før nå. */
   sist_sett: string | null
   kommentarer: Kommentar[]
+}
+
+/**
+ * Om brukeren kan slette tråden: en administrator alltid, ellers den som
+ * startet den, så lenge den ikke er arkivert og ingen andre har skrevet i
+ * den. En kommentar som står igjen som «Slettet», teller ikke. Samme regel
+ * som `public.slett_diskusjon()`.
+ */
+export function kanSletteDiskusjon(
+  traad: Pick<Diskusjonstraad, 'forfatter_id' | 'arkivert_kl' | 'kommentarer'>,
+  bruker: string,
+  admin: boolean,
+): boolean {
+  if (admin) return true
+  return (
+    traad.forfatter_id === bruker &&
+    !traad.arkivert_kl &&
+    traad.kommentarer.every((k) => k.slettet || k.forfatter_id === bruker)
+  )
 }
 
 /** Tekstene i én tråd, til søket. */

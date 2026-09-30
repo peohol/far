@@ -11,9 +11,17 @@ import {
   settTekst,
   settTittel,
   skjulInnhold,
+  slettDiskusjon,
   slettKommentar,
 } from '../../diskusjoner/api'
-import { UKATEGORISERTE, type Diskusjonskategori, type Diskusjonstraad } from '../../diskusjoner/modell'
+import {
+  UKATEGORISERTE,
+  kanSletteDiskusjon,
+  type Diskusjonskategori,
+  type Diskusjonsside as Side,
+  type Diskusjonssider,
+  type Diskusjonstraad,
+} from '../../diskusjoner/modell'
 import { TITTEL_MEST, tekstTilLagring, type Kommentar } from '../../traad/modell'
 import { Riktekst } from '../stoffside/Riktekst'
 import { Rikteksteditor } from '../stoffside/Rikteksteditor'
@@ -21,7 +29,8 @@ import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Forfatterbilde, useForfatternavn, useForfatterkontekst } from '../traad/Forfatterkontekst'
 import { Kommentartraad, type Kommentarkanal } from '../traad/Kommentartraad'
-import { Bekreftknapp, Hjerteknapp, Idehandling, Tidspunkt } from '../traad/Smadeler'
+import { Bekreftknapp, Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from '../traad/Smadeler'
+import { Flytteskjema } from './Skjemaer'
 
 const DATO = new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })
 
@@ -35,11 +44,12 @@ export interface Plassering {
  * Én tråd i diskusjonsmenyen: overskriften, hvem som startet den og når, det
  * første innlegget, hjertene og kommentartråden.
  *
- * Alle kan endre overskriften, flytte tråden og legge den i arkivet; bare den
- * som skrev innlegget, kan endre det. Ingen kan slette en tråd. En
- * administrator kan skjule innholdet i et innlegg eller en kommentar, for
- * eksempel pasientopplysninger som havnet der ved en feil: teksten fjernes for
- * godt, og en merknad står igjen.
+ * Alle kan endre overskriften, flytte tråden (også til en annen side) og legge
+ * den i arkivet; bare den som skrev innlegget, kan endre det. Den som startet
+ * tråden, kan slette den til noen andre har skrevet i den; en administrator
+ * kan slette alle. En administrator kan også skjule innholdet i et innlegg
+ * eller en kommentar, for eksempel pasientopplysninger som havnet der ved en
+ * feil: teksten fjernes for godt, og en merknad står igjen.
  *
  * En arkivert tråd kan leses, men ikke endres, før den er hentet tilbake.
  *
@@ -48,14 +58,22 @@ export interface Plassering {
  */
 export function Diskusjonsside({
   id,
+  side,
+  sider,
   kategorier,
   plassering,
   onTilbake,
   onEndret,
   onSett,
   onFlytt,
+  onFlyttetTilSide,
+  onSlettet,
 }: {
   id: string
+  /** Siden tråden står på. */
+  side: Side
+  /** Sidene tråden kan flyttes til. */
+  sider: Diskusjonssider
   kategorier: readonly Diskusjonskategori[]
   /** Plassen i kategorien, eller `null` når tråden er arkivert eller uten kategori. */
   plassering: Plassering | null
@@ -66,6 +84,10 @@ export function Diskusjonsside({
   onSett: (id: string) => void
   /** Flytt tråden til en plass i en kategori. */
   onFlytt: (kategori: string, indeks: number) => Promise<void>
+  /** Tråden er flyttet til en annen side. */
+  onFlyttetTilSide: (til: Side) => void
+  /** Tråden er slettet. */
+  onSlettet: () => void
 }) {
   const { meg, admin } = useForfatterkontekst()
   const [traad, setTraad] = useState<Diskusjonstraad | null>(null)
@@ -74,6 +96,7 @@ export function Diskusjonsside({
   const [sistSett, setSistSett] = useState<string | null | undefined>(undefined)
   const [endrerTittel, setEndrerTittel] = useBevart(`traad:${id}/endrer-tittel`, false)
   const [endrerTekst, setEndrerTekst] = useBevart(`traad:${id}/endrer-tekst`, false)
+  const [flytter, setFlytter] = useBevart(`traad:${id}/flytter`, false)
   const overskrift = useRef<HTMLHeadingElement>(null)
   const kategoriId = useId()
 
@@ -137,14 +160,18 @@ export function Diskusjonsside({
     settHjerte(traad.id, kommentar?.id ?? null, meg.id, gitt).catch(() => void hent())
   }
 
-  /** En endring av tråden. Feiler den, vises feilen og tråden hentes på nytt. */
-  const utfor = async (handling: () => Promise<unknown>) => {
+  /**
+   * En endring av tråden. Feiler den, vises feilen og tråden hentes på nytt.
+   * Med `ferdig` går man videre dit i stedet for å hente tråden igjen.
+   */
+  const utfor = async (handling: () => Promise<unknown>, ferdig?: () => void) => {
     if (arbeider) return false
     setArbeider(true)
     setFeil(null)
     try {
       await handling()
-      await Promise.all([hent(), onEndret()])
+      if (ferdig) ferdig()
+      else await Promise.all([hent(), onEndret()])
       return true
     } catch (e) {
       setFeil((e as Error).message)
@@ -268,6 +295,14 @@ export function Diskusjonsside({
             onBekreft={() => void utfor(() => arkiverDiskusjon(traad.id, true))}
           />
         )}
+        {!arkivert && (
+          <Idehandling ikon="ext" aria-expanded={flytter} onClick={() => setFlytter(!flytter)}>
+            Flytt til en annen side
+          </Idehandling>
+        )}
+        {kanSletteDiskusjon(traad, meg.id, admin) && (
+          <Slettknapp hva="tråden" onSlett={() => void utfor(() => slettDiskusjon(traad.id), onSlettet)} />
+        )}
         {admin && !eier && !traad.skjult && !arkivert && (
           <Bekreftknapp
             ikon="skjul"
@@ -280,7 +315,10 @@ export function Diskusjonsside({
         )}
       </div>
 
-      {!arkivert && (
+      {/* Plassen på denne siden står i ro mens tråden flyttes til en annen. */}
+      {flytter && !arkivert ? (
+        <Flytteskjema id={traad.id} side={side} sider={sider} onAvbryt={() => setFlytter(false)} onFlyttet={onFlyttetTilSide} />
+      ) : !arkivert && (
         <div className="diskusjonsside__plass">
           <label className="diskusjonsside__kategori" htmlFor={kategoriId}>
             <span className="kun-skjermleser">Kategori</span>

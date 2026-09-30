@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.66.0',
+    versjon: '1.67.0',
     dato: '2026-09-30',
     sammendrag: 'Farmakodynamikken vises som mekanismekort',
     typer: ['Design / layout', 'Funksjonalitet'],
@@ -23,6 +23,19 @@ export const ENDRINGSLOGG: Endring[] = [
       'Fargen og ikonet viser retningen på målet: dempet rødt når aktiviteten reduseres, grønt når den økes, og grått når kilden sier at stoffet ikke virker på målet, eller ikke sier hvilken vei. Mål kilden uttrykkelig sier at stoffet ikke virker på, står som egne kort.',
       'Teksten på de 60 sidene med farmakodynamikk er fordelt på kortene ord for ord, med de samme kildene. Ingenting er lagt til, og kortene sier aldri mer enn kilden, så en antagonist der kilden ikke sier hvilken type, står som «Antagonisme (subtype ikke angitt)».',
       'Redaktører kan legge til, endre, flytte og fjerne mekanismekort som de andre kortene, med utkast, publisering og historikk.',
+    ],
+  },
+  {
+    versjon: '1.66.0',
+    dato: '2026-09-30',
+    sammendrag: 'Diskusjonstråder kan slettes og flyttes til en annen side',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Den som startet en tråd, kan slette den så lenge ingen andre har skrevet i den. En administrator kan slette alle tråder, også de arkiverte.',
+      'En tråd som står på feil side, kan flyttes til en annen fagside eller fortolkning, i en kategori der eller i en ny. Kommentarene følger med, og du kommer til tråden på den nye siden.',
+      'Arkivet nederst i diskusjonsmenyen er lukket til du åpner det, og de arkiverte trådene vises ikke før det.',
+      'Når du drar en tråd eller kategori mot kanten av menyen, ruller bare menyen, ikke siden bak.',
     ],
   },
   {

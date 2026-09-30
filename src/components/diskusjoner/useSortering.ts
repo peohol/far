@@ -35,6 +35,9 @@ export const HANDTAK = '.draghandtak'
  * til da holder dnd-kit en plassholder ved siden av raden og setter raden inn
  * igjen der når animasjonen er over — også en rad React har tatt bort.
  *
+ * Menyen står fast over siden, så å rulle siden bak den flytter ingenting i
+ * lista. Rullingen når man drar mot kanten, holdes derfor inne i menyen.
+ *
  * Biblioteket hentes først når lista vises, så det ikke tynger appen ellers.
  * Kan det ikke tas i bruk (en nettleser uten det dnd-kit trenger), står lista
  * uten dra-og-slipp; knappene for å flytte virker uansett.
@@ -57,7 +60,7 @@ export function useSortering(
     let stopp: (() => void) | undefined
 
     void import('@peohol/smett')
-      .then(({ SortableBoard, RestrictToVerticalAxis, snapshotOrder, restoreOrder }) => {
+      .then(({ SortableBoard, RestrictToVerticalAxis, Scroller, snapshotOrder, restoreOrder }) => {
         if (ferdig) return
         let rekkefolge: ReturnType<typeof snapshotOrder> | null = null
         const lister = () => element.querySelectorAll<HTMLElement>(LISTE)
@@ -109,6 +112,7 @@ export function useSortering(
         })
         // Tegnes bare loddrett. Hvor elementet havner, avgjøres fortsatt av pekeren.
         brett.manager.registry.modifiers.register(RestrictToVerticalAxis.plugin, RestrictToVerticalAxis.options)
+        holdRullingenInne(brett.manager.registry.plugins.get(Scroller))
         stopp = brett.manager.monitor.addEventListener('dragstart', () => {
           rekkefolge = snapshotOrder(lister())
         })
@@ -121,4 +125,19 @@ export function useSortering(
       brett?.destroy()
     }
   }, [rot, aktiv])
+}
+
+/**
+ * dnd-kit ruller det som kan rulles under pekeren, og for noe som står fast
+ * (som menyen) også siden selv. Her er det bare menyens egne flater som skal
+ * rulle, så siden tas ut av det dnd-kit velger blant.
+ */
+export function holdRullingenInne(rulling: { getScrollableElements: () => Set<Element> | null } | undefined): void {
+  if (!rulling) return
+  const alle = rulling.getScrollableElements
+  rulling.getScrollableElements = () => {
+    const flater = alle()
+    if (!flater) return flater
+    return new Set([...flater].filter((flate) => flate !== (flate.ownerDocument.scrollingElement ?? flate.ownerDocument.documentElement)))
+  }
 }
