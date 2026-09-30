@@ -125,6 +125,9 @@ export function Diskusjonsmeny({ side, sidenavn }: { side: Diskusjonsside; siden
     setFokus(false)
   }
 
+  // Et varsel som leder til en tråd, åpner menyen også på smale flater, der den ellers står skjult.
+  const visVarslet = useCallback(() => setMobilApen(true), [setMobilApen])
+
   const lukk = () => {
     setSvever(false)
     setMobilApen(false)
@@ -174,6 +177,7 @@ export function Diskusjonsmeny({ side, sidenavn }: { side: Diskusjonsside; siden
             onApne={() => setSvever(true)}
             onLukk={lukk}
             onITraad={setITraad}
+            onVarslet={visVarslet}
           />
         </Bevaringsomrade>
       </aside>
@@ -191,6 +195,7 @@ function Diskusjonsflate({
   onApne,
   onLukk,
   onITraad,
+  onVarslet,
 }: {
   side: Diskusjonsside
   sidenavn: string
@@ -200,6 +205,8 @@ function Diskusjonsflate({
   onApne: () => void
   onLukk: () => void
   onITraad: (iTraad: boolean) => void
+  /** En tråd et varsel ba om, er åpnet. */
+  onVarslet: () => void
 }) {
   const [oversikt, setOversikt] = useState<Oversikt | null>(null)
   const [feil, setFeil] = useState<string | null>(null)
@@ -239,11 +246,13 @@ function Diskusjonsflate({
   useEffect(() => {
     const apneVenter = () => {
       const id = taDiskusjon(side)
-      if (id) setVisning({ side: 'traad', id })
+      if (!id) return
+      setVisning({ side: 'traad', id })
+      onVarslet()
     }
     apneVenter()
     return lyttEtterDiskusjon(apneVenter)
-  }, [side, setVisning])
+  }, [side, setVisning, onVarslet])
 
   // En åpen tråd holder menyen åpen.
   useEffect(() => {

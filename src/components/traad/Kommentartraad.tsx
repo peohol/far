@@ -192,7 +192,7 @@ function Kommentarvisning({
                 </Idehandling>
               )}
               {!laast && (eier || (admin && kanal.adminSletter)) && <Slettknapp hva="kommentaren" onSlett={() => void utfor(kanal.slett)} />}
-              {admin && kanal.skjul && !skjult && !eier && (
+              {admin && kanal.skjul && !laast && !skjult && !eier && (
                 <Bekreftknapp
                   ikon="skjul"
                   tekst="Skjul"

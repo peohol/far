@@ -35,7 +35,8 @@ flytter trådene og kategoriene med.
 - Kommentarene er som under idéene (svar i svar, hjerter, «Slettet» der det er
   svar), men bare forfatteren endrer og sletter sin egen, også for
   administratorer. En administrator kan i stedet **skjule** en kommentar eller
-  det første innlegget: teksten fjernes for godt, og plassen står med en merknad.
+  det første innlegget: teksten fjernes for godt, og plassen står med en merknad. Appen
+  tilbyr ikke det i en arkivert tråd; den hentes tilbake først.
 
 Trådene og kategoriene skrives gjennom funksjonene i migrasjonen, som holder
 rekkefølgen tett (0, 1, 2 …). Kommentarene og hjertene skrives rett mot
@@ -60,7 +61,8 @@ smal stolpe med knappen som holder den åpen, og emojien til hver kategori med
 et blått tall for tråder med noe nytt. Den åpnes mens pekeren er over den eller
 fokus er i den, og står åpen mens en tråd eller et skjema er åpent. Å holde den
 åpen lagres på brukeren og gjelder alle sider. På smale skjermer åpnes den over
-siden fra knappen «Diskusjoner» i toppmenyen. Mens fokus er i menyen, er den et
+siden fra knappen «Diskusjoner» i toppmenyen, eller av seg selv når et
+varsel leder til en tråd. Mens fokus er i menyen, er den et
 lag (`data-lag`), så appens hurtigtaster venter.
 
 Det brukeren har åpent (tråd, skjema, søk, arkiv) bevares med `useBevart` per

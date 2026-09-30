@@ -321,10 +321,21 @@ describe('én tråd', () => {
     expect(api.arkiverDiskusjon).toHaveBeenCalledWith('t1', false)
   })
 
+  it('lar heller ikke en administrator skjule noe i arkivet', async () => {
+    tilstand.meg = ADMIN
+    api.hentDiskusjonstraad.mockResolvedValue({ ...TRAAD, arkivert_kl: '2026-09-29T10:00:00Z' })
+    const bruker = await apne()
+    await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText(/Tråden kan leses, men ikke endres/)
+    expect(within(panel()).queryByRole('button', { name: /^Skjul innholdet/ })).toBeNull()
+  })
+
   it('åpnes fra et varsel når menyen for siden står', async () => {
     await vis()
     act(() => visDiskusjon('stoff:litium', 't1'))
     await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
     expect(panel().hidden).toBe(false)
+    // Også på smale flater, der menyen ellers står skjult til knappen i toppmenyen trykkes.
+    expect(meny().hasAttribute('data-mobil')).toBe(true)
   })
 })
