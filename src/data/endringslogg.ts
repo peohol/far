@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.62.1',
+    dato: '2026-09-30',
+    sammendrag: 'Halveringstidene øverst på fagsidene er lagt inn i produksjonen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Databaseendringen som la inn halveringstidene fra versjon 1.62.0 er kjørt i produksjonen, og appens oversikt over databaseendringer har fått versjonen produksjonen registrerte.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.62.0',
     dato: '2026-09-30',
     sammendrag: 'Halveringstiden står øverst på alle fagsider som har den, også for aktive metabolitter',
