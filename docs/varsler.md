@@ -30,7 +30,12 @@ Varslene berører ikke fortolkningen; de forteller bare at noe er endret.
 | `favoritter` | Noen publiserer endringer på en fagside du har som favoritt | Ja, av som standard |
 | `favorittdiskusjoner` | Noen starter en ny tråd på en fagside du har som favoritt | Ja, av som standard |
 
-Kategoriene står i `VARSELKATEGORIER`. De som lages av databasen, er de
+Kategoriene står i `VARSELKATEGORIER`. Hver har en `gruppe` fra
+`VARSELGRUPPER` (Fortolkningen, Idéer, Diskusjoner, Favorittsider, Appen):
+innstillingene viser gruppene i den rekkefølgen, hver med ikon og overskrift
+og kategoriene sine under. Ikonene for gruppene står i `Varsler.tsx`. En ny
+kategori får en gruppe; den trenger ingen ny gruppe med mindre den gjelder
+noe helt annet. De som lages av databasen, er de
 samme som `public.varselkategori`; en test passer på at de stemmer. En ny
 kategori legges til med `alter type public.varselkategori add value` i en egen
 migrasjon, og sist i `DATABASEKATEGORIER`. Utløseren som bruker den, skrives i
