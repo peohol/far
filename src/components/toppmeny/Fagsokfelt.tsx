@@ -4,7 +4,7 @@ import { Ikon } from '../ikon/Ikon'
 import { Shortcut } from '../Shortcut'
 
 /** Snarveien som henter fagsøket fram, som den står i merket i feltet. */
-export const FAGSOK_SNARVEI = 'Ctrl K'
+export const FAGSOK_SNARVEI = 'Ctrl + K'
 
 /**
  * Ctrl + K, eller Cmd + K på macOS. Et redigeringsfelt (riktekst) og et lag

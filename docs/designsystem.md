@@ -134,6 +134,12 @@ Alle handlinger i toppmenyen har ikon.
 `Button` med `shortcut` viser tasten i et merke. Knappen som står for tur,
 er `primary` med ↵; de andre er `kant`.
 
+Alle hurtigtastmerker går gjennom `Shortcut`, som tegner snarveien som
+tastaturtaster: én `.tast` per tast, med «+» mellom (skriv «Ctrl + K», med
+luft rundt plusset). Tasten tegnes likt overalt; flaten den står på setter
+bare fargene gjennom `--tast-flate`, `--tast-blekk` og `--tast-kant`
+(`handlinger.css`). Lag aldri et eget merke for en tast.
+
 ## Flater og skjema
 
 - **`Card`** er panelet: hårlinje, stor runding og ingen skygge. `align="start"`
@@ -193,7 +199,7 @@ Resten av grensesnitteksten:
 
 | Hvor | Tekst |
 | --- | --- |
-| Toppmenyen | «Søk i fagstoff» med «Ctrl K», «På siden» med «Ctrl B», «Åpne fortolkning» (stoffsiden), «Åpne stoffside» (fortolkningen), «Rediger», «Lukk» |
+| Toppmenyen | «Søk i fagstoff» med «Ctrl + K», «På siden» med «Ctrl + B», «Åpne fortolkning» (stoffsiden), «Åpne stoffside» (fortolkningen), «Rediger», «Lukk» |
 | Redigering | statuspillen «Redigerer · …» («ingen upubliserte endringer», «utkast med N endringer», «alt er publisert»), «Publiser», «Avslutt redigering», «Publiser endringene», «Publiser nå» |
 | Panelene i redigering | «Rediger», «Legg til», «Legg til kort», «Koble til legemiddeldataene», «Kilder for panelet», «Rediger reglene», «Lagre utkast», «Avbryt» |
 | Viktige data | «Konsentrasjoner i serum», «Kinetikk», «Ikke oppgitt» |
@@ -281,12 +287,12 @@ som i en test, blir innholdet stående i siden.
   til «Åpne stoffside» mens en modul med egen stoffside er valgt (`App.tsx`);
   søkesiden til «Lukk».
 - `sidesok`: plassen til søket i den åpne siden. Stoffsiden legger sitt
-  kompakte søk her (`Sidesok.tsx`, snarveien Ctrl B eller Cmd B). Det vokser
+  kompakte søk her (`Sidesok.tsx`, snarveien Ctrl + B eller Cmd + B). Det vokser
   mens det brukes, og antallet treff og stedene de står, vises under feltet.
   I dokken dekker det hele dokken mens det har fokus.
 - `sok` (en prop på `Toppmeny`): globalt fagsøk. Appen legger `Fagsok`
   (`src/components/sok/`) her: feltet fra `Fagsokfelt.tsx` med snarveien
-  Ctrl K eller Cmd K, og en rullegardin med de beste treffene. Mens fokus står
+  Ctrl + K eller Cmd + K, og en rullegardin med de beste treffene. Mens fokus står
   i fagsøket, er det et lag over appen (`data-lag="fagsok"`), så det som
   skrives, ikke når tastene i siden bak. Ctrl/Cmd K og Ctrl/Cmd B virker
   likevel derfra, så man kan gå rett mellom de to søkene. Snarveiene virker

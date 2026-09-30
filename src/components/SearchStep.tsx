@@ -3,6 +3,7 @@ import { StepBar } from './StepBar'
 import { Ikon } from './ikon/Ikon'
 import { fortolkningenErSkjult, indexToDigit, lagLiggerOver } from '../hooks/useKeyboard'
 import { Filterbytte } from './Filterbytte'
+import { Shortcut } from './Shortcut'
 import { splitName } from '../domain/names'
 import { optionColourVars } from '../domain/optionColours'
 import type { SearchHit } from '../domain/search'
@@ -151,9 +152,9 @@ function Options({
           >
             {/* Står alltid: tallet endrer seg fra søk til søk og er ikke noe
                 man kan lære seg, så det følger ikke hurtigtastinnstillingen. */}
-            <span className="alternativ__tall" aria-hidden="true">
+            <Shortcut always className="alternativ__tall" aria-hidden="true">
               {indexToDigit(i)}
-            </span>
+            </Shortcut>
             <Name analyte={hit.analyte} />
           </button>
         </li>
