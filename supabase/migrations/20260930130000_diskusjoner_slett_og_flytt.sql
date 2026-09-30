@@ -44,10 +44,12 @@ begin
   if traad.id is null then
     raise exception 'Tråden finnes ikke lenger.' using errcode = 'P0002';
   end if;
-  if not public.er_admin() and not (
+  -- En tråd uten forfatter (brukeren er slettet) er ingens egen: bare en administrator sletter den.
+  if not public.er_admin() and not coalesce(
     traad.forfatter_id = bruker
     and traad.arkivert_kl is null
-    and intern.diskusjon_bare_egne(traad.id, bruker)
+    and intern.diskusjon_bare_egne(traad.id, bruker),
+    false
   ) then
     raise exception 'Du kan bare slette en tråd du har startet selv, før andre har skrevet i den.' using errcode = '42501';
   end if;

@@ -313,6 +313,13 @@ describe('diskusjonene i databasen', () => {
     expect((await oversikt(ada, side)).diskusjoner).toEqual([])
     expect(await sql(admin, 'select 1 from public.diskusjonskommentarer k where k.diskusjon_id = any($1)', [[tredje, nyEgen]])).toEqual([])
 
+    // En tråd uten forfatter (brukeren er slettet) sletter bare en administrator.
+    const foreldrelos = await nyTraad(ada, side, kategori, 'Foreldreløs')
+    await db.query('update public.diskusjoner set forfatter_id = null where id = $1', [foreldrelos])
+    expect(await feilFra(() => slett(bo, foreldrelos))).toMatchObject({ code: '42501' })
+    expect(await feilFra(() => slett(ada, foreldrelos))).toMatchObject({ code: '42501' })
+    await slett(admin, foreldrelos)
+
     expect(await feilFra(() => slett(admin, tredje))).toMatchObject({ code: 'P0002' })
     expect(await feilFra(() => sql(null, 'select public.slett_diskusjon($1)', [forste]))).toMatchObject({ code: '42501' })
   })
