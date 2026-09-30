@@ -89,7 +89,11 @@ migreringer etter administratorens ja (`*_oppgaver_tatt_*.sql` og
 `*_oppgaver_utfort_*.sql`). Oppgavene de nevner, finnes bare i produksjon, så
 migreringene gjør ingenting i en database uten oppgaver.
 
-Prompten er ren tekst: den skal leses av en språkmodell. `flytt_oppgave_tilbake()`
+Prompten er ren tekst: den skal leses av en språkmodell. Ved overføringen
+starter den med idéens beskrivelse, gjort om til ren tekst av
+`intern.riktekst_som_tekst()`: avsnitt med en tom linje mellom, punkter med
+«- » eller «1. » foran, og lenker med adressen i parentes. Har idéen ingen
+beskrivelse, blir prompten overskriften. `flytt_oppgave_tilbake()`
 er den eneste måten å fjerne en oppgave på, og gjør idéen åpen igjen. En
 utført oppgave kan ikke endres eller flyttes. Idéen kan ikke slettes så lenge
 den er en oppgave. Det gjelder også når brukeren som skrev den, slettes i

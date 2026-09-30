@@ -130,7 +130,8 @@ describe('arkivet og de planlagte oppgavene', () => {
     const id = await overfor(ide)
 
     expect((await oversikt(bo, ide))!.oppgave).toEqual({ id, status: 'ikke_paabegynt', nummer: expect.any(Number) })
-    expect(await oppgave(bo, id)).toMatchObject({ ide_id: ide, tittel: 'Mørk modus', status: 'ikke_paabegynt', prompt: '', har_prompt: false })
+    // Uten beskrivelse starter prompten med overskriften.
+    expect(await oppgave(bo, id)).toMatchObject({ ide_id: ide, tittel: 'Mørk modus', status: 'ikke_paabegynt', prompt: 'Mørk modus', har_prompt: true })
     expect((await en<Oppgave[]>(bo, 'select public.oppgaveoversikt()')).find((o) => o.id === id)).not.toHaveProperty('prompt')
 
     expect(await feilFra(() => overfor(ide))).toMatchObject({ code: '55000' })
@@ -144,9 +145,74 @@ describe('arkivet og de planlagte oppgavene', () => {
     expect(await feilFra(() => sql(admin, 'delete from public.oppgaver where id = $1', [id]))).toMatchObject({ code: '42501' })
   })
 
+  it('starter prompten med idéens tekst som ren tekst, uten at idéen endres', async () => {
+    const tekst = {
+      type: 'doc',
+      content: [
+        { type: 'paragraph', content: [{ type: 'text', text: 'Knappen skal ' }, { type: 'text', text: 'alltid', marks: [{ type: 'bold' }] }, { type: 'text', text: ' vises.' }] },
+        { type: 'paragraph' },
+        { type: 'paragraph', content: [{ type: 'text', text: 'Linje én' }, { type: 'hardBreak' }, { type: 'text', text: 'linje to' }] },
+        {
+          type: 'bulletList',
+          content: [
+            { type: 'listItem', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Første' }] }] },
+            {
+              type: 'listItem',
+              content: [
+                { type: 'paragraph', content: [{ type: 'text', text: 'Andre' }] },
+                {
+                  type: 'orderedList',
+                  attrs: { start: 3 },
+                  content: [
+                    { type: 'listItem', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'tre' }] }] },
+                    { type: 'listItem', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'fire' }] }] },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'paragraph',
+          content: [
+            { type: 'text', text: 'Se ' },
+            { type: 'text', text: 'Felles', marks: [{ type: 'bold' }, { type: 'link', attrs: { href: 'https://www.felleskatalogen.no' } }] },
+            { type: 'text', text: 'katalogen', marks: [{ type: 'link', attrs: { href: 'https://www.felleskatalogen.no' } }] },
+            { type: 'text', text: ' og ' },
+            { type: 'text', text: 'https://example.org', marks: [{ type: 'link', attrs: { href: 'https://example.org' } }] },
+          ],
+        },
+      ],
+    }
+    const ide = await en<string>(ada, `insert into public.ideer (kategori, tittel, tekst) values ('fag', 'Knapp', $1) returning id`, [JSON.stringify(tekst)])
+    const id = await overfor(ide)
+    expect(await oppgave(bo, id)).toMatchObject({
+      status: 'ikke_paabegynt',
+      har_prompt: true,
+      prompt: [
+        'Knappen skal alltid vises.',
+        '',
+        'Linje én\nlinje to',
+        '',
+        '- Første\n- Andre\n  3. tre\n  4. fire',
+        '',
+        'Se Felleskatalogen (https://www.felleskatalogen.no) og https://example.org',
+      ].join('\n'),
+    })
+    expect((await sql<{ tekst: unknown }>(bo, 'select tekst from public.ideer where id = $1', [ide]))[0]!.tekst).toEqual(tekst)
+
+    // En beskrivelse uten tekst gir overskriften.
+    const tom = await en<string>(ada, `insert into public.ideer (kategori, tittel, tekst) values ('fag', 'Tom', $1) returning id`, [
+      JSON.stringify({ type: 'doc', content: [{ type: 'paragraph' }, { type: 'paragraph', content: [{ type: 'text', text: '  ' }] }] }),
+    ])
+    expect((await oppgave(bo, await overfor(tom)))!.prompt).toBe('Tom')
+  })
+
   it('setter oppgaven under arbeid ved første endring, og klar bare med prompt', async () => {
     const id = await overfor(await nyIde(ada))
     expect(await feilFra(() => sql(bo, 'select public.lagre_oppgave($1, $$En oppgave$$, $2)', [id, 'Gjør det']))).toMatchObject({ code: '42501' })
+    await sql(admin, 'select public.lagre_oppgave($1, $$En oppgave$$, $2)', [id, ''])
+    expect(await oppgave(bo, id)).toMatchObject({ status: 'under_arbeid', prompt: '', har_prompt: false })
     expect(await feilFra(() => sql(admin, 'select public.sett_oppgave_klar($1, true)', [id]))).toMatchObject({ code: '23514' })
 
     await sql(admin, 'select public.lagre_oppgave($1, $$En oppgave$$, $2)', [id, 'Legg til en knapp.'])
