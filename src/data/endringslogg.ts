@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.66.0',
+    dato: '2026-09-30',
+    sammendrag: 'Diskusjonstråder kan slettes og flyttes til en annen side',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Den som startet en tråd, kan slette den så lenge ingen andre har skrevet i den. En administrator kan slette alle tråder, også de arkiverte.',
+      'En tråd som står på feil side, kan flyttes til en annen fagside eller fortolkning, i en kategori der eller i en ny. Kommentarene følger med, og du kommer til tråden på den nye siden.',
+      'Arkivet nederst i diskusjonsmenyen er lukket til du åpner det, og de arkiverte trådene vises ikke før det.',
+      'Når du drar en tråd eller kategori mot kanten av menyen, ruller bare menyen, ikke siden bak.',
+    ],
+  },
+  {
     versjon: '1.65.1',
     dato: '2026-09-30',
     sammendrag: 'Varselinnstillingene er gruppert etter hva de gjelder',

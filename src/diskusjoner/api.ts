@@ -96,17 +96,23 @@ export async function losOppKategori(kategori: string): Promise<void> {
 
 /* --- Trådene ------------------------------------------------------------------ */
 
+/** En kategori på siden, eller en ny, som lages sammen med tråden. */
+export type Kategorivalg = { id: string } | { navn: string; emoji: string }
+
 export interface Nydiskusjon {
   tittel: string
   tekst: Riktekstdokument | null
-  /** En kategori på siden, eller en ny, som lages sammen med tråden. */
-  kategori: { id: string } | { navn: string; emoji: string }
+  kategori: Kategorivalg
+}
+
+/** Parametrene funksjonene i databasen tar for en kategori, eller en ny. */
+function kategoriparametre(kategori: Kategorivalg) {
+  return 'id' in kategori ? { kategori: kategori.id } : { kategori: null, ny_kategori: kategori.navn.trim(), ny_emoji: kategori.emoji.trim() }
 }
 
 /** Lager tråden, og kategorien den skal i når den er ny. Gir ID-en til tråden. */
 export async function opprettDiskusjon(side: Diskusjonsside, ny: Nydiskusjon): Promise<string> {
-  const kategori = 'id' in ny.kategori ? { kategori: ny.kategori.id } : { kategori: null, ny_kategori: ny.kategori.navn.trim(), ny_emoji: ny.kategori.emoji.trim() }
-  return id(sjekk(await klient().rpc('opprett_diskusjon', { side, tittel: ny.tittel.trim(), tekst: ny.tekst, ...kategori })))
+  return id(sjekk(await klient().rpc('opprett_diskusjon', { side, tittel: ny.tittel.trim(), tekst: ny.tekst, ...kategoriparametre(ny.kategori) })))
 }
 
 /** Ny overskrift. Alle kan endre den. */
@@ -121,6 +127,19 @@ export async function settTekst(diskusjon: string, tekst: Riktekstdokument | nul
 
 export async function flyttDiskusjonTil(diskusjon: string, kategori: string, indeks: number): Promise<void> {
   sjekk(await klient().rpc('flytt_diskusjon', { diskusjon, kategori, indeks }))
+}
+
+/** Flytter tråden sist i en kategori på en annen side, eller i en ny kategori der. */
+export async function flyttDiskusjonTilSide(diskusjon: string, side: Diskusjonsside, kategori: Kategorivalg): Promise<void> {
+  sjekk(await klient().rpc('flytt_diskusjon_til_side', { diskusjon, side, ...kategoriparametre(kategori) }))
+}
+
+/**
+ * Sletter tråden med alt i den. Den som startet den, før andre har skrevet i
+ * den; en administrator alltid.
+ */
+export async function slettDiskusjon(diskusjon: string): Promise<void> {
+  sjekk(await klient().rpc('slett_diskusjon', { diskusjon }))
 }
 
 /** Legger tråden i arkivet, eller henter den tilbake (sist i kategorien sin). */
