@@ -50,7 +50,8 @@
 
 /* Viktige data: konsentrasjonene ved siden av kinetikken. Gruppene og kortene
    er aldri bredere enn innholdet trenger, og et kort blir heller bredere enn
-   at et stort tall renner ut: det som ikke får plass, brytes ned på neste rad. */
+   at et stort tall renner ut: det som ikke får plass, brytes ned på neste rad.
+   Dekker ikke raden hele bredden, står den midt i. */
 .viktige-data {
   display: flex;
   flex-direction: column;
@@ -62,6 +63,7 @@
 .viktige-data__grupper {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: var(--rom-7);
 }
 
@@ -87,6 +89,7 @@
   flex: 1;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: var(--rom-4);
   padding: 0;
   list-style: none;
