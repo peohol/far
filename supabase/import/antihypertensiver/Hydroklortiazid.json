@@ -1,0 +1,241 @@
+{
+  "stoff": "hydroklortiazid",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 15,
+      "ovre": 300,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 1200,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": null,
+          "min": 9.5,
+          "maks": 13,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Tiazid som hemmer Na+/Cl- transporter i distale tubuli med påfølgende økt diurese (tap av blodvolum som initialt gir reduksjon i blodtrykket). Gir mindre diurese sammenlignet med slyngediuretika, siden reabsorpsjonen er noe mindre i distale tubuli. Natriuresen forårsaker en sekundær utskillelse av kalium og bikarbonat. Nedsetter nyrenes evne til å fortynne urinen, som til vanlig skjer i distale tubuli. Gir som slyngediuretika også venedilatasjon. Ved fortsatt behandling avhenger den blodtrykkssenkende effekten hovedsakelig av reduksjon i total perifer karmotstand.",
+      "Siden tiazider virker mer distalt i nefronet, hvor mye av saltene og vannet allerede er reabsorbert, gir tiazider en mindre kraftig vanndrivende effekt sammenlignet med slyngediuretika."
+    ],
+    "referanser": [
+      "spc-hydroklortiazid"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Hypertensjon",
+          "Ødemer i forbindelse med hjertesvikt",
+          "Ødemer av annen årsak",
+          "Morbus Ménière",
+          "Profylaktisk ved residiverende kalsiumoksalatsteiner i urinveier"
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-hydroklortiazid"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Dosering avhenger av indikasjon.",
+      "Hypertensjon: Initialt 12,5–50 mg daglig. Den blodtrykkssenkende effekten er lite doseavhengig, og oftest fullt uttalt allerede ved 12,5–25 mg.",
+      "Ødemer og Morbus Ménière: Inntil 100 mg daglig ved alvorlige tilfeller.",
+      "Nedsatt lever- og nyrefunksjon: Ingen dosejustering nødvendig ved mild til moderat nedsatt leverfunksjon eller ved GFR ≥ 30 ml/min. Ved nyresvikt bør serumkreatinin og serumelektrolytter følges."
+    ],
+    "referanser": [
+      "spc-hydroklortiazid"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Hydroklortiazid kan redusere litiumutskillelsen, og dermed gi økte serumkonsentrasjoner ved uendret litiumdosering. NSAID: Samtidig bruk kan motvirke den antihypertensive effekten av tiazider. Kliniske observasjoner tyder på at risikoen for sykehusinnleggelse dobles hos pasienter som behandles med NSAID og diuretika, sammenlignet med pasienter som behandles med diuretika alene. Se preparatomtalen for flere eksempler."
+    ],
+    "referanser": [
+      "spc-hydroklortiazid"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "Ca. 70 %.",
+        "Lavere absorpsjon ved samtidig matinntak, redusert lever- og nyrefunksjon, samt hjertesvikt."
+      ],
+      "referanser": [
+        "spc-hydroklortiazid"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "1,5–2,5 timer (oralt inntak)."
+      ],
+      "referanser": [
+        "spc-hydroklortiazid"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "9,5–13 timer. Kan være kraftig forlenget ved nedsatt nyrefunksjon."
+      ],
+      "referanser": [
+        "spc-hydroklortiazid"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Ca. 40 %."
+      ],
+      "referanser": [
+        "spc-hydroklortiazid"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "3–4 L/kg. Hydroklortiazid akkumuleres i erytrocytter."
+      ],
+      "referanser": [
+        "spc-hydroklortiazid"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Metaboliseres hovedsakelig ikke.",
+        "Eliminasjonen skjer hovedsakelig i uforandret form gjennom nyrene."
+      ],
+      "referanser": [
+        "spc-hydroklortiazid"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 297,7 g/mol."
+      ],
+      "referanser": [
+        "spc-hydroklortiazid"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Væske- og elektrolyttforstyrrelser er vanlig. Tørste og metabolsk alkalose. Initialt polyuri, ved store væsketap oliguri og anuri. Sekundært til væske- og elektrolyttforstyrrelser hodepine, forvirring, svimmelhet, ortostatisk hypotensjon, muskelsvakhet, ev. kramper og koma. EKG-forandringer og arytmier.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 1200 nmol/L), en felles grense for alle antihypertensivene.",
+        "Ingen forslag til toksisk konsentrasjon verken i Clarke, Baselt, Micromedex eller ved frisøk i PubMed. Schulz et al. oppgir 4 mg/L (13 435 nmol/L), uten kildehenvisning. Det er nesten 45 ganger øvre grense for referanseområdet, et langt større avvik enn den felles 4 ×-grensen."
+      ],
+      "referanser": [
+        "schulz2020",
+        "legemiddelhandboka"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "12,5 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "15–23 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "12,5 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "41–65 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "12,5 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "49–78 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "59–93 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "166–262 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "197–311 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "6–25 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "285 (42–1604) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 194."
+      },
+      {
+        "dose": "6–25 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "62 (20–352) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 28."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-hydroklortiazid": {
+      "tittel": "Hydromed «EQL Pharma»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/hydromed-eql-pharma-579916"
+    }
+  }
+}

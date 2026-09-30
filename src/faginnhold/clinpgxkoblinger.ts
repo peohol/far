@@ -189,6 +189,39 @@ export const GHB_KETAMIN_CLINPGXKOBLINGER: readonly Clinpgxkobling[] = [
 ]
 
 /**
+ * Antihypertensivsidene, som importen fra oversikten over antihypertensiver
+ * lager, kontrollert mot ClinPGx 30. september 2026: navnet og ATC-koden
+ * stemmer for alle.
+ */
+export const ANTIHYPERTENSIV_CLINPGXKOBLINGER: readonly Clinpgxkobling[] = [
+  { side: 'Amlodipin', fest_id: 'ID_7747F0C0-30CC-438E-B66F-68C2C14E710F', virkestoff: 'Amlodipin', engelsk: 'Amlodipine', atc: 'C08CA01', clinpgx_id: 'PA448388', navn: 'amlodipine', samsvar: 'navn' },
+  { side: 'Atenolol', fest_id: 'ID_B7952198-5997-46EB-B182-785CBD0D7007', virkestoff: 'Atenolol', engelsk: 'Atenolol', atc: 'C07AB03', clinpgx_id: 'PA448499', navn: 'atenolol', samsvar: 'navn' },
+  { side: 'Bendroflumetiazid', fest_id: 'ID_02AE4CD3-BCA2-487C-974D-20E65AED89B2', virkestoff: 'Bendroflumetiazid', engelsk: 'Bendroflumethiazide', atc: 'C03AA01', identifikatorer: { rxnorm: '1369' }, clinpgx_id: 'PA448563', navn: 'bendroflumethiazide', samsvar: 'navn', merknad: 'FEST har bendroflumetiazid bare sammen med kalium (Centyl med kaliumklorid, C03AB01); ATC-koden er den WHO og ClinPGx har for virkestoffet alene.' },
+  { side: 'Bisoprolol', fest_id: 'ID_BED4501F-4CD5-4EE4-98FA-2FB1096EAEF1', virkestoff: 'Bisoprolol', engelsk: 'Bisoprolol', atc: 'C07AB07', clinpgx_id: 'PA448641', navn: 'bisoprolol', samsvar: 'navn' },
+  { side: 'Bumetanid', fest_id: 'ID_987C2CCC-48D6-4DEB-A68B-0082BF25876A', virkestoff: 'Bumetanid', engelsk: 'Bumetanide', atc: 'C03CA02', clinpgx_id: 'PA448682', navn: 'bumetanide', samsvar: 'navn' },
+  { side: 'Diltiazem', fest_id: 'ID_F337071D-AA12-4D72-9DA5-CB3AD91D2759', virkestoff: 'Diltiazem', engelsk: 'Diltiazem', atc: 'C08DB01', clinpgx_id: 'PA449334', navn: 'diltiazem', samsvar: 'navn', merknad: 'ClinPGx har også C05AE03 (diltiazem i salve mot analfissur).' },
+  { side: 'Doksazosin', fest_id: 'ID_42781DEA-BCA0-48B5-8DD8-1269B99F2910', virkestoff: 'Doksazosin', engelsk: 'Doxazosin', atc: 'C02CA04', clinpgx_id: 'PA449407', navn: 'doxazosin', samsvar: 'navn' },
+  { side: 'Enalapril', fest_id: 'ID_5A4991C1-1D06-46A2-9B95-D7C72864CD0E', virkestoff: 'Enalapril', engelsk: 'Enalapril', atc: 'C09AA02', clinpgx_id: 'PA449456', navn: 'enalapril', samsvar: 'navn' },
+  { side: 'Eplerenon', fest_id: 'ID_D76A9CFA-D219-430B-AD5F-255A9BB6949A', virkestoff: 'Eplerenon', engelsk: 'Eplerenone', atc: 'C03DA04', clinpgx_id: 'PA164749044', navn: 'eplerenone', samsvar: 'navn' },
+  { side: 'Furosemid', fest_id: 'ID_966A96B7-BC79-4152-A555-4C76A2391920', virkestoff: 'Furosemid', engelsk: 'Furosemide', atc: 'C03CA01', clinpgx_id: 'PA449719', navn: 'furosemide', samsvar: 'navn' },
+  { side: 'Hydroklortiazid', fest_id: 'ID_605B1311-43E9-45BC-83D7-828D4F53C523', virkestoff: 'Hydroklortiazid', engelsk: 'Hydrochlorothiazide', atc: 'C03AA03', clinpgx_id: 'PA449899', navn: 'hydrochlorothiazide', samsvar: 'navn' },
+  { side: 'Irbesartan', fest_id: 'ID_BBC7FCDA-3571-4325-B576-645784F29DC1', virkestoff: 'Irbesartan', engelsk: 'Irbesartan', atc: 'C09CA04', clinpgx_id: 'PA450084', navn: 'irbesartan', samsvar: 'navn' },
+  { side: 'Kandesartan', fest_id: 'ID_05B987BF-55BC-4935-9578-9A5AA725B430', virkestoff: 'Kandesartancileksetil', engelsk: 'Candesartan cilexetil', atc: 'C09CA06', identifikatorer: { rxnorm: '214354' }, clinpgx_id: 'PA448765', navn: 'candesartan', samsvar: 'synonym', merknad: 'FEST har forløperen kandesartancileksetil; «Candesartan cilexetil» er synonym for candesartan i ClinPGx.' },
+  { side: 'Karvedilol', fest_id: 'ID_646B1EE5-9372-48A6-8E68-2B7C290289CD', virkestoff: 'Karvedilol', engelsk: 'Carvedilol', atc: 'C07AG02', clinpgx_id: 'PA448817', navn: 'carvedilol', samsvar: 'navn' },
+  { side: 'Labetalol', fest_id: 'ID_1AAC4109-128E-4D4C-B251-23E462DD1B7D', virkestoff: 'Labetalol', engelsk: 'Labetalol', atc: 'C07AG01', clinpgx_id: 'PA164743150', navn: 'labetalol', samsvar: 'navn' },
+  { side: 'Lerkanidipin', fest_id: 'ID_A164C4B8-7BD0-4408-97AE-16E10A14250C', virkestoff: 'Lerkanidipin', engelsk: 'Lercanidipine', atc: 'C08CA13', clinpgx_id: 'PA164769058', navn: 'lercanidipine', samsvar: 'navn' },
+  { side: 'Lisinopril', fest_id: 'ID_DCB94A58-2AD7-40B6-A515-7EE19E299F09', virkestoff: 'Lisinopril', engelsk: 'Lisinopril', atc: 'C09AA03', clinpgx_id: 'PA450242', navn: 'lisinopril', samsvar: 'navn' },
+  { side: 'Losartan', fest_id: 'ID_A3ED2C34-50C9-46E7-9482-5E5B55E2BBC0', virkestoff: 'Losartan', engelsk: 'Losartan', atc: 'C09CA01', clinpgx_id: 'PA450268', navn: 'losartan', samsvar: 'navn' },
+  { side: 'Metoprolol', fest_id: 'ID_F1A5819E-781F-4ADA-92F6-B009B48750A5', virkestoff: 'Metoprolol', engelsk: 'Metoprolol', atc: 'C07AB02', clinpgx_id: 'PA450480', navn: 'metoprolol', samsvar: 'navn' },
+  { side: 'Nifedipin', fest_id: 'ID_D2B69C47-BEFE-4345-B4E7-D59049EF41DD', virkestoff: 'Nifedipin', engelsk: 'Nifedipine', atc: 'C08CA05', clinpgx_id: 'PA450631', navn: 'nifedipine', samsvar: 'navn' },
+  { side: 'Ramipril', fest_id: 'ID_C9D2BF2D-A0F8-46EC-9861-FE58536C8A41', virkestoff: 'Ramipril', engelsk: 'Ramipril', atc: 'C09AA05', clinpgx_id: 'PA451223', navn: 'ramipril', samsvar: 'navn' },
+  { side: 'Spironolakton', fest_id: 'ID_6F33B108-8842-4D25-9746-6397759275CA', virkestoff: 'Spironolakton', engelsk: 'Spironolactone', atc: 'C03DA01', clinpgx_id: 'PA451483', navn: 'spironolactone', samsvar: 'navn' },
+  { side: 'Telmisartan', fest_id: 'ID_D4F3353B-CA8D-442D-86DF-C3052BFB4C7F', virkestoff: 'Telmisartan', engelsk: 'Telmisartan', atc: 'C09CA07', clinpgx_id: 'PA451605', navn: 'telmisartan', samsvar: 'navn' },
+  { side: 'Valsartan', fest_id: 'ID_90CC1E37-24DD-496F-A7F5-D9B8B816E900', virkestoff: 'Valsartan', engelsk: 'Valsartan', atc: 'C09CA03', clinpgx_id: 'PA451848', navn: 'valsartan', samsvar: 'navn' },
+  { side: 'Verapamil', fest_id: 'ID_DB91861C-E102-47D6-8ED7-F0C118195F67', virkestoff: 'Verapamil', engelsk: 'Verapamil', atc: 'C08DA01', clinpgx_id: 'PA451868', navn: 'verapamil', samsvar: 'navn' },
+]
+
+/**
  * Hver import av koblinger, i rekkefølge, med navnet migrasjonen fikk.
  * `festkrav` sier om migrasjonen krever at siden er koblet til virkestoffet i
  * FEST. Den andre gjør ikke det: FEST-koblingene til flere av sidene er ikke
@@ -199,6 +232,7 @@ export const CLINPGXKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: r
   { migrasjon: 'stoffsider_clinpgx_kobling', koblinger: STOFFSIDE_CLINPGXKOBLINGER, festkrav: true },
   { migrasjon: 'stoffsider_clinpgx_dekning', koblinger: DEKNINGSKOBLINGER, festkrav: false },
   { migrasjon: 'ghb_ketamin_clinpgx_kobling', koblinger: GHB_KETAMIN_CLINPGXKOBLINGER, festkrav: true },
+  { migrasjon: 'antihypertensiver_clinpgx_kobling', koblinger: ANTIHYPERTENSIV_CLINPGXKOBLINGER, festkrav: true },
 ]
 
 /** Alle koblingene fra importene, i rekkefølge. */

@@ -1,0 +1,100 @@
+{
+  "referanser": {
+    "rognstad2021": {
+      "tittel": "Establishing Serum Reference Ranges for Antihypertensive Drugs",
+      "forfattere": "Rognstad S et al.",
+      "aar": "2021",
+      "lenke": "https://doi.org/10.1097/FTD.0000000000000806"
+    },
+    "thorstensen2022": {
+      "tittel": "Development of UHPLC-MS/MS methods to quantify 25 antihypertensive drugs in serum in a cohort of patients treated for hypertension",
+      "forfattere": "Thorstensen CW et al.",
+      "aar": "2022",
+      "lenke": "https://doi.org/10.1016/j.jpba.2022.114908"
+    },
+    "hiemke2017": {
+      "tittel": "Consensus Guidelines for Therapeutic Drug Monitoring in Neuropsychopharmacology: Update 2017",
+      "forfattere": "Hiemke C et al.",
+      "aar": "2018",
+      "lenke": "https://doi.org/10.1055/s-0043-116492"
+    },
+    "schulz2020": {
+      "tittel": "Revisited: Therapeutic and toxic blood concentrations of more than 1100 drugs and other xenobiotics",
+      "forfattere": "Schulz M et al.",
+      "aar": "2020",
+      "lenke": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7201985/"
+    },
+    "wu2005": {
+      "tittel": "A Summary of the Effects of Antihypertensive Medications on Measured Blood Pressure",
+      "forfattere": "Wu J et al.",
+      "aar": "2005",
+      "lenke": "https://doi.org/10.1016/j.amjhyper.2005.01.011"
+    },
+    "baselt2017": {
+      "tittel": "Disposition of Toxic Drugs and Chemicals in Man",
+      "forfattere": "Baselt RC",
+      "aar": "2017",
+      "lenke": ""
+    },
+    "felleskatalogen": {
+      "tittel": "Felleskatalogen",
+      "forfattere": "Felleskatalogen AS",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/"
+    },
+    "legemiddelhandboka": {
+      "tittel": "Norsk legemiddelhåndbok",
+      "forfattere": "Foreningen for utgivelse av Norsk legemiddelhåndbok",
+      "aar": "",
+      "lenke": "https://www.legemiddelhandboka.no/"
+    },
+    "helsebiblioteket-ace-hemmere": {
+      "tittel": "ACE-hemmere – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/ace-hemmere-behandlingsanbefaling-ved-forgiftning"
+    },
+    "helsebiblioteket-betablokkere": {
+      "tittel": "Betablokkere – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/betablokkere-behandlingsanbefaling-ved-forgiftning"
+    },
+    "helsebiblioteket-angiotensin-2-antagonister": {
+      "tittel": "Angiotensin-2-antagonister – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/angiotensin-2-antagonister-behandlingsanbefaling-ved-forgiftning"
+    },
+    "helsebiblioteket-amlodipin": {
+      "tittel": "Amlodipin – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/amlodipin-behandlingsanbefaling-ved-forgiftning"
+    },
+    "helsebiblioteket-diltiazem": {
+      "tittel": "Diltiazem – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/diltiazem-behandlingsanbefaling-ved-forgiftning"
+    },
+    "helsebiblioteket-nifedipin": {
+      "tittel": "Nifedipin – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/nifedipin-behandlingsanbefaling-ved-forgiftning"
+    },
+    "helsebiblioteket-verapamil": {
+      "tittel": "Verapamil – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/verapamil-behandlingsanbefaling-ved-forgiftning"
+    },
+    "helsebiblioteket-lerkanidipin": {
+      "tittel": "Lerkanidipin – behandlingsanbefaling ved forgiftning",
+      "forfattere": "Helsebiblioteket (Giftinformasjonen)",
+      "aar": "",
+      "lenke": "https://www.helsebiblioteket.no/forgiftninger/legemidler/lerkanidipin-behandlingsanbefaling-ved-forgiftning"
+    }
+  }
+}

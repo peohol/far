@@ -1,0 +1,238 @@
+{
+  "stoff": "labetalol",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 50,
+      "ovre": 1000,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 4000,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": null,
+          "min": 4,
+          "maks": 8,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Selektiv alfa-1-adrenerg reseptorantagonist og ikke-selektiv beta-1-reseptorantagonist.",
+      "Labetalol senker blodtrykket ved å blokkere perifere arteriolære alfa-adrenoseptorer. Blokkeringen reduserer perifer motstand, og gjennom samtidig beta-blokkering beskyttes hjertet mot reflekssympatisk arbeid som ellers ville oppstå.",
+      "Den reduserte perifere motstanden senker den myokardiale etterbelastningen og oksygenbehovet."
+    ],
+    "referanser": [
+      "spc-labetalol"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Malign hypertensjon (injeksjonsvæske)",
+          "Ved planlagt hypotensjon under anestesi (injeksjonsvæske)",
+          "Hypertensjon inkl. svangerskapshypertensjon (tabletter)",
+          "Angina pectoris med samtidig hypertensjon (tabletter)"
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-labetalol"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Malign hypertensjon (injeksjonsvæske): Startdose 50 mg iv, hvis nødvendig repeteres hvert 5. minutt til tilfredsstillende blodtrykk oppnås. Total dose bør ikke overstige 200 mg.",
+      "Kontrollert hypotensjon under anestesi (injeksjonsvæske): Startdose 10–20 mg iv, trinnvis doseøkning hvert 5. minutt på 5–10 mg til tilfredsstillende blodtrykk oppnås.",
+      "Hypertensjon: Startdose 100 mg × 2 i 2–14 dager før vedlikeholdsdose 200 mg × 2. Ved behov kan dosen økes opp til maks anbefalt dose på 400 mg × 2. Ved alvorlig refraktær hypertensjon har daglige doser opptil 2400 mg/døgn blitt gitt.",
+      "Svangerskapshypertensjon (tabletter): Startdose 100 mg × 2. Ved behov kan dosen økes ukentlig med +100 mg × 2. Daglig dose på 2400 mg/døgn skal ikke overskrides.",
+      "Angina pectoris med samtidig hypertensjon (tabletter): Doseres som nødvendig for å kontrollere hypertensjonen.",
+      "Nedsatt lever- og nyrefunksjon: Skal brukes med forsiktighet ved alvorlig nedsatt nyrefunksjon og ved alvorlig nedsatt leverfunksjon."
+    ],
+    "referanser": [
+      "spc-labetalol"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      {
+        "punkter": [
+          "Den hypotensive virkingen til labetalol kan reduseres ved bruk i kombinasjon med prostaglandinsyntesehemmere (NSAIDs).",
+          "Samtidig administrering av labetalol og adrenalin kan resultere i bradykardi og hypertensjon.",
+          "Fare for uttalt bradykardi og hypotensjon ved kombinasjon med kalsiumantagonister med negativ inotrop effekt (f.eks. verapamil, diltiazem.",
+          "Forsiktighet må utvises ved generell anestesi av pasienter som bruker betablokkere. Betablokkere reduserer risikoen for arytmier ved anestesi men kan føre til nedsettelse av den reflektoriske takykardi og øke risikoen for hypotensjon ved anestesi.",
+          "Midler med β-reseptor-blokkerende egenskaper kan forsterke den blodsukkerreduserende effekten av insulin og orale antidiabetika samtidig som det kan maskere symptomer på hypoglykemi som takykardi og tremor.",
+          "Dersom pasienter som får labetalol trenger adrenalinbehandling, skal det brukes en redusert dose av adrenalin, da samtidig administrering av labetalol og adrenalin kan resultere i bradykardi og hypertensjon."
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-labetalol"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "25 %."
+      ],
+      "referanser": [
+        "spc-labetalol"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "1–2 timer"
+      ],
+      "referanser": [
+        "spc-labetalol"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "4–8 timer."
+      ],
+      "referanser": [
+        "spc-labetalol"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Ca. 50 %."
+      ],
+      "referanser": [
+        "spc-labetalol"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "5,1–9,4 L/kg."
+      ],
+      "referanser": [
+        "spc-labetalol"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Labetalol metaboliseres hovedsakelig i lever via konjugering til inaktive metabolitter.",
+        "Legemiddelet utskilles både via nyrene i urin (ca. 60 %) og via galle/feces, som metabolitter og uforandret moderstoff (< 5 %)."
+      ],
+      "referanser": [
+        "spc-labetalol"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 328,4 g/mol."
+      ],
+      "referanser": [
+        "spc-labetalol"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Selektiv alfa-1-reseptorantagonist og uselektiv beta-reseptorantagonist (alfa- og betablokker).",
+        {
+          "punkter": [
+            "Forventer mer uttalt hypotensjon og noe mindre uttalte hjerteeffekter.",
+            "Det er stor individuell følsomhet for toksisiteten til betablokkere. Relativt lave doser kan gi alvorlig forgiftning hos risikopasienter (hjertesyke), mens friske voksne og barn ofte tolererer større doser godt."
+          ]
+        },
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 4000 nmol/L), en felles grense for alle antihypertensivene.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "helsebiblioteket-betablokkere"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "200 mg",
+        "regime": "12 t etter dose, dosering hver 12. t",
+        "konsentrasjon": "56–89 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "200 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "107–171 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "2400 mg",
+        "regime": "12 t etter dose, dosering hver 12. t",
+        "konsentrasjon": "667–1067 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "2400 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "1281–2048 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "200 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "217 nmol/L",
+        "merknad": "Målt i IDA-studien, n = 1."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-labetalol": {
+      "tittel": "Trandate «Aspen»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/trandate-aspen-564767"
+    }
+  }
+}

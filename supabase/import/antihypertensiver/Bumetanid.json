@@ -1,0 +1,216 @@
+{
+  "stoff": "bumetanid",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 40,
+      "ovre": 400,
+      "enhet": "nmol/L",
+      "forbehold": "Gjelder Cmaks.",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 1600,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": null,
+          "min": 1,
+          "maks": 2,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Slyngediuretikum, hemmer Na+/K+/2Cl- symporter i tubuliceller hovedsakelig i oppadgående del av Henles sløyfe. I tillegg gir slyngediuretika venedilatasjon med redusert venøs tilbakestrømming til hjerte (reduserer preload), og dermed redusert belastning på hjerte. Slyngediuretika hemmer nyrenes evne til å konsentrere urinen, ved at den ødelegger gradienten i interstitiet.",
+      "Bumetanid har bedre oral biotilgjengelighet, halveringstiden øker ikke like mye med grad av nyresvikt og legemidlet er 40 ganger mer potent enn furosemid."
+    ],
+    "referanser": [
+      "spc-bumetanid"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Alle former for ødemer",
+          "Sterkt nedsatt nyrefunksjon, nyresvikt og nefrotisk syndrom",
+          "Forsert diurese",
+          "Hypertensive kriser",
+          "Ved resistens overfor andre diuretika",
+          "Kronisk lungeødem, refraktære ødemer ved hjertesvikt"
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-bumetanid"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Hjertesvikt: Vanlig dosering 0,5–2 mg daglig (i alvorlige tilfeller 2–4 mg daglig), må individualiseres.",
+      "Diuresen begynner vanligvis ca. 30 minutter etter peroral administrasjon, med en topp etter 1–2 timer, og effekten varer 3–5 timer.",
+      "Nedsatt lever- og nyrefunksjon: Halveringstiden forlenges hos pasienter med lever- eller nyresykdom. Forsiktighet bør utvises ved sterkt nedsatt leverfunksjon og ved alvorlig eller progressiv nedsatt nyrefunksjon."
+    ],
+    "referanser": [
+      "spc-bumetanid"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Digitalis grunnet hypokalemitendens og følgende økt sårbarhet for digitalisglykosider. Bumetanid reduserer utskillelsen av litium, noe som kan gi økte serumkonsentrasjoner av litium. NSAID motvirker effekten av bumetanid. Probenecid hemmer den renale tubulære sekresjon av bumetanid som igjen fører til minsket natriuresis. Ototoksisiteten av aminoglykosider kan forsterkes ved samtidig bruk av bumetanid."
+    ],
+    "referanser": [
+      "spc-bumetanid"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "80–95 %."
+      ],
+      "referanser": [
+        "spc-bumetanid"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "1–2 t (ved oral administrering)."
+      ],
+      "referanser": [
+        "spc-bumetanid"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "1–2 t. Forlenges ved økende grad av nedsatt nyrefunksjon, og nedsatt leverfunksjon."
+      ],
+      "referanser": [
+        "spc-bumetanid"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "90–99 %."
+      ],
+      "referanser": [
+        "spc-bumetanid"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "0,1–0,2 L/kg."
+      ],
+      "referanser": [
+        "spc-bumetanid"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Ingen aktive metabolitter er blitt funnet.",
+        "Hovedsakelig uomdannet i urinen, resten i feces."
+      ],
+      "referanser": [
+        "spc-bumetanid"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 364,4 g/mol."
+      ],
+      "referanser": [
+        "spc-bumetanid"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Pga. kort halveringstid, kan serumkonsentrasjonsmålinger vurderes ut i fra Cmaks, men lite dokumentasjon foreligger."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Referanseområdet for bumetanid er basert på Cmax for doser fra 0,5 til 4 mg. Litteraturen rapporterer doser opptil 3 mg, så 4 mg er beregnet ut fra antatt doselinjaritet.",
+        "Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Tolkning",
+      "tekst": [
+        "Bumetanid er ikke påvisbart medikamentfastende, men kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i sammenheng med klinikk."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Ved høye doser og langtidsbehandling kan loopdiuretika gi elektrolyttforstyrrelser med ledsagende symptomer, samt dehydrering og polyuri.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 1600 nmol/L), en felles grense for alle antihypertensivene.",
+        "Det foreligger ikke data for å fastslå et toksisk konsentrasjonsområde for bumetanid. Grensen på 4 × øvre referanseområde er en standardisert toksisitetsgrense som brukes for alle AHT-analytter. OBS referanseområdet for bumetanid er Cmax. Den kliniske situasjonen er alltid styrende for behandlingen."
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "0,5 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "6–9 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "2 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "26–36 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "1 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "51 nmol/L",
+        "merknad": "Målt i IDA-studien, n = 1."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-bumetanid": {
+      "tittel": "Burinex «Karo Pharma»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/burinex-karo-pharma-547150"
+    }
+  }
+}

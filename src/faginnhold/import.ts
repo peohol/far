@@ -2,7 +2,8 @@
  * Import av faginnhold fra en kilde, som en kontrollert datamigrering.
  *
  * Innholdet ligger først i et importdatasett — én JSON-fil per analyttkode,
- * eller per stoff uten analyttkode (`side`), skrevet så tett på kilden at hvert tall kan kontrolleres mot den — og gjøres
+ * per stoff uten analyttkode (`side`) eller per stoff i stoffregisteret
+ * (`stoff`), skrevet så tett på kilden at hvert tall kan kontrolleres mot den — og gjøres
  * her om til objektene databasen lagrer: referanser, stoffsider,
  * laboratorieanalytter og innholdselementer. Datasettet kontrolleres først, og
  * alt som ikke har formen appen leser, stopper importen.
@@ -17,16 +18,21 @@
  * Alt her er rene funksjoner. Bakgrunnen står i docs/faginnhold.md.
  */
 import type { Analyttkatalog } from '../domain/analyttkatalog'
+import { STOFFREGISTER, type Stoffregister } from '../domain/stoffregister'
 import { historiskSidenavn } from './historiskesider'
 import type { Referanseinnhold } from './modell'
 import {
   DATAKORT,
+  datakortFor,
   ELEMENTTYPER,
+  kontrollerFormverdier,
   kontrollerIntervall,
+  lesFormverdier,
   lesDosetabell,
   lesIntervallverdi,
   lesKinetikk,
   type Doserad,
+  type Formverdier,
   type Intervallverdi,
 } from './paneler'
 import { PROSJEKTMERKNAD, persentilmerknad, persentiltekst } from './serumtabell'
@@ -48,6 +54,9 @@ export interface Importtekst {
 
 /** Et datakort. Forbeholdet kan utelates når kilden ikke har noe. */
 export type Importverdi = Omit<Intervallverdi, 'forbehold'> & { forbehold?: string; referanser?: string[] }
+
+/** Et formvis datakort (t½, tₛₛ): verdiene per legemiddelform eller stoff. */
+export type Importformverdier = Formverdier & { referanser?: string[] }
 
 export interface Importkinetikk extends Importtekst {
   tittel: string
@@ -85,8 +94,8 @@ export interface Importserum {
 }
 
 /**
- * Innholdet for én analyttkode, eller for ett stoff uten analyttkode, fra én
- * eller flere sider i kilden. Nøyaktig én av `kode` og `side` står.
+ * Innholdet for én analyttkode, eller for ett stoff, fra én eller flere sider
+ * i kilden. Nøyaktig én av `kode`, `side` og `stoff` står.
  */
 export interface Importfil {
   /** Analyttkoden siden hører til, som katalogen kjenner den. */
@@ -96,6 +105,12 @@ export interface Importfil {
    * Siden lages uten laboratorieanalytt; se `docs/faginnhold.md`.
    */
   side?: string
+  /**
+   * Nøkkelen til stoffet i stoffregisteret (`src/data/stoffregister.json`),
+   * f.eks. «enalapril». Fagsiden er stoffets side, funnet ved nøkkelen; har
+   * stoffet ingen side ennå, lages den med registerets navn og nøkkel.
+   */
+  stoff?: string
   /** Sidene i dokumentet innholdet er hentet fra. Kan utelates når `kilde` står. */
   sider?: number[]
   /**
@@ -105,11 +120,13 @@ export interface Importfil {
    * brukes det i stedet for dokumentet og sidene.
    */
   kilde?: string
-  viktige_data?: Record<string, Importverdi>
+  viktige_data?: Record<string, Importverdi | Importformverdier>
   farmakodynamikk?: Importtekst
   dosering?: Importtekst
   indikasjon?: Importtekst
+  interaksjoner?: Importtekst
   farmakokinetikk?: Importkinetikk[]
+  farmakogenetikk?: Importkinetikk[]
   /** Kortene i seksjonen om terapeutisk legemiddelmonitorering, i rekkefølge. */
   tdm?: Importkinetikk[]
   serumkonsentrasjoner?: Importserum
@@ -123,7 +140,8 @@ export interface Importkilde {
   dokument: string
   /**
    * Datoen indikasjonene ble hentet fra Felleskatalogen, som «2026-09-23».
-   * Står i kilden til revisjonene deres.
+   * Står i kilden til revisjonene deres. Tom når indikasjonene står i
+   * dokumentet selv; da får de dokumentet som kilde, som resten.
    */
   felleskatalogen: string
 }
@@ -131,9 +149,9 @@ export interface Importkilde {
 /** Filen med referansene flere filer i et datasett deler. */
 const FELLESFIL = 'felles.json'
 
-/** Koden eller navnet filen gjelder, som den sorteres og meldes etter. */
-export function filnokkel(fil: Pick<Importfil, 'kode' | 'side'>): string {
-  return fil.kode ?? fil.side ?? ''
+/** Koden, navnet eller stoffet filen gjelder, som den sorteres og meldes etter. */
+export function filnokkel(fil: Pick<Importfil, 'kode' | 'side' | 'stoff'>): string {
+  return fil.kode ?? fil.side ?? fil.stoff ?? ''
 }
 
 /** Et datasett: filene for hver analyttkode eller stoff, sortert, og de felles referansene. */
@@ -173,6 +191,8 @@ export interface Planreferanse extends Planlagt {
 
 export interface Planside extends Planlagt {
   navn: string
+  /** Nøkkelen siden finnes og lages med, for et stoff i registeret. Ellers finnes siden ved navnet. */
+  slug?: string
 }
 
 export interface Planelement extends Planlagt {
@@ -298,20 +318,23 @@ export function kinetikktittel(tittel: string): string {
 const FILFELT = new Set([
   'kode',
   'side',
+  'stoff',
   'sider',
   'kilde',
   'viktige_data',
   'farmakodynamikk',
   'dosering',
   'indikasjon',
+  'interaksjoner',
   'farmakokinetikk',
+  'farmakogenetikk',
   'tdm',
   'serumkonsentrasjoner',
   'referanser',
 ])
-const TEKSTPANELER = ['farmakodynamikk', 'dosering', 'indikasjon'] as const
+const TEKSTPANELER = ['farmakodynamikk', 'dosering', 'indikasjon', 'interaksjoner'] as const
 /** Panelene med en ordnet serie kort med overskrift og tekst. */
-const KORTPANELER = ['farmakokinetikk', 'tdm'] as const
+const KORTPANELER = ['farmakokinetikk', 'farmakogenetikk', 'tdm'] as const
 const DATAKORTTYPER = new Set<string>(DATAKORT.map((k) => k.type))
 /** Panelene som er hentet fra Felleskatalogen, ikke fra PDF-en. */
 const FELLESKATALOGPANELER = new Set<string>(['indikasjon'])
@@ -354,11 +377,12 @@ export function byggImportplan(
   felles: Readonly<Record<string, Referanseinnhold>>,
   katalog: Analyttkatalog,
   kilde: Importkilde,
+  register: Pick<Stoffregister, 'finn'> = STOFFREGISTER,
 ): Importplan {
   const feil: string[] = []
   const referanser = new Map<string, Planreferanse>()
   const pdfkilde = `Importert fra ${kilde.dokument}`
-  const fkkilde = `Hentet fra Felleskatalogen ${norskDato(kilde.felleskatalogen)}`
+  const fkkilde = kilde.felleskatalogen ? `Hentet fra Felleskatalogen ${norskDato(kilde.felleskatalogen)}` : null
 
   const leggTilReferanse = (nokkel: string, innhold: Referanseinnhold, hvor: string, fra: string) => {
     const kjent = referanser.get(nokkel)
@@ -381,10 +405,19 @@ export function byggImportplan(
 
   for (const fil of sorterte) {
     const hvor = filnokkel(fil) || '(uten kode)'
-    // Siden filen gjelder: den katalogen gir koden, eller stoffet uten kode.
-    let sider: { kode: string | null; hovedside: string; komponenter: string[] }
-    if (fil.side !== undefined) {
-      if (fil.kode !== undefined) feil.push(`${hvor}: filen kan ha «kode» eller «side», ikke begge.`)
+    // Siden filen gjelder: den katalogen gir koden, stoffet uten kode, eller stoffet i registeret.
+    let sider: { kode: string | null; hovedside: string; slug?: string; komponenter: string[] }
+    if ([fil.kode, fil.side, fil.stoff].filter((f) => f !== undefined).length > 1) {
+      feil.push(`${hvor}: filen kan ha bare én av «kode», «side» og «stoff».`)
+    }
+    if (fil.stoff !== undefined) {
+      const stoff = typeof fil.stoff === 'string' ? register.finn(fil.stoff) : undefined
+      if (!stoff) {
+        feil.push(`${hvor}: stoffet finnes ikke i stoffregisteret.`)
+        continue
+      }
+      sider = { kode: null, hovedside: stoff.navn, slug: stoff.slug, komponenter: [] }
+    } else if (fil.side !== undefined) {
       if (typeof fil.side !== 'string' || fil.side.trim() === '' || fil.side !== fil.side.trim() || fil.side.length > 200) {
         feil.push(`${hvor}: «side» må være navnet på siden, uten mellomrom først og sist.`)
         continue
@@ -417,7 +450,7 @@ export function byggImportplan(
     const fraKilden = fil.kilde ? `Importert fra ${fil.kilde.trim()}` : `${pdfkilde}, ${sidetekst(fil.sider ?? [])}`
     const egne = fil.referanser ?? {}
     for (const [nokkel, innhold] of Object.entries(egne)) {
-      leggTilReferanse(nokkel, innhold, hvor, nokkel.startsWith('fk-') ? fkkilde : fraKilden)
+      leggTilReferanse(nokkel, innhold, hvor, (nokkel.startsWith('fk-') && fkkilde) || fraKilden)
     }
     const kjente = (nokler: readonly string[] | undefined, hvorIFil: string): string[] => {
       const liste = nokler ?? []
@@ -442,7 +475,7 @@ export function byggImportplan(
         elementtype,
         data,
         referanser: kjente(nokler, `${panel}/${elementtype}`),
-        kilde: FELLESKATALOGPANELER.has(panel) ? fkkilde : fraKilden,
+        kilde: (FELLESKATALOGPANELER.has(panel) && fkkilde) || fraKilden,
       })
     }
 
@@ -470,6 +503,18 @@ export function byggImportplan(
         feil.push(`${hvor} viktige_data: ukjent kort «${type}».`)
         continue
       }
+      if ('former' in verdi) {
+        // Et formvis kort (t½, tₛₛ): verdiene per legemiddelform eller stoff.
+        const { referanser: nokler, ...data } = verdi
+        if (datakortFor(type)?.verdi !== 'formvis') feil.push(`${hvor} ${type}: kortet har ikke verdier per form.`)
+        const lest = lesFormverdier(data)
+        const problem = kontrollerFormverdier(lest)
+        if (problem) feil.push(`${hvor} ${type}: ${problem}`)
+        if (!erLik(lest, data)) feil.push(`${hvor} ${type}: hver verdi må ha nøyaktig form, typisk, min, maks, enhet og eventuelt stoff.`)
+        if (lest.former.length === 0) feil.push(`${hvor} ${type}: kortet har ingen verdi.`)
+        element('viktige_data', type, { ...lest }, nokler)
+        continue
+      }
       const { referanser: nokler, ...rest } = verdi
       const data = { ...rest, forbehold: rest.forbehold ?? '' }
       const lest = lesIntervallverdi(data)
@@ -480,7 +525,7 @@ export function byggImportplan(
       element('viktige_data', type, { ...lest }, nokler)
     }
 
-    // Panel 3–5: rikteksten.
+    // Tekstpanelene: rikteksten.
     for (const panel of TEKSTPANELER) {
       const innhold = fil[panel]
       if (!innhold) continue
@@ -489,7 +534,7 @@ export function byggImportplan(
       element(panel, ELEMENTTYPER.riktekst, { dokument }, innhold.referanser)
     }
 
-    // Farmakokinetikken og TDM: kort for kort.
+    // Farmakokinetikken, farmakogenetikken og TDM: kort for kort.
     for (const panel of KORTPANELER) {
       const titler = new Set<string>()
       ;(fil[panel] ?? []).forEach((kort, posisjon) => {
@@ -529,11 +574,11 @@ export function byggImportplan(
       element('serumkonsentrasjoner', ELEMENTTYPER.dosetabell, data, serum.referanser)
     }
 
-    const side = (navn: string): Planside => ({ navn, kilde: fraKilden })
+    const side = (navn: string, slug?: string): Planside => ({ navn, ...(slug && { slug }), kilde: fraKilden })
     koder.push({
       kode: sider.kode,
-      hovedside: side(sider.hovedside),
-      komponenter: sider.komponenter.map(side),
+      hovedside: side(sider.hovedside, sider.slug),
+      komponenter: sider.komponenter.map((navn) => side(navn)),
       kilde: fraKilden,
       elementer,
     })
@@ -597,6 +642,11 @@ export function finnReferanse(innhold: Referanseinnhold): string {
  * i en migrasjon, som også kjøres i testdatabasen og i nye grener).
  */
 export type UtenAdministrator = 'feil' | 'hopp over'
+
+/** Vilkåret som finner siden: ved nøkkelen for et stoff i registeret, ellers ved navnet. */
+function sidevilkar(side: Pick<Planside, 'navn' | 'slug'>): string {
+  return side.slug ? `s.slug = ${lit(side.slug)}` : `lower(s.navn) = lower(${lit(side.navn)})`
+}
 
 /** Starten på hver blokk: administratoren som gjør importen, som innlogget. */
 export function innlogging(admin: string, utenAdministrator: UtenAdministrator): string {
@@ -717,10 +767,10 @@ export function importSql(
       '  -- Sidene: en side med samme navn som alt finnes, brukes.',
       ...sider.flatMap((s, i) => [
         `  select s.objekt_id into side_${i} from public.infosider s`,
-        `    where s.tilstand = 'utkast' and lower(s.navn) = lower(${lit(s.navn)});`,
+        `    where s.tilstand = 'utkast' and ${sidevilkar(s)};`,
         `  if side_${i} is null then`,
         `  ${kildeSql(s.kilde)}`,
-        `    side_${i} := (public.opprett_utkast('infoside', ${jsonLit({ navn: s.navn })})).id;`,
+        `    side_${i} := (public.opprett_utkast('infoside', ${jsonLit({ navn: s.navn, ...(s.slug && { slug: s.slug }) })})).id;`,
         `    nye := nye || side_${i};`,
         `  end if;`,
       ]),
@@ -737,10 +787,10 @@ export function importSql(
             `  nye := nye || objekt;`,
           ]),
     ]
-    // Siden finnes fra før: siden koden har, eller siden med stoffets navn.
+    // Siden finnes fra før: siden koden har, eller stoffets side.
     const finnesSql =
       kode.kode === null
-        ? `select 1 from public.infosider s where s.tilstand = 'utkast' and lower(s.navn) = lower(${lit(navn)})`
+        ? `select 1 from public.infosider s where s.tilstand = 'utkast' and ${sidevilkar(kode.hovedside)}`
         : `select 1 from public.laboratorieanalytter a where a.kode = ${lit(kode.kode)}`
 
     const kropp: string[] = [
@@ -749,7 +799,7 @@ export function importSql(
           ? [
               '  -- Siden stoffet har fra før, eller en ny.',
               `  select s.objekt_id into ${hovedside} from public.infosider s`,
-              `    where s.tilstand = 'utkast' and lower(s.navn) = lower(${lit(navn)});`,
+              `    where s.tilstand = 'utkast' and ${sidevilkar(kode.hovedside)};`,
               '',
             ]
           : [
@@ -828,9 +878,12 @@ export function importSql(
       )
       if (e.panel === 'viktige_data' && e.referanser.length > 0) {
         // Kildene legges til på et datakort med nøyaktig samme verdi.
-        const sammeVerdi = (['nedre', 'ovre'] as const)
-          .map((felt) => `coalesce(innhold -> 'data' -> '${felt}', 'null') = ${jsonLit(e.data[felt] ?? null)}`)
-          .concat(`coalesce(innhold -> 'data' ->> 'enhet', '') = ${lit(String(e.data.enhet ?? ''))}`)
+        const sammeVerdi =
+          'former' in e.data
+            ? [`coalesce(innhold -> 'data' -> 'former', 'null') = ${jsonLit(e.data.former)}`]
+            : (['nedre', 'ovre'] as const)
+                .map((felt) => `coalesce(innhold -> 'data' -> '${felt}', 'null') = ${jsonLit(e.data[felt] ?? null)}`)
+                .concat(`coalesce(innhold -> 'data' ->> 'enhet', '') = ${lit(String(e.data.enhet ?? ''))}`)
         kropp.push(
           `  elsif not (${sammeVerdi.join('\n      and ')}) then`,
           `    raise notice '%: verdien på kortet % er en annen enn i kilden, og kortet endres ikke.', ${lit(navn)}, ${lit(e.elementtype)};`,

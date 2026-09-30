@@ -136,6 +136,46 @@ export const RUSMIDLER_FESTKOBLINGER: readonly Festkobling[] = [
   { side: 'Zopiklon', fest_id: 'ID_8B254174-7197-4AF9-8A78-739A805012BE' },
 ]
 
+/**
+ * Antihypertensivene (`supabase/import/antihypertensiver/`). Sidene heter som
+ * stoffet i stoffregisteret.
+ */
+export const ANTIHYPERTENSIV_FESTKOBLINGER: readonly Festkobling[] = [
+  { side: 'Amlodipin', fest_id: 'ID_7747F0C0-30CC-438E-B66F-68C2C14E710F' },
+  { side: 'Atenolol', fest_id: 'ID_B7952198-5997-46EB-B182-785CBD0D7007' },
+  {
+    side: 'Bendroflumetiazid',
+    fest_id: 'ID_02AE4CD3-BCA2-487C-974D-20E65AED89B2',
+    merknad: 'Finnes i FEST bare sammen med kalium (Centyl med kaliumklorid).',
+  },
+  { side: 'Bisoprolol', fest_id: 'ID_BED4501F-4CD5-4EE4-98FA-2FB1096EAEF1' },
+  { side: 'Bumetanid', fest_id: 'ID_987C2CCC-48D6-4DEB-A68B-0082BF25876A' },
+  { side: 'Diltiazem', fest_id: 'ID_F337071D-AA12-4D72-9DA5-CB3AD91D2759' },
+  { side: 'Doksazosin', fest_id: 'ID_42781DEA-BCA0-48B5-8DD8-1269B99F2910' },
+  { side: 'Enalapril', fest_id: 'ID_5A4991C1-1D06-46A2-9B95-D7C72864CD0E' },
+  { side: 'Eplerenon', fest_id: 'ID_D76A9CFA-D219-430B-AD5F-255A9BB6949A' },
+  { side: 'Furosemid', fest_id: 'ID_966A96B7-BC79-4152-A555-4C76A2391920' },
+  { side: 'Hydroklortiazid', fest_id: 'ID_605B1311-43E9-45BC-83D7-828D4F53C523' },
+  { side: 'Irbesartan', fest_id: 'ID_BBC7FCDA-3571-4325-B576-645784F29DC1' },
+  {
+    side: 'Kandesartan',
+    fest_id: 'ID_05B987BF-55BC-4935-9578-9A5AA725B430',
+    merknad: 'Kandesartancileksetil, forløperen (prodrug) som omdannes til kandesartan.',
+  },
+  { side: 'Karvedilol', fest_id: 'ID_646B1EE5-9372-48A6-8E68-2B7C290289CD' },
+  { side: 'Labetalol', fest_id: 'ID_1AAC4109-128E-4D4C-B251-23E462DD1B7D' },
+  { side: 'Lerkanidipin', fest_id: 'ID_A164C4B8-7BD0-4408-97AE-16E10A14250C' },
+  { side: 'Lisinopril', fest_id: 'ID_DCB94A58-2AD7-40B6-A515-7EE19E299F09' },
+  { side: 'Losartan', fest_id: 'ID_A3ED2C34-50C9-46E7-9482-5E5B55E2BBC0' },
+  { side: 'Metoprolol', fest_id: 'ID_F1A5819E-781F-4ADA-92F6-B009B48750A5' },
+  { side: 'Nifedipin', fest_id: 'ID_D2B69C47-BEFE-4345-B4E7-D59049EF41DD' },
+  { side: 'Ramipril', fest_id: 'ID_C9D2BF2D-A0F8-46EC-9861-FE58536C8A41' },
+  { side: 'Spironolakton', fest_id: 'ID_6F33B108-8842-4D25-9746-6397759275CA' },
+  { side: 'Telmisartan', fest_id: 'ID_D4F3353B-CA8D-442D-86DF-C3052BFB4C7F' },
+  { side: 'Valsartan', fest_id: 'ID_90CC1E37-24DD-496F-A7F5-D9B8B816E900' },
+  { side: 'Verapamil', fest_id: 'ID_DB91861C-E102-47D6-8ED7-F0C118195F67' },
+]
+
 /** Hver import av koblinger, i rekkefølge, med navnet migrasjonen fikk. */
 export const FESTKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: readonly Festkobling[] }[] = [
   { migrasjon: 'stoffsider_fest_kobling', koblinger: STOFFSIDE_FESTKOBLINGER },
@@ -144,6 +184,7 @@ export const FESTKOBLINGSIMPORTER: readonly { migrasjon: string; koblinger: read
   { migrasjon: 'thc_fest_kobling', koblinger: THC_FESTKOBLINGER },
   { migrasjon: 'cbd_fest_kobling', koblinger: CBD_FESTKOBLINGER },
   { migrasjon: 'rusmidler_fest_kobling', koblinger: RUSMIDLER_FESTKOBLINGER },
+  { migrasjon: 'antihypertensiver_fest_kobling', koblinger: ANTIHYPERTENSIV_FESTKOBLINGER },
 ]
 
 /** Kilden revisjonene får i historikken. */

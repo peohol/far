@@ -717,6 +717,26 @@ fikk indikasjonene sine i `*_rusmidler_indikasjoner_*.sql`, og tapentadol
 (TAP) fikk siden sin samme vei, som THC. Et indikasjonskort som alt står på siden, røres ikke. Har
 Felleskatalogen ingen preparatomtale for stoffet, sier kortet det.
 
+**Antihypertensiver.** `supabase/import/antihypertensiver/` har de 25
+antihypertensivene fra oversikten over serumkonsentrasjoner
+(`originaldata/antihypertensiver.docx`), med samme oppsett som
+antidepressivasidene: viktige data (referanseområdet, toksisk område,
+halveringstid og steady state), farmakodynamikk, indikasjon, dosering,
+interaksjoner, farmakokinetikk, farmakogenetikk, TDM og
+serumkonsentrasjonene (beregnet fra clearance etter Hiemkes formel, og målt i
+IDA-studien). Filene har `stoff` (nøkkelen i stoffregisteret) i stedet for
+`kode` eller `side`: siden får navnet og nøkkelen registeret gir, og et stoff
+som ikke står der, avvises. En fil kan ha bare én av de tre. Halveringstid og
+steady state kan stå per form (`{ former: [...] }`, som datakortet), og
+`interaksjoner` er et tekstpanel og `farmakogenetikk` et kortpanel som
+farmakokinetikken. Bivirkninger, kontraindikasjoner, preparatnavn, figurer og
+måleområdet er utelatt, som for psykofarmaka. Avvik mellom kildene i
+dokumentet (halveringstider i oversikten og under hvert stoff, en toksisk
+grense som var rettet i teksten) er avgjort i datasettet og listet i
+beskrivelsen av PR-en. `npx vite-node scripts/importer-antihypertensiver.ts --
+<brukernavn> <mappe>` lager migrasjonene (`src/faginnhold/antihypertensiver.ts`),
+og sidene kobles til FEST og ClinPGx med hver sin import.
+
 **Rettinger.** En feil i det som ble importert, rettes med en rettingsfil i
 `supabase/import/rettinger/`: kilden, og per retting koden, raden slik den
 står, feltene som endres (eller `null` for å ta bort raden) og hvorfor.

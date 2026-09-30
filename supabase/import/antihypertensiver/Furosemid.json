@@ -1,0 +1,219 @@
+{
+  "stoff": "furosemid",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 1500,
+      "ovre": 10000,
+      "enhet": "nmol/L",
+      "forbehold": "Gjelder Cmaks.",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 40000,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": 1,
+          "min": null,
+          "maks": null,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Slyngediuretika med rask absorpsjon, hemmer Na+/K+/2Cl- symporter i tubuliceller hovedsakelig i oppadgående del av Henles sløyfe, som fører til redusert opptak av væske med økt diurese. I tillegg gir slyngediuretika venedilatasjon med redusert venøs tilbakestrømming til hjertet (reduserer preload), hvilket avlaster hjertet. Slyngediuretika hemmer nyrenes evne til å konsentrere urinen, ved at den ødelegger gradienten i interstitiet."
+    ],
+    "referanser": [
+      "spc-furosemid"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Alle former for ødemer",
+          "Forsert diurese ved intoksikasjoner",
+          "Hypertensjonsbehandling, hvor tiazider er uegnet",
+          "Ved resistens overfor andre diuretika",
+          "Sterkt nedsatt nyrefunksjon, nyresvikt og nefrotisk syndrom",
+          "Kronisk lungeødem, refraktære ødemer ved hjertesvikt",
+          "Vedlikeholdsbehandling ved hjertesvikt"
+        ]
+      },
+      "Se preparatomtalen for flere detaljer."
+    ],
+    "referanser": [
+      "spc-furosemid"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Hypertensjon: Vanlig dosering 20–80 mg daglig i tablettform og 30–120 mg i depotform."
+    ],
+    "referanser": [
+      "spc-furosemid"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Furosemid kan forsterke ototoksisiteten av aminoglykosider og andre ototoksiske legemidler. Furosemid reduserer utskillelsen av litium, noe som kan gi økte plasmakonsentrasjoner av litium og økt risiko for kardiotoksiske og nevrotoksiske effekter av litium. Furosemid gjennomgår tubulær sekresjon. Ved høydosebehandling av furosemid kan dette føre til økte serumnivåer med økt risiko for bivirkninger av andre legemidler som også har tubulær sekresjon (for eks. probenecid, metotreksat, zidovudin, som tilsvarende også kan redusere effekten av furosemid). Se flere relevante interaksjoner i preparatomtalen."
+    ],
+    "referanser": [
+      "spc-furosemid"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "43–64 % (reduseres ved ødem i tarm og ved terminal nyresvikt). Absorpsjonen varierer i stor grad inter- og intraindividuelt."
+      ],
+      "referanser": [
+        "spc-furosemid"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "50–90 min (ved oral administrering)."
+      ],
+      "referanser": [
+        "spc-furosemid"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Normalt ca. 1 time. Hos nyreinsuffisiente kan den være 3–5 ganger forlenget, i enkelte tilfeller opptil 24 timer."
+      ],
+      "referanser": [
+        "spc-furosemid"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Normalt høy, 95–99 %, noe lavere ved nedsatt nyrefunksjon."
+      ],
+      "referanser": [
+        "spc-furosemid"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "0,1–0,2 L/kg."
+      ],
+      "referanser": [
+        "spc-furosemid"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Metaboliseres i liten grad, kun 10 % omdannes i lever. Andelen kan øke ved nyresvikt.",
+        "Ca. 2/3 utskilles i urin, resten i feces. Eliminasjonen avsluttes innen et døgn."
+      ],
+      "referanser": [
+        "spc-furosemid"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 330,7 g/mol."
+      ],
+      "referanser": [
+        "spc-furosemid"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Pga. kort halveringstid, kan serumkonsentrasjonsmålinger vurderes ut i fra Cmaks, men lite dokumentasjon foreligger."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "På grunn av stor intra- og interindividuell variasjon i absorpsjon oppgir ulike farmakokinetiske kilder varierende Cmax-verdier for furosemid. Referanseområdet er basert på doser på 20–80 mg og gjelder ved peroral administrasjon. Ved intravenøs administrasjon kan serumkonsentrasjonen være 2–5 ganger høyere.",
+        "Det er ingen direkte relasjon mellom plasmanivå og terapeutisk effekt.",
+        "Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Tolkning",
+      "tekst": [
+        "Furosemid er ikke påvisbart medikamentfastende, men kan påvises 1–6 timer etter inntak. Analysesvaret må alltid ses i sammenheng med klinikk."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Skyldes væske- og elektrolyttforstyrrelser: Hypovolemi, dehydrering, hemokonsentrasjon, hjertearytmier, alvorlig hypotensjon, akutt nyresvikt, trombose, delirium, paralysis flaccidus, apati og forvirring. Ved overdosering hos barn: Endret mental tilstand, hodepine, hypertoni, muskelsvakhet og kramper.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 40 000 nmol/L), en felles grense for alle antihypertensivene.",
+        "Det foreligger ikke tilstrekkelige data til å fastslå et sikkert toksisk konsentrasjonsområde for furosemid. Grensen på 4 × øvre referanseområde er en standardisert toksisitetsgrense som brukes for alle AHT-analytter. Schultz angir et toksisitetsnivå på 25–30 mg/L, tilsvarende 75 597–90 716 nmol/L. Dette ligger cirka dobbelt så høyt som vår universelle 4×-grense, selv om referanseområdet her er basert på Cmax. Den kliniske situasjonen er alltid styrende for behandlingen."
+      ],
+      "referanser": [
+        "schulz2020"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "20 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "190–394 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "80 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "761–1578 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "20–80 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "1878 (298–4011) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 7."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-furosemid": {
+      "tittel": "Furix «Orifarm Healthcare»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/furix-orifarm-healthcare-559469"
+    }
+  }
+}

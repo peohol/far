@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.65.0',
+    dato: '2026-09-30',
+    sammendrag: 'Fagsider for 25 antihypertensiver',
+    typer: ['Fag'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Amlodipin, atenolol, bendroflumetiazid, bisoprolol, bumetanid, diltiazem, doksazosin, enalapril, eplerenon, furosemid, hydroklortiazid, irbesartan, kandesartan, karvedilol, labetalol, lerkanidipin, lisinopril, losartan, metoprolol, nifedipin, ramipril, spironolakton, telmisartan, valsartan og verapamil har fått fagsider med samme oppsett som antidepressiva.',
+      'Sidene har referanseområde, toksisk område, halveringstid, farmakodynamikk, indikasjoner, dosering, interaksjoner, farmakokinetikk, CYP-enzymer, prøvetaking, toksisitet og serumkonsentrasjoner ved vanlige doser, hentet fra oversikten over antihypertensiver.',
+      'Sidene viser også preparatene fra FEST og farmakogenetikken fra ClinPGx.',
+    ],
+  },
+  {
     versjon: '1.64.1',
     dato: '2026-09-30',
     sammendrag: 'Oppgaven «Diskusjonstråder på alle sider» er merket utført',

@@ -1,0 +1,241 @@
+{
+  "stoff": "lerkanidipin",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 0.2,
+      "ovre": 5,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 20,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": null,
+          "min": 8,
+          "maks": 10,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Lerkanidipin binder seg til spenningsstyrte L(low)-type kalsiumkanaler i sarcolemma i glatte muskelceller i perifere motstandskar (inkludert koronarkar) og hemmer kalsiuminnstrømming i cellene. Dette fører til ytterligere redusert kalsiumfrigivelse fra sarkoplasmatisk retikulum til cytosol. Reduksjon i intracellulært fritt kalsium reduserer glatt muskelkontraksjon, dvs. vil gi vasodilatasjon, derved redusert perifer resistens og fall i blodtrykk.",
+      "Ved veldig høye lerkanidipin serumkonsentrasjoner bindes også legemiddelet til hjertemuskelceller.",
+      "Kalsiumantagonister av dihydropyridintype reduserer sittende systolisk blodtrykk og diastolisk blodtrykk med ca. 15,6 ± 5,3 / 10,3 ± 2,6 mmHg (gjennomsnitt ± SD), ifølge metastudie fra Wu et al. (2005)"
+    ],
+    "referanser": [
+      "felleskatalogen",
+      "wu2005"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Hypertensjon"
+        ]
+      }
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Hypertensjon: 10–20 mg daglig.",
+      "Nedsatt lever- og nyrefunksjon: Brukes med forsiktighet ved nedsatt lever- og nyrefunksjon. Kontraindisert ved alvorlig nedsatt lever- eller nyrefunksjon (GFR < 30 ml/minutt), inkl. hos pasienter på dialyse."
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Kontraindisert: Kombinasjon med CYP3A4-hemmere, ciklosporin, grapefrukt eller grapefruktjuice.",
+      "Samtidig bruk anbefales ikke: Kombinasjon med CYP3A4-induktorer som antiepileptika og rifampicin bør gjøres med forsiktighet, da antihypertensiv effekt kan reduseres, og blodtrykket bør kontrolleres oftere enn normalt. Alkohol bør unngås da antihypertensiv effekt kan forsterkes.",
+      "Forsiktighetsregler, inkl. dosejusteringer: Forsiktighet bør utvises ved samtidig bruk med andre CYP3A4-substrater, klasse III-antiarytmika samt kinidin og sotalol. Pasienter som får samtidig behandling med digoksin bør følges nøye mht. kliniske tegn på digoksintoksisitet. Det bør utvises forsiktighet ved samtidig administrering av >800 mg cimetidin da antihypertensiv effekt kan øke. Ved samtidig bruk med simvastatin bør lerkanidipin administreres om morgenen og simvastatin om kvelden. Økt hypotensiv effekt ved samtidig bruk med andre legemidler som reduserer blodtrykket, som alfablokkere, TCA og antipsykotika. Samtidig bruk av kortikosteroider kan redusere antihypertensiv effekt."
+    ],
+    "referanser": [
+      "felleskatalogen"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "Lav (10 %) pga høy førstepassasje effekt, øker til 40 % ved fettrikt måltid"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "1,5–3 timer"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "8–10 timer"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        ">98 %."
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "2–2,5 L/kg"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "I stor grad av CYP3A4",
+        "50 % ut i urin"
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 611,7 g/mol."
+      ],
+      "referanser": [
+        "felleskatalogen"
+      ]
+    }
+  ],
+  "farmakogenetikk": [
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "3A4"
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Vanligst er hypotensjon, svimmelhet, hodepine og palpitasjoner. Svært høye doser kan gi bradykardi og negativ inotrop effekt.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 20 nmol/L), en felles grense for alle antihypertensivene.",
+        "Generelt lite data. Pasienter har overlevd svært høyt doseinntak, 900–1000 mg (omtrent 50 ganger høyeste terapeutiske dose), ved innleggelse i sykehus for observasjon og behandling.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "helsebiblioteket-lerkanidipin"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "10 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "0,2–0,5 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "10 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "0,6–1,2 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "10 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "0,7–1,4 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "20 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "0,9–1,9 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "20 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "2,3–4,8 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "20 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "2,6–5,5 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "5–30 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "3,8 (1–21,1) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 66."
+      },
+      {
+        "dose": "5–30 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "1,7 (0,4–4,5) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 12."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  }
+}

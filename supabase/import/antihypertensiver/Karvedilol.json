@@ -1,0 +1,261 @@
+{
+  "stoff": "karvedilol",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 2.5,
+      "ovre": 50,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 200,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": 6.5,
+          "min": null,
+          "maks": null,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Selektiv alfa-1-adrenerg reseptorantagonist og ikke-selektiv beta-1-reseptorantagonist.",
+      "Karvedilol er en vasodilaterende ikke-selektiv betablokker som reduserer den perifere vaskulære motstanden ved selektiv alfa 1-reseptor blokkade og undertrykker renin-angiotensin systemet via ikke-selektiv betablokkade.",
+      "Kombinasjonen av betablokkade og alfa-1-modulert vasodilatasjon gir redusert blodtrykk og reduserer ventrikulær pre- og afterload."
+    ],
+    "referanser": [
+      "spc-karvedilol"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Essensiell hypertensjon",
+          "Kronisk stabil angina pectoris",
+          "Hjertesvikt"
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-karvedilol"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Essensiell hypertensjon: Startdose 12,5 mg × 1 i 2 dager før vedlikeholdsdose 25 mg × 1. Ved behov kan dosen økes opp til maks anbefalt dose på 50 mg × 1. Lavere dosering for eldre >65 år, se Felleskatalogen.",
+      "Kronisk stabil angina pectoris: Startdose 12,5 mg × 2 i 2 dager før vedlikeholdsdose 25 mg × 2. Ved behov kan dosen økes til maks anbefalt dose på 50 mg × 2. Lavere dosering for eldre >65 år, se Felleskatalogen.",
+      "Hjertesvikt: I titreringsfase øker man styrke ukentlig til tolerert vedlikeholdsdose, se Felleskatalogen. Maks anbefalt dose for de <85kg er 25 mg × 2 og for de >85kg er 50 mg × 2.",
+      "Nedsatt lever- og nyrefunksjon: Ved moderat nedsatt leverfunksjon kan dosereduksjon være nødvendig. Ved manifestert nedsatt leverfunksjon er karvedilol kontraindisert. Doseres som normalt ved nedsatt nyrefunksjon."
+    ],
+    "referanser": [
+      "spc-karvedilol"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      {
+        "punkter": [
+          "Forsterket blodtrykksfall kan oppstå ved samtidig behandling med f.eks. α-blokkere, nitrater, antipsykotika (fentiazinderivater som f.eks. klorpromazin) og antidepressiva (tricykliske, og de fleste SSRI).",
+          "Fare for uttalt bradykardi og hypotensjon ved kombinasjon med kalsiumantagonister med negativ inotrop effekt (f.eks. verapamil, diltiazem).",
+          "Samtidig bruk av ikke-steroide antiinflammatoriske midler (NSAIDs) og beta-adrenerge blokkere kan føre til en økning av blodtrykket og dårligere kontroll over blodtrykket.",
+          "Midler med β-reseptor-blokkerende egenskaper kan forsterke den blodsukkerreduserende effekten av insulin og orale antidiabetika samtidig som det kan maskere symptomer på hypoglykemi som takykardi og tremor.",
+          "Forsiktighet må utvises ved generell anestesi av pasienter som bruker betablokkere. Betablokkere reduserer risikoen for arytmier ved anestesi men kan føre til nedsettelse av den reflektoriske takykardi og øke risikoen for hypotensjon ved anestesi.",
+          "Samtidig behandling med α-stimulerende adrenergika kan gi økt risiko for blodtrykksstigning (f.eks. fenylpropanolamin og adrenalin) mens samtidig behandling med β-stimulerende adrenergika gir gjensidig redusert effekt (antidot effekt)",
+          "Samtidig bruk av klonidin, reserpin, guanetidin, metyldopa eller guanfacin med beta-reseptorblokkere kan ha en ekstra hypotensiv og hjertefrekvenssenkende effekt.",
+          "Ikke-kardioselektive β-reseptorblokkere motvirker bronkodilatoriske effekter av beta-agonistiske bronkodilatorer.",
+          "Steroider kan gi nedsatt blodtrykkssenkende effekt av β-blokkere."
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-karvedilol"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "Ca. 25 %"
+      ],
+      "referanser": [
+        "spc-karvedilol"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "Ca. 1,5 timer"
+      ],
+      "referanser": [
+        "spc-karvedilol"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "6,5 timer"
+      ],
+      "referanser": [
+        "spc-karvedilol"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Ca. 95 %"
+      ],
+      "referanser": [
+        "spc-karvedilol"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "1,5–2 L/kg"
+      ],
+      "referanser": [
+        "spc-karvedilol"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Karvedilol metaboliseres i stor grad i lever via CYP2D6 og konjugering til et stort antall metabolitter, hvorav minst 3 er farmakologisk aktive. Legemidler som hemmer eller induserer CYP2D6 kan gi henholdsvis økt eller redusert konsentrasjon av karvedilol.",
+        "Legemiddelet utskilles som metabolitter via galle i feces (ca. 60 %) og via nyrene i urin (ca. 16 %)."
+      ],
+      "referanser": [
+        "spc-karvedilol"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 406,5 g/mol."
+      ],
+      "referanser": [
+        "spc-karvedilol"
+      ]
+    }
+  ],
+  "farmakogenetikk": [
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "2D6, 2C9 (3A4, 2C19, 1A2, 2E1)"
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Selektiv alfa-1-reseptorantagonist og uselektiv beta-reseptorantagonist (alfa- og betablokker).",
+        {
+          "punkter": [
+            "Forventer mer uttalt hypotensjon og noe mindre uttalte hjerteeffekter. Karvedilol har trolig enterohepatisk sirkulasjon, og er derfor den eneste betablokkeren der gjentatt kulldosering kan være indisert ved forgiftning.",
+            "Det er stor individuell følsomhet for toksisiteten til betablokkere. Relativt lave doser kan gi alvorlig forgiftning hos risikopasienter (hjertesyke), mens friske voksne og barn ofte tolererer større doser godt."
+          ]
+        },
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 200 nmol/L), en felles grense for alle antihypertensivene.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "helsebiblioteket-betablokkere"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "12,5 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "3–4 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "12,5 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "7–11 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "12,5 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "9–13 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "10–16 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "30–44 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "35–52 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "12,5–50 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "60 (52–176) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 3."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-karvedilol": {
+      "tittel": "Carvedilol HEXAL «HEXAL»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/carvedilol-hexal-hexal-547279"
+    }
+  }
+}

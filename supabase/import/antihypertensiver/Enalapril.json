@@ -1,0 +1,258 @@
+{
+  "stoff": "enalapril",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 10,
+      "ovre": 300,
+      "enhet": "nmol/L",
+      "forbehold": "Gjelder enalaprilat, som laboratoriet måler.",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 1200,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "stoff": "Enalaprilat",
+          "form": "",
+          "typisk": 11,
+          "min": null,
+          "maks": null,
+          "enhet": "timer"
+        }
+      ]
+    },
+    "steady_state": {
+      "former": [
+        {
+          "form": "",
+          "typisk": 4,
+          "min": null,
+          "maks": null,
+          "enhet": "dager"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "ACE-hemmer (angiotensinkonverterende enzymhemmer). Hemming av ACE reduserer mengden angiotensin II i plasma, som igjen gir økt reninaktivitet (pga. opphør av negativ feedback på reninfrisetting) og redusert aldosteronutskillelse. Reduserer den perifere arterielle karmotstanden. Blokkerer nedbrytningen av bradykinin.",
+      "ACE-hemmere senker ikke blodtrykket like effektivt hos pasienter av afrikansk opprinnelse pga. en høyere prevalens av mulig lavere reninnivåer hos hypertonikere av afrikansk opprinnelse."
+    ],
+    "referanser": [
+      "spc-enalapril"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Behandling av hypertensjon",
+          "Behandling av symptomatisk hjertesvikt",
+          "Forebyggende behandling av symptomatisk hjertesvikt hos pasienter med asymptomatisk venstre ventrikkeldysfunksjon (ejeksjonsfraksjon ≤ 35 %)"
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-enalapril"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Vanlig dosering ved hypertensjonsbehandling er 20 mg × 1, men kan økes til 40 mg × 1.",
+      "Nedsatt lever- og nyrefunksjon: Eksponeringen for enalapril og enalaprilat øker ved nedsatt nyrefunksjon (clearance < 60 ml/min) og steady state forlenges ved alvorlig nyresvikt (clearance < 30 ml/min). Redusert dosering ved nyresvikt er anbefalt. Seponeres ved tegn til gulsott eller sterkt økte leverenzymer. Enalapril er ikke anbefalt til barn med glomerulær filtrasjonshastighet < 30 ml/minutt/1,73 m^{2} pga. manglende data."
+    ],
+    "referanser": [
+      "spc-enalapril"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Bruk av kaliumsparende diuretika sammen med ACE-hemmere kan gi signifikant økning av serumkalium. Bruk av ACE-hemmer sammen med litium kan gi reversibel økning i serumkonsentrasjon og toksisitet av litium. NSAIDs (inkludert COX-2 hemmere) og ACE-hemmere har en additiv effekt på økningen av serumkalium og kan medføre forverret nyrefunksjon."
+    ],
+    "referanser": [
+      "spc-enalapril"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "Ca. 60 %."
+      ],
+      "referanser": [
+        "spc-enalapril"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "1 t for enalapril, ca. 4 t for enalaprilat."
+      ],
+      "referanser": [
+        "spc-enalapril"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Ca. 11 timer."
+      ],
+      "referanser": [
+        "spc-enalapril"
+      ]
+    },
+    {
+      "tittel": "tss",
+      "tekst": [
+        "Steady state nås etter 4 dager ved normal nyrefunksjon."
+      ],
+      "referanser": [
+        "spc-enalapril"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "50–60 %."
+      ],
+      "referanser": [
+        "spc-enalapril"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "1,0–2,4 L/kg."
+      ],
+      "referanser": [
+        "spc-enalapril"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Enalapril er et prodrug som omdannes til aktivt enalaprilat som hemmer ACE. Det er enalaprilat som måles i serum ved laboratoriet.",
+        "Hovedsakelig renalt, både uomdannet enalapril (ca. 20 % av dosen) og enalaprilat (ca. 40 % av dosen). Mindre andel utskilles i feces."
+      ],
+      "referanser": [
+        "spc-enalapril"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 348,4 g/mol (enalaprilat)."
+      ],
+      "referanser": [
+        "spc-enalapril"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner.",
+        "Laboratoriet måler enalaprilat, den aktive metabolitten av enalapril, og området gjelder enalaprilat."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "ACE-hemmere har relativt lav akutt toksisitet, men massive overdoser kan gi behandlingstrengende hypotensjon med ledsagende sentralnervøse effekter. Bradykardi, hyperkalemi og nyresvikt er beskrevet. Få rapporter om dødsfall. Alvorlighetsgraden ved overdoser er mer avhengig av pasientens kardiovaskulære status og alder enn av inntatt mengde. Eldre med uttalt hjertesvikt er særlig utsatt.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 1200 nmol/L), en felles grense for alle antihypertensivene.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "helsebiblioteket-ace-hemmere"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "5 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "9–11 nmol/L",
+        "merknad": "Enalaprilat. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "5 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "18–34 nmol/L",
+        "merknad": "Enalaprilat. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "5 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "20–38 nmol/L",
+        "merknad": "Enalaprilat. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "40 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "69–129 nmol/L",
+        "merknad": "Enalaprilat. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "40 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "147–275 nmol/L",
+        "merknad": "Enalaprilat. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "40 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "162–300 nmol/L",
+        "merknad": "Enalaprilat. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "2,5–20 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "254 (43–429) nmol/L",
+        "merknad": "Enalaprilat. Målt i IDA-studien, median (min–maks), n = 22."
+      },
+      {
+        "dose": "2,5–20 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "13 (9–16) nmol/L",
+        "merknad": "Enalaprilat. Målt i IDA-studien, median (min–maks), n = 2."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-enalapril": {
+      "tittel": "Enalapril Sandoz «Sandoz»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/enalapril-sandoz-sandoz-558589"
+    }
+  }
+}

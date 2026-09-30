@@ -1,0 +1,253 @@
+{
+  "stoff": "doksazosin",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 5,
+      "ovre": 80,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 320,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": 22,
+          "min": null,
+          "maks": null,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Selektiv alfa-1-adrenerg reseptorantagonist.",
+      "Selektiv og kompetitiv postsynaptisk alfa1-reseptorblokade. Senker perifer karmotstand samt relakserer glatt muskulatur i stroma, kapsel og blærehals.",
+      "Doksazosin senker blodtrykket som følge av reduksjon i total perifer karmotstand. Bedrer benign prostatahyperplasi (BPH) symptomatisk ved selektiv alfa1-adrenoseptor blokade i glatt muskulatur i stroma, kapsel og blærehals."
+    ],
+    "referanser": [
+      "spc-doksazosin"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Hypertensjon",
+          "Benign prostatahyperplasi (symptomatisk behandling)"
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-doksazosin"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Hypertensjon, benign prostatahyperplasi: Startdose 4 mg × 1, ved behov kan dosen økes til 8 mg × 1, som er maks. anbefalt dose.",
+      "Nedsatt lever- og nyrefunksjon: Skal brukes med forsiktighet ved nedsatt leverfunksjon. Doseres som normalt ved nedsatt nyrefunksjon."
+    ],
+    "referanser": [
+      "spc-doksazosin"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      {
+        "punkter": [
+          "Doksazosin forsterker den blodtrykkssenkende effekten til andre alfablokkere og andre antihypertensiva.",
+          "Samtidig bruk av doksazosin med en PDE-5 hemmer kan føre til symptomatisk hypotensjon hos noen pasienter.",
+          "Vanlig doksazosin har vært brukt sammen med tiaziddiuretika, furosemid, beta-blokkere, ikke-steroide antiinflammatoriske legemidler(NSAIDs), antibiotika, perorale hypoglykemiske legemidler, urikosuriske midler eller antikoagulantia uten legemiddelinteraksjoner i klinisk erfaring. Data fra formelle interaksjonsstudier foreligger imidlertid ikke."
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-doksazosin"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "54–59 %"
+      ],
+      "referanser": [
+        "spc-doksazosin"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "Ca. 8–9 timer"
+      ],
+      "referanser": [
+        "spc-doksazosin"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Bifasisk med terminal halveringstid på 22 timer"
+      ],
+      "referanser": [
+        "spc-doksazosin"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Ca. 98 %"
+      ],
+      "referanser": [
+        "spc-doksazosin"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "1,0–1,9 L/kg"
+      ],
+      "referanser": [
+        "spc-doksazosin"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Doksazosin metaboliseres i stor grad i lever hovedsakelig via CYP3A4. Legemidler som hemmer eller induserer CYP3A4 kan gi henholdsvis økt eller redusert konsentrasjon av doksazosin.",
+        "Legemiddelet utskilles både via galle i feces og via nyrene i urin, i hovedsak som metabolitter."
+      ],
+      "referanser": [
+        "spc-doksazosin"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 451,5 g/mol."
+      ],
+      "referanser": [
+        "spc-doksazosin"
+      ]
+    }
+  ],
+  "farmakogenetikk": [
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "3A4 (2D6, 2C9)"
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "Begrenset erfaring med overdoser.",
+        {
+          "punkter": [
+            "Hovedproblemet er hypotensjon (kardilatasjon) og eventuelt sirkulasjonssvikt. Takykardi og ev. arytmier. Hodepine og svimmelhet. Dyspné. Ev hypoglykemi og hypokalemi."
+          ]
+        },
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 320 nmol/L), en felles grense for alle antihypertensivene."
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "4 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "5–23 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "4 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "8–35 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "4 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "8–36 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "8 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "10–46 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "8 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "16–71 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "8 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "17–73 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "4–8 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "60 (24–91) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 7."
+      },
+      {
+        "dose": "4–8 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "60 (48–85) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 3."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-doksazosin": {
+      "tittel": "Carduran CR «Viatris»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/carduran-cr-viatris-547272"
+    }
+  }
+}

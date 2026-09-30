@@ -166,7 +166,8 @@ den har fått en status. Sider som lages i redigeringen, fanges ikke av
 testene; der viser koblingen forslag som før.
 
 **Koblingene** legges inn med migrasjoner (`stoffsider_clinpgx_kobling`,
-`stoffsider_clinpgx_dekning` og `ghb_ketamin_clinpgx_kobling`), laget fra listene i
+`stoffsider_clinpgx_dekning`, `ghb_ketamin_clinpgx_kobling` og
+`antihypertensiver_clinpgx_kobling`), laget fra listene i
 `src/faginnhold/clinpgxkoblinger.ts` med `scripts/lag-clinpgxkoblinger.ts`.
 En kobling er bare tatt med når navnet og minst ett uavhengig kjennetegn til
 stemmer:
@@ -183,8 +184,8 @@ i tillegg en identifikator i et annet register. FEST er altså et godt
 grunnlag der det finnes, men ikke et krav.
 
 Den første migrasjonen tar et kjemikalie bare med når den publiserte siden
-er koblet til virkestoffet i FEST, og det gjør også den for GHB- og
-ketaminsiden, som FEST-koblingen deres kommer foran. Den andre krever ikke det: alle koblingene
+er koblet til virkestoffet i FEST, og det gjør også de for GHB- og
+ketaminsiden og antihypertensivsidene, som FEST-koblingen deres kommer foran. Den andre krever ikke det: alle koblingene
 der har en identifikator i et annet register, og FEST-koblingene til noen av
 sidene (levomepromazin, O-desmetylvenlafaksin) er laget i produksjonen uten
 en migrasjon i repoet. Da gir migrasjonene det samme resultatet i en database
@@ -201,16 +202,17 @@ Migrasjonene legger inn kortet slik redigeringen gjør, publisert, med kilden
 alt har en ClinPGx-kobling, også i et utkast, så de aldri overskriver en
 redaksjonell kobling, og de kan kjøres igjen uten å gjøre noe. Testene
 kontrollerer at oversikten under er lik listene. Kontrollert mot ClinPGx,
-WHOs ATC-register, RxNorm, PubChem og ChEBI 26. september 2026.
+WHOs ATC-register, RxNorm, PubChem og ChEBI 26. september 2026, og
+antihypertensivene mot ClinPGx 30. september 2026.
 
 | Status | Sider |
 | --- | --- |
-| Koblet til ClinPGx og verifisert | 68 |
+| Koblet til ClinPGx og verifisert | 93 |
 | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | 4 |
 | ClinPGx har ikke relevant objekt | 0 |
 | Metabolitt eller analytisk komponent, kobles ikke automatisk til moderstoffet | 9 |
 | Uavklart, krever faglig vurdering | 0 |
-| Til sammen | 81 |
+| Til sammen | 106 |
 
 Koblet:
 
@@ -286,6 +288,31 @@ Koblet:
 | GHB | Natriumoksybat (Sodium Oxybate) | ja | sodium oxybate | PA166236501 | ATC-kode N07XX04 i FEST, N01AX11 i ClinPGx. Samme RxNorm 9899 og PubChem 23663870. Samme navn: WHO har to ATC-koder for natriumoksybat: N07XX04 (Xyrem) og N01AX11 (anestetikum), som ClinPGx bruker. | ghb_ketamin_clinpgx_kobling |
 | Ketamin | Ketamin (Ketamine) | ja | ketamine | PA450144 | Samme ATC-kode (N01AX03). Samme RxNorm 6130 og PubChem 3821. Samme navn. | ghb_ketamin_clinpgx_kobling |
 | Ketamin | Esketamin (Esketamine) | ja | esketamine | PA166364961 | Samme PubChem 182137 og InChIKey YQEZLKZALYSWHR-ZDUSSCGKSA-N. Samme navn: ClinPGx har ingen ATC-kode for esketamin (FEST har N01AX14 for Ketanest og N06AX27 for Spravato). InChI-en ClinPGx oppgir, er S-enantiomeren, lik PubChems for esketamin. | ghb_ketamin_clinpgx_kobling |
+| Amlodipin | Amlodipin (Amlodipine) | ja | amlodipine | PA448388 | Samme ATC-kode (C08CA01). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Atenolol | Atenolol (Atenolol) | ja | atenolol | PA448499 | Samme ATC-kode (C07AB03). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Bendroflumetiazid | Bendroflumetiazid (Bendroflumethiazide) | ja | bendroflumethiazide | PA448563 | Samme ATC-kode (C03AA01). Samme RxNorm 1369. Samme navn: FEST har bendroflumetiazid bare sammen med kalium (Centyl med kaliumklorid, C03AB01); ATC-koden er den WHO og ClinPGx har for virkestoffet alene. | antihypertensiver_clinpgx_kobling |
+| Bisoprolol | Bisoprolol (Bisoprolol) | ja | bisoprolol | PA448641 | Samme ATC-kode (C07AB07). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Bumetanid | Bumetanid (Bumetanide) | ja | bumetanide | PA448682 | Samme ATC-kode (C03CA02). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Diltiazem | Diltiazem (Diltiazem) | ja | diltiazem | PA449334 | Samme ATC-kode (C08DB01). Samme navn: ClinPGx har også C05AE03 (diltiazem i salve mot analfissur). | antihypertensiver_clinpgx_kobling |
+| Doksazosin | Doksazosin (Doxazosin) | ja | doxazosin | PA449407 | Samme ATC-kode (C02CA04). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Enalapril | Enalapril (Enalapril) | ja | enalapril | PA449456 | Samme ATC-kode (C09AA02). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Eplerenon | Eplerenon (Eplerenone) | ja | eplerenone | PA164749044 | Samme ATC-kode (C03DA04). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Furosemid | Furosemid (Furosemide) | ja | furosemide | PA449719 | Samme ATC-kode (C03CA01). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Hydroklortiazid | Hydroklortiazid (Hydrochlorothiazide) | ja | hydrochlorothiazide | PA449899 | Samme ATC-kode (C03AA03). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Irbesartan | Irbesartan (Irbesartan) | ja | irbesartan | PA450084 | Samme ATC-kode (C09CA04). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Kandesartan | Kandesartancileksetil (Candesartan cilexetil) | ja | candesartan | PA448765 | Samme ATC-kode (C09CA06). Samme RxNorm 214354. Engelsk navn er synonym i ClinPGx: FEST har forløperen kandesartancileksetil; «Candesartan cilexetil» er synonym for candesartan i ClinPGx. | antihypertensiver_clinpgx_kobling |
+| Karvedilol | Karvedilol (Carvedilol) | ja | carvedilol | PA448817 | Samme ATC-kode (C07AG02). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Labetalol | Labetalol (Labetalol) | ja | labetalol | PA164743150 | Samme ATC-kode (C07AG01). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Lerkanidipin | Lerkanidipin (Lercanidipine) | ja | lercanidipine | PA164769058 | Samme ATC-kode (C08CA13). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Lisinopril | Lisinopril (Lisinopril) | ja | lisinopril | PA450242 | Samme ATC-kode (C09AA03). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Losartan | Losartan (Losartan) | ja | losartan | PA450268 | Samme ATC-kode (C09CA01). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Metoprolol | Metoprolol (Metoprolol) | ja | metoprolol | PA450480 | Samme ATC-kode (C07AB02). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Nifedipin | Nifedipin (Nifedipine) | ja | nifedipine | PA450631 | Samme ATC-kode (C08CA05). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Ramipril | Ramipril (Ramipril) | ja | ramipril | PA451223 | Samme ATC-kode (C09AA05). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Spironolakton | Spironolakton (Spironolactone) | ja | spironolactone | PA451483 | Samme ATC-kode (C03DA01). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Telmisartan | Telmisartan (Telmisartan) | ja | telmisartan | PA451605 | Samme ATC-kode (C09CA07). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Valsartan | Valsartan (Valsartan) | ja | valsartan | PA451848 | Samme ATC-kode (C09CA03). Samme navn. | antihypertensiver_clinpgx_kobling |
+| Verapamil | Verapamil (Verapamil) | ja | verapamil | PA451868 | Samme ATC-kode (C08DA01). Samme navn. | antihypertensiver_clinpgx_kobling |
 
 Ikke koblet:
 

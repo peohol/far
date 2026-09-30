@@ -1,0 +1,278 @@
+{
+  "stoff": "losartan",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 30,
+      "ovre": 350,
+      "enhet": "nmol/L",
+      "forbehold": "Gjelder losartansyre, som laboratoriet måler.",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 1400,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "stoff": "Losartan",
+          "form": "",
+          "typisk": 2,
+          "min": null,
+          "maks": null,
+          "enhet": "timer"
+        },
+        {
+          "stoff": "Losartansyre",
+          "form": "",
+          "typisk": null,
+          "min": 6,
+          "maks": 9,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "Losartan blokkerer reseptoren (angiotensin 2- reseptor type 1) til angiotensin 2. Angiotensin 2 er en kraftig vasokonstriktor. Ved å blokkere denne reseptoren oppnår man vasodilatasjon og påfølgende fall i blodtrykk.",
+      "Reseptorer for angiotensin 2 finnes også i:",
+      {
+        "punkter": [
+          "bakre hypofyselapp: blokkering via losartan medfører redusert frigjøring av antidiuretisk hormon (ADH).",
+          "binyrebarken: blokkering via losartan medfører redusert frigjøring av aldosteron.",
+          "nyren: blokkering via losartan medfører redusert gjenopptak av vann og natrium."
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-losartan"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      "Indikasjon for bruk av losartan (usammensatt preparat) hos voksne er:",
+      {
+        "punkter": [
+          "Essensiell hypertensjon",
+          "Nyresykdom hos pasienter med hypertensjon med diabetes mellitus type 2 og proteinuri ≥0,5 g/dag",
+          "Kronisk hjertesvikt når behandling med ACE-hemmer ikke anses hensiktsmessig",
+          "Reduksjon i risikoen for slag hos voksne hypertensive pasienter med venstre ventrikkelhypertrofi"
+        ]
+      },
+      "Indikasjon for bruk hos barn og ungdom mellom 6–18 år er behandling av essensiell hypertensjon."
+    ],
+    "referanser": [
+      "spc-losartan"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Essensiell hypertensjon, hypertensjon med diabetes mellitus type 2 og proteinuri ≥0,5 g/dag, reduksjon i risiko for slag hos voksne hypertensive pasienter med venstre ventrikkelhypertrofi: Vanlig start- og vedlikeholdsdose er 50 mg × 1, kan ved behov økes til 100 mg × 1.",
+      "Hjertesvikt: I titreringsfase øker man styrke ukentlig til tolerert vedlikeholdsdose, se Felleskatalogen. Maks anbefalt dose er 150 mg × 1.",
+      "Nedsatt lever- og nyrefunksjon: Ved nedsatt leverfunksjon bør lavere dose vurderes. Losartan er kontraindisert hos pasienter med alvorlig nedsatt leverfunksjon pga. manglende erfaring. Doseres som normalt ved nedsatt nyrefunksjon."
+    ],
+    "referanser": [
+      "spc-losartan"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      {
+        "punkter": [
+          "Andre antihypertensiva kan øke losartans hypotensive effekt. Samtidig bruk av andre substanser som kan indusere hypotensjon som en bivirkning (som trisykliske antidepressiva, antipsykotika, baklofen og amifostin), kan øke risikoen for hypotensjon.",
+          "Data fra kliniske studier har vist at dobbel blokade av renin-angiotensin-aldosteronsystemet (RAAS) ved kombinasjon av ACE-hemmere, angiotensin-II reseptorantagonister eller aliskiren er forbundet med høyere frekvens av bivirkninger som hypotensjon, hyperkalemi og nedsatt nyrefunksjon (inkludert akutt nyresvikt), sammenlignet med behandling med ett enkelt legemiddel som påvirker RAAS.",
+          "Den antihypertensive effekten kan svekkes når angiotensin II-antagonister gis sammen med NSAIDS (dvs. selektive COX-2-hemmere, acetylsalisylsyre i antiinflammatoriske doser og ikke-selektive NSAIDS).",
+          "Som med andre legemidler som blokkerer angiotensin II eller dets effekter, kan samtidig bruk av andre legemidler som holder tilbake kalium (f.eks. kaliumsparende diuretika: amilorid, triamteren, spironolakton) eller kan øke kaliumnivået (f.eks. heparin, legemidler som inneholder trimetoprim), kaliumtilskudd eller kaliumholdige salterstatninger, gi økninger i serumkalium. Samtidig behandling anbefales ikke."
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-losartan"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "33 %"
+      ],
+      "referanser": [
+        "spc-losartan"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "1 time (losartan), 3–4 timer (losartansyre)"
+      ],
+      "referanser": [
+        "spc-losartan"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Ca. 2 timer (losartan) og 6–9 timer (losartansyre)"
+      ],
+      "referanser": [
+        "spc-losartan"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "≥99 % (for både losartan og losartansyre)"
+      ],
+      "referanser": [
+        "spc-losartan"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "34 L (losartan)"
+      ],
+      "referanser": [
+        "spc-losartan"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Losartan metaboliseres hovedsakelig av CYP2C9 til losartansyre. Metabolitten 10–40 ganger mer potent enn modersubstansen.",
+        "Losartan og losartansyre skilles ut både via urin (35 %) og galle (58 %)."
+      ],
+      "referanser": [
+        "spc-losartan"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 422,91 g/mol (losartan) / 436,9 g/mol (losartankarboksylsyre)."
+      ],
+      "referanser": [
+        "spc-losartan"
+      ]
+    }
+  ],
+  "farmakogenetikk": [
+    {
+      "tittel": "CYP-enzymer (substrat)",
+      "tekst": [
+        "2C9, 3A4"
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner.",
+        "Laboratoriet måler losartansyre, den aktive metabolitten av losartan, og området gjelder losartansyre."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "For gruppen angiotensin II-reseptorantagonister:",
+        "Relativt lav toksisitet. Få rapporter om alvorlige forgiftninger grunnet angiotensin II-reseptorantagonister alene. Hypotensjon er hovedproblemet ved forgiftning. Personer med hjertesykdom (ofte eldre) tolererer mindre enn friske personer.",
+        "Kombinasjon med andre legemidler som påvirker sirkulasjonen kan potensere forgiftningen.",
+        "Klinikk for gruppen: Hodepine, svimmelhet og somnolens. Hypotensjon og takykardi, ev. bradykardi. Hyperkalemi, ev. nyre- og leverpåvirkning.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 1400 nmol/L), en felles grense for alle antihypertensivene.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "helsebiblioteket-angiotensin-2-antagonister"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "50 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "31–40 nmol/L",
+        "merknad": "Losartansyre. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "146–187 nmol/L",
+        "merknad": "Losartansyre. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "211–270 nmol/L",
+        "merknad": "Losartansyre. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "100 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "63–80 nmol/L",
+        "merknad": "Losartansyre. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "100 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "292–374 nmol/L",
+        "merknad": "Losartansyre. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "100 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "421–540 nmol/L",
+        "merknad": "Losartansyre. Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "50–100 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "1041 (124–3109) nmol/L",
+        "merknad": "Losartansyre. Målt i IDA-studien, median (min–maks), n = 36."
+      },
+      {
+        "dose": "50–100 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "43 (10–216) nmol/L",
+        "merknad": "Losartansyre. Målt i IDA-studien, median (min–maks), n = 10."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-losartan": {
+      "tittel": "Losartan Krka «KRKA»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/losartan-krka-krka-588049"
+    }
+  }
+}

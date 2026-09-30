@@ -3,7 +3,7 @@
  * (`src/faginnhold/festkoblinger.ts`): at hver stoffside uten analyttkode har
  * én, at amfetaminsiden har deksamfetamin og lisdeksamfetamin, at THC-siden
  * har dronabinol, at cannabidiolsiden har cannabidiol, at rusmiddelsidene som
- * er legemidler har sine, og at
+ * er legemidler har sine, at hver antihypertensivside har sitt, og at
  * migrasjonene legger dem inn som kortet redigeringen lager, hopper over det
  * de ikke kan koble, og ikke gjør noe når de kjøres igjen. FEST-radene er
  * syntetiske, med ID-ene og navnene fra FEST.
@@ -14,6 +14,7 @@ import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import {
   AMFETAMIN_FESTKOBLINGER,
+  ANTIHYPERTENSIV_FESTKOBLINGER,
   CBD_FESTKOBLINGER,
   FESTKOBLINGSIMPORTER,
   FESTKOBLINGSKILDE,
@@ -25,6 +26,7 @@ import {
 import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import { ELEMENTTYPER, lesLegemiddelkobling } from '../faginnhold/paneler'
 import { stoffsideplan } from '../faginnhold/stoffsider'
+import { antihypertensivplan } from '../faginnhold/antihypertensiver'
 import { PREPARATPANEL } from '../legemiddeldata/stoffside'
 import { stoffslug } from '../domain/stoffregister'
 import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
@@ -69,6 +71,9 @@ const RUSNAVN: Record<string, string> = {
   'ID_7A7394E3-2826-4CDE-8AB1-538BB8DB1AD5': 'Levometadon',
 }
 const rusnavn = (k: { side: string; fest_id: string }) => RUSNAVN[k.fest_id] ?? k.side
+/** Antihypertensivsidene der FEST gir virkestoffet et annet navn enn siden. */
+const ANTIHYPERTENSIVNAVN: Record<string, string> = { Kandesartan: 'Kandesartancileksetil' }
+const antihypertensivnavn = (side: string) => ANTIHYPERTENSIVNAVN[side] ?? side
 /**
  * Siden psykofarmakaimporten lager, før testen oppretter administratoren; den
  * finnes ikke i testdatabasen, så koblingen hoppes over.
@@ -113,6 +118,13 @@ describe('koblingene', () => {
     for (const k of RUSMIDLER_FESTKOBLINGER) expect(k.fest_id, k.side).toMatch(/^ID_[0-9A-F-]{36}$/)
   })
 
+  it('kobler hver antihypertensivside til ett virkestoff, og ingen to til det samme', () => {
+    const sider = antihypertensivplan().koder.map((k) => k.hovedside.navn)
+    expect(ANTIHYPERTENSIV_FESTKOBLINGER.map((k) => k.side)).toEqual(sider)
+    expect(new Set(ANTIHYPERTENSIV_FESTKOBLINGER.map((k) => k.fest_id)).size).toBe(sider.length)
+    for (const k of ANTIHYPERTENSIV_FESTKOBLINGER) expect(k.fest_id, k.side).toMatch(/^ID_[0-9A-F-]{36}$/)
+  })
+
   it('kobler aldri samme side til samme virkestoff to ganger', () => {
     const alle = FESTKOBLINGSIMPORTER.flatMap((i) => i.koblinger.map((k) => `${k.side}|${k.fest_id}`))
     expect(new Set(alle).size).toBe(alle.length)
@@ -155,6 +167,7 @@ describe('migrasjonen i databasen', () => {
       ...THC_FESTKOBLINGER.map((k) => [k.fest_id, 'Dronabinol', false] as const),
       ...CBD_FESTKOBLINGER.map((k) => [k.fest_id, 'Cannabidiol', false] as const),
       ...RUSMIDLER_FESTKOBLINGER.map((k) => [k.fest_id, rusnavn(k), false] as const),
+      ...ANTIHYPERTENSIV_FESTKOBLINGER.map((k) => [k.fest_id, antihypertensivnavn(k.side), false] as const),
     ]
     for (const [fest_id, navn, utgatt] of virkestoff) {
       await db.query(
@@ -223,6 +236,17 @@ describe('migrasjonen i databasen', () => {
       expect(kobling!.innhold.panel, side).toBe(PREPARATPANEL)
       expect(lesLegemiddelkobling(kobling!.innhold.data), side).toEqual({
         virkestoff: RUSMIDLER_FESTKOBLINGER.filter((k) => k.side === side).map((k) => ({ fest_id: k.fest_id, navn: rusnavn(k) })),
+      })
+    }
+  })
+
+  it('kobler antihypertensivsidene, som importen lager, med ett kort per side', async () => {
+    for (const k of ANTIHYPERTENSIV_FESTKOBLINGER) {
+      const [kobling, ...flere] = await koblingen(k.side)
+      expect(flere, k.side).toEqual([])
+      expect(kobling!.innhold.panel, k.side).toBe(PREPARATPANEL)
+      expect(lesLegemiddelkobling(kobling!.innhold.data), k.side).toEqual({
+        virkestoff: [{ fest_id: k.fest_id, navn: antihypertensivnavn(k.side) }],
       })
     }
   })

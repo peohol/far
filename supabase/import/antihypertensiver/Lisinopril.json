@@ -1,0 +1,236 @@
+{
+  "stoff": "lisinopril",
+  "kilde": "antihypertensiver.docx",
+  "viktige_data": {
+    "referanseomrade": {
+      "nedre": 10,
+      "ovre": 300,
+      "enhet": "nmol/L",
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    "toksisk_omrade": {
+      "nedre": 1200,
+      "ovre": null,
+      "enhet": "nmol/L",
+      "forbehold": "4 × øvre grense for referanseområdet."
+    },
+    "halveringstid": {
+      "former": [
+        {
+          "form": "",
+          "typisk": 12.6,
+          "min": null,
+          "maks": null,
+          "enhet": "timer"
+        }
+      ]
+    }
+  },
+  "farmakodynamikk": {
+    "tekst": [
+      "ACE-hemmer (angiotensinkonverterende enzymhemmer). Hemming av ACE gir redusert angiotensin II-konsentrasjon, som igjen resulterer i redusert vasopressoraktivitet og aldosteronutskillelse. Blodtrykkssenkende effekt antas å skyldes hemming av RAAS. Blokkerer nedbrytningen av bradykinin."
+    ],
+    "referanser": [
+      "spc-lisinopril"
+    ]
+  },
+  "indikasjon": {
+    "tekst": [
+      {
+        "punkter": [
+          "Behandling av hypertensjon",
+          "Behandling av symptomatisk hjertesvikt",
+          "Korttidsbehandling (6 uker) av hemodynamisk stabile pasienter innen 24 timer etter et akutt hjerteinfarkt",
+          "Behandling av nyresykdom hos hypertensive pasienter med type 2-diabetes og begynnende nefropati"
+        ]
+      }
+    ],
+    "referanser": [
+      "spc-lisinopril"
+    ]
+  },
+  "dosering": {
+    "tekst": [
+      "Vanlig startdose 10 mg (lavere hos utsatte pasienter; se anbefaling i Felleskatalogen), vanlig vedlikeholdsdose 20 mg × 1. Maksdose 80 mg.",
+      "Nedsatt lever- og nyrefunksjon: Redusert dosering ved nyresvikt er anbefalt. Seponeres ved tegn til gulsott eller sterkt økte leverenzymer. Lavere startdose eller økt doseringsintervall bør vurderes hos barn med nedsatt nyrefunksjon, og anbefales ikke ved alvorlig nedsatt nyrefunksjon (GFR < 30 ml/minutt/1,73 m^{2})."
+    ],
+    "referanser": [
+      "spc-lisinopril"
+    ]
+  },
+  "interaksjoner": {
+    "tekst": [
+      "Samtidig bruk av lisinopril og legemidler som inneholder aliskiren (renin-hemmer) er kontraindisert hos pasienter med diabetes mellitus eller nedsatt nyrefunksjon (GFR < 60 ml/min/1,73 m^{2}), og samtidig bruk med sakubitril/valsartan.",
+      "Risiko for uttalt økning av serum-kalium, særlig hos pasienter med nedsatt nyrefunksjon, ved samtidig bruk av kaliumtilskudd, kaliumsparende diuretika, salterstatninger med kalium og andre legemidler som kan medføre økte kaliumnivåer."
+    ],
+    "referanser": [
+      "spc-lisinopril"
+    ]
+  },
+  "farmakokinetikk": [
+    {
+      "tittel": "Biotilgjengelighet",
+      "tekst": [
+        "Ca. 25 % (interindividuell variasjon; 6–60 %). Reduseres ved hjertesvikt."
+      ],
+      "referanser": [
+        "spc-lisinopril"
+      ]
+    },
+    {
+      "tittel": "tmax",
+      "tekst": [
+        "Innen 7 timer."
+      ],
+      "referanser": [
+        "spc-lisinopril"
+      ]
+    },
+    {
+      "tittel": "t1/2",
+      "tekst": [
+        "Ved gjentatt dosering er den effektive halveringstiden 12,6 timer."
+      ],
+      "referanser": [
+        "spc-lisinopril"
+      ]
+    },
+    {
+      "tittel": "Proteinbinding",
+      "tekst": [
+        "Lisinopril synes ikke å være bundet til andre proteiner enn sirkulerende ACE."
+      ],
+      "referanser": [
+        "spc-lisinopril"
+      ]
+    },
+    {
+      "tittel": "VD",
+      "tekst": [
+        "1,3–2,3 L/kg."
+      ],
+      "referanser": [
+        "spc-lisinopril"
+      ]
+    },
+    {
+      "tittel": "Eliminasjon",
+      "tekst": [
+        "Lisinopril metaboliseres praktisk talt ikke.",
+        "Uendret i urin."
+      ],
+      "referanser": [
+        "spc-lisinopril"
+      ]
+    },
+    {
+      "tittel": "Annet",
+      "tekst": [
+        "Molekylvekt: 405,5 g/mol."
+      ],
+      "referanser": [
+        "spc-lisinopril"
+      ]
+    }
+  ],
+  "tdm": [
+    {
+      "tittel": "Prøvetakingstidspunkt",
+      "tekst": [
+        "Prøven tas 12–24 timer etter siste dose (C_{12–24}).",
+        "Etter en doseendring bør det gå minst fem halveringstider før ny prøve tas."
+      ],
+      "referanser": [
+        "rognstad2021"
+      ]
+    },
+    {
+      "tittel": "Grunnlag for referanseområdet",
+      "tekst": [
+        "Dosejustert, beregnet serumreferanseområde fra Rognstad et al. (2021). Målte konsentrasjoner fra IDA-studien (Thorstensen et al. 2022) står i tabellen over serumkonsentrasjoner."
+      ],
+      "referanser": [
+        "rognstad2021",
+        "thorstensen2022"
+      ]
+    },
+    {
+      "tittel": "Toksisitet",
+      "tekst": [
+        "ACE-hemmere har relativt lav akutt toksisitet, men massive overdoser kan gi behandlingstrengende hypotensjon med ledsagende sentralnervøse effekter. Bradykardi, hyperkalemi og nyresvikt er beskrevet. Få rapporter om dødsfall. Alvorlighetsgraden ved overdoser er mer avhengig av pasientens kardiovaskulære status og alder enn av inntatt mengde. Eldre med uttalt hjertesvikt er særlig utsatt.",
+        "Grensen for toksisk område er satt til 4 × øvre grense for referanseområdet (≥ 1200 nmol/L), en felles grense for alle antihypertensivene.",
+        "Se behandlingsanbefalingen ved forgiftning fra Helsebiblioteket."
+      ],
+      "referanser": [
+        "helsebiblioteket-ace-hemmere"
+      ]
+    }
+  ],
+  "serumkonsentrasjoner": {
+    "rader": [
+      {
+        "dose": "5 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "8–11 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "5 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "17–21 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "5 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "18–23 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "80 mg",
+        "regime": "24 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "133–170 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "80 mg",
+        "regime": "12 t etter dose, dosering hver 24. t",
+        "konsentrasjon": "266–340 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "80 mg",
+        "regime": "Gjennomsnitt ved steady state",
+        "konsentrasjon": "288–368 nmol/L",
+        "merknad": "Beregnet fra clearance ± 1 SD (Hiemkes formel)."
+      },
+      {
+        "dose": "20 mg",
+        "regime": "Cmaks (målt)",
+        "konsentrasjon": "207 nmol/L",
+        "merknad": "Målt i IDA-studien, n = 1."
+      },
+      {
+        "dose": "20 mg",
+        "regime": "Cmin (målt)",
+        "konsentrasjon": "45 (21–45) nmol/L",
+        "merknad": "Målt i IDA-studien, median (min–maks), n = 3."
+      }
+    ],
+    "referanser": [
+      "hiemke2017",
+      "thorstensen2022"
+    ]
+  },
+  "referanser": {
+    "spc-lisinopril": {
+      "tittel": "Lisinopril ratiopharm «ratiopharm»",
+      "forfattere": "Felleskatalogen (preparatomtale)",
+      "aar": "",
+      "lenke": "https://www.felleskatalogen.no/medisin/lisinopril-ratiopharm-ratiopharm-561023"
+    }
+  }
+}

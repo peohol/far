@@ -16,6 +16,7 @@ import { FARMAKOGENETIKKPANEL } from '../clinpgx/stoffside'
 import { gjeldendeClinpgxside, UKOBLEDE_STOFFSIDER } from '../faginnhold/clinpgxdekning'
 import {
   ALLE_CLINPGXKOBLINGER,
+  ANTIHYPERTENSIV_CLINPGXKOBLINGER,
   CLINPGXKOBLINGSIMPORTER,
   CLINPGXKOBLINGSKILDE,
   clinpgxkoblingSql,
@@ -120,6 +121,32 @@ const FORVENTET: Record<string, string[]> = {
   // Sidene som ble laget sammen med stoffregisteret.
   GHB: ['PA166236501'],
   Ketamin: ['PA450144', 'PA166364961'],
+  // Antihypertensivene.
+  Amlodipin: ['PA448388'],
+  Atenolol: ['PA448499'],
+  Bendroflumetiazid: ['PA448563'],
+  Bisoprolol: ['PA448641'],
+  Bumetanid: ['PA448682'],
+  Diltiazem: ['PA449334'],
+  Doksazosin: ['PA449407'],
+  Enalapril: ['PA449456'],
+  Eplerenon: ['PA164749044'],
+  Furosemid: ['PA449719'],
+  Hydroklortiazid: ['PA449899'],
+  Irbesartan: ['PA450084'],
+  Kandesartan: ['PA448765'],
+  Karvedilol: ['PA448817'],
+  Labetalol: ['PA164743150'],
+  Lerkanidipin: ['PA164769058'],
+  Lisinopril: ['PA450242'],
+  Losartan: ['PA450268'],
+  Metoprolol: ['PA450480'],
+  Nifedipin: ['PA450631'],
+  Ramipril: ['PA451223'],
+  Spironolakton: ['PA451483'],
+  Telmisartan: ['PA451605'],
+  Valsartan: ['PA451848'],
+  Verapamil: ['PA451868'],
 }
 /** Sidene som står ukoblet. */
 const UKOBLET = UKOBLEDE_STOFFSIDER.map((u) => u.side)
@@ -338,6 +365,15 @@ describe('migrasjonen i databasen', () => {
     // Testdatabasen har ikke alle sidene, men de fleste, og alle sidene uten FEST-kobling.
     expect(sider.length).toBeGreaterThan(50)
     expect(sider).toEqual(expect.arrayContaining(ALLE_CLINPGXKOBLINGER.filter((k) => k.fest_id === null).map((k) => k.side)))
+  })
+
+  it('kobler antihypertensivsidene, som importen lager og kobler til FEST, via virkestoffet i FEST', async () => {
+    for (const k of ANTIHYPERTENSIV_CLINPGXKOBLINGER) {
+      const [kobling, ...flere] = await koblingen(k.side)
+      expect(flere, k.side).toEqual([])
+      expect(kobling!.innhold.panel, k.side).toBe(FARMAKOGENETIKKPANEL)
+      expect(kobling!.innhold.data, k.side).toEqual({ kjemikalier: [{ clinpgx_id: k.clinpgx_id, navn: k.navn }] })
+    }
   })
 
   it('tar bare med kjemikaliene for virkestoffene siden er koblet til i FEST', async () => {
