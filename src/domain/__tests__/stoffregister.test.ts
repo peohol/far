@@ -3,6 +3,7 @@ import { filnokkel } from '../../faginnhold/import'
 import { CBD_STOFFSIDER, NYE_STOFFSIDER } from '../../faginnhold/indikasjoner'
 import { STOFFSIDE_DATASETT } from '../../faginnhold/stoffsider'
 import { ANALYTTKATALOG } from '../analyttkatalog'
+import { navnenokkel } from '../sokenavn'
 import {
   ANDRE_STOFFER,
   byggStoffregister,
@@ -22,6 +23,9 @@ import {
 
 /** Stoffsidene importene lager. */
 const IMPORTERTE = [...STOFFSIDE_DATASETT.filer.map(filnokkel), ...NYE_STOFFSIDER, ...CBD_STOFFSIDER]
+
+/** Importerte sider en senere migrasjon har gitt stoffets navn (`*_cbd_stoffside.sql`). */
+const OMDOPTE: Readonly<Record<string, string>> = { Cannabidiol: 'CBD' }
 
 function kategori(navn: string, r: readonly Registerkategori[] = STOFFREGISTER.kategorier): Registerkategori {
   const funnet = r.find((k) => k.navn === navn)
@@ -69,8 +73,15 @@ describe('datafilen', () => {
     for (const { kode } of STOFFREGISTER.koblinger) expect(ANALYTTKATALOG.finn(kode), kode).toBeDefined()
   })
 
+  it('navngir aldri et stoff etter metabolitten analytten måler', () => {
+    for (const k of STOFFREGISTER.koblinger.filter((k) => k.relasjon === 'metabolitt')) {
+      const stoff = navnenokkel(STOFFREGISTER.finn(k.stoff)!.navn)
+      for (const komponent of ANALYTTKATALOG.finn(k.kode)!.komponenter) expect(navnenokkel(komponent), k.kode).not.toBe(stoff)
+    }
+  })
+
   it('har et stoff for hver stoffside importene lager', () => {
-    for (const navn of IMPORTERTE) expect(STOFFREGISTER.kanonisk(navn)?.navn, navn).toBe(navn)
+    for (const navn of IMPORTERTE) expect(STOFFREGISTER.kanonisk(navn)?.navn, navn).toBe(OMDOPTE[navn] ?? navn)
   })
 
   it('gir hvert stoff en plass i en kategori, så ingenting havner i «Andre stoffer»', () => {
@@ -110,6 +121,21 @@ describe('nøklene', () => {
     expect(STOFFREGISTER.kanonisk('Nortriptylin')?.slug).toBe('nortriptylin')
     expect(STOFFREGISTER.kanonisk('HBUP')).toBeUndefined()
     expect(STOFFREGISTER.finn('hydroksybupropion')).toBeUndefined()
+  })
+
+  it('fører de gamle adressene til sidene som fikk moderstoffets navn, dit', () => {
+    for (const [gammel, ny] of [
+      ['benzoylekgonin', 'kokain'],
+      ['cannabidiol', 'cbd'],
+      ['enalaprilat', 'enalapril'],
+      ['ramiprilat', 'ramipril'],
+      ['losartansyre', 'losartan'],
+      ['kanrenon', 'spironolakton'],
+      ['o-desmetylvenlafaksin', 'venlafaksin'],
+    ]) {
+      expect(STOFFREGISTER.finn(gammel!), gammel).toBeUndefined()
+      expect(STOFFREGISTER.kanonisk(gammel!)?.slug, gammel).toBe(ny)
+    }
   })
 })
 
@@ -185,7 +211,7 @@ describe('sidemenyen', () => {
       'NMDA-reseptorantagonister',
     ])
     expect(navnI(k, 'SSRI')).toEqual(['Citalopram', 'Escitalopram', 'Fluoksetin', 'Fluvoksamin', 'Paroksetin', 'Sertralin'])
-    expect(navnI(k, 'SNRI')).toEqual(['Duloksetin', 'O-desmetylvenlafaksin', 'Venlafaksin'])
+    expect(navnI(k, 'SNRI')).toEqual(['Duloksetin', 'Venlafaksin'])
     expect(navnI(k, 'NDRI')).toEqual(['Bupropion'])
     expect(navnI(k, 'TCA')).toContain('Amitriptylin')
     expect(navnI(k, 'TCA')).toContain('Nortriptylin')
@@ -223,7 +249,7 @@ describe('sidemenyen', () => {
     expect(k.stoffer.find((s) => s.slug === 'karbamazepin')?.koder).toEqual([])
     expect(navnI(kategori('Alkohol og GHB'))).toEqual(['Etanol', 'GHB'])
     expect(navnI(kategori('Hallusinogene stoffer'))).toEqual(['Ketamin'])
-    expect(navnI(kategori('Cannabinoider'))).toContain('Cannabidiol')
+    expect(navnI(kategori('Cannabinoider'))).toEqual(['CBD', 'THC'])
   })
 
   it('lar et stoff stå i flere kategorier', () => {

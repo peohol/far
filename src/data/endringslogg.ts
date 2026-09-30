@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.61.4',
+    versjon: '1.61.5',
     dato: '2026-09-30',
     sammendrag: 'Alle analysemetodene står nå framme som piller under søket',
     typer: ['Funksjonalitet', 'Design / layout'],
@@ -22,6 +22,19 @@ export const ENDRINGSLOGG: Endring[] = [
       'Filteret som gjelder, har fylt farge. De andre står bare med en tynn kant i sin farge, så du ser med én gang hvilket filter som er aktivt. «Alle» er valgt når søket ikke er begrenset.',
       'Et trykk på en pille setter filteret, og «Alle» slår det av. Markøren blir stående i søkefeltet, så du kan skrive videre med én gang. Hurtigtastene Alt + 1 til Alt + 5 og Alt + 0 virker som før.',
       'Holder du pekeren over en pille, står det hva metoden er.',
+    ],
+  },
+  {
+    versjon: '1.61.4',
+    dato: '2026-09-30',
+    sammendrag: 'Fagsidene heter etter legemidlet eller rusmidlet, ikke etter metabolitten laboratoriet måler',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Fagsidene Benzoylekgonin, Enalaprilat, Ramiprilat, Losartansyre og Kanrenon heter nå Kokain, Enalapril, Ramipril, Losartan og Spironolakton, i sidemenyen, fagsøket og som overskrift. Siden sier fortsatt hvilken metabolitt analysen måler.',
+      'Den egne fagsiden for O-desmetylvenlafaksin er tatt bort. Venlafaksin er siden for VENSUM, og et søk på O-desmetylvenlafaksin eller desvenlafaksin fører dit.',
+      'Cannabidiol heter CBD, som THC, og «cannabidiol» finner fortsatt siden.',
+      'De gamle navnene fungerer som søkeord, og gamle lenker og bokmerker fører til den nye siden.',
     ],
   },
   {
