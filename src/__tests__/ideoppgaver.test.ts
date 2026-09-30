@@ -176,7 +176,8 @@ describe('arkivet og de planlagte oppgavene', () => {
           type: 'paragraph',
           content: [
             { type: 'text', text: 'Se ' },
-            { type: 'text', text: 'Felleskatalogen', marks: [{ type: 'link', attrs: { href: 'https://www.felleskatalogen.no' } }] },
+            { type: 'text', text: 'Felles', marks: [{ type: 'bold' }, { type: 'link', attrs: { href: 'https://www.felleskatalogen.no' } }] },
+            { type: 'text', text: 'katalogen', marks: [{ type: 'link', attrs: { href: 'https://www.felleskatalogen.no' } }] },
             { type: 'text', text: ' og ' },
             { type: 'text', text: 'https://example.org', marks: [{ type: 'link', attrs: { href: 'https://example.org' } }] },
           ],

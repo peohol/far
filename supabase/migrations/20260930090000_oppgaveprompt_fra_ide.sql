@@ -18,7 +18,6 @@ as $$
 declare
   slag text := node ->> 'type';
   barn jsonb := case when jsonb_typeof(node -> 'content') = 'array' then node -> 'content' else '[]'::jsonb end;
-  lenke text;
   start integer;
 begin
   if node is null or jsonb_typeof(node) <> 'object' then
@@ -26,12 +25,7 @@ begin
   end if;
 
   if slag = 'text' then
-    select m -> 'attrs' ->> 'href' into lenke
-    from jsonb_array_elements(case when jsonb_typeof(node -> 'marks') = 'array' then node -> 'marks' else '[]'::jsonb end) m
-    where m ->> 'type' = 'link'
-    limit 1;
-    return coalesce(node ->> 'text', '')
-      || case when lenke is not null and lenke <> coalesce(node ->> 'text', '') then ' (' || lenke || ')' else '' end;
+    return coalesce(node ->> 'text', '');
   elsif slag = 'hardBreak' then
     return E'\n';
   elsif slag = 'doc' then
@@ -58,9 +52,31 @@ begin
         lateral (select case when slag = 'bulletList' then '- ' else (start + n - 1)::text || '. ' end as merke) p
     ), '');
   else
+    -- Tekst som står etter hverandre med samme lenke, er én lenke, også når
+    -- deler av den er formatert: adressen kommer én gang, etter hele lenken.
     return coalesce((
-      select string_agg(intern.riktekst_som_tekst(b.del), '' order by n)
-      from jsonb_array_elements(barn) with ordinality as b(del, n)
+      with deler as (
+        select b.n, intern.riktekst_som_tekst(b.del) as t,
+          (select m -> 'attrs' ->> 'href'
+            from jsonb_array_elements(case when jsonb_typeof(b.del -> 'marks') = 'array' then b.del -> 'marks' else '[]'::jsonb end) m
+            where b.del ->> 'type' = 'text' and m ->> 'type' = 'link'
+            limit 1) as href
+        from jsonb_array_elements(barn) with ordinality as b(del, n)
+      ),
+      grupper as (
+        select d.n, d.t, d.href,
+          count(*) filter (where d.href is distinct from d.forrige) over (order by d.n) as gruppe
+        from (select deler.*, lag(deler.href) over (order by deler.n) as forrige from deler) d
+      ),
+      lenker as (
+        select g.gruppe, max(g.href) as href, string_agg(g.t, '' order by g.n) as t
+        from grupper g
+        group by g.gruppe
+      )
+      select string_agg(
+        l.t || case when l.href is not null and l.href <> l.t then ' (' || l.href || ')' else '' end,
+        '' order by l.gruppe)
+      from lenker l
     ), '');
   end if;
 end;
