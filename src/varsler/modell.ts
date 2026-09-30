@@ -44,6 +44,12 @@ export const VARSELKATEGORIER = {
     obligatorisk: false,
     standard: true,
   },
+  nye_ideer: {
+    tittel: 'Nye idéer',
+    forklaring: 'Når noen har skrevet en ny idé.',
+    obligatorisk: false,
+    standard: false,
+  },
   funksjonalitet: {
     tittel: 'Ny eller endret funksjonalitet i appen',
     forklaring: 'Når appen har fått en ny versjon, med det som står om den i endringsloggen.',
@@ -62,8 +68,8 @@ export type Varselkategori = keyof typeof VARSELKATEGORIER
 
 export const KATEGORIREKKEFOLGE = Object.keys(VARSELKATEGORIER) as Varselkategori[]
 
-/** Kategoriene databasen lager varsler i. Samme verdier som `public.varselkategori`. */
-export const DATABASEKATEGORIER = ['fortolkning', 'mine_ideer', 'aktive_ideer', 'favoritter'] as const satisfies readonly Varselkategori[]
+/** Kategoriene databasen lager varsler i. Samme verdier, i samme rekkefølge, som `public.varselkategori`. */
+export const DATABASEKATEGORIER = ['fortolkning', 'mine_ideer', 'aktive_ideer', 'favoritter', 'nye_ideer'] as const satisfies readonly Varselkategori[]
 export type Databasekategori = (typeof DATABASEKATEGORIER)[number]
 
 function erDatabasekategori(verdi: unknown): verdi is Databasekategori {
@@ -365,6 +371,7 @@ export function aktorer(hendelser: readonly Hendelse[]): string[] {
 /** Hva som har skjedd med idéen, med navnene foran: «Ada og Bo kommenterte idéen din». */
 export function idetekst(varsel: Databasevarsel, meg: string, navn: (id: string) => string): string {
   const hvem = navneliste(aktorer(varsel.hendelser).map(navn))
+  if (varsel.kategori === 'nye_ideer') return `${hvem} skrev en ny idé`
   if (varsel.kategori === 'aktive_ideer') return `${hvem} kommenterte en idé du har kommentert`
   const egen = varsel.ide?.forfatterId === meg
   const barSvar = varsel.hendelser.every((h) => h.svarTil === meg)

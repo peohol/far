@@ -9,6 +9,7 @@ Varslene berører ikke fortolkningen; de forteller bare at noe er endret.
 | --- | --- |
 | `supabase/migrations/*_varsler.sql` | Tabellen, utløserne som lager varslene, og funksjonene som leser og merker dem lest |
 | `supabase/migrations/*_favorittvarsler*.sql` | Varslene om endringer på favorittsidene, og hvordan hendelsene leses |
+| `supabase/migrations/*_nye_ideer_varsler.sql` | Varslene om nye idéer |
 | `src/varsler/modell.ts` | Kategoriene, valgene, føringene i endringsloggen som varsler, sorteringen og tekstene (rene funksjoner) |
 | `src/varsler/api.ts` | Kallene mot Supabase og brukerinnstillingene |
 | `src/components/varsler/` | Bjella (`Varselknapp`), tilstanden (`useVarsler`) og vinduet (`Varsler`) |
@@ -21,11 +22,15 @@ Varslene berører ikke fortolkningen; de forteller bare at noe er endret.
 | `fortolkning` | En kommentar eller et regelsett publiseres, eller en føring i endringsloggen har `endrerFortolkning` | Nei |
 | `mine_ideer` | Noen kommenterer en idé du skrev, eller svarer på en kommentar du skrev | Nei |
 | `aktive_ideer` | Noen kommenterer en idé du har kommentert, uten at det er et svar til deg | Ja, på som standard |
+| `nye_ideer` | Noen skriver en ny idé | Ja, av som standard |
 | `funksjonalitet` | En ny føring i endringsloggen | Ja, på som standard |
 | `favoritter` | Noen publiserer endringer på en fagside du har som favoritt | Ja, av som standard |
 
 Kategoriene står i `VARSELKATEGORIER`. De som lages av databasen, er de
-samme som `public.varselkategori`; en test passer på at de stemmer.
+samme som `public.varselkategori`; en test passer på at de stemmer. En ny
+kategori legges til med `alter type public.varselkategori add value` i en egen
+migrasjon, og sist i `DATABASEKATEGORIER`. Utløseren som bruker den, skrives i
+plpgsql, siden den nye verdien ikke kan brukes før migrasjonen er ferdig.
 Brukerens valg lagres i `brukerinnstillinger` under `varsler.valg`, og
 databasen lager varsler i alle kategoriene: det er appen som viser dem
 brukeren har valgt. Å slå en kategori av og på igjen gir dem tilbake.
@@ -38,6 +43,9 @@ gjorde det, varsles ikke.
 - **Idékommentarer** (`idekommentarer_varsle`): idéens forfatter og den som
   fikk svar får `mine_ideer`, de andre som har kommentert i tråden
   `aktive_ideer`.
+- **Nye idéer** (`ideer_varsle`): alle andre enn den som skrev idéen, får
+  `nye_ideer`, ett varsel per idé. Det er lest når idéen åpnes, som varslene
+  om kommentarene.
 - **Fortolkningen** (`objektpubliseringer_varsle`): hver publisering av en
   kommentar eller et regelsett (`intern.er_fortolkning`) varsler alle andre.
   Et utkast som lagres, varsler ingen: varselet kommer når endringen er

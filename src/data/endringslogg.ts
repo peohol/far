@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.62.6',
+    versjon: '1.63.1',
     dato: '2026-09-30',
     sammendrag: 'En idé som overføres til Planlagte oppgaver, får teksten sin som prompt',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,17 @@ export const ENDRINGSLOGG: Endring[] = [
       'Når en idé overføres til Planlagte oppgaver, starter prompten med den samme teksten som idéen hadde, i stedet for å være tom. Den kan redigeres som før.',
       'Avsnitt, lister og lenker følger med som ren tekst. Har idéen ingen beskrivelse, starter prompten med overskriften.',
       'Oppgaver som alt er overført, er ikke endret.',
+    ],
+  },
+  {
+    versjon: '1.63.0',
+    dato: '2026-09-30',
+    sammendrag: 'Varsel om nye idéer',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Varselinnstillingene har fått valget «Nye idéer». Er det slått på, får du et varsel når noen har skrevet en ny idé, og varselet åpner idéen.',
+      'Valget er av til du slår det på. Du får aldri varsel om idéer du har skrevet selv.',
     ],
   },
   {

@@ -54,7 +54,11 @@ describe('varslene', () => {
   const uleste = (bruker: string) => en<Record<string, number>>(bruker, 'select public.uleste_varsler()')
   const merkLest = (bruker: string, ider: string[] | null, til: string) =>
     sql(bruker, 'select public.merk_varsler_lest($1, $2)', [ider, til])
-  const omIde = async (bruker: string, ide: string) => (await varsler(bruker)).filter((v) => v.ide?.id === ide)
+  /** Varslene om kommentarene på idéen; varselet om at den er ny, testes for seg. */
+  const omIde = async (bruker: string, ide: string) =>
+    (await varsler(bruker)).filter((v) => v.ide?.id === ide && v.kategori !== 'nye_ideer')
+  const omNyIde = async (bruker: string, ide: string) =>
+    (await varsler(bruker)).filter((v) => v.ide?.id === ide && v.kategori === 'nye_ideer')
 
   beforeAll(async () => {
     db = await nyDatabase()
@@ -90,6 +94,32 @@ describe('varslene', () => {
     expect(await omIde(cy, ide)).toMatchObject([{ kategori: 'aktive_ideer', hendelser: [{ av: ada }] }])
     expect(await omIde(admin, ide)).toEqual([])
     expect(await uleste(bo)).toMatchObject({ aktive_ideer: 1, mine_ideer: 1 })
+  })
+
+  it('varsler alle andre om en ny idé, ett varsel per idé, som er lest når idéen åpnes', async () => {
+    const ide = await nyIde(ada, 'Sortering etter hjerter')
+    const annen = await nyIde(ada, 'Utskrift')
+
+    // Ada skrev idéene og får ingenting; alle andre får ett varsel om hver.
+    expect(await omNyIde(ada, ide)).toEqual([])
+    for (const bruker of [admin, bo, cy]) {
+      expect(await omNyIde(bruker, ide)).toMatchObject([
+        { kategori: 'nye_ideer', ide: { id: ide, tittel: 'Sortering etter hjerter', forfatter_id: ada }, hendelser: [{ av: ada }], lest_kl: null },
+      ])
+      expect(await omNyIde(bruker, annen)).toHaveLength(1)
+    }
+    expect((await uleste(bo)).nye_ideer).toBeGreaterThanOrEqual(2)
+
+    // Å åpne idéen merker varselet om den lest, ikke det om den andre.
+    const lest = await en<{ lest_kl: string }>(bo, 'select public.idetraad($1)', [ide])
+    await sql(bo, 'select public.merk_ide_sett($1, $2)', [ide, lest.lest_kl])
+    expect((await omNyIde(bo, ide))[0]!.lest_kl).toEqual(expect.any(String))
+    expect((await omNyIde(bo, annen))[0]!.lest_kl).toBeNull()
+
+    // En kommentar på idéen er et annet varsel, i sin egen kategori.
+    await nyKommentar(cy, ide)
+    expect((await omIde(ada, ide)).map((v) => v.kategori)).toEqual(['mine_ideer'])
+    expect(await omNyIde(ada, ide)).toEqual([])
   })
 
   it('slår sammen uleste varsler om samme idé, og begynner på et nytt når det er lest', async () => {
@@ -297,9 +327,9 @@ describe('varslene', () => {
     await nyKommentar(bo, ide)
     const { lest_kl } = await mine(ada)
     await merkLest(ada, null, lest_kl)
-    await db.query(`update public.varsler set lest_kl = now() - interval '31 days' where ide_id = $1`, [ide])
+    await db.query(`update public.varsler set lest_kl = now() - interval '31 days' where ide_id = $1 and mottaker_id = $2`, [ide, ada])
     expect(await omIde(ada, ide)).toEqual([])
     await merkLest(ada, null, lest_kl)
-    expect(await db.query('select id from public.varsler where ide_id = $1', [ide])).toMatchObject({ rows: [] })
+    expect(await db.query('select id from public.varsler where ide_id = $1 and mottaker_id = $2', [ide, ada])).toMatchObject({ rows: [] })
   })
 })
