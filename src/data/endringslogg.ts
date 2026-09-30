@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.62.3',
+    dato: '2026-09-30',
+    sammendrag: 'Vinduene lukkes ikke lenger når en tekstmarkering slippes utenfor dem',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Markerer du tekst i et vindu, som Idéer eller Planlagte oppgaver, og slipper museknappen utenfor vinduet, blir vinduet stående.',
+      'Et klikk utenfor lukker fortsatt vinduet, men bare når klikket både begynner og slutter utenfor. Det gjelder alle vinduene i appen, og mørkleggingen bak sidemenyen.',
+    ],
+  },
+  {
     versjon: '1.62.2',
     dato: '2026-09-30',
     sammendrag: 'Hurtigtastene ser ut som tastaturtaster',

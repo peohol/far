@@ -11,6 +11,7 @@ import { useFavoritter, type Favoritter } from '../favoritter/Favorittkilde'
 import type { Registerkategori, Registerstoff, Stoffregister } from '../domain/stoffregister'
 import { fokusIFagsok, lagLiggerOver } from '../hooks/useKeyboard'
 import { rullefart } from '../hooks/useKortHopp'
+import { useTrykkUtenfor } from '../hooks/useTrykkUtenfor'
 
 /**
  * Sidemenyen: stoffregisteret.
@@ -108,6 +109,7 @@ export function Sidemeny({ register, onOpprett }: SidemenyProps) {
     setApen(false)
     knapp.current?.focus()
   }, [])
+  const trykkUtenfor = useTrykkUtenfor<HTMLDivElement>(lukk)
 
   /**
    * Ctrl + M åpner og lukker menyen. Den ligger utenom `useKeyboard`, som med
@@ -201,7 +203,7 @@ export function Sidemeny({ register, onOpprett }: SidemenyProps) {
           verktøylinja og de andre faste elementene beholder plassen sin. */}
       <div
         className="menylag"
-        onClick={lukk}
+        {...trykkUtenfor}
         aria-hidden="true"
         {...(apen && { 'data-lag': MENY_LAG })}
       />
