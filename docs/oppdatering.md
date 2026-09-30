@@ -5,26 +5,32 @@ av appen har tilstand som bør overleve en oppdatering.
 
 ## Hva brukeren merker
 
-Når en ny versjon er lagt ut, står det en melding nederst i vinduet:
+Når en ny versjon er lagt ut, og den har en føring i endringsloggen som
+varsles, står det en melding nederst i vinduet:
 «En ny versjon av OUSFAR er klar», med knappen «Oppdater nå». Den forsvinner
 ikke av seg selv og kan ikke lukkes. Står et vindu åpent, ligger meldingen i
 det. «Oppdater nå» laster siden på nytt, og det brukeren holdt på med kommer
 tilbake: vinduene som sto åpne, skjemaer som var halvveis skrevet, valgene i
 fortolkningen, åpne seksjoner og hvor langt ned siden og vinduet var rullet.
 
+En stille designjustering (uten føring) eller en føring med `utenVarsel` gir
+ingen melding; brukeren får den neste gang siden lastes. Unntaket er når en
+del av appen ikke lar seg laste fordi filene til bygget som kjører, er byttet
+ut: da kommer meldingen for et hvilket som helst nytt bygg.
+
 ## Hvor det ligger
 
 | Hvor | Hva |
 | --- | --- |
-| `vite.config.ts` (`versjonsfil`) | Gir bygget en identitet (commiten på Vercel) og legger den med versjonsnummeret i `versjon.json` |
-| `src/oppdatering/versjon.ts` | Leser `versjon.json` og avgjør om bygget som er lagt ut, er et annet enn det som kjører |
+| `vite.config.ts` (`versjonsfil`) | Gir bygget en identitet (commiten på Vercel) og legger den med versjonsnummeret og versjonen det skal oppdateres til (`oppdateringsversjon`), i `versjon.json` |
+| `src/oppdatering/versjon.ts` | Leser `versjon.json` og avgjør om brukeren skal bes om å oppdatere: når versjonen det skal oppdateres til, er en annen enn den som kjører |
 | `src/components/Oppdateringsmelding.tsx` | Meldingen. Spør hvert minutt mens fanen er synlig, når fanen får fokus, og når en del av appen ikke lar seg laste |
 | `src/oppdatering/bevaring.ts` | Bildet av det som tas vare på, i fanens `sessionStorage`, og rullingen tilbake |
 | `src/oppdatering/Bevaring.tsx` | `useBevart`, `Bevaringsomrade` og `Bevaringseier` (brukeren det hører til, satt i `Port.tsx`) |
 
 `versjon.json` ligger utenfor innloggingsveggen, sammen med meldingen, så den
-virker også på innloggingssiden. Fila sier bare hvilket bygg og hvilken versjon
-som er lagt ut.
+virker også på innloggingssiden. Fila sier bare hvilket bygg og hvilke
+versjoner som er lagt ut.
 
 ## Å ta vare på ny tilstand
 

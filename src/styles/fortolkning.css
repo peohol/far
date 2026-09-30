@@ -101,6 +101,10 @@
   letter-spacing: -0.01em;
   background: transparent;
   border: 0;
+  /* Linjen setter av plass til nedstreker, så store bokstaver står høyt i
+     den. I Newsreader ligger midten av versalene (med seriffer) 0,125 em
+     over midten av linjen, målt i nettleseren; så mye skyves teksten ned. */
+  translate: 0 0.125em;
 }
 
 .sokefelt__input:focus {

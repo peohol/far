@@ -33,8 +33,8 @@ FAR er et verktøy for fortolkning og kommentering av farmakologiske analyser. B
 
 ## Versjon og endringslogg
 
-- Appen har et versjonsnummer etter SemVer, og hver PR skal ha nøyaktig én føring i endringsloggen.
-- Som siste steg før en PR er klar til å slås sammen: følg `docs/endringslogg.md`. Les den filen bare da; den trengs ikke ellers i arbeidet.
+- Appen har et versjonsnummer etter SemVer, og hver PR skal ha nøyaktig én føring i endringsloggen — unntatt en stille designjustering, som ikke skal ha noen føring, ny versjon, varsel eller melding om å oppdatere siden.
+- Som siste steg før en PR er klar til å slås sammen: følg `docs/endringslogg.md`, som også avgjør hva som er stille. Les den filen bare da; den trengs ikke ellers i arbeidet.
 
 ## Dokumentasjon og selvvedlikehold
 

@@ -16,6 +16,7 @@ import {
   formaterDato,
   lesVersjon,
   nyesteVersjon,
+  oppdateringsversjon,
   OMFANG,
   sammenlignVersjon,
   type Endring,
@@ -64,6 +65,33 @@ describe('nyesteVersjon', () => {
 
   it('sier fra i stedet for å gjette når loggen er tom', () => {
     expect(() => nyesteVersjon([])).toThrow()
+  })
+})
+
+describe('oppdateringsversjon', () => {
+  const foring = (versjon: string, ekstra: Partial<Endring> = {}): Endring => ({
+    versjon,
+    dato: '2026-09-30',
+    sammendrag: 'x',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: ['x'],
+    ...ekstra,
+  })
+
+  it('er den nyeste føringen som varsles, forbi dem uten varsel', () => {
+    expect(oppdateringsversjon([foring('1.2.1', { utenVarsel: true }), foring('1.2.0')])).toBe('1.2.0')
+    expect(oppdateringsversjon([foring('1.3.0'), foring('1.2.1', { utenVarsel: true })])).toBe('1.3.0')
+  })
+
+  it('tar med en endring i fortolkningen selv om den står uten varsel', () => {
+    expect(oppdateringsversjon([foring('1.2.1', { utenVarsel: true, endrerFortolkning: true }), foring('1.2.0')])).toBe(
+      '1.2.1',
+    )
+  })
+
+  it('finnes for loggen slik den står', () => {
+    expect(() => oppdateringsversjon(ENDRINGSLOGG)).not.toThrow()
   })
 })
 

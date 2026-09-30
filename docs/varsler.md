@@ -74,7 +74,8 @@ fristen, så lista over leste ikke vokser.
 
 En føring er `funksjonalitet`, eller `fortolkning` når den har
 `endrerFortolkning: true` (se `docs/endringslogg.md`). En føring med
-`utenVarsel: true` merkes ikke i appen og er ikke noe varsel.
+`utenVarsel: true` merkes ikke i appen, er ikke noe varsel og ber ingen
+oppdatere siden. En stille designjustering har ingen føring i det hele tatt.
 
 ## Bjella og vinduet
 

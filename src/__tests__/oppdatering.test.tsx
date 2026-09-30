@@ -18,7 +18,7 @@ import { FORTOLKNINGSOPPFORINGER } from '../domain/analyttkatalog'
 import type { Ide } from '../ideer/modell'
 import { Bevaringseier, Bevaringsomrade, useBevart, type Bevaringsform } from '../oppdatering/Bevaring'
 import { GYLDIG_I, LAGRINGSNOKKEL, glemBildet, oppdaterOgTaVare, taBilde } from '../oppdatering/bevaring'
-import { BYGG, hentUtlagtBygg, nyVersjon } from '../oppdatering/versjon'
+import { KJORER, hentUtlagtBygg, nyVersjon } from '../oppdatering/versjon'
 import { fortolkningsform, initialState, type State } from '../state'
 
 const tilstand = vi.hoisted(() => ({ meg: null as unknown as Profil }))
@@ -118,10 +118,38 @@ describe('versjonen som er lagt ut', () => {
     expect(await hentUtlagtBygg(vi.fn(async () => Promise.reject(new Error('uten nett'))))).toBeNull()
   })
 
-  it('er ny bare når bygget er et annet enn det som kjører', () => {
-    expect(nyVersjon({ bygg: BYGG, versjon: '1.0.0' })).toBeNull()
-    expect(nyVersjon(null)).toBeNull()
-    expect(nyVersjon({ bygg: `${BYGG}-annet`, versjon: '1.0.1' })).toEqual({ bygg: `${BYGG}-annet`, versjon: '1.0.1' })
+  const kjorer = { bygg: 'a', versjon: '1.2.1', oppdatering: '1.2.0' }
+
+  it('er ny når versjonen det skal oppdateres til, er en annen enn den som kjører', () => {
+    expect(nyVersjon(null, kjorer)).toBeNull()
+    expect(nyVersjon({ ...kjorer }, kjorer)).toBeNull()
+    const nyere = { bygg: 'b', versjon: '1.3.0', oppdatering: '1.3.0' }
+    expect(nyVersjon(nyere, kjorer)).toEqual(nyere)
+    // Også når en versjon er trukket tilbake.
+    expect(nyVersjon({ bygg: 'b', versjon: '1.1.0', oppdatering: '1.1.0' }, kjorer)).not.toBeNull()
+  })
+
+  it('er ikke ny etter en stille designjustering eller en føring uten varsel', () => {
+    expect(nyVersjon({ bygg: 'b', versjon: '1.2.1', oppdatering: '1.2.0' }, kjorer)).toBeNull()
+    expect(nyVersjon({ bygg: 'b', versjon: '1.2.2', oppdatering: '1.2.0' }, kjorer)).toBeNull()
+  })
+
+  it('er ny ved ethvert annet bygg når en del av appen ikke lar seg laste', () => {
+    expect(nyVersjon({ bygg: 'b', versjon: '1.2.1', oppdatering: '1.2.0' }, kjorer, { alleBygg: true })).not.toBeNull()
+    expect(nyVersjon({ ...kjorer }, kjorer, { alleBygg: true })).toBeNull()
+  })
+
+  it('er ny når det utlagte bygget er fra før versjonen å oppdatere til fantes', () => {
+    expect(nyVersjon({ bygg: 'b', versjon: '1.2.1' }, kjorer)).not.toBeNull()
+  })
+
+  it('leses med versjonen å oppdatere til, og nekter den når den ikke er tekst', async () => {
+    expect(await hentUtlagtBygg(svar({ bygg: 'b', versjon: '1.2.1', oppdatering: '1.2.0' }))).toEqual({
+      bygg: 'b',
+      versjon: '1.2.1',
+      oppdatering: '1.2.0',
+    })
+    expect(await hentUtlagtBygg(svar({ bygg: 'b', versjon: '1.2.1', oppdatering: 3 }))).toBeNull()
   })
 })
 
@@ -129,7 +157,7 @@ describe('versjonen som er lagt ut', () => {
 
 describe('meldingen om en ny versjon', () => {
   it('står ikke så lenge bygget som kjører, er det som er lagt ut', async () => {
-    const hent = vi.fn(async () => ({ bygg: BYGG, versjon: '1.0.0' }))
+    const hent = vi.fn(async () => ({ ...KJORER }))
     render(<Oppdateringsmelding aktiv hent={hent} />)
     await waitFor(() => expect(hent).toHaveBeenCalled())
     expect(screen.queryByRole('alert')).toBeNull()
@@ -149,12 +177,21 @@ describe('meldingen om en ny versjon', () => {
   })
 
   it('spør igjen når fanen får fokus, og med én gang en del av appen ikke lar seg laste', async () => {
-    const hent = vi.fn(async () => ({ bygg: BYGG, versjon: '1.0.0' }))
+    const hent = vi.fn(async () => ({ ...KJORER }))
     render(<Oppdateringsmelding aktiv hent={hent} />)
     await waitFor(() => expect(hent).toHaveBeenCalledTimes(1))
     act(() => void window.dispatchEvent(new Event('focus')))
     act(() => void window.dispatchEvent(new Event('vite:preloadError')))
     expect(hent).toHaveBeenCalledTimes(3)
+  })
+
+  it('står ikke etter en stille endring, men kommer når en del av appen ikke lar seg laste', async () => {
+    const hent = vi.fn(async () => ({ ...KJORER, bygg: `${KJORER.bygg}-stille` }))
+    render(<Oppdateringsmelding aktiv hent={hent} />)
+    await waitFor(() => expect(hent).toHaveBeenCalledTimes(1))
+    expect(screen.queryByRole('alert')).toBeNull()
+    act(() => void window.dispatchEvent(new Event('vite:preloadError')))
+    expect(await screen.findByRole('alert')).toBeTruthy()
   })
 
   it('legger seg i det øverste modale laget, så den kan trykkes på også da', async () => {
