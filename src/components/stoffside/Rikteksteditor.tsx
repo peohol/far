@@ -12,6 +12,8 @@ import {
 } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Fragment, useId, useState, type ReactNode } from 'react'
+import { useAutoerstattregler } from '../../autoerstatt/Autoerstattkilde'
+import { Autoerstatt } from '../../autoerstatt/editor'
 import { kortnavn } from '../../faginnhold/referanser'
 import {
   MERKER,
@@ -46,6 +48,9 @@ import { useRedigering } from './Redigeringskontekst'
  * Tastene er de vanlige: Ctrl + B, I og U for fet, kursiv og understreket,
  * Ctrl + , og Ctrl + . for senket og hevet skrift, Ctrl + Alt + 1 og 2 for
  * overskriftene, og Tab/Shift + Tab for å rykke inn i lister.
+ *
+ * Autoerstatt-reglene (som « - » til « – ») gjelder mens det skrives; se
+ * `src/autoerstatt/`.
  */
 
 /** Tegnene som kan settes inn fra symbolmenyen. */
@@ -169,6 +174,7 @@ export function Rikteksteditor({
 }: RikteksteditorProps) {
   const [panel, setPanel] = useState<Verktoypanel>(null)
   const over = useOverskriftsniva()
+  const regler = useAutoerstattregler()
   const editor = useEditor({
     autofocus: autofokus ? 'end' : false,
     extensions: [
@@ -190,6 +196,7 @@ export function Rikteksteditor({
       Subscript,
       Superscript,
       ...(referanser ? [Sitering] : []),
+      Autoerstatt.configure({ regler }),
     ],
     content: dokument,
     editorProps: {
