@@ -23,6 +23,7 @@ import {
   type Diskusjonstraad,
 } from '../../diskusjoner/modell'
 import { TITTEL_MEST, tekstTilLagring, type Kommentar } from '../../traad/modell'
+import { UnderOverskrift } from '../Overskriftsniva'
 import { Riktekst } from '../stoffside/Riktekst'
 import { Rikteksteditor } from '../stoffside/Rikteksteditor'
 import { Button } from '../Button'
@@ -264,7 +265,9 @@ export function Diskusjonsside({
       ) : traad.skjult ? (
         <p className="kommentar__skjultmerknad">Innholdet er skjult av en administrator.</p>
       ) : (
-        <Riktekst dokument={traad.tekst} />
+        <UnderOverskrift niva={3}>
+          <Riktekst dokument={traad.tekst} />
+        </UnderOverskrift>
       )}
 
       {feil && (

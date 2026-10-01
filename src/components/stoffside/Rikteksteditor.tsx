@@ -1,4 +1,5 @@
 import { Node, mergeAttributes, type Editor } from '@tiptap/core'
+import Heading from '@tiptap/extension-heading'
 import Subscript from '@tiptap/extension-subscript'
 import Superscript from '@tiptap/extension-superscript'
 import {
@@ -10,17 +11,22 @@ import {
   type NodeViewProps,
 } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { useId, useState, type ReactNode } from 'react'
+import { Fragment, useId, useState, type ReactNode } from 'react'
 import { kortnavn } from '../../faginnhold/referanser'
 import {
   MERKER,
   NODER,
+  OVERSKRIFTSATTRIBUTT,
+  OVERSKRIFTSNIVAER,
   erTrygLenke,
+  overskriftselement,
+  overskriftsniva,
   rensDokument,
   type Riktekstdokument,
 } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
+import { useOverskriftsniva } from '../Overskriftsniva'
 import { Referansevelger } from './Referansevelger'
 import { useRedigering } from './Redigeringskontekst'
 
@@ -29,21 +35,47 @@ import { useRedigering } from './Redigeringskontekst'
  *
  * Bygget på TipTap (ProseMirror), som i Slaids. Bare formateringen planen
  * nevner, er slått på: fet, kursiv, understreking, senket og hevet skrift,
- * punktlister, nummererte lister, lenker, symboler og referanser. Overskrifter,
- * sitater, kode, farger, fontstørrelse og justering finnes ikke, så teksten
- * alltid ser lik ut.
+ * overskrifter i to nivåer, punktlister, nummererte lister, skillelinjer,
+ * lenker, symboler og referanser. Sitater, kode, farger, fontstørrelse og
+ * justering finnes ikke, så teksten alltid ser lik ut.
  *
  * Referansene settes inn som siteringsnoder med referanse-ID-ene — aldri med
  * numre. I editoren vises de med forfatter og år; numrene regnes ut når siden
  * vises.
  *
  * Tastene er de vanlige: Ctrl + B, I og U for fet, kursiv og understreket,
- * Ctrl + , og Ctrl + . for senket og hevet skrift, og Tab/Shift + Tab for å
- * rykke inn i lister.
+ * Ctrl + , og Ctrl + . for senket og hevet skrift, Ctrl + Alt + 1 og 2 for
+ * overskriftene, og Tab/Shift + Tab for å rykke inn i lister.
  */
 
 /** Tegnene som kan settes inn fra symbolmenyen. */
 export const SYMBOLER = ['µ', '±', '≤', '≥', '≈', '×', '→', '↑', '↓', '°', 'α', 'β', 'γ', 'Δ', '½', '‰', '–']
+
+/**
+ * Overskriftene, vist som i lesemodus: under den nærmeste overskriften rundt
+ * editoren (`over`), med nivået i `data-niva`. En overskrift som kopieres fra
+ * appen, beholder derfor nivået sitt når den limes inn; en `h1` fra et annet
+ * sted blir nivå 1, og de andre blir nivå 2.
+ */
+function lagOverskrift(over: number) {
+  return Heading.extend({
+    parseHTML() {
+      return [
+        {
+          tag: 'h1, h2, h3, h4, h5, h6',
+          getAttrs: (element: HTMLElement) => {
+            const lagret = element.getAttribute(OVERSKRIFTSATTRIBUTT)
+            return { level: overskriftsniva({ level: lagret ?? (element.tagName === 'H1' ? 1 : 2) }) }
+          },
+        },
+      ]
+    },
+    renderHTML({ node, HTMLAttributes }) {
+      const niva = overskriftsniva(node.attrs)
+      return [overskriftselement(over, niva), mergeAttributes(HTMLAttributes, { [OVERSKRIFTSATTRIBUTT]: niva }), 0]
+    },
+  }).configure({ levels: [...OVERSKRIFTSNIVAER] })
+}
 
 /** Siteringsnoden, med samme navn og form som referansesystemet leter etter. */
 const Sitering = Node.create({
@@ -136,6 +168,7 @@ export function Rikteksteditor({
   fyll = false,
 }: RikteksteditorProps) {
   const [panel, setPanel] = useState<Verktoypanel>(null)
+  const over = useOverskriftsniva()
   const editor = useEditor({
     autofocus: autofokus ? 'end' : false,
     extensions: [
@@ -144,7 +177,6 @@ export function Rikteksteditor({
         blockquote: false,
         code: false,
         codeBlock: false,
-        horizontalRule: false,
         strike: false,
         trailingNode: false,
         link: {
@@ -154,6 +186,7 @@ export function Rikteksteditor({
           isAllowedUri: (url) => erTrygLenke(url),
         },
       }),
+      lagOverskrift(over),
       Subscript,
       Superscript,
       ...(referanser ? [Sitering] : []),
@@ -186,22 +219,38 @@ export function Rikteksteditor({
 interface Formatknapp {
   navn: string
   merke: string
-  /** Merket vises med formateringen det setter, som «F» i fet. */
+  /** Merket vises med formateringen det setter, som «B» i fet. */
   stil?: 'fet' | 'kursiv' | 'understreket'
   tast?: string
-  aktiv: (e: Editor) => boolean
+  /** Om formateringen står på der markøren er. Mangler for knapper som setter inn noe. */
+  aktiv?: (e: Editor) => boolean
   utfor: (e: Editor) => void
 }
 
-const FORMATKNAPPER: Formatknapp[] = [
-  { navn: 'Fet', merke: 'F', stil: 'fet', tast: 'Control+B', aktiv: (e) => e.isActive(MERKER.fet), utfor: (e) => e.chain().focus().toggleBold().run() },
-  { navn: 'Kursiv', merke: 'K', stil: 'kursiv', tast: 'Control+I', aktiv: (e) => e.isActive(MERKER.kursiv), utfor: (e) => e.chain().focus().toggleItalic().run() },
-  { navn: 'Understreket', merke: 'U', stil: 'understreket', tast: 'Control+U', aktiv: (e) => e.isActive(MERKER.understreket), utfor: (e) => e.chain().focus().toggleUnderline().run() },
-  { navn: 'Senket skrift', merke: 'x₂', tast: 'Control+,', aktiv: (e) => e.isActive(MERKER.senket), utfor: (e) => e.chain().focus().toggleSubscript().run() },
-  { navn: 'Hevet skrift', merke: 'x²', tast: 'Control+.', aktiv: (e) => e.isActive(MERKER.hevet), utfor: (e) => e.chain().focus().toggleSuperscript().run() },
-  { navn: 'Punktliste', merke: '•', aktiv: (e) => e.isActive(NODER.punktliste), utfor: (e) => e.chain().focus().toggleBulletList().run() },
-  { navn: 'Nummerert liste', merke: '1.', aktiv: (e) => e.isActive(NODER.nummerertListe), utfor: (e) => e.chain().focus().toggleOrderedList().run() },
+/** Knappene i verktøyraden, i grupper med en skillestrek mellom. */
+const FORMATGRUPPER: Formatknapp[][] = [
+  [
+    { navn: 'Fet', merke: 'B', stil: 'fet', tast: 'Control+B', aktiv: (e) => e.isActive(MERKER.fet), utfor: (e) => e.chain().focus().toggleBold().run() },
+    { navn: 'Kursiv', merke: 'I', stil: 'kursiv', tast: 'Control+I', aktiv: (e) => e.isActive(MERKER.kursiv), utfor: (e) => e.chain().focus().toggleItalic().run() },
+    { navn: 'Understreket', merke: 'U', stil: 'understreket', tast: 'Control+U', aktiv: (e) => e.isActive(MERKER.understreket), utfor: (e) => e.chain().focus().toggleUnderline().run() },
+    { navn: 'Senket skrift', merke: 'x₂', tast: 'Control+,', aktiv: (e) => e.isActive(MERKER.senket), utfor: (e) => e.chain().focus().toggleSubscript().run() },
+    { navn: 'Hevet skrift', merke: 'x²', tast: 'Control+.', aktiv: (e) => e.isActive(MERKER.hevet), utfor: (e) => e.chain().focus().toggleSuperscript().run() },
+  ],
+  OVERSKRIFTSNIVAER.map((level) => ({
+    navn: `Overskrift ${level}`,
+    merke: `H${level}`,
+    tast: `Control+Alt+${level}`,
+    aktiv: (e: Editor) => e.isActive(NODER.overskrift, { level }),
+    utfor: (e: Editor) => e.chain().focus().toggleHeading({ level }).run(),
+  })),
+  [
+    { navn: 'Punktliste', merke: '•', aktiv: (e) => e.isActive(NODER.punktliste), utfor: (e) => e.chain().focus().toggleBulletList().run() },
+    { navn: 'Nummerert liste', merke: '1.', aktiv: (e) => e.isActive(NODER.nummerertListe), utfor: (e) => e.chain().focus().toggleOrderedList().run() },
+    { navn: 'Sett inn skillelinje', merke: '―', utfor: (e) => e.chain().focus().setHorizontalRule().run() },
+  ],
 ]
+
+const FORMATKNAPPER = FORMATGRUPPER.flat()
 
 function Verktoylinje({
   editor,
@@ -219,25 +268,29 @@ function Verktoylinje({
   // Knappene viser hva som står på der markøren er, og tegnes på nytt når det endres.
   const aktive = useEditorState({
     editor,
-    selector: ({ editor: e }) => FORMATKNAPPER.map((k) => k.aktiv(e)).concat(e.isActive(MERKER.lenke)),
+    selector: ({ editor: e }) => FORMATKNAPPER.map((k) => k.aktiv?.(e)).concat(e.isActive(MERKER.lenke)),
   })
   const veksle = (p: Exclude<Verktoypanel, null>) => onPanel(panel === p ? null : p)
 
   return (
     <div className="verktoyrad" role="toolbar" aria-label={`Formatering – ${etikett}`}>
-      {FORMATKNAPPER.map((knapp, i) => (
-        <Verktoyknapp
-          key={knapp.navn}
-          navn={knapp.navn}
-          tast={knapp.tast}
-          stil={knapp.stil}
-          aktiv={aktive[i] ?? false}
-          onClick={() => knapp.utfor(editor)}
-        >
-          {knapp.merke}
-        </Verktoyknapp>
+      {FORMATGRUPPER.map((gruppe) => (
+        <Fragment key={gruppe[0]?.navn}>
+          {gruppe.map((knapp) => (
+            <Verktoyknapp
+              key={knapp.navn}
+              navn={knapp.navn}
+              tast={knapp.tast}
+              stil={knapp.stil}
+              aktiv={aktive[FORMATKNAPPER.indexOf(knapp)]}
+              onClick={() => knapp.utfor(editor)}
+            >
+              {knapp.merke}
+            </Verktoyknapp>
+          ))}
+          <span className="verktoyrad__skille" aria-hidden="true" />
+        </Fragment>
       ))}
-      <span className="verktoyrad__skille" aria-hidden="true" />
       <Verktoyknapp navn="Lenke" aktiv={aktive[FORMATKNAPPER.length] ?? false} apner={panel === 'lenke'} onClick={() => veksle('lenke')}>
         Lenke
       </Verktoyknapp>
@@ -271,7 +324,7 @@ function Verktoyknapp({
   navn: string
   tast?: string | undefined
   stil?: Formatknapp['stil'] | 'referanse' | undefined
-  aktiv?: boolean
+  aktiv?: boolean | undefined
   /** Satt for knappene som åpner et panel under raden. */
   apner?: boolean
   onClick: () => void

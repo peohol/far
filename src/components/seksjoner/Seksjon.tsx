@@ -11,6 +11,7 @@ import {
 } from 'react'
 import { flushSync } from 'react-dom'
 import { TREFFKLASSE, Uthevingskilde, useSokeord } from '../Uthev'
+import { UnderOverskrift } from '../Overskriftsniva'
 import { Ikon } from '../ikon/Ikon'
 import type { Ikonnavn } from '../ikon/register'
 import {
@@ -241,7 +242,8 @@ function Skuff({
     if (!apen && (event.target as Element).closest(INTERAKTIVT)) sett(true)
   }
 
-  const Overskrift = slag === 'seksjon' ? 'h2' : 'h3'
+  const niva = slag === 'seksjon' ? 2 : 3
+  const Overskrift = niva === 2 ? 'h2' : 'h3'
   const Ramme = slag === 'seksjon' ? 'section' : 'div'
   const visOppsummering = !apen && oppsummering != null && oppsummering !== false && oppsummering !== ''
   const visTreff = !apen && treff > 0
@@ -303,7 +305,9 @@ function Skuff({
       </div>
       <div ref={kropp} className={`${KLASSE}__kropp`}>
         <div ref={inner} id={innholdId} className={`${KLASSE}__inner`} {...{ [INNHOLDSATTRIBUTT]: '' }}>
-          <div className={`${KLASSE}__innhold`}>{children}</div>
+          <div className={`${KLASSE}__innhold`}>
+            <UnderOverskrift niva={niva}>{children}</UnderOverskrift>
+          </div>
         </div>
       </div>
     </Ramme>
@@ -355,7 +359,9 @@ function Fastkort({
             <span className={`${KLASSE}__tittelTekst`}>{tittel}</span>
             {tittelTillegg}
           </h3>
-          <div className={`${KLASSE}__fastinnhold`}>{children}</div>
+          <div className={`${KLASSE}__fastinnhold`}>
+            <UnderOverskrift niva={3}>{children}</UnderOverskrift>
+          </div>
         </div>
       </div>
     </div>

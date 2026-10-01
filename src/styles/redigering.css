@@ -497,6 +497,16 @@
   margin-top: var(--rom-3);
 }
 
+/* Skillelinjen kan velges med et klikk og slettes, som et tegn. */
+.riktekstfelt hr {
+  cursor: pointer;
+}
+
+.riktekstfelt hr.ProseMirror-selectednode {
+  background: var(--aksent);
+  box-shadow: 0 0 0 var(--kant-aktiv) var(--aksent);
+}
+
 /* Siteringen i teksten, mens den redigeres: forfatter og år i en pille. */
 .siteringsmerke {
   padding: 0 0.45em;

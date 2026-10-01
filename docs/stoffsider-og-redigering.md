@@ -201,8 +201,10 @@ Relevant formatering:
 - kursiv
 - eventuelt understreking
 - senket/hevet skrift
+- overskrifter i to nivåer (H1 og H2)
 - punktliste
 - nummerert liste
+- horisontal skillelinje
 - lenke
 - symboler
 - referanser

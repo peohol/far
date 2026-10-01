@@ -74,17 +74,42 @@ describe('rikteksten', () => {
     const renset = rensDokument({
       type: 'doc',
       content: [
-        { type: 'heading', attrs: { level: 1 }, content: [{ type: 'text', text: 'Overskrift', marks: [{ type: 'textStyle', attrs: { color: 'red' } }] }] },
+        { type: 'blockquote', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Sitat', marks: [{ type: 'textStyle', attrs: { color: 'red' } }] }] }] },
         { type: 'paragraph', content: [{ type: 'text', text: 'farlig', marks: [{ type: 'link', attrs: { href: 'javascript:alert(1)' } }] }] },
       ],
     })
     expect(renset).toEqual({
       type: 'doc',
       content: [
-        { type: 'paragraph', content: [{ type: 'text', text: 'Overskrift' }] },
+        { type: 'paragraph', content: [{ type: 'text', text: 'Sitat' }] },
         { type: 'paragraph', content: [{ type: 'text', text: 'farlig' }] },
       ],
     })
+  })
+
+  it('beholder overskrifter i to nivåer og skillelinjer', () => {
+    const renset = rensDokument({
+      type: 'doc',
+      content: [
+        { type: 'heading', attrs: { level: 1, id: 'x' }, content: [{ type: 'text', text: 'Dosering', marks: [{ type: 'italic' }] }] },
+        { type: 'horizontalRule', attrs: { farge: 'rød' }, content: [{ type: 'text', text: 'skjult' }] },
+        { type: 'heading', attrs: { level: 2 }, content: [{ type: 'text', text: 'Voksne' }] },
+        { type: 'heading', attrs: { level: 5 }, content: [{ type: 'text', text: 'Dypere' }] },
+        { type: 'heading', content: [{ type: 'text', text: 'Uten nivå' }] },
+      ],
+    })
+    expect(renset).toEqual({
+      type: 'doc',
+      content: [
+        { type: 'heading', attrs: { level: 1 }, content: [{ type: 'text', text: 'Dosering', marks: [{ type: 'italic' }] }] },
+        { type: 'horizontalRule' },
+        { type: 'heading', attrs: { level: 2 }, content: [{ type: 'text', text: 'Voksne' }] },
+        { type: 'heading', attrs: { level: 2 }, content: [{ type: 'text', text: 'Dypere' }] },
+        { type: 'heading', attrs: { level: 1 }, content: [{ type: 'text', text: 'Uten nivå' }] },
+      ],
+    })
+    expect(klartekst(renset)).toBe('Dosering\nVoksne\nDypere\nUten nivå')
+    expect(erTomt(rensDokument({ type: 'doc', content: [{ type: 'horizontalRule' }] }))).toBe(true)
   })
 
   it('gjør alt som ikke er et dokument, til et tomt dokument', () => {

@@ -1921,12 +1921,19 @@ describe('rikteksteditoren', () => {
       'Understreket',
       'Senket skrift',
       'Hevet skrift',
+      'Overskrift 1',
+      'Overskrift 2',
       'Punktliste',
       'Nummerert liste',
+      'Sett inn skillelinje',
       'Lenke',
       'Sett inn symbol',
       'Sett inn referanse',
     ])
+    // Knappene har de samme bokstavene som hurtigtastene.
+    expect(within(rad).getByRole('button', { name: 'Fet' }).textContent).toBe('B')
+    expect(within(rad).getByRole('button', { name: 'Kursiv' }).textContent).toBe('I')
+    expect(within(rad).getByRole('button', { name: 'Overskrift 1' }).getAttribute('aria-keyshortcuts')).toBe('Control+Alt+1')
     expect(screen.getByRole('textbox', { name: 'Farmakodynamikk' })).toBeTruthy()
     // Siteringen i teksten vises med forfatter og år mens den redigeres.
     expect(screen.getByLabelText('Referanse: Nordmann 2020; Hansen 2021')).toBeTruthy()

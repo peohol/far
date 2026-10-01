@@ -487,9 +487,10 @@ Hvordan innholdet tegnes, endrer aldri hva som står der:
   med tekstene sine.
 
 **Rikteksten** er et ProseMirror-dokument, redigert med TipTap som i Slaids.
-Tillatt er avsnitt, linjeskift, punkt- og nummererte lister, fet, kursiv,
-understreket, senket og hevet skrift, lenker (bare `http(s)`) og siteringer.
-Alt leses gjennom `rensDokument` før det vises.
+Tillatt er avsnitt, overskrifter i to nivåer (vist ett og to nivåer under
+den nærmeste overskriften rundt teksten, se `UnderOverskrift`), skillelinjer, linjeskift, punkt- og nummererte
+lister, fet, kursiv, understreket, senket og hevet skrift, lenker (bare
+`http(s)`) og siteringer. Alt leses gjennom `rensDokument` før det vises.
 
 **Redigeringen.** Administratorer får knappen «Rediger». Knappene for å endre
 vises først når utkastet er hentet, og alt lagres som utkast mot revisjonen

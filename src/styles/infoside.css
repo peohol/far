@@ -80,6 +80,38 @@
   color: var(--aksent);
 }
 
+/* Overskriftene i teksten. Elementet følger overskriften rundt teksten, så
+   de styles etter nivået. Nivå 2 er bare litt større enn fet brødtekst.
+   Størrelsene følger teksten rundt, så de passer både i editoren og i
+   lesemodus. */
+.riktekst [data-niva] {
+  font-family: var(--skrift-display);
+  font-weight: var(--vekt-halvfet);
+  line-height: 1.25;
+  color: var(--blekk);
+}
+
+.riktekst [data-niva='1'] {
+  font-size: 1.35em;
+}
+
+.riktekst [data-niva='2'] {
+  font-size: 1.15em;
+}
+
+/* En overskrift hører til teksten under seg, så den får litt mer luft over. */
+.riktekst > [data-niva]:not(:first-child) {
+  margin-top: var(--rom-2);
+}
+
+.riktekst hr {
+  width: 100%;
+  height: var(--kant);
+  margin: var(--rom-2) 0;
+  background: var(--linje);
+  border: 0;
+}
+
 .infotekst,
 .dosetabell {
   width: 100%;
