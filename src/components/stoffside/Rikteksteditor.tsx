@@ -11,7 +11,7 @@ import {
   type NodeViewProps,
 } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { Fragment, useId, useState, type ReactNode } from 'react'
+import { Fragment, useId, useRef, useState, type MouseEvent, type ReactNode, type Ref } from 'react'
 import { useAutoerstattregler } from '../../autoerstatt/Autoerstattkilde'
 import { Autoerstatt } from '../../autoerstatt/editor'
 import { kortnavn } from '../../faginnhold/referanser'
@@ -30,6 +30,7 @@ import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { useOverskriftsniva } from '../Overskriftsniva'
 import { Referansevelger } from './Referansevelger'
+import { Tegnmeny } from './Tegnmeny'
 import { useRedigering } from './Redigeringskontekst'
 
 /**
@@ -37,24 +38,22 @@ import { useRedigering } from './Redigeringskontekst'
  *
  * Bygget på TipTap (ProseMirror), som i Slaids. Bare formateringen planen
  * nevner, er slått på: fet, kursiv, understreking, senket og hevet skrift,
- * overskrifter i to nivåer, punktlister, nummererte lister, skillelinjer,
- * lenker, symboler og referanser. Sitater, kode, farger, fontstørrelse og
- * justering finnes ikke, så teksten alltid ser lik ut.
+ * kode, overskrifter i to nivåer, sitater, punktlister, nummererte lister,
+ * skillelinjer, lenker, spesialtegn og referanser. Kodeblokker, farger,
+ * fontstørrelse og justering finnes ikke, så teksten alltid ser lik ut.
  *
  * Referansene settes inn som siteringsnoder med referanse-ID-ene — aldri med
  * numre. I editoren vises de med forfatter og år; numrene regnes ut når siden
  * vises.
  *
  * Tastene er de vanlige: Ctrl + B, I og U for fet, kursiv og understreket,
- * Ctrl + , og Ctrl + . for senket og hevet skrift, Ctrl + Alt + 1 og 2 for
- * overskriftene, og Tab/Shift + Tab for å rykke inn i lister.
+ * Ctrl + , og Ctrl + . for senket og hevet skrift, Ctrl + E for kode,
+ * Ctrl + Alt + 1 og 2 for overskriftene, Ctrl + Shift + B for sitat, og
+ * Tab/Shift + Tab for å rykke inn i lister.
  *
- * Autoerstatt-reglene (som « - » til « – ») gjelder mens det skrives; se
- * `src/autoerstatt/`.
+ * Autoerstatt-reglene (som « - » til « – ») gjelder mens det skrives, men
+ * ikke i kode; se `src/autoerstatt/`.
  */
-
-/** Tegnene som kan settes inn fra symbolmenyen. */
-export const SYMBOLER = ['µ', '±', '≤', '≥', '≈', '×', '→', '↑', '↓', '°', 'α', 'β', 'γ', 'Δ', '½', '‰', '–']
 
 /**
  * Overskriftene, vist som i lesemodus: under den nærmeste overskriften rundt
@@ -161,7 +160,10 @@ export interface RikteksteditorProps {
   fyll?: boolean
 }
 
-type Verktoypanel = 'lenke' | 'symbol' | 'referanse' | null
+type Verktoypanel = 'lenke' | 'referanse' | null
+
+/** Tegnmenyen når den står åpen, og om den ble åpnet med tastaturet. */
+type Tegnmenytilstand = { medTastatur: boolean } | null
 
 export function Rikteksteditor({
   dokument,
@@ -173,6 +175,8 @@ export function Rikteksteditor({
   fyll = false,
 }: RikteksteditorProps) {
   const [panel, setPanel] = useState<Verktoypanel>(null)
+  const [tegnmeny, setTegnmeny] = useState<Tegnmenytilstand>(null)
+  const tegnknapp = useRef<HTMLButtonElement>(null)
   const over = useOverskriftsniva()
   const regler = useAutoerstattregler()
   const editor = useEditor({
@@ -180,8 +184,6 @@ export function Rikteksteditor({
     extensions: [
       StarterKit.configure({
         heading: false,
-        blockquote: false,
-        code: false,
         codeBlock: false,
         strike: false,
         trailingNode: false,
@@ -214,9 +216,28 @@ export function Rikteksteditor({
 
   return (
     <div className="rikteksteditor">
-      <Verktoylinje editor={editor} panel={panel} onPanel={setPanel} etikett={etikett} referanser={referanser} />
+      <Verktoylinje
+        editor={editor}
+        panel={panel}
+        onPanel={setPanel}
+        tegnmenyApen={tegnmeny !== null}
+        tegnknapp={tegnknapp}
+        onTegnmeny={(medTastatur) => setTegnmeny(tegnmeny ? null : { medTastatur })}
+        etikett={etikett}
+        referanser={referanser}
+      />
+      {tegnmeny && tegnknapp.current && (
+        <Tegnmeny
+          anker={tegnknapp.current}
+          medTastatur={tegnmeny.medTastatur}
+          onSett={(tegn, iTeksten) => (iTeksten ? editor.chain().focus() : editor.chain()).insertContent(tegn).run()}
+          onLukk={(iMenyen) => {
+            setTegnmeny(null)
+            if (iMenyen) editor.commands.focus()
+          }}
+        />
+      )}
       {panel === 'lenke' && <Lenkepanel editor={editor} onLukk={() => setPanel(null)} />}
-      {panel === 'symbol' && <Symbolpanel editor={editor} onLukk={() => setPanel(null)} />}
       {panel === 'referanse' && <Siteringspanel editor={editor} onLukk={() => setPanel(null)} />}
       <EditorContent editor={editor} className={fyll ? 'rikteksteditor__tekst modallag__fyll' : 'rikteksteditor__tekst'} />
     </div>
@@ -227,7 +248,7 @@ interface Formatknapp {
   navn: string
   merke: string
   /** Merket vises med formateringen det setter, som «B» i fet. */
-  stil?: 'fet' | 'kursiv' | 'understreket'
+  stil?: 'fet' | 'kursiv' | 'understreket' | 'kode' | 'sitat'
   tast?: string
   /** Om formateringen står på der markøren er. Mangler for knapper som setter inn noe. */
   aktiv?: (e: Editor) => boolean
@@ -242,6 +263,7 @@ const FORMATGRUPPER: Formatknapp[][] = [
     { navn: 'Understreket', merke: 'U', stil: 'understreket', tast: 'Control+U', aktiv: (e) => e.isActive(MERKER.understreket), utfor: (e) => e.chain().focus().toggleUnderline().run() },
     { navn: 'Senket skrift', merke: 'x₂', tast: 'Control+,', aktiv: (e) => e.isActive(MERKER.senket), utfor: (e) => e.chain().focus().toggleSubscript().run() },
     { navn: 'Hevet skrift', merke: 'x²', tast: 'Control+.', aktiv: (e) => e.isActive(MERKER.hevet), utfor: (e) => e.chain().focus().toggleSuperscript().run() },
+    { navn: 'Kode', merke: '</>', stil: 'kode', tast: 'Control+E', aktiv: (e) => e.isActive(MERKER.kode), utfor: (e) => e.chain().focus().toggleCode().run() },
   ],
   OVERSKRIFTSNIVAER.map((level) => ({
     navn: `Overskrift ${level}`,
@@ -253,6 +275,7 @@ const FORMATGRUPPER: Formatknapp[][] = [
   [
     { navn: 'Punktliste', merke: '•', aktiv: (e) => e.isActive(NODER.punktliste), utfor: (e) => e.chain().focus().toggleBulletList().run() },
     { navn: 'Nummerert liste', merke: '1.', aktiv: (e) => e.isActive(NODER.nummerertListe), utfor: (e) => e.chain().focus().toggleOrderedList().run() },
+    { navn: 'Sitat', merke: '“', stil: 'sitat', tast: 'Control+Shift+B', aktiv: (e) => e.isActive(NODER.sitat), utfor: (e) => e.chain().focus().toggleBlockquote().run() },
     { navn: 'Sett inn skillelinje', merke: '―', utfor: (e) => e.chain().focus().setHorizontalRule().run() },
   ],
 ]
@@ -263,12 +286,19 @@ function Verktoylinje({
   editor,
   panel,
   onPanel,
+  tegnmenyApen,
+  tegnknapp,
+  onTegnmeny,
   etikett,
   referanser,
 }: {
   editor: Editor
   panel: Verktoypanel
   onPanel: (p: Verktoypanel) => void
+  tegnmenyApen: boolean
+  tegnknapp: Ref<HTMLButtonElement>
+  /** Åpner eller lukker tegnmenyen; `medTastatur` når knappen ble trykket med tastaturet. */
+  onTegnmeny: (medTastatur: boolean) => void
   etikett: string
   referanser: boolean
 }) {
@@ -301,7 +331,14 @@ function Verktoylinje({
       <Verktoyknapp navn="Lenke" aktiv={aktive[FORMATKNAPPER.length] ?? false} apner={panel === 'lenke'} onClick={() => veksle('lenke')}>
         Lenke
       </Verktoyknapp>
-      <Verktoyknapp navn="Sett inn symbol" apner={panel === 'symbol'} onClick={() => veksle('symbol')}>
+      <Verktoyknapp
+        navn="Sett inn spesialtegn"
+        knappRef={tegnknapp}
+        meny
+        apner={tegnmenyApen}
+        // Et tastetrykk gir et klikk uten detalj (0); da går fokus inn i menyen.
+        onClick={(e) => onTegnmeny(e.detail === 0)}
+      >
         Ω
       </Verktoyknapp>
       {referanser && (
@@ -325,6 +362,8 @@ function Verktoyknapp({
   stil,
   aktiv,
   apner,
+  meny = false,
+  knappRef,
   onClick,
   children,
 }: {
@@ -334,17 +373,22 @@ function Verktoyknapp({
   aktiv?: boolean | undefined
   /** Satt for knappene som åpner et panel under raden. */
   apner?: boolean
-  onClick: () => void
+  /** Knappen åpner en meny ved seg selv, ikke et panel under raden. */
+  meny?: boolean
+  knappRef?: Ref<HTMLButtonElement>
+  onClick: (e: MouseEvent<HTMLButtonElement>) => void
   children: ReactNode
 }) {
   return (
     <button
+      ref={knappRef}
       type="button"
       className={stil ? `verktoyrad__knapp verktoyrad__knapp--${stil}` : 'verktoyrad__knapp'}
       aria-label={navn}
       title={navn}
       {...(aktiv !== undefined && { 'aria-pressed': aktiv })}
       {...(apner !== undefined && { 'aria-expanded': apner })}
+      {...(meny && { 'aria-haspopup': 'dialog' as const })}
       {...(tast && { 'aria-keyshortcuts': tast })}
       // Markeringen i teksten skal ikke forsvinne av at knappen trykkes.
       onMouseDown={(e) => e.preventDefault()}
@@ -408,28 +452,6 @@ function Lenkepanel({ editor, onLukk }: { editor: Editor; onLukk: () => void }) 
           Bruk lenken
         </Button>
       </div>
-    </div>
-  )
-}
-
-function Symbolpanel({ editor, onLukk }: { editor: Editor; onLukk: () => void }) {
-  return (
-    <div className="verktoypanel symbolpanel" role="group" aria-label="Symboler">
-      {SYMBOLER.map((symbol) => (
-        <button
-          key={symbol}
-          type="button"
-          className="verktoyrad__knapp"
-          aria-label={`Sett inn ${symbol}`}
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={() => {
-            editor.chain().focus().insertContent(symbol).run()
-            onLukk()
-          }}
-        >
-          {symbol}
-        </button>
-      ))}
     </div>
   )
 }

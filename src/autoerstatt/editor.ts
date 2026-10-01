@@ -45,7 +45,9 @@ export const Autoerstatt = Extension.create<AutoerstattValg>({
           handleTextInput(view, fra, til, tekst) {
             if (view.composing) return false
             const $fra = view.state.doc.resolve(fra)
+            // Kode skal stå nøyaktig slik den skrives.
             if (!$fra.parent.isTextblock || $fra.parent.type.spec.code) return false
+            if ((view.state.storedMarks ?? $fra.marks()).some((m) => m.type.spec.code)) return false
             const foran = $fra.parent.textBetween(
               Math.max(0, $fra.parentOffset - MAKS_LENGDE),
               $fra.parentOffset,

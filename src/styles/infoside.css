@@ -104,6 +104,25 @@
   margin-top: var(--rom-2);
 }
 
+/* Sitatet: rykket inn bak en strek, i dempet blekk. */
+.riktekst blockquote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding-left: var(--rom-4);
+  color: var(--blekk-dempet);
+  border-left: var(--kant-tykk) solid var(--linje-kontroll);
+}
+
+/* Kode i teksten: fast bredde på en svak flate. */
+.riktekst code {
+  padding: 0.1em 0.3em;
+  font-family: var(--skrift-mono);
+  font-size: 0.88em;
+  background: var(--flate-hevet);
+  border-radius: var(--runding-merke);
+}
+
 .riktekst hr {
   width: 100%;
   height: var(--kant);

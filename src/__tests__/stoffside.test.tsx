@@ -1921,13 +1921,15 @@ describe('rikteksteditoren', () => {
       'Understreket',
       'Senket skrift',
       'Hevet skrift',
+      'Kode',
       'Overskrift 1',
       'Overskrift 2',
       'Punktliste',
       'Nummerert liste',
+      'Sitat',
       'Sett inn skillelinje',
       'Lenke',
-      'Sett inn symbol',
+      'Sett inn spesialtegn',
       'Sett inn referanse',
     ])
     // Knappene har de samme bokstavene som hurtigtastene.

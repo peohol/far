@@ -373,8 +373,7 @@
   border-color: var(--aksent);
 }
 
-.verktoyrad,
-.symbolpanel {
+.verktoyrad {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -428,6 +427,117 @@
 
 .verktoyrad__knapp--understreket {
   text-decoration: underline;
+}
+
+.verktoyrad__knapp--kode {
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-liten);
+}
+
+/* Anførselstegnet er lite i skriften; det får samme tyngde som bokstavene. */
+.verktoyrad__knapp--sitat {
+  padding-top: 0.35em;
+  font-size: 1.5em;
+  line-height: 1;
+}
+
+/* --- Tegnmenyen ---------------------------------------------------------------
+   Spesialtegnene som en meny ved Ω-knappen (`Tegnmeny`). Den er plassert som
+   tipsboblene (`useBobleplassering`), men har flaten til et panel. Fanene
+   brytes over flere linjer i stedet for å rulle sidelengs, og rutenettet
+   ruller for seg selv, så fanene og navnelinja blir stående. */
+.tegnmeny {
+  --tips-flate: var(--flate);
+  --tips-blekk: var(--blekk);
+}
+
+/* Menyen skal kunne brukes, ikke bare leses som et tips. */
+.tegnmeny,
+.tegnmeny .tipsboble__innhold {
+  pointer-events: auto;
+}
+
+.tegnmeny .tipsboble__innhold {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+  width: min(22.5rem, var(--tips-maks-bredde, calc(100vw - 2.5rem)));
+  padding: var(--rom-3);
+  border: var(--kant) solid var(--linje);
+}
+
+.tegnmeny__faner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-1);
+  padding-bottom: var(--rom-3);
+  border-bottom: var(--kant) solid var(--linje);
+}
+
+.tegnmeny__fane {
+  height: 1.625rem;
+  padding: 0 var(--rom-3);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-medium);
+  white-space: nowrap;
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    color var(--fart-rask) var(--kurve);
+}
+
+.tegnmeny__fane:hover {
+  color: var(--blekk);
+}
+
+.tegnmeny__fane[aria-pressed='true'] {
+  color: var(--aksent);
+  background: var(--aksent-flate);
+}
+
+.tegnmeny__rutenett {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2.125rem, 1fr));
+  gap: 2px;
+  max-height: min(15rem, 42dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Samme skrift som teksten tegnet havner i: ruta viser det man faktisk får. */
+.tegnmeny__tegn {
+  height: 2.125rem;
+  padding: 0;
+  font-family: var(--skrift-display);
+  font-size: 1.0625rem;
+  line-height: 1;
+  color: var(--blekk);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-merke);
+  cursor: pointer;
+  transition: background-color var(--fart-rask) var(--kurve);
+}
+
+.tegnmeny__tegn:hover,
+.tegnmeny__tegn:focus-visible {
+  background: var(--flate-hevet);
+}
+
+/* Navnet på tegnet det pekes på. Høyden står fast, så menyen står stille. */
+.tegnmeny__navn {
+  height: 1.125rem;
+  overflow: hidden;
+  font-size: var(--tekst-liten);
+  line-height: 1.125rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--blekk-dempet);
 }
 
 /* «Referanse» er en pille med ikon, som i designet. */

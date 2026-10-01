@@ -118,6 +118,15 @@ describe('autoerstatt i rikteksteditoren', () => {
     expect(tekst()).toBe('x-- – ')
   })
 
+  it('lar kode stå slik den skrives', async () => {
+    const { e, tekst } = await editor(minnelager())
+    act(() => {
+      e.commands.toggleCode()
+    })
+    skriv(e, 'git log --oneline - x')
+    expect(tekst()).toBe('git log --oneline - x')
+  })
+
   it('bytter ingenting uten reglene', async () => {
     const { e, tekst } = await editor(null)
     skriv(e, 'a - b')

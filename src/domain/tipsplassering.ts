@@ -2,8 +2,8 @@
  * Hvor en tooltip skal stå i vinduet.
  *
  * Regnet ut i rene tall, uten DOM, slik at reglene kan prøves i test. Boblen
- * står helst midtstilt over teksten som utløste den. Er det ikke plass over,
- * faller den ned under. Blir den liggende utenfor en av kantene, skyves den
+ * står helst midtstilt over teksten som utløste den (en meny helst under
+ * knappen sin). Er det ikke plass der, havner den på den andre siden. Blir den liggende utenfor en av kantene, skyves den
  * innover — og pilen blir stående igjen ved ankeret, så det fortsatt går fram
  * hva boblen hører til.
  *
@@ -73,18 +73,26 @@ function klem(verdi: number, minst: number, mest: number): number {
   return Math.min(Math.max(verdi, minst), Math.max(minst, mest))
 }
 
-export function plasserTips(anker: Rute, boble: Storrelse, vindu: Storrelse): Plassering {
+export function plasserTips(
+  anker: Rute,
+  boble: Storrelse,
+  vindu: Storrelse,
+  foretrukket: Plassering['side'] = 'over',
+): Plassering {
   // Plassen som er igjen på hver side av ankeret når luften mot ankeret og
   // avstanden til vinduskanten er trukket fra.
   const romOver = anker.topp - TIPSLUFT - TIPSKANT
   const romUnder = vindu.hoyde - (anker.topp + anker.hoyde) - TIPSLUFT - TIPSKANT
 
-  // Over er standard. Under brukes når boblen ikke får plass over — og når
-  // den ikke får plass noen av stedene, den siden som har mest å gi.
+  // Den foretrukne siden brukes når boblen får plass der. Ellers den andre —
+  // og når den ikke får plass noen av stedene, den siden som har mest å gi.
   const passerOver = boble.hoyde <= romOver
   const passerUnder = boble.hoyde <= romUnder
-  const side: 'over' | 'under' =
-    passerOver || (!passerUnder && romOver >= romUnder) ? 'over' : 'under'
+  const over =
+    foretrukket === 'over'
+      ? passerOver || (!passerUnder && romOver >= romUnder)
+      : !passerUnder && (passerOver || romOver > romUnder)
+  const side: Plassering['side'] = over ? 'over' : 'under'
 
   const onsketTopp =
     side === 'over'
