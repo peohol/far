@@ -168,6 +168,13 @@ bare fargene gjennom `--tast-flate`, `--tast-blekk` og `--tast-kant`
   der en knott glir til valget. Valget trykkes eller dras dit; en usynlig
   skala under tar tastaturet og skjermleserne. Brukes til sikkerhetsmarginen
   i THC-modulen.
+- **Tekstfelt** (rikteksteditorene og `<textarea>`) vokser aldri forbi halve
+  den synlige høyden av flaten de står på (`--tekstfelt-maks`, i `cqh`), og
+  aldri under én linje. Flatene er kroppen i et modalt lag og
+  diskusjonsmenyen; ellers er det vinduet. Er teksten det skjemaet handler om,
+  får skjemaet (eller skriveren) klassen `skriveflate`: da er det like høyt som
+  flaten, og teksten fyller det som er igjen under feltene og over knappene.
+  Stilen står nederst i `skjema.css`.
 - **Klasser uten egen komponent:** `.kommentartekst` (teksten som limes inn),
   `.notis` (forsiktighet, med `--handling` når den tilbyr handlingen),
   `.mangelliste`, og skjemaklassene `.avkryssinger`/`.avkryssing`,
