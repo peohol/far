@@ -12,11 +12,12 @@ import {
   type Mekanismekortdata,
   type Paneldefinisjon,
 } from '../../faginnhold/paneler'
-import { INGEN_EFFEKT, mekanismeFor, retningFor } from '../../faginnhold/mekanismer'
+import { INGEN_EFFEKT } from '../../faginnhold/mekanismer'
 import { doseringskort } from '../../faginnhold/doseringskort'
 import { OPPSUMMERINGSSKILLE, antall, forhandsvisning, ramsOpp } from '../../faginnhold/oppsummering'
 import { NODER, erTomt, klartekst, tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
+import { SenketTekst } from '../SenketTekst'
 import { Ikon } from '../ikon/Ikon'
 import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
 import { Skuffrutenett } from '../seksjoner/Skuffrutenett'
@@ -30,6 +31,7 @@ import { Sistredigert } from '../historikk/Sistredigert'
 import type { Stoffsidehandlinger } from './useStoffside'
 import { kinetikkikon, mekanismeikon, seksjonsikon, tekstvisning } from './panelvisning'
 import { Serumtabell } from './Serumtabell'
+import { Effektpille, Maalnavn, mekanismeklasse } from './Mekanismevisning'
 import '../../styles/monograf.css'
 
 /**
@@ -519,24 +521,13 @@ const MEKANISMEKORT: Korttype<Mekanismekortdata> = {
   elementtype: ELEMENTTYPER.mekanisme,
   les: lesMekanismekort,
   tilData: mekanismekortTilData,
-  tomt: () => ({
-    maal: '',
-    effekt: '',
-    mekanisme: null,
-    retning: 'ukjent',
-    kvalifikasjon: '',
-    merknad: '',
-    dokument: tomtDokument(),
-  }),
+  tomt: () => ({ maal: '', mekanisme: null, dokument: tomtDokument() }),
   navn: (kort) => kort.maal,
   ikon: (kort) => mekanismeikon(kort.mekanisme),
-  tittel: (kort) => <Uthev tekst={kort.maal} />,
-  oppsummering: (kort) => <Mekanismeeffekt kort={kort} />,
-  klasse: (kort) =>
-    ['mekanismekort', `mekanismekort--${retningFor(kort.retning).tone}`, kort.mekanisme === INGEN_EFFEKT && 'mekanismekort--ingen']
-      .filter(Boolean)
-      .join(' '),
-  visning: (kort) => <Mekanismedetaljer kort={kort} />,
+  tittel: (kort) => <Maalnavn maal={kort.maal} />,
+  oppsummering: (kort) => <Effektpille mekanisme={kort.mekanisme} />,
+  klasse: (kort) => mekanismeklasse(kort),
+  visning: (kort) => !erTomt(kort.dokument) && <Riktekst dokument={kort.dokument} />,
   Skjema: MekanismekortSkjema,
 }
 
@@ -573,64 +564,6 @@ export function Mekanismepanel({ definisjon, kontekst }: { definisjon: Paneldefi
   )
 }
 
-/** Effekten på det lukkede kortet: effekten, og kvalifikasjonen dempet etter den. */
-function Mekanismeeffekt({ kort }: { kort: Mekanismekortdata }) {
-  return (
-    <>
-      <span className="mekanismekort__effekt">{kort.effekt}</span>
-      {kort.kvalifikasjon && <span className="mekanismekort__kvalifikasjon"> · {kort.kvalifikasjon}</span>}
-    </>
-  )
-}
-
-/**
- * Det åpnede kortet: effekten, mekanismetypen og retningen, så merknaden og
- * den utdypende teksten. Retningen står alltid i tekst; fargen følger den.
- */
-function Mekanismedetaljer({ kort }: { kort: Mekanismekortdata }) {
-  const retning = retningFor(kort.retning)
-  const mekanisme = mekanismeFor(kort.mekanisme)
-  return (
-    <div className="mekanismekort__detaljer">
-      <dl className="mekanismekort__fakta">
-        <div>
-          <dt>Effekt</dt>
-          <dd>
-            <Uthev tekst={kort.effekt} />
-            {kort.kvalifikasjon && (
-              <span className="mekanismekort__kvalifikasjon">
-                {' · '}
-                <Uthev tekst={kort.kvalifikasjon} />
-              </span>
-            )}
-          </dd>
-        </div>
-        <div>
-          <dt>Mekanisme</dt>
-          <dd>
-            <Uthev tekst={mekanisme?.navn ?? 'Ikke angitt'} />
-          </dd>
-        </div>
-        <div>
-          <dt>Retning</dt>
-          <dd className="mekanismekort__retning">
-            <span className="mekanismekort__symbol" aria-hidden="true">
-              {retning.symbol}
-            </span>
-            <Uthev tekst={retning.navn} />
-          </dd>
-        </div>
-      </dl>
-      {kort.merknad && (
-        <p className="mekanismekort__merknad">
-          <Uthev tekst={kort.merknad} />
-        </p>
-      )}
-      {!erTomt(kort.dokument) && <Riktekst dokument={kort.dokument} />}
-    </div>
-  )
-}
-
 /** Unicode-tegn for senket skrift, som i «tₘₐₓ» og «tₛₛ». */
 const SENKET = /([\u2080-\u209c]+)/
 
@@ -639,19 +572,8 @@ const SENKET = /([\u2080-\u209c]+)/
  * og leses som t med «max» senket. Teksten er den samme.
  */
 function Kinetikktittel({ tittel }: { tittel: string }) {
-  return (
-    <>
-      {tittel.split(SENKET).map((del, i) =>
-        i % 2 === 1 ? (
-          <sub key={i}>
-            <Uthev tekst={del.normalize('NFKC')} />
-          </sub>
-        ) : (
-          del && <Uthev key={i} tekst={del} />
-        ),
-      )}
-    </>
-  )
+  const deler = tittel.split(SENKET).map((tekst, i) => ({ tekst: i % 2 === 1 ? tekst.normalize('NFKC') : tekst, senket: i % 2 === 1 }))
+  return <SenketTekst deler={deler.filter((d) => d.tekst)} />
 }
 
 /* --- Panel 7: tabellen ---------------------------------------------------- */

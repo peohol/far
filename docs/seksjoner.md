@@ -96,7 +96,8 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   hva overskriften handler om (absorpsjon, halveringstid, CYP, prøvetaking …), og et
   generisk ikon når ingen kategori passer, så en ny overskrift aldri feiler.
   Mekanismekortene i farmakodynamikken får ikon etter mekanismetypen
-  (`mekanismeikon`), og et kort uten effekt har ikke noe ikon.
+  (`mekanismeikon`), og et kort uten effekt har ikke noe ikon. Hvordan de
+  tegnes og farges, står i `docs/farmakodynamikk-ikoner.md`.
 - En seksjon i en seksjon, eller et detaljkort utenfor en seksjon eller i et
   annet detaljkort, stopper tegningen med en feil. Trenger innholdet et
   tredje nivå, skal det heller deles opp.

@@ -17,7 +17,7 @@
  * brukes. De tåler manglende og feilformede felt, så en side aldri faller
  * sammen av et element som ikke ser ut som ventet.
  */
-import { erMekanisme, erRetning, INGEN_EFFEKT, type Mekanisme, type Retning } from './mekanismer'
+import { erMekanisme, type Mekanisme } from './mekanismer'
 import { erTomt, rensDokument, tomtDokument, type Riktekstdokument } from './riktekst'
 
 /* --- Panelene ------------------------------------------------------------- */
@@ -512,28 +512,22 @@ export function lesKinetikk(data: unknown): Kinetikkdata {
 
 /**
  * Et mekanismekort: hva stoffet gjør med ett målprotein eller én prosess.
- * Lukket viser kortet målet, effekten og en eventuell kort kvalifikasjon;
- * åpnet merknaden og den utdypende teksten.
+ * Lukket viser kortet målet og effekten som en farget pille; åpnet den
+ * utdypende teksten og kildene.
  *
  * - `maal` — målproteinet eller prosessen, som kilden navngir det
- *   («D2-reseptor», «Noradrenalinreopptak / NET»).
- * - `effekt` — effekten på målet med kildens ord («Antagonist», «Hemmer reopptak»).
- * - `mekanisme` — typen, aldri mer presis enn kilden (se `mekanismer.ts`).
- *   `null` når den mangler eller er ukjent for appen.
- * - `retning` — om den direkte prosessen reduseres, økes, ikke påvirkes eller
- *   ikke er angitt.
- * - `kvalifikasjon` — en svært kort presisering som hører til effekten
- *   («Høy affinitet», «Potent»). Tom når kilden ikke har noen.
- * - `merknad` — en kort merknad til kortet, som et forbehold om hva kilden sier.
+ *   («D2-reseptor», «Noradrenalinreopptak / NET»). Subtypen vises senket.
+ * - `mekanisme` — typen, aldri mer presis enn kilden. Den bestemmer effekten
+ *   i pillen, fargen og ikonet (se `mekanismer.ts`). `null` når den mangler
+ *   eller er ukjent for appen.
  * - `dokument` — den utdypende teksten, tom når kortet ikke har noen.
+ *
+ * Eldre kort har også feltene `effekt`, `retning`, `kvalifikasjon` og
+ * `merknad`. De vises ikke lenger og forsvinner når kortet lagres på nytt.
  */
 export interface Mekanismekortdata {
   maal: string
-  effekt: string
   mekanisme: Mekanisme | null
-  retning: Retning
-  kvalifikasjon: string
-  merknad: string
   dokument: Riktekstdokument
 }
 
@@ -541,42 +535,24 @@ export function lesMekanismekort(data: unknown): Mekanismekortdata {
   const d = erObjekt(data) ? data : {}
   return {
     maal: tekst(d.maal),
-    effekt: tekst(d.effekt),
     mekanisme: erMekanisme(d.mekanisme) ? d.mekanisme : null,
-    retning: erRetning(d.retning) ? d.retning : 'ukjent',
-    kvalifikasjon: tekst(d.kvalifikasjon),
-    merknad: tekst(d.merknad),
     dokument: rensDokument(d.dokument),
   }
 }
 
-/** Et mekanismekort slik det lagres: de tomme feltene står ikke. */
+/** Et mekanismekort slik det lagres: den tomme teksten står ikke. */
 export function mekanismekortTilData(kort: Mekanismekortdata): Record<string, unknown> {
   return {
     maal: kort.maal.trim(),
-    effekt: kort.effekt.trim(),
     mekanisme: kort.mekanisme,
-    retning: kort.retning,
-    ...(kort.kvalifikasjon.trim() && { kvalifikasjon: kort.kvalifikasjon.trim() }),
-    ...(kort.merknad.trim() && { merknad: kort.merknad.trim() }),
     ...(!erTomt(kort.dokument) && { dokument: kort.dokument }),
   }
 }
 
-/** Lengste kvalifikasjon: den står på det lukkede kortet og skal leses med ett blikk. */
-export const KVALIFIKASJON_MAKS = 40
-
 /** Feilen i et mekanismekort som skal lagres, eller `null` når det er gyldig. */
 export function kontrollerMekanismekort(kort: Mekanismekortdata): string | null {
   if (!kort.maal.trim()) return 'Oppgi målproteinet eller prosessen.'
-  if (!kort.effekt.trim()) return 'Oppgi effekten på målet.'
-  if (!kort.mekanisme) return 'Velg mekanismetypen.'
-  if (kort.kvalifikasjon.trim().length > KVALIFIKASJON_MAKS) {
-    return `Kvalifikasjonen kan ha høyst ${KVALIFIKASJON_MAKS} tegn. Legg lengre tekst i merknaden eller den utdypende teksten.`
-  }
-  if ((kort.mekanisme === INGEN_EFFEKT) !== (kort.retning === 'ingen')) {
-    return 'Mekanismen «Ingen effekt» og retningen «Ingen effekt» hører sammen.'
-  }
+  if (!kort.mekanisme) return 'Velg effekten på målet.'
   return null
 }
 
