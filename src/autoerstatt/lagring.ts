@@ -36,7 +36,7 @@ function maaTreffe(rader: unknown[] | null): void {
 export function lagAutoerstattlager(klient: SupabaseClient): Autoerstattlager {
   return {
     async hent() {
-      const { data, error } = await klient.from(TABELL).select('id, finn, erstatt').order('opprettet_kl').order('id')
+      const { data, error } = await klient.from(TABELL).select('id, finn, erstatt').order('opprettet_kl').order('finn')
       if (error) throw tilFeil(error)
       return (data ?? []).filter(
         (r): r is Autoerstattregel => typeof r.id === 'string' && typeof r.finn === 'string' && typeof r.erstatt === 'string',
