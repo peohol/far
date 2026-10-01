@@ -3,6 +3,9 @@
  * (`Fieldset`), tallfeltet og datofeltet (`NumberField`, `DateField`),
  * bryteren (`Toggle`) og trinnbryteren (`MarginScale`). Felles for
  * fortolkningsmodulene, THC og simulatoren i regelvisningen, så de spør likt.
+ *
+ * Til slutt høyden på tekstfeltene i hele appen: rikteksteditorene og
+ * `<textarea>`, og skriveflatene der teksten fyller det som er igjen.
  */
 
 /* --- Avkryssing -------------------------------------------------------------
@@ -300,4 +303,57 @@
 
 .trinnbryter__valg--valgt {
   color: var(--paa-aksent);
+}
+
+/* --- Tekstfelt ---------------------------------------------------------------
+   Et tekstfelt vokser med teksten, men aldri forbi halve den synlige høyden
+   av flaten det står på — kroppen i et modalt lag, diskusjonsmenyen, ellers
+   vinduet (`cqh` faller tilbake til vinduet når ingen flate er oppgitt). Så
+   står verktøyraden over og knappene under alltid i syne, og teksten ruller
+   i feltet. Lavere enn én linje blir feltet aldri; heller ruller flaten. */
+:root {
+  --tekstfelt-maks: 50cqh;
+  /* Én linje i rikteksten (`.riktekstfelt`) med luften over og under. */
+  --tekstfelt-min: calc(var(--tekst-lesing) * 1.55 + var(--rom-5) + var(--rom-6));
+}
+
+:is(.rikteksteditor__tekst, textarea) {
+  max-height: var(--tekstfelt-maks);
+  overflow-y: auto;
+}
+
+.rikteksteditor__tekst {
+  min-height: var(--tekstfelt-min);
+}
+
+/* Skriveflaten: et skjema eller en skriver der teksten er hovedsaken
+   (`skriveflate` på elementet, som ny tråd, idéen og kortteksten). Den er
+   like høy som det synlige av flaten den står på, og teksten tar det som er
+   igjen når feltene over og knappene under har fått sitt. Alt mellom
+   skriveflaten og teksten strekker seg med. Teksten regnes som tom når resten
+   måles (`contain`), så det er den som gir etter når vinduet blir lavere;
+   får heller ikke én linje plass, ruller flaten. Skriveflaten må være det
+   eneste på flaten: det som står over den, trekkes ikke fra. */
+.skriveflate:has(:is(.rikteksteditor__tekst, textarea)) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100cqh;
+}
+
+.skriveflate :has(:is(.rikteksteditor__tekst, textarea)) {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.skriveflate :is(.rikteksteditor__tekst, textarea) {
+  flex: 1 0 auto;
+  max-height: none;
+  min-height: var(--tekstfelt-min);
+  contain: size;
+}
+
+/* Hele flaten er skrivefeltet, så et klikk under teksten treffer det. */
+.skriveflate .rikteksteditor__tekst > .riktekstfelt {
+  min-height: 100%;
 }

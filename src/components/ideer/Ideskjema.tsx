@@ -85,7 +85,7 @@ export function Ideskjema({
   }
 
   return (
-    <form className="ideskjema" onSubmit={(e) => void lagre(e)} noValidate aria-label={ide ? 'Endre idéen' : 'Ny idé'}>
+    <form className="ideskjema skriveflate" onSubmit={(e) => void lagre(e)} noValidate aria-label={ide ? 'Endre idéen' : 'Ny idé'}>
       <fieldset className="ideskjema__kategorier" aria-describedby={feil ? `${kategoriId}-feil` : undefined}>
         <legend className="felt__merkelapp" id={kategoriId}>
           Kategori
@@ -118,7 +118,7 @@ export function Ideskjema({
         <span className="felt__merkelapp" id={beskrivelseId}>
           Beskrivelse
         </span>
-        <Rikteksteditor dokument={tekst} onEndre={setTekst} etikett="Beskrivelse" referanser={false} fyll />
+        <Rikteksteditor dokument={tekst} onEndre={setTekst} etikett="Beskrivelse" referanser={false} />
       </div>
 
       {feil && (

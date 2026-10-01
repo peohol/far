@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.70.2',
+    versjon: '1.70.3',
     dato: '2026-10-01',
     sammendrag: 'Enter kopierer bare kommentarer når du arbeider i fortolkningen',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,18 @@ export const ENDRINGSLOGG: Endring[] = [
       'Enter og mellomrom kopierer kommentarer og går videre i fortolkningen bare når du arbeider der, eller ikke står i noe annet på siden.',
       'Står du i en diskusjonstråd, et tekstfelt eller en editor mens fortolkningen er åpen, gir Enter linjeskift som vanlig. Står du på en knapp, trykker Enter knappen.',
       'Det samme gjelder sifrene og de andre tastene i fortolkningen: de blir i feltet du skriver i, slik de alt gjorde i fagsøket.',
+    ],
+  },
+  {
+    versjon: '1.70.2',
+    dato: '2026-10-01',
+    sammendrag: 'Tekstfeltene skyver ikke lenger knappene ut av syne',
+    typer: ['Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Når du skriver en ny tråd i diskusjonene, er tekstfeltet like høyt som menyen gir plass til, og verktøyraden, feltene over og knappene Avbryt og Publiser blir stående i syne. En lang tekst ruller inne i feltet.',
+      'Det samme gjelder nå alle tekstfelt i appen: ingen av dem vokser seg høyere enn det som er synlig, så ingenting over eller under dem forsvinner ut av bildet. Kommentarfeltene og feltet der du endrer innlegget i en tråd, vokser med teksten opp til halve høyden og ruller deretter.',
+      'Bare når vinduet er så lavt at alt ikke får plass, ruller siden eller vinduet, og et tekstfelt viser alltid minst én linje.',
     ],
   },
   {
