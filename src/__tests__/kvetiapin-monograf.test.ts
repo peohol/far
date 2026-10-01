@@ -4,6 +4,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
 const MIGRASJON = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering.sql'))!
+const FORSTE_IMPORTMIGRASJON = '20260923072247'
 
 interface Element {
   objekt_id: string
@@ -41,8 +42,9 @@ describe('kvetiapin-monografkuratering', () => {
   let farmakokinetikk: Element[]
 
   beforeAll(async () => {
-    db = await nyDatabase({ til: MIGRASJON })
+    db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
     await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
+    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: MIGRASJON })
     await kjorMigrasjoner(db, { bare: [MIGRASJON] })
     farmakodynamikk = await elementer(db, 'farmakodynamikk')
     dosering = await elementer(db, 'dosering')
