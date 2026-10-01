@@ -99,8 +99,9 @@
   font-size: 1.15em;
 }
 
-/* En overskrift hører til teksten under seg, så den får litt mer luft over. */
-.riktekst > [data-niva]:not(:first-child) {
+/* En overskrift hører til teksten under seg, så den får litt mer luft over —
+   men ikke rett under en skillelinje, som har sin egen luft. */
+.riktekst > [data-niva]:not(:first-child, hr + *) {
   margin-top: var(--rom-2);
 }
 
@@ -123,10 +124,12 @@
   border-radius: var(--runding-merke);
 }
 
+/* Skillelinjen lager et tydelig skille, med nøyaktig like mye luft over og
+   under: avstanden mellom blokkene pluss den samme margen på hver side. */
 .riktekst hr {
   width: 100%;
   height: var(--kant);
-  margin: var(--rom-2) 0;
+  margin: var(--rom-6) 0;
   background: var(--linje);
   border: 0;
 }
