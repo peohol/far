@@ -98,15 +98,19 @@ export function tekstvisning(nokkel: string): Tekstvisning {
 }
 
 /**
- * Ikonet for hver mekanisme i farmakodynamikken. De spesifikke mekanismene
- * har sitt eget; de generelle har et nøytralt ikon for familien, som ikke
- * later som kilden sier mer. «Ingen effekt» har bevisst ikke noe ikon.
+ * Ikonet for hver mekanisme i farmakodynamikken (`docs/farmakodynamikk-ikoner.md`).
+ * De spesifikke mekanismene har sitt eget; de generelle har et nøytralt ikon
+ * for familien, som ikke later som kilden sier mer. «Ingen effekt» har
+ * bevisst ikke noe ikon.
  */
 const MEKANISMEIKONER: Readonly<Record<Mekanisme, Ikonnavn | null>> = {
-  antagonisme: 'mekAntagonisme',
-  kompetitiv_antagonisme: 'mekKompetitivAntagonisme',
   agonisme: 'mekAgonisme',
   partiell_agonisme: 'mekPartiellAgonisme',
+  antagonisme: 'mekAntagonisme',
+  kompetitiv_antagonisme: 'mekKompetitivAntagonisme',
+  invers_agonisme: 'mekInversAgonisme',
+  positiv_allosterisk_modulering: 'mekPositivModulering',
+  negativ_allosterisk_modulering: 'mekNegativModulering',
   reseptorbinding: 'mekReseptor',
   reseptorpavirkning: 'mekReseptor',
   kanalblokkering: 'mekKanalblokkering',

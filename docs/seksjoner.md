@@ -18,7 +18,7 @@ offentlige kilder.
   oppsummering.
 - **Et kort kan åpnes bare når det har mer å vise** enn det som står i det
   lukket. Har det ikke det — en halveringstid på «7 timer», eller et
-  mekanismekort uten merknad og utdypende tekst — er det et **fast kort**:
+  mekanismekort uten utdypende tekst — er det et **fast kort**:
   tittelen med hele innholdet rett under, uten pil og uten noe å trykke på.
   I redigeringsmodus kan alle kort åpnes, så redaktøren kommer til knappene.
 - **Bare én skuff per nivå står åpen.** Åpnes en seksjon, lukkes den som sto
@@ -101,7 +101,8 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   hva overskriften handler om (absorpsjon, halveringstid, CYP, prøvetaking …), og et
   generisk ikon når ingen kategori passer, så en ny overskrift aldri feiler.
   Mekanismekortene i farmakodynamikken får ikon etter mekanismetypen
-  (`mekanismeikon`), og et kort uten effekt har ikke noe ikon.
+  (`mekanismeikon`), og et kort uten effekt har ikke noe ikon. Hvordan de
+  tegnes og farges, står i `docs/farmakodynamikk-ikoner.md`.
 - `kanApnes={false}` gjør et detaljkort fast (`Fastkort` i `Seksjon.tsx`):
   `children` står synlig under tittelen i oppsummeringens skrift, og
   `oppsummering`, `handlinger` og `apenFraStart` brukes ikke. Kortet er ikke
@@ -112,9 +113,8 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   kortene i farmakogenetikken) avgjør det med `harMer` i `Korttype`:
   - et kinetikkort har mer når teksten er for lang til å stå hel i
     oppsummeringen (`kuttes`, samme grense som `forhandsvisning`);
-  - et mekanismekort har mer når det har en merknad eller en utdypende tekst.
-    Mekanismetypen og retningen, som ellers står i det åpnede kortet, gir
-    ikonet og fargen, og står for skjermleseren på det faste kortet.
+  - et mekanismekort har mer når det har en utdypende tekst. Ellers står
+    effektpillen fast under målet.
 
   Kildene til kortet står nederst i det faste kortet, som i det åpnede.
 - En seksjon i en seksjon, eller et detaljkort utenfor en seksjon eller i et

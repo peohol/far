@@ -12,11 +12,12 @@ import {
   type Mekanismekortdata,
   type Paneldefinisjon,
 } from '../../faginnhold/paneler'
-import { INGEN_EFFEKT, mekanismeFor, retningFor } from '../../faginnhold/mekanismer'
+import { INGEN_EFFEKT } from '../../faginnhold/mekanismer'
 import { doseringskort } from '../../faginnhold/doseringskort'
 import { OPPSUMMERINGSSKILLE, antall, forhandsvisning, kuttes, ramsOpp } from '../../faginnhold/oppsummering'
 import { NODER, erTomt, klartekst, tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
+import { SenketTekst } from '../SenketTekst'
 import { Ikon } from '../ikon/Ikon'
 import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
 import { Skuffrutenett } from '../seksjoner/Skuffrutenett'
@@ -30,6 +31,7 @@ import { Sistredigert } from '../historikk/Sistredigert'
 import type { Stoffsidehandlinger } from './useStoffside'
 import { kinetikkikon, mekanismeikon, seksjonsikon, tekstvisning } from './panelvisning'
 import { Serumtabell } from './Serumtabell'
+import { Effektpille, Maalnavn, mekanismeklasse } from './Mekanismevisning'
 import '../../styles/monograf.css'
 
 /**
@@ -542,31 +544,24 @@ const MEKANISMEKORT: Korttype<Mekanismekortdata> = {
   elementtype: ELEMENTTYPER.mekanisme,
   les: lesMekanismekort,
   tilData: mekanismekortTilData,
-  tomt: () => ({
-    maal: '',
-    effekt: '',
-    mekanisme: null,
-    retning: 'ukjent',
-    kvalifikasjon: '',
-    merknad: '',
-    dokument: tomtDokument(),
-  }),
+  tomt: () => ({ maal: '', mekanisme: null, dokument: tomtDokument() }),
   navn: (kort) => kort.maal,
   ikon: (kort) => mekanismeikon(kort.mekanisme),
-  tittel: (kort) => <Uthev tekst={kort.maal} />,
-  oppsummering: (kort) => <Mekanismeeffekt kort={kort} />,
-  klasse: (kort) =>
-    ['mekanismekort', `mekanismekort--${retningFor(kort.retning).tone}`, kort.mekanisme === INGEN_EFFEKT && 'mekanismekort--ingen']
-      .filter(Boolean)
-      .join(' '),
-  visning: (kort) => <Mekanismedetaljer kort={kort} />,
-  // Effekten står alt på det lukkede kortet, og mekanismetypen og retningen gir ikonet og fargen.
-  harMer: (kort) => Boolean(kort.merknad) || !erTomt(kort.dokument),
-  fast: (kort) => (
-    <p className="mekanismekort__fast">
-      <Mekanismeeffekt kort={kort} medDetaljer />
-    </p>
+  tittel: (kort) => <Maalnavn maal={kort.maal} />,
+  oppsummering: (kort) => <Effektpille mekanisme={kort.mekanisme} />,
+  klasse: (kort) => mekanismeklasse(kort),
+  // Oppsummeringen skjules når kortet er åpent, så effekten står øverst i det åpnede kortet.
+  visning: (kort) => (
+    <>
+      <p className="mekanismekort__effekt">
+        <Effektpille mekanisme={kort.mekanisme} />
+      </p>
+      {!erTomt(kort.dokument) && <Riktekst dokument={kort.dokument} />}
+    </>
   ),
+  // Pillen står alt på det lukkede kortet, så kortet åpnes bare når det har en utdypende tekst.
+  // Ellers er det fast og viser visningen over, som da bare er pillen.
+  harMer: (kort) => !erTomt(kort.dokument),
   Skjema: MekanismekortSkjema,
 }
 
@@ -603,79 +598,6 @@ export function Mekanismepanel({ definisjon, kontekst }: { definisjon: Paneldefi
   )
 }
 
-/**
- * Effekten på det lukkede kortet: effekten, og kvalifikasjonen dempet etter
- * den. På et fast kort (`medDetaljer`) kan teksten fremheves av søket, og
- * mekanismetypen og retningen, som ellers står i det åpnede kortet, leses av
- * skjermleseren.
- */
-function Mekanismeeffekt({ kort, medDetaljer = false }: { kort: Mekanismekortdata; medDetaljer?: boolean }) {
-  const tekst = (verdi: string) => (medDetaljer ? <Uthev tekst={verdi} /> : verdi)
-  return (
-    <>
-      <span className="mekanismekort__effekt">{tekst(kort.effekt)}</span>
-      {kort.kvalifikasjon && <span className="mekanismekort__kvalifikasjon"> · {tekst(kort.kvalifikasjon)}</span>}
-      {medDetaljer && (
-        // Gjennom `Uthev`, så søket på siden finner kortet også på mekanismen og retningen.
-        <span className="kun-skjermleser">
-          {'. Mekanisme: '}
-          <Uthev tekst={mekanismeFor(kort.mekanisme)?.navn ?? 'Ikke angitt'} />
-          {'. Retning: '}
-          <Uthev tekst={retningFor(kort.retning).navn} />.
-        </span>
-      )}
-    </>
-  )
-}
-
-/**
- * Det åpnede kortet: effekten, mekanismetypen og retningen, så merknaden og
- * den utdypende teksten. Retningen står alltid i tekst; fargen følger den.
- */
-function Mekanismedetaljer({ kort }: { kort: Mekanismekortdata }) {
-  const retning = retningFor(kort.retning)
-  const mekanisme = mekanismeFor(kort.mekanisme)
-  return (
-    <div className="mekanismekort__detaljer">
-      <dl className="mekanismekort__fakta">
-        <div>
-          <dt>Effekt</dt>
-          <dd>
-            <Uthev tekst={kort.effekt} />
-            {kort.kvalifikasjon && (
-              <span className="mekanismekort__kvalifikasjon">
-                {' · '}
-                <Uthev tekst={kort.kvalifikasjon} />
-              </span>
-            )}
-          </dd>
-        </div>
-        <div>
-          <dt>Mekanisme</dt>
-          <dd>
-            <Uthev tekst={mekanisme?.navn ?? 'Ikke angitt'} />
-          </dd>
-        </div>
-        <div>
-          <dt>Retning</dt>
-          <dd className="mekanismekort__retning">
-            <span className="mekanismekort__symbol" aria-hidden="true">
-              {retning.symbol}
-            </span>
-            <Uthev tekst={retning.navn} />
-          </dd>
-        </div>
-      </dl>
-      {kort.merknad && (
-        <p className="mekanismekort__merknad">
-          <Uthev tekst={kort.merknad} />
-        </p>
-      )}
-      {!erTomt(kort.dokument) && <Riktekst dokument={kort.dokument} />}
-    </div>
-  )
-}
-
 /** Unicode-tegn for senket skrift, som i «tₘₐₓ» og «tₛₛ». */
 const SENKET = /([\u2080-\u209c]+)/
 
@@ -684,19 +606,8 @@ const SENKET = /([\u2080-\u209c]+)/
  * og leses som t med «max» senket. Teksten er den samme.
  */
 function Kinetikktittel({ tittel }: { tittel: string }) {
-  return (
-    <>
-      {tittel.split(SENKET).map((del, i) =>
-        i % 2 === 1 ? (
-          <sub key={i}>
-            <Uthev tekst={del.normalize('NFKC')} />
-          </sub>
-        ) : (
-          del && <Uthev key={i} tekst={del} />
-        ),
-      )}
-    </>
-  )
+  const deler = tittel.split(SENKET).map((tekst, i) => ({ tekst: i % 2 === 1 ? tekst.normalize('NFKC') : tekst, senket: i % 2 === 1 }))
+  return <SenketTekst deler={deler.filter((d) => d.tekst)} />
 }
 
 /* --- Panel 7: tabellen ---------------------------------------------------- */

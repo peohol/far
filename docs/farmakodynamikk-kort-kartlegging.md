@@ -1,5 +1,13 @@
 # Kartlegging av farmakodynamiske mekanismer for stoffregisteret
 
+> **Ikke lenger autoritativ (2026-10-01).** Kartleggingen ble brukt til å gjøre
+> farmakodynamikktekstene om til mekanismekort 30.09.2026, og har fortsatt
+> nyttige vurderinger av hva kildene sier. Kortenes utforming er endret siden:
+> kortet viser nå bare målet og effekten som en farget pille, og feltene
+> `effekt`, `retning`, `kvalifikasjon` og `merknad` brukes ikke lenger.
+> Gjeldende utforming, ikoner og farger står i `docs/farmakodynamikk-ikoner.md`
+> og `docs/faginnhold.md`.
+
 ## Formål
 
 Denne filen kartlegger farmakodynamikken som allerede er beskrevet i OUSFAR, slik at dagens fritekst kan erstattes av strukturerte mekanismekort uten å tilføre ny farmakologisk informasjon.

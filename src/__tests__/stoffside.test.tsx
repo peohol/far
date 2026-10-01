@@ -473,9 +473,16 @@ function kilde({ data = side, regler = amtnorsumregler, thc = () => null, kanRed
   return { leser, lager, kanRedigere, legemidler: legemiddelleser() }
 }
 
-/** Knappen som åpner og lukker skuffen med navnet, også når skuffen står skjult. */
+/**
+ * Knappen som åpner og lukker skuffen med navnet, også når skuffen står skjult.
+ * Teksten i knappen teller også: jsdom regner ikke `<sub>` som en del av
+ * linjen, så «D<sub>2</sub>-reseptor» får navnet «D 2 -reseptor» der, men
+ * ikke i nettleseren.
+ */
 function skuffen(navn: string): HTMLElement {
-  const knapp = screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))
+  const knapp = screen
+    .getAllByRole('button', { name: (tilgjengelig, el) => tilgjengelig === navn || el.textContent === navn, hidden: true })
+    .find((b) => b.hasAttribute('aria-expanded'))
   if (!knapp) throw new Error(`Fant ingen skuff som heter «${navn}»`)
   return knapp
 }
@@ -2113,8 +2120,11 @@ describe('kortene i farmakokinetikken', () => {
 describe('mekanismekortene i farmakodynamikken', () => {
   /**
    * Farmakodynamikken som to mekanismekort i stedet for teksten: en
-   * antagonist med kilde og utdypende tekst, og et mål uten effekt.
+   * antagonist med kilde og utdypende tekst, og et eldre kort for et mål uten
+   * effekt og uten utdypende tekst, med feltene kortene hadde før (som ikke
+   * vises lenger).
    */
+  const tekst = (t: string) => ({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: t }] }] })
   const medMekanismer = (tilstand: Tilstand): Stoffsidedata => {
     const data = side(tilstand)
     const kort = (id: string, posisjon: number, kortdata: Record<string, unknown>, referanser: string[] = []) =>
@@ -2123,26 +2133,21 @@ describe('mekanismekortene i farmakodynamikken', () => {
       ...data,
       elementer: [
         ...data.elementer.filter((e) => e.id !== 'tekst'),
-        kort(
-          'm1',
-          0,
-          {
-            maal: 'D2-reseptor',
-            effekt: 'Antagonist',
-            mekanisme: 'antagonisme',
-            retning: 'ned',
-            kvalifikasjon: 'Høy affinitet',
-            dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Syntetisk utdyping.' }] }] },
-          },
-          [REF_A.id],
-        ),
-        kort('m2', 1, { maal: 'D1-reseptor', effekt: 'Ingen effekt', mekanisme: 'ingen_effekt', retning: 'ingen', kvalifikasjon: 'Ingen affinitet' }),
+        kort('m1', 0, { maal: 'D2-reseptor', mekanisme: 'antagonisme', dokument: tekst('Syntetisk utdyping.') }, [REF_A.id]),
+        kort('m2', 1, {
+          maal: 'D1-reseptor',
+          effekt: 'Ingen effekt',
+          mekanisme: 'ingen_effekt',
+          retning: 'ingen',
+          kvalifikasjon: 'Ingen affinitet',
+          merknad: 'Syntetisk merknad.',
+        }),
       ],
     }
   }
   const kortet = (id: string) => document.getElementById(detaljanker('farmakodynamikk', id))!
 
-  it('viser mål og effekt på de lukkede kortene, med fargen etter retningen, og ikke den gamle teksten', async () => {
+  it('viser målet med subtypen senket og effekten som en farget pille på de lukkede kortene', async () => {
     const user = userEvent.setup()
     vis('amitriptylin', kilde({ data: medMekanismer }))
     await finnVerdi('10–20 nmol/L')
@@ -2150,24 +2155,26 @@ describe('mekanismekortene i farmakodynamikken', () => {
     expect(skuffen('Farmakodynamikk').closest('.skuff')!.querySelector('.skuff__oppsummering')!.textContent).toBe('D2-reseptor')
     await apneSkuff(user, 'Farmakodynamikk')
 
-    expect(kortet('m1').querySelector('.skuff__oppsummering')!.textContent).toBe('Antagonist · Høy affinitet')
-    expect(kortet('m1').classList).toContain('mekanismekort--ned')
-    expect(kortet('m1').querySelector('.skuff__ikon .ikon')).not.toBeNull()
+    expect(kortet('m1').querySelector('.skuff__tittel sub')!.textContent).toBe('2')
+    const pille = kortet('m1').querySelector('.skuff__oppsummering .merke')!
+    expect(pille.textContent).toBe('Antagonist')
+    expect(pille.classList).toContain('merke--alvorlig')
+    expect([...kortet('m1').classList]).toEqual(expect.arrayContaining(['mekanismekort--redusert', 'system-dopamin']))
+    expect(kortet('m1').querySelector('.skuff__ikon .ikon')!.getAttribute('data-ikon')).toBe('mekAntagonisme')
 
-    // D1 har ingen merknad eller utdypende tekst, så det er ikke mer å vise: kortet er fast.
+    // D1 har ingen utdypende tekst, så kortet er fast og viser bare effekten, i grått.
+    // De eldre feltene, som kvalifikasjonen og merknaden, vises ikke.
     expect(kortet('m2').classList).toContain('skuff--fast')
     expect(within(kortet('m2')).queryByRole('button')).toBeNull()
-    expect(kortet('m2').querySelector('.mekanismekort__fast')!.textContent).toBe(
-      'Ingen effekt · Ingen affinitet. Mekanisme: Ingen effekt. Retning: Ingen effekt.',
-    )
-    expect(kortet('m2').querySelector('.kun-skjermleser')).not.toBeNull()
-    expect([...kortet('m2').classList]).toEqual(expect.arrayContaining(['mekanismekort--noytral', 'mekanismekort--ingen']))
+    expect(kortet('m2').querySelector('.infokort__innhold')!.textContent).toBe('Ingen effekt')
+    expect(kortet('m2').querySelector('.infokort__innhold .merke')!.classList).toContain('merke--noytral')
+    expect(kortet('m2').classList).toContain('mekanismekort--noytral')
     expect(kortet('m2').querySelector('.skuff__ikon')).toBeNull()
 
     expect(screen.queryByText('gjenopptaket')).toBeNull()
   })
 
-  it('finner et fast mekanismekort på mekanismen, som bare står for skjermleseren', async () => {
+  it('finner et fast mekanismekort på effekten', async () => {
     const user = userEvent.setup()
     vis('amitriptylin', kilde({ data: medMekanismer }))
     await finnVerdi('10–20 nmol/L')
@@ -2176,42 +2183,61 @@ describe('mekanismekortene i farmakodynamikken', () => {
     await user.click(steder.getByRole('button', { name: 'Farmakodynamikk › D1-reseptor' }))
     expect(skuffen('Farmakodynamikk').getAttribute('aria-expanded')).toBe('true')
     expect(document.querySelector('mark.sidetreff--aktiv')!.closest('.skuff--fast')).toBe(kortet('m2'))
-    expect(kortet('m2').querySelector('.kun-skjermleser mark')).not.toBeNull()
+    expect(kortet('m2').querySelector('.merke mark')).not.toBeNull()
   })
 
-  it('viser effekten, mekanismen, retningen, den utdypende teksten og kildene i det åpnede kortet', async () => {
+  it('viser effekten, den utdypende teksten og kildene i det åpnede kortet, og ikke mekanismen og retningen', async () => {
     const user = userEvent.setup()
     vis('amitriptylin', kilde({ data: medMekanismer }))
     await finnVerdi('10–20 nmol/L')
     await apneSkuff(user, 'Farmakodynamikk')
     await apneSkuff(user, 'D2-reseptor')
-    const innhold = within(kortet('m1').querySelector<HTMLElement>('.skuff__innhold')!)
-    expect(innhold.getByText('Antagonisme (subtype ikke angitt)')).toBeTruthy()
-    expect(innhold.getByText('Reduseres')).toBeTruthy()
-    expect(innhold.getByText('Syntetisk utdyping.')).toBeTruthy()
+    const innhold = kortet('m1').querySelector<HTMLElement>('.skuff__innhold')!
+    expect(innhold.querySelector('.mekanismekort__effekt .merke--alvorlig')!.textContent).toBe('Antagonist')
+    expect(within(innhold).getByText('Syntetisk utdyping.')).toBeTruthy()
+    expect(within(innhold).queryByText(/Antagonisme|Reduseres|Mekanisme|Retning/)).toBeNull()
     expect(kortet('m1').querySelector('.referansefelt--element')).not.toBeNull()
   })
 
-  it('legger til et mekanismekort, og binder «Ingen effekt» til retningen', async () => {
+  it('fremhever søketreff i målet også over subtypen, og på effekten', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', kilde({ data: medMekanismer }))
+    await finnVerdi('10–20 nmol/L')
+    const sok = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
+    await user.type(sok, 'D2-res')
+    await waitFor(() => expect(kortet('m1').querySelector('.skuff__tittel mark.sidetreff')).not.toBeNull())
+    const merke = kortet('m1').querySelector('.skuff__tittel mark.sidetreff')!
+    expect(merke.textContent).toBe('D2-res')
+    expect(merke.querySelector('sub')!.textContent).toBe('2')
+
+    await user.clear(sok)
+    await user.type(sok, 'Antagonist')
+    await waitFor(() => expect(kortet('m1').querySelector('.skuff__innhold .merke mark.sidetreff')).not.toBeNull())
+  })
+
+  it('legger til et mekanismekort, og viser effekten slik den blir mens mekanismen velges', async () => {
     const user = userEvent.setup()
     const { lager } = vis('amitriptylin', kilde({ kanRedigere: true, data: medMekanismer }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await apneSkuff(user, 'Farmakodynamikk')
     await user.click(await screen.findByRole('button', { name: 'Legg til mekanismekort' }))
-    const skjema = within(redigeringsvindu('Nytt kort'))
+    const vindu = redigeringsvindu('Nytt kort')
+    const skjema = within(vindu)
 
     await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
     expect(skjema.getByRole('alert').textContent).toBe('Oppgi målproteinet eller prosessen.')
 
     await user.type(skjema.getByLabelText('Målprotein eller prosess'), '5-HT1A-reseptor')
-    await user.type(skjema.getByLabelText('Effekt'), 'Partiell agonist')
-    await user.selectOptions(skjema.getByLabelText('Mekanismetype'), 'ingen_effekt')
-    expect((skjema.getByRole('radio', { name: /Ingen effekt/ }) as HTMLInputElement).checked).toBe(true)
-    expect((skjema.getByRole('radio', { name: /Økes/ }) as HTMLInputElement).disabled).toBe(true)
-    await user.selectOptions(skjema.getByLabelText('Mekanismetype'), 'partiell_agonisme')
-    expect((skjema.getByRole('radio', { name: /Retning ikke angitt/ }) as HTMLInputElement).checked).toBe(true)
-    await user.click(skjema.getByRole('radio', { name: /Økes/ }))
+    await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
+    expect(skjema.getByRole('alert').textContent).toBe('Velg mekanismen.')
+
+    await user.selectOptions(skjema.getByLabelText('Mekanisme'), 'partiell_agonisme')
+    const forhandsvisning = vindu.querySelector('.mekanismeskjema__forhandsvisning')!
+    expect(forhandsvisning.querySelector('.merke')!.textContent).toBe('Partiell agonist')
+    expect(forhandsvisning.querySelector('.merke')!.classList).toContain('merke--toksisk')
+    expect(forhandsvisning.classList).toContain('system-serotonin')
+    expect(forhandsvisning.querySelector('.ikon')!.getAttribute('data-ikon')).toBe('mekPartiellAgonisme')
     await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
 
     await waitFor(() => expect(lager.opprettUtkast).toHaveBeenCalledTimes(1))
@@ -2221,7 +2247,7 @@ describe('mekanismekortene i farmakodynamikken', () => {
         panel: 'farmakodynamikk',
         posisjon: 2,
         elementtype: 'mekanismekort',
-        data: { maal: '5-HT1A-reseptor', effekt: 'Partiell agonist', mekanisme: 'partiell_agonisme', retning: 'opp' },
+        data: { maal: '5-HT1A-reseptor', mekanisme: 'partiell_agonisme' },
       }),
     ])
   })
@@ -2235,8 +2261,7 @@ describe('mekanismekortene i farmakodynamikken', () => {
     await apneSkuff(user, 'D2-reseptor')
     await user.click(await screen.findByRole('button', { name: 'Rediger: D2-reseptor' }))
     const skjema = within(redigeringsvindu('D2-reseptor'))
-    await user.clear(skjema.getByLabelText('Kort kvalifikasjon (valgfri)'))
-    await user.type(skjema.getByLabelText('Kort kvalifikasjon (valgfri)'), 'Potent')
+    await user.selectOptions(skjema.getByLabelText('Mekanisme'), 'invers_agonisme')
     await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
     await waitFor(() => expect(lager.lagreUtkast).toHaveBeenCalledTimes(1))
     expect(vi.mocked(lager.lagreUtkast).mock.calls[0]).toEqual([
@@ -2244,7 +2269,7 @@ describe('mekanismekortene i farmakodynamikken', () => {
       1,
       expect.objectContaining({
         elementtype: 'mekanismekort',
-        data: expect.objectContaining({ maal: 'D2-reseptor', kvalifikasjon: 'Potent', mekanisme: 'antagonisme', retning: 'ned' }),
+        data: { maal: 'D2-reseptor', mekanisme: 'invers_agonisme', dokument: tekst('Syntetisk utdyping.') },
         referanser: [REF_A.id],
       }),
     ])

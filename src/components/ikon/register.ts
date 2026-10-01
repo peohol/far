@@ -25,13 +25,21 @@ export const IKONFARGER = {
   paper: 'papir',
   'i-ink': 'ikon-blekk',
   'i-line': 'ikon-linje',
-  /** Retningen et mekanismekort viser: settes av kortet rundt ikonet (`--retning-farge`). */
-  retning: 'retning',
+  /** Systemet målproteinet hører til: settes av kortet rundt ikonet (`--system-farge`), ellers nøytral. */
+  system: 'system',
+  /** Virkningen på målet, som et trafikklys (se `docs/farmakodynamikk-ikoner.md`). */
+  okt: 'virkning-okt',
+  delvis: 'virkning-delvis',
+  redusert: 'virkning-redusert',
+  noytral: 'virkning-noytral',
 } as const
 
 export type Ikonfarge = keyof typeof IKONFARGER
-/** `f1`/`f2`: flate, `l`: linje, `d`: stiplet linje, `h`: fylt flekk. */
-export type Rolle = 'f1' | 'f2' | 'l' | 'd' | 'h'
+/**
+ * `f1`/`f2`: gjennomskinnelig flate, `o1`/`o2`: ugjennomsiktig flate (svak og
+ * sterkere), `l`: linje, `d`: stiplet linje, `h`: fylt flekk.
+ */
+export type Rolle = 'f1' | 'f2' | 'o1' | 'o2' | 'l' | 'd' | 'h'
 /** Animasjonene i `ikon.css`. Spilles én gang, aldri kontinuerlig. */
 export type Ikonanimasjon =
   | 'spin45'
@@ -52,6 +60,8 @@ export type Ikonanimasjon =
   | 'fill'
   | 'shake'
   | 'pulse'
+  | 'glidR'
+  | 'glidL'
 
 interface Ekstra {
   /** Tynnere strek (80 %), til kurvene i miniplottene. */
@@ -162,30 +172,50 @@ const sat = [90, 210, 330].map((d): [number, number, number] => {
 const axes = P('M7 5v36h37', 'l', 'i-ink')
 
 /*
- * Mekanismeikonene i farmakodynamikken. Målet (reseptoren, kanalen,
- * transportøren eller enzymet) tegnes i fargen `retning`, som kortet rundt
- * setter: rødt når prosessen reduseres, grønt når den økes, grått ellers.
- * Stoffet tegnes i aksentfargen.
+ * Mekanismeikonene i farmakodynamikken. Prinsippene, og hvordan et nytt ikon
+ * tegnes, står i `docs/farmakodynamikk-ikoner.md`. Kort fortalt:
  *
- * De spesifikke ikonene viser selve mekanismen: en partiell agonist halvt
- * fylt i bindingsstedet, en antagonist som fortrenger agonisten, en propp i
- * kanalen. De generelle bruker bare den nøytrale notasjonen for «virker på»
- * (→) og «hemmer» (⊣) eller viser målet alene, så de ikke sier mer enn kilden.
+ * - Målproteinet har fargen til systemet det hører til (`system`), som kortet
+ *   rundt setter. Det er ugjennomsiktig, så membranen ikke synes gjennom.
+ * - Stoffet er en halvsirkel med flatsiden mot målet, i trafikklysfargen for
+ *   virkningen: grønt øker aktiviteten, gult øker den litt, rødt reduserer
+ *   eller snur den, grått er ingen eller ukjent effekt.
+ * - En utstikker fra flatsiden fyller bindingssetet (poren, det aktive
+ *   setet): stoffet både binder og «virker». Uten utstikker binder stoffet
+ *   uten å fylle setet.
  */
 const membran = R(2, 31, 44, 7, 2, 'f1', 'glass')
-/** Reseptoren i membranen, med bindingsstedet øverst mellom x 21 og 27. */
-const reseptor = P('M13 41V17h8v9h6v-9h8v24z', 'f1', 'retning')
-/** Stoffet virker på målet: en pil ned mot bindingsstedet. */
-const virkerPaa = G([P('M24 3v12', 'l', 'i-ink'), P('M20.5 11.5 24 15l3.5-3.5', 'l', 'i-ink')], 'drop')
-/** Stoffet hemmer målet: en strek med tverrstrek. */
-const hemmer = (x1: number, y1: number, x2: number, y2: number, tverr: string): Ikondel =>
-  G([P(`M${x1} ${y1}L${x2} ${y2}`, 'l', 'i-ink'), P(tverr, 'l', 'i-ink')], 'pop')
-/** Ionekanalen: to underenheter med poren mellom x 21 og 27. */
-const kanal = [R(12, 17, 9, 25, 3, 'f1', 'retning'), R(27, 17, 9, 25, 3, 'f1', 'retning')]
-/** Transportøren: én kropp tvers gjennom membranen. */
-const transportor = R(15, 16, 18, 27, 8, 'f1', 'retning')
-/** Stoffet som hemmer en kanal eller transportør, som en propp. */
-const propp = (y: number): Ikondel => R(21, y, 6, 8, 1.8, 'f2', 'accent', 'pop')
+/** Reseptoren i membranen, med bindingssetet øverst mellom x 20 og 28. */
+const reseptor = P('M14 42a2 2 0 0 1-2-2V19a2 2 0 0 1 2-2h6v9h8v-9h6a2 2 0 0 1 2 2v21a2 2 0 0 1-2 2z', 'o1', 'system')
+/**
+ * Stoffet: en halvsirkel med radius `r` og flatsiden ned mot `y`, med
+ * utstikkeren ned i setet når `fyller`. Faller på plass når ikonet spilles.
+ */
+const stoff = (farge: Ikonfarge, fyller: boolean, cx = 24, y = 17, r = 8, anim: Ikonanimasjon = 'drop'): Ikondel => {
+  const b = +(r * 0.31).toFixed(2)
+  const dybde = +(r * 0.75).toFixed(2)
+  const utstikker = fyller ? `h${-(r - b)}v${dybde}a${b} ${b} 0 0 1 ${-2 * b} 0v${-dybde}z` : 'z'
+  return G([P(`M${cx - r} ${y}a${r} ${r} 0 0 1 ${2 * r} 0${utstikker}`, 'o2', farge)], anim)
+}
+/** Ionekanalen: to underenheter med poren mellom dem; `apning` er bredden på poren. */
+const kanal = (apning = 6): [Ikondel, Ikondel] => [
+  R(14 - apning / 2, 17, 10, 25, 3, 'o1', 'system'),
+  R(24 + apning / 2, 17, 10, 25, 3, 'o1', 'system'),
+]
+/** En allosterisk modulator: et stoff som binder på siden av kanalen (flatsiden mot `x`), ikke i poren. */
+const modulator = (farge: Ikonfarge, x: number): Ikondel =>
+  G([P(`M${x} 17a6 6 0 0 0 0 12z`, 'o2', farge)], 'bumpR')
+/** Transportøren: en avrundet kropp gjennom membranen, med inngangen øverst og veien gjennom stiplet. */
+const transportor = [
+  P('M18 16h2v5a4 4 0 0 0 8 0v-5h2a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6H18a6 6 0 0 1-6-6V22a6 6 0 0 1 6-6z', 'o1', 'system'),
+  P('M24 29v11', 'd', 'system'),
+]
+/** Molekylet målet ellers binder eller frakter (signalstoffet, substratet). */
+const substrat = (cx: number, cy: number, anim?: Ikonanimasjon) => C(cx, cy, 2.4, 'f2', 'system', anim)
+/** Enzymet: et løst protein uten membran, med det aktive setet øverst. */
+const enzym = P('M20 17v5a4 4 0 0 0 8 0v-5c7 1 13 7 13 14 0 8-7 13-17 13S7 39 7 31c0-7 6-13 13-14z', 'o1', 'system')
+/** Aksjonspotensialer: en kanal som blokkeres mer jo oftere den åpnes. */
+const fyring = P('M2 7h6l2-5 2.5 7 1.5-2h6l2-5 2.5 7 1.5-2h6l2-5 2.5 7 1.5-2h6', 'l', 'glass', 'draw', { w: 0.8 })
 
 const REGISTER = {
   menu: { vb: 24, parts: [P('M4 7h16M4 12h16M4 17h9', 'l', 'i-ink'), C(18, 17, 2, 'f2', 'accent', 'pop')] },
@@ -865,67 +895,54 @@ const REGISTER = {
     ],
   },
   // --- Mekanismene i farmakodynamikken (se over REGISTER) ---
-  mekReseptor: { vb: 48, parts: [membran, reseptor] },
-  mekAgonisme: { vb: 48, parts: [membran, reseptor, virkerPaa] },
-  mekPartiellAgonisme: {
-    vb: 48,
-    parts: [
-      membran,
-      reseptor,
-      C(24, 21, 4, 'f1', 'accent'),
-      P('M24 17a4 4 0 0 0 0 8z', 'f2', 'accent', 'pop'),
-    ],
-  },
-  mekAntagonisme: { vb: 48, parts: [membran, reseptor, hemmer(24, 3, 24, 13, 'M18.5 13h11')] },
+  mekAgonisme: { vb: 48, parts: [membran, reseptor, stoff('okt', true)] },
+  mekPartiellAgonisme: { vb: 48, parts: [membran, reseptor, stoff('delvis', true)] },
+  mekAntagonisme: { vb: 48, parts: [membran, reseptor, stoff('redusert', false)] },
   mekKompetitivAntagonisme: {
     vb: 48,
-    parts: [membran, reseptor, R(21, 17, 6, 10, 1.5, 'f2', 'accent', 'pop'), C(37, 9, 4, 'd', 'accent', 'bumpR')],
+    // Antagonisten tar plassen, og agonisten skyves bort.
+    parts: [membran, reseptor, stoff('okt', true, 40, 11, 5, 'bumpR'), stoff('redusert', false)],
   },
-  mekIonekanal: { vb: 48, parts: [membran, ...kanal, C(24, 9, 3, 'f2', 'info')] },
-  mekKanalblokkering: { vb: 48, parts: [membran, ...kanal, propp(20), C(24, 8, 3, 'f2', 'info')] },
-  mekBruksavhengigBlokkering: {
+  mekInversAgonisme: { vb: 48, parts: [membran, reseptor, stoff('redusert', true)] },
+  mekPositivModulering: {
     vb: 48,
+    // Modulatoren binder på siden, og kanalen åpnes mer enn normalt.
     parts: [
       membran,
-      ...kanal,
-      propp(20),
-      P('M3 11h6l2.5-7 2.5 12 2.5-5h6l2.5-7 2.5 12 2.5-5h6l2.5-7 2.5 12 2.5-5h3', 'l', 'i-ink', 'draw', { w: 0.8 }),
+      G([kanal(10)[0], modulator('okt', 9)], 'glidL'),
+      G([kanal(10)[1]], 'glidR'),
+      C(24, 23, 2.2, 'f2', 'info', 'drop'),
+      C(24, 35, 2.2, 'f2', 'info', 'drop'),
     ],
   },
-  mekTransportor: { vb: 48, parts: [membran, transportor, P('M24 4v40', 'd', 'i-ink')] },
-  mekTransporterhemming: {
+  mekNegativModulering: {
     vb: 48,
-    parts: [membran, transportor, P('M24 46V30', 'l', 'i-ink'), propp(21), C(24, 8, 3, 'f2', 'info')],
+    // Modulatoren binder på siden, og kanalen lukker seg.
+    parts: [membran, G([kanal(2)[0], modulator('redusert', 13)], 'glidR'), G([kanal(2)[1]], 'glidL'), C(24, 10, 2.2, 'f2', 'info')],
   },
+  mekReseptor: { vb: 48, parts: [membran, reseptor, stoff('noytral', false)] },
+  mekKanalblokkering: { vb: 48, parts: [membran, ...kanal(), stoff('redusert', true)] },
+  mekBruksavhengigBlokkering: { vb: 48, parts: [membran, ...kanal(), fyring, stoff('redusert', true, 24, 17, 7)] },
+  mekIonekanal: { vb: 48, parts: [membran, ...kanal(), stoff('noytral', false)] },
   mekReopptakshemming: {
     vb: 48,
-    parts: [
-      P('M3 3h42v10c0 4-3 6-7 6H10c-4 0-7-2-7-6z', 'f1', 'glass'),
-      R(18, 11, 12, 14, 5, 'f1', 'retning'),
-      P('M40 44c0-9-5-14-12-14', 'l', 'i-ink'),
-      propp(15),
-      C(10, 36, 2.6, 'f2', 'info'),
-      C(20, 42, 2.6, 'f2', 'info'),
-    ],
-  },
-  mekKotransporterhemming: {
-    vb: 48,
+    // Signalstoffet blir stående igjen utenfor cellen.
     parts: [
       membran,
-      transportor,
-      P('M24 46V30', 'l', 'i-ink'),
-      propp(21),
-      C(19, 8, 3, 'f2', 'info'),
-      R(26, 5, 6, 6, 1.2, 'f2', 'warn'),
+      ...transportor,
+      substrat(7, 22, 'pop'),
+      substrat(41, 24, 'pop'),
+      substrat(38, 11, 'pop'),
+      stoff('redusert', true),
     ],
   },
-  mekEnzymhemming: {
+  mekTransporterhemming: { vb: 48, parts: [membran, ...transportor, substrat(40, 22, 'pop'), stoff('redusert', true)] },
+  mekKotransporterhemming: {
     vb: 48,
-    parts: [
-      P('M24 10a14 14 0 1 0 12.1 21L25 24l11.1-7A14 14 0 0 0 24 10z', 'f1', 'retning'),
-      hemmer(46, 24, 38, 24, 'M38 18.5v11'),
-    ],
+    parts: [membran, ...transportor, C(7, 22, 2.6, 'f2', 'info', 'pop'), R(37.5, 19.5, 5, 5, 1.2, 'f2', 'glass', 'pop'), stoff('redusert', true)],
   },
+  mekTransportor: { vb: 48, parts: [membran, ...transportor, stoff('noytral', false)] },
+  mekEnzymhemming: { vb: 48, parts: [enzym, substrat(40, 9, 'bumpR'), stoff('redusert', true)] },
   opp: { vb: 24, parts: [C(12, 12, 9, 'f1', 'glass'), P('M12 16.5V7.5M7.5 12 12 7.5l4.5 4.5', 'l', 'i-ink', 'pop')] },
   ned: { vb: 24, parts: [C(12, 12, 9, 'f1', 'glass'), P('M12 7.5v9M7.5 12l4.5 4.5 4.5-4.5', 'l', 'i-ink', 'pop')] },
 } satisfies Record<string, Ikondefinisjon>

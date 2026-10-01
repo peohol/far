@@ -46,7 +46,7 @@ import {
   lesRiktekst,
   panelFor,
 } from './paneler'
-import { mekanismeFor, retningFor } from './mekanismer'
+import { mekanismeFor } from './mekanismer'
 import { formaterReferanse } from './referanser'
 import { klartekst } from './riktekst'
 import { stoffadresse } from '../domain/rute'
@@ -303,11 +303,7 @@ export function elementtekster(elementtype: string, data: unknown): Elementtekst
       const t = kort.maal
       return [
         ...tekst('overskrift', kort.maal, t, 'Mål'),
-        ...tekst('verdi', kort.effekt, t, 'Effekt'),
-        ...tekst('verdi', kort.kvalifikasjon, t, 'Kvalifikasjon'),
-        ...tekst('verdi', mekanismeFor(kort.mekanisme)?.navn ?? '', t, 'Mekanisme'),
-        ...tekst('verdi', retningFor(kort.retning).navn, t, 'Retning'),
-        ...tekst('fritekst', kort.merknad, t, 'Merknad'),
+        ...tekst('verdi', mekanismeFor(kort.mekanisme)?.effekt ?? '', t, 'Effekt'),
         ...tekst('fritekst', klartekst(kort.dokument), t, 'Utdypende tekst'),
       ]
     }

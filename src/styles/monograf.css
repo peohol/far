@@ -110,112 +110,42 @@
 }
 
 /* --- Farmakodynamikk: mekanismekortene -----------------------------------
-   Lest raskt: målet som tittel, effekten under, og kvalifikasjonen dempet
-   etter den. Retningen på den direkte prosessen gir en diskret farge i
-   ikonet og en tynn stripe langs venstre kant: dempet rødt når prosessen
-   reduseres, grønt når den økes, og grått ellers. Retningen står også i
-   tekst i det åpnede kortet; et kort uten noe mer å vise, som ikke åpnes,
-   har den for skjermleseren. Et mål uten effekt har ikke ikon, og effekten
-   står dempet. */
+   Lest med ett blikk: målet som tittel og effekten som en pille under, i
+   trafikklysfargen for virkningen (docs/farmakodynamikk-ikoner.md). Samme
+   farge gir en tynn stripe langs venstre kant. Åpnet viser kortet pillen
+   øverst, så den utdypende teksten og kildene. Uten utdypende tekst åpnes
+   kortet ikke, og pillen står fast under tittelen. */
 .mekanismekort {
-  --retning-farge: var(--retning-noytral);
-  box-shadow: inset var(--kant-tykk) 0 0 color-mix(in oklab, var(--retning-farge) 70%, var(--linje));
+  --virkning-farge: var(--virkning-noytral);
+  box-shadow: inset var(--kant-tykk) 0 0 color-mix(in oklab, var(--virkning-farge) 70%, var(--linje));
 }
 
-.mekanismekort--ned {
-  --retning-farge: var(--retning-ned);
+.mekanismekort--okt {
+  --virkning-farge: var(--virkning-okt);
 }
 
-.mekanismekort--opp {
-  --retning-farge: var(--retning-opp);
+.mekanismekort--delvis {
+  --virkning-farge: var(--virkning-delvis);
+}
+
+.mekanismekort--redusert {
+  --virkning-farge: var(--virkning-redusert);
 }
 
 .mekanismekort > .skuff__hode .skuff__oppsummering {
   white-space: normal;
 }
 
-.mekanismekort__fast {
-  margin: 0;
-}
-
 .mekanismekort__effekt {
-  font-weight: var(--vekt-medium);
-  color: var(--blekk);
+  margin: 0;
 }
 
-.mekanismekort__kvalifikasjon,
-.mekanismekort--ingen .mekanismekort__effekt {
-  font-weight: var(--vekt-normal);
-  color: var(--blekk-dempet);
-}
-
-.mekanismekort--ingen .mekanismekort__effekt {
-  font-style: italic;
-}
-
-.mekanismekort__detaljer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-4);
+.mekanismekort .infokort__innhold > .riktekst {
   max-width: 44em;
-}
-
-.mekanismekort__fakta {
-  display: grid;
-  grid-template-columns: minmax(6rem, max-content) 1fr;
-  gap: var(--rom-2) var(--rom-5);
-  margin: 0;
-  font-size: var(--tekst-ui);
-}
-
-.mekanismekort__fakta > div {
-  display: contents;
-}
-
-.mekanismekort__fakta dt {
-  font: var(--vekt-halvfet) var(--tekst-liten) / 1.5 var(--skrift-ui);
-  color: var(--blekk-dempet);
-}
-
-.mekanismekort__fakta dd {
-  margin: 0;
-  color: var(--blekk);
-}
-
-.mekanismekort__retning {
-  display: flex;
-  align-items: baseline;
-  gap: var(--rom-2);
-}
-
-.mekanismekort__symbol {
-  font-weight: var(--vekt-halvfet);
-  color: color-mix(in oklab, var(--retning-farge) 75%, var(--blekk));
-}
-
-.mekanismekort__merknad {
-  margin: 0;
-  font: italic var(--vekt-normal) var(--tekst-liten) / 1.45 var(--skrift-display);
-  color: var(--blekk-dempet);
-}
-
-.mekanismekort__detaljer > .riktekst {
   gap: var(--rom-2);
   font: var(--vekt-normal) var(--tekst-ingress) / 1.5 var(--skrift-display);
   color: var(--blekk);
   text-wrap: pretty;
-}
-
-/* På en smal skjerm står hver opplysning over verdien sin. */
-@media (max-width: 30rem) {
-  .mekanismekort__fakta {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-
-  .mekanismekort__fakta > div + div dt {
-    margin-top: var(--rom-2);
-  }
 }
 
 /* --- Interaksjoner ---------------------------------------------------------

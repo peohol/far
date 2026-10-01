@@ -200,12 +200,25 @@
   --under-blekk: #1d4e86;
   --under-kant: #3f7fc2;
 
-  /* Retningen på et mekanismekort i farmakodynamikken: prosessen på målet
-     reduseres, økes, eller ingen effekt / ikke angitt. Brukes dempet, i
-     ikonet og en smal kant, aldri som flate. */
-  --retning-ned: var(--alvorlig);
-  --retning-opp: var(--referanse);
-  --retning-noytral: var(--glass);
+  /* Farmakodynamikken (docs/farmakodynamikk-ikoner.md). Virkningen på målet
+     er et trafikklys: øker, øker litt, reduserer eller snur, og ingen eller
+     ukjent effekt. Systemfargene er faste for hvert system målproteinet
+     hører til, dempet så de ikke konkurrerer med virkningen. */
+  --virkning-okt: var(--referanse);
+  --virkning-delvis: var(--toksisk);
+  --virkning-redusert: var(--alvorlig);
+  --virkning-noytral: var(--glass);
+  --system-dopamin: #6b9a5e;
+  --system-noradrenalin: #5b7fc0;
+  --system-serotonin: #c9a536;
+  --system-histamin: #a065a8;
+  --system-opioid: #cc7e3e;
+  --system-glutamat: #c8708f;
+  --system-gaba: #7a6fc0;
+  --system-acetylkolin: #3f9a95;
+  --system-raas: #a37a5a;
+  --system-hormon: #8f9548;
+  --system-ioner: #4fa3c7;
 
   /* Ikonfarger */
   --blod: #c22e45;
@@ -284,9 +297,21 @@
   --under-blekk: #a9ccf5;
   --under-kant: #7fb4ee;
 
-  --retning-ned: var(--alvorlig);
-  --retning-opp: var(--referanse);
-  --retning-noytral: var(--glass);
+  --virkning-okt: var(--referanse);
+  --virkning-delvis: var(--toksisk);
+  --virkning-redusert: var(--alvorlig);
+  --virkning-noytral: var(--glass);
+  --system-dopamin: #93c487;
+  --system-noradrenalin: #8eabe8;
+  --system-serotonin: #e3c56a;
+  --system-histamin: #c896d0;
+  --system-opioid: #eba46d;
+  --system-glutamat: #e99bb8;
+  --system-gaba: #a79de8;
+  --system-acetylkolin: #6fc6bf;
+  --system-raas: #c9a383;
+  --system-hormon: #bcc274;
+  --system-ioner: #7cc4e4;
 
   --blod: #f2708a;
   --info: #8cb5ee;

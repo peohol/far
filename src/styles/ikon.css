@@ -64,8 +64,28 @@
 .ikon [data-farge='papir'] { --ikon-farge: var(--papir); }
 .ikon [data-farge='ikon-blekk'] { --ikon-farge: var(--ikon-blekk); }
 .ikon [data-farge='ikon-linje'] { --ikon-farge: var(--ikon-linje); }
-/* Mekanismeikonene: målet får retningen til kortet rundt, ellers nøytral linjefarge. */
-.ikon [data-farge='retning'] { --ikon-farge: var(--retning-farge, var(--ikon-linje)); }
+/* Mekanismeikonene (docs/farmakodynamikk-ikoner.md): målproteinet får
+   systemfargen kortet rundt setter, ellers den nøytrale; stoffet får
+   virkningen sin som trafikklys. */
+.ikon [data-farge='system'] { --ikon-farge: var(--system-farge, var(--glass)); }
+.ikon [data-farge='virkning-okt'] { --ikon-farge: var(--virkning-okt); }
+.ikon [data-farge='virkning-delvis'] { --ikon-farge: var(--virkning-delvis); }
+.ikon [data-farge='virkning-redusert'] { --ikon-farge: var(--virkning-redusert); }
+.ikon [data-farge='virkning-noytral'] { --ikon-farge: var(--virkning-noytral); }
+
+/* Systemet et målprotein hører til (`SYSTEMER` i src/faginnhold/mekanismer.ts),
+   satt på elementet rundt ikonet. */
+.system-dopamin { --system-farge: var(--system-dopamin); }
+.system-noradrenalin { --system-farge: var(--system-noradrenalin); }
+.system-serotonin { --system-farge: var(--system-serotonin); }
+.system-histamin { --system-farge: var(--system-histamin); }
+.system-opioid { --system-farge: var(--system-opioid); }
+.system-glutamat { --system-farge: var(--system-glutamat); }
+.system-gaba { --system-farge: var(--system-gaba); }
+.system-acetylkolin { --system-farge: var(--system-acetylkolin); }
+.system-raas { --system-farge: var(--system-raas); }
+.system-hormon { --system-farge: var(--system-hormon); }
+.system-ioner { --system-farge: var(--system-ioner); }
 
 /* --- Roller ---------------------------------------------------------------- */
 .ikon [data-rolle^='f'] {
@@ -78,6 +98,25 @@
 
 .ikon [data-rolle='f2'] {
   fill-opacity: 0.5;
+}
+
+/* Ugjennomsiktige flater: samme tone som `f1`/`f2` over kortflaten, men det
+   som ligger bak (som en cellemembran), synes ikke gjennom. */
+.ikon [data-rolle^='o'] {
+  fill: color-mix(in oklab, var(--ikon-farge) 30%, var(--ikon-grunn, var(--flate)));
+  stroke: color-mix(in oklab, var(--ikon-farge) 52%, var(--ikon-linje));
+  stroke-width: var(--ikon-sw);
+  stroke-linejoin: round;
+}
+
+.ikon [data-rolle='o2'] {
+  fill: color-mix(in oklab, var(--ikon-farge) var(--ikon-o2-andel, 62%), var(--ikon-grunn, var(--flate)));
+}
+
+/* På mørk flate trenger stoffet mer av fargen sin for å lyse like klart. */
+:root[data-tema='moerkt'] .ikon,
+[data-tema='moerkt'] .ikon {
+  --ikon-o2-andel: 78%;
 }
 
 /* Glass er lyst i seg selv og trenger litt mer dekning for å synes. */
@@ -146,6 +185,8 @@
 .ikon[data-spiller] [data-anim='fill'] { animation-name: o-fill; animation-duration: 800ms; transform-origin: bottom; }
 .ikon[data-spiller] [data-anim='shake'] { animation-name: o-shake; animation-duration: 520ms; transform-box: view-box; }
 .ikon[data-spiller] [data-anim='pulse'] { animation-name: o-pulse; animation-duration: 480ms; transform-box: view-box; }
+.ikon[data-spiller] [data-anim='glidR'] { animation-name: o-glidR; animation-duration: 900ms; }
+.ikon[data-spiller] [data-anim='glidL'] { animation-name: o-glidL; animation-duration: 900ms; }
 
 @media (prefers-reduced-motion: reduce) {
   .ikon [data-anim] {
@@ -170,4 +211,7 @@
 @keyframes o-flash { 0%, 45% { opacity: 0; transform: scale(0.5); } 75% { opacity: 1; transform: scale(1.15); } 100% { opacity: 1; transform: scale(1); } }
 @keyframes o-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @keyframes o-tick { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+/* En del som står stille til noe annet har skjedd (en modulator binder), og så glir på plass. */
+@keyframes o-glidR { 0%, 45% { transform: translateX(-2.5px); } 100% { transform: translateX(0); } }
+@keyframes o-glidL { 0%, 45% { transform: translateX(2.5px); } 100% { transform: translateX(0); } }
 @keyframes o-fill { from { transform: scaleY(0.15); } to { transform: scaleY(1); } }
