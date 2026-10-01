@@ -2,11 +2,13 @@ import type { ReactNode } from 'react'
 import {
   MERKER,
   NODER,
-  OVERSKRIFTSELEMENT,
+  OVERSKRIFTSATTRIBUTT,
+  overskriftselement,
   overskriftsniva,
   type Riktekstnode,
   type Tekstmerke,
 } from '../../faginnhold/riktekst'
+import { useOverskriftsniva } from '../Overskriftsniva'
 import { Referansepille } from '../referanser/Referansepille'
 import { Uthev } from '../Uthev'
 
@@ -16,6 +18,8 @@ import { Uthev } from '../Uthev'
  * Dokumentet er renset på forhånd (`rensDokument`), så her vises bare de
  * nodene og merkene som er tillatt. Siteringene blir referansepiller med
  * numrene de har på siden, og all tekst går gjennom søkefremhevingen.
+ * Overskriftene legger seg under den nærmeste overskriften rundt teksten
+ * (`UnderOverskrift`).
  */
 export function Riktekst({ dokument }: { dokument: Riktekstnode }) {
   return <div className="riktekst">{barn(dokument)}</div>
@@ -29,10 +33,8 @@ function Node({ node }: { node: Riktekstnode }): ReactNode {
   switch (node.type) {
     case NODER.avsnitt:
       return <p>{barn(node)}</p>
-    case NODER.overskrift: {
-      const Overskrift = OVERSKRIFTSELEMENT[overskriftsniva(node.attrs)]
-      return <Overskrift>{barn(node)}</Overskrift>
-    }
+    case NODER.overskrift:
+      return <Overskrift node={node} />
     case NODER.skillelinje:
       return <hr />
     case NODER.punktliste:
@@ -55,6 +57,12 @@ function Node({ node }: { node: Riktekstnode }): ReactNode {
     default:
       return <>{barn(node)}</>
   }
+}
+
+function Overskrift({ node }: { node: Riktekstnode }) {
+  const niva = overskriftsniva(node.attrs)
+  const Element = overskriftselement(useOverskriftsniva(), niva)
+  return <Element {...{ [OVERSKRIFTSATTRIBUTT]: niva }}>{barn(node)}</Element>
 }
 
 function Merke({ merke, children }: { merke: Tekstmerke; children: ReactNode }) {

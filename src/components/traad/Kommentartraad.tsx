@@ -3,6 +3,7 @@ import { useBevart } from '../../oppdatering/Bevaring'
 import { tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { byggTraad, erNyKommentar, tekstTilLagring, type Kommentar, type Kommentarnode } from '../../traad/modell'
 import { useSkjuling } from '../../hooks/useSkjuling'
+import { UnderOverskrift } from '../Overskriftsniva'
 import { Riktekst } from '../stoffside/Riktekst'
 import { Rikteksteditor } from '../stoffside/Rikteksteditor'
 import { Button } from '../Button'
@@ -171,7 +172,11 @@ function Kommentarvisning({
           ) : skjult ? (
             <p className="kommentar__skjultmerknad">Innholdet er skjult av en administrator.</p>
           ) : (
-            !kommentar.slettet && <Riktekst dokument={kommentar.tekst} />
+            !kommentar.slettet && (
+              <UnderOverskrift niva={4}>
+                <Riktekst dokument={kommentar.tekst} />
+              </UnderOverskrift>
+            )
           )}
           {feil && (
             <p className="skjemafeil" role="alert">

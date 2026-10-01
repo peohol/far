@@ -13,6 +13,7 @@ import {
 } from '../../ideer/api'
 import { idetilstand, slettesKl, type Idetraad } from '../../ideer/modell'
 import type { Kommentar } from '../../traad/modell'
+import { UnderOverskrift } from '../Overskriftsniva'
 import { Riktekst } from '../stoffside/Riktekst'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
@@ -160,7 +161,8 @@ export function Ideside({
   const laast = tilstand !== 'apen'
   const eier = traad.forfatter_id === meg.id
   const administrerer = admin && !innebygd
-  const Overskrift = innebygd ? 'h4' : 'h3'
+  const niva = innebygd ? 4 : 3
+  const Overskrift = niva === 4 ? 'h4' : 'h3'
 
   return (
     <article className="ideside" data-innebygd={innebygd || undefined} aria-labelledby={`ide-${traad.id}`}>
@@ -222,7 +224,11 @@ export function Ideside({
         </div>
       )}
 
-      {traad.tekst && <Riktekst dokument={traad.tekst} />}
+      {traad.tekst && (
+        <UnderOverskrift niva={niva}>
+          <Riktekst dokument={traad.tekst} />
+        </UnderOverskrift>
+      )}
 
       {feil && (
         <p className="skjemafeil" role="alert">

@@ -487,8 +487,8 @@ Hvordan innholdet tegnes, endrer aldri hva som står der:
   med tekstene sine.
 
 **Rikteksten** er et ProseMirror-dokument, redigert med TipTap som i Slaids.
-Tillatt er avsnitt, overskrifter i to nivåer (`h3` og `h4` når de vises,
-se `OVERSKRIFTSELEMENT`), skillelinjer, linjeskift, punkt- og nummererte
+Tillatt er avsnitt, overskrifter i to nivåer (vist ett og to nivåer under
+den nærmeste overskriften rundt teksten, se `UnderOverskrift`), skillelinjer, linjeskift, punkt- og nummererte
 lister, fet, kursiv, understreket, senket og hevet skrift, lenker (bare
 `http(s)`) og siteringer. Alt leses gjennom `rensDokument` før det vises.
 

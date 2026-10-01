@@ -80,26 +80,27 @@
   color: var(--aksent);
 }
 
-/* Overskriftene i teksten: nivå 1 (`h3`) og nivå 2 (`h4`). Nivå 2 er bare
-   litt større enn fet brødtekst. Størrelsene følger teksten rundt, så de
-   passer både i editoren og i lesemodus. */
-.riktekst :is(h3, h4) {
+/* Overskriftene i teksten. Elementet følger overskriften rundt teksten, så
+   de styles etter nivået. Nivå 2 er bare litt større enn fet brødtekst.
+   Størrelsene følger teksten rundt, så de passer både i editoren og i
+   lesemodus. */
+.riktekst [data-niva] {
   font-family: var(--skrift-display);
   font-weight: var(--vekt-halvfet);
   line-height: 1.25;
   color: var(--blekk);
 }
 
-.riktekst h3 {
+.riktekst [data-niva='1'] {
   font-size: 1.35em;
 }
 
-.riktekst h4 {
+.riktekst [data-niva='2'] {
   font-size: 1.15em;
 }
 
 /* En overskrift hører til teksten under seg, så den får litt mer luft over. */
-.riktekst > :is(h3, h4):not(:first-child) {
+.riktekst > [data-niva]:not(:first-child) {
   margin-top: var(--rom-2);
 }
 

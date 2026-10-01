@@ -62,11 +62,17 @@ export const MERKER = {
 export const OVERSKRIFTSNIVAER = [1, 2] as const
 export type Overskriftsniva = (typeof OVERSKRIFTSNIVAER)[number]
 
+/** Attributtet overskriftene vises med, så nivået kan leses tilbake og styles uansett element. */
+export const OVERSKRIFTSATTRIBUTT = 'data-niva'
+
 /**
- * Elementet hvert overskriftsnivå vises som. Teksten står alltid under
- * sidens og kortets egne overskrifter, så nivå 1 er en `h3`.
+ * Elementet en overskrift på `niva` vises som når teksten står under en
+ * overskrift på nivå `over`: nivå 1 er ett nivå under den, så strukturen
+ * henger sammen for skjermlesere.
  */
-export const OVERSKRIFTSELEMENT: Record<Overskriftsniva, 'h3' | 'h4'> = { 1: 'h3', 2: 'h4' }
+export function overskriftselement(over: number, niva: Overskriftsniva): `h${1 | 2 | 3 | 4 | 5 | 6}` {
+  return `h${Math.min(Math.max(over, 0) + niva, 6) as 1 | 2 | 3 | 4 | 5 | 6}`
+}
 
 /** Overskriftsnivået i nodens `attrs`. Et dypere nivå enn de som finnes, blir det dypeste; noe ugyldig blir nivå 1. */
 export function overskriftsniva(attrs: unknown): Overskriftsniva {

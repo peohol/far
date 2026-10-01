@@ -16,15 +16,17 @@ import { kortnavn } from '../../faginnhold/referanser'
 import {
   MERKER,
   NODER,
-  OVERSKRIFTSELEMENT,
+  OVERSKRIFTSATTRIBUTT,
   OVERSKRIFTSNIVAER,
   erTrygLenke,
+  overskriftselement,
   overskriftsniva,
   rensDokument,
   type Riktekstdokument,
 } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
+import { useOverskriftsniva } from '../Overskriftsniva'
 import { Referansevelger } from './Referansevelger'
 import { useRedigering } from './Redigeringskontekst'
 
@@ -50,22 +52,30 @@ import { useRedigering } from './Redigeringskontekst'
 export const SYMBOLER = ['µ', '±', '≤', '≥', '≈', '×', '→', '↑', '↓', '°', 'α', 'β', 'γ', 'Δ', '½', '‰', '–']
 
 /**
- * Overskriftene, med de samme elementene som i lesemodus (se
- * `OVERSKRIFTSELEMENT`), så en overskrift som kopieres fra appen, blir samme
- * nivå når den limes inn. Overskrifter limt inn fra andre steder som `h1` og
- * `h2`, blir nivå 1 og 2.
+ * Overskriftene, vist som i lesemodus: under den nærmeste overskriften rundt
+ * editoren (`over`), med nivået i `data-niva`. En overskrift som kopieres fra
+ * appen, beholder derfor nivået sitt når den limes inn; en `h1` fra et annet
+ * sted blir nivå 1, og de andre blir nivå 2.
  */
-const Overskrift = Heading.extend({
-  parseHTML() {
-    return OVERSKRIFTSNIVAER.flatMap((level) => [
-      { tag: OVERSKRIFTSELEMENT[level], attrs: { level } },
-      { tag: `h${level}`, attrs: { level } },
-    ])
-  },
-  renderHTML({ node, HTMLAttributes }) {
-    return [OVERSKRIFTSELEMENT[overskriftsniva(node.attrs)], mergeAttributes(HTMLAttributes), 0]
-  },
-}).configure({ levels: [...OVERSKRIFTSNIVAER] })
+function lagOverskrift(over: number) {
+  return Heading.extend({
+    parseHTML() {
+      return [
+        {
+          tag: 'h1, h2, h3, h4, h5, h6',
+          getAttrs: (element: HTMLElement) => {
+            const lagret = element.getAttribute(OVERSKRIFTSATTRIBUTT)
+            return { level: overskriftsniva({ level: lagret ?? (element.tagName === 'H1' ? 1 : 2) }) }
+          },
+        },
+      ]
+    },
+    renderHTML({ node, HTMLAttributes }) {
+      const niva = overskriftsniva(node.attrs)
+      return [overskriftselement(over, niva), mergeAttributes(HTMLAttributes, { [OVERSKRIFTSATTRIBUTT]: niva }), 0]
+    },
+  }).configure({ levels: [...OVERSKRIFTSNIVAER] })
+}
 
 /** Siteringsnoden, med samme navn og form som referansesystemet leter etter. */
 const Sitering = Node.create({
@@ -158,6 +168,7 @@ export function Rikteksteditor({
   fyll = false,
 }: RikteksteditorProps) {
   const [panel, setPanel] = useState<Verktoypanel>(null)
+  const over = useOverskriftsniva()
   const editor = useEditor({
     autofocus: autofokus ? 'end' : false,
     extensions: [
@@ -175,7 +186,7 @@ export function Rikteksteditor({
           isAllowedUri: (url) => erTrygLenke(url),
         },
       }),
-      Overskrift,
+      lagOverskrift(over),
       Subscript,
       Superscript,
       ...(referanser ? [Sitering] : []),
