@@ -28,6 +28,9 @@ vi.mock('../components/konto/Brukerliste', () => ({
 vi.mock('../components/konto/Datakilder', () => ({
   Datakilder: ({ apen }: { apen: boolean }) => (apen ? <p>Datakildene</p> : null),
 }))
+vi.mock('../components/konto/Autoerstattregler', () => ({
+  Autoerstattregler: ({ apen }: { apen: boolean }) => (apen ? <p>Autoerstatt-reglene</p> : null),
+}))
 vi.mock('../components/ideer/Ideer', () => ({
   Ideer: ({ apen, onOppgaver }: { apen: boolean; onOppgaver: (oppgave?: string) => void }) =>
     apen ? (
@@ -394,7 +397,7 @@ describe('kontomenyen', () => {
 })
 
 describe('adminmenyen', () => {
-  it('fører til brukerne og datakildene, og er et eget lag', async () => {
+  it('fører til brukerne, datakildene og autoerstatt-reglene, og er et eget lag', async () => {
     render(
       <Ramme>
         <Adminmeny />
@@ -404,7 +407,7 @@ describe('adminmenyen', () => {
     await userEvent.click(knapp)
     const meny = panel(knapp)
     expect(meny.getAttribute('data-lag')).toBe('adminmeny')
-    expect(within(meny).getAllByRole('button').map((v) => v.textContent)).toEqual(['Brukere', 'Datakilder'])
+    expect(within(meny).getAllByRole('button').map((v) => v.textContent)).toEqual(['Brukere', 'Datakilder', 'Autoerstatt'])
 
     await userEvent.click(within(meny).getByRole('button', { name: 'Brukere' }))
     expect(screen.getByText('Brukerlista')).toBeTruthy()
@@ -413,6 +416,10 @@ describe('adminmenyen', () => {
     await userEvent.click(knapp)
     await userEvent.click(within(meny).getByRole('button', { name: 'Datakilder' }))
     expect(screen.getByText('Datakildene')).toBeTruthy()
+
+    await userEvent.click(knapp)
+    await userEvent.click(within(meny).getByRole('button', { name: 'Autoerstatt' }))
+    expect(screen.getByText('Autoerstatt-reglene')).toBeTruthy()
   })
 })
 

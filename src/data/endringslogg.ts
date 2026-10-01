@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.71.0',
+    dato: '2026-10-01',
+    sammendrag: 'Autoerstatt i teksteditorene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    utenVarsel: true,
+    punkter: [
+      'Teksteditorene og tekstfeltene bytter nå ut tegn mens du skriver: « - » blir « – », «--» blir «–» og « * » blir « · ». Mellomrommene teller med, så en bindestrek uten mellomrom rundt får stå.',
+      'Trykk tilbaketasten rett etter en erstatning for å få tilbake det du skrev. I kode byttes ingenting ut.',
+      'Administratorer oppretter, endrer og sletter reglene fra «Autoerstatt» i adminmenyen.',
+    ],
+  },
+  {
     versjon: '1.70.2',
     dato: '2026-10-01',
     sammendrag: 'Tekstfeltene skyver ikke lenger knappene ut av syne',

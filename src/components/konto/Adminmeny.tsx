@@ -2,14 +2,15 @@ import { useCallback } from 'react'
 import { useBevart } from '../../oppdatering/Bevaring'
 import { useProfil } from '../../auth/okt'
 import { Menyvalg, Nedtrekksmeny } from '../toppmeny/Nedtrekksmeny'
+import { Autoerstattregler } from './Autoerstattregler'
 import { Brukerliste } from './Brukerliste'
 import { Datakilder } from './Datakilder'
 
-type Panel = 'brukere' | 'datakilder' | null
+type Panel = 'brukere' | 'datakilder' | 'autoerstatt' | null
 
 /**
- * Administratorenes egen meny i toppmenyen, til venstre for kontoen: brukerne
- * og driftstatusen for datakildene. Andre ser den ikke. Den er et grensesnitt,
+ * Administratorenes egen meny i toppmenyen, til venstre for kontoen: brukerne,
+ * driftstatusen for datakildene og autoerstatt-reglene i teksteditorene. Andre ser den ikke. Den er et grensesnitt,
  * ikke en tilgangskontroll: databasen og Edge-funksjonene slår opp rollen selv.
  */
 export function Adminmeny() {
@@ -41,12 +42,16 @@ export function Adminmeny() {
               <li>
                 <Menyvalg ikon="reset" tekst="Datakilder" onClick={apne('datakilder')} />
               </li>
+              <li>
+                <Menyvalg ikon="edit" tekst="Autoerstatt" onClick={apne('autoerstatt')} />
+              </li>
             </ul>
           )
         }}
       </Nedtrekksmeny>
       <Brukerliste apen={panel === 'brukere'} onLukk={lukkPanel} />
       <Datakilder apen={panel === 'datakilder'} onLukk={lukkPanel} />
+      <Autoerstattregler apen={panel === 'autoerstatt'} onLukk={lukkPanel} />
     </>
   )
 }
