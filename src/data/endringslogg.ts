@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.68.0',
+    dato: '2026-10-01',
+    sammendrag: 'Nytt utseende på kortene i farmakodynamikken',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Det lukkede kortet viser bare målet og effekten, som en farget pille: grønn når stoffet øker aktiviteten (agonist), gul når det øker den litt (partiell agonist), rød når det reduserer eller snur den (antagonist, invers agonist, hemmer) og grå ved ingen eller ukjent effekt.',
+      'Feltene «Mekanisme» og «Retning» og de korte tilleggene etter effekten er tatt bort. Den utdypende teksten og kildene står når du åpner kortet.',
+      'Subtypen i navnet på målet står senket, som D₁, AT₁ og 5-HT₂C.',
+      'Nye ikoner: målproteinet har en fast farge for systemet det hører til (dopamin grønn, noradrenalin blå, serotonin gul, histamin lilla, opioider oransje, glutamat rosa og så videre), og stoffet er en halvsirkel i samme trafikklysfarge som pillen. Når stoffet fyller bindingssetet, aktiverer det; når det bare legger seg over, blokkerer det.',
+      'Redaktører kan nå også velge invers agonisme og positiv og negativ allosterisk modulering, og ser pillen og ikonet slik kortet blir mens de velger.',
+    ],
+  },
+  {
     versjon: '1.67.0',
     dato: '2026-09-30',
     sammendrag: 'Farmakodynamikken vises som mekanismekort',

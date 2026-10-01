@@ -2147,7 +2147,7 @@ describe('mekanismekortene i farmakodynamikken', () => {
 
     await user.type(skjema.getByLabelText('Målprotein eller prosess'), '5-HT1A-reseptor')
     await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
-    expect(skjema.getByRole('alert').textContent).toBe('Velg effekten på målet.')
+    expect(skjema.getByRole('alert').textContent).toBe('Velg mekanismen.')
 
     await user.selectOptions(skjema.getByLabelText('Mekanisme'), 'partiell_agonisme')
     const forhandsvisning = vindu.querySelector('.mekanismeskjema__forhandsvisning')!

@@ -552,7 +552,7 @@ export function mekanismekortTilData(kort: Mekanismekortdata): Record<string, un
 /** Feilen i et mekanismekort som skal lagres, eller `null` når det er gyldig. */
 export function kontrollerMekanismekort(kort: Mekanismekortdata): string | null {
   if (!kort.maal.trim()) return 'Oppgi målproteinet eller prosessen.'
-  if (!kort.mekanisme) return 'Velg effekten på målet.'
+  if (!kort.mekanisme) return 'Velg mekanismen.'
   return null
 }
 

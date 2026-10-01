@@ -57,7 +57,7 @@ describe('mekanismene', () => {
     const eldre = { maal: 'D2-reseptor', effekt: 'Antagonist', mekanisme: 'antagonisme', retning: 'ned', kvalifikasjon: 'Potent', merknad: 'x' }
     expect(mekanismekortTilData(lesMekanismekort(eldre))).toEqual({ maal: 'D2-reseptor', mekanisme: 'antagonisme' })
     expect(kontrollerMekanismekort(lesMekanismekort({ maal: ' ', mekanisme: 'antagonisme' }))).toBe('Oppgi målproteinet eller prosessen.')
-    expect(kontrollerMekanismekort(lesMekanismekort({ maal: 'D2', mekanisme: 'ukjent' }))).toBe('Velg effekten på målet.')
+    expect(kontrollerMekanismekort(lesMekanismekort({ maal: 'D2', mekanisme: 'ukjent' }))).toBe('Velg mekanismen.')
     expect(kontrollerMekanismekort(lesMekanismekort({ maal: 'D2', mekanisme: 'invers_agonisme' }))).toBeNull()
   })
 })
