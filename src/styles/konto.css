@@ -310,7 +310,8 @@
 
 /* --- Brukerlista --------------------------------------------------------- */
 
-.brukerliste {
+.brukerliste,
+.autoerstatt__liste {
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -322,7 +323,9 @@
   overflow: hidden;
 }
 
-.brukerliste__tomt {
+.brukerliste__tomt,
+.autoerstatt__ingress,
+.autoerstatt__tomt {
   margin: 0;
   font-size: var(--tekst-ui);
   color: var(--blekk-dempet);
@@ -393,6 +396,74 @@
     grid-column: 2;
     justify-content: flex-start;
   }
+}
+
+/* --- Autoerstatt-reglene ------------------------------------------------- */
+
+/* Samme kort og rader som brukerlista: regelen til venstre, knappene til høyre. */
+.autoerstatt__rad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rom-4);
+  padding: var(--rom-4) var(--rom-5);
+}
+
+.autoerstatt__rad + .autoerstatt__rad {
+  border-top: var(--kant) solid var(--linje);
+}
+
+.autoerstatt__rad--skjema {
+  display: block;
+}
+
+.autoerstatt__regel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-3);
+}
+
+.autoerstatt__tekst {
+  padding: var(--rom-1) var(--rom-2);
+  font-family: var(--skrift-mono);
+  font-size: var(--tekst-ui);
+  white-space: pre;
+  color: var(--blekk);
+  background: var(--flate-hevet);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-merke);
+}
+
+.autoerstatt__mellomrom,
+.autoerstatt__pil {
+  color: var(--blekk-dempet);
+}
+
+.autoerstatt__knapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2);
+}
+
+.autoerstatt__felter {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--rom-5);
+}
+
+.autoerstatt__felter .felt__inndata {
+  font-family: var(--skrift-mono);
+}
+
+.autoerstatt__forhandsvisning {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-3);
+  margin: 0;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
 }
 
 /* --- Det midlertidige passordet ------------------------------------------ */

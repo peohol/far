@@ -12,6 +12,8 @@ import {
 } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Fragment, useId, useRef, useState, type MouseEvent, type ReactNode, type Ref } from 'react'
+import { useAutoerstattregler } from '../../autoerstatt/Autoerstattkilde'
+import { Autoerstatt } from '../../autoerstatt/editor'
 import { kortnavn } from '../../faginnhold/referanser'
 import {
   MERKER,
@@ -48,6 +50,9 @@ import { useRedigering } from './Redigeringskontekst'
  * Ctrl + , og Ctrl + . for senket og hevet skrift, Ctrl + E for kode,
  * Ctrl + Alt + 1 og 2 for overskriftene, Ctrl + Shift + B for sitat, og
  * Tab/Shift + Tab for å rykke inn i lister.
+ *
+ * Autoerstatt-reglene (som « - » til « – ») gjelder mens det skrives, men
+ * ikke i kode; se `src/autoerstatt/`.
  */
 
 /**
@@ -166,6 +171,7 @@ export function Rikteksteditor({
   const [tegnmeny, setTegnmeny] = useState<Tegnmenytilstand>(null)
   const tegnknapp = useRef<HTMLButtonElement>(null)
   const over = useOverskriftsniva()
+  const regler = useAutoerstattregler()
   const editor = useEditor({
     autofocus: autofokus ? 'end' : false,
     extensions: [
@@ -185,6 +191,7 @@ export function Rikteksteditor({
       Subscript,
       Superscript,
       ...(referanser ? [Sitering] : []),
+      Autoerstatt.configure({ regler }),
     ],
     content: dokument,
     editorProps: {

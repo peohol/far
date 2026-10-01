@@ -214,6 +214,10 @@ Relevant formatering:
 
 Ikke gi fri kontroll over fontstørrelse, farger eller justering. Vanlig fritekst skal være venstrejustert og visuelt konsistent.
 
+### Autoerstatt
+
+Mens det skrives, bytter rikteksteditoren og tekstfeltene (kommentartekstene i regelredigeringen og prompten i planlagte oppgaver) ut tekst etter reglene i `public.autoerstatt_regler`, som « - » med « – ». Reglene er nøyaktige, også på mellomrom, og gjelder ikke i kode. Tilbaketasten rett etter en erstatning setter tilbake det som ble skrevet. Administratorene endrer reglene fra «Autoerstatt» i adminmenyen. Logikken ligger i `src/autoerstatt/`; et nytt tekstfelt får den med `useAutoerstattFelt`.
+
 ### Fortolkningskommentarer
 
 Kommentarer som kopieres til laboratoriesystemet skal fortsatt være ren tekst.

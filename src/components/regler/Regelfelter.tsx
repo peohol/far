@@ -1,4 +1,5 @@
 import { useId, useState } from 'react'
+import { useAutoerstattFelt } from '../../autoerstatt/felt'
 import { sammenlignFelter, type Felt } from '../../faginnhold/historikk'
 import { Samtidighetskonflikt } from '../../faginnhold/lagring'
 import { Button } from '../Button'
@@ -161,6 +162,7 @@ export function Tekstomrade({
   // Høy nok til at en vanlig kommentar står helt uten å rulle.
   const rader = Math.max(3, Math.ceil(verdi.length / 85))
   const id = useId()
+  const autoerstatt = useAutoerstattFelt<HTMLTextAreaElement>(onEndre)
   return (
     <div className="felt">
       <label className="felt__merkelapp" htmlFor={id}>
@@ -172,7 +174,7 @@ export function Tekstomrade({
         rows={rader}
         value={verdi}
         aria-describedby={hjelp ? `${id}-hjelp` : undefined}
-        onChange={(e) => onEndre(e.target.value)}
+        {...autoerstatt}
       />
       {hjelp && (
         <span id={`${id}-hjelp`} className="felt__hjelp">

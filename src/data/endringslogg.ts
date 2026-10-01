@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.70.3',
+    versjon: '1.71.1',
     dato: '2026-10-01',
     sammendrag: 'Enter kopierer bare kommentarer når du arbeider i fortolkningen',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,19 @@ export const ENDRINGSLOGG: Endring[] = [
       'Enter og mellomrom kopierer kommentarer og går videre i fortolkningen bare når du arbeider der, eller ikke står i noe annet på siden.',
       'Står du i en diskusjonstråd, et tekstfelt eller en editor mens fortolkningen er åpen, gir Enter linjeskift som vanlig. Står du på en knapp, trykker Enter knappen.',
       'Det samme gjelder sifrene og de andre tastene i fortolkningen: de blir i feltet du skriver i, slik de alt gjorde i fagsøket.',
+    ],
+  },
+  {
+    versjon: '1.71.0',
+    dato: '2026-10-01',
+    sammendrag: 'Autoerstatt i teksteditorene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    utenVarsel: true,
+    punkter: [
+      'Teksteditorene og tekstfeltene bytter nå ut tegn mens du skriver: « - » blir « – », «--» blir «–» og « * » blir « · ». Mellomrommene teller med, så en bindestrek uten mellomrom rundt får stå.',
+      'Trykk tilbaketasten rett etter en erstatning for å få tilbake det du skrev. I kode byttes ingenting ut.',
+      'Administratorer oppretter, endrer og sletter reglene fra «Autoerstatt» i adminmenyen.',
     ],
   },
   {

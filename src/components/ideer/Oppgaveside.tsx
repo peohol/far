@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { useAutoerstattFelt } from '../../autoerstatt/felt'
 import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import { flyttOppgaveTilbake, frigiOppgave, hentOppgave, lagreOppgave, settOppgaveKlar } from '../../ideer/api'
 import { oppgavekode } from '../../ideer/modell'
@@ -298,6 +299,7 @@ function Oppgaveskjema({
   // Det som er skrevet, overlever en oppdatering av appen.
   const [tittel, setTittel] = useBevart('tittel', lagret.tittel)
   const [prompt, setPrompt] = useBevart('prompt', lagret.prompt)
+  const autoerstatt = useAutoerstattFelt<HTMLTextAreaElement>(setPrompt)
   const [feil, setFeil] = useState<string | null>(null)
   const [lagrer, setLagrer] = useState(false)
   const id = useId()
@@ -356,7 +358,7 @@ function Oppgaveskjema({
           maxLength={PROMPT_MEST}
           value={prompt}
           aria-describedby={`${id}-hjelp`}
-          onChange={(e) => setPrompt(e.target.value)}
+          {...autoerstatt}
         />
         <span id={`${id}-hjelp`} className="felt__hjelp">
           Skriv oppgaven slik at en språkmodell kan utføre den uten å spørre: hva som skal endres, hvor i appen, og hvordan
