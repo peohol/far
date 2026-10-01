@@ -2167,6 +2167,18 @@ describe('mekanismekortene i farmakodynamikken', () => {
     expect(screen.queryByText('gjenopptaket')).toBeNull()
   })
 
+  it('finner et fast mekanismekort på mekanismen, som bare står for skjermleseren', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', kilde({ data: medMekanismer }))
+    await finnVerdi('10–20 nmol/L')
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'Ingen effekt')
+    const steder = within(await screen.findByRole('list', { name: 'Hvor treffene står' }))
+    await user.click(steder.getByRole('button', { name: 'Farmakodynamikk › D1-reseptor' }))
+    expect(skuffen('Farmakodynamikk').getAttribute('aria-expanded')).toBe('true')
+    expect(document.querySelector('mark.sidetreff--aktiv')!.closest('.skuff--fast')).toBe(kortet('m2'))
+    expect(kortet('m2').querySelector('.kun-skjermleser mark')).not.toBeNull()
+  })
+
   it('viser effekten, mekanismen, retningen, den utdypende teksten og kildene i det åpnede kortet', async () => {
     const user = userEvent.setup()
     vis('amitriptylin', kilde({ data: medMekanismer }))

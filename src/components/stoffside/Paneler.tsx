@@ -616,8 +616,12 @@ function Mekanismeeffekt({ kort, medDetaljer = false }: { kort: Mekanismekortdat
       <span className="mekanismekort__effekt">{tekst(kort.effekt)}</span>
       {kort.kvalifikasjon && <span className="mekanismekort__kvalifikasjon"> · {tekst(kort.kvalifikasjon)}</span>}
       {medDetaljer && (
+        // Gjennom `Uthev`, så søket på siden finner kortet også på mekanismen og retningen.
         <span className="kun-skjermleser">
-          {`. Mekanisme: ${mekanismeFor(kort.mekanisme)?.navn ?? 'Ikke angitt'}. Retning: ${retningFor(kort.retning).navn}.`}
+          {'. Mekanisme: '}
+          <Uthev tekst={mekanismeFor(kort.mekanisme)?.navn ?? 'Ikke angitt'} />
+          {'. Retning: '}
+          <Uthev tekst={retningFor(kort.retning).navn} />.
         </span>
       )}
     </>
