@@ -263,7 +263,7 @@ export function Traadskjema({
   }
 
   return (
-    <form className="diskusjonsskjema" onSubmit={(e) => void lagre(e)} noValidate aria-label="Ny tråd">
+    <form className="diskusjonsskjema skriveflate" onSubmit={(e) => void lagre(e)} noValidate aria-label="Ny tråd">
       <h3 className="diskusjonsskjema__tittel">Ny tråd</h3>
       <Kategorivelger valgt={valgt} onVelg={setKategori} ny={ny} onNy={setNy} kategorier={kategorier} visFeil={provd} />
       <Felt

@@ -577,17 +577,6 @@
   border-radius: 0 0 var(--runding-underkort) var(--runding-underkort);
 }
 
-/* I redigeringsvinduet er det plass til å se mer av teksten mens den skrives. */
-.modallag .riktekstfelt {
-  min-height: 14rem;
-}
-
-/* Når teksten fyller laget, er hele flaten skrivefeltet, så et klikk under
-   teksten treffer det. */
-.modallag .modallag__fyll > .riktekstfelt {
-  min-height: 100%;
-}
-
 /* Kompakt: korte tekster som kommentarene til idéene. */
 .riktekstfelt.riktekstfelt--kompakt {
   min-height: 4.5rem;

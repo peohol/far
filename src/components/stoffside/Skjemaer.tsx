@@ -190,7 +190,7 @@ function Skjemaramme<T>({
     >
       <form
         id={skjemaId}
-        className="redigering"
+        className="redigering skriveflate"
         aria-label={navn}
         onSubmit={(e) => void lagre(e)}
         noValidate
@@ -629,7 +629,7 @@ export function TekstSkjema(props: SkjemaProps<{ dokument: Riktekstdokument }>) 
   return (
     <Skjemaramme {...props} kontroller={() => ({ data: { dokument } })}>
       {/* Editoren leser dokumentet bare når den åpnes: det lagrede, eller utkastet etter en oppdatering. */}
-      <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett={props.tittel} fyll />
+      <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett={props.tittel} />
     </Skjemaramme>
   )
 }
@@ -647,7 +647,7 @@ export function KinetikkSkjema(props: SkjemaProps<{ tittel: string; dokument: Ri
   return (
     <Skjemaramme {...props} kontroller={kontroller}>
       <Tekstfelt merke="Overskrift" verdi={tittel} onEndre={setTittel} />
-      <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett={tittel || props.tittel} fyll />
+      <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett={tittel || props.tittel} />
     </Skjemaramme>
   )
 }
