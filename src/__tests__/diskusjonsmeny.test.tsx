@@ -226,6 +226,16 @@ describe('kolonnen', () => {
     unmount()
     expect(rot.getPropertyValue('--diskusjonsbredde')).toBe('')
   })
+
+  it('lar bredden brukeren endrer, vinne over en lagret bredde som kommer for sent', async () => {
+    let svar: (bredde: number) => void = () => undefined
+    api.hentBredde.mockReturnValue(new Promise((ferdig) => (svar = ferdig)))
+    await apne()
+    fireEvent.keyDown(within(meny()).getByRole('separator', { name: 'Bredden på diskusjonene' }), { key: 'Home' })
+    const valgt = document.documentElement.style.getPropertyValue('--diskusjonsbredde')
+    await act(async () => svar(600))
+    expect(document.documentElement.style.getPropertyValue('--diskusjonsbredde')).toBe(valgt)
+  })
 })
 
 describe('lista', () => {

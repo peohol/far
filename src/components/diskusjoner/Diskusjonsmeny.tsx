@@ -111,9 +111,10 @@ export function Diskusjonsmeny({
     void hentLaast().then((lagret) => lagret !== null && setLaast(lagret), () => undefined)
   }, [setLaast])
 
-  // Bredden er også lagret på brukeren.
+  // Bredden er også lagret på brukeren. Har brukeren alt endret den her, vinner det.
+  const breddeEndret = useRef(false)
   useEffect(() => {
-    void hentBredde().then((lagret) => lagret !== null && setBredde(lagret), () => undefined)
+    void hentBredde().then((lagret) => lagret !== null && !breddeEndret.current && setBredde(lagret), () => undefined)
   }, [setBredde])
 
   useEffect(() => {
@@ -121,7 +122,13 @@ export function Diskusjonsmeny({
     return () => settBredde(null)
   }, [bredde])
 
+  const visBredde = (ny: number) => {
+    breddeEndret.current = true
+    settBredde(ny)
+  }
+
   const lagreNyBredde = (ny: number) => {
+    breddeEndret.current = true
     setBredde(ny)
     void lagreBredde(ny).catch(() => undefined)
   }
@@ -216,7 +223,7 @@ export function Diskusjonsmeny({
               minst: maalLengde(meny.current!, 'var(--diskusjonspanel-minst)'),
               mest: maalLengde(meny.current!, 'var(--diskusjonspanel-mest)'),
             })}
-            onEndre={settBredde}
+            onEndre={visBredde}
             onFerdig={lagreNyBredde}
           />
         )}
