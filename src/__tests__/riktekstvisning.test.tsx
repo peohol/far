@@ -1,16 +1,29 @@
 // @vitest-environment jsdom
 /**
- * Rikteksten i lesemodus: overskriftene og skillelinjene editoren kan sette
- * inn. Overskriftene legger seg under den nærmeste overskriften rundt teksten.
+ * Rikteksten i lesemodus og editoren: overskriftene, skillelinjene, sitatene
+ * og koden editoren kan sette inn, og tegnmenyen. Overskriftene legger seg
+ * under den nærmeste overskriften rundt teksten.
  */
-import { cleanup, render, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { act, cleanup, render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { UnderOverskrift } from '../components/Overskriftsniva'
 import { Riktekst } from '../components/stoffside/Riktekst'
 import { Rikteksteditor } from '../components/stoffside/Rikteksteditor'
 import { rensDokument, type Riktekstdokument } from '../faginnhold/riktekst'
 
 afterEach(cleanup)
+
+beforeAll(() => {
+  globalThis.ResizeObserver ??= class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+  // Editoren ruller markøren fram når den får fokus; jsdom kan ikke måle.
+  Range.prototype.getClientRects ??= () => ({ length: 0, item: () => null, [Symbol.iterator]: [][Symbol.iterator] }) as unknown as DOMRectList
+  Range.prototype.getBoundingClientRect ??= () => new DOMRect()
+})
 
 const overskrifter = (): Riktekstdokument =>
   rensDokument({
@@ -71,3 +84,93 @@ describe('rikteksten i lesemodus', () => {
     expect([...felt.children].map((e) => `${e.tagName}:${e.getAttribute('data-niva')}`)).toEqual(['H4:1', 'H5:2'])
   })
 })
+
+describe('sitater og kode i lesemodus', () => {
+  it('viser sitatet som et sitat og koden som kode', () => {
+    const { container } = render(
+      <Riktekst
+        dokument={rensDokument({
+          type: 'doc',
+          content: [
+            { type: 'blockquote', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Sitert' }] }] },
+            { type: 'paragraph', content: [{ type: 'text', text: 'f(x)', marks: [{ type: 'code' }] }] },
+          ],
+        })}
+      />,
+    )
+    expect(container.querySelector('blockquote > p')?.textContent).toBe('Sitert')
+    expect(container.querySelector('p > code')?.textContent).toBe('f(x)')
+  })
+})
+
+describe('tegnmenyen', () => {
+  beforeEach(() => localStorage.clear())
+
+  const visEditor = () => {
+    const endringer: Riktekstdokument[] = []
+    render(<Rikteksteditor dokument={rensDokument(null)} onEndre={(d) => endringer.push(d)} etikett="Tekst" referanser={false} />)
+    return endringer
+  }
+
+  it('åpnes ved knappen med gruppene fra mdeditz, setter inn tegn og blir stående til Escape', async () => {
+    const user = userEvent.setup()
+    const endringer = visEditor()
+    const knapp = await screen.findByRole('button', { name: 'Sett inn spesialtegn' })
+    expect(knapp.getAttribute('aria-haspopup')).toBe('dialog')
+
+    await user.click(knapp)
+    const meny = screen.getByRole('dialog', { name: 'Spesialtegn' })
+    expect(knapp.getAttribute('aria-expanded')).toBe('true')
+    const faner = within(within(meny).getByRole('group', { name: 'Grupper' })).getAllByRole('button')
+    expect(faner.map((f) => f.textContent)).toEqual([
+      'Piler',
+      'Matematikk',
+      'Gresk',
+      'Typografi',
+      'Merker',
+      'Valuta og enheter',
+      'Tastatur',
+      'Bokstaver',
+    ])
+
+    await user.click(within(meny).getByRole('button', { name: 'Gresk' }))
+    await user.click(within(meny).getByRole('button', { name: 'Alfa' }))
+    await user.click(within(meny).getByRole('button', { name: 'Beta' }))
+    expect(JSON.stringify(endringer.at(-1))).toContain('αβ')
+    // Menyen blir stående for neste tegn.
+    expect(screen.getByRole('dialog', { name: 'Spesialtegn' })).toBe(meny)
+
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('dialog', { name: 'Spesialtegn' })).toBeNull()
+    expect(knapp.getAttribute('aria-expanded')).toBe('false')
+
+    // Neste gang står de sist brukte først, og gruppa man stod i, er valgt.
+    await user.click(knapp)
+    const igjen = screen.getByRole('dialog', { name: 'Spesialtegn' })
+    const nyeFaner = within(within(igjen).getByRole('group', { name: 'Grupper' })).getAllByRole('button')
+    expect(nyeFaner[0]!.textContent).toBe('Nylig')
+    expect(within(igjen).getByRole('button', { name: 'Gresk' }).getAttribute('aria-pressed')).toBe('true')
+    await user.click(nyeFaner[0]!)
+    expect(within(within(igjen).getByRole('group', { name: 'Nylig' })).getAllByRole('button').map((b) => b.textContent)).toEqual(['β', 'α'])
+
+    // Et trykk utenfor lukker også.
+    await user.click(document.body)
+    expect(screen.queryByRole('dialog', { name: 'Spesialtegn' })).toBeNull()
+    await act(async () => {})
+  })
+
+  it('tar fokus inn i menyen når den åpnes med tastaturet, og piltastene bytter gruppe', async () => {
+    const user = userEvent.setup()
+    visEditor()
+    const knapp = await screen.findByRole('button', { name: 'Sett inn spesialtegn' })
+    knapp.focus()
+    await user.keyboard('{Enter}')
+    const meny = screen.getByRole('dialog', { name: 'Spesialtegn' })
+    expect(document.activeElement).toBe(within(meny).getByRole('button', { name: 'Piler' }))
+    await user.keyboard('{ArrowRight}')
+    await act(() => new Promise((ferdig) => requestAnimationFrame(() => ferdig(undefined))))
+    expect(within(meny).getByRole('button', { name: 'Matematikk' }).getAttribute('aria-pressed')).toBe('true')
+    expect(document.activeElement).toBe(within(meny).getByRole('button', { name: 'Matematikk' }))
+  })
+})
+
