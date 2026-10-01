@@ -90,6 +90,25 @@ export function enterErLedig(fokus: Fokusert | null | undefined): boolean {
   return fokus?.tag.toUpperCase() !== 'A'
 }
 
+/** Elementer man skriver i eller velger med tastene, uansett `type`. */
+const FELTELEMENTER = new Set(['INPUT', 'TEXTAREA', 'SELECT'])
+
+/**
+ * Sant når tasten hører til elementet som har fokus et annet sted på siden
+ * enn i fortolkningen — i fagsøket, en diskusjonstråd, en editor, toppmenyen.
+ *
+ * `Enter` og mellomrom hører alltid til det som har fokus: knappen trykkes,
+ * lenken følges, og feltet får linjeskiftet eller mellomrommet. I et felt
+ * hører alle tastene til feltet. Andre taster — sifrene, bokstavene, `Escape`
+ * og piltastene — er ellers fortolkningens, slik at en knapp i toppmenyen
+ * som beholdt fokus etter et klikk, ikke stenger tastaturet.
+ */
+export function tastenHorerTilFokus(tast: string, fokus: Fokusert | null | undefined): boolean {
+  if (!fokus) return false
+  if (tast === 'Enter' || tast === ' ') return true
+  return fokus.redigerbart === true || FELTELEMENTER.has(fokus.tag.toUpperCase())
+}
+
 /**
  * Sant når det brukeren taster hører hjemme i feltet som står fokusert.
  *

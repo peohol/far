@@ -63,6 +63,7 @@ import {
   erBekreftelse,
   modaltLagLiggerOver,
   SKJULT_FORTOLKNING,
+  VIST_FORTOLKNING,
   useKeyboard,
 } from './hooks/useKeyboard'
 import { useRute } from './hooks/useRute'
@@ -638,11 +639,12 @@ export default function App() {
 
           {/* Fortolkningen blir stående bak en åpen stoffside, så det
               brukeren har fylt inn, er der når hen kommer tilbake. Tastene dens
-              ligger i ro så lenge den er skjult — se `fortolkningenErSkjult`. */}
+              gjelder bare mens den vises og fokus står i den eller ingen
+              steder — se `tastenGjelderFortolkningen`. */}
           <main
             className="scene"
             hidden={fortolkningSkjult}
-            {...(fortolkningSkjult && { 'data-fortolkning': SKJULT_FORTOLKNING })}
+            data-fortolkning={fortolkningSkjult ? SKJULT_FORTOLKNING : VIST_FORTOLKNING}
           >
             {vist === 'search' && (
               <SearchStep

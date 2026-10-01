@@ -12,7 +12,7 @@ import { GRUPPEGRENSE, Sokeside } from '../components/sok/Sokeside'
 import { HENTER_MER, visTreff } from '../components/sok/treffvisning'
 import { TipsLag } from '../components/Tips'
 import { lagSokeindeks, sok, sokeord, sokGlobalt, type Sokedokument, type Sokested } from '../faginnhold/sok'
-import { erBekreftelse, fokusIFagsok, lagLiggerOver, useKeyboard } from '../hooks/useKeyboard'
+import { erBekreftelse, fokusIFagsok, lagLiggerOver, useKeyboard, VIST_FORTOLKNING } from '../hooks/useKeyboard'
 import { useSokeindeks, type Lestsokeindeks, type Sokeindekstilstand } from '../hooks/useSokeindeks'
 import { erSidesokSnarvei } from '../components/stoffside/Sidesok'
 import { erFagsokSnarvei } from '../components/toppmeny/Fagsokfelt'
@@ -209,7 +209,11 @@ describe('fagsøket og tastene i appen', () => {
     const user = userEvent.setup()
     const tast = vi.fn()
     const { felt } = visFagsok()
-    render(<Fortolkningstaster tast={tast} />)
+    render(
+      <main data-fortolkning={VIST_FORTOLKNING}>
+        <Fortolkningstaster tast={tast} />
+      </main>,
+    )
 
     await user.click(felt)
     expect(fokusIFagsok()).toBe(true)
