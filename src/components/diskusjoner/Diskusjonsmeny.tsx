@@ -212,6 +212,9 @@ export function Diskusjonsmeny({
           if (event.key !== 'Escape' || event.defaultPrevented) return
           if ((event.target as HTMLElement).isContentEditable) return
           event.preventDefault()
+          // Escape lukker menyen og ikke noe mer: fokus slippes i `lukk()`, så
+          // uten dette ville fortolkningen bak tatt den som «Bytt analytt».
+          event.stopPropagation()
           lukk()
         }}
       >

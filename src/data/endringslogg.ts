@@ -14,14 +14,17 @@ export const ENDRINGSLOGG: Endring[] = [
   {
     versjon: '1.72.0',
     dato: '2026-10-01',
-    sammendrag: 'Diskusjonsmenyen kan gjøres bredere, og knappene blir i syne',
+    sammendrag: 'Diskusjonsmenyen kan gjøres bredere, og fortolkningen får meny nederst på mobil',
     typer: ['Funksjonalitet', 'Design / layout'],
-    omfang: 'Mindre omfang',
+    omfang: 'Moderat omfang',
     punkter: [
       'På store skjermer kan du gjøre diskusjonsmenyen bredere ved å ta tak i venstre kanten og dra. Den kan ikke bli smalere enn før. Bredden huskes og gjelder alle sider. Et dobbeltklikk på kanten setter den tilbake.',
       'Med tastaturet: gå til kanten med Tab og bruk piltastene (med Shift for større steg), Home for smalest og End for bredest.',
       '«‹ Alle tråder» står nå fast øverst i en tråd, så du kommer tilbake til oversikten uten å rulle helt opp.',
       'I oversikten står søkefeltet fast øverst, og «Ny tråd» og «Ny kategori» blir stående nederst i menyen når det er så mange tråder at lista ruller.',
+      'På mobil har fortolkningen nå en meny nederst, som fagsidene, med knappen som åpner diskusjonene og en knapp til fagsiden for stoffet.',
+      'Hører analyttene i modulen til flere stoffer, som Diazepam og Oksazepam eller Kodein og Morfin, får hvert stoff sin knapp, også i menyen øverst på store skjermer.',
+      'Escape i diskusjonsmenyen lukker bare menyen, og tar deg ikke lenger ut av analytten du fortolker.',
     ],
   },
   {

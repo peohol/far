@@ -98,17 +98,17 @@ export function fortolkningForStoff(
 }
 
 /**
- * Stoffsiden en fortolkningsmodul fører til: det ene stoffet kodene i modulen
- * primært hører til. EtG og EtS fører begge til Etanol; DIAZ · DMI · OXA
- * fører til to stoffer og har derfor bare lenkene ved hver kode.
+ * Stoffsidene en fortolkningsmodul fører til: stoffene kodene i modulen
+ * primært hører til, hvert én gang, i kodenes rekkefølge. EtG og EtS fører
+ * begge til Etanol; DIAZ · DMI · OXA fører til Diazepam og Oksazepam.
  */
-export function stoffForFortolkning(analyte: Analyte, register: Stoffregister = STOFFREGISTER): Stoff | undefined {
+export function stofferForFortolkning(analyte: Analyte, register: Stoffregister = STOFFREGISTER): Stoff[] {
   const stoffer = new Map<string, Stoff>()
   for (const { kode } of menyanalytter(analyte)) {
     const stoff = register.primartStoffFor(kode)
     if (stoff) stoffer.set(stoff.slug, stoff)
   }
-  return stoffer.size === 1 ? [...stoffer.values()][0] : undefined
+  return [...stoffer.values()]
 }
 
 /**

@@ -193,6 +193,15 @@ describe('kolonnen', () => {
     expect(document.documentElement.dataset.diskusjonsmeny).toBe('smal')
   })
 
+  it('lukkes med Escape uten at tasten går videre til siden bak', async () => {
+    await apne()
+    const bak = vi.fn()
+    window.addEventListener('keydown', bak)
+    fireEvent.keyDown(within(panel()).getByRole('searchbox', { name: 'Søk i trådene' }), { key: 'Escape' })
+    window.removeEventListener('keydown', bak)
+    expect(bak).not.toHaveBeenCalled()
+  })
+
   it('åpner seg når pekeren kommer inn og lukker seg når den går ut', async () => {
     await apne()
     expect(stolpe().hidden).toBe(true)

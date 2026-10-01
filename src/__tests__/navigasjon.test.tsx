@@ -498,11 +498,15 @@ describe('mellom fortolkningen og stoffsiden', () => {
       ['DMI', '#/stoff/diazepam'],
       ['OXA', '#/stoff/oksazepam'],
     ])
-    // Modulen har koder for to stoffer, og dermed ingen «Åpne stoffside».
+    // Modulen har koder for to stoffer, og dermed én knapp til hver stoffside.
     expect(screen.queryByRole('button', { name: 'Åpne stoffside' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Åpne stoffsiden for Diazepam' }).textContent).toBe('Diazepam')
     // Modulen fortolker med reglene appen hentet.
     await user.click(within(fortolkningen()).getByRole('checkbox', { name: /Oksazepam/ }))
     expect(within(fortolkningen()).getByRole('button', { name: 'Kopier hovedkommentar' })).toBeTruthy()
+    // Knappen for et av stoffene fører til stoffsiden for det.
+    await user.click(screen.getByRole('button', { name: 'Åpne stoffsiden for Oksazepam' }))
+    await stoffsideFor('Oksazepam')
   })
 
   it('lar fortolkningen ligge i ro mens stoffsiden vises', async () => {
