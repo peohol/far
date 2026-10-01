@@ -74,14 +74,14 @@ describe('rikteksten', () => {
     const renset = rensDokument({
       type: 'doc',
       content: [
-        { type: 'blockquote', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Sitat', marks: [{ type: 'textStyle', attrs: { color: 'red' } }] }] }] },
+        { type: 'codeBlock', content: [{ type: 'text', text: 'Kodeblokk', marks: [{ type: 'textStyle', attrs: { color: 'red' } }] }] },
         { type: 'paragraph', content: [{ type: 'text', text: 'farlig', marks: [{ type: 'link', attrs: { href: 'javascript:alert(1)' } }] }] },
       ],
     })
     expect(renset).toEqual({
       type: 'doc',
       content: [
-        { type: 'paragraph', content: [{ type: 'text', text: 'Sitat' }] },
+        { type: 'paragraph', content: [{ type: 'text', text: 'Kodeblokk' }] },
         { type: 'paragraph', content: [{ type: 'text', text: 'farlig' }] },
       ],
     })
@@ -110,6 +110,38 @@ describe('rikteksten', () => {
     })
     expect(klartekst(renset)).toBe('Dosering\nVoksne\nDypere\nUten nivå')
     expect(erTomt(rensDokument({ type: 'doc', content: [{ type: 'horizontalRule' }] }))).toBe(true)
+  })
+
+  it('beholder sitater og kode, og leser sitatet blokk for blokk', () => {
+    const renset = rensDokument({
+      type: 'doc',
+      content: [
+        {
+          type: 'blockquote',
+          content: [
+            { type: 'paragraph', content: [{ type: 'text', text: 'Første' }] },
+            { type: 'text', text: 'løs' },
+          ],
+        },
+        { type: 'paragraph', content: [{ type: 'text', text: 'f(x)', marks: [{ type: 'code' }] }] },
+        { type: 'blockquote' },
+      ],
+    })
+    expect(renset).toEqual({
+      type: 'doc',
+      content: [
+        {
+          type: 'blockquote',
+          content: [
+            { type: 'paragraph', content: [{ type: 'text', text: 'Første' }] },
+            { type: 'paragraph', content: [{ type: 'text', text: 'løs' }] },
+          ],
+        },
+        { type: 'paragraph', content: [{ type: 'text', text: 'f(x)', marks: [{ type: 'code' }] }] },
+        { type: 'blockquote', content: [{ type: 'paragraph' }] },
+      ],
+    })
+    expect(klartekst(renset)).toBe('Første\nløs\nf(x)')
   })
 
   it('gjør alt som ikke er et dokument, til et tomt dokument', () => {

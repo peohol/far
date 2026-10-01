@@ -488,9 +488,12 @@ Hvordan innholdet tegnes, endrer aldri hva som står der:
 
 **Rikteksten** er et ProseMirror-dokument, redigert med TipTap som i Slaids.
 Tillatt er avsnitt, overskrifter i to nivåer (vist ett og to nivåer under
-den nærmeste overskriften rundt teksten, se `UnderOverskrift`), skillelinjer, linjeskift, punkt- og nummererte
-lister, fet, kursiv, understreket, senket og hevet skrift, lenker (bare
-`http(s)`) og siteringer. Alt leses gjennom `rensDokument` før det vises.
+den nærmeste overskriften rundt teksten, se `UnderOverskrift`), sitater,
+skillelinjer, linjeskift, punkt- og nummererte lister, fet, kursiv,
+understreket, senket og hevet skrift, kode, lenker (bare `http(s)`) og
+siteringer. Alt leses gjennom `rensDokument` før det vises. Spesialtegnene i
+editorens tegnmeny (`src/faginnhold/spesialtegn.ts`) har de samme gruppene og
+tegnene som i mdeditz.
 
 **Redigeringen.** Administratorer får knappen «Rediger». Knappene for å endre
 vises først når utkastet er hentet, og alt lagres som utkast mot revisjonen

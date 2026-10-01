@@ -5,8 +5,9 @@
  * Teksten lagres som et ProseMirror-dokument i JSON — samme form som editoren
  * (TipTap, som i Slaids) arbeider med, og samme form som referansesystemet
  * leter etter siteringer i. Formateringen er bevisst begrenset: fet, kursiv,
- * understreking, senket og hevet skrift, overskrifter i to nivåer,
- * punktlister, nummererte lister, skillelinjer, lenker og referanser.
+ * understreking, senket og hevet skrift, kode, overskrifter i to nivåer,
+ * sitater, punktlister, nummererte lister, skillelinjer, lenker og
+ * referanser.
  * Fontstørrelse, farger og justering finnes ikke; vanlig fritekst er
  * venstrejustert og ser lik ut overalt.
  *
@@ -40,6 +41,7 @@ export const NODER = {
   avsnitt: 'paragraph',
   overskrift: 'heading',
   skillelinje: 'horizontalRule',
+  sitat: 'blockquote',
   tekst: 'text',
   linjeskift: 'hardBreak',
   punktliste: 'bulletList',
@@ -55,6 +57,7 @@ export const MERKER = {
   understreket: 'underline',
   senket: 'subscript',
   hevet: 'superscript',
+  kode: 'code',
   lenke: 'link',
 } as const
 
@@ -84,7 +87,7 @@ const TILLATTE_NODER = new Set<string>(Object.values(NODER))
 const TILLATTE_MERKER = new Set<string>(Object.values(MERKER))
 
 /** Nodene som inneholder blokker; tekst som havner rett i dem, pakkes i et avsnitt. */
-const BLOKKBEHOLDERE = new Set<string>([NODER.dokument, NODER.listepunkt])
+const BLOKKBEHOLDERE = new Set<string>([NODER.dokument, NODER.listepunkt, NODER.sitat])
 const LISTER = new Set<string>([NODER.punktliste, NODER.nummerertListe])
 
 /** Et tomt dokument: ett tomt avsnitt, slik editoren lager det. */
@@ -203,6 +206,5 @@ export function klartekst(dokument: Riktekstnode): string {
   if (dokument.type === NODER.tekst) return dokument.text ?? ''
   if (dokument.type === NODER.linjeskift) return '\n'
   const deler = (dokument.content ?? []).map(klartekst)
-  const blokkvis = dokument.type === NODER.dokument || LISTER.has(dokument.type) || dokument.type === NODER.listepunkt
-  return blokkvis ? deler.filter(Boolean).join('\n') : deler.join('')
+  return BLOKKBEHOLDERE.has(dokument.type) || LISTER.has(dokument.type) ? deler.filter(Boolean).join('\n') : deler.join('')
 }
