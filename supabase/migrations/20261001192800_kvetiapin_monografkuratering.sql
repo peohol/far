@@ -65,7 +65,7 @@ begin
   join public.objektrevisjoner r on r.objekt_id = t.objekt_id and r.revisjon = u.revisjon
   where t.tilstand = 'publisert' and t.infoside_id = side
     and t.panel = 'dosering' and t.elementtype = 'riktekst'
-    and r.kilde = 'Importert fra Psykofarmaka.pdf';
+    and r.kilde = 'Importert fra Psykofarmaka.pdf, side 49';
   if n <> 1 then
     raise exception 'Kvetiapin: forventet ett uendret doseringselement, fant %.', n;
   end if;
@@ -77,8 +77,8 @@ begin
   join public.objektrevisjoner r on r.objekt_id = t.objekt_id and r.revisjon = u.revisjon
   where t.tilstand = 'publisert' and t.infoside_id = side
     and t.panel = 'farmakokinetikk' and t.elementtype = 'kinetikkort'
-    and r.kilde = 'Importert fra Psykofarmaka.pdf'
-    and t.data->>'tittel' in ('Biotilgjengelighet', 'tmax', 't1/2', 'tss', 'Proteinbinding', 'VD', 'Eliminasjon', 'CYP-enzymer (substrat)', 'Interaksjoner', 'Annet');
+    and r.kilde = 'Importert fra Psykofarmaka.pdf, side 49'
+    and t.data->>'tittel' in ('Biotilgjengelighet', 'tₘₐₓ', 't½', 'tₛₛ', 'Proteinbinding', 'Vd', 'Eliminasjon', 'CYP-enzymer (substrat)', 'Interaksjoner', 'Annet');
   if n <> 10 then
     raise exception 'Kvetiapin: forventet 10 uendrede farmakokinetikkort, fant %.', n;
   end if;
@@ -253,11 +253,11 @@ begin
   for oppdatering in select value from jsonb_array_elements($json$
   [
     {"fra":"Biotilgjengelighet","data":{"tittel":"Absorpsjon og formulering","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"IR absorberes raskt; matinntak påvirker eksponeringen lite. Depot gir omtrent samme totale døgneksponering som tilsvarende total IR-dose, men med lavere toppkonsentrasjon og senere topp. Fettrikt måltid kan øke depoteksponeringen, derfor tas depot uten mat/minst 1 time før mat eller ved sengetid."}]}]}},"kilder":["ir","xr","devane","figueroa"]},
-    {"fra":"tmax","data":{"tittel":"tmax","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"IR: vanligvis 1–2 timer. Depot: omtrent 5–6 timer ved steady state."}]}]}},"kilder":["devane","figueroa","xr"]},
-    {"fra":"t1/2","data":{"tittel":"t1/2","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Kvetiapin: ca. 7 timer. Norkvetiapin: ca. 12 timer."}]}]}},"kilder":["ir"]},
-    {"fra":"tss","data":{"tittel":"tss","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Steady state for kvetiapin forventes innen omtrent 2 døgn ved regelmessig dosering."}]}]}},"kilder":["dailymed"]},
+    {"fra":"tₘₐₓ","data":{"tittel":"tₘₐₓ","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"IR: vanligvis 1–2 timer. Depot: omtrent 5–6 timer ved steady state."}]}]}},"kilder":["devane","figueroa","xr"]},
+    {"fra":"t½","data":{"tittel":"t½","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Kvetiapin: ca. 7 timer. Norkvetiapin: ca. 12 timer."}]}]}},"kilder":["ir"]},
+    {"fra":"tₛₛ","data":{"tittel":"tₛₛ","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Steady state for kvetiapin forventes innen omtrent 2 døgn ved regelmessig dosering."}]}]}},"kilder":["dailymed"]},
     {"fra":"Proteinbinding","data":{"tittel":"Proteinbinding","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Ca. 83 % ved terapeutiske konsentrasjoner."}]}]}},"kilder":["ir","dailymed"]},
-    {"fra":"VD","data":{"tittel":"VD","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Tilsynelatende distribusjonsvolum ca. 10 ± 4 L/kg."}]}]}},"kilder":["dailymed"]},
+    {"fra":"Vd","data":{"tittel":"Vd","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Tilsynelatende distribusjonsvolum ca. 10 ± 4 L/kg."}]}]}},"kilder":["dailymed"]},
     {"fra":"Eliminasjon","data":{"tittel":"Metabolisme og utskillelse","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Omfattende hepatisk metabolisme. Mindre enn 5 % utskilles uendret i urin og feces. Etter radiomerket dose gjenfinnes omtrent 73 % i urin og 20–21 % i feces, hovedsakelig som metabolitter."}]}]}},"kilder":["ir","devane","dailymed"]},
     {"fra":"CYP-enzymer (substrat)","data":{"tittel":"CYP3A4","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"CYP3A4 er hovedenzymet i metabolismen av kvetiapin. Den aktive metabolitten norkvetiapin dannes og elimineres primært via CYP3A4. Dagens kilder gir ikke grunnlag for å angi CYP2D6 som en klinisk viktig hovedvei."}]}]}},"kilder":["ir","devane","dailymed"]},
     {"fra":"Interaksjoner","data":{"tittel":"CYP3A4-interaksjoner","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Sterke CYP3A4-hemmere kan øke kvetiapineksponeringen betydelig og er kontraindisert i preparatomtalen. Enzyminduktorer kan øke clearance og redusere eksponeringen. Grapefrukt/grapefruktjuice skal unngås."}]}]}},"kilder":["ir","xr"]}
