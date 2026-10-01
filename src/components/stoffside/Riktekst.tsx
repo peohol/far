@@ -37,6 +37,8 @@ function Node({ node }: { node: Riktekstnode }): ReactNode {
       return <Overskrift node={node} />
     case NODER.skillelinje:
       return <hr />
+    case NODER.sitat:
+      return <blockquote>{barn(node)}</blockquote>
     case NODER.punktliste:
       return <ul>{barn(node)}</ul>
     case NODER.nummerertListe:
@@ -77,6 +79,8 @@ function Merke({ merke, children }: { merke: Tekstmerke; children: ReactNode }) 
       return <sub>{children}</sub>
     case MERKER.hevet:
       return <sup>{children}</sup>
+    case MERKER.kode:
+      return <code>{children}</code>
     case MERKER.lenke:
       return (
         <a href={String(merke.attrs?.href ?? '')} target="_blank" rel="noopener noreferrer">

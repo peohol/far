@@ -201,10 +201,13 @@ Relevant formatering:
 - kursiv
 - eventuelt understreking
 - senket/hevet skrift
+- kode
 - overskrifter i to nivåer (H1 og H2)
+- sitat
 - punktliste
 - nummerert liste
 - horisontal skillelinje
+- spesialtegn (meny ved Ω-knappen)
 - lenke
 - symboler
 - referanser

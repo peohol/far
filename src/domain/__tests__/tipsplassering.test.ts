@@ -52,6 +52,16 @@ describe('plasserTips', () => {
     expect(plasserTips(anker(600, 700), BOBLE, VINDU).side).toBe('over')
   })
 
+  it('står under ankeret når det er foretrukket, og går over bare når det ikke er plass under', () => {
+    expect(plasserTips(anker(600, 400), BOBLE, VINDU, 'under').side).toBe('under')
+    expect(plasserTips(anker(600, 40), BOBLE, VINDU, 'under').side).toBe('under')
+    expect(plasserTips(anker(600, 700), BOBLE, VINDU, 'under').side).toBe('over')
+    // Får den ikke plass noe sted, vinner siden med mest plass også her.
+    const hoyBoble: Storrelse = { bredde: 300, hoyde: 700 }
+    expect(plasserTips(anker(600, 300), hoyBoble, VINDU, 'under').side).toBe('under')
+    expect(plasserTips(anker(600, 500), hoyBoble, VINDU, 'under').side).toBe('over')
+  })
+
   it('velger siden med mest plass når boblen ikke får plass noe sted', () => {
     const hoyBoble: Storrelse = { bredde: 300, hoyde: 700 }
 

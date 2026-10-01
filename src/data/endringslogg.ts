@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.70.0',
+    dato: '2026-10-01',
+    sammendrag: 'Sitater, kode og ny spesialtegnmeny i teksteditorene',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Alle teksteditorene i appen har fått knapper for sitat og kode. Ctrl + Shift + B gjør teksten til et sitat, og Ctrl + E gjør den til kode.',
+      'Spesialtegnene åpnes nå som en meny ved Ω-knappen, med de samme tegnene og gruppene som i mdeditz: piler, matematikk, gresk, typografi, merker, valuta og enheter, tastatur og bokstaver.',
+      'Menyen blir stående mens du setter inn flere tegn, og de sist brukte tegnene står først under «Nylig» neste gang. Escape eller et klikk utenfor lukker den.',
+    ],
+  },
+  {
     versjon: '1.69.0',
     dato: '2026-10-01',
     sammendrag: 'Overskrifter og skillelinjer i teksteditorene',

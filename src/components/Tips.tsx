@@ -193,11 +193,12 @@ export interface Bobleplassering<T extends HTMLElement> {
  * boblen: rullingen må skje et sted som ikke klipper den.
  *
  * `oppdatering` er det som kan endre størrelsen på boblen, så den måles på
- * nytt når det skifter.
+ * nytt når det skifter. `side` er siden av ankeret den helst står på.
  */
 export function useBobleplassering<T extends HTMLElement = HTMLDivElement>(
   anker: HTMLElement,
   oppdatering?: unknown,
+  side: Plassering['side'] = 'over',
 ): Bobleplassering<T> {
   const boble = useRef<T>(null)
   const innhold = useRef<T>(null)
@@ -223,6 +224,7 @@ export function useBobleplassering<T extends HTMLElement = HTMLDivElement>(
           { venstre: a.left, topp: a.top, bredde: a.width, hoyde: a.height },
           { bredde: b.width, hoyde: b.height },
           vindu,
+          side,
         ),
         maks: maksTipsstorrelse(vindu),
         // Én piksels slark: avrundet layout skal ikke gjøre boblen rullbar
@@ -247,7 +249,7 @@ export function useBobleplassering<T extends HTMLElement = HTMLDivElement>(
       window.removeEventListener('scroll', mal, true)
       window.removeEventListener('resize', mal)
     }
-  }, [anker, oppdatering])
+  }, [anker, oppdatering, side])
 
   const stil = {
     left: `${maal?.plassering.venstre ?? 0}px`,
@@ -263,7 +265,7 @@ export function useBobleplassering<T extends HTMLElement = HTMLDivElement>(
 
   const klasser = [
     'tipsboble',
-    `tipsboble--${maal?.plassering.side ?? 'over'}`,
+    `tipsboble--${maal?.plassering.side ?? side}`,
     maal && 'tipsboble--klar',
     maal?.rullbar && 'tipsboble--rullbar',
   ]
