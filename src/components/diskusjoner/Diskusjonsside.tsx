@@ -441,7 +441,7 @@ function Tekstskjema({
 }) {
   const [tekst, setTekst] = useBevart<Riktekstdokument>(`traad:${id}/tekst`, () => start ?? tomtDokument())
   return (
-    <div className="kommentarskriver">
+    <div className="kommentarskriver skriveflate">
       <Rikteksteditor dokument={tekst} onEndre={setTekst} etikett="Innlegget" referanser={false} autofokus kompakt />
       <div className="skjema__knapper kommentarskriver__knapper">
         <Button variant="subtle" onClick={onAvbryt}>

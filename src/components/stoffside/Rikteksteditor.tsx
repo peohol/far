@@ -148,12 +148,6 @@ export interface RikteksteditorProps {
   autofokus?: boolean
   /** Lavere tekstfelt, til korte tekster som kommentarer. */
   kompakt?: boolean
-  /**
-   * Teksten er det skjemaet i et modalt lag handler om: den tar resten av
-   * høyden og ruller selv, så verktøyraden, feltene over og knappene under
-   * blir stående (se `.modallag__fyll`).
-   */
-  fyll?: boolean
 }
 
 type Verktoypanel = 'lenke' | 'symbol' | 'referanse' | null
@@ -165,7 +159,6 @@ export function Rikteksteditor({
   referanser = true,
   autofokus = false,
   kompakt = false,
-  fyll = false,
 }: RikteksteditorProps) {
   const [panel, setPanel] = useState<Verktoypanel>(null)
   const over = useOverskriftsniva()
@@ -211,7 +204,7 @@ export function Rikteksteditor({
       {panel === 'lenke' && <Lenkepanel editor={editor} onLukk={() => setPanel(null)} />}
       {panel === 'symbol' && <Symbolpanel editor={editor} onLukk={() => setPanel(null)} />}
       {panel === 'referanse' && <Siteringspanel editor={editor} onLukk={() => setPanel(null)} />}
-      <EditorContent editor={editor} className={fyll ? 'rikteksteditor__tekst modallag__fyll' : 'rikteksteditor__tekst'} />
+      <EditorContent editor={editor} className="rikteksteditor__tekst" />
     </div>
   )
 }

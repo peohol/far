@@ -122,44 +122,21 @@
   border-top: var(--kant) solid var(--linje);
 }
 
-/* --- Lange tekster ---------------------------------------------------------
-   Et tekstfelt i laget vokser ikke forbi en viss høyde, men ruller selv, så
-   det som står over og under det, ikke skyves ut av syne. */
+/* --- Tekstfelt ---------------------------------------------------------------
+   Høyden på tekstfeltene står i `skjema.css`. Laget er flaten de måles mot
+   (`cqh`); med en skriveflate står panelet i full høyde, og da er det kroppen,
+   det synlige mellom toppen og foten, skriveflaten fyller. */
 .modallag {
-  /* Det laveste tekstfeltet som fyller, og det høyeste av de andre. */
-  --modallag-tekst-min: 12rem;
-  --modallag-tekst-maks: 45dvh;
+  container-type: size;
 }
 
-.modallag :is(.rikteksteditor__tekst, .felt__inndata--flerlinje) {
-  max-height: var(--modallag-tekst-maks);
-  overflow-y: auto;
-}
-
-/* Fyll: når teksten er det skjemaet handler om (`Rikteksteditor` med `fyll`),
-   står panelet i full høyde og teksten tar det som er igjen. Alt mellom
-   kroppen og teksten strekker seg med. Teksten regnes som tom når resten
-   måles (`contain`), så det er den som gir etter; blir vinduet for lavt
-   også for den, er det kroppen som ruller, som ellers. */
-.modallag__panel:has(.modallag__fyll) {
+.modallag__panel:has(.skriveflate :is(.rikteksteditor__tekst, textarea)) {
   height: 100%;
 }
 
-.modallag__kropp:has(.modallag__fyll) {
+.modallag__kropp:has(.skriveflate :is(.rikteksteditor__tekst, textarea)) {
   flex: 1;
-}
-
-.modallag__kropp :has(.modallag__fyll) {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.modallag .modallag__fyll {
-  flex: 1 0 auto;
-  max-height: none;
-  min-height: var(--modallag-tekst-min);
-  contain: size;
+  container-type: size;
 }
 
 /* Bakgrunnen skal ikke rulle mens laget står over den.
