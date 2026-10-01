@@ -192,3 +192,15 @@ export async function hentLaast(): Promise<boolean | null> {
 export function lagreLaast(laast: boolean): Promise<void> {
   return lagreInnstilling(LAASNOKKEL, laast)
 }
+
+/** Nøkkelen i brukerinnstillingene for hvor bred menyen er dratt, i piksler. */
+export const BREDDENOKKEL = 'diskusjoner.bredde'
+
+export async function hentBredde(): Promise<number | null> {
+  const verdi = await hentInnstilling(BREDDENOKKEL)
+  return typeof verdi === 'number' && Number.isFinite(verdi) && verdi > 0 ? verdi : null
+}
+
+export function lagreBredde(bredde: number): Promise<void> {
+  return lagreInnstilling(BREDDENOKKEL, Math.round(bredde))
+}

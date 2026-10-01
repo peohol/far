@@ -128,6 +128,8 @@ const api = vi.hoisted(() => ({
   settHjerte: vi.fn(async () => {}),
   hentLaast: vi.fn(),
   lagreLaast: vi.fn(async () => {}),
+  hentBredde: vi.fn(),
+  lagreBredde: vi.fn(async () => {}),
 }))
 
 vi.mock('../diskusjoner/api', () => api)
@@ -156,6 +158,7 @@ beforeEach(() => {
     { id: 't5', tittel: 'Gammel sak', tekster: ['Kvalme og dosering'] },
   ])
   api.hentLaast.mockResolvedValue(null)
+  api.hentBredde.mockResolvedValue(null)
 })
 
 afterEach(() => {
@@ -210,6 +213,18 @@ describe('kolonnen', () => {
     api.hentLaast.mockResolvedValue(true)
     render(<Diskusjonsmeny side="stoff:litium" sidenavn="Litium" sider={SIDER} />)
     await waitFor(() => expect(panel().hidden).toBe(false))
+  })
+
+  it('har en kant som kan dras når den er åpen, og står i bredden brukeren har dratt den til', async () => {
+    api.hentBredde.mockResolvedValue(600)
+    const { unmount } = render(<Diskusjonsmeny side="stoff:litium" sidenavn="Litium" sider={SIDER} />)
+    const rot = document.documentElement.style
+    await waitFor(() => expect(rot.getPropertyValue('--diskusjonsbredde')).toBe('600px'))
+    expect(within(meny()).queryByRole('separator', { name: 'Bredden på diskusjonene' })).toBeNull()
+    fireEvent.mouseEnter(meny())
+    expect(within(meny()).getByRole('separator', { name: 'Bredden på diskusjonene' })).toBeTruthy()
+    unmount()
+    expect(rot.getPropertyValue('--diskusjonsbredde')).toBe('')
   })
 })
 
@@ -310,6 +325,20 @@ describe('én tråd', () => {
     await bruker.click(within(panel()).getByRole('button', { name: 'Legg tråden i arkivet' }))
     await bruker.click(within(panel()).getByRole('button', { name: 'Bekreft at tråden legges i arkivet' }))
     expect(api.arkiverDiskusjon).toHaveBeenCalledWith('t1', true)
+  })
+
+  it('har «Alle tråder» fast over tråden, utenfor det som rulles, som søket i lista', async () => {
+    const bruker = await apne()
+    const kropp = panel().querySelector<HTMLElement>('.diskusjonspanel__kropp')!
+    expect(kropp.contains(within(panel()).getByRole('searchbox', { name: 'Søk i trådene' }))).toBe(false)
+    await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    const tilbake = within(panel()).getByRole('button', { name: 'Alle tråder' })
+    expect(kropp.contains(tilbake)).toBe(false)
+    expect(within(panel()).queryByRole('searchbox')).toBeNull()
+    await bruker.click(tilbake)
+    expect(within(panel()).queryByRole('button', { name: 'Alle tråder' })).toBeNull()
+    expect(within(panel()).getByRole('heading', { name: /^Dosering/ })).toBeTruthy()
   })
 
   it('lar en administrator skjule innhold, men ikke slette andres kommentarer', async () => {

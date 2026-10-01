@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.72.0',
+    dato: '2026-10-01',
+    sammendrag: 'Diskusjonsmenyen kan gjøres bredere, og knappene blir i syne',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'På store skjermer kan du gjøre diskusjonsmenyen bredere ved å ta tak i venstre kanten og dra. Den kan ikke bli smalere enn før. Bredden huskes og gjelder alle sider. Et dobbeltklikk på kanten setter den tilbake.',
+      'Med tastaturet: gå til kanten med Tab og bruk piltastene (med Shift for større steg), Home for smalest og End for bredest.',
+      '«‹ Alle tråder» står nå fast øverst i en tråd, så du kommer tilbake til oversikten uten å rulle helt opp.',
+      'I oversikten står søkefeltet fast øverst, og «Ny tråd» og «Ny kategori» blir stående nederst i menyen når det er så mange tråder at lista ruller.',
+    ],
+  },
+  {
     versjon: '1.71.1',
     dato: '2026-10-01',
     sammendrag: 'Enter kopierer bare kommentarer når du arbeider i fortolkningen',

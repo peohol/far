@@ -8,13 +8,23 @@
  * resten av appen plass til den (`data-diskusjonsmeny` på rotelementet). På
  * smale flater er den skjult til knappen i dokken åpner den over siden.
  *
+ * Åpen kan menyen dras bredere i venstre kanten (`Breddehandtak`). Bredden
+ * brukeren har valgt, står i `--diskusjonsbredde` på rotelementet, og holdes
+ * her mellom den opprinnelige bredden og en bredde som lar siden få plass.
+ *
  * Grensen for smal flate (47,5em ≈ 760 px) står i hver media query; CSS kan
  * ikke lese den fra et token.
  */
 
 :root {
   --diskusjonsstolpe: 3.25rem;
-  --diskusjonspanel: min(28rem, 100vw - 2 * var(--rom-side));
+  --diskusjonspanel-minst: 28rem;
+  /* Så bred at siden bak fortsatt får plass. */
+  --diskusjonspanel-mest: max(var(--diskusjonspanel-minst), 100vw - 32rem);
+  --diskusjonspanel: min(
+    clamp(var(--diskusjonspanel-minst), var(--diskusjonsbredde, 0px), var(--diskusjonspanel-mest)),
+    100vw - 2 * var(--rom-side)
+  );
   /* Avstanden fra kanten av vinduet, og plassen versjonspilla trenger under. */
   --diskusjonskant: var(--rom-5);
   --diskusjonsbunn: calc(var(--rom-5) * 2 + 1.875rem);
@@ -57,6 +67,11 @@
   box-shadow: var(--skygge-modal);
 }
 
+/* Mens kanten dras, følger menyen pekeren uten å gli etter. */
+.diskusjonsmeny:has(> .breddehandtak[data-drar]) {
+  transition: none;
+}
+
 /* Holdt åpen står den ved siden av innholdet, ikke over det. */
 .diskusjonsmeny[data-laast] {
   box-shadow: none;
@@ -69,6 +84,11 @@
 @media (max-width: 47.5em) {
   .diskusjonsknapp {
     display: inline-flex;
+  }
+
+  /* Smalt fyller menyen bredden; der er det ingen kant å dra. */
+  .diskusjonsmeny > .breddehandtak {
+    display: none;
   }
 
   /* Smalt: over siden, fra toppmenyen ned til dokken, og bare når den er bedt om. */
@@ -287,6 +307,34 @@
   outline: none;
 }
 
+.diskusjonspanel__tilbake {
+  display: inline-flex;
+  flex: none;
+  align-self: flex-start;
+  align-items: center;
+  gap: var(--rom-1);
+  min-height: var(--hoyde-liten);
+  margin: var(--rom-3) var(--rom-4) 0;
+  padding: 0 var(--rom-3) 0 var(--rom-1);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-liten);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+}
+
+.diskusjonspanel__tilbake:hover {
+  color: var(--blekk);
+  background: var(--flate-hevet);
+}
+
+.diskusjonspanel__tilbake .ikon {
+  transform: rotate(180deg);
+}
+
 .diskusjonspanel > .skjemafeil {
   margin: var(--rom-3) var(--rom-6) 0;
 }
@@ -301,12 +349,19 @@
   container-type: size;
 }
 
+/* I oversikten står luften nederst i lista selv, så «Ny tråd» og «Ny kategori»
+   kan stå helt nede i menyen (se `.diskusjonsoversikt__nye`). */
+.diskusjonspanel__kropp:has(> .diskusjonsoversikt) {
+  padding-bottom: 0;
+}
+
 /* --- Oversikten ------------------------------------------------------------------ */
 
 .diskusjonsoversikt {
   display: flex;
   flex-direction: column;
   gap: var(--rom-5);
+  padding-bottom: var(--rom-6);
 }
 
 .diskusjonsoversikt__tom {
@@ -563,10 +618,38 @@
   align-self: flex-start;
 }
 
+/* «Ny tråd» og «Ny kategori» følger lista, men blir stående nederst i
+   menyen når lista er lengre enn den. Flaten bak dem dekker det som rulles
+   under; den negative margen holder avstanden til det som følger som før
+   (mindre enn mellomrommet i lista). */
 .diskusjonsoversikt__nye {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   gap: var(--rom-2);
+  margin-block: calc(-1 * var(--rom-2)) calc(-1 * var(--rom-4));
+  padding-block: var(--rom-2) var(--rom-4);
+  background: var(--flate);
+}
+
+/* Når de står fast nederst, skiller en hårlinje dem fra lista som rulles under
+   (der nettleseren kan spørre om det). */
+@supports (container-type: scroll-state) {
+  .diskusjonsoversikt__nye {
+    container-type: scroll-state;
+  }
+
+  @container scroll-state(stuck: bottom) {
+    .diskusjonsoversikt__nye::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      inset-inline: calc(-1 * var(--rom-4));
+      border-top: var(--kant) solid var(--linje);
+    }
+  }
 }
 
 /* --- Arkivet --------------------------------------------------------------------- */
@@ -629,33 +712,6 @@
   flex-direction: column;
   gap: var(--rom-4);
   padding-inline: var(--rom-2);
-}
-
-.diskusjonsside__tilbake {
-  display: inline-flex;
-  align-self: flex-start;
-  align-items: center;
-  gap: var(--rom-1);
-  min-height: var(--hoyde-liten);
-  margin-left: calc(-1 * var(--rom-2));
-  padding: 0 var(--rom-3) 0 var(--rom-1);
-  font-family: var(--skrift-ui);
-  font-size: var(--tekst-liten);
-  font-weight: var(--vekt-halvfet);
-  color: var(--blekk-dempet);
-  background: transparent;
-  border: 0;
-  border-radius: var(--runding-pille);
-  cursor: pointer;
-}
-
-.diskusjonsside__tilbake:hover {
-  color: var(--blekk);
-  background: var(--flate-hevet);
-}
-
-.diskusjonsside__tilbake .ikon {
-  transform: rotate(180deg);
 }
 
 .diskusjonsside__hode {

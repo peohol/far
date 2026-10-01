@@ -10,7 +10,7 @@ de berører ikke den kliniske delen.
 | --- | --- |
 | `supabase/migrations/*_diskusjoner.sql` | Tabellene, radsikkerheten, rekkefølgen, funksjonene appen kaller, og varslene |
 | `src/diskusjoner/modell.ts` | Sidene, lesingen av svarene, grupperingen, flyttingene, reglene for navn og emoji, og søket (rene funksjoner) |
-| `src/diskusjoner/api.ts` | Kallene mot Supabase, og om menyen holdes åpen (`diskusjoner.laast` i brukerinnstillingene) |
+| `src/diskusjoner/api.ts` | Kallene mot Supabase, om menyen holdes åpen og hvor bred den er (`diskusjoner.laast` og `diskusjoner.bredde` i brukerinnstillingene) |
 | `src/components/diskusjoner/` | Menyen (`Diskusjonsmeny`), lista (`Diskusjonsoversikt`), én tråd (`Diskusjonsside`), skjemaene og dra-og-slipp (`useSortering`) |
 | `src/traad/modell.ts`, `src/components/traad/` | Kommentartråden, felles med idéene |
 | `src/styles/diskusjoner.css`, `src/styles/traad.css` | Utseendet |
@@ -67,7 +67,19 @@ til en kategori, eller flyttes med valget på tråden.
 smal stolpe med knappen som holder den åpen, og emojien til hver kategori med
 et blått tall for tråder med noe nytt. Den åpnes mens pekeren er over den eller
 fokus er i den, og står åpen mens en tråd eller et skjema er åpent. Å holde den
-åpen lagres på brukeren og gjelder alle sider. På smale skjermer åpnes den over
+åpen lagres på brukeren og gjelder alle sider.
+
+Åpen kan menyen gjøres bredere ved å dra i venstre kanten, eller med
+piltastene når kanten har fokus (Shift for større steg, Home og End for
+smalest og bredest; dobbeltklikk gir smalest). Den smaleste bredden er den
+menyen hadde fra før; den bredeste lar siden bak beholde plass
+(`--diskusjonspanel-minst` og `--diskusjonspanel-mest` i `diskusjoner.css`).
+Bredden lagres på brukeren og gjelder alle sider. Håndtaket er felles
+(`src/components/Breddehandtak.tsx`).
+
+Overskriften, søket i lista og «Alle tråder» i en tråd står fast; bare det
+under ruller. «Ny tråd» og «Ny kategori» følger lista, men blir stående
+nederst i menyen når lista er lengre enn den. På smale skjermer åpnes den over
 siden fra knappen «Diskusjoner» i toppmenyen, eller av seg selv når et
 varsel leder til en tråd. Mens fokus er i menyen, er den et
 lag (`data-lag`), så appens hurtigtaster venter.
