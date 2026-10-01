@@ -770,7 +770,7 @@ klonazepam ved epilepsi.
 detaljkort per mål: målproteinet eller prosessen som tittel, med subtypen
 senket (D₁, AT₁, 5-HT₂C), og effekten under som en pille i trafikklysfargen
 for virkningen («Agonist» grønn, «Partiell agonist» gul, «Antagonist» rød,
-«Ingen effekt» grå). Det åpnede kortet viser den utdypende teksten og kildene.
+«Ingen effekt» grå). Det åpnede kortet viser pillen, den utdypende teksten og kildene.
 Mekanismetypen (`mekanismer.ts`) er det eneste kortet sier om virkningen: den
 bestemmer teksten i pillen, fargen og ikonet. Typene har både spesifikke og
 generelle varianter for en kilde som ikke sier mer, så kortet aldri blir mer

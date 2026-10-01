@@ -527,7 +527,15 @@ const MEKANISMEKORT: Korttype<Mekanismekortdata> = {
   tittel: (kort) => <Maalnavn maal={kort.maal} />,
   oppsummering: (kort) => <Effektpille mekanisme={kort.mekanisme} />,
   klasse: (kort) => mekanismeklasse(kort),
-  visning: (kort) => !erTomt(kort.dokument) && <Riktekst dokument={kort.dokument} />,
+  // Oppsummeringen skjules når kortet er åpent, så effekten står øverst i det åpnede kortet.
+  visning: (kort) => (
+    <>
+      <p className="mekanismekort__effekt">
+        <Effektpille mekanisme={kort.mekanisme} />
+      </p>
+      {!erTomt(kort.dokument) && <Riktekst dokument={kort.dokument} />}
+    </>
+  ),
   Skjema: MekanismekortSkjema,
 }
 

@@ -28,7 +28,7 @@ Filene:
   fra mekanismetypen (`effekt`), ikke fra fri tekst, så den alltid stemmer
   med fargen og ikonet. Det står aldri «Effekt:» foran.
 - **Kanten** til venstre har samme trafikklysfarge, dempet.
-- **Åpnet** viser kortet bare den utdypende teksten og kildene. Kortet åpnes
+- **Åpnet** viser kortet pillen øverst, så den utdypende teksten og kildene. Kortet åpnes
   bare når det har noe mer å vise.
 - Dataene er `{ maal, mekanisme, dokument? }`. Mekanismen bestemmer alene
   pillen, fargen og ikonet.

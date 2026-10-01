@@ -2120,16 +2120,33 @@ describe('mekanismekortene i farmakodynamikken', () => {
     expect(screen.queryByText('gjenopptaket')).toBeNull()
   })
 
-  it('viser bare den utdypende teksten og kildene i det åpnede kortet', async () => {
+  it('viser effekten, den utdypende teksten og kildene i det åpnede kortet, og ikke mekanismen og retningen', async () => {
     const user = userEvent.setup()
     vis('amitriptylin', kilde({ data: medMekanismer }))
     await finnVerdi('10–20 nmol/L')
     await apneSkuff(user, 'Farmakodynamikk')
     await apneSkuff(user, 'D2-reseptor')
     const innhold = kortet('m1').querySelector<HTMLElement>('.skuff__innhold')!
+    expect(innhold.querySelector('.mekanismekort__effekt .merke--alvorlig')!.textContent).toBe('Antagonist')
     expect(within(innhold).getByText('Syntetisk utdyping.')).toBeTruthy()
     expect(within(innhold).queryByText(/Antagonisme|Reduseres|Mekanisme|Retning/)).toBeNull()
     expect(kortet('m1').querySelector('.referansefelt--element')).not.toBeNull()
+  })
+
+  it('fremhever søketreff i målet også over subtypen, og på effekten', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', kilde({ data: medMekanismer }))
+    await finnVerdi('10–20 nmol/L')
+    const sok = screen.getByRole('searchbox', { name: 'Søk på denne siden' })
+    await user.type(sok, 'D2-res')
+    await waitFor(() => expect(kortet('m1').querySelector('.skuff__tittel mark.sidetreff')).not.toBeNull())
+    const merke = kortet('m1').querySelector('.skuff__tittel mark.sidetreff')!
+    expect(merke.textContent).toBe('D2-res')
+    expect(merke.querySelector('sub')!.textContent).toBe('2')
+
+    await user.clear(sok)
+    await user.type(sok, 'Antagonist')
+    await waitFor(() => expect(kortet('m1').querySelector('.skuff__innhold .merke mark.sidetreff')).not.toBeNull())
   })
 
   it('legger til et mekanismekort, og viser effekten slik den blir mens mekanismen velges', async () => {
