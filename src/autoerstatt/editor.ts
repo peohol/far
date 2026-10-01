@@ -56,14 +56,17 @@ export const Autoerstatt = Extension.create<AutoerstattValg>({
             )
             const regel = finnRegel(foran + tekst, regler())
             if (!regel) return false
-            // Det av `finn` som alt står foran markøren, byttes sammen med det nye tegnet.
-            const start = fra - (regel.finn.length - tekst.length)
+            // Det av `finn` som alt står foran markøren, byttes sammen med det som
+            // skrives. Kommer flere tegn på én gang (som fra autokorrektur), blir
+            // det foran `finn` stående.
+            const start = fra - Math.max(0, regel.finn.length - tekst.length)
+            const forst = tekst.slice(0, Math.max(0, tekst.length - regel.finn.length))
             const erstatning: Erstatning = {
-              fra: start,
-              til: start + regel.erstatt.length,
-              original: view.state.doc.textBetween(start, fra) + tekst,
+              fra: start + forst.length,
+              til: start + forst.length + regel.erstatt.length,
+              original: view.state.doc.textBetween(start, fra) + tekst.slice(forst.length),
             }
-            view.dispatch(view.state.tr.insertText(regel.erstatt, start, til).setMeta(NOKKEL, erstatning))
+            view.dispatch(view.state.tr.insertText(forst + regel.erstatt, start, til).setMeta(NOKKEL, erstatning))
             return true
           },
           handleKeyDown(view, hendelse) {

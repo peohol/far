@@ -34,8 +34,14 @@ describe('når en regel slår til', () => {
     expect(regelfeil('x'.repeat(21), 'y', [])).toMatch(/20 tegn/)
     expect(regelfeil('a\nb', 'y', [])).toMatch(/linjeskift/)
     expect(regelfeil('--', '—', REGLER)).toMatch(/alt en regel/)
-    // Mellomrommene er en del av regelen: « - » og «-» er to ulike regler.
-    expect(regelfeil('-', '‐', REGLER)).toBeNull()
+    // Mellomrommene er en del av regelen, men «-» ville slått til før både
+    // « - » og «--» var skrevet ferdig.
+    expect(regelfeil('-', '‐', REGLER)).toMatch(/Denne regelen slår til før « - » er skrevet ferdig/)
+    expect(regelfeil('---', '—', REGLER)).toMatch(/Regelen for «--» slår til før «---»/)
+    expect(regelfeil('x - y', 'z', REGLER)).toMatch(/Regelen for « - »/)
+    // En kortere regel som bare er slutten av en lengre, hindrer den ikke: den lengste vinner.
+    expect(regelfeil('- ', '–', [regel(' - ', ' – ')])).toBeNull()
+    expect(regelfeil('->', '→', REGLER)).toBeNull()
   })
 
 })

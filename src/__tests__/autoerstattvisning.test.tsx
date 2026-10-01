@@ -118,6 +118,18 @@ describe('autoerstatt i rikteksteditoren', () => {
     expect(tekst()).toBe('x-- – ')
   })
 
+  it('beholder det foran regelen når flere tegn kommer på én gang', async () => {
+    const { e, tekst } = await editor(minnelager())
+    act(() => {
+      const { from, to } = e.state.selection
+      const tatt = e.view.someProp('handleTextInput', (f) => f(e.view, from, to, 'abc--', () => e.state.tr.insertText('abc--', from, to)))
+      expect(tatt).toBe(true)
+    })
+    expect(tekst()).toBe('abc–')
+    tilbake(e)
+    expect(tekst()).toBe('abc--')
+  })
+
   it('lar kode stå slik den skrives', async () => {
     const { e, tekst } = await editor(minnelager())
     act(() => {

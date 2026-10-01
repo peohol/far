@@ -55,5 +55,17 @@ export function regelfeil(
   if (/[\r\n]/.test(finn) || /[\r\n]/.test(erstatt)) return 'En regel kan ikke inneholde linjeskift.'
   if (finn === erstatt) return 'Regelen må bytte teksten med noe annet.'
   if (andre.some((r) => r.finn === finn)) return 'Det finnes alt en regel for denne teksten.'
+  const hindrer = andre.find((r) => blokkerer(r.finn, finn))
+  if (hindrer) return `Regelen for «${hindrer.finn}» slår til før «${finn}» er skrevet ferdig, så denne regelen ville aldri virket.`
+  const hindres = andre.find((r) => blokkerer(finn, r.finn))
+  if (hindres) return `Denne regelen slår til før «${hindres.finn}» er skrevet ferdig, så den regelen ville sluttet å virke.`
   return null
+}
+
+/**
+ * Om regelen for `kort` slår til underveis mens `lang` skrives, og bytter ut
+ * teksten før `lang` er fullført — som «-» før «--».
+ */
+function blokkerer(kort: string, lang: string): boolean {
+  return lang.slice(0, -1).includes(kort)
 }
