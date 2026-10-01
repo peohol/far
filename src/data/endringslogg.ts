@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.67.1',
+    dato: '2026-10-01',
+    sammendrag: 'Kort åpnes bare når de har mer å vise',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Kortene i farmakokinetikken, farmakodynamikken og farmakogenetikken på fagsidene kan bare åpnes når det åpnede kortet viser mer enn det lukkede.',
+      'Et kort uten mer å vise, som en halveringstid på «7 timer», viser hele innholdet sitt rett under tittelen, med kildene under. Det har ingen pil og kan ikke trykkes på.',
+      'Et mekanismekort kan åpnes når det har en merknad eller en utdypende tekst. Ellers viser det målet og effekten, og fargen og ikonet viser retningen og mekanismen som før.',
+      'I redigeringsmodus kan alle kort fortsatt åpnes, så de kan redigeres, flyttes og fjernes.',
+    ],
+  },
+  {
     versjon: '1.67.0',
     dato: '2026-09-30',
     sammendrag: 'Farmakodynamikken vises som mekanismekort',

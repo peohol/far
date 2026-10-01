@@ -90,13 +90,33 @@
   gap: var(--rom-3);
 }
 
+/* Et fast kort viser hele teksten i oppsummeringens skrift (se
+   `.skuff__fastinnhold`), med kildene i et felt som ikke er bredere enn
+   innholdet sitt. */
+.skuff__fastinnhold > .infokort__innhold {
+  align-items: flex-start;
+  gap: var(--rom-2);
+}
+
+.skuff__fastinnhold > .infokort__innhold > .referansefelt {
+  margin-top: var(--rom-1);
+}
+
+.skuff__fastinnhold > .infokort__innhold > .riktekst {
+  gap: var(--rom-1);
+  max-width: none;
+  font: inherit;
+  color: inherit;
+}
+
 /* --- Farmakodynamikk: mekanismekortene -----------------------------------
    Lest raskt: målet som tittel, effekten under, og kvalifikasjonen dempet
    etter den. Retningen på den direkte prosessen gir en diskret farge i
    ikonet og en tynn stripe langs venstre kant: dempet rødt når prosessen
-   reduseres, grønt når den økes, og grått ellers. Retningen står alltid
-   også i tekst i det åpnede kortet. Et mål uten effekt har ikke ikon, og
-   effekten står dempet. */
+   reduseres, grønt når den økes, og grått ellers. Retningen står også i
+   tekst i det åpnede kortet; et kort uten noe mer å vise, som ikke åpnes,
+   har den for skjermleseren. Et mål uten effekt har ikke ikon, og effekten
+   står dempet. */
 .mekanismekort {
   --retning-farge: var(--retning-noytral);
   box-shadow: inset var(--kant-tykk) 0 0 color-mix(in oklab, var(--retning-farge) 70%, var(--linje));
@@ -112,6 +132,10 @@
 
 .mekanismekort > .skuff__hode .skuff__oppsummering {
   white-space: normal;
+}
+
+.mekanismekort__fast {
+  margin: 0;
 }
 
 .mekanismekort__effekt {

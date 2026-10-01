@@ -231,6 +231,27 @@
   border-color: var(--aksent);
 }
 
+/* --- Det faste kortet ----------------------------------------------------
+   Et detaljkort uten noe mer å vise (`Fastkort`): som et lukket kort, men
+   uten pil og uten noe å trykke på, og med innholdet i sin helhet der
+   oppsummeringen ellers står. Tittelen holder samme høyde som knappen i et
+   kort som kan åpnes, så kortene i en rad står likt. */
+.skuff--fast > .skuff__hode {
+  cursor: auto;
+}
+
+.skuff--fast .skuff__tittelTekst {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hoyde-liten);
+}
+
+.skuff__fastinnhold {
+  font: var(--vekt-normal) var(--tekst-liten) / 1.4 var(--skrift-ui);
+  color: var(--blekk-dempet);
+  overflow-wrap: anywhere;
+}
+
 /* --- Kroppen ------------------------------------------------------------ */
 
 .skuff__kropp {

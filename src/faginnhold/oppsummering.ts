@@ -29,11 +29,21 @@ export const FORHANDSVISNINGSLENGDE = 140
  * som ufullstendig.
  */
 export function forhandsvisning(tekst: string, lengde = FORHANDSVISNINGSLENGDE): string {
-  const flat = tekst.replace(/\s+/g, ' ').trim()
-  if (flat.length <= lengde) return flat
+  const flat = flatt(tekst)
+  if (!kuttes(flat, lengde)) return flat
   const kuttet = flat.slice(0, lengde + 1)
   const ordskille = kuttet.lastIndexOf(' ')
   return `${(ordskille > lengde / 2 ? kuttet.slice(0, ordskille) : flat.slice(0, lengde)).replace(/[\s,;:.–-]+$/, '')} …`
+}
+
+/** Om `forhandsvisning` må kutte teksten, så noe av den bare står i helheten. */
+export function kuttes(tekst: string, lengde = FORHANDSVISNINGSLENGDE): boolean {
+  return flatt(tekst).length > lengde
+}
+
+/** Teksten på én linje, med enkle mellomrom. */
+function flatt(tekst: string): string {
+  return tekst.replace(/\s+/g, ' ').trim()
 }
 
 /** «1 rad», «3 rader»: et antall med riktig bøyning. */

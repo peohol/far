@@ -88,7 +88,8 @@ export interface Seksjonsstyring {
   apneTil(element: Element, plass?: Rulleplass): void
   /**
    * Et sted på siden som alltid står fram og ikke er en skuff, som «Viktige
-   * data». En direktelenke dit ruller dit uten å åpne eller lukke noe. Gir
+   * data» eller et detaljkort uten noe mer å vise. En direktelenke dit åpner
+   * bare seksjonen stedet står i, om det står i en, og ruller dit. Gir
    * tilbake avregistreringen. Se `useFastSted`.
    */
   fastSted(sti: readonly string[], element: Element): () => void
@@ -211,7 +212,11 @@ export function SeksjonsstyringKilde({ bevares = false, children }: { bevares?: 
       const mal = kjede[kjede.length - 1]
       if (!mal) return
       const fast = faste.current.get(mal)
-      if (fast) return etterTegning(() => rull(fast, plass))
+      if (fast) {
+        // Et fast kort står i en seksjon som kan være lukket; den åpnes først.
+        velg(kjede.slice(0, -1), false)
+        return etterTegning(() => rull(fast, plass))
+      }
       velg(kjede, false)
       rullNar(mal, plass)
     },
