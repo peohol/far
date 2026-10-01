@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.70.1',
+    versjon: '1.70.2',
     dato: '2026-10-01',
     sammendrag: 'Tekstfeltene skyver ikke lenger knappene ut av syne',
     typer: ['Design / layout'],
