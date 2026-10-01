@@ -291,12 +291,14 @@
   margin: var(--rom-3) var(--rom-6) 0;
 }
 
+/* Kroppen er flaten tekstfeltene i menyen måles mot (se `skjema.css`). */
 .diskusjonspanel__kropp {
   flex: 1;
   min-height: 0;
   padding: var(--rom-4) var(--rom-4) var(--rom-6);
   overflow-y: auto;
   overscroll-behavior: contain;
+  container-type: size;
 }
 
 /* --- Oversikten ------------------------------------------------------------------ */
