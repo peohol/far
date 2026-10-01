@@ -172,5 +172,25 @@ describe('tegnmenyen', () => {
     expect(within(meny).getByRole('button', { name: 'Matematikk' }).getAttribute('aria-pressed')).toBe('true')
     expect(document.activeElement).toBe(within(meny).getByRole('button', { name: 'Matematikk' }))
   })
-})
 
+  it('lukker lenkepanelet når menyen åpnes, og menyen når et panel åpnes', async () => {
+    const user = userEvent.setup()
+    visEditor()
+    const lenke = await screen.findByRole('button', { name: 'Lenke' })
+    const tegn = screen.getByRole('button', { name: 'Sett inn spesialtegn' })
+
+    await user.click(lenke)
+    expect(screen.getByRole('group', { name: 'Lenke' })).toBeTruthy()
+    await user.click(tegn)
+    expect(screen.queryByRole('group', { name: 'Lenke' })).toBeNull()
+    expect(lenke.getAttribute('aria-expanded')).toBe('false')
+    expect(screen.getByRole('dialog', { name: 'Spesialtegn' })).toBeTruthy()
+
+    // Med tastaturet: ingen trykk utenfor, men panelet lukker menyen likevel.
+    lenke.focus()
+    await user.keyboard('{Enter}')
+    expect(screen.queryByRole('dialog', { name: 'Spesialtegn' })).toBeNull()
+    expect(tegn.getAttribute('aria-expanded')).toBe('false')
+    expect(screen.getByRole('group', { name: 'Lenke' })).toBeTruthy()
+  })
+})
