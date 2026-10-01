@@ -18,8 +18,8 @@ export const ENDRINGSLOGG: Endring[] = [
     typer: ['Design / layout'],
     omfang: 'Moderat omfang',
     punkter: [
-      'Når du skriver en ny tråd eller endrer innlegget i en diskusjonstråd, er tekstfeltet like høyt som menyen gir plass til, og verktøyraden, feltene over og knappene Avbryt og Publiser blir stående i syne. En lang tekst ruller inne i feltet.',
-      'Det samme gjelder nå alle tekstfelt i appen: ingen av dem vokser seg høyere enn det som er synlig, så ingenting over eller under dem forsvinner ut av bildet. Kommentarfeltene vokser med teksten opp til halve høyden og ruller deretter.',
+      'Når du skriver en ny tråd i diskusjonene, er tekstfeltet like høyt som menyen gir plass til, og verktøyraden, feltene over og knappene Avbryt og Publiser blir stående i syne. En lang tekst ruller inne i feltet.',
+      'Det samme gjelder nå alle tekstfelt i appen: ingen av dem vokser seg høyere enn det som er synlig, så ingenting over eller under dem forsvinner ut av bildet. Kommentarfeltene og feltet der du endrer innlegget i en tråd, vokser med teksten opp til halve høyden og ruller deretter.',
       'Bare når vinduet er så lavt at alt ikke får plass, ruller siden eller vinduet, og et tekstfelt viser alltid minst én linje.',
     ],
   },

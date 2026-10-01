@@ -174,6 +174,8 @@ bare fargene gjennom `--tast-flate`, `--tast-blekk` og `--tast-kant`
   diskusjonsmenyen; ellers er det vinduet. Er teksten det skjemaet handler om,
   får skjemaet (eller skriveren) klassen `skriveflate`: da er det like høyt som
   flaten, og teksten fyller det som er igjen under feltene og over knappene.
+  Skriveflaten må være det eneste på flaten; står noe over den (som
+  overskriften i en tråd), holder taket på halve høyden.
   Stilen står nederst i `skjema.css`.
 - **Klasser uten egen komponent:** `.kommentartekst` (teksten som limes inn),
   `.notis` (forsiktighet, med `--handling` når den tilbyr handlingen),

@@ -327,12 +327,13 @@
 }
 
 /* Skriveflaten: et skjema eller en skriver der teksten er hovedsaken
-   (`skriveflate` på elementet, som tråden, idéen og kortteksten). Den er
+   (`skriveflate` på elementet, som ny tråd, idéen og kortteksten). Den er
    like høy som det synlige av flaten den står på, og teksten tar det som er
    igjen når feltene over og knappene under har fått sitt. Alt mellom
    skriveflaten og teksten strekker seg med. Teksten regnes som tom når resten
    måles (`contain`), så det er den som gir etter når vinduet blir lavere;
-   får heller ikke én linje plass, ruller flaten. */
+   får heller ikke én linje plass, ruller flaten. Skriveflaten må være det
+   eneste på flaten: det som står over den, trekkes ikke fra. */
 .skriveflate:has(:is(.rikteksteditor__tekst, textarea)) {
   display: flex;
   flex-direction: column;
