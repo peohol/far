@@ -5,9 +5,10 @@
  * Teksten lagres som et ProseMirror-dokument i JSON — samme form som editoren
  * (TipTap, som i Slaids) arbeider med, og samme form som referansesystemet
  * leter etter siteringer i. Formateringen er bevisst begrenset: fet, kursiv,
- * understreking, senket og hevet skrift, punktlister, nummererte lister,
- * lenker og referanser. Fontstørrelse, farger og justering finnes ikke;
- * vanlig fritekst er venstrejustert og ser lik ut overalt.
+ * understreking, senket og hevet skrift, overskrifter i to nivåer,
+ * punktlister, nummererte lister, skillelinjer, lenker og referanser.
+ * Fontstørrelse, farger og justering finnes ikke; vanlig fritekst er
+ * venstrejustert og ser lik ut overalt.
  *
  * Alt som leses fra databasen, går gjennom {@link rensDokument} før det vises.
  * Det som ikke er på lista over tillatte noder og merker, blir ikke vist som
@@ -37,6 +38,8 @@ export interface Riktekstdokument extends Riktekstnode {
 export const NODER = {
   dokument: 'doc',
   avsnitt: 'paragraph',
+  overskrift: 'heading',
+  skillelinje: 'horizontalRule',
   tekst: 'text',
   linjeskift: 'hardBreak',
   punktliste: 'bulletList',
@@ -54,6 +57,22 @@ export const MERKER = {
   hevet: 'superscript',
   lenke: 'link',
 } as const
+
+/** Overskriftsnivåene teksten kan ha: 1 er den største. */
+export const OVERSKRIFTSNIVAER = [1, 2] as const
+export type Overskriftsniva = (typeof OVERSKRIFTSNIVAER)[number]
+
+/**
+ * Elementet hvert overskriftsnivå vises som. Teksten står alltid under
+ * sidens og kortets egne overskrifter, så nivå 1 er en `h3`.
+ */
+export const OVERSKRIFTSELEMENT: Record<Overskriftsniva, 'h3' | 'h4'> = { 1: 'h3', 2: 'h4' }
+
+/** Overskriftsnivået i nodens `attrs`. Et dypere nivå enn de som finnes, blir det dypeste; noe ugyldig blir nivå 1. */
+export function overskriftsniva(attrs: unknown): Overskriftsniva {
+  const niva = Number(erObjekt(attrs) ? attrs.level : undefined)
+  return OVERSKRIFTSNIVAER.filter((n) => n <= niva).pop() ?? OVERSKRIFTSNIVAER[0]
+}
 
 const TILLATTE_NODER = new Set<string>(Object.values(NODER))
 const TILLATTE_MERKER = new Set<string>(Object.values(MERKER))
@@ -110,7 +129,7 @@ function rensInnhold(innhold: unknown): Riktekstnode[] {
       const referanser = siteringsider(node.attrs)
       return referanser.length > 0 ? [{ type: SITERING, attrs: { referanser } }] : []
     }
-    if (node.type === NODER.linjeskift) return [{ type: NODER.linjeskift }]
+    if (node.type === NODER.linjeskift || node.type === NODER.skillelinje) return [{ type: node.type }]
     if (!TILLATTE_NODER.has(node.type) || node.type === NODER.dokument) return rensInnhold(node.content)
 
     const content = rensInnhold(node.content)
@@ -119,9 +138,15 @@ function rensInnhold(innhold: unknown): Riktekstnode[] {
       return punkter.length > 0 ? [{ type: node.type, content: punkter }] : []
     }
     if (BLOKKBEHOLDERE.has(node.type)) return [{ type: node.type, content: blokker(content) }]
-    // Et avsnitt inneholder bare tekstnivå.
+    // Et avsnitt og en overskrift inneholder bare tekstnivå.
     const tekstniva = content.flatMap((n) => (erTekstniva(n) ? [n] : (n.content ?? []).filter(erTekstniva)))
-    return [{ type: node.type, ...(tekstniva.length > 0 && { content: tekstniva }) }]
+    return [
+      {
+        type: node.type,
+        ...(node.type === NODER.overskrift && { attrs: { level: overskriftsniva(node.attrs) } }),
+        ...(tekstniva.length > 0 && { content: tekstniva }),
+      },
+    ]
   })
 }
 

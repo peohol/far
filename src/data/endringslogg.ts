@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.69.0',
+    dato: '2026-10-01',
+    sammendrag: 'Overskrifter og skillelinjer i teksteditorene',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Alle teksteditorene i appen har fått knappene H1 og H2 for overskrifter i to nivåer. H1 er den største; H2 er litt større enn vanlig fet tekst. Ctrl + Alt + 1 og Ctrl + Alt + 2 gjør det samme.',
+      'En ny knapp setter inn en horisontal skillelinje i teksten.',
+      'Knappene for fet og kursiv heter nå B og I, som hurtigtastene Ctrl + B og Ctrl + I.',
+    ],
+  },
+  {
     versjon: '1.68.0',
     dato: '2026-10-01',
     sammendrag: 'Nytt utseende på kortene i farmakodynamikken',
