@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.71.1',
+    dato: '2026-10-01',
+    sammendrag: 'Enter kopierer bare kommentarer når du arbeider i fortolkningen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Enter og mellomrom kopierer kommentarer og går videre i fortolkningen bare når du arbeider der, eller ikke står i noe annet på siden.',
+      'Står du i en diskusjonstråd, et tekstfelt eller en editor mens fortolkningen er åpen, gir Enter linjeskift som vanlig. Står du på en knapp, trykker Enter knappen.',
+      'Det samme gjelder sifrene og de andre tastene i fortolkningen: de blir i feltet du skriver i, slik de alt gjorde i fagsøket.',
+    ],
+  },
+  {
     versjon: '1.71.0',
     dato: '2026-10-01',
     sammendrag: 'Autoerstatt i teksteditorene',

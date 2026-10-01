@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { StepBar } from './StepBar'
 import { Ikon } from './ikon/Ikon'
-import { fortolkningenErSkjult, indexToDigit, lagLiggerOver } from '../hooks/useKeyboard'
+import { indexToDigit, lagLiggerOver, tastenGjelderFortolkningen } from '../hooks/useKeyboard'
 import { Filterbytte } from './Filterbytte'
 import { Shortcut } from './Shortcut'
 import { splitName } from '../domain/names'
@@ -70,9 +70,10 @@ export function SearchStep({
     function onKeyDown(event: KeyboardEvent) {
       const felt = inputRef.current
       if (!felt || document.activeElement === felt) return
-      // Ligger endringsloggen eller sidemenyen over appen, hører det som
-      // skrives hjemme der og skal ikke rykke fokus ned i søkefeltet bak.
-      if (lagLiggerOver() || fortolkningenErSkjult()) return
+      // Ligger endringsloggen eller sidemenyen over appen, eller skrives det i
+      // et felt et annet sted på siden, hører det som skrives hjemme der og
+      // skal ikke rykke fokus ned i søkefeltet bak.
+      if (lagLiggerOver() || !tastenGjelderFortolkningen(event)) return
       if (!isTypedCharacter(event)) return
       if (knappTarTegnet(event)) return
       felt.focus()

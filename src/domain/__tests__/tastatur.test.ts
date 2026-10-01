@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { enterErLedig, feltetTarTegnene, fokustype, mellomromErLedig, type Fokusert } from '../tastatur'
+import {
+  enterErLedig,
+  feltetTarTegnene,
+  fokustype,
+  mellomromErLedig,
+  tastenHorerTilFokus,
+  type Fokusert,
+} from '../tastatur'
 
 const felt = (type: string, ekstra: Partial<Fokusert> = {}): Fokusert => ({
   tag: 'INPUT',
@@ -87,5 +94,34 @@ describe('hva Enter lander på', () => {
     // Analyttkodene i fortolkningsmodulene er lenker til informasjonssidene.
     expect(enterErLedig({ tag: 'A' })).toBe(false)
     expect(enterErLedig({ tag: 'a' })).toBe(false)
+  })
+})
+
+describe('tastene når fokus står utenfor fortolkningen', () => {
+  it('lar Enter og mellomrom høre til alt som har fokus', () => {
+    // Linjeskift i diskusjonstråden, trykk på knappen i toppmenyen.
+    for (const fokus of [{ tag: 'TEXTAREA' }, felt('text'), { tag: 'BUTTON' }, { tag: 'A' }, { tag: 'DIV' }]) {
+      expect(tastenHorerTilFokus('Enter', fokus)).toBe(true)
+      expect(tastenHorerTilFokus(' ', fokus)).toBe(true)
+    }
+    expect(tastenHorerTilFokus('Enter', { tag: 'DIV', redigerbart: true })).toBe(true)
+  })
+
+  it('lar alle tastene høre til et felt eller et redigerbart område', () => {
+    for (const tast of ['1', 'a', 'Escape', 'ArrowDown']) {
+      expect(tastenHorerTilFokus(tast, { tag: 'TEXTAREA' })).toBe(true)
+      expect(tastenHorerTilFokus(tast, felt('search'))).toBe(true)
+      expect(tastenHorerTilFokus(tast, { tag: 'SELECT' })).toBe(true)
+      expect(tastenHorerTilFokus(tast, { tag: 'DIV', redigerbart: true })).toBe(true)
+    }
+  })
+
+  it('lar de andre tastene være fortolkningens når fokus står på en knapp', () => {
+    // En knapp i toppmenyen som beholdt fokus etter et klikk, skal ikke
+    // stenge sifrene, søket eller Escape.
+    for (const tast of ['1', 'a', 'Escape', 'ArrowDown']) {
+      expect(tastenHorerTilFokus(tast, { tag: 'BUTTON' })).toBe(false)
+    }
+    expect(tastenHorerTilFokus('Enter', null)).toBe(false)
   })
 })

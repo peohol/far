@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { enterErLedig, feltetTarTegnene, mellomromErLedig, type Fokusert } from '../domain/tastatur'
+import { enterErLedig, feltetTarTegnene, mellomromErLedig, tastenHorerTilFokus, type Fokusert } from '../domain/tastatur'
 
 export type KeyHandler = (event: KeyboardEvent) => void
 
@@ -34,9 +34,11 @@ export function lagLiggerOver(): boolean {
  * Merket det globale fagsøket bærer som `data-lag` mens fokus står i det.
  *
  * Fagsøket står i toppmenyen over fortolkningen, og det som skrives der, er
- * et søk: sifrene skal ikke velge et alternativ, `Enter` ikke kopiere en
- * kommentar og `Escape` ikke gå et steg tilbake i steget bak. Som laget over
- * appen legger det derfor appens egne taster i ro (se {@link lagLiggerOver}).
+ * et søk: sifrene skal ikke velge et alternativ og `Escape` ikke gå et steg
+ * tilbake i steget bak. Som laget over appen legger det derfor appens egne
+ * taster i ro (se {@link lagLiggerOver}). At `Enter` ikke kopierer en
+ * kommentar derfra, følger av den felles regelen for fokus utenfor
+ * fortolkningen ({@link tastenGjelderFortolkningen}).
  */
 export const FAGSOK_LAG = 'fagsok'
 
@@ -59,20 +61,38 @@ export function erSokesnarvei(event: KeyboardEvent, tast: string): boolean {
   return !lagLiggerOver() || fokusIFagsok()
 }
 
-/** Merket fortolkningen bærer mens den står skjult bak en stoffside. */
+/**
+ * Merket fortolkningens flate bærer i `data-fortolkning`: `vist`, eller
+ * `skjult` mens den står bak en stoffside eller søkesiden.
+ */
+export const VIST_FORTOLKNING = 'vist'
 export const SKJULT_FORTOLKNING = 'skjult'
 
 /**
- * Sant mens fortolkningen står skjult bak en stoffside eller søkesiden.
+ * Sant når tastetrykket er fortolkningens å svare på — den ene regelen alle
+ * som lytter på vinduet på vegne av fortolkningen, spør.
  *
- * Fortolkningen blir stående montert når en stoffside åpnes, så det
- * brukeren har fylt inn, er der når hen kommer tilbake. Tastene dens skal
- * derimot ligge i ro så lenge den ikke vises: `Enter` på stoffsiden
- * skal ikke kopiere en kommentar ingen ser. Alle som lytter på vinduet på
- * vegne av fortolkningen, spør her — samme mønster som {@link lagLiggerOver}.
+ * Fortolkningen blir stående montert når en stoffside åpnes, så det brukeren
+ * har fylt inn, er der når hen kommer tilbake. Mens den står skjult, ligger
+ * tastene dens i ro: `Enter` på stoffsiden skal ikke kopiere en kommentar
+ * ingen ser.
+ *
+ * Mens den vises, er tastene dens når fokus står i fortolkningen, eller ingen
+ * steder. Står fokus et annet sted på siden — i fagsøket, en diskusjonstråd,
+ * en editor, toppmenyen — beholder elementet der de tastene det selv bruker
+ * ({@link tastenHorerTilFokus}): `Enter` gir linjeskift i tekstfeltet og
+ * trykker knappen i stedet for å kopiere en kommentar.
+ *
+ * Står en komponent fra fortolkningen alene, uten flaten rundt seg — som i en
+ * test av ett steg — er alle tastene dens.
  */
-export function fortolkningenErSkjult(): boolean {
-  return document.querySelector(`[data-fortolkning="${SKJULT_FORTOLKNING}"]`) !== null
+export function tastenGjelderFortolkningen(event: KeyboardEvent): boolean {
+  const flate = document.querySelector<HTMLElement>('[data-fortolkning]')
+  if (!flate) return true
+  if (flate.dataset.fortolkning === SKJULT_FORTOLKNING) return false
+  const aktivt = document.activeElement
+  if (!aktivt || aktivt === document.body || flate.contains(aktivt)) return true
+  return !tastenHorerTilFokus(event.key, fokusertNa())
 }
 
 /**
@@ -94,7 +114,7 @@ export function useKeyboard(handlers: Record<string, KeyHandler | undefined>, en
     if (!enabled) return
     function onKeyDown(event: KeyboardEvent) {
       if (event.ctrlKey || event.metaKey || event.altKey) return
-      if (lagLiggerOver() || fortolkningenErSkjult()) return
+      if (lagLiggerOver() || !tastenGjelderFortolkningen(event)) return
       ref.current[event.key]?.(event)
     }
     window.addEventListener('keydown', onKeyDown)
@@ -131,8 +151,8 @@ export function fokusertNa(): Fokusert | null {
 /**
  * Sant når tastetrykket er en bekreftelse: `Enter`, eller mellomrom der
  * mellomrom ikke alt har en jobb der fokus står. `Enter` på en lenke følger
- * lenken, og mens fortolkningen står skjult eller det skrives i fagsøket,
- * bekrefter ingen av dem noe.
+ * lenken, og mens fortolkningen står skjult eller fokus står et annet sted på
+ * siden, bekrefter ingen av dem noe ({@link tastenGjelderFortolkningen}).
  *
  * Dette er den ene regelen for «gjør det steget skal gjøre», og alle stegene
  * og modulene bruker den, slik at de to tastene betyr det samme overalt.
@@ -140,7 +160,7 @@ export function fokusertNa(): Fokusert | null {
  */
 export function erBekreftelse(event: KeyboardEvent): boolean {
   if (event.ctrlKey || event.metaKey || event.altKey) return false
-  if (fortolkningenErSkjult() || fokusIFagsok()) return false
+  if (!tastenGjelderFortolkningen(event)) return false
   if (event.key === 'Enter') return enterErLedig(fokusertNa())
   return event.key === ' ' && mellomromErLedig(fokusertNa())
 }

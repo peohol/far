@@ -1,6 +1,6 @@
 import { useEffect, type RefObject } from 'react'
 import { toppmenyensBunn } from '../components/toppmeny/toppmenyplass'
-import { fortolkningenErSkjult, lagLiggerOver } from './useKeyboard'
+import { lagLiggerOver, tastenGjelderFortolkningen } from './useKeyboard'
 
 /**
  * Ruller et kort pent på plass: vertikalt midtstilt i vinduet, eller til
@@ -138,7 +138,7 @@ export function useKortHopp(
     const paaTast = (event: KeyboardEvent) => {
       if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return
       if (event.ctrlKey || event.metaKey || event.altKey) return
-      if (lagLiggerOver() || fortolkningenErSkjult()) return
+      if (lagLiggerOver() || !tastenGjelderFortolkningen(event)) return
       if (erIRedigerbartFelt()) return
       event.preventDefault()
       hopp(event.key === 'ArrowDown' ? 1 : -1)
