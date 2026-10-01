@@ -90,11 +90,31 @@
   gap: var(--rom-3);
 }
 
+/* Et fast kort viser hele teksten i oppsummeringens skrift (se
+   `.skuff__fastinnhold`), med kildene i et felt som ikke er bredere enn
+   innholdet sitt. */
+.skuff__fastinnhold > .infokort__innhold {
+  align-items: flex-start;
+  gap: var(--rom-2);
+}
+
+.skuff__fastinnhold > .infokort__innhold > .referansefelt {
+  margin-top: var(--rom-1);
+}
+
+.skuff__fastinnhold > .infokort__innhold > .riktekst {
+  gap: var(--rom-1);
+  max-width: none;
+  font: inherit;
+  color: inherit;
+}
+
 /* --- Farmakodynamikk: mekanismekortene -----------------------------------
    Lest med ett blikk: målet som tittel og effekten som en pille under, i
    trafikklysfargen for virkningen (docs/farmakodynamikk-ikoner.md). Samme
    farge gir en tynn stripe langs venstre kant. Åpnet viser kortet pillen
-   øverst, så den utdypende teksten og kildene. */
+   øverst, så den utdypende teksten og kildene. Uten utdypende tekst åpnes
+   kortet ikke, og pillen står fast under tittelen. */
 .mekanismekort {
   --virkning-farge: var(--virkning-noytral);
   box-shadow: inset var(--kant-tykk) 0 0 color-mix(in oklab, var(--virkning-farge) 70%, var(--linje));

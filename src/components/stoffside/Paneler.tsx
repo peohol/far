@@ -14,7 +14,7 @@ import {
 } from '../../faginnhold/paneler'
 import { INGEN_EFFEKT } from '../../faginnhold/mekanismer'
 import { doseringskort } from '../../faginnhold/doseringskort'
-import { OPPSUMMERINGSSKILLE, antall, forhandsvisning, ramsOpp } from '../../faginnhold/oppsummering'
+import { OPPSUMMERINGSSKILLE, antall, forhandsvisning, kuttes, ramsOpp } from '../../faginnhold/oppsummering'
 import { NODER, erTomt, klartekst, tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
 import { SenketTekst } from '../SenketTekst'
@@ -312,6 +312,14 @@ interface Korttype<T> {
   /** Klassen på detaljkortet, f.eks. for retningen på et mekanismekort. */
   klasse?: (kort: T) => string | undefined
   visning: (kort: T) => ReactNode
+  /**
+   * Om det åpnede kortet viser mer enn oppsummeringen. Bare da kan kortet
+   * åpnes (utenom i redigeringsmodus); ellers er det et fast kort som viser
+   * `fast` rett under tittelen.
+   */
+  harMer: (kort: T) => boolean
+  /** Det et fast kort viser under tittelen. Visningen når ikke annet er sagt. */
+  fast?: (kort: T) => ReactNode
   Skjema: (props: SkjemaProps<T>) => ReactNode
 }
 
@@ -325,6 +333,8 @@ const KINETIKKORT: Korttype<Kinetikkdata> = {
   tittel: (kort) => <Kinetikktittel tittel={kort.tittel} />,
   oppsummering: (kort) => tekstoppsummering(kort.dokument),
   visning: (kort) => <Riktekst dokument={kort.dokument} />,
+  // Får teksten plass i oppsummeringen, er det ikke mer å vise; da står den i sin helhet i det faste kortet.
+  harMer: (kort) => kuttes(klartekst(kort.dokument)),
   Skjema: KinetikkSkjema,
 }
 
@@ -402,6 +412,19 @@ function Kortserie<T>({
           {elementer.map((element, i) => {
             const kort = type.les(element.data)
             const navn = type.navn(kort)
+            // Kortet åpnes bare når det har mer å vise. Redaktøren åpner det for å komme til knappene.
+            if (!redigerer && !type.harMer(kort)) {
+              return (
+                <li key={element.id} className="infokort__kort">
+                  <Detaljkort id={element.id} kanApnes={false} ikon={type.ikon(kort)} tittel={type.tittel(kort)} className={type.klasse?.(kort)}>
+                    <div id={elementAnker(element.id)} className="infokort__innhold">
+                      {(type.fast ?? type.visning)(kort)}
+                      <Kortreferanser element={element} />
+                    </div>
+                  </Detaljkort>
+                </li>
+              )
+            }
             return (
               <li key={element.id} className="infokort__kort">
                 <Detaljkort
@@ -536,6 +559,9 @@ const MEKANISMEKORT: Korttype<Mekanismekortdata> = {
       {!erTomt(kort.dokument) && <Riktekst dokument={kort.dokument} />}
     </>
   ),
+  // Pillen står alt på det lukkede kortet, så kortet åpnes bare når det har en utdypende tekst.
+  // Ellers er det fast og viser visningen over, som da bare er pillen.
+  harMer: (kort) => !erTomt(kort.dokument),
   Skjema: MekanismekortSkjema,
 }
 

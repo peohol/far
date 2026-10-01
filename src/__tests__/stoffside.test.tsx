@@ -17,6 +17,7 @@ import { act, cleanup, render, screen, waitFor, within } from '@testing-library/
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { Stoffside } from '../components/stoffside/Stoffside'
+import { detaljanker } from '../components/seksjoner/Seksjon'
 import { FaginnholdskildeProvider } from '../components/stoffside/Faginnholdskilde'
 import { ScenarioreglerProvider, type Scenarioreglerkilde } from '../components/regler/Scenarioreglerkilde'
 import { TipsLag } from '../components/Tips'
@@ -1934,7 +1935,13 @@ describe('rikteksteditoren', () => {
 })
 
 describe('kortene i farmakokinetikken', () => {
-  /** To kinetikkort, Absorpsjon og Metabolisme, med teksten i `tekster` (eller «Syntetisk»). */
+  /**
+   * En tekst som er lengre enn oppsummeringen av et lukket kort får plass til,
+   * så kortet har mer å vise og kan åpnes.
+   */
+  const LANG = 'Syntetisk tekst som er lengre enn det oppsummeringen av et lukket kort får plass til, så kortet har mer å vise og må åpnes for at resten skal leses.'
+
+  /** To kinetikkort, Absorpsjon og Metabolisme, med teksten i `tekster` (eller `LANG`). */
   const medKort =
     (tekster: Partial<Record<'k1' | 'k2', string>> = {}) =>
     (tilstand: Tilstand): Stoffsidedata => {
@@ -1947,7 +1954,7 @@ describe('kortene i farmakokinetikken', () => {
           elementtype: 'kinetikkort',
           data: {
             tittel,
-            dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: tekster[id] ?? 'Syntetisk' }] }] },
+            dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: tekster[id] ?? LANG }] }] },
           },
         })
       return { ...data, elementer: [...data.elementer, kort('k1', 'Absorpsjon', 0), kort('k2', 'Metabolisme', 0)] }
@@ -1992,7 +1999,7 @@ describe('kortene i farmakokinetikken', () => {
   it('går til titteltreffet når søket treffer tittelen på et lukket kort', async () => {
     const user = userEvent.setup()
     // «metabolisme» står i teksten i Absorpsjon og i tittelen på Metabolisme.
-    vis('amitriptylin', kilde({ data: medKort({ k1: 'Syntetisk metabolisme.' }) }))
+    vis('amitriptylin', kilde({ data: medKort({ k1: `${LANG} Om metabolisme.` }) }))
     await finnVerdi('10–20 nmol/L')
     const skuffknapp = (navn: string) =>
       screen.getAllByRole('button', { name: navn, hidden: true }).find((b) => b.hasAttribute('aria-expanded'))!
@@ -2038,7 +2045,7 @@ describe('kortene i farmakokinetikken', () => {
         elementtype: 'kinetikkort',
         data: {
           tittel: 'CYP-enzymer (substrat)',
-          dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Syntetisk CYP2D6.' }] }] },
+          dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: `${LANG} CYP2D6.` }] }] },
         },
       })
       return { ...s, elementer: [...s.elementer, cyp] }
@@ -2049,7 +2056,50 @@ describe('kortene i farmakokinetikken', () => {
     expect(seksjoner.indexOf('farmakogenetikk')).toBe(seksjoner.indexOf('farmakokinetikk') + 1)
     await apneSkuff(user, 'Farmakogenetikk')
     expect(skuffen('CYP-enzymer (substrat)').getAttribute('aria-expanded')).toBe('true')
-    expect(screen.getByText('Syntetisk CYP2D6.')).toBeTruthy()
+    expect(screen.getByText(`${LANG} CYP2D6.`)).toBeTruthy()
+  })
+
+  it('viser et kort uten noe mer å vise som et fast kort med hele teksten, som ikke kan åpnes', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', kilde({ data: medKort({ k1: '44 %' }) }))
+    await finnVerdi('10–20 nmol/L')
+    await apneSkuff(user, 'Farmakokinetikk')
+    const fast = document.getElementById(detaljanker('farmakokinetikk', 'k1'))!
+    expect(fast.classList).toContain('skuff--fast')
+    expect(within(fast).getByRole('heading', { level: 3, name: 'Absorpsjon' })).toBeTruthy()
+    // Ingen knapp og ingen pil: det er ingenting å åpne.
+    expect(within(fast).queryByRole('button')).toBeNull()
+    expect(fast.querySelector('.skuff__pil')).toBeNull()
+    // Hele teksten står fram, og ikke i noen skjult kropp.
+    const tekst = within(fast).getByText('44 %')
+    expect(tekst.closest('[hidden]')).toBeNull()
+    expect(fast.querySelector('.skuff__kropp')).toBeNull()
+    // Kortet med mer å vise kan fortsatt åpnes.
+    expect(skuffen('Metabolisme').getAttribute('aria-expanded')).toBe('false')
+  })
+
+  it('går til et treff i et fast kort og åpner seksjonen det står i', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', kilde({ data: medKort({ k1: '44 % biotilgjengelighet' }) }))
+    await finnVerdi('10–20 nmol/L')
+    expect(skuffen('Farmakokinetikk').getAttribute('aria-expanded')).toBe('false')
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'biotilgjengelighet')
+    const steder = within(await screen.findByRole('list', { name: 'Hvor treffene står' }))
+    await user.click(steder.getByRole('button', { name: 'Farmakokinetikk › Absorpsjon' }))
+    expect(skuffen('Farmakokinetikk').getAttribute('aria-expanded')).toBe('true')
+    const aktivt = document.querySelector('mark.sidetreff--aktiv')!
+    expect(aktivt.closest('.skuff--fast')?.id).toBe(detaljanker('farmakokinetikk', 'k1'))
+    expect(aktivt.closest('[hidden]')).toBeNull()
+  })
+
+  it('lar redaktøren åpne også et kort uten noe mer å vise, for å komme til knappene', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', kilde({ kanRedigere: true, data: medKort({ k1: '44 %' }) }))
+    await finnVerdi('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await apneSkuff(user, 'Farmakokinetikk')
+    await apneSkuff(user, 'Absorpsjon')
+    expect(await screen.findByRole('button', { name: 'Rediger: Absorpsjon' })).toBeTruthy()
   })
 
   it('fjerner et kort først etter en bekreftelse, uten å slette det', async () => {
@@ -2071,7 +2121,8 @@ describe('mekanismekortene i farmakodynamikken', () => {
   /**
    * Farmakodynamikken som to mekanismekort i stedet for teksten: en
    * antagonist med kilde og utdypende tekst, og et eldre kort for et mål uten
-   * effekt, med feltene kortene hadde før (som ikke vises lenger).
+   * effekt og uten utdypende tekst, med feltene kortene hadde før (som ikke
+   * vises lenger).
    */
   const tekst = (t: string) => ({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: t }] }] })
   const medMekanismer = (tilstand: Tilstand): Stoffsidedata => {
@@ -2089,12 +2140,12 @@ describe('mekanismekortene i farmakodynamikken', () => {
           mekanisme: 'ingen_effekt',
           retning: 'ingen',
           kvalifikasjon: 'Ingen affinitet',
-          dokument: tekst('Binder ikke.'),
+          merknad: 'Syntetisk merknad.',
         }),
       ],
     }
   }
-  const kortet = (id: string) => document.querySelector<HTMLElement>(`[data-skuff="farmakodynamikk/${id}"]`)!
+  const kortet = (id: string) => document.getElementById(detaljanker('farmakodynamikk', id))!
 
   it('viser målet med subtypen senket og effekten som en farget pille på de lukkede kortene', async () => {
     const user = userEvent.setup()
@@ -2111,13 +2162,28 @@ describe('mekanismekortene i farmakodynamikken', () => {
     expect([...kortet('m1').classList]).toEqual(expect.arrayContaining(['mekanismekort--redusert', 'system-dopamin']))
     expect(kortet('m1').querySelector('.skuff__ikon .ikon')!.getAttribute('data-ikon')).toBe('mekAntagonisme')
 
-    // De eldre feltene vises ikke: bare effekten, i grått, og ikke noe ikon.
-    expect(kortet('m2').querySelector('.skuff__oppsummering')!.textContent).toBe('Ingen effekt')
-    expect(kortet('m2').querySelector('.skuff__oppsummering .merke')!.classList).toContain('merke--noytral')
+    // D1 har ingen utdypende tekst, så kortet er fast og viser bare effekten, i grått.
+    // De eldre feltene, som kvalifikasjonen og merknaden, vises ikke.
+    expect(kortet('m2').classList).toContain('skuff--fast')
+    expect(within(kortet('m2')).queryByRole('button')).toBeNull()
+    expect(kortet('m2').querySelector('.infokort__innhold')!.textContent).toBe('Ingen effekt')
+    expect(kortet('m2').querySelector('.infokort__innhold .merke')!.classList).toContain('merke--noytral')
     expect(kortet('m2').classList).toContain('mekanismekort--noytral')
     expect(kortet('m2').querySelector('.skuff__ikon')).toBeNull()
 
     expect(screen.queryByText('gjenopptaket')).toBeNull()
+  })
+
+  it('finner et fast mekanismekort på effekten', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', kilde({ data: medMekanismer }))
+    await finnVerdi('10–20 nmol/L')
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'Ingen effekt')
+    const steder = within(await screen.findByRole('list', { name: 'Hvor treffene står' }))
+    await user.click(steder.getByRole('button', { name: 'Farmakodynamikk › D1-reseptor' }))
+    expect(skuffen('Farmakodynamikk').getAttribute('aria-expanded')).toBe('true')
+    expect(document.querySelector('mark.sidetreff--aktiv')!.closest('.skuff--fast')).toBe(kortet('m2'))
+    expect(kortet('m2').querySelector('.merke mark')).not.toBeNull()
   })
 
   it('viser effekten, den utdypende teksten og kildene i det åpnede kortet, og ikke mekanismen og retningen', async () => {
@@ -2469,6 +2535,9 @@ describe('innhold hentet fra en kilde', () => {
 })
 
 describe('farmakogenetikken fra ClinPGx', () => {
+  /** Lengre enn oppsummeringen av et lukket kort, så det redaksjonelle kortet kan åpnes. */
+  const REDAKSJONELL =
+    'Syntetisk redaksjonell tekst. Den er lengre enn det oppsummeringen av et lukket kort får plass til, så kortet har mer å vise når det åpnes og leses i sin helhet.'
   const genref = (symbol: string) => ({ id: `PA-${symbol}`, symbol })
   const grunnlag = {
     navn: '',
@@ -2579,7 +2648,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
                   elementtype: 'kinetikkort',
                   data: {
                     tittel: 'CYP-enzymer (substrat)',
-                    dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Syntetisk redaksjonell tekst.' }] }] },
+                    dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: REDAKSJONELL }] }] },
                   },
                 }),
               ]
@@ -2673,7 +2742,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
     vis('amitriptylin', pgxkilde({ data: medPgx() }, feil))
     expect(await screen.findByText(/Fikk ikke hentet farmakogenetikken fra ClinPGx\. Nettverksfeil/)).toBeTruthy()
     // Det redaksjonelle står der fortsatt.
-    expect(screen.getAllByText('Syntetisk redaksjonell tekst.').length).toBeGreaterThan(0)
+    expect(screen.getAllByText(REDAKSJONELL).length).toBeGreaterThan(0)
   })
 
   it('finner gener og organisasjoner i søket på siden, og åpner kortet treffet står i', async () => {

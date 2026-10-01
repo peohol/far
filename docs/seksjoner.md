@@ -16,6 +16,11 @@ offentlige kilder.
   står der.
 - **Detaljkort** i en åpen seksjon er mindre skuffer med sin egen
   oppsummering.
+- **Et kort kan åpnes bare når det har mer å vise** enn det som står i det
+  lukket. Har det ikke det — en halveringstid på «7 timer», eller et
+  mekanismekort uten utdypende tekst — er det et **fast kort**:
+  tittelen med hele innholdet rett under, uten pil og uten noe å trykke på.
+  I redigeringsmodus kan alle kort åpnes, så redaktøren kommer til knappene.
 - **Bare én skuff per nivå står åpen.** Åpnes en seksjon, lukkes den som sto
   åpen; åpnes et detaljkort, lukkes de andre kortene i samme seksjon, mens
   seksjonen står åpen. Det gjelder uansett hva som åpner skuffen: et trykk,
@@ -98,6 +103,20 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   Mekanismekortene i farmakodynamikken får ikon etter mekanismetypen
   (`mekanismeikon`), og et kort uten effekt har ikke noe ikon. Hvordan de
   tegnes og farges, står i `docs/farmakodynamikk-ikoner.md`.
+- `kanApnes={false}` gjør et detaljkort fast (`Fastkort` i `Seksjon.tsx`):
+  `children` står synlig under tittelen i oppsummeringens skrift, og
+  `oppsummering`, `handlinger` og `apenFraStart` brukes ikke. Kortet er ikke
+  en skuff i styringen, men et fast sted: en direktelenke dit åpner
+  seksjonen og ruller dit, og søket åpner seksjonen rundt et treff i det. Det
+  er den som eier kortene, som vet om de har mer å vise. Kortseriene i
+  `Paneler.tsx` (farmakokinetikken, farmakodynamikken og de redaksjonelle
+  kortene i farmakogenetikken) avgjør det med `harMer` i `Korttype`:
+  - et kinetikkort har mer når teksten er for lang til å stå hel i
+    oppsummeringen (`kuttes`, samme grense som `forhandsvisning`);
+  - et mekanismekort har mer når det har en utdypende tekst. Ellers står
+    effektpillen fast under målet.
+
+  Kildene til kortet står nederst i det faste kortet, som i det åpnede.
 - En seksjon i en seksjon, eller et detaljkort utenfor en seksjon eller i et
   annet detaljkort, stopper tegningen med en feil. Trenger innholdet et
   tredje nivå, skal det heller deles opp.
@@ -173,7 +192,7 @@ regelen om én åpen per nivå kan ikke brytes. `useSeksjonsstyring()` gir:
 | `apne(['seksjon', 'kort'])` | Åpner stedet uten å gli, lukker søsknene, og ruller dit |
 | `apneTil(element)` | Åpner skuffene elementet står i på samme måte, og ruller det fram |
 | `sett(sti, apen)` | Det et trykk gjør: åpner (og ruller den fram, se over) eller lukker |
-| `fastSted(sti, element)` | Melder inn et sted som alltid står fram, så `apne` ruller dit uten å røre skuffene. Brukes gjennom `useFastSted(id, ref)` |
+| `fastSted(sti, element)` | Melder inn et sted som alltid står fram, så `apne` ruller dit uten å røre andre skuffer enn seksjonen stedet står i. Brukes gjennom `useFastSted(id, ref)` og av faste detaljkort |
 
 Står flere søsken åpne fra start (`apenFraStart`), er det den første som
 gjelder. En seksjon uten styringen rundt seg lager sin egen, så detaljkortene
@@ -190,7 +209,8 @@ innholdet, som bærer `data-skuffinnhold`.
 
 - Overskriften er en knapp i en overskrift (`h2` for seksjoner, `h3` for
   detaljkort) med `aria-expanded` og `aria-controls`. Oppsummeringen og antall
-  treff er knyttet til knappen med `aria-describedby`.
+  treff er knyttet til knappen med `aria-describedby`. Et fast kort har
+  overskriften uten knapp, siden det ikke er noe å åpne.
 - Knappen åpnes og lukkes med Enter og mellomrom, og har god trykkflate på
   mobil.
 - Seksjonen er et område (`section`) med overskriften som navn; et detaljkort

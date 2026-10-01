@@ -29,7 +29,7 @@ Filene:
   med fargen og ikonet. Det står aldri «Effekt:» foran.
 - **Kanten** til venstre har samme trafikklysfarge, dempet.
 - **Åpnet** viser kortet pillen øverst, så den utdypende teksten og kildene. Kortet åpnes
-  bare når det har noe mer å vise.
+  bare når det har en utdypende tekst; ellers står pillen fast under målet.
 - Dataene er `{ maal, mekanisme, dokument? }`. Mekanismen bestemmer alene
   pillen, fargen og ikonet.
 
