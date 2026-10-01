@@ -9,6 +9,7 @@ FAR er et verktøy for fortolkning og kommentering av farmakologiske analyser. B
 - Be aldri bidragsyteren redigere filer, kjøre kommandoer, installere programvare, hente logger, kopiere terminalutskrift eller utføre annet teknisk arbeid som Claude kan gjøre selv. Utfør slike steg selv.
 - Forutsett at bidragsyterne ikke har eller bruker et lokalt utviklingsmiljø. Ikke gi lokale oppsettsinstruksjoner med mindre det uttrykkelig etterspørres.
 - Svar på norsk som standard. Forklar resultat og konsekvenser i vanlig språk, og unngå unødvendig utviklersjargong. Forklar tekniske begreper kort når de faktisk trengs.
+- Når en eksplisitt bekreftelse krever en nøyaktig formulering, skal du alltid gi denne formuleringen i en egen kodeblokk slik at bidragsyteren kan kopiere den direkte.
 - Ved avslutning: oppsummer hva som ble endret, hva brukeren vil merke, hvilke kontroller som er kjørt, og eventuelle reelle uavklarte forhold. Ikke dump interne implementasjonsdetaljer uten grunn.
 
 ## Arbeidsmåte
