@@ -19,7 +19,7 @@ import {
   type Seksjonsstyring,
 } from '../components/seksjoner/Seksjonsstyring'
 import { Uthev, Uthevingskilde } from '../components/Uthev'
-import { antall, forhandsvisning, ramsOpp } from '../faginnhold/oppsummering'
+import { FORHANDSVISNINGSLENGDE, antall, forhandsvisning, kuttes, ramsOpp } from '../faginnhold/oppsummering'
 
 let redusert = true
 const rullet = vi.fn()
@@ -198,6 +198,25 @@ describe('de to nivåene', () => {
     expect(screen.getByText('Preparatene').closest('[hidden]')).toBeNull()
   })
 
+  it('har et fast detaljkort uten noe å åpne, med innholdet synlig under tittelen', () => {
+    render(
+      <Seksjon id="kinetikk" tittel="Kinetikk" apenFraStart>
+        <Detaljkort id="t12" tittel="t½" ikon="hl" kanApnes={false} oppsummering="7 timer">
+          <p>7 timer</p>
+        </Detaljkort>
+      </Seksjon>,
+    )
+    const kort = document.getElementById('panel-kinetikk--t12')!
+    expect(kort.getAttribute('role')).toBe('group')
+    expect(within(kort).getByRole('heading', { level: 3, name: 't½' })).toBeTruthy()
+    expect(within(kort).queryByRole('button')).toBeNull()
+    expect(kort.querySelector('.skuff__pil')).toBeNull()
+    expect(kort.querySelector('.skuff__oppsummering')).toBeNull()
+    expect(within(kort).getByText('7 timer').closest('[hidden]')).toBeNull()
+    // Det er ingen skuff i styringen, så søket åpner bare seksjonen rundt det.
+    expect(kort.hasAttribute('data-skuff')).toBe(false)
+  })
+
   it('stopper en tredje skuff, og detaljkort utenfor en seksjon', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {})
     expect(() =>
@@ -349,6 +368,38 @@ describe('styringen for siden', () => {
     await user.click(screen.getByRole('button', { name: 'Hent' }))
     await nesteBilde()
     expect(rullet).toHaveBeenCalledWith(screen.getByTestId('fast'), expect.objectContaining({ block: 'start' }))
+  })
+
+  it('åpner seksjonen rundt et fast kort fra en lenke og ruller dit, uten å lukke det åpne kortet', async () => {
+    const user = userEvent.setup()
+    render(
+      <SeksjonsstyringKilde>
+        <Fanger />
+        <Seksjon id="kinetikk" tittel="Kinetikk">
+          <Detaljkort id="metabolisme" tittel="Metabolisme">
+            <p>Via CYP2D6</p>
+          </Detaljkort>
+          <Detaljkort id="t12" tittel="t½" kanApnes={false}>
+            7 timer
+          </Detaljkort>
+        </Seksjon>
+        <Seksjon id="dosering" tittel="Dosering">
+          <p>Dosene</p>
+        </Seksjon>
+      </SeksjonsstyringKilde>,
+    )
+    await user.click(screen.getByRole('button', { name: 'Dosering' }))
+    act(() => styring!.apne(['kinetikk', 'metabolisme']))
+    rullet.mockClear()
+    act(() => styring!.apne(['kinetikk', 't12']))
+    expect(apen('Kinetikk')).toBe(true)
+    expect(apen('Dosering')).toBe(false)
+    expect(apen('Metabolisme')).toBe(true)
+    await nesteBilde()
+    expect(rullet).toHaveBeenCalledWith(
+      document.getElementById('panel-kinetikk--t12'),
+      expect.objectContaining({ block: 'start' }),
+    )
   })
 
   it('har ingen «åpne alle»', () => {
@@ -691,6 +742,12 @@ describe('oppsummeringene', () => {
     expect(forhandsvisning('Kort  tekst.')).toBe('Kort tekst.')
     const lang = 'Metaboliseres i leveren, hovedsakelig via CYP2D6, til en aktiv metabolitt med lengre halveringstid.'
     expect(forhandsvisning(lang, 40)).toBe('Metaboliseres i leveren, hovedsakelig …')
+  })
+
+  it('sier om forhåndsvisningen må kutte, regnet på teksten på én linje', () => {
+    expect(kuttes('a'.repeat(FORHANDSVISNINGSLENGDE))).toBe(false)
+    expect(kuttes('a'.repeat(FORHANDSVISNINGSLENGDE + 1))).toBe(true)
+    expect(kuttes(`  ${'a '.repeat(FORHANDSVISNINGSLENGDE / 2)}\n\n `)).toBe(false)
   })
 
   it('bøyer antallet', () => {

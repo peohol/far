@@ -112,7 +112,17 @@ interface Felles {
 }
 
 export type SeksjonProps = Felles
-export type DetaljkortProps = Felles
+export interface DetaljkortProps extends Felles {
+  /**
+   * Om kortet kan åpnes. Et kort åpnes bare når det har mer å vise enn det
+   * som står i det lukket: har det ikke det, er det et fast kort som viser
+   * innholdet sitt rett under tittelen, uten pil og uten knapp. Innholdet
+   * (`children`) skal da være så kort at det står fram i sin helhet. Det er
+   * kortserien som vet hva den har å vise, og som avgjør (se `Kortserie` i
+   * `Paneler.tsx`). Kan åpnes når ikke annet er sagt.
+   */
+  kanApnes?: boolean
+}
 
 /**
  * Hovedseksjon på siden: en skuff med overskrift på nivå 2. Står den ikke i en
@@ -137,15 +147,20 @@ export function Seksjon(props: SeksjonProps) {
   )
 }
 
-/** Detaljkort i en seksjon: en mindre skuff med overskrift på nivå 3. */
-export function Detaljkort(props: DetaljkortProps) {
+/**
+ * Detaljkort i en seksjon: en mindre skuff med overskrift på nivå 3, eller et
+ * fast kort når det ikke har noe mer å vise (`kanApnes={false}`).
+ */
+export function Detaljkort({ kanApnes = true, ...props }: DetaljkortProps) {
   const niva = useContext(Nivakontekst)
   if (niva?.slag !== 'seksjon') {
     throw new Error(`Detaljkortet «${props.id}» må stå rett i en seksjon. Siden har bare to nivåer.`)
   }
+  const sti = [niva.id, props.id]
+  const anker = detaljanker(niva.id, props.id)
   return (
     <Nivakontekst.Provider value={{ slag: 'detalj' }}>
-      <Skuff {...props} slag="detalj" sti={[niva.id, props.id]} anker={detaljanker(niva.id, props.id)} />
+      {kanApnes ? <Skuff {...props} slag="detalj" sti={sti} anker={anker} /> : <Fastkort {...props} sti={sti} anker={anker} />}
     </Nivakontekst.Provider>
   )
 }
@@ -292,6 +307,58 @@ function Skuff({
         </div>
       </div>
     </Ramme>
+  )
+}
+
+/**
+ * Et detaljkort uten noe mer å vise: tittelen med innholdet rett under, slik
+ * et lukket kort viser oppsummeringen sin, men i sin helhet. Det har ingen
+ * knapp og ingen pil, for det er ingenting å åpne. Kortet er ikke en skuff i
+ * styringen, men et sted som alltid står fram: en direktelenke dit åpner
+ * seksjonen og ruller dit, og søket åpner seksjonen rundt et treff i det.
+ */
+function Fastkort({
+  sti,
+  anker,
+  tittel,
+  tittelTillegg,
+  ikon,
+  className,
+  children,
+}: Felles & { sti: readonly string[]; anker: string }) {
+  const { fastSted } = useStyring()
+  const ramme = useRef<HTMLDivElement>(null)
+  const nokkel = skuffnokkel(sti)
+  const stien = useRef(sti)
+  stien.current = sti
+  useEffect(() => {
+    if (ramme.current) return fastSted(stien.current, ramme.current)
+  }, [fastSted, nokkel])
+  const overskrift = `${useId()}-overskrift`
+  return (
+    <div
+      ref={ramme}
+      id={anker}
+      className={[KLASSE, `${KLASSE}--detalj`, `${KLASSE}--fast`, className].filter(Boolean).join(' ')}
+      role="group"
+      aria-labelledby={overskrift}
+      data-ikon={ikon ? '' : undefined}
+    >
+      <div className={`${KLASSE}__hode`}>
+        {ikon && (
+          <span className={`${KLASSE}__ikon`}>
+            <Ikon navn={ikon} storrelse="underpunkt" />
+          </span>
+        )}
+        <div className={`${KLASSE}__tekst`}>
+          <h3 id={overskrift} className={`${KLASSE}__tittel`}>
+            <span className={`${KLASSE}__tittelTekst`}>{tittel}</span>
+            {tittelTillegg}
+          </h3>
+          <div className={`${KLASSE}__fastinnhold`}>{children}</div>
+        </div>
+      </div>
+    </div>
   )
 }
 
