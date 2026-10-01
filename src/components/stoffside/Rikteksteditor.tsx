@@ -212,10 +212,17 @@ export function Rikteksteditor({
       <Verktoylinje
         editor={editor}
         panel={panel}
-        onPanel={setPanel}
+        // Ett panel eller tegnmenyen av gangen.
+        onPanel={(p) => {
+          setTegnmeny(null)
+          setPanel(p)
+        }}
         tegnmenyApen={tegnmeny !== null}
         tegnknapp={tegnknapp}
-        onTegnmeny={(medTastatur) => setTegnmeny(tegnmeny ? null : { medTastatur })}
+        onTegnmeny={(medTastatur) => {
+          setPanel(null)
+          setTegnmeny(tegnmeny ? null : { medTastatur })
+        }}
         etikett={etikett}
         referanser={referanser}
       />
