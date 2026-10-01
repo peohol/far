@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.70.1',
+    dato: '2026-10-01',
+    sammendrag: 'Spesialtegnmenyen og lenkepanelet står ikke åpne samtidig',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Når du åpner spesialtegnmenyen mens lenke- eller referansepanelet står åpent, lukkes panelet, og omvendt, også når du bruker tastaturet.',
+    ],
+  },
+  {
     versjon: '1.70.0',
     dato: '2026-10-01',
     sammendrag: 'Sitater, kode og ny spesialtegnmeny i teksteditorene',
