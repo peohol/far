@@ -95,11 +95,11 @@ describe('kvetiapin-monografkuratering', () => {
   it('kildebelegger hvert farmakokinetikkort og fjerner det uspesifikke Annet-kortet fra panelet', async () => {
     expect(farmakokinetikk.map((e) => String(e.data.tittel))).toEqual([
       'Absorpsjon og formulering',
-      'tmax',
-      't1/2',
-      'tss',
+      'tₘₐₓ',
+      't½',
+      'tₛₛ',
       'Proteinbinding',
-      'VD',
+      'Vd',
       'Metabolisme og utskillelse',
       'CYP3A4',
       'CYP3A4-interaksjoner',
@@ -109,7 +109,7 @@ describe('kvetiapin-monografkuratering', () => {
       expect(e.referanser.length, String(e.data.tittel)).toBeGreaterThan(0)
       expect(e.utkast, String(e.data.tittel)).toBe(e.publisert)
     }
-    expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 't1/2')!.data)).toContain('Norkvetiapin: ca. 12 timer')
+    expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 't½')!.data)).toContain('Norkvetiapin: ca. 12 timer')
     expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 'CYP3A4')!.data)).not.toContain('3A4 (2D6)')
 
     const { rows } = await db.query<{ n: number }>(
