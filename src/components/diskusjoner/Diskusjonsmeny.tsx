@@ -285,6 +285,8 @@ function Diskusjonsflate({
   /** Kommentaren en direktelenke førte til, i tråden som står åpen. */
   const [fremhev, setFremhev] = useState<Fremheving | null>(null)
   const kropp = useRef<HTMLDivElement>(null)
+  /** Plassen over det som rulles, der en åpen tråd har overskriften sin. */
+  const [traadhode, setTraadhode] = useState<HTMLDivElement | null>(null)
   const sokId = useId()
 
   const hent = useCallback(async () => {
@@ -405,6 +407,7 @@ function Diskusjonsflate({
         }}
         onSlettet={tilListe}
         fremhev={fremhev}
+        hode={traadhode}
       />
     )
   } else if (visning.side === 'ny-traad') {
@@ -505,12 +508,15 @@ function Diskusjonsflate({
           </button>
         </div>
         <p className="diskusjonspanel__side">{sidenavn}</p>
-        {/* Tilbake og søket står fast over det som rulles. */}
+        {/* Tilbake, overskriften på tråden og søket står fast over det som rulles. */}
         {visning.side === 'traad' && (
-          <button type="button" className="diskusjonspanel__tilbake" onClick={tilListe}>
-            <Ikon navn="chev" storrelse="ui" />
-            <span>Alle tråder</span>
-          </button>
+          <>
+            <button type="button" className="diskusjonspanel__tilbake" onClick={tilListe}>
+              <Ikon navn="chev" storrelse="ui" />
+              <span>Alle tråder</span>
+            </button>
+            <div ref={setTraadhode} className="diskusjonspanel__traadhode" />
+          </>
         )}
         {visning.side === 'liste' && (
           <div className="diskusjonspanel__sok">
