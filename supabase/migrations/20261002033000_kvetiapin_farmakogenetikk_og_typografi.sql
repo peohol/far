@@ -15,7 +15,8 @@ begin
   from public.profiles p
   where p.username = 'peohol' and p.role = 'admin';
   if administrator is null then
-    raise exception 'Fant ingen administrator med brukernavnet peohol.';
+    raise notice 'Fant ingen administrator med brukernavnet peohol, så kvetiapintillegget hoppes over.';
+    return;
   end if;
   perform set_config('request.jwt.claims', jsonb_build_object('sub', administrator, 'role', 'authenticated')::text, true);
 
