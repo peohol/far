@@ -415,17 +415,23 @@
   border-style: dashed;
 }
 
+/* Hodet er et eget felt øverst i kortet, i tonen til sidebakgrunnen og med samme hårlinje
+   som kanten rundt, så det skiller seg tydelig fra trådene under. */
 .diskusjonskategori__hode {
   display: flex;
   align-items: center;
   gap: var(--rom-2);
-  margin: 0;
-  padding: var(--rom-1) var(--rom-1) var(--rom-1) 0;
+  margin: calc(-1 * var(--rom-2)) calc(-1 * var(--rom-2)) var(--rom-1);
+  padding: var(--rom-2) var(--rom-3) var(--rom-2) var(--rom-2);
   font: inherit;
+  background: var(--flate-bunn);
+  border-bottom: var(--kant) solid var(--linje);
+  border-radius: calc(var(--runding-underkort) - var(--kant)) calc(var(--runding-underkort) - var(--kant)) 0 0;
 }
 
 .diskusjonskategori--ukategorisert > .diskusjonskategori__hode {
-  padding-left: var(--rom-3);
+  padding-left: calc(var(--rom-2) + var(--rom-3));
+  border-bottom-style: dashed;
 }
 
 .diskusjonskategori__tittel {
