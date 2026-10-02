@@ -124,6 +124,7 @@ describe('monografkurateringene i migrasjonene', () => {
     // Hjelpefunksjonene selv er ingen kuratering og kjøres alltid.
     expect(migrasjonsfiler().filter((f) => f.endsWith('_monografkuratering_hjelpere.sql'))).toHaveLength(1)
     expect('20261002071332_monografkuratering_hjelpere.sql').not.toMatch(MONOGRAFKURATERING)
+    expect('20261002074500_monografkuratering_hjelpere_retting.sql').not.toMatch(MONOGRAFKURATERING)
   })
 })
 
@@ -143,9 +144,20 @@ describe('monografmigrasjoner uten kuratorprofil', () => {
     expect(elementer[0]!.n).toBe(0)
   })
 
-  it('stopper når siden finnes, men ikke kuratoren, i stedet for å hoppe over i stillhet', async () => {
-    const rita = await opprettBruker(tom, { brukernavn: 'rita', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
-    const { side } = await eksempelside(faginnholdskall(tom, rita), 'Eksempelstoff')
+  let side: string
+
+  it('hopper over også når en tidligere migrasjon har laget siden, så lenge ingen profiler finnes', async () => {
+    const importen = await opprettBruker(tom, { brukernavn: 'import', fornavn: 'Im', etternavn: 'Port', rolle: 'admin' })
+    side = (await eksempelside(faginnholdskall(tom, importen), 'Eksempelstoff')).side
+    // Siden står igjen uten noen profiler, slik den gjør etter en import i en fersk kjede.
+    await tom.exec(`set session_replication_role = replica; delete from public.profiles; set session_replication_role = origin;`)
+    const for_ = await tilstand(tom, side)
+    await tom.exec(MAL)
+    expect(await tilstand(tom, side)).toEqual(for_)
+  })
+
+  it('stopper når siden og andre profiler finnes, men ikke kuratoren, i stedet for å hoppe over i stillhet', async () => {
+    await opprettBruker(tom, { brukernavn: 'rita', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
     await forventStopp(tom, side, MAL, /finnes, men ikke administratoren peohol/)
   })
 })
@@ -298,6 +310,26 @@ describe('monografkuratering med kuratorprofil', () => {
       side,
       `do $$ begin perform intern.kuratering_start('duplikatstoff');
          perform intern.kuratering_referanse('${JSON.stringify(referanse)}', 'Kurateringskilde'); end $$;`,
+      /står på 2 referanser/,
+    )
+    // En referanse med lenken som bare finnes som utkast, er også redaksjonelt arbeid.
+    const utkast = { tittel: 'Utkast', forfattere: 'C', aar: '2026', lenke: 'https://example.org/utkast' }
+    await kall.opprett('referanse', utkast)
+    await forventStopp(
+      db,
+      side,
+      `do $$ begin perform intern.kuratering_start('duplikatstoff');
+         perform intern.kuratering_referanse('${JSON.stringify(utkast)}', 'Kurateringskilde'); end $$;`,
+      /står på en referanse som bare finnes som utkast/,
+    )
+    const publisert = { ...utkast, lenke: 'https://example.org/publisert-og-utkast' }
+    await kall.publiser((await kall.opprett('referanse', publisert)).id, 1)
+    await kall.opprett('referanse', { ...publisert, tittel: 'Parallelt utkast' })
+    await forventStopp(
+      db,
+      side,
+      `do $$ begin perform intern.kuratering_start('duplikatstoff');
+         perform intern.kuratering_referanse('${JSON.stringify(publisert)}', 'Kurateringskilde'); end $$;`,
       /står på 2 referanser/,
     )
     await forventStopp(

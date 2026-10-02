@@ -31,7 +31,8 @@ describe('migrasjonsfilene', () => {
   })
 })
 
-describe('sammenligningen med historikken', () => {
+// Hver sammenligning starter en egen database i minnet, som tar et par sekunder når hele samlingen kjører.
+describe('sammenligningen med historikken', { timeout: 30_000 }, () => {
   /** Kjører spørringen mot en database med disse radene i historikken. */
   async function avvik(
     filer: Array<[string, string]>,

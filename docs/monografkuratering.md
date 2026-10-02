@@ -62,18 +62,19 @@ utrullingen og kontrollen av historikken.
 
 ## Hjelpefunksjonene
 
-`supabase/migrations/*_monografkuratering_hjelpere.sql`, i skjemaet `intern`,
-som ingen av API-rollene når.
+`supabase/migrations/*_monografkuratering_hjelpere.sql`, med rettingen i
+`*_monografkuratering_hjelpere_retting.sql`, i skjemaet `intern`, som ingen av
+API-rollene når.
 
 | Funksjon | Hva den gjør |
 | --- | --- |
-| `kuratering_start(slug)` | Logger inn som kuratoren (`peohol`), låser elementene og referansene mot andre endringer til migrasjonen er ferdig, og gir siden. Uten kuratorprofil gir den `null`, og migrasjonen gjør ingenting; finnes siden uten kuratoren, stopper den |
+| `kuratering_start(slug)` | Logger inn som kuratoren (`peohol`), låser elementene og referansene mot andre endringer til migrasjonen er ferdig, og gir siden. Uten kuratorprofil gir den `null`, og migrasjonen gjør ingenting, også når en tidligere migrasjon har laget siden på en fersk database uten profiler. Finnes siden og andre profiler, men ikke kuratoren, stopper den |
 | `kuratering_utfort(kilde)` | Om kurateringen med denne kilden alt er gjort |
 | `kuratering_antall(side, panel, elementtype, n)` | Panelet har nøyaktig `n` elementer av typen, utkast medregnet |
 | `kuratering_element(side, panel, elementtype, nøkkel, revisjon[, kilde])` | Det ene elementet der `data` inneholder nøkkelen: publisert, uten upublisert utkast, på revisjonen (og med kilden) preflighten fant. Låst til migrasjonen er ferdig |
 | `kuratering_lagre(objekt, revisjon, endring, kilde)` | Innholdet i revisjonen med endringen (feltene på øverste nivå, som `data`, `referanser` eller `panel`), lagret og publisert med kilden i historikken |
 | `kuratering_nytt(side, innhold, nøkkel, kilde)` | Et nytt, publisert element, bare når ingen har nøkkelen fra før |
-| `kuratering_referanse(innhold, kilde)` | Den publiserte referansen med lenken, eller en ny |
+| `kuratering_referanse(innhold, kilde)` | Den publiserte referansen med lenken, eller en ny. Stopper hvis lenken står på flere referanser (utkast medregnet), eller på en som bare er utkast |
 
 Et element fjernes ved å flytte det til panelet `fjernet`
 (`kuratering_lagre(objekt, revisjon, '{"panel": "fjernet"}', kilde)`), så
