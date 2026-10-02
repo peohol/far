@@ -8,6 +8,8 @@ import { Fragment, useRef } from 'react'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { useSidereferanser } from '../referanser/Sidereferanser'
 import { useFastSted } from '../seksjoner/Seksjonsstyring'
+import { Ikon } from '../ikon/Ikon'
+import { kategoriikon } from '../ikon/register'
 import { Metodepille } from '../Metodepille'
 import { useTips } from '../Tips'
 import { Uthev } from '../Uthev'
@@ -87,7 +89,8 @@ export function Identitetspanel({
         {kategorier.map((k, i) => (
           <Fragment key={nokkel(k)}>
             {i > 0 && <span aria-hidden="true">·</span>}
-            <span>
+            <span className="identitet__kategori">
+              <Ikon navn={kategoriikon(k.ikon)} className="identitet__kategoriikon" />
               {k.kategori}
               {k.underkategori && (
                 <>

@@ -280,15 +280,18 @@ describe('sidemenyen', () => {
 
 describe('kategoriene til ett stoff', () => {
   it('gir underkategorien når kategorien er delt opp', () => {
-    expect(STOFFREGISTER.kategorierFor('sertralin')).toEqual([{ kategori: 'Antidepressiver', underkategori: 'SSRI' }])
-    expect(STOFFREGISTER.kategorierFor('bupropion')).toEqual([{ kategori: 'Antidepressiver', underkategori: 'NDRI' }])
+    expect(STOFFREGISTER.kategorierFor('sertralin')).toEqual([{ kategori: 'Antidepressiver', ikon: 'katAntidepressiver', underkategori: 'SSRI' }])
+    expect(STOFFREGISTER.kategorierFor('bupropion')).toEqual([{ kategori: 'Antidepressiver', ikon: 'katAntidepressiver', underkategori: 'NDRI' }])
   })
 
   it('gir hver kategori stoffet står i, i registerets rekkefølge', () => {
-    expect(STOFFREGISTER.kategorierFor('lamotrigin')).toEqual([{ kategori: 'Stemningsstabiliserende' }, { kategori: 'Antiepileptika' }])
+    expect(STOFFREGISTER.kategorierFor('lamotrigin')).toEqual([
+      { kategori: 'Stemningsstabiliserende', ikon: 'katStemningsstabiliserende' },
+      { kategori: 'Antiepileptika', ikon: 'katAntiepileptika' },
+    ])
     expect(STOFFREGISTER.kategorierFor('ketamin')).toEqual([
-      { kategori: 'Antidepressiver', underkategori: 'NMDA-reseptorantagonister' },
-      { kategori: 'Hallusinogene stoffer' },
+      { kategori: 'Antidepressiver', ikon: 'katAntidepressiver', underkategori: 'NMDA-reseptorantagonister' },
+      { kategori: 'Hallusinogene stoffer', ikon: 'katHallusinogener' },
     ])
   })
 

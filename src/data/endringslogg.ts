@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.73.3',
+    dato: '2026-10-02',
+    sammendrag: 'Kategoriikonene også øverst på fagsidene',
+    typer: ['Design / layout'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Kategorien øverst på hver fagside, over navnet på stoffet, har nå det samme ikonet foran seg som i stoffregisteret. Står stoffet i flere kategorier, har hver sitt ikon.',
+    ],
+  },
+  {
     versjon: '1.73.2',
     dato: '2026-10-02',
     sammendrag: 'Ikoner og tydeligere kategorier i stoffregisteret',
