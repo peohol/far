@@ -1,5 +1,5 @@
 -- Kvetiapin: kuratert farmakodynamikk, dosering og farmakokinetikk.
--- Kilder og faglige avgrensninger er gjennomgått 01.10.2026.
+-- Kilder og faglige avgrensninger er gjennomgått på nytt 02.10.2026.
 do $kvetiapin$
 declare
   administrator uuid;
@@ -17,9 +17,10 @@ declare
   ref_cross uuid;
   ref_devane uuid;
   ref_figueroa uuid;
-  ref_dailymed uuid;
+  ref_li uuid;
   ref_clinpgx uuid;
   ref_bakken uuid;
+  ref_dpwg uuid;
 begin
   select p.id into administrator
   from public.profiles p
@@ -121,21 +122,23 @@ begin
   -- Referanser: gjenbruk globalt når samme tittel og lenke allerede finnes.
   select r.objekt_id into ref_ir from public.referanser r
    where r.tilstand = 'publisert' and not r.arkivert
-     and r.tittel = 'Seroquel «Cheplapharm»' and r.lenke = 'https://www.felleskatalogen.no/medisin/seroquel-cheplapharm-563858'
+     and r.tittel = 'Quetiapine Teva – preparatomtale'
+     and r.lenke = 'https://produktinformasjon.legemiddelsok.no/preparatomtaler/07-5150.pdf'
    order by r.objekt_id limit 1;
   if ref_ir is null then
-    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 01.10.2026: gjeldende norsk preparatomtale', true);
-    ref_ir := (public.opprett_utkast('referanse', '{"tittel":"Seroquel «Cheplapharm»","forfattere":"Felleskatalogen (preparatomtale)","aar":"2024","lenke":"https://www.felleskatalogen.no/medisin/seroquel-cheplapharm-563858"}'::jsonb)).id;
+    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: norsk SPC fra Direktoratet for medisinske produkter', true);
+    ref_ir := (public.opprett_utkast('referanse', '{"tittel":"Quetiapine Teva – preparatomtale","forfattere":"Direktoratet for medisinske produkter (SPC)","aar":"2026","lenke":"https://produktinformasjon.legemiddelsok.no/preparatomtaler/07-5150.pdf"}'::jsonb)).id;
     perform public.publiser_utkast(ref_ir, 1);
   end if;
 
   select r.objekt_id into ref_xr from public.referanser r
    where r.tilstand = 'publisert' and not r.arkivert
-     and r.tittel = 'Seroquel Depot «Cheplapharm»' and r.lenke = 'https://www.felleskatalogen.no/medisin/seroquel-depot-cheplapharm-563857'
+     and r.tittel = 'Quetiapine Accord – preparatomtale'
+     and r.lenke = 'https://produktinformasjon.legemiddelsok.no/preparatomtaler/15-10695.pdf'
    order by r.objekt_id limit 1;
   if ref_xr is null then
-    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 01.10.2026: gjeldende norsk preparatomtale', true);
-    ref_xr := (public.opprett_utkast('referanse', '{"tittel":"Seroquel Depot «Cheplapharm»","forfattere":"Felleskatalogen (preparatomtale)","aar":"2024","lenke":"https://www.felleskatalogen.no/medisin/seroquel-depot-cheplapharm-563857"}'::jsonb)).id;
+    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: norsk SPC fra Direktoratet for medisinske produkter', true);
+    ref_xr := (public.opprett_utkast('referanse', '{"tittel":"Quetiapine Accord – preparatomtale","forfattere":"Direktoratet for medisinske produkter (SPC)","aar":"2026","lenke":"https://produktinformasjon.legemiddelsok.no/preparatomtaler/15-10695.pdf"}'::jsonb)).id;
     perform public.publiser_utkast(ref_xr, 1);
   end if;
 
@@ -145,7 +148,7 @@ begin
      and r.lenke = 'https://doi.org/10.1038/sj.npp.1301646'
    order by r.objekt_id limit 1;
   if ref_jensen is null then
-    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 01.10.2026: funksjonell farmakologistudie', true);
+    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: funksjonell farmakologistudie', true);
     ref_jensen := (public.opprett_utkast('referanse', '{"tittel":"N-desalkylquetiapine, a potent norepinephrine reuptake inhibitor and partial 5-HT1A agonist, as a putative mediator of quetiapine''s antidepressant activity","forfattere":"Jensen NH, Rodriguiz RM, Caron MG, Wetsel WC, Rothman RB, Roth BL","aar":"2008","lenke":"https://doi.org/10.1038/sj.npp.1301646"}'::jsonb)).id;
     perform public.publiser_utkast(ref_jensen, 1);
   end if;
@@ -156,7 +159,7 @@ begin
      and r.lenke = 'https://doi.org/10.1111/bph.13346'
    order by r.objekt_id limit 1;
   if ref_cross is null then
-    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 01.10.2026: funksjonell farmakologistudie', true);
+    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: funksjonell farmakologistudie', true);
     ref_cross := (public.opprett_utkast('referanse', '{"tittel":"Quetiapine and its metabolite norquetiapine: translation from in vitro pharmacology to in vivo efficacy in rodent models","forfattere":"Cross AJ, Widzowski D, Maciag C, Zacco A, Hudzik T, Liu J, Nyberg S, Wood MW","aar":"2016","lenke":"https://doi.org/10.1111/bph.13346"}'::jsonb)).id;
     perform public.publiser_utkast(ref_cross, 1);
   end if;
@@ -167,7 +170,7 @@ begin
      and r.lenke = 'https://doi.org/10.2165/00003088-200140070-00003'
    order by r.objekt_id limit 1;
   if ref_devane is null then
-    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 01.10.2026: human farmakokinetikk', true);
+    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: human farmakokinetikk', true);
     ref_devane := (public.opprett_utkast('referanse', '{"tittel":"Clinical pharmacokinetics of quetiapine: an atypical antipsychotic","forfattere":"DeVane CL, Nemeroff CB","aar":"2001","lenke":"https://doi.org/10.2165/00003088-200140070-00003"}'::jsonb)).id;
     perform public.publiser_utkast(ref_devane, 1);
   end if;
@@ -178,20 +181,20 @@ begin
      and r.lenke = 'https://doi.org/10.1016/j.pnpbp.2008.09.026'
    order by r.objekt_id limit 1;
   if ref_figueroa is null then
-    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 01.10.2026: sammenligning av IR- og depotfarmakokinetikk', true);
+    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: sammenligning av IR- og depotfarmakokinetikk', true);
     ref_figueroa := (public.opprett_utkast('referanse', '{"tittel":"Pharmacokinetic profiles of extended release quetiapine fumarate compared with quetiapine immediate release","forfattere":"Figueroa C, Brecher M, Hamer-Maansson JE, Winter H","aar":"2009","lenke":"https://doi.org/10.1016/j.pnpbp.2008.09.026"}'::jsonb)).id;
     perform public.publiser_utkast(ref_figueroa, 1);
   end if;
 
-  select r.objekt_id into ref_dailymed from public.referanser r
+  select r.objekt_id into ref_li from public.referanser r
    where r.tilstand = 'publisert' and not r.arkivert
-     and r.tittel = 'Quetiapine tablet, film coated – prescribing information'
-     and r.lenke = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3112a006-1c61-47f2-84f5-9a7670d09c9b'
+     and r.tittel = 'Multiple dose pharmacokinetics of quetiapine and some of its metabolites in Chinese suffering from schizophrenia'
+     and r.lenke = 'https://pubmed.ncbi.nlm.nih.gov/15000896/'
    order by r.objekt_id limit 1;
-  if ref_dailymed is null then
-    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 01.10.2026: gjeldende amerikansk preparatomtale for supplerende PK-data', true);
-    ref_dailymed := (public.opprett_utkast('referanse', '{"tittel":"Quetiapine tablet, film coated – prescribing information","forfattere":"DailyMed","aar":"2026","lenke":"https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3112a006-1c61-47f2-84f5-9a7670d09c9b"}'::jsonb)).id;
-    perform public.publiser_utkast(ref_dailymed, 1);
+  if ref_li is null then
+    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: human flerdose-farmakokinetikk', true);
+    ref_li := (public.opprett_utkast('referanse', '{"tittel":"Multiple dose pharmacokinetics of quetiapine and some of its metabolites in Chinese suffering from schizophrenia","forfattere":"Li K-Y, Li X, Cheng Z-N, Peng W-X, Zhang B-K, Li H-D","aar":"2004","lenke":"https://pubmed.ncbi.nlm.nih.gov/15000896/"}'::jsonb)).id;
+    perform public.publiser_utkast(ref_li, 1);
   end if;
 
   select r.objekt_id into ref_clinpgx from public.referanser r
@@ -216,6 +219,17 @@ begin
     perform public.publiser_utkast(ref_bakken, 1);
   end if;
 
+  select r.objekt_id into ref_dpwg from public.referanser r
+   where r.tilstand = 'publisert' and not r.arkivert
+     and r.tittel = 'Dutch Pharmacogenetics Working Group (DPWG) guideline for the gene-drug interaction between CYP2D6, CYP3A4 and CYP1A2 and antipsychotics'
+     and r.lenke = 'https://doi.org/10.1038/s41431-023-01347-3'
+   order by r.objekt_id limit 1;
+  if ref_dpwg is null then
+    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: klinisk farmakogenetikk', true);
+    ref_dpwg := (public.opprett_utkast('referanse', '{"tittel":"Dutch Pharmacogenetics Working Group (DPWG) guideline for the gene-drug interaction between CYP2D6, CYP3A4 and CYP1A2 and antipsychotics","forfattere":"Beunk L, Nijenhuis M, Soree B, et al.","aar":"2024","lenke":"https://doi.org/10.1038/s41431-023-01347-3"}'::jsonb)).id;
+    perform public.publiser_utkast(ref_dpwg, 1);
+  end if;
+
   kilder := jsonb_build_object(
     'ir', ref_ir::text,
     'xr', ref_xr::text,
@@ -223,9 +237,10 @@ begin
     'cross', ref_cross::text,
     'devane', ref_devane::text,
     'figueroa', ref_figueroa::text,
-    'dailymed', ref_dailymed::text,
+    'li', ref_li::text,
     'clinpgx', ref_clinpgx::text,
-    'bakken', ref_bakken::text
+    'bakken', ref_bakken::text,
+    'dpwg', ref_dpwg::text
   );
 
   -- Farmakodynamikk: skill binding fra funksjon og marker assayavhengig 5-HT1A-effikasi.
@@ -259,7 +274,7 @@ begin
     select coalesce(jsonb_agg(to_jsonb(kilder->>x.nokkel) order by x.i), '[]'::jsonb) into referanser
     from jsonb_array_elements_text(oppdatering->'kilder') with ordinality x(nokkel, i);
 
-    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 01.10.2026: farmakodynamikk kildebelagt og funksjon skilt fra binding', true);
+    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: farmakodynamikk kildebelagt og funksjon skilt fra binding', true);
     perform public.lagre_utkast(
       e.objekt_id,
       e.revisjon,
@@ -281,23 +296,39 @@ begin
   data := $json$
   {"dokument":{"type":"doc","content":[
     {"type":"heading","attrs":{"level":1},"content":[{"type":"text","text":"Umiddelbar frisetting (IR)"}]},
-    {"type":"paragraph","content":[{"type":"text","text":"Schizofreni: 2 doser daglig. Døgndose dag 1–4: 50, 100, 200 og 300 mg. Vanlig vedlikehold 300–450 mg/døgn; individualiseres innen 150–750 mg/døgn."}]},
-    {"type":"paragraph","content":[{"type":"text","text":"Bipolar mani: 2 doser daglig. Døgndose dag 1–4: 100, 200, 300 og 400 mg. Videre økning til inntil 800 mg/døgn innen dag 6, maksimalt 200 mg økning per døgn. Vanlig effektiv dose 400–800 mg/døgn; vedlikeholdsintervallet er 200–800 mg/døgn."}]},
-    {"type":"paragraph","content":[{"type":"text","text":"Bipolar depresjon: 1 dose ved sengetid. Døgndose dag 1–4: 50, 100, 200 og 300 mg. Anbefalt dose 300 mg/døgn; enkelte kan ha nytte av 600 mg. Doser >300 mg skal forskrives av lege med erfaring i bipolar lidelse; 200 mg kan vurderes ved tolerabilitetsproblemer."}]},
-    {"type":"paragraph","content":[{"type":"text","text":"Forebygging av tilbakefall ved bipolar lidelse: fortsett dosen som ga respons, vanligvis innen 300–800 mg/døgn fordelt på 2 doser; bruk laveste effektive dose."}]},
+    {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"Schizofreni"}]},
+    {"type":"paragraph","content":[{"type":"text","text":"2 doser daglig. Døgndose dag 1–4: 50, 100, 200 og 300 mg. Vanlig vedlikehold 300–450 mg/døgn; individualiseres innen 150–750 mg/døgn."}]},
+    {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"Bipolar mani"}]},
+    {"type":"paragraph","content":[{"type":"text","text":"2 doser daglig. Døgndose dag 1–4: 100, 200, 300 og 400 mg. Videre økning til inntil 800 mg/døgn innen dag 6, maksimalt 200 mg per døgn. Vanlig effektiv dose 400–800 mg/døgn; doseområdet er 200–800 mg/døgn."}]},
+    {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"Bipolar depresjon"}]},
+    {"type":"paragraph","content":[{"type":"text","text":"1 dose ved sengetid. Døgndose dag 1–4: 50, 100, 200 og 300 mg. Anbefalt dose 300 mg/døgn; enkelte kan ha nytte av 600 mg. Doser >300 mg skal forskrives av lege med erfaring i bipolar lidelse; 200 mg kan vurderes ved tolerabilitetsproblemer."}]},
+    {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"Forebygging av tilbakefall"}]},
+    {"type":"paragraph","content":[{"type":"text","text":"Fortsett dosen som ga respons, vanligvis 300–800 mg/døgn fordelt på 2 doser; bruk laveste effektive dose."}]},
+    {"type":"horizontalRule"},
     {"type":"heading","attrs":{"level":1},"content":[{"type":"text","text":"Depot (XR)"}]},
-    {"type":"paragraph","content":[{"type":"text","text":"Schizofreni og bipolar mani: 1 dose daglig, minst 1 time før mat. 300 mg dag 1 og 600 mg dag 2. Anbefalt dose 600 mg/døgn; justeres vanligvis innen 400–800 mg/døgn, maksimalt 800 mg/døgn."}]},
-    {"type":"paragraph","content":[{"type":"text","text":"Bipolar depresjon: 1 dose ved sengetid. Døgndose dag 1–4: 50, 100, 200 og 300 mg. Anbefalt dose 300 mg/døgn; enkelte kan ha nytte av 600 mg. Samme forbehold som for IR gjelder for doser >300 mg og reduksjon til 200 mg."}]},
-    {"type":"paragraph","content":[{"type":"text","text":"Forebygging av tilbakefall ved bipolar lidelse: fortsett effektiv dose ved sengetid, vanligvis 300–800 mg/døgn; bruk laveste effektive dose."}]},
-    {"type":"paragraph","content":[{"type":"text","text":"Tilleggsbehandling ved unipolar depresjon etter suboptimal respons på antidepressiv monoterapi: ved sengetid; 50 mg/døgn dag 1–2 og 150 mg/døgn dag 3–4. Bruk laveste effektive dose; eventuell økning fra 150 til 300 mg/døgn skal bygge på individuell nytte–risiko-vurdering."}]},
-    {"type":"paragraph","content":[{"type":"text","text":"Ved overgang fra IR 2 ganger daglig til depot kan samme totale døgndose gis 1 gang daglig; individuell dosejustering kan være nødvendig."}]},
+    {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"Schizofreni og bipolar mani"}]},
+    {"type":"paragraph","content":[{"type":"text","text":"1 dose daglig uten mat. 300 mg dag 1 og 600 mg dag 2. Anbefalt dose 600 mg/døgn; justeres vanligvis innen 400–800 mg/døgn, maksimalt 800 mg/døgn."}]},
+    {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"Bipolar depresjon"}]},
+    {"type":"paragraph","content":[{"type":"text","text":"1 dose ved sengetid. Døgndose dag 1–4: 50, 100, 200 og 300 mg. Anbefalt dose 300 mg/døgn; enkelte kan ha nytte av 600 mg. Samme forbehold som for IR gjelder for doser >300 mg og reduksjon til 200 mg."}]},
+    {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"Forebygging av tilbakefall"}]},
+    {"type":"paragraph","content":[{"type":"text","text":"Fortsett effektiv dose ved sengetid, vanligvis 300–800 mg/døgn; bruk laveste effektive dose."}]},
+    {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"Tilleggsbehandling ved unipolar depresjon"}]},
+    {"type":"paragraph","content":[{"type":"text","text":"Etter suboptimal respons på antidepressiv monoterapi: 50 mg/døgn dag 1–2 og 150 mg/døgn dag 3–4, ved sengetid. Bruk laveste effektive dose; eventuell økning fra 150 til 300 mg/døgn skal bygge på individuell nytte–risiko-vurdering."}]},
+    {"type":"heading","attrs":{"level":2},"content":[{"type":"text","text":"Bytte fra IR"}]},
+    {"type":"paragraph","content":[{"type":"text","text":"Ved overgang fra IR 2 ganger daglig kan samme totale døgndose gis som depot 1 gang daglig; individuell dosejustering kan være nødvendig."}]},
+    {"type":"horizontalRule"},
     {"type":"heading","attrs":{"level":1},"content":[{"type":"text","text":"Spesielle grupper og seponering"}]},
-    {"type":"paragraph","content":[{"type":"text","text":"Nedsatt leverfunksjon: start IR med 25 mg/døgn og øk 25–50 mg/døgn; start depot med 50 mg/døgn og øk i trinn på 50 mg. Dosejustering er ikke nødvendig ved nedsatt nyrefunksjon. Hos eldre kan langsommere titrering og lavere dose være nødvendig; plasmaclearance er i gjennomsnitt 30–50 % lavere."}]},
-    {"type":"paragraph","content":[{"type":"text","text":"Barn og ungdom <18 år: anbefales ikke. Gradvis seponering over minst 1–2 uker anbefales."}]}
+    {"type":"bulletList","content":[
+      {"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"Nedsatt leverfunksjon: start IR med 25 mg/døgn og øk 25–50 mg/døgn; start depot med 50 mg/døgn og øk i trinn på 50 mg."}]}]},
+      {"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"Nedsatt nyrefunksjon: dosejustering er ikke nødvendig."}]}]},
+      {"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"Eldre: langsommere titrering og lavere dose kan være nødvendig; plasmaclearance er i gjennomsnitt 30–50 % lavere. For depot er startdose 50 mg/døgn. Ved unipolar depresjon: 50 mg/døgn dag 1–3, 100 mg dag 4 og 150 mg dag 8; eventuell økning til 300 mg tidligst dag 22."}]}]},
+      {"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"Barn og ungdom <18 år: anbefales ikke."}]}]},
+      {"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"Seponering: gradvis nedtrapping over minst 1–2 uker anbefales."}]}]}
+    ]}
   ]}}
   $json$::jsonb;
 
-  perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 01.10.2026: dosering oppdatert fra gjeldende IR- og depotpreparatomtaler', true);
+  perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: dosering oppdatert fra gjeldende IR- og depotpreparatomtaler', true);
   perform public.lagre_utkast(e.objekt_id, e.revisjon,
     e.innhold || jsonb_build_object('data', data, 'referanser', jsonb_build_array(ref_ir, ref_xr)));
   perform public.publiser_utkast(e.objekt_id, e.revisjon + 1);
@@ -305,13 +336,14 @@ begin
   -- Farmakokinetikk: oppdater eksisterende kort og legg referanse på hvert kort.
   for oppdatering in select value from jsonb_array_elements($json$
   [
-    {"fra":"Biotilgjengelighet","data":{"tittel":"Absorpsjon og formulering","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"IR absorberes raskt; matinntak påvirker eksponeringen lite. Depot gir omtrent samme totale døgneksponering som tilsvarende total IR-dose, men med lavere toppkonsentrasjon og senere topp. Fettrikt måltid kan øke depoteksponeringen, derfor tas depot uten mat/minst 1 time før mat eller ved sengetid."}]}]}},"kilder":["ir","xr","devane","figueroa"]},
-    {"fra":"tₘₐₓ","data":{"tittel":"tₘₐₓ","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"IR: vanligvis 1–2 timer. Depot: omtrent 5–6 timer ved steady state."}]}]}},"kilder":["devane","figueroa","xr"]},
-    {"fra":"t½","data":{"tittel":"t½","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Kvetiapin: ca. 7 timer. Norkvetiapin: ca. 12 timer."}]}]}},"kilder":["ir"]},
-    {"fra":"tₛₛ","data":{"tittel":"tₛₛ","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Steady state for kvetiapin forventes innen omtrent 2 døgn ved regelmessig dosering."}]}]}},"kilder":["dailymed"]},
-    {"fra":"Proteinbinding","data":{"tittel":"Proteinbinding","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Ca. 83 % ved terapeutiske konsentrasjoner."}]}]}},"kilder":["ir","dailymed"]},
-    {"fra":"Vd","data":{"tittel":"Vd","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Tilsynelatende distribusjonsvolum ca. 10 ± 4 L/kg."}]}]}},"kilder":["dailymed"]},
-    {"fra":"Eliminasjon","data":{"tittel":"Metabolisme og utskillelse","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Omfattende hepatisk metabolisme. Mindre enn 5 % utskilles uendret i urin og feces. Etter radiomerket dose gjenfinnes omtrent 73 % i urin og 20–21 % i feces, hovedsakelig som metabolitter."}]}]}},"kilder":["ir","devane","dailymed"]}
+    {"fra":"Biotilgjengelighet","data":{"tittel":"Absorpsjon og formulering","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"IR absorberes raskt, og matinntak påvirker eksponeringen lite. Depot gir omtrent samme AUC som tilsvarende total IR-dose, men ca. 13 % lavere Cmax og senere topp. Fettrikt måltid øker depot-Cmax ca. 50 % og AUC ca. 20 %; depot tas uten mat."}]}]}},"kilder":["ir","xr","devane","figueroa"]},
+    {"fra":"tₘₐₓ","data":{"tittel":"tₘₐₓ","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"IR: vanligvis 1–2 timer. Depot: omtrent 5–6 timer."}]}]}},"kilder":["devane","figueroa","xr"]},
+    {"fra":"t½","data":{"tittel":"t½","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Kvetiapin: ca. 7 timer. Norkvetiapin: ca. 12 timer."}]}]}},"kilder":["ir","xr","devane"]},
+    {"fra":"tₛₛ","data":{"tittel":"tₛₛ","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Steady state er observert innen omtrent 48 timer ved gjentatt dosering."}]}]}},"kilder":["li"]},
+    {"fra":"Proteinbinding","data":{"tittel":"Proteinbinding","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Ca. 83 %."}]}]}},"kilder":["ir","devane"]},
+    {"fra":"Vd","data":{"tittel":"Vd","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Tilsynelatende distribusjonsvolum er stort; humane studier har rapportert omtrent 500–700 L, med betydelig interindividuell variasjon."}]}]}},"kilder":["devane","li"]},
+    {"fra":"Eliminasjon","data":{"tittel":"Metabolisme og utskillelse","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Omfattende hepatisk metabolisme. Mindre enn 5 % utskilles uendret. Etter radiomerket dose gjenfinnes omtrent 73 % i urin og 21 % i feces, hovedsakelig som metabolitter."}]}]}},"kilder":["ir","xr","devane"]}
+  ]
   ]
   $json$::jsonb) loop
     select t.objekt_id, u.revisjon, r.innhold into e
@@ -330,7 +362,7 @@ begin
     select coalesce(jsonb_agg(to_jsonb(kilder->>x.nokkel) order by x.i), '[]'::jsonb) into referanser
     from jsonb_array_elements_text(oppdatering->'kilder') with ordinality x(nokkel, i);
 
-    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 01.10.2026: farmakokinetikk kildebelagt og presisert', true);
+    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: farmakokinetikk kildebelagt og presisert', true);
     perform public.lagre_utkast(e.objekt_id, e.revisjon,
       e.innhold || jsonb_build_object('data', oppdatering->'data', 'referanser', referanser));
     perform public.publiser_utkast(e.objekt_id, e.revisjon + 1);
@@ -351,13 +383,14 @@ begin
   end if;
   data := $json$
   {"tittel":"CYP3A4 og CYP2D6","dokument":{"type":"doc","content":[
-    {"type":"paragraph","content":[{"type":"text","text":"CYP3A4 er hovedenzymet for metabolismen av kvetiapin og katalyserer blant annet N-dealkylering til den aktive metabolitten norkvetiapin. CYP2D6 har mindre betydning for total clearance av moderstoffet, men bidrar til 7-hydroksylering og er viktig i videre metabolisme av norkvetiapin."}]},
-    {"type":"paragraph","content":[{"type":"text","text":"I humane levermikrosomer og rekombinante systemer ble 7-hydroksy-norkvetiapin dannet via CYP2D6, og norkvetiapin ble metabolisert av både CYP2D6 og CYP3A4. ClinPGx' oppdaterte kvetiapin-PK-spor inkluderer begge enzymene; ClinPGx har også kuratert data der CYP2D6 langsom eller intermediær metabolisme er assosiert med økt norkvetiapineksponering. Farmakogenetisk betydning gjelder derfor særlig metabolitten, mens CYP3A4 dominerer moderstoffets clearance."}]}
+    {"type":"paragraph","content":[{"type":"text","text":"CYP3A4 er hovedenzymet for metabolismen av kvetiapin og danner blant annet den aktive metabolitten norkvetiapin. CYP2D6 har begrenset betydning for total clearance av moderstoffet, men bidrar til 7-hydroksylering og videre metabolisme av norkvetiapin."}]},
+    {"type":"paragraph","content":[{"type":"text","text":"Farmakogenetisk er CYP3A4 den klinisk handlingsrelevante veien. DPWG anbefaler ved kjent CYP3A4 poor metabolizer (PM) å velge et alternativ ved depresjon og bruke om lag 30 % av normaldosen ved andre indikasjoner. Evidensen er begrenset, og rutinemessig CYP3A4-genotyping før behandling anbefales ikke."}]},
+    {"type":"paragraph","content":[{"type":"text","text":"CYP2D6-fenotype kan påvirke norkvetiapineksponering, men DPWG anbefaler ingen dose- eller behandlingsendring for CYP2D6–kvetiapin. ClinPGx' oppdaterte kvetiapin-PK-spor inkluderer CYP3A4 og CYP2D6."}]}
   ]}}
   $json$::jsonb;
   perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: CYP3A4/CYP2D6 presisert etter ClinPGx og Bakken et al. 2012', true);
   perform public.lagre_utkast(e.objekt_id, e.revisjon,
-    e.innhold || jsonb_build_object('data', data, 'referanser', jsonb_build_array(ref_clinpgx, ref_bakken, ref_devane, ref_ir)));
+    e.innhold || jsonb_build_object('data', data, 'referanser', jsonb_build_array(ref_clinpgx, ref_dpwg, ref_bakken, ref_devane, ref_ir)));
   perform public.publiser_utkast(e.objekt_id, e.revisjon + 1);
 
   -- Den redaksjonelle interaksjonsteksten står i eget panel etter seksjonsflyttingen.
@@ -395,7 +428,7 @@ begin
   if not found then
     raise exception 'Kvetiapin: farmakokinetikkortet Annet er endret siden kurateringen ble laget.';
   end if;
-  perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 01.10.2026: uspesifikt Annet-kort erstattet av kildebelagte PK-kort', true);
+  perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: uspesifikt Annet-kort erstattet av kildebelagte PK-kort', true);
   perform public.lagre_utkast(e.objekt_id, e.revisjon, jsonb_set(e.innhold, '{panel}', to_jsonb('fjernet'::text)));
   perform public.publiser_utkast(e.objekt_id, e.revisjon + 1);
 end
