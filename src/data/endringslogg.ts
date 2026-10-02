@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.73.4',
+    versjon: '1.74.1',
     dato: '2026-10-02',
     sammendrag: 'Tryggere oppdateringer av fagsidene',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,28 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Når en fagside oppdateres samlet etter en faglig gjennomgang, kontrolleres hvert kort mot nøyaktig den utgaven som ble gjennomgått. Har noen redigert kortet i mellomtiden, eller finnes det et kort til med det samme målet, stopper oppdateringen uten å endre noe.',
       'Ingen fagtekster er endret.',
+    ],
+  },
+  {
+    versjon: '1.74.0',
+    dato: '2026-10-02',
+    sammendrag: 'Nye seksjoner for virkninger, bivirkninger og misbruk og avhengighet på fagsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Fagsidene har fått to nye seksjoner, «Virkninger» og «Bivirkninger», mellom «Farmakodynamikk» og «Indikasjon». Hver har sitt eget ikon.',
+      'Nederst på fagsidene er det kommet en seksjon for «Misbruk og avhengighet», med fire faste kort som hvert har sitt eget ikon: Misbrukspotensial, Vanedannelse, Toleranse, og Abstinens og tilbakeslagseffekter.',
+      'Seksjonene er tomme foreløpig og vises derfor ikke for den som leser. I redigeringsmodus står de fram. I «Virkninger» og «Bivirkninger» legger du til kort med overskrift og tekst, som i farmakokinetikken; i «Misbruk og avhengighet» legger du til hvert av de fire kortene med en egen knapp.',
+    ],
+  },
+  {
+    versjon: '1.73.4',
+    dato: '2026-10-02',
+    sammendrag: 'Kategoriikonene også øverst på fagsidene',
+    typer: ['Design / layout'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Kategorien øverst på hver fagside, over navnet på stoffet, har nå det samme ikonet foran seg som i stoffregisteret. Står stoffet i flere kategorier, har hver sitt ikon.',
     ],
   },
   {
