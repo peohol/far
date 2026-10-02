@@ -32,17 +32,18 @@ import { navnenokkel } from './sokenavn'
  *   dit koden lenker, og der fortolkningsreglene og datakortene for koden står.
  *   Rekkefølgen per stoff er rekkefølgen analysene vises i, og den første
  *   primære er stoffets hovedanalytt, som eier datakortene uten `gjelder`.
- * - `kategorier`: menyens inndeling, med stoffene ved nøkkelen, og navnet på
- *   ikonet hver kategori vises med (`ikon`, et navn i ikonregisteret i
- *   `src/components/ikon/register.ts`). En kategori uten, eller med et navn
- *   ikonregisteret ikke har, vises med en plassholder (`kategoriikon`).
  *
- * Databasen har i tillegg fagsidene redaktørene har laget (`les_stoffliste`),
- * med nøkkelen og navnet der. De slås sammen med registeret i
- * {@link byggStoffregister}: en side for et stoff i registeret gir stoffet det
- * navnet redaktøren har gitt det, en side for et alias (en metabolitts gamle
- * komponentside) er ikke et eget stoff, og en side registeret ikke kjenner, er
- * et nytt stoff i {@link ANDRE_STOFFER} til noen plasserer det.
+ * Databasen har resten (`les_stoffregister`, se `docs/stoffregister.md`):
+ *
+ * - fagsidene redaktørene har laget, med nøkkelen og navnet der, og om siden
+ *   har innhold. De slås sammen med registeret i
+ *   {@link byggStoffregister}: en side for et stoff i registeret gir stoffet
+ *   det navnet redaktøren har gitt det, en side for et alias (en metabolitts
+ *   gamle komponentside) er ikke et eget stoff, og en side registeret ikke
+ *   kjenner, er et nytt stoff.
+ * - inndelingen ({@link Registerstruktur}): kategoriene og underkategoriene,
+ *   hvor hvert stoff står, og stoffene som er arkivert eller slettet. Et aktivt
+ *   stoff uten plassering står i {@link ANDRE_STOFFER}.
  */
 
 /** Hva en laboratorieanalytt er for stoffet den er koblet til. */
@@ -77,55 +78,117 @@ export interface StoffAnalyttKobling {
   merknad?: string
 }
 
-/** Én kategori slik den står i datafilen. */
-export interface Registerkategoridata {
-  navn: string
-  /** Navnet på kategoriens ikon i ikonregisteret. Uten: plassholderen. */
-  ikon?: string
-  /** Stoffene direkte i kategorien, ved nøkkelen. */
-  stoffer?: string[]
-  underkategorier?: { navn: string; stoffer: string[] }[]
-}
-
 export interface Registerdata {
   stoffer: { slug: string; navn: string; aliaser?: string[] }[]
   analyttkoblinger: { kode: string; stoff: string; relasjon: string; primar?: boolean; merknad?: string }[]
-  kategorier: Registerkategoridata[]
 }
 
 export const STOFFREGISTERDATA: Registerdata = registerdata
 
-/** En fagside slik databasen har den (`les_stoffliste`). */
+/** En fagside slik databasen har den (`les_stoffregister`). */
 export interface Stoffoppforing {
   id: string
   slug: string
   navn: string
+  /** Om siden har noe mer enn navnet: kort eller kilder. Ukjent regnes som innhold. */
+  innhold?: boolean
 }
 
-/** Kategorien for stoffene som ikke står i registeret. */
+/** En kategori eller underkategori slik databasen har den. */
+export interface Kategorirad {
+  id: string
+  /** Kategorien en underkategori står under; `null` for en kategori. */
+  forelder: string | null
+  navn: string
+  posisjon: number
+  /** Navnet på ikonet i ikonregisteret; `null` gir plassholderikonet. */
+  ikon: string | null
+  arkivert_kl: string | null
+}
+
+/** At et stoff står i en kategori. */
+export interface Plasseringsrad {
+  stoff: string
+  kategori: string
+}
+
+/**
+ * Et stoff som ikke er aktivt: arkivert (alle kan hente det tilbake), i
+ * papirkurven (en administrator kan hente det tilbake i 30 dager) eller fjernet
+ * for godt.
+ */
+export type Stoffstatus = 'arkivert' | 'papirkurv' | 'fjernet'
+
+export interface Statusrad {
+  stoff: string
+  status: Stoffstatus
+  endret_kl: string
+  /** Navnet på den som endret statusen, når det er kjent. */
+  endret_av: string | null
+}
+
+/** Inndelingen av registeret, slik databasen har den. */
+export interface Registerstruktur {
+  kategorier: readonly Kategorirad[]
+  plasseringer: readonly Plasseringsrad[]
+  status: readonly Statusrad[]
+}
+
+/** Kategorien for de aktive stoffene uten plassering. */
 export const ANDRE_STOFFER = 'Andre stoffer'
 
-/** Ett stoff i menyen. */
+/** ID-en «Andre stoffer» har, så den kan stå blant de andre. Ingen kategori i databasen har den. */
+export const ANDRE_STOFFER_ID = 'andre-stoffer'
+
+/** Ett stoff i menyen og på helsiden. */
 export interface Registerstoff {
   slug: string
   navn: string
   /** Analyttkodene stoffet er primært stoff for, i registerets rekkefølge. Tom uten. */
   koder: string[]
+  /** Om stoffet er koblet til noen laboratorieanalytt, primært eller ikke. */
+  analytter: boolean
+  /** Om stoffet har en fagside i databasen. Uten den finnes stoffet bare i datafilen. */
+  side: boolean
+  /** Om fagsiden har noe mer enn navnet. */
+  innhold: boolean
+}
+
+/** Et stoff som er arkivert eller i papirkurven, med når og av hvem. */
+export interface Inaktivtstoff extends Registerstoff {
+  endret_kl: string
+  endret_av: string | null
 }
 
 export interface Registerunderkategori {
+  id: string
   navn: string
+  ikon: string | null
   stoffer: Registerstoff[]
 }
 
 export interface Registerkategori {
+  /** ID-en i databasen; {@link ANDRE_STOFFER} har {@link ANDRE_STOFFER_ID}. */
+  id: string
   navn: string
-  /** Navnet på kategoriens ikon i ikonregisteret. Uten: plassholderen. */
-  ikon?: string
+  ikon: string | null
   /** Underkategoriene i registerets rekkefølge. Tom når kategorien ikke er delt opp. */
   underkategorier: Registerunderkategori[]
+  /** Stoffene direkte i kategorien, ved siden av underkategoriene, alfabetisk. */
+  direkte: Registerstoff[]
   /** Alle stoffene i kategorien alfabetisk, uten underkategoriene og hvert én gang. */
   stoffer: Registerstoff[]
+}
+
+/** En arkivert kategori eller underkategori. */
+export interface Arkivertkategori {
+  id: string
+  navn: string
+  /** Navnet på kategorien en underkategori står under. */
+  forelder: string | null
+  arkivert_kl: string
+  /** Hvor mange stoffer som står i den, med underkategoriene. */
+  antall: number
 }
 
 /** Hvor et stoff står i registeret: kategorien, og underkategorien når kategorien er delt opp. */
@@ -134,6 +197,11 @@ export interface Kategoristi {
   /** Kategoriens ikon i ikonregisteret, som i {@link Registerkategori}. */
   ikon?: string
   underkategori?: string
+}
+
+/** En plass stoffet står i inndelingen, med ID-en til kategorien eller underkategorien det står i. */
+export interface Plassering extends Kategoristi {
+  id: string
 }
 
 /** Tegnene som skrives om før alt annet enn a–z og 0–9 blir bindestrek. Samme som `intern.stoffslug` i databasen. */
@@ -168,10 +236,16 @@ export function stoffslug(navn: string): string {
 /** Formen en nøkkel må ha. */
 export const SLUGFORM = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
+/** Om et stoff står i registeret, er arkivert, ligger i papirkurven eller er slettet for godt. */
+export type Stofftilstand = 'aktiv' | Stoffstatus
+
 export interface Stoffregister {
-  /** Alle stoffene, alfabetisk. */
+  /** De aktive stoffene, alfabetisk. Ikke de arkiverte og ikke dem i papirkurven. */
   stoffer: readonly Stoff[]
-  /** Stoffet med denne nøkkelen. Bare de kanoniske nøklene; se {@link kanonisk}. */
+  /**
+   * Stoffet med denne nøkkelen, også når det er arkivert eller i papirkurven
+   * (se {@link status}). Bare de kanoniske nøklene; se {@link kanonisk}.
+   */
   finn: (slug: string) => Stoff | undefined
   /**
    * Stoffet en nøkkel eller et navn fører til: stoffets egen nøkkel, eller
@@ -179,6 +253,8 @@ export interface Stoffregister {
    * ({@link navnenokkel}). Brukes for gamle adresser og navn.
    */
   kanonisk: (nokkelEllerNavn: string) => Stoff | undefined
+  /** Om stoffet er aktivt, arkivert eller i papirkurven. `fjernet` for et stoff registeret ikke kjenner lenger. */
+  status: (slug: string) => Stofftilstand
   /** Alle koblingene, i registerets rekkefølge. */
   koblinger: readonly StoffAnalyttKobling[]
   /** Analyttene koblet til stoffet: de stoffet er primært stoff for først, så de andre, hver i registerets rekkefølge. */
@@ -189,10 +265,25 @@ export interface Stoffregister {
   primartStoffFor: (kode: string) => Stoff | undefined
   /** Stoffet slik menyen viser det, med kodene. `undefined` når registeret ikke kjenner nøkkelen. */
   menystoff: (slug: string) => Registerstoff | undefined
-  /** Menyen: kategoriene med stoffene, uten tomme kategorier. */
+  /** Om inndelingen er hentet fra databasen. Før det er {@link kategorier} og {@link inndeling} tomme. */
+  lastet: boolean
+  /** Menyen: kategoriene med stoffene, uten tomme kategorier og underkategorier, og {@link ANDRE_STOFFER} sist. */
   kategorier: Registerkategori[]
-  /** Kategoriene stoffet står i, i registerets rekkefølge; {@link ANDRE_STOFFER} når ingen. */
+  /**
+   * Hele inndelingen, til redigeringen: også de tomme kategoriene og
+   * underkategoriene, og {@link ANDRE_STOFFER} sist, også tom.
+   */
+  inndeling: Registerkategori[]
+  /** De arkiverte kategoriene og underkategoriene, sist arkivert først. */
+  arkiverteKategorier: Arkivertkategori[]
+  /** De arkiverte stoffene, alfabetisk. */
+  arkiv: Inaktivtstoff[]
+  /** Stoffene i papirkurven, sist slettet først. Tom for andre enn administratorer, som ikke får den. */
+  papirkurv: Inaktivtstoff[]
+  /** Kategoriene stoffet står i, i registerets rekkefølge; {@link ANDRE_STOFFER} når ingen. Tom før {@link lastet}. */
   kategorierFor: (slug: string) => Kategoristi[]
+  /** Plassene stoffet står i inndelingen, i registerets rekkefølge. Tom når det står i «Andre stoffer». */
+  plasseringerFor: (slug: string) => Plassering[]
 }
 
 function paaNavn(a: { navn: string }, b: { navn: string }): number {
@@ -204,33 +295,43 @@ function relasjon(verdi: string): Analyttrelasjon {
   throw new Error(`Ukjent relasjon mellom stoff og analytt: «${verdi}».`)
 }
 
+const etterPosisjon = (a: Kategorirad, b: Kategorirad) => a.posisjon - b.posisjon
+
 /**
- * Registeret av datafilen og fagsidene i databasen. Uten databasen er det
- * registeret alene — det adressene og lenkene fra fortolkningen trenger.
+ * Registeret av datafilen, fagsidene i databasen og inndelingen der. Uten
+ * databasen er det registeret alene — det adressene og lenkene fra
+ * fortolkningen trenger — uten kategorier.
  */
 export function byggStoffregister(
   databasestoffer: readonly Stoffoppforing[] = [],
   data: Registerdata = STOFFREGISTERDATA,
+  struktur: Registerstruktur | null = null,
 ): Stoffregister {
+  const statusFor = new Map((struktur?.status ?? []).map((s) => [s.stoff, s]))
+  const fjernet = (slug: string) => statusFor.get(slug)?.status === 'fjernet'
+
   const perSlug = new Map<string, Stoff>()
   for (const s of data.stoffer) perSlug.set(s.slug, { slug: s.slug, navn: s.navn, aliaser: s.aliaser ?? [] })
   // Aliasene, og de kanoniske nøklene selv, etter nøkkelen de gir.
   const aliasTil = new Map<string, string>()
   for (const s of perSlug.values()) for (const a of s.aliaser) aliasTil.set(stoffslug(a), s.slug)
-  // Navnene og aliasene etter navnenøkkelen, for navn som er skrevet på en annen måte:
-  // registerets navn først, så navnene sidene har i databasen, som går foran.
-  const perNokkel = new Map<string, string>()
-  const leggTilNavn = () => {
-    for (const s of perSlug.values()) for (const n of [s.navn, ...s.aliaser]) perNokkel.set(navnenokkel(n), s.slug)
-  }
-  leggTilNavn()
 
+  const sider = new Map<string, Stoffoppforing>()
   for (const d of databasestoffer) {
     const kjent = perSlug.get(d.slug)
     if (kjent) perSlug.set(d.slug, { ...kjent, navn: d.navn })
     else if (!aliasTil.has(d.slug)) perSlug.set(d.slug, { slug: d.slug, navn: d.navn, aliaser: [] })
+    else continue
+    sider.set(d.slug, d)
   }
-  leggTilNavn()
+  // Et stoff som er slettet for godt, er borte, også når datafilen har det.
+  for (const slug of perSlug.keys()) if (fjernet(slug)) perSlug.delete(slug)
+
+  // Navnene og aliasene etter navnenøkkelen, for navn som er skrevet på en
+  // annen måte; navnene sidene har i databasen, går foran registerets.
+  const perNokkel = new Map<string, string>()
+  for (const s of data.stoffer) if (perSlug.has(s.slug)) for (const n of [s.navn, ...(s.aliaser ?? [])]) perNokkel.set(navnenokkel(n), s.slug)
+  for (const s of perSlug.values()) for (const n of [s.navn, ...s.aliaser]) perNokkel.set(navnenokkel(n), s.slug)
 
   const koblinger: StoffAnalyttKobling[] = data.analyttkoblinger.map((k) => ({
     kode: k.kode,
@@ -248,7 +349,10 @@ export function byggStoffregister(
   // Stoffets egne analytter først, i datafilens rekkefølge, så de andre.
   for (const [slug, liste] of perStoff) perStoff.set(slug, [...liste].sort((a, b) => Number(b.primar) - Number(a.primar)))
 
-  const stoffer = [...perSlug.values()].sort(paaNavn)
+  const status = (slug: string): Stofftilstand =>
+    perSlug.has(slug) ? (statusFor.get(slug)?.status ?? 'aktiv') : 'fjernet'
+  const alle = [...perSlug.values()].sort(paaNavn)
+  const stoffer = alle.filter((s) => status(s.slug) === 'aktiv')
   const finn = (slug: string) => perSlug.get(slug)
   const kanonisk = (nokkel: string) => {
     const s = stoffslug(nokkel)
@@ -261,46 +365,96 @@ export function byggStoffregister(
     return primar && perSlug.get(primar.stoff)
   }
 
-  const menystoff = (s: Stoff): Registerstoff => ({
-    slug: s.slug,
-    navn: s.navn,
-    koder: analytterFor(s.slug)
-      .filter((k) => k.primar)
-      .map((k) => k.kode),
-  })
+  const menystoff = (s: Stoff): Registerstoff => {
+    const side = sider.get(s.slug)
+    return {
+      slug: s.slug,
+      navn: s.navn,
+      koder: analytterFor(s.slug)
+        .filter((k) => k.primar)
+        .map((k) => k.kode),
+      analytter: analytterFor(s.slug).length > 0,
+      side: Boolean(side),
+      innhold: side ? (side.innhold ?? true) : false,
+    }
+  }
+
+  // --- Inndelingen ---
+  const rader = struktur?.kategorier ?? []
+  const perId = new Map(rader.map((k) => [k.id, k]))
+  // En underkategori under en arkivert kategori er arkivert med den.
+  const aktiv = (k: Kategorirad) => !k.arkivert_kl && !(k.forelder && perId.get(k.forelder)?.arkivert_kl)
+  const barn = (forelder: string | null) =>
+    rader.filter((k) => k.forelder === forelder && aktiv(k)).sort(etterPosisjon)
+  const iKategori = new Map<string, Registerstoff[]>()
   const plassert = new Set<string>()
-  const slaaOpp = (slugs: readonly string[] = []) =>
-    slugs
-      .flatMap((slug) => {
-        const s = perSlug.get(slug)
-        if (!s) return []
-        plassert.add(slug)
-        return [menystoff(s)]
-      })
-      .sort(paaNavn)
+  for (const p of struktur?.plasseringer ?? []) {
+    const kategori = perId.get(p.kategori)
+    const s = perSlug.get(p.stoff)
+    if (!kategori || !aktiv(kategori) || !s || status(s.slug) !== 'aktiv') continue
+    iKategori.set(p.kategori, [...(iKategori.get(p.kategori) ?? []), menystoff(s)])
+    plassert.add(p.stoff)
+  }
+  const stofferI = (id: string) => [...(iKategori.get(id) ?? [])].sort(paaNavn)
   const unike = (liste: readonly Registerstoff[]) => [...new Map(liste.map((s) => [s.slug, s])).values()].sort(paaNavn)
 
-  const kategorier = data.kategorier.map((k): Registerkategori => {
-    const underkategorier = (k.underkategorier ?? [])
-      .map((u) => ({ navn: u.navn, stoffer: slaaOpp(u.stoffer) }))
-      .filter((u) => u.stoffer.length > 0)
+  const inndeling: Registerkategori[] = barn(null).map((k) => {
+    const underkategorier = barn(k.id).map((u) => ({ id: u.id, navn: u.navn, ikon: u.ikon, stoffer: stofferI(u.id) }))
+    const direkte = stofferI(k.id)
     return {
+      id: k.id,
       navn: k.navn,
-      ...(k.ikon && { ikon: k.ikon }),
+      ikon: k.ikon,
       underkategorier,
-      stoffer: unike([...slaaOpp(k.stoffer), ...underkategorier.flatMap((u) => u.stoffer)]),
+      direkte,
+      stoffer: unike([...direkte, ...underkategorier.flatMap((u) => u.stoffer)]),
     }
   })
-  const andre = stoffer.filter((s) => !plassert.has(s.slug)).map(menystoff)
-  if (andre.length > 0) kategorier.push({ navn: ANDRE_STOFFER, underkategorier: [], stoffer: andre })
+  if (struktur) {
+    const andre = stoffer.filter((s) => !plassert.has(s.slug)).map(menystoff)
+    inndeling.push({ id: ANDRE_STOFFER_ID, navn: ANDRE_STOFFER, ikon: null, underkategorier: [], direkte: andre, stoffer: andre })
+  }
+  const kategorier = inndeling
+    .map((k) => ({ ...k, underkategorier: k.underkategorier.filter((u) => u.stoffer.length > 0) }))
+    .filter((k) => k.stoffer.length > 0)
 
-  const kategorierFor = (slug: string): Kategoristi[] => {
-    const stier = data.kategorier.flatMap((k): Kategoristi[] => {
-      const kategori = { kategori: k.navn, ...(k.ikon && { ikon: k.ikon }) }
-      const under = (k.underkategorier ?? []).filter((u) => u.stoffer.includes(slug))
-      if (under.length > 0) return under.map((u) => ({ ...kategori, underkategori: u.navn }))
-      return k.stoffer?.includes(slug) ? [kategori] : []
+  const arkiverteKategorier = rader
+    .filter((k) => k.arkivert_kl)
+    .map((k): Arkivertkategori => {
+      const ider = new Set([k.id, ...rader.filter((u) => u.forelder === k.id).map((u) => u.id)])
+      const antall = new Set(
+        (struktur?.plasseringer ?? []).filter((p) => ider.has(p.kategori) && perSlug.has(p.stoff)).map((p) => p.stoff),
+      ).size
+      return {
+        id: k.id,
+        navn: k.navn,
+        forelder: (k.forelder && perId.get(k.forelder)?.navn) ?? null,
+        arkivert_kl: k.arkivert_kl!,
+        antall,
+      }
     })
+    .sort((a, b) => b.arkivert_kl.localeCompare(a.arkivert_kl))
+
+  const inaktive = (hvilken: Stoffstatus) =>
+    alle.flatMap((s): Inaktivtstoff[] => {
+      const rad = statusFor.get(s.slug)
+      return rad?.status === hvilken ? [{ ...menystoff(s), endret_kl: rad.endret_kl, endret_av: rad.endret_av }] : []
+    })
+
+  const plasseringerFor = (slug: string): Plassering[] =>
+    inndeling.flatMap((k): Plassering[] => {
+      if (k.id === ANDRE_STOFFER_ID) return []
+      const under = k.underkategorier.filter((u) => u.stoffer.some((s) => s.slug === slug))
+      // Underkategoriene vises med kategoriens ikon.
+      const kategori = { kategori: k.navn, ...(k.ikon && { ikon: k.ikon }) }
+      return [
+        ...(k.direkte.some((s) => s.slug === slug) ? [{ id: k.id, ...kategori }] : []),
+        ...under.map((u) => ({ id: u.id, ...kategori, underkategori: u.navn })),
+      ]
+    })
+  const kategorierFor = (slug: string): Kategoristi[] => {
+    if (!struktur) return []
+    const stier = plasseringerFor(slug).map(({ id: _id, ...sti }) => sti)
     return stier.length > 0 ? stier : [{ kategori: ANDRE_STOFFER }]
   }
 
@@ -308,6 +462,7 @@ export function byggStoffregister(
     stoffer,
     finn,
     kanonisk,
+    status,
     koblinger,
     analytterFor,
     stofferFor,
@@ -316,20 +471,25 @@ export function byggStoffregister(
       const s = perSlug.get(slug)
       return s && menystoff(s)
     },
-    kategorier: kategorier.filter((k) => k.stoffer.length > 0),
+    lastet: Boolean(struktur),
+    kategorier,
+    inndeling,
+    arkiverteKategorier,
+    arkiv: inaktive('arkivert'),
+    papirkurv: inaktive('papirkurv').sort((a, b) => b.endret_kl.localeCompare(a.endret_kl)),
     kategorierFor,
+    plasseringerFor,
   }
 }
 
-/** Registeret alene, uten fagsidene i databasen. */
+/** Registeret alene, uten fagsidene og inndelingen i databasen. */
 export const STOFFREGISTER = byggStoffregister()
 
 /**
  * Feilene i datafilen: nøkler som ikke har riktig form eller står flere ganger,
  * navn og alias som kolliderer — også når de bare er skrevet ulikt, som
  * «Quetiapine» og «kvetiapin» ({@link navnenokkel}) — koblinger til stoffer
- * som ikke finnes, koder med mer enn ett primært stoff, og kategorier som
- * nevner ukjente stoffer. Tom når alt er i orden. Testene holder den tom.
+ * som ikke finnes og koder med mer enn ett primært stoff. Tom når alt er i orden. Testene holder den tom.
  */
 export function kontrollerStoffregister(data: Registerdata = STOFFREGISTERDATA): string[] {
   const feil: string[] = []
@@ -371,10 +531,5 @@ export function kontrollerStoffregister(data: Registerdata = STOFFREGISTERDATA):
     if (k.primar ?? true) primare.set(k.kode, (primare.get(k.kode) ?? 0) + 1)
   }
   for (const [kode, antall] of primare) if (antall > 1) feil.push(`Koden ${kode} har ${antall} primære stoffer.`)
-  for (const k of data.kategorier) {
-    for (const slug of [...(k.stoffer ?? []), ...(k.underkategorier ?? []).flatMap((u) => u.stoffer)]) {
-      if (!slugs.has(slug)) feil.push(`Kategorien ${k.navn} nevner stoffet «${slug}», som ikke finnes.`)
-    }
-  }
   return feil
 }

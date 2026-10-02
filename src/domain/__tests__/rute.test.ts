@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { FORTOLKNING, adresse, kanoniskAdresse, lesRute, sammeRute, sokeside, stoffadresse } from '../rute'
+import { FORTOLKNING, STOFFREGISTERADRESSE, adresse, kanoniskAdresse, lesRute, sammeRute, sokeside, stoffadresse } from '../rute'
 import { byggStoffregister } from '../stoffregister'
 
 describe('adressene til stoffsidene', () => {
@@ -76,7 +76,7 @@ describe('gamle adresser', () => {
 
   it('later ikke som om en fagside finnes når koden ikke har noe primært stoff', () => {
     expect(lesRute('#/analytt/FINNESIKKE')).toEqual(FORTOLKNING)
-    const utenKobling = byggStoffregister([], { stoffer: [], analyttkoblinger: [], kategorier: [] })
+    const utenKobling = byggStoffregister([], { stoffer: [], analyttkoblinger: [] })
     expect(lesRute('#/analytt/HBUP', utenKobling)).toEqual(FORTOLKNING)
     expect(kanoniskAdresse('#/analytt/HBUP', utenKobling)).toBeNull()
   })
@@ -105,5 +105,14 @@ describe('søkesiden', () => {
     expect(sammeRute(rute, { side: 'sok', q: 'noe annet' })).toBe(false)
     expect(adresse({ side: 'sok', q: '' })).toBe('#/sok')
     expect(adresse(FORTOLKNING)).toBe('#/')
+  })
+})
+
+describe('stoffregisteret', () => {
+  it('har sin egen adresse, og leses og skrives som det er', () => {
+    expect(lesRute(STOFFREGISTERADRESSE)).toEqual({ side: 'stoffregister' })
+    expect(lesRute('#/stoffregister/')).toEqual({ side: 'stoffregister' })
+    expect(adresse({ side: 'stoffregister' })).toBe('#/stoffregister')
+    expect(sammeRute({ side: 'stoffregister' }, FORTOLKNING)).toBe(false)
   })
 })

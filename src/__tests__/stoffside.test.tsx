@@ -22,7 +22,8 @@ import { FaginnholdskildeProvider } from '../components/stoffside/Faginnholdskil
 import { ScenarioreglerProvider, type Scenarioreglerkilde } from '../components/regler/Scenarioreglerkilde'
 import { TipsLag } from '../components/Tips'
 import { ANALYTTKATALOG } from '../domain/analyttkatalog'
-import { STOFFREGISTER, byggStoffregister, type Stoffregister } from '../domain/stoffregister'
+import { STOFFREGISTERDATA, byggStoffregister, type Stoffregister } from '../domain/stoffregister'
+import { GRUNNSTRUKTUR } from './hjelp/registerstruktur'
 import { THC_KODE } from '../domain/thc'
 import { Samtidighetskonflikt, type Faginnholdslager } from '../faginnhold/lagring'
 import {
@@ -506,6 +507,9 @@ function erVerdi(tekst: string) {
 const finnVerdi = (tekst: string) => screen.findByText(erVerdi(tekst))
 const hentVerdi = (tekst: string) => screen.getByText(erVerdi(tekst))
 
+/** Registeret med inndelingen databasen får første gang. */
+const REGISTER = byggStoffregister([], STOFFREGISTERDATA, GRUNNSTRUKTUR)
+
 /** Scenarioreglene appen har hentet, som fortolkningen og stoffsiden viser i lesemodus. */
 const SCENARIOREGLER: Scenarioreglerkilde = {
   tilstand: { status: 'klar', regler: tilScenarioregler(rusScenarioregeldata()) },
@@ -514,14 +518,14 @@ const SCENARIOREGLER: Scenarioreglerkilde = {
 
 interface Visningsvalg {
   sted?: string[]
-  /** Stoffregisteret siden slår opp i; standard er registeret uten databasen. */
+  /** Stoffregisteret siden slår opp i; standard er registeret med inndelingen fra databasen. */
   register?: Stoffregister
   /** Scenarioreglene appen har hentet. Uten dem vises ingen scenarioregler. */
   scenarioregler?: Scenarioreglerkilde
 }
 
 /** Stoffsiden for stoffet med nøkkelen, slik appen viser den på `#/stoff/<nøkkel>`. */
-function vis(stoff: string, k = kilde(), { sted, register = STOFFREGISTER, scenarioregler }: Visningsvalg = {}) {
+function vis(stoff: string, k = kilde(), { sted, register = REGISTER, scenarioregler }: Visningsvalg = {}) {
   const onApneFortolkning = vi.fn()
   const onLukk = vi.fn()
   const medRegler = (barn: ReactNode) =>
@@ -567,7 +571,7 @@ describe('stoffet er sidens identitet', () => {
 
   it('viser et stoff i databasen som registeret ikke kjenner, uten kode og uten veien til fortolkningen', async () => {
     const teststoff = { id: 'stoff', slug: 'teststoff', navn: 'Teststoff' }
-    const register = byggStoffregister([teststoff])
+    const register = byggStoffregister([teststoff], STOFFREGISTERDATA, GRUNNSTRUKTUR)
     const { leser } = vis('teststoff', kilde({ data: enkelSide(teststoff, { nedre: 30, ovre: 60, enhet: 'µmol/L' }) }), {
       register,
     })

@@ -1,0 +1,47 @@
+/**
+ * Dra-og-slipp (`useSortering`): håndtaket, det som dras, plassen det holder,
+ * og lista det kan slippes i. Gjelder alle lister som sorteres med Smett —
+ * diskusjonsmenyen og redigeringen av stoffregisteret.
+ */
+
+/* Håndtaket en rad dras i, med mus og finger. Tastaturet løfter hele raden
+   (mellomrom), så håndtaket er bare for pekeren. Det kommer fram når pekeren
+   står over raden; hver liste sier selv hvilken rad det hører til. */
+.draghandtak {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.5rem;
+  height: var(--hoyde-liten);
+  color: var(--blekk-dempet);
+  opacity: 0.35;
+  cursor: grab;
+  touch-action: none;
+  transition: opacity var(--fart-rask) var(--kurve);
+}
+
+.draghandtak .ikon {
+  transform: rotate(90deg);
+}
+
+/* Lista det som dras, kan slippes i. */
+[data-dnd-container][data-dnd-over] {
+  background: var(--aksent-flate);
+}
+
+/* Det som dras, og plassen det holder. */
+[data-dnd-id][data-dnd-dragging] {
+  background: var(--flate);
+  box-shadow: var(--skygge-modal);
+  cursor: grabbing;
+}
+
+[data-dnd-id][data-dnd-placeholder] {
+  visibility: visible;
+  background: var(--flate-hevet);
+  border: var(--kant-tykk) dashed var(--linje-sterk);
+}
+
+[data-dnd-id][data-dnd-placeholder] > * {
+  visibility: hidden;
+}

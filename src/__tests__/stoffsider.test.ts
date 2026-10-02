@@ -16,6 +16,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { byggSidemodell, publiseringsplan } from '../faginnhold/stoffside'
 import { indekserKunnskapsbase, lagSideleser, lesKunnskapsbase } from '../faginnhold/globaltSok'
 import { lagFaginnholdslager, type Faginnholdslager } from '../faginnhold/lagring'
+import { lagRegisterlager } from '../stoffregister/api'
 import { INGEN_REGLER, TOM_STOFFSIDE, lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import { SITERING } from '../faginnhold/referanser'
 import { indekserSide, lagSokeindeks, sokGlobalt, sokeadresse, stoffidentitet } from '../faginnhold/sok'
@@ -121,7 +122,9 @@ describe('les_stoffliste', () => {
   })
 
   it('gir stoffregisteret et nytt stoff, og ingen egen side for et alias', async () => {
-    const register = byggStoffregister(await adminleser.lesStoffliste('utkast'))
+    const { sider, struktur } = await lagRegisterlager(kall.klientFor(admin)).les('utkast')
+    expect(sider.map((s) => s.slug)).toEqual((await adminleser.lesStoffliste('utkast')).map((s) => s.slug))
+    const register = byggStoffregister(sider, undefined, struktur)
     expect(register.finn('teststoff')).toEqual({ slug: 'teststoff', navn: 'Teststoff', aliaser: [] })
     expect(register.kategorierFor('teststoff')).toEqual([{ kategori: ANDRE_STOFFER }])
     expect(register.kategorier.find((k) => k.navn === ANDRE_STOFFER)?.stoffer.map((s) => s.slug)).toEqual(['teststoff'])

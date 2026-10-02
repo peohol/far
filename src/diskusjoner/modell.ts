@@ -7,25 +7,33 @@
  */
 import { klartekst, type Riktekstdokument } from '../faginnhold/riktekst'
 import { erObjekt, tall, tekst, tekstEllerNull } from '../ideer/lesing'
-import { fortolkningsnokkel, fortolkningsrute, stoffadresse, type Rute } from '../domain/rute'
+import { adresse, fortolkningsnokkel, fortolkningsrute, stoffadresse, type Rute } from '../domain/rute'
 import { lesInnlegg, lesKommentarer, rensInnleggstekst, type Innlegg, type Kommentar } from '../traad/modell'
 
 /* --- Sidene ------------------------------------------------------------------- */
 
 /**
  * Siden trådene står på, slik databasen lagrer den: `stoff:<nøkkel>` for en
- * fagside og `fortolkning:<nøkkel>` for fortolkningen av en analytt.
- * Samme form som `intern.er_diskusjonsside()`.
+ * fagside, `fortolkning:<nøkkel>` for fortolkningen av en analytt og
+ * `register:stoffregister` for helsiden med stoffregisteret. Samme form som
+ * `intern.er_diskusjonsside()`.
  */
-export type Diskusjonsside = `stoff:${string}` | `fortolkning:${string}`
+export type Diskusjonsside = `stoff:${string}` | `fortolkning:${string}` | `register:${string}`
 
 const NOKKEL = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
-const SIDE = /^(stoff|fortolkning):([a-z0-9]+(?:-[a-z0-9]+)*)$/
+const SIDE = /^(stoff|fortolkning|register):([a-z0-9]+(?:-[a-z0-9]+)*)$/
 
-/** Siden ruten viser, når den har diskusjoner: en fagside eller fortolkningen av én analytt. */
+/** Diskusjonssiden til helsiden med stoffregisteret. */
+export const STOFFREGISTERSIDE: Diskusjonsside = 'register:stoffregister'
+
+/** Sidene med diskusjoner som verken er en fagside eller en fortolkning, med navnet. */
+export const ANDRE_DISKUSJONSSIDER: readonly Sidevalg[] = [{ side: STOFFREGISTERSIDE, navn: 'Stoffregisteret' }]
+
+/** Siden ruten viser, når den har diskusjoner: en fagside, fortolkningen av én analytt eller stoffregisteret. */
 export function diskusjonssideFor(rute: Rute): Diskusjonsside | null {
   if (rute.side === 'stoff') return NOKKEL.test(rute.stoff) ? `stoff:${rute.stoff}` : null
   if (rute.side === 'fortolkning' && rute.analytt) return NOKKEL.test(rute.analytt) ? `fortolkning:${rute.analytt}` : null
+  if (rute.side === 'stoffregister') return STOFFREGISTERSIDE
   return null
 }
 
@@ -37,12 +45,14 @@ export function lesDiskusjonsside(verdi: unknown): Diskusjonsside | null {
 export function adresseForSide(side: Diskusjonsside): string {
   const [, type, nokkel] = SIDE.exec(side) ?? []
   if (!nokkel) return '#/'
+  if (type === 'register') return adresse(ruteForSide(side))
   return type === 'stoff' ? stoffadresse(nokkel) : `#/fortolkning/${nokkel}`
 }
 
 /** Ruten til siden, for den som navigerer i appen. */
 export function ruteForSide(side: Diskusjonsside): Rute {
   const [, type, nokkel = ''] = SIDE.exec(side) ?? []
+  if (type === 'register') return { side: 'stoffregister' }
   return type === 'stoff' ? { side: 'stoff', stoff: nokkel } : fortolkningsrute(nokkel)
 }
 
@@ -88,7 +98,7 @@ export function diskusjonssider(
  * fagside som er ny siden lista ble laget), får nøkkelen sin.
  */
 export function navnPaaSide(sider: Diskusjonssider, side: Diskusjonsside): string {
-  const funnet = [...sider.fagsider, ...sider.fortolkninger].find((s) => s.side === side)
+  const funnet = [...sider.fagsider, ...sider.fortolkninger, ...ANDRE_DISKUSJONSSIDER].find((s) => s.side === side)
   if (funnet) return funnet.navn
   const [, type, nokkel = side] = SIDE.exec(side) ?? []
   return type === 'fortolkning' ? fortolkningssidenavn({ kode: nokkel.toUpperCase() }) : nokkel

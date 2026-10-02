@@ -5,6 +5,7 @@
  * rett mot tabellene, der radsikkerheten avgjør hvem som får gjøre hva.
  */
 import { hentInnstilling, lagreInnstilling, lagreSisteValg } from '../auth/innstillinger'
+import { lesbarFeil, UVENTET_FEIL, type Databasefeil } from '../auth/databasefeil'
 import { klient } from '../auth/klient'
 import type { Riktekstdokument } from '../faginnhold/riktekst'
 import {
@@ -17,33 +18,14 @@ import {
   type Diskusjonstraad,
 } from './modell'
 
-const FEIL = 'Noe gikk galt. Prøv igjen.'
-
-interface Databasefeil {
-  code?: string
-  message?: string
-}
-
 /** Unike navn og emojier: brudd på dem sies med det samme som skjemaet sier. */
 const UNIKE: Record<string, string> = {
   diskusjonskategorier_navn_idx: 'En annen kategori på siden har det navnet.',
   diskusjonskategorier_emoji_idx: 'En annen kategori på siden har den emojien.',
 }
 
-/**
- * Feilen gjort om til noe som kan vises. Funksjonene i databasen skriver
- * meldingene sine på norsk, med stor forbokstav; Postgres' egne meldinger
- * begynner med liten, og er ikke skrevet for brukeren.
- */
-export function tilFeil(feil: Databasefeil): Error {
-  const melding = feil.message ?? ''
-  if (feil.code === '23505') {
-    const brudd = Object.keys(UNIKE).find((indeks) => melding.includes(indeks))
-    if (brudd) return new Error(UNIKE[brudd])
-  }
-  if (feil.code === '23514') return new Error('Det som ble skrevet, ble ikke godtatt. Kontroller feltene og prøv igjen.')
-  return new Error(/^\p{Lu}/u.test(melding) ? melding : FEIL)
-}
+/** Feilen gjort om til noe som kan vises (se `lesbarFeil`). */
+export const tilFeil = (feil: Databasefeil): Error => lesbarFeil(feil, UNIKE)
 
 function sjekk<T>({ data, error }: { data: T; error: Databasefeil | null }): T {
   if (error) throw tilFeil(error)
@@ -51,7 +33,7 @@ function sjekk<T>({ data, error }: { data: T; error: Databasefeil | null }): T {
 }
 
 function id(verdi: unknown): string {
-  if (typeof verdi !== 'string') throw new Error(FEIL)
+  if (typeof verdi !== 'string') throw new Error(UVENTET_FEIL)
   return verdi
 }
 

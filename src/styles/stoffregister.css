@@ -1,0 +1,355 @@
+/**
+ * Helsiden for stoffregisteret (`#/stoffregister`): kategoriene som seksjoner
+ * og stoffene som detaljkort (`seksjoner.css`), redigeringsbrettet, arkivet,
+ * papirkurven og foten med meldingene. Bygd på de samme flatene og
+ * avstandene som fagsidene.
+ */
+
+.scene--stoffregister {
+  width: min(100%, 64rem);
+}
+
+.stoffregisterside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-6);
+  /* Plass til foten med meldingene, så den aldri dekker det nederste. */
+  padding-bottom: calc(var(--hoyde-felt) + var(--rom-6));
+}
+
+.stoffregisterside__topp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  padding: var(--rom-8) var(--rom-4) var(--rom-3);
+}
+
+.stoffregisterside__hjelp,
+.stoffregisterside__laster,
+.registerarkiv__hjelp,
+.registerarkiv__tomt,
+.registerbrett__merknad {
+  margin: 0;
+  max-width: 44em;
+  font-size: var(--tekst-ui);
+  color: var(--blekk-dempet);
+}
+
+/* --- Lesevisningen ---------------------------------------------------------- */
+
+.registerunderkategori {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.registerunderkategori + .registerunderkategori,
+.stoffkortene + .registerunderkategori {
+  margin-top: var(--rom-6);
+}
+
+.registerunderkategori__navn {
+  margin: 0;
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-etikett);
+  font-weight: var(--vekt-halvfet);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--blekk-dempet);
+}
+
+.stoffkort__oppsummering > .riktekst {
+  max-width: 44em;
+  font: var(--vekt-normal) var(--tekst-ingress) / 1.5 var(--skrift-display);
+  color: var(--blekk);
+}
+
+.stoffkort__tom,
+.stoffkort__koder {
+  margin: 0;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}
+
+.stoffkort__handlinger,
+.stoffkort__redigering,
+.stoffkort__plassering {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
+.stoffkort__handlinger {
+  margin-top: var(--rom-3);
+}
+
+.stoffkort__handlinger .knapp {
+  text-decoration: none;
+}
+
+.stoffkort__plassering {
+  padding-top: var(--rom-3);
+  border-top: var(--kant) solid var(--linje);
+  font-size: var(--tekst-liten);
+}
+
+.stoffkort__etikett {
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+}
+
+.stoffkort__plass {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-1);
+  padding: 0 var(--rom-1) 0 var(--rom-3);
+  min-height: var(--hoyde-liten);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-pille);
+}
+
+.stoffkort__plass:not(:has(button)) {
+  padding-right: var(--rom-3);
+}
+
+.stoffkort__fjern {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--blekk-dempet);
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+}
+
+.stoffkort__fjern:hover,
+.stoffkort__fjern:focus-visible {
+  color: var(--blekk);
+  background: var(--flate);
+}
+
+.stoffkort__velg {
+  width: auto;
+  min-height: var(--hoyde-liten);
+  font-size: var(--tekst-liten);
+}
+
+.stoffkort__redigering {
+  margin-left: calc(-1 * var(--rom-2));
+}
+
+/* --- Arkivet og papirkurven --------------------------------------------------- */
+
+.registerliste {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.registerliste + .registerliste {
+  margin-top: var(--rom-5);
+}
+
+.registerrad {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-1) var(--rom-4);
+  padding: var(--rom-2) 0;
+  border-bottom: var(--kant) solid var(--linje);
+}
+
+.registerrad__navn {
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+}
+
+.registerrad__meta {
+  flex: 1;
+  font-size: var(--tekst-meta);
+  color: var(--blekk-dempet);
+}
+
+.registerrad__meta .registerrad__meta {
+  flex: none;
+}
+
+.registerrad__handlinger {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-1);
+}
+
+/* --- Redigeringsbrettet ------------------------------------------------------ */
+
+.registerbrett {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-6);
+}
+
+.registerbrett__lister {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+}
+
+.brettliste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: var(--runding-kort);
+}
+
+.brettliste--under {
+  gap: var(--rom-3);
+  margin-left: var(--rom-6);
+}
+
+/* Lista står også tom, så en underkategori kan slippes i den. */
+.brettliste--under:empty {
+  min-height: var(--rom-3);
+}
+
+.brettkategori {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  padding: var(--rom-4);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje);
+  border-radius: var(--runding-kort);
+}
+
+.brettkategori--under {
+  padding: var(--rom-3);
+  background: var(--flate-hevet);
+}
+
+.brettkategori__hode {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
+.brettkategori__hode .registerskjema {
+  flex: 1;
+}
+
+.brettkategori__navn {
+  margin: 0;
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-sterk);
+}
+
+.brettkategori__ikon {
+  color: var(--blekk-dempet);
+}
+
+.brettkategori__antall {
+  font-size: var(--tekst-meta);
+  color: var(--blekk-dempet);
+}
+
+.brettkategori__handlinger {
+  margin-left: var(--rom-4);
+}
+
+:is(.brettkategori, .brettstoff):hover > :is(.brettkategori__hode > .draghandtak, .draghandtak) {
+  opacity: 1;
+}
+
+.brettstoffer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  min-height: var(--rom-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: var(--runding-felt);
+}
+
+.brettstoff {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  min-height: var(--hoyde-liten);
+  padding-right: var(--rom-3);
+  border-radius: var(--runding-felt);
+}
+
+.brettstoff__navn {
+  font-size: var(--tekst-ui);
+  color: var(--blekk);
+  text-decoration: none;
+}
+
+.brettstoff__navn:hover,
+.brettstoff__navn:focus-visible {
+  text-decoration: underline;
+}
+
+.brettstoff__koder {
+  font-size: var(--tekst-merke);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+}
+
+.registerskjema {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--rom-2);
+  max-width: 40rem;
+}
+
+.registerskjema .felt {
+  flex: 1;
+  min-width: 12rem;
+}
+
+/* --- Foten med meldingene ------------------------------------------------------ */
+
+.registerfot {
+  position: fixed;
+  inset-inline: 0;
+  bottom: calc(var(--dokk-offset, 0px) + var(--rom-5));
+  z-index: var(--lag-popover);
+  display: flex;
+  justify-content: center;
+  padding-inline: var(--rom-4);
+  pointer-events: none;
+}
+
+.registerfot > * {
+  width: min(100%, 32rem);
+  pointer-events: auto;
+}
+
+.registerfot__feil {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  padding: var(--rom-2) var(--rom-2) var(--rom-2) var(--rom-5);
+  font-size: var(--tekst-liten);
+  color: var(--alvorlig-blekk);
+  background: var(--alvorlig-flate);
+  border: var(--kant) solid var(--alvorlig-kant);
+  border-radius: var(--runding-underkort);
+}
+
+.registerfot__feil > span {
+  flex: 1;
+}

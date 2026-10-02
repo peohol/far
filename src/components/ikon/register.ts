@@ -219,7 +219,7 @@ const fyring = P('M2 7h6l2-5 2.5 7 1.5-2h6l2-5 2.5 7 1.5-2h6l2-5 2.5 7 1.5-2h6',
 
 /*
  * Stoffregisteret og kategoriene i det. Hver kategori i registeret peker på
- * ikonet sitt med navnet (`ikon` i `src/data/stoffregister.json`); en
+ * ikonet sitt med navnet (`ikon` i `public.stoffkategorier`, se `docs/stoffregister.md`); en
  * kategori uten, eller med et navn som ikke står her, får `katPlassholder`
  * (se `kategoriikon`). Et nytt kategoriikon tegnes i samme stil, i
  * 24-rutenettet, og får navnet `kat<Kategori>`.

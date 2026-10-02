@@ -188,18 +188,5 @@
     {"kode": "ECS1", "stoff": "mdma", "relasjon": "selve_stoffet"},
     {"kode": "UETGS", "stoff": "etanol", "relasjon": "metabolitt"},
     {"kode": "UETS", "stoff": "etanol", "relasjon": "metabolitt"}
-  ],
-  "kategorier": [
-    {"navn": "Antidepressiver", "ikon": "katAntidepressiver", "underkategorier": [{"navn": "SSRI", "stoffer": ["citalopram", "escitalopram", "fluoksetin", "fluvoksamin", "paroksetin", "sertralin"]}, {"navn": "SNRI", "stoffer": ["duloksetin", "venlafaksin"]}, {"navn": "NDRI", "stoffer": ["bupropion"]}, {"navn": "TCA", "stoffer": ["amitriptylin", "doksepin", "klomipramin", "nortriptylin", "trimipramin"]}, {"navn": "Reseptorantagonister (NaSSA)", "stoffer": ["mianserin", "mirtazapin"]}, {"navn": "Multimodale", "stoffer": ["vortioksetin"]}, {"navn": "NMDA-reseptorantagonister", "stoffer": ["ketamin"]}]},
-    {"navn": "Stemningsstabiliserende", "ikon": "katStemningsstabiliserende", "stoffer": ["karbamazepin", "lamotrigin", "litium", "valproat"]},
-    {"navn": "Antipsykotika", "ikon": "katAntipsykotika", "underkategorier": [{"navn": "Førstegenerasjonsmidler", "stoffer": ["flupentiksol", "haloperidol", "klorprotiksen", "levomepromazin", "perfenazin", "zuklopentiksol"]}, {"navn": "Andregenerasjonsmidler", "stoffer": ["amisulprid", "aripiprazol", "brekspiprazol", "kariprazin", "klozapin", "kvetiapin", "lurasidon", "olanzapin", "paliperidon", "risperidon", "sertindol", "ziprasidon"]}]},
-    {"navn": "Antiepileptika", "ikon": "katAntiepileptika", "stoffer": ["fenobarbital", "fenytoin", "gabapentin", "karbamazepin", "klonazepam", "lamotrigin", "levetiracetam", "okskarbazepin", "topiramat", "valproat"]},
-    {"navn": "Alkohol og GHB", "ikon": "katAlkohol", "stoffer": ["etanol", "ghb"]},
-    {"navn": "Benzodiazepiner og Z-hypnotika", "ikon": "katBenzodiazepiner", "stoffer": ["alprazolam", "diazepam", "flunitrazepam", "klonazepam", "nitrazepam", "oksazepam", "zolpidem", "zopiklon"]},
-    {"navn": "Opioider", "ikon": "katOpioider", "stoffer": ["buprenorfin", "fentanyl", "ketobemidon", "kodein", "metadon", "morfin", "oksykodon", "petidin", "tapentadol", "tramadol"]},
-    {"navn": "Stimulanter", "ikon": "katStimulanter", "stoffer": ["amfetamin", "atomoksetin", "kokain", "mdma", "metamfetamin", "metylfenidat"]},
-    {"navn": "Cannabinoider", "ikon": "katCannabinoider", "stoffer": ["thc", "cbd"]},
-    {"navn": "Hallusinogene stoffer", "ikon": "katHallusinogener", "stoffer": ["ketamin"]},
-    {"navn": "Antihypertensiver", "ikon": "katAntihypertensiver", "underkategorier": [{"navn": "ACE-hemmere", "stoffer": ["enalapril", "lisinopril", "ramipril"]}, {"navn": "Aldosteronantagonister", "stoffer": ["eplerenon", "spironolakton"]}, {"navn": "Alfa- og betablokkere", "stoffer": ["karvedilol", "labetalol"]}, {"navn": "Alfablokkere", "stoffer": ["doksazosin"]}, {"navn": "ARB", "stoffer": ["irbesartan", "kandesartan", "losartan", "telmisartan", "valsartan"]}, {"navn": "Betablokkere", "stoffer": ["atenolol", "bisoprolol", "metoprolol"]}, {"navn": "Diuretika", "stoffer": ["bendroflumetiazid", "bumetanid", "furosemid", "hydroklortiazid"]}, {"navn": "Kalsiumantagonister", "stoffer": ["amlodipin", "diltiazem", "lerkanidipin", "nifedipin", "verapamil"]}]}
   ]
 }

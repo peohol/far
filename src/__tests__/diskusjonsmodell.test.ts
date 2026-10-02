@@ -5,6 +5,7 @@
  */
 import { describe, expect, it } from 'vitest'
 import {
+  STOFFREGISTERSIDE,
   UKATEGORISERTE,
   adresseForSide,
   diskusjonssideFor,
@@ -64,6 +65,8 @@ describe('sidene', () => {
     expect(diskusjonssideFor({ side: 'fortolkning', analytt: 'diaz-dmi-oxa' })).toBe('fortolkning:diaz-dmi-oxa')
     expect(diskusjonssideFor({ side: 'fortolkning' })).toBeNull()
     expect(diskusjonssideFor({ side: 'sok', q: 'x' })).toBeNull()
+    // Helsiden for stoffregisteret har sine egne.
+    expect(diskusjonssideFor({ side: 'stoffregister' })).toBe(STOFFREGISTERSIDE)
   })
 
   it('leder tilbake til siden tråden står på', () => {
@@ -71,10 +74,13 @@ describe('sidene', () => {
     expect(adresseForSide('fortolkning:hbup')).toBe('#/fortolkning/hbup')
     expect(ruteForSide('fortolkning:hbup')).toEqual({ side: 'fortolkning', analytt: 'hbup' })
     expect(ruteForSide('stoff:bupropion')).toEqual({ side: 'stoff', stoff: 'bupropion' })
+    expect(adresseForSide(STOFFREGISTERSIDE)).toBe('#/stoffregister')
+    expect(ruteForSide(STOFFREGISTERSIDE)).toEqual({ side: 'stoffregister' })
   })
 
   it('godtar bare sider med formen databasen krever', () => {
     expect(lesDiskusjonsside('stoff:bupropion')).toBe('stoff:bupropion')
+    expect(lesDiskusjonsside(STOFFREGISTERSIDE)).toBe(STOFFREGISTERSIDE)
     for (const ugyldig of ['stoff:', 'stoff:Bupropion', 'annet:x', 'fortolkning:a--b', 42, null]) {
       expect(lesDiskusjonsside(ugyldig)).toBeNull()
     }

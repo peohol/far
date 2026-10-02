@@ -58,7 +58,7 @@ Stoffet er det brukeren leser om, og den eneste identiteten en fagside har, for 
 - Sertralin
 - Risperidon
 
-Hvert stoff har en nøkkel (`bupropion`), et navn og en plass i stoffregisteret (`src/data/stoffregister.json`), som er autoritativt og uavhengig av analyttkatalogen. Fagsiden inneholder farmakologi, preparater, dosering, referanseområder, kommentarer osv., og har adressen `#/stoff/<nøkkel>`.
+Hvert stoff har en nøkkel (`bupropion`), et navn og en plass i stoffregisteret (stoffene i `src/data/stoffregister.json`, inndelingen i databasen; se `docs/stoffregister.md`), som er autoritativt og uavhengig av analyttkatalogen. Fagsiden inneholder farmakologi, preparater, dosering, referanseområder, kommentarer osv., og har adressen `#/stoff/<nøkkel>`.
 
 ### 2.2 Laboratorieanalytt
 
@@ -93,7 +93,7 @@ Eksempel: diazepam, N-desmetyldiazepam og oksazepam har egne analyttkoder og inn
 
 ### Sidemenyen
 
-Venstremenyen er stoffregisteret: den åpner fagsiden (`#/stoff/<nøkkel>`), ikke fortolkningsflyten, og er ordnet etter farmakologisk klasse med og uten analyttkode om hverandre. Linjen navngis alltid etter stoffet, aldri etter laboratoriets analyttnavn; kodene står som sekundær informasjon. Den filtrerer ikke søket.
+Venstremenyen er stoffregisteret: den åpner fagsiden (`#/stoff/<nøkkel>`), ikke fortolkningsflyten, og er ordnet etter farmakologisk klasse med og uten analyttkode om hverandre. Linjen navngis alltid etter stoffet, aldri etter laboratoriets analyttnavn; kodene står som sekundær informasjon. Den filtrerer ikke søket. Nederst lenker den til helsiden for registeret (`#/stoffregister`), der det redigeres (`docs/stoffregister.md`).
 
 Hovedsidens søk er inngangen til fortolkningsarbeidsflyten, og filteret på analysemetode settes der.
 

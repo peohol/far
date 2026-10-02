@@ -37,7 +37,6 @@ const REGISTER = byggStoffregister([], {
     { kode: 'TMOD', stoff: 'testmoderstoff', relasjon: 'selve_stoffet' },
     { kode: 'TMET', stoff: 'testmoderstoff', relasjon: 'metabolitt' },
   ],
-  kategorier: [],
 })
 
 let db: PGlite

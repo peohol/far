@@ -493,25 +493,6 @@
   margin: 0 0 0 1.5rem;
 }
 
-/* Håndtaket en kategori eller tråd dras i, med mus og finger. Tastaturet
-   løfter hele raden (mellomrom), så håndtaket er bare for pekeren. */
-.draghandtak {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 1.5rem;
-  height: var(--hoyde-liten);
-  color: var(--blekk-dempet);
-  opacity: 0.35;
-  cursor: grab;
-  touch-action: none;
-  transition: opacity var(--fart-rask) var(--kurve);
-}
-
-.draghandtak .ikon {
-  transform: rotate(90deg);
-}
-
 :is(.traadrad, .diskusjonskategori__hode):hover > .draghandtak,
 .diskusjonskategori:hover > .diskusjonskategori__hode > .draghandtak {
   opacity: 1;
@@ -532,10 +513,6 @@
 /* Lista er en flexboks, som ellers ville vist den også når den er skjult (arkivet). */
 .traadliste[hidden] {
   display: none;
-}
-
-.traadliste[data-dnd-over] {
-  background: var(--aksent-flate);
 }
 
 .traadrad {
@@ -598,23 +575,6 @@
 .traadknapp__meta .ikon {
   width: 0.875rem;
   height: 0.875rem;
-}
-
-/* Det som dras, og plassen det holder. */
-:is(.traadrad, .diskusjonskategori)[data-dnd-dragging] {
-  background: var(--flate);
-  box-shadow: var(--skygge-modal);
-  cursor: grabbing;
-}
-
-:is(.traadrad, .diskusjonskategori)[data-dnd-placeholder] {
-  visibility: visible;
-  background: var(--flate-hevet);
-  border: var(--kant-tykk) dashed var(--linje-sterk);
-}
-
-:is(.traadrad, .diskusjonskategori)[data-dnd-placeholder] > * {
-  visibility: hidden;
 }
 
 .nytraadknapp {

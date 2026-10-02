@@ -376,23 +376,21 @@
   }
 }
 
-/* --- Ny stoffside ------------------------------------------------------------
-   Står fast nederst i panelet, under lista, for redaktørene. */
-.menyny {
+/* --- Lenken til helsiden ------------------------------------------------------
+   Står fast nederst i panelet, under lista. */
+.menyhelside {
   flex: none;
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: center;
   gap: var(--rom-2);
   padding: var(--rom-4) var(--rom-6) var(--rom-6);
   border-top: var(--kant) solid var(--linje);
+  color: var(--blekk);
+  font-weight: var(--vekt-halvfet);
+  text-decoration: none;
 }
 
-.menyny .felt {
-  flex: 1;
-}
-
-.menyny .skjemafeil {
-  flex-basis: 100%;
-  margin: 0;
+.menyhelside:hover,
+.menyhelside:focus-visible {
+  color: var(--aksent);
 }

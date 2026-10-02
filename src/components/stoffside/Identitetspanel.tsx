@@ -13,7 +13,10 @@ import { kategoriikon } from '../ikon/register'
 import { Metodepille } from '../Metodepille'
 import { useTips } from '../Tips'
 import { Uthev } from '../Uthev'
-import { panelAnker } from './Paneler'
+import { panelAnker, panelteksten, Paneltekst, type Panelkontekst } from './Paneler'
+
+/** Navnet på den korte oppsummeringen av stoffet, i redigeringen. */
+const OPPSUMMERING = 'Oppsummering'
 import '../../styles/monograf-topp.css'
 
 /** «a», «a og b», «a, b og c». */
@@ -49,6 +52,10 @@ export function koblingstekst({ kobling, analytt }: KobletAnalytt, stoffnavn: st
  * til andre stoffer også, lenker «Se også» til sidene deres — bare der
  * registeret har en slik kobling. Står alltid fram, over viktige data
  * (`ViktigeData.tsx`).
+ *
+ * Nederst står den korte oppsummeringen av stoffet: rikteksten i panelet, som
+ * redigeres her. Den samme teksten står på stoffets kort i helsiden for
+ * stoffregisteret.
  */
 export function Identitetspanel({
   definisjon,
@@ -59,6 +66,7 @@ export function Identitetspanel({
   kategorier,
   overskriftId,
   onApneFortolkning,
+  kontekst,
 }: {
   definisjon: Paneldefinisjon
   navn: string
@@ -72,6 +80,8 @@ export function Identitetspanel({
   overskriftId: string
   /** Åpner fortolkningsmodulen analytten hører til. */
   onApneFortolkning: (analytt: Laboratorieanalytt) => void
+  /** Siden med redigeringen, for oppsummeringen. Uten den vises ingen oppsummering. */
+  kontekst?: Panelkontekst
 }) {
   const panelreferanser = useSidereferanser().panelreferanser[definisjon.nokkel] ?? []
   const metodegrupper = analytter.reduce<Laboratorieanalytt[][]>((grupper, { analytt }) => {
@@ -153,6 +163,13 @@ export function Identitetspanel({
           </p>
         )
       })}
+      {kontekst && (
+        <Paneltekst
+          definisjon={{ ...definisjon, tittel: OPPSUMMERING }}
+          kontekst={kontekst}
+          tekst={panelteksten(kontekst, definisjon.nokkel)}
+        />
+      )}
       <Referansefelt ider={panelreferanser} niva="panel" />
     </section>
   )

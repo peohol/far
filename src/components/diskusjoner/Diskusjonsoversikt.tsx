@@ -9,7 +9,7 @@ import {
 import { kortTid } from '../../traad/modell'
 import { Ikon } from '../ikon/Ikon'
 import { Bekreftknapp, Idehandling } from '../traad/Smadeler'
-import { HANDTAK, useSortering, type Flytting } from './useSortering'
+import { HANDTAK, useSortering, type Flytting } from '../../hooks/useSortering'
 
 /** `data-dnd-container` på lista over kategoriene. */
 export const KATEGORILISTE = 'kategorier'

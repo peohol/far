@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { useBevart } from '../oppdatering/Bevaring'
 import { Bryter } from './Bryter'
-import { Button } from './Button'
-import { Felt } from './konto/Felt'
 import { Shortcut } from './Shortcut'
 import { Ikon } from './ikon/Ikon'
 import { kategoriikon } from './ikon/register'
 import { useTips } from './Tips'
-import { stoffadresse } from '../domain/rute'
+import { STOFFREGISTERADRESSE, stoffadresse } from '../domain/rute'
 import { useFavoritter, type Favoritter } from '../favoritter/Favorittkilde'
 import type { Registerkategori, Registerstoff, Stoffregister } from '../domain/stoffregister'
 import { fokusIFagsok, lagLiggerOver } from '../hooks/useKeyboard'
@@ -25,8 +23,9 @@ import { useTrykkUtenfor } from '../hooks/useTrykkUtenfor'
  *
  * Innholdet er stoffregisteret, med stoffsidene i databasen som registeret
  * ikke kjenner, så lista ikke kan komme i utakt med det appen har sider for.
- * Stoffene er lenker, så de også kan åpnes i en ny fane. Redaktørene kan lage
- * en ny stoffside nederst.
+ * Stoffene er lenker, så de også kan åpnes i en ny fane. Nederst står lenken
+ * til helsiden (`#/stoffregister`), der registeret redigeres og nye fagsider
+ * lages; menyen selv redigeres ikke.
  *
  * Øverst, fast over lista, står brukerens favoritter i en egen skuff, lukket
  * til den åpnes. Den lukkes ikke av kategoriene, og de ikke av den.
@@ -70,16 +69,11 @@ function naabare(panel: HTMLElement | null): HTMLElement[] {
 }
 
 export interface SidemenyProps {
-  /** Stoffregisteret med stoffsidene i databasen (`byggStoffregister`). */
+  /** Stoffregisteret med fagsidene og inndelingen i databasen (`byggStoffregister`). */
   register: Stoffregister
-  /**
-   * Lager en ny stoffside med navnet og gir tilbake nøkkelen den fikk. Bare
-   * for dem som kan lage en; uten den står ikke feltet i menyen.
-   */
-  onOpprett?: (navn: string) => Promise<string>
 }
 
-export function Sidemeny({ register, onOpprett }: SidemenyProps) {
+export function Sidemeny({ register }: SidemenyProps) {
   const [apen, setApen] = useBevart('sidemeny', false)
   /** Av gjemmer underkategoriene og lister stoffene i hver kategori i én alfabetisk bolk. */
   const [visUnderkategorier, setVisUnderkategorier] = useState(true)
@@ -264,7 +258,11 @@ export function Sidemeny({ register, onOpprett }: SidemenyProps) {
           ))}
         </ul>
 
-        {onOpprett && <NyStoffside register={register} onOpprett={onOpprett} onApne={velg} />}
+        {/* Helsiden har hele registeret, med arkivet og redigeringen. Menyen holdes ryddig. */}
+        <a className="menyhelside" href={STOFFREGISTERADRESSE} onClick={velg}>
+          <Ikon navn="ext" storrelse="ui" />
+          Åpne hele stoffregisteret
+        </a>
       </nav>
     </>
   )
@@ -333,8 +331,10 @@ function Favorittskuff({
   onVeksle: () => void
   onVelg: () => void
 }) {
+  // En fagside i papirkurven står ikke her; hentes den tilbake, er den her igjen.
   const stoffer = favoritter.stoffer
-    .map((slug): Registerstoff => register.menystoff(slug) ?? { slug, navn: slug, koder: [] })
+    .filter((slug) => register.status(slug) !== 'papirkurv')
+    .map((slug): Registerstoff => register.menystoff(slug) ?? ukjentStoff(slug))
     .sort((a, b) => a.navn.localeCompare(b.navn, 'nb'))
 
   return (
@@ -373,6 +373,16 @@ function Favorittskuff({
     </Skuff>
   )
 }
+
+/** Et stoff registeret ikke kjenner (lenger), med nøkkelen som navn. */
+const ukjentStoff = (slug: string): Registerstoff => ({
+  slug,
+  navn: slug,
+  koder: [],
+  analytter: false,
+  side: false,
+  innhold: false,
+})
 
 /**
  * En skuff i menyen: tittelen som åpner skuffen, og innholdet.
@@ -432,64 +442,6 @@ function Skuff({
         <div className="menyskuff__inner">{children}</div>
       </div>
     </li>
-  )
-}
-
-/**
- * Feltet redaktørene lager en ny stoffside med. Finnes stoffet alt — etter
- * navnet eller et alias — åpnes siden det har. Ellers lages siden i databasen
- * med navnet og en nøkkel av det, og åpnes.
- */
-function NyStoffside({
-  register,
-  onOpprett,
-  onApne,
-}: {
-  register: Stoffregister
-  onOpprett: (navn: string) => Promise<string>
-  onApne: () => void
-}) {
-  const [navn, setNavn] = useState('')
-  const [lager, setLager] = useState(false)
-  const [feil, setFeil] = useState<string | null>(null)
-  const apne = (slug: string) => {
-    onApne()
-    setNavn('')
-    window.location.hash = stoffadresse(slug)
-  }
-  return (
-    <form
-      className="menyny"
-      onSubmit={async (e) => {
-        e.preventDefault()
-        const renset = navn.trim()
-        if (!renset || lager) return
-        const kjent = register.kanonisk(renset)
-        if (kjent) {
-          apne(kjent.slug)
-          return
-        }
-        setLager(true)
-        setFeil(null)
-        try {
-          apne(await onOpprett(renset))
-        } catch (feil) {
-          setFeil(feil instanceof Error ? feil.message : String(feil))
-        } finally {
-          setLager(false)
-        }
-      }}
-    >
-      <Felt merkelapp="Ny fagside" value={navn} maxLength={200} onChange={(e) => setNavn(e.target.value)} />
-      <Button type="submit" variant="kant" disabled={!navn.trim() || lager}>
-        {lager ? 'Lager …' : 'Åpne'}
-      </Button>
-      {feil && (
-        <p className="skjemafeil" role="alert">
-          {feil}
-        </p>
-      )}
-    </form>
   )
 }
 

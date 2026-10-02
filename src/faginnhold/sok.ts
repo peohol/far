@@ -478,6 +478,23 @@ export function lagSokeindeks(dokumenter: readonly Sokedokument[]): Sokeindeks {
   return { dokumenter, foldet, nokler, identitet }
 }
 
+/**
+ * Indeksen uten sidene `skjul` sier ja til — stoffene som er arkivert eller
+ * slettet. Den samme indeksen når ingen skjules, så søket ikke må regne om.
+ */
+export function utenSider<T extends Sokeindeks>(indeks: T, skjul: (stoff: string) => boolean): T {
+  const behold = indeks.dokumenter.map((d) => !skjul(sidenokkel(d.sted.side)))
+  if (behold.every(Boolean)) return indeks
+  const velg = <V,>(liste: readonly V[]) => liste.filter((_, i) => behold[i])
+  return {
+    ...indeks,
+    dokumenter: velg(indeks.dokumenter),
+    foldet: velg(indeks.foldet),
+    nokler: velg(indeks.nokler),
+    identitet: new Map([...indeks.identitet].filter(([side]) => !skjul(side))),
+  }
+}
+
 export interface Sokevalg {
   /** Flest treff. */
   maks?: number

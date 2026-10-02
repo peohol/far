@@ -40,6 +40,7 @@ vi.mock('../auth/klient', async () => {
   const { publiserteStoffrader } = await import('./hjelp/stoffreferanseomrader')
   const { rusScenarioregeldata } = await import('./hjelp/rusgrunnlag')
   const { thcRegelsettutgave } = await import('./hjelp/thcgrunnlag')
+  const { GRUNNSTRUKTUR } = await import('./hjelp/registerstruktur')
   // Ett stoff registeret ikke kjenner, har en publisert side i databasen.
   const teststoff = { id: 'stoff', slug: 'teststoff', navn: 'Teststoff' }
   const stoffside = {
@@ -64,7 +65,7 @@ vi.mock('../auth/klient', async () => {
     les_kommentarer: [...vanlige.les_kommentarer, ...thc.kommentarer],
     les_thc_regelsett: thc.regelsett,
     les_scenarioregler: rusScenarioregeldata(),
-    les_stoffliste: [teststoff],
+    les_stoffregister: { ...GRUNNSTRUKTUR, sider: [teststoff] },
   }
   return {
     klient: () => ({
@@ -173,7 +174,9 @@ describe('sidemenyen', () => {
     // Hver lenke i menyen går til en stoffside, aldri til en analyttkode.
     const adresser = [...meny.querySelectorAll('a[href]')].map((a) => a.getAttribute('href')!)
     expect(adresser.length).toBeGreaterThan(20)
-    expect(adresser.filter((a) => !/^#\/stoff\/[a-z0-9]+(-[a-z0-9]+)*$/.test(a))).toEqual([])
+    // Utenom den ene lenken til hele stoffregisteret.
+    expect(adresser.filter((a) => !/^#\/stoff\/[a-z0-9]+(-[a-z0-9]+)*$/.test(a))).toEqual(['#/stoffregister'])
+    expect(within(meny).getByRole('link', { name: 'Åpne hele stoffregisteret' })).toBeTruthy()
 
     await user.click(within(meny).getByRole('button', { name: /^Antidepressiver/ }))
     expect(within(meny).getByRole('heading', { name: 'TCA' })).toBeTruthy()
