@@ -18,7 +18,8 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { visTreff } from '../components/sok/treffvisning'
 import { analytterForStoff, stoffbeskrivelse } from '../domain/koblinger'
-import { STOFFREGISTER, stoffslug, type Registerdata } from '../domain/stoffregister'
+import { STOFFREGISTER, STOFFREGISTERDATA, byggStoffregister, stoffslug, type Registerdata } from '../domain/stoffregister'
+import { GRUNNSTRUKTUR } from './hjelp/registerstruktur'
 import { byggSidemodell, publiseringsplan } from '../faginnhold/stoffside'
 import {
   MAKS_INTERAKSJONSNOKLER,
@@ -342,6 +343,8 @@ describe('søket i kunnskapsbasen', () => {
 /* --- Fagsøkets akseptansekrav, mot hele stoffregisteret --------------------- */
 
 describe('hvert treff er et stoff, og analytten er sekundær kontekst', () => {
+  /** Registeret med kategoriene, som i appen når inndelingen er hentet. */
+  const MED_INNDELING = byggStoffregister([], STOFFREGISTERDATA, GRUNNSTRUKTUR)
   let indeks: Sokeindeks
   beforeAll(() => {
     // Som i databasen før migrasjonen: en gammel komponentside ved siden av stoffsiden.
@@ -358,7 +361,7 @@ describe('hvert treff er et stoff, og analytten er sekundær kontekst', () => {
   function forste(sporring: string) {
     const [treff] = sokGlobalt(indeks, sporring)
     expect(treff, sporring).toBeDefined()
-    return { treff: treff!, visning: visTreff(treff!, sokeord(sporring), (stoff) => stoffbeskrivelse(stoff)) }
+    return { treff: treff!, visning: visTreff(treff!, sokeord(sporring), (stoff) => stoffbeskrivelse(stoff, MED_INNDELING)) }
   }
 
   it.each(['bupropion', 'hydroksybupropion', 'HBUP'])('«%s» gir stoffet Bupropion på #/stoff/bupropion', (sporring) => {
@@ -370,7 +373,7 @@ describe('hvert treff er et stoff, og analytten er sekundær kontekst', () => {
     expect(visning.sti[0]).toContain('analytt HBUP · hydroksybupropion (kun aktiv metabolitt)')
 
     for (const t of sokGlobalt(indeks, sporring)) {
-      const vist = visTreff(t, sokeord(sporring), (stoff) => stoffbeskrivelse(stoff))
+      const vist = visTreff(t, sokeord(sporring), (stoff) => stoffbeskrivelse(stoff, MED_INNDELING))
       expect(vist.tittel.tekst).not.toBe('Hydroksybupropion')
       expect(vist.adresse).not.toMatch(/HBUP/i)
       expect(vist.adresse).not.toMatch(/hydroksybupropion/i)
@@ -421,7 +424,7 @@ describe('hvert treff er et stoff, og analytten er sekundær kontekst', () => {
     const { treff, visning } = forste('kvetiapin')
     expect(treff.dokument).toMatchObject({ felt: 'navn', sted: { side: { stoff: 'kvetiapin', navn: 'Kvetiapin' } } })
     expect(visning.adresse).toBe('#/stoff/kvetiapin')
-    expect(visning.sti).toEqual([stoffbeskrivelse('kvetiapin')])
+    expect(visning.sti).toEqual([stoffbeskrivelse('kvetiapin', MED_INNDELING)])
   })
 
   it('indekserer innholdet på stoffsiden, men ikke på siden med et alias som nøkkel', () => {
@@ -442,7 +445,7 @@ function register(
   stoffer: Registerdata['stoffer'],
   analyttkoblinger: Registerdata['analyttkoblinger'] = [],
 ): Registerdata {
-  return { stoffer, analyttkoblinger, kategorier: [] }
+  return { stoffer, analyttkoblinger }
 }
 
 const utenTillegg = (sider: Stoffsidedata[]) => ({ sider, legemidler: null, interaksjoner: null })

@@ -1,31 +1,34 @@
 import { useEffect, useRef, type RefObject } from 'react'
 import { flushSync } from 'react-dom'
 import type { SortableBoard } from '@peohol/smett'
+import '../styles/sortering.css'
 
 /** En flytting brukeren har gjort ved å dra, med mus, finger eller tastatur. */
 export interface Flytting {
   /** `data-dnd-id` på det som ble flyttet. */
   id: string
-  /** `data-slag`: `kategori` eller `traad`. */
+  /** `data-slag`: hva det er, som `kategori` eller `traad`. */
   slag: string
   /** `data-dnd-container` på lista det havnet i. */
   til: string
   indeks: number
 }
 
-/** Merket på det som kan dras: kategoriene og trådene, og listene de står i. */
+/** Merket på det som kan dras, og listene det står i. */
 const ELEMENT = '[data-dnd-id]'
 const LISTE = '[data-dnd-container]'
 /** Håndtaket en drag begynner fra med mus og finger. Tastaturet løfter hele raden. */
 export const HANDTAK = '.draghandtak'
 
 /**
- * Dra-og-slipp i diskusjonsmenyen, med Smett (`@peohol/smett`) over dnd-kit:
- * loddrett, for kategoriene og trådene, og for tråder mellom kategoriene.
+ * Dra-og-slipp i lister, med Smett (`@peohol/smett`) over dnd-kit: loddrett,
+ * innenfor en liste og mellom lister. Diskusjonsmenyen sorterer kategoriene og
+ * trådene med den, og helsiden for stoffregisteret kategoriene og stoffene.
  *
  * Hvilke lister som tar imot hva, står i markeringen: `data-slag` på det som
  * dras og `data-tar` på lista. En liste uten `data-tar` tar ikke imot noe,
- * men det som står i den, kan dras ut — slik «Ukategoriserte» er.
+ * men det som står i den, kan dras ut — slik «Ukategoriserte» i
+ * diskusjonsmenyen er.
  *
  * React eier rekkefølgen i DOM-en. Smett flytter elementene mens man drar, og
  * står igjen med den nye rekkefølgen når man slipper; før React tegner den
@@ -35,8 +38,9 @@ export const HANDTAK = '.draghandtak'
  * til da holder dnd-kit en plassholder ved siden av raden og setter raden inn
  * igjen der når animasjonen er over — også en rad React har tatt bort.
  *
- * Menyen står fast over siden, så å rulle siden bak den flytter ingenting i
- * lista. Rullingen når man drar mot kanten, holdes derfor inne i menyen.
+ * Diskusjonsmenyen står fast over siden, så å rulle siden bak den flytter
+ * ingenting i lista. Rullingen når man drar mot kanten, holdes derfor inne i
+ * den (`rullInne`). En liste på selve siden lar siden rulle.
  *
  * Biblioteket hentes først når lista vises, så det ikke tynger appen ellers.
  * Kan det ikke tas i bruk (en nettleser uten det dnd-kit trenger), står lista
@@ -47,6 +51,7 @@ export function useSortering(
   onFlytt: (flytting: Flytting) => void,
   navnPaaListe: (liste: string) => string,
   aktiv = true,
+  { rullInne = true }: { rullInne?: boolean } = {},
 ): void {
   const siste = useRef({ onFlytt, navnPaaListe })
   siste.current = { onFlytt, navnPaaListe }
@@ -112,7 +117,7 @@ export function useSortering(
         })
         // Tegnes bare loddrett. Hvor elementet havner, avgjøres fortsatt av pekeren.
         brett.manager.registry.modifiers.register(RestrictToVerticalAxis.plugin, RestrictToVerticalAxis.options)
-        holdRullingenInne(brett.manager.registry.plugins.get(Scroller))
+        if (rullInne) holdRullingenInne(brett.manager.registry.plugins.get(Scroller))
         stopp = brett.manager.monitor.addEventListener('dragstart', () => {
           rekkefolge = snapshotOrder(lister())
         })
@@ -124,7 +129,7 @@ export function useSortering(
       stopp?.()
       brett?.destroy()
     }
-  }, [rot, aktiv])
+  }, [rot, aktiv, rullInne])
 }
 
 /**

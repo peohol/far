@@ -11,7 +11,8 @@ de berører ikke den kliniske delen.
 | `supabase/migrations/*_diskusjoner.sql` | Tabellene, radsikkerheten, rekkefølgen, funksjonene appen kaller, og varslene |
 | `src/diskusjoner/modell.ts` | Sidene, lesingen av svarene, grupperingen, flyttingene, reglene for navn og emoji, og søket (rene funksjoner) |
 | `src/diskusjoner/api.ts` | Kallene mot Supabase, om menyen holdes åpen og hvor bred den er (`diskusjoner.laast` og `diskusjoner.bredde` i brukerinnstillingene) |
-| `src/components/diskusjoner/` | Menyen (`Diskusjonsmeny`), lista (`Diskusjonsoversikt`), én tråd (`Diskusjonsside`), skjemaene og dra-og-slipp (`useSortering`) |
+| `src/components/diskusjoner/` | Menyen (`Diskusjonsmeny`), lista (`Diskusjonsoversikt`), én tråd (`Diskusjonsside`) og skjemaene |
+| `src/hooks/useSortering.ts`, `src/styles/sortering.css` | Dra-og-slipp, felles med redigeringen av stoffregisteret |
 | `src/traad/modell.ts`, `src/components/traad/` | Kommentartråden, felles med idéene |
 | `src/styles/diskusjoner.css`, `src/styles/traad.css` | Utseendet |
 
@@ -20,8 +21,9 @@ teksten) står i `docs/direktelenker.md`.
 
 ## Sidene
 
-En side er en nøkkel: `stoff:<stoffets nøkkel>` for en fagside og
-`fortolkning:<analyttens nøkkel>` for fortolkningen av én analytt
+En side er en nøkkel: `stoff:<stoffets nøkkel>` for en fagside,
+`fortolkning:<analyttens nøkkel>` for fortolkningen av én analytt og
+`register:stoffregister` for helsiden for stoffregisteret
 (`diskusjonssideFor`). Forsiden, søket og fortolkningen uten valgt analytt har
 ingen diskusjoner. Fortolkningen av en analytt har sin egen adresse,
 `#/fortolkning/<nøkkel>`, så et varsel kan lenke dit. Får en fagside ny nøkkel,

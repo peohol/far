@@ -17,6 +17,9 @@ import { SeksjonsstyringKilde, skuffnokkel, useSeksjonsstyring } from '../seksjo
 import { Sidereferanser } from '../referanser/Sidereferanser'
 import { useFaginnholdskilde } from './Faginnholdskilde'
 import { useFavoritter } from '../../favoritter/Favorittkilde'
+import { useStoffregisterkilde } from '../../stoffregister/Stoffregisterkilde'
+import { Fagsidebanner, Fagsidemeny } from '../stoffregister/Fagsidestatus'
+import { Registerhandlingskilde } from '../stoffregister/Registerhandling'
 import { Identitetspanel } from './Identitetspanel'
 import { finnKobling, Preparatpanel, preparatsoketekster } from './Preparatpanel'
 import { useLegemidler } from './useLegemidler'
@@ -99,7 +102,9 @@ export function Stoffside(props: StoffsideProps) {
   return (
     <Bevaringsomrade navn={`stoff:${props.stoff}`}>
       <SeksjonsstyringKilde key={props.stoff} bevares>
-        <Innhold {...props} />
+        <Registerhandlingskilde>
+          <Innhold {...props} />
+        </Registerhandlingskilde>
       </SeksjonsstyringKilde>
     </Bevaringsomrade>
   )
@@ -125,6 +130,7 @@ function Ikkefunnet({ onLukk, children }: { onLukk: () => void; children: ReactN
 function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLukk }: StoffsideProps) {
   const { kanRedigere } = useFaginnholdskilde()
   const favoritter = useFavoritter()
+  const registerkilde = useStoffregisterkilde()
   const [modus, setModus] = useBevart<Sidemodus>('modus', 'lese')
   const [sporring, setSporring] = useBevart('sok', '')
   const beholder = useRef<HTMLElement>(null)
@@ -244,6 +250,10 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
   if (side.status === 'klar' && !finnes) {
     return <Ikkefunnet onLukk={onLukk}>Fant ingen fagside for «{slug}»</Ikkefunnet>
   }
+  // Papirkurven ser bare administratorene.
+  if (register.status(slug) === 'papirkurv' && !registerkilde?.admin) {
+    return <Ikkefunnet onLukk={onLukk}>Fagsiden er slettet</Ikkefunnet>
+  }
 
   return (
     <section ref={beholder} className="stoffside" aria-labelledby={overskrift} data-modus={modus}>
@@ -277,6 +287,7 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
             {kanRedigere && (
               <Ikonknapp ikon="edit" etikett="Rediger" aria-pressed="false" onClick={() => setModus('rediger')} />
             )}
+            {finnes && <Fagsidemeny slug={slug} />}
             <Lukkeknapp onLukk={onLukk} />
           </>
         )}
@@ -293,6 +304,7 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
         />
       </ToppmenyInnhold>
 
+      <Fagsidebanner slug={slug} />
       {modus === 'rediger' && redigerer && !side.data.infoside && (
         <p className="redigeringsstripe">Siden opprettes i databasen første gang du lagrer noe på den.</p>
       )}
@@ -335,6 +347,7 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
                         kategorier={kategorier}
                         overskriftId={overskrift}
                         onApneFortolkning={apneFortolkningFor}
+                        kontekst={kontekst}
                       />
                     )
                   case 'legemidler':

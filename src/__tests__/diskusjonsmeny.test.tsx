@@ -443,7 +443,7 @@ describe('én tråd', () => {
     const skjema = within(panel()).getByRole('form', { name: 'Flytt tråden' })
     const sidevalg = within(skjema).getByRole('combobox', { name: 'Side' }) as HTMLSelectElement
     // Siden tråden står på, er ikke blant valgene.
-    expect([...sidevalg.options].map((o) => o.value)).toEqual(['', 'stoff:valproat', 'fortolkning:li'])
+    expect([...sidevalg.options].map((o) => o.value)).toEqual(['', 'stoff:valproat', 'fortolkning:li', 'register:stoffregister'])
     expect(within(skjema).getByRole('button', { name: 'Flytt' })).toHaveProperty('disabled', true)
 
     await bruker.selectOptions(sidevalg, 'Valproat')

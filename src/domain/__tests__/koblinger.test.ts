@@ -11,7 +11,8 @@ import {
   stoffbeskrivelse,
   stofferForFortolkning,
 } from '../koblinger'
-import { STOFFREGISTER, byggStoffregister, type Registerdata } from '../stoffregister'
+import { GRUNNSTRUKTUR } from '../../__tests__/hjelp/registerstruktur'
+import { STOFFREGISTER, STOFFREGISTERDATA, byggStoffregister, type Registerdata } from '../stoffregister'
 
 /**
  * Koblingene mellom stoffene (fagsidene) og laboratorieanalyttene
@@ -98,7 +99,6 @@ describe('koblingene fra en datafil', () => {
       { kode: 'AMTNORSUM', stoff: 'annet', relasjon: 'sumanalyse' },
       { kode: 'AMTNORSUM', stoff: 'moderstoff', relasjon: 'sumanalyse', primar: false },
     ],
-    kategorier: [{ navn: 'K', stoffer: ['moderstoff', 'annet', 'uten'] }],
   }
   const register = byggStoffregister([], data)
 
@@ -166,11 +166,15 @@ describe('veiene mellom fortolkningen og stoffsidene', () => {
   })
 
   it('beskriver stoffet i søketreffene med kategorien og analyttene som sekundær informasjon', () => {
-    expect(stoffbeskrivelse('bupropion')).toBe('Antidepressiver › NDRI · analytt HBUP · hydroksybupropion (kun aktiv metabolitt)')
-    expect(stoffbeskrivelse('sertralin')).toBe('Antidepressiver › SSRI · analytt SERT')
-    expect(stoffbeskrivelse('litium')).toBe('Stemningsstabiliserende')
+    const register = byggStoffregister([], STOFFREGISTERDATA, GRUNNSTRUKTUR)
+    const beskriv = (slug: string) => stoffbeskrivelse(slug, register)
+    expect(beskriv('bupropion')).toBe('Antidepressiver › NDRI · analytt HBUP · hydroksybupropion (kun aktiv metabolitt)')
+    expect(beskriv('sertralin')).toBe('Antidepressiver › SSRI · analytt SERT')
+    expect(beskriv('litium')).toBe('Stemningsstabiliserende')
     // Forkortelser med blandet skrift står som de er, midt i linja.
-    expect(stoffbeskrivelse('etanol')).toContain('analytt UETGS · EtG')
+    expect(beskriv('etanol')).toContain('analytt UETGS · EtG')
+    // Før inndelingen er hentet, er det bare analyttene.
+    expect(stoffbeskrivelse('sertralin')).toBe('analytt SERT')
   })
 })
 

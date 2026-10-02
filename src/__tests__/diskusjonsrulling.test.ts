@@ -5,7 +5,7 @@
  * prøves ikke her (se `useSortering`).
  */
 import { describe, expect, it } from 'vitest'
-import { holdRullingenInne } from '../components/diskusjoner/useSortering'
+import { holdRullingenInne } from '../hooks/useSortering'
 
 describe('rullingen i menyen', () => {
   it('ruller menyens egne flater, men aldri siden', () => {

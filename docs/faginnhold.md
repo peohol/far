@@ -50,7 +50,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/legemiddeldata/stoffside.ts` | Hvor preparatene og interaksjonene står på siden, og tekstene søket finner der |
 | `src/faginnhold/historikk.ts`, `innholdsfelter.ts` | Historikken: tidslinjen, sammenligningen felt for felt og ord for ord, og feltene hver objekttype deles i |
 | `src/components/historikk/` | Historikkvinduet og «Sist redigert», som åpner det |
-| `src/data/stoffregister.json`, `src/domain/stoffregister.ts` | Stoffregisteret: stoffene med nøkkel, navn og aliaser, koblingene til laboratorieanalyttene og kategoriene |
+| `src/data/stoffregister.json`, `src/domain/stoffregister.ts` | Stoffregisteret: stoffene med nøkkel, navn og aliaser og koblingene til laboratorieanalyttene. Kategoriene står i databasen (`docs/stoffregister.md`) |
 | `src/domain/analyttkatalog.ts` | Laboratorieanalyttene fortolkningen kjenner |
 | `src/domain/koblinger.ts` | Veiene mellom stoffene og analyttene, bare gjennom koblingene |
 | `src/domain/rute.ts` | Adressene, `#/stoff/<nøkkel>`, og videresendingen av de gamle |
@@ -388,11 +388,11 @@ sin egen adresse, `#/fortolkning/<nøkkel>` (`fortolkningsnokkel`), så den kan
 ha diskusjoner (`docs/diskusjoner.md`).
 
 **Stoffregisteret** i sidemenyen er datafilen, med navnene sidene har i
-databasen (`les_stoffliste`) og sidene registeret ikke kjenner, som havner i
-«Andre stoffer» til de føres inn. Hvert stoff lenker til `#/stoff/<nøkkel>`,
-med kodene det primært er koblet til som sekundær tekst. Redaktørene kan lage
-en ny fagside nederst i menyen: finnes stoffet alt, etter navn eller alias,
-åpnes det; ellers lages siden med navnet og en nøkkel av det.
+databasen og inndelingen i kategorier derfra (`les_stoffregister`); sidene som
+ikke er plassert, står i «Andre stoffer». Hvert stoff lenker til
+`#/stoff/<nøkkel>`, med kodene det primært er koblet til som sekundær tekst.
+Helsiden, redigeringen, arkivet og papirkurven står i `docs/stoffregister.md`;
+nye fagsider lages der.
 
 **Nøkkelen** (`infosider.slug`) er unik og URL-vennlig (små bokstaver a–z, tall
 og enkle bindestreker; `stoffslug` i `src/domain/stoffregister.ts` og
@@ -436,7 +436,7 @@ styrer søket og nummereringen av referansene):
 
 | Panel | Nøkkel | Elementer |
 | --- | --- | --- |
-| Identitet | `identitet` | Ingen; navnet, kategoriene og de koblede analyttene kommer fra siden og stoffregisteret |
+| Identitet | `identitet` | `riktekst`: `{ dokument }` — den korte oppsummeringen av stoffet, som også står i kortet på helsiden for stoffregisteret. Navnet, kategoriene og de koblede analyttene kommer fra siden og stoffregisteret |
 | Viktige data | `viktige_data` | Ett kort per type og kode (`gjelder`, se «Sammenslåtte sider») — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk). Konsentrasjonene har `{ nedre, ovre, enhet }`; t½ og tss har `{ former: [{ stoff?, form, typisk, min, maks, enhet }] }`, én rad per legemiddelform eller stoff |
 | Farmakodynamikk | `farmakodynamikk` | `mekanismekort`: `{ maal, mekanisme, dokument? }`, i rekkefølge, som regel ett per målprotein eller mekanisme (se «Farmakodynamikken som mekanismekort»). En `riktekst` fra en senere import vises under kortene |
 | Indikasjon | `indikasjon` | `riktekst`: `{ dokument }` |

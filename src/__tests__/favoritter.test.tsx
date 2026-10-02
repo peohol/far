@@ -40,7 +40,7 @@ vi.mock('../auth/klient', async () => {
     les_kommentarer: [...vanlige.les_kommentarer, ...thc.kommentarer],
     les_thc_regelsett: thc.regelsett,
     les_scenarioregler: rusScenarioregeldata(),
-    les_stoffliste: [],
+    les_stoffregister: { kategorier: [], plasseringer: [], status: [], sider: [] },
   }
   return {
     klient: () => ({

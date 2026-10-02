@@ -3,6 +3,7 @@ import { useBevart } from '../../oppdatering/Bevaring'
 import { tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { endreKategori, flyttDiskusjonTilSide, hentDiskusjoner, opprettDiskusjon, opprettKategori, type Kategorivalg } from '../../diskusjoner/api'
 import {
+  ANDRE_DISKUSJONSSIDER,
   KATEGORINAVN_MEST,
   emojiFeil,
   grupper,
@@ -10,6 +11,7 @@ import {
   type Diskusjonskategori,
   type Diskusjonsside,
   type Diskusjonssider,
+  type Sidevalg,
 } from '../../diskusjoner/modell'
 import { TITTEL_MEST, tekstTilLagring } from '../../traad/modell'
 import { Rikteksteditor } from '../stoffside/Rikteksteditor'
@@ -366,7 +368,7 @@ export function Flytteskjema({
     }
   }
 
-  const gruppe = (etikett: string, valg: Diskusjonssider['fagsider']) => {
+  const gruppe = (etikett: string, valg: readonly Sidevalg[]) => {
     const andre = valg.filter((v) => v.side !== side)
     return (
       andre.length > 0 && (
@@ -394,6 +396,7 @@ export function Flytteskjema({
           </option>
           {gruppe('Fagsider', sider.fagsider)}
           {gruppe('Fortolkning', sider.fortolkninger)}
+          {gruppe('Andre sider', ANDRE_DISKUSJONSSIDER)}
         </select>
       </div>
       {til && !hentet && !feil && <p className="felt__hjelp">Henter kategoriene …</p>}

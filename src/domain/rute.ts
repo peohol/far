@@ -45,6 +45,10 @@ import { STOFFREGISTER, stoffslug, type Stoffregister } from './stoffregister'
  * bokmerkes og deles:
  *
  *   #/sok?q=kvetiapin
+ *
+ * Stoffregisteret har en helside, der det også redigeres:
+ *
+ *   #/stoffregister
  */
 
 export type Rute =
@@ -65,6 +69,7 @@ export type Rute =
       /** Søket, slik det ble skrevet. Tomt gir en side som ber om et søk. */
       q: string
     }
+  | { side: 'stoffregister' }
 
 export const FORTOLKNING: Rute = { side: 'fortolkning' }
 
@@ -96,11 +101,17 @@ const GAMMEL_ANALYTT = /^#\/analytt\/([^/?#]+)((?:\/[^/?#]+)*)\/?$/i
 
 const SOK = /^#\/sok\/?(?:\?(.*))?$/i
 
+const STOFFREGISTERSIDE = /^#\/stoffregister\/?$/i
+
+/** Adressen til helsiden for stoffregisteret. */
+export const STOFFREGISTERADRESSE = '#/stoffregister'
+
 /** Flest ledd i stedet: seksjonen og detaljkortet. */
 const MAKS_STEDSLEDD = 2
 
 /**
- * Ruten adressen peker på. Alt som ikke er en fagside eller søket, er
+ * Ruten adressen peker på. Alt som ikke er en fagside, søket eller
+ * stoffregisteret, er
  * fortolkningen. Et navn, et alias eller en gammel analyttadresse gir ruten til
  * stoffet de fører til; {@link kanoniskAdresse} sier om adressefeltet bør
  * skrives om.
@@ -108,6 +119,7 @@ const MAKS_STEDSLEDD = 2
 export function lesRute(hash: string, register: Stoffregister = STOFFREGISTER): Rute {
   const sok = SOK.exec(hash)
   if (sok) return { side: 'sok', q: new URLSearchParams(sok[1] ?? '').get('q') ?? '' }
+  if (STOFFREGISTERSIDE.test(hash)) return { side: 'stoffregister' }
   const fortolkning = FORTOLKNINGSSIDE.exec(hash)
   if (fortolkning?.[1]) return { side: 'fortolkning', analytt: fortolkning[1].toLowerCase() }
   const stoff = lesSide(STOFF, hash)
@@ -187,6 +199,8 @@ export function adresse(rute: Rute): string {
       return stoffadresse(rute.stoff, rute.sted)
     case 'sok':
       return sokeside(rute.q)
+    case 'stoffregister':
+      return STOFFREGISTERADRESSE
     default:
       return rute.analytt ? `#/fortolkning/${rute.analytt}` : '#/'
   }
