@@ -16,6 +16,9 @@ OUSFAR, med hjerter og kommentartråder; de berører ikke den kliniske delen.
 | `src/styles/ideer.css`, `src/styles/traad.css` | Utseendet |
 | `.claude/skills/utfor-oppgaver/` | Hvordan Claude utfører oppgavene og merker dem utført |
 
+Lenkene til en tråd, en idé eller en kommentar («Kopier lenke» og brikkene i
+teksten) står i `docs/direktelenker.md`.
+
 Idéer og Planlagte oppgaver åpnes fra idémenyen i toppmenyen (`Ideknapp`, en
 `Nedtrekksmeny` med ett valg for hvert), og hvert av lagene har en knapp øverst
 til det andre. Begge bruker `Modallag`, med `tilbake` i hodet på sidene inni.
@@ -137,4 +140,5 @@ lesing og skriving går gjennom `auth/innstillinger.ts`.
 
 Beskrivelsen og kommentarene bruker den samme editoren som stoffsidene,
 med `referanser={false}`: verktøyraden har ikke referanseknappen, og
-siteringer fjernes når teksten leses (`rensIdetekst`).
+siteringer fjernes når teksten leses (`rensIdetekst`). Den har knappen «Direktelenke» (`direktelenker`), som
+diskusjonene.

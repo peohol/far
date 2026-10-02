@@ -35,6 +35,7 @@ import { Ikon } from '../ikon/Ikon'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
 import { Forfatterkilde } from '../traad/Forfatterkontekst'
+import type { Fremheving } from '../traad/Kommentartraad'
 import { Diskusjonsoversikt, Traadknapp } from './Diskusjonsoversikt'
 import { Diskusjonsside as Traadside } from './Diskusjonsside'
 import { Kategoriskjema, Traadskjema } from './Skjemaer'
@@ -281,6 +282,8 @@ function Diskusjonsflate({
   const [sok, setSok] = useBevart('sok', '')
   const [tekster, setTekster] = useState<Diskusjonstekster[] | null>(null)
   const [profiler, setProfiler] = useState<Profil[]>([])
+  /** Kommentaren en direktelenke førte til, i tråden som står åpen. */
+  const [fremhev, setFremhev] = useState<Fremheving | null>(null)
   const kropp = useRef<HTMLDivElement>(null)
   const sokId = useId()
 
@@ -309,12 +312,14 @@ function Diskusjonsflate({
     void hentDiskusjonstekster(side).then(setTekster, () => setTekster([]))
   }, [soker, side, oversikt])
 
-  // En tråd et varsel ba om, åpnes når menyen for siden står.
+  // En tråd et varsel eller en direktelenke ba om, åpnes når menyen for siden står.
   useEffect(() => {
     const apneVenter = () => {
-      const id = taDiskusjon(side)
-      if (!id) return
-      setVisning({ side: 'traad', id })
+      const venter = taDiskusjon(side)
+      if (!venter) return
+      setVisning({ side: 'traad', id: venter.diskusjon })
+      setFremhev(venter.kommentar ? { kommentar: venter.kommentar, nr: Date.now() } : null)
+      if (!venter.kommentar) kropp.current?.scrollTo({ top: 0 })
       onVarslet()
     }
     apneVenter()
@@ -334,10 +339,12 @@ function Diskusjonsflate({
 
   const tilListe = () => {
     setVisning(LISTE)
+    setFremhev(null)
     void hent()
   }
   const apneTraad = (id: string) => {
     setVisning({ side: 'traad', id })
+    setFremhev(null)
     kropp.current?.scrollTo({ top: 0 })
   }
 
@@ -397,6 +404,7 @@ function Diskusjonsflate({
           window.location.hash = adresseForSide(til)
         }}
         onSlettet={tilListe}
+        fremhev={fremhev}
       />
     )
   } else if (visning.side === 'ny-traad') {

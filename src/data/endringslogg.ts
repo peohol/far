@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.73.0',
+    dato: '2026-10-02',
+    sammendrag: 'Lenker rett til en diskusjon, en idé eller en kommentar',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Hver diskusjonstråd, hver idé og hver kommentar har en knapp, «Kopier lenke», som kopierer en lenke rett dit. Lenken kan limes inn i nettleseren, eller sendes til en kollega.',
+      'Åpner du en slik lenke, kommer du til riktig side med tråden eller idéen åpen. Peker den på en kommentar, rulles den frem og utheves en liten stund, også når den står under et svar som var lukket.',
+      'Verktøyraden i diskusjonene og idéene har en ny knapp, «Direktelenke». Lim inn en kopiert lenke, så ser du hva den peker på før du setter den inn. Bare lenker til en diskusjon, en idé eller en kommentar som finnes, godtas.',
+      'I teksten står lenken som en brikke med siden, emojien og overskriften på tråden (og hvem kommentaren er fra). Hold pekeren over den for å se en forhåndsvisning, og klikk for å gå dit.',
+      'En lenke til noe som er slettet, står overstreket.',
+    ],
+  },
+  {
     versjon: '1.72.0',
     dato: '2026-10-01',
     sammendrag: 'Diskusjonsmenyen kan gjøres bredere, og fortolkningen får meny nederst på mobil',

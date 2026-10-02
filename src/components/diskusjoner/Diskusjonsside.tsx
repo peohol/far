@@ -29,7 +29,8 @@ import { Rikteksteditor } from '../stoffside/Rikteksteditor'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Forfatterbilde, useForfatternavn, useForfatterkontekst } from '../traad/Forfatterkontekst'
-import { Kommentartraad, type Kommentarkanal } from '../traad/Kommentartraad'
+import { Kommentartraad, type Fremheving, type Kommentarkanal } from '../traad/Kommentartraad'
+import { Kopilenkeknapp } from '../direktelenker/Kopilenkeknapp'
 import { Bekreftknapp, Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from '../traad/Smadeler'
 import { Flytteskjema } from './Skjemaer'
 
@@ -68,6 +69,7 @@ export function Diskusjonsside({
   onFlytt,
   onFlyttetTilSide,
   onSlettet,
+  fremhev = null,
 }: {
   id: string
   /** Siden tråden står på. */
@@ -87,6 +89,8 @@ export function Diskusjonsside({
   onFlyttetTilSide: (til: Side) => void
   /** Tråden er slettet. */
   onSlettet: () => void
+  /** Kommentaren en direktelenke førte til. */
+  fremhev?: Fremheving | null
 }) {
   const { meg, admin } = useForfatterkontekst()
   const [traad, setTraad] = useState<Diskusjonstraad | null>(null)
@@ -131,6 +135,7 @@ export function Diskusjonsside({
 
   const kanal = useMemo<Kommentarkanal>(
     () => ({
+      slag: 'diskusjon',
       traad: id,
       opprett: (forelder, tekst) => opprettKommentar(id, forelder, tekst),
       endre: (kommentar, tekst) => endreKommentar(kommentar, tekst),
@@ -276,6 +281,7 @@ export function Diskusjonsside({
             Rediger innlegget
           </Idehandling>
         )}
+        <Kopilenkeknapp mal={{ slag: 'diskusjon', id: traad.id, kommentar: null }} hva="tråden" />
         {!arkivert && (
           <Bekreftknapp
             ikon="arkiv"
@@ -360,6 +366,7 @@ export function Diskusjonsside({
         onEndret={() => Promise.all([hent(), onEndret()])}
         onHjerte={veksleHjerte}
         laast={arkivert}
+        fremhev={fremhev}
       />
     </article>
   )
@@ -430,7 +437,7 @@ function Tekstskjema({
   const [tekst, setTekst] = useBevart<Riktekstdokument>(`traad:${id}/tekst`, () => start ?? tomtDokument())
   return (
     <div className="kommentarskriver">
-      <Rikteksteditor dokument={tekst} onEndre={setTekst} etikett="Innlegget" referanser={false} autofokus kompakt />
+      <Rikteksteditor dokument={tekst} onEndre={setTekst} etikett="Innlegget" referanser={false} direktelenker autofokus kompakt />
       <div className="skjema__knapper kommentarskriver__knapper">
         <Button variant="subtle" onClick={onAvbryt}>
           Avbryt

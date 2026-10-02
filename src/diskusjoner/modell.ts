@@ -83,6 +83,17 @@ export function diskusjonssider(
   }
 }
 
+/**
+ * Navnet på en side, slik brukerne kjenner den. En side lista ikke har (en
+ * fagside som er ny siden lista ble laget), får nøkkelen sin.
+ */
+export function navnPaaSide(sider: Diskusjonssider, side: Diskusjonsside): string {
+  const funnet = [...sider.fagsider, ...sider.fortolkninger].find((s) => s.side === side)
+  if (funnet) return funnet.navn
+  const [, type, nokkel = side] = SIDE.exec(side) ?? []
+  return type === 'fortolkning' ? fortolkningssidenavn({ kode: nokkel.toUpperCase() }) : nokkel
+}
+
 /* --- Formen dataene har ------------------------------------------------------ */
 
 export interface Diskusjonskategori {

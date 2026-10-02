@@ -1,8 +1,10 @@
-import { useId, useMemo, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useBevart } from '../../oppdatering/Bevaring'
+import type { Lenkeslag } from '../../direktelenker/mal'
 import { tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
 import { byggTraad, erNyKommentar, tekstTilLagring, type Kommentar, type Kommentarnode } from '../../traad/modell'
 import { useSkjuling } from '../../hooks/useSkjuling'
+import { Kopilenkeknapp } from '../direktelenker/Kopilenkeknapp'
 import { UnderOverskrift } from '../Overskriftsniva'
 import { Riktekst } from '../stoffside/Riktekst'
 import { Rikteksteditor } from '../stoffside/Rikteksteditor'
@@ -18,7 +20,9 @@ import '../../styles/traad.css'
  * tilby.
  */
 export interface Kommentarkanal {
-  /** Tråden, til navnene det som skrives, tas vare på under (`useBevart`). */
+  /** Hva tråden hører til, til direktelenkene: en idé eller en diskusjon. */
+  slag: Lenkeslag
+  /** Tråden (idéen eller diskusjonen), til direktelenkene og navnene det som skrives, tas vare på under (`useBevart`). */
   traad: string
   opprett: (forelder: string | null, tekst: Riktekstdokument) => Promise<void>
   endre: (kommentar: string, tekst: Riktekstdokument) => Promise<void>
@@ -30,6 +34,15 @@ export interface Kommentarkanal {
   skjul?: (kommentar: string) => Promise<void>
 }
 
+/** En kommentar som skal vises, fra en direktelenke. `nr` er ny for hver gang, også til samme kommentar. */
+export interface Fremheving {
+  kommentar: string
+  nr: number
+}
+
+/** Hvor lenge kommentaren en lenke førte til, står uthevet. */
+export const UTHEVET_I = 2400
+
 /**
  * Kommentartråden under en idé eller i en diskusjon, med svar i svar som på
  * Reddit: hvert nivå rykker inn, og en loddrett linje viser hvilken kommentar
@@ -39,6 +52,10 @@ export interface Kommentarkanal {
  *
  * En frosset tråd (en arkivert eller overført idé, en arkivert diskusjon) kan
  * leses, men ingen kan kommentere, svare, endre, slette eller gi hjerter.
+ *
+ * Hver kommentar har «Kopier lenke». En lenke til en kommentar åpner tråden
+ * med `fremhev`: kommentaren og de den svarer på foldes ut, og den rulles
+ * fram, får fokus og står uthevet en liten stund.
  */
 export function Kommentartraad({
   kanal,
@@ -47,6 +64,7 @@ export function Kommentartraad({
   onEndret,
   onHjerte,
   laast = false,
+  fremhev = null,
 }: {
   kanal: Kommentarkanal
   kommentarer: readonly Kommentar[]
@@ -56,15 +74,47 @@ export function Kommentartraad({
   onEndret: () => Promise<unknown>
   onHjerte: (kommentar: Kommentar) => void
   laast?: boolean
+  /** Kommentaren en direktelenke førte til. */
+  fremhev?: Fremheving | null
 }) {
   const { meg } = useForfatterkontekst()
   const erNy = (kommentar: Kommentar) => erNyKommentar(kommentar, sistSett, meg.id)
   const noder = useMemo(() => byggTraad(kommentarer), [kommentarer])
   const antall = kommentarer.filter((k) => !k.slettet).length
   const id = useId()
+  const seksjon = useRef<HTMLElement>(null)
+
+  // Kommentaren og alle den svarer på, så den kan foldes fram.
+  const veien = useMemo(() => {
+    const ider = new Set<string>()
+    const forelder = new Map(kommentarer.map((k) => [k.id, k.forelder_id]))
+    for (let k: string | null | undefined = fremhev?.kommentar; k && !ider.has(k) && forelder.has(k); k = forelder.get(k)) ider.add(k)
+    return ider
+  }, [kommentarer, fremhev])
+
+  // Rulles fram én gang for hver lenke, når kommentaren står der; ikke på nytt når tråden hentes igjen.
+  const vist = useRef<number | null>(null)
+  useEffect(() => {
+    if (!fremhev || vist.current === fremhev.nr || !veien.has(fremhev.kommentar)) return
+    vist.current = fremhev.nr
+    let frist: number | undefined
+    const ramme = requestAnimationFrame(() => {
+      const element = seksjon.current?.querySelector<HTMLElement>(`[data-kommentar="${fremhev.kommentar}"]`)
+      if (!element) return
+      const rolig = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+      element.focus({ preventScroll: true })
+      element.scrollIntoView?.({ block: 'center', behavior: rolig ? 'auto' : 'smooth' })
+      element.dataset.uthevet = ''
+      frist = window.setTimeout(() => delete element.dataset.uthevet, UTHEVET_I)
+    })
+    return () => {
+      cancelAnimationFrame(ramme)
+      window.clearTimeout(frist)
+    }
+  }, [fremhev, veien])
 
   return (
-    <section className="idetraad" aria-labelledby={id}>
+    <section ref={seksjon} className="idetraad" aria-labelledby={id}>
       <h4 id={id} className="idetraad__tittel">
         {antall === 0 ? 'Kommentarer' : `${antall} ${antall === 1 ? 'kommentar' : 'kommentarer'}`}
       </h4>
@@ -79,7 +129,17 @@ export function Kommentartraad({
       {noder.length > 0 && (
         <ol className="kommentarer">
           {noder.map((node) => (
-            <Kommentarvisning key={node.kommentar.id} node={node} kanal={kanal} erNy={erNy} onEndret={onEndret} onHjerte={onHjerte} laast={laast} />
+            <Kommentarvisning
+              key={node.kommentar.id}
+              node={node}
+              kanal={kanal}
+              erNy={erNy}
+              onEndret={onEndret}
+              onHjerte={onHjerte}
+              laast={laast}
+              veien={veien}
+              fremhevNr={fremhev?.nr ?? null}
+            />
           ))}
         </ol>
       )}
@@ -94,6 +154,8 @@ function Kommentarvisning({
   onEndret,
   onHjerte,
   laast,
+  veien,
+  fremhevNr,
 }: {
   node: Kommentarnode
   kanal: Kommentarkanal
@@ -101,6 +163,9 @@ function Kommentarvisning({
   onEndret: () => Promise<unknown>
   onHjerte: (kommentar: Kommentar) => void
   laast: boolean
+  /** Kommentaren en lenke førte til, og de den svarer på. */
+  veien: ReadonlySet<string>
+  fremhevNr: number | null
 }) {
   const { kommentar, svar, antallSvar } = node
   const { meg, admin } = useForfatterkontekst()
@@ -114,6 +179,12 @@ function Kommentarvisning({
   const inner = useRef<HTMLDivElement>(null)
   const innholdId = useId()
   useSkjuling(kropp, inner, apen)
+
+  // En lenke til denne kommentaren, eller til et svar under den, folder den ut.
+  const iVeien = veien.has(kommentar.id)
+  useEffect(() => {
+    if (iVeien && fremhevNr !== null) setApen(true)
+  }, [iVeien, fremhevNr])
 
   const eier = !laast && !kommentar.slettet && kommentar.forfatter_id === meg.id
   const skjult = Boolean(kommentar.skjult)
@@ -130,7 +201,13 @@ function Kommentarvisning({
   }
 
   return (
-    <li className="kommentar" data-apen={apen || undefined} data-slettet={kommentar.slettet || undefined}>
+    <li
+      className="kommentar"
+      data-kommentar={kommentar.id}
+      tabIndex={-1}
+      data-apen={apen || undefined}
+      data-slettet={kommentar.slettet || undefined}
+    >
       <div className="kommentar__hode">
         <Forfatterbilde id={kommentar.forfatter_id} storrelse="mini" />
         <span className="kommentar__navn">{kommentar.slettet ? 'Slettet' : navn}</span>
@@ -196,6 +273,7 @@ function Kommentarvisning({
                   Rediger
                 </Idehandling>
               )}
+              <Kopilenkeknapp mal={{ slag: kanal.slag, id: kanal.traad, kommentar: kommentar.id }} hva="kommentaren" />
               {!laast && (eier || (admin && kanal.adminSletter)) && <Slettknapp hva="kommentaren" onSlett={() => void utfor(kanal.slett)} />}
               {admin && kanal.skjul && !laast && !skjult && !eier && (
                 <Bekreftknapp
@@ -223,7 +301,17 @@ function Kommentarvisning({
           {svar.length > 0 && (
             <ol className="kommentarer">
               {svar.map((barn) => (
-                <Kommentarvisning key={barn.kommentar.id} node={barn} kanal={kanal} erNy={erNy} onEndret={onEndret} onHjerte={onHjerte} laast={laast} />
+                <Kommentarvisning
+                  key={barn.kommentar.id}
+                  node={barn}
+                  kanal={kanal}
+                  erNy={erNy}
+                  onEndret={onEndret}
+                  onHjerte={onHjerte}
+                  laast={laast}
+                  veien={veien}
+                  fremhevNr={fremhevNr}
+                />
               ))}
             </ol>
           )}
@@ -310,7 +398,7 @@ function Kommentarskriver({
         }
       }}
     >
-      <Rikteksteditor key={runde} dokument={tekst} onEndre={setTekst} etikett={etikett} referanser={false} autofokus kompakt />
+      <Rikteksteditor key={runde} dokument={tekst} onEndre={setTekst} etikett={etikett} referanser={false} direktelenker autofokus kompakt />
       {feil && (
         <p className="skjemafeil" role="alert">
           {feil}

@@ -14,7 +14,7 @@ export const SJEKK_VERSJON_HVER = 60_000
  * gjør resten av siden utilgjengelig, så meldingen må stå i det for å synes og
  * kunne trykkes på. Ellers står den i dokumentet.
  */
-function useOversteLag(aktiv: boolean): HTMLElement | null {
+export function useOversteLag(aktiv: boolean): HTMLElement | null {
   const [lag, setLag] = useState<HTMLElement | null>(null)
   useEffect(() => {
     if (!aktiv) return

@@ -27,6 +27,8 @@ import {
   type Riktekstdokument,
 } from '../../faginnhold/riktekst'
 import { Button } from '../Button'
+import { Direktelenkepanel } from '../direktelenker/Direktelenkepanel'
+import { Lenkebrikkevisning } from '../direktelenker/Lenkebrikke'
 import { Ikon } from '../ikon/Ikon'
 import { useOverskriftsniva } from '../Overskriftsniva'
 import { Referansevelger } from './Referansevelger'
@@ -39,7 +41,7 @@ import { useRedigering } from './Redigeringskontekst'
  * Bygget på TipTap (ProseMirror), som i Slaids. Bare formateringen planen
  * nevner, er slått på: fet, kursiv, understreking, senket og hevet skrift,
  * kode, overskrifter i to nivåer, sitater, punktlister, nummererte lister,
- * skillelinjer, lenker, spesialtegn og referanser. Kodeblokker, farger,
+ * skillelinjer, lenker, spesialtegn, referanser og direktelenker. Kodeblokker, farger,
  * fontstørrelse og justering finnes ikke, så teksten alltid ser lik ut.
  *
  * Referansene settes inn som siteringsnoder med referanse-ID-ene — aldri med
@@ -138,6 +140,53 @@ function Siteringsmerke({ node, selected }: NodeViewProps) {
   )
 }
 
+/**
+ * En direktelenke i teksten, som en brikke (se `src/direktelenker/`): målet
+ * (`slag`, `id`, `kommentar`) og navnet den fikk da den ble satt inn. Noden
+ * står i alle editorene, så en brikke aldri forsvinner fra en tekst som
+ * endres; knappen som setter den inn, bare der `direktelenker` er slått på.
+ */
+const Direktelenkenode = Node.create({
+  name: NODER.direktelenke,
+  group: 'inline',
+  inline: true,
+  atom: true,
+  selectable: true,
+
+  addAttributes() {
+    const fra = (navn: string) => ({
+      default: null,
+      parseHTML: (element: HTMLElement) => element.getAttribute(`data-${navn}`),
+      renderHTML: (attrs: Record<string, unknown>) => (attrs[navn] ? { [`data-${navn}`]: String(attrs[navn]) } : {}),
+    })
+    return { slag: fra('slag'), id: fra('id'), kommentar: fra('kommentar'), etikett: { ...fra('etikett'), default: '' } }
+  },
+
+  parseHTML() {
+    return [{ tag: 'span[data-direktelenke]' }]
+  },
+
+  renderHTML({ node, HTMLAttributes }) {
+    return ['span', mergeAttributes(HTMLAttributes, { 'data-direktelenke': '' }), String(node.attrs.etikett ?? '')]
+  },
+
+  renderText({ node }) {
+    return String(node.attrs.etikett ?? '')
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(Direktelenkemerke)
+  },
+})
+
+function Direktelenkemerke({ node, selected }: NodeViewProps) {
+  return (
+    <NodeViewWrapper as="span" className="lenkebrikke-node">
+      <Lenkebrikkevisning attrs={node.attrs} valgt={selected} />
+    </NodeViewWrapper>
+  )
+}
+
 export interface RikteksteditorProps {
   dokument: Riktekstdokument
   onEndre: (dokument: Riktekstdokument) => void
@@ -148,13 +197,18 @@ export interface RikteksteditorProps {
    * idéene, er verktøyraden bare formateringen.
    */
   referanser?: boolean
+  /**
+   * Knappen som setter inn en direktelenke til en diskusjon, en idé eller en
+   * kommentar som en brikke, som i diskusjonene og idéene.
+   */
+  direktelenker?: boolean
   /** Markøren står i teksten når editoren åpnes. */
   autofokus?: boolean
   /** Lavere tekstfelt, til korte tekster som kommentarer. */
   kompakt?: boolean
 }
 
-type Verktoypanel = 'lenke' | 'referanse' | null
+type Verktoypanel = 'lenke' | 'referanse' | 'direktelenke' | null
 
 /** Tegnmenyen når den står åpen, og om den ble åpnet med tastaturet. */
 type Tegnmenytilstand = { medTastatur: boolean } | null
@@ -164,6 +218,7 @@ export function Rikteksteditor({
   onEndre,
   etikett,
   referanser = true,
+  direktelenker = false,
   autofokus = false,
   kompakt = false,
 }: RikteksteditorProps) {
@@ -191,6 +246,7 @@ export function Rikteksteditor({
       Subscript,
       Superscript,
       ...(referanser ? [Sitering] : []),
+      Direktelenkenode,
       Autoerstatt.configure({ regler }),
     ],
     content: dokument,
@@ -225,6 +281,7 @@ export function Rikteksteditor({
         }}
         etikett={etikett}
         referanser={referanser}
+        direktelenker={direktelenker}
       />
       {tegnmeny && tegnknapp.current && (
         <Tegnmeny
@@ -239,6 +296,22 @@ export function Rikteksteditor({
       )}
       {panel === 'lenke' && <Lenkepanel editor={editor} onLukk={() => setPanel(null)} />}
       {panel === 'referanse' && <Siteringspanel editor={editor} onLukk={() => setPanel(null)} />}
+      {panel === 'direktelenke' && (
+        <Direktelenkepanel
+          onLukk={() => {
+            setPanel(null)
+            editor.commands.focus()
+          }}
+          onSett={(maal, etikett) => {
+            editor
+              .chain()
+              .focus()
+              .insertContent([{ type: NODER.direktelenke, attrs: { ...maal.mal, etikett } }, { type: NODER.tekst, text: ' ' }])
+              .run()
+            setPanel(null)
+          }}
+        />
+      )}
       <EditorContent editor={editor} className="rikteksteditor__tekst" />
     </div>
   )
@@ -291,6 +364,7 @@ function Verktoylinje({
   onTegnmeny,
   etikett,
   referanser,
+  direktelenker,
 }: {
   editor: Editor
   panel: Verktoypanel
@@ -301,6 +375,7 @@ function Verktoylinje({
   onTegnmeny: (medTastatur: boolean) => void
   etikett: string
   referanser: boolean
+  direktelenker: boolean
 }) {
   // Knappene viser hva som står på der markøren er, og tegnes på nytt når det endres.
   const aktive = useEditorState({
@@ -341,6 +416,17 @@ function Verktoylinje({
       >
         Ω
       </Verktoyknapp>
+      {direktelenker && (
+        <Verktoyknapp
+          navn="Sett inn direktelenke til en diskusjon, en idé eller en kommentar"
+          stil="referanse"
+          apner={panel === 'direktelenke'}
+          onClick={() => veksle('direktelenke')}
+        >
+          <Ikon navn="lenke" storrelse="ui" />
+          Direktelenke
+        </Verktoyknapp>
+      )}
       {referanser && (
         <Verktoyknapp
           navn="Sett inn referanse"

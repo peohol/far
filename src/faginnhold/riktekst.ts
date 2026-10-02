@@ -6,8 +6,9 @@
  * (TipTap, som i Slaids) arbeider med, og samme form som referansesystemet
  * leter etter siteringer i. Formateringen er bevisst begrenset: fet, kursiv,
  * understreking, senket og hevet skrift, kode, overskrifter i to nivåer,
- * sitater, punktlister, nummererte lister, skillelinjer, lenker og
- * referanser.
+ * sitater, punktlister, nummererte lister, skillelinjer, lenker,
+ * referanser og direktelenker (lenkebrikker til en diskusjon, en idé eller en
+ * kommentar, se `src/direktelenker/`).
  * Fontstørrelse, farger og justering finnes ikke; vanlig fritekst er
  * venstrejustert og ser lik ut overalt.
  *
@@ -15,6 +16,7 @@
  * Det som ikke er på lista over tillatte noder og merker, blir ikke vist som
  * formatering — teksten i det beholdes — og lenker må være nettadresser.
  */
+import { lesLenkemal } from '../direktelenker/mal'
 import { SITERING } from './referanser'
 
 export interface Tekstmerke {
@@ -48,6 +50,7 @@ export const NODER = {
   nummerertListe: 'orderedList',
   listepunkt: 'listItem',
   sitering: SITERING,
+  direktelenke: 'direktelenke',
 } as const
 
 /** Merkene tekst kan ha. Navnene er TipTaps. */
@@ -115,6 +118,21 @@ function rensMerker(merker: unknown): Tekstmerke[] | undefined {
   return rensede.length > 0 ? rensede : undefined
 }
 
+/** Lengste navn en lenkebrikke lagres med. */
+export const LENKEETIKETT_MEST = 300
+
+/**
+ * En lenkebrikke: målet og navnet den fikk da den ble satt inn. Peker den
+ * ikke på noe gyldig, blir navnet stående som tekst.
+ */
+function rensDirektelenke(attrs: unknown): Riktekstnode[] {
+  const raa = erObjekt(attrs) && typeof attrs.etikett === 'string' ? attrs.etikett.replace(/\s+/g, ' ').trim() : ''
+  const etikett = raa.slice(0, LENKEETIKETT_MEST)
+  const mal = lesLenkemal(attrs)
+  if (!mal) return etikett ? [{ type: NODER.tekst, text: etikett }] : []
+  return [{ type: NODER.direktelenke, attrs: { ...mal, etikett } }]
+}
+
 function siteringsider(attrs: unknown): string[] {
   const ider = erObjekt(attrs) ? attrs.referanser : undefined
   return Array.isArray(ider) ? [...new Set(ider.filter((id): id is string => typeof id === 'string'))] : []
@@ -138,6 +156,7 @@ function rensInnhold(innhold: unknown): Riktekstnode[] {
       const referanser = siteringsider(node.attrs)
       return referanser.length > 0 ? [{ type: SITERING, attrs: { referanser } }] : []
     }
+    if (node.type === NODER.direktelenke) return rensDirektelenke(node.attrs)
     if (node.type === NODER.linjeskift || node.type === NODER.skillelinje) return [{ type: node.type }]
     if (!TILLATTE_NODER.has(node.type) || node.type === NODER.dokument) return rensInnhold(node.content)
 
@@ -160,7 +179,12 @@ function rensInnhold(innhold: unknown): Riktekstnode[] {
 }
 
 function erTekstniva(node: Riktekstnode): boolean {
-  return node.type === NODER.tekst || node.type === NODER.sitering || node.type === NODER.linjeskift
+  return (
+    node.type === NODER.tekst ||
+    node.type === NODER.sitering ||
+    node.type === NODER.direktelenke ||
+    node.type === NODER.linjeskift
+  )
 }
 
 /** Blokker for en blokkbeholder: løs tekst samles i avsnitt, og beholderen er aldri tom. */
@@ -191,19 +215,21 @@ export function rensDokument(verdi: unknown): Riktekstdokument {
   return { type: 'doc', content: blokker(rensInnhold(verdi.content)) }
 }
 
-/** Sant når dokumentet verken har tekst eller siteringer. */
+/** Sant når dokumentet verken har tekst, siteringer eller lenkebrikker. */
 export function erTomt(dokument: Riktekstnode): boolean {
   if (dokument.type === NODER.tekst) return !dokument.text?.trim()
-  if (dokument.type === NODER.sitering) return false
+  if (dokument.type === NODER.sitering || dokument.type === NODER.direktelenke) return false
   return (dokument.content ?? []).every(erTomt)
 }
 
 /**
  * Teksten i dokumentet uten formatering, med blokkene på hver sin linje.
- * Siteringene er ikke tekst og utelates. Brukes av søket.
+ * Siteringene er ikke tekst og utelates; en lenkebrikke er navnet sitt.
+ * Brukes av søket.
  */
 export function klartekst(dokument: Riktekstnode): string {
   if (dokument.type === NODER.tekst) return dokument.text ?? ''
+  if (dokument.type === NODER.direktelenke) return typeof dokument.attrs?.etikett === 'string' ? dokument.attrs.etikett : ''
   if (dokument.type === NODER.linjeskift) return '\n'
   const deler = (dokument.content ?? []).map(klartekst)
   return BLOKKBEHOLDERE.has(dokument.type) || LISTER.has(dokument.type) ? deler.filter(Boolean).join('\n') : deler.join('')

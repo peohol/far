@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import type { Profil } from '@delt/profil'
 import { hentAlleProfiler } from '../../auth/api'
@@ -11,7 +11,7 @@ import { Forfatterkilde } from '../traad/Forfatterkontekst'
 import { veksleSkuff } from './Ideskuff'
 import { Oppgaveliste } from './Oppgaveliste'
 import { Oppgaveside } from './Oppgaveside'
-import { useForlatvakt } from './useForlatvakt'
+import { useForlatvakt, useMeldVakt, type Forlat } from './useForlatvakt'
 import '../../styles/ideer.css'
 
 /**
@@ -31,12 +31,15 @@ const LISTE: Visning = { side: 'liste' }
 export function Oppgaver({
   apen,
   oppgave,
+  vakt: meldTil,
   onLukk,
   onIdeer,
 }: {
   apen: boolean
   /** Oppgaven laget åpnes på, som fra et kort i Idéer. Ellers lista. */
   oppgave?: string
+  /** Får vakten for skjemaet mens laget står åpent (`useMeldVakt`). */
+  vakt?: MutableRefObject<Forlat | null>
   onLukk: () => void
   /** Til Idéer. */
   onIdeer: () => void
@@ -49,6 +52,7 @@ export function Oppgaver({
   const [apneSkuffer, setApneSkuffer] = useState<ReadonlySet<string>>(new Set())
   const vakt = useForlatvakt()
   const { nullstill } = vakt
+  useMeldVakt(apen, vakt.forlat, meldTil)
   /** Teller åpningene, så hver åpning begynner med sidene montert på nytt. */
   const [apning, setApning] = useState(0)
   const rot = useRef<HTMLDivElement>(null)

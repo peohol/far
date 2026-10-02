@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import type { Profil } from '@delt/profil'
 import { hentAlleProfiler } from '../../auth/api'
@@ -9,11 +9,12 @@ import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Modallag } from '../Modallag'
 import { Forfatterkilde } from '../traad/Forfatterkontekst'
+import type { Fremheving } from '../traad/Kommentartraad'
 import { Ideliste } from './Ideliste'
 import { Ideside } from './Ideside'
 import { Ideskjema } from './Ideskjema'
 import { veksleSkuff } from './Ideskuff'
-import { useForlatvakt } from './useForlatvakt'
+import { useForlatvakt, useMeldVakt, type Forlat } from './useForlatvakt'
 import '../../styles/ideer.css'
 
 /**
@@ -38,12 +39,21 @@ const LISTE: Visning = { side: 'liste' }
 export function Ideer({
   apen,
   ide,
+  kommentar,
+  nr,
+  vakt: meldTil,
   onLukk,
   onOppgaver,
 }: {
   apen: boolean
   /** Idéen laget åpnes på, som fra et varsel. Ellers begynner det på lista. */
   ide?: string
+  /** Kommentaren under idéen en direktelenke peker på. */
+  kommentar?: string
+  /** Ny for hver gang laget bes om å åpne idéen, også når den alt står åpen. */
+  nr?: number
+  /** Får vakten for skjemaet mens laget står åpent (`useMeldVakt`). */
+  vakt?: MutableRefObject<Forlat | null>
   onLukk: () => void
   /** Til Planlagte oppgaver, eventuelt rett til én oppgave. */
   onOppgaver: (oppgave?: string) => void
@@ -56,8 +66,10 @@ export function Ideer({
   const [feil, setFeil] = useState<string | null>(null)
   const [apneSkuffer, setApneSkuffer] = useState<ReadonlySet<string>>(new Set())
   const [angring, setAngring] = useState<Angring | null>(null)
+  const [fremhev, setFremhev] = useState<Fremheving | null>(null)
   const vakt = useForlatvakt()
   const { nullstill } = vakt
+  useMeldVakt(apen, vakt.forlat, meldTil)
   const rot = useRef<HTMLDivElement>(null)
   /** Hvor lista stod, og kortet man gikk inn på, så tilbake lander samme sted. */
   const listeplass = useRef<{ rulling: number; ide: string | null }>({ rulling: 0, ide: null })
@@ -86,21 +98,27 @@ export function Ideer({
     if (!fortsetter.current) {
       nullstill()
       setVisning(ide ? { side: 'ide', id: ide } : LISTE)
+      setFremhev(ide && kommentar ? { kommentar, nr: nr ?? Date.now() } : null)
       setApneSkuffer(new Set())
       listeplass.current = { rulling: 0, ide: ide ?? null }
     }
+    // Bare den første åpningen fortsetter; en ny idé mens laget står åpent, vises.
+    fortsetter.current = false
     void ryddIdearkiv()
       .catch(() => undefined)
       .then(hentListe)
     void hentAlleProfiler().then(setProfiler, () => undefined)
     void hentSortering().then(setSortering, () => undefined)
-  }, [apen, ide, hentListe, nullstill])
+    // `kommentar` følger `nr`, som er ny for hver lenke.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apen, ide, nr, hentListe, nullstill])
 
   const kropp = () => rot.current?.closest<HTMLElement>('.modallag__kropp') ?? null
 
   const gaaTil = (neste: Visning) => {
     if (visning.side === 'liste') listeplass.current.rulling = kropp()?.scrollTop ?? 0
     vakt.nullstill()
+    setFremhev(null)
     setVisning(neste)
   }
 
@@ -202,6 +220,7 @@ export function Ideer({
             {visning.side === 'ide' && (
               <Ideside
                 id={visning.id}
+                fremhev={fremhev}
                 onEndre={(ide) => gaaTil({ side: 'skjema', ide })}
                 onSlettet={() => {
                   listeplass.current.ide = null

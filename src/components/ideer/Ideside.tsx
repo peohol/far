@@ -19,7 +19,8 @@ import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Forfatterbilde, useForfatternavn, useForfatterkontekst } from '../traad/Forfatterkontekst'
 import { Kategorimerke } from './Merker'
-import { Kommentartraad, type Kommentarkanal } from '../traad/Kommentartraad'
+import { Kommentartraad, type Fremheving, type Kommentarkanal } from '../traad/Kommentartraad'
+import { Kopilenkeknapp } from '../direktelenker/Kopilenkeknapp'
 import { Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from '../traad/Smadeler'
 
 const DATO = new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -48,6 +49,7 @@ export function Ideside({
   onArkivert,
   onOverfort,
   onOppgave,
+  fremhev = null,
 }: {
   id: string
   innebygd?: boolean
@@ -59,6 +61,8 @@ export function Ideside({
   onOverfort?: (ide: Idetraad, oppgave: string) => void
   /** Til oppgaven en overført idé ble til. */
   onOppgave?: (oppgave: string) => void
+  /** Kommentaren en direktelenke førte til. */
+  fremhev?: Fremheving | null
 }) {
   const { meg, admin } = useForfatterkontekst()
   const [traad, setTraad] = useState<Idetraad | null>(null)
@@ -99,6 +103,7 @@ export function Ideside({
   /** Kommentarene under idéen. En administrator kan slette alle, slik idéene alltid har latt dem. */
   const kanal = useMemo<Kommentarkanal>(
     () => ({
+      slag: 'ide',
       traad: id,
       opprett: (forelder, tekst) => opprettKommentar(id, forelder, tekst),
       endre: (kommentar, tekst) => endreKommentar(kommentar, tekst),
@@ -244,6 +249,7 @@ export function Ideside({
           </Idehandling>
         )}
         {!laast && (eier || admin) && !innebygd && <Slettknapp hva="idéen" onSlett={slett} />}
+        <Kopilenkeknapp mal={{ slag: 'ide', id: traad.id, kommentar: null }} hva="idéen" />
       </div>
 
       {administrerer && !laast && (
@@ -276,7 +282,15 @@ export function Ideside({
         </div>
       )}
 
-      <Kommentartraad kanal={kanal} kommentarer={traad.kommentarer} sistSett={sistSett ?? null} onEndret={hent} onHjerte={veksleHjerte} laast={laast} />
+      <Kommentartraad
+        kanal={kanal}
+        kommentarer={traad.kommentarer}
+        sistSett={sistSett ?? null}
+        onEndret={hent}
+        onHjerte={veksleHjerte}
+        laast={laast}
+        fremhev={fremhev}
+      />
     </article>
   )
 }

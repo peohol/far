@@ -454,7 +454,7 @@ describe('én tråd', () => {
     expect(api.flyttDiskusjonTilSide).toHaveBeenCalledWith('t1', 'stoff:valproat', { id: 'vdos' })
     await waitFor(() => expect(window.location.hash).toBe('#/stoff/valproat'))
     // Menyen på den siden åpner tråden.
-    expect(taDiskusjon('stoff:valproat')).toBe('t1')
+    expect(taDiskusjon('stoff:valproat')).toEqual({ diskusjon: 't1', kommentar: null })
   })
 
   it('flyttes til en ny kategori på den andre siden, med samme regler for navn og emoji', async () => {

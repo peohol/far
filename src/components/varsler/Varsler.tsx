@@ -275,7 +275,7 @@ function Databaseinnhold({ varsel, meg, navn, onGa }: RadProps & { varsel: Datab
   const antall = varsel.hendelser.length
   return (
     <>
-      <button type="button" className="varsel__tittel" data-ih="" onClick={() => ide && onGa(varsel, () => visIde(ide.id))}>
+      <button type="button" className="varsel__tittel" data-ih="" onClick={() => ide && onGa(varsel, () => visIde({ id: ide.id }))}>
         {idetekst(varsel, meg, navn)}
       </button>
       <p className="varsel__meta">
