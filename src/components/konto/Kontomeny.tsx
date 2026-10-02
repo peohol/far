@@ -1,14 +1,13 @@
-import { useCallback, useId, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useBevart } from '../../oppdatering/Bevaring'
 import { visningsnavn } from '@delt/profil'
 import { useAvatarlenker } from '../../auth/avatarer'
 import { useOkt, useProfil } from '../../auth/okt'
 import { useShortcutVisibility } from '../../hooks/useShortcutVisibility'
-import { useSkjuling } from '../../hooks/useSkjuling'
 import type { Theme } from '../../hooks/useTheme'
 import { Bryter } from '../Bryter'
 import { Ikon } from '../ikon/Ikon'
-import { Menyvalg, Nedtrekksmeny } from '../toppmeny/Nedtrekksmeny'
+import { Menyskuff, Menyvalg, Nedtrekksmeny } from '../toppmeny/Nedtrekksmeny'
 import { Avatar } from './Avatar'
 import { Kontopanel } from './Kontopanel'
 
@@ -95,9 +94,7 @@ export function Kontomeny({ theme, onToggleTheme }: KontomenyProps) {
 }
 
 /**
- * «Preferanser»: en skuff i menyen med hurtigtastene og temaet. Den glir opp
- * og igjen som skuffene ellers i appen (`useSkjuling`), og lukket innhold
- * nås ikke med tabulator.
+ * «Preferanser»: en skuff i menyen med hurtigtastene og temaet (`Menyskuff`).
  */
 function Preferanser({
   apen,
@@ -111,26 +108,16 @@ function Preferanser({
   onToggleTheme: () => void
 }) {
   const hurtigtaster = useShortcutVisibility()
-  const kropp = useRef<HTMLDivElement>(null)
-  const inner = useRef<HTMLDivElement>(null)
-  const id = useId()
-  useSkjuling(kropp, inner, apen)
-
   return (
-    <li className="nedtrekk__skuff" data-apen={apen || undefined}>
-      <Menyvalg ikon="gears" tekst="Preferanser" utvidet={apen} kontrollerer={id} onClick={onVeksle} />
-      <div ref={kropp} className="nedtrekk__skuffkropp">
-        <div ref={inner} id={id} className="nedtrekk__skuffinner">
-          <Bryter className="nedtrekk__bryter" pa={hurtigtaster.visible} onEndre={hurtigtaster.toggle}>
-            <Ikon navn="keys" storrelse="ui" />
-            Vis hurtigtaster
-          </Bryter>
-          <Bryter className="nedtrekk__bryter" pa={theme === 'moerkt'} onEndre={onToggleTheme}>
-            <Ikon navn="moon" storrelse="ui" />
-            Mørkt tema
-          </Bryter>
-        </div>
-      </div>
-    </li>
+    <Menyskuff ikon="gears" tekst="Preferanser" apen={apen} onVeksle={onVeksle}>
+      <Bryter className="nedtrekk__bryter" pa={hurtigtaster.visible} onEndre={hurtigtaster.toggle}>
+        <Ikon navn="keys" storrelse="ui" />
+        Vis hurtigtaster
+      </Bryter>
+      <Bryter className="nedtrekk__bryter" pa={theme === 'moerkt'} onEndre={onToggleTheme}>
+        <Ikon navn="moon" storrelse="ui" />
+        Mørkt tema
+      </Bryter>
+    </Menyskuff>
   )
 }

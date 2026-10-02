@@ -16,8 +16,9 @@ Stoffene, aliasene og koblingene til laboratorieanalysene står i
 | `src/data/stoffregister.json` | Stoffene, aliasene og koblingene til analysene (ikke inndelingen) |
 | `src/domain/stoffregister.ts` | Registeret slik appen viser det (`byggStoffregister`): datafilen, fagsidene og inndelingen fra databasen. Uten riktekst, så fortolkningen ikke drar faginnholdet med seg |
 | `src/stoffregister/` | Svaret fra databasen og endringene i det (`modell.ts`), kallene (`api.ts`) og kilden sidemenyen, helsiden og fagsidene deler (`Stoffregisterkilde.tsx`) |
-| `src/components/stoffregister/` | Helsiden, kortene, redigeringsbrettet, arkivet og papirkurven, og menyen og meldingen på fagsiden (`Fagsidestatus.tsx`) |
-| `src/styles/stoffregister.css`, `src/styles/sortering.css` | Utseendet; dra-og-slipp deles med diskusjonene |
+| `src/components/stoffregister/` | Helsiden, kortene, redigeringsbrettet med menyene, arkivet og papirkurven, og menyen og meldingen på fagsiden (`Fagsidestatus.tsx`) |
+| `src/components/stoffregister/registerdra.ts` | Reglene for dra-og-slipp i redigeringen (se under) |
+| `src/hooks/useSortering.ts`, `src/styles/stoffregister.css`, `src/styles/sortering.css` | Dra-og-slipp, felles med diskusjonene, og utseendet |
 
 ## Inndelingen
 
@@ -44,22 +45,57 @@ databasen har. Registeret hentes på nytt når fanen blir synlig igjen.
 
 `#/stoffregister`, lenket fra bunnen av sidemenyen, er bygd som fagsidene: en
 seksjon per kategori, underkategoriene som mellomtitler og et detaljkort per
-stoff. Kortet viser oppsummeringen, veien til fagsiden og fortolkningen, hvor
-stoffet står (med valg som legger det til i eller tar det ut av en kategori),
-og knappene som arkiverer og sletter det. Det som endrer stoffet, tegnes først
-når kortet åpnes. Siden har sine egne diskusjoner (`register:stoffregister`,
-se `docs/diskusjoner.md`). `Escape` lukker den.
+stoff, i et rutenett med like brede kort (`.skuffrutenett`, som
+farmakodynamikk-kortene). Lukket viser kortet navnet og begynnelsen på
+oppsummeringen, aldri analysekodene. Åpnet viser det hele oppsummeringen,
+analysene og veien til fagsiden og fortolkningen. Visningen er bare for å
+lese: alt som endrer et stoff, gjøres i redigeringen. Siden har sine egne
+diskusjoner (`register:stoffregister`, se `docs/diskusjoner.md`). `Escape`
+lukker den.
 
 **Oppsummeringen** er en kort riktekst i panelet «Identitet» på fagsiden
 (elementet `oppsummering`), og skrives og redigeres der. Er den ikke skrevet,
 står det i kortet.
 
 **Redigeringen** («Rediger» i toppmenyen) gjøres bare her, aldri i
-sidemenyen. Kategoriene og underkategoriene lages, gis nytt navn, flyttes
-(med dra-og-slipp eller «Flytt opp»/«Flytt ned»), arkiveres og slettes.
-Stoffene dras mellom kategoriene. En kategori dras inn i en annen og blir en
-underkategori, så lenge den ikke har egne underkategorier. Administratorene kan
-lage en ny fagside her, i kategorien de velger.
+sidemenyen eller lesevisningen. Kategoriene og underkategoriene står som kort
+som kan lukkes (hver for seg, eller «Lukk alle»/«Åpne alle»; det huskes over
+en oppdatering av appen), med stoffene som små brikker i et rutenett. Hver
+kategori, underkategori og hvert stoff har en meny til høyre (som i Huskis)
+i stedet for en rad med knapper:
+
+- Kategorier: «Gi nytt navn», «Ny underkategori», «Flytt opp»/«Flytt ned»,
+  «Flytt til» (en annen kategori, eller ut som egen kategori), «Arkiver» og
+  «Slett» (trykkes to ganger).
+- Stoffer: «Åpne fagside», «Flytt til», «Legg også til i», «Ta ut av …»,
+  «Arkiver» og «Slett» (kan angres).
+
+En kategori dras inn i en annen og blir en underkategori, så lenge den ikke
+har egne underkategorier. Administratorene kan lage en ny fagside her, i
+kategorien de velger.
+
+### Dra-og-slipp i redigeringen
+
+Kategoriene dras i overskriften, stoffene hvor som helst på brikken; med
+tastaturet løftes de med mellomrom og flyttes med piltastene. Reglene er
+hentet fra Huskis (`docs/drag-and-drop.md` der) og står i `registerdra.ts`
+og `useSortering`:
+
+- **Alt annet folder seg sammen før det løftede måles** (`data-drar` på
+  brettet). Drar man en kategori, står bare overskriftene igjen; drar man en
+  underkategori, står kategoriene og underkategoriene igjen uten stoffene.
+  Drar man et stoff, får en kategori uten egne stoffer en tom flate å slippe
+  i.
+- **Det løftede blir under pekeren** (`holdGrepet`): siden rulles like mye som
+  det over foldet seg sammen, og lista holdes like høy mens man drar, så
+  målet ikke smetter unna. Derfor kan også en lang kategori dras helt til
+  topps.
+- **En plassholder viser hvor det havner.** Stoffene står alltid alfabetisk,
+  så plassholderen legges på den alfabetiske plassen i lista pekeren er over.
+  Med tastaturet tar hvert piltrykk stoffet til den neste eller forrige lista.
+- **En lukket kategori åpnes for en titt** når et stoff eller en underkategori
+  holdes over den et øyeblikk, lukkes igjen når man drar videre, og blir
+  stående åpen når man slipper i den.
 
 ## Arkiv og papirkurv
 
@@ -89,4 +125,4 @@ papirkurven står ikke i registeret eller i søket.
   liggende i papirkurven.
 
 Reglene håndheves i databasen. Appen har de samme (`kanSletteStoff`,
-`kanSletteKategori`) for å vise bare knappene som virker.
+`kanSletteKategori`) for å vise bare valgene som virker.

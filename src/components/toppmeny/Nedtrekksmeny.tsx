@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react'
+import { useSkjuling } from '../../hooks/useSkjuling'
 import { Ikon } from '../ikon/Ikon'
 import type { Ikonnavn } from '../ikon/register'
 import { Ikonknapp, type IkonknappProps } from '../Ikonknapp'
@@ -14,6 +15,11 @@ export interface NedtrekksmenyProps {
   onApne?: () => void
   /** Noe som står ved knappen, som prikken for noe nytt. */
   ved?: ReactNode
+  /**
+   * Innholdet tegnes først når menyen åpnes. For menyer som står mange
+   * steder på en side, som ved hvert stoff i redigeringen av stoffregisteret.
+   */
+  lat?: boolean
   /** Innholdet. `lukk` lukker menyen og gir fokus tilbake til knappen. */
   children: (lukk: () => void) => ReactNode
 }
@@ -25,7 +31,7 @@ export interface NedtrekksmenyProps {
  * taster i ro mens den står åpen. Escape, et klikk utenfor eller fokus som
  * går ut av den lukker den, og fokus går tilbake til knappen.
  */
-export function Nedtrekksmeny({ knapp: knappProps, etikett, lag, className, onApne, ved, children }: NedtrekksmenyProps) {
+export function Nedtrekksmeny({ knapp: knappProps, etikett, lag, className, onApne, ved, lat = false, children }: NedtrekksmenyProps) {
   const [apen, setApen] = useState(false)
   const rot = useRef<HTMLDivElement>(null)
   const knapp = useRef<HTMLButtonElement>(null)
@@ -99,7 +105,7 @@ export function Nedtrekksmeny({ knapp: knappProps, etikett, lag, className, onAp
         tabIndex={-1}
         {...(apen && { 'data-lag': lag })}
       >
-        {children(lukkMedFokus)}
+        {(apen || !lat) && children(lukkMedFokus)}
       </div>
     </div>
   )
@@ -139,5 +145,35 @@ export function Menyvalg({ ikon, tekst, hint, nytt, onClick, utvidet, kontroller
         </span>
       )}
     </button>
+  )
+}
+
+export interface MenyskuffProps {
+  ikon: Ikonnavn
+  tekst: string
+  apen: boolean
+  onVeksle: () => void
+  children: ReactNode
+}
+
+/**
+ * Et valg i en nedtrekksmeny som folder ut en skuff med flere valg under seg,
+ * som «Preferanser» i kontomenyen. Skuffen glir opp og igjen som skuffene
+ * ellers i appen (`useSkjuling`), og lukket innhold nås ikke med tabulator.
+ */
+export function Menyskuff({ ikon, tekst, apen, onVeksle, children }: MenyskuffProps) {
+  const kropp = useRef<HTMLDivElement>(null)
+  const inner = useRef<HTMLDivElement>(null)
+  const id = useId()
+  useSkjuling(kropp, inner, apen)
+  return (
+    <li className="nedtrekk__skuff" data-apen={apen || undefined}>
+      <Menyvalg ikon={ikon} tekst={tekst} utvidet={apen} kontrollerer={id} onClick={onVeksle} />
+      <div ref={kropp} className="nedtrekk__skuffkropp">
+        <div ref={inner} id={id} className="nedtrekk__skuffinner">
+          {children}
+        </div>
+      </div>
+    </li>
   )
 }

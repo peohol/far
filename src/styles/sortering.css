@@ -36,12 +36,15 @@
   cursor: grabbing;
 }
 
-[data-dnd-id][data-dnd-placeholder] {
+/* Plassholderen viser hvor det som dras, havner. Smett tar identiteten
+   (`data-dnd-id`) av den, så den kjennes igjen på at den står i en liste. */
+[data-dnd-container] > [data-dnd-placeholder] {
   visibility: visible;
   background: var(--flate-hevet);
   border: var(--kant-tykk) dashed var(--linje-sterk);
+  box-shadow: none;
 }
 
-[data-dnd-id][data-dnd-placeholder] > * {
+[data-dnd-container] > [data-dnd-placeholder] > * {
   visibility: hidden;
 }

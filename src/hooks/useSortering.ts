@@ -14,6 +14,41 @@ export interface Flytting {
   indeks: number
 }
 
+/**
+ * Det en liste med egne regler gjør rundt et drag, i tillegg til det
+ * `useSortering` gjør for alle (se `docs/stoffregister.md`).
+ */
+export interface Dragveileder {
+  /**
+   * Før dnd-kit måler det som løftes — den eneste gangen det måles. Her kan
+   * lista folde seg sammen, så det er kortere vei å dra. Lista holdes da så
+   * høy som den var, og det som løftes, blir liggende under pekeren.
+   */
+  loft?(element: HTMLElement, brett: SortableBoard): void
+  /** Hver gang pekeren flytter seg, og hver gang målet skifter. */
+  underveis?(element: HTMLElement, brett: SortableBoard): void
+  /**
+   * Når draget er over, sluppet eller avbrutt, og dnd-kit har ryddet etter
+   * seg. `liste` er lista det ble sluppet i (den det kom fra, når draget ble
+   * avbrutt).
+   */
+  slipp?(element: HTMLElement, brett: SortableBoard, liste: HTMLElement | null): void
+}
+
+export interface Sorteringsvalg {
+  /** Rullingen når man drar mot kanten, holdes inne i lista (standard). */
+  rullInne?: boolean
+  /**
+   * Lista står loddrett, og det som dras, følger bare pekeren opp og ned
+   * (standard). Ellers måles retningen i hver liste for seg, så et rutenett
+   * kan sorteres, og det som dras, følger pekeren fritt.
+   */
+  loddrett?: boolean
+  /** Hvor et drag begynner med mus og finger. Standard er håndtaket (`HANDTAK`). */
+  handtak?: string
+  veileder?: Dragveileder
+}
+
 /** Merket på det som kan dras, og listene det står i. */
 const ELEMENT = '[data-dnd-id]'
 const LISTE = '[data-dnd-container]'
@@ -51,10 +86,10 @@ export function useSortering(
   onFlytt: (flytting: Flytting) => void,
   navnPaaListe: (liste: string) => string,
   aktiv = true,
-  { rullInne = true }: { rullInne?: boolean } = {},
+  { rullInne = true, loddrett = true, handtak = HANDTAK, veileder }: Sorteringsvalg = {},
 ): void {
-  const siste = useRef({ onFlytt, navnPaaListe })
-  siste.current = { onFlytt, navnPaaListe }
+  const siste = useRef({ onFlytt, navnPaaListe, veileder })
+  siste.current = { onFlytt, navnPaaListe, veileder }
 
   useEffect(() => {
     const element = rot.current
@@ -83,8 +118,10 @@ export function useSortering(
           root: element,
           itemSelector: ELEMENT,
           containerSelector: LISTE,
-          handleSelector: HANDTAK,
-          axis: 'vertical',
+          handleSelector: handtak,
+          axis: loddrett ? 'vertical' : 'auto',
+          // Det som løftes, holdes under den faste toppmenyen.
+          safeInsets: () => ({ top: toppmenyensBunn(), right: 0, bottom: 0, left: 0 }),
           itemType: (el) => el.dataset.slag,
           containerAccept: (liste) => liste.dataset.tar?.split(' ').filter(Boolean) ?? [],
           describeItem: (el) => el.dataset.navn ?? '',
@@ -116,11 +153,45 @@ export function useSortering(
           },
         })
         // Tegnes bare loddrett. Hvor elementet havner, avgjøres fortsatt av pekeren.
-        brett.manager.registry.modifiers.register(RestrictToVerticalAxis.plugin, RestrictToVerticalAxis.options)
+        if (loddrett) brett.manager.registry.modifiers.register(RestrictToVerticalAxis.plugin, RestrictToVerticalAxis.options)
         if (rullInne) holdRullingenInne(brett.manager.registry.plugins.get(Scroller))
-        stopp = brett.manager.monitor.addEventListener('dragstart', () => {
-          rekkefolge = snapshotOrder(lister())
-        })
+        const { monitor, dragOperation } = brett.manager
+        const kilde = () => {
+          const el = dragOperation.source?.element
+          return el instanceof HTMLElement ? el : null
+        }
+        let vakt: (() => void) | null = null
+        const underveis = () => {
+          const el = kilde()
+          if (brett && el && !ferdig) siste.current.veileder?.underveis?.(el, brett)
+        }
+        const stoppere = [
+          monitor.addEventListener('beforedragstart', () => {
+            const el = kilde()
+            const loft = siste.current.veileder?.loft
+            if (!brett || !el || !loft) return
+            vakt = holdGrepet(element, el, () => loft(el, brett!))
+          }),
+          monitor.addEventListener('dragstart', () => {
+            rekkefolge = snapshotOrder(lister())
+          }),
+          monitor.addEventListener('dragmove', underveis),
+          monitor.addEventListener('dragover', underveis),
+          monitor.addEventListener('dragend', () => {
+            const el = kilde()
+            // Smett har alt lagt det der slippet havnet; React legger det tilbake etterpå.
+            const liste = el?.parentElement ?? null
+            void sluppet().then(() => {
+              vakt?.()
+              vakt = null
+              if (brett && el && !ferdig) siste.current.veileder?.slipp?.(el, brett, liste)
+            })
+          }),
+        ]
+        stopp = () => {
+          for (const s of stoppere) s()
+          vakt?.()
+        }
       })
       .catch(() => undefined)
 
@@ -129,7 +200,56 @@ export function useSortering(
       stopp?.()
       brett?.destroy()
     }
-  }, [rot, aktiv, rullInne])
+  }, [rot, aktiv, rullInne, loddrett, handtak])
+}
+
+/**
+ * Lar lista endre seg før det som løftes, blir målt (`endre`), uten at det
+ * flytter seg under pekeren: dnd-kit tegner det fra der det lå da det ble
+ * målt, ikke fra grepet. Folder lista over det seg sammen (eller vokser),
+ * rulles siden like mye, så det står rundt pekeren; det som ikke kan rulles
+ * opp, legges til som luft øverst i lista. Lista holdes like høy som før, så siden
+ * ikke blir kortere mens man drar (da ville nettleseren flyttet rullingen,
+ * og en berøring kunne blitt avbrutt). Gir funksjonen som gjør lista som før
+ * igjen. Fra Huskis' «board-vakt».
+ */
+export function holdGrepet(liste: HTMLElement, element: HTMLElement, endre: () => void): () => void {
+  const dokument = liste.ownerDocument.documentElement
+  const luft = parseFloat(getComputedStyle(liste).paddingTop) || 0
+  const hoyde = liste.getBoundingClientRect().height
+  const topp = element.getBoundingClientRect().top
+  // Nettleseren skal ikke flytte rullingen selv når innholdet folder seg sammen.
+  dokument.style.overflowAnchor = 'none'
+  endre()
+  liste.style.minHeight = `${hoyde}px`
+  const skift = topp - element.getBoundingClientRect().top
+  if (Math.abs(skift) > 0.5) {
+    const rulle = rullerForelder(liste)
+    const for_ = rulle.scrollTop
+    rulle.scrollTop = for_ - skift
+    const rest = skift - (for_ - rulle.scrollTop)
+    if (rest > 0.5) liste.style.paddingTop = `${luft + rest}px`
+  }
+  return () => {
+    liste.style.minHeight = ''
+    liste.style.paddingTop = ''
+    dokument.style.overflowAnchor = ''
+  }
+}
+
+/** Det nærmeste som ruller rundt elementet, eller siden selv. */
+function rullerForelder(element: HTMLElement): Element {
+  for (let el = element.parentElement; el; el = el.parentElement) {
+    const { overflowY } = getComputedStyle(el)
+    if ((overflowY === 'auto' || overflowY === 'scroll') && el.scrollHeight > el.clientHeight) return el
+  }
+  return element.ownerDocument.scrollingElement ?? element.ownerDocument.documentElement
+}
+
+/** Hvor langt ned i vinduet den faste toppmenyen når, eller 0 uten den. */
+function toppmenyensBunn(): number {
+  const meny = document.querySelector('[data-toppmeny]')
+  return meny ? Math.max(0, meny.getBoundingClientRect().bottom) : 0
 }
 
 /**

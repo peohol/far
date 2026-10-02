@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.76.0',
+    dato: '2026-10-02',
+    sammendrag: 'Stoffregisteret i rutenett, og ryddigere redigering med menyer og bedre dra-og-slipp',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Stoffkortene på stoffregistersiden står i et rutenett med like store kort, som kortene på fagsidene. Et lukket kort viser bare navnet og begynnelsen på oppsummeringen, ikke analysekodene.',
+      'Den vanlige visningen er bare for å lese. Å flytte, arkivere og slette stoffer gjøres nå bare under «Rediger».',
+      'I redigeringen har hver kategori, underkategori og hvert stoff en meny til høyre med det som kan gjøres med det: nytt navn, flytting, arkivering og sletting. Den erstatter radene med knapper.',
+      'Kategoriene kan lukkes og åpnes i redigeringen, hver for seg eller alle på en gang.',
+      'Når du drar en kategori, folder alle kategoriene seg sammen til overskriftene, så selv en lang kategori er lett å flytte, også helt til topps. En stiplet plassholder viser hvor det du drar, havner.',
+      'Et stoff som dras, viser plassholderen der det faktisk havner, siden stoffene alltid står alfabetisk. Holder du det over en lukket kategori et øyeblikk, åpnes den så du kan slippe stoffet i den. Med tastaturet flytter piltastene stoffet fra liste til liste.',
+    ],
+  },
+  {
     versjon: '1.75.0',
     dato: '2026-10-02',
     sammendrag: 'Stoffregisteret på en egen side, der det kan redigeres',
