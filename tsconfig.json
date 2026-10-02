@@ -29,6 +29,7 @@
     "scripts/importer-psykofarmaka.ts",
     "vite.config.ts",
     "scripts/importer-intervallregelsett.ts",
+    "scripts/kontroller-migrasjoner.ts",
     "supabase/functions/_delt",
     "api"
   ]

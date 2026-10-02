@@ -10,11 +10,15 @@ Tillegg til reglene i rotens `CLAUDE.md`. Gjelder alt under `supabase/`.
   ikke er gjenskapt i `src/__tests__/hjelp/testdatabase.ts`, utvides det der.
 - Migrasjoner er append-only. Filnavnene svarer til versjonene i prosjektets
   migrasjonshistorikk; endres et filnavn, kommer repoet ut av takt med
-  prosjektet. Kontroller med en listing av migrasjonene at hver rad der har en
-  fil her, og omvendt.
+  prosjektet.
 - En migrasjon som rulles ut med MCP (`apply_migration`), får tidspunktet som
-  versjon. Gi fila det versjonsnummeret prosjektet registrerte, og kontroller
-  at teksten der er lik fila (for eksempel med `md5(statements[1])`).
+  versjon. Gi fila det versjonsnummeret prosjektet registrerte, og kjør
+  spørringen `npm run kontroller:migrasjoner` skriver, med `execute_sql`: den
+  sammenligner versjon, navn og tekst for hver fil med historikken, og skal
+  ikke gi noen rader.
+- En datamigrasjon som endrer en stoffmonografi, bygges på malen i
+  `maler/monografkuratering.sql` og hjelpefunksjonene den bruker
+  (`docs/monografkuratering.md`).
 - En migrasjon kan ikke slette sin egen rad i historikken: raden føres inn
   etter at SQL-en har kjørt. Skriv derfor aldri en «oppryddingsmigrasjon» som
   forsøker det — den etterlater nettopp den raden den skulle fjerne. Er en rad

@@ -37,6 +37,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `supabase/migrations/*_tdm_referanseomrader_*.sql` | Den importen slik den ble rullet ut |
 | `supabase/import/rettinger/`, `src/faginnhold/rettinger.ts`, `scripts/lag-rettinger.ts`, `supabase/migrations/*_rettinger.sql` | Rettinger av rader i tabellene over serumkonsentrasjoner, med kilden og begrunnelsen |
 | `supabase/import/oppdateringer/`, `src/faginnhold/kortoppdateringer.ts`, `scripts/lag-kortoppdateringer.ts` | Oppdateringer av kort på sidene etter en nyere kilde, som de nasjonale referanseområdene for antiepileptika fra 2017 |
+| `supabase/migrations/*_monografkuratering_hjelpere.sql`, `supabase/maler/monografkuratering.sql` | Hjelpefunksjonene og malen for datamigrasjoner etter en monografkuratering: preflight, binding til revisjonen som ble kontrollert, og ingenting på en tom database (`docs/monografkuratering.md`) |
 | `supabase/migrations/*_farmakodynamikk_mekanismekort_*.sql` | Farmakodynamikktekstene gjort om til mekanismekort (2026-09-30; verktøyet som lagde dem, er fjernet) |
 | `src/faginnhold/mekanismer.ts` | Mekanismetypene, virkningene (trafikklyset), systemene målene hører til, og subtypene i målnavnene |
 | `supabase/migrations/*_scenarioregelsett*.sql`, `*_rusregler_import.sql`, `*_scenarioregler_lesing.sql` | Scenarioregelsettene for analytter som vurderes samlet, importen av rusmiddelreglene og lesingen fortolkningen gjør (`docs/scenarioregler.md`) |
@@ -66,6 +67,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/__tests__/festreferanser.test.ts`, `referansefelt.test.tsx` | FEST-referansene, referansefeltet, listen og at editoren aldri tilbyr en automatisk kilde |
 | `src/__tests__/psykofarmakaimport.test.ts`, `tdmimport.test.ts`, `rettinger.test.ts`, `kortoppdateringer.test.ts` | Datasettene, importene, rettingene og oppdateringene, prøvd mot en ekte database |
 | `src/__tests__/farmakodynamikk.test.ts` | Mekanismetypene, ikonene, fargene, systemene, subtypene, søket og historikken |
+| `src/faginnhold/migrasjonshistorikk.ts`, `scripts/kontroller-migrasjoner.ts` | Kontrollen av at migrasjonsfilene har versjonen, navnet og teksten databasen registrerte |
 | `src/__tests__/hjelp/testdatabase.ts` | Postgres i minnet, bygd av migrasjonene, og kallene testene gjør |
 
 ## Domenet
