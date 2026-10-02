@@ -94,6 +94,9 @@ describe('kvetiapin-monografkuratering', () => {
     expect(s).toContain('150–750 mg/døgn')
     expect(s).toContain('Tilleggsbehandling ved unipolar depresjon')
     expect(s).toContain('plasmaclearance er i gjennomsnitt 30–50 % lavere')
+    expect(s).toContain('"level":2')
+    expect(s).toContain('"type":"horizontalRule"')
+    expect(s).toContain('"type":"bulletList"')
     expect(e!.referanser).toHaveLength(2)
     expect(e!.utkast).toBe(e!.publisert)
   })
@@ -114,6 +117,8 @@ describe('kvetiapin-monografkuratering', () => {
       expect(e.utkast, String(e.data.tittel)).toBe(e.publisert)
     }
     expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 't½')!.data)).toContain('Norkvetiapin: ca. 12 timer')
+    expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 'tₛₛ')!.data)).toContain('48 timer')
+    expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 'Vd')!.data)).toContain('500–700 L')
 
     const { rows } = await db.query<{ n: number }>(
       `select count(*)::int as n
@@ -137,7 +142,10 @@ describe('kvetiapin-monografkuratering', () => {
     expect(s).toContain('CYP2D6')
     expect(s).toContain('norkvetiapin')
     expect(s).toContain('ClinPGx')
-    expect(e!.referanser.length).toBeGreaterThanOrEqual(4)
+    expect(s).toContain('CYP3A4 poor metabolizer')
+    expect(s).toContain('30 % av normaldosen')
+    expect(s).toContain('ingen dose- eller behandlingsendring for CYP2D6')
+    expect(e!.referanser.length).toBeGreaterThanOrEqual(5)
     expect(e!.utkast).toBe(e!.publisert)
   })
 
@@ -154,18 +162,19 @@ describe('kvetiapin-monografkuratering', () => {
     const { rows } = await db.query<{ tittel: string; n: number }>(
       `select tittel, count(*)::int as n from public.referanser
        where tilstand = 'publisert' and tittel in (
-         'Seroquel «Cheplapharm»',
-         'Seroquel Depot «Cheplapharm»',
+         'Quetiapine Teva – preparatomtale',
+         'Quetiapine Accord – preparatomtale',
          'N-desalkylquetiapine, a potent norepinephrine reuptake inhibitor and partial 5-HT1A agonist, as a putative mediator of quetiapine''s antidepressant activity',
          'Quetiapine and its metabolite norquetiapine: translation from in vitro pharmacology to in vivo efficacy in rodent models',
          'Clinical pharmacokinetics of quetiapine: an atypical antipsychotic',
          'Pharmacokinetic profiles of extended release quetiapine fumarate compared with quetiapine immediate release',
-         'Quetiapine tablet, film coated – prescribing information',
+         'Multiple dose pharmacokinetics of quetiapine and some of its metabolites in Chinese suffering from schizophrenia',
          'Quetiapine Pathway, Pharmacokinetics',
-         'Metabolism of the active metabolite of quetiapine, N-desalkylquetiapine in vitro'
+         'Metabolism of the active metabolite of quetiapine, N-desalkylquetiapine in vitro',
+         'Dutch Pharmacogenetics Working Group (DPWG) guideline for the gene-drug interaction between CYP2D6, CYP3A4 and CYP1A2 and antipsychotics'
        ) group by tittel`,
     )
-    expect(rows).toHaveLength(9)
+    expect(rows).toHaveLength(10)
     for (const r of rows) expect(r.n, r.tittel).toBe(1)
   })
 })
