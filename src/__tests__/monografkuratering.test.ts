@@ -125,6 +125,7 @@ describe('monografkurateringene i migrasjonene', () => {
     expect(migrasjonsfiler().filter((f) => f.endsWith('_monografkuratering_hjelpere.sql'))).toHaveLength(1)
     expect('20261002071332_monografkuratering_hjelpere.sql').not.toMatch(MONOGRAFKURATERING)
     expect('20261002075626_monografkuratering_hjelpere_retting.sql').not.toMatch(MONOGRAFKURATERING)
+    expect('20261002082000_monografkuratering_hjelpere_referanselenke.sql').not.toMatch(MONOGRAFKURATERING)
   })
 })
 
@@ -320,7 +321,7 @@ describe('monografkuratering med kuratorprofil', () => {
       side,
       `do $$ begin perform intern.kuratering_start('duplikatstoff');
          perform intern.kuratering_referanse('${JSON.stringify(utkast)}', 'Kurateringskilde'); end $$;`,
-      /står på en referanse som bare finnes som utkast/,
+      /står på en referanse som ikke er publisert med den lenken/,
     )
     const publisert = { ...utkast, lenke: 'https://example.org/publisert-og-utkast' }
     await kall.publiser((await kall.opprett('referanse', publisert)).id, 1)
@@ -340,6 +341,41 @@ describe('monografkuratering med kuratorprofil', () => {
            "lenke": "https://example.org/ny"}', ' '); end $$;`,
       /må ha en kilde i historikken/,
     )
+  })
+
+  it('gjenbruker en referanse bare når lenken er publisert og utkastet er likt, og renser lenken først', async () => {
+    const { side } = await eksempelside(kall, 'Lenkestoff')
+    const kurater = (innhold: Record<string, unknown>) =>
+      `do $$ begin perform intern.kuratering_start('lenkestoff');
+         perform intern.kuratering_referanse('${JSON.stringify(innhold)}', 'Kurateringskilde'); end $$;`
+
+    // Publisert med lenke A, og et upublisert utkast som har byttet til lenke B.
+    const a = { tittel: 'Endret lenke', forfattere: 'D', aar: '2026', lenke: 'https://example.org/lenke-a' }
+    const b = { ...a, lenke: 'https://example.org/lenke-b' }
+    const endret = (await kall.opprett('referanse', a)).id
+    await kall.publiser(endret, 1)
+    await kall.lagre(endret, 1, b)
+    for (const innhold of [b, a]) {
+      await forventStopp(db, side, kurater(innhold), /står på en referanse som ikke er publisert med den lenken/)
+    }
+
+    await forventStopp(db, side, kurater({ ...a, lenke: '   ' }), /må ha en lenke/)
+
+    // En lenke med mellomrom rundt finner referansen som er lagret uten dem.
+    const renset = { tittel: 'Renset', forfattere: 'E', aar: '2026', lenke: 'https://example.org/renset' }
+    const eksisterende = (await kall.opprett('referanse', renset)).id
+    await kall.publiser(eksisterende, 1)
+    const referanser = await antallReferanser(db)
+    const funnet = await db.transaction(async (tx) => {
+      await tx.query(`select intern.kuratering_start('lenkestoff')`)
+      const { rows } = await tx.query<{ id: string }>(
+        `select intern.kuratering_referanse($1::jsonb, 'Kurateringskilde') as id`,
+        [JSON.stringify({ ...renset, lenke: '  https://example.org/renset ' })],
+      )
+      return rows[0]!.id
+    })
+    expect(funnet).toBe(eksisterende)
+    expect(await antallReferanser(db)).toBe(referanser)
   })
 
   it('stopper når kuratoren finnes, men ikke siden', async () => {
