@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.73.2',
+    versjon: '1.73.3',
     dato: '2026-10-02',
     sammendrag: 'Tryggere oppdateringer av fagsidene',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,18 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Når en fagside oppdateres samlet etter en faglig gjennomgang, kontrolleres hvert kort mot nøyaktig den utgaven som ble gjennomgått. Har noen redigert kortet i mellomtiden, eller finnes det et kort til med det samme målet, stopper oppdateringen uten å endre noe.',
       'Ingen fagtekster er endret.',
+    ],
+  },
+  {
+    versjon: '1.73.2',
+    dato: '2026-10-02',
+    sammendrag: 'Ikoner og tydeligere kategorier i stoffregisteret',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Stoffregisteret har fått et eget ikon ved tittelen, og hver stoffkategori har sitt eget ikon: soloppgang for antidepressiver, en hjerne for antipsykotika, et vinglass for alkohol og GHB, en valmuekapsel for opioider og så videre.',
+      'Kategorinavnene står nå i samme skrift som overskriftene og litt større, så de skiller seg tydelig fra stoffene under dem.',
+      'En kategori som ikke har fått sitt eget ikon ennå, vises med et nøytralt plassholderikon.',
     ],
   },
   {
