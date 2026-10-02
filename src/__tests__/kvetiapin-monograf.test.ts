@@ -59,7 +59,8 @@ describe('kvetiapin-monografkuratering', () => {
     await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
     await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: KORRIGERING })
 
-    // Korrigeringen skal være trygg å kjøre på nytt i testmiljøet.
+    // Kjør korrigeringen, og deretter én gang til for å verifisere idempotens.
+    await kjorMigrasjoner(db, { bare: [KORRIGERING] })
     await kjorMigrasjoner(db, { bare: [KORRIGERING] })
 
     farmakodynamikk = await elementer(db, 'farmakodynamikk')
