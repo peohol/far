@@ -118,7 +118,7 @@ describe('kvetiapin-monografkuratering', () => {
     }
     expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 't½')!.data)).toContain('Norkvetiapin: ca. 12 timer')
     expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 'tₛₛ')!.data)).toContain('48 timer')
-    expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 'Vd')!.data)).toContain('500–700 L')
+    expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 'Vd')!.data)).toContain('672 ± 394 L')
 
     const { rows } = await db.query<{ n: number }>(
       `select count(*)::int as n
