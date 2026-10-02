@@ -105,6 +105,32 @@ describe('kvetiapin-monografkuratering', () => {
     }
   })
 
+  it('bevarer D1-kortets historikk og oppretter 5-HT2C som et nytt objekt', async () => {
+    const { rows } = await db.query<{ maal: string; panel: string; kilde: string | null }>(
+      `select e.data->>'maal' as maal, e.panel, r.kilde
+       from public.innholdselementer e
+       join public.infosider s on s.objekt_id = e.infoside_id and s.tilstand = 'publisert' and s.slug = 'kvetiapin'
+       join public.objekttilstander p on p.objekt_id = e.objekt_id and p.tilstand = 'publisert'
+       join public.objektrevisjoner r on r.objekt_id = e.objekt_id and r.revisjon = p.revisjon
+       where e.tilstand = 'publisert'
+         and e.data->>'maal' in ('D1-reseptor', '5-HT2C-reseptor')
+       order by e.data->>'maal'`,
+    )
+
+    expect(rows).toEqual([
+      {
+        maal: '5-HT2C-reseptor',
+        panel: 'farmakodynamikk',
+        kilde: 'Monografikuratering av kvetiapin 02.10.2026: 5-HT2C-antagonisme lagt til etter funksjonelle data',
+      },
+      {
+        maal: 'D1-reseptor',
+        panel: 'fjernet',
+        kilde: 'Monografikuratering av kvetiapin 02.10.2026: D1-kort utelatt etter ny evidensvurdering',
+      },
+    ])
+  })
+
   it('har indikasjonsspesifikk IR- og depotdosering med inline-kilder', () => {
     expect(dosering).toHaveLength(1)
     const [e] = dosering
