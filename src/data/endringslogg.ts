@@ -12,6 +12,22 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.74.0',
+    dato: '2026-10-02',
+    sammendrag: 'Stoffregisteret på en egen side, der det kan redigeres',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Betydelig omfang',
+    punkter: [
+      '«Åpne hele stoffregisteret» nederst i sidemenyen åpner registeret som en egen side, bygd som fagsidene: én seksjon per kategori, underkategoriene som mellomtitler og ett kort per stoff. Siden har sine egne diskusjoner.',
+      'Kortet for et stoff viser en kort oppsummering, knapper til fagsiden og fortolkningen, og hvilke kategorier stoffet står i. Oppsummeringen skrives på fagsiden, i feltet under navnet.',
+      'Med «Rediger» kan du lage, gi nytt navn til, flytte, arkivere og slette kategorier og underkategorier, og dra stoffene mellom dem. Stoffene står alltid alfabetisk. Fra kortet kan et stoff også legges i flere kategorier.',
+      'Alle kan arkivere en fagside og hente den tilbake, og slette en fagside som bare har et navn. Bare administratorer kan slette en fagside med innhold, fra siden selv («Mer for fagsiden»), fra registeret eller fra arkivet. En fagside fortolkningen lenker til, kan bare arkiveres.',
+      'Slettede fagsider havner i en papirkurv som bare administratorer ser. Der kan de hentes tilbake eller slettes for godt, og papirkurven kan tømmes. Det som har ligget der i 30 dager, slettes for godt av seg selv.',
+      'Arkiverte og slettede fagsider står ikke i sidemenyen eller i søket. Sidemenyen og den nye siden viser alltid det samme registeret.',
+      'Å lage en ny fagside gjøres nå i redigeringen av stoffregisteret, ikke nederst i sidemenyen.',
+    ],
+  },
+  {
     versjon: '1.73.4',
     dato: '2026-10-02',
     sammendrag: 'Kategoriikonene også øverst på fagsidene',
