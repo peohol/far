@@ -218,6 +218,11 @@ describe('ikonregisteret for farmakokinetikken', () => {
 
   it('leser fri tekst etter mening, og faller trygt tilbake', () => {
     expect(kinetikkikon('Absorpsjon')).toBe('absorp')
+    // De faste kortene i «Misbruk og avhengighet».
+    expect(kinetikkikon('Misbrukspotensial')).toBe('misbruk')
+    expect(kinetikkikon('Vanedannelse')).toBe('vane')
+    expect(kinetikkikon('Toleranse')).toBe('toleranse')
+    expect(kinetikkikon('Abstinens og tilbakeslagseffekter')).toBe('abstinens')
     expect(kinetikkikon('  Distribusjonsvolum ')).toBe('dist')
     expect(kinetikkikon('Metabolisme')).toBe('metab')
     expect(kinetikkikon('Halveringstid')).toBe('hl')

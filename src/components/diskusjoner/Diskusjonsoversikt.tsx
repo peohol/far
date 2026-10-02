@@ -209,32 +209,32 @@ function Kategori({
         >
           <Ikon navn="gears" storrelse="ui" />
         </button>
+        {handlinger && (
+          <div className="idehandlinger diskusjonskategori__handlinger">
+            <Idehandling ikon="edit" onClick={onEndre}>
+              Endre
+            </Idehandling>
+            {!forste && (
+              <Idehandling ikon="opp" onClick={() => onFlytt(indeks - 1)}>
+                Flytt opp
+              </Idehandling>
+            )}
+            {!siste && (
+              <Idehandling ikon="ned" onClick={() => onFlytt(indeks + 1)}>
+                Flytt ned
+              </Idehandling>
+            )}
+            <Bekreftknapp
+              ikon="trash"
+              tekst="Løs opp"
+              bekreftTekst="Bekreft"
+              etikett={`Løs opp ${kategori.navn}`}
+              bekreftEtikett={`Bekreft at ${kategori.navn} løses opp. Trådene havner under ${UKATEGORISERTE.navn}.`}
+              onBekreft={onLosOpp}
+            />
+          </div>
+        )}
       </div>
-      {handlinger && (
-        <div className="idehandlinger diskusjonskategori__handlinger">
-          <Idehandling ikon="edit" onClick={onEndre}>
-            Endre
-          </Idehandling>
-          {!forste && (
-            <Idehandling ikon="opp" onClick={() => onFlytt(indeks - 1)}>
-              Flytt opp
-            </Idehandling>
-          )}
-          {!siste && (
-            <Idehandling ikon="ned" onClick={() => onFlytt(indeks + 1)}>
-              Flytt ned
-            </Idehandling>
-          )}
-          <Bekreftknapp
-            ikon="trash"
-            tekst="Løs opp"
-            bekreftTekst="Bekreft"
-            etikett={`Løs opp ${kategori.navn}`}
-            bekreftEtikett={`Bekreft at ${kategori.navn} løses opp. Trådene havner under ${UKATEGORISERTE.navn}.`}
-            onBekreft={onLosOpp}
-          />
-        </div>
-      )}
       <Traadliste liste={kategori.id} tar="traad" diskusjoner={diskusjoner} onApne={onApne} />
       <button type="button" className="nytraadknapp nytraadknapp--kategori" onClick={onNyTraad}>
         <Ikon navn="plus" storrelse="ui" />

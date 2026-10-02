@@ -419,6 +419,7 @@
    som kanten rundt, så det skiller seg tydelig fra trådene under. */
 .diskusjonskategori__hode {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--rom-2);
   margin: calc(-1 * var(--rom-2)) calc(-1 * var(--rom-2)) var(--rom-1);
@@ -486,8 +487,10 @@
   background: var(--flate-hevet);
 }
 
+/* Handlingene står i hodet, på en egen linje med ikonene under emojien. */
 .diskusjonskategori__handlinger {
-  margin: 0 0 var(--rom-1) var(--rom-3);
+  flex-basis: 100%;
+  margin: 0 0 0 1.5rem;
 }
 
 /* Håndtaket en kategori eller tråd dras i, med mus og finger. Tastaturet

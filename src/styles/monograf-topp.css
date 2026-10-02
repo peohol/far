@@ -12,6 +12,28 @@
   padding: var(--rom-8) var(--rom-4) var(--rom-3);
 }
 
+/* Hver kategori i metalinjen over navnet, med ikonet sitt foran, som i
+   stoffregisteret. Ikonet er større enn de små versalene, så det leses.
+   Teksten står i et eget element som kan brytes, så en lang sti som
+   «Antidepressiver › NMDA-reseptorantagonister» ikke kuttes på en smal skjerm. */
+.identitet__kategori {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  min-width: 0;
+}
+
+.identitet__kategoristi {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+.identitet__kategoriikon {
+  flex: none;
+  width: var(--ikon-ui);
+  height: var(--ikon-ui);
+}
+
 .identitet__navn {
   font-family: var(--skrift-display);
   font-size: var(--tekst-display);
