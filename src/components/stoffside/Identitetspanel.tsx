@@ -91,13 +91,15 @@ export function Identitetspanel({
             {i > 0 && <span aria-hidden="true">·</span>}
             <span className="identitet__kategori">
               <Ikon navn={kategoriikon(k.ikon)} className="identitet__kategoriikon" />
-              {k.kategori}
-              {k.underkategori && (
-                <>
-                  {' '}
-                  <span aria-hidden="true">›</span> {k.underkategori}
-                </>
-              )}
+              <span className="identitet__kategoristi">
+                {k.kategori}
+                {k.underkategori && (
+                  <>
+                    {' '}
+                    <span aria-hidden="true">›</span> {k.underkategori}
+                  </>
+                )}
+              </span>
             </span>
           </Fragment>
         ))}
