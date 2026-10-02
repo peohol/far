@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.73.3',
+    dato: '2026-10-02',
+    sammendrag: 'Fast overskrift i diskusjonstråder og tydeligere kategorier i diskusjonsmenyen',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Overskriften på tråden står nå fast under «‹ Alle tråder», så du ser den mens du ruller. En strek under den skiller den fra det som ruller.',
+      'Du endrer overskriften med blyanten til høyre for den. Knappen «Endre overskrift» under innlegget er borte.',
+      'I oversikten står navnet på hver kategori i et eget felt øverst i kortet, med en strek under, så det er lettere å skille kategorien fra trådene i den.',
+    ],
+  },
+  {
     versjon: '1.73.2',
     dato: '2026-10-02',
     sammendrag: 'Ikoner og tydeligere kategorier i stoffregisteret',
