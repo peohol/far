@@ -35,7 +35,7 @@ import { Detaljkort } from '../seksjoner/Seksjon'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { Uthev } from '../Uthev'
 import { useFaginnholdskilde } from './Faginnholdskilde'
-import { elementAnker, kortelementer, kortoppsummering, Panel, Redaksjonskort, Redigerbar, type Panelkontekst } from './Paneler'
+import { elementAnker, kortelementer, kortoppsummering, Panel, panelteksten, Paneltekst, Redaksjonskort, Redigerbar, type Panelkontekst } from './Paneler'
 import { ClinpgxkoblingSkjema } from './Skjemaer'
 import { Gruppe, Kildelenke } from './Farmakogenetikkdeler'
 import { cpictekster, oppsummerCpic } from '../../cpic/stoffside'
@@ -52,7 +52,7 @@ export function farmakogenetikksoketekster(tilstand: Farmakogenetikktilstand, cp
 }
 
 /**
- * Seksjonen «Farmakogenetikk»: øverst de redaksjonelle kortene, som redigeres
+ * Seksjonen «Farmakogenetikk»: øverst redaksjonell fritekst og kort, som redigeres
  * her, så CPICs strukturerte anbefalinger for legemidlene siden er koblet til
  * (`Cpicvisning`), og under dem det OUSFARs kopi av ClinPGx har for de samme:
  * retningslinjene, preparatomtalene og de kliniske annotasjonene, hver i sitt
@@ -87,6 +87,7 @@ export function Farmakogenetikkpanel({
   onCpicHentet: () => void
 }) {
   const elementer = kortelementer(kontekst, definisjon.nokkel)
+  const tekst = panelteksten(kontekst, definisjon.nokkel)
   const { kobling } = finnClinpgxkobling(kontekst.modell)
   const koblet = kobling.kjemikalier.length > 0
   const visning = tilstand.status === 'klar' ? tilstand.visning : null
@@ -94,15 +95,17 @@ export function Farmakogenetikkpanel({
     <Panel
       definisjon={definisjon}
       kontekst={kontekst}
-      tomt={elementer.length === 0 && !koblet}
+      tomt={elementer.length === 0 && tekst.tomt && !koblet}
       oppsummering={ramsOpp([
+        !tekst.tomt && tekst.oppsummering,
         visning && oppsummerFarmakogenetikk(visning),
         cpic.status === 'klar' && oppsummerCpic(cpic.visning),
         kortoppsummering(elementer),
       ])}
     >
-      {/* Står det bare ett redaksjonelt kort, åpnes det bare når ClinPGx ikke har noe ved siden av. */}
-      <Redaksjonskort definisjon={definisjon} kontekst={kontekst} elementer={elementer} ettAlene={!koblet} />
+      <Paneltekst definisjon={definisjon} kontekst={kontekst} tekst={tekst} />
+      {/* Står det bare ett redaksjonelt kort, åpnes det bare når panelet ikke har annet innhold ved siden av. */}
+      <Redaksjonskort definisjon={definisjon} kontekst={kontekst} elementer={elementer} ettAlene={!koblet && tekst.tomt} />
       {kontekst.redigerer && (
         <Clinpgxkobling definisjon={definisjon} kontekst={kontekst} grunnlag={grunnlag} sidenavn={sidenavn} onHentet={onHentet} />
       )}
