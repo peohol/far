@@ -126,7 +126,7 @@ describe('monografkurateringene i migrasjonene', () => {
     expect('20261002071332_monografkuratering_hjelpere.sql').not.toMatch(MONOGRAFKURATERING)
     expect('20261002075626_monografkuratering_hjelpere_retting.sql').not.toMatch(MONOGRAFKURATERING)
     expect('20261002082956_monografkuratering_hjelpere_referanselenke.sql').not.toMatch(MONOGRAFKURATERING)
-    expect('20261002093500_monografkuratering_hjelpere_arkiverte_utkast.sql').not.toMatch(MONOGRAFKURATERING)
+    expect('20261002110101_monografkuratering_hjelpere_arkiverte_utkast.sql').not.toMatch(MONOGRAFKURATERING)
   })
 })
 
