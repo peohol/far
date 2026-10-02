@@ -15,6 +15,8 @@ import type { Mekanisme } from '../../faginnhold/mekanismer'
 const SEKSJONSIKONER: Readonly<Record<string, Ikonnavn>> = {
   viktige_data: 'ref',
   farmakodynamikk: 'gears',
+  virkninger: 'virkning',
+  bivirkninger: 'bivirkning',
   indikasjon: 'indik',
   preparater: 'prep',
   dosering: 'dose',

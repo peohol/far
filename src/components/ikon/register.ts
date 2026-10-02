@@ -248,6 +248,18 @@ const spiral = (r: number, omdreininger: number): string => {
   return d
 }
 
+/*
+ * Virkninger og bivirkninger: den samme skråstilte kapselen nede til venstre,
+ * og det den gir, oppe til høyre — en gnist for virkningen, et varsel for
+ * bivirkningen. Kapselen er tegnet loddrett om midten og dreies med `rot`;
+ * merket står fritt, så det ikke dreies med.
+ */
+const kapsel: Ikondel[] = [
+  P('M17.5 24v-8.5a6.5 6.5 0 0 1 13 0V24z', 'f2', 'accent'),
+  P('M17.5 24h13v8.5a6.5 6.5 0 0 1-13 0z', 'f1', 'glass'),
+]
+const KAPSEL_SKRA = 'translate(-4 4) rotate(-45 24 24)'
+
 const REGISTER = {
   menu: { vb: 24, parts: [P('M4 7h16M4 12h16M4 17h9', 'l', 'i-ink'), C(18, 17, 2, 'f2', 'accent', 'pop')] },
   search: { vb: 24, ga: 'pulse', parts: [C(10.5, 10.5, 6.5, 'f1', 'accent'), P('M15.5 15.5 20.5 20.5', 'l', 'i-ink')] },
@@ -702,6 +714,23 @@ const REGISTER = {
       C(33, 33, 11, 'f1', 'accent'),
       P('M33 26.5V33l4.5 3', 'l', 'i-ink', 'tick'),
     ],
+  },
+  /* Virkninger: kapselen og en gnist for det stoffet gjør. */
+  virkning: {
+    vb: 48,
+    rot: KAPSEL_SKRA,
+    parts: kapsel,
+    free: [
+      P('M35 3.5Q36.6 11.4 44.5 13 36.6 14.6 35 22.5 33.4 14.6 25.5 13 33.4 11.4 35 3.5z', 'f2', 'ok', 'pop'),
+      C(43, 24.5, 1.8, 'h', 'ok', 'pop'),
+    ],
+  },
+  /* Bivirkninger: den samme kapselen med en varseltrekant. */
+  bivirkning: {
+    vb: 48,
+    rot: KAPSEL_SKRA,
+    parts: kapsel,
+    free: [G([P('M35 4.5 44.5 21.5h-19z', 'f2', 'warn'), P('M35 10.5v5', 'l'), C(35, 18.6, 1.3, 'h')], 'pop')],
   },
   yes: { vb: 24, parts: [C(12, 12, 9, 'f1', 'ok'), P('M8 12.3l2.6 2.6L16 9.5', 'l', null, 'pop')] },
   no: { vb: 24, parts: [C(12, 12, 9, 'f1', 'danger'), P('M9 9l6 6M15 9l-6 6', 'l', null, 'pop')] },

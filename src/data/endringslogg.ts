@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.74.0',
+    dato: '2026-10-02',
+    sammendrag: 'Nye seksjoner for virkninger og bivirkninger på fagsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Fagsidene har fått to nye seksjoner, «Virkninger» og «Bivirkninger», mellom «Farmakodynamikk» og «Indikasjon». Hver har sitt eget ikon.',
+      'Seksjonene er tomme foreløpig og vises derfor ikke for den som leser. I redigeringsmodus står de fram, og du kan legge til kort med overskrift og tekst, som i farmakokinetikken.',
+    ],
+  },
+  {
     versjon: '1.73.4',
     dato: '2026-10-02',
     sammendrag: 'Kategoriikonene også øverst på fagsidene',

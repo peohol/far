@@ -439,6 +439,8 @@ styrer søket og nummereringen av referansene):
 | Identitet | `identitet` | Ingen; navnet, kategoriene og de koblede analyttene kommer fra siden og stoffregisteret |
 | Viktige data | `viktige_data` | Ett kort per type og kode (`gjelder`, se «Sammenslåtte sider») — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk). Konsentrasjonene har `{ nedre, ovre, enhet }`; t½ og tss har `{ former: [{ stoff?, form, typisk, min, maks, enhet }] }`, én rad per legemiddelform eller stoff |
 | Farmakodynamikk | `farmakodynamikk` | `mekanismekort`: `{ maal, mekanisme, dokument? }`, i rekkefølge, som regel ett per målprotein eller mekanisme (se «Farmakodynamikken som mekanismekort»). En `riktekst` fra en senere import vises under kortene |
+| Virkninger | `virkninger` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge, som i farmakokinetikken. Seksjonen kom til 2026-10-02 uten innhold; i lesemodus står den først når den har kort |
+| Bivirkninger | `bivirkninger` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge, som i farmakokinetikken. Kom til sammen med virkningene, uten innhold |
 | Indikasjon | `indikasjon` | `riktekst`: `{ dokument }` |
 | Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
 | Dosering | `dosering` | `riktekst`: `{ dokument }` |
@@ -467,7 +469,7 @@ databasen når siden finnes der.
 tittel, men er et område med navnet for skjermlesere; kortene står i to
 grupper (`DATAKORTGRUPPER`), med konseptikon og etikett på hvert kort, og
 halveringstid og tid til steady state vises som t₁/₂ og tₛₛ. De andre panelene
-er seksjoner som åpnes og lukkes, og kortene i farmakodynamikken, farmakokinetikken, farmakogenetikken og TDM er detaljkort
+er seksjoner som åpnes og lukkes, og kortene i farmakodynamikken, virkningene, bivirkningene, farmakokinetikken, farmakogenetikken og TDM er detaljkort
 i sin seksjon (se `docs/seksjoner.md`). En lukket seksjon viser en kort
 oppsummering med innholdets egne ord: målene i farmakodynamikken, titlene på kinetikkortene, dosene i
 tabellen eller begynnelsen av teksten. Redigeringsmodus åpner ikke alt;

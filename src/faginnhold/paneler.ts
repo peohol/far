@@ -51,6 +51,8 @@ export const PANELER = [
   { nokkel: 'identitet', tittel: 'Identitet', form: 'identitet' },
   { nokkel: 'viktige_data', tittel: 'Viktige data', form: 'datakort' },
   { nokkel: 'farmakodynamikk', tittel: 'Farmakodynamikk', form: 'mekanismer' },
+  { nokkel: 'virkninger', tittel: 'Virkninger', form: 'kort' },
+  { nokkel: 'bivirkninger', tittel: 'Bivirkninger', form: 'kort' },
   { nokkel: 'indikasjon', tittel: 'Indikasjon', form: 'tekst' },
   { nokkel: 'preparater', tittel: 'Preparater', form: 'legemidler' },
   { nokkel: 'dosering', tittel: 'Dosering', form: 'tekst' },
