@@ -1,4 +1,4 @@
-/** Kvetiapin-monografkurateringen: kildebelegg og faglige presiseringer i de kuraterte panelene. */
+/** Kvetiapin-monografkurateringen: fersk kildevurdering av farmakodynamikk, dosering og farmakokinetikk. */
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
@@ -35,49 +35,69 @@ async function elementer(db: PGlite, panel: string): Promise<Element[]> {
 
 const tekst = (data: Record<string, unknown>) => JSON.stringify(data)
 
+function inlineReferanser(verdi: unknown): string[] {
+  if (Array.isArray(verdi)) return verdi.flatMap(inlineReferanser)
+  if (!verdi || typeof verdi !== 'object') return []
+  const node = verdi as Record<string, unknown>
+  if (node.type === 'sitering') {
+    const attrs = node.attrs
+    if (!attrs || typeof attrs !== 'object') return []
+    const referanser = (attrs as Record<string, unknown>).referanser
+    return Array.isArray(referanser) ? referanser.filter((id): id is string => typeof id === 'string') : []
+  }
+  return Object.values(node).flatMap(inlineReferanser)
+}
+
 describe('kvetiapin-monografkuratering', () => {
   let db: PGlite
   let farmakodynamikk: Element[]
   let dosering: Element[]
   let farmakokinetikk: Element[]
-  let farmakogenetikk: Element[]
-  let interaksjoner: Element[]
 
   beforeAll(async () => {
     db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
     await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
     await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: MIGRASJON })
+
+    // Migrasjonen skal være trygg å kjøre på nytt i testmiljøet.
     await kjorMigrasjoner(db, { bare: [MIGRASJON] })
+
     farmakodynamikk = await elementer(db, 'farmakodynamikk')
     dosering = await elementer(db, 'dosering')
     farmakokinetikk = await elementer(db, 'farmakokinetikk')
-    farmakogenetikk = await elementer(db, 'farmakogenetikk')
-    interaksjoner = await elementer(db, 'interaksjoner')
   }, 240_000)
 
-  it('har ni kildebelagte mekanismekort med funksjon skilt fra ren binding', () => {
+  it('har ni kildebelagte mekanismekort uten et eget D1-kort', () => {
     expect(farmakodynamikk).toHaveLength(9)
+
     const mekanismer = new Map(farmakodynamikk.map((e) => [String(e.data.maal), e]))
     expect([...mekanismer].map(([maal]) => maal)).toEqual([
       '5-HT2A-reseptor',
-      'D1-reseptor',
+      '5-HT2C-reseptor',
       'D2-reseptor',
-      'H1-reseptor',
+      'Histamin H1-reseptor',
       'α1-adrenerg reseptor',
       'α2-adrenerg reseptor',
       'M1-, M3- og M5-reseptorer (norkvetiapin)',
       'Noradrenalintransportør / NET (norkvetiapin)',
-      '5-HT1A-reseptor (norkvetiapin)',
+      '5-HT1A-reseptor (kvetiapin og norkvetiapin)',
     ])
+
+    expect(mekanismer.has('D1-reseptor')).toBe(false)
     expect(mekanismer.get('5-HT2A-reseptor')?.data.mekanisme).toBe('antagonisme')
+    expect(mekanismer.get('5-HT2C-reseptor')?.data.mekanisme).toBe('antagonisme')
     expect(mekanismer.get('D2-reseptor')?.data.mekanisme).toBe('antagonisme')
-    for (const maal of ['D1-reseptor', 'H1-reseptor', 'α1-adrenerg reseptor', 'α2-adrenerg reseptor']) {
-      expect(mekanismer.get(maal)?.data.mekanisme, maal).toBe('reseptorbinding')
-    }
+    expect(mekanismer.get('Histamin H1-reseptor')?.data.mekanisme).toBe('antagonisme')
+    expect(mekanismer.get('α1-adrenerg reseptor')?.data.mekanisme).toBe('antagonisme')
+    expect(mekanismer.get('α2-adrenerg reseptor')?.data.mekanisme).toBe('antagonisme')
     expect(mekanismer.get('M1-, M3- og M5-reseptorer (norkvetiapin)')?.data.mekanisme).toBe('antagonisme')
     expect(mekanismer.get('Noradrenalintransportør / NET (norkvetiapin)')?.data.mekanisme).toBe('reopptakshemming')
-    expect(mekanismer.get('5-HT1A-reseptor (norkvetiapin)')?.data.mekanisme).toBe('agonisme')
-    expect(tekst(mekanismer.get('5-HT1A-reseptor (norkvetiapin)')!.data)).toContain('assayavhengig')
+    expect(mekanismer.get('5-HT1A-reseptor (kvetiapin og norkvetiapin)')?.data.mekanisme).toBe('agonisme')
+
+    expect(tekst(mekanismer.get('5-HT2C-reseptor')!.data)).toContain('kliniske betydningen er ikke fastslått')
+    expect(tekst(mekanismer.get('5-HT1A-reseptor (kvetiapin og norkvetiapin)')!.data)).toContain('assayavhengig')
+    expect(tekst(mekanismer.get('Histamin H1-reseptor')!.data)).toContain('56–81 %')
+
     for (const e of farmakodynamikk) {
       expect(e.elementtype).toBe('mekanismekort')
       expect(e.referanser.length, String(e.data.maal)).toBeGreaterThan(0)
@@ -85,96 +105,112 @@ describe('kvetiapin-monografkuratering', () => {
     }
   })
 
-  it('erstatter den gamle doselinjen med indikasjonsspesifikk IR- og depotdosering', () => {
+  it('har indikasjonsspesifikk IR- og depotdosering med inline-kilder', () => {
     expect(dosering).toHaveLength(1)
     const [e] = dosering
     expect(e!.elementtype).toBe('riktekst')
+
     const s = tekst(e!.data)
     expect(s).toContain('Umiddelbar frisetting (IR)')
     expect(s).toContain('150–750 mg/døgn')
+    expect(s).toContain('Depot (XR)')
     expect(s).toContain('Tilleggsbehandling ved unipolar depresjon')
-    expect(s).toContain('plasmaclearance er i gjennomsnitt 30–50 % lavere')
-    expect(s).toContain('"level":2')
+    expect(s).toContain('tidligst dag 22')
+    expect(s).toContain('minst 1–2 uker')
     expect(s).toContain('"type":"horizontalRule"')
     expect(s).toContain('"type":"bulletList"')
-    expect(e!.referanser).toHaveLength(2)
+
+    const inline = inlineReferanser(e!.data)
+    expect(new Set(inline).size).toBe(2)
+    expect(inline.length).toBeGreaterThan(10)
+    expect(e!.referanser).toHaveLength(0)
     expect(e!.utkast).toBe(e!.publisert)
   })
 
-  it('kildebelegger hvert farmakokinetikkort og fjerner det uspesifikke Annet-kortet fra panelet', async () => {
+  it('kildebelegger åtte klinisk relevante farmakokinetikkort', () => {
     expect(farmakokinetikk.map((e) => String(e.data.tittel))).toEqual([
       'Absorpsjon og formulering',
       'tₘₐₓ',
       't½',
       'tₛₛ',
       'Proteinbinding',
-      'Vd',
+      'Distribusjonsvolum',
       'Metabolisme og utskillelse',
+      'Særpopulasjoner',
     ])
+
     for (const e of farmakokinetikk) {
       expect(e.elementtype).toBe('kinetikkort')
       expect(e.referanser.length, String(e.data.tittel)).toBeGreaterThan(0)
       expect(e.utkast, String(e.data.tittel)).toBe(e.publisert)
     }
+
     expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 't½')!.data)).toContain('Norkvetiapin: ca. 12 timer')
     expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 'tₛₛ')!.data)).toContain('48 timer')
-    expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 'Vd')!.data)).toContain('672 ± 394 L')
+    expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 'Distribusjonsvolum')!.data)).toContain('672 ± 394 L')
 
-    const { rows } = await db.query<{ n: number }>(
-      `select count(*)::int as n
+    const metabolisme = tekst(farmakokinetikk.find((e) => e.data.tittel === 'Metabolisme og utskillelse')!.data)
+    expect(metabolisme).toContain('CYP3A4')
+    expect(metabolisme).toContain('CYP2D6')
+    expect(metabolisme).toContain('norkvetiapin')
+    expect(metabolisme).toContain('veiavhengig')
+
+    const saerpopulasjoner = tekst(farmakokinetikk.find((e) => e.data.tittel === 'Særpopulasjoner')!.data)
+    expect(saerpopulasjoner).toContain('30–50 % lavere')
+    expect(saerpopulasjoner).toContain('alvorlig nedsatt nyrefunksjon')
+    expect(saerpopulasjoner).toContain('stabil alkoholisk cirrhose')
+  })
+
+  it('lar farmakogenetikk og interaksjoner være urørt', async () => {
+    const { rows } = await db.query<{ panel: string; tittel: string | null; kilde: string | null }>(
+      `select e.panel, e.data->>'tittel' as tittel, r.kilde
        from public.innholdselementer e
        join public.infosider s on s.objekt_id = e.infoside_id and s.tilstand = 'publisert' and s.slug = 'kvetiapin'
-       where e.tilstand = 'publisert' and e.panel = 'fjernet' and e.data->>'tittel' = 'Annet'`,
+       join public.objekttilstander p on p.objekt_id = e.objekt_id and p.tilstand = 'publisert'
+       join public.objektrevisjoner r on r.objekt_id = e.objekt_id and r.revisjon = p.revisjon
+       where e.tilstand = 'publisert'
+         and (
+           (e.panel = 'farmakogenetikk' and e.elementtype = 'kinetikkort' and e.data->>'tittel' = 'CYP-enzymer (substrat)')
+           or (e.panel = 'interaksjoner' and e.elementtype = 'riktekst')
+         )
+       order by e.panel`,
     )
-    expect(rows[0]!.n).toBe(1)
-  })
 
-  it('oppdaterer CYP-kortet der det faktisk står i Farmakogenetikk', () => {
-    const kort = farmakogenetikk.filter((e) => e.elementtype === 'kinetikkort')
-    const koblinger = farmakogenetikk.filter((e) => e.elementtype === 'clinpgxkobling')
-    expect(kort).toHaveLength(1)
-    expect(koblinger).toHaveLength(1)
-    const [e] = kort
-    expect(e!.elementtype).toBe('kinetikkort')
-    expect(e!.data.tittel).toBe('CYP3A4 og CYP2D6')
-    const s = tekst(e!.data)
-    expect(s).toContain('CYP3A4 er hovedenzymet')
-    expect(s).toContain('CYP2D6')
-    expect(s).toContain('norkvetiapin')
-    expect(s).toContain('ClinPGx')
-    expect(s).toContain('CYP3A4 poor metabolizer')
-    expect(s).toContain('30 % av normaldosen')
-    expect(s).toContain('ingen dose- eller behandlingsendring for CYP2D6')
-    expect(e!.referanser.length).toBeGreaterThanOrEqual(5)
-    expect(e!.utkast).toBe(e!.publisert)
-  })
+    const farmakogenetikk = rows.find((r) => r.panel === 'farmakogenetikk')
+    const interaksjoner = rows.find((r) => r.panel === 'interaksjoner')
 
-  it('oppdaterer den redaksjonelle interaksjonsteksten i Interaksjoner-panelet', () => {
-    expect(interaksjoner).toHaveLength(1)
-    const [e] = interaksjoner
-    expect(e!.elementtype).toBe('riktekst')
-    expect(tekst(e!.data)).toContain('Sterke CYP3A4-hemmere')
-    expect(e!.referanser).toHaveLength(2)
-    expect(e!.utkast).toBe(e!.publisert)
+    expect(farmakogenetikk).toMatchObject({
+      tittel: 'CYP-enzymer (substrat)',
+      kilde: 'Flyttet: fra farmakokinetikken til farmakogenetikken',
+    })
+    expect(interaksjoner?.kilde).toBe('Flyttet: fra kortet i farmakokinetikken til teksten øverst i interaksjonene')
   })
 
   it('oppretter eller gjenbruker de kuraterte referansene uten dubletter', async () => {
-    const { rows } = await db.query<{ tittel: string; n: number }>(
-      `select tittel, count(*)::int as n from public.referanser
-       where tilstand = 'publisert' and tittel in (
-         'Quetiapine Teva – preparatomtale',
-         'Quetiapine Accord – preparatomtale',
-         'N-desalkylquetiapine, a potent norepinephrine reuptake inhibitor and partial 5-HT1A agonist, as a putative mediator of quetiapine''s antidepressant activity',
-         'Quetiapine and its metabolite norquetiapine: translation from in vitro pharmacology to in vivo efficacy in rodent models',
-         'Clinical pharmacokinetics of quetiapine: an atypical antipsychotic',
-         'Pharmacokinetic profiles of extended release quetiapine fumarate compared with quetiapine immediate release',
-         'Multiple dose pharmacokinetics of quetiapine and some of its metabolites in Chinese suffering from schizophrenia',
-         'Quetiapine Pathway, Pharmacokinetics',
-         'Metabolism of the active metabolite of quetiapine, N-desalkylquetiapine in vitro',
-         'Dutch Pharmacogenetics Working Group (DPWG) guideline for the gene-drug interaction between CYP2D6, CYP3A4 and CYP1A2 and antipsychotics'
-       ) group by tittel`,
+    const lenker = [
+      'https://produktinformasjon.legemiddelsok.no/preparatomtaler/07-5148.pdf',
+      'https://produktinformasjon.legemiddelsok.no/preparatomtaler/07-5214.pdf',
+      'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b519b924-2348-46ac-b9a2-c9c198257ea4',
+      'https://doi.org/10.1038/sj.npp.1301646',
+      'https://doi.org/10.1111/bph.13346',
+      'https://doi.org/10.1007/s00213-015-4002-2',
+      'https://doi.org/10.1016/S0924-977X(00)00133-4',
+      'https://doi.org/10.2165/00003088-200140070-00003',
+      'https://doi.org/10.1016/j.pnpbp.2008.09.026',
+      'https://pubmed.ncbi.nlm.nih.gov/15000896/',
+      'https://doi.org/10.1515/DMDI.2006.21.3-4.187',
+      'https://doi.org/10.1124/dmd.112.045237',
+    ]
+
+    const { rows } = await db.query<{ lenke: string; n: number }>(
+      `select lenke, count(*)::int as n
+       from public.referanser
+       where tilstand = 'publisert' and lenke = any($1::text[])
+       group by lenke`,
+      [lenker],
     )
-    expect(rows).toHaveLength(10)
-    for (const r of rows) expect(r.n, r.tittel).toBe(1)
+
+    expect(rows).toHaveLength(lenker.length)
+    for (const r of rows) expect(r.n, r.lenke).toBe(1)
   })
 })
