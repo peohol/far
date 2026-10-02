@@ -3,8 +3,8 @@
  * Helsiden for stoffregisteret (`#/stoffregister`), prøvd med et lager i
  * minnet som endrer inndelingen slik databasen gjør (`endreStruktur`):
  * kategoriene som seksjoner med stoffene som kort, oppsummeringen, veien til
- * fagsiden og fortolkningen, arkivet med angring, redigeringen og
- * papirkurven, som bare administratorer ser. Reglene i selve databasen
+ * fagsiden og fortolkningen, arkivet med angring, redigeringen med menyene
+ * og papirkurven, som bare administratorer ser. Reglene i selve databasen
  * prøves i `stoffregisterdb.test.ts`.
  */
 import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
@@ -130,6 +130,21 @@ async function vis({ admin = false, lager = lagLager() } = {}) {
   return lager
 }
 
+/** Går til redigeringen. */
+async function rediger() {
+  await userEvent.click(screen.getByRole('button', { name: 'Rediger stoffregisteret' }))
+}
+
+/** Åpner menyen til kategorien eller stoffet med navnet i redigeringen. */
+async function meny(navn: string) {
+  await userEvent.click(screen.getByRole('button', { name: `Mer for ${navn}` }))
+}
+
+/** Velger et valg i menyen som er åpen. */
+async function velg(valg: string | RegExp) {
+  await userEvent.click(screen.getByRole('button', { name: valg }))
+}
+
 /** Åpner seksjonen eller kortet med navnet, og gir det som står i det. */
 async function apne(navn: string, i: HTMLElement = document.body): Promise<HTMLElement> {
   const knapp = within(i).getByRole('button', { name: new RegExp(`^${navn}`) })
@@ -155,12 +170,27 @@ describe('lesevisningen', () => {
     expect(within(kort).getByRole('link', { name: 'Åpne fagside' }).getAttribute('href')).toBe('#/stoff/bupropion')
     await userEvent.click(within(kort).getByRole('button', { name: 'Åpne fortolkning' }))
     expect(onApneFortolkning).toHaveBeenCalledWith(ANALYTTKATALOG.finn('HBUP')!.fortolkning)
-    // Står i én kategori.
-    expect(within(kort).getByText('Antidepressiver › NDRI')).toBeTruthy()
+    expect(within(kort).getByText('Analyser: HBUP')).toBeTruthy()
+    // Kortet er bare for å lese: det som endrer stoffet, står i redigeringen.
+    expect(within(kort).queryByRole('button', { name: /Arkiver|Slett/ })).toBeNull()
+    expect(within(kort).queryByRole('combobox')).toBeNull()
 
     const teststoff = await apne('Teststoff', await apne('Andre stoffer'))
     expect(within(teststoff).getByText('Ingen oppsummering ennå. Den skrives på fagsiden.')).toBeTruthy()
     expect(within(teststoff).queryByRole('button', { name: 'Åpne fortolkning' })).toBeNull()
+  })
+
+  it('viser ikke analysekodene på et lukket kort', async () => {
+    await vis()
+    const antidepressiver = await apne('Antidepressiver')
+    const lukket = within(antidepressiver).getByRole('button', { name: /^Bupropion/ })
+    expect(lukket.getAttribute('aria-expanded')).toBe('false')
+    // Det som vises på et lukket kort, er overskriften med navnet og begynnelsen på oppsummeringen.
+    const hode = (knapp: HTMLElement) => knapp.closest('.stoffkort')!.querySelector('.skuff__hode')!.textContent
+    expect(hode(lukket)).toBe('BupropionEt syntetisk sammendrag.')
+    // Et stoff uten oppsummering viser bare navnet, ikke analysene det er koblet til.
+    expect(hode(within(antidepressiver).getByRole('button', { name: /^Sertralin/ }))).toBe('Sertralin')
+    expect(within(await apne('Sertralin', antidepressiver)).getByText(/^Analyser: /)).toBeTruthy()
   })
 
   it('lukker siden med Escape', async () => {
@@ -171,13 +201,15 @@ describe('lesevisningen', () => {
 })
 
 describe('arkivet og papirkurven', () => {
-  it('arkiverer et stoff fra kortet, viser det i arkivet, og angrer', async () => {
+  it('arkiverer et stoff fra menyen i redigeringen, viser det i arkivet, og angrer', async () => {
     const lager = await vis()
-    const kort = await apne('Teststoff', await apne('Andre stoffer'))
-    await userEvent.click(within(kort).getByRole('button', { name: 'Arkiver' }))
+    await rediger()
+    await meny('Teststoff')
+    await velg('Arkiver')
     expect(lager.arkiverStoff).toHaveBeenCalledWith('teststoff', true)
     expect(await screen.findByText('Teststoff er arkivert.')).toBeTruthy()
 
+    await userEvent.click(screen.getByRole('button', { name: 'Ferdig' }))
     const arkiv = await apne('Arkiv')
     expect(within(arkiv).getByRole('link', { name: 'Teststoff' }).getAttribute('href')).toBe('#/stoff/teststoff')
     await userEvent.click(screen.getByRole('button', { name: 'Angre' }))
@@ -188,15 +220,15 @@ describe('arkivet og papirkurven', () => {
   it('lar alle slette en side med bare et navn, men bare administratorer ser papirkurven', async () => {
     const lager = await vis()
     expect(screen.queryByRole('heading', { name: 'Papirkurv' })).toBeNull()
+    await rediger()
     // Bupropion har innhold og er koblet til fortolkningen: den kan bare arkiveres.
-    const bupropion = await apne('Bupropion', await apne('Antidepressiver'))
-    expect(within(bupropion).getByRole('button', { name: 'Arkiver' })).toBeTruthy()
-    expect(within(bupropion).queryByRole('button', { name: 'Slett Bupropion' })).toBeNull()
-    // Én seksjon er åpen om gangen: denne lukker «Antidepressiver».
-    const kort = await apne('Teststoff', await apne('Andre stoffer'))
+    await meny('Bupropion')
+    expect(screen.getByRole('button', { name: 'Arkiver' })).toBeTruthy()
+    expect(screen.queryByRole('button', { name: /^Slett/ })).toBeNull()
+    await userEvent.keyboard('{Escape}')
 
-    await userEvent.click(within(kort).getByRole('button', { name: 'Slett Teststoff' }))
-    await userEvent.click(within(kort).getByRole('button', { name: 'Bekreft sletting av Teststoff' }))
+    await meny('Teststoff')
+    await velg('Slett')
     expect(lager.slettStoff).toHaveBeenCalledWith('teststoff')
     expect(await screen.findByText('Teststoff er slettet.')).toBeTruthy()
   })
@@ -219,23 +251,26 @@ describe('arkivet og papirkurven', () => {
 describe('redigeringen', () => {
   it('lager, gir nytt navn til og sletter en kategori, og viser det med en gang i lesevisningen', async () => {
     const lager = await vis()
-    await userEvent.click(screen.getByRole('button', { name: 'Rediger stoffregisteret' }))
+    await rediger()
     expect(screen.getByText(/Stoffene står alltid alfabetisk/)).toBeTruthy()
 
     await userEvent.type(screen.getByLabelText('Ny kategori'), 'Testkategori{Enter}')
     expect(lager.opprettKategori).toHaveBeenCalledWith('Testkategori', null)
-    const ny = (await screen.findByRole('heading', { level: 3, name: 'Testkategori' })).closest('li')!
+    await screen.findByRole('heading', { level: 3, name: 'Testkategori' })
 
-    await userEvent.click(within(ny).getByRole('button', { name: 'Gi nytt navn' }))
-    const felt = within(ny).getByLabelText('Nytt navn på Testkategori')
+    await meny('Testkategori')
+    await velg('Gi nytt navn')
+    const felt = screen.getByLabelText('Nytt navn på Testkategori')
     await userEvent.clear(felt)
     await userEvent.type(felt, 'Omdøpt{Enter}')
     expect(lager.endreKategori).toHaveBeenCalledWith('ny-1', 'Omdøpt')
-    const omdopt = (await screen.findByRole('heading', { level: 3, name: 'Omdøpt' })).closest('li')!
+    await screen.findByRole('heading', { level: 3, name: 'Omdøpt' })
 
-    // En tom kategori kan alle slette.
-    await userEvent.click(within(omdopt).getByRole('button', { name: 'Slett Omdøpt' }))
-    await userEvent.click(within(omdopt).getByRole('button', { name: 'Bekreft sletting av Omdøpt' }))
+    // En tom kategori kan alle slette, men først når slettingen er bekreftet.
+    await meny('Omdøpt')
+    await velg('Slett')
+    expect(lager.slettKategori).not.toHaveBeenCalled()
+    await velg('Bekreft sletting')
     expect(lager.slettKategori).toHaveBeenCalledWith('ny-1')
     await waitFor(() => expect(screen.queryByRole('heading', { name: 'Omdøpt' })).toBeNull())
 
@@ -243,38 +278,72 @@ describe('redigeringen', () => {
     expect(screen.queryByLabelText('Ny kategori')).toBeNull()
   })
 
-  it('flytter en kategori ned med knappen', async () => {
+  it('flytter en kategori ned fra menyen, men ikke den øverste opp', async () => {
     const lager = await vis()
-    await userEvent.click(screen.getByRole('button', { name: 'Rediger stoffregisteret' }))
-    const forste = screen.getAllByRole('heading', { level: 3 })[0]!
-    // Kategoriens egen knapp står før underkategorienes.
-    await userEvent.click(within(forste.closest('li')!).getAllByRole('button', { name: 'Flytt ned' })[0]!)
-    expect(lager.flyttKategori).toHaveBeenCalledWith(forste.textContent, null, 1)
-    await waitFor(() => expect(screen.getAllByRole('heading', { level: 3 })[1]!.textContent).toBe(forste.textContent))
+    await rediger()
+    const forste = screen.getAllByRole('heading', { level: 3 })[0]!.textContent!
+    await meny(forste)
+    expect(screen.queryByRole('button', { name: 'Flytt opp' })).toBeNull()
+    await velg('Flytt ned')
+    expect(lager.flyttKategori).toHaveBeenCalledWith(forste, null, 1)
+    await waitFor(() => expect(screen.getAllByRole('heading', { level: 3 })[1]!.textContent).toBe(forste))
+  })
+
+  it('gjør en underkategori til en egen kategori fra menyen', async () => {
+    const lager = await vis()
+    await rediger()
+    await meny('NDRI')
+    await velg('Flytt til')
+    await velg('Egen kategori')
+    const ndri = kategoriid('Antidepressiver', 'NDRI')
+    expect(lager.flyttKategori).toHaveBeenCalledWith(ndri, null, expect.any(Number))
+    expect(await screen.findByRole('heading', { level: 3, name: 'NDRI' })).toBeTruthy()
   })
 
   it('lar bare administratorer slette en kategori med stoffer', async () => {
     await vis()
-    await userEvent.click(screen.getByRole('button', { name: 'Rediger stoffregisteret' }))
-    expect(screen.queryByRole('button', { name: 'Slett Antidepressiver' })).toBeNull()
+    await rediger()
+    await meny('Antidepressiver')
+    expect(screen.getByRole('button', { name: 'Arkiver' })).toBeTruthy()
+    expect(screen.queryByRole('button', { name: 'Slett' })).toBeNull()
     cleanup()
     await vis({ admin: true })
-    await userEvent.click(screen.getByRole('button', { name: 'Rediger stoffregisteret' }))
-    expect(screen.getByRole('button', { name: 'Slett Antidepressiver' })).toBeTruthy()
+    await rediger()
+    await meny('Antidepressiver')
+    expect(screen.getByRole('button', { name: 'Slett' })).toBeTruthy()
   })
 
-  it('legger et stoff i en kategori til fra kortet, og tar det ut igjen', async () => {
+  it('lukker og åpner kategoriene, hver for seg og alle på en gang', async () => {
+    await vis()
+    await rediger()
+    const stoffer = () => screen.queryByRole('list', { name: 'Stoffene i SSRI' })
+    expect(stoffer()).toBeTruthy()
+    await userEvent.click(screen.getByRole('button', { name: 'Skjul innholdet i Antidepressiver' }))
+    expect(screen.getByRole('button', { name: 'Vis innholdet i Antidepressiver' }).getAttribute('aria-expanded')).toBe('false')
+    // «Lukk alle» lukker kategoriene øverst, så bare overskriftene deres står igjen.
+    await userEvent.click(screen.getByRole('button', { name: 'Lukk alle' }))
+    const kategorier = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent).filter((n) => n !== 'Andre stoffer')
+    for (const navn of kategorier) expect(screen.getByRole('button', { name: `Vis innholdet i ${navn}` })).toBeTruthy()
+    await userEvent.click(screen.getByRole('button', { name: 'Åpne alle' }))
+    expect(screen.queryAllByRole('button', { name: /^Vis innholdet i/ })).toHaveLength(0)
+    expect(stoffer()).toBeTruthy()
+  })
+
+  it('legger et stoff i en kategori fra menyen, og tar det ut igjen', async () => {
     const lager = await vis()
-    const kort = await apne('Teststoff', await apne('Andre stoffer'))
+    await rediger()
     const ssri = kategoriid('Antidepressiver', 'SSRI')
-    await userEvent.selectOptions(within(kort).getByLabelText('Legg Teststoff til i en kategori'), ssri)
+    await meny('Teststoff')
+    await velg('Flytt til')
+    await velg('SSRI')
     expect(lager.plasserStoff).toHaveBeenCalledWith('teststoff', null, ssri)
     // Stoffet står nå under SSRI, og ikke lenger i «Andre stoffer».
-    const antidepressiver = await apne('Antidepressiver')
-    const iSsri = await apne('Teststoff', antidepressiver)
-    await userEvent.click(within(iSsri).getByRole('button', { name: 'Ta Teststoff ut av Antidepressiver › SSRI' }))
+    await waitFor(() => expect(within(screen.getByRole('list', { name: 'Stoffene i SSRI' })).getByText('Teststoff')).toBeTruthy())
+    expect(within(screen.getByRole('list', { name: 'Stoffene i Andre stoffer' })).queryByText('Teststoff')).toBeNull()
+    await meny('Teststoff')
+    await velg('Ta ut av SSRI')
     expect(lager.plasserStoff).toHaveBeenLastCalledWith('teststoff', ssri, null)
-    await waitFor(() => expect(within(antidepressiver).queryByRole('button', { name: /^Teststoff/ })).toBeNull())
+    await waitFor(() => expect(within(screen.getByRole('list', { name: 'Stoffene i SSRI' })).queryByText('Teststoff')).toBeNull())
   })
 })
 

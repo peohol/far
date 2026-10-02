@@ -7,9 +7,10 @@
 
 /* Siden er et oppslagsverk og kan være lang. Den står øverst i vinduet og
    ruller som en vanlig side, i stedet for å sentreres som stegene. */
-.app:is([data-side='analytt'], [data-side='stoff']) {
+.app:is([data-side='analytt'], [data-side='stoff'], [data-side='stoffregister']) {
   /* Kolonnen følger vinduet, ikke det bredeste innholdet — ellers ville en
-     lang referanse eller tabell presset siden ut over kanten på mobil. */
+     lang referanse, en tabell eller et rutenett med kort presset siden ut
+     over kanten på mobil. */
   grid-template-columns: minmax(0, 1fr);
   place-items: start center;
 }

@@ -59,11 +59,12 @@
   border: var(--kant-aktiv) solid var(--aksent);
 }
 
-/* Detaljkortene i en seksjon: to kolonner når det er plass, og et åpnet kort
-   over hele bredden. Kortet kan stå rett i rutenettet eller i et listepunkt. */
+/* Detaljkortene i en seksjon: så mange kolonner som får plass, og et åpnet
+   kort over hele bredden. Kortet kan stå rett i rutenettet eller i et
+   listepunkt. `--rutenett-min` er den minste bredden et kort får. */
 .skuffrutenett {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--rutenett-min, 16rem)), 1fr));
   gap: var(--rom-3);
   width: 100%;
   margin: 0;

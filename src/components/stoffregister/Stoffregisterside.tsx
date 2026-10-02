@@ -100,8 +100,9 @@ function Innhold({ katalog, onApneFortolkning, onLukk }: StoffregistersideProps)
         )}
         {redigerer && (
           <p className="stoffregisterside__hjelp">
-            Dra kategoriene, underkategoriene og stoffene dit de skal stå — med håndtaket, eller med mellomrom og
-            piltastene. Stoffene står alltid alfabetisk. Endringene lagres med en gang.
+            Dra kategoriene i overskriften og stoffene hvor som helst dit de skal stå, eller bruk mellomrom og
+            piltastene. Menyen til høyre på hver av dem har resten: nytt navn, flytting, arkivering og sletting.
+            Stoffene står alltid alfabetisk. Endringene lagres med en gang.
           </p>
         )}
       </header>
@@ -144,11 +145,11 @@ function Kategoriseksjon({ kategori, ...valg }: Stoffkortvalg & { kategori: Regi
   return (
     <Seksjon id={kategori.id} tittel={kategori.navn} ikon={kategoriikon(kategori.ikon)} oppsummering={oppsummering}>
       {kategori.direkte.length > 0 && (
-        <Stoffrutenett seksjon={kategori.id} gruppe={kategori.id} stoffer={kategori.direkte} {...valg} />
+        <Stoffrutenett gruppe={kategori.id} stoffer={kategori.direkte} {...valg} />
       )}
       {kategori.underkategorier.map((u) => (
         <Underkategori key={u.id} navn={u.navn}>
-          <Stoffrutenett seksjon={kategori.id} gruppe={u.id} stoffer={u.stoffer} {...valg} />
+          <Stoffrutenett gruppe={u.id} stoffer={u.stoffer} {...valg} />
         </Underkategori>
       ))}
     </Seksjon>
@@ -167,17 +168,12 @@ function Underkategori({ navn, children }: { navn: string; children: ReactNode }
   )
 }
 
-function Stoffrutenett({
-  seksjon,
-  gruppe,
-  stoffer,
-  ...valg
-}: Stoffkortvalg & { seksjon: string; gruppe: string; stoffer: readonly Registerstoff[] }) {
+function Stoffrutenett({ gruppe, stoffer, ...valg }: Stoffkortvalg & { gruppe: string; stoffer: readonly Registerstoff[] }) {
   return (
     <Skuffrutenett className="stoffkortene">
       {stoffer.map((s) => (
         <li key={s.slug}>
-          <Stoffkort seksjon={seksjon} id={`${gruppe}.${s.slug}`} stoff={s} {...valg} />
+          <Stoffkort id={`${gruppe}.${s.slug}`} stoff={s} {...valg} />
         </li>
       ))}
     </Skuffrutenett>

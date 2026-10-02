@@ -286,7 +286,8 @@ export interface Stoffregister {
   plasseringerFor: (slug: string) => Plassering[]
 }
 
-function paaNavn(a: { navn: string }, b: { navn: string }): number {
+/** Alfabetisk etter navnet, som stoffene står i registeret. */
+export function paaNavn(a: { navn: string }, b: { navn: string }): number {
   return a.navn.localeCompare(b.navn, 'nb')
 }
 
