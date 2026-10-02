@@ -260,6 +260,32 @@ const kapsel: Ikondel[] = [
 ]
 const KAPSEL_SKRA = 'translate(-4 4) rotate(-45 24 24)'
 
+/*
+ * Misbruk og avhengighet: seksjonen og de faste kortene i den.
+ */
+/** Et kjedeledd: en pille med hull, tegnet som én flate (det indre går mot klokka). */
+const kjedeledd = (x: number, y: number, b: number, h: number, t: number): string => {
+  const r = h / 2
+  const ri = r - t
+  return (
+    `M${x + r} ${y}h${b - h}a${r} ${r} 0 0 1 0 ${h}h${h - b}a${r} ${r} 0 0 1 0 ${-h}z` +
+    `M${x + r} ${y + t}a${ri} ${ri} 0 0 0 0 ${h - 2 * t}h${b - h}a${ri} ${ri} 0 0 0 0 ${2 * t - h}z`
+  )
+}
+/** En bit av en ring om (24, 32) fra vinkelen `fra` til `til` (0 er rett opp). */
+const maalerfelt = (fra: number, til: number): string =>
+  `M${polar(24, 32, 19, fra)}A19 19 0 0 1 ${polar(24, 32, 19, til)}L${polar(24, 32, 11, til)}A11 11 0 0 0 ${polar(24, 32, 11, fra)}z`
+/** Pilen rundt i vanedannelsen: en sirkelbue om midten, med spissen pekende videre med klokka. */
+const runde = (() => {
+  const slutt = 330
+  const a = (slutt * Math.PI) / 180
+  const [x, y] = polar(24, 24, 15, slutt).split(' ').map(Number) as [number, number]
+  // Retningen videre langs buen, og normalen på den.
+  const [dx, dy] = [Math.cos(a), Math.sin(a)]
+  const punkt = (bak: number, ut: number) => `${(x - bak * dx + ut * -dy).toFixed(2)} ${(y - bak * dy + ut * dx).toFixed(2)}`
+  return `M${polar(24, 24, 15, 30)}A15 15 0 1 1 ${x.toFixed(2)} ${y.toFixed(2)}M${punkt(5, 4)}L${x.toFixed(2)} ${y.toFixed(2)}L${punkt(5, -4)}`
+})()
+
 const REGISTER = {
   menu: { vb: 24, parts: [P('M4 7h16M4 12h16M4 17h9', 'l', 'i-ink'), C(18, 17, 2, 'f2', 'accent', 'pop')] },
   search: { vb: 24, ga: 'pulse', parts: [C(10.5, 10.5, 6.5, 'f1', 'accent'), P('M15.5 15.5 20.5 20.5', 'l', 'i-ink')] },
@@ -731,6 +757,53 @@ const REGISTER = {
     rot: KAPSEL_SKRA,
     parts: kapsel,
     free: [G([P('M35 4.5 44.5 21.5h-19z', 'f2', 'warn'), P('M35 10.5v5', 'l'), C(35, 18.6, 1.3, 'h')], 'pop')],
+  },
+  /* Misbruk og avhengighet: to kjedeledd som henger i hverandre. */
+  avhengighet: {
+    vb: 48,
+    rot: 'rotate(-35 24 24)',
+    parts: [P(kjedeledd(3, 17, 26, 14, 4.5), 'f1', 'accent'), G([P(kjedeledd(19, 17, 26, 14, 4.5), 'f2', 'warn')], 'bumpL')],
+  },
+  /* Misbrukspotensial: en måler med viseren i det røde feltet. */
+  misbruk: {
+    vb: 48,
+    parts: [
+      P(maalerfelt(-90, -32), 'f1', 'ok'),
+      P(maalerfelt(-28, 28), 'f1', 'warn'),
+      P(maalerfelt(32, 90), 'f2', 'danger'),
+      G([P(`M24 32L${polar(24, 32, 16, 58)}`, 'l', 'i-ink')], 'pop'),
+      C(24, 32, 2.8, 'h', 'i-ink'),
+      P('M5 38h38', 'l', 'i-line'),
+    ],
+  },
+  /* Vanedannelse: kapselen fra virkningene midt i en pil som går rundt og rundt. */
+  vane: {
+    vb: 48,
+    parts: [
+      P('M24 19.5h-4.5a4.5 4.5 0 0 0 0 9H24z', 'f2', 'accent'),
+      P('M24 19.5h4.5a4.5 4.5 0 0 1 0 9H24z', 'f1', 'glass'),
+      G([P(runde, 'l', 'accent')], 'spin360'),
+    ],
+  },
+  /* Toleranse: virkningskurven flyttes mot høyere doser. */
+  toleranse: {
+    vb: 48,
+    parts: [
+      axes,
+      P('M7 38C14 38 13 12 21 12h7', 'd', 'i-ink'),
+      P('M7 38h6C22 38 22 12 30 12h12', 'l', 'warn', 'draw', { pl: 1 }),
+      G([P('M15 5h10M22 2l3 3-3 3', 'l', 'accent')], 'bumpR'),
+    ],
+  },
+  /* Abstinens og tilbakeslagseffekter: virkningen faller under utgangspunktet før den kommer tilbake. */
+  abstinens: {
+    vb: 48,
+    parts: [
+      axes,
+      P('M7 22h37', 'd', 'i-ink'),
+      P('M23 22c2.5 6 4.5 12 8 12s5.5-7 9-12z', 'f1', 'danger'),
+      P('M7 22c4 0 5-13 9-13s4.5 7 7 13c2.5 6 4.5 12 8 12s5.5-7 9-12h4', 'l', 'accent', 'draw', { pl: 1 }),
+    ],
   },
   yes: { vb: 24, parts: [C(12, 12, 9, 'f1', 'ok'), P('M8 12.3l2.6 2.6L16 9.5', 'l', null, 'pop')] },
   no: { vb: 24, parts: [C(12, 12, 9, 'f1', 'danger'), P('M9 9l6 6M15 9l-6 6', 'l', null, 'pop')] },

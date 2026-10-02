@@ -98,7 +98,8 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   Det er pynt ved siden av tittelen og skjult for skjermlesere. Fagsidens
   seksjonsikoner, og ikonene for kortene i farmakokinetikken og TDM, velges i
   `src/components/stoffside/panelvisning.ts`: kortene får ikon etter
-  hva overskriften handler om (absorpsjon, halveringstid, CYP, prøvetaking …), og et
+  hva overskriften handler om (absorpsjon, halveringstid, CYP, prøvetaking,
+  de faste kortene i «Misbruk og avhengighet» …), og et
   generisk ikon når ingen kategori passer, så en ny overskrift aldri feiler.
   Mekanismekortene i farmakodynamikken får ikon etter mekanismetypen
   (`mekanismeikon`), og et kort uten effekt har ikke noe ikon. Hvordan de

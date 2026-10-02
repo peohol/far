@@ -66,6 +66,8 @@ export interface SkjemaProps<T> {
   onAvbryt: () => void
   /** Ikonet foran tittelen i redigeringsvinduet, som det redigerte har på siden. */
   ikon?: Ikonnavn
+  /** Overskriften er fast (`Paneldefinisjon.kort`) og redigeres ikke. */
+  fastTittel?: boolean
 }
 
 const KONFLIKT =
@@ -646,7 +648,7 @@ export function KinetikkSkjema(props: SkjemaProps<{ tittel: string; dokument: Ri
   }
   return (
     <Skjemaramme {...props} kontroller={kontroller}>
-      <Tekstfelt merke="Overskrift" verdi={tittel} onEndre={setTittel} />
+      {!props.fastTittel && <Tekstfelt merke="Overskrift" verdi={tittel} onEndre={setTittel} />}
       <Rikteksteditor dokument={dokument} onEndre={setDokument} etikett={tittel || props.tittel} />
     </Skjemaramme>
   )

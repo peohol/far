@@ -2176,6 +2176,50 @@ describe('kortene i farmakokinetikken', () => {
     await apneSkuff(user, 'Bivirkninger')
     expect(screen.getByRole('region', { name: 'Bivirkninger' }).textContent).toContain('Munntørrhet.')
   })
+
+  it('har faste kort i «Misbruk og avhengighet», med fast overskrift og rekkefølge', async () => {
+    const user = userEvent.setup()
+    const data = (tilstand: Tilstand): Stoffsidedata => {
+      const s = medKort()(tilstand)
+      const kort = utgave('tol', {
+        infoside: 'hs',
+        panel: 'misbruk_avhengighet',
+        posisjon: 2,
+        elementtype: 'kinetikkort',
+        data: { tittel: 'Toleranse', dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: LANG }] }] } },
+      })
+      return { ...s, elementer: [...s.elementer, kort] }
+    }
+    vis('amitriptylin', kilde({ kanRedigere: true, data }))
+    await finnVerdi('10–20 nmol/L')
+    const titler = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
+    expect(titler.indexOf('Misbruk og avhengighet')).toBeGreaterThan(titler.indexOf('Farmakokinetikk'))
+    const seksjon = screen.getByRole('region', { name: 'Misbruk og avhengighet' })
+    expect(seksjon.querySelector('[data-ikon="avhengighet"]')).not.toBeNull()
+    expect(seksjon.querySelector('[data-ikon="toleranse"]')).not.toBeNull()
+
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await apneSkuff(user, 'Misbruk og avhengighet')
+    // Hvert kort som mangler, legges til for seg; det som finnes, ikke en gang til.
+    const omrade = screen.getByRole('region', { name: 'Misbruk og avhengighet' })
+    for (const tittel of ['Misbrukspotensial', 'Vanedannelse', 'Abstinens og tilbakeslagseffekter']) {
+      expect(within(omrade).getByRole('button', { name: `Legg til: ${tittel}` })).toBeTruthy()
+    }
+    expect(within(omrade).queryByRole('button', { name: 'Legg til: Toleranse' })).toBeNull()
+    expect(within(omrade).queryByRole('button', { name: 'Legg til kort' })).toBeNull()
+
+    // Det faste kortet flyttes ikke, og overskriften kan ikke endres.
+    await apneSkuff(user, 'Toleranse')
+    expect(screen.queryByRole('button', { name: /^Flytt (opp|ned): Toleranse$/ })).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'Rediger: Toleranse' }))
+    expect(within(screen.getByRole('dialog')).queryByLabelText('Overskrift')).toBeNull()
+    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Avbryt' }))
+
+    await user.click(within(omrade).getByRole('button', { name: 'Legg til: Vanedannelse' }))
+    const nytt = screen.getByRole('dialog')
+    expect(within(nytt).queryByLabelText('Overskrift')).toBeNull()
+    expect(nytt.querySelector('[data-ikon="vane"]')).not.toBeNull()
+  })
 })
 
 describe('mekanismekortene i farmakodynamikken', () => {

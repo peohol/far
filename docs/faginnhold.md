@@ -449,6 +449,7 @@ styrer søket og nummereringen av referansene):
 | Interaksjoner | `interaksjoner` | `riktekst`: `{ dokument }`, øverst; under den interaksjonene fra FEST for koblingen i «Preparater» |
 | Terapeutisk legemiddelmonitorering (TDM) | `tdm` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge — prøvetakingstidspunkt, grunnlaget for referanseområdet, tolkning og indikasjoner for måling |
 | Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }`. Kildene står på panelet, ikke på tabellen |
+| Misbruk og avhengighet | `misbruk_avhengighet` | `kinetikkort`: `{ tittel, dokument }` med faste overskrifter (`kort` i `PANELER`): Misbrukspotensial, Vanedannelse, Toleranse, og Abstinens og tilbakeslagseffekter. Hvert kan stå én gang, i den rekkefølgen, og har eget ikon. Overskriften kan ikke endres og kortene ikke flyttes. Kom til 2026-10-02 uten innhold |
 
 Tallene i viktige data er tall, ikke tekst. Bare den ene grensen oppgitt vises
 som «> 10» eller «opptil 20», uten å si om grensen er med. t½ og tss viser

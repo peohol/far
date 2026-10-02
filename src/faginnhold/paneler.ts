@@ -40,6 +40,12 @@ export interface Paneldefinisjon {
   nokkel: string
   tittel: string
   form: Panelform
+  /**
+   * Kortene en kortserie (`kort`) kan ha, i den rekkefølgen de står. Hvert kan
+   * stå én gang, og overskriften er fast. Uten listen velger redaktøren
+   * overskriftene fritt og hvor mange kort det blir.
+   */
+  kort?: readonly string[]
 }
 
 /**
@@ -61,6 +67,12 @@ export const PANELER = [
   { nokkel: 'interaksjoner', tittel: 'Interaksjoner', form: 'interaksjoner' },
   { nokkel: 'tdm', tittel: 'Terapeutisk legemiddelmonitorering (TDM)', form: 'kort' },
   { nokkel: 'serumkonsentrasjoner', tittel: 'Serumkonsentrasjoner ved ulike doser', form: 'tabell' },
+  {
+    nokkel: 'misbruk_avhengighet',
+    tittel: 'Misbruk og avhengighet',
+    form: 'kort',
+    kort: ['Misbrukspotensial', 'Vanedannelse', 'Toleranse', 'Abstinens og tilbakeslagseffekter'],
+  },
 ] as const satisfies readonly Paneldefinisjon[]
 
 export type Panelnokkel = (typeof PANELER)[number]['nokkel']
