@@ -124,7 +124,7 @@ describe('kvetiapinkorrigering med parallelle redaksjonelle kort', () => {
     expect(rows).toHaveLength(2)
     expect(rows.find((r) => r.objekt_id === ekstraPd.id)?.tekst).toContain('Redaksjonelt ekstra D2-kort')
     expect(rows.find((r) => r.objekt_id === ekstraPk.id)?.tekst).toContain('Redaksjonelt ekstra PK-kort')
-    expect(rows.every((r) => r.kilde === 'Manuell redigering')).toBe(true)
+    expect(rows.every((r) => r.kilde === null)).toBe(true)
 
     await testdb.close()
   }, 240_000)
