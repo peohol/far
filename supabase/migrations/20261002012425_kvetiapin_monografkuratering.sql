@@ -8,6 +8,7 @@ declare
   e record;
   k record;
   ref uuid;
+  objekt uuid;
   n integer;
   data jsonb;
   kilder jsonb := '{}'::jsonb;
@@ -301,18 +302,6 @@ begin
         "kilder":["ir","cross","gefvert"]
       },
       {
-        "fra":"D1-reseptor",
-        "mekanisme_fra":"antagonisme",
-        "data":{
-          "maal":"5-HT2C-reseptor",
-          "mekanisme":"antagonisme",
-          "dokument":{"type":"doc","content":[{"type":"paragraph","content":[
-            {"type":"text","text":"Kvetiapin og norkvetiapin er 5-HT2C-antagonister in vitro. Kvetiapin har lav affinitet og lav funksjonell potens, mens norkvetiapin er tydelig mer potent. En rolle i antidepressiv effekt er foreslått fra prekliniske data, men den kliniske betydningen er ikke fastslått."}
-          ]}]}
-        },
-        "kilder":["cross"]
-      },
-      {
         "fra":"D2-reseptor",
         "mekanisme_fra":"antagonisme",
         "data":{
@@ -441,6 +430,70 @@ begin
     );
     perform public.publiser_utkast(e.objekt_id, e.revisjon + 1);
   end loop;
+
+  -- D1-affinitet beholdes ikke som et selvstendig klinisk mekanismekort.
+  -- Kortet flyttes ut av panelet slik at historikken bevares, og 5-HT2C
+  -- opprettes som et nytt objekt i stedet for å gi D1-kortet ny identitet.
+  select t.objekt_id, u.revisjon, r.innhold into e
+  from public.innholdselementer t
+  join public.objekttilstander u
+    on u.objekt_id = t.objekt_id and u.tilstand = 'utkast'
+  join public.objekttilstander p
+    on p.objekt_id = t.objekt_id and p.tilstand = 'publisert' and p.revisjon = u.revisjon
+  join public.objektrevisjoner r
+    on r.objekt_id = t.objekt_id and r.revisjon = u.revisjon
+  where t.tilstand = 'publisert'
+    and t.infoside_id = side
+    and t.panel = 'farmakodynamikk'
+    and t.elementtype = 'mekanismekort'
+    and t.data->>'maal' = 'D1-reseptor'
+    and t.data->>'mekanisme' = 'antagonisme'
+  order by t.objekt_id
+  limit 1;
+
+  if not found then
+    raise exception 'Kvetiapin: D1-kortet er endret siden hovedgrenen som kurateringen bygger på.';
+  end if;
+
+  perform set_config(
+    'far.revisjonskilde',
+    'Monografikuratering av kvetiapin 02.10.2026: D1-kort utelatt etter ny evidensvurdering',
+    true
+  );
+  perform public.lagre_utkast(
+    e.objekt_id,
+    e.revisjon,
+    e.innhold || jsonb_build_object('panel', 'fjernet')
+  );
+  perform public.publiser_utkast(e.objekt_id, e.revisjon + 1);
+
+  perform set_config(
+    'far.revisjonskilde',
+    'Monografikuratering av kvetiapin 02.10.2026: 5-HT2C-antagonisme lagt til etter funksjonelle data',
+    true
+  );
+  objekt := (
+    public.opprett_utkast(
+      'innholdselement',
+      jsonb_build_object(
+        'infoside', side,
+        'panel', 'farmakodynamikk',
+        'posisjon', 1,
+        'elementtype', 'mekanismekort',
+        'data', $json$
+          {
+            "maal":"5-HT2C-reseptor",
+            "mekanisme":"antagonisme",
+            "dokument":{"type":"doc","content":[{"type":"paragraph","content":[
+              {"type":"text","text":"Kvetiapin og norkvetiapin er 5-HT2C-antagonister in vitro. Kvetiapin har lav affinitet og lav funksjonell potens, mens norkvetiapin er tydelig mer potent. En rolle i antidepressiv effekt er foreslått fra prekliniske data, men den kliniske betydningen er ikke fastslått."}
+            ]}]}
+          }
+        $json$::jsonb,
+        'referanser', jsonb_build_array(kilder->>'cross')
+      )
+    )
+  ).id;
+  perform public.publiser_utkast(objekt, 1);
 
   -- Dosering fra gjeldende norske preparatomtaler for IR og depot.
   select t.objekt_id, u.revisjon, r.innhold into e
