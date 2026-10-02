@@ -341,7 +341,7 @@ begin
     {"fra":"t½","data":{"tittel":"t½","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Kvetiapin: ca. 7 timer. Norkvetiapin: ca. 12 timer."}]}]}},"kilder":["ir","xr","devane"]},
     {"fra":"tₛₛ","data":{"tittel":"tₛₛ","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Steady state er observert innen omtrent 48 timer ved gjentatt dosering."}]}]}},"kilder":["li"]},
     {"fra":"Proteinbinding","data":{"tittel":"Proteinbinding","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Ca. 83 %."}]}]}},"kilder":["ir","devane"]},
-    {"fra":"Vd","data":{"tittel":"Vd","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Tilsynelatende distribusjonsvolum er stort; humane studier har rapportert omtrent 500–700 L, med betydelig interindividuell variasjon."}]}]}},"kilder":["devane","li"]},
+    {"fra":"Vd","data":{"tittel":"Vd","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Tilsynelatende distribusjonsvolum (V/F) var 672 ± 394 L i en human flerdosestudie, med stor interindividuell variasjon."}]}]}},"kilder":["devane","li"]},
     {"fra":"Eliminasjon","data":{"tittel":"Metabolisme og utskillelse","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Omfattende hepatisk metabolisme. Mindre enn 5 % utskilles uendret. Etter radiomerket dose gjenfinnes omtrent 73 % i urin og 21 % i feces, hovedsakelig som metabolitter."}]}]}},"kilder":["ir","xr","devane"]}
   ]
   $json$::jsonb) loop
