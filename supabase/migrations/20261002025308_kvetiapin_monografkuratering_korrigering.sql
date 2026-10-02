@@ -109,6 +109,7 @@ begin
     where t.tilstand='publisert' and t.infoside_id=side and t.panel='farmakodynamikk'
       and t.elementtype='mekanismekort' and t.data->>'maal'=oppdatering->>'fra'
       and t.data->>'mekanisme'=oppdatering->>'mekanisme_fra'
+      and r.kilde='Monografikuratering av kvetiapin 01.10.2026: farmakodynamikk kildebelagt og funksjon skilt fra binding'
     order by t.objekt_id limit 1;
     if not found then raise exception 'PD-kort % samsvarer ikke med første kuratering.',oppdatering->>'fra'; end if;
     select coalesce(jsonb_agg(to_jsonb(kilder->>x.nokkel) order by x.i),'[]'::jsonb) into referanser
@@ -125,6 +126,7 @@ begin
   join public.objektrevisjoner r on r.objekt_id=t.objekt_id and r.revisjon=u.revisjon
   where t.tilstand='publisert' and t.infoside_id=side and t.panel='farmakodynamikk'
     and t.elementtype='mekanismekort' and t.data->>'maal'='D1-reseptor' and t.data->>'mekanisme'='reseptorbinding'
+    and r.kilde='Monografikuratering av kvetiapin 01.10.2026: farmakodynamikk kildebelagt og funksjon skilt fra binding'
   order by t.objekt_id limit 1;
   if not found then raise exception 'Fant ikke forventet D1-kort.'; end if;
   perform set_config('far.revisjonskilde','Monografikuratering av kvetiapin 02.10.2026: D1-kort utelatt etter ny evidensvurdering',true);
@@ -144,6 +146,7 @@ begin
   join public.objekttilstander p on p.objekt_id=t.objekt_id and p.tilstand='publisert' and p.revisjon=u.revisjon
   join public.objektrevisjoner r on r.objekt_id=t.objekt_id and r.revisjon=u.revisjon
   where t.tilstand='publisert' and t.infoside_id=side and t.panel='dosering' and t.elementtype='riktekst'
+    and r.kilde='Monografikuratering av kvetiapin 01.10.2026: dosering oppdatert fra gjeldende IR- og depotpreparatomtaler'
   order by t.objekt_id limit 1;
 
   data := replace(replace($json$
@@ -200,6 +203,7 @@ begin
     join public.objektrevisjoner r on r.objekt_id=t.objekt_id and r.revisjon=u.revisjon
     where t.tilstand='publisert' and t.infoside_id=side and t.panel='farmakokinetikk'
       and t.elementtype='kinetikkort' and t.data->>'tittel'=oppdatering->>'fra'
+      and r.kilde='Monografikuratering av kvetiapin 01.10.2026: farmakokinetikk kildebelagt og presisert'
     order by t.objekt_id limit 1;
     if not found then raise exception 'PK-kort % samsvarer ikke med første kuratering.',oppdatering->>'fra'; end if;
     select coalesce(jsonb_agg(to_jsonb(kilder->>x.nokkel) order by x.i),'[]'::jsonb) into referanser
@@ -216,6 +220,7 @@ begin
   join public.objektrevisjoner r on r.objekt_id=t.objekt_id and r.revisjon=u.revisjon
   where t.tilstand='publisert' and t.infoside_id=side and t.panel='fjernet'
     and t.elementtype='kinetikkort' and t.data->>'tittel'='Annet'
+    and r.kilde='Monografikuratering av kvetiapin 01.10.2026: uspesifikt Annet-kort erstattet av kildebelagte PK-kort'
   order by t.objekt_id limit 1;
   if not found then raise exception 'Fant ikke fjernet Annet-kort.'; end if;
   data := $json$ {"tittel":"Særpopulasjoner","dokument":{"type":"doc","content":[
