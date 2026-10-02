@@ -66,9 +66,29 @@ const SUPABASE_GRUNNLAG = /* sql */ `
  * Migrasjonene som bare kan kjøres i produksjon: den første som merket en
  * planlagt oppgave utført, kaller `fullfor_oppgave` for en oppgave som ikke
  * finnes i en ny database. De senere gjør ingenting der (se skillen
- * `utfor-oppgaver`), og kjøres som alle andre.
+ * `utfor-oppgaver`), og kjøres som alle andre. Koblingen av stoffsidene til
+ * FEST-virkestoffene ble kjørt direkte i produksjonen og lagt inn her etterpå,
+ * slik den ble kjørt; den stopper uten administratoren `peohol`.
  */
-const BARE_I_PRODUKSJON = /_oppgaver_utfort_1_56_0\.sql$/
+const BARE_I_PRODUKSJON = /_(oppgaver_utfort_1_56_0|koble_infosider_til_fest_virkestoff)\.sql$/
+
+/**
+ * Monografkurateringene (`docs/monografkuratering.md`): datamigrasjonene som
+ * endrer en stoffside etter en kuratering, bundet til tilstanden siden hadde i
+ * produksjonen. Uten kuratorprofil gjør de ingenting, og der kjøres de som alle
+ * andre. Med kuratoren speiler bare en database som er bygd fra den første
+ * importen, produksjonen, så der kjøres de bare når testen ber om det
+ * (`kurateringer`, eller filen i `bare`): ellers ville preflighten deres
+ * stoppe enhver test som setter opp sider på sin egen måte.
+ */
+export const MONOGRAFKURATERING = /_monografkuratering(?!_hjelpere)(_[a-z0-9_]+)?\.sql$|_kvetiapin_farmakogenetikk_og_typografi\.sql$/
+
+async function harKurator(db: PGlite): Promise<boolean> {
+  const { rows } = await db.query<{ finnes: boolean }>(
+    `select exists (select 1 from public.profiles where username = 'peohol' and role = 'admin') as finnes`,
+  )
+  return rows[0]!.finnes
+}
 
 /** Migrasjonsfilene, i den rekkefølgen prosjektet kjører dem. */
 export function migrasjonsfiler(): string[] {
@@ -80,14 +100,22 @@ export function migrasjonsfiler(): string[] {
 /**
  * Kjører migrasjonene fra og med `fra` til, men ikke med, `til` — begge
  * filnavnprefikser — eller bare filene i `bare`. Uten grenser kjøres alle.
+ * Monografkurateringene hoppes over når kuratoren finnes, med mindre
+ * `kurateringer` er satt (se `MONOGRAFKURATERING`).
  */
 export async function kjorMigrasjoner(
   db: PGlite,
-  { fra = '', til, bare }: { fra?: string; til?: string; bare?: readonly string[] } = {},
+  {
+    fra = '',
+    til,
+    bare,
+    kurateringer = false,
+  }: { fra?: string; til?: string; bare?: readonly string[]; kurateringer?: boolean } = {},
 ): Promise<void> {
   for (const fil of migrasjonsfiler()) {
     if (BARE_I_PRODUKSJON.test(fil)) continue
     if (bare ? !bare.includes(fil) : fil < fra || (til !== undefined && fil >= til)) continue
+    if (!bare && !kurateringer && MONOGRAFKURATERING.test(fil) && (await harKurator(db))) continue
     try {
       await db.exec(readFileSync(`${MIGRASJONER}/${fil}`, 'utf8'))
     } catch (feil) {
