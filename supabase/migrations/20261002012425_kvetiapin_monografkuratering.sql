@@ -344,7 +344,6 @@ begin
     {"fra":"Vd","data":{"tittel":"Vd","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Tilsynelatende distribusjonsvolum er stort; humane studier har rapportert omtrent 500–700 L, med betydelig interindividuell variasjon."}]}]}},"kilder":["devane","li"]},
     {"fra":"Eliminasjon","data":{"tittel":"Metabolisme og utskillelse","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Omfattende hepatisk metabolisme. Mindre enn 5 % utskilles uendret. Etter radiomerket dose gjenfinnes omtrent 73 % i urin og 21 % i feces, hovedsakelig som metabolitter."}]}]}},"kilder":["ir","xr","devane"]}
   ]
-  ]
   $json$::jsonb) loop
     select t.objekt_id, u.revisjon, r.innhold into e
     from public.innholdselementer t
