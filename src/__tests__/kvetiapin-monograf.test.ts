@@ -1,4 +1,4 @@
-/** Kvetiapin-monografkurateringen: kildebelegg og faglige presiseringer i de tre kuraterte panelene. */
+/** Kvetiapin-monografkurateringen: kildebelegg og faglige presiseringer i de kuraterte panelene. */
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
@@ -40,6 +40,8 @@ describe('kvetiapin-monografkuratering', () => {
   let farmakodynamikk: Element[]
   let dosering: Element[]
   let farmakokinetikk: Element[]
+  let farmakogenetikk: Element[]
+  let interaksjoner: Element[]
 
   beforeAll(async () => {
     db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
@@ -49,6 +51,8 @@ describe('kvetiapin-monografkuratering', () => {
     farmakodynamikk = await elementer(db, 'farmakodynamikk')
     dosering = await elementer(db, 'dosering')
     farmakokinetikk = await elementer(db, 'farmakokinetikk')
+    farmakogenetikk = await elementer(db, 'farmakogenetikk')
+    interaksjoner = await elementer(db, 'interaksjoner')
   }, 240_000)
 
   it('har ni kildebelagte mekanismekort med funksjon skilt fra ren binding', () => {
@@ -103,8 +107,6 @@ describe('kvetiapin-monografkuratering', () => {
       'Proteinbinding',
       'Vd',
       'Metabolisme og utskillelse',
-      'CYP3A4',
-      'CYP3A4-interaksjoner',
     ])
     for (const e of farmakokinetikk) {
       expect(e.elementtype).toBe('kinetikkort')
@@ -112,7 +114,6 @@ describe('kvetiapin-monografkuratering', () => {
       expect(e.utkast, String(e.data.tittel)).toBe(e.publisert)
     }
     expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 't½')!.data)).toContain('Norkvetiapin: ca. 12 timer')
-    expect(tekst(farmakokinetikk.find((e) => e.data.tittel === 'CYP3A4')!.data)).not.toContain('3A4 (2D6)')
 
     const { rows } = await db.query<{ n: number }>(
       `select count(*)::int as n
@@ -121,6 +122,29 @@ describe('kvetiapin-monografkuratering', () => {
        where e.tilstand = 'publisert' and e.panel = 'fjernet' and e.data->>'tittel' = 'Annet'`,
     )
     expect(rows[0]!.n).toBe(1)
+  })
+
+  it('oppdaterer CYP-kortet der det faktisk står i Farmakogenetikk', () => {
+    expect(farmakogenetikk).toHaveLength(1)
+    const [e] = farmakogenetikk
+    expect(e!.elementtype).toBe('kinetikkort')
+    expect(e!.data.tittel).toBe('CYP3A4 og CYP2D6')
+    const s = tekst(e!.data)
+    expect(s).toContain('CYP3A4 er hovedenzymet')
+    expect(s).toContain('CYP2D6')
+    expect(s).toContain('norkvetiapin')
+    expect(s).toContain('ClinPGx')
+    expect(e!.referanser.length).toBeGreaterThanOrEqual(4)
+    expect(e!.utkast).toBe(e!.publisert)
+  })
+
+  it('oppdaterer den redaksjonelle interaksjonsteksten i Interaksjoner-panelet', () => {
+    expect(interaksjoner).toHaveLength(1)
+    const [e] = interaksjoner
+    expect(e!.elementtype).toBe('riktekst')
+    expect(tekst(e!.data)).toContain('Sterke CYP3A4-hemmere')
+    expect(e!.referanser).toHaveLength(2)
+    expect(e!.utkast).toBe(e!.publisert)
   })
 
   it('oppretter eller gjenbruker de kuraterte referansene uten dubletter', async () => {
@@ -133,10 +157,12 @@ describe('kvetiapin-monografkuratering', () => {
          'Quetiapine and its metabolite norquetiapine: translation from in vitro pharmacology to in vivo efficacy in rodent models',
          'Clinical pharmacokinetics of quetiapine: an atypical antipsychotic',
          'Pharmacokinetic profiles of extended release quetiapine fumarate compared with quetiapine immediate release',
-         'Quetiapine tablet, film coated – prescribing information'
+         'Quetiapine tablet, film coated – prescribing information',
+         'Quetiapine Pathway, Pharmacokinetics',
+         'Metabolism of the active metabolite of quetiapine, N-desalkylquetiapine in vitro'
        ) group by tittel`,
     )
-    expect(rows).toHaveLength(7)
+    expect(rows).toHaveLength(9)
     for (const r of rows) expect(r.n, r.tittel).toBe(1)
   })
 })
