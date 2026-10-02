@@ -8,6 +8,7 @@ import {
   type Riktekstnode,
   type Tekstmerke,
 } from '../../faginnhold/riktekst'
+import { Lenkebrikke } from '../direktelenker/Lenkebrikke'
 import { useOverskriftsniva } from '../Overskriftsniva'
 import { Referansepille } from '../referanser/Referansepille'
 import { Uthev } from '../Uthev'
@@ -17,7 +18,8 @@ import { Uthev } from '../Uthev'
  *
  * Dokumentet er renset på forhånd (`rensDokument`), så her vises bare de
  * nodene og merkene som er tillatt. Siteringene blir referansepiller med
- * numrene de har på siden, og all tekst går gjennom søkefremhevingen.
+ * numrene de har på siden, direktelenkene blir lenkebrikker med
+ * forhåndsvisning, og all tekst går gjennom søkefremhevingen.
  * Overskriftene legger seg under den nærmeste overskriften rundt teksten
  * (`UnderOverskrift`).
  */
@@ -51,6 +53,8 @@ function Node({ node }: { node: Riktekstnode }): ReactNode {
       const ider = node.attrs?.referanser
       return Array.isArray(ider) ? <Referansepille ider={ider as string[]} niva="inline" /> : null
     }
+    case NODER.direktelenke:
+      return <Lenkebrikke attrs={node.attrs ?? {}} />
     case NODER.tekst:
       return (node.marks ?? []).reduceRight<ReactNode>(
         (innhold, merke) => <Merke merke={merke}>{innhold}</Merke>,

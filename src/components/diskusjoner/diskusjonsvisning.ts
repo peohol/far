@@ -3,27 +3,33 @@ import type { Diskusjonsside } from '../../diskusjoner/modell'
 
 /**
  * Veien inn til en tråd fra andre steder i appen, som et varsel om en ny
- * kommentar. Varselet går til siden tråden står på; diskusjonsmenyen på den
- * siden tar tråden og åpner den.
+ * kommentar eller en direktelenke. Varselet går til siden tråden står på;
+ * diskusjonsmenyen på den siden tar tråden og åpner den.
  *
  * Tråden venter her til menyen for siden står: den som ber om den, er ofte på
  * en annen side, og menyen der byttes ut først når adressen er fulgt.
  */
-let venter: { side: Diskusjonsside; diskusjon: string } | null = null
+export interface Ventende {
+  diskusjon: string
+  /** Kommentaren i tråden som skal vises, om noen. */
+  kommentar: string | null
+}
+
+let venter: (Ventende & { side: Diskusjonsside }) | null = null
 const signal = lagSignal()
 
-/** Åpner tråden i diskusjonsmenyen på siden. Siden må man selv gå til. */
-export function visDiskusjon(side: Diskusjonsside, diskusjon: string): void {
-  venter = { side, diskusjon }
+/** Åpner tråden i diskusjonsmenyen på siden, eventuelt på en kommentar. Siden må man selv gå til. */
+export function visDiskusjon(side: Diskusjonsside, diskusjon: string, kommentar: string | null = null): void {
+  venter = { side, diskusjon, kommentar }
   signal.send()
 }
 
 /** Tråden som venter på å bli åpnet på siden, om noen. Den venter ikke lenger etterpå. */
-export function taDiskusjon(side: Diskusjonsside): string | null {
+export function taDiskusjon(side: Diskusjonsside): Ventende | null {
   if (venter?.side !== side) return null
-  const { diskusjon } = venter
+  const { diskusjon, kommentar } = venter
   venter = null
-  return diskusjon
+  return { diskusjon, kommentar }
 }
 
 /** Hører etter `visDiskusjon`. Gir tilbake funksjonen som slutter å høre etter. */

@@ -879,6 +879,20 @@ const REGISTER = {
       ),
     ],
   },
+  // Tegnet i OUSFAR for direktelenkene, i samme stil som resten av registeret.
+  lenke: {
+    vb: 24,
+    parts: [
+      C(12, 12, 9, 'f1', 'accent'),
+      G(
+        [
+          P('M11 13.2a3 3 0 0 0 4.3.2l2.4-2.4a3 3 0 0 0-4.3-4.3l-1.1 1.1', 'l', 'i-ink'),
+          P('M13 10.8a3 3 0 0 0-4.3-.2l-2.4 2.4a3 3 0 0 0 4.3 4.3l1.1-1.1', 'l', 'i-ink'),
+        ],
+        'pop',
+      ),
+    ],
+  },
   feste: {
     vb: 24,
     parts: [

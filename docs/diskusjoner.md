@@ -15,6 +15,9 @@ de berører ikke den kliniske delen.
 | `src/traad/modell.ts`, `src/components/traad/` | Kommentartråden, felles med idéene |
 | `src/styles/diskusjoner.css`, `src/styles/traad.css` | Utseendet |
 
+Lenkene til en tråd, en idé eller en kommentar («Kopier lenke» og brikkene i
+teksten) står i `docs/direktelenker.md`.
+
 ## Sidene
 
 En side er en nøkkel: `stoff:<stoffets nøkkel>` for en fagside og

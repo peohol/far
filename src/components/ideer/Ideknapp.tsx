@@ -5,11 +5,15 @@ import { hentIdeerMedNytt } from '../../ideer/api'
 import { oppfriskVarsler } from '../../varsler/api'
 import { Menyvalg, Nedtrekksmeny } from '../toppmeny/Nedtrekksmeny'
 import { Ideer } from './Ideer'
-import { lyttEtterIde } from './idevisning'
+import { lyttEtterIde, lyttEtterIdelukking } from './idevisning'
 import { Oppgaver } from './Oppgaver'
 
-/** Laget som står åpent: Idéer, kanskje på én idé, eller Planlagte oppgaver, kanskje på én oppgave. */
-type Vindu = { lag: 'ideer'; ide?: string } | { lag: 'oppgaver'; oppgave?: string } | null
+/**
+ * Laget som står åpent: Idéer, kanskje på én idé (og en kommentar under den,
+ * fra en direktelenke; `nr` er ny for hver lenke), eller Planlagte oppgaver,
+ * kanskje på én oppgave.
+ */
+type Vindu = { lag: 'ideer'; ide?: string; kommentar?: string; nr?: number } | { lag: 'oppgaver'; oppgave?: string } | null
 
 /**
  * Idéer og Planlagte oppgaver, fra en egen meny i toppmenyen med ett valg for
@@ -17,7 +21,9 @@ type Vindu = { lag: 'ideer'; ide?: string } | { lag: 'oppgaver'; oppgave?: strin
  * knappen og på valget, og antallet i navnet.
  *
  * Bare ett av de to lagene står åpent om gangen; man går også mellom dem fra
- * lagene selv. Et varsel kan åpne Idéer rett på en idé (`visIde`).
+ * lagene selv. Et varsel eller en direktelenke kan åpne Idéer rett på en idé
+ * (`visIde`), og en direktelenke til en diskusjon lukker lagene
+ * (`lukkIdelagene`).
  */
 export function Ideknapp() {
   const [vindu, setVindu] = useBevart<Vindu>('ideknapp', null)
@@ -27,7 +33,14 @@ export function Ideknapp() {
     hentIdeerMedNytt().then(setMedNytt, () => undefined)
   }, [])
   useJevnligSjekk(sjekkNytt)
-  useEffect(() => lyttEtterIde((ide) => setVindu({ lag: 'ideer', ide })), [])
+  useEffect(
+    () =>
+      lyttEtterIde(({ id, kommentar }) =>
+        setVindu({ lag: 'ideer', ide: id, ...(kommentar && { kommentar }), nr: Date.now() }),
+      ),
+    [setVindu],
+  )
+  useEffect(() => lyttEtterIdelukking(() => setVindu(null)), [setVindu])
   const nytt = medNytt > 0 ? `nye kommentarer på ${medNytt === 1 ? 'én idé' : `${medNytt} idéer`}` : undefined
 
   // Fast identitet: `Modallag` kobler den til lukkehendelsen på dialogen.
@@ -80,6 +93,8 @@ export function Ideknapp() {
       <Ideer
         apen={vindu?.lag === 'ideer'}
         ide={vindu?.lag === 'ideer' ? vindu.ide : undefined}
+        kommentar={vindu?.lag === 'ideer' ? vindu.kommentar : undefined}
+        nr={vindu?.lag === 'ideer' ? vindu.nr : undefined}
         onLukk={lukkIdeer} onOppgaver={(oppgave) => setVindu({ lag: 'oppgaver', oppgave })} />
       <Oppgaver
         apen={vindu?.lag === 'oppgaver'}

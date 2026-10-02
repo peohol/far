@@ -277,7 +277,7 @@ export function Traadskjema({
         <span className="felt__merkelapp" id={tekstId}>
           Innlegg
         </span>
-        <Rikteksteditor dokument={tekst} onEndre={setTekst} etikett="Innlegg" referanser={false} kompakt />
+        <Rikteksteditor dokument={tekst} onEndre={setTekst} etikett="Innlegg" referanser={false} direktelenker kompakt />
       </div>
       {feil && (
         <p className="skjemafeil" role="alert">

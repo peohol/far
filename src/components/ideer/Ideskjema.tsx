@@ -118,7 +118,7 @@ export function Ideskjema({
         <span className="felt__merkelapp" id={beskrivelseId}>
           Beskrivelse
         </span>
-        <Rikteksteditor dokument={tekst} onEndre={setTekst} etikett="Beskrivelse" referanser={false} />
+        <Rikteksteditor dokument={tekst} onEndre={setTekst} etikett="Beskrivelse" referanser={false} direktelenker />
       </div>
 
       {feil && (

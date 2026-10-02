@@ -1,0 +1,242 @@
+/**
+ * Direktelenkene (src/components/direktelenker/): brikken i teksten, boblen
+ * med forhåndsvisningen, panelet i verktøyraden og meldingen når en lenke ikke
+ * kunne åpnes. Brikken er den samme i lesemodus og i editoren.
+ */
+
+/* Brikken står i teksten og brytes ikke midt i et ledd, men en lang
+   overskrift kan bryte innenfor brikken. */
+.lenkebrikke {
+  display: inline;
+  padding: 0.1em 0.5em 0.12em 0.35em;
+  font-family: var(--skrift-ui);
+  font-size: 0.86em;
+  font-weight: var(--vekt-medium);
+  line-height: var(--linjehoyde-ui);
+  color: var(--aksent);
+  text-decoration: none;
+  background: var(--aksent-flate);
+  border: 1px solid color-mix(in srgb, var(--aksent) 22%, transparent);
+  border-radius: var(--runding-pille);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition:
+    background-color var(--fart-rask) var(--kurve),
+    border-color var(--fart-rask) var(--kurve);
+}
+
+.lenkebrikke .ikon {
+  display: inline-block;
+  width: 1.15em;
+  height: 1.15em;
+  margin-right: 0.3em;
+  vertical-align: -0.2em;
+}
+
+a.lenkebrikke:hover {
+  border-color: var(--aksent);
+}
+
+a.lenkebrikke:focus-visible {
+  outline: var(--fokusring) solid var(--fokus);
+  outline-offset: 1px;
+}
+
+/* Leddene skilles med en prikk, som i navnet brikken lagres med. */
+.lenkebrikke__sted,
+.lenkebrikke__kommentar {
+  color: var(--blekk-dempet);
+}
+
+.lenkebrikke__sted::after,
+.lenkebrikke__tittel:not(:last-child)::after {
+  content: ' · ';
+  color: var(--blekk-dempet);
+}
+
+.lenkebrikke__tittel {
+  font-weight: var(--vekt-halvfet);
+}
+
+/* Peker på noe som ikke finnes lenger: overstreket og stille. */
+.lenkebrikke[data-borte] {
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+  border-color: var(--linje);
+  cursor: default;
+}
+
+.lenkebrikke[data-borte] .lenkebrikke__tittel {
+  text-decoration: line-through;
+}
+
+/* I editoren: valgt som en sitering. */
+.lenkebrikke[data-valgt] {
+  box-shadow: 0 0 0 var(--fokusring) var(--fokus);
+}
+
+.lenkebrikke-node {
+  white-space: normal;
+}
+
+/* Boblen ved brikken: et panel, ikke en snudd tooltip, så forhåndsvisningen
+   leses som et utsnitt av tråden. */
+.lenkeboble {
+  --tips-flate: var(--flate);
+  --tips-blekk: var(--blekk);
+  line-height: normal;
+  white-space: normal;
+}
+
+.lenkeboble .tipsboble__innhold {
+  display: block;
+  max-width: min(26rem, var(--tips-maks-bredde, calc(100vw - 2.5rem)));
+  padding: var(--rom-4) var(--rom-5);
+  border: 1px solid var(--linje);
+}
+
+/* Forhåndsvisningen, i boblen og i panelet. Bare spenn, som blokker. */
+.lenkevisning {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-liten);
+  color: var(--blekk);
+  text-align: left;
+}
+
+.lenkevisning--tom {
+  color: var(--blekk-dempet);
+}
+
+.lenkevisning__hode,
+.lenkevisning__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+  font-size: var(--tekst-meta);
+  color: var(--blekk-dempet);
+}
+
+.lenkevisning__hode {
+  font-weight: var(--vekt-halvfet);
+  letter-spacing: 0.02em;
+}
+
+.lenkevisning__kategori {
+  font-size: var(--tekst-meta);
+  color: var(--blekk-dempet);
+}
+
+.lenkevisning__tittel {
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-ingress);
+  font-weight: var(--vekt-halvfet);
+  line-height: var(--linjehoyde-titler);
+  color: var(--blekk-sterk);
+}
+
+.lenkevisning__utdrag {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: var(--linjehoyde-lesing);
+}
+
+.lenkevisning__utdrag--merknad {
+  font-style: italic;
+  color: var(--blekk-dempet);
+}
+
+.lenkevisning__kommentar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  margin-top: var(--rom-2);
+  padding: var(--rom-3) 0 0 var(--rom-4);
+  border-top: 1px solid var(--linje);
+  border-left: 2px solid var(--aksent);
+}
+
+/* Panelet i verktøyraden: forhåndsvisningen under feltet. */
+.direktelenkepanel__visning {
+  padding: var(--rom-4);
+  background: var(--flate-hevet);
+  border-radius: var(--runding-felt);
+}
+
+/* Kommentaren en lenke førte til, står uthevet en liten stund. */
+.kommentar[data-uthevet] > .kommentar__hode,
+.kommentar[data-uthevet] > .kommentar__kropp > .kommentar__inner > .riktekst {
+  animation: direktelenke-uthev 2.4s var(--kurve);
+}
+
+.kommentar:focus {
+  outline: none;
+}
+
+@keyframes direktelenke-uthev {
+  0%,
+  60% {
+    background: var(--aksent-flate);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kommentar[data-uthevet] > .kommentar__hode,
+  .kommentar[data-uthevet] > .kommentar__kropp > .kommentar__inner > .riktekst {
+    animation: none;
+    background: var(--aksent-flate);
+  }
+}
+
+/* «Lenke kopiert» i handlingsraden. */
+.kopilenke[data-kopiert] {
+  color: var(--referanse-blekk);
+}
+
+/* Meldingen når en lenke ikke kunne åpnes, nederst på midten, med de snudde
+   fargene fra tooltipen. */
+.lenkemelding {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--rom-6) + env(safe-area-inset-bottom, 0px));
+  z-index: var(--lag-modal);
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
+  max-width: min(32rem, calc(100vw - 2 * var(--rom-5)));
+  padding: var(--rom-2) var(--rom-2) var(--rom-2) var(--rom-4);
+  font-size: var(--tekst-liten);
+  color: var(--tips-blekk);
+  background: var(--tips-flate);
+  border-radius: var(--runding-underkort);
+  box-shadow: var(--skygge-modal);
+  transform: translateX(-50%);
+  animation: lenkemelding-inn var(--fart-glid) var(--kurve);
+}
+
+@keyframes lenkemelding-inn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 0.5rem);
+  }
+}
+
+.lenkemelding__lukk {
+  display: inline-grid;
+  place-items: center;
+  width: var(--hoyde-liten);
+  height: var(--hoyde-liten);
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+}
+
+.lenkemelding__lukk:hover {
+  background: color-mix(in srgb, var(--tips-blekk) 14%, transparent);
+}

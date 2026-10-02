@@ -9,6 +9,7 @@ import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Modallag } from '../Modallag'
 import { Forfatterkilde } from '../traad/Forfatterkontekst'
+import type { Fremheving } from '../traad/Kommentartraad'
 import { Ideliste } from './Ideliste'
 import { Ideside } from './Ideside'
 import { Ideskjema } from './Ideskjema'
@@ -38,12 +39,18 @@ const LISTE: Visning = { side: 'liste' }
 export function Ideer({
   apen,
   ide,
+  kommentar,
+  nr,
   onLukk,
   onOppgaver,
 }: {
   apen: boolean
   /** Idéen laget åpnes på, som fra et varsel. Ellers begynner det på lista. */
   ide?: string
+  /** Kommentaren under idéen en direktelenke peker på. */
+  kommentar?: string
+  /** Ny for hver gang laget bes om å åpne idéen, også når den alt står åpen. */
+  nr?: number
   onLukk: () => void
   /** Til Planlagte oppgaver, eventuelt rett til én oppgave. */
   onOppgaver: (oppgave?: string) => void
@@ -56,6 +63,7 @@ export function Ideer({
   const [feil, setFeil] = useState<string | null>(null)
   const [apneSkuffer, setApneSkuffer] = useState<ReadonlySet<string>>(new Set())
   const [angring, setAngring] = useState<Angring | null>(null)
+  const [fremhev, setFremhev] = useState<Fremheving | null>(null)
   const vakt = useForlatvakt()
   const { nullstill } = vakt
   const rot = useRef<HTMLDivElement>(null)
@@ -86,6 +94,7 @@ export function Ideer({
     if (!fortsetter.current) {
       nullstill()
       setVisning(ide ? { side: 'ide', id: ide } : LISTE)
+      setFremhev(ide && kommentar ? { kommentar, nr: nr ?? Date.now() } : null)
       setApneSkuffer(new Set())
       listeplass.current = { rulling: 0, ide: ide ?? null }
     }
@@ -94,13 +103,16 @@ export function Ideer({
       .then(hentListe)
     void hentAlleProfiler().then(setProfiler, () => undefined)
     void hentSortering().then(setSortering, () => undefined)
-  }, [apen, ide, hentListe, nullstill])
+    // `kommentar` følger `nr`, som er ny for hver lenke.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apen, ide, nr, hentListe, nullstill])
 
   const kropp = () => rot.current?.closest<HTMLElement>('.modallag__kropp') ?? null
 
   const gaaTil = (neste: Visning) => {
     if (visning.side === 'liste') listeplass.current.rulling = kropp()?.scrollTop ?? 0
     vakt.nullstill()
+    setFremhev(null)
     setVisning(neste)
   }
 
@@ -202,6 +214,7 @@ export function Ideer({
             {visning.side === 'ide' && (
               <Ideside
                 id={visning.id}
+                fremhev={fremhev}
                 onEndre={(ide) => gaaTil({ side: 'skjema', ide })}
                 onSlettet={() => {
                   listeplass.current.ide = null

@@ -201,7 +201,7 @@ describe('vinduet', () => {
     const { bruker, vindu } = await apne()
     await bruker.click(within(vindu).getByRole('button', { name: 'Ola Nordmann kommenterte idéen din' }))
     expect(api.merkVarslerLest).toHaveBeenCalledWith(['v-ide'], LISTE.lest_kl)
-    expect(visIde).toHaveBeenCalledWith('i1')
+    expect(visIde).toHaveBeenCalledWith({ id: 'i1' })
     expect(screen.queryByRole('dialog')).toBeNull()
   })
 
@@ -282,7 +282,7 @@ describe('vinduet', () => {
     expect(knapp.closest('li')!.textContent).toContain('«Utskrift av svaret»')
     await bruker.click(knapp)
     expect(api.merkVarslerLest).toHaveBeenCalledWith(['v-ny-ide'], LISTE.lest_kl)
-    expect(visIde).toHaveBeenCalledWith('i3')
+    expect(visIde).toHaveBeenCalledWith({ id: 'i3' })
   })
 
   it('lar brukeren slå av og på de valgfrie kategoriene, men ikke de obligatoriske', async () => {
