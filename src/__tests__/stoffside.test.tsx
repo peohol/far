@@ -1553,6 +1553,34 @@ describe('redigeringsmodus', () => {
     expect(screen.getByRole('button', { name: 'Legg til: Halveringstid' })).toBeTruthy()
   })
 
+  it('har tomme seksjoner for virkninger og bivirkninger mellom farmakodynamikken og indikasjonen', async () => {
+    const user = userEvent.setup()
+    const { lager } = vis('amitriptylin', kilde({ kanRedigere: true }))
+    await finnVerdi('10–20 nmol/L')
+    // Uten innhold står de ikke på siden for den som leser.
+    for (const panel of ['Virkninger', 'Bivirkninger']) expect(screen.queryByRole('heading', { level: 2, name: panel })).toBeNull()
+
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await screen.findByRole('heading', { level: 2, name: 'Virkninger' })
+    const titler = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
+    const plass = (navn: string) => titler.indexOf(navn)
+    expect(plass('Farmakodynamikk')).toBeLessThan(plass('Virkninger'))
+    expect(plass('Virkninger')).toBe(plass('Bivirkninger') - 1)
+    expect(plass('Bivirkninger')).toBeLessThan(plass('Indikasjon'))
+
+    const seksjon = screen.getByRole('region', { name: 'Bivirkninger' })
+    expect(seksjon.querySelector('[data-ikon="bivirkning"]')).not.toBeNull()
+    expect(screen.getByRole('region', { name: 'Virkninger' }).querySelector('[data-ikon="virkning"]')).not.toBeNull()
+    // Redaktøren åpner seksjonen for å legge til det første kortet.
+    await user.click(within(seksjon).getAllByRole('button', { name: 'Bivirkninger' }).find((b) => b.hasAttribute('aria-expanded'))!)
+    await user.click(within(seksjon).getByRole('button', { name: 'Legg til kort' }))
+    // Det nye kortet har overskrift og tekst, som kortene i farmakokinetikken.
+    const skjema = screen.getByRole('dialog')
+    expect(within(skjema).getByLabelText('Overskrift')).toBeTruthy()
+    expect(skjema.querySelector('[data-ikon="bivirkning"]')).not.toBeNull()
+    expect(lager.opprettUtkast).not.toHaveBeenCalled()
+  })
+
   it('redigerer i et eget vindu over siden, med fokus i det første feltet', async () => {
     const user = userEvent.setup()
     vis('amitriptylin', kilde({ kanRedigere: true }))
@@ -2131,6 +2159,70 @@ describe('kortene i farmakokinetikken', () => {
     await user.click(screen.getByRole('button', { name: 'Bekreft: fjern Metabolisme' }))
     await waitFor(() => expect(lager.lagreUtkast).toHaveBeenCalledTimes(1))
     expect(vi.mocked(lager.lagreUtkast).mock.calls[0]![2]).toMatchObject({ panel: 'fjernet', elementtype: 'kinetikkort' })
+  })
+
+  it('viser kortene i bivirkningene for den som leser', async () => {
+    const user = userEvent.setup()
+    const data = (tilstand: Tilstand): Stoffsidedata => {
+      const s = medKort()(tilstand)
+      const kort = utgave('bv', {
+        infoside: 'hs',
+        panel: 'bivirkninger',
+        posisjon: 0,
+        elementtype: 'kinetikkort',
+        data: { tittel: 'Vanlige', dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Munntørrhet.' }] }] } },
+      })
+      return { ...s, elementer: [...s.elementer, kort] }
+    }
+    vis('amitriptylin', kilde({ data }))
+    await finnVerdi('10–20 nmol/L')
+    expect(screen.queryByRole('heading', { level: 2, name: 'Virkninger' })).toBeNull()
+    await apneSkuff(user, 'Bivirkninger')
+    expect(screen.getByRole('region', { name: 'Bivirkninger' }).textContent).toContain('Munntørrhet.')
+  })
+
+  it('har faste kort i «Misbruk og avhengighet», med fast overskrift og rekkefølge', async () => {
+    const user = userEvent.setup()
+    const data = (tilstand: Tilstand): Stoffsidedata => {
+      const s = medKort()(tilstand)
+      const kort = utgave('tol', {
+        infoside: 'hs',
+        panel: 'misbruk_avhengighet',
+        posisjon: 2,
+        elementtype: 'kinetikkort',
+        data: { tittel: 'Toleranse', dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: LANG }] }] } },
+      })
+      return { ...s, elementer: [...s.elementer, kort] }
+    }
+    vis('amitriptylin', kilde({ kanRedigere: true, data }))
+    await finnVerdi('10–20 nmol/L')
+    const titler = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
+    expect(titler.indexOf('Misbruk og avhengighet')).toBeGreaterThan(titler.indexOf('Farmakokinetikk'))
+    const seksjon = screen.getByRole('region', { name: 'Misbruk og avhengighet' })
+    expect(seksjon.querySelector('[data-ikon="avhengighet"]')).not.toBeNull()
+    expect(seksjon.querySelector('[data-ikon="toleranse"]')).not.toBeNull()
+
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await apneSkuff(user, 'Misbruk og avhengighet')
+    // Hvert kort som mangler, legges til for seg; det som finnes, ikke en gang til.
+    const omrade = screen.getByRole('region', { name: 'Misbruk og avhengighet' })
+    for (const tittel of ['Misbrukspotensial', 'Vanedannelse', 'Abstinens og tilbakeslagseffekter']) {
+      expect(within(omrade).getByRole('button', { name: `Legg til: ${tittel}` })).toBeTruthy()
+    }
+    expect(within(omrade).queryByRole('button', { name: 'Legg til: Toleranse' })).toBeNull()
+    expect(within(omrade).queryByRole('button', { name: 'Legg til kort' })).toBeNull()
+
+    // Det faste kortet flyttes ikke, og overskriften kan ikke endres.
+    await apneSkuff(user, 'Toleranse')
+    expect(screen.queryByRole('button', { name: /^Flytt (opp|ned): Toleranse$/ })).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'Rediger: Toleranse' }))
+    expect(within(screen.getByRole('dialog')).queryByLabelText('Overskrift')).toBeNull()
+    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Avbryt' }))
+
+    await user.click(within(omrade).getByRole('button', { name: 'Legg til: Vanedannelse' }))
+    const nytt = screen.getByRole('dialog')
+    expect(within(nytt).queryByLabelText('Overskrift')).toBeNull()
+    expect(nytt.querySelector('[data-ikon="vane"]')).not.toBeNull()
   })
 })
 

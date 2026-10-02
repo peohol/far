@@ -439,6 +439,8 @@ styrer søket og nummereringen av referansene):
 | Identitet | `identitet` | `riktekst`: `{ dokument }` — den korte oppsummeringen av stoffet, som også står i kortet på helsiden for stoffregisteret. Navnet, kategoriene og de koblede analyttene kommer fra siden og stoffregisteret |
 | Viktige data | `viktige_data` | Ett kort per type og kode (`gjelder`, se «Sammenslåtte sider») — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk). Konsentrasjonene har `{ nedre, ovre, enhet }`; t½ og tss har `{ former: [{ stoff?, form, typisk, min, maks, enhet }] }`, én rad per legemiddelform eller stoff |
 | Farmakodynamikk | `farmakodynamikk` | `mekanismekort`: `{ maal, mekanisme, dokument? }`, i rekkefølge, som regel ett per målprotein eller mekanisme (se «Farmakodynamikken som mekanismekort»). En `riktekst` fra en senere import vises under kortene |
+| Virkninger | `virkninger` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge, som i farmakokinetikken. Seksjonen kom til 2026-10-02 uten innhold; i lesemodus står den først når den har kort |
+| Bivirkninger | `bivirkninger` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge, som i farmakokinetikken. Kom til sammen med virkningene, uten innhold |
 | Indikasjon | `indikasjon` | `riktekst`: `{ dokument }` |
 | Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
 | Dosering | `dosering` | `riktekst`: `{ dokument }` |
@@ -447,6 +449,7 @@ styrer søket og nummereringen av referansene):
 | Interaksjoner | `interaksjoner` | `riktekst`: `{ dokument }`, øverst; under den interaksjonene fra FEST for koblingen i «Preparater» |
 | Terapeutisk legemiddelmonitorering (TDM) | `tdm` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge — prøvetakingstidspunkt, grunnlaget for referanseområdet, tolkning og indikasjoner for måling |
 | Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }`. Kildene står på panelet, ikke på tabellen |
+| Misbruk og avhengighet | `misbruk_avhengighet` | `kinetikkort`: `{ tittel, dokument }` med faste overskrifter (`kort` i `PANELER`): Misbrukspotensial, Vanedannelse, Toleranse, og Abstinens og tilbakeslagseffekter. Hvert kan stå én gang, i den rekkefølgen, og har eget ikon. Overskriften kan ikke endres og kortene ikke flyttes. Kom til 2026-10-02 uten innhold |
 
 Tallene i viktige data er tall, ikke tekst. Bare den ene grensen oppgitt vises
 som «> 10» eller «opptil 20», uten å si om grensen er med. t½ og tss viser
@@ -467,7 +470,7 @@ databasen når siden finnes der.
 tittel, men er et område med navnet for skjermlesere; kortene står i to
 grupper (`DATAKORTGRUPPER`), med konseptikon og etikett på hvert kort, og
 halveringstid og tid til steady state vises som t₁/₂ og tₛₛ. De andre panelene
-er seksjoner som åpnes og lukkes, og kortene i farmakodynamikken, farmakokinetikken, farmakogenetikken og TDM er detaljkort
+er seksjoner som åpnes og lukkes, og kortene i farmakodynamikken, virkningene, bivirkningene, farmakokinetikken, farmakogenetikken og TDM er detaljkort
 i sin seksjon (se `docs/seksjoner.md`). En lukket seksjon viser en kort
 oppsummering med innholdets egne ord: målene i farmakodynamikken, titlene på kinetikkortene, dosene i
 tabellen eller begynnelsen av teksten. Redigeringsmodus åpner ikke alt;

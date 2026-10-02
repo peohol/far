@@ -304,6 +304,8 @@ interface Korttype<T> {
   tilData: (kort: T) => Record<string, unknown>
   /** Et nytt, tomt kort. */
   tomt: () => T
+  /** Et nytt, tomt kort med en fast overskrift (se `Paneldefinisjon.kort`). */
+  medTittel?: (tittel: string) => T
   /** Navnet på kortet i knappene og redigeringsvinduet. */
   navn: (kort: T) => string
   ikon: (kort: T) => Ikonnavn | undefined
@@ -328,6 +330,7 @@ const KINETIKKORT: Korttype<Kinetikkdata> = {
   les: lesKinetikk,
   tilData: (kort) => ({ ...kort }),
   tomt: () => ({ tittel: '', dokument: tomtDokument() }),
+  medTittel: (tittel) => ({ tittel, dokument: tomtDokument() }),
   navn: (kort) => kort.tittel,
   ikon: (kort) => kinetikkikon(kort.tittel),
   tittel: (kort) => <Kinetikktittel tittel={kort.tittel} />,
@@ -384,6 +387,10 @@ export function Redaksjonskort(props: {
 /**
  * En serie kort i et panel, som detaljkort i et rutenett, med knappene for å
  * legge til, flytte og fjerne i redigeringsmodus.
+ *
+ * Har panelet faste kort (`Paneldefinisjon.kort`), legges hvert av dem til
+ * for seg, med overskriften gitt, og de står i den faste rekkefølgen: de kan
+ * ikke flyttes, og overskriften kan ikke endres.
  */
 function Kortserie<T>({
   definisjon,
@@ -400,10 +407,16 @@ function Kortserie<T>({
   ettAlene?: boolean
   leggTilTekst?: string
 }) {
-  const [nytt, setNytt] = useBevart(`nytt:${definisjon.nokkel}`, false)
+  // `true` er et kort med fri overskrift; en tekst er det faste kortet med den overskriften.
+  const [nytt, setNytt] = useBevart<boolean | string>(`nytt:${definisjon.nokkel}`, false)
   const [fjerner, setFjerner] = useState<string | null>(null)
   const { handlinger, redigerer } = kontekst
   const { Skjema } = type
+  const faste = type.medTittel && definisjon.kort
+  const erFast = (navn: string) => faste?.includes(navn) ?? false
+  const mangler = faste?.filter((tittel) => !elementer.some((e) => type.navn(type.les(e.data)) === tittel)) ?? []
+  const fastNytt = typeof nytt === 'string' && faste ? nytt : null
+  const startNytt = fastNytt !== null && type.medTittel ? type.medTittel(fastNytt) : type.tomt()
 
   return (
     <>
@@ -445,12 +458,12 @@ function Kortserie<T>({
                       visning={type.visning(kort)}
                       ekstra={
                         <>
-                          {i > 0 && (
+                          {!faste && i > 0 && (
                             <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt opp: ${navn}`} onClick={() => void handlinger.flyttElement(element, elementer, -1)}>
                               Flytt opp
                             </Button>
                           )}
-                          {i < elementer.length - 1 && (
+                          {!faste && i < elementer.length - 1 && (
                             <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt ned: ${navn}`} onClick={() => void handlinger.flyttElement(element, elementer, 1)}>
                               Flytt ned
                             </Button>
@@ -482,6 +495,7 @@ function Kortserie<T>({
                         <Skjema
                           tittel={navn}
                           ikon={type.ikon(kort) ?? seksjonsikon(definisjon.nokkel)}
+                          fastTittel={erFast(navn)}
                           start={kort}
                           referanser={element.referanser}
                           onAvbryt={lukk}
@@ -506,26 +520,44 @@ function Kortserie<T>({
           })}
         </Skuffrutenett>
       )}
-      {redigerer && (
+      {redigerer && !faste && (
         <div className="redigeringsrad">
           <Button variant="kant" icon={<Ikon navn="plus" />} className="redigeringsknapp" onClick={() => setNytt(true)}>
             {leggTilTekst}
           </Button>
         </div>
       )}
-      {nytt && (
+      {redigerer && mangler.length > 0 && (
+        <div className="redigeringsrad">
+          {mangler.map((tittel) => (
+            <Button
+              key={tittel}
+              variant="kant"
+              icon={<Ikon navn="plus" />}
+              className="redigeringsknapp"
+              aria-label={`Legg til: ${tittel}`}
+              onClick={() => setNytt(tittel)}
+            >
+              {tittel}
+            </Button>
+          ))}
+        </div>
+      )}
+      {(fastNytt !== null || nytt === true) && (
         <Bevaringsomrade navn={`nytt:${definisjon.nokkel}`}>
           <Skjema
-            tittel="Nytt kort"
-            ikon={seksjonsikon(definisjon.nokkel)}
-            start={type.tomt()}
+            tittel={fastNytt ?? 'Nytt kort'}
+            ikon={(fastNytt !== null && type.ikon(startNytt)) || seksjonsikon(definisjon.nokkel)}
+            fastTittel={fastNytt !== null}
+            start={startNytt}
             referanser={[]}
             onAvbryt={() => setNytt(false)}
             onLagre={async ({ data, referanser }) => {
               await handlinger.lagreElement(null, {
                 panel: definisjon.nokkel,
                 elementtype: type.elementtype,
-                posisjon: Math.max(-1, ...elementer.map((e) => e.posisjon)) + 1,
+                // Et fast kort får plassen sin i den faste rekkefølgen.
+                posisjon: fastNytt !== null && faste ? faste.indexOf(fastNytt) : Math.max(-1, ...elementer.map((e) => e.posisjon)) + 1,
                 data: type.tilData(data),
                 referanser,
               })

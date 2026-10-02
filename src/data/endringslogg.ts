@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.74.0',
+    versjon: '1.75.0',
     dato: '2026-10-02',
     sammendrag: 'Stoffregisteret på en egen side, der det kan redigeres',
     typer: ['Funksjonalitet', 'Design / layout'],
@@ -25,6 +25,18 @@ export const ENDRINGSLOGG: Endring[] = [
       'Slettede fagsider havner i en papirkurv som bare administratorer ser. Der kan de hentes tilbake eller slettes for godt, og papirkurven kan tømmes. Det som har ligget der i 30 dager, slettes for godt av seg selv.',
       'Arkiverte og slettede fagsider står ikke i sidemenyen eller i søket. Sidemenyen og den nye siden viser alltid det samme registeret.',
       'Å lage en ny fagside gjøres nå i redigeringen av stoffregisteret, ikke nederst i sidemenyen.',
+    ],
+  },
+  {
+    versjon: '1.74.0',
+    dato: '2026-10-02',
+    sammendrag: 'Nye seksjoner for virkninger, bivirkninger og misbruk og avhengighet på fagsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Fagsidene har fått to nye seksjoner, «Virkninger» og «Bivirkninger», mellom «Farmakodynamikk» og «Indikasjon». Hver har sitt eget ikon.',
+      'Nederst på fagsidene er det kommet en seksjon for «Misbruk og avhengighet», med fire faste kort som hvert har sitt eget ikon: Misbrukspotensial, Vanedannelse, Toleranse, og Abstinens og tilbakeslagseffekter.',
+      'Seksjonene er tomme foreløpig og vises derfor ikke for den som leser. I redigeringsmodus står de fram. I «Virkninger» og «Bivirkninger» legger du til kort med overskrift og tekst, som i farmakokinetikken; i «Misbruk og avhengighet» legger du til hvert av de fire kortene med en egen knapp.',
     ],
   },
   {

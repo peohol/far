@@ -453,6 +453,8 @@ describe('sidemodellen', () => {
       'identitet',
       'viktige_data',
       'farmakodynamikk',
+      'virkninger',
+      'bivirkninger',
       'indikasjon',
       'preparater',
       'dosering',
@@ -461,6 +463,7 @@ describe('sidemodellen', () => {
       'interaksjoner',
       'tdm',
       'serumkonsentrasjoner',
+      'misbruk_avhengighet',
     ])
   })
 
