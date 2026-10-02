@@ -32,7 +32,10 @@ import { navnenokkel } from './sokenavn'
  *   dit koden lenker, og der fortolkningsreglene og datakortene for koden står.
  *   Rekkefølgen per stoff er rekkefølgen analysene vises i, og den første
  *   primære er stoffets hovedanalytt, som eier datakortene uten `gjelder`.
- * - `kategorier`: menyens inndeling, med stoffene ved nøkkelen.
+ * - `kategorier`: menyens inndeling, med stoffene ved nøkkelen, og navnet på
+ *   ikonet hver kategori vises med (`ikon`, et navn i ikonregisteret i
+ *   `src/components/ikon/register.ts`). En kategori uten, eller med et navn
+ *   ikonregisteret ikke har, vises med en plassholder (`kategoriikon`).
  *
  * Databasen har i tillegg fagsidene redaktørene har laget (`les_stoffliste`),
  * med nøkkelen og navnet der. De slås sammen med registeret i
@@ -77,6 +80,8 @@ export interface StoffAnalyttKobling {
 /** Én kategori slik den står i datafilen. */
 export interface Registerkategoridata {
   navn: string
+  /** Navnet på kategoriens ikon i ikonregisteret. Uten: plassholderen. */
+  ikon?: string
   /** Stoffene direkte i kategorien, ved nøkkelen. */
   stoffer?: string[]
   underkategorier?: { navn: string; stoffer: string[] }[]
@@ -115,6 +120,8 @@ export interface Registerunderkategori {
 
 export interface Registerkategori {
   navn: string
+  /** Navnet på kategoriens ikon i ikonregisteret. Uten: plassholderen. */
+  ikon?: string
   /** Underkategoriene i registerets rekkefølge. Tom når kategorien ikke er delt opp. */
   underkategorier: Registerunderkategori[]
   /** Alle stoffene i kategorien alfabetisk, uten underkategoriene og hvert én gang. */
@@ -277,6 +284,7 @@ export function byggStoffregister(
       .filter((u) => u.stoffer.length > 0)
     return {
       navn: k.navn,
+      ...(k.ikon && { ikon: k.ikon }),
       underkategorier,
       stoffer: unike([...slaaOpp(k.stoffer), ...underkategorier.flatMap((u) => u.stoffer)]),
     }

@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.73.2',
+    dato: '2026-10-02',
+    sammendrag: 'Ikoner og tydeligere kategorier i stoffregisteret',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Stoffregisteret har fått et eget ikon ved tittelen, og hver stoffkategori har sitt eget ikon: soloppgang for antidepressiver, en hjerne for antipsykotika, et vinglass for alkohol og GHB, en valmuekapsel for opioider og så videre.',
+      'Kategorinavnene står nå i samme skrift som overskriftene og litt større, så de skiller seg tydelig fra stoffene under dem.',
+      'En kategori som ikke har fått sitt eget ikon ennå, vises med et nøytralt plassholderikon.',
+    ],
+  },
+  {
     versjon: '1.73.1',
     dato: '2026-10-02',
     sammendrag: 'Stoffsidene heter nå fagsider',

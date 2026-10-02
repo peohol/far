@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { IKONNAVN, KATEGORIIKON_PLASSHOLDER, kategoriikon } from '../../components/ikon/register'
 import { filnokkel } from '../../faginnhold/import'
 import { CBD_STOFFSIDER, NYE_STOFFSIDER } from '../../faginnhold/indikasjoner'
 import { STOFFSIDE_DATASETT } from '../../faginnhold/stoffsider'
@@ -305,5 +306,34 @@ describe('kategoriene til ett stoff', () => {
       )
       expect(stier, stoff.slug).toEqual(iMenyen)
     }
+  })
+})
+
+describe('kategoriikonene', () => {
+  it('gir hver kategori i datafilen sitt eget ikon fra ikonregisteret', () => {
+    const ikoner = STOFFREGISTERDATA.kategorier.map((k) => k.ikon)
+    for (const [i, ikon] of ikoner.entries()) {
+      const navn = STOFFREGISTERDATA.kategorier[i]!.navn
+      expect(IKONNAVN, navn).toContain(ikon)
+      expect(ikon, navn).not.toBe(KATEGORIIKON_PLASSHOLDER)
+    }
+    expect(new Set(ikoner).size).toBe(ikoner.length)
+    expect(STOFFREGISTER.kategorier.map((k) => k.ikon)).toEqual(ikoner)
+  })
+
+  it('gir plassholderen til en kategori uten ikon eller med et ukjent navn', () => {
+    const data: Registerdata = {
+      ...STOFFREGISTERDATA,
+      kategorier: [{ navn: 'Ny kategori', stoffer: ['diazepam'] }],
+    }
+    const register = byggStoffregister([], data)
+    const [ny, andre] = register.kategorier
+    expect(ny?.ikon).toBeUndefined()
+    expect(andre?.navn).toBe(ANDRE_STOFFER)
+    expect(kategoriikon(ny?.ikon)).toBe(KATEGORIIKON_PLASSHOLDER)
+    expect(kategoriikon(andre?.ikon)).toBe(KATEGORIIKON_PLASSHOLDER)
+    expect(kategoriikon('finnesIkke')).toBe(KATEGORIIKON_PLASSHOLDER)
+    expect(kategoriikon('toString')).toBe(KATEGORIIKON_PLASSHOLDER)
+    expect(kategoriikon('katOpioider')).toBe('katOpioider')
   })
 })
