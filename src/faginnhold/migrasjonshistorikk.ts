@@ -83,6 +83,16 @@ export const KJENTE_AVVIK: Readonly<Record<string, { db: string | null; fil: str
     fil: '8e25c74eee4221d75d69949e56ed8492',
     hvorfor: 'Filen fikk etter kjøringen sperren for tom database (PR 163). Ellers lik.',
   },
+  '20261002110800': {
+    db: '3f3d9f4559dfa7ed5fa839ca824f9494',
+    fil: '6306d89d7259e3e6746583cf4dc0c4da',
+    hvorfor: 'Kjørt i SQL Editor; innlimingen ga CRLF-linjeskift, ellers identisk.',
+  },
+  '20261002110900': {
+    db: 'ee2f27e24e474ade1a44ce7f39b58784',
+    fil: 'd2f34e22c4e99ada535019d699d66a46',
+    hvorfor: 'Kjørt i SQL Editor; innlimingen ga CRLF-linjeskift, ellers identisk.',
+  },
 }
 
 export const md5 = (tekst: string) => createHash('md5').update(tekst, 'utf8').digest('hex')
