@@ -125,8 +125,11 @@ describe('kvetiapin-monografkuratering', () => {
   })
 
   it('oppdaterer CYP-kortet der det faktisk står i Farmakogenetikk', () => {
-    expect(farmakogenetikk).toHaveLength(1)
-    const [e] = farmakogenetikk
+    const kort = farmakogenetikk.filter((e) => e.elementtype === 'kinetikkort')
+    const koblinger = farmakogenetikk.filter((e) => e.elementtype === 'clinpgxkobling')
+    expect(kort).toHaveLength(1)
+    expect(koblinger).toHaveLength(1)
+    const [e] = kort
     expect(e!.elementtype).toBe('kinetikkort')
     expect(e!.data.tittel).toBe('CYP3A4 og CYP2D6')
     const s = tekst(e!.data)
