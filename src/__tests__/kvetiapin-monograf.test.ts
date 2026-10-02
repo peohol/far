@@ -1,7 +1,7 @@
 /** Kvetiapin-monografkurateringen: fersk kildevurdering av farmakodynamikk, dosering og farmakokinetikk. */
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, describe, expect, it } from 'vitest'
-import { kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
+import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
 const FORSTE_KURATERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering.sql'))!
 const KORRIGERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_korrigering.sql'))!
@@ -57,6 +57,76 @@ describe('kvetiapinmigrasjoner uten kuratorprofil', () => {
       kjorMigrasjoner(tom, { bare: [FORSTE_KURATERING, KORRIGERING, TILLEGG] }),
     ).resolves.toBeUndefined()
     await tom.close()
+  }, 240_000)
+})
+
+describe('kvetiapinkorrigering med parallelle redaksjonelle kort', () => {
+  it('oppdaterer bare kortene fra den verifiserte første kurateringen', async () => {
+    const testdb = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
+    const admin = await opprettBruker(testdb, {
+      brukernavn: 'peohol',
+      fornavn: 'Rita',
+      etternavn: 'Redaktør',
+      rolle: 'admin',
+    })
+    await kjorMigrasjoner(testdb, { fra: FORSTE_IMPORTMIGRASJON, til: KORRIGERING })
+
+    const { rows: sider } = await testdb.query<{ objekt_id: string }>(
+      `select objekt_id from public.infosider where tilstand='publisert' and slug='kvetiapin'`,
+    )
+    const side = sider[0]!.objekt_id
+    const kall = faginnholdskall(testdb, admin)
+
+    const ekstraPd = await kall.opprett('innholdselement', {
+      infoside: side,
+      panel: 'farmakodynamikk',
+      posisjon: 99,
+      elementtype: 'mekanismekort',
+      data: {
+        maal: 'D2-reseptor',
+        mekanisme: 'antagonisme',
+        dokument: {
+          type: 'doc',
+          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Redaksjonelt ekstra D2-kort' }] }],
+        },
+      },
+      referanser: [],
+    })
+    await kall.publiser(ekstraPd.id, 1)
+
+    const ekstraPk = await kall.opprett('innholdselement', {
+      infoside: side,
+      panel: 'farmakokinetikk',
+      posisjon: 99,
+      elementtype: 'kinetikkort',
+      data: {
+        tittel: 't½',
+        dokument: {
+          type: 'doc',
+          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Redaksjonelt ekstra PK-kort' }] }],
+        },
+      },
+      referanser: [],
+    })
+    await kall.publiser(ekstraPk.id, 1)
+
+    await kjorMigrasjoner(testdb, { bare: [KORRIGERING] })
+
+    const { rows } = await testdb.query<{ objekt_id: string; tekst: string; kilde: string | null }>(
+      `select e.objekt_id, r.innhold::text as tekst, r.kilde
+       from public.innholdselementer e
+       join public.objekttilstander p on p.objekt_id=e.objekt_id and p.tilstand='publisert'
+       join public.objektrevisjoner r on r.objekt_id=e.objekt_id and r.revisjon=p.revisjon
+       where e.objekt_id in ($1, $2)
+       order by e.objekt_id`,
+      [ekstraPd.id, ekstraPk.id],
+    )
+    expect(rows).toHaveLength(2)
+    expect(rows.find((r) => r.objekt_id === ekstraPd.id)?.tekst).toContain('Redaksjonelt ekstra D2-kort')
+    expect(rows.find((r) => r.objekt_id === ekstraPk.id)?.tekst).toContain('Redaksjonelt ekstra PK-kort')
+    expect(rows.every((r) => r.kilde === 'Manuell redigering')).toBe(true)
+
+    await testdb.close()
   }, 240_000)
 })
 
