@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.74.0',
+    dato: '2026-10-02',
+    sammendrag: 'Nye seksjoner for virkninger, bivirkninger og misbruk og avhengighet på fagsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Fagsidene har fått to nye seksjoner, «Virkninger» og «Bivirkninger», mellom «Farmakodynamikk» og «Indikasjon». Hver har sitt eget ikon.',
+      'Nederst på fagsidene er det kommet en seksjon for «Misbruk og avhengighet», med fire faste kort som hvert har sitt eget ikon: Misbrukspotensial, Vanedannelse, Toleranse, og Abstinens og tilbakeslagseffekter.',
+      'Seksjonene er tomme foreløpig og vises derfor ikke for den som leser. I redigeringsmodus står de fram. I «Virkninger» og «Bivirkninger» legger du til kort med overskrift og tekst, som i farmakokinetikken; i «Misbruk og avhengighet» legger du til hvert av de fire kortene med en egen knapp.',
+    ],
+  },
+  {
     versjon: '1.73.4',
     dato: '2026-10-02',
     sammendrag: 'Kategoriikonene også øverst på fagsidene',
