@@ -442,7 +442,7 @@ styrer søket og nummereringen av referansene):
 | Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
 | Dosering | `dosering` | `riktekst`: `{ dokument }` |
 | Farmakokinetikk | `farmakokinetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge |
-| Farmakogenetikk | `farmakogenetikk` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge (som regel ett, «CYP-enzymer (substrat)»); `clinpgxkobling`: `{ kjemikalier: [{ clinpgx_id, navn }] }` — hvilke kjemikalier i ClinPGx siden viser retningslinjene, preparatomtalene og de kliniske annotasjonene for, under kortene (se `docs/clinpgx.md`) |
+| Farmakogenetikk | `farmakogenetikk` | `riktekst`: `{ dokument }` for en kort redaksjonell oppsummering av klinisk relevans og når farmakogenetisk analyse kan være nyttig; `kinetikkort`: `{ tittel, dokument }`, i rekkefølge (som regel ett, «CYP-enzymer (substrat)»); `clinpgxkobling`: `{ kjemikalier: [{ clinpgx_id, navn }] }` — hvilke kjemikalier i ClinPGx siden viser retningslinjene, preparatomtalene og de kliniske annotasjonene for, under det redaksjonelle innholdet (se `docs/clinpgx.md`) |
 | Interaksjoner | `interaksjoner` | `riktekst`: `{ dokument }`, øverst; under den interaksjonene fra FEST for koblingen i «Preparater» |
 | Terapeutisk legemiddelmonitorering (TDM) | `tdm` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge — prøvetakingstidspunkt, grunnlaget for referanseområdet, tolkning og indikasjoner for måling |
 | Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }`. Kildene står på panelet, ikke på tabellen |
