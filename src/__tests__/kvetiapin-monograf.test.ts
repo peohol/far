@@ -4,6 +4,7 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
 const KORRIGERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_korrigering.sql'))!
+const TILLEGG = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_farmakogenetikk_og_typografi.sql'))!
 const FORSTE_IMPORTMIGRASJON = '20260923072247'
 
 interface Element {
@@ -53,19 +54,22 @@ describe('kvetiapin-monografkuratering', () => {
   let farmakodynamikk: Element[]
   let dosering: Element[]
   let farmakokinetikk: Element[]
+  let farmakogenetikk: Element[]
 
   beforeAll(async () => {
     db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
     await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
-    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: KORRIGERING })
+    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: TILLEGG })
 
-    // Kjør korrigeringen, og deretter én gang til for å verifisere idempotens.
+    // Begge kvetiapinoppdateringene skal tåle å kjøres på nytt.
     await kjorMigrasjoner(db, { bare: [KORRIGERING] })
-    await kjorMigrasjoner(db, { bare: [KORRIGERING] })
+    await kjorMigrasjoner(db, { bare: [TILLEGG] })
+    await kjorMigrasjoner(db, { bare: [TILLEGG] })
 
     farmakodynamikk = await elementer(db, 'farmakodynamikk')
     dosering = await elementer(db, 'dosering')
     farmakokinetikk = await elementer(db, 'farmakokinetikk')
+    farmakogenetikk = await elementer(db, 'farmakogenetikk')
   }, 240_000)
 
   it('har ni kildebelagte mekanismekort uten et eget D1-kort', () => {
@@ -103,6 +107,18 @@ describe('kvetiapin-monografkuratering', () => {
       expect(e.elementtype).toBe('mekanismekort')
       expect(e.referanser.length, String(e.data.maal)).toBeGreaterThan(0)
       expect(e.utkast, String(e.data.maal)).toBe(e.publisert)
+    }
+  })
+
+  it('bruker senket tekst for reseptorsubtyper i farmakodynamisk brødtekst', () => {
+    const medSubtype = farmakodynamikk.filter(
+      (e) => String(e.data.maal) !== 'Noradrenalintransportør / NET (norkvetiapin)',
+    )
+    expect(medSubtype).toHaveLength(8)
+    for (const e of medSubtype) {
+      const dokument = JSON.stringify(e.data.dokument)
+      expect(dokument, String(e.data.maal)).toContain('"type":"subscript"')
+      expect(dokument, String(e.data.maal)).not.toMatch(/5-HT[0-9]|D[0-9]|H[0-9]|M[0-9]|α[0-9]/)
     }
   })
 
@@ -188,6 +204,25 @@ describe('kvetiapin-monografkuratering', () => {
     expect(saerpopulasjoner).toContain('stabil alkoholisk cirrhose')
   })
 
+  it('har en kort farmakogenetisk fritekst om når testing er relevant', () => {
+    const fritekst = farmakogenetikk.find((e) => e.elementtype === 'riktekst')
+    expect(fritekst).toBeDefined()
+    expect(fritekst!.referanser).toHaveLength(3)
+
+    const s = tekst(fritekst!.data)
+    expect(s).toContain('ikke rutinemessig anbefalt')
+    expect(s).toContain('manglende CYP3A4-enzymaktivitet')
+    expect(s).toContain('redusert og manglende CYP2D6-enzymaktivitet')
+    expect(s).toContain('mest relevant selektivt')
+    expect(s).toContain('TDM-resultat')
+    expect(s).not.toMatch(/intermediate metabolizer|poor metabolizer|ultrarapid metabolizer|\\bIM\\b|\\bPM\\b|\\bUM\\b/i)
+
+    const enzymkort = farmakogenetikk.find(
+      (e) => e.elementtype === 'kinetikkort' && e.data.tittel === 'CYP-enzymer (substrat)',
+    )
+    expect(enzymkort).toBeDefined()
+  })
+
   it('tilbakefører farmakogenetikk og interaksjoner til tilstanden før første kuratering', async () => {
     const { rows } = await db.query<{ panel: string; tittel: string | null; kilde: string | null }>(
       `select e.panel, e.data->>'tittel' as tittel, r.kilde
@@ -229,6 +264,9 @@ describe('kvetiapin-monografkuratering', () => {
       'https://pubmed.ncbi.nlm.nih.gov/15000896/',
       'https://doi.org/10.1515/DMDI.2006.21.3-4.187',
       'https://doi.org/10.1124/dmd.112.045237',
+      'https://doi.org/10.1038/s41431-023-01347-3',
+      'https://doi.org/10.1097/JCP.0000000000000070',
+      'https://doi.org/10.1111/bcp.15849',
     ]
 
     const { rows } = await db.query<{ lenke: string; n: number }>(
