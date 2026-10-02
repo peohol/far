@@ -194,6 +194,8 @@ export interface Arkivertkategori {
 /** Hvor et stoff står i registeret: kategorien, og underkategorien når kategorien er delt opp. */
 export interface Kategoristi {
   kategori: string
+  /** Kategoriens ikon i ikonregisteret, som i {@link Registerkategori}. */
+  ikon?: string
   underkategori?: string
 }
 
@@ -443,9 +445,11 @@ export function byggStoffregister(
     inndeling.flatMap((k): Plassering[] => {
       if (k.id === ANDRE_STOFFER_ID) return []
       const under = k.underkategorier.filter((u) => u.stoffer.some((s) => s.slug === slug))
+      // Underkategoriene vises med kategoriens ikon.
+      const kategori = { kategori: k.navn, ...(k.ikon && { ikon: k.ikon }) }
       return [
-        ...(k.direkte.some((s) => s.slug === slug) ? [{ id: k.id, kategori: k.navn }] : []),
-        ...under.map((u) => ({ id: u.id, kategori: k.navn, underkategori: u.navn })),
+        ...(k.direkte.some((s) => s.slug === slug) ? [{ id: k.id, ...kategori }] : []),
+        ...under.map((u) => ({ id: u.id, ...kategori, underkategori: u.navn })),
       ]
     })
   const kategorierFor = (slug: string): Kategoristi[] => {

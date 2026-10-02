@@ -82,8 +82,11 @@ menyen hadde fra før; den bredeste lar siden bak beholde plass
 Bredden lagres på brukeren og gjelder alle sider. Håndtaket er felles
 (`src/components/Breddehandtak.tsx`).
 
-Overskriften, søket i lista og «Alle tråder» i en tråd står fast; bare det
-under ruller. «Ny tråd» og «Ny kategori» følger lista, men blir stående
+Overskriften, søket i lista og, i en tråd, «Alle tråder» og overskriften på
+tråden står fast; bare det under ruller. Overskriften på tråden står i en
+plass i menyen (`.diskusjonspanel__traadhode`) som `Diskusjonsside` legger den
+i med en portal, med en hårlinje mot det som ruller og blyanten som endrer
+den til høyre. «Ny tråd» og «Ny kategori» følger lista, men blir stående
 nederst i menyen når lista er lengre enn den. På smale skjermer åpnes den over
 siden fra knappen «Diskusjoner» i toppmenyen, eller av seg selv når et
 varsel leder til en tråd. Mens fokus er i menyen, er den et

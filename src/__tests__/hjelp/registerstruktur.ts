@@ -10,6 +10,7 @@ import type { Kategorirad, Plasseringsrad, Registerstruktur } from '../../domain
 
 interface Grunnkategori {
   navn: string
+  ikon?: string
   stoffer?: string[]
   underkategorier?: { navn: string; stoffer: string[] }[]
 }
@@ -38,7 +39,7 @@ function bygg(): Registerstruktur {
   const plasseringer: Plasseringsrad[] = []
   GRUNNINNDELING.forEach((k, i) => {
     const id = kategoriid(k.navn)
-    kategorier.push({ id, forelder: null, navn: k.navn, posisjon: i, ikon: null, arkivert_kl: null })
+    kategorier.push({ id, forelder: null, navn: k.navn, posisjon: i, ikon: k.ikon ?? null, arkivert_kl: null })
     for (const stoff of k.stoffer ?? []) plasseringer.push({ stoff, kategori: id })
     k.underkategorier?.forEach((u, j) => {
       const uid = kategoriid(k.navn, u.navn)

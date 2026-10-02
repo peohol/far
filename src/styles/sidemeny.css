@@ -78,6 +78,9 @@
 }
 
 .sidemeny__tittel {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-3);
   flex: 1;
   font-family: var(--skrift-display);
   font-size: var(--tekst-seksjon);
@@ -126,12 +129,20 @@
   overflow-y: auto;
 }
 
-/* Stjernen foran «Favoritter» er alltid fylt, som på en side som er favoritt. */
+/* Ikonet foran tittelen i serif, på linje med den. */
+.sidemeny__tittelikon {
+  flex: none;
+  width: var(--ikon-panel);
+  height: var(--ikon-panel);
+}
+
+/* Ikonet foran hver skuff: kategoriens, eller stjernen foran «Favoritter». */
 .menyskuff__ikon {
   flex: none;
 }
 
-.menyskuff__tittel .menyskuff__ikon [data-rolle^='f'] {
+/* Stjernen er alltid fylt, som på en side som er favoritt. */
+.menyskuff__tittel .menyskuff__ikon--fylt [data-rolle^='f'] {
   fill-opacity: 0.85;
 }
 
@@ -229,13 +240,18 @@
   cursor: pointer;
 }
 
+/* Kategorinavnet i serif og litt større enn stoffene under, som står i
+   grotesk, og underkategoriene, som står i dempet kursiv. Newsreader står
+   høyt i linja, så navnet senkes til midten av ikonet ved siden av. */
 .menyskuff__beskrivelse {
   flex: 1;
   min-width: 0;
-  font-size: var(--tekst-etikett);
+  font-family: var(--skrift-display);
+  font-size: var(--tekst-ingress);
   font-weight: var(--vekt-medium);
   line-height: 1.25;
   color: var(--blekk);
+  translate: 0 calc(var(--skrift-display-senk) / 2);
 }
 
 /* Hvor mange stoffer kategorien har, dempet ved siden av navnet. */

@@ -89,6 +89,9 @@ describe('stoffregisteret i databasen', () => {
       'Antihypertensiver',
     ])
     expect(topp.map((k) => k.posisjon)).toEqual(topp.map((_, i) => i))
+    // Hver kategori har ikonet sitt; underkategoriene vises med kategoriens.
+    expect(topp.find((k) => k.navn === 'Opioider')?.ikon).toBe('katOpioider')
+    expect(topp.every((k) => k.ikon?.startsWith('kat'))).toBe(true)
     const ssri = data.kategorier.find((k) => k.navn === 'SSRI')!
     expect(data.kategorier.find((k) => k.id === ssri.forelder)?.navn).toBe('Antidepressiver')
     expect(data.plasseringer.filter((p) => p.kategori === ssri.id).map((p) => p.stoff)).toContain('sertralin')

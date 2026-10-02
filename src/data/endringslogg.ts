@@ -12,6 +12,40 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.73.4',
+    dato: '2026-10-02',
+    sammendrag: 'Kategoriikonene også øverst på fagsidene',
+    typer: ['Design / layout'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Kategorien øverst på hver fagside, over navnet på stoffet, har nå det samme ikonet foran seg som i stoffregisteret. Står stoffet i flere kategorier, har hver sitt ikon.',
+    ],
+  },
+  {
+    versjon: '1.73.3',
+    dato: '2026-10-02',
+    sammendrag: 'Fast overskrift i diskusjonstråder og tydeligere kategorier i diskusjonsmenyen',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Overskriften på tråden står nå fast under «‹ Alle tråder», så du ser den mens du ruller. En strek under den skiller den fra det som ruller.',
+      'Du endrer overskriften med blyanten til høyre for den. Knappen «Endre overskrift» under innlegget er borte.',
+      'I oversikten står navnet på hver kategori i et eget felt øverst i kortet, med en strek under, så det er lettere å skille kategorien fra trådene i den.',
+    ],
+  },
+  {
+    versjon: '1.73.2',
+    dato: '2026-10-02',
+    sammendrag: 'Ikoner og tydeligere kategorier i stoffregisteret',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Stoffregisteret har fått et eget ikon ved tittelen, og hver stoffkategori har sitt eget ikon: soloppgang for antidepressiver, en hjerne for antipsykotika, et vinglass for alkohol og GHB, en valmuekapsel for opioider og så videre.',
+      'Kategorinavnene står nå i samme skrift som overskriftene og litt større, så de skiller seg tydelig fra stoffene under dem.',
+      'En kategori som ikke har fått sitt eget ikon ennå, vises med et nøytralt plassholderikon.',
+    ],
+  },
+  {
     versjon: '1.73.1',
     dato: '2026-10-02',
     sammendrag: 'Stoffsidene heter nå fagsider',

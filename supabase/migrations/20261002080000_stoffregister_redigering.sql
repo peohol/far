@@ -60,7 +60,7 @@ create table public.stoffkategorier (
   constraint stoffkategorier_navn check (char_length(navn) between 1 and 80 and navn = btrim(navn)),
   -- «Andre stoffer» er appens samlekategori for stoffene uten plassering.
   constraint stoffkategorier_navn_reservert check (forelder_id is not null or lower(navn) <> 'andre stoffer'),
-  constraint stoffkategorier_ikon check (ikon is null or (char_length(ikon) <= 60 and ikon ~ '^[a-z][a-z0-9-]*$')),
+  constraint stoffkategorier_ikon check (ikon is null or (char_length(ikon) <= 60 and ikon ~ '^[A-Za-z][A-Za-z0-9-]*$')),
   constraint stoffkategorier_ikke_egen_forelder check (forelder_id is distinct from id)
 );
 
@@ -141,18 +141,18 @@ for each row execute function intern.krev_to_kategorinivaer();
 do $$
 declare
   data jsonb := $json$[
-  {"navn": "Antidepressiver", "underkategorier": [{"navn": "SSRI", "stoffer": ["citalopram", "escitalopram", "fluoksetin", "fluvoksamin", "paroksetin", "sertralin"]}, {"navn": "SNRI", "stoffer": ["duloksetin", "venlafaksin"]}, {"navn": "NDRI", "stoffer": ["bupropion"]}, {"navn": "TCA", "stoffer": ["amitriptylin", "doksepin", "klomipramin", "nortriptylin", "trimipramin"]}, {"navn": "Reseptorantagonister (NaSSA)", "stoffer": ["mianserin", "mirtazapin"]}, {"navn": "Multimodale", "stoffer": ["vortioksetin"]}, {"navn": "NMDA-reseptorantagonister", "stoffer": ["ketamin"]}]},
-  {"navn": "Stemningsstabiliserende", "stoffer": ["karbamazepin", "lamotrigin", "litium", "valproat"]},
-  {"navn": "Antipsykotika", "underkategorier": [{"navn": "Førstegenerasjonsmidler", "stoffer": ["flupentiksol", "haloperidol", "klorprotiksen", "levomepromazin", "perfenazin", "zuklopentiksol"]}, {"navn": "Andregenerasjonsmidler", "stoffer": ["amisulprid", "aripiprazol", "brekspiprazol", "kariprazin", "klozapin", "kvetiapin", "lurasidon", "olanzapin", "paliperidon", "risperidon", "sertindol", "ziprasidon"]}]},
-  {"navn": "Antiepileptika", "stoffer": ["fenobarbital", "fenytoin", "gabapentin", "karbamazepin", "klonazepam", "lamotrigin", "levetiracetam", "okskarbazepin", "topiramat", "valproat"]},
-  {"navn": "Alkohol og GHB", "stoffer": ["etanol", "ghb"]},
-  {"navn": "Benzodiazepiner og Z-hypnotika", "stoffer": ["alprazolam", "diazepam", "flunitrazepam", "klonazepam", "nitrazepam", "oksazepam", "zolpidem", "zopiklon"]},
-  {"navn": "Opioider", "stoffer": ["buprenorfin", "fentanyl", "ketobemidon", "kodein", "metadon", "morfin", "oksykodon", "petidin", "tapentadol", "tramadol"]},
-  {"navn": "Stimulanter", "stoffer": ["amfetamin", "atomoksetin", "kokain", "mdma", "metamfetamin", "metylfenidat"]},
-  {"navn": "Cannabinoider", "stoffer": ["thc", "cbd"]},
-  {"navn": "Hallusinogene stoffer", "stoffer": ["ketamin"]},
-  {"navn": "Antihypertensiver", "underkategorier": [{"navn": "ACE-hemmere", "stoffer": ["enalapril", "lisinopril", "ramipril"]}, {"navn": "Aldosteronantagonister", "stoffer": ["eplerenon", "spironolakton"]}, {"navn": "Alfa- og betablokkere", "stoffer": ["karvedilol", "labetalol"]}, {"navn": "Alfablokkere", "stoffer": ["doksazosin"]}, {"navn": "ARB", "stoffer": ["irbesartan", "kandesartan", "losartan", "telmisartan", "valsartan"]}, {"navn": "Betablokkere", "stoffer": ["atenolol", "bisoprolol", "metoprolol"]}, {"navn": "Diuretika", "stoffer": ["bendroflumetiazid", "bumetanid", "furosemid", "hydroklortiazid"]}, {"navn": "Kalsiumantagonister", "stoffer": ["amlodipin", "diltiazem", "lerkanidipin", "nifedipin", "verapamil"]}]}
-]$json$;
+    {"navn": "Antidepressiver", "ikon": "katAntidepressiver", "underkategorier": [{"navn": "SSRI", "stoffer": ["citalopram", "escitalopram", "fluoksetin", "fluvoksamin", "paroksetin", "sertralin"]}, {"navn": "SNRI", "stoffer": ["duloksetin", "venlafaksin"]}, {"navn": "NDRI", "stoffer": ["bupropion"]}, {"navn": "TCA", "stoffer": ["amitriptylin", "doksepin", "klomipramin", "nortriptylin", "trimipramin"]}, {"navn": "Reseptorantagonister (NaSSA)", "stoffer": ["mianserin", "mirtazapin"]}, {"navn": "Multimodale", "stoffer": ["vortioksetin"]}, {"navn": "NMDA-reseptorantagonister", "stoffer": ["ketamin"]}]},
+    {"navn": "Stemningsstabiliserende", "ikon": "katStemningsstabiliserende", "stoffer": ["karbamazepin", "lamotrigin", "litium", "valproat"]},
+    {"navn": "Antipsykotika", "ikon": "katAntipsykotika", "underkategorier": [{"navn": "Førstegenerasjonsmidler", "stoffer": ["flupentiksol", "haloperidol", "klorprotiksen", "levomepromazin", "perfenazin", "zuklopentiksol"]}, {"navn": "Andregenerasjonsmidler", "stoffer": ["amisulprid", "aripiprazol", "brekspiprazol", "kariprazin", "klozapin", "kvetiapin", "lurasidon", "olanzapin", "paliperidon", "risperidon", "sertindol", "ziprasidon"]}]},
+    {"navn": "Antiepileptika", "ikon": "katAntiepileptika", "stoffer": ["fenobarbital", "fenytoin", "gabapentin", "karbamazepin", "klonazepam", "lamotrigin", "levetiracetam", "okskarbazepin", "topiramat", "valproat"]},
+    {"navn": "Alkohol og GHB", "ikon": "katAlkohol", "stoffer": ["etanol", "ghb"]},
+    {"navn": "Benzodiazepiner og Z-hypnotika", "ikon": "katBenzodiazepiner", "stoffer": ["alprazolam", "diazepam", "flunitrazepam", "klonazepam", "nitrazepam", "oksazepam", "zolpidem", "zopiklon"]},
+    {"navn": "Opioider", "ikon": "katOpioider", "stoffer": ["buprenorfin", "fentanyl", "ketobemidon", "kodein", "metadon", "morfin", "oksykodon", "petidin", "tapentadol", "tramadol"]},
+    {"navn": "Stimulanter", "ikon": "katStimulanter", "stoffer": ["amfetamin", "atomoksetin", "kokain", "mdma", "metamfetamin", "metylfenidat"]},
+    {"navn": "Cannabinoider", "ikon": "katCannabinoider", "stoffer": ["thc", "cbd"]},
+    {"navn": "Hallusinogene stoffer", "ikon": "katHallusinogener", "stoffer": ["ketamin"]},
+    {"navn": "Antihypertensiver", "ikon": "katAntihypertensiver", "underkategorier": [{"navn": "ACE-hemmere", "stoffer": ["enalapril", "lisinopril", "ramipril"]}, {"navn": "Aldosteronantagonister", "stoffer": ["eplerenon", "spironolakton"]}, {"navn": "Alfa- og betablokkere", "stoffer": ["karvedilol", "labetalol"]}, {"navn": "Alfablokkere", "stoffer": ["doksazosin"]}, {"navn": "ARB", "stoffer": ["irbesartan", "kandesartan", "losartan", "telmisartan", "valsartan"]}, {"navn": "Betablokkere", "stoffer": ["atenolol", "bisoprolol", "metoprolol"]}, {"navn": "Diuretika", "stoffer": ["bendroflumetiazid", "bumetanid", "furosemid", "hydroklortiazid"]}, {"navn": "Kalsiumantagonister", "stoffer": ["amlodipin", "diltiazem", "lerkanidipin", "nifedipin", "verapamil"]}]}
+  ]$json$;
   kategori record;
   under record;
   kategori_id uuid;
@@ -163,8 +163,8 @@ begin
     return;
   end if;
   for kategori in select k.verdi, k.nr from jsonb_array_elements(data) with ordinality k(verdi, nr) order by k.nr loop
-    insert into public.stoffkategorier (navn, posisjon)
-    values (kategori.verdi ->> 'navn', kategori.nr - 1)
+    insert into public.stoffkategorier (navn, ikon, posisjon)
+    values (kategori.verdi ->> 'navn', kategori.verdi ->> 'ikon', kategori.nr - 1)
     returning id into kategori_id;
     insert into public.stoffplasseringer (stoff, kategori_id)
     select s, kategori_id from jsonb_array_elements_text(coalesce(kategori.verdi -> 'stoffer', '[]')) s;

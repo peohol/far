@@ -17,7 +17,7 @@ import { Ikon } from '../ikon/Ikon'
 import { Felt } from '../konto/Felt'
 import { Idehandling, Slettknapp } from '../traad/Smadeler'
 import { Kategorialternativer } from './Kategorialternativer'
-import { kategoriikon } from './kategoriikon'
+import { kategoriikon, type Ikonnavn } from '../ikon/register'
 import { useRegisterhandling } from './Registerhandling'
 
 /** Lista med kategoriene øverst. */
@@ -140,7 +140,7 @@ function Brettkategori({
         id={kategori.id}
         forelder={null}
         navn={kategori.navn}
-        ikon={kategoriikon(kategori)}
+        ikon={kategoriikon(kategori.ikon)}
         antallStoffer={kategori.stoffer.length}
         forste={forste}
         siste={siste}
@@ -216,7 +216,7 @@ function Kategorihode({
   id: string
   forelder: string | null
   navn: string
-  ikon?: ReturnType<typeof kategoriikon>
+  ikon?: Ikonnavn
   antallStoffer: number
   forste: boolean
   siste: boolean

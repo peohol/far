@@ -15,7 +15,7 @@ import { Skuffrutenett } from '../seksjoner/Skuffrutenett'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
 import { Bekreftknapp, Idehandling, Slettknapp, Tidspunkt } from '../traad/Smadeler'
-import { kategoriikon } from './kategoriikon'
+import { kategoriikon } from '../ikon/register'
 import { PAPIRKURVDAGER, slettesForGodt } from './papirkurv'
 import { Redigeringsbrett } from './Redigeringsbrett'
 import { Registerhandlingskilde, useRegisterhandling } from './Registerhandling'
@@ -142,7 +142,7 @@ function Kategoriseksjon({ kategori, ...valg }: Stoffkortvalg & { kategori: Regi
     forhandsvisning(ramsOpp(kategori.underkategorier.map((u) => u.navn))),
   ])
   return (
-    <Seksjon id={kategori.id} tittel={kategori.navn} ikon={kategoriikon(kategori)} oppsummering={oppsummering}>
+    <Seksjon id={kategori.id} tittel={kategori.navn} ikon={kategoriikon(kategori.ikon)} oppsummering={oppsummering}>
       {kategori.direkte.length > 0 && (
         <Stoffrutenett seksjon={kategori.id} gruppe={kategori.id} stoffer={kategori.direkte} {...valg} />
       )}

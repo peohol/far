@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { IKONNAVN, KATEGORIIKON_PLASSHOLDER, kategoriikon } from '../../components/ikon/register'
 import { filnokkel } from '../../faginnhold/import'
 import { CBD_STOFFSIDER, NYE_STOFFSIDER } from '../../faginnhold/indikasjoner'
 import { STOFFSIDE_DATASETT } from '../../faginnhold/stoffsider'
@@ -296,15 +297,18 @@ describe('sidemenyen', () => {
 
 describe('kategoriene til ett stoff', () => {
   it('gir underkategorien når kategorien er delt opp', () => {
-    expect(REGISTER.kategorierFor('sertralin')).toEqual([{ kategori: 'Antidepressiver', underkategori: 'SSRI' }])
-    expect(REGISTER.kategorierFor('bupropion')).toEqual([{ kategori: 'Antidepressiver', underkategori: 'NDRI' }])
+    expect(REGISTER.kategorierFor('sertralin')).toEqual([{ kategori: 'Antidepressiver', ikon: 'katAntidepressiver', underkategori: 'SSRI' }])
+    expect(REGISTER.kategorierFor('bupropion')).toEqual([{ kategori: 'Antidepressiver', ikon: 'katAntidepressiver', underkategori: 'NDRI' }])
   })
 
   it('gir hver kategori stoffet står i, i registerets rekkefølge', () => {
-    expect(REGISTER.kategorierFor('lamotrigin')).toEqual([{ kategori: 'Stemningsstabiliserende' }, { kategori: 'Antiepileptika' }])
+    expect(REGISTER.kategorierFor('lamotrigin')).toEqual([
+      { kategori: 'Stemningsstabiliserende', ikon: 'katStemningsstabiliserende' },
+      { kategori: 'Antiepileptika', ikon: 'katAntiepileptika' },
+    ])
     expect(REGISTER.kategorierFor('ketamin')).toEqual([
-      { kategori: 'Antidepressiver', underkategori: 'NMDA-reseptorantagonister' },
-      { kategori: 'Hallusinogene stoffer' },
+      { kategori: 'Antidepressiver', ikon: 'katAntidepressiver', underkategori: 'NMDA-reseptorantagonister' },
+      { kategori: 'Hallusinogene stoffer', ikon: 'katHallusinogener' },
     ])
   })
 
@@ -347,7 +351,7 @@ describe('inndelingen i databasen', () => {
     expect(r.kategorier.map((k) => k.navn)).not.toContain('Tom')
     expect(r.kategorier.find((k) => k.navn === 'Opioider')?.underkategorier).toEqual([])
     // Opioidene står direkte i kategorien, ved siden av den tomme underkategorien.
-    expect(r.kategorierFor('morfin')).toEqual([{ kategori: 'Opioider' }])
+    expect(r.kategorierFor('morfin')).toEqual([{ kategori: 'Opioider', ikon: 'katOpioider' }])
   })
 
   it('legger stoffene i en arkivert kategori i «Andre stoffer», og teller dem i arkivet', () => {
@@ -358,7 +362,7 @@ describe('inndelingen i databasen', () => {
     })
     expect(r.kategorier.map((k) => k.navn)).not.toContain('Antidepressiver')
     expect(r.kategorierFor('sertralin')).toEqual([{ kategori: ANDRE_STOFFER }])
-    expect(r.kategorierFor('ketamin')).toEqual([{ kategori: 'Hallusinogene stoffer' }])
+    expect(r.kategorierFor('ketamin')).toEqual([{ kategori: 'Hallusinogene stoffer', ikon: 'katHallusinogener' }])
     expect(navnI(kategori(ANDRE_STOFFER, r.kategorier))).toContain('Sertralin')
     expect(r.arkiverteKategorier).toMatchObject([{ navn: 'Antidepressiver', forelder: null }])
     const ad = GRUNNINNDELING.find((k) => k.navn === 'Antidepressiver')!
@@ -402,5 +406,34 @@ describe('inndelingen i databasen', () => {
     // Uten svar om innholdet regnes siden som å ha det, så den ikke slettes ved en feil.
     expect(r.menystoff('bupropion')).toMatchObject({ side: true, innhold: true, analytter: true })
     expect(r.menystoff('etanol')).toMatchObject({ side: false, innhold: false, analytter: true })
+  })
+})
+
+describe('kategoriikonene', () => {
+  it('gir hver kategori i inndelingen databasen fikk først, sitt eget ikon fra ikonregisteret', () => {
+    const ikoner = GRUNNINNDELING.map((k) => k.ikon)
+    for (const [i, ikon] of ikoner.entries()) {
+      const navn = GRUNNINNDELING[i]!.navn
+      expect(IKONNAVN, navn).toContain(ikon)
+      expect(ikon, navn).not.toBe(KATEGORIIKON_PLASSHOLDER)
+    }
+    expect(new Set(ikoner).size).toBe(ikoner.length)
+    expect(REGISTER.kategorier.filter((k) => k.id !== ANDRE_STOFFER_ID).map((k) => k.ikon)).toEqual(ikoner)
+  })
+
+  it('gir plassholderen til en kategori uten ikon eller med et ukjent navn', () => {
+    const register = byggStoffregister([], STOFFREGISTERDATA, {
+      kategorier: [{ id: 'ny', forelder: null, navn: 'Ny kategori', posisjon: 0, ikon: null, arkivert_kl: null }],
+      plasseringer: [{ stoff: 'diazepam', kategori: 'ny' }],
+      status: [],
+    })
+    const [ny, andre] = register.kategorier
+    expect(ny?.ikon).toBeNull()
+    expect(andre?.navn).toBe(ANDRE_STOFFER)
+    expect(kategoriikon(ny?.ikon)).toBe(KATEGORIIKON_PLASSHOLDER)
+    expect(kategoriikon(andre?.ikon)).toBe(KATEGORIIKON_PLASSHOLDER)
+    expect(kategoriikon('finnesIkke')).toBe(KATEGORIIKON_PLASSHOLDER)
+    expect(kategoriikon('toString')).toBe(KATEGORIIKON_PLASSHOLDER)
+    expect(kategoriikon('katOpioider')).toBe('katOpioider')
   })
 })

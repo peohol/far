@@ -3,6 +3,7 @@ import { useBevart } from '../oppdatering/Bevaring'
 import { Bryter } from './Bryter'
 import { Shortcut } from './Shortcut'
 import { Ikon } from './ikon/Ikon'
+import { kategoriikon } from './ikon/register'
 import { useTips } from './Tips'
 import { STOFFREGISTERADRESSE, stoffadresse } from '../domain/rute'
 import { useFavoritter, type Favoritter } from '../favoritter/Favorittkilde'
@@ -211,7 +212,10 @@ export function Sidemeny({ register }: SidemenyProps) {
         tabIndex={-1}
       >
         <div className="sidemeny__topp">
-          <h2 className="sidemeny__tittel">{TITTEL}</h2>
+          <h2 className="sidemeny__tittel">
+            <Ikon navn="stoffregister" className="sidemeny__tittelikon" />
+            {TITTEL}
+          </h2>
           <button
             type="button"
             className="sidemeny__lukk"
@@ -290,6 +294,7 @@ function Kategoriskuff({
       onVeksle={onVeksle}
       tittel={
         <>
+          <Ikon navn={kategoriikon(kategori.ikon)} storrelse="ui" className="menyskuff__ikon" />
           <span className="menyskuff__beskrivelse">{kategori.navn}</span>
           <span className="menyskuff__antall" aria-label={`${kategori.stoffer.length} stoffer`}>
             {kategori.stoffer.length}
@@ -339,7 +344,7 @@ function Favorittskuff({
       rullInn={false}
       tittel={
         <>
-          <Ikon navn="star" storrelse="ui" className="menyskuff__ikon" />
+          <Ikon navn="star" storrelse="ui" className="menyskuff__ikon menyskuff__ikon--fylt" />
           <span className="menyskuff__beskrivelse">Favoritter</span>
           <span className="menyskuff__antall" aria-label={`${stoffer.length} stoffer`}>
             {stoffer.length}
