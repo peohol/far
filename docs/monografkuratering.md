@@ -1,6 +1,6 @@
 # Monografkuratering
 
-Leses når en stoffmonografi (en stoffside) skal oppdateres med en
+Leses når en stoffmonografi (en fagside) skal oppdateres med en
 datamigrasjon etter en kuratering. Hvordan sidene, revisjonene og
 publiseringen er bygget, står i `docs/faginnhold.md`.
 

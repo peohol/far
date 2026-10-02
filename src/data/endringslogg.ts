@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.73.1',
+    versjon: '1.73.2',
     dato: '2026-10-02',
     sammendrag: 'Tryggere oppdateringer av fagsidene',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,17 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Når en fagside oppdateres samlet etter en faglig gjennomgang, kontrolleres hvert kort mot nøyaktig den utgaven som ble gjennomgått. Har noen redigert kortet i mellomtiden, eller finnes det et kort til med det samme målet, stopper oppdateringen uten å endre noe.',
       'Ingen fagtekster er endret.',
+    ],
+  },
+  {
+    versjon: '1.73.1',
+    dato: '2026-10-02',
+    sammendrag: 'Stoffsidene heter nå fagsider',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Sidene om hvert stoff kalles nå fagsider overalt i appen, for et tydeligere skille mot fortolkningssidene. Knappen i toppmenyen heter «Åpne fagside», og feltet nederst i stoffregisteret heter «Ny fagside».',
+      'Adressene til sidene er de samme som før, så bokmerker og lenker virker fortsatt.',
     ],
   },
   {

@@ -1,11 +1,11 @@
 # Redigerbart faginnhold i OUSFAR
 
-Leses når noe som har med stoffsider, laboratorieanalytter, koblingene mellom dem,
+Leses når noe som har med fagsider, laboratorieanalytter, koblingene mellom dem,
 innholdselementer, referanser, fortolkningskommentarer, revisjoner eller
 publisering å gjøre skal endres. Planen og fremdriften står i `docs/stoffsider-og-redigering.md`; her står hvordan
 fundamentet faktisk er bygget.
 
-Stoffsidene (arbeidspakke 3) bygger på dette, og det gjør de enkle
+Fagsidene (arbeidspakke 3) bygger på dette, og det gjør de enkle
 konsentrasjonsreglene også: de er regelsett, og steg 2 i fortolkningen bruker
 de publiserte (se `docs/fortolkningsregler.md`). Rusmiddelmodulene, EtG/EtS og
 THC-syre står fortsatt i `src/domain/`. `src/__tests__/fortolkningUendret.test.ts`
@@ -45,7 +45,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/faginnhold/lagring.ts`, `lesing.ts` | Kallene appen gjør for å endre og lese, og konflikter gjort om til en egen feil |
 | `src/faginnhold/paneler.ts` | Panelene 1–7 og formen på hver elementtype |
 | `src/faginnhold/riktekst.ts` | Rikteksten: nodene og merkene som er tillatt, rensing og ren tekst |
-| `src/faginnhold/stoffside.ts` | En stoffside satt sammen: panelene, nummereringen og publiseringsrekkefølgen |
+| `src/faginnhold/stoffside.ts` | En fagside satt sammen: panelene, nummereringen og publiseringsrekkefølgen |
 | `src/faginnhold/sok.ts` | Indekseringen, rangeringen og søket, for siden og hele kunnskapsbasen |
 | `src/faginnhold/globaltSok.ts` | Lesingen og indekseringen av hele kunnskapsbasen for det globale søket |
 | `src/legemiddeldata/stoffside.ts` | Hvor preparatene og interaksjonene står på siden, og tekstene søket finner der |
@@ -78,7 +78,7 @@ Begrepene holdes fra hverandre:
   (`src/data/stoffregister.json`), med en stabil nøkkel (`slug`, f.eks.
   `bupropion`), et navn og eventuelle aliaser (f.eks. «Hydroksybupropion»,
   «quetiapine», «CBD»). Aliasene er den eneste lista over søkenavn for
-  stoffsidene i fagsøket, og et eksakt alias rangeres som et eksakt navn.
+  fagsidene i fagsøket, og et eksakt alias rangeres som et eksakt navn.
   Søket etter analytter i fortolkningen bruker dem ikke; det har sine egne
   søkeord per analyttkode (`src/data/aliaser.json`), som fagsøket ikke
   bruker. Et alias kan være et
@@ -87,9 +87,10 @@ Begrepene holdes fra hverandre:
   `kontrollerStoffregister` sjekker. Preparatnavn er ikke aliaser; de kommer
   fra legemiddeldataene. Stoffet er den eneste identiteten en fagside har. Registeret er fasit for
   hvilke stoffer som finnes, uavhengig av analyttkatalogen.
-- **Stoffside** (`infoside` i databasen) — fagsiden om ett stoff: navnet,
-  nøkkelen og innholdselementene. Siden finnes etter nøkkelen, aldri gjennom en
-  analyttkode. Se [Stoffsidene](#stoffsidene).
+- **Fagside** (`infoside` i databasen, `stoffside` i koden) — siden om ett
+  stoff: navnet, nøkkelen og innholdselementene. Fagsider er noe annet enn
+  fortolkningssidene, der analyttene fortolkes. Siden finnes etter nøkkelen, aldri gjennom en
+  analyttkode. Se [Fagsidene](#fagsidene).
 - **Laboratorieanalytt** — koden laboratoriet rapporterer, f.eks. `HBUP`, og
   det fortolkningen trenger å vite om den (`src/domain/analyttkatalog.ts`).
   Den er ikke en fagside, og fortolkningen av den går ikke veien om noe stoff:
@@ -107,7 +108,7 @@ Begrepene holdes fra hverandre:
   står med sin historikk, men appen bruker dem ikke lenger til å finne eller
   lage sider.
 - **Innholdselement** — et kort, felt eller tekststykke på en
-  stoffside. `panel` og `elementtype` er nøkler (små bokstaver, tall og
+  fagside. `panel` og `elementtype` er nøkler (små bokstaver, tall og
   understrek), og `data` er et JSON-objekt hvis form bestemmes av
   elementtypen. Panelene og elementtypene defineres når sidene bygges.
   Rekkefølgen i et panel er `posisjon`, deretter objekt-ID-en. Posisjonen er
@@ -374,15 +375,15 @@ sted.
 databasen, med samme ordlyd, så redigeringen kan si fra før lagring.
 `kommentarer.test.ts` kjører de samme tilfellene gjennom begge.
 
-## Stoffsidene
+## Fagsidene
 
-**Adressene.** Hver fagside er en stoffside med adressen `#/stoff/<nøkkel>`,
+**Adressene.** Hver fagside har adressen `#/stoff/<nøkkel>`,
 f.eks. `#/stoff/bupropion`, og `#/stoff/bupropion/farmakokinetikk` for en
 seksjon (`src/domain/rute.ts`). Adressen står etter `#`, så nettleseren alene
 leser den: siden som lastes, og innloggingsveggen, er de samme. Et navn eller
 et alias i adressen (`#/stoff/Hydroksybupropion`) fører til stoffets nøkkel.
 De gamle analyttadressene (`#/analytt/HBUP`) leses bare for å sende videre:
-til stoffsiden koden primært er koblet til, med `history.replaceState`, så den
+til fagsiden koden primært er koblet til, med `history.replaceState`, så den
 gamle adressen ikke blir stående i historikken. En kode uten et slikt stoff har
 ingen fagside, og adressen åpner fortolkningen. Fortolkningen av en valgt analytt har
 sin egen adresse, `#/fortolkning/<nøkkel>` (`fortolkningsnokkel`), så den kan
@@ -392,7 +393,7 @@ ha diskusjoner (`docs/diskusjoner.md`).
 databasen (`les_stoffliste`) og sidene registeret ikke kjenner, som havner i
 «Andre stoffer» til de føres inn. Hvert stoff lenker til `#/stoff/<nøkkel>`,
 med kodene det primært er koblet til som sekundær tekst. Redaktørene kan lage
-en ny stoffside nederst i menyen: finnes stoffet alt, etter navn eller alias,
+en ny fagside nederst i menyen: finnes stoffet alt, etter navn eller alias,
 åpnes det; ellers lages siden med navnet og en nøkkel av det.
 
 **Nøkkelen** (`infosider.slug`) er unik og URL-vennlig (små bokstaver a–z, tall
@@ -417,7 +418,7 @@ leser, så radsikkerheten gjelder som ellers.
 
 Fortolkningsreglene leses for seg, etter analyttkoden og modulen
 (`finn_intervallregelsett`, `les_thc_regelsett`, `les_scenarioregler`; se
-`docs/fortolkningsregler.md`), og aldri gjennom siden. Stoffsiden viser reglene
+`docs/fortolkningsregler.md`), og aldri gjennom siden. Fagsiden viser reglene
 for analyttene stoffet er **primært** stoff for, én seksjon per
 fortolkningsmodul (`regelseksjoner` i `src/domain/koblinger.ts`): den første
 heter `fortolkning`, de neste `fortolkning-<kode>`. THC-siden har derfor
@@ -538,7 +539,7 @@ beholder det analytten faktisk måler: komponenten er et eget objekt,
 «Hydroksybupropion», og ikke Bupropion-siden. PALI måler paliperidon, så
 komponenten dens er stoffet selv. Metabolittnavnene er i dag aliaser i
 registeret, og komponentsidene blir stående i databasen uten å vises som
-stoffsider. Importene som lager
+fagsider. Importene som lager
 historiske migrasjoner, bruker `historiskSidenavn`, så SQL-en de lager, er den
 samme som da migrasjonene ble kjørt.
 
@@ -608,7 +609,7 @@ NDRI · analytt HBUP · hydroksybupropion (kun aktiv metabolitt)».
 rangering. Indeksen hentes når appen har tid til overs etter at den er
 åpnet (`useNaarLedig`), eller første gang noen søker før det
 (`useSokeindeks`), og hentes på nytt neste gang når en administrator går ut
-av en stoffside, der noe kan være publisert. Det kan søkes før alt er
+av en fagside, der noe kan være publisert. Det kan søkes før alt er
 hentet: `lesSokeindeks` gir først en indeks over stoffregisteret, så over
 faginnholdet på sidene, og til sist med preparatene, interaksjonene og
 ClinPGx, som er det tregeste å hente. Hentingen går i bakgrunnen og står
@@ -697,13 +698,13 @@ det som står på sidene, rettes altså aldri av importen — de avgjøres av en
 fagperson og rettes for seg. `npx vite-node scripts/importer-tdm.ts --
 <brukernavn> <mappe>` lager migrasjonene.
 
-**Stoffsider uten kode.** `supabase/import/stoffsider/` har stoffene de samme
+**Fagsider uten kode.** `supabase/import/stoffsider/` har stoffene de samme
 kildene gir anbefalinger for, men som appen ikke har noen analyttkode for:
 antiepileptika, sertindol og litium fra rapporten, ketobemidon, petidin og
 flunitrazepam fra Helland mfl., og atomoksetin og metylfenidat fra Frost mfl.
 (de nasjonale områdene fra 2019, med rapportens tidligere område i
 grunnlaget). Filene har `side` (navnet på siden) i stedet for `kode`; importen
-lager da bare stoffsiden, og en fil med navnet til en side en analyttkode alt
+lager da bare fagsiden, og en fil med navnet til en side en analyttkode alt
 hadde, avvises. Den utvider en side som finnes, som TDM-importen. `npx vite-node
 scripts/importer-stoffsider.ts -- <brukernavn> <mappe>` lager migrasjonene
 (`src/faginnhold/stoffsider.ts`). Indikasjonene deres står for seg i

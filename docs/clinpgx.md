@@ -1,7 +1,7 @@
 # Farmakogenetikk fra ClinPGx
 
 Leses når noe som har med ClinPGx-dataene i seksjonen «Farmakogenetikk» på
-stoffsidene skal endres: koblingen, synkroniseringen, visningen eller søket.
+fagsidene skal endres: koblingen, synkroniseringen, visningen eller søket.
 Mønsteret er det samme som for FEST (`docs/legemiddeldata.md`), og det som
 står der om prinsippene, gjelder også her.
 
@@ -127,7 +127,7 @@ Koden:
 
 ## Koblingen
 
-En stoffside kobles til ett eller flere kjemikalier i ClinPGx med
+En fagside kobles til ett eller flere kjemikalier i ClinPGx med
 **accession-ID-en** (PA…), i elementet `clinpgxkobling` i panelet
 `farmakogenetikk`: `{ kjemikalier: [{ clinpgx_id, navn }] }`. Navnet er det
 ClinPGx hadde da kjemikaliet ble valgt. Koblingen er redaksjonelt innhold som
@@ -147,9 +147,9 @@ ukentlige kjøringen. Synkroniseringen henter koblinger både i utkast og
 publisert, så dataene er klare når koblingen publiseres. En kobling som er
 fjernet fra siden, hentes ikke.
 
-### Dekningen for alle stoffsidene
+### Dekningen for alle fagsidene
 
-Hver publiserte stoffside har nøyaktig én ClinPGx-status i
+Hver publiserte fagside har nøyaktig én ClinPGx-status i
 `src/faginnhold/clinpgxdekning.ts`, med grunnen:
 
 | Status | Betyr |
@@ -161,7 +161,7 @@ Hver publiserte stoffside har nøyaktig én ClinPGx-status i
 | `uavklart` | Krever faglig vurdering |
 
 Testene (`clinpgxdekning.test.ts`) kjører alle migrasjonene og krever at
-listen er lik de publiserte sidene. En ny stoffside feiler altså testene til
+listen er lik de publiserte sidene. En ny fagside feiler altså testene til
 den har fått en status. Sider som lages i redigeringen, fanges ikke av
 testene; der viser koblingen forslag som før.
 
@@ -216,7 +216,7 @@ antihypertensivene mot ClinPGx 30. september 2026.
 
 Koblet:
 
-| Stoffside | FEST-virkestoff | Siden koblet til FEST | ClinPGx-navn | ClinPGx-ID | Grunnlag | Migrasjon |
+| Fagside | FEST-virkestoff | Siden koblet til FEST | ClinPGx-navn | ClinPGx-ID | Grunnlag | Migrasjon |
 | --- | --- | --- | --- | --- | --- | --- |
 | Amfetamin | Deksamfetamin (Dexamfetamine) | ja | dextroamphetamine | PA449269 | Samme ATC-kode (N06BA02). Engelsk navn er synonym i ClinPGx. | stoffsider_clinpgx_kobling |
 | Amfetamin | Lisdeksamfetamin (Lisdexamfetamine) | ja | lisdexamfetamine | PA164748975 | Samme ATC-kode (N06BA12). Samme navn. | stoffsider_clinpgx_kobling |
@@ -316,7 +316,7 @@ Koblet:
 
 Ikke koblet:
 
-| Stoffside | Status | ClinPGx | Grunn |
+| Fagside | Status | ClinPGx | Grunn |
 | --- | --- | --- | --- |
 | Bupropion | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | Kandidater: bupropion (PA448687) | Fagsiden gjelder virkestoffet bupropion; laboratoriet måler metabolitten hydroksybupropion (HBUP). ClinPGx har bupropion som eget kjemikalie; koblingen er ikke lagt inn ennå. |
 | CBD | Relevant objekt finnes i ClinPGx, men krever kuratert kobling | Kandidater: cannabidiol (PA166175791) | Siden ble laget 27. september 2026 for å vise Epidyolex fra FEST. ClinPGx har cannabidiol (kontrollert samme dag); koblingen er ikke lagt inn ennå. |

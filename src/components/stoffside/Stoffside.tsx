@@ -242,7 +242,7 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
   }, [stedsnokkel, apne])
 
   if (side.status === 'klar' && !finnes) {
-    return <Ikkefunnet onLukk={onLukk}>Fant ingen stoffside for «{slug}»</Ikkefunnet>
+    return <Ikkefunnet onLukk={onLukk}>Fant ingen fagside for «{slug}»</Ikkefunnet>
   }
 
   return (

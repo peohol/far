@@ -369,7 +369,7 @@ describe('visningen av et treff', () => {
     expect(alias.gruppe).toBe('stoff')
     expect(alias.adresse).toBe('#/stoff/sertralin')
     // Uten noe å si om stoffet står det at det er en stoffside — aldri koden.
-    expect(visFelt('kve', 'kode').sti).toEqual(['Stoffside'])
+    expect(visFelt('kve', 'kode').sti).toEqual(['Fagside'])
     expect(visFelt('kve', 'kode').tittel.tekst).toBe('Kvetiapin')
   })
 

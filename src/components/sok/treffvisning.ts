@@ -67,7 +67,7 @@ const STOFFIKON: Ikonnavn = 'pk'
 const REFERANSER = 'Referanser'
 
 /** Linja under navnet på et stoff når det ikke er noe å si om det. */
-const STOFFSIDE = 'Stoffside'
+const FAGSIDE = 'Fagside'
 
 /** Teksten med ordene fra søket markert. */
 export function markert(tekst: string, ord: readonly string[]): Utdrag {
@@ -101,7 +101,7 @@ export function visTreff(
       ...felles,
       ikon: STOFFIKON,
       tittel: markert(sted.side.navn, ord),
-      sti: [beskrivSide?.(sted.side.stoff) ?? STOFFSIDE],
+      sti: [beskrivSide?.(sted.side.stoff) ?? FAGSIDE],
       ...(annetNavn && { utdrag }),
     }
   }

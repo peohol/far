@@ -87,7 +87,7 @@ ikke møtes i én stor fil. De felles står i `main.tsx`, i denne rekkefølgen:
 - `sok.css`: fagsøkets rullegardin, søkesiden, søket på siden og
   fremhevingen av treff i teksten (`.sidetreff`).
 
-Komponentene i stoffsiden, seksjonene, referansene, merkene og det
+Komponentene i fagsiden, seksjonene, referansene, merkene og det
 modale laget henter sitt eget stilark selv.
 
 ## Ikoner
@@ -154,7 +154,7 @@ bare fargene gjennom `--tast-flate`, `--tast-blekk` og `--tast-kant`
   ikon og kursiv serif. `tone="toksisk"` er for det som mangler.
 - **`Metalinje`** (`src/components/Metalinje.tsx`) er linja over et stoffnavn
   i fortolkningen, som «KVE · SPFA › Antipsykotika». Med `lenker` er kodene
-  lenker til stoffsiden (`Kodepille`). På stoffsiden har linja
+  lenker til fagsiden (`Kodepille`). På fagsiden har linja
   over navnet i stedet kategoriene fra stoffregisteret («Antidepressiver ›
   SSRI»), og under navnet står analyttkoden som pille (`pille--kode`, en knapp
   til fortolkningen) og «Inngår i» med `Metodepille`.
@@ -214,7 +214,7 @@ Resten av grensesnitteksten:
 
 | Hvor | Tekst |
 | --- | --- |
-| Toppmenyen | «Søk i fagstoff» med «Ctrl + K», «På siden» med «Ctrl + B», «Åpne fortolkning» (stoffsiden), «Åpne stoffside» (fortolkningen), «Rediger», «Lukk» |
+| Toppmenyen | «Søk i fagstoff» med «Ctrl + K», «På siden» med «Ctrl + B», «Åpne fortolkning» (fagsiden), «Åpne fagside» (fortolkningen), «Rediger», «Lukk» |
 | Redigering | statuspillen «Redigerer · …» («ingen upubliserte endringer», «utkast med N endringer», «alt er publisert»), «Publiser», «Avslutt redigering», «Publiser endringene», «Publiser nå» |
 | Panelene i redigering | «Rediger», «Legg til», «Legg til kort», «Koble til legemiddeldataene», «Kilder for panelet», «Rediger reglene», «Lagre utkast», «Avbryt» |
 | Viktige data | «Konsentrasjoner i serum», «Kinetikk», «Ikke oppgitt» |
@@ -241,7 +241,7 @@ Ryddet bort i omleggingen:
   Betydningen står alltid i teksten.
 - **`Modallag`** (`src/components/Modallag.tsx`) er det ene modale laget,
   for endringsloggen, kontoen, brukerlista, historikken, publiseringen,
-  preparatvinduet og redigeringsskjemaene på stoffsiden. Det bygger på `<dialog>`: fokusfelle, Escape, trykk på
+  preparatvinduet og redigeringsskjemaene på fagsiden. Det bygger på `<dialog>`: fokusfelle, Escape, trykk på
   bakgrunnen, låst rulling bak og fokuset tilbake. Tittelen er lagets navn,
   og lukkeknappen heter «Lukk» og tittelen, eller `lukketekst`.
   - `ikon`: ikonet i sirkelen foran tittelen.
@@ -257,7 +257,7 @@ Ryddet bort i omleggingen:
   - `vedLukking`: spørres før laget lukkes med Escape, lukkeknappen eller et
     trykk utenfor; gir den `false`, blir laget stående.
 
-  Redigeringsskjemaene på stoffsiden (`Skjemaramme` i `Skjemaer.tsx`) åpnes
+  Redigeringsskjemaene på fagsiden (`Skjemaramme` i `Skjemaer.tsx`) åpnes
   alltid i laget, med ikonet til det som redigeres. Har brukeren endret noe,
   spør vinduet før det lukkes uten å lagre.
 
@@ -294,14 +294,14 @@ Innholdet tegnes med en portal. Det står i menyen, men hører fortsatt til
 siden, med sidens tilstand og kontekster. Står siden uten toppmeny rundt seg,
 som i en test, blir innholdet stående i siden.
 
-- `handlinger`: brukes av stoffsiden til «Åpne fortolkning», «Rediger» og
+- `handlinger`: brukes av fagsiden til «Åpne fortolkning», «Rediger» og
   «Lukk». I redigeringsmodus står bare redigeringen der: status, «Publiser»
   og «Avslutt redigering» (`Redigeringslinje.tsx`). Publiseringen viser hva
   som blir synlig for alle i et modalt lag før noe publiseres. Stilene for
   redigeringen står i `src/styles/redigering.css`. Fortolkningen bruker den
-  til «Åpne stoffside» mens en modul med egen stoffside er valgt (`App.tsx`);
+  til «Åpne fagside» mens en modul med egen fagside er valgt (`App.tsx`);
   søkesiden til «Lukk».
-- `sidesok`: plassen til søket i den åpne siden. Stoffsiden legger sitt
+- `sidesok`: plassen til søket i den åpne siden. Fagsiden legger sitt
   kompakte søk her (`Sidesok.tsx`, snarveien Ctrl + B eller Cmd + B). Det vokser
   mens det brukes, og antallet treff og stedene de står, vises under feltet.
   I dokken dekker det hele dokken mens det har fokus.
@@ -353,7 +353,7 @@ Under 760 px bredde gjelder dette:
   det brukes, og hovedhandlingen korter teksten heller enn å skyve de andre
   ut av vinduet. Har siden verken søk eller hovedhandling (søkesiden), er
   dokken bare så bred som knappene.
-- Fortolkningen har dokken når en analytt er valgt: «Åpne stoffside» (én
+- Fortolkningen har dokken når en analytt er valgt: «Åpne fagside» (én
   knapp per stoff når modulen har koder for flere, som Diazepam og
   Oksazepam) og «Diskusjoner».
 

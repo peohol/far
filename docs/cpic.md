@@ -5,7 +5,7 @@ datamodellen, lesingen, eller visningen og oppslaget som bygger på dem.
 Mønsteret er det samme som for FEST (`docs/legemiddeldata.md`) og ClinPGx
 (`docs/clinpgx.md`), og det som står der om prinsippene, gjelder også her.
 
-ClinPGx gir den brede kunnskapsoversikten på stoffsiden (retningslinjer,
+ClinPGx gir den brede kunnskapsoversikten på fagsiden (retningslinjer,
 preparatomtaler, kliniske annotasjoner). CPIC-laget gir det strukturerte:
 hvilke gen–legemiddel-par CPIC har vurdert, hvilke genetiske resultater en
 anbefaling gjelder, selve anbefalingen og styrken. Dataene er
@@ -193,7 +193,7 @@ dataene tar om lag 50 MB, det meste diplotypene.
   resultat som mangler, og en kombinasjon som ikke står i CPIC, har ingen
   anbefaling.
 
-## Visningen på stoffsiden
+## Visningen på fagsiden
 
 CPIC-dataene står i seksjonen «Farmakogenetikk», i gruppen **«Anbefalinger
 fra CPIC»**, under de redaksjonelle kortene og over ClinPGx-dataene
@@ -388,7 +388,7 @@ Tallene endres med CPICs releaser; kontrollen over er ikke automatisk.
 
 ## Hva som bygger på dette
 
-Visningen på stoffsiden (D, over), oppslaget etter et kjent resultat (E),
+Visningen på fagsiden (D, over), oppslaget etter et kjent resultat (E),
 oversettelsen fra diplotype (F) og endringsloggen med driftstatusen (G,
 `docs/datakilder.md`) leser dette laget. Ingen av dem skriver til det, og
 endringsloggen fanger byttene med triggere på tabellene. Nye lesefunksjoner

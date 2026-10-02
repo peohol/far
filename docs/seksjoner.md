@@ -1,6 +1,6 @@
 # Seksjoner og detaljkort
 
-Stoffsidene viser ikke alt på én gang. De er bygd av **seksjoner** som åpnes og
+Fagsidene viser ikke alt på én gang. De er bygd av **seksjoner** som åpnes og
 lukkes som skuffer, og **detaljkort** inne i seksjonene som kan åpnes for seg.
 Det er to nivåer, og ikke flere: `seksjon → detaljkort`. Byggeklossene står i
 `src/components/seksjoner/` og brukes av alt innhold på siden — OUSFARs eget
@@ -95,7 +95,7 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   trykkes på. `handlinger` er knappene i hodet. Begge står utenfor knappen
   som åpner og lukker.
 - `ikon` er et navn fra ikonregisteret (`src/components/ikon/register.ts`).
-  Det er pynt ved siden av tittelen og skjult for skjermlesere. Stoffsidens
+  Det er pynt ved siden av tittelen og skjult for skjermlesere. Fagsidens
   seksjonsikoner, og ikonene for kortene i farmakokinetikken og TDM, velges i
   `src/components/stoffside/panelvisning.ts`: kortene får ikon etter
   hva overskriften handler om (absorpsjon, halveringstid, CYP, prøvetaking …), og et
@@ -147,7 +147,7 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   </Skuffrutenett>
   ```
 
-Stoffsidens paneler (`src/components/stoffside/Paneler.tsx`) er seksjoner med
+Fagsidens paneler (`src/components/stoffside/Paneler.tsx`) er seksjoner med
 panelnøkkelen som `id`; om et panel står åpent fra start, står i `apen` i
 `src/faginnhold/paneler.ts`.
 
@@ -181,7 +181,7 @@ uten analyttkode. Å åpne og lukke skuffer endrer ikke adressen.
 
 ## Styringen for siden
 
-`SeksjonsstyringKilde` (`Seksjonsstyring.tsx`) ligger rundt hele stoffsiden og
+`SeksjonsstyringKilde` (`Seksjonsstyring.tsx`) ligger rundt hele fagsiden og
 holder rede på hvilken skuff som er åpen i hver søskenflokk — skuffene med
 samme forelder. Nøkkelen er seksjonens ID, og kortets med `/` imellom.
 Tilstanden er *hvilken* skuff som er åpen, ikke om hver enkelt er det, så

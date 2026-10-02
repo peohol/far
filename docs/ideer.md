@@ -138,7 +138,7 @@ lesing og skriving går gjennom `auth/innstillinger.ts`.
 
 ## Riktekst
 
-Beskrivelsen og kommentarene bruker den samme editoren som stoffsidene,
+Beskrivelsen og kommentarene bruker den samme editoren som fagsidene,
 med `referanser={false}`: verktøyraden har ikke referanseknappen, og
 siteringer fjernes når teksten leses (`rensIdetekst`). Den har knappen «Direktelenke» (`direktelenker`), som
 diskusjonene.

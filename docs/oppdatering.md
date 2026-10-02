@@ -38,7 +38,7 @@ Tilstand brukeren ville savnet etter en oppdatering — et vindu som står åpen
 et skjema, et valg — bruker `useBevart(navn, start)` i stedet for `useState`.
 
 - Navnet må være entydig i appen. Det settes sammen med `Bevaringsomrade`
-  rundt, så et skjema kan bruke korte navn: stoffsiden er området
+  rundt, så et skjema kan bruke korte navn: fagsiden er området
   `stoff:<slug>`, og et redigeringsvindu på den `rediger:<id>@<revisjon>`.
 - Bare ren JSON tas vare på. Et `Map` eller et objekt som skal leses tilbake
   til noe annet (som analytten i fortolkningen), får en `Bevaringsform`.
