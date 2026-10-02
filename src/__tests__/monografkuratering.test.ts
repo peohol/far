@@ -124,7 +124,7 @@ describe('monografkurateringene i migrasjonene', () => {
     // Hjelpefunksjonene selv er ingen kuratering og kjøres alltid.
     expect(migrasjonsfiler().filter((f) => f.endsWith('_monografkuratering_hjelpere.sql'))).toHaveLength(1)
     expect('20261002071332_monografkuratering_hjelpere.sql').not.toMatch(MONOGRAFKURATERING)
-    expect('20261002074500_monografkuratering_hjelpere_retting.sql').not.toMatch(MONOGRAFKURATERING)
+    expect('20261002075626_monografkuratering_hjelpere_retting.sql').not.toMatch(MONOGRAFKURATERING)
   })
 })
 
