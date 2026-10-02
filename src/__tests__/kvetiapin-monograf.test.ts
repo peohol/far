@@ -3,6 +3,7 @@ import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
+const FORSTE_KURATERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering.sql'))!
 const KORRIGERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_korrigering.sql'))!
 const TILLEGG = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_farmakogenetikk_og_typografi.sql'))!
 const FORSTE_IMPORTMIGRASJON = '20260923072247'
@@ -48,6 +49,16 @@ function inlineReferanser(verdi: unknown): string[] {
   }
   return Object.values(node).flatMap(inlineReferanser)
 }
+
+describe('kvetiapinmigrasjoner uten kuratorprofil', () => {
+  it('hopper over fagoppdateringene på en helt fersk database', async () => {
+    const tom = await nyDatabase({ til: FORSTE_KURATERING })
+    await expect(
+      kjorMigrasjoner(tom, { bare: [FORSTE_KURATERING, KORRIGERING, TILLEGG] }),
+    ).resolves.toBeUndefined()
+    await tom.close()
+  }, 240_000)
+})
 
 describe('kvetiapin-monografkuratering', () => {
   let db: PGlite
