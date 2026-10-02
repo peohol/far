@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useBevart } from '../../oppdatering/Bevaring'
 import { tomtDokument, type Riktekstdokument } from '../../faginnhold/riktekst'
 import {
@@ -27,6 +28,7 @@ import { UnderOverskrift } from '../Overskriftsniva'
 import { Riktekst } from '../stoffside/Riktekst'
 import { Rikteksteditor } from '../stoffside/Rikteksteditor'
 import { Button } from '../Button'
+import { Ikonknapp } from '../Ikonknapp'
 import { Ikon } from '../ikon/Ikon'
 import { Forfatterbilde, useForfatternavn, useForfatterkontekst } from '../traad/Forfatterkontekst'
 import { Kommentartraad, type Fremheving, type Kommentarkanal } from '../traad/Kommentartraad'
@@ -44,7 +46,9 @@ export interface Plassering {
 
 /**
  * Én tråd i diskusjonsmenyen: overskriften, hvem som startet den og når, det
- * første innlegget, hjertene og kommentartråden.
+ * første innlegget, hjertene og kommentartråden. Overskriften, med blyanten
+ * som endrer den, står i `hode` når menyen har en plass til den over det som
+ * rulles, så den alltid er synlig.
  *
  * Alle kan endre overskriften, flytte tråden (også til en annen side) og legge
  * den i arkivet; bare den som skrev innlegget, kan endre det. Den som startet
@@ -70,6 +74,7 @@ export function Diskusjonsside({
   onFlyttetTilSide,
   onSlettet,
   fremhev = null,
+  hode = null,
 }: {
   id: string
   /** Siden tråden står på. */
@@ -91,6 +96,8 @@ export function Diskusjonsside({
   onSlettet: () => void
   /** Kommentaren en direktelenke førte til. */
   fremhev?: Fremheving | null
+  /** Plassen over det som rulles, der overskriften står fast. Uten den står den øverst i tråden. */
+  hode?: HTMLElement | null
 }) {
   const { meg, admin } = useForfatterkontekst()
   const [traad, setTraad] = useState<Diskusjonstraad | null>(null)
@@ -202,22 +209,30 @@ export function Diskusjonsside({
   const eier = traad.forfatter_id === meg.id
   const kategori = kategorier.find((k) => k.id === traad.kategori_id)
 
+  const tittel =
+    endrerTittel && !arkivert ? (
+      <Tittelskjema
+        tittel={traad.tittel}
+        onAvbryt={() => setEndrerTittel(false)}
+        onLagre={async (tittel) => {
+          if (await utfor(() => settTittel(traad.id, tittel))) setEndrerTittel(false)
+        }}
+      />
+    ) : (
+      <div className="diskusjonsside__tittelrad">
+        <h3 ref={overskrift} id={`diskusjon-${traad.id}`} className="diskusjonsside__tittel" tabIndex={-1}>
+          {traad.tittel}
+        </h3>
+        {!arkivert && (
+          <Ikonknapp ikon="edit" etikett="Endre overskriften" variant="stille" storrelse="liten" onClick={() => setEndrerTittel(true)} />
+        )}
+      </div>
+    )
+
   return (
     <article className="diskusjonsside" aria-labelledby={`diskusjon-${traad.id}`}>
       <header className="diskusjonsside__hode">
-        {endrerTittel && !arkivert ? (
-          <Tittelskjema
-            tittel={traad.tittel}
-            onAvbryt={() => setEndrerTittel(false)}
-            onLagre={async (tittel) => {
-              if (await utfor(() => settTittel(traad.id, tittel))) setEndrerTittel(false)
-            }}
-          />
-        ) : (
-          <h3 ref={overskrift} id={`diskusjon-${traad.id}`} className="diskusjonsside__tittel" tabIndex={-1}>
-            {traad.tittel}
-          </h3>
-        )}
+        {hode ? createPortal(tittel, hode) : tittel}
         <p className="forfatterlinje">
           <Forfatterbilde id={traad.forfatter_id} storrelse="liten" />
           <span className="forfatterlinje__navn">{forfatter}</span>
@@ -271,11 +286,6 @@ export function Diskusjonsside({
 
       <div className="idehandlinger">
         <Hjerteknapp antall={traad.hjerter} gitt={traad.mitt_hjerte} onVeksle={() => veksleHjerte(null)} hva="tråden" laast={arkivert} />
-        {!arkivert && (
-          <Idehandling ikon="edit" onClick={() => setEndrerTittel(true)}>
-            Endre overskrift
-          </Idehandling>
-        )}
         {eier && !arkivert && !traad.skjult && (
           <Idehandling ikon="edit" onClick={() => setEndrerTekst(true)}>
             Rediger innlegget

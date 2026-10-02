@@ -337,6 +337,18 @@
   transform: rotate(180deg);
 }
 
+/* Overskriften på en åpen tråd, fast under «Alle tråder», med samme hårlinje
+   som rundt menyen mot det som rulles. Tom til tråden er hentet. */
+.diskusjonspanel__traadhode {
+  flex: none;
+  padding: var(--rom-2) var(--rom-4) var(--rom-3) var(--rom-6);
+  border-bottom: var(--kant) solid var(--linje);
+}
+
+.diskusjonspanel__traadhode:empty {
+  display: none;
+}
+
 .diskusjonspanel > .skjemafeil {
   margin: var(--rom-3) var(--rom-6) 0;
 }
@@ -722,7 +734,15 @@
   gap: var(--rom-2);
 }
 
+.diskusjonsside__tittelrad {
+  display: flex;
+  align-items: center;
+  gap: var(--rom-2);
+}
+
 .diskusjonsside__tittel {
+  flex: 1;
+  min-width: 0;
   margin: 0;
   font-family: var(--skrift-display);
   font-size: var(--tekst-lesing);

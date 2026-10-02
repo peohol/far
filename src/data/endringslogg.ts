@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.73.2',
+    dato: '2026-10-02',
+    sammendrag: 'Overskriften i en diskusjonstråd står fast øverst',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Overskriften på tråden står nå fast under «‹ Alle tråder», så du ser den mens du ruller. En strek under den skiller den fra det som ruller.',
+      'Du endrer overskriften med blyanten til høyre for den. Knappen «Endre overskrift» under innlegget er borte.',
+    ],
+  },
+  {
     versjon: '1.73.1',
     dato: '2026-10-02',
     sammendrag: 'Stoffsidene heter nå fagsider',
