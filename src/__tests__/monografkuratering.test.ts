@@ -297,11 +297,32 @@ describe('monografkuratering med kuratorprofil', () => {
          perform intern.kuratering_referanse('${JSON.stringify(referanse)}', 'Kurateringskilde'); end $$;`,
       /står på 2 referanser/,
     )
+    await forventStopp(
+      db,
+      side,
+      `do $$ begin perform intern.kuratering_start('duplikatstoff');
+         perform intern.kuratering_referanse('{"tittel": "Ny", "forfattere": "B", "aar": "2026",
+           "lenke": "https://example.org/ny"}', ' '); end $$;`,
+      /må ha en kilde i historikken/,
+    )
   })
 
   it('stopper når kuratoren finnes, men ikke siden', async () => {
     const feil = await feilFra(() => db.exec(malFor('finnesikke')))
     expect(feil?.message).toMatch(/Fant ingen publisert stoffside med nøkkelen «finnesikke»/)
+  })
+
+  it('låser elementene og referansene mot andre endringer mens kurateringen pågår', async () => {
+    await eksempelside(kall, 'Laasestoff')
+    const laaser = await db.transaction(async (tx) => {
+      await tx.query(`select intern.kuratering_start('laasestoff')`)
+      const { rows } = await tx.query<{ tabell: string }>(
+        `select c.relname as tabell from pg_locks l join pg_class c on c.oid = l.relation
+         where l.mode = 'ShareRowExclusiveLock' and l.granted order by 1`,
+      )
+      return rows.map((r) => r.tabell)
+    })
+    expect(laaser).toEqual(['innholdselementer', 'referanser'])
   })
 
   it('kan ikke kalles gjennom data-API-et', async () => {

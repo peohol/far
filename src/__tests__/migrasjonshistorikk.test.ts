@@ -101,5 +101,8 @@ describe('sammenligningen med historikken', () => {
     expect(await avvik([['20261001000001_b.sql', 'select 2; -- endret igjen']], historikk, kjente)).toEqual([
       { versjon: '20261001000001', navn: 'b', avvik: 'annet innhold enn det som ble kjørt' },
     ])
+    expect(await avvik([['20261001000001_b_nytt_navn.sql', 'select 2; -- sperre']], historikk, kjente)).toEqual([
+      { versjon: '20261001000001', navn: 'b_nytt_navn', avvik: 'registrert med navnet b' },
+    ])
   })
 })

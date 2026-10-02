@@ -129,7 +129,8 @@ ${rader.join(',\n')}
   from repo r full join db d on d.versjon = r.versjon
   where not exists (
     select 1 from kjent k
-    where k.versjon = coalesce(r.versjon, d.versjon) and k.db is not distinct from d.md5 and k.fil is not distinct from r.md5)
+    where k.versjon = coalesce(r.versjon, d.versjon) and k.db is not distinct from d.md5 and k.fil is not distinct from r.md5
+      and coalesce(r.navn, d.navn) = coalesce(d.navn, r.navn))
 )
 select versjon, navn, avvik from sammen where avvik is not null order by versjon;`
 }

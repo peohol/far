@@ -49,13 +49,17 @@ begin
     raise exception 'Fant ingen publisert stoffside med nøkkelen «%».', p_slug;
   end if;
 
+  -- Ingen andre kan legge til, endre eller fjerne elementer eller referanser
+  -- før kurateringen er ferdig, så det preflighten fant, står til den er
+  -- skrevet. Lesing går som før.
+  lock table public.innholdselementer, public.referanser in share row exclusive mode;
   perform set_config('request.jwt.claims', jsonb_build_object('sub', kurator, 'role', 'authenticated')::text, true);
   return side;
 end;
 $$;
 
 comment on function intern.kuratering_start(text, text) is
-  'Logger inn som kuratoren og gir den publiserte stoffsiden med nøkkelen. Null uten kuratorprofil (tom database), feil om siden finnes uten den.';
+  'Logger inn som kuratoren, låser elementene og referansene mot andre endringer til migrasjonen er ferdig, og gir den publiserte stoffsiden med nøkkelen. Null uten kuratorprofil (tom database), feil om siden finnes uten den.';
 
 -- Elementene på siden i et panel med en elementtype, utkast og publisert
 -- sammen, der `data` inneholder `p_nokkel`. Et element som bare finnes som
@@ -224,6 +228,9 @@ declare
   treff uuid[];
   objekt uuid;
 begin
+  if nullif(btrim(p_kilde), '') is null then
+    raise exception 'En kuratering må ha en kilde i historikken.';
+  end if;
   if coalesce(p_innhold->>'lenke', '') = '' then
     raise exception 'En kilde i en kuratering må ha en lenke.';
   end if;

@@ -67,7 +67,7 @@ som ingen av API-rollene når.
 
 | Funksjon | Hva den gjør |
 | --- | --- |
-| `kuratering_start(slug)` | Logger inn som kuratoren (`peohol`) og gir siden. Uten kuratorprofil gir den `null`, og migrasjonen gjør ingenting; finnes siden uten kuratoren, stopper den |
+| `kuratering_start(slug)` | Logger inn som kuratoren (`peohol`), låser elementene og referansene mot andre endringer til migrasjonen er ferdig, og gir siden. Uten kuratorprofil gir den `null`, og migrasjonen gjør ingenting; finnes siden uten kuratoren, stopper den |
 | `kuratering_utfort(kilde)` | Om kurateringen med denne kilden alt er gjort |
 | `kuratering_antall(side, panel, elementtype, n)` | Panelet har nøyaktig `n` elementer av typen, utkast medregnet |
 | `kuratering_element(side, panel, elementtype, nøkkel, revisjon[, kilde])` | Det ene elementet der `data` inneholder nøkkelen: publisert, uten upublisert utkast, på revisjonen (og med kilden) preflighten fant. Låst til migrasjonen er ferdig |
