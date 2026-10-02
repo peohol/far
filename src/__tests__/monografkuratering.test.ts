@@ -117,10 +117,13 @@ async function forventStopp(db: PGlite, side: string, sql: string, melding: RegE
 describe('monografkurateringene i migrasjonene', () => {
   it('heter *_monografkuratering*.sql, så testene kjenner dem igjen', () => {
     const medHjelperne = migrasjonsfiler().filter((f) =>
-      readFileSync(`${MIGRASJONER}/${f}`, 'utf8').includes('intern.kuratering_start('),
+      /(?<!function )intern\.kuratering_start\(/.test(readFileSync(`${MIGRASJONER}/${f}`, 'utf8')),
     )
     for (const fil of medHjelperne) expect(fil).toMatch(MONOGRAFKURATERING)
     expect('20261003120000_sertralin_monografkuratering.sql').toMatch(MONOGRAFKURATERING)
+    // Hjelpefunksjonene selv er ingen kuratering og kjøres alltid.
+    expect(migrasjonsfiler().filter((f) => f.endsWith('_monografkuratering_hjelpere.sql'))).toHaveLength(1)
+    expect('20261002071332_monografkuratering_hjelpere.sql').not.toMatch(MONOGRAFKURATERING)
   })
 })
 
