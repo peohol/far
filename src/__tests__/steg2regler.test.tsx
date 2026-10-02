@@ -159,7 +159,7 @@ describe('steg 2 på regelsettene i databasen', () => {
     // Fortolkningen står på analytten, og koden lenker til stoffet kortet står på.
     expect(within(steg).getByRole('heading', { level: 1 }).textContent).toMatch(/^Hydroksybupropion/)
     expect(
-      within(steg).getByRole('link', { name: 'HBUP – åpne stoffsiden for Bupropion' }).getAttribute('href'),
+      within(steg).getByRole('link', { name: 'HBUP – åpne fagsiden for Bupropion' }).getAttribute('href'),
     ).toBe('#/stoff/bupropion')
     expect(within(steg).getByText('510 – 3900 nmol/L')).toBeTruthy()
     expect(within(steg).queryByText('1 – 2 nmol/L')).toBeNull()

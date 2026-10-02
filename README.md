@@ -29,7 +29,7 @@ ingenting ekstra.
 | --- | --- | --- |
 | 1 | Begynn å skrive navnet på en analytt eller kode | hvilken som helst bokstav |
 | — | Åpne og lukke sidemenyen, når som helst | `Ctrl + M` |
-| — | Søke i fagstoffet på alle stoffsidene, fra feltet i toppmenyen | `Ctrl + K` (`Cmd + K` på Mac) |
+| — | Søke i fagstoffet på alle fagsidene, fra feltet i toppmenyen | `Ctrl + K` (`Cmd + K` på Mac) |
 | — | Begrense søket til en analysemetode | `Alt + 1` … `Alt + 5` |
 | — | Slå filteret av igjen | `Alt + 0` |
 | 2 | Velg blant alternativene som passer søket — er det bare ett igjen, går appen videre til det av seg selv | `1`–`9` og `0`, eller `Enter`/`Space` |
@@ -50,10 +50,10 @@ kommentarer i limsteget. Se [EtG og EtS i urin](#etg-og-ets-i-urin).
 
 Menyknappen øverst til venstre åpner **stoffregisteret**, som er veien inn til
 oppslagsverket: alle stoffene appen har sider for, ordnet etter farmakologisk
-klasse, og et trykk på et stoff åpner **stoffsiden** for det. Hvilken
+klasse, og et trykk på et stoff åpner **fagsiden** for det. Hvilken
 analysemetode søket leter i, velges på hovedsiden. Se
 [Stoffregisteret og analysemetodene](#stoffregisteret-og-analysemetodene) og
-[Stoffsidene](#stoffsidene).
+[Fagsidene](#fagsidene).
 
 Smalner søket inn til én eneste analytt, er valget i praksis allerede tatt, og
 appen går videre uten at det trengs et tastetrykk til. Det skjer bare i selve
@@ -228,12 +228,12 @@ klasse, antipsykotika i første- og andregenerasjonsmidler). Et stoff kan stå i
 flere kategorier, som lamotrigin under både antiepileptika og
 stemningsstabiliserende.
 
-`byggStoffregister()` i `src/domain/stoffregister.ts` legger til stoffsidene
+`byggStoffregister()` i `src/domain/stoffregister.ts` legger til fagsidene
 redaktørene har laget i databasen: en side registeret ikke kjenner, havner i
 «Andre stoffer» nederst til noen plasserer den. Én skuff per kategori, én av
 gangen åpen, med antallet stoffer. Stoffene står alfabetisk, og bryteren «Vis
 underkategorier» slår underkategoriene av og lister hver kategori i én bolk.
-Bryteren står fast øverst og «Ny stoffside» (for redaktørene) fast nederst.
+Bryteren står fast øverst og «Ny fagside» (for redaktørene) fast nederst.
 
 Én linje per **stoff**, navngitt etter stoffet, med analyttkodene som er
 koblet til det som sekundær informasjon. **Stoffet er sidens eneste
@@ -253,15 +253,15 @@ Metabolitter som ikke er egne legemidler, er andre navn på stoffet
 (hydroksybupropion, norfluoksetin, N-desmetyldiazepam), ikke egne sider.
 Koblingene utledes aldri av navnelikhet, og både et stoff uten analytt og en
 analytt uten stoff er gyldig. Hver analytt beholder sine egne
-fortolkningsregler (HBUP-reglene hører til HBUP); stoffsiden viser dem der
+fortolkningsregler (HBUP-reglene hører til HBUP); fagsiden viser dem der
 koblingen sier at stoffet er analyttens primære.
 
-### Stoffsidene
+### Fagsidene
 
-Hver stoffside har én kanonisk adresse etter stoffets nøkkel, for eksempel
+Hver fagside har én kanonisk adresse etter stoffets nøkkel, for eksempel
 `#/stoff/bupropion` eller `#/stoff/bupropion/farmakokinetikk`, som kan
 bokmerkes og åpnes direkte. Sidene nås fra sidemenyen, fra fagsøket og fra
-analyttkodepillene i fortolkningsmodulene, som fører til stoffsiden til
+analyttkodepillene i fortolkningsmodulene, som fører til fagsiden til
 analyttens primære stoff. Gamle adresser som `#/analytt/HBUP` sendes videre
 til stoffet når koden har ett primært stoff; ellers vises ingen fagside.
 
@@ -277,7 +277,7 @@ Mac) går til søket på siden i toppmenyen, som fremhever og teller treffene
 (`Enter` og `Shift + Enter` blar).
 
 Fagsøket i toppmenyen (`Ctrl + K`, `Cmd + K` på Mac) søker i alle stoffene
-og de publiserte stoffsidene — på stoffnavnet, andre navn, analyttkodene og
+og de publiserte fagsidene — på stoffnavnet, andre navn, analyttkodene og
 analyttnavnene, så «HBUP» og «hydroksybupropion» begge finner Bupropion — og er noe annet enn analyttsøket som driver
 fortolkningen. Rullegardinen viser de beste treffene med stien på siden
 (piltastene velger, `Enter` åpner, `Esc` lukker), og «Vis alle treff» åpner
@@ -935,7 +935,7 @@ fokuset når menyen åpnes, og tabulator går rundt inne i det så lenge den st�
 tilbake til menyknappen, som da er synlig igjen. `Esc` lukker menyen, og appens
 egne taster ligger i ro så lenge den står åpen.
 
-Stoffsidene er seksjoner med overskrifter i fast nivå: navnet er `h1`,
+Fagsidene er seksjoner med overskrifter i fast nivå: navnet er `h1`,
 panelene `h2` og kortene `h3`, og fokus flyttes til navnet når en side åpnes.
 Søket på siden er en `search`-region med navn, og antallet treff meldes som
 status. Fagsøket er en kombinasjonsboks med en navngitt liste, der det valgte

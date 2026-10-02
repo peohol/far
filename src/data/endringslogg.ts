@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.73.1',
+    dato: '2026-10-02',
+    sammendrag: 'Stoffsidene heter nå fagsider',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Sidene om hvert stoff kalles nå fagsider overalt i appen, for et tydeligere skille mot fortolkningssidene. Knappen i toppmenyen heter «Åpne fagside», og feltet nederst i stoffregisteret heter «Ny fagside».',
+      'Adressene til sidene er de samme som før, så bokmerker og lenker virker fortsatt.',
+    ],
+  },
+  {
     versjon: '1.73.0',
     dato: '2026-10-02',
     sammendrag: 'Lenker rett til en diskusjon, en idé eller en kommentar',

@@ -18,13 +18,13 @@ import { STOFFREGISTER } from '../domain/stoffregister'
 export function Kodepille({ kode }: { kode: string }) {
   const stoff = STOFFREGISTER.primartStoffFor(kode)
   const adresse = stoffadresseForAnalytt(kode)
-  const tips = useTips(`Åpne stoffsiden for ${stoff?.navn ?? kode}`, { skjermleser: false })
+  const tips = useTips(`Åpne fagsiden for ${stoff?.navn ?? kode}`, { skjermleser: false })
   if (!stoff || !adresse) return <span className="metalinje__kode">{kode}</span>
   return (
     <a
       href={adresse}
       className="metalinje__kode metalinje__lenke"
-      aria-label={`${kode} – åpne stoffsiden for ${stoff.navn}`}
+      aria-label={`${kode} – åpne fagsiden for ${stoff.navn}`}
       {...tips.props}
     >
       {kode}

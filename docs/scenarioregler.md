@@ -68,9 +68,9 @@ traff og forholdstallene, som simulatoren viser. Rekkefølgen:
 3. En nevner på 0 gir forholdets melding.
 4. Scenariet der alle vilkårene holder, gir utfallet.
 
-## På stoffsiden
+## På fagsiden
 
-`src/components/regler/Scenarioregler.tsx` viser regelsettet på stoffsiden til
+`src/components/regler/Scenarioregler.tsx` viser regelsettet på fagsiden til
 hver analytt i modulen som har et primært stoff: grensene, scenariene sortert etter hva som er påvist,
 med vilkår og utfall, og kommentarene regelsettet viser til, nummerert, så
 hver tekst står én gang (`src/domain/scenariovisning.ts`). Med mer enn ett scenario følger
@@ -155,7 +155,7 @@ tilstand, og kommentarene de viser til), og `tilScenarioregler`
 modul: mens de hentes, viser steget det og har ingenting å kopiere; kunne de
 ikke hentes, eller mangler eller feiler modulens regelsett, sier steget
 hvorfor og tilbyr «Prøv igjen». Det fortolker aldri med regler som ikke er
-publisert og kontrollert. Stoffsiden bruker de samme hentede reglene
+publisert og kontrollert. Fagsiden bruker de samme hentede reglene
 (`src/components/regler/Scenarioreglerkilde.tsx`), unntatt i redigeringen, som
 leser utkastet. Etter en publisering hentes de på nytt; reglene appen alt har,
 står til de nye er hentet. Hvilke moduler som finnes,

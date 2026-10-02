@@ -1,7 +1,7 @@
 # Legemiddeldata fra offentlige kilder
 
 Leses når noe som har med preparater, virkestoff, pakninger eller andre
-legemiddelgrunndata på stoffsidene å gjøre skal endres. Farmakogenetikken fra
+legemiddelgrunndata på fagsidene å gjøre skal endres. Farmakogenetikken fra
 ClinPGx og CPIC følger det samme mønsteret og står i `docs/clinpgx.md` og
 `docs/cpic.md`. Planen står i
 `docs/stoffsider-og-redigering.md`; her står hvilke kilder som finnes, hva de
@@ -48,7 +48,7 @@ nyttig.
 ## Lisens og kildeangivelse
 
 FEST er lagt ut under **Norsk lisens for offentlige data (NLOD)**. Dataene kan
-brukes fritt, men kilden skal oppgis. Stoffsidene har derfor FEST som en
+brukes fritt, men kilden skal oppgis. Fagsidene har derfor FEST som en
 nummerert referanse («FEST – Forskrivnings- og ekspedisjonsstøtte ·
 Direktoratet for medisinske produkter») i referansefeltet ved alt som kommer
 derfra, med datoen for uttrekket og siste vellykkede kontroll ved siden av.
@@ -79,7 +79,7 @@ DMP tar ikke ansvar for integrasjoner av FEST. Brukeren av dataene skal:
   `endepunkt.ts` er inngangen fra Vercel.
 - Dataene ligger i skjemaet `legemiddeldata`, som ingen API-rolle når direkte.
   Skriving går gjennom funksjonene `legemiddeldata_*`, som bare den hemmelige
-  nøkkelen kan kalle. Stoffsidene leser med `les_legemidler`, og
+  nøkkelen kan kalle. Fagsidene leser med `les_legemidler`, og
   `legemiddeldata_status` viser de siste kjøringene.
 - Et uttrekk lastes først inn i et mellomlager og byttes så inn i én
   transaksjon. Nye rader legges til, endrede oppdateres, og rader som er borte,
@@ -245,9 +245,9 @@ VirkestoffMedStyrke ◀── SortertVirkestoffMedStyrke ── LegemiddelMerkev
   egne legemidler (paliperidon, oksazepam); andre finnes som virkestoff med få
   eller ingen preparater (ramiprilat, kanrenon, enalaprilat).
 
-## Koblingen mellom stoffsider og FEST
+## Koblingen mellom fagsider og FEST
 
-En stoffside kobles til ett eller flere virkestoff i FEST med ID-ene deres,
+En fagside kobles til ett eller flere virkestoff i FEST med ID-ene deres,
 aldri med navnet. Koblingen er redaksjonelt innhold: elementet
 `legemiddelkobling` i seksjonen «Preparater», med `{ virkestoff: [{ fest_id,
 navn }] }`. Den lagres som utkast, publiseres og har historikk som annet
@@ -287,7 +287,7 @@ lager migrasjonen. Den lager det samme publiserte kortet som redigeringen, ett
 per side med virkestoffene i rekkefølge, med navnet FEST gir dem, og «Koblet
 til virkestoffet i FEST» i historikken. En side som mangler eller alt er
 koblet, og et virkestoff som mangler eller er utgått i FEST, hoppes over.
-Slik ble de 15 stoffsidene uten analyttkode koblet
+Slik ble de 15 fagsidene uten analyttkode koblet
 (`*_stoffsider_fest_kobling.sql`): Litium til Litiumion og Valproat til
 Valproinsyre, som preparatenes salter hører til. Ketobemidon har ingen
 preparater i FEST, så siden sier det. Amfetaminsiden (AMF1) er koblet til
@@ -386,7 +386,7 @@ formene redaktørene skriver på t½- og tss-kortene i «Viktige data».
 Hvilke former som finnes, er ikke en håndlaget liste.
 `scripts/legemiddelformer-i-bruk.sql` finner alle formene blant merkevarene i
 FEST som ikke er utgått, og formene blant preparatene til de publiserte
-stoffsidene. Svaret ligger i `src/legemiddeldata/legemiddelformer-i-bruk.json`.
+fagsidene. Svaret ligger i `src/legemiddeldata/legemiddelformer-i-bruk.json`.
 25.09.2026 var det 226 former i FEST og 27 i bruk, fra 50 koblede virkestoff.
 En prøve krever at hver av dem er kartlagt; bare medisinsk blodigle har med
 vilje det generiske ikonet.

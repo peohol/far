@@ -1,10 +1,10 @@
-# Plan: stoffsider, redigerbart faginnhold og fortolkningsregler
+# Plan: fagsider, redigerbart faginnhold og fortolkningsregler
 
 Denne planen beskriver overgangen fra dagens hovedsakelig statiske/hardkodede faginnhold til et redigerbart, kildebelagt og fullt versjonert kunnskapssystem i OUSFAR.
 
 Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av etter hvert som de er ferdige.
 
-> **Kursendring 23.09.2026.** Preparatnavn og andre legemiddelgrunndata skal ikke lenger kopieres for hånd fra Felleskatalogen. De hentes fra autoritative offentlige legemiddeldata (FEST via Helsedirektoratets HAPI, DMP FHIR eller en kombinasjon) og synkroniseres til en egen, lokal kopi i Supabase (del 23). Stoffsidene går samtidig over til progressiv detaljering: hovedseksjoner som trekkspill med minioppsummering, og detaljkort inne i dem (del 24). Klinisk kuratert innhold forblir OUSFAR-redigert og versjonert.
+> **Kursendring 23.09.2026.** Preparatnavn og andre legemiddelgrunndata skal ikke lenger kopieres for hånd fra Felleskatalogen. De hentes fra autoritative offentlige legemiddeldata (FEST via Helsedirektoratets HAPI, DMP FHIR eller en kombinasjon) og synkroniseres til en egen, lokal kopi i Supabase (del 23). Fagsidene går samtidig over til progressiv detaljering: hovedseksjoner som trekkspill med minioppsummering, og detaljkort inne i dem (del 24). Klinisk kuratert innhold forblir OUSFAR-redigert og versjonert.
 >
 > Der eldre deler av planen sier noe annet, gjelder del 23–25. Erstattede deler er merket **Erstattet**. Arbeidspakke 4 er revidert, og arbeidspakke 8–13 er nye. Del 25 sier hvordan de åpne PR-ene og øktene skal tilpasses.
 
@@ -14,7 +14,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [x] Brukersystem med profiler og roller er etablert.
 - [x] Arbeidspakke 1: fundament for redigerbart faginnhold.
 - [x] Arbeidspakke 2: referansesystem.
-- [x] Arbeidspakke 3: stoffsider og navigasjon (omarbeidet 29.09.2026: stoffet er sidens identitet, analyttene kobles eksplisitt).
+- [x] Arbeidspakke 3: fagsider og navigasjon (omarbeidet 29.09.2026: stoffet er sidens identitet, analyttene kobles eksplisitt).
 - [ ] Arbeidspakke 4: import av psykofarmakainnhold (revidert 23.09.2026, omarbeides).
 - [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
 - [x] Arbeidspakke 6: sammensatte analyttgrupper.
@@ -32,14 +32,14 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 
 OUSFAR skal utvikles fra et fortolkningsverktøy med innhold i kode og statiske datafiler til et internt farmakologisk kunnskaps- og beslutningsstøttesystem der:
 
-- stoffregisteret består av stoffsider for stoffer/virkestoffer, og laboratorieanalytter kobles eksplisitt til stoffene
+- stoffregisteret består av fagsider for stoffer/virkestoffer, og laboratorieanalytter kobles eksplisitt til stoffene
 - fortolkningskommentarer og etter hvert fortolkningsregler lagres i Supabase
 - faglig innhold kan redigeres direkte i UI
 - endringer er versjonerte, attribuert til bruker og reversible
 - innhold kan kildebelegges på flere nivåer
 - referanser lagres sentralt og gjenbrukes på tvers av appen
 - fortolkningsmodulene bruker samme publiserte datagrunnlag som redigeringsgrensesnittet
-- søk fungerer både på én stoffside og på tvers av hele kunnskapsbasen
+- søk fungerer både på én fagside og på tvers av hele kunnskapsbasen
 
 Arbeidet skal bygges trinnvis. Enkle konsentrasjonsregler, sammensatte rusmiddelregler og THC-syre skal ikke presses inn i én felles regeleditor.
 
@@ -47,7 +47,7 @@ Arbeidet skal bygges trinnvis. Enkle konsentrasjonsregler, sammensatte rusmiddel
 
 ## 2. Domenemodellen må skille tre begreper
 
-Dette skillet er grunnleggende og må ligge i fundamentet. Hvordan det er bygget, står i `docs/faginnhold.md` under «Domenet» og «Stoffsidene».
+Dette skillet er grunnleggende og må ligge i fundamentet. Hvordan det er bygget, står i `docs/faginnhold.md` under «Domenet» og «Fagsidene».
 
 ### 2.1 Stoff
 
@@ -58,7 +58,7 @@ Stoffet er det brukeren leser om, og den eneste identiteten en fagside har, for 
 - Sertralin
 - Risperidon
 
-Hvert stoff har en nøkkel (`bupropion`), et navn og en plass i stoffregisteret (`src/data/stoffregister.json`), som er autoritativt og uavhengig av analyttkatalogen. Stoffsiden inneholder farmakologi, preparater, dosering, referanseområder, kommentarer osv., og har adressen `#/stoff/<nøkkel>`.
+Hvert stoff har en nøkkel (`bupropion`), et navn og en plass i stoffregisteret (`src/data/stoffregister.json`), som er autoritativt og uavhengig av analyttkatalogen. Fagsiden inneholder farmakologi, preparater, dosering, referanseområder, kommentarer osv., og har adressen `#/stoff/<nøkkel>`.
 
 ### 2.2 Laboratorieanalytt
 
@@ -75,17 +75,17 @@ Eksempel:
 - `HBUP` → Bupropion (metabolitt): laboratoriet måler hydroksybupropion, og siden forklarer det. Hydroksybupropion er et søkeord, ikke en side.
 - `ENAT`, `RAMAT`, `LOSYR`, `KANR` og `BEZ1` → Enalapril, Ramipril, Losartan, Spironolakton og Kokain (metabolitt), på samme måte. En side heter alltid etter legemidlet eller rusmidlet, aldri etter metabolitten laboratoriet måler; testene holder det slik.
 
-Datamodellen antar derfor ikke at «én analyttkode = ett virkestoff», og stoffsidens identitet utledes aldri av analyttnavnet.
+Datamodellen antar derfor ikke at «én analyttkode = ett virkestoff», og fagsidens identitet utledes aldri av analyttnavnet.
 
 For sumanalyser opplyser siden hvilke komponenter analysen omfatter og lenker til de andre stoffene koblingene nevner.
 
 ### 2.3 Fortolkningsmodul
 
-Dette er logikken som bestemmer hvilken eller hvilke kommentarer som skal brukes. Den bruker analyttkodene og deres regler (HBUP-reglene hører til HBUP), aldri stoffsiden.
+Dette er logikken som bestemmer hvilken eller hvilke kommentarer som skal brukes. Den bruker analyttkodene og deres regler (HBUP-reglene hører til HBUP), aldri fagsiden.
 
 For enkle analytter svarer én fortolkningsmodul omtrent til én laboratorieanalytt. For andre gjør den ikke det.
 
-Eksempel: diazepam, N-desmetyldiazepam og oksazepam har egne analyttkoder og inngår i felles fortolkningslogikk. DIAZ og DMI er begge koblet til stoffet Diazepam; oksazepam er et eget legemiddel med sin egen stoffside.
+Eksempel: diazepam, N-desmetyldiazepam og oksazepam har egne analyttkoder og inngår i felles fortolkningslogikk. DIAZ og DMI er begge koblet til stoffet Diazepam; oksazepam er et eget legemiddel med sin egen fagside.
 
 ---
 
@@ -93,7 +93,7 @@ Eksempel: diazepam, N-desmetyldiazepam og oksazepam har egne analyttkoder og inn
 
 ### Sidemenyen
 
-Venstremenyen er stoffregisteret: den åpner stoffsiden (`#/stoff/<nøkkel>`), ikke fortolkningsflyten, og er ordnet etter farmakologisk klasse med og uten analyttkode om hverandre. Linjen navngis alltid etter stoffet, aldri etter laboratoriets analyttnavn; kodene står som sekundær informasjon. Den filtrerer ikke søket.
+Venstremenyen er stoffregisteret: den åpner fagsiden (`#/stoff/<nøkkel>`), ikke fortolkningsflyten, og er ordnet etter farmakologisk klasse med og uten analyttkode om hverandre. Linjen navngis alltid etter stoffet, aldri etter laboratoriets analyttnavn; kodene står som sekundær informasjon. Den filtrerer ikke søket.
 
 Hovedsidens søk er inngangen til fortolkningsarbeidsflyten, og filteret på analysemetode settes der.
 
@@ -103,7 +103,7 @@ Stjernen blant sidens handlinger i toppmenyen gjør stoffet til favoritt for den
 
 ### Fra fortolkningsmodulen
 
-Analyttkodepillene er klikkbare og fører til stoffsiden til analyttens primære stoff, når koden har et.
+Analyttkodepillene er klikkbare og fører til fagsiden til analyttens primære stoff, når koden har et.
 
 Eksempel:
 
@@ -111,15 +111,15 @@ Eksempel:
 
 Flere koder kan ha samme mål. En kode uten koblet stoff er ikke en lenke.
 
-### Fra stoffsiden
+### Fra fagsiden
 
 Siden har en sekundær handling «Åpne fortolkning» når et av stoffets analytter har en fortolkningsmodul.
 
-Hver stoffside har én kanonisk adresse som kan bokmerkes og åpnes direkte. Gamle adresser (`#/analytt/<KODE>`) sendes videre til stoffet når koden har ett primært stoff; ellers vises ingen fagside.
+Hver fagside har én kanonisk adresse som kan bokmerkes og åpnes direkte. Gamle adresser (`#/analytt/<KODE>`) sendes videre til stoffet når koden har ett primært stoff; ellers vises ingen fagside.
 
 ---
 
-## 4. Oppbygning av stoffsiden
+## 4. Oppbygning av fagsiden
 
 Innholdet i panelene under beholdes, men vises fra arbeidspakke 9 som **hovedseksjoner** i modellen for progressiv detaljering (del 24): lukket med en minioppsummering, åpnet med innholdet og eventuelle detaljkort. «Panel» og «hovedseksjon» betyr det samme i resten av planen. Preparatene blir en egen hovedseksjon med data fra de eksterne kildene (del 23).
 
@@ -762,14 +762,14 @@ Klinisk kuratert innhold forblir redigert og versjonert i OUSFAR, med modellen i
 
 Hvor jobben kjører (for eksempel en planlagt serverfunksjon eller en planlagt jobb i Supabase), velges i arbeidspakke 10 ut fra kildenes størrelse, format og autentisering.
 
-### Stabil kobling mellom stoffsider og eksterne data
+### Stabil kobling mellom fagsider og eksterne data
 
 Koblingen mellom en informasjonsside og de eksterne dataene er eksplisitt: informasjonssiden peker på én eller flere eksterne substans-ID-er, med en rolle. Den matches aldri bare på tekstnavn.
 
 - Navnelikhet kan gi **forslag**, men en kobling tas i bruk først når en administrator har bekreftet den. Usikre koblinger gjøres ikke automatisk.
 - **Salter og estere** (f.eks. hydroklorid, dekanoat) knyttes til siden for virkestoffet, med saltformen synlig på preparatet.
 - **Metabolitter/analyttkomponenter** blir ikke automatisk egne stoffer i registeret bare fordi laboratoriet måler dem. Dersom forbindelsen også finnes som et selvstendig virkestoff i stoffregisteret, kan den ha sin egen side med egne preparater; dette er en separat, eksplisitt kobling. Moderstoffets preparater vises ikke som metabolittens.
-- **Sumanalyser** (f.eks. `AMTNORSUM`) viser preparatene for hovedsidens virkestoff. At analysen også måler andre komponenter, endrer ikke navnet eller identiteten til hovedsiden. En komponent som også er et selvstendig virkestoff, som nortriptylin, kan samtidig ha sin egen stoffside via en annen analyttkobling.
+- **Sumanalyser** (f.eks. `AMTNORSUM`) viser preparatene for hovedsidens virkestoff. At analysen også måler andre komponenter, endrer ikke navnet eller identiteten til hovedsiden. En komponent som også er et selvstendig virkestoff, som nortriptylin, kan samtidig ha sin egen fagside via en annen analyttkobling.
 - **Kombinasjonspreparater og flere virkestoffer** vises på siden for hvert virkestoff de inneholder, tydelig merket som kombinasjon med de øvrige virkestoffene.
 - **Samme virkestoff i flere former** grupperes etter legemiddelform (del 24).
 
@@ -777,7 +777,7 @@ Koblingen mellom en informasjonsside og de eksterne dataene er eksplisitt: infor
 
 *Ny 23.09.2026.*
 
-Stoffsidene viser ikke alt innhold fullt ut samtidig. Én generell, gjenbrukbar modell brukes for hele siden:
+Fagsidene viser ikke alt innhold fullt ut samtidig. Én generell, gjenbrukbar modell brukes for hele siden:
 
 1. **Hovedseksjon**, vist som en trekkspillskuff.
 2. **Minioppsummering**, som alltid synes når skuffen er lukket.
@@ -1063,7 +1063,7 @@ Ingen databasemodell lages i denne arbeidspakken.
 
 **Status:** [x] Ferdig
 
-Stoffsidene bruker progressiv detaljering: seksjon → detaljkort, beskrevet i `docs/seksjoner.md`. Identiteten og Viktige data står alltid fram og er ikke seksjoner; de andre seksjonene er lukket med en kort oppsummering av innholdet, og bare én står åpen om gangen. Direktelenker: `#/stoff/<nøkkel>/<seksjon>/<kort>`. Rekkefølgen og visningen er fra `docs/ux-reimagination.md` del 8.
+Fagsidene bruker progressiv detaljering: seksjon → detaljkort, beskrevet i `docs/seksjoner.md`. Identiteten og Viktige data står alltid fram og er ikke seksjoner; de andre seksjonene er lukket med en kort oppsummering av innholdet, og bare én står åpen om gangen. Direktelenker: `#/stoff/<nøkkel>/<seksjon>/<kort>`. Rekkefølgen og visningen er fra `docs/ux-reimagination.md` del 8.
 
 Del 1, komponenten:
 
@@ -1127,7 +1127,7 @@ Ta inn de øvrige feltene i del 23 én etter én, der arbeidspakke 8 viser at ki
 
 ## Viktige arkitekturregler for hele prosjektet
 
-1. Stoff, laboratorieanalytt og fortolkningsmodul er separate konsepter. Stoffet er stoffsidens eneste identitet; analytter kobles til stoffer bare eksplisitt.
+1. Stoff, laboratorieanalytt og fortolkningsmodul er separate konsepter. Stoffet er fagsidens eneste identitet; analytter kobles til stoffer bare eksplisitt.
 2. Kommentar og regel er separate objekter.
 3. Kommentarer som kopieres til laboratoriesystemet er ren tekst.
 4. Delte intervallgrenser redigeres som skillepunkter, slik at hull ikke kan oppstå.
@@ -1140,6 +1140,6 @@ Ta inn de øvrige feltene i del 23 én etter én, der arbeidspakke 8 viser at ki
 11. Komplekse regeltyper får spesialiserte editorer fremfor ett generelt visuelt programmeringsspråk.
 12. Farmakologiske tall lagres som strukturerte data når de faktisk er strukturerte.
 13. Endringer som kan påvirke klinisk output skal være eksplisitt validerte og sporbare.
-14. Stoffsider kobles til eksterne data med eksplisitte, bekreftede ID-koblinger, ikke med tekstnavn.
+14. Fagsider kobles til eksterne data med eksplisitte, bekreftede ID-koblinger, ikke med tekstnavn.
 15. Lokale unntak fra eksterne data lagres for seg; importerte rader muteres ikke.
-16. Stoffsidene bruker én seksjonsmodell: hovedseksjon → detaljkort, høyst to nivåer, med minioppsummering. Nye visninger bygges i den, ikke som egne panelvarianter.
+16. Fagsidene bruker én seksjonsmodell: hovedseksjon → detaljkort, høyst to nivåer, med minioppsummering. Nye visninger bygges i den, ikke som egne panelvarianter.

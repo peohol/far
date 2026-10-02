@@ -136,7 +136,7 @@ export function Identitetspanel({
                     <a
                       className="komponentlenke"
                       href={stoffadresse(stoff.slug)}
-                      aria-label={`${stoff.navn}: åpne stoffsiden, som også er koblet til ${koblet.analytt.kode}`}
+                      aria-label={`${stoff.navn}: åpne fagsiden, som også er koblet til ${koblet.analytt.kode}`}
                     >
                       <Uthev tekst={stoff.navn} />
                     </a>
