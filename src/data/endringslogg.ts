@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.73.2',
+    versjon: '1.73.3',
     dato: '2026-10-02',
     sammendrag: 'Overskriften i en diskusjonstråd står fast øverst',
     typer: ['Design / layout'],
@@ -20,6 +20,18 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Overskriften på tråden står nå fast under «‹ Alle tråder», så du ser den mens du ruller. En strek under den skiller den fra det som ruller.',
       'Du endrer overskriften med blyanten til høyre for den. Knappen «Endre overskrift» under innlegget er borte.',
+    ],
+  },
+  {
+    versjon: '1.73.2',
+    dato: '2026-10-02',
+    sammendrag: 'Ikoner og tydeligere kategorier i stoffregisteret',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Stoffregisteret har fått et eget ikon ved tittelen, og hver stoffkategori har sitt eget ikon: soloppgang for antidepressiver, en hjerne for antipsykotika, et vinglass for alkohol og GHB, en valmuekapsel for opioider og så videre.',
+      'Kategorinavnene står nå i samme skrift som overskriftene og litt større, så de skiller seg tydelig fra stoffene under dem.',
+      'En kategori som ikke har fått sitt eget ikon ennå, vises med et nøytralt plassholderikon.',
     ],
   },
   {

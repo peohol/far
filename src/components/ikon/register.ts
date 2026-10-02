@@ -217,6 +217,37 @@ const enzym = P('M20 17v5a4 4 0 0 0 8 0v-5c7 1 13 7 13 14 0 8-7 13-17 13S7 39 7 
 /** Aksjonspotensialer: en kanal som blokkeres mer jo oftere den åpnes. */
 const fyring = P('M2 7h6l2-5 2.5 7 1.5-2h6l2-5 2.5 7 1.5-2h6l2-5 2.5 7 1.5-2h6', 'l', 'glass', 'draw', { w: 0.8 })
 
+/*
+ * Stoffregisteret og kategoriene i det. Hver kategori i registeret peker på
+ * ikonet sitt med navnet (`ikon` i `src/data/stoffregister.json`); en
+ * kategori uten, eller med et navn som ikke står her, får `katPlassholder`
+ * (se `kategoriikon`). Et nytt kategoriikon tegnes i samme stil, i
+ * 24-rutenettet, og får navnet `kat<Kategori>`.
+ */
+/** Et punkt på avstanden `r` fra (`cx`, `cy`) i retningen `grader`, der 0 er rett opp og vinkelen øker med klokka. */
+const polar = (cx: number, cy: number, r: number, grader: number): string => {
+  const a = (grader * Math.PI) / 180
+  return `${(cx + r * Math.sin(a)).toFixed(2)} ${(cy - r * Math.cos(a)).toFixed(2)}`
+}
+/** Strålene fra soloppgangen: korte streker over horisonten. */
+const soloppgang = [-60, -30, 0, 30, 60].map((g) => P(`M${polar(12, 18, 8.6, g)}L${polar(12, 18, 11.4, g)}`, 'l', 'i-ink'))
+/** Et blad i cannabisbladet: en spiss oval fra (12, 15) ut i retningen `grader`. */
+const blad = (grader: number, lengde: number, bredde: number): Ikondel => {
+  const tupp = polar(12, 15, lengde, grader)
+  // Kontrollpunktene står midt på bladet, `bredde` ut til hver side.
+  const avstand = Math.hypot(lengde * 0.5, bredde)
+  const vinkel = (Math.atan2(bredde, lengde * 0.5) * 180) / Math.PI
+  const midt = (side: number) => polar(12, 15, avstand, grader + side * vinkel)
+  return P(`M12 15Q${midt(1)} ${tupp}Q${midt(-1)} 12 15z`, 'f1', 'ok')
+}
+/** En arkimedisk spiral innenfra og ut: `omdreininger` runder ut til radius `r`. */
+const spiral = (r: number, omdreininger: number): string => {
+  const steg = omdreininger * 36
+  let d = ''
+  for (let i = 0; i <= steg; i++) d += (i ? 'L' : 'M') + polar(12, 12, (r * i) / steg, (i / steg) * omdreininger * 360)
+  return d
+}
+
 const REGISTER = {
   menu: { vb: 24, parts: [P('M4 7h16M4 12h16M4 17h9', 'l', 'i-ink'), C(18, 17, 2, 'f2', 'accent', 'pop')] },
   search: { vb: 24, ga: 'pulse', parts: [C(10.5, 10.5, 6.5, 'f1', 'accent'), P('M15.5 15.5 20.5 20.5', 'l', 'i-ink')] },
@@ -908,6 +939,129 @@ const REGISTER = {
       P('M4.5 19.5 19.5 4.5', 'l', 'danger', 'pop'),
     ],
   },
+  // --- Stoffregisteret og kategoriene (se over REGISTER) ---
+  // Et register med faner i kanten.
+  stoffregister: {
+    vb: 24,
+    parts: [
+      R(4, 3.5, 13.5, 17, 2.5, 'f1', 'accent'),
+      P('M7.5 3.5v17', 'l', 'i-ink'),
+      P('M10.5 8.5h4M10.5 12h4', 'l', 'i-ink'),
+      G([R(17.5, 5.5, 3, 3.5, 1, 'f2', 'warn'), R(17.5, 10.25, 3, 3.5, 1, 'f2', 'info'), R(17.5, 15, 3, 3.5, 1, 'f2', 'ok')], 'bumpL'),
+    ],
+  },
+  // En kategori uten eget ikon: en kapsel i en stiplet ramme.
+  katPlassholder: {
+    vb: 24,
+    parts: [
+      R(3.5, 3.5, 17, 17, 4.5, 'd', 'i-line'),
+      G([R(6.5, 9.5, 11, 5, 2.5, 'f1', 'glass'), P('M12 9.5v5', 'l')], 'pop'),
+    ],
+  },
+  // Soloppgang: stemningsløft.
+  katAntidepressiver: {
+    vb: 24,
+    parts: [P('M5 18a7 7 0 0 1 14 0z', 'f1', 'warn'), G(soloppgang, 'flash'), P('M2 18h20', 'l', 'i-ink')],
+  },
+  // En svingning som dempes til en rett linje.
+  katStemningsstabiliserende: {
+    vb: 24,
+    parts: [
+      C(12, 12, 9.5, 'f1', 'info'),
+      P('M4 12C5 6 6.8 6 7.8 12C8.6 16.8 10.3 16.8 11.1 12C11.7 9.5 13 9.5 13.6 12H20', 'l', 'i-ink', 'draw'),
+    ],
+  },
+  // En hjerne sett fra siden.
+  katAntipsykotika: {
+    vb: 24,
+    parts: [
+      P(
+        'M12 4.6c-1-1-2.7-1.3-4-.6-1.2.6-1.9 1.8-1.9 3.1-1.6.4-2.6 1.8-2.6 3.4 0 .8.3 1.6.8 2.2-.6.6-.9 1.4-.9 2.2 0 1.8 1.4 3.3 3.2 3.4.5 1.4 1.8 2.3 3.3 2.3.8 0 1.5-.3 2.1-.7.6.4 1.3.7 2.1.7 1.5 0 2.8-.9 3.3-2.3 1.8-.1 3.2-1.6 3.2-3.4 0-.8-.3-1.6-.9-2.2.5-.6.8-1.4.8-2.2 0-1.6-1-3-2.6-3.4 0-1.3-.7-2.5-1.9-3.1-1.3-.7-3-.4-4 .6z',
+        'f1',
+        'accent2',
+      ),
+      P('M12 4.6v15.6', 'l', 'i-ink'),
+      G([P('M9.2 8.3c-1.3 0-2.1.9-2.1 2M8.6 14.2c-1.2.2-2 1.1-2 2.2M14.8 8.3c1.3 0 2.1.9 2.1 2M15.4 14.2c1.2.2 2 1.1 2 2.2', 'l', 'i-ink')], 'pop'),
+    ],
+  },
+  // Et skjold mot lynet: anfallet.
+  katAntiepileptika: {
+    vb: 24,
+    parts: [
+      P('M12 3l7.5 3v5.5c0 4.4-3.1 7.8-7.5 9.5-4.4-1.7-7.5-5.1-7.5-9.5V6z', 'f1', 'info'),
+      P('M13.2 6.8 9.3 12.6h3.1l-1.3 4.6 4-6h-3.1z', 'f2', 'warn', 'flash'),
+    ],
+  },
+  // Et vinglass.
+  katAlkohol: {
+    vb: 24,
+    parts: [
+      P('M7 3.5h10l-.4 4.5a4.6 4.6 0 0 1-9.2 0z', 'f1', 'glass'),
+      P('M7.3 7h9.4l-.1 1a4.6 4.6 0 0 1-9.2 0z', 'f2', 'danger', 'fill'),
+      P('M12 12.6v7.4M8.5 20.5h7', 'l', 'i-ink'),
+    ],
+  },
+  // Månen og søvnen.
+  katBenzodiazepiner: {
+    vb: 24,
+    parts: [
+      P('M16.5 15.5A7.5 7.5 0 0 1 8 5a7.5 7.5 0 1 0 8.5 10.5z', 'f1', 'info'),
+      G([P('M13.5 3.5h3.5l-3.5 4h3.5', 'l', 'i-ink'), P('M18 8.5h2.5L18 11.3h2.5', 'l', 'i-ink')], 'pop'),
+    ],
+  },
+  // Valmuekapselen.
+  katOpioider: {
+    vb: 24,
+    parts: [
+      P('M12 15.5v6', 'l', 'i-ink'),
+      P('M12 6c3.2 0 5.5 2.2 5.5 5s-2.3 4.8-5.5 4.8S6.5 13.8 6.5 11 8.8 6 12 6z', 'f1', 'ok'),
+      P('M10 7c-.9 1.2-1.3 2.6-1.3 4s.4 2.8 1.3 4M14 7c.9 1.2 1.3 2.6 1.3 4s-.4 2.8-1.3 4', 'l', 'i-ink'),
+      G([R(8.5, 3.6, 7, 2.6, 1.3, 'f2', 'accent2')], 'pop'),
+    ],
+  },
+  // Et turtallsmåler med nåla langt oppe.
+  katStimulanter: {
+    vb: 24,
+    ga: 'pulse',
+    parts: [
+      P(`M${polar(12, 13.5, 8.5, -135)}A8.5 8.5 0 1 1 ${polar(12, 13.5, 8.5, 135)}z`, 'f1', 'warn'),
+      P([-90, -45, 0, 45, 90].map((g) => `M${polar(12, 13.5, 5.8, g)}L${polar(12, 13.5, 7.2, g)}`).join(''), 'l', 'i-ink'),
+      G([P(`M12 13.5L${polar(12, 13.5, 6, 55)}`, 'l', 'danger')], 'bumpR'),
+      C(12, 13.5, 1.5, 'h', 'i-ink'),
+    ],
+  },
+  // Cannabisbladet.
+  katCannabinoider: {
+    vb: 24,
+    ga: 'pulse',
+    parts: [
+      P('M12 15v6.5', 'l', 'i-ink'),
+      ...(
+        [
+          [-100, 5, 1.6],
+          [100, 5, 1.6],
+          [-62, 8, 2.6],
+          [62, 8, 2.6],
+          [-30, 10.5, 3.2],
+          [30, 10.5, 3.2],
+          [0, 12, 3.6],
+        ] as const
+      ).map(([g, l, b]) => blad(g, l, b)),
+    ],
+  },
+  // En spiral.
+  katHallusinogener: {
+    vb: 24,
+    parts: [C(12, 12, 9.5, 'f1', 'accent2'), P(spiral(7, 2.25), 'l', 'i-ink', 'draw')],
+  },
+  // Hjertet med en pil ned: blodtrykket senkes.
+  katAntihypertensiver: {
+    vb: 24,
+    parts: [
+      P('M12 20.2s-7.8-4.7-7.8-10.3A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.8 2.6c0 5.6-7.8 10.3-7.8 10.3z', 'f1', 'danger'),
+      G([P('M12 9.5v6.5M9.5 13.5 12 16l2.5-2.5', 'l', 'i-ink')], 'drop'),
+    ],
+  },
   // --- Mekanismene i farmakodynamikken (se over REGISTER) ---
   mekAgonisme: { vb: 48, parts: [membran, reseptor, stoff('okt', true)] },
   mekPartiellAgonisme: { vb: 48, parts: [membran, reseptor, stoff('delvis', true)] },
@@ -967,3 +1121,15 @@ export type Ikonnavn = keyof typeof REGISTER
 export const IKONNAVN = Object.keys(REGISTER) as Ikonnavn[]
 
 export const IKONER: Readonly<Record<Ikonnavn, Ikondefinisjon>> = REGISTER
+
+/** Ikonet en stoffkategori får når den ikke har noe eget. */
+export const KATEGORIIKON_PLASSHOLDER: Ikonnavn = 'katPlassholder'
+
+/**
+ * Ikonet til en kategori i stoffregisteret, ut fra navnet kategorien peker på
+ * (`ikon` i registeret). Mangler det, eller er det ikke et ikon her, blir det
+ * plassholderen — så en ny kategori alltid har et ikon til den får sitt eget.
+ */
+export function kategoriikon(navn?: string | null): Ikonnavn {
+  return navn && Object.hasOwn(REGISTER, navn) ? (navn as Ikonnavn) : KATEGORIIKON_PLASSHOLDER
+}
