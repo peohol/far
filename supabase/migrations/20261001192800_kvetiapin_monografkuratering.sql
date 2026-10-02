@@ -18,6 +18,8 @@ declare
   ref_devane uuid;
   ref_figueroa uuid;
   ref_dailymed uuid;
+  ref_clinpgx uuid;
+  ref_bakken uuid;
 begin
   select p.id into administrator
   from public.profiles p
@@ -78,15 +80,42 @@ begin
   where t.tilstand = 'publisert' and t.infoside_id = side
     and t.panel = 'farmakokinetikk' and t.elementtype = 'kinetikkort'
     and r.kilde = 'Importert fra Psykofarmaka.pdf, side 49'
-    and t.data->>'tittel' in ('Biotilgjengelighet', 'tₘₐₓ', 't½', 'tₛₛ', 'Proteinbinding', 'Vd', 'Eliminasjon', 'CYP-enzymer (substrat)', 'Interaksjoner', 'Annet');
-  if n <> 10 then
-    raise exception 'Kvetiapin: forventet 10 uendrede farmakokinetikkort, fant %.', n;
+    and t.data->>'tittel' in ('Biotilgjengelighet', 'tₘₐₓ', 't½', 'tₛₛ', 'Proteinbinding', 'Vd', 'Eliminasjon', 'Annet');
+  if n <> 8 then
+    raise exception 'Kvetiapin: forventet 8 uendrede farmakokinetikkort etter seksjonsflyttingen, fant %.', n;
   end if;
   select count(*) into n from public.innholdselementer t
     where t.tilstand = 'publisert' and t.infoside_id = side
       and t.panel = 'farmakokinetikk' and t.elementtype = 'kinetikkort';
-  if n <> 10 then
-    raise exception 'Kvetiapin: farmakokinetikk har % kort totalt; kurateringen forventet 10.', n;
+  if n <> 8 then
+    raise exception 'Kvetiapin: farmakokinetikk har % kort totalt; kurateringen forventet 8 etter seksjonsflyttingen.', n;
+  end if;
+
+  -- CYP-kortet ble tidligere flyttet til Farmakogenetikk.
+  select count(*) into n
+  from public.innholdselementer t
+  join public.objekttilstander u on u.objekt_id = t.objekt_id and u.tilstand = 'utkast'
+  join public.objekttilstander p on p.objekt_id = t.objekt_id and p.tilstand = 'publisert' and p.revisjon = u.revisjon
+  join public.objektrevisjoner r on r.objekt_id = t.objekt_id and r.revisjon = u.revisjon
+  where t.tilstand = 'publisert' and t.infoside_id = side
+    and t.panel = 'farmakogenetikk' and t.elementtype = 'kinetikkort'
+    and t.data->>'tittel' = 'CYP-enzymer (substrat)'
+    and r.kilde = 'Flyttet: fra farmakokinetikken til farmakogenetikken';
+  if n <> 1 then
+    raise exception 'Kvetiapin: forventet ett uendret CYP-kort i Farmakogenetikk, fant %.', n;
+  end if;
+
+  -- Interaksjonsteksten ble tidligere flyttet til Interaksjoner og gjort om til riktekst.
+  select count(*) into n
+  from public.innholdselementer t
+  join public.objekttilstander u on u.objekt_id = t.objekt_id and u.tilstand = 'utkast'
+  join public.objekttilstander p on p.objekt_id = t.objekt_id and p.tilstand = 'publisert' and p.revisjon = u.revisjon
+  join public.objektrevisjoner r on r.objekt_id = t.objekt_id and r.revisjon = u.revisjon
+  where t.tilstand = 'publisert' and t.infoside_id = side
+    and t.panel = 'interaksjoner' and t.elementtype = 'riktekst'
+    and r.kilde = 'Flyttet: fra kortet i farmakokinetikken til teksten øverst i interaksjonene';
+  if n <> 1 then
+    raise exception 'Kvetiapin: forventet én uendret redaksjonell interaksjonstekst, fant %.', n;
   end if;
 
   -- Referanser: gjenbruk globalt når samme tittel og lenke allerede finnes.
@@ -165,6 +194,28 @@ begin
     perform public.publiser_utkast(ref_dailymed, 1);
   end if;
 
+  select r.objekt_id into ref_clinpgx from public.referanser r
+   where r.tilstand = 'publisert' and not r.arkivert
+     and r.tittel = 'Quetiapine Pathway, Pharmacokinetics'
+     and r.lenke = 'https://www.clinpgx.org/pathway/PA166307081'
+   order by r.objekt_id limit 1;
+  if ref_clinpgx is null then
+    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: oppdatert ClinPGx-PK-pathway', true);
+    ref_clinpgx := (public.opprett_utkast('referanse', '{"tittel":"Quetiapine Pathway, Pharmacokinetics","forfattere":"ClinPGx","aar":"2026","lenke":"https://www.clinpgx.org/pathway/PA166307081"}'::jsonb)).id;
+    perform public.publiser_utkast(ref_clinpgx, 1);
+  end if;
+
+  select r.objekt_id into ref_bakken from public.referanser r
+   where r.tilstand = 'publisert' and not r.arkivert
+     and r.tittel = 'Metabolism of the active metabolite of quetiapine, N-desalkylquetiapine in vitro'
+     and r.lenke = 'https://doi.org/10.1124/dmd.112.045237'
+   order by r.objekt_id limit 1;
+  if ref_bakken is null then
+    perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: CYP2D6 og norkvetiapin', true);
+    ref_bakken := (public.opprett_utkast('referanse', '{"tittel":"Metabolism of the active metabolite of quetiapine, N-desalkylquetiapine in vitro","forfattere":"Bakken GV, Molden E, Knutsen K, Lunder N, Hermann M","aar":"2012","lenke":"https://doi.org/10.1124/dmd.112.045237"}'::jsonb)).id;
+    perform public.publiser_utkast(ref_bakken, 1);
+  end if;
+
   kilder := jsonb_build_object(
     'ir', ref_ir::text,
     'xr', ref_xr::text,
@@ -172,7 +223,9 @@ begin
     'cross', ref_cross::text,
     'devane', ref_devane::text,
     'figueroa', ref_figueroa::text,
-    'dailymed', ref_dailymed::text
+    'dailymed', ref_dailymed::text,
+    'clinpgx', ref_clinpgx::text,
+    'bakken', ref_bakken::text
   );
 
   -- Farmakodynamikk: skill binding fra funksjon og marker assayavhengig 5-HT1A-effikasi.
@@ -258,9 +311,7 @@ begin
     {"fra":"tₛₛ","data":{"tittel":"tₛₛ","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Steady state for kvetiapin forventes innen omtrent 2 døgn ved regelmessig dosering."}]}]}},"kilder":["dailymed"]},
     {"fra":"Proteinbinding","data":{"tittel":"Proteinbinding","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Ca. 83 % ved terapeutiske konsentrasjoner."}]}]}},"kilder":["ir","dailymed"]},
     {"fra":"Vd","data":{"tittel":"Vd","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Tilsynelatende distribusjonsvolum ca. 10 ± 4 L/kg."}]}]}},"kilder":["dailymed"]},
-    {"fra":"Eliminasjon","data":{"tittel":"Metabolisme og utskillelse","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Omfattende hepatisk metabolisme. Mindre enn 5 % utskilles uendret i urin og feces. Etter radiomerket dose gjenfinnes omtrent 73 % i urin og 20–21 % i feces, hovedsakelig som metabolitter."}]}]}},"kilder":["ir","devane","dailymed"]},
-    {"fra":"CYP-enzymer (substrat)","data":{"tittel":"CYP3A4","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"CYP3A4 er hovedenzymet i metabolismen av kvetiapin. Den aktive metabolitten norkvetiapin dannes og elimineres primært via CYP3A4. Dagens kilder gir ikke grunnlag for å angi CYP2D6 som en klinisk viktig hovedvei."}]}]}},"kilder":["ir","devane","dailymed"]},
-    {"fra":"Interaksjoner","data":{"tittel":"CYP3A4-interaksjoner","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Sterke CYP3A4-hemmere kan øke kvetiapineksponeringen betydelig og er kontraindisert i preparatomtalen. Enzyminduktorer kan øke clearance og redusere eksponeringen. Grapefrukt/grapefruktjuice skal unngås."}]}]}},"kilder":["ir","xr"]}
+    {"fra":"Eliminasjon","data":{"tittel":"Metabolisme og utskillelse","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Omfattende hepatisk metabolisme. Mindre enn 5 % utskilles uendret i urin og feces. Etter radiomerket dose gjenfinnes omtrent 73 % i urin og 20–21 % i feces, hovedsakelig som metabolitter."}]}]}},"kilder":["ir","devane","dailymed"]}
   ]
   $json$::jsonb) loop
     select t.objekt_id, u.revisjon, r.innhold into e
@@ -284,6 +335,52 @@ begin
       e.innhold || jsonb_build_object('data', oppdatering->'data', 'referanser', referanser));
     perform public.publiser_utkast(e.objekt_id, e.revisjon + 1);
   end loop;
+
+  -- CYP-kortet står i Farmakogenetikk etter seksjonsflyttingen.
+  select t.objekt_id, u.revisjon, r.innhold into e
+  from public.innholdselementer t
+  join public.objekttilstander u on u.objekt_id = t.objekt_id and u.tilstand = 'utkast'
+  join public.objekttilstander p on p.objekt_id = t.objekt_id and p.tilstand = 'publisert' and p.revisjon = u.revisjon
+  join public.objektrevisjoner r on r.objekt_id = t.objekt_id and r.revisjon = u.revisjon
+  where t.tilstand = 'publisert' and t.infoside_id = side
+    and t.panel = 'farmakogenetikk' and t.elementtype = 'kinetikkort'
+    and t.data->>'tittel' = 'CYP-enzymer (substrat)'
+  order by t.objekt_id limit 1;
+  if not found then
+    raise exception 'Kvetiapin: CYP-kortet i Farmakogenetikk er endret siden kurateringen ble laget.';
+  end if;
+  data := $json$
+  {"tittel":"CYP3A4 og CYP2D6","dokument":{"type":"doc","content":[
+    {"type":"paragraph","content":[{"type":"text","text":"CYP3A4 er hovedenzymet for metabolismen av kvetiapin og katalyserer blant annet N-dealkylering til den aktive metabolitten norkvetiapin. CYP2D6 har mindre betydning for total clearance av moderstoffet, men bidrar til 7-hydroksylering og er viktig i videre metabolisme av norkvetiapin."}]},
+    {"type":"paragraph","content":[{"type":"text","text":"I humane levermikrosomer og rekombinante systemer ble 7-hydroksy-norkvetiapin dannet via CYP2D6, og norkvetiapin ble metabolisert av både CYP2D6 og CYP3A4. ClinPGx' oppdaterte kvetiapin-PK-spor inkluderer begge enzymene; ClinPGx har også kuratert data der CYP2D6 langsom eller intermediær metabolisme er assosiert med økt norkvetiapineksponering. Farmakogenetisk betydning gjelder derfor særlig metabolitten, mens CYP3A4 dominerer moderstoffets clearance."}]}
+  ]}}
+  $json$::jsonb;
+  perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: CYP3A4/CYP2D6 presisert etter ClinPGx og Bakken et al. 2012', true);
+  perform public.lagre_utkast(e.objekt_id, e.revisjon,
+    e.innhold || jsonb_build_object('data', data, 'referanser', jsonb_build_array(ref_clinpgx, ref_bakken, ref_devane, ref_ir)));
+  perform public.publiser_utkast(e.objekt_id, e.revisjon + 1);
+
+  -- Den redaksjonelle interaksjonsteksten står i eget panel etter seksjonsflyttingen.
+  select t.objekt_id, u.revisjon, r.innhold into e
+  from public.innholdselementer t
+  join public.objekttilstander u on u.objekt_id = t.objekt_id and u.tilstand = 'utkast'
+  join public.objekttilstander p on p.objekt_id = t.objekt_id and p.tilstand = 'publisert' and p.revisjon = u.revisjon
+  join public.objektrevisjoner r on r.objekt_id = t.objekt_id and r.revisjon = u.revisjon
+  where t.tilstand = 'publisert' and t.infoside_id = side
+    and t.panel = 'interaksjoner' and t.elementtype = 'riktekst'
+  order by t.posisjon, t.objekt_id limit 1;
+  if not found then
+    raise exception 'Kvetiapin: den redaksjonelle interaksjonsteksten er endret siden kurateringen ble laget.';
+  end if;
+  data := $json$
+  {"dokument":{"type":"doc","content":[
+    {"type":"paragraph","content":[{"type":"text","text":"Sterke CYP3A4-hemmere kan øke kvetiapineksponeringen betydelig og er kontraindisert i preparatomtalen. Enzyminduktorer kan øke clearance og redusere eksponeringen. Grapefrukt/grapefruktjuice skal unngås."}]}
+  ]}}
+  $json$::jsonb;
+  perform set_config('far.revisjonskilde', 'Monografikuratering av kvetiapin 02.10.2026: CYP3A4-interaksjoner kildebelagt i Interaksjoner-panelet', true);
+  perform public.lagre_utkast(e.objekt_id, e.revisjon,
+    e.innhold || jsonb_build_object('data', data, 'referanser', jsonb_build_array(ref_ir, ref_xr)));
+  perform public.publiser_utkast(e.objekt_id, e.revisjon + 1);
 
   -- Det gamle «Annet»-kortet var en løs samling av ratioopplysninger og dupliserende stoffinfo.
   -- Det tas av siden, men beholdes i historikken.
