@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.73.3',
+    versjon: '1.73.4',
     dato: '2026-10-02',
     sammendrag: 'Tryggere oppdateringer av fagsidene',
     typer: ['Funksjonalitet'],
@@ -21,6 +21,18 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Når en fagside oppdateres samlet etter en faglig gjennomgang, kontrolleres hvert kort mot nøyaktig den utgaven som ble gjennomgått. Har noen redigert kortet i mellomtiden, eller finnes det et kort til med det samme målet, stopper oppdateringen uten å endre noe.',
       'Ingen fagtekster er endret.',
+    ],
+  },
+  {
+    versjon: '1.73.3',
+    dato: '2026-10-02',
+    sammendrag: 'Fast overskrift i diskusjonstråder og tydeligere kategorier i diskusjonsmenyen',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Overskriften på tråden står nå fast under «‹ Alle tråder», så du ser den mens du ruller. En strek under den skiller den fra det som ruller.',
+      'Du endrer overskriften med blyanten til høyre for den. Knappen «Endre overskrift» under innlegget er borte.',
+      'I oversikten står navnet på hver kategori i et eget felt øverst i kortet, med en strek under, så det er lettere å skille kategorien fra trådene i den.',
     ],
   },
   {
