@@ -9,7 +9,9 @@ Stoffene, aliasene og koblingene til laboratorieanalysene står i
 
 | Hvor | Hva |
 | --- | --- |
-| `supabase/migrations/*_stoffregister_redigering.sql` | Tabellene, radsikkerheten, reglene og funksjonene appen kaller, og inndelingen registeret fikk første gang |
+| `supabase/migrations/*_stoffregister_redigering.sql` | Tabellene, radsikkerheten og inndelingen registeret fikk første gang |
+| `supabase/migrations/*_stoffregister_lesing.sql` | Funksjonen appen leser registeret med, og de som lager, gir nytt navn til, flytter og arkiverer kategoriene |
+| `supabase/migrations/*_stoffregister_funksjoner.sql` | Resten av reglene: sletting av kategorier, plassering, arkiv og papirkurv |
 | `src/data/stoffregister.json` | Stoffene, aliasene og koblingene til analysene (ikke inndelingen) |
 | `src/domain/stoffregister.ts` | Registeret slik appen viser det (`byggStoffregister`): datafilen, fagsidene og inndelingen fra databasen. Uten riktekst, så fortolkningen ikke drar faginnholdet med seg |
 | `src/stoffregister/` | Svaret fra databasen og endringene i det (`modell.ts`), kallene (`api.ts`) og kilden sidemenyen, helsiden og fagsidene deler (`Stoffregisterkilde.tsx`) |
