@@ -47,6 +47,9 @@ begin
 end;
 $$;
 
+-- Sletter stoffet for godt: fagsiden med kortene, revisjonene og
+-- publiseringene, diskusjonene på siden, favorittene, varslene om siden og
+-- plasseringene i registeret. Statusen blir `fjernet`. Gir tilbake antall
 -- objekter som ble slettet. Avviser når noe utenfor siden peker på den.
 create function intern.fjern_stoff(stoff text, bruker uuid)
 returns integer
