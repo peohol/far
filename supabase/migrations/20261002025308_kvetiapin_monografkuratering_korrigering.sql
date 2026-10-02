@@ -5,7 +5,10 @@ declare
   n integer; data jsonb; kilder jsonb := '{}'::jsonb; oppdatering jsonb; referanser jsonb; forrige jsonb;
 begin
   select id into administrator from public.profiles where username='peohol' and role='admin';
-  if administrator is null then raise exception 'Fant ingen administrator peohol.'; end if;
+  if administrator is null then
+    raise notice 'Fant ingen administrator peohol, så kvetiapinkorrigeringen hoppes over.';
+    return;
+  end if;
   perform set_config('request.jwt.claims',jsonb_build_object('sub',administrator,'role','authenticated')::text,true);
 
   select objekt_id into side from public.infosider where tilstand='publisert' and slug='kvetiapin';
