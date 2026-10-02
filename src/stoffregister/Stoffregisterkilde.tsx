@@ -136,7 +136,16 @@ export function useLagStoffregisterkilde({ lager, admin, opprettSide }: Valg): S
             const slug = stoffslug(navn)
             if (!slug) throw new Error('Navnet må ha minst én bokstav eller ett tall.')
             await opprettSide(navn.trim(), slug)
-            if (kategori) await lager.plasserStoff(slug, null, kategori)
+            if (kategori) {
+              // Siden er laget selv om plasseringen feiler: si det som det er.
+              // Prøver man igjen, åpnes siden som alt finnes.
+              try {
+                await lager.plasserStoff(slug, null, kategori)
+              } catch (e) {
+                const grunn = e instanceof Error ? e.message : String(e)
+                throw new Error(`Fagsiden «${navn.trim()}» er laget, men ble ikke lagt i kategorien: ${grunn} Den står under «Andre stoffer».`)
+              }
+            }
             return slug
           }),
       }),

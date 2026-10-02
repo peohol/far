@@ -96,8 +96,18 @@ function lagLager(): Registerlager & { data: Registerdatabase } {
   }
 }
 
-function Side({ lager, admin, children }: { lager: Registerlager; admin: boolean; children?: ReactNode }) {
-  const kilde = useLagStoffregisterkilde({ lager, admin })
+function Side({
+  lager,
+  admin,
+  opprettSide,
+  children,
+}: {
+  lager: Registerlager
+  admin: boolean
+  opprettSide?: (navn: string, slug: string) => Promise<void>
+  children?: ReactNode
+}) {
+  const kilde = useLagStoffregisterkilde({ lager, admin, ...(opprettSide && { opprettSide }) })
   return (
     <StoffregisterkildeProvider kilde={kilde}>
       {children ?? <Stoffregisterside katalog={ANALYTTKATALOG} onApneFortolkning={onApneFortolkning} onLukk={onLukk} />}
@@ -265,6 +275,35 @@ describe('redigeringen', () => {
     await userEvent.click(within(iSsri).getByRole('button', { name: 'Ta Teststoff ut av Antidepressiver › SSRI' }))
     expect(lager.plasserStoff).toHaveBeenLastCalledWith('teststoff', ssri, null)
     await waitFor(() => expect(within(antidepressiver).queryByRole('button', { name: /^Teststoff/ })).toBeNull())
+  })
+})
+
+describe('en ny fagside', () => {
+  it('sier fra når siden er laget, men ikke kom i kategorien, og åpner den når man prøver igjen', async () => {
+    const lager = lagLager()
+    const opprettSide = vi.fn(async (navn: string, slug: string) => {
+      lager.data.sider = [...lager.data.sider, { id: slug, slug, navn, innhold: false, oppsummering: null }]
+    })
+    vi.mocked(lager.plasserStoff).mockRejectedValueOnce(new Error('Kategorien finnes ikke lenger.'))
+    render(
+      <TipsLag>
+        <Side lager={lager} admin opprettSide={opprettSide} />
+      </TipsLag>,
+    )
+    await screen.findByText(/stoffer i \d+ kategorier/)
+    await userEvent.click(screen.getByRole('button', { name: 'Rediger stoffregisteret' }))
+    await userEvent.type(screen.getByLabelText('Ny fagside'), 'Nystoff')
+    await userEvent.selectOptions(screen.getByLabelText('Kategori'), kategoriid('Opioider'))
+    await userEvent.click(screen.getByRole('button', { name: 'Lag fagside' }))
+    expect(opprettSide).toHaveBeenCalledWith('Nystoff', 'nystoff')
+    expect((await screen.findByRole('alert')).textContent).toContain(
+      'Fagsiden «Nystoff» er laget, men ble ikke lagt i kategorien: Kategorien finnes ikke lenger.',
+    )
+    // Siden står nå i registeret; et nytt forsøk åpner den i stedet for å lage en til.
+    await waitFor(() => expect(within(screen.getByRole('list', { name: 'Stoffene i Andre stoffer' })).getByText('Nystoff')).toBeTruthy())
+    await userEvent.click(screen.getByRole('button', { name: 'Lag fagside' }))
+    expect(window.location.hash).toBe('#/stoff/nystoff')
+    expect(opprettSide).toHaveBeenCalledTimes(1)
   })
 })
 

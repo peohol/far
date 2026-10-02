@@ -22,6 +22,9 @@
 --   ikke dukker opp igjen; en ny fagside med den samme nøkkelen fjerner den.
 -- * `slettede_stoffsider`: loggen over fagsider som er slettet for godt.
 --
+-- * `analyttkoblede_stoffer`: stoffene fortolkningen lenker til, som ikke kan
+--   slettes.
+--
 -- Alle innloggede kan endre kategoriene, plassere stoffer, arkivere og hente
 -- tilbake, og slette en fagside som bare har et navn (og angre det). Bare
 -- administratorer kan slette en fagside med innhold, se og tømme papirkurven,
@@ -112,6 +115,31 @@ create table public.slettede_stoffsider (
 
 comment on table public.slettede_stoffsider is
   'Fagsidene som er slettet for godt: nøkkelen, navnet, objektet og hvor mange objekter som gikk med.';
+
+-- Stoffene fortolkningen lenker til: hvert stoff som er koblet til en
+-- laboratorieanalytt i datafilen (`analyttkoblinger`). Fagsidene deres kan
+-- arkiveres, men ikke slettes, så lenkene fra fortolkningen alltid virker.
+-- Lista følger datafilen; en test (`stoffregisterdb.test.ts`) sier fra når de
+-- går fra hverandre, og en ny kobling føres inn med en migrasjon.
+create table public.analyttkoblede_stoffer (
+  stoff text primary key
+);
+
+comment on table public.analyttkoblede_stoffer is
+  'Stoffene som er koblet til en laboratorieanalytt i datafilen. Fagsidene deres kan ikke slettes, bare arkiveres.';
+
+insert into public.analyttkoblede_stoffer (stoff) values
+  ('alprazolam'), ('amfetamin'), ('amisulprid'), ('amitriptylin'), ('amlodipin'), ('aripiprazol'), ('atenolol'), ('bendroflumetiazid'),
+  ('bisoprolol'), ('brekspiprazol'), ('bumetanid'), ('buprenorfin'), ('bupropion'), ('citalopram'), ('diazepam'), ('diltiazem'),
+  ('doksazosin'), ('doksepin'), ('duloksetin'), ('enalapril'), ('eplerenon'), ('escitalopram'), ('etanol'), ('fentanyl'),
+  ('fluoksetin'), ('flupentiksol'), ('fluvoksamin'), ('furosemid'), ('haloperidol'), ('hydroklortiazid'), ('irbesartan'), ('kandesartan'),
+  ('kariprazin'), ('karvedilol'), ('klomipramin'), ('klonazepam'), ('klorprotiksen'), ('klozapin'), ('kodein'), ('kokain'),
+  ('kvetiapin'), ('labetalol'), ('lamotrigin'), ('lerkanidipin'), ('levomepromazin'), ('lisinopril'), ('losartan'), ('lurasidon'),
+  ('mdma'), ('metadon'), ('metamfetamin'), ('metoprolol'), ('mianserin'), ('mirtazapin'), ('morfin'), ('nifedipin'),
+  ('nitrazepam'), ('nortriptylin'), ('oksazepam'), ('oksykodon'), ('olanzapin'), ('paliperidon'), ('paroksetin'), ('perfenazin'),
+  ('ramipril'), ('risperidon'), ('sertralin'), ('spironolakton'), ('tapentadol'), ('telmisartan'), ('thc'), ('tramadol'),
+  ('trimipramin'), ('valsartan'), ('venlafaksin'), ('verapamil'), ('vortioksetin'), ('ziprasidon'), ('zolpidem'), ('zopiklon'),
+  ('zuklopentiksol');
 
 -- To nivåer: en underkategori har en forelder uten forelder, og en kategori
 -- med underkategorier blir ikke selv en underkategori.
@@ -739,6 +767,10 @@ begin
   if side is null then
     raise exception 'Stoffet har ingen fagside å slette. Arkiver det i stedet.' using errcode = '22023';
   end if;
+  if exists (select 1 from public.analyttkoblede_stoffer a where a.stoff = slett_stoff.stoff) then
+    raise exception 'Fagsiden er koblet til laboratorieanalyser i fortolkningen og kan ikke slettes. Arkiver den i stedet.'
+      using errcode = '22023';
+  end if;
   if not public.er_admin() and intern.stoffside_har_innhold(side) then
     raise exception 'Bare administratorer kan slette en fagside med innhold. Arkiver den i stedet.' using errcode = '42501';
   end if;
@@ -749,7 +781,7 @@ end;
 $$;
 
 comment on function public.slett_stoff(text) is
-  'Legger fagsiden i papirkurven. Alle kan slette en side med bare navn; en side med innhold bare administratorer.';
+  'Legger fagsiden i papirkurven. Alle kan slette en side med bare navn; en side med innhold bare administratorer. En side fortolkningen lenker til, kan ikke slettes.';
 
 -- Henter fagsiden tilbake fra papirkurven: en administrator, eller den som
 -- la den der (så den som slettet, kan angre det uten å se papirkurven).
@@ -873,10 +905,12 @@ alter table public.stoffkategorier enable row level security;
 alter table public.stoffplasseringer enable row level security;
 alter table public.stoffstatus enable row level security;
 alter table public.slettede_stoffsider enable row level security;
+alter table public.analyttkoblede_stoffer enable row level security;
 
 create policy "Innloggede ser kategoriene" on public.stoffkategorier for select to authenticated using (true);
 create policy "Innloggede ser plasseringene" on public.stoffplasseringer for select to authenticated using (true);
 create policy "Innloggede ser statusene" on public.stoffstatus for select to authenticated using (true);
+create policy "Innloggede ser de analyttkoblede stoffene" on public.analyttkoblede_stoffer for select to authenticated using (true);
 create policy "Bare administratorer ser loggen" on public.slettede_stoffsider
 for select to authenticated using ((select public.er_admin()));
 
@@ -884,14 +918,16 @@ revoke all on table
   public.stoffkategorier,
   public.stoffplasseringer,
   public.stoffstatus,
-  public.slettede_stoffsider
+  public.slettede_stoffsider,
+  public.analyttkoblede_stoffer
 from anon, authenticated, service_role;
 
 grant select on table
   public.stoffkategorier,
   public.stoffplasseringer,
   public.stoffstatus,
-  public.slettede_stoffsider
+  public.slettede_stoffsider,
+  public.analyttkoblede_stoffer
 to authenticated, service_role;
 
 revoke all on function

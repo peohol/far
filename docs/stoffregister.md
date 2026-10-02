@@ -70,7 +70,10 @@ papirkurven står ikke i registeret eller i søket.
   slette en med innhold. Det gjøres fra siden («Mer for fagsiden»), fra
   registeret og fra arkivet.
 - En fagside fortolkningen lenker til (stoffet er koblet til en analyse), og et
-  stoff uten side i databasen, kan bare arkiveres.
+  stoff uten side i databasen, kan bare arkiveres. Databasen kjenner de
+  koblede stoffene fra `public.analyttkoblede_stoffer`, som må følge
+  `analyttkoblinger` i datafilen: en ny kobling føres inn med en migrasjon, og
+  `stoffregisterdb.test.ts` feiler til det er gjort.
 - Alle kan slette en tom kategori; bare administratorer en med stoffer.
   Stoffene havner i «Andre stoffer», eller blir stående der de ellers står.
 - En slettet fagside havner i papirkurven, som bare administratorene ser.

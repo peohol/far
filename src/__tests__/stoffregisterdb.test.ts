@@ -181,6 +181,26 @@ describe('stoffregisteret i databasen', () => {
     expect(await status('tomside')).toBeNull()
   })
 
+  it('lar ingen slette en fagside fortolkningen lenker til, men alle arkivere den', async () => {
+    await nySide('Bupropion')
+    for (const hvem of [bruker, admin]) {
+      const feil = await feilFra(() => sql(hvem, 'select public.slett_stoff($1)', ['bupropion']))
+      expect(feil?.code).toBe('22023')
+      expect(feil?.message).toContain('koblet til laboratorieanalyser')
+    }
+    expect(await status('bupropion')).toBeNull()
+    await sql(bruker, 'select public.arkiver_stoff($1, true)', ['bupropion'])
+    expect(await status('bupropion')).toBe('arkivert')
+    await sql(bruker, 'select public.arkiver_stoff($1, false)', ['bupropion'])
+  })
+
+  it('kjenner de samme analyttkoblede stoffene som datafilen', async () => {
+    const iDatabasen = await sql<{ stoff: string }>(bruker, 'select stoff from public.analyttkoblede_stoffer order by stoff')
+    const iDatafilen = [...new Set(STOFFREGISTERDATA.analyttkoblinger.map((k) => k.stoff))].sort()
+    // Går de fra hverandre, føres endringen inn i databasen med en migrasjon.
+    expect(iDatabasen.map((r) => r.stoff)).toEqual(iDatafilen)
+  })
+
   it('sletter en side for godt med kortene, historikken, diskusjonene og favorittene', async () => {
     const { side, kort } = await nySide('Slettes', true)
     const k = await nyKategori(admin, 'Med slettet')
