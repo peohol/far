@@ -3,7 +3,8 @@ import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
-const MIGRASJON = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering.sql'))!
+const FORSTE_KURATERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering.sql'))!
+const KORRIGERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_korrigering.sql'))!
 const FORSTE_IMPORTMIGRASJON = '20260923072247'
 
 interface Element {
@@ -57,10 +58,10 @@ describe('kvetiapin-monografkuratering', () => {
   beforeAll(async () => {
     db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
     await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
-    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: MIGRASJON })
+    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: KORRIGERING })
 
-    // Migrasjonen skal være trygg å kjøre på nytt i testmiljøet.
-    await kjorMigrasjoner(db, { bare: [MIGRASJON] })
+    // Korrigeringen skal være trygg å kjøre på nytt i testmiljøet.
+    await kjorMigrasjoner(db, { bare: [KORRIGERING] })
 
     farmakodynamikk = await elementer(db, 'farmakodynamikk')
     dosering = await elementer(db, 'dosering')
@@ -187,7 +188,7 @@ describe('kvetiapin-monografkuratering', () => {
     expect(saerpopulasjoner).toContain('stabil alkoholisk cirrhose')
   })
 
-  it('lar farmakogenetikk og interaksjoner være urørt', async () => {
+  it('tilbakefører farmakogenetikk og interaksjoner til tilstanden før første kuratering', async () => {
     const { rows } = await db.query<{ panel: string; tittel: string | null; kilde: string | null }>(
       `select e.panel, e.data->>'tittel' as tittel, r.kilde
        from public.innholdselementer e
@@ -207,9 +208,11 @@ describe('kvetiapin-monografkuratering', () => {
 
     expect(farmakogenetikk).toMatchObject({
       tittel: 'CYP-enzymer (substrat)',
-      kilde: 'Flyttet: fra farmakokinetikken til farmakogenetikken',
+      kilde: 'Korrigering etter fersk monografikuratering: farmakogenetikk tilbakeført til tilstanden før kvetiapinkurateringen',
     })
-    expect(interaksjoner?.kilde).toBe('Flyttet: fra kortet i farmakokinetikken til teksten øverst i interaksjonene')
+    expect(interaksjoner?.kilde).toBe(
+      'Korrigering etter fersk monografikuratering: interaksjoner tilbakeført til tilstanden før kvetiapinkurateringen',
+    )
   })
 
   it('oppretter eller gjenbruker de kuraterte referansene uten dubletter', async () => {
