@@ -69,7 +69,7 @@ describe('kvetiapinkorrigering med parallelle redaksjonelle kort', () => {
       etternavn: 'Redaktør',
       rolle: 'admin',
     })
-    await kjorMigrasjoner(testdb, { fra: FORSTE_IMPORTMIGRASJON, til: KORRIGERING })
+    await kjorMigrasjoner(testdb, { fra: FORSTE_IMPORTMIGRASJON, til: KORRIGERING, kurateringer: true })
 
     const { rows: sider } = await testdb.query<{ objekt_id: string }>(
       `select objekt_id from public.infosider where tilstand='publisert' and slug='kvetiapin'`,
@@ -117,7 +117,7 @@ describe('kvetiapinkorrigering med parallelle redaksjonelle kort', () => {
        from public.innholdselementer e
        join public.objekttilstander p on p.objekt_id=e.objekt_id and p.tilstand='publisert'
        join public.objektrevisjoner r on r.objekt_id=e.objekt_id and r.revisjon=p.revisjon
-       where e.objekt_id in ($1, $2)
+       where e.tilstand='publisert' and e.objekt_id in ($1, $2)
        order by e.objekt_id`,
       [ekstraPd.id, ekstraPk.id],
     )
@@ -140,7 +140,7 @@ describe('kvetiapin-monografkuratering', () => {
   beforeAll(async () => {
     db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
     await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
-    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: TILLEGG })
+    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: TILLEGG, kurateringer: true })
 
     // Begge kvetiapinoppdateringene skal tåle å kjøres på nytt.
     await kjorMigrasjoner(db, { bare: [KORRIGERING] })
@@ -204,8 +204,9 @@ describe('kvetiapin-monografkuratering', () => {
   })
 
   it('bevarer D1-kortets historikk og oppretter 5-HT2C som et nytt objekt', async () => {
-    const { rows } = await db.query<{ maal: string; panel: string; kilde: string | null }>(
-      `select e.data->>'maal' as maal, e.panel, r.kilde
+    const { rows } = await db.query<{ maal: string; panel: string; kilde: string | null; opprettet: string | null }>(
+      `select e.data->>'maal' as maal, e.panel, r.kilde,
+         (select r1.kilde from public.objektrevisjoner r1 where r1.objekt_id = e.objekt_id and r1.revisjon = 1) as opprettet
        from public.innholdselementer e
        join public.infosider s on s.objekt_id = e.infoside_id and s.tilstand = 'publisert' and s.slug = 'kvetiapin'
        join public.objekttilstander p on p.objekt_id = e.objekt_id and p.tilstand = 'publisert'
@@ -219,12 +220,16 @@ describe('kvetiapin-monografkuratering', () => {
       {
         maal: '5-HT2C-reseptor',
         panel: 'farmakodynamikk',
-        kilde: 'Monografikuratering av kvetiapin 02.10.2026: 5-HT2C-antagonisme lagt til etter funksjonelle data',
+        // Opprettet som et nytt objekt, og senere gitt senket skrift av tillegget.
+        kilde: 'Monografikuratering av kvetiapin 02.10.2026: reseptorsubtyper formatert med senket tekst',
+        opprettet: 'Monografikuratering av kvetiapin 02.10.2026: 5-HT2C-antagonisme lagt til etter funksjonelle data',
       },
       {
         maal: 'D1-reseptor',
         panel: 'fjernet',
         kilde: 'Monografikuratering av kvetiapin 02.10.2026: D1-kort utelatt etter ny evidensvurdering',
+        opprettet:
+          'Farmakodynamikken strukturert som mekanismekort etter kartleggingen i docs/farmakodynamikk-kort-kartlegging.md',
       },
     ])
   })

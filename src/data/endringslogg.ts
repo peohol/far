@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.74.1',
+    dato: '2026-10-02',
+    sammendrag: 'Tryggere oppdateringer av fagsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    utenVarsel: true,
+    punkter: [
+      'Når en fagside oppdateres samlet etter en faglig gjennomgang, kontrolleres hvert kort mot nøyaktig den utgaven som ble gjennomgått. Har noen redigert kortet i mellomtiden, eller finnes det et kort til med det samme målet, stopper oppdateringen uten å endre noe.',
+      'Ingen fagtekster er endret.',
+    ],
+  },
+  {
     versjon: '1.74.0',
     dato: '2026-10-02',
     sammendrag: 'Nye seksjoner for virkninger, bivirkninger og misbruk og avhengighet på fagsidene',
