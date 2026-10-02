@@ -126,6 +126,7 @@ describe('monografkurateringene i migrasjonene', () => {
     expect('20261002071332_monografkuratering_hjelpere.sql').not.toMatch(MONOGRAFKURATERING)
     expect('20261002075626_monografkuratering_hjelpere_retting.sql').not.toMatch(MONOGRAFKURATERING)
     expect('20261002082956_monografkuratering_hjelpere_referanselenke.sql').not.toMatch(MONOGRAFKURATERING)
+    expect('20261002093500_monografkuratering_hjelpere_arkiverte_utkast.sql').not.toMatch(MONOGRAFKURATERING)
   })
 })
 
@@ -358,6 +359,32 @@ describe('monografkuratering med kuratorprofil', () => {
     for (const innhold of [b, a]) {
       await forventStopp(db, side, kurater(innhold), /står på en referanse som ikke er publisert med den lenken/)
     }
+
+    // Et utkast som både bytter lenke og arkiveres, er også under redigering.
+    const c = { ...a, tittel: 'Arkivert utkast', lenke: 'https://example.org/lenke-c' }
+    const d = { ...c, lenke: 'https://example.org/lenke-d' }
+    const arkivert = (await kall.opprett('referanse', c)).id
+    await kall.publiser(arkivert, 1)
+    await kall.lagre(arkivert, 1, { ...d, arkivert: true })
+    for (const innhold of [d, c]) {
+      await forventStopp(db, side, kurater(innhold), /står på en referanse som ikke er publisert med den lenken/)
+    }
+
+    // En referanse som er arkivert og publisert slik, er lagt bort: kurateringen lager en ny.
+    const bortlagt = { ...a, tittel: 'Lagt bort', lenke: 'https://example.org/lagt-bort' }
+    const gammel = (await kall.opprett('referanse', bortlagt)).id
+    await kall.publiser(gammel, 1)
+    await kall.lagre(gammel, 1, { ...bortlagt, arkivert: true })
+    await kall.publiser(gammel, 2)
+    const ny = await db.transaction(async (tx) => {
+      await tx.query(`select intern.kuratering_start('lenkestoff')`)
+      const { rows } = await tx.query<{ id: string }>(
+        `select intern.kuratering_referanse($1::jsonb, 'Kurateringskilde') as id`,
+        [JSON.stringify(bortlagt)],
+      )
+      return rows[0]!.id
+    })
+    expect(ny).not.toBe(gammel)
 
     await forventStopp(db, side, kurater({ ...a, lenke: '   ' }), /må ha en lenke/)
 

@@ -63,7 +63,7 @@ utrullingen og kontrollen av historikken.
 ## Hjelpefunksjonene
 
 `supabase/migrations/*_monografkuratering_hjelpere.sql`, med rettingene i
-`*_monografkuratering_hjelpere_retting.sql` og `*_referanselenke.sql`, i skjemaet `intern`, som ingen av
+`*_monografkuratering_hjelpere_retting.sql`, `*_referanselenke.sql` og `*_arkiverte_utkast.sql`, i skjemaet `intern`, som ingen av
 API-rollene når.
 
 | Funksjon | Hva den gjør |
@@ -74,7 +74,7 @@ API-rollene når.
 | `kuratering_element(side, panel, elementtype, nøkkel, revisjon[, kilde])` | Det ene elementet der `data` inneholder nøkkelen: publisert, uten upublisert utkast, på revisjonen (og med kilden) preflighten fant. Låst til migrasjonen er ferdig |
 | `kuratering_lagre(objekt, revisjon, endring, kilde)` | Innholdet i revisjonen med endringen (feltene på øverste nivå, som `data`, `referanser` eller `panel`), lagret og publisert med kilden i historikken |
 | `kuratering_nytt(side, innhold, nøkkel, kilde)` | Et nytt, publisert element, bare når ingen har nøkkelen fra før |
-| `kuratering_referanse(innhold, kilde)` | Den publiserte referansen med lenken (renset for mellomrom), eller en ny. Stopper hvis lenken står på flere referanser (utkast medregnet), eller på en der utkastet ikke er publisert, har en annen lenke eller en arkivering |
+| `kuratering_referanse(innhold, kilde)` | Den publiserte referansen med lenken (renset for mellomrom), eller en ny. Stopper hvis lenken står på flere referanser (utkast og arkiverte utkast medregnet), eller på en der utkastet ikke er publisert, har en annen lenke eller en arkivering. En referanse som er arkivert og publisert slik, er lagt bort og telles ikke |
 
 Et element fjernes ved å flytte det til panelet `fjernet`
 (`kuratering_lagre(objekt, revisjon, '{"panel": "fjernet"}', kilde)`), så
