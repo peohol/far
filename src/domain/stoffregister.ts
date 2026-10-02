@@ -131,6 +131,8 @@ export interface Registerkategori {
 /** Hvor et stoff står i registeret: kategorien, og underkategorien når kategorien er delt opp. */
 export interface Kategoristi {
   kategori: string
+  /** Kategoriens ikon i ikonregisteret, som i {@link Registerkategori}. */
+  ikon?: string
   underkategori?: string
 }
 
@@ -294,9 +296,10 @@ export function byggStoffregister(
 
   const kategorierFor = (slug: string): Kategoristi[] => {
     const stier = data.kategorier.flatMap((k): Kategoristi[] => {
+      const kategori = { kategori: k.navn, ...(k.ikon && { ikon: k.ikon }) }
       const under = (k.underkategorier ?? []).filter((u) => u.stoffer.includes(slug))
-      if (under.length > 0) return under.map((u) => ({ kategori: k.navn, underkategori: u.navn }))
-      return k.stoffer?.includes(slug) ? [{ kategori: k.navn }] : []
+      if (under.length > 0) return under.map((u) => ({ ...kategori, underkategori: u.navn }))
+      return k.stoffer?.includes(slug) ? [kategori] : []
     })
     return stier.length > 0 ? stier : [{ kategori: ANDRE_STOFFER }]
   }

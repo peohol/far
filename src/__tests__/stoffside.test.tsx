@@ -577,6 +577,7 @@ describe('stoffet er sidens identitet', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Teststoff' })).toBeTruthy()
     // Kategorien for stoffene registeret ikke har plassert, og ingen analyse under navnet.
     expect(identiteten().querySelector('.metalinje')!.textContent).toBe('Andre stoffer')
+    expect(identiteten().querySelector('.metalinje [data-ikon]')!.getAttribute('data-ikon')).toBe('katPlassholder')
     expect(identiteten().querySelector('.identitet__analyse')).toBeNull()
     expect(screen.queryByRole('button', { name: /åpne fortolkning/i })).toBeNull()
     expect(document.querySelector('.regler')).toBeNull()
@@ -931,6 +932,9 @@ describe('lesemodus', () => {
     vis('lamotrigin', kilde({ data: () => TOM_STOFFSIDE }))
     const identitet = (await screen.findByRole('heading', { level: 1 })).closest('section')!
     expect(identitet.querySelector('.metalinje')!.textContent).toBe('Stemningsstabiliserende·Antiepileptika')
+    // Hver kategori med ikonet sitt foran, som i stoffregisteret.
+    const ikoner = [...identitet.querySelectorAll('.metalinje [data-ikon]')].map((i) => i.getAttribute('data-ikon'))
+    expect(ikoner).toEqual(['katStemningsstabiliserende', 'katAntiepileptika'])
   })
 
   it('grupperer viktige data i konsentrasjoner og kinetikk, med t₁/₂ og tₛₛ som symboler og en verdi per form', async () => {
