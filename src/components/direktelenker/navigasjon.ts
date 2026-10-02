@@ -4,7 +4,7 @@ import type { Lenkemal } from '../../direktelenker/mal'
 import { lesRute } from '../../domain/rute'
 import { lagSignal } from '../../domain/signal'
 import { visDiskusjon } from '../diskusjoner/diskusjonsvisning'
-import { lukkIdelagene, visIde } from '../ideer/idevisning'
+import { forlatIdelagene, visIde } from '../ideer/idevisning'
 
 const feil = lagSignal<string>()
 
@@ -38,13 +38,15 @@ export async function apneDirektelenke(mal: Lenkemal, { erstatt = false }: { ers
     return true
   }
   // Tråden står bak idélagene, som lukkes først.
-  lukkIdelagene()
-  visDiskusjon(maal.side, mal.id, mal.kommentar)
-  if (diskusjonssideFor(lesRute(window.location.hash)) !== maal.side) {
-    const adresse = adresseForSide(maal.side)
-    if (erstatt) window.location.replace(adresse)
-    else window.location.hash = adresse
-  }
+  const { side } = maal
+  forlatIdelagene(() => {
+    visDiskusjon(side, mal.id, mal.kommentar)
+    if (diskusjonssideFor(lesRute(window.location.hash)) !== side) {
+      const adresse = adresseForSide(side)
+      if (erstatt) window.location.replace(adresse)
+      else window.location.hash = adresse
+    }
+  })
   return true
 }
 

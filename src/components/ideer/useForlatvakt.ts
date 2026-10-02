@@ -1,10 +1,13 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState, type MutableRefObject } from 'react'
 
 /**
  * `lagrer`: lagringen er sendt, og skjemaet kan ikke forlates før svaret har
  * kommet — ellers ville det blitt lagret etter at brukeren forkastet det.
  */
 export type Skjemastatus = 'uendret' | 'ulagret' | 'lagrer'
+
+/** Gjør `handling` når skjemaet kan forlates, eller spør først. */
+export type Forlat = (handling: () => void) => void
 
 /**
  * Vakten for et skjema i et lag, som idéskjemaet og prompten til en oppgave:
@@ -50,4 +53,19 @@ export function useForlatvakt() {
     /** En ny side, eller en ny åpning av laget, begynner uten endringer. */
     nullstill,
   }
+}
+
+/**
+ * Gir vakten til laget som står åpent, til den som eier lagene (`Ideknapp`),
+ * så det som kommer utenfra — et varsel eller en direktelenke — også spør før
+ * skjemaet forlates.
+ */
+export function useMeldVakt(apen: boolean, forlat: Forlat, til: MutableRefObject<Forlat | null> | undefined) {
+  useEffect(() => {
+    if (!apen || !til) return
+    til.current = forlat
+    return () => {
+      if (til.current === forlat) til.current = null
+    }
+  })
 }

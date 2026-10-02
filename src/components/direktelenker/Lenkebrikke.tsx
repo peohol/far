@@ -76,12 +76,16 @@ export function Lenkebrikke({ attrs }: { attrs: Record<string, unknown> }) {
   if (!mal) return <span className="lenkebrikke" data-borte="">{etikett}</span>
 
   const ga = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (borte) {
+      event.preventDefault()
+      return
+    }
     // Ny fane, nytt vindu og nedlasting går til nettleseren.
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
     event.preventDefault()
     clearTimeout(tidtaker.current)
     setApen(false)
-    if (!borte) void apneDirektelenke(mal)
+    void apneDirektelenke(mal)
   }
 
   return (
@@ -93,10 +97,13 @@ export function Lenkebrikke({ attrs }: { attrs: Record<string, unknown> }) {
       <a
         ref={lenke}
         className="lenkebrikke"
-        href={fullLenke(mal)}
         data-borte={borte || undefined}
         aria-describedby={apen ? bobleId : undefined}
-        {...(borte && { 'aria-disabled': true, title: 'Lenken peker på noe som ikke finnes lenger' })}
+        // Peker den på noe som er borte, fører den ingen steder, heller ikke i
+        // en ny fane, men står igjen i tabulatorrekkefølgen med forhåndsvisningen.
+        {...(borte
+          ? { role: 'link', tabIndex: 0, 'aria-disabled': true, title: 'Lenken peker på noe som ikke finnes lenger' }
+          : { href: fullLenke(mal) })}
         onClick={ga}
         onFocus={(event) => event.currentTarget.matches(':focus-visible') && setApen(true)}
         onBlur={() => setApen(false)}

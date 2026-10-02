@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type MutableRefObject } from 'react'
 import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import type { Profil } from '@delt/profil'
 import { hentAlleProfiler } from '../../auth/api'
@@ -14,7 +14,7 @@ import { Ideliste } from './Ideliste'
 import { Ideside } from './Ideside'
 import { Ideskjema } from './Ideskjema'
 import { veksleSkuff } from './Ideskuff'
-import { useForlatvakt } from './useForlatvakt'
+import { useForlatvakt, useMeldVakt, type Forlat } from './useForlatvakt'
 import '../../styles/ideer.css'
 
 /**
@@ -41,6 +41,7 @@ export function Ideer({
   ide,
   kommentar,
   nr,
+  vakt: meldTil,
   onLukk,
   onOppgaver,
 }: {
@@ -51,6 +52,8 @@ export function Ideer({
   kommentar?: string
   /** Ny for hver gang laget bes om å åpne idéen, også når den alt står åpen. */
   nr?: number
+  /** Får vakten for skjemaet mens laget står åpent (`useMeldVakt`). */
+  vakt?: MutableRefObject<Forlat | null>
   onLukk: () => void
   /** Til Planlagte oppgaver, eventuelt rett til én oppgave. */
   onOppgaver: (oppgave?: string) => void
@@ -66,6 +69,7 @@ export function Ideer({
   const [fremhev, setFremhev] = useState<Fremheving | null>(null)
   const vakt = useForlatvakt()
   const { nullstill } = vakt
+  useMeldVakt(apen, vakt.forlat, meldTil)
   const rot = useRef<HTMLDivElement>(null)
   /** Hvor lista stod, og kortet man gikk inn på, så tilbake lander samme sted. */
   const listeplass = useRef<{ rulling: number; ide: string | null }>({ rulling: 0, ide: null })
@@ -98,6 +102,8 @@ export function Ideer({
       setApneSkuffer(new Set())
       listeplass.current = { rulling: 0, ide: ide ?? null }
     }
+    // Bare den første åpningen fortsetter; en ny idé mens laget står åpent, vises.
+    fortsetter.current = false
     void ryddIdearkiv()
       .catch(() => undefined)
       .then(hentListe)

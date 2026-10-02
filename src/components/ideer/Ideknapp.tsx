@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useBevart } from '../../oppdatering/Bevaring'
 import { useJevnligSjekk } from '../../hooks/useJevnligSjekk'
 import { hentIdeerMedNytt } from '../../ideer/api'
 import { oppfriskVarsler } from '../../varsler/api'
 import { Menyvalg, Nedtrekksmeny } from '../toppmeny/Nedtrekksmeny'
 import { Ideer } from './Ideer'
-import { lyttEtterIde, lyttEtterIdelukking } from './idevisning'
+import { lyttEtterIde, meldIdelagene } from './idevisning'
 import { Oppgaver } from './Oppgaver'
+import type { Forlat } from './useForlatvakt'
 
 /**
  * Laget som står åpent: Idéer, kanskje på én idé (og en kommentar under den,
@@ -23,7 +24,8 @@ type Vindu = { lag: 'ideer'; ide?: string; kommentar?: string; nr?: number } | {
  * Bare ett av de to lagene står åpent om gangen; man går også mellom dem fra
  * lagene selv. Et varsel eller en direktelenke kan åpne Idéer rett på en idé
  * (`visIde`), og en direktelenke til en diskusjon lukker lagene
- * (`lukkIdelagene`).
+ * (`forlatIdelagene`). Begge spør først, som tilbakeknappen, når et skjema i
+ * laget som står åpent, har endringer som ikke er lagret.
  */
 export function Ideknapp() {
   const [vindu, setVindu] = useBevart<Vindu>('ideknapp', null)
@@ -33,14 +35,26 @@ export function Ideknapp() {
     hentIdeerMedNytt().then(setMedNytt, () => undefined)
   }, [])
   useJevnligSjekk(sjekkNytt)
+  /** Vakten for skjemaet i laget som står åpent (`useMeldVakt`). */
+  const vakt = useRef<Forlat | null>(null)
+  const forlat = useCallback<Forlat>((handling) => (vakt.current ? vakt.current(handling) : handling()), [])
   useEffect(
     () =>
       lyttEtterIde(({ id, kommentar }) =>
-        setVindu({ lag: 'ideer', ide: id, ...(kommentar && { kommentar }), nr: Date.now() }),
+        forlat(() => setVindu({ lag: 'ideer', ide: id, ...(kommentar && { kommentar }), nr: Date.now() })),
       ),
-    [setVindu],
+    [forlat, setVindu],
   )
-  useEffect(() => lyttEtterIdelukking(() => setVindu(null)), [setVindu])
+  useEffect(
+    () =>
+      meldIdelagene((deretter) =>
+        forlat(() => {
+          setVindu(null)
+          deretter()
+        }),
+      ),
+    [forlat, setVindu],
+  )
   const nytt = medNytt > 0 ? `nye kommentarer på ${medNytt === 1 ? 'én idé' : `${medNytt} idéer`}` : undefined
 
   // Fast identitet: `Modallag` kobler den til lukkehendelsen på dialogen.
@@ -95,10 +109,12 @@ export function Ideknapp() {
         ide={vindu?.lag === 'ideer' ? vindu.ide : undefined}
         kommentar={vindu?.lag === 'ideer' ? vindu.kommentar : undefined}
         nr={vindu?.lag === 'ideer' ? vindu.nr : undefined}
+        vakt={vakt}
         onLukk={lukkIdeer} onOppgaver={(oppgave) => setVindu({ lag: 'oppgaver', oppgave })} />
       <Oppgaver
         apen={vindu?.lag === 'oppgaver'}
         oppgave={vindu?.lag === 'oppgaver' ? vindu.oppgave : undefined}
+        vakt={vakt}
         onLukk={lukkOppgaver}
         onIdeer={() => setVindu({ lag: 'ideer' })}
       />

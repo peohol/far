@@ -63,7 +63,7 @@ const { Rikteksteditor } = await import('../components/stoffside/Rikteksteditor'
 const { Direktelenkekilde } = await import('../components/direktelenker/Direktelenkekilde')
 const { Kopilenkeknapp } = await import('../components/direktelenker/Kopilenkeknapp')
 const { lyttEtterDiskusjon, taDiskusjon } = await import('../components/diskusjoner/diskusjonsvisning')
-const { lyttEtterIde } = await import('../components/ideer/idevisning')
+const { lyttEtterIde, meldIdelagene } = await import('../components/ideer/idevisning')
 const { useRute } = await import('../hooks/useRute')
 
 const SIDER = { fagsider: [{ side: 'stoff:bupropion' as const, navn: 'Bupropion' }], fortolkninger: [] }
@@ -145,8 +145,35 @@ describe('brikken i teksten', () => {
     render(<Riktekst dokument={tekstMed({ slag: 'diskusjon', id: BORTE, etikett: 'Slettet tråd' })} />)
     const lenke = screen.getByRole('link', { name: /Slettet tråd/ })
     await waitFor(() => expect(lenke.hasAttribute('data-borte')).toBe(true))
+    // Ingen adresse, så heller ikke Ctrl-klikk eller midtklikk åpner den i en ny fane.
+    expect(lenke.hasAttribute('href')).toBe(false)
+    expect(lenke.getAttribute('aria-disabled')).toBe('true')
     await bruker.click(lenke)
+    await bruker.keyboard('{Control>}')
+    await bruker.click(lenke)
+    await bruker.keyboard('{/Control}')
     expect(window.location.hash).toBe('#/')
+  })
+
+  it('går ikke fra et skjema i idélagene med endringer som ikke er lagret, før brukeren har forkastet dem', async () => {
+    const bruker = userEvent.setup()
+    let forkast: (() => void) | null = null
+    const slutt = meldIdelagene((deretter) => {
+      forkast = deretter
+    })
+    render(
+      <Direktelenkekilde sider={SIDER}>
+        <Riktekst dokument={tekstMed({ slag: 'diskusjon', id: TRAAD, etikett: 'Lagret' })} />
+      </Direktelenkekilde>,
+    )
+    await bruker.click(await screen.findByRole('link', { name: /Maksdose ved nyresvikt/ }))
+    await waitFor(() => expect(forkast).not.toBeNull())
+    expect(window.location.hash).toBe('#/')
+    expect(taDiskusjon('stoff:bupropion')).toBeNull()
+    act(() => forkast!())
+    await waitFor(() => expect(window.location.hash).toBe('#/stoff/bupropion'))
+    expect(taDiskusjon('stoff:bupropion')).toEqual({ diskusjon: TRAAD, kommentar: null })
+    slutt()
   })
 })
 
