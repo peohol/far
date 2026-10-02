@@ -139,7 +139,7 @@ async function velgNortriptylin(user: ReturnType<typeof userEvent.setup>) {
 
 /** Navnet kodepillen i fortolkningen har: koden, og stoffet den fører til. */
 function pillenavn(kode: string, stoff: string): string {
-  return `${kode} – åpne stoffsiden for ${stoff}`
+  return `${kode} – åpne fagsiden for ${stoff}`
 }
 
 /**
@@ -213,7 +213,7 @@ describe('stoffene uten analyttkode', () => {
     // Teststoffet står ikke i registeret, og havner derfor i «Andre stoffer».
     await user.click(await screen.findByRole('button', { name: /^Andre stoffer/ }))
     // En vanlig bruker kan ikke lage nye sider.
-    expect(screen.queryByLabelText('Ny stoffside')).toBeNull()
+    expect(screen.queryByLabelText('Ny fagside')).toBeNull()
     const lenke = screen.getByRole('link', { name: 'Teststoff' })
     expect(lenke.getAttribute('href')).toBe('#/stoff/teststoff')
 
@@ -349,7 +349,7 @@ describe('gamle adresser etter analyttkoden', () => {
     await waitFor(() => expect(fortolkningen().hidden).toBe(false))
     expect(stoffsiden()).toBeNull()
     expect(screen.queryByRole('heading', { level: 1 })).toBeNull()
-    expect(screen.queryByText(/Fant ingen stoffside/)).toBeNull()
+    expect(screen.queryByText(/Fant ingen fagside/)).toBeNull()
     expect(erstatt).not.toHaveBeenCalled()
     expect(databasen.kall.filter((k) => k.funksjon === 'les_stoff')).toEqual([])
   })
@@ -399,29 +399,29 @@ describe('mellom fortolkningen og stoffsiden', () => {
     expect(within(fortolkningen()).getByRole('link', { name: pillenavn('NOR', 'Nortriptylin') })).toBeTruthy()
   })
 
-  it('har «Åpne stoffside» i toppmenyen mens en modul fortolkes, og kommer tilbake til samme modul', async () => {
+  it('har «Åpne fagside» i toppmenyen mens en modul fortolkes, og kommer tilbake til samme modul', async () => {
     const user = userEvent.setup()
     visApp()
     // Uten valgt analytt er det ingen stoffside å åpne.
-    expect(screen.queryByRole('button', { name: 'Åpne stoffside' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Åpne fagside' })).toBeNull()
     await velgNortriptylin(user)
 
-    await user.click(screen.getByRole('button', { name: 'Åpne stoffside' }))
+    await user.click(screen.getByRole('button', { name: 'Åpne fagside' }))
     await stoffsideFor('Nortriptylin')
     expect(window.location.hash).toBe('#/stoff/nortriptylin')
     // Stoffsiden har sine egne handlinger i stedet.
-    expect(screen.queryByRole('button', { name: 'Åpne stoffside' })).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Åpne fagside' })).toBeNull()
 
     await user.click(screen.getByRole('button', { name: 'Åpne fortolkning' }))
     await waitFor(() => expect(fortolkningen().hidden).toBe(false))
     expect(await screen.findByRole('region', { name: 'Velg konsentrasjon' })).toBeTruthy()
   })
 
-  it('går fra «Åpne stoffside» mens HBUP fortolkes til Bupropion-siden', async () => {
+  it('går fra «Åpne fagside» mens HBUP fortolkes til Bupropion-siden', async () => {
     const user = userEvent.setup()
     visApp()
     await velgKode(user, 'HBUP', 'Bupropion')
-    await user.click(screen.getByRole('button', { name: 'Åpne stoffside' }))
+    await user.click(screen.getByRole('button', { name: 'Åpne fagside' }))
     await stoffsideFor('Bupropion')
     expect(window.location.hash).toBe('#/stoff/bupropion')
   })
@@ -499,13 +499,13 @@ describe('mellom fortolkningen og stoffsiden', () => {
       ['OXA', '#/stoff/oksazepam'],
     ])
     // Modulen har koder for to stoffer, og dermed én knapp til hver stoffside.
-    expect(screen.queryByRole('button', { name: 'Åpne stoffside' })).toBeNull()
-    expect(screen.getByRole('button', { name: 'Åpne stoffsiden for Diazepam' }).textContent).toBe('Diazepam')
+    expect(screen.queryByRole('button', { name: 'Åpne fagside' })).toBeNull()
+    expect(screen.getByRole('button', { name: 'Åpne fagsiden for Diazepam' }).textContent).toBe('Diazepam')
     // Modulen fortolker med reglene appen hentet.
     await user.click(within(fortolkningen()).getByRole('checkbox', { name: /Oksazepam/ }))
     expect(within(fortolkningen()).getByRole('button', { name: 'Kopier hovedkommentar' })).toBeTruthy()
     // Knappen for et av stoffene fører til stoffsiden for det.
-    await user.click(screen.getByRole('button', { name: 'Åpne stoffsiden for Oksazepam' }))
+    await user.click(screen.getByRole('button', { name: 'Åpne fagsiden for Oksazepam' }))
     await stoffsideFor('Oksazepam')
   })
 

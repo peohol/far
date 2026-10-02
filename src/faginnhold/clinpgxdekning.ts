@@ -237,7 +237,7 @@ export function clinpgxdekningsoversikt(): string {
     koblinger.map((k) => ({ ...k, side: gjeldendeClinpgxside(k.side), migrasjon })),
   )
   const koblet = tabell(
-    ['Stoffside', 'FEST-virkestoff', 'Siden koblet til FEST', 'ClinPGx-navn', 'ClinPGx-ID', 'Grunnlag', 'Migrasjon'],
+    ['Fagside', 'FEST-virkestoff', 'Siden koblet til FEST', 'ClinPGx-navn', 'ClinPGx-ID', 'Grunnlag', 'Migrasjon'],
     koblinger.map((k) => [
       k.side,
       `${k.virkestoff} (${k.engelsk})`,
@@ -249,7 +249,7 @@ export function clinpgxdekningsoversikt(): string {
     ]),
   )
   const ukoblet = tabell(
-    ['Stoffside', 'Status', 'ClinPGx', 'Grunn'],
+    ['Fagside', 'Status', 'ClinPGx', 'Grunn'],
     dekning.filter((d): d is UkobletSide => d.status !== 'koblet').map((d) => [d.side, DEKNINGSSTATUSER[d.status], detaljer(d), d.grunn]),
   )
   return `${oppsummering}\n\nKoblet:\n\n${koblet}\n\nIkke koblet:\n\n${ukoblet}`

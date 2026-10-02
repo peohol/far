@@ -585,11 +585,11 @@ describe('stoffet er sidens identitet', () => {
 
   it('sier fra når nøkkelen ikke er et stoff, også når den er en analyttkode', async () => {
     vis('finnesikke')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Fant ingen stoffside for «finnesikke»' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Fant ingen fagside for «finnesikke»' })).toBeTruthy()
     cleanup()
     // En analyttkode er ingen stoffnøkkel: HBUP har ingen side av sin egen.
     const { leser } = vis('HBUP')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Fant ingen stoffside for «HBUP»' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Fant ingen fagside for «HBUP»' })).toBeTruthy()
     expect(leser.lesStoffside).toHaveBeenCalledWith('HBUP', 'publisert')
     expect(document.querySelector('section.stoffside')).not.toBeNull()
   })
@@ -714,7 +714,7 @@ describe('Nortriptylin: sumanalysen er bare en sekundær kobling', () => {
       'AMTNORSUM er en sumanalyse og omfatter amitriptylin og nortriptylin. Se også Amitriptylin.',
     ])
     const lenke = within(setninger[0] as HTMLElement).getByRole('link', {
-      name: 'Amitriptylin: åpne stoffsiden, som også er koblet til AMTNORSUM',
+      name: 'Amitriptylin: åpne fagsiden, som også er koblet til AMTNORSUM',
     })
     expect(lenke.getAttribute('href')).toBe('#/stoff/amitriptylin')
 
@@ -1041,9 +1041,9 @@ describe('lesemodus', () => {
     k.leser.lesStoffside = vi.fn(() => new Promise<Stoffsidedata>((r) => (svar = r)))
     vis('finnesikke', k)
     // Databasen kan ha en side registeret ikke kjenner ennå.
-    expect(screen.queryByRole('heading', { name: /Fant ingen stoffside/ })).toBeNull()
+    expect(screen.queryByRole('heading', { name: /Fant ingen fagside/ })).toBeNull()
     await act(async () => svar(TOM_STOFFSIDE))
-    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Fant ingen stoffside for «finnesikke»')
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Fant ingen fagside for «finnesikke»')
   })
 
   it('sier fra når innholdet ikke lar seg hente', async () => {

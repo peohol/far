@@ -475,7 +475,7 @@ function NyStoffside({
         }
       }}
     >
-      <Felt merkelapp="Ny stoffside" value={navn} maxLength={200} onChange={(e) => setNavn(e.target.value)} />
+      <Felt merkelapp="Ny fagside" value={navn} maxLength={200} onChange={(e) => setNavn(e.target.value)} />
       <Button type="submit" variant="kant" disabled={!navn.trim() || lager}>
         {lager ? 'Lager …' : 'Åpne'}
       </Button>

@@ -614,10 +614,10 @@ export default function App() {
                       key={stoff.slug}
                       ikon="indik"
                       variant="primar"
-                      {...(fagsider.length > 1 && { 'aria-label': `Åpne stoffsiden for ${stoff.navn}` })}
+                      {...(fagsider.length > 1 && { 'aria-label': `Åpne fagsiden for ${stoff.navn}` })}
                       onClick={() => gaaTil({ side: 'stoff', stoff: stoff.slug })}
                     >
-                      {fagsider.length > 1 ? stoff.navn : 'Åpne stoffside'}
+                      {fagsider.length > 1 ? stoff.navn : 'Åpne fagside'}
                     </Toppmenyknapp>
                   ))}
                 </ToppmenyInnhold>
