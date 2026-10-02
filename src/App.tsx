@@ -37,7 +37,7 @@ import { FORTOLKNINGSOPPFORINGER, byggKatalog } from './domain/analyttkatalog'
 import { alternativFor, ETG_ALTERNATIVER, type EtgAlternativ } from './domain/etg'
 import type { Rute } from './domain/flytting'
 import { fortolkningsnokkel, fortolkningsrute, lesRute } from './domain/rute'
-import { stoffbeskrivelse, stoffForFortolkning } from './domain/koblinger'
+import { stoffbeskrivelse, stofferForFortolkning } from './domain/koblinger'
 import { byggStoffregister, stoffslug, type Stoffoppforing } from './domain/stoffregister'
 import { rusModulFor } from './domain/rus'
 import { search } from './domain/search'
@@ -413,12 +413,11 @@ export default function App() {
   }, [rute, analyttnokkel, state.analyte, velgAnalytt, gaaTil, slippBildet, dispatch])
 
   /**
-   * Stoffsiden til modulen som fortolkes, når kodene i den primært hører til
-   * ett stoff: toppmenyens «Åpne stoffside». EtG og EtS fører begge til
-   * etanol; moduler med koder for flere stoffer (DIAZ · DMI · OXA) har bare
-   * kodepillene, én per kode.
+   * Stoffsidene til modulen som fortolkes: toppmenyens «Åpne stoffside», eller
+   * én knapp per stoff når kodene hører til flere (DIAZ · DMI · OXA). EtG og
+   * EtS fører begge til etanol.
    */
-  const stoffside = state.analyte ? stoffForFortolkning(state.analyte, register)?.slug : undefined
+  const fagsider = useMemo(() => (state.analyte ? stofferForFortolkning(state.analyte, register) : []), [state.analyte, register])
 
   const settMetodefilter = useCallback((metode: string | null) => {
     dispatch({ type: 'sett-metodefilter', metode })
@@ -602,13 +601,21 @@ export default function App() {
               konto={<Kontomeny theme={theme} onToggleTheme={toggle} />}
             />
 
-            {/* Fortolkningens handling i toppmenyen. Stoffsiden og søkesiden
-                har sine egne mens de vises. */}
-            {!fortolkningSkjult && stoffside && (
+            {/* Fortolkningens handlinger i toppmenyen (i dokken på smale
+                flater). Stoffsiden og søkesiden har sine egne mens de vises. */}
+            {!fortolkningSkjult && fagsider.length > 0 && (
               <ToppmenyInnhold spor="handlinger">
-                <Toppmenyknapp ikon="indik" onClick={() => gaaTil({ side: 'stoff', stoff: stoffside })}>
-                  Åpne stoffside
-                </Toppmenyknapp>
+                {fagsider.map((stoff) => (
+                  <Toppmenyknapp
+                    key={stoff.slug}
+                    ikon="indik"
+                    variant="primar"
+                    {...(fagsider.length > 1 && { 'aria-label': `Åpne stoffsiden for ${stoff.navn}` })}
+                    onClick={() => gaaTil({ side: 'stoff', stoff: stoff.slug })}
+                  >
+                    {fagsider.length > 1 ? stoff.navn : 'Åpne stoffside'}
+                  </Toppmenyknapp>
+                ))}
               </ToppmenyInnhold>
             )}
 

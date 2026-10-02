@@ -28,3 +28,20 @@ export async function lagreInnstilling(nokkel: string, verdi: unknown): Promise<
     .upsert({ nokkel, verdi }, { onConflict: 'bruker_id,nokkel' })
   if (error) throw new Error(FEIL)
 }
+
+/**
+ * Lagrer `nokkel` én gang av gangen, så et eldre valg aldri når fram etter et
+ * nyere. Venter flere, sendes bare det siste. Brukes der et valg kan endres
+ * flere ganger raskt etter hverandre, som bredden på en meny som dras.
+ */
+export function lagreSisteValg<T>(nokkel: string): (verdi: T) => Promise<void> {
+  let ko: Promise<void> = Promise.resolve()
+  let siste: { verdi: T } | null = null
+  return (verdi) => {
+    const valg = { verdi }
+    siste = valg
+    const lagring = ko.then(() => (siste === valg ? lagreInnstilling(nokkel, verdi) : undefined))
+    ko = lagring.catch(() => undefined)
+    return lagring
+  }
+}

@@ -353,8 +353,9 @@ Under 760 px bredde gjelder dette:
   det brukes, og hovedhandlingen korter teksten heller enn å skyve de andre
   ut av vinduet. Har siden verken søk eller hovedhandling (søkesiden), er
   dokken bare så bred som knappene.
-- Fortolkningen har ingen dokk. «Åpne stoffside» står bare i toppmenyen på
-  brede flater; på smale fører kodepillen i steget til stoffsiden.
+- Fortolkningen har dokken når en analytt er valgt: «Åpne stoffside» (én
+  knapp per stoff når modulen har koder for flere, som Diazepam og
+  Oksazepam) og «Diskusjoner».
 
 ### Idéene, adminmenyen og kontoen
 

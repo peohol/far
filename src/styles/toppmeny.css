@@ -634,19 +634,13 @@
     height: var(--hoyde-trykk);
   }
 
-  /* Dokken er for sidene. I fortolkningen fører kodepillene i steget til
-     stoffsiden, så «Åpne stoffside» får ikke en egen dokk over arbeidsflaten. */
-  .app[data-side='fortolkning'] .toppmeny__kontekst {
-    display: none;
-  }
-
   /* Dokken skal ikke dekke det nederste av innholdet, og versjonen i hjørnet
      legger seg over den. */
-  .app:not([data-side='fortolkning']):has(.toppmeny__spor > *) {
+  .app:has(.toppmeny__spor > *) {
     padding-bottom: var(--dokk-offset);
   }
 
-  .app:not([data-side='fortolkning']):has(.toppmeny__spor > *) .versjonspille {
+  .app:has(.toppmeny__spor > *) .versjonspille {
     bottom: calc(var(--rom-4) + var(--hoyde-dokk) + var(--rom-3));
   }
 }

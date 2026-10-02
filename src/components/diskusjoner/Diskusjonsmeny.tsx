@@ -5,9 +5,11 @@ import { hentAlleProfiler } from '../../auth/api'
 import {
   flyttDiskusjonTil,
   flyttKategoriTil,
+  hentBredde,
   hentDiskusjoner,
   hentDiskusjonstekster,
   hentLaast,
+  lagreBredde,
   lagreLaast,
   losOppKategori,
 } from '../../diskusjoner/api'
@@ -28,6 +30,7 @@ import {
 } from '../../diskusjoner/modell'
 import { useJevnligSjekk } from '../../hooks/useJevnligSjekk'
 import { merketall } from '../../varsler/modell'
+import { Breddehandtak, maalLengde } from '../Breddehandtak'
 import { Ikon } from '../ikon/Ikon'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
@@ -46,6 +49,14 @@ export const DISKUSJON_LAG = 'diskusjoner'
  * `smal` for kolonnen med emojiene, `laast` for hele menyen holdt åpen.
  */
 const ROTMERKE = 'diskusjonsmeny'
+
+/** Bredden brukeren har dratt menyen til, satt på rotelementet; `diskusjoner.css` holder den innenfor grensene. */
+const BREDDEVARIABEL = '--diskusjonsbredde'
+const settBredde = (bredde: number | null) => {
+  const stil = document.documentElement.style
+  if (bredde === null) stil.removeProperty(BREDDEVARIABEL)
+  else stil.setProperty(BREDDEVARIABEL, `${bredde}px`)
+}
 
 type Visning =
   | { side: 'liste' }
@@ -67,6 +78,10 @@ const LISTE: Visning = { side: 'liste' }
  * til maskin (brukerinnstillingen `diskusjoner.laast`), og da gir resten av
  * appen plass til den.
  *
+ * Åpen kan menyen gjøres bredere ved å dra i venstre kanten (eller med
+ * piltastene på den); bredden følger brukeren som «Hold åpen»
+ * (`diskusjoner.bredde`). Den smaleste bredden er den menyen har fra før.
+ *
  * På smale flater står en knapp i toppmenyen (dokken) i stedet, som åpner
  * menyen over siden.
  *
@@ -84,6 +99,7 @@ export function Diskusjonsmeny({
   sider: Diskusjonssider
 }) {
   const [laast, setLaast] = useBevart('diskusjoner/laast', false)
+  const [bredde, setBredde] = useBevart<number | null>('diskusjoner/bredde', null)
   const [mobilApen, setMobilApen] = useBevart('diskusjoner/mobil', false)
   const [svever, setSvever] = useState(false)
   const [fokus, setFokus] = useState(false)
@@ -94,6 +110,28 @@ export function Diskusjonsmeny({
   useEffect(() => {
     void hentLaast().then((lagret) => lagret !== null && setLaast(lagret), () => undefined)
   }, [setLaast])
+
+  // Bredden er også lagret på brukeren. Har brukeren alt endret den her, vinner det.
+  const breddeEndret = useRef(false)
+  useEffect(() => {
+    void hentBredde().then((lagret) => lagret !== null && !breddeEndret.current && setBredde(lagret), () => undefined)
+  }, [setBredde])
+
+  useEffect(() => {
+    settBredde(bredde)
+    return () => settBredde(null)
+  }, [bredde])
+
+  const visBredde = (ny: number) => {
+    breddeEndret.current = true
+    settBredde(ny)
+  }
+
+  const lagreNyBredde = (ny: number) => {
+    breddeEndret.current = true
+    setBredde(ny)
+    void lagreBredde(ny).catch(() => undefined)
+  }
 
   const veksleLaas = () => {
     const ny = !laast
@@ -174,9 +212,24 @@ export function Diskusjonsmeny({
           if (event.key !== 'Escape' || event.defaultPrevented) return
           if ((event.target as HTMLElement).isContentEditable) return
           event.preventDefault()
+          // Escape lukker menyen og ikke noe mer: fokus slippes i `lukk()`, så
+          // uten dette ville fortolkningen bak tatt den som «Bytt analytt».
+          event.stopPropagation()
           lukk()
         }}
       >
+        {apen && (
+          <Breddehandtak
+            etikett="Bredden på diskusjonene"
+            maal={() => ({
+              bredde: maalLengde(meny.current!, 'var(--diskusjonspanel)'),
+              minst: maalLengde(meny.current!, 'var(--diskusjonspanel-minst)'),
+              mest: maalLengde(meny.current!, 'var(--diskusjonspanel-mest)'),
+            })}
+            onEndre={visBredde}
+            onFerdig={lagreNyBredde}
+          />
+        )}
         <Bevaringsomrade navn={`diskusjoner:${side}`}>
           <Diskusjonsflate
             key={side}
@@ -334,7 +387,6 @@ function Diskusjonsflate({
         sider={sider}
         kategorier={kategorier}
         plassering={liste && indeks >= 0 ? { indeks, antall: liste.length } : null}
-        onTilbake={tilListe}
         onEndret={hent}
         onSett={merkSett}
         onFlytt={(kategori, til) => flyttTraad(visning.id, kategori, til)}
@@ -445,6 +497,13 @@ function Diskusjonsflate({
           </button>
         </div>
         <p className="diskusjonspanel__side">{sidenavn}</p>
+        {/* Tilbake og søket står fast over det som rulles. */}
+        {visning.side === 'traad' && (
+          <button type="button" className="diskusjonspanel__tilbake" onClick={tilListe}>
+            <Ikon navn="chev" storrelse="ui" />
+            <span>Alle tråder</span>
+          </button>
+        )}
         {visning.side === 'liste' && (
           <div className="diskusjonspanel__sok">
             <label htmlFor={sokId} className="kun-skjermleser">

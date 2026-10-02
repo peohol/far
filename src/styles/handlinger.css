@@ -1,6 +1,7 @@
 /**
  * Handlingsprimitiver fra Atlas: knappen (`Button`), den runde ikonknappen
- * (`Ikonknapp`) og hurtigtastmerket (`Shortcut`).
+ * (`Ikonknapp`) og hurtigtastmerket (`Shortcut`), og kanten en flate dras
+ * bredere i (`Breddehandtak`).
  */
 
 /* --- Hurtigtastmerke --------------------------------------------------------
@@ -241,4 +242,49 @@
   .knapp--kant {
     min-height: var(--hoyde-trykk);
   }
+}
+
+/* --- Breddehåndtak ------------------------------------------------------------
+   Kanten en flate dras bredere eller smalere i (`Breddehandtak`). Flaten må
+   være posisjonert. Håndtaket er bredere enn streken som vises, så det er lett
+   å treffe; streken kommer fram under pekeren, i fokus og mens det dras. */
+.breddehandtak {
+  position: absolute;
+  inset-block: 0;
+  z-index: 1;
+  width: 0.75rem;
+  cursor: col-resize;
+  touch-action: none;
+  outline: none;
+}
+
+.breddehandtak[data-kant='venstre'] {
+  left: -0.375rem;
+}
+
+.breddehandtak[data-kant='hoyre'] {
+  right: -0.375rem;
+}
+
+.breddehandtak::after {
+  content: '';
+  position: absolute;
+  inset-block: var(--rom-4);
+  left: calc(50% - 1px);
+  width: 2px;
+  background: var(--aksent);
+  border-radius: var(--runding-pille);
+  opacity: 0;
+  transition: opacity var(--fart-rask) var(--kurve);
+}
+
+.breddehandtak:hover::after,
+.breddehandtak:focus-visible::after,
+.breddehandtak[data-drar]::after {
+  opacity: 1;
+}
+
+.breddehandtak:focus-visible::after {
+  width: 4px;
+  left: calc(50% - 2px);
 }

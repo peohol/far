@@ -63,7 +63,6 @@ export function Diskusjonsside({
   sider,
   kategorier,
   plassering,
-  onTilbake,
   onEndret,
   onSett,
   onFlytt,
@@ -78,7 +77,6 @@ export function Diskusjonsside({
   kategorier: readonly Diskusjonskategori[]
   /** Plassen i kategorien, eller `null` når tråden er arkivert eller uten kategori. */
   plassering: Plassering | null
-  onTilbake: () => void
   /** Noe ved tråden som lista viser, er endret. */
   onEndret: () => Promise<unknown>
   /** Tråden er åpnet og merket som sett. */
@@ -183,17 +181,9 @@ export function Diskusjonsside({
     }
   }
 
-  const tilbakeknapp = (
-    <button type="button" className="diskusjonsside__tilbake" onClick={onTilbake}>
-      <Ikon navn="chev" storrelse="ui" />
-      <span>Alle tråder</span>
-    </button>
-  )
-
   if (!traad) {
     return (
       <div className="diskusjonsside">
-        {tilbakeknapp}
         {feil && (
           <p className="skjemafeil" role="alert">
             {feil}
@@ -209,8 +199,6 @@ export function Diskusjonsside({
 
   return (
     <article className="diskusjonsside" aria-labelledby={`diskusjon-${traad.id}`}>
-      {tilbakeknapp}
-
       <header className="diskusjonsside__hode">
         {endrerTittel && !arkivert ? (
           <Tittelskjema

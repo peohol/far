@@ -9,7 +9,7 @@ import {
   regelseksjoner,
   stoffadresseForAnalytt,
   stoffbeskrivelse,
-  stoffForFortolkning,
+  stofferForFortolkning,
 } from '../koblinger'
 import { STOFFREGISTER, byggStoffregister, type Registerdata } from '../stoffregister'
 
@@ -129,13 +129,15 @@ describe('veiene mellom fortolkningen og stoffsidene', () => {
     expect(stoffadresseForAnalytt('FINNESIKKE')).toBeUndefined()
   })
 
-  it('åpner stoffsiden fra en modul bare når kodene i den hører til ett stoff', () => {
-    const fortolkning = (kode: string) => ANALYTTKATALOG.finn(kode)!.fortolkning
-    expect(stoffForFortolkning(fortolkning('HBUP'))?.slug).toBe('bupropion')
-    expect(stoffForFortolkning(fortolkning('UETGS'))?.slug).toBe('etanol')
-    expect(stoffForFortolkning(fortolkning('TRAM'))?.slug).toBe('tramadol')
-    // DIAZ · DMI · OXA: diazepam og oksazepam.
-    expect(stoffForFortolkning(fortolkning('DIAZ'))).toBeUndefined()
+  it('fører fra en modul til stoffene kodene i den hører til, hvert én gang', () => {
+    const slugger = (kode: string) => stofferForFortolkning(ANALYTTKATALOG.finn(kode)!.fortolkning).map((s) => s.slug)
+    expect(slugger('HBUP')).toEqual(['bupropion'])
+    // EtG og EtS hører begge til etanol.
+    expect(slugger('UETGS')).toEqual(['etanol'])
+    expect(slugger('TRAM')).toEqual(['tramadol'])
+    // DIAZ og metabolitten DMI hører til diazepam, OXA til oksazepam.
+    expect(slugger('DIAZ')).toEqual(['diazepam', 'oksazepam'])
+    expect(slugger('KOD')).toEqual(['kodein', 'morfin'])
   })
 
   it('åpner fortolkningen fra stoffsiden når stoffets analytter er i én modul', () => {
