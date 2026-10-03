@@ -7,31 +7,46 @@
  */
 
 /* --- Statusen i toppmenyen -------------------------------------------------
-   «Redigerer · utkast med 3 endringer». Tonet som et varsel, med ikon og
-   tekst: fargen er aldri alene om å si at siden står i redigeringsmodus. */
+   Et rundt merke med blyanten, tonet som et varsel og med en ring som puster
+   så lenge siden står i redigeringsmodus. Tallet i hjørnet er endringene som
+   ikke er publisert (som bjella), og hele statusen står som tooltip. Uten
+   tekst får menyen plass også i dokken på smale flater. */
 .redigeringsstatus {
-  display: inline-flex;
-  align-items: center;
-  flex: 0 1 auto;
-  gap: var(--rom-2);
-  min-width: 0;
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--hoyde-kontroll);
   height: var(--hoyde-kontroll);
-  padding: 0 var(--rom-5);
-  font-size: var(--tekst-liten);
-  font-weight: var(--vekt-halvfet);
+  font-size: var(--ikon-ui);
   color: var(--toksisk-blekk);
   background: var(--toksisk-flate);
+  border: var(--kant) solid var(--toksisk-kant);
   border-radius: var(--runding-pille);
+  animation: redigeringsring 2.4s ease-in-out infinite;
 }
 
-.redigeringsstatus .ikon {
-  flex: none;
+@keyframes redigeringsring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--toksisk) 45%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 var(--rom-1) color-mix(in oklab, var(--toksisk) 0%, transparent);
+  }
 }
 
-.redigeringsstatus__tekst {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+/* Tallet i bjellas merke, i redigeringens farge. */
+.redigeringsstatus .varselmerke {
+  color: var(--flate);
+  background: var(--toksisk-blekk);
+}
+
+@media (max-width: 47.5em) {
+  .redigeringsstatus {
+    width: var(--hoyde-trykk);
+    height: var(--hoyde-trykk);
+  }
 }
 
 /* --- Merknader på siden ---------------------------------------------------- */

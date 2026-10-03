@@ -130,7 +130,9 @@ Alle ikoner i appen er `Ikon`. Det finnes ingen andre ikonsett.
   tar bort tooltipen der den ville havnet under et modalt lag.
 - **`Toppmenyknapp`** (`src/components/toppmeny/Toppmenyknapp.tsx`) er en
   pille med ikon og tekst, `primar` eller `sekundar`. På smalere skjermer
-  krymper en sekundær knapp til bare ikon.
+  krymper en sekundær knapp til bare ikon. En handling som ikke kan brukes
+  nå, får `avslatt` med grunnen i stedet for `disabled`: knappen dempes, men
+  grunnen står som tooltip og for skjermlesere.
 - **`Button`** (`src/components/Button.tsx`) er knappen i skjemaer og lag:
   `primary`, `subtle` og `kant` (pille med tynn kant, for handlinger på en
   rad, som «Nytt passord» i brukerlista).
@@ -215,7 +217,7 @@ Resten av grensesnitteksten:
 | Hvor | Tekst |
 | --- | --- |
 | Toppmenyen | «Søk i fagstoff» med «Ctrl + K», «På siden» med «Ctrl + B», «Åpne fortolkning» (fagsiden), «Åpne fagside» (fortolkningen), «Rediger», «Lukk» |
-| Redigering | statuspillen «Redigerer · …» («ingen upubliserte endringer», «utkast med N endringer», «alt er publisert»), «Publiser», «Avslutt redigering», «Publiser endringene», «Publiser nå» |
+| Redigering | statusen «Redigerer · …» som tooltip («ingen upubliserte endringer», «utkast med N endringer», «alt er publisert»), «Publiser» (avslått: «Det er ikke noe nytt å publisere»), «Avslutt redigering», «Publiser endringene», «Publiser nå» |
 | Panelene i redigering | «Rediger», «Legg til», «Legg til kort», «Koble til legemiddeldataene», «Kilder for panelet», «Rediger reglene», «Lagre utkast», «Avbryt» |
 | Viktige data | «Konsentrasjoner i serum», «Kinetikk», «Ikke oppgitt» |
 | Fagsøket | «↑ ↓ velg · Enter åpne · Esc lukk», «Vis alle treff (N)», «Ingen treff i fagstoffet.» |
@@ -296,7 +298,10 @@ som i en test, blir innholdet stående i siden.
 
 - `handlinger`: brukes av fagsiden til «Åpne fortolkning», «Rediger» og
   «Lukk». I redigeringsmodus står bare redigeringen der: status, «Publiser»
-  og «Avslutt redigering» (`Redigeringslinje.tsx`). Publiseringen viser hva
+  og «Avslutt redigering» (`Redigeringslinje.tsx`). Statusen er et rundt
+  merke uten tekst, med en ring som puster og antallet upubliserte endringer
+  i hjørnet; hele statusen står som tooltip. «Publiser» er avslått når
+  ingenting er nytt. Publiseringen viser hva
   som blir synlig for alle i et modalt lag før noe publiseres. Stilene for
   redigeringen står i `src/styles/redigering.css`. Fortolkningen bruker den
   til «Åpne fagside» mens en modul med egen fagside er valgt (`App.tsx`);
