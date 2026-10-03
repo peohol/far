@@ -356,3 +356,10 @@
     padding: var(--rom-2) var(--rom-3);
   }
 }
+
+/* Et overskriftskort uten ikon (undergruppene i «Avhengighet, toleranse og
+   tilbakeslagseffekter»): oppsummeringen står under tittelen, ikke inntrukket
+   som om et ikon sto foran. */
+.skuff--detalj.overskriftskort.overskriftskort--utenIkon > .skuff__hode .skuff__oppsummering {
+  padding-left: 0;
+}

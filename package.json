@@ -13,7 +13,6 @@
     "test:watch": "vitest",
     "import:intervallregelsett": "vite-node scripts/importer-intervallregelsett.ts --",
     "kontroller:migrasjoner": "vite-node scripts/kontroller-migrasjoner.ts --",
-    "import:bivirkninger": "vite-node scripts/lag-bivirkningsimport.ts --",
     "data": "python3 scripts/build_data.py && python3 scripts/build_antihypertensiver.py",
     "bootstrap:admin": "node scripts/bootstrap-admin.ts"
   },

@@ -2185,48 +2185,60 @@ describe('kortene i farmakokinetikken', () => {
     expect(screen.getByRole('region', { name: 'Bivirkninger' }).textContent).toContain('Munntørrhet.')
   })
 
-  it('har faste kort i «Misbruk og avhengighet», med fast overskrift og rekkefølge', async () => {
+  it('har faste kort i to undergrupper i «Avhengighet, toleranse og tilbakeslagseffekter»', async () => {
     const user = userEvent.setup()
+    const SEKSJON = 'Avhengighet, toleranse og tilbakeslagseffekter'
+    const ADAPTASJON = 'Fysiologisk adaptasjon'
+    const LAERING = 'Lærings- og motivasjonsfenomener'
     const data = (tilstand: Tilstand): Stoffsidedata => {
       const s = medKort()(tilstand)
       const kort = utgave('tol', {
         infoside: 'hs',
-        panel: 'misbruk_avhengighet',
-        posisjon: 2,
+        panel: 'avhengighet_toleranse',
+        posisjon: 0,
         elementtype: 'kinetikkort',
-        data: { tittel: 'Toleranse', dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: LANG }] }] } },
+        data: { tittel: 'Toleranseutvikling', dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: LANG }] }] } },
       })
       return { ...s, elementer: [...s.elementer, kort] }
     }
     vis('amitriptylin', kilde({ kanRedigere: true, data }))
     await finnVerdi('10–20 nmol/L')
     const titler = screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
-    expect(titler.indexOf('Misbruk og avhengighet')).toBeGreaterThan(titler.indexOf('Farmakokinetikk'))
-    const seksjon = screen.getByRole('region', { name: 'Misbruk og avhengighet' })
+    expect(titler.indexOf(SEKSJON)).toBeGreaterThan(titler.indexOf('Farmakokinetikk'))
+    const seksjon = screen.getByRole('region', { name: SEKSJON })
     expect(seksjon.querySelector('[data-ikon="avhengighet"]')).not.toBeNull()
     expect(seksjon.querySelector('[data-ikon="toleranse"]')).not.toBeNull()
+    // For den som leser, står bare undergruppen med innhold, og kortet står i den.
+    await apneSkuff(user, SEKSJON)
+    expect(within(seksjon).getByRole('heading', { level: 3, name: ADAPTASJON })).toBeTruthy()
+    expect(within(seksjon).queryByRole('heading', { level: 3, name: LAERING })).toBeNull()
+    expect(within(seksjon).getByRole('heading', { level: 4, name: 'Toleranseutvikling' })).toBeTruthy()
 
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
-    await apneSkuff(user, 'Misbruk og avhengighet')
-    // Hvert kort som mangler, legges til for seg; det som finnes, ikke en gang til.
-    const omrade = screen.getByRole('region', { name: 'Misbruk og avhengighet' })
-    for (const tittel of ['Misbrukspotensial', 'Vanedannelse', 'Abstinens og tilbakeslagseffekter']) {
-      expect(within(omrade).getByRole('button', { name: `Legg til: ${tittel}` })).toBeTruthy()
-    }
-    expect(within(omrade).queryByRole('button', { name: 'Legg til: Toleranse' })).toBeNull()
+    await apneSkuff(user, SEKSJON)
+    const omrade = screen.getByRole('region', { name: SEKSJON })
+    expect(within(omrade).getByRole('heading', { level: 3, name: LAERING })).toBeTruthy()
+    // I redigeringsmodus står begge undergruppene, og hvert kort som mangler,
+    // legges til for seg i sin gruppe; det som finnes, ikke en gang til.
+    await apneSkuff(user, ADAPTASJON)
+    const adaptasjon = within(omrade).getByRole('group', { name: ADAPTASJON })
+    expect(within(adaptasjon).getByRole('button', { name: 'Legg til: Abstinens, seponeringssyndrom og rebound-effekter' })).toBeTruthy()
+    expect(within(adaptasjon).queryByRole('button', { name: 'Legg til: Toleranseutvikling' })).toBeNull()
     expect(within(omrade).queryByRole('button', { name: 'Legg til kort' })).toBeNull()
 
     // Det faste kortet flyttes ikke, og overskriften kan ikke endres.
-    await apneSkuff(user, 'Toleranse')
-    expect(screen.queryByRole('button', { name: /^Flytt (opp|ned): Toleranse$/ })).toBeNull()
-    await user.click(screen.getByRole('button', { name: 'Rediger: Toleranse' }))
+    expect(screen.queryByRole('button', { name: /^Flytt (opp|ned): Toleranseutvikling$/ })).toBeNull()
+    await user.click(screen.getByRole('button', { name: 'Rediger: Toleranseutvikling' }))
     expect(within(screen.getByRole('dialog')).queryByLabelText('Overskrift')).toBeNull()
     await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Avbryt' }))
 
-    await user.click(within(omrade).getByRole('button', { name: 'Legg til: Vanedannelse' }))
+    await apneSkuff(user, LAERING)
+    const laering = within(omrade).getByRole('group', { name: LAERING })
+    expect(within(laering).getByRole('button', { name: 'Legg til: Addiksjon' })).toBeTruthy()
+    await user.click(within(laering).getByRole('button', { name: 'Legg til: Lært mestringsavhengighet' }))
     const nytt = screen.getByRole('dialog')
     expect(within(nytt).queryByLabelText('Overskrift')).toBeNull()
-    expect(nytt.querySelector('[data-ikon="vane"]')).not.toBeNull()
+    expect(nytt.querySelector('[data-ikon="krykke"]')).not.toBeNull()
   })
 })
 

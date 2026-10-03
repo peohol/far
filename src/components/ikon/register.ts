@@ -261,7 +261,7 @@ const kapsel: Ikondel[] = [
 const KAPSEL_SKRA = 'translate(-4 4) rotate(-45 24 24)'
 
 /*
- * Misbruk og avhengighet: seksjonen og de faste kortene i den.
+ * Avhengighet, toleranse og tilbakeslagseffekter: seksjonen og de faste kortene i den.
  */
 /** Et kjedeledd: en pille med hull, tegnet som én flate (det indre går mot klokka). */
 const kjedeledd = (x: number, y: number, b: number, h: number, t: number): string => {
@@ -765,7 +765,7 @@ const REGISTER = {
     parts: kapsel,
     free: [G([P('M35 4.5 44.5 21.5h-19z', 'f2', 'warn'), P('M35 10.5v5', 'l'), C(35, 18.6, 1.3, 'h')], 'pop')],
   },
-  /* Misbruk og avhengighet: to kjedeledd som henger i hverandre. */
+  /* Avhengighet, toleranse og tilbakeslagseffekter: to kjedeledd som henger i hverandre. */
   avhengighet: {
     vb: 48,
     rot: 'rotate(-35 24 24)',
@@ -783,7 +783,18 @@ const REGISTER = {
       P('M5 38h38', 'l', 'i-line'),
     ],
   },
-  /* Vanedannelse: kapselen fra virkningene midt i en pil som går rundt og rundt. */
+  /* Lært mestringsavhengighet: en krykke, noe man har vent seg til å støtte seg på. */
+  krykke: {
+    vb: 48,
+    rot: 'rotate(-22 24 24)',
+    parts: [
+      P('M18 9.5 24 31.5 30 9.5M24 31.5v9', 'l', 'i-ink'),
+      R(13.5, 4.5, 21, 5, 2.5, 'f2', 'accent'),
+      G([R(19, 18.5, 10, 4, 2, 'f2', 'warn')], 'pop'),
+      R(21.5, 40, 5, 5, 1.5, 'f1', 'i-ink'),
+    ],
+  },
+  /* Addiksjon (vanedannelse): kapselen fra virkningene midt i en pil som går rundt og rundt. */
   vane: {
     vb: 48,
     parts: [

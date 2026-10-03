@@ -17,7 +17,7 @@ import { IKONNAVN } from '../components/ikon/register'
 import { Detaljkort, Seksjon } from '../components/seksjoner/Seksjon'
 import { doseringskort } from '../faginnhold/doseringskort'
 import { doserader, kinetikktittel, tilDokument, type Persentiltabell } from '../faginnhold/import'
-import { PANELER, type Doserad } from '../faginnhold/paneler'
+import { PANELER, fasteKort, panelFor, type Doserad } from '../faginnhold/paneler'
 import { PSYKOFARMAKA_FILER } from '../faginnhold/psykofarmaka'
 import { klartekst } from '../faginnhold/riktekst'
 import { lesSerumtabell, persentiltekst, PROSJEKTMERKNAD, type Serumblokk } from '../faginnhold/serumtabell'
@@ -218,11 +218,13 @@ describe('ikonregisteret for farmakokinetikken', () => {
 
   it('leser fri tekst etter mening, og faller trygt tilbake', () => {
     expect(kinetikkikon('Absorpsjon')).toBe('absorp')
-    // De faste kortene i «Misbruk og avhengighet».
+    // De faste kortene i «Avhengighet, toleranse og tilbakeslagseffekter».
+    for (const kort of fasteKort(panelFor('avhengighet_toleranse')!)!) expect(kinetikkikon(kort)).not.toBe('fallback')
+    expect(kinetikkikon('Toleranseutvikling')).toBe('toleranse')
+    expect(kinetikkikon('Abstinens, seponeringssyndrom og rebound-effekter')).toBe('abstinens')
+    expect(kinetikkikon('Addiksjon')).toBe('vane')
+    expect(kinetikkikon('Lært mestringsavhengighet')).toBe('krykke')
     expect(kinetikkikon('Misbrukspotensial')).toBe('misbruk')
-    expect(kinetikkikon('Vanedannelse')).toBe('vane')
-    expect(kinetikkikon('Toleranse')).toBe('toleranse')
-    expect(kinetikkikon('Abstinens og tilbakeslagseffekter')).toBe('abstinens')
     expect(kinetikkikon('  Distribusjonsvolum ')).toBe('dist')
     expect(kinetikkikon('Metabolisme')).toBe('metab')
     expect(kinetikkikon('Halveringstid')).toBe('hl')
