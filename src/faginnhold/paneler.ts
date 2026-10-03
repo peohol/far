@@ -36,6 +36,18 @@ import { erTomt, rensDokument, tomtDokument, type Riktekstdokument } from './rik
  */
 export type Panelform = 'identitet' | 'legemidler' | 'interaksjoner' | 'datakort' | 'tekst' | 'kort' | 'mekanismer' | 'tabell'
 
+/**
+ * En undergruppe av faste kort i en kortserie: en overskrift i seksjonen med
+ * sine kort under seg, som åpnes og lukkes for seg (`docs/seksjoner.md`).
+ */
+export interface Kortgruppe {
+  /** Fast nøkkel for gruppen på siden, så adressen og styringen kan peke dit. */
+  nokkel: string
+  tittel: string
+  /** De faste kortene i gruppen, i den rekkefølgen de står. */
+  kort: readonly string[]
+}
+
 export interface Paneldefinisjon {
   nokkel: string
   tittel: string
@@ -46,6 +58,16 @@ export interface Paneldefinisjon {
    * overskriftene fritt og hvor mange kort det blir.
    */
   kort?: readonly string[]
+  /**
+   * De faste kortene delt i undergrupper, i stedet for `kort`. Kortene er da
+   * gruppenes kort i rekkefølge (se {@link fasteKort}).
+   */
+  grupper?: readonly Kortgruppe[]
+}
+
+/** De faste kortene i et panel, i den rekkefølgen de står, også når de er delt i grupper. */
+export function fasteKort(definisjon: Paneldefinisjon): readonly string[] | undefined {
+  return definisjon.grupper?.flatMap((g) => g.kort) ?? definisjon.kort
 }
 
 /**
@@ -68,10 +90,17 @@ export const PANELER = [
   { nokkel: 'tdm', tittel: 'Terapeutisk legemiddelmonitorering (TDM)', form: 'kort' },
   { nokkel: 'serumkonsentrasjoner', tittel: 'Serumkonsentrasjoner ved ulike doser', form: 'tabell' },
   {
-    nokkel: 'misbruk_avhengighet',
-    tittel: 'Misbruk og avhengighet',
+    nokkel: 'avhengighet_toleranse',
+    tittel: 'Avhengighet, toleranse og tilbakeslagseffekter',
     form: 'kort',
-    kort: ['Misbrukspotensial', 'Vanedannelse', 'Toleranse', 'Abstinens og tilbakeslagseffekter'],
+    grupper: [
+      {
+        nokkel: 'fysiologisk_adaptasjon',
+        tittel: 'Fenomener relatert til fysiologisk adaptasjon',
+        kort: ['Toleranseutvikling', 'Rebound-effekter og seponeringssyndrom'],
+      },
+      { nokkel: 'laeringsfenomener', tittel: 'Læringsfenomener', kort: ['Addiksjon', 'Lært mestringsavhengighet'] },
+    ],
   },
 ] as const satisfies readonly Paneldefinisjon[]
 

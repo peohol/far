@@ -25,7 +25,7 @@ const SEKSJONSIKONER: Readonly<Record<string, Ikonnavn>> = {
   interaksjoner: 'inter',
   tdm: 'tdm',
   serumkonsentrasjoner: 'serum',
-  misbruk_avhengighet: 'avhengighet',
+  avhengighet_toleranse: 'avhengighet',
   fortolkning: 'interp',
   referanser: 'refs',
 }
@@ -57,11 +57,12 @@ const KINETIKKATEGORIER: readonly { ikon: Ikonnavn; monster: RegExp }[] = [
   { ikon: 'tdm', monster: /pr[oø]vetak/ },
   { ikon: 'ref', monster: /referanse(omr|grense)/ },
   { ikon: 'indik', monster: /indikasjon/ },
-  // De faste kortene i «Misbruk og avhengighet».
+  // De faste kortene i «Avhengighet, toleranse og tilbakeslagseffekter».
+  { ikon: 'krykke', monster: /mestring/ },
   { ikon: 'misbruk', monster: /misbruk/ },
-  { ikon: 'vane', monster: /vanedann/ },
+  { ikon: 'vane', monster: /vanedann|addiksjon/ },
   { ikon: 'toleranse', monster: /toleranse/ },
-  { ikon: 'abstinens', monster: /abstinens|tilbakeslag/ },
+  { ikon: 'abstinens', monster: /abstinens|tilbakeslag|rebound|seponering/ },
 ]
 
 /** Overskriften slik kategoriene sammenlignes: «tₘₐₓ» → «tmax», «Absorpsjon» → «absorpsjon». */
