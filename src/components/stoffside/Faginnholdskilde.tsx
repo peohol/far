@@ -4,6 +4,7 @@ import type { Faginnholdsleser } from '../../faginnhold/lesing'
 import type { Farmakogenetikkleser } from '../../clinpgx/lesing'
 import type { Cpicleser } from '../../cpic/lesing'
 import type { Legemiddelleser } from '../../legemiddeldata/lesing'
+import type { Bivirkningsleser } from '../../bivirkninger/lesing'
 
 /**
  * Hvor stoffsidene henter og lagrer faginnholdet, og om den innloggede
@@ -34,6 +35,12 @@ export interface Faginnholdskilde {
    * legemidlene siden er koblet til i ClinPGx. Uten den vises de ikke.
    */
   cpic?: Cpicleser
+  /**
+   * Bivirkningene importert fra preparatomtalene, som seksjonen
+   * «Bivirkninger» viser ved siden av de redaksjonelle kortene. Uten den vises
+   * bare de redaksjonelle.
+   */
+  bivirkninger?: Bivirkningsleser
 }
 
 const Kontekst = createContext<Faginnholdskilde | null>(null)

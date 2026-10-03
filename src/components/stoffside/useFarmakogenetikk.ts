@@ -5,6 +5,8 @@ import { lagDiplotypeindeks, type Diplotypeindeks } from '../../cpic/diplotype'
 import type { Cpicutvalg } from '../../cpic/lesing'
 import { byggCpicvisning, type Cpicvisning } from '../../cpic/stoffside'
 import { useFaginnholdskilde } from './Faginnholdskilde'
+import type { Bivirkningsdata } from '../../bivirkninger/modell'
+import { byggBivirkningsvisning, type Bivirkningsvisning } from '../../bivirkninger/stoffside'
 
 /** Dataene fra én kilde for kjemikaliene siden er koblet til, og visningen bygd av dem. */
 export type Kildetilstand<U, V> =
@@ -15,6 +17,7 @@ export type Kildetilstand<U, V> =
 
 export type Farmakogenetikktilstand = Kildetilstand<Farmakogenetikkutvalg, Farmakogenetikkvisning>
 export type Cpictilstand = Kildetilstand<Cpicutvalg, Cpicvisning>
+export type Bivirkningstilstand = Kildetilstand<Bivirkningsdata, Bivirkningsvisning>
 
 /**
  * Leser dataene fra en kilde for ClinPGx-ID-ene siden er koblet til, og
@@ -22,7 +25,7 @@ export type Cpictilstand = Kildetilstand<Cpicutvalg, Cpicvisning>
  * satt opp uten kilden. `lesPaNytt` leser dem igjen, etter at en
  * administrator har hentet nye. `bygg` må være den samme funksjonen hver gang.
  */
-function useKilde<U, V>(
+export function useKilde<U, V>(
   leser: { les(ider: readonly string[]): Promise<U> } | undefined,
   koblet: readonly string[],
   bygg: (utvalg: U) => V,
@@ -65,6 +68,18 @@ export function useFarmakogenetikk(koblet: readonly string[]) {
 /** CPIC-dataene for de samme kjemikaliene, etter ClinPGx-ID-en CPIC oppgir for legemidlene. */
 export function useCpic(koblet: readonly string[]) {
   return useKilde(useFaginnholdskilde().cpic, koblet, byggCpicvisning)
+}
+
+/**
+ * Bivirkningene på fagsiden med nøkkelen, gruppert for begge visningene i
+ * seksjonen «Bivirkninger». `ingen` når appen er satt opp uten dem.
+ */
+export function useBivirkninger(stoff: string) {
+  const leser = useFaginnholdskilde().bivirkninger
+  // Kilden tar én nøkkel; `useKilde` tar en liste.
+  const enKilde = useMemo(() => leser && { les: (nokler: readonly string[]) => leser.les(nokler[0]!) }, [leser])
+  const nokler = useMemo(() => [stoff], [stoff])
+  return useKilde(enKilde, nokler, byggBivirkningsvisning)
 }
 
 export type Diplotypetilstand =

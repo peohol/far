@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.77.0',
+    dato: '2026-10-03',
+    sammendrag: 'Grunnlaget for bivirkninger fra preparatomtalene, etter frekvens eller organsystem',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    utenVarsel: true,
+    punkter: [
+      'Seksjonen «Bivirkninger» på fagsidene kan nå vise bivirkningene fra preparatomtalene, gruppert etter frekvens eller etter organsystem. En bryter øverst i seksjonen bytter mellom de to; det er de samme bivirkningene i begge.',
+      'Frekvensene står fra «Svært vanlige» til «Ikke kjent», med fem til én prikk og navnet ved, og organsystemene står med eget ikon i den rekkefølgen preparatomtalene bruker. Bare kombinasjoner som har bivirkninger, vises, og hvert kort kan åpnes til en punktliste.',
+      'Har en preparatomtale flere bivirkningstabeller – for ulike indikasjoner eller doseringer, eller med ulikt frekvensgrunnlag – vises hver tabell for seg med navnet og frekvensgrunnlaget over, så frekvensene aldri blandes.',
+      'Preparatomtalen bivirkningene kommer fra, står som kilde i seksjonen, med versjon, revisjonsdato og når den ble importert og kontrollert.',
+      'Ingen bivirkninger er lagt inn ennå. De importeres etter faglig kontroll, og seksjonen viser dem først når de er på plass.',
+    ],
+  },
+  {
     versjon: '1.76.2',
     dato: '2026-10-03',
     sammendrag: '«Misbruk og avhengighet» heter nå «Avhengighet, toleranse og tilbakeslagseffekter», med to undergrupper',
