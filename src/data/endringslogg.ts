@@ -19,7 +19,7 @@ export const ENDRINGSLOGG: Endring[] = [
     omfang: 'Mindre omfang',
     punkter: [
       'Den siste seksjonen på fagsidene heter nå «Avhengighet, toleranse og tilbakeslagseffekter».',
-      'Kortene står i to undergrupper som åpnes og lukkes for seg, som legemiddelformene i «Preparater»: «Fenomener relatert til fysiologisk adaptasjon» med Toleranseutvikling og Rebound-effekter og seponeringssyndrom, og «Lærings- og motivasjonsfenomener» med Addiksjon og Lært mestringsavhengighet.',
+      'Kortene står i to undergrupper som åpnes og lukkes for seg, som legemiddelformene i «Preparater»: «Fysiologisk adaptasjon» med kortene «Toleranseutvikling» og «Abstinens, seponeringssyndrom og rebound-effekter», og «Lærings- og motivasjonsfenomener» med «Addiksjon» og «Lært mestringsavhengighet».',
       'Lært mestringsavhengighet har fått et eget ikon, en krykke. De andre kortene bruker ikonene som fantes. Kortet Misbrukspotensial er tatt ut.',
       'Seksjonen er fortsatt tom og vises bare i redigeringsmodus, der hvert kort legges til med en egen knapp i sin undergruppe.',
     ],

@@ -221,7 +221,7 @@ describe('ikonregisteret for farmakokinetikken', () => {
     // De faste kortene i «Avhengighet, toleranse og tilbakeslagseffekter».
     for (const kort of fasteKort(panelFor('avhengighet_toleranse')!)!) expect(kinetikkikon(kort)).not.toBe('fallback')
     expect(kinetikkikon('Toleranseutvikling')).toBe('toleranse')
-    expect(kinetikkikon('Rebound-effekter og seponeringssyndrom')).toBe('abstinens')
+    expect(kinetikkikon('Abstinens, seponeringssyndrom og rebound-effekter')).toBe('abstinens')
     expect(kinetikkikon('Addiksjon')).toBe('vane')
     expect(kinetikkikon('Lært mestringsavhengighet')).toBe('krykke')
     expect(kinetikkikon('Misbrukspotensial')).toBe('misbruk')

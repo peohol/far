@@ -96,8 +96,8 @@ export const PANELER = [
     grupper: [
       {
         nokkel: 'fysiologisk_adaptasjon',
-        tittel: 'Fenomener relatert til fysiologisk adaptasjon',
-        kort: ['Toleranseutvikling', 'Rebound-effekter og seponeringssyndrom'],
+        tittel: 'Fysiologisk adaptasjon',
+        kort: ['Toleranseutvikling', 'Abstinens, seponeringssyndrom og rebound-effekter'],
       },
       { nokkel: 'laering_motivasjon', tittel: 'Lærings- og motivasjonsfenomener', kort: ['Addiksjon', 'Lært mestringsavhengighet'] },
     ],

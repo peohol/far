@@ -2185,7 +2185,7 @@ describe('kortene i farmakokinetikken', () => {
   it('har faste kort i to undergrupper i «Avhengighet, toleranse og tilbakeslagseffekter»', async () => {
     const user = userEvent.setup()
     const SEKSJON = 'Avhengighet, toleranse og tilbakeslagseffekter'
-    const ADAPTASJON = 'Fenomener relatert til fysiologisk adaptasjon'
+    const ADAPTASJON = 'Fysiologisk adaptasjon'
     const LAERING = 'Lærings- og motivasjonsfenomener'
     const data = (tilstand: Tilstand): Stoffsidedata => {
       const s = medKort()(tilstand)
@@ -2219,7 +2219,7 @@ describe('kortene i farmakokinetikken', () => {
     // legges til for seg i sin gruppe; det som finnes, ikke en gang til.
     await apneSkuff(user, ADAPTASJON)
     const adaptasjon = within(omrade).getByRole('group', { name: ADAPTASJON })
-    expect(within(adaptasjon).getByRole('button', { name: 'Legg til: Rebound-effekter og seponeringssyndrom' })).toBeTruthy()
+    expect(within(adaptasjon).getByRole('button', { name: 'Legg til: Abstinens, seponeringssyndrom og rebound-effekter' })).toBeTruthy()
     expect(within(adaptasjon).queryByRole('button', { name: 'Legg til: Toleranseutvikling' })).toBeNull()
     expect(within(omrade).queryByRole('button', { name: 'Legg til kort' })).toBeNull()
 
