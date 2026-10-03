@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.76.1',
+    dato: '2026-10-03',
+    sammendrag: 'Redigeringsmenyen får plass på mobil, og «Publiser» sier fra når ingenting er nytt',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Statusen for redigeringen er nå et rundt merke med blyanten, uten tekst, så menyen får plass også på mobil, både stående og liggende. Merket har en ring som puster så lenge siden redigeres, og et tall i hjørnet for endringene som ikke er publisert. Hele statusen vises når du holder over eller trykker på merket.',
+      '«Publiser» står dempet når det ikke er noe nytt å publisere, og sier det når du holder over den.',
+      'Knappen for å avslutte redigeringen havner ikke lenger oppå knappen for idéer på mellomstore skjermer.',
+    ],
+  },
+  {
     versjon: '1.76.0',
     dato: '2026-10-02',
     sammendrag: 'Stoffregisteret i rutenett, og ryddigere redigering med menyer og bedre dra-og-slipp',

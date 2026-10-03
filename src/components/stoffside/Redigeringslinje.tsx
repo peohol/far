@@ -11,6 +11,7 @@ import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Modallag } from '../Modallag'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
+import { useTips } from '../Tips'
 
 export interface RedigeringshandlingerProps {
   data: Stoffsidedata
@@ -45,6 +46,8 @@ export function Redigeringshandlinger({
   const [feil, setFeil] = useState<string | null>(null)
   const [ferdig, setFerdig] = useState(false)
   const status = statustekst(laster, plan.length, ferdig)
+  const antall = laster ? 0 : plan.length
+  const tips = useTips(status, { skjermleser: false })
 
   const publiser = async () => {
     setPubliserer(true)
@@ -62,20 +65,25 @@ export function Redigeringshandlinger({
 
   return (
     <>
-      <span className="redigeringsstatus" role="status">
+      {/* Bare ikonet, så menyen får plass også på smale flater: fargen og
+          ringen sier at siden redigeres, tallet hvor mange endringer som
+          venter, og hele statusen står som tooltip. */}
+      <span className="redigeringsstatus" role="status" {...tips.props}>
         <Ikon navn="edit" storrelse="ui" />
+        {antall > 0 && (
+          <span className="varselmerke" aria-hidden="true">
+            {antall}
+          </span>
+        )}
         <span className="kun-skjermleser">
           Redigeringsmodus. Du ser utkastet. Endringene blir synlige for andre først når de publiseres.
         </span>
-        {/* På smale flater kan teksten bli kuttet; hele står da som tooltip. */}
-        <span className="redigeringsstatus__tekst" title={status}>
-          {status}
-        </span>
+        <span className="kun-skjermleser">{status}</span>
       </span>
       <Toppmenyknapp
         ikon="publish"
         variant="primar"
-        disabled={laster || plan.length === 0}
+        avslatt={laster ? status : plan.length === 0 ? INGENTING_A_PUBLISERE : undefined}
         aria-haspopup="dialog"
         onClick={() => {
           setFeil(null)
@@ -118,7 +126,10 @@ export function Redigeringshandlinger({
   )
 }
 
-/** Teksten i statuspillen: «Redigerer · utkast med 3 endringer». */
+/** Grunnen til at «Publiser» står avslått når utkastet er likt det publiserte. */
+export const INGENTING_A_PUBLISERE = 'Det er ikke noe nytt å publisere'
+
+/** Statusen for redigeringen, som tooltip: «Redigerer · utkast med 3 endringer». */
 export function statustekst(laster: boolean, antall: number, ferdig: boolean): string {
   if (laster) return 'Henter utkastet …'
   if (antall === 0) return ferdig ? 'Redigerer · alt er publisert' : 'Redigerer · ingen upubliserte endringer'

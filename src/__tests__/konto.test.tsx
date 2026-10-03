@@ -44,7 +44,10 @@ const { Endringslogg } = await import('../components/Endringslogg')
 const { ENDRINGSLOGG } = await import('../data/endringslogg')
 const { Port } = await import('../components/konto/Port')
 const { Brukerliste } = await import('../components/konto/Brukerliste')
-const { statustekst } = await import('../components/stoffside/Redigeringslinje')
+const { INGENTING_A_PUBLISERE, Redigeringshandlinger, statustekst } = await import(
+  '../components/stoffside/Redigeringslinje'
+)
+const { INGEN_REGLER } = await import('../faginnhold/lesing')
 const { TipsLag } = await import('../components/Tips')
 const { Versjonspille } = await import('../components/Versjonspille')
 const { visEndringslogg } = await import('../components/endringsloggvisning')
@@ -249,5 +252,45 @@ describe('statusen for redigeringsmodusen', () => {
     expect(statustekst(false, 0, true)).toBe('Redigerer · alt er publisert')
     expect(statustekst(false, 1, false)).toBe('Redigerer · utkast med 1 endring')
     expect(statustekst(false, 3, false)).toBe('Redigerer · utkast med 3 endringer')
+  })
+
+  const handlinger = (antall: number, laster = false) => (
+    <Redigeringshandlinger
+      data={{ referanser: [], elementer: [] } as never}
+      regler={INGEN_REGLER}
+      publisert={INGEN_REGLER}
+      plan={Array.from({ length: antall }, (_, i) => ({ slag: 'referanse' as const, id: `r${i}`, revisjon: 1 }))}
+      laster={laster}
+      onPubliser={async () => {}}
+      onAvslutt={() => {}}
+    />
+  )
+
+  it('viser statusen uten synlig tekst, med antallet i et merke', () => {
+    const { container, rerender } = render(handlinger(0))
+    const status = screen.getByRole('status')
+    expect(within(status).getByText('Redigerer · ingen upubliserte endringer').className).toBe('kun-skjermleser')
+    expect(container.querySelector('.varselmerke')).toBeNull()
+    rerender(handlinger(3))
+    expect(within(status).getByText('Redigerer · utkast med 3 endringer')).toBeTruthy()
+    expect(container.querySelector('.varselmerke')?.textContent).toBe('3')
+  })
+
+  it('demper «Publiser» og sier hvorfor når ingenting er nytt', async () => {
+    const { rerender } = render(handlinger(0))
+    const knapp = screen.getByRole('button', { name: 'Publiser' })
+    expect(knapp.getAttribute('aria-disabled')).toBe('true')
+    expect(document.getElementById(knapp.getAttribute('aria-describedby')!)?.textContent).toBe(INGENTING_A_PUBLISERE)
+    await userEvent.click(knapp)
+    expect(screen.queryByRole('dialog', { name: 'Publiser endringene' })).toBeNull()
+
+    rerender(handlinger(2, true))
+    expect(document.getElementById(knapp.getAttribute('aria-describedby')!)?.textContent).toBe('Henter utkastet …')
+
+    rerender(handlinger(2))
+    expect(knapp.getAttribute('aria-disabled')).toBeNull()
+    expect(knapp.getAttribute('aria-describedby')).toBeNull()
+    await userEvent.click(knapp)
+    expect(screen.getByRole('dialog', { name: 'Publiser endringene' })).toBeTruthy()
   })
 })

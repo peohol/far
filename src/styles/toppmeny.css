@@ -175,12 +175,19 @@
   border-color: var(--aksent);
 }
 
-.toppmenyknapp[data-variant='sekundar']:hover {
+.toppmenyknapp[data-variant='sekundar']:hover:not([aria-disabled='true']) {
   border-color: var(--linje-sterk);
 }
 
-.toppmenyknapp[data-variant='primar']:hover {
+.toppmenyknapp[data-variant='primar']:hover:not([aria-disabled='true']) {
   background: color-mix(in oklab, var(--aksent) 88%, var(--blekk));
+}
+
+/* Avslått (`avslatt`): dempet som `.knapp:disabled`, men fortsatt med
+   tooltip for grunnen. */
+.toppmenyknapp[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 
 .toppmenyknapp[aria-pressed='true'] {

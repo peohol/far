@@ -1798,7 +1798,7 @@ describe('redigeringsmodus', () => {
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     // Datakortet og en kommentar regelsettet peker på, har revisjoner som ikke
     // er publisert. Regelsettet selv er publisert og er ikke med.
-    // Statuspillen i toppmenyen teller det som ikke er publisert.
+    // Statusen i toppmenyen teller det som ikke er publisert.
     expect(await screen.findByText('Redigerer · utkast med 2 endringer')).toBeTruthy()
     await user.click(screen.getByRole('button', { name: 'Publiser' }))
     const oppsummering = screen.getByRole('dialog', { name: 'Publiser endringene' })
@@ -1899,7 +1899,8 @@ describe('overgangen til redigering', () => {
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
 
     // Det publiserte står fortsatt, men kan ikke endres mens utkastet hentes.
-    expect(screen.getByText('Henter utkastet …')).toBeTruthy()
+    expect(screen.getAllByRole('status').some((s) => s.textContent?.includes('Henter utkastet …'))).toBe(true)
+    expect(screen.getByRole('button', { name: 'Publiser' }).getAttribute('aria-disabled')).toBe('true')
     expect(screen.queryByRole('button', { name: 'Rediger: Referanseområde' })).toBeNull()
     expect(screen.queryByRole('button', { name: /^Legg til/ })).toBeNull()
 
