@@ -155,17 +155,34 @@ export interface Bivirkningskilde {
   merknad: string | null
   importert_kl: string
   importert_av: string
+  /** Bivirkningstabellene i preparatomtalen når den har flere, i rekkefølge; tom når den har én. */
+  kontekster: Kontekst[]
+}
+
+/**
+ * Én av flere bivirkningstabeller i en preparatomtale: for en indikasjon, en
+ * dosering eller et frekvensgrunnlag (per pasient, per infusjon …). Radene i
+ * ulike tabeller er ikke sammenlignbare og blandes aldri.
+ */
+export interface Kontekst {
+  nokkel: string
+  navn: string
+  /** Hva frekvensene er regnet per, når preparatomtalen sier det. */
+  frekvensgrunnlag: string | null
+  merknad: string | null
 }
 
 /** Én bivirkning, slik den står i kilden. */
 export interface Bivirkning {
   /** Kildens `id`. */
   kilde: string
+  /** Nøkkelen til tabellen (konteksten) i kilden; `null` når kilden har én tabell. */
+  kontekst: string | null
   organsystem: Organsystemkode
   frekvens: Frekvenskode
   tekst: string
   fotnote: string | null
-  /** Rekkefølgen i kilden, innenfor organsystemet og frekvensen. */
+  /** Rekkefølgen i kilden, innenfor tabellen, organsystemet og frekvensen. */
   posisjon: number
 }
 
@@ -176,6 +193,33 @@ export interface Bivirkningsdata {
 }
 
 export const INGEN_BIVIRKNINGER: Bivirkningsdata = { kilder: [], bivirkninger: [] }
+
+/** En bivirkningstabell: én kilde, eventuelt én kontekst i den, og radene i tabellen. */
+export interface Tabell {
+  kilde: Bivirkningskilde
+  kontekst: Kontekst | null
+  bivirkninger: Bivirkning[]
+}
+
+/**
+ * Bivirkningene delt i tabellene de står i — kilde for kilde, og i hver kilde
+ * kontekst for kontekst — så rader fra ulike preparatomtaler, indikasjoner,
+ * doseringer eller frekvensgrunnlag aldri havner i samme gruppe. Bare tabeller
+ * med rader er med, i kildenes rekkefølge og preparatomtalens.
+ */
+export function tabeller(data: Bivirkningsdata): Tabell[] {
+  return data.kilder.flatMap((kilde) =>
+    [null, ...kilde.kontekster].flatMap((kontekst): Tabell[] => {
+      const rader = data.bivirkninger.filter((b) => b.kilde === kilde.id && b.kontekst === (kontekst?.nokkel ?? null))
+      return rader.length > 0 ? [{ kilde, kontekst, bivirkninger: rader }] : []
+    }),
+  )
+}
+
+/** Den faste ID-en til en tabell, f.eks. `preparat-spc` eller `preparat-spc_per-infusjon`. Nøklene har aldri `_`. */
+export function tabellid(tabell: Pick<Tabell, 'kilde' | 'kontekst'>): string {
+  return tabell.kontekst ? `${tabell.kilde.nokkel}_${tabell.kontekst.nokkel}` : tabell.kilde.nokkel
+}
 
 /* --- Visningene ---------------------------------------------------------- */
 
@@ -211,12 +255,13 @@ function rang(nokkel: Gruppenokkel): number {
 const motsatt = (visning: Visning): Visning => (visning === 'frekvens' ? 'organsystem' : 'frekvens')
 
 /**
- * Bivirkningene gruppert for en visning: etter frekvens med organsystemene
- * under, eller etter organsystem med frekvensene under. Gruppene står i den
- * faste rekkefølgen (frekvensen fra høyest til lavest, organsystemene som i
- * preparatomtalene), og bare kombinasjoner med minst én bivirkning er med —
- * en tom gruppe finnes ikke. Innenfor en kombinasjon står bivirkningene i
- * kildenes rekkefølge, kilde for kilde.
+ * Bivirkningene i én tabell gruppert for en visning: etter frekvens med
+ * organsystemene under, eller etter organsystem med frekvensene under.
+ * Gruppene står i den faste rekkefølgen (frekvensen fra høyest til lavest,
+ * organsystemene som i preparatomtalene), og bare kombinasjoner med minst én
+ * bivirkning er med — en tom gruppe finnes ikke. Innenfor en kombinasjon står
+ * bivirkningene i preparatomtalens rekkefølge. Gis rader fra flere tabeller,
+ * står de tabell for tabell; siden grupperer hver tabell for seg (`tabeller`).
  */
 export function grupper(bivirkninger: readonly Bivirkning[], visning: Visning): Gruppe[] {
   const indre = motsatt(visning)
@@ -230,10 +275,11 @@ export function grupper(bivirkninger: readonly Bivirkning[], visning: Visning): 
     if (!under) gruppe.under.set(i.kode, (under = { nokkel: i, bivirkninger: [] }))
     under.bivirkninger.push(rad)
   }
-  const kilderekkefolge = new Map<string, number>()
-  for (const rad of bivirkninger) if (!kilderekkefolge.has(rad.kilde)) kilderekkefolge.set(rad.kilde, kilderekkefolge.size)
+  const tabellrekkefolge = new Map<string, number>()
+  const tabellAv = (rad: Bivirkning) => `${rad.kilde} ${rad.kontekst ?? ''}`
+  for (const rad of bivirkninger) if (!tabellrekkefolge.has(tabellAv(rad))) tabellrekkefolge.set(tabellAv(rad), tabellrekkefolge.size)
   const iKilden = (a: Bivirkning, b: Bivirkning) =>
-    kilderekkefolge.get(a.kilde)! - kilderekkefolge.get(b.kilde)! || a.posisjon - b.posisjon
+    tabellrekkefolge.get(tabellAv(a))! - tabellrekkefolge.get(tabellAv(b))! || a.posisjon - b.posisjon
   return [...ytre.values()]
     .sort((a, b) => rang(a.nokkel) - rang(b.nokkel))
     .map(({ nokkel, under }) => ({
@@ -249,12 +295,19 @@ export function gruppenavn(nokkel: Gruppenokkel): string {
   return nokkel.slag === 'frekvens' ? frekvens(nokkel.kode).navn : organsystem(nokkel.kode).navn
 }
 
-/** Den faste ID-en en gruppe har på siden og i adressen, f.eks. `frekvens-vanlige`. */
-export function gruppeid(nokkel: Gruppenokkel): string {
-  return `${nokkel.slag}-${nokkel.kode.replaceAll('_', '-')}`
+/** Forstavelsen til ID-ene i en tabell når siden har flere, f.eks. `tabell-preparat-spc_per-infusjon--`. */
+export const TABELLFORSTAVELSE = /^tabell-[a-z0-9_-]+?--/
+
+/**
+ * Den faste ID-en en gruppe har på siden og i adressen, f.eks.
+ * `frekvens-vanlige`. Har siden flere tabeller, står tabellen (`tabellid`)
+ * foran: `tabell-preparat-spc--frekvens-vanlige`.
+ */
+export function gruppeid(nokkel: Gruppenokkel, tabell: string | null = null): string {
+  return `${tabell ? `tabell-${tabell}--` : ''}${nokkel.slag}-${nokkel.kode.replaceAll('_', '-')}`
 }
 
 /** ID-en til en kombinasjon inne i en gruppe, f.eks. `frekvens-vanlige--organsystem-hjerte`. */
-export function undergruppeid(gruppe: Gruppenokkel, under: Gruppenokkel): string {
-  return `${gruppeid(gruppe)}--${gruppeid(under)}`
+export function undergruppeid(gruppe: Gruppenokkel, under: Gruppenokkel, tabell: string | null = null): string {
+  return `${gruppeid(gruppe, tabell)}--${gruppeid(under)}`
 }

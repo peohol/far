@@ -30,6 +30,7 @@ import {
   grupper,
   gruppeid,
   gruppenavn,
+  tabeller,
   undergruppeid,
   type Bivirkning,
   type Bivirkningsdata,
@@ -41,7 +42,6 @@ import {
   bivirkningstekster,
   byggBivirkningsvisning,
   oppsummerBivirkninger,
-  undergruppeHarMer,
   visningForKort,
 } from '../bivirkninger/stoffside'
 import { IKONER } from '../components/ikon/register'
@@ -49,21 +49,36 @@ import { frekvensikon, organsystemikon } from '../components/stoffside/panelvisn
 import { kallSom } from './hjelp/fest'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
-const MAL = JSON.parse(readFileSync(new URL('../../supabase/maler/bivirkningsimport.json', import.meta.url), 'utf8')) as Bivirkningsimport
+/** En import med én tabell, der organsystemene står rett i importen. */
+type Enkeltabell = Extract<Bivirkningsimport, { tabeller?: undefined }>
+/** En import med flere tabeller. */
+type Flertabell = Extract<Bivirkningsimport, { organsystemer?: undefined }>
+
+const lesMal = (navn: string): unknown => JSON.parse(readFileSync(new URL(`../../supabase/maler/${navn}`, import.meta.url), 'utf8'))
+const MAL = lesMal('bivirkningsimport.json') as Enkeltabell
+const TABELLMAL = lesMal('bivirkningsimport-tabeller.json') as Flertabell
 const IMPORTMAPPE = new URL('../../supabase/import/bivirkninger/', import.meta.url)
 const MIGRASJONSMAPPE = new URL('../../supabase/migrations/', import.meta.url)
 
 /** En syntetisk import til fagsiden i testdatabasen, med endringer for en test. */
-function lagImport(endre: (imp: Bivirkningsimport) => void = () => {}): Bivirkningsimport {
+function lagImport(endre: (imp: Enkeltabell) => void = () => {}): Enkeltabell {
   const imp = structuredClone(MAL)
   imp.stoff = 'syntetisk-teststoff'
   endre(imp)
   return imp
 }
 
+/** En syntetisk import med flere tabeller til fagsiden i testdatabasen, med endringer for en test. */
+function lagTabellimport(endre: (imp: Flertabell) => void = () => {}): Flertabell {
+  const imp = structuredClone(TABELLMAL)
+  imp.stoff = 'syntetisk-teststoff'
+  endre(imp)
+  return imp
+}
+
 /** En kopi av malen med én verdi byttet ut, satt med en sti som `['kilde', 'tittel']`. */
-function medVerdi(sti: readonly (string | number)[], verdi: unknown): unknown {
-  const imp = structuredClone(MAL) as unknown as Record<string | number, unknown>
+function medVerdi(sti: readonly (string | number)[], verdi: unknown, mal: Bivirkningsimport = MAL): unknown {
+  const imp = structuredClone(mal) as unknown as Record<string | number, unknown>
   let her = imp
   for (const steg of sti.slice(0, -1)) her = her[steg] as Record<string | number, unknown>
   const siste = sti[sti.length - 1]!
@@ -142,7 +157,7 @@ const FEILTILFELLER: { navn: string; data: unknown; feil: string[] }[] = [
       return d
     })(),
     feil: [
-      'stof: ukjent felt. Tillatte felt: format, stoff, kilde, organsystemer.',
+      'stof: ukjent felt. Tillatte felt: format, stoff, kilde, organsystemer, tabeller.',
       'kilde.versjon: ukjent felt. Tillatte felt: nokkel, type, tittel, preparat, innehaver, spc_versjon, revisjonsdato, lenke, kontrollert, kontrollert_av, importert_av, merknad.',
       'organsystemer[0].navn: ukjent felt. Tillatte felt: organsystem, frekvenser.',
       'organsystemer[0].frekvenser[0].antall: ukjent felt. Tillatte felt: frekvens, bivirkninger.',
@@ -210,6 +225,52 @@ const FEILTILFELLER: { navn: string; data: unknown; feil: string[] }[] = [
     ],
   },
   { navn: 'ingen organsystemer', data: medVerdi(['organsystemer'], []), feil: ['organsystemer: må være en liste med minst ett organsystem.'] },
+  // Flere tabeller.
+  {
+    navn: 'både organsystemer og tabeller',
+    data: { ...structuredClone(TABELLMAL), organsystemer: structuredClone(MAL.organsystemer) },
+    feil: ['organsystemer: utelat feltet når importen har tabeller; organsystemene står i hver tabell.'],
+  },
+  { navn: 'ingen tabeller', data: medVerdi(['tabeller'], [], TABELLMAL), feil: ['tabeller: må være en liste med minst én tabell.'] },
+  { navn: 'tabeller som ikke er en liste', data: medVerdi(['tabeller'], {}, TABELLMAL), feil: ['tabeller: må være en liste med minst én tabell.'] },
+  { navn: 'en tabell som ikke er et objekt', data: medVerdi(['tabeller', 0], 'Syntetisk', TABELLMAL), feil: ['tabeller[0]: må være et objekt.'] },
+  {
+    navn: 'samme tabellnøkkel to ganger',
+    data: medVerdi(['tabeller', 1, 'nokkel'], 'syntetisk-indikasjon-per-pasient', TABELLMAL),
+    feil: ['tabeller[1].nokkel: «syntetisk-indikasjon-per-pasient» står mer enn én gang; hver tabell har sin egen nøkkel.'],
+  },
+  {
+    navn: 'en tabell uten navn, med feil nøkkel og tomt frekvensgrunnlag',
+    data: medVerdi(['tabeller', 0], { nokkel: 'Per pasient', frekvensgrunnlag: '', organsystemer: structuredClone(MAL.organsystemer) }, TABELLMAL),
+    feil: [
+      'tabeller[0].nokkel: må bestå av små bokstaver a–z, tall og enkle bindestreker (høyst 100 tegn).',
+      'tabeller[0].navn: må fylles ut.',
+      'tabeller[0].frekvensgrunnlag: kan ikke være tom tekst; utelat feltet i stedet.',
+    ],
+  },
+  {
+    navn: 'et ukjent felt og et ukjent organsystem i en tabell',
+    data: (() => {
+      const d = structuredClone(TABELLMAL) as unknown as { tabeller: Record<string, unknown>[] }
+      d.tabeller[1]!.indikasjon = 'Syntetisk'
+      ;(d.tabeller[1]!.organsystemer as Record<string, unknown>[])[0]!.organsystem = 'mage'
+      return d
+    })(),
+    feil: [
+      'tabeller[1].indikasjon: ukjent felt. Tillatte felt: nokkel, navn, frekvensgrunnlag, merknad, organsystemer.',
+      'tabeller[1].organsystemer[0].organsystem: ukjent organsystem «mage». De tillatte kodene står i docs/bivirkninger.md.',
+    ],
+  },
+  {
+    navn: 'en tabell uten organsystemer',
+    data: medVerdi(['tabeller', 0, 'organsystemer'], undefined, TABELLMAL),
+    feil: ['tabeller[0].organsystemer: må være en liste med minst ett organsystem.'],
+  },
+  {
+    navn: 'en for lang bivirkning i en tabell',
+    data: medVerdi(['tabeller', 1, 'organsystemer', 0, 'frekvenser', 0, 'bivirkninger', 0], 'æ'.repeat(MAKSLENGDE.tekst + 1), TABELLMAL),
+    feil: [`tabeller[1].organsystemer[0].frekvenser[0].bivirkninger[0]: er lengre enn ${MAKSLENGDE.tekst} tegn.`],
+  },
 ]
 
 /* --- De faste listene ----------------------------------------------------- */
@@ -262,6 +323,16 @@ describe('importformatet', () => {
     expect(MAL.stoff).toMatch(/^syntetisk/)
     // Hver bivirkning i malen sier selv at den er syntetisk.
     for (const o of MAL.organsystemer) for (const f of o.frekvenser) for (const b of f.bivirkninger) expect(typeof b === 'string' ? b : b.tekst).toMatch(/^Syntetisk/)
+  })
+
+  it('godtar malen for en preparatomtale med flere tabeller, som også er syntetisk', () => {
+    expect(kontrollerImport(TABELLMAL).ok).toBe(true)
+    expect(antallIImport(TABELLMAL)).toBe(2)
+    expect(TABELLMAL.stoff).toMatch(/^syntetisk/)
+    for (const t of TABELLMAL.tabeller)
+      for (const o of t.organsystemer) for (const f of o.frekvenser) for (const b of f.bivirkninger) expect(typeof b === 'string' ? b : b.tekst).toMatch(/^Syntetisk/)
+    // Et tomt organsystemer-felt ved siden av tabellene er det samme som at det mangler.
+    expect(importfeil({ ...TABELLMAL, organsystemer: null })).toEqual([])
   })
 
   it('godtar valgfrie felt som er utelatt eller null, og en SPC uten noen av frekvensene', () => {
@@ -323,8 +394,12 @@ describe('bivirkningene i databasen', () => {
     expect(rows[0]!.feil).toEqual(feil)
   })
 
-  it('godtar det appen godtar', async () => {
-    const { rows } = await db.query<{ feil: string[] }>('select bivirkninger.importfeil($1::jsonb) as feil', [JSON.stringify(MAL)])
+  it.each([
+    ['malen', MAL],
+    ['malen med flere tabeller', TABELLMAL],
+    ['tabeller med et tomt organsystemer-felt', { ...TABELLMAL, organsystemer: null }],
+  ])('godtar det appen godtar: %s', async (_, data) => {
+    const { rows } = await db.query<{ feil: string[] }>('select bivirkninger.importfeil($1::jsonb) as feil', [JSON.stringify(data)])
     expect(rows[0]!.feil).toEqual([])
   })
 
@@ -445,6 +520,50 @@ describe('bivirkningene i databasen', () => {
     expect((await les()).kilder.map((k) => k.nokkel)).toContain('fra-migrasjon')
   })
 
+  it('legger inn en preparatomtale med flere tabeller hver for seg, og blander aldri radene', async () => {
+    const id = await importer(lagTabellimport())
+    const data = await les()
+    const kilden = data.kilder.find((k) => k.id === id)!
+    expect(kilden.kontekster).toEqual([
+      { nokkel: 'syntetisk-indikasjon-per-pasient', navn: 'Syntetisk indikasjon A', frekvensgrunnlag: 'per pasient', merknad: null },
+      { nokkel: 'syntetisk-indikasjon-per-infusjon', navn: 'Syntetisk indikasjon A', frekvensgrunnlag: 'per infusjon', merknad: 'Syntetisk merknad til tabellen.' },
+    ])
+    // Den samme teksten i to tabeller er to rader, hver med sin tabell og sin frekvens.
+    expect(data.bivirkninger.filter((b) => b.kilde === id).map((b) => [b.kontekst, b.organsystem, b.frekvens, b.tekst])).toEqual([
+      ['syntetisk-indikasjon-per-pasient', 'generelle', 'vanlige', 'Syntetisk bivirkning E'],
+      ['syntetisk-indikasjon-per-infusjon', 'generelle', 'mindre_vanlige', 'Syntetisk bivirkning E'],
+    ])
+    // De andre kildene på siden har én tabell og ingen kontekst.
+    expect(data.kilder.filter((k) => k.id !== id).every((k) => k.kontekster.length === 0)).toBe(true)
+    expect(data.bivirkninger.filter((b) => b.kilde !== id).every((b) => b.kontekst === null)).toBe(true)
+    const visning = byggBivirkningsvisning(data)
+    const tabellene = visning.tabeller.filter((t) => t.kilde.id === id)
+    expect(tabellene.map((t) => [t.kontekst?.frekvensgrunnlag, t.bivirkninger.length])).toEqual([
+      ['per pasient', 1],
+      ['per infusjon', 1],
+    ])
+  })
+
+  it('erstatter tabellene med kilden, og lar ikke en rad peke på en tabell i en annen kilde', async () => {
+    const forrige = (await les()).kilder.find((k) => k.nokkel === TABELLMAL.kilde.nokkel)!.id
+    expect(await importer(lagTabellimport())).toBe(forrige)
+    const ny = await importer(lagTabellimport((i) => (i.tabeller[1]!.frekvensgrunnlag = 'per syntetisk dose')))
+    const data = await les()
+    expect(data.kilder.find((k) => k.id === ny)!.kontekster.map((t) => t.frekvensgrunnlag)).toEqual(['per pasient', 'per syntetisk dose'])
+    expect(data.kilder.some((k) => k.id === forrige)).toBe(false)
+    // De gamle tabellene står igjen som historikk med den gamle kilden.
+    expect(await antall(`select count(*) as n from bivirkninger.kontekster where kilde = '${forrige}'`)).toBe(2)
+    const fremmed = (await db.query<{ id: string }>(`select id::text from bivirkninger.kontekster where kilde = '${forrige}' limit 1`)).rows[0]!.id
+    const fu = await feilFra(() =>
+      db.query(
+        `insert into bivirkninger.bivirkninger (kilde, kontekst, organsystem, frekvens, tekst, posisjon) values ($1, $2, 'hud', 'vanlige', 'Syntetisk', 99)`,
+        [ny, fremmed],
+      ),
+    )
+    expect(fu?.code).toBe('23503')
+    await db.query(`select bivirkninger.trekk_tilbake('syntetisk-teststoff', $1, 'Syntetisk test')`, [TABELLMAL.kilde.nokkel])
+  })
+
   it('lar bare innloggede lese, og ingen av API-rollene røre tabellene eller importen', async () => {
     expect(await feilFra(() => kallSom(db, 'anon')('les_bivirkninger', { stoff: 'syntetisk-teststoff' }))).not.toBeNull()
     for (const rolle of ['anon', 'authenticated'] as const) {
@@ -465,18 +584,34 @@ describe('bivirkningene i databasen', () => {
 /* --- Lesingen ------------------------------------------------------------- */
 
 describe('lesingen', () => {
-  it('hopper over rader med ukjente koder eller fra en kilde som ikke er med', () => {
+  it('hopper over rader med ukjente koder eller fra en kilde eller tabell som ikke er med', () => {
     const data = lesBivirkningsdata({
-      kilder: [{ id: 'k1', nokkel: 'a', type: 'spc', tittel: 'Syntetisk', importert_kl: '2026-01-01T00:00:00Z' }, { id: 'k2', type: 'annet', tittel: 'X' }],
+      kilder: [
+        {
+          id: 'k1',
+          nokkel: 'a',
+          type: 'spc',
+          tittel: 'Syntetisk',
+          importert_kl: '2026-01-01T00:00:00Z',
+          kontekster: [{ nokkel: 't1', navn: 'Syntetisk tabell', frekvensgrunnlag: 'per pasient' }, { nokkel: 't2' }],
+        },
+        { id: 'k2', type: 'annet', tittel: 'X' },
+      ],
       bivirkninger: [
         { kilde: 'k1', organsystem: 'hud', frekvens: 'vanlige', tekst: 'Syntetisk A', posisjon: 0 },
         { kilde: 'k1', organsystem: 'mage', frekvens: 'vanlige', tekst: 'Syntetisk B', posisjon: 1 },
         { kilde: 'k1', organsystem: 'hud', frekvens: 'ofte', tekst: 'Syntetisk C', posisjon: 2 },
         { kilde: 'k2', organsystem: 'hud', frekvens: 'vanlige', tekst: 'Syntetisk D', posisjon: 0 },
+        { kilde: 'k1', kontekst: 't1', organsystem: 'hud', frekvens: 'vanlige', tekst: 'Syntetisk E', posisjon: 0 },
+        { kilde: 'k1', kontekst: 't2', organsystem: 'hud', frekvens: 'vanlige', tekst: 'Syntetisk F', posisjon: 0 },
       ],
     })
     expect(data.kilder.map((k) => k.id)).toEqual(['k1'])
-    expect(data.bivirkninger.map((b) => b.tekst)).toEqual(['Syntetisk A'])
+    expect(data.kilder[0]!.kontekster).toEqual([{ nokkel: 't1', navn: 'Syntetisk tabell', frekvensgrunnlag: 'per pasient', merknad: null }])
+    expect(data.bivirkninger.map((b) => [b.kontekst, b.tekst])).toEqual([
+      [null, 'Syntetisk A'],
+      ['t1', 'Syntetisk E'],
+    ])
     expect(lesBivirkningsdata(null)).toEqual({ kilder: [], bivirkninger: [] })
   })
 })
@@ -499,13 +634,14 @@ function kilde(id: string, endringer: Partial<Bivirkningskilde> = {}): Bivirknin
     merknad: null,
     importert_kl: '2026-03-01T10:00:00Z',
     importert_av: 'Syntetisk',
+    kontekster: [],
     ...endringer,
   }
 }
 
 let plass = 0
 function rad(organsystem: Bivirkning['organsystem'], frekvens: Bivirkning['frekvens'], tekst: string, ekstra: Partial<Bivirkning> = {}): Bivirkning {
-  return { kilde: 'k1', organsystem, frekvens, tekst, fotnote: null, posisjon: plass++, ...ekstra }
+  return { kilde: 'k1', kontekst: null, organsystem, frekvens, tekst, fotnote: null, posisjon: plass++, ...ekstra }
 }
 
 const SYNTETISK: Bivirkningsdata = {
@@ -554,12 +690,12 @@ describe('visningene av det samme datasettet', () => {
   })
 
   it('bruker de samme radene i begge visningene, hver nøyaktig én gang', () => {
-    const visning = byggBivirkningsvisning(SYNTETISK)
+    const [tabell] = byggBivirkningsvisning(SYNTETISK).tabeller
     const sorter = (r: Bivirkning[]) => [...r].sort((a, b) => a.posisjon - b.posisjon)
-    expect(sorter(radene(visning.grupper.frekvens))).toEqual(SYNTETISK.bivirkninger)
-    expect(sorter(radene(visning.grupper.organsystem))).toEqual(SYNTETISK.bivirkninger)
+    expect(sorter(radene(tabell!.grupper.frekvens))).toEqual(SYNTETISK.bivirkninger)
+    expect(sorter(radene(tabell!.grupper.organsystem))).toEqual(SYNTETISK.bivirkninger)
     // Det er de samme objektene, ikke kopier.
-    expect(radene(visning.grupper.frekvens).every((r) => SYNTETISK.bivirkninger.includes(r))).toBe(true)
+    expect(radene(tabell!.grupper.frekvens).every((r) => SYNTETISK.bivirkninger.includes(r))).toBe(true)
   })
 
   it('holder rekkefølgen fra preparatomtalen innenfor en kombinasjon, kilde for kilde', () => {
@@ -585,22 +721,10 @@ describe('visningene av det samme datasettet', () => {
     expect(visningForKort(undefined)).toBeNull()
   })
 
-  it('åpner et kort bare når det har mer å vise enn oppsummeringen', () => {
-    const [vanlige] = grupper(SYNTETISK.bivirkninger, 'frekvens').slice(1)
-    expect(undergruppeHarMer(vanlige!.undergrupper[0]!, false)).toBe(false)
-    expect(undergruppeHarMer(vanlige!.undergrupper[0]!, true)).toBe(true)
-    const [svaertVanlige] = grupper(SYNTETISK.bivirkninger, 'frekvens')
-    expect(undergruppeHarMer(svaertVanlige!.undergrupper[0]!, false)).toBe(true)
-    const mange = grupper(
-      Array.from({ length: 12 }, (_, i) => rad('hud', 'vanlige', `Syntetisk bivirkning nummer ${i}`)),
-      'frekvens',
-    )[0]!.undergrupper[0]!
-    expect(undergruppeHarMer(mange, false)).toBe(true)
-  })
-
   it('oppsummerer seksjonen likt i begge visningene', () => {
     expect(oppsummerBivirkninger(SYNTETISK)).toBe('6 bivirkninger · 3 organsystemer')
     expect(oppsummerBivirkninger({ kilder: [], bivirkninger: [] })).toBe('')
+    expect(oppsummerBivirkninger(FLERE_TABELLER)).toBe('4 bivirkninger · 2 organsystemer · 3 tabeller')
   })
 
   it('gir søket tekstene i visningen som står, med kortet de står i', () => {
@@ -618,6 +742,87 @@ describe('visningene av det samme datasettet', () => {
     // De samme bivirkningene er med i begge.
     const fritekst = (t: typeof frekvens) => t.filter((x) => x.felt === 'fritekst').map((x) => x.tekst).sort()
     expect(fritekst(frekvens)).toEqual(fritekst(organ))
+  })
+})
+
+/* --- Flere tabeller ------------------------------------------------------ */
+
+/** To preparatomtaler, den ene med to tabeller med ulikt frekvensgrunnlag og den samme bivirkningen i begge. */
+const FLERE_TABELLER: Bivirkningsdata = {
+  kilder: [
+    kilde('k1', {
+      preparat: 'Syntetisk infusjon',
+      kontekster: [
+        { nokkel: 'per-pasient', navn: 'Syntetisk indikasjon', frekvensgrunnlag: 'per pasient', merknad: null },
+        { nokkel: 'per-infusjon', navn: 'Syntetisk indikasjon', frekvensgrunnlag: 'per infusjon', merknad: null },
+      ],
+    }),
+    kilde('k2'),
+  ],
+  bivirkninger: [
+    rad('generelle', 'vanlige', 'Syntetisk feber', { kontekst: 'per-pasient', posisjon: 0 }),
+    rad('generelle', 'mindre_vanlige', 'Syntetisk feber', { kontekst: 'per-infusjon', posisjon: 0 }),
+    rad('generelle', 'vanlige', 'Syntetisk tretthet', { kontekst: 'per-infusjon', posisjon: 1 }),
+    rad('hud', 'vanlige', 'Syntetisk utslett', { kilde: 'k2', posisjon: 0 }),
+  ],
+}
+
+describe('flere tabeller', () => {
+  it('deler bivirkningene i tabeller, kilde for kilde, og blander aldri rader fra ulike tabeller', () => {
+    expect(tabeller(FLERE_TABELLER).map((t) => [t.kilde.id, t.kontekst?.nokkel ?? null, t.bivirkninger.map((b) => b.tekst)])).toEqual([
+      ['k1', 'per-pasient', ['Syntetisk feber']],
+      ['k1', 'per-infusjon', ['Syntetisk feber', 'Syntetisk tretthet']],
+      ['k2', null, ['Syntetisk utslett']],
+    ])
+    const visning = byggBivirkningsvisning(FLERE_TABELLER)
+    expect(visning.tabeller.map((t) => [t.id, t.navn])).toEqual([
+      ['k1_per-pasient', 'Syntetisk infusjon – Syntetisk indikasjon'],
+      ['k1_per-infusjon', 'Syntetisk infusjon – Syntetisk indikasjon'],
+      ['k2', 'Syntetisk preparatomtale k2'],
+    ])
+    // «Syntetisk feber» står som «Vanlige» i den ene tabellen og «Mindre vanlige» i den andre, hver for seg.
+    expect(visning.tabeller.map((t) => navnene(t.grupper.frekvens))).toEqual([
+      [['Vanlige', ['Generelle lidelser og reaksjoner på administrasjonsstedet']]],
+      [
+        ['Vanlige', ['Generelle lidelser og reaksjoner på administrasjonsstedet']],
+        ['Mindre vanlige', ['Generelle lidelser og reaksjoner på administrasjonsstedet']],
+      ],
+      [['Vanlige', ['Hud- og underhudssykdommer']]],
+    ])
+    // Hver tabell har de samme radene i begge visningene.
+    for (const t of visning.tabeller) {
+      const sortert = (g: Gruppe[]) => radene(g).map((b) => b.tekst).sort()
+      expect(sortert(t.grupper.frekvens)).toEqual(sortert(t.grupper.organsystem))
+    }
+  })
+
+  it('er like enkel som før med én tabell, og viser navnet når tabellen har et', () => {
+    expect(byggBivirkningsvisning(SYNTETISK).tabeller.map((t) => [t.id, t.navn])).toEqual([[null, null]])
+    const enKontekst: Bivirkningsdata = {
+      kilder: [kilde('k1', { kontekster: [{ nokkel: 'voksne', navn: 'Syntetisk: voksne', frekvensgrunnlag: null, merknad: null }] })],
+      bivirkninger: [rad('hud', 'vanlige', 'Syntetisk', { kontekst: 'voksne' })],
+    }
+    expect(byggBivirkningsvisning(enKontekst).tabeller.map((t) => [t.id, t.navn])).toEqual([[null, 'Syntetisk: voksne']])
+    expect(oppsummerBivirkninger(enKontekst)).toBe('1 bivirkning · 1 organsystem')
+  })
+
+  it('gir kortene i hver tabell egne ID-er, som søket og lenkene bruker', () => {
+    const visning = byggBivirkningsvisning(FLERE_TABELLER)
+    const [vanlige] = visning.tabeller[1]!.grupper.frekvens
+    expect(gruppeid(vanlige!.nokkel, 'k1_per-infusjon')).toBe('tabell-k1_per-infusjon--frekvens-vanlige')
+    expect(undergruppeid(vanlige!.nokkel, vanlige!.undergrupper[0]!.nokkel, 'k1_per-infusjon')).toBe(
+      'tabell-k1_per-infusjon--frekvens-vanlige--organsystem-generelle',
+    )
+    expect(visningForKort('tabell-k1_per-infusjon--organsystem-generelle')).toBe('organsystem')
+    expect(visningForKort('tabell-k2--frekvens-vanlige--organsystem-hud')).toBe('frekvens')
+    const treff = bivirkningstekster(visning, 'frekvens').filter((t) => t.tekst === 'Syntetisk feber')
+    expect(treff.map((t) => [t.detaljkort, t.element.id])).toEqual([
+      ['tabell-k1_per-pasient--frekvens-vanlige', 'tabell-k1_per-pasient--frekvens-vanlige--organsystem-generelle'],
+      ['tabell-k1_per-infusjon--frekvens-mindre-vanlige', 'tabell-k1_per-infusjon--frekvens-mindre-vanlige--organsystem-generelle'],
+    ])
+    // ID-ene er unike på siden.
+    const ider = visning.tabeller.flatMap((t) => t.grupper.frekvens.map((g) => gruppeid(g.nokkel, t.id)))
+    expect(new Set(ider).size).toBe(ider.length)
   })
 })
 

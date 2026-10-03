@@ -12,6 +12,12 @@ fagsiden: etter frekvens, med organsystemene under, eller etter organsystem,
 med frekvensene under. Begge visningene lages av de samme radene hver gang
 siden vises; de lagres aldri hver for seg.
 
+Noen preparatomtaler har **flere bivirkningstabeller**: for ulike
+indikasjoner eller doseringer, eller med ulikt frekvensgrunnlag (for eksempel
+frekvens per pasient og per infusjon). Frekvensene i slike tabeller er ikke
+sammenlignbare, så hver tabell lagres og vises for seg og blandes aldri med
+de andre (se [Flere tabeller](#flere-tabeller-i-en-preparatomtale)).
+
 ## Faglig avgrensning
 
 Systemet er bare infrastruktur. Det henter ingenting fra Felleskatalogen,
@@ -28,12 +34,15 @@ syntetiske data, som sier selv at de er syntetiske.
 | Frekvensene | `FREKVENSER` i `src/bivirkninger/modell.ts`, `bivirkninger.frekvenser` | Den faste lista under, med rekkefølgen |
 | Organsystemene | `ORGANSYSTEMER` i `src/bivirkninger/modell.ts`, `bivirkninger.organsystemer` | Den sentrale kartleggingen til MedDRA, under |
 | Kildene | `bivirkninger.kilder` | Én rad per import av én preparatomtale til én fagside, med sporbarheten |
-| Bivirkningene | `bivirkninger.bivirkninger` | Én rad per bivirkning: kilden, organsystemet, frekvensen, teksten, fotnoten og plassen i preparatomtalen |
+| Tabellene (kontekstene) | `bivirkninger.kontekster` | Bare når preparatomtalen har flere tabeller: én rad per tabell, med nøkkel, navn, frekvensgrunnlag, merknad og plassen i preparatomtalen |
+| Bivirkningene | `bivirkninger.bivirkninger` | Én rad per bivirkning: kilden, tabellen (eller ingen), organsystemet, frekvensen, teksten, fotnoten og plassen i preparatomtalen |
 
 Hver bivirkning er dermed knyttet til fagsiden (gjennom kilden), et
 organsystem, en frekvens, teksten og kilden. Organsystemet og frekvensen er
 fremmednøkler til de faste listene, så databasen tar aldri imot en kode den
-ikke kjenner — heller ikke utenom importen.
+ikke kjenner — heller ikke utenom importen. En rad kan bare peke på en tabell
+i sin egen kilde, og to rader kan bare ha samme tekst i samme kombinasjon av
+organsystem og frekvens når de står i ulike tabeller.
 
 Fagsiden er objektet i `redigerbare_objekter`, ikke navnet: kilden følger
 siden om den får nytt navn. Importen finner siden etter nøkkelen
@@ -41,8 +50,9 @@ siden om den får nytt navn. Importen finner siden etter nøkkelen
 
 Skjemaet `bivirkninger` er lukket for API-rollene. Appen leser med
 `public.les_bivirkninger(stoff)`, som bare innloggede kan kalle, og som gir
-de gjeldende kildene og radene fra dem i preparatomtalenes rekkefølge
-(`src/bivirkninger/lesing.ts`).
+de gjeldende kildene med tabellene sine og radene fra dem i
+preparatomtalenes rekkefølge (`src/bivirkninger/lesing.ts`). Hver rad har
+nøkkelen til tabellen sin, eller `null` når kilden har én tabell.
 
 ### Sporbarheten
 
@@ -70,8 +80,8 @@ Fotnoter til én bivirkning står ved bivirkningen (`fotnote`).
 Kilden står som automatisk referanse i referansefeltet til «Bivirkninger»
 (`src/bivirkninger/referanser.ts`), med versjonen, revisjonsdatoen, når den
 ble importert og av hvem, når den ble kontrollert og av hvem, og merknaden.
-Har siden bivirkninger fra flere preparatomtaler, står kilden også ved hver
-bivirkning.
+Har siden bivirkninger fra flere preparatomtaler, står kilden også ved
+navnet over hver tabell.
 
 ## Frekvensene
 
@@ -150,18 +160,38 @@ direktelenke til en gruppe i den andre visningen bytter visning.
   et kort per frekvens.
 
 Bare kombinasjoner med minst én bivirkning vises. Rekkefølgen innenfor en
-kombinasjon er preparatomtalens, kilde for kilde.
+kombinasjon er preparatomtalens.
 
 Trekkspillet følger reglene i `docs/seksjoner.md`: gruppene er detaljkort i
 styringen for siden, med én åpen om gangen. Kortene i en gruppe er
 `Underkort` i et `Underkortrutenett` — en visning i detaljkortet som styrer
-seg selv, også med én åpen om gangen, og ikke et tredje nivå i styringen. Et
-kort åpnes bare når det har mer å vise (`undergruppeHarMer`): når lista er
-for lang for oppsummeringen, når en bivirkning har fotnote, eller når siden
-har flere kilder. Ellers står lista fast under tittelen.
+seg selv, også med én åpen om gangen, og ikke et tredje nivå i styringen.
+Hvert kombinasjonskort kan alltid åpnes: lukket viser det bivirkningene som
+oppsummering, åpent som punktliste med fotnotene. Har en gruppe bare én
+kombinasjon, står den åpen fra start.
 
 Søket på siden finner bivirkningene, fotnotene og navnene i visningen som
 står (`bivirkningstekster`).
+
+### Flere tabeller i en preparatomtale
+
+Hver bivirkningstabell vises for seg (`tabeller` i `modell.ts`,
+`byggBivirkningsvisning` i `stoffside.ts`): med to preparatomtaler, eller en
+preparatomtale med flere tabeller, står tabellene etter hverandre under
+bryteren, hver med sine egne grupper. Den samme bivirkningen kan da stå i
+flere tabeller med ulik frekvens; den slås aldri sammen.
+
+- Over hver tabell står navnet som skiller den fra de andre: preparatet (når
+  preparatomtalene er flere) og tabellens navn, og under det
+  frekvensgrunnlaget og merknaden i rolig tekst. Kilden står som
+  referansepille ved navnet når preparatomtalene er flere.
+- Med én tabell uten navn står ingenting ekstra; seksjonen ser ut som før.
+- Med flere tabeller får kortene tabellen foran ID-en, så de er unike på
+  siden: `tabell-<kildenøkkel>_<tabellnøkkel>--frekvens-vanlige` (bare
+  `tabell-<kildenøkkel>--…` for en preparatomtale med én tabell). Søket og
+  direktelenkene bruker disse ID-ene.
+- Oppsummeringen av seksjonen sier hvor mange tabeller det er, når de er
+  flere.
 
 De redaksjonelle kortene i seksjonen står under bivirkningene som før.
 
@@ -201,6 +231,34 @@ De redaksjonelle kortene i seksjonen står under bivirkningene som før.
 }
 ```
 
+Har preparatomtalen flere bivirkningstabeller, står de under `tabeller` i
+stedet for `organsystemer`, hver med sin nøkkel, sitt navn, eventuelt
+frekvensgrunnlaget og en merknad, og organsystemene sine i samme form som
+over. Malen er `supabase/maler/bivirkningsimport-tabeller.json` (syntetisk):
+
+```json
+{
+  "format": "ousfar-bivirkninger/1",
+  "stoff": "…",
+  "kilde": { "…": "som over" },
+  "tabeller": [
+    {
+      "nokkel": "indikasjon-a-per-pasient",
+      "navn": "<navnet på tabellen slik preparatomtalen har det>",
+      "frekvensgrunnlag": "per pasient",
+      "merknad": "…",
+      "organsystemer": [{ "organsystem": "…", "frekvenser": [{ "frekvens": "…", "bivirkninger": ["…"] }] }]
+    },
+    {
+      "nokkel": "indikasjon-a-per-infusjon",
+      "navn": "…",
+      "frekvensgrunnlag": "per infusjon",
+      "organsystemer": ["…"]
+    }
+  ]
+}
+```
+
 Reglene, som kontrolleres både av appen (`src/bivirkninger/import.ts`) og av
 databasen (`bivirkninger.importfeil`), med de samme meldingene:
 
@@ -208,7 +266,12 @@ databasen (`bivirkninger.importfeil`), med de samme meldingene:
 - `organsystem` og `frekvens` er kodene i tabellene over, nøyaktig. Et
   ukjent organsystem eller en ukjent frekvens er en feil; det lages aldri en
   ny variant.
-- Hvert organsystem står én gang, og hver frekvens én gang under det.
+- Enten `organsystemer` (én tabell) eller `tabeller` (flere), aldri begge.
+  En tabell har `nokkel` (små bokstaver a–z, tall og enkle bindestreker,
+  unik i fila) og `navn` (påkrevd), og kan ha `frekvensgrunnlag` og
+  `merknad`. Tabellene står i preparatomtalens rekkefølge.
+- Hvert organsystem står én gang i en tabell, og hver frekvens én gang under
+  det.
 - En bivirkning er tekst, eller `{ "tekst", "fotnote" }`. Samme tekst kan
   ikke stå to ganger i samme kombinasjon (store og små bokstaver regnes
   likt).
@@ -224,7 +287,10 @@ Feilmeldingene har stedet i fila foran, f.eks.
 
 1. Lag én fil per preparatomtale per fagside etter malen, med bivirkningene
    slik de står i preparatomtalen: organsystemet og frekvensen preparatomtalen
-   oppgir, teksten ordrett og fotnotene ved bivirkningen de gjelder.
+   oppgir, teksten ordrett og fotnotene ved bivirkningen de gjelder. Har
+   preparatomtalen flere bivirkningstabeller (indikasjoner, doseringer eller
+   frekvensgrunnlag), legg hver under `tabeller` med navnet og
+   frekvensgrunnlaget slik preparatomtalen oppgir dem; slå dem aldri sammen.
 2. Fyll ut sporbarheten: tittelen, preparatet, innehaveren, versjonen,
    revisjonsdatoen og lenken fra preparatomtalen, og hvem som kontrollerte
    og når.
@@ -254,7 +320,7 @@ rulles ut en ny migrasjon som over.
 
 - Samme fagside og samme kildenøkkel erstatter den forrige importen:
   den gamle kilden merkes som erstattet (`erstattet_av`) og vises ikke
-  lenger, og de nye radene legges inn under en ny kilde. Det blir ingen
+  lenger, og de nye radene og tabellene legges inn under en ny kilde. Det blir ingen
   duplikater, og ingen rader blir stående uten kilde.
 - Er innholdet det samme som sist (bortsett fra `importert_av`), gjør
   importen ingenting.
@@ -266,21 +332,21 @@ den ble importert til feil side), trekkes den tilbake:
 og importfila tas ut i samme endring. Radene står igjen som historikk.
 
 En ny preparatomtale for den samme fagsiden (et annet preparat) får en ny
-kildenøkkel og en egen fil; bivirkningene fra begge vises side om side, med
-kilden ved hver.
+kildenøkkel og en egen fil; bivirkningene fra hver vises som egne tabeller,
+etter hverandre, med preparatet og kilden over hver.
 
 ## Filene
 
 | Fil | Hva |
 | --- | --- |
-| `src/bivirkninger/modell.ts` | Frekvensene, organsystemene, kildene og grupperingen i de to visningene |
+| `src/bivirkninger/modell.ts` | Frekvensene, organsystemene, kildene, tabellene og grupperingen i de to visningene |
 | `src/bivirkninger/import.ts` | Importformatet, kontrollen og migrasjonene |
 | `src/bivirkninger/lesing.ts` | Lesingen appen gjør |
 | `src/bivirkninger/referanser.ts` | Kildene som automatiske referanser |
-| `src/bivirkninger/stoffside.ts` | Oppsummeringene, når et kort har mer å vise, og tekstene søket finner |
+| `src/bivirkninger/stoffside.ts` | Tabellene slik siden viser dem, oppsummeringene og tekstene søket finner |
 | `src/components/stoffside/Bivirkningspanel.tsx`, `src/styles/bivirkninger.css` | Seksjonen på fagsiden |
 | `supabase/migrations/*_bivirkninger.sql` | Skjemaet, de faste listene, kontrollen, importen og lesingen |
 | `scripts/lag-bivirkningsimport.ts` | Kontrollen av en importfil og migrasjonen for den |
-| `supabase/maler/bivirkningsimport.json` | Malen, syntetisk |
+| `supabase/maler/bivirkningsimport.json`, `bivirkningsimport-tabeller.json` | Malene for én og for flere tabeller, syntetiske |
 | `supabase/import/bivirkninger/` | Importfilene |
 | `src/__tests__/bivirkninger.test.ts`, `stoffside.test.tsx` | Testene |

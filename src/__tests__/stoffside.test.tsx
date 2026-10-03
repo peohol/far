@@ -3394,7 +3394,7 @@ describe('farmakogenetikken fra ClinPGx', () => {
 describe('bivirkningene fra preparatomtalene', () => {
   /** Syntetiske bivirkninger i formen `les_bivirkninger` gir. Ingen av dem er fra en preparatomtale. */
   function rad(organsystem: Bivirkning['organsystem'], frekvens: Bivirkning['frekvens'], tekst: string, ekstra: Partial<Bivirkning> = {}): Bivirkning {
-    return { kilde: 'k1', organsystem, frekvens, tekst, fotnote: null, posisjon: 0, ...ekstra }
+    return { kilde: 'k1', kontekst: null, organsystem, frekvens, tekst, fotnote: null, posisjon: 0, ...ekstra }
   }
   const MANGE = Array.from({ length: 10 }, (_, i) => rad('nevrologiske', 'vanlige', `Syntetisk nevrologisk bivirkning ${i + 1}`, { posisjon: i }))
   const DATA: Bivirkningsdata = {
@@ -3414,6 +3414,7 @@ describe('bivirkningene fra preparatomtalene', () => {
         merknad: null,
         importert_kl: '2026-02-02T10:00:00Z',
         importert_av: 'Syntetisk importør',
+        kontekster: [],
       },
     ],
     bivirkninger: [
@@ -3467,6 +3468,8 @@ describe('bivirkningene fra preparatomtalene', () => {
     expect(within(vanlige as HTMLElement).getByText('≥ 1/100 til < 1/10')).toBeTruthy()
     expect(within(seksjon).queryByText('Svært vanlige')).toBeNull()
     expect(within(seksjon).queryByText('Mindre vanlige')).toBeNull()
+    // Med én tabell står ingen tabellnavn over gruppene.
+    expect(seksjon.querySelector('.bivirkninger__tabell')).toBeNull()
 
     await user.click(skuffen('Vanlige'))
     expect(kortene('Vanlige')).toEqual(['Nevrologiske sykdommer', 'Hud- og underhudssykdommer'])
@@ -3495,14 +3498,62 @@ describe('bivirkningene fra preparatomtalene', () => {
     expect(screen.getByText('Syntetisk fotnote')).toBeTruthy()
   })
 
-  it('viser et kort uten mer å vise som fast, med lista rett under tittelen', async () => {
+  it('kan åpne hvert kombinasjonskort, med oppsummeringen lukket og punktlista åpen', async () => {
     const user = userEvent.setup()
     vis('amitriptylin', bivirkningskilde())
     await apneSkuff(user, 'Bivirkninger')
-    await user.click(skuffen('Ikke kjent'))
-    const fast = screen.getByText('Syntetisk bivirkning med ukjent frekvens').closest('.skuff')!
-    expect(fast.classList.contains('skuff--fast')).toBe(true)
-    expect(within(fast as HTMLElement).getByRole('heading', { level: 4 }).textContent).toBe('Gastrointestinale sykdommer')
+    const seksjon = screen.getByRole('region', { name: 'Bivirkninger' })
+    for (const gruppe of ['Vanlige', 'Sjeldne', 'Ikke kjent']) {
+      await user.click(skuffen(gruppe))
+      expect(seksjon.querySelector('.underkortrutenett .skuff--fast')).toBeNull()
+    }
+    // Også et kort med én kort bivirkning og ingen fotnote åpnes og lukkes.
+    const ukjent = within(skuffen('Ikke kjent').closest('.overskriftskort') as HTMLElement).getByRole('button', { name: /Gastrointestinale sykdommer/ })
+    expect(ukjent.getAttribute('aria-expanded')).toBe('true')
+    const kortet = ukjent.closest('.skuff') as HTMLElement
+    expect(within(kortet).getByRole('listitem').textContent).toBe('Syntetisk bivirkning med ukjent frekvens')
+    await user.click(ukjent)
+    expect(ukjent.getAttribute('aria-expanded')).toBe('false')
+    expect(kortet.querySelector('.skuff__oppsummering')?.textContent).toContain('Syntetisk bivirkning med ukjent frekvens')
+  })
+
+  it('holder tabellene i en preparatomtale hver for seg, med navnet og frekvensgrunnlaget over', async () => {
+    const user = userEvent.setup()
+    const tabell = (nokkel: string, frekvensgrunnlag: string) => ({ nokkel, navn: 'Syntetisk indikasjon', frekvensgrunnlag, merknad: null })
+    const data: Bivirkningsdata = {
+      kilder: [{ ...DATA.kilder[0]!, kontekster: [tabell('per-pasient', 'per pasient'), tabell('per-infusjon', 'per infusjon')] }],
+      bivirkninger: [
+        rad('generelle', 'vanlige', 'Syntetisk feber', { kontekst: 'per-pasient' }),
+        rad('generelle', 'mindre_vanlige', 'Syntetisk feber', { kontekst: 'per-infusjon' }),
+      ],
+    }
+    vis('amitriptylin', bivirkningskilde(data))
+    expect(await screen.findByText('2 bivirkninger · 1 organsystem · 2 tabeller')).toBeTruthy()
+    await apneSkuff(user, 'Bivirkninger')
+    const tabellene = within(screen.getByRole('region', { name: 'Bivirkninger' })).getAllByRole('group', { name: 'Syntetisk indikasjon' })
+    expect(tabellene.map((t) => t.querySelector('.bivirkninger__tabellinfo')?.textContent)).toEqual([
+      'Frekvensgrunnlag: per pasient',
+      'Frekvensgrunnlag: per infusjon',
+    ])
+    // Den samme bivirkningen står i hver sin tabell, med hver sin frekvens; den blandes ikke.
+    const overskrifter = (t: HTMLElement) => [...t.querySelectorAll('.overskriftskort > .skuff__hode .skuff__tittelTekst')].map((x) => x.textContent)
+    expect(tabellene.map(overskrifter)).toEqual([['Vanlige'], ['Mindre vanlige']])
+    fireEvent.change(visning(), { target: { value: '1' } })
+    expect(tabellene.map(overskrifter)).toEqual([
+      ['Generelle lidelser og reaksjoner på administrasjonsstedet'],
+      ['Generelle lidelser og reaksjoner på administrasjonsstedet'],
+    ])
+  })
+
+  it('åpner kortet en lenke peker på i en av flere tabeller', async () => {
+    const data: Bivirkningsdata = {
+      kilder: [{ ...DATA.kilder[0]!, kontekster: [{ nokkel: 'voksne', navn: 'Syntetisk: voksne', frekvensgrunnlag: null, merknad: null }] }],
+      bivirkninger: [rad('hud', 'vanlige', 'Syntetisk A'), rad('hud', 'sjeldne', 'Syntetisk B', { kontekst: 'voksne' })],
+    }
+    vis('amitriptylin', bivirkningskilde(data), { sted: ['bivirkninger', 'tabell-syntetisk-spc_voksne--organsystem-hud'] })
+    const gruppe = await screen.findByRole('group', { name: 'Syntetisk: voksne' })
+    await waitFor(() => expect(within(gruppe).getByRole('button', { name: /Hud- og underhudssykdommer/ }).getAttribute('aria-expanded')).toBe('true'))
+    expect(visning().getAttribute('aria-valuetext')).toBe('Organsystem')
   })
 
   it('snur grupperingen med bryteren, med de samme bivirkningene', async () => {

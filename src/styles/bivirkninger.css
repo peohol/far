@@ -2,7 +2,8 @@
    Se `src/components/stoffside/Bivirkningspanel.tsx` og
    `docs/bivirkninger.md`. Gruppene er overskriftskort og kombinasjonene
    underkort (`seksjoner.css`); her står bare det som er særegent for
-   seksjonen: bryteren øverst, definisjonen ved frekvensen og punktlista. */
+   seksjonen: bryteren øverst, navnet over hver tabell når de er flere,
+   definisjonen ved frekvensen og punktlista. */
 
 /* Bivirkningene står over hele bredden, også om seksjonen legger de
    redaksjonelle kortene i et rutenett. */
@@ -42,6 +43,37 @@
   }
 }
 
+/* En tabell med navn: navnet, og frekvensgrunnlaget og merknaden i rolig
+   tekst, over gruppene. Tabellene står med samme luft som gruppene. */
+.bivirkninger__tabell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-3);
+}
+
+.bivirkninger__tabellhode {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+}
+
+.bivirkninger__tabellnavn {
+  margin: 0;
+  font: var(--vekt-halvfet) var(--tekst-ui) / var(--linjehoyde-tett) var(--skrift-ui);
+  color: var(--blekk);
+  overflow-wrap: anywhere;
+}
+
+.bivirkninger__tabellnavn > .referansepille-feste {
+  margin-left: var(--rom-2);
+}
+
+.bivirkninger__tabellinfo {
+  margin: 0;
+  font: var(--vekt-normal) var(--tekst-liten) / var(--linjehoyde-tett) var(--skrift-ui);
+  color: var(--blekk-dempet);
+}
+
 .bivirkninger__liste {
   display: flex;
   flex-direction: column;
@@ -53,10 +85,6 @@
   color: var(--blekk);
   list-style: disc;
   overflow-wrap: anywhere;
-}
-
-.bivirkninger__liste > li > .referansepille-feste {
-  margin-left: var(--rom-2);
 }
 
 .bivirkninger__fotnote {

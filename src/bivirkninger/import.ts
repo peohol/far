@@ -28,6 +28,8 @@ export const MAKSLENGDE = {
   kontrollert_av: 200,
   importert_av: 200,
   merknad: 2000,
+  navn: 300,
+  frekvensgrunnlag: 200,
   tekst: 500,
   fotnote: 1000,
 } as const
@@ -50,19 +52,38 @@ export interface Importkilde {
   merknad?: string | null
 }
 
-/** Én importfil: stoffet, kilden, og bivirkningene etter organsystem og frekvens, som i preparatomtalen. */
-export interface Bivirkningsimport {
+/** Bivirkningene i én tabell, etter organsystem og frekvens, som i preparatomtalen. */
+export type Importorgansystemer = {
+  organsystem: Organsystemkode
+  frekvenser: { frekvens: Frekvenskode; bivirkninger: Importbivirkning[] }[]
+}[]
+
+/**
+ * Én av flere bivirkningstabeller i preparatomtalen — for en indikasjon, en
+ * dosering eller et frekvensgrunnlag (per pasient, per infusjon …). Hver
+ * tabell vises for seg, og radene i ulike tabeller blandes aldri.
+ */
+export interface Importtabell {
+  nokkel: string
+  navn: string
+  frekvensgrunnlag?: string | null
+  merknad?: string | null
+  organsystemer: Importorgansystemer
+}
+
+/**
+ * Én importfil: stoffet, kilden og bivirkningene. Har preparatomtalen én
+ * tabell, står organsystemene rett i importen; har den flere, står hver under
+ * `tabeller`, og `organsystemer` utelates.
+ */
+export type Bivirkningsimport = {
   format: typeof IMPORTFORMAT
   stoff: string
   kilde: Importkilde
-  organsystemer: {
-    organsystem: Organsystemkode
-    frekvenser: { frekvens: Frekvenskode; bivirkninger: Importbivirkning[] }[]
-  }[]
-}
+} & ({ organsystemer: Importorgansystemer; tabeller?: undefined } | { tabeller: Importtabell[]; organsystemer?: undefined })
 
 /** Feltene på hvert nivå, i den rekkefølgen de kontrolleres. */
-const TOPPFELT = ['format', 'stoff', 'kilde', 'organsystemer'] as const
+const TOPPFELT = ['format', 'stoff', 'kilde', 'organsystemer', 'tabeller'] as const
 const KILDEFELT = [
   'nokkel',
   'type',
@@ -77,6 +98,7 @@ const KILDEFELT = [
   'importert_av',
   'merknad',
 ] as const
+const TABELLFELT = ['nokkel', 'navn', 'frekvensgrunnlag', 'merknad', 'organsystemer'] as const
 const ORGANSYSTEMFELT = ['organsystem', 'frekvenser'] as const
 const FREKVENSFELT = ['frekvens', 'bivirkninger'] as const
 const BIVIRKNINGSFELT = ['tekst', 'fotnote'] as const
@@ -90,6 +112,11 @@ type Objekt = Record<string, unknown>
 
 function erObjekt(verdi: unknown): verdi is Objekt {
   return typeof verdi === 'object' && verdi !== null && !Array.isArray(verdi)
+}
+
+/** Om feltet står i objektet med en verdi (ikke `null`), som `bivirkninger.har` i databasen. */
+function har(objekt: Objekt, felt: string): boolean {
+  return objekt[felt] !== undefined && objekt[felt] !== null
 }
 
 /** Antall tegn, som `char_length` i databasen (ikke UTF-16-enheter). */
@@ -132,6 +159,13 @@ function datofeil(verdi: unknown, sti: string): string[] {
   return typeof verdi === 'string' && erDato(verdi) ? [] : [`${sti}: må være en dato på formen ÅÅÅÅ-MM-DD.`]
 }
 
+/** Feilen i en nøkkel (kilde eller tabell): små bokstaver a–z, tall og enkle bindestreker. */
+function nokkelfeil(verdi: unknown, sti: string): string[] {
+  return typeof verdi === 'string' && NOKKEL.test(verdi) && tegn(verdi) <= MAKSLENGDE.nokkel
+    ? []
+    : [`${sti}: må bestå av små bokstaver a–z, tall og enkle bindestreker (høyst ${MAKSLENGDE.nokkel} tegn).`]
+}
+
 /** Teksten slik to like bivirkninger sammenlignes: uten forskjell på store og små bokstaver. */
 function sammenligning(tekst: string): string {
   return tekst.toLocaleLowerCase('nb')
@@ -140,9 +174,7 @@ function sammenligning(tekst: string): string {
 function kildefeil(kilde: unknown): string[] {
   if (!erObjekt(kilde)) return ['kilde: må være et objekt.']
   const feil = ukjenteFelt(kilde, 'kilde', KILDEFELT)
-  if (typeof kilde.nokkel !== 'string' || !NOKKEL.test(kilde.nokkel) || tegn(kilde.nokkel) > MAKSLENGDE.nokkel) {
-    feil.push(`kilde.nokkel: må bestå av små bokstaver a–z, tall og enkle bindestreker (høyst ${MAKSLENGDE.nokkel} tegn).`)
-  }
+  feil.push(...nokkelfeil(kilde.nokkel, 'kilde.nokkel'))
   feil.push(
     ...kodefeil(kilde.type, 'kilde.type', (KILDETYPER as readonly unknown[]).includes(kilde.type), `ukjent kildetype %. Tillatte: ${KILDETYPER.join(', ')}.`),
   )
@@ -227,12 +259,12 @@ function frekvensfeil(liste: unknown, sti: string): string[] {
   return feil
 }
 
-function organsystemfeil(liste: unknown): string[] {
-  if (!Array.isArray(liste) || liste.length === 0) return ['organsystemer: må være en liste med minst ett organsystem.']
+function organsystemfeil(liste: unknown, sti: string): string[] {
+  if (!Array.isArray(liste) || liste.length === 0) return [`${sti}: må være en liste med minst ett organsystem.`]
   const feil: string[] = []
   const sett = new Set<string>()
   liste.forEach((o: unknown, i) => {
-    const her = `organsystemer[${i}]`
+    const her = `${sti}[${i}]`
     if (!erObjekt(o)) {
       feil.push(`${her}: må være et objekt.`)
       return
@@ -251,6 +283,33 @@ function organsystemfeil(liste: unknown): string[] {
   return feil
 }
 
+function tabellfeil(liste: unknown): string[] {
+  if (!Array.isArray(liste) || liste.length === 0) return ['tabeller: må være en liste med minst én tabell.']
+  const feil: string[] = []
+  const sett = new Set<string>()
+  liste.forEach((t: unknown, i) => {
+    const her = `tabeller[${i}]`
+    if (!erObjekt(t)) {
+      feil.push(`${her}: må være et objekt.`)
+      return
+    }
+    feil.push(...ukjenteFelt(t, her, TABELLFELT))
+    const ugyldig = nokkelfeil(t.nokkel, `${her}.nokkel`)
+    if (ugyldig.length > 0) {
+      feil.push(...ugyldig)
+    } else if (sett.has(t.nokkel as string)) {
+      feil.push(`${her}.nokkel: «${t.nokkel}» står mer enn én gang; hver tabell har sin egen nøkkel.`)
+    } else {
+      sett.add(t.nokkel as string)
+    }
+    feil.push(...tekstfeil(t.navn, `${her}.navn`, MAKSLENGDE.navn, true))
+    feil.push(...tekstfeil(t.frekvensgrunnlag, `${her}.frekvensgrunnlag`, MAKSLENGDE.frekvensgrunnlag, false))
+    feil.push(...tekstfeil(t.merknad, `${her}.merknad`, MAKSLENGDE.merknad, false))
+    feil.push(...organsystemfeil(t.organsystemer, `${her}.organsystemer`))
+  })
+  return feil
+}
+
 /**
  * Alle feilene i en import, med stedet i fila foran hver; tom når importen kan
  * legges inn. Om fagsiden `stoff` finnes, vet bare databasen.
@@ -263,7 +322,13 @@ export function importfeil(data: unknown): string[] {
     feil.push('stoff: må være nøkkelen til en fagside (små bokstaver a–z, tall og enkle bindestreker).')
   }
   feil.push(...kildefeil(data.kilde))
-  feil.push(...organsystemfeil(data.organsystemer))
+  // Én tabell står rett i importen; flere står hver for seg under tabeller.
+  if (har(data, 'tabeller')) {
+    if (har(data, 'organsystemer')) feil.push('organsystemer: utelat feltet når importen har tabeller; organsystemene står i hver tabell.')
+    feil.push(...tabellfeil(data.tabeller))
+  } else {
+    feil.push(...organsystemfeil(data.organsystemer, 'organsystemer'))
+  }
   return feil
 }
 
@@ -275,9 +340,17 @@ export function kontrollerImport(data: unknown): Importkontroll {
   return feil.length > 0 ? { ok: false, feil } : { ok: true, import: data as Bivirkningsimport }
 }
 
+/** Tabellene i en import som er kontrollert; én uten nøkkel når organsystemene står rett i importen. */
+export function importtabeller(imp: Bivirkningsimport): { nokkel: string | null; organsystemer: Importorgansystemer }[] {
+  return imp.tabeller ?? [{ nokkel: null, organsystemer: imp.organsystemer }]
+}
+
 /** Antall bivirkninger i en import som er kontrollert. */
 export function antallIImport(imp: Bivirkningsimport): number {
-  return imp.organsystemer.reduce((sum, o) => sum + o.frekvenser.reduce((s, f) => s + f.bivirkninger.length, 0), 0)
+  return importtabeller(imp).reduce(
+    (sum, t) => sum + t.organsystemer.reduce((s, o) => s + o.frekvenser.reduce((n, f) => n + f.bivirkninger.length, 0), 0),
+    0,
+  )
 }
 
 /* --- Migrasjonen --------------------------------------------------------- */

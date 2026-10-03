@@ -7,8 +7,8 @@ import {
   bivirkningstekster,
   gruppeoppsummering,
   oppsummerBivirkninger,
-  undergruppeHarMer,
   undergruppeoppsummering,
+  type Bivirkningstabell,
   type Bivirkningsvisning,
 } from '../../bivirkninger/stoffside'
 import { Ikon } from '../ikon/Ikon'
@@ -40,9 +40,11 @@ export function harBivirkninger(tilstand: Bivirkningstilstand): boolean {
  * Det er ett datasett, og bryteren øverst bestemmer bare hvordan det vises
  * (`docs/bivirkninger.md`). Gruppene er detaljkort tegnet som overskrifter, i
  * styringen for siden som andre detaljkort; i hver står kombinasjonene som
- * underkort med ikon, navn og punktliste. Bare kombinasjoner med bivirkninger
- * vises. Dataene kan ikke redigeres her; de importeres, og kildene står i
- * seksjonens referansefelt.
+ * underkort med ikon, navn og oppsummering, som åpnes til punktlista. Bare
+ * kombinasjoner med bivirkninger vises. Har siden flere tabeller (flere
+ * preparatomtaler, eller flere tabeller i én), står hver for seg med navnet
+ * over, og radene blandes aldri. Dataene kan ikke redigeres her; de
+ * importeres, og kildene står i seksjonens referansefelt.
  */
 export function Bivirkningspanel({
   definisjon,
@@ -102,19 +104,72 @@ function Bivirkningsgrupper({
   valgt: Visning
   onVelg: (visning: Visning) => void
 }) {
-  const grupper = visning.grupper[valgt]
+  const alene = visning.tabeller.length === 1
   return (
     <div className="bivirkninger">
       <div className="bivirkninger__visning">
         <Trinnbryter etikett="Vis bivirkningene etter" valg={VISNINGSVALG} verdi={valgt} onVelg={onVelg} />
       </div>
-      <ul className="overskriftskortene">
-        {grupper.map((gruppe) => (
-          <li key={gruppeid(gruppe.nokkel)}>
-            <Bivirkningsgruppe gruppe={gruppe} flereKilder={visning.flereKilder} alene={grupper.length === 1} />
-          </li>
-        ))}
-      </ul>
+      {visning.tabeller.map((tabell) => (
+        <Bivirkningstabellvisning
+          key={tabell.id ?? ''}
+          tabell={tabell}
+          valgt={valgt}
+          medKilde={visning.flereKilder}
+          alene={alene}
+        />
+      ))}
+    </div>
+  )
+}
+
+/**
+ * Én tabell: gruppene, og navnet over når det trengs for å skille den fra de
+ * andre — med frekvensgrunnlaget, merknaden og, når kildene er flere, kilden.
+ */
+function Bivirkningstabellvisning({
+  tabell,
+  valgt,
+  medKilde,
+  alene,
+}: {
+  tabell: Bivirkningstabell
+  valgt: Visning
+  medKilde: boolean
+  alene: boolean
+}) {
+  const grupper = tabell.grupper[valgt]
+  const liste = (
+    <ul className="overskriftskortene">
+      {grupper.map((gruppe) => (
+        <li key={gruppeid(gruppe.nokkel)}>
+          <Bivirkningsgruppe gruppe={gruppe} tabell={tabell.id} alene={alene && grupper.length === 1} />
+        </li>
+      ))}
+    </ul>
+  )
+  if (!tabell.navn) return liste
+  const etikett = `bivirkningstabell-${tabell.id ?? 'eneste'}`
+  const { frekvensgrunnlag, merknad } = tabell.kontekst ?? {}
+  return (
+    <div className="bivirkninger__tabell" role="group" aria-labelledby={etikett}>
+      <div className="bivirkninger__tabellhode">
+        <p id={etikett} className="bivirkninger__tabellnavn">
+          <Uthev tekst={tabell.navn} />
+          {medKilde && <Referansepille ider={[bivirkningsreferanseId(tabell.kilde)]} />}
+        </p>
+        {frekvensgrunnlag && (
+          <p className="bivirkninger__tabellinfo">
+            Frekvensgrunnlag: <Uthev tekst={frekvensgrunnlag} />
+          </p>
+        )}
+        {merknad && (
+          <p className="bivirkninger__tabellinfo">
+            <Uthev tekst={merknad} />
+          </p>
+        )}
+      </div>
+      {liste}
     </div>
   )
 }
@@ -125,14 +180,14 @@ function Definisjon({ nokkel }: { nokkel: Gruppenokkel }) {
   return <span className="bivirkninger__definisjon">{frekvens(nokkel.kode).definisjon}</span>
 }
 
-function Bivirkningsgruppe({ gruppe, flereKilder, alene }: { gruppe: Gruppe; flereKilder: boolean; alene: boolean }) {
-  const id = gruppeid(gruppe.nokkel)
+function Bivirkningsgruppe({ gruppe, tabell, alene }: { gruppe: Gruppe; tabell: string | null; alene: boolean }) {
+  const id = gruppeid(gruppe.nokkel, tabell)
   return (
     <Detaljkort
       id={id}
       // Organsystemene har lange navn; overskriften er på størrelse med seksjonens i begge visningene.
       className="overskriftskort overskriftskort--lang"
-      // Med bare én gruppe er det ingenting å velge mellom.
+      // Med bare én gruppe på siden er det ingenting å velge mellom.
       apenFraStart={alene}
       tittel={
         <>
@@ -145,27 +200,24 @@ function Bivirkningsgruppe({ gruppe, flereKilder, alene }: { gruppe: Gruppe; fle
     >
       <Underkortrutenett
         etikett={gruppenavn(gruppe.nokkel)}
-        apenFraStart={gruppe.undergrupper.length === 1 ? undergruppeid(gruppe.nokkel, gruppe.undergrupper[0]!.nokkel) : null}
+        apenFraStart={gruppe.undergrupper.length === 1 ? undergruppeid(gruppe.nokkel, gruppe.undergrupper[0]!.nokkel, tabell) : null}
       >
         {gruppe.undergrupper.map((under) => {
-          const uid = undergruppeid(gruppe.nokkel, under.nokkel)
-          const sammendrag = undergruppeoppsummering(under)
+          const uid = undergruppeid(gruppe.nokkel, under.nokkel, tabell)
           return (
             <Underkort
               key={uid}
               id={uid}
               anker={elementAnker(uid)}
-              kanApnes={undergruppeHarMer(under, flereKilder)}
               ikon={bivirkningsikon(under.nokkel)}
               tittel={<Uthev tekst={gruppenavn(under.nokkel)} />}
               tittelTillegg={<Definisjon nokkel={under.nokkel} />}
-              oppsummering={forhandsvisning(sammendrag)}
+              oppsummering={forhandsvisning(undergruppeoppsummering(under))}
             >
               <ul className="bivirkninger__liste">
                 {under.bivirkninger.map((b) => (
                   <li key={`${b.kilde}:${b.posisjon}`}>
                     <Uthev tekst={b.tekst} />
-                    {flereKilder && <Referansepille ider={[bivirkningsreferanseId({ id: b.kilde })]} />}
                     {b.fotnote && (
                       <span className="bivirkninger__fotnote">
                         <Uthev tekst={b.fotnote} />

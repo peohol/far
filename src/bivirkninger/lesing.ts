@@ -3,7 +3,7 @@
  * (`les_bivirkninger` i migrasjonen `*_bivirkninger.sql`).
  *
  * Svaret leses defensivt: en rad med en kode appen ikke kjenner, eller fra en
- * kilde som ikke er med, hoppes over, så siden aldri faller sammen av data som
+ * kilde eller tabell (kontekst) som ikke er med, hoppes over, så siden aldri faller sammen av data som
  * ikke ser ut som ventet. Databasen slipper ikke inn slike rader.
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -15,6 +15,7 @@ import {
   type Bivirkning,
   type Bivirkningsdata,
   type Bivirkningskilde,
+  type Kontekst,
 } from './modell'
 
 type Objekt = Record<string, unknown>
@@ -25,6 +26,13 @@ function erObjekt(v: unknown): v is Objekt {
 
 function tekst(v: unknown): string | null {
   return typeof v === 'string' && v.trim() !== '' ? v.trim() : null
+}
+
+function lesKontekst(v: unknown): Kontekst | null {
+  if (!erObjekt(v)) return null
+  const nokkel = tekst(v.nokkel)
+  const navn = tekst(v.navn)
+  return nokkel && navn ? { nokkel, navn, frekvensgrunnlag: tekst(v.frekvensgrunnlag), merknad: tekst(v.merknad) } : null
 }
 
 function lesKilde(v: unknown): Bivirkningskilde | null {
@@ -48,16 +56,24 @@ function lesKilde(v: unknown): Bivirkningskilde | null {
     merknad: tekst(v.merknad),
     importert_kl: tekst(v.importert_kl) ?? '',
     importert_av: tekst(v.importert_av) ?? '',
+    kontekster: (Array.isArray(v.kontekster) ? v.kontekster : []).map(lesKontekst).filter((k): k is Kontekst => k !== null),
   }
 }
 
-function lesBivirkning(v: unknown, kilder: ReadonlySet<string>): Bivirkning | null {
+/** Kildene etter ID, med nøklene til tabellene i hver. */
+type Kildeoppslag = ReadonlyMap<string, ReadonlySet<string>>
+
+function lesBivirkning(v: unknown, kilder: Kildeoppslag): Bivirkning | null {
   if (!erObjekt(v)) return null
   const kilde = tekst(v.kilde)
+  const kontekst = tekst(v.kontekst)
   const t = tekst(v.tekst)
-  if (!kilde || !kilder.has(kilde) || !t || !erOrgansystemkode(v.organsystem) || !erFrekvenskode(v.frekvens)) return null
+  const tabeller = kilde ? kilder.get(kilde) : undefined
+  if (!kilde || !tabeller || (kontekst !== null && !tabeller.has(kontekst))) return null
+  if (!t || !erOrgansystemkode(v.organsystem) || !erFrekvenskode(v.frekvens)) return null
   return {
     kilde,
+    kontekst,
     organsystem: v.organsystem,
     frekvens: v.frekvens,
     tekst: t,
@@ -70,9 +86,9 @@ function lesBivirkning(v: unknown, kilder: ReadonlySet<string>): Bivirkning | nu
 export function lesBivirkningsdata(svar: unknown): Bivirkningsdata {
   if (!erObjekt(svar)) return INGEN_BIVIRKNINGER
   const kilder = (Array.isArray(svar.kilder) ? svar.kilder : []).map(lesKilde).filter((k): k is Bivirkningskilde => k !== null)
-  const ider = new Set(kilder.map((k) => k.id))
+  const oppslag: Kildeoppslag = new Map(kilder.map((k) => [k.id, new Set(k.kontekster.map((t) => t.nokkel))]))
   const bivirkninger = (Array.isArray(svar.bivirkninger) ? svar.bivirkninger : [])
-    .map((b) => lesBivirkning(b, ider))
+    .map((b) => lesBivirkning(b, oppslag))
     .filter((b): b is Bivirkning => b !== null)
   return { kilder, bivirkninger }
 }

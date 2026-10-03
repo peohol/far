@@ -1,0 +1,40 @@
+{
+  "format": "ousfar-bivirkninger/1",
+  "stoff": "syntetisk-eksempel",
+  "kilde": {
+    "nokkel": "syntetisk-infusjon-spc",
+    "type": "spc",
+    "tittel": "Preparatomtale (SPC) for Syntetisk preparat 5 mg/ml infusjonsvæske",
+    "preparat": "Syntetisk preparat 5 mg/ml infusjonsvæske",
+    "innehaver": "Syntetisk innehaver AS",
+    "spc_versjon": "Syntetisk versjon 1",
+    "revisjonsdato": "2026-01-31",
+    "importert_av": "Syntetisk importør",
+    "merknad": "Malen er syntetisk og viser bare formatet for en preparatomtale med flere bivirkningstabeller. Den er ikke data fra noen preparatomtale."
+  },
+  "tabeller": [
+    {
+      "nokkel": "syntetisk-indikasjon-per-pasient",
+      "navn": "Syntetisk indikasjon A",
+      "frekvensgrunnlag": "per pasient",
+      "organsystemer": [
+        {
+          "organsystem": "generelle",
+          "frekvenser": [{ "frekvens": "vanlige", "bivirkninger": ["Syntetisk bivirkning E"] }]
+        }
+      ]
+    },
+    {
+      "nokkel": "syntetisk-indikasjon-per-infusjon",
+      "navn": "Syntetisk indikasjon A",
+      "frekvensgrunnlag": "per infusjon",
+      "merknad": "Syntetisk merknad til tabellen.",
+      "organsystemer": [
+        {
+          "organsystem": "generelle",
+          "frekvenser": [{ "frekvens": "mindre_vanlige", "bivirkninger": ["Syntetisk bivirkning E"] }]
+        }
+      ]
+    }
+  ]
+}

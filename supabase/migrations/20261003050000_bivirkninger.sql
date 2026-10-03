@@ -5,6 +5,11 @@
 --     gjennom den fagsiden), organsystemet, frekvensen og teksten slik den
 --     står i preparatomtalen. Visningen etter frekvens og visningen etter
 --     organsystem lages av de samme radene i appen; ingen av dem lagres.
+--   * Har preparatomtalen flere bivirkningstabeller — for ulike indikasjoner
+--     eller doseringer, eller med ulikt frekvensgrunnlag (per pasient, per
+--     infusjon) — står hver som en kontekst (bivirkninger.kontekster), og
+--     radene peker på sin. Slike tabeller blandes aldri. En preparatomtale
+--     med én tabell har ingen kontekst.
 --   * Frekvensene og organsystemene er faste lister her og i
 --     src/bivirkninger/modell.ts. En rad kan bare peke på en kode som står i
 --     listene, og importen avviser alt annet med en melding om hvor feilen er,
@@ -133,20 +138,46 @@ create unique index bivirkninger_kilder_gjeldende_idx
 comment on table bivirkninger.kilder is
   'Hver import av en preparatomtale for en fagside, med sporbarheten. Erstattede og tilbaketrukne står igjen som historikk.';
 
+-- Tabellene i en preparatomtale som har flere: for ulike indikasjoner eller
+-- doseringer, eller med ulikt frekvensgrunnlag. Hver vises for seg.
+create table bivirkninger.kontekster (
+  id bigint generated always as identity primary key,
+  kilde uuid not null references bivirkninger.kilder (id),
+  nokkel text not null check (char_length(nokkel) <= 100 and nokkel ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
+  navn text not null check (char_length(navn) between 1 and 300 and navn !~ '^\s|\s$|[\n\r\t]'),
+  -- Hva frekvensene er regnet per, når preparatomtalen sier det (per pasient, per infusjon …).
+  frekvensgrunnlag text check (char_length(frekvensgrunnlag) between 1 and 200 and frekvensgrunnlag !~ '^\s|\s$|[\n\r\t]'),
+  merknad text check (char_length(merknad) between 1 and 2000),
+  -- Rekkefølgen i preparatomtalen.
+  posisjon integer not null check (posisjon >= 0),
+  unique (kilde, nokkel),
+  unique (kilde, posisjon),
+  unique (id, kilde)
+);
+
+comment on table bivirkninger.kontekster is
+  'Bivirkningstabellene i en preparatomtale som har flere (indikasjon, dosering eller frekvensgrunnlag). En preparatomtale med én tabell har ingen.';
+
 create table bivirkninger.bivirkninger (
   id bigint generated always as identity primary key,
   kilde uuid not null references bivirkninger.kilder (id),
+  -- Tabellen i preparatomtalen, når den har flere; ellers tom.
+  kontekst bigint,
   organsystem text not null references bivirkninger.organsystemer (kode),
   frekvens text not null references bivirkninger.frekvenser (kode),
   tekst text not null check (char_length(tekst) between 1 and 500 and tekst !~ '^\s|\s$|[\n\r\t]'),
   fotnote text check (char_length(fotnote) between 1 and 1000 and fotnote !~ '^\s|\s$|[\n\r\t]'),
-  -- Rekkefølgen i preparatomtalen, innenfor organsystemet og frekvensen.
+  -- Rekkefølgen i preparatomtalen, innenfor tabellen, organsystemet og frekvensen.
   posisjon integer not null check (posisjon >= 0),
-  unique (kilde, organsystem, frekvens, posisjon)
+  -- Konteksten hører til den samme kilden som raden.
+  foreign key (kontekst, kilde) references bivirkninger.kontekster (id, kilde)
 );
 
+create unique index bivirkninger_bivirkninger_plass_idx
+  on bivirkninger.bivirkninger (kilde, coalesce(kontekst, 0), organsystem, frekvens, posisjon);
+
 create unique index bivirkninger_bivirkninger_tekst_idx
-  on bivirkninger.bivirkninger (kilde, organsystem, frekvens, lower(tekst));
+  on bivirkninger.bivirkninger (kilde, coalesce(kontekst, 0), organsystem, frekvens, lower(tekst));
 
 comment on table bivirkninger.bivirkninger is
   'Én bivirkning per rad: kilden, organsystemet, frekvensen og teksten slik den står i preparatomtalen. Begge visningene på fagsiden lages av disse radene.';
@@ -343,6 +374,102 @@ begin
 end;
 $$;
 
+create function bivirkninger.organsystemfeil(liste jsonb, sti text)
+returns text[]
+language plpgsql
+stable
+set search_path = ''
+as $$
+declare
+  feil text[] := '{}';
+  sett text[] := '{}';
+  ukjent text[];
+  o jsonb;
+  her text;
+begin
+  if jsonb_typeof(liste) is distinct from 'array' or jsonb_array_length(liste) = 0 then
+    return array[sti || ': må være en liste med minst ett organsystem.'];
+  end if;
+  for i in 0 .. jsonb_array_length(liste) - 1 loop
+    o := liste -> i;
+    her := format('%s[%s]', sti, i);
+    if jsonb_typeof(o) <> 'object' then
+      feil := feil || (her || ': må være et objekt.');
+      continue;
+    end if;
+    feil := feil || bivirkninger.ukjente_felt(o, her, array['organsystem', 'frekvenser']);
+    ukjent := bivirkninger.kodefeil(
+      o -> 'organsystem',
+      her || '.organsystem',
+      exists (select 1 from bivirkninger.organsystemer k where to_jsonb(k.kode) = o -> 'organsystem'),
+      'ukjent organsystem %. De tillatte kodene står i docs/bivirkninger.md.');
+    if cardinality(ukjent) > 0 then
+      feil := feil || ukjent;
+    elsif (o ->> 'organsystem') = any (sett) then
+      feil := feil || format('%s.organsystem: «%s» står mer enn én gang; samle frekvensene under ett organsystem.', her, o ->> 'organsystem');
+    else
+      sett := sett || (o ->> 'organsystem');
+    end if;
+    feil := feil || bivirkninger.frekvensfeil(o -> 'frekvenser', her || '.frekvenser');
+  end loop;
+  return feil;
+end;
+$$;
+
+-- Tabellene i en preparatomtale med flere: hver med nøkkel, navn, eventuelt
+-- frekvensgrunnlag og merknad, og organsystemene sine.
+create function bivirkninger.tabellfeil(liste jsonb)
+returns text[]
+language plpgsql
+stable
+set search_path = ''
+as $$
+declare
+  feil text[] := '{}';
+  sett text[] := '{}';
+  t jsonb;
+  her text;
+begin
+  if jsonb_typeof(liste) is distinct from 'array' or jsonb_array_length(liste) = 0 then
+    return array['tabeller: må være en liste med minst én tabell.'];
+  end if;
+  for i in 0 .. jsonb_array_length(liste) - 1 loop
+    t := liste -> i;
+    her := format('tabeller[%s]', i);
+    if jsonb_typeof(t) <> 'object' then
+      feil := feil || (her || ': må være et objekt.');
+      continue;
+    end if;
+    feil := feil || bivirkninger.ukjente_felt(t, her, array['nokkel', 'navn', 'frekvensgrunnlag', 'merknad', 'organsystemer']);
+    if jsonb_typeof(t -> 'nokkel') is distinct from 'string'
+      or (t ->> 'nokkel') !~ '^[a-z0-9]+(-[a-z0-9]+)*$'
+      or char_length(t ->> 'nokkel') > 100 then
+      feil := feil || (her || '.nokkel: må bestå av små bokstaver a–z, tall og enkle bindestreker (høyst 100 tegn).');
+    elsif (t ->> 'nokkel') = any (sett) then
+      feil := feil || format('%s.nokkel: «%s» står mer enn én gang; hver tabell har sin egen nøkkel.', her, t ->> 'nokkel');
+    else
+      sett := sett || (t ->> 'nokkel');
+    end if;
+    feil := feil
+      || bivirkninger.tekstfeil(t -> 'navn', her || '.navn', 300, true)
+      || bivirkninger.tekstfeil(t -> 'frekvensgrunnlag', her || '.frekvensgrunnlag', 200, false)
+      || bivirkninger.tekstfeil(t -> 'merknad', her || '.merknad', 2000, false)
+      || bivirkninger.organsystemfeil(t -> 'organsystemer', her || '.organsystemer');
+  end loop;
+  return feil;
+end;
+$$;
+
+-- Om et felt står i objektet med en verdi (ikke null).
+create function bivirkninger.har(o jsonb, felt text)
+returns boolean
+language sql
+immutable
+set search_path = ''
+as $$
+  select jsonb_typeof(o -> felt) is distinct from null and jsonb_typeof(o -> felt) <> 'null'
+$$;
+
 -- Alle feilene i en import, med stedet i fila foran hver. Tom når importen
 -- kan legges inn. Om fagsiden finnes, sjekker importer().
 create function bivirkninger.importfeil(p jsonb)
@@ -353,18 +480,13 @@ set search_path = ''
 as $$
 declare
   feil text[] := '{}';
-  sett text[] := '{}';
-  ukjent text[];
   kilde jsonb := p -> 'kilde';
-  liste jsonb := p -> 'organsystemer';
-  o jsonb;
-  her text;
   lenke text[];
 begin
   if p is null or jsonb_typeof(p) <> 'object' then
     return array['Importen må være et JSON-objekt.'];
   end if;
-  feil := feil || bivirkninger.ukjente_felt(p, '', array['format', 'stoff', 'kilde', 'organsystemer']);
+  feil := feil || bivirkninger.ukjente_felt(p, '', array['format', 'stoff', 'kilde', 'organsystemer', 'tabeller']);
   if p -> 'format' is distinct from to_jsonb('ousfar-bivirkninger/1'::text) then
     feil := feil || 'format: må være «ousfar-bivirkninger/1».'::text;
   end if;
@@ -402,37 +524,42 @@ begin
       || bivirkninger.tekstfeil(kilde -> 'merknad', 'kilde.merknad', 2000, false);
   end if;
 
-  if jsonb_typeof(liste) is distinct from 'array' or jsonb_array_length(liste) = 0 then
-    feil := feil || 'organsystemer: må være en liste med minst ett organsystem.'::text;
+  -- Én tabell står rett i importen; flere står hver for seg under tabeller.
+  if bivirkninger.har(p, 'tabeller') then
+    if bivirkninger.har(p, 'organsystemer') then
+      feil := feil || 'organsystemer: utelat feltet når importen har tabeller; organsystemene står i hver tabell.'::text;
+    end if;
+    feil := feil || bivirkninger.tabellfeil(p -> 'tabeller');
   else
-    for i in 0 .. jsonb_array_length(liste) - 1 loop
-      o := liste -> i;
-      her := format('organsystemer[%s]', i);
-      if jsonb_typeof(o) <> 'object' then
-        feil := feil || (her || ': må være et objekt.');
-        continue;
-      end if;
-      feil := feil || bivirkninger.ukjente_felt(o, her, array['organsystem', 'frekvenser']);
-      ukjent := bivirkninger.kodefeil(
-        o -> 'organsystem',
-        her || '.organsystem',
-        exists (select 1 from bivirkninger.organsystemer k where to_jsonb(k.kode) = o -> 'organsystem'),
-        'ukjent organsystem %. De tillatte kodene står i docs/bivirkninger.md.');
-      if cardinality(ukjent) > 0 then
-        feil := feil || ukjent;
-      elsif (o ->> 'organsystem') = any (sett) then
-        feil := feil || format('%s.organsystem: «%s» står mer enn én gang; samle frekvensene under ett organsystem.', her, o ->> 'organsystem');
-      else
-        sett := sett || (o ->> 'organsystem');
-      end if;
-      feil := feil || bivirkninger.frekvensfeil(o -> 'frekvenser', her || '.frekvenser');
-    end loop;
+    feil := feil || bivirkninger.organsystemfeil(p -> 'organsystemer', 'organsystemer');
   end if;
   return feil;
 end;
 $$;
 
 -- --- Importen ---------------------------------------------------------------
+
+-- Radene i én tabell, organsystem for organsystem, med plassen i
+-- preparatomtalen. Kontrollert på forhånd av importfeil().
+create function bivirkninger.legg_inn_rader(p_kilde uuid, p_kontekst bigint, p_organsystemer jsonb)
+returns void
+language sql
+volatile
+set search_path = ''
+as $$
+  insert into bivirkninger.bivirkninger (kilde, kontekst, organsystem, frekvens, tekst, fotnote, posisjon)
+  select
+    p_kilde,
+    p_kontekst,
+    o.v ->> 'organsystem',
+    f.v ->> 'frekvens',
+    case when jsonb_typeof(b.v) = 'string' then b.v #>> '{}' else b.v ->> 'tekst' end,
+    case when jsonb_typeof(b.v) = 'object' then b.v ->> 'fotnote' end,
+    b.n - 1
+  from jsonb_array_elements(p_organsystemer) o(v)
+  cross join lateral jsonb_array_elements(o.v -> 'frekvenser') f(v)
+  cross join lateral jsonb_array_elements(f.v -> 'bivirkninger') with ordinality b(v, n)
+$$;
 
 -- Legger inn én kontrollert import og gir tilbake ID-en til kilden. Har
 -- importen feil, eller finnes ikke fagsiden, avvises den med alle feilene, og
@@ -451,7 +578,10 @@ declare
   v_sum text;
   v_forrige bivirkninger.kilder;
   v_ny uuid := gen_random_uuid();
+  v_kontekst bigint;
   k jsonb := p_import -> 'kilde';
+  t jsonb;
+  n bigint;
 begin
   feil := bivirkninger.importfeil(p_import);
   if cardinality(feil) = 0 then
@@ -490,17 +620,17 @@ begin
     k ->> 'spc_versjon', (k ->> 'revisjonsdato')::date, k ->> 'lenke', (k ->> 'kontrollert')::date,
     k ->> 'kontrollert_av', k ->> 'merknad', k ->> 'importert_av', v_sum, p_import);
 
-  insert into bivirkninger.bivirkninger (kilde, organsystem, frekvens, tekst, fotnote, posisjon)
-  select
-    v_ny,
-    o.v ->> 'organsystem',
-    f.v ->> 'frekvens',
-    case when jsonb_typeof(b.v) = 'string' then b.v #>> '{}' else b.v ->> 'tekst' end,
-    case when jsonb_typeof(b.v) = 'object' then b.v ->> 'fotnote' end,
-    b.n - 1
-  from jsonb_array_elements(p_import -> 'organsystemer') o(v)
-  cross join lateral jsonb_array_elements(o.v -> 'frekvenser') f(v)
-  cross join lateral jsonb_array_elements(f.v -> 'bivirkninger') with ordinality b(v, n);
+  -- Én tabell står rett i importen, uten kontekst; flere får hver sin.
+  if bivirkninger.har(p_import, 'tabeller') then
+    for t, n in select x.v, x.n from jsonb_array_elements(p_import -> 'tabeller') with ordinality x(v, n) loop
+      insert into bivirkninger.kontekster (kilde, nokkel, navn, frekvensgrunnlag, merknad, posisjon)
+      values (v_ny, t ->> 'nokkel', t ->> 'navn', t ->> 'frekvensgrunnlag', t ->> 'merknad', n - 1)
+      returning id into v_kontekst;
+      perform bivirkninger.legg_inn_rader(v_ny, v_kontekst, t -> 'organsystemer');
+    end loop;
+  else
+    perform bivirkninger.legg_inn_rader(v_ny, null, p_import -> 'organsystemer');
+  end if;
 
   return v_ny;
 end;
@@ -537,8 +667,10 @@ $$;
 
 -- --- Lesingen ---------------------------------------------------------------
 
--- Bivirkningene på fagsiden med nøkkelen: de gjeldende kildene og radene fra
--- dem, i preparatomtalenes rekkefølge (organsystem, frekvens, kilde, plass).
+-- Bivirkningene på fagsiden med nøkkelen: de gjeldende kildene med tabellene
+-- (kontekstene) sine og radene fra dem, i preparatomtalenes rekkefølge
+-- (organsystem, frekvens, kilde, tabell, plass). En rad uten kontekst står i
+-- kildens eneste tabell.
 -- Navnene på frekvensene og organsystemene står i appen.
 create function public.les_bivirkninger(stoff text)
 returns jsonb
@@ -560,16 +692,23 @@ as $$
         'id', k.id, 'nokkel', k.nokkel, 'type', k.type, 'tittel', k.tittel, 'preparat', k.preparat,
         'innehaver', k.innehaver, 'spc_versjon', k.spc_versjon, 'revisjonsdato', k.revisjonsdato,
         'lenke', k.lenke, 'kontrollert', k.kontrollert, 'kontrollert_av', k.kontrollert_av,
-        'merknad', k.merknad, 'importert_kl', k.importert_kl, 'importert_av', k.importert_av)
+        'merknad', k.merknad, 'importert_kl', k.importert_kl, 'importert_av', k.importert_av,
+        'kontekster', coalesce((
+          select jsonb_agg(jsonb_build_object(
+            'nokkel', t.nokkel, 'navn', t.navn, 'frekvensgrunnlag', t.frekvensgrunnlag, 'merknad', t.merknad)
+            order by t.posisjon)
+          from bivirkninger.kontekster t
+          where t.kilde = k.id), '[]'))
         order by k.importert_kl, k.nokkel)
       from kilder k), '[]'),
     'bivirkninger', coalesce((
       select jsonb_agg(jsonb_build_object(
-        'kilde', b.kilde, 'organsystem', b.organsystem, 'frekvens', b.frekvens,
+        'kilde', b.kilde, 'kontekst', t.nokkel, 'organsystem', b.organsystem, 'frekvens', b.frekvens,
         'tekst', b.tekst, 'fotnote', b.fotnote, 'posisjon', b.posisjon)
-        order by o.rang, f.rang, k.importert_kl, k.nokkel, b.posisjon)
+        order by o.rang, f.rang, k.importert_kl, k.nokkel, t.posisjon nulls first, b.posisjon)
       from bivirkninger.bivirkninger b
       join kilder k on k.id = b.kilde
+      left join bivirkninger.kontekster t on t.id = b.kontekst
       join bivirkninger.organsystemer o on o.kode = b.organsystem
       join bivirkninger.frekvenser f on f.kode = b.frekvens), '[]')
   )
