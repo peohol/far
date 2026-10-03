@@ -38,16 +38,16 @@ export function Legemiddelformer({ visning, sidenavn }: { visning: Preparatvisni
 
   return (
     <>
-      <ul className="preparatformer">
+      <ul className="overskriftskortene">
         {visning.former.map((f) => (
           <li key={f.id}>
             <Detaljkort
               id={preparatkort(f.id)}
-              className="preparatform"
+              className="overskriftskort"
               apenFraStart={apenFraStart}
               tittel={
                 <>
-                  <Ikon navn={formikonnavn(f.ikon)} className="preparatform__ikon" />
+                  <Ikon navn={formikonnavn(f.ikon)} className="overskriftskort__ikon" />
                   <Uthev tekst={f.form} />
                 </>
               }

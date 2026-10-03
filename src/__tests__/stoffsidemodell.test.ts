@@ -463,7 +463,7 @@ describe('sidemodellen', () => {
       'interaksjoner',
       'tdm',
       'serumkonsentrasjoner',
-      'misbruk_avhengighet',
+      'avhengighet_toleranse',
     ])
   })
 

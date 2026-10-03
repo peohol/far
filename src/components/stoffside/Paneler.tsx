@@ -3,6 +3,7 @@ import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
 import type { Sideelement, Sidemodell } from '../../faginnhold/stoffside'
 import {
   ELEMENTTYPER,
+  fasteKort,
   lesDosetabell,
   lesKinetikk,
   lesMekanismekort,
@@ -19,7 +20,7 @@ import { NODER, erTomt, klartekst, tomtDokument, type Riktekstdokument } from '.
 import { Button } from '../Button'
 import { SenketTekst } from '../SenketTekst'
 import { Ikon } from '../ikon/Ikon'
-import { Detaljkort, Seksjon, seksjonsanker } from '../seksjoner/Seksjon'
+import { Detaljkort, Seksjon, Underkort, Underkortrutenett, seksjonsanker } from '../seksjoner/Seksjon'
 import { Skuffrutenett } from '../seksjoner/Skuffrutenett'
 import { Referansefelt } from '../referanser/Referansefelt'
 import { useSidereferanser } from '../referanser/Sidereferanser'
@@ -304,7 +305,7 @@ interface Korttype<T> {
   tilData: (kort: T) => Record<string, unknown>
   /** Et nytt, tomt kort. */
   tomt: () => T
-  /** Et nytt, tomt kort med en fast overskrift (se `Paneldefinisjon.kort`). */
+  /** Et nytt, tomt kort med en fast overskrift (se `fasteKort`). */
   medTittel?: (tittel: string) => T
   /** Navnet på kortet i knappene og redigeringsvinduet. */
   navn: (kort: T) => string
@@ -390,7 +391,10 @@ export function Redaksjonskort(props: {
  *
  * Har panelet faste kort (`Paneldefinisjon.kort`), legges hvert av dem til
  * for seg, med overskriften gitt, og de står i den faste rekkefølgen: de kan
- * ikke flyttes, og overskriften kan ikke endres.
+ * ikke flyttes, og overskriften kan ikke endres. Er de faste kortene delt i
+ * grupper (`Paneldefinisjon.grupper`), er hver gruppe et detaljkort tegnet som
+ * en overskrift, med kortene sine som underkort (`Underkortrutenett`) og
+ * knappene for å legge dem til.
  */
 function Kortserie<T>({
   definisjon,
@@ -412,112 +416,166 @@ function Kortserie<T>({
   const [fjerner, setFjerner] = useState<string | null>(null)
   const { handlinger, redigerer } = kontekst
   const { Skjema } = type
-  const faste = type.medTittel && definisjon.kort
+  const faste = type.medTittel && fasteKort(definisjon)
+  const grupper = faste ? definisjon.grupper : undefined
+  const navnPaa = (element: Sideelement) => type.navn(type.les(element.data))
   const erFast = (navn: string) => faste?.includes(navn) ?? false
-  const mangler = faste?.filter((tittel) => !elementer.some((e) => type.navn(type.les(e.data)) === tittel)) ?? []
   const fastNytt = typeof nytt === 'string' && faste ? nytt : null
   const startNytt = fastNytt !== null && type.medTittel ? type.medTittel(fastNytt) : type.tomt()
 
+  /**
+   * Ett kort. I en gruppe er det et underkort, ellers et detaljkort i
+   * seksjonens rutenett; innholdet og knappene er de samme. `liste` er kortene
+   * det flyttes blant.
+   */
+  const kortet = (element: Sideelement, i: number, liste: readonly Sideelement[], apenFraStart: boolean) => {
+    const kort = type.les(element.data)
+    const navn = type.navn(kort)
+    // Kortet åpnes bare når det har mer å vise. Redaktøren åpner det for å komme til knappene.
+    const kanApnes = redigerer || type.harMer(kort)
+    const hode = {
+      id: element.id,
+      kanApnes,
+      ikon: type.ikon(kort),
+      tittel: type.tittel(kort),
+      oppsummering: kanApnes ? type.oppsummering(kort) : undefined,
+      className: type.klasse?.(kort),
+    }
+    // Ankeret søket peker på står inne i kortet, så å gå dit åpner også kortet.
+    const innhold = (
+      <div id={elementAnker(element.id)} className="infokort__innhold">
+        {kanApnes ? (
+          <Redigerbar
+            navn={navn}
+            element={element}
+            redigerer={redigerer}
+            visning={type.visning(kort)}
+            ekstra={
+              <>
+                {!faste && i > 0 && (
+                  <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt opp: ${navn}`} onClick={() => void handlinger.flyttElement(element, liste, -1)}>
+                    Flytt opp
+                  </Button>
+                )}
+                {!faste && i < liste.length - 1 && (
+                  <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt ned: ${navn}`} onClick={() => void handlinger.flyttElement(element, liste, 1)}>
+                    Flytt ned
+                  </Button>
+                )}
+                {/* To trykk: et kort som fjernes, forsvinner fra utkastet og
+                    hentes bare tilbake gjennom historikken. */}
+                {fjerner === element.id ? (
+                  <Button
+                    variant="subtle"
+                    className="redigeringsknapp"
+                    aria-label={`Bekreft: fjern ${navn}`}
+                    onClick={() => void handlinger.fjernElement(element)}
+                  >
+                    Bekreft fjerning
+                  </Button>
+                ) : (
+                  <Button variant="subtle" className="redigeringsknapp" aria-label={`Fjern: ${navn}`} onClick={() => setFjerner(element.id)}>
+                    Fjern
+                  </Button>
+                )}
+              </>
+            }
+            skjema={(lukk) => (
+              <Skjema
+                tittel={navn}
+                ikon={type.ikon(kort) ?? seksjonsikon(definisjon.nokkel)}
+                fastTittel={erFast(navn)}
+                start={kort}
+                referanser={element.referanser}
+                onAvbryt={lukk}
+                onLagre={async ({ data, referanser }) => {
+                  await handlinger.lagreElement(element, {
+                    panel: definisjon.nokkel,
+                    elementtype: type.elementtype,
+                    posisjon: element.posisjon,
+                    data: type.tilData(data),
+                    referanser,
+                  })
+                  lukk()
+                }}
+              />
+            )}
+          />
+        ) : (
+          (type.fast ?? type.visning)(kort)
+        )}
+        <Kortreferanser element={element} />
+      </div>
+    )
+    return grupper ? (
+      <Underkort key={element.id} {...hode}>
+        {innhold}
+      </Underkort>
+    ) : (
+      <li key={element.id} className="infokort__kort">
+        <Detaljkort {...hode} apenFraStart={apenFraStart}>
+          {innhold}
+        </Detaljkort>
+      </li>
+    )
+  }
+
+  /** Knappene for de faste kortene som ikke er lagt til ennå. */
+  const leggTilFaste = (titler: readonly string[]) =>
+    redigerer &&
+    titler.length > 0 && (
+      <div className="redigeringsrad">
+        {titler.map((tittel) => (
+          <Button
+            key={tittel}
+            variant="kant"
+            icon={<Ikon navn="plus" />}
+            className="redigeringsknapp"
+            aria-label={`Legg til: ${tittel}`}
+            onClick={() => setNytt(tittel)}
+          >
+            {tittel}
+          </Button>
+        ))}
+      </div>
+    )
+  const mangler = (titler: readonly string[]) => titler.filter((tittel) => !elementer.some((e) => navnPaa(e) === tittel))
+
+  // Står kortene i grupper, vises hver gruppe med kortene sine. Et kort som ikke hører til
+  // noen gruppe (en overskrift som er tatt ut), står for seg under dem, så ingenting skjules.
+  const gruppert = grupper?.map((gruppe) => ({ gruppe, kort: elementer.filter((e) => gruppe.kort.includes(navnPaa(e))) }))
+  const synlige = gruppert?.filter((g) => redigerer || g.kort.length > 0) ?? []
+  const utenGruppe = grupper ? elementer.filter((e) => !faste?.includes(navnPaa(e))) : elementer
+
   return (
     <>
-      {elementer.length > 0 && (
+      {synlige.length > 0 && (
+        <ul className="overskriftskortene">
+          {synlige.map(({ gruppe, kort }) => (
+            <li key={gruppe.nokkel}>
+              <Detaljkort
+                id={gruppe.nokkel}
+                className="overskriftskort overskriftskort--lang overskriftskort--utenIkon"
+                // Med bare én gruppe er det ingenting å velge mellom.
+                apenFraStart={synlige.length === 1}
+                tittel={<Uthev tekst={gruppe.tittel} />}
+                oppsummering={ramsOpp(kort.map(navnPaa))}
+              >
+                {kort.length > 0 && (
+                  <Underkortrutenett etikett={gruppe.tittel} apenFraStart={kort.length === 1 ? kort[0]!.id : null}>
+                    {kort.map((element, i) => kortet(element, i, kort, false))}
+                  </Underkortrutenett>
+                )}
+                {leggTilFaste(mangler(gruppe.kort))}
+              </Detaljkort>
+            </li>
+          ))}
+        </ul>
+      )}
+      {utenGruppe.length > 0 && (
         <Skuffrutenett className="infokort">
-          {elementer.map((element, i) => {
-            const kort = type.les(element.data)
-            const navn = type.navn(kort)
-            // Kortet åpnes bare når det har mer å vise. Redaktøren åpner det for å komme til knappene.
-            if (!redigerer && !type.harMer(kort)) {
-              return (
-                <li key={element.id} className="infokort__kort">
-                  <Detaljkort id={element.id} kanApnes={false} ikon={type.ikon(kort)} tittel={type.tittel(kort)} className={type.klasse?.(kort)}>
-                    <div id={elementAnker(element.id)} className="infokort__innhold">
-                      {(type.fast ?? type.visning)(kort)}
-                      <Kortreferanser element={element} />
-                    </div>
-                  </Detaljkort>
-                </li>
-              )
-            }
-            return (
-              <li key={element.id} className="infokort__kort">
-                <Detaljkort
-                  id={element.id}
-                  // Står det bare ett kort i seksjonen, er det ingenting å velge mellom.
-                  apenFraStart={ettAlene && elementer.length === 1}
-                  ikon={type.ikon(kort)}
-                  tittel={type.tittel(kort)}
-                  oppsummering={type.oppsummering(kort)}
-                  className={type.klasse?.(kort)}
-                >
-                  {/* Ankeret søket peker på står inne i detaljkortet, så å gå dit åpner også kortet. */}
-                  <div id={elementAnker(element.id)} className="infokort__innhold">
-                    <Redigerbar
-                      navn={navn}
-                      element={element}
-                      redigerer={redigerer}
-                      visning={type.visning(kort)}
-                      ekstra={
-                        <>
-                          {!faste && i > 0 && (
-                            <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt opp: ${navn}`} onClick={() => void handlinger.flyttElement(element, elementer, -1)}>
-                              Flytt opp
-                            </Button>
-                          )}
-                          {!faste && i < elementer.length - 1 && (
-                            <Button variant="subtle" className="redigeringsknapp" aria-label={`Flytt ned: ${navn}`} onClick={() => void handlinger.flyttElement(element, elementer, 1)}>
-                              Flytt ned
-                            </Button>
-                          )}
-                          {/* To trykk: et kort som fjernes, forsvinner fra utkastet og
-                              hentes bare tilbake gjennom historikken. */}
-                          {fjerner === element.id ? (
-                            <Button
-                              variant="subtle"
-                              className="redigeringsknapp"
-                              aria-label={`Bekreft: fjern ${navn}`}
-                              onClick={() => void handlinger.fjernElement(element)}
-                            >
-                              Bekreft fjerning
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="subtle"
-                              className="redigeringsknapp"
-                              aria-label={`Fjern: ${navn}`}
-                              onClick={() => setFjerner(element.id)}
-                            >
-                              Fjern
-                            </Button>
-                          )}
-                        </>
-                      }
-                      skjema={(lukk) => (
-                        <Skjema
-                          tittel={navn}
-                          ikon={type.ikon(kort) ?? seksjonsikon(definisjon.nokkel)}
-                          fastTittel={erFast(navn)}
-                          start={kort}
-                          referanser={element.referanser}
-                          onAvbryt={lukk}
-                          onLagre={async ({ data, referanser }) => {
-                            await handlinger.lagreElement(element, {
-                              panel: definisjon.nokkel,
-                              elementtype: type.elementtype,
-                              posisjon: element.posisjon,
-                              data: type.tilData(data),
-                              referanser,
-                            })
-                            lukk()
-                          }}
-                        />
-                      )}
-                    />
-                    <Kortreferanser element={element} />
-                  </div>
-                </Detaljkort>
-              </li>
-            )
-          })}
+          {/* Står det bare ett kort i seksjonen, er det ingenting å velge mellom. */}
+          {utenGruppe.map((element, i) => kortet(element, i, utenGruppe, ettAlene && elementer.length === 1))}
         </Skuffrutenett>
       )}
       {redigerer && !faste && (
@@ -527,22 +585,7 @@ function Kortserie<T>({
           </Button>
         </div>
       )}
-      {redigerer && mangler.length > 0 && (
-        <div className="redigeringsrad">
-          {mangler.map((tittel) => (
-            <Button
-              key={tittel}
-              variant="kant"
-              icon={<Ikon navn="plus" />}
-              className="redigeringsknapp"
-              aria-label={`Legg til: ${tittel}`}
-              onClick={() => setNytt(tittel)}
-            >
-              {tittel}
-            </Button>
-          ))}
-        </div>
-      )}
+      {!grupper && leggTilFaste(mangler(faste || []))}
       {(fastNytt !== null || nytt === true) && (
         <Bevaringsomrade navn={`nytt:${definisjon.nokkel}`}>
           <Skjema
