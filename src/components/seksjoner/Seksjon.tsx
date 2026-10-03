@@ -1,8 +1,10 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
   type MouseEvent,
@@ -18,12 +20,15 @@ import {
   INNHOLDSATTRIBUTT,
   SKUFFATTRIBUTT,
   SeksjonsstyringKilde,
+  VIS_HENDELSE,
   skuffnokkel,
   useSeksjonsstyring,
   type Seksjonsstyring,
 } from './Seksjonsstyring'
 import { useSkjuling } from '../../hooks/useSkjuling'
 import { useRutenettflytting } from './Skuffrutenett'
+import { useFlytting } from '../../hooks/useFlytting'
+import { rullefart } from '../../hooks/useKortHopp'
 import '../../styles/seksjoner.css'
 
 /**
@@ -183,18 +188,12 @@ function Skuff({
   slag,
   sti,
   anker,
-  tittel,
-  tittelTillegg,
-  oppsummering,
-  handlinger,
-  ikon,
   apenFraStart = false,
-  className,
-  children,
+  ...resten
 }: Felles & { slag: 'seksjon' | 'detalj'; sti: readonly string[]; anker: string }) {
   const nokkel = skuffnokkel(sti)
   const styring = useStyring()
-  const { registrer } = styring
+  const { registrer, apneTil } = styring
   // Stien er en ny liste ved hver tegning; nøkkelen sier når den er en annen.
   const stien = useRef(sti)
   stien.current = sti
@@ -203,34 +202,106 @@ function Skuff({
   // Et detaljkort i et rutenett vokser og flytter seg med naboene i stedet for å gli opp (se `Skuffrutenett`).
   const rutenett = useRutenettflytting()
   const flyttes = slag === 'detalj' && rutenett !== null
-  const sett = (apen: boolean) => {
-    if (flyttes) rutenett()
-    styring.sett(sti, apen)
-  }
+  // Nettleserens eget søk fant noe i den lukkede skuffen. Skuffen åpnes, og
+  // søsknene lukkes, før nettleseren ruller til treffet — så treffet står der
+  // nettleseren tror det står.
+  const funnet = useCallback((inner: HTMLElement) => apneTil(inner, false), [apneTil])
+
+  return (
+    <Skufframme
+      {...resten}
+      slag={slag}
+      niva={slag === 'seksjon' ? 2 : 3}
+      anker={anker}
+      apen={apen}
+      animer={animer}
+      flyttes={flyttes}
+      skuff={nokkel}
+      onSett={(apnes) => {
+        if (flyttes) rutenett()
+        styring.sett(sti, apnes)
+      }}
+      onFunnet={funnet}
+    />
+  )
+}
+
+/**
+ * Det en skuff tegner: hodet med ikon, tittel, oppsummering, treff, knapper
+ * og pil, og kroppen som glir opp og igjen. Om den er åpen, og hva et trykk
+ * gjør, bestemmer den som bruker den: en seksjon eller et detaljkort i
+ * styringen for siden (`Skuff`), eller et underkort i en visning som styrer
+ * seg selv (`Underkort`).
+ */
+function Skufframme({
+  slag,
+  niva,
+  anker,
+  apen,
+  animer,
+  flyttes,
+  skuff,
+  onSett,
+  onFunnet,
+  onVis,
+  tittel,
+  tittelTillegg,
+  oppsummering,
+  handlinger,
+  ikon,
+  className,
+  children,
+}: Omit<Felles, 'id' | 'apenFraStart'> & {
+  slag: 'seksjon' | 'detalj'
+  niva: 2 | 3 | 4
+  anker?: string
+  apen: boolean
+  /** Usann når skiftet skal skje straks, uten å gli. */
+  animer: boolean
+  /** Sant når et rutenett flytter kortet i stedet for at det glir opp. */
+  flyttes: boolean
+  /** Nøkkelen i styringen for siden. Et underkort har ingen. */
+  skuff?: string
+  onSett: (apen: boolean) => void
+  /** Nettleserens eget søk fant noe i den lukkede skuffen. */
+  onFunnet: (inner: HTMLElement) => void
+  /** Søket på siden skal vise noe i skuffen (`VIS_HENDELSE`). */
+  onVis?: () => void
+}) {
   const id = useId()
   const overskrift = `${id}-overskrift`
   const innholdId = `${id}-innhold`
   const oppsummeringId = `${id}-oppsummering`
   const treffId = `${id}-treff`
+  const ramme = useRef<HTMLElement>(null)
   const kropp = useRef<HTMLDivElement>(null)
   const inner = useRef<HTMLDivElement>(null)
   const treff = useTreffI(inner)
 
   useSkjuling(kropp, inner, apen, animer && !flyttes)
 
-  // Nettleserens eget søk fant noe i den lukkede skuffen. Skuffen åpnes, og
-  // søsknene lukkes, før nettleseren ruller til treffet — så treffet står der
-  // nettleseren tror det står.
-  const { apneTil } = styring
+  // Skuffen må stå åpen før nettleseren ruller til treffet.
+  const funnet = useRef(onFunnet)
+  funnet.current = onFunnet
   useEffect(() => {
     const el = inner.current
     if (!el) return
-    const aapne = () => flushSync(() => apneTil(el, false))
+    const aapne = () => flushSync(() => funnet.current(el))
     el.addEventListener('beforematch', aapne)
     return () => el.removeEventListener('beforematch', aapne)
-  }, [apneTil])
+  }, [])
 
-  const veksle = () => sett(!apen)
+  const vis = useRef(onVis)
+  vis.current = onVis
+  useEffect(() => {
+    const el = ramme.current
+    if (!el || !vis.current) return
+    const vises = () => vis.current?.()
+    el.addEventListener(VIS_HENDELSE, vises)
+    return () => el.removeEventListener(VIS_HENDELSE, vises)
+  }, [])
+
+  const veksle = () => onSett(!apen)
   // Et trykk hvor som helst i hodet åpner og lukker — men ikke på knappene i det.
   const trykkIHodet = (event: MouseEvent<HTMLDivElement>) => {
     if ((event.target as Element).closest(INTERAKTIVT)) return
@@ -239,11 +310,10 @@ function Skuff({
   }
   // Knappene i hodet virker på innholdet, så det må stå fram.
   const trykkPaaHandling = (event: MouseEvent<HTMLDivElement>) => {
-    if (!apen && (event.target as Element).closest(INTERAKTIVT)) sett(true)
+    if (!apen && (event.target as Element).closest(INTERAKTIVT)) onSett(true)
   }
 
-  const niva = slag === 'seksjon' ? 2 : 3
-  const Overskrift = niva === 2 ? 'h2' : 'h3'
+  const Overskrift = OVERSKRIFTER[niva]
   const Ramme = slag === 'seksjon' ? 'section' : 'div'
   const visOppsummering = !apen && oppsummering != null && oppsummering !== false && oppsummering !== ''
   const visTreff = !apen && treff > 0
@@ -251,11 +321,12 @@ function Skuff({
 
   return (
     <Ramme
+      ref={ramme as RefObject<HTMLDivElement>}
       id={anker}
       className={[KLASSE, `${KLASSE}--${slag}`, className].filter(Boolean).join(' ')}
       aria-labelledby={overskrift}
       {...(slag === 'detalj' && { role: 'group' })}
-      {...{ [SKUFFATTRIBUTT]: nokkel }}
+      {...(skuff !== undefined && { [SKUFFATTRIBUTT]: skuff })}
       data-apen={apen || undefined}
       data-stille={!animer || undefined}
       data-flyttes={flyttes || undefined}
@@ -304,7 +375,7 @@ function Skuff({
         </span>
       </div>
       <div ref={kropp} className={`${KLASSE}__kropp`}>
-        <div ref={inner} id={innholdId} className={`${KLASSE}__inner`} {...{ [INNHOLDSATTRIBUTT]: '' }}>
+        <div ref={inner} id={innholdId} className={`${KLASSE}__inner`} {...(skuff !== undefined && { [INNHOLDSATTRIBUTT]: '' })}>
           <div className={`${KLASSE}__innhold`}>
             <UnderOverskrift niva={niva}>{children}</UnderOverskrift>
           </div>
@@ -314,6 +385,8 @@ function Skuff({
   )
 }
 
+const OVERSKRIFTER = { 2: 'h2', 3: 'h3', 4: 'h4' } as const
+
 /**
  * Et detaljkort uten noe mer å vise: tittelen med innholdet rett under, slik
  * et lukket kort viser oppsummeringen sin, men i sin helhet. Det har ingen
@@ -321,15 +394,7 @@ function Skuff({
  * styringen, men et sted som alltid står fram: en direktelenke dit åpner
  * seksjonen og ruller dit, og søket åpner seksjonen rundt et treff i det.
  */
-function Fastkort({
-  sti,
-  anker,
-  tittel,
-  tittelTillegg,
-  ikon,
-  className,
-  children,
-}: Felles & { sti: readonly string[]; anker: string }) {
+function Fastkort({ sti, anker, ...resten }: Felles & { sti: readonly string[]; anker: string }) {
   const { fastSted } = useStyring()
   const ramme = useRef<HTMLDivElement>(null)
   const nokkel = skuffnokkel(sti)
@@ -338,7 +403,26 @@ function Fastkort({
   useEffect(() => {
     if (ramme.current) return fastSted(stien.current, ramme.current)
   }, [fastSted, nokkel])
+  return <Fastramme {...resten} ramme={ramme} anker={anker} niva={3} />
+}
+
+/** Det et fast kort tegner: hodet med ikon og tittel, og innholdet rett under tittelen. */
+function Fastramme({
+  ramme,
+  anker,
+  niva,
+  tittel,
+  tittelTillegg,
+  ikon,
+  className,
+  children,
+}: Pick<Felles, 'tittel' | 'tittelTillegg' | 'ikon' | 'className' | 'children'> & {
+  ramme?: RefObject<HTMLDivElement>
+  anker?: string
+  niva: 3 | 4
+}) {
   const overskrift = `${useId()}-overskrift`
+  const Overskrift = OVERSKRIFTER[niva]
   return (
     <div
       ref={ramme}
@@ -355,16 +439,127 @@ function Fastkort({
           </span>
         )}
         <div className={`${KLASSE}__tekst`}>
-          <h3 id={overskrift} className={`${KLASSE}__tittel`}>
+          <Overskrift id={overskrift} className={`${KLASSE}__tittel`}>
             <span className={`${KLASSE}__tittelTekst`}>{tittel}</span>
             {tittelTillegg}
-          </h3>
+          </Overskrift>
           <div className={`${KLASSE}__fastinnhold`}>
-            <UnderOverskrift niva={3}>{children}</UnderOverskrift>
+            <UnderOverskrift niva={niva}>{children}</UnderOverskrift>
           </div>
         </div>
       </div>
     </div>
+  )
+}
+
+/* --- Underkort: en visning i et detaljkort som styrer seg selv ------------ */
+
+interface Underkortstyring {
+  apen: string | null
+  /** Et trykk: åpner eller lukker kortet med flytting. */
+  veksle: (id: string, apnes: boolean) => void
+  /** Søket eller nettleseren skal vise noe i kortet: åpne det straks. */
+  vis: (id: string) => void
+}
+
+const Underkortkontekst = createContext<Underkortstyring | null>(null)
+
+/**
+ * Kort i et rutenett inne i et detaljkort, når innholdet i kortet selv er en
+ * samling som åpnes for seg — som organsystemene under en frekvens i
+ * «Bivirkninger». Kortene ser ut og oppfører seg som detaljkort: bare ett står
+ * åpent om gangen, et åpnet kort tar hele bredden og naboene glir dit de skal
+ * (`useFlytting`), og et kort uten mer å vise er fast (`kanApnes={false}`).
+ *
+ * Det er ikke et tredje nivå med skuffer: rutenettet styrer seg selv og står
+ * ikke i styringen for siden eller i adressen, slik styrkene i «Preparater»
+ * gjør det. Innholdet i et lukket kort står i dokumentet med
+ * `hidden="until-found"`, så nettleserens søk og søket på siden finner det og
+ * åpner kortet (`beforematch` og `VIS_HENDELSE`).
+ */
+export function Underkortrutenett({
+  etikett,
+  apenFraStart = null,
+  className,
+  children,
+}: {
+  /** Navnet skjermlesere oppgir for lista. */
+  etikett: string
+  /** Kortet som står åpent fra start, om noe. */
+  apenFraStart?: string | null
+  className?: string
+  children: ReactNode
+}) {
+  const niva = useContext(Nivakontekst)
+  if (niva?.slag !== 'detalj') throw new Error('Underkortene må stå i et detaljkort.')
+  const [apen, setApen] = useState<string | null>(apenFraStart)
+  const liste = useRef<HTMLUListElement>(null)
+  // Kortet brukeren åpnet, rulles fram når det har vokst ferdig.
+  const rullTil = useRef(false)
+  const husk = useFlytting(liste, {
+    etter: () => {
+      if (!rullTil.current) return
+      rullTil.current = false
+      liste.current?.querySelector(':scope > li > [data-apen]')?.scrollIntoView({ behavior: rullefart(), block: 'nearest' })
+    },
+  })
+  const veksle = useCallback(
+    (id: string, apnes: boolean) => {
+      husk()
+      rullTil.current = apnes
+      setApen(apnes ? id : null)
+    },
+    [husk],
+  )
+  const styring = useMemo<Underkortstyring>(() => ({ apen, veksle, vis: setApen }), [apen, veksle])
+  return (
+    <Underkortkontekst.Provider value={styring}>
+      <ul ref={liste} className={['skuffrutenett', 'underkortrutenett', className].filter(Boolean).join(' ')} aria-label={etikett}>
+        {children}
+      </ul>
+    </Underkortkontekst.Provider>
+  )
+}
+
+/**
+ * Ett kort i et `Underkortrutenett`, med overskrift på nivå 4. Som et
+ * detaljkort kan det åpnes bare når det har mer å vise; ellers er det fast og
+ * viser `children` rett under tittelen.
+ */
+export function Underkort({
+  id,
+  anker,
+  kanApnes = true,
+  ...resten
+}: Omit<DetaljkortProps, 'apenFraStart' | 'handlinger'> & {
+  /** ID-en kortet har i dokumentet, så søket kan peke dit. */
+  anker?: string
+}) {
+  const styring = useContext(Underkortkontekst)
+  if (!styring) throw new Error(`Underkortet «${id}» må stå i et Underkortrutenett.`)
+  const { vis } = styring
+  const visDette = useCallback(() => vis(id), [vis, id])
+  const klasse = [`${KLASSE}--underkort`, resten.className].filter(Boolean).join(' ')
+  return (
+    <li>
+      {kanApnes ? (
+        <Skufframme
+          {...resten}
+          className={klasse}
+          slag="detalj"
+          niva={4}
+          anker={anker}
+          apen={styring.apen === id}
+          animer
+          flyttes
+          onSett={(apnes) => styring.veksle(id, apnes)}
+          onFunnet={visDette}
+          onVis={visDette}
+        />
+      ) : (
+        <Fastramme {...resten} className={klasse} anker={anker} niva={4} />
+      )}
+    </li>
   )
 }
 

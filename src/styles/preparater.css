@@ -1,6 +1,6 @@
 /* --- Preparater: form → styrke → preparat → preparatvindu ------------------
-   Se `src/components/preparater/`. Formen er et detaljkort (`seksjoner.css`)
-   som her tegnes som en stor overskrift med ikon; styrkene er et rutenett av
+   Se `src/components/preparater/`. Formen er et overskriftskort
+   (`seksjoner.css`); styrkene er et rutenett av
    like store kort; preparatvinduet står i et modalt lag (`modallag.css`). */
 
 /* Formene er overskrifter i full bredde, også om seksjonen legger
@@ -19,56 +19,6 @@
   margin: 0;
   font-size: var(--tekst-liten);
   color: var(--blekk-dempet);
-}
-
-.preparatformer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--rom-2);
-  width: 100%;
-  margin: 0;
-}
-
-/* --- Legemiddelformen som overskrift (Atlas: FormHeader) ------------------ */
-
-.skuff--detalj.preparatform,
-.skuff--detalj.preparatform[data-apen] {
-  padding: 0 0 var(--rom-3);
-  background: none;
-  border: 0;
-  border-bottom: var(--kant) solid var(--linje);
-  border-radius: 0;
-}
-
-.skuff--detalj.preparatform > .skuff__hode .skuff__tittel {
-  font: var(--vekt-medium) var(--tekst-tall) / var(--linjehoyde-tett) var(--skrift-display);
-  letter-spacing: -0.01em;
-}
-
-.preparatform > .skuff__hode .skuff__tittel > .skuff__knapp {
-  flex: 1 1 auto;
-  min-height: calc(var(--ikon-form) + var(--rom-3));
-}
-
-.preparatform > .skuff__hode .skuff__pil {
-  font-size: var(--tekst-ui);
-}
-
-.preparatform > .skuff__hode .skuff__tittelTekst {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--rom-5);
-}
-
-.preparatform__ikon {
-  flex: none;
-  width: var(--ikon-form);
-  height: var(--ikon-form);
-}
-
-.skuff--detalj.preparatform > .skuff__hode .skuff__oppsummering {
-  margin-top: 0;
-  padding-left: calc(var(--ikon-form) + var(--rom-5));
 }
 
 /* --- Styrkene (Atlas: StrengthGrid og StrengthCard) ---------------------- */

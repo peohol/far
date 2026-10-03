@@ -127,6 +127,19 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
   Skjuler den noe, gjøres det med `hidden="until-found"`, og den åpner seg
   når nettleserens søk finner noe der (`beforematch`) og når `apneTil` sender
   `VIS_HENDELSE` fra elementet som skal vises (`useSkjultTilFunnet`).
+- Er visningen kort som ser ut og oppfører seg som detaljkort, brukes
+  `Underkortrutenett` med `Underkort` fra `Seksjon.tsx`, som i
+  «Bivirkninger» (`docs/bivirkninger.md`). Kortene har samme hode, pil, kant
+  og flytting som detaljkortene (`Skufframme` og `Fastramme` tegner begge),
+  overskrift på nivå 4, ett åpent om gangen, og `kanApnes={false}` for et
+  kort uten mer å vise. Rutenettet styrer seg selv og står ikke i styringen
+  for siden eller i adressen; det åpner kortet rundt et treff selv
+  (`beforematch` og `VIS_HENDELSE`).
+- Et detaljkort som skal se ut som en overskrift i stedet for et kort — når
+  innholdet i det selv er kort, som legemiddelformene i «Preparater» og
+  frekvensene og organsystemene i «Bivirkninger» — får klassen
+  `overskriftskort` (og står i `.overskriftskortene`). Med lange titler gir
+  `overskriftskort--lang` overskriften seksjonens størrelse.
 - Glidningen er felles: `useSkjuling` (`src/hooks/`) skjuler og viser
   innholdet rundt en kropp som glir mellom `grid-template-rows: 0fr` og `1fr`,
   og brukes av skuffene og styrkene i preparatvinduet. Klipp innholdet ved
