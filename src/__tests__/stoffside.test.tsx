@@ -2186,7 +2186,7 @@ describe('kortene i farmakokinetikken', () => {
     const user = userEvent.setup()
     const SEKSJON = 'Avhengighet, toleranse og tilbakeslagseffekter'
     const ADAPTASJON = 'Fenomener relatert til fysiologisk adaptasjon'
-    const LAERING = 'Læringsfenomener'
+    const LAERING = 'Lærings- og motivasjonsfenomener'
     const data = (tilstand: Tilstand): Stoffsidedata => {
       const s = medKort()(tilstand)
       const kort = utgave('tol', {

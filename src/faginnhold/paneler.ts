@@ -99,7 +99,7 @@ export const PANELER = [
         tittel: 'Fenomener relatert til fysiologisk adaptasjon',
         kort: ['Toleranseutvikling', 'Rebound-effekter og seponeringssyndrom'],
       },
-      { nokkel: 'laeringsfenomener', tittel: 'Læringsfenomener', kort: ['Addiksjon', 'Lært mestringsavhengighet'] },
+      { nokkel: 'laering_motivasjon', tittel: 'Lærings- og motivasjonsfenomener', kort: ['Addiksjon', 'Lært mestringsavhengighet'] },
     ],
   },
 ] as const satisfies readonly Paneldefinisjon[]
