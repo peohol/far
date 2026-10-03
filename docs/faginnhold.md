@@ -59,6 +59,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `src/faginnhold/referanser.ts` | Siteringer, nummerering, piller og referanseliste, for redaksjonelle og automatiske referanser — rene funksjoner |
 | `src/legemiddeldata/referanser.ts` | De automatiske referansene fra FEST |
 | `src/clinpgx/referanser.ts` | De automatiske referansene fra ClinPGx (se `docs/clinpgx.md`) |
+| `src/bivirkninger/` | Bivirkningene fra preparatomtalene: modellen, importen, lesingen og referansene (se `docs/bivirkninger.md`) |
 | `src/components/referanser/` | Referansepillen med boblen, referansefeltet og referanselisten |
 | `src/__tests__/faginnhold.test.ts`, `referanser.test.ts`, `stoffsidelesing.test.ts`, `kommentarer.test.ts` | Reglene og lesingen, prøvd mot en ekte database |
 | `src/__tests__/stoffside.test.tsx`, `navigasjon.test.tsx`, `stoffsidemodell.test.ts` | Sidene, redigeringen og veiene mellom sidene og fortolkningen |
@@ -311,8 +312,10 @@ Referansene har to opphav i samme nummerering, samme bobler og samme liste:
 | Redaksjonell | Objekter i databasen, som over | Redigeres, arkiveres og slettes gjennom den vanlige arbeidsflyten |
 | Automatisk | Lages av data OUSFAR henter fra andre, hver gang siden vises (`automatisk` på `Referanse`) | Aldri: de er ikke objekter, kan ikke velges i referansevelgeren (der står de låst når søket treffer dem) og forsvinner av seg selv når kilden ikke lenger har dem |
 
-De automatiske kildene er FEST (`src/legemiddeldata/referanser.ts`) og
-ClinPGx (`src/clinpgx/referanser.ts`, se `docs/clinpgx.md`). FEST:
+De automatiske kildene er FEST (`src/legemiddeldata/referanser.ts`),
+ClinPGx (`src/clinpgx/referanser.ts`, se `docs/clinpgx.md`), CPIC
+(`src/cpic/referanser.ts`) og preparatomtalene bivirkningene er importert
+fra (`src/bivirkninger/referanser.ts`, se `docs/bivirkninger.md`). FEST:
 
 - **FEST selv** (ID `fest:kilde`) står i referansefeltet til «Preparater» og
   «Interaksjoner». Sporbarheten NLOD krever — uttrekket kopien bygger på og
@@ -441,7 +444,7 @@ styrer søket og nummereringen av referansene):
 | Viktige data | `viktige_data` | Ett kort per type og kode (`gjelder`, se «Sammenslåtte sider») — `referanseomrade`, `toksisk_omrade`, `alvorlig_intoksikasjon` (gruppen konsentrasjoner), `halveringstid`, `steady_state` (gruppen kinetikk). Konsentrasjonene har `{ nedre, ovre, enhet }`; t½ og tss har `{ former: [{ stoff?, form, typisk, min, maks, enhet }] }`, én rad per legemiddelform eller stoff |
 | Farmakodynamikk | `farmakodynamikk` | `mekanismekort`: `{ maal, mekanisme, dokument? }`, i rekkefølge, som regel ett per målprotein eller mekanisme (se «Farmakodynamikken som mekanismekort»). En `riktekst` fra en senere import vises under kortene |
 | Virkninger | `virkninger` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge, som i farmakokinetikken. Seksjonen kom til 2026-10-02 uten innhold; i lesemodus står den først når den har kort |
-| Bivirkninger | `bivirkninger` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge, som i farmakokinetikken. Kom til sammen med virkningene, uten innhold |
+| Bivirkninger | `bivirkninger` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge, som i farmakokinetikken. Kom til sammen med virkningene, uten innhold. Over kortene står bivirkningene fra preparatomtalene, gruppert etter frekvens eller organsystem; de importeres og redigeres ikke her (se `docs/bivirkninger.md`) |
 | Indikasjon | `indikasjon` | `riktekst`: `{ dokument }` |
 | Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
 | Dosering | `dosering` | `riktekst`: `{ dokument }` |

@@ -62,6 +62,7 @@ import { Stoffregisterside } from './components/stoffregister/Stoffregisterside'
 import { lagLegemiddelleser } from './legemiddeldata/lesing'
 import { lagFarmakogenetikkleser } from './clinpgx/lesing'
 import { lagCpicleser } from './cpic/lesing'
+import { lagBivirkningsleser } from './bivirkninger/lesing'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
 import { useHenting } from './hooks/useHenting'
@@ -159,6 +160,7 @@ export default function App() {
       legemidler: lagLegemiddelleser(klient()),
       farmakogenetikk: lagFarmakogenetikkleser(klient()),
       cpic: lagCpicleser(klient()),
+      bivirkninger: lagBivirkningsleser(klient()),
     }),
     [profil.role],
   )

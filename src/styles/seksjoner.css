@@ -247,6 +247,16 @@
   min-height: var(--hoyde-liten);
 }
 
+/* Et fast underkort kan ha en hel liste under tittelen; ikonet står da på
+   linje med tittelen, ikke midt på lista. */
+.skuff--underkort.skuff--fast > .skuff__hode {
+  align-items: flex-start;
+}
+
+.skuff--underkort.skuff--fast > .skuff__hode > .skuff__ikon {
+  min-height: var(--hoyde-liten);
+}
+
 .skuff__fastinnhold {
   font: var(--vekt-normal) var(--tekst-liten) / 1.4 var(--skrift-ui);
   color: var(--blekk-dempet);
@@ -309,6 +319,74 @@
 
 .skuff--detalj[data-ikon] > .skuff__kropp .skuff__innhold {
   padding-left: calc(var(--ikon-underpunkt) + var(--rom-4));
+}
+
+/* --- Overskriftskortet ---------------------------------------------------
+   Et detaljkort som tegnes som en stor overskrift med ikon og hårlinje under
+   i stedet for som et kort (Atlas: `FormHeader`), når innholdet i det selv er
+   kort — legemiddelformene i «Preparater», frekvensene og organsystemene i
+   «Bivirkninger». Kortene står under hverandre i `.overskriftskortene`, i
+   full bredde også om seksjonen legger detaljkortene i et rutenett. */
+
+.overskriftskortene {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+  width: 100%;
+  margin: 0;
+}
+
+.skuff--detalj.overskriftskort,
+.skuff--detalj.overskriftskort[data-apen] {
+  padding: 0 0 var(--rom-3);
+  background: none;
+  border: 0;
+  border-bottom: var(--kant) solid var(--linje);
+  border-radius: 0;
+}
+
+.skuff--detalj.overskriftskort > .skuff__hode .skuff__tittel {
+  font: var(--vekt-medium) var(--tekst-tall) / var(--linjehoyde-tett) var(--skrift-display);
+  letter-spacing: -0.01em;
+}
+
+.overskriftskort > .skuff__hode .skuff__tittel > .skuff__knapp {
+  flex: 1 1 auto;
+  min-height: calc(var(--ikon-form) + var(--rom-3));
+}
+
+.overskriftskort > .skuff__hode .skuff__pil {
+  font-size: var(--tekst-ui);
+}
+
+.overskriftskort > .skuff__hode .skuff__tittelTekst {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-5);
+}
+
+.overskriftskort__ikon {
+  flex: none;
+  width: var(--ikon-form);
+  height: var(--ikon-form);
+}
+
+.skuff--detalj.overskriftskort > .skuff__hode .skuff__oppsummering {
+  margin-top: 0;
+  padding-left: calc(var(--ikon-form) + var(--rom-5));
+}
+
+/* Med lange titler, som organsystemene i «Bivirkninger», er overskriften på
+   størrelse med seksjonens. */
+.skuff--detalj.overskriftskort--lang > .skuff__hode .skuff__tittel {
+  font-size: var(--tekst-seksjon);
+}
+
+/* Et langt ord brytes heller enn å skyve pilen ut av raden. */
+.overskriftskort > .skuff__hode .skuff__tittelTekst {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
 /* --- Smale flater ------------------------------------------------------- */

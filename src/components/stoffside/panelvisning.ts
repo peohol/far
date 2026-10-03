@@ -1,6 +1,7 @@
 import { FORMVARIANTER, formvariant } from '../../legemiddeldata/legemiddelformer'
 import type { Ikonnavn } from '../ikon/register'
 import type { Mekanisme } from '../../faginnhold/mekanismer'
+import type { Frekvenskode, Gruppenokkel, Organsystemkode } from '../../bivirkninger/modell'
 
 /**
  * Ikonene på stoffsiden: seksjonsikonet for hvert panel, og ikonet for hvert
@@ -135,4 +136,66 @@ const MEKANISMEIKONER: Readonly<Record<Mekanisme, Ikonnavn | null>> = {
 /** Ikonet for mekanismen, eller ingen for «Ingen effekt» og en mekanisme som mangler. */
 export function mekanismeikon(mekanisme: Mekanisme | null): Ikonnavn | undefined {
   return (mekanisme && MEKANISMEIKONER[mekanisme]) || undefined
+}
+
+/**
+ * Ikonet for hver frekvens i «Bivirkninger»: fem prikker der færre er fylt jo
+ * sjeldnere bivirkningen er, så nivåene leses i rekkefølge. «Ikke kjent» har
+ * ikke noe nivå og får et spørsmålstegn. Ikonet står alltid sammen med navnet.
+ */
+const FREKVENSIKONER: Readonly<Record<Frekvenskode, Ikonnavn>> = {
+  svaert_vanlige: 'frekvens5',
+  vanlige: 'frekvens4',
+  mindre_vanlige: 'frekvens3',
+  sjeldne: 'frekvens2',
+  svaert_sjeldne: 'frekvens1',
+  ikke_kjent: 'frekvensUkjent',
+}
+
+/**
+ * Ikonet for hvert organsystem i «Bivirkninger» — det eneste stedet de velges.
+ * Et nytt organsystem i `src/bivirkninger/modell.ts` må få et ikon her, ellers
+ * bygger ikke appen.
+ */
+const ORGANSYSTEMIKONER: Readonly<Record<Organsystemkode, Ikonnavn>> = {
+  infeksiose: 'orgInfeksjon',
+  svulster: 'orgSvulst',
+  blod_lymfe: 'orgBlod',
+  immunsystemet: 'shield',
+  endokrine: 'orgEndokrin',
+  stoffskifte: 'orgStoffskifte',
+  psykiatriske: 'orgPsykisk',
+  nevrologiske: 'orgHjerne',
+  oye: 'orgOye',
+  ore_labyrint: 'orgOre',
+  hjerte: 'heart',
+  kar: 'orgKar',
+  respirasjon: 'orgLunger',
+  gastrointestinale: 'orgMage',
+  lever_galle: 'orgLever',
+  hud: 'orgHud',
+  muskel_skjelett: 'orgSkjelett',
+  nyre_urinveier: 'orgNyre',
+  svangerskap: 'orgSvangerskap',
+  kjonnsorganer_bryst: 'orgKjonn',
+  medfodte: 'dna',
+  generelle: 'orgGenerell',
+  undersokelser: 'serum',
+  skader: 'orgSkade',
+  prosedyrer: 'orgProsedyre',
+  sosiale: 'orgSosial',
+  produktproblemer: 'pack',
+}
+
+export function frekvensikon(kode: Frekvenskode): Ikonnavn {
+  return FREKVENSIKONER[kode]
+}
+
+export function organsystemikon(kode: Organsystemkode): Ikonnavn {
+  return ORGANSYSTEMIKONER[kode]
+}
+
+/** Ikonet for en frekvens eller et organsystem i «Bivirkninger». */
+export function bivirkningsikon(nokkel: Gruppenokkel): Ikonnavn {
+  return nokkel.slag === 'frekvens' ? frekvensikon(nokkel.kode) : organsystemikon(nokkel.kode)
 }

@@ -456,15 +456,15 @@ describe('mellom fortolkningen og stoffsiden', () => {
     await waitFor(() => expect(knappene(steg)).toEqual(hbup))
 
     // Reglene er lest etter analyttkoden. Stoffets nøkkel er bare brukt til å
-    // lese monografien — det finnes ikke noe regelsett for Bupropion — og
-    // diskusjonene på siden.
+    // lese monografien og bivirkningene fra preparatomtalene — det finnes ikke
+    // noe regelsett for Bupropion — og diskusjonene på siden.
     expect(
       databasen.kall.filter((k) => k.funksjon === 'finn_intervallregelsett').map((k) => k.argumenter.analyttkode),
     ).toEqual(['HBUP'])
     const etterStoffet = databasen.kall.filter((k) =>
       Object.values(k.argumenter).some((v) => typeof v === 'string' && /bupropion/i.test(v)),
     )
-    expect(etterStoffet.map((k) => k.funksjon).filter((f) => f !== 'diskusjonsoversikt')).toEqual(['les_stoff'])
+    expect(etterStoffet.map((k) => k.funksjon).filter((f) => f !== 'diskusjonsoversikt').sort()).toEqual(['les_bivirkninger', 'les_stoff'])
   })
 
   it('har ingen felles «Åpne fortolkning» på THC-siden, men en kodeknapp for THC og for IRCAK', async () => {

@@ -119,6 +119,12 @@ Atlas. Det er data, så et nytt ikon er en ny oppføring der.
   trykket sluppet på et annet element enn det startet på, og klikket blitt
   borte.
 
+- **Fagsidens kategorier:** ikonene for seksjonene, kortene, mekanismene,
+  frekvensene og organsystemene velges ett sted, i
+  `src/components/stoffside/panelvisning.ts`. Frekvensikonene
+  (`frekvens5`–`frekvens1`, `frekvensUkjent`) er ordinale: fem prikker til én,
+  og «?» for ukjent (`docs/bivirkninger.md`).
+
 Alle ikoner i appen er `Ikon`. Det finnes ingen andre ikonsett.
 
 ## Knapper

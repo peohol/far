@@ -12,8 +12,9 @@
  * at databasen selv gjør det den skal, prøves i `stoffsidelesing.test.ts`.
  * Innholdet er syntetisk. Tallene og tekstene er ikke kliniske verdier.
  */
+import { readFileSync } from 'node:fs'
 import type { ReactNode } from 'react'
-import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { Stoffside } from '../components/stoffside/Stoffside'
@@ -52,6 +53,8 @@ import {
 import type { Farmakogenetikkleser, Farmakogenetikkutvalg } from '../clinpgx/lesing'
 import { lesDiplotypegrunnlag, type Cpicleser, type Cpicutvalg, type Diplotypegrunnlag } from '../cpic/lesing'
 import type { Anbefaling, Betingelse, Gen, Par } from '../cpic/modell'
+import type { Bivirkningsleser } from '../bivirkninger/lesing'
+import type { Bivirkning, Bivirkningsdata } from '../bivirkninger/modell'
 import { rusScenarioregeldata } from './hjelp/rusgrunnlag'
 import { thcRegelsettutgave } from './hjelp/thcgrunnlag'
 
@@ -3373,5 +3376,184 @@ describe('farmakogenetikken fra ClinPGx', () => {
     const nytt = screen.getByLabelText('CYP2D6, resultat').closest('.interaksjon') as HTMLElement
     await waitFor(() => expect((within(nytt).getByLabelText('CYP2D6, resultat') as HTMLSelectElement).value).toBe('Poor Metabolizer'))
     expect(within(nytt).getByRole('region', { name: 'Oversettelsen av CYP2D6 *1/*4' }).textContent).toContain('Poor Metabolizer, aktivitetsverdi 0.0')
+  })
+})
+
+describe('bivirkningene fra preparatomtalene', () => {
+  /** Syntetiske bivirkninger i formen `les_bivirkninger` gir. Ingen av dem er fra en preparatomtale. */
+  function rad(organsystem: Bivirkning['organsystem'], frekvens: Bivirkning['frekvens'], tekst: string, ekstra: Partial<Bivirkning> = {}): Bivirkning {
+    return { kilde: 'k1', organsystem, frekvens, tekst, fotnote: null, posisjon: 0, ...ekstra }
+  }
+  const MANGE = Array.from({ length: 10 }, (_, i) => rad('nevrologiske', 'vanlige', `Syntetisk nevrologisk bivirkning ${i + 1}`, { posisjon: i }))
+  const DATA: Bivirkningsdata = {
+    kilder: [
+      {
+        id: 'k1',
+        nokkel: 'syntetisk-spc',
+        type: 'spc',
+        tittel: 'Syntetisk preparatomtale',
+        preparat: 'Syntetisk preparat',
+        innehaver: 'Syntetisk innehaver',
+        spc_versjon: '1',
+        revisjonsdato: '2026-01-31',
+        lenke: 'https://example.org/syntetisk',
+        kontrollert: '2026-02-01',
+        kontrollert_av: 'Syntetisk kontrollør',
+        merknad: null,
+        importert_kl: '2026-02-02T10:00:00Z',
+        importert_av: 'Syntetisk importør',
+      },
+    ],
+    bivirkninger: [
+      ...MANGE,
+      rad('nevrologiske', 'sjeldne', 'Syntetisk sjelden bivirkning'),
+      rad('hud', 'vanlige', 'Syntetisk hudbivirkning', { fotnote: 'Syntetisk fotnote' }),
+      rad('gastrointestinale', 'ikke_kjent', 'Syntetisk bivirkning med ukjent frekvens'),
+    ],
+  }
+
+  function bivirkningskilde(data: Bivirkningsdata | Error = DATA) {
+    const leser: Bivirkningsleser = { les: vi.fn(async () => (data instanceof Error ? Promise.reject(data) : data)) }
+    return { ...kilde(), bivirkninger: leser }
+  }
+
+  /** Overskriftene på gruppene i seksjonen, i rekkefølge. */
+  function gruppene(): string[] {
+    const seksjon = screen.getByRole('region', { name: 'Bivirkninger' })
+    return [...seksjon.querySelectorAll('.overskriftskort > .skuff__hode .skuff__tittelTekst')].map((t) => t.textContent ?? '')
+  }
+
+  /** Overskriftene på kortene i en gruppe, i rekkefølge. */
+  function kortene(gruppe: string): string[] {
+    const kort = skuffen(gruppe).closest('.overskriftskort')!
+    return [...kort.querySelectorAll('.underkortrutenett .skuff__tittelTekst')].map((t) => t.textContent ?? '')
+  }
+
+  const visning = () => screen.getByRole('slider', { name: 'Vis bivirkningene etter' })
+
+  it('viser ikke seksjonen når siden ikke har bivirkninger, og leser dem etter stoffets nøkkel', async () => {
+    const k = bivirkningskilde({ kilder: [], bivirkninger: [] })
+    vis('amitriptylin', k)
+    await finnVerdi('10–20 nmol/L')
+    expect(k.bivirkninger.les).toHaveBeenCalledWith('amitriptylin')
+    expect(screen.queryByRole('region', { name: 'Bivirkninger' })).toBeNull()
+  })
+
+  it('grupperer etter frekvens fra den høyeste, med bryteren øverst og bare gruppene som har noe', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', bivirkningskilde())
+    // Den lukkede seksjonen oppsummerer det samme i begge visningene.
+    expect(await screen.findByText('13 bivirkninger · 3 organsystemer')).toBeTruthy()
+    await apneSkuff(user, 'Bivirkninger')
+    const seksjon = screen.getByRole('region', { name: 'Bivirkninger' })
+    expect(visning().getAttribute('aria-valuetext')).toBe('Frekvens')
+    expect(visning().compareDocumentPosition(skuffen('Vanlige')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(gruppene()).toEqual(['Vanlige', 'Sjeldne', 'Ikke kjent'])
+    // Hver frekvens står med ikonet og det den betyr.
+    const vanlige = skuffen('Vanlige').closest('.overskriftskort')!
+    expect(vanlige.querySelector('.overskriftskort__ikon')).toBeTruthy()
+    expect(within(vanlige as HTMLElement).getByText('≥ 1/100 til < 1/10')).toBeTruthy()
+    expect(within(seksjon).queryByText('Svært vanlige')).toBeNull()
+    expect(within(seksjon).queryByText('Mindre vanlige')).toBeNull()
+
+    await user.click(skuffen('Vanlige'))
+    expect(kortene('Vanlige')).toEqual(['Nevrologiske sykdommer', 'Hud- og underhudssykdommer'])
+    // Organsystemene har hvert sitt ikon.
+    expect(vanlige.querySelectorAll('.underkortrutenett .skuff__ikon')).toHaveLength(2)
+  })
+
+  it('har ett åpent kort per nivå, også blant organsystemene i en frekvens', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', bivirkningskilde())
+    await apneSkuff(user, 'Bivirkninger')
+    await user.click(skuffen('Vanlige'))
+    await user.click(skuffen('Sjeldne'))
+    expect(skuffen('Vanlige').getAttribute('aria-expanded')).toBe('false')
+    expect(skuffen('Sjeldne').getAttribute('aria-expanded')).toBe('true')
+
+    await user.click(skuffen('Vanlige'))
+    const nevro = within(skuffen('Vanlige').closest('.overskriftskort') as HTMLElement)
+    const [nevrologiske, hud] = nevro.getAllByRole('button', { name: /sykdommer$/ })
+    await user.click(nevrologiske!)
+    expect(nevrologiske!.getAttribute('aria-expanded')).toBe('true')
+    expect(screen.getByText('Syntetisk nevrologisk bivirkning 10')).toBeTruthy()
+    await user.click(hud!)
+    expect(nevrologiske!.getAttribute('aria-expanded')).toBe('false')
+    expect(hud!.getAttribute('aria-expanded')).toBe('true')
+    expect(screen.getByText('Syntetisk fotnote')).toBeTruthy()
+  })
+
+  it('viser et kort uten mer å vise som fast, med lista rett under tittelen', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', bivirkningskilde())
+    await apneSkuff(user, 'Bivirkninger')
+    await user.click(skuffen('Ikke kjent'))
+    const fast = screen.getByText('Syntetisk bivirkning med ukjent frekvens').closest('.skuff')!
+    expect(fast.classList.contains('skuff--fast')).toBe(true)
+    expect(within(fast as HTMLElement).getByRole('heading', { level: 4 }).textContent).toBe('Gastrointestinale sykdommer')
+  })
+
+  it('snur grupperingen med bryteren, med de samme bivirkningene', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', bivirkningskilde())
+    await apneSkuff(user, 'Bivirkninger')
+    const fraFrekvens = [...screen.getByRole('region', { name: 'Bivirkninger' }).querySelectorAll('.bivirkninger__liste > li')].map((li) => li.textContent).sort()
+    fireEvent.change(visning(), { target: { value: '1' } })
+    expect(visning().getAttribute('aria-valuetext')).toBe('Organsystem')
+    expect(gruppene()).toEqual(['Nevrologiske sykdommer', 'Gastrointestinale sykdommer', 'Hud- og underhudssykdommer'])
+    await user.click(skuffen('Nevrologiske sykdommer'))
+    expect(kortene('Nevrologiske sykdommer')).toEqual(['Vanlige', 'Sjeldne'])
+    // Frekvensen står med navnet og definisjonen også inne i et organsystem.
+    expect(within(skuffen('Nevrologiske sykdommer').closest('.overskriftskort') as HTMLElement).getByText('< 1/1 000', { exact: false })).toBeTruthy()
+    const fraOrgansystem = [...screen.getByRole('region', { name: 'Bivirkninger' }).querySelectorAll('.bivirkninger__liste > li')].map((li) => li.textContent).sort()
+    expect(fraOrgansystem).toEqual(fraFrekvens)
+    expect(fraOrgansystem).toHaveLength(13)
+  })
+
+  it('åpner visningen en lenke peker på', async () => {
+    vis('amitriptylin', bivirkningskilde(), { sted: ['bivirkninger', 'organsystem-hud'] })
+    await waitFor(() => expect(skuffen('Hud- og underhudssykdommer').getAttribute('aria-expanded')).toBe('true'))
+    expect(visning().getAttribute('aria-valuetext')).toBe('Organsystem')
+  })
+
+  it('har preparatomtalen i seksjonens referansefelt, med versjonen og importen', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', bivirkningskilde())
+    await apneSkuff(user, 'Bivirkninger')
+    const liste = screen.getByRole('region', { name: 'Referanser' })
+    expect(within(liste).getByText('Automatisk fra Preparatomtale (SPC)')).toBeTruthy()
+    expect(liste.textContent).toContain('Syntetisk preparatomtale')
+    expect(liste.textContent).toMatch(/versjon 1, revidert .+, importert .+ av Syntetisk importør, kontrollert .+ av Syntetisk kontrollør/)
+  })
+
+  it('finner en bivirkning med søket på siden og viser hvor den står', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', bivirkningskilde())
+    await screen.findByText('13 bivirkninger · 3 organsystemer')
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'ukjent frekvens')
+    await waitFor(() =>
+      expect(within(screen.getByRole('list', { name: 'Hvor treffene står' })).getByRole('button').textContent).toBe(
+        'Bivirkninger › Gastrointestinale sykdommer',
+      ),
+    )
+  })
+
+  it('passer på smale og brede flater: rutenett som bryter, lange navn som brytes, og definisjonen på egen linje når det er trangt', () => {
+    const seksjoner = readFileSync('src/styles/seksjoner.css', 'utf8')
+    const bivirkninger = readFileSync('src/styles/bivirkninger.css', 'utf8')
+    // Underkortene står i det samme rutenettet som detaljkortene: så mange kolonner som får plass, én på en smal flate.
+    expect(seksjoner).toMatch(/\.skuffrutenett\s*\{[^}]*repeat\(auto-fill, minmax\(min\(100%/)
+    expect(seksjoner).toMatch(/\.overskriftskort > \.skuff__hode \.skuff__tittelTekst\s*\{[^}]*overflow-wrap:\s*anywhere/)
+    expect(bivirkninger).toMatch(/\.bivirkninger__liste\s*\{[^}]*overflow-wrap:\s*anywhere/)
+    expect(bivirkninger).toMatch(/@media \(max-width: 47\.5em\)\s*\{\s*\.overskriftskort > \.skuff__hode \.bivirkninger__definisjon\s*\{\s*flex-basis:\s*100%/)
+  })
+
+  it('sier fra når bivirkningene ikke kunne hentes, i redigeringen', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', { ...bivirkningskilde(new Error('Syntetisk feil')), kanRedigere: true })
+    await finnVerdi('10–20 nmol/L')
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await apneSkuff(user, 'Bivirkninger')
+    expect(await screen.findByText(/Fikk ikke hentet bivirkningene\. Syntetisk feil/)).toBeTruthy()
   })
 })

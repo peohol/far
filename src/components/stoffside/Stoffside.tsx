@@ -41,7 +41,11 @@ import { clinpgxlitteratur, clinpgxreferanser } from '../../clinpgx/referanser'
 import { cpicreferanser } from '../../cpic/referanser'
 import { FARMAKOGENETIKKPANEL, kobledeKjemikalier, koblingsgrunnlag } from '../../clinpgx/stoffside'
 import { Farmakogenetikkpanel, farmakogenetikksoketekster } from './Farmakogenetikkpanel'
-import { useCpic, useFarmakogenetikk } from './useFarmakogenetikk'
+import { useBivirkninger, useCpic, useFarmakogenetikk } from './useFarmakogenetikk'
+import { Bivirkningspanel, bivirkningssoketekster, harBivirkninger } from './Bivirkningspanel'
+import { BIVIRKNINGSPANEL, bivirkningsreferanser } from '../../bivirkninger/referanser'
+import { visningForKort } from '../../bivirkninger/stoffside'
+import type { Visning } from '../../bivirkninger/modell'
 import { useStoffside, type Sidemodus, type Stoffsidehandlinger } from './useStoffside'
 import type { Stoff, Stoffregister } from '../../domain/stoffregister'
 import {
@@ -174,7 +178,10 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
   const pgx = farmakogenetikk.tilstand
   const cpic = useCpic(kjemikalier)
   const cpictilstand = cpic.tilstand
-  // Redaksjonelle og automatiske referanser (FEST, ClinPGx og CPIC) nummereres sammen.
+  const bivirkninger = useBivirkninger(slug).tilstand
+  // Visningen av bivirkningene styrer også hvilke kort søket på siden peker på.
+  const [bivirkningsvisning, setBivirkningsvisning] = useBevart<Visning>('bivirkningsvisning', 'frekvens')
+  // Redaksjonelle og automatiske referanser (FEST, ClinPGx, CPIC og preparatomtalene) nummereres sammen.
   const univers = useMemo(
     () =>
       referanseunivers(
@@ -190,9 +197,10 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
             clinpgxlitteratur(pgx.status === 'klar' ? pgx.visning : null),
           ),
           clinpgxreferanser(pgx.status === 'klar' ? pgx.utvalg : null, pgx.status === 'klar' ? pgx.visning : null),
+          bivirkningsreferanser(bivirkninger.status === 'klar' ? bivirkninger.utvalg : null),
         ),
       ),
-    [modell, legemidler, interaksjoner, pgx, cpictilstand],
+    [modell, legemidler, interaksjoner, pgx, cpictilstand, bivirkninger],
   )
   const grunnlag = useMemo(
     () => koblingsgrunnlag(legemidler.status === 'klar' ? legemidler.utvalg : null, koblet),
@@ -208,9 +216,10 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
           ...preparatsoketekster(legemidler),
           ...interaksjonssoketekster(interaksjoner),
           ...farmakogenetikksoketekster(pgx, cpictilstand),
+          ...bivirkningssoketekster(bivirkninger, bivirkningsvisning),
         ],
       ),
-    [slug, navn, kjent, analytter, modell, legemidler, interaksjoner, pgx, cpictilstand],
+    [slug, navn, kjent, analytter, modell, legemidler, interaksjoner, pgx, cpictilstand, bivirkninger, bivirkningsvisning],
   )
   const ord = useMemo(() => sokeord(sporring), [sporring])
 
@@ -226,7 +235,7 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
   )
   // Etter en publisering skal fortolkningen bruke de nye reglene.
   const { provIgjen: hentScenarioreglerPaNytt } = useScenarioreglerkilde()
-  const harInnhold = modell.paneler.size > 0 || Object.keys(modell.panelreferanser).length > 0
+  const harInnhold = modell.paneler.size > 0 || Object.keys(modell.panelreferanser).length > 0 || harBivirkninger(bivirkninger)
 
   // En side som åpnes, begynner øverst, med fokus på navnet — så tastaturet og
   // skjermleseren står der siden begynner, og ikke igjen i menyen eller modulen.
@@ -246,6 +255,11 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
   useEffect(() => {
     if (stedsnokkel && stedet.current) apne?.(stedet.current)
   }, [stedsnokkel, apne])
+  // En lenke til en gruppe bivirkninger viser den visningen gruppen står i.
+  const lenketVisning = sted?.[0] === BIVIRKNINGSPANEL ? visningForKort(sted[1]) : null
+  useEffect(() => {
+    if (lenketVisning) setBivirkningsvisning(lenketVisning)
+  }, [stedsnokkel, lenketVisning, setBivirkningsvisning])
 
   if (side.status === 'klar' && !finnes) {
     return <Ikkefunnet onLukk={onLukk}>Fant ingen fagside for «{slug}»</Ikkefunnet>
@@ -387,6 +401,15 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
                         sted={sted}
                         onHentet={farmakogenetikk.lesPaNytt}
                         onCpicHentet={cpic.lesPaNytt}
+                      />
+                    ) : definisjon.nokkel === BIVIRKNINGSPANEL ? (
+                      <Bivirkningspanel
+                        key={definisjon.nokkel}
+                        definisjon={definisjon}
+                        kontekst={kontekst}
+                        tilstand={bivirkninger}
+                        visning={bivirkningsvisning}
+                        onVelgVisning={setBivirkningsvisning}
                       />
                     ) : (
                       <Kortpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />

@@ -1,0 +1,37 @@
+{
+  "format": "ousfar-bivirkninger/1",
+  "stoff": "syntetisk-eksempel",
+  "kilde": {
+    "nokkel": "syntetisk-preparat-spc",
+    "type": "spc",
+    "tittel": "Preparatomtale (SPC) for Syntetisk preparat 10 mg tabletter",
+    "preparat": "Syntetisk preparat 10 mg tabletter",
+    "innehaver": "Syntetisk innehaver AS",
+    "spc_versjon": "Syntetisk versjon 1",
+    "revisjonsdato": "2026-01-31",
+    "lenke": "https://example.org/syntetisk-preparatomtale",
+    "kontrollert": "2026-02-01",
+    "kontrollert_av": "Syntetisk kontrollør",
+    "importert_av": "Syntetisk importør",
+    "merknad": "Malen er syntetisk og viser bare formatet. Den er ikke data fra noen preparatomtale."
+  },
+  "organsystemer": [
+    {
+      "organsystem": "nevrologiske",
+      "frekvenser": [
+        { "frekvens": "svaert_vanlige", "bivirkninger": ["Syntetisk bivirkning A"] },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Syntetisk bivirkning B",
+            { "tekst": "Syntetisk bivirkning C", "fotnote": "Syntetisk fotnote slik den står i preparatomtalen." }
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "gastrointestinale",
+      "frekvenser": [{ "frekvens": "ikke_kjent", "bivirkninger": ["Syntetisk bivirkning D"] }]
+    }
+  ]
+}

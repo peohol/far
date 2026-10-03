@@ -1,0 +1,66 @@
+/* --- Bivirkninger: frekvens ↔ organsystem ---------------------------------
+   Se `src/components/stoffside/Bivirkningspanel.tsx` og
+   `docs/bivirkninger.md`. Gruppene er overskriftskort og kombinasjonene
+   underkort (`seksjoner.css`); her står bare det som er særegent for
+   seksjonen: bryteren øverst, definisjonen ved frekvensen og punktlista. */
+
+/* Bivirkningene står over hele bredden, også om seksjonen legger de
+   redaksjonelle kortene i et rutenett. */
+.bivirkninger {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / -1;
+  gap: var(--rom-5);
+  width: 100%;
+}
+
+.bivirkninger__visning {
+  display: flex;
+}
+
+/* Bryteren tar like brede valg; på en smal flate fyller den bredden, så
+   begge merkene får plass på én linje. */
+@media (max-width: 30em) {
+  .bivirkninger__visning > .trinnbryter {
+    flex: 1 1 auto;
+  }
+}
+
+/* Frekvensen står alltid med det den betyr, i rolig tekst etter navnet. */
+.bivirkninger__definisjon {
+  font: var(--vekt-normal) var(--tekst-liten) / var(--linjehoyde-tett) var(--skrift-ui);
+  letter-spacing: 0;
+  color: var(--blekk-dempet);
+}
+
+/* På en smal flate står definisjonen i en frekvensgruppe på egen linje, på
+   linje med navnet, som oppsummeringen under. */
+@media (max-width: 47.5em) {
+  .overskriftskort > .skuff__hode .bivirkninger__definisjon {
+    flex-basis: 100%;
+    padding-left: calc(var(--ikon-form) + var(--rom-5));
+  }
+}
+
+.bivirkninger__liste {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  margin: 0;
+  padding-left: 1.2em;
+  font-size: var(--tekst-ui);
+  line-height: 1.5;
+  color: var(--blekk);
+  list-style: disc;
+  overflow-wrap: anywhere;
+}
+
+.bivirkninger__liste > li > .referansepille-feste {
+  margin-left: var(--rom-2);
+}
+
+.bivirkninger__fotnote {
+  display: block;
+  font-size: var(--tekst-liten);
+  color: var(--blekk-dempet);
+}

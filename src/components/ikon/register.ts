@@ -286,6 +286,13 @@ const runde = (() => {
   return `M${polar(24, 24, 15, 30)}A15 15 0 1 1 ${x.toFixed(2)} ${y.toFixed(2)}M${punkt(5, 4)}L${x.toFixed(2)} ${y.toFixed(2)}L${punkt(5, -4)}`
 })()
 
+/** Frekvensen i bivirkningene: fem prikker på rad, de `n` første fylt. */
+function prikker(n: number): Ikondel[] {
+  return [0, 1, 2, 3, 4].map((i) =>
+    i < n ? C(3.2 + i * 4.4, 12, 1.9, 'h', 'accent', 'pop') : C(3.2 + i * 4.4, 12, 1.6, 'l', 'i-line'),
+  )
+}
+
 const REGISTER = {
   menu: { vb: 24, parts: [P('M4 7h16M4 12h16M4 17h9', 'l', 'i-ink'), C(18, 17, 2, 'f2', 'accent', 'pop')] },
   search: { vb: 24, ga: 'pulse', parts: [C(10.5, 10.5, 6.5, 'f1', 'accent'), P('M15.5 15.5 20.5 20.5', 'l', 'i-ink')] },
@@ -1215,6 +1222,232 @@ const REGISTER = {
   mekEnzymhemming: { vb: 48, parts: [enzym, substrat(40, 9, 'bumpR'), stoff('redusert', true)] },
   opp: { vb: 24, parts: [C(12, 12, 9, 'f1', 'glass'), P('M12 16.5V7.5M7.5 12 12 7.5l4.5 4.5', 'l', 'i-ink', 'pop')] },
   ned: { vb: 24, parts: [C(12, 12, 9, 'f1', 'glass'), P('M12 7.5v9M7.5 12l4.5 4.5 4.5-4.5', 'l', 'i-ink', 'pop')] },
+  // --- Bivirkningene: frekvensene og organsystemene (se `src/components/stoffside/panelvisning.ts`) ---
+  // Frekvensen som fem prikker der færre er fylt jo sjeldnere bivirkningen er.
+  frekvens5: { vb: 24, parts: prikker(5) },
+  frekvens4: { vb: 24, parts: prikker(4) },
+  frekvens3: { vb: 24, parts: prikker(3) },
+  frekvens2: { vb: 24, parts: prikker(2) },
+  frekvens1: { vb: 24, parts: prikker(1) },
+  // «Ikke kjent»: et spørsmålstegn, uten noe nivå.
+  frekvensUkjent: {
+    vb: 24,
+    parts: [C(12, 12, 9, 'f1', 'glass'), P('M9.6 9.4a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1.1.9-1.1 1.6v.5', 'l', 'i-ink'), C(12, 16.6, 1.1, 'h', 'i-ink', 'pop')],
+  },
+  // Infeksjoner: et virus med pigger.
+  orgInfeksjon: {
+    vb: 24,
+    ga: 'spin45',
+    parts: [
+      C(12, 12, 5.5, 'f1', 'ok'),
+      P('M12 6.5v-3M12 17.5v3M6.5 12h-3M17.5 12h3M15.9 8.1 18 6M8.1 8.1 6 6M15.9 15.9 18 18M8.1 15.9 6 18', 'l', 'i-ink'),
+      C(10.3, 11, 1.1, 'h', 'ok'),
+      C(13.6, 13.2, 1.1, 'h', 'ok'),
+    ],
+  },
+  // Svulster: celler som vokser i en klynge.
+  orgSvulst: {
+    vb: 24,
+    parts: [
+      C(9, 9.5, 5, 'f1', 'accent2'),
+      G([C(15.5, 13, 5.5, 'f1', 'danger')], 'pop'),
+      C(9.5, 17, 3.8, 'f1', 'accent2'),
+      C(9, 9.5, 1.4, 'h', 'i-ink'),
+      C(15.5, 13, 1.6, 'h', 'i-ink'),
+      C(9.5, 17, 1.1, 'h', 'i-ink'),
+    ],
+  },
+  // Blod og lymfatiske organer: en bloddråpe.
+  orgBlod: {
+    vb: 24,
+    ga: 'drop',
+    parts: [P('M12 3.5c-3 4-6 7.4-6 10.8a6 6 0 0 0 12 0c0-3.4-3-6.8-6-10.8z', 'f1', 'blood'), P('M9.3 14.6a2.7 2.7 0 0 0 2.3 2.6', 'l', 'i-ink')],
+  },
+  // Endokrine sykdommer: skjoldbruskkjertelen som en sommerfugl rundt luftrøret.
+  orgEndokrin: {
+    vb: 24,
+    parts: [
+      P('M12 3v18', 'l', 'i-line'),
+      P('M11 12.5c0-3.6-1.6-7.5-4.2-7.5S3.5 9 3.5 13.2s2.2 6.3 4.6 6.3S11 16.4 11 12.5z', 'f1', 'accent'),
+      P('M13 12.5c0-3.6 1.6-7.5 4.2-7.5s3.3 4 3.3 8.2-2.2 6.3-4.6 6.3S13 16.4 13 12.5z', 'f1', 'accent'),
+      G([R(9.5, 11.5, 5, 3.6, 1.6, 'f2', 'accent')], 'pop'),
+    ],
+  },
+  // Stoffskifte og ernæring: et eple.
+  orgStoffskifte: {
+    vb: 24,
+    parts: [
+      P('M12 8c-1.6-1.1-5.6-1.6-7 2-1.3 3.4-.3 7.6 2.6 9.9 1.3 1 2.8 1 4.4.3 1.6.7 3.1.7 4.4-.3 2.9-2.3 3.9-6.5 2.6-9.9-1.4-3.6-5.4-3.1-7-2z', 'f1', 'ok'),
+      P('M12 8c0-1.9.6-3.4 2-4.5', 'l', 'i-ink'),
+      G([P('M13 6c1.4-1.6 3.4-2 5-1.4-.6 1.6-2.4 2.8-5 1.4z', 'f2', 'ok')], 'wink'),
+    ],
+  },
+  // Psykiatriske lidelser: et hode i profil med en bølgende tanke.
+  orgPsykisk: {
+    vb: 24,
+    parts: [
+      P('M15 21v-3h2.1a1.9 1.9 0 0 0 1.9-1.9v-2.3l1.6-.7-1.6-3A7.4 7.4 0 0 0 11.6 3a7.2 7.2 0 0 0-4.6 12.8V21z', 'f1', 'accent2'),
+      G([P('M8.3 10.2c.9-1.3 2-1.3 2.9 0s2 1.3 2.9 0', 'l', 'i-ink')], 'glidR'),
+    ],
+  },
+  // Nevrologiske sykdommer: hjernen sett ovenfra.
+  orgHjerne: {
+    vb: 24,
+    parts: [
+      P(
+        'M12 5.2C10.8 4 8.6 4 7.5 5.3 5.8 5.2 4.4 6.6 4.5 8.3 3.1 9.1 2.6 10.9 3.4 12.3 2.4 13.6 2.8 15.6 4.2 16.3 4.4 18 6 19.2 7.7 18.9 8.7 20.2 10.7 20.3 12 19.3 13.3 20.3 15.3 20.2 16.3 18.9 18 19.2 19.6 18 19.8 16.3 21.2 15.6 21.6 13.6 20.6 12.3 21.4 10.9 20.9 9.1 19.5 8.3 19.6 6.6 18.2 5.2 16.5 5.3 15.4 4 13.2 4 12 5.2z',
+        'f1',
+        'accent',
+      ),
+      P('M12 5.2v14.1', 'l', 'i-ink'),
+      G([P('M7.3 9.4c1.2.2 2.1 1 2.3 2.3M16.7 9.4c-1.2.2-2.1 1-2.3 2.3M6.9 15.2c1-.8 2.3-.8 3.1.2M17.1 15.2c-1-.8-2.3-.8-3.1.2', 'l', 'i-ink')], 'flash'),
+    ],
+  },
+  // Øyesykdommer: et øye.
+  orgOye: {
+    vb: 24,
+    parts: [
+      P('M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z', 'f1', 'glass'),
+      C(12, 12, 3.6, 'f2', 'info'),
+      C(12, 12, 1.5, 'h', 'i-ink', 'wink'),
+      P('M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z', 'l', 'i-ink'),
+    ],
+  },
+  // Øre og labyrint: et øre med lydbølger.
+  orgOre: {
+    vb: 24,
+    parts: [
+      P('M6 9.5a5.5 5.5 0 0 1 11 0c0 2.8-1.6 4-2.9 5.2-1 .9-1.4 1.9-1.6 3.2-.3 2-1.7 3.6-3.8 3.6A3.4 3.4 0 0 1 5.3 19', 'f1', 'warn'),
+      P('M8.8 9.8a2.7 2.7 0 0 1 5.4 0c0 1.5-1.3 2.2-2.2 2.8', 'l', 'i-ink'),
+      G([P('M19.6 6.5a6 6 0 0 1 0 6M21.6 4.8a9 9 0 0 1 0 9.4', 'l', 'info')], 'rayS'),
+    ],
+  },
+  // Karsykdommer: et blodkar med blodlegemer.
+  orgKar: {
+    vb: 24,
+    parts: [
+      R(2.5, 8, 19, 8, 4, 'f1', 'danger'),
+      G([C(7.5, 12, 1.9, 'h', 'blood'), C(12.5, 12, 1.9, 'h', 'blood'), C(17.3, 12, 1.9, 'h', 'blood')], 'glidR'),
+      P('M2.5 8h19M2.5 16h19', 'l', 'i-ink'),
+    ],
+  },
+  // Respirasjonsorganer: lungene og luftrøret.
+  orgLunger: {
+    vb: 24,
+    ga: 'pulse',
+    parts: [
+      P('M10 8.5C7.5 7 4.6 10 4 14.5c-.4 3.5 1 5.5 3 5.5 2.3 0 3-1.5 3-4z', 'f1', 'info'),
+      P('M14 8.5c2.5-1.5 5.4 1.5 6 6 .4 3.5-1 5.5-3 5.5-2.3 0-3-1.5-3-4z', 'f1', 'info'),
+      P('M12 3.5v7.5M12 11l-2.5 2.2M12 11l2.5 2.2', 'l', 'i-ink'),
+    ],
+  },
+  // Gastrointestinale sykdommer: magesekken.
+  orgMage: {
+    vb: 24,
+    parts: [
+      P('M8 3.5h3v3.3c0 1.5 1 2.2 2.6 2.2 3.6 0 6.4 2.6 6.4 6.3 0 3.6-2.9 5.7-6.6 5.7-2.4 0-3.8-.9-5.4-.9-1.2 0-2 .4-2.8 1l-1-2.3c1-.8 2.4-1.3 3.8-1.3.9 0 1.3-.6 1.1-1.6L8 10.3z', 'f1', 'warn'),
+      G([P('M12 15c1.5.9 3.5.9 5 0', 'l', 'i-ink')], 'wink'),
+    ],
+  },
+  // Lever og galleveier: leveren med galleblæren.
+  orgLever: {
+    vb: 24,
+    parts: [
+      P('M3 9.6c0-2 1.6-3.5 3.6-3.4 3.4.2 8.5.4 12.4-.2 1.8-.3 2.9 1 2.4 2.6-1.1 3.6-4.6 7.2-9.6 8.8-2.3.7-4.4 1-5.9.2C3.9 16.3 3 13.1 3 9.6z', 'f1', 'blood'),
+      P('M13 6.2c-.5 3-1.6 5.5-3.5 7.6', 'l', 'i-ink'),
+      G([C(13.5, 15.6, 1.9, 'f2', 'ok')], 'pop'),
+    ],
+  },
+  // Hud og underhud: hudlagene med hår.
+  orgHud: {
+    vb: 24,
+    parts: [
+      R(3, 10, 18, 10, 2, 'f1', 'warn'),
+      P('M3 15h18', 'd', 'i-line'),
+      P('M3 10c2-1.4 4-1.4 6 0s4 1.4 6 0 4-1.4 6 0', 'l', 'i-ink'),
+      G([P('M8 9.6V5M15.5 9.6V6', 'l', 'i-ink')], 'wink'),
+    ],
+  },
+  // Muskler, bindevev og skjelett: en knokkel.
+  orgSkjelett: {
+    vb: 24,
+    rot: 'rotate(-40 12 12)',
+    parts: [
+      R(6.5, 10.3, 11, 3.4, 1, 'o1', 'glass'),
+      C(5.6, 9.8, 2.4, 'o1', 'glass'),
+      C(5.6, 14.2, 2.4, 'o1', 'glass'),
+      C(18.4, 9.8, 2.4, 'o1', 'glass'),
+      C(18.4, 14.2, 2.4, 'o1', 'glass'),
+    ],
+  },
+  // Nyre og urinveier: en nyre med urinlederen.
+  orgNyre: {
+    vb: 24,
+    parts: [
+      P('M15.5 4c-3.8 0-7.5 3.5-7.5 8.5S11 20 14.5 20c2.4 0 3.2-1.8 3.2-3.5 0-1.6-1.4-2.4-1.4-4.5s1.6-2.6 1.6-4.4C17.9 5.6 17.3 4 15.5 4z', 'f1', 'danger'),
+      G([P('M16.3 12h-3c-1.5 0-2.5 1-2.5 2.5V21', 'l', 'info')], 'drop'),
+    ],
+  },
+  // Svangerskap og perinatalperioden: en gravid kvinne i profil.
+  orgSvangerskap: {
+    vb: 24,
+    parts: [
+      C(10.5, 4.8, 2.4, 'f2', 'accent2'),
+      P('M8.5 8.2h4c.6 1.4 1 2.4 2.6 3.4 2.4 1.5 2.5 5.2-.1 6.4-.8.4-1.7.5-2.5.5v3H8.7v-4.1C7.6 16 7.3 14 7.7 12z', 'f1', 'accent2'),
+      G([C(13.6, 14.8, 1.5, 'h', 'danger')], 'pulse'),
+    ],
+  },
+  // Kjønnsorganer og bryst: kvinne- og mannssymbolet.
+  orgKjonn: {
+    vb: 24,
+    parts: [
+      C(9, 13.5, 4.2, 'f1', 'danger'),
+      P('M9 17.7v3.8M6.8 19.7h4.4', 'l', 'i-ink'),
+      C(15, 8.5, 4.2, 'f1', 'info'),
+      G([P('M18 5.5l3-3M18.2 2.5H21v2.8', 'l', 'i-ink')], 'bumpR'),
+    ],
+  },
+  // Generelle lidelser og reaksjoner på administrasjonsstedet: et termometer.
+  orgGenerell: {
+    vb: 24,
+    parts: [
+      P('M10 4.5a2 2 0 0 1 4 0v9.2a4 4 0 1 1-4 0z', 'f1', 'glass'),
+      C(12, 16.8, 2.3, 'f2', 'danger'),
+      G([P('M12 15V8.5', 'l', 'danger')], 'fill'),
+      P('M14.5 7h1.6M14.5 10h1.6', 'l', 'i-line'),
+    ],
+  },
+  // Skader, forgiftninger og komplikasjoner: et plaster.
+  orgSkade: {
+    vb: 24,
+    rot: 'rotate(-45 12 12)',
+    parts: [
+      R(2.5, 8.5, 19, 7, 3.5, 'f1', 'warn'),
+      R(9, 8.5, 6, 7, 1, 'f2', 'paper'),
+      C(10.8, 10.8, 0.7, 'h', 'i-line'),
+      C(13.2, 13.2, 0.7, 'h', 'i-line'),
+      C(13.2, 10.8, 0.7, 'h', 'i-line'),
+      C(10.8, 13.2, 0.7, 'h', 'i-line'),
+    ],
+  },
+  // Kirurgiske og medisinske prosedyrer: en skalpell.
+  orgProsedyre: {
+    vb: 24,
+    parts: [
+      P('M3.5 20.5 12 12l2.2 2.2c-2.6 3.6-6.2 5.6-10.7 6.3z', 'f1', 'glass'),
+      G([P('M13.4 10.6l6-6 2.2 2.2-6 6z', 'f2', 'accent2')], 'bumpR'),
+      P('M3.5 20.5 12 12', 'l', 'i-ink'),
+    ],
+  },
+  // Sosiale omstendigheter: to personer.
+  orgSosial: {
+    vb: 24,
+    parts: [
+      C(8.5, 8, 3, 'f1', 'accent'),
+      P('M3 19.5a5.5 5.5 0 0 1 11 0z', 'f1', 'accent'),
+      G([C(16, 9, 2.6, 'f1', 'accent2'), P('M11.5 19.5a4.5 4.5 0 0 1 9 0z', 'f1', 'accent2')], 'pop'),
+    ],
+  },
 } satisfies Record<string, Ikondefinisjon>
 
 export type Ikonnavn = keyof typeof REGISTER
