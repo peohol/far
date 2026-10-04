@@ -10,11 +10,13 @@ declare
   nmdar uuid;
   hcn1 uuid;
   ref_opioid uuid;
+  ref_opioid_pam uuid;
   ref_m1 uuid;
   ref_nachr uuid;
   ref_na uuid;
   ref_sigma uuid;
   ref_trkb uuid;
+  ref_gabaa uuid;
 begin
   if side is null then
     return;
@@ -33,6 +35,9 @@ begin
   ref_opioid := intern.kuratering_referanse(
     '{"tittel":"Structural basis of opioid receptor activation by PCP and ketamine","forfattere":"Jiang Q, Han J, Fine EJ, et al.","aar":"2026","lenke":"https://doi.org/10.1038/s41594-026-01839-y"}'::jsonb,
     kilde);
+  ref_opioid_pam := intern.kuratering_referanse(
+    '{"tittel":"Ketamine and Major Ketamine Metabolites Function as Allosteric Modulators of Opioid Receptors","forfattere":"Gomes I, Gupta A, Margolis EB, Fricker LD, Devi LA","aar":"2024","lenke":"https://doi.org/10.1124/molpharm.124.000947"}'::jsonb,
+    kilde);
   ref_m1 := intern.kuratering_referanse(
     '{"tittel":"Inhibition by ketamine of muscarinic acetylcholine receptor function","forfattere":"Durieux ME","aar":"1995","lenke":"https://doi.org/10.1097/00000539-199507000-00012"}'::jsonb,
     kilde);
@@ -48,6 +53,9 @@ begin
   ref_trkb := intern.kuratering_referanse(
     '{"tittel":"Antidepressant drugs act by directly binding to TRKB neurotrophin receptors","forfattere":"Casarotto PC, Girych M, Fred SM, et al.","aar":"2021","lenke":"https://doi.org/10.1016/j.cell.2021.01.034"}'::jsonb,
     kilde);
+  ref_gabaa := intern.kuratering_referanse(
+    '{"tittel":"Ketamine Increases the Function of γ-Aminobutyric Acid Type A Receptors in Hippocampal and Cortical Neurons","forfattere":"Wang DS, Penna A, Orser BA","aar":"2017","lenke":"https://doi.org/10.1097/ALN.0000000000001483"}'::jsonb,
+    kilde);
 
   perform intern.kuratering_nytt(side, jsonb_build_object(
     'panel','farmakodynamikk','posisjon',2,'elementtype','mekanismekort',
@@ -57,11 +65,11 @@ begin
       "mekanisme":"partiell_agonisme",
       "dokument":{"type":"doc","content":[
         {"type":"paragraph","content":[{"type":"text","text":"Ketamin binder direkte i det ortosteriske setet til humane μ-opioidreseptorer og virker som partiell agonist i funksjonelle cAMP-assays. For S-ketamin ble pKi 5,08 og pEC50 5,08 rapportert; affiniteten er betydelig lavere enn for NMDA-reseptoren."}]},
-        {"type":"paragraph","content":[{"type":"text","text":"Dette etablerer MOR som et reelt sekundærmål, men den kliniske betydningen for analgesi, antidepressiv effekt og forsterkende egenskaper er fortsatt uavklart og kan ikke utledes av bindingsdata alene."}]}
+        {"type":"paragraph","content":[{"type":"text","text":"Dette etablerer MOR som et reelt sekundærmål, men den kliniske betydningen for analgesi, antidepressiv effekt og forsterkende egenskaper er fortsatt uavklart. En studie fra 2024 fant dessuten positiv allosterisk modulering av endogent opioidpeptidsignal ved submikromolare konsentrasjoner, mens 2026-studien ikke fant målbar slik potensering i cAMP- eller β-arrestin-assays; den funksjonelle profilen er derfor assayavhengig og ikke endelig avklart."}]}
       ]}
     }
 $json$::jsonb,
-    'referanser',jsonb_build_array(ref_opioid)
+    'referanser',jsonb_build_array(ref_opioid,ref_opioid_pam)
   ), '{"maal":"μ-opioidreseptor (MOR)"}'::jsonb, kilde);
 
   perform intern.kuratering_nytt(side, jsonb_build_object(
@@ -72,11 +80,11 @@ $json$::jsonb,
       "mekanisme":"partiell_agonisme",
       "dokument":{"type":"doc","content":[
         {"type":"paragraph","content":[{"type":"text","text":"Ketamin binder direkte til humane κ-opioidreseptorer og virker som partiell agonist. For S-ketamin ble pKi 5,01 og pEC50 4,72 rapportert; også her er målpotensen klart lavere enn ved NMDA-reseptoren."}]},
-        {"type":"paragraph","content":[{"type":"text","text":"I mus ble ketaminindusert antinocisepsjon blokkert av den selektive KOR-antagonisten aticaprant og av nalokson. Dette støtter funksjonell betydning in vivo, men dokumenterer ikke hvor stor rolle KOR har for kliniske effekter hos mennesker."}]}
+        {"type":"paragraph","content":[{"type":"text","text":"I mus ble ketaminindusert antinocisepsjon blokkert av den selektive KOR-antagonisten aticaprant og av nalokson. Positiv allosterisk modulering av endogent opioidpeptidsignal er også rapportert, men ble ikke gjenfunnet i alle funksjonelle assays. Dette støtter opioidmedvirkning, men dokumenterer ikke hvor stor rolle KOR har for kliniske effekter hos mennesker."}]}
       ]}
     }
 $json$::jsonb,
-    'referanser',jsonb_build_array(ref_opioid)
+    'referanser',jsonb_build_array(ref_opioid,ref_opioid_pam)
   ), '{"maal":"κ-opioidreseptor (KOR)"}'::jsonb, kilde);
 
   perform intern.kuratering_nytt(side, jsonb_build_object(
@@ -168,6 +176,22 @@ $json$::jsonb,
 $json$::jsonb,
     'referanser',jsonb_build_array(ref_trkb)
   ), '{"maal":"TrkB-reseptor"}'::jsonb, kilde);
+
+
+  perform intern.kuratering_nytt(side, jsonb_build_object(
+    'panel','farmakodynamikk','posisjon',10,'elementtype','mekanismekort',
+    'data',$json$
+{
+      "maal":"Ekstrasynaptiske GABAA-reseptorer",
+      "mekanisme":"reseptorpavirkning",
+      "dokument":{"type":"doc","content":[
+        {"type":"paragraph","content":[{"type":"text","text":"Ketamin økte tonisk inhibitorisk strøm gjennom høyaffine ekstrasynaptiske GABAA-reseptorer i dyrkede murine hippocampus- og korteksnevroner og forskjøv GABAs konsentrasjons-respons mot økt tilsynelatende potens ved lave GABA-konsentrasjoner."}]},
+        {"type":"paragraph","content":[{"type":"text","text":"Effekten ble observert ved konsentrasjoner forfatterne vurderte som klinisk relevante, mens direkte kanalåpning av ketamin bare forekom ved høyere konsentrasjoner. Evidensen er preklinisk, og den molekylære interaksjonstypen og kliniske betydningen hos mennesker er ikke fastslått."}]}
+      ]}
+    }
+$json$::jsonb,
+    'referanser',jsonb_build_array(ref_gabaa)
+  ), '{"maal":"Ekstrasynaptiske GABAA-reseptorer"}'::jsonb, kilde);
 
   -- D2-reseptor og monoamintransportører ble vurdert særskilt, men ikke lagt inn:
   -- direkte funksjonelle studier er motstridende eller negative ved relevante konsentrasjoner.
