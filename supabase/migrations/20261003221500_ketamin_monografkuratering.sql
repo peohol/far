@@ -70,8 +70,8 @@ begin
   data := replace(data::text, '__mosca__', kilder->>'mosca')::jsonb;
   perform intern.kuratering_nytt(side, jsonb_build_object(
     'panel','identitet','posisjon',0,'elementtype','riktekst',
-    'data',data,
-    'referanser',jsonb_build_array(kilder->>'spc_ketamin',kilder->>'spc_ketanest',kilder->>'ema_spravato',kilder->>'krystal',kilder->>'mcgirr',kilder->>'dmp_trd',kilder->>'nye_trd',kilder->>'vasudeva',kilder->>'mosca')),
+    'data',data
+  ),
     '{}'::jsonb, kilde);
 
   -- Virkninger, farmakodynamikk, farmakokinetikk og avhengighet.
@@ -101,8 +101,8 @@ begin
   data := replace(data::text, '__ema_spravato__', kilder->>'ema_spravato')::jsonb;
   perform intern.kuratering_nytt(side, jsonb_build_object(
     'panel','dosering','posisjon',0,'elementtype','riktekst',
-    'data',data,
-    'referanser',jsonb_build_array(kilder->>'spc_ketamin',kilder->>'spc_ketanest',kilder->>'mcgirr',kilder->>'dmp_trd',kilder->>'nye_trd',kilder->>'abbar',kilder->>'nye_suicid',kilder->>'ema_spravato')),
+    'data',data
+  ),
     '{}'::jsonb, kilde);
 
   -- «Lært mestringsavhengighet» opprettes ikke: ketaminspesifikk evidens var utilstrekkelig.
