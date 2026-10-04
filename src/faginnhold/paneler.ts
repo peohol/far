@@ -709,6 +709,24 @@ export function erEnkeltelement(elementtype: string): boolean {
   return ENKELTELEMENTER.includes(elementtype)
 }
 
+/**
+ * Nøkkelen som gjør et innholdselement til det eneste i sitt slag på siden,
+ * eller `null` når det kan stå flere: et enkeltelement etter panelet, typen og
+ * koden det gjelder, og et fast kort etter panelet og overskriften. Databasen
+ * avviser et element nummer to med samme nøkkel
+ * (`innholdselementer_enkeltelement_idx`, `innholdselementer_fast_kort_idx`),
+ * så når en ny lagring avvises og et slikt element alt finnes, har noen andre
+ * lagt det inn i mellomtiden.
+ */
+export function enkeltnokkel({ panel, elementtype, data }: { panel: string; elementtype: string; data: unknown }): string | null {
+  if (panel === FJERNET) return null
+  if (erEnkeltelement(elementtype)) return JSON.stringify([panel, elementtype, datakortGjelder(data)])
+  if (elementtype === ELEMENTTYPER.kinetikk && PANELER_MED_FASTE_KORT.includes(panel)) {
+    return JSON.stringify([panel, elementtype, lesKinetikk(data).tittel])
+  }
+  return null
+}
+
 /* --- Felles --------------------------------------------------------------- */
 
 function erObjekt(verdi: unknown): verdi is Record<string, unknown> {

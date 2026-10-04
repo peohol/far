@@ -26,7 +26,7 @@ import { byggSidemodell, publiseringsplan } from '../faginnhold/stoffside'
 import { lagFaginnholdslager, type Faginnholdslager } from '../faginnhold/lagring'
 import { INGEN_REGLER, TOM_STOFFSIDE, lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import type { Objektstatus } from '../faginnhold/modell'
-import { ENKELTELEMENTER, PANELER_MED_FASTE_KORT, fasteKort, panelFor } from '../faginnhold/paneler'
+import { ENKELTELEMENTER, PANELER_MED_FASTE_KORT, enkeltnokkel, fasteKort, panelFor } from '../faginnhold/paneler'
 import { SITERING } from '../faginnhold/referanser'
 import { STOFFREGISTER, stoffslug } from '../domain/stoffregister'
 import { primareAnalytter } from '../domain/koblinger'
@@ -515,6 +515,27 @@ describe('de faste kortene', () => {
     // Uten faste kort kan samme overskrift stå flere ganger.
     await kort('farmakokinetikk', 'Absorpsjon')
     await kort('farmakokinetikk', 'Absorpsjon')
+  })
+
+  it('kjenner igjen kortet som sto i veien, så appen kan si at noen andre la det inn', async () => {
+    const side = (await lager.opprettUtkast('infoside', { navn: 'Samtidig side' })).id
+    const innhold = (panel: string, elementtype: string, data: Record<string, unknown>) => ({ infoside: side, panel, posisjon: 0, elementtype, data })
+    const tilfeller = [
+      innhold('graviditet_amming', 'kinetikkort', { tittel: 'Amming', dokument: tekst('Syntetisk.') }),
+      innhold('dosering', 'riktekst', { dokument: tekst('Syntetisk.') }),
+      innhold('viktige_data', 'referanseomrade', { nedre: 1, ovre: 2, enhet: 'nmol/L', gjelder: 'OTRAM' }),
+    ]
+    for (const endring of tilfeller) {
+      await lager.opprettUtkast('innholdselement', endring)
+      await expect(lager.opprettUtkast('innholdselement', endring)).rejects.toThrow()
+      const utkast = await adminleser.lesStoffside('samtidig-side', 'utkast')
+      expect(utkast.elementer.filter((e) => enkeltnokkel(e.innhold) === enkeltnokkel(endring)), endring.panel).toHaveLength(1)
+    }
+    // Et kort med fri overskrift, og et som er fjernet, står aldri i veien.
+    expect(enkeltnokkel(innhold('farmakokinetikk', 'kinetikkort', { tittel: 'Absorpsjon' }))).toBeNull()
+    expect(enkeltnokkel(innhold('fjernet', 'kinetikkort', { tittel: 'Amming' }))).toBeNull()
+    // Mellomrom rundt overskriften gjør det ikke til et annet kort, som i databasen.
+    expect(enkeltnokkel(innhold('graviditet_amming', 'kinetikkort', { tittel: ' Amming ' }))).toBe(enkeltnokkel(tilfeller[0]!))
   })
 
   it('lar et fast kort som er fjernet, legges til og publiseres på nytt', async () => {
