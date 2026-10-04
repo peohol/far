@@ -15,6 +15,8 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import {
   bivirkningsendringer,
   importfeil,
+  kildeid,
+  sisteEndringer,
   importmigrasjon,
   kontrollerImport,
   antallIImport,
@@ -23,6 +25,7 @@ import {
   MAKSLENGDE,
   type Bivirkningsimport,
 } from '../bivirkninger/import'
+import { sammeInnhold } from '../bivirkninger/forhandsvisning'
 import { lesBivirkningsdata } from '../bivirkninger/lesing'
 import {
   FREKVENSER,
@@ -579,6 +582,28 @@ describe('bivirkningene i databasen', () => {
     }
     expect(await innlogget()('les_bivirkninger', { stoff: 'finnes-ikke' })).toEqual({ kilder: [], bivirkninger: [] })
   })
+
+  it('ser de samme importene som like som forhåndsvisningen gjør', async () => {
+    const grunn = lagImport((i) => (i.kilde.nokkel = 'syntetisk-likhet'))
+    const varianter: Bivirkningsimport[] = [
+      grunn,
+      lagImport((i) => Object.assign(i.kilde, { nokkel: 'syntetisk-likhet', importert_av: 'Syntetisk annen' })),
+      { organsystemer: grunn.organsystemer, kilde: grunn.kilde, stoff: grunn.stoff, format: grunn.format },
+      lagImport((i) => Object.assign(i.kilde, { nokkel: 'syntetisk-likhet', lenke: null })),
+      lagImport((i) => Object.assign(i.kilde, { nokkel: 'syntetisk-likhet', lenke: null, spc_versjon: 'Syntetisk versjon 2' })),
+      lagImport((i) => {
+        Object.assign(i.kilde, { nokkel: 'syntetisk-likhet', lenke: null, spc_versjon: 'Syntetisk versjon 2' })
+        i.organsystemer.reverse()
+      }),
+    ]
+    let forrige = await importer(varianter[0])
+    for (const [n, ny] of varianter.entries()) {
+      if (n === 0) continue
+      const id = await importer(ny)
+      expect(id === forrige, `variant ${n}`).toBe(sammeInnhold(varianter[n - 1]!, ny))
+      forrige = id
+    }
+  })
 })
 
 /* --- Lesingen ------------------------------------------------------------- */
@@ -861,19 +886,19 @@ describe('kildene som referanser', () => {
 
 describe('importfilene og migrasjonene', () => {
   const filer = readdirSync(IMPORTMAPPE).filter((f) => f.endsWith('.json'))
-  const migrasjoner = readdirSync(MIGRASJONSMAPPE)
-    .filter((f) => f.endsWith('.sql'))
-    .sort()
-    .flatMap((f) => bivirkningsendringer(readFileSync(new URL(f, MIGRASJONSMAPPE), 'utf8')))
   /** Det siste migrasjonene gjorde med hver kilde på hver fagside. */
-  const siste = new Map(migrasjoner.map((e) => [`${e.stoff}--${e.nokkel}`, e]))
+  const siste = sisteEndringer(
+    readdirSync(MIGRASJONSMAPPE)
+      .filter((f) => f.endsWith('.sql'))
+      .map((navn) => ({ navn, sql: readFileSync(new URL(navn, MIGRASJONSMAPPE), 'utf8') })),
+  )
 
   it.each(filer.length ? filer : ['(ingen ennå)'])('%s er gyldig, heter etter innholdet og er lagt inn', (fil) => {
     if (!filer.length) return
     const data = JSON.parse(readFileSync(new URL(fil, IMPORTMAPPE), 'utf8')) as Bivirkningsimport
     expect(importfeil(data)).toEqual([])
     expect(fil).toBe(`${data.stoff}--${data.kilde.nokkel}.json`)
-    const endring = siste.get(`${data.stoff}--${data.kilde.nokkel}`)
+    const endring = siste.get(kildeid(data.stoff, data.kilde.nokkel))
     expect(endring?.slag, 'Lag migrasjonen med npm run import:bivirkninger').toBe('import')
     expect(endring?.slag === 'import' && endring.import).toEqual(data)
   })
