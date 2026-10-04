@@ -20,7 +20,7 @@ export const ENDRINGSLOGG: Endring[] = [
     utenVarsel: true,
     punkter: [
       'Ordinære, testede og reversible produksjonsmigrasjoner kan nå rulles ut som en del av utviklingsarbeidet uten at administratoren må kopiere inn en egen godkjenningssetning.',
-      'Migrasjoner med reell risiko for vesentlig datatap eller vanskelig tilbakeføring krever fortsatt uttrykkelig godkjenning; agenten skal velge en tryggere, reversibel løsning når det er mulig.',
+      'Migrasjoner med vesentlig risiko for datatap, sikkerhet/personvern, produksjonsnedetid eller vanskelig tilbakeføring krever fortsatt uttrykkelig godkjenning; agenten skal velge en tryggere løsning når det er mulig.',
     ],
   },
   {
