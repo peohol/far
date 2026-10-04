@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.79.0',
+    dato: '2026-10-04',
+    sammendrag: 'Fagsidene får seksjonene «Toksisitet og forgiftning» og «Graviditet, amming og reproduksjon»',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      '«Toksisitet og forgiftning» står etter «Bivirkninger», med faste kort i denne rekkefølgen: Toksisk dose og eksponering, Toksiske konsentrasjoner, Klinisk forgiftningsbilde, Alvorlige komplikasjoner, Toksikokinetiske særtrekk og Behandling ved forgiftning.',
+      '«Graviditet, amming og reproduksjon» står rett før «Avhengighet, toleranse og tilbakeslagseffekter», med kortene Graviditet, Perinatal og neonatal påvirkning, Amming og Fertilitet og reproduksjon.',
+      'Hvert kort har eget ikon, kilder og historikk som de andre kortene, og kan stå én gang. I redigeringsmodus legges hvert kort til med sin egen knapp; overskriften står fast, og kortene står alltid i samme rekkefølge.',
+      'Seksjonene er tomme til innholdet er kuratert. Kort uten innhold vises ikke, og en tom seksjon vises bare i redigeringsmodus. Tallene i «Viktige data» står der de står.',
+    ],
+  },
+  {
     versjon: '1.78.0',
     dato: '2026-10-04',
     sammendrag: 'Bivirkningsimporter kan forhåndsvises og sammenlignes med forrige versjon før de legges inn',

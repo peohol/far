@@ -445,6 +445,7 @@ styrer søket og nummereringen av referansene):
 | Farmakodynamikk | `farmakodynamikk` | `mekanismekort`: `{ maal, mekanisme, dokument? }`, i rekkefølge, som regel ett per målprotein eller mekanisme (se «Farmakodynamikken som mekanismekort»). En `riktekst` fra en senere import vises under kortene |
 | Virkninger | `virkninger` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge, som i farmakokinetikken. Seksjonen kom til 2026-10-02 uten innhold; i lesemodus står den først når den har kort |
 | Bivirkninger | `bivirkninger` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge, som i farmakokinetikken. Kom til sammen med virkningene, uten innhold. Over kortene står bivirkningene fra preparatomtalene, gruppert etter frekvens eller organsystem; de importeres og redigeres ikke her (se `docs/bivirkninger.md`) |
+| Toksisitet og forgiftning | `toksisitet_forgiftning` | `kinetikkort`: `{ tittel, dokument }` med faste overskrifter (`kort` i `PANELER`), i denne rekkefølgen: «Toksisk dose og eksponering», «Toksiske konsentrasjoner», «Klinisk forgiftningsbilde», «Alvorlige komplikasjoner», «Toksikokinetiske særtrekk» og «Behandling ved forgiftning». Hvert kort kan stå én gang (også i databasen, se under), `posisjon` er plassen i `fasteKort`, og hvert har eget ikon. Tallene i viktige data (toksisk område, alvorlig/dødelig intoksikasjon) står for seg og kobles ikke hit; kortene kan utdype og sette dem i kontekst. Kom til 2026-10-04 uten innhold |
 | Indikasjon | `indikasjon` | `riktekst`: `{ dokument }` |
 | Preparater | `preparater` | `legemiddelkobling`: `{ virkestoff: [{ fest_id, navn }] }` — hvilke virkestoff i legemiddeldataene siden viser preparatene for (se `docs/legemiddeldata.md`) |
 | Dosering | `dosering` | `riktekst`: `{ dokument }` |
@@ -453,6 +454,7 @@ styrer søket og nummereringen av referansene):
 | Interaksjoner | `interaksjoner` | `riktekst`: `{ dokument }`, øverst; under den interaksjonene fra FEST for koblingen i «Preparater» |
 | Terapeutisk legemiddelmonitorering (TDM) | `tdm` | `kinetikkort`: `{ tittel, dokument }`, i rekkefølge — prøvetakingstidspunkt, grunnlaget for referanseområdet, tolkning og indikasjoner for måling |
 | Serumkonsentrasjoner | `serumkonsentrasjoner` | `dosetabell`: `{ rader: [{ dose, regime, konsentrasjon, merknad }] }`. Kildene står på panelet, ikke på tabellen |
+| Graviditet, amming og reproduksjon | `graviditet_amming` | `kinetikkort`: `{ tittel, dokument }` med faste overskrifter (`kort` i `PANELER`): «Graviditet», «Perinatal og neonatal påvirkning», «Amming» og «Fertilitet og reproduksjon», på samme måte som toksisiteten. Kom til 2026-10-04 uten innhold |
 | Avhengighet, toleranse og tilbakeslagseffekter | `avhengighet_toleranse` | `kinetikkort`: `{ tittel, dokument }` med faste overskrifter i to undergrupper (`grupper` i `PANELER`): «Fysiologisk adaptasjon» med «Toleranseutvikling» og «Abstinens, seponeringssyndrom og rebound-effekter», og «Lærings- og motivasjonsfenomener» med «Addiksjon» og «Lært mestringsavhengighet» (å ha vent seg til å bruke stoffet for å mestre bestemte situasjoner). Hvert kort kan stå én gang, i den rekkefølgen (`posisjon` er plassen i `fasteKort`), og har eget ikon. Overskriften kan ikke endres og kortene ikke flyttes. Undergruppene er overskriftskort med kortene som underkort; i lesemodus står bare gruppene med kort. Kom til 2026-10-02 som «Misbruk og avhengighet» (`misbruk_avhengighet`) uten innhold, og fikk navn og grupper 2026-10-03, før noe innhold var skrevet |
 
 Tallene i viktige data er tall, ikke tekst. Bare den ene grensen oppgitt vises
@@ -469,12 +471,26 @@ og t½/tss uten `former` leses som ett område eller én typisk verdi. Koden, na
 kategorien i identiteten kommer fra stoffregisteret og koblingene; navnet fra
 databasen når siden finnes der.
 
+**De faste kortene.** I seksjonene med faste kort (`PANELER_MED_FASTE_KORT`:
+toksisiteten, graviditeten og avhengigheten) har redaktøren én «Legg til: X»
+per kort som mangler, overskriften kan ikke endres, og kortene kan ikke
+flyttes. Et kort finnes bare når det har tekst, så seksjonen kan stå helt
+eller delvis tom; i lesemodus står bare kortene som finnes, og en seksjon uten
+kort står ikke. Databasen håndhever at hvert fast kort står én gang per side,
+panel og tilstand, etter overskriften (`innholdselementer_fast_kort_idx`,
+migrasjonen `faste_kort_en_gang`). Et kort som er fjernet, står i `fjernet` og
+gir plass til et nytt med samme overskrift; publiseringen tar det fjernede
+først (`publiseringsplan`), så det nye ikke kolliderer med det gamle i det
+publiserte. Kortene er ellers vanlige kort i en kortserie: oppsummeringen,
+søket, direktelenkene, kildene, historikken og utkastene virker som i
+farmakokinetikken.
+
 **Visningen.** Identiteten og viktige data står alltid fram øverst
 (`Identitetspanel.tsx`, `ViktigeData.tsx`). Viktige data har ingen synlig
 tittel, men er et område med navnet for skjermlesere; kortene står i to
 grupper (`DATAKORTGRUPPER`), med konseptikon og etikett på hvert kort, og
 halveringstid og tid til steady state vises som t₁/₂ og tₛₛ. De andre panelene
-er seksjoner som åpnes og lukkes, og kortene i farmakodynamikken, virkningene, bivirkningene, farmakokinetikken, farmakogenetikken og TDM er detaljkort
+er seksjoner som åpnes og lukkes, og kortene i farmakodynamikken, virkningene, bivirkningene, toksisiteten, farmakokinetikken, farmakogenetikken, TDM, graviditeten og avhengigheten er detaljkort
 i sin seksjon (se `docs/seksjoner.md`). En lukket seksjon viser en kort
 oppsummering med innholdets egne ord: målene i farmakodynamikken, titlene på kinetikkortene, dosene i
 tabellen eller begynnelsen av teksten. Redigeringsmodus åpner ikke alt;

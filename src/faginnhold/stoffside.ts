@@ -156,7 +156,7 @@ function etterId<T extends { id: string }>(liste: readonly T[]): T[] {
  * Det som må publiseres for at stoffsiden og reglene den viser skal bli slik
  * utkastet viser dem, i den rekkefølgen databasen krever: det publiserte kan
  * bare peke på det som også er publisert. Referansene først, så siden og
- * innholdselementene. Til sist regelsettene, hvert etter kommentarene det
+ * innholdselementene, de fjernede av dem først. Til sist regelsettene, hvert etter kommentarene det
  * peker på.
  *
  * `side` og `regler` er utkastet. Bare det som faktisk har upubliserte
@@ -180,7 +180,11 @@ export function publiseringsplan(side: Stoffsidedata, regler: Regeldata): Publis
 
   for (const referanse of side.referanser) legg('referanse', referanse)
   legg('infoside', side.infoside)
-  for (const element of etterId(side.elementer)) legg('innholdselement', element)
+  // Det som er tatt bort fra siden, først: et kort som bare kan stå én gang, og som er
+  // fjernet og lagt til på nytt, må være ute av det publiserte før det nye kommer inn.
+  const elementer = etterId(side.elementer)
+  for (const element of elementer) if (element.innhold.panel === FJERNET) legg('innholdselement', element)
+  for (const element of elementer) legg('innholdselement', element)
   for (const kode of Object.keys(regler.regelsett).sort()) leggRegelsett('intervallregelsett', regler.regelsett[kode])
   for (const modul of Object.keys(regler.scenarioregelsett).sort()) {
     leggRegelsett('scenarioregelsett', regler.scenarioregelsett[modul])

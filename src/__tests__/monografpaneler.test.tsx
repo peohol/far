@@ -17,7 +17,7 @@ import { IKONNAVN } from '../components/ikon/register'
 import { Detaljkort, Seksjon } from '../components/seksjoner/Seksjon'
 import { doseringskort } from '../faginnhold/doseringskort'
 import { doserader, kinetikktittel, tilDokument, type Persentiltabell } from '../faginnhold/import'
-import { PANELER, fasteKort, panelFor, type Doserad } from '../faginnhold/paneler'
+import { PANELER, PANELER_MED_FASTE_KORT, fasteKort, panelFor, type Doserad } from '../faginnhold/paneler'
 import { PSYKOFARMAKA_FILER } from '../faginnhold/psykofarmaka'
 import { klartekst } from '../faginnhold/riktekst'
 import { lesSerumtabell, persentiltekst, PROSJEKTMERKNAD, type Serumblokk } from '../faginnhold/serumtabell'
@@ -218,8 +218,23 @@ describe('ikonregisteret for farmakokinetikken', () => {
 
   it('leser fri tekst etter mening, og faller trygt tilbake', () => {
     expect(kinetikkikon('Absorpsjon')).toBe('absorp')
-    // De faste kortene i «Avhengighet, toleranse og tilbakeslagseffekter».
-    for (const kort of fasteKort(panelFor('avhengighet_toleranse')!)!) expect(kinetikkikon(kort)).not.toBe('fallback')
+    // Hvert fast kort har sitt eget ikon, i alle seksjonene med faste kort.
+    for (const panel of PANELER_MED_FASTE_KORT) {
+      const ikoner = fasteKort(panelFor(panel)!)!.map(kinetikkikon)
+      expect(ikoner, panel).not.toContain('fallback')
+      expect(new Set(ikoner).size, panel).toBe(ikoner.length)
+    }
+    expect(fasteKort(panelFor('toksisitet_forgiftning')!)!.map(kinetikkikon)).toEqual([
+      'toksiskDose',
+      'tox',
+      'forgiftningsbilde',
+      'sev',
+      'toksikokinetikk',
+      'antidot',
+    ])
+    expect(fasteKort(panelFor('graviditet_amming')!)!.map(kinetikkikon)).toEqual(['foster', 'nyfodt', 'amming', 'fertilitet'])
+    // «Amming» står ikke inne i et annet ord.
+    expect(kinetikkikon('Stamming')).toBe('fallback')
     expect(kinetikkikon('Toleranseutvikling')).toBe('toleranse')
     expect(kinetikkikon('Abstinens, seponeringssyndrom og rebound-effekter')).toBe('abstinens')
     expect(kinetikkikon('Addiksjon')).toBe('vane')

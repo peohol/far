@@ -18,6 +18,7 @@ const SEKSJONSIKONER: Readonly<Record<string, Ikonnavn>> = {
   farmakodynamikk: 'gears',
   virkninger: 'virkning',
   bivirkninger: 'bivirkning',
+  toksisitet_forgiftning: 'forgiftning',
   indikasjon: 'indik',
   preparater: 'prep',
   dosering: 'dose',
@@ -26,6 +27,7 @@ const SEKSJONSIKONER: Readonly<Record<string, Ikonnavn>> = {
   interaksjoner: 'inter',
   tdm: 'tdm',
   serumkonsentrasjoner: 'serum',
+  graviditet_amming: 'svangerskap',
   avhengighet_toleranse: 'avhengighet',
   fortolkning: 'interp',
   referanser: 'refs',
@@ -64,6 +66,19 @@ const KINETIKKATEGORIER: readonly { ikon: Ikonnavn; monster: RegExp }[] = [
   { ikon: 'vane', monster: /vanedann|addiksjon/ },
   { ikon: 'toleranse', monster: /toleranse/ },
   { ikon: 'abstinens', monster: /abstinens|tilbakeslag|rebound|seponering/ },
+  // De faste kortene i «Toksisitet og forgiftning». Konsentrasjonene og de
+  // alvorlige komplikasjonene har ikonene fra viktige data.
+  { ikon: 'toksiskDose', monster: /toksisk dose|eksponering/ },
+  { ikon: 'tox', monster: /toksisk(e)? (konsentrasjon|omr)/ },
+  { ikon: 'forgiftningsbilde', monster: /forgiftningsbilde|klinisk bilde/ },
+  { ikon: 'sev', monster: /komplikasjon|intoksikasjon/ },
+  { ikon: 'toksikokinetikk', monster: /toksikokinet/ },
+  { ikon: 'antidot', monster: /antidot|motgift|behandling ved forgiftning/ },
+  // De faste kortene i «Graviditet, amming og reproduksjon».
+  { ikon: 'foster', monster: /graviditet|svangerskap/ },
+  { ikon: 'nyfodt', monster: /perinatal|neonatal|nyf[oø]dt/ },
+  { ikon: 'amming', monster: /\bamming|morsmelk|brystmelk/ },
+  { ikon: 'fertilitet', monster: /fertilitet|reproduksjon/ },
 ]
 
 /** Overskriften slik kategoriene sammenlignes: «tₘₐₓ» → «tmax», «Absorpsjon» → «absorpsjon». */
