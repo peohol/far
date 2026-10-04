@@ -1,0 +1,182 @@
+-- Bivirkninger for fagsiden «ketamin» fra Ketanest 5 mg/ml og 25 mg/ml – preparatomtale (SPC).
+-- Laget av scripts/lag-bivirkningsimport.ts fra importfila; se docs/bivirkninger.md.
+select bivirkninger.importer($import${
+  "format": "ousfar-bivirkninger/1",
+  "stoff": "ketamin",
+  "kilde": {
+    "nokkel": "ketanest-injeksjon",
+    "type": "spc",
+    "tittel": "Ketanest 5 mg/ml og 25 mg/ml – preparatomtale (SPC)",
+    "preparat": "Ketanest",
+    "innehaver": "Pfizer AS",
+    "revisjonsdato": "2021-11-04",
+    "lenke": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/13-9423.pdf",
+    "kontrollert": "2026-10-04",
+    "kontrollert_av": "ChatGPT",
+    "importert_av": "ChatGPT monografikurator"
+  },
+  "organsystemer": [
+    {
+      "organsystem": "immunsystemet",
+      "frekvenser": [
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            "Anafylaksi"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "psykiatriske",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            {
+              "tekst": "Oppvåkningsreaksjoner. Disse omfatter livaktige drømmer, deriblant mareritt, svimmelhet og motorisk rastløshet.",
+              "fotnote": "Når esketamin brukes som eneste anestetikum, kan opptil 30 % av pasientene få doseavhengige bivirkninger under oppvåkningsfasen. Insidensen av disse bivirkningene kan reduseres vesentlig ved samtidig administrering av et benzodiazepin."
+            }
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Hallusinasjoner",
+            "dysfori",
+            "angst",
+            "desorientering"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "nevrologiske",
+      "frekvenser": [
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Toniske og kloniske bevegelser som kan ligne på konvulsjoner (pga. økt muskeltonus)",
+            "nystagmus"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "oye",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Tåkesyn"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Diplopi",
+            "økt intraokulært trykk"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "hjerte",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Forbigående takykardi",
+            "økt blodtrykk og hjertefrekvens (ca. 20 % av utgangsnivå er vanlig)."
+          ]
+        },
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            "Arytmi",
+            "bradykardi"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "kar",
+      "frekvenser": [
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            "Hypotensjon (spesielt i forbindelse med kretsløpskollaps)"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "respirasjon",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Økt vaskulær motstand i det pulmonale kretsløpet",
+            "økt mucussekresjon",
+            "Økt oksygenforbruk",
+            "laryngospasme",
+            {
+              "tekst": "forbigående respirasjonshemming",
+              "fotnote": "Risikoen for respirasjonshemming avhenger vanligvis av dosen og injeksjonshastigheten."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "gastrointestinale",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Kvalme og oppkast",
+            "økt salivasjon"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "lever_galle",
+      "frekvenser": [
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Unormale leverfunksjonsprøver",
+            {
+              "tekst": "Legemiddelindusert leverskade",
+              "fotnote": "Forlenget bruk (> 3 dager) eller rusmisbruk."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "hud",
+      "frekvenser": [
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Morbilliformt utslett",
+            "eksantem"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "generelle",
+      "frekvenser": [
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Smerte og erytem på injeksjonsstedet"
+          ]
+        }
+      ]
+    }
+  ]
+}$import$::jsonb);
