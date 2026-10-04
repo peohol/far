@@ -532,10 +532,7 @@ select bivirkninger.importer($import${
                 "Priapisme",
                 "galaktoré",
                 "hevelse i brystene",
-                {
-                  "tekst": "menstruasjonsforstyrrelse",
-                  "fotnote": "Minst ett tilfelle av trombocytter ≤ 100 x 10^9/l."
-                }
+                "menstruasjonsforstyrrelse"
               ]
             }
           ]
