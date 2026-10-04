@@ -9,7 +9,8 @@ FAR er et verktøy for fortolkning og kommentering av farmakologiske analyser. B
 - Be aldri bidragsyteren redigere filer, kjøre kommandoer, installere programvare, hente logger, kopiere terminalutskrift eller utføre annet teknisk arbeid som Claude kan gjøre selv. Utfør slike steg selv.
 - Forutsett at bidragsyterne ikke har eller bruker et lokalt utviklingsmiljø. Ikke gi lokale oppsettsinstruksjoner med mindre det uttrykkelig etterspørres.
 - Svar på norsk som standard. Forklar resultat og konsekvenser i vanlig språk, og unngå unødvendig utviklersjargong. Forklar tekniske begreper kort når de faktisk trengs.
-- Når en eksplisitt bekreftelse krever en nøyaktig formulering, skal du alltid gi denne formuleringen i en egen kodeblokk slik at bidragsyteren kan kopiere den direkte.
+- Produksjonsmigrasjoner følger en risikobasert regel: rull ordinære, testede og reversible migrasjoner ut som del av oppgaven uten å be om et eget ja. Be bare om eksplisitt bekreftelse når migrasjonen kan gi vesentlig datatap eller andre klart destruktive eller vanskelig reversible konsekvenser. Kan samme mål nås trygt og reversibelt, velg den løsningen i stedet for å stoppe for godkjenning.
+- Når en slik eksplisitt bekreftelse faktisk kreves og må ha en nøyaktig formulering, skal du alltid gi denne formuleringen i en egen kodeblokk slik at bidragsyteren kan kopiere den direkte.
 - Ved avslutning: oppsummer hva som ble endret, hva brukeren vil merke, hvilke kontroller som er kjørt, og eventuelle reelle uavklarte forhold. Ikke dump interne implementasjonsdetaljer uten grunn.
 
 ## Arbeidsmåte
