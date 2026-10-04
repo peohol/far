@@ -94,7 +94,7 @@ $json$::jsonb,
       "maal":"M1-muskarinreseptor",
       "mekanisme":"antagonisme",
       "dokument":{"type":"doc","content":[
-        {"type":"paragraph","content":[{"type":"text","text":"Ketamin hemmer M1-muskarinreseptormediert signalering direkte. I rekombinante M1-reseptorer uttrykt i Xenopus-oocytter var IC50 omtrent 5,7 µM, med nær komplett hemming ved høye konsentrasjoner."}]},
+        {"type":"paragraph","content":[{"type":"text","text":"Ketamin hemmer M"},{"type":"text","text":"1","marks":[{"type":"subscript"}]},{"type":"text","text":"-muskarinreseptormediert signalering direkte. I rekombinante M"},{"type":"text","text":"1","marks":[{"type":"subscript"}]},{"type":"text","text":"-reseptorer uttrykt i Xenopus-oocytter var IC50 omtrent 5,7 µM, med nær komplett hemming ved høye konsentrasjoner."}]},
         {"type":"paragraph","content":[{"type":"text","text":"Studien dokumenterer funksjonell antagonisme, men ikke at hemmingen er kompetitiv. Bidraget til ketamins kliniske anestetiske, kognitive eller autonome effekter er ikke avklart."}]}
       ]}
     }
@@ -109,7 +109,7 @@ $json$::jsonb,
       "maal":"α7-nikotinreseptor",
       "mekanisme":"antagonisme",
       "dokument":{"type":"doc","content":[
-        {"type":"paragraph","content":[{"type":"text","text":"Rent racemisk ketamin hemmer humane rekombinante α7-nikotinreseptorer ikke-kompetitivt; IC50 var 20 ± 2 µM i Xenopus-oocytter. Dette ligger i et konsentrasjonsområde som kan overlappe anestetisk eksponering, men er klart svakere enn NMDA-reseptorblokkaden."}]},
+        {"type":"paragraph","content":[{"type":"text","text":"Rent racemisk ketamin hemmer humane rekombinante α"},{"type":"text","text":"7","marks":[{"type":"subscript"}]},{"type":"text","text":"-nikotinreseptorer ikke-kompetitivt; IC50 var 20 ± 2 µM i Xenopus-oocytter. Dette ligger i et konsentrasjonsområde som kan overlappe anestetisk eksponering, men er klart svakere enn NMDA-reseptorblokkaden."}]},
         {"type":"paragraph","content":[{"type":"text","text":"Benzetoniumklorid, et konserveringsmiddel i enkelte ketaminpreparater, hemmer samme reseptor mer potent. Preparatspesifikk konserveringsmiddeleffekt skal derfor ikke tilskrives ketaminmolekylet."}]}
       ]}
     }
@@ -124,7 +124,7 @@ $json$::jsonb,
       "maal":"α4β2-nikotinreseptor",
       "mekanisme":"bruksavhengig_blokkering",
       "dokument":{"type":"doc","content":[
-        {"type":"paragraph","content":[{"type":"text","text":"Ketamin hemmer humane rekombinante α4β2-nikotinreseptorer ikke-kompetitivt og på en spennings- og bruksavhengig måte. IC50 var 50 ± 4 µM, altså ved høyere konsentrasjoner enn for α7-reseptoren."}]},
+        {"type":"paragraph","content":[{"type":"text","text":"Ketamin hemmer humane rekombinante α"},{"type":"text","text":"4","marks":[{"type":"subscript"}]},{"type":"text","text":"β"},{"type":"text","text":"2","marks":[{"type":"subscript"}]},{"type":"text","text":"-nikotinreseptorer ikke-kompetitivt og på en spennings- og bruksavhengig måte. IC50 var 50 ± 4 µM, altså ved høyere konsentrasjoner enn for α"},{"type":"text","text":"7","marks":[{"type":"subscript"}]},{"type":"text","text":"-reseptoren."}]},
         {"type":"paragraph","content":[{"type":"text","text":"Funnet dokumenterer en direkte kanalvirkning, men den relativt lave potensen gjør betydningen ved vanlig systemisk eksponering usikker."}]}
       ]}
     }
@@ -154,7 +154,7 @@ $json$::jsonb,
       "maal":"σ1- og σ2-reseptorer",
       "mekanisme":"reseptorbinding",
       "dokument":{"type":"doc","content":[
-        {"type":"paragraph","content":[{"type":"text","text":"Racemisk ketamin binder σ1- og σ2-reseptorer med mikromolar affinitet. I prekliniske modeller påvirket σ-reseptorantagonister enkelte cellulære effekter av ketamin, men blokkerte ikke den antidepressivlignende effekten i tvungen-svømming-test."}]},
+        {"type":"paragraph","content":[{"type":"text","text":"Racemisk ketamin binder σ"},{"type":"text","text":"1","marks":[{"type":"subscript"}]},{"type":"text","text":"- og σ"},{"type":"text","text":"2","marks":[{"type":"subscript"}]},{"type":"text","text":"-reseptorer med mikromolar affinitet. I prekliniske modeller påvirket σ-reseptorantagonister enkelte cellulære effekter av ketamin, men blokkerte ikke den antidepressivlignende effekten i tvungen-svømming-test."}]},
         {"type":"paragraph","content":[{"type":"text","text":"Bindingen er derfor dokumentert, mens funksjonell retning og klinisk betydning hos mennesker er usikker."}]}
       ]}
     }
@@ -185,7 +185,7 @@ $json$::jsonb,
       "maal":"Ekstrasynaptiske GABAA-reseptorer",
       "mekanisme":"reseptorpavirkning",
       "dokument":{"type":"doc","content":[
-        {"type":"paragraph","content":[{"type":"text","text":"Ketamin økte tonisk inhibitorisk strøm gjennom høyaffine ekstrasynaptiske GABAA-reseptorer i dyrkede murine hippocampus- og korteksnevroner og forskjøv GABAs konsentrasjons-respons mot økt tilsynelatende potens ved lave GABA-konsentrasjoner."}]},
+        {"type":"paragraph","content":[{"type":"text","text":"Ketamin økte tonisk inhibitorisk strøm gjennom høyaffine ekstrasynaptiske GABA"},{"type":"text","text":"A","marks":[{"type":"subscript"}]},{"type":"text","text":"-reseptorer i dyrkede murine hippocampus- og korteksnevroner og forskjøv GABAs konsentrasjons-respons mot økt tilsynelatende potens ved lave GABA-konsentrasjoner."}]},
         {"type":"paragraph","content":[{"type":"text","text":"Effekten ble observert ved konsentrasjoner forfatterne vurderte som klinisk relevante, mens direkte kanalåpning av ketamin bare forekom ved høyere konsentrasjoner. Evidensen er preklinisk, og den molekylære interaksjonstypen og kliniske betydningen hos mennesker er ikke fastslått."}]}
       ]}
     }
