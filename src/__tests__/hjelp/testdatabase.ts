@@ -81,7 +81,7 @@ const BARE_I_PRODUKSJON = /_(oppgaver_utfort_1_56_0|koble_infosider_til_fest_vir
  * (`kurateringer`, eller filen i `bare`): ellers ville preflighten deres
  * stoppe enhver test som setter opp sider på sin egen måte.
  */
-export const MONOGRAFKURATERING = /_monografkuratering(?!_hjelpere)(_[a-z0-9_]+)?\.sql$|_kvetiapin_farmakogenetikk_og_typografi\.sql$/
+export const MONOGRAFKURATERING = /_monografkuratering(?!_hjelpere)(_[a-z0-9_]+)?\.sql$|_kvetiapin_farmakogenetikk_og_typografi\.sql$|_kvetiapin_virkninger_og_avhengighet\.sql$/
 
 /**
  * En bivirkningsimport (`docs/bivirkninger.md`) gjelder en fagside som
