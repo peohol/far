@@ -10,8 +10,8 @@ overført og skrevet en prompt til. Hver har et nummer fra den ble overført,
 vist som «OPG-007» (`nummer = 7`). Oppgaver med status `klar` er klare til å
 utføres. Dette er en engangsøkt som administratoren følger live: spør når noe
 er uklart etter reglene i `CLAUDE.md`. Ordinære produksjonsmigrasjoner rulles
-ut som en del av arbeidet uten eget samtykke; bare destruktive eller vanskelig
-reversible migrasjoner stopper for eksplisitt godkjenning. Det finnes ingen automatikk som
+ut som en del av arbeidet uten eget samtykke; bare migrasjoner med vesentlig
+risiko etter `CLAUDE.md` stopper for eksplisitt godkjenning. Det finnes ingen automatikk som
 gjør dette i bakgrunnen, og det skal det heller ikke.
 
 Oppdraget står i databasen, ikke i meldingen fra brukeren. `/utfor-oppgaver`
@@ -114,8 +114,8 @@ Følg `CLAUDE.md` som i alt annet arbeid: les koden først, test, og kjør
 - Ha nummeret i grenen og i tittelen på PR-en, som `claude/opg-007-varsler` og
   «OPG-007: Varslingssystem», så en avbrutt oppgave kan finnes igjen.
 - Databaseendringer følger den risikobaserte migrasjonsregelen i `CLAUDE.md`:
-  ordinære og reversible migrasjoner rulles ut uten eget samtykke; bare reelt
-  destruktive eller vanskelig reversible migrasjoner krever eksplisitt ja.
+  ordinære migrasjoner med lav produksjonsrisiko rulles ut uten eget samtykke;
+  migrasjoner med vesentlig risiko etter `CLAUDE.md` krever eksplisitt ja.
 - Må en oppgave legges fra seg uferdig, si at administratoren kan fortsette den
   i en ny økt med `/utfor-oppgaver OPG-007`, eller frigi den i appen så den er
   klar igjen.
