@@ -260,6 +260,17 @@ const kapsel: Ikondel[] = [
 ]
 const KAPSEL_SKRA = 'translate(-4 4) rotate(-45 24 24)'
 
+/** Pipetten i doseringen, med væsken i fargen `fyll`. Den står på skrå (`PIPETTE_SKRA`). */
+const pipette = (fyll: Ikonfarge): Ikondel[] => [
+  R(19, 1.5, 10, 11, 5, 'f2', 'accent'),
+  P('M20.5 12h7v18l-3.5 6-3.5-6z', 'f1', 'glass'),
+  P('M20.5 23h7v7l-3.5 6-3.5-6z', 'f2', fyll),
+  P('M20.5 16h3M20.5 20h3M20.5 24h3M20.5 28h3', 'l'),
+]
+const PIPETTE_SKRA = 'rotate(-45 24 24)'
+/** Dråpen fra pipetten. */
+const DRAPE = 'M33.5 37.5c-2 2.4-3 3.9-3 4.9a3 3 0 0 0 6 0c0-1-1-2.5-3-4.9z'
+
 /*
  * Avhengighet, toleranse og tilbakeslagseffekter: seksjonen og de faste kortene i den.
  */
@@ -399,17 +410,7 @@ const REGISTER = {
       R(32.5, 28, 9, 7, 1, 'f2', 'paper'),
     ],
   },
-  dose: {
-    vb: 48,
-    rot: 'rotate(-45 24 24)',
-    parts: [
-      R(19, 1.5, 10, 11, 5, 'f2', 'accent'),
-      P('M20.5 12h7v18l-3.5 6-3.5-6z', 'f1', 'glass'),
-      P('M20.5 23h7v7l-3.5 6-3.5-6z', 'f2', 'accent'),
-      P('M20.5 16h3M20.5 20h3M20.5 24h3M20.5 28h3', 'l'),
-    ],
-    free: [P('M33.5 37.5c-2 2.4-3 3.9-3 4.9a3 3 0 0 0 6 0c0-1-1-2.5-3-4.9z', 'f1', 'accent', 'drop')],
-  },
+  dose: { vb: 48, rot: PIPETTE_SKRA, parts: pipette('accent'), free: [P(DRAPE, 'f1', 'accent', 'drop')] },
   pk: {
     vb: 48,
     parts: [
@@ -821,6 +822,110 @@ const REGISTER = {
       P('M7 22h37', 'd', 'i-ink'),
       P('M23 22c2.5 6 4.5 12 8 12s5.5-7 9-12z', 'f1', 'danger'),
       P('M7 22c4 0 5-13 9-13s4.5 7 7 13c2.5 6 4.5 12 8 12s5.5-7 9-12h4', 'l', 'accent', 'draw', { pl: 1 }),
+    ],
+  },
+  /*
+   * Toksisitet og forgiftning: seksjonen og de faste kortene i den. «Toksiske
+   * konsentrasjoner» og «Alvorlige komplikasjoner» bruker `tox` og `sev`, som
+   * toksisk område og alvorlig intoksikasjon i viktige data.
+   */
+  /* Toksisitet og forgiftning: en giftflaske med et kryss på etiketten. */
+  forgiftning: {
+    vb: 48,
+    parts: [
+      R(19, 4, 10, 5.5, 1.5, 'f2', 'accent2'),
+      P('M20 9.5h8v5c6.5 2 11 7.6 11 14.5 0 8.6-6.7 15-15 15S9 37.6 9 29c0-6.9 4.5-12.5 11-14.5z', 'f1', 'glass'),
+      P('M9.9 34h28.2A15 15 0 0 1 9.9 34z', 'f2', 'warn', 'fill'),
+      C(24, 25, 5.5, 'o2', 'paper'),
+      G([P('M21.5 22.5l5 5M26.5 22.5l-5 5', 'l', 'danger')], 'pop'),
+    ],
+  },
+  /* Toksisk dose og eksponering: pipetten fra doseringen, full av gift, med dråper som renner over. */
+  toksiskDose: {
+    vb: 48,
+    rot: PIPETTE_SKRA,
+    parts: pipette('warn'),
+    free: [P(DRAPE, 'f2', 'danger', 'drop'), C(41, 33, 1.8, 'h', 'danger', 'pop')],
+  },
+  /* Klinisk forgiftningsbilde: en monitor med en urolig kurve. */
+  forgiftningsbilde: {
+    vb: 48,
+    parts: [
+      R(5, 8, 38, 27, 4, 'f1', 'glass'),
+      P('M9 22h7l3-7 4 14 3-10 2 3h11', 'l', 'danger', 'draw', { pl: 1 }),
+      P('M17 42h14M24 35v7', 'l', 'i-line'),
+    ],
+  },
+  /* Toksikokinetiske særtrekk: konsentrasjonskurven som stiger inn i det toksiske feltet og blir der lenge. */
+  toksikokinetikk: {
+    vb: 48,
+    parts: [
+      axes,
+      P('M7 7h37v11H7z', 'f1', 'warn'),
+      P('M7 18h37', 'd', 'warn'),
+      P('M7 40C11 40 13 10 19 10s9 3 25 18', 'l', 'accent', 'draw', { pl: 1 }),
+    ],
+  },
+  /* Behandling ved forgiftning: sprøyten med motgiften og et grønt pluss. */
+  antidot: {
+    vb: 48,
+    rot: 'rotate(-45 24 24)',
+    parts: [
+      R(10, 19, 22, 10, 2, 'f1', 'glass'),
+      R(10, 19, 12, 10, 2, 'f2', 'ok', 'fill'),
+      P('M32 24h7M39 19v10M10 24H3', 'l', 'i-ink'),
+    ],
+    free: [G([C(37, 37, 8, 'f2', 'ok'), P('M37 33v8M33 37h8', 'l', 'paper')], 'pop')],
+  },
+  /*
+   * Graviditet, amming og reproduksjon: seksjonen og de faste kortene i den.
+   */
+  /* Graviditet, amming og reproduksjon: en gravid kvinne i profil, som organsystemet i bivirkningene. */
+  svangerskap: {
+    vb: 48,
+    parts: [
+      C(21, 9.6, 4.8, 'f2', 'accent2'),
+      P('M17 16.4h8c1.2 2.8 2 4.8 5.2 6.8 4.8 3 5 10.4-.2 12.8-1.6.8-3.4 1-5 1v6H17.4v-8.2C15.2 32 14.6 28 15.4 24z', 'f1', 'accent2'),
+      G([C(27.2, 29.6, 3, 'h', 'danger')], 'pulse'),
+    ],
+  },
+  /* Graviditet: fosteret i livmoren, med hjertet. */
+  foster: {
+    vb: 48,
+    parts: [
+      C(24, 24, 19, 'f1', 'accent2'),
+      C(27, 16, 6, 'f2', 'accent2'),
+      P('M22.5 19.5C17 21 14 26.5 15.5 31.5s7 7.5 12 6c4.5-1.5 6.5-6 5-10-1-2.5-3.5-4-6-4z', 'f2', 'accent2'),
+      G([C(25, 30, 2.2, 'h', 'danger')], 'pulse'),
+    ],
+  },
+  /* Perinatal og neonatal påvirkning: et nyfødt barn, svøpt. */
+  nyfodt: {
+    vb: 48,
+    parts: [
+      R(13, 18, 22, 26, 11, 'f1', 'info'),
+      P('M15 25l9 7 9-7', 'l', 'i-line'),
+      C(24, 14, 8, 'o1', 'accent2'),
+      G([P('M18.5 13.5c.9.9 2.1.9 3 0M26.5 13.5c.9.9 2.1.9 3 0', 'l', 'i-ink')], 'wink'),
+    ],
+  },
+  /* Amming: en dråpe melk, og en liten dråpe til. */
+  amming: {
+    vb: 48,
+    parts: [
+      P('M22 5S9 19.5 9 28.5a13 13 0 0 0 26 0C35 19.5 22 5 22 5z', 'f1', 'glass'),
+      P('M22 5S9 19.5 9 28.5a13 13 0 0 0 26 0C35 19.5 22 5 22 5z', 'l', 'i-line'),
+      P('M15.5 29a6.5 6.5 0 0 0 6.5 6.5', 'l', 'paper'),
+      G([P('M38 32s-4 4.5-4 7a4 4 0 0 0 8 0c0-2.5-4-7-4-7z', 'f2', 'info')], 'drop'),
+    ],
+  },
+  /* Fertilitet og reproduksjon: egget og en sædcelle på vei inn. */
+  fertilitet: {
+    vb: 48,
+    parts: [
+      C(30, 27, 13, 'f1', 'accent2'),
+      C(30, 27, 4.5, 'f2', 'accent2'),
+      G([C(15, 18, 3.2, 'h', 'info'), P('M12.7 15.7c-1.6-1.6-.4-3.4-2-5s-3.4-.4-5-2', 'l', 'info')], 'bumpR'),
     ],
   },
   yes: { vb: 24, parts: [C(12, 12, 9, 'f1', 'ok'), P('M8 12.3l2.6 2.6L16 9.5', 'l', null, 'pop')] },

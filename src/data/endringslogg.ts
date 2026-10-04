@@ -12,15 +12,41 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.77.1',
+    versjon: '1.79.1',
     dato: '2026-10-04',
     sammendrag: 'Utviklingsagenter kan rulle ut ordinære produksjonsmigrasjoner uten ekstra bekreftelse',
     typer: ['Funksjonalitet'],
     omfang: 'Minimalt omfang',
     utenVarsel: true,
     punkter: [
-      'Ordinære, testede og reversible produksjonsmigrasjoner kan nå rulles ut som en del av utviklingsarbeidet uten at administratoren må kopiere inn en egen godkjenningssetning.',
+      'Ordinære, testede produksjonsmigrasjoner med lav produksjonsrisiko kan nå rulles ut som en del av utviklingsarbeidet uten at administratoren må kopiere inn en egen godkjenningssetning.',
       'Migrasjoner med vesentlig risiko for datatap, sikkerhet/personvern, produksjonsnedetid eller vanskelig tilbakeføring krever fortsatt uttrykkelig godkjenning; agenten skal velge en tryggere løsning når det er mulig.',
+    ],
+  },
+  {
+    versjon: '1.79.0',
+    dato: '2026-10-04',
+    sammendrag: 'Fagsidene får seksjonene «Toksisitet og forgiftning» og «Graviditet, amming og reproduksjon»',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      '«Toksisitet og forgiftning» står etter «Bivirkninger», med faste kort i denne rekkefølgen: Toksisk dose og eksponering, Toksiske konsentrasjoner, Klinisk forgiftningsbilde, Alvorlige komplikasjoner, Toksikokinetiske særtrekk og Behandling ved forgiftning.',
+      '«Graviditet, amming og reproduksjon» står rett før «Avhengighet, toleranse og tilbakeslagseffekter», med kortene Graviditet, Perinatal og neonatal påvirkning, Amming og Fertilitet og reproduksjon.',
+      'Hvert kort har eget ikon, kilder og historikk som de andre kortene, og kan stå én gang. I redigeringsmodus legges hvert kort til med sin egen knapp; overskriften står fast, og kortene står alltid i samme rekkefølge.',
+      'Seksjonene er tomme til innholdet er kuratert. Kort uten innhold vises ikke, og en tom seksjon vises bare i redigeringsmodus. Tallene i «Viktige data» står der de står.',
+    ],
+  },
+  {
+    versjon: '1.78.0',
+    dato: '2026-10-04',
+    sammendrag: 'Bivirkningsimporter kan forhåndsvises og sammenlignes med forrige versjon før de legges inn',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    utenVarsel: true,
+    punkter: [
+      'Før bivirkninger fra en preparatomtale legges inn, kan importen nå forhåndsvises: hvilken fagside og preparatomtale den gjelder, versjon og revisjonsdato, tabellene og frekvensgrunnlaget, og hvor mange bivirkninger det er i alt, per frekvens og per organsystem, med fotnotene.',
+      'Ved en ny versjon av en preparatomtale viser forhåndsvisningen hva som er endret fra den som ligger inne: bivirkninger som er lagt til eller fjernet, flyttet til et annet organsystem, har fått ny frekvens eller ny fotnote, og endringer i tabellene og kildeopplysningene. Bivirkninger med ulik tekst blir aldri regnet som den samme.',
+      'Ingenting endres i appen. Forhåndsvisningen er et kontrollverktøy for den som legger inn bivirkningene.',
     ],
   },
   {

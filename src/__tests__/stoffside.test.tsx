@@ -2240,6 +2240,78 @@ describe('kortene i farmakokinetikken', () => {
     expect(within(nytt).queryByLabelText('Overskrift')).toBeNull()
     expect(nytt.querySelector('[data-ikon="krykke"]')).not.toBeNull()
   })
+
+  it('har «Toksisitet og forgiftning» og «Graviditet, amming og reproduksjon» med faste kort, skjult når de er tomme', async () => {
+    const user = userEvent.setup()
+    const TOKS = 'Toksisitet og forgiftning'
+    const GRAV = 'Graviditet, amming og reproduksjon'
+    const data = (tilstand: Tilstand): Stoffsidedata => {
+      const s = medKort()(tilstand)
+      const kort = utgave('antidot', {
+        infoside: 'hs',
+        panel: 'toksisitet_forgiftning',
+        posisjon: 5,
+        elementtype: 'kinetikkort',
+        data: {
+          tittel: 'Behandling ved forgiftning',
+          dokument: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: `${LANG} Motgiftsomtale.` }] }] },
+        },
+      })
+      return { ...s, elementer: [...s.elementer, kort] }
+    }
+    vis('amitriptylin', kilde({ kanRedigere: true, data }))
+    await finnVerdi('10–20 nmol/L')
+    // Graviditeten har ikke noe innhold og står ikke for den som leser.
+    const titler = () => screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)
+    expect(titler()).toContain(TOKS)
+    expect(titler()).not.toContain(GRAV)
+    const toks = screen.getByRole('region', { name: TOKS })
+    expect(toks.querySelector('[data-ikon="forgiftning"]')).not.toBeNull()
+    expect(toks.querySelector('[data-ikon="antidot"]')).not.toBeNull()
+    // Lukket sier seksjonen hvilke kort den har; bare kortet med innhold står.
+    expect(toks.querySelector('.skuff__oppsummering')?.textContent).toBe('Behandling ved forgiftning')
+    await apneSkuff(user, TOKS)
+    expect(within(toks).getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual(['Behandling ved forgiftning'])
+    expect(within(toks).queryByRole('button', { name: /^Legg til/ })).toBeNull()
+
+    // Søket på siden finner teksten i kortet.
+    await user.type(screen.getByRole('searchbox', { name: 'Søk på denne siden' }), 'motgiftsomtale')
+    await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Treff 1 av 1'))
+    expect(document.querySelector('mark.sidetreff')?.closest('#panel-toksisitet_forgiftning')).not.toBeNull()
+    await user.clear(screen.getByRole('searchbox', { name: 'Søk på denne siden' }))
+
+    // I redigeringsmodus står begge seksjonene, med de faste kortene som mangler, og ingen kort med fri overskrift.
+    await user.click(screen.getByRole('button', { name: 'Rediger' }))
+    await apneSkuff(user, TOKS)
+    const toksRed = screen.getByRole('region', { name: TOKS })
+    expect(within(toksRed).getAllByRole('button', { name: /^Legg til: / }).map((b) => b.getAttribute('aria-label'))).toEqual([
+      'Legg til: Toksisk dose og eksponering',
+      'Legg til: Toksiske konsentrasjoner',
+      'Legg til: Klinisk forgiftningsbilde',
+      'Legg til: Alvorlige komplikasjoner',
+      'Legg til: Toksikokinetiske særtrekk',
+    ])
+    expect(within(toksRed).queryByRole('button', { name: 'Legg til kort' })).toBeNull()
+    expect(screen.queryByRole('button', { name: /^Flytt (opp|ned): Behandling ved forgiftning$/ })).toBeNull()
+
+    // Toksisiteten står mellom bivirkningene og indikasjonen, graviditeten rett før avhengigheten.
+    const rekkefolge = titler()
+    expect(rekkefolge.slice(rekkefolge.indexOf('Bivirkninger'), rekkefolge.indexOf('Indikasjon') + 1)).toEqual(['Bivirkninger', TOKS, 'Indikasjon'])
+    expect(rekkefolge[rekkefolge.indexOf('Avhengighet, toleranse og tilbakeslagseffekter') - 1]).toBe(GRAV)
+    await apneSkuff(user, GRAV)
+    const grav = screen.getByRole('region', { name: GRAV })
+    expect(grav.querySelector('[data-ikon="svangerskap"]')).not.toBeNull()
+    expect(within(grav).getAllByRole('button', { name: /^Legg til: / }).map((b) => b.textContent)).toEqual([
+      'Graviditet',
+      'Perinatal og neonatal påvirkning',
+      'Amming',
+      'Fertilitet og reproduksjon',
+    ])
+    await user.click(within(grav).getByRole('button', { name: 'Legg til: Amming' }))
+    const nytt = screen.getByRole('dialog')
+    expect(within(nytt).queryByLabelText('Overskrift')).toBeNull()
+    expect(nytt.querySelector('[data-ikon="amming"]')).not.toBeNull()
+  })
 })
 
 describe('mekanismekortene i farmakodynamikken', () => {

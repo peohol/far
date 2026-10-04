@@ -19,13 +19,14 @@
  * Navnene, tekstene og tallene er syntetiske, også på sidene for stoffene i
  * stoffregisteret (Bupropion og Tramadol). Ingen kliniske verdier inngår.
  */
+import { readFileSync } from 'node:fs'
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { byggSidemodell, publiseringsplan } from '../faginnhold/stoffside'
 import { lagFaginnholdslager, type Faginnholdslager } from '../faginnhold/lagring'
 import { INGEN_REGLER, TOM_STOFFSIDE, lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import type { Objektstatus } from '../faginnhold/modell'
-import { ENKELTELEMENTER } from '../faginnhold/paneler'
+import { ENKELTELEMENTER, PANELER_MED_FASTE_KORT, enkeltnokkel, fasteKort, panelFor } from '../faginnhold/paneler'
 import { SITERING } from '../faginnhold/referanser'
 import { STOFFREGISTER, stoffslug } from '../domain/stoffregister'
 import { primareAnalytter } from '../domain/koblinger'
@@ -492,6 +493,83 @@ describe('kortene som bare kan stå én gang', () => {
     const forste = await lager.opprettUtkast('innholdselement', innhold('riktekst', 'dosering'))
     await lager.lagreUtkast(forste.id, 1, innhold('riktekst', 'fjernet'))
     await lager.opprettUtkast('innholdselement', innhold('riktekst', 'dosering'))
+  })
+})
+
+describe('de faste kortene', () => {
+  const tekst = (t: string) => dokument({ type: 'text', text: t })
+
+  it('står én gang per side, panel og tilstand i hver seksjon med faste kort', async () => {
+    const side = (await lager.opprettUtkast('infoside', { navn: 'Fastkortside' })).id
+    const kort = (panel: string, tittel: string) =>
+      lager.opprettUtkast('innholdselement', { infoside: side, panel, posisjon: 0, elementtype: 'kinetikkort', data: { tittel, dokument: tekst('Syntetisk.') } })
+
+    for (const panel of PANELER_MED_FASTE_KORT) {
+      const [forste, andre] = fasteKort(panelFor(panel)!)!
+      await kort(panel, forste!)
+      await expect(kort(panel, forste!), panel).rejects.toThrow()
+      // Mellomrom rundt overskriften gjør det ikke til et annet kort.
+      await expect(kort(panel, ` ${forste} `), panel).rejects.toThrow()
+      await kort(panel, andre!)
+    }
+    // Uten faste kort kan samme overskrift stå flere ganger.
+    await kort('farmakokinetikk', 'Absorpsjon')
+    await kort('farmakokinetikk', 'Absorpsjon')
+  })
+
+  it('kjenner igjen kortet som sto i veien, så appen kan si at noen andre la det inn', async () => {
+    const side = (await lager.opprettUtkast('infoside', { navn: 'Samtidig side' })).id
+    const innhold = (panel: string, elementtype: string, data: Record<string, unknown>) => ({ infoside: side, panel, posisjon: 0, elementtype, data })
+    const tilfeller = [
+      innhold('graviditet_amming', 'kinetikkort', { tittel: 'Amming', dokument: tekst('Syntetisk.') }),
+      innhold('dosering', 'riktekst', { dokument: tekst('Syntetisk.') }),
+      innhold('viktige_data', 'referanseomrade', { nedre: 1, ovre: 2, enhet: 'nmol/L', gjelder: 'OTRAM' }),
+    ]
+    for (const endring of tilfeller) {
+      await lager.opprettUtkast('innholdselement', endring)
+      await expect(lager.opprettUtkast('innholdselement', endring)).rejects.toThrow()
+      const utkast = await adminleser.lesStoffside('samtidig-side', 'utkast')
+      expect(utkast.elementer.filter((e) => enkeltnokkel(e.innhold) === enkeltnokkel(endring)), endring.panel).toHaveLength(1)
+    }
+    // Et kort med fri overskrift, og et som er fjernet, står aldri i veien.
+    expect(enkeltnokkel(innhold('farmakokinetikk', 'kinetikkort', { tittel: 'Absorpsjon' }))).toBeNull()
+    expect(enkeltnokkel(innhold('fjernet', 'kinetikkort', { tittel: 'Amming' }))).toBeNull()
+    // Mellomrom rundt overskriften gjør det ikke til et annet kort, som i databasen.
+    expect(enkeltnokkel(innhold('graviditet_amming', 'kinetikkort', { tittel: ' Amming ' }))).toBe(enkeltnokkel(tilfeller[0]!))
+  })
+
+  it('lar et fast kort som er fjernet, legges til og publiseres på nytt', async () => {
+    const side = await lager.opprettUtkast('infoside', { navn: 'Toksisk testmiddel' })
+    const innhold = (t: string) => ({
+      infoside: side.id,
+      panel: 'toksisitet_forgiftning',
+      posisjon: 5,
+      elementtype: 'kinetikkort',
+      data: { tittel: 'Behandling ved forgiftning', dokument: tekst(t) },
+    })
+    const gammelt = await lager.opprettUtkast('innholdselement', innhold('Det gamle.'))
+    await publiser(side, gammelt)
+
+    await lager.lagreUtkast(gammelt.id, 1, { ...innhold('Det gamle.'), panel: 'fjernet' })
+    await lager.opprettUtkast('innholdselement', innhold('Det nye.'))
+    const plan = publiseringsplan(await adminleser.lesStoffside('toksisk-testmiddel', 'utkast'), INGEN_REGLER)
+    expect(plan[0]).toEqual({ slag: 'innholdselement', id: gammelt.id, revisjon: 2 })
+    for (const steg of plan) await lager.publiserUtkast(steg.id, steg.revisjon)
+
+    const modell = byggSidemodell(await brukerleser.lesStoffside('toksisk-testmiddel', 'publisert'))
+    expect(modell.paneler.get('toksisitet_forgiftning')!.map((e) => e.data)).toEqual([
+      { tittel: 'Behandling ved forgiftning', dokument: tekst('Det nye.') },
+    ])
+  })
+
+  it('har de samme panelene i databasen som i paneler.ts', () => {
+    const les = (fil: string) => readFileSync(new URL(`../../supabase/migrations/${fil}`, import.meta.url), 'utf8')
+    const sql = migrasjonsfiler()
+      .map(les)
+      .filter((tekst) => tekst.includes('create unique index innholdselementer_fast_kort_idx'))
+      .at(-1)!
+    const liste = /panel in \(([^)]*)\)/.exec(sql.slice(sql.indexOf('create unique index innholdselementer_fast_kort_idx')))![1]!
+    expect([...liste.matchAll(/'([a-z_]+)'/g)].map((m) => m[1]).sort()).toEqual([...PANELER_MED_FASTE_KORT].sort())
   })
 })
 

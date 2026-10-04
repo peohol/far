@@ -63,6 +63,29 @@ utrullingen og kontrollen av historikken.
 
 5. **Etterpå endres migrasjonen aldri.** En retting er en ny migrasjon.
 
+## Seksjonene med faste kort
+
+«Toksisitet og forgiftning» (`toksisitet_forgiftning`), «Graviditet, amming
+og reproduksjon» (`graviditet_amming`) og «Avhengighet, toleranse og
+tilbakeslagseffekter» (`avhengighet_toleranse`) har faste kort
+(`docs/faginnhold.md`). Et kort i dem er et `kinetikkort` med nøyaktig den
+faste overskriften i `data.tittel`, nøkkelen `{"tittel": "…"}` og `posisjon`
+lik plassen i lista (`fasteKort` i `src/faginnhold/paneler.ts`). Hvert kan
+stå én gang; databasen avviser et kort nummer to. Kildene står på kortet
+(`referanser`) og inline som siteringer, som ellers.
+
+Redaksjonelle rammer for kuratoren:
+
+- Et kort skrives bare når stoffet har relevant dokumentasjon. Ingen
+  standardtekst for å fylle en seksjon; det som mangler, står tomt og vises
+  ikke.
+- «Behandling ved forgiftning» er stoffspesifikke tiltak, antidoter og
+  andre særlige behandlingsforhold, ikke generell ABC- eller
+  akuttmedisinsk behandling.
+- Tallene i viktige data (toksisk område, alvorlig/dødelig intoksikasjon)
+  flyttes eller dupliseres ikke. Toksisitetskortene kan utdype dem og sette
+  dem i kontekst, men er egne redaksjonelle elementer.
+
 ## Hjelpefunksjonene
 
 `supabase/migrations/*_monografkuratering_hjelpere.sql`, med rettingene i

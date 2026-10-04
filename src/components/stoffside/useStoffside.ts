@@ -15,7 +15,7 @@ import { kommentarendringer, utenKommentarer } from '../../regler/kommentarer'
 import type { Intervallregelsett } from '../../regler/modell'
 import { scenariokommentarendringer, type Scenarioutkast } from '../../regler/scenarioredigering'
 import { RUS_MODULER, rusModulFor, type RusModul } from '../../domain/rus'
-import { FJERNET, datakortGjelder, erEnkeltelement } from '../../faginnhold/paneler'
+import { FJERNET, enkeltnokkel } from '../../faginnhold/paneler'
 import type { Referanse } from '../../faginnhold/referanser'
 import type { Laboratorieanalytt } from '../../domain/analyttkatalog'
 import type { Stoff } from '../../domain/stoffregister'
@@ -243,15 +243,11 @@ export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, analytter: rea
         try {
           await lager.opprettUtkast('innholdselement', innhold)
         } catch (feil) {
-          if (!erEnkeltelement(endring.elementtype)) throw feil
+          // Et kort som bare kan stå én gang, og som noen andre la inn mens dette ble skrevet.
+          const nokkel = enkeltnokkel(endring)
+          if (!nokkel) throw feil
           const na = await lesSide('utkast')
-          const finnes = na.elementer.some(
-            (e) =>
-              e.innhold.panel === endring.panel &&
-              e.innhold.elementtype === endring.elementtype &&
-              datakortGjelder(e.innhold.data) === datakortGjelder(endring.data),
-          )
-          if (!finnes) throw feil
+          if (!na.elementer.some((e) => enkeltnokkel(e.innhold) === nokkel)) throw feil
           throw Object.assign(new Samtidighetskonflikt(null, null), { message: LAGT_INN_AV_ANDRE })
         }
       }),

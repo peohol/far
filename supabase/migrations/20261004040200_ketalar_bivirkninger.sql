@@ -1,0 +1,261 @@
+-- Bivirkninger for fagsiden «ketamin» fra Ketalar 10 mg/ml og 50 mg/ml – preparatomtale (SPC).
+-- Laget av scripts/lag-bivirkningsimport.ts fra importfila; se docs/bivirkninger.md.
+select bivirkninger.importer($import${
+  "format": "ousfar-bivirkninger/1",
+  "stoff": "ketamin",
+  "kilde": {
+    "nokkel": "ketalar-injeksjon",
+    "type": "spc",
+    "tittel": "Ketalar 10 mg/ml og 50 mg/ml – preparatomtale (SPC)",
+    "preparat": "Ketalar",
+    "innehaver": "Pfizer AS",
+    "revisjonsdato": "2023-11-13",
+    "lenke": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-05724.pdf",
+    "kontrollert": "2026-10-04",
+    "kontrollert_av": "ChatGPT",
+    "importert_av": "ChatGPT monografikurator"
+  },
+  "organsystemer": [
+    {
+      "organsystem": "immunsystemet",
+      "frekvenser": [
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            {
+              "tekst": "Anafylaktisk reaksjon",
+              "fotnote": "Bivirkning identifisert ved bruk etter markedsføring"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "stoffskifte",
+      "frekvenser": [
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Anoreksi"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "psykiatriske",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Hallusinasjoner",
+            "unormale drømmer",
+            "mareritt",
+            "forvirring",
+            "agitasjon",
+            "unormal adferd (se pkt. 4.4)"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Angst"
+          ]
+        },
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            {
+              "tekst": "Delirium",
+              "fotnote": "Bivirkning identifisert ved bruk etter markedsføring"
+            },
+            {
+              "tekst": "desorientering",
+              "fotnote": "Bivirkning identifisert ved bruk etter markedsføring"
+            },
+            {
+              "tekst": "flashback",
+              "fotnote": "Bivirkning identifisert ved bruk etter markedsføring"
+            },
+            {
+              "tekst": "dysfori",
+              "fotnote": "Bivirkning identifisert ved bruk etter markedsføring"
+            },
+            "søvnløshet"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "nevrologiske",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Nystagmus",
+            "hypertoni",
+            "toniske og kloniske bevegelser"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "oye",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Diplopi"
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Økt intraokulært trykk"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "hjerte",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Forbigående takykardi"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Bradykardi",
+            "arytmi"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "kar",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Hypertensjon"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Hypotensjon"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "gastrointestinale",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Kvalme",
+            "oppkast"
+          ]
+        },
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            {
+              "tekst": "Hypersalivasjon",
+              "fotnote": "Bivirkning identifisert ved bruk etter markedsføring"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "respirasjon",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Forhøyet respirasjonsfrekvens"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Laryngospasme",
+            "respiratorisk depresjon"
+          ]
+        },
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            {
+              "tekst": "Obstruktiv lungesykdom",
+              "fotnote": "Bivirkning identifisert ved bruk etter markedsføring"
+            },
+            {
+              "tekst": "apné",
+              "fotnote": "Bivirkning identifisert ved bruk etter markedsføring"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "lever_galle",
+      "frekvenser": [
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            {
+              "tekst": "Unormal leverfunksjonstest",
+              "fotnote": "Bivirkning identifisert ved bruk etter markedsføring"
+            },
+            {
+              "tekst": "legemiddelindusert leverskade",
+              "fotnote": "Bivirkning identifisert ved bruk etter markedsføring. Langvarig bruk (>3 dager) eller rusmisbruk."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "hud",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Erytem",
+            "meslinglignende utslett"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Lokal smerte på injeksjonsstedet",
+            "eksantem"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "nyre_urinveier",
+      "frekvenser": [
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            {
+              "tekst": "Blødende cystitt",
+              "fotnote": "Bivirkning identifisert ved bruk etter markedsføring. Langvarig bruk (1 måned til flere år), spesielt i tilfeller av ketaminmisbruk."
+            },
+            {
+              "tekst": "cystitt",
+              "fotnote": "Bivirkning identifisert ved bruk etter markedsføring. Langvarig bruk (1 måned til flere år), spesielt i tilfeller av ketaminmisbruk."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}$import$::jsonb);

@@ -83,6 +83,18 @@ const BARE_I_PRODUKSJON = /_(oppgaver_utfort_1_56_0|koble_infosider_til_fest_vir
  */
 export const MONOGRAFKURATERING = /_monografkuratering(?!_hjelpere)(_[a-z0-9_]+)?\.sql$|_kvetiapin_farmakogenetikk_og_typografi\.sql$/
 
+/**
+ * En bivirkningsimport (`docs/bivirkninger.md`) gjelder en fagside som
+ * produksjonen har, ofte fra en import eller kuratering som ikke gjør noe i
+ * en testdatabase. Uten den siden stopper importen, så den hoppes over der.
+ */
+const BIVIRKNINGSIMPORT = /^select bivirkninger\.importer\(\$import\$\{\s*"format": "ousfar-bivirkninger\/1",\s*"stoff": "([^"]+)"/m
+
+async function harFagside(db: PGlite, slug: string): Promise<boolean> {
+  const { rows } = await db.query<{ finnes: boolean }>(`select exists (select 1 from public.infosider where slug = $1) as finnes`, [slug])
+  return rows[0]!.finnes
+}
+
 async function harKurator(db: PGlite): Promise<boolean> {
   const { rows } = await db.query<{ finnes: boolean }>(
     `select exists (select 1 from public.profiles where username = 'peohol' and role = 'admin') as finnes`,
@@ -101,7 +113,8 @@ export function migrasjonsfiler(): string[] {
  * Kjører migrasjonene fra og med `fra` til, men ikke med, `til` — begge
  * filnavnprefikser — eller bare filene i `bare`. Uten grenser kjøres alle.
  * Monografkurateringene hoppes over når kuratoren finnes, med mindre
- * `kurateringer` er satt (se `MONOGRAFKURATERING`).
+ * `kurateringer` er satt (se `MONOGRAFKURATERING`), og en bivirkningsimport
+ * når fagsiden den gjelder, ikke finnes (se `BIVIRKNINGSIMPORT`).
  */
 export async function kjorMigrasjoner(
   db: PGlite,
@@ -116,8 +129,11 @@ export async function kjorMigrasjoner(
     if (BARE_I_PRODUKSJON.test(fil)) continue
     if (bare ? !bare.includes(fil) : fil < fra || (til !== undefined && fil >= til)) continue
     if (!bare && !kurateringer && MONOGRAFKURATERING.test(fil) && (await harKurator(db))) continue
+    const sql = readFileSync(`${MIGRASJONER}/${fil}`, 'utf8')
+    const importert = !bare && BIVIRKNINGSIMPORT.exec(sql)?.[1]
+    if (importert && !(await harFagside(db, importert))) continue
     try {
-      await db.exec(readFileSync(`${MIGRASJONER}/${fil}`, 'utf8'))
+      await db.exec(sql)
     } catch (feil) {
       throw new Error(`Migrasjonen ${fil} feilet: ${(feil as Error).message}`)
     }
