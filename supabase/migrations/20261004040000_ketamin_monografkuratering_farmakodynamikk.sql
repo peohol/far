@@ -43,7 +43,7 @@ begin
     '{"tittel":"Blockade of voltage-operated neuronal and skeletal muscle sodium channels by S(+)- and R(-)-ketamine","forfattere":"Haeseler G, Tetzlaff D, Bufler J, et al.","aar":"2003","lenke":"https://doi.org/10.1213/01.ANE.0000052513.91900.D5"}'::jsonb,
     kilde);
   ref_sigma := intern.kuratering_referanse(
-    '{"tittel":"Evaluation of sigma (sigma) receptors in the antidepressant-like effects of ketamine in vitro and in vivo","forfattere":"Robson MJ, Elliott M, Seminerio MJ, Matsumoto RR","aar":"2012","lenke":"https://doi.org/10.1016/j.euroneuro.2011.08.002"}'::jsonb,
+    '{"tittel":"Evaluation of sigma (σ) receptors in the antidepressant-like effects of ketamine in vitro and in vivo","forfattere":"Robson MJ, Elliott M, Seminerio MJ, Matsumoto RR","aar":"2012","lenke":"https://doi.org/10.1016/j.euroneuro.2011.08.002"}'::jsonb,
     kilde);
   ref_trkb := intern.kuratering_referanse(
     '{"tittel":"Antidepressant drugs act by directly binding to TRKB neurotrophin receptors","forfattere":"Casarotto PC, Girych M, Fred SM, et al.","aar":"2021","lenke":"https://doi.org/10.1016/j.cell.2021.01.034"}'::jsonb,
@@ -86,7 +86,7 @@ $json$::jsonb,
       "maal":"M1-muskarinreseptor",
       "mekanisme":"antagonisme",
       "dokument":{"type":"doc","content":[
-        {"type":"paragraph","content":[{"type":"text","text":"Ketamin hemmer M1-muskarinreseptormediert signalering direkte. I humane rekombinante M1-reseptorer uttrykt i Xenopus-oocytter var IC50 omtrent 5,7 µM, med nær komplett hemming ved høye konsentrasjoner."}]},
+        {"type":"paragraph","content":[{"type":"text","text":"Ketamin hemmer M1-muskarinreseptormediert signalering direkte. I rekombinante M1-reseptorer uttrykt i Xenopus-oocytter var IC50 omtrent 5,7 µM, med nær komplett hemming ved høye konsentrasjoner."}]},
         {"type":"paragraph","content":[{"type":"text","text":"Studien dokumenterer funksjonell antagonisme, men ikke at hemmingen er kompetitiv. Bidraget til ketamins kliniske anestetiske, kognitive eller autonome effekter er ikke avklart."}]}
       ]}
     }
@@ -131,7 +131,7 @@ $json$::jsonb,
       "maal":"Spenningsstyrte Na+-kanaler",
       "mekanisme":"kanalblokkering",
       "dokument":{"type":"doc","content":[
-        {"type":"paragraph","content":[{"type":"text","text":"Ketamin blokkerer spenningsstyrte Na+-kanaler direkte og med høyere affinitet for inaktivert enn hvilende kanaltilstand. I rekombinante nevronale og humane skjelettmuskelkanaler var blokkaden spenningsavhengig, med tydelig stereoselektivitet."}]},
+        {"type":"paragraph","content":[{"type":"text","text":"Ketamin blokkerer spenningsstyrte Na+-kanaler direkte og med høyere affinitet for inaktivert enn hvilende kanaltilstand. I rekombinante nevronale og humane skjelettmuskelkanaler var blokkaden spenningsavhengig; S-ketamin var mer potent enn R-ketamin i skjelettmuskelisoformen, men ikke i den nevronale isoformen."}]},
         {"type":"paragraph","content":[{"type":"text","text":"Potensen var vesentlig lavere enn ved NMDA-reseptoren (IC50 i titalls til hundrevis av µM avhengig av kanaltype og membranpotensial). Mekanismen kan derfor være mest relevant ved høy lokal eksponering og bidraget til vanlige systemiske effekter er usikkert."}]}
       ]}
     }
