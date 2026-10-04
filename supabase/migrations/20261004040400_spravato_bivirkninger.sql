@@ -1,0 +1,265 @@
+-- Bivirkninger for fagsiden «ketamin» fra Spravato 28 mg nesespray, oppløsning – preparatomtale (SPC).
+-- Laget av scripts/lag-bivirkningsimport.ts fra importfila; se docs/bivirkninger.md.
+select bivirkninger.importer($import${
+  "format": "ousfar-bivirkninger/1",
+  "stoff": "ketamin",
+  "kilde": {
+    "nokkel": "spravato-nesespray",
+    "type": "spc",
+    "tittel": "Spravato 28 mg nesespray, oppløsning – preparatomtale (SPC)",
+    "preparat": "Spravato",
+    "innehaver": "Janssen-Cilag International NV",
+    "spc_versjon": "12/2024",
+    "lenke": "https://static.janssen-emea.com/sites/default/files/Finland/uploads/SPC/NO/spravato-NO.pdf",
+    "kontrollert": "2026-10-04",
+    "kontrollert_av": "ChatGPT",
+    "importert_av": "ChatGPT monografikurator"
+  },
+  "organsystemer": [
+    {
+      "organsystem": "psykiatriske",
+      "frekvenser": [
+        {
+          "frekvens": "svaert_vanlige",
+          "bivirkninger": [
+            "dissosiasjon"
+          ]
+        },
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "angst",
+            "eufori",
+            "forvirringstilstand",
+            "derealisasjon",
+            "irritabilitet",
+            "hallusinasjon inkludert synshallusinasjon",
+            "agitasjon",
+            "illusjon",
+            "panikkanfall",
+            "endret tidsoppfatning"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "psykomotorisk retardasjon",
+            "emosjonell uro",
+            "dysfori"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "nevrologiske",
+      "frekvenser": [
+        {
+          "frekvens": "svaert_vanlige",
+          "bivirkninger": [
+            "svimmelhet",
+            "hodepine",
+            "somnolens",
+            "dysgeusi",
+            "hypoestesi"
+          ]
+        },
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "parestesi",
+            "sedasjon",
+            "tremor",
+            "psykisk svekkelse",
+            "letargi",
+            "dysartri",
+            "oppmerksomhetsforstyrrelse"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "nystagmus",
+            "psykomotorisk hyperaktivitet"
+          ]
+        },
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            "krampeanfall"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "oye",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "tåkesyn"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "ore_labyrint",
+      "frekvenser": [
+        {
+          "frekvens": "svaert_vanlige",
+          "bivirkninger": [
+            "vertigo"
+          ]
+        },
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "tinnitus",
+            "hyperakusi"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "hjerte",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "takykardi"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "bradykardi"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "kar",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "hypertensjon"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "hypotensjon"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "respirasjon",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "neseubehag",
+            "irritasjon i svelget",
+            "orofaryngeale smerter",
+            "uttørring av neseslimhinne inkludert nasal skorpedannelse",
+            "nasal pruritus"
+          ]
+        },
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            "respirasjonshemming"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "gastrointestinale",
+      "frekvenser": [
+        {
+          "frekvens": "svaert_vanlige",
+          "bivirkninger": [
+            "kvalme",
+            "oppkast"
+          ]
+        },
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "oral hypoestesi",
+            "munntørrhet"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "økt spyttsekresjon"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "hud",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "hyperhidrose"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "kaldsvetting"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "nyre_urinveier",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "pollakiuri",
+            "dysuri",
+            "akutt vannlatingstrang"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "generelle",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Føle seg unormal",
+            "følelse av å være beruset",
+            "asteni",
+            "gråting",
+            "følelse av kroppstemperaturendringer"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "forstyrrelser i ganglaget"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "undersokelser",
+      "frekvenser": [
+        {
+          "frekvens": "svaert_vanlige",
+          "bivirkninger": [
+            "økt blodtrykk"
+          ]
+        }
+      ]
+    }
+  ]
+}$import$::jsonb);
