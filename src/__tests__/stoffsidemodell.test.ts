@@ -455,6 +455,7 @@ describe('sidemodellen', () => {
       'farmakodynamikk',
       'virkninger',
       'bivirkninger',
+      'toksisitet_forgiftning',
       'indikasjon',
       'preparater',
       'dosering',
@@ -463,6 +464,7 @@ describe('sidemodellen', () => {
       'interaksjoner',
       'tdm',
       'serumkonsentrasjoner',
+      'graviditet_amming',
       'avhengighet_toleranse',
     ])
   })
@@ -485,8 +487,9 @@ describe('sidemodellen', () => {
     expect(publiseringsplan(side(), regler())).toEqual([
       { slag: 'referanse', id: 'b', revisjon: 1 },
       { slag: 'infoside', id: 's', revisjon: 2 },
-      { slag: 'innholdselement', id: 'e1', revisjon: 3 },
+      // Det som er tatt bort fra siden, først, så et kort som bare kan stå én gang, kan legges til på nytt.
       { slag: 'innholdselement', id: 'fjernet', revisjon: 2 },
+      { slag: 'innholdselement', id: 'e1', revisjon: 3 },
       // Regelsettene per analyttkode, i kodenes rekkefølge, hvert etter kommentarene det peker på.
       { slag: 'kommentar', id: 'k1', revisjon: 2 },
       { slag: 'kommentar', id: 'k3', revisjon: 1 },

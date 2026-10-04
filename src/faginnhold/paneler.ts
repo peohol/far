@@ -54,8 +54,10 @@ export interface Paneldefinisjon {
   form: Panelform
   /**
    * Kortene en kortserie (`kort`) kan ha, i den rekkefølgen de står. Hvert kan
-   * stå én gang, og overskriften er fast. Uten listen velger redaktøren
-   * overskriftene fritt og hvor mange kort det blir.
+   * stå én gang (se {@link PANELER_MED_FASTE_KORT}), og overskriften er fast.
+   * Et kort finnes bare når det har innhold, så en seksjon kan stå helt eller
+   * delvis tom. Uten listen velger redaktøren overskriftene fritt og hvor mange
+   * kort det blir.
    */
   kort?: readonly string[]
   /**
@@ -81,6 +83,19 @@ export const PANELER = [
   { nokkel: 'farmakodynamikk', tittel: 'Farmakodynamikk', form: 'mekanismer' },
   { nokkel: 'virkninger', tittel: 'Virkninger', form: 'kort' },
   { nokkel: 'bivirkninger', tittel: 'Bivirkninger', form: 'kort' },
+  {
+    nokkel: 'toksisitet_forgiftning',
+    tittel: 'Toksisitet og forgiftning',
+    form: 'kort',
+    kort: [
+      'Toksisk dose og eksponering',
+      'Toksiske konsentrasjoner',
+      'Klinisk forgiftningsbilde',
+      'Alvorlige komplikasjoner',
+      'Toksikokinetiske særtrekk',
+      'Behandling ved forgiftning',
+    ],
+  },
   { nokkel: 'indikasjon', tittel: 'Indikasjon', form: 'tekst' },
   { nokkel: 'preparater', tittel: 'Preparater', form: 'legemidler' },
   { nokkel: 'dosering', tittel: 'Dosering', form: 'tekst' },
@@ -89,6 +104,12 @@ export const PANELER = [
   { nokkel: 'interaksjoner', tittel: 'Interaksjoner', form: 'interaksjoner' },
   { nokkel: 'tdm', tittel: 'Terapeutisk legemiddelmonitorering (TDM)', form: 'kort' },
   { nokkel: 'serumkonsentrasjoner', tittel: 'Serumkonsentrasjoner ved ulike doser', form: 'tabell' },
+  {
+    nokkel: 'graviditet_amming',
+    tittel: 'Graviditet, amming og reproduksjon',
+    form: 'kort',
+    kort: ['Graviditet', 'Perinatal og neonatal påvirkning', 'Amming', 'Fertilitet og reproduksjon'],
+  },
   {
     nokkel: 'avhengighet_toleranse',
     tittel: 'Avhengighet, toleranse og tilbakeslagseffekter',
@@ -108,6 +129,15 @@ export type Panelnokkel = (typeof PANELER)[number]['nokkel']
 
 /** Panelene i den rekkefølgen siden viser dem — også rekkefølgen referansene nummereres i. */
 export const PANELREKKEFOLGE: readonly string[] = PANELER.map((p) => p.nokkel)
+
+/**
+ * Panelene med faste kort (`kort` eller `grupper`). Hvert fast kort kan stå én
+ * gang per side og tilstand, etter overskriften. Databasen håndhever det
+ * (`innholdselementer_fast_kort_idx` i migrasjonen `faste_kort_en_gang`), så
+ * to som legger til det samme kortet samtidig, ikke begge får det lagret.
+ * Testene kontrollerer at listene stemmer.
+ */
+export const PANELER_MED_FASTE_KORT: readonly string[] = PANELER.filter((p) => fasteKort(p)).map((p) => p.nokkel)
 
 const PANEL_PER_NOKKEL = new Map<string, Paneldefinisjon>(PANELER.map((p) => [p.nokkel, p]))
 
