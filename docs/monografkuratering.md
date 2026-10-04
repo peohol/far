@@ -53,10 +53,12 @@ utrullingen og kontrollen av historikken.
    kjedene kjøres fra den første importen med `kurateringer: true`, som
    `kvetiapin-monograf.test.ts` gjør. Kjør også `npm run build`.
 
-4. **Utrullingen** krever Peders uttrykkelige ja, med navnet på migrasjonen.
-   Rull den ut med `apply_migration`, gi fila versjonen prosjektet
-   registrerte, og kjør kontrollen av historikken (under). Den skal ikke gi
-   noen rader.
+4. **Utrullingen.** Når preflight og testene er bestått, rulles en ordinær
+   monografkuratering ut med `apply_migration` uten separat samtykke. Gi fila
+   versjonen prosjektet registrerte, og kjør kontrollen av historikken (under).
+   Den skal ikke gi noen rader. Hvis migrasjonen avviker fra den vanlige malen
+   og innebærer reell risiko for vesentlig datatap eller vanskelig reversering,
+   gjelder den risikobaserte godkjenningsregelen i `CLAUDE.md`.
 
 5. **Etterpå endres migrasjonen aldri.** En retting er en ny migrasjon.
 
