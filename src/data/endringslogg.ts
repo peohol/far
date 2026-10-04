@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.77.1',
+    dato: '2026-10-04',
+    sammendrag: 'Utviklingsagenter kan rulle ut ordinære produksjonsmigrasjoner uten ekstra bekreftelse',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    utenVarsel: true,
+    punkter: [
+      'Ordinære, testede og reversible produksjonsmigrasjoner kan nå rulles ut som en del av utviklingsarbeidet uten at administratoren må kopiere inn en egen godkjenningssetning.',
+      'Migrasjoner med reell risiko for vesentlig datatap eller vanskelig tilbakeføring krever fortsatt uttrykkelig godkjenning; agenten skal velge en tryggere, reversibel løsning når det er mulig.',
+    ],
+  },
+  {
     versjon: '1.77.0',
     dato: '2026-10-03',
     sammendrag: 'Grunnlaget for bivirkninger fra preparatomtalene, etter frekvens eller organsystem',
