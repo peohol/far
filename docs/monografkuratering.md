@@ -57,8 +57,9 @@ utrullingen og kontrollen av historikken.
    monografkuratering ut med `apply_migration` uten separat samtykke. Gi fila
    versjonen prosjektet registrerte, og kjør kontrollen av historikken (under).
    Den skal ikke gi noen rader. Hvis migrasjonen avviker fra den vanlige malen
-   og innebærer reell risiko for vesentlig datatap eller vanskelig reversering,
-   gjelder den risikobaserte godkjenningsregelen i `CLAUDE.md`.
+   og innebærer vesentlig risiko for datatap, sikkerhet/personvern,
+   produksjonstilgjengelighet eller vanskelig reversering, gjelder den
+   risikobaserte godkjenningsregelen i `CLAUDE.md`.
 
 5. **Etterpå endres migrasjonen aldri.** En retting er en ny migrasjon.
 
