@@ -9,8 +9,9 @@ Planlagte oppgaver er idéer fra idévinduet i appen som en administrator har
 overført og skrevet en prompt til. Hver har et nummer fra den ble overført,
 vist som «OPG-007» (`nummer = 7`). Oppgaver med status `klar` er klare til å
 utføres. Dette er en engangsøkt som administratoren følger live: spør når noe
-er uklart, og vent på administratorens svar der reglene i `CLAUDE.md` krever
-det, som før databaseendringer i produksjon. Det finnes ingen automatikk som
+er uklart etter reglene i `CLAUDE.md`. Ordinære produksjonsmigrasjoner rulles
+ut som en del av arbeidet uten eget samtykke; bare migrasjoner med vesentlig
+risiko etter `CLAUDE.md` stopper for eksplisitt godkjenning. Det finnes ingen automatikk som
 gjør dette i bakgrunnen, og det skal det heller ikke.
 
 Oppdraget står i databasen, ikke i meldingen fra brukeren. `/utfor-oppgaver`
@@ -20,8 +21,8 @@ hver, og utfør dem. Nevner brukeren én eller flere oppgaver med overskriften
 eller nummeret, gjør bare dem.
 
 En oppgave går gjennom statusene Ikke påbegynt → Påbegynt → Klar til
-implementering → Håndteres nå av en agent → Utført. Claude setter de to siste,
-med migreringer administratoren godkjenner. Bakgrunnen står i `docs/ideer.md`
+implementering → Håndteres nå av en agent → Utført. Claude setter de to siste
+med migreringer etter den risikobaserte regelen i `CLAUDE.md`. Bakgrunnen står i `docs/ideer.md`
 under «Arkivet og Planlagte oppgaver».
 
 ## 1. Les oppgavene
@@ -89,14 +90,13 @@ er en migrering som bare kaller `ta_oppgaver` med numrene:
 select public.ta_oppgaver(array[7, 8]) where exists (select 1 from public.oppgaver);
 ```
 
-- Be om administratorens ja i den samme meldingen som planen, med én ferdig
-  setning å kopiere: «Ja, rull ut migrasjonen «oppgaver_tatt_opg_007_008» til
-  produksjonsdatabasen i Supabase.» Navnet er `oppgaver_tatt_` og numrene.
-- Rull den ut med `apply_migration` først etter det ja-et. Oppgavene står da
-  som «Håndteres nå av en agent» i appen.
+- Rull den ut med `apply_migration` når planen er vist; ikke be om et eget ja.
+  Dette er en normal, reversibel statusendring. Navnet er `oppgaver_tatt_` og
+  numrene. Oppgavene står da som «Håndteres nå av en agent» i appen.
 - Funksjonen tar alle eller ingen. Stopper den fordi en oppgave ikke er klar
   lenger (en annen økt har tatt den, eller administratoren har endret den), si
-  hvilken, ta den ut av planen, og be om et nytt ja for resten.
+  hvilken, ta den ut av planen, og rull om nødvendig ut en ny migrasjon for
+  resten uten eget samtykke.
 - Legg fila i `supabase/migrations/` med versjonen prosjektet registrerte
   (`list_migrations`), uten linjeskift til slutt, så den er lik byte for byte.
   Den går i den første PR-en for oppgavene.
@@ -113,8 +113,9 @@ Følg `CLAUDE.md` som i alt annet arbeid: les koden først, test, og kjør
   gjelder annet arbeid.
 - Ha nummeret i grenen og i tittelen på PR-en, som `claude/opg-007-varsler` og
   «OPG-007: Varslingssystem», så en avbrutt oppgave kan finnes igjen.
-- Databaseendringer rulles ut i produksjon først etter at administratoren har
-  skrevet et eksplisitt ja som nevner migrasjonene.
+- Databaseendringer følger den risikobaserte migrasjonsregelen i `CLAUDE.md`:
+  ordinære migrasjoner med lav produksjonsrisiko rulles ut uten eget samtykke;
+  migrasjoner med vesentlig risiko etter `CLAUDE.md` krever eksplisitt ja.
 - Må en oppgave legges fra seg uferdig, si at administratoren kan fortsette den
   i en ny økt med `/utfor-oppgaver OPG-007`, eller frigi den i appen så den er
   klar igjen.
@@ -134,8 +135,8 @@ select public.fullfor_oppgave(7, '<x.y.z>') where exists (select 1 from public.o
 ```
 
 - Én migrering kan merke flere oppgaver.
-- Rull den ut med `apply_migration` (navn som `oppgaver_utfort_<x_y_z>`) først
-  etter at administratoren har skrevet et eksplisitt ja som nevner den.
+- Rull den ut med `apply_migration` (navn som `oppgaver_utfort_<x_y_z>`) når
+  sammenslåingen og versjonen er kontrollert; ikke be om et eget ja.
 - Legg deretter fila i `supabase/migrations/` på samme måte som i steg 3. Den
   går i en egen liten PR, med en føring som har `utenVarsel: true`.
 - Funksjonen stopper hvis oppgaven verken håndteres av en agent eller er klar,

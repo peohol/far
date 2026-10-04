@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.79.1',
+    dato: '2026-10-04',
+    sammendrag: 'Utviklingsagenter kan rulle ut ordinære produksjonsmigrasjoner uten ekstra bekreftelse',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    utenVarsel: true,
+    punkter: [
+      'Ordinære, testede produksjonsmigrasjoner med lav produksjonsrisiko kan nå rulles ut som en del av utviklingsarbeidet uten at administratoren må kopiere inn en egen godkjenningssetning.',
+      'Migrasjoner med vesentlig risiko for datatap, sikkerhet/personvern, produksjonsnedetid eller vanskelig tilbakeføring krever fortsatt uttrykkelig godkjenning; agenten skal velge en tryggere løsning når det er mulig.',
+    ],
+  },
+  {
     versjon: '1.79.0',
     dato: '2026-10-04',
     sammendrag: 'Fagsidene får seksjonene «Toksisitet og forgiftning» og «Graviditet, amming og reproduksjon»',

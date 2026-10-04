@@ -11,6 +11,16 @@ Tillegg til reglene i rotens `CLAUDE.md`. Gjelder alt under `supabase/`.
 - Migrasjoner er append-only. Filnavnene svarer til versjonene i prosjektets
   migrasjonshistorikk; endres et filnavn, kommer repoet ut av takt med
   prosjektet.
+- Før `apply_migration`: vurder risikoen. Nye eller utvidende skjemaendringer,
+  kontrollerte datamigrasjoner og andre testede endringer med lav produksjonsrisiko
+  rulles normalt ut uten separat samtykke. Stopp for eksplisitt godkjenning ved
+  reell risiko for vesentlig datatap, svekket sikkerhet/personvern, betydelig
+  produksjonsnedetid eller vanskelig reversering. Eksempler er `drop table`,
+  `drop column`, `truncate`, bred sletting, destruktiv omskriving uten pålitelig
+  gjenoppretting, endringer i RLS/grants som kan åpne utilsiktet tilgang, eller
+  operasjoner som kan holde lange eksklusive låser. At en migrasjon kan rulles
+  tilbake er ikke nok hvis skade kan oppstå før tilbakeføring. Velg en tryggere
+  løsning hvis den kan løse oppgaven.
 - En migrasjon som rulles ut med MCP (`apply_migration`), får tidspunktet som
   versjon. Gi fila det versjonsnummeret prosjektet registrerte, og kjør
   spørringen `npm run kontroller:migrasjoner` skriver, med `execute_sql`: den

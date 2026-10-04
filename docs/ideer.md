@@ -88,9 +88,10 @@ oppgave. En oppgave går gjennom disse statusene:
    er slått sammen, med versjonen i endringsloggen.
 
 `ta_oppgaver()` og `fullfor_oppgave()` kan ingen i appen kalle. De kjøres som
-migreringer etter administratorens ja (`*_oppgaver_tatt_*.sql` og
-`*_oppgaver_utfort_*.sql`). Oppgavene de nevner, finnes bare i produksjon, så
-migreringene gjør ingenting i en database uten oppgaver.
+migreringer av agenten uten separat samtykke (`*_oppgaver_tatt_*.sql` og
+`*_oppgaver_utfort_*.sql`); de er reversible statusendringer og følger den
+risikobaserte regelen i `CLAUDE.md`. Oppgavene de nevner, finnes bare i
+produksjon, så migreringene gjør ingenting i en database uten oppgaver.
 
 Prompten er ren tekst: den skal leses av en språkmodell. Ved overføringen
 starter den med idéens beskrivelse, gjort om til ren tekst av
