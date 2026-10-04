@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.78.0',
+    dato: '2026-10-04',
+    sammendrag: 'Bivirkningsimporter kan forhåndsvises og sammenlignes med forrige versjon før de legges inn',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    utenVarsel: true,
+    punkter: [
+      'Før bivirkninger fra en preparatomtale legges inn, kan importen nå forhåndsvises: hvilken fagside og preparatomtale den gjelder, versjon og revisjonsdato, tabellene og frekvensgrunnlaget, og hvor mange bivirkninger det er i alt, per frekvens og per organsystem, med fotnotene.',
+      'Ved en ny versjon av en preparatomtale viser forhåndsvisningen hva som er endret fra den som ligger inne: bivirkninger som er lagt til eller fjernet, flyttet til et annet organsystem, har fått ny frekvens eller ny fotnote, og endringer i tabellene og kildeopplysningene. Bivirkninger med ulik tekst blir aldri regnet som den samme.',
+      'Ingenting endres i appen. Forhåndsvisningen er et kontrollverktøy for den som legger inn bivirkningene.',
+    ],
+  },
+  {
     versjon: '1.77.0',
     dato: '2026-10-03',
     sammendrag: 'Grunnlaget for bivirkninger fra preparatomtalene, etter frekvens eller organsystem',

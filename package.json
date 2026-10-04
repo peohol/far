@@ -1,7 +1,7 @@
 {
   "name": "far",
   "private": true,
-  "version": "1.77.0",
+  "version": "1.78.0",
   "type": "module",
   "description": "Verktøy for å kommentere farmakologiske analyser",
   "scripts": {
@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "import:bivirkninger": "vite-node scripts/lag-bivirkningsimport.ts --",
     "import:intervallregelsett": "vite-node scripts/importer-intervallregelsett.ts --",
     "kontroller:migrasjoner": "vite-node scripts/kontroller-migrasjoner.ts --",
     "data": "python3 scripts/build_data.py && python3 scripts/build_antihypertensiver.py",

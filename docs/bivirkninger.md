@@ -298,25 +298,80 @@ Feilmeldingene har stedet i fila foran, f.eks.
    (`preparat-10-mg-tabletter`). Den skal ikke endres senere.
 4. Legg fila i `supabase/import/bivirkninger/` med navnet
    `<fagsidenøkkel>--<kildenøkkel>.json`.
+5. Forhåndsvis fila (under) og kontroller innholdet og endringene mot
+   preparatomtalen før migrasjonen lages.
+
+## Forhåndsvisningen
+
+Før en migrasjon lages, forhåndsvises importen:
+
+```
+npm run import:bivirkninger -- <fil>
+npm run import:bivirkninger -- <fil> --mot <forrige.json>
+```
+
+Det er en tørrkjøring: fila kontrolleres, og forhåndsvisningen skrives ut
+som Markdown, men ingenting lages og ingenting sendes til databasen. Den kan
+lagres med `> rapport.md`. Har fila feil, skrives bare feilene ut.
+Forhåndsvisningen viser:
+
+- **Kilden:** fagsiden, kildenøkkelen, tittelen, preparatet, innehaveren,
+  SPC-versjonen og revisjonsdatoen («ikke oppgitt» når de mangler), lenken,
+  kontrollen, hvem som importerte og merknaden.
+- **Innholdet:** antallet bivirkninger og fotnoter i alt, og for hver tabell
+  navnet, nøkkelen, frekvensgrunnlaget og merknaden, antallet per frekvens
+  (alle seks, også dem med 0), antallet per organsystem og hver bivirkning
+  med fotnote. Med flere tabeller telles hver tabell for seg, fordi
+  frekvensene kan ha ulikt grunnlag.
+- **Endringene** fra den forrige importen av samme kilde på samme fagside:
+  den siste importen i `supabase/migrations/`, eller fila etter `--mot` (for
+  eksempel for å sammenligne to versjoner av en preparatomtale før den
+  gamle fila endres). Finnes ingen, står det at det er en førstegangsimport;
+  ble kilden trukket tilbake, står det også. Endringene er
+  - kildefeltene og fagsiden som er endret, med verdien før og nå,
+  - tabellene som er lagt til, fjernet, har fått nytt navn,
+    frekvensgrunnlag eller merknad, eller har byttet plass,
+  - bivirkningene som er lagt til eller fjernet, flyttet til et annet
+    organsystem, har fått endret frekvens, endret fotnote eller bare andre
+    store og små bokstaver i teksten,
+  - kombinasjoner av organsystem og frekvens der bivirkningene har byttet
+    plass.
+
+  Er innholdet det samme som sist (bortsett fra `importert_av`), står det at
+  databasen ikke vil endre noe. Er fila annerledes uten at noe av dette er
+  endret (for eksempel rekkefølgen på organsystemene i fila, eller et felt
+  som er `null` i stedet for utelatt), står det at den likevel legges inn
+  som en ny import — slik databasen gjør.
+
+Forhåndsvisningen gjetter aldri. To bivirkninger er den samme bare når de
+står i samme tabell med samme tekst, slik kontrollen regner det (uten forskjell
+på store og små bokstaver). Får en bivirkning en annen tekst, står den gamle
+som fjernet og den nye som lagt til, også når forskjellen er liten; det er
+den faglige kontrollen som avgjør om det er den samme. Står en tekst flere
+steder i en tabell, pares den først med samme sted; er det da én igjen på
+hver side, er den flyttet, ellers står de som fjernet og lagt til. Én
+tabell som blir til flere (eller omvendt) står som tabeller fjernet og lagt
+til, med alle bivirkningene.
 
 ## Slik legges en import inn
 
-1. Kontroller fila: `npm run import:bivirkninger -- <fil>`. Alle feilene
-   skrives ut med stedet i fila; ingenting lages før fila er i orden.
+1. Forhåndsvis og kontroller fila: `npm run import:bivirkninger -- <fil>`.
+   Alle feilene skrives ut med stedet i fila; ingenting lages før fila er i
+   orden. Gå gjennom forhåndsvisningen, og særlig endringene, mot
+   preparatomtalen.
 2. Lag migrasjonen: `npm run import:bivirkninger -- <fil> <migrasjon.sql>`.
-   Den kaller `bivirkninger.importer`, som kontrollerer importen på nytt.
+   Forhåndsvisningen skrives ut igjen. Er innholdet det samme som i den
+   siste importen, lages ingen migrasjon. Migrasjonen kaller
+   `bivirkninger.importer`, som kontrollerer importen på nytt.
 3. Rull den ut med `apply_migration` og gi fila versjonen prosjektet
    registrerte (`supabase/CLAUDE.md`). Migrasjonen sletter ingenting.
-
-Testen `bivirkninger.test.ts` holder importfilene og migrasjonene i takt:
-hver fil skal være lik den siste importen av samme kilde i migrasjonene, og
-hver kilde migrasjonene har lagt inn og ikke trukket tilbake, skal ha en fil.
 
 ## Oppdatere en preparatomtale
 
 Kommer en ny versjon av preparatomtalen, endres **den samme fila**, med samme
-`stoff` og samme `kilde.nokkel`, og ny versjon og revisjonsdato. Så lages og
-rulles ut en ny migrasjon som over.
+`stoff` og samme `kilde.nokkel`, og ny versjon og revisjonsdato. Så
+forhåndsvises den — endringene fra den gjeldende importen står der — og en
+ny migrasjon lages og rulles ut som over.
 
 - Samme fagside og samme kildenøkkel erstatter den forrige importen:
   den gamle kilden merkes som erstattet (`erstattet_av`) og vises ikke
@@ -341,12 +396,13 @@ etter hverandre, med preparatet og kilden over hver.
 | --- | --- |
 | `src/bivirkninger/modell.ts` | Frekvensene, organsystemene, kildene, tabellene og grupperingen i de to visningene |
 | `src/bivirkninger/import.ts` | Importformatet, kontrollen og migrasjonene |
+| `src/bivirkninger/forhandsvisning.ts` | Forhåndsvisningen: innholdet i en import og sammenligningen med den forrige |
 | `src/bivirkninger/lesing.ts` | Lesingen appen gjør |
 | `src/bivirkninger/referanser.ts` | Kildene som automatiske referanser |
 | `src/bivirkninger/stoffside.ts` | Tabellene slik siden viser dem, oppsummeringene og tekstene søket finner |
 | `src/components/stoffside/Bivirkningspanel.tsx`, `src/styles/bivirkninger.css` | Seksjonen på fagsiden |
 | `supabase/migrations/*_bivirkninger.sql` | Skjemaet, de faste listene, kontrollen, importen og lesingen |
-| `scripts/lag-bivirkningsimport.ts` | Kontrollen av en importfil og migrasjonen for den |
+| `scripts/lag-bivirkningsimport.ts` | `npm run import:bivirkninger`: kontrollen og forhåndsvisningen av en importfil, og migrasjonen for den |
 | `supabase/maler/bivirkningsimport.json`, `bivirkningsimport-tabeller.json` | Malene for én og for flere tabeller, syntetiske |
 | `supabase/import/bivirkninger/` | Importfilene |
-| `src/__tests__/bivirkninger.test.ts`, `stoffside.test.tsx` | Testene |
+| `src/__tests__/bivirkninger.test.ts`, `bivirkningsforhandsvisning.test.ts`, `stoffside.test.tsx` | Testene |

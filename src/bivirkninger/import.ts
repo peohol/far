@@ -84,7 +84,7 @@ export type Bivirkningsimport = {
 
 /** Feltene på hvert nivå, i den rekkefølgen de kontrolleres. */
 const TOPPFELT = ['format', 'stoff', 'kilde', 'organsystemer', 'tabeller'] as const
-const KILDEFELT = [
+export const KILDEFELT = [
   'nokkel',
   'type',
   'tittel',
@@ -167,7 +167,7 @@ function nokkelfeil(verdi: unknown, sti: string): string[] {
 }
 
 /** Teksten slik to like bivirkninger sammenlignes: uten forskjell på store og små bokstaver. */
-function sammenligning(tekst: string): string {
+export function sammenligning(tekst: string): string {
   return tekst.toLocaleLowerCase('nb')
 }
 
@@ -420,4 +420,24 @@ export function bivirkningsendringer(sql: string): Bivirkningsendring[] {
     funn.push({ plass: m.index, endring: { slag: 'tilbaketrekking', stoff: tekst(m[1]!), nokkel: tekst(m[2]!) } })
   }
   return funn.sort((a, b) => a.plass - b.plass).map((f) => f.endring)
+}
+
+/** Kilden til en import slik migrasjonene og importfilene kjenner den igjen: fagsiden og kildenøkkelen. */
+export function kildeid(stoff: string, nokkel: string): string {
+  return `${stoff}--${nokkel}`
+}
+
+/** En endring i bivirkningene, med navnet på migrasjonen som gjør den. */
+export type Migrasjonsendring = Bivirkningsendring & { migrasjon: string }
+
+/**
+ * Det siste migrasjonene gjør med hver kilde på hver fagside (`kildeid`).
+ * Migrasjonene sorteres etter navnet, som er rekkefølgen de kjøres i.
+ */
+export function sisteEndringer(migrasjoner: readonly { navn: string; sql: string }[]): Map<string, Migrasjonsendring> {
+  const siste = new Map<string, Migrasjonsendring>()
+  for (const { navn, sql } of [...migrasjoner].sort((a, b) => (a.navn < b.navn ? -1 : a.navn > b.navn ? 1 : 0))) {
+    for (const e of bivirkningsendringer(sql)) siste.set(kildeid(e.stoff, e.nokkel), { ...e, migrasjon: navn })
+  }
+  return siste
 }
