@@ -31,7 +31,7 @@ begin
     'Tatt bort: datoen for kontroll mot Felleskatalogen');
   perform intern.kuratering_antall(side, 'interaksjoner', 'riktekst', 1);
   interaksjoner := intern.kuratering_element(side, 'interaksjoner', 'riktekst', '{}'::jsonb, 4,
-    'Korrigering etter fersk monografkuratering: interaksjoner tilbakeført til tilstanden før kvetiapinkurateringen');
+    'Korrigering etter fersk monografikuratering: interaksjoner tilbakeført til tilstanden før kvetiapinkurateringen');
 
   create temporary table kvetiapin_fullforing_kilder(
     nokkel text primary key, tittel text, forfattere text, aar text, lenke text
