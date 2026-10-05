@@ -15,7 +15,7 @@ import { Rusvalg } from '../Rusvalg'
 import { Detaljkort } from '../seksjoner/Seksjon'
 
 /**
- * Delene scenarioreglene på stoffsiden og redigeringen av dem har felles:
+ * Delene visningen av scenarioreglene og redigeringen av dem har felles:
  * kodene, vilkårene i et scenario og simulatoren. Simulatoren prøver det
  * regelsettet den får — det publiserte, eller utkastet slik det står i
  * skjemaet.

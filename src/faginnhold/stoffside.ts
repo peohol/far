@@ -152,17 +152,8 @@ function etterId<T extends { id: string }>(liste: readonly T[]): T[] {
   return [...liste].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
 }
 
-/**
- * Det som må publiseres for at stoffsiden og reglene den viser skal bli slik
- * utkastet viser dem, i den rekkefølgen databasen krever: det publiserte kan
- * bare peke på det som også er publisert. Referansene først, så siden og
- * innholdselementene, de fjernede av dem først. Til sist regelsettene, hvert etter kommentarene det
- * peker på.
- *
- * `side` og `regler` er utkastet. Bare det som faktisk har upubliserte
- * endringer, er med. Referansene som er med, er dem siden siterer.
- */
-export function publiseringsplan(side: Stoffsidedata, regler: Regeldata): Publiseringssteg[] {
+/** Stegene i en plan, hvert objekt én gang og bare når det har upubliserte endringer. */
+function planlegger() {
   const steg: Publiseringssteg[] = []
   const sett = new Set<string>()
   const legg = (slag: Publiseringsslag, utgave: Utgave<unknown> | null | undefined) => {
@@ -170,14 +161,20 @@ export function publiseringsplan(side: Stoffsidedata, regler: Regeldata): Publis
     sett.add(utgave.id)
     steg.push({ slag, id: utgave.id, revisjon: utgave.revisjon })
   }
-  const leggRegelsett = (
-    slag: Publiseringsslag,
-    utgave: { regelsett: Utgave<unknown>; kommentarer: Utgave<unknown>[] } | null | undefined,
-  ) => {
-    for (const kommentar of utgave?.kommentarer ?? []) legg('kommentar', kommentar)
-    legg(slag, utgave?.regelsett)
-  }
+  return { steg, legg }
+}
 
+/**
+ * Det som må publiseres for at stoffsiden skal bli slik utkastet viser den, i
+ * den rekkefølgen databasen krever: det publiserte kan bare peke på det som
+ * også er publisert. Referansene først, så siden og innholdselementene, de
+ * fjernede av dem først.
+ *
+ * `side` er utkastet. Bare det som faktisk har upubliserte endringer, er med.
+ * Referansene som er med, er dem siden siterer.
+ */
+export function publiseringsplan(side: Stoffsidedata): Publiseringssteg[] {
+  const { steg, legg } = planlegger()
   for (const referanse of side.referanser) legg('referanse', referanse)
   legg('infoside', side.infoside)
   // Det som er tatt bort fra siden, først: et kort som bare kan stå én gang, og som er
@@ -185,6 +182,24 @@ export function publiseringsplan(side: Stoffsidedata, regler: Regeldata): Publis
   const elementer = etterId(side.elementer)
   for (const element of elementer) if (element.innhold.panel === FJERNET) legg('innholdselement', element)
   for (const element of elementer) legg('innholdselement', element)
+  return steg
+}
+
+/**
+ * Det som må publiseres for at fortolkningsreglene skal bli slik utkastet
+ * viser dem: hvert regelsett etter kommentarene det peker på, siden det
+ * publiserte regelsettet bare kan peke på publiserte kommentarer. En
+ * kommentar flere regelsett deler, publiseres én gang.
+ */
+export function regelplan(regler: Regeldata): Publiseringssteg[] {
+  const { steg, legg } = planlegger()
+  const leggRegelsett = (
+    slag: Publiseringsslag,
+    utgave: { regelsett: Utgave<unknown>; kommentarer: Utgave<unknown>[] } | null | undefined,
+  ) => {
+    for (const kommentar of utgave?.kommentarer ?? []) legg('kommentar', kommentar)
+    legg(slag, utgave?.regelsett)
+  }
   for (const kode of Object.keys(regler.regelsett).sort()) leggRegelsett('intervallregelsett', regler.regelsett[kode])
   for (const modul of Object.keys(regler.scenarioregelsett).sort()) {
     leggRegelsett('scenarioregelsett', regler.scenarioregelsett[modul])

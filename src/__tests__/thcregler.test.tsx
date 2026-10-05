@@ -1,12 +1,10 @@
 // @vitest-environment jsdom
 /**
- * THC-syrereglene på stoffsiden for THC (`#/stoff/thc`), prøvd i en nettleser
- * i minnet: oversikten, tekstbolkene og simulatoren. IRCAK er koblet til THC
- * som metabolitt i stoffregisteret, og reglene for koden står på THC-siden i
- * sin egen seksjon (`fortolkning-ircak`), lest etter koden og ikke gjennom
- * siden. Simulatoren fortolker med den
- * samme motoren og de samme komponentene som fortolkningsmodulen
- * (`thcsteg.test.tsx`), med reglene siden viser.
+ * THC-syrereglene, prøvd i en nettleser i minnet: oversikten, tekstbolkene og
+ * simulatoren. De står i redigeringen på fortolkningssiden for THC-syre i urin
+ * (`#/fortolkning/ircak/rediger`), lest etter koden, og ikke på fagsiden for
+ * THC. Simulatoren fortolker med den samme motoren og de samme komponentene
+ * som fortolkningsmodulen (`thcsteg.test.tsx`), med reglene som vises.
  */
 import { cleanup, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -14,9 +12,11 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { Stoffside } from '../components/stoffside/Stoffside'
 import { FaginnholdskildeProvider } from '../components/stoffside/Faginnholdskilde'
 import { Thcregler } from '../components/regler/Thcregler'
+import { Fortolkningsredigering } from '../components/regler/Fortolkningsredigering'
 import { TipsLag } from '../components/Tips'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from '../domain/analyttkatalog'
 import { STOFFREGISTER } from '../domain/stoffregister'
+import { THC_ANALYTT } from '../domain/thc'
 import { fortolkThc, tomThcInndata } from '../domain/thcMotor'
 import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../domain/thcTekster'
 import type { Faginnholdslager } from '../faginnhold/lagring'
@@ -39,20 +39,26 @@ afterEach(cleanup)
 
 const katalog = byggKatalog(FORTOLKNINGSOPPFORINGER)
 
-/** Stoffsiden for stoffet med nøkkelen, med THC-syreregelsettet i databasen. Gir leseren tilbake. */
-function visSide(stoff: string, sted?: readonly string[]): Faginnholdsleser {
+/** Fagsiden for THC, med THC-syreregelsettet i databasen. Gir leseren tilbake. */
+function visSide(): Faginnholdsleser {
   const leser = falskLeser({ lesThcRegelsett: vi.fn(async () => thcRegelsettutgave()) })
   render(
     <TipsLag>
       <FaginnholdskildeProvider kilde={{ leser, lager: {} as Faginnholdslager, kanRedigere: false }}>
-        <Stoffside
-          stoff={stoff}
-          sted={sted}
-          register={STOFFREGISTER}
-          katalog={katalog}
-          onApneFortolkning={vi.fn()}
-          onLukk={vi.fn()}
-        />
+        <Stoffside stoff="thc" register={STOFFREGISTER} katalog={katalog} onApneFortolkning={vi.fn()} onLukk={vi.fn()} />
+      </FaginnholdskildeProvider>
+    </TipsLag>,
+  )
+  return leser
+}
+
+/** Redigeringen på fortolkningssiden for THC-syre i urin. Gir leseren tilbake. */
+function visRedigering(): Faginnholdsleser {
+  const leser = falskLeser({ lesThcRegelsett: vi.fn(async () => thcRegelsettutgave()) })
+  render(
+    <TipsLag>
+      <FaginnholdskildeProvider kilde={{ leser, lager: {} as Faginnholdslager, kanRedigere: true }}>
+        <Fortolkningsredigering fortolkning={THC_ANALYTT} katalog={katalog} onPublisert={vi.fn()} onAvslutt={vi.fn()} />
       </FaginnholdskildeProvider>
     </TipsLag>,
   )
@@ -69,30 +75,24 @@ function visRegler(utgave: ThcRegelsettutgave = thcRegelsettutgave()) {
 
 const gruppe = (navn: string) => within(screen.getByRole('group', { name: navn }))
 
-describe('THC-syrereglene på stoffsiden', () => {
-  it('står på THC-siden, i seksjonen for IRCAK, og ikke på andre sider', async () => {
-    const thc = visSide('thc')
-    expect((await screen.findByRole('heading', { level: 1 })).textContent).toBe('THC')
-    const overskrift = await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler – THC-syre i urin' })
-    // THC og IRCAK fortolkes i hver sin modul, og hver har sin seksjon på siden.
-    expect(overskrift.closest('section')?.id).toBe('panel-fortolkning-ircak')
-    // Siden leses etter stoffets nøkkel, reglene etter koden.
-    expect(thc.lesStoffside).toHaveBeenCalledWith('thc', 'publisert')
-    expect(thc.lesThcRegelsett).toHaveBeenCalledWith('publisert')
-    expect(vi.mocked(thc.finnIntervallregelsett).mock.calls.map(([kode]) => kode).sort()).toEqual(['IRCAK', 'THC'])
+describe('THC-syrereglene', () => {
+  it('står i redigeringen på fortolkningssiden for THC-syre, og ikke på fagsiden for THC', async () => {
+    const redigering = visRedigering()
+    const overskrift = await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler' })
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Fortolkning av THC-syre i urin')
+    // Den eneste delen av reglene står åpen.
+    expect(overskrift.closest('section')?.id).toBe('panel-fortolkning')
+    expect(screen.getByRole('button', { name: 'Fortolkningsregler' }).getAttribute('aria-expanded')).toBe('true')
+    // Reglene leses etter koden, som utkast.
+    expect(redigering.lesThcRegelsett).toHaveBeenCalledWith('utkast')
+    expect(vi.mocked(redigering.finnIntervallregelsett).mock.calls.map(([kode]) => kode)).toContain('IRCAK')
     cleanup()
 
-    const nortriptylin = visSide('nortriptylin')
+    const fagside = visSide()
+    expect((await screen.findByRole('heading', { level: 1 })).textContent).toBe('THC')
     await screen.findByText('Denne siden har ikke fått faginnhold ennå.')
-    expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkningsregler – THC-syre i urin' })).toBeNull()
-    expect(nortriptylin.lesThcRegelsett).not.toHaveBeenCalled()
-  })
-
-  it('åpner simulatoren fra en direktelenke til seksjonen for IRCAK', async () => {
-    visSide('thc', ['fortolkning-ircak', 'simulator'])
-    const simulator = await screen.findByRole('button', { name: 'Prøv reglene' })
-    expect(simulator.getAttribute('aria-expanded')).toBe('true')
-    expect(screen.getByRole('button', { name: 'Fortolkningsregler – THC-syre i urin' }).getAttribute('aria-expanded')).toBe('true')
+    expect(screen.queryByRole('heading', { level: 2, name: /Fortolkningsregler/ })).toBeNull()
+    expect(fagside.lesThcRegelsett).not.toHaveBeenCalled()
   })
 
   it('oppsummerer reglene og viser grensene, marginene og kurvene hvert bruksmønster avgjøres av', () => {

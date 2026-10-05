@@ -16,7 +16,7 @@ rusmiddelreglene og THC-syre har egne regeltyper.
 | --- | --- |
 | `supabase/migrations/*_intervallregelsett_objekttype.sql`, `*_intervallregelsett.sql` | Objekttypen, tabellene, valideringen og lesingen |
 | `supabase/migrations/*_importer_intervallregelsett_1.sql` … `_6.sql` | Importen av dagens regler, i seks porsjoner |
-| `supabase/migrations/*_regelredigering_lesing.sql` | `finn_intervallregelsett`: regelsettet for én kode, til fagsiden |
+| `supabase/migrations/*_regelredigering_lesing.sql` | `finn_intervallregelsett`: regelsettet for én kode, til redigeringen av fortolkningen |
 | `supabase/migrations/*_intervallregelsett_kommentarobjekter.sql`, `*_flytt_regelsettkommentarer.sql` | Reglene peker på de felles kommentarobjektene, `lagre_intervallregelsett`, og flyttingen av tekstene dit. Lagringen av kommentarene er felles med scenarioreglene (`intern.lagre_kommentarendringer` i `*_lagre_scenarioregelsett.sql`) |
 | `supabase/import/intervallregelsett.json` | Importdatasettet: dagens regler, ett regelsett per linje, med kilden |
 | `src/regler/modell.ts` | Formen på et regelsett, felles for appen og databasen |
@@ -30,13 +30,13 @@ rusmiddelreglene og THC-syre har egne regeltyper.
 | `src/components/BandStep.tsx` | Steg 2: knappene, og hva som står i stedet mens reglene hentes eller mangler |
 | `src/regler/redigering.ts` | Endringene redigeringen gjør — grenser, deling, sammenslåing, kommentarer, ringing, cut-off — som rene funksjoner |
 | `src/regler/visning.ts` | Navnene på nivåer og handlinger, feltene historikken sammenligner, og simulatoren |
-| `src/components/regler/` | «Fortolkning» på fagsiden: tabellen, simulatoren og redigeringen. Feltene, lagringen med konflikten (`Regelfelter.tsx`) og historikken under reglene (`Regelhistorikk.tsx`) er felles med scenarioreglene |
+| `src/components/regler/` | Redigeringssiden for fortolkningen (`Fortolkningsredigering.tsx`, `useFortolkningsredigering.ts`) med tabellen, simulatoren og redigeringen. Feltene, lagringen med konflikten (`Regelfelter.tsx`) og historikken under reglene (`Regelhistorikk.tsx`) er felles med scenarioreglene |
 | `src/__tests__/intervallregelsett.test.ts` | Import, paritet, validering, tilgang og versjonering, mot en ekte database |
 | `src/__tests__/kommentarflytting.test.ts` | Flyttingen av tekstene til kommentarobjekter, på de historiske importfilene |
 | `src/__tests__/hjelp/dagensregler.ts`, `src/__tests__/data/dagensgrenser.json` | Fasiten fra før byttet: regelsettene og grensene den gamle motoren ga |
 | `src/__tests__/fortolkningUendret.test.ts`, `steg2regler.test.tsx` | At klinisk output er den samme som før byttet, og steg 2 på regelsettene i appen |
 | `src/__tests__/referanseomrader.test.ts`, `src/__tests__/data/referanseomrader.json` | Lesingen av referanseområdene, og referanseområdene fasiten bruker |
-| `src/__tests__/regelredigering.test.ts`, `stoffside.test.tsx` | Redigeringen, simulatoren og historikken, som rene funksjoner og i siden |
+| `src/__tests__/regelredigering.test.ts`, `fortolkningsredigering.test.tsx` | Redigeringen, simulatoren og historikken, som rene funksjoner og på redigeringssiden |
 
 ## Modellen
 
@@ -218,9 +218,8 @@ ikke tar inn noe fra databasen eller faginnholdet.
   gjør ingenting. Uten knapper kan ingen kommentar bli gitt etter andre regler
   enn de publiserte. En feil har «Prøv igjen». Påvisningsgrensen og
   terapiområdet står likevel; de er fra datasettet.
-- **Nye regler** gjelder fra neste gang appen åpnes. En administrator som går
-  fra en fagside tilbake til fortolkningen, får dem hentet på nytt med en
-  gang. Har appen alt regelsettene, blir de stående til de nye er hentet.
+- **Nye regler** gjelder fra neste gang appen åpnes. En administrator som
+  publiserer på redigeringssiden, får dem hentet på nytt med en gang. Har appen alt regelsettene, blir de stående til de nye er hentet.
 - **Tallene over knappene:** ringegrensen, og for antihypertensiver den
   toksiske grensen — der det første intervallet på nivået «over» begynner —
   leses av regelsettet. Enheten står på den første pillen, og på en senere
@@ -242,14 +241,24 @@ ikke tar inn noe fra databasen eller faginnholdet.
   kildedokumentene; det er grunnen til at de står igjen. Resten av
   datasettene er uendret.
 
-## På fagsiden
+## Redigeringssiden
 
-Regelsettet vises på fagsiden til analyttens primære stoff (koblingen i
-stoffregisteret), under panelene, som seksjonen «Fortolkning» i den felles
-seksjonsmodellen (`docs/seksjoner.md`, adressen `#/stoff/bupropion/fortolkning`
-for HBUP). Har stoffet analytter i flere fortolkningsmoduler, får de neste
-sin egen seksjon, `fortolkning-<kode>` (`regelseksjoner` i
-`src/domain/koblinger.ts`). Lukket sier den hvor mange områder det er, og
+Fagsidene og fortolkningen er adskilt: fagsidene viser ingen regler. I
+fortolkningen har administratorer knappen «Rediger fortolkningen» (blyanten i
+toppmenyen) når modulen har regler. Den åpner en egen side over
+fortolkningen, `#/fortolkning/<nøkkel>/rediger`, med alle delene av reglene
+modulen gir: scenarioreglene (`docs/scenarioregler.md`), THC-syrereglene
+(`docs/thc-syre.md`) og konsentrasjonsreglene for hver kode i modulen
+(`analytterForFortolkning` i `src/domain/koblinger.ts`). Hver del er en seksjon
+i den felles seksjonsmodellen (`docs/seksjoner.md`). Er det bare én, står den
+åpen med en gang; ellers har hver sin tittel og adresse,
+`#/fortolkning/diaz/rediger/fortolkning-dmi` osv. Siden viser alltid
+utkastet, toppmenyen har den samme statusen, publiseringen og «Avslutt
+redigering» som fagsidene, og `Escape` går tilbake til fortolkningen. For andre
+enn administratorer er adressen bare fortolkningen. Den gamle adressen
+`#/analytt/<KODE>/fortolkning` fører til fortolkningen for koden.
+
+Konsentrasjonsreglene er seksjonen «Fortolkning». Lukket sier den hvor mange områder det er, og
 ringegrensen og cut-off når de finnes. Åpnet viser den en tabell med
 konsentrasjonen, kommentaren og «Ring rekvirent» — de samme radene, fargene og
 tekstene som knappene på steg 2 — med ringegrensen under. Under tabellen er
@@ -282,8 +291,8 @@ hver mot revisjonen brukeren åpnet. En ny kommentar får et navn etter hva den
 brukes til. Har noen andre lagret regelsettet eller en av kommentarene i
 mellomtiden, lagres ingenting, står det brukeren har gjort, og hen kan sammenligne med
 det de lagret (feltene som er ulike, rødt og grønt) og velge å forkaste sitt
-eller lagre over deres. Publiseringen skjer med resten av siden, kommentarene
-før regelsettet, og oppsummeringen før den sier hva som endres. «Sist
+eller lagre over deres. Publiseringen skjer med resten av redigeringssiden
+(`regelplan` i `src/faginnhold/stoffside.ts`), kommentarene før regelsettet, og oppsummeringen før den sier hva som endres. «Sist
 redigert» åpner historikken, der en tidligere revisjon kan sammenlignes og
 gjenopprettes som en ny (se `docs/faginnhold.md`): for regelsettet, der
 kommentarene vises med navnet, og for hver kommentar for seg, ord for ord, i

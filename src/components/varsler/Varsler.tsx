@@ -2,7 +2,7 @@ import { useEffect, useId, useMemo, useState } from 'react'
 import { visningsnavn, type Profil } from '@delt/profil'
 import { hentAlleProfiler } from '../../auth/api'
 import { useProfil } from '../../auth/okt'
-import { FORTOLKNINGSSEKSJON, fortolkningsseksjonFor, stoffadresseForAnalytt } from '../../domain/koblinger'
+import { fortolkningsadresseForAnalytt } from '../../domain/koblinger'
 import { stoffadresse } from '../../domain/rute'
 import { formaterDato } from '../../domain/versjon'
 import {
@@ -286,9 +286,9 @@ function Databaseinnhold({ varsel, meg, navn, onGa }: RadProps & { varsel: Datab
   )
 }
 
-/** Adressen til reglene for en analyttkode på stoffsiden, når koden har en side. */
+/** Adressen til fortolkningssiden reglene for en analyttkode hører til, når appen kjenner koden. */
 function regeladresse(kode: string | null): string | undefined {
-  return kode ? stoffadresseForAnalytt(kode, [fortolkningsseksjonFor(kode) ?? FORTOLKNINGSSEKSJON]) : undefined
+  return kode ? fortolkningsadresseForAnalytt(kode) : undefined
 }
 
 function Objektlenke({ objekt, onGa }: { objekt: Fortolkningsobjekt; onGa: () => void }) {

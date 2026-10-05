@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   REGLENE_KUNNE_IKKE_HENTES,
   tilScenarioregler,
@@ -44,16 +44,3 @@ export function useHentScenarioregler(les: () => Promise<Scenarioregeldata>): Sc
   const provIgjen = useCallback(() => setRunde((r) => r + 1), [])
   return { tilstand, provIgjen }
 }
-
-const Kontekst = createContext<Scenarioreglerkilde | null>(null)
-
-export function ScenarioreglerProvider({ kilde, children }: { kilde: Scenarioreglerkilde; children: ReactNode }) {
-  return <Kontekst.Provider value={kilde}>{children}</Kontekst.Provider>
-}
-
-/** Reglene appen har hentet. Utenfor en provider er de aldri hentet. */
-export function useScenarioreglerkilde(): Scenarioreglerkilde {
-  return useContext(Kontekst) ?? UTEN_KILDE
-}
-
-const UTEN_KILDE: Scenarioreglerkilde = { tilstand: { status: 'laster' }, provIgjen: () => {} }

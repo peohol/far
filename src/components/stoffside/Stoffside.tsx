@@ -30,11 +30,7 @@ import { ViktigeData } from './ViktigeData'
 import { Redigeringskilde } from './Redigeringskontekst'
 import { Redigeringshandlinger } from './Redigeringslinje'
 import { Sidesok } from './Sidesok'
-import { Scenarioregler, useScenarioreglerFor, type Delingsside } from '../regler/Scenarioregler'
-import { useScenarioreglerkilde } from '../regler/Scenarioreglerkilde'
 import { Uthevingskilde } from '../Uthev'
-import { Fortolkningsregler } from '../regler/Fortolkningsregler'
-import { Thcregler } from '../regler/Thcregler'
 import { festreferanser } from '../../legemiddeldata/referanser'
 import { slaSammenAutomatiske } from '../../faginnhold/referanser'
 import { clinpgxlitteratur, clinpgxreferanser } from '../../clinpgx/referanser'
@@ -46,17 +42,9 @@ import { Bivirkningspanel, bivirkningssoketekster, harBivirkninger } from './Biv
 import { BIVIRKNINGSPANEL, bivirkningsreferanser } from '../../bivirkninger/referanser'
 import { visningForKort } from '../../bivirkninger/stoffside'
 import type { Visning } from '../../bivirkninger/modell'
-import { useStoffside, type Sidemodus, type Stoffsidehandlinger } from './useStoffside'
+import { useStoffside, type Sidemodus } from './useStoffside'
 import type { Stoff, Stoffregister } from '../../domain/stoffregister'
-import {
-  analytterForStoff,
-  fortolkningForStoff,
-  regelseksjoner,
-  type Regelseksjon,
-} from '../../domain/koblinger'
-import { rusModulFor } from '../../domain/rus'
-import { THC_KODE } from '../../domain/thc'
-import type { Regeldata } from '../../faginnhold/lesing'
+import { analytterForStoff, fortolkningForStoff } from '../../domain/koblinger'
 
 export interface StoffsideProps {
   /** Stoffets nøkkel fra adressen (`#/stoff/<nøkkel>`). */
@@ -86,10 +74,10 @@ export interface StoffsideProps {
  * et sted etter nøkkelen åpner seksjonen eller detaljkortet den peker på.
  *
  * Laboratorieanalyttene stoffet er koblet til i registeret, står som sekundær
- * informasjon i identitetspanelet. Fortolkningsreglene for analyttene stoffet
- * er primært stoff for, står nederst, lest for seg fra fortolkningssystemet
- * (`src/domain/koblinger.ts`). Har stoffet analytter i én fortolkningsmodul,
- * har siden «Åpne fortolkning» i toppmenyen; ellers åpnes hver fra koden sin.
+ * informasjon i identitetspanelet (`src/domain/koblinger.ts`). Fortolkningsreglene
+ * hører til fortolkningssystemet og står på fortolkningssidene, ikke her. Har
+ * stoffet analytter i én fortolkningsmodul, har siden «Åpne fortolkning» i
+ * toppmenyen; ellers åpnes hver fra koden sin.
  *
  * Normalt står siden i lesemodus og viser det publiserte. Administratorer kan
  * slå på redigeringsmodus, som viser utkastet med diskrete knapper for å endre
@@ -143,11 +131,10 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
   const kjent = register.finn(slug)
   const analytter = useMemo(() => analytterForStoff(slug, register, katalog), [slug, register, katalog])
   const primare = useMemo(() => analytter.filter((a) => a.kobling.primar).map((a) => a.analytt), [analytter])
-  const seksjoner = useMemo(() => regelseksjoner(slug, register, katalog), [slug, register, katalog])
   const fortolkning = useMemo(() => fortolkningForStoff(slug, register, katalog), [slug, register, katalog])
   const stoffet = useMemo<Pick<Stoff, 'slug' | 'navn'>>(() => ({ slug, navn: kjent?.navn ?? slug }), [slug, kjent])
-  const handlinger = useStoffside(stoffet, primare, modus)
-  const { side, referansebase, publisert, konflikt, plan } = handlinger
+  const handlinger = useStoffside(stoffet, modus)
+  const { side, referansebase, konflikt, plan } = handlinger
   const modell = useMemo(() => byggSidemodell(side.data), [side.data])
   const navn = side.data.stoff?.navn ?? kjent?.navn ?? ''
   const kategorier = useMemo(() => register.kategorierFor(slug), [register, slug])
@@ -233,8 +220,6 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
     }),
     [redigerer, referansebase, handlinger.opprettReferanse, handlinger.gjenopprett],
   )
-  // Etter en publisering skal fortolkningen bruke de nye reglene.
-  const { provIgjen: hentScenarioreglerPaNytt } = useScenarioreglerkilde()
   const harInnhold = modell.paneler.size > 0 || Object.keys(modell.panelreferanser).length > 0 || harBivirkninger(bivirkninger)
 
   // En side som åpnes, begynner øverst, med fokus på navnet — så tastaturet og
@@ -278,14 +263,9 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
         {kanRedigere && modus === 'rediger' ? (
           <Redigeringshandlinger
             data={side.data}
-            regler={side.regler}
-            publisert={publisert}
             plan={plan}
             laster={!redigerer}
-            onPubliser={async () => {
-              await handlinger.publiser()
-              hentScenarioreglerPaNytt()
-            }}
+            onPubliser={handlinger.publiser}
             onAvslutt={() => setModus('lese')}
           />
         ) : (
@@ -424,20 +404,6 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
               {!redigerer && side.status === 'klar' && !harInnhold && (
                 <p className="stoffside__tom">Denne siden har ikke fått faginnhold ennå.</p>
               )}
-              {seksjoner.map((seksjon) => (
-                <Regelseksjonsvisning
-                  key={seksjon.seksjon}
-                  seksjon={seksjon}
-                  tittel={seksjoner.length > 1 ? `Fortolkningsregler – ${seksjon.fortolkning.visningsnavn}` : undefined}
-                  slug={slug}
-                  register={register}
-                  katalog={katalog}
-                  regler={side.regler}
-                  publisert={publisert}
-                  redigerer={redigerer}
-                  handlinger={handlinger}
-                />
-              ))}
               <Referanseliste />
             </div>
           </Redigeringskilde>
@@ -446,99 +412,3 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
     </section>
   )
 }
-
-/**
- * Fortolkningsreglene for én modul på stoffsiden: scenarioreglene når modulen
- * fortolkes med dem, THC-syrereglene for IRCAK, og intervallreglene for hver
- * analytt som har et regelsett. Reglene er lest etter analyttkoden og modulen,
- * aldri gjennom stoffet.
- */
-function Regelseksjonsvisning({
-  seksjon,
-  tittel,
-  slug,
-  register,
-  katalog,
-  regler,
-  publisert,
-  redigerer,
-  handlinger,
-}: {
-  seksjon: Regelseksjon
-  /** Tittelen når siden har regler for flere moduler. */
-  tittel: string | undefined
-  slug: string
-  register: Stoffregister
-  katalog: Analyttkatalog
-  /** Reglene i tilstanden siden viser. */
-  regler: Regeldata
-  publisert: Regeldata
-  redigerer: boolean
-  handlinger: Stoffsidehandlinger
-}) {
-  const { fortolkning, analytter } = seksjon
-  const modul = rusModulFor(fortolkning)
-  // Scenarioreglene: i redigeringen utkastet, ellers de publiserte appen alt har.
-  const utkast = modul ? regler.scenarioregelsett[modul.id] : undefined
-  const { lagreScenarioregelsett, hentScenarioregelsettutkast } = handlinger
-  const scenarioredigering = useMemo(
-    () =>
-      redigerer && utkast && modul
-        ? {
-            utgave: utkast,
-            publisert: publisert.scenarioregelsett[modul.id] ?? null,
-            onLagre: (u: Parameters<typeof lagreScenarioregelsett>[1], g?: Parameters<typeof lagreScenarioregelsett>[2]) =>
-              lagreScenarioregelsett(modul.id, u, g),
-            hentNyeste: () => hentScenarioregelsettutkast(modul.id),
-          }
-        : null,
-    [redigerer, utkast, modul, publisert.scenarioregelsett, lagreScenarioregelsett, hentScenarioregelsettutkast],
-  )
-  const scenarioregler = useScenarioreglerFor(fortolkning, scenarioredigering)
-  // De andre stoffene med analytter i samme modul deler reglene og kommentarene.
-  const delesMed = useMemo(() => {
-    const sider = new Map<string, Delingsside>()
-    for (const analytt of katalog.oppforinger) {
-      if (analytt.fortolkning !== fortolkning) continue
-      const stoff = register.primartStoffFor(analytt.kode)
-      if (stoff && stoff.slug !== slug) sider.set(stoff.slug, { navn: stoff.navn, slug: stoff.slug })
-    }
-    return [...sider.values()]
-  }, [katalog, register, fortolkning, slug])
-  const thc = analytter.some((a) => a.kode === THC_KODE) ? regler.thcregelsett : null
-
-  return (
-    <>
-      {scenarioregler && (
-        <Scenarioregler
-          {...scenarioregler}
-          delesMed={delesMed}
-          seksjonsid={seksjon.seksjon}
-          {...(tittel && { tittel })}
-        />
-      )}
-      {thc && (
-        <Thcregler
-          utgave={thc}
-          redigerer={redigerer}
-          onLagre={handlinger.lagreThcRegelsett}
-          seksjonsid={seksjon.seksjon}
-          {...(tittel && { tittel })}
-        />
-      )}
-      {analytter.map((analytt) => (
-        <Fortolkningsregler
-          key={analytt.kode}
-          utgave={regler.regelsett[analytt.kode] ?? null}
-          publisert={publisert.regelsett[analytt.kode] ?? null}
-          redigerer={redigerer}
-          onLagre={(innhold, grunnlag) => handlinger.lagreRegelsett(analytt.kode, innhold, grunnlag)}
-          hentNyeste={() => handlinger.hentRegelsettutkast(analytt.kode)}
-          seksjonsid={seksjon.seksjon}
-          {...(tittel && { tittel })}
-        />
-      ))}
-    </>
-  )
-}
-

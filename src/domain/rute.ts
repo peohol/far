@@ -1,4 +1,4 @@
-import { FORTOLKNINGSSEKSJON, fortolkningsseksjonFor } from './koblinger'
+import { ANALYTTKATALOG } from './analyttkatalog'
 import { STOFFREGISTER, stoffslug, type Stoffregister } from './stoffregister'
 
 /**
@@ -10,6 +10,11 @@ import { STOFFREGISTER, stoffslug, type Stoffregister } from './stoffregister'
  * diskusjoner og et varsel kan lede dit:
  *
  *   #/fortolkning/hbup
+ *
+ * Administratorene redigerer reglene og kommentarene fortolkningen gir, på en
+ * egen adresse under den:
+ *
+ *   #/fortolkning/hbup/rediger
  *
  * Resten av tilstanden i fortolkningen — søket, valget i steg 2 — lever i
  * appen, ikke i adressefeltet. Fagsidene har hver sin adresse, slik at de kan
@@ -40,6 +45,8 @@ import { STOFFREGISTER, stoffslug, type Stoffregister } from './stoffregister'
  * - `#/analytt/HBUP` går til stoffsiden analytten primært er koblet til,
  *   `#/stoff/bupropion`. En analytt uten et slikt stoff har ingen fagside, og
  *   adressen åpner fortolkningen.
+ * - `#/analytt/HBUP/fortolkning` pekte på reglene, som nå står på
+ *   fortolkningssiden, og går dit: `#/fortolkning/hbup`.
  *
  * Søket i fagstoffet har sin egen side, med søket i adressen, så et søk kan
  * bokmerkes og deles:
@@ -56,6 +63,8 @@ export type Rute =
       side: 'fortolkning'
       /** Nøkkelen til analytten som fortolkes ({@link fortolkningsnokkel}). Utelatt uten analytt. */
       analytt?: string
+      /** Reglene og kommentarene for analytten redigeres. Bare med en analytt. */
+      rediger?: true
     }
   | {
       side: 'stoff'
@@ -73,7 +82,10 @@ export type Rute =
 
 export const FORTOLKNING: Rute = { side: 'fortolkning' }
 
-const FORTOLKNINGSSIDE = /^#\/fortolkning\/([a-z0-9]+(?:-[a-z0-9]+)*)\/?$/i
+const FORTOLKNINGSSIDE = /^#\/fortolkning\/([a-z0-9]+(?:-[a-z0-9]+)*)(\/rediger)?\/?$/i
+
+/** Det siste leddet i adressen til redigeringen av en fortolkning. */
+const REDIGER = 'rediger'
 
 /**
  * Nøkkelen til fortolkningssiden for en analyttkode, slik den står i adressen
@@ -94,7 +106,20 @@ export function fortolkningsrute(kode?: string | null): Rute {
   return analytt ? { side: 'fortolkning', analytt } : FORTOLKNING
 }
 
+/** Ruten til redigeringen av reglene og kommentarene for analytten med koden. */
+export function redigeringsrute(kode: string): Rute {
+  return { side: 'fortolkning', analytt: fortolkningsnokkel(kode), rediger: true }
+}
+
+/** Sant når ruten er redigeringen av en fortolkning. */
+export function erRedigering(rute: Rute): boolean {
+  return rute.side === 'fortolkning' && rute.rediger === true
+}
+
 const STOFF = /^#\/stoff\/([^/?#]+)((?:\/[^/?#]+)*)\/?$/i
+
+/** Seksjonen med reglene på de gamle sidene for en analyttkode. */
+const GAMMEL_REGELSEKSJON = 'fortolkning'
 
 /** Adressene fra før fagsidene fikk stoffets nøkkel. Leses bare for å sende videre. */
 const GAMMEL_ANALYTT = /^#\/analytt\/([^/?#]+)((?:\/[^/?#]+)*)\/?$/i
@@ -121,7 +146,10 @@ export function lesRute(hash: string, register: Stoffregister = STOFFREGISTER): 
   if (sok) return { side: 'sok', q: new URLSearchParams(sok[1] ?? '').get('q') ?? '' }
   if (STOFFREGISTERSIDE.test(hash)) return { side: 'stoffregister' }
   const fortolkning = FORTOLKNINGSSIDE.exec(hash)
-  if (fortolkning?.[1]) return { side: 'fortolkning', analytt: fortolkning[1].toLowerCase() }
+  if (fortolkning?.[1]) {
+    const analytt = fortolkning[1].toLowerCase()
+    return fortolkning[2] ? { side: 'fortolkning', analytt, rediger: true } : { side: 'fortolkning', analytt }
+  }
   const stoff = lesSide(STOFF, hash)
   if (stoff) {
     // Et kjent navn eller alias fører til stoffets nøkkel; en nøkkel
@@ -131,16 +159,13 @@ export function lesRute(hash: string, register: Stoffregister = STOFFREGISTER): 
   }
   const analytt = lesSide(GAMMEL_ANALYTT, hash)
   if (analytt) {
+    // Seksjonen «fortolkning» på den gamle siden for koden var reglene, som
+    // nå står på fortolkningssiden til modulen koden fortolkes i.
+    if (analytt.sted?.[0] === GAMMEL_REGELSEKSJON) {
+      return fortolkningsrute(ANALYTTKATALOG.finn(analytt.nokkel)?.fortolkning.kode)
+    }
     const tilStoff = register.primartStoffFor(analytt.nokkel)
-    if (!tilStoff) return FORTOLKNING
-    // Seksjonen med fortolkningsreglene het «fortolkning» på den gamle
-    // siden for koden; på stoffsiden står reglene for koden i sin seksjon.
-    const [forste, ...resten] = analytt.sted ?? []
-    const sted =
-      forste === FORTOLKNINGSSEKSJON
-        ? [fortolkningsseksjonFor(analytt.nokkel, register) ?? FORTOLKNINGSSEKSJON, ...resten]
-        : analytt.sted
-    return stoffrute(tilStoff.slug, sted)
+    return tilStoff ? stoffrute(tilStoff.slug, analytt.sted) : FORTOLKNING
   }
   return FORTOLKNING
 }
@@ -153,11 +178,13 @@ function stoffrute(stoff: string, sted?: readonly string[]): Rute {
  * Den kanoniske adressen når `hash` er en adresse til en fagside skrevet på en
  * annen måte — et navn, et alias eller en gammel analyttadresse — ellers
  * `null`. Appen skriver adressefeltet om til den uten å legge noe nytt i
- * historikken, så den gamle adressen ikke blir stående.
+ * historikken, så den gamle adressen ikke blir stående. En gammel adresse til
+ * reglene for en kode går til fortolkningssiden.
  */
 export function kanoniskAdresse(hash: string, register: Stoffregister = STOFFREGISTER): string | null {
   if (!STOFF.test(hash) && !GAMMEL_ANALYTT.test(hash)) return null
   const rute = lesRute(hash, register)
+  if (rute.side === 'fortolkning' && rute.analytt) return adresse(rute)
   if (rute.side !== 'stoff') return null
   const kanonisk = adresse(rute)
   return kanonisk === hash || kanonisk === hash.replace(/\/$/, '') ? null : kanonisk
@@ -202,7 +229,8 @@ export function adresse(rute: Rute): string {
     case 'stoffregister':
       return STOFFREGISTERADRESSE
     default:
-      return rute.analytt ? `#/fortolkning/${rute.analytt}` : '#/'
+      if (!rute.analytt) return '#/'
+      return rute.rediger ? `#/fortolkning/${rute.analytt}/${REDIGER}` : `#/fortolkning/${rute.analytt}`
   }
 }
 

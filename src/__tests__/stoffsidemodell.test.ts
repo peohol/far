@@ -3,7 +3,7 @@
  * sidemodellen. Innholdet er syntetisk.
  */
 import { describe, expect, it } from 'vitest'
-import { byggSidemodell, publiseringsplan } from '../faginnhold/stoffside'
+import { byggSidemodell, publiseringsplan, regelplan } from '../faginnhold/stoffside'
 import { INGEN_REGLER, TOM_STOFFSIDE, type Regeldata, type Stoffsidedata, type Utgave } from '../faginnhold/lesing'
 import type { Innholdselementinnhold } from '../faginnhold/modell'
 import {
@@ -484,12 +484,18 @@ describe('sidemodellen', () => {
   })
 
   it('publiserer i den rekkefølgen databasen krever, og bare det som er endret', () => {
-    expect(publiseringsplan(side(), regler())).toEqual([
+    expect(publiseringsplan(side())).toEqual([
       { slag: 'referanse', id: 'b', revisjon: 1 },
       { slag: 'infoside', id: 's', revisjon: 2 },
       // Det som er tatt bort fra siden, først, så et kort som bare kan stå én gang, kan legges til på nytt.
       { slag: 'innholdselement', id: 'fjernet', revisjon: 2 },
       { slag: 'innholdselement', id: 'e1', revisjon: 3 },
+    ])
+    expect(publiseringsplan(TOM_STOFFSIDE)).toEqual([])
+  })
+
+  it('publiserer reglene for seg, hvert regelsett etter kommentarene det peker på', () => {
+    expect(regelplan(regler())).toEqual([
       // Regelsettene per analyttkode, i kodenes rekkefølge, hvert etter kommentarene det peker på.
       { slag: 'kommentar', id: 'k1', revisjon: 2 },
       { slag: 'kommentar', id: 'k3', revisjon: 1 },
@@ -503,24 +509,13 @@ describe('sidemodellen', () => {
       { slag: 'kommentar', id: 'k6', revisjon: 1 },
       { slag: 'thc_regelsett', id: 'thc', revisjon: 2 },
     ])
-    expect(publiseringsplan(TOM_STOFFSIDE, INGEN_REGLER)).toEqual([])
+    expect(regelplan(INGEN_REGLER)).toEqual([])
   })
 
-  it('publiserer stoffsiden uten noe om analyttene, og reglene uten noen side', () => {
-    const plan = publiseringsplan(side(), INGEN_REGLER)
+  it('publiserer stoffsiden uten noe om analyttene', () => {
+    const plan = publiseringsplan(side())
     // Stoffsiden har ingen laboratorieanalytt eller komponentsider å publisere.
     expect([...new Set(plan.map((s) => s.slag))]).toEqual(['referanse', 'infoside', 'innholdselement'])
-    // Et stoff i registeret uten side i databasen kan likevel få reglene sine publisert.
-    expect(publiseringsplan(TOM_STOFFSIDE, regler()).map((s) => s.id)).toEqual([
-      'k1',
-      'k3',
-      'rs-andre',
-      'rs-test',
-      'k4',
-      'sc-test',
-      'k6',
-      'thc',
-    ])
   })
 
   it('publiserer ingenting når utkastet er det samme som det publiserte', () => {
@@ -532,7 +527,7 @@ describe('sidemodellen', () => {
       elementer: data.elementer.map(publisert),
       referanser: data.referanser.map(publisert),
     }
-    expect(publiseringsplan(uendret, INGEN_REGLER)).toEqual([])
+    expect(publiseringsplan(uendret)).toEqual([])
   })
 
   it('indekserer siden for søket, med stien til hvert treff', () => {

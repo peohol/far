@@ -2,7 +2,7 @@
  * Redigeringen av THC-syrereglene og -tekstene slik appen lagrer og
  * publiserer den, mot en ekte Postgres bygd av migrasjonene: endringene
  * `thcEndringer` gir, lagret som utkast, og publisert i den rekkefølgen
- * `publiseringsplan` sier. Vanlige brukere ser endringen først når alt er
+ * `regelplan` sier. Vanlige brukere ser endringen først når alt er
  * publisert, og fortolkningen bruker den da.
  */
 import type { PGlite } from '@electric-sql/pglite'
@@ -10,11 +10,10 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import { THC_KODE } from '../domain/thc'
 import { fortolkThc, tomThcInndata } from '../domain/thcMotor'
 import { normalkvantil } from '../domain/thcRegelsett'
-import { publiseringsplan } from '../faginnhold/stoffside'
+import { regelplan } from '../faginnhold/stoffside'
 import { lagFaginnholdslager, Samtidighetskonflikt } from '../faginnhold/lagring'
 import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import { thcEndringer, thcReglerFra, thcUtkastFra, thcUtkastfeil } from '../faginnhold/thcregler'
-import { primareAnalytter } from '../domain/koblinger'
 import { lesRegeldata } from './hjelp/regeldata'
 import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
@@ -62,12 +61,8 @@ describe('redigeringen av THC-syrereglene', () => {
     // Vanlige brukere ser fortsatt det publiserte.
     expect(await bruker.lesThcRegelsett('publisert')).toStrictEqual(publisertFor)
 
-    // Reglene står på THC-siden, fordi THC-syre (IRCAK) er koblet til stoffet
-    // THC i stoffregisteret — ikke fordi siden hører til koden.
-    expect(primareAnalytter('thc').map((a) => a.kode)).toContain(THC_KODE)
-    const side = await admin.lesStoffside('thc', 'utkast')
-    expect(side.stoff).toMatchObject({ slug: 'thc', navn: 'THC' })
-    const plan = publiseringsplan(side, await lesRegeldata(admin, 'thc', 'utkast'))
+    // Reglene redigeres og publiseres på fortolkningssiden for THC-syre (IRCAK).
+    const plan = regelplan(await lesRegeldata(admin, THC_KODE, 'utkast'))
     expect(plan.map((s) => s.slag)).toEqual(['kommentar', 'thc_regelsett'])
     for (const steg of plan) await lager.publiserUtkast(steg.id, steg.revisjon)
 
@@ -79,9 +74,7 @@ describe('redigeringen av THC-syrereglene', () => {
       hentet.modell,
     )
     expect(resultat.type === 'kommentar' && resultat.kommentar).toContain('Syntetisk tillegg.')
-    expect(
-      publiseringsplan(await admin.lesStoffside('thc', 'utkast'), await lesRegeldata(admin, 'thc', 'utkast')),
-    ).toEqual([])
+    expect(regelplan(await lesRegeldata(admin, THC_KODE, 'utkast'))).toEqual([])
   })
 
   it('gir en konflikt når noen andre har lagret i mellomtiden, og skriver ikke over', async () => {

@@ -24,7 +24,7 @@ import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { byggSidemodell, publiseringsplan } from '../faginnhold/stoffside'
 import { lagFaginnholdslager, type Faginnholdslager } from '../faginnhold/lagring'
-import { INGEN_REGLER, TOM_STOFFSIDE, lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
+import { TOM_STOFFSIDE, lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import type { Objektstatus } from '../faginnhold/modell'
 import { ENKELTELEMENTER, PANELER_MED_FASTE_KORT, enkeltnokkel, fasteKort, panelFor } from '../faginnhold/paneler'
 import { SITERING } from '../faginnhold/referanser'
@@ -138,7 +138,7 @@ describe('les_stoff', () => {
 
   it('publiserer hele siden i den rekkefølgen databasen krever', async () => {
     const utkast = await adminleser.lesStoffside('testmiddel', 'utkast')
-    const plan = publiseringsplan(utkast, INGEN_REGLER)
+    const plan = publiseringsplan(utkast)
     expect(plan.map((s) => s.slag)).toEqual(['referanse', 'referanse', 'infoside', 'innholdselement', 'innholdselement'])
     for (const steg of plan) await lager.publiserUtkast(steg.id, steg.revisjon)
 
@@ -147,7 +147,7 @@ describe('les_stoff', () => {
     expect(publisert.infoside).toMatchObject({ id: ider.side, revisjon: 1, publisert_revisjon: 1 })
     expect(publisert.elementer).toHaveLength(2)
     expect(publisert.referanser.map((r) => r.innhold.tittel).sort()).toEqual(['Kilde A', 'Kilde B'])
-    expect(publiseringsplan(await adminleser.lesStoffside('testmiddel', 'utkast'), INGEN_REGLER)).toEqual([])
+    expect(publiseringsplan(await adminleser.lesStoffside('testmiddel', 'utkast'))).toEqual([])
   })
 
   it('nummererer referansene i den rekkefølgen siden viser dem', async () => {
@@ -168,7 +168,7 @@ describe('les_stoff', () => {
 
     const endret = await adminleser.lesStoffside('testmiddel', 'utkast')
     expect(endret.elementer.find((e) => e.id === ider.kort)).toMatchObject({ revisjon: 2, publisert_revisjon: 1 })
-    expect(publiseringsplan(endret, INGEN_REGLER)).toEqual([{ slag: 'innholdselement', id: ider.kort, revisjon: 2 }])
+    expect(publiseringsplan(endret)).toEqual([{ slag: 'innholdselement', id: ider.kort, revisjon: 2 }])
 
     const publisert = await brukerleser.lesStoffside('testmiddel', 'publisert')
     expect(publisert.elementer.find((e) => e.id === ider.kort)?.innhold.data).toMatchObject({ ovre: 20 })
@@ -552,7 +552,7 @@ describe('de faste kortene', () => {
 
     await lager.lagreUtkast(gammelt.id, 1, { ...innhold('Det gamle.'), panel: 'fjernet' })
     await lager.opprettUtkast('innholdselement', innhold('Det nye.'))
-    const plan = publiseringsplan(await adminleser.lesStoffside('toksisk-testmiddel', 'utkast'), INGEN_REGLER)
+    const plan = publiseringsplan(await adminleser.lesStoffside('toksisk-testmiddel', 'utkast'))
     expect(plan[0]).toEqual({ slag: 'innholdselement', id: gammelt.id, revisjon: 2 })
     for (const steg of plan) await lager.publiserUtkast(steg.id, steg.revisjon)
 

@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.80.0',
+    dato: '2026-10-05',
+    sammendrag: 'Fortolkningsreglene redigeres fra fortolkningen, ikke lenger fra fagsidene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Administratorer har en blyant, «Rediger fortolkningen», i toppmenyen mens en fortolkning står åpen. Den åpner en egen side med reglene og kommentarene fortolkningen gir, der du velger hva du vil endre.',
+      'Har fortolkningen flere sett med regler, som en modul med flere koder, står hvert sett for seg med sin egen tittel.',
+      'Endringene lagres som utkast og publiseres fra toppmenyen som på fagsidene. Fortolkningen bruker de nye reglene med en gang de er publisert.',
+      'Fagsidene viser ikke lenger fortolkningsreglene nederst på siden.',
+      'Varsler om endrede regler fører nå til fortolkningen reglene gjelder.',
+    ],
+  },
+  {
     versjon: '1.79.1',
     dato: '2026-10-04',
     sammendrag: 'Utviklingsagenter kan rulle ut ordinære produksjonsmigrasjoner uten ekstra bekreftelse',

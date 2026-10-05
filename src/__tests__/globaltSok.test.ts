@@ -30,7 +30,7 @@ import {
   type Sideleser,
 } from '../faginnhold/globaltSok'
 import { lagFaginnholdslager } from '../faginnhold/lagring'
-import { INGEN_REGLER, lagFaginnholdsleser, type Faginnholdsleser, type Stoffsidedata } from '../faginnhold/lesing'
+import { lagFaginnholdsleser, type Faginnholdsleser, type Stoffsidedata } from '../faginnhold/lesing'
 import { SITERING } from '../faginnhold/referanser'
 import {
   indekserSide,
@@ -83,7 +83,7 @@ async function publisertSide(
     ).id
   }
   const leser = lagFaginnholdsleser(kall.klientFor(admin))
-  for (const steg of publiseringsplan(await leser.lesStoffside(stoffslug(navn), 'utkast'), INGEN_REGLER)) {
+  for (const steg of publiseringsplan(await leser.lesStoffside(stoffslug(navn), 'utkast'))) {
     await lager.publiserUtkast(steg.id, steg.revisjon)
   }
   return { side, ...laget }

@@ -36,14 +36,13 @@ export function regeloppsummering(regelsett: Intervallregelsettinnhold): string 
 }
 
 /**
- * Fortolkningsreglene for en analyttkode, på stoffsiden: seksjonen
+ * Fortolkningsreglene for en analyttkode, på redigeringssiden for
+ * fortolkningen (`Fortolkningsredigering`): seksjonen
  * «Fortolkning» med kommentaren hver konsentrasjon gir, og detaljkortet
  * «Simulator» for å prøve en verdi (se `docs/seksjoner.md`).
  *
- * Regelsettet hører til fortolkningssystemet, etter koden, og er ikke en del
- * av stoffsiden; det vises her fordi koblingen i stoffregisteret sier at
- * stoffet er analyttens primære stoff. Kommentarene det peker
- * på, er egne objekter igjen. I redigeringsmodus kan administratorer endre
+ * Regelsettet hører til fortolkningssystemet, etter koden. Kommentarene det
+ * peker på, er egne objekter igjen. I redigeringen kan administratorer endre
  * reglene og tekstene, se hva som ikke er publisert og åpne historikken — for
  * regelsettet og for hver kommentar.
  */
@@ -55,6 +54,7 @@ export function Fortolkningsregler({
   hentNyeste,
   seksjonsid = FORTOLKNING,
   tittel = 'Fortolkning',
+  apenFraStart,
 }: {
   utgave: Regelsettutgave | null
   /** Det publiserte regelsettet, til å si hva som ikke er publisert ennå. */
@@ -62,10 +62,12 @@ export function Fortolkningsregler({
   redigerer: boolean
   onLagre: RegelredigeringProps['onLagre']
   hentNyeste: RegelredigeringProps['hentNyeste']
-  /** Egen seksjons-ID når flere fortolkningsmoduler står på samme stoffside. */
+  /** Egen seksjons-ID når flere regelsett står på samme redigeringsside. */
   seksjonsid?: string
   /** Egen tittel når det må fremgå hvilken analytt regelsettet gjelder. */
   tittel?: string
+  /** Seksjonen står åpen når den vises. */
+  apenFraStart?: boolean
 }) {
   // En redigering som er i gang, overlever en oppdatering av appen.
   const redigeringsnavn = utgave ? `regler:${utgave.regelsett.id}` : null
@@ -86,6 +88,7 @@ export function Fortolkningsregler({
       ikon={seksjonsikon(FORTOLKNING)}
       tittel={<Uthev tekst={tittel} />}
       oppsummering={regeloppsummering(regelsett)}
+      apenFraStart={apenFraStart}
       handlinger={
         redigerer &&
         !redigeres && (

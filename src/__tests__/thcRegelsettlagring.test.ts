@@ -28,7 +28,6 @@ import {
   type ThcTekster,
 } from '../domain/thcTekster'
 import { lagFaginnholdsleser } from '../faginnhold/lesing'
-import { primareAnalytter } from '../domain/koblinger'
 import { lesRegeldata } from './hjelp/regeldata'
 import { thcReglerFra } from '../faginnhold/thcregler'
 import { THC_MODELL } from './hjelp/thcgrunnlag'
@@ -156,12 +155,10 @@ describe('regelsettet etter migrasjonene', () => {
     const leser = lagFaginnholdsleser(k.klientFor(bruker))
     const regler = thcReglerFra({ status: 'klar', data: await leser.lesThcRegelsett('publisert') }, () => {})
     expect(regler).toEqual({ status: 'klar', modell: THC_MODELL })
-    // THC-siden viser det samme regelsettet, fordi THC-syre er koblet til
-    // stoffet THC i stoffregisteret; et stoff uten koblingen får det ikke.
-    expect(primareAnalytter('thc').map((a) => a.kode)).toContain(THC_KODE)
-    expect((await leser.lesStoffside('thc', 'publisert')).stoff).toMatchObject({ slug: 'thc', navn: 'THC' })
-    expect((await lesRegeldata(leser, 'thc', 'publisert')).thcregelsett).toEqual(await leser.lesThcRegelsett('publisert'))
-    expect((await lesRegeldata(leser, 'amitriptylin', 'publisert')).thcregelsett).toBeNull()
+    // Redigeringen på fortolkningssiden for THC-syre viser det samme
+    // regelsettet; en annen fortolkning får det ikke.
+    expect((await lesRegeldata(leser, THC_KODE, 'publisert')).thcregelsett).toEqual(await leser.lesThcRegelsett('publisert'))
+    expect((await lesRegeldata(leser, 'AMTNORSUM', 'publisert')).thcregelsett).toBeNull()
   })
 
   it('har historikken urørt: importen, rettingen av tallene og flyttingen av tekstene', async () => {

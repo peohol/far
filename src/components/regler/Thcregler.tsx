@@ -19,7 +19,7 @@ import { Thcredigering, type ThcredigeringProps } from './Thcredigering'
 import { Thcsimulator } from './Thcsimulator'
 
 /**
- * Fortolkningsreglene for THC-syre i urin (IRCAK) på stoffsiden for THC
+ * Fortolkningsreglene for THC-syre i urin (IRCAK) på redigeringssiden for fortolkningen
  * (`docs/thc-syre.md`): nivåene, marginene, måleusikkerheten og kurvene
  * konklusjonen avgjøres av, tekstbolkene kommentaren settes sammen av, og en
  * simulator som fortolker med akkurat disse reglene.
@@ -38,14 +38,17 @@ export function Thcregler({
   onLagre,
   seksjonsid = FORTOLKNING,
   tittel = 'Fortolkningsregler',
+  apenFraStart,
 }: {
   utgave: ThcRegelsettutgave
   redigerer: boolean
   onLagre?: ThcredigeringProps['onLagre']
-  /** Egen seksjons-ID når THC-syrereglene deler stoffside med et annet regelsett. */
+  /** Egen seksjons-ID når THC-syrereglene deler redigeringsside med et annet regelsett. */
   seksjonsid?: string
   /** Egen tittel når det må fremgå at reglene gjelder THC-syre i urin. */
   tittel?: string
+  /** Seksjonen står åpen når den vises. */
+  apenFraStart?: boolean
 }) {
   const modell = useMemo(() => tilThcModell(utgave), [utgave])
   const start = useMemo(() => thcUtkastFra(utgave), [utgave])
@@ -72,6 +75,7 @@ export function Thcregler({
             ])
           : 'Reglene er ikke gyldige'
       }
+      apenFraStart={apenFraStart}
       handlinger={
         redigerer &&
         start &&

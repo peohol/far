@@ -72,8 +72,8 @@ står bare én gang, med den siste publiseringen.
 
 Hendelsene lagrer ID-er, og navnene slås opp når varslene leses
 (`mine_varsler()`): en kommentar med navnet sitt, et regelsett med
-analyttkodene, og analyttkoden reglene står under på fagsiden, så varselet
-kan lenke dit. En idékommentar som er slettet, forsvinner fra varselet, og et
+analyttkodene, og analyttkoden reglene hører til, så varselet kan lenke til
+fortolkningen for den. En idékommentar som er slettet, forsvinner fra varselet, og et
 varsel uten hendelser vises ikke. Slettes idéen, går varslene med.
 
 `mine_varsler()` gir alle uleste og de leste fra de siste 30 dagene
@@ -110,7 +110,7 @@ Vinduet viser de uleste under «Nye» og resten under «Tidligere». Et varsel
 leder dit det gjelder, og er lest når man går dit: idéen (`visIde`, som
 `Ideknapp` hører etter), tråden på siden den står på (`visDiskusjon`, som
 `Diskusjonsmeny` hører etter), føringen i endringsloggen (`visEndringslogg`) eller
-reglene på fagsiden. «Merk som lest» og «Merk alle som lest» gjør det
+fortolkningen reglene gjelder. «Merk som lest» og «Merk alle som lest» gjør det
 samme uten å gå noe sted; «Merk alle som lest» gjelder bare kategoriene brukeren har slått på. Tannhjulet åpner innstillingene, der de
 obligatoriske kategoriene står låst.
 

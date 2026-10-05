@@ -98,7 +98,7 @@ export interface Regeldata {
   /**
    * Scenarioregelsettet for hver modul analyttene fortolkes i med
    * scenarioregler, etter modulens ID. Hentes bare til redigeringen;
-   * lesemodusen viser dem appen alt har hentet (`Scenarioreglerkilde`).
+   * fortolkningen bruker dem appen alt har hentet (`Scenarioreglerkilde`).
    */
   scenarioregelsett: Readonly<Record<string, Scenarioregelsettutgave>>
 }

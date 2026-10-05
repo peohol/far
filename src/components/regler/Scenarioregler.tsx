@@ -8,7 +8,6 @@ import { revisjonsnokkel, type Scenarioregelsettutgave } from '../../faginnhold/
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
 import { kommentaroppslag } from '../../regler/kommentarer'
 import { scenariofelter, tilScenarioutkast, utkastfelter, type Scenarioutkast } from '../../regler/scenarioredigering'
-import { stoffadresse } from '../../domain/rute'
 import type { Analyte } from '../../types'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
@@ -18,7 +17,6 @@ import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
 import { kommentarnavnoppslag, Regelhistorikk, upubliserteFelt } from './Regelhistorikk'
 import { Koder, provKjor, Scenariovilkar, Simulator } from './Scenariodeler'
 import { Scenarioredigering } from './Scenarioredigering'
-import { useScenarioreglerkilde } from './Scenarioreglerkilde'
 
 /** Det redigeringen av scenarioreglene trenger: utkastet, det publiserte og lagringen. */
 export interface Scenarioredigeringskilde {
@@ -35,27 +33,20 @@ export interface Scenarioredigeringskilde {
 }
 
 /**
- * Regelsettet fortolkningsmodulen bruker for denne analytten, med navnene på
- * analyttene og kommentarene regelsettet viser til: det publiserte, eller
- * utkastet når `redigering` er gitt. `null` når modulen ikke fortolkes med
- * scenarioregler, eller reglene ikke er hentet.
+ * Utkastet til regelsettet modulen fortolkes med, med navnene på analyttene og
+ * kommentarene regelsettet viser til. `null` når modulen ikke fortolkes med
+ * scenarioregler, eller utkastet ikke er hentet.
  */
 export function useScenarioreglerFor(
-  fortolkning: Analyte | null,
-  redigering: Scenarioredigeringskilde | null = null,
+  fortolkning: Analyte,
+  redigering: Scenarioredigeringskilde | null,
 ): ScenarioreglerProps | null {
-  const { tilstand } = useScenarioreglerkilde()
   return useMemo(() => {
-    const modul = fortolkning && rusModulFor(fortolkning)
-    if (!modul) return null
-    if (redigering) {
-      const { utgave } = redigering
-      return { modul, regelsett: utgave.regelsett.innhold, kommentarer: kommentaroppslag(utgave.kommentarer), redigering }
-    }
-    if (tilstand.status !== 'klar') return null
-    const utgave = tilstand.regler.regelsett.get(modul.id)
-    return utgave ? { modul, regelsett: utgave.innhold, kommentarer: tilstand.regler.kommentarer } : null
-  }, [fortolkning, tilstand, redigering])
+    const modul = rusModulFor(fortolkning)
+    if (!modul || !redigering) return null
+    const { utgave } = redigering
+    return { modul, regelsett: utgave.regelsett.innhold, kommentarer: kommentaroppslag(utgave.kommentarer), redigering }
+  }, [fortolkning, redigering])
 }
 
 export interface ScenarioreglerProps {
@@ -63,29 +54,18 @@ export interface ScenarioreglerProps {
   regelsett: Scenarioregelsett
   /** Kommentarobjektene scenariene peker på. */
   kommentarer: Kommentaroppslag
-  /** For administratorer i redigeringsmodus. Da er det utkastet som vises. */
+  /** For administratorer i redigeringen. Da er det utkastet som vises. */
   redigering?: Scenarioredigeringskilde
-  /**
-   * De andre stoffsidene som viser de samme reglene, fordi kodene deres
-   * fortolkes i samme modul: oksazepam på diazepamsiden, morfin på
-   * kodeinsiden. Én side per navn, med koden som åpner den.
-   */
-  delesMed?: readonly Delingsside[]
-  /** Egen seksjons-ID når flere fortolkningsmoduler står på samme stoffside. */
+  /** Egen seksjons-ID når flere deler av reglene står på samme side. */
   seksjonsid?: string
   /** Egen tittel når det må fremgå hvilken analytt regelsettet gjelder. */
   tittel?: string
-}
-
-/** En annen side som deler reglene og kommentarene. */
-export interface Delingsside {
-  navn: string
-  /** Stoffets nøkkel i stoffregisteret. */
-  slug: string
+  /** Seksjonen står åpen når den vises. */
+  apenFraStart?: boolean
 }
 
 /**
- * Fortolkningsreglene på stoffsiden, for moduler som fortolkes med
+ * Fortolkningsreglene på redigeringssiden for fortolkningen, for moduler som fortolkes med
  * scenarioregler (`docs/scenarioregler.md`): grensene, scenariene — hva som er
  * påvist, vilkårene og utfallet — og kommentarene scenariene viser til,
  * nummerert, så hver står bare én gang.
@@ -96,7 +76,7 @@ export interface Delingsside {
  * ingenting å kopiere.
  *
  * Reglene er seksjonen `fortolkning` på siden, og kommentartekstene og
- * simulatoren detaljkort i den (`docs/seksjoner.md`). I redigeringsmodus kan
+ * simulatoren detaljkort i den (`docs/seksjoner.md`). I redigeringen kan
  * administratorer endre grensene og tekstene, se hva som ikke er publisert og
  * åpne historikken — for regelsettet og for hver kommentar.
  */
@@ -105,9 +85,9 @@ export function Scenarioregler({
   regelsett,
   kommentarer,
   redigering,
-  delesMed = [],
   seksjonsid = 'fortolkning',
   tittel = 'Fortolkningsregler',
+  apenFraStart,
 }: ScenarioreglerProps) {
   const beskrivelse = useMemo(() => beskrivRegelsett(regelsett, kommentarer), [regelsett, kommentarer])
   const [inndata, setInndata] = useState<RusInndata>(TOM_RUS_INNDATA)
@@ -130,6 +110,7 @@ export function Scenarioregler({
         antall(beskrivelse.scenarier.length, 'scenario', 'scenarier'),
         ...beskrivelse.grenser.map((g) => `${g.navn}: ${g.prosent}`),
       ])}
+      apenFraStart={apenFraStart}
       handlinger={
         redigering &&
         !redigeres && (
@@ -140,7 +121,6 @@ export function Scenarioregler({
       }
       className="regler"
     >
-      {delesMed.length > 0 && <Delingsmerknad sider={delesMed} redigering={Boolean(redigering)} />}
       {redigeringsmodus ? (
         // Utkastet tas vare på mot revisjonene det bygger på, og kommer bare
         // tilbake så lenge ingen andre har lagret i mellomtiden.
@@ -239,34 +219,6 @@ export function Scenarioregler({
         />
       )}
     </Seksjon>
-  )
-}
-
-/**
- * Sier at reglene og kommentartekstene er de samme på de andre sidene, med
- * lenker dit. De er ett objekt i databasen, så det finnes bare ett sted å
- * redigere dem, uansett hvilken av sidene redaktøren står på.
- */
-function Delingsmerknad({ sider, redigering }: { sider: readonly Delingsside[]; redigering: boolean }) {
-  return (
-    <p className="regler__deling">
-      <Uthev tekst="Reglene og kommentartekstene er felles med " />
-      {sider.map((s, i) => (
-        <span key={s.slug}>
-          {i > 0 && (i === sider.length - 1 ? ' og ' : ', ')}
-          <a href={stoffadresse(s.slug)}>
-            <Uthev tekst={s.navn} />
-          </a>
-        </span>
-      ))}
-      <Uthev
-        tekst={
-          redigering
-            ? '. En endring her gjelder også der, og det er de samme tekstene som redigeres fra alle sidene.'
-            : '.'
-        }
-      />
-    </p>
   )
 }
 
