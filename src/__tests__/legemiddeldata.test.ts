@@ -747,6 +747,9 @@ describe('preparatene og interaksjonene på stoffsiden', () => {
     )
     const mange = Array.from({ length: 101 }, (_, i) => `N06AA${i}`)
     await expect(leser.interaksjoner({ atc: mange, virkestoff: [] })).rejects.toThrow(/For mange ATC-koder/)
+    await expect(leser.interaksjoner({ atc: ['N05AH04ALTFORELANG'], virkestoff: [] })).rejects.toThrow(
+      /Ugyldig ATC-kode/,
+    )
   })
 })
 
