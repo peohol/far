@@ -9,6 +9,7 @@ const TILLEGG = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_farmakogene
 const VIRKNINGER_OG_AVHENGIGHET = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_virkninger_og_avhengighet.sql'))!
 const FULLFORING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_fullforing.sql'))!
 const FERSK_KJORING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_fersk_kjoring.sql'))!
+const KONSENTRASJONER_NMOL = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_konsentrasjoner_nmol_l.sql'))!
 const FORSTE_IMPORTMIGRASJON = '20260923072247'
 
 interface Element {
@@ -57,7 +58,7 @@ describe('kvetiapinmigrasjoner uten kuratorprofil', () => {
   it('hopper over fagoppdateringene på en helt fersk database', async () => {
     const tom = await nyDatabase({ til: FORSTE_KURATERING })
     await expect(
-      kjorMigrasjoner(tom, { bare: [FORSTE_KURATERING, KORRIGERING, TILLEGG, VIRKNINGER_OG_AVHENGIGHET, FULLFORING, FERSK_KJORING] }),
+      kjorMigrasjoner(tom, { bare: [FORSTE_KURATERING, KORRIGERING, TILLEGG, VIRKNINGER_OG_AVHENGIGHET, FULLFORING, FERSK_KJORING, KONSENTRASJONER_NMOL] }),
     ).resolves.toBeUndefined()
     await tom.close()
   }, 240_000)
@@ -150,7 +151,7 @@ describe('kvetiapin-monografkuratering', () => {
   beforeAll(async () => {
     db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
     await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
-    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: FERSK_KJORING, kurateringer: true })
+    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: KONSENTRASJONER_NMOL, kurateringer: true })
 
     // Begge kvetiapinoppdateringene skal tåle å kjøres på nytt.
     await kjorMigrasjoner(db, { bare: [KORRIGERING] })
@@ -397,7 +398,7 @@ describe('kvetiapin-monografkuratering', () => {
     const grunnlag = tdm.find((e) => e.data.tittel === 'Grunnlag for referanseområdet')
     expect(grunnlag).toBeDefined()
     expect(tekst(grunnlag!.data)).toContain('50–700 nmol/L')
-    expect(tekst(grunnlag!.data)).toContain('100–500 ng/mL')
+    expect(tekst(grunnlag!.data)).toContain('260–1 300 nmol/L')
     expect(tekst(grunnlag!.data)).toContain('skal derfor ikke erstatte')
     expect(grunnlag!.referanser).toHaveLength(2)
 
@@ -414,6 +415,30 @@ describe('kvetiapin-monografkuratering', () => {
       { elementtype: 'referanseomrade', nedre: 50, ovre: 700 },
       { elementtype: 'toksisk_omrade', nedre: 3600, ovre: null },
     ])
+  })
+
+  it('viser alle redaksjonelle kvetiapinkonsentrasjoner som nmol/L', async () => {
+    const toksiske = toksisitet.find((e) => e.data.tittel === 'Toksiske konsentrasjoner')!
+    expect(tekst(toksiske.data)).toContain('10 400 nmol/L')
+    expect(tekst(toksiske.data)).toContain('5 200 nmol/L')
+    expect(tekst(toksiske.data)).not.toMatch(/mg\/L|ng\/mL|mg\/kg/)
+
+    const tdm = await elementer(db, 'tdm')
+    const grunnlag = tdm.find((e) => e.data.tittel === 'Grunnlag for referanseområdet')!
+    expect(tekst(grunnlag.data)).toContain('260–1 300 nmol/L')
+    expect(tekst(grunnlag.data)).not.toMatch(/mg\/L|ng\/mL|mg\/kg/)
+
+    const { rows } = await db.query<{ n: number }>(
+      `select count(*)::int as n
+       from public.innholdselementer e
+       join public.infosider s on s.objekt_id=e.infoside_id and s.tilstand='publisert' and s.slug='kvetiapin'
+       join public.objekttilstander p on p.objekt_id=e.objekt_id and p.tilstand='publisert'
+       join public.objektrevisjoner r on r.objekt_id=e.objekt_id and r.revisjon=p.revisjon
+       where e.tilstand='publisert'
+         and e.panel <> 'fjernet'
+         and r.innhold::text ~* '(mg/L|ng/mL|mg/kg|µg/L|ug/L|μg/L)'`,
+    )
+    expect(rows[0]?.n).toBe(0)
   })
 
   it('prioriterer Janusmed og LactMed i graviditet og amming', () => {
