@@ -5,12 +5,15 @@
  * - `cliSetninger` deler fila i setninger nøyaktig slik Supabase-CLI-en gjør det
  *   når den lagrer en migrasjon i historikken (`supabase db push`), så
  *   kontrollen kan sammenligne teksten eksakt.
+ * - `ikkeAtomiske` finner det som gjør at CLI-en ikke kjører migrasjonen i én
+ *   transaksjon, så en feil underveis kan etterlate den halvveis utført.
  * - `utenKommentarer` tar bort kommentarene, så en destruktiv setning ikke
  *   gjemmes av en kommentar mellom ordene (`drop /* … *\/ table`).
  *
- * Delingen er overført uendret fra CLI-en versjon 2.117.0 (som er låst i
- * `package.json`), `apps/cli/src/command-internal/legacy-sql-split.ts`
- * (`legacySplitAndTrim`), MIT-lisens, © Supabase. Den har særheter (som `\`
+ * Delingen og reglene for transaksjonen er overført uendret fra CLI-en versjon
+ * 2.117.0 (som er låst i `package.json`), `apps/cli/src/command-internal/`
+ * `legacy-sql-split.ts` (`legacySplitAndTrim`), `legacy-migration-file.ts` og
+ * `legacy-migration-apply.ts`, MIT-lisens, © Supabase. Den har særheter (som `\`
  * utenfor strenger) som må beholdes for at tekstene skal bli like; oppgraderes
  * CLI-en, kontrolleres den mot den nye versjonen.
  */
@@ -173,6 +176,65 @@ export function cliSetninger(sql: string): string[] {
   }
   if (acc.length > 0) legg(acc)
   return setninger
+}
+
+/** Første linje i en fil CLI-en kjører uten transaksjon (pg-delta). */
+const UTEN_TRANSAKSJON = '-- pg-delta: transaction=false'
+
+/** Setningene PostgreSQL ikke kjører i en transaksjon; CLI-en kjører dem for seg, utenfor. */
+const UTENFOR_TRANSAKSJONEN: ReadonlyArray<readonly [RegExp, string]> = [
+  [/^CREATE\s+(?:UNIQUE\s+)?INDEX\s+CONCURRENTLY(?:\s|$)/u, 'create index concurrently'],
+  [/^DROP\s+INDEX\s+CONCURRENTLY(?:\s|$)/u, 'drop index concurrently'],
+  [/^REINDEX(?:\s|\().*\sCONCURRENTLY(?:\s|$)/u, 'reindex concurrently'],
+  [/^VACUUM(?:\s|\(|$)/u, 'vacuum'],
+  [/^ALTER\s+SYSTEM(?:\s|$)/u, 'alter system'],
+  [/^CLUSTER(?:\s|$)/u, 'cluster'],
+]
+const TRANSAKSJONSKONTROLL = /^(?:BEGIN|START\s+TRANSACTION|COMMIT|END|ABORT|PREPARE\s+TRANSACTION)(?:\s|$)/u
+
+/** Setningen slik CLI-en leser starten: uten BOM, blanke tegn og kommentarer foran, med store bokstaver. */
+function starten(sql: string): string {
+  const fjernBlanke = (tekst: string) => tekst.replace(/^[ \t\n\r]+/u, '')
+  let rest = fjernBlanke(sql)
+  while (rest.charCodeAt(0) === 0xfeff) rest = fjernBlanke(rest.slice(1))
+  for (;;) {
+    if (rest.startsWith('--')) {
+      const i = rest.indexOf('\n')
+      if (i < 0) return ''
+      rest = fjernBlanke(rest.slice(i + 1))
+    } else if (rest.startsWith('/*')) {
+      const i = rest.indexOf('*/')
+      if (i < 0) return rest.toUpperCase()
+      rest = fjernBlanke(rest.slice(i + 2))
+    } else {
+      return rest.trim().toUpperCase()
+    }
+  }
+}
+
+/** En setning som åpner, avslutter eller ruller tilbake en transaksjon (ikke `rollback to`). */
+function styrerTransaksjonen(start: string): boolean {
+  const ord = start.split(/\s+/u)
+  if (ord[0] === 'ROLLBACK') return ord[ord[1] === 'WORK' || ord[1] === 'TRANSACTION' ? 2 : 1] !== 'TO'
+  return TRANSAKSJONSKONTROLL.test(start)
+}
+
+/**
+ * Det som gjør at CLI-en ikke kjører hele migrasjonen og raden i historikken i
+ * én transaksjon: setninger som må kjøres utenfor en transaksjon, setninger som
+ * styrer transaksjonen selv (`begin`, `commit` …), eller pg-delta-linjen som slår
+ * transaksjonen av. Tom når migrasjonen er atomisk.
+ */
+export function ikkeAtomiske(sql: string): string[] {
+  const utenBom = sql.charCodeAt(0) === 0xfeff ? sql.slice(1) : sql
+  const funnet = new Set<string>()
+  if (utenBom.split('\n', 1)[0]!.replace(/\r$/, '') === UTEN_TRANSAKSJON) funnet.add(UTEN_TRANSAKSJON)
+  for (const setning of cliSetninger(sql)) {
+    const start = starten(setning)
+    for (const [monster, navn] of UTENFOR_TRANSAKSJONEN) if (monster.test(start)) funnet.add(navn)
+    if (styrerTransaksjonen(start)) funnet.add('begin/commit')
+  }
+  return [...funnet]
 }
 
 /**

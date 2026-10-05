@@ -15,7 +15,7 @@
  * `scripts/kontroller-migrasjoner.ts` skriver spørringen.
  */
 import { createHash } from 'node:crypto'
-import { cliSetninger, utenKommentarer } from './sqlsetninger'
+import { cliSetninger, ikkeAtomiske, utenKommentarer } from './sqlsetninger'
 
 /** `<versjon>_<navn>.sql`: versjonen er 14 sifre (UTC-tidspunkt), navnet små bokstaver, tall og understrek. */
 export const MIGRASJONSFILNAVN = /^(\d{14})_([a-z0-9_]+)\.sql$/
@@ -237,6 +237,26 @@ export function destruktivfeil(filer: readonly Migrasjonsfil[]): string[] {
   })
 }
 
+/**
+ * Feilmeldingene for filer CLI-en ikke ville kjørt i én transaksjon
+ * (`ikkeAtomiske`). En feil underveis kunne da etterlate migrasjonen halvveis
+ * utført og uregistrert, så neste utrulling kjørte den på nytt. Slike rulles
+ * aldri ut automatisk; det finnes ikke noe merke som slipper dem gjennom.
+ */
+export function ikkeAtomiskfeil(filer: readonly Migrasjonsfil[]): string[] {
+  return filer.flatMap((f) => {
+    const funnet = ikkeAtomiske(f.innhold)
+    if (!funnet.length) return []
+    return [
+      `${filnavn(f)}: inneholder ${funnet.join(', ')}, som gjør at den ikke kjøres i én transaksjon. ` +
+        'Den rulles ikke ut automatisk; gjør den atomisk eller del den opp (docs/migrasjoner.md).',
+    ]
+  })
+}
+
+/** Det som stopper en migrasjon fra å rulles ut automatisk, både i CI og før utrullingen. */
+export const utrullingsfeil = (filer: readonly Migrasjonsfil[]) => [...destruktivfeil(filer), ...ikkeAtomiskfeil(filer)]
+
 export const filnavn = (f: Migrasjonsfil) => `${f.versjon}_${f.navn}.sql`
 
 /**
@@ -250,6 +270,7 @@ export const filnavn = (f: Migrasjonsfil) => `${f.versjon}_${f.navn}.sql`
  * - En ny migrasjon har en versjon som ikke er nyere enn alle på grenen, så den
  *   ville kjørt i en annen rekkefølge i testene enn i produksjonen.
  * - En ny eller endret migrasjon har destruktive setninger uten godkjenning.
+ * - En ny eller endret migrasjon ville ikke blitt kjørt i én transaksjon.
  */
 export function endringsfeil(
   grunn: readonly Migrasjonsfil[],
@@ -272,7 +293,7 @@ export function endringsfeil(
       feil.push(`${filnavn(f)}: versjonen er ikke nyere enn den nyeste migrasjonen på grenen (${nyeste}); gi fila et nytt tidspunkt`)
   }
   const endrede = pr.filter((f) => iGrunn.has(filnavn(f)) && iGrunn.get(filnavn(f))!.innhold !== f.innhold)
-  return [...feil, ...destruktivfeil([...nye, ...endrede])]
+  return [...feil, ...utrullingsfeil([...nye, ...endrede])]
 }
 
 /**

@@ -13,7 +13,8 @@ Reglene for hva en migrasjon kan inneholde, står i `supabase/CLAUDE.md`.
    - `npm run kontroller:migrasjoner -- --mot …`: filnavnene, at ingen
      migrasjon som er kjørt i produksjonen er endret, fjernet eller omdøpt, at
      nye migrasjoner er nyere enn dem på `main`, og at ingen ny migrasjon har
-     destruktive setninger uten godkjenning (under);
+     destruktive setninger uten godkjenning eller ikke kan kjøres i én
+     transaksjon (under);
    - `npm test`, som kjører alle migrasjonene i en database i minnet;
    - `npm run build`.
 3. **PR-en slås sammen.** For en ordinær, testet migrasjon er sammenslåingen
@@ -22,13 +23,14 @@ Reglene for hva en migrasjon kan inneholde, står i `supabase/CLAUDE.md`.
    når en sammenslåing til `main` endrer `supabase/migrations/`:
    - *forkontroll*: historikken i produksjonen stemmer med filene, produksjonen
      har ingen migrasjon uten fil, ingen ventende migrasjon er destruktiv uten
-     godkjenning, og en tørrkjøring av `supabase db push` planlegger nøyaktig de
+     godkjenning eller ikke-atomisk, og en tørrkjøring av `supabase db push` planlegger nøyaktig de
      migrasjonene produksjonen mangler;
    - *utrullingen*: `supabase db push` kjører bare de som mangler, hver i én
      transaksjon sammen med raden i historikken;
    - *etterkontroll*: historikken stemmer nøyaktig med alle filene.
 5. **Feiler et steg, stopper kjøringen** med feilen i loggen og sammendraget,
-   og ingenting mer rulles ut. En migrasjon som feiler, er rullet tilbake.
+   og ingenting mer rulles ut. En migrasjon som feiler, er rullet tilbake, siden
+   bare atomiske migrasjoner rulles ut (under).
 
 Kjøringene står under *Actions → Produksjonsmigrering* i GitHub. Der kan den
 også startes på nytt med *Run workflow* (bare på `main`).
@@ -64,6 +66,18 @@ en annen database, for å prøve dem lokalt.
   migrasjonen. Andre risikoer i regelen (bred sletting, endringer i
   RLS/grants, lange låser) lar seg ikke skille ut sikkert maskinelt, og vurderes
   før PR-en slås sammen.
+- **Bare atomiske migrasjoner.** At en migrasjon som feiler, er rullet tilbake,
+  gjelder bare når CLI-en kjører den i én transaksjon. Det gjør den ikke når fila
+  har `begin`, `commit` eller andre setninger som styrer transaksjonen,
+  setninger PostgreSQL ikke kjører i en transaksjon (`create`/`drop index
+  concurrently`, `reindex … concurrently`, `vacuum`, `alter system`, `cluster`),
+  eller første linjen `-- pg-delta: transaction=false`. Da kan en feil etterlate
+  den halvveis utført og uregistrert, og neste utrulling kjører hele fila på
+  nytt. Slike migrasjoner stoppes derfor både i CI og før utrullingen, uten noe
+  merke som slipper dem gjennom (samme regler som CLI-en, i
+  `src/faginnhold/sqlsetninger.ts`). Gjør migrasjonen atomisk (for eksempel
+  `create index` uten `concurrently`, og uten `begin`/`commit`), eller del den
+  opp. Trengs en slik setning likevel, er det en egen plan utenom automatikken.
 
 ## Oppsettet i GitHub
 
@@ -121,5 +135,6 @@ kjørt, og hvorfor. De vises igjen om fila eller teksten endres.
 | *annet innhold enn det som ble kjørt* | Fila er endret etter at den ble kjørt. Sett den tilbake; en retting er en ny migrasjon. |
 | *registrert med en annen versjon* | Den samme migrasjonen er kjørt under en annen versjon. Gi fila den versjonen. |
 | *inneholder drop table …* | Destruktiv uten godkjenningsmerket (over). |
+| *… som gjør at den ikke kjøres i én transaksjon* | Ikke-atomisk (over). Gjør den atomisk eller del den opp. |
 | *Tørrkjøringen planlegger andre migrasjoner …* | CLI-en og kontrollen er uenige om hva som mangler. Ingenting er endret; finn årsaken før noe rulles ut. |
-| En SQL-feil under utrullingen | Migrasjonen er rullet tilbake og ikke registrert, og de etter den er ikke kjørt. Siden den ikke er kjørt, kan den rettes i en ny PR. |
+| En SQL-feil under utrullingen | Migrasjonen (som er atomisk, over) er rullet tilbake og ikke registrert, og de etter den er ikke kjørt. Siden den ikke er kjørt, kan den rettes i en ny PR. |

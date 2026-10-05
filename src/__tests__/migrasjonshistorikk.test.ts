@@ -9,11 +9,14 @@ import {
   endringsfeil,
   filnavnfeil,
   historikkSql,
+  ikkeAtomiskfeil,
   KJENTE_AVVIK,
   lesMigrasjonsfil,
   md5,
+  utrullingsfeil,
   ventendeMigrasjoner,
 } from '../faginnhold/migrasjonshistorikk'
+import { ikkeAtomiske } from '../faginnhold/sqlsetninger'
 import { migrasjonsfiler } from './hjelp/testdatabase'
 
 const MAPPE = fileURLToPath(new URL('../../supabase/migrations', import.meta.url))
@@ -259,6 +262,57 @@ describe('endringene i en PR', () => {
     expect(endringsfeil(grunn, [...grunn, fil('20261001000002_c.sql', 'truncate a;')], { kjente: {} })).toEqual([
       expect.stringContaining('20261001000002_c.sql: inneholder truncate'),
     ])
+  })
+
+  it('stopper en ny migrasjon som ikke kjøres i én transaksjon', () => {
+    const ny = fil('20261001000002_c.sql', '-- destruktiv-godkjent: hjelper ikke\ncreate index concurrently i on a (t);')
+    expect(endringsfeil(grunn, [...grunn, ny], { kjente: {} })).toEqual([
+      expect.stringContaining('20261001000002_c.sql: inneholder create index concurrently, som gjør at den ikke kjøres i én transaksjon'),
+    ])
+  })
+})
+
+describe('ikke-atomiske migrasjoner', () => {
+  const fil = (innhold: string) => lesMigrasjonsfil('20261001000000_a.sql', innhold)
+
+  it('finner det som gjør at CLI-en ikke kjører migrasjonen i én transaksjon', () => {
+    expect(
+      ikkeAtomiske(`create unique index concurrently i on a (t);
+        /* forklaring */ drop index concurrently j;
+        reindex (verbose) table concurrently a; vacuum (analyze) a; alter system set x = 1; cluster a;`),
+    ).toEqual([
+      'create index concurrently',
+      'drop index concurrently',
+      'reindex concurrently',
+      'vacuum',
+      'alter system',
+      'cluster',
+    ])
+    for (const sql of ['begin;\ncreate table a ();\ncommit;', 'start transaction; select 1;', 'select 1; rollback;', 'end;'])
+      expect(ikkeAtomiske(sql), sql).toEqual(['begin/commit'])
+    expect(ikkeAtomiske('-- pg-delta: transaction=false\r\nselect 1;')).toEqual(['-- pg-delta: transaction=false'])
+  })
+
+  it('lar vanlige migrasjoner være, også funksjoner og blokker med begin og end', () => {
+    const vanlig = `create function f() returns void language plpgsql as $$ begin perform 1; end; $$;
+      do $$ begin create index concurrently_navn on a (t); end $$;
+      create function g() returns int language sql begin atomic select 1; end;
+      create index i on a (t); -- vacuum gjøres ikke her
+      savepoint s; rollback to savepoint s; release s;`
+    expect(ikkeAtomiske(vanlig)).toEqual([])
+    expect(ikkeAtomiskfeil([fil(vanlig)])).toEqual([])
+  })
+
+  it('stoppes uten noe merke som slipper dem gjennom', () => {
+    expect(ikkeAtomiskfeil([fil('-- destruktiv-godkjent: Peder\nvacuum a;')])).toEqual([
+      expect.stringContaining('20261001000000_a.sql: inneholder vacuum'),
+    ])
+    expect(utrullingsfeil([fil('drop table a;\nvacuum;')])).toHaveLength(2)
+  })
+
+  it('finnes ikke blant migrasjonene som er kjørt', () => {
+    const treff = migrasjonsfiler().filter((f) => ikkeAtomiske(readFileSync(`${MAPPE}/${f}`, 'utf8')).length)
+    expect(treff).toEqual([])
   })
 })
 

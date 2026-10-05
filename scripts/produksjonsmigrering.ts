@@ -11,7 +11,7 @@
  * - `forkontroll` finner migrasjonene produksjonen ikke har kjørt, stopper hvis
  *   historikken ikke stemmer med repoet, hvis produksjonen har en migrasjon uten
  *   fil, eller hvis en ventende migrasjon har destruktive setninger uten
- *   godkjenning, og tørrkjører CLI-en: den skal planlegge nøyaktig de samme filene.
+ *   godkjenning eller ikke ville blitt kjørt i én transaksjon, og tørrkjører CLI-en: den skal planlegge nøyaktig de samme filene.
  * - `utrull` kjører de ventende migrasjonene (`supabase db push`).
  * - `etterkontroll` stopper hvis historikken ikke stemmer nøyaktig med repoet.
  *
@@ -24,11 +24,11 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
-  destruktivfeil,
   filnavn,
   historikkSql,
   KJENTE_AVVIK,
   type Migrasjonsfil,
+  utrullingsfeil,
   ventendeMigrasjoner,
 } from '../src/faginnhold/migrasjonshistorikk'
 import { migrasjoner } from './migrasjonsmappe'
@@ -85,7 +85,7 @@ function forkontroll() {
   const { ventende, utenFil } = ventendeMigrasjoner(filer, registrerteVersjoner())
   const feil = [
     ...utenFil.map((v) => `${v}: er registrert i produksjonen, men har ingen fil i repoet`),
-    ...destruktivfeil(ventende),
+    ...utrullingsfeil(ventende),
   ]
   if (feil.length) stopp(`Utrullingen er stoppet før noe er endret:\n${feil.map((f) => `- ${f}`).join('\n')}`)
 

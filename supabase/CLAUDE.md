@@ -29,6 +29,9 @@ Tillegg til reglene i rotens `CLAUDE.md`. Gjelder alt under `supabase/`.
   løse oppgaven. De destruktive setningene utrullingen kjenner igjen, stopper
   den til fila har merket `-- destruktiv-godkjent: <hvem, når, hva>`; skriv det
   bare etter en slik godkjenning.
+- En migrasjon skal kunne kjøres i én transaksjon: ingen `begin`/`commit`,
+  `create index concurrently`, `vacuum` o.l. Utrullingen stopper slike, siden en
+  feil underveis ville etterlatt dem halvveis utført (`docs/migrasjoner.md`).
 - En datamigrasjon som endrer en stoffmonografi, bygges på malen i
   `maler/monografkuratering.sql` og hjelpefunksjonene den bruker
   (`docs/monografkuratering.md`).
