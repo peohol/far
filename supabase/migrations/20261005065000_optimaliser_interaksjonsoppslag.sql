@@ -76,7 +76,7 @@ begin
       ) i
     ),
     ikke_vurdert_ider as (
-      select v.fest_id
+      select distinct v.fest_id
       from sok_atc a
       cross join lateral (
         select x.fest_id
