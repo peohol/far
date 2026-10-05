@@ -323,6 +323,12 @@ describe('kvetiapin-monografkuratering', () => {
       'Addiksjon',
     ])
     expect(avhengighet.some((e) => e.data.tittel === 'Lært mestringsavhengighet')).toBe(false)
+    for (const e of avhengighet) {
+      expect(e.referanser.length, String(e.data.tittel)).toBeGreaterThan(0)
+      const inline = inlineReferanser(e.data)
+      expect(inline.length, String(e.data.tittel)).toBeGreaterThan(0)
+      expect(new Set(inline), String(e.data.tittel)).toEqual(new Set(e.referanser))
+    }
 
     expect(toksisitet.map((e) => String(e.data.tittel))).toEqual([
       'Toksisk dose og eksponering',
