@@ -12,6 +12,7 @@ on:
       - scripts/produksjonsmigrering.ts
       - scripts/migrasjonsmappe.ts
       - src/faginnhold/migrasjonshistorikk.ts
+      - src/faginnhold/sqlsetninger.ts
   workflow_dispatch:
 
 permissions:

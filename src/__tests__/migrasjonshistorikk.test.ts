@@ -49,14 +49,13 @@ describe('sammenligningen med historikken', { timeout: 30_000 }, () => {
   async function historikk(rader: Rad[]) {
     const db = new PGlite()
     await db.exec(`create schema supabase_migrations;
-      create table supabase_migrations.schema_migrations (version text primary key, statements text[], name text, created_by text);`)
+      create table supabase_migrations.schema_migrations (version text primary key, statements text[], name text);`)
+    // Bare kolonnene CLI-en selv lager; Supabase har flere (created_by m.fl.), men de brukes ikke.
     for (const [versjon, navn, tekst] of rader) {
-      // CLI-en (db push) fører ikke created_by; apply_migration fører hvem som kjørte den.
-      await db.query('insert into supabase_migrations.schema_migrations values ($1, $2, $3, $4)', [
+      await db.query('insert into supabase_migrations.schema_migrations values ($1, $2, $3)', [
         versjon,
         Array.isArray(tekst) ? tekst : [tekst],
         navn,
-        Array.isArray(tekst) ? null : 'peder@example.com',
       ])
     }
     return db
@@ -139,6 +138,12 @@ describe('sammenligningen med historikken', { timeout: 30_000 }, () => {
     expect(
       await avvik([['20261001000000_a.sql', fil.replace("'x;'", "'y;'")]], [['20261001000000', 'a', cli]]),
     ).toEqual([{ versjon: '20261001000000', navn: 'a', avvik: 'annet innhold enn det som ble kjørt' }])
+    // Mellomrom og semikolon inni en streng er innhold, ikke noe CLI-en tok bort.
+    for (const endret of ["'x ;'", "'x'"]) {
+      expect(
+        await avvik([['20261001000000_a.sql', fil.replace("'x;'", endret)]], [['20261001000000', 'a', cli]]),
+      ).toEqual([{ versjon: '20261001000000', navn: 'a', avvik: 'annet innhold enn det som ble kjørt' }])
+    }
     // Én tekst fra apply_migration sammenlignes som før, ikke i CLI-formen.
     expect(await avvik([['20261001000000_a.sql', 'select  1;']], [['20261001000000', 'a', 'select 1;']])).toEqual([
       { versjon: '20261001000000', navn: 'a', avvik: 'annet innhold enn det som ble kjørt' },
@@ -180,13 +185,26 @@ describe('destruktive migrasjoner', () => {
       'drop schema',
       'disable row level security',
     ])
+    // `column` kan utelates, også i en do-blokk.
+    expect(destruktiveSetninger('alter table only public.a\n  drop if exists b;')).toEqual(['drop column'])
+    expect(destruktiveSetninger('do $$ begin alter table a drop b; end $$;')).toEqual(['drop column'])
+  })
+
+  it('lar ikke en kommentar mellom ordene gjemme dem', () => {
+    expect(destruktiveSetninger('drop /* gammel */ table a;')).toEqual(['drop table'])
+    expect(destruktiveSetninger('drop /* ytre /* indre */ fortsatt */ schema s;')).toEqual(['drop schema'])
+    expect(destruktiveSetninger('alter table a drop -- forklaring\n  column b;')).toEqual(['drop column'])
+    expect(destruktiveSetninger('alter table a disable row /**/ level security;')).toEqual(['disable row level security'])
   })
 
   it('lar vanlige migrasjoner være, også triggere for truncate', () => {
     const vanlig = `create table a (id int);
       create trigger t before truncate on a for each statement execute function f();
       create trigger u after insert or truncate on a execute function f();
-      drop function if exists f(); drop policy p on a; delete from a where id = 1;`
+      drop function if exists f(); drop policy p on a; delete from a where id = 1;
+      alter table a drop constraint a_pk, alter column b drop not null, alter column c drop  default;
+      alter table a alter column d drop identity if exists, alter column e drop expression;
+      alter table a add column f text default 'x; drop b';`
     expect(destruktiveSetninger(vanlig)).toEqual([])
   })
 

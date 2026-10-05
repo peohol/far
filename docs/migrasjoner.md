@@ -50,8 +50,9 @@ en annen database, for å prøve dem lokalt.
   loggene, og skriptet skriver aldri ut argumentene det gir CLI-en.
 - **Destruktive migrasjoner** må godkjennes eksplisitt, etter den risikobaserte
   regelen i `CLAUDE.md`. De setningene som kan skilles ut sikkert, stoppes
-  automatisk: `drop table`, `drop schema`, `drop database`, `drop column`,
-  `truncate` og `disable row level security`. En migrasjon med noen av dem
+  automatisk: `drop table`, `drop schema`, `drop database`, `drop column`
+  (også `alter table … drop <kolonne>`), `truncate` og
+  `disable row level security`, også med kommentarer mellom ordene. En migrasjon med noen av dem
   stoppes både i CI og før utrullingen, til den har en kommentarlinje med
   hvem som godkjente, når og hva:
 
@@ -102,10 +103,11 @@ annen versjon enn den som ble registrert. Utrullingen kjører den samme
 sammenligningen før og etter.
 
 Teksten er lagret på to måter. CLI-en deler fila i setninger og lagrer dem hver
-for seg, uten blanke tegn og semikolon i endene, og fører ikke `created_by`;
-`apply_migration` og SQL-editoren lagrer hele teksten som én. For radene fra
-CLI-en sammenlignes derfor teksten uten blanke tegn og semikolon, så en
-forskjell bare i mellomrom ses ikke der.
+for seg, uten blanke tegn og semikolon i endene; `apply_migration` og
+SQL-editoren lagrer hele teksten som én. Kontrollen deler fila på nøyaktig samme
+måte som CLI-en (`src/faginnhold/sqlsetninger.ts`, overført fra den låste
+versjonen), så også setningene fra CLI-en sammenlignes eksakt. Oppgraderes
+CLI-en, kontrolleres delingen mot den nye versjonen.
 
 Avvik som er avklart, står i `KJENTE_AVVIK` i
 `src/faginnhold/migrasjonshistorikk.ts`, med md5 av fila og av teksten som ble

@@ -6,8 +6,8 @@
  * Filen i repoet skal ha nøyaktig den versjonen og det navnet produksjonen
  * registrerte, og det samme innholdet. Teksten lagres på to måter: Supabase-CLI-en
  * (`supabase db push`, normalveien) deler fila i setninger og lagrer hver for seg
- * uten blanke tegn og semikolon i endene, mens `apply_migration` (MCP) og
- * SQL-editoren lagrer hele teksten som én. Kontrollen er én lesespørring som
+ * uten blanke tegn og semikolon i endene (`cliSetninger`), mens `apply_migration`
+ * (MCP) og SQL-editoren lagrer hele teksten som én. Kontrollen er én lesespørring som
  * sammenligner repoet med det produksjonen har, og som gir bare radene som
  * avviker; ingen rader betyr at alt stemmer. Den kan kjøres med
  * Supabase-MCP-ens `execute_sql` (som bare kan lese), i SQL-editoren eller av
@@ -15,6 +15,7 @@
  * `scripts/kontroller-migrasjoner.ts` skriver spørringen.
  */
 import { createHash } from 'node:crypto'
+import { cliSetninger, utenKommentarer } from './sqlsetninger'
 
 /** `<versjon>_<navn>.sql`: versjonen er 14 sifre (UTC-tidspunkt), navnet små bokstaver, tall og understrek. */
 export const MIGRASJONSFILNAVN = /^(\d{14})_([a-z0-9_]+)\.sql$/
@@ -105,12 +106,10 @@ export const md5 = (tekst: string) => createHash('md5').update(tekst, 'utf8').di
 const SLUTT = /[ \t\r\n]+$/
 
 /**
- * Tegnene CLI-en kan ta bort når den deler fila i setninger: blanke tegn og
- * semikolon i endene av hver. Uten dem er teksten den samme som fila, uansett
- * hvordan den ble delt. Samme tegnklasse som i spørringen.
+ * Teksten CLI-en lagrer, med setningene skilt av linjeskift; spørringen setter
+ * sammen `statements` på samme måte.
  */
-const CLI_FJERNER = /[ \t\n\r\f\v;]+/g
-export const cliform = (tekst: string) => tekst.replace(CLI_FJERNER, '')
+export const cliform = (tekst: string) => cliSetninger(tekst).join('\n')
 
 export interface Historikkvalg {
   /** Godta filer som ikke er kjørt ennå (før utrullingen); ellers er de et avvik. */
@@ -140,11 +139,10 @@ ${rader.join(',\n')}
   values
     (null::text, null::text, null::text)${kjent.map((k) => `,\n${k}`).join('')}
 ), db as (
-  -- CLI-en (db push) fører ikke created_by, og lagrer setningene hver for seg.
+  -- CLI-en (db push) lagrer setningene hver for seg; de andre hele teksten som én.
   select version as versjon, name as navn, md5(statements[1]) as md5,
     md5(rtrim(statements[1], E' \\t\\r\\n')) as md5_trimmet,
-    case when created_by is null
-      then md5(regexp_replace(array_to_string(statements, ''), '[ \\t\\n\\r\\f\\v;]+', '', 'g')) end as md5_cli
+    md5(array_to_string(statements, E'\\n')) as md5_cli
   from supabase_migrations.schema_migrations
 ), sammen as (
   select coalesce(r.versjon, d.versjon) as versjon, coalesce(r.navn, d.navn) as navn,
@@ -200,7 +198,11 @@ const DESTRUKTIVE: ReadonlyArray<readonly [RegExp, string]> = [
   [/\bdrop\s+table\b/i, 'drop table'],
   [/\bdrop\s+schema\b/i, 'drop schema'],
   [/\bdrop\s+database\b/i, 'drop database'],
-  [/\bdrop\s+column\b/i, 'drop column'],
+  // `column` kan utelates: `alter table a drop b`, men ikke `drop constraint`, `drop default` osv.
+  [
+    /\bdrop\s+column\b|\balter\s+table\b[^;]*?\bdrop\s+(?!\s|constraint\b|not\s+null\b|default\b|identity\b|expression\b)/i,
+    'drop column',
+  ],
   // Ikke `truncate` som hendelse i en trigger (`before truncate on …`, `insert or truncate`).
   [/(?<!\b(?:before|after|or|of)\s+)\btruncate\b/i, 'truncate'],
   [/\bdisable\s+row\s+level\s+security\b/i, 'disable row level security'],
@@ -213,9 +215,14 @@ const DESTRUKTIVE: ReadonlyArray<readonly [RegExp, string]> = [
  */
 export const DESTRUKTIV_GODKJENT = /^--[ \t]*destruktiv-godkjent:[ \t]*\S/m
 
-/** De destruktive setningstypene migrasjonen inneholder (også i kommentarer, så de ikke gjemmes). */
+/**
+ * De destruktive setningstypene migrasjonen inneholder. Teksten leses både som
+ * den står, så de ikke gjemmes i en kommentar, og uten kommentarene, så en
+ * kommentar mellom ordene (`drop /* … *\/ table`) ikke gjemmer dem.
+ */
 export function destruktiveSetninger(innhold: string): string[] {
-  return DESTRUKTIVE.filter(([monster]) => monster.test(innhold)).map(([, navn]) => navn)
+  const tekster = [innhold, utenKommentarer(innhold)]
+  return DESTRUKTIVE.filter(([monster]) => tekster.some((t) => monster.test(t))).map(([, navn]) => navn)
 }
 
 /** Feilmeldingene for filer med destruktive setninger uten godkjenningsmerket. */
