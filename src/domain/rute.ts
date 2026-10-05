@@ -16,6 +16,11 @@ import { STOFFREGISTER, stoffslug, type Stoffregister } from './stoffregister'
  *
  *   #/fortolkning/hbup/rediger
  *
+ * Har modulen flere deler av reglene, kan adressen peke på én av dem, og
+ * eventuelt et detaljkort i den, som på en fagside:
+ *
+ *   #/fortolkning/diaz-dmi-oxa/rediger/fortolkning-dmi/simulator
+ *
  * Resten av tilstanden i fortolkningen — søket, valget i steg 2 — lever i
  * appen, ikke i adressefeltet. Fagsidene har hver sin adresse, slik at de kan
  * bokmerkes, deles og åpnes direkte.
@@ -65,6 +70,8 @@ export type Rute =
       analytt?: string
       /** Reglene og kommentarene for analytten redigeres. Bare med en analytt. */
       rediger?: true
+      /** Seksjonen og eventuelt detaljkortet på redigeringssiden adressen peker på. Bare med `rediger`. */
+      sted?: readonly string[]
     }
   | {
       side: 'stoff'
@@ -82,9 +89,9 @@ export type Rute =
 
 export const FORTOLKNING: Rute = { side: 'fortolkning' }
 
-const FORTOLKNINGSSIDE = /^#\/fortolkning\/([a-z0-9]+(?:-[a-z0-9]+)*)(\/rediger)?\/?$/i
+const FORTOLKNINGSSIDE = /^#\/fortolkning\/([a-z0-9]+(?:-[a-z0-9]+)*)(?:\/(rediger)((?:\/[^/?#]+)*))?\/?$/i
 
-/** Det siste leddet i adressen til redigeringen av en fortolkning. */
+/** Leddet etter nøkkelen i adressen til redigeringen av en fortolkning. */
 const REDIGER = 'rediger'
 
 /**
@@ -148,7 +155,9 @@ export function lesRute(hash: string, register: Stoffregister = STOFFREGISTER): 
   const fortolkning = FORTOLKNINGSSIDE.exec(hash)
   if (fortolkning?.[1]) {
     const analytt = fortolkning[1].toLowerCase()
-    return fortolkning[2] ? { side: 'fortolkning', analytt, rediger: true } : { side: 'fortolkning', analytt }
+    if (!fortolkning[2]) return { side: 'fortolkning', analytt }
+    const sted = lesSted(fortolkning[3] ?? '')
+    return sted ? { side: 'fortolkning', analytt, rediger: true, sted } : { side: 'fortolkning', analytt, rediger: true }
   }
   const stoff = lesSide(STOFF, hash)
   if (stoff) {
@@ -230,7 +239,8 @@ export function adresse(rute: Rute): string {
       return STOFFREGISTERADRESSE
     default:
       if (!rute.analytt) return '#/'
-      return rute.rediger ? `#/fortolkning/${rute.analytt}/${REDIGER}` : `#/fortolkning/${rute.analytt}`
+      if (!rute.rediger) return `#/fortolkning/${rute.analytt}`
+      return ['#/fortolkning', rute.analytt, REDIGER, ...(rute.sted ?? []).map(encodeURIComponent)].join('/')
   }
 }
 

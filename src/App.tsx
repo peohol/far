@@ -675,6 +675,7 @@ export default function App() {
                       <Fortolkningsredigering
                         key={state.analyte.kode}
                         fortolkning={state.analyte}
+                        sted={rute.side === 'fortolkning' ? rute.sted : undefined}
                         katalog={katalog}
                         onPublisert={reglerPublisert}
                         onAvslutt={lukkInfoside}

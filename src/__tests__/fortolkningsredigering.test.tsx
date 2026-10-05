@@ -166,13 +166,19 @@ function kilde(regler: (kode: string, t: Tilstand) => Regelsettutgave | null = (
 }
 
 /** Redigeringen av fortolkningen koden hører til, AMTNORSUM om ingen annen er gitt. */
-function vis(k = kilde(), fortolkning = katalog.finn('AMTNORSUM')!.fortolkning) {
+function vis(k = kilde(), fortolkning = katalog.finn('AMTNORSUM')!.fortolkning, sted?: string[]) {
   const onPublisert = vi.fn()
   const onAvslutt = vi.fn()
   render(
     <TipsLag>
       <FaginnholdskildeProvider kilde={k}>
-        <Fortolkningsredigering fortolkning={fortolkning} katalog={katalog} onPublisert={onPublisert} onAvslutt={onAvslutt} />
+        <Fortolkningsredigering
+          fortolkning={fortolkning}
+          sted={sted}
+          katalog={katalog}
+          onPublisert={onPublisert}
+          onAvslutt={onAvslutt}
+        />
       </FaginnholdskildeProvider>
     </TipsLag>,
   )
@@ -196,6 +202,17 @@ async function fortolkningen() {
   return seksjon
 }
 
+/** Regelsett for DIAZ og DMI, men ikke OXA, i modulen de deler. */
+function diazOgDmi(kode: string, t: Tilstand): Regelsettutgave | null {
+  if (kode !== 'DIAZ' && kode !== 'DMI') return null
+  const u = regelsettutgave(t)
+  return { ...u, regelsett: { ...u.regelsett, id: `regelsett-${kode}`, innhold: { ...u.regelsett.innhold, analyttkode: kode } } }
+}
+
+/** Om seksjonen med navnet står åpen. */
+const apen = (navn: string) =>
+  within(screen.getByRole('region', { name: navn })).getByRole('button', { name: navn }).getAttribute('aria-expanded')
+
 describe('siden', () => {
   it('leser utkastet til reglene for hver kode i modulen, og har navnet på fortolkningen', async () => {
     const { leser } = vis()
@@ -214,12 +231,7 @@ describe('siden', () => {
   })
 
   it('har én seksjon per kode med regler når modulen dekker flere koder', async () => {
-    const delt = (kode: string, t: Tilstand): Regelsettutgave | null => {
-      if (kode !== 'DIAZ' && kode !== 'DMI') return null
-      const u = regelsettutgave(t)
-      return { ...u, regelsett: { ...u.regelsett, id: `regelsett-${kode}`, innhold: { ...u.regelsett.innhold, analyttkode: kode } } }
-    }
-    const { leser } = vis(kilde(delt), katalog.finn('DMI')!.fortolkning)
+    const { leser } = vis(kilde(diazOgDmi), katalog.finn('DMI')!.fortolkning)
     expect(await screen.findByRole('region', { name: 'Fortolkningsregler – DIAZ' })).toBeTruthy()
     expect(screen.getByRole('region', { name: 'Fortolkningsregler – DMI' }).id).toBe('panel-fortolkning-dmi')
     expect(screen.queryByRole('region', { name: /OXA/ })).toBeNull()
@@ -228,6 +240,22 @@ describe('siden', () => {
     )
     // Med flere deler står de lukket, så redaktøren velger hva som skal redigeres.
     expect(screen.getAllByRole('button', { name: 'Rediger reglene' })).toHaveLength(2)
+  })
+
+  it('åpner delen adressen peker på, og har bare én del åpen om gangen', async () => {
+    const user = userEvent.setup()
+    vis(kilde(diazOgDmi), katalog.finn('DMI')!.fortolkning, ['fortolkning-dmi'])
+    await screen.findByRole('region', { name: 'Fortolkningsregler – DIAZ' })
+    await waitFor(() => expect(apen('Fortolkningsregler – DMI')).toBe('true'))
+    expect(apen('Fortolkningsregler – DIAZ')).toBe('false')
+
+    await user.click(
+      within(screen.getByRole('region', { name: 'Fortolkningsregler – DIAZ' })).getByRole('button', {
+        name: 'Fortolkningsregler – DIAZ',
+      }),
+    )
+    await waitFor(() => expect(apen('Fortolkningsregler – DIAZ')).toBe('true'))
+    expect(apen('Fortolkningsregler – DMI')).toBe('false')
   })
 
   it('sier fra når fortolkningen ikke har regler som kan redigeres her', async () => {

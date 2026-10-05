@@ -13,7 +13,7 @@ import { Lukkeknapp } from '../Lukkeknapp'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
 import { Referanseliste } from '../referanser/Referanseliste'
-import { SeksjonsstyringKilde, skuffnokkel, useSeksjonsstyring } from '../seksjoner/Seksjonsstyring'
+import { SeksjonsstyringKilde, skuffnokkel, useAdressested } from '../seksjoner/Seksjonsstyring'
 import { Sidereferanser } from '../referanser/Sidereferanser'
 import { useFaginnholdskilde } from './Faginnholdskilde'
 import { useFavoritter } from '../../favoritter/Favorittkilde'
@@ -225,21 +225,12 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
   // En side som åpnes, begynner øverst, med fokus på navnet — så tastaturet og
   // skjermleseren står der siden begynner, og ikke igjen i menyen eller modulen.
   // Peker adressen på et sted på siden, åpnes det og rulles det dit i stedet.
-  const styring = useSeksjonsstyring()
-  const apne = styring?.apne
+  const pekerPaaSted = useAdressested(sted)
   const stedsnokkel = skuffnokkel(sted ?? [])
-  const pekerPaaSted = useRef(stedsnokkel !== '')
   useEffect(() => {
-    if (!pekerPaaSted.current) window.scrollTo({ top: 0 })
+    if (!pekerPaaSted) window.scrollTo({ top: 0 })
     document.getElementById(overskrift)?.focus({ preventScroll: true })
-  }, [overskrift])
-  // Nøkkelen, og ikke lista, avgjør om stedet er nytt: en ny adresse til det
-  // samme stedet skal ikke rulle siden dit på nytt.
-  const stedet = useRef(sted)
-  stedet.current = sted
-  useEffect(() => {
-    if (stedsnokkel && stedet.current) apne?.(stedet.current)
-  }, [stedsnokkel, apne])
+  }, [overskrift, pekerPaaSted])
   // En lenke til en gruppe bivirkninger viser den visningen gruppen står i.
   const lenketVisning = sted?.[0] === BIVIRKNINGSPANEL ? visningForKort(sted[1]) : null
   useEffect(() => {

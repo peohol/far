@@ -7,6 +7,7 @@ import { useLukkMedEscape } from '../../hooks/useLukkMedEscape'
 import type { Analyte } from '../../types'
 import { Button } from '../Button'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
+import { SeksjonsstyringKilde, useAdressested } from '../seksjoner/Seksjonsstyring'
 import { Redigeringskilde, type Redigeringsverdi } from '../stoffside/Redigeringskontekst'
 import { Redigeringshandlinger } from '../stoffside/Redigeringslinje'
 import { Fortolkningsregler, FORTOLKNING } from './Fortolkningsregler'
@@ -17,6 +18,8 @@ import { harRegler, useFortolkningsredigering, type Fortolkningsredigering as Re
 export interface FortolkningsredigeringProps {
   /** Fortolkningsmodulen som redigeres: oppføringen søket i fortolkningen gir. */
   fortolkning: Analyte
+  /** Delen av reglene, og eventuelt detaljkortet i den, adressen peker på. */
+  sted?: readonly string[]
   /** Laboratorieanalyttene, så reglene for hver kode i modulen kan leses. */
   katalog: Analyttkatalog
   /** Etter en publisering, så fortolkningen henter de nye reglene. */
@@ -41,11 +44,24 @@ type Regeldel = { slag: 'scenario' } | { slag: 'thc' } | { slag: 'intervall'; an
  * den delen. Alt lagres som utkast; toppmenyen sier hva som ikke er publisert,
  * publiserer det og går tilbake til fortolkningen, som på fagsidene.
  *
+ * Delene er seksjoner på samme side, så bare én av dem står åpen om gangen, og
+ * en adresse som `#/fortolkning/diaz-dmi-oxa/rediger/fortolkning-dmi` åpner
+ * den ene.
+ *
  * `Escape` går tilbake til fortolkningen, men ikke fra et felt eller et åpent
  * redigeringsskjema.
  */
-export function Fortolkningsredigering({ fortolkning, katalog, onPublisert, onAvslutt }: FortolkningsredigeringProps) {
+export function Fortolkningsredigering(props: FortolkningsredigeringProps) {
+  return (
+    <SeksjonsstyringKilde>
+      <Innhold {...props} />
+    </SeksjonsstyringKilde>
+  )
+}
+
+function Innhold({ fortolkning, sted, katalog, onPublisert, onAvslutt }: FortolkningsredigeringProps) {
   useLukkMedEscape(onAvslutt)
+  const pekerPaaSted = useAdressested(sted)
   const overskrift = useId()
   const analytter = useMemo(() => analytterForFortolkning(fortolkning, katalog), [fortolkning, katalog])
   const redigering = useFortolkningsredigering(analytter)
@@ -62,11 +78,11 @@ export function Fortolkningsredigering({ fortolkning, katalog, onPublisert, onAv
     }
   }, [navn])
 
-  // Siden begynner øverst, med fokus på overskriften.
+  // Siden begynner øverst, med fokus på overskriften — eller på stedet adressen peker på.
   useEffect(() => {
-    window.scrollTo({ top: 0 })
+    if (!pekerPaaSted) window.scrollTo({ top: 0 })
     document.getElementById(overskrift)?.focus({ preventScroll: true })
-  }, [overskrift])
+  }, [overskrift, pekerPaaSted])
 
   const redigeringsverdi = useMemo<Redigeringsverdi>(
     () => ({

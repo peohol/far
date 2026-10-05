@@ -251,8 +251,8 @@ modulen gir: scenarioreglene (`docs/scenarioregler.md`), THC-syrereglene
 (`docs/thc-syre.md`) og konsentrasjonsreglene for hver kode i modulen
 (`analytterForFortolkning` i `src/domain/koblinger.ts`). Hver del er en seksjon
 i den felles seksjonsmodellen (`docs/seksjoner.md`). Er det bare én, står den
-åpen med en gang; ellers har hver sin tittel og adresse,
-`#/fortolkning/diaz/rediger/fortolkning-dmi` osv. Siden viser alltid
+åpen med en gang; ellers står bare én åpen om gangen, og hver har sin tittel og adresse,
+`#/fortolkning/diaz-dmi-oxa/rediger/fortolkning-dmi` osv. (og et detaljkort i den, `…/fortolkning-dmi/simulator`). Siden viser alltid
 utkastet, toppmenyen har den samme statusen, publiseringen og «Avslutt
 redigering» som fagsidene, og `Escape` går tilbake til fortolkningen. For andre
 enn administratorer er adressen bare fortolkningen. Den gamle adressen

@@ -273,6 +273,25 @@ export function SeksjonsstyringKilde({ bevares = false, children }: { bevares?: 
 }
 
 /**
+ * Åpner stedet adressen peker på — en seksjon, og eventuelt et detaljkort i
+ * den — og ruller dit, hver gang adressen peker på et nytt sted. Nøkkelen, og
+ * ikke lista, avgjør om stedet er nytt: en ny adresse til det samme stedet
+ * skal ikke rulle siden dit på nytt. Gir tilbake om siden ble åpnet på et
+ * sted, så den kan la være å begynne øverst.
+ */
+export function useAdressested(sted: readonly string[] | undefined): boolean {
+  const apne = useSeksjonsstyring()?.apne
+  const nokkel = skuffnokkel(sted ?? [])
+  const fraStart = useRef(nokkel !== '')
+  const stedet = useRef(sted)
+  stedet.current = sted
+  useEffect(() => {
+    if (nokkel && stedet.current) apne?.(stedet.current)
+  }, [nokkel, apne])
+  return fraStart.current
+}
+
+/**
  * Melder elementet inn som et sted som alltid står fram (se
  * `Seksjonsstyring.fastSted`), så en direktelenke til `id` ruller dit — også
  * når lenken ble fulgt før innholdet var hentet. Gjør ingenting utenfor en

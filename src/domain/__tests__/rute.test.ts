@@ -67,6 +67,13 @@ describe('adressene til stoffsidene', () => {
     expect(erRedigering(fortolkningsrute('HBUP'))).toBe(false)
     expect(sammeRute(rute, fortolkningsrute('DIAZ · DMI · OXA'))).toBe(false)
     expect(kanoniskAdresse('#/fortolkning/hbup/rediger')).toBeNull()
+    // Redigeringen kan peke på en del av reglene, og et detaljkort i den.
+    const tilKort = { ...rute, sted: ['fortolkning-dmi', 'simulator'] }
+    expect(adresse(tilKort)).toBe('#/fortolkning/diaz-dmi-oxa/rediger/fortolkning-dmi/simulator')
+    expect(lesRute('#/fortolkning/diaz-dmi-oxa/rediger/fortolkning-dmi/simulator')).toEqual(tilKort)
+    expect(lesRute('#/fortolkning/diaz-dmi-oxa/rediger/fortolkning-dmi/')).toEqual({ ...rute, sted: ['fortolkning-dmi'] })
+    // Flere ledd enn siden har nivåer gir redigeringen uten sted.
+    expect(lesRute('#/fortolkning/diaz-dmi-oxa/rediger/a/b/c')).toEqual(rute)
     // Noe annet etter nøkkelen er ingen side.
     expect(lesRute('#/fortolkning/hbup/annet')).toEqual(FORTOLKNING)
   })
