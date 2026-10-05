@@ -417,7 +417,7 @@ describe('kvetiapin-monografkuratering', () => {
       kilde: 'Korrigering etter fersk monografikuratering: farmakogenetikk tilbakeført til tilstanden før kvetiapinkurateringen',
     })
     expect(interaksjoner?.kilde).toBe(
-      'Korrigering etter fersk monografikuratering: interaksjoner tilbakeført til tilstanden før kvetiapinkurateringen',
+      'Monografkuratering av kvetiapin 04.10.2026: fullforing av toksisitet, graviditet, indikasjon og interaksjoner',
     )
   })
 
