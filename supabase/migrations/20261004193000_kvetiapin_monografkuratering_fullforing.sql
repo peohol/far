@@ -13,6 +13,7 @@ declare
   kilder jsonb := '{}'::jsonb;
   oppdatering jsonb;
   referanser jsonb;
+  data jsonb;
 begin
   if side is null then return; end if;
   if intern.kuratering_utfort(kilde) then
