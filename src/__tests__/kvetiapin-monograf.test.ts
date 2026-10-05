@@ -8,7 +8,8 @@ const KORRIGERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monogra
 const TILLEGG = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_farmakogenetikk_og_typografi.sql'))!
 const VIRKNINGER_OG_AVHENGIGHET = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_virkninger_og_avhengighet.sql'))!
 const FULLFORING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_fullforing.sql'))!
-const BIVIRKNINGER = migrasjonsfiler().find((f) => f.endsWith('_seroquel_depot_bivirkninger.sql'))!
+const FERSK_KJORING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_fersk_kjoring.sql'))!
+const KONSENTRASJONER_NMOL = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_konsentrasjoner_nmol_l.sql'))!
 const FORSTE_IMPORTMIGRASJON = '20260923072247'
 
 interface Element {
@@ -57,7 +58,7 @@ describe('kvetiapinmigrasjoner uten kuratorprofil', () => {
   it('hopper over fagoppdateringene på en helt fersk database', async () => {
     const tom = await nyDatabase({ til: FORSTE_KURATERING })
     await expect(
-      kjorMigrasjoner(tom, { bare: [FORSTE_KURATERING, KORRIGERING, TILLEGG, VIRKNINGER_OG_AVHENGIGHET, FULLFORING] }),
+      kjorMigrasjoner(tom, { bare: [FORSTE_KURATERING, KORRIGERING, TILLEGG, VIRKNINGER_OG_AVHENGIGHET, FULLFORING, FERSK_KJORING, KONSENTRASJONER_NMOL] }),
     ).resolves.toBeUndefined()
     await tom.close()
   }, 240_000)
@@ -150,7 +151,7 @@ describe('kvetiapin-monografkuratering', () => {
   beforeAll(async () => {
     db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
     await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
-    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: BIVIRKNINGER, kurateringer: true })
+    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: KONSENTRASJONER_NMOL, kurateringer: true })
 
     // Begge kvetiapinoppdateringene skal tåle å kjøres på nytt.
     await kjorMigrasjoner(db, { bare: [KORRIGERING] })
@@ -316,6 +317,7 @@ describe('kvetiapin-monografkuratering', () => {
       'Antimanisk effekt',
       'Antidepressiv effekt',
       'Sedasjon og søvnighet',
+      'Forebygging av tilbakefall ved bipolar lidelse',
     ])
     expect(avhengighet.map((e) => String(e.data.tittel))).toEqual([
       'Toleranseutvikling',
@@ -376,9 +378,82 @@ describe('kvetiapin-monografkuratering', () => {
       expect(e.utkast, String(e.data.tittel ?? e.panel)).toBe(e.publisert)
     }
 
+    const antidepressiv = virkninger.find((e) => e.data.tittel === 'Antidepressiv effekt')!
+    expect(tekst(antidepressiv.data)).toContain('RR 1,15')
+    expect(tekst(antidepressiv.data)).toContain('RR 1,56')
+    expect(antidepressiv.referanser.length).toBe(4)
+
+    const vedlikehold = virkninger.find((e) => e.data.tittel === 'Forebygging av tilbakefall ved bipolar lidelse')!
+    expect(tekst(vedlikehold.data)).toContain('10 867')
+    expect(tekst(vedlikehold.data)).toContain('gruppefunn')
+    expect(vedlikehold.referanser.length).toBe(2)
+
     expect(farmakodynamikk).toHaveLength(9)
     expect(dosering).toHaveLength(1)
     expect(farmakokinetikk).toHaveLength(8)
+  })
+
+  it('bevarer norsk TDM-grunnverdi og legger AGNP 2026 til som kontekst', async () => {
+    const tdm = await elementer(db, 'tdm')
+    const grunnlag = tdm.find((e) => e.data.tittel === 'Grunnlag for referanseområdet')
+    expect(grunnlag).toBeDefined()
+    expect(tekst(grunnlag!.data)).toContain('50–700 nmol/L')
+    expect(tekst(grunnlag!.data)).toContain('260–1 300 nmol/L')
+    expect(tekst(grunnlag!.data)).toContain('skal derfor ikke erstatte')
+    expect(grunnlag!.referanser).toHaveLength(2)
+
+    const { rows } = await db.query<{ elementtype: string; nedre: number | null; ovre: number | null }>(
+      `select e.elementtype, (e.data->>'nedre')::int as nedre, (e.data->>'ovre')::int as ovre
+       from public.innholdselementer e
+       join public.infosider s on s.objekt_id=e.infoside_id and s.tilstand='publisert' and s.slug='kvetiapin'
+       where e.tilstand='publisert' and e.panel='viktige_data'
+         and e.elementtype in ('referanseomrade','toksisk_omrade','alvorlig_intoksikasjon')
+       order by e.elementtype`,
+    )
+    expect(rows).toEqual([
+      { elementtype: 'alvorlig_intoksikasjon', nedre: 3600, ovre: null },
+      { elementtype: 'referanseomrade', nedre: 50, ovre: 700 },
+      { elementtype: 'toksisk_omrade', nedre: 3600, ovre: null },
+    ])
+  })
+
+  it('viser alle redaksjonelle kvetiapinkonsentrasjoner som nmol/L', async () => {
+    const toksiske = toksisitet.find((e) => e.data.tittel === 'Toksiske konsentrasjoner')!
+    expect(tekst(toksiske.data)).toContain('10 400 nmol/L')
+    expect(tekst(toksiske.data)).toContain('5 200 nmol/L')
+    expect(tekst(toksiske.data)).not.toMatch(/mg\/L|ng\/mL|mg\/kg/)
+
+    const tdm = await elementer(db, 'tdm')
+    const grunnlag = tdm.find((e) => e.data.tittel === 'Grunnlag for referanseområdet')!
+    expect(tekst(grunnlag.data)).toContain('260–1 300 nmol/L')
+    expect(tekst(grunnlag.data)).not.toMatch(/mg\/L|ng\/mL|mg\/kg/)
+
+    const { rows } = await db.query<{ n: number }>(
+      `select count(*)::int as n
+       from public.innholdselementer e
+       join public.infosider s on s.objekt_id=e.infoside_id and s.tilstand='publisert' and s.slug='kvetiapin'
+       join public.objekttilstander p on p.objekt_id=e.objekt_id and p.tilstand='publisert'
+       join public.objektrevisjoner r on r.objekt_id=e.objekt_id and r.revisjon=p.revisjon
+       where e.tilstand='publisert'
+         and e.panel <> 'fjernet'
+         and r.innhold::text ~* '(mg/L|ng/mL|mg/kg|µg/L|ug/L|μg/L)'`,
+    )
+    expect(rows[0]?.n).toBe(0)
+  })
+
+  it('prioriterer Janusmed og LactMed i graviditet og amming', () => {
+    const gravid = graviditet.find((e) => e.data.tittel === 'Graviditet')!
+    const neonatal = graviditet.find((e) => e.data.tittel === 'Perinatal og neonatal påvirkning')!
+    const amm = graviditet.find((e) => e.data.tittel === 'Amming')!
+
+    expect(tekst(gravid.data)).toContain('Janusmed')
+    expect(tekst(gravid.data)).toContain('svangerskapsdiabetes')
+    expect(gravid.referanser).toHaveLength(3)
+    expect(tekst(neonatal.data)).toContain('Janusmed')
+    expect(neonatal.referanser).toHaveLength(2)
+    expect(tekst(amm.data)).toContain('friskt, fullgått barn')
+    expect(tekst(amm.data)).toContain('0,16 %')
+    expect(amm.referanser).toHaveLength(3)
   })
 
   it('har en kort farmakogenetisk fritekst om når testing er relevant', () => {
@@ -456,6 +531,12 @@ describe('kvetiapin-monografkuratering', () => {
       'https://www.ncbi.nlm.nih.gov/books/NBK501087/',
       'https://doi.org/10.1097/JCP.0000000000000905',
       'https://doi.org/10.1111/j.1365-2125.2005.02507.x',
+      'https://doi.org/10.1016/j.euroneuro.2026.112818',
+      'https://doi.org/10.1001/jamapsychiatry.2026.0658',
+      'https://doi.org/10.1016/j.jad.2026.121798',
+      'https://doi.org/10.1055/a-2860-7861',
+      'https://janusmed.se/fosterpaverkan/lakemedel/Quetiapin%20Orion',
+      'https://janusmed.se/amning/lakemedel/Quetiapine%20Teva',
     ]
 
     const { rows } = await db.query<{ lenke: string; n: number }>(
