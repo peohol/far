@@ -344,6 +344,17 @@ describe('kvetiapin-monografkuratering', () => {
     expect(tekst(graviditet.find((e) => e.data.tittel === 'Graviditet')!.data)).toContain('13 090')
     expect(tekst(graviditet.find((e) => e.data.tittel === 'Amming')!.data)).toContain('0,16 %')
 
+    for (const e of [...toksisitet, ...graviditet]) {
+      expect(e.referanser.length, String(e.data.tittel)).toBeGreaterThan(0)
+      const inline = inlineReferanser(e.data)
+      expect(inline.length, String(e.data.tittel)).toBeGreaterThan(0)
+      expect(new Set(inline), String(e.data.tittel)).toEqual(new Set(e.referanser))
+    }
+
+    expect(tekst(toksisitet.find((e) => e.data.tittel === 'Behandling ved forgiftning')!.data)).not.toContain(
+      'sikring av luftvei',
+    )
+
     const sedasjon = virkninger.find((e) => e.data.tittel === 'Sedasjon og søvnighet')!
     expect(JSON.stringify(sedasjon.data)).toContain('"marks":[{"type":"subscript"}]')
     expect(JSON.stringify(sedasjon.data)).not.toContain('"type":"subscript","content"')
