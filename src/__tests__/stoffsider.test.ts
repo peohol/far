@@ -17,7 +17,7 @@ import { byggSidemodell, publiseringsplan } from '../faginnhold/stoffside'
 import { indekserKunnskapsbase, lagSideleser, lesKunnskapsbase } from '../faginnhold/globaltSok'
 import { lagFaginnholdslager, type Faginnholdslager } from '../faginnhold/lagring'
 import { lagRegisterlager } from '../stoffregister/api'
-import { INGEN_REGLER, TOM_STOFFSIDE, lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
+import { TOM_STOFFSIDE, lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
 import { SITERING } from '../faginnhold/referanser'
 import { indekserSide, lagSokeindeks, sokGlobalt, sokeadresse, stoffidentitet } from '../faginnhold/sok'
 import { ANDRE_STOFFER, byggStoffregister } from '../domain/stoffregister'
@@ -150,7 +150,7 @@ describe('les_stoffliste', () => {
 describe('når sidene er publisert', () => {
   beforeAll(async () => {
     for (const slug of ['teststoff', 'bupropion', 'hydroksybupropion']) {
-      const plan = publiseringsplan(await adminleser.lesStoffside(slug, 'utkast'), INGEN_REGLER)
+      const plan = publiseringsplan(await adminleser.lesStoffside(slug, 'utkast'))
       if (slug === 'teststoff') {
         expect(plan.map((s) => s.slag)).toEqual(['referanse', 'referanse', 'infoside', 'innholdselement'])
       }

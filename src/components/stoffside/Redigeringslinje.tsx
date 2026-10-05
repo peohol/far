@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Publiseringssteg } from '../../faginnhold/stoffside'
 import { endredeFelt } from '../../faginnhold/historikk'
-import { INGEN_REGLER, type Regeldata, type Stoffsidedata } from '../../faginnhold/lesing'
+import { INGEN_REGLER, TOM_STOFFSIDE, type Regeldata, type Stoffsidedata } from '../../faginnhold/lesing'
 import { korttittel, panelFor } from '../../faginnhold/paneler'
 import { RUS_MODULER } from '../../domain/rus'
 import { losRegelsett } from '../../regler/kommentarer'
@@ -14,11 +14,12 @@ import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
 import { useTips } from '../Tips'
 
 export interface RedigeringshandlingerProps {
-  data: Stoffsidedata
-  /** Utkastet til fortolkningsreglene siden viser. */
-  regler: Regeldata
+  /** Utkastet til stoffsiden, når det er den som redigeres. */
+  data?: Stoffsidedata
+  /** Utkastet til fortolkningsreglene, når det er dem som redigeres. */
+  regler?: Regeldata
   /** Regelsettene slik de er publisert, til å si hva som endres. */
-  publisert: Regeldata
+  publisert?: Regeldata
   plan: Publiseringssteg[]
   /** Sant mens utkastet hentes etter at redigeringen er slått på. */
   laster: boolean
@@ -28,14 +29,15 @@ export interface RedigeringshandlingerProps {
 
 /**
  * Redigeringsmodusen i toppmenyen (i dokken på smale flater): hva som står
- * upublisert, publiseringen og veien tilbake til lesemodus.
+ * upublisert, publiseringen og veien tilbake til lesemodus. Felles for
+ * fagsidene og redigeringen av fortolkningsreglene.
  *
  * Før noe publiseres, vises hva som vil bli synlig for alle, i et eget lag.
  */
 export function Redigeringshandlinger({
-  data,
-  regler,
-  publisert,
+  data = TOM_STOFFSIDE,
+  regler = INGEN_REGLER,
+  publisert = INGEN_REGLER,
   plan,
   laster,
   onPubliser,

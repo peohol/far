@@ -115,6 +115,8 @@ Flere koder kan ha samme mål. En kode uten koblet stoff er ikke en lenke.
 
 Siden har en sekundær handling «Åpne fortolkning» når et av stoffets analytter har en fortolkningsmodul.
 
+Fortolkningsreglene og -kommentarene står ikke på fagsiden. Administratorer redigerer dem fra fortolkningen, med «Rediger fortolkningen» (`docs/fortolkningsregler.md`, «Redigeringssiden»).
+
 Hver fagside har én kanonisk adresse som kan bokmerkes og åpnes direkte. Gamle adresser (`#/analytt/<KODE>`) sendes videre til stoffet når koden har ett primært stoff; ellers vises ingen fagside.
 
 ---
@@ -970,7 +972,8 @@ peker på dem med ID og inneholder ikke tekstene (del 4). Referanseområdet
 under analyttnavnet på steg 2 leses fra kortet på informasjonssiden, så de to
 alltid viser det samme (del 5). Regelvisningen på analyttsiden er seksjonen
 «Fortolkning», med simulatoren og kommentarhistorikken som detaljkort
-(arbeidspakke 13).
+(arbeidspakke 13). Reglene er siden flyttet fra fagsidene til en egen
+redigeringsside i fortolkningen (`docs/fortolkningsregler.md`, «Redigeringssiden»).
 
 - [x] Kommentarobjekter i Supabase.
 - [x] Enkle intervalbaserte regelsett.

@@ -11,7 +11,8 @@ import { EtgStep } from './components/EtgStep'
 import { KontrollStep } from './components/KontrollStep'
 import { PasteStep } from './components/PasteStep'
 import { RusStep } from './components/RusStep'
-import { ScenarioreglerProvider, useHentScenarioregler } from './components/regler/Scenarioreglerkilde'
+import { useHentScenarioregler } from './components/regler/Scenarioreglerkilde'
+import { Fortolkningsredigering } from './components/regler/Fortolkningsredigering'
 import { Sidemeny, sidemenyenErApen } from './components/Sidemeny'
 import { ThcStep } from './components/ThcStep'
 import { CopyFlash } from './components/CopyFlash'
@@ -25,6 +26,7 @@ import { Sokeside } from './components/sok/Sokeside'
 import { Toppmeny } from './components/toppmeny/Toppmeny'
 import { ToppmenyInnhold, ToppmenyKilde } from './components/toppmeny/Toppmenykilde'
 import { Toppmenyknapp } from './components/toppmeny/Toppmenyknapp'
+import { Ikonknapp } from './components/Ikonknapp'
 import { Versjonspille } from './components/Versjonspille'
 import { Diskusjonsmeny } from './components/diskusjoner/Diskusjonsmeny'
 import { Direktelenkekilde } from './components/direktelenker/Direktelenkekilde'
@@ -39,9 +41,10 @@ import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from './domain/analyttkatalog'
 import { alternativFor, ETG_ALTERNATIVER, type EtgAlternativ } from './domain/etg'
 import type { Rute } from './domain/flytting'
-import { fortolkningsnokkel, fortolkningsrute, lesRute } from './domain/rute'
-import { stoffbeskrivelse, stofferForFortolkning } from './domain/koblinger'
+import { erRedigering, fortolkningsnokkel, fortolkningsrute, lesRute, redigeringsrute } from './domain/rute'
+import { analytterForFortolkning, stoffbeskrivelse, stofferForFortolkning } from './domain/koblinger'
 import { rusModulFor } from './domain/rus'
+import { THC_KODE } from './domain/thc'
 import { search } from './domain/search'
 import {
   CUTOFF_NOKKEL,
@@ -149,8 +152,6 @@ export default function App() {
   const katalog = useMemo(() => byggKatalog(alleAnalytter), [alleAnalytter])
   const [rute, gaaTil] = useRute(apneFraAdressen)
   const paaInfoside = rute.side === 'stoff'
-  // Stoffsidene og søkesiden legger seg over fortolkningen, som står skjult bak.
-  const fortolkningSkjult = rute.side !== 'fortolkning'
 
   const faginnhold = useMemo<Faginnholdskilde>(
     () => ({
@@ -164,6 +165,11 @@ export default function App() {
     }),
     [profil.role],
   )
+  // Redigeringen av reglene og kommentarene en fortolkning gir, for
+  // administratorene, på en egen adresse under fortolkningen.
+  const redigererFortolkning = erRedigering(rute) && faginnhold.kanRedigere && state.analyte !== null
+  // Stoffsidene, søkesiden og redigeringen legger seg over fortolkningen, som står skjult bak.
+  const fortolkningSkjult = rute.side !== 'fortolkning' || redigererFortolkning
   // Reglene rusmiddelmodulene fortolkes med, hentet én gang for hele appen.
   const scenarioregler = useHentScenarioregler(useCallback(() => lesScenarioregler(klient()), []))
   const hits = useMemo(() => search(state.query, pool), [state.query, pool])
@@ -246,8 +252,8 @@ export default function App() {
   const regelsett = regeloppslag?.status === 'klar' ? regeloppslag.regelsett : null
   const valgene = useMemo(() => (regelsett ? regelsettvalg(regelsett) : []), [regelsett])
 
-  // En administrator kan ha publisert nye regler på en stoffside. De
-  // hentes når hen går tilbake til fortolkningen.
+  // En administrator kan ha publisert et nytt referanseområde på en
+  // stoffside. Det hentes når hen går tilbake til fortolkningen.
   const varPaInfoside = useRef(paaInfoside)
   // Det samme gjelder fagsøket, som henter indeksen på nytt neste gang det
   // brukes, eller med én gang når hen går rett til søkesiden: den har alt bedt
@@ -258,7 +264,6 @@ export default function App() {
   useEffect(() => {
     if (varPaInfoside.current && !paaInfoside && faginnhold.kanRedigere) {
       hentPaNytt()
-      hentThcPaNytt()
       hentStoffsiderPaNytt()
       foreldSokeindeks(paaSokeside)
     }
@@ -268,10 +273,24 @@ export default function App() {
     paaSokeside,
     faginnhold.kanRedigere,
     hentPaNytt,
-    hentThcPaNytt,
     hentStoffsiderPaNytt,
     foreldSokeindeks,
   ])
+
+  // Etter en publisering i redigeringen bruker fortolkningen de nye reglene med en gang.
+  const { provIgjen: hentScenarioreglerPaNytt } = scenarioregler
+  const reglerPublisert = useCallback(() => {
+    hentPaNytt()
+    hentThcPaNytt()
+    hentScenarioreglerPaNytt()
+  }, [hentPaNytt, hentThcPaNytt, hentScenarioreglerPaNytt])
+
+  // Redigeringen er bare for administratorene; for andre er adressen fortolkningen.
+  useEffect(() => {
+    if (erRedigering(rute) && !faginnhold.kanRedigere && rute.side === 'fortolkning') {
+      gaaTil({ side: 'fortolkning', analytt: rute.analytt }, { erstatt: true })
+    }
+  }, [rute, faginnhold.kanRedigere, gaaTil])
 
   // Tilstandsmaskinen trenger alternativene det nye søket gir for å se om det
   // smalner inn til én analytt, så søket kjøres her og ikke først når steget
@@ -424,6 +443,19 @@ export default function App() {
    * EtS fører begge til etanol.
    */
   const fagsider = useMemo(() => (state.analyte ? stofferForFortolkning(state.analyte, register) : []), [state.analyte, register])
+
+  /**
+   * Fortolkningen har regler og kommentarer administratorene kan redigere: en
+   * modul med scenarioregler, THC-syre, eller en kode med et publisert
+   * regelsett. EtG og EtS har ingen.
+   */
+  const kanRedigeres = useMemo(() => {
+    const analytt = state.analyte
+    if (!faginnhold.kanRedigere || !analytt) return false
+    if (rusModulFor(analytt) || analytt.kode === THC_KODE) return true
+    const { tilstand } = regler
+    return tilstand.status === 'klar' && analytterForFortolkning(analytt, katalog).some((a) => tilstand.etterKode.has(a.kode))
+  }, [faginnhold.kanRedigere, state.analyte, regler, katalog])
 
   const settMetodefilter = useCallback((metode: string | null) => {
     dispatch({ type: 'sett-metodefilter', metode })
@@ -586,7 +618,7 @@ export default function App() {
                 className="app"
                 data-steg={vist}
                 data-tomt={isIdle(state) && !fortolkningSkjult ? 'ja' : 'nei'}
-                data-side={rute.side}
+                data-side={redigererFortolkning ? 'fortolkningsredigering' : rute.side}
               >
                 <Toppmeny
                   meny={
@@ -612,8 +644,9 @@ export default function App() {
                 />
 
                 {/* Fortolkningens handlinger i toppmenyen (i dokken på smale
-                    flater). Stoffsiden og søkesiden har sine egne mens de vises. */}
-                {!fortolkningSkjult && fagsider.length > 0 && (
+                    flater). Stoffsiden, søkesiden og redigeringen har sine
+                    egne mens de vises. */}
+                {!fortolkningSkjult && (fagsider.length > 0 || kanRedigeres) && (
                   <ToppmenyInnhold spor="handlinger">
                     {fagsider.map((stoff) => (
                       <Toppmenyknapp
@@ -626,22 +659,42 @@ export default function App() {
                         {fagsider.length > 1 ? stoff.navn : 'Åpne fagside'}
                       </Toppmenyknapp>
                     ))}
+                    {kanRedigeres && state.analyte && (
+                      <Ikonknapp
+                        ikon="edit"
+                        etikett="Rediger fortolkningen"
+                        onClick={() => state.analyte && gaaTil(redigeringsrute(state.analyte.kode))}
+                      />
+                    )}
                   </ToppmenyInnhold>
+                )}
+
+                {redigererFortolkning && state.analyte && (
+                  <main className="scene scene--infoside">
+                    <FaginnholdskildeProvider kilde={faginnhold}>
+                      <Fortolkningsredigering
+                        key={state.analyte.kode}
+                        fortolkning={state.analyte}
+                        sted={rute.side === 'fortolkning' ? rute.sted : undefined}
+                        katalog={katalog}
+                        onPublisert={reglerPublisert}
+                        onAvslutt={lukkInfoside}
+                      />
+                    </FaginnholdskildeProvider>
+                  </main>
                 )}
 
                 {rute.side === 'stoff' && (
                   <main className="scene scene--infoside">
                     <FaginnholdskildeProvider kilde={faginnhold}>
-                      <ScenarioreglerProvider kilde={scenarioregler}>
-                        <Stoffside
-                          stoff={rute.stoff}
-                          sted={rute.sted}
-                          register={register}
-                          katalog={katalog}
-                          onApneFortolkning={apneFortolkning}
-                          onLukk={lukkInfoside}
-                        />
-                      </ScenarioreglerProvider>
+                      <Stoffside
+                        stoff={rute.stoff}
+                        sted={rute.sted}
+                        register={register}
+                        katalog={katalog}
+                        onApneFortolkning={apneFortolkning}
+                        onLukk={lukkInfoside}
+                      />
                     </FaginnholdskildeProvider>
                   </main>
                 )}

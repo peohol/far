@@ -20,7 +20,11 @@
  * - Fagsøket i toppmenyen når tastene i fortolkningen aldri, og søkesiden
  *   legger seg over fortolkningen som en stoffside.
  *
- * Innloggingen og databasen er erstattet: økten er en vanlig bruker, og
+ * - Fortolkningsreglene redigeres fra fortolkningen, på en egen side bare
+ *   administratorer får åpne (`#/fortolkning/<nøkkel>/rediger`).
+ *
+ * Innloggingen og databasen er erstattet: økten er en vanlig bruker (eller en
+ * administrator, når testen sier det), og
  * databasen har bare regelsettene fra før byttet, referanseområdekortene på
  * stoffsidene og siden for ett stoff som ikke står i registeret. Hvert kall
  * til databasen noteres, så testene kan se hva som ble lest etter hva.
@@ -31,9 +35,11 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 
 /** Kallene appen har gjort til databasen, i rekkefølge. */
 const databasen = vi.hoisted(() => ({ kall: [] as { funksjon: string; argumenter: Record<string, unknown> }[] }))
+/** Rollen til den innloggede; en vanlig bruker, med mindre testen sier noe annet. */
+const okt = vi.hoisted(() => ({ rolle: 'user' }))
 
 vi.mock('../auth/okt', () => ({
-  useProfil: () => ({ role: 'user', first_name: 'Lars', last_name: 'Leser', username: 'leser' }),
+  useProfil: () => ({ role: okt.rolle, first_name: 'Lars', last_name: 'Leser', username: 'leser' }),
 }))
 vi.mock('../auth/klient', async () => {
   const { DAGENS_REGELSETT } = await import('./hjelp/dagensregler')
@@ -104,6 +110,7 @@ beforeAll(() => {
 beforeEach(() => {
   window.location.hash = ''
   databasen.kall = []
+  okt.rolle = 'user'
 })
 
 afterEach(() => {
@@ -338,11 +345,12 @@ describe('gamle adresser etter analyttkoden', () => {
     expect(erstatt.mock.calls.map(([, , adresse]) => adresse)).toEqual([`#/stoff/${slug}`])
   })
 
-  it('sender seksjonen med fortolkningsreglene til seksjonen for koden på stoffsiden', async () => {
+  it('sender den gamle adressen til fortolkningsreglene til fortolkningen for koden', async () => {
     window.location.hash = '#/analytt/IRCAK/fortolkning'
     visApp()
-    await stoffsideFor('THC')
-    await waitFor(() => expect(window.location.hash).toBe('#/stoff/thc/fortolkning-ircak'))
+    await waitFor(() => expect(fortolkningen().hidden).toBe(false))
+    await waitFor(() => expect(window.location.hash).toBe('#/fortolkning/ircak'))
+    expect(stoffsiden()).toBeNull()
   })
 
   it('åpner ingen fagside for en kode som ikke er koblet til noe stoff', async () => {
@@ -355,6 +363,41 @@ describe('gamle adresser etter analyttkoden', () => {
     expect(screen.queryByText(/Fant ingen fagside/)).toBeNull()
     expect(erstatt).not.toHaveBeenCalled()
     expect(databasen.kall.filter((k) => k.funksjon === 'les_stoff')).toEqual([])
+  })
+})
+
+describe('redigeringen av fortolkningen', () => {
+  it('åpnes med «Rediger fortolkningen» for administratorer, og går tilbake til samme modul', async () => {
+    okt.rolle = 'admin'
+    const user = userEvent.setup()
+    visApp()
+    await velgNortriptylin(user)
+
+    await user.click(screen.getByRole('button', { name: 'Rediger fortolkningen' }))
+    await waitFor(() => expect(window.location.hash).toBe('#/fortolkning/nor/rediger'))
+    expect(fortolkningen().hidden).toBe(true)
+    const side = stoffsiden()!
+    expect(within(side).getByText('Rediger fortolkningen')).toBeTruthy()
+    // Reglene for koden står åpne, med utkastet.
+    expect(await within(side).findByRole('heading', { level: 2, name: 'Fortolkning' })).toBeTruthy()
+    expect(
+      databasen.kall.filter((k) => k.funksjon === 'finn_intervallregelsett').map((k) => k.argumenter.analyttkode),
+    ).toContain('NOR')
+
+    await user.click(screen.getByRole('button', { name: 'Avslutt redigering' }))
+    await waitFor(() => expect(fortolkningen().hidden).toBe(false))
+    expect(window.location.hash).toBe('#/fortolkning/nor')
+    expect(screen.getByRole('region', { name: 'Velg konsentrasjon' })).toBeTruthy()
+  })
+
+  it('er ikke der for andre, og adressen til den er bare fortolkningen', async () => {
+    window.location.hash = '#/fortolkning/nor/rediger'
+    visApp()
+    await waitFor(() => expect(window.location.hash).toBe('#/fortolkning/nor'))
+    await screen.findByRole('region', { name: 'Velg konsentrasjon' })
+    expect(fortolkningen().hidden).toBe(false)
+    expect(screen.queryByRole('button', { name: 'Rediger fortolkningen' })).toBeNull()
+    expect(stoffsiden()).toBeNull()
   })
 })
 
@@ -434,9 +477,8 @@ describe('mellom fortolkningen og stoffsiden', () => {
     window.location.hash = '#/stoff/bupropion'
     visApp()
     await stoffsideFor('Bupropion')
-    // Reglene på siden er HBUP-regelsettet, lest etter koden.
-    const regler = (await screen.findByRole('heading', { level: 2, name: 'Fortolkning' })).closest('section')!
-    expect(regler.textContent).toContain('Kommentaren fortolkningen gir for HBUP, etter målt konsentrasjon.')
+    // Fortolkningsreglene står ikke på fagsiden; de redigeres i fortolkningen.
+    expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkning' })).toBeNull()
     // Identitetspanelet sier hva HBUP er for stoffet, som sekundær informasjon.
     const identitet = document.querySelector('.identitet')!
     expect(within(identitet as HTMLElement).getByRole('button', { name: 'HBUP – åpne fortolkningen' })).toBeTruthy()
@@ -455,12 +497,10 @@ describe('mellom fortolkningen og stoffsiden', () => {
     const hbup = regelsettvalg(dagensRegelsett('HBUP')).map((v) => v.label)
     await waitFor(() => expect(knappene(steg)).toEqual(hbup))
 
-    // Reglene er lest etter analyttkoden. Stoffets nøkkel er bare brukt til å
-    // lese monografien og bivirkningene fra preparatomtalene — det finnes ikke
-    // noe regelsett for Bupropion — og diskusjonene på siden.
-    expect(
-      databasen.kall.filter((k) => k.funksjon === 'finn_intervallregelsett').map((k) => k.argumenter.analyttkode),
-    ).toEqual(['HBUP'])
+    // Fortolkningen har alle regelsettene, ordnet etter analyttkoden; fagsiden
+    // leser ingen regler. Stoffets nøkkel er bare brukt til å lese monografien
+    // og bivirkningene fra preparatomtalene og diskusjonene på siden.
+    expect(databasen.kall.filter((k) => k.funksjon === 'finn_intervallregelsett')).toEqual([])
     const etterStoffet = databasen.kall.filter((k) =>
       Object.values(k.argumenter).some((v) => typeof v === 'string' && /bupropion/i.test(v)),
     )
@@ -472,11 +512,10 @@ describe('mellom fortolkningen og stoffsiden', () => {
     window.location.hash = '#/stoff/thc'
     visApp()
     await stoffsideFor('THC')
-    // THC og IRCAK fortolkes i hver sin modul, med hver sin seksjon på siden.
-    expect(await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler – THC' })).toBeTruthy()
-    expect(screen.getByRole('heading', { level: 2, name: 'Fortolkningsregler – THC-syre i urin' })).toBeTruthy()
+    // THC og IRCAK fortolkes i hver sin modul, med hver sin knapp på siden.
+    expect(await screen.findByRole('button', { name: 'THC – åpne fortolkningen' })).toBeTruthy()
     expect(screen.queryByRole('button', { name: 'Åpne fortolkning' })).toBeNull()
-    expect(screen.getByRole('button', { name: 'THC – åpne fortolkningen' })).toBeTruthy()
+    expect(screen.queryByRole('heading', { level: 2, name: /^Fortolkningsregler/ })).toBeNull()
 
     await user.click(screen.getByRole('button', { name: 'IRCAK – åpne fortolkningen' }))
     await waitFor(() => expect(fortolkningen().hidden).toBe(false))

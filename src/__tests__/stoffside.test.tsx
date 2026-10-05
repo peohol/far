@@ -5,22 +5,20 @@
  *
  * Siden er identifisert av stoffets nøkkel (`<Stoffside stoff="bupropion">`),
  * aldri av en analyttkode. Laboratorieanalyttene står som sekundær
- * informasjon etter koblingene i stoffregisteret, og fortolkningsreglene leses
- * for seg etter analyttkoden og modulen.
+ * informasjon etter koblingene i stoffregisteret. Fortolkningsreglene står på
+ * fortolkningssidene (`fortolkningsredigering.test.tsx`), ikke her.
  *
  * Databasen er erstattet av en enkel leser og et lager som husker kallene;
  * at databasen selv gjør det den skal, prøves i `stoffsidelesing.test.ts`.
  * Innholdet er syntetisk. Tallene og tekstene er ikke kliniske verdier.
  */
 import { readFileSync } from 'node:fs'
-import type { ReactNode } from 'react'
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { Stoffside } from '../components/stoffside/Stoffside'
 import { detaljanker } from '../components/seksjoner/Seksjon'
 import { FaginnholdskildeProvider } from '../components/stoffside/Faginnholdskilde'
-import { ScenarioreglerProvider, type Scenarioreglerkilde } from '../components/regler/Scenarioreglerkilde'
 import { TipsLag } from '../components/Tips'
 import { ANALYTTKATALOG } from '../domain/analyttkatalog'
 import { STOFFREGISTERDATA, byggStoffregister, type Stoffregister } from '../domain/stoffregister'
@@ -36,7 +34,6 @@ import {
 } from '../faginnhold/lesing'
 import type { Historikk } from '../faginnhold/historikk'
 import type { Objektstatus, Tilstand } from '../faginnhold/modell'
-import { tilScenarioregler } from '../faginnhold/scenarioregler'
 import type { ThcRegelsettutgave } from '../faginnhold/thcregler'
 import { kommentarnavn, utenKommentarer } from '../regler/kommentarer'
 import type { Intervallregelsett, Intervallregelsettinnhold } from '../regler/modell'
@@ -55,7 +52,6 @@ import { lesDiplotypegrunnlag, type Cpicleser, type Cpicutvalg, type Diplotypegr
 import type { Anbefaling, Betingelse, Gen, Par } from '../cpic/modell'
 import type { Bivirkningsleser } from '../bivirkninger/lesing'
 import type { Bivirkning, Bivirkningsdata } from '../bivirkninger/modell'
-import { rusScenarioregeldata } from './hjelp/rusgrunnlag'
 import { thcRegelsettutgave } from './hjelp/thcgrunnlag'
 
 beforeAll(() => {
@@ -143,7 +139,6 @@ function regelsett(tilstand: Tilstand = 'publisert', kode = 'AMTNORSUM'): Interv
 const REGELSETT_ID = 'rrrrrrrr-0000-4000-8000-000000000003'
 /** Kommentaren som er endret i utkastet. */
 const HOY = 'k-hoy'
-const HOY_NAVN = 'AMTNORSUM – over referanseområdet, ring rekvirent'
 
 /**
  * Regelsettet og kommentarene det peker på, som egne objekter. Regelsettet er
@@ -513,39 +508,27 @@ const hentVerdi = (tekst: string) => screen.getByText(erVerdi(tekst))
 /** Registeret med inndelingen databasen får første gang. */
 const REGISTER = byggStoffregister([], STOFFREGISTERDATA, GRUNNSTRUKTUR)
 
-/** Scenarioreglene appen har hentet, som fortolkningen og stoffsiden viser i lesemodus. */
-const SCENARIOREGLER: Scenarioreglerkilde = {
-  tilstand: { status: 'klar', regler: tilScenarioregler(rusScenarioregeldata()) },
-  provIgjen: () => {},
-}
-
 interface Visningsvalg {
   sted?: string[]
   /** Stoffregisteret siden slår opp i; standard er registeret med inndelingen fra databasen. */
   register?: Stoffregister
-  /** Scenarioreglene appen har hentet. Uten dem vises ingen scenarioregler. */
-  scenarioregler?: Scenarioreglerkilde
 }
 
 /** Stoffsiden for stoffet med nøkkelen, slik appen viser den på `#/stoff/<nøkkel>`. */
-function vis(stoff: string, k = kilde(), { sted, register = REGISTER, scenarioregler }: Visningsvalg = {}) {
+function vis(stoff: string, k = kilde(), { sted, register = REGISTER }: Visningsvalg = {}) {
   const onApneFortolkning = vi.fn()
   const onLukk = vi.fn()
-  const medRegler = (barn: ReactNode) =>
-    scenarioregler ? <ScenarioreglerProvider kilde={scenarioregler}>{barn}</ScenarioreglerProvider> : barn
   render(
     <TipsLag>
       <FaginnholdskildeProvider kilde={k}>
-        {medRegler(
-          <Stoffside
-            stoff={stoff}
-            sted={sted}
-            register={register}
-            katalog={katalog}
-            onApneFortolkning={onApneFortolkning}
-            onLukk={onLukk}
-          />,
-        )}
+        <Stoffside
+          stoff={stoff}
+          sted={sted}
+          register={register}
+          katalog={katalog}
+          onApneFortolkning={onApneFortolkning}
+          onLukk={onLukk}
+        />
       </FaginnholdskildeProvider>
     </TipsLag>,
   )
@@ -558,13 +541,15 @@ function identiteten(): HTMLElement {
 }
 
 describe('stoffet er sidens identitet', () => {
-  it('leser siden etter stoffets nøkkel og reglene for seg etter analyttkoden', async () => {
+  it('leser siden etter stoffets nøkkel, og viser ikke fortolkningsreglene', async () => {
     const { leser } = vis('amitriptylin')
     expect(await finnVerdi('10–20 nmol/L')).toBeTruthy()
     expect(leser.lesStoffside).toHaveBeenCalledWith('amitriptylin', 'publisert')
-    // Reglene for analytten amitriptylin er primært stoff for, og ingen andre.
-    await waitFor(() => expect(leser.finnIntervallregelsett).toHaveBeenCalledWith('AMTNORSUM', 'publisert'))
-    expect(vi.mocked(leser.finnIntervallregelsett).mock.calls.map(([kode]) => kode)).toEqual(['AMTNORSUM'])
+    // Reglene hører til fortolkningssidene: fagsiden leser og viser dem ikke.
+    expect(leser.finnIntervallregelsett).not.toHaveBeenCalled()
+    expect(leser.lesThcRegelsett).not.toHaveBeenCalled()
+    expect(document.querySelector('.regler')).toBeNull()
+    expect(screen.queryByRole('region', { name: /^Fortolkning/ })).toBeNull()
     const stoffside = document.querySelector('section.stoffside')!
     expect(stoffside.getAttribute('data-modus')).toBe('lese')
     expect(stoffside.querySelector('.stoffside__paneler')).not.toBeNull()
@@ -602,8 +587,7 @@ describe('stoffet er sidens identitet', () => {
     expect(document.querySelector('section.stoffside')).not.toBeNull()
   })
 
-  it('viser et stoff i registeret som ikke har noen side i databasen: tom monografi og reglene', async () => {
-    const user = userEvent.setup()
+  it('viser et stoff i registeret som ikke har noen side i databasen: tom monografi', async () => {
     window.location.hash = '#/stoff/nortriptylin'
     const { leser } = vis(
       'nortriptylin',
@@ -613,9 +597,8 @@ describe('stoffet er sidens identitet', () => {
     expect(document.querySelector('.stoffside__tom')).not.toBeNull()
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Nortriptylin')
     expect(leser.lesStoffside).toHaveBeenCalledWith('nortriptylin', 'publisert')
-    // Reglene står likevel, og adressen blir stående på stoffet.
-    await user.click(await within(await screen.findByRole('region', { name: 'Fortolkning' })).findByRole('button', { name: 'Fortolkning' }))
-    expect(screen.getByText('Syntetisk lav kommentar.')).toBeTruthy()
+    // Adressen blir stående på stoffet, og reglene står ikke her.
+    expect(document.querySelector('.regler')).toBeNull()
     expect(window.location.hash).toBe('#/stoff/nortriptylin')
     window.location.hash = ''
   })
@@ -672,9 +655,6 @@ describe('Bupropion: metabolitten er sekundær informasjon', () => {
     // Ingen andre stoffer er koblet til HBUP, så det er ingen «Se også».
     expect(within(setning as HTMLElement).queryByRole('link')).toBeNull()
 
-    // Reglene for HBUP står på siden, lest etter koden.
-    expect(vi.mocked(leser.finnIntervallregelsett).mock.calls.map(([kode]) => kode)).toEqual(['HBUP'])
-    expect(await screen.findByRole('region', { name: 'Fortolkning' })).toBeTruthy()
     // Koden og «Åpne fortolkning» åpner begge fortolkningen for HBUP.
     await user.click(within(analyse).getByRole('button', { name: 'HBUP – åpne fortolkningen' }))
     await user.click(screen.getByRole('button', { name: 'Åpne fortolkning' }))
@@ -701,17 +681,11 @@ describe('Nortriptylin: sumanalysen er bare en sekundær kobling', () => {
   const norregler = (kode: string, t: Tilstand) =>
     kode === 'NOR' ? regelsettutgave(t, 2, 'NOR') : kode === 'AMTNORSUM' ? regelsettutgave(t) : null
 
-  it('viser reglene for NOR, og AMTNORSUM bare som kode med «Se også» Amitriptylin', async () => {
+  it('viser NOR, og AMTNORSUM bare som kode med «Se også» Amitriptylin', async () => {
     const user = userEvent.setup()
-    const { leser, onApneFortolkning } = vis('nortriptylin', kilde({ data: () => TOM_STOFFSIDE, regler: norregler }))
-    const seksjon = await screen.findByRole('region', { name: 'Fortolkning' })
+    const { onApneFortolkning } = vis('nortriptylin', kilde({ data: () => TOM_STOFFSIDE, regler: norregler }))
+    expect(await screen.findByText('Denne siden har ikke fått faginnhold ennå.')).toBeTruthy()
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Nortriptylin')
-
-    // Bare reglene for NOR er lest; AMTNORSUM-reglene står på Amitriptylin-siden.
-    expect(vi.mocked(leser.finnIntervallregelsett).mock.calls.map(([kode]) => kode)).toEqual(['NOR'])
-    expect(document.querySelectorAll('.regler')).toHaveLength(1)
-    await user.click(within(seksjon).getByRole('button', { name: 'Fortolkning' }))
-    expect(within(seksjon).getByText('Ringegrense: 1800 nmol/L')).toBeTruthy()
 
     // Begge kodene står under navnet, NOR først.
     const analyse = identiteten().querySelector('.identitet__analyse') as HTMLElement
@@ -748,28 +722,19 @@ describe('Nortriptylin: sumanalysen er bare en sekundær kobling', () => {
 })
 
 describe('THC: to fortolkningsmoduler på samme side', () => {
-  it('har én regelseksjon for THC og én for THC-syre i urin, og ingen felles «Åpne fortolkning»', async () => {
+  it('viser begge kodene, uten regler, og ingen felles «Åpne fortolkning»', async () => {
     const user = userEvent.setup()
-    const thcregelsett = thcRegelsettutgave()
     const { leser, onApneFortolkning } = vis(
       'thc',
-      kilde({ data: () => TOM_STOFFSIDE, regler: () => null, thc: () => thcregelsett }),
-      { scenarioregler: SCENARIOREGLER },
+      kilde({ data: () => TOM_STOFFSIDE, regler: () => null, thc: () => thcRegelsettutgave() }),
     )
-    expect(await screen.findByRole('region', { name: 'Fortolkningsregler – THC-syre i urin' })).toBeTruthy()
+    expect(await screen.findByText('Denne siden har ikke fått faginnhold ennå.')).toBeTruthy()
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('THC')
     expect(document.title).toBe('THC – OUSFAR')
     expect(identiteten().querySelector('.metalinje')!.textContent).toBe('Cannabinoider')
-
-    // Seksjonene: `fortolkning` for den første modulen, `fortolkning-ircak` for THC-syre.
-    const thc = screen.getByRole('region', { name: 'Fortolkningsregler – THC' })
-    const ircak = screen.getByRole('region', { name: 'Fortolkningsregler – THC-syre i urin' })
-    expect(thc.id).toBe('panel-fortolkning')
-    expect(ircak.id).toBe('panel-fortolkning-ircak')
-    expect(thc.compareDocumentPosition(ircak) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    // THC-syrereglene er lest for seg, fordi IRCAK er en av stoffets analytter.
-    expect(leser.lesThcRegelsett).toHaveBeenCalledWith('publisert')
-    expect(vi.mocked(leser.finnIntervallregelsett).mock.calls.map(([kode]) => kode).sort()).toEqual(['IRCAK', 'THC'])
+    // Reglene for begge modulene står på fortolkningssidene deres.
+    expect(document.querySelector('.regler')).toBeNull()
+    expect(leser.lesThcRegelsett).not.toHaveBeenCalled()
 
     // Modulene er to, så hver åpnes fra koden sin.
     expect(screen.queryByRole('button', { name: 'Åpne fortolkning' })).toBeNull()
@@ -786,16 +751,6 @@ describe('THC: to fortolkningsmoduler på samme side', () => {
     expect(identiteten().querySelector('.identitet__komponenter')!.textContent).toBe(
       'IRCAK måler THC-syre, en metabolitt av THC.',
     )
-  })
-
-  it('åpner seksjonen for THC-syre når adressen peker dit', async () => {
-    vis('thc', kilde({ data: () => TOM_STOFFSIDE, regler: () => null, thc: () => thcRegelsettutgave() }), {
-      sted: ['fortolkning-ircak'],
-      scenarioregler: SCENARIOREGLER,
-    })
-    await screen.findByRole('region', { name: 'Fortolkningsregler – THC-syre i urin' })
-    await waitFor(() => expect(skuffen('Fortolkningsregler – THC-syre i urin').getAttribute('aria-expanded')).toBe('true'))
-    expect(skuffen('Fortolkningsregler – THC').getAttribute('aria-expanded')).toBe('false')
   })
 })
 
@@ -815,7 +770,7 @@ describe('Diazepam: datakort for hver primære analytt', () => {
   })
 
   it('viser referanseområdet for DIAZ og for DMI, merket med analyttens navn', async () => {
-    const { leser } = vis('diazepam', kilde({ data: diazepamside, regler: () => null }))
+    vis('diazepam', kilde({ data: diazepamside, regler: () => null }))
     await finnVerdi('100–200 nmol/L')
     const konsentrasjoner = within(screen.getByRole('region', { name: 'Viktige data' })).getByRole('group', {
       name: 'Konsentrasjoner i serum',
@@ -829,8 +784,6 @@ describe('Diazepam: datakort for hver primære analytt', () => {
       '100–200 nmol/L',
       '300–400 nmol/L',
     ])
-    // Reglene for begge kodene er lest, og ikke for oksazepam, som har sin egen side.
-    expect(vi.mocked(leser.finnIntervallregelsett).mock.calls.map(([kode]) => kode)).toEqual(['DIAZ', 'DMI'])
     const analyse = identiteten().querySelector('.identitet__analyse')!
     expect(analyse.textContent).toBe(`DIAZ·DMI·Inngår i${katalog.finn('DIAZ')!.analysemetode}`)
     expect(identiteten().querySelector('.identitet__komponenter')!.textContent).toBe(
@@ -838,23 +791,13 @@ describe('Diazepam: datakort for hver primære analytt', () => {
     )
   })
 
-  it('åpner den felles modulen, med reglene som deles med oksazepam', async () => {
+  it('åpner den felles modulen, uten å vise reglene for den', async () => {
     const user = userEvent.setup()
-    const { onApneFortolkning } = vis('diazepam', kilde({ data: diazepamside, regler: () => null }), {
-      scenarioregler: SCENARIOREGLER,
-    })
+    const { onApneFortolkning } = vis('diazepam', kilde({ data: diazepamside, regler: () => null }))
     await finnVerdi('100–200 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Åpne fortolkning' }))
     expect(onApneFortolkning.mock.calls[0]![0].kode).toBe('DIAZ · DMI · OXA')
-    // Én regelseksjon for modulen, som sier at Oksazepam-siden viser de samme reglene.
-    const seksjon = document.getElementById('panel-fortolkning')!
-    expect(seksjon).not.toBeNull()
-    expect(document.getElementById('panel-fortolkning-dmi')).toBeNull()
-    await apneSkuff(user, 'Fortolkningsregler')
-    expect(within(seksjon).getByText(/Reglene og kommentartekstene er felles med/).textContent).toBe(
-      'Reglene og kommentartekstene er felles med Oksazepam.',
-    )
-    expect(within(seksjon).getByRole('link', { name: 'Oksazepam' }).getAttribute('href')).toBe('#/stoff/oksazepam')
+    expect(document.querySelector('.regler')).toBeNull()
   })
 
   it('lagrer kortet for DMI med koden det gjelder', async () => {
@@ -1799,25 +1742,20 @@ describe('redigeringsmodus', () => {
     const { lager } = vis('amitriptylin', kilde({ kanRedigere: true }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
-    // Datakortet og en kommentar regelsettet peker på, har revisjoner som ikke
-    // er publisert. Regelsettet selv er publisert og er ikke med.
-    // Statusen i toppmenyen teller det som ikke er publisert.
-    expect(await screen.findByText('Redigerer · utkast med 2 endringer')).toBeTruthy()
+    // Datakortet har en revisjon som ikke er publisert. En kommentar
+    // fortolkningsreglene peker på, er også endret, men reglene publiseres på
+    // fortolkningssiden og er ikke med. Statusen i toppmenyen teller det som
+    // ikke er publisert.
+    expect(await screen.findByText('Redigerer · utkast med 1 endring')).toBeTruthy()
     await user.click(screen.getByRole('button', { name: 'Publiser' }))
     const oppsummering = screen.getByRole('dialog', { name: 'Publiser endringene' })
     await waitFor(() =>
-      expect(within(oppsummering).getAllByRole('listitem').map((li) => li.textContent)).toEqual([
-        'Viktige data',
-        `Kommentar: ${HOY_NAVN}`,
-      ]),
+      expect(within(oppsummering).getAllByRole('listitem').map((li) => li.textContent)).toEqual(['Viktige data']),
     )
     expect(lager.publiserUtkast).not.toHaveBeenCalled()
     await user.click(screen.getByRole('button', { name: 'Publiser nå' }))
-    await waitFor(() => expect(lager.publiserUtkast).toHaveBeenCalledWith(HOY, 2))
-    expect(vi.mocked(lager.publiserUtkast).mock.calls).toEqual([
-      ['kort', 2],
-      [HOY, 2],
-    ])
+    await waitFor(() => expect(lager.publiserUtkast).toHaveBeenCalledWith('kort', 2))
+    expect(vi.mocked(lager.publiserUtkast).mock.calls).toEqual([['kort', 2]])
   })
 
   it('publiserer en ny side med siden først, uten steg for analytter eller komponenter', async () => {
@@ -2480,212 +2418,13 @@ describe('mekanismekortene i farmakodynamikken', () => {
   })
 })
 
-describe('fortolkningsreglene', () => {
-  /** Siden i redigeringsmodus, med reglene fra utkastet. */
-  async function redigerer(k = kilde({ kanRedigere: true })) {
+describe('historikken', () => {
+  it('åpner historikken for et kort fra «Sist redigert»', async () => {
     const user = userEvent.setup()
-    const verdier = vis('amitriptylin', k)
+    const { leser } = vis('amitriptylin', kilde({ kanRedigere: true }))
     await finnVerdi('10–20 nmol/L')
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
-    await screen.findByText('Endret syntetisk høy kommentar.')
-    return { user, ...verdier }
-  }
-
-  /** Seksjonen «Fortolkning», åpnet. Den er lukket når siden vises. */
-  async function apneFortolkning(user = userEvent.setup()) {
-    const seksjon = await screen.findByRole('region', { name: 'Fortolkning' })
-    const knapp = within(seksjon).getByRole('button', { name: 'Fortolkning' })
-    expect(knapp.getAttribute('aria-expanded')).toBe('false')
-    await user.click(knapp)
-    return seksjon
-  }
-
-  it('viser reglene som en tabell, med ringegrensen og cut-off', async () => {
-    vis('amitriptylin')
-    // Lukket sier seksjonen hva den inneholder.
-    expect((await screen.findByText('3 områder · Ringegrense 1800 nmol/L · Cut-off')).textContent).toBeTruthy()
-    const seksjon = await apneFortolkning()
-    expect(seksjon.id).toBe('panel-fortolkning')
-    const rader = within(seksjon)
-      .getAllByRole('row')
-      .slice(1)
-      .map((rad) => [...rad.querySelectorAll('th, td')].map((c) => c.textContent))
-    expect(rader).toEqual([
-      ['< 10', 'Syntetisk lav kommentar.', ''],
-      ['10 – 1799', 'Syntetisk middels kommentar.', ''],
-      ['≥ 1800', 'Syntetisk høy kommentar.', 'Ring rekvirent'],
-      ['Til stede under cut-off', 'Syntetisk innledning. Syntetisk middels kommentar.', ''],
-    ])
-    expect(within(seksjon).getByText('Ringegrense: 1800 nmol/L')).toBeTruthy()
-    expect(within(seksjon).queryByRole('button', { name: 'Rediger reglene' })).toBeNull()
-  })
-
-  it('simulerer en verdi på og rundt grensene, og cut-off', async () => {
-    const user = userEvent.setup()
-    vis('amitriptylin')
-    const seksjon = await apneFortolkning(user)
-    // Simulatoren er et detaljkort i seksjonen, med sin egen adresse.
-    const simulator = within(seksjon).getByRole('group', { name: 'Simulator' })
-    expect(simulator.id).toBe('panel-fortolkning--simulator')
-    await user.click(within(simulator).getByRole('button', { name: 'Simulator' }))
-    const felt = within(simulator).getByLabelText('Målt konsentrasjon (nmol/L)')
-    const svar = () => seksjon.querySelector('.regler__svar')!.textContent
-
-    await user.type(felt, '1799,5')
-    expect(svar()).toBe('10 – 1799 nmol/L · Innenfor referanseområdetSyntetisk middels kommentar.Ingen ekstra handling.')
-    await user.clear(felt)
-    await user.type(felt, '1800')
-    expect(svar()).toBe('≥ 1800 nmol/L · Over referanseområdetSyntetisk høy kommentar.Ring rekvirent.')
-    await user.click(within(seksjon).getByRole('checkbox', { name: 'Til stede under cut-off' }))
-    expect(svar()).toBe('Til stede under cut-offSyntetisk innledning. Syntetisk middels kommentar.Ingen ekstra handling.')
-  })
-
-  it('lagrer en flyttet grense og en endret kommentar som utkast, med ringegrensen', async () => {
-    const { user, lager } = await redigerer()
-    const seksjon = screen.getByRole('region', { name: 'Fortolkning' })
-    await user.click(within(seksjon).getByRole('button', { name: 'Rediger reglene' }))
-    const skjema = screen.getByRole('form', { name: 'Rediger: Fortolkningsreglene for AMTNORSUM' })
-
-    const grense = within(skjema).getByLabelText('Grense mellom intervall 2 og 3')
-    await user.clear(grense)
-    await user.type(grense, '2000')
-    // Kommentaren til intervall 2 brukes også av cut-off, og det sies.
-    const intervall2 = within(skjema).getByRole('group', { name: 'Intervall 2: 10 – 1999 nmol/L' })
-    const tekst = within(intervall2).getByLabelText('Kommentartekst')
-    expect(within(intervall2).getByText(/brukes også av cut-off/)).toBeTruthy()
-    await user.clear(tekst)
-    await user.type(tekst, ' Ny syntetisk kommentar. ')
-
-    // Simulatoren prøver det som står i skjemaet.
-    await user.type(within(skjema).getByLabelText('Målt konsentrasjon (nmol/L)'), '1999')
-    expect(skjema.querySelector('.regler__svar')!.textContent).toMatch(/Ny syntetisk kommentar/)
-
-    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
-    await waitFor(() => expect(lager.lagreIntervallregelsett).toHaveBeenCalled())
-    const [id, revisjon, innhold, kommentarer] = vi.mocked(lager.lagreIntervallregelsett).mock.calls[0]!
-    expect([id, revisjon]).toEqual([REGELSETT_ID, 2])
-    // Regelsettet lagres uten tekstene; den endrede teksten lagres i kommentaren.
-    expect(innhold).toEqual({ ...utenKommentarer(regelsett('utkast')), skillepunkter: [10, 2000], ringegrense: 2000 })
-    expect(kommentarer).toEqual([
-      {
-        id: 'k-middels',
-        revisjon: 1,
-        innhold: { navn: 'AMTNORSUM – innenfor referanseområdet', tekst: 'Ny syntetisk kommentar.', plassholdere: [] },
-      },
-    ])
-    expect(lager.lagreUtkast).not.toHaveBeenCalled()
-  })
-
-  it('deler og slår sammen intervaller, og avviser en grense utenfor intervallet', async () => {
-    const { user, lager } = await redigerer()
-    await user.click(screen.getByRole('button', { name: 'Rediger reglene' }))
-    const skjema = screen.getByRole('form', { name: 'Rediger: Fortolkningsreglene for AMTNORSUM' })
-    const intervall2 = within(skjema).getByRole('group', { name: 'Intervall 2: 10 – 1799 nmol/L' })
-    await user.click(within(intervall2).getByRole('button', { name: 'Del intervallet' }))
-    await user.type(within(intervall2).getByLabelText('Ny grense inne i intervallet'), '5000')
-    await user.click(within(intervall2).getByRole('button', { name: 'Del her' }))
-    expect(within(intervall2).getByRole('alert').textContent).toBe('Grensen må ligge inne i intervallet.')
-    const ny = within(intervall2).getByLabelText('Ny grense inne i intervallet')
-    await user.clear(ny)
-    await user.type(ny, '500')
-    await user.click(within(intervall2).getByRole('button', { name: 'Del her' }))
-    expect(within(skjema).getByRole('group', { name: 'Intervall 3: 500 – 1799 nmol/L' })).toBeTruthy()
-
-    await user.click(
-      within(within(skjema).getByRole('group', { name: 'Intervall 2: 10 – 499 nmol/L' })).getByRole('button', {
-        name: 'Slå sammen med intervallet over',
-      }),
-    )
-    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
-    await waitFor(() => expect(lager.lagreIntervallregelsett).toHaveBeenCalled())
-    expect(vi.mocked(lager.lagreIntervallregelsett).mock.calls[0]!.slice(2)).toEqual([
-      utenKommentarer(regelsett('utkast')),
-      [],
-    ])
-  })
-
-  it('lar brukeren sammenligne og velge ved en konflikt, uten å miste det som er gjort', async () => {
-    const k = kilde({ kanRedigere: true })
-    const { user, lager, leser } = await redigerer(k)
-    vi.mocked(lager.lagreIntervallregelsett).mockRejectedValueOnce(new Samtidighetskonflikt(3, 2))
-    vi.mocked(leser.finnIntervallregelsett).mockResolvedValueOnce(regelsettutgave('publisert', 3))
-    await user.click(screen.getByRole('button', { name: 'Rediger reglene' }))
-    const skjema = screen.getByRole('form', { name: 'Rediger: Fortolkningsreglene for AMTNORSUM' })
-    const tekst = within(within(skjema).getByRole('group', { name: /^Intervall 1/ })).getByLabelText('Kommentartekst')
-    await user.clear(tekst)
-    await user.type(tekst, 'Min syntetiske kommentar.')
-    await user.click(within(skjema).getByRole('button', { name: 'Lagre utkast' }))
-
-    expect(await within(skjema).findByText(/Noen andre har lagret reglene/)).toBeTruthy()
-    expect((tekst as HTMLTextAreaElement).value).toBe('Min syntetiske kommentar.')
-    await user.click(within(skjema).getByRole('button', { name: 'Sammenlign med deres' }))
-    expect(await within(skjema).findByText('revisjon 3', { exact: false })).toBeTruthy()
-    // Rødt er deres, grønt er ditt.
-    expect(skjema.querySelector('del')?.textContent).toBe('Syntetisk lav')
-    expect(skjema.querySelector('ins')?.textContent).toBe('Min syntetiske')
-
-    await user.click(within(skjema).getByRole('button', { name: 'Lagre mine over deres' }))
-    await waitFor(() => expect(lager.lagreIntervallregelsett).toHaveBeenCalledTimes(2))
-    const [id, revisjon, , kommentarer] = vi.mocked(lager.lagreIntervallregelsett).mock.calls[1]!
-    expect([id, revisjon]).toEqual([REGELSETT_ID, 3])
-    expect(kommentarer).toEqual([
-      expect.objectContaining({ id: 'k-lav', revisjon: 1, innhold: expect.objectContaining({ tekst: 'Min syntetiske kommentar.' }) }),
-      // Den høye kommentaren er ulik i deres utgave, og det brukeren har, lagres over.
-      expect.objectContaining({ id: HOY, revisjon: 1, innhold: expect.objectContaining({ tekst: 'Endret syntetisk høy kommentar.' }) }),
-    ])
-  })
-
-  it('viser historikken med hvem, når og hva som er endret, og gjenoppretter som en ny revisjon', async () => {
-    const { user, lager } = await redigerer()
-    const seksjon = await apneFortolkning(user)
-    await user.click(within(seksjon).getByRole('button', { name: /Vis historikken for fortolkningsreglene/ }))
-    const vindu = await screen.findByRole('dialog', { name: 'Historikk: Fortolkningsreglene' })
-
-    expect(await within(vindu).findByText('Revisjon 2: endret (utkastet nå)')).toBeTruthy()
-    expect(within(vindu).getAllByText('av Rita Redaktør 22.09.2026 kl. 14:32').length).toBeGreaterThan(0)
-    expect(within(vindu).getByText('Syntetisk import')).toBeTruthy()
-    // Regelsettet eier ikke tekstene: endringen er at det øverste intervallet
-    // fikk sin egen kommentar, vist med navnet.
-    expect(within(vindu).getByRole('heading', { name: 'Intervall 3' })).toBeTruthy()
-    expect([...vindu.querySelectorAll('del')].map((d) => d.textContent?.trim())).toEqual(['innenfor referanseområdet'])
-    expect([...vindu.querySelectorAll('ins')].map((d) => d.textContent?.trim())).toEqual([
-      'over referanseområdet, ring rekvirent',
-    ])
-    expect(vindu.textContent).not.toContain('Syntetisk høy kommentar.')
-
-    // Side om side viser alle feltene, med det endrede merket.
-    await user.click(within(vindu).getByRole('button', { name: 'Side om side' }))
-    expect(within(vindu).getByRole('columnheader', { name: 'Revisjon 1' })).toBeTruthy()
-    expect(vindu.querySelectorAll('tr.historikk__endret')).toHaveLength(1)
-
-    // Revisjon 1 gjenopprettes som en ny revisjon av utkastet.
-    await user.click(within(vindu).getByRole('button', { name: /Revisjon 1: opprettet/ }))
-    await user.click(within(vindu).getByRole('button', { name: 'Gjenopprett revisjon 1' }))
-    await user.click(within(vindu).getByRole('button', { name: 'Gjenopprett nå' }))
-    await waitFor(() => expect(lager.gjenopprettRevisjon).toHaveBeenCalledWith(REGELSETT_ID, 2, 1))
-  })
-
-  it('viser historikken for hver kommentar for seg, ord for ord, og gjenoppretter den', async () => {
-    const { user, lager, leser } = await redigerer()
-    const seksjon = screen.getByRole('region', { name: 'Fortolkning' })
-    await user.click(within(seksjon).getByText('Historikken for hver kommentar'))
-    await user.click(within(seksjon).getByRole('button', { name: new RegExp(`historikken for kommentaren «${HOY_NAVN}»`) }))
-    const vindu = await screen.findByRole('dialog', { name: `Historikk: Kommentaren «${HOY_NAVN}»` })
-    expect(leser.lesHistorikk).toHaveBeenCalledWith(HOY)
-
-    expect(await within(vindu).findByText('Revisjon 2: endret (utkastet nå)')).toBeTruthy()
-    expect([...vindu.querySelectorAll('del')].map((d) => d.textContent)).toEqual(['Syntetisk'])
-    expect([...vindu.querySelectorAll('ins')].map((d) => d.textContent)).toEqual(['Endret syntetisk'])
-
-    await user.click(within(vindu).getByRole('button', { name: /Revisjon 1: opprettet/ }))
-    await user.click(within(vindu).getByRole('button', { name: 'Gjenopprett revisjon 1' }))
-    await user.click(within(vindu).getByRole('button', { name: 'Gjenopprett nå' }))
-    await waitFor(() => expect(lager.gjenopprettRevisjon).toHaveBeenCalledWith(HOY, 2, 1))
-  })
-
-  it('åpner historikken for et kort fra «Sist redigert»', async () => {
-    const { user, leser } = await redigerer()
-    await user.click(screen.getByRole('button', { name: /Vis historikken for referanseområde/ }))
+    await user.click(await screen.findByRole('button', { name: /Vis historikken for referanseområde/ }))
     await screen.findByRole('dialog', { name: 'Historikk: Referanseområde' })
     expect(leser.lesHistorikk).toHaveBeenCalledWith('kort')
   })

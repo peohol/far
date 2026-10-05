@@ -68,25 +68,25 @@ traff og forholdstallene, som simulatoren viser. Rekkefølgen:
 3. En nevner på 0 gir forholdets melding.
 4. Scenariet der alle vilkårene holder, gir utfallet.
 
-## På fagsiden
+## På redigeringssiden
 
-`src/components/regler/Scenarioregler.tsx` viser regelsettet på fagsiden til
-hver analytt i modulen som har et primært stoff: grensene, scenariene sortert etter hva som er påvist,
+`src/components/regler/Scenarioregler.tsx` viser regelsettet på
+redigeringssiden for fortolkningen (`docs/fortolkningsregler.md`, «Redigeringssiden»): grensene, scenariene sortert etter hva som er påvist,
 med vilkår og utfall, og kommentarene regelsettet viser til, nummerert, så
 hver tekst står én gang (`src/domain/scenariovisning.ts`). Med mer enn ett scenario følger
 «Prøv reglene», som bruker samme skjema (`Rusvalg`) og samme visning av
 utfallet (`Rusutfall`) som fortolkningsmodulen, kjører `kjorScenarier` og
 markerer scenariet som traff.
 
-Reglene er seksjonen `fortolkning` på siden (`docs/seksjoner.md`), lukket fra
-start, med antall scenarier og grensene i oppsummeringen. Kommentartekstene
-(`tekster`) og simulatoren (`simulator`) er detaljkort i den, så en
-direktelenke som `#/stoff/diazepam/fortolkning/simulator` åpner simulatoren.
+Reglene er seksjonen `fortolkning` på siden (`docs/seksjoner.md`), med antall
+scenarier og grensene i oppsummeringen; står de sammen med andre regler, heter
+den `fortolkning-scenarier`. Kommentartekstene (`tekster`) og simulatoren
+(`simulator`) er detaljkort i den.
 
 ## Redigeringen
 
-Administratorer redigerer reglene i redigeringsmodus, i seksjonen
-`fortolkning` («Rediger reglene»), med `Scenarioredigering.tsx`. Endringene
+Administratorer redigerer reglene på redigeringssiden, i seksjonen
+med reglene («Rediger reglene»), med `Scenarioredigering.tsx`. Endringene
 er rene funksjoner i `src/regler/scenarioredigering.ts`. Det som kan endres,
 er det en fagperson skriver og justerer:
 
@@ -155,9 +155,7 @@ tilstand, og kommentarene de viser til), og `tilScenarioregler`
 modul: mens de hentes, viser steget det og har ingenting å kopiere; kunne de
 ikke hentes, eller mangler eller feiler modulens regelsett, sier steget
 hvorfor og tilbyr «Prøv igjen». Det fortolker aldri med regler som ikke er
-publisert og kontrollert. Fagsiden bruker de samme hentede reglene
-(`src/components/regler/Scenarioreglerkilde.tsx`), unntatt i redigeringen, som
-leser utkastet. Etter en publisering hentes de på nytt; reglene appen alt har,
+publisert og kontrollert. Redigeringssiden leser utkastet. Etter en publisering hentes de på nytt; reglene appen alt har,
 står til de nye er hentet. Hvilke moduler som finnes,
 og hvilke koder de dekker, står i `src/domain/rus.ts`.
 

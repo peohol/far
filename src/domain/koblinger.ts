@@ -1,6 +1,6 @@
 import { ANALYTTKATALOG, type Analyttkatalog, type Laboratorieanalytt } from './analyttkatalog'
 import { menyanalytter } from './analysemetoder'
-import { stoffadresse } from './rute'
+import { adresse, fortolkningsrute, stoffadresse } from './rute'
 import { iSetning } from './names'
 import { ANDRE_STOFFER, STOFFREGISTER, type Stoff, type StoffAnalyttKobling, type Stoffregister } from './stoffregister'
 import type { Analyte } from '../types'
@@ -49,38 +49,40 @@ export function primareAnalytter(
     .map(({ analytt }) => analytt)
 }
 
-/** Fortolkningsreglene for én modul på stoffsiden: analyttene i den og seksjonen de står i. */
-export interface Regelseksjon {
+/** En fortolkningsmodul og analyttene i den. */
+export interface Fortolkningsmodul {
   fortolkning: Analyte
   analytter: Laboratorieanalytt[]
-  /** Nøkkelen til seksjonen på siden: `fortolkning` for den første, ellers med koden etter. */
-  seksjon: string
 }
 
-/** Den første seksjonen med fortolkningsregler på en stoffside. */
-export const FORTOLKNINGSSEKSJON = 'fortolkning'
-
 /**
- * Fortolkningsmodulene til stoffets primære analytter, i rekkefølge, hver med
- * sin seksjon på siden. Analytter som deler modul (DIAZ og DMI), står sammen.
+ * Fortolkningsmodulene til stoffets primære analytter, i rekkefølge. Analytter
+ * som deler modul (DIAZ og DMI), står sammen.
  */
-export function regelseksjoner(
+export function fortolkningsmoduler(
   slug: string,
   register: Stoffregister = STOFFREGISTER,
   katalog: Analyttkatalog = ANALYTTKATALOG,
-): Regelseksjon[] {
-  const seksjoner: Regelseksjon[] = []
+): Fortolkningsmodul[] {
+  const moduler: Fortolkningsmodul[] = []
   for (const analytt of primareAnalytter(slug, register, katalog)) {
-    const kjent = seksjoner.find((s) => s.fortolkning === analytt.fortolkning)
+    const kjent = moduler.find((m) => m.fortolkning === analytt.fortolkning)
     if (kjent) kjent.analytter.push(analytt)
-    else
-      seksjoner.push({
-        fortolkning: analytt.fortolkning,
-        analytter: [analytt],
-        seksjon: seksjoner.length === 0 ? FORTOLKNINGSSEKSJON : `${FORTOLKNINGSSEKSJON}-${analytt.kode.toLowerCase()}`,
-      })
+    else moduler.push({ fortolkning: analytt.fortolkning, analytter: [analytt] })
   }
-  return seksjoner
+  return moduler
+}
+
+/**
+ * Analyttene en fortolkningsmodul fortolker, i katalogens rekkefølge: én for
+ * de fleste, og hver kode for modulene som dekker flere (DIAZ · DMI · OXA).
+ * Det er reglene for dem fortolkningssiden redigerer.
+ */
+export function analytterForFortolkning(
+  fortolkning: Analyte,
+  katalog: Analyttkatalog = ANALYTTKATALOG,
+): Laboratorieanalytt[] {
+  return katalog.oppforinger.filter((a) => a.fortolkning.kode === fortolkning.kode)
 }
 
 /**
@@ -93,8 +95,8 @@ export function fortolkningForStoff(
   register: Stoffregister = STOFFREGISTER,
   katalog: Analyttkatalog = ANALYTTKATALOG,
 ): Analyte | undefined {
-  const seksjoner = regelseksjoner(slug, register, katalog)
-  return seksjoner.length === 1 ? seksjoner[0]!.fortolkning : undefined
+  const moduler = fortolkningsmoduler(slug, register, katalog)
+  return moduler.length === 1 ? moduler[0]!.fortolkning : undefined
 }
 
 /**
@@ -112,18 +114,12 @@ export function stofferForFortolkning(analyte: Analyte, register: Stoffregister 
 }
 
 /**
- * Seksjonen på stoffsiden der reglene for koden står, eller `undefined` når
- * koden ikke har noe primært stoff.
+ * Adressen til fortolkningssiden der reglene for en analyttkode fortolkes og
+ * redigeres: modulen koden hører til. `undefined` når appen ikke kjenner koden.
  */
-export function fortolkningsseksjonFor(
-  kode: string,
-  register: Stoffregister = STOFFREGISTER,
-  katalog: Analyttkatalog = ANALYTTKATALOG,
-): string | undefined {
-  const stoff = register.primartStoffFor(kode)
-  if (!stoff) return undefined
-  const k = kode.trim().toUpperCase()
-  return regelseksjoner(stoff.slug, register, katalog).find((s) => s.analytter.some((a) => a.kode === k))?.seksjon
+export function fortolkningsadresseForAnalytt(kode: string, katalog: Analyttkatalog = ANALYTTKATALOG): string | undefined {
+  const analytt = katalog.finn(kode)
+  return analytt && adresse(fortolkningsrute(analytt.fortolkning.kode))
 }
 
 /**

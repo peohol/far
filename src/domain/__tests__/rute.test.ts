@@ -1,5 +1,17 @@
 import { describe, expect, it } from 'vitest'
-import { FORTOLKNING, STOFFREGISTERADRESSE, adresse, kanoniskAdresse, lesRute, sammeRute, sokeside, stoffadresse } from '../rute'
+import {
+  FORTOLKNING,
+  STOFFREGISTERADRESSE,
+  adresse,
+  erRedigering,
+  fortolkningsrute,
+  kanoniskAdresse,
+  lesRute,
+  redigeringsrute,
+  sammeRute,
+  sokeside,
+  stoffadresse,
+} from '../rute'
 import { byggStoffregister } from '../stoffregister'
 
 describe('adressene til stoffsidene', () => {
@@ -45,6 +57,27 @@ describe('adressene til stoffsidene', () => {
     expect(lesRute('#/stoff/!!!')).toEqual(FORTOLKNING)
   })
 
+  it('leser og skriver redigeringen av en fortolkning, under fortolkningssiden', () => {
+    const rute = redigeringsrute('DIAZ · DMI · OXA')
+    expect(rute).toEqual({ side: 'fortolkning', analytt: 'diaz-dmi-oxa', rediger: true })
+    expect(adresse(rute)).toBe('#/fortolkning/diaz-dmi-oxa/rediger')
+    expect(lesRute('#/fortolkning/diaz-dmi-oxa/rediger')).toEqual(rute)
+    expect(lesRute('#/fortolkning/hbup/rediger/')).toEqual(redigeringsrute('HBUP'))
+    expect(erRedigering(rute)).toBe(true)
+    expect(erRedigering(fortolkningsrute('HBUP'))).toBe(false)
+    expect(sammeRute(rute, fortolkningsrute('DIAZ · DMI · OXA'))).toBe(false)
+    expect(kanoniskAdresse('#/fortolkning/hbup/rediger')).toBeNull()
+    // Redigeringen kan peke på en del av reglene, og et detaljkort i den.
+    const tilKort = { ...rute, sted: ['fortolkning-dmi', 'simulator'] }
+    expect(adresse(tilKort)).toBe('#/fortolkning/diaz-dmi-oxa/rediger/fortolkning-dmi/simulator')
+    expect(lesRute('#/fortolkning/diaz-dmi-oxa/rediger/fortolkning-dmi/simulator')).toEqual(tilKort)
+    expect(lesRute('#/fortolkning/diaz-dmi-oxa/rediger/fortolkning-dmi/')).toEqual({ ...rute, sted: ['fortolkning-dmi'] })
+    // Flere ledd enn siden har nivåer gir redigeringen uten sted.
+    expect(lesRute('#/fortolkning/diaz-dmi-oxa/rediger/a/b/c')).toEqual(rute)
+    // Noe annet etter nøkkelen er ingen side.
+    expect(lesRute('#/fortolkning/hbup/annet')).toEqual(FORTOLKNING)
+  })
+
   it('leser alt annet som fortolkningen', () => {
     for (const hash of ['', '#', '#/', '#/analytt/', '#/noe/annet', '#element-123', '#/analytt/%E0%A4%A']) {
       expect(lesRute(hash), hash).toEqual(FORTOLKNING)
@@ -65,13 +98,11 @@ describe('gamle adresser', () => {
     expect(lesRute('#/analytt/UETS')).toEqual({ side: 'stoff', stoff: 'etanol' })
   })
 
-  it('sender seksjonen med reglene til seksjonen for koden på stoffsiden', () => {
-    expect(lesRute('#/analytt/IRCAK/fortolkning')).toEqual({ side: 'stoff', stoff: 'thc', sted: ['fortolkning-ircak'] })
-    expect(lesRute('#/analytt/THC/fortolkning/simulator')).toEqual({
-      side: 'stoff',
-      stoff: 'thc',
-      sted: ['fortolkning', 'simulator'],
-    })
+  it('sender seksjonen med reglene til fortolkningssiden, der reglene nå står', () => {
+    expect(lesRute('#/analytt/IRCAK/fortolkning')).toEqual({ side: 'fortolkning', analytt: 'ircak' })
+    expect(lesRute('#/analytt/THC/fortolkning/simulator')).toEqual({ side: 'fortolkning', analytt: 'thc' })
+    expect(lesRute('#/analytt/DMI/fortolkning')).toEqual({ side: 'fortolkning', analytt: 'diaz-dmi-oxa' })
+    expect(lesRute('#/analytt/FINNESIKKE/fortolkning')).toEqual(FORTOLKNING)
   })
 
   it('later ikke som om en fagside finnes når koden ikke har noe primært stoff', () => {
@@ -84,7 +115,7 @@ describe('gamle adresser', () => {
   it('skriver adressefeltet om til den kanoniske adressen, og lar den kanoniske stå', () => {
     expect(kanoniskAdresse('#/analytt/HBUP')).toBe('#/stoff/bupropion')
     expect(kanoniskAdresse('#/analytt/HBUP/farmakokinetikk')).toBe('#/stoff/bupropion/farmakokinetikk')
-    expect(kanoniskAdresse('#/analytt/IRCAK/fortolkning')).toBe('#/stoff/thc/fortolkning-ircak')
+    expect(kanoniskAdresse('#/analytt/IRCAK/fortolkning')).toBe('#/fortolkning/ircak')
     expect(kanoniskAdresse('#/stoff/Hydroksybupropion')).toBe('#/stoff/bupropion')
     expect(kanoniskAdresse('#/stoff/Valproat')).toBe('#/stoff/valproat')
     expect(kanoniskAdresse('#/stoff/bupropion')).toBeNull()

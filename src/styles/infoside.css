@@ -7,7 +7,7 @@
 
 /* Siden er et oppslagsverk og kan være lang. Den står øverst i vinduet og
    ruller som en vanlig side, i stedet for å sentreres som stegene. */
-.app:is([data-side='analytt'], [data-side='stoff'], [data-side='stoffregister']) {
+.app:is([data-side='analytt'], [data-side='stoff'], [data-side='stoffregister'], [data-side='fortolkningsredigering']) {
   /* Kolonnen følger vinduet, ikke det bredeste innholdet — ellers ville en
      lang referanse, en tabell eller et rutenett med kort presset siden ut
      over kanten på mobil. */

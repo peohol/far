@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { ANALYTTKATALOG } from '../analyttkatalog'
 import {
+  analytterForFortolkning,
   analytterForStoff,
   fortolkningForStoff,
-  fortolkningsseksjonFor,
+  fortolkningsadresseForAnalytt,
+  fortolkningsmoduler,
   primareAnalytter,
   referanseomraderPerAnalytt,
-  regelseksjoner,
   stoffadresseForAnalytt,
   stoffbeskrivelse,
   stofferForFortolkning,
@@ -147,22 +148,30 @@ describe('veiene mellom fortolkningen og stoffsidene', () => {
     expect(fortolkningForStoff('litium')).toBeUndefined()
   })
 
-  it('gir reglene for hver modul sin seksjon på stoffsiden', () => {
-    const seksjoner = (slug: string) =>
-      regelseksjoner(slug).map((s) => [s.seksjon, s.analytter.map((a) => a.kode)] as const)
-    expect(seksjoner('bupropion')).toEqual([['fortolkning', ['HBUP']]])
-    expect(seksjoner('diazepam')).toEqual([['fortolkning', ['DIAZ', 'DMI']]])
-    expect(seksjoner('thc')).toEqual([
-      ['fortolkning', ['THC']],
-      ['fortolkning-ircak', ['IRCAK']],
+  it('samler stoffets primære analytter i fortolkningsmodulene deres', () => {
+    const moduler = (slug: string) =>
+      fortolkningsmoduler(slug).map((m) => [m.fortolkning.kode, m.analytter.map((a) => a.kode)] as const)
+    expect(moduler('bupropion')).toEqual([['HBUP', ['HBUP']]])
+    expect(moduler('diazepam')).toEqual([['DIAZ · DMI · OXA', ['DIAZ', 'DMI']]])
+    expect(moduler('thc')).toEqual([
+      ['THC', ['THC']],
+      ['IRCAK', ['IRCAK']],
     ])
-    expect(seksjoner('etanol')).toEqual([['fortolkning', ['UETGS', 'UETS']]])
-    // Nortriptylin viser reglene for NOR, ikke for AMTNORSUM.
-    expect(seksjoner('nortriptylin')).toEqual([['fortolkning', ['NOR']]])
-    expect(seksjoner('litium')).toEqual([])
-    expect(fortolkningsseksjonFor('IRCAK')).toBe('fortolkning-ircak')
-    expect(fortolkningsseksjonFor('hbup')).toBe('fortolkning')
-    expect(fortolkningsseksjonFor('FINNESIKKE')).toBeUndefined()
+    // Nortriptylin er primært stoff for NOR, ikke for AMTNORSUM.
+    expect(moduler('nortriptylin')).toEqual([['NOR', ['NOR']]])
+    expect(moduler('litium')).toEqual([])
+  })
+
+  it('gir hver kode i en fortolkningsmodul, og fortolkningssiden reglene for en kode står på', () => {
+    const koder = (kode: string) => analytterForFortolkning(ANALYTTKATALOG.finn(kode)!.fortolkning).map((a) => a.kode)
+    expect(koder('HBUP')).toEqual(['HBUP'])
+    // Modulen dekker alle tre kodene, også oksazepam, som har sin egen fagside.
+    expect(koder('DMI')).toEqual(['DIAZ', 'DMI', 'OXA'])
+    expect(koder('IRCAK')).toEqual(['IRCAK'])
+    expect(fortolkningsadresseForAnalytt('hbup')).toBe('#/fortolkning/hbup')
+    expect(fortolkningsadresseForAnalytt('DMI')).toBe('#/fortolkning/diaz-dmi-oxa')
+    expect(fortolkningsadresseForAnalytt('IRCAK')).toBe('#/fortolkning/ircak')
+    expect(fortolkningsadresseForAnalytt('FINNESIKKE')).toBeUndefined()
   })
 
   it('beskriver stoffet i søketreffene med kategorien og analyttene som sekundær informasjon', () => {

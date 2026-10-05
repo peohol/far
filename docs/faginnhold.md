@@ -420,13 +420,10 @@ leser, så radsikkerheten gjelder som ellers.
 
 Fortolkningsreglene leses for seg, etter analyttkoden og modulen
 (`finn_intervallregelsett`, `les_thc_regelsett`, `les_scenarioregler`; se
-`docs/fortolkningsregler.md`), og aldri gjennom siden. Fagsiden viser reglene
-for analyttene stoffet er **primært** stoff for, én seksjon per
-fortolkningsmodul (`regelseksjoner` i `src/domain/koblinger.ts`): den første
-heter `fortolkning`, de neste `fortolkning-<kode>`. THC-siden har derfor
-scenarioreglene for THC i serum i `fortolkning` og THC-syrereglene for IRCAK i
-`fortolkning-ircak`. Nortriptylin-siden viser reglene for NOR; AMTNORSUM står
-der bare som sekundær kobling, med «Se også» til amitriptylin.
+`docs/fortolkningsregler.md`), og aldri gjennom siden. Fagsiden viser ingen
+regler; de redigeres på en egen side i fortolkningen
+(`#/fortolkning/<nøkkel>/rediger`, se «Redigeringssiden» i
+`docs/fortolkningsregler.md`), som publiseres for seg (`regelplan`).
 
 Funksjonene som leste en side gjennom en analyttkode eller etter navnet
 (`les_analyttside`, `les_analyttsider`, `les_stoffside`, `les_stoffsider`,

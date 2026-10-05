@@ -10,9 +10,9 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { Thcregler } from '../components/regler/Thcregler'
 import { TipsLag } from '../components/Tips'
-import { publiseringsplan } from '../faginnhold/stoffside'
+import { regelplan } from '../faginnhold/stoffside'
 import { THC_TEKSTBOLKER } from '../domain/thcTekster'
-import { INGEN_REGLER, TOM_STOFFSIDE } from '../faginnhold/lesing'
+import { INGEN_REGLER } from '../faginnhold/lesing'
 import { thcEndringer, thcUtkastfeil, type ThcRegelsettutgave } from '../faginnhold/thcregler'
 import { THC_REGELSETT, THC_TEKSTER, thcRegelsettutgave } from './hjelp/thcgrunnlag'
 
@@ -82,17 +82,15 @@ describe('publiseringen', () => {
     const utgave: ThcRegelsettutgave = thcRegelsettutgave()
     utgave.regelsett = { ...utgave.regelsett, revisjon: 4 }
     utgave.kommentarer = utgave.kommentarer.map((k) => (k.id === 'thc-apning' ? { ...k, revisjon: 2 } : k))
-    // Reglene hører til fortolkningssystemet og kommer for seg, ikke gjennom
-    // stoffsiden; en side uten upubliserte endringer gir bare reglene.
-    expect(publiseringsplan(TOM_STOFFSIDE, { ...INGEN_REGLER, thcregelsett: utgave })).toEqual([
+    expect(regelplan({ ...INGEN_REGLER, thcregelsett: utgave })).toEqual([
       { slag: 'kommentar', id: 'thc-apning', revisjon: 2 },
       { slag: 'thc_regelsett', id: 'thc-regelsett', revisjon: 4 },
     ])
-    expect(publiseringsplan(TOM_STOFFSIDE, { ...INGEN_REGLER, thcregelsett: thcRegelsettutgave() })).toEqual([])
+    expect(regelplan({ ...INGEN_REGLER, thcregelsett: thcRegelsettutgave() })).toEqual([])
   })
 })
 
-describe('redigeringen på THC-siden', () => {
+describe('redigeringen av THC-syrereglene', () => {
   function visRedigering(utgave = thcRegelsettutgave()) {
     const onLagre = vi.fn(async () => {})
     render(

@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 /**
- * Fortolkningsreglene og simulatoren på stoffsiden, prøvd i en nettleser i
- * minnet. Reglene står på siden til stoffet analyttene i modulen primært er
- * koblet til i stoffregisteret, lest etter modulen og ikke gjennom siden. Reglene er de publiserte rusmiddelreglene (grunnlaget de ble
+ * Scenarioreglene og simulatoren, prøvd i en nettleser i minnet, og
+ * redigeringen av dem på fortolkningssiden til modulen. Fagsidene viser dem
+ * ikke. Reglene er de publiserte rusmiddelreglene (grunnlaget de ble
  * importert fra); at de gir det samme som den opprinnelige fortolkningen,
  * prøves i `rusparitet.test.ts`.
  */
@@ -12,7 +12,7 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { Stoffside } from '../components/stoffside/Stoffside'
 import { FaginnholdskildeProvider } from '../components/stoffside/Faginnholdskilde'
 import { Scenarioregler } from '../components/regler/Scenarioregler'
-import { ScenarioreglerProvider, type Scenarioreglerkilde } from '../components/regler/Scenarioreglerkilde'
+import { Fortolkningsredigering } from '../components/regler/Fortolkningsredigering'
 import { TipsLag } from '../components/Tips'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from '../domain/analyttkatalog'
 import { Samtidighetskonflikt, type Faginnholdslager } from '../faginnhold/lagring'
@@ -21,8 +21,7 @@ import { STOFFREGISTER } from '../domain/stoffregister'
 import type { Faginnholdsleser, Scenarioregelsettutgave, Utgave } from '../faginnhold/lesing'
 import type { Objektstatus, Tilstand } from '../faginnhold/modell'
 import type { Scenarioregelsett } from '../domain/scenario'
-import { tilScenarioregler } from '../faginnhold/scenarioregler'
-import { RUS_GRUNNLAG, RUS_KOMMENTARER, rusRegelsett, rusScenarioregeldata } from './hjelp/rusgrunnlag'
+import { RUS_GRUNNLAG, RUS_KOMMENTARER, rusRegelsett } from './hjelp/rusgrunnlag'
 import { scenariokommentarer } from '../regler/scenarioredigering'
 import { falskLeser } from './hjelp/falskleser'
 
@@ -55,31 +54,24 @@ function regler(kode: string) {
   return { modul, regelsett: rusRegelsett(modul.id), kommentarer: RUS_KOMMENTARER }
 }
 
-const HENTET: Scenarioreglerkilde = {
-  tilstand: { status: 'klar', regler: tilScenarioregler(rusScenarioregeldata()) },
-  provIgjen: () => {},
-}
-
-/** Stoffsiden for stoffet med nøkkelen, uten noe i databasen. */
-function visSide(stoff: string, { kilde = HENTET, sted }: { kilde?: Scenarioreglerkilde; sted?: readonly string[] } = {}) {
+/** Fagsiden for stoffet med nøkkelen, uten noe i databasen. */
+function visSide(stoff: string) {
   const leser = falskLeser()
   const lager = {} as Faginnholdslager
   render(
     <TipsLag>
       <FaginnholdskildeProvider kilde={{ leser, lager, kanRedigere: false }}>
-        <ScenarioreglerProvider kilde={kilde}>
-          <Stoffside
-            stoff={stoff}
-            sted={sted}
-            register={STOFFREGISTER}
-            katalog={katalog}
-            onApneFortolkning={vi.fn()}
-            onLukk={vi.fn()}
-          />
-        </ScenarioreglerProvider>
+        <Stoffside
+          stoff={stoff}
+          register={STOFFREGISTER}
+          katalog={katalog}
+          onApneFortolkning={vi.fn()}
+          onLukk={vi.fn()}
+        />
       </FaginnholdskildeProvider>
     </TipsLag>,
   )
+  return leser
 }
 
 /** Reglene for modulen, med seksjonen og simulatoren åpnet slik brukeren gjør det. */
@@ -92,50 +84,19 @@ async function visSimulator(user: ReturnType<typeof userEvent.setup>, kode: stri
 const truffet = () => document.querySelector('.scenario[aria-current="true"]')
 const status = () => screen.getByRole('status').textContent
 
-describe('på stoffsiden', () => {
-  it('står reglene på sidene til stoffene analyttene i modulen er koblet til, og ikke på andre sider', async () => {
-    visSide('oksazepam')
-    expect(await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeTruthy()
-    cleanup()
-    visSide('diazepam')
-    expect(await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeTruthy()
-    cleanup()
-    visSide('nortriptylin')
-    await screen.findByText('Denne siden har ikke fått faginnhold ennå.')
-    expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeNull()
-  })
-
-  it('sier hvilke andre sider som deler reglene og kommentartekstene, med lenker dit', async () => {
-    const user = userEvent.setup()
-    visSide('oksazepam')
-    await user.click(await screen.findByRole('button', { name: 'Fortolkningsregler' }))
-    const merknad = screen.getByText(/Reglene og kommentartekstene er felles med/).closest('p')!
-    expect(merknad.textContent).toBe('Reglene og kommentartekstene er felles med Diazepam.')
-    // Lenken går til stoffsiden etter stoffets nøkkel, aldri til en analyttkode.
-    expect(within(merknad).getByRole('link').getAttribute('href')).toBe('#/stoff/diazepam')
-    cleanup()
-    // DIAZ og metabolitten DMI er begge koblet til diazepam, og står på den ene siden.
-    visSide('diazepam')
-    expect((await screen.findByRole('heading', { level: 1 })).textContent).toBe('Diazepam')
-    await user.click(await screen.findByRole('button', { name: 'Fortolkningsregler' }))
-    const fraDiazepam = screen.getByText(/Reglene og kommentartekstene er felles med/).closest('p')!
-    expect(fraDiazepam.textContent).toBe('Reglene og kommentartekstene er felles med Oksazepam.')
-    expect(within(fraDiazepam).getAllByRole('link').map((a) => a.getAttribute('href'))).toEqual(['#/stoff/oksazepam'])
-    // Diazepam deler ikke reglene med seg selv, selv om to av kodene står her.
-    expect(screen.queryByText(/Siden gjelder også/)).toBeNull()
-    expect(screen.getByRole('button', { name: 'DIAZ – åpne fortolkningen' })).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'DMI – åpne fortolkningen' })).toBeTruthy()
-  })
-
-  it('viser ingen regler før de er hentet, eller når de ikke kunne hentes', async () => {
-    for (const tilstand of [{ status: 'laster' }, { status: 'feil', melding: 'Nede.' }] as const) {
-      visSide('oksazepam', { kilde: { tilstand, provIgjen: () => {} } })
-      await screen.findByRole('heading', { level: 1 })
+describe('på fagsiden', () => {
+  it('står ikke reglene, heller ikke på sidene til stoffene analyttene i modulen er koblet til', async () => {
+    for (const stoff of ['oksazepam', 'diazepam']) {
+      const leser = visSide(stoff)
+      await screen.findByText('Denne siden har ikke fått faginnhold ennå.')
       expect(screen.queryByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeNull()
+      expect(leser.finnScenarioregelsett).not.toHaveBeenCalled()
       cleanup()
     }
   })
+})
 
+describe('seksjonen', () => {
   it('står lukket, med antall scenarier og grensene i oppsummeringen', async () => {
     const user = userEvent.setup()
     render(<Scenarioregler {...regler('DIAZ')} />)
@@ -151,14 +112,6 @@ describe('på stoffsiden', () => {
       expect(screen.getByRole('button', { name: navn }).getAttribute('aria-expanded')).toBe('false')
     }
     expect(document.getElementById('panel-fortolkning--simulator')).toBeTruthy()
-  })
-
-  it('åpner simulatoren fra en direktelenke', async () => {
-    visSide('oksazepam', { sted: ['fortolkning', 'simulator'] })
-    const simulator = await screen.findByRole('button', { name: 'Prøv reglene' })
-    expect(simulator.getAttribute('aria-expanded')).toBe('true')
-    expect(screen.getByRole('button', { name: 'Fortolkningsregler' }).getAttribute('aria-expanded')).toBe('true')
-    expect(screen.queryByRole('button', { name: 'Åpne alle' })).toBeNull()
   })
 
   it('viser en modul med én analytt uten simulator', () => {
@@ -301,6 +254,7 @@ describe('redigeringen', () => {
     publisert_kl: null,
   })
 
+  /** Redigeringen på fortolkningssiden for diazepamgruppen, med utkastet hentet. */
   async function visRedigering() {
     const user = userEvent.setup()
     const leser: Faginnholdsleser = falskLeser({
@@ -311,28 +265,25 @@ describe('redigeringen', () => {
       lagreScenarioregelsett: vi.fn(async (id: string) => status(id)),
       publiserUtkast: vi.fn(async (id: string) => status(id)),
     } as unknown as Faginnholdslager
-    const kilde: Scenarioreglerkilde = { ...HENTET, provIgjen: vi.fn() }
+    const onPublisert = vi.fn()
     render(
       <TipsLag>
         <FaginnholdskildeProvider kilde={{ leser, lager, kanRedigere: true }}>
-          <ScenarioreglerProvider kilde={kilde}>
-            <Stoffside
-              stoff="oksazepam"
-              register={STOFFREGISTER}
-              katalog={katalog}
-              onApneFortolkning={vi.fn()}
-              onLukk={vi.fn()}
-            />
-          </ScenarioreglerProvider>
+          <Fortolkningsredigering
+            fortolkning={katalog.finn('OXA')!.fortolkning}
+            katalog={katalog}
+            onPublisert={onPublisert}
+            onAvslutt={vi.fn()}
+          />
         </FaginnholdskildeProvider>
       </TipsLag>,
     )
-    await user.click(await screen.findByRole('button', { name: 'Rediger' }))
-    // Utkastet er hentet når grensen i det står i oppsummeringen.
-    await screen.findByText(`8 scenarier · ${GRENSE}: 11 %`)
+    // Utkastet er hentet når grensen som er flyttet i det, står som ikke
+    // publisert. Reglene er den eneste delen på siden og står åpne.
+    await screen.findByText('Ikke publisert: Grenser: Grense 1.')
     const seksjon = screen.getByRole('region', { name: 'Fortolkningsregler' })
-    await user.click(within(seksjon).getByRole('button', { name: 'Fortolkningsregler' }))
-    return { user, leser, lager, kilde, seksjon }
+    expect(within(seksjon).getByRole('button', { name: 'Fortolkningsregler' }).getAttribute('aria-expanded')).toBe('true')
+    return { user, leser, lager, onPublisert, seksjon }
   }
 
   async function apneSkjema(user: ReturnType<typeof userEvent.setup>, seksjon: HTMLElement) {
@@ -346,8 +297,9 @@ describe('redigeringen', () => {
     expect(within(seksjon).getByRole('button', { name: /^Sist redigert av Rita Redaktør/ })).toBeTruthy()
     expect(within(seksjon).getByRole('button', { name: 'Historikken for hver kommentar' })).toBeTruthy()
     cleanup()
-    visSide('oksazepam')
-    await screen.findByRole('heading', { level: 2, name: 'Fortolkningsregler' })
+    // Uten redigeringen er det de publiserte reglene, uten knappen.
+    render(<Scenarioregler {...regler('OXA')} />)
+    expect(screen.getByRole('heading', { level: 2, name: 'Fortolkningsregler' })).toBeTruthy()
     expect(screen.queryByRole('button', { name: 'Rediger reglene' })).toBeNull()
   })
 
@@ -449,7 +401,7 @@ describe('redigeringen', () => {
   })
 
   it('publiserer regelsettet med det som er endret, og henter reglene fortolkningen bruker på nytt', async () => {
-    const { user, lager, kilde } = await visRedigering()
+    const { user, lager, onPublisert } = await visRedigering()
     await user.click(screen.getByRole('button', { name: 'Publiser' }))
     const vindu = screen.getByRole('dialog', { name: 'Publiser endringene' })
     expect(within(vindu).getByRole('listitem').textContent).toBe(
@@ -457,6 +409,6 @@ describe('redigeringen', () => {
     )
     await user.click(within(vindu).getByRole('button', { name: 'Publiser nå' }))
     await waitFor(() => expect(lager.publiserUtkast).toHaveBeenCalledWith(REGELSETT_ID, 2))
-    await waitFor(() => expect(kilde.provIgjen).toHaveBeenCalled())
+    await waitFor(() => expect(onPublisert).toHaveBeenCalled())
   })
 })
