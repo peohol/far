@@ -6,6 +6,9 @@ import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettB
 const FORSTE_KURATERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering.sql'))!
 const KORRIGERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_korrigering.sql'))!
 const TILLEGG = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_farmakogenetikk_og_typografi.sql'))!
+const VIRKNINGER_OG_AVHENGIGHET = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_virkninger_og_avhengighet.sql'))!
+const FULLFORING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_fullforing.sql'))!
+const BIVIRKNINGER = migrasjonsfiler().find((f) => f.endsWith('_seroquel_depot_bivirkninger.sql'))!
 const FORSTE_IMPORTMIGRASJON = '20260923072247'
 
 interface Element {
@@ -54,7 +57,7 @@ describe('kvetiapinmigrasjoner uten kuratorprofil', () => {
   it('hopper over fagoppdateringene på en helt fersk database', async () => {
     const tom = await nyDatabase({ til: FORSTE_KURATERING })
     await expect(
-      kjorMigrasjoner(tom, { bare: [FORSTE_KURATERING, KORRIGERING, TILLEGG] }),
+      kjorMigrasjoner(tom, { bare: [FORSTE_KURATERING, KORRIGERING, TILLEGG, VIRKNINGER_OG_AVHENGIGHET, FULLFORING] }),
     ).resolves.toBeUndefined()
     await tom.close()
   }, 240_000)
@@ -136,21 +139,37 @@ describe('kvetiapin-monografkuratering', () => {
   let dosering: Element[]
   let farmakokinetikk: Element[]
   let farmakogenetikk: Element[]
+  let identitet: Element[]
+  let virkninger: Element[]
+  let avhengighet: Element[]
+  let toksisitet: Element[]
+  let graviditet: Element[]
+  let indikasjon: Element[]
+  let interaksjoner: Element[]
 
   beforeAll(async () => {
     db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
     await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
-    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: TILLEGG, kurateringer: true })
+    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: BIVIRKNINGER, kurateringer: true })
 
     // Begge kvetiapinoppdateringene skal tåle å kjøres på nytt.
     await kjorMigrasjoner(db, { bare: [KORRIGERING] })
     await kjorMigrasjoner(db, { bare: [TILLEGG] })
     await kjorMigrasjoner(db, { bare: [TILLEGG] })
+    await kjorMigrasjoner(db, { bare: [VIRKNINGER_OG_AVHENGIGHET] })
+    await kjorMigrasjoner(db, { bare: [FULLFORING] })
 
     farmakodynamikk = await elementer(db, 'farmakodynamikk')
     dosering = await elementer(db, 'dosering')
     farmakokinetikk = await elementer(db, 'farmakokinetikk')
     farmakogenetikk = await elementer(db, 'farmakogenetikk')
+    identitet = await elementer(db, 'identitet')
+    virkninger = await elementer(db, 'virkninger')
+    avhengighet = await elementer(db, 'avhengighet_toleranse')
+    toksisitet = await elementer(db, 'toksisitet_forgiftning')
+    graviditet = await elementer(db, 'graviditet_amming')
+    indikasjon = await elementer(db, 'indikasjon')
+    interaksjoner = await elementer(db, 'interaksjoner')
   }, 240_000)
 
   it('har ni kildebelagte mekanismekort uten et eget D1-kort', () => {
@@ -290,6 +309,78 @@ describe('kvetiapin-monografkuratering', () => {
     expect(saerpopulasjoner).toContain('stabil alkoholisk cirrhose')
   })
 
+  it('fullfører oppsummering, virkninger, avhengighet, toksisitet og reproduksjon uten å erstatte etablerte seksjoner', () => {
+    expect(identitet).toHaveLength(1)
+    expect(virkninger.map((e) => String(e.data.tittel))).toEqual([
+      'Antipsykotisk effekt',
+      'Antimanisk effekt',
+      'Antidepressiv effekt',
+      'Sedasjon og søvnighet',
+    ])
+    expect(avhengighet.map((e) => String(e.data.tittel))).toEqual([
+      'Toleranseutvikling',
+      'Abstinens, seponeringssyndrom og rebound-effekter',
+      'Addiksjon',
+    ])
+    expect(avhengighet.some((e) => e.data.tittel === 'Lært mestringsavhengighet')).toBe(false)
+    for (const e of avhengighet) {
+      expect(e.referanser.length, String(e.data.tittel)).toBeGreaterThan(0)
+      const inline = inlineReferanser(e.data)
+      expect(inline.length, String(e.data.tittel)).toBeGreaterThan(0)
+      expect(new Set(inline), String(e.data.tittel)).toEqual(new Set(e.referanser))
+    }
+
+    expect(toksisitet.map((e) => String(e.data.tittel))).toEqual([
+      'Toksisk dose og eksponering',
+      'Toksiske konsentrasjoner',
+      'Klinisk forgiftningsbilde',
+      'Alvorlige komplikasjoner',
+      'Toksikokinetiske særtrekk',
+      'Behandling ved forgiftning',
+    ])
+    expect(tekst(toksisitet.find((e) => e.data.tittel === 'Toksiske konsentrasjoner')!.data)).toContain('postmortemspesifikke')
+    expect(tekst(toksisitet.find((e) => e.data.tittel === 'Toksiske konsentrasjoner')!.data)).toContain('ikke en universell toksisitetsgrense')
+
+    expect(graviditet.map((e) => String(e.data.tittel))).toEqual([
+      'Graviditet',
+      'Perinatal og neonatal påvirkning',
+      'Amming',
+      'Fertilitet og reproduksjon',
+    ])
+    expect(tekst(graviditet.find((e) => e.data.tittel === 'Graviditet')!.data)).toContain('13 090')
+    expect(tekst(graviditet.find((e) => e.data.tittel === 'Amming')!.data)).toContain('0,16 %')
+
+    for (const e of [...toksisitet, ...graviditet]) {
+      expect(e.referanser.length, String(e.data.tittel)).toBeGreaterThan(0)
+      const inline = inlineReferanser(e.data)
+      expect(inline.length, String(e.data.tittel)).toBeGreaterThan(0)
+      expect(new Set(inline), String(e.data.tittel)).toEqual(new Set(e.referanser))
+    }
+
+    expect(tekst(toksisitet.find((e) => e.data.tittel === 'Behandling ved forgiftning')!.data)).not.toContain(
+      'sikring av luftvei',
+    )
+
+    const sedasjon = virkninger.find((e) => e.data.tittel === 'Sedasjon og søvnighet')!
+    expect(JSON.stringify(sedasjon.data)).toContain('"marks":[{"type":"subscript"}]')
+    expect(JSON.stringify(sedasjon.data)).not.toContain('"type":"subscript","content"')
+
+    expect(indikasjon).toHaveLength(1)
+    expect(tekst(indikasjon[0]!.data)).toContain('unipolar depresjon')
+    expect(indikasjon[0]!.referanser.length).toBeGreaterThan(0)
+    expect(interaksjoner).toHaveLength(1)
+    expect(tekst(interaksjoner[0]!.data)).toContain('CYP3A4-substrat')
+    expect(interaksjoner[0]!.referanser.length).toBeGreaterThan(0)
+
+    for (const e of [...virkninger, ...avhengighet, ...toksisitet, ...graviditet, ...indikasjon, ...interaksjoner]) {
+      expect(e.utkast, String(e.data.tittel ?? e.panel)).toBe(e.publisert)
+    }
+
+    expect(farmakodynamikk).toHaveLength(9)
+    expect(dosering).toHaveLength(1)
+    expect(farmakokinetikk).toHaveLength(8)
+  })
+
   it('har en kort farmakogenetisk fritekst om når testing er relevant', () => {
     const fritekst = farmakogenetikk.find((e) => e.elementtype === 'riktekst')
     expect(fritekst).toBeDefined()
@@ -309,7 +400,7 @@ describe('kvetiapin-monografkuratering', () => {
     expect(enzymkort).toBeDefined()
   })
 
-  it('tilbakefører farmakogenetikk og interaksjoner til tilstanden før første kuratering', async () => {
+  it('bevarer tilbakeført farmakogenetikk og kildebelegger interaksjonsteksten på nytt', async () => {
     const { rows } = await db.query<{ panel: string; tittel: string | null; kilde: string | null }>(
       `select e.panel, e.data->>'tittel' as tittel, r.kilde
        from public.innholdselementer e
@@ -332,7 +423,7 @@ describe('kvetiapin-monografkuratering', () => {
       kilde: 'Korrigering etter fersk monografikuratering: farmakogenetikk tilbakeført til tilstanden før kvetiapinkurateringen',
     })
     expect(interaksjoner?.kilde).toBe(
-      'Korrigering etter fersk monografikuratering: interaksjoner tilbakeført til tilstanden før kvetiapinkurateringen',
+      'Monografkuratering av kvetiapin 04.10.2026: fullforing av toksisitet, graviditet, indikasjon og interaksjoner',
     )
   })
 
@@ -353,6 +444,18 @@ describe('kvetiapin-monografkuratering', () => {
       'https://doi.org/10.1038/s41431-023-01347-3',
       'https://doi.org/10.1097/JCP.0000000000000070',
       'https://doi.org/10.1111/bcp.15849',
+      'https://doi.org/10.1192/bjp.bp.114.154377',
+      'https://doi.org/10.1038/s41380-021-01334-4',
+      'https://doi.org/10.2147/DDDT.S63779',
+      'https://doi.org/10.1177/0004867420965693',
+      'https://doi.org/10.1080/10826084.2019.1668013',
+      'https://doi.org/10.2147/DHPS.S296515',
+      'https://doi.org/10.3390/jox14040085',
+      'https://doi.org/10.1093/jat/bkv072',
+      'https://doi.org/10.1097/JCP.0000000000002127',
+      'https://www.ncbi.nlm.nih.gov/books/NBK501087/',
+      'https://doi.org/10.1097/JCP.0000000000000905',
+      'https://doi.org/10.1111/j.1365-2125.2005.02507.x',
     ]
 
     const { rows } = await db.query<{ lenke: string; n: number }>(
