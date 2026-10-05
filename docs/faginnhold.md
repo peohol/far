@@ -682,9 +682,9 @@ testdatabasen.
 
 **Innleggingen.** Importen rulles ut som migrasjoner:
 `npm run import:psykofarmaka -- <brukernavn> --migrasjoner <mappe>` lager
-filene, som legges inn med `apply_migration` (MCP-ens `execute_sql` har bare
-leserettigheter) og så legges i `supabase/migrations/` med versjonen
-prosjektet registrerte. De går gjennom de samme funksjonene som appen, som
+filene, som legges i `supabase/migrations/` og rulles ut når PR-en slås
+sammen (`docs/migrasjoner.md`; MCP-ens `execute_sql` har bare
+leserettigheter). De går gjennom de samme funksjonene som appen, som
 administratoren som er oppgitt: `opprett_utkast` for hvert objekt, så
 `publiser_utkast` i den rekkefølgen databasen krever. Hver revisjon får kilden
 sin gjennom innstillingen `far.revisjonskilde`, som bare gjelder

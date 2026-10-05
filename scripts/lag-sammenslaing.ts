@@ -4,9 +4,9 @@
  *
  *   npx vite-node scripts/lag-sammenslaing.ts -- <brukernavn> <fil>
  *
- * `brukernavn` er administratoren revisjonene føres på. Filen rulles ut med
- * `apply_migration` og gis versjonen prosjektet registrerer når den legges i
- * `supabase/migrations/`.
+ * `brukernavn` er administratoren revisjonene føres på. Filen legges i
+ * `supabase/migrations/` med tidspunktet som versjon, og rulles ut når PR-en
+ * slås sammen (`docs/migrasjoner.md`).
  */
 import { writeFileSync } from 'node:fs'
 import { sammenslaingSql } from '../src/faginnhold/sammenslatte'

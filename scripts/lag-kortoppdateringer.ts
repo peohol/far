@@ -5,8 +5,8 @@
  *   npx vite-node scripts/lag-kortoppdateringer.ts -- <brukernavn> <oppdateringsfil> <utfil>
  *
  * `brukernavn` er administratoren revisjonene føres på — den som har bestilt
- * oppdateringen. Filen skrives klar til å rulles ut med `apply_migration`, og
- * gis versjonen prosjektet registrerer når den legges i `supabase/migrations/`.
+ * oppdateringen. Filen legges i `supabase/migrations/` med tidspunktet som
+ * versjon, og rulles ut når PR-en slås sammen (`docs/migrasjoner.md`).
  * Bakgrunnen står i `src/faginnhold/kortoppdateringer.ts`.
  *
  * Oppdateringsfilen kontrolleres før noe skrives; har den feil, skrives de i stedet.

@@ -5,9 +5,9 @@
  *   npx vite-node scripts/importer-tdm.ts -- <brukernavn> <mappe>
  *
  * `brukernavn` er administratoren revisjonene føres på — den som har bestilt
- * importen. Filene skrives som `tdm_referanseomrader_NN.sql` i `mappe`, klare
- * til å rulles ut med `apply_migration`, og gis versjonen prosjektet
- * registrerer når de legges i `supabase/migrations/`. De gjør ingenting der
+ * importen. Filene skrives som `tdm_referanseomrader_NN.sql` i `mappe`, og
+ * legges i `supabase/migrations/` med tidspunktet som versjon; de rulles ut når
+ * PR-en slås sammen (`docs/migrasjoner.md`). De gjør ingenting der
  * administratoren ikke finnes, som i testdatabasen, og utvider sidene som
  * finnes uten å endre det som står der (se `src/faginnhold/tdm.ts`).
  *

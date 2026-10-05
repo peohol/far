@@ -5,8 +5,8 @@
  *   npx vite-node scripts/lag-rettinger.ts -- <brukernavn> <rettingsfil> <utfil>
  *
  * `brukernavn` er administratoren revisjonene føres på — den som har bestilt
- * rettingen. Filen skrives klar til å rulles ut med `apply_migration`, og gis
- * versjonen prosjektet registrerer når den legges i `supabase/migrations/`.
+ * rettingen. Filen legges i `supabase/migrations/` med tidspunktet som versjon,
+ * og rulles ut når PR-en slås sammen (`docs/migrasjoner.md`).
  * Bakgrunnen står i `src/faginnhold/rettinger.ts`.
  *
  * Rettingsfilen kontrolleres før noe skrives; har den feil, skrives de i stedet.

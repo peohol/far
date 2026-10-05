@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.80.1',
+    dato: '2026-10-05',
+    sammendrag: 'Databaseendringer rulles ut automatisk når endringen slås sammen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    utenVarsel: true,
+    punkter: [
+      'Endringer i databasen, også oppdateringer av fagsider, rulles nå ut til appen automatisk når endringen er godkjent og slått sammen, i stedet for at en utviklingsagent gjør det for hånd etterpå.',
+      'Hver endring kontrolleres automatisk før den slås sammen, og utrullingen kontrollerer databasen før og etter. Stemmer noe ikke, stopper utrullingen uten å endre noe mer.',
+      'Endringer som kan slette data, som å fjerne en tabell, rulles ikke ut før de er uttrykkelig godkjent.',
+    ],
+  },
+  {
     versjon: '1.80.0',
     dato: '2026-10-05',
     sammendrag: 'Fortolkningsreglene redigeres fra fortolkningen, ikke lenger fra fagsidene',

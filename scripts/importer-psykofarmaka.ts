@@ -13,9 +13,9 @@
  * over, så den kan kjøres igjen etter et avbrudd.
  *
  * Med `--migrasjoner` skrives den som filer `psykofarmaka_import_NN.sql` i
- * `mappe`, klare til å rulles ut med `apply_migration` (MCP-ens `execute_sql`
- * har bare leserettigheter). Filene gis versjonen prosjektet registrerer når
- * de legges i `supabase/migrations/`. De gjør ingenting der administratoren
+ * `mappe`, som legges i `supabase/migrations/` med tidspunktet som versjon og
+ * rulles ut når PR-en slås sammen (`docs/migrasjoner.md`; MCP-ens
+ * `execute_sql` har bare leserettigheter). De gjør ingenting der administratoren
  * ikke finnes, som i testdatabasen.
  *
  * Datasettet kontrolleres før noe skrives; har det feil, skrives de i stedet.

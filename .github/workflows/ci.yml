@@ -1,0 +1,57 @@
+# Kontrollene på hver PR mot main: migrasjonsfilene, testene og bygget
+# (docs/migrasjoner.md). Arbeidsflyten har ingen hemmeligheter og ingen tilgang
+# til produksjonsdatabasen.
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  # For å finne den siste vellykkede produksjonsmigreringen.
+  actions: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  kontroller:
+    name: Migrasjoner, tester og bygg
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # PR-en slått sammen med main; første forelder er main slik den ble slått sammen med.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Migrasjonene i commiten den siste vellykkede utrullingen gjaldt, er kjørt i
+      # produksjonen og kan ikke endres. Før første utrulling gjelder det alle på main.
+      - name: Migrasjonsfilene mot main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          utrullet=$(gh api "repos/$REPO/actions/workflows/produksjonsmigrering.yml/runs?branch=main&status=success&per_page=1" \
+            --jq '.workflow_runs[0].head_sha // empty' 2>/dev/null || true)
+          if [ -n "$utrullet" ] && git fetch --no-tags --depth=1 origin "$utrullet"; then
+            npm run -s kontroller:migrasjoner -- --mot HEAD^1 --utrullet "$utrullet"
+          else
+            npm run -s kontroller:migrasjoner -- --mot HEAD^1
+          fi
+
+      - name: Tester
+        run: npm test
+
+      - name: Bygg
+        run: npm run build
