@@ -70,7 +70,7 @@ begin
     {"panel":"toksisitet_forgiftning","posisjon":2,"elementtype":"kinetikkort","nokkel":{"tittel":"Klinisk forgiftningsbilde"},"data":{"tittel":"Klinisk forgiftningsbilde","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Forgiftningsbildet domineres av forsterkning av den kjente farmakologien: søvnighet/sedasjon, redusert bevissthet, takykardi og hypotensjon, ofte sammen med antikolinerge trekk. Forvirring, delirium og agitasjon kan også forekomme."}]},{"type":"paragraph","content":[{"type":"text","text":"Ved depotinntak kan maksimal sedasjon og pulsøkning komme forsinket, og oppvåkningen kan være forlenget."}]}]}},"refs":["spc","intox"]},
     {"panel":"toksisitet_forgiftning","posisjon":3,"elementtype":"kinetikkort","nokkel":{"tittel":"Alvorlige komplikasjoner"},"data":{"tittel":"Alvorlige komplikasjoner","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Alvorlig overdose kan gi koma, respirasjonsdepresjon, uttalt hypotensjon, QT-forlengelse, krampeanfall eller status epilepticus, rabdomyolyse og urinretensjon; dødsfall er rapportert."}]},{"type":"paragraph","content":[{"type":"text","text":"Risikoen for intensivbehov, intubasjon, vasopressorbehandling, QTc-forlengelse og kramper øker med dose og maksimal serumkonsentrasjon, men enkeltverdier kan ikke alene forutsi forløpet."}]}]}},"refs":["spc","intox"]},
     {"panel":"toksisitet_forgiftning","posisjon":4,"elementtype":"kinetikkort","nokkel":{"tittel":"Toksikokinetiske særtrekk"},"data":{"tittel":"Toksikokinetiske særtrekk","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Eliminasjonen kan være betydelig langsommere ved forgiftning enn ved terapeutisk bruk. I en nyere akuttserie var typisk terminal halveringstid omkring 16,5 timer, med ytterligere forlengelse ved svært høye konsentrasjoner."}]},{"type":"paragraph","content":[{"type":"text","text":"Depotpreparater kan gi forsinket absorpsjon og forlenget symptomvarighet. Ved store depotinntak er farmakobesoar beskrevet, noe som kan opprettholde absorpsjonen og gjøre vanlig ventrikkeltømming lite effektiv."}]}]}},"refs":["intox","spc"]},
-    {"panel":"toksisitet_forgiftning","posisjon":5,"elementtype":"kinetikkort","nokkel":{"tittel":"Behandling ved forgiftning"},"data":{"tittel":"Behandling ved forgiftning","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Det finnes ingen spesifikk antidot. Behandlingen er primært støttende med sikring av luftvei og adekvat oksygenering/ventilasjon, kontinuerlig kardiovaskulær overvåkning og behandling av hypotensjon og andre komplikasjoner."}]},{"type":"paragraph","content":[{"type":"text","text":"Preparatomtalen anbefaler å vurdere ventrikkelskylling ved alvorlig forgiftning tidlig etter inntak og aktivt kull. Ved refraktær hypotensjon brukes intravenøs væske og egnede sympatomimetika; adrenalin og dopamin bør unngås fordi beta-stimulering kan forverre hypotensjon ved kvetiapins alfa-blokade. Ved mistenkt depot-besoar kan bildediagnostikk og eventuell endoskopisk fjerning være aktuelt."}]}]}},"refs":["spc"]},
+    {"panel":"toksisitet_forgiftning","posisjon":5,"elementtype":"kinetikkort","nokkel":{"tittel":"Behandling ved forgiftning"},"data":{"tittel":"Behandling ved forgiftning","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Det finnes ingen spesifikk antidot."}]},{"type":"paragraph","content":[{"type":"text","text":"Preparatomtalen anbefaler å vurdere ventrikkelskylling ved alvorlig forgiftning tidlig etter inntak og aktivt kull. Ved refraktær hypotensjon bør adrenalin og dopamin unngås fordi beta-stimulering kan forverre hypotensjon ved kvetiapins alfa-blokade. Ved mistenkt depot-besoar kan bildediagnostikk og eventuell endoskopisk fjerning være aktuelt."}]}]}},"refs":["spc"]},
     {"panel":"graviditet_amming","posisjon":0,"elementtype":"kinetikkort","nokkel":{"tittel":"Graviditet"},"data":{"tittel":"Graviditet","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Samlet observasjonsdata gir ikke holdepunkter for en tydelig økt risiko for større medfødte misdannelser ved kvetiapineksponering i svangerskapet. En systematisk oversikt og meta-analyse publisert i 2026 inkluderte 13 090 eksponerte graviditeter med misdannelsesutfall og fant en samlet forekomst av større misdannelser på 4,1 %, omtrent på nivå med bakgrunnsrisikoen."}]},{"type":"paragraph","content":[{"type":"text","text":"Evidensen er observasjonell og påvirkes av indikasjon og andre konfunderende faktorer. Preparatomtalen anbefaler bruk i graviditet bare når forventet nytte oppveier mulig risiko. Flere studier peker på en mulig doseavhengig sammenheng med svangerskapsdiabetes, slik at metabolsk oppfølging er relevant."}]}]}},"refs":["pregnancy","spc"]},
     {"panel":"graviditet_amming","posisjon":1,"elementtype":"kinetikkort","nokkel":{"tittel":"Perinatal og neonatal påvirkning"},"data":{"tittel":"Perinatal og neonatal påvirkning","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Eksponering for antipsykotika, inkludert kvetiapin, i tredje trimester kan gi neonatal påvirkning etter fødsel. Preparatomtalen beskriver risiko for ekstrapyramidale symptomer og/eller seponeringssymptomer som agitasjon, hypertoni eller hypotoni, tremor, somnolens, respirasjonsbesvær og ernæringsproblemer."}]},{"type":"paragraph","content":[{"type":"text","text":"Nyfødte som er eksponert sent i svangerskapet bør derfor observeres klinisk etter fødselen. Tilgjengelige data gir ikke grunnlag for å angi en presis individuell risiko."}]}]}},"refs":["spc","pregnancy"]},
     {"panel":"graviditet_amming","posisjon":2,"elementtype":"kinetikkort","nokkel":{"tittel":"Amming"},"data":{"tittel":"Amming","dokument":{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Kvetiapin går over i morsmelk i lave mengder. LactMed oppsummerer at doser opp til 400 mg/døgn vanligvis gir en beregnet spedbarnsdose under 1 % av mors vektjusterte dose. I en serie på ni ammende kvinner var gjennomsnittlig relativ spedbarnsdose 0,16 % (0,04–0,35 %)."}]},{"type":"paragraph","content":[{"type":"text","text":"Publiserte spedbarnsutfall er begrensede, men gjennomgående betryggende. Ved amming anbefales observasjon for særlig søvnighet og normal utvikling, og nytte–risiko må vurderes individuelt."}]}]}},"refs":["lactmed","milk","spc"]},
@@ -80,11 +80,32 @@ begin
       into referanser
       from jsonb_array_elements_text(oppdatering->'refs') with ordinality x(nokkel,i);
 
+    select jsonb_set(
+      oppdatering->'data',
+      '{dokument,content}',
+      coalesce(jsonb_agg(
+        case
+          when node->>'type' = 'paragraph' then
+            jsonb_set(
+              node,
+              '{content}',
+              coalesce(node->'content', '[]'::jsonb) || jsonb_build_array(
+                jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',referanser))
+              )
+            )
+          else node
+        end
+        order by ord
+      ), '[]'::jsonb)
+    )
+      into data
+      from jsonb_array_elements(oppdatering#>'{data,dokument,content}') with ordinality n(node,ord);
+
     perform intern.kuratering_nytt(side, jsonb_build_object(
       'panel', oppdatering->>'panel',
       'posisjon', (oppdatering->>'posisjon')::integer,
       'elementtype', oppdatering->>'elementtype',
-      'data', oppdatering->'data',
+      'data', data,
       'referanser', referanser),
       oppdatering->'nokkel', kilde);
   end loop;
