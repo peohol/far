@@ -8,7 +8,6 @@ const KORRIGERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monogra
 const TILLEGG = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_farmakogenetikk_og_typografi.sql'))!
 const VIRKNINGER_OG_AVHENGIGHET = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_virkninger_og_avhengighet.sql'))!
 const FULLFORING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_fullforing.sql'))!
-const BIVIRKNINGER = migrasjonsfiler().find((f) => f.endsWith('_seroquel_depot_bivirkninger.sql'))!
 const FERSK_KJORING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_fersk_kjoring.sql'))!
 const FORSTE_IMPORTMIGRASJON = '20260923072247'
 
@@ -403,7 +402,7 @@ describe('kvetiapin-monografkuratering', () => {
     expect(grunnlag!.referanser).toHaveLength(2)
 
     const { rows } = await db.query<{ elementtype: string; nedre: number | null; ovre: number | null }>(
-      `select e.elementtype, (e.data->>'nedre')::numeric as nedre, (e.data->>'ovre')::numeric as ovre
+      `select e.elementtype, (e.data->>'nedre')::int as nedre, (e.data->>'ovre')::int as ovre
        from public.innholdselementer e
        join public.infosider s on s.objekt_id=e.infoside_id and s.tilstand='publisert' and s.slug='kvetiapin'
        where e.tilstand='publisert' and e.panel='viktige_data'
