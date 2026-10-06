@@ -1,6 +1,6 @@
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, expect, it } from 'vitest'
-import { type Element, elementer, tekst } from '../hjelp/kurateringskjeden'
+import { type Element, elementer, inlineReferanser, tekst } from '../hjelp/kurateringskjeden'
 
 export default function citalopram(db: () => PGlite): void {
   let identitet: Element[]
@@ -132,6 +132,14 @@ export default function citalopram(db: () => PGlite): void {
     expect(pgx).toContain('SLC6A4')
     expect(pgx).toContain('HTR2A')
     expect(pgx).not.toMatch(/\b(PM|IM|NM|UM)\b/)
+  })
+
+  it('har samsvarende kort- og inline-kilder i de faste nye seksjonene', () => {
+    for (const e of [...toksisitet, ...graviditet, ...avhengighet]) {
+      const inline = inlineReferanser(e.data)
+      expect(inline.length, String(e.data.tittel)).toBeGreaterThan(0)
+      expect(new Set(inline), String(e.data.tittel)).toEqual(new Set(e.referanser))
+    }
   })
 
   it('har kildebelegg og ingen upubliserte redaksjonelle elementer', () => {
