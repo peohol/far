@@ -8,7 +8,7 @@
  * operatorer. Navnene der er oppdiktet.
  */
 import { beforeAll, describe, expect, it } from 'vitest'
-import type { Byttegruppedata, Kode, Merkevaredata, Pakningsdata, Styrkedata } from '../legemiddeldata/fest'
+import type { Byttegruppedata, Kode, Merkevaredata, Pakningsdata, Pakningsinnhold, Styrkedata } from '../legemiddeldata/fest'
 import type { Legemiddelutvalg, MedId } from '../legemiddeldata/lesing'
 import {
   byggPreparatvisning,
@@ -578,6 +578,29 @@ describe('byttbarhet i apotek', () => {
     expect(byttbarhetstekst({ med: ['A', 'B'], midlertidig_utgatt: ['A'], pakninger: null })).toBe(
       'Byttbar i apotek med A (midlertidig utgått) og B.',
     )
+  })
+})
+
+describe('pakningsstørrelsen', () => {
+  it('viser FESTs tekst når størrelsen ikke er ett tall, også i byttbarheten', () => {
+    const endose = (felt: Partial<Pakningsinnhold>) => {
+      const p = pakning('p1', 'm1', ['g1'])
+      return { ...p, innhold: [{ ...p.innhold[0]!, pakningsstorrelse: null, antall: 98, mengde: 1, ...felt }] }
+    }
+    const u = (felt: Partial<Pakningsinnhold>) => ({
+      ...utvalg([styrke('s1', 'mor')], [merkevare('m1', 'Alfa', ['s1']), merkevare('m2', 'Beta', ['s1'])]),
+      pakninger: [endose(felt), pakning('p1b', 'm1', [], 98), pakning('p2', 'm2', ['g1'])],
+      byttegrupper: [byttegruppe('g1')],
+    })
+    const styrke1 = (felt: Partial<Pakningsinnhold>) =>
+      byggPreparatvisning(u(felt), ['mor'], '2026-09-25').preparater.get('53:Alfa')!.styrker[0]!
+    const lest = styrke1({ pakningsstorrelse_tekst: '98 x 1' })
+    expect(lest.pakninger.map((p) => p.tekst)).toEqual(['98 stk', '98 x 1 stk'])
+    expect(byttbarhetstekst(lest.byttbarhet[0]!)).toBe('Pakningen 98 x 1 stk er byttbar i apotek med Beta m2.')
+    // Rader lest før teksten ble tatt med: antall og mengde, ikke bare mengden («1 stk»).
+    expect(styrke1({}).pakninger.map((p) => p.tekst)).toEqual(['98 stk', '98 x 1 stk'])
+    // Uten antall er mengden størrelsen, som før.
+    expect(styrke1({ antall: null, mengde: 10 }).pakninger.map((p) => p.tekst)).toEqual(['10 stk', '98 stk'])
   })
 })
 
