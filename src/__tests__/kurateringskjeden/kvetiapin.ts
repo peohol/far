@@ -1,171 +1,16 @@
-/** Kvetiapin-monografkurateringen: fersk kildevurdering av farmakodynamikk, dosering og farmakokinetikk. */
+/**
+ * Kvetiapin etter hele kurateringskjeden (`kurateringskjeden.test.ts`): fersk
+ * kildevurdering av farmakodynamikk, dosering og farmakokinetikk, med
+ * tilleggene og rettingene som fulgte.
+ */
 import type { PGlite } from '@electric-sql/pglite'
-import { readFileSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
 import { beforeAll, describe, expect, it } from 'vitest'
-import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
+import { type Element, elementer, inlineReferanser, kuratertDatabase, tekst } from '../hjelp/kurateringskjeden'
+import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler } from '../hjelp/testdatabase'
 
-const FORSTE_KURATERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering.sql'))!
 const KORRIGERING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_korrigering.sql'))!
-const TILLEGG = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_farmakogenetikk_og_typografi.sql'))!
-const VIRKNINGER_OG_AVHENGIGHET = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_virkninger_og_avhengighet.sql'))!
-const FULLFORING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_fullforing.sql'))!
-const FERSK_KJORING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_fersk_kjoring.sql'))!
-const KONSENTRASJONER_NMOL = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_konsentrasjoner_nmol_l.sql'))!
-const FORSTE_IMPORTMIGRASJON = '20260923072247'
-const MIGRASJONER = fileURLToPath(new URL('../../supabase/migrations', import.meta.url))
 
-interface Element {
-  objekt_id: string
-  panel: string
-  elementtype: string
-  data: Record<string, unknown>
-  referanser: string[]
-  utkast: number
-  publisert: number
-}
-
-async function elementer(db: PGlite, panel: string): Promise<Element[]> {
-  const { rows } = await db.query<Element>(
-    `select e.objekt_id, e.panel, e.elementtype, e.data,
-       coalesce(r.innhold->'referanser', '[]'::jsonb) as referanser,
-       u.revisjon as utkast, p.revisjon as publisert
-     from public.innholdselementer e
-     join public.infosider s on s.objekt_id = e.infoside_id and s.tilstand = 'publisert' and s.slug = 'kvetiapin'
-     join public.objekttilstander u on u.objekt_id = e.objekt_id and u.tilstand = 'utkast'
-     join public.objekttilstander p on p.objekt_id = e.objekt_id and p.tilstand = 'publisert'
-     join public.objektrevisjoner r on r.objekt_id = e.objekt_id and r.revisjon = p.revisjon
-     where e.tilstand = 'publisert' and e.panel = $1
-     order by e.posisjon, e.objekt_id`,
-    [panel],
-  )
-  return rows
-}
-
-const tekst = (data: Record<string, unknown>) => JSON.stringify(data)
-
-function inlineReferanser(verdi: unknown): string[] {
-  if (Array.isArray(verdi)) return verdi.flatMap(inlineReferanser)
-  if (!verdi || typeof verdi !== 'object') return []
-  const node = verdi as Record<string, unknown>
-  if (node.type === 'sitering') {
-    const attrs = node.attrs
-    if (!attrs || typeof attrs !== 'object') return []
-    const referanser = (attrs as Record<string, unknown>).referanser
-    return Array.isArray(referanser) ? referanser.filter((id): id is string => typeof id === 'string') : []
-  }
-  return Object.values(node).flatMap(inlineReferanser)
-}
-
-/** Kvetiapinkurateringene, i rekkefølgen produksjonen kjørte dem. */
-const KVETIAPINKURATERINGER = [
-  FORSTE_KURATERING,
-  KORRIGERING,
-  TILLEGG,
-  VIRKNINGER_OG_AVHENGIGHET,
-  FULLFORING,
-  migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_avhengighet_inline.sql'))!,
-  FERSK_KJORING,
-  KONSENTRASJONER_NMOL,
-]
-
-/** Kurateringene som selv sier fra når de alt er gjort (`intern.kuratering_utfort`). */
-const SELVSJEKKENDE = KVETIAPINKURATERINGER.filter((f) =>
-  readFileSync(`${MIGRASJONER}/${f}`, 'utf8').includes('intern.kuratering_utfort('),
-)
-
-async function antall(db: PGlite, tabell: 'objektrevisjoner' | 'referanser'): Promise<number> {
-  const { rows } = await db.query<{ n: number }>(`select count(*)::int as n from public.${tabell}`)
-  return rows[0]!.n
-}
-
-describe('kvetiapinmigrasjoner uten kuratorprofil', () => {
-  it('gjør ingenting i den vanlige kronologiske kjeden, der hjelpefunksjonene finnes før kurateringene', async () => {
-    expect(KVETIAPINKURATERINGER.every(Boolean)).toBe(true)
-    expect(KVETIAPINKURATERINGER).toEqual([...KVETIAPINKURATERINGER].sort())
-
-    // Uten profiler hopper ikke testdatabasen over noen kuratering: alle kjøres, i rekkefølge.
-    const tom = await nyDatabase()
-    const { rows } = await tom.query<{ n: number }>(
-      `select count(*)::int as n from public.objektrevisjoner where kilde ilike '%kuratering%kvetiapin%'`,
-    )
-    expect(rows[0]!.n).toBe(0)
-    await tom.close()
-  }, 240_000)
-})
-
-describe('kvetiapinkorrigering med parallelle redaksjonelle kort', () => {
-  it('oppdaterer bare kortene fra den verifiserte første kurateringen', async () => {
-    const testdb = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
-    const admin = await opprettBruker(testdb, {
-      brukernavn: 'peohol',
-      fornavn: 'Rita',
-      etternavn: 'Redaktør',
-      rolle: 'admin',
-    })
-    await kjorMigrasjoner(testdb, { fra: FORSTE_IMPORTMIGRASJON, til: KORRIGERING, kurateringer: true })
-
-    const { rows: sider } = await testdb.query<{ objekt_id: string }>(
-      `select objekt_id from public.infosider where tilstand='publisert' and slug='kvetiapin'`,
-    )
-    const side = sider[0]!.objekt_id
-    const kall = faginnholdskall(testdb, admin)
-
-    const ekstraPd = await kall.opprett('innholdselement', {
-      infoside: side,
-      panel: 'farmakodynamikk',
-      posisjon: 99,
-      elementtype: 'mekanismekort',
-      data: {
-        maal: 'D2-reseptor',
-        mekanisme: 'antagonisme',
-        dokument: {
-          type: 'doc',
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Redaksjonelt ekstra D2-kort' }] }],
-        },
-      },
-      referanser: [],
-    })
-    await kall.publiser(ekstraPd.id, 1)
-
-    const ekstraPk = await kall.opprett('innholdselement', {
-      infoside: side,
-      panel: 'farmakokinetikk',
-      posisjon: 99,
-      elementtype: 'kinetikkort',
-      data: {
-        tittel: 't½',
-        dokument: {
-          type: 'doc',
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Redaksjonelt ekstra PK-kort' }] }],
-        },
-      },
-      referanser: [],
-    })
-    await kall.publiser(ekstraPk.id, 1)
-
-    await kjorMigrasjoner(testdb, { bare: [KORRIGERING] })
-
-    const { rows } = await testdb.query<{ objekt_id: string; tekst: string; kilde: string | null }>(
-      `select e.objekt_id, r.innhold::text as tekst, r.kilde
-       from public.innholdselementer e
-       join public.objekttilstander p on p.objekt_id=e.objekt_id and p.tilstand='publisert'
-       join public.objektrevisjoner r on r.objekt_id=e.objekt_id and r.revisjon=p.revisjon
-       where e.tilstand='publisert' and e.objekt_id in ($1, $2)
-       order by e.objekt_id`,
-      [ekstraPd.id, ekstraPk.id],
-    )
-    expect(rows).toHaveLength(2)
-    expect(rows.find((r) => r.objekt_id === ekstraPd.id)?.tekst).toContain('Redaksjonelt ekstra D2-kort')
-    expect(rows.find((r) => r.objekt_id === ekstraPk.id)?.tekst).toContain('Redaksjonelt ekstra PK-kort')
-    expect(rows.every((r) => r.kilde === null)).toBe(true)
-
-    await testdb.close()
-  }, 240_000)
-})
-
-describe('kvetiapin-monografkuratering', () => {
-  let db: PGlite
+export default function kvetiapin(db: () => PGlite): void {
   let farmakodynamikk: Element[]
   let dosering: Element[]
   let farmakokinetikk: Element[]
@@ -179,23 +24,19 @@ describe('kvetiapin-monografkuratering', () => {
   let interaksjoner: Element[]
 
   beforeAll(async () => {
-    db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
-    await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
-    // Hele kjeden, én gang og i rekkefølge, slik produksjonen kjørte den.
-    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, kurateringer: true })
-
-    farmakodynamikk = await elementer(db, 'farmakodynamikk')
-    dosering = await elementer(db, 'dosering')
-    farmakokinetikk = await elementer(db, 'farmakokinetikk')
-    farmakogenetikk = await elementer(db, 'farmakogenetikk')
-    identitet = await elementer(db, 'identitet')
-    virkninger = await elementer(db, 'virkninger')
-    avhengighet = await elementer(db, 'avhengighet_toleranse')
-    toksisitet = await elementer(db, 'toksisitet_forgiftning')
-    graviditet = await elementer(db, 'graviditet_amming')
-    indikasjon = await elementer(db, 'indikasjon')
-    interaksjoner = await elementer(db, 'interaksjoner')
-  }, 240_000)
+    const panel = (navn: string) => elementer(db(), 'kvetiapin', navn)
+    farmakodynamikk = await panel('farmakodynamikk')
+    dosering = await panel('dosering')
+    farmakokinetikk = await panel('farmakokinetikk')
+    farmakogenetikk = await panel('farmakogenetikk')
+    identitet = await panel('identitet')
+    virkninger = await panel('virkninger')
+    avhengighet = await panel('avhengighet_toleranse')
+    toksisitet = await panel('toksisitet_forgiftning')
+    graviditet = await panel('graviditet_amming')
+    indikasjon = await panel('indikasjon')
+    interaksjoner = await panel('interaksjoner')
+  })
 
   it('har ni kildebelagte mekanismekort uten et eget D1-kort', () => {
     expect(farmakodynamikk).toHaveLength(9)
@@ -248,7 +89,7 @@ describe('kvetiapin-monografkuratering', () => {
   })
 
   it('bevarer D1-kortets historikk og oppretter 5-HT2C som et nytt objekt', async () => {
-    const { rows } = await db.query<{ maal: string; panel: string; kilde: string | null; opprettet: string | null }>(
+    const { rows } = await db().query<{ maal: string; panel: string; kilde: string | null; opprettet: string | null }>(
       `select e.data->>'maal' as maal, e.panel, r.kilde,
          (select r1.kilde from public.objektrevisjoner r1 where r1.objekt_id = e.objekt_id and r1.revisjon = 1) as opprettet
        from public.innholdselementer e
@@ -418,7 +259,7 @@ describe('kvetiapin-monografkuratering', () => {
   })
 
   it('bevarer norsk TDM-grunnverdi og legger AGNP 2026 til som kontekst', async () => {
-    const tdm = await elementer(db, 'tdm')
+    const tdm = await elementer(db(), 'kvetiapin', 'tdm')
     const grunnlag = tdm.find((e) => e.data.tittel === 'Grunnlag for referanseområdet')
     expect(grunnlag).toBeDefined()
     expect(tekst(grunnlag!.data)).toContain('50–700 nmol/L')
@@ -426,7 +267,7 @@ describe('kvetiapin-monografkuratering', () => {
     expect(tekst(grunnlag!.data)).toContain('skal derfor ikke erstatte')
     expect(grunnlag!.referanser).toHaveLength(2)
 
-    const { rows } = await db.query<{ elementtype: string; nedre: number | null; ovre: number | null }>(
+    const { rows } = await db().query<{ elementtype: string; nedre: number | null; ovre: number | null }>(
       `select e.elementtype, (e.data->>'nedre')::int as nedre, (e.data->>'ovre')::int as ovre
        from public.innholdselementer e
        join public.infosider s on s.objekt_id=e.infoside_id and s.tilstand='publisert' and s.slug='kvetiapin'
@@ -442,7 +283,7 @@ describe('kvetiapin-monografkuratering', () => {
   })
 
   it('viser alle redaksjonelle kvetiapinkonsentrasjoner som nmol/L', async () => {
-    const { rows: kjort } = await db.query<{ n: number }>(
+    const { rows: kjort } = await db().query<{ n: number }>(
       `select count(*)::int as n from public.objektrevisjoner
        where kilde = 'Monografkuratering av kvetiapin 05.10.2026: konsentrasjoner standardisert til nmol/L'`,
     )
@@ -453,12 +294,12 @@ describe('kvetiapin-monografkuratering', () => {
     expect(tekst(toksiske.data)).toContain('5 200 nmol/L')
     expect(tekst(toksiske.data)).not.toMatch(/mg\/L|ng\/mL|mg\/kg/)
 
-    const tdm = await elementer(db, 'tdm')
+    const tdm = await elementer(db(), 'kvetiapin', 'tdm')
     const grunnlag = tdm.find((e) => e.data.tittel === 'Grunnlag for referanseområdet')!
     expect(tekst(grunnlag.data)).toContain('260–1 300 nmol/L')
     expect(tekst(grunnlag.data)).not.toMatch(/mg\/L|ng\/mL|mg\/kg/)
 
-    const { rows } = await db.query<{ n: number }>(
+    const { rows } = await db().query<{ n: number }>(
       `select count(*)::int as n
        from public.innholdselementer e
        join public.infosider s on s.objekt_id=e.infoside_id and s.tilstand='publisert' and s.slug='kvetiapin'
@@ -506,7 +347,7 @@ describe('kvetiapin-monografkuratering', () => {
   })
 
   it('bevarer tilbakeført farmakogenetikk og kildebelegger interaksjonsteksten på nytt', async () => {
-    const { rows } = await db.query<{ panel: string; tittel: string | null; kilde: string | null }>(
+    const { rows } = await db().query<{ panel: string; tittel: string | null; kilde: string | null }>(
       `select e.panel, e.data->>'tittel' as tittel, r.kilde
        from public.innholdselementer e
        join public.infosider s on s.objekt_id = e.infoside_id and s.tilstand = 'publisert' and s.slug = 'kvetiapin'
@@ -569,7 +410,7 @@ describe('kvetiapin-monografkuratering', () => {
       'https://janusmed.se/amning/lakemedel/Quetiapine%20Teva',
     ]
 
-    const { rows } = await db.query<{ lenke: string; n: number }>(
+    const { rows } = await db().query<{ lenke: string; n: number }>(
       `select lenke, count(*)::int as n
        from public.referanser
        where tilstand = 'publisert' and lenke = any($1::text[])
@@ -581,14 +422,66 @@ describe('kvetiapin-monografkuratering', () => {
     for (const r of rows) expect(r.n, r.lenke).toBe(1)
   })
 
-  // Sist, siden den kjører migrasjoner på nytt. Bare kurateringene som selv
-  // sjekker `intern.kuratering_utfort` lover å tåle det; de eldre gjør det ikke.
-  it('kurateringene som sjekker om de alt er gjort, endrer ingenting når de kjøres på nytt', async () => {
-    expect(SELVSJEKKENDE).toEqual(KVETIAPINKURATERINGER.slice(3))
-    const revisjoner = await antall(db, 'objektrevisjoner')
-    const referanser = await antall(db, 'referanser')
-    await kjorMigrasjoner(db, { bare: SELVSJEKKENDE })
-    expect(await antall(db, 'objektrevisjoner')).toBe(revisjoner)
-    expect(await antall(db, 'referanser')).toBe(referanser)
+  describe('kvetiapinkorrigering med parallelle redaksjonelle kort', () => {
+    it('oppdaterer bare kortene fra den verifiserte første kurateringen', async () => {
+      const { db: testdb, kurator: admin } = await kuratertDatabase({ til: KORRIGERING })
+
+      const { rows: sider } = await testdb.query<{ objekt_id: string }>(
+        `select objekt_id from public.infosider where tilstand='publisert' and slug='kvetiapin'`,
+      )
+      const side = sider[0]!.objekt_id
+      const kall = faginnholdskall(testdb, admin)
+
+      const ekstraPd = await kall.opprett('innholdselement', {
+        infoside: side,
+        panel: 'farmakodynamikk',
+        posisjon: 99,
+        elementtype: 'mekanismekort',
+        data: {
+          maal: 'D2-reseptor',
+          mekanisme: 'antagonisme',
+          dokument: {
+            type: 'doc',
+            content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Redaksjonelt ekstra D2-kort' }] }],
+          },
+        },
+        referanser: [],
+      })
+      await kall.publiser(ekstraPd.id, 1)
+
+      const ekstraPk = await kall.opprett('innholdselement', {
+        infoside: side,
+        panel: 'farmakokinetikk',
+        posisjon: 99,
+        elementtype: 'kinetikkort',
+        data: {
+          tittel: 't½',
+          dokument: {
+            type: 'doc',
+            content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Redaksjonelt ekstra PK-kort' }] }],
+          },
+        },
+        referanser: [],
+      })
+      await kall.publiser(ekstraPk.id, 1)
+
+      await kjorMigrasjoner(testdb, { bare: [KORRIGERING] })
+
+      const { rows } = await testdb.query<{ objekt_id: string; tekst: string; kilde: string | null }>(
+        `select e.objekt_id, r.innhold::text as tekst, r.kilde
+         from public.innholdselementer e
+         join public.objekttilstander p on p.objekt_id=e.objekt_id and p.tilstand='publisert'
+         join public.objektrevisjoner r on r.objekt_id=e.objekt_id and r.revisjon=p.revisjon
+         where e.tilstand='publisert' and e.objekt_id in ($1, $2)
+         order by e.objekt_id`,
+        [ekstraPd.id, ekstraPk.id],
+      )
+      expect(rows).toHaveLength(2)
+      expect(rows.find((r) => r.objekt_id === ekstraPd.id)?.tekst).toContain('Redaksjonelt ekstra D2-kort')
+      expect(rows.find((r) => r.objekt_id === ekstraPk.id)?.tekst).toContain('Redaksjonelt ekstra PK-kort')
+      expect(rows.every((r) => r.kilde === null)).toBe(true)
+
+      await testdb.close()
+    }, 240_000)
   })
-})
+}

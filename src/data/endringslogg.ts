@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.80.3',
+    dato: '2026-10-06',
+    sammendrag: 'Felles automatiske kontroller for alle fagsideoppdateringer fra kuratoren',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    utenVarsel: true,
+    punkter: [
+      'Hver ny oppdatering av en fagside fra kuratoren prøves nå automatisk på samme måte som kvetiapin: alle oppdateringene kjøres én gang og i samme rekkefølge som i appen, og hver av dem må faktisk endre siden, uten å etterlate upubliserte utkast eller kilder som mangler.',
+      'Oppdateringer som lover å tåle å kjøres to ganger, prøves hver for seg på at de ikke endrer noe andre gang. Ingenting i appen eller på fagsidene er endret.',
+    ],
+  },
+  {
     versjon: '1.80.2',
     dato: '2026-10-06',
     sammendrag: 'De automatiske kontrollene av fagsideoppdateringer er rettet og grønne igjen',

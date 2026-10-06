@@ -13,15 +13,21 @@ import { utenKommentarer } from '../faginnhold/sqlsetninger'
 import {
   brukerKuratorhjelperne,
   erMonografkuratering,
+  erSelvsjekkende,
   faginnholdskall,
   feilFra,
+  grunnlagsdatabase,
+  kjorMigrasjoner,
   KURATERINGER_MED_AVVIKENDE_NAVN,
   KURATERINGSNAVN,
+  kurateringssider,
   migrasjonsfiler,
+  monografkurateringer,
   nyDatabase,
   PRODUKSJONSREFERANSER,
   opprettBruker,
   type Faginnholdskall,
+  type KjortKuratering,
 } from './hjelp/testdatabase'
 
 const MIGRASJONER = fileURLToPath(new URL('../../supabase/migrations', import.meta.url))
@@ -136,6 +142,12 @@ describe('monografkurateringene i migrasjonene', () => {
     expect(brukerKuratorhjelperne("comment on function intern.kuratering_start(text, text) is 'Logger inn';")).toBe(false)
     expect(brukerKuratorhjelperne("-- kaller intern.kuratering_start('kvetiapin')\nselect 1;")).toBe(false)
     expect(brukerKuratorhjelperne("/* intern.kuratering_start('kvetiapin') */ select 1;")).toBe(false)
+    expect(kurateringssider("side uuid := intern.kuratering_start('ketamin'); -- intern.kuratering_start('annet')")).toEqual([
+      'ketamin',
+    ])
+    expect(erSelvsjekkende("if intern.kuratering_utfort(kilde) then return; end if;")).toBe(true)
+    expect(erSelvsjekkende("-- if intern.kuratering_utfort(kilde) then return; end if;")).toBe(false)
+    expect(erSelvsjekkende("create function intern.kuratering_utfort(p_kilde text) returns boolean")).toBe(false)
 
     const hjelpere = migrasjonsfiler().filter((f) => f.includes('_monografkuratering_hjelpere'))
     expect(hjelpere).toHaveLength(4)
@@ -158,36 +170,54 @@ describe('monografkurateringene i migrasjonene', () => {
     expect([...iBruk].sort()).toEqual(Object.keys(PRODUKSJONSREFERANSER).sort())
   })
 
-  it('heter *_monografkuratering*.sql, bortsett fra de historiske avvikene, som ikke blir flere', () => {
-    expect('20261003120000_sertralin_monografkuratering.sql').toMatch(KURATERINGSNAVN)
-    expect('20261003120000_sertralin_monografkuratering_tillegg.sql').toMatch(KURATERINGSNAVN)
+  it('heter <versjon>_<stoff>_monografkuratering*.sql, bortsett fra de historiske avvikene, som ikke blir flere', () => {
+    expect(KURATERINGSNAVN.exec('20261003120000_sertralin_monografkuratering.sql')?.[1]).toBe('sertralin')
+    expect(KURATERINGSNAVN.exec('20261003120000_sertralin_monografkuratering_tillegg.sql')?.[1]).toBe('sertralin')
+    expect('20261003120000_monografkuratering.sql').not.toMatch(KURATERINGSNAVN)
     for (const fil of kurateringer) {
-      if (!KURATERINGER_MED_AVVIKENDE_NAVN.includes(fil)) expect(fil).toMatch(KURATERINGSNAVN)
+      if (!(fil in KURATERINGER_MED_AVVIKENDE_NAVN)) expect(fil).toMatch(KURATERINGSNAVN)
     }
     // Allerede kjørt i produksjonen og dermed uforanderlige; en ny kuratering
     // skal ha det vanlige navnet i stedet for å bli lagt til her.
-    expect(KURATERINGER_MED_AVVIKENDE_NAVN).toEqual([
-      '20261002040004_kvetiapin_farmakogenetikk_og_typografi.sql',
-      '20261004040353_kvetiapin_virkninger_og_avhengighet.sql',
-      '20261005173500_kvetiapin_konsentrasjoner_nmol_l.sql',
-    ])
-    for (const fil of KURATERINGER_MED_AVVIKENDE_NAVN) {
+    expect(KURATERINGER_MED_AVVIKENDE_NAVN).toEqual({
+      '20261002040004_kvetiapin_farmakogenetikk_og_typografi.sql': 'kvetiapin',
+      '20261004040353_kvetiapin_virkninger_og_avhengighet.sql': 'kvetiapin',
+      '20261005173500_kvetiapin_konsentrasjoner_nmol_l.sql': 'kvetiapin',
+    })
+    for (const fil of Object.keys(KURATERINGER_MED_AVVIKENDE_NAVN)) {
       expect(migrasjonsfiler()).toContain(fil)
       expect(fil).not.toMatch(KURATERINGSNAVN)
+    }
+  })
+
+  it('åpner bare stoffsiden som står i navnet', () => {
+    for (const { fil } of monografkurateringer()) {
+      const navn = KURATERINGER_MED_AVVIKENDE_NAVN[fil] ?? KURATERINGSNAVN.exec(fil)?.[1]
+      expect(navn, fil).toBeDefined()
+      const sql = readFileSync(`${MIGRASJONER}/${fil}`, 'utf8')
+      const sider = kurateringssider(sql)
+      // En kuratering bygd på hjelperne åpner nøyaktig én side, med nøkkelen som tekst.
+      if (brukerKuratorhjelperne(sql)) expect(sider, fil).toHaveLength(1)
+      for (const side of sider) expect(side.replaceAll('-', '_'), fil).toBe(navn)
     }
   })
 })
 
 describe('monografmigrasjoner uten kuratorprofil', () => {
   let tom: PGlite
+  let kjort: KjortKuratering[]
 
   beforeAll(async () => {
-    tom = await nyDatabase()
+    tom = await grunnlagsdatabase()
+    kjort = await kjorMigrasjoner(tom)
   }, 240_000)
 
   it('hele migrasjonskjeden kjører på en tom database uten kuratorprofil', async () => {
     const { rows } = await tom.query<{ n: number }>('select count(*)::int as n from public.profiles')
     expect(rows[0]!.n).toBe(0)
+    // Alle kurateringene kjøres, i rekkefølge, og ingen av dem endrer noe.
+    expect(kjort.map((k) => k.fil)).toEqual(monografkurateringer().map((k) => k.fil))
+    for (const k of kjort) expect(k.nyeRevisjoner, k.fil).toBe(0)
     // Malen, som enhver kuratering bygd på den, gjør ingenting her.
     await tom.exec(MAL)
     const { rows: elementer } = await tom.query<{ n: number }>('select count(*)::int as n from public.innholdselementer')
