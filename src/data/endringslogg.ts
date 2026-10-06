@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.80.3',
+    dato: '2026-10-06',
+    sammendrag: 'Kontrollen av databaseendringer kjører bare når en endring berører databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    utenVarsel: true,
+    punkter: [
+      'Den automatiske kontrollen av databaseendringer kjører nå bare når en endring faktisk berører databasen eller utrullingen av den. Andre endringer kontrolleres som før med testene og bygget.',
+    ],
+  },
+  {
     versjon: '1.80.2',
     dato: '2026-10-06',
     sammendrag: 'De automatiske kontrollene av fagsideoppdateringer er rettet og grønne igjen',

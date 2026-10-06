@@ -30,6 +30,7 @@
     "vite.config.ts",
     "scripts/importer-intervallregelsett.ts",
     "scripts/kontroller-migrasjoner.ts",
+    "scripts/berorer-migrasjoner.ts",
     "scripts/migrasjonsmappe.ts",
     "scripts/produksjonsmigrering.ts",
     "supabase/functions/_delt",
