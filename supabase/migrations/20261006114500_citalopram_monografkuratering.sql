@@ -282,9 +282,16 @@ begin
       side,
       jsonb_build_object('panel','toksisitet_forgiftning','posisjon',(x->>'posisjon')::int,'elementtype','kinetikkort',
         'data',jsonb_build_object('tittel',x->>'tittel','dokument',jsonb_build_object(
-          'type','doc','content',jsonb_build_array(jsonb_build_object(
-            'type','paragraph','content',jsonb_build_array(jsonb_build_object('type','text','text',x->>'tekst'))
-          ))
+          'type','doc','content',jsonb_build_array(
+            jsonb_build_object(
+              'type','paragraph','content',jsonb_build_array(jsonb_build_object('type','text','text',x->>'tekst'))
+            ),
+            jsonb_build_object(
+              'type','sitering','attrs',jsonb_build_object(
+                'referanser',jsonb_build_array(kilder->>'giftinfo',kilder->>'spc')
+              )
+            )
+          )
         )),
         'referanser',jsonb_build_array(kilder->>'giftinfo',kilder->>'spc')),
       jsonb_build_object('tittel',x->>'tittel'),
@@ -308,9 +315,14 @@ begin
       side,
       jsonb_build_object('panel','graviditet_amming','posisjon',(x->>'posisjon')::int,'elementtype','kinetikkort',
         'data',jsonb_build_object('tittel',x->>'tittel','dokument',jsonb_build_object(
-          'type','doc','content',jsonb_build_array(jsonb_build_object(
-            'type','paragraph','content',jsonb_build_array(jsonb_build_object('type','text','text',x->>'tekst'))
-          ))
+          'type','doc','content',jsonb_build_array(
+            jsonb_build_object(
+              'type','paragraph','content',jsonb_build_array(jsonb_build_object('type','text','text',x->>'tekst'))
+            ),
+            jsonb_build_object(
+              'type','sitering','attrs',jsonb_build_object('referanser',refs)
+            )
+          )
         )),
         'referanser',refs),
       jsonb_build_object('tittel',x->>'tittel'),
@@ -329,9 +341,16 @@ begin
       side,
       jsonb_build_object('panel','avhengighet_toleranse','posisjon',(x->>'posisjon')::int,'elementtype','kinetikkort',
         'data',jsonb_build_object('tittel',x->>'tittel','dokument',jsonb_build_object(
-          'type','doc','content',jsonb_build_array(jsonb_build_object(
-            'type','paragraph','content',jsonb_build_array(jsonb_build_object('type','text','text',x->>'tekst'))
-          ))
+          'type','doc','content',jsonb_build_array(
+            jsonb_build_object(
+              'type','paragraph','content',jsonb_build_array(jsonb_build_object('type','text','text',x->>'tekst'))
+            ),
+            jsonb_build_object(
+              'type','sitering','attrs',jsonb_build_object(
+                'referanser',jsonb_build_array(kilder->>'spc',kilder->>'nutt2003',kilder->>'chiappini2022')
+              )
+            )
+          )
         )),
         'referanser',jsonb_build_array(kilder->>'spc',kilder->>'nutt2003',kilder->>'chiappini2022')),
       jsonb_build_object('tittel',x->>'tittel'),
