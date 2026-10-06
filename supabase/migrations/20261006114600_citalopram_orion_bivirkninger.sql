@@ -211,7 +211,7 @@ select bivirkninger.importer($import${
           "frekvens": "ikke_kjent",
           "bivirkninger": [
             "QT-forlengelse",
-            "ventrikulær arytmi inkludert “torsade de pointes”"
+            "vetrikulær arytmi inkludert “torsade de pointes”"
           ]
         }
       ]
@@ -271,7 +271,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "ikke_kjent",
           "bivirkninger": [
-            "Gastrointestinal blødning (inkludert rektalblødning)"
+            "Gastrointesinal blødning (inkludert rektalblødning)"
           ]
         }
       ]
@@ -315,13 +315,13 @@ select bivirkninger.importer($import${
             "alopesi",
             "utslett",
             "purpura",
-            "lysfølsomhetsreaksjon"
+            "lysømfintlighetsreaksjon"
           ]
         },
         {
           "frekvens": "ikke_kjent",
           "bivirkninger": [
-            "Angioødem",
+            "Angioødemer",
             "ekkymose"
           ]
         }
