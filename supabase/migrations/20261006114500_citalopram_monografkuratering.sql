@@ -154,11 +154,11 @@ begin
   for x in select value from jsonb_array_elements($json$
   [
     {"tittel":"Biotilgjengelighet","tekst":"Citalopram absorberes nesten fullstendig og uavhengig av matinntak. Oral biotilgjengelighet er omtrent 80 %."},
-    {"tittel":"tmax","tekst":"Maksimal plasmakonsentrasjon nås etter omtrent 4 timer, med oppgitt intervall 1–6 timer."},
-    {"tittel":"t1/2","tekst":"Terminal halveringstid er omtrent 36 timer, med oppgitt intervall 28–42 timer."},
-    {"tittel":"tss","tekst":"Steady state oppnås vanligvis etter 1–2 uker. Ved samme dose kan steady-state-konsentrasjonen variere om lag firefold mellom personer."},
+    {"tittel":"tₘₐₓ","tekst":"Maksimal plasmakonsentrasjon nås etter omtrent 4 timer, med oppgitt intervall 1–6 timer."},
+    {"tittel":"t½","tekst":"Terminal halveringstid er omtrent 36 timer, med oppgitt intervall 28–42 timer."},
+    {"tittel":"tₛₛ","tekst":"Steady state oppnås vanligvis etter 1–2 uker. Ved samme dose kan steady-state-konsentrasjonen variere om lag firefold mellom personer."},
     {"tittel":"Proteinbinding","tekst":"Plasmaproteinbindingen er omtrent 80 % for citalopram og hovedmetabolittene."},
-    {"tittel":"VD","tekst":"Tilsynelatende distribusjonsvolum er omtrent 14 L/kg, med oppgitt intervall 12–17 L/kg."},
+    {"tittel":"Vd","tekst":"Tilsynelatende distribusjonsvolum er omtrent 14 L/kg, med oppgitt intervall 12–17 L/kg."},
     {"tittel":"Eliminasjon","tekst":"Citalopram elimineres hovedsakelig ved hepatisk metabolisme. Omtrent 15 % av clearance er renal; rundt 12–23 % av døgndosen kan utskilles uendret i urin."},
     {"tittel":"CYP-enzymer (substrat)","tekst":"CYP2C19 er et sentralt enzym i N-demetyleringen, med bidrag fra CYP3A4 og CYP2D6. Desmetylcitalopram og didesmetylcitalopram er farmakologisk aktive, men mindre potente og selektive enn moderstoffet og anses ikke å bidra vesentlig til antidepressiv effekt."},
     {"tittel":"Interaksjoner","tekst":"Citalopram er en svak hemmer av CYP1A2, CYP2C19 og CYP2D6 og har ubetydelig hemming av CYP2C9, CYP2E1 og CYP3A4. CYP2C19-hemmere kan øke citaloprameksponeringen; omeprazol økte eksponeringen av S-citalopram med omtrent 50 % i en interaksjonsstudie. Legemiddelspesifikke interaksjoner vises i den automatiske interaksjonsseksjonen."}
