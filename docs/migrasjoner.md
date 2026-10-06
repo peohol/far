@@ -17,6 +17,15 @@ Reglene for hva en migrasjon kan inneholde, står i `supabase/CLAUDE.md`.
      transaksjon (under);
    - `npm test`, som kjører alle migrasjonene i en database i minnet;
    - `npm run build`.
+
+   Testene og bygget kjører på hver PR. Kontrollen av migrasjonsfilene kjører
+   bare når PR-en endrer migrasjonene eller noe kontrollen og utrullingen
+   avhenger av: lista står i `src/faginnhold/migrasjonsavhengigheter.ts`, og
+   `npm run berorer:migrasjoner -- <grunn>` avgjør det. Av pakkefilene teller
+   bare kommandoene og versjonene av Supabase-CLI-en og `vite-node`, ikke
+   appens versjonsnummer. En test krever at lista har med alt
+   arbeidsflytene kjører og importerer, og alt som starter utrullingen. Kan
+   endringene ikke leses, kjøres kontrollen.
 3. **PR-en slås sammen.** For en ordinær, testet migrasjon er sammenslåingen
    godkjenningen; den trenger ikke noe eget ja.
 4. **GitHub Actions ruller den ut** (`.github/workflows/produksjonsmigrering.yml`),
