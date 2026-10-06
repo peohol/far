@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.80.3',
+    versjon: '1.80.4',
     dato: '2026-10-06',
     sammendrag: 'Kontrollen av databaseendringer kjører bare når en endring berører databasen',
     typer: ['Funksjonalitet'],
@@ -20,6 +20,17 @@ export const ENDRINGSLOGG: Endring[] = [
     utenVarsel: true,
     punkter: [
       'Den automatiske kontrollen av databaseendringer kjører nå bare når en endring faktisk berører databasen eller utrullingen av den. Andre endringer kontrolleres som før med testene og bygget.',
+    ],
+  },
+  {
+    versjon: '1.80.3',
+    dato: '2026-10-06',
+    sammendrag: 'Serverjobbene kjører nå i Stockholm, ved siden av databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    utenVarsel: true,
+    punkter: [
+      'De nattlige og ukentlige oppdateringene av legemiddeldata og farmakogenetikk kjører nå i Stockholm, der databasen ligger, i stedet for i USA. Det gir kortere vei mellom dem. Ingenting i appen ser annerledes ut.',
     ],
   },
   {
