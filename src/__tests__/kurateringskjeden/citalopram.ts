@@ -43,11 +43,11 @@ export default function citalopram(db: () => PGlite): void {
     expect(dosering).toHaveLength(1)
     expect(farmakokinetikk.map((e) => String(e.data.tittel))).toEqual([
       'Biotilgjengelighet',
-      'tmax',
-      't1/2',
-      'tss',
+      'tₘₐₓ',
+      't½',
+      'tₛₛ',
       'Proteinbinding',
-      'VD',
+      'Vd',
       'Eliminasjon',
       'CYP-enzymer (substrat)',
       'Interaksjoner',
