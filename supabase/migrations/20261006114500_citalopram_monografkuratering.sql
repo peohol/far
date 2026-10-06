@@ -24,6 +24,8 @@ begin
   -- Preflight av elementene som allerede finnes og skal endres.
   perform intern.kuratering_antall(side, 'identitet', 'riktekst', 0);
   perform intern.kuratering_antall(side, 'virkninger', 'kinetikkort', 0);
+  perform intern.kuratering_antall(side, 'viktige_data', 'halveringstid', 1);
+  perform intern.kuratering_antall(side, 'viktige_data', 'steady_state', 1);
   perform intern.kuratering_antall(side, 'farmakodynamikk', 'mekanismekort', 7);
   perform intern.kuratering_antall(side, 'indikasjon', 'riktekst', 1);
   perform intern.kuratering_antall(side, 'dosering', 'riktekst', 1);
@@ -44,14 +46,16 @@ begin
     ('giftinfo','Citalopram – behandlingsanbefaling ved forgiftning','Giftinformasjonen / Helsebiblioteket','2026','https://www.helsebiblioteket.no/forgiftninger/legemidler/citalopram-behandlingsanbefaling-ved-forgiftning'),
     ('cpic','Clinical Pharmacogenetics Implementation Consortium (CPIC) Guideline for CYP2D6, CYP2C19, CYP2B6, SLC6A4, and HTR2A Genotypes and Serotonin Reuptake Inhibitor Antidepressants','Bousman CA, Stevenson JM, Ramsey LB, et al.','2023','https://doi.org/10.1002/cpt.2903'),
     ('agnp2026','Consensus Guidelines for Therapeutic Drug Monitoring in Neuropsychopharmacology: Update 2026 – Pharmacokinetic, pharmacogenetic and clinical aspects','Hart XM, Gründer G, Hiemke C, et al.','2026','https://doi.org/10.1055/a-2860-7861'),
-    ('tdmreview','Toward therapeutic drug monitoring of citalopram in depression? Insights from a systematic review','Li X, et al.','2023','https://doi.org/10.3389/fpsyt.2023.1144573'),
+    ('tdmreview','Toward therapeutic drug monitoring of citalopram in depression? Insights from a systematic review','Xu N, Song Z, Jiang D, Zhao R','2023','https://doi.org/10.3389/fpsyt.2023.1144573'),
     ('cipriani','Comparative efficacy and acceptability of 21 antidepressant drugs for the acute treatment of adults with major depressive disorder: a systematic review and network meta-analysis','Cipriani A, Furukawa TA, Salanti G, et al.','2018','https://doi.org/10.1016/S0140-6736(17)32802-7'),
     ('ocd','Citalopram 20 mg, 40 mg and 60 mg are all effective and well tolerated compared with placebo in obsessive-compulsive disorder','Montgomery SA, Kasper S, Stein DJ, Bang Hedegaard K, Lemming OM','2001','https://pubmed.ncbi.nlm.nih.gov/11236072/'),
     ('panic','A controlled, prospective, 1-year trial of citalopram in the treatment of panic disorder','Lepola U, Wade A, Leinonen E, et al.','1998','https://pubmed.ncbi.nlm.nih.gov/9818634/'),
     ('pregmeta','Association of citalopram with congenital anomalies: A meta-analysis','Kang HH, Ahn KH, Hong SC, et al.','2017','https://doi.org/10.5468/ogs.2017.60.2.145'),
     ('janusfoster','Janusmed fosterpåverkan – citalopram','Region Stockholm','2026','https://janusmed.se/fosterpaverkan/lakemedel/Citalopram%20BMM%20Pharma'),
     ('janusamning','Janusmed amning – citalopram','Region Stockholm / Klinisk farmakologi, Karolinska Universitetssjukhuset','2026','https://janusmed.se/amning/lakemedel/Citalopram%20Teva'),
-    ('lactmed','Citalopram','Drugs and Lactation Database (LactMed)','2026','https://www.ncbi.nlm.nih.gov/books/NBK501185/');
+    ('lactmed','Citalopram','Drugs and Lactation Database (LactMed)','2026','https://www.ncbi.nlm.nih.gov/books/NBK501185/'),
+    ('nutt2003','Death and dependence: current controversies over the selective serotonin reuptake inhibitors','Nutt DJ','2003','https://doi.org/10.1177/0269881103174019'),
+    ('chiappini2022','A Focus on Abuse/Misuse and Withdrawal Issues with Selective Serotonin Reuptake Inhibitors (SSRIs): Analysis of Both the European EMA and the US FAERS Pharmacovigilance Databases','Chiappini S, Vickers-Smith R, Guirguis A, et al.','2022','https://doi.org/10.3390/ph15050565');
 
   for k in select * from citalopram_kilder order by nokkel loop
     ref := intern.kuratering_referanse(
@@ -74,8 +78,36 @@ begin
   perform intern.kuratering_nytt(
     side,
     jsonb_build_object('panel','identitet','posisjon',0,'elementtype','riktekst','data',data,
-      'referanser',jsonb_build_array(kilder->>'spc',kilder->>'cpic')),
+      'referanser',jsonb_build_array(kilder->>'spc',kilder->>'cpic',kilder->>'nutt2003',kilder->>'chiappini2022')),
     '{}'::jsonb,
+    kilde
+  );
+
+  -- Viktige data: PK-nøkkeltall synkroniseres med gjeldende SPC. De norske
+  -- referanse- og toksisitetsgrensene endres ikke.
+  obj := intern.kuratering_element(
+    side, 'viktige_data', 'halveringstid', '{}'::jsonb, 2,
+    'Omgjort: forbeholdet er tatt bort, og verdien står som typisk, minimum og maksimum per legemiddelform'
+  );
+  perform intern.kuratering_lagre(
+    obj, 2,
+    jsonb_build_object(
+      'data', '{"former":[{"form":"","typisk":36,"min":28,"maks":42,"enhet":"timer"}]}'::jsonb,
+      'referanser', jsonb_build_array(kilder->>'spc')
+    ),
+    kilde
+  );
+
+  obj := intern.kuratering_element(
+    side, 'viktige_data', 'steady_state', '{}'::jsonb, 2,
+    'Omgjort: forbeholdet er tatt bort, og verdien står som typisk, minimum og maksimum per legemiddelform'
+  );
+  perform intern.kuratering_lagre(
+    obj, 2,
+    jsonb_build_object(
+      'data', '{"former":[{"form":"","typisk":null,"min":1,"maks":2,"enhet":"uker"}]}'::jsonb,
+      'referanser', jsonb_build_array(kilder->>'spc')
+    ),
     kilde
   );
 
@@ -291,7 +323,7 @@ begin
   [
     {"posisjon":0,"tittel":"Toleranseutvikling","tekst":"Preparatomtalen angir at langvarig behandling ikke induserer toleranse for den hemmende effekten på serotoninreopptak. Dette utelukker ikke at klinisk effekt eller bivirkninger kan endre seg over tid, men det finnes ikke et etablert mønster med farmakodynamisk toleranse som krever kontinuerlig doseeskalering."},
     {"posisjon":1,"tittel":"Abstinens, seponeringssyndrom og rebound-effekter","tekst":"Seponeringssymptomer er vanlige, særlig ved brå avslutning. I en tilbakefallsforebyggende studie ble bivirkninger etter seponering sett hos 40 % etter avsluttet aktiv behandling mot 20 % hos dem som fortsatte. Typiske symptomer er svimmelhet, parestesier, søvnforstyrrelser, angst/agitasjon, kvalme, tremor, hodepine og emosjonell ustabilitet. De oppstår oftest de første dagene og går vanligvis over innen omtrent to uker, men kan hos noen vare i måneder; nedtrapping bør derfor individualiseres."},
-    {"posisjon":2,"tittel":"Addiksjon","tekst":"Citalopram gir ikke rusvirkning eller et typisk mønster av craving, kontrolltap og tvangsmessig bruk, og regnes ikke som et addiktivt legemiddel. Et seponeringssyndrom etter fysiologisk tilpasning skal ikke i seg selv tolkes som addiksjon."}
+    {"posisjon":2,"tittel":"Addiksjon","tekst":"Citalopram og andre SSRI regnes vanligvis ikke som addiktive i formell forstand med et klassisk avhengighetssyndrom. En faglig gjennomgang fant ikke evidens for slik addiksjon, mens farmakovigilansedatabaser inneholder rapporter om misbruk, avhengighet og seponering også for citalopram; spontanrapportering kan ikke fastslå forekomst eller årsakssammenheng. Seponeringssymptomer etter fysiologisk tilpasning må derfor skilles fra addiksjon."}
   ]$json$::jsonb) loop
     perform intern.kuratering_nytt(
       side,
@@ -301,7 +333,7 @@ begin
             'type','paragraph','content',jsonb_build_array(jsonb_build_object('type','text','text',x->>'tekst'))
           ))
         )),
-        'referanser',jsonb_build_array(kilder->>'spc')),
+        'referanser',jsonb_build_array(kilder->>'spc',kilder->>'nutt2003',kilder->>'chiappini2022')),
       jsonb_build_object('tittel',x->>'tittel'),
       kilde
     );
