@@ -1,7 +1,8 @@
 /**
  * Monografkurateringene kjørt slik produksjonen kjørte dem: hele kjeden én
  * gang, i rekkefølge, med kuratoren (`hjelp/kurateringskjeden.ts`). For hvert
- * stoff kontrolleres at hver kuratering faktisk endret siden, og at siden står
+ * stoff kontrolleres at hver kuratering faktisk endret elementene på sin egen
+ * side og ingen andre (nye referanser alene teller ikke), og at siden står
  * uten upubliserte utkast og bare peker på referanser som finnes, én per
  * lenke. Sluttresultatet for et stoff valideres i `kurateringskjeden/<stoff>.ts`.
  * Til slutt kjøres kurateringene som selv sjekker om de alt er gjort, på nytt,
@@ -44,8 +45,10 @@ describe('kurateringskjeden', () => {
 describe.each(STOFFER)('%s', (stoff) => {
   const filer = KURATERINGER.filter((k) => k.stoff === stoff).map((k) => k.fil)
 
-  it.each(filer)('%s endrer siden når kuratoren finnes', (fil) => {
-    expect(kjort.find((k) => k.fil === fil)?.nyeRevisjoner).toBeGreaterThan(0)
+  it.each(filer)('%s endrer elementene på siden, og bare på den, når kuratoren finnes', (fil) => {
+    const endret = kjort.find((k) => k.fil === fil)?.endredeSider ?? {}
+    expect(Object.keys(endret)).toEqual([stoff])
+    expect(endret[stoff]).toBeGreaterThan(0)
   })
 
   it('står uten upubliserte utkast', async () => {
@@ -86,6 +89,6 @@ describe('kurateringene som sjekker om de alt er gjort', () => {
   const selvsjekkende = KURATERINGER.filter((k) => k.selvsjekkende).map((k) => k.fil)
 
   it.each(selvsjekkende)('%s endrer ingenting når den kjøres på nytt', async (fil) => {
-    expect(await kjorMigrasjoner(db, { bare: [fil] })).toEqual([{ fil, nyeRevisjoner: 0 }])
+    expect(await kjorMigrasjoner(db, { bare: [fil] })).toEqual([{ fil, nyeRevisjoner: 0, endredeSider: {} }])
   })
 })

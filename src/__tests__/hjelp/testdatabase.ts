@@ -207,15 +207,48 @@ export function migrasjonsfiler(): string[] {
     .sort()
 }
 
-/** En monografkuratering `kjorMigrasjoner` kjørte, og hvor mange revisjoner den la til. */
+/** En monografkuratering som er kjørt, med revisjonene den la til. */
 export interface KjortKuratering {
   fil: string
+  /** Alle nye revisjoner, også av referansene. */
   nyeRevisjoner: number
+  /**
+   * Nye revisjoner av elementene på hver fagside, etter nøkkelen til siden.
+   * En kuratering som bare legger inn referanser, endrer ingen side.
+   */
+  endredeSider: Record<string, number>
 }
 
-async function antallRevisjoner(db: PGlite): Promise<number> {
-  const { rows } = await db.query<{ n: number }>(`select count(*)::int as n from public.objektrevisjoner`)
-  return rows[0]!.n
+/** Revisjonene i alt, og revisjonene av elementene på hver fagside. */
+async function revisjonstall(db: PGlite): Promise<{ alle: number; sider: Record<string, number> }> {
+  const { rows } = await db.query<{ slug: string | null; n: number }>(
+    `select s.slug, count(*)::int as n
+     from public.objektrevisjoner r
+     left join public.innholdselementer e on e.objekt_id = r.objekt_id and e.tilstand = 'utkast'
+     left join public.infosider s on s.objekt_id = e.infoside_id and s.tilstand = 'publisert'
+     group by s.slug`,
+  )
+  const sider = Object.fromEntries(rows.flatMap((r) => (r.slug === null ? [] : [[r.slug, r.n]])))
+  return { alle: rows.reduce((sum, r) => sum + r.n, 0), sider }
+}
+
+async function kjor(db: PGlite, fil: string, sql: string): Promise<void> {
+  try {
+    await db.exec(sql)
+  } catch (feil) {
+    throw new Error(`Migrasjonen ${fil} feilet: ${(feil as Error).message}`)
+  }
+}
+
+/** Kjører en monografkuratering og måler hva den endret (`KjortKuratering`). */
+export async function kjorKuratering(db: PGlite, fil: string, sql: string): Promise<KjortKuratering> {
+  const for_ = await revisjonstall(db)
+  await kjor(db, fil, sql)
+  const etter = await revisjonstall(db)
+  const endredeSider = Object.fromEntries(
+    Object.entries(etter.sider).flatMap(([slug, n]) => (n > (for_.sider[slug] ?? 0) ? [[slug, n - (for_.sider[slug] ?? 0)]] : [])),
+  )
+  return { fil, nyeRevisjoner: etter.alle - for_.alle, endredeSider }
 }
 
 /**
@@ -224,7 +257,7 @@ async function antallRevisjoner(db: PGlite): Promise<number> {
  * Monografkurateringene hoppes over når kuratoren finnes, med mindre
  * `kurateringer` er satt (se `erMonografkuratering`), og en bivirkningsimport
  * når fagsiden den gjelder, ikke finnes (se `BIVIRKNINGSIMPORT`). Gir
- * kurateringene som ble kjørt, med revisjonene hver la til.
+ * kurateringene som ble kjørt, med det hver endret (`kjorKuratering`).
  */
 export async function kjorMigrasjoner(
   db: PGlite,
@@ -248,13 +281,8 @@ export async function kjorMigrasjoner(
     }
     const importert = !bare && BIVIRKNINGSIMPORT.exec(sql)?.[1]
     if (importert && !(await harFagside(db, importert))) continue
-    const for_ = kuratering ? await antallRevisjoner(db) : 0
-    try {
-      await db.exec(sql)
-    } catch (feil) {
-      throw new Error(`Migrasjonen ${fil} feilet: ${(feil as Error).message}`)
-    }
-    if (kuratering) kjort.push({ fil, nyeRevisjoner: (await antallRevisjoner(db)) - for_ })
+    if (kuratering) kjort.push(await kjorKuratering(db, fil, sql))
+    else await kjor(db, fil, sql)
   }
   return kjort
 }

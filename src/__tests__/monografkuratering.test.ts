@@ -17,6 +17,7 @@ import {
   faginnholdskall,
   feilFra,
   grunnlagsdatabase,
+  kjorKuratering,
   kjorMigrasjoner,
   KURATERINGER_MED_AVVIKENDE_NAVN,
   KURATERINGSNAVN,
@@ -217,7 +218,7 @@ describe('monografmigrasjoner uten kuratorprofil', () => {
     expect(rows[0]!.n).toBe(0)
     // Alle kurateringene kjøres, i rekkefølge, og ingen av dem endrer noe.
     expect(kjort.map((k) => k.fil)).toEqual(monografkurateringer().map((k) => k.fil))
-    for (const k of kjort) expect(k.nyeRevisjoner, k.fil).toBe(0)
+    for (const k of kjort) expect(k, k.fil).toEqual({ fil: k.fil, nyeRevisjoner: 0, endredeSider: {} })
     // Malen, som enhver kuratering bygd på den, gjør ingenting her.
     await tom.exec(MAL)
     const { rows: elementer } = await tom.query<{ n: number }>('select count(*)::int as n from public.innholdselementer')
@@ -275,6 +276,23 @@ describe('monografkuratering med kuratorprofil', () => {
     // Kjørt en gang til: kurateringen er gjort, og ingenting endres.
     await db.exec(MAL)
     expect(await tilstand(db, side)).toEqual(etter)
+  })
+
+  it('regner bare nye revisjoner av elementene på en side som at kurateringen endret den siden', async () => {
+    await eksempelside(kall, 'Kildeside')
+    const bareKilde = `do $$ begin perform intern.kuratering_start('kildeside');
+      perform intern.kuratering_referanse('{"tittel": "Bare en kilde", "forfattere": "F", "aar": "2026",
+        "lenke": "https://example.org/bare-en-kilde"}', 'Kurateringskilde'); end $$;`
+    // En kuratering som bare legger inn en referanse, endrer ingen side, og
+    // stopper dermed kjedetesten (`kurateringskjeden.test.ts`).
+    const kilde = await kjorKuratering(db, 'bare_kilde.sql', bareKilde)
+    expect(kilde.nyeRevisjoner).toBeGreaterThan(0)
+    expect(kilde.endredeSider).toEqual({})
+
+    // Malen endrer tre kort og legger til ett på siden.
+    const malen = await kjorKuratering(db, 'malen.sql', malFor('kildeside'))
+    expect(malen.endredeSider).toEqual({ kildeside: 4 })
+    expect(malen.nyeRevisjoner).toBeGreaterThanOrEqual(4)
   })
 
   it('stopper på et parallelt redaksjonelt kort med samme mål, før noe er endret', async () => {
