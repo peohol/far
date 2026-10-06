@@ -27,8 +27,9 @@ begin
   perform intern.kuratering_antall(side, 'farmakodynamikk', 'mekanismekort', 7);
   perform intern.kuratering_antall(side, 'indikasjon', 'riktekst', 1);
   perform intern.kuratering_antall(side, 'dosering', 'riktekst', 1);
-  perform intern.kuratering_antall(side, 'farmakokinetikk', 'kinetikkort', 9);
-  perform intern.kuratering_antall(side, 'farmakogenetikk', 'kinetikkort', 0);
+  perform intern.kuratering_antall(side, 'farmakokinetikk', 'kinetikkort', 7);
+  perform intern.kuratering_antall(side, 'farmakogenetikk', 'kinetikkort', 1);
+  perform intern.kuratering_antall(side, 'interaksjoner', 'riktekst', 1);
   perform intern.kuratering_antall(side, 'tdm', 'kinetikkort', 2);
   perform intern.kuratering_antall(side, 'toksisitet_forgiftning', 'kinetikkort', 0);
   perform intern.kuratering_antall(side, 'graviditet_amming', 'kinetikkort', 0);
@@ -159,9 +160,7 @@ begin
     {"tittel":"tₛₛ","tekst":"Steady state oppnås vanligvis etter 1–2 uker. Ved samme dose kan steady-state-konsentrasjonen variere om lag firefold mellom personer."},
     {"tittel":"Proteinbinding","tekst":"Plasmaproteinbindingen er omtrent 80 % for citalopram og hovedmetabolittene."},
     {"tittel":"Vd","tekst":"Tilsynelatende distribusjonsvolum er omtrent 14 L/kg, med oppgitt intervall 12–17 L/kg."},
-    {"tittel":"Eliminasjon","tekst":"Citalopram elimineres hovedsakelig ved hepatisk metabolisme. Omtrent 15 % av clearance er renal; rundt 12–23 % av døgndosen kan utskilles uendret i urin."},
-    {"tittel":"CYP-enzymer (substrat)","tekst":"CYP2C19 er et sentralt enzym i N-demetyleringen, med bidrag fra CYP3A4 og CYP2D6. Desmetylcitalopram og didesmetylcitalopram er farmakologisk aktive, men mindre potente og selektive enn moderstoffet og anses ikke å bidra vesentlig til antidepressiv effekt."},
-    {"tittel":"Interaksjoner","tekst":"Citalopram er en svak hemmer av CYP1A2, CYP2C19 og CYP2D6 og har ubetydelig hemming av CYP2C9, CYP2E1 og CYP3A4. CYP2C19-hemmere kan øke citaloprameksponeringen; omeprazol økte eksponeringen av S-citalopram med omtrent 50 % i en interaksjonsstudie. Legemiddelspesifikke interaksjoner vises i den automatiske interaksjonsseksjonen."}
+    {"tittel":"Eliminasjon","tekst":"Citalopram elimineres hovedsakelig ved hepatisk metabolisme. Omtrent 15 % av clearance er renal; rundt 12–23 % av døgndosen kan utskilles uendret i urin."}
   ]$json$::jsonb) loop
     obj := intern.kuratering_element(side,'farmakokinetikk','kinetikkort',
       jsonb_build_object('tittel',x->>'tittel'),1);
@@ -174,6 +173,30 @@ begin
       'referanser',jsonb_build_array(kilder->>'spc')
     ),kilde);
   end loop;
+
+  -- Den gamle CYP-substratoversikten ble flyttet fra farmakokinetikk til farmakogenetikk i 2026.
+  obj := intern.kuratering_element(side,'farmakogenetikk','kinetikkort',
+    '{"tittel":"CYP-enzymer (substrat)"}'::jsonb,2);
+  data := $json$
+  {"tittel":"CYP-enzymer (substrat)","dokument":{"type":"doc","content":[
+    {"type":"paragraph","content":[{"type":"text","text":"CYP2C19 er et sentralt enzym i N-demetyleringen, med bidrag fra CYP3A4 og CYP2D6. Desmetylcitalopram og didesmetylcitalopram er farmakologisk aktive, men mindre potente og selektive enn moderstoffet og anses ikke å bidra vesentlig til antidepressiv effekt."}]}
+  ]}}
+  $json$::jsonb;
+  perform intern.kuratering_lagre(obj,2,jsonb_build_object(
+    'data',data,'referanser',jsonb_build_array(kilder->>'spc',kilder->>'cpic')
+  ),kilde);
+
+  -- Interaksjonsteksten er redaksjonell; legemiddelspesifikke treff under den er automatisk importert.
+  obj := intern.kuratering_element(side,'interaksjoner','riktekst','{}'::jsonb,2);
+  data := $json$
+  {"dokument":{"type":"doc","content":[
+    {"type":"paragraph","content":[{"type":"text","text":"Citalopram er en svak hemmer av CYP1A2, CYP2C19 og CYP2D6 og har ubetydelig hemming av CYP2C9, CYP2E1 og CYP3A4. CYP2C19-hemmere kan øke citaloprameksponeringen; omeprazol økte eksponeringen av S-citalopram med omtrent 50 % i en interaksjonsstudie."}]},
+    {"type":"paragraph","content":[{"type":"text","text":"Farmakodynamisk er kombinasjoner som øker serotonerg aktivitet eller forlenger QT-intervallet særlig viktige. De konkrete, legemiddelspesifikke interaksjonene nedenfor hentes automatisk og erstattes ikke av denne redaksjonelle teksten."}]}
+  ]}}
+  $json$::jsonb;
+  perform intern.kuratering_lagre(obj,2,jsonb_build_object(
+    'data',data,'referanser',jsonb_build_array(kilder->>'spc')
+  ),kilde);
 
   -- Farmakogenetikk: redaksjonell syntese ved siden av automatiske ClinPGx/CPIC-data.
   for x in select value from jsonb_array_elements($json$
