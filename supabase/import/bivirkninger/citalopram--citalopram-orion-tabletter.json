@@ -209,7 +209,7 @@
           "frekvens": "ikke_kjent",
           "bivirkninger": [
             "QT-forlengelse",
-            "ventrikulær arytmi inkludert “torsade de pointes”"
+            "vetrikulær arytmi inkludert “torsade de pointes”"
           ]
         }
       ]
@@ -269,7 +269,7 @@
         {
           "frekvens": "ikke_kjent",
           "bivirkninger": [
-            "Gastrointestinal blødning (inkludert rektalblødning)"
+            "Gastrointesinal blødning (inkludert rektalblødning)"
           ]
         }
       ]
@@ -313,13 +313,13 @@
             "alopesi",
             "utslett",
             "purpura",
-            "lysfølsomhetsreaksjon"
+            "lysømfintlighetsreaksjon"
           ]
         },
         {
           "frekvens": "ikke_kjent",
           "bivirkninger": [
-            "Angioødem",
+            "Angioødemer",
             "ekkymose"
           ]
         }
