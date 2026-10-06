@@ -8,7 +8,7 @@
  * importen. SQL-en skrives til `fil`, eller til skjermen, og kjøres mot
  * prosjektet med databasens egne rettigheter. Et regelsett som alt finnes,
  * hoppes over. Med `--migrering` gjør SQL-en ingenting når administratoren
- * mangler, så den kan rulles ut som en datamigrering (`apply_migration`).
+ * mangler, så den kan rulles ut som en datamigrering (`docs/migrasjoner.md`).
  * Med `--del i/n` lages bare del `i` når importen deles i `n` porsjoner.
  * Kommentarene blir kommentarobjekter med ID-ene i datasettet. Bakgrunnen
  * står i docs/fortolkningsregler.md.

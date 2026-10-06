@@ -5,9 +5,9 @@
  *   npx vite-node scripts/lag-clinpgxkoblinger.ts -- <brukernavn> <migrasjon> <fil>
  *
  * `brukernavn` er administratoren revisjonene føres på, og `migrasjon` navnet
- * på importen (f.eks. `stoffsider_clinpgx_kobling`). Filen rulles ut med
- * `apply_migration` og gis versjonen prosjektet registrerer når den legges i
- * `supabase/migrations/`.
+ * på importen (f.eks. `stoffsider_clinpgx_kobling`). Filen legges i
+ * `supabase/migrations/` med tidspunktet som versjon, og rulles ut når PR-en
+ * slås sammen (`docs/migrasjoner.md`).
  */
 import { writeFileSync } from 'node:fs'
 import { clinpgxkoblingSql, CLINPGXKOBLINGSIMPORTER } from '../src/faginnhold/clinpgxkoblinger'

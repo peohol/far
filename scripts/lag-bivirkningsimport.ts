@@ -15,9 +15,9 @@
  * siste importen, lages heller ingen migrasjon.
  *
  * Forhåndsvisningen er Markdown på standard ut og kan lagres med
- * `> rapport.md`; alt annet skrives til standard feil. Migrasjonen rulles ut
- * med `apply_migration` og gis versjonen prosjektet registrerer når den legges
- * i `supabase/migrations/`.
+ * `> rapport.md`; alt annet skrives til standard feil. Migrasjonen legges i
+ * `supabase/migrations/` med tidspunktet som versjon, og rulles ut når PR-en
+ * slås sammen (`docs/migrasjoner.md`).
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { importrapport, sammeInnhold, type Sammenligningsgrunnlag } from '../src/bivirkninger/forhandsvisning'

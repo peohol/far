@@ -91,15 +91,19 @@ select public.ta_oppgaver(array[7, 8]) where exists (select 1 from public.oppgav
 ```
 
 - Rull den ut med `apply_migration` når planen er vist; ikke be om et eget ja.
-  Dette er en normal, reversibel statusendring. Navnet er `oppgaver_tatt_` og
-  numrene. Oppgavene står da som «Håndteres nå av en agent» i appen.
+  Dette er en normal, reversibel statusendring, og et av de få tilfellene der
+  reserveveien i `docs/migrasjoner.md` brukes: statusen må gjelde før noen PR
+  er slått sammen. Navnet er `oppgaver_tatt_` og numrene. Oppgavene står da som
+  «Håndteres nå av en agent» i appen.
 - Funksjonen tar alle eller ingen. Stopper den fordi en oppgave ikke er klar
   lenger (en annen økt har tatt den, eller administratoren har endret den), si
   hvilken, ta den ut av planen, og rull om nødvendig ut en ny migrasjon for
   resten uten eget samtykke.
 - Legg fila i `supabase/migrations/` med versjonen prosjektet registrerte
   (`list_migrations`), uten linjeskift til slutt, så den er lik byte for byte.
-  Den går i den første PR-en for oppgavene.
+  Den går med en gang i en egen liten PR, med en føring som har
+  `utenVarsel: true`: frem til den er på `main`, stopper den automatiske
+  utrullingen av alle andre migrasjoner.
 
 ## 4. Utfør oppgavene
 
@@ -114,8 +118,9 @@ Følg `CLAUDE.md` som i alt annet arbeid: les koden først, test, og kjør
 - Ha nummeret i grenen og i tittelen på PR-en, som `claude/opg-007-varsler` og
   «OPG-007: Varslingssystem», så en avbrutt oppgave kan finnes igjen.
 - Databaseendringer følger den risikobaserte migrasjonsregelen i `CLAUDE.md`:
-  ordinære migrasjoner med lav produksjonsrisiko rulles ut uten eget samtykke;
-  migrasjoner med vesentlig risiko etter `CLAUDE.md` krever eksplisitt ja.
+  ordinære migrasjoner med lav produksjonsrisiko rulles ut automatisk når PR-en
+  slås sammen, uten eget samtykke; migrasjoner med vesentlig risiko etter
+  `CLAUDE.md` krever eksplisitt ja.
 - Må en oppgave legges fra seg uferdig, si at administratoren kan fortsette den
   i en ny økt med `/utfor-oppgaver OPG-007`, eller frigi den i appen så den er
   klar igjen.
@@ -135,13 +140,15 @@ select public.fullfor_oppgave(7, '<x.y.z>') where exists (select 1 from public.o
 ```
 
 - Én migrering kan merke flere oppgaver.
-- Rull den ut med `apply_migration` (navn som `oppgaver_utfort_<x_y_z>`) når
-  sammenslåingen og versjonen er kontrollert; ikke be om et eget ja.
-- Legg deretter fila i `supabase/migrations/` på samme måte som i steg 3. Den
-  går i en egen liten PR, med en føring som har `utenVarsel: true`.
+- Når sammenslåingen og versjonen er kontrollert, legges den i
+  `supabase/migrations/` (navn som `oppgaver_utfort_<x_y_z>`) i en egen liten
+  PR, med en føring som har `utenVarsel: true`. Den rulles ut automatisk når
+  PR-en slås sammen (`docs/migrasjoner.md`); ikke be om et eget ja.
 - Funksjonen stopper hvis oppgaven verken håndteres av en agent eller er klar,
-  for eksempel hvis administratoren har flyttet den tilbake i mellomtiden. Si
-  det, og merk den ikke.
+  for eksempel hvis administratoren har flyttet den tilbake i mellomtiden. Les
+  statusen med `execute_sql` før PR-en lages, og merk den ikke hvis den har
+  endret seg; si det. Stopper utrullingen likevel på dette, fjernes fila i en ny
+  PR (den er ikke kjørt).
 
 Til slutt: oppsummer for administratoren hvilke oppgaver som ble utført, med
 nummeret og versjonen hver av dem.

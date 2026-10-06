@@ -3,7 +3,20 @@ import { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
-import { filnavnfeil, historikkSql, KJENTE_AVVIK, lesMigrasjonsfil, md5 } from '../faginnhold/migrasjonshistorikk'
+import {
+  destruktiveSetninger,
+  destruktivfeil,
+  endringsfeil,
+  filnavnfeil,
+  historikkSql,
+  ikkeAtomiskfeil,
+  KJENTE_AVVIK,
+  lesMigrasjonsfil,
+  md5,
+  utrullingsfeil,
+  ventendeMigrasjoner,
+} from '../faginnhold/migrasjonshistorikk'
+import { ikkeAtomiske } from '../faginnhold/sqlsetninger'
 import { migrasjonsfiler } from './hjelp/testdatabase'
 
 const MAPPE = fileURLToPath(new URL('../../supabase/migrations', import.meta.url))
@@ -33,20 +46,34 @@ describe('migrasjonsfilene', () => {
 
 // Hver sammenligning starter en egen database i minnet, som tar et par sekunder når hele samlingen kjører.
 describe('sammenligningen med historikken', { timeout: 30_000 }, () => {
-  /** Kjører spørringen mot en database med disse radene i historikken. */
-  async function avvik(
-    filer: Array<[string, string]>,
-    historikk: Array<[string, string, string]>,
-    kjente: Parameters<typeof historikkSql>[1] = {},
-  ) {
+  /** En rad i historikken: én tekst, som `apply_migration` lagrer, eller setningene CLI-en lagret. */
+  type Rad = [versjon: string, navn: string, tekst: string | string[]]
+
+  async function historikk(rader: Rad[]) {
     const db = new PGlite()
     await db.exec(`create schema supabase_migrations;
       create table supabase_migrations.schema_migrations (version text primary key, statements text[], name text);`)
-    for (const [versjon, navn, tekst] of historikk) {
-      await db.query('insert into supabase_migrations.schema_migrations values ($1, array[$2], $3)', [versjon, tekst, navn])
+    // Bare kolonnene CLI-en selv lager; Supabase har flere (created_by m.fl.), men de brukes ikke.
+    for (const [versjon, navn, tekst] of rader) {
+      await db.query('insert into supabase_migrations.schema_migrations values ($1, $2, $3)', [
+        versjon,
+        Array.isArray(tekst) ? tekst : [tekst],
+        navn,
+      ])
     }
+    return db
+  }
+
+  /** Kjører spørringen mot en database med disse radene i historikken. */
+  async function avvik(
+    filer: Array<[string, string]>,
+    rader: Rad[],
+    kjente: Parameters<typeof historikkSql>[1] = {},
+    valg: Parameters<typeof historikkSql>[2] = {},
+  ) {
+    const db = await historikk(rader)
     const { rows } = await db.query<{ versjon: string; navn: string; avvik: string }>(
-      historikkSql(filer.map(([fil, innhold]) => lesMigrasjonsfil(fil, innhold)), kjente),
+      historikkSql(filer.map(([fil, innhold]) => lesMigrasjonsfil(fil, innhold)), kjente, valg),
     )
     await db.close()
     return rows
@@ -94,16 +121,206 @@ describe('sammenligningen med historikken', { timeout: 30_000 }, () => {
       '20261001000001': { db: md5('select 2;'), fil: md5('select 2; -- sperre'), hvorfor: 'test' },
       '20261001000003': { db: md5('select 4;'), fil: null, hvorfor: 'test' },
     }
-    const historikk: Array<[string, string, string]> = [
+    const rader: Rad[] = [
       ['20261001000001', 'b', 'select 2;'],
       ['20261001000003', 'borte', 'select 4;'],
     ]
-    expect(await avvik([['20261001000001_b.sql', 'select 2; -- sperre']], historikk, kjente)).toEqual([])
-    expect(await avvik([['20261001000001_b.sql', 'select 2; -- endret igjen']], historikk, kjente)).toEqual([
+    expect(await avvik([['20261001000001_b.sql', 'select 2; -- sperre']], rader, kjente)).toEqual([])
+    expect(await avvik([['20261001000001_b.sql', 'select 2; -- endret igjen']], rader, kjente)).toEqual([
       { versjon: '20261001000001', navn: 'b', avvik: 'annet innhold enn det som ble kjørt' },
     ])
-    expect(await avvik([['20261001000001_b_nytt_navn.sql', 'select 2; -- sperre']], historikk, kjente)).toEqual([
+    expect(await avvik([['20261001000001_b_nytt_navn.sql', 'select 2; -- sperre']], rader, kjente)).toEqual([
       { versjon: '20261001000001', navn: 'b_nytt_navn', avvik: 'registrert med navnet b' },
     ])
+  })
+
+  it('kjenner igjen setningene CLI-en lagret, men ikke et annet innhold', async () => {
+    const fil = '-- Kommentar; med semikolon\ncreate table a (t text);\n\ndo $$ begin insert into a values (\'x;\'); end $$;\n'
+    const cli = ['-- Kommentar; med semikolon\ncreate table a (t text)', "do $$ begin insert into a values ('x;'); end $$"]
+    expect(await avvik([['20261001000000_a.sql', fil]], [['20261001000000', 'a', cli]])).toEqual([])
+    expect(
+      await avvik([['20261001000000_a.sql', fil.replace("'x;'", "'y;'")]], [['20261001000000', 'a', cli]]),
+    ).toEqual([{ versjon: '20261001000000', navn: 'a', avvik: 'annet innhold enn det som ble kjørt' }])
+    // Mellomrom og semikolon inni en streng er innhold, ikke noe CLI-en tok bort.
+    for (const endret of ["'x ;'", "'x'"]) {
+      expect(
+        await avvik([['20261001000000_a.sql', fil.replace("'x;'", endret)]], [['20261001000000', 'a', cli]]),
+      ).toEqual([{ versjon: '20261001000000', navn: 'a', avvik: 'annet innhold enn det som ble kjørt' }])
+    }
+    // Én tekst fra apply_migration sammenlignes som før, ikke i CLI-formen.
+    expect(await avvik([['20261001000000_a.sql', 'select  1;']], [['20261001000000', 'a', 'select 1;']])).toEqual([
+      { versjon: '20261001000000', navn: 'a', avvik: 'annet innhold enn det som ble kjørt' },
+    ])
+  })
+
+  it('godtar filer som ikke er kjørt ennå bare før utrullingen', async () => {
+    const filer: Array<[string, string]> = [['20261001000000_a.sql', 'select 1;'], ['20261001000001_ny.sql', 'select 2;']]
+    const rader: Rad[] = [['20261001000000', 'a', 'select 1;']]
+    expect(await avvik(filer, rader, {}, { ventende: true })).toEqual([])
+    expect(await avvik(filer, rader)).toEqual([{ versjon: '20261001000001', navn: 'ny', avvik: 'ikke kjørt i databasen' }])
+    // En fil som er kjørt med en annen versjon, er et avvik også før utrullingen: den ville blitt kjørt to ganger.
+    expect(await avvik([['20261001000002_a.sql', 'select 1;']], rader, {}, { ventende: true })).toEqual([
+      { versjon: '20261001000000', navn: 'a', avvik: 'filen har en annen versjon: 20261001000002' },
+      { versjon: '20261001000002', navn: 'a', avvik: 'registrert med en annen versjon: 20261001000000' },
+    ])
+  })
+
+  it('stopper med avvikene i feilmeldingen når utrullingen ber om det', async () => {
+    const filer = [lesMigrasjonsfil('20261001000000_a.sql', 'select 1;')]
+    const db = await historikk([['20261001000000', 'a', 'select 1;']])
+    await expect(db.exec(historikkSql(filer, {}, { stopp: true }))).resolves.toBeDefined()
+    await db.exec(`update supabase_migrations.schema_migrations set statements = array['select 2;']`)
+    await expect(db.exec(historikkSql(filer, {}, { stopp: true }))).rejects.toThrow(
+      /stemmer ikke med repoet:\n20261001000000 a: annet innhold enn det som ble kjørt/,
+    )
+    await db.close()
+  })
+})
+
+describe('destruktive migrasjoner', () => {
+  it('finner setningene som kan gi vanskelig reversibelt tap eller åpne tilgang', () => {
+    expect(destruktiveSetninger('drop table if exists public.a;')).toEqual(['drop table'])
+    expect(destruktiveSetninger('alter table a drop column b, drop  column c;\ntruncate public.x;')).toEqual([
+      'drop column',
+      'truncate',
+    ])
+    expect(destruktiveSetninger('DROP SCHEMA s CASCADE; alter table a disable row level security;')).toEqual([
+      'drop schema',
+      'disable row level security',
+    ])
+    // `column` kan utelates, også i en do-blokk.
+    expect(destruktiveSetninger('alter table only public.a\n  drop if exists b;')).toEqual(['drop column'])
+    expect(destruktiveSetninger('do $$ begin alter table a drop b; end $$;')).toEqual(['drop column'])
+  })
+
+  it('lar ikke en kommentar mellom ordene gjemme dem', () => {
+    expect(destruktiveSetninger('drop /* gammel */ table a;')).toEqual(['drop table'])
+    expect(destruktiveSetninger('drop /* ytre /* indre */ fortsatt */ schema s;')).toEqual(['drop schema'])
+    expect(destruktiveSetninger('alter table a drop -- forklaring\n  column b;')).toEqual(['drop column'])
+    expect(destruktiveSetninger('alter table a disable row /**/ level security;')).toEqual(['disable row level security'])
+  })
+
+  it('lar vanlige migrasjoner være, også triggere for truncate', () => {
+    const vanlig = `create table a (id int);
+      create trigger t before truncate on a for each statement execute function f();
+      create trigger u after insert or truncate on a execute function f();
+      drop function if exists f(); drop policy p on a; delete from a where id = 1;
+      alter table a drop constraint a_pk, alter column b drop not null, alter column c drop  default;
+      alter table a alter column d drop identity if exists, alter column e drop expression;
+      alter table a add column f text default 'x; drop b';`
+    expect(destruktiveSetninger(vanlig)).toEqual([])
+  })
+
+  it('slipper gjennom en destruktiv migrasjon bare med godkjenningsmerket', () => {
+    const fil = (innhold: string) => lesMigrasjonsfil('20261001000000_rydd.sql', innhold)
+    expect(destruktivfeil([fil('drop table a;')])).toEqual([expect.stringContaining('20261001000000_rydd.sql: inneholder drop table')])
+    expect(destruktivfeil([fil('-- destruktiv-godkjent: Peder 2026-10-05, tom tabell\ndrop table a;')])).toEqual([])
+    expect(destruktivfeil([fil('-- destruktiv-godkjent:\ndrop table a;')])).toHaveLength(1)
+  })
+})
+
+describe('endringene i en PR', () => {
+  const fil = (navn: string, innhold = `select '${navn}';`) => lesMigrasjonsfil(navn, innhold)
+  const grunn = [fil('20261001000000_a.sql'), fil('20261001000001_b.sql')]
+
+  it('godtar nye migrasjoner etter de eksisterende', () => {
+    expect(endringsfeil(grunn, [...grunn, fil('20261001000002_c.sql')], { kjente: {} })).toEqual([])
+  })
+
+  it('stopper endrede, fjernede og omdøpte migrasjoner og nye med eldre versjon', () => {
+    expect(
+      endringsfeil(
+        grunn,
+        [fil('20261001000000_a.sql', 'select 2;'), fil('20261001000001_b_nytt.sql'), fil('20261001000001_c.sql')],
+        { kjente: {} },
+      ),
+    ).toEqual([
+      '20261001000000_a.sql: er endret, men er kjørt i produksjonen; en retting er en ny migrasjon',
+      '20261001000001_b.sql: er fjernet eller omdøpt, men er kjørt i produksjonen',
+      '20261001000001_b_nytt.sql: versjonen er ikke nyere enn den nyeste migrasjonen på grenen (20261001000001); gi fila et nytt tidspunkt',
+      '20261001000001_c.sql: versjonen er ikke nyere enn den nyeste migrasjonen på grenen (20261001000001); gi fila et nytt tidspunkt',
+    ])
+  })
+
+  it('godtar en endring bare når den står som kjent avvik med akkurat det innholdet', () => {
+    const endret = [fil('20261001000000_a.sql', 'select 2; -- sperre'), grunn[1]!]
+    const kjente = { '20261001000000': { db: md5("select '20261001000000_a.sql';"), fil: md5('select 2; -- sperre'), hvorfor: 'test' } }
+    expect(endringsfeil(grunn, endret, { kjente })).toEqual([])
+    expect(endringsfeil(grunn, [fil('20261001000000_a.sql', 'select 3;'), grunn[1]!], { kjente })).toHaveLength(1)
+  })
+
+  it('lar en migrasjon som er slått sammen, men ikke rullet ut, rettes', () => {
+    const rettet = [grunn[0]!, fil('20261001000001_b.sql', 'select 22;')]
+    expect(endringsfeil(grunn, rettet, { utrullet: [grunn[0]!], kjente: {} })).toEqual([])
+    expect(endringsfeil(grunn, [grunn[0]!], { utrullet: [grunn[0]!], kjente: {} })).toEqual([])
+    expect(endringsfeil(grunn, [grunn[0]!, fil('20261001000001_b.sql', 'drop table a;')], { utrullet: [grunn[0]!], kjente: {} })).toEqual([
+      expect.stringContaining('20261001000001_b.sql: inneholder drop table'),
+    ])
+  })
+
+  it('stopper en ny destruktiv migrasjon uten godkjenning', () => {
+    expect(endringsfeil(grunn, [...grunn, fil('20261001000002_c.sql', 'truncate a;')], { kjente: {} })).toEqual([
+      expect.stringContaining('20261001000002_c.sql: inneholder truncate'),
+    ])
+  })
+
+  it('stopper en ny migrasjon som ikke kjøres i én transaksjon', () => {
+    const ny = fil('20261001000002_c.sql', '-- destruktiv-godkjent: hjelper ikke\ncreate index concurrently i on a (t);')
+    expect(endringsfeil(grunn, [...grunn, ny], { kjente: {} })).toEqual([
+      expect.stringContaining('20261001000002_c.sql: inneholder create index concurrently, som gjør at den ikke kjøres i én transaksjon'),
+    ])
+  })
+})
+
+describe('ikke-atomiske migrasjoner', () => {
+  const fil = (innhold: string) => lesMigrasjonsfil('20261001000000_a.sql', innhold)
+
+  it('finner det som gjør at CLI-en ikke kjører migrasjonen i én transaksjon', () => {
+    expect(
+      ikkeAtomiske(`create unique index concurrently i on a (t);
+        /* forklaring */ drop index concurrently j;
+        reindex (verbose) table concurrently a; vacuum (analyze) a; alter system set x = 1; cluster a;`),
+    ).toEqual([
+      'create index concurrently',
+      'drop index concurrently',
+      'reindex concurrently',
+      'vacuum',
+      'alter system',
+      'cluster',
+    ])
+    for (const sql of ['begin;\ncreate table a ();\ncommit;', 'start transaction; select 1;', 'select 1; rollback;', 'end;'])
+      expect(ikkeAtomiske(sql), sql).toEqual(['begin/commit'])
+    expect(ikkeAtomiske('-- pg-delta: transaction=false\r\nselect 1;')).toEqual(['-- pg-delta: transaction=false'])
+  })
+
+  it('lar vanlige migrasjoner være, også funksjoner og blokker med begin og end', () => {
+    const vanlig = `create function f() returns void language plpgsql as $$ begin perform 1; end; $$;
+      do $$ begin create index concurrently_navn on a (t); end $$;
+      create function g() returns int language sql begin atomic select 1; end;
+      create index i on a (t); -- vacuum gjøres ikke her
+      savepoint s; rollback to savepoint s; release s;`
+    expect(ikkeAtomiske(vanlig)).toEqual([])
+    expect(ikkeAtomiskfeil([fil(vanlig)])).toEqual([])
+  })
+
+  it('stoppes uten noe merke som slipper dem gjennom', () => {
+    expect(ikkeAtomiskfeil([fil('-- destruktiv-godkjent: Peder\nvacuum a;')])).toEqual([
+      expect.stringContaining('20261001000000_a.sql: inneholder vacuum'),
+    ])
+    expect(utrullingsfeil([fil('drop table a;\nvacuum;')])).toHaveLength(2)
+  })
+
+  it('finnes ikke blant migrasjonene som er kjørt', () => {
+    const treff = migrasjonsfiler().filter((f) => ikkeAtomiske(readFileSync(`${MAPPE}/${f}`, 'utf8')).length)
+    expect(treff).toEqual([])
+  })
+})
+
+describe('ventende migrasjoner', () => {
+  it('er filene produksjonen ikke har kjørt, og versjoner uten fil meldes', () => {
+    const filer = ['20261001000000_a.sql', '20261001000001_b.sql', '20261001000002_c.sql'].map((f) => lesMigrasjonsfil(f, ''))
+    const { ventende, utenFil } = ventendeMigrasjoner(filer, ['20261001000000', '20261001000002', '20260901000000'])
+    expect(ventende.map((f) => f.versjon)).toEqual(['20261001000001'])
+    expect(utenFil).toEqual(['20260901000000'])
   })
 })

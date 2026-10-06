@@ -363,8 +363,8 @@ til, med alle bivirkningene.
    Forhåndsvisningen skrives ut igjen. Er innholdet det samme som i den
    siste importen, lages ingen migrasjon. Migrasjonen kaller
    `bivirkninger.importer`, som kontrollerer importen på nytt.
-3. Rull den ut med `apply_migration` og gi fila versjonen prosjektet
-   registrerte (`supabase/CLAUDE.md`). Migrasjonen sletter ingenting.
+3. Legg den i `supabase/migrations/`; den rulles ut når PR-en slås sammen
+   (`docs/migrasjoner.md`). Migrasjonen sletter ingenting.
 
 ## Oppdatere en preparatomtale
 

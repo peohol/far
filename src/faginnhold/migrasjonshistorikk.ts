@@ -1,16 +1,21 @@
 /**
  * Kontrollen av at migrasjonsfilene i `supabase/migrations/` stemmer med
- * historikken produksjonen har registrert (`supabase_migrations.schema_migrations`).
+ * historikken produksjonen har registrert (`supabase_migrations.schema_migrations`),
+ * og kontrollene av filene selv før de rulles ut (`docs/migrasjoner.md`).
  *
- * `apply_migration` gir hver migrasjon sin egen versjon (tidspunktet den ble
- * kjørt) og lagrer teksten slik den ble sendt. Filen i repoet skal derfor ha
- * nøyaktig den versjonen og det navnet, og det samme innholdet. Kontrollen er
- * én lesespørring som sammenligner repoet med det produksjonen har: den kan
- * kjøres med Supabase-MCP-ens `execute_sql` (som bare kan lese) eller i
- * SQL-editoren, og gir bare radene som avviker. Ingen rader betyr at alt
- * stemmer. `scripts/kontroller-migrasjoner.ts` skriver spørringen.
+ * Filen i repoet skal ha nøyaktig den versjonen og det navnet produksjonen
+ * registrerte, og det samme innholdet. Teksten lagres på to måter: Supabase-CLI-en
+ * (`supabase db push`, normalveien) deler fila i setninger og lagrer hver for seg
+ * uten blanke tegn og semikolon i endene (`cliSetninger`), mens `apply_migration`
+ * (MCP) og SQL-editoren lagrer hele teksten som én. Kontrollen er én lesespørring som
+ * sammenligner repoet med det produksjonen har, og som gir bare radene som
+ * avviker; ingen rader betyr at alt stemmer. Den kan kjøres med
+ * Supabase-MCP-ens `execute_sql` (som bare kan lese), i SQL-editoren eller av
+ * utrullingen (`scripts/produksjonsmigrering.ts`), som stopper ved avvik.
+ * `scripts/kontroller-migrasjoner.ts` skriver spørringen.
  */
 import { createHash } from 'node:crypto'
+import { cliSetninger, ikkeAtomiske, utenKommentarer } from './sqlsetninger'
 
 /** `<versjon>_<navn>.sql`: versjonen er 14 sifre (UTC-tidspunkt), navnet små bokstaver, tall og understrek. */
 export const MIGRASJONSFILNAVN = /^(\d{14})_([a-z0-9_]+)\.sql$/
@@ -101,25 +106,43 @@ export const md5 = (tekst: string) => createHash('md5').update(tekst, 'utf8').di
 const SLUTT = /[ \t\r\n]+$/
 
 /**
+ * Teksten CLI-en lagrer, med setningene skilt av linjeskift; spørringen setter
+ * sammen `statements` på samme måte.
+ */
+export const cliform = (tekst: string) => cliSetninger(tekst).join('\n')
+
+export interface Historikkvalg {
+  /** Godta filer som ikke er kjørt ennå (før utrullingen); ellers er de et avvik. */
+  ventende?: boolean
+  /**
+   * Én blokk som stopper med avvikene i feilmeldingen i stedet for å gi dem
+   * som rader, for utrullingen. Lesespørringen er standard.
+   */
+  stopp?: boolean
+}
+
+/**
  * Lesespørringen som sammenligner filene med produksjonens historikk. Hver rad
  * er en versjon som avviker, med hva som er galt i `avvik`.
  */
-export function historikkSql(filer: readonly Migrasjonsfil[], kjente = KJENTE_AVVIK): string {
+export function historikkSql(filer: readonly Migrasjonsfil[], kjente = KJENTE_AVVIK, valg: Historikkvalg = {}): string {
   const rader = filer.map(
-    (f) => `    ('${f.versjon}', '${f.navn}', '${md5(f.innhold)}', '${md5(f.innhold.replace(SLUTT, ''))}')`,
+    (f) =>
+      `    ('${f.versjon}', '${f.navn}', '${md5(f.innhold)}', '${md5(f.innhold.replace(SLUTT, ''))}', '${md5(cliform(f.innhold))}')`,
   )
   const tekst = (verdi: string | null) => (verdi === null ? 'null' : `'${verdi}'`)
   const kjent = Object.entries(kjente).map(([versjon, a]) => `    ('${versjon}', ${tekst(a.db)}, ${tekst(a.fil)})`)
-  return `-- Migrasjonsfilene i repoet mot historikken i databasen. Ingen rader: alt stemmer.
-with repo(versjon, navn, md5, md5_trimmet) as (
+  const sammenligning = `with repo(versjon, navn, md5, md5_trimmet, md5_cli) as (
   values
 ${rader.join(',\n')}
 ), kjent(versjon, db, fil) as (
   values
     (null::text, null::text, null::text)${kjent.map((k) => `,\n${k}`).join('')}
 ), db as (
+  -- CLI-en (db push) lagrer setningene hver for seg; de andre hele teksten som én.
   select version as versjon, name as navn, md5(statements[1]) as md5,
-    md5(rtrim(statements[1], E' \\t\\r\\n')) as md5_trimmet
+    md5(rtrim(statements[1], E' \\t\\r\\n')) as md5_trimmet,
+    md5(array_to_string(statements, E'\\n')) as md5_cli
   from supabase_migrations.schema_migrations
 ), sammen as (
   select coalesce(r.versjon, d.versjon) as versjon, coalesce(r.navn, d.navn) as navn,
@@ -127,13 +150,13 @@ ${rader.join(',\n')}
       when d.versjon is null then coalesce(
         'registrert med en annen versjon: ' || (select string_agg(x.versjon, ', ' order by x.versjon) from db x
           where x.navn = r.navn and not exists (select 1 from repo y where y.versjon = x.versjon)),
-        'ikke kjørt i databasen')
+        ${valg.ventende ? 'null' : "'ikke kjørt i databasen'"})
       when r.versjon is null then coalesce(
         'filen har en annen versjon: ' || (select string_agg(y.versjon, ', ' order by y.versjon) from repo y
           where y.navn = d.navn and not exists (select 1 from db x where x.versjon = y.versjon)),
         'mangler i repoet')
       when r.navn <> d.navn then 'registrert med navnet ' || d.navn
-      when r.md5 = d.md5 or r.md5_trimmet = d.md5_trimmet then null
+      when r.md5 = d.md5 or r.md5_trimmet = d.md5_trimmet or r.md5_cli = d.md5_cli then null
       else 'annet innhold enn det som ble kjørt'
     end as avvik
   from repo r full join db d on d.versjon = r.versjon
@@ -141,6 +164,147 @@ ${rader.join(',\n')}
     select 1 from kjent k
     where k.versjon = coalesce(r.versjon, d.versjon) and k.db is not distinct from d.md5 and k.fil is not distinct from r.md5
       and coalesce(r.navn, d.navn) = coalesce(d.navn, r.navn))
-)
+)`
+  if (!valg.stopp) {
+    return `-- Migrasjonsfilene i repoet mot historikken i databasen. Ingen rader: alt stemmer.
+${sammenligning}
 select versjon, navn, avvik from sammen where avvik is not null order by versjon;`
+  }
+  return `-- Migrasjonsfilene i repoet mot historikken i databasen. Stopper med avvikene, om det er noen.
+do $kontroll$
+declare
+  funnet text;
+begin
+  select string_agg(versjon || ' ' || navn || ': ' || avvik, E'\\n' order by versjon) into funnet
+  from (
+${sammenligning}
+select * from sammen where avvik is not null
+  ) as avvikende;
+  if funnet is not null then
+    raise exception E'Migrasjonshistorikken i databasen stemmer ikke med repoet:\\n%', funnet;
+  end if;
+end
+$kontroll$;`
+}
+
+/**
+ * Setningene som kan gi vesentlig og vanskelig reversibelt datatap eller åpne
+ * tilgang, og som derfor må være eksplisitt godkjent før en migrasjon rulles ut
+ * automatisk (`docs/migrasjoner.md`). Listen er snever med vilje: den skal
+ * treffe nøyaktig, ikke gjøre vanlige migrasjoner tunge. Bred sletting og andre
+ * risikoer lar seg ikke skille ut sikkert her, og vurderes før PR-en slås sammen.
+ */
+const DESTRUKTIVE: ReadonlyArray<readonly [RegExp, string]> = [
+  [/\bdrop\s+table\b/i, 'drop table'],
+  [/\bdrop\s+schema\b/i, 'drop schema'],
+  [/\bdrop\s+database\b/i, 'drop database'],
+  // `column` kan utelates: `alter table a drop b`, men ikke `drop constraint`, `drop default` osv.
+  [
+    /\bdrop\s+column\b|\balter\s+table\b[^;]*?\bdrop\s+(?!\s|constraint\b|not\s+null\b|default\b|identity\b|expression\b)/i,
+    'drop column',
+  ],
+  // Ikke `truncate` som hendelse i en trigger (`before truncate on …`, `insert or truncate`).
+  [/(?<!\b(?:before|after|or|of)\s+)\btruncate\b/i, 'truncate'],
+  [/\bdisable\s+row\s+level\s+security\b/i, 'disable row level security'],
+]
+
+/**
+ * Merket i en migrasjon som er godkjent til tross for destruktive setninger:
+ * en kommentarlinje med hvem som godkjente, når og hva, for eksempel
+ * `-- destruktiv-godkjent: Peder 2026-10-05, fjerner den tomme tabellen x`.
+ */
+export const DESTRUKTIV_GODKJENT = /^--[ \t]*destruktiv-godkjent:[ \t]*\S/m
+
+/**
+ * De destruktive setningstypene migrasjonen inneholder. Teksten leses både som
+ * den står, så de ikke gjemmes i en kommentar, og uten kommentarene, så en
+ * kommentar mellom ordene (`drop /* … *\/ table`) ikke gjemmer dem.
+ */
+export function destruktiveSetninger(innhold: string): string[] {
+  const tekster = [innhold, utenKommentarer(innhold)]
+  return DESTRUKTIVE.filter(([monster]) => tekster.some((t) => monster.test(t))).map(([, navn]) => navn)
+}
+
+/** Feilmeldingene for filer med destruktive setninger uten godkjenningsmerket. */
+export function destruktivfeil(filer: readonly Migrasjonsfil[]): string[] {
+  return filer.flatMap((f) => {
+    const funnet = destruktiveSetninger(f.innhold)
+    if (!funnet.length || DESTRUKTIV_GODKJENT.test(f.innhold)) return []
+    return [
+      `${filnavn(f)}: inneholder ${funnet.join(', ')}. Den rulles ikke ut automatisk før den er eksplisitt godkjent ` +
+        'og har merket «-- destruktiv-godkjent: <hvem, når, hva>» (docs/migrasjoner.md).',
+    ]
+  })
+}
+
+/**
+ * Feilmeldingene for filer CLI-en ikke ville kjørt i én transaksjon
+ * (`ikkeAtomiske`). En feil underveis kunne da etterlate migrasjonen halvveis
+ * utført og uregistrert, så neste utrulling kjørte den på nytt. Slike rulles
+ * aldri ut automatisk; det finnes ikke noe merke som slipper dem gjennom.
+ */
+export function ikkeAtomiskfeil(filer: readonly Migrasjonsfil[]): string[] {
+  return filer.flatMap((f) => {
+    const funnet = ikkeAtomiske(f.innhold)
+    if (!funnet.length) return []
+    return [
+      `${filnavn(f)}: inneholder ${funnet.join(', ')}, som gjør at den ikke kjøres i én transaksjon. ` +
+        'Den rulles ikke ut automatisk; gjør den atomisk eller del den opp (docs/migrasjoner.md).',
+    ]
+  })
+}
+
+/** Det som stopper en migrasjon fra å rulles ut automatisk, både i CI og før utrullingen. */
+export const utrullingsfeil = (filer: readonly Migrasjonsfil[]) => [...destruktivfeil(filer), ...ikkeAtomiskfeil(filer)]
+
+export const filnavn = (f: Migrasjonsfil) => `${f.versjon}_${f.navn}.sql`
+
+/**
+ * Feilene en PR kan ha i migrasjonene, uten tilgang til produksjonen. `grunn` er
+ * filene på grenen PR-en skal inn i, `utrullet` filene slik de stod sist
+ * utrullingen var vellykket (de er kjørt i produksjonen; ukjent: `grunn`).
+ * - En utrullet migrasjon er fjernet, omdøpt eller endret. Migrasjoner er
+ *   append-only; en endring godtas bare når den står i `kjente` med akkurat det
+ *   nye innholdet. En migrasjon som er slått sammen, men stoppet før den ble
+ *   kjørt, kan rettes.
+ * - En ny migrasjon har en versjon som ikke er nyere enn alle på grenen, så den
+ *   ville kjørt i en annen rekkefølge i testene enn i produksjonen.
+ * - En ny eller endret migrasjon har destruktive setninger uten godkjenning.
+ * - En ny eller endret migrasjon ville ikke blitt kjørt i én transaksjon.
+ */
+export function endringsfeil(
+  grunn: readonly Migrasjonsfil[],
+  pr: readonly Migrasjonsfil[],
+  { utrullet = grunn, kjente = KJENTE_AVVIK }: { utrullet?: readonly Migrasjonsfil[]; kjente?: typeof KJENTE_AVVIK } = {},
+): string[] {
+  const feil: string[] = []
+  const iPr = new Map(pr.map((f) => [filnavn(f), f]))
+  for (const f of utrullet) {
+    const ny = iPr.get(filnavn(f))
+    if (!ny) feil.push(`${filnavn(f)}: er fjernet eller omdøpt, men er kjørt i produksjonen`)
+    else if (ny.innhold !== f.innhold && kjente[f.versjon]?.fil !== md5(ny.innhold))
+      feil.push(`${filnavn(f)}: er endret, men er kjørt i produksjonen; en retting er en ny migrasjon`)
+  }
+  const iGrunn = new Map(grunn.map((f) => [filnavn(f), f]))
+  const nye = pr.filter((f) => !iGrunn.has(filnavn(f)))
+  const nyeste = grunn.reduce((maks, f) => (f.versjon > maks ? f.versjon : maks), '')
+  for (const f of nye) {
+    if (f.versjon <= nyeste)
+      feil.push(`${filnavn(f)}: versjonen er ikke nyere enn den nyeste migrasjonen på grenen (${nyeste}); gi fila et nytt tidspunkt`)
+  }
+  const endrede = pr.filter((f) => iGrunn.has(filnavn(f)) && iGrunn.get(filnavn(f))!.innhold !== f.innhold)
+  return [...feil, ...utrullingsfeil([...nye, ...endrede])]
+}
+
+/**
+ * Filene som ikke er kjørt i produksjonen ennå, ut fra versjonene den har
+ * registrert, og de registrerte versjonene som ikke har noen fil.
+ */
+export function ventendeMigrasjoner(filer: readonly Migrasjonsfil[], registrerte: readonly string[]) {
+  const kjort = new Set(registrerte)
+  const iRepo = new Set(filer.map((f) => f.versjon))
+  return {
+    ventende: filer.filter((f) => !kjort.has(f.versjon)),
+    utenFil: [...kjort].filter((v) => !iRepo.has(v)).sort(),
+  }
 }

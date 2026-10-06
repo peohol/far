@@ -53,13 +53,16 @@ utrullingen og kontrollen av historikken.
    kjedene kjøres fra den første importen med `kurateringer: true`, som
    `kvetiapin-monograf.test.ts` gjør. Kjør også `npm run build`.
 
-4. **Utrullingen.** Når preflight og testene er bestått, rulles en ordinær
-   monografkuratering ut med `apply_migration` uten separat samtykke. Gi fila
-   versjonen prosjektet registrerte, og kjør kontrollen av historikken (under).
-   Den skal ikke gi noen rader. Hvis migrasjonen avviker fra den vanlige malen
-   og innebærer vesentlig risiko for datatap, sikkerhet/personvern,
-   produksjonstilgjengelighet eller vanskelig reversering, gjelder den
-   risikobaserte godkjenningsregelen i `CLAUDE.md`.
+4. **Utrullingen.** Når preflight og testene er bestått, slås PR-en sammen, og
+   GitHub Actions ruller migrasjonen ut til produksjonen og kontrollerer
+   historikken (`docs/migrasjoner.md`). En ordinær monografkuratering trenger
+   ikke noe eget samtykke; sammenslåingen er godkjenningen. Hvis migrasjonen
+   avviker fra den vanlige malen og innebærer vesentlig risiko for datatap,
+   sikkerhet/personvern, produksjonstilgjengelighet eller vanskelig reversering,
+   gjelder den risikobaserte godkjenningsregelen i `CLAUDE.md`. Preflighten
+   gjelder produksjonen slik den er når migrasjonen kjøres: endres siden før
+   PR-en slås sammen, stopper migrasjonen uten å endre noe, og må skrives på
+   nytt. `apply_migration` direkte er bare en reservevei (`docs/migrasjoner.md`).
 
 5. **Etterpå endres migrasjonen aldri.** En retting er en ny migrasjon.
 
@@ -117,13 +120,6 @@ Det som gikk galt før, og som funksjonene stopper:
 
 ## Kontrollen av historikken
 
-`npm run kontroller:migrasjoner` kontrollerer navnene på filene (14 sifre,
-understrek, navn; én fil per versjon) og skriver en lesespørring som
-sammenligner versjonen, navnet og innholdet i hver fil med det databasen har
-registrert. Kjør spørringen med `execute_sql`. Ingen rader betyr at alt
-stemmer; ellers sier hver rad hva som avviker, også når en fil har en annen
-versjon enn den som ble registrert.
-
-Avvik som er avklart, står i `KJENTE_AVVIK` i
-`src/faginnhold/migrasjonshistorikk.ts`, med md5 av fila og av teksten som ble
-kjørt, og hvorfor. De vises igjen om fila eller teksten endres.
+Utrullingen kontrollerer historikken før og etter. Spørringen
+`npm run kontroller:migrasjoner` skriver, og de avklarte avvikene i
+`KJENTE_AVVIK`, er beskrevet i `docs/migrasjoner.md`.

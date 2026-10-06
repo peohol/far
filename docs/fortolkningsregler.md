@@ -310,4 +310,5 @@ som for en ny objekttype) og i `REGELHANDLINGER`; en ny rad i
 
 **Ny import.** Legg dataene i et importdatasett med kilde, lag SQL-en med
 `npm run import:intervallregelsett -- <brukernavn> <fil> --migrering --del i/n`,
-rull den ut med `apply_migration` og gi fila versjonen prosjektet registrerte.
+og legg den i `supabase/migrations/`; den rulles ut når PR-en slås sammen
+(`docs/migrasjoner.md`).
