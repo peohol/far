@@ -1,6 +1,6 @@
-# Kontrollene på hver PR mot main: migrasjonsfilene, testene og bygget
-# (docs/migrasjoner.md). Arbeidsflyten har ingen hemmeligheter og ingen tilgang
-# til produksjonsdatabasen.
+# Kontrollene på hver PR mot main: migrasjonsfilene (når PR-en berører dem),
+# testene og bygget (docs/migrasjoner.md). Arbeidsflyten har ingen hemmeligheter
+# og ingen tilgang til produksjonsdatabasen.
 name: CI
 
 on:
@@ -35,9 +35,19 @@ jobs:
 
       - run: npm ci
 
+      # Bare når PR-en endrer migrasjonene eller det kontrollen og utrullingen
+      # avhenger av (src/faginnhold/migrasjonsavhengigheter.ts). Feiler dette
+      # steget, kjøres kontrollen likevel, og testene og bygget som før.
+      - name: Berører PR-en migrasjonene?
+        id: berort
+        continue-on-error: true
+        run: npm run -s berorer:migrasjoner -- HEAD^1
+
       # Migrasjonene i commiten den siste vellykkede utrullingen gjaldt, er kjørt i
       # produksjonen og kan ikke endres. Før første utrulling gjelder det alle på main.
       - name: Migrasjonsfilene mot main
+        # Hoppes bare over når det er avgjort at den ikke gjelder.
+        if: steps.berort.outputs.trengs != 'false'
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
