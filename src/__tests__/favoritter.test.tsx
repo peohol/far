@@ -136,7 +136,9 @@ describe('favorittskuffen i stoffregisteret', () => {
   })
 })
 
-describe('stjernen på fagsiden', () => {
+// Hele appen tegnes opp og klikkes gjennom; alene tar det rundt fire sekunder,
+// så standardgrensen på fem gir ingen margin på en travel CI-maskin.
+describe('stjernen på fagsiden', { timeout: 20_000 }, () => {
   it('legger stoffet til i favorittene og fjerner det igjen, og skuffen følger med', async () => {
     const user = userEvent.setup()
     window.location.hash = '#/stoff/bupropion'
