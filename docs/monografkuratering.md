@@ -40,24 +40,40 @@ utrullingen og kontrollen av historikken.
    `supabase/migrations/<versjon>_<stoff>_monografkuratering.sql` (et tillegg:
    `…_monografkuratering_<hva>.sql`) og fyll inn preflighten og endringene.
    Testene kjenner kurateringene igjen på kallet til `intern.kuratering_start()`,
-   men navnet er påkrevd for nye; bare tre eldre kvetiapinmigrasjoner avviker
-   (`KURATERINGER_MED_AVVIKENDE_NAVN` i `src/__tests__/hjelp/testdatabase.ts`),
-   og den listen skal ikke vokse. Hjelpefunksjonene (under) gjør kontrollene; skriv
+   men navnet er påkrevd for nye, og stoffet i navnet må være siden migrasjonen
+   åpner (`intern.kuratering_start('<stoff>')`, én side per migrasjon); bare
+   tre eldre kvetiapinmigrasjoner avviker (`KURATERINGER_MED_AVVIKENDE_NAVN` i
+   `src/__tests__/hjelp/testdatabase.ts`), og den listen skal ikke vokse.
+   Hjelpefunksjonene (under) gjør kontrollene; skriv
    dem ikke for hånd. Referanser slås opp med `kuratering_referanse`, aldri med
    id-en de har i produksjonen. Hele migrasjonen er én transaksjon: stopper en kontroll,
    er ingenting endret.
 
-3. **Test.** `npm test` kjører alle migrasjonene på en tom database uten
-   kuratorprofil (`monografkuratering.test.ts`), og alle bygget på malen gjør
-   da ingenting. Andre tester som setter opp kuratoren og sider på sin egen
-   måte, hopper over kurateringene (`kjorMigrasjoner` i
-   `src/__tests__/hjelp/testdatabase.ts`), siden preflighten deres gjelder
-   produksjonen. Skal selve endringene prøves, bygges siden slik preflighten
-   fant den i testen, som `monografkuratering.test.ts` gjør for malen, eller
-   hele kjeden kjøres én gang, i rekkefølge, fra den første importen med
-   `kurateringer: true`, som `kvetiapin-monograf.test.ts` gjør. En eldre
-   kuratering kjøres ikke på nytt etter senere kurateringer; bare de som selv
-   sjekker `kuratering_utfort`, lover å tåle det. Kjør også `npm run build`.
+3. **Test.** `npm test` prøver en ny kuratering av seg selv, uten noe nytt
+   testoppsett:
+
+   - `monografkuratering.test.ts` kjører alle migrasjonene på en tom database
+     uten kuratorprofil, der hver kuratering skal kjøre uten å endre noe, og
+     kontrollerer navnet og siden.
+   - `kurateringskjeden.test.ts` kjører hele kjeden én gang, i rekkefølge, fra
+     den første importen med kuratoren på plass, slik produksjonen gjorde.
+     Hver kuratering skal endre elementene på sin egen side og ingen andre,
+     heller ikke en side den flytter et element fra (nye referanser alene
+     teller ikke); siden skal stå uten upubliserte utkast og
+     bare peke på publiserte referanser som finnes, én med hver lenke. Til
+     slutt kjøres de som sjekker `kuratering_utfort` (som malen), på nytt, hver
+     for seg, og skal ikke endre noe. En eldre kuratering uten den sjekken
+     kjøres aldri på nytt.
+   - Sluttresultatet for stoffet valideres i
+     `src/__tests__/kurateringskjeden/<stoff>.ts`, som testen finner selv (se
+     `kvetiapin.ts`): en standardeksport som får databasen etter hele kjeden og
+     slår opp sidens elementer med `elementer(db, '<stoff>', '<panel>')` fra
+     `hjelp/kurateringskjeden.ts`. Skriv den for det kuratoren har bestemt, og
+     utvid den ved neste kuratering av samme stoff.
+
+   Andre tester som setter opp kuratoren og sider på sin egen måte, hopper
+   over kurateringene (`kjorMigrasjoner` i `src/__tests__/hjelp/testdatabase.ts`),
+   siden preflighten deres gjelder produksjonen. Kjør også `npm run build`.
 
 4. **Utrullingen.** Når preflight og testene er bestått, slås PR-en sammen, og
    GitHub Actions ruller migrasjonen ut til produksjonen og kontrollerer

@@ -75,32 +75,47 @@ const BARE_I_PRODUKSJON = /_(oppgaver_utfort_1_56_0|koble_infosider_til_fest_vir
 
 /**
  * Navnet en ny monografkuratering skal ha (`docs/monografkuratering.md`):
- * `*_monografkuratering*.sql`, men ikke hjelpefunksjonene
- * (`*_monografkuratering_hjelpere*.sql`), som alltid kjøres.
+ * `<versjon>_<stoff>_monografkuratering*.sql`, men ikke hjelpefunksjonene
+ * (`*_monografkuratering_hjelpere*.sql`), som alltid kjøres. Gruppen er stoffet.
  */
-export const KURATERINGSNAVN = /_monografkuratering(?!_hjelpere)(_[a-z0-9_]+)?\.sql$/
+export const KURATERINGSNAVN = /^\d+_([a-z0-9_]+?)_monografkuratering(?!_hjelpere)(?:_[a-z0-9_]+)?\.sql$/
 
 /**
- * Kurateringer som alt er kjørt i produksjonen uten å følge navnet. Migrasjonene
- * endres aldri etterpå, så de står her for godt; listen skal ikke vokse. Den
- * første (`040004`) er fra før hjelpefunksjonene og har sin egen preflight.
+ * Kurateringer som alt er kjørt i produksjonen uten å følge navnet, med
+ * stoffet de gjelder. Migrasjonene endres aldri etterpå, så de står her for
+ * godt; listen skal ikke vokse. Den første (`040004`) er fra før
+ * hjelpefunksjonene og har sin egen preflight.
  */
-export const KURATERINGER_MED_AVVIKENDE_NAVN: readonly string[] = [
-  '20261002040004_kvetiapin_farmakogenetikk_og_typografi.sql',
-  '20261004040353_kvetiapin_virkninger_og_avhengighet.sql',
-  '20261005173500_kvetiapin_konsentrasjoner_nmol_l.sql',
-]
+export const KURATERINGER_MED_AVVIKENDE_NAVN: Readonly<Record<string, string>> = {
+  '20261002040004_kvetiapin_farmakogenetikk_og_typografi.sql': 'kvetiapin',
+  '20261004040353_kvetiapin_virkninger_og_avhengighet.sql': 'kvetiapin',
+  '20261005173500_kvetiapin_konsentrasjoner_nmol_l.sql': 'kvetiapin',
+}
 
 /**
- * Et kall til `intern.kuratering_start(…)` utenfor kommentarene — ikke
- * definisjonen av funksjonen (`create … function`) eller kommentaren på den
- * (`comment on function`).
+ * Kallene til `intern.<funksjon>(…)` utenfor kommentarene — ikke definisjonen
+ * av funksjonen (`create … function`) eller kommentaren på den
+ * (`comment on function`) — med det første argumentet når det er en tekst.
  */
-const KURATERINGSSTART = /(?<!\bfunction\s+)\bintern\s*\.\s*kuratering_start\s*\(/i
+function kallTil(funksjon: string, sql: string): { argument?: string }[] {
+  if (!sql.toLowerCase().includes(funksjon)) return []
+  const kall = new RegExp(String.raw`(?<!\bfunction\s+)\bintern\s*\.\s*${funksjon}\s*\(\s*(?:'([^']*)')?`, 'gi')
+  return [...utenKommentarer(sql).matchAll(kall)].map((m) => ({ argument: m[1] }))
+}
 
 /** Om migrasjonen kaller `intern.kuratering_start()`, altså er bygd på kuratorhjelperne. */
-export const brukerKuratorhjelperne = (sql: string): boolean =>
-  /kuratering_start/i.test(sql) && KURATERINGSSTART.test(utenKommentarer(sql))
+export const brukerKuratorhjelperne = (sql: string): boolean => kallTil('kuratering_start', sql).length > 0
+
+/**
+ * Om migrasjonen selv sjekker om den alt er gjort (`intern.kuratering_utfort()`),
+ * og dermed lover å ikke endre noe når den kjøres på nytt.
+ */
+export const erSelvsjekkende = (sql: string): boolean => kallTil('kuratering_utfort', sql).length > 0
+
+/** Stoffsidene migrasjonen åpner med `intern.kuratering_start('<slug>')`. */
+export const kurateringssider = (sql: string): string[] => [
+  ...new Set(kallTil('kuratering_start', sql).flatMap((k) => (k.argument === undefined ? [] : [k.argument]))),
+]
 
 /**
  * Monografkurateringene: datamigrasjonene som endrer en stoffside etter en
@@ -113,7 +128,30 @@ export const brukerKuratorhjelperne = (sql: string): boolean =>
  * deres stoppe enhver test som setter opp sider på sin egen måte.
  */
 export function erMonografkuratering(fil: string, sql: string): boolean {
-  return KURATERINGSNAVN.test(fil) || KURATERINGER_MED_AVVIKENDE_NAVN.includes(fil) || brukerKuratorhjelperne(sql)
+  return KURATERINGSNAVN.test(fil) || fil in KURATERINGER_MED_AVVIKENDE_NAVN || brukerKuratorhjelperne(sql)
+}
+
+/** En monografkuratering i `supabase/migrations/`. */
+export interface Monografkuratering {
+  fil: string
+  /**
+   * Stoffsiden den gjelder: den den åpner med `intern.kuratering_start`,
+   * ellers stoffet i navnet. At de to stemmer, kontrolleres i
+   * `monografkuratering.test.ts`.
+   */
+  stoff: string | undefined
+  /** Sjekker selv om den alt er gjort, og skal tåle å kjøres på nytt. */
+  selvsjekkende: boolean
+}
+
+/** Alle monografkurateringene, i den rekkefølgen prosjektet kjører dem. */
+export function monografkurateringer(): Monografkuratering[] {
+  return migrasjonsfiler().flatMap((fil) => {
+    const sql = readFileSync(`${MIGRASJONER}/${fil}`, 'utf8')
+    if (!erMonografkuratering(fil, sql)) return []
+    const stoff = kurateringssider(sql)[0] ?? KURATERINGER_MED_AVVIKENDE_NAVN[fil] ?? KURATERINGSNAVN.exec(fil)?.[1]
+    return [{ fil, stoff, selvsjekkende: erSelvsjekkende(sql) }]
+  })
 }
 
 /**
@@ -169,12 +207,74 @@ export function migrasjonsfiler(): string[] {
     .sort()
 }
 
+/** En monografkuratering som er kjørt, med revisjonene den la til. */
+export interface KjortKuratering {
+  fil: string
+  /** Alle nye revisjoner, også av referansene. */
+  nyeRevisjoner: number
+  /**
+   * Nye revisjoner av elementene (og sidene selv) etter nøkkelen til hver
+   * fagside de berører: siden et element sto på før kurateringen, og siden
+   * det står på etter. Et element som flyttes, berører begge. En kuratering
+   * som bare legger inn referanser, berører ingen side.
+   */
+  endredeSider: Record<string, number>
+}
+
+interface Revisjonstall {
+  /** Antall revisjoner per objekt. */
+  revisjoner: Map<string, number>
+  /** Fagsidene hvert element står på (utkast og publisert), og hver side selv. */
+  sider: Map<string, Set<string>>
+}
+
+async function revisjonstall(db: PGlite): Promise<Revisjonstall> {
+  const { rows: revisjoner } = await db.query<{ objekt_id: string; n: number }>(
+    `select objekt_id, count(*)::int as n from public.objektrevisjoner group by objekt_id`,
+  )
+  const { rows: plasseringer } = await db.query<{ objekt_id: string; slug: string }>(
+    `select e.objekt_id, s.slug from public.innholdselementer e join public.infosider s on s.objekt_id = e.infoside_id
+     union
+     select objekt_id, slug from public.infosider`,
+  )
+  const sider = new Map<string, Set<string>>()
+  for (const { objekt_id, slug } of plasseringer) sider.set(objekt_id, (sider.get(objekt_id) ?? new Set()).add(slug))
+  return { revisjoner: new Map(revisjoner.map((r) => [r.objekt_id, r.n])), sider }
+}
+
+async function kjor(db: PGlite, fil: string, sql: string): Promise<void> {
+  try {
+    await db.exec(sql)
+  } catch (feil) {
+    throw new Error(`Migrasjonen ${fil} feilet: ${(feil as Error).message}`)
+  }
+}
+
+/** Kjører en monografkuratering og måler hva den endret (`KjortKuratering`). */
+export async function kjorKuratering(db: PGlite, fil: string, sql: string): Promise<KjortKuratering> {
+  const for_ = await revisjonstall(db)
+  await kjor(db, fil, sql)
+  const etter = await revisjonstall(db)
+  let nyeRevisjoner = 0
+  const endredeSider: Record<string, number> = {}
+  for (const [objekt, n] of etter.revisjoner) {
+    const nye = n - (for_.revisjoner.get(objekt) ?? 0)
+    if (nye <= 0) continue
+    nyeRevisjoner += nye
+    for (const slug of new Set([...(for_.sider.get(objekt) ?? []), ...(etter.sider.get(objekt) ?? [])])) {
+      endredeSider[slug] = (endredeSider[slug] ?? 0) + nye
+    }
+  }
+  return { fil, nyeRevisjoner, endredeSider }
+}
+
 /**
  * Kjører migrasjonene fra og med `fra` til, men ikke med, `til` — begge
  * filnavnprefikser — eller bare filene i `bare`. Uten grenser kjøres alle.
  * Monografkurateringene hoppes over når kuratoren finnes, med mindre
  * `kurateringer` er satt (se `erMonografkuratering`), og en bivirkningsimport
- * når fagsiden den gjelder, ikke finnes (se `BIVIRKNINGSIMPORT`).
+ * når fagsiden den gjelder, ikke finnes (se `BIVIRKNINGSIMPORT`). Gir
+ * kurateringene som ble kjørt, med det hver endret (`kjorKuratering`).
  */
 export async function kjorMigrasjoner(
   db: PGlite,
@@ -184,24 +284,31 @@ export async function kjorMigrasjoner(
     bare,
     kurateringer = false,
   }: { fra?: string; til?: string; bare?: readonly string[]; kurateringer?: boolean } = {},
-): Promise<void> {
+): Promise<KjortKuratering[]> {
+  const kjort: KjortKuratering[] = []
   for (const fil of migrasjonsfiler()) {
     if (BARE_I_PRODUKSJON.test(fil)) continue
     if (bare ? !bare.includes(fil) : fil < fra || (til !== undefined && fil >= til)) continue
     let sql = readFileSync(`${MIGRASJONER}/${fil}`, 'utf8')
-    if (erMonografkuratering(fil, sql)) {
+    const kuratering = erMonografkuratering(fil, sql)
+    if (kuratering) {
       if (!bare && !kurateringer) {
         if (await harKurator(db)) continue
       } else sql = await medTestensReferanser(db, sql)
     }
     const importert = !bare && BIVIRKNINGSIMPORT.exec(sql)?.[1]
     if (importert && !(await harFagside(db, importert))) continue
-    try {
-      await db.exec(sql)
-    } catch (feil) {
-      throw new Error(`Migrasjonen ${fil} feilet: ${(feil as Error).message}`)
-    }
+    if (kuratering) kjort.push(await kjorKuratering(db, fil, sql))
+    else await kjor(db, fil, sql)
   }
+  return kjort
+}
+
+/** En tom database med det Supabase har på plass før migrasjonene. */
+export async function grunnlagsdatabase(): Promise<PGlite> {
+  const db = new PGlite()
+  await db.exec(SUPABASE_GRUNNLAG)
+  return db
 }
 
 /**
@@ -209,8 +316,7 @@ export async function kjorMigrasjoner(
  * `til`, for å prøve hvordan en senere migrasjon møter data som alt finnes.
  */
 export async function nyDatabase({ til }: { til?: string } = {}): Promise<PGlite> {
-  const db = new PGlite()
-  await db.exec(SUPABASE_GRUNNLAG)
+  const db = await grunnlagsdatabase()
   await kjorMigrasjoner(db, { til })
   return db
 }

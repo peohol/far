@@ -170,7 +170,9 @@ function knappene(steg: HTMLElement): string[] {
   return [...steg.querySelectorAll('.bandknapp .bandknapp__verdi')].map((k) => k.textContent ?? '')
 }
 
-describe('sidemenyen', () => {
+// Hele appen tegnes opp og klikkes gjennom; alene tar det rundt fem sekunder,
+// så standardgrensen på fem gir ingen margin på en travel CI-maskin.
+describe('sidemenyen', { timeout: 20_000 }, () => {
   it('er stoffregisteret, og lenker hvert stoff til stoffsiden etter nøkkelen, med kodene som sekundær tekst', async () => {
     const user = userEvent.setup()
     visApp()
@@ -366,7 +368,8 @@ describe('gamle adresser etter analyttkoden', () => {
   })
 })
 
-describe('redigeringen av fortolkningen', () => {
+// Som i sidemenyen: hele appen, med god margin på tiden.
+describe('redigeringen av fortolkningen', { timeout: 20_000 }, () => {
   it('åpnes med «Rediger fortolkningen» for administratorer, og går tilbake til samme modul', async () => {
     okt.rolle = 'admin'
     const user = userEvent.setup()
@@ -427,7 +430,8 @@ describe('kodepillene i fortolkningen', () => {
   })
 })
 
-describe('mellom fortolkningen og stoffsiden', () => {
+// Som i sidemenyen: hele appen, med god margin på tiden.
+describe('mellom fortolkningen og stoffsiden', { timeout: 20_000 }, () => {
   it('går fra kodepillen til siden og tilbake til samme modul', async () => {
     const user = userEvent.setup()
     visApp()
