@@ -11,7 +11,7 @@
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { lesDatakildestatus, vurderKilder } from '../datakilder/status'
-import { ENTITETER, lesFest, PARSERVERSJON, type Festpost, type Interaksjonsdata, type Merkevaredata } from '../legemiddeldata/fest'
+import { ENTITETER, lesFest, PARSERVERSJON, type Festpost, type Interaksjonsdata, type Merkevaredata, type Pakningsdata } from '../legemiddeldata/fest'
 import { lagLegemiddellager, type Databasekall } from '../legemiddeldata/lager'
 import { behandleSynk } from '../legemiddeldata/endepunkt'
 import { lagLegemiddelleser, type Legemiddelutvalg, type Virkestofftreff } from '../legemiddeldata/lesing'
@@ -176,6 +176,23 @@ describe('lesingen av FEST', () => {
       innhold: [expect.objectContaining({ merkevare_id: expect.stringMatching(/^ID_/), enhet: expect.anything() })],
       markedsforingsdato: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
     })
+    // Dagen pakningen går inn i byttegruppen, per gruppe.
+    const { byttegrupper, byttegrupper_fra } = pakning!.data as { byttegrupper: string[]; byttegrupper_fra: Record<string, string> }
+    expect(Object.keys(byttegrupper_fra)).toEqual(byttegrupper)
+    expect(Object.values(byttegrupper_fra).every((d) => /^\d{4}-\d{2}-\d{2}$/.test(d))).toBe(true)
+  })
+
+  it('bevarer FESTs tekst for en pakningsstørrelse som ikke er ett tall', async () => {
+    const endose = UTDRAG.replace('<Pakningsstr>100</Pakningsstr>', '<Pakningsstr>98 x 1</Pakningsstr>')
+    expect(endose).not.toBe(UTDRAG)
+    const innhold = (await les(endose)).poster
+      .filter((p) => p.entitet === 'pakning')
+      .flatMap((p) => (p.data as Pakningsdata).innhold)
+    const endoser = innhold.filter((i) => i.pakningsstorrelse === null)
+    expect(endoser).toHaveLength(1)
+    expect(endoser[0]).toMatchObject({ pakningsstorrelse_tekst: '98 x 1' })
+    // De andre er tall og har ingen egen tekst.
+    expect(innhold.filter((i) => i.pakningsstorrelse !== null).every((i) => i.pakningsstorrelse_tekst === null)).toBe(true)
   })
 
   it('tåler prefikser og navnerom, og at teksten deles hvor som helst', async () => {

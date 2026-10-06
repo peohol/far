@@ -208,7 +208,7 @@ trengs ikke for seg.
 | Produsent | `…/ProduktInfo/Produsent` | |
 | Pakning | `Legemiddelpakning/Varenr`, `Pakningsinfo` (`Pakningsstr`, `EnhetPakning`, `Pakningstype`, `RefLegemiddelMerkevare`) | |
 | Markedsføring | `Legemiddelpakning/Markedsforingsinfo` | `Markedsforingsdato`, `MidlUtgattDato` (midlertidig utgått), `AvregDato` (avregistrert) |
-| Byttbarhet | `Legemiddelpakning/PakningByttegruppe/RefByttegruppe` → `Byttegruppe` | Pakninger i samme gruppe er byttbare i apotek |
+| Byttbarhet | `Legemiddelpakning/PakningByttegruppe/RefByttegruppe` → `Byttegruppe` | Pakninger i samme gruppe er byttbare i apotek, fra pakningens `GyldigFraDato` i gruppen |
 
 ## Stabile ID-er og relasjoner
 
@@ -344,10 +344,22 @@ godkjenningsfritak». Visningen følger `docs/ux-reimagination.md`, del 9:
   byttes i apotek. Ved hver styrke står «Byttbar i apotek med …» og de andre
   preparatene i gruppen, med FESTs navn med form og styrke. Er bare noen av
   pakningene i gruppen (f.eks. en 2 ml-ampulle og ikke en 4 ml), sier teksten
-  hvilke. Har gruppen merknad til byttbarheten, står FESTs merknad under. Bare
-  grupper som gjelder i dag (fra og med `GyldigFraDato`, til og med
-  `GyldigTilDato`) og har andre preparater, tas med. Står ingenting, er
-  styrken ikke byttbar med noe annet preparat i FEST.
+  hvilke, med varenummeret når en pakning utenfor gruppen har samme tekst.
+  Har gruppen merknad til byttbarheten (f.eks. «Begrenset bytte ved
+  epilepsi»), står FESTs merknad under. Er alle pakningene et annet preparat
+  har i gruppen, midlertidig utgått (fra og med `MidlUtgattDato`), står
+  «(midlertidig utgått)» etter navnet. Bare dette regnes med:
+  - grupper som gjelder i dag (fra og med `GyldigFraDato`, til og med
+    `GyldigTilDato`);
+  - pakninger som er i gruppen i dag: FEST melder nye byttbarheter på
+    forhånd med pakningens egen `GyldigFraDato` i gruppen;
+  - pakninger som ikke er avregistrert (`AvregDato` er ikke passert);
+  - grupper med andre preparater enn preparatet selv.
+
+  Står ingenting, er styrken ikke byttbar med noe annet preparat i FEST, og
+  det sies ikke noe mer om det.
+- **Pakningsstørrelsen** er FESTs `Pakningsstr`. Er den ikke ett tall, som
+  «98 x 1» for endosepakninger, vises FESTs egen tekst.
 - **Refusjon** står ikke i OUSFARs kopi av FEST og vises ikke.
 - Nederst i seksjonen står FEST som referanse i referansefeltet, med datoen
   for uttrekket og når kopien sist ble kontrollert mot FEST.

@@ -19,7 +19,7 @@ import { SaxesParser } from 'saxes'
  * kjøring selv om FEST-filen er uendret, slik at også de eldre radene får den
  * nye formen.
  */
-export const PARSERVERSJON = 2
+export const PARSERVERSJON = 3
 
 /* --- Et lite tre per oppføring -------------------------------------------- */
 
@@ -143,6 +143,11 @@ export interface Merkevaredata {
 export interface Pakningsinnhold {
   merkevare_id: string
   pakningsstorrelse: number | null
+  /**
+   * FESTs egen tekst for størrelsen når den ikke er ett tall, f.eks. «98 x 1»
+   * for en endosepakning. Mangler i rader lest før parserversjon 3.
+   */
+  pakningsstorrelse_tekst?: string | null
   enhet: Kode | null
   pakningstype: Kode | null
   mengde: number | null
@@ -160,6 +165,11 @@ export interface Pakningsdata {
   midlertidig_utgatt_dato: string | null
   avregistrert_dato: string | null
   byttegrupper: string[]
+  /**
+   * Dagen pakningen går inn i hver byttegruppe (`PakningByttegruppe/GyldigFraDato`),
+   * per gruppe-ID, når FEST oppgir den. Mangler i rader lest før parserversjon 3.
+   */
+  byttegrupper_fra?: Record<string, string>
   ean: string[]
 }
 
@@ -297,19 +307,26 @@ export const ENHETER = [
     element: 'Legemiddelpakning',
     les: (n): Pakningsdata => {
       const innhold = alleBarn(n, 'Pakningsinfo')
-        .map((p) => ({
-          merkevare_id: tekstIn(p, 'RefLegemiddelMerkevare') ?? '',
-          pakningsstorrelse: tall(tekstIn(p, 'Pakningsstr')),
-          enhet: kode(p, 'EnhetPakning'),
-          pakningstype: kode(p, 'Pakningstype'),
-          mengde: tall(tekstIn(p, 'Mengde')),
-          antall: tall(tekstIn(p, 'Antall')),
-          rekkefolge: tall(tekstIn(p, 'Sortering')),
-        }))
+        .map((p) => {
+          const storrelse = tekstIn(p, 'Pakningsstr')
+          return {
+            merkevare_id: tekstIn(p, 'RefLegemiddelMerkevare') ?? '',
+            pakningsstorrelse: tall(storrelse),
+            pakningsstorrelse_tekst: tall(storrelse) === null ? storrelse : null,
+            enhet: kode(p, 'EnhetPakning'),
+            pakningstype: kode(p, 'Pakningstype'),
+            mengde: tall(tekstIn(p, 'Mengde')),
+            antall: tall(tekstIn(p, 'Antall')),
+            rekkefolge: tall(tekstIn(p, 'Sortering')),
+          }
+        })
         .filter((p) => p.merkevare_id !== '')
         .sort((a, b) => (a.rekkefolge ?? 0) - (b.rekkefolge ?? 0))
         .map(({ rekkefolge: _, ...p }) => p)
       const marked = barn(n, 'Markedsforingsinfo')
+      const byttegrupper = alleBarn(n, 'PakningByttegruppe')
+        .map((b) => [tekstIn(b, 'RefByttegruppe'), tekstIn(b, 'GyldigFraDato')] as const)
+        .filter((b): b is readonly [string, string | null] => b[0] !== null)
       return {
         varenr: tekstIn(n, 'Varenr') ?? '',
         navn_form_styrke: tekstIn(n, 'NavnFormStyrke') ?? '',
@@ -318,9 +335,8 @@ export const ENHETER = [
         markedsforingsdato: tekstIn(marked, 'Markedsforingsdato'),
         midlertidig_utgatt_dato: tekstIn(marked, 'MidlUtgattDato'),
         avregistrert_dato: tekstIn(marked, 'AvregDato'),
-        byttegrupper: alleBarn(n, 'PakningByttegruppe')
-          .map((b) => tekstIn(b, 'RefByttegruppe'))
-          .filter((id): id is string => id !== null),
+        byttegrupper: byttegrupper.map(([id]) => id),
+        byttegrupper_fra: Object.fromEntries(byttegrupper.filter((b): b is readonly [string, string] => b[1] !== null)),
         ean: alleBarn(n, 'Ean')
           .map((e) => e.tekst.trim())
           .filter(Boolean),

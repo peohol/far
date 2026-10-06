@@ -24,7 +24,8 @@
  *   ikke egne grupper. Det er også **særlig overvåkning** (FESTs svarte
  *   trekant).
  * - **Byttbarhet** er FESTs byttegrupper: pakninger i samme gruppe kan byttes
- *   i apotek. Den står per styrke, med de andre preparatene i gruppen.
+ *   i apotek. Den står per styrke, med de andre preparatene i gruppen, og bare
+ *   for pakninger som er i gruppen i dag og ikke er avregistrert.
  */
 import { antall, ramsOpp } from '../faginnhold/oppsummering'
 import { alfabetisk } from '../faginnhold/paneler'
@@ -35,8 +36,11 @@ import type { Legemiddelutvalg, MedId } from './lesing'
 import {
   egneVirkestoff,
   formaterMengde,
+  gjeldendeByttegrupper,
+  gjelderIdag,
   GODKJENNINGSFRITAK,
   handteringFor,
+  midlertidigUtgatt,
   pakningerPerMerkevare,
   styrkemengde,
   trygLenke,
@@ -120,7 +124,12 @@ export interface Byttbarhet {
   gruppe: string
   /** De andre preparatene med pakninger i gruppen, med FESTs navn med form og styrke. Alfabetisk. */
   med: string[]
-  /** Pakningene av styrken som er i gruppen, når det ikke er alle; ellers `null`. */
+  /** De av `med` der alle pakningene i gruppen er meldt midlertidig utgått. */
+  midlertidig_utgatt: string[]
+  /**
+   * Pakningene av styrken som er i gruppen, når det ikke er alle; ellers
+   * `null`. Har en pakning utenfor gruppen samme tekst, står varenummeret med.
+   */
   pakninger: string[] | null
   /** FESTs merknad til byttbarheten, når den har en. */
   merknad: string | null
@@ -204,7 +213,7 @@ export function byggPreparatvisning(
   const virkestoff: Virkestoffoppslag = new Map(utvalg.virkestoff.map((v) => [v.id, v]))
   const styrker = new Map(utvalg.styrker.map((s) => [s.id, s]))
   const { egne, salter } = egneVirkestoff(utvalg, koblet)
-  const pakninger = pakningerPerMerkevare(utvalg)
+  const pakninger = pakningerPerMerkevare(utvalg, idag)
   const navn = (id: string) => virkestoff.get(id)?.navn ?? id
 
   const former = new Map<string, Formgruppe & { grupper: Map<string, Styrkegruppe> }>()
@@ -472,31 +481,32 @@ function dagensDato(): string {
   return `${d.getFullYear()}-${to(d.getMonth() + 1)}-${to(d.getDate())}`
 }
 
-/** Om byttegruppen gjelder `idag`. Datoene er `ÅÅÅÅ-MM-DD` og sammenlignes som tekst. */
+/** Om byttegruppen gjelder `idag`, med første og siste gyldige dag. */
 export function gyldigByttegruppe(g: Pick<Byttegruppedata, 'gyldig_fra' | 'gyldig_til'>, idag: string): boolean {
-  const dag = (dato: string | null) => dato?.slice(0, 10) || null
-  const fra = dag(g.gyldig_fra)
-  const til = dag(g.gyldig_til)
-  return (!fra || fra <= idag) && (!til || til >= idag)
+  return gjelderIdag(g.gyldig_fra, g.gyldig_til, idag)
 }
 
 /**
- * Byttbarheten for en styrke: hver gyldige byttegruppe pakningene hører til,
- * med de andre preparatene som har pakninger i den. En gruppe uten andre
- * preparater i utvalget sier ingenting om hva det kan byttes med, og vises
- * ikke.
+ * Byttbarheten for en styrke: hver gyldige byttegruppe pakningene hører til i
+ * dag, med de andre preparatene som har pakninger i den i dag. En gruppe uten
+ * andre preparater i utvalget sier ingenting om hva det kan byttes med, og
+ * vises ikke. Et preparat er midlertidig utgått i gruppen når alle pakningene
+ * det har der, er meldt midlertidig utgått.
  */
 function byttbarhetFor(utvalg: Legemiddelutvalg, idag: string) {
   const grupper = new Map<string, MedId<Byttegruppedata>>(
     utvalg.byttegrupper.filter((g) => gyldigByttegruppe(g, idag)).map((g) => [g.id, g]),
   )
   const navnFor = new Map(utvalg.merkevarer.map((m) => [m.id, m.navn_form_styrke]))
-  const merkevarerI = new Map<string, Set<string>>()
+  /** Per gruppe: merkevarene i den, og om minst én av pakningene deres der ikke er utgått. */
+  const merkevarerI = new Map<string, Map<string, boolean>>()
   for (const p of utvalg.pakninger) {
-    for (const g of p.byttegrupper) {
+    for (const g of gjeldendeByttegrupper(p, idag)) {
       if (!grupper.has(g)) continue
-      const merkevarer = merkevarerI.get(g) ?? merkevarerI.set(g, new Set()).get(g)!
-      for (const { merkevare_id } of p.innhold) merkevarer.add(merkevare_id)
+      const merkevarer = merkevarerI.get(g) ?? merkevarerI.set(g, new Map()).get(g)!
+      for (const { merkevare_id } of p.innhold) {
+        merkevarer.set(merkevare_id, merkevarer.get(merkevare_id) === true || !midlertidigUtgatt(p, idag))
+      }
     }
   }
 
@@ -507,23 +517,42 @@ function byttbarhetFor(utvalg: Legemiddelutvalg, idag: string) {
       .flatMap((id): Byttbarhet[] => {
         const gruppe = grupper.get(id)
         if (!gruppe) return []
-        const med: string[] = []
-        for (const m of merkevarerI.get(id) ?? []) if (!egne.has(m)) leggTil(med, [navnFor.get(m)])
-        const andre = med.filter((n) => !s.navn_form_styrke.includes(n)).sort(alfabetisk)
-        if (andre.length === 0) return []
-        const pakninger = s.pakninger.filter((p) => p.byttegrupper.includes(id))
+        // Samme navn kan være flere merkevarer, f.eks. parallellimport: tilgjengelig når én av dem er det.
+        const tilgjengelig = new Map<string, boolean>()
+        for (const [m, harTilgjengelig] of merkevarerI.get(id) ?? []) {
+          const navn = navnFor.get(m)
+          if (egne.has(m) || !navn || s.navn_form_styrke.includes(navn)) continue
+          tilgjengelig.set(navn, tilgjengelig.get(navn) === true || harTilgjengelig)
+        }
+        if (tilgjengelig.size === 0) return []
+        const med = [...tilgjengelig.keys()].sort(alfabetisk)
+        const iGruppen = s.pakninger.filter((p) => p.byttegrupper.includes(id))
         return [
           {
             kode: gruppe.kode,
             gruppe: gruppe.tekst,
-            med: andre,
-            pakninger: pakninger.length === s.pakninger.length ? null : [...new Set(pakninger.map((p) => p.tekst || p.varenr))],
+            med,
+            midlertidig_utgatt: med.filter((n) => !tilgjengelig.get(n)),
+            pakninger: iGruppen.length === s.pakninger.length ? null : pakningsnavn(iGruppen, s.pakninger),
             merknad: (gruppe.merknad_til_byttbarhet && gruppe.beskrivelse?.trim()) || null,
           },
         ]
       })
       .sort((a, b) => a.gruppe.localeCompare(b.gruppe, 'nb', { numeric: true }))
   }
+}
+
+/**
+ * Pakningene i en byttegruppe slik de kan nevnes: med teksten, og med
+ * varenummeret når en pakning utenfor gruppen har samme tekst, så det er
+ * entydig hvilken som er byttbar.
+ */
+function pakningsnavn(iGruppen: readonly Preparatpakning[], alle: readonly Preparatpakning[]): string[] {
+  const utenfor = new Set(alle.filter((p) => !iGruppen.includes(p)).map((p) => p.tekst))
+  const navn = iGruppen.map((p) =>
+    !p.tekst ? `varenr. ${p.varenr}` : utenfor.has(p.tekst) ? `${p.tekst} (varenr. ${p.varenr})` : p.tekst,
+  )
+  return [...new Set(navn)]
 }
 
 function slaSammenHandtering(a: Handtering, b: Handtering): Handtering {
@@ -638,10 +667,14 @@ export function oppsummerStyrke(styrke: Styrkegruppe): string {
 /**
  * Byttbarheten i én gruppe som setning, f.eks. «Byttbar i apotek med
  * Amitriptylin Abcur tab 25 mg og Sarotex tab 25 mg.», eller for bare noen
- * av pakningene «Pakningen 2 ml ampulle er byttbar i apotek med …».
+ * av pakningene «Pakningen 2 ml ampulle er byttbar i apotek med …». Et
+ * preparat som er midlertidig utgått i gruppen, får det i parentes.
  */
-export function byttbarhetstekst(b: Pick<Byttbarhet, 'med' | 'pakninger'>): string {
-  const med = `i apotek med ${ramsOppMed(b.med)}.`
+export function byttbarhetstekst(
+  b: Pick<Byttbarhet, 'med' | 'pakninger'> & Partial<Pick<Byttbarhet, 'midlertidig_utgatt'>>,
+): string {
+  const navn = b.med.map((n) => (b.midlertidig_utgatt?.includes(n) ? `${n} (midlertidig utgått)` : n))
+  const med = `i apotek med ${ramsOppMed(navn)}.`
   if (!b.pakninger) return `Byttbar ${med}`
   return b.pakninger.length === 1
     ? `Pakningen ${b.pakninger[0]} er byttbar ${med}`
