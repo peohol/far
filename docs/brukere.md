@@ -132,6 +132,12 @@ Migrasjoner og Edge-funksjoner ligger i repoet og rulles ut mot prosjektet
 med Supabase CLI eller MCP. Filnavnene på migrasjonene følger versjonene i
 prosjektets historikk, så de skal ikke endres i ettertid.
 
+Serverfunksjonene i `api/` kjører i Vercels region Stockholm (`arn1`), samme
+sted som databasen (Supabase `eu-north-1`). Regionen settes ett sted, med
+`regions` i `vercel.json`, og gjelder alle funksjonene; ingen av dem skal ha
+en egen region. Veggen i `middleware.ts` kjører på kanten nær brukeren og er
+ikke bundet til regionen.
+
 Appen trenger to innstillinger i Vercel, begge offentlige:
 
 - `VITE_SUPABASE_URL`
