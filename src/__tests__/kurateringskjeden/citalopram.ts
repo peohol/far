@@ -83,6 +83,7 @@ export default function citalopram(db: () => PGlite): void {
       'Abstinens, seponeringssyndrom og rebound-effekter',
       'Addiksjon',
     ])
+    expect(avhengighet.some((e) => e.data.tittel === 'Lært mestringsavhengighet')).toBe(false)
   })
 
   it('bevarer norske konsentrasjonsrammer og beskriver internasjonal TDM som kontekst', () => {
@@ -93,6 +94,35 @@ export default function citalopram(db: () => PGlite): void {
     const toksiske = tekst(toksisitet.find((e) => e.data.tittel === 'Toksiske konsentrasjoner')!.data)
     expect(toksiske).toContain('700 nmol/L')
     expect(toksiske).toContain('10 000 nmol/L')
+  })
+
+  it('bevarer norske konsentrasjonsgrenser og synkroniserer PK-nøkkeltall med SPC', async () => {
+    const { rows } = await db().query<{ elementtype: string; data: Record<string, unknown> }>(
+      `select e.elementtype, e.data
+       from public.innholdselementer e
+       join public.infosider s on s.objekt_id=e.infoside_id and s.tilstand='publisert' and s.slug='citalopram'
+       where e.tilstand='publisert' and e.panel='viktige_data'
+         and e.elementtype in ('referanseomrade','toksisk_omrade','alvorlig_intoksikasjon','halveringstid','steady_state')
+       order by e.elementtype`,
+    )
+    const perType = new Map(rows.map((r) => [r.elementtype, r.data]))
+
+    expect(perType.get('referanseomrade')).toMatchObject({ nedre: 70, ovre: 350, enhet: 'nmol/L' })
+    expect(perType.get('toksisk_omrade')).toMatchObject({ nedre: 700, ovre: null, enhet: 'nmol/L' })
+    expect(perType.get('alvorlig_intoksikasjon')).toMatchObject({ nedre: 10000, ovre: null, enhet: 'nmol/L' })
+    expect(perType.get('halveringstid')).toMatchObject({
+      former: [{ form: '', typisk: 36, min: 28, maks: 42, enhet: 'timer' }],
+    })
+    expect(perType.get('steady_state')).toMatchObject({
+      former: [{ form: '', typisk: null, min: 1, maks: 2, enhet: 'uker' }],
+    })
+
+    const serum = await elementer(db(), 'citalopram', 'serumkonsentrasjoner')
+    expect(serum).toHaveLength(1)
+    const serumtekst = tekst(serum[0]!.data)
+    expect(serumtekst).toContain('Median 70 nmol/L')
+    expect(serumtekst).toContain('Median 297 nmol/L')
+    expect(serumtekst).toContain('10.–90. persentil: 64–328 nmol/L')
   })
 
   it('bruker norsk enzymaktivitetsterminologi og avgrenser PGx klinisk', () => {
