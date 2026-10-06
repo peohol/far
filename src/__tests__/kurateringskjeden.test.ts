@@ -2,7 +2,8 @@
  * Monografkurateringene kjørt slik produksjonen kjørte dem: hele kjeden én
  * gang, i rekkefølge, med kuratoren (`hjelp/kurateringskjeden.ts`). For hvert
  * stoff kontrolleres at hver kuratering faktisk endret elementene på sin egen
- * side og ingen andre (nye referanser alene teller ikke), og at siden står
+ * side og ingen andre, heller ikke ved å flytte et element derfra (nye
+ * referanser alene teller ikke), og at siden står
  * uten upubliserte utkast og bare peker på referanser som finnes, én per
  * lenke. Sluttresultatet for et stoff valideres i `kurateringskjeden/<stoff>.ts`.
  * Til slutt kjøres kurateringene som selv sjekker om de alt er gjort, på nytt,
@@ -10,7 +11,7 @@
  */
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, describe, expect, it } from 'vitest'
-import { elementer, inlineReferanser, kuratertDatabase, type Stoffvalidering } from './hjelp/kurateringskjeden'
+import { andreSider, elementer, inlineReferanser, kuratertDatabase, type Stoffvalidering } from './hjelp/kurateringskjeden'
 import { type KjortKuratering, kjorMigrasjoner, monografkurateringer } from './hjelp/testdatabase'
 
 const KURATERINGER = monografkurateringer()
@@ -46,9 +47,9 @@ describe.each(STOFFER)('%s', (stoff) => {
   const filer = KURATERINGER.filter((k) => k.stoff === stoff).map((k) => k.fil)
 
   it.each(filer)('%s endrer elementene på siden, og bare på den, når kuratoren finnes', (fil) => {
-    const endret = kjort.find((k) => k.fil === fil)?.endredeSider ?? {}
-    expect(Object.keys(endret)).toEqual([stoff])
-    expect(endret[stoff]).toBeGreaterThan(0)
+    const k = kjort.find((k) => k.fil === fil)!
+    expect(andreSider(k, stoff)).toEqual([])
+    expect(k.endredeSider[stoff]).toBeGreaterThan(0)
   })
 
   it('står uten upubliserte utkast', async () => {

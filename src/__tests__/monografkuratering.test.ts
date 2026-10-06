@@ -30,6 +30,7 @@ import {
   type Faginnholdskall,
   type KjortKuratering,
 } from './hjelp/testdatabase'
+import { andreSider } from './hjelp/kurateringskjeden'
 
 const MIGRASJONER = fileURLToPath(new URL('../../supabase/migrations', import.meta.url))
 const MAL = readFileSync(fileURLToPath(new URL('../../supabase/maler/monografkuratering.sql', import.meta.url)), 'utf8')
@@ -293,6 +294,17 @@ describe('monografkuratering med kuratorprofil', () => {
     const malen = await kjorKuratering(db, 'malen.sql', malFor('kildeside'))
     expect(malen.endredeSider).toEqual({ kildeside: 4 })
     expect(malen.nyeRevisjoner).toBeGreaterThanOrEqual(4)
+  })
+
+  it('regner et element som flyttes fra en annen side, som en endring av begge sidene', async () => {
+    const fra = await eksempelside(kall, 'Flyttekilde')
+    const til = await eksempelside(kall, 'Flyttemaal')
+    const flytt = `do $$ begin perform intern.kuratering_start('flyttemaal');
+      perform intern.kuratering_lagre('${fra.h1}', 1, '{"infoside": "${til.side}"}', 'Kurateringskilde'); end $$;`
+    const kjort = await kjorKuratering(db, 'flytt.sql', flytt)
+    expect(kjort.endredeSider).toEqual({ flyttekilde: 1, flyttemaal: 1 })
+    // Kjedetesten avviser den: kurateringen av flyttemaal har endret en annen side.
+    expect(andreSider(kjort, 'flyttemaal')).toEqual(['flyttekilde'])
   })
 
   it('stopper på et parallelt redaksjonelt kort med samme mål, før noe er endret', async () => {

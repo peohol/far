@@ -213,23 +213,33 @@ export interface KjortKuratering {
   /** Alle nye revisjoner, også av referansene. */
   nyeRevisjoner: number
   /**
-   * Nye revisjoner av elementene på hver fagside, etter nøkkelen til siden.
-   * En kuratering som bare legger inn referanser, endrer ingen side.
+   * Nye revisjoner av elementene (og sidene selv) etter nøkkelen til hver
+   * fagside de berører: siden et element sto på før kurateringen, og siden
+   * det står på etter. Et element som flyttes, berører begge. En kuratering
+   * som bare legger inn referanser, berører ingen side.
    */
   endredeSider: Record<string, number>
 }
 
-/** Revisjonene i alt, og revisjonene av elementene på hver fagside. */
-async function revisjonstall(db: PGlite): Promise<{ alle: number; sider: Record<string, number> }> {
-  const { rows } = await db.query<{ slug: string | null; n: number }>(
-    `select s.slug, count(*)::int as n
-     from public.objektrevisjoner r
-     left join public.innholdselementer e on e.objekt_id = r.objekt_id and e.tilstand = 'utkast'
-     left join public.infosider s on s.objekt_id = e.infoside_id and s.tilstand = 'publisert'
-     group by s.slug`,
+interface Revisjonstall {
+  /** Antall revisjoner per objekt. */
+  revisjoner: Map<string, number>
+  /** Fagsidene hvert element står på (utkast og publisert), og hver side selv. */
+  sider: Map<string, Set<string>>
+}
+
+async function revisjonstall(db: PGlite): Promise<Revisjonstall> {
+  const { rows: revisjoner } = await db.query<{ objekt_id: string; n: number }>(
+    `select objekt_id, count(*)::int as n from public.objektrevisjoner group by objekt_id`,
   )
-  const sider = Object.fromEntries(rows.flatMap((r) => (r.slug === null ? [] : [[r.slug, r.n]])))
-  return { alle: rows.reduce((sum, r) => sum + r.n, 0), sider }
+  const { rows: plasseringer } = await db.query<{ objekt_id: string; slug: string }>(
+    `select e.objekt_id, s.slug from public.innholdselementer e join public.infosider s on s.objekt_id = e.infoside_id
+     union
+     select objekt_id, slug from public.infosider`,
+  )
+  const sider = new Map<string, Set<string>>()
+  for (const { objekt_id, slug } of plasseringer) sider.set(objekt_id, (sider.get(objekt_id) ?? new Set()).add(slug))
+  return { revisjoner: new Map(revisjoner.map((r) => [r.objekt_id, r.n])), sider }
 }
 
 async function kjor(db: PGlite, fil: string, sql: string): Promise<void> {
@@ -245,10 +255,17 @@ export async function kjorKuratering(db: PGlite, fil: string, sql: string): Prom
   const for_ = await revisjonstall(db)
   await kjor(db, fil, sql)
   const etter = await revisjonstall(db)
-  const endredeSider = Object.fromEntries(
-    Object.entries(etter.sider).flatMap(([slug, n]) => (n > (for_.sider[slug] ?? 0) ? [[slug, n - (for_.sider[slug] ?? 0)]] : [])),
-  )
-  return { fil, nyeRevisjoner: etter.alle - for_.alle, endredeSider }
+  let nyeRevisjoner = 0
+  const endredeSider: Record<string, number> = {}
+  for (const [objekt, n] of etter.revisjoner) {
+    const nye = n - (for_.revisjoner.get(objekt) ?? 0)
+    if (nye <= 0) continue
+    nyeRevisjoner += nye
+    for (const slug of new Set([...(for_.sider.get(objekt) ?? []), ...(etter.sider.get(objekt) ?? [])])) {
+      endredeSider[slug] = (endredeSider[slug] ?? 0) + nye
+    }
+  }
+  return { fil, nyeRevisjoner, endredeSider }
 }
 
 /**

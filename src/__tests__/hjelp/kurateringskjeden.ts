@@ -73,6 +73,15 @@ export function inlineReferanser(verdi: unknown): string[] {
 }
 
 /**
+ * Fagsidene utenom `stoff` som kurateringen endret, også en side den har
+ * flyttet et element fra. Kjedetesten krever at listen er tom.
+ */
+export const andreSider = (kjort: KjortKuratering, stoff: string): string[] =>
+  Object.keys(kjort.endredeSider)
+    .filter((side) => side !== stoff)
+    .sort()
+
+/**
  * Det stoffspesifikke i `kurateringskjeden/<stoff>.ts`: en standardeksport som
  * registrerer testene av sluttresultatet, med databasen etter hele kjeden.
  */

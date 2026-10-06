@@ -57,8 +57,9 @@ utrullingen og kontrollen av historikken.
      kontrollerer navnet og siden.
    - `kurateringskjeden.test.ts` kjører hele kjeden én gang, i rekkefølge, fra
      den første importen med kuratoren på plass, slik produksjonen gjorde.
-     Hver kuratering skal endre elementene på sin egen side og ingen andre
-     (nye referanser alene teller ikke); siden skal stå uten upubliserte utkast og
+     Hver kuratering skal endre elementene på sin egen side og ingen andre,
+     heller ikke en side den flytter et element fra (nye referanser alene
+     teller ikke); siden skal stå uten upubliserte utkast og
      bare peke på publiserte referanser som finnes, én med hver lenke. Til
      slutt kjøres de som sjekker `kuratering_utfort` (som malen), på nytt, hver
      for seg, og skal ikke endre noe. En eldre kuratering uten den sjekken
