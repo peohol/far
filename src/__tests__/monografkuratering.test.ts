@@ -9,12 +9,17 @@ import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { beforeAll, describe, expect, it } from 'vitest'
+import { utenKommentarer } from '../faginnhold/sqlsetninger'
 import {
+  brukerKuratorhjelperne,
+  erMonografkuratering,
   faginnholdskall,
   feilFra,
+  KURATERINGER_MED_AVVIKENDE_NAVN,
+  KURATERINGSNAVN,
   migrasjonsfiler,
-  MONOGRAFKURATERING,
   nyDatabase,
+  PRODUKSJONSREFERANSER,
   opprettBruker,
   type Faginnholdskall,
 } from './hjelp/testdatabase'
@@ -115,18 +120,61 @@ async function forventStopp(db: PGlite, side: string, sql: string, melding: RegE
 }
 
 describe('monografkurateringene i migrasjonene', () => {
-  it('heter *_monografkuratering*.sql, så testene kjenner dem igjen', () => {
-    const medHjelperne = migrasjonsfiler().filter((f) =>
-      /(?<!function )intern\.kuratering_start\(/.test(readFileSync(`${MIGRASJONER}/${f}`, 'utf8')),
-    )
-    for (const fil of medHjelperne) expect(fil).toMatch(MONOGRAFKURATERING)
-    expect('20261003120000_sertralin_monografkuratering.sql').toMatch(MONOGRAFKURATERING)
-    // Hjelpefunksjonene selv er ingen kuratering og kjøres alltid.
-    expect(migrasjonsfiler().filter((f) => f.endsWith('_monografkuratering_hjelpere.sql'))).toHaveLength(1)
-    expect('20261002071332_monografkuratering_hjelpere.sql').not.toMatch(MONOGRAFKURATERING)
-    expect('20261002075626_monografkuratering_hjelpere_retting.sql').not.toMatch(MONOGRAFKURATERING)
-    expect('20261002082956_monografkuratering_hjelpere_referanselenke.sql').not.toMatch(MONOGRAFKURATERING)
-    expect('20261002110101_monografkuratering_hjelpere_arkiverte_utkast.sql').not.toMatch(MONOGRAFKURATERING)
+  const kurateringer = migrasjonsfiler().filter((f) => erMonografkuratering(f, readFileSync(`${MIGRASJONER}/${f}`, 'utf8')))
+
+  it('kjennes igjen på kallet til kuratorhjelperne, uansett navn', () => {
+    const medHjelperne = migrasjonsfiler().filter((f) => brukerKuratorhjelperne(readFileSync(`${MIGRASJONER}/${f}`, 'utf8')))
+    expect(medHjelperne.length).toBeGreaterThan(0)
+    for (const fil of medHjelperne) expect(kurateringer, fil).toContain(fil)
+    expect(medHjelperne).toContain('20261005173500_kvetiapin_konsentrasjoner_nmol_l.sql')
+  })
+
+  it('kjenner ikke igjen definisjonen av hjelperne, kommentarer om dem eller hjelpemigrasjonene', () => {
+    expect(brukerKuratorhjelperne("declare side uuid := intern.kuratering_start('kvetiapin');")).toBe(true)
+    expect(brukerKuratorhjelperne("select intern . kuratering_start ( 'ketamin' )")).toBe(true)
+    expect(brukerKuratorhjelperne("create or replace function intern.kuratering_start(p_slug text) returns uuid")).toBe(false)
+    expect(brukerKuratorhjelperne("comment on function intern.kuratering_start(text, text) is 'Logger inn';")).toBe(false)
+    expect(brukerKuratorhjelperne("-- kaller intern.kuratering_start('kvetiapin')\nselect 1;")).toBe(false)
+    expect(brukerKuratorhjelperne("/* intern.kuratering_start('kvetiapin') */ select 1;")).toBe(false)
+
+    const hjelpere = migrasjonsfiler().filter((f) => f.includes('_monografkuratering_hjelpere'))
+    expect(hjelpere).toHaveLength(4)
+    for (const fil of hjelpere) {
+      expect(fil).not.toMatch(KURATERINGSNAVN)
+      expect(kurateringer, fil).not.toContain(fil)
+    }
+  })
+
+  it('peker bare på referanser med produksjonens id når testene vet hvilken lenke id-en har', () => {
+    const iBruk = new Set<string>()
+    for (const fil of kurateringer) {
+      const sql = utenKommentarer(readFileSync(`${MIGRASJONER}/${fil}`, 'utf8'))
+      for (const [, id] of sql.matchAll(/"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"/g)) {
+        // En ny kuratering slår referansen opp med `intern.kuratering_referanse`.
+        expect(Object.keys(PRODUKSJONSREFERANSER), `${fil}: ${id}`).toContain(id)
+        iBruk.add(id!)
+      }
+    }
+    expect([...iBruk].sort()).toEqual(Object.keys(PRODUKSJONSREFERANSER).sort())
+  })
+
+  it('heter *_monografkuratering*.sql, bortsett fra de historiske avvikene, som ikke blir flere', () => {
+    expect('20261003120000_sertralin_monografkuratering.sql').toMatch(KURATERINGSNAVN)
+    expect('20261003120000_sertralin_monografkuratering_tillegg.sql').toMatch(KURATERINGSNAVN)
+    for (const fil of kurateringer) {
+      if (!KURATERINGER_MED_AVVIKENDE_NAVN.includes(fil)) expect(fil).toMatch(KURATERINGSNAVN)
+    }
+    // Allerede kjørt i produksjonen og dermed uforanderlige; en ny kuratering
+    // skal ha det vanlige navnet i stedet for å bli lagt til her.
+    expect(KURATERINGER_MED_AVVIKENDE_NAVN).toEqual([
+      '20261002040004_kvetiapin_farmakogenetikk_og_typografi.sql',
+      '20261004040353_kvetiapin_virkninger_og_avhengighet.sql',
+      '20261005173500_kvetiapin_konsentrasjoner_nmol_l.sql',
+    ])
+    for (const fil of KURATERINGER_MED_AVVIKENDE_NAVN) {
+      expect(migrasjonsfiler()).toContain(fil)
+      expect(fil).not.toMatch(KURATERINGSNAVN)
+    }
   })
 })
 
