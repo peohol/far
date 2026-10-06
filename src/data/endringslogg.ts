@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.80.6',
+    dato: '2026-10-06',
+    sammendrag: 'Byttbarheten i apotek viser bare det som faktisk gjelder i dag',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'I preparatvinduet regnes et preparat som byttbart med et annet først fra dagen FEST sier pakningen går inn i byttegruppen, ikke når byttet bare er meldt på forhånd.',
+      'Avregistrerte pakninger regnes ikke lenger med, verken som noe preparatet kan byttes med eller som byttbare selv.',
+      'Er alle pakningene et annet preparat har i byttegruppen, midlertidig utgått, står «(midlertidig utgått)» etter navnet.',
+      'Er bare noen av pakningene byttbare, og en annen pakning har samme størrelse og type, står varenummeret med, så det er tydelig hvilken det gjelder.',
+      'Pakninger der FEST oppgir størrelsen som for eksempel «98 x 1» (endosepakninger), viser nå hele størrelsen i stedet for bare «1 stk».',
+    ],
+  },
+  {
     versjon: '1.80.5',
     dato: '2026-10-06',
     sammendrag: 'Felles automatiske kontroller for alle fagsideoppdateringer fra kuratoren',

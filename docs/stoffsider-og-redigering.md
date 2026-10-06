@@ -23,7 +23,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [x] Arbeidspakke 9: seksjoner og detaljkort (progressiv detaljering).
 - [ ] Arbeidspakke 10: ekstern legemiddelgrunnmur (lokal kopi og synkronisering).
 - [ ] Arbeidspakke 11: preparater fra eksterne data, ende til ende.
-- [ ] Arbeidspakke 12: flere legemiddeldata der kildene er gode nok.
+- [x] Arbeidspakke 12: flere legemiddeldata der kildene er gode nok.
 - [ ] Arbeidspakke 13: regelvisninger og simulatorer i seksjonsarkitekturen.
 
 ---
@@ -1109,13 +1109,13 @@ Del 2, dagens sider:
 
 ## Arbeidspakke 12 - Flere legemiddeldata
 
-**Status:** [ ] Påbegynt. Reseptgruppe, administrasjonsvei, deling/knusing/åpning, preparatomtalen og interaksjonene er bygget; byttbarhet gjenstår.
+**Status:** [x] Ferdig 06.10.2026. Reseptgruppe, administrasjonsvei, deling/knusing/åpning, preparatomtalen, interaksjonene og byttbarheten er bygget. Feltene som ikke er tatt inn (f.eks. refusjon), er vurdert i `docs/legemiddeldata.md`.
 
 Ta inn de øvrige feltene i del 23 én etter én, der arbeidspakke 8 viser at kildedataene er gode nok og feltet har nytte i OUSFAR, for eksempel ATC, reseptstatus, markedsstatus, administrasjonsvei, byttbarhet, deling/knusing/åpning, lenke til preparatomtale og eventuelt interaksjoner.
 
 - [x] Reseptgruppe, administrasjonsvei, deling/knusing/åpning og lenke til preparatomtale på preparatene.
 - [x] Interaksjoner fra FEST, i egen seksjon, etter FESTs implementeringsveiledning.
-- [ ] Byttbarhet i klartekst.
+- [x] Byttbarhet i klartekst: hva hver styrke kan byttes med i apotek, med FESTs merknad, bare for byttegrupper og pakninger som gjelder i dag (`docs/legemiddeldata.md`).
 
 ## Arbeidspakke 13 - Regelvisninger og simulatorer i seksjonsarkitekturen
 

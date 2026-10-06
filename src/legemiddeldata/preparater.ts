@@ -12,7 +12,7 @@
  *   {@link GODKJENNINGSFRITAK}.
  */
 import { formaterTall } from '../faginnhold/paneler'
-import type { Mengde, Merkevaredata } from './fest'
+import type { Mengde, Merkevaredata, Pakningsdata, Pakningsinnhold } from './fest'
 import type { Legemiddelutvalg } from './lesing'
 
 /** Preparattypen FEST bruker for preparater som krever godkjenningsfritak. */
@@ -26,7 +26,7 @@ export interface Preparatpakning {
   tekst: string
   /** Datoen pakningen er meldt midlertidig utgått, når den er det. */
   midlertidig_utgatt: string | null
-  /** Byttegruppene i FEST pakningen hører til. */
+  /** Byttegruppene i FEST pakningen hører til i dag ({@link gjeldendeByttegrupper}). */
   byttegrupper: string[]
 }
 
@@ -64,31 +64,69 @@ export function virkestoffI(m: Merkevaredata, styrker: ReadonlyMap<string, { vir
 }
 
 /**
+ * Om en periode i FEST gjelder `idag`, med første og siste dag. Datoene er
+ * `ÅÅÅÅ-MM-DD`, eventuelt med klokkeslett, og sammenlignes som tekst. Mangler
+ * en grense, er perioden åpen den veien.
+ */
+export function gjelderIdag(fra: string | null | undefined, til: string | null | undefined, idag: string): boolean {
+  const dag = (dato: string | null | undefined) => dato?.slice(0, 10) || null
+  const f = dag(fra)
+  const t = dag(til)
+  return (!f || f <= idag) && (!t || t >= idag)
+}
+
+/**
+ * Byttegruppene pakningen hører til `idag`: ikke før dagen den går inn i
+ * gruppen (FEST melder nye byttbarheter på forhånd), og ingen når pakningen
+ * er avregistrert. Gruppens egen gyldighet sjekkes for seg.
+ */
+export function gjeldendeByttegrupper(
+  p: Pick<Pakningsdata, 'byttegrupper' | 'byttegrupper_fra' | 'avregistrert_dato'>,
+  idag: string,
+): string[] {
+  // Avregistreringsdatoen er den første dagen pakningen ikke er på markedet.
+  const avregistrert = p.avregistrert_dato?.slice(0, 10)
+  if (avregistrert && avregistrert <= idag) return []
+  return p.byttegrupper.filter((id) => gjelderIdag(p.byttegrupper_fra?.[id], null, idag))
+}
+
+/**
  * Pakningene til hver merkevare, med størrelse, pakningstype og varenummer.
  */
-export function pakningerPerMerkevare(utvalg: Legemiddelutvalg): Map<string, Preparatpakning[]> {
+export function pakningerPerMerkevare(utvalg: Legemiddelutvalg, idag: string): Map<string, Preparatpakning[]> {
   const pakningerFor = new Map<string, Preparatpakning[]>()
   for (const p of utvalg.pakninger) {
     for (const innhold of p.innhold) {
-      // Noen pakninger oppgir mengden i stedet for pakningsstørrelsen.
-      const storrelse = innhold.pakningsstorrelse ?? innhold.mengde
+      const storrelse = pakningsstorrelse(innhold)
       const liste = pakningerFor.get(innhold.merkevare_id) ?? []
       liste.push({
         id: p.id,
         varenr: p.varenr,
         tekst: [
-          storrelse !== null && `${formaterTall(storrelse)} ${innhold.enhet?.kode ?? ''}`.trim(),
+          storrelse !== null && `${storrelse} ${innhold.enhet?.kode ?? ''}`.trim(),
           innhold.pakningstype?.tekst.toLocaleLowerCase('nb'),
         ]
           .filter(Boolean)
           .join(', '),
         midlertidig_utgatt: p.midlertidig_utgatt_dato,
-        byttegrupper: p.byttegrupper,
+        byttegrupper: gjeldendeByttegrupper(p, idag),
       })
       pakningerFor.set(innhold.merkevare_id, liste)
     }
   }
   return pakningerFor
+}
+
+/**
+ * Størrelsen på pakningen som tekst: tallet; FESTs egen tekst når størrelsen
+ * ikke er ett tall, f.eks. «98 x 1» for en endosepakning; ellers antall og
+ * mengde, eller bare mengden, som noen pakninger oppgir i stedet.
+ */
+function pakningsstorrelse(i: Pakningsinnhold): string | null {
+  if (i.pakningsstorrelse !== null) return formaterTall(i.pakningsstorrelse)
+  if (i.pakningsstorrelse_tekst) return i.pakningsstorrelse_tekst
+  if (i.mengde === null) return null
+  return i.antall === null ? formaterTall(i.mengde) : `${formaterTall(i.antall)} x ${formaterTall(i.mengde)}`
 }
 
 /**

@@ -99,7 +99,7 @@ describe('preparatmodellen med utdraget fra FEST', () => {
 
   it('mister ingenting fra FEST: alle merkevarer, pakninger og lenker står i detaljene', () => {
     const nye = [...visning.preparater.values()]
-    const pakninger = pakningerPerMerkevare(amitriptylin)
+    const pakninger = pakningerPerMerkevare(amitriptylin, '2026-01-01')
     expect(nye.flatMap((p) => p.styrker.flatMap((s) => s.pakninger.map((k) => k.id))).sort()).toEqual(
       [...new Set(amitriptylin.merkevarer.flatMap((m) => (pakninger.get(m.id) ?? []).map((k) => k.id)))].sort(),
     )
@@ -205,7 +205,13 @@ function merkevare(id: string, varenavn: string, styrker: string[], felt: Partia
   }
 }
 
-function pakning(id: string, merkevare_id: string, byttegrupper: string[] = [], storrelse = 100): MedId<Pakningsdata> {
+function pakning(
+  id: string,
+  merkevare_id: string,
+  byttegrupper: string[] = [],
+  storrelse = 100,
+  felt: Partial<Pakningsdata> = {},
+): MedId<Pakningsdata> {
   return {
     id,
     varenr: id.toUpperCase(),
@@ -219,6 +225,7 @@ function pakning(id: string, merkevare_id: string, byttegrupper: string[] = [], 
     avregistrert_dato: null,
     byttegrupper,
     ean: [],
+    ...felt,
   }
 }
 
@@ -416,7 +423,14 @@ describe('byttbarhet i apotek', () => {
       byttegrupper: [byttegruppe('g1')],
     }
     expect(bytte(u)).toEqual([
-      { kode: 'g1', gruppe: 'TESTMIDDEL TABLETT g1', med: ['Beta m2', 'Gamma m3'], pakninger: null, merknad: null },
+      {
+        kode: 'g1',
+        gruppe: 'TESTMIDDEL TABLETT g1',
+        med: ['Beta m2', 'Gamma m3'],
+        midlertidig_utgatt: [],
+        pakninger: null,
+        merknad: null,
+      },
     ])
     expect(bytte(u, '53:Gamma').map((b) => b.med)).toEqual([['Alfa m1', 'Beta m2']])
   })
@@ -466,6 +480,74 @@ describe('byttbarhet i apotek', () => {
     expect(gyldigByttegruppe({ gyldig_fra: '2026-09-25T00:00:00', gyldig_til: null }, IDAG)).toBe(true)
   })
 
+  it('regner en pakning med i gruppen først fra dagen FEST sier den går inn i den', () => {
+    const u = (fra: string | undefined) => ({
+      ...utvalg([styrke('s1', 'mor')], tre),
+      pakninger: [
+        pakning('p1', 'm1', ['g1']),
+        pakning('p2', 'm2', ['g1'], 100, { byttegrupper_fra: fra ? { g1: fra } : {} }),
+        pakning('p3', 'm3', ['g1'], 100, { byttegrupper_fra: { g1: '2020-01-01' } }),
+      ],
+      byttegrupper: [byttegruppe('g1')],
+    })
+    expect(bytte(u('2026-09-26'))[0]!.med).toEqual(['Gamma m3'])
+    expect(bytte(u('2026-09-26'), '53:Beta')).toEqual([])
+    expect(bytte(u(IDAG))[0]!.med).toEqual(['Beta m2', 'Gamma m3'])
+    expect(bytte(u('2026-09-25T00:00:00'))[0]!.med).toEqual(['Beta m2', 'Gamma m3'])
+    // Rader lest før FEST-datoen ble tatt med, har ingen dato: da gjelder gruppen.
+    expect(bytte(u(undefined))[0]!.med).toEqual(['Beta m2', 'Gamma m3'])
+  })
+
+  it('regner ikke med avregistrerte pakninger, verken som egne eller andres', () => {
+    const u = (avregistrert_dato: string) => ({
+      ...utvalg([styrke('s1', 'mor')], tre),
+      pakninger: [
+        pakning('p1', 'm1', ['g1']),
+        pakning('p2', 'm2', ['g1'], 100, { avregistrert_dato }),
+        pakning('p3', 'm3', ['g1']),
+      ],
+      byttegrupper: [byttegruppe('g1')],
+    })
+    expect(bytte(u(IDAG))[0]!.med).toEqual(['Gamma m3'])
+    expect(bytte(u('2026-01-01'), '53:Beta')).toEqual([])
+    // Er avregistreringen fram i tid, er pakningen fortsatt på markedet.
+    expect(bytte(u('2026-09-26'))[0]!.med).toEqual(['Beta m2', 'Gamma m3'])
+  })
+
+  it('sier fra når et preparat bare har midlertidig utgåtte pakninger i gruppen', () => {
+    const u = {
+      ...utvalg([styrke('s1', 'mor')], tre),
+      pakninger: [
+        pakning('p1', 'm1', ['g1']),
+        pakning('p2', 'm2', ['g1'], 100, { midlertidig_utgatt_dato: '2026-09-01' }),
+        pakning('p3', 'm3', ['g1'], 100, { midlertidig_utgatt_dato: '2026-09-01' }),
+        // Gamma har en annen pakning i gruppen som ikke er utgått.
+        pakning('p3b', 'm3', ['g1'], 20),
+        // En utgått pakning utenfor gruppen teller ikke.
+        pakning('p2b', 'm2', [], 20),
+      ],
+      byttegrupper: [byttegruppe('g1')],
+    }
+    const [b] = bytte(u)
+    expect(b!.midlertidig_utgatt).toEqual(['Beta m2'])
+    expect(byttbarhetstekst(b!)).toBe('Byttbar i apotek med Beta m2 (midlertidig utgått) og Gamma m3.')
+  })
+
+  it('oppgir varenummeret når en pakning utenfor gruppen har samme tekst', () => {
+    const u = {
+      ...utvalg([styrke('s1', 'mor')], tre),
+      pakninger: [
+        pakning('p1', 'm1', ['g1'], 20),
+        pakning('p1b', 'm1', [], 20),
+        pakning('p1c', 'm1', ['g1'], 100),
+        pakning('p1d', 'm1', [], 30),
+        pakning('p2', 'm2', ['g1'], 20),
+      ],
+      byttegrupper: [byttegruppe('g1')],
+    }
+    expect(bytte(u)[0]!.pakninger).toEqual(['20 stk (varenr. P1)', '100 stk'])
+  })
+
   it('tar med FESTs merknad bare når gruppen har merknad til byttbarheten', () => {
     const u = (felt: Partial<Byttegruppedata>) => ({
       ...utvalg([styrke('s1', 'mor')], tre),
@@ -485,6 +567,9 @@ describe('byttbarhet i apotek', () => {
     expect(byttbarhetstekst({ med: ['A', 'B'], pakninger: ['20 stk'] })).toBe('Pakningen 20 stk er byttbar i apotek med A og B.')
     expect(byttbarhetstekst({ med: ['A'], pakninger: ['20 stk', '100 stk'] })).toBe(
       'Pakningene 20 stk og 100 stk er byttbare i apotek med A.',
+    )
+    expect(byttbarhetstekst({ med: ['A', 'B'], midlertidig_utgatt: ['A'], pakninger: null })).toBe(
+      'Byttbar i apotek med A (midlertidig utgått) og B.',
     )
   })
 })

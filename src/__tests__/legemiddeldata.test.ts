@@ -176,6 +176,10 @@ describe('lesingen av FEST', () => {
       innhold: [expect.objectContaining({ merkevare_id: expect.stringMatching(/^ID_/), enhet: expect.anything() })],
       markedsforingsdato: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
     })
+    // Dagen pakningen går inn i byttegruppen, per gruppe.
+    const { byttegrupper, byttegrupper_fra } = pakning!.data as { byttegrupper: string[]; byttegrupper_fra: Record<string, string> }
+    expect(Object.keys(byttegrupper_fra)).toEqual(byttegrupper)
+    expect(Object.values(byttegrupper_fra).every((d) => /^\d{4}-\d{2}-\d{2}$/.test(d))).toBe(true)
   })
 
   it('tåler prefikser og navnerom, og at teksten deles hvor som helst', async () => {
