@@ -58,7 +58,7 @@ export default function citalopram(db: () => PGlite): void {
       'Når farmakogenetisk analyse er relevant',
     ])
     expect(interaksjoner).toHaveLength(1)
-    expect(tekst(interaksjoner[0].data)).toContain('hentes automatisk')
+    expect(tekst(interaksjoner[0]!.data)).toContain('hentes automatisk')
     expect(tdm.map((e) => String(e.data.tittel))).toEqual([
       'Prøvetakingstidspunkt',
       'Grunnlag for referanseområdet',
