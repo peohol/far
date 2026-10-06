@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.80.2',
+    dato: '2026-10-06',
+    sammendrag: 'De automatiske kontrollene av fagsideoppdateringer er rettet og grønne igjen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    utenVarsel: true,
+    punkter: [
+      'De automatiske kontrollene som prøver oppdateringene av fagsidene før de slås sammen, kjører nå oppdateringene én gang og i samme rekkefølge som i appen, slik at de igjen kan godkjenne nye endringer.',
+      'Kvetiapinsiden er kontrollert slik den faktisk står i appen, også med konsentrasjonene i nmol/L. Ingenting i appen eller på fagsidene er endret.',
+    ],
+  },
+  {
     versjon: '1.80.1',
     dato: '2026-10-05',
     sammendrag: 'Databaseendringer rulles ut automatisk når endringen slås sammen',

@@ -1,5 +1,7 @@
 /** Kvetiapin-monografkurateringen: fersk kildevurdering av farmakodynamikk, dosering og farmakokinetikk. */
 import type { PGlite } from '@electric-sql/pglite'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
@@ -11,6 +13,7 @@ const FULLFORING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monograf
 const FERSK_KJORING = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_fersk_kjoring.sql'))!
 const KONSENTRASJONER_NMOL = migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_konsentrasjoner_nmol_l.sql'))!
 const FORSTE_IMPORTMIGRASJON = '20260923072247'
+const MIGRASJONER = fileURLToPath(new URL('../../supabase/migrations', import.meta.url))
 
 interface Element {
   objekt_id: string
@@ -54,12 +57,39 @@ function inlineReferanser(verdi: unknown): string[] {
   return Object.values(node).flatMap(inlineReferanser)
 }
 
+/** Kvetiapinkurateringene, i rekkefølgen produksjonen kjørte dem. */
+const KVETIAPINKURATERINGER = [
+  FORSTE_KURATERING,
+  KORRIGERING,
+  TILLEGG,
+  VIRKNINGER_OG_AVHENGIGHET,
+  FULLFORING,
+  migrasjonsfiler().find((f) => f.endsWith('_kvetiapin_monografkuratering_avhengighet_inline.sql'))!,
+  FERSK_KJORING,
+  KONSENTRASJONER_NMOL,
+]
+
+/** Kurateringene som selv sier fra når de alt er gjort (`intern.kuratering_utfort`). */
+const SELVSJEKKENDE = KVETIAPINKURATERINGER.filter((f) =>
+  readFileSync(`${MIGRASJONER}/${f}`, 'utf8').includes('intern.kuratering_utfort('),
+)
+
+async function antall(db: PGlite, tabell: 'objektrevisjoner' | 'referanser'): Promise<number> {
+  const { rows } = await db.query<{ n: number }>(`select count(*)::int as n from public.${tabell}`)
+  return rows[0]!.n
+}
+
 describe('kvetiapinmigrasjoner uten kuratorprofil', () => {
-  it('hopper over fagoppdateringene på en helt fersk database', async () => {
-    const tom = await nyDatabase({ til: FORSTE_KURATERING })
-    await expect(
-      kjorMigrasjoner(tom, { bare: [FORSTE_KURATERING, KORRIGERING, TILLEGG, VIRKNINGER_OG_AVHENGIGHET, FULLFORING, FERSK_KJORING, KONSENTRASJONER_NMOL] }),
-    ).resolves.toBeUndefined()
+  it('gjør ingenting i den vanlige kronologiske kjeden, der hjelpefunksjonene finnes før kurateringene', async () => {
+    expect(KVETIAPINKURATERINGER.every(Boolean)).toBe(true)
+    expect(KVETIAPINKURATERINGER).toEqual([...KVETIAPINKURATERINGER].sort())
+
+    // Uten profiler hopper ikke testdatabasen over noen kuratering: alle kjøres, i rekkefølge.
+    const tom = await nyDatabase()
+    const { rows } = await tom.query<{ n: number }>(
+      `select count(*)::int as n from public.objektrevisjoner where kilde ilike '%kuratering%kvetiapin%'`,
+    )
+    expect(rows[0]!.n).toBe(0)
     await tom.close()
   }, 240_000)
 })
@@ -151,14 +181,8 @@ describe('kvetiapin-monografkuratering', () => {
   beforeAll(async () => {
     db = await nyDatabase({ til: FORSTE_IMPORTMIGRASJON })
     await opprettBruker(db, { brukernavn: 'peohol', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
-    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, til: KONSENTRASJONER_NMOL, kurateringer: true })
-
-    // Begge kvetiapinoppdateringene skal tåle å kjøres på nytt.
-    await kjorMigrasjoner(db, { bare: [KORRIGERING] })
-    await kjorMigrasjoner(db, { bare: [TILLEGG] })
-    await kjorMigrasjoner(db, { bare: [TILLEGG] })
-    await kjorMigrasjoner(db, { bare: [VIRKNINGER_OG_AVHENGIGHET] })
-    await kjorMigrasjoner(db, { bare: [FULLFORING] })
+    // Hele kjeden, én gang og i rekkefølge, slik produksjonen kjørte den.
+    await kjorMigrasjoner(db, { fra: FORSTE_IMPORTMIGRASJON, kurateringer: true })
 
     farmakodynamikk = await elementer(db, 'farmakodynamikk')
     dosering = await elementer(db, 'dosering')
@@ -418,6 +442,12 @@ describe('kvetiapin-monografkuratering', () => {
   })
 
   it('viser alle redaksjonelle kvetiapinkonsentrasjoner som nmol/L', async () => {
+    const { rows: kjort } = await db.query<{ n: number }>(
+      `select count(*)::int as n from public.objektrevisjoner
+       where kilde = 'Monografkuratering av kvetiapin 05.10.2026: konsentrasjoner standardisert til nmol/L'`,
+    )
+    expect(kjort[0]!.n).toBe(2)
+
     const toksiske = toksisitet.find((e) => e.data.tittel === 'Toksiske konsentrasjoner')!
     expect(tekst(toksiske.data)).toContain('10 400 nmol/L')
     expect(tekst(toksiske.data)).toContain('5 200 nmol/L')
@@ -549,5 +579,16 @@ describe('kvetiapin-monografkuratering', () => {
 
     expect(rows).toHaveLength(lenker.length)
     for (const r of rows) expect(r.n, r.lenke).toBe(1)
+  })
+
+  // Sist, siden den kjører migrasjoner på nytt. Bare kurateringene som selv
+  // sjekker `intern.kuratering_utfort` lover å tåle det; de eldre gjør det ikke.
+  it('kurateringene som sjekker om de alt er gjort, endrer ingenting når de kjøres på nytt', async () => {
+    expect(SELVSJEKKENDE).toEqual(KVETIAPINKURATERINGER.slice(3))
+    const revisjoner = await antall(db, 'objektrevisjoner')
+    const referanser = await antall(db, 'referanser')
+    await kjorMigrasjoner(db, { bare: SELVSJEKKENDE })
+    expect(await antall(db, 'objektrevisjoner')).toBe(revisjoner)
+    expect(await antall(db, 'referanser')).toBe(referanser)
   })
 })

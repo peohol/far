@@ -39,8 +39,12 @@ utrullingen og kontrollen av historikken.
 2. **Migrasjonen.** Kopier `supabase/maler/monografkuratering.sql` til
    `supabase/migrations/<versjon>_<stoff>_monografkuratering.sql` (et tillegg:
    `…_monografkuratering_<hva>.sql`) og fyll inn preflighten og endringene.
-   Navnet er det testene kjenner kurateringene igjen på. Hjelpefunksjonene (under) gjør kontrollene; skriv
-   dem ikke for hånd. Hele migrasjonen er én transaksjon: stopper en kontroll,
+   Testene kjenner kurateringene igjen på kallet til `intern.kuratering_start()`,
+   men navnet er påkrevd for nye; bare tre eldre kvetiapinmigrasjoner avviker
+   (`KURATERINGER_MED_AVVIKENDE_NAVN` i `src/__tests__/hjelp/testdatabase.ts`),
+   og den listen skal ikke vokse. Hjelpefunksjonene (under) gjør kontrollene; skriv
+   dem ikke for hånd. Referanser slås opp med `kuratering_referanse`, aldri med
+   id-en de har i produksjonen. Hele migrasjonen er én transaksjon: stopper en kontroll,
    er ingenting endret.
 
 3. **Test.** `npm test` kjører alle migrasjonene på en tom database uten
@@ -50,8 +54,10 @@ utrullingen og kontrollen av historikken.
    `src/__tests__/hjelp/testdatabase.ts`), siden preflighten deres gjelder
    produksjonen. Skal selve endringene prøves, bygges siden slik preflighten
    fant den i testen, som `monografkuratering.test.ts` gjør for malen, eller
-   kjedene kjøres fra den første importen med `kurateringer: true`, som
-   `kvetiapin-monograf.test.ts` gjør. Kjør også `npm run build`.
+   hele kjeden kjøres én gang, i rekkefølge, fra den første importen med
+   `kurateringer: true`, som `kvetiapin-monograf.test.ts` gjør. En eldre
+   kuratering kjøres ikke på nytt etter senere kurateringer; bare de som selv
+   sjekker `kuratering_utfort`, lover å tåle det. Kjør også `npm run build`.
 
 4. **Utrullingen.** Når preflight og testene er bestått, slås PR-en sammen, og
    GitHub Actions ruller migrasjonen ut til produksjonen og kontrollerer

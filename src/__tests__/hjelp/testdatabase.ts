@@ -15,6 +15,7 @@ import { expect } from 'vitest'
 import { INTERN_AUTH_DOMENE } from '@delt/brukernavn'
 import type { Rolle } from '@delt/profil'
 import type { Innhold, Objektstatus, Objekttype } from '../../faginnhold/modell'
+import { utenKommentarer } from '../../faginnhold/sqlsetninger'
 
 const MIGRASJONER = fileURLToPath(new URL('../../../supabase/migrations', import.meta.url))
 
@@ -73,15 +74,74 @@ const SUPABASE_GRUNNLAG = /* sql */ `
 const BARE_I_PRODUKSJON = /_(oppgaver_utfort_1_56_0|koble_infosider_til_fest_virkestoff)\.sql$/
 
 /**
- * Monografkurateringene (`docs/monografkuratering.md`): datamigrasjonene som
- * endrer en stoffside etter en kuratering, bundet til tilstanden siden hadde i
- * produksjonen. Uten kuratorprofil gjør de ingenting, og der kjøres de som alle
- * andre. Med kuratoren speiler bare en database som er bygd fra den første
- * importen, produksjonen, så der kjøres de bare når testen ber om det
- * (`kurateringer`, eller filen i `bare`): ellers ville preflighten deres
- * stoppe enhver test som setter opp sider på sin egen måte.
+ * Navnet en ny monografkuratering skal ha (`docs/monografkuratering.md`):
+ * `*_monografkuratering*.sql`, men ikke hjelpefunksjonene
+ * (`*_monografkuratering_hjelpere*.sql`), som alltid kjøres.
  */
-export const MONOGRAFKURATERING = /_monografkuratering(?!_hjelpere)(_[a-z0-9_]+)?\.sql$|_kvetiapin_farmakogenetikk_og_typografi\.sql$|_kvetiapin_virkninger_og_avhengighet\.sql$/
+export const KURATERINGSNAVN = /_monografkuratering(?!_hjelpere)(_[a-z0-9_]+)?\.sql$/
+
+/**
+ * Kurateringer som alt er kjørt i produksjonen uten å følge navnet. Migrasjonene
+ * endres aldri etterpå, så de står her for godt; listen skal ikke vokse. Den
+ * første (`040004`) er fra før hjelpefunksjonene og har sin egen preflight.
+ */
+export const KURATERINGER_MED_AVVIKENDE_NAVN: readonly string[] = [
+  '20261002040004_kvetiapin_farmakogenetikk_og_typografi.sql',
+  '20261004040353_kvetiapin_virkninger_og_avhengighet.sql',
+  '20261005173500_kvetiapin_konsentrasjoner_nmol_l.sql',
+]
+
+/**
+ * Et kall til `intern.kuratering_start(…)` utenfor kommentarene — ikke
+ * definisjonen av funksjonen (`create … function`) eller kommentaren på den
+ * (`comment on function`).
+ */
+const KURATERINGSSTART = /(?<!\bfunction\s+)\bintern\s*\.\s*kuratering_start\s*\(/i
+
+/** Om migrasjonen kaller `intern.kuratering_start()`, altså er bygd på kuratorhjelperne. */
+export const brukerKuratorhjelperne = (sql: string): boolean =>
+  /kuratering_start/i.test(sql) && KURATERINGSSTART.test(utenKommentarer(sql))
+
+/**
+ * Monografkurateringene: datamigrasjonene som endrer en stoffside etter en
+ * kuratering, bundet til tilstanden siden hadde i produksjonen. Kjent igjen på
+ * at de kaller `intern.kuratering_start()`, på navnet, eller fordi de står i
+ * `KURATERINGER_MED_AVVIKENDE_NAVN`. Uten kuratorprofil gjør de ingenting, og
+ * der kjøres de som alle andre. Med kuratoren speiler bare en database som er
+ * bygd fra den første importen, produksjonen, så der kjøres de bare når testen
+ * ber om det (`kurateringer`, eller filen i `bare`): ellers ville preflighten
+ * deres stoppe enhver test som setter opp sider på sin egen måte.
+ */
+export function erMonografkuratering(fil: string, sql: string): boolean {
+  return KURATERINGSNAVN.test(fil) || KURATERINGER_MED_AVVIKENDE_NAVN.includes(fil) || brukerKuratorhjelperne(sql)
+}
+
+/**
+ * Referanser en kuratering har skrevet inn med id-en de har i produksjonen, i
+ * stedet for å slå dem opp på lenken med `intern.kuratering_referanse`. En
+ * database bygd fra importene gir de samme referansene andre id-er, så før en
+ * slik kuratering kjøres med kuratoren, byttes id-en mot den publiserte
+ * referansen med samme lenke, slik produksjonen har dem (kontrollert der
+ * 06.10.2026). Finnes ikke nøyaktig én slik referanse, står id-en, og
+ * migrasjonen stopper som den ville gjort i produksjonen.
+ */
+export const PRODUKSJONSREFERANSER: Readonly<Record<string, string>> = {
+  'b06bea10-ecbc-4554-ab46-fa2ec023aa7f': 'https://doi.org/10.3390/jox14040085',
+  '4cb30ebd-5b65-4c81-9faa-1db2739c10b9': 'https://doi.org/10.1093/jat/bkv072',
+}
+
+async function medTestensReferanser(db: PGlite, sql: string): Promise<string> {
+  let ut = sql
+  for (const [id, lenke] of Object.entries(PRODUKSJONSREFERANSER)) {
+    if (!ut.includes(id)) continue
+    const { rows } = await db.query<{ objekt_id: string }>(
+      `select objekt_id from public.referanser where tilstand = 'publisert' and lenke = $1`,
+      [lenke],
+    )
+    if (rows.length === 1) ut = ut.replaceAll(id, rows[0]!.objekt_id)
+  }
+  return ut
+}
 
 /**
  * En bivirkningsimport (`docs/bivirkninger.md`) gjelder en fagside som
@@ -113,7 +173,7 @@ export function migrasjonsfiler(): string[] {
  * Kjører migrasjonene fra og med `fra` til, men ikke med, `til` — begge
  * filnavnprefikser — eller bare filene i `bare`. Uten grenser kjøres alle.
  * Monografkurateringene hoppes over når kuratoren finnes, med mindre
- * `kurateringer` er satt (se `MONOGRAFKURATERING`), og en bivirkningsimport
+ * `kurateringer` er satt (se `erMonografkuratering`), og en bivirkningsimport
  * når fagsiden den gjelder, ikke finnes (se `BIVIRKNINGSIMPORT`).
  */
 export async function kjorMigrasjoner(
@@ -128,8 +188,12 @@ export async function kjorMigrasjoner(
   for (const fil of migrasjonsfiler()) {
     if (BARE_I_PRODUKSJON.test(fil)) continue
     if (bare ? !bare.includes(fil) : fil < fra || (til !== undefined && fil >= til)) continue
-    if (!bare && !kurateringer && MONOGRAFKURATERING.test(fil) && (await harKurator(db))) continue
-    const sql = readFileSync(`${MIGRASJONER}/${fil}`, 'utf8')
+    let sql = readFileSync(`${MIGRASJONER}/${fil}`, 'utf8')
+    if (erMonografkuratering(fil, sql)) {
+      if (!bare && !kurateringer) {
+        if (await harKurator(db)) continue
+      } else sql = await medTestensReferanser(db, sql)
+    }
     const importert = !bare && BIVIRKNINGSIMPORT.exec(sql)?.[1]
     if (importert && !(await harFagside(db, importert))) continue
     try {
