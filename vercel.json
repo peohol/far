@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": ["arn1"],
   "crons": [
     { "path": "/api/legemiddeldata-synk", "schedule": "15 4 * * *" },
     { "path": "/api/clinpgx-synk", "schedule": "30 2 * * 1" },

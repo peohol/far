@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.80.3',
+    dato: '2026-10-06',
+    sammendrag: 'Serverjobbene kjører nå i Stockholm, ved siden av databasen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    utenVarsel: true,
+    punkter: [
+      'De nattlige og ukentlige oppdateringene av legemiddeldata og farmakogenetikk kjører nå i Stockholm, der databasen ligger, i stedet for i USA. Det gir kortere vei mellom dem. Ingenting i appen ser annerledes ut.',
+    ],
+  },
+  {
     versjon: '1.80.2',
     dato: '2026-10-06',
     sammendrag: 'De automatiske kontrollene av fagsideoppdateringer er rettet og grønne igjen',
