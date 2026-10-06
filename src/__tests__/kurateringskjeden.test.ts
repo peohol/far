@@ -49,9 +49,18 @@ describe.each(STOFFER)('%s', (stoff) => {
   })
 
   it('står uten upubliserte utkast', async () => {
-    const side = await elementer(db, stoff)
-    expect(side.length).toBeGreaterThan(0)
-    for (const e of side) expect(e.utkast, `${e.panel} ${e.objekt_id}`).toBe(e.publisert)
+    expect((await elementer(db, stoff)).length).toBeGreaterThan(0)
+    // Fra utkastsradene, så et element som bare finnes som utkast, også kommer med.
+    const { rows } = await db.query<{ objekt_id: string; panel: string; utkast: number; publisert: number | null }>(
+      `select e.objekt_id, e.panel, u.revisjon as utkast, p.revisjon as publisert
+       from public.innholdselementer e
+       join public.infosider s on s.objekt_id = e.infoside_id and s.tilstand = 'publisert' and s.slug = $1
+       join public.objekttilstander u on u.objekt_id = e.objekt_id and u.tilstand = 'utkast'
+       left join public.objekttilstander p on p.objekt_id = e.objekt_id and p.tilstand = 'publisert'
+       where e.tilstand = 'utkast' and p.revisjon is distinct from u.revisjon`,
+      [stoff],
+    )
+    expect(rows).toEqual([])
   })
 
   it('peker bare på publiserte referanser som finnes, og bare én med hver lenke', async () => {
