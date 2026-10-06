@@ -531,6 +531,13 @@ describe('byttbarhet i apotek', () => {
     const [b] = bytte(u)
     expect(b!.midlertidig_utgatt).toEqual(['Beta m2'])
     expect(byttbarhetstekst(b!)).toBe('Byttbar i apotek med Beta m2 (midlertidig utgått) og Gamma m3.')
+    // Fra og med datoen, ikke før: en dato fram i tid er bare meldt.
+    expect(bytte(u, '53:Alfa', '2026-09-01')[0]!.midlertidig_utgatt).toEqual(['Beta m2'])
+    expect(bytte(u, '53:Alfa', '2026-08-31')[0]!.midlertidig_utgatt).toEqual([])
+    const pakninger = (idag: string) =>
+      byggPreparatvisning(u, ['mor'], idag).preparater.get('53:Beta')!.styrker[0]!.pakninger.map((p) => p.midlertidig_utgatt)
+    expect(pakninger('2026-08-31')).toEqual([null, null])
+    expect(pakninger(IDAG)).toEqual([null, '2026-09-01'])
   })
 
   it('oppgir varenummeret når en pakning utenfor gruppen har samme tekst', () => {

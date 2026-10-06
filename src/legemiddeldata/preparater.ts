@@ -24,7 +24,7 @@ export interface Preparatpakning {
   varenr: string
   /** F.eks. «100 stk, blisterpakning». */
   tekst: string
-  /** Datoen pakningen er meldt midlertidig utgått, når den er det. */
+  /** Datoen pakningen er meldt midlertidig utgått, når den er det i dag ({@link midlertidigUtgatt}). */
   midlertidig_utgatt: string | null
   /** Byttegruppene i FEST pakningen hører til i dag ({@link gjeldendeByttegrupper}). */
   byttegrupper: string[]
@@ -76,6 +76,15 @@ export function gjelderIdag(fra: string | null | undefined, til: string | null |
 }
 
 /**
+ * Datoen pakningen ble midlertidig utgått, når den er det `idag`. En dato
+ * fram i tid er bare meldt, og pakningen er fortsatt å få.
+ */
+export function midlertidigUtgatt(p: Pick<Pakningsdata, 'midlertidig_utgatt_dato'>, idag: string): string | null {
+  const dato = p.midlertidig_utgatt_dato
+  return dato && gjelderIdag(dato, null, idag) ? dato : null
+}
+
+/**
  * Byttegruppene pakningen hører til `idag`: ikke før dagen den går inn i
  * gruppen (FEST melder nye byttbarheter på forhånd), og ingen når pakningen
  * er avregistrert. Gruppens egen gyldighet sjekkes for seg.
@@ -108,7 +117,7 @@ export function pakningerPerMerkevare(utvalg: Legemiddelutvalg, idag: string): M
         ]
           .filter(Boolean)
           .join(', '),
-        midlertidig_utgatt: p.midlertidig_utgatt_dato,
+        midlertidig_utgatt: midlertidigUtgatt(p, idag),
         byttegrupper: gjeldendeByttegrupper(p, idag),
       })
       pakningerFor.set(innhold.merkevare_id, liste)

@@ -40,6 +40,7 @@ import {
   gjelderIdag,
   GODKJENNINGSFRITAK,
   handteringFor,
+  midlertidigUtgatt,
   pakningerPerMerkevare,
   styrkemengde,
   trygLenke,
@@ -504,7 +505,7 @@ function byttbarhetFor(utvalg: Legemiddelutvalg, idag: string) {
       if (!grupper.has(g)) continue
       const merkevarer = merkevarerI.get(g) ?? merkevarerI.set(g, new Map()).get(g)!
       for (const { merkevare_id } of p.innhold) {
-        merkevarer.set(merkevare_id, merkevarer.get(merkevare_id) === true || !p.midlertidig_utgatt_dato)
+        merkevarer.set(merkevare_id, merkevarer.get(merkevare_id) === true || !midlertidigUtgatt(p, idag))
       }
     }
   }

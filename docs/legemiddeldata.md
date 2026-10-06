@@ -347,8 +347,8 @@ godkjenningsfritak». Visningen følger `docs/ux-reimagination.md`, del 9:
   hvilke, med varenummeret når en pakning utenfor gruppen har samme tekst.
   Har gruppen merknad til byttbarheten (f.eks. «Begrenset bytte ved
   epilepsi»), står FESTs merknad under. Er alle pakningene et annet preparat
-  har i gruppen, meldt midlertidig utgått, står «(midlertidig utgått)» etter
-  navnet. Bare dette regnes med:
+  har i gruppen, midlertidig utgått (fra og med `MidlUtgattDato`), står
+  «(midlertidig utgått)» etter navnet. Bare dette regnes med:
   - grupper som gjelder i dag (fra og med `GyldigFraDato`, til og med
     `GyldigTilDato`);
   - pakninger som er i gruppen i dag: FEST melder nye byttbarheter på
