@@ -86,14 +86,30 @@ export default function citalopram(db: () => PGlite): void {
     expect(avhengighet.some((e) => e.data.tittel === 'Lært mestringsavhengighet')).toBe(false)
   })
 
-  it('bevarer norske konsentrasjonsrammer og beskriver internasjonal TDM som kontekst', () => {
+  it('bevarer norske konsentrasjonsrammer og beskriver internasjonal TDM som kontekst', async () => {
     const kontekst = tekst(tdm.find((e) => e.data.tittel === 'Konsentrasjon–effekt og internasjonal kontekst')!.data)
     expect(kontekst).toContain('70–350 nmol/L')
     expect(kontekst).toContain('erstatter ikke det norske')
 
-    const toksiske = tekst(toksisitet.find((e) => e.data.tittel === 'Toksiske konsentrasjoner')!.data)
+    const toksiskKort = toksisitet.find((e) => e.data.tittel === 'Toksiske konsentrasjoner')!
+    const toksiske = tekst(toksiskKort.data)
     expect(toksiske).toContain('700 nmol/L')
     expect(toksiske).toContain('10 000 nmol/L')
+
+    const { rows: toksisitetskilder } = await db().query<{ tittel: string }>(
+      `select tittel
+       from public.referanser
+       where tilstand = 'publisert' and objekt_id = any($1::uuid[])
+       order by tittel`,
+      [toksiskKort.referanser],
+    )
+    expect(toksisitetskilder.map((r) => r.tittel)).toEqual(
+      expect.arrayContaining([
+        'Revisited: Therapeutic and toxic blood concentrations of more than 1100 drugs and other xenobiotics',
+        'Consensus Guidelines for Therapeutic Drug Monitoring in Neuropsychopharmacology: Update 2017',
+        'Citalopram – behandlingsanbefaling ved forgiftning',
+      ]),
+    )
   })
 
   it('bevarer norske konsentrasjonsgrenser og synkroniserer PK-nøkkeltall med SPC', async () => {
