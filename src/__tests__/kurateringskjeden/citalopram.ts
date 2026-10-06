@@ -10,6 +10,7 @@ export default function citalopram(db: () => PGlite): void {
   let dosering: Element[]
   let farmakokinetikk: Element[]
   let farmakogenetikk: Element[]
+  let interaksjoner: Element[]
   let tdm: Element[]
   let toksisitet: Element[]
   let graviditet: Element[]
@@ -24,6 +25,7 @@ export default function citalopram(db: () => PGlite): void {
     dosering = await panel('dosering')
     farmakokinetikk = await panel('farmakokinetikk')
     farmakogenetikk = await panel('farmakogenetikk')
+    interaksjoner = await panel('interaksjoner')
     tdm = await panel('tdm')
     toksisitet = await panel('toksisitet_forgiftning')
     graviditet = await panel('graviditet_amming')
@@ -49,13 +51,14 @@ export default function citalopram(db: () => PGlite): void {
       'Proteinbinding',
       'Vd',
       'Eliminasjon',
-      'CYP-enzymer (substrat)',
-      'Interaksjoner',
     ])
     expect(farmakogenetikk.map((e) => String(e.data.tittel))).toEqual([
+      'CYP-enzymer (substrat)',
       'CYP2C19 og citaloprameksponering',
       'Når farmakogenetisk analyse er relevant',
     ])
+    expect(interaksjoner).toHaveLength(1)
+    expect(tekst(interaksjoner[0].data)).toContain('hentes automatisk')
     expect(tdm.map((e) => String(e.data.tittel))).toEqual([
       'Prøvetakingstidspunkt',
       'Grunnlag for referanseområdet',
@@ -110,6 +113,7 @@ export default function citalopram(db: () => PGlite): void {
       ...dosering,
       ...farmakokinetikk,
       ...farmakogenetikk,
+      ...interaksjoner,
       ...tdm,
       ...toksisitet,
       ...graviditet,
