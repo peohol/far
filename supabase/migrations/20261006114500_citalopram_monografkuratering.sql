@@ -44,6 +44,8 @@ begin
   insert into citalopram_kilder values
     ('spc','Citalopram Orion – preparatomtale (SPC)','Direktoratet for medisinske produkter','2025','https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4252.pdf'),
     ('giftinfo','Citalopram – behandlingsanbefaling ved forgiftning','Giftinformasjonen / Helsebiblioteket','2026','https://www.helsebiblioteket.no/forgiftninger/legemidler/citalopram-behandlingsanbefaling-ved-forgiftning'),
+    ('schulz2020','Revisited: Therapeutic and toxic blood concentrations of more than 1100 drugs and other xenobiotics','Schulz M et al.','2020','https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7201985/'),
+    ('hiemke2017','Consensus Guidelines for Therapeutic Drug Monitoring in Neuropsychopharmacology: Update 2017','Hiemke C et al.','2018','https://doi.org/10.1055/s-0043-116492'),
     ('cpic','Clinical Pharmacogenetics Implementation Consortium (CPIC) Guideline for CYP2D6, CYP2C19, CYP2B6, SLC6A4, and HTR2A Genotypes and Serotonin Reuptake Inhibitor Antidepressants','Bousman CA, Stevenson JM, Ramsey LB, et al.','2023','https://doi.org/10.1002/cpt.2903'),
     ('agnp2026','Consensus Guidelines for Therapeutic Drug Monitoring in Neuropsychopharmacology: Update 2026 – Pharmacokinetic, pharmacogenetic and clinical aspects','Hart XM, Gründer G, Hiemke C, et al.','2026','https://doi.org/10.1055/a-2860-7861'),
     ('tdmreview','Toward therapeutic drug monitoring of citalopram in depression? Insights from a systematic review','Xu N, Song Z, Jiang D, Zhao R','2023','https://doi.org/10.3389/fpsyt.2023.1144573'),
@@ -158,14 +160,14 @@ begin
   end loop;
 
   -- Indikasjon.
-  obj := intern.kuratering_element(side,'indikasjon','riktekst','{}'::jsonb,1);
+  obj := intern.kuratering_element(side,'indikasjon','riktekst','{}'::jsonb,2);
   data := $json$
   {"dokument":{"type":"doc","content":[
     {"type":"paragraph","content":[{"type":"text","text":"Godkjente indikasjoner hos voksne er behandling av alvorlige depressive episoder, panikklidelse med eller uten agorafobi og tvangslidelse (OCD), samt profylakse ved tilbakevendende depressive episoder."}]},
     {"type":"paragraph","content":[{"type":"text","text":"Citalopram bør ikke brukes hos barn og ungdom under 18 år etter preparatomtalen. Dette er en regulatorisk formulering og utelukker ikke at spesialiststyrt bruk kan forekomme utenfor godkjent indikasjon."}]}
   ]}}
   $json$::jsonb;
-  perform intern.kuratering_lagre(obj,1,jsonb_build_object(
+  perform intern.kuratering_lagre(obj,2,jsonb_build_object(
     'data',data,'referanser',jsonb_build_array(kilder->>'spc')
   ),kilde);
 
@@ -271,13 +273,17 @@ begin
   -- i Viktige data beholdes og utdypes her, ikke erstattes.
   for x in select value from jsonb_array_elements($json$
   [
-    {"posisjon":0,"tittel":"Toksisk dose og eksponering","tekst":"Ved akutt peroralt inntak hos voksne gir under 600 mg som regel lette symptomer. Fra 600 mg foreligger risiko for hjertepåvirkning og kramper og Giftinformasjonen anbefaler sykehusvurdering; over 1000 mg kan kramper og hjertepåvirkning forventes. Samtidige serotonerge eller krampeterskelsenkende stoffer kan øke risikoen."},
-    {"posisjon":1,"tittel":"Toksiske konsentrasjoner","tekst":"OUSFARs etablerte serumgrenser beholdes: ≥700 nmol/L er markert som toksisk område, og ≥10 000 nmol/L som omtrentlig nivå assosiert med komatøs/fatal forgiftning. Slike konsentrasjoner er støtteinformasjon, ikke universelle kliniske behandlingsgrenser; i akutt overdose har serumkonsentrasjonsmåling begrenset nytte."},
-    {"posisjon":2,"tittel":"Klinisk forgiftningsbilde","tekst":"Lett forgiftning domineres av gastrointestinale symptomer, svimmelhet/ataksi, tremor, takykardi og somnolens. Ved moderat eller alvorlig forgiftning kan CNS-depresjon/koma, kramper, QTc-forlengelse, QRS-forlengelse og serotonergt syndrom forekomme."},
-    {"posisjon":3,"tittel":"Alvorlige komplikasjoner","tekst":"De viktigste alvorlige komplikasjonene er kramper og kardial toksisitet med uttalt QTc-forlengelse, torsade de pointes og andre ventrikulære arytmier; sirkulasjonssvikt og hjertestans er beskrevet. Citalopram regnes som et av de mer toksiske SSRI-preparatene ved overdose."},
-    {"posisjon":4,"tittel":"Toksikokinetiske særtrekk","tekst":"Symptomer opptrer vanligvis innen tiden til Cmax, omtrent 4 timer for vanlige tabletter, men kramper kan komme allerede etter 2–3 timer og EKG-forandringer kan debutere så sent som rundt 12 timer. CYP2C19-hemming eller manglende CYP2C19-enzymaktivitet kan øke eksponeringen."},
-    {"posisjon":5,"tittel":"Behandling ved forgiftning","tekst":"Behandlingen er symptomatisk. Giftinformasjonen anbefaler vurdering av ventrikkelskylling og kull avhengig av dose, tidsforløp og aspirasjonsrisiko. Ved inntak over 600 mg eller forlenget QTc anbefales hjerteovervåkning i minst 12–24 timer eller til QTc er nær normalisert; kramper behandles med benzodiazepin, og uttalt QT-forlengelse/torsade håndteres med målrettet korreksjon av utløsende faktorer og magnesium etter forgiftningsanbefalingen."}
+    {"posisjon":0,"tittel":"Toksisk dose og eksponering","tekst":"Ved akutt peroralt inntak hos voksne gir under 600 mg som regel lette symptomer. Fra 600 mg foreligger risiko for hjertepåvirkning og kramper og Giftinformasjonen anbefaler sykehusvurdering; over 1000 mg kan kramper og hjertepåvirkning forventes. Samtidige serotonerge eller krampeterskelsenkende stoffer kan øke risikoen.","refs":["giftinfo","spc"]},
+    {"posisjon":1,"tittel":"Toksiske konsentrasjoner","tekst":"OUSFARs etablerte serumgrenser beholdes: ≥700 nmol/L er markert som toksisk område, og ≥10 000 nmol/L som omtrentlig nivå assosiert med komatøs/fatal forgiftning. Slike konsentrasjoner er støtteinformasjon, ikke universelle kliniske behandlingsgrenser; i akutt overdose har serumkonsentrasjonsmåling begrenset nytte.","refs":["schulz2020","hiemke2017","giftinfo"]},
+    {"posisjon":2,"tittel":"Klinisk forgiftningsbilde","tekst":"Lett forgiftning domineres av gastrointestinale symptomer, svimmelhet/ataksi, tremor, takykardi og somnolens. Ved moderat eller alvorlig forgiftning kan CNS-depresjon/koma, kramper, QTc-forlengelse, QRS-forlengelse og serotonergt syndrom forekomme.","refs":["giftinfo","spc"]},
+    {"posisjon":3,"tittel":"Alvorlige komplikasjoner","tekst":"De viktigste alvorlige komplikasjonene er kramper og kardial toksisitet med uttalt QTc-forlengelse, torsade de pointes og andre ventrikulære arytmier; sirkulasjonssvikt og hjertestans er beskrevet. Citalopram regnes som et av de mer toksiske SSRI-preparatene ved overdose.","refs":["giftinfo","spc"]},
+    {"posisjon":4,"tittel":"Toksikokinetiske særtrekk","tekst":"Symptomer opptrer vanligvis innen tiden til Cmax, omtrent 4 timer for vanlige tabletter, men kramper kan komme allerede etter 2–3 timer og EKG-forandringer kan debutere så sent som rundt 12 timer. CYP2C19-hemming eller manglende CYP2C19-enzymaktivitet kan øke eksponeringen.","refs":["giftinfo","spc"]},
+    {"posisjon":5,"tittel":"Behandling ved forgiftning","tekst":"Behandlingen er symptomatisk. Giftinformasjonen anbefaler vurdering av ventrikkelskylling og kull avhengig av dose, tidsforløp og aspirasjonsrisiko. Ved inntak over 600 mg eller forlenget QTc anbefales hjerteovervåkning i minst 12–24 timer eller til QTc er nær normalisert; kramper behandles med benzodiazepin, og uttalt QT-forlengelse/torsade håndteres med målrettet korreksjon av utløsende faktorer og magnesium etter forgiftningsanbefalingen.","refs":["giftinfo"]}
   ]$json$::jsonb) loop
+    refs := '[]'::jsonb;
+    for k in select value::text as nokkel from jsonb_array_elements_text(x->'refs') loop
+      refs := refs || to_jsonb(kilder->>k.nokkel);
+    end loop;
     perform intern.kuratering_nytt(
       side,
       jsonb_build_object('panel','toksisitet_forgiftning','posisjon',(x->>'posisjon')::int,'elementtype','kinetikkort',
@@ -287,15 +293,13 @@ begin
               'type','paragraph','content',jsonb_build_array(
                 jsonb_build_object('type','text','text',x->>'tekst'),
                 jsonb_build_object(
-                  'type','sitering','attrs',jsonb_build_object(
-                    'referanser',jsonb_build_array(kilder->>'giftinfo',kilder->>'spc')
-                  )
+                  'type','sitering','attrs',jsonb_build_object('referanser',refs)
                 )
               )
             )
           )
         )),
-        'referanser',jsonb_build_array(kilder->>'giftinfo',kilder->>'spc')),
+        'referanser',refs),
       jsonb_build_object('tittel',x->>'tittel'),
       kilde
     );
