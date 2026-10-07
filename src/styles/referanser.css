@@ -19,6 +19,9 @@
   height: 1.55em;
   padding: 0 0.4em;
   font: inherit;
+  /* Alltid UI-skriften, også inne i løpende tekst med serifskrift: den sitter
+     midt i pillen, mens serifskriften hever tallene. */
+  font-family: var(--skrift-ui);
   font-size: var(--tekst-merke);
   font-weight: var(--vekt-fet);
   font-variant-numeric: tabular-nums;
