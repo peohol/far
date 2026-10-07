@@ -20,7 +20,6 @@ import { THC_ANALYTT } from '../domain/thc'
 import { fortolkThc, tomThcInndata } from '../domain/thcMotor'
 import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../domain/thcTekster'
 import { Samtidighetskonflikt, type Faginnholdslager } from '../faginnhold/lagring'
-import type { Objektstatus } from '../faginnhold/modell'
 import type { Faginnholdsleser } from '../faginnhold/lesing'
 import type { ThcRegelsettutgave } from '../faginnhold/thcregler'
 import { THC_MODELL, THC_REGELSETT, THC_TEKSTER, thcRegelsettutgave } from './hjelp/thcgrunnlag'
@@ -96,14 +95,13 @@ describe('THC-syrereglene', () => {
     expect(fagside.lesThcRegelsett).not.toHaveBeenCalled()
   })
 
-  it('sier fra på siden ved en konflikt, og lar brukeren sammenligne i skjemaet', async () => {
+  it('lagrer alt i ett kall, sier fra på siden ved en konflikt, og forkaster hele redigeringen ved «Forkast»', async () => {
     const user = userEvent.setup()
-    // Teksten lagres; regelsettet har noen andre lagret i mellomtiden.
-    const lagreUtkast = vi.fn(async (objekt: string) => {
-      if (objekt === 'thc-regelsett') throw new Samtidighetskonflikt(4, 3)
-      return {} as Objektstatus
+    // Noen andre har lagret i mellomtiden; ingenting av det brukeren endret, er lagret.
+    const lagreThcRegelsett = vi.fn<Faginnholdslager['lagreThcRegelsett']>(async () => {
+      throw new Samtidighetskonflikt(4, 3)
     })
-    visRedigering({ lagreUtkast } as unknown as Faginnholdslager)
+    const leser = visRedigering({ lagreThcRegelsett } as unknown as Faginnholdslager)
     await user.click(await screen.findByRole('button', { name: 'Rediger reglene' }))
     const skjema = within(screen.getByRole('form', { name: 'Rediger: Fortolkningsreglene for THC-syre i urin' }))
     const apning = skjema.getByRole('textbox', { name: 'Åpning' })
@@ -113,30 +111,21 @@ describe('THC-syrereglene', () => {
     await user.type(varsel, '21')
     await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
 
-    expect(lagreUtkast.mock.calls.map(([objekt]) => objekt)).toEqual(['thc-apning', 'thc-regelsett'])
+    expect(lagreThcRegelsett).toHaveBeenCalledOnce()
+    const [objekt, revisjon, innhold, kommentarer] = lagreThcRegelsett.mock.calls[0]!
+    expect([objekt, revisjon, innhold.varsel_dager_mellom]).toEqual(['thc-regelsett', 3, 21])
+    expect(kommentarer.map((k) => k.id)).toEqual(['thc-apning'])
     expect(await skjema.findByText(/Noen andre har lagret reglene mens du redigerte/)).toBeTruthy()
     expect(skjema.getByRole('button', { name: 'Sammenlign med deres' })).toBeTruthy()
     // Siden sier også fra, så reglene kan hentes på nytt om brukeren forkaster sitt.
     expect(screen.getByText('Noen andre har endret reglene mens du redigerte. Ingenting er skrevet over.')).toBeTruthy()
     // Det brukeren skrev, står fortsatt.
     expect(skjema.getByRole('textbox', { name: 'Varsel ved mer enn (dager mellom prøvene)' })).toHaveProperty('value', '21')
-  })
 
-  it('sier fra på siden også når bare reglene ble avvist, så det nyeste kan hentes etter «Forkast»', async () => {
-    const user = userEvent.setup()
-    const lagreUtkast = vi.fn(async () => {
-      throw new Samtidighetskonflikt(4, 3)
-    })
-    const leser = visRedigering({ lagreUtkast } as unknown as Faginnholdslager)
-    await user.click(await screen.findByRole('button', { name: 'Rediger reglene' }))
-    const skjema = within(screen.getByRole('form', { name: 'Rediger: Fortolkningsreglene for THC-syre i urin' }))
-    const varsel = skjema.getByRole('textbox', { name: 'Varsel ved mer enn (dager mellom prøvene)' })
-    await user.clear(varsel)
-    await user.type(varsel, '21')
-    await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
-    await user.click(await skjema.findByRole('button', { name: 'Forkast mine endringer' }))
-
+    // Ingenting ble lagret, så «Forkast mine endringer» forkaster alt brukeren endret, og det nyeste kan hentes.
+    await user.click(skjema.getByRole('button', { name: 'Forkast mine endringer' }))
     expect(screen.queryByRole('form')).toBeNull()
+    expect(lagreThcRegelsett).toHaveBeenCalledOnce()
     const lest = vi.mocked(leser.lesThcRegelsett).mock.calls.length
     await user.click(screen.getByRole('button', { name: 'Hent nyeste utgave' }))
     await vi.waitFor(() => expect(vi.mocked(leser.lesThcRegelsett).mock.calls.length).toBeGreaterThan(lest))

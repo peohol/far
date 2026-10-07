@@ -41,7 +41,7 @@ som fasit i testene (se [Redigeringen](#redigeringen)).
 | `src/domain/__tests__/fasit/thc-regelsett-import.json`, `thc-tekster-import.json` | Reglene og tekstene slik de står i den opprinnelige modulen |
 | `src/domain/__tests__/fasit/thc-fasit.json` | Fasiten: utfallet av den opprinnelige modulen for over 4000 inndata |
 | `scripts/lag-thc-fasit.ts` | Lager fasiten på nytt, bare ved bevisst klinisk endring |
-| `supabase/migrations/*_thc_regelsett*.sql`, `*_thc_tekster_som_kommentarer.sql` | Lagringen: tabellene, kontrollen på serveren, importen og flyttingen av tekstene |
+| `supabase/migrations/*_thc_regelsett*.sql`, `*_thc_tekster_som_kommentarer.sql`, `*_thc_laste_deler_og_samlet_lagring.sql` | Lagringen: tabellene, kontrollen på serveren, importen, flyttingen av tekstene, de låste delene og `lagre_thc_regelsett` |
 | `src/__tests__/thcRegelsettlagring.test.ts` | Lagringen prøvd mot en ekte database bygd av migrasjonene |
 | `src/__tests__/thcsteg.test.tsx`, `thcregler.test.tsx` | Modulen og redigeringssiden med reglene de får |
 | `src/__tests__/thcredigering.test.tsx`, `thcredigeringslagring.test.ts` | Redigeringen, og lagringen og publiseringen av den mot en ekte database |
@@ -229,8 +229,14 @@ felt, andelene som prosent, og et felt som ikke røres, beholder tallet helt
 ned til siste siffer. Utskillelseskurvene (a1, k1, a2, k2 og navnet) og
 konverteringsfaktoren er låst (Peder, 07.10.2026): skjemaet viser dem uten
 felt, og lagringen tar dem alltid fra det som er lagret (`THC_LASTE_DELER`,
-`medLasteDeler`). Skal de endres, gjøres det i koden, med en migrasjon og en
-ny fasit. Nivåer og marginer kan legges til og fjernes; z for en
+`medLasteDeler`). Databasen håndhever det også: `intern.skriv_thc_regelsett`,
+som all lagring, gjenoppretting og publisering går gjennom, avviser kurver
+og en konverteringsfaktor som er forskjellige fra det publiserte
+regelsettet. En eldre revisjon eller et utkast med andre kurver kan derfor
+verken gjenopprettes eller publiseres. Skal de endres, gjøres det i koden,
+med en migrasjon og en ny fasit; migrasjonen slår av kontrollen for sin egen
+transaksjon med `select set_config('far.endre_thc_laste_deler', 'ja', true)`.
+Valideringen står i `intern.skriv_thc_regelsett_innhold`. Nivåer og marginer kan legges til og fjernes; z for en
 ny margin regnes ut av marginen. Tekstene redigeres der bolken er beskrevet,
 med plassholderne den må ha.
 
@@ -240,15 +246,17 @@ endres — og utkastet kan ikke lagres før de er rettet. Så lenge det er
 gyldig, fortolker simulatoren under med utkastet slik det står.
 
 `thcEndringer` avgjør hva som lagres: hver kommentar med endret tekst, og
-regelsettet bare når reglene er endret. Bolkene peker på de samme
-kommentarene som før, så lagringene er uavhengige av hverandre og går hver
-mot revisjonen som ble åpnet. Har noen andre lagret i mellomtiden, blir det
+regelsettet når reglene er endret. Bolkene peker på de samme kommentarene
+som før. Alt lagres i én transaksjon med `lagre_thc_regelsett`, hvert
+objekt mot revisjonen som ble åpnet, også regelsettet når bare en tekst er
+endret. Har noen andre lagret i mellomtiden, blir det
 en konflikt som i de andre regelredigeringene (`Lagringskonflikt`):
 ingenting er skrevet over, brukeren kan sammenligne sitt med det de lagret,
 felt for felt, og velge å forkaste sitt eller lagre over deres. Da lagres
 det som er forskjellig fra deres, mot revisjonene deres
-(`lagreThcUtkast`). Objektene lagres hver for seg, så noe kan være lagret
-før konflikten; siden sier derfor også fra, med «Hent nyeste utgave».
+(`lagreThcUtkast`). Ved en konflikt er ingenting lagret, så «Forkast mine
+endringer» forkaster hele redigeringen; siden sier også fra, med «Hent
+nyeste utgave».
 Publiseringsplanen tar de endrede kommentarene før
 regelsettet, som databasen krever.
 

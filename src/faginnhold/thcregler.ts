@@ -131,22 +131,24 @@ export function thcEndringer(utgave: ThcRegelsettutgave, regler: ThcRegelsett, t
 }
 
 /**
- * Lagrer endringene fra `mot` som utkast: hver kommentar med endret tekst,
- * og regelsettet om reglene er endret, hver mot revisjonen i `mot`. Står noe
- * av det på en nyere revisjon, avviser lagringen det med en
- * samtidighetskonflikt. `mot` er utgaven brukeren åpnet, eller den nyeste når
- * hen har sammenlignet og valgt å lagre sitt over den; da lagres bare det som
- * er forskjellig fra den. De låste delene ({@link THC_LASTE_DELER}) lagres
- * alltid slik de står i `mot`, uansett hva utkastet har.
+ * Lagrer endringene fra `mot` som utkast: kommentarene med endret tekst og
+ * regelsettet, i én transaksjon og mot revisjonene i `mot`. Står noe av det
+ * på en nyere revisjon, avvises alt med en samtidighetskonflikt, og ingenting
+ * er lagret. `mot` er utgaven brukeren åpnet, eller den nyeste når hen har
+ * sammenlignet og valgt å lagre sitt over den; da lagres bare det som er
+ * forskjellig fra den. De låste delene ({@link THC_LASTE_DELER}) lagres
+ * alltid slik de står i `mot`, uansett hva utkastet har, og databasen avviser
+ * dem om de er forskjellige fra det publiserte.
  */
 export async function lagreThcUtkast(
-  lager: Pick<Faginnholdslager, 'lagreUtkast'>,
+  lager: Pick<Faginnholdslager, 'lagreThcRegelsett'>,
   mot: ThcRegelsettutgave,
   { regler, tekster }: ThcUtkast,
 ): Promise<void> {
   const { kommentarer, regelsett } = thcEndringer(mot, medLasteDeler(regler, mot.regelsett.innhold), tekster)
-  for (const k of kommentarer) await lager.lagreUtkast(k.id, k.revisjon, k.innhold)
-  if (regelsett) await lager.lagreUtkast(regelsett.id, regelsett.revisjon, regelsett.innhold)
+  if (!regelsett && kommentarer.length === 0) return
+  const { id, revisjon, innhold } = mot.regelsett
+  await lager.lagreThcRegelsett(id, revisjon, regelsett?.innhold ?? innhold, kommentarer)
 }
 
 /**

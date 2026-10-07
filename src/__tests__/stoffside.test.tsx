@@ -466,6 +466,7 @@ function kilde({ data = side, regler = amtnorsumregler, thc = () => null, kanRed
     gjenopprettRevisjon: vi.fn(async (id: string) => status(id, 3)),
     lagreIntervallregelsett: vi.fn(async (id: string) => status(id, 3)),
     lagreScenarioregelsett: vi.fn(async (id: string) => status(id, 3)),
+    lagreThcRegelsett: vi.fn(async (id: string) => status(id, 3)),
     publiserUtkast: vi.fn(async (id: string) => status(id)),
     slettReferanse: vi.fn(),
   }

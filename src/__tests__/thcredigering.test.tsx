@@ -133,28 +133,41 @@ describe('feltene historikken og sammenligningene viser', () => {
 describe('de låste delene', () => {
   it('lagres alltid slik de står i det lagrede, også når utkastet har noe annet', async () => {
     const utgave = thcRegelsettutgave()
-    const lagreUtkast = vi.fn(async () => ({}) as Objektstatus)
+    const lagreThcRegelsett = vi.fn(async () => ({}) as Objektstatus)
+    const lager = { lagreThcRegelsett } as unknown as Faginnholdslager
     const kurver = { ...THC_REGELSETT.kurver, gul: { ...THC_REGELSETT.kurver.gul, k1: 0.5 } }
     const regler = { ...THC_REGELSETT, kurver, konverteringsfaktor: 2, varsel_dager_mellom: 21 }
-    await lagreThcUtkast({ lagreUtkast } as unknown as Faginnholdslager, utgave, { regler, tekster: THC_TEKSTER })
-    expect(lagreUtkast).toHaveBeenCalledOnce()
-    expect(lagreUtkast).toHaveBeenCalledWith('thc-regelsett', 3, {
-      ...THC_REGELSETT,
-      varsel_dager_mellom: 21,
-      tekstbolker: utgave.regelsett.innhold.tekstbolker,
-    })
+    await lagreThcUtkast(lager, utgave, { regler, tekster: THC_TEKSTER })
+    expect(lagreThcRegelsett).toHaveBeenCalledOnce()
+    expect(lagreThcRegelsett).toHaveBeenCalledWith(
+      'thc-regelsett',
+      3,
+      { ...THC_REGELSETT, varsel_dager_mellom: 21, tekstbolker: utgave.regelsett.innhold.tekstbolker },
+      [],
+    )
     // Er bare de låste delene ulike, lagres ingenting.
-    lagreUtkast.mockClear()
-    await lagreThcUtkast({ lagreUtkast } as unknown as Faginnholdslager, utgave, {
-      regler: { ...THC_REGELSETT, kurver, konverteringsfaktor: 2 },
-      tekster: THC_TEKSTER,
-    })
-    expect(lagreUtkast).not.toHaveBeenCalled()
+    lagreThcRegelsett.mockClear()
+    await lagreThcUtkast(lager, utgave, { regler: { ...THC_REGELSETT, kurver, konverteringsfaktor: 2 }, tekster: THC_TEKSTER })
+    expect(lagreThcRegelsett).not.toHaveBeenCalled()
   })
 
   it('er kurvene og konverteringsfaktoren', () => {
     expect(medLasteDeler({ ...THC_REGELSETT, konverteringsfaktor: 2 }, THC_REGELSETT)).toStrictEqual(THC_REGELSETT)
     expect([...THC_LASTE_DELER].sort()).toEqual(['konverteringsfaktor', 'kurver'])
+  })
+})
+
+describe('lagringen', () => {
+  it('lagrer en endret tekst og regelsettet i ett kall, mot revisjonene som ble åpnet', async () => {
+    const utgave = thcRegelsettutgave()
+    const lagreThcRegelsett = vi.fn(async () => ({}) as Objektstatus)
+    const tekster = { ...THC_TEKSTER, apning: `${THC_TEKSTER.apning} Syntetisk.` }
+    await lagreThcUtkast({ lagreThcRegelsett } as unknown as Faginnholdslager, utgave, { regler: THC_REGELSETT, tekster })
+    // Regelsettet er uendret, men tas med, så en nyere revisjon av det også gir en konflikt.
+    expect(lagreThcRegelsett).toHaveBeenCalledOnce()
+    expect(lagreThcRegelsett).toHaveBeenCalledWith('thc-regelsett', 3, utgave.regelsett.innhold, [
+      expect.objectContaining({ id: 'thc-apning', innhold: expect.objectContaining({ tekst: tekster.apning }) }),
+    ])
   })
 })
 

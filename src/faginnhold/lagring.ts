@@ -14,6 +14,7 @@ import { KONFLIKT, type Innhold, type Objektstatus, type Objekttype } from './mo
 import type { Kommentarendring } from '../regler/kommentarer'
 import type { Intervallregelsettinnhold } from '../regler/modell'
 import type { Scenarioregelsett } from '../domain/scenario'
+import type { ThcRegelsettinnhold } from '../domain/thcTekster'
 
 const UVENTET_FEIL = 'Noe gikk galt. Prøv igjen.'
 const IKKE_GODTATT = 'Innholdet ble ikke godtatt. Kontroller feltene og prøv igjen.'
@@ -115,6 +116,16 @@ export interface Faginnholdslager {
     innhold: Scenarioregelsett,
     kommentarer: Kommentarendring[],
   ): Promise<Objektstatus>
+  /**
+   * Det samme for THC-syreregelsettet og de endrede kommentarene tekstbolkene
+   * peker på (`docs/thc-syre.md`).
+   */
+  lagreThcRegelsett(
+    objekt: string,
+    forventetRevisjon: number,
+    innhold: ThcRegelsettinnhold,
+    kommentarer: Kommentarendring[],
+  ): Promise<Objektstatus>
   /** Publiserer utkastet slik det står i `forventetRevisjon`. */
   publiserUtkast(objekt: string, forventetRevisjon: number): Promise<Objektstatus>
   /**
@@ -146,6 +157,8 @@ export function lagFaginnholdslager(klient: SupabaseClient): Faginnholdslager {
       kall('lagre_intervallregelsett', { objekt, forventet_revisjon: forventetRevisjon, innhold, kommentarer }),
     lagreScenarioregelsett: (objekt, forventetRevisjon, innhold, kommentarer) =>
       kall('lagre_scenarioregelsett', { objekt, forventet_revisjon: forventetRevisjon, innhold, kommentarer }),
+    lagreThcRegelsett: (objekt, forventetRevisjon, innhold, kommentarer) =>
+      kall('lagre_thc_regelsett', { objekt, forventet_revisjon: forventetRevisjon, innhold, kommentarer }),
     publiserUtkast: (objekt, forventetRevisjon) =>
       kall('publiser_utkast', { objekt, forventet_revisjon: forventetRevisjon }),
     slettReferanse: async (objekt, forventetRevisjon) => {

@@ -38,6 +38,7 @@ import {
   migrasjonsfiler,
   nyDatabase,
   opprettBruker,
+  som,
   type Faginnholdskall,
 } from './hjelp/testdatabase'
 
@@ -91,6 +92,18 @@ async function tekstene(bolker: ThcTekstbolker): Promise<ThcTekster> {
   const svar = thcTeksterFra(bolker, new Map([...oppslag].map(([kid, u]) => [kid, u.innhold.tekst])))
   if (!svar.ok) throw new Error(svar.feil.join(' '))
   return svar.tekster
+}
+
+/**
+ * Lagrer utkastet slik en migrasjon kan gjøre det: med kontrollen av de
+ * låste delene (kurvene og konverteringsfaktoren) slått av, så det er
+ * valideringen av reglene som prøves.
+ */
+async function lagreSomMigrasjon(revisjon: number, innhold: unknown) {
+  await som(db, peder, async (tx) => {
+    await tx.query(`select set_config('far.endre_thc_laste_deler', 'ja', true)`)
+    await tx.query('select public.lagre_utkast($1, $2, $3)', [id, revisjon, JSON.stringify(innhold)])
+  })
 }
 
 /** En ny, publisert kommentar. */
@@ -216,7 +229,7 @@ describe('lagring og publisering', () => {
       konsentrasjonsnivaer: REGELSETT.konsentrasjonsnivaer.map((n) => (n.nedre === 40 ? { ...n, nedre: 50 } : n)),
       tekstbolker: { ...BOLKER, uten_forrige: annen },
     }
-    await k.lagre(id, revisjon, mye)
+    await lagreSomMigrasjon(revisjon, mye)
     expect((await regelsettet('utkast')).innhold).toStrictEqual(mye)
 
     const status = await k.gjenopprett(id, revisjon + 1, revisjon)
@@ -307,7 +320,7 @@ describe('tilgangen', () => {
 /** Feilen databasen gir når regelsettet lagres, uten at noe blir lagret. */
 async function avvisning(innhold: unknown) {
   const { revisjon } = await regelsettet('utkast')
-  const feil = await feilFra(() => k.lagre(id, revisjon, JSON.parse(JSON.stringify(innhold)) as ThcRegelsettinnhold))
+  const feil = await feilFra(() => lagreSomMigrasjon(revisjon, innhold))
   expect(feil?.code).toBe('22023')
   expect((await regelsettet('utkast')).revisjon).toBe(revisjon)
   return feil!.message
