@@ -14,6 +14,11 @@ import { regelplan } from '../faginnhold/stoffside'
 import { THC_TEKSTBOLKER } from '../domain/thcTekster'
 import { INGEN_REGLER } from '../faginnhold/lesing'
 import {
+  lagreThcUtkast,
+  medLasteDeler,
+  tallSomFelt,
+  THC_KURVEFELT,
+  THC_LASTE_DELER,
   thcEndringer,
   thcUtgavefelter,
   thcUtkastfelter,
@@ -23,7 +28,8 @@ import {
 } from '../faginnhold/thcregler'
 import { endredeFelt } from '../faginnhold/historikk'
 import { innholdsfelter } from '../faginnhold/innholdsfelter'
-import { Samtidighetskonflikt } from '../faginnhold/lagring'
+import { Samtidighetskonflikt, type Faginnholdslager } from '../faginnhold/lagring'
+import type { Objektstatus } from '../faginnhold/modell'
 import { THC_REGELSETT, THC_TEKSTER, thcRegelsettutgave } from './hjelp/thcgrunnlag'
 
 beforeAll(() => {
@@ -124,6 +130,34 @@ describe('feltene historikken og sammenligningene viser', () => {
   })
 })
 
+describe('de låste delene', () => {
+  it('lagres alltid slik de står i det lagrede, også når utkastet har noe annet', async () => {
+    const utgave = thcRegelsettutgave()
+    const lagreUtkast = vi.fn(async () => ({}) as Objektstatus)
+    const kurver = { ...THC_REGELSETT.kurver, gul: { ...THC_REGELSETT.kurver.gul, k1: 0.5 } }
+    const regler = { ...THC_REGELSETT, kurver, konverteringsfaktor: 2, varsel_dager_mellom: 21 }
+    await lagreThcUtkast({ lagreUtkast } as unknown as Faginnholdslager, utgave, { regler, tekster: THC_TEKSTER })
+    expect(lagreUtkast).toHaveBeenCalledOnce()
+    expect(lagreUtkast).toHaveBeenCalledWith('thc-regelsett', 3, {
+      ...THC_REGELSETT,
+      varsel_dager_mellom: 21,
+      tekstbolker: utgave.regelsett.innhold.tekstbolker,
+    })
+    // Er bare de låste delene ulike, lagres ingenting.
+    lagreUtkast.mockClear()
+    await lagreThcUtkast({ lagreUtkast } as unknown as Faginnholdslager, utgave, {
+      regler: { ...THC_REGELSETT, kurver, konverteringsfaktor: 2 },
+      tekster: THC_TEKSTER,
+    })
+    expect(lagreUtkast).not.toHaveBeenCalled()
+  })
+
+  it('er kurvene og konverteringsfaktoren', () => {
+    expect(medLasteDeler({ ...THC_REGELSETT, konverteringsfaktor: 2 }, THC_REGELSETT)).toStrictEqual(THC_REGELSETT)
+    expect([...THC_LASTE_DELER].sort()).toEqual(['konverteringsfaktor', 'kurver'])
+  })
+})
+
 describe('publiseringen', () => {
   it('publiserer de endrede tekstene før regelsettet som peker på dem', () => {
     const utgave: ThcRegelsettutgave = thcRegelsettutgave()
@@ -186,6 +220,21 @@ describe('redigeringen av THC-syrereglene', () => {
     expect(thcUtkastfeil(thcRegelsettutgave(), regler, tekster)).toEqual([])
     // Alt annet står nøyaktig som før, helt ned til siste siffer.
     expect({ ...regler, sikkerhetsmarginer: THC_REGELSETT.sikkerhetsmarginer }).toStrictEqual(THC_REGELSETT)
+  })
+
+  it('viser kurvene og konverteringsfaktoren, men lar dem ikke endres', async () => {
+    const user = userEvent.setup()
+    visRedigering()
+    const skjema = await apne(user)
+    const kurver = within(skjema.getByRole('group', { name: 'Utskillelseskurvene' }))
+    expect(kurver.queryAllByRole('textbox')).toEqual([])
+    expect(kurver.getByText('Kurvene er låst og kan bare endres i koden.')).toBeTruthy()
+    const gronn = THC_REGELSETT.kurver.gronn
+    expect(kurver.getByText(new RegExp(`^${gronn.navn}: a1 `)).textContent).toBe(
+      `${gronn.navn}: ${THC_KURVEFELT.map((f) => `${f} ${tallSomFelt(gronn[f])}`).join(' · ')}`,
+    )
+    expect(skjema.queryByRole('textbox', { name: /^(a1|k1|a2|k2) / })).toBeNull()
+    expect(skjema.queryByRole('textbox', { name: 'Konverteringsfaktor' })).toBeNull()
   })
 
   it('sier hva som må rettes, og lagrer ikke før det er gjort', async () => {

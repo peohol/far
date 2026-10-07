@@ -68,6 +68,22 @@ export function thcReglerFra(henting: Henting<ThcRegelsettutgave | null>, provIg
 
 /* --- Redigeringen ----------------------------------------------------------- */
 
+/** Tallene i hver utskillelseskurve. */
+export const THC_KURVEFELT = ['a1', 'k1', 'a2', 'k2'] as const
+
+/**
+ * Delene av reglene som er låst i redigeringen: utskillelseskurvene og
+ * konverteringsfaktoren som skalerer dem. De endres bare i koden (med en
+ * migrasjon), aldri i appen.
+ */
+export const THC_LASTE_DELER = ['kurver', 'konverteringsfaktor'] as const satisfies readonly (keyof ThcRegelsett)[]
+
+/** `regler` med de låste delene slik de står i `fra`, det som er lagret. */
+export function medLasteDeler(regler: ThcRegelsett, fra: ThcRegelsett): ThcRegelsett {
+  const laste = Object.fromEntries(THC_LASTE_DELER.map((del) => [del, fra[del]]))
+  return { ...regler, ...laste }
+}
+
 /** Reglene og tekstene slik redigeringen holder dem. */
 export interface ThcUtkast {
   regler: ThcRegelsett
@@ -120,14 +136,15 @@ export function thcEndringer(utgave: ThcRegelsettutgave, regler: ThcRegelsett, t
  * av det på en nyere revisjon, avviser lagringen det med en
  * samtidighetskonflikt. `mot` er utgaven brukeren åpnet, eller den nyeste når
  * hen har sammenlignet og valgt å lagre sitt over den; da lagres bare det som
- * er forskjellig fra den.
+ * er forskjellig fra den. De låste delene ({@link THC_LASTE_DELER}) lagres
+ * alltid slik de står i `mot`, uansett hva utkastet har.
  */
 export async function lagreThcUtkast(
   lager: Pick<Faginnholdslager, 'lagreUtkast'>,
   mot: ThcRegelsettutgave,
   { regler, tekster }: ThcUtkast,
 ): Promise<void> {
-  const { kommentarer, regelsett } = thcEndringer(mot, regler, tekster)
+  const { kommentarer, regelsett } = thcEndringer(mot, medLasteDeler(regler, mot.regelsett.innhold), tekster)
   for (const k of kommentarer) await lager.lagreUtkast(k.id, k.revisjon, k.innhold)
   if (regelsett) await lager.lagreUtkast(regelsett.id, regelsett.revisjon, regelsett.innhold)
 }
@@ -218,7 +235,7 @@ export function thcfelter(regler: ThcRegelsett, tekst: (nokkel: ThcTekstnokkel) 
     const gruppe = kurve(rolle)
     felter.push(
       { nokkel: `kurve-${rolle}-navn`, gruppe, navn: 'Navn', verdi: k.navn },
-      ...(['a1', 'k1', 'a2', 'k2'] as const).map((felt) => ({
+      ...THC_KURVEFELT.map((felt) => ({
         nokkel: `kurve-${rolle}-${felt}`,
         gruppe,
         navn: felt,

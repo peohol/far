@@ -7,7 +7,6 @@ import {
   normalkvantil,
   type ThcBruksmonster,
   type ThcKonsentrasjonsniva,
-  type ThcKurve,
   type ThcKurverolle,
   type ThcRegelsett,
 } from '../../domain/thcRegelsett'
@@ -15,7 +14,9 @@ import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../../domain/thcTekster'
 import { marginmerke } from '../../domain/thcVisning'
 import { lesTallfelt } from '../../faginnhold/paneler'
 import {
+  medLasteDeler,
   tallSomFelt,
+  THC_KURVEFELT,
   thcEndringer,
   thcUtgavefelter,
   thcUtkastfelter,
@@ -42,8 +43,6 @@ export interface ThcredigeringProps {
   onAvbryt: () => void
 }
 
-const KURVEFELT = ['a1', 'k1', 'a2', 'k2'] as const
-
 /**
  * Redigeringen av THC-syrereglene og -tekstene, i stedet for oversikten mens
  * den pågår.
@@ -52,6 +51,8 @@ const KURVEFELT = ['a1', 'k1', 'a2', 'k2'] as const
  * røres, beholder tallet nøyaktig slik det er lagret. Feilene står samlet
  * mens det skrives — de samme som databasen ville avvist — og simulatoren
  * under fortolker med utkastet slik det står, så snart det er gyldig.
+ * Utskillelseskurvene og konverteringsfaktoren vises, men er låst
+ * (`THC_LASTE_DELER`): de endres bare i koden.
  *
  * Tekstene er kommentarene bolkene peker på, og lagres hver for seg; reglene
  * lagres bare når de er endret. Plassholderne i en tekst kan ikke endres.
@@ -60,7 +61,9 @@ const KURVEFELT = ['a1', 'k1', 'a2', 'k2'] as const
  * over før brukeren har sammenlignet og valgt.
  */
 export function Thcredigering({ utgave, start, onLagre, hentNyeste, onAvbryt }: ThcredigeringProps) {
-  const [regler, setRegler] = useBevart('regler', start.regler)
+  const [lagrede, setRegler] = useBevart('regler', start.regler)
+  // Kurvene og konverteringsfaktoren er låst; de står alltid som lagret.
+  const regler = useMemo(() => medLasteDeler(lagrede, start.regler), [lagrede, start.regler])
   const [tekster, setTekster] = useBevart('tekster', start.tekster)
   const lagring = useRegellagring(onLagre, hentNyeste)
   const tittel = useId()
@@ -255,21 +258,24 @@ export function Thcredigering({ utgave, start, onLagre, hentNyeste, onAvbryt }: 
 
       <fieldset className="regelredigering__gruppe">
         <legend>Utskillelseskurvene</legend>
-        {THC_KURVEROLLER.map((rolle) => (
-          <Kurveredigering
-            key={rolle}
-            rolle={rolle}
-            kurve={regler.kurver[rolle]}
-            onEndre={(kurve) => sett('kurver', { ...regler.kurver, [rolle]: kurve })}
-          />
-        ))}
-        <div className="feltrad">
-          <Tallinndata
-            merke="Konverteringsfaktor"
-            verdi={regler.konverteringsfaktor}
-            onEndre={(faktor) => sett('konverteringsfaktor', faktor)}
-          />
-        </div>
+        <p className="felt__hjelp">Kurvene er låst og kan bare endres i koden.</p>
+        <dl className="regler__grenser">
+          {THC_KURVEROLLER.map((rolle) => {
+            const kurve = regler.kurver[rolle]
+            return (
+              <div key={rolle} className="regler__grense">
+                <dt>Den {KURVEFARGE[rolle]} kurven</dt>
+                <dd>
+                  {kurve.navn}: {THC_KURVEFELT.map((felt) => `${felt} ${tallSomFelt(kurve[felt])}`).join(' · ')}
+                </dd>
+              </div>
+            )
+          })}
+          <div className="regler__grense">
+            <dt>Konverteringsfaktor</dt>
+            <dd>{tallSomFelt(regler.konverteringsfaktor)}</dd>
+          </div>
+        </dl>
       </fieldset>
 
       <fieldset className="regelredigering__gruppe">
@@ -412,42 +418,6 @@ function Bruksmonsterredigering({
         valg={KURVEVALG}
         onEndre={(v) => onEndre({ ...monster, nytt_inntak_over: v as ThcKurverolle })}
       />
-    </div>
-  )
-}
-
-function Kurveredigering({
-  rolle,
-  kurve,
-  onEndre,
-}: {
-  rolle: ThcKurverolle
-  kurve: ThcKurve
-  onEndre: (kurve: ThcKurve) => void
-}) {
-  const id = useId()
-  const farge = KURVEFARGE[rolle]
-  return (
-    <div className="feltrad">
-      <div className="felt">
-        <label className="felt__merkelapp" htmlFor={id}>
-          Den {farge} kurven
-        </label>
-        <input
-          id={id}
-          className="felt__inndata"
-          value={kurve.navn}
-          onChange={(e) => onEndre({ ...kurve, navn: e.target.value })}
-        />
-      </div>
-      {KURVEFELT.map((felt) => (
-        <Tallinndata
-          key={felt}
-          merke={`${felt} (den ${farge})`}
-          verdi={kurve[felt]}
-          onEndre={(verdi) => onEndre({ ...kurve, [felt]: verdi })}
-        />
-      ))}
     </div>
   )
 }

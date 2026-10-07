@@ -226,7 +226,11 @@ det slik (se [Fasiten](#fasiten)).
 
 Seksjonen har «Rediger reglene». Hvert tall har sitt eget
 felt, andelene som prosent, og et felt som ikke røres, beholder tallet helt
-ned til siste siffer. Nivåer og marginer kan legges til og fjernes; z for en
+ned til siste siffer. Utskillelseskurvene (a1, k1, a2, k2 og navnet) og
+konverteringsfaktoren er låst (Peder, 07.10.2026): skjemaet viser dem uten
+felt, og lagringen tar dem alltid fra det som er lagret (`THC_LASTE_DELER`,
+`medLasteDeler`). Skal de endres, gjøres det i koden, med en migrasjon og en
+ny fasit. Nivåer og marginer kan legges til og fjernes; z for en
 ny margin regnes ut av marginen. Tekstene redigeres der bolken er beskrevet,
 med plassholderne den må ha.
 
