@@ -24,7 +24,7 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 - [ ] Arbeidspakke 10: ekstern legemiddelgrunnmur (lokal kopi og synkronisering).
 - [ ] Arbeidspakke 11: preparater fra eksterne data, ende til ende.
 - [x] Arbeidspakke 12: flere legemiddeldata der kildene er gode nok.
-- [ ] Arbeidspakke 13: regelvisninger og simulatorer i seksjonsarkitekturen.
+- [x] Arbeidspakke 13: regelvisninger og simulatorer i seksjonsarkitekturen.
 
 ---
 
@@ -1119,12 +1119,12 @@ Ta inn de øvrige feltene i del 23 én etter én, der arbeidspakke 8 viser at ki
 
 ## Arbeidspakke 13 - Regelvisninger og simulatorer i seksjonsarkitekturen
 
-**Status:** [ ] Ikke startet. Starter når arbeidspakke 9 del 1 er på `main`.
+**Status:** [x] Ferdig 07.10.2026. Alle tre regeltypene vises, prøves og redigeres på samme måte, som en hovedseksjon med detaljkort på redigeringssiden for fortolkningen (`docs/fortolkningsregler.md`, «Redigeringssiden»): reglene i seksjonen, tekstene og simulatoren som detaljkort, «Rediger reglene» i hodet, og de felles delene for historikk, hva som ikke er publisert, og konflikten når noen andre har lagret i mellomtiden (`Regelhistorikk`, `Regelfelter`). THC-syre er beskrevet i `docs/thc-syre.md`.
 
 - [x] Fortolkning/regler for konsentrasjonsreglene (arbeidspakke 5) vises som hovedseksjon med detaljkort.
 - [x] Scenarioreglene og simulatoren (arbeidspakke 6) likeså.
-- [ ] THC-editoren og -simulatoren (arbeidspakke 7) bygges i modellen fra starten.
-- [ ] Regelmotorene, valideringen og paritetstestene er uendret; klinisk output endres ikke.
+- [x] THC-editoren og -simulatoren (arbeidspakke 7) bygges i modellen fra starten.
+- [x] Regelmotorene, valideringen og paritetstestene er uendret; klinisk output endres ikke. For THC-syre sier `thcseksjonsparitet.test.tsx` det eksplisitt: fortolkningsmodulen, seksjonen og redigeringen bruker den samme modellen og gir fasiten fra den opprinnelige modulen i hvert tilfelle, også på skjermen.
 
 ---
 

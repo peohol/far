@@ -192,8 +192,10 @@ function Regeldelvisning({
       return regler.thcregelsett ? (
         <Thcregler
           utgave={regler.thcregelsett}
+          publisert={publisert.thcregelsett}
           redigerer
           onLagre={redigering.lagreThcRegelsett}
+          hentNyeste={redigering.hentThcRegelsettutkast}
           apenFraStart={ene}
           {...(!ene && { seksjonsid: `${FORTOLKNING}-thc`, tittel: 'Fortolkningsregler – THC-syre i urin' })}
         />

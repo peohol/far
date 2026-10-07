@@ -19,7 +19,7 @@ import { STOFFREGISTER } from '../domain/stoffregister'
 import { THC_ANALYTT } from '../domain/thc'
 import { fortolkThc, tomThcInndata } from '../domain/thcMotor'
 import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../domain/thcTekster'
-import type { Faginnholdslager } from '../faginnhold/lagring'
+import { Samtidighetskonflikt, type Faginnholdslager } from '../faginnhold/lagring'
 import type { Faginnholdsleser } from '../faginnhold/lesing'
 import type { ThcRegelsettutgave } from '../faginnhold/thcregler'
 import { THC_MODELL, THC_REGELSETT, THC_TEKSTER, thcRegelsettutgave } from './hjelp/thcgrunnlag'
@@ -53,11 +53,11 @@ function visSide(): Faginnholdsleser {
 }
 
 /** Redigeringen på fortolkningssiden for THC-syre i urin. Gir leseren tilbake. */
-function visRedigering(): Faginnholdsleser {
+function visRedigering(lager = {} as Faginnholdslager): Faginnholdsleser {
   const leser = falskLeser({ lesThcRegelsett: vi.fn(async () => thcRegelsettutgave()) })
   render(
     <TipsLag>
-      <FaginnholdskildeProvider kilde={{ leser, lager: {} as Faginnholdslager, kanRedigere: true }}>
+      <FaginnholdskildeProvider kilde={{ leser, lager, kanRedigere: true }}>
         <Fortolkningsredigering fortolkning={THC_ANALYTT} katalog={katalog} onPublisert={vi.fn()} onAvslutt={vi.fn()} />
       </FaginnholdskildeProvider>
     </TipsLag>,
@@ -93,6 +93,42 @@ describe('THC-syrereglene', () => {
     await screen.findByText('Denne siden har ikke fått faginnhold ennå.')
     expect(screen.queryByRole('heading', { level: 2, name: /Fortolkningsregler/ })).toBeNull()
     expect(fagside.lesThcRegelsett).not.toHaveBeenCalled()
+  })
+
+  it('lagrer alt i ett kall, sier fra på siden ved en konflikt, og forkaster hele redigeringen ved «Forkast»', async () => {
+    const user = userEvent.setup()
+    // Noen andre har lagret i mellomtiden; ingenting av det brukeren endret, er lagret.
+    const lagreThcRegelsett = vi.fn<Faginnholdslager['lagreThcRegelsett']>(async () => {
+      throw new Samtidighetskonflikt(4, 3)
+    })
+    const leser = visRedigering({ lagreThcRegelsett } as unknown as Faginnholdslager)
+    await user.click(await screen.findByRole('button', { name: 'Rediger reglene' }))
+    const skjema = within(screen.getByRole('form', { name: 'Rediger: Fortolkningsreglene for THC-syre i urin' }))
+    const apning = skjema.getByRole('textbox', { name: 'Åpning' })
+    await user.type(apning, ' Syntetisk.')
+    const varsel = skjema.getByRole('textbox', { name: 'Varsel ved mer enn (dager mellom prøvene)' })
+    await user.clear(varsel)
+    await user.type(varsel, '21')
+    await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
+
+    expect(lagreThcRegelsett).toHaveBeenCalledOnce()
+    const [objekt, revisjon, innhold, kommentarer] = lagreThcRegelsett.mock.calls[0]!
+    expect([objekt, revisjon, innhold.varsel_dager_mellom]).toEqual(['thc-regelsett', 3, 21])
+    expect(kommentarer.map((k) => k.id)).toEqual(['thc-apning'])
+    expect(await skjema.findByText(/Noen andre har lagret reglene mens du redigerte/)).toBeTruthy()
+    expect(skjema.getByRole('button', { name: 'Sammenlign med deres' })).toBeTruthy()
+    // Siden sier også fra, så reglene kan hentes på nytt om brukeren forkaster sitt.
+    expect(screen.getByText('Noen andre har endret reglene mens du redigerte. Ingenting er skrevet over.')).toBeTruthy()
+    // Det brukeren skrev, står fortsatt.
+    expect(skjema.getByRole('textbox', { name: 'Varsel ved mer enn (dager mellom prøvene)' })).toHaveProperty('value', '21')
+
+    // Ingenting ble lagret, så «Forkast mine endringer» forkaster alt brukeren endret, og det nyeste kan hentes.
+    await user.click(skjema.getByRole('button', { name: 'Forkast mine endringer' }))
+    expect(screen.queryByRole('form')).toBeNull()
+    expect(lagreThcRegelsett).toHaveBeenCalledOnce()
+    const lest = vi.mocked(leser.lesThcRegelsett).mock.calls.length
+    await user.click(screen.getByRole('button', { name: 'Hent nyeste utgave' }))
+    await vi.waitFor(() => expect(vi.mocked(leser.lesThcRegelsett).mock.calls.length).toBeGreaterThan(lest))
   })
 
   it('oppsummerer reglene og viser grensene, marginene og kurvene hvert bruksmønster avgjøres av', () => {
