@@ -189,7 +189,7 @@ describe('endringsloggen', () => {
     const versjon = ENDRINGSLOGG[2]!
     act(() => visEndringslogg(versjon.versjon))
     const lag = screen.getByRole('dialog', { name: 'Endringslogg' })
-    const foring = within(lag).getByRole('button', { name: (navn) => navn.includes(versjon.sammendrag) })
+    const foring = within(lag).getByRole('button', { name: new RegExp(versjon.versjon.replaceAll('.', '\\.')) })
     expect(foring.getAttribute('aria-expanded')).toBe('true')
     expect(document.activeElement).toBe(foring)
   })

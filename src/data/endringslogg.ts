@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.81.1',
+    versjon: '1.81.2',
     dato: '2026-10-07',
     sammendrag: 'Planen for fagsidene og redigeringen viser at alt det planlagte arbeidet er ferdig',
     typer: ['Funksjonalitet'],
@@ -20,6 +20,18 @@ export const ENDRINGSLOGG: Endring[] = [
     utenVarsel: true,
     punkter: [
       'Fremdriftsoversikten i planen er oppdatert: alle de planlagte arbeidspakkene er ferdige. Det som står igjen, er en faglig gjennomgang av tre stoffer der den toksiske grensen i Psykofarmaka-heftet er lavere enn den øvre grensen for referanseområdet. Ingenting i appen er endret.',
+    ],
+  },
+  {
+    versjon: '1.81.1',
+    dato: '2026-10-07',
+    sammendrag: 'Citalopram har tydeligere kildehenvisninger ved de enkelte fagpåstandene',
+    typer: ['Fag'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Lengre tekster om citalopram viser nå kilden direkte ved den påstanden kilden støtter, i stedet for å samle ulike kilder nederst på kortet.',
+      'Farmakogenetikken presiserer at CPIC beskriver hvordan et foreliggende CYP2C19-resultat brukes, men ikke hvem som bør analyseres.',
+      'TDM-teksten er oppdatert med en norsk studie fra 2026, og ammeteksten skiller tydelig mellom preparatomtalens forsiktighetsråd og vurderingene i LactMed og Janusmed.',
     ],
   },
   {

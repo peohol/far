@@ -101,7 +101,7 @@ export default function citalopram(db: () => PGlite): void {
        from public.referanser
        where tilstand = 'publisert' and objekt_id = any($1::uuid[])
        order by tittel`,
-      [toksiskKort.referanser],
+      [inlineReferanser(toksiskKort.data)],
     )
     expect(toksisitetskilder.map((r) => r.tittel)).toEqual(
       expect.arrayContaining([
@@ -150,12 +150,66 @@ export default function citalopram(db: () => PGlite): void {
     expect(pgx).not.toMatch(/\b(PM|IM|NM|UM)\b/)
   })
 
-  it('har samsvarende kort- og inline-kilder i de faste nye seksjonene', () => {
-    for (const e of [...toksisitet, ...graviditet, ...avhengighet]) {
-      const inline = inlineReferanser(e.data)
-      expect(inline.length, String(e.data.tittel)).toBeGreaterThan(0)
-      expect(new Set(inline), String(e.data.tittel)).toEqual(new Set(e.referanser))
+  it('bruker påstandsnære inline-kilder når teksten er heterogen, og kortkilder når én kilde dekker hele kortet', () => {
+    const oppsummering = identitet[0]!
+    expect(oppsummering.referanser).toHaveLength(0)
+    expect(inlineReferanser(oppsummering.data).length).toBeGreaterThanOrEqual(6)
+
+    const panikk = virkninger.find((e) => e.data.tittel === 'Effekt ved panikklidelse')!
+    expect(panikk.referanser).toHaveLength(0)
+    expect(new Set(inlineReferanser(panikk.data)).size).toBe(2)
+
+    for (const tittel of ['CYP-enzymer (substrat)', 'CYP2C19 og citaloprameksponering', 'Når farmakogenetisk analyse er relevant']) {
+      const kort = farmakogenetikk.find((e) => e.data.tittel === tittel)!
+      expect(kort.referanser, tittel).toHaveLength(0)
+      expect(inlineReferanser(kort.data).length, tittel).toBeGreaterThan(1)
     }
+
+    const tdmKontekst = tdm.find((e) => e.data.tittel === 'Konsentrasjon–effekt og internasjonal kontekst')!
+    expect(tdmKontekst.referanser).toHaveLength(0)
+    expect(inlineReferanser(tdmKontekst.data).length).toBeGreaterThanOrEqual(5)
+
+    for (const tittel of ['Toksisk dose og eksponering', 'Toksiske konsentrasjoner', 'Toksikokinetiske særtrekk']) {
+      const kort = toksisitet.find((e) => e.data.tittel === tittel)!
+      expect(kort.referanser, tittel).toHaveLength(0)
+      expect(inlineReferanser(kort.data).length, tittel).toBeGreaterThan(1)
+    }
+
+    for (const tittel of ['Graviditet', 'Perinatal og neonatal påvirkning', 'Amming']) {
+      const kort = graviditet.find((e) => e.data.tittel === tittel)!
+      expect(kort.referanser, tittel).toHaveLength(0)
+      expect(inlineReferanser(kort.data).length, tittel).toBeGreaterThan(1)
+    }
+
+    const fertilitet = graviditet.find((e) => e.data.tittel === 'Fertilitet og reproduksjon')!
+    expect(fertilitet.referanser).toHaveLength(1)
+    expect(inlineReferanser(fertilitet.data)).toHaveLength(0)
+
+    const toleranse = avhengighet.find((e) => e.data.tittel === 'Toleranseutvikling')!
+    expect(toleranse.referanser).toHaveLength(1)
+    expect(inlineReferanser(toleranse.data)).toHaveLength(0)
+
+    const seponering = avhengighet.find((e) => e.data.tittel === 'Abstinens, seponeringssyndrom og rebound-effekter')!
+    expect(seponering.referanser).toHaveLength(0)
+    expect(inlineReferanser(seponering.data).length).toBe(3)
+
+    const addiksjon = avhengighet.find((e) => e.data.tittel === 'Addiksjon')!
+    expect(addiksjon.referanser).toHaveLength(0)
+    expect(new Set(inlineReferanser(addiksjon.data)).size).toBe(2)
+  })
+
+  it('avgrenser CPIC til bruk av et foreliggende CYP2C19-resultat', () => {
+    const kort = farmakogenetikk.find((e) => e.data.tittel === 'Når farmakogenetisk analyse er relevant')!
+    const innhold = tekst(kort.data)
+    expect(innhold).toContain('allerede foreliggende CYP2C19-resultat')
+    expect(innhold).toContain('tar ikke stilling til hvem som bør genotypes')
+  })
+
+  it('skiller regulatorisk ammeråd fra LactMed/Janusmed-vurderingen', () => {
+    const amming = graviditet.find((e) => e.data.tittel === 'Amming')!
+    const innhold = tekst(amming.data)
+    expect(innhold).toContain('anbefaler forsiktighet')
+    expect(innhold).toContain('ikke er grunn til å avslutte amming')
   })
 
   it('har kildebelegg og ingen upubliserte redaksjonelle elementer', () => {
@@ -173,7 +227,8 @@ export default function citalopram(db: () => PGlite): void {
       ...graviditet,
       ...avhengighet,
     ]) {
-      expect(e.referanser.length, String(e.data.tittel ?? e.panel)).toBeGreaterThan(0)
+      const kildebelegg = e.referanser.length + inlineReferanser(e.data).length
+      expect(kildebelegg, String(e.data.tittel ?? e.panel)).toBeGreaterThan(0)
       expect(e.utkast, String(e.data.tittel ?? e.panel)).toBe(e.publisert)
     }
   })
