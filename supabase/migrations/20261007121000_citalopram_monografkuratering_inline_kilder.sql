@@ -95,7 +95,7 @@ begin
       jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(spc)))
     )),
     jsonb_build_object('type','paragraph','content',jsonb_build_array(
-      jsonb_build_object('type','text','text','Et klinisk særtrekk er doseavhengig QT-forlengelse, som bidrar til at maksimal anbefalt dose er 40 mg/døgn og 20 mg/døgn hos blant annet eldre, ved nedsatt leverfunksjon og ved langsom CYP2C19-omsetning.'),
+      jsonb_build_object('type','text','text','Et klinisk særtrekk er doseavhengig QT-forlengelse, som bidrar til at maksimal anbefalt dose er 40 mg/døgn og 20 mg/døgn hos blant annet eldre, ved nedsatt leverfunksjon og ved manglende CYP2C19-enzymaktivitet.'),
       jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(spc)))
     )),
     jsonb_build_object('type','paragraph','content',jsonb_build_array(
@@ -136,7 +136,7 @@ begin
     'type','doc','content',jsonb_build_array(jsonb_build_object('type','paragraph','content',jsonb_build_array(
       jsonb_build_object('type','text','text','CYP2C19-genotype har klinisk relevant betydning for citaloprameksponering.'),
       jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(cpic))),
-      jsonb_build_object('type','text','text',' Preparatomtalen beskriver omtrent doble plasmakonsentrasjoner av den aktive enantiomeren hos personer med langsom CYP2C19-omsetning sammenlignet med raske omsettere.'),
+      jsonb_build_object('type','text','text',' Preparatomtalen beskriver omtrent doble plasmakonsentrasjoner av den aktive enantiomeren hos personer med manglende CYP2C19-enzymaktivitet sammenlignet med personer med normal enzymaktivitet.'),
       jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(spc))),
       jsonb_build_object('type','text','text',' Ved økt enzymaktivitet kan konsentrasjonene bli lavere og sannsynligheten for klinisk effekt redusert.'),
       jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(cpic)))
@@ -222,7 +222,7 @@ begin
     'type','doc','content',jsonb_build_array(jsonb_build_object('type','paragraph','content',jsonb_build_array(
       jsonb_build_object('type','text','text','Symptomer opptrer vanligvis innen tiden til Cmax, omtrent 4 timer for vanlige tabletter, men kramper kan komme allerede etter 2–3 timer og EKG-forandringer kan debutere så sent som rundt 12 timer.'),
       jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(giftinfo,spc))),
-      jsonb_build_object('type','text','text',' CYP2C19-hemming eller langsom CYP2C19-omsetning kan øke eksponeringen.'),
+      jsonb_build_object('type','text','text',' CYP2C19-hemming eller manglende CYP2C19-enzymaktivitet kan øke eksponeringen.'),
       jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(spc,cpic)))
     )))
   ));
