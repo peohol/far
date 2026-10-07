@@ -19,7 +19,7 @@ export const ENDRINGSLOGG: Endring[] = [
     omfang: 'Minimalt omfang',
     utenVarsel: true,
     punkter: [
-      'Fremdriftsoversikten i planen er oppdatert: alle de planlagte arbeidspakkene er ferdige. Det som står igjen, er en faglig gjennomgang av seks referanse- og toksisitetsgrenser fra Psykofarmaka-heftet. Ingenting i appen er endret.',
+      'Fremdriftsoversikten i planen er oppdatert: alle de planlagte arbeidspakkene er ferdige. Det som står igjen, er en faglig gjennomgang av tre stoffer der den toksiske grensen i Psykofarmaka-heftet er lavere enn den øvre grensen for referanseområdet. Ingenting i appen er endret.',
     ],
   },
   {

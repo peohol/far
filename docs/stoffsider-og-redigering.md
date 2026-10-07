@@ -30,12 +30,11 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 
 Gjenstående faglig kvalitetssikring (klinisk gjennomgang, ikke kode; se arbeidspakke 4):
 
-- [ ] BREK (brekspiprazol): referanseområdet er 50–350 nmol/L i Psykofarmaka.pdf, mot 50–330 nmol/L i de tidligere statiske fortolkningsdataene. Fagsiden og fortolkningen viser nå PDF-verdien.
-- [ ] DOKSUM (doksepin + desmetyldoksepin): 180–550 nmol/L i PDF-en, mot 18–550 nmol/L i de tidligere statiske dataene. Nå vises PDF-verdien.
-- [ ] LMP (levomepromazin): 10–300 nmol/L i PDF-en, mot <300 nmol/L i de tidligere statiske dataene. Nå vises PDF-verdien.
 - [ ] KLOZ (klozapin): toksisk grense (>1800 nmol/L) er lavere enn øvre referansegrense (2500 nmol/L) i PDF-en.
 - [ ] PARO (paroksetin): toksisk grense (>350 nmol/L) er lavere enn øvre referansegrense (400 nmol/L) i PDF-en.
 - [ ] MIASUM (mianserin): toksisk grense (>500 nmol/L) er lavere enn øvre referansegrense (900 nmol/L) i PDF-en.
+
+Avklart: avvikene i referanseområdet for BREK (50–350 nmol/L), DOKSUM (180–550 nmol/L) og LMP (10–300 nmol/L) mellom Psykofarmaka.pdf og de tidligere statiske fortolkningsdataene ble avgjort av Peder 23.09.2026. Fagsiden og fortolkningen bruker PDF-verdiene (`docs/fortolkningsregler.md`).
 
 Betinget, bare hvis behovet oppstår: lokale tillegg og skjulinger i de eksterne legemiddeldataene uten å endre de importerte radene (arbeidspakke 10). Det har ikke vært behov for det.
 
@@ -947,7 +946,7 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 ## Arbeidspakke 4 - Psykofarmakainnhold
 
-**Status:** [x] Ferdig 23.09.2026. Revidert etter kursendringen og slått sammen i omarbeidet form (PR #35). De seks punktene til klinisk gjennomgang nederst står igjen som faglig kvalitetssikring.
+**Status:** [x] Ferdig 23.09.2026. Revidert etter kursendringen og slått sammen i omarbeidet form (PR #35). Av punktene til klinisk gjennomgang nederst er BREK, DOKSUM og LMP avklart; KLOZ, PARO og MIASUM står igjen som faglig kvalitetssikring.
 
 Beholdes:
 
@@ -972,7 +971,7 @@ Omarbeidingen:
 
 Elementtypen for preparater og skjemaet for dem fra arbeidspakke 3 ble erstattet i arbeidspakke 11 av koblingen til legemiddeldataene (`legemiddelkobling`, se `docs/faginnhold.md`).
 
-Til klinisk gjennomgang (står igjen, se Status øverst): avvikene mellom PDF-en og de statiske dataene (BREK, DOKSUM, LMP) og toksisk område lavere enn referanseområdet (KLOZ, PARO, MIASUM) er listet i PR #35 og ikke rettet.
+Til klinisk gjennomgang: avvikene mellom PDF-en og de statiske dataene (BREK, DOKSUM, LMP) og toksisk område lavere enn referanseområdet (KLOZ, PARO, MIASUM) ble listet i PR #35. De tre første er avklart: fagsiden og fortolkningen bruker PDF-verdiene, slik Peder bestemte (PR #48, `docs/fortolkningsregler.md`). KLOZ, PARO og MIASUM står igjen (se Status øverst).
 
 ## Arbeidspakke 5 - Enkle kommentarer og konsentrasjonsregler
 
