@@ -13,7 +13,7 @@ import type { Endring } from '../domain/versjon'
 export const ENDRINGSLOGG: Endring[] = [
   {
     versjon: '1.80.7',
-    dato: '2026-10-06',
+    dato: '2026-10-07',
     sammendrag: 'De automatiske kontrollene av stoffregisteret er raskere og stabile',
     typer: ['Funksjonalitet'],
     omfang: 'Minimalt omfang',
