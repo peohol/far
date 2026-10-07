@@ -91,8 +91,10 @@ describe('pillen', () => {
     expect(pille('Referanse 2')).toHaveProperty('textContent', '2')
     const inline = pille('Referanser 1–3')
     expect(inline.textContent).toBe('1–3')
-    expect(inline.closest('sup')).not.toBeNull()
-    expect(pille('Referanse 1').closest('sup')).toBeNull()
+    // I teksten står pillen på linjen, ikke hevet som superscript.
+    expect(inline.classList.contains('referansepille--inline')).toBe(true)
+    expect(inline.closest('sup')).toBeNull()
+    expect(pille('Referanse 1').classList.contains('referansepille--inline')).toBe(false)
     for (const knapp of screen.getAllByRole('button', { name: /Referanse/ })) {
       expect(knapp.getAttribute('aria-expanded')).toBe('false')
     }

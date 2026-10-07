@@ -4,19 +4,20 @@
    kilde ikke kan redigeres. */
 
 /* En sitering er en liten, rund pille med numrene på siden, som i Slaids.
-   Inline står den hevet i teksten; for et helt kort eller panel står den i
-   referansefeltet nederst. Aksenten er forbeholdt det som kan trykkes på. */
+   Inline står den midt på tekstlinjen; for et helt kort eller panel står den
+   i referansefeltet nederst. Aksenten er forbeholdt det som kan trykkes på. */
 .referansepille-feste {
   position: relative;
   line-height: 0;
 }
 
 .referansepille {
+  --pille-hoyde: 1.55em;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.55em;
-  height: 1.55em;
+  min-width: var(--pille-hoyde);
+  height: var(--pille-hoyde);
   padding: 0 0.4em;
   font: inherit;
   /* Alltid UI-skriften, også inne i løpende tekst med serifskrift: den sitter
@@ -34,9 +35,12 @@
   transition: background var(--fart-rask) var(--kurve), color var(--fart-rask) var(--kurve);
 }
 
+/* I løpende tekst står pillen midt på linjen, ikke hevet, og tar ingen høyde:
+   de negative margene gjør boksen null høy, så linjeavstanden blir den samme
+   med og uten piller. */
 .referansepille--inline {
-  margin-left: 0.12em;
-  vertical-align: super;
+  margin: calc(var(--pille-hoyde) / -2) 0 calc(var(--pille-hoyde) / -2) 0.12em;
+  vertical-align: middle;
 }
 
 .referansepille:hover,

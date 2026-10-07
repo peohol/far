@@ -328,7 +328,7 @@ Ved implementering:
 
 Alle synlige kilder skal inn i det nummererte referansesystemet.
 
-- Inline-referanser: superscript-piller.
+- Inline-referanser: piller midt på tekstlinjen, som ikke endrer linjeavstanden.
 - Referanser som gjelder et helt kort eller panel: eget visuelt avgrenset **referansefelt nederst** i kortet eller panelet, ikke i overskriften og ikke blandet med brødteksten.
 - UI skal ikke skrive ut en manuell kildehenvisning som løpende «Kilde: …» dersom den egentlig er en referanse. Den vises som nummerpille; full tekst finnes i popover og referanselisten.
 - Referanselisten nederst er eneste permanente sted full bibliografisk tekst listes.
