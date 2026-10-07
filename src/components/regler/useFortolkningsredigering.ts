@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { regelplan } from '../../faginnhold/stoffside'
-import { Samtidighetskonflikt, type Faginnholdslager } from '../../faginnhold/lagring'
+import { Samtidighetskonflikt } from '../../faginnhold/lagring'
 import {
   INGEN_REGLER,
   type Regeldata,
@@ -169,30 +169,18 @@ export function useFortolkningsredigering(analytter: readonly Laboratorieanalytt
    * tekst, og regelsettet om reglene er endret, mot revisjonene brukeren
    * åpnet — eller mot `grunnlag` når brukeren har sett en nyere utgave og
    * velger å lagre over den. En konflikt kastes videre til redigeringen, som
-   * for de andre regelsettene. Objektene lagres hver for seg; ble noe lagret
-   * før konflikten, sier siden i tillegg fra at reglene bør hentes på nytt.
+   * for de andre regelsettene. Objektene lagres hver for seg, så noe kan være
+   * lagret før konflikten; siden sier derfor også fra, så reglene kan hentes
+   * på nytt om brukeren forkaster sitt.
    */
   const lagreThcRegelsett = useCallback(
-    async (utkast: ThcUtkast, grunnlag?: ThcRegelsettutgave) => {
-      const mot = grunnlag ?? utkastet().thcregelsett
-      if (!mot) throw new Error(IKKE_KLAR)
-      let noeLagret = false
-      const tellende: Pick<Faginnholdslager, 'lagreUtkast'> = {
-        lagreUtkast: async (objekt, revisjon, innhold) => {
-          const status = await lager.lagreUtkast(objekt, revisjon, innhold)
-          noeLagret = true
-          return status
-        },
-      }
-      try {
-        await lagreThcUtkast(tellende, mot, utkast)
-      } catch (e) {
-        if (noeLagret && e instanceof Samtidighetskonflikt) setKonflikt(true)
-        throw e
-      }
-      setRunde((r) => r + 1)
-    },
-    [lager, utkastet],
+    (utkast: ThcUtkast, grunnlag?: ThcRegelsettutgave) =>
+      endre(async () => {
+        const mot = grunnlag ?? utkastet().thcregelsett
+        if (!mot) throw new Error(IKKE_KLAR)
+        await lagreThcUtkast(lager, mot, utkast)
+      }),
+    [endre, lager, utkastet],
   )
 
   /** THC-syrereglene slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */

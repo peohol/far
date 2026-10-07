@@ -96,7 +96,7 @@ describe('THC-syrereglene', () => {
     expect(fagside.lesThcRegelsett).not.toHaveBeenCalled()
   })
 
-  it('sier fra på siden når noe ble lagret før en konflikt, og lar brukeren sammenligne i skjemaet', async () => {
+  it('sier fra på siden ved en konflikt, og lar brukeren sammenligne i skjemaet', async () => {
     const user = userEvent.setup()
     // Teksten lagres; regelsettet har noen andre lagret i mellomtiden.
     const lagreUtkast = vi.fn(async (objekt: string) => {
@@ -116,10 +116,30 @@ describe('THC-syrereglene', () => {
     expect(lagreUtkast.mock.calls.map(([objekt]) => objekt)).toEqual(['thc-apning', 'thc-regelsett'])
     expect(await skjema.findByText(/Noen andre har lagret reglene mens du redigerte/)).toBeTruthy()
     expect(skjema.getByRole('button', { name: 'Sammenlign med deres' })).toBeTruthy()
-    // Siden sier også fra, så reglene kan hentes på nytt etter det som ble lagret.
+    // Siden sier også fra, så reglene kan hentes på nytt om brukeren forkaster sitt.
     expect(screen.getByText('Noen andre har endret reglene mens du redigerte. Ingenting er skrevet over.')).toBeTruthy()
     // Det brukeren skrev, står fortsatt.
     expect(skjema.getByRole('textbox', { name: 'Varsel ved mer enn (dager mellom prøvene)' })).toHaveProperty('value', '21')
+  })
+
+  it('sier fra på siden også når bare reglene ble avvist, så det nyeste kan hentes etter «Forkast»', async () => {
+    const user = userEvent.setup()
+    const lagreUtkast = vi.fn(async () => {
+      throw new Samtidighetskonflikt(4, 3)
+    })
+    const leser = visRedigering({ lagreUtkast } as unknown as Faginnholdslager)
+    await user.click(await screen.findByRole('button', { name: 'Rediger reglene' }))
+    const skjema = within(screen.getByRole('form', { name: 'Rediger: Fortolkningsreglene for THC-syre i urin' }))
+    const varsel = skjema.getByRole('textbox', { name: 'Varsel ved mer enn (dager mellom prøvene)' })
+    await user.clear(varsel)
+    await user.type(varsel, '21')
+    await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
+    await user.click(await skjema.findByRole('button', { name: 'Forkast mine endringer' }))
+
+    expect(screen.queryByRole('form')).toBeNull()
+    const lest = vi.mocked(leser.lesThcRegelsett).mock.calls.length
+    await user.click(screen.getByRole('button', { name: 'Hent nyeste utgave' }))
+    await vi.waitFor(() => expect(vi.mocked(leser.lesThcRegelsett).mock.calls.length).toBeGreaterThan(lest))
   })
 
   it('oppsummerer reglene og viser grensene, marginene og kurvene hvert bruksmønster avgjøres av', () => {

@@ -243,7 +243,9 @@ en konflikt som i de andre regelredigeringene (`Lagringskonflikt`):
 ingenting er skrevet over, brukeren kan sammenligne sitt med det de lagret,
 felt for felt, og velge å forkaste sitt eller lagre over deres. Da lagres
 det som er forskjellig fra deres, mot revisjonene deres
-(`lagreThcUtkast`). Publiseringsplanen tar de endrede kommentarene før
+(`lagreThcUtkast`). Objektene lagres hver for seg, så noe kan være lagret
+før konflikten; siden sier derfor også fra, med «Hent nyeste utgave».
+Publiseringsplanen tar de endrede kommentarene før
 regelsettet, som databasen krever.
 
 ## Fasiten
