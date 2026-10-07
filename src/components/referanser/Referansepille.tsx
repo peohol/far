@@ -25,7 +25,7 @@ export interface ReferansepilleProps {
   /** Referansene siteringen viser til, i den rekkefølgen de er lagret. */
   ider: readonly string[]
   /**
-   * `inline` står hevet i teksten. `element` og `panel` står for seg, i
+   * `inline` står i tekstlinjen. `element` og `panel` står for seg, i
    * referansefeltet nederst i kortet eller panelet (`Referansefelt`).
    */
   niva?: Referanseniva
@@ -82,10 +82,8 @@ export function Referansepille({ ider, niva = 'inline' }: ReferansepilleProps) {
 
   if (oppforinger.length === 0) return null
   const tekst = komprimer(numre)
-  const Feste = niva === 'inline' ? 'sup' : 'span'
-
   return (
-    <Feste
+    <span
       ref={feste}
       className={`referansepille-feste referansepille-feste--${niva}`}
       // Berøring åpner med trykket, ikke med «pekeren kom»: ellers ville
@@ -129,7 +127,7 @@ export function Referansepille({ ider, niva = 'inline' }: ReferansepilleProps) {
       {apen && knapp.current && (
         <Referanseboble id={bobleId} anker={knapp.current} oppforinger={oppforinger} />
       )}
-    </Feste>
+    </span>
   )
 }
 

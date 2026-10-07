@@ -272,7 +272,7 @@ Vis som i Slaids, for eksempel:
 
 `1-3, 5, 9-11`
 
-visuelt som superscript/pille. Sammenhengende serier på minst tre komprimeres til intervall.
+visuelt som en pille midt på tekstlinjen (ikke hevet), i UI-skriften og uten å endre linjeavstanden. Sammenhengende serier på minst tre komprimeres til intervall.
 
 Popover må fungere både med hover og klikk/trykk/tastatur.
 
