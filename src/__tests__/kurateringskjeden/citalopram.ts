@@ -101,7 +101,7 @@ export default function citalopram(db: () => PGlite): void {
        from public.referanser
        where tilstand = 'publisert' and objekt_id = any($1::uuid[])
        order by tittel`,
-      [toksiskKort.referanser],
+      [inlineReferanser(toksiskKort.data)],
     )
     expect(toksisitetskilder.map((r) => r.tittel)).toEqual(
       expect.arrayContaining([
