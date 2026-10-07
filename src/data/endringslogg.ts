@@ -19,7 +19,7 @@ export const ENDRINGSLOGG: Endring[] = [
     omfang: 'Mindre omfang',
     punkter: [
       'Lengre tekster om citalopram viser nå kilden direkte ved den påstanden kilden støtter, i stedet for å samle ulike kilder nederst på kortet.',
-      'Farmakogenetikken presiserer at CPIC beskriver hvordan et foreliggende CYP2C19-resultat brukes, men ikke hvem som bør gentestes.',
+      'Farmakogenetikken presiserer at CPIC beskriver hvordan et foreliggende CYP2C19-resultat brukes, men ikke hvem som bør analyseres.',
       'TDM-teksten er oppdatert med en norsk studie fra 2026, og ammeteksten skiller tydelig mellom preparatomtalens forsiktighetsråd og vurderingene i LactMed og Janusmed.',
     ],
   },
