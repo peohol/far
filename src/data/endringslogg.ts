@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.81.1',
+    dato: '2026-10-07',
+    sammendrag: 'Planen for fagsidene og redigeringen viser at alt det planlagte arbeidet er ferdig',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    utenVarsel: true,
+    punkter: [
+      'Fremdriftsoversikten i planen er oppdatert: alle de planlagte arbeidspakkene er ferdige. Det som står igjen, er en faglig gjennomgang av seks referanse- og toksisitetsgrenser fra Psykofarmaka-heftet. Ingenting i appen er endret.',
+    ],
+  },
+  {
     versjon: '1.81.0',
     dato: '2026-10-07',
     sammendrag: 'Redigeringen av THC-syrereglene virker som for de andre fortolkningsreglene',
