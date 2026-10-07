@@ -14,6 +14,7 @@ declare
   giftinfo uuid;
   schulz2020 uuid;
   hiemke2017 uuid;
+  agnp2026 uuid;
   tdmreview uuid;
   espnes2026 uuid;
   pregmeta uuid;
@@ -57,6 +58,9 @@ begin
     kilde);
   hiemke2017 := intern.kuratering_referanse(
     '{"tittel":"Consensus Guidelines for Therapeutic Drug Monitoring in Neuropsychopharmacology: Update 2017","forfattere":"Hiemke C et al.","aar":"2018","lenke":"https://doi.org/10.1055/s-0043-116492"}',
+    kilde);
+  agnp2026 := intern.kuratering_referanse(
+    '{"tittel":"Consensus Guidelines for Therapeutic Drug Monitoring in Neuropsychopharmacology: Update 2026 – Pharmacokinetic, pharmacogenetic and clinical aspects","forfattere":"Hart XM, Gründer G, Hiemke C, et al.","aar":"2026","lenke":"https://doi.org/10.1055/a-2860-7861"}',
     kilde);
   tdmreview := intern.kuratering_referanse(
     '{"tittel":"Toward therapeutic drug monitoring of citalopram in depression? Insights from a systematic review","forfattere":"Xu N, Song Z, Jiang D, Zhao R","aar":"2023","lenke":"https://doi.org/10.3389/fpsyt.2023.1144573"}',
@@ -130,6 +134,21 @@ begin
 
   -- Farmakogenetikk: kilden settes ved hver klinisk påstand. CPIC sier hvordan
   -- et foreliggende resultat brukes, ikke hvem som bør testes.
+  -- Det eksisterende CYP-substratkortet har to faglig ulike påstander:
+  -- metabolisme støttes av både SPC og CPIC, mens metabolittenes relative
+  -- farmakodynamiske betydning her hentes fra SPC.
+  obj := intern.kuratering_element(side, 'farmakogenetikk', 'kinetikkort',
+    '{"tittel":"CYP-enzymer (substrat)"}'::jsonb, 3, forrige);
+  data := jsonb_build_object('tittel','CYP-enzymer (substrat)','dokument',jsonb_build_object(
+    'type','doc','content',jsonb_build_array(jsonb_build_object('type','paragraph','content',jsonb_build_array(
+      jsonb_build_object('type','text','text','CYP2C19 er et sentralt enzym i N-demetyleringen, med bidrag fra CYP3A4 og CYP2D6.'),
+      jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(spc,cpic))),
+      jsonb_build_object('type','text','text',' Desmetylcitalopram og didesmetylcitalopram er farmakologisk aktive, men mindre potente og selektive enn moderstoffet og anses ikke å bidra vesentlig til antidepressiv effekt.'),
+      jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(spc)))
+    )))
+  ));
+  perform intern.kuratering_lagre(obj, 3, jsonb_build_object('data',data,'referanser','[]'::jsonb), kilde);
+
   obj := intern.kuratering_element(side, 'farmakogenetikk', 'kinetikkort',
     '{"tittel":"CYP2C19 og citaloprameksponering"}'::jsonb, 1, forrige);
   data := jsonb_build_object('tittel','CYP2C19 og citaloprameksponering','dokument',jsonb_build_object(
@@ -185,7 +204,7 @@ begin
         jsonb_build_object('type','text','text','Dokumentasjonen for en skarp konsentrasjon–effekt- eller konsentrasjon–bivirkningsterskel er begrenset.'),
         jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(tdmreview))),
         jsonb_build_object('type','text','text',' Serumkonsentrasjonen bør derfor tolkes i sammenheng med blant annet dose, prøvetidspunkt, etterlevelse, interaksjoner, organfunksjon og farmakogenetiske forhold, ikke som et automatisk dosejusteringsmål mot én universell terskel.'),
-        jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(tdmreview,cpic)))
+        jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(tdmreview,agnp2026)))
       ))
     )
   ));
