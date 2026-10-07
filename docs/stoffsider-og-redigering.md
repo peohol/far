@@ -6,25 +6,37 @@ Planen skal brukes som fremdriftssporing. Arbeidspakkene nederst krysses av ette
 
 > **Kursendring 23.09.2026.** Preparatnavn og andre legemiddelgrunndata skal ikke lenger kopieres for hånd fra Felleskatalogen. De hentes fra autoritative offentlige legemiddeldata (FEST via Helsedirektoratets HAPI, DMP FHIR eller en kombinasjon) og synkroniseres til en egen, lokal kopi i Supabase (del 23). Fagsidene går samtidig over til progressiv detaljering: hovedseksjoner som trekkspill med minioppsummering, og detaljkort inne i dem (del 24). Klinisk kuratert innhold forblir OUSFAR-redigert og versjonert.
 >
-> Der eldre deler av planen sier noe annet, gjelder del 23–25. Erstattede deler er merket **Erstattet**. Arbeidspakke 4 er revidert, og arbeidspakke 8–13 er nye. Del 25 sier hvordan de åpne PR-ene og øktene skal tilpasses.
+> Der eldre deler av planen sier noe annet, gjelder del 23–25. Erstattede deler er merket **Erstattet**. Arbeidspakke 4 er revidert, og arbeidspakke 8–13 er nye. Del 25 beskriver hvordan PR-ene og øktene som var åpne da, ble tilpasset og slått sammen.
 
 ## Status
+
+**Det planlagte implementeringsløpet er fullført.** Arbeidspakke 1–13 er ferdige og slått sammen på `main` (siste: arbeidspakke 13, versjon 1.81.0, 07.10.2026). Det som står igjen, er faglig kvalitetssikring og én betinget funksjon som bare bygges hvis behovet oppstår; ingen av delene er implementeringsgjeld.
 
 - [x] Supabase er etablert.
 - [x] Brukersystem med profiler og roller er etablert.
 - [x] Arbeidspakke 1: fundament for redigerbart faginnhold.
 - [x] Arbeidspakke 2: referansesystem.
 - [x] Arbeidspakke 3: fagsider og navigasjon (omarbeidet 29.09.2026: stoffet er sidens identitet, analyttene kobles eksplisitt).
-- [ ] Arbeidspakke 4: import av psykofarmakainnhold (revidert 23.09.2026, omarbeides).
-- [ ] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
+- [x] Arbeidspakke 4: import av psykofarmakainnhold (revidert og omarbeidet 23.09.2026).
+- [x] Arbeidspakke 5: enkle kommentarer og konsentrasjonsregler.
 - [x] Arbeidspakke 6: sammensatte analyttgrupper.
 - [x] Arbeidspakke 7: THC-syre (motor, lagring, produksjonskilde, simulator og editor).
-- [ ] Arbeidspakke 8: kartlegging av offentlige legemiddeldatakilder.
+- [x] Arbeidspakke 8: kartlegging av offentlige legemiddeldatakilder.
 - [x] Arbeidspakke 9: seksjoner og detaljkort (progressiv detaljering).
-- [ ] Arbeidspakke 10: ekstern legemiddelgrunnmur (lokal kopi og synkronisering).
-- [ ] Arbeidspakke 11: preparater fra eksterne data, ende til ende.
+- [x] Arbeidspakke 10: ekstern legemiddelgrunnmur (lokal kopi og synkronisering).
+- [x] Arbeidspakke 11: preparater fra eksterne data, ende til ende.
 - [x] Arbeidspakke 12: flere legemiddeldata der kildene er gode nok.
 - [x] Arbeidspakke 13: regelvisninger og simulatorer i seksjonsarkitekturen.
+
+Gjenstående faglig kvalitetssikring (klinisk gjennomgang, ikke kode; se arbeidspakke 4):
+
+- [ ] KLOZ (klozapin): toksisk grense (>1800 nmol/L) er lavere enn øvre referansegrense (2500 nmol/L) i PDF-en.
+- [ ] PARO (paroksetin): toksisk grense (>350 nmol/L) er lavere enn øvre referansegrense (400 nmol/L) i PDF-en.
+- [ ] MIASUM (mianserin): toksisk grense (>500 nmol/L) er lavere enn øvre referansegrense (900 nmol/L) i PDF-en.
+
+Avklart: avvikene i referanseområdet for BREK (50–350 nmol/L), DOKSUM (180–550 nmol/L) og LMP (10–300 nmol/L) mellom Psykofarmaka.pdf og de tidligere statiske fortolkningsdataene ble avgjort av Peder 23.09.2026. Fagsiden og fortolkningen bruker PDF-verdiene (`docs/fortolkningsregler.md`).
+
+Betinget, bare hvis behovet oppstår: lokale tillegg og skjulinger i de eksterne legemiddeldataene uten å endre de importerte radene (arbeidspakke 10). Det har ikke vært behov for det.
 
 ---
 
@@ -821,32 +833,34 @@ Identiteten (panel 1) og kritiske varsler skjules ikke.
 
 ## 25. Koordinering av pågående arbeid
 
-*Ny 23.09.2026. Oppdateres når PR-ene slås sammen eller lukkes.*
+*Ny 23.09.2026. Avsluttet samme dag: alle PR-ene i tabellen under er slått sammen på `main`. Delen står som dokumentasjon av hvordan arbeidet ble koordinert.*
 
 ### Felles regler
 
-- **Migrasjoner som alt er kjørt i produksjon, endres aldri.** Alle migrasjonene i de åpne PR-ene under er kjørt mot produksjonsdatabasen, men ingen av dem er på `main` ennå. De skal inn på `main` byte-identiske. Endringer i data eller skjema som alt er i produksjon, gjøres med nye migrasjoner.
-- **`20260923064740_revisjonskilde.sql`** ligger byte-identisk i #35 og #37. Den PR-en som slås sammen først, tar den inn; den andre beholder den identiske kopien (git slår dem sammen uten konflikt). Funksjonaliteten beholdes selv om #35 omarbeides.
+- **Migrasjoner som alt er kjørt i produksjon, endres aldri.** Migrasjonene i PR-ene under var kjørt mot produksjonsdatabasen før PR-ene ble slått sammen, og de kom inn på `main` byte-identiske. Endringer i data eller skjema som alt er i produksjon, gjøres med nye migrasjoner.
+- **`20260923064740_revisjonskilde.sql`** lå byte-identisk i #35 og #37. #35 ble slått sammen først og tok den inn; #37 hadde den identiske kopien. Funksjonaliteten er beholdt.
 - **Delte filer** som er identiske på flere grener, beholdes identiske til den første PR-en med dem er slått sammen. `src/domain/kommentarobjekt.ts` ligger i #33 og #38. Rettelsen i `src/hooks/useKortHopp.ts` (som alle grenene har) er tatt inn på `main` med denne revisjonen av planen, byte-identisk.
 - **Denne planen** redigeres av flere grener. Ved konflikt: ta `main`s tekst og legg bare inn statusendringene for egen arbeidspakke.
 - **Versjonsnummeret** settes når PR-en er klar til sammenslåing: neste ledige nummer over `main`, etter `docs/endringslogg.md`.
 - **Ny panel-UI:** ingen nye, permanente panelvarianter bygges før seksjonsmodellen (arbeidspakke 9, del 1) er på `main`. Domenearbeid, lagring, validering, historikk og paritetstester fortsetter som før.
 
-### De åpne PR-ene
+### PR-ene som var åpne 23.09.2026
 
-| PR | Arbeidspakke | Hva | Vurdering | Rebase | UI-tilpasning |
-| --- | --- | --- | --- | --- | --- |
-| #38 | 5–7, felles | Kommentarobjektene | Fortsetter uendret | Ja, på `main` med denne planen og endringsloggen | Ingen UI |
-| #37 | 5 del 1 | Intervallregelsettene i databasen, importen, pariteten | Fortsetter uendret | Ja, på `main`; planstatus etter reglene over | Ingen UI |
-| #39 | 5 del 2 | Redigering, simulator og historikk for konsentrasjonsreglene | Fortsetter. Historikkvinduet er generelt og beholdes | Ja, etter #37 | Regelvisningen og simulatoren flyttes inn i seksjonsmodellen i arbeidspakke 13. Ikke utvid panelet videre |
-| #33 | 6 del 1 | Scenariomotoren, regelsettene og simulatoren | Fortsetter | Ja, på `main` etter #38 | Scenarioregler og simulator flyttes inn i seksjonsmodellen i arbeidspakke 13. Ikke utvid panelet videre |
-| #34 | 7 del 1 | THC-motoren, reglene og tekstene som data | Fortsetter uendret | Ja, etter #33 | Ingen UI |
-| #36 | 7 del 2 | THC-regelsettet lagret i Supabase | Fortsetter uendret | Ja, etter #34 | Ingen UI. THC-editoren og -simulatoren bygges i seksjonsmodellen (arbeidspakke 13) |
-| #35 | 4 | Psykofarmakainnholdet | Omarbeidet etter arbeidspakke 4 under; den gamle formen merges ikke | Ja, på `main` | Preparat- og kontrolldatovisningen fjernes; innholdet vises gjennom seksjonsmodellen når arbeidspakke 9 er på `main` |
+| PR | Arbeidspakke | Hva | Vurdering | Rebase | UI-tilpasning | Slått sammen |
+| --- | --- | --- | --- | --- | --- | --- |
+| #38 | 5–7, felles | Kommentarobjektene | Fortsetter uendret | Ja, på `main` med denne planen og endringsloggen | Ingen UI | 23.09.2026 (1.14.0) |
+| #37 | 5 del 1 | Intervallregelsettene i databasen, importen, pariteten | Fortsetter uendret | Ja, på `main`; planstatus etter reglene over | Ingen UI | 23.09.2026 (1.17.0) |
+| #39 | 5 del 2 | Redigering, simulator og historikk for konsentrasjonsreglene | Fortsetter. Historikkvinduet er generelt og beholdes | Ja, etter #37 | Regelvisningen og simulatoren flyttes inn i seksjonsmodellen i arbeidspakke 13. Ikke utvid panelet videre | 23.09.2026 (1.18.0) |
+| #33 | 6 del 1 | Scenariomotoren, regelsettene og simulatoren | Fortsetter | Ja, på `main` etter #38 | Scenarioregler og simulator flyttes inn i seksjonsmodellen i arbeidspakke 13. Ikke utvid panelet videre | 23.09.2026 (1.15.0) |
+| #34 | 7 del 1 | THC-motoren, reglene og tekstene som data | Fortsetter uendret | Ja, etter #33 | Ingen UI | 23.09.2026 (1.16.1) |
+| #36 | 7 del 2 | THC-regelsettet lagret i Supabase | Fortsetter uendret | Ja, etter #34 | Ingen UI. THC-editoren og -simulatoren bygges i seksjonsmodellen (arbeidspakke 13) | 23.09.2026 (1.16.2) |
+| #35 | 4 | Psykofarmakainnholdet | Omarbeidet etter arbeidspakke 4 under; den gamle formen merges ikke | Ja, på `main` | Preparat- og kontrolldatovisningen fjernes; innholdet vises gjennom seksjonsmodellen når arbeidspakke 9 er på `main` | 23.09.2026 (1.12.0) |
 
-**Rekkefølge:** denne planen først, så #38, deretter #33 og #37 (i hvilken som helst rekkefølge), #39 etter #37, #34 etter #33, og #36 etter #34. Den omarbeidede #35 kan slås sammen når den er grønn, uavhengig av de andre. Arbeidspakke 9 del 2 (flytting av dagens sider) flytter det som er på `main` når den starter; paneler som kommer senere, flyttes av eieren i arbeidspakke 13.
+**Rekkefølge (fulgt):** denne planen først, så #38, deretter #33 og #37, #39 etter #37, #34 etter #33, og #36 etter #34. Den omarbeidede #35 ble slått sammen først, uavhengig av de andre. Arbeidspakke 9 del 2 (flytting av dagens sider) flytter det som er på `main` når den starter; paneler som kommer senere, flyttes av eieren i arbeidspakke 13.
 
 ### Øktene
+
+Ansvaret slik det var fordelt under koordineringen.
 
 | Økt | Eier |
 | --- | --- |
@@ -932,13 +946,13 @@ Hvordan sidene er bygget, står i `docs/faginnhold.md` under «Informasjonssiden
 
 ## Arbeidspakke 4 - Psykofarmakainnhold
 
-**Status:** [ ] Revidert 23.09.2026. Innholdet er ferdig i produksjonsdatabasen, og omarbeidingen er gjort der. PR #35 (omarbeidet) gjenstår å slå sammen.
+**Status:** [x] Ferdig 23.09.2026. Revidert etter kursendringen og slått sammen i omarbeidet form (PR #35). Av punktene til klinisk gjennomgang nederst er BREK, DOKSUM og LMP avklart; KLOZ, PARO og MIASUM står igjen som faglig kvalitetssikring.
 
 Beholdes:
 
 - [x] Render og kontroller `originaldata/Psykofarmaka.pdf`.
 - [x] Bygg kontrollert importdatasett.
-- [x] Importer antidepressiver, antipsykotika og lamotrigin: 35 sider og 103 referanser (i produksjonsdatabasen; ikke på `main` ennå).
+- [x] Importer antidepressiver, antipsykotika og lamotrigin: 35 sider og 103 referanser.
 - [x] Fyll panel 2–7 der kilden har data, koblet til riktige informasjonssider, også sumanalyser og komponenter.
 - [x] Første revisjon peker tilbake til kilde/side der det er mulig, f.eks. «Importert fra Psykofarmaka.pdf, side 7» (`revisjonskilde`, som også brukes av annet arbeid og beholdes uendret).
 - [x] Indikasjonssammendragene beholdes som redaksjonelt klinisk innhold (panel 5), med preparatomtalene i Felleskatalogen som referanser. FEST/HAPI gir ikke indikasjonstekst; arbeidspakke 8 bekrefter om noen av de eksterne kildene gjør det.
@@ -953,11 +967,11 @@ Omarbeidingen:
 - [x] Den manuelle preparatnavnlisten og kontrolldatoen er fjernet fra koden, importdatasettet og visningen.
 - [x] De 35 preparatnavnelementene og kontrolldatoene på indikasjonene er tatt bort i produksjonsdatabasen som nye, publiserte revisjoner med kilden «Tatt bort: preparatnavnene skal hentes fra offentlige legemiddeldata» (migrasjonen `psykofarmaka_kursendring`). De kjørte migrasjonene er ikke endret, og alt kan gjenopprettes fra historikken.
 - [x] Ingen ny, permanent panel-UI; innholdet vises gjennom seksjonsmodellen (arbeidspakke 9).
-- [ ] Alle migrasjonene som er kjørt i produksjon, er med byte-identiske når PR-en slås sammen.
+- [x] Alle de 17 migrasjonene som var kjørt i produksjon, kom med byte-identiske; `psykofarmakaimport.test.ts` låser sjekksummene.
 
-Elementtypen for preparater og skjemaet for dem fra arbeidspakke 3 står fortsatt på `main`. De erstattes i arbeidspakke 11.
+Elementtypen for preparater og skjemaet for dem fra arbeidspakke 3 ble erstattet i arbeidspakke 11 av koblingen til legemiddeldataene (`legemiddelkobling`, se `docs/faginnhold.md`).
 
-Til klinisk gjennomgang: avvikene mellom PDF-en og de statiske dataene (BREK, DOKSUM, LMP) og toksisk område lavere enn referanseområdet (KLOZ, PARO, MIASUM) er listet i PR #35 og ikke rettet.
+Til klinisk gjennomgang: avvikene mellom PDF-en og de statiske dataene (BREK, DOKSUM, LMP) og toksisk område lavere enn referanseområdet (KLOZ, PARO, MIASUM) ble listet i PR #35. De tre første er avklart: fagsiden og fortolkningen bruker PDF-verdiene, slik Peder bestemte (PR #48, `docs/fortolkningsregler.md`). KLOZ, PARO og MIASUM står igjen (se Status øverst).
 
 ## Arbeidspakke 5 - Enkle kommentarer og konsentrasjonsregler
 
@@ -1020,7 +1034,7 @@ Egen spesialisert regelmotor/editor for:
 - [x] simulator og regresjonstester
 
 Punktene over er representert i regelsettet, motoren og lagringen i Supabase,
-med validering på serveren. Gjenstår:
+med validering på serveren. I tillegg er dette gjort:
 
 - [x] Strukturert lagring i Supabase, med utkast/publisering, historikk og gjenoppretting.
 - [x] Server-side validering, også av kurvenes rekkefølge for alle prøveverdier.
@@ -1086,19 +1100,20 @@ Del 2, dagens sider:
 
 ## Arbeidspakke 10 - Ekstern legemiddelgrunnmur
 
-**Status:** [ ] Grunnmuren er i produksjonsdatabasen (PR #45): egen kopi av FEST i skjemaet `legemiddeldata`, synkronisert hver natt fra Vercel. Koblingene fra sidene kommer med arbeidspakke 11.
+**Status:** [x] Ferdig 23.09.2026 (PR #45): egen kopi av FEST i skjemaet `legemiddeldata`, synkronisert hver natt fra Vercel. Koblingene fra sidene ble bygget i arbeidspakke 11.
 
 - [x] Databasemodell i Supabase for den lokale kopien, ut fra arbeidspakke 8 (del 18 og 23).
 - [x] Synkroniseringsjobb, server-side og planlagt, idempotent, med nye, endrede og utgåtte produkter.
 - [x] Siste gyldige data beholdes ved feil; kjøringene registreres.
 - [x] Hemmeligheter bare server-side.
 - [x] Eksplisitte, bekreftede koblinger fra informasjonssidene til eksterne substans-ID-er (del 23). Bygget i arbeidspakke 11.
-- [ ] Lokale tillegg og skjulinger uten å mutere importerte rader, hvis det trengs. Ikke behov ennå.
 - [x] Testdata fra faktiske svar og integrasjonstester.
+
+Betinget, ikke en del av det planlagte løpet: lokale tillegg og skjulinger uten å mutere importerte rader, hvis det blir behov. Det har ikke vært behov for det.
 
 ## Arbeidspakke 11 - Preparater fra eksterne data
 
-**Status:** [ ] Bygget. Hver side kobles til virkestoffene i FEST av en administrator i redigeringsmodus; navnelikhet gir bare forslag. Sidene viser ingen preparater før koblingen er publisert.
+**Status:** [x] Ferdig 23.09.2026 (PR #47 og #49). Hver side kobles til virkestoffene i FEST av en administrator i redigeringsmodus; navnelikhet gir bare forslag. Sidene viser ingen preparater før koblingen er publisert.
 
 - [x] Erstatt det manuelle preparatfeltet med de synkroniserte dataene.
 - [x] Hovedseksjonen «Preparater»: `legemiddelform → preparat → styrker`, med pakninger og detaljer i detaljkort.
