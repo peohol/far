@@ -12,18 +12,18 @@
 
 | Område | Kilde | Kontroll |
 | --- | --- | --- |
-| SPC, indikasjon, dosering, PK, sikkerhet, reproduksjon | Citalopram Orion – preparatomtale, DMP, revisjon 04/2025 | kontrollert 2026-10-06 |
-| Forgiftning | Giftinformasjonen/Helsebiblioteket: Citalopram – behandlingsanbefaling ved forgiftning | kontrollert 2026-10-06 |
-| Farmakogenetikk | CPIC: Bousman et al. 2023, DOI 10.1002/cpt.2903 | kontrollert 2026-10-06 |
-| TDM | AGNP Update 2026, DOI 10.1055/a-2860-7861 | kontrollert 2026-10-06 |
+| SPC, indikasjon, dosering, PK, sikkerhet, reproduksjon | Citalopram Orion – preparatomtale, DMP, revisjon 04/2025 | kontrollert 2026-10-07 |
+| Forgiftning | Giftinformasjonen/Helsebiblioteket: Citalopram – behandlingsanbefaling ved forgiftning | kontrollert 2026-10-07 |
+| Farmakogenetikk | CPIC: Bousman et al. 2023, DOI 10.1002/cpt.2903 | kontrollert 2026-10-07 |
+| TDM | AGNP Update 2026, DOI 10.1055/a-2860-7861 | kontrollert 2026-10-07 |
 | TDM, konsentrasjon–utfall | Xu, Song, Jiang & Zhao 2023, DOI 10.3389/fpsyt.2023.1144573 | kontrollert 2026-10-07 |
 | TDM, enantiomerfordeling og norsk konsensusområde | Espnes, Hønnås, Skogvoll & Spigset 2026, DOI 10.1007/s00228-026-04148-x | kontrollert 2026-10-07 |
-| Depresjon | Cipriani et al. 2018, DOI 10.1016/S0140-6736(17)32802-7 | kontrollert 2026-10-06 |
-| OCD | Montgomery et al. 2001, PMID 11236072 | kontrollert 2026-10-06 |
-| Panikklidelse | Lepola et al. 1998, PMID 9818634 | kontrollert 2026-10-06 |
-| Graviditet | Kang et al. 2017, DOI 10.5468/ogs.2017.60.2.145; Janusmed fosterpåverkan | kontrollert 2026-10-06 |
-| Amming | Janusmed amning; LactMed, siste revisjon 2026-09-15 | kontrollert 2026-10-06 |
-| Addiksjon/misbruk | Nutt 2003, DOI 10.1177/0269881103174019; Chiappini et al. 2022, DOI 10.3390/ph15050565 | kontrollert 2026-10-06 |
+| Depresjon | Cipriani et al. 2018, DOI 10.1016/S0140-6736(17)32802-7 | kontrollert 2026-10-07 |
+| OCD | Montgomery et al. 2001, PMID 11236072 | kontrollert 2026-10-07 |
+| Panikklidelse | Lepola et al. 1998, PMID 9818634 | kontrollert 2026-10-07 |
+| Graviditet | Kang et al. 2017, DOI 10.5468/ogs.2017.60.2.145; Janusmed fosterpåverkan | kontrollert 2026-10-07 |
+| Amming | Janusmed amning; LactMed, siste revisjon 2026-09-15 | kontrollert 2026-10-07 |
+| Addiksjon/misbruk | Nutt 2003, DOI 10.1177/0269881103174019; Chiappini et al. 2022, DOI 10.3390/ph15050565 | kontrollert 2026-10-07 |
 | Norske serumdata | Reis et al. 2009 og Referanseområdeprosjektet 2005–2008 | eksisterende OUSFAR-grunnlag bevart |
 
 ## Søke- og kontrollrunde
