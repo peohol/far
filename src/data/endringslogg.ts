@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.80.7',
+    dato: '2026-10-07',
+    sammendrag: 'De automatiske kontrollene av stoffregisteret er raskere og stabile',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    utenVarsel: true,
+    punkter: [
+      'De automatiske kontrollene av siden for stoffregisteret ble av og til stoppet fordi de brukte for lang tid, uten at noe var galt i appen. De leter nå bare der knappene faktisk står, og bruker under halvparten så lang tid. Ingenting i appen er endret.',
+    ],
+  },
+  {
     versjon: '1.80.6',
     dato: '2026-10-06',
     sammendrag: 'Byttbarheten i apotek viser bare det som faktisk gjelder i dag',
