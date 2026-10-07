@@ -13,7 +13,7 @@ import { normalkvantil } from '../domain/thcRegelsett'
 import { regelplan } from '../faginnhold/stoffside'
 import { lagFaginnholdslager, Samtidighetskonflikt } from '../faginnhold/lagring'
 import { lagFaginnholdsleser, type Faginnholdsleser } from '../faginnhold/lesing'
-import { thcEndringer, thcReglerFra, thcUtkastFra, thcUtkastfeil } from '../faginnhold/thcregler'
+import { lagreThcUtkast, thcEndringer, thcReglerFra, thcUtkastFra, thcUtkastfeil } from '../faginnhold/thcregler'
 import { lesRegeldata } from './hjelp/regeldata'
 import { faginnholdskall, kjorMigrasjoner, migrasjonsfiler, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
@@ -35,11 +35,9 @@ beforeAll(async () => {
   lager = lagFaginnholdslager(kall.klientFor(peder))
 }, 120_000)
 
-/** Lagrer som `lagreThcRegelsett` i appen gjør. */
+/** Lagrer med den samme funksjonen som `lagreThcRegelsett` i appen. */
 async function lagre(...[utgave, regler, tekster]: Parameters<typeof thcEndringer>) {
-  const { kommentarer, regelsett } = thcEndringer(utgave, regler, tekster)
-  for (const k of kommentarer) await lager.lagreUtkast(k.id, k.revisjon, k.innhold)
-  if (regelsett) await lager.lagreUtkast(regelsett.id, regelsett.revisjon, regelsett.innhold)
+  await lagreThcUtkast(lager, utgave, { regler, tekster })
 }
 
 describe('redigeringen av THC-syrereglene', () => {
@@ -85,5 +83,26 @@ describe('redigeringen av THC-syrereglene', () => {
     const mine = { ...start.regler, varsel_dager_mellom: 40 }
     await expect(lagre(apnet, mine, start.tekster)).rejects.toBeInstanceOf(Samtidighetskonflikt)
     expect((await admin.lesThcRegelsett('utkast'))!.regelsett.innhold.varsel_dager_mellom).toBe(25)
+  })
+
+  it('lagrer over deres når brukeren har sammenlignet, og bare det som er forskjellig fra deres', async () => {
+    const apnet = (await admin.lesThcRegelsett('utkast'))!
+    const start = thcUtkastFra(apnet)!
+    // Noen andre endrer reglene og en tekst mens brukeren endrer reglene.
+    const deres = { ...start.tekster, pavisningstid: `${start.tekster.pavisningstid} Deres tillegg.` }
+    await lagre(apnet, { ...start.regler, varsel_dager_mellom: 28 }, deres)
+    const mine = { ...start.regler, varsel_dager_mellom: 35 }
+    await expect(lagre(apnet, mine, start.tekster)).rejects.toBeInstanceOf(Samtidighetskonflikt)
+
+    // «Lagre mine over deres», etter sammenligningen: mot det nyeste, så
+    // resultatet er nøyaktig brukerens utkast, også teksten de endret.
+    const nyeste = (await admin.lesThcRegelsett('utkast'))!
+    await lagre(nyeste, mine, start.tekster)
+    const etter = (await admin.lesThcRegelsett('utkast'))!
+    expect(thcUtkastFra(etter)).toStrictEqual({ regler: mine, tekster: start.tekster })
+    // Tekstene som var like deres, fikk ingen ny revisjon.
+    const revisjoner = (u: typeof etter) => Object.fromEntries(u.kommentarer.map((k) => [k.id, k.revisjon]))
+    const endret = Object.entries(revisjoner(etter)).filter(([id, rev]) => revisjoner(nyeste)[id] !== rev)
+    expect(endret.map(([id]) => id)).toEqual([nyeste.regelsett.innhold.tekstbolker.pavisningstid])
   })
 })

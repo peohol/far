@@ -19,7 +19,8 @@ import { STOFFREGISTER } from '../domain/stoffregister'
 import { THC_ANALYTT } from '../domain/thc'
 import { fortolkThc, tomThcInndata } from '../domain/thcMotor'
 import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../domain/thcTekster'
-import type { Faginnholdslager } from '../faginnhold/lagring'
+import { Samtidighetskonflikt, type Faginnholdslager } from '../faginnhold/lagring'
+import type { Objektstatus } from '../faginnhold/modell'
 import type { Faginnholdsleser } from '../faginnhold/lesing'
 import type { ThcRegelsettutgave } from '../faginnhold/thcregler'
 import { THC_MODELL, THC_REGELSETT, THC_TEKSTER, thcRegelsettutgave } from './hjelp/thcgrunnlag'
@@ -53,11 +54,11 @@ function visSide(): Faginnholdsleser {
 }
 
 /** Redigeringen på fortolkningssiden for THC-syre i urin. Gir leseren tilbake. */
-function visRedigering(): Faginnholdsleser {
+function visRedigering(lager = {} as Faginnholdslager): Faginnholdsleser {
   const leser = falskLeser({ lesThcRegelsett: vi.fn(async () => thcRegelsettutgave()) })
   render(
     <TipsLag>
-      <FaginnholdskildeProvider kilde={{ leser, lager: {} as Faginnholdslager, kanRedigere: true }}>
+      <FaginnholdskildeProvider kilde={{ leser, lager, kanRedigere: true }}>
         <Fortolkningsredigering fortolkning={THC_ANALYTT} katalog={katalog} onPublisert={vi.fn()} onAvslutt={vi.fn()} />
       </FaginnholdskildeProvider>
     </TipsLag>,
@@ -93,6 +94,32 @@ describe('THC-syrereglene', () => {
     await screen.findByText('Denne siden har ikke fått faginnhold ennå.')
     expect(screen.queryByRole('heading', { level: 2, name: /Fortolkningsregler/ })).toBeNull()
     expect(fagside.lesThcRegelsett).not.toHaveBeenCalled()
+  })
+
+  it('sier fra på siden når noe ble lagret før en konflikt, og lar brukeren sammenligne i skjemaet', async () => {
+    const user = userEvent.setup()
+    // Teksten lagres; regelsettet har noen andre lagret i mellomtiden.
+    const lagreUtkast = vi.fn(async (objekt: string) => {
+      if (objekt === 'thc-regelsett') throw new Samtidighetskonflikt(4, 3)
+      return {} as Objektstatus
+    })
+    visRedigering({ lagreUtkast } as unknown as Faginnholdslager)
+    await user.click(await screen.findByRole('button', { name: 'Rediger reglene' }))
+    const skjema = within(screen.getByRole('form', { name: 'Rediger: Fortolkningsreglene for THC-syre i urin' }))
+    const apning = skjema.getByRole('textbox', { name: 'Åpning' })
+    await user.type(apning, ' Syntetisk.')
+    const varsel = skjema.getByRole('textbox', { name: 'Varsel ved mer enn (dager mellom prøvene)' })
+    await user.clear(varsel)
+    await user.type(varsel, '21')
+    await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
+
+    expect(lagreUtkast.mock.calls.map(([objekt]) => objekt)).toEqual(['thc-apning', 'thc-regelsett'])
+    expect(await skjema.findByText(/Noen andre har lagret reglene mens du redigerte/)).toBeTruthy()
+    expect(skjema.getByRole('button', { name: 'Sammenlign med deres' })).toBeTruthy()
+    // Siden sier også fra, så reglene kan hentes på nytt etter det som ble lagret.
+    expect(screen.getByText('Noen andre har endret reglene mens du redigerte. Ingenting er skrevet over.')).toBeTruthy()
+    // Det brukeren skrev, står fortsatt.
+    expect(skjema.getByRole('textbox', { name: 'Varsel ved mer enn (dager mellom prøvene)' })).toHaveProperty('value', '21')
   })
 
   it('oppsummerer reglene og viser grensene, marginene og kurvene hvert bruksmønster avgjøres av', () => {

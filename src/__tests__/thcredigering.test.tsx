@@ -13,7 +13,17 @@ import { TipsLag } from '../components/Tips'
 import { regelplan } from '../faginnhold/stoffside'
 import { THC_TEKSTBOLKER } from '../domain/thcTekster'
 import { INGEN_REGLER } from '../faginnhold/lesing'
-import { thcEndringer, thcUtkastfeil, type ThcRegelsettutgave } from '../faginnhold/thcregler'
+import {
+  thcEndringer,
+  thcUtgavefelter,
+  thcUtkastfelter,
+  thcUtkastfeil,
+  type ThcRegelsettutgave,
+  type ThcUtkast,
+} from '../faginnhold/thcregler'
+import { endredeFelt } from '../faginnhold/historikk'
+import { innholdsfelter } from '../faginnhold/innholdsfelter'
+import { Samtidighetskonflikt } from '../faginnhold/lagring'
 import { THC_REGELSETT, THC_TEKSTER, thcRegelsettutgave } from './hjelp/thcgrunnlag'
 
 beforeAll(() => {
@@ -77,6 +87,43 @@ describe('endringene som lagres', () => {
   })
 })
 
+describe('feltene historikken og sammenligningene viser', () => {
+  it('navngir hver del av reglene som i redigeringen, og hver tekstbolk', () => {
+    const felter = thcUtkastfelter({ regler: THC_REGELSETT, tekster: THC_TEKSTER })
+    const navn = felter.map((f) => (f.gruppe ? `${f.gruppe}: ${f.navn}` : f.navn))
+    expect(navn).toContain('Nivå 2: Fra og med (IRCAK)')
+    expect(navn).toContain('Sikkerhetsmargin: Standard')
+    expect(navn).toContain('Måleusikkerhet: CV for THC-syre')
+    expect(navn).toContain('Kronisk bruk: Nytt inntak over')
+    expect(navn).toContain('Den gule kurven: k1')
+    expect(navn).toContain(`Tekstbolkene: ${THC_TEKSTBOLKER.apning.tittel}`)
+    expect(new Set(felter.map((f) => f.nokkel)).size).toBe(felter.length)
+    expect(felter.find((f) => f.nokkel === 'tekst-apning')?.verdi).toBe(THC_TEKSTER.apning)
+    expect(felter.find((f) => f.nokkel === 'margin-standard')?.verdi).toBe('90 %')
+  })
+
+  it('viser en endring helt ned i siste siffer', () => {
+    const gul = THC_REGELSETT.kurver.gul
+    const nabo = gul.k1 + Number.EPSILON * gul.k1
+    expect(nabo).not.toBe(gul.k1)
+    const endret = { ...THC_REGELSETT, kurver: { ...THC_REGELSETT.kurver, gul: { ...gul, k1: nabo } } }
+    expect(
+      endredeFelt(
+        thcUtkastfelter({ regler: THC_REGELSETT, tekster: THC_TEKSTER }),
+        thcUtkastfelter({ regler: endret, tekster: THC_TEKSTER }),
+      ),
+    ).toEqual(['Den gule kurven: k1'])
+  })
+
+  it('viser navnet på kommentaren hver bolk peker på i historikken for regelsettet', () => {
+    const utgave = thcRegelsettutgave()
+    const felter = innholdsfelter('thc_regelsett', utgave.regelsett.innhold)
+    expect(felter.find((f) => f.nokkel === 'tekst-apning')?.verdi).toBe('thc-apning')
+    // Et utkast og utgaven det står i, gir de samme feltene.
+    expect(thcUtgavefelter(utgave)).toEqual(thcUtkastfelter({ regler: THC_REGELSETT, tekster: THC_TEKSTER }))
+  })
+})
+
 describe('publiseringen', () => {
   it('publiserer de endrede tekstene før regelsettet som peker på dem', () => {
     const utgave: ThcRegelsettutgave = thcRegelsettutgave()
@@ -91,11 +138,17 @@ describe('publiseringen', () => {
 })
 
 describe('redigeringen av THC-syrereglene', () => {
-  function visRedigering(utgave = thcRegelsettutgave()) {
-    const onLagre = vi.fn(async () => {})
+  function visRedigering(
+    utgave = thcRegelsettutgave(),
+    {
+      onLagre = vi.fn(async (_utkast: ThcUtkast, _grunnlag?: ThcRegelsettutgave) => {}),
+      hentNyeste = vi.fn(async () => utgave as ThcRegelsettutgave | null),
+      publisert = thcRegelsettutgave(),
+    } = {},
+  ) {
     render(
       <TipsLag>
-        <Thcregler utgave={utgave} redigerer onLagre={onLagre} />
+        <Thcregler utgave={utgave} publisert={publisert} redigerer onLagre={onLagre} hentNyeste={hentNyeste} />
       </TipsLag>,
     )
     return onLagre
@@ -108,7 +161,7 @@ describe('redigeringen av THC-syrereglene', () => {
   }
 
   it('finnes bare for administratorer i redigeringsmodus', () => {
-    render(<Thcregler utgave={thcRegelsettutgave()} redigerer={false} onLagre={vi.fn()} />)
+    render(<Thcregler utgave={thcRegelsettutgave()} redigerer={false} onLagre={vi.fn()} hentNyeste={vi.fn()} />)
     expect(screen.queryByRole('button', { name: 'Rediger reglene' })).toBeNull()
   })
 
@@ -126,7 +179,8 @@ describe('redigeringen av THC-syrereglene', () => {
     await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
 
     expect(onLagre).toHaveBeenCalledOnce()
-    const [regler, tekster] = onLagre.mock.calls[0]! as unknown as [typeof THC_REGELSETT, typeof THC_TEKSTER]
+    const [{ regler, tekster }, grunnlag] = onLagre.mock.calls[0]!
+    expect(grunnlag).toBeUndefined()
     expect(tekster).toEqual({ ...THC_TEKSTER, pavisningstid: 'Syntetisk påvisningstid.' })
     expect(regler.sikkerhetsmarginer[2]!.margin).toBe(0.95)
     expect(thcUtkastfeil(thcRegelsettutgave(), regler, tekster)).toEqual([])
@@ -169,10 +223,52 @@ describe('redigeringen av THC-syrereglene', () => {
     expect(screen.queryByRole('form')).toBeNull()
   })
 
-  it('sier hva som ikke er publisert', async () => {
-    const utgave = thcRegelsettutgave()
+  it('sier hvilke felt som ikke er publisert, som de andre regelsettene', async () => {
+    const utgave = thcRegelsettutgave({
+      regler: { ...THC_REGELSETT, varsel_dager_mellom: 21 },
+      tekster: { ...THC_TEKSTER, apning: 'Syntetisk åpning i {nivå} konsentrasjon.' },
+    })
+    utgave.regelsett = { ...utgave.regelsett, revisjon: 4 }
     utgave.kommentarer = utgave.kommentarer.map((k) => (k.id === 'thc-apning' ? { ...k, revisjon: 2 } : k))
     visRedigering(utgave)
-    expect(screen.getByText('Ikke publisert: «THC-syre: Åpning».')).toBeTruthy()
+    expect(
+      screen.getByText('Ikke publisert: Varsel ved mer enn (dager mellom prøvene), Tekstbolkene: Åpning.'),
+    ).toBeTruthy()
+    // Historikken for hver tekst står i det samme detaljkortet som for de andre regelsettene.
+    expect(screen.getByText('Historikken for hver kommentar')).toBeTruthy()
+  })
+
+  it('sier ingenting om publisering når alt er publisert', () => {
+    visRedigering()
+    expect(screen.queryByText(/Ikke publisert/)).toBeNull()
+  })
+
+  it('lar brukeren sammenligne og lagre over når noen andre har lagret i mellomtiden', async () => {
+    const user = userEvent.setup()
+    const deres = thcRegelsettutgave({ regler: { ...THC_REGELSETT, varsel_dager_mellom: 28 } })
+    deres.regelsett = { ...deres.regelsett, revisjon: 5 }
+    const onLagre = vi.fn(async (_utkast: ThcUtkast, grunnlag?: ThcRegelsettutgave) => {
+      if (!grunnlag) throw new Samtidighetskonflikt(5, 3)
+    })
+    const hentNyeste = vi.fn(async () => deres)
+    visRedigering(thcRegelsettutgave(), { onLagre, hentNyeste })
+    const skjema = await apne(user)
+
+    const varsel = skjema.getByRole('textbox', { name: 'Varsel ved mer enn (dager mellom prøvene)' })
+    await user.clear(varsel)
+    await user.type(varsel, '35')
+    await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
+    const konflikt = within(await skjema.findByRole('alert'))
+    expect(konflikt.getByText(/Noen andre har lagret reglene mens du redigerte/)).toBeTruthy()
+    expect(skjema.getByRole('button', { name: 'Lagre utkast' })).toHaveProperty('disabled', true)
+
+    await user.click(konflikt.getByRole('button', { name: 'Sammenlign med deres' }))
+    expect(hentNyeste).toHaveBeenCalledOnce()
+    expect(konflikt.getByText(/revisjon 5/)).toBeTruthy()
+    await user.click(konflikt.getByRole('button', { name: 'Lagre mine over deres' }))
+    expect(onLagre).toHaveBeenLastCalledWith(
+      { regler: { ...THC_REGELSETT, varsel_dager_mellom: 35 }, tekster: THC_TEKSTER },
+      deres,
+    )
   })
 })

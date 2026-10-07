@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.81.0',
+    dato: '2026-10-07',
+    sammendrag: 'Redigeringen av THC-syrereglene virker som for de andre fortolkningsreglene',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Under THC-syrereglene på redigeringssiden for fortolkningen står «Sist redigert», hva som ikke er publisert og historikken for hver kommentar på samme måte som for konsentrasjonsreglene og rusmiddelreglene.',
+      'Historikken og «Ikke publisert» viser hvilke deler som er endret, som «Nivå 2: Fra og med (IRCAK)» eller «Tekstbolkene: Åpning», i stedet for hele regelsettet.',
+      'Har noen andre lagret THC-syrereglene mens du redigerte, kan du sammenligne ditt med deres, felt for felt, og velge å forkaste ditt eller lagre over deres, uten å miste det du har skrevet.',
+      'Fortolkningen av THC-syre er uendret: kommentarene, konklusjonene og kurvene er nøyaktig de samme som før.',
+    ],
+  },
+  {
     versjon: '1.80.7',
     dato: '2026-10-07',
     sammendrag: 'De automatiske kontrollene av stoffregisteret er raskere og stabile',

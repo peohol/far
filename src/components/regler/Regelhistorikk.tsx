@@ -7,7 +7,7 @@ import { antall } from '../../faginnhold/oppsummering'
 import { Sistredigert } from '../historikk/Sistredigert'
 import { Detaljkort } from '../seksjoner/Seksjon'
 
-type Regelsettype = 'intervallregelsett' | 'scenarioregelsett'
+type Regelsettype = 'intervallregelsett' | 'scenarioregelsett' | 'thc_regelsett'
 
 /**
  * Hva i regelsettet og kommentarene det bruker som ikke er publisert, som
@@ -23,7 +23,7 @@ export function upubliserteFelt(utgaver: readonly Utgave<unknown>[], publisert: 
  * Det en administrator ser under fortolkningsreglene i redigeringsmodus:
  * «Sist redigert» for regelsettet, med historikken bak, hva som ikke er
  * publisert, og historikken for hver kommentar regelsettet bruker. Felles for
- * intervallreglene og scenarioreglene.
+ * intervallreglene, scenarioreglene og THC-syrereglene.
  */
 export function Regelhistorikk<T extends Regelsettype>({
   utgave,

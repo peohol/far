@@ -1,20 +1,25 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
-import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../../domain/thcTekster'
+import { THC_TEKSTBOLKER, THC_TEKSTNOKLER, type ThcRegelsettinnhold } from '../../domain/thcTekster'
 import type { ThcModell } from '../../domain/thcMotor'
 import { bruksmonsterbeskrivelse, marginmerke, nivaomrader, somProsent } from '../../domain/thcVisning'
 import { revisjonsnokkel } from '../../faginnhold/lesing'
-import { upublisert } from '../../faginnhold/stoffside'
 import { antall, ramsOpp } from '../../faginnhold/oppsummering'
-import { thcUtkastFra, tilThcModell, type ThcRegelsettutgave } from '../../faginnhold/thcregler'
+import {
+  thcfelter,
+  thcUtgavefelter,
+  thcUtkastFra,
+  tilThcModell,
+  type ThcRegelsettutgave,
+} from '../../faginnhold/thcregler'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Panelhode } from '../Panelhode'
 import { Uthev } from '../Uthev'
 import { seksjonsikon } from '../stoffside/panelvisning'
-import { Sistredigert } from '../historikk/Sistredigert'
 import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
 import { FORTOLKNING } from './Fortolkningsregler'
+import { kommentarnavnoppslag, Regelhistorikk, upubliserteFelt } from './Regelhistorikk'
 import { Thcredigering, type ThcredigeringProps } from './Thcredigering'
 import { Thcsimulator } from './Thcsimulator'
 
@@ -27,22 +32,31 @@ import { Thcsimulator } from './Thcsimulator'
  * I lesemodus er det de publiserte reglene, i redigeringsmodus utkastet. Et
  * regelsett som ikke består kontrollen, vises med feilene i stedet. I
  * redigeringsmodus kan administratorer endre reglene og tekstene
- * ({@link Thcredigering}), se hva som ikke er publisert og åpne historikken.
+ * ({@link Thcredigering}), se hva som ikke er publisert og åpne historikken —
+ * for regelsettet og for hver tekst — med de samme delene som
+ * konsentrasjonsreglene og scenarioreglene (`Regelhistorikk`).
  *
  * Reglene er seksjonen `fortolkning` på siden, og tekstene og simulatoren
- * detaljkort i den (`docs/seksjoner.md`).
+ * detaljkort i den (`docs/seksjoner.md`). Hvordan det regnes, er motorens
+ * (`docs/thc-syre.md`); seksjonen viser og redigerer bare.
  */
 export function Thcregler({
   utgave,
+  publisert = null,
   redigerer,
   onLagre,
+  hentNyeste,
   seksjonsid = FORTOLKNING,
   tittel = 'Fortolkningsregler',
   apenFraStart,
 }: {
   utgave: ThcRegelsettutgave
+  /** Det publiserte regelsettet, til å si hva som ikke er publisert ennå. */
+  publisert?: ThcRegelsettutgave | null
   redigerer: boolean
   onLagre?: ThcredigeringProps['onLagre']
+  /** Utkastet slik det står i databasen nå, til sammenligningen ved en konflikt. */
+  hentNyeste?: ThcredigeringProps['hentNyeste']
   /** Egen seksjons-ID når THC-syrereglene deler redigeringsside med et annet regelsett. */
   seksjonsid?: string
   /** Egen tittel når det må fremgå at reglene gjelder THC-syre i urin. */
@@ -54,13 +68,13 @@ export function Thcregler({
   const start = useMemo(() => thcUtkastFra(utgave), [utgave])
   // En redigering som er i gang, overlever en oppdatering av appen.
   const [redigeres, setRedigeres] = useBevart(`thcregler:${utgave.regelsett.id}`, false)
-  const redigeringsmodus = redigeres && redigerer && start && onLagre
-  const upubliserte = redigerer
-    ? [
-        ...(upublisert(utgave.regelsett) ? ['reglene'] : []),
-        ...utgave.kommentarer.filter(upublisert).map((k) => `«${k.innhold.navn}»`),
-      ]
-    : []
+  const kanRedigeres = redigerer && start && onLagre && hentNyeste
+  const redigeringsmodus = redigeres && kanRedigeres
+  const kommentarnavn = useMemo(() => kommentarnavnoppslag(utgave.kommentarer), [utgave])
+  const historikkfelter = useCallback(
+    (innhold: ThcRegelsettinnhold) => thcfelter(innhold, (nokkel) => kommentarnavn(innhold.tekstbolker[nokkel])),
+    [kommentarnavn],
+  )
 
   return (
     <Seksjon
@@ -77,9 +91,7 @@ export function Thcregler({
       }
       apenFraStart={apenFraStart}
       handlinger={
-        redigerer &&
-        start &&
-        onLagre &&
+        kanRedigeres &&
         !redigeres && (
           <Button
             variant="kant"
@@ -101,10 +113,11 @@ export function Thcregler({
             key={revisjonsnokkel(utgave)}
             utgave={utgave}
             start={start}
-            onLagre={async (regler, tekster) => {
-              await onLagre(regler, tekster)
+            onLagre={async (utkast, grunnlag) => {
+              await onLagre(utkast, grunnlag)
               setRedigeres(false)
             }}
+            hentNyeste={hentNyeste}
             onAvbryt={() => setRedigeres(false)}
           />
         </Bevaringsomrade>
@@ -123,26 +136,17 @@ export function Thcregler({
         </>
       )}
       {redigerer && (
-        <div className="redigeringsrad regler__historikk">
-          <Sistredigert utgave={utgave.regelsett} type="thc_regelsett" navn="THC-syrereglene" />
-          {upubliserte.length > 0 && <p className="sistredigert">Ikke publisert: {upubliserte.join(', ')}.</p>}
-        </div>
-      )}
-      {redigerer && (
-        <Detaljkort
-          id="kommentarhistorikk"
-          tittel="Historikken for hver tekst"
-          oppsummering={antall(utgave.kommentarer.length, 'tekst', 'tekster')}
-        >
-          <ul className="regler__kommentarhistorikk">
-            {utgave.kommentarer.map((k) => (
-              <li key={k.id}>
-                <span className="sistredigert">{k.innhold.navn}: </span>
-                <Sistredigert utgave={k} type="kommentar" navn={`Teksten «${k.innhold.navn}»`} />
-              </li>
-            ))}
-          </ul>
-        </Detaljkort>
+        <Regelhistorikk
+          utgave={utgave.regelsett}
+          type="thc_regelsett"
+          felter={historikkfelter}
+          upubliserte={upubliserteFelt(
+            [utgave.regelsett, ...utgave.kommentarer],
+            publisert && thcUtgavefelter(publisert),
+            thcUtgavefelter(utgave),
+          )}
+          kommentarer={utgave.kommentarer}
+        />
       )}
     </Seksjon>
   )

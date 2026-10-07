@@ -11,22 +11,34 @@ import {
   type ThcKurverolle,
   type ThcRegelsett,
 } from '../../domain/thcRegelsett'
-import { THC_TEKSTBOLKER, THC_TEKSTNOKLER, type ThcTekster } from '../../domain/thcTekster'
+import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../../domain/thcTekster'
 import { marginmerke } from '../../domain/thcVisning'
-import { Samtidighetskonflikt } from '../../faginnhold/lagring'
-import { lesTallfelt, tallTilFelt } from '../../faginnhold/paneler'
-import { thcEndringer, thcUtkastfeil, type ThcRegelsettutgave } from '../../faginnhold/thcregler'
+import { lesTallfelt } from '../../faginnhold/paneler'
+import {
+  tallSomFelt,
+  thcEndringer,
+  thcUtgavefelter,
+  thcUtkastfelter,
+  thcUtkastfeil,
+  type ThcRegelsettutgave,
+  type ThcUtkast,
+} from '../../faginnhold/thcregler'
 import { Button } from '../Button'
 import { Tallfelt } from '../Tallfelt'
-import { Tekstomrade, Valgfelt } from './Regelfelter'
+import { Lagringskonflikt, Tekstomrade, useRegellagring, Valgfelt } from './Regelfelter'
 import { Thcsimulator } from './Thcsimulator'
 
 export interface ThcredigeringProps {
   /** Utkastet redigeringen starter fra. */
   utgave: ThcRegelsettutgave
-  start: { regler: ThcRegelsett; tekster: ThcTekster }
-  /** Lagrer det som er endret som utkast, mot revisjonene i `utgave`. */
-  onLagre: (regler: ThcRegelsett, tekster: ThcTekster) => Promise<void>
+  start: ThcUtkast
+  /**
+   * Lagrer det som er endret som utkast, mot revisjonene i `utgave`, eller mot
+   * `grunnlag` når brukeren har sett en nyere utgave og valgt å lagre over den.
+   */
+  onLagre: (utkast: ThcUtkast, grunnlag?: ThcRegelsettutgave) => Promise<void>
+  /** Utkastet slik det står i databasen nå, med tekstene. */
+  hentNyeste: () => Promise<ThcRegelsettutgave | null>
   onAvbryt: () => void
 }
 
@@ -43,12 +55,14 @@ const KURVEFELT = ['a1', 'k1', 'a2', 'k2'] as const
  *
  * Tekstene er kommentarene bolkene peker på, og lagres hver for seg; reglene
  * lagres bare når de er endret. Plassholderne i en tekst kan ikke endres.
+ * Lagringen og konflikten når noen andre har lagret i mellomtiden, er de
+ * samme som i de andre regelredigeringene (`Regelfelter`): ingenting skrives
+ * over før brukeren har sammenlignet og valgt.
  */
-export function Thcredigering({ utgave, start, onLagre, onAvbryt }: ThcredigeringProps) {
+export function Thcredigering({ utgave, start, onLagre, hentNyeste, onAvbryt }: ThcredigeringProps) {
   const [regler, setRegler] = useBevart('regler', start.regler)
   const [tekster, setTekster] = useBevart('tekster', start.tekster)
-  const [lagrer, setLagrer] = useState(false)
-  const [feil, setFeil] = useState<string | null>(null)
+  const lagring = useRegellagring(onLagre, hentNyeste)
   const tittel = useId()
 
   const utkastfeil = useMemo(() => thcUtkastfeil(utgave, regler, tekster), [utgave, regler, tekster])
@@ -60,26 +74,13 @@ export function Thcredigering({ utgave, start, onLagre, onAvbryt }: Thcredigerin
   const endringer = useMemo(() => thcEndringer(utgave, regler, tekster), [utgave, regler, tekster])
   const antallEndret = endringer.kommentarer.length + (endringer.regelsett ? 1 : 0)
 
-  const lagre = async () => {
+  const lagre = async (grunnlag?: ThcRegelsettutgave) => {
     if (utkastfeil.length > 0) return
-    if (antallEndret === 0) {
+    if (antallEndret === 0 && !grunnlag) {
       onAvbryt()
       return
     }
-    setLagrer(true)
-    setFeil(null)
-    try {
-      await onLagre(regler, tekster)
-    } catch (e) {
-      setFeil(
-        e instanceof Samtidighetskonflikt
-          ? 'Noen andre har lagret reglene eller tekstene mens du redigerte, så ikke alt ble lagret. ' +
-              'Det du har skrevet, står her til du velger «Hent nyeste utgave» øverst på siden; ' +
-              'ta vare på det du trenger først.'
-          : (e as Error).message,
-      )
-      setLagrer(false)
-    }
+    await lagring.lagre({ regler, tekster }, grunnlag)
   }
 
   const sett = <K extends keyof ThcRegelsett>(felt: K, verdi: ThcRegelsett[K]) =>
@@ -300,17 +301,35 @@ export function Thcredigering({ utgave, start, onLagre, onAvbryt }: Thcredigerin
         modell && <Thcsimulator modell={modell} />
       )}
 
-      {feil && (
+      {lagring.feil && (
         <p className="skjemafeil" role="alert">
-          {feil}
+          {lagring.feil}
         </p>
+      )}
+      {lagring.konflikt && (
+        <Lagringskonflikt
+          nyeste={lagring.konflikt.nyeste}
+          sammenlign={(nyeste) => ({
+            revisjon: nyeste.regelsett.revisjon,
+            deres: thcUtgavefelter(nyeste),
+            mine: thcUtkastfelter({ regler, tekster }),
+          })}
+          onSammenlign={lagring.sammenlign}
+          onLagreLikevel={(nyeste) => void lagre(nyeste)}
+          onForkast={onAvbryt}
+          lagrer={lagring.lagrer}
+        />
       )}
       <div className="skjema__knapper">
         <Button variant="subtle" onClick={onAvbryt}>
           Avbryt
         </Button>
-        <Button type="submit" className="knapp--kompakt" disabled={lagrer || utkastfeil.length > 0}>
-          {lagrer ? 'Lagrer …' : 'Lagre utkast'}
+        <Button
+          type="submit"
+          className="knapp--kompakt"
+          disabled={lagring.lagrer || utkastfeil.length > 0 || lagring.konflikt !== null}
+        >
+          {lagring.lagrer ? 'Lagrer …' : 'Lagre utkast'}
         </Button>
       </div>
     </form>
@@ -452,11 +471,8 @@ function Tallinndata({
   onEndre: (verdi: number) => void
 }) {
   const id = useId()
-  // Prosentene rundes for visningen, så 0,2 står som 20 og ikke som
-  // 20,000000000000004; tallet selv endres ikke før feltet gjør det.
-  const [tekst, setTekst] = useState(() =>
-    Number.isFinite(verdi) ? tallTilFelt(skala === 1 ? verdi : Math.round(verdi * skala * 1e9) / 1e9) : '',
-  )
+  // Tallet selv endres ikke før feltet gjør det.
+  const [tekst, setTekst] = useState(() => tallSomFelt(verdi, skala))
   return (
     <div className="felt">
       <label className="felt__merkelapp" htmlFor={id}>

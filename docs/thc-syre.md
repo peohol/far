@@ -35,7 +35,7 @@ som fasit i testene (se [Redigeringen](#redigeringen)).
 | `src/domain/thc.ts` | Koden, analysemetoden og søkeoppføringen |
 | `src/faginnhold/thcregler.ts` | Fra det databasen gir til en kontrollert modell, eller feilen modulen viser |
 | `src/components/ThcStep.tsx`, `ThcSkjema.tsx`, `ThcUtfall.tsx` | Modulen: skjemaet, kommentaren og kurvene, delt med simulatoren |
-| `src/components/regler/Thcregler.tsx`, `Thcsimulator.tsx` | Reglene, tekstbolkene og simulatoren på redigeringssiden for fortolkningen |
+| `src/components/regler/Thcregler.tsx`, `Thcsimulator.tsx` | Reglene, tekstbolkene og simulatoren på redigeringssiden for fortolkningen, som seksjon med detaljkort |
 | `src/components/regler/Thcredigering.tsx` | Redigeringen av reglene og tekstene |
 | `src/domain/__tests__/hjelp/thcOpprinnelig.ts` | Den opprinnelige modulen, med regnearkets konstanter i koden. Bare fasit i testene |
 | `src/domain/__tests__/fasit/thc-regelsett-import.json`, `thc-tekster-import.json` | Reglene og tekstene slik de står i den opprinnelige modulen |
@@ -45,6 +45,7 @@ som fasit i testene (se [Redigeringen](#redigeringen)).
 | `src/__tests__/thcRegelsettlagring.test.ts` | Lagringen prøvd mot en ekte database bygd av migrasjonene |
 | `src/__tests__/thcsteg.test.tsx`, `thcregler.test.tsx` | Modulen og redigeringssiden med reglene de får |
 | `src/__tests__/thcredigering.test.tsx`, `thcredigeringslagring.test.ts` | Redigeringen, og lagringen og publiseringen av den mot en ekte database |
+| `src/__tests__/thcseksjonsparitet.test.tsx` | Pariteten for seksjonen: samme modell og samme kliniske output som modulen og fasiten |
 
 ## Fremgangsmåten
 
@@ -208,6 +209,19 @@ detaljkortet `simulator`. Simulatoren bruker det samme skjemaet, den samme
 kommentaren og de samme kurvene som modulen, og viser hvilke tekstbolker
 kommentaren ble satt sammen av. Det er utkastet som vises.
 
+Seksjonen er bygd som konsentrasjonsreglene og scenarioreglene
+(arbeidspakke 13): «Rediger reglene» i hodet, og under reglene «Sist
+redigert» med historikken, hva som ikke er publisert, og detaljkortet
+«Historikken for hver kommentar» (`Regelhistorikk`). Historikken og
+sammenligningene deler reglene i de samme feltene som redigeringen
+(`thcfelter`: «Nivå 2: Fra og med (IRCAK)», «Den gule kurven: k1»,
+«Tekstbolkene: Åpning» …), med tallene helt ned til siste siffer, og
+«Ikke publisert» nevner feltene som er endret.
+
+Seksjonen viser og redigerer bare. Modellen den viser og simulerer med, er
+den samme som modulen fortolker med, og `thcseksjonsparitet.test.tsx` holder
+det slik (se [Fasiten](#fasiten)).
+
 ## Redigeringen
 
 Seksjonen har «Rediger reglene». Hvert tall har sitt eget
@@ -225,8 +239,12 @@ gyldig, fortolker simulatoren under med utkastet slik det står.
 regelsettet bare når reglene er endret. Bolkene peker på de samme
 kommentarene som før, så lagringene er uavhengige av hverandre og går hver
 mot revisjonen som ble åpnet. Har noen andre lagret i mellomtiden, blir det
-en konflikt og siden leses på nytt. Publiseringsplanen tar de endrede
-kommentarene før regelsettet, som databasen krever.
+en konflikt som i de andre regelredigeringene (`Lagringskonflikt`):
+ingenting er skrevet over, brukeren kan sammenligne sitt med det de lagret,
+felt for felt, og velge å forkaste sitt eller lagre over deres. Da lagres
+det som er forskjellig fra deres, mot revisjonene deres
+(`lagreThcUtkast`). Publiseringsplanen tar de endrede kommentarene før
+regelsettet, som databasen krever.
 
 ## Fasiten
 
@@ -250,6 +268,11 @@ To sett tester holder det slik:
 - `thcRegelsettlagring.test.ts` leser regelsettet slik appen gjør, fra en
   database bygd av migrasjonene, og krever nøyaktig den modellen fasiten er
   laget med.
+- `thcseksjonsparitet.test.tsx` holder at seksjonen og redigeringen bruker
+  nøyaktig den samme modellen som modulen, at den gir fasiten i hvert
+  tilfelle med de samme tallene og figurene, og at modulen, simulatoren i
+  seksjonen og simulatoren i redigeringen viser den samme kommentaren,
+  varselet og manglene som fasiten for ett tilfelle av hvert utfall.
 
 Fasiten lages bare på nytt når den kliniske outputen endres med vilje, i samme
 PR som endringen, og da med merket «Fag» i endringsloggen.

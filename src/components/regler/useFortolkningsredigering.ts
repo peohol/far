@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { regelplan } from '../../faginnhold/stoffside'
-import { Samtidighetskonflikt } from '../../faginnhold/lagring'
+import { Samtidighetskonflikt, type Faginnholdslager } from '../../faginnhold/lagring'
 import {
   INGEN_REGLER,
   type Regeldata,
@@ -15,9 +15,7 @@ import { scenariokommentarendringer, type Scenarioutkast } from '../../regler/sc
 import { RUS_MODULER, rusModulFor, type RusModul } from '../../domain/rus'
 import type { Laboratorieanalytt } from '../../domain/analyttkatalog'
 import { THC_KODE } from '../../domain/thc'
-import type { ThcRegelsett } from '../../domain/thcRegelsett'
-import type { ThcTekster } from '../../domain/thcTekster'
-import { thcEndringer } from '../../faginnhold/thcregler'
+import { lagreThcUtkast, type ThcRegelsettutgave, type ThcUtkast } from '../../faginnhold/thcregler'
 import { useFaginnholdskilde } from '../stoffside/Faginnholdskilde'
 
 export interface Regeltilstand {
@@ -169,20 +167,36 @@ export function useFortolkningsredigering(analytter: readonly Laboratorieanalytt
   /**
    * Lagrer THC-syrereglene og -tekstene som utkast: hver kommentar med endret
    * tekst, og regelsettet om reglene er endret, mot revisjonene brukeren
-   * åpnet. Står noe av det på en nyere revisjon, blir det en konflikt som
-   * ellers, og reglene leses på nytt.
+   * åpnet — eller mot `grunnlag` når brukeren har sett en nyere utgave og
+   * velger å lagre over den. En konflikt kastes videre til redigeringen, som
+   * for de andre regelsettene. Objektene lagres hver for seg; ble noe lagret
+   * før konflikten, sier siden i tillegg fra at reglene bør hentes på nytt.
    */
   const lagreThcRegelsett = useCallback(
-    (regler: ThcRegelsett, tekster: ThcTekster) =>
-      endre(async () => {
-        const apnet = utkastet().thcregelsett
-        if (!apnet) throw new Error(IKKE_KLAR)
-        const { kommentarer, regelsett } = thcEndringer(apnet, regler, tekster)
-        for (const k of kommentarer) await lager.lagreUtkast(k.id, k.revisjon, k.innhold)
-        if (regelsett) await lager.lagreUtkast(regelsett.id, regelsett.revisjon, regelsett.innhold)
-      }),
-    [endre, lager, utkastet],
+    async (utkast: ThcUtkast, grunnlag?: ThcRegelsettutgave) => {
+      const mot = grunnlag ?? utkastet().thcregelsett
+      if (!mot) throw new Error(IKKE_KLAR)
+      let noeLagret = false
+      const tellende: Pick<Faginnholdslager, 'lagreUtkast'> = {
+        lagreUtkast: async (objekt, revisjon, innhold) => {
+          const status = await lager.lagreUtkast(objekt, revisjon, innhold)
+          noeLagret = true
+          return status
+        },
+      }
+      try {
+        await lagreThcUtkast(tellende, mot, utkast)
+      } catch (e) {
+        if (noeLagret && e instanceof Samtidighetskonflikt) setKonflikt(true)
+        throw e
+      }
+      setRunde((r) => r + 1)
+    },
+    [lager, utkastet],
   )
+
+  /** THC-syrereglene slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */
+  const hentThcRegelsettutkast = useCallback(() => leser.lesThcRegelsett('utkast'), [leser])
 
   /** Regelsettet for koden slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */
   const hentRegelsettutkast = useCallback((kode: string) => leser.finnIntervallregelsett(kode, 'utkast'), [leser])
@@ -258,6 +272,7 @@ export function useFortolkningsredigering(analytter: readonly Laboratorieanalytt
     lagreScenarioregelsett,
     hentScenarioregelsettutkast,
     lagreThcRegelsett,
+    hentThcRegelsettutkast,
     gjenopprett,
     publiser,
   }

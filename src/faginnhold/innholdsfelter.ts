@@ -9,6 +9,7 @@ import { jsonfelter, type Felt } from './historikk'
 import type { Innhold, Innholdselementinnhold, Objekttype } from './modell'
 import { FJERNET, panelFor } from './paneler'
 import { formaterReferanse } from './referanser'
+import { thcfelter } from './thcregler'
 import { elementtekster, type Elementtekst } from './sok'
 
 const TEKSTNAVN: Partial<Record<Elementtekst['felt'], string>> = {
@@ -67,8 +68,8 @@ const FELTER: { [T in Objekttype]: (innhold: Innhold[T]) => Felt[] } = {
     { nokkel: 'tekst', navn: 'Tekst', verdi: innhold.tekst, tekst: true },
     { nokkel: 'plassholdere', navn: 'Plassholdere', verdi: innhold.plassholdere.join(', ') || 'Ingen' },
   ],
-  thc_regelsett: (innhold) => jsonfelter(innhold),
   // Som for intervallregelsettene: redigeringen gir historikken tekstene.
+  thc_regelsett: (innhold) => thcfelter(innhold, (nokkel) => innhold.tekstbolker[nokkel]),
   scenarioregelsett: (innhold) => scenariofelter(innhold, (id) => id),
 }
 
