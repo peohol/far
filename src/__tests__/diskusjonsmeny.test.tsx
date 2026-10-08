@@ -143,6 +143,13 @@ const { taDiskusjon, visDiskusjon } = await import('../components/diskusjoner/di
 beforeAll(() => {
   Element.prototype.scrollIntoView ??= function () {}
   Element.prototype.scrollTo ??= function () {}
+  HTMLDialogElement.prototype.showModal ??= function (this: HTMLDialogElement) {
+    this.setAttribute('open', '')
+  }
+  HTMLDialogElement.prototype.close ??= function (this: HTMLDialogElement) {
+    this.removeAttribute('open')
+    this.dispatchEvent(new Event('close'))
+  }
   // TipTap måler markøren; jsdom har ingen oppsett å måle i.
   document.elementFromPoint ??= () => null
   Range.prototype.getClientRects ??= () => ({ length: 0, item: () => null, [Symbol.iterator]: [][Symbol.iterator] }) as unknown as DOMRectList
@@ -168,6 +175,7 @@ afterEach(() => {
 
 const meny = () => screen.getByRole('complementary', { name: 'Diskusjoner om Litium' })
 const panel = () => meny().querySelector<HTMLElement>('.diskusjonspanel')!
+const flyttelag = () => within(within(panel()).getByRole('dialog', { name: 'Flytt tråden' })).getByRole('form', { name: 'Flytt tråden' })
 const stolpe = () => meny().querySelector<HTMLElement>('.diskusjonsstolpe')!
 
 async function vis() {
@@ -433,11 +441,13 @@ describe('én tråd', () => {
     expect(kropp.contains(overskrift)).toBe(false)
     expect(overskrift.closest('.diskusjonspanel__traadhode')?.contains(blyant)).toBe(true)
     expect(panel().querySelector('.idehandlinger')?.contains(blyant)).toBe(false)
-    // Hvem som skrev innlegget, handlingene og kategorien står også fast, så et langt innlegg ikke skyver dem ned.
+    // Hvem som skrev innlegget, og handlingene, står også fast, så et langt innlegg ikke skyver dem ned.
     const hode = overskrift.closest<HTMLElement>('.diskusjonspanel__traadhode')!
     expect(within(hode).getByText('Ola Nordmann')).toBeTruthy()
-    expect(within(hode).getByRole('button', { name: 'Kopier lenke til tråden' })).toBeTruthy()
-    expect(within(hode).getByRole('combobox', { name: 'Kategori' })).toBeTruthy()
+    expect(within(hode).getByRole('button', { name: 'Kopier lenke til tråden' }).textContent).toBe('Lenke')
+    expect(within(hode).getByRole('button', { name: 'Flytt tråden' }).textContent).toBe('Flytt')
+    // Kategorien velges i «Flytt», ikke i hodet.
+    expect(within(hode).queryByRole('combobox')).toBeNull()
     expect(kropp.contains(within(panel()).getByText('Hvordan doserer vi ved nyresvikt?'))).toBe(true)
     await bruker.click(blyant)
     expect(within(panel()).getByRole('textbox', { name: 'Overskrift' }).closest('.diskusjonspanel__traadhode')).toBeTruthy()
@@ -519,23 +529,22 @@ describe('én tråd', () => {
     await admin.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
     await within(panel()).findByText(/Tråden kan leses, men ikke endres/)
     expect(within(panel()).getByRole('button', { name: 'Slett tråden' })).toBeTruthy()
-    // En arkivert tråd flyttes ikke til en annen side.
-    expect(within(panel()).queryByRole('button', { name: 'Flytt til en annen side' })).toBeNull()
+    // En arkivert tråd flyttes ikke.
+    expect(within(panel()).queryByRole('button', { name: 'Flytt tråden' })).toBeNull()
   })
 
   it('flyttes til en annen side, i en kategori der, og følges dit', async () => {
     const bruker = await apne()
     await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
     await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
-    const rull = vi.spyOn(Element.prototype, 'scrollIntoView')
-    await bruker.click(within(panel()).getByRole('button', { name: 'Flytt til en annen side' }))
-    const skjema = within(panel()).getByRole('form', { name: 'Flytt tråden' })
-    // Knappen står fast øverst; er tråden rullet ned, rulles den opp til skjemaet.
-    await waitFor(() => expect(rull.mock.contexts).toContain(panel().querySelector('.diskusjonsside')))
-    rull.mockRestore()
+    await bruker.click(within(panel()).getByRole('button', { name: 'Flytt tråden' }))
+    const skjema = flyttelag()
     const sidevalg = within(skjema).getByRole('combobox', { name: 'Side' }) as HTMLSelectElement
-    // Siden tråden står på, er ikke blant valgene.
-    expect([...sidevalg.options].map((o) => o.value)).toEqual(['', 'stoff:valproat', 'fortolkning:li', 'register:stoffregister'])
+    // Siden tråden står på, er valgt, med kategorien den står i; da er det ingenting å flytte.
+    expect([...sidevalg.options].map((o) => o.value)).toEqual(['stoff:litium', 'stoff:valproat', 'fortolkning:li', 'register:stoffregister'])
+    expect(sidevalg.value).toBe('stoff:litium')
+    expect(sidevalg.selectedOptions[0]!.textContent).toBe('Litium (denne siden)')
+    expect((within(skjema).getByRole('combobox', { name: 'Kategori' }) as HTMLSelectElement).value).toBe('dos')
     expect(within(skjema).getByRole('button', { name: 'Flytt' })).toHaveProperty('disabled', true)
 
     await bruker.selectOptions(sidevalg, 'Valproat')
@@ -553,8 +562,8 @@ describe('én tråd', () => {
     const bruker = await apne()
     await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
     await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
-    await bruker.click(within(panel()).getByRole('button', { name: 'Flytt til en annen side' }))
-    const skjema = within(panel()).getByRole('form', { name: 'Flytt tråden' })
+    await bruker.click(within(panel()).getByRole('button', { name: 'Flytt tråden' }))
+    const skjema = flyttelag()
     await bruker.selectOptions(within(skjema).getByRole('combobox', { name: 'Side' }), 'Valproat')
     await bruker.selectOptions(await within(skjema).findByRole('combobox', { name: 'Kategori' }), '＋ Ny kategori …')
     await bruker.type(within(skjema).getByRole('textbox', { name: 'Kategori' }), 'Dosering')
@@ -568,6 +577,48 @@ describe('én tråd', () => {
     await bruker.type(navn, 'Graviditet')
     await bruker.click(within(skjema).getByRole('button', { name: 'Flytt' }))
     expect(api.flyttDiskusjonTilSide).toHaveBeenCalledWith('t1', 'stoff:valproat', { navn: 'Graviditet', emoji: '🧪' })
+  })
+
+  it('flyttes til en annen kategori på siden den står på, sist der', async () => {
+    const bruker = await apne()
+    await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    await bruker.click(within(panel()).getByRole('button', { name: 'Flytt tråden' }))
+    const skjema = flyttelag()
+    await bruker.selectOptions(within(skjema).getByRole('combobox', { name: 'Kategori' }), '🩺 Bivirkninger')
+    await bruker.click(within(skjema).getByRole('button', { name: 'Flytt' }))
+    expect(api.flyttDiskusjonTil).toHaveBeenCalledWith('t1', 'biv', Number.MAX_SAFE_INTEGER)
+    expect(api.flyttDiskusjonTilSide).not.toHaveBeenCalled()
+    await waitFor(() => expect(within(panel()).queryByRole('dialog')).toBeNull())
+    // Tråden står åpen der den var.
+    expect(within(panel()).getByText('Hvordan doserer vi ved nyresvikt?')).toBeTruthy()
+  })
+
+  it('flyttes til en ny kategori på siden den står på', async () => {
+    const bruker = await apne()
+    await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    await bruker.click(within(panel()).getByRole('button', { name: 'Flytt tråden' }))
+    const skjema = flyttelag()
+    await bruker.selectOptions(within(skjema).getByRole('combobox', { name: 'Kategori' }), '＋ Ny kategori …')
+    await bruker.type(within(skjema).getByRole('textbox', { name: 'Kategori' }), 'Interaksjoner')
+    await bruker.click(within(skjema).getByRole('button', { name: '🧪' }))
+    await bruker.click(within(skjema).getByRole('button', { name: 'Flytt' }))
+    expect(api.opprettKategori).toHaveBeenCalledWith('stoff:litium', 'Interaksjoner', '🧪')
+    await waitFor(() => expect(api.flyttDiskusjonTil).toHaveBeenCalledWith('t1', 'ny-kat', Number.MAX_SAFE_INTEGER))
+    expect(api.flyttDiskusjonTilSide).not.toHaveBeenCalled()
+  })
+
+  it('Escape lukker flyttelaget, ikke menyen', async () => {
+    const bruker = await apne()
+    await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    await bruker.click(within(panel()).getByRole('button', { name: 'Flytt tråden' }))
+    const skjema = flyttelag()
+    // Menyen tar ikke tasten, så nettleseren lukker laget som vanlig.
+    expect(fireEvent.keyDown(within(skjema).getByRole('combobox', { name: 'Side' }), { key: 'Escape' })).toBe(true)
+    expect(panel().hidden).toBe(false)
+    expect(within(panel()).getByText('Hvordan doserer vi ved nyresvikt?')).toBeTruthy()
   })
 
   it('åpnes fra et varsel når menyen for siden står', async () => {
