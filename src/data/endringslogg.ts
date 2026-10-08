@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.85.1',
+    dato: '2026-10-08',
+    sammendrag: 'Søket ser den første publiserte endringen etter oppdateringen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    utenVarsel: true,
+    punkter: [
+      'Den aller første endringen som ble publisert etter forrige oppdatering, kunne bli stående usett i søket til neste dag. Nå fanges også den.',
+    ],
+  },
+  {
     versjon: '1.85.0',
     dato: '2026-10-08',
     sammendrag: 'Søket i fagstoffet er raskere, og preparatene og interaksjonene faller ikke lenger ut',

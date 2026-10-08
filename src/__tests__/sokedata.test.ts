@@ -21,7 +21,7 @@ import { lagLegemiddelleser, lagLegemiddelsok, type Legemiddelleser, type Legemi
 import { byggPreparatvisning } from '../legemiddeldata/preparatmodell'
 import { interaksjonerFraSok, preparatformer, preparatformerFraSok, preparattekster } from '../legemiddeldata/stoffside'
 import { AMITRIPTYLIN, AMITRIPTYLINHYDROKLORID, KODEIN, kallSom, synkroniserUtdrag } from './hjelp/fest'
-import { faginnholdskall, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
+import { faginnholdskall, kjorMigrasjoner, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
 let db: PGlite
 let kall: Faginnholdskall
@@ -54,6 +54,83 @@ async function paSiden(koblet: string[]) {
     })),
   }
 }
+
+/** Migrasjonen som tar sekvensen bak versjonen for sidene i bruk. */
+const SEKVENSRETTING = '20261008130100_sokedata_versjon_forste_endring.sql'
+
+/** Versjonen for sidene, slik appen ser den. */
+async function sideversjon(database: PGlite): Promise<string> {
+  return (await database.query<{ v: string }>("select public.sokedata_versjoner() ->> 'sider' as v")).rows[0]!.v
+}
+
+/** Utløser endringsmerkingen nøyaktig én gang, som én publisert endring. */
+async function enPublisertEndring(database: PGlite): Promise<void> {
+  // En setningsutløser kjøres én gang per setning, også når ingen rader treffes.
+  await database.query('update public.objektrevisjoner set revisjon = revisjon where false')
+}
+
+describe('versjonen for sidene ved den første publiserte endringen', () => {
+  // Kjøres først i filen, før noe er publisert i databasen.
+  it('endres allerede av den første publiserte endringen i en ny database', async () => {
+    const { rows } = await db.query<{ is_called: boolean }>('select is_called from intern.publisert_innhold_versjon')
+    expect(rows[0]!.is_called).toBe(true)
+    const forst = await sideversjon(db)
+    await enPublisertEndring(db)
+    expect(await sideversjon(db)).not.toBe(forst)
+  })
+
+  it('PostgreSQL: det første nextval på en ny sekvens lar last_value stå', async () => {
+    // Grunnen til at sekvensen må tas i bruk før versjonen kan leses av last_value.
+    await db.exec('create temporary sequence forste_nextval')
+    const les = async () =>
+      (await db.query<{ last_value: number; is_called: boolean }>('select last_value::int, is_called from forste_nextval')).rows[0]
+    expect(await les()).toEqual({ last_value: 1, is_called: false })
+    await db.query("select nextval('forste_nextval')")
+    expect(await les()).toEqual({ last_value: 1, is_called: true })
+    await db.query("select nextval('forste_nextval')")
+    expect(await les()).toEqual({ last_value: 2, is_called: true })
+    await db.exec('drop sequence forste_nextval')
+  })
+
+  describe('rettingen', () => {
+    let forRettingen: PGlite
+    beforeAll(async () => {
+      forRettingen = await nyDatabase({ til: SEKVENSRETTING.slice(0, 14) })
+    }, 120_000)
+
+    const settTilstand = (last_value: number, is_called: boolean) =>
+      forRettingen.query("select setval('intern.publisert_innhold_versjon', $1, $2)", [last_value, is_called])
+    const rett = () => kjorMigrasjoner(forRettingen, { bare: [SEKVENSRETTING] })
+
+    it('gjorde at den første publiserte endringen ikke endret versjonen', async () => {
+      await settTilstand(1, false)
+      const forst = await sideversjon(forRettingen)
+      await enPublisertEndring(forRettingen)
+      expect(await sideversjon(forRettingen)).toBe(forst)
+    })
+
+    it('lar versjonen stå når sekvensen ennå ikke er brukt, og den første endringen endrer den', async () => {
+      await settTilstand(1, false)
+      const forst = await sideversjon(forRettingen)
+      await rett()
+      expect(await sideversjon(forRettingen)).toBe(forst)
+      await enPublisertEndring(forRettingen)
+      expect(await sideversjon(forRettingen)).not.toBe(forst)
+    })
+
+    it('øker versjonen når sekvensen alt er brukt, og hver senere endring endrer den', async () => {
+      for (const last_value of [1, 7]) {
+        await settTilstand(last_value, true)
+        const forst = await sideversjon(forRettingen)
+        await rett()
+        const etter = await sideversjon(forRettingen)
+        expect(etter).toBe(`${last_value + 1}:${forst.split(':')[1]}`)
+        await enPublisertEndring(forRettingen)
+        expect(await sideversjon(forRettingen)).not.toBe(etter)
+      }
+    })
+  })
+})
 
 describe('søkedataene fra FEST', () => {
   let koblinger: string[][]
