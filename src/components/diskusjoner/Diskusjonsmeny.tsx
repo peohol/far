@@ -12,6 +12,8 @@ import {
   lagreBredde,
   lagreLaast,
   losOppKategori,
+  opprettKategori,
+  type Kategorivalg,
 } from '../../diskusjoner/api'
 import {
   TOM_OVERSIKT,
@@ -67,6 +69,9 @@ type Visning =
   | { side: 'kategori'; id?: string }
 
 const LISTE: Visning = { side: 'liste' }
+
+/** Plassen sist i en kategori; databasen legger tråden der. */
+const SIST = Number.MAX_SAFE_INTEGER
 
 /**
  * Diskusjonene på siden som står åpen — en fagside eller fortolkningen av én
@@ -236,7 +241,8 @@ export function Diskusjonsmeny({
         onBlur={ut}
         onKeyDown={(event) => {
           if (event.key !== 'Escape' || event.defaultPrevented) return
-          if ((event.target as HTMLElement).isContentEditable) return
+          // Et lag over menyen, som flyttingen av en tråd, lukkes for seg.
+          if ((event.target as HTMLElement).isContentEditable || (event.target as HTMLElement).closest('dialog')) return
           event.preventDefault()
           // Escape lukker menyen (eller helsiden) og ikke noe mer: fokus slippes i `lukk()`, så
           // uten dette ville fortolkningen bak tatt den som «Bytt analytt».
@@ -397,6 +403,19 @@ function Diskusjonsflate({
   }
   const flyttTraad = (id: string, kategori: string, indeks: number) =>
     lagreFlytting((o) => flyttDiskusjon(o, id, kategori, indeks), () => flyttDiskusjonTil(id, kategori, indeks))
+  /**
+   * Sist i en kategori på siden, eller i en ny, som lages først. Lista hentes
+   * på nytt også når flyttingen feiler etter at kategorien er laget, så den
+   * nye kategorien står der og kan velges neste gang.
+   */
+  const flyttTraadHer = async (id: string, valg: Kategorivalg) => {
+    if ('id' in valg) return flyttTraad(id, valg.id, SIST)
+    try {
+      await flyttDiskusjonTil(id, await opprettKategori(side, valg.navn, valg.emoji), SIST)
+    } finally {
+      await hent()
+    }
+  }
   const flyttKat = (id: string, indeks: number) =>
     lagreFlytting((o) => flyttKategori(o, id, indeks), () => flyttKategoriTil(id, indeks))
 
@@ -419,8 +438,6 @@ function Diskusjonsflate({
 
   let innhold: ReactNode
   if (visning.side === 'traad') {
-    const liste = gruppering.kategorier.find((g) => g.diskusjoner.some((d) => d.id === visning.id))?.diskusjoner
-    const indeks = liste?.findIndex((d) => d.id === visning.id) ?? -1
     innhold = (
       <Traadside
         key={visning.id}
@@ -428,10 +445,9 @@ function Diskusjonsflate({
         side={side}
         sider={sider}
         kategorier={kategorier}
-        plassering={liste && indeks >= 0 ? { indeks, antall: liste.length } : null}
         onEndret={hent}
         onSett={merkSett}
-        onFlytt={(kategori, til) => flyttTraad(visning.id, kategori, til)}
+        onFlytt={(kategori) => flyttTraadHer(visning.id, kategori)}
         onFlyttetTilSide={(til) => {
           // Tråden følges til siden den er flyttet til, der menyen åpner den.
           setVisning(LISTE)

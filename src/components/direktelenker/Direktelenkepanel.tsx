@@ -18,7 +18,7 @@ type Sjekk =
   | { status: 'klar'; maal: Lenkemaal }
 
 const MELDINGER: Partial<Record<Sjekk['status'], string>> = {
-  ugyldig: 'Dette er ikke en lenke til en diskusjon, en idé eller en kommentar. Bruk «Kopier lenke» der, og lim den inn her.',
+  ugyldig: 'Dette er ikke en lenke til en diskusjon, en idé eller en kommentar. Bruk «Lenke» der, og lim den inn her.',
   borte: 'Lenken peker på noe som ikke finnes lenger.',
   feil: 'Fikk ikke sjekket lenken. Prøv igjen.',
 }

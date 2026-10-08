@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.84.0',
+    dato: '2026-10-08',
+    sammendrag: 'Diskusjonstråder flyttes fra ett sted, og verktøylinjene er ryddigere',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      '«Flytt» i en diskusjonstråd åpner et vindu der siden tråden står på, er valgt. Der kan du flytte tråden til en annen kategori, eller til en ny, på samme side, eller til en kategori på en annen side.',
+      'Valget av kategori og «Flytt opp»/«Flytt ned» inne i tråden er fjernet. Rekkefølgen i en kategori endres fortsatt ved å dra trådene i oversikten.',
+      '«Rediger innlegget» heter nå «Rediger», og «Kopier lenke» heter «Lenke» overalt, også under idéene og de planlagte oppgavene.',
+    ],
+  },
+  {
     versjon: '1.83.0',
     dato: '2026-10-08',
     sammendrag: 'Diskusjonstrådene har verktøylinjen fast øverst, og lange tekster kan legges sammen',

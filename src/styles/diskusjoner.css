@@ -805,23 +805,6 @@
   font-size: var(--tekst-ui);
 }
 
-.diskusjonsside__plass {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--rom-1) var(--rom-2);
-}
-
-.diskusjonsside__kategori {
-  flex: 1 1 10rem;
-}
-
-.diskusjonsside__kategori .felt__inndata {
-  min-height: var(--hoyde-liten);
-  padding-block: var(--rom-1);
-  font-size: var(--tekst-liten);
-}
-
 /* Tråden i et smalt panel: mindre innrykk per nivå. Som helside er det plass til det vanlige. */
 .diskusjonsmeny:not([data-helside]) .diskusjonsside .kommentarer {
   --kommentar-skinne: 1.25rem;
@@ -837,7 +820,7 @@
   padding-inline: var(--rom-2);
 }
 
-/* Inne i tråden står skjemaet på linje med resten av den. */
+/* I laget for flyttingen har laget selv luften til sidene. */
 .diskusjonsskjema--flytt {
   padding-inline: 0;
 }

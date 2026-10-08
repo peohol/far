@@ -14,9 +14,9 @@ import {
   skjulInnhold,
   slettDiskusjon,
   slettKommentar,
+  type Kategorivalg,
 } from '../../diskusjoner/api'
 import {
-  UKATEGORISERTE,
   kanSletteDiskusjon,
   type Diskusjonskategori,
   type Diskusjonsside as Side,
@@ -38,12 +38,6 @@ import { Bekreftknapp, Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from '.
 import { Flytteskjema } from './Skjemaer'
 
 const DATO = new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })
-
-/** Hvor tråden står blant de andre i kategorien, for knappene som flytter den. */
-export interface Plassering {
-  indeks: number
-  antall: number
-}
 
 /**
  * Én tråd i diskusjonsmenyen: overskriften, hvem som startet den og når, det
@@ -68,7 +62,6 @@ export function Diskusjonsside({
   side,
   sider,
   kategorier,
-  plassering,
   onEndret,
   onSett,
   onFlytt,
@@ -83,14 +76,12 @@ export function Diskusjonsside({
   /** Sidene tråden kan flyttes til. */
   sider: Diskusjonssider
   kategorier: readonly Diskusjonskategori[]
-  /** Plassen i kategorien, eller `null` når tråden er arkivert eller uten kategori. */
-  plassering: Plassering | null
   /** Noe ved tråden som lista viser, er endret. */
   onEndret: () => Promise<unknown>
   /** Tråden er åpnet og merket som sett. */
   onSett: (id: string) => void
-  /** Flytt tråden til en plass i en kategori. */
-  onFlytt: (kategori: string, indeks: number) => Promise<void>
+  /** Flytt tråden sist i en kategori på siden, eller i en ny kategori der. */
+  onFlytt: (kategori: Kategorivalg) => Promise<void>
   /** Tråden er flyttet til en annen side. */
   onFlyttetTilSide: (til: Side) => void
   /** Tråden er slettet. */
@@ -110,7 +101,6 @@ export function Diskusjonsside({
   const [flytter, setFlytter] = useBevart(`traad:${id}/flytter`, false)
   const overskrift = useRef<HTMLHeadingElement>(null)
   const artikkel = useRef<HTMLElement>(null)
-  const kategoriId = useId()
 
   const hent = useCallback(async () => {
     try {
@@ -208,17 +198,16 @@ export function Diskusjonsside({
   }
 
   /**
-   * Skjemaene knappene i det faste hodet åpner, står øverst i det som rulles.
-   * Er tråden rullet ned, rulles den opp så skjemaet synes.
+   * Skjemaet for innlegget står øverst i det som rulles, mens knappen står
+   * fast i hodet. Er tråden rullet ned, rulles den opp så skjemaet synes.
    */
-  const visSkjema = (vis: (apen: boolean) => void) => {
-    vis(true)
+  const redigerInnlegget = () => {
+    setEndrerTekst(true)
     requestAnimationFrame(() => artikkel.current?.scrollIntoView({ block: 'start' }))
   }
 
   const arkivert = Boolean(traad.arkivert_kl)
   const eier = traad.forfatter_id === meg.id
-  const kategori = kategorier.find((k) => k.id === traad.kategori_id)
 
   const tittel =
     endrerTittel && !arkivert ? (
@@ -240,7 +229,7 @@ export function Diskusjonsside({
       </div>
     )
 
-  // Hvem som skrev innlegget, handlingene og plassen i kategorien står fast
+  // Hvem som skrev innlegget, og handlingene, står fast
   // under overskriften, så de nås uten å rulle forbi et langt innlegg.
   const hodeinnhold = (
     <>
@@ -254,8 +243,8 @@ export function Diskusjonsside({
       <div className="idehandlinger">
         <Hjerteknapp antall={traad.hjerter} gitt={traad.mitt_hjerte} onVeksle={() => veksleHjerte(null)} hva="tråden" laast={arkivert} />
         {eier && !arkivert && !traad.skjult && (
-          <Idehandling ikon="edit" onClick={() => visSkjema(setEndrerTekst)}>
-            Rediger innlegget
+          <Idehandling ikon="edit" aria-label="Rediger innlegget" onClick={redigerInnlegget}>
+            Rediger
           </Idehandling>
         )}
         <Kopilenkeknapp mal={{ slag: 'diskusjon', id: traad.id, kommentar: null }} hva="tråden" />
@@ -270,8 +259,8 @@ export function Diskusjonsside({
           />
         )}
         {!arkivert && (
-          <Idehandling ikon="ext" aria-expanded={flytter} onClick={() => (flytter ? setFlytter(false) : visSkjema(setFlytter))}>
-            Flytt til en annen side
+          <Idehandling ikon="ext" aria-label="Flytt tråden" aria-haspopup="dialog" onClick={() => setFlytter(true)}>
+            Flytt
           </Idehandling>
         )}
         {kanSletteDiskusjon(traad, meg.id, admin) && (
@@ -288,49 +277,6 @@ export function Diskusjonsside({
           />
         )}
       </div>
-      {!arkivert && !flytter && (
-        <div className="diskusjonsside__plass">
-          <label className="diskusjonsside__kategori" htmlFor={kategoriId}>
-            <span className="kun-skjermleser">Kategori</span>
-            <select
-              id={kategoriId}
-              className="felt__inndata"
-              value={kategori?.id ?? ''}
-              disabled={arbeider}
-              onChange={(e) => e.target.value && void utfor(() => onFlytt(e.target.value, Number.MAX_SAFE_INTEGER))}
-            >
-              {!kategori && (
-                <option value="" disabled>
-                  {UKATEGORISERTE.emoji} {UKATEGORISERTE.navn}
-                </option>
-              )}
-              {kategorier.map((k) => (
-                <option key={k.id} value={k.id}>
-                  {k.emoji} {k.navn}
-                </option>
-              ))}
-            </select>
-          </label>
-          {kategori && plassering && plassering.antall > 1 && (
-            <>
-              <Idehandling
-                ikon="opp"
-                onClick={() => plassering.indeks > 0 && void utfor(() => onFlytt(kategori.id, plassering.indeks - 1))}
-              >
-                Flytt opp
-              </Idehandling>
-              <Idehandling
-                ikon="ned"
-                onClick={() =>
-                  plassering.indeks < plassering.antall - 1 && void utfor(() => onFlytt(kategori.id, plassering.indeks + 1))
-                }
-              >
-                Flytt ned
-              </Idehandling>
-            </>
-          )}
-        </div>
-      )}
     </>
   )
 
@@ -358,9 +304,17 @@ export function Diskusjonsside({
         </div>
       )}
 
-      {/* Plassen på denne siden står i ro mens tråden flyttes til en annen. */}
       {flytter && !arkivert && (
-        <Flytteskjema id={traad.id} side={side} sider={sider} onAvbryt={() => setFlytter(false)} onFlyttet={onFlyttetTilSide} />
+        <Flytteskjema
+          id={traad.id}
+          side={side}
+          sider={sider}
+          kategorier={kategorier}
+          kategori={traad.kategori_id}
+          onAvbryt={() => setFlytter(false)}
+          onFlyttHer={(kategori) => onFlytt(kategori).then(() => void hent())}
+          onFlyttet={onFlyttetTilSide}
+        />
       )}
 
       {feil && (

@@ -1,7 +1,7 @@
 # Direktelenkene
 
 Leses når noe ved lenkene til en diskusjon, en idé eller en kommentar skal
-endres: «Kopier lenke», brikkene i teksten, forhåndsvisningen eller knappen
+endres: «Lenke», brikkene i teksten, forhåndsvisningen eller knappen
 «Direktelenke» i verktøyraden.
 
 ## Hvor det ligger

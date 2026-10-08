@@ -54,7 +54,7 @@ export const UTHEVET_I = 2400
  * En frosset tråd (en arkivert eller overført idé, en arkivert diskusjon) kan
  * leses, men ingen kan kommentere, svare, endre, slette eller gi hjerter.
  *
- * Hver kommentar har «Kopier lenke». En lenke til en kommentar åpner tråden
+ * Hver kommentar har «Lenke». En lenke til en kommentar åpner tråden
  * med `fremhev`: kommentaren og de den svarer på foldes ut, og den rulles
  * fram, får fokus og står uthevet en liten stund.
  */

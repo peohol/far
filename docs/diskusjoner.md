@@ -16,7 +16,7 @@ de berører ikke den kliniske delen.
 | `src/traad/modell.ts`, `src/components/traad/` | Kommentartråden, felles med idéene |
 | `src/styles/diskusjoner.css`, `src/styles/traad.css` | Utseendet |
 
-Lenkene til en tråd, en idé eller en kommentar («Kopier lenke» og brikkene i
+Lenkene til en tråd, en idé eller en kommentar («Lenke» og brikkene i
 teksten) står i `docs/direktelenker.md`.
 
 ## Sidene
@@ -33,9 +33,11 @@ flytter trådene og kategoriene med.
 
 - Alle innloggede lager, endrer, flytter, arkiverer og henter tilbake tråder, og
   lager, endrer, flytter og løser opp kategorier.
-- En tråd kan flyttes til en annen side (en annen fagside eller fortolkning),
-  sist i en kategori der eller i en ny, med kommentarene og hjertene
-  (`flytt_diskusjon_til_side()`). Appen følger tråden dit.
+- «Flytt» på en tråd åpner et lag (`Flytteskjema`) med siden den står på
+  valgt, så den kan flyttes sist i en annen kategori eller en ny her. Velges en
+  annen side (en fagside eller fortolkning), flyttes den sist i en kategori der
+  eller i en ny, med kommentarene og hjertene (`flytt_diskusjon_til_side()`).
+  Appen følger tråden dit.
 - Den som startet en tråd, kan slette den så lenge den ikke er arkivert og
   ingen andre har skrevet i den; en kommentar som står igjen som «Slettet»,
   teller ikke. En administrator kan slette alle tråder, også arkiverte
@@ -86,9 +88,9 @@ Overskriften, søket i lista og, i en tråd, «Alle tråder» og overskriften p�
 tråden står fast; bare det under ruller. Overskriften på tråden står i en
 plass i menyen (`.diskusjonspanel__traadhode`) som `Diskusjonsside` legger den
 i med en portal, med en hårlinje mot det som ruller og blyanten som endrer
-den til høyre. Under den står forfatterlinja, handlingene på tråden og
-plassen i kategorien, så de nås uten å rulle forbi et langt innlegg; plassen
-tar aldri mer enn halve høyden. Lange innlegg og kommentarer viser bare de
+den til høyre. Under den står forfatterlinja og handlingene på tråden,
+så de nås uten å rulle forbi et langt innlegg; plassen tar aldri mer enn
+halve høyden. Lange innlegg og kommentarer viser bare de
 første linjene til de vises hele (`Langtekst`, felles med idéene). «Ny tråd» og «Ny kategori» følger lista, men blir stående
 nederst i menyen når lista er lengre enn den. På smale skjermer åpnes den over
 siden fra knappen «Diskusjoner» i toppmenyen, eller av seg selv når et
@@ -121,8 +123,8 @@ Kategoriene og trådene dras loddrett med `@peohol/smett`, et lag over dnd-kit,
 også mellom kategoriene. Hvilke lister som tar imot hva, står i markeringen
 (`data-slag` og `data-tar`; se `useSortering`). Tastaturet løfter en rad med
 mellomrom og flytter den med piltastene. Alle flyttinger kan også gjøres med
-knapper: «Flytt opp»/«Flytt ned» på kategoriene, og kategorivalget og
-«Flytt opp»/«Flytt ned» inne i en tråd.
+knapper: «Flytt opp»/«Flytt ned» på kategoriene, og «Flytt» inne i en tråd
+(til en annen kategori, sist).
 
 Når man drar mot kanten av lista, ruller lista, aldri siden bak menyen
 (`holdRullingenInne`): dnd-kit ruller ellers også siden for noe som står fast.

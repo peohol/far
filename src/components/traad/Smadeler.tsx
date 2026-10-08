@@ -99,6 +99,9 @@ export function Idehandling({
   children: string
   onClick: () => void
   'aria-expanded'?: boolean
+  /** Et lengre navn enn det som står på knappen, som begynner med det. */
+  'aria-label'?: string
+  'aria-haspopup'?: 'dialog'
 }) {
   return (
     <button type="button" className="idehandling" data-ih="" onClick={onClick} {...rest}>

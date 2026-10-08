@@ -8,8 +8,8 @@ import '../../styles/direktelenker.css'
 export const KVITTERING_I = 2500
 
 /**
- * «Kopier lenke» i handlingsraden under en tråd, en idé eller en kommentar:
- * legger direktelenken dit på utklippstavlen. Lenken kan limes inn i
+ * «Lenke» i handlingsraden under en tråd, en idé eller en kommentar: legger
+ * direktelenken dit på utklippstavlen. Lenken kan limes inn i
  * nettleseren, eller settes inn i en tekst med knappen for direktelenker i
  * verktøyraden. Knappen sier fra en liten stund når den er kopiert.
  */
@@ -33,7 +33,7 @@ export function Kopilenkeknapp({ mal, hva }: { mal: Lenkemal; /** «tråden», �
       onClick={() => void kopier(fullLenke(mal)).then((ok) => setSvar(ok ? 'kopiert' : 'feil'))}
     >
       <Ikon navn={svar === 'kopiert' ? 'done' : 'lenke'} storrelse="ui" />
-      <span aria-live="polite">{svar === 'kopiert' ? 'Lenke kopiert' : svar === 'feil' ? 'Fikk ikke kopiert' : 'Kopier lenke'}</span>
+      <span aria-live="polite">{svar === 'kopiert' ? 'Lenke kopiert' : svar === 'feil' ? 'Fikk ikke kopiert' : 'Lenke'}</span>
     </button>
   )
 }

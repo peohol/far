@@ -16,7 +16,7 @@ OUSFAR, med hjerter og kommentartråder; de berører ikke den kliniske delen.
 | `src/styles/ideer.css`, `src/styles/traad.css` | Utseendet |
 | `.claude/skills/utfor-oppgaver/` | Hvordan Claude utfører oppgavene og merker dem utført |
 
-Lenkene til en tråd, en idé eller en kommentar («Kopier lenke» og brikkene i
+Lenkene til en tråd, en idé eller en kommentar («Lenke» og brikkene i
 teksten) står i `docs/direktelenker.md`.
 
 Idéer og Planlagte oppgaver åpnes fra idémenyen i toppmenyen (`Ideknapp`, en
