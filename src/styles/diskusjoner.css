@@ -245,13 +245,9 @@
   }
 }
 
-/* Som helside er lukkeknappen veien tilbake til menyen, på alle bredder.
-   «Hold åpen» gjelder menyen, ikke helsiden. */
-.diskusjonsmeny[data-helside] .diskusjonspanel__lukk {
-  display: grid;
-}
-
-.diskusjonsmeny[data-helside] .diskusjonspanel .diskusjonsmeny__laas {
+/* Som helside er knappen for helsiden veien tilbake til menyen, på alle
+   bredder. Lukkeknappen og «Hold åpen» gjelder menyen, ikke helsiden. */
+.diskusjonsmeny[data-helside] .diskusjonspanel :is(.diskusjonspanel__lukk, .diskusjonsmeny__laas) {
   display: none;
 }
 

@@ -95,7 +95,7 @@ lag (`data-lag`), så appens hurtigtaster venter.
 Knappen ved siden av «Hold åpen» viser menyen som **helside** over hele
 vinduet (`data-helside`), med det som stod åpent — oversikten eller en tråd —
 i en lesebredde midt på (`--diskusjonshelside`). Det er en tilstand over siden
-som står, ikke en egen adresse. Escape, lukkeknappen eller den samme knappen
+som står, ikke en egen adresse. Escape eller den samme knappen
 går tilbake til menyen, åpen som før. Så lenge er resten av appen `inert`
 (`useRestenInert`) og menyen et lag, også uten fokus.
 

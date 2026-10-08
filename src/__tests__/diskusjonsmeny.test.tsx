@@ -298,21 +298,21 @@ describe('som helside', () => {
       const bruker = await apne()
       await bruker.click(within(panel()).getByRole('button', { name: 'Vis diskusjonene som helside' }))
       expect(meny().hasAttribute('data-mobil')).toBe(false)
-      await bruker.click(within(panel()).getByRole('button', { name: 'Tilbake til menyen' }))
+      await bruker.click(within(panel()).getByRole('button', { name: 'Vis diskusjonene som helside' }))
       expect(meny().hasAttribute('data-mobil')).toBe(true)
     } finally {
       knapp.remove()
     }
   })
 
-  it('viser én tråd, og lukkeknappen går tilbake til den samme tråden i menyen', async () => {
+  it('viser én tråd, og knappen går tilbake til den samme tråden i menyen', async () => {
     const bruker = await apne()
     await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
     await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
     await bruker.click(within(panel()).getByRole('button', { name: 'Vis diskusjonene som helside' }))
     expect(meny().hasAttribute('data-helside')).toBe(true)
     expect(within(panel()).getByText('Hvordan doserer vi ved nyresvikt?')).toBeTruthy()
-    await bruker.click(within(panel()).getByRole('button', { name: 'Tilbake til menyen' }))
+    await bruker.click(within(panel()).getByRole('button', { name: 'Vis diskusjonene som helside' }))
     expect(meny().hasAttribute('data-helside')).toBe(false)
     expect(within(panel()).getByText('Hvordan doserer vi ved nyresvikt?')).toBeTruthy()
     expect(panel().hidden).toBe(false)

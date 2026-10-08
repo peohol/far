@@ -89,7 +89,7 @@ const LISTE: Visning = { side: 'liste' }
  *
  * Åpen kan menyen også vises som helside over hele vinduet, med oversikten
  * eller én tråd. Det er en tilstand over siden som står, ikke en egen side:
- * `Escape`, lukkeknappen eller knappen for helsiden igjen tar brukeren tilbake
+ * `Escape` eller knappen for helsiden igjen tar brukeren tilbake
  * til menyen slik den stod, på den samme siden. Resten av appen er inert så
  * lenge.
  *
@@ -189,9 +189,8 @@ export function Diskusjonsmeny({
 
   /**
    * Tilbake fra helsiden til menyen, åpen som før — på smale flater også om
-   * helsiden ble åpnet på en bred. Står fokus ikke lenger i menyen
-   * (lukkeknappen er borte på brede flater), går det til knappen for
-   * helsiden.
+   * helsiden ble åpnet på en bred. Står fokus ikke lenger i menyen, går det
+   * til knappen for helsiden.
    */
   const avsluttHelside = () => {
     setHelside(false)
@@ -270,7 +269,7 @@ export function Diskusjonsmeny({
             helside={helside}
             onHelside={() => (helside ? avsluttHelside() : setHelside(true))}
             onApne={() => setSvever(true)}
-            onLukk={helside ? avsluttHelside : lukk}
+            onLukk={lukk}
             onITraad={setITraad}
             onVarslet={visVarslet}
           />
@@ -305,7 +304,6 @@ function Diskusjonsflate({
   helside: boolean
   onHelside: () => void
   onApne: () => void
-  /** Lukker menyen, eller går tilbake fra helsiden til menyen. */
   onLukk: () => void
   onITraad: (iTraad: boolean) => void
   /** En tråd et varsel ba om, er åpnet. */
@@ -551,7 +549,7 @@ function Diskusjonsflate({
           <button
             type="button"
             className="diskusjonspanel__lukk"
-            aria-label={helside ? 'Tilbake til menyen' : 'Lukk diskusjonene'}
+            aria-label="Lukk diskusjonene"
             onClick={onLukk}
           >
             <Ikon navn="close" storrelse="ui" />

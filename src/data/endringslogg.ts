@@ -19,7 +19,7 @@ export const ENDRINGSLOGG: Endring[] = [
     omfang: 'Mindre omfang',
     punkter: [
       'Øverst i diskusjonsmenyen står en ny knapp som viser diskusjonene som en helside over hele skjermen, både oversikten over trådene og én tråd om gangen.',
-      'Escape, lukkeknappen eller den samme knappen tar deg tilbake til siden du var på, med diskusjonsmenyen åpen slik den stod.',
+      'Escape eller den samme knappen tar deg tilbake til siden du var på, med diskusjonsmenyen åpen slik den stod.',
       'Helsiden virker også på mobil.',
     ],
   },
