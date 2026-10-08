@@ -138,6 +138,11 @@
   animation: diskusjonshelside-inn var(--fart-glid) var(--kurve);
 }
 
+/* Siden bak ruller ikke, og rullefeltet dens skal ikke stå ved siden av menyens. */
+:root:has(.diskusjonsmeny[data-helside]) {
+  overflow: hidden;
+}
+
 @keyframes diskusjonshelside-inn {
   from {
     opacity: 0;

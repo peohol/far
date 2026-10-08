@@ -21,6 +21,7 @@ export const ENDRINGSLOGG: Endring[] = [
       'I en åpen diskusjonstråd står navnet og bildet til den som startet tråden, verktøylinjen og valget av kategori nå fast under overskriften. Du trenger ikke lenger rulle forbi et langt innlegg for å komme til dem.',
       'Lange innlegg og kommentarer viser bare de første linjene, som toner ut. «Vis hele innlegget» eller «Vis hele kommentaren» viser hele teksten, og «Vis mindre» legger den sammen igjen.',
       'Dette gjelder også kommentarene under idéene.',
+      'Når diskusjonene vises som helside, står ikke lenger rullefeltet til siden bak ved siden av diskusjonenes eget.',
     ],
   },
   {
