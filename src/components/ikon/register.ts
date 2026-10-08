@@ -1164,6 +1164,22 @@ const REGISTER = {
       P('M4.5 19.5 19.5 4.5', 'l', 'danger', 'pop'),
     ],
   },
+  // Vis som helside: hjørnene trekkes ut mot kanten.
+  helside: {
+    vb: 24,
+    parts: [
+      R(7.5, 7.5, 9, 9, 2, 'f1', 'accent'),
+      G([P('M3.5 8.5v-5h5M15.5 3.5h5v5M20.5 15.5v5h-5M8.5 20.5h-5v-5', 'l', 'i-ink')], 'pop'),
+    ],
+  },
+  // Avslutt helsiden: hjørnene trekkes inn igjen.
+  helsideAv: {
+    vb: 24,
+    parts: [
+      R(9.5, 9.5, 5, 5, 1.5, 'f1', 'accent'),
+      G([P('M3.5 8.5h5v-5M15.5 3.5v5h5M20.5 15.5h-5v5M8.5 20.5v-5h-5', 'l', 'i-ink')], 'pop'),
+    ],
+  },
   // --- Stoffregisteret og kategoriene (se over REGISTER) ---
   // Et register med faner i kanten.
   stoffregister: {

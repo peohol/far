@@ -12,6 +12,9 @@
  * brukeren har valgt, står i `--diskusjonsbredde` på rotelementet, og holdes
  * her mellom den opprinnelige bredden og en bredde som lar siden få plass.
  *
+ * Som helside (`data-helside`) dekker menyen hele vinduet, over toppmenyen og
+ * dokken, med innholdet i en lesbar bredde midt på.
+ *
  * Grensen for smal flate (47,5em ≈ 760 px) står i hver media query; CSS kan
  * ikke lese den fra et token.
  */
@@ -28,6 +31,8 @@
   /* Avstanden fra kanten av vinduet, og plassen versjonspilla trenger under. */
   --diskusjonskant: var(--rom-5);
   --diskusjonsbunn: calc(var(--rom-5) * 2 + 1.875rem);
+  /* Lesebredden for innholdet når menyen står som helside. */
+  --diskusjonshelside: 60rem;
 }
 
 /* --- Plassen resten av appen gir ------------------------------------------ */
@@ -117,6 +122,46 @@
   }
 }
 
+/* Som helside: hele vinduet, på alle bredder. Står etter reglene for smale
+   flater, så den vinner over dem. */
+.diskusjonsmeny[data-helside] {
+  inset: 0;
+  z-index: var(--lag-popover);
+  width: auto;
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  transition: none;
+  animation: diskusjonshelside-inn var(--fart-glid) var(--kurve);
+}
+
+@keyframes diskusjonshelside-inn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+/* Innholdet står i lesebredden midt på, men det som rulles, går helt ut til
+   kantene av vinduet, så det rulles uansett hvor pekeren står. Enhetene
+   måles mot menyen (`100cqi`), også i kroppen, som selv er en beholder. */
+.diskusjonsmeny[data-helside] {
+  container-type: inline-size;
+  --helside-innrykk: max(0px, (100cqi - var(--diskusjonshelside)) / 2);
+}
+
+.diskusjonsmeny[data-helside] > .diskusjonspanel {
+  padding: max(var(--rom-4), env(safe-area-inset-top, 0px)) var(--helside-innrykk) env(safe-area-inset-bottom, 0px);
+}
+
+.diskusjonsmeny[data-helside] .diskusjonspanel__kropp {
+  margin-inline: calc(-1 * var(--helside-innrykk));
+  padding-inline: calc(var(--rom-4) + var(--helside-innrykk));
+}
+
 /* --- Kolonnen ----------------------------------------------------------------- */
 
 .diskusjonsstolpe {
@@ -149,6 +194,7 @@
 .diskusjonsmeny__laas,
 .diskusjonsstolpe__knapp,
 .diskusjonsstolpe__kategori,
+.diskusjonspanel__helside,
 .diskusjonspanel__lukk {
   position: relative;
   display: grid;
@@ -169,7 +215,13 @@
     border-color var(--fart-rask) var(--kurve);
 }
 
-:is(.diskusjonsmeny__laas, .diskusjonsstolpe__knapp, .diskusjonsstolpe__kategori, .diskusjonspanel__lukk):hover {
+:is(
+    .diskusjonsmeny__laas,
+    .diskusjonsstolpe__knapp,
+    .diskusjonsstolpe__kategori,
+    .diskusjonspanel__helside,
+    .diskusjonspanel__lukk
+  ):hover {
   background: var(--flate-hevet);
 }
 
@@ -191,6 +243,12 @@
   .diskusjonspanel .diskusjonsmeny__laas {
     display: none;
   }
+}
+
+/* Som helside er knappen for helsiden veien tilbake til menyen, på alle
+   bredder. Lukkeknappen og «Hold åpen» gjelder menyen, ikke helsiden. */
+.diskusjonsmeny[data-helside] .diskusjonspanel :is(.diskusjonspanel__lukk, .diskusjonsmeny__laas) {
+  display: none;
 }
 
 /* Det blå merket for noe nytt: i kolonnen og ved kategorinavnet. */
@@ -752,8 +810,8 @@
   font-size: var(--tekst-liten);
 }
 
-/* Tråden i et smalt panel: mindre innrykk per nivå. */
-.diskusjonsside .kommentarer {
+/* Tråden i et smalt panel: mindre innrykk per nivå. Som helside er det plass til det vanlige. */
+.diskusjonsmeny:not([data-helside]) .diskusjonsside .kommentarer {
   --kommentar-skinne: 1.25rem;
   --kommentar-luft: var(--rom-2);
 }
@@ -836,6 +894,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .diskusjonsmeny,
+  .diskusjonsmeny[data-helside],
   .diskusjonspanel,
   .diskusjonsarkiv__pil {
     animation: none;

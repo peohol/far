@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.82.0',
+    dato: '2026-10-08',
+    sammendrag: 'Diskusjonene kan vises som helside',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Øverst i diskusjonsmenyen står en ny knapp som viser diskusjonene som en helside over hele skjermen, både oversikten over trådene og én tråd om gangen.',
+      'Escape eller den samme knappen tar deg tilbake til siden du var på, med diskusjonsmenyen åpen slik den stod.',
+      'Helsiden virker også på mobil.',
+    ],
+  },
+  {
     versjon: '1.81.2',
     dato: '2026-10-07',
     sammendrag: 'Planen for fagsidene og redigeringen viser at alt det planlagte arbeidet er ferdig',
