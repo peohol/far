@@ -29,6 +29,7 @@ import {
   type Diskusjonstekster,
 } from '../../diskusjoner/modell'
 import { useJevnligSjekk } from '../../hooks/useJevnligSjekk'
+import { useRestenInert } from '../../hooks/useRestenInert'
 import { merketall } from '../../varsler/modell'
 import { Breddehandtak, maalLengde } from '../Breddehandtak'
 import { Ikon } from '../ikon/Ikon'
@@ -86,6 +87,12 @@ const LISTE: Visning = { side: 'liste' }
  * På smale flater står en knapp i toppmenyen (dokken) i stedet, som åpner
  * menyen over siden.
  *
+ * Åpen kan menyen også vises som helside over hele vinduet, med oversikten
+ * eller én tråd. Det er en tilstand over siden som står, ikke en egen side:
+ * `Escape`, lukkeknappen eller knappen for helsiden igjen tar brukeren tilbake
+ * til menyen slik den stod, på den samme siden. Resten av appen er inert så
+ * lenge.
+ *
  * Mens fokus står i menyen, er den et lag over appen: tastene i fortolkningen
  * ligger i ro, så det som skrives her, ikke velger eller kopierer noe bak.
  */
@@ -102,6 +109,7 @@ export function Diskusjonsmeny({
   const [laast, setLaast] = useBevart('diskusjoner/laast', false)
   const [bredde, setBredde] = useBevart<number | null>('diskusjoner/bredde', null)
   const [mobilApen, setMobilApen] = useBevart('diskusjoner/mobil', false)
+  const [helside, setHelside] = useBevart('diskusjoner/helside', false)
   const [svever, setSvever] = useState(false)
   const [fokus, setFokus] = useState(false)
   const [iTraad, setITraad] = useState(false)
@@ -140,7 +148,8 @@ export function Diskusjonsmeny({
     void lagreLaast(ny).catch(() => undefined)
   }
 
-  const apen = laast || svever || fokus || iTraad || mobilApen
+  const apen = laast || svever || fokus || iTraad || mobilApen || helside
+  useRestenInert(meny, helside)
 
   // Resten av appen gir plass til kolonnen, og til hele menyen når den holdes åpen.
   useEffect(() => {
@@ -178,6 +187,20 @@ export function Diskusjonsmeny({
   // Et varsel som leder til en tråd, åpner menyen også på smale flater, der den ellers står skjult.
   const visVarslet = useCallback(() => setMobilApen(true), [setMobilApen])
 
+  /**
+   * Tilbake fra helsiden til menyen, åpen som før. Står fokus ikke lenger i
+   * menyen (lukkeknappen er borte på brede flater), går det til knappen for
+   * helsiden.
+   */
+  const avsluttHelside = () => {
+    setHelside(false)
+    setSvever(true)
+    requestAnimationFrame(() => {
+      const knapp = meny.current?.querySelector<HTMLElement>('.diskusjonspanel__helside')
+      if (!meny.current?.contains(document.activeElement) || document.activeElement?.checkVisibility?.() === false) knapp?.focus()
+    })
+  }
+
   const lukk = () => {
     setSvever(false)
     setMobilApen(false)
@@ -204,7 +227,8 @@ export function Diskusjonsmeny({
         data-apen={apen || undefined}
         data-laast={laast || undefined}
         data-mobil={mobilApen || undefined}
-        {...(fokus && { 'data-lag': DISKUSJON_LAG })}
+        data-helside={helside || undefined}
+        {...((fokus || helside) && { 'data-lag': DISKUSJON_LAG })}
         onMouseEnter={() => setSvever(true)}
         onMouseLeave={() => setSvever(false)}
         onFocus={inn}
@@ -213,13 +237,14 @@ export function Diskusjonsmeny({
           if (event.key !== 'Escape' || event.defaultPrevented) return
           if ((event.target as HTMLElement).isContentEditable) return
           event.preventDefault()
-          // Escape lukker menyen og ikke noe mer: fokus slippes i `lukk()`, så
+          // Escape lukker menyen (eller helsiden) og ikke noe mer: fokus slippes i `lukk()`, så
           // uten dette ville fortolkningen bak tatt den som «Bytt analytt».
           event.stopPropagation()
-          lukk()
+          if (helside) avsluttHelside()
+          else lukk()
         }}
       >
-        {apen && (
+        {apen && !helside && (
           <Breddehandtak
             etikett="Bredden på diskusjonene"
             maal={() => ({
@@ -240,8 +265,10 @@ export function Diskusjonsmeny({
             apen={apen}
             laast={laast}
             onLaas={veksleLaas}
+            helside={helside}
+            onHelside={() => (helside ? avsluttHelside() : setHelside(true))}
             onApne={() => setSvever(true)}
-            onLukk={lukk}
+            onLukk={helside ? avsluttHelside : lukk}
             onITraad={setITraad}
             onVarslet={visVarslet}
           />
@@ -259,6 +286,8 @@ function Diskusjonsflate({
   apen,
   laast,
   onLaas,
+  helside,
+  onHelside,
   onApne,
   onLukk,
   onITraad,
@@ -270,7 +299,11 @@ function Diskusjonsflate({
   apen: boolean
   laast: boolean
   onLaas: () => void
+  /** Menyen står som helside over hele vinduet. */
+  helside: boolean
+  onHelside: () => void
   onApne: () => void
+  /** Lukker menyen, eller går tilbake fra helsiden til menyen. */
   onLukk: () => void
   onITraad: (iTraad: boolean) => void
   /** En tråd et varsel ba om, er åpnet. */
@@ -503,7 +536,22 @@ function Diskusjonsflate({
             <span>Diskusjoner</span>
           </h2>
           <Laasknapp laast={laast} onLaas={onLaas} />
-          <button type="button" className="diskusjonspanel__lukk" aria-label="Lukk diskusjonene" onClick={onLukk}>
+          <button
+            type="button"
+            className="diskusjonspanel__helside"
+            aria-pressed={helside}
+            aria-label="Vis diskusjonene som helside"
+            title={helside ? 'Tilbake til menyen' : 'Vis som helside'}
+            onClick={onHelside}
+          >
+            <Ikon navn={helside ? 'helsideAv' : 'helside'} storrelse="ui" />
+          </button>
+          <button
+            type="button"
+            className="diskusjonspanel__lukk"
+            aria-label={helside ? 'Tilbake til menyen' : 'Lukk diskusjonene'}
+            onClick={onLukk}
+          >
             <Ikon navn="close" storrelse="ui" />
           </button>
         </div>

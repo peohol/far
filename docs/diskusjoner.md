@@ -92,8 +92,15 @@ siden fra knappen «Diskusjoner» i toppmenyen, eller av seg selv når et
 varsel leder til en tråd. Mens fokus er i menyen, er den et
 lag (`data-lag`), så appens hurtigtaster venter.
 
-Det brukeren har åpent (tråd, skjema, søk, arkiv) bevares med `useBevart` per
-side.
+Knappen ved siden av «Hold åpen» viser menyen som **helside** over hele
+vinduet (`data-helside`), med det som stod åpent — oversikten eller en tråd —
+i en lesebredde midt på (`--diskusjonshelside`). Det er en tilstand over siden
+som står, ikke en egen adresse. Escape, lukkeknappen eller den samme knappen
+går tilbake til menyen, åpen som før. Så lenge er resten av appen `inert`
+(`useRestenInert`) og menyen et lag, også uten fokus.
+
+Det brukeren har åpent (tråd, skjema, søk, arkiv, helside) bevares med
+`useBevart`, tråden og skjemaet per side.
 
 Nytt er som under idéene: en tråd er ny når noen andre har skrevet den og den
 aldri er åpnet, eller når andre har kommentert etter at den sist ble åpnet

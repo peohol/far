@@ -4,7 +4,7 @@
  * med «Hold åpen» og emojiene, åpning og lukking med pekeren, kategoriene og
  * trådene, en ny tråd med ny kategori, søket, arkivet, én tråd med det bare
  * forfatteren eller en administrator ser, sletting og flytting til en annen
- * side, og en tråd åpnet fra et varsel.
+ * side, en tråd åpnet fra et varsel, og menyen som helside.
  *
  * Økten og kallene mot databasen er erstattet; det er skjermbildene som prøves.
  * Dra-og-slipp prøves ikke her: testmiljøet har ingen peker (se `useSortering`).
@@ -244,6 +244,54 @@ describe('kolonnen', () => {
     const valgt = document.documentElement.style.getPropertyValue('--diskusjonsbredde')
     await act(async () => svar(600))
     expect(document.documentElement.style.getPropertyValue('--diskusjonsbredde')).toBe(valgt)
+  })
+})
+
+describe('som helside', () => {
+  it('dekker vinduet med oversikten, gjør resten inert og går tilbake til menyen med Escape', async () => {
+    const bruker = userEvent.setup()
+    const { container } = render(
+      <div className="app">
+        <main>Siden bak</main>
+        <Diskusjonsmeny side="stoff:litium" sidenavn="Litium" sider={SIDER} />
+      </div>,
+    )
+    await within(stolpe()).findByRole('button', { name: 'Dosering, 1 med nytt' })
+    fireEvent.mouseEnter(meny())
+    const knapp = within(panel()).getByRole('button', { name: 'Vis diskusjonene som helside' })
+    expect(knapp.getAttribute('aria-pressed')).toBe('false')
+    await bruker.click(knapp)
+    expect(meny().hasAttribute('data-helside')).toBe(true)
+    expect(knapp.getAttribute('aria-pressed')).toBe('true')
+    expect(container.querySelector('main')!.hasAttribute('inert')).toBe(true)
+    // Ingen kant å dra, og pekeren som går ut, lukker ingenting.
+    expect(within(meny()).queryByRole('separator')).toBeNull()
+    fireEvent.mouseLeave(meny())
+    expect(panel().hidden).toBe(false)
+    expect(within(panel()).getByRole('heading', { name: /^Dosering/ })).toBeTruthy()
+
+    const bak = vi.fn()
+    window.addEventListener('keydown', bak)
+    fireEvent.keyDown(knapp, { key: 'Escape' })
+    window.removeEventListener('keydown', bak)
+    expect(bak).not.toHaveBeenCalled()
+    expect(meny().hasAttribute('data-helside')).toBe(false)
+    expect(container.querySelector('main')!.hasAttribute('inert')).toBe(false)
+    // Tilbake i menyen, åpen som før.
+    expect(panel().hidden).toBe(false)
+  })
+
+  it('viser én tråd, og lukkeknappen går tilbake til den samme tråden i menyen', async () => {
+    const bruker = await apne()
+    await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    await bruker.click(within(panel()).getByRole('button', { name: 'Vis diskusjonene som helside' }))
+    expect(meny().hasAttribute('data-helside')).toBe(true)
+    expect(within(panel()).getByText('Hvordan doserer vi ved nyresvikt?')).toBeTruthy()
+    await bruker.click(within(panel()).getByRole('button', { name: 'Tilbake til menyen' }))
+    expect(meny().hasAttribute('data-helside')).toBe(false)
+    expect(within(panel()).getByText('Hvordan doserer vi ved nyresvikt?')).toBeTruthy()
+    expect(panel().hidden).toBe(false)
   })
 })
 
