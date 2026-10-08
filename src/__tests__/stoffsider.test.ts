@@ -179,7 +179,7 @@ describe('når sidene er publisert', () => {
   })
 
   it('finnes i søket i hele kunnskapsbasen, med adresse etter stoffets nøkkel', async () => {
-    const base = await lesKunnskapsbase(lagSideleser(kall.klientFor(bruker)), null)
+    const base = await lesKunnskapsbase({ sider: lagSideleser(kall.klientFor(bruker)) })
     const dokumenter = indekserKunnskapsbase(base)
     const paStoffet = dokumenter.filter((d) => d.sted.side.stoff === 'teststoff')
 
@@ -195,7 +195,7 @@ describe('når sidene er publisert', () => {
   })
 
   it('fører analyttkoden og aliaset til stoffet, og indekserer ikke aliasets gamle side for seg', async () => {
-    const base = await lesKunnskapsbase(lagSideleser(kall.klientFor(bruker)), null)
+    const base = await lesKunnskapsbase({ sider: lagSideleser(kall.klientFor(bruker)) })
     const indeks = lagSokeindeks(indekserKunnskapsbase(base))
     expect(indeks.dokumenter.some((d) => d.sted.side.stoff === 'hydroksybupropion')).toBe(false)
 

@@ -8,6 +8,7 @@ import { Ikon } from '../ikon/Ikon'
 import { Fagsokfelt } from '../toppmeny/Fagsokfelt'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
 import { Markert } from './Markert'
+import { Manglende } from './Manglende'
 import { HENTER_MER } from './treffvisning'
 import { useFagsoketreff } from './useFagsoketreff'
 
@@ -19,6 +20,8 @@ export interface FagsokProps {
   indeks: Sokeindekstilstand
   /** Ber om indeksen: første gang feltet får fokus, og etter en feil. */
   onKrev: () => void
+  /** Leser det som manglet, på nytt. `onKrev` når det ikke er gitt. */
+  onProvIgjen?: () => void
   /** Søket i adressen mens søkesiden står åpen, så feltet viser det samme. */
   sporring?: string
   /** Linja under et stoff: koden, analysemetoden og kategorien. */
@@ -38,7 +41,7 @@ export interface FagsokProps {
  * står her, er fagsøket et lag over appen (`FAGSOK_LAG`), så det som skrives,
  * aldri når tastene i fortolkningen bak.
  */
-export function Fagsok({ indeks, onKrev, sporring, beskrivSide, onGaaTil }: FagsokProps) {
+export function Fagsok({ indeks, onKrev, onProvIgjen, sporring, beskrivSide, onGaaTil }: FagsokProps) {
   const id = useId()
   const felt = useRef<HTMLInputElement>(null)
   const [verdi, setVerdi] = useState(sporring ?? '')
@@ -140,6 +143,7 @@ export function Fagsok({ indeks, onKrev, sporring, beskrivSide, onGaaTil }: Fags
           <Liste
             indeks={indeks}
             onKrev={onKrev}
+            onProvIgjen={onProvIgjen ?? onKrev}
             antall={treff.length}
             forsinket={forsinket}
           >
@@ -201,12 +205,14 @@ export function Fagsok({ indeks, onKrev, sporring, beskrivSide, onGaaTil }: Fags
 function Liste({
   indeks,
   onKrev,
+  onProvIgjen,
   antall,
   forsinket,
   children,
 }: {
   indeks: Sokeindekstilstand
   onKrev: () => void
+  onProvIgjen: () => void
   antall: number
   forsinket: boolean
   children: React.ReactNode
@@ -240,6 +246,12 @@ function Liste({
           {HENTER_MER}
         </p>
       )}
+      <Manglende
+        className="fagsok__melding"
+        mangler={indeks.indeks.mangler}
+        henter={!!indeks.henterMer}
+        onProvIgjen={onProvIgjen}
+      />
       <p className="kun-skjermleser" role="status">
         {forsinket ? '' : antall === 1 ? '1 treff' : `${antall} treff`}
       </p>

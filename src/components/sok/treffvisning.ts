@@ -11,6 +11,7 @@ import {
   type Treffgruppe,
   type Utdrag,
 } from '../../faginnhold/sok'
+import type { Manglende, Sokekilde } from '../../faginnhold/globaltSok'
 import type { Ikonnavn } from '../ikon/register'
 import { seksjonsikon } from '../stoffside/panelvisning'
 
@@ -38,6 +39,23 @@ export interface Treffvisning {
 
 /** Det som står mens søket bare har en del av fagstoffet, og resten hentes. */
 export const HENTER_MER = 'Henter mer fagstoff …'
+
+/** Hva hver kilde gir søket, slik det står når den mangler. */
+const KILDENAVN: Record<Sokekilde, string> = {
+  sider: 'innholdet på fagsidene',
+  preparater: 'preparatene fra FEST',
+  interaksjoner: 'interaksjonene fra FEST',
+  farmakogenetikk: 'farmakogenetikken fra ClinPGx',
+  cpic: 'anbefalingene fra CPIC',
+}
+
+/** Det som står når noe ikke kunne hentes, eller `null` når alt er med. */
+export function manglertekst(mangler: Manglende | undefined): string | null {
+  const navn = (Object.keys(KILDENAVN) as Sokekilde[]).filter((k) => mangler?.[k] !== undefined).map((k) => KILDENAVN[k])
+  if (navn.length === 0) return null
+  const liste = navn.length === 1 ? navn[0] : `${navn.slice(0, -1).join(', ')} og ${navn.at(-1)}`
+  return `Søket mangler nå ${liste}, som ikke kunne hentes.`
+}
 
 /** Navnene på gruppene: fanen på søkesiden og overskriften over gruppen. */
 export const GRUPPENAVN: Record<Treffgruppe, { fane: string; overskrift: string }> = {

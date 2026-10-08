@@ -79,8 +79,10 @@ DMP tar ikke ansvar for integrasjoner av FEST. Brukeren av dataene skal:
   `endepunkt.ts` er inngangen fra Vercel.
 - Dataene ligger i skjemaet `legemiddeldata`, som ingen API-rolle når direkte.
   Skriving går gjennom funksjonene `legemiddeldata_*`, som bare den hemmelige
-  nøkkelen kan kalle. Fagsidene leser med `les_legemidler`, og
-  `legemiddeldata_status` viser de siste kjøringene.
+  nøkkelen kan kalle. Fagsidene leser med `les_legemidler`, søket i hele
+  kunnskapsbasen bare navnene med `les_preparatsok` og `les_interaksjonssok`
+  (se `docs/faginnhold.md`), og `legemiddeldata_status` viser de siste
+  kjøringene.
 - Et uttrekk lastes først inn i et mellomlager og byttes så inn i én
   transaksjon. Nye rader legges til, endrede oppdateres, og rader som er borte,
   merkes som utgått, men slettes ikke. Et uttrekk som har under 80 % av radene
@@ -427,7 +429,10 @@ og logikken står i `src/legemiddeldata/interaksjoner.ts`.
   bare har sidens virkestoff (med saltene). Kombinasjonspreparatenes koder tas
   ikke med; de ville gitt interaksjonene til de andre virkestoffene. Kodene
   som ble brukt, står i merknaden nederst i seksjonen. Oppslaget gjøres av `les_interaksjoner` i
-  databasen.
+  databasen, i oppslagstabellene `interaksjonsoppslag` (relevansen og navnet på
+  hver substansgruppe) og `interaksjonssubstanser` (ATC-koden og virkestoffet
+  til hvert stoff). De har bare de aktive interaksjonene, og en trigger bygger
+  dem på nytt for interaksjonene synkroniseringen har endret.
 - **Hva som vises.** Bare «Bør unngås» (rød) og «Forholdsregler bør tas»
   (gul), de alvorligste først og ellers alfabetisk. «Ingen tiltak nødvendig»
   skal etter veiledningen ikke gi interaksjonsmelding og vises ikke.

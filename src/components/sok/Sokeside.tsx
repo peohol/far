@@ -7,6 +7,7 @@ import { Lastesirkel } from '../Lasteindikator'
 import { Ikon } from '../ikon/Ikon'
 import { Lukkeknapp } from '../Lukkeknapp'
 import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
+import { Manglende } from './Manglende'
 import { Markert } from './Markert'
 import { GRUPPENAVN, HENTER_MER, type Treffvisning } from './treffvisning'
 import { useFagsoketreff } from './useFagsoketreff'
@@ -19,6 +20,8 @@ export interface SokesideProps {
   q: string
   indeks: Sokeindekstilstand
   onKrev: () => void
+  /** Leser det som manglet, på nytt. `onKrev` når det ikke er gitt. */
+  onProvIgjen?: () => void
   beskrivSide?: (stoff: string) => string | undefined
   /** Tilbake til fortolkningen slik den sto. */
   onLukk: () => void
@@ -32,7 +35,7 @@ type Filter = Treffgruppe | 'alle'
  * rekkefølge. Hvert treff dyplenker til seksjonen eller kortet det står i.
  * Søket skrives i fagsøket i toppmenyen; siden viser bare resultatet.
  */
-export function Sokeside({ q, indeks, onKrev, beskrivSide, onLukk }: SokesideProps) {
+export function Sokeside({ q, indeks, onKrev, onProvIgjen, beskrivSide, onLukk }: SokesideProps) {
   const overskrift = useId()
   const [filter, setFilter] = useState<Filter>('alle')
   const { treff, vis } = useFagsoketreff(indeks, q, beskrivSide)
@@ -104,11 +107,12 @@ export function Sokeside({ q, indeks, onKrev, beskrivSide, onLukk }: SokesidePro
               <Lastesirkel /> {HENTER_MER} Flere treff kan komme til.
             </p>
           )}
-          {indeks.indeks.festfeil && (
-            <p className="sidevarsel" role="note">
-              Preparatene og interaksjonene fra FEST er ikke med i søket nå, fordi de ikke kunne hentes.
-            </p>
-          )}
+          <Manglende
+            className="sidevarsel"
+            mangler={indeks.indeks.mangler}
+            henter={!!indeks.henterMer}
+            onProvIgjen={onProvIgjen ?? onKrev}
+          />
           {treff.length > 0 && (
             <div className="sokeside__filter" role="group" aria-label="Vis treff">
               <Filterknapp navn="Alle" antall={treff.length} valgt={filter === 'alle'} onVelg={() => setFilter('alle')} />

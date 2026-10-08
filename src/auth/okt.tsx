@@ -20,6 +20,7 @@ import type { Profil } from '@delt/profil'
 import { tilgangFor, type Tilgang } from '../domain/tilgang'
 import * as api from './api'
 import { erKonfigurert, klient } from './klient'
+import { tomMellomlageret } from './mellomlager'
 
 interface Oktverdi {
   /** Hva som skal vises nå. Se `domain/tilgang.ts`. */
@@ -53,7 +54,11 @@ export function OktProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (mangler) return
-    const { data } = klient().auth.onAuthStateChange((_hendelse, ny) => setOkt(ny))
+    const { data } = klient().auth.onAuthStateChange((hendelse, ny) => {
+      // Det som er lagret i nettleseren, hører til den som var logget inn.
+      if (hendelse === 'SIGNED_OUT') void tomMellomlageret()
+      setOkt(ny)
+    })
 
     void klient()
       .auth.getSession()

@@ -202,6 +202,17 @@ const VANLIG_LEGEMIDDEL = '7'
 type Virkestoffoppslag = ReadonlyMap<string, { navn: string }>
 
 /**
+ * Legemiddelformen et preparat står under: ID-en (FESTs kode) og teksten.
+ * Søket bruker den samme, så et preparatnavn finnes i samme detaljkort.
+ */
+export function legemiddelform(kode: { kode?: string | null; tekst?: string | null } | null | undefined): {
+  id: string
+  form: string
+} {
+  return { id: kode?.kode || 'ukjent', form: kode?.tekst || 'Ukjent legemiddelform' }
+}
+
+/**
  * @param idag Datoen byttegruppenes gyldighet måles mot (`ÅÅÅÅ-MM-DD`). Dagens
  *   dato der brukeren er, om ikke annet er gitt.
  */
@@ -220,13 +231,13 @@ export function byggPreparatvisning(
   const preparater = new Map<string, Preparatdetalj & { perStyrke: Map<string, Preparatstyrkedetalj> }>()
 
   for (const m of utvalg.merkevarer) {
-    const formId = m.legemiddelform?.kode || 'ukjent'
+    const { id: formId, form: formtekst } = legemiddelform(m.legemiddelform)
     const form =
       former.get(formId) ??
       former
         .set(formId, {
           id: formId,
-          form: m.legemiddelform?.tekst || 'Ukjent legemiddelform',
+          form: formtekst,
           ikon: formikon(m.legemiddelform?.kode, m.legemiddelform?.tekst),
           styrker: [],
           grupper: new Map(),

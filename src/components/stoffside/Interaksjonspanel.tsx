@@ -12,7 +12,7 @@ import type { Interaksjonstilstand } from './useInteraksjoner'
 
 /** Stoffene siden interagerer med, slik søket på siden finner dem, med detaljkortet de står i. */
 export function interaksjonssoketekster(tilstand: Interaksjonstilstand): Tilleggstekst[] {
-  return tilstand.status === 'klar' ? interaksjonstekster(tilstand.oversikt) : []
+  return tilstand.status === 'klar' ? interaksjonstekster(tilstand.oversikt.interaksjoner) : []
 }
 
 /**

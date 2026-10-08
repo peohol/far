@@ -5,8 +5,10 @@
  * bare gjennom funksjonene som er åpne for innloggede: `les_legemidler` (alt
  * en stoffside trenger om virkestoffene den er koblet til), `sok_virkestoff`
  * (til å velge koblingen) og `les_interaksjoner` (interaksjonene for
- * ATC-kodene og virkestoffene). De er beskrevet i migrasjonene
- * `*_legemiddeldata.sql`, `*_legemiddelkobling.sql` og `*_interaksjoner.sql`.
+ * ATC-kodene og virkestoffene). Søket i hele kunnskapsbasen leser bare navnene,
+ * med `les_preparatsok` og `les_interaksjonssok`. De er beskrevet i
+ * migrasjonene `*_legemiddeldata.sql`, `*_legemiddelkobling.sql`,
+ * `*_interaksjoner.sql` og `*_sokedata.sql`.
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
@@ -71,6 +73,43 @@ export interface Interaksjonsutvalg {
 }
 
 export const TOMME_INTERAKSJONER: Interaksjonsutvalg = { interaksjoner: [], ikke_vurdert: [] }
+
+/** Et preparat i søkedataene: legemiddelformens kode og tekst, og varenavnet. */
+export type Preparatsokerad = [kode: string | null, tekst: string | null, navn: string]
+
+/** En interaksjon i søkedataene: ID-en, FESTs relevanskode og navnet på det siden interagerer med. */
+export type Interaksjonssokerad = [id: string, relevans: string, med: string]
+
+/**
+ * Det søket i hele kunnskapsbasen trenger fra legemiddeldataene: for hver side
+ * — gitt som virkestoffene den er koblet til — preparatnavnene og
+ * interaksjonene seksjonene viser. Svaret har én liste per side, i samme
+ * rekkefølge.
+ */
+export interface Legemiddelsok {
+  preparater(sider: readonly (readonly string[])[]): Promise<Preparatsokerad[][]>
+  interaksjoner(sider: readonly (readonly string[])[]): Promise<Interaksjonssokerad[][]>
+}
+
+/** Flest sider `les_preparatsok` og `les_interaksjonssok` tar imot i ett kall (migrasjonen `*_sokedata.sql`). */
+export const MAKS_SOKESIDER = 500
+
+export function lagLegemiddelsok(klient: SupabaseClient): Legemiddelsok {
+  const les = <T>(funksjon: string) => async (sider: readonly (readonly string[])[]): Promise<T[][]> => {
+    const deler: (readonly string[])[][] = []
+    for (let i = 0; i < sider.length; i += MAKS_SOKESIDER) deler.push(sider.slice(i, i + MAKS_SOKESIDER))
+    const svar = await Promise.all(
+      deler.map(async (del) => {
+        const { data, error } = await klient.rpc(funksjon, { sider: del })
+        if (error) throw new Error(error.message)
+        if (!Array.isArray(data) || data.length !== del.length) throw new Error(`${funksjon} ga et uventet svar.`)
+        return data as T[][]
+      }),
+    )
+    return svar.flat()
+  }
+  return { preparater: les<Preparatsokerad>('les_preparatsok'), interaksjoner: les<Interaksjonssokerad>('les_interaksjonssok') }
+}
 
 export interface Legemiddelleser {
   les(virkestoff: readonly string[]): Promise<Legemiddelutvalg>

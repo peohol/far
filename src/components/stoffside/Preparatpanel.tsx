@@ -2,7 +2,7 @@ import { ELEMENTTYPER, type Paneldefinisjon } from '../../faginnhold/paneler'
 import type { Tilleggstekst } from '../../faginnhold/sok'
 import { oppsummerPreparatvisning } from '../../legemiddeldata/preparatmodell'
 import { festForeldet } from '../../legemiddeldata/referanser'
-import { finnKobling, preparattekster } from '../../legemiddeldata/stoffside'
+import { finnKobling, preparatformer, preparattekster } from '../../legemiddeldata/stoffside'
 import { Legemiddelformer } from '../preparater/Legemiddelformer'
 import { elementAnker, Panel, Redigerbar, type Panelkontekst } from './Paneler'
 import { LegemiddelkoblingSkjema } from './Skjemaer'
@@ -14,7 +14,7 @@ export { finnKobling, PREPARATPANEL } from '../../legemiddeldata/stoffside'
 
 /** Preparatnavnene, slik søket på siden finner dem, med detaljkortet de står i. */
 export function preparatsoketekster(tilstand: Legemiddeltilstand): Tilleggstekst[] {
-  return tilstand.status === 'klar' ? preparattekster(tilstand.visning) : []
+  return tilstand.status === 'klar' ? preparattekster(preparatformer(tilstand.visning)) : []
 }
 
 /**

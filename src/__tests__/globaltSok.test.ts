@@ -22,13 +22,16 @@ import { STOFFREGISTER, STOFFREGISTERDATA, byggStoffregister, stoffslug, type Re
 import { GRUNNSTRUKTUR } from './hjelp/registerstruktur'
 import { byggSidemodell, publiseringsplan } from '../faginnhold/stoffside'
 import {
-  MAKS_INTERAKSJONSNOKLER,
   indekserKunnskapsbase,
   lagSideleser,
+  lagVersjonsleser,
   lesKunnskapsbase,
   lesSokeindeks,
+  type Kunnskapsindeks,
   type Sideleser,
+  type Sokekilder,
 } from '../faginnhold/globaltSok'
+import type { Mellomlager } from '../auth/mellomlager'
 import { lagFaginnholdslager } from '../faginnhold/lagring'
 import { lagFaginnholdsleser, type Faginnholdsleser, type Stoffsidedata } from '../faginnhold/lesing'
 import { SITERING } from '../faginnhold/referanser'
@@ -47,9 +50,21 @@ import {
   type Sokeindeks,
 } from '../faginnhold/sok'
 import { byggInteraksjoner, interaksjonsnokler } from '../legemiddeldata/interaksjoner'
-import { lagLegemiddelleser, TOMME_INTERAKSJONER, TOMT_UTVALG, type Legemiddelleser } from '../legemiddeldata/lesing'
+import {
+  lagLegemiddelleser,
+  lagLegemiddelsok,
+  MAKS_SOKESIDER,
+  type Legemiddelleser,
+  type Legemiddelsok,
+} from '../legemiddeldata/lesing'
 import { byggPreparatvisning } from '../legemiddeldata/preparatmodell'
-import { interaksjonstekster, koblede, preparatkort, preparattekster } from '../legemiddeldata/stoffside'
+import {
+  interaksjonstekster,
+  koblede,
+  preparatformer,
+  preparatkort,
+  preparattekster,
+} from '../legemiddeldata/stoffside'
 import { AMITRIPTYLIN, KODEIN, synkroniserUtdrag } from './hjelp/fest'
 import { faginnholdskall, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
@@ -67,6 +82,7 @@ let brukerklient: SupabaseClient
 let sideleser: Sideleser
 let faginnhold: Faginnholdsleser
 let legemidler: Legemiddelleser
+let legemiddelsok: Legemiddelsok
 const ider = { kilde: '', metabolisme: '', fjernet: '' }
 
 /** Oppretter en stoffside med innholdet, og publiserer alt. Nøkkelen er den navnet gir. */
@@ -132,7 +148,36 @@ beforeAll(async () => {
   sideleser = lagSideleser(brukerklient)
   faginnhold = lagFaginnholdsleser(brukerklient)
   legemidler = lagLegemiddelleser(brukerklient)
+  legemiddelsok = lagLegemiddelsok(brukerklient)
 }, 120_000)
+
+/** Et mellomlager i minnet, som i nettleseren. */
+function minnelager(): Mellomlager & { innhold: Map<string, unknown> } {
+  const innhold = new Map<string, unknown>()
+  return {
+    innhold,
+    les: async (nokkel) => structuredClone(innhold.get(nokkel)),
+    skriv: async (nokkel, verdi) => void innhold.set(nokkel, structuredClone(verdi)),
+  }
+}
+
+/** En klient som noterer hvilke funksjoner som kalles, og kan få noen av dem til å feile. */
+function tellendeKlient(feiler: (funksjon: string) => boolean = () => false) {
+  const kalt: string[] = []
+  const klient = {
+    rpc: async (funksjon: string, argumenter?: Record<string, unknown>) => {
+      kalt.push(funksjon)
+      if (feiler(funksjon)) return { data: null, error: { message: `${funksjon} svarer ikke` } }
+      return brukerklient.rpc(funksjon, argumenter)
+    },
+  } as unknown as SupabaseClient
+  return { kalt, klient }
+}
+
+/** Kildene appen leser fra, mot klienten. */
+function kilderFor(klient: SupabaseClient, ekstra: Partial<Sokekilder> = {}): Sokekilder {
+  return { sider: lagSideleser(klient), legemidler: lagLegemiddelsok(klient), versjoner: lagVersjonsleser(klient), ventetider: [], ...ekstra }
+}
 
 describe('les_stoffer', () => {
   it('gir hver stoffside på samme form som les_stoff', async () => {
@@ -153,24 +198,18 @@ describe('les_stoffer', () => {
 })
 
 describe('lesingen av kunnskapsbasen', () => {
-  it('leser alt i tre kall, uansett hvor mange sider det er', async () => {
-    const kalt: string[] = []
-    const tellende = {
-      rpc: (funksjon: string, argumenter: Record<string, unknown>) => {
-        kalt.push(funksjon)
-        return brukerklient.rpc(funksjon, argumenter)
-      },
-    } as unknown as SupabaseClient
-    const base = await lesKunnskapsbase(lagSideleser(tellende), lagLegemiddelleser(tellende))
-    // Sidene leses etter stoffet, aldri gjennom en analyttkode.
-    expect(kalt).toEqual(['les_stoffer', 'les_legemidler', 'les_interaksjoner'])
+  it('leser alt i fire små kall, uansett hvor mange sider det er', async () => {
+    const { kalt, klient } = tellendeKlient()
+    const base = await lesKunnskapsbase(kilderFor(klient))
+    // Sidene leses etter stoffet, aldri gjennom en analyttkode, og FEST bare med navnene søket trenger.
+    expect(kalt).toEqual(['sokedata_versjoner', 'les_stoffer', 'les_preparatsok', 'les_interaksjonssok'])
     expect(base.sider).toHaveLength(4)
-    expect(base.festfeil).toBeUndefined()
+    expect(base.mangler).toBeUndefined()
   })
 
   it('finner stoffene i registeret også når databasen ikke har noen sider', async () => {
     const tom: Sideleser = { lesStoffsider: async () => [] }
-    const base = await lesKunnskapsbase(tom, null)
+    const base = await lesKunnskapsbase({ sider: tom })
     expect(base.sider).toEqual([])
     const [treff] = sokGlobalt(lagSokeindeks(indekserKunnskapsbase(base)), 'kvetiapin')
     expect(treff!.dokument).toMatchObject({ felt: 'navn', sted: { side: { stoff: 'kvetiapin', navn: 'Kvetiapin' } } })
@@ -178,7 +217,7 @@ describe('lesingen av kunnskapsbasen', () => {
   })
 
   it('gir hver side de samme søkedokumentene som søket på siden selv', async () => {
-    const base = await lesKunnskapsbase(sideleser, legemidler)
+    const base = await lesKunnskapsbase({ sider: sideleser, legemidler: legemiddelsok })
     const globale = indekserKunnskapsbase(base)
 
     for (const slug of ['amitriptylin', 'kodein', 'nortriptylin']) {
@@ -191,8 +230,8 @@ describe('lesingen av kunnskapsbasen', () => {
         const utvalg = await legemidler.les(koblet)
         const nokler = interaksjonsnokler(utvalg, koblet)
         tillegg.push(
-          ...preparattekster(byggPreparatvisning(utvalg, koblet)),
-          ...interaksjonstekster(byggInteraksjoner(await legemidler.interaksjoner(nokler), nokler)),
+          ...preparattekster(preparatformer(byggPreparatvisning(utvalg, koblet))),
+          ...interaksjonstekster(byggInteraksjoner(await legemidler.interaksjoner(nokler), nokler).interaksjoner),
         )
       }
       const paSiden = indekserSide(stoffidentitet(STOFFREGISTER.finn(slug)!, analytterForStoff(slug)), modell, tillegg)
@@ -204,25 +243,53 @@ describe('lesingen av kunnskapsbasen', () => {
     ])
   })
 
-  it('indekserer faginnholdet også når legemiddeldataene ikke kan leses', async () => {
-    const nede: Legemiddelleser = {
-      les: async () => {
-        throw new Error('Legemiddeldataene svarer ikke')
+  it('indekserer alt det andre når en kilde ikke kan leses, og sier hvilken', async () => {
+    const nede: Legemiddelsok = {
+      preparater: async () => {
+        throw new Error('Preparatene svarer ikke')
       },
-      sok: async () => [],
-      interaksjoner: async () => TOMME_INTERAKSJONER,
+      interaksjoner: legemiddelsok.interaksjoner,
     }
-    const indeks = await lesSokeindeks(sideleser, nede)
-    expect(indeks.festfeil).toBe('Legemiddeldataene svarer ikke')
+    const indeks = await lesSokeindeks({ sider: sideleser, legemidler: nede, ventetider: [] })
+    expect(indeks.mangler).toEqual({ preparater: 'Preparatene svarer ikke' })
     expect(sokGlobalt(indeks, 'sarotex')).toEqual([])
+    expect(sokGlobalt(indeks, 'terbinafin')).not.toEqual([])
     expect(sokGlobalt(indeks, 'doseringstekst')).toHaveLength(1)
   })
 
-  it('gir indekser over det som er lest, før legemiddeldataene er der', async () => {
-    const delvise: Awaited<ReturnType<typeof lesSokeindeks>>[] = []
-    const indeks = await lesSokeindeks(sideleser, legemidler, {}, (d) => delvise.push(d))
-    expect(delvise).toHaveLength(2)
-    const [forst, sa] = delvise as [(typeof delvise)[0], (typeof delvise)[0]]
+  it('finner registeret når sidene ikke kan leses, og sier fra', async () => {
+    const nede: Sideleser = {
+      lesStoffsider: async () => {
+        throw new Error('Sidene svarer ikke')
+      },
+    }
+    const indeks = await lesSokeindeks({ sider: nede, legemidler: legemiddelsok, ventetider: [] })
+    expect(indeks.mangler).toEqual({ sider: 'Sidene svarer ikke' })
+    expect(sokGlobalt(indeks, 'kvetiapin').map((t) => t.dokument.sted.side.stoff)).toEqual(['kvetiapin'])
+  })
+
+  it('prøver en kilde igjen før den gir opp', async () => {
+    let forsok = 0
+    const ustabil: Legemiddelsok = {
+      ...legemiddelsok,
+      preparater: async (sider) => {
+        forsok += 1
+        if (forsok < 3) throw new Error('Tidsavbrudd')
+        return legemiddelsok.preparater(sider)
+      },
+    }
+    const indeks = await lesSokeindeks({ sider: sideleser, legemidler: ustabil, ventetider: [0, 0] })
+    expect(forsok).toBe(3)
+    expect(indeks.mangler).toBeUndefined()
+    expect(sokGlobalt(indeks, 'sarotex')).not.toEqual([])
+  })
+
+  it('gir indekser over det som er lest, før de andre kildene er der', async () => {
+    const delvise: Kunnskapsindeks[] = []
+    const indeks = await lesSokeindeks({ sider: sideleser, legemidler: legemiddelsok }, {}, (d) => delvise.push(d))
+    // Registeret, sidene, og så preparatene og interaksjonene hver for seg.
+    expect(delvise).toHaveLength(4)
+    const [forst, sa] = delvise as [Kunnskapsindeks, Kunnskapsindeks]
     // Først bare stoffene i registeret, uten å vente på noe.
     expect(sokGlobalt(forst, 'kvetiapin').map((t) => t.dokument.sted.side.stoff)).toEqual(['kvetiapin'])
     expect(sokGlobalt(forst, 'doseringstekst')).toEqual([])
@@ -235,30 +302,80 @@ describe('lesingen av kunnskapsbasen', () => {
     expect(sokGlobalt(indeks, 'kvetiapin')).toEqual(sokGlobalt(forst, 'kvetiapin'))
   })
 
-  it('deler interaksjonsoppslaget i flere kall når nøklene er flere enn databasen tar imot', async () => {
-    const antall = MAKS_INTERAKSJONSNOKLER + 20
-    const sider = Array.from({ length: antall }, (_, i) => side(`side-${i}`, `Side ${i}`, { koblet: [`V${i}`] }))
-    const oppslag: number[] = []
-    const mange: Legemiddelleser = {
-      les: async () => ({ ...TOMT_UTVALG, virkestoff: [] }),
-      sok: async () => [],
-      interaksjoner: async ({ atc, virkestoff }) => {
-        oppslag.push(virkestoff.length)
-        expect(atc).toEqual([])
-        // Samme interaksjon i begge svarene står bare én gang.
-        return { interaksjoner: [{ id: 'felles' } as never], ikke_vurdert: [] }
+  it('leser søkedataene for mange sider i deler, med ett svar per side', async () => {
+    const kall: number[] = []
+    const klient = {
+      rpc: async (_funksjon: string, { sider }: { sider: string[][] }) => {
+        kall.push(sider.length)
+        return { data: sider.map((s) => [[null, null, s[0]]]), error: null }
       },
+    } as unknown as SupabaseClient
+    const sider = Array.from({ length: MAKS_SOKESIDER + 20 }, (_, i) => [`V${i}`])
+    const svar = await lagLegemiddelsok(klient).preparater(sider)
+    expect(kall).toEqual([MAKS_SOKESIDER, 20])
+    expect(svar.map((s) => s[0]![2])).toEqual(sider.map((s) => s[0]))
+    // Et svar som ikke har én liste per side, er en feil, ikke tomme sider.
+    const feil = { rpc: async () => ({ data: [], error: null }) } as unknown as SupabaseClient
+    await expect(lagLegemiddelsok(feil).interaksjoner([['V1']])).rejects.toThrow(/uventet svar/)
+  })
+})
+
+describe('mellomlagringen', () => {
+  it('viser det lagrede med én gang, og leser bare versjonene når ingenting er endret', async () => {
+    const lager = minnelager()
+    const forste = tellendeKlient()
+    const ny = await lesSokeindeks(kilderFor(forste.klient, { mellomlager: lager }))
+    expect([...lager.innhold.keys()].sort()).toEqual(['sok:interaksjoner', 'sok:preparater', 'sok:sider'])
+
+    const andre = tellendeKlient()
+    const delvise: Kunnskapsindeks[] = []
+    const lagret = await lesSokeindeks(kilderFor(andre.klient, { mellomlager: lager }), {}, (d) => delvise.push(d))
+    expect(andre.kalt).toEqual(['sokedata_versjoner'])
+    // Registeret, og så alt fra lageret i én omgang, før noe er spurt om.
+    expect(delvise).toHaveLength(2)
+    expect(sokGlobalt(delvise[1]!, 'sarotex')).toEqual(sokGlobalt(ny, 'sarotex'))
+    expect(lagret.dokumenter).toEqual(ny.dokumenter)
+  })
+
+  it('leser på nytt bare kildene som er endret', async () => {
+    const lager = minnelager()
+    await lesSokeindeks(kilderFor(tellendeKlient().klient, { mellomlager: lager }))
+    // En ny FEST-synkronisering gir en ny versjon for preparatene og interaksjonene.
+    const { kalt, klient } = tellendeKlient()
+    const versjoner = lagVersjonsleser(klient)
+    await lesSokeindeks(
+      kilderFor(klient, { mellomlager: lager, versjoner: async () => ({ ...(await versjoner()), fest: 'ny' }) }),
+    )
+    expect(kalt).toEqual(['sokedata_versjoner', 'les_preparatsok', 'les_interaksjonssok'])
+  })
+
+  it('bruker det lagrede når en kilde ikke kan leses, og leser alt når versjonene ikke kan leses', async () => {
+    const lager = minnelager()
+    const ny = await lesSokeindeks(kilderFor(tellendeKlient().klient, { mellomlager: lager }))
+    const { kalt, klient } = tellendeKlient((f) => f !== 'les_stoffer')
+    const indeks = await lesSokeindeks(kilderFor(klient, { mellomlager: lager }))
+    expect(kalt).toEqual(['sokedata_versjoner', 'les_stoffer', 'les_preparatsok', 'les_interaksjonssok'])
+    expect(indeks.mangler).toBeUndefined()
+    expect(indeks.dokumenter).toEqual(ny.dokumenter)
+  })
+
+  it('bruker ikke det som er lagret for andre koblinger', async () => {
+    const lager = minnelager()
+    await lesSokeindeks(kilderFor(tellendeKlient().klient, { mellomlager: lager }))
+    const bareAmitriptylin: Sideleser = {
+      lesStoffsider: async (t) => (await sideleser.lesStoffsider(t)).filter((s) => s.stoff?.slug !== 'kodein'),
     }
-    const base = await lesKunnskapsbase({ lesStoffsider: async () => sider }, mange)
-    expect(oppslag).toEqual([MAKS_INTERAKSJONSNOKLER, 20])
-    expect(base.interaksjoner?.interaksjoner).toHaveLength(1)
+    const { klient } = tellendeKlient((f) => f.startsWith('les_') && f !== 'les_stoffer')
+    const indeks = await lesSokeindeks({ ...kilderFor(klient, { mellomlager: lager }), sider: bareAmitriptylin, versjoner: null })
+    // Preparatene som var lagret, gjaldt også Kodein, og brukes ikke.
+    expect(indeks.mangler).toEqual({ preparater: 'les_preparatsok svarer ikke', interaksjoner: 'les_interaksjonssok svarer ikke' })
   })
 })
 
 describe('søket i kunnskapsbasen', () => {
   let indeks: Awaited<ReturnType<typeof lesSokeindeks>>
   beforeAll(async () => {
-    indeks = await lesSokeindeks(sideleser, legemidler)
+    indeks = await lesSokeindeks({ sider: sideleser, legemidler: legemiddelsok })
   })
 
   it('finner et preparat og peker på detaljkortet for legemiddelformen', async () => {
@@ -353,7 +470,7 @@ describe('hvert treff er et stoff, og analytten er sekundær kontekst', () => {
       side('hydroksybupropion', 'Hydroksybupropion', { tekst: 'Syntetisk tekst på den gamle komponentsiden.' }),
     ]
     indeks = lagSokeindeks(
-      indekserKunnskapsbase({ sider, legemidler: null, interaksjoner: null }),
+      indekserKunnskapsbase({ sider }),
     )
   })
 
@@ -448,7 +565,7 @@ function register(
   return { stoffer, analyttkoblinger }
 }
 
-const utenTillegg = (sider: Stoffsidedata[]) => ({ sider, legemidler: null, interaksjoner: null })
+const utenTillegg = (sider: Stoffsidedata[]) => ({ sider })
 
 describe('rangeringen', () => {
   it('følger planens rekkefølge av felt', () => {

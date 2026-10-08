@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.85.0',
+    dato: '2026-10-08',
+    sammendrag: 'Søket i fagstoffet er raskere, og preparatene og interaksjonene faller ikke lenger ut',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Preparatene og interaksjonene fra FEST kunne mangle i søket fordi hentingen tok for lang tid. Søket henter nå bare navnene det trenger, en brøkdel av datamengden, og de kommer med som de skal.',
+      'Fagstoffet du har søkt i før, er klart med én gang neste gang du åpner appen. Bare det som er endret siden, hentes på nytt.',
+      'Kan en del av fagstoffet ikke hentes, er resten med som vanlig, og søket sier nøyaktig hva som mangler, med en knapp for å prøve igjen.',
+    ],
+  },
+  {
     versjon: '1.84.0',
     dato: '2026-10-08',
     sammendrag: 'Diskusjonstråder flyttes fra ett sted, og verktøylinjene er ryddigere',
