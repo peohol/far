@@ -1,9 +1,9 @@
 /**
- * Driftstatusen for datakildene — legemiddeldataene fra FEST og de
- * farmakogenetiske fra ClinPGx og CPIC — slik administratorene ser den: de
+ * Driftstatusen for datakildene — legemiddeldataene fra FEST, de
+ * farmakogenetiske fra ClinPGx og CPIC og de kjemiske fra PubChem — slik administratorene ser den: de
  * siste kjøringene, om noe er galt, og hva som er endret siden forrige henting.
  *
- * Endringene i ClinPGx og CPIC oppdages i databasen
+ * Endringene i ClinPGx, CPIC og PubChem oppdages i databasen
  * (`*_datakilder_endringer.sql`, `docs/datakilder.md`); FEST har ingen
  * endringslogg, men hver kjøring teller nye, endrede og utgåtte rader. Alt
  * leses med `datakilder_status()`. Alt her er rene funksjoner, bortsett fra
@@ -12,7 +12,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import vercel from '../../vercel.json'
 
-export const DATAKILDER = ['fest', 'clinpgx', 'cpic'] as const
+export const DATAKILDER = ['fest', 'clinpgx', 'cpic', 'pubchem'] as const
 export type Datakilde = (typeof DATAKILDER)[number]
 
 export interface Kildeoppsett {
@@ -63,6 +63,8 @@ export const KILDEOPPSETT: Record<Datakilde, Kildeoppsett> = {
     endringslogg: true,
   },
   cpic: { navn: 'CPIC', synk: '/api/cpic-synk', versjonsnavn: 'Skjemaversjon', etterFeil: null, endringslogg: true },
+  // Alt som består kontrollen, byttes inn i én transaksjon (docs/kjemi.md).
+  pubchem: { navn: 'PubChem', synk: '/api/pubchem-synk', versjonsnavn: 'Parserversjon', etterFeil: null, endringslogg: true },
 }
 
 /* --- Formen fra databasen -------------------------------------------------- */
@@ -96,6 +98,11 @@ export interface Kjoring {
   endringer: Endringstall
   /** For kilder uten endringslogg (FEST): radene kjøringen byttet inn. `null` når den ikke byttet inn noe. */
   rader?: Radtall | null
+  /**
+   * Det kjøringen ikke kunne koble sikkert, og som venter på at noen vurderer
+   * det (`antall.uavklarte`), f.eks. forbindelser uten verifisert CID i PubChem.
+   */
+  uavklarte?: string[]
 }
 
 export type Endringsart = 'ny' | 'endret' | 'fjernet' | 'grunnlag'
@@ -185,6 +192,9 @@ function lesKjoring(o: unknown): Kjoring | null {
     feil: tekst(o.feil),
     endringer: { klinisk: tall(e.klinisk), metadata: tall(e.metadata), grunnlag: tall(e.grunnlag) },
     ...(!KILDEOPPSETT[kilde].endringslogg && { rader: lesRader(o.antall) }),
+    ...(erObjekt(o.antall) && Array.isArray(o.antall.uavklarte) && {
+      uavklarte: o.antall.uavklarte.filter((u): u is string => typeof u === 'string'),
+    }),
   }
 }
 
@@ -401,6 +411,7 @@ const TYPENAVN: Record<string, string> = {
   publikasjon: 'Publikasjon',
   term: 'Term',
   endring: 'CPICs endringslogg',
+  forbindelse: 'Kjemisk forbindelse',
 }
 
 /** «Endret · Anbefaling», «Ny · Retningslinje». */
@@ -426,6 +437,8 @@ export function sporlinje(e: Endring): string {
   if (erObjekt(versjon)) deler.push(`CPIC-versjon ${String(versjon.foer ?? '–')} → ${String(versjon.etter ?? '–')}`)
   else if (typeof versjon === 'number') deler.push(`CPIC-versjon ${versjon}`)
   if (typeof e.spor.antall === 'number') deler.push(`${e.spor.antall} rader`)
+  const parser = e.spor.parserversjon
+  if (erObjekt(parser)) deler.push(`OUSFARs lesing endret (parserversjon ${String(parser.foer ?? '–')} → ${String(parser.etter ?? '–')})`)
   return deler.join(' · ')
 }
 

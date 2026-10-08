@@ -13,13 +13,12 @@
  * treff; det er en tom liste, ikke en feil.
  */
 
+import { lagHofligHenting, standardVent } from '../server/hofligHenting.js'
+
 export const CLINPGX_API = 'https://api.clinpgx.org/v1'
 
 /** Minste tid mellom to kall. ClinPGx tillater to i sekundet; litt margin. */
 export const MINSTE_AVSTAND_MS = 600
-
-/** Hvor lenge ett kall kan ta. */
-const TIDSGRENSE_MS = 30_000
 
 /** Nye forsøk etter 429 eller serverfeil. */
 const NYE_FORSOK = 2
@@ -51,8 +50,6 @@ export interface Apivalg {
   na?: () => number
 }
 
-const standardVent = (ms: number) => new Promise<void>((ferdig) => setTimeout(ferdig, ms))
-
 interface Jsend {
   status?: unknown
   data?: unknown
@@ -78,42 +75,19 @@ export function lagClinpgxApi({
   vent = standardVent,
   na = Date.now,
 }: Apivalg = {}): ClinpgxApi {
-  let ko: Promise<unknown> = Promise.resolve()
-  let forrigeStart = -Infinity
-
-  /** Ett kall om gangen, med avstanden ClinPGx ber om mellom hvert. */
-  function iKo<T>(arbeid: () => Promise<T>): Promise<T> {
-    const neste = ko.then(async () => {
-      const ventetid = forrigeStart + avstand - na()
-      if (ventetid > 0) await vent(ventetid)
-      forrigeStart = na()
-      return arbeid()
-    })
-    ko = neste.catch(() => undefined)
-    return neste
-  }
+  const henting = lagHofligHenting({ avstand, nyeForsok: NYE_FORSOK, hoder: { accept: 'application/json' }, hent, vent, na })
 
   async function kall(sti: string, parametre: Record<string, string>): Promise<{ status: number; svar: Jsend | null }> {
     const url = new URL(`${base}${sti}`)
     for (const [n, v] of Object.entries(parametre)) url.searchParams.set(n, v)
-    for (let forsok = 0; ; forsok += 1) {
-      const res = await iKo(() =>
-        hent(url, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(TIDSGRENSE_MS) }),
-      )
-      let svar: Jsend | null = null
-      try {
-        svar = (await res.json()) as Jsend
-      } catch {
-        svar = null
-      }
-      const kanProvesIgjen = res.status === 429 || res.status >= 500
-      if (kanProvesIgjen && forsok < NYE_FORSOK) {
-        const sekunder = Number(res.headers.get('retry-after'))
-        await vent(Number.isFinite(sekunder) && sekunder > 0 ? Math.min(sekunder, 30) * 1000 : 5000 * (forsok + 1))
-        continue
-      }
-      return { status: res.status, svar }
+    const res = await henting(url)
+    let svar: Jsend | null = null
+    try {
+      svar = (await res.json()) as Jsend
+    } catch {
+      svar = null
     }
+    return { status: res.status, svar }
   }
 
   return {

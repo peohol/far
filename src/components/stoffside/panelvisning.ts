@@ -26,6 +26,7 @@ const SEKSJONSIKONER: Readonly<Record<string, Ikonnavn>> = {
   farmakogenetikk: 'dna',
   interaksjoner: 'inter',
   tdm: 'tdm',
+  kjemiske_grunndata: 'molekyl',
   serumkonsentrasjoner: 'serum',
   graviditet_amming: 'svangerskap',
   avhengighet_toleranse: 'avhengighet',

@@ -5,6 +5,7 @@ import type { Farmakogenetikkleser } from '../../clinpgx/lesing'
 import type { Cpicleser } from '../../cpic/lesing'
 import type { Legemiddelleser } from '../../legemiddeldata/lesing'
 import type { Bivirkningsleser } from '../../bivirkninger/lesing'
+import type { Kjemileser } from '../../kjemi/lesing'
 
 /**
  * Hvor stoffsidene henter og lagrer faginnholdet, og om den innloggede
@@ -41,6 +42,11 @@ export interface Faginnholdskilde {
    * bare de redaksjonelle.
    */
   bivirkninger?: Bivirkningsleser
+  /**
+   * De kjemiske grunndataene fra PubChem, som seksjonen «Kjemiske grunndata»
+   * viser for forbindelsene stoffet har. Uten den vises bare forbindelsene.
+   */
+  kjemi?: Kjemileser
 }
 
 const Kontekst = createContext<Faginnholdskilde | null>(null)

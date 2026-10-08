@@ -4,11 +4,13 @@
   "crons": [
     { "path": "/api/legemiddeldata-synk", "schedule": "15 4 * * *" },
     { "path": "/api/clinpgx-synk", "schedule": "30 2 * * 1" },
-    { "path": "/api/cpic-synk", "schedule": "45 2 * * 2" }
+    { "path": "/api/cpic-synk", "schedule": "45 2 * * 2" },
+    { "path": "/api/pubchem-synk", "schedule": "15 3 * * 3" }
   ],
   "functions": {
     "api/legemiddeldata-synk.ts": { "maxDuration": 300 },
     "api/clinpgx-synk.ts": { "maxDuration": 300 },
-    "api/cpic-synk.ts": { "maxDuration": 300 }
+    "api/cpic-synk.ts": { "maxDuration": 300 },
+    "api/pubchem-synk.ts": { "maxDuration": 300 }
   }
 }

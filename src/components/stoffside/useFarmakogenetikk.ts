@@ -7,6 +7,8 @@ import { byggCpicvisning, type Cpicvisning } from '../../cpic/stoffside'
 import { useFaginnholdskilde } from './Faginnholdskilde'
 import type { Bivirkningsdata } from '../../bivirkninger/modell'
 import { byggBivirkningsvisning, type Bivirkningsvisning } from '../../bivirkninger/stoffside'
+import type { Kjemiutvalg } from '../../kjemi/lesing'
+import { byggKjemivisning, kjemicider, type Kjemivisning } from '../../kjemi/stoffside'
 
 /** Dataene fra én kilde for kjemikaliene siden er koblet til, og visningen bygd av dem. */
 export type Kildetilstand<U, V> =
@@ -68,6 +70,20 @@ export function useFarmakogenetikk(koblet: readonly string[]) {
 /** CPIC-dataene for de samme kjemikaliene, etter ClinPGx-ID-en CPIC oppgir for legemidlene. */
 export function useCpic(koblet: readonly string[]) {
   return useKilde(useFaginnholdskilde().cpic, koblet, byggCpicvisning)
+}
+
+const somDet = <T,>(utvalg: T) => utvalg
+
+/**
+ * De kjemiske grunndataene fra PubChem for forbindelsene stoffet har, ordnet
+ * slik seksjonen «Kjemiske grunndata» viser dem. Forbindelsene står også når
+ * dataene ikke er hentet ennå, eller appen er satt opp uten kilden.
+ */
+export function useKjemi(stoff: string): Kjemivisning {
+  const cider = useMemo(() => kjemicider(stoff), [stoff])
+  const { tilstand } = useKilde(useFaginnholdskilde().kjemi, cider, somDet<Kjemiutvalg>)
+  const utvalg = tilstand.status === 'klar' ? tilstand.utvalg : null
+  return useMemo(() => byggKjemivisning(stoff, utvalg), [stoff, utvalg])
 }
 
 /**

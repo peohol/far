@@ -530,6 +530,18 @@ const REGISTER = {
       ...sat.map(([x, y]) => C(+x.toFixed(2), +y.toFixed(2), 4.6, 'f1', 'info')),
     ],
   },
+  // Kjemiske grunndata: en ring med to atomer på hver sin binding.
+  molekyl: {
+    vb: 48,
+    parts: [
+      P('M24 11l11 6.4v12.7L24 36.5l-11-6.4V17.4z', 'f1', 'info'),
+      C(24, 23.8, 5.2, 'f2', 'accent2'),
+      P('M35 17.4l5.5-3.2', 'l', 'i-ink'),
+      C(41.5, 13.6, 3.6, 'f2', 'warn', 'pop'),
+      P('M13 30.1l-5.5 3.2', 'l', 'i-ink'),
+      C(6.5, 34, 3.6, 'f2', 'warn', 'pop'),
+    ],
+  },
   protein: {
     vb: 48,
     parts: [

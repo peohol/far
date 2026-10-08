@@ -33,8 +33,19 @@ import { erTomt, rensDokument, tomtDokument, type Riktekstdokument } from './rik
  * - `kort` — en ordnet serie kort med overskrift og riktekst.
  * - `mekanismer` — en ordnet serie mekanismekort: mål → effekt (se {@link Mekanismekortdata}).
  * - `tabell` — én tabell med faste kolonner.
+ * - `kjemi` — de kjemiske grunndataene fra PubChem for forbindelsene stoffet
+ *   har i `src/data/forbindelser.ts` (`src/kjemi/`). Ikke redaksjonelt.
  */
-export type Panelform = 'identitet' | 'legemidler' | 'interaksjoner' | 'datakort' | 'tekst' | 'kort' | 'mekanismer' | 'tabell'
+export type Panelform =
+  | 'identitet'
+  | 'legemidler'
+  | 'interaksjoner'
+  | 'datakort'
+  | 'tekst'
+  | 'kort'
+  | 'mekanismer'
+  | 'tabell'
+  | 'kjemi'
 
 /**
  * En undergruppe av faste kort i en kortserie: en overskrift i seksjonen med
@@ -103,6 +114,7 @@ export const PANELER = [
   { nokkel: 'farmakogenetikk', tittel: 'Farmakogenetikk', form: 'kort' },
   { nokkel: 'interaksjoner', tittel: 'Interaksjoner', form: 'interaksjoner' },
   { nokkel: 'tdm', tittel: 'Terapeutisk legemiddelmonitorering (TDM)', form: 'kort' },
+  { nokkel: 'kjemiske_grunndata', tittel: 'Kjemiske grunndata', form: 'kjemi' },
   { nokkel: 'serumkonsentrasjoner', tittel: 'Serumkonsentrasjoner ved ulike doser', form: 'tabell' },
   {
     nokkel: 'graviditet_amming',

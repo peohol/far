@@ -1,0 +1,57 @@
+/* Seksjonen «Kjemiske grunndata» (src/components/stoffside/Kjemipanel.tsx).
+   Tabellen bruker tabelloppsettet fra serumtabellen (monograf.css). */
+
+.kjemi {
+  width: 100%;
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
+}
+
+.kjemi__tabell tbody th[scope='row'] {
+  text-align: left;
+  white-space: normal;
+  min-width: 12rem;
+  font: var(--vekt-normal) var(--tekst-ui) / 1.3 var(--skrift-ui);
+  color: var(--blekk-sterk);
+  background: none;
+}
+
+.kjemi__tabell tr {
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
+}
+
+.kjemi__tabell td {
+  vertical-align: top;
+}
+
+.kjemi__navn {
+  display: block;
+  font-weight: var(--vekt-halvfet);
+}
+
+.kjemi__relasjon,
+.kjemi__merknad,
+.kjemi__inchikey {
+  display: block;
+  margin-top: var(--rom-1);
+  font: var(--vekt-normal) var(--tekst-liten) / 1.3 var(--skrift-ui);
+  color: var(--blekk-dempet);
+}
+
+.kjemi__merknad {
+  max-width: 28rem;
+}
+
+.kjemi__inchikey {
+  letter-spacing: 0.01em;
+}
+
+.kjemi__formel sub,
+.kjemi__formel sup {
+  font-size: 0.75em;
+  line-height: 0;
+}
+
+.kjemi__mangler {
+  white-space: normal;
+  color: var(--blekk-dempet);
+}
