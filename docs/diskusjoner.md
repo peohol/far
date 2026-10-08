@@ -86,7 +86,10 @@ Overskriften, søket i lista og, i en tråd, «Alle tråder» og overskriften p�
 tråden står fast; bare det under ruller. Overskriften på tråden står i en
 plass i menyen (`.diskusjonspanel__traadhode`) som `Diskusjonsside` legger den
 i med en portal, med en hårlinje mot det som ruller og blyanten som endrer
-den til høyre. «Ny tråd» og «Ny kategori» følger lista, men blir stående
+den til høyre. Under den står forfatterlinja, handlingene på tråden og
+plassen i kategorien, så de nås uten å rulle forbi et langt innlegg; plassen
+tar aldri mer enn halve høyden. Lange innlegg og kommentarer viser bare de
+første linjene til de vises hele (`Langtekst`, felles med idéene). «Ny tråd» og «Ny kategori» følger lista, men blir stående
 nederst i menyen når lista er lengre enn den. På smale skjermer åpnes den over
 siden fra knappen «Diskusjoner» i toppmenyen, eller av seg selv når et
 varsel leder til en tråd. Mens fokus er i menyen, er den et

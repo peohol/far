@@ -11,6 +11,7 @@ import { Rikteksteditor } from '../stoffside/Rikteksteditor'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Forfatterbilde, useForfatternavn, useForfatterkontekst } from './Forfatterkontekst'
+import { Langtekst } from './Langtekst'
 import { Bekreftknapp, Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from './Smadeler'
 import '../../styles/traad.css'
 
@@ -250,9 +251,11 @@ function Kommentarvisning({
             <p className="kommentar__skjultmerknad">Innholdet er skjult av en administrator.</p>
           ) : (
             !kommentar.slettet && (
-              <UnderOverskrift niva={4}>
-                <Riktekst dokument={kommentar.tekst} />
-              </UnderOverskrift>
+              <Langtekst hva="kommentaren">
+                <UnderOverskrift niva={4}>
+                  <Riktekst dokument={kommentar.tekst} />
+                </UnderOverskrift>
+              </Langtekst>
             )
           )}
           {feil && (

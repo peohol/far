@@ -365,3 +365,54 @@
   font-style: italic;
   color: var(--blekk-dempet);
 }
+
+/* --- Lange tekster ----------------------------------------------------------- */
+
+/* Et langt innlegg eller en lang kommentar viser de første linjene, som toner
+   ut; knappen under viser resten (`Langtekst`). Høyden glir mellom det som
+   vises, og hele teksten, som måles i `--langtekst-hel`. */
+.langtekst {
+  --langtekst-hoyde: 14rem;
+  --langtekst-toning: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--rom-1);
+}
+
+.langtekst__flate {
+  align-self: stretch;
+  min-width: 0;
+}
+
+.langtekst[data-lang] > .langtekst__flate {
+  max-height: var(--langtekst-hoyde);
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, #000 calc(100% - var(--langtekst-toning)), transparent);
+  transition: max-height var(--fart-glid) var(--kurve);
+}
+
+.langtekst[data-lang][data-apen] > .langtekst__flate {
+  max-height: var(--langtekst-hel);
+  mask-image: none;
+}
+
+.langtekst__knapp {
+  margin-left: calc(-1 * var(--rom-2));
+}
+
+.langtekst__knapp .ikon {
+  transform: rotate(90deg);
+  transition: transform var(--fart-glid) var(--kurve);
+}
+
+.langtekst__knapp[aria-expanded='true'] .ikon {
+  transform: rotate(-90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .langtekst[data-lang] > .langtekst__flate,
+  .langtekst__knapp .ikon {
+    transition: none;
+  }
+}

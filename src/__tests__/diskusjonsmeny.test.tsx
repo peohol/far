@@ -433,6 +433,12 @@ describe('én tråd', () => {
     expect(kropp.contains(overskrift)).toBe(false)
     expect(overskrift.closest('.diskusjonspanel__traadhode')?.contains(blyant)).toBe(true)
     expect(panel().querySelector('.idehandlinger')?.contains(blyant)).toBe(false)
+    // Hvem som skrev innlegget, handlingene og kategorien står også fast, så et langt innlegg ikke skyver dem ned.
+    const hode = overskrift.closest<HTMLElement>('.diskusjonspanel__traadhode')!
+    expect(within(hode).getByText('Ola Nordmann')).toBeTruthy()
+    expect(within(hode).getByRole('button', { name: 'Kopier lenke til tråden' })).toBeTruthy()
+    expect(within(hode).getByRole('combobox', { name: 'Kategori' })).toBeTruthy()
+    expect(kropp.contains(within(panel()).getByText('Hvordan doserer vi ved nyresvikt?'))).toBe(true)
     await bruker.click(blyant)
     expect(within(panel()).getByRole('textbox', { name: 'Overskrift' }).closest('.diskusjonspanel__traadhode')).toBeTruthy()
     await bruker.keyboard('{Escape}')
