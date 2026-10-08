@@ -1,0 +1,16 @@
+name: FP-probe
+on:
+  push:
+    branches: [claude/fp-probe]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          for u in https://www.farmakologiportalen.no/robots.txt "https://www.farmakologiportalen.no/farma/basisarkforanalyse?archetypeId=648" "https://www.farmakologiportalen.no/farma/search/autocomplete?type=global" https://www.farmakologiportalen.no/sitemap.xml; do
+            curl -sS -A "OUSFAR-datasynk/1.0 (+https://github.com/peohol/far)" -o out.txt -w "$u %{http_code} %{size_download}\n" "$u" || true
+            head -c 1500 out.txt; echo; echo ----
+          done
