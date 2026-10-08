@@ -188,13 +188,15 @@ export function Diskusjonsmeny({
   const visVarslet = useCallback(() => setMobilApen(true), [setMobilApen])
 
   /**
-   * Tilbake fra helsiden til menyen, åpen som før. Står fokus ikke lenger i
-   * menyen (lukkeknappen er borte på brede flater), går det til knappen for
+   * Tilbake fra helsiden til menyen, åpen som før — på smale flater også om
+   * helsiden ble åpnet på en bred. Står fokus ikke lenger i menyen
+   * (lukkeknappen er borte på brede flater), går det til knappen for
    * helsiden.
    */
   const avsluttHelside = () => {
     setHelside(false)
     setSvever(true)
+    if (smalFlate()) setMobilApen(true)
     requestAnimationFrame(() => {
       const knapp = meny.current?.querySelector<HTMLElement>('.diskusjonspanel__helside')
       if (!meny.current?.contains(document.activeElement) || document.activeElement?.checkVisibility?.() === false) knapp?.focus()
@@ -599,6 +601,11 @@ function Diskusjonsflate({
       </div>
     </Forfatterkilde>
   )
+}
+
+/** Smal flate: knappen for diskusjonene står i dokken (se `diskusjoner.css`). */
+function smalFlate(): boolean {
+  return document.querySelector<HTMLElement>('.diskusjonsknapp')?.checkVisibility?.() === true
 }
 
 /** Fokus som holder menyen åpen: i et felt det skrives i, eller kommet dit med tastaturet. */

@@ -281,6 +281,30 @@ describe('som helside', () => {
     expect(panel().hidden).toBe(false)
   })
 
+  it('gjør også en side som kommer til underveis, inert', async () => {
+    const bruker = await apne()
+    await bruker.click(within(panel()).getByRole('button', { name: 'Vis diskusjonene som helside' }))
+    const ny = document.createElement('main')
+    act(() => meny().parentElement!.append(ny))
+    await waitFor(() => expect(ny.hasAttribute('inert')).toBe(true))
+    fireEvent.keyDown(meny(), { key: 'Escape' })
+    expect(ny.hasAttribute('inert')).toBe(false)
+  })
+
+  it('går tilbake til menyen åpen også når skjermen er blitt smal mens helsiden stod', async () => {
+    const knapp = document.body.appendChild(Object.assign(document.createElement('button'), { className: 'diskusjonsknapp' }))
+    knapp.checkVisibility = () => true
+    try {
+      const bruker = await apne()
+      await bruker.click(within(panel()).getByRole('button', { name: 'Vis diskusjonene som helside' }))
+      expect(meny().hasAttribute('data-mobil')).toBe(false)
+      await bruker.click(within(panel()).getByRole('button', { name: 'Tilbake til menyen' }))
+      expect(meny().hasAttribute('data-mobil')).toBe(true)
+    } finally {
+      knapp.remove()
+    }
+  })
+
   it('viser én tråd, og lukkeknappen går tilbake til den samme tråden i menyen', async () => {
     const bruker = await apne()
     await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
