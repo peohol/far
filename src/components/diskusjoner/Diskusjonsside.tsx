@@ -32,6 +32,7 @@ import { Ikonknapp } from '../Ikonknapp'
 import { Ikon } from '../ikon/Ikon'
 import { Forfatterbilde, useForfatternavn, useForfatterkontekst } from '../traad/Forfatterkontekst'
 import { Kommentartraad, type Fremheving, type Kommentarkanal } from '../traad/Kommentartraad'
+import { Langtekst } from '../traad/Langtekst'
 import { Kopilenkeknapp } from '../direktelenker/Kopilenkeknapp'
 import { Bekreftknapp, Hjerteknapp, Idehandling, Slettknapp, Tidspunkt } from '../traad/Smadeler'
 import { Flytteskjema } from './Skjemaer'
@@ -108,6 +109,7 @@ export function Diskusjonsside({
   const [endrerTekst, setEndrerTekst] = useBevart(`traad:${id}/endrer-tekst`, false)
   const [flytter, setFlytter] = useBevart(`traad:${id}/flytter`, false)
   const overskrift = useRef<HTMLHeadingElement>(null)
+  const artikkel = useRef<HTMLElement>(null)
   const kategoriId = useId()
 
   const hent = useCallback(async () => {
@@ -205,6 +207,15 @@ export function Diskusjonsside({
     )
   }
 
+  /**
+   * Skjemaene knappene i det faste hodet åpner, står øverst i det som rulles.
+   * Er tråden rullet ned, rulles den opp så skjemaet synes.
+   */
+  const visSkjema = (vis: (apen: boolean) => void) => {
+    vis(true)
+    requestAnimationFrame(() => artikkel.current?.scrollIntoView({ block: 'start' }))
+  }
+
   const arkivert = Boolean(traad.arkivert_kl)
   const eier = traad.forfatter_id === meg.id
   const kategori = kategorier.find((k) => k.id === traad.kategori_id)
@@ -229,65 +240,21 @@ export function Diskusjonsside({
       </div>
     )
 
-  return (
-    <article className="diskusjonsside" aria-labelledby={`diskusjon-${traad.id}`}>
-      <header className="diskusjonsside__hode">
-        {hode ? createPortal(tittel, hode) : tittel}
-        <p className="forfatterlinje">
-          <Forfatterbilde id={traad.forfatter_id} storrelse="liten" />
-          <span className="forfatterlinje__navn">{forfatter}</span>
-          <span aria-hidden="true">·</span>
-          <Tidspunkt iso={traad.opprettet_kl} endret={traad.endret_kl} />
-        </p>
-      </header>
-
-      {arkivert && traad.arkivert_kl && (
-        <div className="idemerknad" role="note">
-          <Ikon navn="arkiv" storrelse="ui" />
-          <p>
-            <strong>Arkivert {DATO.format(new Date(traad.arkivert_kl))}.</strong> Tråden kan leses, men ikke endres eller
-            kommenteres.
-          </p>
-          <div className="idemerknad__handlinger">
-            <Button
-              variant="kant"
-              icon={<Ikon navn="reset" storrelse="ui" />}
-              disabled={arbeider}
-              onClick={() => void utfor(() => arkiverDiskusjon(traad.id, false))}
-            >
-              Hent tilbake
-            </Button>
-          </div>
-        </div>
-      )}
-
-      {endrerTekst && eier && !arkivert ? (
-        <Tekstskjema
-          id={traad.id}
-          tekst={traad.tekst}
-          onAvbryt={() => setEndrerTekst(false)}
-          onLagre={async (tekst) => {
-            if (await utfor(() => settTekst(traad.id, tekst))) setEndrerTekst(false)
-          }}
-        />
-      ) : traad.skjult ? (
-        <p className="kommentar__skjultmerknad">Innholdet er skjult av en administrator.</p>
-      ) : (
-        <UnderOverskrift niva={3}>
-          <Riktekst dokument={traad.tekst} />
-        </UnderOverskrift>
-      )}
-
-      {feil && (
-        <p className="skjemafeil" role="alert">
-          {feil}
-        </p>
-      )}
-
+  // Hvem som skrev innlegget, handlingene og plassen i kategorien står fast
+  // under overskriften, så de nås uten å rulle forbi et langt innlegg.
+  const hodeinnhold = (
+    <>
+      {tittel}
+      <p className="forfatterlinje">
+        <Forfatterbilde id={traad.forfatter_id} storrelse="liten" />
+        <span className="forfatterlinje__navn">{forfatter}</span>
+        <span aria-hidden="true">·</span>
+        <Tidspunkt iso={traad.opprettet_kl} endret={traad.endret_kl} />
+      </p>
       <div className="idehandlinger">
         <Hjerteknapp antall={traad.hjerter} gitt={traad.mitt_hjerte} onVeksle={() => veksleHjerte(null)} hva="tråden" laast={arkivert} />
         {eier && !arkivert && !traad.skjult && (
-          <Idehandling ikon="edit" onClick={() => setEndrerTekst(true)}>
+          <Idehandling ikon="edit" onClick={() => visSkjema(setEndrerTekst)}>
             Rediger innlegget
           </Idehandling>
         )}
@@ -303,7 +270,7 @@ export function Diskusjonsside({
           />
         )}
         {!arkivert && (
-          <Idehandling ikon="ext" aria-expanded={flytter} onClick={() => setFlytter(!flytter)}>
+          <Idehandling ikon="ext" aria-expanded={flytter} onClick={() => (flytter ? setFlytter(false) : visSkjema(setFlytter))}>
             Flytt til en annen side
           </Idehandling>
         )}
@@ -321,11 +288,7 @@ export function Diskusjonsside({
           />
         )}
       </div>
-
-      {/* Plassen på denne siden står i ro mens tråden flyttes til en annen. */}
-      {flytter && !arkivert ? (
-        <Flytteskjema id={traad.id} side={side} sider={sider} onAvbryt={() => setFlytter(false)} onFlyttet={onFlyttetTilSide} />
-      ) : !arkivert && (
+      {!arkivert && !flytter && (
         <div className="diskusjonsside__plass">
           <label className="diskusjonsside__kategori" htmlFor={kategoriId}>
             <span className="kun-skjermleser">Kategori</span>
@@ -367,6 +330,62 @@ export function Diskusjonsside({
             </>
           )}
         </div>
+      )}
+    </>
+  )
+
+  return (
+    <article ref={artikkel} className="diskusjonsside" aria-labelledby={`diskusjon-${traad.id}`}>
+      {hode ? createPortal(hodeinnhold, hode) : <header className="diskusjonsside__hode">{hodeinnhold}</header>}
+
+      {arkivert && traad.arkivert_kl && (
+        <div className="idemerknad" role="note">
+          <Ikon navn="arkiv" storrelse="ui" />
+          <p>
+            <strong>Arkivert {DATO.format(new Date(traad.arkivert_kl))}.</strong> Tråden kan leses, men ikke endres eller
+            kommenteres.
+          </p>
+          <div className="idemerknad__handlinger">
+            <Button
+              variant="kant"
+              icon={<Ikon navn="reset" storrelse="ui" />}
+              disabled={arbeider}
+              onClick={() => void utfor(() => arkiverDiskusjon(traad.id, false))}
+            >
+              Hent tilbake
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Plassen på denne siden står i ro mens tråden flyttes til en annen. */}
+      {flytter && !arkivert && (
+        <Flytteskjema id={traad.id} side={side} sider={sider} onAvbryt={() => setFlytter(false)} onFlyttet={onFlyttetTilSide} />
+      )}
+
+      {feil && (
+        <p className="skjemafeil" role="alert">
+          {feil}
+        </p>
+      )}
+
+      {endrerTekst && eier && !arkivert ? (
+        <Tekstskjema
+          id={traad.id}
+          tekst={traad.tekst}
+          onAvbryt={() => setEndrerTekst(false)}
+          onLagre={async (tekst) => {
+            if (await utfor(() => settTekst(traad.id, tekst))) setEndrerTekst(false)
+          }}
+        />
+      ) : traad.skjult ? (
+        <p className="kommentar__skjultmerknad">Innholdet er skjult av en administrator.</p>
+      ) : (
+        <Langtekst hva="innlegget">
+          <UnderOverskrift niva={3}>
+            <Riktekst dokument={traad.tekst} />
+          </UnderOverskrift>
+        </Langtekst>
       )}
 
       <Kommentartraad

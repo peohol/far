@@ -433,6 +433,12 @@ describe('én tråd', () => {
     expect(kropp.contains(overskrift)).toBe(false)
     expect(overskrift.closest('.diskusjonspanel__traadhode')?.contains(blyant)).toBe(true)
     expect(panel().querySelector('.idehandlinger')?.contains(blyant)).toBe(false)
+    // Hvem som skrev innlegget, handlingene og kategorien står også fast, så et langt innlegg ikke skyver dem ned.
+    const hode = overskrift.closest<HTMLElement>('.diskusjonspanel__traadhode')!
+    expect(within(hode).getByText('Ola Nordmann')).toBeTruthy()
+    expect(within(hode).getByRole('button', { name: 'Kopier lenke til tråden' })).toBeTruthy()
+    expect(within(hode).getByRole('combobox', { name: 'Kategori' })).toBeTruthy()
+    expect(kropp.contains(within(panel()).getByText('Hvordan doserer vi ved nyresvikt?'))).toBe(true)
     await bruker.click(blyant)
     expect(within(panel()).getByRole('textbox', { name: 'Overskrift' }).closest('.diskusjonspanel__traadhode')).toBeTruthy()
     await bruker.keyboard('{Escape}')
@@ -521,8 +527,12 @@ describe('én tråd', () => {
     const bruker = await apne()
     await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
     await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    const rull = vi.spyOn(Element.prototype, 'scrollIntoView')
     await bruker.click(within(panel()).getByRole('button', { name: 'Flytt til en annen side' }))
     const skjema = within(panel()).getByRole('form', { name: 'Flytt tråden' })
+    // Knappen står fast øverst; er tråden rullet ned, rulles den opp til skjemaet.
+    await waitFor(() => expect(rull.mock.contexts).toContain(panel().querySelector('.diskusjonsside')))
+    rull.mockRestore()
     const sidevalg = within(skjema).getByRole('combobox', { name: 'Side' }) as HTMLSelectElement
     // Siden tråden står på, er ikke blant valgene.
     expect([...sidevalg.options].map((o) => o.value)).toEqual(['', 'stoff:valproat', 'fortolkning:li', 'register:stoffregister'])

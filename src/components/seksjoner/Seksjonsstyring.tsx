@@ -414,9 +414,10 @@ function etterGlidning(skuff: Element, gjor: () => void) {
     if (ferdig || (event && event.target !== kropp)) return
     ferdig = true
     kropp?.removeEventListener('transitionend', slutt)
-    window.clearTimeout(frist)
-    gjor()
+    clearTimeout(frist)
+    // En skuff som er tatt bort mens den gled (siden er byttet), har ingenting å gjøre.
+    if (skuff.isConnected) gjor()
   }
   kropp?.addEventListener('transitionend', slutt)
-  const frist = window.setTimeout(slutt, MAKS_GLIDETID)
+  const frist = setTimeout(slutt, MAKS_GLIDETID)
 }

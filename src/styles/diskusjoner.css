@@ -138,6 +138,11 @@
   animation: diskusjonshelside-inn var(--fart-glid) var(--kurve);
 }
 
+/* Siden bak ruller ikke, og rullefeltet dens skal ikke stå ved siden av menyens. */
+:root:has(.diskusjonsmeny[data-helside]) {
+  overflow: hidden;
+}
+
 @keyframes diskusjonshelside-inn {
   from {
     opacity: 0;
@@ -395,11 +400,18 @@
   transform: rotate(180deg);
 }
 
-/* Overskriften på en åpen tråd, fast under «Alle tråder», med samme hårlinje
-   som rundt menyen mot det som rulles. Tom til tråden er hentet. */
+/* Overskriften på en åpen tråd, med hvem som skrev innlegget, handlingene og
+   plassen i kategorien, fast under «Alle tråder», med samme hårlinje som rundt
+   menyen mot det som rulles. Tom til tråden er hentet. Tar aldri mer enn
+   halve høyden, så tråden alltid har plass under. */
 .diskusjonspanel__traadhode {
+  display: flex;
   flex: none;
+  flex-direction: column;
+  gap: var(--rom-2);
+  max-height: 50dvh;
   padding: var(--rom-2) var(--rom-4) var(--rom-3) var(--rom-6);
+  overflow-y: auto;
   border-bottom: var(--kant) solid var(--linje);
 }
 
@@ -789,7 +801,7 @@
   gap: var(--rom-2);
 }
 
-.diskusjonsside > .riktekst {
+.diskusjonsside > .langtekst .riktekst {
   font-size: var(--tekst-ui);
 }
 

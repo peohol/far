@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.83.0',
+    dato: '2026-10-08',
+    sammendrag: 'Diskusjonstrådene har verktøylinjen fast øverst, og lange tekster kan legges sammen',
+    typer: ['Funksjonalitet', 'Design / layout'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'I en åpen diskusjonstråd står navnet og bildet til den som startet tråden, verktøylinjen og valget av kategori nå fast under overskriften. Du trenger ikke lenger rulle forbi et langt innlegg for å komme til dem.',
+      'Lange innlegg og kommentarer viser bare de første linjene, som toner ut. «Vis hele innlegget» eller «Vis hele kommentaren» viser hele teksten, og «Vis mindre» legger den sammen igjen.',
+      'Dette gjelder også kommentarene under idéene.',
+      'Når diskusjonene vises som helside, står ikke lenger rullefeltet til siden bak ved siden av diskusjonenes eget.',
+    ],
+  },
+  {
     versjon: '1.82.0',
     dato: '2026-10-08',
     sammendrag: 'Diskusjonene kan vises som helside',
