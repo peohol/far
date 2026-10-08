@@ -20,6 +20,7 @@ export async function GET(request: Request): Promise<Response> {
           accept: p.get('accept') ?? 'text/html,application/json;q=0.9,*/*;q=0.8',
           'accept-language': 'nb-NO,nb;q=0.9,no;q=0.8,en;q=0.5',
           ...(p.get('ctype') ? { 'content-type': p.get('ctype')! } : {}),
+          ...Object.fromEntries(p.getAll('hode').map((h) => [h.slice(0, h.indexOf(':')), h.slice(h.indexOf(':') + 1)])),
         },
         body: p.get('body') ?? undefined,
         redirect: p.get('folg') ? 'follow' : 'manual',
