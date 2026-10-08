@@ -60,10 +60,23 @@ export const GITHUB_OIDC = {
 const githubNokler = createRemoteJWKSet(new URL(`${GITHUB_OIDC.utsteder}/.well-known/jwks`))
 
 /**
- * Et OIDC-token fra GitHub Actions, kontrollert mot GitHubs nøkler: utsteder,
- * publikum, repoet, grenen og arbeidsflyten (`.github/workflows/<fil>`) må
- * stemme. Den planlagte kjøringen er `cron`, en kjøring noen startet for hånd,
- * `manuell`. Et token fra noen annen utsteder avvises uten nettverkskall.
+ * Hvem kravene i et kontrollert OIDC-token fra GitHub sier kjører: repoet,
+ * grenen og arbeidsflyten (`.github/workflows/<fil>`) må stemme. Arbeidsflyten
+ * står i `workflow_ref`; `job_workflow_ref` er der bare når jobben kjører en
+ * gjenbrukt arbeidsflyt, og må da være den samme. Den planlagte kjøringen er
+ * `cron`, en kjøring noen startet for hånd, `manuell`.
+ */
+export function githubkrav(krav: Record<string, unknown>, arbeidsflyt: string): Utlost | null {
+  const ventet = `${GITHUB_OIDC.repo}/${arbeidsflyt}@${GITHUB_OIDC.gren}`
+  if (krav.repository !== GITHUB_OIDC.repo || krav.ref !== GITHUB_OIDC.gren || krav.workflow_ref !== ventet) return null
+  if (krav.job_workflow_ref !== undefined && krav.job_workflow_ref !== ventet) return null
+  return krav.event_name === 'schedule' ? 'cron' : 'manuell'
+}
+
+/**
+ * Et OIDC-token fra GitHub Actions, kontrollert mot GitHubs nøkler (utsteder
+ * og publikum) og deretter med `githubkrav`. Et token fra noen annen utsteder
+ * avvises uten nettverkskall.
  */
 export const githubkjoring: Githubsjekk = async (token, arbeidsflyt) => {
   let utsteder: unknown
@@ -74,9 +87,7 @@ export const githubkjoring: Githubsjekk = async (token, arbeidsflyt) => {
   }
   if (utsteder !== GITHUB_OIDC.utsteder) return null
   const { payload } = await jwtVerify(token, githubNokler, { issuer: GITHUB_OIDC.utsteder, audience: GITHUB_OIDC.publikum })
-  const ventet = `${GITHUB_OIDC.repo}/${arbeidsflyt}@${GITHUB_OIDC.gren}`
-  if (payload.repository !== GITHUB_OIDC.repo || payload.ref !== GITHUB_OIDC.gren || payload.job_workflow_ref !== ventet) return null
-  return payload.event_name === 'schedule' ? 'cron' : 'manuell'
+  return githubkrav(payload, arbeidsflyt)
 }
 
 /** Arbeidsflyten i GitHub Actions som kan kalle endepunktet, og kontrollen av tokenet. */
