@@ -37,8 +37,11 @@ import { clinpgxlitteratur, clinpgxreferanser } from '../../clinpgx/referanser'
 import { cpicreferanser } from '../../cpic/referanser'
 import { FARMAKOGENETIKKPANEL, kobledeKjemikalier, koblingsgrunnlag } from '../../clinpgx/stoffside'
 import { Farmakogenetikkpanel, farmakogenetikksoketekster } from './Farmakogenetikkpanel'
-import { useBivirkninger, useCpic, useFarmakogenetikk, useKjemi } from './useFarmakogenetikk'
+import { useBivirkninger, useCpic, useFarmakogenetikk, useKjemi, useLaboratorieanalyser } from './useFarmakogenetikk'
 import { Kjemipanel } from './Kjemipanel'
+import { Laboratoriepanel } from './Laboratoriepanel'
+import { labsoketekster } from '../../farmakologiportalen/stoffside'
+import { fpreferanser } from '../../farmakologiportalen/referanser'
 import { kjemisoketekster } from '../../kjemi/stoffside'
 import { pubchemreferanser } from '../../kjemi/referanser'
 import { Bivirkningspanel, bivirkningssoketekster, harBivirkninger } from './Bivirkningspanel'
@@ -170,6 +173,7 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
   const cpictilstand = cpic.tilstand
   const bivirkninger = useBivirkninger(slug).tilstand
   const kjemi = useKjemi(slug)
+  const laboratorier = useLaboratorieanalyser(slug, kjemi)
   // Visningen av bivirkningene styrer også hvilke kort søket på siden peker på.
   const [bivirkningsvisning, setBivirkningsvisning] = useBevart<Visning>('bivirkningsvisning', 'frekvens')
   // Redaksjonelle og automatiske referanser (FEST, ClinPGx, CPIC og preparatomtalene) nummereres sammen.
@@ -189,10 +193,11 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
           ),
           clinpgxreferanser(pgx.status === 'klar' ? pgx.utvalg : null, pgx.status === 'klar' ? pgx.visning : null),
           bivirkningsreferanser(bivirkninger.status === 'klar' ? bivirkninger.utvalg : null),
+          fpreferanser(laboratorier),
           pubchemreferanser(kjemi),
         ),
       ),
-    [modell, legemidler, interaksjoner, pgx, cpictilstand, bivirkninger, kjemi],
+    [modell, legemidler, interaksjoner, pgx, cpictilstand, bivirkninger, kjemi, laboratorier],
   )
   const grunnlag = useMemo(
     () => koblingsgrunnlag(legemidler.status === 'klar' ? legemidler.utvalg : null, koblet),
@@ -209,10 +214,11 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
           ...interaksjonssoketekster(interaksjoner),
           ...farmakogenetikksoketekster(pgx, cpictilstand),
           ...bivirkningssoketekster(bivirkninger, bivirkningsvisning),
+          ...labsoketekster(laboratorier),
           ...kjemisoketekster(kjemi),
         ],
       ),
-    [slug, navn, kjent, analytter, modell, legemidler, interaksjoner, pgx, cpictilstand, bivirkninger, bivirkningsvisning, kjemi],
+    [slug, navn, kjent, analytter, modell, legemidler, interaksjoner, pgx, cpictilstand, bivirkninger, bivirkningsvisning, kjemi, laboratorier],
   )
   const ord = useMemo(() => sokeord(sporring), [sporring])
 
@@ -230,7 +236,8 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
     modell.paneler.size > 0 ||
     Object.keys(modell.panelreferanser).length > 0 ||
     harBivirkninger(bivirkninger) ||
-    kjemi.rader.some((r) => r.data)
+    kjemi.rader.some((r) => r.data) ||
+    laboratorier.tabeller.length > 0
 
   // En side som åpnes, begynner øverst, med fokus på navnet — så tastaturet og
   // skjermleseren står der siden begynner, og ikke igjen i menyen eller modulen.
@@ -399,6 +406,10 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
                     return <Mekanismepanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                   case 'tabell':
                     return <Tabellpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
+                  case 'laboratorier':
+                    return (
+                      <Laboratoriepanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} visning={laboratorier} />
+                    )
                   case 'kjemi':
                     return <Kjemipanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} visning={kjemi} />
                 }

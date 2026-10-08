@@ -6,6 +6,7 @@ import type { Cpicleser } from '../../cpic/lesing'
 import type { Legemiddelleser } from '../../legemiddeldata/lesing'
 import type { Bivirkningsleser } from '../../bivirkninger/lesing'
 import type { Kjemileser } from '../../kjemi/lesing'
+import type { Lableser } from '../../farmakologiportalen/lesing'
 
 /**
  * Hvor stoffsidene henter og lagrer faginnholdet, og om den innloggede
@@ -47,6 +48,11 @@ export interface Faginnholdskilde {
    * viser for forbindelsene stoffet har. Uten den vises bare forbindelsene.
    */
   kjemi?: Kjemileser
+  /**
+   * Analysene ved norske laboratorier fra Farmakologiportalen, som seksjonen
+   * «Analyse ved norske laboratorier» viser for de samme forbindelsene.
+   */
+  laboratorier?: Lableser
 }
 
 const Kontekst = createContext<Faginnholdskilde | null>(null)

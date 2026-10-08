@@ -46,6 +46,22 @@ export interface Pubchemkobling {
   grunnlag: string
 }
 
+/**
+ * Koblingen til komponenten i Farmakologiportalen (`docs/farmakologiportalen.md`):
+ * verifisert mot PubChem, usikker (bare navnet), eller uavklart med grunnen.
+ */
+export type Fpkobling =
+  | {
+      status: 'verifisert' | 'usikker'
+      /** Komponentens ID i portalen. */
+      id: string
+      /** Komponentens tittel i portalen ved kontrollen. */
+      navn: string
+      kontrollert: string
+      grunnlag: string
+    }
+  | { status: 'uavklart'; grunn: string; kandidater: string[]; kontrollert: string }
+
 export interface Uavklart {
   grunn: string
   /** CID-ene som kunne passe. */
@@ -65,6 +81,9 @@ export interface Forbindelse {
   merknad?: string
   pubchem?: Pubchemkobling
   uavklart?: Uavklart
+  /** Navnet i Farmakologiportalen, når det ikke er et av navnene over («Tetrahydrocannabinolsyre»). Brukes bare i kontrollen. */
+  fpnavn?: string[]
+  farmakologiportalen?: Fpkobling
 }
 
 export const FORBINDELSESRELASJONER: readonly Forbindelsesrelasjon[] = ['selve_stoffet', 'metabolitt']
@@ -80,6 +99,8 @@ export interface Forbindelsesregister {
   forStoff(stoff: string): Forbindelse[]
   /** Forbindelsene med verifisert kobling til PubChem. */
   medPubchem(): (Forbindelse & { pubchem: Pubchemkobling })[]
+  /** Komponent-ID-en i Farmakologiportalen, når forbindelsen er koblet (verifisert eller usikkert). */
+  fpId(f: Forbindelse): string | null
 }
 
 export function byggForbindelsesregister(forbindelser: readonly Forbindelse[]): Forbindelsesregister {
@@ -97,19 +118,22 @@ export function byggForbindelsesregister(forbindelser: readonly Forbindelse[]): 
         )
         .map(({ f }) => f),
     medPubchem: () => forbindelser.filter((f): f is Forbindelse & { pubchem: Pubchemkobling } => Boolean(f.pubchem)),
+    fpId: (f) => (f.farmakologiportalen && f.farmakologiportalen.status !== 'uavklart' ? f.farmakologiportalen.id : null),
   }
 }
 
 /**
  * Feilene i registeret: ukjente stoffer, nøkler som går igjen, en CID brukt
  * av to forbindelser, en kobling uten grunnlag, eller en forbindelse som
- * verken er koblet eller sier hvorfor ikke. Tom når alt stemmer. Kjøres av
+ * verken er koblet eller sier hvorfor ikke — til PubChem og til
+ * Farmakologiportalen. Tom når alt stemmer. Kjøres av
  * testene.
  */
 export function kontrollerForbindelser(forbindelser: readonly Forbindelse[], stoffer: ReadonlySet<string>): string[] {
   const feil: string[] = []
   const nokler = new Set<string>()
   const cider = new Map<number, string>()
+  const fpider = new Map<string, string>()
   for (const f of forbindelser) {
     if (!NOKKEL.test(f.nokkel)) feil.push(`${f.nokkel}: ugyldig nøkkel`)
     if (nokler.has(f.nokkel)) feil.push(`${f.nokkel}: står to ganger`)
@@ -135,6 +159,21 @@ export function kontrollerForbindelser(forbindelser: readonly Forbindelse[], sto
       if (!grunnlag.trim()) feil.push(`${f.nokkel}: grunnlaget mangler`)
     }
     if (f.uavklart && !f.uavklart.grunn.trim()) feil.push(`${f.nokkel}: uavklart uten grunn`)
+    const fp = f.farmakologiportalen
+    if (!fp) feil.push(`${f.nokkel}: verken koblet til Farmakologiportalen eller merket uavklart`)
+    else if (!['verifisert', 'usikker', 'uavklart'].includes(fp.status)) feil.push(`${f.nokkel}: ukjent status for Farmakologiportalen`)
+    else {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(fp.kontrollert)) feil.push(`${f.nokkel}: kontrolldatoen for Farmakologiportalen mangler`)
+      if (fp.status === 'uavklart') {
+        if (!fp.grunn.trim()) feil.push(`${f.nokkel}: uavklart i Farmakologiportalen uten grunn`)
+      } else {
+        if (!/^[0-9A-Za-z_-]{1,40}$/.test(fp.id)) feil.push(`${f.nokkel}: ugyldig ID i Farmakologiportalen`)
+        if (!fp.grunnlag.trim()) feil.push(`${f.nokkel}: grunnlaget for Farmakologiportalen mangler`)
+        const forrige = fpider.get(fp.id)
+        if (forrige) feil.push(`${f.nokkel}: komponent ${fp.id} i Farmakologiportalen er også brukt av ${forrige}`)
+        fpider.set(fp.id, f.nokkel)
+      }
+    }
   }
   return feil
 }

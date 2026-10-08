@@ -1,0 +1,122 @@
+[
+ {
+  "id": "10277",
+  "active": "true",
+  "expire_action": "HIDE",
+  "expire_date": null,
+  "modified_date": "2020-02-07T23:13:49",
+  "published_date": "2020-02-07T23:13:49",
+  "title": "DNA",
+  "name": "DNA"
+ },
+ {
+  "id": "11082",
+  "active": "true",
+  "expire_action": "HIDE",
+  "expire_date": null,
+  "modified_date": "2022-04-07T09:54:47",
+  "published_date": "2022-04-07T09:54:47",
+  "title": "Kapillærblod",
+  "name": "Kapillærblod"
+ },
+ {
+  "id": "3819",
+  "active": "true",
+  "expire_action": "HIDE",
+  "expire_date": null,
+  "modified_date": "2015-09-08T08:51:11",
+  "published_date": "2015-09-08T08:51:11",
+  "title": "Plasma",
+  "name": "Plasma"
+ },
+ {
+  "id": "3820",
+  "active": "true",
+  "expire_action": "HIDE",
+  "expire_date": null,
+  "modified_date": "2015-09-08T08:51:14",
+  "published_date": "2015-09-08T08:51:14",
+  "title": "Fullblod",
+  "name": "Fullblod"
+ },
+ {
+  "id": "3821",
+  "active": "true",
+  "expire_action": "HIDE",
+  "expire_date": null,
+  "modified_date": "2015-09-08T08:51:17",
+  "published_date": "2015-09-08T08:51:17",
+  "title": "Urin",
+  "name": "Urin"
+ },
+ {
+  "id": "3822",
+  "active": "true",
+  "expire_action": "HIDE",
+  "expire_date": null,
+  "modified_date": "2015-09-08T08:51:22",
+  "published_date": "2015-09-08T08:51:22",
+  "title": "Spytt",
+  "name": "Spytt"
+ },
+ {
+  "id": "3823",
+  "active": "true",
+  "expire_action": "HIDE",
+  "expire_date": null,
+  "modified_date": "2015-09-08T08:51:25",
+  "published_date": "2015-09-08T08:51:25",
+  "title": "Hår",
+  "name": "Hår"
+ },
+ {
+  "id": "3824",
+  "active": "true",
+  "expire_action": "HIDE",
+  "expire_date": null,
+  "modified_date": "2015-09-08T08:51:28",
+  "published_date": "2015-09-08T08:51:28",
+  "title": "Serum",
+  "name": "Serum"
+ },
+ {
+  "id": "3825",
+  "active": "true",
+  "expire_action": "HIDE",
+  "expire_date": null,
+  "modified_date": "2015-09-08T08:51:32",
+  "published_date": "2015-09-08T08:51:32",
+  "title": "Annet",
+  "name": "Annet"
+ },
+ {
+  "id": "8597",
+  "active": "true",
+  "expire_action": "HIDE",
+  "expire_date": null,
+  "modified_date": "2015-12-01T20:25:48",
+  "published_date": "2015-12-01T20:25:48",
+  "title": "Erytrocytter",
+  "name": "Erytrocytter"
+ },
+ {
+  "id": "9011",
+  "active": "true",
+  "expire_action": "HIDE",
+  "expire_date": null,
+  "modified_date": "2016-03-08T09:20:48",
+  "published_date": "2016-03-08T09:20:48",
+  "title": "Spinalvæske",
+  "name": "Spinalvæske"
+ },
+ {
+  "id": "9449",
+  "active": "true",
+  "expire_action": "HIDE",
+  "expire_date": null,
+  "modified_date": "2017-05-31T20:58:55",
+  "published_date": "2017-05-31T20:58:54",
+  "title": "Utåndingsluft",
+  "name": "Utåndingsluft"
+ }
+]

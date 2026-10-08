@@ -530,6 +530,20 @@ const REGISTER = {
       ...sat.map(([x, y]) => C(+x.toFixed(2), +y.toFixed(2), 4.6, 'f1', 'info')),
     ],
   },
+  // Analyse ved norske laboratorier: tre prøverør i et stativ.
+  laboratorium: {
+    vb: 48,
+    parts: [
+      P('M9.5 7h7v27a3.5 3.5 0 0 1-7 0z', 'f1', 'glass'),
+      P('M9.5 22h7v12a3.5 3.5 0 0 1-7 0z', 'f2', 'blood', 'fill'),
+      P('M20.5 7h7v27a3.5 3.5 0 0 1-7 0z', 'f1', 'glass'),
+      P('M20.5 17h7v17a3.5 3.5 0 0 1-7 0z', 'f2', 'info', 'fill'),
+      P('M31.5 7h7v27a3.5 3.5 0 0 1-7 0z', 'f1', 'glass'),
+      P('M31.5 26h7v8a3.5 3.5 0 0 1-7 0z', 'f2', 'accent', 'fill'),
+      P('M5 29h38', 'l', 'i-ink'),
+      P('M5 42h38', 'd', 'i-ink'),
+    ],
+  },
   // Kjemiske grunndata: en ring med to atomer på hver sin binding.
   molekyl: {
     vb: 48,

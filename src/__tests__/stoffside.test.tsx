@@ -52,6 +52,9 @@ import { lesDiplotypegrunnlag, type Cpicleser, type Cpicutvalg, type Diplotypegr
 import type { Anbefaling, Betingelse, Gen, Par } from '../cpic/modell'
 import type { Bivirkningsleser } from '../bivirkninger/lesing'
 import { lesKjemiutvalg } from '../kjemi/lesing'
+import { lesLabutvalg } from '../farmakologiportalen/lesing'
+import { ENTITETER } from '../farmakologiportalen/modell'
+import { lesListe } from '../farmakologiportalen/synk'
 import type { Bivirkning, Bivirkningsdata } from '../bivirkninger/modell'
 import { thcRegelsettutgave } from './hjelp/thcgrunnlag'
 
@@ -3473,5 +3476,96 @@ describe('kjemiske grunndata', () => {
     await apneSkuff(user, 'Kjemiske grunndata')
     const seksjon = screen.getByRole('region', { name: 'Kjemiske grunndata' })
     expect(within(seksjon).getAllByText('Hentes fra PubChem ved neste oppdatering.')).toHaveLength(2)
+  })
+})
+
+describe('analyse ved norske laboratorier', () => {
+  /** Det `les_laboratorieanalyser` gir for komponentene, bygd av utdraget fra portalen. */
+  function labutvalg(komponenter: readonly string[]) {
+    const filer: Record<string, string> = {
+      enhet: 'units',
+      provemateriale: 'sampletypes',
+      institusjon: 'institutions',
+      laboratorium: 'labs',
+      komponent: 'components',
+      analyse: 'analyses',
+    }
+    const enheter = new Map<string, string>()
+    const lest: Record<string, { id: string; data: object }[]> = {}
+    for (const e of ENTITETER) {
+      const rader = JSON.parse(readFileSync(`src/__tests__/data/farmakologiportalen/${filer[e.navn]}.json`, 'utf8')) as unknown[]
+      lest[e.navn] = lesListe(e, rader, enheter).rader
+      if (e.navn === 'enhet') for (const r of lest.enhet!) enheter.set(r.id, (r.data as { navn: string }).navn)
+    }
+    const valgte = lest.komponent!.filter((k) => komponenter.includes(k.id) || (k.data as { gruppe: string[] }).gruppe.some((g) => komponenter.includes(g)))
+    const ider = new Set(valgte.map((k) => k.id))
+    return lesLabutvalg({
+      kilde: { kontrollert_kl: '2026-10-08T04:40:00Z', endret_kl: '2026-10-08T04:40:00Z' },
+      komponenter: valgte,
+      analyser: lest.analyse!.filter((a) => ider.has((a.data as { komponent_id: string }).komponent_id)),
+      laboratorier: lest.laboratorium,
+      institusjoner: lest.institusjon,
+    })
+  }
+
+  const pubchem = (cid: number, molvekt: string, inchikey: string) => ({
+    cid,
+    data: { cid, tittel: '', formel: 'C', molvekt, inchikey, iupac: null, monoisotopisk_masse: null, ladning: 0, enheter: 1, stereo: {} },
+    sist_hentet_kl: '2026-10-08T03:15:00Z',
+  })
+
+  function labkilde() {
+    const laboratorier = { les: vi.fn(async (ider: readonly string[]) => labutvalg(ider)) }
+    const kjemi = {
+      les: vi.fn(async () =>
+        lesKjemiutvalg({
+          kilde: 'PubChem',
+          forbindelser: [pubchem(444, '239.74', 'SNPPWIUOZRMYNY-UHFFFAOYSA-N'), pubchem(446, '255.74', 'AKOAEVOSDHIVFX-UHFFFAOYSA-N')],
+        }),
+      ),
+    }
+    const data = enkelSide({ id: 'bup', slug: 'bupropion', navn: 'Bupropion' }, { nedre: 1000, ovre: 2000, enhet: 'nmol/L' })
+    return { ...kilde({ data }), laboratorier, kjemi }
+  }
+
+  const enhet = () => screen.getByRole('slider', { name: 'Vis måleområdene i' })
+
+  it('viser én tabell per matrise med laboratorium, metode og måleområde, og bytter enhet', async () => {
+    const user = userEvent.setup()
+    const k = labkilde()
+    vis('bupropion', k)
+    await apneSkuff(user, 'Analyse ved norske laboratorier')
+    expect(k.laboratorier.les).toHaveBeenCalledWith(['529', '794'])
+    const seksjon = screen.getByRole('region', { name: 'Analyse ved norske laboratorier' })
+    const tabeller = within(seksjon).getAllByRole('table')
+    expect(tabeller.map((t) => t.getAttribute('aria-labelledby') && document.getElementById(t.getAttribute('aria-labelledby')!)?.textContent)).toEqual([
+      'Serum',
+      'Fullblod',
+    ])
+    const [serum] = tabeller
+    expect(within(serum!).getAllByRole('columnheader').map((h) => h.textContent)).toEqual(['Analytt', 'Laboratorium', 'Metode', 'Måleområde (µg/L)', 'Benevning'])
+    const haukeland = within(serum!).getAllByRole('row').find((r) => r.textContent?.includes('Haukeland'))!
+    expect(haukeland.textContent).toContain('Hydroksybupropion')
+    expect(haukeland.textContent).toContain('LC-MS/MS')
+    expect(haukeland.textContent).toContain('73—2000')
+    expect(within(haukeland).getByRole('link', { name: /73—2000/ }).getAttribute('href')).toBe('https://farmakologiportalen.no/analysis/?id=10147')
+    expect(within(haukeland).getByRole('link', { name: /Haukeland/ }).getAttribute('href')).toMatch(/^https:\/\/farmakologiportalen\.no\/lab\/\?id=\d+$/)
+
+    fireEvent.change(enhet(), { target: { value: '1' } })
+    expect(enhet().getAttribute('aria-valuetext')).toBe('nmol/L')
+    expect(within(serum!).getAllByRole('columnheader').map((h) => h.textContent)).toContain('Måleområde (nmol/L)')
+    expect(haukeland.textContent).toContain('280—8000')
+    // Portalen står som kilde i referansefeltet, med når dataene sist ble kontrollert.
+    expect(within(seksjon).getByText('Laboratorieanalyser fra Farmakologiportalen, sist kontrollert 8. oktober 2026')).toBeTruthy()
+    expect(within(seksjon).getByRole('button', { name: 'Referanse 1' })).toBeTruthy()
+  })
+
+  it('viser ikke seksjonen når portalen ikke har noe for stoffet', async () => {
+    const k = { ...kilde(), laboratorier: { les: vi.fn(async () => lesLabutvalg({})) } }
+    vis('amitriptylin', k)
+    await finnVerdi('10–20 nmol/L')
+    await waitFor(() => expect(k.laboratorier.les).toHaveBeenCalled())
+    expect(skuffen('Kjemiske grunndata')).toBeTruthy()
+    expect(() => skuffen('Analyse ved norske laboratorier')).toThrow()
   })
 })

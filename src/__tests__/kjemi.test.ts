@@ -90,23 +90,28 @@ describe('registeret over forbindelser', () => {
 
   it('finner feilene i et register', () => {
     const god = FORBINDELSER.finn('citalopram')!
+    const uavklartFp = { status: 'uavklart' as const, grunn: 'Test.', kandidater: [], kontrollert: '2026-10-08' }
     const feil = kontrollerForbindelser(
       [
         god,
         { ...god, nokkel: 'kopi' },
-        { ...god, nokkel: 'ukjent', stoffer: [{ stoff: 'finnes-ikke', relasjon: 'selve_stoffet' }], pubchem: undefined },
-        { ...god, nokkel: 'begge', uavklart: { grunn: 'x', kandidater: [] }, pubchem: { ...god.pubchem!, cid: 1 } },
-        { ...god, nokkel: 'salt', pubchem: { ...god.pubchem!, cid: 2, formel: 'C20H21FN2O.ClH', inchikey: 'feil' } },
+        { ...god, nokkel: 'ukjent', stoffer: [{ stoff: 'finnes-ikke', relasjon: 'selve_stoffet' }], pubchem: undefined, farmakologiportalen: uavklartFp },
+        { ...god, nokkel: 'begge', uavklart: { grunn: 'x', kandidater: [] }, pubchem: { ...god.pubchem!, cid: 1 }, farmakologiportalen: uavklartFp },
+        { ...god, nokkel: 'salt', pubchem: { ...god.pubchem!, cid: 2, formel: 'C20H21FN2O.ClH', inchikey: 'feil' }, farmakologiportalen: { ...uavklartFp, grunn: ' ' } },
+        { ...god, nokkel: 'utenfp', pubchem: { ...god.pubchem!, cid: 3 }, farmakologiportalen: undefined },
       ],
       stoffer,
     )
     expect(feil).toEqual([
       'kopi: CID 2771 er også brukt av citalopram',
+      'kopi: komponent 536 i Farmakologiportalen er også brukt av citalopram',
       'ukjent: ukjent stoff finnes-ikke',
       'ukjent: verken koblet til PubChem eller merket uavklart',
       'begge: både koblet og uavklart',
       'salt: ugyldig InChIKey',
       'salt: ugyldig formel',
+      'salt: uavklart i Farmakologiportalen uten grunn',
+      'utenfp: verken koblet til Farmakologiportalen eller merket uavklart',
     ])
   })
 })

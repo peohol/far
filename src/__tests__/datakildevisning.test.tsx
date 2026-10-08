@@ -109,6 +109,7 @@ describe('FEST sammen med ClinPGx og CPIC', () => {
       'datakilde-clinpgx',
       'datakilde-cpic',
       'datakilde-pubchem',
+      'datakilde-farmakologiportalen',
     ])
     expect(within(region).getByText('I orden', { selector: '.merke' })).toBeTruthy()
     expect(within(region).getByText('Siste henting byttet inn et nytt uttrekk (rader nye: 3, endrede: 12, utgåtte: 1).')).toBeTruthy()

@@ -1,0 +1,44 @@
+# Synkroniserer laboratorieanalysene fra Farmakologiportalen hver natt, og når
+# noen starter den for hånd (docs/farmakologiportalen.md). Selve hentingen gjør
+# OUSFARs server i Stockholm, den eneste veien portalen svarer; jobben her ber
+# den om det, med et OIDC-token GitHub utsteder for denne arbeidsflyten på main.
+# Ingen hemmeligheter, ingen commits og ingen migrasjoner: dataene går rett i
+# databasen.
+name: Farmakologiportalen
+
+on:
+  schedule:
+    # 04:40 UTC, etter den nattlige FEST-synkroniseringen.
+    - cron: '40 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  # Bare for å få OIDC-tokenet; arbeidsflyten leser og skriver ingenting i repoet.
+  id-token: write
+
+concurrency:
+  group: farmakologiportalen-synk
+  cancel-in-progress: false
+
+jobs:
+  synkroniser:
+    name: Synkroniser Farmakologiportalen
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      ADRESSE: https://ousfar.vercel.app/api/farmakologiportalen-synk
+    steps:
+      - name: Be OUSFAR hente fra portalen
+        run: |
+          set -euo pipefail
+          token=$(curl -sSf -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=ousfar" | jq -r .value)
+          echo "::add-mask::$token"
+          kode=$(curl -sS -o svar.json -w '%{http_code}' --max-time 330 -X POST \
+            -H "Authorization: Bearer $token" "$ADRESSE")
+          jq '{status, synk, feil, antall: (.antall // {} | with_entries(select(.key != "merknader" and .key != "uavklarte")))}' svar.json || cat svar.json
+          if [ "$kode" != "200" ]; then
+            echo "::error::Synkroniseringen svarte $kode; dataene fra siste vellykkede henting står. Se «Datakilder» i OUSFAR."
+            exit 1
+          fi

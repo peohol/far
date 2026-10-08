@@ -61,9 +61,20 @@ export function kallSom(db: PGlite, rolle: 'service_role' | 'authenticated' | 'a
         JSON.stringify(rolle === 'authenticated' ? { sub: '00000000-0000-0000-0000-000000000001', role: rolle } : { role: rolle }),
       ])
       const navn = Object.keys(argumenter)
-      const verdier = Object.values(argumenter).map((v) =>
-        v !== null && typeof v === 'object' && !(Array.isArray(v) && v.every((x) => typeof x === 'string')) ? JSON.stringify(v) : v,
+      // Som data-API-et: et argument av typen json/jsonb sendes som JSON, en
+      // liste til en array-parameter som en liste.
+      const { rows: typer } = await tx.query<{ navn: string; type: string }>(
+        `select a.navn, format_type(a.typ, null) as type
+         from pg_proc p, unnest(p.proargnames, p.proargtypes::oid[]) a(navn, typ)
+         where p.proname = $1 and p.pronamespace = 'public'::regnamespace`,
+        [funksjon],
       )
+      const type = new Map(typer.map((t) => [t.navn, t.type]))
+      const verdier = navn.map((n) => {
+        const v = argumenter[n]
+        if (v === null || typeof v !== 'object') return v
+        return Array.isArray(v) && type.get(n)?.endsWith('[]') ? v : JSON.stringify(v)
+      })
       const { rows } = await tx.query<{ r: unknown }>(
         `select public.${funksjon}(${navn.map((n, i) => `${n} => $${i + 1}`).join(', ')}) as r`,
         verdier,
