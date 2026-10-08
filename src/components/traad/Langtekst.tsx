@@ -1,11 +1,13 @@
 import { useId, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { Button } from '../Button'
 import { maalLengde } from '../Breddehandtak'
 import { Ikon } from '../ikon/Ikon'
 
 /**
  * En lang tekst i en tråd — innlegget i en diskusjon eller en kommentar — vist
  * bare med de første linjene, som forsvinner bak en toning. Knappen under
- * viser hele teksten (feltet glir ut) og legger den sammen igjen.
+ * viser hele teksten (feltet glir ut) og legger den sammen igjen. Den står
+ * midt under teksten, som en pille med kant.
  *
  * Hvor mye som vises, står i `--langtekst-hoyde` (`traad.css`). En tekst som
  * bare er litt lengre, vises hel: det lønner seg ikke å skjule et par linjer.
@@ -53,10 +55,16 @@ export function Langtekst({ hva, children }: { hva: string; children: ReactNode 
         <div ref={innhold}>{children}</div>
       </div>
       {lang && (
-        <button type="button" className="idehandling langtekst__knapp" aria-expanded={apen} aria-controls={id} onClick={veksle}>
-          <Ikon navn="chev" storrelse="ui" />
-          <span>{apen ? 'Vis mindre' : `Vis hele ${hva}`}</span>
-        </button>
+        <Button
+          variant="kant"
+          className="langtekst__knapp"
+          icon={<Ikon navn="chev" storrelse="ui" />}
+          aria-expanded={apen}
+          aria-controls={id}
+          onClick={veksle}
+        >
+          {apen ? 'Vis mindre' : `Vis hele ${hva}`}
+        </Button>
       )}
     </div>
   )
