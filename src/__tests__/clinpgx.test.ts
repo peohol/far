@@ -914,7 +914,7 @@ describe('søket', () => {
     const les = vi.fn(async () => SERTRALINUTVALG)
     const farmakogenetikk: Farmakogenetikkleser = { les, sok: async () => [], hent: async () => ({ status: 'fullfort' }) }
     const sideleser = { lesStoffsider: async () => [sertralinside()] }
-    const indeks = await lesSokeindeks(sideleser, null, { farmakogenetikk })
+    const indeks = await lesSokeindeks({ sider: sideleser, farmakogenetikk })
     expect(les).toHaveBeenCalledWith([SERTRALIN])
 
     const [treff] = sokGlobalt(indeks, 'CPIC CYP2B6')
@@ -934,14 +934,17 @@ describe('søket', () => {
       hent: async () => ({ status: 'feilet' }),
     }
     const sideleser = { lesStoffsider: async () => [sertralinside()] }
-    const base = await lesKunnskapsbase(sideleser, null, 'publisert', nede)
-    expect(base.clinpgxfeil).toBe('ClinPGx-kopien svarer ikke')
+    const base = await lesKunnskapsbase({ sider: sideleser, farmakogenetikk: nede, ventetider: [] })
+    expect(base.mangler).toEqual({ farmakogenetikk: 'ClinPGx-kopien svarer ikke' })
     const dokumenter = indekserKunnskapsbase(base)
     expect(dokumenter.some((d) => d.tekst.includes('redaksjonell'))).toBe(true)
     expect(dokumenter.some((d) => d.tekst.includes('CYP2B6'))).toBe(false)
     // En side uten kobling spør ikke ClinPGx.
     const uten = vi.fn(nede.les)
-    await lesKunnskapsbase({ lesStoffsider: async () => [{ ...sertralinside(), elementer: [] }] }, null, 'publisert', { ...nede, les: uten })
+    await lesKunnskapsbase({
+      sider: { lesStoffsider: async () => [{ ...sertralinside(), elementer: [] }] },
+      farmakogenetikk: { ...nede, les: uten },
+    })
     expect(uten).not.toHaveBeenCalled()
     expect(byggSidemodell(sertralinside()).paneler.get('farmakogenetikk')).toHaveLength(2)
   })

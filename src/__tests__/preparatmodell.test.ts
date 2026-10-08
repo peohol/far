@@ -23,7 +23,7 @@ import {
 } from '../legemiddeldata/preparatmodell'
 import { formaterTall } from '../faginnhold/paneler'
 import { GODKJENNINGSFRITAK, pakningerPerMerkevare, trygLenke } from '../legemiddeldata/preparater'
-import { preparatkort, preparattekster } from '../legemiddeldata/stoffside'
+import { preparatformer, preparatkort, preparattekster } from '../legemiddeldata/stoffside'
 import { AMITRIPTYLIN, innloggetLeser, KODEIN, synkroniserUtdrag } from './hjelp/fest'
 import { nyDatabase } from './hjelp/testdatabase'
 
@@ -129,10 +129,10 @@ describe('preparatmodellen med utdraget fra FEST', () => {
     expect(kodimagnyl!.kombinasjon).toEqual(['Acetylsalisylsyre', 'Magnesiumoksid'])
   })
 
-  it('gir søket hvert preparatnavn én gang per form, med stedet det står', () => {
-    const tekster = preparattekster(visning)
+  it('gir søket hvert preparatnavn én gang per form, alfabetisk, med stedet det står', () => {
+    const tekster = preparattekster(preparatformer(visning))
     const tablett = tekster.filter((t) => t.element.tittel === 'Tablett')
-    expect(tablett.map((t) => t.tekst)).toEqual(['Amitriptylin Abcur', 'Amitriptylin Orifarm', 'Sarotex', 'Amitriptylin-CT'])
+    expect(tablett.map((t) => t.tekst)).toEqual(['Amitriptylin Abcur', 'Amitriptylin Orifarm', 'Amitriptylin-CT', 'Sarotex'])
     expect(tablett.every((t) => t.panel === 'preparater' && t.felt === 'preparat' && t.element.id === 'preparater-53')).toBe(true)
     expect(tekster).toHaveLength(7)
     expect(preparatkort('53')).toBe('form-53')

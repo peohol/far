@@ -19,7 +19,7 @@ import { indekserSide, lagSokeindeks, sokGlobalt, type Sokedokument } from '../f
  * annen side. Søket etter analytter i fortolkningen bruker dem ikke.
  */
 
-const indeks = lagSokeindeks(indekserKunnskapsbase({ sider: [], legemidler: null, interaksjoner: null }))
+const indeks = lagSokeindeks(indekserKunnskapsbase({ sider: [] }))
 
 /** Det beste treffet i fagsøket: stoffet og poengene. */
 function forste(sporring: string) {

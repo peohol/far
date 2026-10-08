@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useProfil } from './auth/okt'
 import { iBakgrunnen } from './auth/aktivitet'
 import { klient } from './auth/klient'
+import { nettleserlager } from './auth/mellomlager'
 import { Stoffside } from './components/stoffside/Stoffside'
 import { FaginnholdskildeProvider, type Faginnholdskilde } from './components/stoffside/Faginnholdskilde'
 import { SearchStep } from './components/SearchStep'
@@ -57,13 +58,13 @@ import { lagFaginnholdslager } from './faginnhold/lagring'
 import { lagFaginnholdsleser } from './faginnhold/lesing'
 import { lesScenarioregler, reglerForModul } from './faginnhold/scenarioregler'
 import { thcReglerFra } from './faginnhold/thcregler'
-import { lagSideleser, lesSokeindeks } from './faginnhold/globaltSok'
+import { lagSideleser, lagVersjonsleser, lesSokeindeks } from './faginnhold/globaltSok'
 import { utenSider } from './faginnhold/sok'
 import { lagRegisterlager } from './stoffregister/api'
 import { StoffregisterkildeProvider, useLagStoffregisterkilde } from './stoffregister/Stoffregisterkilde'
 import { Stoffregisterside } from './components/stoffregister/Stoffregisterside'
-import { lagLegemiddelleser } from './legemiddeldata/lesing'
-import { lagFarmakogenetikkleser } from './clinpgx/lesing'
+import { lagLegemiddelleser, lagLegemiddelsok } from './legemiddeldata/lesing'
+import { lagFarmakogenetikkleser, lagFarmakogenetikksok } from './clinpgx/lesing'
 import { lagCpicleser } from './cpic/lesing'
 import { lagBivirkningsleser } from './bivirkninger/lesing'
 import { useClipboard } from './hooks/useClipboard'
@@ -222,13 +223,15 @@ export default function App() {
     (delvis) => {
       const stille = iBakgrunnen(klient())
       return lesSokeindeks(
-        lagSideleser(stille),
-        lagLegemiddelleser(stille),
         {
-          farmakogenetikk: lagFarmakogenetikkleser(stille),
+          sider: lagSideleser(stille),
+          legemidler: lagLegemiddelsok(stille),
+          farmakogenetikk: lagFarmakogenetikksok(stille),
           cpic: lagCpicleser(stille),
-          katalog,
+          versjoner: lagVersjonsleser(stille),
+          mellomlager: nettleserlager,
         },
+        { katalog },
         delvis,
       )
     },
@@ -628,6 +631,7 @@ export default function App() {
                     <Fagsok
                       indeks={synligIndeks}
                       onKrev={sokeindeks.krev}
+                      onProvIgjen={sokeindeks.provIgjen}
                       sporring={rute.side === 'sok' ? rute.q : undefined}
                       beskrivSide={beskrivSide}
                       onGaaTil={gaaTilAdresse}
@@ -711,6 +715,7 @@ export default function App() {
                       q={rute.q}
                       indeks={synligIndeks}
                       onKrev={sokeindeks.krev}
+                      onProvIgjen={sokeindeks.provIgjen}
                       beskrivSide={beskrivSide}
                       onLukk={lukkInfoside}
                     />

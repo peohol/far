@@ -63,5 +63,11 @@ jobs:
       - name: Tester
         run: npm test
 
+      # Med oppkoblingen satt, som på Vercel. Uten den fjerner byggingen alt
+      # innloggingen gjør, og kontrollen av veggen ville sett en annen app enn
+      # den som legges ut. Verdiene er bare plassholdere; bygget brukes ikke.
       - name: Bygg
+        env:
+          VITE_SUPABASE_URL: https://plassholder.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_plassholder
         run: npm run build

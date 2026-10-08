@@ -187,6 +187,28 @@ describe('rullegardinen under fagsøket', () => {
     expect(onKrev).toHaveBeenCalled()
   })
 
+  it('sier i rullegardinen hva som ikke kom med, og prøver igjen uten å miste treffene', async () => {
+    const user = userEvent.setup()
+    const onKrev = vi.fn()
+    const onProvIgjen = vi.fn()
+    render(
+      <TipsLag>
+        <Fagsok
+          indeks={{ status: 'klar', indeks: { ...KLAR.indeks, mangler: { preparater: 'nede' } } }}
+          onKrev={onKrev}
+          onProvIgjen={onProvIgjen}
+          onGaaTil={vi.fn()}
+        />
+      </TipsLag>,
+    )
+    await user.click(screen.getByRole('combobox'))
+    await user.keyboard('kvetiapin')
+    expect(screen.getAllByRole('option').length).toBeGreaterThan(0)
+    expect(screen.getByRole('note').textContent).toContain('Søket mangler nå preparatene fra FEST')
+    await user.click(screen.getByRole('button', { name: 'Prøv igjen' }))
+    expect(onProvIgjen).toHaveBeenCalled()
+  })
+
   it('viser søket fra søkesiden i feltet', () => {
     const { felt } = visFagsok(KLAR, 'metabolisme')
     expect(felt.value).toBe('metabolisme')
@@ -257,13 +279,14 @@ describe('fagsøket og tastene i appen', () => {
 
 function visSokeside(q: string, indeks: Sokeindekstilstand = KLAR) {
   const onKrev = vi.fn()
+  const onProvIgjen = vi.fn()
   const onLukk = vi.fn()
   render(
     <TipsLag>
-      <Sokeside q={q} indeks={indeks} onKrev={onKrev} beskrivSide={beskrivSide} onLukk={onLukk} />
+      <Sokeside q={q} indeks={indeks} onKrev={onKrev} onProvIgjen={onProvIgjen} beskrivSide={beskrivSide} onLukk={onLukk} />
     </TipsLag>,
   )
-  return { onKrev, onLukk }
+  return { onKrev, onProvIgjen, onLukk }
 }
 
 describe('søkesiden', () => {
@@ -342,9 +365,23 @@ describe('søkesiden', () => {
     expect(onKrev).toHaveBeenCalled()
   })
 
-  it('sier fra når legemiddeldataene ikke kom med i indeksen', () => {
-    visSokeside('sertralin', { status: 'klar', indeks: { ...KLAR.indeks, festfeil: 'nede' } })
-    expect(screen.getByRole('note').textContent).toContain('FEST')
+  it('sier presist hva som ikke kom med i indeksen, og lar brukeren prøve igjen', async () => {
+    const user = userEvent.setup()
+    const mangler = { interaksjoner: 'nede', cpic: 'nede' }
+    const { onProvIgjen } = visSokeside('sertralin', { status: 'klar', indeks: { ...KLAR.indeks, mangler } })
+    expect(screen.getByRole('note').textContent).toContain(
+      'Søket mangler nå interaksjonene fra FEST og anbefalingene fra CPIC, som ikke kunne hentes.',
+    )
+    await user.click(screen.getByRole('button', { name: 'Prøv igjen' }))
+    expect(onProvIgjen).toHaveBeenCalled()
+    cleanup()
+    // Mens det hentes på nytt, står det uten knappen.
+    visSokeside('sertralin', { status: 'klar', indeks: { ...KLAR.indeks, mangler }, henterMer: true })
+    expect(screen.getByRole('note').textContent).toContain('interaksjonene fra FEST')
+    expect(screen.queryByRole('button', { name: 'Prøv igjen' })).toBeNull()
+    cleanup()
+    visSokeside('sertralin')
+    expect(screen.queryByRole('note')).toBeNull()
   })
 })
 

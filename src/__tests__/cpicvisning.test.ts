@@ -335,7 +335,7 @@ describe('søket', () => {
     const les = vi.fn(async (ider: readonly string[]) => cpicFor(HELE, ider))
     const cpic: Cpicleser = { les, diplotyper: async () => lesDiplotypegrunnlag(null), hent: async () => ({ status: 'uendret' }) }
     const sideleser = { lesStoffsider: async () => [amitriptylinside()] }
-    const indeks = await lesSokeindeks(sideleser, null, { cpic })
+    const indeks = await lesSokeindeks({ sider: sideleser, cpic })
     expect(les).toHaveBeenCalledWith([AMITRIPTYLIN])
     const [treff] = sokGlobalt(indeks, 'CYP2D6 poor metabolizer')
     expect(sokeadresse(treff!.dokument.sted)).toBe(`#/stoff/amitriptylin/farmakogenetikk/${cpickort('100414')}`)
@@ -350,8 +350,8 @@ describe('søket', () => {
       hent: async () => ({ status: 'feilet' }),
     }
     const sideleser = { lesStoffsider: async () => [amitriptylinside()] }
-    const base = await lesKunnskapsbase(sideleser, null, 'publisert', null, nede)
-    expect(base.cpicfeil).toBe('CPIC-kopien svarer ikke')
+    const base = await lesKunnskapsbase({ sider: sideleser, cpic: nede, ventetider: [] })
+    expect(base.mangler).toEqual({ cpic: 'CPIC-kopien svarer ikke' })
     expect(indekserKunnskapsbase(base).some((d) => d.tekst.includes('Metabolizer'))).toBe(false)
   })
 })

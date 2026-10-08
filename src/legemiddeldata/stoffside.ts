@@ -8,12 +8,11 @@
  * treff peker på det samme stedet uansett hvilket søk som fant det.
  */
 import type { Sideelement, Sidemodell } from '../faginnhold/stoffside'
-import { ELEMENTTYPER, lesLegemiddelkobling, type Legemiddelkoblingdata, type Panelnokkel } from '../faginnhold/paneler'
+import { alfabetisk, ELEMENTTYPER, lesLegemiddelkobling, type Legemiddelkoblingdata, type Panelnokkel } from '../faginnhold/paneler'
 import type { Tilleggstekst } from '../faginnhold/sok'
-import type { Interaksjonsoversikt } from './interaksjoner'
-import type { Legemiddelutvalg } from './lesing'
-import type { Preparatvisning } from './preparatmodell'
-import { egneVirkestoff, virkestoffI } from './preparater'
+import { relevansgrad, sammenlignInteraksjoner, type Interaksjon } from './interaksjoner'
+import type { Interaksjonssokerad, Preparatsokerad } from './lesing'
+import { legemiddelform, type Preparatvisning } from './preparatmodell'
 import { interaksjonssted } from './referanser'
 
 /** Seksjonen koblingen og preparatene står i. */
@@ -44,27 +43,57 @@ export function koblede(modell: Sidemodell): string[] {
   return finnKobling(modell).kobling.virkestoff.map((v) => v.fest_id)
 }
 
+/** Preparatnavnene i én legemiddelform, det søket finner i formens detaljkort. */
+export interface Preparatform {
+  id: string
+  form: string
+  navn: readonly string[]
+}
+
+/** Preparatnavnene i hver legemiddelform seksjonen viser. */
+export function preparatformer({ former }: Pick<Preparatvisning, 'former'>): Preparatform[] {
+  return former.map((f) => ({ id: f.id, form: f.form, navn: f.styrker.flatMap((s) => s.preparater.map((p) => p.navn)) }))
+}
+
+/**
+ * Preparatnavnene i hver legemiddelform fra søkedataene (`les_preparatsok`),
+ * gruppert som {@link byggPreparatvisning} grupperer merkevarene.
+ */
+export function preparatformerFraSok(rader: readonly Preparatsokerad[]): Preparatform[] {
+  const former = new Map<string, { id: string; form: string; navn: string[] }>()
+  for (const [kode, tekst, navn] of rader) {
+    const { id, form } = legemiddelform({ kode, tekst })
+    const f = former.get(id) ?? former.set(id, { id, form, navn: [] }).get(id)!
+    f.navn.push(navn)
+  }
+  return [...former.values()]
+}
+
 /**
  * Preparatnavnene, én gang per legemiddelform, med detaljkortet de står i.
  * Et navn står i styrkekortene i formen, også i de lukkede, så søket finner
- * det der og åpner kortet.
+ * det der og åpner kortet. Formene og navnene står alfabetisk.
  */
-export function preparattekster({ former }: Preparatvisning): Tilleggstekst[] {
-  return former.flatMap((f) =>
-    [...new Set(f.styrker.flatMap((s) => s.preparater.map((p) => p.navn)))].map(
-      (navn): Tilleggstekst => ({
-        panel: PREPARATPANEL,
-        element: { id: preparatsted(f.id), tittel: f.form },
-        detaljkort: preparatkort(f.id),
-        felt: 'preparat',
-        tekst: navn,
-      }),
-    ),
-  )
+export function preparattekster(former: readonly Preparatform[]): Tilleggstekst[] {
+  return [...former]
+    .sort((a, b) => alfabetisk(a.form, b.form) || sammenlign(a.id, b.id))
+    .flatMap((f) =>
+      [...new Set(f.navn)]
+        .sort((a, b) => alfabetisk(a, b) || sammenlign(a, b))
+        .map(
+          (navn): Tilleggstekst => ({
+            panel: PREPARATPANEL,
+            element: { id: preparatsted(f.id), tittel: f.form },
+            detaljkort: preparatkort(f.id),
+            felt: 'preparat',
+            tekst: navn,
+          }),
+        ),
+    )
 }
 
-/** Stoffene siden interagerer med, med detaljkortet de står i. */
-export function interaksjonstekster({ interaksjoner }: Interaksjonsoversikt): Tilleggstekst[] {
+/** Stoffene siden interagerer med, med detaljkortet de står i, i rekkefølgen seksjonen viser dem. */
+export function interaksjonstekster(interaksjoner: readonly Pick<Interaksjon, 'id' | 'med'>[]): Tilleggstekst[] {
   return interaksjoner.map((i): Tilleggstekst => {
     const kort = interaksjonssted(i)
     return { panel: INTERAKSJONSPANEL, element: { id: kort, tittel: i.med }, detaljkort: kort, felt: 'overskrift', tekst: i.med }
@@ -72,30 +101,16 @@ export function interaksjonstekster({ interaksjoner }: Interaksjonsoversikt): Ti
 }
 
 /**
- * Den delen av et utvalg som hører til én side: det `les_legemidler` gir for
- * sidens egne virkestoff. Da kan legemiddeldataene for mange sider leses i ett
- * kall og deles opp etterpå, med de samme preparatene hver side viser.
- *
- * Et preparat hører til siden når det har et av sidens virkestoff, eller et
- * salt av det, med eller uten styrke — som i `les_legemidler`. Pakningene og
- * byttegruppene følger preparatene.
+ * Interaksjonene seksjonen viser, fra søkedataene (`les_interaksjonssok`),
+ * i samme rekkefølge som {@link byggInteraksjoner}.
  */
-export function utvalgFor(utvalg: Legemiddelutvalg, koblet: readonly string[]): Legemiddelutvalg {
-  const { egne } = egneVirkestoff(utvalg, koblet)
-  const styrker = new Map(utvalg.styrker.map((s) => [s.id, s]))
-  const merkevarer = utvalg.merkevarer.filter((m) => virkestoffI(m, styrker).some((id) => egne.has(id)))
-  const merkevareider = new Set(merkevarer.map((m) => m.id))
-  const pakninger = utvalg.pakninger.filter((p) => p.merkevarer.some((id) => merkevareider.has(id)))
-  const byttegrupper = new Set(pakninger.flatMap((p) => p.byttegrupper))
-  const styrkeider = new Set(merkevarer.flatMap((m) => m.virkestoff_med_styrke))
-  const alleStyrker = utvalg.styrker.filter((s) => styrkeider.has(s.id))
-  const stoff = new Set([...koblet, ...merkevarer.flatMap((m) => virkestoffI(m, styrker))])
-  return {
-    ...utvalg,
-    virkestoff: utvalg.virkestoff.filter((v) => stoff.has(v.id)),
-    styrker: alleStyrker,
-    merkevarer,
-    pakninger,
-    byttegrupper: utvalg.byttegrupper.filter((b) => byttegrupper.has(b.id)),
-  }
+export function interaksjonerFraSok(rader: readonly Interaksjonssokerad[]): Pick<Interaksjon, 'id' | 'relevans' | 'med'>[] {
+  return rader
+    .flatMap(([id, kode, med]) => {
+      const relevans = relevansgrad(kode)
+      return relevans ? [{ id, relevans, med }] : []
+    })
+    .sort(sammenlignInteraksjoner)
 }
+
+const sammenlign = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)

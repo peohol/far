@@ -109,6 +109,7 @@ Funksjonene i `public`:
 | --- | --- | --- |
 | `clinpgx_start_synk`, `clinpgx_koblede_kjemikalier`, `clinpgx_lagre_kjemikalie`, `clinpgx_kjemikalie_feilet`, `clinpgx_fullfor_synk`, `clinpgx_avbryt_synk` | Serveren (`service_role`) | Synkroniseringen |
 | `les_farmakogenetikk(kjemikalie_ider)` | Innloggede | Alt siden trenger for opptil 200 kjemikalier, uten rådataene |
+| `les_farmakogenetikk_sok(kjemikalie_ider)` | Innloggede | Det samme uten allelfenotypene, legemidlene og litteraturen, til søket i hele kunnskapsbasen |
 | `clinpgx_status()` | Innloggede | De 20 siste kjøringene |
 
 Koden:

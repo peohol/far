@@ -606,11 +606,21 @@ analyttene det er koblet til, er bare andre veier dit (`stoffidentitet` i
 `#/stoff/bupropion`. Koden til en analytt stoffet bare er sekundært koblet til
 (AMTNORSUM på Nortriptylin), er en komponent, ikke et alias, så den ikke
 rangeres som stoffets eget navn.
-Lesingen er fire kall uansett antall sider: `les_stoffer` gir alle sidene på
-samme form som `les_stoff`, med referansene én gang; `les_legemidler` gir legemiddeldataene for alle
-koblingene, og hver side får sin del av dem (`utvalgFor`); `les_interaksjoner`
-gir interaksjonene, delt i flere kall bare om nøklene er flere enn databasen
-tar imot. Kan ikke legemiddeldataene leses, indekseres faginnholdet likevel,
+Dataene kommer fra fem kilder, hver lest i ett kall uansett antall sider
+(migrasjonen `*_sokedata.sql`): `les_stoffer` gir alle sidene på samme form
+som `les_stoff`, med referansene én gang; `les_preparatsok` og
+`les_interaksjonssok` gir bare preparatnavnene og interaksjonene hver side
+viser — de samme som seksjonene bygger av de fullstendige legemiddeldataene,
+som en test kontrollerer for hvert virkestoff i FEST-utdraget;
+`les_farmakogenetikk_sok` gir ClinPGx-dataene uten feltene søket ikke bruker,
+og `les_cpic` CPIC-dataene. Det som er lest, lagres i nettleseren
+(`src/auth/mellomlager.ts`, tømmes ved utlogging), og `sokedata_versjoner`
+sier hvilke kilder som er endret siden: versjonen for sidene telles opp av en
+trigger når noe publisert endres (utkast teller ikke), og de andre følger
+synkroniseringene. Bare det som er endret, leses på nytt, og et nytt bygg av
+appen leser alt. Feiler en kilde, prøves den to ganger til; feiler den
+fortsatt, brukes det lagrede, og ellers står kilden i `mangler`, mens de
+andre kildene er med som vanlig.
 `sokGlobalt` gir det beste treffet per sted, og lar ord som ikke står i
 teksten, stå i navnet eller koden til siden: «sertralin metabolisme» finner
 kortet «Metabolisme» på sertralinsiden. Aliasene til kodene gis av appen fra
@@ -628,10 +638,13 @@ NDRI · analytt HBUP · hydroksybupropion (kun aktiv metabolitt)».
 rangering. Indeksen hentes når appen har tid til overs etter at den er
 åpnet (`useNaarLedig`), eller første gang noen søker før det
 (`useSokeindeks`), og hentes på nytt neste gang når en administrator går ut
-av en fagside, der noe kan være publisert. Det kan søkes før alt er
-hentet: `lesSokeindeks` gir først en indeks over stoffregisteret, så over
-faginnholdet på sidene, og til sist med preparatene, interaksjonene og
-ClinPGx, som er det tregeste å hente. Hentingen går i bakgrunnen og står
+av en fagside, der noe kan være publisert. Når fagsøket får fokus og
+indeksen er eldre enn ti minutter, ses det etter endringer, og manglet en
+kilde, prøves den igjen etter et halvt minutt. Det kan søkes før alt er
+hentet: `lesSokeindeks` gir først en indeks over stoffregisteret, så over det
+som var lagret fra forrige gang, og så en ny hver gang en kilde er lest. Kunne
+en kilde ikke hentes, sier rullegardinen og søkesiden nøyaktig hva søket
+mangler, med «Prøv igjen». Hentingen går i bakgrunnen og står
 ikke i lasteindikatoren (`src/auth/aktivitet.ts`); søket viser selv at mer
 er på vei. Utdraget til et treff lages først når treffet vises, så et kort
 søk som treffer det meste, ikke blir tregt. `treffgruppe` deler treffene i

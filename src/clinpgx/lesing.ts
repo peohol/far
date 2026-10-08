@@ -131,6 +131,44 @@ export interface Farmakogenetikkleser {
 /** Flest kjemikalier `les_farmakogenetikk` tar imot i ett kall (migrasjonen `*_clinpgx.sql`). */
 export const MAKS_KJEMIKALIER = 200
 
+/**
+ * Utvalget for kjemikaliene fra `funksjon`, i så få kall som grensen i
+ * databasen tillater.
+ */
+async function lesUtvalg(
+  klient: SupabaseClient,
+  funksjon: 'les_farmakogenetikk' | 'les_farmakogenetikk_sok',
+  kjemikalier: readonly string[],
+): Promise<Farmakogenetikkutvalg> {
+  if (kjemikalier.length === 0) return TOMT_FARMAKOGENETIKKUTVALG
+  const deler: string[][] = []
+  for (let i = 0; i < kjemikalier.length; i += MAKS_KJEMIKALIER) deler.push(kjemikalier.slice(i, i + MAKS_KJEMIKALIER))
+  const svar = await Promise.all(
+    deler.map(async (del) => {
+      const { data, error } = await klient.rpc(funksjon, { kjemikalie_ider: del })
+      if (error) throw new Error(error.message)
+      return lesFarmakogenetikkutvalg(data)
+    }),
+  )
+  if (svar.length === 1) return svar[0]!
+  const unike = <T extends { id: string }>(lister: T[][]) => [...new Map(lister.flat().map((x) => [x.id, x])).values()]
+  return {
+    ...svar[0]!,
+    kjemikalier: unike(svar.map((s) => s.kjemikalier)),
+    retningslinjer: unike(svar.map((s) => s.retningslinjer)),
+    preparatomtaler: unike(svar.map((s) => s.preparatomtaler)),
+    kliniske: unike(svar.map((s) => s.kliniske)),
+  }
+}
+
+/**
+ * Det søket i hele kunnskapsbasen leser: utvalget uten feltene søket ikke
+ * bruker (allelfenotypene, legemidlene og litteraturen, `les_farmakogenetikk_sok`).
+ */
+export function lagFarmakogenetikksok(klient: SupabaseClient): Pick<Farmakogenetikkleser, 'les'> {
+  return { les: (kjemikalier) => lesUtvalg(klient, 'les_farmakogenetikk_sok', kjemikalier) }
+}
+
 export function lagFarmakogenetikkleser(klient: SupabaseClient, hent: typeof fetch = (...a) => fetch(...a)): Farmakogenetikkleser {
   async function innlogget(): Promise<Record<string, string>> {
     const { data } = await klient.auth.getSession()
@@ -149,27 +187,7 @@ export function lagFarmakogenetikkleser(klient: SupabaseClient, hent: typeof fet
   }
 
   return {
-    les: async (kjemikalier) => {
-      if (kjemikalier.length === 0) return TOMT_FARMAKOGENETIKKUTVALG
-      const deler: string[][] = []
-      for (let i = 0; i < kjemikalier.length; i += MAKS_KJEMIKALIER) deler.push(kjemikalier.slice(i, i + MAKS_KJEMIKALIER))
-      const svar = await Promise.all(
-        deler.map(async (del) => {
-          const { data, error } = await klient.rpc('les_farmakogenetikk', { kjemikalie_ider: del })
-          if (error) throw new Error(error.message)
-          return lesFarmakogenetikkutvalg(data)
-        }),
-      )
-      if (svar.length === 1) return svar[0]!
-      const unike = <T extends { id: string }>(lister: T[][]) => [...new Map(lister.flat().map((x) => [x.id, x])).values()]
-      return {
-        ...svar[0]!,
-        kjemikalier: unike(svar.map((s) => s.kjemikalier)),
-        retningslinjer: unike(svar.map((s) => s.retningslinjer)),
-        preparatomtaler: unike(svar.map((s) => s.preparatomtaler)),
-        kliniske: unike(svar.map((s) => s.kliniske)),
-      }
-    },
+    les: (kjemikalier) => lesUtvalg(klient, 'les_farmakogenetikk', kjemikalier),
     sok: async (tekst) => {
       if (tekst.trim().length < 2) return []
       const res = await hent(`/api/clinpgx-sok?q=${encodeURIComponent(tekst.trim())}`, { headers: await innlogget() })

@@ -34,6 +34,23 @@ const VISTE_RELEVANSER = new Map([
 
 export type Relevansgrad = 'unnga' | 'forholdsregler'
 
+/** Relevansgraden for FESTs relevanskode, eller `null` for en relevans som ikke vises. */
+export function relevansgrad(kode: string | null | undefined): Relevansgrad | null {
+  return VISTE_RELEVANSER.get(kode as '1' | '2') ?? null
+}
+
+const REKKEFOLGE: readonly Relevansgrad[] = [...VISTE_RELEVANSER.values()]
+
+/** Rekkefølgen interaksjonene vises i: de alvorligste først, så alfabetisk. */
+export function sammenlignInteraksjoner(
+  a: Pick<Interaksjon, 'id' | 'relevans' | 'med'>,
+  b: Pick<Interaksjon, 'id' | 'relevans' | 'med'>,
+): number {
+  return (
+    REKKEFOLGE.indexOf(a.relevans) - REKKEFOLGE.indexOf(b.relevans) || alfabetisk(a.med, b.med) || alfabetisk(a.id, b.id)
+  )
+}
+
 /** Overskriftene håndteringen er delt i, etter implementeringsveiledningen. */
 const HANDTERINGSAVSNITT = ['Dosetilpasning', 'Justering av administrering', 'Monitorering', 'Legemiddelalternativer']
 
@@ -122,7 +139,7 @@ export function handteringsavsnitt(tekst: string | null): Handteringsavsnitt[] {
 export function byggInteraksjoner(utvalg: Interaksjonsutvalg, nokler: Interaksjonsnokler): Interaksjonsoversikt {
   const interaksjoner: Interaksjon[] = []
   for (const i of utvalg.interaksjoner) {
-    const relevans = VISTE_RELEVANSER.get(i.relevans?.kode as '1' | '2')
+    const relevans = relevansgrad(i.relevans?.kode)
     if (!relevans) continue
     const egen = i.substansgrupper.findIndex((g) => g.substanser.some((s) => treffer(s, nokler)))
     if (egen === -1) continue
@@ -144,11 +161,7 @@ export function byggInteraksjoner(utvalg: Interaksjonsutvalg, nokler: Interaksjo
       }),
     })
   }
-  const rekkefolge = [...VISTE_RELEVANSER.values()]
-  interaksjoner.sort(
-    (a, b) =>
-      rekkefolge.indexOf(a.relevans) - rekkefolge.indexOf(b.relevans) || alfabetisk(a.med, b.med) || alfabetisk(a.id, b.id),
-  )
+  interaksjoner.sort(sammenlignInteraksjoner)
   const ikkeVurdert = new Set(
     utvalg.ikke_vurdert.flatMap((v) =>
       v.atc.filter((k) => k.kode && nokler.atc.some((a) => a.startsWith(k.kode))).map((k) => `${k.tekst} (${k.kode})`),
