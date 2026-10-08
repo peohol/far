@@ -616,7 +616,11 @@ som en test kontrollerer for hvert virkestoff i FEST-utdraget;
 og `les_cpic` CPIC-dataene. Det som er lest, lagres i nettleseren
 (`src/auth/mellomlager.ts`, tømmes ved utlogging), og `sokedata_versjoner`
 sier hvilke kilder som er endret siden: versjonen for sidene telles opp av en
-trigger når noe publisert endres (utkast teller ikke), og de andre følger
+trigger når noe publisert endres (utkast teller ikke). Den er sekvensens
+`last_value`, og sekvensen må være tatt i bruk (`is_called`): det første
+`nextval` på en ny sekvens lar `last_value` stå. Den tas derfor i bruk med
+ett `nextval` i en egen migrasjon (`*_sokedata_versjon_forste_endring.sql`),
+og en ny sekvens med samme rolle må gjøre det samme. De andre følger
 synkroniseringene. Bare det som er endret, leses på nytt, og et nytt bygg av
 appen leser alt. Feiler en kilde, prøves den to ganger til; feiler den
 fortsatt, brukes det lagrede, og ellers står kilden i `mangler`, mens de
