@@ -67,6 +67,7 @@ import { lagLegemiddelleser, lagLegemiddelsok } from './legemiddeldata/lesing'
 import { lagFarmakogenetikkleser, lagFarmakogenetikksok } from './clinpgx/lesing'
 import { lagCpicleser } from './cpic/lesing'
 import { lagBivirkningsleser } from './bivirkninger/lesing'
+import { lagKjemileser } from './kjemi/lesing'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
 import { useHenting } from './hooks/useHenting'
@@ -163,6 +164,7 @@ export default function App() {
       farmakogenetikk: lagFarmakogenetikkleser(klient()),
       cpic: lagCpicleser(klient()),
       bivirkninger: lagBivirkningsleser(klient()),
+      kjemi: lagKjemileser(klient()),
     }),
     [profil.role],
   )

@@ -1,9 +1,9 @@
 # Endringer og driftstatus for datakildene
 
-Leses når noe som har med endringsloggen for de farmakogenetiske datakildene
-eller driftstatusen for FEST, ClinPGx og CPIC skal endres: hva som regnes som
-en klinisk endring, hva som logges, eller panelet «Datakilder». Kildene selv
-står i `docs/legemiddeldata.md`, `docs/clinpgx.md` og `docs/cpic.md`.
+Leses når noe som har med endringsloggen for datakildene eller driftstatusen
+for FEST, ClinPGx, CPIC og PubChem skal endres: hva som regnes som en klinisk
+endring, hva som logges, eller panelet «Datakilder». Kildene selv står i
+`docs/legemiddeldata.md`, `docs/clinpgx.md`, `docs/cpic.md` og `docs/kjemi.md`.
 
 Formålet er at en administrator skal se om synkroniseringene går som de skal,
 og hva som faktisk er endret i kildene siden forrige vellykkede henting — og
@@ -12,7 +12,7 @@ merknad. Ingenting her vises for sluttbrukerne, og det sendes ingen varsler.
 
 ## Hva som logges
 
-Triggere på datatabellene i skjemaene `clinpgx` og `cpic` ser radene før og
+Triggere på datatabellene i skjemaene `clinpgx`, `cpic` og `pubchem` ser radene før og
 etter hvert bytte og skriver til `datakilder.endringer`
 (`supabase/migrations/*_datakilder_endringer.sql`). Synkroniseringsfunksjonene
 er ikke endret; alt som bytter inn data, logges likt. Triggerne kjører i samme
@@ -21,7 +21,7 @@ sammen), etterlater ingenting i loggen.
 
 | Art | Når |
 | --- | --- |
-| `grunnlag` | Første gang noe hentes: et kjemikalie i ClinPGx, en type i CPIC. Én føring med antallet, ikke én per objekt |
+| `grunnlag` | Første gang noe hentes: et kjemikalie i ClinPGx, en type i CPIC, forbindelsene i PubChem. Én føring med antallet, ikke én per objekt |
 | `ny` | Et objekt som ikke fantes, eller som var utgått og er tilbake (`spor.tilbake`). I ClinPGx: en annotasjon som er kommet til et kjemikalie |
 | `endret` | Et objekt der noe er ulikt: de leste dataene, eller bare rådataene |
 | `fjernet` | Et objekt som er borte fra kilden (CPIC: merket utgått). I ClinPGx: en annotasjon som ikke lenger gjelder kjemikaliet |
@@ -35,7 +35,9 @@ navnet), feltene som er endret, verdiene før og etter i de feltene, og `spor`:
   dato, type og tekst, f.eks. «Updated recommendation»);
 - CPIC: CPICs versjonsnummer for raden før og etter. Releasen og
   skjemaversjonen står på kjøringen. CPICs egen endringslogg synkroniseres som
-  typen `endring`, og nye føringer der logges som metadata.
+  typen `endring`, og nye føringer der logges som metadata;
+- PubChem: parserversjonene før og etter, når OUSFARs lesing er endret. Er
+  svaret fra PubChem det samme og bare lesingen ny, er endringen metadata.
 
 Rådataene ligger fortsatt i tabellene, og kjøringene i
 `clinpgx.synkroniseringer` og `cpic.synkroniseringer`.
@@ -70,6 +72,7 @@ Metadata er i dag:
 | CPIC | genresultat_oppslag | `beskrivelse` |
 | CPIC | allel | `pmid` |
 | CPIC | alleldefinisjon, publikasjon, term, endring | alt |
+| PubChem | forbindelse | `tittel`, `iupac`, `monoisotopisk_masse` |
 
 Alt annet er klinisk: anbefalingene med betingelser, klassifisering,
 populasjon og kommentarer; genresultatene og diplotypene; allelfunksjonene;
@@ -90,6 +93,10 @@ ufullstendig:
   minst fire annotasjoner kan ikke falle under halvparten, og et svar med ett
   objekt som ikke kan leses eller har en annen form enn ventet
   (strukturkontrollen), byttes ikke inn.
+- **PubChem** (`docs/kjemi.md`): det som består kontrollen, i én
+  transaksjon. En forbindelse der PubChem oppgir en annen InChIKey eller formel
+  enn koblingen ble kontrollert mot, byttes ikke inn (konflikt), og mangler
+  mange i svaret eller kan de ikke leses, byttes ingenting inn.
 - **FEST** (`docs/legemiddeldata.md`): alt eller ingenting. Hver type må ha
   minst 80 % av radene fra før, og strukturkontrollen avviser et uttrekk der
   sentrale felt eller koblinger plutselig er borte fra nesten alle postene.
@@ -104,7 +111,7 @@ borte — er en `fjernet`-føring, klinisk, og synes i panelet.
 ## Driftstatusen
 
 `datakilder_status(antall)` (bare administratorer; andre får 42501) gir de ti
-siste kjøringene per kilde (FEST, ClinPGx, CPIC) med antallet kliniske
+siste kjøringene per kilde (FEST, ClinPGx, CPIC, PubChem) med antallet kliniske
 endringer, metadata og grunnlag (FEST: radene i `antall`), siste kjente release og versjon per kilde (fra en vellykket kjøring,
 også når den siste ikke fikk dem oppgitt), og de siste endringene per kilde
 (200 som standard, høyst 1000), så en stor release i den ene kilden ikke
@@ -118,21 +125,23 @@ I appen: adminmenyen → «Datakilder» (bare for administratorer,
   delvis (med feilene per kjemikalie), har stått uferdig i over en halvtime,
   eller når siste vellykkede henting er eldre enn intervallet og ett døgn til.
   Intervallet leses av cron-uttrykket i `vercel.json`: for FEST hver natt, så
-  to døgn; for ClinPGx og CPIC hver uke, så åtte døgn. Meldingen ved en feil
+  to døgn; for ClinPGx, CPIC og PubChem hver uke, så åtte døgn. Meldingen ved en feil
   følger måten kilden byttes inn på (`etterFeil` og `beholdt` i
   `KILDEOPPSETT`). I FEST og CPIC står dataene fra siste vellykkede henting;
   for FEST sier panelet at OUSFAR fortsatt bruker siste gyldige FEST-data. I
   ClinPGx kan kjemikalier som ble hentet før feilen, være oppdatert;
 - siste vellykkede henting, releasen (CPIC) og versjonen: parserversjonen
-  (ClinPGx), skjemaversjonen (CPIC) eller datoen DMP laget uttrekket (FEST);
+  (ClinPGx, PubChem), skjemaversjonen (CPIC) eller datoen DMP laget uttrekket (FEST);
+- «Til vurdering»: det siste vellykkede kjøring ikke kunne koble sikkert
+  (`antall.uavklarte`), i PubChem forbindelsene uten verifisert kobling;
 - de siste kjøringene, med hvem som utløste dem (den nattlige eller ukentlige
   jobben, eller en administrator);
-- ClinPGx og CPIC: de kliniske endringene, nyest først, med feltene, sporet og
+- ClinPGx, CPIC og PubChem: de kliniske endringene, nyest først, med feltene, sporet og
   verdiene før og etter; metadataene når de slås på. FEST logger ikke hver
   endring; kjøringene viser hvor mange rader som ble nye, endret og utgått;
 - «Hent nå», som gjør det samme som den planlagte jobben med
   administratorens innlogging (`POST /api/legemiddeldata-synk`,
-  `/api/clinpgx-synk` eller `/api/cpic-synk`). `CRON_SECRET` og
+  `/api/clinpgx-synk`, `/api/cpic-synk` eller `/api/pubchem-synk`). `CRON_SECRET` og
   `SUPABASE_SECRET_KEY` blir på serveren.
 
 ## Koden
@@ -141,9 +150,10 @@ I appen: adminmenyen → «Datakilder» (bare for administratorer,
 | --- | --- |
 | `supabase/migrations/*_datakilder_endringer.sql` | Skjemaet `datakilder`, reglene, triggerne og `datakilder_status` |
 | `supabase/migrations/*_fest_i_datakilder.sql` | FEST i `datakilder_status`, og `utlost_av` på FEST-kjøringene |
+| `supabase/migrations/*_pubchem.sql` | PubChem i reglene, loggen og `datakilder_status` |
 | `src/datakilder/status.ts` | Lesingen av statusen, vurderingen, tekstene for en endring, «Hent nå» |
 | `src/components/konto/Datakilder.tsx`, `src/styles/datakilder.css` | Panelet |
-| `src/__tests__/clinpgx.test.ts`, `cpic.test.ts` | Endringsloggen, mot en ekte database, for hver kilde |
+| `src/__tests__/clinpgx.test.ts`, `cpic.test.ts`, `kjemi.test.ts` | Endringsloggen, mot en ekte database, for hver kilde |
 | `src/__tests__/datakilder.test.ts`, `datakildevisning.test.tsx` | Lesefunksjonen, tilgangen, vurderingen og panelet |
 | `src/__tests__/legemiddeldata.test.ts` | FEST-feil i statusen, og «Hent nå» for FEST |
 

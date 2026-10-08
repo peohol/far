@@ -51,6 +51,7 @@ import type { Farmakogenetikkleser, Farmakogenetikkutvalg } from '../clinpgx/les
 import { lesDiplotypegrunnlag, type Cpicleser, type Cpicutvalg, type Diplotypegrunnlag } from '../cpic/lesing'
 import type { Anbefaling, Betingelse, Gen, Par } from '../cpic/modell'
 import type { Bivirkningsleser } from '../bivirkninger/lesing'
+import { lesKjemiutvalg } from '../kjemi/lesing'
 import type { Bivirkning, Bivirkningsdata } from '../bivirkninger/modell'
 import { thcRegelsettutgave } from './hjelp/thcgrunnlag'
 
@@ -3430,5 +3431,47 @@ describe('bivirkningene fra preparatomtalene', () => {
     await user.click(screen.getByRole('button', { name: 'Rediger' }))
     await apneSkuff(user, 'Bivirkninger')
     expect(await screen.findByText(/Fikk ikke hentet bivirkningene\. Syntetisk feil/)).toBeTruthy()
+  })
+})
+
+describe('kjemiske grunndata', () => {
+  const pubchemdata = (cid: number, tittel: string, formel: string, molvekt: string, inchikey: string) => ({
+    cid,
+    data: { cid, tittel, formel, molvekt, inchikey, iupac: null, monoisotopisk_masse: null, ladning: 0, enheter: 1, stereo: {} },
+    sist_hentet_kl: '2026-10-08T03:15:00Z',
+  })
+
+  function kjemikilde(forbindelser: ReturnType<typeof pubchemdata>[]) {
+    const les = vi.fn(async () => lesKjemiutvalg({ kilde: 'PubChem', forbindelser }))
+    return { ...kilde(), kjemi: { les } }
+  }
+
+  it('viser stoffet og metabolitten med formel, molekylvekt og lenke til PubChem', async () => {
+    const user = userEvent.setup()
+    const k = kjemikilde([
+      pubchemdata(2160, 'Amitriptyline', 'C20H23N', '277.4', 'KRMDCWKBEZIMAB-UHFFFAOYSA-N'),
+      pubchemdata(4543, 'Nortriptyline', 'C19H21N', '263.4', 'PHVGLTMQBUFIQQ-UHFFFAOYSA-N'),
+    ])
+    vis('amitriptylin', k)
+    expect(await screen.findByText('Amitriptylin 277,4 g/mol · Nortriptylin 263,4 g/mol')).toBeTruthy()
+    expect(k.kjemi.les).toHaveBeenCalledWith(['2160', '4543'])
+    await apneSkuff(user, 'Kjemiske grunndata')
+    const seksjon = screen.getByRole('region', { name: 'Kjemiske grunndata' })
+    const rader = within(seksjon).getAllByRole('row').slice(1)
+    expect(rader.map((r) => within(r).getByRole('rowheader').textContent)).toEqual(['Amitriptylin', 'NortriptylinMetabolitt'])
+    expect(within(rader[1]!).getByText('263,4 g/mol')).toBeTruthy()
+    const lenke = within(rader[1]!).getByRole('link', { name: /CID 4543/ })
+    expect(lenke.getAttribute('href')).toBe('https://pubchem.ncbi.nlm.nih.gov/compound/4543')
+    // Formelen med tallene senket.
+    expect(rader[0]!.querySelectorAll('sub')).toHaveLength(2)
+    expect(within(seksjon).getByText('PubChem')).toBeTruthy()
+  })
+
+  it('viser forbindelsene også før dataene er hentet', async () => {
+    const user = userEvent.setup()
+    vis('amitriptylin', kjemikilde([]))
+    await apneSkuff(user, 'Kjemiske grunndata')
+    const seksjon = screen.getByRole('region', { name: 'Kjemiske grunndata' })
+    expect(within(seksjon).getAllByText('Hentes fra PubChem ved neste oppdatering.')).toHaveLength(2)
   })
 })

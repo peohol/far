@@ -37,7 +37,10 @@ import { clinpgxlitteratur, clinpgxreferanser } from '../../clinpgx/referanser'
 import { cpicreferanser } from '../../cpic/referanser'
 import { FARMAKOGENETIKKPANEL, kobledeKjemikalier, koblingsgrunnlag } from '../../clinpgx/stoffside'
 import { Farmakogenetikkpanel, farmakogenetikksoketekster } from './Farmakogenetikkpanel'
-import { useBivirkninger, useCpic, useFarmakogenetikk } from './useFarmakogenetikk'
+import { useBivirkninger, useCpic, useFarmakogenetikk, useKjemi } from './useFarmakogenetikk'
+import { Kjemipanel } from './Kjemipanel'
+import { kjemisoketekster } from '../../kjemi/stoffside'
+import { pubchemreferanser } from '../../kjemi/referanser'
 import { Bivirkningspanel, bivirkningssoketekster, harBivirkninger } from './Bivirkningspanel'
 import { BIVIRKNINGSPANEL, bivirkningsreferanser } from '../../bivirkninger/referanser'
 import { visningForKort } from '../../bivirkninger/stoffside'
@@ -166,6 +169,7 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
   const cpic = useCpic(kjemikalier)
   const cpictilstand = cpic.tilstand
   const bivirkninger = useBivirkninger(slug).tilstand
+  const kjemi = useKjemi(slug)
   // Visningen av bivirkningene styrer også hvilke kort søket på siden peker på.
   const [bivirkningsvisning, setBivirkningsvisning] = useBevart<Visning>('bivirkningsvisning', 'frekvens')
   // Redaksjonelle og automatiske referanser (FEST, ClinPGx, CPIC og preparatomtalene) nummereres sammen.
@@ -185,9 +189,10 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
           ),
           clinpgxreferanser(pgx.status === 'klar' ? pgx.utvalg : null, pgx.status === 'klar' ? pgx.visning : null),
           bivirkningsreferanser(bivirkninger.status === 'klar' ? bivirkninger.utvalg : null),
+          pubchemreferanser(kjemi),
         ),
       ),
-    [modell, legemidler, interaksjoner, pgx, cpictilstand, bivirkninger],
+    [modell, legemidler, interaksjoner, pgx, cpictilstand, bivirkninger, kjemi],
   )
   const grunnlag = useMemo(
     () => koblingsgrunnlag(legemidler.status === 'klar' ? legemidler.utvalg : null, koblet),
@@ -204,9 +209,10 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
           ...interaksjonssoketekster(interaksjoner),
           ...farmakogenetikksoketekster(pgx, cpictilstand),
           ...bivirkningssoketekster(bivirkninger, bivirkningsvisning),
+          ...kjemisoketekster(kjemi),
         ],
       ),
-    [slug, navn, kjent, analytter, modell, legemidler, interaksjoner, pgx, cpictilstand, bivirkninger, bivirkningsvisning],
+    [slug, navn, kjent, analytter, modell, legemidler, interaksjoner, pgx, cpictilstand, bivirkninger, bivirkningsvisning, kjemi],
   )
   const ord = useMemo(() => sokeord(sporring), [sporring])
 
@@ -220,7 +226,11 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
     }),
     [redigerer, referansebase, handlinger.opprettReferanse, handlinger.gjenopprett],
   )
-  const harInnhold = modell.paneler.size > 0 || Object.keys(modell.panelreferanser).length > 0 || harBivirkninger(bivirkninger)
+  const harInnhold =
+    modell.paneler.size > 0 ||
+    Object.keys(modell.panelreferanser).length > 0 ||
+    harBivirkninger(bivirkninger) ||
+    kjemi.rader.some((r) => r.data)
 
   // En side som åpnes, begynner øverst, med fokus på navnet — så tastaturet og
   // skjermleseren står der siden begynner, og ikke igjen i menyen eller modulen.
@@ -389,6 +399,8 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
                     return <Mekanismepanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
                   case 'tabell':
                     return <Tabellpanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} />
+                  case 'kjemi':
+                    return <Kjemipanel key={definisjon.nokkel} definisjon={definisjon} kontekst={kontekst} visning={kjemi} />
                 }
               })}
 

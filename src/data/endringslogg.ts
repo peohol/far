@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.86.0',
+    dato: '2026-10-08',
+    sammendrag: 'Fagsidene viser kjemiske grunndata fra PubChem',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Ny seksjon «Kjemiske grunndata» på fagsidene: molekylformel, molekylvekt og identifikatorene i PubChem for stoffet og metabolittene laboratoriene måler, for eksempel desmetylcitalopram på citalopram-siden og THC-OH og THC-COOH på THC-siden.',
+      'Hver forbindelse er kontrollert mot en uavhengig kilde før den ble koblet til PubChem. Desmetylklomipramin kunne ikke bekreftes og står uten tall til den er vurdert.',
+      'Dataene hentes fra PubChem hver uke. Oppgir PubChem plutselig en annen identitet for en forbindelse, beholdes dataene fra før til koblingen er vurdert på nytt.',
+      'Administratorer ser PubChem i «Datakilder», med siste henting, endringer, «Hent nå» og det som venter på vurdering.',
+    ],
+  },
+  {
     versjon: '1.85.1',
     dato: '2026-10-08',
     sammendrag: 'Søket ser den første publiserte endringen etter oppdateringen',

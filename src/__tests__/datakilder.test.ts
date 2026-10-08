@@ -192,7 +192,7 @@ describe('vurderingen', () => {
     expect(intervallDogn('30 2 * * 1')).toBe(7)
     expect(intervallDogn('15 4 * * *')).toBe(1)
     expect(intervallDogn('0 3 1 * *')).toBeNull()
-    expect(kildeintervaller()).toEqual({ fest: 1, clinpgx: 7, cpic: 7 })
+    expect(kildeintervaller()).toEqual({ fest: 1, clinpgx: 7, cpic: 7, pubchem: 7 })
     expect([jobbnavn(1), jobbnavn(7), jobbnavn(null)]).toEqual(['Nattlig jobb', 'Ukentlig jobb', 'Planlagt jobb'])
   })
 

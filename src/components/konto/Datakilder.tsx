@@ -42,8 +42,8 @@ const MAKS_ENDRINGER = 50
 
 /**
  * Driftstatusen for datakildene, for administratorer: hvordan siste henting
- * fra FEST, ClinPGx og CPIC gikk, de siste kjøringene, og hva som er endret —
- * i ClinPGx og CPIC de kliniske endringene først, metadataene på
+ * fra FEST, ClinPGx, CPIC og PubChem gikk, de siste kjøringene, og hva som er endret —
+ * i ClinPGx, CPIC og PubChem de kliniske endringene først, metadataene på
  * forespørsel; i FEST antallet nye, endrede og utgåtte rader. «Hent nå» ber
  * serveren hente med en gang, som den planlagte jobben.
  *
@@ -97,8 +97,8 @@ export function Datakilder({ apen, onLukk, leser: egenLeser }: { apen: boolean; 
   return (
     <Modallag apen={apen} tittel="Datakilder" ikon="reset" bred onLukk={onLukk}>
       <p className="datakilder__ingress">
-        Legemiddeldata fra FEST og farmakogenetiske data fra ClinPGx og CPIC: hvordan siste henting gikk, og hva som
-        er endret siden forrige. Ingenting her vises for andre enn administratorer.
+        Legemiddeldata fra FEST, farmakogenetiske data fra ClinPGx og CPIC og kjemiske grunndata fra PubChem: hvordan
+        siste henting gikk, og hva som er endret siden forrige. Ingenting her vises for andre enn administratorer.
       </p>
       <label className="datakilder__valg">
         <input type="checkbox" checked={metadata} onChange={(e) => setMetadata(e.target.checked)} />
@@ -178,6 +178,15 @@ function Kilde({
           <dd>{v.versjon ? (visVersjon?.(v.versjon) ?? v.versjon) : '–'}</dd>
         </div>
       </dl>
+
+      {(v.sisteVellykkede?.uavklarte?.length ?? 0) > 0 && (
+        <details className="datakilde__bolk">
+          <summary>Til vurdering ({v.sisteVellykkede!.uavklarte!.length})</summary>
+          <p className="datakilder__tomt">
+            Ikke koblet sikkert til {v.navn}, så ingen data er hentet for dem: {v.sisteVellykkede!.uavklarte!.join(', ')}.
+          </p>
+        </details>
+      )}
 
       {v.kjoringer.length > 0 && (
         <details className="datakilde__bolk">
