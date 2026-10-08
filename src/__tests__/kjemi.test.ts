@@ -45,6 +45,8 @@ const SVAR = JSON.parse(readFileSync(new URL('./data/pubchem/egenskaper.json', i
 }
 const RADER = SVAR.PropertyTable.Properties
 const rad = (cid: number) => RADER.find((r) => r.CID === cid)!
+/** En telling for kjøringer testene avslutter selv. */
+const TELLING = { forbindelser: 1, feilet: 0, konflikter: 0, strukturavvik: 0, uavklarte: [] }
 
 /* --- Registeret ----------------------------------------------------------- */
 
@@ -335,13 +337,14 @@ describe('synkroniseringen', () => {
       [2771, 'C20H21FN2O', '324.4'],
       [162180, 'C19H19FN2O', '310.4'],
     ])
-    expect(utvalg.kontrollert_kl).not.toBeNull()
+    expect(utvalg.forbindelser.every((f) => f.sist_hentet_kl)).toBe(true)
     // Rådataene går aldri til nettleseren.
     expect(JSON.stringify(utvalg)).not.toContain('IUPACName')
   })
 
   it('beholder dataene fra før når PubChem oppgir en annen identitet, og bytter inn resten', async () => {
     await synkroniserKjemi({ lager: lager(), api: falskApi(), register: testregister() })
+    await db.exec(`update pubchem.forbindelser set sist_hentet_kl = '2026-10-01T03:15:00Z'`)
     const resultat = await synkroniserKjemi({
       lager: lager(),
       api: falskApi((rader) => rader.map((r) => (r.CID === 2771 ? { ...r, InChIKey: 'WSEQXVZVJXJVFP-HXUWFJFHSA-N', MolecularWeight: '999.9' } : r))),
@@ -351,8 +354,12 @@ describe('synkroniseringen', () => {
     expect('feil' in resultat && resultat.feil).toContain(
       'citalopram (CID 2771): PubChem oppgir nå InChIKey WSEQXVZVJXJVFP-HXUWFJFHSA-N, men koblingen ble kontrollert mot WSEQXVZVJXJVFP-UHFFFAOYSA-N.',
     )
-    const [citalopram] = (await leser.les(['2771'])).forbindelser
-    expect(citalopram!.data.molvekt).toBe('324.4')
+    const etter = await leser.les(['2771', '162180'])
+    expect(etter.forbindelser[0]!.data.molvekt).toBe('324.4')
+    // Den avviste er ikke kontrollert av kjøringen, så siden lover ikke mer enn den gjorde.
+    expect(new Date(etter.forbindelser[0]!.sist_hentet_kl!).toISOString()).toBe('2026-10-01T03:15:00.000Z')
+    expect(new Date(etter.forbindelser[1]!.sist_hentet_kl!).getTime()).toBeGreaterThan(Date.parse('2026-10-02'))
+    expect(new Date(byggKjemivisning('citalopram', etter).kontrollert_kl!).toISOString()).toBe('2026-10-01T03:15:00.000Z')
     const [rad] = (await db.query<{ feil: string }>('select feil from pubchem.forbindelser where cid = 2771')).rows
     expect(rad!.feil).toContain('Dataene fra før står')
   })
@@ -404,12 +411,12 @@ describe('synkroniseringen', () => {
 
   it('logger en endring som bare kommer av en ny lesing som metadata, med parserversjonene', async () => {
     const l = lager()
-    const synk = await l.start('manuell')
     const lest = lesPubchemrad(rad(444))
     if (!('data' in lest)) throw new Error('kunne ikke lese')
-    await l.lagre(synk, [{ cid: 444, data: lest.data, raa: rad(444) }], 1)
-    await l.lagre(synk, [{ cid: 444, data: { ...lest.data, iupac: null, ladning: 1 }, raa: rad(444) }], 2)
-    await l.fullfor(synk, { forbindelser: 1, hentet: 1, endret: 1, feilet: 0, konflikter: 0, strukturavvik: 0, uavklarte: [] }, 2)
+    for (const [data, parserversjon] of [[lest.data, 1], [{ ...lest.data, iupac: null, ladning: 1 }, 2]] as const) {
+      const synk = await l.start('manuell')
+      await l.fullfor(synk, { forbindelser: [{ cid: 444, data, raa: rad(444) }], feil: [], resultat: TELLING }, parserversjon)
+    }
     const [, ny] = await endringer()
     expect(ny).toEqual(
       expect.objectContaining({ art: 'endret', niva: 'metadata', felt: ['iupac', 'ladning'], spor: { parserversjon: { foer: 1, etter: 2 } } }),
@@ -419,11 +426,27 @@ describe('synkroniseringen', () => {
   it('avviser data med feil form, og bare én kjøring om gangen', async () => {
     const l = lager()
     const synk = await l.start('cron')
-    await expect(l.lagre(synk, [{ cid: 444, data: { cid: 444, formel: 'C', molvekt: 'tung', inchikey: 'x' } as never, raa: null }], 1)).rejects.toThrow(
-      'Forbindelsene har feil form.',
-    )
+    const feilForm = { cid: 444, data: { cid: 444, formel: 'C', molvekt: 'tung', inchikey: 'x' } as never, raa: null }
+    await expect(l.fullfor(synk, { forbindelser: [feilForm], feil: [], resultat: TELLING }, 1)).rejects.toThrow('Forbindelsene har feil form.')
     await expect(l.start('cron')).rejects.toThrow('En synkronisering fra PubChem pågår allerede.')
     await l.avbryt(synk, 'stoppet')
+  })
+
+  it('bytter inn, noterer feilene og avslutter kjøringen i én transaksjon', async () => {
+    const l = lager()
+    const synk = await l.start('cron')
+    const lest = lesPubchemrad(rad(444))
+    if (!('data' in lest)) throw new Error('kunne ikke lese')
+    // Feilene har feil form: da er heller ikke forbindelsen som besto, byttet inn.
+    await expect(
+      l.fullfor(synk, { forbindelser: [{ cid: 444, data: lest.data, raa: rad(444) }], feil: [{ cid: -1, feil: '' }], resultat: TELLING }, 1),
+    ).rejects.toThrow('Feilene har feil form.')
+    expect((await db.query('select 1 from pubchem.forbindelser')).rows).toHaveLength(0)
+    const [kjoring] = (await db.query<{ status: string }>('select status from pubchem.synkroniseringer where id = $1', [synk])).rows
+    expect(kjoring!.status).toBe('pagar')
+    await l.avbryt(synk, 'stoppet')
+    const [etter] = (await db.query<{ status: string }>('select status from pubchem.synkroniseringer where id = $1', [synk])).rows
+    expect(etter!.status).toBe('feilet')
   })
 
   it('står i «Datakilder» med kjøringene, endringene og forbindelsene som venter på vurdering', async () => {
@@ -467,7 +490,6 @@ describe('endepunktet', () => {
 describe('visningen på fagsidene', () => {
   const utvalg = lesKjemiutvalg({
     kilde: 'PubChem',
-    kontrollert_kl: '2026-10-08T03:15:00Z',
     forbindelser: [2771, 162180].map((cid) => {
       const lest = lesPubchemrad(rad(cid))
       return { cid, data: 'data' in lest ? lest.data : null, sist_hentet_kl: '2026-10-08T03:15:00Z' }
@@ -513,11 +535,16 @@ describe('visningen på fagsidene', () => {
     expect(panelreferanser).toEqual({ [KJEMIPANEL]: [PUBCHEM_KILDE] })
     expect(referanser[0]!.automatisk).toEqual({ kilde: 'PubChem', opphav: 'Kjemiske grunndata fra PubChem, sist kontrollert 8. oktober 2026' })
     expect(pubchemreferanser(byggKjemivisning('citalopram', null)).referanser).toEqual([])
+    // Datoen er den eldste av forbindelsene siden viser.
+    const eldre = { ...utvalg, forbindelser: [utvalg.forbindelser[0]!, { ...utvalg.forbindelser[1]!, sist_hentet_kl: '2026-10-01T03:15:00Z' }] }
+    expect(pubchemreferanser(byggKjemivisning('citalopram', eldre)).referanser[0]!.automatisk!.opphav).toBe(
+      'Kjemiske grunndata fra PubChem, sist kontrollert 1. oktober 2026',
+    )
   })
 
   it('hopper over en lagret forbindelse som ikke ser ut som ventet', () => {
     const lest = lesKjemiutvalg({ forbindelser: [{ cid: 1, data: { cid: 1, formel: 'C', molvekt: 'x', inchikey: 'y' } }, { cid: 2, data: null }, 'tull'] })
-    expect(lest).toEqual({ kilde: 'PubChem', kontrollert_kl: null, forbindelser: [] })
+    expect(lest).toEqual({ kilde: 'PubChem', forbindelser: [] })
   })
 })
 

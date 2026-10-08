@@ -19,8 +19,6 @@ export interface Kjemipost {
 
 export interface Kjemiutvalg {
   kilde: string
-  /** Når en synkronisering sist gikk til ende. */
-  kontrollert_kl: string | null
   forbindelser: Kjemipost[]
 }
 
@@ -73,7 +71,7 @@ export function lesKjemiutvalg(svar: unknown): Kjemiutvalg {
       forbindelser.push({ cid: data.cid, data, sist_hentet_kl: tekst(f.sist_hentet_kl), sist_endret_kl: tekst(f.sist_endret_kl) })
     }
   }
-  return { kilde: tekst(o.kilde) ?? 'PubChem', kontrollert_kl: tekst(o.kontrollert_kl), forbindelser }
+  return { kilde: tekst(o.kilde) ?? 'PubChem', forbindelser }
 }
 
 export function lagKjemileser(klient: SupabaseClient): Kjemileser {

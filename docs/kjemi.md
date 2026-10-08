@@ -84,8 +84,9 @@ kontrollerer hver:
   det, er det en **konflikt**: dataene fra før står, og koblingen må vurderes
   på nytt i datafilen.
 
-Det som består, byttes inn i én transaksjon (`pubchem_lagre`); feilen noteres
-på resten (`pubchem_feilet`), og kjøringen blir «delvis». Mangler mer enn to
+Det som består, byttes inn, feilen noteres på resten og kjøringen avsluttes,
+alt i én transaksjon (`pubchem_fullfor_synk`); er noe feilet, blir kjøringen
+«delvis». Går noe galt der, er ingenting byttet inn. Mangler mer enn to
 forbindelser (eller en tidel) i svaret eller kan de ikke leses, tyder det på en
 feil hos PubChem eller et endret format, og da byttes ingenting inn.
 Forbindelsene uten verifisert kobling står i kjøringen (`antall.uavklarte`) og
@@ -105,7 +106,9 @@ Seksjonen «Kjemiske grunndata» (`src/components/stoffside/Kjemipanel.tsx`,
 selve stoffet først, så metabolittene — med molekylformelen, molekylvekten slik
 PubChem oppgir den, CID med lenke og InChIKey. En forbindelse som ikke er koblet
 eller ikke hentet ennå, står med det. PubChem er kilde i referansefeltet, med
-når dataene sist ble kontrollert. Ingenting her redigeres.
+når dataene sist ble kontrollert: den eldste av forbindelsene siden viser, så
+en forbindelse en kjøring avviste, aldri ser nyere kontrollert ut enn den er.
+Ingenting her redigeres.
 
 Nettleseren leser bare kopien (`les_kjemi`), aldri PubChem.
 

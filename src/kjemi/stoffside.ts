@@ -27,7 +27,11 @@ export interface Kjemirad {
 
 export interface Kjemivisning {
   rader: Kjemirad[]
-  /** Når en synkronisering fra PubChem sist gikk til ende. */
+  /**
+   * Når dataene siden viser, sist ble kontrollert mot PubChem: den eldste av
+   * forbindelsene, så datoen aldri lover mer enn det som gjelder alle. En
+   * forbindelse en kjøring avviste, beholder datoen den sist ble godtatt.
+   */
   kontrollert_kl: string | null
 }
 
@@ -41,15 +45,17 @@ export function byggKjemivisning(
   utvalg: Kjemiutvalg | null,
   register: Forbindelsesregister = FORBINDELSER,
 ): Kjemivisning {
-  const hentet = new Map(utvalg?.forbindelser.map((p) => [p.cid, p.data]) ?? [])
-  return {
-    rader: register.forStoff(stoff).map((forbindelse): Kjemirad => {
-      const relasjon = forbindelse.stoffer.find((s) => s.stoff === stoff)!.relasjon
-      const data = forbindelse.pubchem ? (hentet.get(forbindelse.pubchem.cid) ?? null) : null
-      return { forbindelse, relasjon, data, status: data ? 'hentet' : forbindelse.pubchem ? 'ikke_hentet' : 'uavklart' }
-    }),
-    kontrollert_kl: utvalg?.kontrollert_kl ?? null,
-  }
+  const hentet = new Map(utvalg?.forbindelser.map((p) => [p.cid, p]) ?? [])
+  const tider: string[] = []
+  const rader = register.forStoff(stoff).map((forbindelse): Kjemirad => {
+    const relasjon = forbindelse.stoffer.find((s) => s.stoff === stoff)!.relasjon
+    const post = forbindelse.pubchem ? hentet.get(forbindelse.pubchem.cid) : undefined
+    if (post?.sist_hentet_kl && !Number.isNaN(Date.parse(post.sist_hentet_kl))) tider.push(post.sist_hentet_kl)
+    const data = post?.data ?? null
+    return { forbindelse, relasjon, data, status: data ? 'hentet' : forbindelse.pubchem ? 'ikke_hentet' : 'uavklart' }
+  })
+  tider.sort((a, b) => Date.parse(a) - Date.parse(b))
+  return { rader, kontrollert_kl: tider[0] ?? null }
 }
 
 /** En del av en molekylformel: tallene står senket, ladningen hevet. */

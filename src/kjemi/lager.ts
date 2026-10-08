@@ -31,26 +31,37 @@ export interface Kjemisynktelling {
   feil?: string
 }
 
+/** Det en kjøring avslutter med: det som byttes inn, feilene og tellingen. */
+export interface Kjemiavslutning {
+  forbindelser: Lagringsforbindelse[]
+  feil: { cid: number; feil: string }[]
+  /** Tellingen uten `hentet` og `endret`, som databasen fyller inn. */
+  resultat: Omit<Kjemisynktelling, 'hentet' | 'endret'>
+}
+
 export interface Kjemilager {
   start(utlostAv: 'cron' | 'manuell'): Promise<number>
-  lagre(synk: number, forbindelser: Lagringsforbindelse[], parserversjon: number): Promise<{ lagret: number; endret: number }>
-  feilet(synk: number, feil: { cid: number; feil: string }[]): Promise<void>
-  fullfor(synk: number, resultat: Kjemisynktelling, parserversjon: number): Promise<'fullfort' | 'delvis'>
+  /** Bytter inn, noterer feilene og avslutter kjøringen i én transaksjon. */
+  fullfor(
+    synk: number,
+    avslutning: Kjemiavslutning,
+    parserversjon: number,
+  ): Promise<{ status: 'fullfort' | 'delvis'; hentet: number; endret: number }>
   avbryt(synk: number, feil: string): Promise<void>
 }
 
 export function lagKjemilager(kall: Databasekall): Kjemilager {
   return {
     start: async (utlostAv) => Number(await kall('pubchem_start_synk', { utlost_av: utlostAv })),
-    lagre: async (synk, forbindelser, parserversjon) => {
-      const svar = (await kall('pubchem_lagre', { synk, forbindelser, parserversjon })) as { lagret?: number; endret?: number } | null
-      return { lagret: Number(svar?.lagret ?? 0), endret: Number(svar?.endret ?? 0) }
+    fullfor: async (synk, { forbindelser, feil, resultat }, parserversjon) => {
+      const svar = (await kall('pubchem_fullfor_synk', { synk, forbindelser, feil, resultat, parserversjon })) as {
+        status?: string
+        hentet?: number
+        endret?: number
+      } | null
+      if (svar?.status !== 'fullfort' && svar?.status !== 'delvis') throw new Error('Databasen avsluttet ikke kjøringen.')
+      return { status: svar.status, hentet: Number(svar.hentet ?? 0), endret: Number(svar.endret ?? 0) }
     },
-    feilet: async (synk, feil) => {
-      await kall('pubchem_feilet', { synk, feil })
-    },
-    fullfor: async (synk, resultat, parserversjon) =>
-      (await kall('pubchem_fullfor_synk', { synk, resultat, parserversjon })) as 'fullfort' | 'delvis',
     avbryt: async (synk, feil) => {
       await kall('pubchem_avbryt_synk', { synk, feil })
     },

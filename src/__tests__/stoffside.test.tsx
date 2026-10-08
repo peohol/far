@@ -3442,7 +3442,7 @@ describe('kjemiske grunndata', () => {
   })
 
   function kjemikilde(forbindelser: ReturnType<typeof pubchemdata>[]) {
-    const les = vi.fn(async () => lesKjemiutvalg({ kilde: 'PubChem', kontrollert_kl: '2026-10-08T03:15:00Z', forbindelser }))
+    const les = vi.fn(async () => lesKjemiutvalg({ kilde: 'PubChem', forbindelser }))
     return { ...kilde(), kjemi: { les } }
   }
 

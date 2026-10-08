@@ -10,7 +10,8 @@
  *    `src/data/forbindelser.ts`, i så få kall som mulig;
  * 3. kontrollerer hver forbindelse: svaret må kunne leses (`lesPubchemrad`),
  *    og InChIKey og formelen må være de koblingen ble kontrollert mot;
- * 4. bytter inn alle som besto, i én transaksjon, og noterer feilen på resten.
+ * 4. bytter inn alle som besto, noterer feilen på resten og avslutter kjøringen,
+ *    alt i én transaksjon.
  *
  * En forbindelse som ikke består, byttes ikke inn, og det som lå der fra før,
  * står. Har PubChem endret identiteten (InChIKey eller formelen), er det en
@@ -86,21 +87,20 @@ export async function synkroniserKjemi({
       )
     }
 
-    const lagret = ok.length > 0 ? await lager.lagre(synk, ok, PARSERVERSJON) : { lagret: 0, endret: 0 }
-    if (feil.length > 0) await lager.feilet(synk, feil.map(({ cid, feil }) => ({ cid, feil })))
-
-    const resultat: Kjemisynktelling = {
+    const resultat = {
       forbindelser: koblede.length,
-      hentet: lagret.lagret,
-      endret: lagret.endret,
       feilet: feil.length,
       konflikter: feil.length - bortfall,
       strukturavvik: bortfall,
       uavklarte: register.alle.filter((f) => !f.pubchem).map((f) => f.nokkel),
       ...(feil.length > 0 && { feil: feil.map((f) => `${f.nokkel} (CID ${f.cid}): ${f.feil}`).join('\n') }),
     }
-    const status = await lager.fullfor(synk, resultat, PARSERVERSJON)
-    return { status, synk, ...resultat }
+    const { status, hentet, endret } = await lager.fullfor(
+      synk,
+      { forbindelser: ok, feil: feil.map(({ cid, feil }) => ({ cid, feil })), resultat },
+      PARSERVERSJON,
+    )
+    return { status, synk, ...resultat, hentet, endret }
   } catch (e) {
     const feil = e instanceof Error ? e.message : String(e)
     await lager.avbryt(synk, feil)

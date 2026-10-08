@@ -119,11 +119,11 @@ begin
 end;
 $$;
 
--- Bytter inn forbindelsene, i én transaksjon: forbindelser = [{cid, data, raa}, ...].
--- Jobben har allerede kontrollert hver mot koblingen; her kontrolleres bare
--- formen, så en feil i jobben aldri gir halve data. Gir antallet som ble
--- byttet inn, og hvor mange av dem som var endret.
-create function public.pubchem_lagre(synk bigint, forbindelser jsonb, parserversjon integer)
+-- Bytter inn forbindelsene: forbindelser = [{cid, data, raa}, ...]. Jobben har
+-- allerede kontrollert hver mot koblingen; her kontrolleres bare formen, så en
+-- feil i jobben aldri gir halve data. Gir antallet som ble byttet inn, og hvor
+-- mange av dem som var endret. Kalles bare av pubchem_fullfor_synk.
+create function pubchem.lagre(synk bigint, forbindelser jsonb, parserversjon integer)
 returns jsonb
 language plpgsql
 security definer
@@ -158,7 +158,7 @@ begin
 
   insert into pubchem.forbindelser as p (cid, data, raa, hash, parserversjon, sist_endret_kl, sist_hentet_kl, sist_synk, feil, feil_kl)
   select (f ->> 'cid')::integer, f -> 'data', coalesce(f -> 'raa', 'null'), md5((f -> 'data')::text),
-         pubchem_lagre.parserversjon, now(), now(), synk, null, null
+         lagre.parserversjon, now(), now(), synk, null, null
   from jsonb_array_elements(forbindelser) f
   on conflict (cid) do update set
     data = excluded.data,
@@ -176,8 +176,8 @@ end;
 $$;
 
 -- Forbindelsene som ikke kunne byttes inn: feil = [{cid, feil}, ...]. Feilen
--- noteres, og dataene står som før.
-create function public.pubchem_feilet(synk bigint, feil jsonb)
+-- noteres, og dataene står som før. Kalles bare av pubchem_fullfor_synk.
+create function pubchem.feilet(synk bigint, feil jsonb)
 returns void
 language plpgsql
 security definer
@@ -202,27 +202,47 @@ begin
 end;
 $$;
 
--- Kjøringen er ferdig. `resultat` er tellingen jobben gjorde; er noe
--- feilet, er kjøringen «delvis».
-create function public.pubchem_fullfor_synk(synk bigint, resultat jsonb, parserversjon integer)
-returns text
+-- Kjøringen er ferdig: forbindelsene som besto, byttes inn, feilen noteres på
+-- resten, og kjøringen avsluttes — alt i én transaksjon, så data aldri blir
+-- stående byttet inn av en kjøring som ikke gikk til ende. `resultat` er
+-- tellingen jobben gjorde; antallet byttet inn og endret legges til her. Er
+-- noe feilet, er kjøringen «delvis».
+create function public.pubchem_fullfor_synk(synk bigint, forbindelser jsonb, feil jsonb, resultat jsonb, parserversjon integer)
+returns jsonb
 language plpgsql
 security definer
 set search_path = ''
 as $$
 declare
+  lagret jsonb := jsonb_build_object('lagret', 0, 'endret', 0);
+  telling jsonb;
   ny text;
 begin
   perform pubchem.pagaende(synk);
-  ny := case when coalesce((resultat ->> 'feilet')::integer, 0) = 0 then 'fullfort' else 'delvis' end;
+  if jsonb_typeof(resultat) <> 'object' then
+    raise exception 'Resultatet skal være et objekt.' using errcode = '22023';
+  end if;
+  if jsonb_typeof(forbindelser) <> 'array' or jsonb_typeof(feil) <> 'array' then
+    raise exception 'Forbindelsene og feilene skal være lister.' using errcode = '22023';
+  end if;
+  if jsonb_array_length(forbindelser) > 0 then
+    lagret := pubchem.lagre(synk, forbindelser, pubchem_fullfor_synk.parserversjon);
+  end if;
+  if jsonb_array_length(feil) > 0 then
+    perform pubchem.feilet(synk, feil);
+  end if;
+
+  telling := resultat || jsonb_build_object(
+    'hentet', lagret -> 'lagret', 'endret', lagret -> 'endret', 'feilet', jsonb_array_length(feil));
+  ny := case when jsonb_array_length(feil) = 0 then 'fullfort' else 'delvis' end;
   update pubchem.synkroniseringer set
     status = ny,
     avsluttet_kl = now(),
-    antall = resultat,
+    antall = telling,
     parserversjon = pubchem_fullfor_synk.parserversjon,
     feil = nullif(left(resultat ->> 'feil', 2000), '')
   where id = synk;
-  return ny;
+  return jsonb_build_object('status', ny, 'hentet', lagret -> 'lagret', 'endret', lagret -> 'endret');
 end;
 $$;
 
@@ -246,9 +266,10 @@ $$;
 
 -- --- Lesingen --------------------------------------------------------------
 
--- Det fagsidene trenger fra PubChem for disse CID-ene: dataene, når de sist
--- ble hentet og endret, og når en synkronisering sist gikk til ende.
--- Rådataene er ikke med.
+-- Det fagsidene trenger fra PubChem for disse CID-ene: dataene og når hver
+-- sist ble hentet og endret. Når dataene sist ble kontrollert, regnes ut fra
+-- forbindelsene selv: en forbindelse en kjøring avviste, er ikke kontrollert
+-- av den. Rådataene er ikke med.
 create function public.les_kjemi(cider integer[])
 returns jsonb
 language plpgsql
@@ -263,8 +284,6 @@ begin
 
   return jsonb_build_object(
     'kilde', 'PubChem',
-    'kontrollert_kl', (
-      select max(s.avsluttet_kl) from pubchem.synkroniseringer s where s.status in ('fullfort', 'delvis')),
     'forbindelser', coalesce((
       select jsonb_agg(jsonb_build_object(
         'cid', p.cid,
@@ -292,7 +311,7 @@ insert into datakilder.feltregler (kilde, type, felt, niva) values
   ('pubchem', 'forbindelse', 'iupac', 'metadata'),
   ('pubchem', 'forbindelse', 'monoisotopisk_masse', 'metadata');
 
--- pubchem_lagre bytter inn alt med én insert … on conflict. Det som settes
+-- pubchem.lagre bytter inn alt med én insert … on conflict. Det som settes
 -- inn, og det som får data for første gang, er et grunnlag; det som endres,
 -- logges. Er svaret fra PubChem det samme og bare lesingen ny, er endringen
 -- metadata, med parserversjonene i sporet.
@@ -464,18 +483,14 @@ revoke all on function datakilder.pubchem_forbindelse_endret() from public, anon
 
 revoke all on function
   public.pubchem_start_synk(text),
-  public.pubchem_lagre(bigint, jsonb, integer),
-  public.pubchem_feilet(bigint, jsonb),
-  public.pubchem_fullfor_synk(bigint, jsonb, integer),
+  public.pubchem_fullfor_synk(bigint, jsonb, jsonb, jsonb, integer),
   public.pubchem_avbryt_synk(bigint, text),
   public.les_kjemi(integer[])
 from public, anon, authenticated, service_role;
 
 grant execute on function
   public.pubchem_start_synk(text),
-  public.pubchem_lagre(bigint, jsonb, integer),
-  public.pubchem_feilet(bigint, jsonb),
-  public.pubchem_fullfor_synk(bigint, jsonb, integer),
+  public.pubchem_fullfor_synk(bigint, jsonb, jsonb, jsonb, integer),
   public.pubchem_avbryt_synk(bigint, text)
 to service_role;
 
