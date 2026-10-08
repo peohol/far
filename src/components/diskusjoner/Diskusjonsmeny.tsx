@@ -403,11 +403,18 @@ function Diskusjonsflate({
   }
   const flyttTraad = (id: string, kategori: string, indeks: number) =>
     lagreFlytting((o) => flyttDiskusjon(o, id, kategori, indeks), () => flyttDiskusjonTil(id, kategori, indeks))
-  /** Sist i en kategori på siden, eller i en ny, som lages først. */
+  /**
+   * Sist i en kategori på siden, eller i en ny, som lages først. Lista hentes
+   * på nytt også når flyttingen feiler etter at kategorien er laget, så den
+   * nye kategorien står der og kan velges neste gang.
+   */
   const flyttTraadHer = async (id: string, valg: Kategorivalg) => {
     if ('id' in valg) return flyttTraad(id, valg.id, SIST)
-    await flyttDiskusjonTil(id, await opprettKategori(side, valg.navn, valg.emoji), SIST)
-    await hent()
+    try {
+      await flyttDiskusjonTil(id, await opprettKategori(side, valg.navn, valg.emoji), SIST)
+    } finally {
+      await hent()
+    }
   }
   const flyttKat = (id: string, indeks: number) =>
     lagreFlytting((o) => flyttKategori(o, id, indeks), () => flyttKategoriTil(id, indeks))

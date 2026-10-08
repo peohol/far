@@ -609,6 +609,23 @@ describe('én tråd', () => {
     expect(api.flyttDiskusjonTilSide).not.toHaveBeenCalled()
   })
 
+  it('henter lista på nytt når den nye kategorien er laget, men flyttingen feiler', async () => {
+    const bruker = await apne()
+    await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
+    await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    await bruker.click(within(panel()).getByRole('button', { name: 'Flytt tråden' }))
+    const skjema = flyttelag()
+    await bruker.selectOptions(within(skjema).getByRole('combobox', { name: 'Kategori' }), '＋ Ny kategori …')
+    await bruker.type(within(skjema).getByRole('textbox', { name: 'Kategori' }), 'Interaksjoner')
+    await bruker.click(within(skjema).getByRole('button', { name: '🧪' }))
+    api.flyttDiskusjonTil.mockRejectedValueOnce(new Error('Fikk ikke flyttet tråden.'))
+    const hentinger = api.hentDiskusjoner.mock.calls.length
+    await bruker.click(within(skjema).getByRole('button', { name: 'Flytt' }))
+    expect((await within(skjema).findByRole('alert')).textContent).toBe('Fikk ikke flyttet tråden.')
+    // Kategorien som ble laget, står i lista, så den kan velges når man prøver igjen.
+    expect(api.hentDiskusjoner.mock.calls.length).toBeGreaterThan(hentinger)
+  })
+
   it('Escape lukker flyttelaget, ikke menyen', async () => {
     const bruker = await apne()
     await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
