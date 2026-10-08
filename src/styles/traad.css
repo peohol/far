@@ -279,7 +279,7 @@
   padding-top: var(--rom-1);
 }
 
-.kommentar__inner > .riktekst {
+.kommentar__inner > .langtekst .riktekst {
   overflow-wrap: anywhere;
 }
 

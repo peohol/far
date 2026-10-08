@@ -169,7 +169,7 @@ a.lenkebrikke:focus-visible {
 
 /* Kommentaren en lenke førte til, står uthevet en liten stund. */
 .kommentar[data-uthevet] > .kommentar__hode,
-.kommentar[data-uthevet] > .kommentar__kropp > .kommentar__inner > .riktekst {
+.kommentar[data-uthevet] > .kommentar__kropp > .kommentar__inner > .langtekst .riktekst {
   animation: direktelenke-uthev 2.4s var(--kurve);
 }
 
@@ -186,7 +186,7 @@ a.lenkebrikke:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   .kommentar[data-uthevet] > .kommentar__hode,
-  .kommentar[data-uthevet] > .kommentar__kropp > .kommentar__inner > .riktekst {
+  .kommentar[data-uthevet] > .kommentar__kropp > .kommentar__inner > .langtekst .riktekst {
     animation: none;
     background: var(--aksent-flate);
   }

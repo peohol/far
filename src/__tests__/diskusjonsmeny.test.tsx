@@ -527,8 +527,12 @@ describe('én tråd', () => {
     const bruker = await apne()
     await bruker.click(within(panel()).getByRole('button', { name: /Nyresvikt/ }))
     await within(panel()).findByText('Hvordan doserer vi ved nyresvikt?')
+    const rull = vi.spyOn(Element.prototype, 'scrollIntoView')
     await bruker.click(within(panel()).getByRole('button', { name: 'Flytt til en annen side' }))
     const skjema = within(panel()).getByRole('form', { name: 'Flytt tråden' })
+    // Knappen står fast øverst; er tråden rullet ned, rulles den opp til skjemaet.
+    await waitFor(() => expect(rull.mock.contexts).toContain(panel().querySelector('.diskusjonsside')))
+    rull.mockRestore()
     const sidevalg = within(skjema).getByRole('combobox', { name: 'Side' }) as HTMLSelectElement
     // Siden tråden står på, er ikke blant valgene.
     expect([...sidevalg.options].map((o) => o.value)).toEqual(['', 'stoff:valproat', 'fortolkning:li', 'register:stoffregister'])

@@ -796,7 +796,7 @@
   gap: var(--rom-2);
 }
 
-.diskusjonsside > .riktekst {
+.diskusjonsside > .langtekst .riktekst {
   font-size: var(--tekst-ui);
 }
 

@@ -109,6 +109,7 @@ export function Diskusjonsside({
   const [endrerTekst, setEndrerTekst] = useBevart(`traad:${id}/endrer-tekst`, false)
   const [flytter, setFlytter] = useBevart(`traad:${id}/flytter`, false)
   const overskrift = useRef<HTMLHeadingElement>(null)
+  const artikkel = useRef<HTMLElement>(null)
   const kategoriId = useId()
 
   const hent = useCallback(async () => {
@@ -206,6 +207,15 @@ export function Diskusjonsside({
     )
   }
 
+  /**
+   * Skjemaene knappene i det faste hodet åpner, står øverst i det som rulles.
+   * Er tråden rullet ned, rulles den opp så skjemaet synes.
+   */
+  const visSkjema = (vis: (apen: boolean) => void) => {
+    vis(true)
+    requestAnimationFrame(() => artikkel.current?.scrollIntoView({ block: 'start' }))
+  }
+
   const arkivert = Boolean(traad.arkivert_kl)
   const eier = traad.forfatter_id === meg.id
   const kategori = kategorier.find((k) => k.id === traad.kategori_id)
@@ -244,7 +254,7 @@ export function Diskusjonsside({
       <div className="idehandlinger">
         <Hjerteknapp antall={traad.hjerter} gitt={traad.mitt_hjerte} onVeksle={() => veksleHjerte(null)} hva="tråden" laast={arkivert} />
         {eier && !arkivert && !traad.skjult && (
-          <Idehandling ikon="edit" onClick={() => setEndrerTekst(true)}>
+          <Idehandling ikon="edit" onClick={() => visSkjema(setEndrerTekst)}>
             Rediger innlegget
           </Idehandling>
         )}
@@ -260,7 +270,7 @@ export function Diskusjonsside({
           />
         )}
         {!arkivert && (
-          <Idehandling ikon="ext" aria-expanded={flytter} onClick={() => setFlytter(!flytter)}>
+          <Idehandling ikon="ext" aria-expanded={flytter} onClick={() => (flytter ? setFlytter(false) : visSkjema(setFlytter))}>
             Flytt til en annen side
           </Idehandling>
         )}
@@ -325,7 +335,7 @@ export function Diskusjonsside({
   )
 
   return (
-    <article className="diskusjonsside" aria-labelledby={`diskusjon-${traad.id}`}>
+    <article ref={artikkel} className="diskusjonsside" aria-labelledby={`diskusjon-${traad.id}`}>
       {hode ? createPortal(hodeinnhold, hode) : <header className="diskusjonsside__hode">{hodeinnhold}</header>}
 
       {arkivert && traad.arkivert_kl && (
