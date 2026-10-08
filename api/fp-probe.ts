@@ -3,7 +3,8 @@
 export async function GET(request: Request): Promise<Response> {
   const sti = new URL(request.url).searchParams.get('sti') ?? '/'
   const url = new URL(sti, 'https://www.farmakologiportalen.no')
-  if (url.hostname !== 'www.farmakologiportalen.no') return new Response('nei', { status: 400 })
+  const tillatt = url.hostname === 'farmakologiportalen.no' || url.hostname.endsWith('.farmakologiportalen.no')
+  if (!tillatt) return new Response('nei', { status: 400 })
   const r = await fetch(url, {
     headers: {
       'user-agent': new URL(request.url).searchParams.get('ua') ?? 'OUSFAR-datasynk/1.0 (+https://github.com/peohol/far)',
