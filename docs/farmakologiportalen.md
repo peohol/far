@@ -130,11 +130,15 @@ sidelengs; på smale skjermer står bemerkningen under måleområdet.
 Laboratoriet og måleområdet lenker til portalen.
 
 Måleområdene vises i enheten brukeren velger (µg/L, nmol/L, µmol/L), med høyst
-to gjeldende sifre, som `x—y` (`src/enheter/konsentrasjon.ts`). Som på
-portalens egen analyseside vises et måleområde bare når begge grensene er
-oppgitt; én grense alene (342 aktive analyser i oktober 2026, halvparten
-kvalitative) kan være en kvantifiseringsgrense eller en cut-off, og står som
-«Ikke oppgitt». Mellom masse og stoffmengde regnes de bare
+to gjeldende sifre, som `x—y` (`src/enheter/konsentrasjon.ts`). Portalens
+egen analyseside viser et måleområde bare når begge grensene er oppgitt. Én
+grense alene (342 aktive analyser i oktober 2026, halvparten kvalitative) står
+i portalens data (`meassurearea_lower`/`meassurearea_upper` fra
+`/api/analyses`), men ikke på siden. Den vises som «Nedre grense 30 nmol/L»,
+i laboratoriets egen enhet uten omregning og merket «Vises ikke på portalens
+side»; den kan være en kvantifiseringsgrense eller en cut-off, så den kalles
+ikke noe mer enn en grense. Mangler begge, står det «Ikke oppgitt». Mellom
+masse og stoffmengde regnes de bare
 om med molekylvekten fra PubChem og en verifisert kobling, og en sumanalyse
 regnes aldri om mellom dem. Det som ikke kan regnes om, står som laboratoriet
 oppga det, med enheten. Portalen er kilde i referansefeltet, med når dataene

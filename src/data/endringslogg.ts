@@ -21,7 +21,7 @@ export const ENDRINGSLOGG: Endring[] = [
       'Én tabell per prøvemateriale og analytt, med begge i overskriften, for eksempel «Serum · Citalopram» og «Serum · Desmetylcitalopram». Kolonnen «Analytt» er borte.',
       'Tabellene får plass i bredden uten å rulle sidelengs. Laboratorienavnene brytes over flere linjer, og helseforetaket står ikke lenger under.',
       'Kolonnen «Benevning» er borte; måleområdet står i enheten som er valgt over tabellene. Svarer et laboratorium ut noe annet enn en konsentrasjon, som positiv/negativ, står det i en egen kolonne «Bemerkning».',
-      'Har laboratoriet bare oppgitt én grense, står måleområdet som «Ikke oppgitt», slik Farmakologiportalen selv viser det. Før sto det for eksempel «fra 10», et tall portalen ikke viser.',
+      'Har laboratoriet bare oppgitt én grense, står den nå som «Nedre grense» eller «Øvre grense» i laboratoriets egen enhet, merket «Vises ikke på portalens side». Grensen ligger i Farmakologiportalens data, men portalens analyseside viser den ikke. Før sto den omregnet, for eksempel som «fra 10».',
     ],
   },
   {
