@@ -12,6 +12,16 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.88.2',
+    dato: '2026-10-09',
+    sammendrag: 'Enkeltgrenser i laboratorietabellene regnes om til valgt enhet',
+    typer: ['Fag'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Har laboratoriet bare oppgitt én grense, regnes den nå om til enheten som er valgt over tabellene, akkurat som de hele måleområdene. Da kan radene sammenlignes. Kan grensen ikke regnes om, står den i laboratoriets egen enhet som før.',
+    ],
+  },
+  {
     versjon: '1.88.1',
     dato: '2026-10-09',
     sammendrag: 'Farmakogenetikken fra ClinPGx oppdateres for alle stoffene hver uke',

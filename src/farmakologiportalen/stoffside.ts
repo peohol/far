@@ -238,28 +238,28 @@ export interface Maleomradevisning {
  * ikke regnes om, står det som laboratoriet oppga det, med enheten.
  *
  * Én grense alene (oftest en nedre, ofte ved en kvalitativ analyse) vises
- * som det portalens data sier — «Nedre grense 30» i laboratoriets egen enhet,
- * uten omregning — og merkes, siden portalens analyseside ikke viser den.
- * Den sier ikke sikkert hva den er (en kvantifiseringsgrense eller en
- * cut-off), så den kalles ikke noe mer enn en grense.
+ * som det portalens data sier — «Nedre grense 10» — regnet om som et helt
+ * område, så radene kan sammenlignes, og merkes, siden portalens analyseside
+ * ikke viser den. Den sier ikke sikkert hva den er (en
+ * kvantifiseringsgrense eller en cut-off), så den kalles ikke noe mer enn en
+ * grense.
  */
 export function maleomrade(rad: Pick<Labrad, 'nedre' | 'ovre' | 'enhet' | 'molvekt'>, valgt: Visningsenhet): Maleomradevisning {
   const grenser = [rad.nedre, rad.ovre]
   if (!rad.nedre && !rad.ovre) return { tekst: 'Ikke oppgitt', enhet: null, omregnet: false, enkeltgrense: false }
-  if (!rad.nedre || !rad.ovre) {
-    const grense = (rad.nedre ?? rad.ovre)!
-    const tekst = `${rad.nedre ? 'Nedre' : 'Øvre'} grense ${visGrense(grense)}`
-    return { tekst, enhet: grense.enhet ?? rad.enhet.original, omregnet: false, enkeltgrense: true }
-  }
-  const fra = lesKonsentrasjonsenhet(rad.enhet.enhet)
+  const enkeltgrense = !rad.nedre || !rad.ovre
   const til = lesKonsentrasjonsenhet(valgt)!
-  const omregnet = grenser.map((g) => (g && g.verdi !== null && fra ? regnOm(g.verdi, fra, til, rad.molvekt) : null))
-  if (grenser.every((g, i) => g === null || omregnet[i] !== null)) {
-    const [nedre, ovre] = grenser.map((g, i) => (g ? visGrense(g, omregnet[i]!) : null))
-    return { tekst: visOmrade(nedre!, ovre!), enhet: null, omregnet: true, enkeltgrense: false }
-  }
-  const [nedre, ovre] = grenser.map((g) => (g ? visGrense(g) : null))
-  return { tekst: visOmrade(nedre!, ovre!), enhet: rad.enhet.original, omregnet: false, enkeltgrense: false }
+  // En enhet som står i selve grensen («20 µg/L»), gjelder den grensen.
+  const fra = (g: Grense) => lesKonsentrasjonsenhet(g.enhet ?? rad.enhet.enhet)
+  const regnet = grenser.map((g) => {
+    const enhet = g && fra(g)
+    return g && g.verdi !== null && enhet ? regnOm(g.verdi, enhet, til, rad.molvekt) : null
+  })
+  const omregnet = grenser.every((g, i) => g === null || regnet[i] !== null)
+  const [nedre, ovre] = grenser.map((g, i) => (g ? visGrense(g, omregnet ? regnet[i]! : g.verdi) : null))
+  const tekst = enkeltgrense ? `${nedre ? 'Nedre' : 'Øvre'} grense ${(nedre ?? ovre)!}` : visOmrade(nedre!, ovre!)
+  const egen = enkeltgrense ? (rad.nedre ?? rad.ovre)!.enhet : null
+  return { tekst, enhet: omregnet ? null : (egen ?? rad.enhet.original), omregnet, enkeltgrense }
 }
 
 /** Benevninger i portalen som ikke sier noe om svaret. */

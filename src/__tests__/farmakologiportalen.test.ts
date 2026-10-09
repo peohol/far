@@ -663,8 +663,8 @@ describe('visningen på fagsidene', () => {
     expect(tabell('citalopram', 'Serum · Citalopram', 'µmol/L')).toContainEqual(['Citalopram', 'Klinisk farmakologi Haukeland', '0,026—0,82'])
     expect(tabell('citalopram', 'Fullblod · Citalopram')).toEqual([
       ['Citalopram', 'Klinisk farmakologi St Olav', '1,6—160'],
-      // Portalen oppgir bare en nedre grense her, og viser den ikke på analysesiden.
-      ['Citalopram', 'Rettstoksikologi OUS', 'Nedre grense 0,1 µmol/L'],
+      // Portalen oppgir bare en nedre grense her (0,1 µmol/L), og viser den ikke på analysesiden.
+      ['Citalopram', 'Rettstoksikologi OUS', 'Nedre grense 32'],
     ])
   })
 
@@ -676,7 +676,7 @@ describe('visningen på fagsidene', () => {
       'Fullblod · Hydroksybupropion',
     ])
     expect(tabell('bupropion', 'Serum · Hydroksybupropion')).toContainEqual(['Hydroksybupropion', 'Klinisk farmakologi Haukeland', '73—2000'])
-    expect(tabell('bupropion', 'Fullblod · Bupropion')).toContainEqual(['Bupropion', 'Rettstoksikologi OUS', 'Nedre grense 0,1 µmol/L'])
+    expect(tabell('bupropion', 'Fullblod · Bupropion')).toContainEqual(['Bupropion', 'Rettstoksikologi OUS', 'Nedre grense 24'])
     expect(tabell('bupropion', 'Fullblod · Hydroksybupropion', 'µmol/L')).toContainEqual([
       'Hydroksybupropion',
       'Klinisk farmakologi St Olav',
@@ -684,24 +684,38 @@ describe('visningen på fagsidene', () => {
     ])
   })
 
-  it('viser en enkelt grense som den står i portalens data, merket og uten omregning', () => {
+  it('regner om en enkelt grense som et helt område, og merker den', () => {
     const grense = (verdi: number) => ({ verdi, original: String(verdi), enhet: null, komparator: null })
     const rad = { enhet: { original: 'nmol/L', enhet: 'nmol/L' }, molvekt: 344.4 }
     // THC-syre i urin ved Rettstoksikologi OUS: portalen har «30» nmol/L som nedre grense, men viser ikke noe måleområde.
     expect(maleomrade({ ...rad, nedre: grense(30), ovre: null }, 'µg/L')).toEqual({
+      tekst: 'Nedre grense 10',
+      enhet: null,
+      omregnet: true,
+      enkeltgrense: true,
+    })
+    expect(maleomrade({ ...rad, nedre: grense(30), ovre: null }, 'nmol/L')).toMatchObject({ tekst: 'Nedre grense 30', enhet: null })
+    expect(maleomrade({ ...rad, nedre: null, ovre: grense(3000) }, 'µmol/L')).toMatchObject({ tekst: 'Øvre grense 3', enkeltgrense: true })
+    // Uten molekylvekt kan den ikke regnes om mellom masse og stoffmengde, og står i laboratoriets enhet.
+    expect(maleomrade({ ...rad, molvekt: null, nedre: grense(30), ovre: null }, 'µg/L')).toEqual({
       tekst: 'Nedre grense 30',
       enhet: 'nmol/L',
       omregnet: false,
       enkeltgrense: true,
     })
-    expect(maleomrade({ ...rad, nedre: null, ovre: grense(30) }, 'nmol/L')).toMatchObject({ tekst: 'Øvre grense 30', enhet: 'nmol/L', enkeltgrense: true })
-    // En enhet som sto i selve verdien, går foran feltet for enheten.
-    expect(maleomrade({ ...rad, nedre: { ...grense(20), original: '20 µg/L', enhet: 'µg/L' }, ovre: null }, 'nmol/L')).toMatchObject({
+    // En enhet i selve grensen gjelder den grensen, også når feltet for enheten sier noe annet.
+    const ugL = { ...grense(20), original: '20 µg/L', enhet: 'µg/L' }
+    expect(maleomrade({ ...rad, nedre: ugL, ovre: null }, 'µg/L')).toMatchObject({ tekst: 'Nedre grense 20', enhet: null, omregnet: true })
+    expect(maleomrade({ ...rad, nedre: ugL, ovre: null }, 'nmol/L')).toMatchObject({ tekst: 'Nedre grense 58', omregnet: true })
+    expect(maleomrade({ ...rad, molvekt: null, nedre: ugL, ovre: null }, 'nmol/L')).toEqual({
       tekst: 'Nedre grense 20',
       enhet: 'µg/L',
+      omregnet: false,
+      enkeltgrense: true,
     })
-    expect(maleomrade({ ...rad, nedre: null, ovre: null }, 'µg/L')).toEqual({ tekst: 'Ikke oppgitt', enhet: null, omregnet: false, enkeltgrense: false })
+    // En enkelt grense og et helt område blir sammenlignbare i samme enhet.
     expect(maleomrade({ ...rad, nedre: grense(30), ovre: grense(3000) }, 'µg/L')).toMatchObject({ tekst: '10—1000', enkeltgrense: false })
+    expect(maleomrade({ ...rad, nedre: null, ovre: null }, 'µg/L')).toEqual({ tekst: 'Ikke oppgitt', enhet: null, omregnet: false, enkeltgrense: false })
   })
 
   it('regner aldri en sumanalyse om mellom masse og stoffmengde, men innenfor samme slag', () => {
@@ -735,6 +749,8 @@ describe('visningen på fagsidene', () => {
     const alle = v.tabeller.flatMap((t) => t.rader)
     expect(alle.some((r) => r.laboratorium.includes('Internt testsystem'))).toBe(false)
     expect(tabell('thc', 'Urin · THC-syre (THC-COOH)', 'nmol/L')).toContainEqual(['THC-syre (THC-COOH)', 'Klinisk farmakologi OUS Ullevål', '29—12000'])
+    // Portalen har bare «30» nmol/L som nedre grense ved OUS; regnet om står den sammenlignbar med radene over.
+    expect(tabell('thc', 'Urin · THC-syre (THC-COOH)')).toContainEqual(['THC-syre (THC-COOH)', 'Rettstoksikologi OUS', 'Nedre grense 10'])
     expect(tabell('thc', 'Urin · 11-hydroksy-THC', 'nmol/L')).toContainEqual([
       '11-hydroksy-THC',
       'Klinisk farmakologi, Laboratoriemedisin, Tromsø',
