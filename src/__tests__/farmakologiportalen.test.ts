@@ -33,7 +33,7 @@ import { lagLableser, type Lableser, type Labutvalg } from '../farmakologiportal
 import { fpreferanser, FP_KILDE } from '../farmakologiportalen/referanser'
 import {
   byggLabvisning,
-  harEgenBenevning,
+  bemerkning,
   labkomponenter,
   laboppsummering,
   labsoketekster,
@@ -614,7 +614,7 @@ describe('visningen på fagsidene', () => {
     }
   }, 60_000)
 
-  /** Radene i tabellen for matrisen: analytt, laboratorium og måleområdet i enheten. */
+  /** Radene i tabellen for matrisen og analytten: analytt, laboratorium og måleområdet i enheten. */
   const tabell = (stoff: string, tittel: string, enhet: 'µg/L' | 'nmol/L' | 'µmol/L' = 'µg/L') => {
     const t = visninger.get(stoff)!.tabeller.find((x) => x.tittel === tittel)
     if (!t) throw new Error(`Ingen tabell ${tittel} for ${stoff}`)
@@ -632,34 +632,71 @@ describe('visningen på fagsidene', () => {
     expect(JSON.stringify(u)).not.toContain('modified_date')
   })
 
-  it('citalopram: én tabell per matrise, serum med begge analyttene, omregnet med PubChems molekylvekt', () => {
+  it('citalopram: én tabell per matrise og analytt, omregnet med PubChems molekylvekt', () => {
     const v = visninger.get('citalopram')!
-    expect(v.tabeller.map((t) => [t.tittel, t.visAnalytt])).toEqual([
-      ['Serum', true],
-      ['Fullblod', false],
+    // Analytten står i hver tittel, også der det bare er én i matrisen.
+    expect(v.tabeller.map((t) => [t.tittel, t.materiale, t.analytt])).toEqual([
+      ['Serum · Citalopram', 'Serum', 'Citalopram'],
+      ['Serum · Desmetylcitalopram', 'Serum', 'Desmetylcitalopram'],
+      ['Fullblod · Citalopram', 'Fullblod', 'Citalopram'],
     ])
+    expect(v.tabeller.every((t) => t.rader.every((r) => r.analytt === t.analytt))).toBe(true)
     expect(v.usikre).toEqual([])
-    const serum = tabell('citalopram', 'Serum')
+    const serum = tabell('citalopram', 'Serum · Citalopram')
     expect(serum).toContainEqual(['Citalopram', 'Klinisk farmakologi Drammen', '3,2—510'])
     expect(serum).toContainEqual(['Citalopram', 'Klinisk farmakologi Haukeland', '8,4—270'])
-    // Desmetylcitalopram (310,4 g/mol): 8—800 nmol/L.
-    expect(serum).toContainEqual(['Desmetylcitalopram', 'Klinisk farmakologi, Laboratoriemedisin, Tromsø', '2,5—250'])
     expect(serum).toContainEqual(['Citalopram', 'Klinisk farmakologi Diakonhjemmet, Senter for psykofarmakologi (SFP)', 'Ikke oppgitt'])
-    // Selve stoffet før metabolitten.
-    const analytter = serum.map((r) => r[0])
-    expect(analytter.indexOf('Desmetylcitalopram')).toBeGreaterThan(analytter.lastIndexOf('Citalopram'))
-    expect(tabell('citalopram', 'Serum', 'nmol/L')).toContainEqual(['Citalopram', 'Klinisk farmakologi Drammen', '10—1600'])
-    expect(tabell('citalopram', 'Serum', 'µmol/L')).toContainEqual(['Citalopram', 'Klinisk farmakologi Haukeland', '0,026—0,82'])
-    expect(tabell('citalopram', 'Fullblod')).toEqual([
+    // Laboratoriene i alfabetisk rekkefølge.
+    expect(serum.map((r) => r[1])).toEqual([...serum.map((r) => r[1])].sort((a, b) => a!.localeCompare(b!, 'nb')))
+    // Desmetylcitalopram (310,4 g/mol): 8—800 nmol/L.
+    expect(tabell('citalopram', 'Serum · Desmetylcitalopram')).toContainEqual([
+      'Desmetylcitalopram',
+      'Klinisk farmakologi, Laboratoriemedisin, Tromsø',
+      '2,5—250',
+    ])
+    expect(tabell('citalopram', 'Serum · Citalopram', 'nmol/L')).toContainEqual(['Citalopram', 'Klinisk farmakologi Drammen', '10—1600'])
+    expect(tabell('citalopram', 'Serum · Citalopram', 'µmol/L')).toContainEqual(['Citalopram', 'Klinisk farmakologi Haukeland', '0,026—0,82'])
+    expect(tabell('citalopram', 'Fullblod · Citalopram')).toEqual([
       ['Citalopram', 'Klinisk farmakologi St Olav', '1,6—160'],
-      ['Citalopram', 'Rettstoksikologi OUS', 'fra 32'],
+      // Portalen oppgir bare en nedre grense her, og viser den ikke på analysesiden.
+      ['Citalopram', 'Rettstoksikologi OUS', 'Nedre grense 0,1 µmol/L'],
     ])
   })
 
-  it('bupropion og hydroksybupropion: begge i serum og fullblod', () => {
-    expect(tabell('bupropion', 'Serum')).toContainEqual(['Hydroksybupropion', 'Klinisk farmakologi Haukeland', '73—2000'])
-    expect(tabell('bupropion', 'Fullblod')).toContainEqual(['Bupropion', 'Rettstoksikologi OUS', 'fra 24'])
-    expect(tabell('bupropion', 'Fullblod', 'µmol/L')).toContainEqual(['Hydroksybupropion', 'Klinisk farmakologi St Olav', '0,1—10'])
+  it('bupropion og hydroksybupropion: begge i serum og fullblod, selve stoffet først', () => {
+    expect(visninger.get('bupropion')!.tabeller.map((t) => t.tittel)).toEqual([
+      'Serum · Bupropion',
+      'Serum · Hydroksybupropion',
+      'Fullblod · Bupropion',
+      'Fullblod · Hydroksybupropion',
+    ])
+    expect(tabell('bupropion', 'Serum · Hydroksybupropion')).toContainEqual(['Hydroksybupropion', 'Klinisk farmakologi Haukeland', '73—2000'])
+    expect(tabell('bupropion', 'Fullblod · Bupropion')).toContainEqual(['Bupropion', 'Rettstoksikologi OUS', 'Nedre grense 0,1 µmol/L'])
+    expect(tabell('bupropion', 'Fullblod · Hydroksybupropion', 'µmol/L')).toContainEqual([
+      'Hydroksybupropion',
+      'Klinisk farmakologi St Olav',
+      '0,1—10',
+    ])
+  })
+
+  it('viser en enkelt grense som den står i portalens data, merket og uten omregning', () => {
+    const grense = (verdi: number) => ({ verdi, original: String(verdi), enhet: null, komparator: null })
+    const rad = { enhet: { original: 'nmol/L', enhet: 'nmol/L' }, molvekt: 344.4 }
+    // THC-syre i urin ved Rettstoksikologi OUS: portalen har «30» nmol/L som nedre grense, men viser ikke noe måleområde.
+    expect(maleomrade({ ...rad, nedre: grense(30), ovre: null }, 'µg/L')).toEqual({
+      tekst: 'Nedre grense 30',
+      enhet: 'nmol/L',
+      omregnet: false,
+      enkeltgrense: true,
+    })
+    expect(maleomrade({ ...rad, nedre: null, ovre: grense(30) }, 'nmol/L')).toMatchObject({ tekst: 'Øvre grense 30', enhet: 'nmol/L', enkeltgrense: true })
+    // En enhet som sto i selve verdien, går foran feltet for enheten.
+    expect(maleomrade({ ...rad, nedre: { ...grense(20), original: '20 µg/L', enhet: 'µg/L' }, ovre: null }, 'nmol/L')).toMatchObject({
+      tekst: 'Nedre grense 20',
+      enhet: 'µg/L',
+    })
+    expect(maleomrade({ ...rad, nedre: null, ovre: null }, 'µg/L')).toEqual({ tekst: 'Ikke oppgitt', enhet: null, omregnet: false, enkeltgrense: false })
+    expect(maleomrade({ ...rad, nedre: grense(30), ovre: grense(3000) }, 'µg/L')).toMatchObject({ tekst: '10—1000', enkeltgrense: false })
   })
 
   it('regner aldri en sumanalyse om mellom masse og stoffmengde, men innenfor samme slag', () => {
@@ -677,26 +714,57 @@ describe('visningen på fagsidene', () => {
 
   it('THC: metabolittene og gruppeanalysene i urin, enhetene per kreatinin uten omregning, og uten portalens testlaboratorium', () => {
     const v = visninger.get('thc')!
-    expect(v.tabeller.map((t) => t.tittel)).toEqual(['Serum', 'Fullblod', 'Urin', 'Spytt', 'Hår'])
+    const thc = 'THC (delta-9-tetrahydrokannabinol)'
+    // Matrisene i fast rekkefølge; i urin selve stoffet, metabolittene og så gruppeanalysene.
+    expect(v.tabeller.map((t) => t.tittel)).toEqual([
+      `Serum · ${thc}`,
+      `Fullblod · ${thc}`,
+      `Urin · ${thc}`,
+      'Urin · 11-hydroksy-THC',
+      'Urin · THC-syre (THC-COOH)',
+      'Urin · Cannabis (uspesifikk)',
+      'Urin · Cannabis (uspesifikk) stiks',
+      `Spytt · ${thc}`,
+      `Hår · ${thc}`,
+    ])
     const alle = v.tabeller.flatMap((t) => t.rader)
     expect(alle.some((r) => r.laboratorium.includes('Internt testsystem'))).toBe(false)
-    const urin = tabell('thc', 'Urin', 'nmol/L')
-    expect(urin).toContainEqual(['THC-syre (THC-COOH)', 'Klinisk farmakologi OUS Ullevål', '29—12000'])
-    expect(urin).toContainEqual(['11-hydroksy-THC', 'Klinisk farmakologi, Laboratoriemedisin, Tromsø', '20—640 µmol/mol kreatinin'])
-    expect(urin).toContainEqual(['Cannabis (uspesifikk)', 'Rusmiddellaboratorium Sanderud', '25—100 µg/L'])
-    expect(tabell('thc', 'Serum')).toContainEqual(['THC (delta-9-tetrahydrokannabinol)', 'Klinisk farmakologi OUS Ullevål', '3,1—130'])
-    // Svarer laboratoriet ut i en annen benevning enn den valgte, sier kolonnen det.
-    const kvalitativ = alle.find((r) => r.benevning?.startsWith('Kvalitativ'))!
-    expect(harEgenBenevning(kvalitativ, 'µg/L')).toBe(true)
-    expect(harEgenBenevning({ benevning: 'µg/L' }, 'µg/L')).toBe(false)
+    expect(tabell('thc', 'Urin · THC-syre (THC-COOH)', 'nmol/L')).toContainEqual(['THC-syre (THC-COOH)', 'Klinisk farmakologi OUS Ullevål', '29—12000'])
+    expect(tabell('thc', 'Urin · 11-hydroksy-THC', 'nmol/L')).toContainEqual([
+      '11-hydroksy-THC',
+      'Klinisk farmakologi, Laboratoriemedisin, Tromsø',
+      '20—640 µmol/mol kreatinin',
+    ])
+    expect(tabell('thc', 'Urin · Cannabis (uspesifikk)', 'nmol/L')).toContainEqual(['Cannabis (uspesifikk)', 'Rusmiddellaboratorium Sanderud', '25—100 µg/L'])
+    expect(tabell('thc', `Serum · ${thc}`)).toContainEqual([thc, 'Klinisk farmakologi OUS Ullevål', '3,1—130'])
+  })
+
+  it('bemerker bare et svar som ikke er en konsentrasjon og ikke står i måleområdet', () => {
+    const enhet = (original: string | null) => ({ original, enhet: null })
+    expect(bemerkning({ benevning: 'Kvalitativ (positiv/negativ)', enhet: enhet('µg/L') })).toBe('Svar: Kvalitativ (positiv/negativ)')
+    expect(bemerkning({ benevning: 'mg/mol kreatinin', enhet: enhet('µg/L') })).toBe('Svar: mg/mol kreatinin')
+    // En konsentrasjon sier ikke noe måleområdet i den valgte enheten ikke sier.
+    expect(bemerkning({ benevning: 'µmol/L', enhet: enhet('µg/L') })).toBeNull()
+    expect(bemerkning({ benevning: 'nmol/l', enhet: enhet('nmol/L') })).toBeNull()
+    // Står måleområdet alt i den enheten, er det sagt der.
+    expect(bemerkning({ benevning: 'µmol/mol kreatinin', enhet: enhet('µmol/mol kreatinin') })).toBeNull()
+    expect(bemerkning({ benevning: 'Annen enhet', enhet: enhet('µg/L') })).toBeNull()
+    expect(bemerkning({ benevning: null, enhet: enhet('µg/L') })).toBeNull()
+    const urin = visninger.get('thc')!.tabeller.find((t) => t.tittel === 'Urin · THC-syre (THC-COOH)')!
+    expect(urin.rader.map(bemerkning)).toContain('Svar: Kvalitativ (positiv/negativ)')
   })
 
   it('oppsummerer seksjonen, finnes i søket og har Farmakologiportalen som kilde', () => {
     const v = visninger.get('citalopram')!
+    // Radene per prøvemateriale, ikke per tabell.
     expect(laboppsummering(v)).toBe('Serum 9 · Fullblod 2')
     const tekster = labsoketekster(v)
     expect(tekster.every((t) => t.panel === LABPANEL)).toBe(true)
     expect(tekster.map((t) => t.tekst)).toEqual(expect.arrayContaining(['Klinisk farmakologi Drammen', 'LC-MS/MS', 'Desmetylcitalopram']))
+    // Bare det tabellene viser: helseforetaket står ikke der, og finnes derfor ikke av søket på siden.
+    const institusjoner = new Set(v.tabeller.flatMap((t) => t.rader.flatMap((r) => r.institusjon ?? [])))
+    expect(institusjoner.size).toBeGreaterThan(0)
+    expect(tekster.filter((t) => institusjoner.has(t.tekst) && !v.tabeller.some((x) => x.rader.some((r) => r.laboratorium === t.tekst)))).toEqual([])
     const ref = fpreferanser(v)
     expect(ref.referanser.map((r) => r.id)).toEqual([FP_KILDE])
     expect(ref.referanser[0]!.automatisk?.opphav).toMatch(/^Laboratorieanalyser fra Farmakologiportalen, sist kontrollert \d{1,2}\. \p{L}+ \d{4}$/u)

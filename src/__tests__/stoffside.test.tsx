@@ -3530,7 +3530,7 @@ describe('analyse ved norske laboratorier', () => {
 
   const enhet = () => screen.getByRole('slider', { name: 'Vis måleområdene i' })
 
-  it('viser én tabell per matrise med laboratorium, metode og måleområde, og bytter enhet', async () => {
+  it('viser én tabell per matrise og analytt med laboratorium, metode og måleområde, og bytter enhet', async () => {
     const user = userEvent.setup()
     const k = labkilde()
     vis('bupropion', k)
@@ -3538,14 +3538,20 @@ describe('analyse ved norske laboratorier', () => {
     expect(k.laboratorier.les).toHaveBeenCalledWith(['529', '794'])
     const seksjon = screen.getByRole('region', { name: 'Analyse ved norske laboratorier' })
     const tabeller = within(seksjon).getAllByRole('table')
-    expect(tabeller.map((t) => t.getAttribute('aria-labelledby') && document.getElementById(t.getAttribute('aria-labelledby')!)?.textContent)).toEqual([
-      'Serum',
-      'Fullblod',
+    // Hver tabell sier hvilken analytt den gjelder.
+    expect(tabeller.map((t) => document.getElementById(t.getAttribute('aria-labelledby')!)?.textContent)).toEqual([
+      'Serum · Bupropion',
+      'Serum · Hydroksybupropion',
+      'Fullblod · Bupropion',
+      'Fullblod · Hydroksybupropion',
     ])
-    const [serum] = tabeller
-    expect(within(serum!).getAllByRole('columnheader').map((h) => h.textContent)).toEqual(['Analytt', 'Laboratorium', 'Metode', 'Måleområde (µg/L)', 'Benevning'])
-    const haukeland = within(serum!).getAllByRole('row').find((r) => r.textContent?.includes('Haukeland'))!
-    expect(haukeland.textContent).toContain('Hydroksybupropion')
+    const hydroksy = tabeller[1]!
+    // Ingen kolonne for analytten eller benevningen: enheten står over måleområdet.
+    expect(within(hydroksy).getAllByRole('columnheader').map((h) => h.textContent)).toEqual(['Laboratorium', 'Metode', 'Måleområde (µg/L)'])
+    const haukeland = within(hydroksy).getAllByRole('row').find((r) => r.textContent?.includes('Haukeland'))!
+    expect(within(haukeland).getByRole('rowheader').textContent).toMatch(/^Klinisk farmakologi Haukeland/)
+    // Helseforetaket gjentas ikke under laboratoriet.
+    expect(haukeland.textContent).not.toContain('Helse Bergen')
     expect(haukeland.textContent).toContain('LC-MS/MS')
     expect(haukeland.textContent).toContain('73—2000')
     expect(within(haukeland).getByRole('link', { name: /73—2000/ }).getAttribute('href')).toBe('https://farmakologiportalen.no/analysis/?id=10147')
@@ -3553,11 +3559,64 @@ describe('analyse ved norske laboratorier', () => {
 
     fireEvent.change(enhet(), { target: { value: '1' } })
     expect(enhet().getAttribute('aria-valuetext')).toBe('nmol/L')
-    expect(within(serum!).getAllByRole('columnheader').map((h) => h.textContent)).toContain('Måleområde (nmol/L)')
+    expect(within(hydroksy).getAllByRole('columnheader').map((h) => h.textContent)).toEqual(['Laboratorium', 'Metode', 'Måleområde (nmol/L)'])
     expect(haukeland.textContent).toContain('280—8000')
     // Portalen står som kilde i referansefeltet, med når dataene sist ble kontrollert.
     expect(within(seksjon).getByText('Laboratorieanalyser fra Farmakologiportalen, sist kontrollert 8. oktober 2026')).toBeTruthy()
     expect(within(seksjon).getByRole('button', { name: 'Referanse 1' })).toBeTruthy()
+  })
+
+  it('har kolonnen «Bemerkning» bare når et laboratorium svarer ut noe annet enn en konsentrasjon', async () => {
+    const user = userEvent.setup()
+    const laboratorier = { les: vi.fn(async (ider: readonly string[]) => labutvalg(ider)) }
+    const data = enkelSide({ id: 'thc', slug: 'thc', navn: 'THC' }, { nedre: 1, ovre: 2, enhet: 'nmol/L' })
+    const k = { ...kilde({ data }), laboratorier }
+    vis('thc', k)
+    await apneSkuff(user, 'Analyse ved norske laboratorier')
+    const seksjon = screen.getByRole('region', { name: 'Analyse ved norske laboratorier' })
+    const tabell = (tittel: string) =>
+      within(seksjon)
+        .getAllByRole('table')
+        .find((t) => document.getElementById(t.getAttribute('aria-labelledby')!)?.textContent === tittel)!
+    const urin = tabell('Urin · THC-syre (THC-COOH)')
+    expect(within(urin).getAllByRole('columnheader').map((h) => h.textContent)).toEqual([
+      'Laboratorium',
+      'Metode',
+      'Måleområde (µg/L)',
+      'Bemerkning',
+    ])
+    expect(within(urin).getAllByText('Svar: Kvalitativ (positiv/negativ)').length).toBeGreaterThan(0)
+    // Bare en nedre grense i portalens data: den står som laboratoriet oppga den, merket fordi portalens side ikke viser den.
+    const ous = within(urin).getByRole('rowheader', { name: /Rettstoksikologi OUS/ }).closest('tr')!
+    expect(ous.textContent).toContain('Nedre grense 30 nmol/L')
+    expect(ous.textContent).toContain('Vises ikke på portalens side')
+    expect(within(tabell('Serum · THC (delta-9-tetrahydrokannabinol)')).queryByRole('columnheader', { name: 'Bemerkning' })).toBeNull()
+  })
+
+  it('bryter lange metodenavn ved skråstreken, og søket på siden fremhever dem som de står', async () => {
+    const user = userEvent.setup()
+    const laboratorier = { les: vi.fn(async (ider: readonly string[]) => labutvalg(ider)) }
+    const data = enkelSide({ id: 'thc', slug: 'thc', navn: 'THC' }, { nedre: 1, ovre: 2, enhet: 'nmol/L' })
+    const k = { ...kilde({ data }), laboratorier }
+    vis('thc', k)
+    await apneSkuff(user, 'Analyse ved norske laboratorier')
+    const seksjon = screen.getByRole('region', { name: 'Analyse ved norske laboratorier' })
+    const metode = within(seksjon).getAllByText((_, el) => el?.tagName === 'TD' && el.textContent === 'Andre immunologiske/enzymatiske/fotometriske metoder')[0]!
+    // Brytepunktene er <wbr>, ikke tegn i teksten, og ikke i «LC-MS/MS».
+    expect(metode.querySelectorAll('wbr')).toHaveLength(2)
+    expect(metode.textContent).not.toContain('\u200b')
+    expect(within(seksjon).getAllByText('LC-MS/MS')[0]!.querySelector('wbr')).toBeNull()
+
+    await user.keyboard('{Control>}b{/Control}')
+    await user.keyboard('immunologiske/enzymatiske')
+    await waitFor(() => expect(metode.querySelector('mark.sidetreff')?.textContent).toBe('immunologiske/enzymatiske'))
+    expect(screen.getByRole('status').textContent).toMatch(/^Treff 1 av \d+$/)
+  })
+
+  it('bryter teksten i tabellene, så de vises i hele bredden uten å rulle sidelengs', () => {
+    const css = readFileSync('src/styles/laboratorier.css', 'utf8')
+    expect(css).toMatch(/\.serumtabell__tabell\.laboratorier__rader th,\s*\.serumtabell__tabell\.laboratorier__rader td\s*\{[^}]*white-space:\s*normal/)
+    expect(css).not.toMatch(/\.laboratorier__rader[^{]*\{[^}]*min-width:\s*1\d?rem/)
   })
 
   it('viser ikke seksjonen når portalen ikke har noe for stoffet', async () => {
