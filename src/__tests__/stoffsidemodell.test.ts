@@ -463,6 +463,7 @@ describe('sidemodellen', () => {
       'farmakogenetikk',
       'interaksjoner',
       'tdm',
+      'laboratorieanalyser',
       'kjemiske_grunndata',
       'serumkonsentrasjoner',
       'graviditet_amming',

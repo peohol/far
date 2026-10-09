@@ -190,3 +190,11 @@
   font-weight: var(--vekt-halvfet);
   color: var(--blekk-dempet);
 }
+
+/* Det siste kjøringen fant som bør vurderes, én setning per punkt. */
+.datakilde__merknader {
+  margin: var(--rom-2) 0 0;
+  padding-left: var(--rom-5);
+  font-size: var(--tekst-ui);
+  color: var(--blekk-dempet);
+}

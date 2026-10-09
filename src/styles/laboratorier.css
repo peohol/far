@@ -1,0 +1,78 @@
+/* Seksjonen «Analyse ved norske laboratorier»
+   (src/components/stoffside/Laboratoriepanel.tsx). Tabellene bruker
+   tabelloppsettet fra serumtabellen (monograf.css); bryteren er
+   `.trinnbryter`. Her står bare det som er særegent for seksjonen. */
+
+.laboratorier {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / -1;
+  gap: var(--rom-5);
+  width: 100%;
+}
+
+.laboratorier__valg {
+  display: flex;
+}
+
+@media (max-width: 30em) {
+  .laboratorier__valg > .trinnbryter {
+    flex: 1 1 auto;
+  }
+}
+
+.laboratorier__tabell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+}
+
+.laboratorier__tittel {
+  margin: 0;
+  font: var(--vekt-halvfet) var(--tekst-ui) / var(--linjehoyde-tett) var(--skrift-ui);
+  color: var(--blekk);
+}
+
+.laboratorier__rader tr {
+  scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
+}
+
+.laboratorier__rader th[scope='row'] {
+  text-align: left;
+  white-space: normal;
+  min-width: 10rem;
+  font: var(--vekt-normal) var(--tekst-ui) / 1.3 var(--skrift-ui);
+  color: var(--blekk-sterk);
+  background: none;
+}
+
+.laboratorier__rader td {
+  vertical-align: top;
+}
+
+.laboratorier__lab {
+  display: block;
+}
+
+.laboratorier__tillegg {
+  display: block;
+  margin-top: var(--rom-1);
+  font: var(--vekt-normal) var(--tekst-liten) / 1.3 var(--skrift-ui);
+  color: var(--blekk-dempet);
+}
+
+.laboratorier__omrade {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.laboratorier__mangler {
+  color: var(--blekk-dempet);
+}
+
+.laboratorier__merknad {
+  margin: 0;
+  max-width: 48rem;
+  font: var(--vekt-normal) var(--tekst-liten) / var(--linjehoyde-tett) var(--skrift-ui);
+  color: var(--blekk-dempet);
+}

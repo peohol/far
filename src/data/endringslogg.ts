@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.87.0',
+    dato: '2026-10-08',
+    sammendrag: 'Fagsidene viser analysene ved norske laboratorier fra Farmakologiportalen',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    punkter: [
+      'Ny seksjon «Analyse ved norske laboratorier» på fagsidene: hvilke laboratorier som analyserer stoffet og metabolittene, med metode og måleområde, én tabell per prøvemateriale.',
+      'Måleområdene kan vises i µg/L, nmol/L eller µmol/L, avrundet til to gjeldende sifre. De regnes bare om når molekylvekten er kontrollert mot PubChem; ellers står de i enheten laboratoriet oppga.',
+      'Laboratoriet og måleområdet lenker til Farmakologiportalen, og seksjonen viser når dataene sist ble kontrollert.',
+      'Dataene hentes fra Farmakologiportalen hver natt. Mislykkes en henting, eller ser den ufullstendig ut, står dataene fra før.',
+      'Administratorer ser Farmakologiportalen i «Datakilder», med siste henting, endringer, «Hent nå» og det som bør vurderes, som koblinger som bare stemmer på navnet.',
+    ],
+  },
+  {
     versjon: '1.86.0',
     dato: '2026-10-08',
     sammendrag: 'Fagsidene viser kjemiske grunndata fra PubChem',

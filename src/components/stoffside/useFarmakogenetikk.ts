@@ -9,6 +9,8 @@ import type { Bivirkningsdata } from '../../bivirkninger/modell'
 import { byggBivirkningsvisning, type Bivirkningsvisning } from '../../bivirkninger/stoffside'
 import type { Kjemiutvalg } from '../../kjemi/lesing'
 import { byggKjemivisning, kjemicider, type Kjemivisning } from '../../kjemi/stoffside'
+import type { Labutvalg } from '../../farmakologiportalen/lesing'
+import { byggLabvisning, labkomponenter, type Labvisning } from '../../farmakologiportalen/stoffside'
 
 /** Dataene fra én kilde for kjemikaliene siden er koblet til, og visningen bygd av dem. */
 export type Kildetilstand<U, V> =
@@ -84,6 +86,19 @@ export function useKjemi(stoff: string): Kjemivisning {
   const { tilstand } = useKilde(useFaginnholdskilde().kjemi, cider, somDet<Kjemiutvalg>)
   const utvalg = tilstand.status === 'klar' ? tilstand.utvalg : null
   return useMemo(() => byggKjemivisning(stoff, utvalg), [stoff, utvalg])
+}
+
+/**
+ * Analysene ved norske laboratorier fra Farmakologiportalen for
+ * forbindelsene stoffet har, ordnet slik seksjonen «Analyse ved norske
+ * laboratorier» viser dem. Molekylvektene omregningen bruker, er PubChems
+ * (`kjemi`).
+ */
+export function useLaboratorieanalyser(stoff: string, kjemi: Kjemivisning): Labvisning {
+  const komponenter = useMemo(() => labkomponenter(stoff), [stoff])
+  const { tilstand } = useKilde(useFaginnholdskilde().laboratorier, komponenter, somDet<Labutvalg>)
+  const utvalg = tilstand.status === 'klar' ? tilstand.utvalg : null
+  return useMemo(() => byggLabvisning(stoff, utvalg, kjemi), [stoff, utvalg, kjemi])
 }
 
 /**

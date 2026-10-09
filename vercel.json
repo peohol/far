@@ -11,6 +11,7 @@
     "api/legemiddeldata-synk.ts": { "maxDuration": 300 },
     "api/clinpgx-synk.ts": { "maxDuration": 300 },
     "api/cpic-synk.ts": { "maxDuration": 300 },
-    "api/pubchem-synk.ts": { "maxDuration": 300 }
+    "api/pubchem-synk.ts": { "maxDuration": 300 },
+    "api/farmakologiportalen-synk.ts": { "maxDuration": 300 }
   }
 }

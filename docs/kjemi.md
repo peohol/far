@@ -2,7 +2,9 @@
 
 Leses når noe som har med forbindelsene, koblingene til PubChem, synkroniseringen
 eller seksjonen «Kjemiske grunndata» på fagsidene skal endres. Driftstatusen og
-endringsloggen står i `docs/datakilder.md`.
+endringsloggen står i `docs/datakilder.md`. Koblingene til Farmakologiportalen
+og laboratorieanalysene står i `docs/farmakologiportalen.md`; molekylvektene
+der regnes om med, kommer herfra.
 
 ## Forbindelser er ikke fagsider
 

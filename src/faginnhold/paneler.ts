@@ -35,6 +35,9 @@ import { erTomt, rensDokument, tomtDokument, type Riktekstdokument } from './rik
  * - `tabell` — én tabell med faste kolonner.
  * - `kjemi` — de kjemiske grunndataene fra PubChem for forbindelsene stoffet
  *   har i `src/data/forbindelser.ts` (`src/kjemi/`). Ikke redaksjonelt.
+ * - `laboratorier` — analysene norske laboratorier oppgir i
+ *   Farmakologiportalen for de samme forbindelsene (`src/farmakologiportalen/`).
+ *   Ikke redaksjonelt.
  */
 export type Panelform =
   | 'identitet'
@@ -46,6 +49,7 @@ export type Panelform =
   | 'mekanismer'
   | 'tabell'
   | 'kjemi'
+  | 'laboratorier'
 
 /**
  * En undergruppe av faste kort i en kortserie: en overskrift i seksjonen med
@@ -114,6 +118,7 @@ export const PANELER = [
   { nokkel: 'farmakogenetikk', tittel: 'Farmakogenetikk', form: 'kort' },
   { nokkel: 'interaksjoner', tittel: 'Interaksjoner', form: 'interaksjoner' },
   { nokkel: 'tdm', tittel: 'Terapeutisk legemiddelmonitorering (TDM)', form: 'kort' },
+  { nokkel: 'laboratorieanalyser', tittel: 'Analyse ved norske laboratorier', form: 'laboratorier' },
   { nokkel: 'kjemiske_grunndata', tittel: 'Kjemiske grunndata', form: 'kjemi' },
   { nokkel: 'serumkonsentrasjoner', tittel: 'Serumkonsentrasjoner ved ulike doser', form: 'tabell' },
   {

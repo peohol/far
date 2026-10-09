@@ -1,0 +1,222 @@
+[
+ {
+  "id": "10159",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2019-12-13T09:13:18",
+  "published_date": "2019-12-13T09:11:00",
+  "title": "mg x t/L",
+  "name": "mg x t/L",
+  "unit": "mg x t/L"
+ },
+ {
+  "id": "10160",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2019-12-13T09:13:27",
+  "published_date": "2019-12-13T09:13:00",
+  "title": "µg x t/L",
+  "name": "µg x t/L",
+  "unit": "µg x t/L"
+ },
+ {
+  "id": "10704",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2020-12-17T13:08:10",
+  "published_date": "2020-12-17T13:08:10",
+  "title": "mg",
+  "name": "mg",
+  "unit": "mg"
+ },
+ {
+  "id": "11204",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2023-08-10T08:13:53",
+  "published_date": "2023-08-10T08:13:53",
+  "title": "ng/g",
+  "name": "ng/g",
+  "unit": "ng/g"
+ },
+ {
+  "id": "11205",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2023-08-10T08:14:14",
+  "published_date": "2023-08-10T08:14:14",
+  "title": "µg/g",
+  "name": "µg/g",
+  "unit": "µg/g"
+ },
+ {
+  "id": "11588",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2025-04-01T21:48:20",
+  "published_date": "2025-04-01T21:47:00",
+  "title": "g/kg (‰, promille)",
+  "name": "g/kg (‰, promille)",
+  "unit": "g/kg (‰, promille)"
+ },
+ {
+  "id": "3807",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2015-09-08T08:48:58",
+  "published_date": "2015-09-08T08:48:58",
+  "title": "g/L",
+  "name": "g/L",
+  "unit": "g/L"
+ },
+ {
+  "id": "3808",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2015-09-08T08:49:01",
+  "published_date": "2015-09-08T08:49:01",
+  "title": "mg/L",
+  "name": "mg/L",
+  "unit": "mg/L"
+ },
+ {
+  "id": "3809",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2015-09-08T08:49:13",
+  "published_date": "2015-09-08T08:49:13",
+  "title": "μg/L",
+  "name": "µg/L",
+  "unit": "μg/L"
+ },
+ {
+  "id": "3810",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2015-09-08T08:49:28",
+  "published_date": "2015-09-08T08:49:28",
+  "title": "mol/L",
+  "name": "mol/L",
+  "unit": "mol/L"
+ },
+ {
+  "id": "3811",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2015-09-08T08:49:34",
+  "published_date": "2015-09-08T08:49:34",
+  "title": "mmol/L",
+  "name": "mmol/L",
+  "unit": "mmol/L"
+ },
+ {
+  "id": "3812",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2015-09-08T08:49:55",
+  "published_date": "2015-09-08T08:49:55",
+  "title": "μmol/L",
+  "name": "µmol/L",
+  "unit": "μmol/L"
+ },
+ {
+  "id": "3813",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2015-09-08T08:50:01",
+  "published_date": "2015-09-08T08:50:01",
+  "title": "nmol/L",
+  "name": "nmol/L",
+  "unit": "nmol/L"
+ },
+ {
+  "id": "3814",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2015-09-08T08:50:11",
+  "published_date": "2015-09-08T08:50:11",
+  "title": "μmol/kg",
+  "name": "µmol/kg",
+  "unit": "μmol/kg"
+ },
+ {
+  "id": "3816",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2015-09-08T08:50:29",
+  "published_date": "2015-09-08T08:50:29",
+  "title": "% (prosent)",
+  "name": "% (prosent)",
+  "unit": "% (prosent)"
+ },
+ {
+  "id": "3817",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2015-09-08T08:50:37",
+  "published_date": "2015-09-08T08:50:37",
+  "title": "Kvalitativ (positiv/negativ)",
+  "name": "Kvalitativ (positiv/negativ)",
+  "unit": "Kvalitativ (positiv/negativ)"
+ },
+ {
+  "id": "3818",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2015-09-08T08:50:42",
+  "published_date": "2015-09-08T08:50:42",
+  "title": "Annen enhet",
+  "name": "Annen enhet",
+  "unit": "Annen enhet"
+ },
+ {
+  "id": "8610",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2015-12-16T10:01:31",
+  "published_date": "2015-12-16T10:01:31",
+  "title": "mg/mol kreatinin",
+  "name": "mg/mol kreatinin",
+  "unit": "mg/mol kreatinin"
+ },
+ {
+  "id": "8957",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2016-02-20T14:55:50",
+  "published_date": "2016-02-20T14:55:50",
+  "title": "μmol/mol kreatinin",
+  "name": "µmol/mol kreatinin",
+  "unit": "μmol/mol kreatinin"
+ },
+ {
+  "id": "8969",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2016-02-23T09:42:01",
+  "published_date": "2016-02-23T09:42:01",
+  "title": "Uten benevning",
+  "name": "Uten benevning",
+  "unit": "Uten benevning"
+ },
+ {
+  "id": "9042",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2016-04-21T11:22:35",
+  "published_date": "2016-04-21T11:08:00",
+  "title": "Arbitrær/prosedyredefinert",
+  "name": "Arbitrær/prosedyredefinert",
+  "unit": "Arbitrær/prosedyredefinert"
+ },
+ {
+  "id": "9764",
+  "active": "true",
+  "expire_action": "HIDE",
+  "modified_date": "2018-07-04T08:51:58",
+  "published_date": "2018-06-29T14:28:00",
+  "title": "mmol/mol kreatinin",
+  "name": "mmol/mol kreatinin",
+  "unit": "mmol/mol kreatinin"
+ }
+]

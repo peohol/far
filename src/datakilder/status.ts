@@ -1,9 +1,10 @@
 /**
  * Driftstatusen for datakildene — legemiddeldataene fra FEST, de
- * farmakogenetiske fra ClinPGx og CPIC og de kjemiske fra PubChem — slik administratorene ser den: de
+ * farmakogenetiske fra ClinPGx og CPIC, de kjemiske fra PubChem og
+ * laboratorieanalysene fra Farmakologiportalen — slik administratorene ser den: de
  * siste kjøringene, om noe er galt, og hva som er endret siden forrige henting.
  *
- * Endringene i ClinPGx, CPIC og PubChem oppdages i databasen
+ * Endringene i ClinPGx, CPIC, PubChem og Farmakologiportalen oppdages i databasen
  * (`*_datakilder_endringer.sql`, `docs/datakilder.md`); FEST har ingen
  * endringslogg, men hver kjøring teller nye, endrede og utgåtte rader. Alt
  * leses med `datakilder_status()`. Alt her er rene funksjoner, bortsett fra
@@ -12,7 +13,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import vercel from '../../vercel.json'
 
-export const DATAKILDER = ['fest', 'clinpgx', 'cpic', 'pubchem'] as const
+export const DATAKILDER = ['fest', 'clinpgx', 'cpic', 'pubchem', 'farmakologiportalen'] as const
 export type Datakilde = (typeof DATAKILDER)[number]
 
 export interface Kildeoppsett {
@@ -35,6 +36,11 @@ export interface Kildeoppsett {
    * Uten: kjøringen teller bare nye, endrede og utgåtte rader.
    */
   endringslogg: boolean
+  /**
+   * Døgn mellom de planlagte kjøringene, når de ikke står i `vercel.json`
+   * (jobben går et annet sted, som GitHub Actions).
+   */
+  intervall?: number
 }
 
 /** «2026-09-08T03:09:06» som «08.09.2026». */
@@ -65,6 +71,16 @@ export const KILDEOPPSETT: Record<Datakilde, Kildeoppsett> = {
   cpic: { navn: 'CPIC', synk: '/api/cpic-synk', versjonsnavn: 'Skjemaversjon', etterFeil: null, endringslogg: true },
   // Alt som består kontrollen, byttes inn i én transaksjon (docs/kjemi.md).
   pubchem: { navn: 'PubChem', synk: '/api/pubchem-synk', versjonsnavn: 'Parserversjon', etterFeil: null, endringslogg: true },
+  // Hele uttrekket byttes inn i én transaksjon, hver natt fra GitHub Actions
+  // (docs/farmakologiportalen.md).
+  farmakologiportalen: {
+    navn: 'Farmakologiportalen',
+    synk: '/api/farmakologiportalen-synk',
+    versjonsnavn: 'Parserversjon',
+    etterFeil: null,
+    endringslogg: true,
+    intervall: 1,
+  },
 }
 
 /* --- Formen fra databasen -------------------------------------------------- */
@@ -103,6 +119,8 @@ export interface Kjoring {
    * det (`antall.uavklarte`), f.eks. forbindelser uten verifisert CID i PubChem.
    */
   uavklarte?: string[]
+  /** Det kjøringen fant som noen bør se på, én setning hver (`antall.merknader`). */
+  merknader?: string[]
 }
 
 export type Endringsart = 'ny' | 'endret' | 'fjernet' | 'grunnlag'
@@ -173,6 +191,14 @@ function lesRader(antall: unknown): Radtall | null {
   return { nye: sum('nye'), endrede: sum('endrede'), utgatte: sum('utgatte') }
 }
 
+/** Henvisninger i en kilde som ikke traff etter et bytte (`antall.brudd`), som én setning. */
+function bruddtekst(b: unknown): string | null {
+  if (!erObjekt(b) || typeof b.antall !== 'number' || !tekst(b.fra) || !tekst(b.til)) return null
+  const navn = (type: string) => TYPENAVN[type] ?? type
+  const eksempler = Array.isArray(b.eksempler) ? b.eksempler.filter((e): e is string => typeof e === 'string') : []
+  return `${b.antall} av typen «${navn(tekst(b.fra)!)}» viser til «${navn(tekst(b.til)!)}» som kilden ikke har${eksempler.length ? ` (f.eks. ID ${eksempler.join(', ')})` : ''}.`
+}
+
 function lesKjoring(o: unknown): Kjoring | null {
   if (!erObjekt(o)) return null
   const kilde = blant(DATAKILDER, o.kilde)
@@ -194,6 +220,12 @@ function lesKjoring(o: unknown): Kjoring | null {
     ...(!KILDEOPPSETT[kilde].endringslogg && { rader: lesRader(o.antall) }),
     ...(erObjekt(o.antall) && Array.isArray(o.antall.uavklarte) && {
       uavklarte: o.antall.uavklarte.filter((u): u is string => typeof u === 'string'),
+    }),
+    ...(erObjekt(o.antall) && (Array.isArray(o.antall.merknader) || Array.isArray(o.antall.brudd)) && {
+      merknader: [
+        ...(Array.isArray(o.antall.merknader) ? o.antall.merknader : []).filter((m): m is string => typeof m === 'string'),
+        ...(Array.isArray(o.antall.brudd) ? o.antall.brudd : []).map(bruddtekst).filter((m): m is string => m !== null),
+      ],
     }),
   }
 }
@@ -263,12 +295,12 @@ export function intervallDogn(uttrykk: string): number | null {
   return ukedag === '*' ? 1 : null
 }
 
-/** Intervallet for hver kilde, fra Vercels cron-oppsett. */
+/** Intervallet for hver kilde, fra Vercels cron-oppsett, eller fra oppsettet når jobben går et annet sted. */
 export function kildeintervaller(crons: readonly { path: string; schedule: string }[] = vercel.crons): Partial<Record<Datakilde, number>> {
   const intervaller: Partial<Record<Datakilde, number>> = {}
   for (const kilde of DATAKILDER) {
     const cron = crons.find((c) => c.path === KILDEOPPSETT[kilde].synk)
-    const dogn = cron ? intervallDogn(cron.schedule) : null
+    const dogn = cron ? intervallDogn(cron.schedule) : (KILDEOPPSETT[kilde].intervall ?? null)
     if (dogn) intervaller[kilde] = dogn
   }
   return intervaller
@@ -289,7 +321,7 @@ export interface Kildevurdering {
   /** Siste kjente release og versjon, fra en vellykket kjøring. */
   release: string | null
   versjon: string | null
-  /** Døgn mellom de planlagte kjøringene, fra `vercel.json`. */
+  /** Døgn mellom de planlagte kjøringene, fra `vercel.json` eller kildeoppsettet. */
   intervall: number | null
   /** Nyest først. */
   kjoringer: Kjoring[]
@@ -412,6 +444,12 @@ const TYPENAVN: Record<string, string> = {
   term: 'Term',
   endring: 'CPICs endringslogg',
   forbindelse: 'Kjemisk forbindelse',
+  enhet: 'Enhet',
+  provemateriale: 'Prøvemateriale',
+  institusjon: 'Institusjon',
+  laboratorium: 'Laboratorium',
+  komponent: 'Komponent',
+  analyse: 'Laboratorieanalyse',
 }
 
 /** «Endret · Anbefaling», «Ny · Retningslinje». */
