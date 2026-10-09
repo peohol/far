@@ -1,7 +1,9 @@
 /* Seksjonen «Analyse ved norske laboratorier»
    (src/components/stoffside/Laboratoriepanel.tsx). Tabellene bruker
    tabelloppsettet fra serumtabellen (monograf.css); bryteren er
-   `.trinnbryter`. Her står bare det som er særegent for seksjonen. */
+   `.trinnbryter`. Her står bare det som er særegent for seksjonen.
+   Tabellene skal vises i hele bredden uten å rulle sidelengs: tekst brytes i
+   alle kolonnene unntatt tallene i måleområdet. */
 
 .laboratorier {
   display: flex;
@@ -33,21 +35,50 @@
   color: var(--blekk);
 }
 
+.laboratorier__skille {
+  color: var(--blekk-dempet);
+}
+
+.laboratorier__analytt {
+  color: var(--blekk-sterk);
+}
+
 .laboratorier__rader tr {
   scroll-margin-block: var(--toppmeny-offset) var(--rom-7);
 }
 
-.laboratorier__rader th[scope='row'] {
+.serumtabell__tabell.laboratorier__rader th,
+.serumtabell__tabell.laboratorier__rader td {
   text-align: left;
+  vertical-align: top;
   white-space: normal;
-  min-width: 10rem;
+  overflow-wrap: break-word;
+  line-height: 1.3;
+}
+
+.serumtabell__tabell.laboratorier__rader tbody th[scope='row'] {
+  text-align: left;
   font: var(--vekt-normal) var(--tekst-ui) / 1.3 var(--skrift-ui);
   color: var(--blekk-sterk);
   background: none;
 }
 
-.laboratorier__rader td {
-  vertical-align: top;
+/* Metoden brytes etter skråstrekene mellom lange ord («immunologiske/enzymatiske/fotometriske»,
+   se `Laboratoriepanel.tsx`), og kolonnen er bred nok til at «LC-QTOF-MS» står på én linje. */
+.serumtabell__tabell.laboratorier__rader td:nth-child(2) {
+  min-width: 8.5rem;
+}
+
+/* Lenkene står på første linje i cellen, som teksten i de andre kolonnene. */
+.laboratorier__rader .preparatlenke {
+  min-height: 0;
+  align-items: baseline;
+}
+
+/* En enhet som ikke er den valgte, kan gå på neste linje under tallene. */
+.laboratorier__rader td .preparatlenke {
+  flex-wrap: wrap;
+  column-gap: var(--rom-1);
 }
 
 .laboratorier__lab {
@@ -66,6 +97,10 @@
   white-space: nowrap;
 }
 
+.laboratorier__enhet {
+  color: var(--blekk-dempet);
+}
+
 .laboratorier__mangler {
   color: var(--blekk-dempet);
 }
@@ -75,4 +110,39 @@
   max-width: 48rem;
   font: var(--vekt-normal) var(--tekst-liten) / var(--linjehoyde-tett) var(--skrift-ui);
   color: var(--blekk-dempet);
+}
+
+/* --- Smale skjermer --------------------------------------------------------
+   Tre smale kolonner: bemerkningen står under måleområdet i stedet for i en
+   egen kolonne, og cellene har mindre luft. */
+@media (max-width: 30em) {
+  .serumtabell__tabell.laboratorier__rader th,
+  .serumtabell__tabell.laboratorier__rader td {
+    padding-inline: var(--rom-2);
+  }
+
+  .serumtabell__tabell.laboratorier__rader td:nth-child(2) {
+    min-width: 4.5rem;
+  }
+
+  /* Lenkene er understreket; ikonet tar plass navnene trenger. */
+  .laboratorier__rader .preparatlenke > .ikon {
+    display: none;
+  }
+
+  .serumtabell__tabell.laboratorier__rader .laboratorier__bemerkningskolonne {
+    display: none;
+  }
+
+  /* Lange sammensatte ord («Rusmiddellaboratorium») brytes heller enn at tabellen ruller. */
+  .serumtabell__tabell.laboratorier__rader tbody th[scope='row'],
+  .laboratorier__bemerkning {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (min-width: 30.0625em) {
+  .laboratorier__tillegg.laboratorier__bemerkning {
+    display: none;
+  }
 }

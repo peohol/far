@@ -4,12 +4,14 @@
  * `src/data/forbindelser.ts`, og for gruppe- og sumanalysene som dekker dem
  * (`docs/farmakologiportalen.md`).
  *
- * Én tabell per matrise, i den rekkefølgen `MATRISER` har dem. Måleområdene
- * vises i enheten brukeren velger når de kan regnes om sikkert: mellom masse
- * og stoffmengde bare med molekylvekten fra PubChem, og bare når koblingen
- * til portalen er verifisert. En sumanalyse regnes aldri om mellom masse og
- * stoffmengde. Det som ikke kan regnes om, står som laboratoriet oppga det,
- * med enheten.
+ * Én tabell per matrise og analytt, med begge i tittelen («Serum ·
+ * Desmetylcitalopram»), så det aldri er tvil om hva som er målt: matrisene i
+ * den rekkefølgen `MATRISER` har dem, og innenfor hver matrise selve stoffet
+ * før metabolittene og gruppe- og sumanalysene. Måleområdene vises i enheten
+ * brukeren velger når de kan regnes om sikkert: mellom masse og stoffmengde
+ * bare med molekylvekten fra PubChem, og bare når koblingen til portalen er
+ * verifisert. En sumanalyse regnes aldri om mellom masse og stoffmengde. Det
+ * som ikke kan regnes om, står som laboratoriet oppga det, med enheten.
  *
  * Alt her er rene funksjoner.
  */
@@ -70,12 +72,14 @@ export interface Labrad {
 }
 
 export interface Labtabell {
-  /** Matrisens nøkkel, eller `annet:<prøvemateriale>` for et OUSFAR ikke kjenner. */
+  /** Matrisens nøkkel (eller `annet:<prøvemateriale>` for et OUSFAR ikke kjenner) og analyttens. */
   nokkel: string
+  /** Prøvematerialet: det radene har, når de har det samme («Serum»); ellers matrisen («Serum og plasma»). */
+  materiale: string
+  analytt: string
+  /** Materialet og analytten: «Serum · Citalopram». */
   tittel: string
   rader: Labrad[]
-  /** Om analytten skal stå i en egen kolonne: når tabellen har mer enn én. */
-  visAnalytt: boolean
   /** Om prøvematerialet skal stå på hver rad: når radene ikke har det samme. */
   visProvemateriale: boolean
 }
@@ -111,7 +115,7 @@ export function byggLabvisning(
     (kjemi?.rader ?? []).flatMap((r) => (r.data ? [[r.forbindelse.nokkel, Number(r.data.molvekt)] as const] : [])),
   )
 
-  const tabeller = new Map<string, Labrad[]>()
+  const grupper = new Map<string, { matrise: string; rader: Labrad[] }>()
   for (const { id, data: a } of utvalg.analyser) {
     if (!vises(a)) continue
     const forbindelse = etterId.get(a.komponent_id) ?? null
@@ -136,35 +140,36 @@ export function byggLabvisning(
       benevning: a.svarenhet.original,
       molvekt: mw && Number.isFinite(mw) && mw > 0 ? mw : null,
     }
-    const nokkel = a.provemateriale.matrise ?? `annet:${a.provemateriale.original ?? 'Prøvemateriale ikke oppgitt'}`
-    tabeller.set(nokkel, [...(tabeller.get(nokkel) ?? []), rad])
+    const matrise = a.provemateriale.matrise ?? `annet:${a.provemateriale.original ?? 'Prøvemateriale ikke oppgitt'}`
+    const nokkel = `${matrise}|${forbindelse?.nokkel ?? `fp:${a.komponent_id}`}`
+    const gruppe = grupper.get(nokkel)
+    if (gruppe) gruppe.rader.push(rad)
+    else grupper.set(nokkel, { matrise, rader: [rad] })
   }
 
-  const plass = (nokkel: string) => {
-    const i = MATRISER.findIndex((m) => m.nokkel === nokkel)
+  const plass = (matrise: string) => {
+    const i = MATRISER.findIndex((m) => m.nokkel === matrise)
     return i < 0 ? MATRISER.length : i
   }
-  const radorden = (r: Labrad) => (r.forbindelse ? (rekkefolge.get(r.forbindelse.nokkel) ?? 0) : forbindelser.length)
-  return {
-    usikre,
-    kontrollert_kl: utvalg.kilde.kontrollert_kl,
-    tabeller: [...tabeller]
-      .sort(([a], [b]) => plass(a) - plass(b) || sammenlign(a, b))
-      .map(([nokkel, rader]): Labtabell => {
-        rader.sort((a, b) => radorden(a) - radorden(b) || sammenlign(a.analytt, b.analytt) || sammenlign(a.laboratorium, b.laboratorium) || sammenlign(a.id, b.id))
-        const materialer = new Set(rader.map((r) => r.provemateriale ?? ''))
-        const matrise = MATRISER.find((m) => m.nokkel === nokkel)
-        const eneste = materialer.size === 1 ? rader[0]!.provemateriale : null
-        return {
-          nokkel,
-          // Har alle radene samme prøvemateriale, står det som tittel («Serum»); ellers matrisen («Serum og plasma»).
-          tittel: eneste ?? matrise?.navn ?? nokkel.replace(/^annet:/, ''),
-          rader,
-          visAnalytt: new Set(rader.map((r) => r.analytt)).size > 1,
-          visProvemateriale: materialer.size > 1,
-        }
-      }),
-  }
+  // Selve stoffet og metabolittene i registerets rekkefølge, gruppe- og sumanalysene etter dem.
+  const analyttorden = (r: Labrad) => (r.forbindelse ? (rekkefolge.get(r.forbindelse.nokkel) ?? 0) : forbindelser.length)
+  const tabeller = [...grupper].map(([nokkel, { matrise, rader }]): Labtabell => {
+    rader.sort((a, b) => sammenlign(a.laboratorium, b.laboratorium) || sammenlign(a.id, b.id))
+    const materialer = new Set(rader.map((r) => r.provemateriale ?? ''))
+    const eneste = materialer.size === 1 ? rader[0]!.provemateriale : null
+    const materiale = eneste ?? MATRISER.find((m) => m.nokkel === matrise)?.navn ?? matrise.replace(/^annet:/, '')
+    const analytt = rader[0]!.analytt
+    return { nokkel, materiale, analytt, tittel: `${materiale} · ${analytt}`, rader, visProvemateriale: materialer.size > 1 }
+  })
+  const matriseAv = (t: Labtabell) => grupper.get(t.nokkel)!.matrise
+  tabeller.sort(
+    (a, b) =>
+      plass(matriseAv(a)) - plass(matriseAv(b)) ||
+      sammenlign(matriseAv(a), matriseAv(b)) ||
+      analyttorden(a.rader[0]!) - analyttorden(b.rader[0]!) ||
+      sammenlign(a.analytt, b.analytt),
+  )
+  return { usikre, kontrollert_kl: utvalg.kilde.kontrollert_kl, tabeller }
 }
 
 /** Et måleområde slik det vises: tallene, og enheten når den ikke er den valgte. */
@@ -193,14 +198,28 @@ export function maleomrade(rad: Pick<Labrad, 'nedre' | 'ovre' | 'enhet' | 'molve
   return { tekst: visOmrade(nedre!, ovre!), enhet: rad.enhet.original, omregnet: false }
 }
 
-/** Om benevningen laboratoriet svarer ut i, sier noe den valgte enheten ikke sier. */
-export function harEgenBenevning(rad: Pick<Labrad, 'benevning'>, valgt: Visningsenhet): boolean {
-  return Boolean(rad.benevning) && lesKonsentrasjonsenhet(rad.benevning)?.enhet !== valgt
+/** Benevninger i portalen som ikke sier noe om svaret. */
+const TOMME_BENEVNINGER = new Set(['annen enhet'])
+
+/**
+ * Hva laboratoriet svarer ut i, når det ikke er en konsentrasjon og ikke
+ * enheten måleområdet står i: et kvalitativt svar («Kvalitativ
+ * (positiv/negativ)») eller en enhet per kreatinin. En konsentrasjon sier
+ * ikke noe måleområdet i den valgte enheten ikke sier. `null` når det ikke er
+ * noe å bemerke.
+ */
+export function bemerkning(rad: Pick<Labrad, 'benevning' | 'enhet'>): string | null {
+  const benevning = rad.benevning?.trim()
+  if (!benevning || TOMME_BENEVNINGER.has(benevning.toLowerCase())) return null
+  if (lesKonsentrasjonsenhet(benevning) || benevning === rad.enhet.original?.trim()) return null
+  return `Svar: ${benevning}`
 }
 
-/** Hva seksjonen viser når den er lukket: «Serum og plasma 6 · Urin 2». */
+/** Hva seksjonen viser når den er lukket: radene per prøvemateriale, «Serum 9 · Fullblod 2». */
 export function laboppsummering(visning: Labvisning): string {
-  return ramsOpp(visning.tabeller.map((t) => `${t.tittel} ${t.rader.length}`))
+  const antall = new Map<string, number>()
+  for (const t of visning.tabeller) antall.set(t.materiale, (antall.get(t.materiale) ?? 0) + t.rader.length)
+  return ramsOpp([...antall].map(([materiale, n]) => `${materiale} ${n}`))
 }
 
 /** Ankeret til raden for en analyse. */

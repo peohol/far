@@ -119,9 +119,15 @@ Seksjonen «Analyse ved norske laboratorier» (`Laboratoriepanel.tsx`,
 `src/farmakologiportalen/stoffside.ts`) står etter TDM og viser analysene for
 forbindelsene stoffet har, og for gruppe- og sumanalysene som dekker dem. Med:
 bare analyser som er aktive og synlige i portalen, ved laboratorier som er i
-drift. Én tabell per matrise: Laboratorium, Metode og Måleområde, med Analytt
-når tabellen har flere og Benevning når laboratoriet svarer ut i en annen
-enhet enn den valgte. Laboratoriet og måleområdet lenker til portalen.
+drift. Én tabell per matrise og analytt, med begge i tittelen («Serum ·
+Desmetylcitalopram»), så det aldri er tvil om hva som er målt: selve stoffet
+før metabolittene og gruppe- og sumanalysene. Kolonnene er Laboratorium,
+Metode og Måleområde, og Bemerkning når et laboratorium svarer ut noe annet
+enn en konsentrasjon (et kvalitativt svar, en enhet per kreatinin). Det står
+ingen benevning ved siden av tallene: de er i den valgte enheten, eller har
+enheten sin rett etter seg. Tabellene skal vises i hele bredden uten å rulle
+sidelengs; på smale skjermer står bemerkningen under måleområdet.
+Laboratoriet og måleområdet lenker til portalen.
 
 Måleområdene vises i enheten brukeren velger (µg/L, nmol/L, µmol/L), med høyst
 to gjeldende sifre, som `x—y`, «fra x» eller «opptil y»

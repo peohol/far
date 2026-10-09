@@ -3,7 +3,7 @@ import { VISNINGSENHETER, type Visningsenhet } from '../../enheter/konsentrasjon
 import type { Paneldefinisjon } from '../../faginnhold/paneler'
 import { fpUrl } from '../../farmakologiportalen/api'
 import {
-  harEgenBenevning,
+  bemerkning,
   laboppsummering,
   labsted,
   maleomrade,
@@ -20,11 +20,15 @@ import '../../styles/laboratorier.css'
 
 const ENHETSVALG: readonly Trinnvalg<Visningsenhet>[] = VISNINGSENHETER.map((e) => ({ verdi: e, merke: e }))
 const erVisningsenhet = (v: unknown): v is Visningsenhet => VISNINGSENHETER.some((e) => e === v)
+/** Et usynlig brytepunkt etter skråstreken mellom to lange ord («immunologiske/enzymatiske»), men ikke i «LC-MS/MS». */
+const brytbar = (tekst: string) => tekst.replace(/(?<=\p{L}{4})\/(?=\p{L}{4})/gu, '/\u200b')
 
 /**
  * Seksjonen «Analyse ved norske laboratorier»: analysene laboratoriene oppgir
- * i Farmakologiportalen for forbindelsene stoffet har, én tabell per
- * matrise, med måleområdene i enheten brukeren velger. Ingenting her
+ * i Farmakologiportalen for forbindelsene stoffet har, én tabell per matrise
+ * og analytt («Serum · Desmetylcitalopram»), med måleområdene i enheten
+ * brukeren velger. Tabellene er smale nok til å vises i hele bredden; lange
+ * navn brytes. Ingenting her
  * redigeres; koblingene står i `src/data/forbindelser.ts`, og portalen står
  * som kilde i referansefeltet (`src/farmakologiportalen/`).
  */
@@ -70,26 +74,34 @@ export function Laboratoriepanel({
 
 function Tabell({ tabell, enhet }: { tabell: Labtabell; enhet: Visningsenhet }) {
   const overskrift = useId()
-  const benevning = tabell.rader.some((r) => harEgenBenevning(r, enhet))
+  const merknader = tabell.rader.map(bemerkning)
+  const medBemerkning = merknader.some(Boolean)
   return (
     <div className="laboratorier__tabell">
       <p id={overskrift} className="laboratorier__tittel">
-        <Uthev tekst={tabell.tittel} />
+        <Uthev tekst={tabell.materiale} />
+        <span className="laboratorier__skille"> · </span>
+        <span className="laboratorier__analytt">
+          <Uthev tekst={tabell.analytt} />
+        </span>
       </p>
       <div className="serumtabell__rull" role="region" aria-labelledby={overskrift} tabIndex={0}>
-        <table className="serumtabell__tabell laboratorier__rader" aria-labelledby={overskrift}>
+        <table className="serumtabell__tabell laboratorier__rader" aria-labelledby={overskrift} data-bemerkning={medBemerkning || undefined}>
           <thead>
             <tr>
-              {tabell.visAnalytt && <th scope="col">Analytt</th>}
               <th scope="col">Laboratorium</th>
               <th scope="col">Metode</th>
               <th scope="col">Måleområde ({enhet})</th>
-              {benevning && <th scope="col">Benevning</th>}
+              {medBemerkning && (
+                <th scope="col" className="laboratorier__bemerkningskolonne">
+                  Bemerkning
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
-            {tabell.rader.map((r) => (
-              <Rad key={r.id} rad={r} tabell={tabell} enhet={enhet} benevning={benevning} />
+            {tabell.rader.map((r, i) => (
+              <Rad key={r.id} rad={r} tabell={tabell} enhet={enhet} bemerkning={medBemerkning ? (merknader[i] ?? '') : null} />
             ))}
           </tbody>
         </table>
@@ -98,46 +110,33 @@ function Tabell({ tabell, enhet }: { tabell: Labtabell; enhet: Visningsenhet }) 
   )
 }
 
-function Rad({ rad: r, tabell, enhet, benevning }: { rad: Labrad; tabell: Labtabell; enhet: Visningsenhet; benevning: boolean }) {
+function Rad({ rad: r, tabell, enhet, bemerkning }: { rad: Labrad; tabell: Labtabell; enhet: Visningsenhet; bemerkning: string | null }) {
   const omrade = maleomrade(r, enhet)
-  const lab = (
-    <>
-      <span className="laboratorier__lab">
-        {r.laboratorium_id ? (
-          <Kildelenke lenke={fpUrl.laboratorium(r.laboratorium_id)}>
-            <Uthev tekst={r.laboratorium} />
-          </Kildelenke>
-        ) : (
-          <Uthev tekst={r.laboratorium} />
-        )}
-      </span>
-      {r.institusjon && !r.laboratorium.includes(r.institusjon) && (
-        <span className="laboratorier__tillegg">
-          <Uthev tekst={r.institusjon} />
-        </span>
-      )}
-      {tabell.visProvemateriale && r.provemateriale && <span className="laboratorier__tillegg">{r.provemateriale}</span>}
-    </>
-  )
   return (
     <tr id={elementAnker(labsted(r.id))}>
-      {tabell.visAnalytt && (
-        <th scope="row">
-          <Uthev tekst={r.analytt} />
-        </th>
-      )}
-      {tabell.visAnalytt ? <td>{lab}</td> : <th scope="row">{lab}</th>}
-      <td>{r.metode ? <Uthev tekst={r.metode} /> : <span className="laboratorier__mangler">Ikke oppgitt</span>}</td>
+      <th scope="row">
+        <span className="laboratorier__lab">
+          {r.laboratorium_id ? (
+            <Kildelenke lenke={fpUrl.laboratorium(r.laboratorium_id)}>
+              <Uthev tekst={r.laboratorium} />
+            </Kildelenke>
+          ) : (
+            <Uthev tekst={r.laboratorium} />
+          )}
+        </span>
+        {tabell.visProvemateriale && r.provemateriale && <span className="laboratorier__tillegg">{r.provemateriale}</span>}
+      </th>
+      <td>{r.metode ? <Uthev tekst={brytbar(r.metode)} /> : <span className="laboratorier__mangler">Ikke oppgitt</span>}</td>
       <td>
         <Kildelenke lenke={fpUrl.analyse(r.id)}>
-          <span className={omrade.tekst === 'Ikke oppgitt' ? 'laboratorier__mangler' : 'laboratorier__omrade'}>
-            {omrade.tekst}
-            {omrade.enhet && ` ${omrade.enhet}`}
-          </span>
+          <span className={omrade.tekst === 'Ikke oppgitt' ? 'laboratorier__mangler' : 'laboratorier__omrade'}>{omrade.tekst}</span>
+          {omrade.enhet && <span className="laboratorier__enhet"> {omrade.enhet}</span>}
           <span className="kun-skjermleser"> i Farmakologiportalen</span>
         </Kildelenke>
+        {/* På smale skjermer står bemerkningen her, og kolonnen er skjult (laboratorier.css). */}
+        {bemerkning && <span className="laboratorier__tillegg laboratorier__bemerkning">{bemerkning}</span>}
       </td>
-      {benevning && <td>{harEgenBenevning(r, enhet) ? r.benevning : ''}</td>}
+      {bemerkning !== null && <td className="laboratorier__bemerkningskolonne">{bemerkning}</td>}
     </tr>
   )
 }

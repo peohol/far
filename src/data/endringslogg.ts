@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.87.1',
+    dato: '2026-10-09',
+    sammendrag: 'Ryddigere tabeller i «Analyse ved norske laboratorier»',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Én tabell per prøvemateriale og analytt, med begge i overskriften, for eksempel «Serum · Citalopram» og «Serum · Desmetylcitalopram». Kolonnen «Analytt» er borte.',
+      'Tabellene får plass i bredden uten å rulle sidelengs. Laboratorienavnene brytes over flere linjer, og helseforetaket står ikke lenger under.',
+      'Kolonnen «Benevning» er borte; måleområdet står i enheten som er valgt over tabellene. Svarer et laboratorium ut noe annet enn en konsentrasjon, som positiv/negativ, står det i en egen kolonne «Bemerkning».',
+    ],
+  },
+  {
     versjon: '1.87.0',
     dato: '2026-10-08',
     sammendrag: 'Fagsidene viser analysene ved norske laboratorier fra Farmakologiportalen',
