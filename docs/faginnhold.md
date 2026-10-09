@@ -606,14 +606,18 @@ analyttene det er koblet til, er bare andre veier dit (`stoffidentitet` i
 `#/stoff/bupropion`. Koden til en analytt stoffet bare er sekundært koblet til
 (AMTNORSUM på Nortriptylin), er en komponent, ikke et alias, så den ikke
 rangeres som stoffets eget navn.
-Dataene kommer fra fem kilder, hver lest i ett kall uansett antall sider
-(migrasjonen `*_sokedata.sql`): `les_stoffer` gir alle sidene på samme form
+Dataene kommer fra seks kilder, hver lest i ett kall uansett antall sider
+(migrasjonene `*_sokedata.sql` og `*_laboratoriesok.sql`): `les_stoffer` gir alle sidene på samme form
 som `les_stoff`, med referansene én gang; `les_preparatsok` og
 `les_interaksjonssok` gir bare preparatnavnene og interaksjonene hver side
 viser — de samme som seksjonene bygger av de fullstendige legemiddeldataene,
 som en test kontrollerer for hvert virkestoff i FEST-utdraget;
 `les_farmakogenetikk_sok` gir ClinPGx-dataene uten feltene søket ikke bruker,
-og `les_cpic` CPIC-dataene. Det som er lest, lagres i nettleseren
+`les_cpic` CPIC-dataene, og `les_laboratoriesok` navnene og metodene i
+laboratorieanalysene fra Farmakologiportalen for alle forbindelsene i
+registeret, uten måleområdene, så hver side får de samme analysene som
+seksjonen viser (`velgAnalyser` i `src/farmakologiportalen/stoffside.ts`).
+Det som er lest, lagres i nettleseren
 (`src/auth/mellomlager.ts`, tømmes ved utlogging), og `sokedata_versjoner`
 sier hvilke kilder som er endret siden: versjonen for sidene telles opp av en
 trigger når noe publisert endres (utkast teller ikke). Den er sekvensens

@@ -47,6 +47,7 @@ const KILDENAVN: Record<Sokekilde, string> = {
   interaksjoner: 'interaksjonene fra FEST',
   farmakogenetikk: 'farmakogenetikken fra ClinPGx',
   cpic: 'anbefalingene fra CPIC',
+  laboratorier: 'laboratorieanalysene fra Farmakologiportalen',
 }
 
 /** Det som står når noe ikke kunne hentes, eller `null` når alt er med. */

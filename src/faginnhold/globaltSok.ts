@@ -2,7 +2,7 @@
  * Grunnlaget for søket i hele kunnskapsbasen: alle de publiserte sidene,
  * lest i én omgang og indeksert med den samme koden som søket på én side.
  *
- * Dataene kommer fra fem kilder, som leses hver for seg (se {@link lesSokeindeks}):
+ * Dataene kommer fra seks kilder, som leses hver for seg (se {@link lesSokeindeks}):
  *
  * - **sider**: `les_stoffer` gir alle fagsidene på samme form som `les_stoff`.
  * - **preparater** og **interaksjoner**: `les_preparatsok` og
@@ -12,6 +12,9 @@
  * - **farmakogenetikk** og **cpic**: `les_farmakogenetikk_sok` og `les_cpic`
  *   gir dataene for alle kjemikaliene sidene er koblet til i ClinPGx. Hver side
  *   får sin del (`farmakogenetikkFor`, `cpicFor`).
+ * - **laboratorier**: `les_laboratoriesok` gir navnene og metodene i
+ *   analysene fra Farmakologiportalen for alle forbindelsene i registeret, og
+ *   hver side får de samme analysene som seksjonen på siden viser.
  *
  * Det som er lest, lagres i nettleseren, og neste gang vises det med én gang.
  * `sokedata_versjoner` sier hvilke kilder som er endret siden, og bare de
@@ -48,9 +51,11 @@ import { farmakogenetikkFor, type Farmakogenetikkleser, type Farmakogenetikkutva
 import { byggFarmakogenetikkvisning, farmakogenetikktekster, kobledeKjemikalier } from '../clinpgx/stoffside'
 import type { Cpicleser, Cpicutvalg } from '../cpic/lesing'
 import { byggCpicvisning, cpicFor, cpictekster } from '../cpic/stoffside'
+import type { Labsokedata, Labsokleser } from '../farmakologiportalen/lesing'
+import { alleLabkomponenter, labsoketeksterFor } from '../farmakologiportalen/stoffside'
 
 /** Kildene søket leser, hver for seg. */
-export type Sokekilde = 'sider' | 'preparater' | 'interaksjoner' | 'farmakogenetikk' | 'cpic'
+export type Sokekilde = 'sider' | 'preparater' | 'interaksjoner' | 'farmakogenetikk' | 'cpic' | 'laboratorier'
 
 /** Kildene som ikke kunne leses, med feilen. */
 export type Manglende = Partial<Record<Sokekilde, string>>
@@ -69,6 +74,8 @@ export interface Kunnskapsbase {
   farmakogenetikk?: Farmakogenetikkutvalg | null
   /** CPIC-dataene for de samme koblingene. */
   cpic?: Cpicutvalg | null
+  /** Laboratorieanalysene fra Farmakologiportalen for alle forbindelsene i registeret. */
+  laboratorier?: Labsokedata | null
   /** Kildene som ikke kunne leses. */
   mangler?: Manglende
 }
@@ -79,7 +86,10 @@ export interface Sokedataversjoner {
   fest?: string
   clinpgx?: string
   cpic?: string
+  laboratorier?: string
 }
+
+const VERSJONSNOKLER = ['sider', 'fest', 'clinpgx', 'cpic', 'laboratorier'] as const satisfies readonly (keyof Sokedataversjoner)[]
 
 export interface Sideleser {
   /** Alle stoffsidene i én tilstand, alfabetisk. */
@@ -92,6 +102,7 @@ export interface Sokekilder {
   legemidler?: Legemiddelsok | null
   farmakogenetikk?: Pick<Farmakogenetikkleser, 'les'> | null
   cpic?: Pick<Cpicleser, 'les'> | null
+  laboratorier?: Pick<Labsokleser, 'les'> | null
   /** Versjonene. Uten dem leses alt på nytt, og det lagrede brukes bare til det er lest. */
   versjoner?: (() => Promise<Sokedataversjoner>) | null
   /** Hvor det som er lest, lagres til neste gang. */
@@ -128,7 +139,7 @@ export function lagVersjonsleser(klient: SupabaseClient): () => Promise<Sokedata
     if (error) throw tilFeil(error)
     const svar = (data ?? {}) as Record<string, unknown>
     return Object.fromEntries(
-      (['sider', 'fest', 'clinpgx', 'cpic'] as const).flatMap((k) => (typeof svar[k] === 'string' ? [[k, svar[k]]] : [])),
+      VERSJONSNOKLER.flatMap((k) => (typeof svar[k] === 'string' ? [[k, svar[k]]] : [])),
     )
   }
 }
@@ -150,6 +161,7 @@ interface Tilleggsdata {
   interaksjoner: Perkobling<Interaksjonssokerad>
   farmakogenetikk: Farmakogenetikkutvalg
   cpic: Cpicutvalg
+  laboratorier: Labsokedata
 }
 
 interface Tilleggskilde<K extends Tillegg> {
@@ -195,6 +207,12 @@ const TILLEGGSKILDER: { [K in Tillegg]: Tilleggskilde<K> } = {
     versjon: 'cpic',
     inndata: kjemikaliene,
     leser: ({ cpic }) => cpic && ((ider) => cpic.les(ider)),
+  },
+  laboratorier: {
+    versjon: 'laboratorier',
+    // Koblingene til portalen står i registeret, ikke på sidene.
+    inndata: () => alleLabkomponenter(),
+    leser: ({ laboratorier }) => laboratorier && ((ider) => laboratorier.les(ider)),
   },
 }
 
@@ -381,8 +399,10 @@ const cpicteksteneFor = husket((utvalg: Cpicutvalg, nokkel: string) =>
   cpictekster(byggCpicvisning(cpicFor(utvalg, nokkel.split(' ')))),
 )
 
+const labteksteneFor = husket((sokedata: Labsokedata, stoff: string) => labsoketeksterFor(stoff, sokedata))
+
 /** Tekstene fra de andre kildene på én side, de samme som søket på siden får. */
-function tilleggstekster(base: Kunnskapsbase, modell: Sidemodell): Tilleggstekst[] {
+function tilleggstekster(base: Kunnskapsbase, modell: Sidemodell, stoff: string): Tilleggstekst[] {
   const kobling = koblingsnokkel(koblede(modell))
   const kjemikalier = kobledeKjemikalier(modell).join(' ')
   return [
@@ -390,6 +410,7 @@ function tilleggstekster(base: Kunnskapsbase, modell: Sidemodell): Tilleggstekst
     ...(kobling && base.interaksjoner ? interaksjonsteksteneFor(base.interaksjoner, kobling) : []),
     ...(kjemikalier && base.farmakogenetikk ? farmakogenetikkteksteneFor(base.farmakogenetikk, kjemikalier) : []),
     ...(kjemikalier && base.cpic ? cpicteksteneFor(base.cpic, kjemikalier) : []),
+    ...(base.laboratorier ? labteksteneFor(base.laboratorier, stoff) : []),
   ]
 }
 
@@ -426,7 +447,7 @@ export function indekserKunnskapsbase(
     const data = perSlug.get(stoff.slug)
     const modell = data ? modellFor(data) : TOM_MODELL
     const identitet = stoffidentitet(stoff, analytterForStoff(stoff.slug, register, katalog))
-    return indekserSide(identitet, modell, data ? tilleggstekster(base, modell) : [])
+    return indekserSide(identitet, modell, data ? tilleggstekster(base, modell, stoff.slug) : [])
   })
 }
 

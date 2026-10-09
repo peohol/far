@@ -8,6 +8,7 @@ import { act, cleanup, fireEvent, render, screen, within } from '@testing-librar
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
+import type { Datakildestatus, Kjoring } from '../datakilder/status'
 
 const loggUt = vi.fn(async () => {})
 const rolle = vi.hoisted(() => ({ verdi: 'admin' }))
@@ -25,8 +26,12 @@ vi.mock('../components/konto/Kontopanel', () => ({
 vi.mock('../components/konto/Brukerliste', () => ({
   Brukerliste: ({ apen }: { apen: boolean }) => (apen ? <p>Brukerlista</p> : null),
 }))
+const datakildepanel = vi.hoisted(() => ({ lukk: null as null | (() => void) }))
 vi.mock('../components/konto/Datakilder', () => ({
-  Datakilder: ({ apen }: { apen: boolean }) => (apen ? <p>Datakildene</p> : null),
+  Datakilder: ({ apen, onLukk }: { apen: boolean; onLukk: () => void }) => {
+    datakildepanel.lukk = onLukk
+    return apen ? <p>Datakildene</p> : null
+  },
 }))
 vi.mock('../components/konto/Autoerstattregler', () => ({
   Autoerstattregler: ({ apen }: { apen: boolean }) => (apen ? <p>Autoerstatt-reglene</p> : null),
@@ -57,6 +62,7 @@ const { ToppmenyKilde, ToppmenyInnhold } = await import('../components/toppmeny/
 const { Fagsokfelt, erFagsokSnarvei } = await import('../components/toppmeny/Fagsokfelt')
 const { Kontomeny } = await import('../components/konto/Kontomeny')
 const { Adminmeny } = await import('../components/konto/Adminmeny')
+const { DATAKILDER } = await import('../datakilder/status')
 const { Ideknapp } = await import('../components/ideer/Ideknapp')
 const { TipsLag } = await import('../components/Tips')
 const { ShortcutVisibilityProvider, useShortcutVisibility } = await import('../hooks/useShortcutVisibility')
@@ -420,6 +426,38 @@ describe('adminmenyen', () => {
     await userEvent.click(knapp)
     await userEvent.click(within(meny).getByRole('button', { name: 'Autoerstatt' }))
     expect(screen.getByText('Autoerstatt-reglene')).toBeTruthy()
+  })
+
+  it('har en prikk når en datakilde bør ses over, og ser etter på nytt når «Datakilder» lukkes', async () => {
+    const na = new Date().toISOString()
+    const kjoring = (kilde: Kjoring['kilde'], status: Kjoring['status']): Kjoring => ({
+      kilde, id: 1, status, utlost_av: 'cron', startet_kl: na, avsluttet_kl: na, release: null, versjon: null,
+      feil: status === 'feilet' ? 'Portalen svarte 503' : null, endringer: { klinisk: 0, metadata: 0, grunnlag: 0 },
+    })
+    const iOrden = DATAKILDER.map((k) => kjoring(k, 'uendret'))
+    const status = vi.fn(async (): Promise<Datakildestatus> => ({
+      kjoringer: iOrden.map((k) => (k.kilde === 'farmakologiportalen' ? kjoring(k.kilde, 'feilet') : k)),
+      endringer: [],
+    }))
+    const leser = { status, hentNa: vi.fn() }
+    render(
+      <Ramme>
+        <Adminmeny leser={leser} />
+      </Ramme>,
+    )
+    const knapp = await screen.findByRole('button', { name: 'Administrasjon (Farmakologiportalen bør ses over)' })
+    expect(status).toHaveBeenCalledWith(1)
+    expect(knapp.parentElement!.querySelector('.toppmeny__prikk')).toBeTruthy()
+    await userEvent.click(knapp)
+    expect(within(panel(knapp)).getByRole('img', { name: 'Farmakologiportalen bør ses over' })).toBeTruthy()
+
+    // Hentet på nytt og i orden: prikken forsvinner når panelet lukkes.
+    status.mockResolvedValue({ kjoringer: iOrden, endringer: [] })
+    await userEvent.click(within(panel(knapp)).getByRole('button', { name: /^Datakilder/ }))
+    expect(screen.getByText('Datakildene')).toBeTruthy()
+    act(() => datakildepanel.lukk?.())
+    expect(await screen.findByRole('button', { name: 'Administrasjon' })).toBeTruthy()
+    expect(document.querySelector('.adminmeny .toppmeny__prikk')).toBeNull()
   })
 })
 

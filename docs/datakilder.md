@@ -129,7 +129,11 @@ også når den siste ikke fikk dem oppgitt), og de siste endringene per kilde
 skyver den andre ut.
 
 I appen: adminmenyen → «Datakilder» (bare for administratorer,
-`src/components/konto/Datakilder.tsx`). Per kilde:
+`src/components/konto/Datakilder.tsx`). Er en kilde ikke i orden (Feilet eller
+Se over), står det en prikk på adminmenyen og på «Datakilder», og knappen
+sier hvilke kilder som bør ses over (`kilderSomBorSesOver`, med én endring per
+kilde fra `datakilder_status`). Den sjekkes når appen og fanen åpnes, hvert
+femte minutt og når panelet lukkes. Per kilde:
 
 - tilstanden (`src/datakilder/status.ts`, `vurderKilder`): **Feilet** når
   siste kjøring feilet, med feilteksten fra kjøringen; **Se over** når den var

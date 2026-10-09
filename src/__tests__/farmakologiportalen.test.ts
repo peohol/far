@@ -29,18 +29,21 @@ import { lagFplager } from '../farmakologiportalen/lager'
 import { ENTITETER, ENTITETNAVN, entitet, type Analysedata, type Komponentdata } from '../farmakologiportalen/modell'
 import { matriseFor } from '../farmakologiportalen/provematerialer'
 import { lagRapport, strukturavvik, synkroniserFarmakologiportalen } from '../farmakologiportalen/synk'
-import { lagLableser, type Lableser, type Labutvalg } from '../farmakologiportalen/lesing'
+import { lagLableser, lagLabsokleser, lesLabsokedata, type Lableser, type Labutvalg } from '../farmakologiportalen/lesing'
 import { fpreferanser, FP_KILDE } from '../farmakologiportalen/referanser'
 import {
   byggLabvisning,
   bemerkning,
   labkomponenter,
   laboppsummering,
+  alleLabkomponenter,
   labsoketekster,
+  labsoketeksterFor,
   LABPANEL,
   maleomrade,
   type Labvisning,
 } from '../farmakologiportalen/stoffside'
+import type { Tilleggstekst } from '../faginnhold/sok'
 import { byggKjemivisning } from '../kjemi/stoffside'
 import { byggForbindelsesregister, FORBINDELSER, type Forbindelse } from '../kjemi/forbindelser'
 import { githubkrav, githubkjoring, type Githubsjekk } from '../server/tilgang'
@@ -598,6 +601,7 @@ function kjemiFor(stoff: string) {
 describe('visningen på fagsidene', () => {
   let db: PGlite
   let leser: Lableser
+  let klient: ReturnType<ReturnType<typeof faginnholdskall>['klientFor']>
   const visninger = new Map<string, Labvisning>()
   const utvalg = new Map<string, Labutvalg>()
 
@@ -605,7 +609,8 @@ describe('visningen på fagsidene', () => {
     db = await nyDatabase()
     const admin = await opprettBruker(db, { brukernavn: 'admin', fornavn: 'Ada', etternavn: 'Admin', rolle: 'admin' })
     const bruker = await opprettBruker(db, { brukernavn: 'leser', fornavn: 'Lea', etternavn: 'Leser', rolle: 'user' })
-    leser = lagLableser(faginnholdskall(db, admin).klientFor(bruker))
+    klient = faginnholdskall(db, admin).klientFor(bruker)
+    leser = lagLableser(klient)
     await synkroniserFarmakologiportalen({ lager: lagFplager(kallSom(db, 'service_role')), api: falskApi() })
     for (const stoff of ['citalopram', 'bupropion', 'thc']) {
       const u = await leser.les(labkomponenter(stoff))
@@ -745,6 +750,56 @@ describe('visningen på fagsidene', () => {
     expect(ref.referanser[0]!.automatisk?.opphav).toMatch(/^Laboratorieanalyser fra Farmakologiportalen, sist kontrollert \d{1,2}\. \p{L}+ \d{4}$/u)
     expect(ref.panelreferanser).toEqual({ [LABPANEL]: [FP_KILDE] })
     expect(fpreferanser(byggLabvisning('citalopram', null, null)).referanser).toEqual([])
+  })
+
+  it('gir det globale søket de samme analysene og tekstene som fagsiden, med bare feltene søket trenger', async () => {
+    const komponenter = alleLabkomponenter()
+    expect(komponenter).toEqual([...new Set(komponenter)].sort())
+    expect(komponenter).toEqual(expect.arrayContaining([...labkomponenter('citalopram'), ...labkomponenter('thc')]))
+    const sokedata = await lagLabsokleser(klient).les(komponenter)
+    const sortert = (t: Tilleggstekst[]) => t.map((x) => `${x.element.id} ${x.felt} ${x.tekst}`).sort()
+    for (const stoff of ['citalopram', 'bupropion', 'thc']) {
+      const side = labsoketekster(visninger.get(stoff)!)
+      expect(side.length).toBeGreaterThan(0)
+      expect(sortert(labsoketeksterFor(stoff, sokedata))).toEqual(sortert(side))
+    }
+    expect(labsoketeksterFor('finnes-ikke', sokedata)).toEqual([])
+    // Ingen måleområder, enheter eller rådata, og laboratoriets navn bare én gang.
+    const fullt = await leser.les(komponenter)
+    const json = JSON.stringify(sokedata)
+    expect(json).not.toMatch(/maleomrade|svarenhet|provemateriale|modified_date/)
+    expect(json.length).toBeLessThan(JSON.stringify(fullt).length / 3)
+    expect(sokedata.analyser.every((a) => a.data.laboratorium === undefined || !sokedata.laboratorier.some((l) => l.id === a.data.laboratorium_id))).toBe(true)
+  })
+
+  it('søkedataene er for innloggede, har en grense, og versjonen følger siste fullførte henting', async () => {
+    await expect(kallSom(db, 'anon')('les_laboratoriesok', { komponenter: ['536'] })).rejects.toThrow()
+    const mange = Array.from({ length: 1001 }, (_, i) => String(i))
+    const { error } = await klient.rpc('les_laboratoriesok', { komponenter: mange })
+    expect(error?.message).toMatch(/For mange komponenter/)
+    const versjoner = (await klient.rpc('sokedata_versjoner', {})).data as Record<string, string>
+    const id = (await db.query<{ id: number }>(`select max(id)::int as id from farmakologiportalen.synkroniseringer where status = 'fullfort'`)).rows[0]?.id
+    expect(versjoner.laboratorier).toBe(String(id))
+  })
+
+  it('leser søkedataene defensivt: en rad som ikke ser ut som ventet, hoppes over', () => {
+    const d = lesLabsokedata({
+      komponenter: [{ id: '1', data: { navn: 'A', gruppe: [] } }, { id: '2', data: { navn: 'B' } }],
+      analyser: [
+        { id: 'a1', data: { komponent_id: '1', metode: 'LC-MS/MS', status: 'Active' } },
+        { id: 'a2', data: { komponent_id: '1', metode: 7 } },
+        { id: 'a3', data: { metode: 'x' } },
+      ],
+      laboratorier: [{ id: 'l1', data: { navn: 'Lab' } }, { id: 'l2', data: {} }],
+      institusjoner: 'feil',
+    })
+    expect(d.komponenter.map((k) => k.id)).toEqual(['1'])
+    expect(d.analyser).toEqual([
+      { id: 'a1', data: { komponent_id: '1', metode: 'LC-MS/MS', status: 'Active', laboratorium_id: null, synlighet: null } },
+    ])
+    expect(d.laboratorier).toEqual([{ id: 'l1', data: { navn: 'Lab', institusjon_id: null, institusjon: null } }])
+    expect(d.institusjoner).toEqual([])
+    expect(lesLabsokedata(null)).toEqual({ komponenter: [], analyser: [], laboratorier: [], institusjoner: [] })
   })
 
   it('viser ingenting for et stoff uten koblede forbindelser', () => {
