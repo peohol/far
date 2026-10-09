@@ -109,8 +109,9 @@ export type Utvalgsanalyse = Pick<Analysedata, 'komponent_id' | 'laboratorium_id
 export interface Analyseutvalg<A extends Utvalgsanalyse = Utvalgsanalyse> {
   komponenter: readonly Labpost<Pick<Komponentdata, 'navn' | 'gruppe'>>[]
   analyser: readonly Labpost<A>[]
-  laboratorier: readonly Labpost<Pick<Laboratoriedata, 'navn' | 'institusjon_id' | 'institusjon' | 'aktiv'>>[]
-  institusjoner: readonly Labpost<{ navn: string }>[]
+  laboratorier: readonly Labpost<Pick<Laboratoriedata, 'navn' | 'aktiv'> & Partial<Pick<Laboratoriedata, 'institusjon_id' | 'institusjon'>>>[]
+  /** Bare fagsiden trenger dem; søket viser ikke helseforetaket. */
+  institusjoner?: readonly Labpost<{ navn: string }>[]
 }
 
 /** En analyse stoffet skal vise, med analytten og laboratoriet slått opp. */
@@ -138,7 +139,7 @@ export function velgAnalyser<A extends Utvalgsanalyse>(
   const etterId = new Map(forbindelser.flatMap((f) => (register.fpId(f) ? [[register.fpId(f)!, f] as const] : [])))
   const komponenter = new Map(utvalg.komponenter.map((k) => [k.id, k.data]))
   const laboratorier = new Map(utvalg.laboratorier.map((l) => [l.id, l.data]))
-  const institusjoner = new Map(utvalg.institusjoner.map((i) => [i.id, i.data.navn]))
+  const institusjoner = new Map((utvalg.institusjoner ?? []).map((i) => [i.id, i.data.navn]))
   return utvalg.analyser.flatMap(({ id, data: a }): Valgtanalyse<A>[] => {
     if (!vises(a)) return []
     const forbindelse = etterId.get(a.komponent_id) ?? null
@@ -278,9 +279,12 @@ export function labsted(id: string): string {
 }
 
 /** Det søket finner en analyse på. */
-export type Labsokerad = Pick<Labrad, 'id' | 'analytt' | 'laboratorium' | 'institusjon' | 'metode'>
+export type Labsokerad = Pick<Labrad, 'id' | 'analytt' | 'laboratorium' | 'metode'>
 
-/** Analyttene, laboratoriene og metodene, slik søket på siden finner dem. */
+/**
+ * Analyttene, laboratoriene og metodene, slik søket på siden finner dem: det
+ * tabellene viser, og ikke noe mer (helseforetaket står ikke i tabellene).
+ */
 export function labsoketekster(visning: Pick<Labvisning, 'tabeller'>): Tilleggstekst[] {
   return labradtekster(visning.tabeller.flatMap((t) => t.rader))
 }
@@ -291,7 +295,7 @@ export function labradtekster(rader: readonly Labsokerad[]): Tilleggstekst[] {
     const element = { id: labsted(r.id), tittel: `${r.analytt} · ${r.laboratorium}` }
     const tekst = (felt: Tilleggstekst['felt'], verdi: string | null): Tilleggstekst[] =>
       verdi ? [{ panel: LABPANEL, element, felt, tekst: verdi }] : []
-    return [...tekst('overskrift', r.analytt), ...tekst('verdi', r.laboratorium), ...tekst('verdi', r.institusjon), ...tekst('verdi', r.metode)]
+    return [...tekst('overskrift', r.analytt), ...tekst('verdi', r.laboratorium), ...tekst('verdi', r.metode)]
   })
 }
 

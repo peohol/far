@@ -91,16 +91,15 @@ export function lesLabsokedata(svar: unknown): Labsokedata {
       o.analyser,
       (d) =>
         Boolean(tekst(d.komponent_id)) &&
-        ['laboratorium_id', 'metode', 'status', 'synlighet', 'laboratorium', 'institusjon'].every((f) => valgfriTekst(d, f)),
+        ['laboratorium_id', 'metode', 'status', 'synlighet', 'laboratorium'].every((f) => valgfriTekst(d, f)),
     ).map(({ id, data }) => ({
       id,
       data: { ...data, laboratorium_id: data.laboratorium_id ?? null, metode: data.metode ?? null, status: data.status ?? null, synlighet: data.synlighet ?? null },
     })),
-    laboratorier: poster<Laboratoriedata>(o.laboratorier, harNavn).map(({ id, data }) => ({
+    laboratorier: poster<Pick<Laboratoriedata, 'navn' | 'aktiv'>>(o.laboratorier, harNavn).map(({ id, data }) => ({
       id,
-      data: { ...data, institusjon_id: data.institusjon_id ?? null, institusjon: data.institusjon ?? null },
+      data: { navn: data.navn, aktiv: data.aktiv ?? null },
     })),
-    institusjoner: poster<{ navn: string }>(o.institusjoner, harNavn),
   }
 }
 

@@ -20,8 +20,8 @@ import '../../styles/laboratorier.css'
 
 const ENHETSVALG: readonly Trinnvalg<Visningsenhet>[] = VISNINGSENHETER.map((e) => ({ verdi: e, merke: e }))
 const erVisningsenhet = (v: unknown): v is Visningsenhet => VISNINGSENHETER.some((e) => e === v)
-/** Et usynlig brytepunkt etter skråstreken mellom to lange ord («immunologiske/enzymatiske»), men ikke i «LC-MS/MS». */
-const brytbar = (tekst: string) => tekst.replace(/(?<=\p{L}{4})\/(?=\p{L}{4})/gu, '/\u200b')
+/** Brytepunktene etter skråstreken mellom to lange ord («immunologiske/enzymatiske»), men ikke i «LC-MS/MS». */
+const etterSkrastrek = (tekst: string) => [...tekst.matchAll(/(?<=\p{L}{4})\/(?=\p{L}{4})/gu)].map((m) => m.index + 1)
 
 /**
  * Seksjonen «Analyse ved norske laboratorier»: analysene laboratoriene oppgir
@@ -126,7 +126,7 @@ function Rad({ rad: r, tabell, enhet, bemerkning }: { rad: Labrad; tabell: Labta
         </span>
         {tabell.visProvemateriale && r.provemateriale && <span className="laboratorier__tillegg">{r.provemateriale}</span>}
       </th>
-      <td>{r.metode ? <Uthev tekst={brytbar(r.metode)} /> : <span className="laboratorier__mangler">Ikke oppgitt</span>}</td>
+      <td>{r.metode ? <Uthev tekst={r.metode} brudd={etterSkrastrek} /> : <span className="laboratorier__mangler">Ikke oppgitt</span>}</td>
       <td>
         <Kildelenke lenke={fpUrl.analyse(r.id)}>
           <span className={omrade.tekst === 'Ikke oppgitt' ? 'laboratorier__mangler' : 'laboratorier__omrade'}>{omrade.tekst}</span>

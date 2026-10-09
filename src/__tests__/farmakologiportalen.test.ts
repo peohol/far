@@ -745,6 +745,10 @@ describe('visningen på fagsidene', () => {
     const tekster = labsoketekster(v)
     expect(tekster.every((t) => t.panel === LABPANEL)).toBe(true)
     expect(tekster.map((t) => t.tekst)).toEqual(expect.arrayContaining(['Klinisk farmakologi Drammen', 'LC-MS/MS', 'Desmetylcitalopram']))
+    // Bare det tabellene viser: helseforetaket står ikke der, og finnes derfor ikke av søket på siden.
+    const institusjoner = new Set(v.tabeller.flatMap((t) => t.rader.flatMap((r) => r.institusjon ?? [])))
+    expect(institusjoner.size).toBeGreaterThan(0)
+    expect(tekster.filter((t) => institusjoner.has(t.tekst) && !v.tabeller.some((x) => x.rader.some((r) => r.laboratorium === t.tekst)))).toEqual([])
     const ref = fpreferanser(v)
     expect(ref.referanser.map((r) => r.id)).toEqual([FP_KILDE])
     expect(ref.referanser[0]!.automatisk?.opphav).toMatch(/^Laboratorieanalyser fra Farmakologiportalen, sist kontrollert \d{1,2}\. \p{L}+ \d{4}$/u)
@@ -764,10 +768,10 @@ describe('visningen på fagsidene', () => {
       expect(sortert(labsoketeksterFor(stoff, sokedata))).toEqual(sortert(side))
     }
     expect(labsoketeksterFor('finnes-ikke', sokedata)).toEqual([])
-    // Ingen måleområder, enheter eller rådata, og laboratoriets navn bare én gang.
+    // Ingen måleområder, enheter, helseforetak eller rådata, og laboratoriets navn bare én gang.
     const fullt = await leser.les(komponenter)
     const json = JSON.stringify(sokedata)
-    expect(json).not.toMatch(/maleomrade|svarenhet|provemateriale|modified_date/)
+    expect(json).not.toMatch(/maleomrade|svarenhet|provemateriale|institusjon|modified_date/)
     expect(json.length).toBeLessThan(JSON.stringify(fullt).length / 3)
     expect(sokedata.analyser.every((a) => a.data.laboratorium === undefined || !sokedata.laboratorier.some((l) => l.id === a.data.laboratorium_id))).toBe(true)
   })
@@ -791,15 +795,13 @@ describe('visningen på fagsidene', () => {
         { id: 'a3', data: { metode: 'x' } },
       ],
       laboratorier: [{ id: 'l1', data: { navn: 'Lab' } }, { id: 'l2', data: {} }],
-      institusjoner: 'feil',
     })
     expect(d.komponenter.map((k) => k.id)).toEqual(['1'])
     expect(d.analyser).toEqual([
       { id: 'a1', data: { komponent_id: '1', metode: 'LC-MS/MS', status: 'Active', laboratorium_id: null, synlighet: null } },
     ])
-    expect(d.laboratorier).toEqual([{ id: 'l1', data: { navn: 'Lab', institusjon_id: null, institusjon: null } }])
-    expect(d.institusjoner).toEqual([])
-    expect(lesLabsokedata(null)).toEqual({ komponenter: [], analyser: [], laboratorier: [], institusjoner: [] })
+    expect(d.laboratorier).toEqual([{ id: 'l1', data: { navn: 'Lab', aktiv: null } }])
+    expect(lesLabsokedata(null)).toEqual({ komponenter: [], analyser: [], laboratorier: [] })
   })
 
   it('viser ingenting for et stoff uten koblede forbindelser', () => {

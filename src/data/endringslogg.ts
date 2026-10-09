@@ -18,7 +18,7 @@ export const ENDRINGSLOGG: Endring[] = [
     typer: ['Funksjonalitet'],
     omfang: 'Mindre omfang',
     punkter: [
-      'Fagsøket finner nå også analysene fra Farmakologiportalen: søk på et laboratorium, et helseforetak eller en metode, og treffet åpner «Analyse ved norske laboratorier» på fagsiden.',
+      'Fagsøket finner nå også analysene fra Farmakologiportalen: søk på et laboratorium eller en metode, og treffet åpner «Analyse ved norske laboratorier» på fagsiden.',
       'Kan analysene ikke hentes til søket, sier søket fra, og resten av søket virker som før.',
       'Administratorer får en prikk på administrasjonsmenyen og på «Datakilder» når en henting har feilet, var ufullstendig eller er for gammel, med navnet på kilden.',
     ],

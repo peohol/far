@@ -137,8 +137,9 @@ regnes aldri om mellom dem. Det som ikke kan regnes om, står som laboratoriet
 oppga det, med enheten. Portalen er kilde i referansefeltet, med når dataene
 sist ble kontrollert. Ingenting her redigeres.
 
-Det globale fagsøket finner analysene på analyttnavnet, laboratoriet,
-helseforetaket og metoden, og treffet åpner seksjonen på fagsiden. Søket leser
+Det globale fagsøket finner analysene på det tabellene viser: analytten,
+laboratoriet og metoden (ikke helseforetaket, som ikke står i tabellene), og
+treffet åpner seksjonen på fagsiden. Søket leser
 de samme analysene som seksjonen, men bare navnene og metodene
 (`les_laboratoriesok`), og leser dem på nytt bare etter en fullført henting
 (`laboratorier` i `sokedata_versjoner`). Kan de ikke leses, sier søket fra, og

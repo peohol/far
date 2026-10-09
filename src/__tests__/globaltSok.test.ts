@@ -386,19 +386,18 @@ describe('laboratorieanalysene fra Farmakologiportalen', () => {
       { id: 'syn3', data: { komponent_id: amitriptylin, laboratorium_id: 'l2', metode: 'Nedlagt metode', status: 'Active', synlighet: null } },
     ],
     laboratorier: [
-      { id: 'l1', data: { navn: 'Syntetisk laboratorium', institusjon_id: 'i1', institusjon: null } },
-      { id: 'l2', data: { navn: 'Nedlagt laboratorium', institusjon_id: null, institusjon: null, aktiv: false } },
+      { id: 'l1', data: { navn: 'Syntetisk laboratorium' } },
+      { id: 'l2', data: { navn: 'Nedlagt laboratorium', aktiv: false } },
     ],
-    institusjoner: [{ id: 'i1', data: { navn: 'Syntetisk helseforetak' } }],
   }
 
-  it('finner laboratoriet, institusjonen og metoden på fagsiden, og bare det seksjonen viser', async () => {
+  it('finner laboratoriet og metoden på fagsiden, og bare det seksjonen viser', async () => {
     const les = vi.fn(async () => sokedata)
     const indeks = await lesSokeindeks({ sider: sideleser, laboratorier: { les }, ventetider: [] })
     expect(les).toHaveBeenCalledOnce()
     expect(les).toHaveBeenCalledWith(alleLabkomponenter())
     expect(indeks.mangler).toBeUndefined()
-    for (const ord of ['syntetisk laboratorium', 'syntetisk helseforetak', 'syntetisk kromatografi']) {
+    for (const ord of ['syntetisk laboratorium', 'syntetisk kromatografi']) {
       const treff = sokGlobalt(indeks, ord)
       expect(treff.map((t) => sti(t.dokument.sted)), ord).toEqual([['Amitriptylin', 'Analyse ved norske laboratorier', 'Amitriptylin · Syntetisk laboratorium']])
       // Som søket på siden: lenken åpner seksjonen, og stedet har raden.

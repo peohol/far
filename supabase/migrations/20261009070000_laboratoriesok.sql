@@ -2,12 +2,12 @@
 --
 -- les_laboratoriesok(komponenter) gir det samme utvalget som
 -- les_laboratorieanalyser — komponentene, gruppe- og sumanalysene som dekker
--- dem, analysene og laboratoriene — men bare feltene søket trenger: navnene,
--- metodene og det som avgjør om en analyse vises (status, synlighet, om
--- laboratoriet er i drift). Måleområder, enheter og rådata er ikke med, så
--- svaret for alle koblede komponenter er en brøkdel av det fulle. Analysens
--- egne laboratorie- og institusjonsnavn sendes bare når laboratoriet ikke
--- finnes i kopien; ellers brukes laboratoriets.
+-- dem, analysene og laboratoriene — men bare det tabellene på fagsiden viser
+-- og søket finner: navnene, metodene og det som avgjør om en analyse vises
+-- (status, synlighet, om laboratoriet er i drift). Måleområder, enheter,
+-- helseforetak og rådata er ikke med, så svaret for alle koblede komponenter
+-- er en brøkdel av det fulle. Analysens eget laboratorienavn sendes bare når
+-- laboratoriet ikke finnes i kopien.
 --
 -- sokedata_versjoner() får nøkkelen «laboratorier»: siste fullførte henting,
 -- som er den eneste som endrer kopien. Appen leser laboratoriedataene på nytt
@@ -38,7 +38,7 @@ begin
       where a.utgatt_kl is null and a.komponent_id in (select fp_id from valgte)
     ),
     laboratorier as (
-      select l.fp_id, l.data, l.institusjon_id
+      select l.fp_id, l.data
       from farmakologiportalen.laboratorium l
       where l.utgatt_kl is null and l.fp_id in (select laboratorium_id from analyser)
     )
@@ -54,21 +54,14 @@ begin
           'metode', a.data -> 'metode',
           'status', a.data -> 'status',
           'synlighet', a.data -> 'synlighet',
-          'laboratorium', case when l.fp_id is null then a.data -> 'laboratorium' end,
-          'institusjon', case when l.fp_id is null then a.data -> 'institusjon' end))) order by a.fp_id)
+          'laboratorium', case when l.fp_id is null then a.data -> 'laboratorium' end))) order by a.fp_id)
         from analyser a
         left join laboratorier l on l.fp_id = a.laboratorium_id), '[]'),
       'laboratorier', coalesce((
         select jsonb_agg(jsonb_build_object('id', l.fp_id, 'data', jsonb_strip_nulls(jsonb_build_object(
           'navn', l.data -> 'navn',
-          'institusjon_id', l.data -> 'institusjon_id',
-          'institusjon', l.data -> 'institusjon',
           'aktiv', l.data -> 'aktiv'))) order by l.fp_id)
-        from laboratorier l), '[]'),
-      'institusjoner', coalesce((
-        select jsonb_agg(jsonb_build_object('id', i.fp_id, 'data', jsonb_build_object('navn', i.data -> 'navn')) order by i.fp_id)
-        from farmakologiportalen.institusjon i
-        where i.utgatt_kl is null and i.fp_id in (select institusjon_id from laboratorier)), '[]')
+        from laboratorier l), '[]')
     )
   );
 end;
