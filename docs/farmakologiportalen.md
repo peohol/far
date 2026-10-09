@@ -144,7 +144,16 @@ regnes aldri om mellom dem. Det som ikke kan regnes om, står som laboratoriet
 oppga det, med enheten. Portalen er kilde i referansefeltet, med når dataene
 sist ble kontrollert. Ingenting her redigeres.
 
-Nettleseren leser bare kopien (`les_laboratorieanalyser`), aldri portalen.
+Det globale fagsøket finner analysene på det tabellene viser: analytten,
+laboratoriet og metoden (ikke helseforetaket, som ikke står i tabellene), og
+treffet åpner seksjonen på fagsiden. Søket leser
+de samme analysene som seksjonen, men bare navnene og metodene
+(`les_laboratoriesok`), og leser dem på nytt bare etter en fullført henting
+(`laboratorier` i `sokedata_versjoner`). Kan de ikke leses, sier søket fra, og
+resten virker som før (`docs/faginnhold.md`).
+
+Nettleseren leser bare kopien (`les_laboratorieanalyser`,
+`les_laboratoriesok`), aldri portalen.
 
 ## Koden
 
@@ -156,6 +165,7 @@ Nettleseren leser bare kopien (`les_laboratorieanalyser`), aldri portalen.
 | `src/farmakologiportalen/synk.ts`, `lager.ts`, `endepunkt.ts`, `api/farmakologiportalen-synk.ts` | Synkroniseringen |
 | `.github/workflows/farmakologiportalen-synk.yml` | Den nattlige jobben |
 | `supabase/migrations/*_farmakologiportalen.sql` | Skjemaet, funksjonene, endringsloggen og portalen i `datakilder_status` |
+| `supabase/migrations/*_laboratoriesok.sql` | Søkedataene til det globale søket og versjonen deres |
 | `src/enheter/konsentrasjon.ts` | Enhetene, omregningen og avrundingen |
 | `src/farmakologiportalen/lesing.ts`, `stoffside.ts`, `referanser.ts` | Lesingen, visningen og referansen |
 | `src/__tests__/farmakologiportalen.test.ts` | Alt over, med et utdrag av ekte data fra portalen (`data/farmakologiportalen/`) |

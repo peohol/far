@@ -244,7 +244,9 @@ describe('versjonene', () => {
     const versjoner = lagVersjonsleser(brukerklient)
     const forst = await versjoner()
     expect(forst.fest).toMatch(/^[1-9]\d*$/)
-    expect(Object.keys(forst).sort()).toEqual(['clinpgx', 'cpic', 'fest', 'sider'])
+    expect(Object.keys(forst).sort()).toEqual(['clinpgx', 'cpic', 'fest', 'laboratorier', 'sider'])
+    // Ingen henting fra Farmakologiportalen er fullført her.
+    expect(forst.laboratorier).toBe('0')
 
     await lagFaginnholdslager(kall.klientFor(admin)).opprettUtkast('infoside', { navn: 'Bare utkast' })
     expect((await versjoner()).sider).toBe(forst.sider)

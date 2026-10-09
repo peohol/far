@@ -28,8 +28,8 @@ import type { Panelnokkel } from '../faginnhold/paneler'
 import type { Tilleggstekst } from '../faginnhold/sok'
 import { FORBINDELSER, type Forbindelse, type Forbindelsesregister } from '../kjemi/forbindelser'
 import type { Kjemivisning } from '../kjemi/stoffside'
-import type { Labutvalg } from './lesing'
-import type { Analysedata } from './modell'
+import type { Laboratoriedata, Labpost, Labutvalg } from './lesing'
+import type { Analysedata, Komponentdata } from './modell'
 import { MATRISER } from './provematerialer'
 
 export const LABPANEL: Panelnokkel = 'laboratorieanalyser'
@@ -41,6 +41,11 @@ export const LABPANEL: Panelnokkel = 'laboratorieanalyser'
  */
 export function vises(a: Pick<Analysedata, 'status' | 'synlighet'>): boolean {
   return (a.status ?? '').toLowerCase() === 'active' && (a.synlighet ?? '').toLowerCase() !== 'hidden'
+}
+
+/** Komponent-ID-ene i portalen for alle forbindelsene i registeret, sortert: det det globale søket leser. */
+export function alleLabkomponenter(register: Forbindelsesregister = FORBINDELSER): string[] {
+  return [...new Set(register.alle.flatMap((f) => register.fpId(f) ?? []))].sort()
 }
 
 /** Komponent-ID-ene i portalen for forbindelsene stoffet har. */
@@ -96,6 +101,67 @@ export const TOM_LABVISNING: Labvisning = { tabeller: [], usikre: [], kontroller
 
 const sammenlign = (a: string, b: string) => a.localeCompare(b, 'nb')
 
+/** Det utvalget leser av en analyse, både på fagsiden og i søket. */
+export type Utvalgsanalyse = Pick<Analysedata, 'komponent_id' | 'laboratorium_id' | 'metode' | 'status' | 'synlighet'> &
+  Partial<Pick<Analysedata, 'navn' | 'laboratorium' | 'institusjon'>>
+
+/** Komponentene, analysene, laboratoriene og institusjonene, med så mye av hver som trengs. */
+export interface Analyseutvalg<A extends Utvalgsanalyse = Utvalgsanalyse> {
+  komponenter: readonly Labpost<Pick<Komponentdata, 'navn' | 'gruppe'>>[]
+  analyser: readonly Labpost<A>[]
+  laboratorier: readonly Labpost<Pick<Laboratoriedata, 'navn' | 'aktiv'> & Partial<Pick<Laboratoriedata, 'institusjon_id' | 'institusjon'>>>[]
+  /** Bare fagsiden trenger dem; søket viser ikke helseforetaket. */
+  institusjoner?: readonly Labpost<{ navn: string }>[]
+}
+
+/** En analyse stoffet skal vise, med analytten og laboratoriet slått opp. */
+export interface Valgtanalyse<A extends Utvalgsanalyse> {
+  id: string
+  analyse: A
+  /** Forbindelsen på fagsiden; `null` for en gruppe- eller sumanalyse. */
+  forbindelse: Forbindelse | null
+  analytt: string
+  laboratorium: string
+  laboratorium_id: string | null
+  institusjon: string | null
+}
+
+/**
+ * Analysene for forbindelsene til et stoff, og for gruppe- og sumanalysene
+ * som dekker dem: bare de som vises, ved laboratorier som er i drift. Det
+ * samme utvalget gir tabellene på fagsiden og treffene i søket.
+ */
+export function velgAnalyser<A extends Utvalgsanalyse>(
+  forbindelser: readonly Forbindelse[],
+  utvalg: Analyseutvalg<A>,
+  register: Forbindelsesregister = FORBINDELSER,
+): Valgtanalyse<A>[] {
+  const etterId = new Map(forbindelser.flatMap((f) => (register.fpId(f) ? [[register.fpId(f)!, f] as const] : [])))
+  const komponenter = new Map(utvalg.komponenter.map((k) => [k.id, k.data]))
+  const laboratorier = new Map(utvalg.laboratorier.map((l) => [l.id, l.data]))
+  const institusjoner = new Map((utvalg.institusjoner ?? []).map((i) => [i.id, i.data.navn]))
+  return utvalg.analyser.flatMap(({ id, data: a }): Valgtanalyse<A>[] => {
+    if (!vises(a)) return []
+    const forbindelse = etterId.get(a.komponent_id) ?? null
+    const komponent = komponenter.get(a.komponent_id)
+    // En komponent som verken er forbindelsens eller en gruppe som dekker den, hører ikke hjemme her.
+    if (!forbindelse && !komponent?.gruppe.some((g) => etterId.has(g))) return []
+    const lab = a.laboratorium_id ? laboratorier.get(a.laboratorium_id) : undefined
+    if (lab?.aktiv === false) return []
+    return [
+      {
+        id,
+        analyse: a,
+        forbindelse,
+        analytt: forbindelse?.navn ?? komponent?.navn ?? a.navn ?? a.komponent_id,
+        laboratorium: lab?.navn ?? a.laboratorium ?? 'Laboratoriet er ikke oppgitt',
+        laboratorium_id: lab ? a.laboratorium_id : null,
+        institusjon: (lab?.institusjon_id && institusjoner.get(lab.institusjon_id)) || lab?.institusjon || a.institusjon || null,
+      },
+    ]
+  })
+}
+
 export function byggLabvisning(
   stoff: string,
   utvalg: Labutvalg | null,
@@ -106,32 +172,17 @@ export function byggLabvisning(
   const usikre = forbindelser.filter((f) => f.farmakologiportalen?.status === 'usikker')
   if (!utvalg) return { ...TOM_LABVISNING, usikre }
 
-  const etterId = new Map(forbindelser.flatMap((f) => (register.fpId(f) ? [[register.fpId(f)!, f] as const] : [])))
   const rekkefolge = new Map(forbindelser.map((f, i) => [f.nokkel, i]))
-  const komponenter = new Map(utvalg.komponenter.map((k) => [k.id, k.data]))
-  const laboratorier = new Map(utvalg.laboratorier.map((l) => [l.id, l.data]))
-  const institusjoner = new Map(utvalg.institusjoner.map((i) => [i.id, i.data.navn]))
   const molvekter = new Map(
     (kjemi?.rader ?? []).flatMap((r) => (r.data ? [[r.forbindelse.nokkel, Number(r.data.molvekt)] as const] : [])),
   )
 
   const grupper = new Map<string, { matrise: string; rader: Labrad[] }>()
-  for (const { id, data: a } of utvalg.analyser) {
-    if (!vises(a)) continue
-    const forbindelse = etterId.get(a.komponent_id) ?? null
-    const komponent = komponenter.get(a.komponent_id)
-    // En komponent som verken er forbindelsens eller en gruppe som dekker den, hører ikke hjemme her.
-    if (!forbindelse && !komponent?.gruppe.some((g) => etterId.has(g))) continue
-    const lab = a.laboratorium_id ? laboratorier.get(a.laboratorium_id) : undefined
-    if (lab?.aktiv === false) continue
+  for (const { analyse: a, ...valgt } of velgAnalyser(forbindelser, utvalg, register)) {
+    const { forbindelse } = valgt
     const mw = forbindelse?.farmakologiportalen?.status === 'verifisert' ? molvekter.get(forbindelse.nokkel) : undefined
     const rad: Labrad = {
-      id,
-      analytt: forbindelse?.navn ?? komponent?.navn ?? a.navn,
-      forbindelse,
-      laboratorium: lab?.navn ?? a.laboratorium ?? 'Laboratoriet er ikke oppgitt',
-      laboratorium_id: lab ? a.laboratorium_id : null,
-      institusjon: (lab?.institusjon_id && institusjoner.get(lab.institusjon_id)) || lab?.institusjon || a.institusjon,
+      ...valgt,
       metode: a.metode,
       provemateriale: a.provemateriale.original,
       nedre: a.maleomrade.nedre,
@@ -240,17 +291,38 @@ export function labsted(id: string): string {
   return `lab:${id}`
 }
 
+/** Det søket finner en analyse på. */
+export type Labsokerad = Pick<Labrad, 'id' | 'analytt' | 'laboratorium' | 'metode'>
+
 /**
  * Analyttene, laboratoriene og metodene, slik søket på siden finner dem: det
  * tabellene viser, og ikke noe mer (helseforetaket står ikke i tabellene).
  */
-export function labsoketekster(visning: Labvisning): Tilleggstekst[] {
-  return visning.tabeller.flatMap((t) =>
-    t.rader.flatMap((r): Tilleggstekst[] => {
-      const element = { id: labsted(r.id), tittel: `${r.analytt} · ${r.laboratorium}` }
-      const tekst = (felt: Tilleggstekst['felt'], verdi: string | null): Tilleggstekst[] =>
-        verdi ? [{ panel: LABPANEL, element, felt, tekst: verdi }] : []
-      return [...tekst('overskrift', r.analytt), ...tekst('verdi', r.laboratorium), ...tekst('verdi', r.metode)]
-    }),
-  )
+export function labsoketekster(visning: Pick<Labvisning, 'tabeller'>): Tilleggstekst[] {
+  return labradtekster(visning.tabeller.flatMap((t) => t.rader))
+}
+
+/** Søketekstene for analysene, på siden og i det globale søket. */
+export function labradtekster(rader: readonly Labsokerad[]): Tilleggstekst[] {
+  return rader.flatMap((r): Tilleggstekst[] => {
+    const element = { id: labsted(r.id), tittel: `${r.analytt} · ${r.laboratorium}` }
+    const tekst = (felt: Tilleggstekst['felt'], verdi: string | null): Tilleggstekst[] =>
+      verdi ? [{ panel: LABPANEL, element, felt, tekst: verdi }] : []
+    return [...tekst('overskrift', r.analytt), ...tekst('verdi', r.laboratorium), ...tekst('verdi', r.metode)]
+  })
+}
+
+/**
+ * Søketekstene for analysene et stoff har, fra søkedataene
+ * (`les_laboratoriesok`): de samme analysene og tekstene som seksjonen på
+ * fagsiden, i samme rekkefølge som der.
+ */
+export function labsoketeksterFor(
+  stoff: string,
+  sokedata: Analyseutvalg,
+  register: Forbindelsesregister = FORBINDELSER,
+): Tilleggstekst[] {
+  const forbindelser = register.forStoff(stoff)
+  if (!forbindelser.some((f) => register.fpId(f))) return []
+  return labradtekster(velgAnalyser(forbindelser, sokedata, register).map(({ analyse, ...r }) => ({ ...r, metode: analyse.metode })))
 }

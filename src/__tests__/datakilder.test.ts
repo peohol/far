@@ -13,6 +13,7 @@ import {
   jobbnavn,
   KILDEOPPSETT,
   kildeintervaller,
+  kilderSomBorSesOver,
   lagDatakildeleser,
   lesDatakildestatus,
   MAKS_OMGANGER,
@@ -106,6 +107,8 @@ describe('lesefunksjonen', () => {
       return new Response(JSON.stringify({ status: 'uendret' }))
     }) as unknown as typeof fetch)
     expect((await leser.status()).kjoringer).toHaveLength(5)
+    // Prikken på adminmenyen trenger bare kjøringene, ikke endringene.
+    expect((await leser.status(1)).endringer.map((e) => e.objekt_id)).toEqual(['PA166104981', 'anbefaling'])
     expect(await leser.hentNa('cpic')).toEqual({ status: 'uendret' })
     expect(kalt).toEqual([{ url: '/api/cpic-synk', init: { method: 'POST', headers: { authorization: 'Bearer tokenet' } } }])
 
@@ -341,6 +344,28 @@ describe('vurderingen', () => {
       endringer: [expect.objectContaining({ etikett: 'CYP2D6', niva: 'klinisk', felt: ['a'], spor: {} })],
       kilder: {},
     })
+  })
+})
+
+describe('prikken på adminmenyen', () => {
+  it('nevner kildene som ikke er i orden, med samme vurdering som panelet', () => {
+    const iOrden = (['fest', 'clinpgx', 'cpic', 'pubchem'] as const).map((k, i) => kjoring(k, i + 1, 'uendret', '2026-09-26T04:00:00Z'))
+    const status = (...kjoringer: Kjoring[]): Datakildestatus => ({ kjoringer: [...iOrden, ...kjoringer], endringer: [] })
+    expect(kilderSomBorSesOver(status(kjoring('farmakologiportalen', 2, 'fullfort', '2026-09-26T04:40:00Z')), NA)).toEqual([])
+    expect(
+      kilderSomBorSesOver(
+        status(
+          kjoring('farmakologiportalen', 3, 'feilet', '2026-09-26T04:40:00Z', { feil: 'Portalen svarte 503' }),
+          kjoring('farmakologiportalen', 2, 'fullfort', '2026-09-25T04:40:00Z'),
+        ),
+        NA,
+      ),
+    ).toEqual(['Farmakologiportalen'])
+    // En nattlig kilde som ikke har lyktes på over to døgn, og en kilde uten kjøringer.
+    expect(kilderSomBorSesOver({ kjoringer: [...iOrden.slice(1), kjoring('farmakologiportalen', 2, 'fullfort', '2026-09-24T11:00:00Z')], endringer: [] }, NA)).toEqual([
+      'FEST',
+      'Farmakologiportalen',
+    ])
   })
 })
 

@@ -418,6 +418,16 @@ export function vurderKilder(
   })
 }
 
+/**
+ * Navnene på kildene som bør ses over (siste henting feilet, var delvis, står
+ * uferdig eller er for gammel), til prikken på adminmenyen.
+ */
+export function kilderSomBorSesOver(status: Datakildestatus, na: number = Date.now()): string[] {
+  return vurderKilder(status, na)
+    .filter((v) => v.tilstand !== 'ok')
+    .map((v) => v.navn)
+}
+
 /* --- Visningen av en endring ------------------------------------------------ */
 
 const ARTSNAVN: Record<Endringsart, string> = {
@@ -517,15 +527,16 @@ export interface Hentingssvar {
 export const MAKS_OMGANGER = 6
 
 export interface Datakildeleser {
-  status(): Promise<Datakildestatus>
+  /** `antall`: flest endringer per kilde (databasen gir 200 uten). */
+  status(antall?: number): Promise<Datakildestatus>
   /** Ber serveren hente fra kilden nå, med administratorens innlogging. */
   hentNa(kilde: Datakilde): Promise<Hentingssvar>
 }
 
 export function lagDatakildeleser(klient: SupabaseClient, hent: typeof fetch = (...a) => fetch(...a)): Datakildeleser {
   return {
-    status: async () => {
-      const { data, error } = await klient.rpc('datakilder_status', {})
+    status: async (antall) => {
+      const { data, error } = await klient.rpc('datakilder_status', antall ? { antall } : {})
       if (error) throw new Error(error.message)
       return lesDatakildestatus(data)
     },

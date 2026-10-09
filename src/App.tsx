@@ -68,7 +68,7 @@ import { lagFarmakogenetikkleser, lagFarmakogenetikksok } from './clinpgx/lesing
 import { lagCpicleser } from './cpic/lesing'
 import { lagBivirkningsleser } from './bivirkninger/lesing'
 import { lagKjemileser } from './kjemi/lesing'
-import { lagLableser } from './farmakologiportalen/lesing'
+import { lagLableser, lagLabsokleser } from './farmakologiportalen/lesing'
 import { useClipboard } from './hooks/useClipboard'
 import { useCopyFlash } from './hooks/useCopyFlash'
 import { useHenting } from './hooks/useHenting'
@@ -232,6 +232,7 @@ export default function App() {
           legemidler: lagLegemiddelsok(stille),
           farmakogenetikk: lagFarmakogenetikksok(stille),
           cpic: lagCpicleser(stille),
+          laboratorier: lagLabsokleser(stille),
           versjoner: lagVersjonsleser(stille),
           mellomlager: nettleserlager,
         },
