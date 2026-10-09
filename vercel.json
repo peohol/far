@@ -3,7 +3,6 @@
   "regions": ["arn1"],
   "crons": [
     { "path": "/api/legemiddeldata-synk", "schedule": "15 4 * * *" },
-    { "path": "/api/clinpgx-synk", "schedule": "30 2 * * 1" },
     { "path": "/api/cpic-synk", "schedule": "45 2 * * 2" },
     { "path": "/api/pubchem-synk", "schedule": "15 3 * * 3" }
   ],

@@ -120,6 +120,7 @@ Koden:
 | `src/clinpgx/api.ts` | Kallene: én kø, avstand mellom kallene, nye forsøk ved 429 og serverfeil |
 | `src/clinpgx/synk.ts`, `lager.ts` | Synkroniseringen og databasekallene den gjør |
 | `src/clinpgx/endepunkt.ts`, `api/clinpgx-synk.ts`, `api/clinpgx-sok.ts` | Serverendepunktene |
+| `.github/workflows/clinpgx-synk.yml` | Den ukentlige jobben, i så mange omganger som trengs |
 | `src/clinpgx/lesing.ts` | Lesingen appen gjør |
 | `src/clinpgx/stoffside.ts` | Rekkefølgen i seksjonen, detaljkortene, oppsummeringen, tekstene søket finner, forslagene til kobling |
 | `src/clinpgx/referanser.ts` | De automatiske referansene og meldingen om gamle data |
@@ -335,17 +336,35 @@ Ikke koblet:
 
 ## Synkroniseringen
 
-- **Ukentlig**: Vercel kaller `GET /api/clinpgx-synk` mandag 02:30 UTC med
-  `CRON_SECRET`. Egen jobb, atskilt fra FEST, som går hver natt 04:15.
+- **Ukentlig**: GitHub Actions (`.github/workflows/clinpgx-synk.yml`) kaller
+  `POST /api/clinpgx-synk` mandag 02:30 UTC med et OIDC-token for
+  arbeidsflyten på `main`, som `githubkjoring` i `src/server/tilgang.ts`
+  kontrollerer. Ingen hemmelighet å lagre. Den kan også startes for hånd under
+  *Actions → ClinPGx*. Egen jobb, atskilt fra FEST, som går hver natt 04:15.
 - **Manuelt**: en administrator trykker «Hent fra ClinPGx nå» ved koblingen,
   som gjør `POST /api/clinpgx-synk` med sin egen innlogging og
-  `{ "kjemikalier": ["PA…"] }` (høyst 20). Serveren sjekker `er_admin()` med
-  brukerens token.
+  `{ "kjemikalier": ["PA…"] }` (høyst 20), eller «Hent nå» i «Datakilder» for
+  alle. Serveren sjekker `er_admin()` med brukerens token.
 
 Én kjøring om gangen. Kjemikaliene hentes ett og ett — de som aldri er hentet
 først, så de eldste — med fire kall hver, i kø med minst 0,6 s mellom
-kallene. Blir tiden knapp (240 av Vercels 300 sekunder), stopper jobben før
-neste kjemikalie og henter resten neste gang.
+kallene. Det tar 2–4 sekunder per kjemikalie, så én omgang rekker 60–90 av
+dem innenfor Vercels grense.
+
+**Omgangene**: blir tiden knapp (240 av Vercels 300 sekunder), stopper
+omgangen før neste kjemikalie, og kjøringen avsluttes som `delvis` med resten
+utsatt. Svaret har da `fortsett: <kjøringen>`, og jobben i GitHub Actions og
+«Hent nå» i «Datakilder» kaller igjen med `{ "fortsett": <kjøringen> }` til
+det er borte (høyst seks omganger, så hele kjøringen holder seg under
+halvtimen en henting kan stå uferdig; det rekker 350–500 kjemikalier). `clinpgx_fortsett_synk` åpner den samme
+kjøringen igjen, og omgangen henter bare kjemikaliene kjøringen ikke har
+hentet eller notert en feil på (`sist_synk`), med tellingen lagt til den fra
+før. Hver ukentlige kjøring dekker dermed alle kjemikaliene, i én rad i
+loggen. Bare den nyeste kjøringen kan fortsettes, og
+bare innen en time etter at den stoppet. Stopper omgangene underveis, står
+kjøringen som `delvis` med det som ble utsatt, og det står først i køen neste
+gang. Et utvalg en administrator ba om, fortsettes ikke; det er alltid lite.
+Kjøringen står `pagar` bare mens en omgang pågår.
 
 **Feil**:
 
@@ -404,7 +423,8 @@ ikke leser. Et felt som blir valgfritt hos ClinPGx, stanser kjemikaliene som
 mangler det, til kravet endres i `struktur.ts`.
 
 Hver kjøring logges i `clinpgx.synkroniseringer`, og en feilet kjøring gir
-502, så den også synes i Vercel. Hva som er nytt, endret eller borte siden
+502, så den også synes i Vercel og GitHub. Pågår en kjøring allerede, eller
+kan den ikke fortsettes, svarer endepunktet 409. Hva som er nytt, endret eller borte siden
 forrige henting, og om det er klinisk eller bare metadata, står i
 endringsloggen (`docs/datakilder.md`).
 

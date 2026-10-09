@@ -60,13 +60,15 @@ export const KILDEOPPSETT: Record<Datakilde, Kildeoppsett> = {
     beholdt: 'OUSFAR bruker fortsatt siste gyldige FEST-data; ingenting fra den feilede hentingen er tatt i bruk.',
     endringslogg: false,
   },
-  // Ett kjemikalie om gangen, hvert i sin transaksjon (docs/clinpgx.md).
+  // Ett kjemikalie om gangen, hvert i sin transaksjon, hver uke fra GitHub
+  // Actions i så mange omganger som trengs (docs/clinpgx.md).
   clinpgx: {
     navn: 'ClinPGx',
     synk: '/api/clinpgx-synk',
     versjonsnavn: 'Parserversjon',
     etterFeil: 'Kjemikalier som ble hentet før feilen, kan være oppdatert; de andre står som før.',
     endringslogg: true,
+    intervall: 7,
   },
   cpic: { navn: 'CPIC', synk: '/api/cpic-synk', versjonsnavn: 'Skjemaversjon', etterFeil: null, endringslogg: true },
   // Alt som består kontrollen, byttes inn i én transaksjon (docs/kjemi.md).
@@ -513,7 +515,16 @@ export function feltendringer(e: Endring): { felt: string; foer: string; etter: 
 export interface Hentingssvar {
   status: string
   feil?: string
+  /** Kjøringen serveren vil fortsette i en ny omgang (ClinPGx). */
+  fortsett?: number
 }
+
+/**
+ * Høyst så mange omganger «Hent nå» ber om for én kjøring: seks på rundt fire
+ * minutter holder hele kjøringen under halvtimen en henting kan stå uferdig.
+ * Samme grense som jobben i GitHub Actions (`.github/workflows/clinpgx-synk.yml`).
+ */
+export const MAKS_OMGANGER = 6
 
 export interface Datakildeleser {
   /** `antall`: flest endringer per kilde (databasen gir 200 uten). */
@@ -533,10 +544,29 @@ export function lagDatakildeleser(klient: SupabaseClient, hent: typeof fetch = (
       const { data } = await klient.auth.getSession()
       const token = data.session?.access_token
       if (!token) throw new Error('Du må være logget inn.')
-      const res = await hent(KILDEOPPSETT[kilde].synk, { method: 'POST', headers: { authorization: `Bearer ${token}` } })
-      const svar = (await res.json().catch(() => null)) as Hentingssvar | { feil?: string } | null
-      if (svar && 'status' in svar && typeof svar.status === 'string') return svar
-      throw new Error((svar && 'feil' in svar && svar.feil) || `Serveren svarte ${res.status}.`)
+      return hentIOmganger(hent, KILDEOPPSETT[kilde].synk, token)
     },
+  }
+}
+
+/**
+ * Ber serveren hente, og igjen med `{ fortsett }` så lenge svaret har det: en
+ * kilde som ikke rekker alt i ett kall (ClinPGx), fortsetter den samme
+ * kjøringen. Svaret er det fra siste omgang, med tellingen for hele kjøringen.
+ */
+async function hentIOmganger(hent: typeof fetch, sti: string, token: string): Promise<Hentingssvar> {
+  let fortsett: number | undefined
+  for (let omgang = 1; ; omgang += 1) {
+    const res = await hent(sti, {
+      method: 'POST',
+      headers: { authorization: `Bearer ${token}`, ...(fortsett !== undefined && { 'content-type': 'application/json' }) },
+      ...(fortsett !== undefined && { body: JSON.stringify({ fortsett }) }),
+    })
+    const svar = (await res.json().catch(() => null)) as Hentingssvar | { feil?: string } | null
+    if (!(svar && 'status' in svar && typeof svar.status === 'string')) {
+      throw new Error((svar && 'feil' in svar && svar.feil) || `Serveren svarte ${res.status}.`)
+    }
+    if (typeof svar.fortsett !== 'number' || omgang >= MAKS_OMGANGER) return svar
+    fortsett = svar.fortsett
   }
 }
