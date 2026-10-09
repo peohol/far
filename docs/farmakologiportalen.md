@@ -130,8 +130,11 @@ sidelengs; på smale skjermer står bemerkningen under måleområdet.
 Laboratoriet og måleområdet lenker til portalen.
 
 Måleområdene vises i enheten brukeren velger (µg/L, nmol/L, µmol/L), med høyst
-to gjeldende sifre, som `x—y`, «fra x» eller «opptil y»
-(`src/enheter/konsentrasjon.ts`). Mellom masse og stoffmengde regnes de bare
+to gjeldende sifre, som `x—y` (`src/enheter/konsentrasjon.ts`). Som på
+portalens egen analyseside vises et måleområde bare når begge grensene er
+oppgitt; én grense alene (342 aktive analyser i oktober 2026, halvparten
+kvalitative) kan være en kvantifiseringsgrense eller en cut-off, og står som
+«Ikke oppgitt». Mellom masse og stoffmengde regnes de bare
 om med molekylvekten fra PubChem og en verifisert kobling, og en sumanalyse
 regnes aldri om mellom dem. Det som ikke kan regnes om, står som laboratoriet
 oppga det, med enheten. Portalen er kilde i referansefeltet, med når dataene

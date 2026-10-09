@@ -234,10 +234,15 @@ export interface Maleomradevisning {
 /**
  * Måleområdet i den valgte enheten, med høyst to gjeldende sifre. Kan det
  * ikke regnes om, står det som laboratoriet oppga det, med enheten.
+ *
+ * Som på portalens egen analyseside vises måleområdet bare når begge
+ * grensene er oppgitt. Én grense alene (oftest en nedre, ofte ved en
+ * kvalitativ analyse) sier ikke sikkert hva den er — et måleområde, en
+ * kvantifiseringsgrense eller en cut-off — og portalen viser den ikke.
  */
 export function maleomrade(rad: Pick<Labrad, 'nedre' | 'ovre' | 'enhet' | 'molvekt'>, valgt: Visningsenhet): Maleomradevisning {
   const grenser = [rad.nedre, rad.ovre]
-  if (grenser.every((g) => g === null)) return { tekst: 'Ikke oppgitt', enhet: null, omregnet: false }
+  if (grenser.some((g) => g === null)) return { tekst: 'Ikke oppgitt', enhet: null, omregnet: false }
   const fra = lesKonsentrasjonsenhet(rad.enhet.enhet)
   const til = lesKonsentrasjonsenhet(valgt)!
   const omregnet = grenser.map((g) => (g && g.verdi !== null && fra ? regnOm(g.verdi, fra, til, rad.molvekt) : null))

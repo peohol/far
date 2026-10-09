@@ -663,7 +663,8 @@ describe('visningen på fagsidene', () => {
     expect(tabell('citalopram', 'Serum · Citalopram', 'µmol/L')).toContainEqual(['Citalopram', 'Klinisk farmakologi Haukeland', '0,026—0,82'])
     expect(tabell('citalopram', 'Fullblod · Citalopram')).toEqual([
       ['Citalopram', 'Klinisk farmakologi St Olav', '1,6—160'],
-      ['Citalopram', 'Rettstoksikologi OUS', 'fra 32'],
+      // Portalen oppgir bare en nedre grense her, og viser den ikke.
+      ['Citalopram', 'Rettstoksikologi OUS', 'Ikke oppgitt'],
     ])
   })
 
@@ -675,12 +676,21 @@ describe('visningen på fagsidene', () => {
       'Fullblod · Hydroksybupropion',
     ])
     expect(tabell('bupropion', 'Serum · Hydroksybupropion')).toContainEqual(['Hydroksybupropion', 'Klinisk farmakologi Haukeland', '73—2000'])
-    expect(tabell('bupropion', 'Fullblod · Bupropion')).toContainEqual(['Bupropion', 'Rettstoksikologi OUS', 'fra 24'])
+    expect(tabell('bupropion', 'Fullblod · Bupropion')).toContainEqual(['Bupropion', 'Rettstoksikologi OUS', 'Ikke oppgitt'])
     expect(tabell('bupropion', 'Fullblod · Hydroksybupropion', 'µmol/L')).toContainEqual([
       'Hydroksybupropion',
       'Klinisk farmakologi St Olav',
       '0,1—10',
     ])
+  })
+
+  it('viser måleområdet bare når begge grensene er oppgitt, som portalens analyseside', () => {
+    const grense = (verdi: number) => ({ verdi, original: String(verdi), enhet: null, komparator: null })
+    const rad = { enhet: { original: 'nmol/L', enhet: 'nmol/L' }, molvekt: 344.4 }
+    // THC-syre i urin ved Rettstoksikologi OUS: portalen har «30» som nedre grense, men viser ikke noe måleområde.
+    expect(maleomrade({ ...rad, nedre: grense(30), ovre: null }, 'µg/L')).toEqual({ tekst: 'Ikke oppgitt', enhet: null, omregnet: false })
+    expect(maleomrade({ ...rad, nedre: null, ovre: grense(30) }, 'nmol/L').tekst).toBe('Ikke oppgitt')
+    expect(maleomrade({ ...rad, nedre: grense(30), ovre: grense(3000) }, 'µg/L').tekst).toBe('10—1000')
   })
 
   it('regner aldri en sumanalyse om mellom masse og stoffmengde, men innenfor samme slag', () => {
