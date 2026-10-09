@@ -15,12 +15,13 @@ export const ENDRINGSLOGG: Endring[] = [
     versjon: '1.87.1',
     dato: '2026-10-09',
     sammendrag: 'Ryddigere tabeller i «Analyse ved norske laboratorier»',
-    typer: ['Design / layout'],
+    typer: ['Design / layout', 'Fag'],
     omfang: 'Mindre omfang',
     punkter: [
       'Én tabell per prøvemateriale og analytt, med begge i overskriften, for eksempel «Serum · Citalopram» og «Serum · Desmetylcitalopram». Kolonnen «Analytt» er borte.',
       'Tabellene får plass i bredden uten å rulle sidelengs. Laboratorienavnene brytes over flere linjer, og helseforetaket står ikke lenger under.',
       'Kolonnen «Benevning» er borte; måleområdet står i enheten som er valgt over tabellene. Svarer et laboratorium ut noe annet enn en konsentrasjon, som positiv/negativ, står det i en egen kolonne «Bemerkning».',
+      'Har laboratoriet bare oppgitt én grense, står måleområdet som «Ikke oppgitt», slik Farmakologiportalen selv viser det. Før sto det for eksempel «fra 10», et tall portalen ikke viser.',
     ],
   },
   {
