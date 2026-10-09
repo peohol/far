@@ -3586,6 +3586,10 @@ describe('analyse ved norske laboratorier', () => {
       'Bemerkning',
     ])
     expect(within(urin).getAllByText('Svar: Kvalitativ (positiv/negativ)').length).toBeGreaterThan(0)
+    // Bare en nedre grense i portalens data: den står som laboratoriet oppga den, merket fordi portalens side ikke viser den.
+    const ous = within(urin).getByRole('rowheader', { name: /Rettstoksikologi OUS/ }).closest('tr')!
+    expect(ous.textContent).toContain('Nedre grense 30 nmol/L')
+    expect(ous.textContent).toContain('Vises ikke på portalens side')
     expect(within(tabell('Serum · THC (delta-9-tetrahydrokannabinol)')).queryByRole('columnheader', { name: 'Bemerkning' })).toBeNull()
   })
 

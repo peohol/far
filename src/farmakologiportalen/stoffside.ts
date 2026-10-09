@@ -229,29 +229,37 @@ export interface Maleomradevisning {
   /** Enheten tallene står i, når de ikke er regnet om til den valgte. */
   enhet: string | null
   omregnet: boolean
+  /** Bare én grense er oppgitt. Portalens analyseside viser den ikke. */
+  enkeltgrense: boolean
 }
 
 /**
  * Måleområdet i den valgte enheten, med høyst to gjeldende sifre. Kan det
  * ikke regnes om, står det som laboratoriet oppga det, med enheten.
  *
- * Som på portalens egen analyseside vises måleområdet bare når begge
- * grensene er oppgitt. Én grense alene (oftest en nedre, ofte ved en
- * kvalitativ analyse) sier ikke sikkert hva den er — et måleområde, en
- * kvantifiseringsgrense eller en cut-off — og portalen viser den ikke.
+ * Én grense alene (oftest en nedre, ofte ved en kvalitativ analyse) vises
+ * som det portalens data sier — «Nedre grense 30» i laboratoriets egen enhet,
+ * uten omregning — og merkes, siden portalens analyseside ikke viser den.
+ * Den sier ikke sikkert hva den er (en kvantifiseringsgrense eller en
+ * cut-off), så den kalles ikke noe mer enn en grense.
  */
 export function maleomrade(rad: Pick<Labrad, 'nedre' | 'ovre' | 'enhet' | 'molvekt'>, valgt: Visningsenhet): Maleomradevisning {
   const grenser = [rad.nedre, rad.ovre]
-  if (grenser.some((g) => g === null)) return { tekst: 'Ikke oppgitt', enhet: null, omregnet: false }
+  if (!rad.nedre && !rad.ovre) return { tekst: 'Ikke oppgitt', enhet: null, omregnet: false, enkeltgrense: false }
+  if (!rad.nedre || !rad.ovre) {
+    const grense = (rad.nedre ?? rad.ovre)!
+    const tekst = `${rad.nedre ? 'Nedre' : 'Øvre'} grense ${visGrense(grense)}`
+    return { tekst, enhet: grense.enhet ?? rad.enhet.original, omregnet: false, enkeltgrense: true }
+  }
   const fra = lesKonsentrasjonsenhet(rad.enhet.enhet)
   const til = lesKonsentrasjonsenhet(valgt)!
   const omregnet = grenser.map((g) => (g && g.verdi !== null && fra ? regnOm(g.verdi, fra, til, rad.molvekt) : null))
   if (grenser.every((g, i) => g === null || omregnet[i] !== null)) {
     const [nedre, ovre] = grenser.map((g, i) => (g ? visGrense(g, omregnet[i]!) : null))
-    return { tekst: visOmrade(nedre!, ovre!), enhet: null, omregnet: true }
+    return { tekst: visOmrade(nedre!, ovre!), enhet: null, omregnet: true, enkeltgrense: false }
   }
   const [nedre, ovre] = grenser.map((g) => (g ? visGrense(g) : null))
-  return { tekst: visOmrade(nedre!, ovre!), enhet: rad.enhet.original, omregnet: false }
+  return { tekst: visOmrade(nedre!, ovre!), enhet: rad.enhet.original, omregnet: false, enkeltgrense: false }
 }
 
 /** Benevninger i portalen som ikke sier noe om svaret. */

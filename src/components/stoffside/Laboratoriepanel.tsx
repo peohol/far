@@ -133,6 +133,7 @@ function Rad({ rad: r, tabell, enhet, bemerkning }: { rad: Labrad; tabell: Labta
           {omrade.enhet && <span className="laboratorier__enhet"> {omrade.enhet}</span>}
           <span className="kun-skjermleser"> i Farmakologiportalen</span>
         </Kildelenke>
+        {omrade.enkeltgrense && <span className="laboratorier__tillegg">Vises ikke på portalens side</span>}
         {/* På smale skjermer står bemerkningen her, og kolonnen er skjult (laboratorier.css). */}
         {bemerkning && <span className="laboratorier__tillegg laboratorier__bemerkning">{bemerkning}</span>}
       </td>
