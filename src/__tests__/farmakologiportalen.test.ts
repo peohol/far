@@ -740,6 +740,10 @@ describe('visningen på fagsidene', () => {
     const tekster = labsoketekster(v)
     expect(tekster.every((t) => t.panel === LABPANEL)).toBe(true)
     expect(tekster.map((t) => t.tekst)).toEqual(expect.arrayContaining(['Klinisk farmakologi Drammen', 'LC-MS/MS', 'Desmetylcitalopram']))
+    // Bare det tabellene viser: helseforetaket står ikke der, og finnes derfor ikke av søket på siden.
+    const institusjoner = new Set(v.tabeller.flatMap((t) => t.rader.flatMap((r) => r.institusjon ?? [])))
+    expect(institusjoner.size).toBeGreaterThan(0)
+    expect(tekster.filter((t) => institusjoner.has(t.tekst) && !v.tabeller.some((x) => x.rader.some((r) => r.laboratorium === t.tekst)))).toEqual([])
     const ref = fpreferanser(v)
     expect(ref.referanser.map((r) => r.id)).toEqual([FP_KILDE])
     expect(ref.referanser[0]!.automatisk?.opphav).toMatch(/^Laboratorieanalyser fra Farmakologiportalen, sist kontrollert \d{1,2}\. \p{L}+ \d{4}$/u)

@@ -3589,6 +3589,26 @@ describe('analyse ved norske laboratorier', () => {
     expect(within(tabell('Serum · THC (delta-9-tetrahydrokannabinol)')).queryByRole('columnheader', { name: 'Bemerkning' })).toBeNull()
   })
 
+  it('bryter lange metodenavn ved skråstreken, og søket på siden fremhever dem som de står', async () => {
+    const user = userEvent.setup()
+    const laboratorier = { les: vi.fn(async (ider: readonly string[]) => labutvalg(ider)) }
+    const data = enkelSide({ id: 'thc', slug: 'thc', navn: 'THC' }, { nedre: 1, ovre: 2, enhet: 'nmol/L' })
+    const k = { ...kilde({ data }), laboratorier }
+    vis('thc', k)
+    await apneSkuff(user, 'Analyse ved norske laboratorier')
+    const seksjon = screen.getByRole('region', { name: 'Analyse ved norske laboratorier' })
+    const metode = within(seksjon).getAllByText((_, el) => el?.tagName === 'TD' && el.textContent === 'Andre immunologiske/enzymatiske/fotometriske metoder')[0]!
+    // Brytepunktene er <wbr>, ikke tegn i teksten, og ikke i «LC-MS/MS».
+    expect(metode.querySelectorAll('wbr')).toHaveLength(2)
+    expect(metode.textContent).not.toContain('\u200b')
+    expect(within(seksjon).getAllByText('LC-MS/MS')[0]!.querySelector('wbr')).toBeNull()
+
+    await user.keyboard('{Control>}b{/Control}')
+    await user.keyboard('immunologiske/enzymatiske')
+    await waitFor(() => expect(metode.querySelector('mark.sidetreff')?.textContent).toBe('immunologiske/enzymatiske'))
+    expect(screen.getByRole('status').textContent).toMatch(/^Treff 1 av \d+$/)
+  })
+
   it('bryter teksten i tabellene, så de vises i hele bredden uten å rulle sidelengs', () => {
     const css = readFileSync('src/styles/laboratorier.css', 'utf8')
     expect(css).toMatch(/\.serumtabell__tabell\.laboratorier__rader th,\s*\.serumtabell__tabell\.laboratorier__rader td\s*\{[^}]*white-space:\s*normal/)

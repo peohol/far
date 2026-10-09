@@ -23,23 +23,41 @@ export function useSokeord(): readonly string[] {
 /** Klassen hvert treff har. Søket finner treffene på den. */
 export const TREFFKLASSE = 'sidetreff'
 
-/** Teksten, med søketreffene fremhevet. */
-export function Uthev({ tekst }: { tekst: string }) {
+/**
+ * Teksten, med søketreffene fremhevet. `brudd` gir posisjonene i teksten der
+ * linjen kan brytes (`<wbr>`); treffene finnes i teksten som den er, så et
+ * søk på det som står, alltid gir et merke.
+ */
+export function Uthev({ tekst, brudd }: { tekst: string; brudd?: (tekst: string) => readonly number[] }) {
   const ord = useContext(Sokeord)
   const treff = treffIntervaller(tekst, ord)
-  if (treff.length === 0) return <>{tekst}</>
+  const bruddsteder = brudd?.(tekst) ?? []
+  if (treff.length === 0 && bruddsteder.length === 0) return <>{tekst}</>
+
+  /** Tekstbiten fra `fra` til `til`, med brytepunktene som faller inni den. */
+  const bit = (fra: number, til: number): ReactNode[] => {
+    const deler: ReactNode[] = []
+    let forrige = fra
+    for (const sted of bruddsteder) {
+      if (sted <= fra || sted >= til) continue
+      deler.push(tekst.slice(forrige, sted), <wbr key={`b${sted}`} />)
+      forrige = sted
+    }
+    deler.push(tekst.slice(forrige, til))
+    return deler
+  }
 
   const deler: ReactNode[] = []
   let forrige = 0
   for (const [start, slutt] of treff) {
-    if (start > forrige) deler.push(tekst.slice(forrige, start))
+    if (start > forrige) deler.push(...bit(forrige, start))
     deler.push(
       <mark key={start} className={TREFFKLASSE}>
-        {tekst.slice(start, slutt)}
+        {bit(start, slutt)}
       </mark>,
     )
     forrige = slutt
   }
-  if (forrige < tekst.length) deler.push(tekst.slice(forrige))
+  if (forrige < tekst.length) deler.push(...bit(forrige, tekst.length))
   return <>{deler}</>
 }

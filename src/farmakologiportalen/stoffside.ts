@@ -227,14 +227,17 @@ export function labsted(id: string): string {
   return `lab:${id}`
 }
 
-/** Analyttene, laboratoriene og metodene, slik søket på siden finner dem. */
+/**
+ * Analyttene, laboratoriene og metodene, slik søket på siden finner dem: det
+ * tabellene viser, og ikke noe mer (helseforetaket står ikke i tabellene).
+ */
 export function labsoketekster(visning: Labvisning): Tilleggstekst[] {
   return visning.tabeller.flatMap((t) =>
     t.rader.flatMap((r): Tilleggstekst[] => {
       const element = { id: labsted(r.id), tittel: `${r.analytt} · ${r.laboratorium}` }
       const tekst = (felt: Tilleggstekst['felt'], verdi: string | null): Tilleggstekst[] =>
         verdi ? [{ panel: LABPANEL, element, felt, tekst: verdi }] : []
-      return [...tekst('overskrift', r.analytt), ...tekst('verdi', r.laboratorium), ...tekst('verdi', r.institusjon), ...tekst('verdi', r.metode)]
+      return [...tekst('overskrift', r.analytt), ...tekst('verdi', r.laboratorium), ...tekst('verdi', r.metode)]
     }),
   )
 }
