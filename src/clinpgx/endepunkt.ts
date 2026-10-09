@@ -1,10 +1,13 @@
 /**
  * Serverendepunktene for ClinPGx.
  *
- * - `/api/clinpgx-synk` synkroniserer. Vercel kaller det hver uke med
- *   `GET` og `Authorization: Bearer <CRON_SECRET>`. En administrator kan be om
- *   det samme med `POST` og sin egen innlogging, for alle kjemikaliene eller
- *   bare noen (`{ "kjemikalier": ["PA…"] }`).
+ * - `/api/clinpgx-synk` synkroniserer. Jobben i GitHub Actions kaller det hver
+ *   uke med `POST` og et OIDC-token for arbeidsflyten, og igjen med
+ *   `{ "fortsett": <kjøringen> }` så lenge svaret har `fortsett`: én omgang
+ *   rekker ikke alle kjemikaliene innenfor Vercels grense. En administrator kan
+ *   be om det samme med sin egen innlogging, for alle kjemikaliene eller bare
+ *   noen (`{ "kjemikalier": ["PA…"] }`). `GET` med
+ *   `Authorization: Bearer <CRON_SECRET>` virker fortsatt, for Vercels cron.
  * - `/api/clinpgx-sok` slår opp et kjemikalie i ClinPGx på navnet eller
  *   ID-en, så en administrator kan velge hva en stoffside kobles til. Bare for
  *   administratorer.
@@ -15,7 +18,7 @@
  * innloggede — et token som ikke er gyldig, avvises der.
  */
 import { kallMot } from '../legemiddeldata/lager.js'
-import { bearer, erAdmin, hvem, serverklient, svar, type Adminsjekk, type Miljo } from '../server/tilgang.js'
+import { bearer, erAdmin, hvem, serverklient, svar, type Adminsjekk, type Githubsjekk, type Miljo } from '../server/tilgang.js'
 import { lagClinpgxApi, type ClinpgxApi } from './api.js'
 import { lagClinpgxlager } from './lager.js'
 import { lesKjemikaliesvar, type Kjemikalie } from './modell.js'
@@ -23,20 +26,36 @@ import { synkroniserClinpgx, type Synkresultat, type Synkvalg } from './synk.js'
 
 export { erAdmin, type Adminsjekk, type Miljo }
 
-type Synkroniser = (valg: Pick<Synkvalg, 'lager' | 'api' | 'utlostAv' | 'bare'>) => Promise<Synkresultat>
+type Synkroniser = (valg: Pick<Synkvalg, 'lager' | 'api' | 'utlostAv' | 'bare' | 'fortsett'>) => Promise<Synkresultat>
+
+/** Arbeidsflyten som kjører synkroniseringen hver uke. */
+export const CLINPGX_ARBEIDSFLYT = '.github/workflows/clinpgx-synk.yml'
 
 /** Flest kjemikalier en administrator kan be om å få hentet i ett kall. */
 export const MAKS_MANUELLE = 20
 
-/** Kjemikaliene en administrator ba om, eller `undefined` for alle. Ugyldige ID-er avvises. */
-async function bestilte(foresporsel: Request): Promise<string[] | undefined | 'ugyldig'> {
+/** Det kallet ber om: bare noen kjemikalier, eller neste omgang av en kjøring. */
+type Bestilling = { bare?: string[]; fortsett?: number }
+
+/**
+ * Kjemikaliene en administrator ba om, eller kjøringen en omgang skal
+ * fortsette. Tomt: alle kjemikaliene, i en ny kjøring. Ugyldige ID-er, og
+ * begge deler på en gang, avvises.
+ */
+async function bestilling(foresporsel: Request, kanVelge: boolean): Promise<Bestilling | 'ugyldig'> {
+  if (foresporsel.method !== 'POST') return {}
   const tekst = await foresporsel.text()
-  if (!tekst.trim()) return undefined
+  if (!tekst.trim()) return {}
   try {
-    const innhold = JSON.parse(tekst) as { kjemikalier?: unknown }
-    if (innhold.kjemikalier === undefined) return undefined
-    const liste = innhold.kjemikalier
+    const innhold = JSON.parse(tekst) as { kjemikalier?: unknown; fortsett?: unknown }
+    const { kjemikalier: liste, fortsett } = innhold
+    if (fortsett !== undefined) {
+      if (liste !== undefined || typeof fortsett !== 'number' || !Number.isSafeInteger(fortsett) || fortsett < 1) return 'ugyldig'
+      return { fortsett }
+    }
+    if (liste === undefined) return {}
     if (
+      !kanVelge ||
       !Array.isArray(liste) ||
       liste.length === 0 ||
       liste.length > MAKS_MANUELLE ||
@@ -44,7 +63,7 @@ async function bestilte(foresporsel: Request): Promise<string[] | undefined | 'u
     ) {
       return 'ugyldig'
     }
-    return [...new Set(liste as string[])]
+    return { bare: [...new Set(liste as string[])] }
   } catch {
     return 'ugyldig'
   }
@@ -53,27 +72,40 @@ async function bestilte(foresporsel: Request): Promise<string[] | undefined | 'u
 export async function behandleClinpgxSynk(
   foresporsel: Request,
   miljo: Miljo,
-  { synkroniser = synkroniserClinpgx, adminsjekk = erAdmin, api }: { synkroniser?: Synkroniser; adminsjekk?: Adminsjekk; api?: ClinpgxApi } = {},
+  {
+    synkroniser = synkroniserClinpgx,
+    adminsjekk = erAdmin,
+    githubsjekk,
+    api,
+  }: { synkroniser?: Synkroniser; adminsjekk?: Adminsjekk; githubsjekk?: Githubsjekk; api?: ClinpgxApi } = {},
 ): Promise<Response> {
   if (foresporsel.method !== 'GET' && foresporsel.method !== 'POST') return svar(405, { feil: 'Bare GET og POST.' })
-  const utlostAv = await hvem(foresporsel, miljo, adminsjekk)
+  const utlostAv = await hvem(foresporsel, miljo, adminsjekk, { arbeidsflyt: CLINPGX_ARBEIDSFLYT, sjekk: githubsjekk })
   if (!utlostAv) return svar(401, { feil: 'Ikke tilgang.' })
 
-  const bare = utlostAv === 'manuell' ? await bestilte(foresporsel) : undefined
-  if (bare === 'ugyldig') {
-    return svar(400, { feil: `Oppgi opptil ${MAKS_MANUELLE} ClinPGx-ID-er som «kjemikalier», f.eks. ["PA451333"].` })
+  const bestilt = await bestilling(foresporsel, utlostAv === 'manuell')
+  if (bestilt === 'ugyldig') {
+    return svar(400, {
+      feil: `Oppgi opptil ${MAKS_MANUELLE} ClinPGx-ID-er som «kjemikalier», f.eks. ["PA451333"], eller kjøringen som skal fortsettes som «fortsett».`,
+    })
   }
 
   const klient = serverklient(miljo)
   if (!klient) return svar(500, { feil: 'Mangler oppkoblingen mot databasen.' })
 
-  const resultat = await synkroniser({
-    lager: lagClinpgxlager(kallMot(klient)),
-    api: api ?? lagClinpgxApi(),
-    utlostAv,
-    ...(bare && { bare }),
-  })
-  // En feilet kjøring er logget i databasen; statuskoden gjør den synlig i Vercel også.
+  let resultat: Synkresultat
+  try {
+    resultat = await synkroniser({
+      lager: lagClinpgxlager(kallMot(klient)),
+      api: api ?? lagClinpgxApi(),
+      utlostAv,
+      ...bestilt,
+    })
+  } catch (e) {
+    // En kjøring pågår allerede, eller den som skulle fortsettes, kan ikke det.
+    return svar(409, { feil: e instanceof Error ? e.message : String(e) })
+  }
+  // En feilet kjøring er logget i databasen; statuskoden gjør den synlig i Vercel og GitHub også.
   return svar(resultat.status === 'feilet' ? 502 : 200, resultat)
 }
 

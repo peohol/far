@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.88.1',
+    dato: '2026-10-09',
+    sammendrag: 'Farmakogenetikken fra ClinPGx oppdateres for alle stoffene hver uke',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Den ukentlige hentingen fra ClinPGx rakk bare rundt 60 av de koblede stoffene, så resten ble oppdatert bare annenhver uke. Nå fortsetter den til alle er hentet.',
+      'Det samme gjelder «Hent nå» for ClinPGx i «Datakilder»: den henter alle stoffene i én kjøring, og tar da noen minutter.',
+    ],
+  },
+  {
     versjon: '1.88.0',
     dato: '2026-10-09',
     sammendrag: 'Laboratorieanalysene i fagsøket, og en prikk når en datakilde bør ses over',

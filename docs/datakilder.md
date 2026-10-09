@@ -140,9 +140,10 @@ femte minutt og når panelet lukkes. Per kilde:
   delvis (med feilene per kjemikalie), har stått uferdig i over en halvtime,
   eller når siste vellykkede henting er eldre enn intervallet og ett døgn til.
   Intervallet leses av cron-uttrykket i `vercel.json`: for FEST hver natt, så
-  to døgn; for ClinPGx, CPIC og PubChem hver uke, så åtte døgn.
-  Farmakologiportalen kjøres av GitHub Actions og har intervallet i
-  `KILDEOPPSETT` (hver natt, så to døgn). Meldingen ved en feil
+  to døgn; for CPIC og PubChem hver uke, så åtte døgn.
+  ClinPGx og Farmakologiportalen kjøres av GitHub Actions og har intervallet i
+  `KILDEOPPSETT` (ClinPGx hver uke, så åtte døgn; Farmakologiportalen hver
+  natt, så to døgn). Meldingen ved en feil
   følger måten kilden byttes inn på (`etterFeil` og `beholdt` i
   `KILDEOPPSETT`). I FEST og CPIC står dataene fra siste vellykkede henting;
   for FEST sier panelet at OUSFAR fortsatt bruker siste gyldige FEST-data. I
@@ -163,8 +164,10 @@ femte minutt og når panelet lukkes. Per kilde:
 - «Hent nå», som gjør det samme som den planlagte jobben med
   administratorens innlogging (`POST /api/legemiddeldata-synk`,
   `/api/clinpgx-synk`, `/api/cpic-synk`, `/api/pubchem-synk` eller
-  `/api/farmakologiportalen-synk`). `CRON_SECRET` og
-  `SUPABASE_SECRET_KEY` blir på serveren.
+  `/api/farmakologiportalen-synk`). Svarer serveren med `fortsett`
+  (ClinPGx, som henter i omganger), ber knappen om neste omgang av den samme
+  kjøringen til alt er hentet. `CRON_SECRET` og `SUPABASE_SECRET_KEY` blir på
+  serveren.
 
 ## Koden
 

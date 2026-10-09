@@ -12,6 +12,8 @@ export interface KobletKjemikalie {
   /** Navnet koblingen lagret, fra ClinPGx da den ble valgt. */
   navn: string | null
   sist_hentet_kl: string | null
+  /** Kjøringen som sist hentet kjemikaliet eller noterte en feil på det. */
+  sist_synk: number | null
 }
 
 export interface Lagringsannotasjon {
@@ -40,6 +42,8 @@ export interface Synkresultattelling {
 
 export interface Clinpgxlager {
   start(utlostAv: 'cron' | 'manuell'): Promise<number>
+  /** Åpner en kjøring med kjemikalier utsatt for neste omgang, og gir tellingen så langt. */
+  fortsett(synk: number): Promise<Synkresultattelling>
   koblede(): Promise<KobletKjemikalie[]>
   lagre(synk: number, kjemikalie: { id: string; data: object; raa: unknown }, annotasjoner: Lagringsannotasjon[]): Promise<Annotasjonstelling>
   feilet(synk: number, kjemikalie: string, feil: string, finnes?: boolean): Promise<void>
@@ -50,6 +54,7 @@ export interface Clinpgxlager {
 export function lagClinpgxlager(kall: Databasekall): Clinpgxlager {
   return {
     start: async (utlostAv) => Number(await kall('clinpgx_start_synk', { utlost_av: utlostAv })),
+    fortsett: async (synk) => (await kall('clinpgx_fortsett_synk', { synk })) as Synkresultattelling,
     koblede: async () => ((await kall('clinpgx_koblede_kjemikalier', {})) as KobletKjemikalie[] | null) ?? [],
     lagre: async (synk, kjemikalie, annotasjoner) =>
       ((await kall('clinpgx_lagre_kjemikalie', { synk, kjemikalie, annotasjoner })) as Annotasjonstelling | null) ?? {},
