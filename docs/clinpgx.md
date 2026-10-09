@@ -355,16 +355,16 @@ dem innenfor Vercels grense.
 omgangen før neste kjemikalie, og kjøringen avsluttes som `delvis` med resten
 utsatt. Svaret har da `fortsett: <kjøringen>`, og jobben i GitHub Actions og
 «Hent nå» i «Datakilder» kaller igjen med `{ "fortsett": <kjøringen> }` til
-det er borte (høyst tolv omganger). `clinpgx_fortsett_synk` åpner den samme
+det er borte (høyst seks omganger, så hele kjøringen holder seg under
+halvtimen en henting kan stå uferdig; det rekker 350–500 kjemikalier). `clinpgx_fortsett_synk` åpner den samme
 kjøringen igjen, og omgangen henter bare kjemikaliene kjøringen ikke har
 hentet eller notert en feil på (`sist_synk`), med tellingen lagt til den fra
 før. Hver ukentlige kjøring dekker dermed alle kjemikaliene, i én rad i
-loggen, hvor mange de enn blir. Bare den nyeste kjøringen kan fortsettes, og
+loggen. Bare den nyeste kjøringen kan fortsettes, og
 bare innen en time etter at den stoppet. Stopper omgangene underveis, står
 kjøringen som `delvis` med det som ble utsatt, og det står først i køen neste
 gang. Et utvalg en administrator ba om, fortsettes ikke; det er alltid lite.
-En fortsatt kjøring regnes som avbrutt en halvtime etter at siste omgang
-startet (`omgang_startet_kl`).
+Kjøringen står `pagar` bare mens en omgang pågår.
 
 **Feil**:
 

@@ -26,11 +26,13 @@ jobs:
     name: Synkroniser ClinPGx
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 40
     env:
       ADRESSE: https://ousfar.vercel.app/api/clinpgx-synk
-      # Høyst så mange omganger; hver henter rundt 60 kjemikalier.
-      OMGANGER: 12
+      # Høyst så mange omganger, hver på rundt fire minutter og 60–90 kjemikalier:
+      # hele kjøringen holdes under halvtimen en henting kan stå uferdig
+      # (MAKS_OMGANGER i src/datakilder/status.ts).
+      OMGANGER: 6
     steps:
       - name: Be OUSFAR hente fra ClinPGx
         run: |

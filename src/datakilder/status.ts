@@ -509,8 +509,12 @@ export interface Hentingssvar {
   fortsett?: number
 }
 
-/** Høyst så mange omganger «Hent nå» ber om for én kjøring. */
-export const MAKS_OMGANGER = 12
+/**
+ * Høyst så mange omganger «Hent nå» ber om for én kjøring: seks på rundt fire
+ * minutter holder hele kjøringen under halvtimen en henting kan stå uferdig.
+ * Samme grense som jobben i GitHub Actions (`.github/workflows/clinpgx-synk.yml`).
+ */
+export const MAKS_OMGANGER = 6
 
 export interface Datakildeleser {
   status(): Promise<Datakildestatus>

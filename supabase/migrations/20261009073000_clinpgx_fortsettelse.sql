@@ -5,38 +5,13 @@
 -- kjøringen som `delvis` med resten utsatt, og neste omgang fortsetter den samme
 -- kjøringen med kjemikaliene den ikke har hentet ennå (docs/clinpgx.md).
 --
--- Bare utvidelser: en ny kolonne, en ny funksjon, og to funksjoner byttet ut med
--- samme signatur og samme svar som før, pluss ett felt. Ingenting slettes.
-
-alter table clinpgx.synkroniseringer add column omgang_startet_kl timestamptz;
-
-comment on column clinpgx.synkroniseringer.omgang_startet_kl is
-  'Når siste omgang av kjøringen startet, når den er fortsatt etter den første. En kjøring står uferdig når omgangen har stått over en halvtime.';
-
--- Som før, men en kjøring som er fortsatt, regnes som avbrutt først en halvtime
--- etter at omgangen startet, ikke etter at kjøringen startet.
-create or replace function public.clinpgx_start_synk(utlost_av text default 'cron')
-returns bigint
-language plpgsql
-security definer
-set search_path = ''
-as $$
-declare
-  ny bigint;
-begin
-  update clinpgx.synkroniseringer
-  set status = 'feilet', avsluttet_kl = now(), feil = 'Avbrutt uten å bli fullført.'
-  where status = 'pagar' and coalesce(omgang_startet_kl, startet_kl) < now() - interval '30 minutes';
-
-  begin
-    insert into clinpgx.synkroniseringer (utlost_av) values (coalesce(clinpgx_start_synk.utlost_av, 'cron'))
-    returning id into ny;
-  exception when unique_violation then
-    raise exception 'En synkronisering fra ClinPGx pågår allerede.' using errcode = 'PT409';
-  end;
-  return ny;
-end;
-$$;
+-- Bare utvidelser: en ny funksjon, og en funksjon byttet ut med samme signatur
+-- og samme svar som før, pluss ett felt. Ingenting slettes.
+--
+-- En kjøring står `pagar` bare mens en omgang pågår, og alle omgangene til
+-- sammen holdes under en halvtime (høyst seks omganger på rundt fire minutter),
+-- så grensen på en halvtime i `clinpgx_start_synk` og i «Datakilder» gjelder
+-- fortsatt hele kjøringen.
 
 -- Som før, med `sist_synk`: kjøringen som sist hentet kjemikaliet eller noterte
 -- en feil på det. En omgang som fortsetter en kjøring, hopper over dem.
@@ -90,7 +65,7 @@ begin
   end if;
 
   update clinpgx.synkroniseringer
-  set status = 'pagar', avsluttet_kl = null, omgang_startet_kl = now()
+  set status = 'pagar', avsluttet_kl = null
   where id = synk;
   return s.antall;
 end;

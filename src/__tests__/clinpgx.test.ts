@@ -39,7 +39,7 @@ import {
 } from '../clinpgx/stoffside'
 import { strukturavvik, strukturfeiltekst } from '../clinpgx/struktur'
 import { synkroniserClinpgx } from '../clinpgx/synk'
-import { lesDatakildestatus, vurderKilder } from '../datakilder/status'
+import { lesDatakildestatus, MAKS_OMGANGER, vurderKilder } from '../datakilder/status'
 import { byggSidemodell } from '../faginnhold/stoffside'
 import { indekserKunnskapsbase, lesKunnskapsbase, lesSokeindeks } from '../faginnhold/globaltSok'
 import type { Stoffsidedata } from '../faginnhold/lesing'
@@ -763,16 +763,6 @@ describe('synkroniseringen', () => {
       expect((await kjoringer()).find((k) => k.id === gammel.synk)).toMatchObject({ status: 'delvis', antall: { utsatt: 1 } })
     })
 
-    it('regner en fortsatt kjøring som uferdig først en halvtime etter at omgangen startet', async () => {
-      const forste = await omgang()
-      await db.exec(`update clinpgx.synkroniseringer set startet_kl = now() - interval '50 minutes'`)
-      await lager().fortsett(forste.synk)
-      expect((await feilFra(() => lager().start('manuell')))?.message).toContain('pågår allerede')
-      await db.exec(`update clinpgx.synkroniseringer set omgang_startet_kl = now() - interval '31 minutes'`)
-      expect(await lager().start('manuell')).toBeGreaterThan(forste.synk)
-      expect((await kjoringer())[0]).toMatchObject({ status: 'feilet' })
-    })
-
     it('lar bare serveren fortsette en kjøring', async () => {
       expect((await feilFra(() => kallSom(db, 'authenticated')('clinpgx_fortsett_synk', { synk: 1 })))?.code).toBe('42501')
     })
@@ -1069,5 +1059,7 @@ describe('FEST ved siden av ClinPGx', () => {
     expect(arbeidsflyt).toContain('https://ousfar.vercel.app/api/clinpgx-synk')
     expect(arbeidsflyt).toContain("'{fortsett: $synk}'")
     expect(arbeidsflyt).toContain("if: github.ref == 'refs/heads/main'")
+    // Jobben og «Hent nå» har samme grense for omgangene.
+    expect(arbeidsflyt).toContain(`OMGANGER: ${MAKS_OMGANGER}\n`)
   })
 })
