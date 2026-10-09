@@ -248,13 +248,18 @@ export function maleomrade(rad: Pick<Labrad, 'nedre' | 'ovre' | 'enhet' | 'molve
   const grenser = [rad.nedre, rad.ovre]
   if (!rad.nedre && !rad.ovre) return { tekst: 'Ikke oppgitt', enhet: null, omregnet: false, enkeltgrense: false }
   const enkeltgrense = !rad.nedre || !rad.ovre
-  const fra = lesKonsentrasjonsenhet(rad.enhet.enhet)
   const til = lesKonsentrasjonsenhet(valgt)!
-  const regnet = grenser.map((g) => (g && g.verdi !== null && fra ? regnOm(g.verdi, fra, til, rad.molvekt) : null))
+  // En enhet som står i selve grensen («20 µg/L»), gjelder den grensen.
+  const fra = (g: Grense) => lesKonsentrasjonsenhet(g.enhet ?? rad.enhet.enhet)
+  const regnet = grenser.map((g) => {
+    const enhet = g && fra(g)
+    return g && g.verdi !== null && enhet ? regnOm(g.verdi, enhet, til, rad.molvekt) : null
+  })
   const omregnet = grenser.every((g, i) => g === null || regnet[i] !== null)
   const [nedre, ovre] = grenser.map((g, i) => (g ? visGrense(g, omregnet ? regnet[i]! : g.verdi) : null))
   const tekst = enkeltgrense ? `${nedre ? 'Nedre' : 'Øvre'} grense ${(nedre ?? ovre)!}` : visOmrade(nedre!, ovre!)
-  return { tekst, enhet: omregnet ? null : rad.enhet.original, omregnet, enkeltgrense }
+  const egen = enkeltgrense ? (rad.nedre ?? rad.ovre)!.enhet : null
+  return { tekst, enhet: omregnet ? null : (egen ?? rad.enhet.original), omregnet, enkeltgrense }
 }
 
 /** Benevninger i portalen som ikke sier noe om svaret. */

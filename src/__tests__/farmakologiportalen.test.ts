@@ -703,6 +703,16 @@ describe('visningen på fagsidene', () => {
       omregnet: false,
       enkeltgrense: true,
     })
+    // En enhet i selve grensen gjelder den grensen, også når feltet for enheten sier noe annet.
+    const ugL = { ...grense(20), original: '20 µg/L', enhet: 'µg/L' }
+    expect(maleomrade({ ...rad, nedre: ugL, ovre: null }, 'µg/L')).toMatchObject({ tekst: 'Nedre grense 20', enhet: null, omregnet: true })
+    expect(maleomrade({ ...rad, nedre: ugL, ovre: null }, 'nmol/L')).toMatchObject({ tekst: 'Nedre grense 58', omregnet: true })
+    expect(maleomrade({ ...rad, molvekt: null, nedre: ugL, ovre: null }, 'nmol/L')).toEqual({
+      tekst: 'Nedre grense 20',
+      enhet: 'µg/L',
+      omregnet: false,
+      enkeltgrense: true,
+    })
     // En enkelt grense og et helt område blir sammenlignbare i samme enhet.
     expect(maleomrade({ ...rad, nedre: grense(30), ovre: grense(3000) }, 'µg/L')).toMatchObject({ tekst: '10—1000', enkeltgrense: false })
     expect(maleomrade({ ...rad, nedre: null, ovre: null }, 'µg/L')).toEqual({ tekst: 'Ikke oppgitt', enhet: null, omregnet: false, enkeltgrense: false })
