@@ -10,7 +10,7 @@ import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { lagClinpgxApi, type ClinpgxApi } from '../clinpgx/api'
-import { behandleClinpgxSok, behandleClinpgxSynk, slaOppKjemikalie } from '../clinpgx/endepunkt'
+import { behandleClinpgxSok, behandleClinpgxSynk, CLINPGX_ARBEIDSFLYT, slaOppKjemikalie } from '../clinpgx/endepunkt'
 import { lagClinpgxlager } from '../clinpgx/lager'
 import { lagFarmakogenetikkleser, lesFarmakogenetikkutvalg, type Farmakogenetikkleser } from '../clinpgx/lesing'
 import {
@@ -704,6 +704,80 @@ describe('synkroniseringen', () => {
     expect(koblede[0]!.sist_hentet_kl).toBeNull()
   })
 
+  describe('omgangene', () => {
+    // Hver omgang rekker ett kjemikalie: det første passer i tiden, det neste ikke.
+    const omgang = (valg: Partial<Parameters<typeof synkroniserClinpgx>[0]> = {}) => {
+      let klokke = 0
+      return synkroniserClinpgx({ lager: lager(), api: falskApi(), tidsbudsjett: 20_000, na: () => (klokke += 3_000), ...valg })
+    }
+    const kjoringer = async () =>
+      (await db.query<{ id: number; status: string; antall: Record<string, unknown> | null }>('select id, status, antall from clinpgx.synkroniseringer order by id')).rows
+
+    it('fortsetter den samme kjøringen med det som ble utsatt, til alle kjemikaliene er hentet', async () => {
+      const forste = await omgang()
+      expect(forste).toMatchObject({ status: 'delvis', kjemikalier: 2, hentet: 1, utsatt: 1, fortsett: forste.synk })
+
+      const api = falskApi()
+      const andre = await omgang({ api, fortsett: forste.synk })
+      expect(andre).toMatchObject({
+        status: 'fullfort',
+        synk: forste.synk,
+        kjemikalier: 2,
+        hentet: 2,
+        feilet: 0,
+        utsatt: 0,
+        // Tellingen gjelder hele kjøringen, som om alt var hentet i én omgang.
+        annotasjoner: { retningslinje: 3, preparatomtale: 2, klinisk: 5 },
+      })
+      expect(andre).not.toHaveProperty('fortsett')
+      // Bare det som ble utsatt, hentes i andre omgang.
+      expect(api.kall.every((k) => k.includes(SERTRALIN))).toBe(true)
+      expect(await kjoringer()).toMatchObject([{ id: forste.synk, status: 'fullfort', antall: { hentet: 2, utsatt: 0 } }])
+      expect((await leser.les([SERTRALIN, 'PA10026'])).kjemikalier.every((k) => k.sist_hentet_kl !== null)).toBe(true)
+    })
+
+    it('prøver ikke et kjemikalie som feilet, igjen i den samme kjøringen, men tar med feilen', async () => {
+      const forste = await omgang({ api: falskApi({ '/data/chemical/PA10026': new Error('ClinPGx svarte 500') }) })
+      expect(forste).toMatchObject({ status: 'delvis', feilet: 1, utsatt: 1, fortsett: forste.synk })
+      const api = falskApi()
+      const andre = await omgang({ api, fortsett: forste.synk })
+      expect(api.kall.some((k) => k.includes('PA10026'))).toBe(false)
+      expect(andre).toMatchObject({ status: 'delvis', kjemikalier: 2, hentet: 1, feilet: 1, utsatt: 0 })
+      expect(andre).not.toHaveProperty('fortsett')
+      expect((andre as { feil: string }).feil).toContain('PA10026: ClinPGx svarte 500')
+    })
+
+    it('fortsetter ikke et utvalg en administrator ba om, en kjøring som er ferdig, eller en som en nyere har tatt over', async () => {
+      const utvalg = await omgang({ bare: [SERTRALIN, 'PA10026'], utlostAv: 'manuell' })
+      expect(utvalg).toMatchObject({ status: 'delvis', utsatt: 1 })
+      expect(utvalg).not.toHaveProperty('fortsett')
+
+      const ferdig = await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      expect((await feilFra(() => lager().fortsett(ferdig.synk)))?.message).toContain('ingen utsatte')
+
+      await db.exec('truncate clinpgx.kjemikalie_annotasjoner, clinpgx.annotasjoner, clinpgx.kjemikalier, clinpgx.synkroniseringer cascade')
+      const gammel = await omgang()
+      await synkroniserClinpgx({ lager: lager(), api: falskApi() })
+      await expect(omgang({ fortsett: gammel.synk })).rejects.toThrow('nyere')
+      // Den gamle kjøringen står som den var.
+      expect((await kjoringer()).find((k) => k.id === gammel.synk)).toMatchObject({ status: 'delvis', antall: { utsatt: 1 } })
+    })
+
+    it('regner en fortsatt kjøring som uferdig først en halvtime etter at omgangen startet', async () => {
+      const forste = await omgang()
+      await db.exec(`update clinpgx.synkroniseringer set startet_kl = now() - interval '50 minutes'`)
+      await lager().fortsett(forste.synk)
+      expect((await feilFra(() => lager().start('manuell')))?.message).toContain('pågår allerede')
+      await db.exec(`update clinpgx.synkroniseringer set omgang_startet_kl = now() - interval '31 minutes'`)
+      expect(await lager().start('manuell')).toBeGreaterThan(forste.synk)
+      expect((await kjoringer())[0]).toMatchObject({ status: 'feilet' })
+    })
+
+    it('lar bare serveren fortsette en kjøring', async () => {
+      expect((await feilFra(() => kallSom(db, 'authenticated')('clinpgx_fortsett_synk', { synk: 1 })))?.code).toBe('42501')
+    })
+  })
+
   it('kjører én synkronisering om gangen', async () => {
     const forste = await lager().start('cron')
     expect((await feilFra(() => lager().start('manuell')))?.message).toContain('pågår allerede')
@@ -786,6 +860,33 @@ describe('endepunktene', () => {
 
     expect((await behandleClinpgxSynk(foresporsel('POST', 'admin-token', { kjemikalier: [SERTRALIN] }), MILJO, valg)).status).toBe(200)
     expect(synkroniser).toHaveBeenLastCalledWith(expect.objectContaining({ utlostAv: 'manuell', bare: [SERTRALIN] }))
+  })
+
+  it('tar imot den ukentlige jobben i GitHub Actions, og neste omgang av en kjøring', async () => {
+    const synkroniser = vi.fn(async (_valg: object) => ferdig)
+    const githubsjekk = vi.fn(async (token: string, arbeidsflyt: string) =>
+      token === 'github-token' && arbeidsflyt === CLINPGX_ARBEIDSFLYT ? ('cron' as const) : null,
+    )
+    const valg = { synkroniser, githubsjekk, adminsjekk: async () => false, api: falskApi() }
+
+    expect((await behandleClinpgxSynk(foresporsel('POST', 'github-token'), MILJO, valg)).status).toBe(200)
+    expect(synkroniser.mock.lastCall![0]).toMatchObject({ utlostAv: 'cron' })
+    expect(synkroniser.mock.lastCall![0]).not.toHaveProperty('fortsett')
+
+    expect((await behandleClinpgxSynk(foresporsel('POST', 'github-token', { fortsett: 7 }), MILJO, valg)).status).toBe(200)
+    expect(synkroniser).toHaveBeenLastCalledWith(expect.objectContaining({ utlostAv: 'cron', fortsett: 7 }))
+
+    // Den planlagte jobben velger ikke kjemikalier, og en omgang er et heltall.
+    expect((await behandleClinpgxSynk(foresporsel('POST', 'github-token', { kjemikalier: [SERTRALIN] }), MILJO, valg)).status).toBe(400)
+    expect((await behandleClinpgxSynk(foresporsel('POST', 'github-token', { fortsett: '7' }), MILJO, valg)).status).toBe(400)
+    expect((await behandleClinpgxSynk(foresporsel('POST', 'github-token', { fortsett: 7, kjemikalier: [SERTRALIN] }), MILJO, valg)).status).toBe(400)
+    expect(synkroniser).toHaveBeenCalledTimes(2)
+
+    // Pågår en kjøring, eller kan den ikke fortsettes, sier svaret det.
+    const opptatt = { ...valg, synkroniser: async () => Promise.reject(new Error('En synkronisering fra ClinPGx pågår allerede.')) }
+    const svar = await behandleClinpgxSynk(foresporsel('POST', 'github-token'), MILJO, opptatt)
+    expect(svar.status).toBe(409)
+    expect(await svar.json()).toEqual({ feil: 'En synkronisering fra ClinPGx pågår allerede.' })
   })
 
   it('avviser kall uten tilgang, med feil innhold og uten oppkoblingen mot databasen', async () => {
@@ -953,13 +1054,20 @@ describe('søket', () => {
 /* --- FEST er uberørt ------------------------------------------------------ */
 
 describe('FEST ved siden av ClinPGx', () => {
-  it('har sin egen daglige jobb, uendret, og ClinPGx sin ukentlige', () => {
+  it('har sin egen daglige jobb, uendret, og ClinPGx sin ukentlige i GitHub Actions, i omganger', () => {
     const vercel = JSON.parse(readFileSync(new URL('../../vercel.json', import.meta.url), 'utf8')) as {
       crons: { path: string; schedule: string }[]
       functions: Record<string, { maxDuration: number }>
     }
     expect(vercel.crons).toContainEqual({ path: '/api/legemiddeldata-synk', schedule: '15 4 * * *' })
-    expect(vercel.crons).toContainEqual({ path: '/api/clinpgx-synk', schedule: '30 2 * * 1' })
     expect(vercel.functions['api/legemiddeldata-synk.ts']).toEqual({ maxDuration: 300 })
+    // Én jobb, ikke to: Vercel kaller ikke ClinPGx-synkroniseringen lenger.
+    expect(vercel.crons.map((c) => c.path)).not.toContain('/api/clinpgx-synk')
+    expect(vercel.functions['api/clinpgx-synk.ts']).toEqual({ maxDuration: 300 })
+    const arbeidsflyt = readFileSync(new URL(`../../${CLINPGX_ARBEIDSFLYT}`, import.meta.url), 'utf8')
+    expect(arbeidsflyt).toContain("- cron: '30 2 * * 1'")
+    expect(arbeidsflyt).toContain('https://ousfar.vercel.app/api/clinpgx-synk')
+    expect(arbeidsflyt).toContain("'{fortsett: $synk}'")
+    expect(arbeidsflyt).toContain("if: github.ref == 'refs/heads/main'")
   })
 })

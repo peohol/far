@@ -1,0 +1,60 @@
+# Synkroniserer de farmakogenetiske dataene fra ClinPGx hver uke, og når noen
+# starter den for hånd (docs/clinpgx.md). Selve hentingen gjør OUSFARs server;
+# jobben her ber den om det, med et OIDC-token GitHub utsteder for denne
+# arbeidsflyten på main. Én omgang rekker ikke alle kjemikaliene innenfor
+# Vercels grense på 300 sekunder, så jobben ber om neste omgang av den samme
+# kjøringen så lenge svaret har `fortsett`. Ingen hemmeligheter, ingen commits
+# og ingen migrasjoner: dataene går rett i databasen.
+name: ClinPGx
+
+on:
+  schedule:
+    # Mandag 02:30 UTC.
+    - cron: '30 2 * * 1'
+  workflow_dispatch:
+
+permissions:
+  # Bare for å få OIDC-tokenet; arbeidsflyten leser og skriver ingenting i repoet.
+  id-token: write
+
+concurrency:
+  group: clinpgx-synk
+  cancel-in-progress: false
+
+jobs:
+  synkroniser:
+    name: Synkroniser ClinPGx
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      ADRESSE: https://ousfar.vercel.app/api/clinpgx-synk
+      # Høyst så mange omganger; hver henter rundt 60 kjemikalier.
+      OMGANGER: 12
+    steps:
+      - name: Be OUSFAR hente fra ClinPGx
+        run: |
+          set -euo pipefail
+          innhold='{}'
+          for omgang in $(seq 1 "$OMGANGER"); do
+            # Et nytt token for hver omgang: tokenet varer bare noen minutter.
+            token=$(curl -sSf -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+              "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=ousfar" | jq -r .value)
+            echo "::add-mask::$token"
+            kode=$(curl -sS -o svar.json -w '%{http_code}' --max-time 330 -X POST \
+              -H "Authorization: Bearer $token" -H 'content-type: application/json' \
+              -d "$innhold" "$ADRESSE")
+            echo "Omgang $omgang:"
+            jq '{status, synk, kjemikalier, hentet, feilet, utsatt, feil}' svar.json || cat svar.json
+            if [ "$kode" != "200" ]; then
+              echo "::error::Synkroniseringen svarte $kode. Kjemikalier som alt er hentet, er oppdatert; de andre står som før. Se «Datakilder» i OUSFAR."
+              exit 1
+            fi
+            fortsett=$(jq -r '.fortsett // empty' svar.json)
+            if [ -z "$fortsett" ]; then
+              exit 0
+            fi
+            innhold=$(jq -nc --argjson synk "$fortsett" '{fortsett: $synk}')
+          done
+          echo "::error::Kjøringen ble ikke ferdig på $OMGANGER omganger; resten hentes først neste gang. Se «Datakilder» i OUSFAR."
+          exit 1

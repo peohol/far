@@ -20,8 +20,14 @@
  * De andre hentes som vanlig. Et objekt som ikke kan leses eller har endret
  * form, tyder på at API-et er endret; da er det tryggere å beholde det gamle
  * enn å bytte inn et svar der noe mangler.
- * Blir tiden knapp, stopper jobben før neste kjemikalie; resten hentes neste
- * gang, først i køen.
+ * Blir tiden knapp, stopper omgangen før neste kjemikalie, og kjøringen
+ * avsluttes som `delvis` med resten utsatt. Svaret har da `fortsett`, og neste
+ * omgang (`fortsett: <kjøringen>`) åpner den samme kjøringen igjen og henter
+ * bare kjemikaliene den ikke har hentet eller notert en feil på ennå, med
+ * tellingen lagt til den fra før. Jobben i GitHub Actions og «Hent nå» kaller
+ * igjen til `fortsett` er borte, så én kjøring dekker alle kjemikaliene.
+ * Stopper de underveis, står kjøringen som `delvis`, og det som ble utsatt,
+ * står først i køen neste gang.
  */
 import type { ClinpgxApi } from './api.js'
 import { ClinpgxFeil } from './api.js'
@@ -43,7 +49,7 @@ export const TIDSBUDSJETT_MS = 240_000
 const TID_PER_KJEMIKALIE_MS = 15_000
 
 export type Synkresultat =
-  | ({ status: 'fullfort' | 'delvis'; synk: number } & Synkresultattelling)
+  | ({ status: 'fullfort' | 'delvis'; synk: number; /** Kjøringen å fortsette i neste omgang, når noe er utsatt. */ fortsett?: number } & Synkresultattelling)
   | { status: 'feilet'; synk: number; feil: string }
 
 export interface Synkvalg {
@@ -52,6 +58,8 @@ export interface Synkvalg {
   utlostAv?: 'cron' | 'manuell'
   /** Bare disse kjemikaliene, av dem som er koblet. Uten: alle. */
   bare?: readonly string[]
+  /** Kjøringen denne omgangen fortsetter, i stedet for å starte en ny. */
+  fortsett?: number
   tidsbudsjett?: number
   na?: () => number
 }
@@ -109,30 +117,39 @@ export async function synkroniserClinpgx({
   api,
   utlostAv = 'cron',
   bare,
+  fortsett,
   tidsbudsjett = TIDSBUDSJETT_MS,
   na = Date.now,
 }: Synkvalg): Promise<Synkresultat> {
   const start = na()
-  const synk = await lager.start(utlostAv)
+  // Kan kjøringen ikke startes eller fortsettes, er det ingen kjøring å avslutte.
+  const tidligere = fortsett === undefined ? null : await lager.fortsett(fortsett)
+  const synk = fortsett ?? (await lager.start(utlostAv))
   try {
     const alle = await lager.koblede()
-    const kjemikalier: KobletKjemikalie[] = bare ? alle.filter((k) => bare.includes(k.id)) : alle
+    const kjemikalier: KobletKjemikalie[] = tidligere
+      ? alle.filter((k) => k.sist_synk !== synk)
+      : bare
+        ? alle.filter((k) => bare.includes(k.id))
+        : alle
     const telling: Synkresultattelling = {
-      kjemikalier: kjemikalier.length,
-      hentet: 0,
-      feilet: 0,
+      kjemikalier: (tidligere ? tidligere.hentet + tidligere.feilet : 0) + kjemikalier.length,
+      hentet: tidligere?.hentet ?? 0,
+      feilet: tidligere?.feilet ?? 0,
       utsatt: 0,
-      annotasjoner: {},
-      forkastet: 0,
-      strukturavvik: 0,
+      annotasjoner: { ...tidligere?.annotasjoner },
+      forkastet: tidligere?.forkastet ?? 0,
+      strukturavvik: tidligere?.strukturavvik ?? 0,
     }
-    const feil: string[] = []
+    const feil: string[] = tidligere?.feil ? [tidligere.feil] : []
+    let behandlet = 0
 
     for (const [i, { id }] of kjemikalier.entries()) {
       if (na() - start + TID_PER_KJEMIKALIE_MS > tidsbudsjett) {
         telling.utsatt = kjemikalier.length - i
         break
       }
+      behandlet += 1
       try {
         const hentet = await hentKjemikalie(api, id)
         telling.forkastet += hentet.forkastet
@@ -158,7 +175,10 @@ export async function synkroniserClinpgx({
 
     const resultat = { ...telling, ...(feil.length > 0 && { feil: feil.join('\n') }) }
     const status = await lager.fullfor(synk, resultat, PARSERVERSJON)
-    return { status, synk, ...resultat }
+    // Et utvalg en administrator ba om, fortsettes ikke: det er alltid lite.
+    // En omgang som ikke rakk noe, ville bare gjenta seg.
+    const kanFortsette = status === 'delvis' && telling.utsatt > 0 && !bare && behandlet > 0
+    return { status, synk, ...resultat, ...(kanFortsette && { fortsett: synk }) }
   } catch (e) {
     const feil = e instanceof Error ? e.message : String(e)
     await lager.avbryt(synk, feil)

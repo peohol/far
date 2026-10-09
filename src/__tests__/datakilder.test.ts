@@ -15,6 +15,7 @@ import {
   kildeintervaller,
   lagDatakildeleser,
   lesDatakildestatus,
+  MAKS_OMGANGER,
   sporlinje,
   TOM_DATAKILDESTATUS,
   vurderKilder,
@@ -115,6 +116,32 @@ describe('lesefunksjonen', () => {
     await leser.hentNa('fest')
     expect(kalt.at(-1)).toEqual({ url: '/api/legemiddeldata-synk', init: { method: 'POST', headers: { authorization: 'Bearer tokenet' } } })
   })
+
+  it('ber om neste omgang av den samme kjøringen så lenge serveren sier at den kan fortsettes', async () => {
+    const kalt: (string | undefined)[] = []
+    const svar = [
+      { status: 'delvis', synk: 7, hentet: 57, utsatt: 37, fortsett: 7 },
+      { status: 'fullfort', synk: 7, hentet: 94, utsatt: 0 },
+    ]
+    const klient = { auth: { getSession: async () => ({ data: { session: { access_token: 'tokenet' } } }) } } as unknown as Parameters<
+      typeof lagDatakildeleser
+    >[0]
+    const leser = lagDatakildeleser(klient, (async (_url: string, init?: RequestInit) => {
+      kalt.push(init?.body as string | undefined)
+      return new Response(JSON.stringify(svar[kalt.length - 1]))
+    }) as unknown as typeof fetch)
+    expect(await leser.hentNa('clinpgx')).toEqual(svar[1])
+    expect(kalt).toEqual([undefined, JSON.stringify({ fortsett: 7 })])
+
+    // Aldri i det uendelige: etter MAKS_OMGANGER gis siste svar tilbake.
+    let antall = 0
+    const uendelig = lagDatakildeleser(klient, (async () => {
+      antall += 1
+      return new Response(JSON.stringify(svar[0]))
+    }) as unknown as typeof fetch)
+    expect(await uendelig.hentNa('clinpgx')).toMatchObject({ status: 'delvis', fortsett: 7 })
+    expect(antall).toBe(MAKS_OMGANGER)
+  })
 })
 
 describe('FEST i lesefunksjonen', () => {
@@ -193,8 +220,8 @@ describe('vurderingen', () => {
     expect(intervallDogn('15 4 * * *')).toBe(1)
     expect(intervallDogn('0 3 1 * *')).toBeNull()
     expect(kildeintervaller()).toEqual({ fest: 1, clinpgx: 7, cpic: 7, pubchem: 7, farmakologiportalen: 1 })
-    // Farmakologiportalen hentes fra GitHub Actions, ikke Vercel: intervallet står i oppsettet.
-    expect(kildeintervaller([])).toEqual({ farmakologiportalen: 1 })
+    // ClinPGx og Farmakologiportalen hentes fra GitHub Actions, ikke Vercel: intervallet står i oppsettet.
+    expect(kildeintervaller([])).toEqual({ clinpgx: 7, farmakologiportalen: 1 })
     expect([jobbnavn(1), jobbnavn(7), jobbnavn(null)]).toEqual(['Nattlig jobb', 'Ukentlig jobb', 'Planlagt jobb'])
   })
 
