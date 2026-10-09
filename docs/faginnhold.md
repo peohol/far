@@ -633,7 +633,8 @@ andre kildene er med som vanlig.
 teksten, stå i navnet eller koden til siden: «sertralin metabolisme» finner
 kortet «Metabolisme» på sertralinsiden. Aliasene til kodene gis av appen fra
 analyttkatalogen, og blir andre navn på stoffet koden primært hører til. Et
-stoff uten publisert side indekseres med navnet, aliasene og analyttene.
+stoff uten publisert side indekseres med navnet, aliasene, analyttene og
+laboratorieanalysene, som også vises på en slik side.
 
 Hvert treff har stedet det står: siden, seksjonen, ankeret på siden og — når
 teksten står i et detaljkort — nøkkelen til kortet. `sokeadresse` gjør stedet

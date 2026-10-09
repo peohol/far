@@ -410,8 +410,13 @@ function tilleggstekster(base: Kunnskapsbase, modell: Sidemodell, stoff: string)
     ...(kobling && base.interaksjoner ? interaksjonsteksteneFor(base.interaksjoner, kobling) : []),
     ...(kjemikalier && base.farmakogenetikk ? farmakogenetikkteksteneFor(base.farmakogenetikk, kjemikalier) : []),
     ...(kjemikalier && base.cpic ? cpicteksteneFor(base.cpic, kjemikalier) : []),
-    ...(base.laboratorier ? labteksteneFor(base.laboratorier, stoff) : []),
+    ...labtekster(base, stoff),
   ]
+}
+
+/** Laboratorieanalysene er knyttet til stoffet, ikke til siden, og vises også for et stoff uten publisert side. */
+function labtekster(base: Kunnskapsbase, stoff: string): Tilleggstekst[] {
+  return base.laboratorier ? labteksteneFor(base.laboratorier, stoff) : []
 }
 
 export interface Indekseringsvalg {
@@ -429,8 +434,9 @@ const TOM_MODELL = byggSidemodell(TOM_STOFFSIDE)
  * `indekserSide`, som på siden selv. Stoffene står alfabetisk, så like gode
  * treff kommer i en fast rekkefølge.
  *
- * Et stoff uten side i databasen indekseres med navnet, aliasene og
- * analyttene det er koblet til, så søket finner det som menyen gjør. En side
+ * Et stoff uten side i databasen indekseres med navnet, aliasene,
+ * analyttene det er koblet til og laboratorieanalysene, så søket finner det
+ * som menyen og siden gjør. En side
  * i databasen hvis nøkkel er et alias for et stoff i registeret, er ikke en
  * egen side og indekseres ikke.
  */
@@ -447,7 +453,7 @@ export function indekserKunnskapsbase(
     const data = perSlug.get(stoff.slug)
     const modell = data ? modellFor(data) : TOM_MODELL
     const identitet = stoffidentitet(stoff, analytterForStoff(stoff.slug, register, katalog))
-    return indekserSide(identitet, modell, data ? tilleggstekster(base, modell, stoff.slug) : [])
+    return indekserSide(identitet, modell, data ? tilleggstekster(base, modell, stoff.slug) : labtekster(base, stoff.slug))
   })
 }
 

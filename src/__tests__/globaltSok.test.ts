@@ -408,6 +408,23 @@ describe('laboratorieanalysene fra Farmakologiportalen', () => {
     expect(sokGlobalt(indeks, 'nedlagt')).toEqual([])
   })
 
+  it('finner analysene også for et stoff i registeret uten publisert side, der seksjonen vises likevel', async () => {
+    const citalopram = FORBINDELSER.fpId(FORBINDELSER.forStoff('citalopram')[0]!)!
+    const medCitalopram: Labsokedata = {
+      ...sokedata,
+      komponenter: [...sokedata.komponenter, { id: citalopram, data: { navn: 'Citalopram', gruppe: [] } }],
+      analyser: [
+        ...sokedata.analyser,
+        { id: 'syn4', data: { komponent_id: citalopram, laboratorium_id: 'l1', metode: 'Syntetisk elektroforese', status: 'Active', synlighet: null } },
+      ],
+    }
+    const indeks = await lesSokeindeks({ sider: sideleser, laboratorier: { les: async () => medCitalopram }, ventetider: [] })
+    expect((await sideleser.lesStoffsider('publisert')).some((s) => s.stoff?.slug === 'citalopram')).toBe(false)
+    expect(sokGlobalt(indeks, 'syntetisk elektroforese').map((t) => sti(t.dokument.sted))).toEqual([
+      ['Citalopram', 'Analyse ved norske laboratorier', 'Citalopram · Syntetisk laboratorium'],
+    ])
+  })
+
   it('indekserer resten og sier fra når analysene ikke kan leses', async () => {
     const nede = { les: async () => Promise.reject(new Error('Analysene svarer ikke')) }
     const indeks = await lesSokeindeks({ sider: sideleser, legemidler: legemiddelsok, laboratorier: nede, ventetider: [] })
