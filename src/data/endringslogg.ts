@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.88.0',
+    dato: '2026-10-09',
+    sammendrag: 'Laboratorieanalysene i fagsøket, og en prikk når en datakilde bør ses over',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Fagsøket finner nå også analysene fra Farmakologiportalen: søk på et laboratorium eller en metode, og treffet åpner «Analyse ved norske laboratorier» på fagsiden.',
+      'Kan analysene ikke hentes til søket, sier søket fra, og resten av søket virker som før.',
+      'Administratorer får en prikk på administrasjonsmenyen og på «Datakilder» når en henting har feilet, var ufullstendig eller er for gammel, med navnet på kilden.',
+    ],
+  },
+  {
     versjon: '1.87.1',
     dato: '2026-10-09',
     sammendrag: 'Ryddigere tabeller i «Analyse ved norske laboratorier»',

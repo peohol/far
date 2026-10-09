@@ -15,8 +15,11 @@
  */
 import type { PGlite } from '@electric-sql/pglite'
 import type { SupabaseClient } from '@supabase/supabase-js'
-import { beforeAll, describe, expect, it } from 'vitest'
-import { visTreff } from '../components/sok/treffvisning'
+import { beforeAll, describe, expect, it, vi } from 'vitest'
+import { manglertekst, visTreff } from '../components/sok/treffvisning'
+import type { Labsokedata } from '../farmakologiportalen/lesing'
+import { alleLabkomponenter, labsted } from '../farmakologiportalen/stoffside'
+import { FORBINDELSER } from '../kjemi/forbindelser'
 import { analytterForStoff, stoffbeskrivelse } from '../domain/koblinger'
 import { STOFFREGISTER, STOFFREGISTERDATA, byggStoffregister, stoffslug, type Registerdata } from '../domain/stoffregister'
 import { GRUNNSTRUKTUR } from './hjelp/registerstruktur'
@@ -369,6 +372,83 @@ describe('mellomlagringen', () => {
     const indeks = await lesSokeindeks({ ...kilderFor(klient, { mellomlager: lager }), sider: bareAmitriptylin, versjoner: null })
     // Preparatene som var lagret, gjaldt også Kodein, og brukes ikke.
     expect(indeks.mangler).toEqual({ preparater: 'les_preparatsok svarer ikke', interaksjoner: 'les_interaksjonssok svarer ikke' })
+  })
+})
+
+describe('laboratorieanalysene fra Farmakologiportalen', () => {
+  const amitriptylin = FORBINDELSER.fpId(FORBINDELSER.forStoff('amitriptylin')[0]!)!
+  // Syntetiske navn; bare formen er som i `les_laboratoriesok`.
+  const sokedata: Labsokedata = {
+    komponenter: [{ id: amitriptylin, data: { navn: 'Amitriptylin', gruppe: [] } }],
+    analyser: [
+      { id: 'syn1', data: { komponent_id: amitriptylin, laboratorium_id: 'l1', metode: 'Syntetisk kromatografi', status: 'Active', synlighet: null } },
+      { id: 'syn2', data: { komponent_id: amitriptylin, laboratorium_id: 'l1', metode: 'Skjult metode', status: 'Active', synlighet: 'Hidden' } },
+      { id: 'syn3', data: { komponent_id: amitriptylin, laboratorium_id: 'l2', metode: 'Nedlagt metode', status: 'Active', synlighet: null } },
+    ],
+    laboratorier: [
+      { id: 'l1', data: { navn: 'Syntetisk laboratorium' } },
+      { id: 'l2', data: { navn: 'Nedlagt laboratorium', aktiv: false } },
+    ],
+  }
+
+  it('finner laboratoriet og metoden på fagsiden, og bare det seksjonen viser', async () => {
+    const les = vi.fn(async () => sokedata)
+    const indeks = await lesSokeindeks({ sider: sideleser, laboratorier: { les }, ventetider: [] })
+    expect(les).toHaveBeenCalledOnce()
+    expect(les).toHaveBeenCalledWith(alleLabkomponenter())
+    expect(indeks.mangler).toBeUndefined()
+    for (const ord of ['syntetisk laboratorium', 'syntetisk kromatografi']) {
+      const treff = sokGlobalt(indeks, ord)
+      expect(treff.map((t) => sti(t.dokument.sted)), ord).toEqual([['Amitriptylin', 'Analyse ved norske laboratorier', 'Amitriptylin · Syntetisk laboratorium']])
+      // Som søket på siden: lenken åpner seksjonen, og stedet har raden.
+      expect(sokeadresse(treff[0]!.dokument.sted)).toBe('#/stoff/amitriptylin/laboratorieanalyser')
+      expect(treff[0]!.dokument.sted.element?.id).toBe(labsted('syn1'))
+    }
+    expect(sokGlobalt(indeks, 'skjult metode')).toEqual([])
+    expect(sokGlobalt(indeks, 'nedlagt')).toEqual([])
+  })
+
+  it('finner analysene også for et stoff i registeret uten publisert side, der seksjonen vises likevel', async () => {
+    const citalopram = FORBINDELSER.fpId(FORBINDELSER.forStoff('citalopram')[0]!)!
+    const medCitalopram: Labsokedata = {
+      ...sokedata,
+      komponenter: [...sokedata.komponenter, { id: citalopram, data: { navn: 'Citalopram', gruppe: [] } }],
+      analyser: [
+        ...sokedata.analyser,
+        { id: 'syn4', data: { komponent_id: citalopram, laboratorium_id: 'l1', metode: 'Syntetisk elektroforese', status: 'Active', synlighet: null } },
+      ],
+    }
+    const indeks = await lesSokeindeks({ sider: sideleser, laboratorier: { les: async () => medCitalopram }, ventetider: [] })
+    expect((await sideleser.lesStoffsider('publisert')).some((s) => s.stoff?.slug === 'citalopram')).toBe(false)
+    expect(sokGlobalt(indeks, 'syntetisk elektroforese').map((t) => sti(t.dokument.sted))).toEqual([
+      ['Citalopram', 'Analyse ved norske laboratorier', 'Citalopram · Syntetisk laboratorium'],
+    ])
+  })
+
+  it('indekserer resten og sier fra når analysene ikke kan leses', async () => {
+    const nede = { les: async () => Promise.reject(new Error('Analysene svarer ikke')) }
+    const indeks = await lesSokeindeks({ sider: sideleser, legemidler: legemiddelsok, laboratorier: nede, ventetider: [] })
+    expect(indeks.mangler).toEqual({ laboratorier: 'Analysene svarer ikke' })
+    expect(manglertekst(indeks.mangler)).toBe('Søket mangler nå laboratorieanalysene fra Farmakologiportalen, som ikke kunne hentes.')
+    expect(sokGlobalt(indeks, 'sarotex')).not.toEqual([])
+  })
+
+  it('leser analysene på nytt bare når versjonen er endret', async () => {
+    const lager = minnelager()
+    const les = vi.fn(async () => sokedata)
+    const kilder = (versjon: string): Sokekilder => ({
+      sider: sideleser,
+      laboratorier: { les },
+      versjoner: async () => ({ sider: 's', laboratorier: versjon }),
+      mellomlager: lager,
+      ventetider: [],
+    })
+    await lesSokeindeks(kilder('1'))
+    const igjen = await lesSokeindeks(kilder('1'))
+    expect(les).toHaveBeenCalledOnce()
+    expect(sokGlobalt(igjen, 'syntetisk laboratorium')).toHaveLength(1)
+    await lesSokeindeks(kilder('2'))
+    expect(les).toHaveBeenCalledTimes(2)
   })
 })
 
