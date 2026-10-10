@@ -49,6 +49,8 @@ begin
   insert into thc_kildeliste values
     ('dmp','Sativex – legemiddelvisning (MT 11-8809)','Direktoratet for medisinske produkter','2026','https://legemiddelsok.no/sider/Legemiddelvisning.aspx?f=&pakningId=3611939b-f0b7-46c8-ae31-76498d856873&pane=0&searchquery=Cannabidiol'),
     ('sativex','Sativex oromucosal spray – Summary of Product Characteristics (UK)','SVX Therapeutics / MHRA','2026','https://www.medicines.org.uk/emc/product/602/smpc'),
+    ('marinol','Marinol (dronabinol) capsules – FDA prescribing information, revised 03/2026','US Food and Drug Administration','2026','https://www.accessdata.fda.gov/drugsatfda_docs/label/2026/018651s036lbl.pdf'),
+    ('pain','Cannabis-based medicines for chronic neuropathic pain in adults – Cochrane Review 2026','Ateş G, Welsch P, Klose P, et al.','2026','https://doi.org/10.1002/14651858.CD012182.pub3'),
     ('gift','Cannabis – behandlingsanbefaling ved forgiftning','Giftinformasjonen / Helsebiblioteket','2020','https://www.helsebiblioteket.no/forgiftninger/rusmidler/cannabis-behandlingsanbefaling-ved-forgiftning'),
     ('iuphar','Δ9-Tetrahydrocannabinol – ligand data','IUPHAR/BPS Guide to PHARMACOLOGY','2026','https://www.guidetopharmacology.org/GRAC/LigandDisplayForward?ligandId=2424'),
     ('ms','Cannabis and cannabinoids for symptomatic treatment for people with multiple sclerosis','Filippini G, Minozzi S, Borrelli F, et al. (Cochrane)','2022','https://doi.org/10.1002/14651858.CD013444.pub2'),
@@ -104,6 +106,8 @@ begin
       'THC omdannes blant annet til den aktive metabolitten 11-OH-THC og videre til THC-COOH (THC-syre), som primært er en eksponeringsmarkør. Påvisning av metabolitten dokumenterer ikke i seg selv aktuell rus.',array['sativex','blood']),
     ('identitet',0,'riktekst',null,null,5,
       'Gjentatt høy cannabiseksponering kan medføre toleranse, abstinens og cannabisbrukslidelse. Disse er ulike fenomener og forekommer ikke nødvendigvis sammen.',array['withdraw','cb1pet']),
+    ('identitet',0,'riktekst',null,null,6,
+      'Isolert dronabinol er i USA et godkjent legemiddel ved aidsrelatert anoreksi og kjemoterapiutløst kvalme som ikke har respondert tilstrekkelig på konvensjonell behandling. Disse amerikanske indikasjonene må holdes atskilt fra norsk godkjenning av kombinasjonspreparatet Sativex.',array['marinol','dmp']),
 
     -- Mekanismer; direkte binding/mekanisme, ikke kliniske virkninger
     ('farmakodynamikk',0,'mekanismekort','CB₁-reseptor','partiell_agonisme',1,
@@ -120,6 +124,14 @@ begin
       'Kontrollerte THC-administrasjonsstudier viser en akutt økning i positive, negative og generelle psykotomimetiske symptomer mot placebo. Dette er ikke det samme som at enhver eksponert utvikler en vedvarende psykosesykdom.',array['psych']),
     ('virkninger',3,'kinetikkort','Spastisitet ved multippel sklerose',null,1,
       'Nabiximols (THC + CBD, Sativex) har sannsynligvis effekt på pasientrapportert spastisitet ved MS på kort sikt. Dette er dokumentasjon for kombinasjonspreparatet, ikke for at isolert THC alene har tilsvarende dokumentert effekt.',array['ms','sativex']),
+    ('virkninger',4,'kinetikkort','Appetittstimulering',null,1,
+      'Dronabinol (isolert Δ9-THC) stimulerer appetitten. I USA er kapsler med dronabinol godkjent ved anoreksi assosiert med vekttap hos personer med aids, basert blant annet på placebokontrollerte kliniske studier. Dette er en amerikansk indikasjon, ikke en norsk godkjenning av isolert THC.',array['marinol']),
+    ('virkninger',5,'kinetikkort','Antiemetisk effekt',null,1,
+      'Isolert dronabinol har dokumentert antiemetisk effekt og er i USA godkjent til voksne med kvalme og oppkast etter kreftkjemoterapi når vanlige kvalmestillende midler har gitt utilstrekkelig effekt. Nyere antiemetiske alternativer og toleranseproblemer begrenser overførbarheten av eldre effektstudier til dagens praksis.',array['marinol']),
+    ('virkninger',6,'kinetikkort','Analgetisk effekt',null,1,
+      'Det finnes studier av THC-holdige midler ved kroniske nevropatiske smerter, men en oppdatert Cochrane-oversikt fra 2026 fant ikke sikker dokumentasjon for at THC-dominerte preparater gir klinisk betydningsfull smertelindring sammenlignet med placebo. Resultatene gjelder en gruppe ulike THC-dominerte formuleringer, ikke én standardisert THC-dose.',array['pain']),
+    ('virkninger',7,'kinetikkort','Kardiovaskulære virkninger',null,1,
+      'THC kan gi takykardi, konjunktival injeksjon og varierende blodtrykksrespons, inkludert ortostatisk hypotensjon og synkope. Hemodynamisk ustabilitet er særlig viktig hos personer med underliggende hjertesykdom.',array['marinol','gift']),
 
     -- Redaksjonell bivirkningskontekst, IKKE en strukturert SPC-tabell
     ('bivirkninger',0,'kinetikkort','Sentrale sikkerhetsmomenter',null,1,
