@@ -143,7 +143,7 @@ begin
     ('toksisitet_forgiftning',3,'kinetikkort','Alvorlige komplikasjoner',null,2,
       'Ved langvarig, ofte høy cannabisbruk kan cannabinoid hyperemesis gi tilbakevendende episoder med alvorlig oppkast. Denne sammenhengen gjelder kronisk cannabiseksponering, ikke ett enkelt THC-inntak.',array['chs']),
     ('toksisitet_forgiftning',4,'kinetikkort','Toksikokinetiske særtrekk',null,1,
-      'Etter inhalasjon inntrer effekten raskt; etter peroralt inntak kan maksimal virkning komme flere timer senere. THC er svært lipofilt og har flerfasisk fordeling/elimasjon med en lang terminal fase etter gjentatt bruk.',array['gift','oralpk','sativex']),
+      'Etter inhalasjon inntrer effekten raskt; etter peroralt inntak kan maksimal virkning komme flere timer senere. THC er svært lipofilt og har flerfasisk fordeling/eliminasjon med en lang terminal fase etter gjentatt bruk.',array['gift','oralpk','sativex']),
     ('toksisitet_forgiftning',5,'kinetikkort','Behandling ved forgiftning',null,1,
       'Det finnes ingen etablert THC-antidot. Ved akutt forgiftning rettes behandlingen mot kliniske symptomer og komplikasjoner; betydelig uro og angst kan behandles med benzodiazepiner, og alvorlige psykotiske symptomer kan kreve antipsykotisk behandling.',array['gift']),
     ('toksisitet_forgiftning',5,'kinetikkort','Behandling ved forgiftning',null,2,
