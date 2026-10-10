@@ -67,7 +67,7 @@ export default function thc(db: () => PGlite): void {
     expect(tdm).toContain('ikke ett allment validert')
     const dose = tekst((await panel('dosering'))[0]!.data)
     expect(dose).toContain('2,7 mg THC og 2,5 mg CBD')
-    expect(dose).toContain('maksimal')
+    expect(dose).toContain('12 sprayer')
     expect(dose).toContain('ikke brukes som generell doseanbefaling')
     const graviditet = tekst((await panel('graviditet_amming')).find((x) => x.data.tittel === 'Graviditet')!.data)
     expect(graviditet).toContain('assosiasjoner')
