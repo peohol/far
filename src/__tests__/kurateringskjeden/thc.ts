@@ -43,6 +43,9 @@ export default function thc(db: () => PGlite): void {
     expect(await panel('indikasjon')).toHaveLength(1) // den eldre kildebelagte indikasjonen bevares
     expect(await panel('bivirkninger')).toHaveLength(1)
     expect(await panel('farmakokinetikk')).toHaveLength(4)
+    const pk = (await panel('farmakokinetikk')).map((e) => tekst(e.data)).join(' ')
+    expect(pk).toContain('13 nmol/L')
+    expect(pk).not.toContain('ng/mL')
     expect(await panel('farmakogenetikk')).toHaveLength(2)
     expect(await panel('interaksjoner')).toHaveLength(1)
     expect(await panel('tdm')).toHaveLength(1)
