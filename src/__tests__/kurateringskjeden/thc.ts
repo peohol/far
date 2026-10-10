@@ -6,8 +6,8 @@ import { type Element, elementer, inlineReferanser, tekst } from '../hjelp/kurat
  * Full redaksjonell THC-kuratering. Tester også at innholdet ikke forveksler
  * THC med THC-COOH, cannabis som helprodukt eller Sativex (THC + CBD).
  *
- * OBS: Produksjons-preflight og norsk SPC-import gjenstår, se
- * docs/kurateringsjournal/thc.md.
+ * Norsk Sativex-SPC fra 28.05.2026 er også importert som strukturert bivirkningskilde,
+ * med klinisk datagrunnlag adskilt fra isolert THC.
  */
 export default function thc(db: () => PGlite): void {
   let alle: Element[]
@@ -66,6 +66,41 @@ export default function thc(db: () => PGlite): void {
     expect((await panel('avhengighet_toleranse')).map((x) => x.data.tittel)).toEqual([
       'Toleranseutvikling', 'Abstinens, seponeringssyndrom og rebound-effekter', 'Addiksjon',
     ])
+  })
+
+  it('bevarer Sativex-bivirkninger fra norsk SPC, inkludert frekvens og fotnoter', async () => {
+    const { rows } = await db().query<{
+      totalt: number
+      organsystemer: number
+      svaert_vanlige: number
+      vanlige: number
+      mindre_vanlige: number
+      fotnoter: number
+      revisjonsdato: string | null
+    }>(`
+      select count(*)::integer as totalt,
+        count(distinct b.organsystem)::integer as organsystemer,
+        count(*) filter (where b.frekvens = 'svaert_vanlige')::integer as svaert_vanlige,
+        count(*) filter (where b.frekvens = 'vanlige')::integer as vanlige,
+        count(*) filter (where b.frekvens = 'mindre_vanlige')::integer as mindre_vanlige,
+        count(*) filter (where b.fotnote is not null)::integer as fotnoter,
+        max(k.revisjonsdato)::text as revisjonsdato
+      from bivirkninger.bivirkninger b
+      join bivirkninger.kilder k on k.id = b.kilde
+      join public.infosider s on s.objekt_id = k.infoside and s.tilstand = 'publisert'
+      where s.slug = 'thc'
+        and k.nokkel = 'sativex-munnspray-11-8809'
+        and k.erstattet_av is null and k.trukket_kl is null
+    `)
+    expect(rows[0]).toEqual({
+      totalt: 53,
+      organsystemer: 13,
+      svaert_vanlige: 2,
+      vanlige: 37,
+      mindre_vanlige: 14,
+      fotnoter: 3,
+      revisjonsdato: '2026-05-28',
+    })
   })
 
   it('skiller mellom molekyl, aktiv og inaktiv metabolitt, matriser og preparatkilder', async () => {
