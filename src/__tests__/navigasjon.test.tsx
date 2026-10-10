@@ -234,7 +234,9 @@ describe('stoffene uten analyttkode', () => {
     expect(window.location.hash).toBe('#/stoff/teststoff')
     expect(fortolkningen().hidden).toBe(true)
     expect(screen.queryByRole('button', { name: 'Åpne fortolkning' })).toBeNull()
-    expect(databasen.kall).toContainEqual({ funksjon: 'les_stoff', argumenter: { stoff: 'teststoff', sidetilstand: 'publisert' } })
+    await waitFor(() => expect(databasen.kall).toContainEqual({
+      funksjon: 'les_stoff', argumenter: { stoff: 'teststoff', sidetilstand: 'publisert' },
+    }))
   })
 })
 
