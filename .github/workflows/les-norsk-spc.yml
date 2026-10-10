@@ -47,4 +47,11 @@ jobs:
           print('FULL_SECTION_PAGES_5_THROUGH_11_END')
           print('LAST_PAGE_REVISJON')
           print(parts[-1])
+          import base64
+          p8=doc[7]
+          pix=p8.get_pixmap(matrix=pymupdf.Matrix(1.65,1.65),alpha=False)
+          raw=base64.b64encode(pix.tobytes('jpeg',jpg_quality=72)).decode('ascii')
+          print('ORIGINAL_PDF_SIDE8_JPEG_B64_BEGIN')
+          for k in range(0,len(raw),16000): print('IMGCHUNK '+raw[k:k+16000])
+          print('ORIGINAL_PDF_SIDE8_JPEG_B64_END')
           PY
