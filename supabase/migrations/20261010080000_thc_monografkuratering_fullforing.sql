@@ -13,6 +13,7 @@ declare
   r_serum uuid;
   r_coping uuid;
   r_motiver uuid;
+  r_ous uuid;
   k record;
   refs jsonb;
   dokument jsonb;
@@ -37,6 +38,13 @@ begin
       'forfattere','Direktoratet for medisinske produkter',
       'aar','2026',
       'lenke','https://produktinformasjon.legemiddelsok.no/preparatomtaler/11-8809.pdf'
+    ), kilde);
+  r_ous := intern.kuratering_referanse(
+    jsonb_build_object(
+      'tittel','Tetrahydrocannabinol (THC) (serum) – Brukerhåndbok i klinisk farmakologi ved OUS',
+      'forfattere','Oslo universitetssykehus / Ilah Le Nygaard',
+      'aar','2023',
+      'lenke','https://metodebok.no/emne/tLKUdfH2/tetrahydrocannabinol-%28thc%29-%28serum%29/brukerh%C3%A5ndbok-i-klinisk-farmakologi-ous'
     ), kilde);
   r_serum := intern.kuratering_referanse(
     jsonb_build_object(
@@ -118,6 +126,9 @@ begin
     ('tdm',1,'Prøvetaking etter inhalasjon',
       'I et kontrollert forsøk med 18–20 menn per aktiv dose nådde THC i serum gjennomsnittlig maksimal konsentrasjon omtrent 10–14 minutter etter røykestart. Nivåene falt raskt videre, og dose i sigaretten var ikke lik systemisk absorbert dose. Tolking av enkeltmålinger krever derfor prøvetidspunkt og inntaksmåte; de observerte toppverdiene er ikke terapeutiske målverdier eller sikre rusgrenser.',
       array['serum']),
+    ('tdm',2,'Når THC-analyse er klinisk relevant',
+      'OUS metodebok oppgir at THC i serum kan være aktuelt ved vurdering av akutt ruspåvirkning. Hvis spørsmålet i stedet gjelder tidligere rusmiddelbruk, anbefales urinundersøkelse av THC-syre fordi påvisningstiden i urin generelt er lengre. For serumanalyser oppgis tidspunkt for siste inntak, dosering og prøvetaking. En målt serumkonsentrasjon kan gi eksponeringsinformasjon, men kan ikke alene fastslå graden av klinisk påvirkning.',
+      array['ous']),
     ('avhengighet_toleranse',3,'Lært mestringsavhengighet',
       'Ved gjentatt bruk av THC-holdig cannabis for å håndtere uro, negative følelser eller søvnvansker kan en person utvikle forventning om å trenge cannabis i bestemte situasjoner. Humane studier finner at mestrings- og søvnmotiver forekommer og henger sammen med bruksmønster, men dokumenterer ikke at isolert THC alene forårsaker en varig slik forventning. Fenomenet er ikke en egen diagnose og er ikke i seg selv ensbetydende med addiksjon, craving eller fysiologisk abstinens.',
       array['coping','motiver']);
@@ -129,6 +140,7 @@ begin
         when 'serum' then to_jsonb(r_serum)
         when 'coping' then to_jsonb(r_coping)
         when 'motiver' then to_jsonb(r_motiver)
+        when 'ous' then to_jsonb(r_ous)
         else null
       end order by c.ord
     ) into refs
