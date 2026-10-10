@@ -40,21 +40,21 @@ begin
     ), kilde);
   r_serum := intern.kuratering_referanse(
     jsonb_build_object(
-      'tittel','THC serum concentrations and pharmacological effects after smoking cannabis containing up to 69 mg THC',
+      'tittel','Delta-9-tetrahydrocannabinol (THC) serum concentrations and pharmacological effects in males after smoking a combination of tobacco and cannabis containing up to 69 mg THC',
       'forfattere','Hunault CC, Mensinga TT, de Vries I, et al.',
       'aar','2008',
       'lenke','https://doi.org/10.1007/s00213-008-1260-2'
     ), kilde);
   r_coping := intern.kuratering_referanse(
     jsonb_build_object(
-      'tittel','Negative Affect Regulation and Marijuana Use: Coping and Sleep Motives',
-      'forfattere','Livingston NR et al.',
+      'tittel','Negative Affect Regulation and Marijuana Use in College Students: Evaluating the Mediating Roles of Coping and Sleep Motives',
+      'forfattere','Livingston NR, Hetelekides E, Bravo AJ, Looby A, et al.',
       'aar','2023',
       'lenke','https://doi.org/10.1080/02791072.2022.2054747'
     ), kilde);
   r_motiver := intern.kuratering_referanse(
     jsonb_build_object(
-      'tittel','Multiple motives for cannabis use: common motive combinations and consequences',
+      'tittel','Multiple motives for cannabis use: identifying common motive combinations and exploring differences across combinations',
       'forfattere','Dyar C, Curtis J, Lee CM',
       'aar','2025',
       'lenke','https://doi.org/10.1186/s42238-025-00362-z'
