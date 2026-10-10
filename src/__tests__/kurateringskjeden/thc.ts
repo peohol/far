@@ -29,7 +29,16 @@ export default function thc(db: () => PGlite): void {
       'Kognisjon og psykomotorikk',
       'Psykotomimetiske virkninger',
       'Spastisitet ved multippel sklerose',
+      'Appetittstimulering',
+      'Antiemetisk effekt',
+      'Analgetisk effekt',
+      'Kardiovaskulære virkninger',
     ])
+    const smerte = tekst(virkninger.find((x) => x.data.tittel === 'Analgetisk effekt')!.data)
+    expect(smerte).toContain('Cochrane-oversikt fra 2026')
+    expect(smerte).toContain('ikke sikker dokumentasjon')
+    const appetitt = tekst(virkninger.find((x) => x.data.tittel === 'Appetittstimulering')!.data)
+    expect(appetitt).toContain('amerikansk indikasjon')
     expect(await panel('dosering')).toHaveLength(1)
     expect(await panel('indikasjon')).toHaveLength(1) // den eldre kildebelagte indikasjonen bevares
     expect(await panel('bivirkninger')).toHaveLength(1)
