@@ -173,7 +173,7 @@ begin
     ('farmakokinetikk',0,'kinetikkort','Opptak og betydningen av administrasjonsvei',null,1,
       'Inhalert THC absorberes raskt og kan gi høye tidlige blodtopper. Peroral tilførsel gir senere og mer variabel absorpsjon, med større betydning av førstepassasje og den aktive metabolitten 11-OH-THC.',array['oralpk','sativex']),
     ('farmakokinetikk',0,'kinetikkort','Opptak og betydningen av administrasjonsvei',null,2,
-      'Etter en enkeltdose på fire sprayer Sativex (10,8 mg THC og 10 mg CBD) angir preparatomtalen en gjennomsnittlig maksimal THC-plasmakonsentrasjon rundt 4 ng/mL etter cirka 45–120 minutter, men interindividuell variabilitet er stor. Dette er ikke en generell THC-Tmax.',array['sativex']),
+      'Etter en enkeltdose på fire sprayer Sativex (10,8 mg THC og 10 mg CBD) angir preparatomtalen en gjennomsnittlig maksimal THC-plasmakonsentrasjon rundt 13 nmol/L etter cirka 45–120 minutter (omregnet til nmol/L med THC-molekylvekt 314,46 g/mol), men interindividuell variabilitet er stor. Dette er ikke en generell THC-Tmax.',array['sativex','marinol']),
     ('farmakokinetikk',1,'kinetikkort','Distribusjon og proteinbinding',null,1,
       'THC er svært fettløselig, fordeles raskt til vev og kan redistribueres langsomt fra fettdepoter. Sativex-preparatomtalen oppgir høy proteinbinding for THC (omtrent 97 %).',array['sativex']),
     ('farmakokinetikk',2,'kinetikkort','Metabolisme og metabolitter',null,1,
