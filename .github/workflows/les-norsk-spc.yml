@@ -54,4 +54,26 @@ jobs:
           print('ORIGINAL_PDF_SIDE8_JPEG_B64_BEGIN')
           for k in range(0,len(raw),16000): print('IMGCHUNK '+raw[k:k+16000])
           print('ORIGINAL_PDF_SIDE8_JPEG_B64_END')
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - name: Kontroller og forhåndsvis norsk SPC-import
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts --silent
+          sourcefile='supabase/import/bivirkninger/thc--sativex-munnspray-11-8809.json'
+          npm run -s import:bivirkninger -- "$sourcefile" > /tmp/forhandsvisning.md
+          echo 'THC_SPC_PREVIEW_START'
+          cat /tmp/forhandsvisning.md
+          echo 'THC_SPC_PREVIEW_END'
+          npm run -s import:bivirkninger -- "$sourcefile" /tmp/thc_sativex_bivirkninger.sql > /tmp/forhandsvisning2.md
+          echo 'THC_SPC_SQL_START'
+          cat /tmp/thc_sativex_bivirkninger.sql
+          echo
+          echo 'THC_SPC_SQL_END'
           PY
