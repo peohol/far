@@ -1,6 +1,7 @@
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, expect, it } from 'vitest'
 import { type Element, elementer, inlineReferanser, tekst } from '../hjelp/kurateringskjeden'
+import { PANELER } from '../../faginnhold/paneler'
 
 /**
  * Full redaksjonell THC-kuratering. Tester også at innholdet ikke forveksler
@@ -42,13 +43,13 @@ export default function thc(db: () => PGlite): void {
     expect(await panel('dosering')).toHaveLength(1)
     expect(await panel('indikasjon')).toHaveLength(1) // den eldre kildebelagte indikasjonen bevares
     expect(await panel('bivirkninger')).toHaveLength(1)
-    expect(await panel('farmakokinetikk')).toHaveLength(4)
+    expect(await panel('farmakokinetikk')).toHaveLength(6)
     const pk = (await panel('farmakokinetikk')).map((e) => tekst(e.data)).join(' ')
     expect(pk).toContain('13 nmol/L')
     expect(pk).not.toContain('ng/mL')
     expect(await panel('farmakogenetikk')).toHaveLength(2)
     expect(await panel('interaksjoner')).toHaveLength(1)
-    expect(await panel('tdm')).toHaveLength(1)
+    expect(await panel('tdm')).toHaveLength(2)
   })
 
   it('har faste toksisitets-, graviditets- og avhengighetskort uten å fylle dokumentasjonshull', async () => {
@@ -64,7 +65,7 @@ export default function thc(db: () => PGlite): void {
       'Graviditet', 'Perinatal og neonatal påvirkning', 'Amming', 'Fertilitet og reproduksjon',
     ])
     expect((await panel('avhengighet_toleranse')).map((x) => x.data.tittel)).toEqual([
-      'Toleranseutvikling', 'Abstinens, seponeringssyndrom og rebound-effekter', 'Addiksjon',
+      'Toleranseutvikling', 'Abstinens, seponeringssyndrom og rebound-effekter', 'Addiksjon', 'Lært mestringsavhengighet',
     ])
   })
 
@@ -119,6 +120,70 @@ export default function thc(db: () => PGlite): void {
     const graviditet = tekst((await panel('graviditet_amming')).find((x) => x.data.tittel === 'Graviditet')!.data)
     expect(graviditet).toContain('assosiasjoner')
     expect(graviditet).toContain('ikke presenteres som THC-spesifikke kausale risikoer')
+  })
+
+  it('har dokumentert dekning av samtlige live redaksjonelle paneler', () => {
+    const automatisk = new Set(['preparater', 'laboratorieanalyser', 'kjemiske_grunndata'])
+    const forventet = [
+      'identitet', 'viktige_data', 'farmakodynamikk', 'virkninger',
+      'bivirkninger', 'toksisitet_forgiftning', 'indikasjon', 'dosering',
+      'farmakokinetikk', 'farmakogenetikk', 'interaksjoner', 'tdm',
+      'serumkonsentrasjoner', 'graviditet_amming', 'avhengighet_toleranse',
+    ]
+    // Hvis panelmodellen utvides, må dekningsmatrisen revideres; ikke overse nye krav.
+    expect(PANELER.filter((p) => !automatisk.has(p.nokkel)).map((p) => p.nokkel)).toEqual(
+      PANELER.map((p) => p.nokkel).filter((p) => forventet.includes(p)),
+    )
+    expect(PANELER.filter((p) => !automatisk.has(p.nokkel)).map((p) => p.nokkel).sort()).toEqual([...forventet].sort())
+    for (const p of forventet) {
+      expect(alle.some((e) => e.panel === p), p).toBe(true)
+    }
+  })
+
+  it('legger inn kildebelagt, formuleringstilordnet halveringstid uten falske THC-grenser', async () => {
+    const viktige = await panel('viktige_data')
+    expect(viktige.map((e) => e.elementtype)).toEqual(['halveringstid'])
+    expect(viktige[0]!.data.former).toEqual([
+      { form: 'Sativex, 2 sprayer – THC i plasma', typisk: 1.94, min: null, maks: null, enhet: 'timer' },
+      { form: 'Sativex, 4 sprayer – THC i plasma', typisk: 3.72, min: null, maks: null, enhet: 'timer' },
+      { form: 'Sativex, 8 sprayer – THC i plasma', typisk: 5.25, min: null, maks: null, enhet: 'timer' },
+    ])
+    expect(viktige[0]!.referanser).toHaveLength(1)
+    // Ikke finn på universelle grenser/t_ss; de er eksplisitt vurdert i evidensjournalen.
+    expect(viktige.some((e) => ['referanseomrade','toksisk_omrade','alvorlig_intoksikasjon','steady_state'].includes(e.elementtype))).toBe(false)
+  })
+
+  it('viser faktiske SERUM-data fra samme humane doseforsøk i nmol/L, med kilder', async () => {
+    const tabell = await panel('serumkonsentrasjoner')
+    expect(tabell).toHaveLength(1)
+    expect(tabell[0]!.elementtype).toBe('dosetabell')
+    const rader = tabell[0]!.data.rader as Record<string, string>[]
+    expect(rader).toHaveLength(3)
+    expect(rader.map((r) => r.dose)).toEqual([
+      '29,3 mg THC i sigaretten', '49,1 mg THC i sigaretten', '69,4 mg THC i sigaretten',
+    ])
+    expect(rader.map((r) => r.konsentrasjon)).toEqual([
+      'Cmax (middel ± SD): 430 ± 218 nmol/L',
+      'Cmax (middel ± SD): 645 ± 357 nmol/L',
+      'Cmax (middel ± SD): 735 ± 345 nmol/L',
+    ])
+    for (const rad of rader) {
+      expect(rad.regime).toContain('tobakk')
+      expect(rad.merknad).toContain('THC i serum')
+      expect(rad.merknad).toContain('ikke absorbert dose')
+      expect(rad.merknad).toContain('tabell 2')
+    }
+    expect(tabell[0]!.referanser).toHaveLength(1)
+    expect(tabell[0]!.utkast).toBe(tabell[0]!.publisert)
+  })
+
+  it('beskriver lært mestring uten å kalle cannabisbruksmotiver isolert THC-kausalitet', async () => {
+    const laering = (await panel('avhengighet_toleranse')).find((e) => e.data.tittel === 'Lært mestringsavhengighet')!
+    expect(tekst(laering.data)).toContain('THC-holdig cannabis')
+    expect(tekst(laering.data)).toContain('ikke at isolert THC')
+    expect(tekst(laering.data)).toContain('ikke i seg selv ensbetydende med addiksjon')
+    expect(new Set(inlineReferanser(laering.data)).size).toBe(2)
+    expect(laering.referanser).toHaveLength(0)
   })
 
   it('kobler alle redaksjonelle påstander til publiserte referanser ved påstanden', async () => {
