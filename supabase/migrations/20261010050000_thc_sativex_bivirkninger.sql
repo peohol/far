@@ -14,7 +14,6 @@ select bivirkninger.importer($import${
     "kontrollert": "2026-10-10",
     "kontrollert_av": "ChatGPT monografikurator",
     "importert_av": "ChatGPT monografikurator",
-/home/runner/work/_temp/4b4f4db6-77d4-40b4-bd13-73cceadf3c70.sh: line 13: PY: command not found
     "merknad": "Avsnitt 4.8, bivirkninger med plausibel sammenheng med Sativex i placebokontrollerte og åpne studier hos MS-pasienter. Enkelte kan være del av underliggende sykdom. Asteriskfotnoter gjelder langvarige åpne studier."
   },
   "organsystemer": [
