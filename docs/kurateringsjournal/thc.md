@@ -64,7 +64,7 @@
 4. **CYP2C9-genetikk:** Tre ganger AUC ved *3/*3 i en studie med 43 personer er ikke bevis for klinisk nytte av rutinemessig genotyping.
 5. **Graviditet/amming:** Svangerskapsstudier om cannabis har store residual-konfunderingsproblemer, mens laktasjonsstudier bekrefter THC-overgang men dokumenterer ikke sikkerhetsgrense.
 6. **Cannabinoid hyperemesis:** Gjelder særlig langvarig høy cannabiseksponering, ikke påvist terskel for én THC-dose.
-7. **FEST/ClinPGx/CPIC/PubChem/Farmakologiportalen:** Ikke omskrevet som redaksjonell tekst. I FAR-produksjon returnerte authenticated-RPC for THC-siden, FEST-preparater (11 navn), FEST-interaksjonssøk (37 treff) og Farmakologiportalen uten feil eller timeout. THC har ingen aktiv redaksjonell ClinPGx-kobling. Norsk SPC-import er forhåndsvist med repoets importverktøy. Stoffspesifikk PubChem-visning er ikke verifisert.
+7. **FEST/ClinPGx/CPIC/PubChem/Farmakologiportalen:** Ikke omskrevet som redaksjonell tekst. I FAR-produksjon returnerte authenticated-RPC for THC-siden, FEST-preparater (11 navn), FEST-interaksjonssøk (37 treff) og Farmakologiportalen uten feil eller timeout. THC har ingen aktiv redaksjonell ClinPGx-kobling. Norsk SPC-import er forhåndsvist med repoets importverktøy. PubChem er kontrollert gjennom `authenticated`-rollens ordinære `les_kjemi`-RPC: både THC (CID 16078, C21H30O2, 314,5 g/mol) og THC-syre (CID 108207, C21H28O4, 344,4 g/mol) returneres uten feil.
 
 ## Avstemming mot eksisterende OUSFAR-innhold
 
@@ -76,7 +76,7 @@ Eksisterende norsk THC-indikasjon i `supabase/import/indikasjoner/THC.json` og i
 - **Bestått:** Original norsk DMP-SPC for Sativex (15 sider, oppdatert 28.05.2026) hentet direkte som PDF, kildefast tabell s. 8 kontrollert visuelt. Repoets preview viste 53 reaksjoner og 3 fotnoter fordelt over 13 organsystemer, uten feil.
 - **Bestått før SPC-import:** Monografikjedetester og bygg i CI. **Ny CI må kontrolleres etter tilleggsimporten.**
 - **Bestått:** Authenticated-RPC-test av THC-fagsiden, FEST-preparater og -interaksjoner og Farmakologiportalen. SPC-lesefunksjonen svarte med tom liste før import, som forventet. Aktiv ClinPGx-kobling for THC mangler.
-- **Gjenstår:** Kontroller sluttdiff og ny CI for samlet PR; verifiser eventuell stoffspesifikk PubChem-visning og at strukturert bivirkningsvisning fungerer etter utrullingen. Ingen produksjonsmigrasjon før sammenslåing.
+- **Gjenstår:** Kontroller sluttdiff og ny CI for samlet PR; verifiser strukturert bivirkningsvisning etter utrullingen (sammenhold mot de 53 importerte SPC-reaksjonene). Ingen produksjonsmigrasjon før sammenslåing.
 
 ## Historikk
 
