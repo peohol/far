@@ -5,7 +5,7 @@
 - **Modus:** Full oppdatering, med selvstendig kildeinnhenting før avstemming mot historiske importdata
 - **Avgrensning:** Moderstoffet Δ9-THC; 11-OH-THC er farmakologisk aktiv metabolitt, 11-nor-9-karboksy-THC (THC-COOH / THC-syre, IRCAK) er primært markør for eksponering. Cannabisprodukter og kombinasjonen THC/CBD (Sativex/nabiximols) er ikke identiske med isolert THC.
 - **Kunnskapsdato:** 2026-10-10
-- **Leveransestatus:** Redaksjonell THC-kuratering og norsk Sativex-SPC-bivirkningsimport ligger i samme PR. Produksjons-preflight mot FAR i organisasjonen Personlig er bestått (12 tilsiktede panel-/elementtyper har ingen eksisterende publiserte/utkast-elementer). CI besto før den kildefaste bivirkningsimporten; ny full CI-kjøring gjenstår kontroll. Produksjonsnære authenticated-RPC-er for THC-fagsiden, FEST-preparater, FEST-interaksjoner og Farmakologiportalen returnerte uten feil. Ingen endring er gjort i produksjonen.
+- **Leveransestatus:** Hele den levende panelmodellen er revurdert; nye strukturerte THC-halveringstider og humane serumdata, kildebelagt lærings-/mestringskort, to PK-tillegg og et prøvetakingskort kompletterer den opprinnelige THC-migrasjonen og den norske SPC-bivirkningsimporten i PR #210. Produksjons-preflight er bestått. Full CI på den **siste** tilleggsrevisjonen avventes før PR kan erklæres ferdig. Ingen endring er gjort i produksjonen.
 
 ## Kilderegnskap – selvstendig innhenting
 
@@ -36,7 +36,7 @@
 | Seksjon | Kuratorens vurdering | Sikkerhet |
 | --- | --- | --- |
 | Konsis oppsummering | Partiell CB1-/CB2-agonist; akutt rus, svekket oppmerksomhet/psykomotorikk; meget ruteavhengig kinetikk; Sativex er THC/CBD-kombinasjon; abstinens og addiksjon etter gjentatt bruk | Høy for hovedpunktene |
-| Viktige data | Ikke endre eksisterende norske referanse-/toksisitetsverdier. Ikke etablere en falsk universell THC-halveringstid fra ulike prøvemetoder. | Høy |
+| Viktige data | Tre kortverdier for THC-plasmahalveringstid etter Sativex 2/4/8 sprayer (1,94/3,72/5,25 timer) fra norsk SPC, ikke en universell halvveringstid. Alle fire øvrige typer er eksplisitt vurdert og begrunnet tomme. Ingen norske grunnverdier endret. | Høy for preparatspesifikke verdier, lav generaliserbarhet |
 | Farmakodynamikk | CB1 og CB2 er partielle agonistmål. CB1-mediert hemming av presynaptisk transmitterfrigjøring er sentral nevral mekanisme. | Høy |
 | Virkninger | Akutt rus, kognisjon/koordinasjon, psykotomimetiske og kardiovaskulære effekter; dronabinol har dokumenterte appetittstimulerende/antiemetiske effekter med **amerikanske** indikasjoner, ikke norske. Cochrane 2026 gir ingen sikker smertelindringskonklusjon for THC-dominerte midler. Sativex-effekt på MS-spastisitet gjelder THC/CBD-kombinasjonen. | Høy for hovedvirkningene; lav/veldig lav for smertelindring |
 | Bivirkninger | Strukturert tabell er importert fra **norsk Sativex-SPC 28.05.2026**, s. 8, etter visuell kontroll av frekvenskolonner, organsystemer og fotnoter. **53 enkeltreaksjoner:** 2 svært vanlige, 37 vanlige og 14 mindre vanlige fordelt på 13 organsystemer; 3 fotnoter. Repoets forhåndsvisning viste førstegangsimport uten feil. Frekvensene gjelder **Sativex (THC/CBD)** i MS-studier, ikke isolert THC. | Høy for kildefidel overføring; andre kliniske risikoestimater må vurderes separat |
@@ -54,7 +54,52 @@
 | Toleranse | CB1-nevroadaptasjon i humane PET-studier; effektspecifikk toleranse, ikke lik abstinens eller addiksjon. | Høy/moderat |
 | Abstinens / rebound | Irritabilitet, søvnplager, angst, redusert appetitt ved opphør etter hyppig bruk, vanlig debut 1–2 d, topp d2–6. Skill fra tilbakefall av symptomer THC ble brukt mot. | Høy |
 | Addiksjon | Etablert cannabisbrukslidelse inkluderer kontrolltap, videre bruk tross skade, craving. Toleranse/abstinens alene er ikke addiksjon. Risikoen avhenger av bruksmønster og produktstyrke. | Høy |
-| Lært mestringsavhengighet | Mestringsbruk for søvn/angst kan lære en forventning om at THC er nødvendig. Evidensen er i stor grad selvrapportert cannabisbruk, og en THC-spesifikk kausal konklusjon står åpen. | Lav/moderat – bør vurderes særskilt |
+| Lært mestringsavhengighet | Eget kort skrevet etter ny gjennomgang av Livingston 2023 og Dyar 2025; de dokumenterer mestrings- og søvnmotiver, men ikke en kausal THC-spesifikk lært avhengighet. OUSFAR-begrepet presenteres som pedagogisk, ikke diagnostisk. | Moderat for motiver, lav for kausal THC-spesifikk mekanisme |
+
+## Dekningsmatrise mot levende panelmodell (full oppdatering 10.10.2026)
+
+Områdeinndelingen kommer fra `src/faginnhold/paneler.ts` på `main`, ikke fra hvilke kort første THC-kjøring tilfeldigvis skrev. **Vurdert = ja** betyr at området er sjekket både for faglig innhold, kildedekning og hva som allerede finnes i FAR. Utelatelse er bare tillatt med selvstendig begrunnelse nedenfor. Ingen automatiske kilder kopieres til redaksjonell tekst.
+
+| Live panel | Vurdert | Vedtak og faktisk dekning etter PR #210 | Eventuelle tomme felt |
+| --- | --- | --- | --- |
+| `identitet` – Konsis oppsummering | Ja | Nytt kildebelagt kort om THC, CB₁/CB₂, rus, metabolitter, Sativex og avhengighet. | Ingen av de tilsiktede delene. |
+| `viktige_data` | Ja | Strukturert, **formulerings- og dosebundet THC-plasmahalveringstid** for Sativex etter 2, 4 og 8 sprayer; ny egen migrasjon. | Klinisk referanseområde, toksisk område, alvorlig/dødelig konsentrasjon og generelt tₛₛ er vurdert og **bevisst ikke fylt**; se detaljmatrisen. |
+| `farmakodynamikk` | Ja | To mekanismekort: partiell CB₁- og CB₂-agonisme, med kilde direkte i kortene. | Ingen dokumentert ekstra reseptormekanisme av tilsvarende klinisk betydning er utelatt. |
+| `virkninger` | Ja | Åtte kildebelagte kort: rus, psykomotorikk, psykotomimetiske symptomer, MS-spastisitet for THC/CBD, appetitt, antiemese, analgesi og kardiovaskulære effekter. | Ingen av de vurderte hovedvirkningene. |
+| `bivirkninger` | Ja | Ett redaksjonelt sikkerhetskort **og** separat SPC-import med 53 norske Sativex-reaksjoner, 13 organsystemer, 3 fotnoter og frekvensinndeling. | Frekvensene gjelder Sativex hos MS-pasienter, ikke isolert THC. |
+| `toksisitet_forgiftning` | Ja | **Alle seks faste kort** skrevet: dose/eksponering; toksiske konsentrasjoner; klinisk bilde; komplikasjoner; toksikokinetikk; behandling. | Ingen universell toksisk dose eller dødelig THC-konsentrasjon konstruert. |
+| `indikasjon` | Ja | Eksisterende norsk indikasjon beholdt etter kontroll mot Sativex-SPC; amerikanske dronabinolindikasjoner tydelig skilt ut i oppsummeringen. | Ingen ubegrunnet ny norsk indikasjon. |
+| `preparater` | Ja | FEST-koblingen via dronabinol beholdt; 11 preparatnavn returnert i produksjonsnær `authenticated`-RPC-test. | Automatisk/importert, ikke redaksjonelt. |
+| `dosering` | Ja | Formuleringsspesifikk norsk Sativex-titrering; peroralt dronabinol omtales bare med regulatorisk geografi. | Ingen generell rekreasjonell THC-dose. |
+| `farmakokinetikk` | Ja | **Seks kort**: absorpsjon; distribusjon; metabolisme; halveringstid/eliminasjon; mat; nedsatt leverfunksjon. Administrasjonsmåte og matrise beholdes per kilde. | Ingen kunstig felles halveringstid. |
+| `farmakogenetikk` | Ja | To redaksjonelle kort om CYP2C9-data og klinisk nytte; automatisk ClinPGx/CPIC beholdt adskilt. | Ingen validert genotypebasert doseringsregel konstruert. |
+| `interaksjoner` | Ja | Redaksjonell klinisk syntese + uendret FEST-lag; 37 interaksjonssøketreff i produksjonsnær test. | Ikke dobbeltfør FEST-listen. |
+| `tdm` | Ja | **To kort** om forholdet mellom konsentrasjon og påvirkning og prøvetaking etter røykestart. | Ingen terapeutisk målverdi for rus-/påvirkningsbedømmelse. |
+| `laboratorieanalyser` | Ja | Farmakologiportalens automatiske lesevei kontrollert som `authenticated`; ikke skrevet manuelt. | Automatisk. |
+| `kjemiske_grunndata` | Ja | PubChem `les_kjemi` bekreftet THC/CID 16078 og THC-syre/CID 108207 via `authenticated`-RPC. | Automatisk. |
+| `serumkonsentrasjoner` | Ja | **Ny dose–serumtabell** med tre faktiske målte `Cmax` fra samme humane THC-røykestudie (Hunault et al. 2008), omregnet til nmol/L. | Ikke fylt med Sativex-**plasma**tall; ikke ekstrapolert til terapeutiske doser. |
+| `graviditet_amming` | Ja | Alle fire faste kort: graviditet, perinatalt/neonatalt, amming og fertilitet; skiller observasjonell cannabisforskning fra isolert THC. | Ingen oppdiktet absoluttrisiko. |
+| `avhengighet_toleranse` | Ja | **Alle fire faste kort**: toleranse; abstinens/rebound; addiksjon; nå også forsiktig kildebelagt **lært mestringsavhengighet**. | Den siste er OUSFARs pedagogiske begrep, ikke en særskilt diagnose. |
+
+### «Viktige data»: eksplisitt beslutning for hvert av fem strukturerte datakort
+
+| Kort | Beslutning | Kilde/forbehold |
+| --- | --- | --- |
+| `referanseomrade` | **Tomt med hensikt.** | Ingen etablert norsk klinisk terapeutisk THC-serumreferanse som dekker ulike produkter og bruksformål. Bruk ikke farmakologiske rus-/kjøregrenseverdier som TDM-mål. Tidligere norske verdier (der de finnes) skal alltid bevares. |
+| `toksisk_omrade` | **Tomt med hensikt.** | Ingen universell antemortem THC-konsentrasjon som skiller toksisitet fra ikke-toksisitet; dose, matrise, tid, toleranse og andre stoffer varierer. |
+| `alvorlig_intoksikasjon` | **Tomt med hensikt.** | Dødelig/alvorlig THC-forgiftning har ikke en validert enkeltterskel i serum; postmortale eller blandingsrelaterte funn gir ikke et sikkert referansetall. |
+| `halveringstid` | **Fylt med tre betingede tall.** | Norsk Sativex-SPC, pkt. 5.2: THC i **plasma** etter 2/4/8 sprayer: 1,94/3,72/5,25 timer. Ikke allmenn eller doseuavhengig terminal halveringstid. |
+| `steady_state` | **Tomt med hensikt.** | Det finnes ikke én forsvarlig tₛₛ-verdi for THC på tvers av administrasjonsveier, gjentatte doser, distribusjon til fettvev og varierende halveringstidsfase; tall fra kort plasmafase alene er uegnet som generelt steady-state-estimat. |
+
+### Kvantitativ evidens – serumkonsentrasjoner, t½ og metabolitter
+
+**Hunault et al. 2008** ([DOI](https://doi.org/10.1007/s00213-008-1260-2), originalarbeid, tabell 2): 24 voksne mannlige, ikke-daglige cannabisbrukere i crossover-studie; analyserte runder hadde 18, 20 og 20 deltakere. Cannabis blandet med tobakk, røykt som enkeltsigarett med henholdsvis 29,3, 49,1 og 69,4 mg THC. SERUM ble analysert seriellt over 0–8 timer med LC-MS/MS. Målte gjennomsnittlige THC-serum-**Cmax** (SD) var henholdsvis **135,1 (68,5); 202,9 (112,4); og 231,0 (108,5) µg/L**. Med THC-molekylmasse 314,46 g/mol tilsvarer dette avrundet **430 ± 218; 645 ± 357; og 735 ± 345 nmol/L**, slik den strukturerte tabellen viser. Gjennomsnittlig tid til toppkonsentrasjon fra røykestart 9,8 / 14,1 / 12,3 minutter. **Evidenstillit høy for målte verdier i denne populasjonen, svært lav for å generalisere til kroniske brukere, annen inntaksvei eller kliniske målverdier.** Cmax er ikke et terapeutisk referanseområde, og mg THC i sigaretten er ikke inhalert/absorbert mg.
+
+**Norsk Sativex-SPC 28.05.2026** ([original](https://produktinformasjon.legemiddelsok.no/preparatomtaler/11-8809.pdf), pkt. 5.2): ikke-kompartmental PK-analyse med plasmahalveringstider **1,94; 3,72; 5,25 timer** etter 2; 4; 8 sprayer Sativex. Mat økte THC-Cmax 1,6 ganger og THC-AUC 2,8 ganger, og moderat/alvorlig nedsatt leverfunksjon reduserte clearance. Her er **plasma** prøvematrise, med THC/CBD-spray som formulering; ikke bland med Hunaults SERUM fra inhalert cannabis. Lav generaliserbarhet til isolert THC via andre administrasjonsveier.
+
+**Coping/søvnmotiver:** [Livingston et al. 2023](https://doi.org/10.1080/02791072.2022.2054747) (N=1453 universitetsstudenter med cannabisbruk; selvrapportert motiv-/symptomforskning) og [Dyar, Curtis og Lee 2025](https://doi.org/10.1186/s42238-025-00362-z) (N=571 unge voksne **kvinner** som brukte cannabis regelmessig; økologisk sanntidsundersøkelse) viser sammenhenger mellom bruksmotiver og bruksmønster. Studiene isolerer verken THC-molekylet, effekt av andre cannabinoider eller kausal læring av forventningen om nødvendig mestringshjelp. **Evidenstillit moderat for at mestrings-/søvnmotiver forekommer, lav for kausal THC-spesifikk mestringsavhengighet.** Kortet fremstiller dette som pedagogisk mulighet, aldri et etablerte diagnosekriterium.
+
+**Adversarial kontroll:** Et høyt Cmax i inhalasjonsstudien kan ikke brukes som «normalkonsentrasjon» i Sativex-behandling; et lavt Sativex-plasma-Cmax kan ikke tolkes som direkte ekvivalent lavt serum etter røyking. Fravær av universelle serumgrenser er ikke fravær av klinisk risiko. Motiver for cannabisbruk er ikke i seg selv bevis for avhengighet/addiksjon eller en kausal THC-spesifikk nevrofysiologisk mekanisme.
 
 ## Kildekritisk kontroll
 
@@ -74,10 +119,12 @@ Eksisterende norsk THC-indikasjon i `supabase/import/indikasjoner/THC.json` og i
 
 - **Bestått:** Produksjons-preflight av de 12 tilsiktede redaksjonelle elementtypene, og bevaring av indikasjon/preparatkobling og norsk konsentrasjonsgrunnlag.
 - **Bestått:** Original norsk DMP-SPC for Sativex (15 sider, oppdatert 28.05.2026) hentet direkte som PDF, kildefast tabell s. 8 kontrollert visuelt. Repoets preview viste 53 reaksjoner og 3 fotnoter fordelt over 13 organsystemer, uten feil.
-- **Bestått før SPC-import:** Monografikjedetester og bygg i CI. **Ny CI må kontrolleres etter tilleggsimporten.**
+- **Tidligere CI:** Monografikjedetester, norsk SPC-import og bygg bestod samlet på commit `725848cc` (Actions `38026525034`). **Ny full CI må kontrolleres etter denne strukturelle fullføringen.**
 - **Bestått:** Authenticated-RPC-test av THC-fagsiden, FEST-preparater og -interaksjoner og Farmakologiportalen. SPC-lesefunksjonen svarte med tom liste før import, som forventet. Aktiv ClinPGx-kobling for THC mangler.
-- **Gjenstår:** Kontroller sluttdiff og ny CI for samlet PR; verifiser strukturert bivirkningsvisning etter utrullingen (sammenhold mot de 53 importerte SPC-reaksjonene). Ingen produksjonsmigrasjon før sammenslåing.
+- **Gjenstår før PR klar:** Kontroll av sluttdiff og siste CI for nye dosedata, halveringstid og mestringskort; vurder og håndter eventuelle Codex-funn. **Etter merge:** Kontroller strukturert bivirkningsvisning med 53 norske SPC-reaksjoner og ny serumtabell. Ingen produksjonsmigrasjon før sammenslåing.
 
 ## Historikk
 
 - **2026-10-10:** Full systematisk ny gjennomgang av THC, med vekt på klinisk/forensisk fortolkningspresisjon. Skriftlig kilde- og beslutningslogg. Ytterligere uavhengig kildekontroll av isolert dronabinol (FDA 2026) og Cochrane (2026) førte til særskilt dekning av appetitt, antiemese, hemodynamikk og begrenset evidens for smertelindring. Senere samme dag ble FAR-prosjektet lest via direkte prosjekt-ID under «Personlig», og original norsk Sativex-PDF ble selvstendig hentet via en nettverksåpen GitHub Actions-kjører til tross for feil MIME-header i nettleserverktøyet. SPC-revisjon 28.05.2026 og frekvenstabellen på s. 8 er kontrollert. Strukturert import av 53 bivirkninger, med 3 fotnoter, er lagt til med repoets egen forhåndsvisning og migrasjonsgenerator.
+
+- **2026-10-10 (fullføring etter dekningsavvik):** Alle 18 live paneler vurdert systematisk, 15 redaksjonelle/miks-paneler dekket gjennom eksisterende eller nytt innhold og 3 automatiske kontrollert. Ny serumdose–tabell bygger på målte **serum**verdier hos Hunault et al. (2008) og ikke plasma fra Sativex. Tre Sativex-halveringstider registrert med formulering/dose. Lært mestringskort skrevet med lav kausal evidenstillit; alle fem viktige datatyper, seks toksisitetskort, fire graviditetskort og fire avhengighetskort avstemt. Tilhørende test låser dekningsmatrisen til `PANELER`. Fullførende migrasjon er separat og overskriver ingen eksisterende data.
