@@ -21,22 +21,25 @@ jobs:
           if [ "$(head -c 5 sativex.pdf)" != '%PDF-' ]; then
             echo 'Ikke en PDF'; exit 1
           fi
-          pdfinfo sativex.pdf | head -n 18
-          pdftotext -layout sativex.pdf sativex.txt
+          python3 -m pip install --quiet --disable-pip-version-check pymupdf==1.26.4
           python3 - <<'PY'
           import re
+          import pymupdf
           from pathlib import Path
-          txt = Path('sativex.txt').read_text(encoding='utf-8')
-          print('UTF8_CHARS', len(txt))
+          doc = pymupdf.open('sativex.pdf')
+          print('PDF_PAGES',len(doc))
+          parts=[]
+          for n,page in enumerate(doc):
+            page_txt=page.get_text('text',sort=True)
+            parts.append(page_txt)
+            print('PAGE',n+1,'CHARS',len(page_txt),'HAS_4_8',bool(re.search(r'4\\.8\\s*Bivirkninger',page_txt,re.I)))
+          txt='\\n'.join(parts)
           print('DOCUMENT_START')
-          print(txt[:1400])
-          matches=list(re.finditer(r'(?m)^\s*4\.8\s*\n?\s*Bivirkninger\s*$',txt,re.IGNORECASE))
-          if not matches:
-            matches=list(re.finditer(r'4\.8\s+Bivirkninger',txt,re.IGNORECASE))
-          if not matches:
-            raise SystemExit('Finner ikke 4.8 Bivirkninger')
+          print(txt[:1600])
+          matches=list(re.finditer(r'4\\.8\\s*Bivirkninger',txt,re.IGNORECASE))
+          if not matches: raise SystemExit('Finner ikke 4.8 Bivirkninger')
           start=matches[-1].start()
-          end=re.search(r'(?m)^\s*4\.9\s*\n?\s*Overdosering',txt[start:],re.IGNORECASE)
+          end=re.search(r'4\\.9\\s*Overdosering',txt[start:],re.IGNORECASE)
           excerpt=txt[start:start+end.start()] if end else txt[start:start+24000]
           print('BIVIRKNINGER_4_8_START')
           print(excerpt)
