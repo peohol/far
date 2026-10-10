@@ -49,7 +49,7 @@ export default function thc(db: () => PGlite): void {
     expect(pk).not.toContain('ng/mL')
     expect(await panel('farmakogenetikk')).toHaveLength(2)
     expect(await panel('interaksjoner')).toHaveLength(1)
-    expect(await panel('tdm')).toHaveLength(2)
+    expect(await panel('tdm')).toHaveLength(3)
   })
 
   it('har faste toksisitets-, graviditets- og avhengighetskort uten å fylle dokumentasjonshull', async () => {
@@ -138,6 +138,18 @@ export default function thc(db: () => PGlite): void {
     for (const p of forventet) {
       expect(alle.some((e) => e.panel === p), p).toBe(true)
     }
+  })
+
+  it('har spesifikk analyseindikasjon for THC-serum og THC-syre i urin etter OUS metodebok', async () => {
+    const tdm = await panel('tdm')
+    const veiledning = tdm.find((e) => e.data.tittel === 'Når THC-analyse er klinisk relevant')!
+    expect(veiledning).toBeDefined()
+    const innhold = tekst(veiledning.data)
+    expect(innhold).toContain('OUS metodebok')
+    expect(innhold).toContain('akutt ruspåvirkning')
+    expect(innhold).toContain('urinundersøkelse av THC-syre')
+    expect(innhold).toContain('siste inntak')
+    expect(new Set(inlineReferanser(veiledning.data)).size).toBe(1)
   })
 
   it('legger inn kildebelagt, formuleringstilordnet halveringstid uten falske THC-grenser', async () => {
