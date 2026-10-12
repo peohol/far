@@ -4,8 +4,9 @@
  * migrasjonene.
  *
  * Databasen bygges slik prosjektet ble det: regelsettet importeres med
- * tekstene i seg, tallene rettes, og tekstene flyttes så ut som egne
- * kommentarer. Det som prøves, er altså resultatet av de samme migrasjonene
+ * tekstene i seg, tallene rettes, tekstene flyttes så ut som egne
+ * kommentarer, og til slutt byttes de ut med de nye kommentarene og de felles
+ * setningene (12.10.2026). Det som prøves, er altså resultatet av de samme migrasjonene
  * som ble kjørt mot prosjektet, med administratoren de er skrevet for.
  */
 import type { PGlite } from '@electric-sql/pglite'
@@ -13,12 +14,15 @@ import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import importert from '../domain/__tests__/fasit/thc-regelsett-import.json'
 import importerteTekster from '../domain/__tests__/fasit/thc-tekster-import.json'
+import gjeldende from '../domain/__tests__/fasit/thc-regelsett.json'
+import gjeldendeTekster from '../domain/__tests__/fasit/thc-tekster.json'
 import type { Kommentarinnhold } from '../domain/kommentarobjekt'
 import { THC_KODE } from '../domain/thc'
 import { sammenlign, type Kurve } from '../domain/thcKurver'
 import { lagThcModell } from '../domain/thcMotor'
 import { validerThcRegelsett, visIrcak, type ThcRegelsett } from '../domain/thcRegelsett'
 import {
+  THC_KOMMENTARNOKLER,
   THC_TEKSTBOLKER,
   THC_TEKSTNOKLER,
   thcTeksterFra,
@@ -42,8 +46,12 @@ import {
   type Faginnholdskall,
 } from './hjelp/testdatabase'
 
-const REGLER = importert as ThcRegelsett
-const TEKSTER = importerteTekster as ThcTekster
+/** Reglene og tekstene slik den opprinnelige modulen hadde dem, som importen la inn. */
+const IMPORTERTE_REGLER = importert as Omit<ThcRegelsett, 'kort_tid_dager' | 'med_sporsmalsetning'>
+const IMPORTERTE_TEKSTER = importerteTekster as Record<string, string>
+/** Reglene og tekstene slik de står etter migrasjonene. */
+const REGLER = gjeldende as ThcRegelsett
+const TEKSTER = gjeldendeTekster as ThcTekster
 
 /** Den første migrasjonen som legger inn data: importen av regelsettet. */
 const IMPORT = migrasjonsfiler().find((f) => f.endsWith('_thc_regelsett_import.sql'))!
@@ -134,14 +142,14 @@ describe('regelsettet etter migrasjonene', () => {
     expect(regler).toStrictEqual(REGLER)
     expect(Object.keys(tekstbolker).sort()).toEqual([...THC_TEKSTNOKLER].sort())
     expect(new Set(Object.values(tekstbolker)).size).toBe(THC_TEKSTNOKLER.length)
-    expect([revisjon, publisert_revisjon]).toEqual([3, 3])
+    expect([revisjon, publisert_revisjon]).toEqual([4, 4])
     // Tallene er de samme flyttallene, ikke bare like når de skrives ut.
     expect(regler.kurver.gul.a1).toBe(2 * 75.10642536264817)
     expect(regler.konverteringsfaktor).toBe(344.451 / 1000)
     await k.forventSamsvar(id)
   })
 
-  it('har tekstene fra koden som publiserte kommentarer, én per bolk', async () => {
+  it('har tekstene fra koden som publiserte kommentarer, én per tekst', async () => {
     expect(await tekstene(BOLKER)).toStrictEqual(TEKSTER)
     const kommentarer = await kommentarene(Object.values(BOLKER))
     for (const nokkel of THC_TEKSTNOKLER) {
@@ -174,22 +182,35 @@ describe('regelsettet etter migrasjonene', () => {
     expect((await lesRegeldata(leser, 'AMTNORSUM', 'publisert')).thcregelsett).toBeNull()
   })
 
-  it('har historikken urørt: importen, rettingen av tallene og flyttingen av tekstene', async () => {
-    const [importen, rettingen, flyttingen] = await k.revisjoner(id)
-    expect([importen?.handling, rettingen?.handling, flyttingen?.handling]).toEqual(['opprettet', 'endret', 'endret'])
-    for (const r of [importen, rettingen, flyttingen]) expect(r?.utfort_av).toBe(peder)
+  it('har historikken urørt: importen, rettingen av tallene, flyttingen av tekstene og de nye kommentarene', async () => {
+    const [importen, rettingen, flyttingen, nye] = await k.revisjoner(id)
+    expect([importen, rettingen, flyttingen, nye].map((r) => r?.handling)).toEqual(['opprettet', 'endret', 'endret', 'endret'])
+    for (const r of [importen, rettingen, flyttingen, nye]) expect(r?.utfort_av).toBe(peder)
     // Importen fikk 15 sifre; rettingen alle. Begge har tekstene i seg.
     expect((importen!.innhold as { kurver: ThcRegelsett['kurver'] }).kurver.gul.a1).not.toBe(REGLER.kurver.gul.a1)
     const { tekster, ...reglene } = rettingen!.innhold as unknown as ThcRegelsett & { tekster: ThcTekster }
-    expect(reglene).toStrictEqual(REGLER)
-    expect(tekster).toStrictEqual(TEKSTER)
-    expect(flyttingen!.innhold).toStrictEqual(REGELSETT)
+    expect(reglene).toStrictEqual(IMPORTERTE_REGLER)
+    expect(tekster).toStrictEqual(IMPORTERTE_TEKSTER)
+    // Flyttingen pekte på de ti gamle tekstbolkene, med reglene uendret.
+    const { tekstbolker: gamle, ...flyttet } = flyttingen!.innhold as unknown as ThcRegelsettinnhold
+    expect(flyttet).toStrictEqual(IMPORTERTE_REGLER)
+    expect(Object.keys(gamle).sort()).toEqual(Object.keys(IMPORTERTE_TEKSTER).sort())
+    // De nye kommentarene: reglene er de samme, med kort tid og spørsmålsetningen.
+    expect(nye!.innhold).toStrictEqual(REGELSETT)
+    const { kort_tid_dager: _k, med_sporsmalsetning: _s, ...uendret } = REGLER
+    expect(uendret).toStrictEqual(IMPORTERTE_REGLER)
+  })
+
+  it('har de nye tekstene i migrasjonen lik eierens ordlyd', () => {
+    const fil = migrasjonsfiler().find((f) => f.endsWith('_thc_nye_kommentarer.sql'))!
+    const json = /\$json\$(.*)\$json\$/s.exec(readFileSync(`supabase/migrations/${fil}`, 'utf8'))![1]!
+    expect(JSON.parse(json)).toStrictEqual(TEKSTER)
   })
 
   it('ble importert fra de samme reglene og tekstene som fasiten', () => {
     const fil = readFileSync(`supabase/migrations/${IMPORT}`, 'utf8')
     const json = /\$json\$(.*)\$json\$/s.exec(fil)![1]!
-    expect(JSON.parse(json)).toStrictEqual({ ...REGLER, tekster: TEKSTER })
+    expect(JSON.parse(json)).toStrictEqual({ ...IMPORTERTE_REGLER, tekster: IMPORTERTE_TEKSTER })
   })
 
   it('gjør ingenting i en database uten administratoren de er skrevet for', async () => {
@@ -250,6 +271,18 @@ describe('lagring og publisering', () => {
     await k.forventSamsvar(id)
   })
 
+  it('gjenoppretter en revisjon fra før de nye kommentarene, med kommentarene regelsettet har nå', async () => {
+    const { revisjon } = await regelsettet('utkast')
+    await k.lagre(id, revisjon, { ...REGELSETT, varsel_dager_mellom: 60, kort_tid_dager: 2 })
+    await k.gjenopprett(id, revisjon + 1, 3)
+    const { innhold } = await regelsettet('utkast')
+    // Reglene fra revisjon 3, og kommentarene, kort tid og spørsmålsetningen
+    // slik regelsettet har dem nå.
+    expect(innhold).toStrictEqual({ ...REGELSETT, kort_tid_dager: 2 })
+    await k.lagre(id, revisjon + 2, REGELSETT)
+    await k.forventSamsvar(id)
+  })
+
   it('publiserer ikke et regelsett som peker på en kommentar som ikke er publisert', async () => {
     const upublisert = await nyKommentar('Oppfølging anbefales.', [], false)
     const { revisjon } = await regelsettet('utkast')
@@ -265,17 +298,17 @@ describe('lagring og publisering', () => {
     await k.publiser(id, revisjon + 2)
   })
 
-  it('lar en tekst rettes og publiseres uten å røre reglene, men ikke miste en plassholder bolken trenger', async () => {
-    const apning = BOLKER.apning
+  it('lar en tekst rettes og publiseres uten å røre reglene, men ikke miste en plassholder den trenger', async () => {
+    const apning = BOLKER.introsetning
     const regler = await regelsettet('publisert')
     const rettet = 'THC-syre er påvist i {nivå} konsentrasjon.'
-    await k.lagre(apning, 1, { navn: 'THC-syre: Åpning', tekst: rettet, plassholdere: ['{nivå}'] })
+    await k.lagre(apning, 1, { navn: 'THC-syre: Introsetning', tekst: rettet, plassholdere: ['{nivå}'] })
     await k.publiser(apning, 2)
-    expect((await tekstene(BOLKER)).apning).toBe(rettet)
+    expect((await tekstene(BOLKER)).introsetning).toBe(rettet)
     expect(await regelsettet('publisert')).toStrictEqual(regler)
 
     const uten = await feilFra(() =>
-      k.lagre(apning, 2, { navn: 'THC-syre: Åpning', tekst: 'THC-syre er påvist.', plassholdere: [] }),
+      k.lagre(apning, 2, { navn: 'THC-syre: Introsetning', tekst: 'THC-syre er påvist.', plassholdere: [] }),
     )
     expect(uten?.message).toBe('Plassholderne i en kommentar kan ikke endres. Lag en ny kommentar i stedet.')
 
@@ -352,11 +385,20 @@ describe('valideringen av reglene', () => {
     ['like navn', med({ konsentrasjonsnivaer: REGLER.konsentrasjonsnivaer.map((n) => ({ ...n, navn: 'lav' })) })],
     ['bruksmønster i feil rekkefølge', med({ bruksmonstre: { ...REGLER.bruksmonstre, ikke_kronisk: { vanskelig_over: 'gul', nytt_inntak_over: 'gul' } } })],
     ['varsel 0', med({ varsel_dager_mellom: 0 })],
+    ['kort tid 0', med({ kort_tid_dager: 0 })],
+    ['kort tid 2,5', med({ kort_tid_dager: 2.5 })],
+    ['spørsmålsetning for en ukjent kommentar', med({ med_sporsmalsetning: ['apning' as never] })],
+    ['spørsmålsetning to ganger', med({ med_sporsmalsetning: ['vanskelig', 'vanskelig'] })],
+    ['spørsmålsetning i feil rekkefølge', med({ med_sporsmalsetning: ['kort_tid', 'vanskelig'] })],
   ]
 
   it.each(ugyldige)('avviser %s, både i appen og i databasen', async (_, regler) => {
-    expect(validerThcRegelsett(regler).length).toBeGreaterThan(0)
-    expect(await avvisning({ ...regler, tekstbolker: BOLKER })).not.toBe('')
+    const iAppen = validerThcRegelsett(regler)
+    expect(iAppen.length).toBeGreaterThan(0)
+    const iDatabasen = await avvisning({ ...regler, tekstbolker: BOLKER })
+    expect(iDatabasen).not.toBe('')
+    // Kort tid og spørsmålsetningen er nye, og meldingene skal være de samme.
+    if (/kort tid|spørsmålsetning/i.test(_)) expect(iAppen).toContain(iDatabasen)
   })
 
   it.each<[string, unknown]>([
@@ -374,7 +416,7 @@ describe('valideringen av reglene', () => {
       ...REGELSETT,
       sikkerhetsmarginer: [...REGLER.sikkerhetsmarginer.slice(0, 2), { margin: 0.95, z: -1.6448536269514715 }, REGLER.sikkerhetsmarginer[2]!],
       konsentrasjonsnivaer: [...REGLER.konsentrasjonsnivaer, { navn: 'svært høy', nedre: 200, nylig_inntak: true }],
-      tekstbolker: { ...BOLKER, nylig_inntak: annen },
+      tekstbolker: { ...BOLKER, introsetning: annen },
     }
     const { tekstbolker: _, ...regler } = nytt
     expect(validerThcRegelsett(regler)).toEqual([])
@@ -385,26 +427,29 @@ describe('valideringen av reglene', () => {
   })
 })
 
-describe('valideringen av tekstbolkene', () => {
-  it('krever en kommentar for hver bolk', async () => {
+describe('valideringen av tekstene', () => {
+  it('krever en kommentar for hver tekst', async () => {
     const side = await k.opprett('infoside', { navn: 'Ikke en kommentar' })
     for (const ugyldig of [side.id, '00000000-0000-4000-8000-000000000000']) {
       expect(await avvisning({ ...REGELSETT, tekstbolker: { ...BOLKER, vanskelig: ugyldig } })).toBe(
-        'Tekstbolken «Vanskelig å avgjøre» må peke på en kommentar.',
+        'Teksten «Kan ikke fastslås (øvrige nivåer)» må peke på en kommentar.',
       )
     }
     const { uten_forrige: _, ...uten } = BOLKER
     expect(await avvisning({ ...REGELSETT, tekstbolker: uten })).toBe('Mangler felt: uten_forrige.')
-    expect(await avvisning({ ...REGELSETT, tekstbolker: { ...BOLKER, ukjent: BOLKER.apning } })).toBe('Ukjente felt: ukjent.')
+    expect(await avvisning({ ...REGELSETT, tekstbolker: { ...BOLKER, ukjent: BOLKER.introsetning } })).toBe('Ukjente felt: ukjent.')
   })
 
   // Hver bolk godtar bare kommentarer med plassholderne den krever og kan
   // bruke. Databasen gir en av meldingene appen gir.
   it.each<[string, (typeof THC_TEKSTNOKLER)[number], string, string[]]>([
-    ['nivået mangler i åpningen', 'apning', 'THC-syre er påvist.', []],
-    ['datoen i åpningen', 'apning', 'Påvist i {nivå} siden {forrige prøvedato}.', ['{nivå}', '{forrige prøvedato}']],
+    ['nivået mangler i introsetningen', 'introsetning', 'THC-syre er påvist.', []],
+    ['datoen i introsetningen', 'introsetning', 'Påvist i {nivå} siden {forrige prøvedato}.', ['{nivå}', '{forrige prøvedato}']],
     ['datoen mangler', 'ikke_nodvendigvis', 'Ikke nødvendigvis.', []],
-    ['en plassholder bolken ikke kjenner', 'nylig_inntak', 'Nylig {inntak}.', ['{inntak}']],
+    ['datoen for den tidligere prøven mangler', 'samlet_vurdering', 'Etter {forrige prøvedato}.', ['{forrige prøvedato}']],
+    ['datoen for den tidligere prøven der den ikke hører hjemme', 'vanskelig', '{forrige prøvedato} {tidligere prøvedato}.', ['{forrige prøvedato}', '{tidligere prøvedato}']],
+    ['en plassholder i spørsmålsetningen', 'sporsmalsetning', 'Spør om {nivå}.', ['{nivå}']],
+    ['en plassholder teksten ikke kjenner', 'uten_forrige_nylig', 'Nylig {inntak}.', ['{inntak}']],
   ])('avviser en kommentar der %s, både i appen og i databasen', async (_, nokkel, tekst, plassholdere) => {
     const iAppen = validerThcTekstbolk(nokkel, plassholdere)
     expect(iAppen.length).toBeGreaterThan(0)
@@ -412,9 +457,12 @@ describe('valideringen av tekstbolkene', () => {
     expect(iAppen).toContain(await avvisning({ ...REGELSETT, tekstbolker: { ...BOLKER, [nokkel]: kommentar } }))
   })
 
-  it('har de samme bolkene, titlene og plassholderne som appen', async () => {
-    const [rad] = await k.fasit<{ nokler: string[] }>(`select intern.thc_tekstnokler() as nokler`)
+  it('har de samme tekstene, titlene og plassholderne som appen', async () => {
+    const [rad] = await k.fasit<{ nokler: string[]; kommentarer: string[] }>(
+      `select intern.thc_tekstnokler() as nokler, intern.thc_kommentarnokler() as kommentarer`,
+    )
     expect(rad!.nokler).toEqual([...THC_TEKSTNOKLER])
+    expect(rad!.kommentarer).toEqual([...THC_KOMMENTARNOKLER])
     for (const nokkel of THC_TEKSTNOKLER) {
       const [b] = await k.fasit<{ tittel: string; krever: string[]; kan: string[] }>(
         `select intern.thc_tekstbolktittel($1) as tittel, intern.thc_tekstbolk_krever($1) as krever,

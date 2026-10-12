@@ -73,12 +73,18 @@ const DATASETT: Record<string, string> = {
  * kommentaren og konklusjonen som den opprinnelige modulen for hver av dem,
  * står i `thcParitet.test.ts`, og fasiten (`thcMotor.test.ts`) gjelder
  * fortsatt uendret.
+ *
+ * Summen for THC-syre ble byttet igjen 12.10.2026, med vilje, da kommentarene
+ * fikk ny ordlyd og de nye situasjonene (samlet vurdering, under cut-off og
+ * kort tid mellom prøvene) kom til. Konklusjonene, nivåene og tallgrunnlaget
+ * er de samme; den nye fasiten ble kontrollert mot den gamle på alt annet enn
+ * kommentarteksten.
  */
 const FORTOLKNINGSUTFALL: Record<string, string> = {
   band: '0beefabadcb7f4dc7e1438c9feb7f9496c40e7a883336031a2f6f59648114779',
   etg: '9aa2aea633064367b24e4a9578c37fb5fde700f7b410c8710187769c62ef434c',
   rus: '33a3739b124621c0deca34f68675b10c5398598ca78f3f6775456e3981621078',
-  thc: '1d2c6c72838470e343b694eaaa0f880153c9eee6a628ff9cea492629b70ace9b',
+  thc: 'b6c0ecd8ce6423262565b8847c16ee8c29dc940ed740beab39428f08f60a2e33',
   kategorier: 'd6b8c44090aa62afd61f57bfa8ff317c6c6e6ade4498485c0a7cff1804786098',
 }
 

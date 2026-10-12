@@ -1,0 +1,15 @@
+{
+  "introsetning": "THC-syre, et omdannelsesprodukt av cannabis, er påvist i {nivå} konsentrasjon.",
+  "sporsmalsetning": "Ved spørsmål kan rekvirenten kontakte vakthavende lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).",
+  "uten_forrige": "Etter et enkeltinntak vil THC-syre kunne påvises i urin i opptil en uke. Ved gjentatte inntak kan påvisningstiden øke, vanligvis opptil en måned etter avsluttet inntak. Oppfølging med flere prøver anbefales.",
+  "uten_forrige_nylig": "Analyseresultatet viser at cannabis har vært inntatt. Slike konsentrasjoner ses gjerne kort tid etter inntak av cannabis. Oppfølging med flere prøver anbefales.",
+  "ikke_nodvendigvis": "Analyseresultatet viser at cannabis har vært inntatt – men ikke nødvendigvis etter prøven tatt {forrige prøvedato}.",
+  "ikke_nodvendigvis_nylig": "Analyseresultatet viser at cannabis har vært inntatt – men ikke nødvendigvis etter prøven tatt {forrige prøvedato}.",
+  "vanskelig": "Analyseresultatet viser at cannabis har vært inntatt – men gir i seg selv ikke grunnlag for å fastslå om inntaket har skjedd etter prøven tatt {forrige prøvedato}.",
+  "vanskelig_nylig": "Analyseresultatet viser at cannabis har vært inntatt – men gir i seg selv ikke grunnlag for å fastslå om inntaket har skjedd etter prøven tatt {forrige prøvedato}.",
+  "nytt_inntak": "Analyseresultatet tilsier at cannabis har vært inntatt etter prøve tatt {forrige prøvedato}.",
+  "nytt_inntak_nylig": "Slike konsentrasjoner ses gjerne ved prøvetaking kort tid etter inntak av cannabis. Analyseresultatet tilsier at cannabis har vært inntatt etter prøve tatt {forrige prøvedato}.",
+  "samlet_vurdering": "Analyseresultatet viser at cannabis har vært inntatt – men gir i seg selv ikke grunnlag for å fastslå om inntaket har skjedd etter prøven tatt {forrige prøvedato}. En samlet vurdering av flere tidligere prøver tilsier likevel at det har skjedd minst ett inntak etter prøven tatt {tidligere prøvedato}.",
+  "under_cutoff_ikke_nodvendigvis": "Analyseresultatet viser at cannabis har vært inntatt – men ikke nødvendigvis etter prøven tatt {forrige prøvedato} selv om den ble rapportert som «ikke påvist». Lave konsentrasjoner av THC-syre kan svinge over og under påvisningsgrensen uten at dette nødvendigvis skyldes nytt inntak.",
+  "kort_tid": "Analyseresultatet viser at cannabis har vært inntatt – men denne prøven og forrige prøve ble tatt med så kort tid imellom at det ikke kan vurderes om inntak har skjedd mellom prøvene."
+}

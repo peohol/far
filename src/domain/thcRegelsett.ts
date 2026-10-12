@@ -14,6 +14,7 @@
  * regelsett uten å ha kontrollert det.
  */
 import { sammenlign, type Kurve, type Rekkefolgebrudd } from './thcKurver'
+import { THC_KOMMENTARNOKLER, type ThcKommentarnokkel } from './thcTekster'
 
 /** Kurvene konklusjonen leses av, fra raskest til tregest utskillelse. */
 export const THC_KURVEROLLER = ['gronn', 'gul', 'rod'] as const
@@ -101,6 +102,18 @@ export interface ThcRegelsett {
   bruksmonstre: { kronisk: ThcBruksmonster; ikke_kronisk: ThcBruksmonster }
   /** Mer enn så mange døgn mellom prøvene gir et varsel. */
   varsel_dager_mellom: number
+  /**
+   * Færre døgn enn dette mellom prøvene gir banneret om kort tid, med valget
+   * om ikke å vurdere prøvene mot hverandre. 3 betyr samme dag, 1 eller 2
+   * døgn.
+   */
+  kort_tid_dager: number
+  /**
+   * Kommentarene som avsluttes med spørsmålsetningen, i fast rekkefølge
+   * ({@link THC_KOMMENTARNOKLER}). Hvilken kommentar som brukes, er motorens
+   * regel; dette er bare hvordan den avsluttes.
+   */
+  med_sporsmalsetning: ThcKommentarnokkel[]
 }
 
 /** Marginen der medianen leses av: ingen korreksjon i det hele tatt. */
@@ -345,7 +358,7 @@ export function validerThcRegelsett(r: ThcRegelsett): string[] {
     if (vanskelig < 0 || nytt < 0) feil.push(`Grensene ved ${bruk} peker på en ukjent kurve.`)
     else if (!(vanskelig < nytt)) {
       feil.push(
-        `Grensene ved ${bruk}: nytt inntak må ligge på en tregere kurve enn «vanskelig å avgjøre».`,
+        `Grensene ved ${bruk}: nytt inntak må ligge på en tregere kurve enn «kan ikke fastslås».`,
       )
     }
   }
@@ -353,12 +366,32 @@ export function validerThcRegelsett(r: ThcRegelsett): string[] {
   if (!(Number.isInteger(r.varsel_dager_mellom) && r.varsel_dager_mellom >= 1)) {
     feil.push('Varselet om tid mellom prøvene må være et helt antall døgn, minst 1.')
   }
+  if (!(Number.isInteger(r.kort_tid_dager) && r.kort_tid_dager >= 1)) {
+    feil.push('Grensen for kort tid mellom prøvene må være et helt antall døgn, minst 1.')
+  }
+  feil.push(...sporsmalsetningfeil(r.med_sporsmalsetning))
 
   // Rekkefølgen kan bare avgjøres for kurver med gyldige tall; ellers er
   // feilen i tallene meldt over.
   const kurvetall = THC_KURVEROLLER.every((rolle) => KURVEFELT.every((felt) => positivt(r.kurver[rolle][felt])))
   if (kurvetall && positivt(r.konverteringsfaktor)) feil.push(...kurvefeil(r))
   return feil
+}
+
+/**
+ * Feilene i listen over kommentarer som avsluttes med spørsmålsetningen: hver
+ * må være en kommentar, bare én gang og i fast rekkefølge, slik redigeringen
+ * og databasen alltid skriver den.
+ */
+function sporsmalsetningfeil(liste: unknown): string[] {
+  if (!Array.isArray(liste)) return ['Det må oppgis hvilke kommentarer som avsluttes med spørsmålsetningen.']
+  const ukjente = liste.filter((k) => !(THC_KOMMENTARNOKLER as readonly unknown[]).includes(k))
+  if (ukjente.length > 0) return [`Spørsmålsetningen er satt for en ukjent kommentar: ${ukjente.join(', ')}.`]
+  const ordnet = THC_KOMMENTARNOKLER.filter((k) => liste.includes(k))
+  if (ordnet.length !== liste.length || ordnet.some((k, i) => liste[i] !== k)) {
+    return ['Spørsmålsetningen må være satt én gang per kommentar, i fast rekkefølge.']
+  }
+  return []
 }
 
 declare const godkjent: unique symbol

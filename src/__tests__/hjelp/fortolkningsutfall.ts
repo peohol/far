@@ -13,8 +13,9 @@
  * med den samme koden.
  *
  * THC-syre fortolkes med regelsettet og tekstene som er publisert i Supabase.
- * Uten database brukes det de ble importert fra (`fasit/thc-*-import.json`),
- * som `thcRegelsettlagring.test.ts` viser at databasen gir tilbake uendret.
+ * Uten database brukes det som er publisert (`fasit/thc-regelsett.json` og
+ * `fasit/thc-tekster.json`), som `thcRegelsettlagring.test.ts` viser at
+ * databasen gir tilbake uendret.
  *
  * Rusmiddelmodulene fortolkes med regelsettene som er publisert i Supabase.
  * Uten database brukes grunnlaget de ble importert fra (`rusgrunnlag.ts`),
@@ -27,7 +28,7 @@ import { ETG_ALTERNATIVER } from '../../domain/etg'
 import { grensepiller } from '../../domain/piller'
 import { RUS_MODULER } from '../../domain/rus'
 import { kjorScenarier, verdifelter } from '../../domain/scenario'
-import { konklusjon, settSammen, velgTekstbolker, THC_KONKLUSJONER } from '../../domain/thcMotor'
+import { byggKommentar, konklusjon, velgKommentar, THC_KONKLUSJONER } from '../../domain/thcMotor'
 import { cutoffvalg, regelsettvalg } from '../../domain/valg'
 import { dagensRegelsett } from './dagensregler'
 import { referanseomradeFor } from './referanseomrader'
@@ -76,15 +77,22 @@ export function fortolkningsutfall() {
   })
 
   // Kommentaren for hvert nivå og hver konklusjon, med og uten at forrige
-  // prøve lå under cut-off — alle kombinasjonene tekstbolkene velges etter.
-  const { regler, tekster } = THC_MODELL
+  // prøve lå under cut-off, med og uten samlet vurdering og kort tid — alle
+  // kombinasjonene kommentaren velges etter.
+  const { regler } = THC_MODELL
   const thc = regler.konsentrasjonsnivaer.flatMap((niva) =>
     THC_KONKLUSJONER.flatMap((utfall) =>
-      [true, false].map((underCutoff) =>
-        settSammen(tekster, velgTekstbolker(niva, utfall, underCutoff), {
-          niva: niva.navn,
-          forrigeDato: '01.02.2026',
-        }),
+      [true, false].flatMap((underCutoff) =>
+        [true, false].flatMap((samlet) =>
+          [true, false].map(
+            (kortTid) =>
+              byggKommentar(THC_MODELL, velgKommentar(niva, utfall, { underCutoff, samlet, kortTid }), {
+                niva: niva.navn,
+                forrigeDato: '01.02.2026',
+                tidligereDato: '15.01.2026',
+              }).kommentar,
+          ),
+        ),
       ),
     ),
   )

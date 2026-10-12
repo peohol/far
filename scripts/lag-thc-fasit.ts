@@ -3,6 +3,11 @@
  *
  * Kjøres bare når den kliniske outputen endres med vilje — fasiten er det som
  * beskytter den. Se `src/domain/__tests__/hjelp/thcFasit.ts`.
+ *
+ * Konklusjonen, manglene, varselet og tallene kommer fra den opprinnelige
+ * modulen. Kommentaren er eierens ordlyd fra 12.10.2026
+ * (`hjelp/thcKommentarfasit.ts`) for det nivået og den konklusjonen den
+ * opprinnelige modulen ga.
  */
 import { writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -28,6 +33,8 @@ import {
   type FasitInndata,
   type FasitUtfall,
 } from '../src/domain/__tests__/hjelp/thcFasit'
+import { fasitniva, forventetKommentar } from '../src/domain/__tests__/hjelp/thcKommentarfasit'
+import { formaterDatoNorsk } from '../src/domain/thcTall'
 
 function kurvetreff(inn: FasitInndata): number[] {
   const forrige = inn.forrigeUnderCutoff ? beregnIrcak(inn.forrigeUcak, inn.forrigeNkre) : lesTall(inn.forrigeVerdi)
@@ -45,16 +52,22 @@ function kurvetreff(inn: FasitInndata): number[] {
 function utfall(inn: FasitInndata): FasitUtfall {
   const r = fortolkThc({ ...inn, sikkerhetsmargin: inn.sikkerhetsmargin as Sikkerhetsmargin })
   if (r.type === 'mangler') return r
+  const konklusjon = inn.ingenTidligere
+    ? 'uten_forrige'
+    : r.kategori >= 4
+      ? 'nytt_inntak'
+      : r.kategori === 3
+        ? 'vanskelig'
+        : 'ikke_nodvendigvis'
   return {
     type: 'kommentar',
-    kommentar: r.kommentar,
-    konklusjon: inn.ingenTidligere
-      ? 'uten_forrige'
-      : r.kategori >= 4
-        ? 'nytt_inntak'
-        : r.kategori === 3
-          ? 'vanskelig'
-          : 'ikke_nodvendigvis',
+    kommentar: forventetKommentar(
+      fasitniva(lesTall(inn.aktuellVerdi)!),
+      konklusjon,
+      !inn.ingenTidligere && inn.forrigeUnderCutoff,
+      formaterDatoNorsk(inn.forrigeDato),
+    ),
+    konklusjon,
     langtMellomProvene: r.merEnn30Dager,
     grunnlag: r.grunnlag,
   }

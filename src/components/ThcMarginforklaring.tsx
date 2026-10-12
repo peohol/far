@@ -1,7 +1,7 @@
 import { erUtenMargin } from '../domain/thcMotor'
 import type { ThcRegelsett } from '../domain/thcRegelsett'
 import { formaterProsent } from '../domain/thcPlot'
-import { THC_TEKSTBOLKER } from '../domain/thcTekster'
+import { THC_SITUASJONSINFO } from '../domain/thcTekster'
 import { formaterIrcak } from '../domain/thcTall'
 import {
   MARGINEKSEMPEL,
@@ -102,7 +102,7 @@ export function ThcMarginforklaring({ regler }: { regler: ThcRegelsett }) {
                 <tr key={margin}>
                   <th scope="row">{marginvalg(margin)}</th>
                   <td>{formaterProsent(endring * 100)}</td>
-                  <td>{THC_TEKSTBOLKER[utfall].tittel}</td>
+                  <td>{THC_SITUASJONSINFO[utfall].tittel}</td>
                 </tr>
               ))}
             </tbody>

@@ -8,8 +8,8 @@ import { Detaljkort } from '../seksjoner/Seksjon'
 
 /**
  * Fortolkningsmodulen i det små: det samme skjemaet og den samme kommentaren,
- * med reglene som vises over, og hvilke tekstbolker kommentaren ble satt
- * sammen av. Det er ingenting å kopiere.
+ * med reglene som vises over, og hvilke tekster kommentaren ble satt sammen
+ * av. Det er ingenting å kopiere.
  */
 export function Thcsimulator({ modell }: { modell: ThcModell }) {
   const { regler } = modell
@@ -37,7 +37,7 @@ export function Thcsimulator({ modell }: { modell: ThcModell }) {
       <div className="simulator__resultat">
         {resultat.type === 'kommentar' && (
           <p className="simulator__scenario" role="status">
-            Tekstbolker: {resultat.bolker.map((nokkel) => THC_TEKSTBOLKER[nokkel].tittel).join(', ')}.
+            Satt sammen av: {resultat.bolker.map((nokkel) => THC_TEKSTBOLKER[nokkel].tittel).join(', ')}.
           </p>
         )}
         <ThcKommentar

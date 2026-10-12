@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.89.0',
+    dato: '2026-10-12',
+    sammendrag: 'Ny ordlyd i THC-syrekommentarene, samlet vurdering og kort tid mellom prøvene',
+    typer: ['Fag', 'Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    endrerFortolkning: true,
+    punkter: [
+      'Alle kommentarene for THC-syre i urin har fått ny ordlyd. De begynner nå med den samme introsetningen, og kommentarene der det er nødvendig, slutter med hvordan rekvirenten kan kontakte vakthavende lege. Når hver kommentar brukes, er ikke endret.',
+      'Ny avkryssing «Samlet vurdering med enda tidligere prøver»: legg inn prøver før forrige prøve. Kan det ikke fastslås om det er nytt inntak etter forrige prøve, men en tidligere prøve viser nytt inntak, sier kommentaren det, med datoen for den prøven.',
+      'Er prøvene tatt samme dag eller med mindre enn tre dager imellom, kommer det en melding med avkryssingen «Kort tid mellom prøvene». Hukes den av, vurderes ikke prøvene mot hverandre, og kommentaren sier at det ikke kan vurderes om inntak har skjedd mellom prøvene.',
+      'Var forrige prøve under cut-off og endringen ikke nødvendigvis betyr nytt inntak, forklarer kommentaren nå at lave konsentrasjoner kan svinge over og under påvisningsgrensen.',
+      'I redigeringen står de to felles setningene øverst, og hver kommentar har sin egen boks med når den brukes, en avkryssing for spørsmålsetningen og hvordan den blir seende ut ferdig satt sammen.',
+    ],
+  },
+  {
     versjon: '1.88.2',
     dato: '2026-10-09',
     sammendrag: 'Enkeltgrenser i laboratorietabellene regnes om til valgt enhet',

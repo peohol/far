@@ -15,6 +15,7 @@ import {
   THC_TEKSTNOKLER,
   thcTeksterFra,
   validerThcTekst,
+  type ThcKommentarnokkel,
   type ThcRegelsettinnhold,
   type ThcTekster,
   type ThcTekstnokkel,
@@ -165,7 +166,7 @@ export function thcUtkastfeil(utgave: ThcRegelsettutgave, regler: ThcRegelsett, 
     if (!kommentar) return []
     const tidligere = utgave.kommentarer.find((k) => k.id === kommentar.id)!.innhold.plassholdere
     return validerKommentar(kommentar.innhold, tidligere).map(
-      (melding) => `Tekstbolken «${THC_TEKSTBOLKER[nokkel].tittel}»: ${melding}`,
+      (melding) => `Teksten «${THC_TEKSTBOLKER[nokkel].tittel}»: ${melding}`,
     )
   })
   return [...validerThcRegelsett(regler), ...tekstfeil]
@@ -226,12 +227,18 @@ export function thcfelter(regler: ThcRegelsett, tekst: (nokkel: ThcTekstnokkel) 
   )
   const monster = (nokkel: string, gruppe: string, m: ThcBruksmonster) =>
     felter.push(
-      { nokkel: `${nokkel}-vanskelig`, gruppe, navn: 'Vanskelig å avgjøre over', verdi: kurve(m.vanskelig_over) },
+      { nokkel: `${nokkel}-vanskelig`, gruppe, navn: 'Kan ikke fastslås over', verdi: kurve(m.vanskelig_over) },
       { nokkel: `${nokkel}-nytt`, gruppe, navn: 'Nytt inntak over', verdi: kurve(m.nytt_inntak_over) },
     )
   monster('kronisk', 'Kronisk bruk', regler.bruksmonstre.kronisk)
   monster('enkeltinntak', 'Enkeltinntak', regler.bruksmonstre.ikke_kronisk)
   felter.push({ nokkel: 'varsel', navn: 'Varsel ved mer enn (dager mellom prøvene)', verdi: tallSomFelt(regler.varsel_dager_mellom) })
+  // Revisjoner fra før kort tid og spørsmålsetningen kom, har dem ikke.
+  felter.push({
+    nokkel: 'kort-tid',
+    navn: 'Kort tid ved færre enn (dager mellom prøvene)',
+    verdi: tallSomFelt(regler.kort_tid_dager ?? NaN),
+  })
   for (const rolle of THC_KURVEROLLER) {
     const k = regler.kurver[rolle]
     const gruppe = kurve(rolle)
@@ -247,7 +254,17 @@ export function thcfelter(regler: ThcRegelsett, tekst: (nokkel: ThcTekstnokkel) 
   }
   felter.push({ nokkel: 'konverteringsfaktor', navn: 'Konverteringsfaktor', verdi: tallSomFelt(regler.konverteringsfaktor) })
   for (const nokkel of THC_TEKSTNOKLER) {
-    felter.push({ nokkel: `tekst-${nokkel}`, gruppe: 'Tekstbolkene', navn: THC_TEKSTBOLKER[nokkel].tittel, verdi: tekst(nokkel), tekst: true })
+    const { tittel, situasjon } = THC_TEKSTBOLKER[nokkel]
+    const gruppe = situasjon === null ? 'Felles setninger' : 'Kommentarene'
+    felter.push({ nokkel: `tekst-${nokkel}`, gruppe, navn: tittel, verdi: tekst(nokkel), tekst: true })
+    if (situasjon !== null) {
+      felter.push({
+        nokkel: `sporsmal-${nokkel}`,
+        gruppe,
+        navn: `${tittel}: avsluttes med spørsmålsetningen`,
+        verdi: (regler.med_sporsmalsetning ?? []).includes(nokkel as ThcKommentarnokkel) ? 'Ja' : 'Nei',
+      })
+    }
   }
   return felter
 }
@@ -261,7 +278,7 @@ export function thcUtkastfelter({ regler, tekster }: ThcUtkast): Felt[] {
 export function thcUtgavefelter(utgave: ThcRegelsettutgave): Felt[] {
   const { tekstbolker, ...regler } = utgave.regelsett.innhold
   const tekster = new Map(utgave.kommentarer.map((k) => [k.id, k.innhold.tekst]))
-  return thcfelter(regler, (nokkel) => tekster.get(tekstbolker[nokkel]) ?? '')
+  return thcfelter(regler, (nokkel) => tekster.get(tekstbolker?.[nokkel] ?? '') ?? '')
 }
 
 /** Sant når to JSON-verdier har samme innhold, uansett rekkefølgen på nøklene. */

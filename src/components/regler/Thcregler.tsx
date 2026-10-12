@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { Bevaringsomrade, useBevart } from '../../oppdatering/Bevaring'
-import { THC_TEKSTBOLKER, THC_TEKSTNOKLER, type ThcRegelsettinnhold } from '../../domain/thcTekster'
+import { THC_KOMMENTARNOKLER, type ThcRegelsettinnhold } from '../../domain/thcTekster'
 import type { ThcModell } from '../../domain/thcMotor'
 import { bruksmonsterbeskrivelse, marginmerke, nivaomrader, somProsent } from '../../domain/thcVisning'
 import { revisjonsnokkel } from '../../faginnhold/lesing'
@@ -20,13 +20,14 @@ import { seksjonsikon } from '../stoffside/panelvisning'
 import { Detaljkort, Seksjon } from '../seksjoner/Seksjon'
 import { FORTOLKNING } from './Fortolkningsregler'
 import { kommentarnavnoppslag, Regelhistorikk, upubliserteFelt } from './Regelhistorikk'
+import { Thckommentarer } from './Thckommentarer'
 import { Thcredigering, type ThcredigeringProps } from './Thcredigering'
 import { Thcsimulator } from './Thcsimulator'
 
 /**
  * Fortolkningsreglene for THC-syre i urin (IRCAK) på redigeringssiden for fortolkningen
  * (`docs/thc-syre.md`): nivåene, marginene, måleusikkerheten og kurvene
- * konklusjonen avgjøres av, tekstbolkene kommentaren settes sammen av, og en
+ * konklusjonen avgjøres av, kommentarene og de felles setningene, og en
  * simulator som fortolker med akkurat disse reglene.
  *
  * I lesemodus er det de publiserte reglene, i redigeringsmodus utkastet. Et
@@ -72,7 +73,7 @@ export function Thcregler({
   const redigeringsmodus = redigeres && kanRedigeres
   const kommentarnavn = useMemo(() => kommentarnavnoppslag(utgave.kommentarer), [utgave])
   const historikkfelter = useCallback(
-    (innhold: ThcRegelsettinnhold) => thcfelter(innhold, (nokkel) => kommentarnavn(innhold.tekstbolker[nokkel])),
+    (innhold: ThcRegelsettinnhold) => thcfelter(innhold, (nokkel) => (innhold.tekstbolker?.[nokkel] ? kommentarnavn(innhold.tekstbolker[nokkel]) : '')),
     [kommentarnavn],
   )
 
@@ -183,6 +184,7 @@ function Reglene({ modell }: { modell: ThcModell }) {
         <Grense navn="Kreatinin" verdi={`${somProsent(maleusikkerhet.cv_kreatinin)} %`} />
         <Grense navn="Under cut-off" verdi={`${somProsent(maleusikkerhet.faktor_under_cutoff - 1)} % høyere`} />
         <Grense navn="Varsel ved mer enn" verdi={antall(regler.varsel_dager_mellom, 'dag', 'dager')} />
+        <Grense navn="Kort tid ved færre enn" verdi={antall(regler.kort_tid_dager, 'dag', 'dager')} />
       </dl>
       <dl className="regler__monstre">
         <div>
@@ -195,20 +197,12 @@ function Reglene({ modell }: { modell: ThcModell }) {
         </div>
       </dl>
 
-      <Detaljkort id="tekster" tittel="Tekstbolkene" oppsummering={antall(THC_TEKSTNOKLER.length, 'bolk', 'bolker')}>
-        <ol className="regeltekster">
-          {THC_TEKSTNOKLER.map((nokkel) => (
-            <li key={nokkel} className="regeltekst">
-              <p className="regeltekst__nummer">{THC_TEKSTBOLKER[nokkel].tittel}</p>
-              <p className="regler__ingress">
-                <Uthev tekst={THC_TEKSTBOLKER[nokkel].brukes} />
-              </p>
-              <p className="kommentartekst">
-                <Uthev tekst={tekster[nokkel]} />
-              </p>
-            </li>
-          ))}
-        </ol>
+      <Detaljkort
+        id="tekster"
+        tittel="Kommentarene"
+        oppsummering={antall(THC_KOMMENTARNOKLER.length, 'kommentar', 'kommentarer')}
+      >
+        <Thckommentarer regler={regler} tekster={tekster} />
       </Detaljkort>
 
       <Thcsimulator modell={modell} />

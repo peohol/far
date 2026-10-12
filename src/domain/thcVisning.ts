@@ -1,5 +1,6 @@
 import { sammenlignMedForrige, type ThcForventet, type ThcKonklusjon } from './thcMotor'
-import { INGEN_SIKKERHETSMARGIN, KURVEFARGE, type ThcRegelsett } from './thcRegelsett'
+import { INGEN_SIKKERHETSMARGIN, KURVEFARGE, type ThcKonsentrasjonsniva, type ThcRegelsett } from './thcRegelsett'
+import { kommentardeler, settSammen, THC_TEKSTBOLKER, type ThcKommentarnokkel, type ThcTekster } from './thcTekster'
 import { formaterIrcak, ordEndring } from './thcTall'
 
 /**
@@ -107,12 +108,43 @@ export function forventetNedgang(
 
 /**
  * Kurvene konklusjonen mot forrige prøve avgjøres av for et bruksmønster:
- * «Over den gule kurven: vanskelig å avgjøre. Over den røde: nytt inntak.»
+ * «Over den gule kurven: kan ikke fastslås. Over den røde: nytt inntak.»
  */
 export function bruksmonsterbeskrivelse(r: ThcRegelsett, kronisk: boolean): string {
   const monster = kronisk ? r.bruksmonstre.kronisk : r.bruksmonstre.ikke_kronisk
   return (
-    `Over den ${KURVEFARGE[monster.vanskelig_over]} kurven: vanskelig å avgjøre. ` +
+    `Over den ${KURVEFARGE[monster.vanskelig_over]} kurven: kan ikke fastslås. ` +
     `Over den ${KURVEFARGE[monster.nytt_inntak_over]}: nytt inntak.`
   )
+}
+
+/* --- Kommentarene ----------------------------------------------------------- */
+
+/** Nivåene en kommentar gjelder for: alle, eller de som tyder (ikke) på nylig inntak. */
+export function nivaerForKommentar(r: ThcRegelsett, nokkel: ThcKommentarnokkel): ThcKonsentrasjonsniva[] {
+  const { nivaer } = THC_TEKSTBOLKER[nokkel]
+  return r.konsentrasjonsnivaer.filter((n) => nivaer === 'alle' || (nivaer === 'nylig') === n.nylig_inntak)
+}
+
+/** «Lav og middels høy», «Lav, middels høy og høy», eller «Ingen nivåer nå». */
+export function nivaliste(navn: readonly string[]): string {
+  if (navn.length === 0) return 'Ingen nivåer nå'
+  const tekst = navn.length === 1 ? navn[0]! : `${navn.slice(0, -1).join(', ')} og ${navn.at(-1)}`
+  return tekst.charAt(0).toUpperCase() + tekst.slice(1)
+}
+
+/** Datoene eksemplene på kommentarene viser. Oppdiktede. */
+export const EKSEMPELDATOER = { forrigeDato: '04.07.2026', tidligereDato: '01.06.2026' } as const
+
+/**
+ * Kommentaren slik den blir, med det første nivået den gjelder for og
+ * eksempeldatoene. Brukes også for et utkast som ikke er gyldig ennå, så
+ * redigeringen kan vise hva som skrives.
+ */
+export function eksempelkommentar(r: ThcRegelsett, tekster: ThcTekster, nokkel: ThcKommentarnokkel): string {
+  const niva = nivaerForKommentar(r, nokkel)[0] ?? r.konsentrasjonsnivaer[0]
+  return settSammen(tekster, kommentardeler(r.med_sporsmalsetning ?? [], nokkel), {
+    niva: niva?.navn ?? '{nivå}',
+    ...EKSEMPELDATOER,
+  })
 }

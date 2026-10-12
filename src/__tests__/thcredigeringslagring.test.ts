@@ -47,7 +47,7 @@ describe('redigeringen av THC-syrereglene', () => {
     const start = thcUtkastFra(utkast)!
     const publisertFor = await bruker.lesThcRegelsett('publisert')
 
-    const tekster = { ...start.tekster, pavisningstid: `${start.tekster.pavisningstid} Syntetisk tillegg.` }
+    const tekster = { ...start.tekster, uten_forrige: `${start.tekster.uten_forrige} Syntetisk tillegg.` }
     const regler = {
       ...start.regler,
       sikkerhetsmarginer: start.regler.sikkerhetsmarginer.map((m) =>
@@ -90,7 +90,7 @@ describe('redigeringen av THC-syrereglene', () => {
     const apnet = (await admin.lesThcRegelsett('utkast'))!
     const start = thcUtkastFra(apnet)!
     // Noen andre endrer reglene og en tekst mens brukeren endrer reglene.
-    const deres = { ...start.tekster, pavisningstid: `${start.tekster.pavisningstid} Deres tillegg.` }
+    const deres = { ...start.tekster, uten_forrige: `${start.tekster.uten_forrige} Deres tillegg.` }
     await lagre(apnet, { ...start.regler, varsel_dager_mellom: 28 }, deres)
     const mine = { ...start.regler, varsel_dager_mellom: 35 }
     await expect(lagre(apnet, mine, start.tekster)).rejects.toBeInstanceOf(Samtidighetskonflikt)
@@ -104,7 +104,7 @@ describe('redigeringen av THC-syrereglene', () => {
     // Tekstene som var like deres, fikk ingen ny revisjon.
     const revisjoner = (u: typeof etter) => Object.fromEntries(u.kommentarer.map((k) => [k.id, k.revisjon]))
     const endret = Object.entries(revisjoner(etter)).filter(([id, rev]) => revisjoner(nyeste)[id] !== rev)
-    expect(endret.map(([id]) => id)).toEqual([nyeste.regelsett.innhold.tekstbolker.pavisningstid])
+    expect(endret.map(([id]) => id)).toEqual([nyeste.regelsett.innhold.tekstbolker.uten_forrige])
   })
 })
 
@@ -116,7 +116,7 @@ describe('lagringen i én transaksjon', () => {
     await lagre(apnet, { ...start.regler, varsel_dager_mellom: 26 }, start.tekster)
     const deres = (await admin.lesThcRegelsett('utkast'))!
 
-    const tekster = { ...start.tekster, apning: `${start.tekster.apning} Syntetisk.` }
+    const tekster = { ...start.tekster, introsetning: `${start.tekster.introsetning} Syntetisk.` }
     await expect(lagre(apnet, { ...start.regler, varsel_dager_mellom: 27 }, tekster)).rejects.toBeInstanceOf(
       Samtidighetskonflikt,
     )
@@ -129,7 +129,7 @@ describe('lagringen i én transaksjon', () => {
     await lagre(apnet, { ...start.regler, varsel_dager_mellom: 29 }, start.tekster)
     const deres = (await admin.lesThcRegelsett('utkast'))!
 
-    const tekster = { ...start.tekster, apning: `${start.tekster.apning} Syntetisk.` }
+    const tekster = { ...start.tekster, introsetning: `${start.tekster.introsetning} Syntetisk.` }
     await expect(lagre(apnet, start.regler, tekster)).rejects.toBeInstanceOf(Samtidighetskonflikt)
     expect(await admin.lesThcRegelsett('utkast')).toStrictEqual(deres)
   })

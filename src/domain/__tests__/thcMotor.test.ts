@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import importert from './fasit/thc-regelsett-import.json'
-import importerteTekster from './fasit/thc-tekster-import.json'
+import gjeldende from './fasit/thc-regelsett.json'
+import gjeldendeTekster from './fasit/thc-tekster.json'
 import fasitfil from './fasit/thc-fasit.json'
 import {
   dekodInndata,
@@ -16,11 +16,12 @@ import {
   konsentrasjonsniva,
   korreksjonsfaktor,
   korrigertEndring,
+  kortTidMellomProvene,
   kurverOver,
   lagThcModell,
-  settSammen,
   tomThcInndata,
-  velgTekstbolker,
+  tomThcProve,
+  velgKommentar,
   type ThcInndata,
   type ThcKonklusjon,
   type ThcModell,
@@ -29,24 +30,35 @@ import {
 import { byggGraf, figurkurver } from '../thcPlot'
 import { godkjennThcRegelsett, kurverI, normalkvantil, validerThcRegelsett, type ThcRegelsett } from '../thcRegelsett'
 import {
+  kommentardeler,
+  settSammen,
+  THC_KOMMENTARNOKLER,
+  THC_SITUASJONER,
   THC_TEKSTBOLKER,
   THC_TEKSTNOKLER,
   validerThcTekster,
   type ThcTekster,
   type ThcTekstnokkel,
 } from '../thcTekster'
+import {
+  forventetKommentar,
+  forventetKortTidKommentar,
+  forventetSamletKommentar,
+} from './hjelp/thcKommentarfasit'
 
 /**
  * Den nye THC-syremotoren, som leser fagkunnskapen fra et regelsett og
- * tekstbolker i stedet for fra konstanter i koden.
+ * tekster i stedet for fra konstanter i koden.
  *
- * `REGELSETT` og `TEKSTER` er reglene og tekstene slik de sto i den
- * opprinnelige modulen. Fasiten (`fasit/thc-fasit.json`) er utfallet av den
- * opprinnelige modulen for over 4000 inndata, og motoren skal gi nøyaktig det
- * samme.
+ * `REGELSETT` er reglene slik de sto i den opprinnelige modulen, med
+ * grensen for kort tid og hvilke kommentarer som avsluttes med
+ * spørsmålsetningen; `TEKSTER` er eierens ordlyd fra 12.10.2026. Fasiten
+ * (`fasit/thc-fasit.json`) er konklusjonen, manglene og tallene den
+ * opprinnelige modulen gir for over 4000 inndata, med kommentaren i den nye
+ * ordlyden, og motoren skal gi nøyaktig det samme.
  */
-const REGELSETT = importert as ThcRegelsett
-const TEKSTER = importerteTekster as ThcTekster
+const REGELSETT = gjeldende as ThcRegelsett
+const TEKSTER = gjeldendeTekster as ThcTekster
 const FASIT = fasitfil as Fasit
 
 /** Reglene og tekstene satt sammen; testen feiler om de ikke godtas. */
@@ -121,7 +133,7 @@ describe('regelsettet som ble importert', () => {
     expect(niva(1e6)).toBe('høy')
   })
 
-  it('gjenskaper regnearkets eksempel (Fortolkning!A6), med tankestrek i «5–7»', () => {
+  it('gjenskaper regnearkets eksempel (Fortolkning!A6), i den nye ordlyden', () => {
     const r = kommentar(
       fortolk({
         ...tomThcInndata(REGELSETT),
@@ -134,11 +146,9 @@ describe('regelsettet som ble importert', () => {
     expect(r.konklusjon).toBe('vanskelig')
     expect(r.kommentar).toBe(
       'THC-syre, et omdannelsesprodukt av cannabis, er påvist i lav konsentrasjon. ' +
-        'Etter et enkeltinntak vil THC-syre kunne påvises i urin i cirka 5–7 dager. Ved gjentatte inntak vil ' +
-        'påvisningstiden for THC-syre i urin øke, vanligvis opptil en måned etter avsluttet inntak. ' +
-        'Basert på analyseresultatet alene er det vanskelig å avgjøre hvorvidt cannabis har vært inntatt etter ' +
-        'prøve tatt 04.07.2026. Ved spørsmål kan rekvirent kontakte vakthavende lege ved Seksjon for klinisk ' +
-        'farmakologi Ullevål (se ous.labfag.no).',
+        'Analyseresultatet viser at cannabis har vært inntatt – men gir i seg selv ikke grunnlag for å fastslå ' +
+        'om inntaket har skjedd etter prøven tatt 04.07.2026. Ved spørsmål kan rekvirenten kontakte vakthavende ' +
+        'lege ved Seksjon for klinisk farmakologi Ullevål (se ous.labfag.no).',
     )
   })
 
@@ -154,7 +164,7 @@ describe('regelsettet som ble importert', () => {
 describe('fasiten fra den opprinnelige modulen', () => {
   const utfall = FASIT.tilfeller.map(([inn]) => somFasitutfall(fortolk(dekodInndata(inn) as ThcInndata)))
 
-  it('dekker alle konklusjonene, alle tekstbolkene og ugyldige inndata', () => {
+  it('dekker alle konklusjonene, alle tekstene utenom de nye situasjonene, og ugyldige inndata', () => {
     expect(FASIT.tilfeller.length).toBeGreaterThan(4000)
     const konklusjoner = new Set(FASIT.tilfeller.map(([, u]) => u[0]))
     expect([...konklusjoner].sort()).toEqual(['ikke_nodvendigvis', 'm', 'nytt_inntak', 'uten_forrige', 'vanskelig'])
@@ -164,7 +174,10 @@ describe('fasiten fra den opprinnelige modulen', () => {
         return r.type === 'kommentar' ? r.bolker : []
       }),
     )
-    expect([...brukt].sort()).toEqual([...THC_TEKSTNOKLER].sort())
+    // Den samlede vurderingen og kort tid kjente ikke den opprinnelige
+    // modulen; de prøves for seg under.
+    const nye = ['samlet_vurdering', 'kort_tid']
+    expect([...brukt].sort()).toEqual(THC_TEKSTNOKLER.filter((n) => !nye.includes(n)).sort())
   })
 
   it('gir samme kommentar, konklusjon, varsel og mangler i hvert eneste tilfelle', () => {
@@ -192,58 +205,216 @@ describe('fasiten fra den opprinnelige modulen', () => {
   })
 })
 
-describe('tekstbolkene', () => {
+describe('kommentarene', () => {
   const nivaer = REGELSETT.konsentrasjonsnivaer
   const utfall: ThcKonklusjon[] = ['uten_forrige', 'ikke_nodvendigvis', 'vanskelig', 'nytt_inntak']
+  const ingen = { underCutoff: false, samlet: false, kortTid: false }
 
-  it('åpner alltid, og avslutter uten forrige prøve med å anbefale oppfølging', () => {
+  it('gir eierens ordlyd for hvert nivå og hver konklusjon, med og uten cut-off', () => {
     for (const niva of nivaer) {
       for (const u of utfall) {
         for (const underCutoff of [false, true]) {
-          const bolker = velgTekstbolker(niva, u, underCutoff)
-          expect(bolker[0]).toBe('apning')
-          expect(bolker.at(-1) === 'uten_forrige').toBe(u === 'uten_forrige')
+          const nokkel = velgKommentar(niva, u, { ...ingen, underCutoff })
+          const tekst = settSammen(TEKSTER, kommentardeler(REGELSETT.med_sporsmalsetning, nokkel), {
+            niva: niva.navn,
+            forrigeDato: '01.02.2026',
+            tidligereDato: '',
+          })
+          const fasitniva = niva.navn as 'lav' | 'middels høy' | 'høy'
+          expect(tekst, `${niva.navn}, ${u}, under cut-off: ${underCutoff}`).toBe(
+            forventetKommentar(fasitniva, u, underCutoff, '01.02.2026'),
+          )
         }
       }
     }
   })
 
-  it('står i den rekkefølgen THC_TEKSTNOKLER har', () => {
-    for (const niva of nivaer) {
-      for (const u of utfall) {
-        for (const underCutoff of [false, true]) {
-          const bolker = velgTekstbolker(niva, u, underCutoff)
-          const plass = bolker.map((b) => THC_TEKSTNOKLER.indexOf(b))
-          expect(plass).toEqual([...plass].sort((a, b) => a - b))
-        }
-      }
+  it('bruker egen kommentar for nivåene som tyder på nylig inntak', () => {
+    const [lav, middels, hoy] = nivaer
+    for (const u of utfall) {
+      expect(velgKommentar(lav!, u, ingen)).toBe(u)
+      expect(velgKommentar(middels!, u, ingen)).toBe(u)
+      expect(velgKommentar(hoy!, u, ingen)).toBe(`${u}_nylig`)
     }
   })
 
-  it('bytter konklusjonen mot forrige prøve under cut-off, men ikke et sikkert nytt inntak', () => {
+  it('har egen kommentar under cut-off bare for «ikke nødvendigvis nytt»', () => {
     const lav = nivaer[0]!
-    expect(velgTekstbolker(lav, 'vanskelig', true)).toContain('under_cutoff_vanskelig')
-    expect(velgTekstbolker(lav, 'vanskelig', true)).toContain('inntak_har_skjedd')
-    expect(velgTekstbolker(lav, 'vanskelig', false)).not.toContain('inntak_har_skjedd')
-    expect(velgTekstbolker(lav, 'ikke_nodvendigvis', true)).toContain('under_cutoff_ikke_nodvendigvis')
-    expect(velgTekstbolker(lav, 'nytt_inntak', true)).toEqual(velgTekstbolker(lav, 'nytt_inntak', false))
-    expect(velgTekstbolker(lav, 'uten_forrige', true)).toEqual(velgTekstbolker(lav, 'uten_forrige', false))
+    expect(velgKommentar(lav, 'ikke_nodvendigvis', { ...ingen, underCutoff: true })).toBe('under_cutoff_ikke_nodvendigvis')
+    for (const u of ['uten_forrige', 'vanskelig', 'nytt_inntak'] as const) {
+      expect(velgKommentar(lav, u, { ...ingen, underCutoff: true })).toBe(u)
+    }
   })
 
-  it('setter inn nivået og datoen der plassholderne står, og binder bolkene med ett mellomrom', () => {
+  it('bytter «kan ikke fastslås» med den samlede vurderingen, og ingen annen konklusjon', () => {
+    for (const niva of nivaer) {
+      expect(velgKommentar(niva, 'vanskelig', { ...ingen, samlet: true })).toBe('samlet_vurdering')
+      for (const u of ['ikke_nodvendigvis', 'nytt_inntak'] as const) {
+        expect(velgKommentar(niva, u, { ...ingen, samlet: true })).not.toBe('samlet_vurdering')
+      }
+    }
+  })
+
+  it('gir kort tid foran alt annet', () => {
+    for (const u of utfall) {
+      expect(velgKommentar(nivaer[2]!, u, { underCutoff: true, samlet: true, kortTid: true })).toBe('kort_tid')
+    }
+  })
+
+  it('åpner alltid med introsetningen, og avslutter med spørsmålsetningen bare der regelsettet sier det', () => {
+    for (const nokkel of THC_KOMMENTARNOKLER) {
+      const deler = kommentardeler(REGELSETT.med_sporsmalsetning, nokkel)
+      expect(deler[0]).toBe('introsetning')
+      expect(deler[1]).toBe(nokkel)
+      expect(deler.includes('sporsmalsetning')).toBe(REGELSETT.med_sporsmalsetning.includes(nokkel))
+    }
+    expect(kommentardeler([], 'vanskelig')).toEqual(['introsetning', 'vanskelig'])
+  })
+
+  it('setter inn nivået og datoene der plassholderne står, og binder delene med ett mellomrom', () => {
     const tekst = settSammen(
-      { ...TEKSTER, apning: 'A {nivå}.', nytt_inntak: 'B {forrige prøvedato} {forrige prøvedato}.' },
-      ['apning', 'nytt_inntak'],
-      { niva: 'lav', forrigeDato: '01.02.2026' },
+      { ...TEKSTER, introsetning: 'A {nivå}.', samlet_vurdering: 'B {forrige prøvedato} {tidligere prøvedato}.' },
+      ['introsetning', 'samlet_vurdering', 'sporsmalsetning'],
+      { niva: 'lav', forrigeDato: '01.02.2026', tidligereDato: '15.01.2026' },
     )
-    expect(tekst).toBe('A lav. B 01.02.2026 01.02.2026.')
+    expect(tekst).toBe(`A lav. B 01.02.2026 15.01.2026. ${TEKSTER.sporsmalsetning}`)
   })
 
-  it('har en beskrivelse og tittel for hver bolk', () => {
+  it('har en beskrivelse og tittel for hver tekst og hver situasjon', () => {
     for (const nokkel of THC_TEKSTNOKLER) {
       expect(THC_TEKSTBOLKER[nokkel].tittel).not.toBe('')
       expect(THC_TEKSTBOLKER[nokkel].brukes).not.toBe('')
     }
+    expect(new Set(THC_TEKSTNOKLER.map((n) => THC_TEKSTBOLKER[n].tittel)).size).toBe(THC_TEKSTNOKLER.length)
+    expect(THC_SITUASJONER.flatMap((s) => THC_KOMMENTARNOKLER.filter((n) => THC_TEKSTBOLKER[n].situasjon === s))).toEqual(
+      THC_KOMMENTARNOKLER,
+    )
+  })
+})
+
+describe('samlet vurdering mot tidligere prøver', () => {
+  // Hver prøve for seg gir «kan ikke fastslås» mot den før: 6,5 → 2,5 på 23
+  // døgn. Mot en prøve med lavere IRCAK lenger tilbake er det nytt inntak.
+  const grunn: ThcInndata = {
+    ...tomThcInndata(REGELSETT),
+    aktuellVerdi: '2,5',
+    aktuellDato: '2026-07-27',
+    forrigeVerdi: '6,5',
+    forrigeDato: '2026-07-04',
+  }
+  const prove = (verdi: string, dato: string) => ({ ...tomThcProve(), verdi, dato })
+  const samlet = (...tidligere: ReturnType<typeof prove>[]): ThcInndata => ({ ...grunn, samletVurdering: true, tidligere })
+
+  it('gir den samlede kommentaren når en enda tidligere prøve gir nytt inntak', () => {
+    expect(kommentar(fortolk(grunn)).konklusjon).toBe('vanskelig')
+    const r = kommentar(fortolk(samlet(prove('0,5', '2026-06-01'))))
+    expect(r.konklusjon).toBe('vanskelig')
+    expect(r.kommentarnokkel).toBe('samlet_vurdering')
+    expect(r.samlet).toEqual({ dato: '01.06.2026', ircak: 0.5, dager: 56 })
+    expect(r.kommentar).toBe(forventetSamletKommentar('lav', '04.07.2026', '01.06.2026'))
+    // Tallgrunnlaget mot forrige prøve er det samme som uten.
+    expect(r.grunnlag).toEqual(kommentar(fortolk(grunn)).grunnlag)
+  })
+
+  it('bruker den nærmeste prøven som gir nytt inntak, uansett rekkefølgen de står i', () => {
+    const r = kommentar(fortolk(samlet(prove('0,1', '2026-05-01'), prove('0,5', '2026-06-01'), prove('6', '2026-06-20'))))
+    expect(r.samlet?.dato).toBe('01.06.2026')
+  })
+
+  it('regner IRCAK 0 i en tidligere prøve som nytt inntak etter den', () => {
+    expect(kommentar(fortolk(samlet(prove('0', '2026-06-30')))).samlet?.dato).toBe('30.06.2026')
+  })
+
+  it('beholder kommentaren mot forrige prøve når de tidligere prøvene ikke tilfører noe', () => {
+    const r = kommentar(fortolk(samlet(prove('7', '2026-06-30'))))
+    expect(r.samlet).toBeNull()
+    expect(r.kommentar).toBe(forventetKommentar('lav', 'vanskelig', false, '04.07.2026'))
+  })
+
+  it('gjelder bare «kan ikke fastslås»', () => {
+    for (const aktuellVerdi of ['0,3', '30']) {
+      const uten = kommentar(fortolk({ ...grunn, aktuellVerdi }))
+      const med = kommentar(fortolk({ ...samlet(prove('0', '2026-06-30')), aktuellVerdi }))
+      expect(med.konklusjon).not.toBe('vanskelig')
+      expect(med.kommentar).toBe(uten.kommentar)
+    }
+  })
+
+  it('bruker den høyere måleusikkerheten for en tidligere prøve under cut-off', () => {
+    // UCAK/NKRE = 3, som IRCAK 3 gir nytt inntak — men med usikkerheten
+    // under cut-off er det ikke lenger sikkert.
+    const underCutoff = { ...tomThcProve(), underCutoff: true, ucak: '6', nkre: '2', dato: '2026-07-01' }
+    expect(kommentar(fortolk(samlet(prove('3', '2026-07-01')))).samlet).not.toBeNull()
+    expect(kommentar(fortolk(samlet(underCutoff)))).toMatchObject({ samlet: null })
+  })
+
+  it('sier fra om det som mangler i de tidligere prøvene', () => {
+    expect(fortolk({ ...grunn, samletVurdering: true, tidligere: [] })).toEqual({
+      type: 'mangler',
+      mangler: ['Legg til en tidligere prøve, eller slå av den samlede vurderingen.'],
+    })
+    expect(fortolk(samlet(prove('', '')))).toEqual({
+      type: 'mangler',
+      mangler: ['Fyll inn IRCAK for den tidligere prøven.', 'Fyll inn prøvedato for den tidligere prøven.'],
+    })
+    expect(fortolk(samlet(prove('1', '2026-06-01'), prove('-1', '2026-07-10')))).toEqual({
+      type: 'mangler',
+      mangler: [
+        'IRCAK for tidligere prøve 2 må være et tall som ikke er negativt.',
+        'Tidligere prøve 2 kan ikke være tatt etter forrige prøve.',
+      ],
+    })
+  })
+
+  it('ser bort fra de tidligere prøvene når samlet vurdering er slått av', () => {
+    const r = fortolk({ ...samlet(prove('', '')), samletVurdering: false })
+    expect(kommentar(r).kommentar).toBe(kommentar(fortolk(grunn)).kommentar)
+  })
+})
+
+describe('kort tid mellom prøvene', () => {
+  const grunn: ThcInndata = {
+    ...tomThcInndata(REGELSETT),
+    aktuellVerdi: '45',
+    aktuellDato: '2026-07-27',
+    forrigeVerdi: '6,5',
+    forrigeDato: '2026-07-25',
+  }
+
+  it('gjelder samme dag og færre døgn enn regelsettets grense', () => {
+    const dager = (forrigeDato: string) => kortTidMellomProvene(REGELSETT, { ...grunn, forrigeDato })
+    expect(dager('2026-07-27')).toBe(true)
+    expect(dager('2026-07-26')).toBe(true)
+    expect(dager('2026-07-25')).toBe(true)
+    expect(dager('2026-07-24')).toBe(false)
+    expect(dager('2026-07-28')).toBe(false)
+    expect(dager('')).toBe(false)
+    expect(kortTidMellomProvene(REGELSETT, { ...grunn, ingenTidligere: true })).toBe(false)
+    expect(kortTidMellomProvene({ ...REGELSETT, kort_tid_dager: 4 }, { ...grunn, forrigeDato: '2026-07-24' })).toBe(true)
+  })
+
+  it('fortolker som før til «Kort tid mellom prøvene» er huket av', () => {
+    const vanlig = kommentar(fortolk(grunn))
+    expect(vanlig.konklusjon).toBe('nytt_inntak')
+    expect(vanlig.kommentar).toBe(forventetKommentar('høy', 'nytt_inntak', false, '25.07.2026'))
+  })
+
+  it('vurderer ikke prøvene mot hverandre når det er huket av', () => {
+    const r = kommentar(fortolk({ ...grunn, kortTid: true, samletVurdering: true, tidligere: [] }))
+    expect(r.kommentarnokkel).toBe('kort_tid')
+    expect(r.konklusjon).toBe('uten_forrige')
+    expect(r.grunnlag).toBeNull()
+    expect(r.kommentar).toBe(forventetKortTidKommentar('høy'))
+  })
+
+  it('trenger ikke tallene for forrige prøve da', () => {
+    const r = fortolk({ ...grunn, kortTid: true, forrigeVerdi: '' })
+    expect(r.type).toBe('kommentar')
+  })
+
+  it('ser bort fra avkryssingen når prøvene ikke er tatt med kort tid imellom', () => {
+    const r = kommentar(fortolk({ ...grunn, forrigeDato: '2026-07-04', kortTid: true }))
+    expect(r.kommentarnokkel).not.toBe('kort_tid')
   })
 })
 
@@ -294,6 +465,13 @@ describe('et redigert regelsett', () => {
   it('bruker den nye ordlyden', () => {
     const m = modell(REGELSETT, { ...TEKSTER, uten_forrige: 'Ny prøve anbefales.' })
     expect(kommentar(fortolk({ ...eksempel, ingenTidligere: true }, m)).kommentar.endsWith('Ny prøve anbefales.')).toBe(true)
+  })
+
+  it('avslutter med spørsmålsetningen etter regelsettet', () => {
+    const uten = modell({ ...REGELSETT, med_sporsmalsetning: [] })
+    const prove = { ...eksempel, aktuellVerdi: '2,5' }
+    expect(kommentar(fortolk(prove)).kommentar.endsWith(TEKSTER.sporsmalsetning)).toBe(true)
+    expect(kommentar(fortolk(prove, uten)).kommentar.endsWith(TEKSTER.sporsmalsetning)).toBe(false)
   })
 
   it('følger grensene for bruksmønsteret', () => {
@@ -372,6 +550,11 @@ describe('valideringen', () => {
     ['like nivånavn', med({ konsentrasjonsnivaer: REGELSETT.konsentrasjonsnivaer.map((n) => ({ ...n, navn: 'lav' })) }), /samme navn/],
     ['bruksmønster i feil rekkefølge', med({ bruksmonstre: { ...REGELSETT.bruksmonstre, kronisk: { vanskelig_over: 'rod', nytt_inntak_over: 'gul' } } }), /tregere kurve/],
     ['varsel 0 døgn', med({ varsel_dager_mellom: 0 }), /helt antall døgn/],
+    ['kort tid 0 døgn', med({ kort_tid_dager: 0 }), /kort tid mellom prøvene må være et helt antall døgn/],
+    ['kort tid 1,5 døgn', med({ kort_tid_dager: 1.5 }), /kort tid mellom prøvene må være et helt antall døgn/],
+    ['spørsmålsetning for introsetningen', med({ med_sporsmalsetning: ['introsetning' as never] }), /ukjent kommentar: introsetning/],
+    ['spørsmålsetning to ganger', med({ med_sporsmalsetning: ['kort_tid', 'kort_tid'] }), /én gang per kommentar/],
+    ['spørsmålsetning i feil rekkefølge', med({ med_sporsmalsetning: ['kort_tid', 'vanskelig'] }), /fast rekkefølge/],
   ])('avviser regelsett med %s', (_, r, melding) => {
     expect(validerThcRegelsett(r).join('\n')).toMatch(melding)
     const godkjent = godkjennThcRegelsett(r)
@@ -380,12 +563,15 @@ describe('valideringen', () => {
   })
 
   it.each<[string, ThcTekster, RegExp]>([
-    ['tom tekst', tekst('pavisningstid', ''), /er tom/],
-    ['tekst med mellomrom i enden', tekst('pavisningstid', 'Tekst. '), /mellomrom/],
-    ['dato mangler', tekst('vanskelig', 'Vanskelig å avgjøre.'), /må inneholde \{forrige prøvedato\}/],
+    ['tom tekst', tekst('sporsmalsetning', ''), /er tom/],
+    ['tekst med mellomrom i enden', tekst('uten_forrige_nylig', 'Tekst. '), /mellomrom/],
+    ['dato mangler', tekst('vanskelig', 'Kan ikke fastslås.'), /må inneholde \{forrige prøvedato\}/],
+    ['tidligere dato mangler', tekst('samlet_vurdering', 'Etter {forrige prøvedato}.'), /må inneholde \{tidligere prøvedato\}/],
     ['dato der den ikke finnes', tekst('uten_forrige', 'Siden {forrige prøvedato}.'), /ikke kan bruke/],
-    ['ukjent plassholder', tekst('apning', 'Påvist i {nivå} {mengde}.'), /ikke kan bruke: \{mengde\}/],
-    ['løs krøllparentes', tekst('apning', 'Påvist i {nivå} }.'), /krøllparentes/],
+    ['tidligere dato der den ikke finnes', tekst('vanskelig', '{forrige prøvedato} {tidligere prøvedato}.'), /ikke kan bruke/],
+    ['nivå mangler i introsetningen', tekst('introsetning', 'Påvist.'), /må inneholde \{nivå\}/],
+    ['ukjent plassholder', tekst('introsetning', 'Påvist i {nivå} {mengde}.'), /ikke kan bruke: \{mengde\}/],
+    ['løs krøllparentes', tekst('introsetning', 'Påvist i {nivå} }.'), /krøllparentes/],
   ])('avviser tekster med %s', (_, t, melding) => {
     expect(validerThcTekster(t).join('\n')).toMatch(melding)
     expect(lagThcModell(REGELSETT, t).ok).toBe(false)
