@@ -1,4 +1,10 @@
-import { erUtenMargin, konsentrasjonsniva, type ThcGrunnlag, type ThcKonklusjon } from '../domain/thcMotor'
+import {
+  erUtenMargin,
+  konsentrasjonsniva,
+  type ThcGrunnlag,
+  type ThcKonklusjon,
+  type ThcSamletVurdering,
+} from '../domain/thcMotor'
 import type { ThcRegelsett } from '../domain/thcRegelsett'
 import { formaterIrcak, formaterTall } from '../domain/thcTall'
 import { endringsfrase, forventetNedgang, nivabeskrivelse, somProsent } from '../domain/thcVisning'
@@ -22,10 +28,13 @@ import { endringsfrase, forventetNedgang, nivabeskrivelse, somProsent } from '..
 export function ThcForklaring({
   grunnlag,
   konklusjon,
+  samlet = null,
   regler,
 }: {
   grunnlag: ThcGrunnlag
   konklusjon: ThcKonklusjon
+  /** Den tidligere prøven den samlede vurderingen fant nytt inntak etter. */
+  samlet?: ThcSamletVurdering | null
   regler: ThcRegelsett
 }) {
   const { forrige, aktuell, dager, kronisk, maltEndring, korrigertEndring, forventet, underCutoff } =
@@ -49,11 +58,13 @@ export function ThcForklaring({
         'inntatt etter forrige prøve.'
       : konklusjon === 'vanskelig'
         ? `${endringen} viser mindre nedgang enn forventet, men er fortsatt ` +
-          'mulig ved spesielt treg utskillelse. Kommentaren sier derfor at ' +
-          (underCutoff
-            ? 'inntakstidspunktet ikke kan avgjøres, siden nivået kan svinge over og under ' +
-              'påvisningsgrensen uten at noe nytt er inntatt.'
-            : 'det er vanskelig å avgjøre hvorvidt cannabis har vært inntatt etter forrige prøve.')
+          'mulig ved spesielt treg utskillelse. Kommentaren sier derfor at analyseresultatet i seg selv ' +
+          'ikke gir grunnlag for å fastslå om cannabis har vært inntatt etter forrige prøve.' +
+          (samlet
+            ? ` Sammenlignet med prøven tatt ${samlet.dato}, ${samlet.dager === 1 ? '1 dag' : `${samlet.dager} dager`} ` +
+              'før denne, viser den derimot mindre nedgang enn det som anses mulig. Den samlede vurderingen ' +
+              'sier derfor at det har skjedd minst ett inntak etter den prøven.'
+            : '')
         : `${endringen} ligger innenfor det som er forventet. Kommentaren ` +
           'sier derfor at cannabis ikke nødvendigvis har vært inntatt etter forrige prøve' +
           (underCutoff ? ', selv om den ble rapportert som «ikke påvist».' : '.')

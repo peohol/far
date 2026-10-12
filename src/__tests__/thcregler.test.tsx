@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 /**
- * THC-syrereglene, prøvd i en nettleser i minnet: oversikten, tekstbolkene og
+ * THC-syrereglene, prøvd i en nettleser i minnet: oversikten, kommentarene og
  * simulatoren. De står i redigeringen på fortolkningssiden for THC-syre i urin
  * (`#/fortolkning/ircak/rediger`), lest etter koden, og ikke på fagsiden for
  * THC. Simulatoren fortolker med den samme motoren og de samme komponentene
@@ -18,7 +18,14 @@ import { FORTOLKNINGSOPPFORINGER, byggKatalog } from '../domain/analyttkatalog'
 import { STOFFREGISTER } from '../domain/stoffregister'
 import { THC_ANALYTT } from '../domain/thc'
 import { fortolkThc, tomThcInndata } from '../domain/thcMotor'
-import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../domain/thcTekster'
+import {
+  kommentarerFor,
+  THC_FELLES_SETNINGER,
+  THC_SITUASJONER,
+  THC_SITUASJONSINFO,
+  THC_TEKSTBOLKER,
+} from '../domain/thcTekster'
+import { eksempelkommentar } from '../domain/thcVisning'
 import { Samtidighetskonflikt, type Faginnholdslager } from '../faginnhold/lagring'
 import type { Faginnholdsleser } from '../faginnhold/lesing'
 import type { ThcRegelsettutgave } from '../faginnhold/thcregler'
@@ -104,8 +111,8 @@ describe('THC-syrereglene', () => {
     const leser = visRedigering({ lagreThcRegelsett } as unknown as Faginnholdslager)
     await user.click(await screen.findByRole('button', { name: 'Rediger reglene' }))
     const skjema = within(screen.getByRole('form', { name: 'Rediger: Fortolkningsreglene for THC-syre i urin' }))
-    const apning = skjema.getByRole('textbox', { name: 'Åpning' })
-    await user.type(apning, ' Syntetisk.')
+    const intro = skjema.getByRole('textbox', { name: 'Introsetning' })
+    await user.type(intro, ' Syntetisk.')
     const varsel = skjema.getByRole('textbox', { name: 'Varsel ved mer enn (dager mellom prøvene)' })
     await user.clear(varsel)
     await user.type(varsel, '21')
@@ -114,7 +121,7 @@ describe('THC-syrereglene', () => {
     expect(lagreThcRegelsett).toHaveBeenCalledOnce()
     const [objekt, revisjon, innhold, kommentarer] = lagreThcRegelsett.mock.calls[0]!
     expect([objekt, revisjon, innhold.varsel_dager_mellom]).toEqual(['thc-regelsett', 3, 21])
-    expect(kommentarer.map((k) => k.id)).toEqual(['thc-apning'])
+    expect(kommentarer.map((k) => k.id)).toEqual(['thc-introsetning'])
     expect(await skjema.findByText(/Noen andre har lagret reglene mens du redigerte/)).toBeTruthy()
     expect(skjema.getByRole('button', { name: 'Sammenlign med deres' })).toBeTruthy()
     // Siden sier også fra, så reglene kan hentes på nytt om brukeren forkaster sitt.
@@ -145,21 +152,41 @@ describe('THC-syrereglene', () => {
       'Kreatinin5 %',
       'Under cut-off50 % høyere',
       'Varsel ved mer enn30 dager',
+      'Kort tid ved færre enn3 dager',
     ])
     expect(document.querySelector('.regler__monstre')?.textContent).toBe(
-      'Kronisk brukOver den gule kurven: vanskelig å avgjøre. Over den røde: nytt inntak.' +
-        'EnkeltinntakOver den grønne kurven: vanskelig å avgjøre. Over den gule: nytt inntak.',
+      'Kronisk brukOver den gule kurven: kan ikke fastslås. Over den røde: nytt inntak.' +
+        'EnkeltinntakOver den grønne kurven: kan ikke fastslås. Over den gule: nytt inntak.',
     )
   })
 
-  it('viser hver tekstbolk med når den brukes og teksten', () => {
+  it('viser de felles setningene, og hver kommentar ferdig satt sammen med når den brukes', () => {
     visRegler()
-    const bolker = [...document.querySelectorAll('.regeltekst')]
-    expect(bolker).toHaveLength(THC_TEKSTNOKLER.length)
-    THC_TEKSTNOKLER.forEach((nokkel, i) => {
-      expect(bolker[i]!.querySelector('.regeltekst__nummer')?.textContent).toBe(THC_TEKSTBOLKER[nokkel].tittel)
-      expect(bolker[i]!.querySelector('.kommentartekst')?.textContent).toBe(THC_TEKSTER[nokkel])
+    const punkter = [...document.querySelectorAll('.regeltekst')]
+    expect(punkter).toHaveLength(THC_FELLES_SETNINGER.length + THC_SITUASJONER.length + 1)
+    THC_FELLES_SETNINGER.forEach((nokkel, i) => {
+      expect(punkter[i]!.querySelector('.regeltekst__nummer')?.textContent).toBe(THC_TEKSTBOLKER[nokkel].tittel)
+      expect(punkter[i]!.querySelector('.kommentartekst')?.textContent).toBe(THC_TEKSTER[nokkel])
     })
+    THC_SITUASJONER.forEach((situasjon, i) => {
+      const punkt = punkter[THC_FELLES_SETNINGER.length + i]!
+      expect(punkt.querySelector('.regeltekst__nummer')?.textContent).toBe(THC_SITUASJONSINFO[situasjon].tittel)
+      expect([...punkt.querySelectorAll('.kommentartekst')].map((k) => k.textContent)).toEqual(
+        kommentarerFor(situasjon).map((nokkel) => eksempelkommentar(THC_REGELSETT, THC_TEKSTER, nokkel)),
+      )
+    })
+    // Nivåene som deler en kommentar, står over den.
+    const nytt = punkter[THC_FELLES_SETNINGER.length + THC_SITUASJONER.indexOf('nytt_inntak')]!
+    expect([...nytt.querySelectorAll('.thc-kommentar__niva')].map((n) => n.textContent)).toEqual([
+      'Lav og middels høy',
+      'Høy',
+    ])
+    // Kort tid gir den samme kommentaren for alle nivåer, vist med det første, og spørsmålsetningen sist.
+    const kortTid = punkter[THC_FELLES_SETNINGER.length + THC_SITUASJONER.indexOf('kort_tid')]!
+    expect(kortTid.querySelector('.kommentartekst')?.textContent).toBe(
+      `THC-syre, et omdannelsesprodukt av cannabis, er påvist i lav konsentrasjon. ${THC_TEKSTER.kort_tid} ` +
+        THC_TEKSTER.sporsmalsetning,
+    )
   })
 
   it('fortolker i simulatoren med reglene siden viser, og sier hvilke bolker kommentaren består av', async () => {
@@ -186,7 +213,7 @@ describe('THC-syrereglene', () => {
     const simulator = within(document.querySelector<HTMLElement>('.simulator')!)
     expect(simulator.getByText(forventet.kommentar)).toBeTruthy()
     expect(simulator.getByRole('status').textContent).toBe(
-      `Tekstbolker: ${forventet.bolker.map((b) => THC_TEKSTBOLKER[b].tittel).join(', ')}.`,
+      `Satt sammen av: ${forventet.bolker.map((b) => THC_TEKSTBOLKER[b].tittel).join(', ')}.`,
     )
     // Kurvene og forklaringen står som i modulen, men det er ingenting å kopiere.
     expect(simulator.getByText('Forklaring')).toBeTruthy()

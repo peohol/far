@@ -685,3 +685,42 @@ button.historikk__velg:hover {
   margin: 0;
   color: var(--blekk-dempet);
 }
+
+/* --- THC-syrekommentarene --------------------------------------------------
+   Én kommentar per nivågruppe under hver situasjon. I redigeringen står
+   situasjonene som egne grupper, med kommentaren ferdig satt sammen under
+   feltet. */
+.thc-kommentar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+}
+
+.thc-kommentar__niva {
+  font-size: var(--tekst-ui);
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk-dempet);
+}
+
+.thc-kommentar__eksempel {
+  font-size: var(--tekst-ui);
+  text-align: left;
+  color: var(--blekk);
+}
+
+.thc-kommentarredigering {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  min-width: 0;
+  margin: 0;
+  padding: var(--rom-4) 0 0;
+  border: 0;
+  border-top: var(--kant) solid var(--linje);
+}
+
+.thc-kommentarredigering > legend {
+  padding: 0 var(--rom-2) 0 0;
+  font-weight: var(--vekt-halvfet);
+  color: var(--blekk);
+}

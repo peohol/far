@@ -14,11 +14,10 @@ import { ThcStep } from '../components/ThcStep'
 import { TipsLag } from '../components/Tips'
 import { fortolkThc, lagThcModell, tomThcInndata, type ThcModell, type ThcRegler } from '../domain/thcMotor'
 import type { ThcRegelsett } from '../domain/thcRegelsett'
-import type { ThcTekster } from '../domain/thcTekster'
+import { THC_SITUASJONSINFO, type ThcTekster } from '../domain/thcTekster'
 import { thcReglerFra } from '../faginnhold/thcregler'
 import { ShortcutVisibilityProvider } from '../hooks/useShortcutVisibility'
 import { formaterProsent } from '../domain/thcPlot'
-import { THC_TEKSTBOLKER } from '../domain/thcTekster'
 import { margineksempel, marginvalg } from '../domain/thcVisning'
 import { medPekerhendelser, trykkPaaValg } from './hjelp/pekerhendelser'
 import { THC_MODELL, THC_REGELSETT, THC_TEKSTER, thcRegelsettutgave } from './hjelp/thcgrunnlag'
@@ -153,7 +152,7 @@ describe('fortolkningsmodulen for THC-syre', () => {
       margineksempel(THC_REGELSETT).map(({ margin, endring, utfall }) => [
         marginvalg(margin),
         formaterProsent(endring * 100),
-        THC_TEKSTBOLKER[utfall].tittel,
+        THC_SITUASJONSINFO[utfall].tittel,
       ]),
     )
     expect(within(detaljer).getByText('90 % (standard)')).toBeTruthy()
@@ -167,7 +166,7 @@ describe('fortolkningsmodulen for THC-syre', () => {
       varsel_dager_mellom: 5,
       sikkerhetsmarginer: THC_REGELSETT.sikkerhetsmarginer.filter((m) => m.margin !== 0.99),
     }
-    const tekster = { ...THC_TEKSTER, apning: 'Syntetisk åpning: {nivå} konsentrasjon.' }
+    const tekster = { ...THC_TEKSTER, introsetning: 'Syntetisk åpning: {nivå} konsentrasjon.' }
     visSteg({ status: 'klar', modell: modell(regler, tekster) })
 
     expect(screen.getByRole('slider', { name: 'Sikkerhetsmargin' }).getAttribute('aria-valuetext')).toBe('90 %')
@@ -182,6 +181,68 @@ describe('fortolkningsmodulen for THC-syre', () => {
     expect(screen.getByRole('note').textContent).toContain('Det er mer enn 5 dager mellom prøvene.')
     await user.click(screen.getByRole('button', { name: 'Huk av nå' }))
     expect(screen.getByRole('checkbox', { name: 'Ingen tidligere prøve tilgjengelig' })).toHaveProperty('checked', true)
+  })
+
+  it('spør om kort tid mellom prøvene, og vurderer dem ikke mot hverandre når det hukes av', async () => {
+    const user = userEvent.setup()
+    visSteg({ status: 'klar', modell: THC_MODELL })
+    await user.type(gruppe('Forrige prøve').getByRole('textbox', { name: 'IRCAK' }), '120')
+    await user.type(gruppe('Forrige prøve').getByLabelText('Prøvedato'), '2026-02-06')
+    await user.type(gruppe('Denne prøven').getByRole('textbox', { name: 'IRCAK' }), '80')
+    await user.type(gruppe('Denne prøven').getByLabelText('Prøvedato'), '2026-02-08')
+
+    const inn = {
+      ...tomThcInndata(THC_REGELSETT),
+      forrigeVerdi: '120',
+      forrigeDato: '2026-02-06',
+      aktuellVerdi: '80',
+      aktuellDato: '2026-02-08',
+    }
+    const vanlig = fortolkThc(inn, THC_MODELL)
+    if (vanlig.type !== 'kommentar') throw new Error('Tilfellet skal gi en kommentar.')
+    expect(screen.getByText(vanlig.kommentar)).toBeTruthy()
+    // Meldingen og avkryssingen kommer sammen, og den er ikke huket av.
+    expect(screen.getByRole('note').textContent).toContain('Det er bare 2 dager mellom prøvene.')
+    const kortTid = screen.getByRole('checkbox', { name: 'Kort tid mellom prøvene' })
+    expect(kortTid).toHaveProperty('checked', false)
+
+    await user.click(kortTid)
+    const forventet = fortolkThc({ ...inn, kortTid: true }, THC_MODELL)
+    if (forventet.type !== 'kommentar') throw new Error('Tilfellet skal gi en kommentar.')
+    expect(forventet.kommentar).toContain(THC_TEKSTER.kort_tid)
+    expect(screen.getByText(forventet.kommentar)).toBeTruthy()
+    // Prøvene vurderes ikke mot hverandre, så det er ingen margin å velge.
+    expect(screen.queryByRole('slider', { name: 'Sikkerhetsmargin' })).toBeNull()
+
+    // Med tre dager eller mer imellom er det ingenting å spørre om.
+    await user.clear(gruppe('Forrige prøve').getByLabelText('Prøvedato'))
+    await user.type(gruppe('Forrige prøve').getByLabelText('Prøvedato'), '2026-02-05')
+    expect(screen.queryByRole('checkbox', { name: 'Kort tid mellom prøvene' })).toBeNull()
+    // Avkryssingen som står igjen, gjelder ikke lenger, og prøvene vurderes mot hverandre.
+    const lenger = fortolkThc({ ...inn, forrigeDato: '2026-02-05', kortTid: true }, THC_MODELL)
+    if (lenger.type !== 'kommentar') throw new Error('Tilfellet skal gi en kommentar.')
+    expect(lenger.kommentar).not.toContain(THC_TEKSTER.kort_tid)
+    expect(screen.getByText(lenger.kommentar)).toBeTruthy()
+  })
+
+  it('vurderer mot enda tidligere prøver når samlet vurdering er slått på', async () => {
+    const user = userEvent.setup()
+    visSteg({ status: 'klar', modell: THC_MODELL })
+    await user.type(gruppe('Forrige prøve').getByRole('textbox', { name: 'IRCAK' }), '6,5')
+    await user.type(gruppe('Forrige prøve').getByLabelText('Prøvedato'), '2026-07-04')
+    await user.type(gruppe('Denne prøven').getByRole('textbox', { name: 'IRCAK' }), '2,5')
+    await user.type(gruppe('Denne prøven').getByLabelText('Prøvedato'), '2026-07-27')
+    expect(screen.getByText(/men gir i seg selv ikke grunnlag for å fastslå/)).toBeTruthy()
+
+    await user.click(screen.getByRole('checkbox', { name: 'Samlet vurdering med enda tidligere prøver' }))
+    await user.type(gruppe('Tidligere prøve').getByRole('textbox', { name: 'IRCAK' }), '0,5')
+    await user.type(gruppe('Tidligere prøve').getByLabelText('Prøvedato'), '2026-06-01')
+    expect(screen.getByText(/tilsier likevel at det har skjedd minst ett inntak etter prøven tatt 01\.06\.2026\./)).toBeTruthy()
+
+    // En prøve til gir to nummererte prøver.
+    await user.click(screen.getByRole('button', { name: 'Legg til tidligere prøve' }))
+    expect(gruppe('Tidligere prøve 1')).toBeTruthy()
+    expect(gruppe('Tidligere prøve 2')).toBeTruthy()
   })
 
   it('gir ingen kommentar når nye regler ikke har marginen skjemaet står på', async () => {

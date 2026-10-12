@@ -196,13 +196,16 @@ function fyllInn(rot: HTMLElement, inn: FasitInndata, marginer: readonly number[
   settAvkryssing(rot, 'Ingen tidligere prøve tilgjengelig', inn.ingenTidligere)
 }
 
-/** Det skjermen viser: kommentaren og varselet, eller manglene. */
+/**
+ * Det skjermen viser: kommentaren og varselet om lang tid mellom prøvene,
+ * eller manglene. Meldingen om kort tid mellom prøvene er ikke del av fasiten.
+ */
 function vist(rot: HTMLElement): unknown {
   const mangler = [...rot.querySelectorAll('.mangelliste li')].map((li) => li.textContent)
   if (mangler.length > 0) return { mangler }
   return {
     kommentar: rot.querySelector('.kommentartekst')?.textContent ?? null,
-    varsel: rot.querySelector('.notis--handling') !== null,
+    varsel: rot.querySelector('.notis--handling:not(.thc-korttid)') !== null,
   }
 }
 

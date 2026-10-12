@@ -53,13 +53,13 @@ describe('endringene som lagres', () => {
   })
 
   it('er bare kommentaren når bare en tekst er endret', () => {
-    const tekster = { ...THC_TEKSTER, pavisningstid: 'Syntetisk påvisningstid.' }
+    const tekster = { ...THC_TEKSTER, uten_forrige: 'Syntetisk påvisningstid.' }
     expect(thcEndringer(utgave, { ...THC_REGELSETT }, tekster)).toEqual({
       kommentarer: [
         {
-          id: 'thc-pavisningstid',
+          id: 'thc-uten_forrige',
           revisjon: 1,
-          innhold: { ...utgave.kommentarer.find((k) => k.id === 'thc-pavisningstid')!.innhold, tekst: 'Syntetisk påvisningstid.' },
+          innhold: { ...utgave.kommentarer.find((k) => k.id === 'thc-uten_forrige')!.innhold, tekst: 'Syntetisk påvisningstid.' },
         },
       ],
       regelsett: null,
@@ -79,13 +79,20 @@ describe('endringene som lagres', () => {
   })
 
   it('stopper en tekst som mister eller får en plassholder, og ugyldige regler', () => {
-    const utenNiva = { ...THC_TEKSTER, apning: 'THC-syre er påvist.' }
-    expect(thcUtkastfeil(utgave, THC_REGELSETT, utenNiva)).toEqual(['Tekstbolken «Åpning» må inneholde {nivå}.'])
-    // Bolken kan bruke datoen, men kommentaren har ikke hatt den, og plassholderne i en kommentar står fast.
-    const medDato = { ...THC_TEKSTER, under_cutoff_vanskelig: `${THC_TEKSTER.under_cutoff_vanskelig} {forrige prøvedato}.` }
-    const bolk = THC_TEKSTBOLKER.under_cutoff_vanskelig.tittel
+    const utenNiva = { ...THC_TEKSTER, introsetning: 'THC-syre er påvist.' }
+    expect(thcUtkastfeil(utgave, THC_REGELSETT, utenNiva)).toEqual(['Teksten «Introsetning» må inneholde {nivå}.'])
+    // Teksten kan bruke datoen, men kommentaren har ikke hatt den, og plassholderne i en kommentar står fast.
+    const medDato = { ...THC_TEKSTER, kort_tid: `${THC_TEKSTER.kort_tid} {forrige prøvedato}.` }
+    const tittel = THC_TEKSTBOLKER.kort_tid.tittel
     expect(thcUtkastfeil(utgave, THC_REGELSETT, medDato)).toEqual([
-      `Tekstbolken «${bolk}»: Kommentarteksten har plassholdere som ikke er oppgitt: {forrige prøvedato}.`,
+      `Teksten «${tittel}»: Kommentarteksten har plassholdere som ikke er oppgitt: {forrige prøvedato}.`,
+    ])
+    // Også de felles setningene kontrolleres.
+    expect(thcUtkastfeil(utgave, THC_REGELSETT, { ...THC_TEKSTER, sporsmalsetning: ' ' })).toEqual([
+      'Teksten «Spørsmålsetning» er tom.',
+    ])
+    expect(thcUtkastfeil(utgave, { ...THC_REGELSETT, kort_tid_dager: 0 }, THC_TEKSTER)).toEqual([
+      'Grensen for kort tid mellom prøvene må være et helt antall døgn, minst 1.',
     ])
     expect(thcUtkastfeil(utgave, { ...THC_REGELSETT, varsel_dager_mellom: 0 }, THC_TEKSTER)).toEqual([
       'Varselet om tid mellom prøvene må være et helt antall døgn, minst 1.',
@@ -102,9 +109,13 @@ describe('feltene historikken og sammenligningene viser', () => {
     expect(navn).toContain('Måleusikkerhet: CV for THC-syre')
     expect(navn).toContain('Kronisk bruk: Nytt inntak over')
     expect(navn).toContain('Den gule kurven: k1')
-    expect(navn).toContain(`Tekstbolkene: ${THC_TEKSTBOLKER.apning.tittel}`)
+    expect(navn).toContain('Felles setninger: Introsetning')
+    expect(navn).toContain(`Kommentarene: ${THC_TEKSTBOLKER.nytt_inntak_nylig.tittel}`)
+    expect(navn).toContain('Kommentarene: Kort tid mellom prøvene: avsluttes med spørsmålsetningen')
     expect(new Set(felter.map((f) => f.nokkel)).size).toBe(felter.length)
-    expect(felter.find((f) => f.nokkel === 'tekst-apning')?.verdi).toBe(THC_TEKSTER.apning)
+    expect(felter.find((f) => f.nokkel === 'tekst-introsetning')?.verdi).toBe(THC_TEKSTER.introsetning)
+    expect(felter.find((f) => f.nokkel === 'sporsmal-kort_tid')?.verdi).toBe('Ja')
+    expect(felter.find((f) => f.nokkel === 'sporsmal-nytt_inntak')?.verdi).toBe('Nei')
     expect(felter.find((f) => f.nokkel === 'margin-standard')?.verdi).toBe('90 %')
   })
 
@@ -124,7 +135,7 @@ describe('feltene historikken og sammenligningene viser', () => {
   it('viser navnet på kommentaren hver bolk peker på i historikken for regelsettet', () => {
     const utgave = thcRegelsettutgave()
     const felter = innholdsfelter('thc_regelsett', utgave.regelsett.innhold)
-    expect(felter.find((f) => f.nokkel === 'tekst-apning')?.verdi).toBe('thc-apning')
+    expect(felter.find((f) => f.nokkel === 'tekst-introsetning')?.verdi).toBe('thc-introsetning')
     // Et utkast og utgaven det står i, gir de samme feltene.
     expect(thcUtgavefelter(utgave)).toEqual(thcUtkastfelter({ regler: THC_REGELSETT, tekster: THC_TEKSTER }))
   })
@@ -161,12 +172,12 @@ describe('lagringen', () => {
   it('lagrer en endret tekst og regelsettet i ett kall, mot revisjonene som ble åpnet', async () => {
     const utgave = thcRegelsettutgave()
     const lagreThcRegelsett = vi.fn(async () => ({}) as Objektstatus)
-    const tekster = { ...THC_TEKSTER, apning: `${THC_TEKSTER.apning} Syntetisk.` }
+    const tekster = { ...THC_TEKSTER, introsetning: `${THC_TEKSTER.introsetning} Syntetisk.` }
     await lagreThcUtkast({ lagreThcRegelsett } as unknown as Faginnholdslager, utgave, { regler: THC_REGELSETT, tekster })
     // Regelsettet er uendret, men tas med, så en nyere revisjon av det også gir en konflikt.
     expect(lagreThcRegelsett).toHaveBeenCalledOnce()
     expect(lagreThcRegelsett).toHaveBeenCalledWith('thc-regelsett', 3, utgave.regelsett.innhold, [
-      expect.objectContaining({ id: 'thc-apning', innhold: expect.objectContaining({ tekst: tekster.apning }) }),
+      expect.objectContaining({ id: 'thc-introsetning', innhold: expect.objectContaining({ tekst: tekster.introsetning }) }),
     ])
   })
 })
@@ -175,9 +186,9 @@ describe('publiseringen', () => {
   it('publiserer de endrede tekstene før regelsettet som peker på dem', () => {
     const utgave: ThcRegelsettutgave = thcRegelsettutgave()
     utgave.regelsett = { ...utgave.regelsett, revisjon: 4 }
-    utgave.kommentarer = utgave.kommentarer.map((k) => (k.id === 'thc-apning' ? { ...k, revisjon: 2 } : k))
+    utgave.kommentarer = utgave.kommentarer.map((k) => (k.id === 'thc-introsetning' ? { ...k, revisjon: 2 } : k))
     expect(regelplan({ ...INGEN_REGLER, thcregelsett: utgave })).toEqual([
-      { slag: 'kommentar', id: 'thc-apning', revisjon: 2 },
+      { slag: 'kommentar', id: 'thc-introsetning', revisjon: 2 },
       { slag: 'thc_regelsett', id: 'thc-regelsett', revisjon: 4 },
     ])
     expect(regelplan({ ...INGEN_REGLER, thcregelsett: thcRegelsettutgave() })).toEqual([])
@@ -217,7 +228,7 @@ describe('redigeringen av THC-syrereglene', () => {
     const onLagre = visRedigering()
     const skjema = await apne(user)
 
-    const tekst = skjema.getByRole('textbox', { name: 'Påvisningstid' })
+    const tekst = skjema.getByRole('textbox', { name: 'Ikke vurdert mot tidligere prøve: lav og middels høy' })
     await user.clear(tekst)
     await user.type(tekst, 'Syntetisk påvisningstid.')
     const margin = skjema.getByRole('textbox', { name: 'Margin 3 (%)' })
@@ -228,11 +239,42 @@ describe('redigeringen av THC-syrereglene', () => {
     expect(onLagre).toHaveBeenCalledOnce()
     const [{ regler, tekster }, grunnlag] = onLagre.mock.calls[0]!
     expect(grunnlag).toBeUndefined()
-    expect(tekster).toEqual({ ...THC_TEKSTER, pavisningstid: 'Syntetisk påvisningstid.' })
+    expect(tekster).toEqual({ ...THC_TEKSTER, uten_forrige: 'Syntetisk påvisningstid.' })
     expect(regler.sikkerhetsmarginer[2]!.margin).toBe(0.95)
     expect(thcUtkastfeil(thcRegelsettutgave(), regler, tekster)).toEqual([])
     // Alt annet står nøyaktig som før, helt ned til siste siffer.
     expect({ ...regler, sikkerhetsmarginer: THC_REGELSETT.sikkerhetsmarginer }).toStrictEqual(THC_REGELSETT)
+  })
+
+  it('lagrer spørsmålsetningen og grensen for kort tid, og viser kommentaren slik den blir', async () => {
+    const user = userEvent.setup()
+    const onLagre = visRedigering()
+    const skjema = await apne(user)
+
+    const nytt = within(skjema.getByRole('group', { name: 'Nytt inntak' }))
+    const [ovrige, nylig] = nytt.getAllByRole('checkbox', { name: 'Avslutt med spørsmålsetningen' })
+    expect(ovrige).toHaveProperty('checked', false)
+    await user.click(nylig!)
+    expect(nytt.getAllByText(/^Slik blir den:/)[1]!.parentElement!.textContent).toContain(
+      `etter prøve tatt 04.07.2026. ${THC_TEKSTER.sporsmalsetning}`,
+    )
+    const kortTid = skjema.getByRole('textbox', { name: 'Kort tid ved færre enn (dager mellom prøvene)' })
+    await user.clear(kortTid)
+    await user.type(kortTid, '2')
+    await user.click(skjema.getByRole('button', { name: 'Lagre utkast' }))
+
+    const [{ regler, tekster }] = onLagre.mock.calls[0]!
+    expect(tekster).toEqual(THC_TEKSTER)
+    expect(regler.kort_tid_dager).toBe(2)
+    // I fast rekkefølge, uansett hvilken som ble huket av sist.
+    expect(regler.med_sporsmalsetning).toEqual([
+      'vanskelig',
+      'vanskelig_nylig',
+      'nytt_inntak_nylig',
+      'samlet_vurdering',
+      'under_cutoff_ikke_nodvendigvis',
+      'kort_tid',
+    ])
   })
 
   it('viser kurvene og konverteringsfaktoren, men lar dem ikke endres', async () => {
@@ -254,10 +296,10 @@ describe('redigeringen av THC-syrereglene', () => {
     const user = userEvent.setup()
     const onLagre = visRedigering()
     const skjema = await apne(user)
-    const apning = skjema.getByRole('textbox', { name: 'Åpning' })
-    await user.clear(apning)
-    await user.type(apning, 'THC-syre er påvist.')
-    expect(skjema.getByRole('alert').textContent).toContain('Tekstbolken «Åpning» må inneholde {nivå}.')
+    const intro = skjema.getByRole('textbox', { name: 'Introsetning' })
+    await user.clear(intro)
+    await user.type(intro, 'THC-syre er påvist.')
+    expect(skjema.getByRole('alert').textContent).toContain('Teksten «Introsetning» må inneholde {nivå}.')
     expect(skjema.getByRole('button', { name: 'Lagre utkast' })).toHaveProperty('disabled', true)
     expect(onLagre).not.toHaveBeenCalled()
   })
@@ -266,14 +308,17 @@ describe('redigeringen av THC-syrereglene', () => {
     const user = userEvent.setup()
     visRedigering()
     const skjema = await apne(user)
-    const apning = skjema.getByRole('textbox', { name: 'Åpning' })
-    await user.clear(apning)
+    const intro = skjema.getByRole('textbox', { name: 'Introsetning' })
+    await user.clear(intro)
     // Krøllparentesene må skrives dobbelt for user-event.
-    await user.type(apning, 'Syntetisk åpning i {{nivå} konsentrasjon.')
+    await user.type(intro, 'Syntetisk åpning i {{nivå} konsentrasjon.')
     await user.click(skjema.getByRole('button', { name: 'Prøv reglene' }))
     await user.click(skjema.getByRole('checkbox', { name: 'Ingen tidligere prøve tilgjengelig' }))
     await user.type(skjema.getByRole('group', { name: 'Denne prøven' }).querySelector('input')!, '10')
-    expect(skjema.getByText(/^Syntetisk åpning i lav konsentrasjon\./)).toBeTruthy()
+    // Både simulatoren og eksemplene under tekstene viser den nye introsetningen.
+    const treff = skjema.getAllByText(/^Syntetisk åpning i lav konsentrasjon\./)
+    expect(treff.some((e) => e.closest('.simulator__resultat'))).toBe(true)
+    expect(treff.some((e) => e.closest('.thc-kommentarredigering'))).toBe(true)
   })
 
   it('lukker uten å lagre når ingenting er endret', async () => {
@@ -288,13 +333,13 @@ describe('redigeringen av THC-syrereglene', () => {
   it('sier hvilke felt som ikke er publisert, som de andre regelsettene', async () => {
     const utgave = thcRegelsettutgave({
       regler: { ...THC_REGELSETT, varsel_dager_mellom: 21 },
-      tekster: { ...THC_TEKSTER, apning: 'Syntetisk åpning i {nivå} konsentrasjon.' },
+      tekster: { ...THC_TEKSTER, introsetning: 'Syntetisk åpning i {nivå} konsentrasjon.' },
     })
     utgave.regelsett = { ...utgave.regelsett, revisjon: 4 }
-    utgave.kommentarer = utgave.kommentarer.map((k) => (k.id === 'thc-apning' ? { ...k, revisjon: 2 } : k))
+    utgave.kommentarer = utgave.kommentarer.map((k) => (k.id === 'thc-introsetning' ? { ...k, revisjon: 2 } : k))
     visRedigering(utgave)
     expect(
-      screen.getByText('Ikke publisert: Varsel ved mer enn (dager mellom prøvene), Tekstbolkene: Åpning.'),
+      screen.getByText('Ikke publisert: Varsel ved mer enn (dager mellom prøvene), Felles setninger: Introsetning.'),
     ).toBeTruthy()
     // Historikken for hver tekst står i det samme detaljkortet som for de andre regelsettene.
     expect(screen.getByText('Historikken for hver kommentar')).toBeTruthy()

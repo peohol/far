@@ -16,7 +16,7 @@ kontroll på serveren (se [Lagringen](#lagringen)). Fortolkningsmodulen
 fortolker med motoren og det som er publisert (se [I appen](#i-appen)).
 THC-syre (IRCAK) er koblet til stoffet THC (`#/stoff/thc`), sammen med THC i
 serum. Siden viser to separate fortolkningsseksjoner:
-scenarioreglene for THC i serum og THC-syrereglene for urin med tekstbolker
+scenarioreglene for THC i serum og THC-syrereglene for urin med kommentarene
 og simulator. Administratorer kan redigere og publisere de to regelsettene
 uavhengig fra den samme siden. Den opprinnelige THC-syremodulen er bare igjen
 som fasit i testene (se [Redigeringen](#redigeringen)).
@@ -26,7 +26,7 @@ som fasit i testene (se [Redigeringen](#redigeringen)).
 | Hvor | Hva |
 | --- | --- |
 | `src/domain/thcRegelsett.ts` | Reglene: formen, og den ene kontrollen av dem |
-| `src/domain/thcTekster.ts` | Tekstbolkene: hva hver er, når den brukes, og kontrollen av dem |
+| `src/domain/thcTekster.ts` | Tekstene: de felles setningene og kommentaren for hver situasjon, når de brukes, sammensettingen og kontrollen av dem |
 | `src/domain/thcKurver.ts` | Kurveregningen, og beviset for at kurvene står i rekkefølge |
 | `src/domain/thcMotor.ts` | Motoren: fra inndata, regler og tekster til kommentar, konklusjon og tallgrunnlag |
 | `src/domain/thcTall.ts` | Tall og datoer slik de tastes og skrives |
@@ -35,13 +35,15 @@ som fasit i testene (se [Redigeringen](#redigeringen)).
 | `src/domain/thc.ts` | Koden, analysemetoden og søkeoppføringen |
 | `src/faginnhold/thcregler.ts` | Fra det databasen gir til en kontrollert modell, eller feilen modulen viser |
 | `src/components/ThcStep.tsx`, `ThcSkjema.tsx`, `ThcUtfall.tsx` | Modulen: skjemaet, kommentaren og kurvene, delt med simulatoren |
-| `src/components/regler/Thcregler.tsx`, `Thcsimulator.tsx` | Reglene, tekstbolkene og simulatoren på redigeringssiden for fortolkningen, som seksjon med detaljkort |
-| `src/components/regler/Thcredigering.tsx` | Redigeringen av reglene og tekstene |
+| `src/components/regler/Thcregler.tsx`, `Thckommentarer.tsx`, `Thcsimulator.tsx` | Reglene, kommentarene og simulatoren på redigeringssiden for fortolkningen, som seksjon med detaljkort |
+| `src/components/regler/Thcredigering.tsx`, `Thckommentarer.tsx` | Redigeringen av reglene og tekstene |
 | `src/domain/__tests__/hjelp/thcOpprinnelig.ts` | Den opprinnelige modulen, med regnearkets konstanter i koden. Bare fasit i testene |
 | `src/domain/__tests__/fasit/thc-regelsett-import.json`, `thc-tekster-import.json` | Reglene og tekstene slik de står i den opprinnelige modulen |
-| `src/domain/__tests__/fasit/thc-fasit.json` | Fasiten: utfallet av den opprinnelige modulen for over 4000 inndata |
+| `src/domain/__tests__/fasit/thc-regelsett.json`, `thc-tekster.json` | Reglene og tekstene slik de er publisert nå |
+| `src/domain/__tests__/hjelp/thcKommentarfasit.ts` | Kommentarene slik eieren skrev dem 12.10.2026, skrevet ut uavhengig av tekstene og motoren |
+| `src/domain/__tests__/fasit/thc-fasit.json` | Fasiten: konklusjonen fra den opprinnelige modulen og kommentaren fra kommentarfasiten for over 4000 inndata |
 | `scripts/lag-thc-fasit.ts` | Lager fasiten på nytt, bare ved bevisst klinisk endring |
-| `supabase/migrations/*_thc_regelsett*.sql`, `*_thc_tekster_som_kommentarer.sql`, `*_thc_laste_deler_og_samlet_lagring.sql` | Lagringen: tabellene, kontrollen på serveren, importen, flyttingen av tekstene, de låste delene og `lagre_thc_regelsett` |
+| `supabase/migrations/*_thc_regelsett*.sql`, `*_thc_tekster_som_kommentarer.sql`, `*_thc_laste_deler_og_samlet_lagring.sql`, `*_thc_nye_kommentarer.sql` | Lagringen: tabellene, kontrollen på serveren, importen, flyttingen av tekstene, de låste delene, `lagre_thc_regelsett` og de nye kommentarene |
 | `src/__tests__/thcRegelsettlagring.test.ts` | Lagringen prøvd mot en ekte database bygd av migrasjonene |
 | `src/__tests__/thcsteg.test.tsx`, `thcregler.test.tsx` | Modulen og redigeringssiden med reglene de får |
 | `src/__tests__/thcredigering.test.tsx`, `thcredigeringslagring.test.ts` | Redigeringen, og lagringen og publiseringen av den mot en ekte database |
@@ -65,12 +67,33 @@ Kilden er regnearket `originaldata/THC-COOH.xlsm`, med eierens senere tillegg.
 5. **Konklusjonen** avgjøres av hvor mange kurver, fra grønn og utover, den
    korrigerte endringen ligger over (strengt større enn), og av grensene for
    bruksmønsteret: ved kronisk bruk skiller gul «ikke nødvendigvis» fra
-   «vanskelig å avgjøre», og rød «vanskelig» fra nytt inntak; uten kronisk
-   bruk er det grønn og gul.
+   «kan ikke fastslås», og rød «kan ikke fastslås» fra nytt inntak; uten
+   kronisk bruk er det grønn og gul. I koden heter «kan ikke fastslås»
+   fortsatt `vanskelig`.
 6. **IRCAK 0 i forrige prøve** gir alltid nytt inntak, uten tallgrunnlag.
-7. **Kommentaren** settes sammen av tekstbolker etter konsentrasjonsnivået i
-   denne prøven og konklusjonen. Hvilke bolker hver konklusjon gir, er en
-   regel i motoren (`velgTekstbolker`); ordlyden står i tekstene.
+7. **Kommentaren** velges etter situasjonen og konsentrasjonsnivået i denne
+   prøven (`velgKommentar`), og settes sammen av introsetningen, kommentaren
+   og eventuelt spørsmålsetningen (`byggKommentar`). Se
+   [Kommentarene](#kommentarene).
+
+**Kort tid mellom prøvene.** Er prøvene tatt samme dag eller med færre døgn
+imellom enn regelsettets grense (`kort_tid_dager`, 3), viser skjemaet en
+melding med avkryssingen «Kort tid mellom prøvene», som ikke er huket av.
+Hukes den av, vurderes ikke prøvene mot hverandre: det blir ingen
+sammenligning, ingen margin og ingen tallgrunnlag, konklusjonen er som uten
+forrige prøve, og kommentaren er «Kort tid mellom prøvene». Står
+avkryssingen igjen etter at datoene er endret så det er lenger imellom,
+gjelder den ikke.
+
+**Samlet vurdering.** Med «Samlet vurdering med enda tidligere prøver» kan
+brukeren legge inn flere prøver før forrige prøve (IRCAK eller UCAK og NKRE,
+og dato). Gir sammenligningen med forrige prøve «kan ikke fastslås»,
+sammenlignes denne prøven med hver av dem, fra den nærmeste og bakover, med
+den samme fremgangsmåten. Den nærmeste som gir nytt inntak (eller har IRCAK
+0), gir kommentaren «Samlet vurdering av flere tidligere prøver» med datoen
+dens. Gir ingen nytt inntak, er kommentaren den vanlige. Konklusjonen og
+tallgrunnlaget er alltid sammenligningen med forrige prøve. En tidligere
+prøve må være tatt før forrige prøve.
 
 ## Regler og tekster er adskilt
 
@@ -80,18 +103,47 @@ to adskilte ting, som prosjektets arkitekturregel om kommentar og regel krever:
 - **Reglene** (`ThcRegelsett`) har ingen tekst som havner i kommentaren. De
   eneste ordene der er navnene på nivåene («lav», «middels høy», «høy»), som
   settes inn for plassholderen `{nivå}`, og navnene på kurvene i figuren.
-- **Tekstene** (`ThcTekster`) er én tekst per bolk. Hver bolk har en fast
-  rolle — nøkkelen, f.eks. `vanskelig` — og kan inneholde plassholderne
-  `{nivå}` og `{forrige prøvedato}`, som fylles inn når kommentaren settes
-  sammen. Hvilke plassholdere hver bolk må ha og kan ha, står i
-  `THC_TEKSTBOLKER`.
+- **Tekstene** (`ThcTekster`) er én tekst per nøkkel: de to felles setningene
+  og kommentaren for hver situasjon (se [Kommentarene](#kommentarene)). De
+  kan inneholde plassholderne `{nivå}`, `{forrige prøvedato}` og
+  `{tidligere prøvedato}`, som fylles inn når kommentaren settes sammen.
+  Hvilke plassholdere hver tekst må ha og kan ha, står i `THC_TEKSTBOLKER`.
+- **Hvilke kommentarer som avsluttes med spørsmålsetningen** er en del av
+  regelsettet (`med_sporsmalsetning`), ikke en plassholder, fordi
+  plassholderne i en kommentar aldri kan endres.
 
 Motoren tar imot begge, satt sammen og kontrollert, som en `ThcModell` fra
 `lagThcModell`.
 
 I databasen er hver tekst en kommentar (objekttypen `kommentar`, se
-`docs/faginnhold.md`), og regelsettet sier hvilken kommentar hver bolk bruker
+`docs/faginnhold.md`), og regelsettet sier hvilken kommentar hver tekst bruker
 (`tekstbolker`). `thcTeksterFra` slår tekstene opp i kommentarene.
+
+## Kommentarene
+
+Ordlyden er Peders (12.10.2026). Hver kommentar er introsetningen, så
+kommentaren for situasjonen, og spørsmålsetningen sist der det er huket av
+for den, bundet sammen med ett mellomrom (`settSammen`).
+
+| Nøkkel | Hva |
+| --- | --- |
+| `introsetning` | «THC-syre, et omdannelsesprodukt av cannabis, er påvist i {nivå} konsentrasjon.» Først i alle |
+| `sporsmalsetning` | «Ved spørsmål kan rekvirenten kontakte vakthavende lege …» Sist i dem som skal ha den |
+| `uten_forrige` | Ikke vurdert mot tidligere prøve |
+| `ikke_nodvendigvis` | Ikke nødvendigvis nytt |
+| `vanskelig` | Kan ikke fastslås (spørsmålsetning) |
+| `nytt_inntak` | Nytt inntak |
+| `samlet_vurdering` | Kan ikke fastslås, men en enda tidligere prøve gir nytt inntak (spørsmålsetning) |
+| `under_cutoff_ikke_nodvendigvis` | Ikke nødvendigvis nytt når forrige prøve var under cut-off (spørsmålsetning) |
+| `kort_tid` | Kort tid mellom prøvene (spørsmålsetning) |
+
+De fire første situasjonene har to kommentarer: én for nivåene som tyder på
+nylig inntak (`_nylig`, i dag «høy») og én for de øvrige. Hvilken som
+brukes, avgjøres av flagget på nivået, ikke av navnet, så det holder også om
+nivåene endres. «Kan ikke fastslås» og «Ikke nødvendigvis nytt» har i dag den
+samme ordlyden for alle nivåer, men kan skilles. Forrige prøve under cut-off
+gir egen kommentar bare for «ikke nødvendigvis nytt»; ellers er kommentaren
+den samme som uten cut-off.
 
 ## Reglene
 
@@ -104,6 +156,8 @@ I databasen er hver tekst en kommentar (objekttypen `kommentar`, se
 | Konsentrasjonsnivåer | Navn, nedre grense, om nivået tyder på nylig inntak | Det laveste uten grense, resten stigende; ulike navn |
 | Bruksmønstre | Kurven hver konklusjon ligger over, for kronisk og ikke-kronisk bruk | Nytt inntak er en tregere kurve enn «vanskelig» |
 | Varsel | Døgn mellom prøvene før varselet | Helt tall ≥ 1 |
+| Kort tid | Færre døgn mellom prøvene enn dette gir avkryssingen for kort tid | Helt tall ≥ 1 |
+| Spørsmålsetningen | Kommentarene som avsluttes med den | Kjente kommentarer, hver én gang, i fast rekkefølge |
 
 Grensene er matematisk entydige: et nivå gjelder fra og med sin nedre grense
 og opp til, men ikke med, neste nivås. Det er skillepunktet som lagres, én
@@ -147,7 +201,7 @@ Regelsettet er objekttypen `thc_regelsett` i faginnholdet
 (`docs/faginnhold.md`), med utkast, publisering, revisjoner, gjenoppretting
 og samtidighetskontroll derfra. Det finnes bare ett. Formen er
 `ThcRegelsettinnhold`: reglene, og `tekstbolker` med kommentar-ID-en for hver
-bolk.
+tekst.
 
 Delene har egne tabeller med kontroller på hver kolonne: `thc_regelsett`
 (enkeltverdiene), `thc_kurver`, `thc_sikkerhetsmarginer`,
@@ -158,8 +212,8 @@ bare peker på kommentarer. Tallene er `float8`, som i motoren.
 lagres og publiseres går gjennom, og avviser det `validerThcRegelsett`
 avviser: z mot AS 241, skillepunktene, grensene per bruksmønster og kurvenes
 rekkefølge — avgjort for hele domenet med den samme fremgangsmåten som
-`thcKurver.ts`, og med de samme meldingene. En bolk må peke på en kommentar
-med plassholderne bolken krever, og ingen den ikke kan bruke
+`thcKurver.ts`, og med de samme meldingene. En tekst må peke på en kommentar
+med plassholderne teksten krever, og ingen den ikke kan bruke
 (`validerThcTekstbolk`). Plassholderne i en kommentar kan aldri endres, så
 det holder også når teksten senere rettes. Et regelsett kan ikke publiseres
 før kommentarene det peker på er publisert. Testene sender de samme ugyldige
@@ -178,12 +232,19 @@ utkastene bare til administratorer. Tabellene kan ikke skrives direkte.
 2. Revisjon 2 (`*_thc_regelsett_flyttall.sql`) har alle sifrene.
 3. `*_thc_tekster_som_kommentarer.sql` flyttet de ti tekstene ut som
    publiserte kommentarer («THC-syre: Åpning» osv.), og revisjon 3 peker på
-   dem. Den er publisert, og reglene og tekstene er lik
-   `thc-regelsett-import.json` og `thc-tekster-import.json`.
+   dem. Reglene og tekstene var lik `thc-regelsett-import.json` og
+   `thc-tekster-import.json`.
+4. `*_thc_nye_kommentarer.sql` (12.10.2026) la inn de 13 nye tekstene som
+   publiserte kommentarer («THC-syre: Introsetning» osv.), med grensen for
+   kort tid og spørsmålsetningen i regelsettet, og publiserte en ny revisjon
+   som peker på dem. Reglene ellers er uendret. Har regelsettet et utkast
+   som ikke er publisert, stopper migrasjonen uten å endre noe. De gamle
+   kommentarene står igjen, med sin historikk, men brukes ikke.
 
-Revisjon 1 og 2 har tekstene i seg. Gjenopprettes en av dem, får regelsettet
-reglene derfra og beholder kommentarene det peker på nå; tekstene har sin egen
-historikk.
+Revisjonene fra før de nye kommentarene har tekstene i seg eller peker på de
+gamle. Gjenopprettes en av dem, får regelsettet reglene derfra og beholder
+kommentarene, grensen for kort tid og spørsmålsetningen det har nå; tekstene
+har sin egen historikk.
 
 ## I appen
 
@@ -204,10 +265,13 @@ Står skjemaet på en margin et nytt regelsett ikke har, gir motoren en mangel
 og ingen kommentar.
 
 Redigeringssiden for IRCAK (`#/fortolkning/ircak/rediger`, se
-`docs/fortolkningsregler.md`) har seksjonen med oversikten over reglene, detaljkortet `tekster` med hver tekstbolk og når den brukes, og
-detaljkortet `simulator`. Simulatoren bruker det samme skjemaet, den samme
-kommentaren og de samme kurvene som modulen, og viser hvilke tekstbolker
-kommentaren ble satt sammen av. Det er utkastet som vises.
+`docs/fortolkningsregler.md`) har seksjonen med oversikten over reglene,
+detaljkortet «Kommentarene» med de felles setningene og hver situasjon, når
+den brukes og kommentaren ferdig satt sammen for hver gruppe av nivåer
+(`Thckommentarer`), og detaljkortet `simulator`. Simulatoren bruker det
+samme skjemaet, den samme kommentaren og de samme kurvene som modulen, og
+viser hvilke tekster kommentaren ble satt sammen av. Det er utkastet som
+vises.
 
 Seksjonen er bygd som konsentrasjonsreglene og scenarioreglene
 (arbeidspakke 13): «Rediger reglene» i hodet, og under reglene «Sist
@@ -215,7 +279,8 @@ redigert» med historikken, hva som ikke er publisert, og detaljkortet
 «Historikken for hver kommentar» (`Regelhistorikk`). Historikken og
 sammenligningene deler reglene i de samme feltene som redigeringen
 (`thcfelter`: «Nivå 2: Fra og med (IRCAK)», «Den gule kurven: k1»,
-«Tekstbolkene: Åpning» …), med tallene helt ned til siste siffer, og
+«Felles setninger: Introsetning», «Kommentarene: Kort tid mellom prøvene:
+avsluttes med spørsmålsetningen» …), med tallene helt ned til siste siffer, og
 «Ikke publisert» nevner feltene som er endret.
 
 Seksjonen viser og redigerer bare. Modellen den viser og simulerer med, er
@@ -237,8 +302,11 @@ verken gjenopprettes eller publiseres. Skal de endres, gjøres det i koden,
 med en migrasjon og en ny fasit; migrasjonen slår av kontrollen for sin egen
 transaksjon med `select set_config('far.endre_thc_laste_deler', 'ja', true)`.
 Valideringen står i `intern.skriv_thc_regelsett_innhold`. Nivåer og marginer kan legges til og fjernes; z for en
-ny margin regnes ut av marginen. Tekstene redigeres der bolken er beskrevet,
-med plassholderne den må ha.
+ny margin regnes ut av marginen. Tekstene redigeres i to grupper
+(`Thckommentarredigering`): «Felles setninger», og «Kommentarene» med én
+boks per situasjon, der hver kommentar har tekstfeltet, avkryssingen
+«Avslutt med spørsmålsetningen» og «Slik blir den:» — kommentaren ferdig
+satt sammen med eksempeldatoer, oppdatert mens det skrives.
 
 `thcUtkastfeil` samler feilene mens det skrives — `validerThcRegelsett`,
 `validerThcTekst` og plassholderne kommentaren har fra før, som ikke kan
@@ -246,7 +314,7 @@ endres — og utkastet kan ikke lagres før de er rettet. Så lenge det er
 gyldig, fortolker simulatoren under med utkastet slik det står.
 
 `thcEndringer` avgjør hva som lagres: hver kommentar med endret tekst, og
-regelsettet når reglene er endret. Bolkene peker på de samme kommentarene
+regelsettet når reglene er endret. Tekstene peker på de samme kommentarene
 som før. Alt lagres i én transaksjon med `lagre_thc_regelsett`, hvert
 objekt mot revisjonen som ble åpnet, også regelsettet når bare en tekst er
 endret. Har noen andre lagret i mellomtiden, blir det
@@ -264,9 +332,13 @@ regelsettet, som databasen krever.
 
 Motoren er skrevet slik at regnestykkene skjer i nøyaktig samme rekkefølge som
 i den opprinnelige modulen, og gir samme resultat helt ned til siste siffer.
-To sett tester holder det slik:
+Kommentarene fikk ny ordlyd 12.10.2026; fasiten ble da laget på nytt med
+konklusjonene fra den opprinnelige modulen og kommentarene fra
+`thcKommentarfasit.ts`, og kontrollert mot den gamle: alt annet enn
+kommentarteksten er det samme, også summen over tallgrunnlaget. Testene som
+holder det slik:
 
-- `thcMotor.test.ts` kjører motoren med de importerte reglene og tekstene over
+- `thcMotor.test.ts` kjører motoren med de publiserte reglene og tekstene over
   hele fasiten. Den krever samme kommentar tegn for tegn, samme konklusjon,
   samme varsel og samme mangler for hvert tilfelle, og samme SHA-256 over alt
   tallgrunnlaget og et utvalg figurer. Tilfellene ligger rett på, rett under
@@ -274,8 +346,10 @@ To sett tester holder det slik:
   nivåene. De dekker også IRCAK 0, under cut-off, ingen tidligere prøve,
   varselgrensen og ugyldige felt. Beskrivelsen står i `hjelp/thcFasit.ts`.
 - `thcParitet.test.ts` kjører den opprinnelige modulen og motoren side om
-  side på 20 000 tilfeldige inndata, og sammenligner tekstbolkene og
-  konklusjonen for hver kombinasjon av nivå, utfall og under cut-off.
+  side på 20 000 tilfeldige inndata, og sammenligner konklusjonen, og
+  kommentaren mot kommentarfasiten, for hver kombinasjon av nivå, utfall og
+  under cut-off. Samlet vurdering og kort tid er prøvd for seg i
+  `thcMotor.test.ts`.
 - `fortolkningUendret.test.ts` holder alle kommentarene motoren kan gi med de
   publiserte tekstene, og konklusjonen for et rutenett av endringer, fast med
   SHA-256.

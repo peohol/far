@@ -69,7 +69,7 @@ export function ThcKommentar({
 /** Grunnlaget kurvene og forklaringen tegnes fra: fortolkningen mot en forrige prøve minst ett døgn før. */
 function grafgrunnlag(resultat: ThcResultat) {
   return resultat.type === 'kommentar' && resultat.grunnlag && resultat.grunnlag.dager >= 1
-    ? { grunnlag: resultat.grunnlag, konklusjon: resultat.konklusjon }
+    ? { grunnlag: resultat.grunnlag, konklusjon: resultat.konklusjon, samlet: resultat.samlet }
     : null
 }
 
@@ -81,7 +81,7 @@ export function ThcKurvebilde({ resultat, regler }: { resultat: ThcResultat; reg
     <>
       <ThcPlot grunnlag={graf.grunnlag} regler={regler} />
       <Details summary="Forklaring" ikon="fallback">
-        <ThcForklaring grunnlag={graf.grunnlag} konklusjon={graf.konklusjon} regler={regler} />
+        <ThcForklaring grunnlag={graf.grunnlag} konklusjon={graf.konklusjon} samlet={graf.samlet} regler={regler} />
       </Details>
     </>
   )

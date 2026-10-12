@@ -90,6 +90,21 @@
   color: var(--blekk);
 }
 
+/* De tidligere prøvene i den samlede vurderingen, under forrige og denne
+   prøven, med samme felt. */
+.thc-tidligere {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  width: 100%;
+}
+
+.thc-tidligere__ingress {
+  font-size: var(--tekst-ui);
+  text-align: left;
+  color: var(--blekk-dempet);
+}
+
 /* Sikkerhetsmarginen, nederst i inndatapanelet: overskriften og bryteren
    midtstilt i en hevet flate (Atlas `MarginScale`), og forklaringen under. */
 .thc-margin {

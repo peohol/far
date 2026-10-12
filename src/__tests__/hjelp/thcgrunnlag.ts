@@ -1,5 +1,5 @@
-import importertRegelsett from '../../domain/__tests__/fasit/thc-regelsett-import.json'
-import importerteTekster from '../../domain/__tests__/fasit/thc-tekster-import.json'
+import gjeldendeRegelsett from '../../domain/__tests__/fasit/thc-regelsett.json'
+import gjeldendeTekster from '../../domain/__tests__/fasit/thc-tekster.json'
 import { lagThcModell, type ThcModell } from '../../domain/thcMotor'
 import type { ThcRegelsett } from '../../domain/thcRegelsett'
 import { plassholdereI, type Kommentarinnhold } from '../../domain/kommentarobjekt'
@@ -9,11 +9,11 @@ import type { ThcRegelsettutgave } from '../../faginnhold/thcregler'
 
 /**
  * THC-syreregelsettet og tekstene slik de er publisert i Supabase, for testene
- * som ikke har en database: det de ble importert fra, som
- * `thcRegelsettlagring.test.ts` viser at databasen gir tilbake uendret.
+ * som ikke har en database, som `thcRegelsettlagring.test.ts` viser at
+ * databasen gir tilbake uendret.
  */
-export const THC_REGELSETT = importertRegelsett as ThcRegelsett
-export const THC_TEKSTER = importerteTekster as ThcTekster
+export const THC_REGELSETT = gjeldendeRegelsett as ThcRegelsett
+export const THC_TEKSTER = gjeldendeTekster as ThcTekster
 
 function modell(): ThcModell {
   const m = lagThcModell(THC_REGELSETT, THC_TEKSTER)

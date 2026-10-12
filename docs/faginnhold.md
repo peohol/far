@@ -124,7 +124,7 @@ Begrepene holdes fra hverandre:
   konsentrasjonsreglene for én analyttkode. Regelsettet peker på kommentarene i
   stedet for å ha sin egen kopi. Se `docs/fortolkningsregler.md`.
 - **THC-syreregelsett** (`thc_regelsett`) — reglene for THC-syre i urin som
-  ett objekt: kurvene, grensene og hvilken kommentar hver tekstbolk bruker
+  ett objekt: kurvene, grensene og hvilken kommentar hver tekst bruker
   lagres, publiseres og gjenopprettes samlet. Tekstene er kommentarer. Det
   finnes bare ett. Se `docs/thc-syre.md`.
 

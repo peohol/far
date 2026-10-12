@@ -10,7 +10,6 @@ import {
   type ThcKurverolle,
   type ThcRegelsett,
 } from '../../domain/thcRegelsett'
-import { THC_TEKSTBOLKER, THC_TEKSTNOKLER } from '../../domain/thcTekster'
 import { marginmerke } from '../../domain/thcVisning'
 import { lesTallfelt } from '../../faginnhold/paneler'
 import {
@@ -26,7 +25,8 @@ import {
 } from '../../faginnhold/thcregler'
 import { Button } from '../Button'
 import { Tallfelt } from '../Tallfelt'
-import { Lagringskonflikt, Tekstomrade, useRegellagring, Valgfelt } from './Regelfelter'
+import { Lagringskonflikt, useRegellagring, Valgfelt } from './Regelfelter'
+import { Thckommentarredigering } from './Thckommentarer'
 import { Thcsimulator } from './Thcsimulator'
 
 export interface ThcredigeringProps {
@@ -54,8 +54,10 @@ export interface ThcredigeringProps {
  * Utskillelseskurvene og konverteringsfaktoren vises, men er låst
  * (`THC_LASTE_DELER`): de endres bare i koden.
  *
- * Tekstene er kommentarene bolkene peker på, og lagres hver for seg; reglene
- * lagres bare når de er endret. Plassholderne i en tekst kan ikke endres.
+ * Tekstene er kommentarene regelsettet peker på, og lagres hver for seg;
+ * reglene lagres bare når de er endret. De felles setningene og kommentarene
+ * redigeres i `Thckommentarredigering`, som viser hver kommentar ferdig satt
+ * sammen mens det skrives. Plassholderne i en tekst kan ikke endres.
  * Lagringen og konflikten når noen andre har lagret i mellomtiden, er de
  * samme som i de andre regelredigeringene (`Regelfelter`): ingenting skrives
  * over før brukeren har sammenlignet og valgt.
@@ -253,7 +255,16 @@ export function Thcredigering({ utgave, start, onLagre, hentNyeste, onAvbryt }: 
             verdi={regler.varsel_dager_mellom}
             onEndre={(dager) => sett('varsel_dager_mellom', dager)}
           />
+          <Tallinndata
+            merke="Kort tid ved færre enn (dager mellom prøvene)"
+            verdi={regler.kort_tid_dager}
+            onEndre={(dager) => sett('kort_tid_dager', dager)}
+          />
         </div>
+        <p className="felt__hjelp">
+          Ved kort tid vises et banner, og brukeren kan velge at prøvene ikke vurderes mot hverandre. 3 betyr
+          samme dag, 1 eller 2 dager.
+        </p>
       </fieldset>
 
       <fieldset className="regelredigering__gruppe">
@@ -278,21 +289,12 @@ export function Thcredigering({ utgave, start, onLagre, hentNyeste, onAvbryt }: 
         </dl>
       </fieldset>
 
-      <fieldset className="regelredigering__gruppe">
-        <legend>Tekstbolkene</legend>
-        {THC_TEKSTNOKLER.map((nokkel) => {
-          const { tittel: bolk, brukes, plassholdere } = THC_TEKSTBOLKER[nokkel]
-          return (
-            <Tekstomrade
-              key={nokkel}
-              merke={bolk}
-              verdi={tekster[nokkel]}
-              hjelp={plassholdere.length > 0 ? `${brukes} Må inneholde ${plassholdere.join(' og ')}.` : brukes}
-              onEndre={(tekst) => setTekster((t) => ({ ...t, [nokkel]: tekst }))}
-            />
-          )
-        })}
-      </fieldset>
+      <Thckommentarredigering
+        regler={regler}
+        tekster={tekster}
+        onTekst={(nokkel, tekst) => setTekster((t) => ({ ...t, [nokkel]: tekst }))}
+        onSporsmalsetning={(nokler) => sett('med_sporsmalsetning', nokler)}
+      />
 
       {utkastfeil.length > 0 ? (
         <div className="sidevarsel" role="alert">
@@ -407,7 +409,7 @@ function Bruksmonsterredigering({
   return (
     <div className="feltrad">
       <Valgfelt
-        merke={`${navn}: vanskelig å avgjøre over`}
+        merke={`${navn}: kan ikke fastslås over`}
         verdi={monster.vanskelig_over}
         valg={KURVEVALG}
         onEndre={(v) => onEndre({ ...monster, vanskelig_over: v as ThcKurverolle })}

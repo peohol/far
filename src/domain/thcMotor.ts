@@ -9,7 +9,17 @@ import {
   type ThcKurverolle,
   type ThcRegelsett,
 } from './thcRegelsett'
-import { godkjennThcTekster, type GodkjenteThcTekster, type ThcTekster, type ThcTekstnokkel } from './thcTekster'
+import {
+  godkjennThcTekster,
+  kommentardeler,
+  kommentarnokkel,
+  settSammen,
+  type GodkjenteThcTekster,
+  type ThcKommentarnokkel,
+  type ThcPlassholderverdier,
+  type ThcTekster,
+  type ThcTekstnokkel,
+} from './thcTekster'
 import { beregnIrcak, dagerMellom, formaterDatoNorsk, lesTall } from './thcTall'
 
 /**
@@ -27,7 +37,7 @@ import { beregnIrcak, dagerMellom, formaterDatoNorsk, lesTall } from './thcTall'
  * Alt som er fagkunnskap kommer utenfra: kurvene, usikkerheten, marginene,
  * nivåene og grensene per bruksmønster fra regelsettet (`thcRegelsett.ts`),
  * og ordlyden fra tekstbolkene (`thcTekster.ts`). Her står bare
- * fremgangsmåten, og hvilke bolker hver konklusjon gir. Regnestykkene er gjort i
+ * fremgangsmåten, og hvilken kommentar hver konklusjon gir. Regnestykkene er gjort i
  * nøyaktig samme rekkefølge som i den opprinnelige modulen, slik at
  * resultatene er like helt ned til siste siffer; testene mot fasiten
  * (`__tests__/fasit/`) holder det slik.
@@ -176,62 +186,63 @@ export function sammenlignMedForrige(
 
 /* --- Kommentaren ---------------------------------------------------------- */
 
-/**
- * Tekstbolkene kommentaren består av, i rekkefølge. Vilkårene er de samme som
- * i regnearkets tekstformler (J23–J30), med eierens tillegg; hver bolk er
- * beskrevet i `THC_TEKSTBOLKER`.
- */
-export function velgTekstbolker(
-  niva: ThcKonsentrasjonsniva,
-  utfall: ThcKonklusjon,
-  underCutoff: boolean,
-): ThcTekstnokkel[] {
-  const bolker: ThcTekstnokkel[] = ['apning']
-  const medForrige = utfall !== 'uten_forrige'
-  // Under cut-off erstatter egne bolker konklusjonen mot forrige prøve, så
-  // lenge den ikke er et sikkert nytt inntak.
-  const underGrensen = underCutoff && medForrige && utfall !== 'nytt_inntak'
-
-  if (niva.nylig_inntak) bolker.push('nylig_inntak')
-  if (utfall === 'nytt_inntak') bolker.push('nytt_inntak')
-  if (
-    !niva.nylig_inntak &&
-    (utfall === 'uten_forrige' || utfall === 'ikke_nodvendigvis' || underGrensen)
-  ) {
-    bolker.push('inntak_har_skjedd')
-  }
-
-  if (medForrige && utfall !== 'nytt_inntak') {
-    bolker.push('pavisningstid')
-    if (underGrensen) {
-      bolker.push(utfall === 'vanskelig' ? 'under_cutoff_vanskelig' : 'under_cutoff_ikke_nodvendigvis')
-    } else {
-      bolker.push(utfall === 'vanskelig' ? 'vanskelig' : 'ikke_nodvendigvis')
-    }
-  } else if (!medForrige && !niva.nylig_inntak) {
-    bolker.push('pavisningstid')
-  }
-
-  if (!medForrige) bolker.push('uten_forrige')
-  return bolker
+/** Det utover konklusjonen som avgjør hvilken kommentar som brukes. */
+export interface ThcKommentarvalg {
+  /** Forrige prøve er fortolket under cut-off. */
+  underCutoff: boolean
+  /** En enda tidligere prøve gir nytt inntak i den samlede vurderingen. */
+  samlet: boolean
+  /** Prøvene er tatt med kort tid imellom og vurderes ikke mot hverandre. */
+  kortTid: boolean
 }
 
-/** Setter inn plassholderne og binder bolkene sammen med mellomrom. */
-export function settSammen(
-  tekster: ThcTekster,
-  bolker: ThcTekstnokkel[],
-  verdier: { niva: string; forrigeDato: string },
-): string {
-  return bolker
-    .map((nokkel) =>
-      tekster[nokkel]
-        .replaceAll('{nivå}', verdier.niva)
-        .replaceAll('{forrige prøvedato}', verdier.forrigeDato),
-    )
-    .join(' ')
+/**
+ * Kommentaren konklusjonen gir. Under cut-off har «ikke nødvendigvis» sin
+ * egen kommentar; «kan ikke fastslås» erstattes av den samlede vurderingen
+ * når en enda tidligere prøve gir nytt inntak; og kort tid mellom prøvene
+ * gir sin egen. Ellers er det situasjonen selv, med egen kommentar for
+ * nivåene som tyder på nylig inntak. Hver kommentar er beskrevet i
+ * `THC_SITUASJONSINFO`.
+ */
+export function velgKommentar(
+  niva: ThcKonsentrasjonsniva,
+  utfall: ThcKonklusjon,
+  { underCutoff, samlet, kortTid }: ThcKommentarvalg,
+): ThcKommentarnokkel {
+  if (kortTid) return 'kort_tid'
+  if (utfall === 'vanskelig' && samlet) return 'samlet_vurdering'
+  if (utfall === 'ikke_nodvendigvis' && underCutoff) return 'under_cutoff_ikke_nodvendigvis'
+  return kommentarnokkel(utfall, niva.nylig_inntak)
+}
+
+/** Den ferdige kommentaren for nøkkelen, med plassholderne fylt inn. */
+export function byggKommentar(
+  { regler, tekster }: ThcModell,
+  nokkel: ThcKommentarnokkel,
+  verdier: ThcPlassholderverdier,
+): { kommentar: string; deler: ThcTekstnokkel[] } {
+  const deler = kommentardeler(regler.med_sporsmalsetning, nokkel)
+  return { kommentar: settSammen(tekster, deler, verdier), deler }
 }
 
 /* --- Fortolkningen -------------------------------------------------------- */
+
+/**
+ * En prøve slik den tastes: IRCAK, eller — når den ble fortolket under
+ * cut-off — labsystemets to interne tall, UCAK og NKRE, som IRCAK regnes ut
+ * av. Og prøvedatoen.
+ */
+export interface ThcProve {
+  underCutoff: boolean
+  verdi: string
+  ucak: string
+  nkre: string
+  dato: string
+}
+
+export function tomThcProve(): ThcProve {
+  return { underCutoff: false, verdi: '', ucak: '', nkre: '', dato: '' }
+}
 
 export interface ThcInndata {
   kronisk: boolean
@@ -249,6 +260,35 @@ export interface ThcInndata {
   forrigeNkre: string
   forrigeDato: string
   sikkerhetsmargin: number
+  /**
+   * Prøvene er tatt med så kort tid imellom at de ikke skal vurderes mot
+   * hverandre. Gjelder bare når de faktisk er det ({@link kortTidMellomProvene}).
+   */
+  kortTid?: boolean
+  /** Vurder også mot prøvene i {@link tidligere} når konklusjonen er «kan ikke fastslås». */
+  samletVurdering?: boolean
+  /** Prøvene før forrige prøve, til den samlede vurderingen. */
+  tidligere?: ThcProve[]
+}
+
+/** Feltene i skjemaet forrige prøve står i. */
+export const FORRIGE_PROVEFELT = {
+  underCutoff: 'forrigeUnderCutoff',
+  verdi: 'forrigeVerdi',
+  ucak: 'forrigeUcak',
+  nkre: 'forrigeNkre',
+  dato: 'forrigeDato',
+} as const satisfies Record<keyof ThcProve, keyof ThcInndata>
+
+/** Forrige prøve, på samme form som de tidligere. */
+export function forrigeProve(inn: ThcInndata): ThcProve {
+  return {
+    underCutoff: inn.forrigeUnderCutoff,
+    verdi: inn.forrigeVerdi,
+    ucak: inn.forrigeUcak,
+    nkre: inn.forrigeNkre,
+    dato: inn.forrigeDato,
+  }
 }
 
 /** Et tomt skjema, med regelsettets standardmargin. */
@@ -264,7 +304,30 @@ export function tomThcInndata(r: ThcRegelsett): ThcInndata {
     forrigeNkre: '',
     forrigeDato: '',
     sikkerhetsmargin: r.standard_sikkerhetsmargin,
+    kortTid: false,
+    samletVurdering: false,
+    tidligere: [],
   }
+}
+
+/**
+ * Døgnene mellom forrige prøve og denne, når begge datoene er fylt inn og
+ * står i riktig rekkefølge.
+ */
+function dagerMellomProvene(inn: ThcInndata): number | null {
+  if (inn.ingenTidligere || inn.forrigeDato === '' || inn.aktuellDato === '') return null
+  const dager = dagerMellom(inn.forrigeDato, inn.aktuellDato)
+  return Number.isFinite(dager) && dager >= 0 ? dager : null
+}
+
+/**
+ * Sant når prøvene er tatt samme dag eller med færre døgn imellom enn
+ * regelsettets grense. Da viser skjemaet banneret og valget om ikke å vurdere
+ * prøvene mot hverandre.
+ */
+export function kortTidMellomProvene(r: ThcRegelsett, inn: ThcInndata): boolean {
+  const dager = dagerMellomProvene(inn)
+  return dager !== null && dager < r.kort_tid_dager
 }
 
 /**
@@ -291,18 +354,35 @@ export interface ThcGrunnlag extends ThcGrafgrunnlag {
   forventet: ThcForventet
 }
 
+/** Den tidligere prøven den samlede vurderingen fant nytt inntak etter. */
+export interface ThcSamletVurdering {
+  /** Datoen slik kommentaren skriver den. */
+  dato: string
+  /** IRCAK i den tidligere prøven. */
+  ircak: number
+  dager: number
+}
+
 export type ThcResultat =
   | { type: 'mangler'; mangler: string[] }
   | {
       type: 'kommentar'
       kommentar: string
+      /**
+       * Konklusjonen mot forrige prøve. `uten_forrige` også når prøvene ikke
+       * vurderes mot hverandre fordi det er kort tid mellom dem.
+       */
       konklusjon: ThcKonklusjon
       /** Nivået den aktuelle prøven ligger på. */
       niva: ThcKonsentrasjonsniva
-      /** Tekstbolkene kommentaren ble satt sammen av, i rekkefølge. */
+      /** Kommentaren som ble brukt. */
+      kommentarnokkel: ThcKommentarnokkel
+      /** Tekstene kommentaren ble satt sammen av, i rekkefølge. */
       bolker: ThcTekstnokkel[]
       /** Satt når fortolkningen er gjort mot forrige prøve med IRCAK over 0. */
       grunnlag: ThcGrunnlag | null
+      /** Satt når den samlede vurderingen fant nytt inntak etter en enda tidligere prøve. */
+      samlet: ThcSamletVurdering | null
       /**
        * Sant når det er mer enn regelsettets varselgrense i døgn mellom
        * prøvene. Fortolkningen skjer som normalt; dette er bare et varsel.
@@ -311,10 +391,49 @@ export type ThcResultat =
     }
 
 /**
+ * Leser IRCAK i en prøve og legger det som mangler til `mangler`, med
+ * prøvens navn: «forrige prøve», «tidligere prøve 1». IRCAK er `null` når det
+ * mangler noe.
+ */
+function lesProve(prove: ThcProve, navn: string, mangler: string[]): number | null {
+  let ircak: number | null
+  if (prove.underCutoff) {
+    const thcSyre = lesTall(prove.ucak)
+    const kreatinin = lesTall(prove.nkre)
+    if (prove.ucak.trim() === '') {
+      mangler.push(`Fyll inn UCAK (THC-syre) for ${navn}.`)
+    } else if (thcSyre === null || thcSyre < 0) {
+      mangler.push(`UCAK (THC-syre) for ${navn} må være et tall som ikke er negativt.`)
+    }
+    if (prove.nkre.trim() === '') {
+      mangler.push(`Fyll inn NKRE (kreatinin) for ${navn}.`)
+    } else if (kreatinin === null || !(kreatinin > 0)) {
+      mangler.push(`NKRE (kreatinin) for ${navn} må være et tall større enn 0.`)
+    }
+    ircak = beregnIrcak(prove.ucak, prove.nkre)
+  } else {
+    ircak = lesTall(prove.verdi)
+    if (prove.verdi.trim() === '') {
+      mangler.push(`Fyll inn IRCAK for ${navn}.`)
+    } else if (ircak === null || ircak < 0) {
+      mangler.push(`IRCAK for ${navn} må være et tall som ikke er negativt.`)
+    }
+  }
+  if (prove.dato === '') mangler.push(`Fyll inn prøvedato for ${navn}.`)
+  return ircak
+}
+
+/** Navnet en tidligere prøve har i meldingene: «den tidligere prøven», eller nummeret når det er flere. */
+function tidligereNavn(antall: number, i: number): string {
+  return antall === 1 ? 'den tidligere prøven' : `tidligere prøve ${i + 1}`
+}
+
+/**
  * Validerer inndataene og bygger kommentaren. Forrige prøve brukes i
  * sammenligningen uansett hvor lang tid det har gått siden den.
  */
-export function fortolkThc(inn: ThcInndata, { regler: r, tekster }: ThcModell): ThcResultat {
+export function fortolkThc(inn: ThcInndata, modell: ThcModell): ThcResultat {
+  const { regler: r } = modell
   const mangler: string[] = []
 
   const aktuell = lesTall(inn.aktuellVerdi)
@@ -324,38 +443,34 @@ export function fortolkThc(inn: ThcInndata, { regler: r, tekster }: ThcModell): 
   // Avkryssingen står inne i «Forrige prøve», så den betyr ingenting når det
   // ikke finnes en forrige prøve å fortolke.
   const underCutoff = !inn.ingenTidligere && inn.forrigeUnderCutoff
+  // Kort tid mellom prøvene gjelder bare så lenge datoene sier det; da
+  // trengs ikke tallene for forrige prøve, siden prøvene ikke sammenlignes.
+  const kortTid = inn.kortTid === true && kortTidMellomProvene(r, inn)
+  // Den samlede vurderingen gjelder bare når prøvene sammenlignes.
+  const tidligere = !inn.ingenTidligere && !kortTid && inn.samletVurdering ? (inn.tidligere ?? []) : []
 
   let forrige: number | null = null
+  const tidligereIrcak: (number | null)[] = []
   if (!inn.ingenTidligere) {
     if (inn.aktuellDato === '') mangler.push('Fyll inn prøvedato for denne prøven.')
 
-    if (underCutoff) {
-      const thcSyre = lesTall(inn.forrigeUcak)
-      const kreatinin = lesTall(inn.forrigeNkre)
-      if (inn.forrigeUcak.trim() === '') {
-        mangler.push('Fyll inn UCAK (THC-syre) for forrige prøve.')
-      } else if (thcSyre === null || thcSyre < 0) {
-        mangler.push('UCAK (THC-syre) for forrige prøve må være et tall som ikke er negativt.')
-      }
-      if (inn.forrigeNkre.trim() === '') {
-        mangler.push('Fyll inn NKRE (kreatinin) for forrige prøve.')
-      } else if (kreatinin === null || !(kreatinin > 0)) {
-        mangler.push('NKRE (kreatinin) for forrige prøve må være et tall større enn 0.')
-      }
-      forrige = beregnIrcak(inn.forrigeUcak, inn.forrigeNkre)
-    } else {
-      forrige = lesTall(inn.forrigeVerdi)
-      if (inn.forrigeVerdi.trim() === '') {
-        mangler.push('Fyll inn IRCAK for forrige prøve.')
-      } else if (forrige === null || forrige < 0) {
-        mangler.push('IRCAK for forrige prøve må være et tall som ikke er negativt.')
-      }
-    }
+    if (!kortTid) forrige = lesProve(forrigeProve(inn), 'forrige prøve', mangler)
 
-    if (inn.forrigeDato === '') mangler.push('Fyll inn prøvedato for forrige prøve.')
     if (inn.forrigeDato !== '' && inn.aktuellDato !== '' && dagerMellom(inn.forrigeDato, inn.aktuellDato) < 0) {
       mangler.push('Denne prøven kan ikke være tatt før forrige prøve.')
     }
+
+    if (!kortTid && inn.samletVurdering && tidligere.length === 0) {
+      mangler.push('Legg til en tidligere prøve, eller slå av den samlede vurderingen.')
+    }
+    tidligere.forEach((prove, i) => {
+      const navn = tidligereNavn(tidligere.length, i)
+      tidligereIrcak.push(lesProve(prove, navn, mangler))
+      if (prove.dato !== '' && inn.forrigeDato !== '' && dagerMellom(prove.dato, inn.forrigeDato) < 0) {
+        const stor = navn.charAt(0).toUpperCase() + navn.slice(1)
+        mangler.push(`${stor} kan ikke være tatt etter forrige prøve.`)
+      }
+    })
   }
 
   // Marginen kommer fra skjemaet, som kan leve lenger enn regelsettet det ble
@@ -368,15 +483,28 @@ export function fortolkThc(inn: ThcInndata, { regler: r, tekster }: ThcModell): 
 
   const aktuellIrcak = aktuell as number
   const niva = konsentrasjonsniva(r, aktuellIrcak)
-  const resultat = (utfall: ThcKonklusjon, forrigeDato: string, grunnlag: ThcGrunnlag | null, langt: boolean) => {
-    const bolker = velgTekstbolker(niva, utfall, underCutoff)
+  const resultat = (
+    utfall: ThcKonklusjon,
+    forrigeDato: string,
+    grunnlag: ThcGrunnlag | null,
+    langt: boolean,
+    { samlet = null, kortTid = false }: { samlet?: ThcSamletVurdering | null; kortTid?: boolean } = {},
+  ) => {
+    const kommentarnokkel = velgKommentar(niva, utfall, { underCutoff, samlet: samlet !== null, kortTid })
+    const { kommentar, deler } = byggKommentar(modell, kommentarnokkel, {
+      niva: niva.navn,
+      forrigeDato,
+      tidligereDato: samlet?.dato ?? '',
+    })
     return {
       type: 'kommentar' as const,
-      kommentar: settSammen(tekster, bolker, { niva: niva.navn, forrigeDato }),
+      kommentar,
       konklusjon: utfall,
       niva,
-      bolker,
+      kommentarnokkel,
+      bolker: deler,
       grunnlag,
+      samlet,
       langtMellomProvene: langt,
     }
   }
@@ -384,8 +512,12 @@ export function fortolkThc(inn: ThcInndata, { regler: r, tekster }: ThcModell): 
   if (inn.ingenTidligere) return resultat('uten_forrige', '', null, false)
 
   const dager = dagerMellom(inn.forrigeDato, inn.aktuellDato)
-  const langt = dager > r.varsel_dager_mellom
   const forrigeDato = formaterDatoNorsk(inn.forrigeDato)
+
+  // Prøvene vurderes ikke mot hverandre; varselet om lang tid gjelder ikke.
+  if (kortTid) return resultat('uten_forrige', forrigeDato, null, false, { kortTid: true })
+
+  const langt = dager > r.varsel_dager_mellom
   const forrigeIrcak = forrige as number
 
   // Ingen THC-syre i forrige prøve: da finnes det ingen utskillelse å regne
@@ -393,14 +525,17 @@ export function fortolkThc(inn: ThcInndata, { regler: r, tekster }: ThcModell): 
   // Figuren og forklaringen har ingen prosentvis endring fra 0 å vise.
   if (forrigeIrcak === 0) return resultat('nytt_inntak', forrigeDato, null, langt)
 
-  const { korrigert, forventet, utfall } = sammenlignMedForrige(r, {
-    forrige: forrigeIrcak,
-    aktuell: aktuellIrcak,
-    dager,
-    kronisk: inn.kronisk,
-    margin: inn.sikkerhetsmargin,
-    usikkerhet: underCutoff ? r.maleusikkerhet.faktor_under_cutoff : 1,
-  })
+  const sammenlign = (fra: number, dagerFra: number, fraUnderCutoff: boolean) =>
+    sammenlignMedForrige(r, {
+      forrige: fra,
+      aktuell: aktuellIrcak,
+      dager: dagerFra,
+      kronisk: inn.kronisk,
+      margin: inn.sikkerhetsmargin,
+      usikkerhet: fraUnderCutoff ? r.maleusikkerhet.faktor_under_cutoff : 1,
+    })
+
+  const { korrigert, forventet, utfall } = sammenlign(forrigeIrcak, dager, underCutoff)
 
   return resultat(
     utfall,
@@ -417,7 +552,34 @@ export function fortolkThc(inn: ThcInndata, { regler: r, tekster }: ThcModell): 
       forventet,
     },
     langt,
+    { samlet: utfall === 'vanskelig' ? samletVurdering(tidligere, tidligereIrcak as number[], inn, sammenlign) : null },
   )
+}
+
+/**
+ * Den samlede vurderingen: denne prøven sammenlignes med hver av de
+ * tidligere prøvene, fra den nærmeste og bakover, på samme måte som med
+ * forrige prøve. Den første som gir nytt inntak, brukes. Gir ingen av dem
+ * nytt inntak, tilfører de ikke noe, og kommentaren gjelder bare forrige
+ * prøve.
+ */
+function samletVurdering(
+  prover: ThcProve[],
+  ircak: number[],
+  inn: ThcInndata,
+  sammenlign: (fra: number, dager: number, underCutoff: boolean) => { utfall: ThcKonklusjon },
+): ThcSamletVurdering | null {
+  const nyestForst = prover
+    .map((prove, i) => ({ prove, ircak: ircak[i]!, dager: dagerMellom(prove.dato, inn.aktuellDato) }))
+    .sort((a, b) => a.dager - b.dager)
+  for (const { prove, ircak: fra, dager } of nyestForst) {
+    // IRCAK 0 i den tidligere prøven: som for forrige prøve er ethvert funn
+    // nå et nytt inntak etter den.
+    if (fra === 0 || sammenlign(fra, dager, prove.underCutoff).utfall === 'nytt_inntak') {
+      return { dato: formaterDatoNorsk(prove.dato), ircak: fra, dager }
+    }
+  }
+  return null
 }
 
 /** Sant når marginen er den uten korreksjon — medianen er den målte verdien. */

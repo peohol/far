@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import importert from './fasit/thc-regelsett-import.json'
+import regelsett from './fasit/thc-regelsett.json'
 import { tidForVerdi as opprinneligTidForVerdi } from './hjelp/thcOpprinnelig'
 import {
   forventetEndring,
@@ -20,7 +20,7 @@ import { kurverI, validerThcRegelsett, visIrcak, type ThcRegelsett } from '../th
  * også langt utenfor det et rutenett ville dekket, og at det den avviser
  * faktisk bryter rekkefølgen der den sier.
  */
-const REGELSETT = importert as ThcRegelsett
+const REGELSETT = regelsett as ThcRegelsett
 const KURVER = kurverI(REGELSETT)
 
 /** Fast frø, så et avvik kan gjenskapes. */
