@@ -238,6 +238,9 @@ export function byggPreparatvisning(
 
   const former = new Map<string, Formgruppe & { grupper: Map<string, Styrkegruppe> }>()
   const preparater = new Map<string, Preparatdetalj & { perStyrke: Map<string, Preparatstyrkedetalj> }>()
+  // Delingen til hver merkevare for seg, før håndteringen slås sammen: ikonet
+  // skal bare ha delestrek når FEST sier det om alle (`fellesDeling`).
+  const delinger = new Map<Preparatstyrkedetalj, Handteringsstatus[]>()
 
   for (const m of utvalg.merkevarer) {
     const { id: formId, form: formtekst } = legemiddelform(m.legemiddelform)
@@ -329,7 +332,9 @@ export function byggPreparatvisning(
         .get(nokkel)!
     // Samme preparat i samme styrke kan være flere merkevarer i FEST, f.eks.
     // med hver sine pakninger. Det er én styrke å vise, med alt fra dem alle.
-    if (styrke.merkevarer.length > 0) styrke.handtering = slaSammenHandtering(styrke.handtering, handteringFor(m))
+    const handtering = handteringFor(m)
+    if (styrke.merkevarer.length > 0) styrke.handtering = slaSammenHandtering(styrke.handtering, handtering)
+    delinger.set(styrke, [...(delinger.get(styrke) ?? []), handtering.deling.status])
     styrke.merkevarer.push(m.id)
     leggTil(styrke.navn_form_styrke, [m.navn_form_styrke])
     leggTilMerker(styrke.merker, merker)
@@ -367,7 +372,7 @@ export function byggPreparatvisning(
           navn: preparat.navn,
           produsenter: s.produsenter,
           merker: s.merker,
-          deling: s.handtering.deling.status,
+          deling: fellesDeling(delinger.get(s)!),
         })
         return { s, i }
       })
@@ -380,7 +385,7 @@ export function byggPreparatvisning(
       leggTil(preparat.produsenter, s.produsenter)
       leggTilKoder(preparat.atc, s.atc)
     }
-    const deling = fellesDeling(styrkeliste.map((s) => s.handtering.deling.status))
+    const deling = fellesDeling(styrkeliste.flatMap((s) => delinger.get(s)!))
     ferdigePreparater.set(preparat.id, { ...preparat, styrker: styrkeliste, deling })
   }
   for (const f of ferdigeFormer) {
