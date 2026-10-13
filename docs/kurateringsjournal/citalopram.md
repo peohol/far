@@ -2,11 +2,58 @@
 
 - **Stoff/slug:** citalopram
 - **Dekning:** full stoffmonografi, inkludert redaksjonelle seksjoner og kontroll av automatiske datalag
-- **Sist oppdatert:** 2026-10-07
+- **Sist oppdatert:** 2026-10-13
 - **Kurateringsmodus:** de novo-kuratering
-- **Kunnskapsgrense:** 2026-10-07
+- **Kunnskapsgrense:** 2026-10-13
 - **Siste fulle kjøring:** 2026-10-06
-- **Siste de novo-kjøring:** 2026-10-07
+- **Siste de novo-kjøring:** 2026-10-13
+
+## Full de novo-pilot 2026-10-13
+
+Dette er den første komplette faglige piloten etter teknisk godkjenning av GitHub-, Supabase- og SPC-infrastrukturen. Før eksisterende citalopram-monografi, referanseliste og evidensjournal ble åpnet, ble appens levende innholdsmodell kartlagt til 37 kontrollpunkter: 18 paneler, 14 faste underkort og fem strukturerte datafelt. En separat blind evidensprotokoll ble deretter låst. Først etter adversarial kontroll av hovedkonklusjonene ble eksisterende innhold åpnet og sammenlignet.
+
+### Uavhengig evidensgrunnlag og adversarial kontroll
+
+| Domene | Uavhengig kontroll | Konklusjon før avstemming |
+| --- | --- | --- |
+| SPC og regulatorisk innhold | gjeldende norske original-PDF-er, tabeller og fotnoter | indikasjon, dose, QT-risiko, PK og sikkerhetsinformasjon må være kildefidel |
+| Farmakodynamikk | human transportørstudie, PMID 21730142 | SERT-hemming er den klinisk informative hovedmekanismen; negativ reseptoroppramsing og allosterisk klinisk tolkning har lav nytte |
+| Depresjon | Apler 2011, DOI 10.1136/bmjopen-2011-000106; tilbakefalls-RCT, PMID 7622809 | statistisk effekt mot placebo, liten gjennomsnittlig symptomforskjell og betydelige publikasjons-/rapporteringsbegrensninger |
+| Panikklidelse | direkte RCT, PMID 9818634; Cochrane 2018, DOI 10.1002/14651858.CD010676.pub2 | eldre positiv studie, men ingen sikker citalopramspesifikk forskjell i senere oversiktsanalyse |
+| Tvangslidelse | RCT, PMID 11236072 | respons mot placebo; 60 mg-armen ligger over dagens maksimale anbefalte dose |
+| Farmakogenetikk | CPIC 2023, DOI 10.1002/cpt.2903 | CYP2C19 er handlingsrelevant når genotype foreligger; CPIC avgjør ikke hvem som skal genotypes |
+| TDM | norsk laboratoriehåndbok; Espnes 2026; AGNP 2026; Xu 2023 | 70–350 nmol/L beholdes; serum uten gel ved steady state 12–24 timer etter dose; ingen skarp universell effektgrense |
+| Forgiftning | Giftinformasjonen, kontrollert 2026-10-13 | dose, klinikk og serie-EKG styrer observasjon; tidligere kildebelagte konsentrasjonsgrenser beholdes |
+| Graviditet | UKTIS versjon 4, september 2026; Embryotox | ingen overbevisende samlet misdannelsesøkning; små absolutte signaler og residual konfundering må synliggjøres |
+| Amming | LactMed, revidert 2026-08-15; Embryotox | vanlig relativ spedbarnsdose omtrent 3–6 %, stor variasjon; amming kan vanligvis fortsette med observasjon |
+| Avhengighet/toleranse | målrettede søk, SPC og vurdering av eksisterende kilder | seponeringssyndrom er reelt, klassisk addiksjon ikke etablert; klinisk toleranse og lært mestringsavhengighet mangler robust citalopramspesifikk dokumentasjon |
+
+### Avstemming mot eksisterende innhold
+
+Følgende ble forbedret:
+
+- Antidepressiv effekt fikk direkte substansspesifikke effektmål, tilbakefallsdata og eksplisitte begrensninger.
+- Panikkortet balanserer den eldre positive studien mot Cochrane-analysen; OCD-kortet markerer at 60 mg overstiger dagens maksimum.
+- Farmakodynamikkpanelet er konsentrert til SERT med humane affinitetsdata. Seks lavt informative negative målkort og en klinisk usikker allosterisk tolkning er tatt ut av levende visning, med revisjonshistorikken bevart.
+- Prøvetakingskortet angir serum uten gel, steady state og 12–24 timer etter siste dose, med nødvendige rekvisisjonsopplysninger.
+- Graviditets- og ammekortene bruker 2026-teratologikilder, absoluttrisiko og konkret observasjon av barnet.
+- Toleransekortet er tatt ut av levende visning fordi molekylær SERT-tilpasning ikke dokumenterer klinisk toleranse.
+
+Følgende ble beholdt etter ny, selvstendig vurdering:
+
+- det norske serumreferanseområdet 70–350 nmol/L, toksisk grense 700 nmol/L og grense for alvorlig forgiftning 10 000 nmol/L;
+- den særskilte norske dose–serumtabellen og dens originalkilder;
+- SPC-baserte indikasjoner, dosering, QT-risiko og farmakokinetiske nøkkeltall;
+- CYP2C19/CPIC-innholdet, TDM-begrensningene, forgiftningskortene, fertilitetskortet, seponeringskortet og addiksjonsavgrensningen;
+- automatiske FEST-, interaksjons-, laboratorie- og ClinPGx/CPIC-lag uten manuell duplisering.
+
+### Kvalitetsporter for piloten
+
+- Faglig uavhengighet: bestått; blind protokoll ble låst før eksisterende innhold ble åpnet.
+- Beskyttede norske data: bestått ved migrasjons- og regresjonskontroll; ingen beskyttet verdi eller serumrad endres.
+- Påstand–kilde-kobling: bestått i nye heterogene kort ved inline-sitering.
+- Maskinlesbar dekning: 37 av 37 kontrollpunkter dokumentert i `citalopram-dekning.json`.
+- Produksjonsnær funksjonstest og SPC-artefaktkontroll: dokumenteres med GitHub Actions-kjøringen for denne kurateringen før PR-en gjøres klar for faglig vurdering.
 
 ## Kontrollerte hovedkilder
 
@@ -22,7 +69,7 @@
 | OCD | Montgomery et al. 2001, PMID 11236072 | kontrollert 2026-10-07 |
 | Panikklidelse | Lepola et al. 1998, PMID 9818634 | kontrollert 2026-10-07 |
 | Graviditet | Kang et al. 2017, DOI 10.5468/ogs.2017.60.2.145; Janusmed fosterpåverkan | kontrollert 2026-10-07 |
-| Amming | Janusmed amning; LactMed, siste revisjon 2026-09-15 | kontrollert 2026-10-07 |
+| Amming | Janusmed amning; LactMed, siste revisjon 2026-08-15 | kontrollert 2026-10-13 |
 | Addiksjon/misbruk | Nutt 2003, DOI 10.1177/0269881103174019; Chiappini et al. 2022, DOI 10.3390/ph15050565 | kontrollert 2026-10-07 |
 | Norske serumdata | Reis et al. 2009 og Referanseområdeprosjektet 2005–2008 | eksisterende OUSFAR-grunnlag bevart |
 
@@ -121,6 +168,7 @@ Den forrige testen krevde i praksis samme kildegruppe både inline og på kortet
 
 ## Historikk
 
+- **2026-10-13 – full de novo-pilot:** forventet dekning avledet fra levende appmodell før søk. Blind evidens og adversarial kontroll ble låst før gammel monografi/journal ble lest. Direkte effektestimater, preanalytikk og 2026-data for graviditet/amming ble lagt inn; seks negative PD-kort og toleransekortet ble tatt ut av levende visning. Norske konsentrasjonsområder og serumtabell ble bevart.
 - **2026-10-07 – de novo-kuratering og kildeplassering:** blind evidensrunde før avstemming mot eksisterende monografi. Hovedinnholdet ble bekreftet, PGx/TDM/amming ble nyansert, og lange eller kildeheterogene tekster fikk påstandsnære inline-siteringer. Korte, kildehomogene kort beholder kortreferanser.
 - **2026-10-06 – full oppdatering:** hele levende monografien revurdert. Ny oppsummering, virkninger, toksisitet, graviditet/amming/reproduksjon og avhengighetsseksjon; PD, indikasjon, dosering, PK, PGx, TDM og interaksjonstekst revidert. Strukturert bivirkningsimport lagt til.
 - Norske referanse- og toksisitetsverdier ble eksplisitt beholdt. Eldre PK-nøkkeltall i «Viktige data» ble derimot synkronisert med gjeldende SPC fordi de ikke omfattes av bevaringsregelen.
