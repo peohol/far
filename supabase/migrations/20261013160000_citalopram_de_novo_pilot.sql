@@ -151,7 +151,7 @@ begin
         jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(ocdstudie,spc)))
       )
     )))
-  ));
+  );
   perform intern.kuratering_lagre(obj,1,jsonb_build_object('data',data,'referanser','[]'::jsonb),kilde);
 
   -- Norsk preanalytikk og bruksomrade for serumkonsentrasjonsmaling.
@@ -183,7 +183,7 @@ begin
         jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(uktis,embryotox)))
       )
     )))
-  ));
+  );
   perform intern.kuratering_lagre(obj,2,jsonb_build_object('data',data,'referanser','[]'::jsonb),kilde);
 
   obj := intern.kuratering_element(
@@ -196,7 +196,7 @@ begin
         jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(uktis,embryotox)))
       )
     )))
-  ));
+  );
   perform intern.kuratering_lagre(obj,2,jsonb_build_object('data',data,'referanser','[]'::jsonb),kilde);
 
   obj := intern.kuratering_element(
@@ -209,7 +209,7 @@ begin
         jsonb_build_object('type','sitering','attrs',jsonb_build_object('referanser',jsonb_build_array(embryotox,lactmed)))
       )
     )))
-  ));
+  );
   perform intern.kuratering_lagre(obj,2,jsonb_build_object('data',data,'referanser','[]'::jsonb),kilde);
 
   -- Molekylaer SERT-tilpasning dokumenterer ikke klinisk toleranse.
