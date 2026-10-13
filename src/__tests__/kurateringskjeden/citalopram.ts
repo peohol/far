@@ -40,7 +40,7 @@ export default function citalopram(db: () => PGlite): void {
       'Effekt ved tvangslidelse',
       'Doseavhengig QT-forlengelse',
     ])
-    expect(farmakodynamikk).toHaveLength(7)
+    expect(farmakodynamikk.map((e) => String(e.data.maal))).toEqual(['Serotoninreopptak / SERT'])
     expect(indikasjon).toHaveLength(1)
     expect(dosering).toHaveLength(1)
     expect(farmakokinetikk.map((e) => String(e.data.tittel))).toEqual([
@@ -79,10 +79,10 @@ export default function citalopram(db: () => PGlite): void {
       'Fertilitet og reproduksjon',
     ])
     expect(avhengighet.map((e) => String(e.data.tittel))).toEqual([
-      'Toleranseutvikling',
       'Abstinens, seponeringssyndrom og rebound-effekter',
       'Addiksjon',
     ])
+    expect(avhengighet.some((e) => e.data.tittel === 'Toleranseutvikling')).toBe(false)
     expect(avhengighet.some((e) => e.data.tittel === 'Lært mestringsavhengighet')).toBe(false)
   })
 
@@ -150,6 +150,33 @@ export default function citalopram(db: () => PGlite): void {
     expect(pgx).not.toMatch(/\b(PM|IM|NM|UM)\b/)
   })
 
+  it('viser direkte citalopramevidens og sentrale begrensninger', () => {
+    const sert = tekst(farmakodynamikk[0]!.data)
+    expect(sert).toContain('4 nmol/L')
+    expect(sert).toContain('1414 nmol/L')
+    expect(sert).toContain('35 ganger')
+    expect(sert).not.toContain('alloster')
+
+    const depresjon = tekst(virkninger.find((e) => e.data.tittel === 'Antidepressiv effekt')!.data)
+    expect(depresjon).toContain('RR 1,42')
+    expect(depresjon).toContain('Hedges g -0,27')
+    expect(depresjon).toContain('upubliserte studier inngikk ikke')
+
+    const panikk = tekst(virkninger.find((e) => e.data.tittel === 'Effekt ved panikklidelse')!.data)
+    expect(panikk).toContain('RR 0,95')
+    expect(panikk).toContain('ikke sikker forskjell fra placebo')
+
+    const ocd = tekst(virkninger.find((e) => e.data.tittel === 'Effekt ved tvangslidelse')!.data)
+    expect(ocd).toContain('60 mg/døgn overstiger dagens maksimale anbefalte dose')
+  })
+
+  it('angir norsk preanalytikk for serumprøven', () => {
+    const prove = tekst(tdm.find((e) => e.data.tittel === 'Prøvetakingstidspunkt')!.data)
+    expect(prove).toContain('uten gel')
+    expect(prove).toContain('12–24 timer etter siste dose')
+    expect(prove).toContain('tidspunkt for siste dose og prøvetaking')
+  })
+
   it('bruker påstandsnære inline-kilder når teksten er heterogen, og kortkilder når én kilde dekker hele kortet', () => {
     const oppsummering = identitet[0]!
     expect(oppsummering.referanser).toHaveLength(0)
@@ -185,10 +212,6 @@ export default function citalopram(db: () => PGlite): void {
     expect(fertilitet.referanser).toHaveLength(1)
     expect(inlineReferanser(fertilitet.data)).toHaveLength(0)
 
-    const toleranse = avhengighet.find((e) => e.data.tittel === 'Toleranseutvikling')!
-    expect(toleranse.referanser).toHaveLength(1)
-    expect(inlineReferanser(toleranse.data)).toHaveLength(0)
-
     const seponering = avhengighet.find((e) => e.data.tittel === 'Abstinens, seponeringssyndrom og rebound-effekter')!
     expect(seponering.referanser).toHaveLength(0)
     expect(inlineReferanser(seponering.data).length).toBe(3)
@@ -205,11 +228,20 @@ export default function citalopram(db: () => PGlite): void {
     expect(innhold).toContain('tar ikke stilling til hvem som bør genotypes')
   })
 
-  it('skiller regulatorisk ammeråd fra LactMed/Janusmed-vurderingen', () => {
+  it('beskriver absoluttrisiko i svangerskapet og klinisk oppfølging ved amming', () => {
+    const gravid = tekst(graviditet.find((e) => e.data.tittel === 'Graviditet')!.data)
+    expect(gravid).toContain('1,3 %')
+    expect(gravid).toContain('rundt 1 %')
+
+    const perinatal = tekst(graviditet.find((e) => e.data.tittel === 'Perinatal og neonatal påvirkning')!.data)
+    expect(perinatal).toContain('to til tre av ti')
+    expect(perinatal).toContain('under 0,4 %')
+
     const amming = graviditet.find((e) => e.data.tittel === 'Amming')!
     const innhold = tekst(amming.data)
-    expect(innhold).toContain('anbefaler forsiktighet')
-    expect(innhold).toContain('ikke er grunn til å avslutte amming')
+    expect(innhold).toContain('3–6 %')
+    expect(innhold).toContain('ikke i seg selv grunn til å avslutte amming')
+    expect(innhold).toContain('matinntak og vektutvikling')
   })
 
   it('har kildebelegg og ingen upubliserte redaksjonelle elementer', () => {
