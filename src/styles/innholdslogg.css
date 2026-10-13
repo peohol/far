@@ -31,6 +31,13 @@
   margin-bottom: var(--rom-3);
 }
 
+/* I skjemaene på én linje i stoffregisteret står det på en egen linje under. */
+.registerskjema > :is(.oppsummeringsfelt, .oppsummeringsfelt__apne) {
+  flex-basis: 100%;
+  margin-bottom: 0;
+  text-align: start;
+}
+
 /* --- Loggvinduet ------------------------------------------------------------ */
 .innholdslogg__valg {
   display: flex;

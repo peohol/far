@@ -54,9 +54,10 @@ import {
   regelsettvalg,
   type Kommentarvalg,
 } from './domain/valg'
-import { lagFaginnholdslager } from './faginnhold/lagring'
+import { lagFaginnholdslager, lagerFor } from './faginnhold/lagring'
 import { lagFaginnholdsleser } from './faginnhold/lesing'
 import { lagEndringsloggleser } from './endringslogg/api'
+import type { Endringskontekst } from './endringslogg/operasjon'
 import { endringssideFor } from './endringslogg/sider'
 import { Innholdslogg } from './components/endringslogg/Innholdslogg'
 import { lesScenarioregler, reglerForModul } from './faginnhold/scenarioregler'
@@ -212,8 +213,8 @@ export default function App() {
   const registerlager = useMemo(() => lagRegisterlager(klient()), [])
   const endringsloggleser = useMemo(() => lagEndringsloggleser(klient()), [])
   const opprettSide = useCallback(
-    async (navn: string, slug: string) => {
-      await faginnhold.lager.opprettUtkast('infoside', { navn, slug })
+    async (navn: string, slug: string, endring: Endringskontekst) => {
+      await lagerFor(faginnhold.lager, endring).opprettUtkast('infoside', { navn, slug })
     },
     [faginnhold.lager],
   )

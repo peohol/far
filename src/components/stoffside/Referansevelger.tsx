@@ -4,6 +4,7 @@ import { erAutomatisk, formaterReferanse, type Referanse } from '../../faginnhol
 import { erTrygLenke } from '../../faginnhold/riktekst'
 import { fold, sokeord } from '../../faginnhold/sok'
 import { Button } from '../Button'
+import { Oppsummeringsfelt } from '../endringslogg/Oppsummeringsfelt'
 import { Ikon } from '../ikon/Ikon'
 import { Referansetekst } from '../referanser/Referansetekst'
 import { useRedigering } from './Redigeringskontekst'
@@ -198,6 +199,7 @@ const FELT: { navn: keyof Referanseinnhold; merke: string; type?: string }[] = [
 function NyReferanse({ onLagret, onAvbryt }: { onLagret: (r: Referanse) => void; onAvbryt: () => void }) {
   const { opprettReferanse } = useRedigering()
   const [innhold, setInnhold] = useState<Referanseinnhold>(TOM_REFERANSE)
+  const [oppsummering, setOppsummering] = useState('')
   const [feil, setFeil] = useState<string | null>(null)
   const [lagrer, setLagrer] = useState(false)
   const id = useId()
@@ -218,7 +220,7 @@ function NyReferanse({ onLagret, onAvbryt }: { onLagret: (r: Referanse) => void;
     setLagrer(true)
     setFeil(null)
     try {
-      onLagret(await opprettReferanse(renset))
+      onLagret(await opprettReferanse(renset, oppsummering.trim() || undefined))
     } catch (e) {
       setFeil((e as Error).message)
     } finally {
@@ -253,6 +255,7 @@ function NyReferanse({ onLagret, onAvbryt }: { onLagret: (r: Referanse) => void;
           {feil}
         </p>
       )}
+      <Oppsummeringsfelt verdi={oppsummering} onEndre={setOppsummering} onEnter={() => void lagre()} />
       <div className="skjema__knapper">
         <Button variant="subtle" onClick={onAvbryt}>
           Avbryt

@@ -138,6 +138,21 @@ describe('beskrivelsen av endringene på en fagside', () => {
     ])
   })
 
+  it('beskriver en kategori som er flyttet opp eller ned blant søsknene', () => {
+    expect(
+      beskriv(
+        [],
+        [
+          hendelse('kategori_omordnet', { navn: 'SSRI', forelder: 'Antidepressiver', fra: 3, til: 1 }),
+          hendelse('kategori_omordnet', { navn: 'Opioider', forelder: null, fra: 1, til: 2 }),
+        ],
+      ),
+    ).toEqual([
+      'Kategorien «SSRI» flyttet opp fra plass 3 til 1 i kategorien «Antidepressiver»',
+      'Kategorien «Opioider» flyttet ned fra plass 1 til 2',
+    ])
+  })
+
   it('beskriver importerte og tilbaketrukne bivirkninger', () => {
     expect(
       beskriv(

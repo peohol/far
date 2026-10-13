@@ -240,6 +240,31 @@ describe('loggen for en fagside', () => {
     expect(sitert!.deler![0]!.referanser).toEqual({ lagt_til: 1, fjernet: 0 })
   })
 
+  it('røper ikke en referanse eller et kort som bare i et utkast er knyttet til siden', async () => {
+    const { side, slug, kort } = await nyFagside()
+    const ref = await kall.opprett('referanse', { tittel: 'Hemmelig kilde', forfattere: 'A', aar: '2026', lenke: 'https://example.org/utkastkilde' })
+    await kall.publiser(ref.id, 1)
+    // Et publisert kort på en annen fagside.
+    const annen = await nyFagside()
+    // Bare utkast: kortet siterer referansen, og kortet fra den andre siden flyttes hit.
+    await kall.lagre(kort, 1, kortinnhold(side, 'Første utgave', { referanser: [ref.id] }))
+    await kall.lagre(annen.kort, 1, kortinnhold(side, 'Første utgave', { panel: 'indikasjon' }))
+
+    const objekter = (l: Logg) => new Set(l.endringer.flatMap((e) => (e.deler ?? []).map((d) => d.objekt)))
+    const forLeser = objekter(await logg(leser, { stoff: slug }))
+    expect(forLeser.has(ref.id)).toBe(false)
+    expect(forLeser.has(annen.kort)).toBe(false)
+    // Administratorene ser koblingene med utkastene, men ikke når de velger dem bort.
+    const medUtkast = objekter(await logg(admin, { stoff: slug }, { med_utkast: true }))
+    expect(medUtkast.has(ref.id)).toBe(true)
+    expect(medUtkast.has(annen.kort)).toBe(true)
+    expect(objekter(await logg(admin, { stoff: slug })).has(ref.id)).toBe(false)
+
+    // Når utkastet publiseres, hører referansen til siden for alle.
+    await kall.publiser(kort, 2)
+    expect(objekter(await logg(leser, { stoff: slug })).has(ref.id)).toBe(true)
+  })
+
   it('blar bakover med «etter» og sier når det finnes flere', async () => {
     const { side, slug, kort } = await nyFagside()
     for (let revisjon = 1; revisjon <= 4; revisjon += 1) {
@@ -292,6 +317,31 @@ describe('stoffregisteret', () => {
     const fagside = await logg(leser, { stoff: slug })
     expect(fagside.endringer[0]!.hendelser![0]!.hendelse).toBe('stoff_hentet_fra_arkivet')
     expect(side).toBeTruthy()
+  })
+
+  it('fører en flytting opp eller ned blant søsknene som én hendelse, og ingenting når plassen er den samme', async () => {
+    const opprett = async (navn: string, forelder: string | null = null) =>
+      ((await sql<{ k: string }>(leser, 'select public.opprett_stoffkategori($1, $2) as k', [navn, forelder])) as [{ k: string }])[0].k
+    const forelder = await opprett('Syntetisk forelder')
+    const forste = await opprett('Syntetisk en', forelder)
+    await opprett('Syntetisk to', forelder)
+    const tredje = await opprett('Syntetisk tre', forelder)
+
+    const for_ = await antall('public.innholdsendringer')
+    await sql(leser, 'select public.flytt_stoffkategori($1, $2, 0)', [tredje, forelder])
+    expect(await antall('public.innholdsendringer')).toBe(for_ + 1)
+    const [endring] = (await logg(leser, { stoffregister: true })).endringer
+    expect(endring!.hendelser).toEqual([
+      expect.objectContaining({
+        hendelse: 'kategori_omordnet',
+        data: expect.objectContaining({ kategori: tredje, navn: 'Syntetisk tre', forelder: 'Syntetisk forelder', fra: 3, til: 1 }),
+      }),
+    ])
+    expect(endring).toMatchObject({ aktor: 'bruker', person: { fornavn: 'Lars' } })
+
+    // Samme plass som før: ingen endring.
+    await sql(leser, 'select public.flytt_stoffkategori($1, $2, 1)', [forste, forelder])
+    expect(await antall('public.innholdsendringer')).toBe(for_ + 1)
   })
 
   it('fører en ny fagside og et nytt navn i registerets logg', async () => {

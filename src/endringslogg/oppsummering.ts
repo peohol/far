@@ -251,6 +251,12 @@ export function hendelseslinjer(hendelser: readonly Hendelse[]): Endringslinje[]
       case 'kategori_flyttet':
         linjer.push(register(`${stor(kategori(d.navn))} flyttet fra ${nivaa(d.fra)} til ${nivaa(d.til)}`))
         break
+      case 'kategori_omordnet': {
+        const [fra, til] = [Number(d.fra), Number(d.til)]
+        const retning = Number.isFinite(fra) && Number.isFinite(til) ? ` ${til < fra ? 'opp' : 'ned'} fra plass ${fra} til ${til}` : ''
+        linjer.push(register(`${stor(kategori(d.navn))} flyttet${retning}${tekst(d.forelder) ? ` i ${kategori(d.forelder)}` : ''}`))
+        break
+      }
       case 'kategori_arkivert':
         linjer.push(register(`${stor(kategori(d.navn))} arkivert`))
         break

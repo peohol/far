@@ -228,8 +228,8 @@ export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, modus: Sidemod
   )
 
   const opprettReferanse = useCallback(
-    async (innhold: Referanseinnhold): Promise<Referanse> => {
-      const status = await lager.opprettUtkast('referanse', innhold)
+    async (innhold: Referanseinnhold, oppsummering?: string): Promise<Referanse> => {
+      const status = await lagerFor(lager, nyEndring(oppsummering)).opprettUtkast('referanse', innhold)
       const referanse: Referanse = { ...innhold, id: status.id }
       setReferansebase((base) => [...base, referanse])
       return referanse

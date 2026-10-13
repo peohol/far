@@ -996,6 +996,57 @@ create trigger stoffkategorier_logg
 after insert or update on public.stoffkategorier
 for each row execute function intern.logg_stoffkategori();
 
+-- Rekkefølgen søsknene står i, uten de arkiverte.
+create function intern.kategorirekke(p_forelder uuid)
+returns uuid[]
+language sql
+stable
+set search_path = ''
+as $$
+  select coalesce(array_agg(k.id order by k.posisjon, k.opprettet_kl, k.id), '{}')
+  from public.stoffkategorier k
+  where k.forelder_id is not distinct from p_forelder and k.arkivert_kl is null
+$$;
+
+-- Som før, og en flytting opp eller ned blant søsknene føres som én hendelse
+-- med plassen før og etter. Omnummereringen av de andre er en følge av den og
+-- føres ikke for seg; en flytting til en annen forelder føres av triggeren.
+create or replace function public.flytt_stoffkategori(kategori uuid, forelder uuid, indeks integer)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  rad public.stoffkategorier;
+  for_rekke uuid[];
+  etter_rekke uuid[];
+begin
+  perform intern.krev_registerbruker();
+  rad := intern.laas_stoffkategori(flytt_stoffkategori.kategori);
+  if rad.arkivert_kl is not null then
+    raise exception 'Kategorien er arkivert. Hent den tilbake før den flyttes.' using errcode = '22023';
+  end if;
+  if rad.forelder_id is distinct from flytt_stoffkategori.forelder then
+    perform intern.krev_kategoriforelder(flytt_stoffkategori.forelder);
+    perform intern.krev_ledig_kategorinavn(flytt_stoffkategori.forelder, rad.navn, rad.id);
+    update public.stoffkategorier k set forelder_id = flytt_stoffkategori.forelder where k.id = rad.id;
+    perform intern.ordne_stoffkategorier(rad.forelder_id);
+    perform intern.ordne_stoffkategorier(flytt_stoffkategori.forelder, rad.id, flytt_stoffkategori.indeks);
+    return;
+  end if;
+  for_rekke := intern.kategorirekke(rad.forelder_id);
+  perform intern.ordne_stoffkategorier(flytt_stoffkategori.forelder, rad.id, flytt_stoffkategori.indeks);
+  etter_rekke := intern.kategorirekke(rad.forelder_id);
+  if array_position(for_rekke, rad.id) is distinct from array_position(etter_rekke, rad.id) then
+    perform intern.ny_hendelse('kategori_omordnet', null, true, jsonb_build_object(
+      'kategori', rad.id, 'navn', rad.navn, 'forelder', intern.kategorinavn(rad.forelder_id),
+      'fra', array_position(for_rekke, rad.id), 'til', array_position(etter_rekke, rad.id),
+      'antall', cardinality(etter_rekke)));
+  end if;
+end;
+$$;
+
 create function intern.logg_stoffplassering()
 returns trigger
 language plpgsql
@@ -1125,20 +1176,29 @@ $$;
 
 -- Alle objektene som hører til siden: røttene, kortene som har stått på en av
 -- dem, og referansene og kommentarene noen av dem har pekt på.
-create function intern.sidens_objekter(p_rotter uuid[])
+--
+-- Uten utkastene (alltid for andre enn administratorer) gjelder bare de
+-- publiserte utgavene: et kort som bare i et utkast er flyttet til siden, eller
+-- en referanse som bare er sitert i et utkast, hører ikke til siden — ellers
+-- ville loggen røpet koblingen før den er publisert.
+create function intern.sidens_objekter(p_rotter uuid[], p_utkast boolean)
 returns setof uuid
 language sql
 stable
 set search_path = ''
 as $$
-  with egne as (
+  with utgaver as (
+    select r.objekt_id, r.innhold from public.objektrevisjoner r
+    where p_utkast or exists (
+      select 1 from public.objektpubliseringer p where p.objekt_id = r.objekt_id and p.revisjon = r.revisjon)
+  ), egne as (
     select unnest(p_rotter) as id
     union
-    select r.objekt_id from public.objektrevisjoner r
+    select r.objekt_id from utgaver r
     where r.innhold ? 'infoside' and (r.innhold ->> 'infoside') = any (select unnest(p_rotter)::text)
   ), nevnte as (
     select distinct m[1]::uuid as id
-    from public.objektrevisjoner r
+    from utgaver r
     cross join lateral regexp_matches(r.innhold::text, '([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', 'g') m
     where r.objekt_id in (select id from egne)
   )
@@ -1192,7 +1252,7 @@ begin
   end if;
 
   rotter := array(select intern.endringsrotter(les_endringslogg.side, admin));
-  objekter := case when register then rotter else array(select intern.sidens_objekter(rotter)) end;
+  objekter := case when register then rotter else array(select intern.sidens_objekter(rotter, utkast)) end;
 
   with medlemmer as (
     select coalesce(r.endring_id::text, 'eldre:' || r.utfort_kl::text || ':' || r.utfort_av::text) as nokkel,

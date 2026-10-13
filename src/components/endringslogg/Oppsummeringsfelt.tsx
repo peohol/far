@@ -10,15 +10,19 @@ import '../../styles/innholdslogg.css'
  *
  * `skjema` er skjemaet feltet hører til når det står utenfor det (i foten av
  * et redigeringsvindu), så Enter i feltet lagrer som i resten av skjemaet.
+ * `onEnter` lagrer der det ikke er noe eget skjema (som en ny referanse inne i
+ * skjemaet for kortet), så Enter ikke sender det ytre skjemaet.
  */
 export function Oppsummeringsfelt({
   verdi,
   onEndre,
   skjema,
+  onEnter,
 }: {
   verdi: string
   onEndre: (verdi: string) => void
   skjema?: string
+  onEnter?: () => void
 }) {
   const [apen, setApen] = useState(verdi !== '')
   if (!apen) {
@@ -38,6 +42,13 @@ export function Oppsummeringsfelt({
         autoFocus
         {...(skjema && { form: skjema })}
         onChange={(e) => onEndre(e.target.value)}
+        {...(onEnter && {
+          onKeyDown: (e) => {
+            if (e.key !== 'Enter') return
+            e.preventDefault()
+            onEnter()
+          },
+        })}
       />
     </div>
   )

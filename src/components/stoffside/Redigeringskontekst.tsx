@@ -19,8 +19,8 @@ export interface Redigeringsverdi {
   redigerer: boolean
   /** Alle referansene i utkastet, arkiverte medregnet. */
   referansebase: readonly Referanse[]
-  /** Legger inn en ny referanse i referansebasen og gir den tilbake. */
-  opprettReferanse: (innhold: Referanseinnhold) => Promise<Referanse>
+  /** Legger inn en ny referanse i referansebasen og gir den tilbake, med oppsummeringen til endringsloggen. */
+  opprettReferanse: (innhold: Referanseinnhold, oppsummering?: string) => Promise<Referanse>
   /** Lager en ny revisjon av objektet med innholdet fra `fraRevisjon`. */
   gjenopprett: (utgave: Utgave<unknown>, fraRevisjon: number) => Promise<void>
 }

@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { byggStoffregister, stoffslug, type Registerstruktur, type Stoffregister } from '../domain/stoffregister'
 import { erTomt, type Riktekstdokument } from '../faginnhold/riktekst'
+import { nyEndring, type Endringskontekst } from '../endringslogg/operasjon'
 import { useHenting } from '../hooks/useHenting'
 import type { Registerlager } from './api'
 import { endreStruktur, type Registerdatabase, type Registerendring } from './modell'
@@ -20,9 +21,13 @@ import { endreStruktur, type Registerdatabase, type Registerendring } from './mo
  * Når registeret er hentet første gang, ryddes papirkurven for det som har
  * ligget der i mer enn 30 dager (`rydd_stoffpapirkurven`).
  */
+/**
+ * `oppsummering` er det brukeren skrev om endringen til endringsloggen, der
+ * handlingen har et skjema; uten den beskriver loggen endringen selv.
+ */
 export interface Registerhandlinger {
-  opprettKategori: (navn: string, forelder: string | null) => Promise<string>
-  endreKategori: (kategori: string, navn: string) => Promise<void>
+  opprettKategori: (navn: string, forelder: string | null, oppsummering?: string) => Promise<string>
+  endreKategori: (kategori: string, navn: string, oppsummering?: string) => Promise<void>
   flyttKategori: (kategori: string, forelder: string | null, indeks: number) => Promise<void>
   arkiverKategori: (kategori: string, arkivert: boolean) => Promise<void>
   slettKategori: (kategori: string) => Promise<void>
@@ -32,8 +37,11 @@ export interface Registerhandlinger {
   gjenopprettStoff: (stoff: string) => Promise<void>
   slettStoffForGodt: (stoff: string) => Promise<void>
   tomPapirkurven: () => Promise<number>
-  /** En ny fagside, lagt i kategorien når den er gitt. Gir nøkkelen. `undefined` for andre enn administratorer. */
-  opprettStoffside?: (navn: string, kategori: string | null) => Promise<string>
+  /**
+   * En ny fagside, lagt i kategorien når den er gitt, som én endring i loggen.
+   * Gir nøkkelen. `undefined` for andre enn administratorer.
+   */
+  opprettStoffside?: (navn: string, kategori: string | null, oppsummering?: string) => Promise<string>
 }
 
 export interface Stoffregisterkilde {
@@ -51,8 +59,8 @@ export interface Stoffregisterkilde {
 interface Valg {
   lager: Registerlager
   admin: boolean
-  /** Lager utkastet til en ny fagside. Bare for administratorer. */
-  opprettSide?: (navn: string, slug: string) => Promise<void>
+  /** Lager utkastet til en ny fagside, som en del av handlingen. Bare for administratorer. */
+  opprettSide?: (navn: string, slug: string, endring: Endringskontekst) => Promise<void>
 }
 
 /** Det som vises: inndelingen databasen har, med endringene som er på vei. */
@@ -113,9 +121,14 @@ export function useLagStoffregisterkilde({ lager, admin, opprettSide }: Valg): S
 
   const handlinger = useMemo<Registerhandlinger>(
     () => ({
-      opprettKategori: (navn, forelder) => utfor(() => lager.opprettKategori(navn, forelder)),
-      endreKategori: (kategori, navn) =>
-        utfor(() => lager.endreKategori(kategori, navn), { type: 'endre-kategori', kategori, navn: navn.trim() }),
+      opprettKategori: (navn, forelder, oppsummering) =>
+        utfor(() => lagerFor(lager, nyEndring(oppsummering)).opprettKategori(navn, forelder)),
+      endreKategori: (kategori, navn, oppsummering) =>
+        utfor(() => lagerFor(lager, nyEndring(oppsummering)).endreKategori(kategori, navn), {
+          type: 'endre-kategori',
+          kategori,
+          navn: navn.trim(),
+        }),
       flyttKategori: (kategori, forelder, indeks) =>
         utfor(() => lager.flyttKategori(kategori, forelder, indeks), { type: 'flytt-kategori', kategori, forelder, indeks }),
       arkiverKategori: (kategori, arkivert) =>
@@ -131,16 +144,18 @@ export function useLagStoffregisterkilde({ lager, admin, opprettSide }: Valg): S
         utfor(() => lager.slettStoffForGodt(stoff), { type: 'sett-status', stoff, status: 'fjernet' }),
       tomPapirkurven: () => utfor(() => lager.tomPapirkurven()),
       ...(opprettSide && {
-        opprettStoffside: (navn: string, kategori: string | null) =>
+        opprettStoffside: (navn: string, kategori: string | null, oppsummering?: string) =>
           utfor(async () => {
             const slug = stoffslug(navn)
             if (!slug) throw new Error('Navnet må ha minst én bokstav eller ett tall.')
-            await opprettSide(navn.trim(), slug)
+            // Siden og plasseringen er én handling i endringsloggen.
+            const endring = nyEndring(oppsummering)
+            await opprettSide(navn.trim(), slug, endring)
             if (kategori) {
               // Siden er laget selv om plasseringen feiler: si det som det er.
               // Prøver man igjen, åpnes siden som alt finnes.
               try {
-                await lager.plasserStoff(slug, null, kategori)
+                await lagerFor(lager, endring).plasserStoff(slug, null, kategori)
               } catch (e) {
                 const grunn = e instanceof Error ? e.message : String(e)
                 throw new Error(`Fagsiden «${navn.trim()}» er laget, men ble ikke lagt i kategorien: ${grunn} Den står under «Andre stoffer».`)
@@ -169,6 +184,9 @@ export function useLagStoffregisterkilde({ lager, admin, opprettSide }: Valg): S
     [register, oppsummering, handlinger, admin, feil, hentPaNytt],
   )
 }
+
+/** Lageret for handlingen, når lageret kan føre handlinger; ellers lageret selv. */
+const lagerFor = (lager: Registerlager, endring: Endringskontekst): Registerlager => lager.medEndring?.(endring) ?? lager
 
 const Kontekst = createContext<Stoffregisterkilde | null>(null)
 

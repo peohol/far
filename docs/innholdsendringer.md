@@ -51,7 +51,10 @@ den er ikke et system ved siden av.
 
 Hvilke objekter som hører til en side, avgjøres når loggen leses, ut fra
 objektene selv: fagsiden, kortene som har stått på den (også de som er flyttet
-bort), og referansene og kommentarene de peker på. Et nytt navn, en flytting,
+bort), og referansene og kommentarene de peker på. Uten utkastene — alltid for
+andre enn administratorer — teller bare de publiserte utgavene, så et kort som
+bare i et utkast er flyttet til siden, eller en referanse som bare er sitert i
+et utkast, ikke røper koblingen før den er publisert. Et nytt navn, en flytting,
 en arkivering og en gjenoppretting endrer derfor ikke hvilken historikk siden
 har.
 
@@ -68,9 +71,14 @@ lagre et kort, legge det inn på siden, eller publisere hele siden. Lagringer,
 flyttinger, fjerninger, gjenopprettinger og publiseringer på fagsidene og
 fortolkningssidene går alle gjennom én handling hver (`lagerFor`,
 `nyEndring` i `src/faginnhold/lagring.ts` og `src/endringslogg/operasjon.ts`).
-Handlingene i stoffregisteret er ett kall hver.
+Handlingene i stoffregisteret er ett kall hver, gjennom `Registerlager.medEndring`
+på samme måte; en ny fagside og plasseringen av den er én handling. En flytting
+opp eller ned blant søsknene føres som én hendelse med plassen før og etter
+(`kategori_omordnet`), ikke som omnummereringen av alle søsknene.
 
-Lagring og publisering har et valgfritt felt for en kort oppsummering. Står
+Lagring og publisering har et valgfritt felt for en kort oppsummering, og det
+har også skjemaene i stoffregisteret (ny kategori, nytt navn, ny fagside) og
+den nye referansen. Står
 det tomt — som det alltid gjør for handlinger uten lagreknapp, som en
 flytting — beskriver loggen endringen selv ut fra delene: «Dosering
 oppdatert», «Farmakodynamikk: to mekanismekort endret», «Sertralin flyttet
