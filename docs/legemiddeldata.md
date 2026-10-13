@@ -397,6 +397,14 @@ variant etter FEST-koden i `FORMKODER`. Former ingen regel passer for, får det
 generiske ikonet og merkes `kartlagt: false`. De samme reglene gir ikonene for
 formene redaktørene skriver på t½- og tss-kortene i «Viktige data».
 
+Tabletten er en flat sylinder sett litt ovenfra, og har delestrek bare når FEST
+sier at tablettene kan deles (`delbar` i `FORMVARIANTER`, `delingsikon`).
+Delingen samles for preparatene i en styrke, for styrkene i en form og for
+styrkene til et preparat (`fellesDeling`): streken står bare når alle er
+delbare. Ikke delbar, ikke spesifisert og ulikt mellom preparatene gir tabletten
+uten strek. Har preparatene i en styrke ulike ikoner, står ikonet også foran
+hvert preparatnavn i det åpne styrkekortet.
+
 Hvilke former som finnes, er ikke en håndlaget liste.
 `scripts/legemiddelformer-i-bruk.sql` finner alle formene blant merkevarene i
 FEST som ikke er utgått, og formene blant preparatene til de publiserte

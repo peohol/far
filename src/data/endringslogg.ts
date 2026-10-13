@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.90.0',
+    dato: '2026-10-13',
+    sammendrag: 'Tablettikonet viser om tabletten kan deles',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Tabletter vises nå som en flat tablett sett litt ovenfra. Bare tabletter som kan deles etter FEST, har delestrek; er de ikke delbare eller sier FEST ingenting om det, er det ingen strek.',
+      'Ikonet på styrkekortet har delestrek når alle preparatene med styrken kan deles. Er det ulikt mellom dem, står ikonet foran hvert preparatnavn, så du ser det før du åpner preparatet.',
+      'Preparatvinduet og overskriften for legemiddelformen følger samme regel.',
+    ],
+  },
+  {
     versjon: '1.89.1',
     dato: '2026-10-13',
     sammendrag: 'Oppgaven «Endre tablettikonet til preparater så man ser om de kan deles eller ikke» håndteres av en agent',

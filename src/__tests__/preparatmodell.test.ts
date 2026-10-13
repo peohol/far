@@ -367,6 +367,36 @@ describe('styrker som ser like ut, men ikke er det', () => {
     expect(s!.handtering.deling).toEqual({ status: 'ukjent', tekst: null })
   })
 
+  it('samler delingen per styrke, form og preparat, og sier ja bare når FEST sier det om alle', () => {
+    const delbar = { kode: '2', tekst: 'Delbar i 2' }
+    const ikkeDelbar = { kode: '1', tekst: 'Ikke delbar' }
+    const v = byggPreparatvisning(
+      utvalg(
+        [styrke('s1', 'mor'), styrke('s2', 'mor', { styrke: mengde(50, 'mg') }), styrke('s3', 'mor', { styrke: mengde(100, 'mg') })],
+        [
+          merkevare('m1', 'Alfa', ['s1'], { deling: delbar }),
+          merkevare('m2', 'Beta', ['s1'], { deling: { kode: '4', tekst: 'Delbar i 4' } }),
+          merkevare('m3', 'Alfa', ['s2'], { deling: delbar }),
+          merkevare('m4', 'Beta', ['s2'], { deling: ikkeDelbar }),
+          // «Ikke spesifisert» er ukjent, og et ukjent preparat gjør ikke styrken delbar.
+          merkevare('m5', 'Alfa', ['s3'], { deling: delbar }),
+          merkevare('m6', 'Gamma', ['s3'], { deling: { kode: '0', tekst: 'Ikke spesifisert' } }),
+        ],
+      ),
+      ['mor'],
+    )
+    const [form] = v.former
+    expect(form!.styrker.map((s) => [s.styrke, s.deling, s.preparater.map((p) => [p.navn, p.deling])])).toEqual([
+      ['25 mg', 'ja', [['Alfa', 'ja'], ['Beta', 'ja']]],
+      ['50 mg', 'varierer', [['Alfa', 'ja'], ['Beta', 'nei']]],
+      ['100 mg', 'varierer', [['Alfa', 'ja'], ['Gamma', 'ukjent']]],
+    ])
+    expect(form!.deling).toBe('varierer')
+    expect(v.preparater.get('53:Alfa')!.deling).toBe('ja')
+    expect(v.preparater.get('53:Beta')!.deling).toBe('varierer')
+    expect(v.preparater.get('53:Gamma')!.deling).toBe('ukjent')
+  })
+
   it('merker fritak og andre preparattyper på preparatet i styrken der de gjelder', () => {
     const v = byggPreparatvisning(
       utvalg(
