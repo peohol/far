@@ -12,6 +12,20 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.92.1',
+    dato: '2026-10-13',
+    sammendrag: 'Citaloprammonografien er faglig gjennomgått fra grunnen av',
+    typer: ['Fag'],
+    omfang: 'Moderat omfang',
+    gjelder: ['stoff/citalopram'],
+    punkter: [
+      'Effektdokumentasjonen ved depresjon, panikklidelse og tvangslidelse er vurdert på nytt, med tydeligere tall, studiepopulasjoner og begrensninger.',
+      'Farmakodynamikk, prøvetaking, graviditet og amming er oppdatert med nyere og mer presise kilder.',
+      'Det norske serumreferanseområdet på 70–350 nmol/L, toksisitetsgrensene og dose–serumtabellen er kontrollert og beholdt.',
+      'Svakt dokumenterte kort om klinisk toleranse og lite informative negative mål er tatt ut.',
+    ],
+  },
+  {
     versjon: '1.92.0',
     dato: '2026-10-13',
     sammendrag: 'Endringslogg på hver side med innhold: hvem som endret hva, og når',
