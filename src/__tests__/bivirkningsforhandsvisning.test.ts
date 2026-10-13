@@ -14,6 +14,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { importoversikt, importrapport, sammeInnhold, sammenlignImporter, type Importrad } from '../bivirkninger/forhandsvisning'
 import { importmigrasjon, kildeid, sisteEndringer, tilbaketrekkingsmigrasjon, type Bivirkningsimport } from '../bivirkninger/import'
+import { medErklaring } from '../faginnhold/endringserklaering'
 
 type Enkeltabell = Extract<Bivirkningsimport, { tabeller?: undefined }>
 type Flertabell = Extract<Bivirkningsimport, { organsystemer?: undefined }>
@@ -375,7 +376,18 @@ describe('importverktøyet', () => {
     expect(r.feil).toContain('ukjent frekvenskategori «ofte»')
     expect(r.ut).toBe('')
     expect(existsSync(migrasjon)).toBe(false)
-    expect(kjor('supabase/maler/bivirkningsimport.json', migrasjon).kode).toBe(0)
-    expect(readFileSync(migrasjon, 'utf8')).toBe(importmigrasjon(MAL))
+    // Uten agent og uten et migrasjonsnavn lages ingen migrasjon: endringen skal føres på agenten.
+    const fil = join(mappe, '20261014000000_bivirkninger.sql')
+    expect(kjor('supabase/maler/bivirkningsimport.json', fil).feil).toContain('Oppgi agenten')
+    expect(kjor('supabase/maler/bivirkningsimport.json', migrasjon, '--agent', 'claude-code').feil).toContain('er ikke et migrasjonsnavn')
+    expect(existsSync(fil) || existsSync(migrasjon)).toBe(false)
+    expect(kjor('supabase/maler/bivirkningsimport.json', fil, '--agent', 'claude-code').kode).toBe(0)
+    expect(readFileSync(fil, 'utf8')).toBe(
+      medErklaring(importmigrasjon(MAL), {
+        agent: 'claude-code',
+        migrasjon: '20261014000000_bivirkninger.sql',
+        oppsummering: `Bivirkninger lagt inn fra ${MAL.kilde.tittel}`,
+      }),
+    )
   }, 60_000)
 })

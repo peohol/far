@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { regelplan } from '../../faginnhold/stoffside'
-import { Samtidighetskonflikt } from '../../faginnhold/lagring'
+import { lagerFor, Samtidighetskonflikt, type Faginnholdslager } from '../../faginnhold/lagring'
+import { nyEndring } from '../../endringslogg/operasjon'
 import {
   INGEN_REGLER,
   type Regeldata,
@@ -12,7 +13,7 @@ import type { Tilstand } from '../../faginnhold/modell'
 import { kommentarendringer, utenKommentarer } from '../../regler/kommentarer'
 import type { Intervallregelsett } from '../../regler/modell'
 import { scenariokommentarendringer, type Scenarioutkast } from '../../regler/scenarioredigering'
-import { RUS_MODULER, rusModulFor, type RusModul } from '../../domain/rus'
+import { modulMedId, scenariomoduler } from '../../domain/rus'
 import type { Laboratorieanalytt } from '../../domain/analyttkatalog'
 import { THC_KODE } from '../../domain/thc'
 import { lagreThcUtkast, type ThcRegelsettutgave, type ThcUtkast } from '../../faginnhold/thcregler'
@@ -26,20 +27,6 @@ export interface Regeltilstand {
 }
 
 const IKKE_KLAR = 'Utkastet er ikke hentet ennå. Vent litt og prøv igjen.'
-
-/** Scenariomodulene analyttene fortolkes i, hver én gang. */
-function scenariomoduler(analytter: readonly Laboratorieanalytt[]): RusModul[] {
-  const moduler = new Map<string, RusModul>()
-  for (const { fortolkning } of analytter) {
-    const modul = rusModulFor(fortolkning)
-    if (modul) moduler.set(modul.id, modul)
-  }
-  return [...moduler.values()]
-}
-
-function modulMedId(id: string): RusModul | undefined {
-  return RUS_MODULER.find((m) => m.id === id)
-}
 
 /** Sant når fortolkningen har regler å redigere: noe regelsett eller noen kommentar. */
 export function harRegler(regler: Regeldata): boolean {
@@ -65,7 +52,7 @@ export function useFortolkningsredigering(analytter: readonly Laboratorieanalytt
   // Kodene og modulene som tekst, så en ny liste med de samme ikke leser alt på nytt.
   const kodeliste = analytter.map((a) => a.kode).join(' ')
   const koder = useMemo(() => (kodeliste ? kodeliste.split(' ') : []), [kodeliste])
-  const modulliste = scenariomoduler(analytter)
+  const modulliste = scenariomoduler(analytter.map((a) => a.fortolkning))
     .map((m) => m.id)
     .join(' ')
   const moduler = useMemo(() => (modulliste ? modulliste.split(' ') : []), [modulliste])
@@ -123,17 +110,29 @@ export function useFortolkningsredigering(analytter: readonly Laboratorieanalytt
     setRunde((r) => r + 1)
   }, [])
 
-  /** Kjører en endring, leser reglene på nytt, og sier fra om en konflikt. */
-  const endre = useCallback(async <T,>(arbeid: () => Promise<T>): Promise<T> => {
-    try {
-      const svar = await arbeid()
-      setRunde((r) => r + 1)
-      return svar
-    } catch (e) {
-      if (e instanceof Samtidighetskonflikt) setKonflikt(true)
-      throw e
-    }
-  }, [])
+  /**
+   * Kjører en endring og leser reglene på nytt. Kallene arbeidet gjør med
+   * lageret det får, føres som én endring i endringsloggen, med oppsummeringen
+   * brukeren skrev. Med `meldKonflikt` sier siden selv fra om en konflikt;
+   * ellers tar redigeringen seg av den.
+   */
+  const endre = useCallback(
+    async <T,>(
+      arbeid: (lager: Faginnholdslager) => Promise<T>,
+      oppsummering?: string,
+      meldKonflikt = true,
+    ): Promise<T> => {
+      try {
+        const svar = await arbeid(lagerFor(lager, nyEndring(oppsummering)))
+        setRunde((r) => r + 1)
+        return svar
+      } catch (e) {
+        if (meldKonflikt && e instanceof Samtidighetskonflikt) setKonflikt(true)
+        throw e
+      }
+    },
+    [lager],
+  )
 
   /** Utkastet slik det sist ble lest. Endringene lagres alltid mot revisjonene i det. */
   const utkastet = useCallback((): Regeldata => {
@@ -149,19 +148,23 @@ export function useFortolkningsredigering(analytter: readonly Laboratorieanalytt
    * lagres.
    */
   const lagreRegelsett = useCallback(
-    async (kode: string, innhold: Intervallregelsett, grunnlag?: Regelsettutgave) => {
-      const apnet = utkastet().regelsett[kode]
-      if (!apnet) throw new Error(IKKE_KLAR)
-      const mot = grunnlag ?? apnet
-      await lager.lagreIntervallregelsett(
-        mot.regelsett.id,
-        mot.regelsett.revisjon,
-        utenKommentarer(innhold),
-        kommentarendringer(innhold, mot.kommentarer, apnet.kommentarer),
-      )
-      setRunde((r) => r + 1)
-    },
-    [lager, utkastet],
+    (kode: string, innhold: Intervallregelsett, grunnlag?: Regelsettutgave, oppsummering?: string) =>
+      endre(
+        async (lager) => {
+          const apnet = utkastet().regelsett[kode]
+          if (!apnet) throw new Error(IKKE_KLAR)
+          const mot = grunnlag ?? apnet
+          await lager.lagreIntervallregelsett(
+            mot.regelsett.id,
+            mot.regelsett.revisjon,
+            utenKommentarer(innhold),
+            kommentarendringer(innhold, mot.kommentarer, apnet.kommentarer),
+          )
+        },
+        oppsummering,
+        false,
+      ),
+    [endre, utkastet],
   )
 
   /**
@@ -174,13 +177,13 @@ export function useFortolkningsredigering(analytter: readonly Laboratorieanalytt
    * på nytt om brukeren forkaster sitt.
    */
   const lagreThcRegelsett = useCallback(
-    (utkast: ThcUtkast, grunnlag?: ThcRegelsettutgave) =>
-      endre(async () => {
+    (utkast: ThcUtkast, grunnlag?: ThcRegelsettutgave, oppsummering?: string) =>
+      endre(async (lager) => {
         const mot = grunnlag ?? utkastet().thcregelsett
         if (!mot) throw new Error(IKKE_KLAR)
         await lagreThcUtkast(lager, mot, utkast)
-      }),
-    [endre, lager, utkastet],
+      }, oppsummering),
+    [endre, utkastet],
   )
 
   /** THC-syrereglene slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */
@@ -195,20 +198,24 @@ export function useFortolkningsredigering(analytter: readonly Laboratorieanalytt
    * `grunnlag`.
    */
   const lagreScenarioregelsett = useCallback(
-    async (modulId: string, utkast: Scenarioutkast, grunnlag?: Scenarioregelsettutgave) => {
-      const apnet = utkastet().scenarioregelsett[modulId]
-      const modul = modulMedId(modulId)
-      if (!apnet || !modul) throw new Error(IKKE_KLAR)
-      const mot = grunnlag ?? apnet
-      await lager.lagreScenarioregelsett(
-        mot.regelsett.id,
-        mot.regelsett.revisjon,
-        utkast.regelsett,
-        scenariokommentarendringer(utkast, modul.navn, mot.kommentarer, apnet.kommentarer),
-      )
-      setRunde((r) => r + 1)
-    },
-    [lager, utkastet],
+    (modulId: string, utkast: Scenarioutkast, grunnlag?: Scenarioregelsettutgave, oppsummering?: string) =>
+      endre(
+        async (lager) => {
+          const apnet = utkastet().scenarioregelsett[modulId]
+          const modul = modulMedId(modulId)
+          if (!apnet || !modul) throw new Error(IKKE_KLAR)
+          const mot = grunnlag ?? apnet
+          await lager.lagreScenarioregelsett(
+            mot.regelsett.id,
+            mot.regelsett.revisjon,
+            utkast.regelsett,
+            scenariokommentarendringer(utkast, modul.navn, mot.kommentarer, apnet.kommentarer),
+          )
+        },
+        oppsummering,
+        false,
+      ),
+    [endre, utkastet],
   )
 
   /** Scenarioregelsettet til modulen slik utkastet står i databasen nå, til sammenligningen ved en konflikt. */
@@ -220,11 +227,11 @@ export function useFortolkningsredigering(analytter: readonly Laboratorieanalytt
   /** Lager en ny revisjon av objektet med innholdet fra en tidligere. */
   const gjenopprett = useCallback(
     (utgave: Utgave<unknown>, fraRevisjon: number) =>
-      endre(async () => {
+      endre(async (lager) => {
         utkastet()
         await lager.gjenopprettRevisjon(utgave.id, utgave.revisjon, fraRevisjon)
       }),
-    [endre, lager, utkastet],
+    [endre, utkastet],
   )
 
   const plan = useMemo(() => regelplan(tilstand.regler), [tilstand.regler])
@@ -232,16 +239,17 @@ export function useFortolkningsredigering(analytter: readonly Laboratorieanalytt
   /**
    * Publiserer reglene og kommentarene som har upubliserte endringer,
    * kommentarene før regelsettet som peker på dem. Stopper ved første feil;
-   * det som alt er publisert, står.
+   * det som alt er publisert, står. Hele publiseringen føres som én endring i
+   * endringsloggen.
    */
   const publiser = useCallback(
-    () =>
-      endre(async () => {
+    (oppsummering?: string) =>
+      endre(async (lager) => {
         for (const steg of regelplan(utkastet())) {
           await lager.publiserUtkast(steg.id, steg.revisjon)
         }
-      }),
-    [endre, lager, utkastet],
+      }, oppsummering),
+    [endre, utkastet],
   )
 
   return {

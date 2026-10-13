@@ -260,14 +260,14 @@ describe('migrasjonshistorikken', () => {
     expect(new Set(navn).size).toBe(navn.length)
   })
 
-  it('lar bare oppryddingen fra første utkast røre historikktabellen', () => {
+  it('lar bare oppryddingen fra første utkast endre historikktabellen', () => {
     // Raden for en migrasjon føres inn etter at SQL-en har kjørt. En migrasjon
     // kan derfor ikke slette sin egen rad, og et forsøk etterlater nettopp den
     // raden den skulle fjerne. Fila under finnes fordi det skjedde én gang;
-    // flere av dem skal det ikke bli.
-    const rorer = filer.filter((f) =>
-      utenKommentarer(les(`${mappe}/${f}`)).includes('supabase_migrations'),
-    )
+    // flere av dem skal det ikke bli. Å lese tabellen er greit: endringsloggen
+    // bekrefter med den at en agents migrasjon er kjørt.
+    const skriver = /\b(?:insert\s+into|update|delete\s+from|truncate(?:\s+table)?|alter\s+table|drop\s+table)\s+supabase_migrations\./iu
+    const rorer = filer.filter((f) => skriver.test(utenKommentarer(les(`${mappe}/${f}`))))
     expect(rorer.map((f) => f.replace(/^\d+_/, ''))).toEqual(['rydd_historikken_selv.sql'])
   })
 })

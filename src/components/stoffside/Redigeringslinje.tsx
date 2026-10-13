@@ -3,7 +3,7 @@ import type { Publiseringssteg } from '../../faginnhold/stoffside'
 import { endredeFelt } from '../../faginnhold/historikk'
 import { INGEN_REGLER, TOM_STOFFSIDE, type Regeldata, type Stoffsidedata } from '../../faginnhold/lesing'
 import { korttittel, panelFor } from '../../faginnhold/paneler'
-import { RUS_MODULER } from '../../domain/rus'
+import { modulMedId } from '../../domain/rus'
 import { losRegelsett } from '../../regler/kommentarer'
 import { tilScenarioutkast, utkastfelter } from '../../regler/scenarioredigering'
 import { regelsettfelterMedTekst } from '../regler/Fortolkningsregler'
@@ -12,6 +12,8 @@ import { Ikon } from '../ikon/Ikon'
 import { Modallag } from '../Modallag'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
 import { useTips } from '../Tips'
+import { useBevart } from '../../oppdatering/Bevaring'
+import { Oppsummeringsfelt } from '../endringslogg/Oppsummeringsfelt'
 
 export interface RedigeringshandlingerProps {
   /** Utkastet til stoffsiden, når det er den som redigeres. */
@@ -23,7 +25,8 @@ export interface RedigeringshandlingerProps {
   plan: Publiseringssteg[]
   /** Sant mens utkastet hentes etter at redigeringen er slått på. */
   laster: boolean
-  onPubliser: () => Promise<void>
+  /** Publiserer, med oppsummeringen til endringsloggen når brukeren skrev en. */
+  onPubliser: (oppsummering?: string) => Promise<void>
   onAvslutt: () => void
 }
 
@@ -47,6 +50,7 @@ export function Redigeringshandlinger({
   const [publiserer, setPubliserer] = useState(false)
   const [feil, setFeil] = useState<string | null>(null)
   const [ferdig, setFerdig] = useState(false)
+  const [oppsummering, setOppsummering] = useBevart('publiseringsoppsummering', '')
   const status = statustekst(laster, plan.length, ferdig)
   const antall = laster ? 0 : plan.length
   const tips = useTips(status, { skjermleser: false })
@@ -55,7 +59,8 @@ export function Redigeringshandlinger({
     setPubliserer(true)
     setFeil(null)
     try {
-      await onPubliser()
+      await onPubliser(oppsummering)
+      setOppsummering('')
       setFerdig(true)
       setBekrefter(false)
     } catch (e) {
@@ -115,6 +120,7 @@ export function Redigeringshandlinger({
             {feil}
           </p>
         )}
+        <Oppsummeringsfelt verdi={oppsummering} onEndre={setOppsummering} />
         <div className="skjema__knapper">
           <Button variant="subtle" onClick={() => setBekrefter(false)}>
             Avbryt
@@ -166,7 +172,7 @@ export function beskrivSteg(
         Object.entries(regler.scenarioregelsett).find(([, r]) => r.regelsett.id === steg.id) ?? []
       const forrige = modul ? publisert.scenarioregelsett[modul] : undefined
       return medEndringer(
-        `Fortolkningsreglene for ${RUS_MODULER.find((m) => m.id === modul)?.navn ?? 'modulen'}`,
+        `Fortolkningsreglene for ${(modul && modulMedId(modul)?.navn) ?? 'modulen'}`,
         regelsett && forrige
           ? endredeFelt(utkastfelter(tilScenarioutkast(forrige)), utkastfelter(tilScenarioutkast(regelsett)))
           : null,

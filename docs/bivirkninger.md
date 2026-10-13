@@ -364,7 +364,9 @@ til, med alle bivirkningene.
    Alle feilene skrives ut med stedet i fila; ingenting lages før fila er i
    orden. Gå gjennom forhåndsvisningen, og særlig endringene, mot
    preparatomtalen.
-2. Lag migrasjonen: `npm run import:bivirkninger -- <fil> <migrasjon.sql>`.
+2. Lag migrasjonen: `npm run import:bivirkninger -- <fil> <migrasjon.sql> --agent <nøkkel>`.
+   Agenten (som `chatgpt-monografkurator`) står for endringen i endringsloggen
+   for fagsiden (`docs/innholdsendringer.md`), og fila må ha migrasjonsnavnet.
    Forhåndsvisningen skrives ut igjen. Er innholdet det samme som i den
    siste importen, lages ingen migrasjon. Migrasjonen kaller
    `bivirkninger.importer`, som kontrollerer importen på nytt.
@@ -388,7 +390,7 @@ ny migrasjon lages og rulles ut som over.
 
 Skal en preparatomtale ikke lenger vises (preparatet er avregistrert, eller
 den ble importert til feil side), trekkes den tilbake:
-`npm run import:bivirkninger -- --trekk-tilbake <fagsidenøkkel> <kildenøkkel> "<begrunnelse>" <migrasjon.sql>`,
+`npm run import:bivirkninger -- --trekk-tilbake <fagsidenøkkel> <kildenøkkel> "<begrunnelse>" <migrasjon.sql> --agent <nøkkel>`,
 og importfila tas ut i samme endring. Radene står igjen som historikk.
 
 En ny preparatomtale for den samme fagsiden (et annet preparat) får en ny

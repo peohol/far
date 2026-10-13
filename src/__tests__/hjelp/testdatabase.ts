@@ -353,19 +353,25 @@ export async function opprettBruker(db: PGlite, bruker: Testbruker): Promise<str
 
 /**
  * Kjører arbeidet slik data-API-et gjør det for en innlogget bruker: som
- * rollen `authenticated`, med bruker-ID-en i JWT-kravene. Uten bruker-ID
- * kjøres det som `anon`. Alt skjer i én transaksjon, som ved et kall mot
- * API-et, og en feil ruller den tilbake.
+ * rollen `authenticated`, med bruker-ID-en i JWT-kravene og overskriftene i
+ * forespørselen (`request.headers`, med små bokstaver i navnene). Uten
+ * bruker-ID kjøres det som `anon`. Alt skjer i én transaksjon, som ved et kall
+ * mot API-et, og en feil ruller den tilbake.
  */
 export async function som<T>(
   db: PGlite,
   brukerId: string | null,
   arbeid: (tx: Transaction) => Promise<T>,
+  overskrifter: Record<string, string> = {},
 ): Promise<T> {
   return db.transaction(async (tx) => {
     await tx.query(`select set_config('role', $1, true)`, [brukerId ? 'authenticated' : 'anon'])
     await tx.query(`select set_config('request.jwt.claims', $1, true)`, [
       JSON.stringify(brukerId ? { sub: brukerId, role: 'authenticated' } : { role: 'anon' }),
+    ])
+    await tx.query(`select set_config('request.method', 'POST', true)`)
+    await tx.query(`select set_config('request.headers', $1, true)`, [
+      JSON.stringify(Object.fromEntries(Object.entries(overskrifter).map(([n, v]) => [n.toLowerCase(), v]))),
     ])
     return arbeid(tx)
   })
@@ -428,6 +434,7 @@ export function faginnholdskall(db: PGlite, admin: string) {
     brukerId: string | null,
     funksjon: string,
     argumenter: Record<string, unknown>,
+    overskrifter: Record<string, string> = {},
   ): Promise<T> {
     const navn = Object.keys(argumenter)
     // Et jsonb-argument sendes som JSON, også når det er en liste; andre
@@ -443,7 +450,7 @@ export function faginnholdskall(db: PGlite, admin: string) {
         verdier,
       )
       return rows[0]!
-    })
+    }, overskrifter)
   }
 
   /** Leser som den oppgitte brukeren. */
@@ -497,20 +504,33 @@ export function faginnholdskall(db: PGlite, admin: string) {
   /**
    * En klient som svarer som data-API-et, med databasen bak seg. Som der gis
    * en funksjon som returnerer én verdi, tilbake som verdien selv, og ikke som
-   * en rad.
+   * en rad, og overskriftene satt med `setHeader` følger med kallet.
    */
   function klientFor(brukerId: string): SupabaseClient {
     return {
-      rpc: async (funksjon: string, argumenter: Record<string, unknown>) => {
-        try {
-          const rad = await rpc<Record<string, unknown>>(brukerId, funksjon, argumenter)
-          const kolonner = rad ? Object.keys(rad) : []
-          const data = kolonner.length === 1 && kolonner[0] === funksjon ? rad[funksjon] : rad
-          return { data, error: null }
-        } catch (feil) {
-          const { code, message, detail } = feil as { code: string; message: string; detail?: string }
-          return { data: null, error: { code, message, details: detail ?? null, hint: null } }
+      rpc: (funksjon: string, argumenter: Record<string, unknown>) => {
+        const overskrifter: Record<string, string> = {}
+        const utfor = async () => {
+          try {
+            const rad = await rpc<Record<string, unknown>>(brukerId, funksjon, argumenter, overskrifter)
+            const kolonner = rad ? Object.keys(rad) : []
+            const data = kolonner.length === 1 && kolonner[0] === funksjon ? rad[funksjon] : rad
+            return { data, error: null }
+          } catch (feil) {
+            const { code, message, detail } = feil as { code: string; message: string; detail?: string }
+            return { data: null, error: { code, message, details: detail ?? null, hint: null } }
+          }
         }
+        const kall = {
+          setHeader(navn: string, verdi: string) {
+            overskrifter[navn] = verdi
+            return kall
+          },
+          then<A, B>(ok: (svar: Awaited<ReturnType<typeof utfor>>) => A, feil?: (grunn: unknown) => B) {
+            return utfor().then(ok, feil)
+          },
+        }
+        return kall
       },
     } as unknown as SupabaseClient
   }

@@ -113,8 +113,8 @@ function Innhold({ fortolkning, sted, katalog, onPublisert, onAvslutt }: Fortolk
           publisert={publisert}
           plan={plan}
           laster={!kanEndres}
-          onPubliser={async () => {
-            await redigering.publiser()
+          onPubliser={async (oppsummering) => {
+            await redigering.publiser(oppsummering)
             onPublisert()
           }}
           onAvslutt={onAvslutt}
@@ -207,7 +207,7 @@ function Regeldelvisning({
           utgave={regler.regelsett[kode] ?? null}
           publisert={publisert.regelsett[kode] ?? null}
           redigerer
-          onLagre={(innhold, grunnlag) => redigering.lagreRegelsett(kode, innhold, grunnlag)}
+          onLagre={(innhold, grunnlag, oppsummering) => redigering.lagreRegelsett(kode, innhold, grunnlag, oppsummering)}
           hentNyeste={() => redigering.hentRegelsettutkast(kode)}
           apenFraStart={ene}
           {...(!ene && { seksjonsid: `${FORTOLKNING}-${kode.toLowerCase()}`, tittel: `Fortolkningsregler – ${kode}` })}
@@ -228,8 +228,11 @@ function Scenariodel({ fortolkning, redigering, ene }: { fortolkning: Analyte; r
         ? {
             utgave: utkast,
             publisert: publisert.scenarioregelsett[modul.id] ?? null,
-            onLagre: (u: Parameters<typeof lagreScenarioregelsett>[1], g?: Parameters<typeof lagreScenarioregelsett>[2]) =>
-              lagreScenarioregelsett(modul.id, u, g),
+            onLagre: (
+              u: Parameters<typeof lagreScenarioregelsett>[1],
+              g?: Parameters<typeof lagreScenarioregelsett>[2],
+              oppsummering?: string,
+            ) => lagreScenarioregelsett(modul.id, u, g, oppsummering),
             hentNyeste: () => hentScenarioregelsettutkast(modul.id),
           }
         : null,

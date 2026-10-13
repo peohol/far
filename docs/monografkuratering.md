@@ -54,6 +54,37 @@ DMP med tekstuttrekk og sidebilder, fra GitHub Actions
    id-en de har i produksjonen. Hele migrasjonen er én transaksjon: stopper en kontroll,
    er ingenting endret.
 
+   **Rapporten er påkrevd.** Det siste kurateringen gjør, etter alle
+   endringene, er `intern.kuratering_rapport('<agent>', '<migrasjonens eget
+   filnavn>', <rapport>)`. Den blir én samlet føring i endringsloggen for
+   fagsiden (`docs/innholdsendringer.md`), og skal beskrive det som faktisk
+   ble gjort, ikke det som var planlagt:
+
+   ```json
+   {
+     "oppsummering": "Kort, forståelig sammendrag (høyst 500 tegn)",
+     "seksjoner": [
+       { "seksjon": "<panelnøkkel>", "nytt": ["…"], "endret": ["…"], "fjernet": ["…"] }
+     ],
+     "nye_opplysninger": ["Vesentlige nye opplysninger"],
+     "korrigeringer": ["Rettinger av feil"],
+     "kildegrunnlag": ["Endringer i kildene: nye, byttede, fjernede"],
+     "mangler": ["Viktige hull som fortsatt står åpne"],
+     "lenker": ["https://github.com/peohol/far/pull/<nr>"]
+   }
+   ```
+
+   Agenten er nøkkelen i `public.endringsagenter` (ChatGPT-kuratoren er
+   `chatgpt-monografkurator`; en ny agent legges inn med en migrasjon).
+   Databasen kontrollerer rapporten mot endringene: hver seksjon og art
+   (nytt, endret, fjernet) som er endret, skal stå der, og ingen andre; en ny
+   kilde skal stå i kildegrunnlaget. Stemmer det ikke, eller mangler rapporten,
+   stopper migrasjonen uten å endre noe. Etter rapporten kan ingenting mer
+   endres. Er kurateringen alt gjort (`kuratering_utfort`), returnerer malen
+   før rapporten, og det føres ingenting. CI stopper også en ny kuratering uten
+   rapport, og en rapport med et annet filnavn enn migrasjonens eget
+   (`src/faginnhold/endringserklaering.ts`).
+
 3. **Test.** `npm test` prøver en ny kuratering av seg selv, uten noe nytt
    testoppsett:
 
@@ -130,6 +161,7 @@ API-rollene når.
 | `kuratering_element(side, panel, elementtype, nøkkel, revisjon[, kilde])` | Det ene elementet der `data` inneholder nøkkelen: publisert, uten upublisert utkast, på revisjonen (og med kilden) preflighten fant. Låst til migrasjonen er ferdig |
 | `kuratering_lagre(objekt, revisjon, endring, kilde)` | Innholdet i revisjonen med endringen (feltene på øverste nivå, som `data`, `referanser` eller `panel`), lagret og publisert med kilden i historikken |
 | `kuratering_nytt(side, innhold, nøkkel, kilde)` | Et nytt, publisert element, bare når ingen har nøkkelen fra før |
+| `kuratering_rapport(agent, migrasjon, rapport)` | Avslutter kurateringen med rapporten til endringsloggen, kontrollert mot det som faktisk er endret (over). Påkrevd |
 | `kuratering_referanse(innhold, kilde)` | Den publiserte referansen med lenken (renset for mellomrom), eller en ny. Stopper hvis lenken står på flere referanser (utkast og arkiverte utkast medregnet), eller på en der utkastet ikke er publisert, har en annen lenke eller en arkivering. En referanse som er arkivert og publisert slik, er lagt bort og telles ikke |
 
 Et element fjernes ved å flytte det til panelet `fjernet`

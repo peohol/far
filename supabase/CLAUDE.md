@@ -34,7 +34,10 @@ Tillegg til reglene i rotens `CLAUDE.md`. Gjelder alt under `supabase/`.
   feil underveis ville etterlatt dem halvveis utført (`docs/migrasjoner.md`).
 - En datamigrasjon som endrer en stoffmonografi, bygges på malen i
   `maler/monografkuratering.sql` og hjelpefunksjonene den bruker
-  (`docs/monografkuratering.md`).
+  (`docs/monografkuratering.md`), og avsluttes med rapporten.
+- En migrasjon som endrer faginnhold, oppgir agenten med
+  `intern.endring_start('<agent>', '<eget filnavn>', '<hensikt>')` først
+  (`docs/innholdsendringer.md`); CI stopper den ellers.
 - En migrasjon kan ikke slette sin egen rad i historikken: raden føres inn
   etter at SQL-en har kjørt. Skriv derfor aldri en «oppryddingsmigrasjon» som
   forsøker det — den etterlater nettopp den raden den skulle fjerne. Er en rad

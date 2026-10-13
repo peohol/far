@@ -15,6 +15,7 @@ import type { Kommentarendring } from '../regler/kommentarer'
 import type { Intervallregelsettinnhold } from '../regler/modell'
 import type { Scenarioregelsett } from '../domain/scenario'
 import type { ThcRegelsettinnhold } from '../domain/thcTekster'
+import { iEndring, type Endringskontekst } from '../endringslogg/operasjon'
 
 const UVENTET_FEIL = 'Noe gikk galt. Prøv igjen.'
 const IKKE_GODTATT = 'Innholdet ble ikke godtatt. Kontroller feltene og prøv igjen.'
@@ -133,11 +134,21 @@ export interface Faginnholdslager {
    * eller sitert, heller ikke i en eldre revisjon; ellers må den arkiveres.
    */
   slettReferanse(objekt: string, forventetRevisjon: number): Promise<void>
+  /**
+   * Det samme lageret, der alle kallene hører til én handling i
+   * endringsloggen, med oppsummeringen brukeren skrev
+   * (`src/endringslogg/operasjon.ts`). Utelatt i enkle erstatninger i testene.
+   */
+  medEndring?(endring: Endringskontekst): Faginnholdslager
 }
 
-export function lagFaginnholdslager(klient: SupabaseClient): Faginnholdslager {
+/** Lageret for handlingen, når lageret kan føre handlinger; ellers lageret selv. */
+export const lagerFor = (lager: Faginnholdslager, endring: Endringskontekst): Faginnholdslager =>
+  lager.medEndring?.(endring) ?? lager
+
+export function lagFaginnholdslager(klient: SupabaseClient, endring?: Endringskontekst): Faginnholdslager {
   async function kall<T = Objektstatus>(funksjon: string, argumenter: Record<string, unknown>): Promise<T> {
-    const { data, error } = await klient.rpc(funksjon, argumenter)
+    const { data, error } = await iEndring(klient.rpc(funksjon, argumenter), endring)
     if (error) throw tilFeil(error)
     if (!data) throw new Error(UVENTET_FEIL)
     return data as T
@@ -164,5 +175,6 @@ export function lagFaginnholdslager(klient: SupabaseClient): Faginnholdslager {
     slettReferanse: async (objekt, forventetRevisjon) => {
       await kall<string>('slett_referanse', { objekt, forventet_revisjon: forventetRevisjon })
     },
+    medEndring: (ny) => lagFaginnholdslager(klient, ny),
   }
 }

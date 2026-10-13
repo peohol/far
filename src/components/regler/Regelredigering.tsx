@@ -28,6 +28,7 @@ import { NIVANAVN, regelsettfelter, tekstene } from '../../regler/visning'
 import type { Level } from '../../types'
 import { Button } from '../Button'
 import { Grensefelt, Lagringskonflikt, oppramsing, Tekstomrade, useRegellagring, Valgfelt } from './Regelfelter'
+import { Oppsummeringsfelt } from '../endringslogg/Oppsummeringsfelt'
 import { Regelsimulator } from './Regeltabell'
 
 export interface RegelredigeringProps {
@@ -36,7 +37,7 @@ export interface RegelredigeringProps {
    * Lagrer utkastet med kommentarene, mot det brukeren åpnet, eller mot
    * `grunnlag` når hen har sett en nyere utgave og valgt å lagre over den.
    */
-  onLagre: (innhold: Intervallregelsett, grunnlag?: Regelsettutgave) => Promise<void>
+  onLagre: (innhold: Intervallregelsett, grunnlag?: Regelsettutgave, oppsummering?: string) => Promise<void>
   /** Utkastet slik det står i databasen nå, med kommentarene. */
   hentNyeste: () => Promise<Regelsettutgave | null>
   onAvbryt: () => void
@@ -189,6 +190,7 @@ export function Regelredigering({ start, onLagre, hentNyeste, onAvbryt }: Regelr
           lagrer={lagrer}
         />
       )}
+      <Oppsummeringsfelt verdi={lagring.oppsummering} onEndre={lagring.setOppsummering} />
       <div className="skjema__knapper">
         <Button variant="subtle" onClick={onAvbryt}>
           Avbryt

@@ -21,6 +21,7 @@ export const AVHENGIGHETER: readonly string[] = [
   'scripts/berorer-migrasjoner.ts',
   'src/faginnhold/migrasjonshistorikk.ts',
   'src/faginnhold/sqlsetninger.ts',
+  'src/faginnhold/endringserklaering.ts',
   'src/faginnhold/migrasjonsavhengigheter.ts',
 ]
 

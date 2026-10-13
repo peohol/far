@@ -14,7 +14,8 @@ Reglene for hva en migrasjon kan inneholde, står i `supabase/CLAUDE.md`.
      migrasjon som er kjørt i produksjonen er endret, fjernet eller omdøpt, at
      nye migrasjoner er nyere enn dem på `main`, og at ingen ny migrasjon har
      destruktive setninger uten godkjenning eller ikke kan kjøres i én
-     transaksjon (under);
+     transaksjon (under), og at en ny migrasjon som endrer faginnhold, oppgir
+     agenten, og en kuratering rapporten (`docs/innholdsendringer.md`);
    - `npm test`, som kjører alle migrasjonene i en database i minnet;
    - `npm run build`.
 
@@ -32,7 +33,7 @@ Reglene for hva en migrasjon kan inneholde, står i `supabase/CLAUDE.md`.
    når en sammenslåing til `main` endrer `supabase/migrations/`:
    - *forkontroll*: historikken i produksjonen stemmer med filene, produksjonen
      har ingen migrasjon uten fil, ingen ventende migrasjon er destruktiv uten
-     godkjenning eller ikke-atomisk, og en tørrkjøring av `supabase db push` planlegger nøyaktig de
+     godkjenning, ikke-atomisk eller endrer innhold uten å oppgi agenten, og en tørrkjøring av `supabase db push` planlegger nøyaktig de
      migrasjonene produksjonen mangler;
    - *utrullingen*: `supabase db push` kjører bare de som mangler, hver i én
      transaksjon sammen med raden i historikken;

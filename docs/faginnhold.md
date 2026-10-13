@@ -30,6 +30,7 @@ kjernen og stegene ikke henter noe fra faginnholdet selv.
 | `supabase/migrations/*_kommentar_objekttype.sql`, `*_kommentarer.sql` | Fortolkningskommentarene som egne objekter |
 | `src/domain/kommentarobjekt.ts` | Formen på en kommentar og kontrollen av den, lik databasens |
 | `supabase/migrations/*_revisjonskilde.sql` | Kilden i revisjonene, for innhold som er importert |
+| `supabase/migrations/*_innholdsendringer.sql`, `src/endringslogg/` | Endringsloggen for sidene: hver lagring, publisering og kuratering som én endring, med hvem — person, KI-agent eller system (`docs/innholdsendringer.md`) |
 | `supabase/import/psykofarmaka/` | Importdatasettet for psykofarmakasidene, én fil per analyttkode |
 | `src/faginnhold/import.ts`, `psykofarmaka.ts`, `scripts/importer-psykofarmaka.ts` | Kontrollen av datasettet, planen og SQL-en som legger det inn |
 | `supabase/migrations/*_psykofarmaka_import_*.sql`, `*_psykofarmaka_kursendring.sql` | Importen slik den ble rullet ut, og kursendringen som tok bort preparatnavnene etterpå |

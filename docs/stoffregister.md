@@ -126,3 +126,10 @@ papirkurven står ikke i registeret eller i søket.
 
 Reglene håndheves i databasen. Appen har de samme (`kanSletteStoff`,
 `kanSletteKategori`) for å vise bare valgene som virker.
+
+Alt som endres i inndelingen, arkivet og papirkurven — kategorier som
+opprettes, får nytt navn, flyttes, arkiveres eller slettes, og fagsider som
+plasseres, flyttes, arkiveres, slettes og hentes tilbake — føres i
+endringsloggen for stoffregisteret, og det som gjelder én fagside, også i
+fagsidens (`docs/innholdsendringer.md`). Ryddingen av papirkurven føres som en
+rutine.

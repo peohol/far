@@ -2,7 +2,8 @@
 --
 -- Kopier filen til supabase/migrations/<versjon>_<stoff>_monografkuratering.sql
 -- og bytt ut eksemplet: nøkkelen til stoffsiden, kilden, preflighten med
--- antallene og revisjonene kuratoren kontrollerte i produksjonen, og endringene.
+-- antallene og revisjonene kuratoren kontrollerte i produksjonen, endringene,
+-- og rapporten med filnavnet til migrasjonen selv. Rapporten er påkrevd.
 -- `monografkuratering.test.ts` kjører malen slik den står, mot en eksempelside.
 do $kuratering$
 declare
@@ -46,5 +47,30 @@ begin
     'panel', 'farmakodynamikk', 'posisjon', 2, 'elementtype', 'mekanismekort',
     'data', '{"maal": "5-HT2C-reseptor", "mekanisme": "antagonisme", "dokument": {"type": "doc", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Nytt kort."}]}]}}'::jsonb,
     'referanser', jsonb_build_array(referanse)), '{"maal": "5-HT2C-reseptor"}', kilde);
+
+  -- 4. Rapporten til endringsloggen for fagsiden: hva som faktisk ble gjort,
+  --    seksjon for seksjon (panelnøklene), med nye opplysninger, rettinger,
+  --    endringer i kildegrunnlaget og det som fortsatt mangler. Databasen
+  --    sammenligner seksjonene med endringene og stopper migrasjonen om de
+  --    ikke stemmer; etter rapporten kan ingenting mer endres. Andre argument
+  --    er filnavnet til migrasjonen selv.
+  perform intern.kuratering_rapport('chatgpt-monografkurator', '20261002000000_eksempelstoff_monografkuratering.sql', $rapport$
+  {
+    "oppsummering": "Farmakodynamikk og dosering kontrollert mot Eksempelkilde",
+    "seksjoner": [
+      {
+        "seksjon": "farmakodynamikk",
+        "nytt": ["Mekanismekort for 5-HT2C-reseptoren"],
+        "endret": ["D2-reseptor: mekanismen beskrevet som antagonisme, med kilde"],
+        "fjernet": ["H1-reseptor: ikke støttet av kildene"]
+      },
+      { "seksjon": "dosering", "endret": ["Doseringsteksten skrevet om etter kilden"] }
+    ],
+    "nye_opplysninger": ["Antagonisme ved 5-HT2C-reseptoren"],
+    "korrigeringer": ["H1-antagonisme var oppgitt uten kilde og er fjernet"],
+    "kildegrunnlag": ["Eksempelkilde (2026) lagt til"],
+    "mangler": ["Dosering ved nedsatt leverfunksjon er ikke dekket av kildene"]
+  }
+  $rapport$::jsonb);
 end
 $kuratering$;

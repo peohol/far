@@ -2,6 +2,7 @@ import { useId, useState } from 'react'
 import { useAutoerstattFelt } from '../../autoerstatt/felt'
 import { sammenlignFelter, type Felt } from '../../faginnhold/historikk'
 import { Samtidighetskonflikt } from '../../faginnhold/lagring'
+import { useBevart } from '../../oppdatering/Bevaring'
 import { Button } from '../Button'
 import { Tallfelt } from '../Tallfelt'
 import { Endringsliste } from '../historikk/Historikkvindu'
@@ -21,11 +22,15 @@ import { Endringsliste } from '../historikk/Historikkvindu'
  * lagre over den. Har noen andre lagret i mellomtiden, blir det en konflikt
  * der brukeren kan hente det nyeste og sammenligne; ingenting er skrevet
  * over, og skjemaet står som det var.
+ *
+ * `oppsummering` er det brukeren valgfritt skriver om endringen til
+ * endringsloggen for siden (`Oppsummeringsfelt`); den sendes med lagringen.
  */
 export function useRegellagring<I, G>(
-  onLagre: (innhold: I, grunnlag?: G) => Promise<void>,
+  onLagre: (innhold: I, grunnlag?: G, oppsummering?: string) => Promise<void>,
   hentNyeste: () => Promise<G | null>,
 ) {
+  const [oppsummering, setOppsummering] = useBevart('oppsummering', '')
   const [feil, setFeil] = useState<string | null>(null)
   const [lagrer, setLagrer] = useState(false)
   const [konflikt, setKonflikt] = useState<{ nyeste: G | null } | null>(null)
@@ -34,7 +39,7 @@ export function useRegellagring<I, G>(
     setLagrer(true)
     setFeil(null)
     try {
-      await onLagre(innhold, grunnlag)
+      await onLagre(innhold, grunnlag, oppsummering.trim() || undefined)
     } catch (e) {
       if (e instanceof Samtidighetskonflikt) setKonflikt({ nyeste: null })
       else setFeil((e as Error).message)
@@ -44,7 +49,7 @@ export function useRegellagring<I, G>(
 
   const sammenlign = async () => setKonflikt({ nyeste: await hentNyeste() })
 
-  return { feil, setFeil, lagrer, konflikt, lagre, sammenlign }
+  return { feil, setFeil, lagrer, konflikt, lagre, sammenlign, oppsummering, setOppsummering }
 }
 
 /**

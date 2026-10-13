@@ -1,0 +1,146 @@
+/**
+ * Endringsloggen for innholdssidene (`src/components/endringslogg/`):
+ * oppsummeringsfeltet ved lagring og loggvinduet. Appens egen endringslogg
+ * over versjonene står i `endringslogg.css`; loggvinduet låner skuffene derfra.
+ */
+
+/* --- Oppsummeringsfeltet ----------------------------------------------------
+   Lukket er det en liten tekstlenke over knappene, så lagringen ikke blir
+   tyngre for den som ikke vil skrive noe. */
+.oppsummeringsfelt__apne {
+  align-self: flex-start;
+  padding: var(--rom-1) 0;
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-meta);
+  color: var(--blekk-dempet);
+  text-decoration: underline;
+  text-decoration-color: var(--linje-sterk);
+  text-underline-offset: 0.2em;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.oppsummeringsfelt__apne:hover,
+.oppsummeringsfelt__apne:focus-visible {
+  color: var(--blekk);
+  text-decoration-color: currentColor;
+}
+
+.oppsummeringsfelt {
+  margin-bottom: var(--rom-3);
+}
+
+/* --- Loggvinduet ------------------------------------------------------------ */
+.innholdslogg__valg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2) var(--rom-5);
+  margin: 0 0 var(--rom-4);
+  font-size: var(--tekst-meta);
+  color: var(--blekk-dempet);
+}
+
+.innholdslogg__valg label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rom-2);
+  cursor: pointer;
+}
+
+.innholdslogg__tom,
+.innholdslogg__feil {
+  margin: var(--rom-4) 0;
+  color: var(--blekk-dempet);
+}
+
+.innholdslogg__feil {
+  color: var(--alvorlig-blekk);
+}
+
+.innholdslogg__tid {
+  font-variant-numeric: tabular-nums;
+}
+
+.innholdslogg__hvem {
+  color: var(--blekk);
+  letter-spacing: normal;
+}
+
+.innholdslogg__kropp {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-4);
+  padding: 0 var(--rom-5) var(--rom-5);
+  font-size: var(--tekst-ui);
+  line-height: var(--linjehoyde-ui);
+}
+
+.innholdslogg__blokk {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-2);
+}
+
+.innholdslogg__overskrift {
+  margin: 0;
+  font-size: var(--tekst-meta);
+  font-weight: var(--vekt-halvfet);
+  letter-spacing: 0.06em;
+  color: var(--blekk-dempet);
+}
+
+.innholdslogg__punkter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rom-1);
+  margin: 0;
+  padding-left: var(--rom-5);
+}
+
+.innholdslogg__del {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--rom-2) var(--rom-3);
+}
+
+.innholdslogg__del-tekst {
+  flex: 1 1 14rem;
+}
+
+.innholdslogg__lenker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rom-2) var(--rom-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.innholdslogg__lenker a {
+  color: var(--aksent);
+}
+
+.innholdslogg__sammenlign {
+  flex: none;
+  padding: var(--rom-1) var(--rom-3);
+  font-family: var(--skrift-ui);
+  font-size: var(--tekst-meta);
+  color: var(--blekk);
+  background: var(--flate);
+  border: var(--kant) solid var(--linje-kontroll);
+  border-radius: var(--runding-pille);
+  cursor: pointer;
+}
+
+.innholdslogg__sammenlign:hover,
+.innholdslogg__sammenlign:focus-visible {
+  border-color: var(--blekk-dempet);
+}
+
+.innholdslogg__flere {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--rom-4);
+}

@@ -4,8 +4,11 @@
  * `docs/bivirkninger.md`).
  *
  *   npm run import:bivirkninger -- <importfil.json> [--mot <forrige.json>]
- *   npm run import:bivirkninger -- <importfil.json> <migrasjonsfil.sql>
- *   npm run import:bivirkninger -- --trekk-tilbake <stoff> <kildenøkkel> "<begrunnelse>" <migrasjonsfil.sql>
+ *   npm run import:bivirkninger -- <importfil.json> <migrasjonsfil.sql> --agent <nøkkel> [--lenke <PR>]
+ *   npm run import:bivirkninger -- --trekk-tilbake <stoff> <kildenøkkel> "<begrunnelse>" <migrasjonsfil.sql> --agent <nøkkel>
+ *
+ * `--agent` er agenten som står for endringen i endringsloggen for siden
+ * (`docs/innholdsendringer.md`); migrasjonen åpnes med erklæringen.
  *
  * Uten migrasjonsfil er det en tørrkjøring: fila kontrolleres, og
  * forhåndsvisningen skrives ut, men ingenting lages. Importen sammenlignes
@@ -29,9 +32,11 @@ import {
   tilbaketrekkingsmigrasjon,
   type Bivirkningsimport,
 } from '../src/bivirkninger/import'
+import { erklartMigrasjon, lesAgentvalg } from './agentvalg'
 
 const MIGRASJONSMAPPE = new URL('../supabase/migrations/', import.meta.url)
-const argumenter = process.argv.slice(2).filter((a) => a !== '--')
+const valg = lesAgentvalg(process.argv.slice(2))
+const argumenter = valg.resten
 
 function avslutt(melding: string): never {
   console.error(melding)
@@ -57,7 +62,10 @@ if (argumenter[0] === '--trekk-tilbake') {
   if (!stoff || !nokkel || !begrunnelse?.trim() || !fil) {
     avslutt('Bruk: --trekk-tilbake <stoff> <kildenøkkel> "<begrunnelse>" <migrasjonsfil.sql>')
   }
-  writeFileSync(fil, tilbaketrekkingsmigrasjon(stoff, nokkel, begrunnelse))
+  writeFileSync(
+    fil,
+    erklartMigrasjon(tilbaketrekkingsmigrasjon(stoff, nokkel, begrunnelse), fil, valg, `Bivirkningene fra ${nokkel} trukket tilbake`),
+  )
   console.error(`Tilbaketrekking av «${nokkel}» på «${stoff}» → ${fil}`)
 } else {
   const mot = argumenter.indexOf('--mot')
@@ -87,7 +95,7 @@ if (argumenter[0] === '--trekk-tilbake') {
         `Ingen migrasjon laget: innholdet er det samme som i den siste importen av kilden (${siste.migrasjon}), og databasen ville ikke endret noe.`,
       )
     }
-    writeFileSync(fil, importmigrasjon(imp))
+    writeFileSync(fil, erklartMigrasjon(importmigrasjon(imp), fil, valg, `Bivirkninger lagt inn fra ${imp.kilde.tittel}`))
     console.error(`Migrasjonen → ${fil}`)
   }
 }

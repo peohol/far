@@ -244,6 +244,14 @@ describe('monografmigrasjoner uten kuratorprofil', () => {
   })
 })
 
+/** Rapporten en kuratering i testene avsluttes med (`intern.kuratering_rapport`). */
+const rapport = (innhold: Record<string, unknown>) =>
+  `intern.kuratering_rapport('chatgpt-monografkurator', '20261014000000_testkuratering.sql', '${JSON.stringify({
+    oppsummering: 'Syntetisk kuratering',
+    seksjoner: [],
+    ...innhold,
+  })}'::jsonb)`
+
 describe('monografkuratering med kuratorprofil', () => {
   let db: PGlite
   let kall: Faginnholdskall
@@ -283,7 +291,8 @@ describe('monografkuratering med kuratorprofil', () => {
     await eksempelside(kall, 'Kildeside')
     const bareKilde = `do $$ begin perform intern.kuratering_start('kildeside');
       perform intern.kuratering_referanse('{"tittel": "Bare en kilde", "forfattere": "F", "aar": "2026",
-        "lenke": "https://example.org/bare-en-kilde"}', 'Kurateringskilde'); end $$;`
+        "lenke": "https://example.org/bare-en-kilde"}', 'Kurateringskilde');
+      perform ${rapport({ kildegrunnlag: ['Bare en kilde'] })}; end $$;`
     // En kuratering som bare legger inn en referanse, endrer ingen side, og
     // stopper dermed kjedetesten (`kurateringskjeden.test.ts`).
     const kilde = await kjorKuratering(db, 'bare_kilde.sql', bareKilde)
@@ -300,7 +309,8 @@ describe('monografkuratering med kuratorprofil', () => {
     const fra = await eksempelside(kall, 'Flyttekilde')
     const til = await eksempelside(kall, 'Flyttemaal')
     const flytt = `do $$ begin perform intern.kuratering_start('flyttemaal');
-      perform intern.kuratering_lagre('${fra.h1}', 1, '{"infoside": "${til.side}"}', 'Kurateringskilde'); end $$;`
+      perform intern.kuratering_lagre('${fra.h1}', 1, '{"infoside": "${til.side}"}', 'Kurateringskilde');
+      perform ${rapport({ seksjoner: [{ seksjon: 'farmakodynamikk', endret: ['H1-kortet flyttet hit'] }] })}; end $$;`
     const kjort = await kjorKuratering(db, 'flytt.sql', flytt)
     expect(kjort.endredeSider).toEqual({ flyttekilde: 1, flyttemaal: 1 })
     // Kjedetesten avviser den: kurateringen av flyttemaal har endret en annen side.
@@ -490,6 +500,7 @@ describe('monografkuratering med kuratorprofil', () => {
         `select intern.kuratering_referanse($1::jsonb, 'Kurateringskilde') as id`,
         [JSON.stringify(bortlagt)],
       )
+      await tx.query(`select ${rapport({ kildegrunnlag: ['Lagt bort, lagt inn på nytt'] })}`)
       return rows[0]!.id
     })
     expect(ny).not.toBe(gammel)
