@@ -33,6 +33,7 @@
     "scripts/berorer-migrasjoner.ts",
     "scripts/migrasjonsmappe.ts",
     "scripts/produksjonsmigrering.ts",
+    "scripts/kuratorjobb.ts",
     "supabase/functions/_delt",
     "api"
   ]
