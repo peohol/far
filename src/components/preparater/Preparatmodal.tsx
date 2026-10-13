@@ -56,7 +56,7 @@ export function Preparatmodal({
       onLukk={onLukk}
       ark
       meta={ramsOpp([sidenavn, preparat.form])}
-      ikon={formikonnavn(preparat.ikon)}
+      ikon={formikonnavn(preparat.ikon, preparat.deling)}
       undertittel={preparat.produsenter.join(', ') || undefined}
       merker={merker.felles.length > 0 ? <Preparatmerker merker={merker.felles} /> : undefined}
       lukketekst="Lukk preparatet"

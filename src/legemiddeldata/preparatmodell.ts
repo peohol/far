@@ -46,6 +46,7 @@ import {
   trygLenke,
   virkestoffI,
   type Handtering,
+  type Handteringsstatus,
   type Handteringsvalg,
   type Preparatpakning,
   type Styrkemengde,
@@ -84,6 +85,8 @@ export interface Preparatrad {
   produsenter: string[]
   /** Merkene for preparatet i denne styrken. */
   merker: Preparatmerke[]
+  /** Om preparatet i denne styrken kan deles, etter FEST. */
+  deling: Handteringsstatus
 }
 
 export interface Styrkegruppe {
@@ -103,6 +106,8 @@ export interface Styrkegruppe {
   kombinasjon: boolean
   /** Preparatene med styrken, alfabetisk. */
   preparater: Preparatrad[]
+  /** Om preparatene med styrken kan deles, samlet med {@link fellesDeling}. */
+  deling: Handteringsstatus
 }
 
 export interface Formgruppe {
@@ -111,6 +116,8 @@ export interface Formgruppe {
   form: string
   ikon: Formikon
   styrker: Styrkegruppe[]
+  /** Om preparatene i formen kan deles, samlet med {@link fellesDeling}. */
+  deling: Handteringsstatus
 }
 
 /**
@@ -182,6 +189,8 @@ export interface Preparatdetalj {
   atc: Kode[]
   /** I samme rekkefølge som styrkene i formen. */
   styrker: Preparatstyrkedetalj[]
+  /** Om preparatet kan deles i alle styrkene, samlet med {@link fellesDeling}. */
+  deling: Handteringsstatus
 }
 
 export interface Preparatvisning {
@@ -229,6 +238,9 @@ export function byggPreparatvisning(
 
   const former = new Map<string, Formgruppe & { grupper: Map<string, Styrkegruppe> }>()
   const preparater = new Map<string, Preparatdetalj & { perStyrke: Map<string, Preparatstyrkedetalj> }>()
+  // Delingen til hver merkevare for seg, før håndteringen slås sammen: ikonet
+  // skal bare ha delestrek når FEST sier det om alle (`fellesDeling`).
+  const delinger = new Map<Preparatstyrkedetalj, Handteringsstatus[]>()
 
   for (const m of utvalg.merkevarer) {
     const { id: formId, form: formtekst } = legemiddelform(m.legemiddelform)
@@ -240,6 +252,7 @@ export function byggPreparatvisning(
           form: formtekst,
           ikon: formikon(m.legemiddelform?.kode, m.legemiddelform?.tekst),
           styrker: [],
+          deling: 'ukjent',
           grupper: new Map(),
         })
         .get(formId)!
@@ -262,6 +275,7 @@ export function byggPreparatvisning(
           uten_styrke: m.virkestoff_uten_styrke.map(navn),
           kombinasjon,
           preparater: [],
+          deling: 'ukjent',
         })
         .get(nokkel)!
 
@@ -285,6 +299,7 @@ export function byggPreparatvisning(
           produsenter: [],
           atc: [],
           styrker: [],
+          deling: 'ukjent',
           perStyrke: new Map(),
         })
         .get(preparatId)!
@@ -317,7 +332,9 @@ export function byggPreparatvisning(
         .get(nokkel)!
     // Samme preparat i samme styrke kan være flere merkevarer i FEST, f.eks.
     // med hver sine pakninger. Det er én styrke å vise, med alt fra dem alle.
-    if (styrke.merkevarer.length > 0) styrke.handtering = slaSammenHandtering(styrke.handtering, handteringFor(m))
+    const handtering = handteringFor(m)
+    if (styrke.merkevarer.length > 0) styrke.handtering = slaSammenHandtering(styrke.handtering, handtering)
+    delinger.set(styrke, [...(delinger.get(styrke) ?? []), handtering.deling.status])
     styrke.merkevarer.push(m.id)
     leggTil(styrke.navn_form_styrke, [m.navn_form_styrke])
     leggTilMerker(styrke.merker, merker)
@@ -350,7 +367,13 @@ export function byggPreparatvisning(
         s.presisering = g.presisering
         s.pakninger.sort((a, b) => a.tekst.localeCompare(b.tekst, 'nb', { numeric: true }))
         s.byttbarhet = bytte(s)
-        g.preparater.push({ preparat: preparat.id, navn: preparat.navn, produsenter: s.produsenter, merker: s.merker })
+        g.preparater.push({
+          preparat: preparat.id,
+          navn: preparat.navn,
+          produsenter: s.produsenter,
+          merker: s.merker,
+          deling: fellesDeling(delinger.get(s)!),
+        })
         return { s, i }
       })
       .sort((a, b) => a.i - b.i)
@@ -362,10 +385,15 @@ export function byggPreparatvisning(
       leggTil(preparat.produsenter, s.produsenter)
       leggTilKoder(preparat.atc, s.atc)
     }
-    ferdigePreparater.set(preparat.id, { ...preparat, styrker: styrkeliste })
+    const deling = fellesDeling(styrkeliste.flatMap((s) => delinger.get(s)!))
+    ferdigePreparater.set(preparat.id, { ...preparat, styrker: styrkeliste, deling })
   }
-  for (const g of ferdigeFormer.flatMap((f) => f.styrker)) {
-    g.preparater.sort((a, b) => alfabetisk(a.navn, b.navn) || a.preparat.localeCompare(b.preparat))
+  for (const f of ferdigeFormer) {
+    for (const g of f.styrker) {
+      g.preparater.sort((a, b) => alfabetisk(a.navn, b.navn) || a.preparat.localeCompare(b.preparat))
+      g.deling = fellesDeling(g.preparater.map((p) => p.deling))
+    }
+    f.deling = fellesDeling(f.styrker.map((g) => g.deling))
   }
 
   return { former: ferdigeFormer.sort((a, b) => alfabetisk(a.form, b.form)), preparater: ferdigePreparater }
@@ -564,6 +592,16 @@ function pakningsnavn(iGruppen: readonly Preparatpakning[], alle: readonly Prepa
     !p.tekst ? `varenr. ${p.varenr}` : utenfor.has(p.tekst) ? `${p.tekst} (varenr. ${p.varenr})` : p.tekst,
   )
   return [...new Set(navn)]
+}
+
+/**
+ * Delingen for flere preparater eller styrker samlet: det de alle har felles,
+ * ellers `varierer`. Ulikt fra {@link slaSammenHandtering} teller `ukjent` med,
+ * så ikonet med delestrek (`ja`) bare vises når FEST sier det om alle.
+ */
+export function fellesDeling(statuser: readonly Handteringsstatus[]): Handteringsstatus {
+  const [forste = 'ukjent'] = statuser
+  return statuser.every((s) => s === forste) ? forste : 'varierer'
 }
 
 function slaSammenHandtering(a: Handtering, b: Handtering): Handtering {

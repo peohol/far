@@ -47,7 +47,7 @@ export function Legemiddelformer({ visning, sidenavn }: { visning: Preparatvisni
               apenFraStart={apenFraStart}
               tittel={
                 <>
-                  <Ikon navn={formikonnavn(f.ikon)} className="overskriftskort__ikon" />
+                  <Ikon navn={formikonnavn(f.ikon, f.deling)} className="overskriftskort__ikon" />
                   <Uthev tekst={f.form} />
                 </>
               }

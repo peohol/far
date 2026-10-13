@@ -22,13 +22,18 @@
  * Se `docs/legemiddeldata.md`.
  */
 
+import type { Handteringsstatus } from './preparater'
+
 /**
  * De semantiske variantene og ikonet hver av dem vises med. Atlas har ikoner
  * for tablett, depottablett og kapsel; de andre er tegnet i samme stil
  * (`src/components/ikon/register.ts`).
+ *
+ * En variant med `delbar` har et eget ikon for det FEST sier kan deles (se
+ * `delingsikon`); ellers vises `ikon`.
  */
 export const FORMVARIANTER = {
-  tablett: { ikon: 'tablet' },
+  tablett: { ikon: 'tablet', delbar: 'tabletDelbar' },
   depottablett: { ikon: 'depot' },
   kapsel: { ikon: 'capsule' },
   mikstur: { ikon: 'bottle' },
@@ -45,7 +50,7 @@ export const FORMVARIANTER = {
   implantat: { ikon: 'implant' },
   gass: { ikon: 'gas' },
   generisk: { ikon: 'fallback' },
-} as const satisfies Record<string, { ikon: string }>
+} as const satisfies Record<string, { ikon: string; delbar?: string }>
 
 export type Formvariant = keyof typeof FORMVARIANTER
 
@@ -129,4 +134,15 @@ export function formikon(kode: string | null | undefined, tekst: string | null |
   const kjent = (kode ? FORMKODER[kode] : undefined) ?? formvariant(tekst)
   const variant = kjent ?? GENERISK_FORM
   return { variant, ikon: FORMVARIANTER[variant].ikon, kartlagt: kjent !== undefined }
+}
+
+/**
+ * Ikonet for formen når det er kjent om preparatene kan deles: tegningen med
+ * delestrek bare når FEST sier at alle kan deles (`ja`). Er det ikke delbart,
+ * ukjent eller ulikt mellom preparatene, står formens vanlige ikon uten
+ * delestrek, så streken aldri lover mer enn FEST gjør.
+ */
+export function delingsikon(ikon: Formikon, deling: Handteringsstatus): string {
+  const variant: { ikon: string; delbar?: string } = FORMVARIANTER[ikon.variant]
+  return deling === 'ja' && variant.delbar ? variant.delbar : ikon.ikon
 }
