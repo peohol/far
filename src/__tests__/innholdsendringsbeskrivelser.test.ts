@@ -19,6 +19,7 @@ function del(overstyr: Partial<Endringsdel>): Endringsdel {
     dataEndret: [],
     referanser: null,
     panelreferanser: {},
+    delt: false,
     ...overstyr,
   }
 }
@@ -136,6 +137,19 @@ describe('beskrivelsen av endringene på en fagside', () => {
       'Kategorien «SSRI» flyttet fra øverste nivå til kategorien «Antidepressiver»',
       'Sertralin arkivert',
     ])
+  })
+
+  it('sier når en referanse eller kommentar som endres, er delt med andre sider', () => {
+    const referanse = (overstyr: Partial<Endringsdel>) =>
+      del({ type: 'referanse', for: { tittel: 'Kilde' }, etter: { tittel: 'Kilde' }, endret: ['innhold'], ...overstyr })
+    expect(beskriv([referanse({ delt: true })])).toEqual(['Referanser: den delte referansen «Kilde» endret'])
+    expect(beskriv([referanse({ delt: true, etter: { tittel: 'Kilde', arkivert: true } })])).toEqual([
+      'Den delte referansen «Kilde» arkivert',
+    ])
+    expect(beskriv([del({ type: 'kommentar', for: { navn: 'Lav' }, etter: { navn: 'Lav' }, delt: true })])).toEqual([
+      'Fortolkningskommentarer: den delte kommentaren «Lav» endret',
+    ])
+    expect(beskriv([referanse({})])).toEqual(['Referanser: referanse «Kilde» endret'])
   })
 
   it('beskriver en kategori som er flyttet opp eller ned blant søsknene', () => {

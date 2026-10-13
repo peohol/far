@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.92.1',
+    dato: '2026-10-13',
+    sammendrag: 'Endringsloggen på en fagside viser bare det som angikk den siden',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['vinduer'],
+    punkter: [
+      'En referanse som flere fagsider deler, tar ikke lenger med seg det som skjedde på andre fagsider før den ble knyttet til siden. Citalopram viser for eksempel ikke lenger kurateringen av kvetiapin.',
+      'At en referanse knyttes til eller fjernes fra siden, står som en endring av kortet eller siden som fikk eller mistet den. Senere endringer av referansen vises på alle sidene som bruker den, merket «Delt».',
+      'Et kort som er flyttet fra en annen fagside, tar ikke med seg historikken fra den andre siden. Det samme gjelder kommentarene på fortolkningssidene.',
+    ],
+  },
+  {
     versjon: '1.92.0',
     dato: '2026-10-13',
     sammendrag: 'Endringslogg på hver side med innhold: hvem som endret hva, og når',
