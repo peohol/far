@@ -46,8 +46,8 @@ export interface Festomtale {
 
 export interface Festomtaler {
   omtaler: Festomtale[]
-  /** Adresser FEST oppgir som ikke er DMPs, og som derfor ikke hentes. */
-  avviste: string[]
+  /** Adresser FEST oppgir som ikke er DMPs, og som derfor ikke hentes, med preparatene som viser til dem. */
+  avviste: Festomtale[]
   /** Preparater uten preparatomtale i FEST (f.eks. sentralt godkjente, der omtalen ligger hos EMA). */
   uten_omtale: Festpreparat[]
 }
@@ -55,7 +55,7 @@ export interface Festomtaler {
 /** Preparatomtalene i legemiddeldataene appen leser for siden, én gang per adresse, i FESTs rekkefølge. */
 export function festomtaler(utvalg: Pick<Legemiddelutvalg, 'merkevarer'>): Festomtaler {
   const perAdresse = new Map<string, Festpreparat[]>()
-  const avviste = new Set<string>()
+  const avviste = new Map<string, Festpreparat[]>()
   const uten: Festpreparat[] = []
   for (const m of utvalg.merkevarer) {
     const preparat: Festpreparat = {
@@ -68,14 +68,94 @@ export function festomtaler(utvalg: Pick<Legemiddelutvalg, 'merkevarer'>): Festo
     }
     const adresse = m.preparatomtale?.trim()
     if (!adresse) uten.push(preparat)
-    else if (!erDmpAdresse(adresse)) avviste.add(adresse)
-    else perAdresse.set(adresse, [...(perAdresse.get(adresse) ?? []), preparat])
+    else {
+      const gruppe = erDmpAdresse(adresse) ? perAdresse : avviste
+      gruppe.set(adresse, [...(gruppe.get(adresse) ?? []), preparat])
+    }
   }
-  return {
-    omtaler: [...perAdresse].map(([adresse, preparater]) => ({ adresse, preparater })),
-    avviste: [...avviste],
-    uten_omtale: uten,
+  const liste = (gruppe: Map<string, Festpreparat[]>) => [...gruppe].map(([adresse, preparater]) => ({ adresse, preparater }))
+  return { omtaler: liste(perAdresse), avviste: liste(avviste), uten_omtale: uten }
+}
+
+/** Hvorfor et preparat i FEST står uten en hentet preparatomtale fra DMP. */
+export type Mangelgrunn =
+  /** FEST oppgir ingen preparatomtale (f.eks. sentralt godkjent, med omtalen hos EMA). */
+  | 'uten_omtale'
+  /** FEST oppgir en adresse som ikke er DMPs; den hentes ikke. */
+  | 'ikke_dmp'
+  /** Over grensen for antallet preparatomtaler i jobben. */
+  | 'utelatt'
+  /** Forespørselen oppga andre adresser. */
+  | 'ikke_valgt'
+  /** Fila kunne ikke hentes, eller den besto ikke kontrollen. */
+  | 'ikke_hentet'
+
+export interface Spcdekning {
+  /** Sann bare når hvert preparat FEST oppgir for stoffet, har en preparatomtale fra DMP som ble hentet og godkjent. */
+  dekket: boolean
+  /** Preparatene FEST oppgir for stoffet. */
+  preparater: number
+  /** Preparatene med en hentet preparatomtale. */
+  hentet: number
+  /** Ulike dokumenter som ble hentet. */
+  dokumenter: number
+  /** Preparatene uten en hentet preparatomtale, med grunnen; til å hente dem et annet sted, som hos EMA. */
+  mangler: (Festpreparat & { grunn: Mangelgrunn; adresse: string | null })[]
+}
+
+/**
+ * Hvor godt de hentede preparatomtalene dekker preparatene FEST oppgir for
+ * stoffet. At ingen fil fra DMP ble funnet, betyr aldri at behovet er dekket:
+ * hvert preparat uten en hentet omtale står i `mangler`, og kontrollen gir
+ * en advarsel.
+ */
+export function vurderDekning(
+  fest: Festomtaler | null,
+  jobb: { valgte: readonly string[]; utelatt: readonly string[]; hentet: ReadonlySet<string>; dokumenter: number },
+): { dekning: Spcdekning; kontroll: Kontroll } {
+  const mangler: Spcdekning['mangler'] = []
+  let preparater = 0
+  const legg = (grunn: Mangelgrunn, adresse: string | null, liste: readonly Festpreparat[]) => {
+    preparater += liste.length
+    for (const p of liste) mangler.push({ ...p, grunn, adresse })
   }
+  const valgte = new Set(jobb.valgte)
+  const utelatt = new Set(jobb.utelatt)
+  for (const { adresse, preparater: liste } of fest?.omtaler ?? []) {
+    if (jobb.hentet.has(adresse)) preparater += liste.length
+    else legg(utelatt.has(adresse) ? 'utelatt' : valgte.has(adresse) ? 'ikke_hentet' : 'ikke_valgt', adresse, liste)
+  }
+  for (const { adresse, preparater: liste } of fest?.avviste ?? []) legg('ikke_dmp', adresse, liste)
+  legg('uten_omtale', null, fest?.uten_omtale ?? [])
+
+  const dekning: Spcdekning = { dekket: preparater > 0 && mangler.length === 0, preparater, hentet: preparater - mangler.length, dokumenter: jobb.dokumenter, mangler }
+  const kontroll = (status: Kontroll['status'], melding: string): { dekning: Spcdekning; kontroll: Kontroll } => ({
+    dekning,
+    kontroll: { id: 'dekning', status, melding, antall: { preparater, hentet: dekning.hentet, mangler: mangler.length, dokumenter: jobb.dokumenter } },
+  })
+  if (jobb.dokumenter === 0) return kontroll('advarsel', 'Ingen preparatomtale ble hentet. SPC-behovet er ikke dekket; se «dekning».')
+  if (!fest || preparater === 0) return kontroll('advarsel', 'FEST oppgir ingen preparater for stoffet, så dekningen kan ikke vurderes. Behovet er ikke vist dekket.')
+  if (dekning.dekket) return kontroll('ok', `Alle ${preparater} preparatene FEST oppgir, har en hentet preparatomtale fra DMP.`)
+  const tall = (grunn: Mangelgrunn) => mangler.filter((m) => m.grunn === grunn).length
+  if (mangler.every((m) => m.grunn === 'ikke_valgt')) {
+    return kontroll('ikke_aktuelt', `Jobben gjaldt bare de oppgitte adressene. ${mangler.length} av ${preparater} preparater i FEST er ikke dekket av den; se «dekning.mangler».`)
+  }
+  const deler = (
+    [
+      ['uten_omtale', 'uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA)'],
+      ['ikke_dmp', 'med en adresse som ikke er DMPs'],
+      ['ikke_hentet', 'der fila ikke kunne hentes eller godkjennes'],
+      ['utelatt', 'utelatt over grensen'],
+      ['ikke_valgt', 'ikke valgt i forespørselen'],
+    ] as const
+  )
+    .map(([grunn, tekst]) => [tall(grunn), tekst] as const)
+    .filter(([n]) => n > 0)
+    .map(([n, tekst]) => `${n} ${tekst}`)
+  return kontroll(
+    'advarsel',
+    `${mangler.length} av ${preparater} preparater i FEST mangler en hentet preparatomtale fra DMP: ${deler.join('; ')}. SPC-behovet er ikke dekket; se «dekning.mangler».`,
+  )
 }
 
 /** Svaret på én henting, slik kontrollen trenger det. */
@@ -93,8 +173,8 @@ const tekst = (bytes: Uint8Array, fra: number, til: number) => Buffer.from(bytes
 
 /**
  * Kontrollen av fila: at den kom fra DMP hele veien, at den kom hel (lengden
- * og kontrollsummen DMP oppgir), og at den er en PDF. Om PDF-en kan leses,
- * kontrolleres av PDF-verktøyene etterpå.
+ * og kontrollsummen DMP oppgir), og at den er en PDF etter innholdet. Om
+ * PDF-en kan leses, kontrolleres av PDF-verktøyene etterpå.
  */
 export function kontrollerPdfsvar(svar: Pdfsvar): Kontroll[] {
   const k: Kontroll[] = []
@@ -109,14 +189,19 @@ export function kontrollerPdfsvar(svar: Pdfsvar): Kontroll[] {
       ? { id: 'http', status: 'ok', melding: 'DMP svarte 200.' }
       : { id: 'http', status: 'feil', melding: `DMP svarte ${svar.status}.` },
   )
+  const n = svar.bytes.length
+  const start = tekst(svar.bytes, 0, 5)
+  const erPdf = start === '%PDF-' && tekst(svar.bytes, Math.max(0, n - 2048), n).includes('%%EOF')
   const type = svar.hoder['content-type'] ?? ''
+  // Det er innholdet som avgjør om fila er en PDF; en annen innholdstype fra DMP er bare en advarsel.
   k.push(
     /^application\/pdf\b/i.test(type)
       ? { id: 'innholdstype', status: 'ok', melding: 'Innholdstypen er application/pdf.' }
-      : { id: 'innholdstype', status: 'feil', melding: `Innholdstypen er «${type || 'ikke oppgitt'}», ikke application/pdf.` },
+      : erPdf
+        ? { id: 'innholdstype', status: 'advarsel', melding: `DMP oppga innholdstypen «${type || 'ikke oppgitt'}», men fila er en PDF etter innholdet.` }
+        : { id: 'innholdstype', status: 'feil', melding: `Innholdstypen er «${type || 'ikke oppgitt'}», ikke application/pdf.` },
   )
   const lengde = svar.hoder['content-length']
-  const n = svar.bytes.length
   k.push(
     n > MAKS_PDF_BYTES
       ? { id: 'lengde', status: 'feil', melding: `Fila er større enn ${MAKS_PDF_BYTES} byte.`, antall: { bytes: n } }
@@ -135,10 +220,8 @@ export function kontrollerPdfsvar(svar: Pdfsvar): Kontroll[] {
         ? { id: 'kontrollsum', status: 'ok', melding: 'MD5-summen er den DMP oppga.' }
         : { id: 'kontrollsum', status: 'feil', melding: `MD5-summen er ${egen}, DMP oppga ${md5}.` },
   )
-  const start = tekst(svar.bytes, 0, 5)
-  const slutt = tekst(svar.bytes, Math.max(0, n - 2048), n)
   k.push(
-    start === '%PDF-' && slutt.includes('%%EOF')
+    erPdf
       ? { id: 'pdf', status: 'ok', melding: 'Fila begynner og slutter som en PDF.' }
       : { id: 'pdf', status: 'feil', melding: start === '%PDF-' ? 'Fila mangler PDF-avslutningen (%%EOF); den kan være avkuttet.' : 'Fila er ikke en PDF.' },
   )

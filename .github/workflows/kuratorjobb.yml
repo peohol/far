@@ -122,8 +122,9 @@ jobs:
           git switch -c "$GREN"
           mkdir -p kuratorjobb
           (cd ../kode && npm run -s kuratorjobb -- felter "$STOFFER" "$OPPGAVER") > kuratorjobb/foresporsel.json
+          git add kuratorjobb/foresporsel.json
           git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
-            commit -q -m "Kuratorjobb: forespørsel for $STOFFER" -- kuratorjobb/foresporsel.json
+            commit -q -m "Kuratorjobb: forespørsel for $STOFFER"
 
       - name: PDF-verktøyene
         run: |

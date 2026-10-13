@@ -3,6 +3,10 @@
  * den samme koden appen bruker, som en vanlig innlogget bruker, og
  * kontrollerer at hver del kan leses og settes sammen slik siden viser den.
  *
+ * Resultatet er offentlig (jobbgrenene ligger i et offentlig repo), så det
+ * har bare utfall, tall og tekniske meldinger, aldri innholdet appen leste:
+ * det er bak innloggingen.
+ *
  * Testen endrer ingenting. Den sammenligner ikke med noen fasit for
  * innholdet — det er kuratorens arbeid — men finner ut om appens faktiske
  * leseoperasjoner virker: `les_stoff`, legemiddeldataene fra FEST,
@@ -31,8 +35,6 @@ export interface Funksjonstestresultat {
   stoff: string
   status: Utfall
   kontroller: Kontroll[]
-  /** Svarene appen fikk, slik den leste dem, til sammenligning med det kuratoren leser direkte i databasen. */
-  svar: Record<string, unknown>
 }
 
 export interface Funksjonstestvalg {
@@ -72,7 +74,6 @@ export async function kontrollerBruker(klient: SupabaseClient): Promise<Kontroll
  */
 export async function funksjonstest(klient: SupabaseClient, stoff: string, { na = () => new Date() }: Funksjonstestvalg = {}): Promise<Funksjonstestresultat> {
   const kontroller: Kontroll[] = []
-  const svar: Record<string, unknown> = {}
   const legg = (k: Kontroll) => kontroller.push(k)
 
   /** Kjører ett kall som en kontroll. Gir svaret, eller `undefined` når kallet feilet. */
@@ -108,9 +109,8 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
     const antall = { elementer: s.elementer.length, referanser: s.referanser.length }
     return s.elementer.length === 0
       ? { status: 'advarsel', melding: 'Den publiserte siden har ingen innholdselementer.', antall }
-      : { status: 'ok', melding: `Den publiserte siden «${s.infoside.innhold.navn}» ble lest.`, antall }
+      : { status: 'ok', melding: 'Den publiserte siden ble lest.', antall }
   })
-  svar.les_stoff = side ?? null
 
   const modell = (() => {
     if (!side?.infoside) return null
@@ -135,7 +135,7 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
         : {
             id: 'referanser',
             status: 'feil',
-            melding: `Siden siterer referanser som ikke kom med i svaret: ${mangler.join(', ')}`,
+            melding: `Siden siterer ${mangler.length} referanser som ikke kom med i svaret.`,
             antall: { sitert: sitert.length, mangler: mangler.length },
           },
     )
@@ -172,7 +172,6 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
       if (u.merkevarer.length === 0) return { status: 'advarsel', melding: 'FEST har ingen preparater med virkestoffene.', antall }
       return { status: 'ok', melding: `Legemiddeldataene ble lest (FEST kontrollert ${u.kontrollert_kl}).`, antall }
     })
-    svar.les_legemidler = utvalg ?? null
     if (utvalg) {
       bygg('preparatvisning', 'Preparatseksjonen', () => byggPreparatvisning(utvalg, virkestoff))
       const nokler = interaksjonsnokler(utvalg, virkestoff)
@@ -181,7 +180,6 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
         melding: 'Interaksjonene ble lest.',
         antall: { interaksjoner: i.interaksjoner.length, ikke_vurdert: i.ikke_vurdert.length },
       }))
-      svar.les_interaksjoner = interaksjoner ?? null
       if (interaksjoner) bygg('interaksjonsvisning', 'Interaksjonsseksjonen', () => byggInteraksjoner(interaksjoner, nokler))
     }
   }
@@ -191,7 +189,6 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
   {
     const start = performance.now()
     const { data, error } = await klient.rpc('les_bivirkninger', { stoff })
-    svar.les_bivirkninger = error ? null : data
     if (error) legg({ id: 'bivirkninger', rpc: 'les_bivirkninger', ms: ms(start), status: 'feil', melding: `les_bivirkninger feilet: ${error.message}` })
     else {
       const rader = Array.isArray((data as { bivirkninger?: unknown } | null)?.bivirkninger) ? (data as { bivirkninger: unknown[] }).bivirkninger.length : 0
@@ -228,7 +225,6 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
       if (dager === null || dager > FERSKHET_DAGER.clinpgx) return { status: 'advarsel', melding: `ClinPGx ble sist synkronisert ${u.kontrollert_kl ?? 'aldri'}.`, antall }
       return { status: 'ok', melding: `ClinPGx-dataene ble lest (synkronisert ${u.kontrollert_kl}).`, antall }
     })
-    svar.les_farmakogenetikk = pgx ?? null
     if (pgx) bygg('farmakogenetikkvisning', 'Farmakogenetikkseksjonen', () => byggFarmakogenetikkvisning(pgx))
 
     const cpic = await kall('cpic', 'les_cpic', () => lagCpicleser(klient).les(kjemikalier), (u) => {
@@ -238,9 +234,8 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
         ? { status: 'ok', melding: `CPIC (release ${u.kilde.release}) har ingenting for kjemikaliene.`, antall }
         : { status: 'ok', melding: `CPIC-dataene ble lest (release ${u.kilde.release}).`, antall }
     })
-    svar.les_cpic = cpic ?? null
     if (cpic) bygg('cpicvisning', 'CPIC-visningen', () => byggCpicvisning(cpic))
   }
 
-  return { stoff, status: samletStatus(kontroller.map((k) => k.status)), kontroller, svar }
+  return { stoff, status: samletStatus(kontroller.map((k) => k.status)), kontroller }
 }

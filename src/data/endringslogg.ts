@@ -19,7 +19,7 @@ export const ENDRINGSLOGG: Endring[] = [
     omfang: 'Minimalt omfang',
     punkter: [
       'Ingen endring i appen. Monografkuratoren kan nå få en kontroll av at en fagside leses riktig, slik en vanlig innlogget bruker ser den, med legemiddeldata, bivirkninger og farmakogenetikk.',
-      'Kuratoren kan også få de originale preparatomtalene fra DMP, kontrollert for at de kom hele, med tekstuttrekk og et bilde av hver side til visuell kontroll av tabellene.',
+      'Kuratoren kan også få de originale preparatomtalene fra DMP, kontrollert for at de kom hele, med tekstuttrekk og et bilde av hver side til visuell kontroll av tabellene. Preparater uten preparatomtale hos DMP, som sentralt godkjente, listes opp.',
     ],
     utenVarsel: true,
   },

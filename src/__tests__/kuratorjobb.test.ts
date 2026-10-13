@@ -6,7 +6,10 @@
 import type { PGlite } from '@electric-sql/pglite'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { createHash } from 'node:crypto'
-import { existsSync, readFileSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { lagFaginnholdslager } from '../faginnhold/lagring'
@@ -15,7 +18,7 @@ import { publiseringsplan } from '../faginnhold/stoffside'
 import { foresporselFraFelter, lesForesporsel, MAKS_STOFFER } from '../kuratorjobb/foresporsel'
 import { funksjonstest, kontrollerBruker } from '../kuratorjobb/funksjonstest'
 import { JOBBGREN, JOBBMAPPE, samletStatus, type Kontroll } from '../kuratorjobb/modell'
-import { AVSNITT_4_8, erDmpAdresse, festomtaler, finnAvsnitt, kontrollerPdfsvar, lesPdfinfo, type Pdfsvar } from '../kuratorjobb/spc'
+import { AVSNITT_4_8, erDmpAdresse, festomtaler, finnAvsnitt, kontrollerPdfsvar, lesPdfinfo, vurderDekning, type Festomtaler, type Pdfsvar } from '../kuratorjobb/spc'
 import type { Legemiddelutvalg } from '../legemiddeldata/lesing'
 import { SITERING } from '../faginnhold/referanser'
 import { AMITRIPTYLIN, synkroniserUtdrag } from './hjelp/fest'
@@ -99,6 +102,98 @@ describe('jobbgrenene', () => {
   })
 })
 
+/** Skriptet til steget med navnet i arbeidsflyten, slik Actions kjører det. */
+function stegskript(flyt: string, navn: string): string {
+  const linjer = flyt.split('\n')
+  const steg = linjer.findIndex((l) => l.trim() === `- name: ${navn}`)
+  const run = linjer.findIndex((l, i) => i > steg && /^\s*run: \|$/.test(l))
+  const innrykk = linjer[run]!.search(/\S/)
+  const kropp: string[] = []
+  for (const l of linjer.slice(run + 1)) {
+    if (l.trim() && l.search(/\S/) <= innrykk) break
+    kropp.push(l)
+  }
+  const fjern = Math.min(...kropp.filter((l) => l.trim()).map((l) => l.search(/\S/)))
+  return kropp.map((l) => l.slice(fjern)).join('\n')
+}
+
+describe('startveiene', () => {
+  const flyt = readFileSync(`${ROT}.github/workflows/kuratorjobb.yml`, 'utf8')
+  const git = (mappe: string, ...a: string[]) =>
+    execFileSync('git', ['-c', 'user.name=Syntetisk', '-c', 'user.email=syntetisk@example.invalid', '-c', 'init.defaultBranch=main', ...a], { cwd: mappe, encoding: 'utf8' })
+
+  /**
+   * Kjører stegene som lager og melder jobben, med en lokal kopi av repoet
+   * som «origin» og det ekte skriptet. `npm` er byttet ut med et kall til
+   * skriptet, siden mappen med koden her ikke er en kopi av repoet.
+   */
+  function kjorSteg(mappe: string, navn: string, env: Record<string, string>) {
+    execFileSync('bash', ['--noprofile', '--norc', '-eo', 'pipefail', '-c', stegskript(flyt, navn)], {
+      cwd: join(mappe, 'jobb'),
+      env: { ...process.env, PATH: `${join(mappe, 'bin')}:${process.env.PATH}`, GITHUB_ENV: join(mappe, 'github_env'), KJORING: 'https://example.invalid/kjoring/1', ...env },
+      stdio: 'pipe',
+    })
+  }
+
+  function oppsett(): string {
+    const mappe = mkdtempSync(join(tmpdir(), 'kuratorjobb-'))
+    for (const m of ['bin', 'kode', 'kilde']) mkdirSync(join(mappe, m))
+    writeFileSync(
+      join(mappe, 'bin', 'npm'),
+      `#!/usr/bin/env bash\n# npm run -s kuratorjobb -- <argumenter>\nshift 4\nexec "${ROT}node_modules/.bin/vite-node" --root "${ROT}" "${ROT}scripts/kuratorjobb.ts" -- "$@"\n`,
+    )
+    chmodSync(join(mappe, 'bin', 'npm'), 0o755)
+    git(mappe, 'init', '-q', '--bare', 'origin.git')
+    const kilde = join(mappe, 'kilde')
+    git(kilde, 'init', '-q')
+    writeFileSync(join(kilde, 'README.md'), 'Syntetisk\n')
+    git(kilde, 'add', '-A')
+    git(kilde, 'commit', '-qm', 'Start')
+    git(kilde, 'push', '-q', '../origin.git', 'HEAD:refs/heads/main')
+    return mappe
+  }
+
+  const lesPaGren = (mappe: string, gren: string, fil: string) => JSON.parse(git(join(mappe, 'origin.git'), 'show', `${gren}:${fil}`))
+
+  it('startet for hånd med stoffene: lager grenen med forespørselen og melder jobben startet', () => {
+    const mappe = oppsett()
+    try {
+      git(mappe, 'clone', '-q', '-b', 'main', 'origin.git', 'jobb')
+      const gren = 'kuratorjobb/manuell-1'
+      kjorSteg(mappe, 'Lag grenen for en jobb startet med stoffene', { GREN: gren, STOFFER: 'citalopram, escitalopram', OPPGAVER: 'funksjonstest' })
+      kjorSteg(mappe, 'Meld at jobben er startet', { GREN: gren })
+      expect(lesPaGren(mappe, gren, 'kuratorjobb/foresporsel.json')).toEqual({ versjon: 1, stoffer: ['citalopram', 'escitalopram'], oppgaver: ['funksjonstest'] })
+      const status = lesPaGren(mappe, gren, 'kuratorjobb/resultat/status.json')
+      expect(status).toMatchObject({ status: 'kjorer', jobb: { gren } })
+      const foresporsel = git(join(mappe, 'origin.git'), 'show', `${gren}:kuratorjobb/foresporsel.json`)
+      expect(status.jobb.foresporsel_sha256).toBe(createHash('sha256').update(foresporsel).digest('hex'))
+    } finally {
+      rmSync(mappe, { recursive: true, force: true })
+    }
+  }, 60_000)
+
+  it('startet av en forespørsel på en jobbgren: melder jobben startet på samme gren', () => {
+    const mappe = oppsett()
+    try {
+      const gren = 'kuratorjobb/citalopram'
+      const kilde = join(mappe, 'kilde')
+      git(kilde, 'switch', '-qc', gren)
+      mkdirSync(join(kilde, 'kuratorjobb'))
+      writeFileSync(join(kilde, 'kuratorjobb', 'foresporsel.json'), JSON.stringify({ versjon: 1, stoffer: ['citalopram'], referanse: 'kø-1' }))
+      git(kilde, 'add', '-A')
+      git(kilde, 'commit', '-qm', 'Forespørsel')
+      git(kilde, 'push', '-q', '../origin.git', `HEAD:refs/heads/${gren}`)
+      git(mappe, 'clone', '-q', '-b', gren, 'origin.git', 'jobb')
+      kjorSteg(mappe, 'Meld at jobben er startet', { GREN: gren })
+      expect(lesPaGren(mappe, gren, 'kuratorjobb/resultat/status.json')).toMatchObject({ status: 'kjorer', jobb: { gren } })
+      expect(lesPaGren(mappe, gren, 'kuratorjobb/foresporsel.json')).toMatchObject({ referanse: 'kø-1' })
+      expect(readFileSync(join(mappe, 'github_env'), 'utf8')).toContain(`JOBB_GREN=${gren}`)
+    } finally {
+      rmSync(mappe, { recursive: true, force: true })
+    }
+  }, 60_000)
+})
+
 describe('preparatomtalene', () => {
   it('godtar bare DMPs adresser', () => {
     expect(erDmpAdresse(`${DMP}/06-4251.pdf`)).toBe(true)
@@ -131,7 +226,7 @@ describe('preparatomtalene', () => {
       [`${DMP}/2.pdf`, ['c']],
     ])
     expect(omtaler.uten_omtale.map((p) => p.merkevare_id)).toEqual(['d'])
-    expect(omtaler.avviste).toEqual(['https://www.ema.europa.eu/d.pdf'])
+    expect(omtaler.avviste.map((o) => [o.adresse, o.preparater.map((p) => p.merkevare_id)])).toEqual([['https://www.ema.europa.eu/d.pdf', ['e']]])
     expect(omtaler.omtaler[0]!.preparater[0]).toEqual({
       merkevare_id: 'a',
       varenavn: 'A 10',
@@ -166,8 +261,20 @@ describe('preparatomtalene', () => {
     expect(
       utfall(kontrollerPdfsvar(svar({ bytes: html, hoder: { 'content-type': 'text/html', 'content-length': String(html.length) } }))),
     ).toMatchObject({ innholdstype: 'feil', kontrollsum: 'advarsel', pdf: 'feil' })
+    expect(utfall(kontrollerPdfsvar(svar({ bytes: html, hoder: { 'content-type': 'application/octet-stream' } })))).toMatchObject({ innholdstype: 'feil', pdf: 'feil' })
     expect(utfall(kontrollerPdfsvar(svar({ status: 404 })))).toMatchObject({ http: 'feil' })
     expect(utfall(kontrollerPdfsvar(svar({ adresser: [`${DMP}/1.pdf`, 'https://annen.example/1.pdf'] })))).toMatchObject({ adresse: 'feil' })
+  })
+
+  it('godtar en PDF etter innholdet når DMP oppgir en annen innholdstype, med en advarsel', () => {
+    for (const type of ['application/octet-stream', 'binary/octet-stream', undefined]) {
+      const hoder: Record<string, string> = { 'content-length': String(pdf.length), 'content-md5': md5(pdf) }
+      if (type) hoder['content-type'] = type
+      const kontroller = kontrollerPdfsvar(svar({ hoder }))
+      expect(utfall(kontroller), type).toEqual({ adresse: 'ok', http: 'ok', innholdstype: 'advarsel', lengde: 'ok', kontrollsum: 'ok', pdf: 'ok' })
+      expect(kontroller.find((k) => k.id === 'innholdstype')!.melding).toContain(type ?? 'ikke oppgitt')
+      expect(samletStatus(kontroller.map((k) => k.status))).toBe('advarsel')
+    }
   })
 
   it('finner sidene avsnitt 4.8 står på, uten å la seg lure av henvisninger', () => {
@@ -194,6 +301,70 @@ describe('preparatomtalene', () => {
       produsent: null,
     })
     expect(lesPdfinfo('')).toMatchObject({ sider: null, kryptert: false })
+  })
+})
+
+describe('dekningen av preparatomtalene', () => {
+  const preparat = (id: string) => ({ merkevare_id: id, varenavn: `Syntetisk ${id}`, navn_form_styrke: `Syntetisk ${id} tab`, produsent: 'Syntetisk', atc: 'N06AB04', legemiddelform: 'Tablett' })
+  const a = `${DMP}/a.pdf`
+  const b = `${DMP}/b.pdf`
+  const fest = (endring: Partial<Festomtaler> = {}): Festomtaler => ({
+    omtaler: [
+      { adresse: a, preparater: [preparat('1'), preparat('2')] },
+      { adresse: b, preparater: [preparat('3')] },
+    ],
+    avviste: [],
+    uten_omtale: [],
+    ...endring,
+  })
+  const grunner = (r: ReturnType<typeof vurderDekning>) => r.dekning.mangler.map((m) => [m.merkevare_id, m.grunn])
+
+  it('er dekket bare når hvert preparat i FEST har en hentet omtale', () => {
+    const r = vurderDekning(fest(), { valgte: [a, b], utelatt: [], hentet: new Set([a, b]), dokumenter: 2 })
+    expect(r.kontroll.status).toBe('ok')
+    expect(r.dekning).toEqual({ dekket: true, preparater: 3, hentet: 3, dokumenter: 2, mangler: [] })
+  })
+
+  it('melder preparater uten omtale hos DMP, som sentralt godkjente, med en sporbar liste', () => {
+    const r = vurderDekning(fest({ uten_omtale: [preparat('4')], avviste: [{ adresse: 'https://www.ema.europa.eu/x.pdf', preparater: [preparat('5')] }] }), {
+      valgte: [a, b],
+      utelatt: [],
+      hentet: new Set([a, b]),
+      dokumenter: 2,
+    })
+    expect(r.kontroll.status).toBe('advarsel')
+    expect(r.dekning).toMatchObject({ dekket: false, preparater: 5, hentet: 3 })
+    expect(grunner(r)).toEqual([['5', 'ikke_dmp'], ['4', 'uten_omtale']])
+    expect(r.dekning.mangler[0]).toMatchObject({ varenavn: 'Syntetisk 5', produsent: 'Syntetisk', atc: 'N06AB04', adresse: 'https://www.ema.europa.eu/x.pdf' })
+    expect(r.kontroll.melding).toContain('SPC-behovet er ikke dekket')
+  })
+
+  it('likestiller aldri «ingen fil hentet» med at behovet er dekket', () => {
+    // Bare sentralt godkjente preparater: ingenting å hente hos DMP.
+    const bareEma = vurderDekning(fest({ omtaler: [], uten_omtale: [preparat('1')] }), { valgte: [], utelatt: [], hentet: new Set(), dokumenter: 0 })
+    expect(bareEma.kontroll.status).toBe('advarsel')
+    expect(bareEma.dekning).toMatchObject({ dekket: false, preparater: 1, hentet: 0 })
+    expect(grunner(bareEma)).toEqual([['1', 'uten_omtale']])
+    // FEST oppgir ingen preparater, eller FEST kunne ikke leses.
+    for (const f of [fest({ omtaler: [] }), null]) {
+      const r = vurderDekning(f, { valgte: [], utelatt: [], hentet: new Set(), dokumenter: 0 })
+      expect(r.kontroll.status).toBe('advarsel')
+      expect(r.dekning.dekket).toBe(false)
+    }
+    // Hentingen feilet for alle.
+    const feilet = vurderDekning(fest(), { valgte: [a, b], utelatt: [], hentet: new Set(), dokumenter: 0 })
+    expect(feilet.kontroll.status).toBe('advarsel')
+    expect(grunner(feilet)).toEqual([['1', 'ikke_hentet'], ['2', 'ikke_hentet'], ['3', 'ikke_hentet']])
+  })
+
+  it('skiller preparater over grensen og preparater forespørselen ikke ba om', () => {
+    const utelatt = vurderDekning(fest(), { valgte: [a], utelatt: [b], hentet: new Set([a]), dokumenter: 1 })
+    expect(utelatt.kontroll.status).toBe('advarsel')
+    expect(grunner(utelatt)).toEqual([['3', 'utelatt']])
+    const oppgitt = vurderDekning(fest(), { valgte: [a], utelatt: [], hentet: new Set([a]), dokumenter: 1 })
+    expect(oppgitt.kontroll.status).toBe('ikke_aktuelt')
+    expect(oppgitt.dekning.dekket).toBe(false)
+    expect(grunner(oppgitt)).toEqual([['3', 'ikke_valgt']])
   })
 })
 
@@ -275,10 +446,10 @@ describe('funksjonstesten', () => {
     expect(resultat.status).toBe('advarsel')
     expect(resultat.kontroller.find((k) => k.id === 'les_stoff')).toMatchObject({ rpc: 'les_stoff', antall: { elementer: 3, referanser: 1 } })
     expect(resultat.kontroller.find((k) => k.id === 'fest')!.antall!.merkevarer).toBeGreaterThan(0)
-    // Svarene er det appen leste: det publiserte, ikke utkastet.
-    expect(JSON.stringify(resultat.svar.les_stoff)).toContain('Syntetisk tekst.')
-    expect(JSON.stringify(resultat.svar.les_stoff)).not.toContain('Upublisert')
-    expect(Object.keys(resultat.svar).sort()).toEqual(['les_bivirkninger', 'les_cpic', 'les_farmakogenetikk', 'les_interaksjoner', 'les_legemidler', 'les_stoff'])
+    // Resultatet publiseres på en offentlig gren: bare utfall og tall, ikke innholdet bak innloggingen.
+    const publisert = JSON.stringify(resultat)
+    for (const innhold of ['Syntetisk tekst', 'Upublisert', 'Syntetisk lærebok', 'Nordmann', 'Rita', 'Redaktør', 'redaktor']) expect(publisert).not.toContain(innhold)
+    expect(Object.keys(resultat).sort()).toEqual(['kontroller', 'status', 'stoff'])
   })
 
   it('sier fra når en vanlig bruker ser utkastet', async () => {

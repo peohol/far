@@ -17,6 +17,13 @@ den tekniske hjelpen kuratoren får fra GitHub Actions under en kuratering
 Jobbene gjør ikke noe faglig arbeid og endrer ingenting i databasen eller på
 fagsidene. De leser og henter, og legger resultatet fram.
 
+**Repoet er offentlig, og det er jobbgrenene også.** Resultatet har derfor
+bare det som allerede er offentlig: utfall, tall og tekniske meldinger fra
+funksjonstesten, og preparatomtalene fra DMP med FESTs preparatdata. Innholdet
+appen leser bak innloggingen (fagsidene, redaktørene, bivirkningene,
+farmakogenetikken) skrives aldri på grenen eller i loggen. Kuratoren leser det
+selv med Supabase-tilkoblingen sin.
+
 ## Kort fortalt for kuratoren
 
 1. Lag en gren fra `main` som heter `kuratorjobb/<stoff>-<ÅÅÅÅMMDD>` (eller noe
@@ -80,8 +87,7 @@ roten av grenen, så de kan hentes direkte.
 ```
 kuratorjobb/resultat/
   status.json                         oversikten: les den først
-  <stoff>/funksjonstest.json          kontrollene, og hvor svarene står
-  <stoff>/svar/<rpc>.json             det appen fikk fra hvert kall
+  <stoff>/funksjonstest.json          kontrollene: utfall og tall
   <stoff>/spc.json                    preparatomtalene: proveniens og kontroller
   <stoff>/spc/<sha256-16>/original.pdf
   <stoff>/spc/<sha256-16>/tekst.txt   hele teksten, sidene skilt med sideskift
@@ -133,17 +139,32 @@ En kontroll har `id`, `status`, `melding` (på norsk), og eventuelt `rpc`,
 | `clinpgx`, `farmakogenetikkvisning` | `les_farmakogenetikk` for kjemikaliene siden er koblet til. Advarsel for et kjemikalie som ikke er hentet, har feil, eller når ClinPGx er eldre enn ti døgn |
 | `cpic`, `cpicvisning` | `les_cpic` for de samme kjemikaliene |
 
-`svar` i `funksjonstest.json` peker på filene med det appen fikk fra hvert
-kall, til sammenligning med det kuratoren leser direkte i databasen. Med
-`"alle"` tas svarene ikke med.
+Funksjonstesten tar ikke med det appen fikk fra kallene, bare om det virket
+og hvor mye som kom (`antall`). Meldingene nevner ikke innhold, navn eller
+ID-er fra fagsiden.
 
 ### Preparatomtalene
 
 Uten `spc.adresser` hentes preparatomtalene FEST oppgir for preparatene med
 virkestoffene siden er koblet til, slik appen leser dem (`les_legemidler`).
-Adressene i FEST kommer fra DMP. Preparater uten preparatomtale i FEST, som
-sentralt godkjente der omtalen ligger hos EMA, står i `fest.uten_omtale`;
-adresser som ikke er DMPs, står i `fest.avviste` og hentes ikke.
+Adressene i FEST kommer fra DMP.
+
+At ingen fil fra DMP ble funnet, betyr aldri at SPC-behovet er dekket.
+Kontrollen `dekning` er `ok` bare når hvert preparat FEST oppgir for stoffet,
+har en preparatomtale som ble hentet og godkjent. Ellers er den en advarsel,
+også når ingen fil ble hentet, og hvert preparat uten en hentet omtale står i
+`dekning.mangler` med varenavn, produsent, ATC, form og `grunn`:
+
+| `grunn` | Betyr |
+| --- | --- |
+| `uten_omtale` | FEST oppgir ingen preparatomtale, f.eks. for et sentralt godkjent legemiddel med omtalen hos EMA |
+| `ikke_dmp` | FEST oppgir en adresse som ikke er DMPs (står i `adresse`); den hentes ikke |
+| `ikke_hentet` | Fila kunne ikke hentes eller besto ikke kontrollen |
+| `utelatt` | Over `spc.maks` |
+| `ikke_valgt` | Forespørselen oppga andre adresser i `spc.adresser`. Bare dette gir `ikke_aktuelt` i stedet for en advarsel; `dekket` er likevel `false` |
+
+`dekning.mangler` er lista over preparatomtaler som må skaffes et annet sted,
+som hos EMA.
 
 `spc.json` har:
 
@@ -157,11 +178,15 @@ adresser som ikke er DMPs, står i `fest.avviste` og hentes ikke.
   `avsnitt_4_8`: sidene «4.8 Bivirkninger» står på, funnet etter overskriftene
   i teksten — et hjelpemiddel for å finne fram, ikke en tolkning.
 - `utelatt`: adresser over `spc.maks`.
+- `dekning`: `dekket`, `preparater` og `hentet` (preparatene i FEST, og hvor
+  mange av dem som har en hentet omtale), `dokumenter`, og `mangler` (over).
 
 Kontrollene av hver fil: at hver adresse på veien var DMPs (`adresse`), at DMP
-svarte 200 med `application/pdf` (`http`, `innholdstype`), at lengden og
-MD5-summen er de DMP oppga (`lengde`, `kontrollsum`), at fila er en hel PDF
-(`pdf`), at den kan leses og hvor mange sider den har (`pdfinfo`), at teksten
+svarte 200 (`http`), at lengden og MD5-summen er de DMP oppga (`lengde`,
+`kontrollsum`), at fila er en hel PDF etter innholdet (`pdf`: begynner med
+`%PDF-` og har `%%EOF`), hvilken innholdstype DMP oppga (`innholdstype`:
+advarsel når det ikke er `application/pdf`, f.eks. `application/octet-stream`,
+men fila er en PDF; feil når den heller ikke er det), at den kan leses og hvor mange sider den har (`pdfinfo`), at teksten
 kunne trekkes ut (`tekst`; advarsel ved lite tekst, som i en skannet PDF), og
 at det ble ett bilde per side (`sidebilder`). Sidebildene er PNG i gråtoner,
 150 dpi som standard: rundt 300 kB per side.
@@ -186,7 +211,7 @@ at det ble ett bilde per side (`sidebilder`). Sidebildene er PNG i gråtoner,
   historikken til upubliserte endringer og administratorfunksjoner testes
   ikke.
 - **EMA.** Preparatomtaler for sentralt godkjente legemidler ligger hos EMA og
-  har ingen adresse i FEST; de hentes ikke.
+  har ingen adresse i FEST; de hentes ikke, men står i `dekning.mangler`.
 
 ## Sikkerheten
 
@@ -195,6 +220,9 @@ at det ble ett bilde per side (`sidebilder`). Sidebildene er PNG i gråtoner,
   bruke. Jobben som videresender fra jobbgrenene, har ingen hemmeligheter, og
   en endret arbeidsflyt på en jobbgren får ikke tak i dem.
 - Skriptet skriver aldri ut passordet eller feilmeldingen fra innloggingen.
+- Repoet, jobbgrenene og loggene i Actions er offentlige. Resultatet har bare
+  utfall, tall og offentlige data (over); testen sjekker at innholdet bak
+  innloggingen ikke kommer med i funksjonstesten.
 - Den skrivebeskyttede brukeren kuratoren bruker i Supabase, er ikke endret.
 - Jobben skriver bare på grener under `kuratorjobb/` (`JOBBGREN` i
   `src/kuratorjobb/modell.ts`), og bare i `kuratorjobb/resultat/`.

@@ -56,6 +56,7 @@ import {
   lesFestomtaler,
   lesPdfinfo,
   sha256,
+  vurderDekning,
   type Festomtaler,
   type Festpreparat,
   type Pdfinfo,
@@ -283,7 +284,12 @@ async function spc(klient: SupabaseClient | null, stoff: string, valg: NonNullab
       fest = await lesFestomtaler(klient, stoff)
       kontroller.push(
         fest
-          ? { id: 'fest', status: 'ok', melding: `FEST oppgir ${fest.omtaler.length} preparatomtaler hos DMP for stoffet.`, antall: { omtaler: fest.omtaler.length, uten_omtale: fest.uten_omtale.length } }
+          ? {
+              id: 'fest',
+              status: 'ok',
+              melding: `FEST oppgir ${fest.omtaler.length} preparatomtaler hos DMP for stoffet; dekningen står i «dekning».`,
+              antall: { omtaler: fest.omtaler.length, ikke_dmp: fest.avviste.length, uten_omtale: fest.uten_omtale.length },
+            }
           : { id: 'fest', status: valg.adresser ? 'ikke_aktuelt' : 'feil', melding: 'Siden finnes ikke eller er ikke koblet til FEST; FEST oppgir ingen preparatomtaler.' },
       )
     } catch (e) {
@@ -357,9 +363,13 @@ async function spc(klient: SupabaseClient | null, stoff: string, valg: NonNullab
     }
   }
 
-  if (valgte.length === 0 && kontroller.every((k) => k.status !== 'feil')) {
-    kontroller.push({ id: 'ingen', status: 'ikke_aktuelt', melding: 'Ingen preparatomtaler å hente.' })
-  }
+  const { dekning, kontroll } = vurderDekning(fest, {
+    valgte,
+    utelatt,
+    hentet: new Set(adresser.filter((a) => a.dokument && dokumenter.get(a.dokument)?.status !== 'feil').map((a) => a.adresse)),
+    dokumenter: [...dokumenter.values()].filter((d) => d.status !== 'feil').length,
+  })
+  kontroller.push(kontroll)
   const status = samletStatus([
     ...kontroller.map((k) => k.status),
     ...adresser.map((a) => a.status),
@@ -370,7 +380,8 @@ async function spc(klient: SupabaseClient | null, stoff: string, valg: NonNullab
     status,
     kilde: valg.adresser ? 'foresporsel' : 'fest',
     dpi,
-    fest: fest ? { kontrollert_kl: fest.kontrollert_kl, avviste: fest.avviste, uten_omtale: fest.uten_omtale } : null,
+    fest: fest ? { kontrollert_kl: fest.kontrollert_kl } : null,
+    dekning,
     kontroller,
     adresser,
     dokumenter: [...dokumenter.values()],
@@ -422,22 +433,14 @@ async function kjor(status: Jobbstatus, tekst: string | null, ferdig: () => void
   const brukerOk = status.bruker.every((k) => k.status !== 'feil')
   for (const stoff of [...new Set(stoffer)]) {
     const oppgaver: Stoffstatus['oppgaver'] = {}
-    const lagre = (oppgave: Oppgave, resultat: { status: Utfall } & Record<string, unknown>) => {
+    const lagre = <T extends { status: Utfall }>(oppgave: Oppgave, resultat: T) => {
       const fil = resultatfil(oppgave, stoff)
       skrivJson(fil, resultat)
       oppgaver[oppgave] = { status: resultat.status, fil }
     }
     if (foresporsel.oppgaver.includes('funksjonstest')) {
       if (klient && brukerOk) {
-        const { svar, ...resultat } = await funksjonstest(klient, stoff)
-        const svarfiler: Record<string, string> = {}
-        // Svarene tas bare med for stoffer med navn; for alle sidene ville de blitt for store.
-        for (const [rpc, data] of foresporsel.stoffer === 'alle' ? [] : Object.entries(svar)) {
-          const fil = `${RESULTATMAPPE}/${stoff}/svar/${rpc}.json`
-          skrivJson(fil, data)
-          svarfiler[rpc] = fil
-        }
-        lagre('funksjonstest', { ...resultat, svar: svarfiler })
+        lagre('funksjonstest', await funksjonstest(klient, stoff))
       } else {
         lagre('funksjonstest', { stoff, status: 'feil', kontroller: [{ id: 'bruker', status: 'feil', melding: 'Testbrukeren kan ikke brukes; se «bruker» i status.json.' }] })
       }
