@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.89.1',
+    dato: '2026-10-13',
+    sammendrag: 'Oppgaven «Endre tablettikonet til preparater så man ser om de kan deles eller ikke» håndteres av en agent',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Den planlagte oppgaven «Endre tablettikonet til preparater så man ser om de kan deles eller ikke» (OPG-005) står som «Håndteres nå av en agent», og det er ført inn i appens oversikt over databaseendringer.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.89.0',
     dato: '2026-10-12',
     sammendrag: 'Ny ordlyd i THC-syrekommentarene, samlet vurdering og kort tid mellom prøvene',
