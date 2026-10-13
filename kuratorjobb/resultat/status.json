@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/pilot-citalopram-20261013",
+    "foresporsel_commit": "ba8646eeecb9327f0fc86c6378ac6400e2741f88",
+    "foresporsel_sha256": "0905b759e17d90c97620c70d42c68abac7bab4b74318ea1afc391532b9ec7d50",
+    "kode_commit": "d26495cdd253f3ba5dc2c9267890049c1471fd57",
+    "kjoring": "https://github.com/peohol/far/actions/runs/38389728656",
+    "startet_kl": "2026-10-13T11:22:45.203Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
