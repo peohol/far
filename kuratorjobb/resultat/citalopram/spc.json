@@ -1,0 +1,530 @@
+{
+  "stoff": "citalopram",
+  "status": "ok",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-13T04:15:06.241153+00:00"
+  },
+  "dekning": {
+    "dekket": true,
+    "preparater": 6,
+    "hentet": 6,
+    "dokumenter": 2,
+    "mangler": []
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 5 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 5,
+        "ikke_dmp": 0,
+        "uten_omtale": 0
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "ok",
+      "melding": "Alle 6 preparatene FEST oppgir, har en hentet preparatomtale fra DMP.",
+      "antall": {
+        "preparater": 6,
+        "hentet": 6,
+        "mangler": 0,
+        "dokumenter": 2
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08151.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08151.pdf",
+      "hentet_kl": "2026-10-13T11:59:38.835Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "238324",
+        "content-md5": "DtdyEFN3MsxugvVZAx2ufQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:55 GMT",
+        "etag": "0x8DE53793F5C739C",
+        "date": "Tue, 13 Oct 2026 11:59:39 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_06762D66-7AA1-4983-A156-92E780D2F1C5",
+          "varenavn": "Cipramil",
+          "navn_form_styrke": "Cipramil tab 20 mg",
+          "produsent": "2care4 ApS",
+          "atc": "N06AB04",
+          "legemiddelform": "Tablett, filmdrasjert"
+        },
+        {
+          "merkevare_id": "ID_14CA69A5-F0C7-48F8-A6B0-BE2499E0E798",
+          "varenavn": "Cipramil",
+          "navn_form_styrke": "Cipramil tab 20 mg",
+          "produsent": "H. Lundbeck A/S",
+          "atc": "N06AB04",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08151.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (238324 byte).",
+          "antall": {
+            "bytes": 238324
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "4bc8dfd2e647d273f044bc3019d3fe116a4ca59b1ff47951866230484e2fd8de"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08150.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08150.pdf",
+      "hentet_kl": "2026-10-13T11:59:46.219Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "238324",
+        "content-md5": "DtdyEFN3MsxugvVZAx2ufQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:53 GMT",
+        "etag": "0x8DE53793E698424",
+        "date": "Tue, 13 Oct 2026 11:59:46 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_2B7B0CA7-7221-4983-91F9-FDF1AAD96189",
+          "varenavn": "Cipramil",
+          "navn_form_styrke": "Cipramil tab 10 mg",
+          "produsent": "H. Lundbeck A/S",
+          "atc": "N06AB04",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08150.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (238324 byte).",
+          "antall": {
+            "bytes": 238324
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "4bc8dfd2e647d273f044bc3019d3fe116a4ca59b1ff47951866230484e2fd8de"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4251.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4251.pdf",
+      "hentet_kl": "2026-10-13T11:59:47.132Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "301083",
+        "content-md5": "EmKbyYmzXOzNZJFNVbo1EQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:41 GMT",
+        "etag": "0x8DE5379374FB1E6",
+        "date": "Tue, 13 Oct 2026 11:59:47 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_8926A874-4851-4CFE-8C37-0162524E0572",
+          "varenavn": "Citalopram Orion",
+          "navn_form_styrke": "Citalopram Orion tab 10 mg",
+          "produsent": "Orion Corporation Orion Pharma",
+          "atc": "N06AB04",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4251.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (301083 byte).",
+          "antall": {
+            "bytes": 301083
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "5a59820bf262dbdb2238c9adca633279f14e81acc89dbef2fb987cbe249377c7"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4252.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4252.pdf",
+      "hentet_kl": "2026-10-13T11:59:54.305Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "301083",
+        "content-md5": "EmKbyYmzXOzNZJFNVbo1EQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:52 GMT",
+        "etag": "0x8DE53793DCC7080",
+        "date": "Tue, 13 Oct 2026 11:59:55 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_A0B034C4-0D55-4B18-AE2E-8BA33F47EC52",
+          "varenavn": "Citalopram Orion",
+          "navn_form_styrke": "Citalopram Orion tab 20 mg",
+          "produsent": "Orion Corporation Orion Pharma",
+          "atc": "N06AB04",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4252.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (301083 byte).",
+          "antall": {
+            "bytes": 301083
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "5a59820bf262dbdb2238c9adca633279f14e81acc89dbef2fb987cbe249377c7"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4253.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4253.pdf",
+      "hentet_kl": "2026-10-13T11:59:55.576Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "301083",
+        "content-md5": "EmKbyYmzXOzNZJFNVbo1EQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:57 GMT",
+        "etag": "0x8DE537940DCC18D",
+        "date": "Tue, 13 Oct 2026 11:59:56 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_BD4B45DA-CB7A-443F-A8DE-32FD86E7D62B",
+          "varenavn": "Citalopram Orion",
+          "navn_form_styrke": "Citalopram Orion tab 40 mg",
+          "produsent": "Orion Corporation Orion Pharma",
+          "atc": "N06AB04",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4253.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (301083 byte).",
+          "antall": {
+            "bytes": 301083
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "5a59820bf262dbdb2238c9adca633279f14e81acc89dbef2fb987cbe249377c7"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "4bc8dfd2e647d273f044bc3019d3fe116a4ca59b1ff47951866230484e2fd8de",
+      "bytes": 238324,
+      "mappe": "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273",
+      "pdf": {
+        "sider": 15,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "Portrait SmPC",
+        "laget": "Thu May 16 11:53:27 2024 UTC",
+        "endret": "Thu May 16 11:53:27 2024 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/original.pdf",
+        "tekst": "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-001.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-002.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-003.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-004.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-005.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-006.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-007.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-008.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-009.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-010.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-011.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-012.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-013.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-014.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-015.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-001.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-002.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-003.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-004.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-005.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-006.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-007.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-008.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-009.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-010.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-011.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-012.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-013.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-014.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-015.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 9,
+        "til": 12
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (15 sider).",
+          "antall": {
+            "sider": 15
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 31856
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 9."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 15
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "5a59820bf262dbdb2238c9adca633279f14e81acc89dbef2fb987cbe249377c7",
+      "bytes": 301083,
+      "mappe": "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb",
+      "pdf": {
+        "sider": 16,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "1",
+        "laget": "Tue Apr  1 12:40:59 2025 UTC",
+        "endret": "Tue Apr  1 12:40:59 2025 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/original.pdf",
+        "tekst": "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-001.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-002.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-003.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-004.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-005.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-006.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-007.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-008.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-009.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-010.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-011.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-012.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-013.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-014.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-015.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-016.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-001.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-002.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-003.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-004.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-005.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-006.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-007.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-008.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-009.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-010.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-011.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-012.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-013.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-014.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-015.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-016.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 10,
+        "til": 12
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (16 sider).",
+          "antall": {
+            "sider": 16
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 34088
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 10."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 16
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}
