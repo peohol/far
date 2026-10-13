@@ -1,18 +1,55 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "ok",
   "jobb": {
     "gren": "kuratorjobb/chatgpt-citalopram-pilot-20261013",
     "foresporsel_commit": "3e61cfb1b56c24530c503ef6dc4f35b34a21fb9c",
     "foresporsel_sha256": "1314e14a123d88d411e192364aeffec6147a8f503f79cbf40a6279af6461f96e",
     "kode_commit": "d26495cdd253f3ba5dc2c9267890049c1471fd57",
     "kjoring": "https://github.com/peohol/far/actions/runs/38394584551",
-    "startet_kl": "2026-10-13T12:04:31.463Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-13T12:04:33.474Z",
+    "ferdig_kl": "2026-10-13T12:04:58.348Z"
   },
-  "foresporsel": null,
-  "referanse": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "citalopram"
+    ],
+    "oppgaver": [
+      "funksjonstest",
+      "spc"
+    ],
+    "referanse": "chatgpt-teknisk-pilot-20261013"
+  },
+  "referanse": "chatgpt-teknisk-pilot-20261013",
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 759
+    }
+  ],
+  "stoffer": {
+    "citalopram": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/citalopram/funksjonstest.json"
+        },
+        "spc": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/citalopram/spc.json"
+        }
+      }
+    }
+  }
 }
