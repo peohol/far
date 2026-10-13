@@ -184,7 +184,7 @@ export default function citalopram(db: () => PGlite): void {
 
     const panikk = virkninger.find((e) => e.data.tittel === 'Effekt ved panikklidelse')!
     expect(panikk.referanser).toHaveLength(0)
-    expect(new Set(inlineReferanser(panikk.data)).size).toBe(2)
+    expect(new Set(inlineReferanser(panikk.data)).size).toBe(3)
 
     for (const tittel of ['CYP-enzymer (substrat)', 'CYP2C19 og citaloprameksponering', 'Når farmakogenetisk analyse er relevant']) {
       const kort = farmakogenetikk.find((e) => e.data.tittel === tittel)!
