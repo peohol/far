@@ -21,6 +21,7 @@ export const ENDRINGSLOGG: Endring[] = [
     punkter: [
       'Når du tilpasser profilbildet, fyller sirkelen nå bildet helt ut til nærmeste kant fra start. Et kvadratisk bilde kan dermed brukes i sin helhet.',
       'Glidebryteren zoomer inn derfra, og bildet dekker alltid hele sirkelen.',
+      'Bildet roteres med knappen, en kvart omdreining om gangen. På mobil kan det ikke lenger vris skjevt med to fingre, siden det kunne gi tomme felt i sirkelen.',
     ],
   },
   {

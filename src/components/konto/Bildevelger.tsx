@@ -127,10 +127,11 @@ export function Bildevelger({ visning, onValgt }: BildevelgerProps) {
           // korteste side, også etter rotering og når flaten endrer størrelse.
           // Ved minste zoom går sirkelen derfor helt ut til nærmeste kant, og
           // bildet dekker alltid sirkelen, så resultatet aldri får gjennomsiktige
-          // hjørner.
+          // hjørner. Det holder bare når bildet står rett eller er snudd en
+          // kvart omdreining, så rotering skjer kun med knappen, ikke med to
+          // fingre.
           onCropChange={setMidtpunkt}
           onZoomChange={setZoom}
-          onRotationChange={setRotasjon}
           onCropComplete={(_, piksler) => setUtsnitt(piksler)}
         />
       </div>
