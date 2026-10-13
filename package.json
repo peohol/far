@@ -1,7 +1,7 @@
 {
   "name": "far",
   "private": true,
-  "version": "1.91.0",
+  "version": "1.91.1",
   "type": "module",
   "description": "Verktøy for å kommentere farmakologiske analyser",
   "scripts": {
@@ -13,6 +13,7 @@
     "test:watch": "vitest",
     "import:bivirkninger": "vite-node scripts/lag-bivirkningsimport.ts --",
     "import:intervallregelsett": "vite-node scripts/importer-intervallregelsett.ts --",
+    "kuratorjobb": "vite-node scripts/kuratorjobb.ts --",
     "kontroller:migrasjoner": "vite-node scripts/kontroller-migrasjoner.ts --",
     "berorer:migrasjoner": "vite-node scripts/berorer-migrasjoner.ts --",
     "produksjonsmigrering": "vite-node scripts/produksjonsmigrering.ts --",

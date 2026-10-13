@@ -1,0 +1,201 @@
+# Kuratorjobbene: funksjonstesten av appens lesekall og hentingen av
+# preparatomtaler for ChatGPT-monografkuratoren (docs/kuratorjobber.md).
+#
+# Kuratoren starter en jobb ved å skrive kuratorjobb/foresporsel.json på en gren
+# som heter kuratorjobb/<noe>. Da starter «videresend» jobben på main, med
+# grenen som felt. Jobben kan også startes for hånd (eller av et verktøy som
+# kan starte arbeidsflyter) på main, med en gren eller med stoffene.
+#
+# Selve jobben kjører alltid koden og arbeidsflyten slik de står på main, med
+# testbrukeren fra miljøet «kuratortest», som bare main får bruke. Fra
+# jobbgrenen leses bare forespørselen, som data; resultatet skrives tilbake på
+# samme gren. Grenen slås aldri sammen med main.
+name: Kuratorjobb
+
+on:
+  push:
+    branches: ['kuratorjobb/**']
+    paths: ['kuratorjobb/foresporsel.json']
+  workflow_dispatch:
+    inputs:
+      gren:
+        description: Jobbgrenen (kuratorjobb/…) med kuratorjobb/foresporsel.json. Tom gir en ny gren for stoffene under.
+        required: false
+        default: ''
+      stoffer:
+        description: Bare uten gren. Stoffene, kommaseparert (nøkler eller navn i stoffregisteret), eller «alle».
+        required: false
+        default: ''
+      oppgaver:
+        description: Bare uten gren. funksjonstest og/eller spc, kommaseparert.
+        required: false
+        default: funksjonstest,spc
+
+permissions: {}
+
+jobs:
+  videresend:
+    name: Start jobben fra main
+    if: github.event_name == 'push' && !github.event.deleted
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      # Bare for å starte arbeidsflyten på main. Ingen hemmeligheter her.
+      actions: write
+    steps:
+      - name: Start kuratorjobben for grenen
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          GREN: ${{ github.ref_name }}
+        run: gh workflow run kuratorjobb.yml --repo "$REPO" --ref main -f gren="$GREN"
+
+  kjor:
+    name: Kjør kuratorjobben
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    # Testbrukeren ligger i miljøet, som bare main får bruke.
+    environment: kuratortest
+    permissions:
+      # For å skrive resultatet på jobbgrenen.
+      contents: write
+    concurrency:
+      group: kuratorjobb-${{ inputs.gren || github.run_id }}
+      cancel-in-progress: false
+    env:
+      # OUSFARs prosjekt i Supabase og den offentlige nøkkelen, de samme verdiene
+      # appen har i nettleseren. Ingen av dem er hemmelige.
+      SUPABASE_URL: https://jfzqowsmjtthpbipnxnf.supabase.co
+      SUPABASE_PUBLISHABLE_KEY: sb_publishable_-xx8oSXHh9dBqs3EnxyprA_vijEb2AU
+      GREN_INN: ${{ inputs.gren }}
+      STOFFER: ${{ inputs.stoffer }}
+      OPPGAVER: ${{ inputs.oppgaver }}
+      KJORING: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    defaults:
+      run:
+        working-directory: kode
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          path: kode
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          package-manager-cache: false
+
+      - run: npm ci --ignore-scripts
+
+      - name: Finn jobbgrenen
+        id: gren
+        run: |
+          if [ -n "$GREN_INN" ]; then
+            gren="$GREN_INN"; ny=false
+          elif [ -n "$STOFFER" ]; then
+            gren="kuratorjobb/manuell-$GITHUB_RUN_ID"; ny=true
+          else
+            echo "::error::Oppgi enten en jobbgren eller stoffene."
+            exit 1
+          fi
+          if ! npm run -s kuratorjobb -- gren "$gren"; then
+            echo "::error::«$gren» er ikke en jobbgren; navnet må begynne med kuratorjobb/."
+            exit 1
+          fi
+          echo "gren=$gren" >> "$GITHUB_OUTPUT"
+          echo "ny=$ny" >> "$GITHUB_OUTPUT"
+
+      # Jobbgrenen leses og skrives bare som filer; ingenting fra den kjøres.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ steps.gren.outputs.ny == 'true' && 'main' || steps.gren.outputs.gren }}
+          path: jobb
+
+      - name: Lag grenen for en jobb startet med stoffene
+        if: steps.gren.outputs.ny == 'true'
+        working-directory: jobb
+        env:
+          GREN: ${{ steps.gren.outputs.gren }}
+        run: |
+          git switch -c "$GREN"
+          mkdir -p kuratorjobb
+          (cd ../kode && npm run -s kuratorjobb -- felter "$STOFFER" "$OPPGAVER") > kuratorjobb/foresporsel.json
+          git add kuratorjobb/foresporsel.json
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit -q -m "Kuratorjobb: forespørsel for $STOFFER"
+
+      - name: PDF-verktøyene
+        run: |
+          if ! command -v pdftoppm >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq --no-install-recommends poppler-utils
+          fi
+          pdftoppm -v
+
+      - name: Meld at jobben er startet
+        working-directory: jobb
+        env:
+          GREN: ${{ steps.gren.outputs.gren }}
+        run: |
+          export FORESPORSEL_COMMIT=$(git rev-parse HEAD) KODE_COMMIT=$(git -C ../kode rev-parse HEAD) JOBB_GREN="$GREN"
+          echo "FORESPORSEL_COMMIT=$FORESPORSEL_COMMIT" >> "$GITHUB_ENV"
+          echo "KODE_COMMIT=$KODE_COMMIT" >> "$GITHUB_ENV"
+          echo "JOBB_GREN=$GREN" >> "$GITHUB_ENV"
+          (cd ../kode && npm run -s kuratorjobb -- start ../jobb)
+          git add -A kuratorjobb
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit -q -m "Kuratorjobb startet: $KJORING"
+          git push -q origin "HEAD:refs/heads/$GREN"
+
+      - name: Kjør jobben
+        env:
+          OUSFAR_TESTBRUKER: ${{ secrets.OUSFAR_TESTBRUKER }}
+          OUSFAR_TESTPASSORD: ${{ secrets.OUSFAR_TESTPASSORD }}
+        run: |
+          if ! npm run -s kuratorjobb -- kjor ../jobb; then
+            # Skriptet ble stoppet; resultatet sier fra i stedet for å stå som «kjorer».
+            fil=../jobb/kuratorjobb/resultat/status.json
+            mkdir -p "$(dirname "$fil")"
+            { cat "$fil" 2>/dev/null || echo '{"versjon": 1, "jobb": {}, "feil": []}'; } |
+              jq --arg kl "$(date -u +%FT%TZ)" --arg kjoring "$KJORING" \
+                '.status = "feil" | .jobb.ferdig_kl = $kl | .jobb.kjoring = $kjoring | .feil += ["Jobben stoppet uventet; se kjøringen."]' > status.json
+            mv status.json "$fil"
+          fi
+
+      - name: Lagre resultatet på jobbgrenen
+        if: always() && steps.gren.outputs.gren != ''
+        working-directory: jobb
+        env:
+          GREN: ${{ steps.gren.outputs.gren }}
+        run: |
+          [ -f kuratorjobb/resultat/status.json ] || exit 0
+          git add -A kuratorjobb
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit -q -m "Kuratorjobb ferdig: $(jq -r .status kuratorjobb/resultat/status.json)" || exit 0
+          # Har kuratoren skrevet på grenen imens, legges resultatet oppå.
+          for forsok in 1 2 3; do
+            git push -q origin "HEAD:refs/heads/$GREN" && break
+            [ "$forsok" = 3 ] && exit 1
+            git fetch -q --depth=50 origin "$GREN" && git rebase -q FETCH_HEAD
+          done
+          status=$(jq -r .status kuratorjobb/resultat/status.json)
+          {
+            echo "### Kuratorjobb: $status"
+            echo
+            echo "Resultatet står på grenen \`$GREN\` i \`kuratorjobb/resultat/\`."
+            echo
+            jq -r '.feil[] | "- Feil: \(.)"' kuratorjobb/resultat/status.json
+            jq -r '.stoffer | to_entries[] | "- \(.key): \(.value.status)"' kuratorjobb/resultat/status.json
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Utfallet
+        working-directory: jobb
+        run: |
+          status=$(jq -r .status kuratorjobb/resultat/status.json)
+          echo "Kuratorjobben: $status"
+          if [ "$status" = feil ]; then
+            echo "::error::Kuratorjobben fant feil; se kuratorjobb/resultat/status.json på grenen."
+            exit 1
+          fi

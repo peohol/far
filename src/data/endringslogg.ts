@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.91.1',
+    dato: '2026-10-13',
+    sammendrag: 'Teknisk hjelp til monografkuratoren: funksjonstest av fagsidene og originale preparatomtaler',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Monografkuratoren kan nå få en kontroll av at en fagside leses riktig, slik en vanlig innlogget bruker ser den, med legemiddeldata, bivirkninger og farmakogenetikk.',
+      'Kuratoren kan også få de originale preparatomtalene fra DMP, kontrollert for at de kom hele, med tekstuttrekk og et bilde av hver side til visuell kontroll av tabellene. Preparater uten preparatomtale hos DMP, som sentralt godkjente, listes opp.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.91.0',
     dato: '2026-10-13',
     sammendrag: 'Meldingen om en ny versjon kommer bare når den gjelder siden du er på',

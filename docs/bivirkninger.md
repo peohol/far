@@ -27,6 +27,11 @@ frekvens. Alt innhold kommer fra en importfil som er laget og faglig
 kontrollert utenfor appen, og tas inn ordrett. Malen og testene bruker bare
 syntetiske data, som sier selv at de er syntetiske.
 
+Kuratoren som lager importfila, kan få de originale preparatomtalene fra DMP,
+med tekstuttrekk og sidebilder, fra en kuratorjobb (`docs/kuratorjobber.md`).
+Jobben legger bare filene fram; ingenting derfra går inn i appen uten
+importen.
+
 ## Datamodellen
 
 | Del | Hvor | Hva |

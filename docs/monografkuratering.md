@@ -11,6 +11,11 @@ utrullingen og kontrollen av historikken.
 
 ## Arbeidsflyten
 
+Før og under arbeidet kan kuratoren få en funksjonstest av siden, slik appen
+leser den som en vanlig innlogget bruker, og de originale preparatomtalene fra
+DMP med tekstuttrekk og sidebilder, fra GitHub Actions
+(`docs/kuratorjobber.md`).
+
 1. **Preflight i produksjonen.** Les sidens elementer slik de står nå, med
    `execute_sql` (som bare kan lese):
 
