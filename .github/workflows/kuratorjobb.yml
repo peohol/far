@@ -154,9 +154,13 @@ jobs:
           OUSFAR_TESTPASSORD: ${{ secrets.OUSFAR_TESTPASSORD }}
         run: |
           if ! npm run -s kuratorjobb -- kjor ../jobb; then
-            # Skriptet stoppet uventet; resultatet sier fra i stedet for å stå som «kjorer».
-            jq --arg kl "$(date -u +%FT%TZ)" '.status = "feil" | .jobb.ferdig_kl = $kl | .feil += ["Jobben stoppet uventet; se kjøringen."]' \
-              ../jobb/kuratorjobb/resultat/status.json > status.json && mv status.json ../jobb/kuratorjobb/resultat/status.json
+            # Skriptet ble stoppet; resultatet sier fra i stedet for å stå som «kjorer».
+            fil=../jobb/kuratorjobb/resultat/status.json
+            mkdir -p "$(dirname "$fil")"
+            { cat "$fil" 2>/dev/null || echo '{"versjon": 1, "jobb": {}, "feil": []}'; } |
+              jq --arg kl "$(date -u +%FT%TZ)" --arg kjoring "$KJORING" \
+                '.status = "feil" | .jobb.ferdig_kl = $kl | .jobb.kjoring = $kjoring | .feil += ["Jobben stoppet uventet; se kjøringen."]' > status.json
+            mv status.json "$fil"
           fi
 
       - name: Lagre resultatet på jobbgrenen

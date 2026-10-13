@@ -380,25 +380,7 @@ async function spc(klient: SupabaseClient | null, stoff: string, valg: NonNullab
 
 /* --- Jobben -------------------------------------------------------------- */
 
-async function kjor() {
-  const { tekst, sha } = lesForesporselsfil()
-  rmSync(iMappe(RESULTATMAPPE), { recursive: true, force: true })
-  const status = grunnstatus(sha)
-  const ferdig = () => {
-    status.jobb.ferdig_kl = naa()
-    status.status = samletStatus([
-      ...(status.feil.length > 0 ? (['feil'] as Utfall[]) : []),
-      ...status.bruker.map((k) => k.status),
-      ...Object.values(status.stoffer).map((s) => s.status),
-    ])
-    skrivJson(STATUSFIL, status)
-    console.log(`Kuratorjobben er ferdig: ${status.status}`)
-    for (const [stoff, s] of Object.entries(status.stoffer)) {
-      console.log(`  ${stoff}: ${s.status} (${Object.entries(s.oppgaver).map(([o, r]) => `${o} ${r?.status}`).join(', ')})`)
-    }
-    for (const f of status.feil) console.log(`  feil: ${f}`)
-  }
-
+async function kjor(status: Jobbstatus, tekst: string | null, ferdig: () => void) {
   if (tekst === null) {
     status.feil.push(`Fant ikke ${FORESPORSELSFIL} på grenen.`)
     return ferdig()
@@ -476,5 +458,29 @@ if (kommando === 'gren') {
   rmSync(iMappe(RESULTATMAPPE), { recursive: true, force: true })
   skrivJson(STATUSFIL, grunnstatus(sha))
 } else {
-  await kjor()
+  const { tekst, sha } = lesForesporselsfil()
+  rmSync(iMappe(RESULTATMAPPE), { recursive: true, force: true })
+  const status = grunnstatus(sha)
+  // Står der fra starten, så et uventet stopp aldri etterlater grenen uten status.
+  skrivJson(STATUSFIL, status)
+  const ferdig = () => {
+    status.jobb.ferdig_kl = naa()
+    status.status = samletStatus([
+      ...(status.feil.length > 0 ? (['feil'] as Utfall[]) : []),
+      ...status.bruker.map((k) => k.status),
+      ...Object.values(status.stoffer).map((s) => s.status),
+    ])
+    skrivJson(STATUSFIL, status)
+    console.log(`Kuratorjobben er ferdig: ${status.status}`)
+    for (const [stoff, s] of Object.entries(status.stoffer)) {
+      console.log(`  ${stoff}: ${s.status} (${Object.entries(s.oppgaver).map(([o, r]) => `${o} ${r?.status}`).join(', ')})`)
+    }
+    for (const f of status.feil) console.log(`  feil: ${f}`)
+  }
+  try {
+    await kjor(status, tekst, ferdig)
+  } catch (e) {
+    status.feil.push(`Jobben stoppet uventet: ${e instanceof Error ? e.message : String(e)}`)
+    ferdig()
+  }
 }
