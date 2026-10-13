@@ -1,0 +1,11 @@
+{
+  "versjon": 1,
+  "stoffer": [
+    "citalopram"
+  ],
+  "oppgaver": [
+    "funksjonstest",
+    "spc"
+  ],
+  "referanse": "chatgpt-teknisk-pilot-20261013"
+}
