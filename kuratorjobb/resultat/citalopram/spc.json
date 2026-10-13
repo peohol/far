@@ -1,0 +1,317 @@
+{
+  "stoff": "citalopram",
+  "status": "advarsel",
+  "kilde": "foresporsel",
+  "dpi": 150,
+  "fest": null,
+  "dekning": {
+    "dekket": false,
+    "preparater": 0,
+    "hentet": 0,
+    "dokumenter": 2,
+    "mangler": []
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "advarsel",
+      "melding": "Ikke innlogget; preparatomtalene i FEST kunne ikke slås opp, og adressene står uten preparatene FEST knytter til dem."
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "FEST oppgir ingen preparater for stoffet, så dekningen kan ikke vurderes. Behovet er ikke vist dekket.",
+      "antall": {
+        "preparater": 0,
+        "hentet": 0,
+        "mangler": 0,
+        "dokumenter": 2
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08150.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08150.pdf",
+      "hentet_kl": "2026-10-13T11:22:47.035Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "238324",
+        "content-md5": "DtdyEFN3MsxugvVZAx2ufQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:53 GMT",
+        "etag": "0x8DE53793E698424",
+        "date": "Tue, 13 Oct 2026 11:22:47 GMT"
+      },
+      "preparater": [],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08150.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (238324 byte).",
+          "antall": {
+            "bytes": 238324
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "4bc8dfd2e647d273f044bc3019d3fe116a4ca59b1ff47951866230484e2fd8de"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4251.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4251.pdf",
+      "hentet_kl": "2026-10-13T11:22:53.809Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "301083",
+        "content-md5": "EmKbyYmzXOzNZJFNVbo1EQ==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:41 GMT",
+        "etag": "0x8DE5379374FB1E6",
+        "date": "Tue, 13 Oct 2026 11:22:54 GMT"
+      },
+      "preparater": [],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4251.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (301083 byte).",
+          "antall": {
+            "bytes": 301083
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "5a59820bf262dbdb2238c9adca633279f14e81acc89dbef2fb987cbe249377c7"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "4bc8dfd2e647d273f044bc3019d3fe116a4ca59b1ff47951866230484e2fd8de",
+      "bytes": 238324,
+      "mappe": "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273",
+      "pdf": {
+        "sider": 15,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "Portrait SmPC",
+        "laget": "Thu May 16 11:53:27 2024 UTC",
+        "endret": "Thu May 16 11:53:27 2024 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/original.pdf",
+        "tekst": "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-001.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-002.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-003.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-004.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-005.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-006.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-007.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-008.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-009.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-010.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-011.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-012.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-013.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-014.txt",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/tekst/side-015.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-001.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-002.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-003.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-004.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-005.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-006.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-007.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-008.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-009.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-010.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-011.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-012.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-013.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-014.png",
+          "kuratorjobb/resultat/citalopram/spc/4bc8dfd2e647d273/sider/side-015.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 9,
+        "til": 12
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (15 sider).",
+          "antall": {
+            "sider": 15
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 31856
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 9."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 15
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "5a59820bf262dbdb2238c9adca633279f14e81acc89dbef2fb987cbe249377c7",
+      "bytes": 301083,
+      "mappe": "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb",
+      "pdf": {
+        "sider": 16,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": "1",
+        "laget": "Tue Apr  1 12:40:59 2025 UTC",
+        "endret": "Tue Apr  1 12:40:59 2025 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/original.pdf",
+        "tekst": "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-001.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-002.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-003.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-004.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-005.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-006.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-007.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-008.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-009.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-010.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-011.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-012.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-013.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-014.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-015.txt",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/tekst/side-016.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-001.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-002.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-003.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-004.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-005.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-006.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-007.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-008.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-009.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-010.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-011.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-012.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-013.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-014.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-015.png",
+          "kuratorjobb/resultat/citalopram/spc/5a59820bf262dbdb/sider/side-016.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 10,
+        "til": 12
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (16 sider).",
+          "antall": {
+            "sider": 16
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 34088
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 10."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 16
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

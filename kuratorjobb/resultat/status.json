@@ -1,18 +1,51 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/pilot-citalopram-20261013",
     "foresporsel_commit": "ba8646eeecb9327f0fc86c6378ac6400e2741f88",
     "foresporsel_sha256": "0905b759e17d90c97620c70d42c68abac7bab4b74318ea1afc391532b9ec7d50",
     "kode_commit": "d26495cdd253f3ba5dc2c9267890049c1471fd57",
     "kjoring": "https://github.com/peohol/far/actions/runs/38389728656",
-    "startet_kl": "2026-10-13T11:22:45.203Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-13T11:22:47.033Z",
+    "ferdig_kl": "2026-10-13T11:22:59.907Z"
   },
-  "foresporsel": null,
-  "referanse": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "citalopram"
+    ],
+    "oppgaver": [
+      "spc"
+    ],
+    "spc": {
+      "adresser": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08150.pdf",
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4251.pdf"
+      ],
+      "maks": 20,
+      "dpi": 150
+    },
+    "referanse": "infrastrukturtest uten testbruker"
+  },
+  "referanse": "infrastrukturtest uten testbruker",
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "advarsel",
+      "melding": "Testbrukeren er ikke satt opp: hemmelighetene OUSFAR_TESTBRUKER og OUSFAR_TESTPASSORD mangler (docs/kuratorjobber.md)."
+    }
+  ],
+  "stoffer": {
+    "citalopram": {
+      "status": "advarsel",
+      "oppgaver": {
+        "spc": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/citalopram/spc.json"
+        }
+      }
+    }
+  }
 }
