@@ -12,6 +12,17 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.90.1',
+    dato: '2026-10-13',
+    sammendrag: 'Oppgaven «Endre tablettikonet til preparater så man ser om de kan deles eller ikke» er merket utført',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen ny endring i appen. Den planlagte oppgaven «Endre tablettikonet til preparater så man ser om de kan deles eller ikke» (OPG-005) er merket utført med versjon 1.90.0, og det er ført inn i appens oversikt over databaseendringer.',
+    ],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.90.0',
     dato: '2026-10-13',
     sammendrag: 'Tablettikonet viser om tabletten kan deles',
