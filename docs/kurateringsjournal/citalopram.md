@@ -53,7 +53,15 @@ Følgende ble beholdt etter ny, selvstendig vurdering:
 - Beskyttede norske data: bestått ved migrasjons- og regresjonskontroll; ingen beskyttet verdi eller serumrad endres.
 - Påstand–kilde-kobling: bestått i nye heterogene kort ved inline-sitering.
 - Maskinlesbar dekning: 37 av 37 kontrollpunkter dokumentert i `citalopram-dekning.json`.
-- Produksjonsnær funksjonstest og SPC-artefaktkontroll: dokumenteres med GitHub Actions-kjøringen for denne kurateringen før PR-en gjøres klar for faglig vurdering.
+- Produksjonsnær funksjonstest: bestått i GitHub Actions-kjøring 38438360166. Vanlig bruker kunne lese og bygge siden; utkast var skjult. FEST ga seks merkevarer/åtte pakninger, interaksjonslaget 67 treff, bivirkningslaget 86 av 86 rader, ClinPGx 63 kliniske annotasjoner og CPIC åtte anbefalinger.
+- SPC-artefaktkontroll: bestått i samme kjøring. Alle seks preparater var dekket av to distinkte DMP-originaler: Cipramil, 15 sider, oppdatert 16.05.2024, og Citalopram Orion, 16 sider, oppdatert 01.04.2025. PDF-kontrollsummer, tekstuttrekk og 180-dpi sidebilder ble kontrollert.
+- Visuell SPC-kontroll: tabellene i punkt 4.8 ble lest i original layout. Orion-tabellen og begge fotnotene samsvarer med eksisterende strukturerte 86-raders import. Indikasjon, dose, graviditet/amming, overdose, QT-data, farmakodynamikk og farmakokinetikk ble kontrollert i begge originaldokumentene.
+
+### Regulatoriske kildekonflikter
+
+- Cipramil 2024 sier at citalopram ikke skal brukes under amming, mens Citalopram Orion 2025 anbefaler forsiktighet. Den kliniske teksten bygger derfor på nyere LactMed og Embryotox og synliggjør oppfølging, fremfor å presentere én produktspesifikk ordlyd som en enhetlig klasseregel.
+- Cipramil 2024 angir at dosering ikke behøver individualiseres etter CYP2C19/CYP2D6-fenotype, mens Orion har redusert maksimum for langsomme CYP2C19-omsettere. CPIC 2023 er brukt som handlingsrettet genotypekilde; SPC-ene brukes regulatorisk og konflikten er ikke glattet over.
+- Orion beskriver et allosterisk SERT-bindingssted og begge SPC-er omtaler manglende toleranse for reopptakshemmingen. Disse molekylære/regulatoriske formuleringene er ikke brukt som belegg for klinisk allosteri eller klinisk toleranse.
 
 ## Kontrollerte hovedkilder
 
