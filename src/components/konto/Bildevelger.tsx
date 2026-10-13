@@ -9,6 +9,9 @@ import { Ikon } from '../ikon/Ikon'
 /** Største fil vi tar imot fra disken. Bildet krymper uansett før opplasting. */
 const STORSTE_FIL = 15 * 1024 * 1024
 
+/** Zoomområdet. Ved 1 fyller sirkelen bildet ut til nærmeste kant. */
+const ZOOM = { min: 1, max: 5 } as const
+
 export interface BildevelgerProps {
   /** Avataren som vises når ingen redigering pågår. */
   visning: ReactNode
@@ -27,7 +30,7 @@ export function Bildevelger({ visning, onValgt }: BildevelgerProps) {
   const filvelger = useRef<HTMLInputElement>(null)
   const [kilde, setKilde] = useState<string | null>(null)
   const [midtpunkt, setMidtpunkt] = useState<Point>({ x: 0, y: 0 })
-  const [zoom, setZoom] = useState(1)
+  const [zoom, setZoom] = useState<number>(ZOOM.min)
   const [rotasjon, setRotasjon] = useState(0)
   const [utsnitt, setUtsnitt] = useState<Area | null>(null)
   const [feil, setFeil] = useState<string | null>(null)
@@ -42,7 +45,7 @@ export function Bildevelger({ visning, onValgt }: BildevelgerProps) {
   const avbryt = useCallback(() => {
     setKilde(null)
     setMidtpunkt({ x: 0, y: 0 })
-    setZoom(1)
+    setZoom(ZOOM.min)
     setRotasjon(0)
     setUtsnitt(null)
   }, [])
@@ -118,11 +121,13 @@ export function Bildevelger({ visning, onValgt }: BildevelgerProps) {
           aspect={1}
           cropShape="round"
           showGrid={false}
-          minZoom={1}
-          maxZoom={5}
-          // Standardoppførselen holder bildet dekkende over sirkelen, slik at
-          // resultatet aldri får gjennomsiktige hjørner.
-          cropSize={{ width: 220, height: 220 }}
+          minZoom={ZOOM.min}
+          maxZoom={ZOOM.max}
+          // Uten fast størrelse gjør biblioteket sirkelen så stor som bildets
+          // korteste side, også etter rotering og når flaten endrer størrelse.
+          // Ved minste zoom går sirkelen derfor helt ut til nærmeste kant, og
+          // bildet dekker alltid sirkelen, så resultatet aldri får gjennomsiktige
+          // hjørner.
           onCropChange={setMidtpunkt}
           onZoomChange={setZoom}
           onRotationChange={setRotasjon}
@@ -139,8 +144,8 @@ export function Bildevelger({ visning, onValgt }: BildevelgerProps) {
           <span>Zoom</span>
           <input
             type="range"
-            min={1}
-            max={5}
+            min={ZOOM.min}
+            max={ZOOM.max}
             step={0.01}
             value={zoom}
             onChange={(hendelse) => setZoom(Number(hendelse.target.value))}
