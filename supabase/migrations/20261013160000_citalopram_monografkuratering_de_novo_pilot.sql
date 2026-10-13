@@ -218,5 +218,57 @@ begin
     side, 'avhengighet_toleranse', 'kinetikkort',
     '{"tittel":"Toleranseutvikling"}'::jsonb, 2);
   perform intern.kuratering_lagre(obj,2,jsonb_build_object('panel','fjernet'),kilde);
+
+  perform intern.kuratering_rapport(
+    'chatgpt-monografkurator',
+    '20261013160000_citalopram_monografkuratering_de_novo_pilot.sql',
+    $rapport$
+    {
+      "oppsummering": "Citalopram er fullstendig de novo-kuratert med direkte effektdata, presisert TDM og oppdatert graviditets- og ammedokumentasjon; svakt dokumenterte mekanisme- og toleransekort er fjernet.",
+      "seksjoner": [
+        {
+          "seksjon": "farmakodynamikk",
+          "endret": ["SERT-kortet er konsentrert til humane transportørdata med kvantifisert selektivitet"],
+          "fjernet": ["Seks negative målkort uten selvstendig klinisk informasjonsverdi"]
+        },
+        {
+          "seksjon": "virkninger",
+          "endret": ["Antidepressiv effekt, tilbakefallsforebygging, panikklidelse og tvangslidelse er kvantifisert med begrensninger"]
+        },
+        {
+          "seksjon": "tdm",
+          "endret": ["Prøvetakingstidspunkt, prøvemateriale og kliniske indikasjoner for konsentrasjonsmåling er presisert"]
+        },
+        {
+          "seksjon": "graviditet_amming",
+          "endret": ["Graviditet, perinatal påvirkning og amming er oppdatert med teratologikilder og absoluttrisiko"]
+        },
+        {
+          "seksjon": "avhengighet_toleranse",
+          "fjernet": ["Toleranseutvikling, fordi molekylær SERT-tilpasning ikke dokumenterer klinisk toleranse"]
+        }
+      ],
+      "nye_opplysninger": [
+        "Direkte citaloprameffekt ved depresjon og tilbakefallsforebygging er kvantifisert",
+        "Respons og remisjon ved panikklidelse er skilt med korrekte Cochrane-estimater",
+        "Graviditets-, perinatal- og ammerisiko er oppdatert med nyere teratologikilder"
+      ],
+      "korrigeringer": [
+        "Panikkstudien skiller nå mellom randomiserte, videreførte, effektanalyserte og fullførere",
+        "60 mg-armen i OCD-studien er satt i kontekst mot dagens maksimale dose",
+        "Udokumentert klinisk toleransefortolkning og seks lite informative negative målkort er fjernet"
+      ],
+      "kildegrunnlag": [
+        "Andersen et al. 2011, Apler 2011, Robert og Montgomery 1995, Lepola et al. 1998, Bighelli et al. 2018 og Montgomery et al. 2001 er lagt til eller kontrollert",
+        "Citalopram Orion SPC 2025, Sykehuset Østfold laboratoriehåndbok 2026, UKTIS 2026, Embryotox 2026 og LactMed 2026 er lagt til eller kontrollert"
+      ],
+      "mangler": [
+        "Ingen skarp universell konsentrasjon-effektgrense",
+        "Moderne substansspesifikk evidens ved panikklidelse og OCD er begrenset",
+        "Menneskelige fertilitetsdata og robust citalopramspesifikk dokumentasjon for klinisk toleranse er begrenset"
+      ],
+      "lenker": ["https://github.com/peohol/far/pull/222"]
+    }
+    $rapport$::jsonb);
 end
 $citalopram_de_novo$;
