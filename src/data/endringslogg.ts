@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.91.0',
+    dato: '2026-10-13',
+    sammendrag: 'Meldingen om en ny versjon kommer bare når den gjelder siden du er på',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['hele appen'],
+    punkter: [
+      'Meldingen «En ny versjon av OUSFAR er klar» kommer nå bare når endringene gjelder siden du står på, eller vinduet du har åpent.',
+      'Gjelder endringene andre sider, tas den nye versjonen i bruk av seg selv neste gang du går til en annen side eller nullstiller fortolkningen. Siden lastes da på nytt et øyeblikk etter, og det du holdt på med, blir stående.',
+      'Begynner du å skrive eller klikke med en gang etter at du gikk til en ny side, venter appen til neste gang, så ingen tastetrykk går tapt. Går du til en side endringene gjelder, kommer meldingen som før.',
+    ],
+  },
+  {
     versjon: '1.90.1',
     dato: '2026-10-13',
     sammendrag: 'Oppgaven «Endre tablettikonet til preparater så man ser om de kan deles eller ikke» er merket utført',

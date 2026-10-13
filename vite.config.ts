@@ -3,7 +3,7 @@ import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import { KLINISK_PAKKE } from './src/auth/vegg'
 import { ENDRINGSLOGG } from './src/data/endringslogg'
-import { nyesteVersjon, oppdateringsversjon } from './src/domain/versjon'
+import { endringsomrader, nyesteVersjon, oppdateringsversjon } from './src/domain/versjon'
 import { VERSJONSFIL, type Byggopplysninger } from './src/oppdatering/versjon'
 
 /**
@@ -11,7 +11,9 @@ import { VERSJONSFIL, type Byggopplysninger } from './src/oppdatering/versjon'
  * `versjon.json` ved siden av `index.html`. Appen som kjører, spør etter fila
  * og ber brukeren oppdatere når en annen versjon er lagt ut
  * (`src/oppdatering/versjon.ts`). Bygget er commiten på Vercel; ellers
- * tidspunktet, så hvert lokale bygg er nytt.
+ * tidspunktet, så hvert lokale bygg er nytt. Fila sier også hvilke sider de
+ * nyeste føringene gjelder; det trenger bare appen som spør, ikke den som
+ * kjører.
  */
 function versjonsfil(): Plugin {
   const opplysninger: Byggopplysninger = {
@@ -23,7 +25,8 @@ function versjonsfil(): Plugin {
     name: 'ousfar-versjonsfil',
     config: () => ({ define: { __BYGG__: JSON.stringify(opplysninger) } }),
     generateBundle() {
-      this.emitFile({ type: 'asset', fileName: VERSJONSFIL, source: JSON.stringify(opplysninger) })
+      const fil: Byggopplysninger = { ...opplysninger, endringer: endringsomrader(ENDRINGSLOGG) }
+      this.emitFile({ type: 'asset', fileName: VERSJONSFIL, source: JSON.stringify(fil) })
     },
   }
 }

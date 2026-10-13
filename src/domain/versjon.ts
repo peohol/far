@@ -9,6 +9,7 @@
  *
  * Rutinen for å legge inn en ny føring står i `docs/endringslogg.md`.
  */
+import type { Endringsomrade, Sideomrade } from '../oppdatering/sider'
 
 /**
  * Hva slags endring det er snakk om. Én føring kan være flere ting på én gang
@@ -50,6 +51,13 @@ export interface Endring {
    * føres inn i koden. Da blir den ikke et varsel.
    */
   utenVarsel?: true
+  /**
+   * Sidene endringen gjelder, som `fortolkning/thc` eller `stoff`
+   * (`src/oppdatering/sider.ts`). Brukerne bes bare om å oppdatere når de står
+   * på en av dem; ellers tas versjonen i bruk når de går til en annen side.
+   * Mangler den, kan endringen gjelde alle sider.
+   */
+  gjelder?: readonly Sideomrade[]
 }
 
 /**
@@ -82,6 +90,25 @@ export function oppdateringsversjon(logg: readonly Endring[]): string {
   const nyeste = logg.find(varsles)
   if (!nyeste) throw new Error('Endringsloggen har ingen føring som varsles')
   return nyeste.versjon
+}
+
+/**
+ * Så mange av de nyeste føringene som varsles, står i `versjon.json` med
+ * sidene de gjelder. Er versjonen brukeren kjører, eldre enn alle, bes hen om
+ * å oppdatere uansett side.
+ */
+export const ENDRINGSOMRADER_I_FILA = 30
+
+/**
+ * De nyeste føringene som varsles, nyest først, med sidene de gjelder — det
+ * appen som kjører, trenger for å avgjøre om en ny versjon berører siden
+ * brukeren er på (`src/oppdatering/sider.ts`).
+ */
+export function endringsomrader(logg: readonly Endring[], antall = ENDRINGSOMRADER_I_FILA): Endringsomrade[] {
+  return logg
+    .filter(varsles)
+    .slice(0, antall)
+    .map(({ versjon, gjelder }) => (gjelder ? { versjon, gjelder: [...gjelder] } : { versjon }))
 }
 
 /** `2026-08-17` → `17.08.2026`. Formen føringene merkes med i loggen. */

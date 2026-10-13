@@ -119,10 +119,20 @@ export function taBilde(): Oppdateringsbilde {
   return { tatt: Date.now(), eier, verdier, rulling: rulling.filter((r) => r.topp > 0) }
 }
 
-/** Tar bildet, legger det i fanen og laster siden på nytt, med den nye versjonen. */
-export function oppdaterOgTaVare(lastInn: () => void = () => window.location.reload()): void {
+/**
+ * Tar bildet, legger det i fanen og laster siden på nytt, med den nye
+ * versjonen. Uten `rulling` tas ikke rulleplassene med: ved en oppdatering i
+ * stillhet rett etter at brukeren gikk til en ny side, hører de til siden hen
+ * forlot.
+ */
+export function oppdaterOgTaVare(
+  lastInn: () => void = () => window.location.reload(),
+  { rulling = true }: { rulling?: boolean } = {},
+): void {
   try {
-    sessionStorage.setItem(LAGRINGSNOKKEL, JSON.stringify(taBilde()))
+    const bilde = taBilde()
+    if (!rulling) bilde.rulling = []
+    sessionStorage.setItem(LAGRINGSNOKKEL, JSON.stringify(bilde))
   } catch {
     // Uten lagring i fanen oppdateres det likevel; det er viktigere enn å huske.
   }

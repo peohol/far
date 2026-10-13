@@ -7,9 +7,12 @@
  * bes om å oppdatere når versjonen de skal oppdatere til (`oppdatering`) er en
  * annen enn den som kjører — som regel en nyere, men det gjelder også når en
  * versjon er trukket tilbake. Et bygg som bare er en stille designjustering
- * eller en føring med `utenVarsel`, ber altså ingen oppdatere. Fila ligger
- * utenfor innloggingsveggen og sier ikke noe annet enn dette.
+ * eller en føring med `utenVarsel`, ber altså ingen oppdatere. Fila sier også
+ * hvilke sider de nyeste føringene gjelder, så brukeren bare bes om å
+ * oppdatere når siden hen er på, er berørt (`sider.ts`). Den ligger utenfor
+ * innloggingsveggen og sier ikke noe annet enn dette.
  */
+import type { Endringsomrade } from './sider'
 
 /** Det `versjon.json` inneholder. */
 export interface Byggopplysninger {
@@ -21,6 +24,12 @@ export interface Byggopplysninger {
    * (`oppdateringsversjon`). Mangler i bygg fra før feltet fantes.
    */
   oppdatering?: string
+  /**
+   * De nyeste føringene som varsles, nyest først, med sidene de gjelder
+   * (`endringsomrader`). Bare i `versjon.json`; mangler i bygg fra før feltet
+   * fantes, og da kan en ny versjon berøre alle sider.
+   */
+  endringer?: Endringsomrade[]
 }
 
 declare const __BYGG__: Byggopplysninger | undefined
@@ -31,6 +40,16 @@ export const KJORER: Byggopplysninger =
 
 /** Fila bygget legger ut, ved siden av `index.html`. */
 export const VERSJONSFIL = 'versjon.json'
+
+function erEndringsomrader(data: unknown): data is Endringsomrade[] {
+  return (
+    Array.isArray(data) &&
+    data.every((e: Partial<Record<keyof Endringsomrade, unknown>> | null) => {
+      if (typeof e?.versjon !== 'string') return false
+      return e.gjelder === undefined || (Array.isArray(e.gjelder) && e.gjelder.every((o) => typeof o === 'string'))
+    })
+  )
+}
 
 function erByggopplysninger(data: unknown): data is Byggopplysninger {
   const { bygg, versjon, oppdatering } = (data ?? {}) as Partial<Record<keyof Byggopplysninger, unknown>>
@@ -52,7 +71,14 @@ export async function hentUtlagtBygg(hent: typeof fetch = fetch): Promise<Byggop
     const svar = await hent(new URL(VERSJONSFIL, document.baseURI), { cache: 'no-store' })
     if (!svar.ok) return null
     const data: unknown = await svar.json()
-    return erByggopplysninger(data) ? data : null
+    if (!erByggopplysninger(data)) return null
+    // Sidene føringene gjelder, er et tillegg: kan de ikke leses, kan en ny
+    // versjon berøre alle sider, som før de fantes.
+    if (data.endringer !== undefined && !erEndringsomrader(data.endringer)) {
+      const { endringer: _uleselig, ...resten } = data
+      return resten
+    }
+    return data
   } catch {
     return null
   }

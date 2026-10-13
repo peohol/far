@@ -13,24 +13,49 @@ det. «Oppdater nå» laster siden på nytt, og det brukeren holdt på med komme
 tilbake: vinduene som sto åpne, skjemaer som var halvveis skrevet, valgene i
 fortolkningen, åpne seksjoner og hvor langt ned siden og vinduet var rullet.
 
+Meldingen står bare når den nye versjonen berører siden brukeren er på. Hver
+føring i endringsloggen sier hvilke sider den gjelder (`gjelder`, se
+`docs/endringslogg.md`), og `versjon.json` har med de nyeste føringene og
+sidene deres. Berører ingen av føringene etter versjonen som kjører, siden,
+står ingen melding. Da tas den nye versjonen i bruk i stillhet i neste rolige
+øyeblikk:
+
+- når brukeren går til en annen side (en seksjon på siden eller søket teller
+  ikke), eller
+- når fortolkningen nullstilles.
+
+Siden lastes da på nytt når brukeren har latt appen være i et sekund etterpå,
+uten rulleplassen fra siden hen forlot. Begynner hen å skrive, klikke eller
+rulle før det, venter appen til neste rolige øyeblikk, så ingen tastetrykk går
+tapt; står et vindu åpent, venter den også. Er siden hen nå står på, berørt,
+kommer meldingen.
+
+Meldingen kommer alltid når det ikke lar seg avgjøre hvilke sider som er
+berørt: en føring uten `gjelder`, et bygg fra før feltet fantes, en versjon som
+er for gammel til å stå blant de nyeste føringene i fila, eller en versjon som
+er trukket tilbake. Endringer i `vinduer` gir meldingen bare mens et vindu
+står åpent, og på innloggingssiden gir bare `hele appen` meldingen.
+
 En stille designjustering (uten føring) eller en føring med `utenVarsel` gir
-ingen melding; brukeren får den neste gang siden lastes. Unntaket er når en
-del av appen ikke lar seg laste fordi filene til bygget som kjører, er byttet
-ut: da kommer meldingen for et hvilket som helst nytt bygg.
+ingen melding og ingen oppdatering i stillhet; brukeren får den neste gang
+siden lastes. Unntaket er når en del av appen ikke lar seg laste fordi filene
+til bygget som kjører, er byttet ut: da kommer meldingen for et hvilket som
+helst nytt bygg, uansett side.
 
 ## Hvor det ligger
 
 | Hvor | Hva |
 | --- | --- |
 | `vite.config.ts` (`versjonsfil`) | Gir bygget en identitet (commiten på Vercel) og legger den med versjonsnummeret og versjonen det skal oppdateres til (`oppdateringsversjon`), i `versjon.json` |
-| `src/oppdatering/versjon.ts` | Leser `versjon.json` og avgjør om brukeren skal bes om å oppdatere: når versjonen det skal oppdateres til, er en annen enn den som kjører |
-| `src/components/Oppdateringsmelding.tsx` | Meldingen. Spør hvert minutt mens fanen er synlig, når fanen får fokus, og når en del av appen ikke lar seg laste |
+| `src/oppdatering/versjon.ts` | Leser `versjon.json` og avgjør om det er en ny versjon: når versjonen det skal oppdateres til, er en annen enn den som kjører |
+| `src/oppdatering/sider.ts` | Hvilke sider en ny versjon berører, siden brukeren er på (meldt av `App.tsx`), og de rolige øyeblikkene |
+| `src/components/Oppdateringsmelding.tsx` | Meldingen og oppdateringen i stillhet. Spør hvert minutt mens fanen er synlig, når fanen får fokus, og når en del av appen ikke lar seg laste |
 | `src/oppdatering/bevaring.ts` | Bildet av det som tas vare på, i fanens `sessionStorage`, og rullingen tilbake |
 | `src/oppdatering/Bevaring.tsx` | `useBevart`, `Bevaringsomrade` og `Bevaringseier` (brukeren det hører til, satt i `Port.tsx`) |
 
 `versjon.json` ligger utenfor innloggingsveggen, sammen med meldingen, så den
 virker også på innloggingssiden. Fila sier bare hvilket bygg og hvilke
-versjoner som er lagt ut.
+versjoner som er lagt ut, og hvilke sider de nyeste føringene gjelder.
 
 ## Å ta vare på ny tilstand
 

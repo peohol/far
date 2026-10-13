@@ -18,7 +18,8 @@ import { FORTOLKNINGSOPPFORINGER } from '../domain/analyttkatalog'
 import type { Ide } from '../ideer/modell'
 import { Bevaringseier, Bevaringsomrade, useBevart, type Bevaringsform } from '../oppdatering/Bevaring'
 import { GYLDIG_I, LAGRINGSNOKKEL, glemBildet, oppdaterOgTaVare, taBilde } from '../oppdatering/bevaring'
-import { KJORER, hentUtlagtBygg, nyVersjon } from '../oppdatering/versjon'
+import { berorer, berortAvNyVersjon, glemSider, meldSide, roligOyeblikk } from '../oppdatering/sider'
+import { KJORER, hentUtlagtBygg, nyVersjon, type Byggopplysninger } from '../oppdatering/versjon'
 import { fortolkningsform, initialState, type State } from '../state'
 
 const tilstand = vi.hoisted(() => ({ meg: null as unknown as Profil }))
@@ -84,6 +85,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup()
+  glemSider()
   vi.clearAllMocks()
   vi.useRealTimers()
 })
@@ -151,6 +153,64 @@ describe('versjonen som er lagt ut', () => {
     })
     expect(await hentUtlagtBygg(svar({ bygg: 'b', versjon: '1.2.1', oppdatering: 3 }))).toBeNull()
   })
+
+  it('leses med sidene de nyeste føringene gjelder, og uten dem når de ikke lar seg lese', async () => {
+    const endringer = [{ versjon: '1.3.0', gjelder: ['stoff'] }, { versjon: '1.2.0' }]
+    const fila = { bygg: 'b', versjon: '1.3.0', oppdatering: '1.3.0' }
+    expect(await hentUtlagtBygg(svar({ ...fila, endringer }))).toEqual({ ...fila, endringer })
+    expect(await hentUtlagtBygg(svar({ ...fila, endringer: 'stoff' }))).toEqual(fila)
+    expect(await hentUtlagtBygg(svar({ ...fila, endringer: [{ versjon: '1.3.0', gjelder: [3] }] }))).toEqual(fila)
+  })
+})
+
+/* --- Sidene en ny versjon berører ---------------------------------------- */
+
+describe('sidene en ny versjon berører', () => {
+  it('er siden området står for, og sidene under den', () => {
+    expect(berorer('fortolkning', 'fortolkning', false)).toBe(true)
+    expect(berorer('fortolkning', 'fortolkning/thc/rediger', false)).toBe(true)
+    expect(berorer('fortolkning/thc', 'fortolkning/thc/rediger', false)).toBe(true)
+    expect(berorer('fortolkning/thc', 'fortolkning', false)).toBe(false)
+    expect(berorer('fortolkning/thc', 'fortolkning/hbup', false)).toBe(false)
+    expect(berorer('fortolkning/*/rediger', 'fortolkning/hbup/rediger', false)).toBe(true)
+    expect(berorer('fortolkning/*/rediger', 'fortolkning/hbup', false)).toBe(false)
+    expect(berorer('stoff', 'stoff/bupropion', false)).toBe(true)
+    expect(berorer('stoff/bupropion', 'stoff/bupropion-x', false)).toBe(false)
+    expect(berorer('stoff', 'stoffregister', false)).toBe(false)
+  })
+
+  it('er alle sider for hele appen, og vinduene bare når et står åpent', () => {
+    expect(berorer('hele appen', 'sok', false)).toBe(true)
+    expect(berorer('hele appen', null, false)).toBe(true)
+    expect(berorer('vinduer', 'sok', false)).toBe(false)
+    expect(berorer('vinduer', 'sok', true)).toBe(true)
+    // På innloggingssiden er det ingen side.
+    expect(berorer('fortolkning', null, false)).toBe(false)
+  })
+
+  const endringer = [
+    { versjon: '1.4.0', gjelder: ['stoff'] },
+    { versjon: '1.3.0', gjelder: ['sok'] },
+    { versjon: '1.2.0' },
+  ]
+
+  it('er dem føringene etter versjonen som kjører, gjelder', () => {
+    expect(berortAvNyVersjon(endringer, '1.3.0', 'stoff/bupropion', false)).toBe(true)
+    expect(berortAvNyVersjon(endringer, '1.3.0', 'sok', false)).toBe(false)
+    expect(berortAvNyVersjon(endringer, '1.2.0', 'sok', false)).toBe(true)
+    expect(berortAvNyVersjon(endringer, '1.2.0', 'fortolkning', false)).toBe(false)
+  })
+
+  it('kan være alle sider når det ikke lar seg avgjøre', () => {
+    // En føring som ikke sier hvilke sider den gjelder.
+    expect(berortAvNyVersjon([{ versjon: '1.5.0' }, ...endringer], '1.4.0', 'sok', false)).toBe(true)
+    // Versjonen som kjører, er for gammel til å stå i lista, eller trukket tilbake.
+    expect(berortAvNyVersjon(endringer, '1.1.0', 'fortolkning', false)).toBe(true)
+    expect(berortAvNyVersjon(endringer, '1.5.0', 'fortolkning', false)).toBe(true)
+    // Fila sier ikke hvilke sider føringene gjelder.
+    expect(berortAvNyVersjon(undefined, '1.3.0', 'fortolkning', false)).toBe(true)
+    expect(berortAvNyVersjon(endringer, undefined, 'fortolkning', false)).toBe(true)
+  })
 })
 
 /* --- Meldingen ------------------------------------------------------------ */
@@ -215,6 +275,100 @@ describe('meldingen om en ny versjon', () => {
   })
 })
 
+describe('en ny versjon som ikke berører siden brukeren er på', () => {
+  /** Et nytt bygg med én føring etter den som kjører, som gjelder fagsidene. */
+  const fagsidebygg = async (): Promise<Byggopplysninger> => ({
+    bygg: 'nytt',
+    versjon: '99.0.0',
+    oppdatering: '99.0.0',
+    endringer: [{ versjon: '99.0.0', gjelder: ['stoff'] }, { versjon: KJORER.oppdatering ?? '' }],
+  })
+
+  function vis(side: string, stilleEtter = 20) {
+    meldSide(side)
+    const hent = vi.fn(fagsidebygg)
+    const oppdater = vi.fn()
+    const oppdaterStille = vi.fn()
+    render(<Oppdateringsmelding aktiv hent={hent} oppdater={oppdater} oppdaterStille={oppdaterStille} stilleEtter={stilleEtter} />)
+    return { hent, oppdater, oppdaterStille }
+  }
+
+  it('gir ingen melding, og tas i bruk i stillhet når brukeren går til en annen side', async () => {
+    const { hent, oppdaterStille } = vis('fortolkning/thc')
+    await waitFor(() => expect(hent).toHaveBeenCalled())
+    expect(screen.queryByRole('alert')).toBeNull()
+    expect(oppdaterStille).not.toHaveBeenCalled()
+
+    act(() => meldSide('sok'))
+    await waitFor(() => expect(oppdaterStille).toHaveBeenCalledOnce())
+    expect(screen.queryByRole('alert')).toBeNull()
+  })
+
+  it('tas i bruk i stillhet når fortolkningen nullstilles', async () => {
+    const { hent, oppdaterStille } = vis('fortolkning')
+    await waitFor(() => expect(hent).toHaveBeenCalled())
+    act(() => roligOyeblikk())
+    await waitFor(() => expect(oppdaterStille).toHaveBeenCalledOnce())
+  })
+
+  it('venter når brukeren er i gang igjen med én gang, og gir meldingen på en side den berører', async () => {
+    const { hent, oppdaterStille } = vis('fortolkning', 200)
+    await waitFor(() => expect(hent).toHaveBeenCalled())
+    act(() => meldSide('stoff/bupropion'))
+    // Mens appen venter på et rolig øyeblikk, står ingen melding.
+    expect(screen.queryByRole('alert')).toBeNull()
+    act(() => void window.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' })))
+    expect(await screen.findByRole('alert')).toBeTruthy()
+    await new Promise((r) => setTimeout(r, 250))
+    expect(oppdaterStille).not.toHaveBeenCalled()
+  })
+
+  it('gir meldingen med én gang når den berører siden', async () => {
+    const { oppdaterStille } = vis('stoff/bupropion')
+    expect(await screen.findByRole('alert')).toBeTruthy()
+    // Går brukeren videre, tas den likevel i bruk i stillhet.
+    act(() => meldSide('fortolkning'))
+    await waitFor(() => expect(oppdaterStille).toHaveBeenCalledOnce())
+  })
+
+  it('oppdaterer ikke i stillhet mens et vindu står åpent', async () => {
+    const { hent, oppdaterStille } = vis('fortolkning')
+    await waitFor(() => expect(hent).toHaveBeenCalled())
+    const lag = document.createElement('dialog')
+    lag.setAttribute('open', '')
+    document.body.append(lag)
+    act(() => meldSide('sok'))
+    await new Promise((r) => setTimeout(r, 60))
+    expect(oppdaterStille).not.toHaveBeenCalled()
+    expect(screen.queryByRole('alert')).toBeNull()
+    lag.remove()
+  })
+
+  it('gir meldingen når en del av appen ikke lar seg laste', async () => {
+    const { hent } = vis('fortolkning')
+    await waitFor(() => expect(hent).toHaveBeenCalled())
+    expect(screen.queryByRole('alert')).toBeNull()
+    act(() => void window.dispatchEvent(new Event('vite:preloadError')))
+    expect(await screen.findByRole('alert')).toBeTruthy()
+  })
+
+  it('gir meldingen for en endring i vinduene bare mens et vindu står åpent', async () => {
+    meldSide('sok')
+    const hent = vi.fn(async () => ({
+      ...(await fagsidebygg()),
+      endringer: [{ versjon: '99.0.0', gjelder: ['vinduer'] }, { versjon: KJORER.oppdatering ?? '' }],
+    }))
+    render(<Oppdateringsmelding aktiv hent={hent} oppdaterStille={vi.fn()} />)
+    await waitFor(() => expect(hent).toHaveBeenCalled())
+    expect(screen.queryByRole('alert')).toBeNull()
+    const lag = document.createElement('dialog')
+    document.body.append(lag)
+    act(() => lag.setAttribute('open', ''))
+    expect(lag.contains(await screen.findByRole('alert'))).toBe(true)
+    lag.remove()
+  })
+})
+
 /* --- Det som tas vare på --------------------------------------------------- */
 
 function Teller({ navn = 'teller', start = 0 }: { navn?: string; start?: number }) {
@@ -227,6 +381,17 @@ function Teller({ navn = 'teller', start = 0 }: { navn?: string; start?: number 
 }
 
 describe('det som tas vare på gjennom en oppdatering', () => {
+  it('tar ikke med rullingen ved en oppdatering i stillhet, der den hører til siden brukeren forlot', () => {
+    const rulling = () => JSON.parse(sessionStorage.getItem(LAGRINGSNOKKEL) ?? '{}').rulling
+    Object.defineProperty(window, 'scrollY', { value: 300, configurable: true })
+    oppdaterOgTaVare(vi.fn())
+    expect(rulling()).toEqual([{ lag: null, topp: 300 }])
+    oppdaterOgTaVare(vi.fn(), { rulling: false })
+    expect(rulling()).toEqual([])
+    Object.defineProperty(window, 'scrollY', { value: 0, configurable: true })
+    sessionStorage.clear()
+  })
+
   it('kommer tilbake én gang, i den nye versjonen, med områdene rundt i navnet', async () => {
     render(
       <Bevaringsomrade navn="side">

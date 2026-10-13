@@ -42,7 +42,7 @@ import { ANALYSEMETODER, filtrertPool } from './domain/analysemetoder'
 import { FORTOLKNINGSOPPFORINGER, byggKatalog } from './domain/analyttkatalog'
 import { alternativFor, ETG_ALTERNATIVER, type EtgAlternativ } from './domain/etg'
 import type { Rute } from './domain/flytting'
-import { erRedigering, fortolkningsnokkel, fortolkningsrute, lesRute, redigeringsrute } from './domain/rute'
+import { erRedigering, fortolkningsnokkel, fortolkningsrute, lesRute, redigeringsrute, sidesti } from './domain/rute'
 import { analytterForFortolkning, stoffbeskrivelse, stofferForFortolkning } from './domain/koblinger'
 import { rusModulFor } from './domain/rus'
 import { THC_KODE } from './domain/thc'
@@ -88,6 +88,7 @@ import { useKontotema } from './hooks/useKontotema'
 import { lesPubliserteRegelsett } from './regler/kommentarer'
 import { slaOpp } from './regler/publiserte'
 import { useBevart } from './oppdatering/Bevaring'
+import { meldSide, roligOyeblikk } from './oppdatering/sider'
 import { fortolkningsform, initialState, isIdle, reducer, stageOf, type Action, type Stage } from './state'
 import type { Analyte } from './types'
 
@@ -155,6 +156,12 @@ export default function App() {
   const katalog = useMemo(() => byggKatalog(alleAnalytter), [alleAnalytter])
   const [rute, gaaTil] = useRute(apneFraAdressen)
   const paaInfoside = rute.side === 'stoff'
+  // Siden brukeren er på, for meldingen om en ny versjon: den står bare når
+  // versjonen berører siden, og å gå til en annen side er et rolig øyeblikk
+  // der den kan tas i bruk i stillhet (`src/oppdatering/sider.ts`).
+  const side = sidesti(rute)
+  useEffect(() => meldSide(side), [side])
+  useEffect(() => () => meldSide(null), [])
 
   const faginnhold = useMemo<Faginnholdskilde>(
     () => ({
@@ -473,6 +480,8 @@ export default function App() {
     slippBildet()
     setFailedCopy(null)
     dispatch({ type: 'nullstill' })
+    // En fortolkning som er nullstilt, har ingenting å miste.
+    roligOyeblikk()
   }, [slippBildet])
 
   useEffect(() => () => window.clearTimeout(stegbytte.current), [])
