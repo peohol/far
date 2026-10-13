@@ -1,0 +1,12 @@
+{
+  "versjon": 1,
+  "stoffer": ["citalopram"],
+  "oppgaver": ["spc"],
+  "spc": {
+    "adresser": [
+      "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08150.pdf",
+      "https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4251.pdf"
+    ]
+  },
+  "referanse": "infrastrukturtest uten testbruker"
+}
