@@ -141,7 +141,11 @@ En kontroll har `id`, `status`, `melding` (på norsk), og eventuelt `rpc`,
 
 Funksjonstesten tar ikke med det appen fikk fra kallene, bare om det virket
 og hvor mye som kom (`antall`). Meldingene nevner ikke innhold, navn eller
-ID-er fra fagsiden.
+ID-er fra fagsiden. En feil fra databasen eller appen står bare med typen og
+koden, f.eks. «les_stoff feilet (kode 22P02, HTTP 400; teksten publiseres
+ikke)», aldri med teksten, som kan ha med data bak innloggingen
+(`offentligFeil` i `src/kuratorjobb/modell.ts`). Gjør det samme kallet selv
+for å se hele feilen. Det samme gjelder `feil` i `status.json`.
 
 ### Preparatomtalene
 
@@ -197,8 +201,7 @@ at det ble ett bilde per side (`sidebilder`). Sidebildene er PNG i gråtoner,
   hentes, avhenger av GitHub-verktøyet kuratoren har: noen gir filinnholdet
   direkte, andre som base64, og noen bare tekstfiler. Tekstfilene og JSON-en
   kan alle hente. Prøv `sider/side-001.png` i første pilot; går det ikke,
-  finnes de samme filene i kjøringen i Actions, og tekstuttrekket og
-  `avsnitt_4_8` står uansett.
+  står tekstuttrekket og `avsnitt_4_8` uansett.
 - **Tiden.** En jobb starter som regel innen et minutt etter commiten, men
   GitHub kan bruke lenger tid. Funksjonstesten tar sekunder per stoff;
   preparatomtalene rundt ti sekunder per fil. `status.json` med `kjorer` og

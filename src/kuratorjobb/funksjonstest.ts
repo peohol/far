@@ -4,8 +4,8 @@
  * kontrollerer at hver del kan leses og settes sammen slik siden viser den.
  *
  * Resultatet er offentlig (jobbgrenene ligger i et offentlig repo), så det
- * har bare utfall, tall og tekniske meldinger, aldri innholdet appen leste:
- * det er bak innloggingen.
+ * har bare utfall, tall og faste meldinger, aldri innholdet appen leste eller
+ * teksten i en feil (`offentligFeil`): det er bak innloggingen.
  *
  * Testen endrer ingenting. Den sammenligner ikke med noen fasit for
  * innholdet — det er kuratorens arbeid — men finner ut om appens faktiske
@@ -26,7 +26,7 @@ import { byggInteraksjoner, interaksjonsnokler } from '../legemiddeldata/interak
 import { lagLegemiddelleser, type Legemiddelutvalg } from '../legemiddeldata/lesing'
 import { byggPreparatvisning } from '../legemiddeldata/preparatmodell'
 import { koblede } from '../legemiddeldata/stoffside'
-import { samletStatus, type Kontroll, type Utfall } from './modell'
+import { offentligFeil, samletStatus, type Kontroll, type Utfall } from './modell'
 
 /** Data som er eldre enn dette, gir en advarsel. Synkroniseringene går hver natt (FEST) eller hver uke (ClinPGx). */
 export const FERSKHET_DAGER = { fest: 3, clinpgx: 10 } as const
@@ -42,7 +42,6 @@ export interface Funksjonstestvalg {
 }
 
 const ms = (start: number) => Math.round(performance.now() - start)
-const feiltekst = (e: unknown) => (e instanceof Error ? e.message : String(e))
 
 function alder(kl: string | null, na: Date): number | null {
   if (!kl) return null
@@ -54,7 +53,7 @@ function alder(kl: string | null, na: Date): number | null {
 export async function kontrollerBruker(klient: SupabaseClient): Promise<Kontroll[]> {
   const start = performance.now()
   const { data, error } = await klient.rpc('er_admin', {})
-  if (error) return [{ id: 'bruker', status: 'feil', melding: `Kunne ikke slå opp rollen: ${error.message}`, rpc: 'er_admin', ms: ms(start) }]
+  if (error) return [{ id: 'bruker', status: 'feil', melding: `Kunne ikke slå opp rollen (${offentligFeil(error)}).`, rpc: 'er_admin', ms: ms(start) }]
   return [
     data === false
       ? { id: 'bruker', status: 'ok', melding: 'Testbrukeren er en vanlig innlogget bruker, ikke administrator.', rpc: 'er_admin', ms: ms(start) }
@@ -84,7 +83,7 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
       legg({ id, rpc, ms: ms(start), ...vurder(resultat) })
       return resultat
     } catch (e) {
-      legg({ id, rpc, ms: ms(start), status: 'feil', melding: `${rpc} feilet: ${feiltekst(e)}` })
+      legg({ id, rpc, ms: ms(start), status: 'feil', melding: `${rpc} feilet (${offentligFeil(e)}).` })
       return undefined
     }
   }
@@ -95,7 +94,7 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
       arbeid()
       legg({ id, status: 'ok', melding: `${hva} kan bygges av svaret.` })
     } catch (e) {
-      legg({ id, status: 'feil', melding: `${hva} kan ikke bygges av svaret: ${feiltekst(e)}` })
+      legg({ id, status: 'feil', melding: `${hva} kan ikke bygges av svaret (${offentligFeil(e)}).` })
     }
   }
 
@@ -119,7 +118,7 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
       legg({ id: 'sidemodell', status: 'ok', melding: 'Siden kan settes sammen slik appen viser den.' })
       return m
     } catch (e) {
-      legg({ id: 'sidemodell', status: 'feil', melding: `Siden kan ikke settes sammen: ${feiltekst(e)}` })
+      legg({ id: 'sidemodell', status: 'feil', melding: `Siden kan ikke settes sammen (${offentligFeil(e)}).` })
       return null
     }
   })()
@@ -164,7 +163,7 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
       const funnet = new Set(u.virkestoff.map((v) => v.id))
       const mangler = virkestoff.filter((id) => !funnet.has(id))
       const antall = { virkestoff: u.virkestoff.length, merkevarer: u.merkevarer.length, pakninger: u.pakninger.length }
-      if (mangler.length > 0) return { status: 'feil', melding: `Virkestoff siden er koblet til, finnes ikke i FEST-kopien: ${mangler.join(', ')}`, antall }
+      if (mangler.length > 0) return { status: 'feil', melding: `${mangler.length} av virkestoffene siden er koblet til, finnes ikke i FEST-kopien.`, antall: { ...antall, mangler: mangler.length } }
       const dager = alder(u.kontrollert_kl, na())
       if (dager === null || dager > FERSKHET_DAGER.fest) {
         return { status: 'advarsel', melding: `FEST-kopien ble sist kontrollert ${u.kontrollert_kl ?? 'aldri'}.`, antall }
@@ -189,7 +188,7 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
   {
     const start = performance.now()
     const { data, error } = await klient.rpc('les_bivirkninger', { stoff })
-    if (error) legg({ id: 'bivirkninger', rpc: 'les_bivirkninger', ms: ms(start), status: 'feil', melding: `les_bivirkninger feilet: ${error.message}` })
+    if (error) legg({ id: 'bivirkninger', rpc: 'les_bivirkninger', ms: ms(start), status: 'feil', melding: `les_bivirkninger feilet (${offentligFeil(error)}).` })
     else {
       const rader = Array.isArray((data as { bivirkninger?: unknown } | null)?.bivirkninger) ? (data as { bivirkninger: unknown[] }).bivirkninger.length : 0
       const lest = lesBivirkningsdata(data)
@@ -216,11 +215,11 @@ export async function funksjonstest(klient: SupabaseClient, stoff: string, { na 
   } else {
     const pgx = await kall<Farmakogenetikkutvalg>('clinpgx', 'les_farmakogenetikk', () => lagFarmakogenetikkleser(klient).les(kjemikalier), (u) => {
       const statuser = kjemikaliestatuser(u, kobling!)
-      const ikkeHentet = statuser.filter((s) => !s.sist_hentet_kl).map((s) => s.id)
-      const feilet = statuser.filter((s) => s.feil || !s.finnes).map((s) => `${s.id}${s.feil ? ` (${s.feil})` : ' (finnes ikke i ClinPGx)'}`)
+      const ikkeHentet = statuser.filter((s) => !s.sist_hentet_kl).length
+      const feilet = statuser.filter((s) => s.feil || !s.finnes).length
       const antall = { kjemikalier: statuser.length, retningslinjer: u.retningslinjer.length, preparatomtaler: u.preparatomtaler.length, kliniske: u.kliniske.length }
-      if (ikkeHentet.length > 0) return { status: 'advarsel', melding: `Kjemikalier som ikke er hentet fra ClinPGx ennå: ${ikkeHentet.join(', ')}`, antall }
-      if (feilet.length > 0) return { status: 'advarsel', melding: `Kjemikalier med feil ved siste henting: ${feilet.join(', ')}`, antall }
+      if (ikkeHentet > 0) return { status: 'advarsel', melding: `${ikkeHentet} av kjemikaliene er ikke hentet fra ClinPGx ennå.`, antall: { ...antall, ikke_hentet: ikkeHentet } }
+      if (feilet > 0) return { status: 'advarsel', melding: `${feilet} av kjemikaliene hadde feil ved siste henting, eller finnes ikke i ClinPGx.`, antall: { ...antall, feilet } }
       const dager = alder(u.kontrollert_kl, na())
       if (dager === null || dager > FERSKHET_DAGER.clinpgx) return { status: 'advarsel', melding: `ClinPGx ble sist synkronisert ${u.kontrollert_kl ?? 'aldri'}.`, antall }
       return { status: 'ok', melding: `ClinPGx-dataene ble lest (synkronisert ${u.kontrollert_kl}).`, antall }

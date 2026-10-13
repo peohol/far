@@ -129,3 +129,32 @@ export interface Stoffstatus {
 export function resultatfil(oppgave: Oppgave, stoff: string): string {
   return `${RESULTATMAPPE}/${stoff}/${oppgave}.json`
 }
+
+/**
+ * En feil slik den kan stå i det offentlige resultatet og i loggen: hva slags
+ * feil det er og koden fra databasen, aldri teksten. Repoet er offentlig, og
+ * teksten i en feil fra databasen eller appen kan ha med data som ellers
+ * krever innlogging (f.eks. en verdi i en Postgres-melding). Kuratoren finner
+ * detaljene ved å gjøre det samme kallet selv.
+ */
+export function offentligFeil(e: unknown): string {
+  const felt = (navn: string, monster: RegExp): string | null => {
+    const v = typeof e === 'object' && e !== null ? (e as Record<string, unknown>)[navn] : undefined
+    const tekst = typeof v === 'number' ? String(v) : v
+    return typeof tekst === 'string' && monster.test(tekst) ? tekst : null
+  }
+  const deler = [
+    // Klassen, som TypeError, eller en egen feiltype i appen.
+    e instanceof Error && /^[A-Za-z]{1,40}$/.test(e.name) && e.name !== 'Error' ? e.name : null,
+    // SQLSTATE fra Postgres (22P02) eller PostgRESTs koder (PGRST116).
+    (() => {
+      const kode = felt('code', /^[A-Z0-9]{1,10}$/)
+      return kode ? `kode ${kode}` : null
+    })(),
+    (() => {
+      const status = felt('status', /^[1-5]\d\d$/)
+      return status ? `HTTP ${status}` : null
+    })(),
+  ].filter(Boolean)
+  return `${deler.length > 0 ? deler.join(', ') : 'uten kode'}; teksten publiseres ikke`
+}

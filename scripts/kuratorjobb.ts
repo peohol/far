@@ -38,6 +38,7 @@ import {
   KURATORJOBBVERSJON,
   RESULTATMAPPE,
   SPCGRENSER,
+  offentligFeil,
   STATUSFIL,
   resultatfil,
   samletStatus,
@@ -293,7 +294,7 @@ async function spc(klient: SupabaseClient | null, stoff: string, valg: NonNullab
           : { id: 'fest', status: valg.adresser ? 'ikke_aktuelt' : 'feil', melding: 'Siden finnes ikke eller er ikke koblet til FEST; FEST oppgir ingen preparatomtaler.' },
       )
     } catch (e) {
-      kontroller.push({ id: 'fest', status: 'feil', melding: `Kunne ikke lese preparatomtalene i FEST: ${e instanceof Error ? e.message : String(e)}` })
+      kontroller.push({ id: 'fest', status: 'feil', melding: `Kunne ikke lese preparatomtalene i FEST (${offentligFeil(e)}).` })
     }
   } else {
     kontroller.push({
@@ -331,6 +332,7 @@ async function spc(klient: SupabaseClient | null, stoff: string, valg: NonNullab
     try {
       svar = await hentPdf(adresse)
     } catch (e) {
+      // Feilene fra hentingen og PDF-verktøyene gjelder bare DMPs offentlige filer, og tas med som de er.
       rad.kontroller.push({ id: 'henting', status: 'feil', melding: `Kunne ikke hente fila: ${e instanceof Error ? e.message : String(e)}` })
       continue
     }
@@ -483,7 +485,7 @@ if (kommando === 'gren') {
   try {
     await kjor(status, tekst, ferdig)
   } catch (e) {
-    status.feil.push(`Jobben stoppet uventet: ${e instanceof Error ? e.message : String(e)}`)
+    status.feil.push(`Jobben stoppet uventet (${offentligFeil(e)}).`)
     ferdig()
   }
 }

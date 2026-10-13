@@ -17,7 +17,7 @@ import { lagFaginnholdsleser } from '../faginnhold/lesing'
 import { publiseringsplan } from '../faginnhold/stoffside'
 import { foresporselFraFelter, lesForesporsel, MAKS_STOFFER } from '../kuratorjobb/foresporsel'
 import { funksjonstest, kontrollerBruker } from '../kuratorjobb/funksjonstest'
-import { JOBBGREN, JOBBMAPPE, samletStatus, type Kontroll } from '../kuratorjobb/modell'
+import { JOBBGREN, JOBBMAPPE, offentligFeil, samletStatus, type Kontroll } from '../kuratorjobb/modell'
 import { AVSNITT_4_8, erDmpAdresse, festomtaler, finnAvsnitt, kontrollerPdfsvar, lesPdfinfo, vurderDekning, type Festomtaler, type Pdfsvar } from '../kuratorjobb/spc'
 import type { Legemiddelutvalg } from '../legemiddeldata/lesing'
 import { SITERING } from '../faginnhold/referanser'
@@ -368,6 +368,25 @@ describe('dekningen av preparatomtalene', () => {
   })
 })
 
+describe('feilene i det offentlige resultatet', () => {
+  const hemmelig = 'Syntetisk hemmelig verdi'
+
+  it('har typen og koden, aldri teksten', () => {
+    expect(offentligFeil({ message: `invalid input syntax for type uuid: "${hemmelig}"`, code: '22P02', details: hemmelig, hint: hemmelig })).toBe(
+      'kode 22P02; teksten publiseres ikke',
+    )
+    expect(offentligFeil({ message: hemmelig, code: 'PGRST116', status: 406 })).toBe('kode PGRST116, HTTP 406; teksten publiseres ikke')
+    expect(offentligFeil(new TypeError(hemmelig))).toBe('TypeError; teksten publiseres ikke')
+    expect(offentligFeil(new Error(hemmelig))).toBe('uten kode; teksten publiseres ikke')
+    expect(offentligFeil(hemmelig)).toBe('uten kode; teksten publiseres ikke')
+    // Felt som ikke ser ut som en kode, tas ikke med.
+    expect(offentligFeil({ code: hemmelig, status: hemmelig })).toBe('uten kode; teksten publiseres ikke')
+    const navngitt = new Error(hemmelig)
+    navngitt.name = hemmelig
+    expect(offentligFeil(navngitt)).not.toContain(hemmelig)
+  })
+})
+
 describe('det samlede utfallet', () => {
   it('er det verste, og ok når alt annet ikke er aktuelt', () => {
     expect(samletStatus([])).toBe('ok')
@@ -467,7 +486,8 @@ describe('funksjonstesten', () => {
   it('fortsetter når ett kall feiler, og melder rader appen ville forkastet', async () => {
     const klient = {
       rpc: async (funksjon: string, argumenter?: Record<string, unknown>) => {
-        if (funksjon === 'les_legemidler') return { data: null, error: { message: 'syntetisk feil' } }
+        if (funksjon === 'les_legemidler') return { data: null, error: { message: 'Syntetisk hemmelig verdi', code: '22P02' } }
+        if (funksjon === 'les_cpic') throw new TypeError('Syntetisk hemmelig verdi')
         if (funksjon === 'les_bivirkninger') {
           return {
             data: {
@@ -481,7 +501,10 @@ describe('funksjonstesten', () => {
       },
     } as unknown as SupabaseClient
     const resultat = await funksjonstest(klient, 'amitriptylin')
-    expect(resultat.kontroller.find((k) => k.id === 'fest')).toMatchObject({ status: 'feil', melding: 'les_legemidler feilet: syntetisk feil' })
+    expect(resultat.kontroller.find((k) => k.id === 'fest')).toMatchObject({ status: 'feil', melding: 'les_legemidler feilet (uten kode; teksten publiseres ikke).' })
+    expect(resultat.kontroller.find((k) => k.id === 'cpic')).toMatchObject({ status: 'feil', melding: 'les_cpic feilet (TypeError; teksten publiseres ikke).' })
+    // Teksten i feilene fra databasen og appen kommer aldri med i resultatet.
+    expect(JSON.stringify(resultat)).not.toContain('hemmelig')
     expect(resultat.kontroller.find((k) => k.id === 'bivirkninger')).toMatchObject({ status: 'feil', antall: { rader: 1, rader_appen_viser: 0 } })
     expect(utfall(resultat.kontroller)).toMatchObject({ les_stoff: 'ok', clinpgx: 'advarsel' })
   })
