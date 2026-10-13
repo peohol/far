@@ -1,18 +1,59 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "ok",
   "jobb": {
     "gren": "kuratorjobb/citalopram-de-novo-pilot-20261013",
     "foresporsel_commit": "cfa77d64b1bffce7c36ad4d904cc213dfe3e734b",
     "foresporsel_sha256": "9ef6b12a7cbdb85d5e3437edec368564cf59ccc79d68eee984ba7a3706cb4643",
     "kode_commit": "8a32eb49143a440dfce9308f5b0c1365e68454b9",
     "kjoring": "https://github.com/peohol/far/actions/runs/38438360166",
-    "startet_kl": "2026-10-13T17:24:43.506Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-13T17:24:45.600Z",
+    "ferdig_kl": "2026-10-13T17:25:15.100Z"
   },
-  "foresporsel": null,
-  "referanse": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "citalopram"
+    ],
+    "oppgaver": [
+      "funksjonstest",
+      "spc"
+    ],
+    "spc": {
+      "maks": 50,
+      "dpi": 180
+    },
+    "referanse": "citalopram-de-novo-pilot-2026-10-13"
+  },
+  "referanse": "citalopram-de-novo-pilot-2026-10-13",
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 1111
+    }
+  ],
+  "stoffer": {
+    "citalopram": {
+      "status": "ok",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/citalopram/funksjonstest.json"
+        },
+        "spc": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/citalopram/spc.json"
+        }
+      }
+    }
+  }
 }

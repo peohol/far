@@ -1,0 +1,56 @@
+ECT (elektrokonvulsiv behandling)
+Det foreligger ingen kliniske studier som fastslår risiko eller nytte ved samtidig bruk av
+elektrokonvulsiv behandling (ECT) og citalopram (se pkt. 4.4).
+
+
+
+
+Farmakokinetiske interaksjoner:
+
+Biotransformasjon av citalopram til demetylcitalopram medieres av isoenzymene: CYP2C19- (ca.
+38 %), CYP3A4- (ca. 31 %) og CYP2D6- (ca. 31 %) i cytokrom P450-systemet. Det faktum at
+citalopram metaboliseres av flere CYP betyr at hemming av biotransformasjonen er lite sannsynlig,
+siden hemming av ett enzym kan kompenseres av et annet. Det er defor lite sannsynlig at samtidig
+administrering av citalopram med andre legemidler gir farmakokinetiske interaksjoner i klinisk
+praksis.
+
+Mat
+Det er ikke rapportert at absorpsjon og andre farmakokinetiske egenskaper ved citalopram påvirkes av
+matinntak.
+
+Effekten av andre legemidler på farmakokinetikken til citalopram:
+Samtidig administrasjon med ketokonazol (en potent CYP3A4-hemmer) endret ikke
+farmakokinetikken til citalopram.
+
+En farmakokinetisk studie av litium og citalopram viste ingen farmakokinetiske interaksjoner (se
+over).
+
+Cimetidin
+Cimetidin, en potent CYP2D6, 3A4 og 1A2-enzymhemmer, ga en moderat økning i gjennomsnittlig
+steady state-nivåer av citalopram. Forsiktighet anbefales ved administrering av citalopram i
+kombinasjon med cimetidin.. Samtidig administrering av escitalopram (den aktive enantiomeren av
+citalopram) og omeprazol 30 mg én gang daglig (en CYP2C19-hemmer) førte til moderat (ca. 50 %)
+økning i plasmakonsentrasjonen til escitalopram. Forsiktighet bør derfor utvises ved samtidig bruk av
+CYP 2C19-hemmere (f.eks. omeprazol, esomeprazol, flukonazol, fluvoksamin, lansoprazol,
+tiklopidin) eller cimetidin. En reduksjon i citalopramdosen kan være nødvendig basert på overvåking
+av bivirkninger ved samtidig bruk av CYP2C19-hemmere.
+
+Metoprolol
+Escitalopram (den aktive enantiomeren av citalopram) er en hemmer av enzymet CYP2D6.
+Forsiktighet bør utvises ved bruk av citalopram i kombinasjon med legemidler som hovedsakelig
+metaboliseres via dette enzymet, og som har et smalt terapeutisk vindu, f.eks. flekainid, propafenon og
+metoprolol (når brukt ved hjertesvikt) eller enkelte CNS-virkende legemidler som i hovedsak
+metaboliseres via CYP2D6, f.eks. antidepressiva som desipramin, klomipramin og nortriptylin, eller
+antipsykotika som risperidon, tioridazin og haloperidol. Dosejustering kan være nødvendig. Samtidig
+administrering med metoprolol førte til en dobling i plasmanivåene av metoprolol, men ga ingen
+statistisk signifikant økning i effekten av metoprolol på blodtrykk og hjertefrekvens.
+
+Effekten av citalopram på andre legemidler:
+En farmakokinetisk/farmakodynamisk interaksjonsstudie med samtidig administrering av citalopram
+og metoprolol (et CYP2D6-substrat) førte til en dobling i plasmanivåene av metoprolol, men ingen
+statistisk signifikant økning i effekten av metoprolol på blodtrykk eller hjertefrekvens ble sett hos
+friske frivillige. Det anbefales å utvise forsiktighet når citalopram administreres sammen med
+metoprolol. Dosejustering kan være nødvendig.
+
+
+                                                    8
