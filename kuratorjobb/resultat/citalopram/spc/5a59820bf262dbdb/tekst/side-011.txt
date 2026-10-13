@@ -1,0 +1,57 @@
+MedDRA              Svært          Vanlige            Mindre              Sjeldne         Svært     Ikke kjent
+Organklasse-        vanlige                           vanlige                             sjeldne
+system
+                                   oppmerksom-                            smaks-                    ekstrapyramidal
+                                   hetforstyrrelse                        forstyrrelser             forstyrrelse,
+                                                                                                    akatisi,
+                                                                                                    bevegelses-
+                                                                                                    forstyrrelse
+Øye-sykdommer                                         Mydriasis                                     Syns-
+                                                                                                    forstyrrelser
+Sykdommer i øre                    Tinnitus
+og labyrint
+Hjertesykdom-                                         Bradykardi,                                   QT-forlengelse,
+mer                                                   takykardi                                     vetrikulær
+                                                                                                    arytmi inkludert
+                                                                                                    “torsade de
+                                                                                                    pointes”
+Karsyk-dommer                                                             Blødninger                Ortostatisk
+                                                                                                    hypotensjon
+Sykdommer i                        Gjesping,                                                        Epistakse
+respirasjons-
+organer, thorax
+og mediastinum
+Gastro-             Kvalme,        Diaré,                                                           Gastrointesinal
+intestinale         munntørrhet    forstoppelse,                                                    blødning
+sykdommer                          oppkast                                                          (inkludert
+                                                                                                    rektalblødning)
+Sykdommer i                                                               Hepatitt                  Unormale lever-
+lever og                                                                                            funksjonstester
+galleveier
+Hud- og             Økt svetting   Kløe               Urtikaria,                                    Angioødemer,
+underhuds-                                            alopesi, utslett,                             ekkymose
+sykdommer                                             purpura, lys-
+                                                      ømfintlighets-
+                                                      reaksjon
+Sykdommer i                        Myalgi, artralgi
+muskler,
+bindevev og
+skjelett
+Sykdommer i                                           Urinretensjon
+nyre og urinveier
+Lidelser i                         Impotens,          Kvinner:                                      Galaktoré
+kjønnsorganer                      ejakulasjons-      Menoragi                                      Kvinner:
+og bryst-                          forstyrrelser,                                                   Metroragi,
+sykdommer                          ejakulasjons-                                                    postpartum-
+                                   svikt                                                            blødning2
+                                                                                                    Menn:
+                                                                                                    Priapisme
+Generelle                          Utmattelse         Ødem                Feber
+lidelser og
+reaksjoner på ad-
+ministrasjons-
+stedet
+
+
+
+                                                            11
