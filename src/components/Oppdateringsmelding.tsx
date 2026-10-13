@@ -1,13 +1,30 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { useJevnligSjekk } from '../hooks/useJevnligSjekk'
 import { oppdaterOgTaVare } from '../oppdatering/bevaring'
-import { hentUtlagtBygg, nyVersjon, type Byggopplysninger } from '../oppdatering/versjon'
+import { berortAvNyVersjon, gjeldendeSide, lyttEtterSide, vedRoligOyeblikk, ventPaaRo } from '../oppdatering/sider'
+import { hentUtlagtBygg, KJORER, nyVersjon, type Byggopplysninger } from '../oppdatering/versjon'
 import { Ikon } from './ikon/Ikon'
 import '../styles/oppdatering.css'
 
 /** Hvor ofte appen spør om en ny versjon er lagt ut, mens fanen er synlig. */
 export const SJEKK_VERSJON_HVER = 60_000
+
+/**
+ * Hvor lenge brukeren må la appen være etter et rolig øyeblikk før den nye
+ * versjonen tas i bruk i stillhet. Er hen i gang igjen før det, venter appen
+ * til neste gang, så omlastingen ikke tar tastetrykk.
+ */
+export const STILLE_ETTER = 1_000
+
+/** Oppdaterer i stillhet: det brukeren holdt på med, kommer tilbake, men ikke rulleplassen på siden hen forlot. */
+const oppdaterIStillhet = () => oppdaterOgTaVare(undefined, { rulling: false })
+
+/** En ny versjon som er funnet, og om den ble funnet fordi en del av appen ikke lot seg laste. */
+interface Funnet {
+  bygg: Byggopplysninger
+  lastefeil: boolean
+}
 
 /**
  * Det øverste laget som står åpent: et modalt lag ligger over alt annet og
@@ -39,11 +56,21 @@ export function useOversteLag(aktiv: boolean): HTMLElement | null {
  * ikke lar seg laste, som skjer når filene til det gamle bygget er borte; da
  * holder det at bygget er et annet.
  *
+ * Meldingen står bare når den nye versjonen berører siden brukeren er på,
+ * eller vinduet som står åpent over den (`src/oppdatering/sider.ts`), eller
+ * når en del av appen ikke lar seg laste. Ellers tas versjonen i bruk i
+ * stillhet i neste rolige øyeblikk — når brukeren går til en annen side eller
+ * nullstiller fortolkningen — så sant hen ikke er i gang med noe igjen med én
+ * gang etterpå, og ikke noe vindu står åpent. Går brukeren til en side den
+ * berører, og er i gang før versjonen er tatt i bruk, kommer meldingen.
+ *
  * Meldingen forsvinner ikke av seg selv og kan ikke lukkes: den gamle
- * versjonen skal ikke brukes videre. «Oppdater nå» tar vare på det brukeren
- * holder på med — vinduer som står åpne, skjemaer som er halvveis skrevet,
- * valgene i fortolkningen og hvor langt ned siden er rullet — og laster siden
- * på nytt med den nye versjonen, der det kommer tilbake (`src/oppdatering/`).
+ * versjonen skal ikke brukes videre på en side den berører. «Oppdater nå»
+ * tar vare på det brukeren holder på med — vinduer som står åpne, skjemaer som
+ * er halvveis skrevet, valgene i fortolkningen og hvor langt ned siden er
+ * rullet — og laster siden på nytt med den nye versjonen, der det kommer
+ * tilbake (`src/oppdatering/`). En oppdatering i stillhet tar vare på det
+ * samme, bortsett fra rullingen.
  *
  * Står den i appens rot, virker den også på innloggingssiden.
  */
@@ -51,21 +78,32 @@ export function Oppdateringsmelding({
   aktiv = !import.meta.env.DEV,
   hent = hentUtlagtBygg,
   oppdater = oppdaterOgTaVare,
+  oppdaterStille = oppdaterIStillhet,
+  stilleEtter = STILLE_ETTER,
 }: {
   /** Av i utviklingsserveren, som ikke legger ut noen versjonsfil. */
   aktiv?: boolean
   hent?: () => Promise<Byggopplysninger | null>
   oppdater?: () => void
+  oppdaterStille?: () => void
+  stilleEtter?: number
 }) {
-  const [ny, setNy] = useState<Byggopplysninger | null>(null)
+  const [ny, setNy] = useState<Funnet | null>(null)
   const [oppdaterer, setOppdaterer] = useState(false)
+  /** Et rolig øyeblikk er nettopp kommet, og appen venter på å oppdatere i stillhet. */
+  const [venter, setVenter] = useState(false)
+  const side = useSyncExternalStore(lyttEtterSide, gjeldendeSide)
 
   const spor = useCallback(
     (alleBygg: boolean) => {
       if (!aktiv) return
       void hent().then((utlagt) => {
-        const funnet = nyVersjon(utlagt, undefined, { alleBygg })
-        if (funnet) setNy(funnet)
+        const bygg = nyVersjon(utlagt, undefined, { alleBygg })
+        if (!bygg) return
+        setNy((forrige) => {
+          const lastefeil = alleBygg || (forrige?.lastefeil ?? false)
+          return forrige?.bygg.bygg === bygg.bygg && forrige.lastefeil === lastefeil ? forrige : { bygg, lastefeil }
+        })
       })
     },
     [aktiv, hent],
@@ -82,14 +120,47 @@ export function Oppdateringsmelding({
     return () => window.removeEventListener('vite:preloadError', lastefeil)
   }, [spor])
 
-  const lag = useOversteLag(ny !== null)
+  // Når en ny versjon er funnet, tas den i bruk i stillhet i hvert rolige
+  // øyeblikk der brukeren ikke er i gang igjen med én gang, og ikke noe vindu
+  // står åpent. Det gjelder også når meldingen står.
+  const harNy = ny !== null
+  useEffect(() => {
+    if (!harNy) return
+    let avbryt: (() => void) | null = null
+    const stopp = vedRoligOyeblikk(() => {
+      avbryt?.()
+      setVenter(true)
+      avbryt = ventPaaRo(
+        stilleEtter,
+        () => {
+          avbryt = null
+          if (document.querySelector('dialog[open]')) setVenter(false)
+          else oppdaterStille()
+        },
+        () => {
+          avbryt = null
+          setVenter(false)
+        },
+      )
+    })
+    return () => {
+      stopp()
+      avbryt?.()
+    }
+  }, [harNy, oppdaterStille, stilleEtter])
+
+  const lag = useOversteLag(harNy)
   if (!ny || !lag) return null
+  const vinduApent = lag !== document.body
+  const berort = ny.lastefeil || berortAvNyVersjon(ny.bygg.endringer, KJORER.oppdatering, side, vinduApent)
+  // Har brukeren trykket «Oppdater nå», blir meldingen stående til siden lastes.
+  if (!oppdaterer && (venter || !berort)) return null
 
   return createPortal(
     <div className="oppdateringsmelding" role="alert">
       <p className="oppdateringsmelding__tekst">
-        <strong>En ny versjon av OUSFAR er klar{ny.versjon ? ` (${ny.versjon})` : ''}.</strong> Oppdater for å ta den i
-        bruk. Det du holder på med, blir stående.
+        <strong>En ny versjon av OUSFAR er klar{ny.bygg.versjon ? ` (${ny.bygg.versjon})` : ''}.</strong> Oppdater
+        for å ta den i bruk. Det du holder på med, blir stående.
       </p>
       <button
         type="button"

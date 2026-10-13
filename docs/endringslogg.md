@@ -58,6 +58,7 @@ alt inne på grenen: **rediger den**. Legg aldri til en føring nummer to.
   sammendrag: 'Én ekstremt kort linje om hva som ble gjort',
   typer: ['Funksjonalitet'],
   omfang: 'Mindre omfang',
+  gjelder: ['fortolkning/thc'], // Sidene endringen gjelder; se steg 4.
   punkter: [
     'Det konkrete, i vanlig språk.',
     'Ett punkt per ting brukeren vil merke.',
@@ -98,6 +99,28 @@ seg selv og trenger det ikke.
 når en databaseendring som alt er rullet ut, føres inn i koden (for eksempel
 `oppgaver_utfort_*`). Da blir føringen ikke et varsel, og appen ber ingen
 oppdatere siden for den.
+
+**`gjelder`** — sidene endringen gjelder. Brukerne bes bare om å oppdatere
+når de står på en av dem; ellers tas versjonen i bruk når de går til en annen
+side eller nullstiller fortolkningen (`docs/oppdatering.md`). Hver føring som
+varsles, skal ha den; en test krever det. Et område er siden slik den står i
+adressen, uten `#/` og uten seksjonen på siden, og gjelder også sidene under:
+
+| Område | Gjelder |
+| --- | --- |
+| `fortolkning` | Hele fortolkningen: søket, hver analytt og redigeringen av reglene |
+| `fortolkning/thc` | Fortolkningen av én analytt og redigeringen av den (nøkkelen fra adressen) |
+| `fortolkning/*/rediger` | Redigeringen av reglene, for alle analytter |
+| `stoff` | Alle fagsidene |
+| `stoff/bupropion` | Én fagside |
+| `sok` | Søkesiden i fagstoffet |
+| `stoffregister` | Stoffregisteret |
+| `vinduer` | Vinduene som åpnes over sidene, som idéene, varslene og endringsloggen |
+| `hele appen` | Noe som står på alle sider, som toppmenyen, sidemenyen og diskusjonene, eller noe felles for dem |
+
+Sett så mange områder som trengs. Gjelder endringen noe som står på alle sider,
+eller er du i tvil, bruk `hele appen`. En test kontrollerer at hvert område
+finnes, så en skrivefeil ikke lar brukerne stå på en gammel versjon.
 
 **Omfang** — ett merke, vurdert skjønnsmessig. Beskrivelsene er veiledende:
 

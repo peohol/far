@@ -254,6 +254,24 @@ export function stoffadresse(slug: string, sted: readonly string[] = []): string
   return ['#/stoff', ...[slug, ...sted].map(encodeURIComponent)].join('/')
 }
 
+/**
+ * Siden ruten står på, uten stedet på den og uten søket: `fortolkning`,
+ * `fortolkning/hbup`, `fortolkning/hbup/rediger`, `stoff/bupropion`, `sok` og
+ * `stoffregister`. Det er formen områdene i endringsloggen skrives på
+ * (`src/oppdatering/sider.ts`), og det som skifter når brukeren går til en
+ * annen side — ikke når en seksjon åpnes eller søket skrives om.
+ */
+export function sidesti(rute: Rute): string {
+  switch (rute.side) {
+    case 'stoff':
+      return `stoff/${rute.stoff}`
+    case 'fortolkning':
+      return ['fortolkning', rute.analytt, rute.rediger ? REDIGER : undefined].filter(Boolean).join('/')
+    default:
+      return rute.side
+  }
+}
+
 export function sammeRute(a: Rute, b: Rute): boolean {
   return adresse(a) === adresse(b)
 }

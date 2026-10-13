@@ -77,6 +77,7 @@ export const APNE_MODULER = new Map(
     'meldingen om en ny versjon, som også skal nå den som står på innloggingssiden': [
       'src/components/Oppdateringsmelding.tsx',
       'src/oppdatering/versjon.ts',
+      'src/oppdatering/sider.ts',
       'src/oppdatering/bevaring.ts',
       'src/oppdatering/Bevaring.tsx',
       'src/hooks/useJevnligSjekk.ts',

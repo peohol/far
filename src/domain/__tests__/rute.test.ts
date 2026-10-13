@@ -9,6 +9,7 @@ import {
   lesRute,
   redigeringsrute,
   sammeRute,
+  sidesti,
   sokeside,
   stoffadresse,
 } from '../rute'
@@ -145,5 +146,16 @@ describe('stoffregisteret', () => {
     expect(lesRute('#/stoffregister/')).toEqual({ side: 'stoffregister' })
     expect(adresse({ side: 'stoffregister' })).toBe('#/stoffregister')
     expect(sammeRute({ side: 'stoffregister' }, FORTOLKNING)).toBe(false)
+  })
+})
+
+describe('siden en rute står på', () => {
+  it('er adressen uten stedet på siden og uten søket', () => {
+    expect(sidesti(FORTOLKNING)).toBe('fortolkning')
+    expect(sidesti(fortolkningsrute('HBUP'))).toBe('fortolkning/hbup')
+    expect(sidesti(lesRute('#/fortolkning/hbup/rediger/fortolkning-dmi/simulator'))).toBe('fortolkning/hbup/rediger')
+    expect(sidesti(lesRute('#/stoff/bupropion/farmakokinetikk'))).toBe('stoff/bupropion')
+    expect(sidesti(lesRute(sokeside('kvetiapin')))).toBe('sok')
+    expect(sidesti(lesRute(STOFFREGISTERADRESSE))).toBe('stoffregister')
   })
 })

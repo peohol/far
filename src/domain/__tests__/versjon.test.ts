@@ -11,7 +11,21 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { ENDRINGSLOGG } from '../../data/endringslogg'
+import { berorer, HELE_APPEN, VINDUER } from '../../oppdatering/sider'
+import { FORTOLKNINGSOPPFORINGER } from '../analyttkatalog'
 import {
+  FORTOLKNING,
+  fortolkningsrute,
+  lesRute,
+  redigeringsrute,
+  sidesti,
+  sokeside,
+  STOFFREGISTERADRESSE,
+  type Rute,
+} from '../rute'
+import { STOFFREGISTER } from '../stoffregister'
+import {
+  endringsomrader,
   ENDRINGSTYPER,
   formaterDato,
   lesVersjon,
@@ -19,6 +33,7 @@ import {
   oppdateringsversjon,
   OMFANG,
   sammenlignVersjon,
+  varsles,
   type Endring,
 } from '../versjon'
 
@@ -92,6 +107,82 @@ describe('oppdateringsversjon', () => {
 
   it('finnes for loggen slik den står', () => {
     expect(() => oppdateringsversjon(ENDRINGSLOGG)).not.toThrow()
+  })
+})
+
+describe('endringsomrader', () => {
+  const foring = (versjon: string, ekstra: Partial<Endring> = {}): Endring => ({
+    versjon,
+    dato: '2026-09-30',
+    sammendrag: 'x',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: ['x'],
+    ...ekstra,
+  })
+
+  it('er de nyeste føringene som varsles, nyest først, med sidene de gjelder', () => {
+    const logg = [
+      foring('1.3.0', { gjelder: ['stoff'] }),
+      foring('1.2.1', { utenVarsel: true }),
+      foring('1.2.0'),
+      foring('1.1.0', { gjelder: ['sok'] }),
+    ]
+    expect(endringsomrader(logg)).toEqual([
+      { versjon: '1.3.0', gjelder: ['stoff'] },
+      { versjon: '1.2.0' },
+      { versjon: '1.1.0', gjelder: ['sok'] },
+    ])
+    expect(endringsomrader(logg, 2).map((e) => e.versjon)).toEqual(['1.3.0', '1.2.0'])
+  })
+})
+
+/** Den første versjonen der hver føring som varsles, må si hvilke sider den gjelder. */
+const FORSTE_MED_OMRADER = '1.90.0'
+
+/** Alle sidene i appen, slik områdene skrives (`sidesti`). */
+const ALLE_SIDER = [
+  FORTOLKNING,
+  ...FORTOLKNINGSOPPFORINGER.flatMap((a) => [fortolkningsrute(a.kode), redigeringsrute(a.kode)]),
+  ...STOFFREGISTER.stoffer.map((s): Rute => ({ side: 'stoff', stoff: s.slug })),
+  lesRute(sokeside('')),
+  lesRute(STOFFREGISTERADRESSE),
+].map(sidesti)
+
+/**
+ * Om området er et område appen kjenner: hele appen, vinduene, eller en eller
+ * flere sider som finnes. Et område med en skrivefeil ville aldri berørt noen
+ * side, og brukerne ville ikke blitt bedt om å oppdatere når de skulle.
+ */
+function kjentOmrade(omrade: string): boolean {
+  return omrade === HELE_APPEN || omrade === VINDUER || ALLE_SIDER.some((side) => berorer(omrade, side, false))
+}
+
+describe('områdene en føring gjelder', () => {
+  it('kjennes igjen når de er sider, og ikke ellers', () => {
+    const kjente = ['hele appen', 'vinduer', 'fortolkning', 'fortolkning/hbup', 'fortolkning/*/rediger', 'stoff']
+    for (const omrade of [...kjente, 'stoff/bupropion', 'sok', 'stoffregister']) {
+      expect(kjentOmrade(omrade), omrade).toBe(true)
+    }
+    const ukjente = ['alt', 'stoff/finnes-ikke', 'fortolkning/xyz', 'sok/kvetiapin', 'fortolkning/hbup/endre']
+    for (const omrade of [...ukjente, 'stoff/bupropion/farmakokinetikk', '']) {
+      expect(kjentOmrade(omrade), omrade).toBe(false)
+    }
+  })
+
+  it.each(ENDRINGSLOGG.filter((e) => e.gjelder).map((e) => [e.versjon, e] as const))(
+    '%s gjelder sider som finnes',
+    (_v, endring) => {
+      expect(endring.gjelder?.length, 'tom liste: bruk utenVarsel for en endring ingen merker').toBeGreaterThan(0)
+      for (const omrade of endring.gjelder ?? []) expect(kjentOmrade(omrade), omrade).toBe(true)
+    },
+  )
+
+  it(`er med i hver føring som varsles fra ${FORSTE_MED_OMRADER}`, () => {
+    const uten = ENDRINGSLOGG.filter(
+      (e) => sammenlignVersjon(e.versjon, FORSTE_MED_OMRADER) >= 0 && varsles(e) && !e.gjelder,
+    ).map((e) => e.versjon)
+    expect(uten, 'sett `gjelder` etter docs/endringslogg.md').toEqual([])
   })
 })
 
