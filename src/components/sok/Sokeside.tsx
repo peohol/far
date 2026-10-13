@@ -69,7 +69,7 @@ export function Sokeside({ q, indeks, onKrev, onProvIgjen, beskrivSide, onLukk }
 
   return (
     <section className="sokeside" aria-labelledby={overskrift}>
-      <ToppmenyInnhold spor="handlinger">
+      <ToppmenyInnhold spor="lukk">
         <Lukkeknapp onLukk={onLukk} />
       </ToppmenyInnhold>
 

@@ -115,10 +115,13 @@
      Den ene faste toppmenyen svever over innholdet. `--toppmeny-offset` er
      hvor mye av vinduet den tar øverst: innhold, ankere og scrollIntoView
      skal alltid legge seg under den. `--dokk-offset` er det samme nederst
-     på smale flater, der monografens handlinger ligger i en dokk. */
+     på smale flater, der sidens handlinger ligger i en dokk. Dokken er
+     `--hoyde-dokk` høy på én rad; når den går over to, setter `Toppmeny` den
+     målte høyden som `--dokkhoyde` på dokumentet. */
   --toppmeny-luft: var(--rom-5);
   --toppmeny-offset: calc(var(--hoyde-toppmeny) + 1.75rem);
-  --dokk-offset: calc(var(--hoyde-dokk) + 1.75rem);
+  --dokkhoyde: var(--hoyde-dokk);
+  --dokk-offset: calc(var(--dokkhoyde) + 1.75rem);
   --blur-toppmeny: 16px;
 
   /* --- Lag ----------------------------------------------------------------

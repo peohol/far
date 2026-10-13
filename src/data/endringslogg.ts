@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.92.1',
+    dato: '2026-10-13',
+    sammendrag: 'Menyen nederst på mobil går over to rader når knappene ikke får plass, i en fast rekkefølge',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff', 'stoffregister', 'fortolkning', 'sok'],
+    punkter: [
+      'På mobil går menyen nederst over to rader når knappene ikke får plass på én: søket på siden og hovedknappen, som «Åpne fortolkning», står øverst med hele teksten, og de andre knappene under. Får alt plass, står det på én rad som før.',
+      'Knappene står i samme rekkefølge overalt, både på én og to rader og i toppmenyen på større skjermer: søk, hovedknappen, favoritt, diskusjoner, endringslogg, rediger og «Mer», og «Lukk» alltid sist. Før kom klokken for endringsloggen etter «Lukk».',
+      'Mens du søker på siden, dekker søkefeltet bare den øverste raden, så de andre knappene står der fortsatt.',
+    ],
+  },
+  {
     versjon: '1.92.0',
     dato: '2026-10-13',
     sammendrag: 'Endringslogg på hver side med innhold: hvem som endret hva, og når',

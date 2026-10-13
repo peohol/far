@@ -83,7 +83,7 @@
   }
 
   body:has(.app:not([data-side='fortolkning']) .toppmeny__spor > *) > .oppdateringsmelding {
-    bottom: calc(var(--rom-4) + var(--hoyde-dokk) + var(--rom-3));
+    bottom: calc(var(--rom-4) + var(--dokkhoyde) + var(--rom-3));
   }
 }
 

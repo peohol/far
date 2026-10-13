@@ -281,7 +281,7 @@ venstre inneholder den:
 
 1. sidemenyen
 2. globalt fagsøk (`sok`)
-3. sidens egne plasser, `sidesok` og `handlinger`
+3. sidens egne plasser (`TOPPMENYSPOR` i `Toppmenykilde.tsx`)
 4. et skille
 5. idéene og, bare for administratorer, adminmenyen (`verktoy`)
 6. kontoen
@@ -292,8 +292,10 @@ Appen står i `ToppmenyKilde`. En side legger innhold i menyen med
 `ToppmenyInnhold`:
 
 ```tsx
-<ToppmenyInnhold spor="handlinger">
+<ToppmenyInnhold spor="hovedhandling">
   <Toppmenyknapp ikon="interp" variant="primar" …>Åpne fortolkning</Toppmenyknapp>
+</ToppmenyInnhold>
+<ToppmenyInnhold spor="lukk">
   <Lukkeknapp onLukk={lukk} />
 </ToppmenyInnhold>
 ```
@@ -302,16 +304,29 @@ Innholdet tegnes med en portal. Det står i menyen, men hører fortsatt til
 siden, med sidens tilstand og kontekster. Står siden uten toppmeny rundt seg,
 som i en test, blir innholdet stående i siden.
 
-- `handlinger`: brukes av fagsiden til «Åpne fortolkning», «Rediger» og
-  «Lukk». I redigeringsmodus står bare redigeringen der: status, «Publiser»
+Plassene står i en fast rekkefølge, i to grupper, uansett hvilken side eller
+komponent som la noe i dem først. Rekkefølgen er den samme i toppmenyen, på én
+rad i dokken og på to:
+
+| Gruppe | Plass | Brukes til |
+| --- | --- | --- |
+| `hoved` | `sidesok` | søket i den åpne siden |
+| | `hovedhandling` | sidens hovedhandling: «Åpne fortolkning», «Åpne fagside», «Publiser», «Ferdig» |
+| `handlinger` | `favoritt` | stjernen på fagsiden |
+| | `diskusjoner` | «Diskusjoner» (bare i dokken) |
+| | `endringslogg` | sidens endringslogg |
+| | `redigering` | «Rediger», «Mer for fagsiden» og statusen mens siden redigeres |
+| | `lukk` | «Lukk» eller «Avslutt redigering», alltid sist |
+
+- I redigeringsmodus står bare redigeringen i plassene: status, «Publiser»
   og «Avslutt redigering» (`Redigeringslinje.tsx`). Statusen er et rundt
   merke uten tekst, med en ring som puster og antallet upubliserte endringer
   i hjørnet; hele statusen står som tooltip. «Publiser» er avslått når
   ingenting er nytt. Publiseringen viser hva
   som blir synlig for alle i et modalt lag før noe publiseres. Stilene for
-  redigeringen står i `src/styles/redigering.css`. Fortolkningen bruker den
-  til «Åpne fagside» mens en modul med egen fagside er valgt (`App.tsx`);
-  søkesiden til «Lukk».
+  redigeringen står i `src/styles/redigering.css`.
+- Fortolkningen bruker `hovedhandling` til «Åpne fagside» mens en modul med
+  egen fagside er valgt (`App.tsx`); søkesiden bare `lukk`.
 - `sidesok`: plassen til søket i den åpne siden. Fagsiden legger sitt
   kompakte søk her (`Sidesok.tsx`, snarveien Ctrl + B eller Cmd + B). Det vokser
   mens det brukes, og antallet treff og stedene de står, vises under feltet.
@@ -361,9 +376,14 @@ Under 760 px bredde gjelder dette:
 - Skillet viker. Nedtrekksmenyene henger ved vinduets høyre kant.
 - Sidens plasser flytter til en **dokk** nederst i vinduet, og siden får
   `--dokk-offset` luft nederst. Søket på siden står som en rund lupeknapp til
-  det brukes, og hovedhandlingen korter teksten heller enn å skyve de andre
-  ut av vinduet. Har siden verken søk eller hovedhandling (søkesiden), er
-  dokken bare så bred som knappene.
+  det brukes, og legger seg da over hovedgruppen.
+- Får ikke alt plass på én rad, går dokken over **to rader**: søket og
+  hovedhandlingen øverst, de andre knappene samlet under, fordelt over hele
+  bredden. Raden brytes aldri midt i gruppen. `Toppmeny` måler høyden og
+  setter den som `--dokkhoyde`, så `--dokk-offset` og det som står over
+  dokken, følger med. Hovedhandlingen korter teksten bare om den ikke får
+  plass alene på sin rad. Har siden verken søk eller hovedhandling
+  (søkesiden), er dokken bare så bred som knappene.
 - Fortolkningen har dokken når en analytt er valgt: «Åpne fagside» (én
   knapp per stoff når modulen har koder for flere, som Diazepam og
   Oksazepam) og «Diskusjoner».
