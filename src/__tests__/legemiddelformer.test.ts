@@ -15,7 +15,7 @@ import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { lagFaginnholdslager } from '../faginnhold/lagring'
 import { ELEMENTTYPER } from '../faginnhold/paneler'
-import { FORMKODER, FORMREGLER, FORMVARIANTER, formikon, GENERISK_FORM } from '../legemiddeldata/legemiddelformer'
+import { delingsikon, FORMKODER, FORMREGLER, FORMVARIANTER, formikon, GENERISK_FORM } from '../legemiddeldata/legemiddelformer'
 import iBruk from '../legemiddeldata/legemiddelformer-i-bruk.json'
 import { IKONER } from '../components/ikon/register'
 import { AMITRIPTYLIN, KODEIN, synkroniserUtdrag } from './hjelp/fest'
@@ -85,7 +85,18 @@ describe('ikonregisteret for legemiddelformene', () => {
     for (const variant of [...Object.values(FORMKODER), ...FORMREGLER.map((r) => r.variant)]) {
       expect(FORMVARIANTER).toHaveProperty(variant)
     }
-    for (const { ikon } of Object.values(FORMVARIANTER)) expect(IKONER).toHaveProperty(ikon)
+    for (const variant of Object.values(FORMVARIANTER)) {
+      expect(IKONER).toHaveProperty(variant.ikon)
+      if ('delbar' in variant) expect(IKONER).toHaveProperty(variant.delbar)
+    }
+  })
+
+  it('gir tabletten delestrek bare når FEST sier at den kan deles', () => {
+    const tablett = formikon('53', 'Tablett')
+    expect(delingsikon(tablett, 'ja')).toBe('tabletDelbar')
+    for (const deling of ['nei', 'ukjent', 'varierer'] as const) expect(delingsikon(tablett, deling)).toBe('tablet')
+    // Former uten egen tegning for delbar beholder ikonet sitt.
+    expect(delingsikon(formikon('25', 'Depottablett'), 'ja')).toBe('depot')
   })
 
   it.each([

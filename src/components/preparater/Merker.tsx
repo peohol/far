@@ -1,14 +1,18 @@
 import type { ReactNode } from 'react'
-import type { Formikon } from '../../legemiddeldata/legemiddelformer'
-import type { Handtering, Handteringsvalg } from '../../legemiddeldata/preparater'
+import { delingsikon, type Formikon } from '../../legemiddeldata/legemiddelformer'
+import type { Handtering, Handteringsstatus, Handteringsvalg } from '../../legemiddeldata/preparater'
 import type { Preparatmerke } from '../../legemiddeldata/preparatmodell'
 import { Ikon } from '../ikon/Ikon'
 import { IKONER, type Ikonnavn } from '../ikon/register'
 import { Merke, type Merketone } from '../Merke'
 
-/** Ikonet for en legemiddelform. En form registeret ikke kjenner, får det generiske. */
-export function formikonnavn(ikon: Formikon): Ikonnavn {
-  return ikon.ikon in IKONER ? (ikon.ikon as Ikonnavn) : 'fallback'
+/**
+ * Ikonet for en legemiddelform, med delestrek når FEST sier at tablettene kan
+ * deles (`delingsikon`). En form registeret ikke kjenner, får det generiske.
+ */
+export function formikonnavn(ikon: Formikon, deling: Handteringsstatus = 'ukjent'): Ikonnavn {
+  const navn = delingsikon(ikon, deling)
+  return navn in IKONER ? (navn as Ikonnavn) : 'fallback'
 }
 
 const MERKER: Record<Preparatmerke['type'], { tone: Merketone; tekst: (m: Preparatmerke) => string; ikon?: ReactNode }> = {

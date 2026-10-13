@@ -120,6 +120,13 @@ const R = (
   anim?: Ikonanimasjon,
 ): Ikondel => ({ t: 'rect', a: { x, y, width, height, rx }, role, col, anim })
 const G = (kids: Ikondel[], anim?: Ikonanimasjon): Ikondel => ({ t: 'g', kids, anim })
+
+/** Tabletten uten delestrek: kanten under og toppflaten med fasen, i 48-rutenettet. */
+const tablett = (): Ikondel[] => [
+  P('M7 20.5v6a17 9.5 0 0 0 34 0v-6a17 9.5 0 0 1-34 0z', 'f2', 'info'),
+  P('M7 20.5a17 9.5 0 1 0 34 0a17 9.5 0 1 0-34 0z', 'f1', 'info'),
+  P('M12 20.5a12 6.5 0 1 0 24 0a12 6.5 0 1 0-24 0z', 'f2', 'info'),
+]
 const gear = (cx: number, cy: number, ro: number, ri: number, n: number) => {
   const s = Math.PI / n
   let d = ''
@@ -609,11 +616,11 @@ const REGISTER = {
       P('M13 38.5c3 2 6 2 9 0s6-2 9 0', 'l', 'i-ink'),
     ],
   },
-  tablet: {
-    vb: 48,
-    ga: 'pulse',
-    parts: [C(24, 24, 15, 'f1', 'info'), C(24, 24, 10.5, 'f2', 'info'), P('M24 9v30', 'l')],
-  },
+  /* Tabletten er en flat sylinder sett litt ovenfra: kanten og toppflaten med
+     fasen. Delestreken står bare på `tabletDelbar`, så ikonet viser om
+     tabletten kan deles (se `legemiddelformer.ts`). */
+  tablet: { vb: 48, ga: 'pulse', parts: tablett() },
+  tabletDelbar: { vb: 48, ga: 'pulse', parts: [...tablett(), P('M24 11v25', 'l')] },
   /* Legemiddelformene uten egen tegning i handoffen, i samme stil: sprøyte
      (injeksjon og depotinjeksjon), flaske (mikstur) og dråpeflaske (dråper). */
   syringe: {

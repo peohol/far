@@ -2,9 +2,9 @@ import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type 
 import { flushSync } from 'react-dom'
 import { useFlytting } from '../../hooks/useFlytting'
 import { rullefart } from '../../hooks/useKortHopp'
+import type { Formikon } from '../../legemiddeldata/legemiddelformer'
 import { oppsummerStyrke, type Formgruppe, type Styrkegruppe } from '../../legemiddeldata/preparatmodell'
 import { Ikon } from '../ikon/Ikon'
-import type { Ikonnavn } from '../ikon/register'
 import { VIS_HENDELSE } from '../seksjoner/Seksjonsstyring'
 import { Uthev } from '../Uthev'
 import { formikonnavn, Preparatmerker } from './Merker'
@@ -23,6 +23,10 @@ export interface Preparatvalg {
  * `StrengthGrid` og `StrengthCard`). Ett kort per styrke, uansett hvor mange
  * preparater som har den. Bare ett kort står åpent: det fyller bredden og
  * lister preparatnavnene alfabetisk, og et navn åpner preparatvinduet.
+ *
+ * Ikonet på kortet har delestrek når FEST sier at alle preparatene med
+ * styrken kan deles. Er det ulikt mellom dem, får hvert preparatnavn sitt eget
+ * ikon, så det synes før preparatet åpnes.
  *
  * Preparatnavnene i et lukket kort står i dokumentet, skjult med
  * `hidden="until-found"`, så søket på siden og nettleserens eget søk finner
@@ -43,7 +47,6 @@ export function Styrkerutenett({
 }) {
   // En form med én styrke har ingenting å velge mellom.
   const [apen, setApen] = useState<string | null>(form.styrker.length === 1 ? form.styrker[0]!.id : null)
-  const ikon = formikonnavn(form.ikon)
   const rutenett = useRef<HTMLUListElement>(null)
   // Kortet brukeren åpnet, rulles fram når det har vokst ferdig.
   const rullTil = useRef(false)
@@ -78,7 +81,7 @@ export function Styrkerutenett({
           key={s.id}
           styrke={s}
           form={form.form}
-          ikon={ikon}
+          ikon={form.ikon}
           apen={apen === s.id}
           settApen={setApen}
           veksle={veksle}
@@ -102,7 +105,7 @@ function Styrkekort({
 }: {
   styrke: Styrkegruppe
   form: string
-  ikon: Ikonnavn
+  ikon: Formikon
   apen: boolean
   /** Hvilket kort i rutenettet som står åpent, straks; `null` lukker. */
   settApen: (id: string | null) => void
@@ -115,6 +118,8 @@ function Styrkekort({
   const innhold = useRef<HTMLDivElement>(null)
   const tekst = styrke.styrke || UTEN_STYRKE
   const antall = oppsummerStyrke(styrke)
+  const radikoner = styrke.preparater.map((p) => formikonnavn(ikon, p.deling))
+  const ulikeIkoner = new Set(radikoner).size > 1
 
   // Søket eller nettleseren fant noe i det lukkede kortet: åpne det, og la
   // dem rulle til treffet selv.
@@ -136,7 +141,7 @@ function Styrkekort({
         title={styrke.kombinasjon ? tekst : undefined}
         onClick={() => veksle(styrke.id, !apen)}
       >
-        <Ikon navn={ikon} className="styrkekort__ikon" />
+        <Ikon navn={formikonnavn(ikon, styrke.deling)} className="styrkekort__ikon" />
         <span className="styrkekort__tekst">
           <span className="styrkekort__styrke">
             <Uthev tekst={tekst} />
@@ -157,7 +162,7 @@ function Styrkekort({
       </button>
       <div ref={innhold} id={`${id}-innhold`} className="styrkekort__innhold">
         <ul className="preparatrader" aria-label={`Preparater med ${tekst}`}>
-          {styrke.preparater.map((p) => (
+          {styrke.preparater.map((p, i) => (
             <li key={p.preparat}>
               <button
                 type="button"
@@ -169,6 +174,7 @@ function Styrkekort({
               >
                 <span className="preparatrad__navn">
                   <span className="preparatrad__tittel">
+                    {ulikeIkoner && <Ikon navn={radikoner[i]!} storrelse="1.4em" className="preparatrad__ikon" />}
                     <Uthev tekst={p.navn} />
                   </span>
                   {p.produsenter.length > 0 && (

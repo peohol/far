@@ -138,7 +138,7 @@ describe('endringsomrader', () => {
 })
 
 /** Den første versjonen der hver føring som varsles, må si hvilke sider den gjelder. */
-const FORSTE_MED_OMRADER = '1.90.0'
+const FORSTE_MED_OMRADER = '1.91.0'
 
 /** Alle sidene i appen, slik områdene skrives (`sidesti`). */
 const ALLE_SIDER = [

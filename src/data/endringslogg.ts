@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.90.0',
+    versjon: '1.91.0',
     dato: '2026-10-13',
     sammendrag: 'Meldingen om en ny versjon kommer bare når den gjelder siden du er på',
     typer: ['Funksjonalitet'],
@@ -22,6 +22,18 @@ export const ENDRINGSLOGG: Endring[] = [
       'Meldingen «En ny versjon av OUSFAR er klar» kommer nå bare når endringene gjelder siden du står på, eller vinduet du har åpent.',
       'Gjelder endringene andre sider, tas den nye versjonen i bruk av seg selv neste gang du går til en annen side eller nullstiller fortolkningen. Siden lastes da på nytt et øyeblikk etter, og det du holdt på med, blir stående.',
       'Begynner du å skrive eller klikke med en gang etter at du gikk til en ny side, venter appen til neste gang, så ingen tastetrykk går tapt. Går du til en side endringene gjelder, kommer meldingen som før.',
+    ],
+  },
+  {
+    versjon: '1.90.0',
+    dato: '2026-10-13',
+    sammendrag: 'Tablettikonet viser om tabletten kan deles',
+    typer: ['Design / layout', 'Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    punkter: [
+      'Tabletter vises nå som en flat tablett sett litt ovenfra. Bare tabletter som kan deles etter FEST, har delestrek; er de ikke delbare eller sier FEST ingenting om det, er det ingen strek.',
+      'Ikonet på styrkekortet har delestrek når alle preparatene med styrken kan deles. Er det ulikt mellom dem, står ikonet foran hvert preparatnavn, så du ser det før du åpner preparatet.',
+      'Preparatvinduet og overskriften for legemiddelformen følger samme regel.',
     ],
   },
   {

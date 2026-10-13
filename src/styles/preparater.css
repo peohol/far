@@ -207,6 +207,13 @@
   hyphens: auto;
 }
 
+/* Formikonet foran navnet, bare når preparatene med styrken har ulike ikoner
+   (som delbar og ikke delbar tablett). */
+.preparatrad__ikon {
+  margin-right: var(--rom-2);
+  vertical-align: -0.4em;
+}
+
 .preparatrad__merker {
   display: flex;
   flex-wrap: wrap;
