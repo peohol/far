@@ -376,6 +376,8 @@ describe('redigeringen av THC-syrereglene', () => {
     expect(onLagre).toHaveBeenLastCalledWith(
       { regler: { ...THC_REGELSETT, varsel_dager_mellom: 35 }, tekster: THC_TEKSTER },
       deres,
+      // Uten oppsummering til endringsloggen.
+      undefined,
     )
   })
 })

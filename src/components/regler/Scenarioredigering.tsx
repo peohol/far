@@ -33,12 +33,13 @@ import {
   useRegellagring,
   Valgfelt,
 } from './Regelfelter'
+import { Oppsummeringsfelt } from '../endringslogg/Oppsummeringsfelt'
 import { Koder, provKjor, Scenariovilkar, Simulator } from './Scenariodeler'
 
 export interface ScenarioredigeringProps {
   modul: RusModul
   start: Scenarioutkast
-  onLagre: (utkast: Scenarioutkast, grunnlag?: Scenarioregelsettutgave) => Promise<void>
+  onLagre: (utkast: Scenarioutkast, grunnlag?: Scenarioregelsettutgave, oppsummering?: string) => Promise<void>
   hentNyeste: () => Promise<Scenarioregelsettutgave | null>
   onAvbryt: () => void
 }
@@ -239,6 +240,7 @@ export function Scenarioredigering({ modul, start, onLagre, hentNyeste, onAvbryt
           lagrer={lagring.lagrer}
         />
       )}
+      <Oppsummeringsfelt verdi={lagring.oppsummering} onEndre={lagring.setOppsummering} />
       <div className="skjema__knapper">
         <Button variant="subtle" onClick={onAvbryt}>
           Avbryt

@@ -114,8 +114,8 @@ export function Thcregler({
             key={revisjonsnokkel(utgave)}
             utgave={utgave}
             start={start}
-            onLagre={async (utkast, grunnlag) => {
-              await onLagre(utkast, grunnlag)
+            onLagre={async (utkast, grunnlag, oppsummering) => {
+              await onLagre(utkast, grunnlag, oppsummering)
               setRedigeres(false)
             }}
             hentNyeste={hentNyeste}

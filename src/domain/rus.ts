@@ -206,6 +206,20 @@ export function rusModulFor(analyte: Analyte): RusModul | undefined {
   return modulPerKode.get(analyte.kode)
 }
 
+/** Scenariomodulene analyttene fortolkes i, hver én gang. */
+export function scenariomoduler(analytter: readonly Analyte[]): RusModul[] {
+  const moduler = new Map<string, RusModul>()
+  for (const analytt of analytter) {
+    const modul = rusModulFor(analytt)
+    if (modul) moduler.set(modul.id, modul)
+  }
+  return [...moduler.values()]
+}
+
+export function modulMedId(id: string): RusModul | undefined {
+  return RUS_MODULER.find((m) => m.id === id)
+}
+
 export function erRusAnalytt(analyte: Analyte): boolean {
   return modulPerKode.has(analyte.kode)
 }

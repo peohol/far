@@ -16,6 +16,7 @@
  */
 import { createHash } from 'node:crypto'
 import { cliSetninger, ikkeAtomiske, utenKommentarer } from './sqlsetninger'
+import { erklaringsfeil } from './endringserklaering'
 
 /** `<versjon>_<navn>.sql`: versjonen er 14 sifre (UTC-tidspunkt), navnet små bokstaver, tall og understrek. */
 export const MIGRASJONSFILNAVN = /^(\d{14})_([a-z0-9_]+)\.sql$/
@@ -254,8 +255,20 @@ export function ikkeAtomiskfeil(filer: readonly Migrasjonsfil[]): string[] {
   })
 }
 
+/**
+ * Feilmeldingene for filer som endrer faginnholdet uten å oppgi agenten, eller
+ * kuraterer uten rapport (`endringserklaering.ts`).
+ */
+export function agentfeil(filer: readonly Migrasjonsfil[]): string[] {
+  return filer.flatMap((f) => erklaringsfeil(filnavn(f), f.innhold))
+}
+
 /** Det som stopper en migrasjon fra å rulles ut automatisk, både i CI og før utrullingen. */
-export const utrullingsfeil = (filer: readonly Migrasjonsfil[]) => [...destruktivfeil(filer), ...ikkeAtomiskfeil(filer)]
+export const utrullingsfeil = (filer: readonly Migrasjonsfil[]) => [
+  ...destruktivfeil(filer),
+  ...ikkeAtomiskfeil(filer),
+  ...agentfeil(filer),
+]
 
 export const filnavn = (f: Migrasjonsfil) => `${f.versjon}_${f.navn}.sql`
 

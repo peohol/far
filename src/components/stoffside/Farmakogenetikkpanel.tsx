@@ -201,14 +201,14 @@ function Clinpgxkobling({
             start={kobling}
             referanser={element?.referanser ?? []}
             onAvbryt={lukk}
-            onLagre={async ({ data, referanser }) => {
+            onLagre={async ({ data, referanser, oppsummering }) => {
               await kontekst.handlinger.lagreElement(element, {
                 panel: definisjon.nokkel,
                 elementtype: ELEMENTTYPER.clinpgxkobling,
                 posisjon: 0,
                 data: { ...data },
                 referanser,
-              })
+              }, oppsummering)
               lukk()
               void hent(data.kjemikalier.map((k) => k.clinpgx_id))
             }}

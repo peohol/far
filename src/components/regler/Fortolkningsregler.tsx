@@ -106,8 +106,8 @@ export function Fortolkningsregler({
           <Regelredigering
             key={revisjonsnokkel(utgave)}
             start={regelsett}
-            onLagre={async (innhold, grunnlag) => {
-              await onLagre(innhold, grunnlag)
+            onLagre={async (innhold, grunnlag, oppsummering) => {
+              await onLagre(innhold, grunnlag, oppsummering)
               setRedigeres(false)
             }}
             hentNyeste={hentNyeste}

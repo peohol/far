@@ -173,8 +173,8 @@ function Panelkilder({ definisjon, kontekst }: { definisjon: Paneldefinisjon; ko
             tittel={definisjon.tittel}
             referanser={referanser}
             onAvbryt={() => setApen(false)}
-            onLagre={async (ider) => {
-              await kontekst.handlinger.lagrePanelreferanser(definisjon.nokkel, ider)
+            onLagre={async (ider, oppsummering) => {
+              await kontekst.handlinger.lagrePanelreferanser(definisjon.nokkel, ider, oppsummering)
               setApen(false)
             }}
           />
@@ -208,14 +208,14 @@ function Datakort({
   const { ikon, tone } = UTSEENDE[type]
   const lagre =
     (lukk: () => void) =>
-    async ({ data, referanser }: Skjemaresultat<object>) => {
+    async ({ data, referanser, oppsummering }: Skjemaresultat<object>) => {
       await kontekst.handlinger.lagreElement(element, {
         panel: definisjon.nokkel,
         elementtype: type,
         posisjon: plass,
         data: { ...(data as Record<string, unknown>), ...(gjelder && { gjelder }) },
         referanser,
-      })
+      }, oppsummering)
       lukk()
     }
   const navn = etikett ? `${def.tittel}, ${etikett}` : def.tittel

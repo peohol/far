@@ -39,6 +39,7 @@ import { Rikteksteditor } from './Rikteksteditor'
 import { Effektpille, mekanismeklasse } from './Mekanismevisning'
 import { mekanismeikon } from './panelvisning'
 import { Ikon } from '../ikon/Ikon'
+import { Oppsummeringsfelt } from '../endringslogg/Oppsummeringsfelt'
 
 /**
  * Skjemaene for hver elementtype på stoffsiden.
@@ -51,10 +52,14 @@ import { Ikon } from '../ikon/Ikon'
  * skjemaet stående med det brukeren skrev, og siden sier fra.
  */
 
-/** Det et skjema lagrer: dataene i elementet og kildene for kortet. */
+/**
+ * Det et skjema lagrer: dataene i elementet, kildene for kortet og den
+ * valgfrie oppsummeringen til endringsloggen.
+ */
 export interface Skjemaresultat<T> {
   data: T
   referanser: string[]
+  oppsummering?: string
 }
 
 export interface SkjemaProps<T> {
@@ -109,6 +114,7 @@ function Skjemaramme<T>({
   children?: ReactNode
 }) {
   const [kilder, setKilder] = useBevart<string[]>('kilder', () => [...referanser])
+  const [oppsummering, setOppsummering] = useBevart('oppsummering', '')
   const [feil, setFeil] = useState<string | null>(null)
   const [lagrer, setLagrer] = useState(false)
   const [forlater, setForlater] = useState(false)
@@ -149,7 +155,7 @@ function Skjemaramme<T>({
     setFeil(null)
     setForlater(false)
     try {
-      await onLagre({ data: resultat.data, referanser: kilder })
+      await onLagre({ data: resultat.data, referanser: kilder, oppsummering })
     } catch (e) {
       setFeil(e instanceof Samtidighetskonflikt ? KONFLIKT : (e as Error).message)
       setLagrer(false)
@@ -178,14 +184,17 @@ function Skjemaramme<T>({
           {forlater ? (
             <Forlatvarsel onForkast={onAvbryt} onFortsett={fortsett} />
           ) : (
-            <div className="skjema__knapper redigering__knapper">
-              <Button variant="subtle" onClick={onAvbryt}>
-                Avbryt
-              </Button>
-              <Button type="submit" form={skjemaId} className="knapp--kompakt" disabled={lagrer}>
-                {lagrer ? 'Lagrer …' : 'Lagre utkast'}
-              </Button>
-            </div>
+            <>
+              <Oppsummeringsfelt verdi={oppsummering} onEndre={setOppsummering} skjema={skjemaId} />
+              <div className="skjema__knapper redigering__knapper">
+                <Button variant="subtle" onClick={onAvbryt}>
+                  Avbryt
+                </Button>
+                <Button type="submit" form={skjemaId} className="knapp--kompakt" disabled={lagrer}>
+                  {lagrer ? 'Lagrer …' : 'Lagre utkast'}
+                </Button>
+              </div>
+            </>
           )}
         </>
       }
@@ -778,7 +787,7 @@ export function PanelkildeSkjema({
 }: {
   tittel: string
   referanser: readonly string[]
-  onLagre: (ider: string[]) => Promise<void>
+  onLagre: (ider: string[], oppsummering?: string) => Promise<void>
   onAvbryt: () => void
 }) {
   return (
@@ -791,7 +800,7 @@ export function PanelkildeSkjema({
       referanser={referanser}
       kontroller={() => ({ data: null })}
       onAvbryt={onAvbryt}
-      onLagre={({ referanser: ider }) => onLagre(ider)}
+      onLagre={({ referanser: ider, oppsummering }) => onLagre(ider, oppsummering)}
     />
   )
 }

@@ -75,14 +75,14 @@ export function Preparatpanel({
               start={kobling}
               referanser={element?.referanser ?? []}
               onAvbryt={lukk}
-              onLagre={async ({ data, referanser }) => {
+              onLagre={async ({ data, referanser, oppsummering }) => {
                 await handlinger.lagreElement(element, {
                   panel: definisjon.nokkel,
                   elementtype: ELEMENTTYPER.legemiddelkobling,
                   posisjon: 0,
                   data: { ...data },
                   referanser,
-                })
+                }, oppsummering)
                 lukk()
               }}
             />

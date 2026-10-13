@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { publiseringsplan, tilReferanse, type Sideelement } from '../../faginnhold/stoffside'
-import { Samtidighetskonflikt } from '../../faginnhold/lagring'
+import { lagerFor, Samtidighetskonflikt, type Faginnholdslager } from '../../faginnhold/lagring'
+import { nyEndring } from '../../endringslogg/operasjon'
 import { TOM_STOFFSIDE, type Stoffsidedata, type Utgave } from '../../faginnhold/lesing'
 import type { Infosideinnhold, Innholdselementinnhold, Referanseinnhold, Tilstand } from '../../faginnhold/modell'
 import { FJERNET, enkeltnokkel } from '../../faginnhold/paneler'
@@ -107,11 +108,15 @@ export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, modus: Sidemod
     setRunde((r) => r + 1)
   }, [])
 
-  /** Kjører en endring, leser siden på nytt, og sier fra om en konflikt. */
+  /**
+   * Kjører en endring, leser siden på nytt, og sier fra om en konflikt.
+   * Kallene arbeidet gjør med lageret det får, føres som én endring i
+   * endringsloggen, med oppsummeringen brukeren skrev.
+   */
   const endre = useCallback(
-    async <T,>(arbeid: () => Promise<T>): Promise<T> => {
+    async <T,>(arbeid: (lager: Faginnholdslager) => Promise<T>, oppsummering?: string): Promise<T> => {
       try {
-        const svar = await arbeid()
+        const svar = await arbeid(lagerFor(lager, nyEndring(oppsummering)))
         setRunde((r) => r + 1)
         return svar
       } catch (e) {
@@ -119,7 +124,7 @@ export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, modus: Sidemod
         throw e
       }
     },
-    [],
+    [lager],
   )
 
   /**
@@ -135,7 +140,7 @@ export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, modus: Sidemod
    * Stoffsiden i databasen, opprettet med stoffets navn og nøkkel først om den
    * ikke finnes. Gir tilbake utkastet slik det står nå.
    */
-  const sikreSide = useCallback(async (): Promise<Utgave<Infosideinnhold>> => {
+  const sikreSide = useCallback(async (lager: Faginnholdslager): Promise<Utgave<Infosideinnhold>> => {
     const { data } = utkastet()
     if (data.infoside) return data.infoside
     const innhold: Infosideinnhold = { navn, slug }
@@ -149,7 +154,7 @@ export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, modus: Sidemod
       endret_av_etternavn: '',
       endret_kl: status.endret_kl ?? '',
     }
-  }, [lager, navn, slug, utkastet])
+  }, [navn, slug, utkastet])
 
   /**
    * Lagrer et element, eller oppretter det. Et kort som bare kan finnes én
@@ -157,9 +162,9 @@ export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, modus: Sidemod
    * mellomtiden, blir det en konflikt som ellers, ikke et kort nummer to.
    */
   const lagreElement = useCallback(
-    (element: Sideelement | null, endring: Elementendring) =>
-      endre(async () => {
-        const side = await sikreSide()
+    (element: Sideelement | null, endring: Elementendring, oppsummering?: string) =>
+      endre(async (lager) => {
+        const side = await sikreSide(lager)
         const innhold: Innholdselementinnhold = { infoside: side.id, ...endring }
         if (element) {
           await lager.lagreUtkast(element.id, element.utgave.revisjon, innhold)
@@ -175,18 +180,18 @@ export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, modus: Sidemod
           if (!na.elementer.some((e) => enkeltnokkel(e.innhold) === nokkel)) throw feil
           throw Object.assign(new Samtidighetskonflikt(null, null), { message: LAGT_INN_AV_ANDRE })
         }
-      }),
-    [endre, sikreSide, lager, lesSide],
+      }, oppsummering),
+    [endre, sikreSide, lesSide],
   )
 
   /** Tar kortet bort fra siden. Det slettes ikke; se `FJERNET`. */
   const fjernElement = useCallback(
     (element: Sideelement) =>
-      endre(() => {
+      endre((lager) => {
         utkastet()
         return lager.lagreUtkast(element.id, element.utgave.revisjon, { ...element.utgave.innhold, panel: FJERNET })
       }),
-    [endre, lager, utkastet],
+    [endre, utkastet],
   )
 
   /**
@@ -195,7 +200,7 @@ export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, modus: Sidemod
    */
   const flyttElement = useCallback(
     (element: Sideelement, naboer: readonly Sideelement[], retning: -1 | 1) =>
-      endre(async () => {
+      endre(async (lager) => {
         utkastet()
         const rekke = [...naboer]
         const fra = rekke.findIndex((e) => e.id === element.id)
@@ -207,24 +212,24 @@ export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, modus: Sidemod
           await lager.lagreUtkast(e.id, e.utgave.revisjon, { ...e.utgave.innhold, posisjon })
         }
       }),
-    [endre, lager, utkastet],
+    [endre, utkastet],
   )
 
   const lagrePanelreferanser = useCallback(
-    (panel: string, ider: string[]) =>
-      endre(async () => {
-        const side = await sikreSide()
+    (panel: string, ider: string[], oppsummering?: string) =>
+      endre(async (lager) => {
+        const side = await sikreSide(lager)
         const panelreferanser = { ...(side.innhold.panelreferanser ?? {}) }
         if (ider.length > 0) panelreferanser[panel] = ider
         else delete panelreferanser[panel]
         await lager.lagreUtkast(side.id, side.revisjon, { navn: side.innhold.navn, slug: side.innhold.slug, panelreferanser })
-      }),
-    [endre, sikreSide, lager],
+      }, oppsummering),
+    [endre, sikreSide],
   )
 
   const opprettReferanse = useCallback(
-    async (innhold: Referanseinnhold): Promise<Referanse> => {
-      const status = await lager.opprettUtkast('referanse', innhold)
+    async (innhold: Referanseinnhold, oppsummering?: string): Promise<Referanse> => {
+      const status = await lagerFor(lager, nyEndring(oppsummering)).opprettUtkast('referanse', innhold)
       const referanse: Referanse = { ...innhold, id: status.id }
       setReferansebase((base) => [...base, referanse])
       return referanse
@@ -235,11 +240,11 @@ export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, modus: Sidemod
   /** Lager en ny revisjon av objektet med innholdet fra en tidligere. */
   const gjenopprett = useCallback(
     (utgave: Utgave<unknown>, fraRevisjon: number) =>
-      endre(async () => {
+      endre(async (lager) => {
         utkastet()
         await lager.gjenopprettRevisjon(utgave.id, utgave.revisjon, fraRevisjon)
       }),
-    [endre, lager, utkastet],
+    [endre, utkastet],
   )
 
   const plan = useMemo(
@@ -250,15 +255,16 @@ export function useStoffside(stoff: Pick<Stoff, 'slug' | 'navn'>, modus: Sidemod
   /**
    * Publiserer alt på siden som har upubliserte endringer, i den rekkefølgen
    * databasen krever. Stopper ved første feil; det som alt er publisert, står.
+   * Hele publiseringen føres som én endring i endringsloggen.
    */
   const publiser = useCallback(
-    () =>
-      endre(async () => {
+    (oppsummering?: string) =>
+      endre(async (lager) => {
         for (const steg of publiseringsplan(utkastet().data)) {
           await lager.publiserUtkast(steg.id, steg.revisjon)
         }
-      }),
-    [endre, lager, utkastet],
+      }, oppsummering),
+    [endre, utkastet],
   )
 
   return {

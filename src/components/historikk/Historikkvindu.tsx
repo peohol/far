@@ -25,6 +25,13 @@ export interface HistorikkvinduProps<T> {
   gjeldende?: number
   /** Gjenoppretter en tidligere revisjon som en ny. Utelatt for dem som bare leser. */
   onGjenopprett?: (fraRevisjon: number) => Promise<void>
+  /** Revisjonen som vises først, som fra endringsloggen. Uten den den nyeste. */
+  forstValgt?: number
+  /**
+   * Revisjonen den sammenlignes med først; `null` er ingen (objektet er nytt).
+   * Uten den den nærmeste eldre.
+   */
+  forstMot?: number | null
   onLukk: () => void
 }
 
@@ -51,6 +58,8 @@ export function Historikkvindu<T>({
   felter,
   gjeldende,
   onGjenopprett,
+  forstValgt,
+  forstMot,
   onLukk,
 }: HistorikkvinduProps<T>) {
   const { leser } = useFaginnholdskilde()
@@ -69,8 +78,11 @@ export function Historikkvindu<T>({
       .then((historikk) => {
         if (!gjelder) return
         setLasting({ status: 'klar', historikk })
-        setValgt(historikk.revisjoner.at(-1)?.revisjon ?? null)
-        setMotRevisjon(undefined)
+        const forst = forstValgt !== undefined && historikk.revisjoner.some((r) => r.revisjon === forstValgt)
+        setValgt(forst ? forstValgt : (historikk.revisjoner.at(-1)?.revisjon ?? null))
+        const finnes = (revisjon: number | null | undefined) =>
+          revisjon === null || historikk.revisjoner.some((r) => r.revisjon === revisjon)
+        setMotRevisjon(forst && finnes(forstMot) ? forstMot : undefined)
       })
       .catch((e: Error) => {
         if (gjelder) setLasting({ status: 'feil', feil: e.message })
@@ -78,7 +90,7 @@ export function Historikkvindu<T>({
     return () => {
       gjelder = false
     }
-  }, [apen, leser, objekt, runde])
+  }, [apen, leser, objekt, runde, forstValgt, forstMot])
 
   const historikk = lasting.status === 'klar' ? lasting.historikk : null
   const valgtBilde = historikk?.revisjoner.find((r) => r.revisjon === valgt) ?? null

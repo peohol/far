@@ -12,6 +12,23 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.92.0',
+    dato: '2026-10-13',
+    sammendrag: 'Endringslogg på hver side med innhold: hvem som endret hva, og når',
+    typer: ['Funksjonalitet'],
+    omfang: 'Moderat omfang',
+    gjelder: ['stoff', 'stoffregister', 'fortolkning'],
+    punkter: [
+      'Fagsidene, stoffregisteret og fortolkningssidene har fått sin egen endringslogg, bak den nye klokkeknappen øverst. Den viser endringene i innholdet nyest først, med tidspunkt, hvem som gjorde dem og et kort sammendrag.',
+      'Det står tydelig om endringen er gjort av en person, en navngitt KI-agent eller systemet. En KI-agent oppgir hvilken endring i koden den kom fra, og det står om den er bekreftet kjørt.',
+      'Fold ut en endring for å se hva den besto av, og sammenlign med versjonen før i historikken.',
+      'Når du lagrer, publiserer, legger inn en referanse eller endrer i stoffregisteret, kan du skrive en kort oppsummering til loggen. Lar du den stå tom, beskriver loggen selv hva som ble endret, som «Dosering oppdatert» eller «Farmakodynamikk: to mekanismekort endret».',
+      'En kuratering av en fagside blir én samlet føring med det som er nytt, endret og fjernet i hver seksjon, rettinger, endringer i kildene og det som fortsatt mangler.',
+      'Endringer i stoffregisteret føres også: nye og omdøpte kategorier, flyttinger (også opp og ned i rekkefølgen), arkivering, sletting og gjenoppretting.',
+      'Andre enn administratorer ser bare det som er publisert. Administratorer kan også se utkastene.',
+    ],
+  },
+  {
     versjon: '1.91.2',
     dato: '2026-10-13',
     sammendrag: 'Profilbildet kan zoomes helt ut, så sirkelen når bildets kant',

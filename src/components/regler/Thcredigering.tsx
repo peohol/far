@@ -26,6 +26,7 @@ import {
 import { Button } from '../Button'
 import { Tallfelt } from '../Tallfelt'
 import { Lagringskonflikt, useRegellagring, Valgfelt } from './Regelfelter'
+import { Oppsummeringsfelt } from '../endringslogg/Oppsummeringsfelt'
 import { Thckommentarredigering } from './Thckommentarer'
 import { Thcsimulator } from './Thcsimulator'
 
@@ -37,7 +38,7 @@ export interface ThcredigeringProps {
    * Lagrer det som er endret som utkast, mot revisjonene i `utgave`, eller mot
    * `grunnlag` når brukeren har sett en nyere utgave og valgt å lagre over den.
    */
-  onLagre: (utkast: ThcUtkast, grunnlag?: ThcRegelsettutgave) => Promise<void>
+  onLagre: (utkast: ThcUtkast, grunnlag?: ThcRegelsettutgave, oppsummering?: string) => Promise<void>
   /** Utkastet slik det står i databasen nå, med tekstene. */
   hentNyeste: () => Promise<ThcRegelsettutgave | null>
   onAvbryt: () => void
@@ -328,6 +329,7 @@ export function Thcredigering({ utgave, start, onLagre, hentNyeste, onAvbryt }: 
           lagrer={lagring.lagrer}
         />
       )}
+      <Oppsummeringsfelt verdi={lagring.oppsummering} onEndre={lagring.setOppsummering} />
       <div className="skjema__knapper">
         <Button variant="subtle" onClick={onAvbryt}>
           Avbryt

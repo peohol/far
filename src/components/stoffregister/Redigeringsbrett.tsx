@@ -9,6 +9,7 @@ import {
 } from '../../domain/stoffregister'
 import { antall } from '../../faginnhold/oppsummering'
 import { useSortering, type Flytting } from '../../hooks/useSortering'
+import { Oppsummeringsfelt } from '../endringslogg/Oppsummeringsfelt'
 import { useBevart } from '../../oppdatering/Bevaring'
 import { useStoffregisterkilde } from '../../stoffregister/Stoffregisterkilde'
 import { erEkteKategori, kanSletteKategori, kanSletteStoff } from '../../stoffregister/modell'
@@ -221,8 +222,8 @@ function Brettkategori({
             start={gruppe.navn}
             knapp="Lagre"
             onAvbryt={() => setEndrer(false)}
-            onLagre={async (nytt) => {
-              if (nytt !== gruppe.navn && !(await utfor(() => kilde.handlinger.endreKategori(gruppe.id, nytt)))) return
+            onLagre={async (nytt, oppsummering) => {
+              if (nytt !== gruppe.navn && !(await utfor(() => kilde.handlinger.endreKategori(gruppe.id, nytt, oppsummering)))) return
               setEndrer(false)
             }}
           />
@@ -543,7 +544,10 @@ function Stoffmeny({ stoff, kategori }: { stoff: Registerstoff; kategori: string
 
 /* --- Skjemaene ---------------------------------------------------------------------- */
 
-/** Et navn som skrives inn og lagres: en ny kategori, eller et nytt navn på en. */
+/**
+ * Et navn som skrives inn og lagres: en ny kategori, eller et nytt navn på en,
+ * med den valgfrie oppsummeringen til endringsloggen.
+ */
 function Navneskjema({
   merkelapp,
   start = '',
@@ -554,10 +558,11 @@ function Navneskjema({
   merkelapp: string
   start?: string
   knapp: string
-  onLagre: (navn: string) => Promise<void>
+  onLagre: (navn: string, oppsummering?: string) => Promise<void>
   onAvbryt?: () => void
 }) {
   const [navn, setNavn] = useBevart(`navn:${merkelapp}`, start)
+  const [oppsummering, setOppsummering] = useBevart(`oppsummering:${merkelapp}`, '')
   const [lagrer, setLagrer] = useState(false)
   const send = async (e: FormEvent) => {
     e.preventDefault()
@@ -565,8 +570,9 @@ function Navneskjema({
     if (!renset || lagrer) return
     setLagrer(true)
     try {
-      await onLagre(renset)
+      await onLagre(renset, oppsummering.trim() || undefined)
       setNavn('')
+      setOppsummering('')
     } finally {
       setLagrer(false)
     }
@@ -594,6 +600,7 @@ function Navneskjema({
           Avbryt
         </Button>
       )}
+      <Oppsummeringsfelt verdi={oppsummering} onEndre={setOppsummering} />
     </form>
   )
 }
@@ -608,8 +615,8 @@ function Nykategori({ forelder, onFerdig }: { forelder: string | null; onFerdig?
       merkelapp={forelder ? 'Ny underkategori' : 'Ny kategori'}
       knapp="Legg til"
       {...(onFerdig && { onAvbryt: onFerdig })}
-      onLagre={async (navn) => {
-        if (await utfor(() => kilde.handlinger.opprettKategori(navn, forelder))) onFerdig?.()
+      onLagre={async (navn, oppsummering) => {
+        if (await utfor(() => kilde.handlinger.opprettKategori(navn, forelder, oppsummering))) onFerdig?.()
       }}
     />
   )
@@ -625,12 +632,14 @@ function Nyfagside() {
   const { utfor } = useRegisterhandling()
   const [navn, setNavn] = useBevart('ny-fagside', '')
   const [kategori, setKategori] = useBevart('ny-fagside/kategori', '')
+  const [oppsummering, setOppsummering] = useBevart('ny-fagside/oppsummering', '')
   const [lager, setLager] = useState(false)
   const kategoriId = useId()
   const opprett = kilde?.handlinger.opprettStoffside
   if (!kilde || !opprett) return null
   const apne = (slug: string) => {
     setNavn('')
+    setOppsummering('')
     window.location.hash = stoffadresse(slug)
   }
   const send = async (e: FormEvent) => {
@@ -642,7 +651,7 @@ function Nyfagside() {
     setLager(true)
     let slug = ''
     const laget = await utfor(async () => {
-      slug = await opprett(renset, kategori || null)
+      slug = await opprett(renset, kategori || null, oppsummering.trim() || undefined)
     })
     setLager(false)
     if (laget) apne(slug)
@@ -662,6 +671,7 @@ function Nyfagside() {
       <Button type="submit" variant="kant" disabled={!navn.trim() || lager}>
         {lager ? 'Lager …' : 'Lag fagside'}
       </Button>
+      <Oppsummeringsfelt verdi={oppsummering} onEndre={setOppsummering} />
     </form>
   )
 }

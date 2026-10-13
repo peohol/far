@@ -27,7 +27,7 @@ export interface Scenarioredigeringskilde {
    * Lagrer utkastet med kommentarene, mot det brukeren åpnet, eller mot
    * `grunnlag` når hen har sett en nyere utgave og valgt å lagre over den.
    */
-  onLagre: (utkast: Scenarioutkast, grunnlag?: Scenarioregelsettutgave) => Promise<void>
+  onLagre: (utkast: Scenarioutkast, grunnlag?: Scenarioregelsettutgave, oppsummering?: string) => Promise<void>
   /** Utkastet slik det står i databasen nå, med kommentarene. */
   hentNyeste: () => Promise<Scenarioregelsettutgave | null>
 }
@@ -129,8 +129,8 @@ export function Scenarioregler({
             key={revisjonsnokkel(redigering.utgave)}
             modul={modul}
             start={tilScenarioutkast(redigering.utgave)}
-            onLagre={async (utkast, grunnlag) => {
-              await redigering.onLagre(utkast, grunnlag)
+            onLagre={async (utkast, grunnlag, oppsummering) => {
+              await redigering.onLagre(utkast, grunnlag, oppsummering)
               setRedigeres(false)
             }}
             hentNyeste={redigering.hentNyeste}

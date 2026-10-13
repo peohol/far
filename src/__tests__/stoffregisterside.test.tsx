@@ -17,6 +17,7 @@ import { Stoffregisterside } from '../components/stoffregister/Stoffregisterside
 import { ToppmenyKilde, useMeldSpor } from '../components/toppmeny/Toppmenykilde'
 import { TipsLag } from '../components/Tips'
 import { ANALYTTKATALOG } from '../domain/analyttkatalog'
+import type { Endringskontekst } from '../endringslogg/operasjon'
 import type { Registerlager } from '../stoffregister/api'
 import { StoffregisterkildeProvider, useLagStoffregisterkilde } from '../stoffregister/Stoffregisterkilde'
 import { endreStruktur, type Registerdatabase, type Registerendring, type Registerside } from '../stoffregister/modell'
@@ -105,7 +106,7 @@ function Side({
 }: {
   lager: Registerlager
   admin: boolean
-  opprettSide?: (navn: string, slug: string) => Promise<void>
+  opprettSide?: (navn: string, slug: string, endring: Endringskontekst) => Promise<void>
   children?: ReactNode
 }) {
   const kilde = useLagStoffregisterkilde({ lager, admin, ...(opprettSide && { opprettSide }) })
@@ -397,7 +398,7 @@ describe('en ny fagside', () => {
     await userEvent.type(screen.getByRole('textbox', { name: 'Ny fagside' }), 'Nystoff')
     await userEvent.selectOptions(screen.getByRole('combobox', { name: 'Kategori' }), kategoriid('Opioider'))
     await userEvent.click(screen.getByRole('button', { name: 'Lag fagside' }))
-    expect(opprettSide).toHaveBeenCalledWith('Nystoff', 'nystoff')
+    expect(opprettSide).toHaveBeenCalledWith('Nystoff', 'nystoff', expect.objectContaining({ id: expect.any(String) }))
     expect((await screen.findByRole('alert')).textContent).toContain(
       'Fagsiden «Nystoff» er laget, men ble ikke lagt i kategorien: Kategorien finnes ikke lenger.',
     )
@@ -406,6 +407,36 @@ describe('en ny fagside', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Lag fagside' }))
     expect(window.location.hash).toBe('#/stoff/nystoff')
     expect(opprettSide).toHaveBeenCalledTimes(1)
+  })
+
+  it('fører siden og plasseringen som én endring, med oppsummeringen som ble skrevet', async () => {
+    const lager = lagLager()
+    const endringer: Endringskontekst[] = []
+    lager.medEndring = vi.fn((endring: Endringskontekst) => {
+      endringer.push(endring)
+      return lager
+    })
+    const opprettSide = vi.fn(async (navn: string, slug: string) => {
+      lager.data.sider = [...lager.data.sider, { id: slug, slug, navn, innhold: false, oppsummering: null }]
+    })
+    render(
+      <TipsLag>
+        <Side lager={lager} admin opprettSide={opprettSide} />
+      </TipsLag>,
+    )
+    await screen.findByText(/stoffer i \d+ kategorier/)
+    await rediger()
+    const skjema = screen.getByRole('textbox', { name: 'Ny fagside' }).closest('form')!
+    await userEvent.type(screen.getByRole('textbox', { name: 'Ny fagside' }), 'Annetstoff')
+    await userEvent.selectOptions(screen.getByRole('combobox', { name: 'Kategori' }), kategoriid('Opioider'))
+    await userEvent.click(within(skjema).getByRole('button', { name: 'Legg til en kort oppsummering (valgfri)' }))
+    await userEvent.type(within(skjema).getByRole('textbox', { name: /Kort oppsummering/ }), 'Ny side for Annetstoff')
+    await userEvent.click(within(skjema).getByRole('button', { name: 'Lag fagside' }))
+    await waitFor(() => expect(lager.plasserStoff).toHaveBeenCalledWith('annetstoff', null, kategoriid('Opioider')))
+    const endring = (opprettSide.mock.calls[0] as unknown[])[2] as Endringskontekst
+    expect(endring).toEqual({ id: expect.any(String), oppsummering: 'Ny side for Annetstoff' })
+    // Plasseringen går gjennom lageret for den samme handlingen.
+    expect(endringer).toEqual([endring])
   })
 })
 

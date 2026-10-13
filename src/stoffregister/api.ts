@@ -5,6 +5,7 @@
  */
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { lesbarFeil, type Databasefeil } from '../auth/databasefeil'
+import { iEndring, type Endringskontekst } from '../endringslogg/operasjon'
 import type { Tilstand } from '../faginnhold/modell'
 import { lesRegisterdatabase, type Registerdatabase } from './modell'
 
@@ -41,11 +42,17 @@ export interface Registerlager {
   tomPapirkurven(): Promise<number>
   /** Sletter det som har ligget i papirkurven i mer enn 30 dager. Gir antallet. */
   rydd(): Promise<number>
+  /**
+   * Det samme lageret, der kallene hører til én handling i endringsloggen,
+   * med oppsummeringen brukeren skrev (`src/endringslogg/operasjon.ts`).
+   * Utelatt i enkle erstatninger i testene.
+   */
+  medEndring?(endring: Endringskontekst): Registerlager
 }
 
-export function lagRegisterlager(klient: SupabaseClient): Registerlager {
+export function lagRegisterlager(klient: SupabaseClient, endring?: Endringskontekst): Registerlager {
   const kall = async <T = unknown>(funksjon: string, argumenter: Record<string, unknown> = {}): Promise<T> => {
-    const { data, error } = await klient.rpc(funksjon, argumenter)
+    const { data, error } = await iEndring(klient.rpc(funksjon, argumenter), endring)
     if (error) throw tilFeil(error)
     return data as T
   }
@@ -74,5 +81,6 @@ export function lagRegisterlager(klient: SupabaseClient): Registerlager {
     slettStoffForGodt: (stoff) => ingenting('slett_stoff_for_godt', { stoff }),
     tomPapirkurven: () => antall('tom_stoffpapirkurven'),
     rydd: () => antall('rydd_stoffpapirkurven'),
+    medEndring: (ny) => lagRegisterlager(klient, ny),
   }
 }

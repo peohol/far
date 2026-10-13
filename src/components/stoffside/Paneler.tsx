@@ -108,8 +108,8 @@ export function Panel({
             tittel={definisjon.tittel}
             referanser={panelreferanser}
             onAvbryt={() => setKilder(false)}
-            onLagre={async (ider) => {
-              await handlinger.lagrePanelreferanser(definisjon.nokkel, ider)
+            onLagre={async (ider, oppsummering) => {
+              await handlinger.lagrePanelreferanser(definisjon.nokkel, ider, oppsummering)
               setKilder(false)
             }}
           />
@@ -247,14 +247,14 @@ export function Paneltekst({
             start={{ dokument }}
             referanser={element?.referanser ?? []}
             onAvbryt={lukk}
-            onLagre={async ({ data, referanser }) => {
+            onLagre={async ({ data, referanser, oppsummering }) => {
               await kontekst.handlinger.lagreElement(element, {
                 panel: definisjon.nokkel,
                 elementtype: ELEMENTTYPER.riktekst,
                 posisjon: 0,
                 data,
                 referanser,
-              })
+              }, oppsummering)
               lukk()
             }}
           />
@@ -488,14 +488,14 @@ function Kortserie<T>({
                 start={kort}
                 referanser={element.referanser}
                 onAvbryt={lukk}
-                onLagre={async ({ data, referanser }) => {
+                onLagre={async ({ data, referanser, oppsummering }) => {
                   await handlinger.lagreElement(element, {
                     panel: definisjon.nokkel,
                     elementtype: type.elementtype,
                     posisjon: element.posisjon,
                     data: type.tilData(data),
                     referanser,
-                  })
+                  }, oppsummering)
                   lukk()
                 }}
               />
@@ -595,7 +595,7 @@ function Kortserie<T>({
             start={startNytt}
             referanser={[]}
             onAvbryt={() => setNytt(false)}
-            onLagre={async ({ data, referanser }) => {
+            onLagre={async ({ data, referanser, oppsummering }) => {
               await handlinger.lagreElement(null, {
                 panel: definisjon.nokkel,
                 elementtype: type.elementtype,
@@ -603,7 +603,7 @@ function Kortserie<T>({
                 posisjon: fastNytt !== null && faste ? faste.indexOf(fastNytt) : Math.max(-1, ...elementer.map((e) => e.posisjon)) + 1,
                 data: type.tilData(data),
                 referanser,
-              })
+              }, oppsummering)
               setNytt(false)
             }}
           />
@@ -721,14 +721,14 @@ export function Tabellpanel({ definisjon, kontekst }: { definisjon: Paneldefinis
               start={{ rader }}
               referanser={element?.referanser ?? []}
               onAvbryt={lukk}
-              onLagre={async ({ data, referanser }) => {
+              onLagre={async ({ data, referanser, oppsummering }) => {
                 await kontekst.handlinger.lagreElement(element, {
                   panel: definisjon.nokkel,
                   elementtype: ELEMENTTYPER.dosetabell,
                   posisjon: 0,
                   data: data as unknown as Record<string, unknown>,
                   referanser,
-                })
+                }, oppsummering)
                 lukk()
               }}
             />

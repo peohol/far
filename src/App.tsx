@@ -54,8 +54,12 @@ import {
   regelsettvalg,
   type Kommentarvalg,
 } from './domain/valg'
-import { lagFaginnholdslager } from './faginnhold/lagring'
+import { lagFaginnholdslager, lagerFor } from './faginnhold/lagring'
 import { lagFaginnholdsleser } from './faginnhold/lesing'
+import { lagEndringsloggleser } from './endringslogg/api'
+import type { Endringskontekst } from './endringslogg/operasjon'
+import { endringssideFor } from './endringslogg/sider'
+import { Innholdslogg } from './components/endringslogg/Innholdslogg'
 import { lesScenarioregler, reglerForModul } from './faginnhold/scenarioregler'
 import { thcReglerFra } from './faginnhold/thcregler'
 import { lagSideleser, lagVersjonsleser, lesSokeindeks } from './faginnhold/globaltSok'
@@ -207,9 +211,10 @@ export default function App() {
   // sidene registeret ikke kjenner, og inndelingen, arkivet og papirkurven.
   // Redaktørene ser også sidene som ikke er publisert, og lager nye.
   const registerlager = useMemo(() => lagRegisterlager(klient()), [])
+  const endringsloggleser = useMemo(() => lagEndringsloggleser(klient()), [])
   const opprettSide = useCallback(
-    async (navn: string, slug: string) => {
-      await faginnhold.lager.opprettUtkast('infoside', { navn, slug })
+    async (navn: string, slug: string, endring: Endringskontekst) => {
+      await lagerFor(faginnhold.lager, endring).opprettUtkast('infoside', { navn, slug })
     },
     [faginnhold.lager],
   )
@@ -622,6 +627,11 @@ export default function App() {
         : state.analyte
         ? fortolkningssidenavn(state.analyte)
         : 'Fortolkningen'
+  // Endringsloggen for innholdet på siden som står åpen.
+  const endringsside = useMemo(
+    () => endringssideFor(rute, { fortolkning: state.analyte, katalog, kanonisk: kanoniskStoff }),
+    [rute, state.analyte, katalog, kanoniskStoff],
+  )
   // Sidene en tråd kan flyttes til.
   const sider = useMemo(() => diskusjonssider(register.stoffer, FORTOLKNINGSOPPFORINGER), [register])
 
@@ -827,6 +837,17 @@ export default function App() {
                 </main>
 
                 {diskusjonsside && <Diskusjonsmeny side={diskusjonsside} sidenavn={sidenavn} sider={sider} />}
+
+                {endringsside && (
+                  <FaginnholdskildeProvider kilde={faginnhold}>
+                    <Innholdslogg
+                      side={endringsside}
+                      sidenavn={sidenavn}
+                      leser={endringsloggleser}
+                      admin={faginnhold.kanRedigere}
+                    />
+                  </FaginnholdskildeProvider>
+                )}
 
                 {/* Versjonen og veien inn til endringsloggen, fast nederst i hjørnet. */}
                 <Versjonspille />
