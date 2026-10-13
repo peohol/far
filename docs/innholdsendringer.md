@@ -68,8 +68,9 @@ Hva som hører til en side, avgjøres når loggen leses, ut fra objektene selv
   skjedde mens siden pekte på den. At den knyttes til eller fjernes fra siden,
   står som en endring av kortet eller siden som fikk eller mistet den. Det den
   var før det, hører ikke til siden, og fjernes den og legges inn igjen, teller
-  den bare mens den var knyttet til siden. Brukes den også andre steder, er den
-  **delt**: endringen vises på alle sidene som bruker den, merket «Delt», og en
+  den bare mens den var knyttet til siden. Ble den også brukt andre steder da
+  den ble endret, er endringen **delt**: den vises på alle sidene som brukte
+  den, merket «Delt» (ikke i ettertid, når en annen side tar den i bruk), og en
   endring som bare gjaldt delte objekter, vises uten sammendraget og rapporten
   fra det den ellers gjaldt (som kurateringen av en annen fagside).
 

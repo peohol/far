@@ -15,7 +15,8 @@
 --     referansen var før det, er ikke sidens historikk. Fjernes den og legges
 --     inn igjen, teller den bare mens den var knyttet til siden.
 --
--- En referanse eller kommentar som også brukes andre steder, merkes som delt,
+-- En endring av en referanse eller kommentar som også ble brukt andre steder da
+-- den ble gjort, merkes som delt,
 -- og en endring som bare gjaldt slike, vises uten sammendraget og rapporten fra
 -- det den ellers gjaldt. Historikken selv er urørt; bare lesingen endres.
 
@@ -100,22 +101,42 @@ as $$
     from public.objektpubliseringer p
     where p.objekt_id in (select id from nevnte)
   ),
-  -- Referansene og kommentarene som også brukes av noe annet enn siden.
-  delte as (
-    select n.id from nevnte n
-    where exists (
-      select 1 from public.objektrevisjoner r
-      where r.objekt_id <> n.id
-        and r.objekt_id not in (select id from egne)
-        and strpos(r.innhold::text, n.id::text) > 0
-        and (p_utkast or exists (
-          select 1 from public.objektpubliseringer p where p.objekt_id = r.objekt_id and p.revisjon = r.revisjon)))
+  -- Objektene utenfor siden som noen gang har pekt på en av dem.
+  andre as (
+    select distinct n.id as nevnt, r.objekt_id
+    from nevnte n
+    join public.objektrevisjoner r on r.objekt_id <> n.id and strpos(r.innhold::text, n.id::text) > 0
+  ),
+  -- Hvilken utgave av dem som gjaldt når, på samme måte som for sidens egne.
+  andres_tilstander as (
+    select a.nevnt, t.objekt_id, t.revisjon, t.kl,
+      lead(t.kl) over (partition by a.nevnt, t.objekt_id order by t.kl, t.revisjon) as neste_kl
+    from andre a
+    cross join lateral (
+      select r.objekt_id, r.revisjon, r.utfort_kl as kl
+      from public.objektrevisjoner r
+      where p_utkast and r.objekt_id = a.objekt_id
+      union all
+      select p.objekt_id, p.revisjon, p.utfort_kl
+      from public.objektpubliseringer p
+      where not p_utkast and p.objekt_id = a.objekt_id
+    ) t
+  ),
+  -- Når en referanse eller kommentar også ble brukt av noe som ikke sto på siden.
+  delt_bruk as (
+    select a.nevnt, a.kl, a.neste_kl
+    from andres_tilstander a
+    join public.objektrevisjoner r on r.objekt_id = a.objekt_id and r.revisjon = a.revisjon
+    where strpos(r.innhold::text, a.nevnt::text) > 0
+      and not intern.paa_siden(r.objekt_id, r.innhold, p_rotter)
   )
   select h.objekt_id, h.revisjon, h.publisering, false
   from egne_hendelser h
   where p_register or h.paa or h.var_paa
   union all
-  select h.objekt_id, h.revisjon, h.publisering, h.objekt_id in (select id from delte)
+  select h.objekt_id, h.revisjon, h.publisering, exists (
+      select 1 from delt_bruk d
+      where d.nevnt = h.objekt_id and d.kl <= h.kl and (d.neste_kl is null or h.kl < d.neste_kl))
   from nevnte_hendelser h
   where exists (
     select 1 from sitater s

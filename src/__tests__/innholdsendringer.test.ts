@@ -345,8 +345,13 @@ describe('delte referanser og kort som flyttes', () => {
     const delt = forB.endringer.find((e) => e.deler?.some((d) => d.objekt === ref))!
     expect(delt).toMatchObject({ delt: true, art: 'redigering', deler: [expect.objectContaining({ delt: true })] })
 
-    // A har vært knyttet til den hele tiden.
-    expect(titler(await logg(leser, { stoff: a.slug }))).toHaveLength(4)
+    // A har vært knyttet til den hele tiden, men den var bare delt mens B siterte
+    // den: det A endret alene, blir ikke delt i ettertid fordi B tok den i bruk.
+    const forA = await logg(leser, { stoff: a.slug })
+    expect(titler(forA)).toHaveLength(4)
+    expect(delerFor(forA, ref).map((d) => d.delt ?? false)).toEqual([true, false, true, false])
+    const alene = forA.endringer.find((e) => e.deler?.some((d) => d.objekt === ref && d.etter?.tittel === 'Delt kilde, før B'))!
+    expect(alene.delt).toBeUndefined()
   })
 
   it('merker ikke en referanse som bare siden bruker, som delt', async () => {
