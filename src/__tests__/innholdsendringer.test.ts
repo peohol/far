@@ -23,6 +23,7 @@ import {
 
 const LOGGMIGRASJON = migrasjonsfiler().find((f) => f.endsWith('_innholdsendringer.sql'))!
 const AGENTFIL = '20991231000000_syntetisk_agentmigrasjon.sql'
+const PROFILMIGRASJON = migrasjonsfiler().find((f) => f.endsWith('_endringslogg_profiler.sql'))!
 const DOK = (tekst: string) => ({ type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: tekst }] }] })
 const base64 = (tekst: string) => Buffer.from(tekst, 'utf8').toString('base64')
 
@@ -48,6 +49,7 @@ interface Endring {
   art: string
   agent?: { nokkel: string; navn: string; art: string }
   person?: { fornavn: string; etternavn: string }
+  profil?: { id: string; username: string; first_name: string; last_name: string; avatar_path?: string; updated_at: string }
   oppsummering?: string
   rapport?: Record<string, unknown>
   migrasjon?: string
@@ -222,7 +224,12 @@ describe('loggen for en fagside', () => {
     expect(await logg(leser, { stoff: slug }, { med_utkast: true })).toEqual(vanlig)
 
     const medUtkast = await logg(admin, { stoff: slug }, { med_utkast: true })
-    expect(medUtkast.endringer[0]).toMatchObject({ utkast: true, aktor: 'bruker', person: { fornavn: 'Rita', etternavn: 'Redaktør' } })
+    expect(medUtkast.endringer[0]).toMatchObject({
+      utkast: true,
+      aktor: 'bruker',
+      person: { fornavn: 'Rita', etternavn: 'Redaktør' },
+      profil: { id: admin, username: 'peohol', first_name: 'Rita', last_name: 'Redaktør' },
+    })
     expect(medUtkast.endringer[0]!.deler).toEqual([
       expect.objectContaining({ objekt: kort, type: 'innholdselement', fra: 1, til: 2, endret: ['data'], data_endret: ['dokument'] }),
     ])
@@ -501,6 +508,37 @@ describe('agentene', () => {
       lenker: ['https://github.com/peohol/far/pull/999'],
     })
   })
+
+  it('viser en agent med profilen den har fått, og systemet uten', async () => {
+    const bot = await opprettBruker(db, { brukernavn: 'syntetisk.bot', fornavn: 'Syntetisk', etternavn: 'Bot', rolle: 'user' })
+    await db.query(`update public.profiles set avatar_path = $2 where id = $1`, [bot, `${bot}/avatar.webp`])
+    await db.query(`insert into public.agentprofiler (agent, profil) values ('claude-code', $1)`, [bot])
+    const { side, slug, kort } = await nyFagside()
+    await db.exec(`
+      select intern.endring_start('claude-code', '${AGENTFIL}', 'Med profilbilde');
+      select set_config('request.jwt.claims', '{"sub": "${admin}", "role": "authenticated"}', true);
+      select public.lagre_utkast('${kort}', 1, '${JSON.stringify(kortinnhold(side, 'Med bilde'))}');
+      select public.publiser_utkast('${kort}', 2);`)
+    const [endring] = (await logg(leser, { stoff: slug })).endringer
+    // Navnet er agentens; bildet er profilens.
+    expect(endring).toMatchObject({
+      aktor: 'agent',
+      agent: { navn: 'Claude Code' },
+      profil: { id: bot, first_name: 'Syntetisk', last_name: 'Bot', avatar_path: `${bot}/avatar.webp` },
+    })
+    await db.query(`delete from public.agentprofiler where agent = 'claude-code'`)
+
+    // Koblingene leses bare gjennom loggen.
+    expect(await feilFra(() => sql(leser, 'select * from public.agentprofiler'))).toBeTruthy()
+  })
+
+  it('knytter kuratorboten til profilen sin når den finnes', async () => {
+    const eldre = await nyDatabase({ til: PROFILMIGRASJON })
+    const bot = await opprettBruker(eldre, { brukernavn: 'kuratortest', fornavn: 'Kurator', etternavn: 'Bot', rolle: 'user' })
+    await kjorMigrasjoner(eldre, { bare: [PROFILMIGRASJON] })
+    const { rows } = await eldre.query<{ agent: string; profil: string }>('select agent, profil from public.agentprofiler')
+    expect(rows).toEqual([{ agent: 'chatgpt-monografkurator', profil: bot }])
+  }, 120_000)
 
   it('avviser en ukjent agent, et feil filnavn og en agent som oppgir seg for sent', async () => {
     expect((await feilFra(() => db.exec(`select intern.endring_start('ukjent', '${AGENTFIL}', 'x')`)))?.message).toMatch(

@@ -21,7 +21,8 @@ tjenestene — er skjult til man slår på «Vis rutineendringer».
 | Hvor | Hva |
 | --- | --- |
 | `supabase/migrations/*_innholdsendringer.sql` | Tabellene, føringen av endringene, rapportkontrollen, hendelsene i stoffregisteret og bivirkningene, og lesingen (`les_endringslogg`) |
-| `supabase/migrations/*_endringslogg_tilknytning.sql` | Hva som hører til en side (`intern.sidens_utgaver`), og lesingen slik den er nå |
+| `supabase/migrations/*_endringslogg_tilknytning.sql` | Hva som hører til en side (`intern.sidens_utgaver`) |
+| `supabase/migrations/*_endringslogg_profiler.sql` | Profilene agentene vises med (`agentprofiler`), og lesingen slik den er nå |
 | `src/endringslogg/` | Modellen og lesingen (`modell.ts`, `api.ts`), handlingen appen sender med kallene (`operasjon.ts`), sammendragene (`oppsummering.ts`) og siden loggen gjelder (`sider.ts`) |
 | `src/components/endringslogg/` | Knappen og loggvinduet (`Innholdslogg.tsx`) og det valgfrie oppsummeringsfeltet ved lagring (`Oppsummeringsfelt.tsx`) |
 | `src/faginnhold/endringserklaering.ts` | Kontrollen i CI og før utrullingen av at en migrasjon som endrer innhold, oppgir agenten |
@@ -49,6 +50,13 @@ den er ikke et system ved siden av.
 - **`endringsagenter`** — agentene som kan stå for en endring, med nøkkel,
   navn, art (`ki-agent` eller `system`) og om de er en rutine. En ny agent
   legges inn med en migrasjon.
+- **`agentprofiler`** — brukerprofilen en agent vises med: loggen viser
+  agentens navn med profilbildet derfra. Kuratorboten (ChatGPT
+  monografkurator) har profilen `kuratortest`. En kobling legges inn med en
+  migrasjon; uten den vises agenten med forbokstavene.
+
+Loggen viser hvem som gjorde hver endring først, med profilbildet: personens
+egen profil, agentens profil, eller et tannhjul for systemet.
 
 Tabellene kan ikke endres eller slettes gjennom API-et, og radene kan aldri
 slettes. En endring kan bare fylles ut i transaksjonen den ble laget i, og en

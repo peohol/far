@@ -18,6 +18,12 @@ import type { Endring, Endringsdel, Endringslogg } from '../endringslogg/modell'
 import type { Faginnholdslager } from '../faginnhold/lagring'
 import { falskLeser } from './hjelp/falskleser'
 
+// Profilbildene får en fast lenke i stedet for en signert fra Storage.
+vi.mock('../auth/avatarer', () => ({
+  useAvatarlenker: (profiler: { avatar_path: string | null }[]) =>
+    new Map(profiler.flatMap((p) => (p.avatar_path ? [[p.avatar_path, `https://bilder.test/${p.avatar_path}`]] : []))),
+}))
+
 beforeAll(() => {
   globalThis.ResizeObserver ??= class {
     observe() {}
@@ -63,6 +69,7 @@ function endring(id: string, kl: string, ekstra: Partial<Endring> = {}): Endring
     art: 'redigering',
     agent: null,
     person: { fornavn: 'Rita', etternavn: 'Redaktør' },
+    profil: { id: 'rita', username: 'rita', first_name: 'Rita', last_name: 'Redaktør', avatar_path: null, updated_at: '2026-10-01T00:00:00Z' },
     oppsummering: null,
     rapport: null,
     migrasjon: null,
@@ -83,6 +90,14 @@ const KURATERING = endring('k1', '2026-10-13T12:00:00Z', {
   art: 'kuratering',
   agent: KURATOR,
   person: null,
+  profil: {
+    id: 'kuratorbot',
+    username: 'kuratorbot',
+    first_name: 'Kurator',
+    last_name: 'Bot',
+    avatar_path: 'kuratorbot/avatar.webp',
+    updated_at: '2026-10-13T00:00:00Z',
+  },
   oppsummering: 'Dosering ved nyresvikt kontrollert mot SPC',
   rapport: {
     seksjoner: [{ seksjon: 'dosering', nytt: [], endret: ['Maksdose ved nyresvikt'], fjernet: [] }],
@@ -139,7 +154,8 @@ describe('endringsloggen for en side', () => {
     const lag = await screen.findByRole('dialog', { name: 'Endringslogg: Syntetin' })
     const foringer = await within(lag).findAllByRole('listitem')
     const [forste, andre] = foringer.filter((f) => f.classList.contains('loggskuff'))
-    expect(forste?.textContent).toContain('13.10.2026 kl. 14:00 · ChatGPT monografkurator')
+    expect(forste?.querySelector('.innholdslogg__hvem')?.textContent).toBe('ChatGPT monografkurator')
+    expect(forste?.querySelector('.innholdslogg__tid')?.textContent).toBe('13.10.2026 kl. 14:00')
     expect(forste?.textContent).toContain('Dosering ved nyresvikt kontrollert mot SPC')
     expect(within(forste!).getByText('KI-agent')).toBeTruthy()
     expect(within(forste!).getByText('Kuratering')).toBeTruthy()
@@ -147,6 +163,25 @@ describe('endringsloggen for en side', () => {
     // Uten oppsummering beskriver loggen endringen selv.
     expect(andre?.textContent).toContain('Dosering oppdatert')
     expect(within(andre!).getByText('Person')).toBeTruthy()
+  })
+
+  it('viser hvem som gjorde endringen med profilbildet, også for kuratorboten', async () => {
+    const system = endring('s1', '2026-10-11T08:00:00Z', { aktor: 'system', person: null, profil: null })
+    const { user } = vis([{ endringer: [KURATERING, endring('e1', '2026-10-12T08:15:00Z'), system], flere: false }])
+    await user.click(screen.getByRole('button', { name: 'Endringslogg' }))
+    const lag = await screen.findByRole('dialog', { name: 'Endringslogg: Syntetin' })
+    const [kurator, rita, systemet] = (await within(lag).findAllByRole('listitem')).filter((f) =>
+      f.classList.contains('loggskuff'),
+    )
+    // Agentens egen profil gir bildet; navnet er agentens.
+    expect(kurator!.querySelector('.avatar img')?.getAttribute('src')).toBe('https://bilder.test/kuratorbot/avatar.webp')
+    expect(kurator!.querySelector('.innholdslogg__hvem')?.textContent).toBe('ChatGPT monografkurator')
+    // Uten profilbilde: forbokstavene.
+    expect(rita!.querySelector('.avatar img')).toBeNull()
+    expect(rita!.querySelector('.avatar__initialer')?.textContent).toBe('RR')
+    // Systemet har ingen profil.
+    expect(systemet!.querySelector('.avatar--system')).not.toBeNull()
+    expect(systemet!.querySelector('.innholdslogg__hvem')?.textContent).toBe('Systemet')
   })
 
   it('viser rapporten, migrasjonen og lenkene når en kuratering foldes ut', async () => {

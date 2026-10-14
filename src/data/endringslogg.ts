@@ -12,6 +12,18 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.92.4',
+    dato: '2026-10-14',
+    sammendrag: 'Endringsloggen viser hvem som gjorde endringen tydeligere, med profilbilde',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['vinduer'],
+    punkter: [
+      'Hver endring i endringsloggen begynner nå med profilbildet og navnet til den som gjorde den, og tidspunktet etter. Uten profilbilde vises forbokstavene, og systemet vises med et tannhjul.',
+      'Kuratorboten vises med profilbildet fra sin egen profil, under navnet ChatGPT monografkurator.',
+    ],
+  },
+  {
     versjon: '1.92.3',
     dato: '2026-10-14',
     sammendrag: 'Menyen nederst på mobil går over to rader når knappene ikke får plass, i en fast rekkefølge',
