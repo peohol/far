@@ -1,0 +1,58 @@
+avklare, kan også være involvert. I den kliniske studiedatabasen fortsatte over 80 % av pasientene med
+samtidig bruk av andre stimulantia.
+
+Voksne
+
+Effekten av natriumoksybat for behandling av narkolepsisymptomer ble fastslått i fire randomiserte,
+dobbeltblinde, placebokontrollerte, parallellgruppe-, multisenterstudier (studie 1, 2, 3 og 4) av pasienter med
+narkolepsi med katapleksi, unntatt studie 2, der katapleksi ikke var noe krav for deltakelse. Samtidig bruk av
+stimulantia var tillatt i alle studiene (unntatt fasen med aktiv behandling i studie 2), antidepressiver ble
+seponert før aktiv behandling i alle studiene unntatt studie 2. I hver studie var den daglige dosen delt i to
+like doser. Den første dosen ble tatt ved sengetid, og den andre dosen ble tatt 2,5 til 4 timer senere.
+
+Tabell 2   Oppsummering av kliniske studier med natriumoksybat ved behandling av
+narkolepsi
+Studie Primæreffekt N       Sekundær effekt            Varighet Aktiv behandling og
+                                                                                         dosering (g/d)
+
+Studie 1      EDS (ESS);         246     MWT/søvnarkitektur/               8 uker             Natriumoxybat
+                                         katapleksi/søvnepisoder
+                  CGIc                                                                               4,5-9
+                                         /FOSQ
+
+Studie 2     EDS (MWT)           231 Søvnarkitektur/ ESS/ CGI/             8 uker           Natriumoxybat 6-9
+                                     søvnepisoder
+                                                                                         Modafinil 200-600 mg
+
+Studie 3      Katapleksi         136 EDS (ESS)/CGIc/                       4 uker           Natriumoxybat 3-9
+                                     Søvnepisoder
+
+Studie 4      Katapleksi         55      Ingen                             4 uker           Natriumoxybat 3-9
+EDS – Ekstrem søvnighet på dagtid (Excessive Daytime Sleepiness);
+ESS – Epworth Sleepiness Scale;
+MWT – Maintenance of Wakefulness Test; søvnepisoder – antall utilsiktede søvnepisoder på dagtid;
+CGI-c – Clinical Global Impression of Change;
+FOSQ – Functional Outcomes of Sleep Questionnaire
+
+Studie 1 omfattet 246 pasienter med narkolepsi og inkluderte en opptitreringsperiode på 1 uke. De primære
+effektparametrene var endringer i ekstrem søvnighet på dagtid målt ved bruk av Epworth Sleepiness Scale
+(ESS), og endringen i generell alvorlighet i pasientens narkolepsisymptomer, vurdert av utprøveren ved
+bruk av Clinical Global Impressions of Change (CGI-c).
+
+Tabell 3   Sammendrag for ESS i studie 1
+                       Epworth Sleepiness Scale (ESS, skala 0-24)
+ Dosegruppe [g/d (n)] Baseline      Endepunkt     Median endring fra                               Endring fra baseline
+                                                       baseline                                    sammenlignet med
+                                                                                                         placebo
+                                                                                                        (p-verdi)
+Placebo (60)                      17,3                16,7                    -0,5                           -
+4,5 (68)                          17,5                15,7                    -1,0                        0,119
+6 (63)                            17,9                15,3                    -2,0                         0,001
+9 (55)                            17,9                13,1                    -2,0                       < 0,001
+
+
+Tabell 4       Sammendrag for CGI-c i studie 1
+                               Clinical Global Impressions of Change (CGI-c)
+
+
+                                                          11

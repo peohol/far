@@ -1,0 +1,351 @@
+{
+  "stoff": "ghb",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-14T04:15:52.673451+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 3,
+    "hentet": 2,
+    "dokumenter": 2,
+    "mangler": [
+      {
+        "merkevare_id": "ID_55A8A7A7-D02C-4194-88B9-0E1E0A24F652",
+        "varenavn": "Xyrem",
+        "navn_form_styrke": "Xyrem mikst oppl 500 mg/ml",
+        "produsent": "UCB Pharma S.A. (2)",
+        "atc": "N07XX04",
+        "legemiddelform": "Mikstur, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 2 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 2,
+        "ikke_dmp": 0,
+        "uten_omtale": 1
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "1 av 3 preparater i FEST mangler en hentet preparatomtale fra DMP: 1 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 3,
+        "hentet": 2,
+        "mangler": 1,
+        "dokumenter": 2
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/18-12473.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/18-12473.pdf",
+      "hentet_kl": "2026-10-14T06:51:42.961Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "226710",
+        "content-md5": "4euh4wrwhK6M3LA1MGlomw==",
+        "last-modified": "Wed, 14 Jan 2026 14:28:50 GMT",
+        "etag": "0x8DE53793C6AF0AF",
+        "date": "Wed, 14 Oct 2026 06:51:43 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_3D884905-E55B-4086-A389-114F774DFF80",
+          "varenavn": "Natriumoksybat Kalceks",
+          "navn_form_styrke": "Natriumoksybat Kalceks mikst oppl 500 mg/ml",
+          "produsent": "AS Kalceks",
+          "atc": "N07XX04",
+          "legemiddelform": "Mikstur, oppløsning"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/18-12473.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (226710 byte).",
+          "antall": {
+            "bytes": 226710
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "b4e0cb9586d8231328a5450ac15fd30d41406703e9a533af83c36a082c859306"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12925.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12925.pdf",
+      "hentet_kl": "2026-10-14T06:51:49.596Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "402863",
+        "content-md5": "T/Hop1GtUIr8tkLQuCdO6A==",
+        "last-modified": "Thu, 19 Mar 2026 20:48:58 GMT",
+        "etag": "0x8DE85F8F19AA81D",
+        "date": "Wed, 14 Oct 2026 06:51:50 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_49BC29FD-8078-40D1-9D48-3C1822EE6A9B",
+          "varenavn": "Oxiore",
+          "navn_form_styrke": "Oxiore mikst oppl 500 mg/ml",
+          "produsent": "Øresund Pharma ApS",
+          "atc": "N07XX04",
+          "legemiddelform": "Mikstur, oppløsning"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12925.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (402863 byte).",
+          "antall": {
+            "bytes": 402863
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "506a02d29092da5bec556d37587f973ea3364288828a75dc81c5c5f98d15660b"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "b4e0cb9586d8231328a5450ac15fd30d41406703e9a533af83c36a082c859306",
+      "bytes": 226710,
+      "mappe": "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313",
+      "pdf": {
+        "sider": 13,
+        "pdfversjon": "1.5",
+        "kryptert": false,
+        "tittel": null,
+        "laget": "Tue Apr 16 07:43:14 2024 UTC",
+        "endret": "Tue Apr 16 07:43:14 2024 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/original.pdf",
+        "tekst": "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-001.txt",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-002.txt",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-003.txt",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-004.txt",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-005.txt",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-006.txt",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-007.txt",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-008.txt",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-009.txt",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-010.txt",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-011.txt",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-012.txt",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/tekst/side-013.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-001.png",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-002.png",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-003.png",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-004.png",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-005.png",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-006.png",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-007.png",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-008.png",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-009.png",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-010.png",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-011.png",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-012.png",
+          "kuratorjobb/resultat/ghb/spc/b4e0cb9586d82313/sider/side-013.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 6,
+        "til": 8
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (13 sider).",
+          "antall": {
+            "sider": 13
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 31284
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 6."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 13
+          }
+        }
+      ]
+    },
+    {
+      "sha256": "506a02d29092da5bec556d37587f973ea3364288828a75dc81c5c5f98d15660b",
+      "bytes": 402863,
+      "mappe": "kuratorjobb/resultat/ghb/spc/506a02d29092da5b",
+      "pdf": {
+        "sider": 17,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": null,
+        "laget": "Wed Jan 28 07:00:17 2026 UTC",
+        "endret": "Wed Jan 28 07:00:17 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/original.pdf",
+        "tekst": "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-001.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-002.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-003.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-004.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-005.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-006.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-007.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-008.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-009.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-010.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-011.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-012.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-013.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-014.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-015.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-016.txt",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/tekst/side-017.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-001.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-002.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-003.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-004.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-005.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-006.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-007.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-008.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-009.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-010.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-011.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-012.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-013.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-014.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-015.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-016.png",
+          "kuratorjobb/resultat/ghb/spc/506a02d29092da5b/sider/side-017.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 7,
+        "til": 10
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (17 sider).",
+          "antall": {
+            "sider": 17
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 41012
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 7."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 17
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

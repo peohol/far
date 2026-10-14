@@ -1,0 +1,55 @@
+I studie 4 var responsen numerisk nesten lik for pasienter som ble behandlet med doser på 6 til 9 g/dag,
+men det ble ikke observert noen effekt hos pasienter som ble behandlet med doser på mindre enn 6 g/dag.
+
+5.2     Farmakokinetiske egenskaper
+
+Natriumoksybat absorberes raskt og nesten fullstendig etter oral administrasjon. Absorpsjonen forsinkes
+og reduseres av et fettrikt måltid. Det elimineres hovedsakelig ved metabolisme med en halveringstid på
+0,5 til 1 time. Farmakokinetikken er ikke-lineær med en 3,8 ganger økning av arealet under kurven for
+plasmakonsentrasjon (AUC) versus tid når dosen dobles fra 4,5 g til 9 g.
+Farmakokinetikken endres ikke ved gjentatt dosering.
+
+Absorpsjon
+Natriumoksybat absorberes raskt etter oral administrasjon med en absolutt biotilgjengelighet på omtrent
+88 %. Gjennomsnittlige maksimale plasmakonsentrasjoner (1. og 2. topp) etter administrasjon av en
+daglig dose på 9 g fordelt på to like doser gitt med fire timers mellomrom var henholdsvis 78 og
+142 mikrogram/ml. Den gjennomsnittlige tid til maksimal plasmakonsentrasjon (Tmax) varierte fra 0,5 til 2
+timer i åtte farmakokinetiske studier. Etter oral administrasjon øker plasmakonsentrasjonen av
+natriumoksybat mer enn proporsjonalt med økende dose. Enkeltdoser større enn 4,5 g er ikke studert.
+Administrasjon av natriumoksybat rett etter et fettrikt måltid resulterte i forsinket absorpsjon
+(gjennomsnittlig Tmax økte fra 0,75 timer til 2,0 timer) og en reduksjon i maksimal plasmakonsentrasjon
+(Cmax) med et gjennomsnitt på 58 % og på systemisk eksponering (AUC) med 37 %.
+
+Distribusjon
+Natriumoksybat er en hydrofil forbindelse med et tilsynelatende distribusjonsvolum på 190-384 ml/kg.
+Ved natriumoksybatkonsentrasjoner fra 3 til 300 g/ml er mindre enn 1 % bundet til plasmaproteiner.
+
+Biotransformasjon
+Dyrestudier indikerer at metabolisme er den viktigste eliminasjonsveien for natriumoksybat, og gir
+karbondioksid og vann via trikarboksylsyre (Krebs’)-syklus og sekundært ved ß-oksidasjon. Den primære
+veien involverer et NADP+-koblet enzym i cytosol, GHB-dehydrogenase som katalyserer omdanning av
+natriumoksybat til suksinsemialdehyd, som deretter biotransformeres til suksinsyre av enzymet
+suksinsemialdehyd dehydrogenase. Suksinsyre går inn i Krebs’ syklus og metaboliseres til karbondioksid
+og vann. Et annet mitokondrie-oksidoreduktase-enzym, en transhydrogenase, katalyserer også omdanning
+av suksinsemialdehyd i nærvær av α-ketoglutarat. En alternativ vei for biotransformasjon involverer ß-
+oksidasjon via 3,4-dihydroksybutyrat til acetyl CoA, som også går inn i sitronsyresyklusen og resulterer i
+dannelsen av karbondioksid og vann. Det er ikke identifisert aktive metabolitter.
+
+In vitro-studier med poolede humane levermikrosomer indikerer at natriumoksybat ikke signifikant
+hemmer aktiviteten av de humane isoenzymene: CYP1A2, CYP2C9, CYP2C19, CYP2D6, CYP2E1 eller
+CYP3A opp til en konsentrasjon på 3 mM (378 g /ml). Disse verdiene er betydelig høyere enn nivåene
+som oppnås ved terapeutiske doser.
+
+Eliminasjon
+Clearance av natriumoksybat er nesten bare ved biotransformasjon til karbondioksid som deretter
+elimineres ved utånding. I gjennomsnitt gjenfinnes mindre enn 5 % av uforandret legemiddel i urinen 6-8
+timer etter dosering. Fekal ekskresjon er ubetydelig.
+
+Eldre
+Hos et begrenset antall pasienter eldre enn 65 år, var farmakokinetikken til natriumoksybat ikke
+forskjellig sammenlignet med pasienter yngre enn 65 år.
+
+Pediatrisk populasjon
+Farmakokinetikken av natriumoksybat hos barn under 18 år er ikke undersøkt.
+
+Nedsatt nyrefunksjon

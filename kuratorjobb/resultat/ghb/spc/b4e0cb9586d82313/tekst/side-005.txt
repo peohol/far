@@ -1,0 +1,56 @@
+Omeprazol
+Samtidig administrering av omeprazol har ingen klinisk signifikant effekt på farmakokinetikken av
+natriumoksybat. Det kreves derfor ikke doseendring av natriumoksybat når det gis samtidig med
+protonpumpehemmere.
+
+Ibuprofen
+Studier av legemiddelinteraksjoner hos friske voksne viste ingen farmakokinetiske interaksjoner mellom
+natriumoksybat og ibuprofen.
+
+Diklofenak
+Studier av legemiddelinteraksjoner hos friske voksne viste ingen farmakokinetiske interaksjoner mellom
+natriumoksybat og diklofenak. Samtidig administrering av natriumoksybat og diklofenak hos friske
+frivillige reduserte oppmerksomhetssvikten forårsaket av administrering av natriumoksybat alene, målt
+ved hjelp av. psykometriske tester.
+
+GHB-dehydrogenasehemmere
+Siden natriumoksybat metaboliseres via GHB-dehydrogenase er det en mulig risiko for interaksjon med
+legemidler som stimulerer eller hemmer dette enzymet (f.eks. valproat, fenytoin eller etosuksimid) (se
+pkt. 4.4).
+
+Samtidig administrering av natriumoksybat (6 g/dag) og valproat (1250 mg/dag) medførte en økning i den
+systemiske eksponeringen for natriumoksybat med ca. 25 % og ingen signifikant endring i Cmax. Det ble
+ikke sett noen effekt på farmakokinetikken til valproat. De farmakodynamiske effektene som oppsto,
+inkludert økt svekkelse av kognitiv funksjon og søvnighet, var større ved samtidig administrering enn det
+som ble sett ved bruk av hvert av legemidlene alene. Dersom samtidig bruk er nødvendig, bør pasientens
+respons og tolerabilitet følges og dosen justeres ved behov (se pkt. 4.2).
+
+Topiramat
+Klinisk(e) observasjon(er) av koma og økt plasmakonsentrasjon av GHB er rapportert hos en pasient(er)
+som brukte natriumoksybat samtidig med topiramat (pkt. 4.4), og mulige farmakodynamiske og
+farmakokinetiske interaksjoner ved samtidig bruk av natriumoksybat og topiramat kan derfor ikke
+utelukkes.
+
+In vitro-studier med poolede humane levermikrosomer indikerer at natriumoksybat ikke signifikant
+hemmer aktiviteten av humane isoenzymer (se pkt 5.2).
+
+4.6     Fertilitet, graviditet og amming
+
+Graviditet
+Dyrestudier har ikke gitt bevis for teratogenisitet, men embryoletalitet er sett i studier av både rotter og
+kaniner (se pkt. 5.3).
+Data fra et begrenset antall gravide kvinner som ble eksponert i første trimester, indikerer en mulig økt
+risiko for spontanaborter. Hittil er ingen andre relevante epidemiologiske data tilgjengelige. Begrenset
+mengde data fra gravide kvinner i andre og tredje trimester indikerer ikke potensial for misdannelser eller
+føto-/neonatal toksisitet forårsaket av natriumoksybat.
+Natriumoksybat anbefales ikke under graviditet.
+
+Amming
+Natriumoksybat og/eller dets metabolitter skilles ut i morsmelk. Endringer i søvnmønster er sett hos
+spedbarn som ammes av mødre som har vært eksponert. Dette kan være i samsvar med effektene av
+natriumoksybat på nervesystemet. Natriumoksybat bør ikke brukes under amming.
+
+Fertilitet
+Det finnes ingen kliniske data vedrørende natriumoksybats påvirkning på fertilitet. Studier med doser av
+GHB på opptil 1000 mg/kg/dag hos hann- og hunnrotter har ikke vist holdepunkter for uønskede effekter
+på fertilitet.

@@ -1,18 +1,55 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/ghb-0001",
     "foresporsel_commit": "1ace181a8c22073aeabcc9edca8459a8e22ebc25",
     "foresporsel_sha256": "58d41387dff8d75c7db347e5bf192bd1f3dfa496ab8317f2eae9b713297b0e30",
     "kode_commit": "af619461472b179d8769d289a6cf1f611f726e15",
     "kjoring": "https://github.com/peohol/far/actions/runs/38524649521",
-    "startet_kl": "2026-10-14T06:51:34.596Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-14T06:51:36.702Z",
+    "ferdig_kl": "2026-10-14T06:51:58.428Z"
   },
-  "foresporsel": null,
-  "referanse": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "ghb"
+    ],
+    "oppgaver": [
+      "funksjonstest",
+      "spc"
+    ],
+    "referanse": "ghb-0001"
+  },
+  "referanse": "ghb-0001",
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 1034
+    }
+  ],
+  "stoffer": {
+    "ghb": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/ghb/funksjonstest.json"
+        },
+        "spc": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/ghb/spc.json"
+        }
+      }
+    }
+  }
 }

@@ -1,0 +1,935 @@
+1.    LEGEMIDLETS NAVN
+
+Oxiore 500 mg/ml mikstur, oppløsning
+
+
+2.    KVALITATIV OG KVANTITATIV SAMMENSETNING
+
+Hver ml oppløsning inneholder 500 mg natriumoksybat.
+
+Hjelpestoff med kjent effekt:
+Oxiore inneholder natrium, (se pkt.4.4).
+
+For fullstendig liste over hjelpestoffer, se pkt. 6.1.
+
+
+3.    LEGEMIDDELFORM
+
+Mikstur, oppløsning.
+
+Miksturen er klar.
+
+
+4.    KLINISKE OPPLYSNINGER
+
+4.1    Indikasjoner
+
+Behandling av narkolepsi med katapleksi hos voksne pasienter, ungdom og barn fra og med 7 år.
+
+4.2   Dosering og administrasjonsmåte
+
+Behandling bør initieres av og følges opp under veiledning av en lege med erfaring i behandling av
+narkolepsi. Leger skal overholde kontraindikasjoner, advarsler og forsiktighetsregler nøye.
+
+Dosering
+Voksne
+Den anbefalte startdosen er 4,5 g/dag natriumoksybat fordelt på to like doser på 2,25 g/dose. Dosen bør
+titreres til effekt ut fra effekt og tolerabilitet (se pkt. 4.4) opp til maksimalt 9 g/dag fordelt på to like doser
+på 4,5 g/dose ved å justere opp eller ned i trinn på 1,5 g/dag (dvs. 0,75 g/dose). Minst 1-2 uker anbefales
+mellom hver doseøkning. Dosen på 9 g/dag må ikke overskrides på grunn av muligheten for utvikling av
+alvorlige symptomer ved doser på 18 g/dag eller mer (se pkt. 4.4).
+Enkeltdoser på 4,5 g må ikke gis, med mindre pasienten tidligere er titrert til dette doseringsnivået.
+
+Dersom natriumoksybat og valproat brukes samtidig (se pkt. 4.5), anbefales en reduksjon av
+natriumoksybatdosen med 20 %. Den anbefalte startdosen av natriumoksybat ved bruk samtidig med
+valproat er 3,6 g/dag, gitt peroralt og fordelt på to like doser på ca. 1,8 g. Dersom samtidig bruk er
+nødvendig, bør pasientens respons og tolerabilitet følges og dosen tilpasses deretter (se pkt. 4.4).
+
+Seponering av natriumoksybat
+Seponeringseffekter av natriumoksybat har ikke vært systematisk undersøkt i kontrollerte kliniske studier
+(se pkt. 4.4).
+
+Hvis pasienten slutter å ta legemidlet i mer enn 14 etterfølgende dager, skal titrering startes på nytt fra
+den laveste dosen.
+
+Spesielle populasjoner
+
+                                                      1
+Eldre
+Eldre pasienter bør følges nøye for svekket motorisk og/eller kognitiv funksjon når de tar natriumoksybat
+(se pkt. 4.4).
+
+Nedsatt leverfunksjon
+Startdosen bør halveres hos alle pasienter med nedsatt leverfunksjon, og responsen på doseøkninger bør
+følges nøye (se pkt. 4.4 og 5.2).
+
+Nedsatt nyrefunksjon
+Alle pasienter med nedsatt nyrefunksjon bør vurdere veiledning for å redusere inntak av natrium (se pkt.
+4.4).
+
+Pediatrisk populasjon
+Ungdom og barn fra og med 7 år som veier minst 15 kg:
+Natriumoksybat administreres oralt to ganger hver kveld. Doseringsanbefalinger er angitt i tabell 1.
+Tabell 1 Natriumoksybat, anbefalt startdose og titrering for pediatriske pasienter
+
+
+    Pasientens vekt        Total daglig                Dosetitrering (til       Anbefalt maksimal
+                           startdose (fordelt på       klinisk effekt)          total daglig dose
+                           2 doser)*
+     15 kg – < 20 kg           ≤ 1 gram/dag            ≤ 0,5 gram/dag/uke       0,2 gram/kg/dag
+     20 kg – < 30 kg           ≤ 2 gram/dag             ≤ 1 gram/dag/uke
+     30 kg – < 45 kg           ≤ 3 gram/dag             ≤ 1 gram/dag/uke
+         ≥ 45 kg              ≤ 4,5 gram/dag           ≤ 1,5 gram/dag/uke       9 gram/dag
+
+
+*Ved leggetid og 2,5 til 4 timer senere. For barn som sover mer enn 8 timer per natt, kan natriumoksybat gis
+etter leggetid, mens barnet er i sengen, fordelt på to like doser med 2,5 til 4 timers mellomrom.
+Dosen bør titreres gradvis til effekt vises innenfor akseptabel bivirkningsprofil (se pkt. 4.4).
+Det anbefales minst én til to uker mellom doseøkningene. Doseringsanbefalinger for natriumoksybat
+(startdose, dosetitrering og maksimal dose) for pediatriske pasienter er basert på kroppsvekt. Pasientens
+kroppsvekt bør derfor kontrolleres regelmessig, spesielt under titrering, for å sikre at riktig dose
+natriumoksybat administreres.
+Den anbefalte maksimale totale daglige dosen er 0,2 g/kg/dag hos pediatriske pasienter som veier mindre
+enn 45 kg. For pediatriske pasienter som veier 45 kg eller mer er den maksimale totale daglige dosen
+9 gram/dag.
+Ved samtidig bruk av natriumoksybat og valproat (se pkt. 4.5), anbefales en reduksjon i
+natriumoksybatdosen med 20 %, f.eks. 4,8 gram/dag i stedet for 6 gram/dag.
+Sikkerhet og effekt av natriumoksybat hos barn under 7 år har ikke blitt fastslått. Natriumoksybat anbefales
+derfor ikke til barn under 7 år. Barn under 15 kg bør ikke gis natriumoksybat.
+
+
+Administrasjonsmåte
+Oxiore skal tas peroralt ved leggetid og deretter 2,5 til 4 timer senere. Det anbefales at begge doser med
+Oxiore gjøres klare samtidig, når pasienten går til sengs.
+Oxiore leveres sammen med en gradert målesprøyte og to 90 ml doseringsbegre med barnesikret lokk. Hver
+oppmålt dose av Oxiore må fylles i doseringsbegeret og fortynnes med 60 ml vann før inntak. Fordi mat
+signifikant reduserer biotilgjengeligheten av natriumoksybat bør både voksne og pediatriske pasienter spise
+minst flere (2-3) timer før inntak av den første dosen Oxiore ved leggetid. Voksne og pediatriske pasienter
+bør alltid la det gå like lang tid hver gang mellom inntak av dosen og måltider. Dosene skal tas innen 24
+                                                   2
+timer etter tilberedning, ellers skal de kastes.
+
+Pasienten bør kun bruke sprøyten som leveres med Oxiore. Andre natriumoksybat produkter med
+forskjellige styrker er tilgjengelige, og utveksling av de forskjellige sprøyter fra forskjellige merker kan føre
+til overdose. Alvorlige bivirkninger, for eksempel pustebesvær, krampeanfall og psykose, kan inntreffe (se
+pkt. 4.8 ″Bivirkninger″ og pkt. 4.9 ″Overdosering″).
+
+4.3   Kontraindikasjoner
+
+Overfølsomhet overfor virkestoffet eller overfor noen av hjelpestoffene listet opp i pkt. 6.1.
+- Pasienter med alvorlig depresjon.
+- Pasienter med suksin-semialdehyd-dehydrogenasemangel.
+- Pasienter som behandles med opioider eller barbiturater.
+
+4.4   Advarsler og forsiktighetsregler
+
+ Natriumoksybat kan potensielt indusere respirasjonsdepresjon.
+Respirasjons- og CNS-depresjon
+Natriumoksybat kan også potensielt indusere respirasjonsdepresjon. Pasienter bør vurderes med hensyn på
+søvnapné før behandling og forsiktighet bør utvises når behandling vurderes. Apné og respirasjonsdepresjon
+er observert hos en fastende, frisk person etter en enkeltdose på 4,5 g (to ganger anbefalt startdose). Under
+overvåkning etter markedsføring er det observert at natriumoksybat kan gjøre pasientene mer mottakelige
+for kvelningsfornemmelser under søvn. Pasienten bør spørres om tegn på depresjon av sentralnervesystemet
+(CNS) eller respirasjonen. Særlig forsiktighet bør utvises hos pasienter med en underliggende respiratorisk
+lidelse. Pasienter bør overvåkes for tegn på respirasjonsdepresjon under behandling. På grunn av høyere
+risiko for søvnapné, bør pasienter med BMI ≥40 kg/m2 følges nøye opp ved bruk av natriumoksybat.
+
+Omtrent 80 % av pasientene som fikk natriumoksybat i kliniske studier fortsatte å bruke CNS- stimulerende
+legemidler. Det er ukjent om dette påvirket respirasjonen gjennom natten. Før doseøkning med
+natriumoksybat, bør forskrivere være oppmerksomme på at søvnapné forekommer hos opptil 50 % av
+pasienter med narkolepsi.
+
+- Benzodiazepiner
+  På grunn av mulig økt risiko for respirasjonsdepresjon, bør samtidig bruk av benzodiazepiner og
+  natriumoksybat unngås.
+
+- Alkohol og CNS-dempende legemidler
+  Kombinasjon av alkohol eller et annet CNS-dempende legemiddel og natriumoksybat kan gi forsterket
+  CNS-dempende effekt av natriumoksybat og økt risiko for respirasjonsdepresjon. Pasienter bør derfor
+  advares mot bruk av alkohol i forbindelse med bruk av natriumoksybat.
+
+- Gammahydroksysmørsyre (GHB)-dehydrogenasehemmere
+  Forsiktighet må utvises hos pasienter som får samtidig behandling med valproat eller andre GHB-
+  dehydrogenasehemmere, fordi farmakokinetiske og farmakodynamiske interaksjoner er sett ved samtidig
+  administrering av natriumoksybat og valproat (se pkt. 4.5). Dersom samtidig bruk er nødvendig bør
+  dosejustering overveies. I tillegg bør pasientens respons og tolerabilitet følges nøye og dosen tilpasses
+  deretter.
+
+- Topiramat
+  Det er gjort klinisk(e) observasjon(er) av koma og økt plasmakonsentrasjon av GHB etter samtidig
+  administrering av natriumoksybat og topiramat. Pasienter bør derfor advares mot bruk av topiramat i
+  forbindelse med bruk av natriumoksybat (pkt. 4.5).
+
+Misbrukspotensial og avhengighet
+Natriumoksybat, som er som natriumsaltet av GHB, er et CNS-dempende virkestoff med velkjent
+                                                    3
+misbrukspotensial. Før behandling bør leger vurdere pasienter med tanke på tidligere legemiddelmisbruk
+eller tilbøyelighet til dette. Pasienter bør følges opp regelmessig, og behandling med natriumoksybat bør
+avbrytes dersom misbruk mistenkes.
+
+Det er rapportert tilfeller av avhengighet etter ulovlig bruk av GHB ved hyppig gjentatte doser (18 til 250
+g/dag) over det terapeutiske doseområdet. Selv om det ikke er klare holdepunkter for at avhengighet kan
+oppstå hos pasienter som tar natriumoksybat i terapeutiske doser, kan denne muligheten ikke utelukkes.
+
+Pasienter med porfyri
+Natriumoksybat anses ikke å være sikkert hos pasienter med porfyri fordi det har vist å kunne utløse porfyri
+hos dyr eller i in vitro-systemer.
+
+Nevropsykiatriske hendelser
+Pasienter kan bli forvirret mens de behandles med natriumoksybat. Hvis dette skjer bør de gjennomgå full
+evaluering, og passende tiltak vurderes individuelt. Andre nevropsykiatriske hendelser inkluderer angst,
+psykoser, paranoia, hallusinasjoner og uro. Utvikling av tankeforstyrrelser, inkludert tanker om å utføre
+voldelige handlinger (inkludert skade andre) og/eller unormal atferd når pasienter behandles med
+natriumoksybat krever grundig og umiddelbar evaluering.
+
+Utvikling av depresjon når pasienter behandles med natriumoksybat krever grundig og umiddelbar
+evaluering. Pasienter med tidligere affektive lidelser (inkludert depressiv sykdom, angst og bipolar lidelse),
+selvmordsforsøk og psykose bør følges særlig nøye med tanke på utvikling av depressive symptomer
+og/eller selvmordstanker mens de tar natriumoksybat. Natriumoksybat er kontraindisert ved alvorlig
+depresjon (pkt. 4.3).
+
+Hvis en pasient opplever urin- eller fekalinkontinens under behandling med natriumoksybat, bør
+forskrivende lege vurdere å undersøke ytterligere for å utelukke underliggende årsaker.
+
+Søvngjengeri har vært rapportert hos pasienter som behandles med natriumoksybat i kliniske studier. Det er
+uklart om noen eller alle av disse episodene har sammenheng med ekte somnambulisme (en parasomni som
+forekommer under non-REM-søvnen), eller med en annen medisinsk lidelse. Risikoen for skade eller
+selvpåført skade bør tas hensyn til hos alle pasienter som går i søvnen. Episoder med søvngjengeri bør
+derfor evalueres og passende intervensjon vurderes.
+
+Pediatrisk populasjon:
+
+Overvåking i titreringsfasen
+Pasientens toleranase, spesielt med hensyn til mulige tegn på depresjon av sentralnervesystemet og
+respirasjonen, skal overvåkes nøye ved hver doseøkning under titrering. Nøye overvåking bør omfatte at
+foreldre/omsorgspersoner observerer pusten til barnet etter inntak av natriumoksybat for å vurdere om
+respirasjonen er unormal de første to timene, f.eks. støyende pust, søvnapné, cyanose i lepper/ansikt. Hvis
+unormal pusting observeres bør det søkes medisinsk hjelp. Hvis noe unormalt observeres etter den første
+dosen bør den andre dosen ikke gis. Hvis det ikke oppdages noe unormalt kan den andre dosen gis. Den
+andre dosen bør ikke gis tidligere enn 2,5 timer eller senere enn 4 timer etter den første dosen. I enkelte
+tilfeller, f.eks. hvis det er usikkert om foreldre/omsorgspersoner kan utføre overvåkingen som beskrevet,
+anbefales ikke bruk av natriumoksybat med mindre medisinsk tilsyn av behandlingen kan organiseres.
+Hvis du er i tvil om en dose er administrert, skal dosen ikke administreres på nytt igjen, for å redusere
+risikoen for overdosering.
+
+Vekttap
+Vektreduksjon er vanlig blant pasienter som behandles med natriumoksybat (se pkt. 4.8). For pediatriske
+pasienter er det viktig at kroppsvekten kontrolleres regelmessig, spesielt under dosetitrering, for å sikre at
+den riktige dosen av natriumoksybat administreres (se pkt. 4.2).
+
+Nevropsykiatriske hendelser
+For barn og ungdom er det spesielt viktig å vurdere eventuelle suicidale eller depressive tilstander før
+                                                    4
+oppstart av behandling med natriumoksybat (se pkt. 4.8) og å overvåke alle behandlingsrelaterte hendelser.
+
+Alkohol og CNS-dempende legemidler
+Tatt i betraktning risikoen for alkoholinntak blant ungdom, er det sett at alkohol ytterligere kan forsterke
+CNS-dempende og respirasjonshemmende effekt av natriumoksybat hos barn og ungdom som tar
+natriumoksybat (se pkt. 4.5).
+
+Oxiore inneholder natrium
+Dette legemidlet inneholder 0,41 g natrium per dose med 2,25 g natriumoksybat. Dette tilsvarer 20 % av
+WHOs anbefalte maksimale daglige inntak av natrium på 2 g for en voksen person.
+Den maksimale daglige dosen av dette legemidlet tilsvarer 82 % av WHOs anbefalte maksimale daglige
+inntak av natrium. Oxiore er ansett som «natriumrik». Dette bør det særlig tas hensyn til hos pasienter som
+er på en saltfattig diett.
+En veiledning for å redusere natriuminntaket bør vurderes nøye ved behandling av pasienter med hjertesvikt,
+hypertensjon eller svekket nyrefunksjon (se pkt. 4.2 og 4.9).
+
+
+Eldre
+Det er svært begrenset erfaring med natriumoksybat hos eldre. Eldre pasienter bør derfor følges tett med
+tanke på svekket motorisk og/eller kognitiv funksjon når de tar natriumoksybat.
+
+Epileptikere
+Kramper er blitt observert hos pasienter som ble behandlet med natriumoksybat. Sikkerhet og effekt av
+natriumoksybat er ikke klarlagt hos pasienter med epilepsi, og bruk anbefales derfor ikke.
+
+Rebound-effekter og seponeringssyndrom
+Seponeringseffekter av natriumoksybat har ikke blitt systematisk undersøkt i kontrollerte kliniske studier.
+Hos noen pasienter kan katapleksi komme tilbake med en høyere frekvens etter opphør av behandlingen
+med natriumoksybat, men dette kan skyldes normal variasjon av sykdommen. Selv om erfaringen fra
+kliniske studier med terapeutiske doser natriumoksybat hos pasienter med narkolepsi/katapleksi ikke har vist
+klare bevis for seponeringssyndrom, ble det i sjeldne tilfeller observert hendelser som insomni, hodepine,
+angst, svimmelhet, søvnforstyrrelser, søvnighet, hallusinasjoner og psykotiske lidelser etter seponering av
+GHB.
+
+Opplæringsmateriell
+For å hjelpe forskrivere og pasienter/omsorgspersoner med viktig informasjon om Oxiore vil det bli utlevert
+opplæringsmateriell. Materiellet vil legge ekstra vekt på viktigheten av å utføre innledende vurdering mht.
+vekst og læringsevne hos pediatriske pasienter. I tillegg vil materiellet understreke viktigheten av å
+rapportere alle bivirkninger og atferdsendringer (sosial atferd og læring) til barnets helsepersonell.
+
+4.5   Interaksjon med andre legemidler og andre former for interaksjon
+
+Kombinasjon av alkohol og natriumoksybat kan fortsterke de dempende effektene av natriumoksybat på
+sentralnervesystemet. Pasienter bør advares mot å bruke enhver form for alkoholholdig drikke i forbindelse
+med natriumoksybat.
+Natriumoksybat bør ikke brukes i kombinasjon med legemidler med sedativ–hypnotisk effekt eller andre
+CNS-dempende legemidler.
+
+Legemidler med sedativ-hypnotisk effekt
+Studier av legemiddelinteraksjoner hos friske voksne med natriumoksybat (enkeltdose på 2,25 g) og
+lorazepam (enkeltdose på 2 mg) og zolpidemtartrat (enkeltdose på 5 mg) viste ingen farmakokinetiske
+interaksjoner. Økt søvnighet ble sett etter samtidig administrering av natriumoksybat (2,25 g) og lorazepam
+(2 mg). Farmakodynamisk interaksjon med zolpidem er ikke undersøkt. Når høyere doser på opptil 9 g/dag
+natriumoksybat kombineres med høyere doser hypnotika (innenfor anbefalt doseområde), kan ikke
+farmakodynamiske interaksjoner forbundet med symptomer på CNS- og/eller respirasjonsdepresjon
+                                                   5
+utelukkes (se pkt. 4.3).
+
+Tramadol
+En studie av legemiddelinteraksjoner hos friske voksne med natriumoksybat (enkeltdose på 2,25 g) og
+tramadol (enkeltdose på 100 mg) viste ingen farmakokinetiske/farmakodynamiske interaksjoner. Når høyere
+doser på opptil 9 g/dag natriumoksybat kombineres med høyere doser opioider (innenfor anbefalt
+doseområde), kan ikke farmakodynamiske interaksjoner forbundet med symptomer på CNS- og/eller
+respirasjonsdepresjon utelukkes (se pkt. 4.3).
+
+Antidepressiver
+Studier av legemiddelinteraksjoner hos friske voksne viste ingen farmakokinetiske interaksjoner mellom
+natriumoksybat (enkeltdose på 2,25 g) og antidepressivet protriptylinhydroklorid (enkeltdose på 10 mg) og
+duloksetin (60 mg ved steady state). Ingen tilleggseffekt med hensyn til søvnighet ble sett ved
+sammenligning av enkeltdoser av natriumoksybat alene (2,25 g) og natriumoksybat (2,25 g) i kombinasjon
+med duloksetin (60 mg ved steady state). Antidepressiver har vært brukt til behandling av katapleksi. En
+mulig additiv effekt av antidepressiver og natriumoksybat kan ikke utelukkes. Hyppigheten av bivirkninger
+har økt når natriumoksybat er gitt samtidig med trisykliske antidepressiver.
+
+Modafinil
+En studie av legemiddelinteraksjoner hos friske voksne viste ingen farmakokinetiske interaksjoner mellom
+natriumoksybat (enkeltdose på 4,5 g) og modafinil (enkeltdose på 200 mg). Natriumoksybat har blitt
+administrert samtidig med CNS-stimulerende midler hos ca. 80 % av pasientene i kliniske studier av
+narkolepsi. Det er ikke kjent om dette påvirket respirasjonen i løpet av natten.
+
+Omeprazol
+Samtidig administrering av omeprazol har ingen klinisk signifikant effekt på farmakokinetikken av
+natriumoksybat. Det kreves derfor ikke doseendring av natriumoksybat når det gis samtidig med
+protonpumpehemmere.
+
+Ibuprofen
+Studier av legemiddelinteraksjoner hos friske voksne viste ingen farmakokinetiske interaksjoner mellom
+natriumoksybat og ibuprofen.
+
+Diklofenak
+Studier av legemiddelinteraksjoner hos friske voksne viste ingen farmakokinetiske interaksjoner mellom
+natriumoksybat og diklofenak. Samtidig administrering av natriumoksybat og diklofenak hos friske
+frivillige reduserte oppmerksomhetssvikten forårsaket av administrering av natriumoksybat alene, målt vha.
+psykometriske tester.
+
+GHB-dehydrogenasehemmere
+Siden natriumoksybat metaboliseres via GHB-dehydrogenase er det en mulig risiko for interaksjon med
+legemidler som stimulerer eller hemmer dette enzymet (f.eks. valproat, fenytoin eller etosuksimid) (se pkt.
+4.4).
+
+Samtidig administrering av natriumoksybat (6 g/dag) og valproat (1250 mg/dag) medførte en økning i den
+systemiske eksponeringen for natriumoksybat med ca. 25 % og ingen signifikant endring i Cmax. Det ble
+ikke sett noen effekt på farmakokinetikken til valproat. De farmakodynamiske effektene som oppsto,
+inkludert økt svekkelse av kognitiv funksjon og søvnighet, var større ved samtidig administrering enn det
+som ble sett ved bruk av hvert av legemidlene alene. Dersom samtidig bruk er nødvendig, bør pasientens
+respons og tolerabilitet følges og dosen justeres ved behov (se pkt. 4.2).
+
+Topiramat
+                                                  6
+Klinisk(e) observasjon(er) av koma og økt plasmakonsentrasjon av GHB er rapportert hos en pasient(er)
+som brukte natriumoksybat samtidig med topiramat, og mulige farmakodynamiske og farmakokinetiske
+interaksjoner ved samtidig bruk av natriumoksybat og topiramat kan derfor ikke utelukkes (pkt. 4.4).
+
+In vitro-studier med poolede humane levermikrosomer indikerer at natriumoksybat ikke signifikant
+hemmer aktiviteten av humane isoenzymer (se pkt 5.2).
+
+4.6   Fertilitet, graviditet og amming
+
+Graviditet
+Dyrestudier har ikke gitt bevis for teratogenisitet, men embryoletalitet er sett i studier av både rotter og
+kaniner (se pkt. 5.3).
+
+Data fra et begrenset antall gravide kvinner som ble eksponert i første trimester, indikerer en mulig økt
+risiko for spontanaborter. Hittil er ingen andre relevante epidemiologiske data tilgjengelige. Begrenset
+mengde data fra gravide kvinner i andre og tredje trimester indikerer ikke potensial for misdannelser eller
+føto-/neonatal toksisitet forårsaket av natriumoksybat.
+Natriumoksybat anbefales ikke under graviditet.
+
+Amming
+Natriumoksybat og/eller dets metabolitter skilles ut i morsmelk. Endringer i søvnmønster er sett hos spedbarn
+som ammes av mødre som har vært eksponert. Dette kan være i samsvar med effektene av natriumoksybat på
+nervesystemet. Natriumoksybat bør ikke brukes under amming.
+
+Fertilitet
+Det finnes ingen kliniske data vedrørende natriumoksybats påvirkning på fertilitet. Studier med doser av
+GHB på opptil 1000 mg/kg/dag hos hann- og hunnrotter har ikke vist holdepunkter for uønskede effekter på
+fertilitet.
+
+4.7   Påvirkning av evnen til å kjøre bil og bruke maskiner
+
+Natriumoksybat har stor påvirkning på evnen til å kjøre bil og bruke maskiner.
+
+I minst 6 timer etter inntatt dose natriumoksybat må pasienter ikke utføre oppgaver som krever fullstendig
+mental årvåkenhet eller motorisk koordinasjon, som f.eks. bruke maskiner eller kjøre bil.
+
+I begynnelsen av behandlingen, og inntil pasientene vet om natriumoksybat vil påvirke dem neste dag, bør
+de utvise ekstrem forsiktighet når de kjører bil, bruker tunge maskiner eller utfører enhver annen oppgave
+som kan være farlig eller som krever fullstendig mental årvåkenhet.
+
+Hvis forholdet mellom daglig dose og kroppsvekt overstiger 0,1 gram/kg/dag for pediatriske pasienter bør
+leger og foreldre eller omsorgspersoner vurdere om denne tiden bør være lengre enn 6 timer, avhengig av
+individuell sensitivitet.
+
+4.8   Bivirkninger
+
+Sammendrag av sikkerhetsprofilen
+
+Kliniske studier
+Sikkerhetsprofilen var kvalitativt den samme i studier hos voksne som i studier hos pediatriske pasienter.
+
+De hyppigst rapporterte bivirkningene hos voksne er svimmelhet, kvalme og hodepine, som
+forekommer hos 10 % til 20 % av pasientene. De mest alvorlige bivirkningene er selvmordsforsøk,
+psykose, respirasjonsdepresjon og konvulsjoner.
+
+Hos voksne ble effekt og sikkerhet av natriumoksybat ved behandling av narkolepsisymptomer fastslått i
+                                                    7
+fire randomiserte, dobbeltblinde, placebokontrollerte, parallellgruppe-, multisenterstudier av pasienter med
+narkolepsi med katapleksi, unntatt i én studie, der katapleksi ikke var et krav for deltakelse To fase 3 og én
+fase 2 dobbeltblinde, parallellgruppe-, placebokontrollerte studier ble utført for å undersøke om
+natriumoksybat er indisert ved fibromyalgi hos voksne. I tillegg er det utført randomiserte, dobbeltblinde,
+placebokontrollerte, crossover interaksjonsstudier med ibuprofen, diklofenak og valproat med friske voksne
+personer. Et sammendrag er gitt i pkt. 4.5.
+
+Erfaring etter markedsføring
+I tillegg til bivirkningene som er rapportert i kliniske studier, er det rapportert bivirkninger etter
+markedsføring. Det er ikke alltid mulig å gi et sikkert estimat av hyppigheten av insidensen i pasientgruppen
+som skal behandles.
+
+Bivirkninger i tabellform
+Bivirkningene er angitt i henhold til MedDRAs organklassesystem.
+
+Frekvensestimat: Svært vanlige (1/10), vanlige (1/100 til <1/10), mindre vanlige (1/1000 til
+<1/100), sjeldne (1/10 000 til <1/1000), svært sjeldne (1/10 000), ikke kjent (kan ikke anslås ut fra
+tilgjengelige data).
+
+Innenfor hver frekvensgruppering er bivirkninger presentert etter synkende alvorlighetsgrad.
+
+Infeksiøse og parasittære sykdommer
+Vanlige: Nasofaryngitt, sinusitt.
+
+Forstyrrelser i immunsystemet
+Mindre vanlige: Hypersensitivitet.
+
+
+Stoffskifte- og ernæringsbetingede sykdommer
+Vanlige: Anoreksi, nedsatt appetitt.
+Ikke kjent: Dehydrering, økt appetitt.
+
+Psykiatriske lidelser
+Vanlige: Depresjon, katapleksi, angst, unormale drømmer, forvirringstilstand, desorientering,
+mareritt, søvngjengeri, søvnforstyrrelser, insomni, søvnopprettholdelse-insomni, nervøsitet.
+Mindre vanlige: Selvmordsforsøk, psykose, paranoia, hallusinasjoner, unormale tanker,
+opphisselse, initial insomni.
+Ikke kjent: Selvmordstanker, drapstanker, aggresjon, eufori, søvnrelaterte
+spiseforstyrrelser, panikkanfall, mani/bipolar lidelse, vrangforestillinger, bruksisme,
+irritabilitet, økt libido.
+
+Nevrologiske sykdommer
+Svært vanlige: Svimmelhet, hodepine.
+Vanlige: Søvnparalyse, søvnighet, tremor, balanseforstyrrelser, oppmerksomhetsforstyrrelser,
+hypoestesi, parestesi, sedasjon, dysgeusi.
+Mindre vanlige: Myoklonus, amnesi,”restless legs”- syndrom.
+Ikke kjent: Konvulsjoner, bevissthetstap, dyskinesi.
+
+Øyesykdommer
+Vanlige: Tåkesyn.
+
+Sykdommer i øre og labyrint
+Vanlige: Vertigo.
+Ikke kjent: Tinnitus.
+                                                  8
+Hjertesykdommer
+Vanlige: Palpitasjoner.
+
+Karsykdommer
+Vanlige: Hypertensjon.
+
+Sykdommer i respirasjonsorganer, thorax og mediastinum
+Vanlige: Dyspné, snorking, nesetetthet.
+Ikke kjent: Respirasjonsdepresjon, søvnapné, kvelningsfornemmelse.
+
+Gastrointestinale sykdommer
+Svært vanlige: Kvalme (frekvensen av kvalme er høyere hos kvinner enn hos menn).
+Vanlige: Oppkast, diaré, smerter i øvre abdomen.
+Mindre vanlige: Fekal inkontinens.
+Ikke kjent: Munntørrhet.
+
+Hud- og underhudssykdommer
+Vanlige: Hyperhidrose, utslett.
+Ikke kjent: Urtikaria, angioødem, seboré.
+
+Sykdommer i muskler, bindevev og skjelett
+Vanlige: Artralgi, muskelspasmer, ryggsmerte.
+
+Sykdommer i nyre og urinveier
+Vanlige: Enuresis nocturna, urininkontinens.
+Ikke kjent: Pollakisuri/hurtig innsettende trang til vannlating, nokturi.
+
+Generelle lidelser og reaksjoner på administrasjonsstedet
+Vanlige: Asteni, tretthet, følelse av å være beruset, perifert ødem.
+
+Undersøkelser
+Vanlige: Økt blodtrykk, vektreduksjon.
+
+Skader, forgiftninger og komplikasjoner ved medisinske prosedyrer
+Vanlige: Fall.
+
+Beskrivelse av utvalgte bivirkninger
+Hos noen pasienter kan katapleksi komme tilbake med en høyere frekvens etter opphør av behandlingen
+med natriumoksybat, men dette kan skyldes normal variasjon av sykdommen. Selv om erfaringen fra
+kliniske studier med terapeutiske doser natriumoksybat hos pasienter med narkolepsi/katapleksi ikke har vist
+klare bevis for seponeringssyndrom, ble det i sjeldne tilfeller observert bivirkninger som insomni, hodepine,
+angst, svimmelhet, søvnforstyrrelser, søvnighet, hallusinasjoner og psykotiske lidelser etter seponering av
+GHB.
+
+Spesielle populasjoner
+
+Pediatrisk populasjon
+I den pediatriske populasjonen ble effekt og sikkerhet av natriumoksybat for behandling av narkolepsi med
+katapleksisymptomer fastslått i en fase 2/3 dobbeltblind, placebokontrollert, randomisert seponerings-
+multisenterstudie.
+
+I en studie med barn og ungdom var de hyppigst rapporterte behandlingsrelaterte bivirkningene enurese
+(18,3 %), kvalme (12,5 %), oppkast (8,7 %) og vekttap (8,7 %), nedsatt matlyst (6,7 %), hodepine (5,8 %),
+svimmelhet (5,8 %). Bivirkninger med selvmordstanker (1 %) og akutt psykose (1 %) ble også rapportert (se
+pkt. 4.4 og pkt. 5).
+                                                    9
+Hos noen barn mellom 7 og < 18 år har overvåking av bivirkninger etter markedsføring vist at behandling
+med natriumoksybat ble avbrutt på grunn av unormal atferd, aggresjon og humørendringer.
+
+Melding av mistenkte bivirkninger
+Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+melde enhver mistenkt bivirkning. Dette gjøres via www.legemiddelverket.no/meldeskjema.
+
+4.9   Overdosering
+
+Det er begrenset informasjon om tegn og symptomer på overdose med natriumoksybat. Det meste av
+informasjonen kommer fra ulovlig bruk av GHB. Natriumoksybat er natriumsaltet av GHB. Hendelser
+assosiert med seponeringssyndrom har vært observert utenfor det terapeutiske doseområdet.
+
+Symptomer
+Pasienter har hatt varierende grad av nedsatt bevissthet som kan svinge raskt mellom en forvirret,
+urolig kjempende tilstand med ataksi og koma. Emese (også ved nedsatt bevissthet), diaforese,
+hodepine og svekkede psykomotoriske evner kan observeres. Tåkesyn har vært rapportert. En stadig
+dypere koma har blitt observert ved høyere doser så vel som acidose. Myoklonus og tonisk-kloniske
+anfall har vært rapportert. Det er rapporter om nedsatt respirasjonshastighet og -dybde og om
+livstruende respirasjonsdepresjon som krever intubering og kunstig åndedrett. Cheyne-Stokes
+respirasjon og apné har vært observert. Bradykardi og hypotermi kan følge bevisstløshet, likeledes
+muskulær hypotoni, men senereflekser forblir intakte. Bradykardi har svart på intravenøs
+administrasjon av atropin.
+Hendelser med hypernatremi med metabolsk alkalose er rapportert i sammenheng med samtidig
+infusjon av natriumklorid.
+
+Behandling
+Mageskylling kan vurderes hvis det mistenkes samtidig inntak av andre midler. Siden brekninger kan
+forekomme ved nedsatt bevissthet bør pasienten legges i passende stilling (stabilt sideleie) og det kan
+være ønskelig å beskytte luftveiene ved å intubere.
+Selv om brekningsrefleksen kan være fraværende hos pasienter i dyp koma kan også bevisstløse
+pasienter kjempe mot intubering, og raskt utført induksjon (uten bruk av sedativer) bør vurderes.
+
+Det kan ikke forventes å reversere de sentralnervøse effektene av natriumoksybat med flumazenil. Det
+er ikke tilstrekkelig bevis for å anbefale bruk av nalokson ved behandling av overdose med GHB.
+Bruk av hemodialyse og andre ekstrakorporale tiltak for å fjerne legemiddel har ikke blitt undersøkt
+ved overdose med natriumoksybat, men tilfeller av acidose på grunn av overdose med GHB har vært
+rapportert. På grunn av den raske metaboliseringen av natriumoksybat kan det hende at disse tiltakene
+ikke er påkrevd.
+
+
+5.    FARMAKOLOGISKE EGENSKAPER
+
+5.1   Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Andre midler med virkning på nervesystemet, ATC-kode: N07X X04
+
+Virkningsmekanisme
+Natriumoksybat er et legemiddel med dempende effekt på sentralnervesystemet som reduserer ekstrem
+søvnighet på dagtid og katapleksi hos pasienter med narkolepsi, og som endrer søvnarkitekturen slik at det
+blir mindre fragmentert nattesøvn. Den eksakte virkningsmekanismen av natriumoksybat er ukjent, men
+natriumoksybat antas å virke ved å fremme slow wave-søvn (deltasøvn) og sikre nattesøvn. Natriumoksybat
+gitt før nattesøvn øker fase 3- og 4-søvn og øker søvnlatens, mens den reduserer frekvensen av REM-
+søvnperioder ved innsovning (sleep onset REM periods (SOREMPs)). Andre mekanismer, som det gjenstår å
+                                                  10
+avklare, kan også være involvert. I den kliniske studiedatabasen fortsatte over 80 % av pasientene med
+samtidig bruk av andre stimulantia.
+
+Voksne
+
+Effekten av natriumoksybat for behandling av narkolepsisymptomer ble fastslått i fire randomiserte,
+dobbeltblinde, placebokontrollerte, parallellgruppe-, multisenterstudier (studie 1, 2, 3 og 4) av pasienter med
+narkolepsi med katapleksi, unntatt studie 2, der katapleksi ikke var noe krav for deltakelse. Samtidig bruk av
+stimulantia var tillatt i alle studiene (unntatt fasen med aktiv behandling i studie 2), antidepressiver ble
+seponert før aktiv behandling i alle studiene unntatt studie 2. I hver studie var den daglige dosen delt i to
+like doser. Den første dosen ble tatt ved sengetid, og den andre dosen ble tatt 2,5 til 4 timer senere.
+
+Tabell 2   Oppsummering av kliniske studier med natriumoksybat ved behandling av
+narkolepsi
+Studie Primæreffekt N       Sekundær effekt            Varighet Aktiv behandling og
+                                                                                         dosering (g/d)
+
+Studie 1      EDS (ESS);         246     MWT/søvnarkitektur/               8 uker             Natriumoxybat
+                                         katapleksi/søvnepisoder
+                  CGIc                                                                               4,5-9
+                                         /FOSQ
+
+Studie 2     EDS (MWT)           231 Søvnarkitektur/ ESS/ CGI/             8 uker           Natriumoxybat 6-9
+                                     søvnepisoder
+                                                                                         Modafinil 200-600 mg
+
+Studie 3      Katapleksi         136 EDS (ESS)/CGIc/                       4 uker           Natriumoxybat 3-9
+                                     Søvnepisoder
+
+Studie 4      Katapleksi         55      Ingen                             4 uker           Natriumoxybat 3-9
+EDS – Ekstrem søvnighet på dagtid (Excessive Daytime Sleepiness);
+ESS – Epworth Sleepiness Scale;
+MWT – Maintenance of Wakefulness Test; søvnepisoder – antall utilsiktede søvnepisoder på dagtid;
+CGI-c – Clinical Global Impression of Change;
+FOSQ – Functional Outcomes of Sleep Questionnaire
+
+Studie 1 omfattet 246 pasienter med narkolepsi og inkluderte en opptitreringsperiode på 1 uke. De primære
+effektparametrene var endringer i ekstrem søvnighet på dagtid målt ved bruk av Epworth Sleepiness Scale
+(ESS), og endringen i generell alvorlighet i pasientens narkolepsisymptomer, vurdert av utprøveren ved
+bruk av Clinical Global Impressions of Change (CGI-c).
+
+Tabell 3   Sammendrag for ESS i studie 1
+                       Epworth Sleepiness Scale (ESS, skala 0-24)
+ Dosegruppe [g/d (n)] Baseline      Endepunkt     Median endring fra                               Endring fra baseline
+                                                       baseline                                    sammenlignet med
+                                                                                                         placebo
+                                                                                                        (p-verdi)
+Placebo (60)                      17,3                16,7                    -0,5                           -
+4,5 (68)                          17,5                15,7                    -1,0                        0,119
+6 (63)                            17,9                15,3                    -2,0                         0,001
+9 (55)                            17,9                13,1                    -2,0                       < 0,001
+
+
+Tabell 4       Sammendrag for CGI-c i studie 1
+                               Clinical Global Impressions of Change (CGI-c)
+
+
+                                                          11
+       Dosegruppe [g/d (n)]                           Respondere*                          Endring fra baseline
+                                                         n (%)                          sammenlignet med placebo
+                                                                                                (p-verdi)
+Placebo (60)                                            13 (21,7)                                   -
+4,5 (68)                                                32 (47,1)                                 0,002
+6 (63)                                                  30 (47,6)                                <0,001
+9 (55)                                                  30 (54,4)                                <0,001
+* CGI-c-dataene ble analysert ved å definere respondere som de pasientene som oppnådde svært stor forbedring eller stor
+forbedring.
+
+I studie 2 ble effekten av oralt administrert natriumoksybat, modafinil og natriumoksybat + modafinil,
+sammenlignet med placebo i behandlingen av søvnighet på dagtid ved narkolepsi. I løpet av den 8 uker
+lange, dobbeltblinde studien tok pasientene modafinil med etablert dose eller tilsvarende placebodose.
+Natriumoksybat eller tilsvarende placebodose var 6 g/dag de første 4 ukene, økt til 8 g/dag de resterende 4
+ukene. Den primære effektparameteren var ekstrem søvnighet på dagtid målt som objektiv respons i MWT.
+
+Tabell 5    Sammendrag for MWT i studie 2
+                                       STUDIE 2
+     Dosegruppe      Baseline     Endepunkt                            Gjennomsnittlig                  Endring
+                                                                     endring fra baseline           sammenlignet med
+                                                                                                        placebo
+Placebo (56)                      9,9                 6,9                      -2,7                        -
+Natriumoksybat (55)              11,5                11,3                      0,16                     <0,001
+Modafinil (63)                   10,5                 9,8                      -0,6                      0,004
+Natriumoksybat +                 10,4                12,7                      2,3                      <0,001
+Modafinil (57)
+
+Studie 3 omfattet 136 narkoleptiske pasienter med moderat til alvorlig katapleksi (median på 21
+katapleksianfall per uke) ved baseline. Den primære effektparameteren i denne studien var frekvensen av
+katapleksianfall.
+
+Tabell 6  Sammendrag av resultater i studie 3
+    Dosering       Antall pasienter                                          Katapleksianfall
+             Studie 3                    Baseline                            Median endring              Endring fra
+                                                                               fra baseline               baseline
+                                                                                                        sammenlignet
+                                                                                                        med placebo
+                                                                                                          (p-verdi)
+                                                                            Median, anfall/uke
+Placebo                             33                      20,5                   -4                          -
+3,0 g /dag                          33                      20,0                   -7                       0,5235
+6,0 g /dag                          31                      23,0                  -10                       0,0529
+9,0 g /dag                          33                      23,5                  -16                       0,0008
+
+I studie 4 deltok 55 narkoleptiske pasienter som hadde gjennomgått åpen behandling med natriumoksybat i
+7 til 44 måneder. Pasientene ble randomisert til fortsatt behandling med natriumoksybat ved stabil dose,
+eller til placebo. Studie 4 ble utformet spesifikt for å evaluere fortsatt effekt av natriumoksybat etter
+langtidsbruk. Den primære effektparameteren i denne studien var frekvensen av katapleksianfall.
+
+Tabell 7  Sammendrag av resultater i studie 4
+Behandlingsgruppe Antall pasienter                                           Katapleksianfall
+
+
+
+
+                                                            12
+                 Studie 4                          Baseline          Median endring          Endring fra
+                                                                      fra baseline            baseline
+                                                                                            sammenlignet
+                                                                                            med placebo
+                                                                                              (p-verdi)
+                                                                 Median, anfall/to uker
+Placebo                         29                    4,0                 21,0                    -
+
+Natriumoksybat                  26                    1,9                   0                 p <0,001
+
+I studie 4 var responsen numerisk nesten lik for pasienter som ble behandlet med doser på 6 til
+9 g/dag, men det ble ikke observert noen effekt hos pasienter som ble behandlet med doser på mindre
+enn 6 g/dag.
+
+Pediatrisk populasjon
+
+Effekt av natriumoksybat hos pediatriske pasienter som har narkolepsi med katapleksi ble fastslått i
+en dobbeltblind, placebokontrollert, randomisert seponerings-multisenterstudie.
+
+Denne studien viste klinisk effekt av natriumoksybat i behandling av katapleksi og uttalt søvnighet
+på dagtid (Excess Daytime Sleepiness, EDS) ved narkolepsi hos pediatriske personer.
+63 pasienter ble randomisert i effektpopulasjonen der det primære endepunktet for effekt i denne
+studien var endring i antallet ukentlige katapleksianfall mellom de siste to ukene av perioden med
+stabil dose og den dobbeltblinde perioden.
+
+I løpet av den dobbeltblinde perioden var median (1. kvartil, 3. kvartil) endring fra baseline (dvs. de
+2 siste ukene av perioden med stabil dose) i ukentlig antall katapleksianfall 12,71 (3,44, 19,77) for
+pasienter randomisert til placebo og 0,27 (-1,00, 2,50) for pasienter randomisert til natriumoksybat.
+
+Tabell 8 Sammendrag av resultat i studie 13-005 med barn/ungdom
+
+  Behandlingsgruppe          Antall pasienter     Ukentlig antall katapleksianfall (median)
+                                                   Baseline (dvs.         Dobbeltblind      Endring fra
+                                                   siste 2 uker av           periode         baseline
+                                                   perioden med
+                                                     stabil dose)
+
+        Placebo                      32                  4,67                   21,25             12,71
+   Natriumoksybat                    31                  3,50                    3,77              0,27
+p-verdi                                                                                       < 0,0001
+
+Når subgruppeanalyser etter alder (7–11 år og 12–17 år) ble utført for det primære endepunktet, ble
+lignende resultater observert. I den dobbeltblinde behandlingsperioden for personer i alderen 7 til 11
+år var median (1. kvartil, 3. kvartil) endring fra baseline i ukentlig antall katapleksianfall 18,32 (7,58,
+35,75) for personer randomisert til placebo og 0,13 (-1,15, 2,05) for personer randomisert til
+natriumoksybat (p < 0,0001).
+
+I den dobbeltblinde behandlingsperioden for personer 12 til 17 år var median (1. kvartil, 3. kvartil)
+endring fra baseline i ukentlig antall katapleksianfall 9,39 (1,08, 16,12) for personer randomisert til
+placebo og 0,58 (-0,88, 2,58) for personer randomisert til natriumoksybat (p = 0,0044). I den
+dobbeltblinde behandlingsperioden var median (1. kvartil, 3. kvartil) endring i sekundært endepunkt
+(endring i ESS-skår) fra baseline (som forekom ved besøk 3 – på slutten av perioden med stabil dose)
+i Epworth søvnighetsskala for barn og ungdom (ESS-CHAD)-skår 3,0 (1,0, 5,0) for personer
+randomisert til placebo og 0,0 (-1,0, 2,0) for personer randomisert til natriumoksybat.
+Sammenligning av rangert endring fra baseline mellom behandlingene var statistisk signifikant (p =
+0,0004) ved analyse med ANCOVA-modellen ved bruk av behandling som en faktor og rangert
+                                                    13
+baselineverdi som en kovariat. Personer randomisert til placebo hadde i gjennomsnitt høyere ESS
+(CHAD)-skår ved baseline sammenlignet med de som fikk natriumoksybat
+
+Tabell 9 Sammendrag av ESS (CHAD)-skår i den dobbeltblinde behandlingsperioden
+(effektpopulasjon)
+
+  Behandlingsgruppe       Antall pasienter              Endring i ESS (CHAD)-skår (median)
+                                               Baseline (Besøk         Slutten av      Endring fra
+                                                3-Slutten av          dobbeltblind      baseline
+                                                periode med        behandlingsperiode
+                                                 stabil dose)          (Besøk 4)
+
+        Placebo                 32              11,0                 12,0              3,0
+    Natriumoksybat              31               8,0                  9,0              0,0
+ p-verdi                                                                          0,0004
+Forkortelser: ESS (CHAD) = Epworth søvnighetsskala for barn og ungdom (Epworth Sleepiness
+Scale for Children and Adolescents)
+
+5.2   Farmakokinetiske egenskaper
+
+Natriumoksybat absorberes raskt og nesten fullstendig etter oral administrasjon; absorpsjonen forsinkes og
+reduseres av et fettrikt måltid. Det elimineres hovedsakelig ved metabolisme med en halveringstid på 0,5 til
+1 time. Farmakokinetikken er ikke-lineær med en 3,8 ganger økning av arealet under kurven for
+plasmakonsentrasjon versus tid (AUC) når dosen dobles fra 4,5 g til 9 g.
+Farmakokinetikken endres ikke ved gjentatt dosering.
+
+Absorpsjon
+Natriumoksybat absorberes raskt etter oral administrasjon med en absolutt biotilgjengelighet på omtrent 88
+%. Gjennomsnittlige maksimale plasmakonsentrasjoner (1. og 2. topp) etter administrasjon av en daglig
+dose på 9 g fordelt på to like doser gitt med fire timers mellomrom var henholdsvis 78 og 142 g/ml. Den
+gjennomsnittlige tid til maksimal plasmakonsentrasjon (Tmax) varierte fra 0,5 til 2 timer i åtte
+farmakokinetiske studier.
+
+Etter oral administrasjon øker plasmakonsentrasjonen av natriumoksybat mer enn proporsjonalt med økende
+dose. Enkeltdoser større enn 4,5 g er ikke studert. Administrasjon av natriumoksybat rett etter et fettrikt
+måltid resulterte i forsinket absorpsjon (gjennomsnittlig Tmax økte fra 0,75 timer til 2,0 timer) og en
+reduksjon i maksimal plasmakonsentrasjon (Cmax) med et gjennomsnitt på 58 % og på systemisk
+eksponering (AUC) med 37 %.
+
+Distribusjon
+Natriumoksybat er en hydrofil forbindelse med et tilsynelatende distribusjonsvolum på 190-384 ml/kg.
+Ved natriumoksybatkonsentrasjoner fra 3 til 300 µg/ml er mindre enn 1 % bundet til plasmaproteiner.
+
+Biotransformasjon
+Dyrestudier indikerer at metabolisme er den viktigste eliminasjonsveien for natriumoksybat, og gir
+karbondioksid og vann via trikarboksylsyre (Krebs’)-syklus og sekundært ved ß-oksidasjon. Den primære
+veien involverer et NADP+-koblet enzym i cytosol, GHB-dehydrogenase som katalyserer omdanning av
+natriumoksybat til suksinsemialdehyd, som deretter biotransformeres til suksinsyre av enzymet
+suksinsemialdehyd dehydrogenase. Suksinsyre går inn i Krebs’ syklus og metaboliseres til karbondioksid og
+vann. Et annet mitokondrieoksidoreduktaseenzym, en transhydrogenase, katalyserer også omdanning av
+suksinsemialdehyd i nærvær av α-ketoglutarat. En alternativ vei for biotransformasjon involverer ß-
+oksidasjon via 3,4-dihydroksybutyrat til acetyl CoA, som også går inn i sitronsyresyklusen og resulterer i
+dannelsen av karbondioksid og vann. Det er ikke identifisert aktive metabolitter.
+
+In vitro-studier med poolede humane levermikrosomer indikerer at natriumoksybat ikke signifikant hemmer
+aktiviteten av de humane isoenzymene: CYP1A2, CYP2C9, CYP2C19, CYP2D6, CYP2E1 eller CYP3A
+                                                  14
+opp til en konsentrasjon på 3 mM (378 g/ml). Disse verdiene er betydelig høyere enn nivåene som oppnås
+ved terapeutiske doser.
+
+Eliminasjon
+Clearance av natriumoksybat er nesten bare ved biotransformasjon til karbondioksid som deretter elimineres
+ved utånding. I gjennomsnitt gjenfinnes mindre enn 5 % av uforandret legemiddel i urinen 6-8 timer etter
+dosering. Fekal ekskresjon er ubetydelig.
+
+Spesielle populasjoner
+
+Eldre
+Hos et begrenset antall pasienter eldre enn 65 år, var farmakokinetikken til natriumoksybat ikke forskjellig
+ved sammenligning med pasienter yngre enn 65 år.
+
+Pediatrisk populasjon
+De viktigste farmakokinetiske egenskapene til natriumoksybat hos pediatriske personer er de samme som er
+rapportert i farmakokinetiske studier av natriumoksybat hos voksne.
+
+Pediatriske og voksne personer som får samme dose i mg/kg har like profiler for plasmakonsentrasjon/tid (se
+pkt. 4.2).
+
+Nedsatt nyrefunksjon
+Siden nyrene ikke spiller en betydelig rolle for utskillelsen av natriumoksybat har det ikke vært gjennomført
+farmakokinetiske studier hos pasienter med nedsatt nyrefunksjon; det forventes ikke at nyrefunksjonen
+påvirker farmakokinetikken av natriumoksybat.
+
+Nedsatt leverfunksjon
+Natriumoksybat gjennomgår betydelig presystemisk metabolisme (”first-pass”-metabolisme i leveren). Etter
+en enkel oral dose på 25 mg/kg, var AUC-verdier fordoblet hos cirrhotiske pasienter, med tilsynelatende
+oral clearance redusert fra 9,1 hos friske voksne til 4,5 og 4,1 ml/min/kg hos henholdsvis Klasse A (uten
+ascites) og Klasse C (med ascites) pasienter. Eliminasjonshalveringstid var signifikant lengre hos Klasse C
+og Klasse A pasienter enn hos kontrollpersonene (gjennomsnittlig t1/2 på 59 og 32 versus 22 minutter).
+Startdosen bør halveres hos alle pasienter med nedsatt leverfunksjon, og responsen på doseøkninger bør
+følges nøye (se pkt. 4.2).
+
+Rase
+Rasens innvirkning på metabolismen til natriumoksybat er ikke evaluert.
+
+5.3   Prekliniske sikkerhetsdata
+
+Gjentatt administrering av natriumoksybat til rotter (90 dager og 26 uker) og hunder (52 uker) ga ingen
+signifikante funn når det gjelder klinisk kjemi og mikro- og makropatologi. Behandlingsrelaterte kliniske
+tegn var hovedsakelig relatert til sedering, redusert matinntak og sekundære endringer i kroppsvekt,
+vektøkning og organvekt. Eksponeringer for rotter og hunder ved NOEL var lavere (~50 %) enn for
+mennesker. Natriumoksybat var ikke-mutagent og ikke-klastogent i in vitro- og in vivo-studier.
+
+Gammabutyrolakton (GBL), et prodrug av GHB testet ved eksponeringer tilsvarende den som forventes hos
+mennesker (1,21-1,64 ganger) er blitt klassifisert av NTP som ikke-karsinogen hos rotter og muligens
+karsinogen hos mus på grunn av en svak økning av feokromocytomer som var vanskelig å tolke på grunn av
+høy mortalitet i gruppen som fikk høy dose. I en karsinogenisitetsstudie med oksybat hos rotter ble det ikke
+funnet tumorer relatert til forbindelsen.
+
+GHB hadde ingen effekt på paring, generell fertilitet eller sædparametre, og førte ikke til embryoføtal
+toksisitet hos rotter eksponert for opptil 1000 mg/kg/dag GHB (1,64 ganger menneskelig eksponering
+beregnet ut fra ikke-drektige dyr). Perinatal mortalitet var økt og gjennomsnittlig avkomvekt var redusert i
+dieperioden hos høydose F1-dyr. Sammenhengen mellom disse effektene på utvikling og maternell toksisitet
+                                                  15
+kunne ikke klarlegges. Hos kaniner ble det sett svak fostertoksisitet.
+
+I en 10-ukers toksisitetsstudie med gjentatt dosering hos juvenile rotter behandlet fra postnatal dag 21 til 90
+ga natriumoksybat bivirkninger, inkludert død i løpet av første behandlingsuke da dyrenes alder var 21 til 27
+dager, som tilsvarer en omtrentlig alder på 3–4 år hos barn. Akutt toksisitet ble vist ved eksponering under
+det som er forventet hos pediatriske pasienter og dødsfall ble innledet av natriumoksybat-relaterte kliniske
+tegn (bradypné, dyp respirasjon, redusert aktivitet, ukoordinert gange, hemmet opprettingsrefleks) i tråd
+med legemidlets forventede farmakologi. Årsaken til denne relativt mye høyere toksisiteten i løpet av første
+behandlingsuke er ikke helt klarlagt. Dette kan være forbundet med at unge dyr ser ut til å være utsatt for en
+høyere systemisk eksponering enn eldre juvenile rotter. Det kan også skyldes høyere sensitivitet overfor
+natriumoksybat hos de yngste rotteungene sammenlignet med eldre juvenile og voksne rotter og/eller en
+utvikling av toleranse. Redusert kroppsvekt og matinntak tilsvarende det som ble sett hos voksne ble også
+observert, sammen med ytterligere respiratoriske symptomer (dyp og langsom respirasjon). Natriumoksybat
+forårsaket ikke bivirkninger på vekst og utvikling ved eksponeringsnivåer opptil 2 til 4 ganger høyere enn
+forventet eksponering ved maksimal anbefalt dose hos pediatriske personer (200 mg/kg/dag hos pediatriske
+pasienter med kroppsvekt mindre enn 45 kg eller 9 gram/dag for pediatriske pasienter med kroppsvekt
+≥ 45 kg).
+
+Diskriminasjonsstudier av legemidler viser at GHB danner en unik diskriminativ stimulus som på visse
+områder er tilsvarende den til alkohol, morfin og visse GABA-mimetiske legemidler.
+Selvadministreringsstudier av rotter, mus og aper har gitt motstridende resultater, mens toleranse for GHB
+samt krysstoleranse for alkohol og baklofen er blitt tydelig vist hos gnagere.
+
+
+6.    FARMASØYTISKE OPPLYSNINGER
+
+6.1   Hjelpestoffer
+
+Vann, renset
+Malinsyre til pH-justering
+Natriumhydroksid til pH-justering
+
+6.2   Uforlikeligheter
+
+Dette legemidlet må ikke blandes med andre legemidler.
+
+6.3   Holdbarhet
+
+3 år
+Etter første åpning: 90 dager.
+Etter fortynning i doseringsbeger skal tilberedningen brukes innen 24 timer.
+
+6.4   Oppbevaringsbetingelser
+
+Dette legemidlet krever ingen spesielle oppbevaringsbetingelser.
+
+Oppbevaringsbetingelser etter anbrudd av pakningen, se pkt. 6.3.
+Oppbevaringsbetingelser etter fortynning av legemidlet, se pkt. 6.3.
+
+6.5   Emballasje (type og innhold) og spesielt utstyr for bruk
+
+180 ml oppløsning i en brun plastik (PET)-flaske på 200 ml som leveres med en ytre hvit, indre
+gjennomsiktig, barnesikret plastlokk, laget av HDPE/polypropylene med en hvit tetningsskive laget av
+utvidet polyethylen.
+
+Hver eske inneholder én flaske, en gradert måleenhet (gjennomsiktig polypropylensprøyte med en hvit
+                                                   16
+Pstempel) 4,5 g (9 ml) kapasitet med graderinger per 0,20 g og 0,25 g, en gjennomsiktig LDPE-adapter til
+sprøyten, to oransje doseringsbegre av polypropylen med 90 ml kapasitet og to hvite HDPE-skrulokk.
+
+Et komma brukes som skilletegn på sprøyten.
+
+6.6   Spesielle forholdsregler for destruksjon
+
+Ikke anvendt legemiddel samt avfall bør destrueres i overensstemmelse med lokale krav.
+
+
+7.    INNEHAVER AV MARKEDSFØRINGSTILLATELSEN
+
+Oresund Pharma ApS
+Orient Plads 1
+2150 Nordhavn
+Danmark
+
+
+8.    MARKEDSFØRINGSTILLATELSESNUMMER
+
+19-12925
+
+
+9.    DATO FOR FØRSTE MARKEDSFØRINGSTILLATELSE / SISTE FORNYELSE
+
+Dato for første markedsføringstillatelse: 07. desember 2020
+Dato for siste fornyelse: 16. september 2025
+
+
+10.   OPPDATERINGSDATO
+
+17.12.2025
+
+
+
+
+                                                 17
+

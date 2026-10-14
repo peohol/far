@@ -1,0 +1,56 @@
+       Dosegruppe [g/d (n)]                           Respondere*                          Endring fra baseline
+                                                         n (%)                          sammenlignet med placebo
+                                                                                                (p-verdi)
+Placebo (60)                                            13 (21,7)                                   -
+4,5 (68)                                                32 (47,1)                                 0,002
+6 (63)                                                  30 (47,6)                                <0,001
+9 (55)                                                  30 (54,4)                                <0,001
+* CGI-c-dataene ble analysert ved å definere respondere som de pasientene som oppnådde svært stor forbedring eller stor
+forbedring.
+
+I studie 2 ble effekten av oralt administrert natriumoksybat, modafinil og natriumoksybat + modafinil,
+sammenlignet med placebo i behandlingen av søvnighet på dagtid ved narkolepsi. I løpet av den 8 uker
+lange, dobbeltblinde studien tok pasientene modafinil med etablert dose eller tilsvarende placebodose.
+Natriumoksybat eller tilsvarende placebodose var 6 g/dag de første 4 ukene, økt til 8 g/dag de resterende 4
+ukene. Den primære effektparameteren var ekstrem søvnighet på dagtid målt som objektiv respons i MWT.
+
+Tabell 5    Sammendrag for MWT i studie 2
+                                       STUDIE 2
+     Dosegruppe      Baseline     Endepunkt                            Gjennomsnittlig                  Endring
+                                                                     endring fra baseline           sammenlignet med
+                                                                                                        placebo
+Placebo (56)                      9,9                 6,9                      -2,7                        -
+Natriumoksybat (55)              11,5                11,3                      0,16                     <0,001
+Modafinil (63)                   10,5                 9,8                      -0,6                      0,004
+Natriumoksybat +                 10,4                12,7                      2,3                      <0,001
+Modafinil (57)
+
+Studie 3 omfattet 136 narkoleptiske pasienter med moderat til alvorlig katapleksi (median på 21
+katapleksianfall per uke) ved baseline. Den primære effektparameteren i denne studien var frekvensen av
+katapleksianfall.
+
+Tabell 6  Sammendrag av resultater i studie 3
+    Dosering       Antall pasienter                                          Katapleksianfall
+             Studie 3                    Baseline                            Median endring              Endring fra
+                                                                               fra baseline               baseline
+                                                                                                        sammenlignet
+                                                                                                        med placebo
+                                                                                                          (p-verdi)
+                                                                            Median, anfall/uke
+Placebo                             33                      20,5                   -4                          -
+3,0 g /dag                          33                      20,0                   -7                       0,5235
+6,0 g /dag                          31                      23,0                  -10                       0,0529
+9,0 g /dag                          33                      23,5                  -16                       0,0008
+
+I studie 4 deltok 55 narkoleptiske pasienter som hadde gjennomgått åpen behandling med natriumoksybat i
+7 til 44 måneder. Pasientene ble randomisert til fortsatt behandling med natriumoksybat ved stabil dose,
+eller til placebo. Studie 4 ble utformet spesifikt for å evaluere fortsatt effekt av natriumoksybat etter
+langtidsbruk. Den primære effektparameteren i denne studien var frekvensen av katapleksianfall.
+
+Tabell 7  Sammendrag av resultater i studie 4
+Behandlingsgruppe Antall pasienter                                           Katapleksianfall
+
+
+
+
+                                                            12
