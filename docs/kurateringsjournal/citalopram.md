@@ -2,11 +2,43 @@
 
 - **Stoff/slug:** citalopram
 - **Dekning:** full stoffmonografi, inkludert redaksjonelle seksjoner og kontroll av automatiske datalag
-- **Sist oppdatert:** 2026-10-13
-- **Kurateringsmodus:** de novo-kuratering
-- **Kunnskapsgrense:** 2026-10-13
+- **Sist oppdatert:** 2026-10-14
+- **Kurateringsmodus:** avgrenset oppfølging 2026-10-14; siste fullstendige modus: de novo
+- **Kunnskapsgrense:** full gjennomgang 2026-10-13; avgrenset SPC-/reproduksjonskontroll 2026-10-14
 - **Siste fulle kjøring:** 2026-10-13
 - **Siste de novo-kjøring:** 2026-10-13
+
+## Avgrenset kilde- og sikkerhetsoppfølging 2026-10-14
+
+Denne oppfølgingen endrer **ikke** kunnskapsgrensen for den fullstendige de novo-gjennomgangen 13.10. Den gjelder et spesifikt regulatorisk kildeavvik, manglende separat SPC-import og påstandsnær kildeplassering i tre eksisterende reproduksjonskort.
+
+### Originalkontroll av bivirkningstabeller
+
+| Kilde | Original og proveniens | Dekning |
+| --- | --- | --- |
+| Cipramil 10/20 mg, H. Lundbeck A/S | [DMP-SPC 0000-08151.pdf](https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08151.pdf), revisjon 16.05.2024; SHA-256 `4bc8dfd2e647d273f044bc3019d3fe116a4ca59b1ff47951866230484e2fd8de` | Punkt 4.8 s. 9–11: 84 separat transkriberte bivirkningsrader, 18 organsystemer, to fotnoter |
+| Citalopram Orion 10/20/40 mg | [DMP-SPC 06-4252.pdf](https://produktinformasjon.legemiddelsok.no/preparatomtaler/06-4252.pdf), revisjon 01.04.2025; SHA-256 `5a59820bf262dbdb2238c9adca633279f14e81acc89dbef2fb987cbe249377c7` | Punkt 4.8 s. 10–12: eksisterende 86 bivirkningsrader, 18 organsystemer, to fotnoter, uendret |
+
+Begge originale sidebildeseriene er kontrollert visuelt i kuratorjobben `kuratorjobb/workspace-agent-citalopram-20261013`. Kildene har ulike formuleringer og enkelte ulike tabellpunkter: Orion oppgir blant annet «eufori» og «økt libido» som mindre vanlige; disse står ikke i Cipramils tilsvarende tabell. Preparatomtalene er derfor importert hver for seg med egne kildenøkler og må **ikke** aggregeres til én kunstig frekvenskatalog. Ingen frekvens er anslått eller omkodet.
+
+**Særlig ADH-avvik:** Orion bruker «Utilstrekkelig ADH-sekresjon» under endokrine sykdommer / «ikke kjent», mens Cipramil bruker «Uhensiktsmessig sekresjon av ADH» under samme klassifikasjon. Dette er forskjellige fysiologiske påstander. Cipramil-ordlyden tilsvarer SIADH/uhensiktsmessig antidiuretisk effekt, som kan gi hyponatremi. Orion-ordlyden vurderes som en sannsynlig kildefeil; den er **ikke** rettet i importens originaltekst. Et eget redaksjonelt bivirkningskort forklarer avviket, med begge originale SPC-er som direkte referanser. En eventuell rettelse av offisiell SPC må komme fra kilden selv.
+
+**Fotnoter:** Begge kilder har egen fotnote om selvmordsrelaterte hendelser og en klassebasert fotnote om postpartumblødning. De følger hendelsene de gjelder. OUSFAR har verken slått sammen kildene eller gjort klassehendelser om til beregnede citalopramspesifikke frekvenser.
+
+### Forbedret påstand–kilde-kobling i reproduksjonsseksjonen
+
+Ingen kliniske tall eller anbefalinger er endret. De tre eksisterende kortene har fått referanser direkte etter respektive utsagn:
+
+- **Graviditet:** UKTIS for absolutte misdannelsessignaler, UKTIS/Embryotox for individuell vurdering av behandlingsendring.
+- **Perinatal/neonatal:** Embryotox for neonatal tilpasning; UKTIS for PPHN-risiko og postpartumblødning, hver for seg.
+- **Amming:** LactMed for relativ spedbarnsdose og serumeksponering; LactMed/Embryotox for observerte reaksjoner, oppfølging og behandlingsvalg.
+
+### Avgrensning og kontroll
+
+- Utført: sammenligning av originaltabellene og kildetro import; kildeavviket er forklart; tre kort har mer presis referanseplassering; de norske strukturverdiene 70–350, 700 og 10 000 nmol/L er ikke berørt.
+- Nytt / endret i appen etter migrasjon: bivirkninger (én separat Cipramil-kilde og ett redaksjonelt ADH-kort); graviditet/amming (tre kort med omplasserte referanser).
+- Gjenstår før ferdig teknisk port: CI/kurateringskjedetester på faktisk PR-HEAD, etterkontroll av importpreview og autentiserte runtime-kall til PubChem og Farmakologiportalen. Disse kontrollene skal ikke kvitteres av som bestått ut fra manuell tabellinspeksjon.
+- Etter merge: verifiser at **begge** kildene vises hver for seg, ADH-kortet vises, sidens endringslogg viser både import og redaksjonell kuratering, og ingen beskyttede serum-/toksisitetsverdier er endret.
 
 ## Full de novo-pilot 2026-10-13
 
@@ -180,6 +212,8 @@ Den forrige testen krevde i praksis samme kildegruppe både inline og på kortet
 
 ## Historikk
 
+- **2026-10-14 – avgrenset SPC- og referansekontroll:** Cipramils 84-raders bivirkningstabell innført som egen kilde ved siden av Orions 86 rader. Misvisende ADH-formulering i Orion er forklart uten å endre kildeteksten. Påstandsnære siteringer er flyttet i de tre aktuelle reproduksjonskortene. Full de novo-dato er uendret.
+
 - **2026-10-13 – oppfølging etter uavhengig PR-gjennomgang:** panikkortet korrigert slik at RR 0,95 gjelder manglende remisjon, mens responsanalysen oppgis separat som RR 0,82. Langtidsstudiens 279 fortsettende, 258 i effektanalysen og 179 fullførere er synliggjort. Dekningskontrollen er presisert, automatiske kjemi-/laboratorielag er ikke lenger feilaktig kvittert via generisk sidemodelltest, LactMed-datoen er rekontrollert mot NCBIs gjeldende originalside, og siste fulle kjøring er rettet til 13.10.
 - **2026-10-13 – full de novo-pilot:** forventet dekning avledet fra levende appmodell før søk. Blind evidens og adversarial kontroll ble låst før gammel monografi/journal ble lest. Direkte effektestimater, preanalytikk og 2026-data for graviditet/amming ble lagt inn; seks negative PD-kort og toleransekortet ble tatt ut av levende visning. Norske konsentrasjonsområder og serumtabell ble bevart.
 - **2026-10-07 – de novo-kuratering og kildeplassering:** blind evidensrunde før avstemming mot eksisterende monografi. Hovedinnholdet ble bekreftet, PGx/TDM/amming ble nyansert, og lange eller kildeheterogene tekster fikk påstandsnære inline-siteringer. Korte, kildehomogene kort beholder kortreferanser.
@@ -189,6 +223,7 @@ Den forrige testen krevde i praksis samme kildegruppe både inline og på kortet
 ## Neste overvåkning
 
 Prioriter ny kontroll ved:
+- eventuell oppdatert Orion-SPC som korrigerer ADH-terminologien; vurder da separat kilde- og importrevisjon;
 - ny norsk SPC eller Giftinformasjonen-anbefaling;
 - ny AGNP/CPIC-versjon;
 - nye robuste citalopramspesifikke data om konsentrasjon–utfall;
