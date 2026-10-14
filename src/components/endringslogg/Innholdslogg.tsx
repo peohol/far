@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { visningsnavn } from '@delt/profil'
 import { useAvatarlenker } from '../../auth/avatarer'
 import type { Endringsloggleser } from '../../endringslogg/api'
 import {
@@ -193,10 +194,14 @@ function Loggvindu({
 
 const erObjekttype = (type: string): type is Objekttype => (OBJEKTTYPER as readonly string[]).includes(type)
 
-/** Hvem som gjorde endringen, slik den står i loggen. */
+/**
+ * Hvem som gjorde endringen, slik den står i loggen. En agent med egen profil
+ * (som kuratorboten) står med navnet i profilen; agentnavnet står i detaljene.
+ */
 export function hvem(endring: Endring): string {
   const person = endring.person && fulltNavn(endring.person)
   if (endring.aktor === 'bruker') return person || 'Ukjent person'
+  if (endring.agent && endring.profil) return visningsnavn(endring.profil)
   return endring.agent?.navn ?? (endring.aktor === 'agent' ? 'Ukjent agent' : 'Systemet')
 }
 

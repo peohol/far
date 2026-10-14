@@ -154,7 +154,7 @@ describe('endringsloggen for en side', () => {
     const lag = await screen.findByRole('dialog', { name: 'Endringslogg: Syntetin' })
     const foringer = await within(lag).findAllByRole('listitem')
     const [forste, andre] = foringer.filter((f) => f.classList.contains('loggskuff'))
-    expect(forste?.querySelector('.innholdslogg__hvem')?.textContent).toBe('ChatGPT monografkurator')
+    expect(forste?.querySelector('.innholdslogg__hvem')?.textContent).toBe('Kurator Bot')
     expect(forste?.querySelector('.innholdslogg__tid')?.textContent).toBe('13.10.2026 kl. 14:00')
     expect(forste?.textContent).toContain('Dosering ved nyresvikt kontrollert mot SPC')
     expect(within(forste!).getByText('KI-agent')).toBeTruthy()
@@ -173,9 +173,11 @@ describe('endringsloggen for en side', () => {
     const [kurator, rita, systemet] = (await within(lag).findAllByRole('listitem')).filter((f) =>
       f.classList.contains('loggskuff'),
     )
-    // Agentens egen profil gir bildet; navnet er agentens.
+    // Agentens egen profil gir bildet og navnet; agentnavnet står i detaljene.
     expect(kurator!.querySelector('.avatar img')?.getAttribute('src')).toBe('https://bilder.test/kuratorbot/avatar.webp')
-    expect(kurator!.querySelector('.innholdslogg__hvem')?.textContent).toBe('ChatGPT monografkurator')
+    expect(kurator!.querySelector('.innholdslogg__hvem')?.textContent).toBe('Kurator Bot')
+    await user.click(within(kurator!).getByRole('button', { expanded: false }))
+    expect(within(kurator!).getByText('ChatGPT monografkurator')).toBeTruthy()
     // Uten profilbilde: forbokstavene.
     expect(rita!.querySelector('.avatar img')).toBeNull()
     expect(rita!.querySelector('.avatar__initialer')?.textContent).toBe('RR')
@@ -187,7 +189,7 @@ describe('endringsloggen for en side', () => {
   it('viser rapporten, migrasjonen og lenkene når en kuratering foldes ut', async () => {
     const { user } = vis([{ endringer: [KURATERING], flere: false }])
     await user.click(screen.getByRole('button', { name: 'Endringslogg' }))
-    await user.click(await screen.findByRole('button', { name: /ChatGPT monografkurator/ }))
+    await user.click(await screen.findByRole('button', { name: /Kurator Bot/ }))
     const lag = screen.getByRole('dialog')
     expect(within(lag).getByText('Endret: Maksdose ved nyresvikt')).toBeTruthy()
     expect(within(lag).getByText('Feil enhet rettet')).toBeTruthy()

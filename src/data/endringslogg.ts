@@ -20,7 +20,7 @@ export const ENDRINGSLOGG: Endring[] = [
     gjelder: ['vinduer'],
     punkter: [
       'Hver endring i endringsloggen begynner nå med profilbildet og navnet til den som gjorde den, og tidspunktet etter. Uten profilbilde vises forbokstavene, og systemet vises med et tannhjul.',
-      'Kuratorboten vises med profilbildet fra sin egen profil, under navnet ChatGPT monografkurator.',
+      'Kuratorboten vises med navnet og profilbildet fra sin egen profil, «Kurator Bot». At det er ChatGPT monografkurator, står når endringen foldes ut.',
     ],
   },
   {
