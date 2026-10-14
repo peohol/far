@@ -1,0 +1,431 @@
+{
+  "modus": "de_novo",
+  "modell_sha256": "d064923f8672a424eb6342a10bbfc2fd2c8070dd8c14f0cb63dd70ba29487d67",
+  "fase": "blind_låst_før_avstemming",
+  "omrader": [
+    {
+      "nokkel": "identitet",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Ny uavhengig syntese av identitet, bruk og hovedrisiko.",
+      "kilder": [
+        "EMA Xyrem 2025",
+        "Felmlee 2021 PMID 33417072"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "viktige_data",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Fem strukturerte felt skal avstemmes; ingen gammel verdi er åpnet.",
+      "kilder": [
+        "EMA Xyrem 2025"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "viktige_data/referanseomrade",
+      "status": "tomt_begrunnet",
+      "begrunnelse": "Ingen robust terapeutisk serumgrense identifisert i blindfasen; gammel norsk verdi skal beskyttes hvis den finnes.",
+      "kilder": [],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "viktige_data/toksisk_omrade",
+      "status": "tomt_begrunnet",
+      "begrunnelse": "Konsentrasjon og alvorlighetsgrad overlapper betydelig; ingen ny universell terskel konstrueres.",
+      "kilder": [
+        "PMID 12827115",
+        "PMID 27581664",
+        "PMID 30307336"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "viktige_data/alvorlig_intoksikasjon",
+      "status": "tomt_begrunnet",
+      "begrunnelse": "Fatale og overlevde konsentrasjoner overlapper; ingen ny universell terskel konstrueres.",
+      "kilder": [
+        "PMID 30307336"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "viktige_data/halveringstid",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Regulatoriske og kontrollerte humane data støtter omtrent 0,5–1 time.",
+      "kilder": [
+        "EMA Xyrem 2025",
+        "PMID 26659543"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "viktige_data/steady_state",
+      "status": "tomt_begrunnet",
+      "begrunnelse": "Ingen klinisk meningsfull steady-state-verdi er identifisert for kort, delt nattlig dosering.",
+      "kilder": [
+        "EMA Xyrem 2025"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "farmakodynamikk",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "GABA-B-agonisme prioriteres; egne GHB-bindingssteder omtales som usikre.",
+      "kilder": [
+        "PMID 33417072",
+        "PMID 23791974",
+        "IUPHAR ligand 4711"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "virkninger",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Kvantitative effekter ved narkolepsi og viktige begrensninger skal inn.",
+      "kilder": [
+        "PMID 22893778",
+        "EMA Xyrem 2025"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "bivirkninger",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Aktuelle norske/EMA SPC-tabeller skal importeres kildefidelt.",
+      "kilder": [
+        "DMP Kalceks 2024",
+        "DMP Oxiore 2025",
+        "EMA Xyrem 2025"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "toksisitet_forgiftning",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Seks faste kort skal fylles fra nasjonal anbefaling og konsentrasjonsstudier.",
+      "kilder": [
+        "Giftinformasjonen GHB 2017"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "toksisitet_forgiftning/Toksisk dose og eksponering",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Omtrent 50 mg/kg gir ofte koma, men blandingsinntak og variasjon vektlegges.",
+      "kilder": [
+        "Giftinformasjonen GHB 2017"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "toksisitet_forgiftning/Toksiske konsentrasjoner",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Observerte serier gjengis uten diagnostisk eller prognostisk terskel.",
+      "kilder": [
+        "PMID 12827115",
+        "PMID 27581664",
+        "PMID 30307336"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "toksisitet_forgiftning/Klinisk forgiftningsbilde",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Rask koma, fluktuasjon, oppkast, bradykardi og rask oppvåkning dekkes.",
+      "kilder": [
+        "Giftinformasjonen GHB 2017"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "toksisitet_forgiftning/Alvorlige komplikasjoner",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Respirasjonsdepresjon, aspirasjon, hypotensjon og sjeldne kramper prioriteres.",
+      "kilder": [
+        "Giftinformasjonen GHB 2017"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "toksisitet_forgiftning/Toksikokinetiske særtrekk",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Rask absorpsjon, metningskinetikk og kort forløp beskrives.",
+      "kilder": [
+        "PMID 33417072",
+        "Giftinformasjonen GHB 2017"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "toksisitet_forgiftning/Behandling ved forgiftning",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Støttebehandling, luftvei og observasjon følger nasjonal anbefaling.",
+      "kilder": [
+        "Giftinformasjonen GHB 2017"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "indikasjon",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Norsk/EU godkjent narkolepsiindikasjon skilles fra annen bruk.",
+      "kilder": [
+        "EMA Xyrem 2025"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "preparater",
+      "status": "automatisk_verifisert",
+      "begrunnelse": "FEST-laget eier preparatlisten.",
+      "kilder": [
+        "Kuratorjobb 38524649521"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "dosering",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Voksen-, pediatrisk, lever- og måltidsdosering hentes fra SPC.",
+      "kilder": [
+        "EMA Xyrem 2025"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "farmakokinetikk",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Absorpsjon, mat, ikke-linearitet, distribusjon, metabolisme og eliminasjon dekkes.",
+      "kilder": [
+        "EMA Xyrem 2025",
+        "PMID 26659543"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "farmakogenetikk",
+      "status": "tomt_begrunnet",
+      "begrunnelse": "Ingen handlingsrettet PGx-anbefaling identifisert; automatiske lag verifiseres.",
+      "kilder": [
+        "ClinPGx/CPIC runtime 38524649521"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "interaksjoner",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "CNS-depressiva, alkohol og valproat prioriteres; konkrete FEST-treff er automatiske.",
+      "kilder": [
+        "EMA Xyrem 2025",
+        "Kuratorjobb 38524649521"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "tdm",
+      "status": "tomt_begrunnet",
+      "begrunnelse": "Rutinemessig TDM og behandlingsstyring med nivåer er ikke etablert.",
+      "kilder": [
+        "Giftinformasjonen GHB 2017"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "laboratorieanalyser",
+      "status": "automatisk_verifisert",
+      "begrunnelse": "Farmakologiportalen-kobling og visning er produksjonsnært testet.",
+      "kilder": [
+        "Kuratorjobb 38524649521"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "kjemiske_grunndata",
+      "status": "automatisk_verifisert",
+      "begrunnelse": "PubChem-kobling og kjemivisning er produksjonsnært testet.",
+      "kilder": [
+        "Kuratorjobb 38524649521",
+        "PubChem CID 10413"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "serumkonsentrasjoner",
+      "status": "tomt_begrunnet",
+      "begrunnelse": "Kontrollerte dose–konsentrasjonsdata gjelder plasma; dose–serumtabell opprettes ikke.",
+      "kilder": [
+        "PMID 26659543"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "graviditet_amming",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Fire faste kort vurderes med tydelig regulatorisk/evidensmessig usikkerhet.",
+      "kilder": [
+        "EMA Xyrem 2025",
+        "LactMed Oxybate Salts 2026"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "graviditet_amming/Graviditet",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Humane data er utilstrekkelige og bruk anbefales ikke regulatorisk.",
+      "kilder": [
+        "EMA Xyrem 2025"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "graviditet_amming/Perinatal og neonatal påvirkning",
+      "status": "tomt_begrunnet",
+      "begrunnelse": "Datagrunnlaget er utilstrekkelig for et selvstendig klinisk kort.",
+      "kilder": [
+        "EMA Xyrem 2025"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "graviditet_amming/Amming",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Overgang i melk, regulatorisk råd og begrenset LactMed-erfaring presenteres separat.",
+      "kilder": [
+        "EMA Xyrem 2025",
+        "LactMed Oxybate Salts 2026"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "graviditet_amming/Fertilitet og reproduksjon",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Manglende humandata og regulatoriske prekliniske data oppgis.",
+      "kilder": [
+        "EMA Xyrem 2025"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "avhengighet_toleranse",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Terapeutisk bruk skilles fra hyppig høydosebruk.",
+      "kilder": [
+        "PMID 28004314",
+        "PMID 33417072"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "avhengighet_toleranse/fysiologisk_adaptasjon/Toleranseutvikling",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Toleranse ved regelmessig rusbruk er dokumentert; terapeutisk kontekst nyanseres.",
+      "kilder": [
+        "PMID 33417072",
+        "WHO ECDD"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "avhengighet_toleranse/fysiologisk_adaptasjon/Abstinens, seponeringssyndrom og rebound-effekter",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Raskt innsettende, potensielt livstruende abstinens dekkes.",
+      "kilder": [
+        "PMID 15225884",
+        "Giftinformasjonen GHB 2017"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "avhengighet_toleranse/laering_motivasjon/Addiksjon",
+      "status": "nytt_eller_oppdatert",
+      "begrunnelse": "Misbruks- og avhengighetspotensial presenteres med kontekst og databegrensning.",
+      "kilder": [
+        "WHO ECDD",
+        "PMID 28004314"
+      ],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    },
+    {
+      "nokkel": "avhengighet_toleranse/laering_motivasjon/Lært mestringsavhengighet",
+      "status": "tomt_begrunnet",
+      "begrunnelse": "Ingen avgrenset substansspesifikk evidens ble funnet.",
+      "kilder": [],
+      "sok": [],
+      "artefakt": "",
+      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+    }
+  ]
+}
