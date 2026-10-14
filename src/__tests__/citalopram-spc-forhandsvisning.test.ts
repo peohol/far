@@ -5,7 +5,7 @@
  */
 import { readFileSync } from 'node:fs'
 import { expect, it } from 'vitest'
-import { importoversikt, importrapport } from '../bivirkninger/forhandsvisning'
+import { importrader, importoversikt, importrapport } from '../bivirkninger/forhandsvisning'
 import { kontrollerImport } from '../bivirkninger/import'
 
 it('forhåndsviser den originale Cipramil-importen uten å endre databasen', () => {
@@ -25,6 +25,7 @@ it('forhåndsviser den originale Cipramil-importen uten å endre databasen', () 
   const forhåndsvisning = importrapport(kontroll.import, { slag: 'ingen' })
   expect(forhåndsvisning).toContain('84 bivirkninger i alt')
   expect(forhåndsvisning).toContain('2 fotnoter')
-  expect(forhåndsvisning).toContain('Uhensiktsmessig sekresjon av ADH')
+  const adhrader = importrader(kontroll.import).filter((r) => r.organsystem === 'endokrine' && r.tekst.includes('ADH'))
+  expect(adhrader).toEqual([expect.objectContaining({ tekst: 'Uhensiktsmessig sekresjon av ADH', frekvens: 'ikke_kjent' })])
   expect(forhåndsvisning).toContain('Førstegangsimport:')
 })
