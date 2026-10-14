@@ -1,0 +1,43 @@
+{
+  "versjon": 1,
+  "foresporsel_id": "reserver-1",
+  "foresporsel_sha256": "5d4bd7e55eab7657c34617161a1442f11182015156a3b164881d25b133af6ed0",
+  "handling": "reserver",
+  "utfall": "ok",
+  "melding": "lurasidon er reservert til 2026-10-14T20:37:42.383Z.",
+  "behandlet_kl": "2026-10-14T17:37:42.383Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38608212464",
+  "oppgave": {
+    "oppgave": "lurasidon-0002",
+    "stoff": "lurasidon",
+    "navn": "Lurasidon",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-14T20:37:42.383Z",
+    "jobbgren": "kuratorjobb/lurasidon-0002",
+    "kurateringsgren": "kuratering/lurasidon-0002",
+    "pr": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-14T04:50:44.088Z",
+      "side": true,
+      "elementer": 23,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 6,
+      "referanser": 2,
+      "elementer_uten_kilde": 20
+    },
+    "prioritet": {
+      "poeng": 467.3,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "7 av 13 redaksjonelle seksjoner er tomme.",
+        "20 av 23 elementer har ingen kilde.",
+        "Bare 2 referanser."
+      ]
+    }
+  }
+}
