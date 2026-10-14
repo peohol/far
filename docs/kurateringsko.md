@@ -101,8 +101,13 @@ Et stoff som venter etter en feil, står sist til `tidligst_kl`.
 - **Kurateringer i repoet.** Køen leser monografkurateringene blant
   migrasjonene på `main` (kallet `intern.kuratering_start('<stoff>')`) og
   evidensjournalene i `docs/kurateringsjournal/<stoff>.md` (feltene
-  «Kurateringsmodus», «Kunnskapsgrense» og «Siste de novo-kjøring»). En
-  kuratering som er gjort utenom køen, blir stoffets siste kuratering.
+  «Kurateringsmodus», «Kunnskapsgrense», «Siste fulle kjøring» og
+  «Siste de novo-kjøring»). En kuratering som er gjort utenom køen,
+  blir kjent for køen. Ved avgrensede oppfølginger brukes journalens
+  dato for **siste fulle kjøring** som faglig grunnlinje: en senere
+  korreksjon av et kort eller en SPC-import må ikke gjøre at stoffet
+  feilaktig settes opp til en ny de novo-kuratering. Den tidligere
+  gjennomførte de novo-runden blir bevart til en nyere runde bestilles.
 - **Publisering.** Når en PR køen følger, er slått sammen, ser køen etter
   «Produksjonsmigrering» på `main`. Er den vellykket, er kurateringen
   publisert med modus, kunnskapsgrense, de novo-runde og PR. Feilet den, blir

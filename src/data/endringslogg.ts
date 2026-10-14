@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.92.7',
+    versjon: '1.92.8',
     dato: '2026-10-14',
     sammendrag: 'Fagsiden om GHB er fullstendig faglig kuratert',
     typer: ['Fag'],
@@ -22,6 +22,19 @@ export const ENDRINGSLOGG: Endring[] = [
       'GHB-siden dekker nå virkning, dosering, farmakokinetikk, interaksjoner, forgiftning, graviditet og amming samt toleranse, avhengighet og abstinens.',
       'Bivirkninger fra de tre aktuelle preparatomtalene vises strukturert, med kilde og produktforskjeller bevart.',
       'Konsentrasjoner ved forgiftning vises med usikkerheten de faktisk har, uten en kunstig universell behandlingsgrense.',
+    ],
+  },
+  {
+    versjon: '1.92.7',
+    dato: '2026-10-14',
+    sammendrag: 'Citalopram: to preparatomtaler og tydeligere forklaring av ADH-bivirkningen',
+    typer: ['Fag'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff/citalopram'],
+    punkter: [
+      'Bivirkningene fra Cipramil vises nå som en egen preparatomtale ved siden av Citalopram Orion, slik at ulike originaltekster og frekvenser ikke blandes.',
+      'Et eget kort forklarer hvorfor de to preparatomtalene beskriver ADH-sekresjon forskjellig, og hvorfor SIADH er den relevante kliniske tilstanden.',
+      'Tall om graviditet, neonatal påvirkning og amming har fått referanser direkte ved hver påstand.',
     ],
   },
   {

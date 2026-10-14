@@ -28,27 +28,42 @@ function felt(journal: string, navn: string): string | null {
 export const REPO_RUNDE = 1
 
 /**
- * Den siste kurateringen per stoff, etter migrasjonene og journalene. Modusen
- * er `de_novo` når migrasjonen sier det i navnet eller journalen har en de
- * novo-kjøring samme dag eller senere; ellers `oppdatering`.
+ * Siste fullstendige kuratering per stoff, fra migrasjonene og journalene.
+ * En nyere avgrenset migrasjon skal verken overskrive fullføringsdatoen
+ * eller få køen til å planlegge en allerede gjennomført de novo-runde på nytt.
  */
 export function kurateringerIRepo(migrasjoner: readonly Repofil[], journaler: readonly Repofil[]): Record<string, Kurateringsspor> {
-  const siste = new Map<string, { kl: string; fil: string }>()
+  const perStoff = new Map<string, { kl: string; fil: string }[]>()
   for (const m of migrasjoner) {
     const v = VERSJON.exec(m.navn)
     const stoff = KURATERINGSSTART.exec(utenKommentarer(m.innhold))?.[1]
     if (!v || !stoff) continue
     const kl = `${v[1]}-${v[2]}-${v[3]}T${v[4]}:${v[5]}:${v[6]}.000Z`
-    const forrige = siste.get(stoff)
-    if (!forrige || forrige.kl < kl) siste.set(stoff, { kl, fil: m.navn })
+    perStoff.set(stoff, [...(perStoff.get(stoff) ?? []), { kl, fil: m.navn }])
   }
   const journalFor = new Map(journaler.map((j) => [j.navn.replace(/\.md$/, ''), j.innhold]))
   const ut: Record<string, Kurateringsspor> = {}
-  for (const [stoff, { kl, fil }] of siste) {
+  for (const [stoff, migrasjonerForStoff] of perStoff) {
     const journal = journalFor.get(stoff) ?? ''
+    const sortert = [...migrasjonerForStoff].sort((a, b) => a.kl.localeCompare(b.kl))
+    const sisteFulleDato = felt(journal, 'Siste fulle kjøring')?.match(new RegExp(DATO))?.[1] ?? null
+
+    // En senere avgrenset oppfølging er ikke en ny full kurateringsrunde.
+    // Bruk journalens eksplisitte fullføringsdato når den finnes, slik at
+    // etterfølgende reparasjonsmigrasjoner ikke nullstiller de novo-status.
+    const fullstendige = sisteFulleDato ? sortert.filter((m) => m.kl.startsWith(sisteFulleDato)) : []
+    const valgt = fullstendige.at(-1) ?? sortert.at(-1)!
+    const kl = sisteFulleDato && valgt.kl.slice(0, 10) !== sisteFulleDato
+      ? `${sisteFulleDato}T00:00:00.000Z`
+      : valgt.kl
+
     const deNovoDato = felt(journal, 'Siste de novo-kjøring')?.match(new RegExp(DATO))?.[1] ?? null
     const modusfelt = felt(journal, 'Kurateringsmodus|Modus') ?? ''
-    const deNovo = /de_novo/.test(fil) || (deNovoDato !== null && deNovoDato >= kl.slice(0, 10)) || (/de novo/i.test(modusfelt) && !deNovoDato)
+    // En utført de novo-runde er fortsatt utført etter en delvis revisjon
+    // eller full oppdatering. Neste de novo-runde styres av de_novo_runde.
+    const deNovo = /de_novo/.test(valgt.fil) ||
+      (deNovoDato !== null && deNovoDato <= kl.slice(0, 10)) ||
+      (/de novo/i.test(modusfelt) && !deNovoDato)
     const kunnskapsgrense = felt(journal, 'Kunnskapsgrense|Kunnskapsdato')?.match(new RegExp(DATO))?.[1] ?? null
     const modus: Modus = deNovo ? 'de_novo' : 'oppdatering'
     ut[stoff] = { kl, modus, kunnskapsgrense, runde: deNovo ? REPO_RUNDE : null, pr: null, kilde: 'repo' }

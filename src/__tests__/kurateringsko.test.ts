@@ -316,6 +316,32 @@ describe('historikken i repoet', () => {
     expect(Object.keys(spor).sort()).toEqual(['citalopram', 'ketamin', 'kvetiapin', 'thc'])
   })
 
+  it('bevarer de novo-status etter en avgrenset migrasjon dagen etter', () => {
+    const spor = kurateringerIRepo([
+      { navn: '20261013160000_citalopram_monografkuratering_de_novo.sql', innhold: "perform intern.kuratering_start('citalopram');" },
+      { navn: '20261014090100_citalopram_monografkuratering_spc_og_kilder.sql', innhold: "perform intern.kuratering_start('citalopram');" },
+    ], [{
+      navn: 'citalopram.md',
+      innhold: [
+        '- **Kurateringsmodus:** avgrenset oppfølging; siste fullstendige modus: de novo',
+        '- **Kunnskapsgrense:** full gjennomgang 2026-10-13; avgrenset SPC-kontroll 2026-10-14',
+        '- **Siste fulle kjøring:** 2026-10-13',
+        '- **Siste de novo-kjøring:** 2026-10-13',
+      ].join('\n'),
+    }])
+    expect(spor.citalopram).toMatchObject({
+      modus: 'de_novo',
+      runde: 1,
+      kunnskapsgrense: '2026-10-13',
+      kilde: 'repo',
+    })
+    expect(spor.citalopram!.kl.slice(0, 10)).toBe('2026-10-13')
+
+    const t = ny([{ stoff: 'citalopram', navn: 'Citalopram', aktiv: true, maal: maal(14) }])
+    oppdaterRepohistorikk(t, spor, T0)
+    expect(forfaltModus(t.stoffer.citalopram!, T0, INNSTILLINGER)).toBeNull()
+  })
+
   it('kjenner igjen en kuratering etter kallet, ikke etter navnet eller en kommentar', () => {
     const spor = kurateringerIRepo(
       [
