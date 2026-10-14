@@ -275,17 +275,17 @@ begin
     {
       "oppsummering": "GHB er fullstendig de novo-kuratert med regulatorisk indikasjon og dosering, kvantitativ effekt og PK, norsk forgiftningsbehandling, reproduksjon og tydelig skille mellom terapeutisk bruk og avhengighet.",
       "seksjoner": [
-        {"seksjon":"identitet","ny":["Ny oppsummering av GHB og natriumoksybat"]},
-        {"seksjon":"viktige_data","ny":["Strukturert halveringstid"]},
-        {"seksjon":"farmakodynamikk","ny":["GABA-B-agonisme med mekanistisk usikkerhet"]},
-        {"seksjon":"virkninger","ny":["Kvantitativ narkolepsieffekt og kontrollert human dose-respons"]},
+        {"seksjon":"identitet","nytt":["Ny oppsummering av GHB og natriumoksybat"]},
+        {"seksjon":"viktige_data","nytt":["Strukturert halveringstid"]},
+        {"seksjon":"farmakodynamikk","nytt":["GABA-B-agonisme med mekanistisk usikkerhet"]},
+        {"seksjon":"virkninger","nytt":["Kvantitativ narkolepsieffekt og kontrollert human dose-respons"]},
         {"seksjon":"indikasjon","endret":["Primærkilder og avgrensning mot alkoholbrukslidelse"]},
-        {"seksjon":"dosering","ny":["Voksen-, barne-, lever-, mat- og valproatdosering"]},
-        {"seksjon":"farmakokinetikk","ny":["Syv kort for absorpsjon, ikke-linearitet, distribusjon, metabolisme og eliminasjon"]},
-        {"seksjon":"interaksjoner","ny":["CNS-depressiva, valproat og topiramat"]},
-        {"seksjon":"toksisitet_forgiftning","ny":["Seks kort fra Giftinformasjonen og originalserier"]},
-        {"seksjon":"graviditet_amming","ny":["Graviditet, amming og fertilitet"]},
-        {"seksjon":"avhengighet_toleranse","ny":["Toleranse, abstinens og addiksjon"]}
+        {"seksjon":"dosering","nytt":["Voksen-, barne-, lever-, mat- og valproatdosering"]},
+        {"seksjon":"farmakokinetikk","nytt":["Syv kort for absorpsjon, ikke-linearitet, distribusjon, metabolisme og eliminasjon"]},
+        {"seksjon":"interaksjoner","nytt":["CNS-depressiva, valproat og topiramat"]},
+        {"seksjon":"toksisitet_forgiftning","nytt":["Seks kort fra Giftinformasjonen og originalserier"]},
+        {"seksjon":"graviditet_amming","nytt":["Graviditet, amming og fertilitet"]},
+        {"seksjon":"avhengighet_toleranse","nytt":["Toleranse, abstinens og addiksjon"]}
       ],
       "nye_opplysninger": [
         "Effekt ved narkolepsi og human PK/PD er kvantifisert",
