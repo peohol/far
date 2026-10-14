@@ -63,3 +63,42 @@ Denne delen ble skrevet og committet før eksisterende GHB-monografi, referansel
 
 Etter denne låsingen åpnes eksisterende innhold read-only. Alle tidligere kildebelagte norske referanseområder, toksiske grenser og dose–serumrader skal bevares med mindre originalkildene kan dokumentere at de er feil. Hvert av de 37 kontrollpunktene skal deretter få endelig status, kildegrunnlag og testbevis. Strukturert SPC-import skal gjengi hver aktuell originaltabell uten språklig normalisering.
 
+## Avstemming mot eksisterende innhold
+
+Den publiserte siden hadde tre elementer: FEST-kobling, ClinPGx-kobling og en kort indikasjonstekst med tre Felleskatalog-referanser. Det fantes ingen redaksjonell oppsummering, virknings-, mekanisme-, dose-, farmakokinetikk-, interaksjons-, TDM-, toksisitets-, graviditets-/amme- eller avhengighetstekst, ingen strukturerte viktige data og ingen dose–serumtabell. Det var derfor ingen beskyttede norske konsentrasjonsverdier å endre.
+
+Indikasjonsteksten ble faglig bekreftet, men kildegrunnlaget er flyttet til gjeldende EMA- og DMP-originaler. Avgrensningen mot alkoholbrukslidelse er lagt til fordi dette ikke er norsk godkjent indikasjon, og nyere meta-analyse ikke viste sikker overlegenhet mot placebo for langvarig abstinens.
+
+### Resultat
+
+- Ny oppsummering, ett mekanismekort og to kvantitative virkningskort.
+- Strukturert halveringstid 0,5–1 time; ingen terapeutisk serumgrense, toksisk terskel, steady-state-verdi eller dose–serumtabell er konstruert.
+- Indikasjon oppdatert og dose, syv farmakokinetikkort og en interaksjonsramme lagt til.
+- Seks toksisitetskort bygger på Giftinformasjonen og tre konsentrasjonskilder; nivåer presenteres som overlappende observasjoner, ikke behandlingsgrenser.
+- Graviditet, amming og fertilitet er dekket. Perinatal/neonatal påvirkning står begrunnet tomt fordi humandata er utilstrekkelige.
+- Toleranse, abstinens og addiksjon er dekket med eksplisitt skille mellom terapeutisk bruk og tett høydosebruk. Lært mestringsavhengighet står begrunnet tomt.
+- Tre selvstendige strukturerte SPC-importer er lagt til: Kalceks (89 hendelser), Oxiore (90) og Xyrem (90). Forskjellen er kvelningsfornemmelse med ukjent frekvens i Oxiore/Xyrem.
+
+## Kvalitetskontroller
+
+- **Blind uavhengighet:** bestått; commit 8f823884 låste evidensprotokollen, og commit 5e41e4a låste 37-punktsmatrisen før gammel tekst og referanser ble åpnet.
+- **Dekning:** 37 av 37 kontrollpunkter dokumentert mot levende panelmodell.
+- **Beskyttede norske data:** bestått; read-only preflight viste ingen referanseområde, toksisk område, alvorlig-intoksikasjonsgrense eller dose–serumrader for GHB.
+- **Produksjonsnær funksjonstest:** bestått i kuratorjobb 38524649521. Ordinær bruker kunne lese siden og skjulte utkast; FEST ga ett virkestoff, tre merkevarer og tre pakninger; interaksjoner ga 12 treff; ClinPGx ga ett kjemikalium, ingen retningslinjer og tre produktetiketter; CPIC ga ingen anbefaling; PubChem og Farmakologiportalen ble lest gjennom sine faktiske lese- og visningsveier.
+- **SPC-artefakter:** bestått i kuratorjobb 38524649521. To DMP-originaler ble hentet med kontrollsummer og sidebilder; Xyrem ble dekket av gjeldende EMA-produktinformasjon.
+- **Visuell SPC-kontroll:** bestått. Punkt 4.8 ble lest i original layout for Kalceks side 6–8 og Oxiore side 7–10; tabellene har ingen fotnoter. EMA-tabellen er kontrollert mot norsk produktinformasjon og samme hendelsesliste som Oxiore.
+- **Påstand–kilde-kobling:** nye heterogene toksisitets-, graviditets- og avhengighetskort bruker påstandsnære inline-siteringer; homogene kort har elementreferanser.
+- **Migrasjons- og regresjonskontroll:** stoffspesifikk kjedetest dekker sluttstruktur, tall, fravær av konstruerte serumfelt, tre SPC-importer, kildedekning og fravær av upubliserte utkast. Endelig GitHub Actions-resultat føres i PR-en.
+
+## Regulatoriske kildekonflikter og kunnskapshull
+
+- Kalceks er godkjent bare for voksne, mens Oxiore/Xyrem omfatter barn fra 7 år; doseteksten skiller produktomfangene.
+- Kalceks-tabellen mangler «kvelningsfornemmelse», som står med ukjent frekvens i Oxiore/Xyrem. Importene holdes derfor separate.
+- Preparatomtalen fraråder bruk under amming. LactMed beskriver få kasuistikker og et mulig tidsavgrenset ammeopphold ved nødvendig behandling; dette er ikke tolket som dokumentert sikkerhet.
+- Giftinformasjonens nasjonale side er sist revidert i 2017. Den er fortsatt publisert nasjonal behandlingsanbefaling, men er supplert med nyere oversikter og originalserier.
+- Serum-/plasmakonsentrasjoner har stor overlapp mellom kliniske utfall, og prøvetidspunkt påvirker verdien på grunn av kort halveringstid. Ingen universell toksisk/fatal grense er faglig forsvarlig.
+- Ingen handlingsrettet PGx-anbefaling, robust terapeutisk TDM-grense, tilstrekkelige humane perinatal-/fertilitetsdata eller avgrenset evidens for lært mestringsavhengighet ble funnet.
+
+## Historikk
+
+- **2026-10-14 – køpilot ghb-0001:** full de novo-evidensrunde, blind låsing, avstemming, monografmigrasjon, tre SPC-importer, regresjonstest og utkast-PR 228.
