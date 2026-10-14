@@ -1,36 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-2",
-  "foresporsel_sha256": "0ccc40a7d0e0ec05b626b4c2029c643865765f8c57c5ec7d81188e537a35338f",
-  "handling": "forny",
+  "foresporsel_id": "frigi-1",
+  "foresporsel_sha256": "b675741443b64798271c6798daeb9ecefc135d047d18e54be5d0c3c82a6adc13",
+  "handling": "frigi",
   "utfall": "ok",
-  "melding": "Reservasjonen av lurasidon varer til 2026-10-14T20:49:53.342Z.",
-  "behandlet_kl": "2026-10-14T17:49:53.342Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38609948299",
-  "oppgave": {
-    "oppgave": "lurasidon-0002",
-    "stoff": "lurasidon",
-    "navn": "Lurasidon",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-14T20:49:53.342Z",
-    "jobbgren": "kuratorjobb/lurasidon-0002",
-    "kurateringsgren": "kuratering/lurasidon-0002",
-    "pr": 229,
-    "gjenoppta": null,
-    "sist_kuratert": null,
-    "maal": {
-      "kl": "2026-10-14T04:50:44.088Z",
-      "side": true,
-      "elementer": 23,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 6,
-      "referanser": 2,
-      "elementer_uten_kilde": 20
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "lurasidon er frigitt og står i køen igjen.",
+  "behandlet_kl": "2026-10-14T18:04:44.264Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38612038372"
 }
