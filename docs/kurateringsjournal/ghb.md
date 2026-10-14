@@ -31,10 +31,27 @@ Denne delen ble skrevet og committet før eksisterende GHB-monografi, referansel
 - EMA: startdose voksne 4,5 g/natt fordelt på to doser; økning med 1,5 g/natt med minst 1–2 ukers intervall; maksimum 9 g/natt.
 - Matforsøk: Tmax 0,75 til 2 timer; Cmax redusert 58 % og AUC 37 %.
 - Dosefordobling fra 4,5 til 9 g ga omtrent 3,8 ganger AUC.
-- Liechti et al., 32 friske menn: 25 og 35 mg/kg ga Cmax 218 (176–270) og 453 (374–549) µmol/L og halveringstid 36 ± 9 og 39 ± 7 minutter.
-- Meta-analyse ved narkolepsi: 9 g/natt mot placebo reduserte ukentlige katapleksianfall med MD −8,5 (95 % KI −15,3 til −1,6), økte Maintenance of Wakefulness Test med 5,18 minutter (2,59–7,78) og ga CGI-respons RR 2,42 (1,77–3,32).
+- Liechti et al., 32 friske menn (16 per dose): 20 og 35 mg/kg GHB ga plasma-Cmax 218 (176–270) og 453 (374–549) µmol/L, median tmax 35 minutter og halveringstid 36 ± 9 og 39 ± 7 minutter. Artikkelsammendraget oppgir inkonsistent 25 mg/kg, mens metode, figur 1 og tabell 1 oppgir 20 mg/kg; de sistnevnte, innbyrdes konsistente originaldataene er lagt til grunn.
+- Meta-analysen ved narkolepsi inkluderte seks randomiserte studier, men hvert estimat bygget på en delmengde: 9 g/natt reduserte ukentlige katapleksianfall med MD −8,5 i 2 studier (95 % KI −15,3 til −1,6), økte Maintenance of Wakefulness Test med 5,18 minutter i 2 studier (2,59–7,78) og ga CGI-respons RR 2,42 i 3 studier (1,77–3,32).
 - Pediatrisk randomisert seponeringsstudie: median endring i ukentlige katapleksianfall 12,71 med placebo mot 0,27 med fortsatt natriumoksybat.
 - Prospektiv alvorlig forgiftning: serum 45–295 mg/L, median 180 mg/L; ingen korrelasjon med komadybde eller oppvåkningstid.
+
+### Sporbarhet for analytt, matrise og omregning
+
+- Liechti målte GHB i plasma etter orale doser oppgitt som GHB, ikke som gram natriumoksybat. Cmax 218 og 453 nmol/mL er identisk med 218 og 453 µmol/L; i appens nmol/L-enhet tilsvarer dette henholdsvis 218 000 og 453 000 nmol/L. Verdiene gjelder toppkonsentrasjon, median tmax 35 minutter, og er ikke et terapeutisk referanseområde.
+- Sporer et al. målte GHB i serielle serumprøver ved alvorlig overdose (GCS ≤8). Med molekylmasse 104,105 g/mol tilsvarer 45–295 mg/L omtrent 432–2 834 µmol/L, eller 432 000–2 834 000 nmol/L; median 180 mg/L tilsvarer omtrent 1 729 µmol/L eller 1 729 000 nmol/L. Tid siden inntak var ikke standardisert, og nivået korrelerte ikke med komadybde eller oppvåkningstid.
+- Gram natriumoksybat i preparatomtalene er massen av natriumsaltet og kan ikke likestilles direkte med gram fri GHB-syre. Doseangivelsene er derfor beholdt i kildens legemiddelform, mens målte konsentrasjoner er merket med analytt og matrise.
+
+### Bibliografisk revisjon etter PMID/DOI
+
+Alle litteraturreferansene ble kontrollert mot PubMed-posten. Særlig ble følgende feilrettet:
+
+- PMID 12827115: *Gamma-hydroxybutyrate serum levels and clinical syndrome after severe overdose*, Karl A Sporer, Rachel L Chin, Jo Ellen Dyer og Ryan Lamb (2003).
+- PMID 27581664: *Presentations to an urban emergency department in Switzerland due to acute γ-hydroxybutyrate toxicity*, Evangelia Liakoni, Fabio Walther, Christian H Nickel og Matthias E Liechti (2016).
+- PMID 30307336: *Interpreting γ-hydroxybutyrate concentrations for clinical and forensic purposes*, Francesco Paolo Busardò og Alan Wayne Jones (2019).
+- PMID 28004314: *Pharmacological Treatment in γ-Hydroxybutyrate (GHB) and γ-Butyrolactone (GBL) Dependence: Detoxification and Relapse Prevention*, Rama M Kamal, Martijn S van Noorden, Wim Wannet, Harmen Beurmanjer, Boukje A G Dijkstra og Arnt Schellekens (2017).
+- PMID 39225220: *Long-term Efficacy and Safety of Sodium Oxybate in Treating Alcohol Use Disorder: A Systematic Review and Meta-Analysis*, Letizia Biso, Andrea Spini, Francesco Petragnano, Roberto Maggio, Marco Scarselli og Marco Carli (journalår 2025; elektronisk publisert 2024).
+- De øvrige PubMed-postene i migrasjonen ble samtidig avstemt for eksakt tittel, full forfatterliste og år.
 
 ### Adversarial kontroll
 
@@ -54,10 +71,10 @@ Denne delen ble skrevet og committet før eksisterende GHB-monografi, referansel
 | Forgiftning | Giftinformasjonen/Helsebiblioteket: GHB, behandlingsanbefaling ved forgiftning, revisjon 2017 |
 | PK/PD | Liechti et al. 2016, PMID 26659543; Felmlee et al. 2021, PMID 33417072 |
 | Effekt | Alshaikh et al. 2012, PMID 22893778; EMA pivotalstudier |
-| Konsentrasjoner | Zvosec et al. 2003, PMID 12827115; Liakoni et al. 2016, PMID 27581664; Busardò & Jones 2019, PMID 30307336 |
+| Konsentrasjoner | Sporer et al. 2003, PMID 12827115; Liakoni et al. 2016, PMID 27581664; Busardò & Jones 2019, PMID 30307336 |
 | Avhengighet/abstinens | McDonough et al. 2004, PMID 15225884; Kamal et al. 2017, PMID 28004314; Felmlee et al. 2021 |
 | Amming | LactMed: Oxybate Salts, revidert 15.08.2026 |
-| Alkoholavhengighet | Caputo et al. 2024, PMID 39225220 |
+| Alkoholavhengighet | Biso et al. 2025 (e-publisert 2024), PMID 39225220 |
 
 ### Planlagt avstemming
 
@@ -92,7 +109,8 @@ Indikasjonsteksten ble faglig bekreftet, men kildegrunnlaget er flyttet til gjel
 
 ## Regulatoriske kildekonflikter og kunnskapshull
 
-- Kalceks er godkjent bare for voksne, mens Oxiore/Xyrem omfatter barn fra 7 år; doseteksten skiller produktomfangene.
+- Kalceks er godkjent bare for voksne, mens Oxiore/Xyrem omfatter barn fra 7 år; doseteksten skiller produktomfangene og gjengir Oxiore-båndene 15–<20, 20–<30, 30–<45 og ≥45 kg med startdose, titreringstrinn og maksimaldose.
+- Oxiore-kontraindikasjonene alvorlig depresjon, suksinsemialdehyddehydrogenasemangel og samtidig behandling med opioider eller barbiturater er eksplisitt gjengitt.
 - Kalceks-tabellen mangler «kvelningsfornemmelse», som står med ukjent frekvens i Oxiore/Xyrem. Importene holdes derfor separate.
 - Preparatomtalen fraråder bruk under amming. LactMed beskriver få kasuistikker og et mulig tidsavgrenset ammeopphold ved nødvendig behandling; dette er ikke tolket som dokumentert sikkerhet.
 - Giftinformasjonens nasjonale side er sist revidert i 2017. Den er fortsatt publisert nasjonal behandlingsanbefaling, men er supplert med nyere oversikter og originalserier.
