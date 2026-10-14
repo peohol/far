@@ -51,6 +51,7 @@ const dosering: Endringsdel = {
   dataEndret: ['dokument'],
   referanser: null,
   panelreferanser: {},
+  delt: false,
 }
 
 function endring(id: string, kl: string, ekstra: Partial<Endring> = {}): Endring {
@@ -70,6 +71,7 @@ function endring(id: string, kl: string, ekstra: Partial<Endring> = {}): Endring
     deler: [dosering],
     hendelser: [],
     utkast: false,
+    delt: false,
     ...ekstra,
   }
 }
@@ -161,6 +163,23 @@ describe('endringsloggen for en side', () => {
     expect(within(lag).getByRole('link', { name: /Se migrasjonen/ }).getAttribute('href')).toBe(
       'https://github.com/peohol/far/blob/main/supabase/migrations/20261013120000_syntetisk_kuratering.sql',
     )
+  })
+
+  it('merker en endring av en delt referanse og sier hva det betyr', async () => {
+    const delt = endring('d1', '2026-10-12T08:15:00Z', {
+      delt: true,
+      aktor: 'system',
+      person: null,
+      deler: [{ ...dosering, type: 'referanse', for: { tittel: 'Felles kilde' }, etter: { tittel: 'Felles kilde, rettet' }, endret: ['innhold'], delt: true }],
+    })
+    const { user } = vis([{ endringer: [delt], flere: false }])
+    await user.click(screen.getByRole('button', { name: 'Endringslogg' }))
+    const lag = await screen.findByRole('dialog', { name: 'Endringslogg: Syntetin' })
+    const [foring] = (await within(lag).findAllByRole('listitem')).filter((f) => f.classList.contains('loggskuff'))
+    expect(within(foring!).getByText('Delt')).toBeTruthy()
+    expect(foring!.textContent).toContain('Referanser: den delte referansen «Felles kilde, rettet» endret')
+    await user.click(within(foring!).getByRole('button', { name: /System/ }))
+    expect(lag.textContent).toContain('også brukes andre steder')
   })
 
   it('åpner historikken med revisjonene endringen gikk mellom', async () => {

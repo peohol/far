@@ -55,6 +55,8 @@ export interface Endringsdel {
   referanser: Listeendring | null
   /** For en fagside: referansene som ble lagt til og fjernet per panel. */
   panelreferanser: Record<string, Listeendring>
+  /** En referanse eller kommentar som også brukes andre steder enn på siden. */
+  delt: boolean
 }
 
 /** Det i en endring som ikke har revisjoner: stoffregisteret og bivirkningene. */
@@ -94,6 +96,11 @@ export interface Endring {
   hendelser: Hendelse[]
   /** Ingenting av den er publisert ennå (bare administratorer ser slike). */
   utkast: boolean
+  /**
+   * Den gjaldt bare delte referanser og kommentarer siden bruker. Hva den
+   * ellers gjaldt (som en kuratering av en annen fagside), er utelatt.
+   */
+  delt: boolean
 }
 
 export interface Endringslogg {
@@ -146,6 +153,7 @@ function lesDel(verdi: unknown): Endringsdel | null {
     dataEndret: tekster(verdi.data_endret),
     referanser: lesListeendring(verdi.referanser),
     panelreferanser,
+    delt: verdi.delt === true,
   }
 }
 
@@ -205,6 +213,7 @@ function lesEndring(verdi: unknown): Endring | null {
     deler: Array.isArray(verdi.deler) ? verdi.deler.map(lesDel).filter((d): d is Endringsdel => d !== null) : [],
     hendelser: Array.isArray(verdi.hendelser) ? verdi.hendelser.map(lesHendelse).filter((h): h is Hendelse => h !== null) : [],
     utkast: verdi.utkast === true,
+    delt: verdi.delt === true,
   }
 }
 
