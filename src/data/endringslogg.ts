@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.92.7',
+    dato: '2026-10-14',
+    sammendrag: 'Fagsiden om GHB er fullstendig faglig kuratert',
+    typer: ['Fag'],
+    omfang: 'Større omfang',
+    gjelder: ['stoff/ghb'],
+    punkter: [
+      'GHB-siden dekker nå virkning, dosering, farmakokinetikk, interaksjoner, forgiftning, graviditet og amming samt toleranse, avhengighet og abstinens.',
+      'Bivirkninger fra de tre aktuelle preparatomtalene vises strukturert, med kilde og produktforskjeller bevart.',
+      'Konsentrasjoner ved forgiftning vises med usikkerheten de faktisk har, uten en kunstig universell behandlingsgrense.',
+    ],
+  },
+  {
     versjon: '1.92.6',
     dato: '2026-10-14',
     sammendrag: 'Kurateringskøen hopper over testsiden',
