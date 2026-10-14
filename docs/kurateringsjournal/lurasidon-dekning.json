@@ -1,0 +1,413 @@
+{
+  "modus": "de_novo",
+  "modell_sha256": "d064923f8672a424eb6342a10bbfc2fd2c8070dd8c14f0cb63dd70ba29487d67",
+  "omrader": [
+    {
+      "nokkel": "identitet",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk regulatoriske primærkilder og relevante originalstudier; dokumenter positive, negative og usikre funn samt kildebegrensninger."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "viktige_data",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk regulatoriske primærkilder og relevante originalstudier; dokumenter positive, negative og usikre funn samt kildebegrensninger."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "farmakodynamikk",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk regulatoriske vurderinger og originalstudier/systematiske oversikter etter reseptorprofil, klinisk effekt, effektstørrelser og heterogenitet."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "virkninger",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk regulatoriske vurderinger og originalstudier/systematiske oversikter etter reseptorprofil, klinisk effekt, effektstørrelser og heterogenitet."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "bivirkninger",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC, RCT-er og komparative meta-analyser; kvantifiser akatisi/EPS, sedasjon, metabolsk belastning, prolaktin og QT der forsvarlig."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "toksisitet_forgiftning",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "indikasjon",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC/DMP og regulatoriske kilder for godkjent indikasjon, preparater, dosering og dosejustering."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "preparater",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC/DMP og regulatoriske kilder for godkjent indikasjon, preparater, dosering og dosejustering."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "dosering",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC/DMP og regulatoriske kilder for godkjent indikasjon, preparater, dosering og dosejustering."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "farmakokinetikk",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC, regulatoriske etiketter/EPAR og originale PK-studier etter absorpsjon, matinteraksjon, distribusjon, metabolisme, eliminasjon og tidsparametre."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "farmakogenetikk",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk CPIC, DPWG/ClinPGx, FDA og originaldata; skill klinisk anbefaling fra teoretisk CYP3A4-relevans."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "interaksjoner",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC og kliniske DDI-studier etter sterke/moderate CYP3A4-hemmere og -induktorer, mat/grapefrukt og farmakodynamiske interaksjoner."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "tdm",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norske laboratoriekilder/Farmakologiportalen, AGNP og originale serumstudier; verifiser prøvetid, enhet, matriks og indikasjon."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "laboratorieanalyser",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norske laboratoriekilder/Farmakologiportalen, AGNP og originale serumstudier; verifiser prøvetid, enhet, matriks og indikasjon."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "kjemiske_grunndata",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk regulatoriske primærkilder og relevante originalstudier; dokumenter positive, negative og usikre funn samt kildebegrensninger."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "serumkonsentrasjoner",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norske laboratoriekilder/Farmakologiportalen, AGNP og originale serumstudier; verifiser prøvetid, enhet, matriks og indikasjon."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "graviditet_amming",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC, LactMed/UKTIS/Embryotox og originaldata/registre; skill graviditet, neonatal påvirkning, amming og fertilitet."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "avhengighet_toleranse",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk SPC, systematiske oversikter og kliniske data etter toleranse, seponeringsfenomener, misbruk/addiksjon og funksjonell mestringsavhengighet."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "viktige_data/referanseomrade",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norske laboratoriekilder/Farmakologiportalen, AGNP og originale serumstudier; verifiser prøvetid, enhet, matriks og indikasjon."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "viktige_data/toksisk_omrade",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk regulatoriske primærkilder og relevante originalstudier; dokumenter positive, negative og usikre funn samt kildebegrensninger."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "viktige_data/alvorlig_intoksikasjon",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk regulatoriske primærkilder og relevante originalstudier; dokumenter positive, negative og usikre funn samt kildebegrensninger."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "viktige_data/halveringstid",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC, regulatoriske etiketter/EPAR og originale PK-studier etter absorpsjon, matinteraksjon, distribusjon, metabolisme, eliminasjon og tidsparametre."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "viktige_data/steady_state",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC, regulatoriske etiketter/EPAR og originale PK-studier etter absorpsjon, matinteraksjon, distribusjon, metabolisme, eliminasjon og tidsparametre."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "toksisitet_forgiftning/Toksisk dose og eksponering",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "toksisitet_forgiftning/Toksiske konsentrasjoner",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "toksisitet_forgiftning/Klinisk forgiftningsbilde",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "toksisitet_forgiftning/Alvorlige komplikasjoner",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "toksisitet_forgiftning/Toksikokinetiske særtrekk",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "toksisitet_forgiftning/Behandling ved forgiftning",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "graviditet_amming/Graviditet",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC, LactMed/UKTIS/Embryotox og originaldata/registre; skill graviditet, neonatal påvirkning, amming og fertilitet."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "graviditet_amming/Perinatal og neonatal påvirkning",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC, LactMed/UKTIS/Embryotox og originaldata/registre; skill graviditet, neonatal påvirkning, amming og fertilitet."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "graviditet_amming/Amming",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC, LactMed/UKTIS/Embryotox og originaldata/registre; skill graviditet, neonatal påvirkning, amming og fertilitet."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "graviditet_amming/Fertilitet og reproduksjon",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk norsk SPC, LactMed/UKTIS/Embryotox og originaldata/registre; skill graviditet, neonatal påvirkning, amming og fertilitet."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "avhengighet_toleranse/fysiologisk_adaptasjon/Toleranseutvikling",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk SPC, systematiske oversikter og kliniske data etter toleranse, seponeringsfenomener, misbruk/addiksjon og funksjonell mestringsavhengighet."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "avhengighet_toleranse/fysiologisk_adaptasjon/Abstinens, seponeringssyndrom og rebound-effekter",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk SPC, systematiske oversikter og kliniske data etter toleranse, seponeringsfenomener, misbruk/addiksjon og funksjonell mestringsavhengighet."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "avhengighet_toleranse/laering_motivasjon/Addiksjon",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk SPC, systematiske oversikter og kliniske data etter toleranse, seponeringsfenomener, misbruk/addiksjon og funksjonell mestringsavhengighet."
+      ],
+      "artefakt": [],
+      "bevis": []
+    },
+    {
+      "nokkel": "avhengighet_toleranse/laering_motivasjon/Lært mestringsavhengighet",
+      "status": "ikke_vurdert",
+      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
+      "kilder": [],
+      "sok": [
+        "Søk SPC, systematiske oversikter og kliniske data etter toleranse, seponeringsfenomener, misbruk/addiksjon og funksjonell mestringsavhengighet."
+      ],
+      "artefakt": [],
+      "bevis": []
+    }
+  ]
+}
