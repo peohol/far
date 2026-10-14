@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-14T08:40:05.104Z",
+  "oppdatert_kl": "2026-10-14T17:33:15.733Z",
   "malt_kl": "2026-10-14T04:50:43.758Z",
   "teller": 1,
   "stoffer": {
@@ -2138,7 +2138,7 @@
       "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 62.8,
+        "poeng": 63.1,
         "grunner": [
           "De novo-kuratering i runden som gjelder.",
           "Sist kuratert 2026-10-05.",
