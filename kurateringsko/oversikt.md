@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-14T17:37:42.383Z. Stoffene sist lest fra databasen 2026-10-14T04:50:43.758Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-14T17:47:24.906Z. Stoffene sist lest fra databasen 2026-10-14T04:50:43.758Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 92 · Reservert: 1 · Fagarbeid ferdig (utkast-PR): 1 · Publisert: 1 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **lurasidon** (lurasidon-0002), frist 2026-10-14T20:37:42.383Z
+- **lurasidon** (lurasidon-0002), frist 2026-10-14T20:47:24.906Z: Evidensgjennomgang og migrasjon under arbeid
 
 ## Til gjennomgang
 

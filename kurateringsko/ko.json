@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-14T17:37:42.383Z",
+  "oppdatert_kl": "2026-10-14T17:47:24.906Z",
   "malt_kl": "2026-10-14T04:50:43.758Z",
   "teller": 2,
   "stoffer": {
@@ -2538,9 +2538,9 @@
         "okt": "kurateringsko/okt/20261014-173642",
         "modus": "de_novo",
         "reservert_kl": "2026-10-14T17:37:42.383Z",
-        "fornyet_kl": "2026-10-14T17:37:42.383Z",
-        "frist_kl": "2026-10-14T20:37:42.383Z",
-        "fase": null,
+        "fornyet_kl": "2026-10-14T17:47:24.906Z",
+        "frist_kl": "2026-10-14T20:47:24.906Z",
+        "fase": "Evidensgjennomgang og migrasjon under arbeid",
         "jobbgren": "kuratorjobb/lurasidon-0002",
         "kurateringsgren": "kuratering/lurasidon-0002",
         "pr": null
@@ -2571,6 +2571,13 @@
           "oppgave": "lurasidon-0002",
           "okt": "kurateringsko/okt/20261014-173642",
           "melding": "Forsøk 1, de_novo."
+        },
+        {
+          "kl": "2026-10-14T17:47:24.906Z",
+          "hendelse": "fornyet",
+          "oppgave": "lurasidon-0002",
+          "okt": "kurateringsko/okt/20261014-173642",
+          "melding": "Evidensgjennomgang og migrasjon under arbeid"
         }
       ]
     },
@@ -4310,27 +4317,28 @@
     },
     "kurateringsko/okt/20261014-173642": {
       "ider": [
+        "forny-1",
         "reserver-1"
       ],
       "siste": {
-        "id": "reserver-1",
-        "sha256": "5d4bd7e55eab7657c34617161a1442f11182015156a3b164881d25b133af6ed0",
+        "id": "forny-1",
+        "sha256": "e1a8cf2d45639b211bde8c1504b9246d7c5092c330fd8f70fd9e7305561ab739",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-1",
-          "foresporsel_sha256": "5d4bd7e55eab7657c34617161a1442f11182015156a3b164881d25b133af6ed0",
-          "handling": "reserver",
+          "foresporsel_id": "forny-1",
+          "foresporsel_sha256": "e1a8cf2d45639b211bde8c1504b9246d7c5092c330fd8f70fd9e7305561ab739",
+          "handling": "forny",
           "utfall": "ok",
-          "melding": "lurasidon er reservert til 2026-10-14T20:37:42.383Z.",
-          "behandlet_kl": "2026-10-14T17:37:42.383Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38608212464",
+          "melding": "Reservasjonen av lurasidon varer til 2026-10-14T20:47:24.906Z.",
+          "behandlet_kl": "2026-10-14T17:47:24.906Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38609588384",
           "oppgave": {
             "oppgave": "lurasidon-0002",
             "stoff": "lurasidon",
             "navn": "Lurasidon",
             "modus": "de_novo",
             "forsok": 1,
-            "frist_kl": "2026-10-14T20:37:42.383Z",
+            "frist_kl": "2026-10-14T20:47:24.906Z",
             "jobbgren": "kuratorjobb/lurasidon-0002",
             "kurateringsgren": "kuratering/lurasidon-0002",
             "pr": null,
@@ -4346,21 +4354,14 @@
               "elementer_uten_kilde": 20
             },
             "prioritet": {
-              "poeng": 467.3,
-              "grunner": [
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "7 av 13 redaksjonelle seksjoner er tomme.",
-                "20 av 23 elementer har ingen kilde.",
-                "Bare 2 referanser."
-              ]
+              "poeng": 0,
+              "grunner": []
             }
           }
         }
       },
       "besvart_commit": null,
-      "sist_brukt_kl": "2026-10-14T17:37:42.383Z"
+      "sist_brukt_kl": "2026-10-14T17:47:24.906Z"
     }
   }
 }
