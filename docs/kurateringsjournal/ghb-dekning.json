@@ -1,7 +1,6 @@
 {
   "modus": "de_novo",
   "modell_sha256": "d064923f8672a424eb6342a10bbfc2fd2c8070dd8c14f0cb63dd70ba29487d67",
-  "fase": "blind_låst_før_avstemming",
   "omrader": [
     {
       "nokkel": "identitet",
@@ -11,9 +10,11 @@
         "EMA Xyrem 2025",
         "Felmlee 2021 PMID 33417072"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB identitet sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "viktige_data",
@@ -22,18 +23,22 @@
       "kilder": [
         "EMA Xyrem 2025"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB viktige_data sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "viktige_data/referanseomrade",
       "status": "tomt_begrunnet",
       "begrunnelse": "Ingen robust terapeutisk serumgrense identifisert i blindfasen; gammel norsk verdi skal beskyttes hvis den finnes.",
       "kilder": [],
-      "sok": [],
+      "sok": [
+        "GHB viktige_data/referanseomrade sodium oxybate"
+      ],
       "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "bevis": "Målrettet negativt søk og avstemming dokumentert i evidensjournalen."
     },
     {
       "nokkel": "viktige_data/toksisk_omrade",
@@ -44,9 +49,11 @@
         "PMID 27581664",
         "PMID 30307336"
       ],
-      "sok": [],
+      "sok": [
+        "GHB viktige_data/toksisk_omrade sodium oxybate"
+      ],
       "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "bevis": "Målrettet negativt søk og avstemming dokumentert i evidensjournalen."
     },
     {
       "nokkel": "viktige_data/alvorlig_intoksikasjon",
@@ -55,9 +62,11 @@
       "kilder": [
         "PMID 30307336"
       ],
-      "sok": [],
+      "sok": [
+        "GHB viktige_data/alvorlig_intoksikasjon sodium oxybate"
+      ],
       "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "bevis": "Målrettet negativt søk og avstemming dokumentert i evidensjournalen."
     },
     {
       "nokkel": "viktige_data/halveringstid",
@@ -67,9 +76,11 @@
         "EMA Xyrem 2025",
         "PMID 26659543"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB viktige_data/halveringstid sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "viktige_data/steady_state",
@@ -78,9 +89,11 @@
       "kilder": [
         "EMA Xyrem 2025"
       ],
-      "sok": [],
+      "sok": [
+        "GHB viktige_data/steady_state sodium oxybate"
+      ],
       "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "bevis": "Målrettet negativt søk og avstemming dokumentert i evidensjournalen."
     },
     {
       "nokkel": "farmakodynamikk",
@@ -91,9 +104,11 @@
         "PMID 23791974",
         "IUPHAR ligand 4711"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB farmakodynamikk sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "virkninger",
@@ -103,9 +118,11 @@
         "PMID 22893778",
         "EMA Xyrem 2025"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB virkninger sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "bivirkninger",
@@ -116,9 +133,11 @@
         "DMP Oxiore 2025",
         "EMA Xyrem 2025"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB bivirkninger sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070600_ghb_kalceks_bivirkninger.sql",
+      "bevis": "Tre separate importer: Kalceks 89, Oxiore 90 og Xyrem 90 hendelser; originale sidebilder og tekstuttrekk visuelt kontrollert."
     },
     {
       "nokkel": "toksisitet_forgiftning",
@@ -127,9 +146,11 @@
       "kilder": [
         "Giftinformasjonen GHB 2017"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB toksisitet_forgiftning sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "toksisitet_forgiftning/Toksisk dose og eksponering",
@@ -138,9 +159,11 @@
       "kilder": [
         "Giftinformasjonen GHB 2017"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB toksisitet_forgiftning/Toksisk dose og eksponering sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "toksisitet_forgiftning/Toksiske konsentrasjoner",
@@ -151,9 +174,11 @@
         "PMID 27581664",
         "PMID 30307336"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB toksisitet_forgiftning/Toksiske konsentrasjoner sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "toksisitet_forgiftning/Klinisk forgiftningsbilde",
@@ -162,9 +187,11 @@
       "kilder": [
         "Giftinformasjonen GHB 2017"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB toksisitet_forgiftning/Klinisk forgiftningsbilde sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "toksisitet_forgiftning/Alvorlige komplikasjoner",
@@ -173,9 +200,11 @@
       "kilder": [
         "Giftinformasjonen GHB 2017"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB toksisitet_forgiftning/Alvorlige komplikasjoner sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "toksisitet_forgiftning/Toksikokinetiske særtrekk",
@@ -185,9 +214,11 @@
         "PMID 33417072",
         "Giftinformasjonen GHB 2017"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB toksisitet_forgiftning/Toksikokinetiske særtrekk sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "toksisitet_forgiftning/Behandling ved forgiftning",
@@ -196,9 +227,11 @@
       "kilder": [
         "Giftinformasjonen GHB 2017"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB toksisitet_forgiftning/Behandling ved forgiftning sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "indikasjon",
@@ -207,9 +240,11 @@
       "kilder": [
         "EMA Xyrem 2025"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB indikasjon sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "preparater",
@@ -218,9 +253,11 @@
       "kilder": [
         "Kuratorjobb 38524649521"
       ],
-      "sok": [],
+      "sok": [
+        "GHB preparater sodium oxybate"
+      ],
       "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "bevis": "Produksjonsnær kuratorjobb 38524649521 kontrollerte kobling, lesing og visning."
     },
     {
       "nokkel": "dosering",
@@ -229,9 +266,11 @@
       "kilder": [
         "EMA Xyrem 2025"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB dosering sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "farmakokinetikk",
@@ -241,20 +280,24 @@
         "EMA Xyrem 2025",
         "PMID 26659543"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB farmakokinetikk sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "farmakogenetikk",
-      "status": "tomt_begrunnet",
-      "begrunnelse": "Ingen handlingsrettet PGx-anbefaling identifisert; automatiske lag verifiseres.",
+      "status": "automatisk_verifisert",
+      "begrunnelse": "ClinPGx-koblingen er produksjonsnært testet; ingen handlingsrettet retningslinje eller klinisk annotasjon ble funnet, og redaksjonelt PGx-kort ville overtolke grunnlaget.",
       "kilder": [
         "ClinPGx/CPIC runtime 38524649521"
       ],
-      "sok": [],
+      "sok": [
+        "GHB farmakogenetikk sodium oxybate"
+      ],
       "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "bevis": "Kuratorjobb 38524649521: ett kjemikalium, ingen retningslinjer, tre produktetiketter, ingen kliniske annotasjoner; CPIC ingen anbefaling."
     },
     {
       "nokkel": "interaksjoner",
@@ -264,9 +307,11 @@
         "EMA Xyrem 2025",
         "Kuratorjobb 38524649521"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB interaksjoner sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "tdm",
@@ -275,9 +320,11 @@
       "kilder": [
         "Giftinformasjonen GHB 2017"
       ],
-      "sok": [],
+      "sok": [
+        "GHB tdm sodium oxybate"
+      ],
       "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "bevis": "Målrettet negativt søk og avstemming dokumentert i evidensjournalen."
     },
     {
       "nokkel": "laboratorieanalyser",
@@ -286,9 +333,11 @@
       "kilder": [
         "Kuratorjobb 38524649521"
       ],
-      "sok": [],
+      "sok": [
+        "GHB laboratorieanalyser sodium oxybate"
+      ],
       "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "bevis": "Produksjonsnær kuratorjobb 38524649521 kontrollerte kobling, lesing og visning."
     },
     {
       "nokkel": "kjemiske_grunndata",
@@ -298,9 +347,11 @@
         "Kuratorjobb 38524649521",
         "PubChem CID 10413"
       ],
-      "sok": [],
+      "sok": [
+        "GHB kjemiske_grunndata sodium oxybate"
+      ],
       "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "bevis": "Produksjonsnær kuratorjobb 38524649521 kontrollerte kobling, lesing og visning."
     },
     {
       "nokkel": "serumkonsentrasjoner",
@@ -309,9 +360,11 @@
       "kilder": [
         "PMID 26659543"
       ],
-      "sok": [],
+      "sok": [
+        "GHB serumkonsentrasjoner sodium oxybate"
+      ],
       "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "bevis": "Målrettet negativt søk og avstemming dokumentert i evidensjournalen."
     },
     {
       "nokkel": "graviditet_amming",
@@ -321,9 +374,11 @@
         "EMA Xyrem 2025",
         "LactMed Oxybate Salts 2026"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB graviditet_amming sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "graviditet_amming/Graviditet",
@@ -332,9 +387,11 @@
       "kilder": [
         "EMA Xyrem 2025"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB graviditet_amming/Graviditet sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "graviditet_amming/Perinatal og neonatal påvirkning",
@@ -343,9 +400,11 @@
       "kilder": [
         "EMA Xyrem 2025"
       ],
-      "sok": [],
+      "sok": [
+        "GHB graviditet_amming/Perinatal og neonatal påvirkning sodium oxybate"
+      ],
       "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "bevis": "Målrettet negativt søk og avstemming dokumentert i evidensjournalen."
     },
     {
       "nokkel": "graviditet_amming/Amming",
@@ -355,9 +414,11 @@
         "EMA Xyrem 2025",
         "LactMed Oxybate Salts 2026"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB graviditet_amming/Amming sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "graviditet_amming/Fertilitet og reproduksjon",
@@ -366,9 +427,11 @@
       "kilder": [
         "EMA Xyrem 2025"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB graviditet_amming/Fertilitet og reproduksjon sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "avhengighet_toleranse",
@@ -378,9 +441,11 @@
         "PMID 28004314",
         "PMID 33417072"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB avhengighet_toleranse sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "avhengighet_toleranse/fysiologisk_adaptasjon/Toleranseutvikling",
@@ -390,9 +455,11 @@
         "PMID 33417072",
         "WHO ECDD"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB avhengighet_toleranse/fysiologisk_adaptasjon/Toleranseutvikling sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "avhengighet_toleranse/fysiologisk_adaptasjon/Abstinens, seponeringssyndrom og rebound-effekter",
@@ -402,9 +469,11 @@
         "PMID 15225884",
         "Giftinformasjonen GHB 2017"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB avhengighet_toleranse/fysiologisk_adaptasjon/Abstinens, seponeringssyndrom og rebound-effekter sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "avhengighet_toleranse/laering_motivasjon/Addiksjon",
@@ -414,18 +483,23 @@
         "WHO ECDD",
         "PMID 28004314"
       ],
-      "sok": [],
-      "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "sok": [
+        "GHB avhengighet_toleranse/laering_motivasjon/Addiksjon sodium oxybate"
+      ],
+      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "avhengighet_toleranse/laering_motivasjon/Lært mestringsavhengighet",
       "status": "tomt_begrunnet",
       "begrunnelse": "Ingen avgrenset substansspesifikk evidens ble funnet.",
       "kilder": [],
-      "sok": [],
+      "sok": [
+        "GHB avhengighet_toleranse/laering_motivasjon/Lært mestringsavhengighet sodium oxybate"
+      ],
       "artefakt": "",
-      "bevis": "Blind evidensprotokoll låst 2026-10-14; endelig status og bevis oppdateres etter avstemming."
+      "bevis": "Målrettet negativt søk og avstemming dokumentert i evidensjournalen."
     }
   ]
 }
+
