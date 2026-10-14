@@ -4,410 +4,705 @@
   "omrader": [
     {
       "nokkel": "identitet",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Identitet, ATC, CAS, formel og molekylmasse verifisert mot SPC/PubChem.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubchem.ncbi.nlm.nih.gov/compound/lurasidone"
+      ],
       "sok": [
         "Søk regulatoriske primærkilder og relevante originalstudier; dokumenter positive, negative og usikre funn samt kildebegrensninger."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "viktige_data",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Kjerneparametre er verifisert; manglende norske referanse- og toksisitetsterskler er eksplisitt flagget.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://www.farmakologiportalen.no/content/9001/Lurasidon",
+        "https://pubmed.ncbi.nlm.nih.gov/39671209/",
+        "https://pubmed.ncbi.nlm.nih.gov/32167797/",
+        "https://pubmed.ncbi.nlm.nih.gov/34860899/"
+      ],
       "sok": [
         "Søk regulatoriske primærkilder og relevante originalstudier; dokumenter positive, negative og usikre funn samt kildebegrensninger."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "farmakodynamikk",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Reseptorprofil og funksjonell aktivitet verifisert; mekanisme avgrenset fra klinisk kausalitet.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubmed.ncbi.nlm.nih.gov/20404009/"
+      ],
       "sok": [
         "Søk regulatoriske vurderinger og originalstudier/systematiske oversikter etter reseptorprofil, klinisk effekt, effektstørrelser og heterogenitet."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "virkninger",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "RCT/meta-analyse, vedlikehold og nullfunn dokumentert med effektstørrelser og designbegrensninger.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubmed.ncbi.nlm.nih.gov/29906709/",
+        "https://pubmed.ncbi.nlm.nih.gov/30950208/",
+        "https://pubmed.ncbi.nlm.nih.gov/26645209/"
+      ],
       "sok": [
         "Søk regulatoriske vurderinger og originalstudier/systematiske oversikter etter reseptorprofil, klinisk effekt, effektstørrelser og heterogenitet."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "bivirkninger",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "SPC og meta-analyse dekker akatisi/EPS, metabolsk risiko, prolaktin og QT med adversariell kontroll.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubmed.ncbi.nlm.nih.gov/31065941/",
+        "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=d8b9ba36-fb02-4f52-b0ed-7fdd81d50c4c&type=display"
+      ],
       "sok": [
         "Søk norsk SPC, RCT-er og komparative meta-analyser; kvantifiser akatisi/EPS, sedasjon, metabolsk belastning, prolaktin og QT der forsvarlig."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "toksisitet_forgiftning",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Poison-center-serier og SPC dekker eksponering, klinikk, komplikasjoner, forløp og støttebehandling; terskler avgrenses.",
+      "kilder": [
+        "https://pubmed.ncbi.nlm.nih.gov/32167797/",
+        "https://pubmed.ncbi.nlm.nih.gov/34860899/",
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda"
+      ],
       "sok": [
         "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "indikasjon",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Norsk indikasjon og dosering med særgrupper og jurisdiksjonsforskjeller verifisert.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda"
+      ],
       "sok": [
         "Søk norsk SPC/DMP og regulatoriske kilder for godkjent indikasjon, preparater, dosering og dosejustering."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "preparater",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "FEST-runtime viste ni merkevarer og 12 pakninger; DMP/EMA-kildedekning er kartlagt.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda"
+      ],
       "sok": [
         "Søk norsk SPC/DMP og regulatoriske kilder for godkjent indikasjon, preparater, dosering og dosejustering."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "dosering",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Norsk indikasjon og dosering med særgrupper og jurisdiksjonsforskjeller verifisert.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda"
+      ],
       "sok": [
         "Søk norsk SPC/DMP og regulatoriske kilder for godkjent indikasjon, preparater, dosering og dosejustering."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "farmakokinetikk",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Tmax, matpåvirkning, distribusjon, CYP3A4, utskillelse, halveringstid og steady state verifisert.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubmed.ncbi.nlm.nih.gov/24014143/"
+      ],
       "sok": [
         "Søk norsk SPC, regulatoriske etiketter/EPAR og originale PK-studier etter absorpsjon, matinteraksjon, distribusjon, metabolisme, eliminasjon og tidsparametre."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "farmakogenetikk",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Ingen CPIC/ClinPGx-retningslinje eller validert genotypebasert doseanbefaling; negativt funn dokumentert.",
+      "kilder": [
+        "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/200603s041lbl.pdf"
+      ],
       "sok": [
         "Søk CPIC, DPWG/ClinPGx, FDA og originaldata; skill klinisk anbefaling fra teoretisk CYP3A4-relevans."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "interaksjoner",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "CYP3A4-hemmere/-induktorer, grapefrukt og farmakodynamiske interaksjoner verifisert i SPC.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda"
+      ],
       "sok": [
         "Søk norsk SPC og kliniske DDI-studier etter sterke/moderate CYP3A4-hemmere og -induktorer, mat/grapefrukt og farmakodynamiske interaksjoner."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "tdm",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Internasjonalt 15–40 ng/mL er usikkert; nyere realdata og manglende norsk område er eksplisitt dokumentert.",
+      "kilder": [
+        "https://www.farmakologiportalen.no/content/9001/Lurasidon",
+        "https://pubmed.ncbi.nlm.nih.gov/39671209/"
+      ],
       "sok": [
         "Søk norske laboratoriekilder/Farmakologiportalen, AGNP og originale serumstudier; verifiser prøvetid, enhet, matriks og indikasjon."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "laboratorieanalyser",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Tre norske serum/plasma-laboratorier og metode/materiale verifisert; runtime viste fire analyser ved tre laboratorier.",
+      "kilder": [
+        "https://www.farmakologiportalen.no/content/9001/Lurasidon",
+        "https://pubmed.ncbi.nlm.nih.gov/39671209/"
+      ],
       "sok": [
         "Søk norske laboratoriekilder/Farmakologiportalen, AGNP og originale serumstudier; verifiser prøvetid, enhet, matriks og indikasjon."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "kjemiske_grunndata",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Identitet, ATC, CAS, formel og molekylmasse verifisert mot SPC/PubChem.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubchem.ncbi.nlm.nih.gov/compound/lurasidone"
+      ],
       "sok": [
         "Søk regulatoriske primærkilder og relevante originalstudier; dokumenter positive, negative og usikre funn samt kildebegrensninger."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "serumkonsentrasjoner",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Internasjonalt 15–40 ng/mL er usikkert; nyere realdata og manglende norsk område er eksplisitt dokumentert.",
+      "kilder": [
+        "https://www.farmakologiportalen.no/content/9001/Lurasidon",
+        "https://pubmed.ncbi.nlm.nih.gov/39671209/"
+      ],
       "sok": [
         "Søk norske laboratoriekilder/Farmakologiportalen, AGNP og originale serumstudier; verifiser prøvetid, enhet, matriks og indikasjon."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "graviditet_amming",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "SPC, prospektivt graviditetsregister, human melkestudie og LactMed dekker graviditet, neonatal risiko, amming og fertilitet.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubmed.ncbi.nlm.nih.gov/36716275/",
+        "https://pubmed.ncbi.nlm.nih.gov/41129619/",
+        "https://www.ncbi.nlm.nih.gov/books/NBK501728/"
+      ],
       "sok": [
         "Søk norsk SPC, LactMed/UKTIS/Embryotox og originaldata/registre; skill graviditet, neonatal påvirkning, amming og fertilitet."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "avhengighet_toleranse",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Seksjonen kan beskrive eksplisitt datamangel, regulatorisk misbruksstatus og skillet mellom seponering og tilbakefall.",
+      "kilder": [
+        "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/200603s041lbl.pdf"
+      ],
       "sok": [
         "Søk SPC, systematiske oversikter og kliniske data etter toleranse, seponeringsfenomener, misbruk/addiksjon og funksjonell mestringsavhengighet."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "viktige_data/referanseomrade",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "kunne_ikke_verifiseres",
+      "begrunnelse": "Farmakologiportalen oppgir intet norsk referanseområde. Utenlandsk 15–40 ng/mL skal ikke fylle beskyttet norsk felt.",
+      "kilder": [
+        "https://www.farmakologiportalen.no/content/9001/Lurasidon",
+        "https://pubmed.ncbi.nlm.nih.gov/39671209/"
+      ],
       "sok": [
         "Søk norske laboratoriekilder/Farmakologiportalen, AGNP og originale serumstudier; verifiser prøvetid, enhet, matriks og indikasjon."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "viktige_data/toksisk_omrade",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "kunne_ikke_verifiseres",
+      "begrunnelse": "Ingen validert toksisk serumkonsentrasjon eller sikker terskel for alvorlig intoksikasjon ble funnet.",
+      "kilder": [
+        "https://pubmed.ncbi.nlm.nih.gov/32167797/",
+        "https://pubmed.ncbi.nlm.nih.gov/34860899/"
+      ],
       "sok": [
         "Søk regulatoriske primærkilder og relevante originalstudier; dokumenter positive, negative og usikre funn samt kildebegrensninger."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "viktige_data/alvorlig_intoksikasjon",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "kunne_ikke_verifiseres",
+      "begrunnelse": "Ingen validert toksisk serumkonsentrasjon eller sikker terskel for alvorlig intoksikasjon ble funnet.",
+      "kilder": [
+        "https://pubmed.ncbi.nlm.nih.gov/32167797/",
+        "https://pubmed.ncbi.nlm.nih.gov/34860899/"
+      ],
       "sok": [
         "Søk regulatoriske primærkilder og relevante originalstudier; dokumenter positive, negative og usikre funn samt kildebegrensninger."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "viktige_data/halveringstid",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Tmax, matpåvirkning, distribusjon, CYP3A4, utskillelse, halveringstid og steady state verifisert.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubmed.ncbi.nlm.nih.gov/24014143/"
+      ],
       "sok": [
         "Søk norsk SPC, regulatoriske etiketter/EPAR og originale PK-studier etter absorpsjon, matinteraksjon, distribusjon, metabolisme, eliminasjon og tidsparametre."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "viktige_data/steady_state",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Tmax, matpåvirkning, distribusjon, CYP3A4, utskillelse, halveringstid og steady state verifisert.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubmed.ncbi.nlm.nih.gov/24014143/"
+      ],
       "sok": [
         "Søk norsk SPC, regulatoriske etiketter/EPAR og originale PK-studier etter absorpsjon, matinteraksjon, distribusjon, metabolisme, eliminasjon og tidsparametre."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "toksisitet_forgiftning/Toksisk dose og eksponering",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Poison-center-serier og SPC dekker eksponering, klinikk, komplikasjoner, forløp og støttebehandling; terskler avgrenses.",
+      "kilder": [
+        "https://pubmed.ncbi.nlm.nih.gov/32167797/",
+        "https://pubmed.ncbi.nlm.nih.gov/34860899/",
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda"
+      ],
       "sok": [
         "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "toksisitet_forgiftning/Toksiske konsentrasjoner",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "kunne_ikke_verifiseres",
+      "begrunnelse": "Ingen validert toksisk serumkonsentrasjon eller sikker terskel for alvorlig intoksikasjon ble funnet.",
+      "kilder": [
+        "https://pubmed.ncbi.nlm.nih.gov/32167797/",
+        "https://pubmed.ncbi.nlm.nih.gov/34860899/"
+      ],
       "sok": [
         "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "toksisitet_forgiftning/Klinisk forgiftningsbilde",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Poison-center-serier og SPC dekker eksponering, klinikk, komplikasjoner, forløp og støttebehandling; terskler avgrenses.",
+      "kilder": [
+        "https://pubmed.ncbi.nlm.nih.gov/32167797/",
+        "https://pubmed.ncbi.nlm.nih.gov/34860899/",
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda"
+      ],
       "sok": [
         "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "toksisitet_forgiftning/Alvorlige komplikasjoner",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Poison-center-serier og SPC dekker eksponering, klinikk, komplikasjoner, forløp og støttebehandling; terskler avgrenses.",
+      "kilder": [
+        "https://pubmed.ncbi.nlm.nih.gov/32167797/",
+        "https://pubmed.ncbi.nlm.nih.gov/34860899/",
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda"
+      ],
       "sok": [
         "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "toksisitet_forgiftning/Toksikokinetiske særtrekk",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Poison-center-serier og SPC dekker eksponering, klinikk, komplikasjoner, forløp og støttebehandling; terskler avgrenses.",
+      "kilder": [
+        "https://pubmed.ncbi.nlm.nih.gov/32167797/",
+        "https://pubmed.ncbi.nlm.nih.gov/34860899/",
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda"
+      ],
       "sok": [
         "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "toksisitet_forgiftning/Behandling ved forgiftning",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Poison-center-serier og SPC dekker eksponering, klinikk, komplikasjoner, forløp og støttebehandling; terskler avgrenses.",
+      "kilder": [
+        "https://pubmed.ncbi.nlm.nih.gov/32167797/",
+        "https://pubmed.ncbi.nlm.nih.gov/34860899/",
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda"
+      ],
       "sok": [
         "Søk Giftinformasjonen/Helsebiblioteket, SPC og originalserier/kasuistikker etter dose, serumkonsentrasjon, klinikk, forløp og behandling."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "graviditet_amming/Graviditet",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "SPC, prospektivt graviditetsregister, human melkestudie og LactMed dekker graviditet, neonatal risiko, amming og fertilitet.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubmed.ncbi.nlm.nih.gov/36716275/",
+        "https://pubmed.ncbi.nlm.nih.gov/41129619/",
+        "https://www.ncbi.nlm.nih.gov/books/NBK501728/"
+      ],
       "sok": [
         "Søk norsk SPC, LactMed/UKTIS/Embryotox og originaldata/registre; skill graviditet, neonatal påvirkning, amming og fertilitet."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "graviditet_amming/Perinatal og neonatal påvirkning",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "SPC, prospektivt graviditetsregister, human melkestudie og LactMed dekker graviditet, neonatal risiko, amming og fertilitet.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubmed.ncbi.nlm.nih.gov/36716275/",
+        "https://pubmed.ncbi.nlm.nih.gov/41129619/",
+        "https://www.ncbi.nlm.nih.gov/books/NBK501728/"
+      ],
       "sok": [
         "Søk norsk SPC, LactMed/UKTIS/Embryotox og originaldata/registre; skill graviditet, neonatal påvirkning, amming og fertilitet."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "graviditet_amming/Amming",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "SPC, prospektivt graviditetsregister, human melkestudie og LactMed dekker graviditet, neonatal risiko, amming og fertilitet.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubmed.ncbi.nlm.nih.gov/36716275/",
+        "https://pubmed.ncbi.nlm.nih.gov/41129619/",
+        "https://www.ncbi.nlm.nih.gov/books/NBK501728/"
+      ],
       "sok": [
         "Søk norsk SPC, LactMed/UKTIS/Embryotox og originaldata/registre; skill graviditet, neonatal påvirkning, amming og fertilitet."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "graviditet_amming/Fertilitet og reproduksjon",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "SPC, prospektivt graviditetsregister, human melkestudie og LactMed dekker graviditet, neonatal risiko, amming og fertilitet.",
+      "kilder": [
+        "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+        "https://www.ema.europa.eu/en/medicines/human/EPAR/latuda",
+        "https://pubmed.ncbi.nlm.nih.gov/36716275/",
+        "https://pubmed.ncbi.nlm.nih.gov/41129619/",
+        "https://www.ncbi.nlm.nih.gov/books/NBK501728/"
+      ],
       "sok": [
         "Søk norsk SPC, LactMed/UKTIS/Embryotox og originaldata/registre; skill graviditet, neonatal påvirkning, amming og fertilitet."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "avhengighet_toleranse/fysiologisk_adaptasjon/Toleranseutvikling",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "kunne_ikke_verifiseres",
+      "begrunnelse": "Lurasidonspesifikk toleranse og fysisk abstinens er ikke systematisk studert; tilbakefall kan ikke brukes som surrogat.",
+      "kilder": [
+        "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/200603s041lbl.pdf"
+      ],
       "sok": [
         "Søk SPC, systematiske oversikter og kliniske data etter toleranse, seponeringsfenomener, misbruk/addiksjon og funksjonell mestringsavhengighet."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "avhengighet_toleranse/fysiologisk_adaptasjon/Abstinens, seponeringssyndrom og rebound-effekter",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "kunne_ikke_verifiseres",
+      "begrunnelse": "Lurasidonspesifikk toleranse og fysisk abstinens er ikke systematisk studert; tilbakefall kan ikke brukes som surrogat.",
+      "kilder": [
+        "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/200603s041lbl.pdf"
+      ],
       "sok": [
         "Søk SPC, systematiske oversikter og kliniske data etter toleranse, seponeringsfenomener, misbruk/addiksjon og funksjonell mestringsavhengighet."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "avhengighet_toleranse/laering_motivasjon/Addiksjon",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "dekket",
+      "begrunnelse": "Ikke kontrollert stoff og ingen systematisk legemiddelsøkende atferd i studier, men misbrukspotensial er ikke systematisk undersøkt.",
+      "kilder": [
+        "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/200603s041lbl.pdf"
+      ],
       "sok": [
         "Søk SPC, systematiske oversikter og kliniske data etter toleranse, seponeringsfenomener, misbruk/addiksjon og funksjonell mestringsavhengighet."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     },
     {
       "nokkel": "avhengighet_toleranse/laering_motivasjon/Lært mestringsavhengighet",
-      "status": "ikke_vurdert",
-      "begrunnelse": "Blind de novo-vurdering planlagt; eksisterende redaksjonelt innhold er ikke åpnet.",
-      "kilder": [],
+      "status": "kunne_ikke_verifiseres",
+      "begrunnelse": "Ikke et validert substansspesifikt endepunkt; ingen kvantifiserbar lurasidon-evidens funnet.",
+      "kilder": [
+        "https://www.accessdata.fda.gov/drugsatfda_docs/label/2025/200603s041lbl.pdf"
+      ],
       "sok": [
         "Søk SPC, systematiske oversikter og kliniske data etter toleranse, seponeringsfenomener, misbruk/addiksjon og funksjonell mestringsavhengighet."
       ],
-      "artefakt": [],
-      "bevis": []
+      "artefakt": [
+        "docs/kurateringsjournal/lurasidon.md"
+      ],
+      "bevis": [
+        "Blind evidensinnhenting låst i docs/kurateringsjournal/lurasidon.md 2026-10-14."
+      ]
     }
   ]
 }
