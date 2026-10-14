@@ -12,8 +12,8 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.92.1',
-    dato: '2026-10-13',
+    versjon: '1.92.2',
+    dato: '2026-10-14',
     sammendrag: 'Endringsloggen på en fagside viser bare det som angikk den siden',
     typer: ['Funksjonalitet'],
     omfang: 'Mindre omfang',
@@ -22,6 +22,20 @@ export const ENDRINGSLOGG: Endring[] = [
       'En referanse som flere fagsider deler, tar ikke lenger med seg det som skjedde på andre fagsider før den ble knyttet til siden. Citalopram viser for eksempel ikke lenger kurateringen av kvetiapin.',
       'At en referanse knyttes til eller fjernes fra siden, står som en endring av kortet eller siden som fikk eller mistet den. Senere endringer av referansen vises på alle sidene som bruker den, merket «Delt».',
       'Et kort som er flyttet fra en annen fagside, tar ikke med seg historikken fra den andre siden. Det samme gjelder kommentarene på fortolkningssidene.',
+    ],
+  },
+  {
+    versjon: '1.92.1',
+    dato: '2026-10-13',
+    sammendrag: 'Citaloprammonografien er faglig gjennomgått fra grunnen av',
+    typer: ['Fag'],
+    omfang: 'Moderat omfang',
+    gjelder: ['stoff/citalopram'],
+    punkter: [
+      'Effektdokumentasjonen ved depresjon, panikklidelse og tvangslidelse er vurdert på nytt, med tydeligere tall, studiepopulasjoner og begrensninger.',
+      'Farmakodynamikk, prøvetaking, graviditet og amming er oppdatert med nyere og mer presise kilder.',
+      'Det norske serumreferanseområdet på 70–350 nmol/L, toksisitetsgrensene og dose–serumtabellen er kontrollert og beholdt.',
+      'Svakt dokumenterte kort om klinisk toleranse og lite informative negative mål er tatt ut.',
     ],
   },
   {
