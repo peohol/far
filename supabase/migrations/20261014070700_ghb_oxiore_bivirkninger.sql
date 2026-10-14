@@ -26,7 +26,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "nasofaryngitt",
+            "Nasofaryngitt",
             "sinusitt"
           ]
         }
@@ -38,7 +38,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "mindre_vanlige",
           "bivirkninger": [
-            "hypersensitivitet"
+            "Hypersensitivitet"
           ]
         }
       ]
@@ -49,14 +49,14 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "anoreksi",
+            "Anoreksi",
             "nedsatt appetitt"
           ]
         },
         {
           "frekvens": "ikke_kjent",
           "bivirkninger": [
-            "dehydrering",
+            "Dehydrering",
             "økt appetitt"
           ]
         }
@@ -68,7 +68,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "depresjon",
+            "Depresjon",
             "katapleksi",
             "angst",
             "unormale drømmer",
@@ -85,7 +85,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "mindre_vanlige",
           "bivirkninger": [
-            "selvmordsforsøk",
+            "Selvmordsforsøk",
             "psykose",
             "paranoia",
             "hallusinasjoner",
@@ -97,7 +97,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "ikke_kjent",
           "bivirkninger": [
-            "selvmordstanker",
+            "Selvmordstanker",
             "drapstanker",
             "aggresjon",
             "eufori",
@@ -118,14 +118,14 @@ select bivirkninger.importer($import${
         {
           "frekvens": "svaert_vanlige",
           "bivirkninger": [
-            "svimmelhet",
+            "Svimmelhet",
             "hodepine"
           ]
         },
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "søvnparalyse",
+            "Søvnparalyse",
             "søvnighet",
             "tremor",
             "balanseforstyrrelser",
@@ -139,7 +139,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "mindre_vanlige",
           "bivirkninger": [
-            "myoklonus",
+            "Myoklonus",
             "amnesi",
             "”restless legs”- syndrom"
           ]
@@ -147,7 +147,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "ikke_kjent",
           "bivirkninger": [
-            "konvulsjoner",
+            "Konvulsjoner",
             "bevissthetstap",
             "dyskinesi"
           ]
@@ -160,7 +160,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "tåkesyn"
+            "Tåkesyn"
           ]
         }
       ]
@@ -171,13 +171,13 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "vertigo"
+            "Vertigo"
           ]
         },
         {
           "frekvens": "ikke_kjent",
           "bivirkninger": [
-            "tinnitus"
+            "Tinnitus"
           ]
         }
       ]
@@ -188,7 +188,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "palpitasjoner"
+            "Palpitasjoner"
           ]
         }
       ]
@@ -199,7 +199,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "hypertensjon"
+            "Hypertensjon"
           ]
         }
       ]
@@ -210,7 +210,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "dyspné",
+            "Dyspné",
             "snorking",
             "nesetetthet"
           ]
@@ -218,7 +218,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "ikke_kjent",
           "bivirkninger": [
-            "respirasjonsdepresjon",
+            "Respirasjonsdepresjon",
             "søvnapné",
             "kvelningsfornemmelse"
           ]
@@ -231,13 +231,13 @@ select bivirkninger.importer($import${
         {
           "frekvens": "svaert_vanlige",
           "bivirkninger": [
-            "kvalme (frekvensen av kvalme er høyere hos kvinner enn hos menn)"
+            "Kvalme (frekvensen av kvalme er høyere hos kvinner enn hos menn)"
           ]
         },
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "oppkast",
+            "Oppkast",
             "diaré",
             "smerter i øvre abdomen"
           ]
@@ -245,13 +245,13 @@ select bivirkninger.importer($import${
         {
           "frekvens": "mindre_vanlige",
           "bivirkninger": [
-            "fekal inkontinens"
+            "Fekal inkontinens"
           ]
         },
         {
           "frekvens": "ikke_kjent",
           "bivirkninger": [
-            "munntørrhet"
+            "Munntørrhet"
           ]
         }
       ]
@@ -262,14 +262,14 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "hyperhidrose",
+            "Hyperhidrose",
             "utslett"
           ]
         },
         {
           "frekvens": "ikke_kjent",
           "bivirkninger": [
-            "urtikaria",
+            "Urtikaria",
             "angioødem",
             "seboré"
           ]
@@ -282,7 +282,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "artralgi",
+            "Artralgi",
             "muskelspasmer",
             "ryggsmerte"
           ]
@@ -295,14 +295,14 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "enuresis nocturna",
+            "Enuresis nocturna",
             "urininkontinens"
           ]
         },
         {
           "frekvens": "ikke_kjent",
           "bivirkninger": [
-            "pollakisuri/hurtig innsettende trang til vannlating",
+            "Pollakisuri/hurtig innsettende trang til vannlating",
             "nokturi"
           ]
         }
@@ -314,7 +314,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "asteni",
+            "Asteni",
             "tretthet",
             "følelse av å være beruset",
             "perifert ødem"
@@ -328,7 +328,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "økt blodtrykk",
+            "Økt blodtrykk",
             "vektreduksjon"
           ]
         }
@@ -340,7 +340,7 @@ select bivirkninger.importer($import${
         {
           "frekvens": "vanlige",
           "bivirkninger": [
-            "fall"
+            "Fall"
           ]
         }
       ]
