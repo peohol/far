@@ -665,7 +665,9 @@ describe('loggen kan ikke endres', () => {
 describe('endringene fra før loggen fantes', () => {
   it('fører ikke en kuratering av én fagside inn i loggen til en annen som senere siterer den samme referansen', async () => {
     // Slik det skjedde med kvetiapin og citalopram: referansen ble laget under
-    // kurateringen av kvetiapin og først dagen etter sitert på citalopram.
+    // kurateringen av kvetiapin og først dagen etter sitert på citalopram. Sidene
+    // har syntetiske navn, så de virkelige kurateringene i migrasjonene etterpå
+    // ikke finner dem.
     const eldre = await nyDatabase({ til: LOGGMIGRASJON })
     const redaktor = await opprettBruker(eldre, { brukernavn: 'kurator', fornavn: 'Kari', etternavn: 'Kurator', rolle: 'admin' })
     const vanlig = await opprettBruker(eldre, { brukernavn: 'vanlig', fornavn: 'Vera', etternavn: 'Vanlig', rolle: 'user' })
@@ -682,14 +684,14 @@ describe('endringene fra før loggen fantes', () => {
       `'innholdselement', '${JSON.stringify({ ...kortinnhold(side, 'Kort'), referanser: [ref] })}'::jsonb`
 
     let ref = ''
-    await kuratering('Monografkuratering av kvetiapin 05.10.2026', async (f) => {
-      const side = await f('opprett_utkast', `'infoside', '{"navn": "Kvetiapin"}'::jsonb`)
+    await kuratering('Monografkuratering av kurert stoff 05.10.2026', async (f) => {
+      const side = await f('opprett_utkast', `'infoside', '{"navn": "Kurert stoff"}'::jsonb`)
       ref = await f('opprett_utkast', `'referanse', '{"tittel": "Consensus Guidelines (syntetisk)", "forfattere": "A", "aar": "2026", "lenke": ""}'::jsonb`)
       const element = await f('opprett_utkast', kort(side, ref))
       for (const id of [side, ref, element]) await f('publiser_utkast', `'${id}', 1`)
     })
-    await kuratering('Monografkuratering av citalopram 06.10.2026', async (f) => {
-      const side = await f('opprett_utkast', `'infoside', '{"navn": "Citalopram"}'::jsonb`)
+    await kuratering('Monografkuratering av siterende stoff 06.10.2026', async (f) => {
+      const side = await f('opprett_utkast', `'infoside', '{"navn": "Siterende stoff"}'::jsonb`)
       const element = await f('opprett_utkast', kort(side, ref))
       for (const id of [side, element]) await f('publiser_utkast', `'${id}', 1`)
     })
@@ -697,17 +699,17 @@ describe('endringene fra før loggen fantes', () => {
     const les = async (stoff: string) =>
       (await k.rpc<{ les_endringslogg: Logg }>(vanlig, 'les_endringslogg', { side: { stoff } })).les_endringslogg
 
-    const citalopram = await les('citalopram')
-    expect(citalopram.endringer).toHaveLength(1)
-    expect(citalopram.endringer[0]).toMatchObject({ oppsummering: 'Monografkuratering av citalopram 06.10.2026', aktor: 'system' })
-    expect(objekterI(citalopram).has(ref)).toBe(false)
-    expect(JSON.stringify(citalopram)).not.toContain('kvetiapin')
+    const sitert = await les('siterende-stoff')
+    expect(sitert.endringer).toHaveLength(1)
+    expect(sitert.endringer[0]).toMatchObject({ oppsummering: 'Monografkuratering av siterende stoff 06.10.2026', aktor: 'system' })
+    expect(objekterI(sitert).has(ref)).toBe(false)
+    expect(JSON.stringify(sitert)).not.toContain('kurert stoff')
 
-    // Hos kvetiapin, der referansen ble laget, står den som før.
-    const kvetiapin = await les('kvetiapin')
-    expect(kvetiapin.endringer).toHaveLength(1)
-    expect(objekterI(kvetiapin).has(ref)).toBe(true)
-    expect(kvetiapin.endringer[0]!.oppsummering).toBe('Monografkuratering av kvetiapin 05.10.2026')
+    // Hos siden der referansen ble laget, står den som før.
+    const kurert = await les('kurert-stoff')
+    expect(kurert.endringer).toHaveLength(1)
+    expect(objekterI(kurert).has(ref)).toBe(true)
+    expect(kurert.endringer[0]!.oppsummering).toBe('Monografkuratering av kurert stoff 05.10.2026')
   }, 120_000)
 
   it('settes sammen av revisjonene og publiseringene etter tidspunkt og person', async () => {
