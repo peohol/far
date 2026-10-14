@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-14T06:49:52.156Z",
+  "oppdatert_kl": "2026-10-14T07:09:10.092Z",
   "malt_kl": "2026-10-14T04:50:43.758Z",
   "teller": 1,
   "stoffer": {
@@ -1439,12 +1439,12 @@
         "okt": "kurateringsko/okt/20261014-064915",
         "modus": "de_novo",
         "reservert_kl": "2026-10-14T06:49:52.156Z",
-        "fornyet_kl": "2026-10-14T06:49:52.156Z",
-        "frist_kl": "2026-10-14T09:49:52.156Z",
-        "fase": null,
+        "fornyet_kl": "2026-10-14T07:09:10.092Z",
+        "frist_kl": "2026-10-14T10:09:10.092Z",
+        "fase": "Faglig kuratering og kildekontroll ferdig; kvalitetskontroller kjører",
         "jobbgren": "kuratorjobb/ghb-0001",
         "kurateringsgren": "kuratering/ghb-0001",
-        "pr": null
+        "pr": 228
       },
       "forsok": 1,
       "tidligst_kl": null,
@@ -1472,6 +1472,19 @@
           "oppgave": "ghb-0001",
           "okt": "kurateringsko/okt/20261014-064915",
           "melding": "Forsøk 1, de_novo."
+        },
+        {
+          "kl": "2026-10-14T07:09:10.092Z",
+          "hendelse": "pr_funnet",
+          "oppgave": "ghb-0001",
+          "melding": "Fant PR #228 fra kuratering/ghb-0001."
+        },
+        {
+          "kl": "2026-10-14T07:09:10.092Z",
+          "hendelse": "fornyet",
+          "oppgave": "ghb-0001",
+          "okt": "kurateringsko/okt/20261014-064915",
+          "melding": "Faglig kuratering og kildekontroll ferdig; kvalitetskontroller kjører"
         }
       ]
     },
@@ -4242,30 +4255,31 @@
     },
     "kurateringsko/okt/20261014-064915": {
       "ider": [
+        "forny-1",
         "reserver-1"
       ],
       "siste": {
-        "id": "reserver-1",
-        "sha256": "5d4bd7e55eab7657c34617161a1442f11182015156a3b164881d25b133af6ed0",
+        "id": "forny-1",
+        "sha256": "7be3282461271420adc731bf77487a33045bebea4340d2c20884827c122b2f51",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-1",
-          "foresporsel_sha256": "5d4bd7e55eab7657c34617161a1442f11182015156a3b164881d25b133af6ed0",
-          "handling": "reserver",
+          "foresporsel_id": "forny-1",
+          "foresporsel_sha256": "7be3282461271420adc731bf77487a33045bebea4340d2c20884827c122b2f51",
+          "handling": "forny",
           "utfall": "ok",
-          "melding": "ghb er reservert til 2026-10-14T09:49:52.156Z.",
-          "behandlet_kl": "2026-10-14T06:49:52.156Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38524492151",
+          "melding": "Reservasjonen av ghb varer til 2026-10-14T10:09:10.092Z.",
+          "behandlet_kl": "2026-10-14T07:09:10.092Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38526462971",
           "oppgave": {
             "oppgave": "ghb-0001",
             "stoff": "ghb",
             "navn": "GHB",
             "modus": "de_novo",
             "forsok": 1,
-            "frist_kl": "2026-10-14T09:49:52.156Z",
+            "frist_kl": "2026-10-14T10:09:10.092Z",
             "jobbgren": "kuratorjobb/ghb-0001",
             "kurateringsgren": "kuratering/ghb-0001",
-            "pr": null,
+            "pr": 228,
             "gjenoppta": null,
             "sist_kuratert": null,
             "maal": {
@@ -4278,21 +4292,14 @@
               "elementer_uten_kilde": 1
             },
             "prioritet": {
-              "poeng": 471.3,
-              "grunner": [
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "11 av 13 redaksjonelle seksjoner er tomme.",
-                "1 av 3 elementer har ingen kilde.",
-                "Bare 3 referanser."
-              ]
+              "poeng": 0,
+              "grunner": []
             }
           }
         }
       },
       "besvart_commit": null,
-      "sist_brukt_kl": "2026-10-14T06:49:52.156Z"
+      "sist_brukt_kl": "2026-10-14T07:09:10.092Z"
     }
   }
 }
