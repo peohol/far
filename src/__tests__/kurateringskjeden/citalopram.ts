@@ -9,6 +9,7 @@ import { type Element, elementer, inlineReferanser, tekst } from '../hjelp/kurat
 export default function citalopram(db: () => PGlite): void {
   let identitet: Element[]
   let virkninger: Element[]
+  let bivirkninger: Element[]
   let farmakodynamikk: Element[]
   let indikasjon: Element[]
   let dosering: Element[]
@@ -25,6 +26,7 @@ export default function citalopram(db: () => PGlite): void {
     identitet = await panel('identitet')
     virkninger = await panel('virkninger')
     farmakodynamikk = await panel('farmakodynamikk')
+    bivirkninger = await panel('bivirkninger')
     indikasjon = await panel('indikasjon')
     dosering = await panel('dosering')
     farmakokinetikk = await panel('farmakokinetikk')
@@ -352,11 +354,70 @@ export default function citalopram(db: () => PGlite): void {
     expect(innhold).toContain('matinntak og vektutvikling')
   })
 
+
+  it('har kildebevart ADH-bivirkning med eksplisitt klinisk kildeavklaring', () => {
+    expect(bivirkninger.map((e) => String(e.data.tittel))).toEqual(['ADH-sekresjon – motstridende SPC-ordlyd'])
+    const merknad = tekst(bivirkninger[0]!.data)
+    expect(merknad).toContain('Utilstrekkelig ADH-sekresjon')
+    expect(merknad).toContain('Uhensiktsmessig sekresjon av ADH')
+    expect(merknad).toContain('SIADH')
+    expect(merknad).toContain('hyponatremi')
+    expect(inlineReferanser(bivirkninger[0]!.data)).toHaveLength(4)
+  })
+
+  it('viser Cipramil og Orion som to uavhengige, kildefidele SPC-tabeller', async () => {
+    const { rows } = await db().query<{ nokkel: string; antall: number; fotnoter: number }>(
+      `select k.nokkel,
+              count(b.id)::integer as antall,
+              count(b.fotnote)::integer as fotnoter
+       from bivirkninger.kilder k
+       join public.infosider s on s.objekt_id = k.infoside and s.tilstand = 'publisert'
+       left join bivirkninger.bivirkninger b on b.kilde = k.id
+       where s.slug = 'citalopram' and k.erstattet_av is null and k.trukket_kl is null
+       group by k.nokkel order by k.nokkel`,
+    )
+    expect(rows).toEqual([
+      { nokkel: 'cipramil-tabletter', antall: 84, fotnoter: 2 },
+      { nokkel: 'citalopram-orion-tabletter', antall: 86, fotnoter: 2 },
+    ])
+
+    const { rows: adh } = await db().query<{ nokkel: string; tekst: string; frekvens: string }>(
+      `select k.nokkel, b.tekst, b.frekvens
+       from bivirkninger.bivirkninger b
+       join bivirkninger.kilder k on k.id = b.kilde
+       join public.infosider s on s.objekt_id = k.infoside and s.tilstand = 'publisert'
+       where s.slug = 'citalopram' and b.organsystem = 'endokrine'
+         and b.tekst ilike '%ADH%' and k.erstattet_av is null and k.trukket_kl is null
+       order by k.nokkel`,
+    )
+    expect(adh).toEqual([
+      { nokkel: 'cipramil-tabletter', tekst: 'Uhensiktsmessig sekresjon av ADH', frekvens: 'ikke_kjent' },
+      { nokkel: 'citalopram-orion-tabletter', tekst: 'Utilstrekkelig ADH-sekresjon', frekvens: 'ikke_kjent' },
+    ])
+  })
+
+  it('plasserer reproduksjonsreferanser separat ved hver risikopåstand', () => {
+    const gravid = graviditet.find((e) => e.data.tittel === 'Graviditet')!
+    const perinatal = graviditet.find((e) => e.data.tittel === 'Perinatal og neonatal påvirkning')!
+    const amming = graviditet.find((e) => e.data.tittel === 'Amming')!
+
+    const avsnitt = (element: Element) =>
+      ((element.data.dokument as { content?: { content?: { type?: string }[] }[] }).content ?? [])
+        .filter((p) => p.content?.some((x) => x.type === 'sitering'))
+
+    expect(avsnitt(gravid)).toHaveLength(2)
+    expect(avsnitt(perinatal)).toHaveLength(3)
+    expect(avsnitt(amming)).toHaveLength(3)
+    expect(inlineReferanser(perinatal.data).length).toBeGreaterThanOrEqual(3)
+    expect(inlineReferanser(amming.data).length).toBeGreaterThanOrEqual(3)
+  })
+
   it('har kildebelegg og ingen upubliserte redaksjonelle elementer', () => {
     for (const e of [
       ...identitet,
       ...virkninger,
       ...farmakodynamikk,
+      ...bivirkninger,
       ...indikasjon,
       ...dosering,
       ...farmakokinetikk,
