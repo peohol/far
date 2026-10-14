@@ -595,12 +595,18 @@
   }
 
   /* Panelene henger under pillen, ved vinduets høyre kant, så en meny fra en
-     knapp lenger inn ikke går ut over venstre kant. */
+     knapp lenger inn ikke går ut over venstre kant. Fra dokken åpner de seg
+     oppover, rett over den. */
   .nedtrekk__panel {
     position: fixed;
     top: calc(var(--rom-3) + var(--hoyde-toppmeny) + var(--rom-3));
     right: var(--rom-3);
     width: min(21.25rem, calc(100vw - 2 * var(--rom-3)));
+  }
+
+  .toppmeny__kontekst .nedtrekk__panel {
+    top: auto;
+    bottom: calc(var(--rom-4) + var(--dokkhoyde) + var(--rom-3));
   }
 
   .menyknapp {
@@ -639,10 +645,17 @@
   }
 
   /* Hver gruppe er ikke bredere enn knappene sine, og radene står midt i
-     dokken. Får ikke handlingene plass ved siden av hovedgruppen, går de
-     samlet ned på en egen rad. */
+     dokken. Får ikke handlingene plass ved siden av hovedgruppen, står de på
+     hver sin rad (`Toppmeny` setter merket), og dokken er ikke bredere enn
+     den bredeste raden. */
+  .toppmeny__kontekst[data-to-rader] {
+    flex-direction: column;
+    align-items: center;
+  }
+
   .toppmeny__gruppe[data-gruppe='hoved'] {
     min-width: 0;
+    max-width: 100%;
   }
 
   .toppmeny__gruppe[data-gruppe='handlinger'] {
@@ -667,15 +680,20 @@
     height: var(--hoyde-trykk);
   }
 
-  /* Mens det søkes på siden, tar dokken hele bredden, og søket står på en
-     egen øverste rad med handlingene under, også der alt ellers står på én.
-     Hovedhandlingen viker til bare ikonet (teksten er fortsatt knappens
-     navn), og søkefeltet tar resten av raden. */
+  /* Mens det søkes på siden, tar dokken hele bredden, og søkefeltet har hele
+     den øverste raden for seg selv, også der alt ellers står på én.
+     Hovedhandlingen flytter ned først på raden under og viker til bare
+     ikonet (teksten er fortsatt knappens navn). */
   .toppmeny__kontekst:has(.sidesok:focus-within) {
+    flex-direction: row;
     width: auto;
   }
 
   .toppmeny__gruppe[data-gruppe='hoved']:has(.sidesok:focus-within) {
+    display: contents;
+  }
+
+  .toppmeny__kontekst .sidesok:focus-within {
     flex: 1 1 100%;
   }
 

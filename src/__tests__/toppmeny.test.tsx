@@ -57,7 +57,7 @@ vi.mock('../components/ideer/Oppgaver', () => ({
 
 const { Ikon } = await import('../components/ikon/Ikon')
 const { IKONER, IKONFARGER, IKONNAVN } = await import('../components/ikon/register')
-const { Toppmeny } = await import('../components/toppmeny/Toppmeny')
+const { Toppmeny, trengerToRader } = await import('../components/toppmeny/Toppmeny')
 const { ToppmenyKilde, ToppmenyInnhold } = await import('../components/toppmeny/Toppmenykilde')
 const { Fagsokfelt, erFagsokSnarvei } = await import('../components/toppmeny/Fagsokfelt')
 const { Kontomeny } = await import('../components/konto/Kontomeny')
@@ -248,6 +248,15 @@ describe('plassene i toppmenyen', () => {
     const [hoved, handlinger] = dokk.querySelectorAll('.toppmeny__gruppe')
     expect(within(hoved as HTMLElement).getAllByRole('button')).toHaveLength(2)
     expect(within(handlinger as HTMLElement).getAllByRole('button')).toHaveLength(5)
+  })
+
+  it('setter gruppene i dokken på hver sin rad bare når de ikke får plass ved siden av hverandre', () => {
+    // Søk og «Åpne fortolkning» (226 px) og seks ikoner (294 px), 6 px imellom.
+    expect(trengerToRader([226, 294], 6, 526)).toBe(false)
+    expect(trengerToRader([226, 294], 6, 525)).toBe(true)
+    // En side med bare én gruppe står alltid på én rad.
+    expect(trengerToRader([294], 6, 300)).toBe(false)
+    expect(trengerToRader([], 6, 300)).toBe(false)
   })
 
   it('går over to rader i dokken heller enn å klemme hovedhandlingen', () => {

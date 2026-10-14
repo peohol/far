@@ -376,16 +376,20 @@ Under 760 px bredde gjelder dette:
 - Skillet viker. Nedtrekksmenyene henger ved vinduets høyre kant.
 - Sidens plasser flytter til en **dokk** nederst i vinduet, og siden får
   `--dokk-offset` luft nederst. Dokken står midt i vinduet og er ikke
-  bredere enn knappene; hovedhandlingen er så bred som innholdet, og radene
-  står midtstilt med luft på sidene heller enn at noe strekkes.
+  bredere enn den bredeste raden med knapper; hovedhandlingen er så bred som
+  innholdet, og radene står midtstilt heller enn at noe strekkes.
 - Får ikke alt plass på én rad, går dokken over **to rader**: søket og
   hovedhandlingen øverst, de andre knappene samlet under. Raden brytes aldri
-  midt i gruppen. `Toppmeny` måler høyden og setter den som `--dokkhoyde`,
-  så `--dokk-offset` og det som står over dokken, følger med. Hovedhandlingen
+  midt i gruppen. `Toppmeny` avgjør det (`data-to-rader`, se
+  `trengerToRader`), fordi en rad som brytes i CSS gjør dokken like bred som
+  vinduet. Den måler også høyden og setter den som `--dokkhoyde`, så
+  `--dokk-offset` og det som står over dokken, følger med. Hovedhandlingen
   korter teksten bare om den ikke får plass alene på sin rad.
-- Søket på siden står som en rund lupeknapp til det brukes. Da får det en
-  egen øverste rad i full bredde (også der alt ellers står på én), og
-  hovedhandlingen viker til bare ikonet ved siden av.
+- Søket på siden står som en rund lupeknapp til det brukes. Da har det hele
+  den øverste raden for seg selv (også der alt ellers står på én), og
+  hovedhandlingen flytter ned først på raden under, som bare ikonet.
+- Nedtrekksmenyer fra dokken (som «Mer for fagsiden») åpner seg oppover,
+  rett over dokken.
 - Fortolkningen har dokken når en analytt er valgt: «Åpne fagside» (én
   knapp per stoff når modulen har koder for flere, som Diazepam og
   Oksazepam) og «Diskusjoner».

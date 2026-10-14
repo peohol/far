@@ -26,7 +26,7 @@ export interface ToppmenyProps {
  * seg under den (se `tokens.css`).
  */
 export function Toppmeny({ meny, sok, verktoy, konto }: ToppmenyProps) {
-  const dokk = useDokkhoyde()
+  const dokk = useDokk()
 
   return (
     <header className="toppmeny" data-toppmeny="">
@@ -57,28 +57,67 @@ function Spor({ navn }: { navn: Toppmenyspor }) {
 /** Dokkens målte høyde, på dokumentet (se `tokens.css`). */
 const DOKKHOYDE = '--dokkhoyde'
 
+/** Merket dokken bærer når gruppene står på hver sin rad (se `toppmeny.css`). */
+const TO_RADER = 'data-to-rader'
+
 /**
- * Melder dokkens høyde til resten av appen mens sidens plasser står i den, så
- * siden og det som står over dokken, gir plass også når den går over to
- * rader. Står plassene i toppmenyen (brede flater) eller er de tomme, gjelder
- * høyden på én rad fra `tokens.css`.
+ * Om gruppene i dokken trenger hver sin rad: når de ikke får plass ved siden
+ * av hverandre, med mellomrommet mellom dem.
  */
-function useDokkhoyde() {
+export function trengerToRader(bredder: readonly number[], mellomrom: number, plass: number) {
+  const behov = bredder.reduce((sum, bredde) => sum + bredde, 0) + mellomrom * Math.max(0, bredder.length - 1)
+  return behov > plass + 0.5
+}
+
+/**
+ * Holder dokken på smale flater i orden:
+ *
+ * - Får ikke gruppene plass på én rad, står de på hver sin (`data-to-rader`),
+ *   og dokken blir ikke bredere enn den bredeste raden. Det kan ikke CSS
+ *   avgjøre selv: en rad som brytes, gjør boksen rundt like bred som det er
+ *   plass til. Mens det søkes på siden, står valget slik det var.
+ * - Høyden meldes til resten av appen som `--dokkhoyde`, så siden og det som
+ *   står over dokken, gir plass også når den går over to rader. Står plassene
+ *   i toppmenyen (brede flater) eller er de tomme, gjelder høyden på én rad
+ *   fra `tokens.css`.
+ */
+function useDokk() {
   const [dokk, setDokk] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
     if (!dokk || typeof ResizeObserver !== 'function') return
     const rot = document.documentElement.style
+    const grupper = Array.from(dokk.querySelectorAll<HTMLElement>(':scope > .toppmeny__gruppe'))
     const maal = () => {
+      const stil = getComputedStyle(dokk)
+      const fast = stil.position === 'fixed'
+      const soker = dokk.querySelector('.sidesok')?.contains(document.activeElement) ?? false
+      if (!fast) dokk.removeAttribute(TO_RADER)
+      else if (!soker) {
+        const px = (verdi: string) => parseFloat(verdi) || 0
+        const plass =
+          document.documentElement.clientWidth -
+          px(stil.left) -
+          px(stil.right) -
+          px(stil.paddingLeft) -
+          px(stil.paddingRight) -
+          px(stil.borderLeftWidth) -
+          px(stil.borderRightWidth)
+        const bredder = grupper.filter((g) => g.getClientRects().length > 0).map((g) => g.getBoundingClientRect().width)
+        dokk.toggleAttribute(TO_RADER, trengerToRader(bredder, px(stil.columnGap), plass))
+      }
       const hoyde = dokk.getBoundingClientRect().height
-      if (hoyde > 0 && getComputedStyle(dokk).position === 'fixed') rot.setProperty(DOKKHOYDE, `${hoyde}px`)
+      if (hoyde > 0 && fast) rot.setProperty(DOKKHOYDE, `${hoyde}px`)
       else rot.removeProperty(DOKKHOYDE)
     }
     const vakt = new ResizeObserver(maal)
-    vakt.observe(dokk)
+    for (const element of [dokk, ...grupper]) vakt.observe(element)
+    window.addEventListener('resize', maal)
     maal()
     return () => {
       vakt.disconnect()
+      window.removeEventListener('resize', maal)
+      dokk.removeAttribute(TO_RADER)
       rot.removeProperty(DOKKHOYDE)
     }
   }, [dokk])
