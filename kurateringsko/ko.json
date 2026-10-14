@@ -1,0 +1,4178 @@
+{
+  "versjon": 1,
+  "oppdatert_kl": "2026-10-14T04:50:43.758Z",
+  "malt_kl": "2026-10-14T04:50:43.758Z",
+  "teller": 0,
+  "stoffer": {
+    "alprazolam": {
+      "stoff": "alprazolam",
+      "navn": "Alprazolam",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 445.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 8 elementer har ingen kilde.",
+          "Bare 2 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 2,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "amfetamin": {
+      "stoff": "amfetamin",
+      "navn": "Amfetamin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 426.4,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 7 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 7,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 10,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "amisulprid": {
+      "stoff": "amisulprid",
+      "navn": "Amisulprid",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 423.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "21 av 30 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 30,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 6,
+        "elementer_uten_kilde": 21
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "amitriptylin": {
+      "stoff": "amitriptylin",
+      "navn": "Amitriptylin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 420.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "18 av 28 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 28,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 9,
+        "elementer_uten_kilde": 18
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "amlodipin": {
+      "stoff": "amlodipin",
+      "navn": "Amlodipin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 21 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 8,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "aripiprazol": {
+      "stoff": "aripiprazol",
+      "navn": "Aripiprazol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 417.3,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "15 av 26 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 26,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 8,
+        "elementer_uten_kilde": 15
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "atenolol": {
+      "stoff": "atenolol",
+      "navn": "Atenolol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 21 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "atomoksetin": {
+      "stoff": "atomoksetin",
+      "navn": "Atomoksetin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 446.4,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 7 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 7,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 3,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "bendroflumetiazid": {
+      "stoff": "bendroflumetiazid",
+      "navn": "Bendroflumetiazid",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 396,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 20 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 20,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "bisoprolol": {
+      "stoff": "bisoprolol",
+      "navn": "Bisoprolol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.3,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 22 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 22,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "brekspiprazol": {
+      "stoff": "brekspiprazol",
+      "navn": "Brekspiprazol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 466.3,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "7 av 13 redaksjonelle seksjoner er tomme.",
+          "17 av 20 elementer har ingen kilde.",
+          "Bare 1 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 20,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 6,
+        "referanser": 1,
+        "elementer_uten_kilde": 17
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "bumetanid": {
+      "stoff": "bumetanid",
+      "navn": "Bumetanid",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 418,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "4 av 21 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 4,
+        "elementer_uten_kilde": 4
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "buprenorfin": {
+      "stoff": "buprenorfin",
+      "navn": "Buprenorfin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 425.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 8 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 13,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "bupropion": {
+      "stoff": "bupropion",
+      "navn": "Bupropion",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 432.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "6 av 13 redaksjonelle seksjoner er tomme.",
+          "16 av 22 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 22,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 7,
+        "referanser": 8,
+        "elementer_uten_kilde": 16
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "cbd": {
+      "stoff": "cbd",
+      "navn": "CBD",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 462.3,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "12 av 13 redaksjonelle seksjoner er tomme.",
+          "Bare 1 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 2,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 1,
+        "referanser": 1,
+        "elementer_uten_kilde": 0
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "citalopram": {
+      "stoff": "citalopram",
+      "navn": "Citalopram",
+      "status": "publisert",
+      "modus": null,
+      "prioritet": {
+        "poeng": 0,
+        "grunner": []
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 42,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 12,
+        "referanser": 22,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": {
+        "kl": "2026-10-13T16:00:00.000Z",
+        "modus": "de_novo",
+        "kunnskapsgrense": "2026-10-13",
+        "runde": 1,
+        "pr": null,
+        "kilde": "repo"
+      },
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        },
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "kuratering_i_repoet",
+          "melding": "En kuratering (de_novo) fra 2026-10-13 står i repoet."
+        }
+      ]
+    },
+    "diazepam": {
+      "stoff": "diazepam",
+      "navn": "Diazepam",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 445.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 8 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 4,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "diltiazem": {
+      "stoff": "diltiazem",
+      "navn": "Diltiazem",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 21 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 8,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "doksazosin": {
+      "stoff": "doksazosin",
+      "navn": "Doksazosin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 418,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "4 av 21 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 4,
+        "elementer_uten_kilde": 4
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "doksepin": {
+      "stoff": "doksepin",
+      "navn": "Doksepin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 460.7,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "7 av 13 redaksjonelle seksjoner er tomme.",
+          "14 av 19 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 19,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 6,
+        "referanser": 4,
+        "elementer_uten_kilde": 14
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "duloksetin": {
+      "stoff": "duloksetin",
+      "navn": "Duloksetin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 423.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "19 av 27 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 27,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 19
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "enalapril": {
+      "stoff": "enalapril",
+      "navn": "Enalapril",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 397.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "4 av 22 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 22,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 4
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "eplerenon": {
+      "stoff": "eplerenon",
+      "navn": "Eplerenon",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 419.8,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "5 av 22 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 22,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 4,
+        "elementer_uten_kilde": 5
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "escitalopram": {
+      "stoff": "escitalopram",
+      "navn": "Escitalopram",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 426.9,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "20 av 26 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 26,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 20
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "etanol": {
+      "stoff": "etanol",
+      "navn": "Etanol",
+      "status": "blokkert",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 0,
+        "grunner": []
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": false,
+        "elementer": 0,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 0,
+        "referanser": 0,
+        "elementer_uten_kilde": 0
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [
+        {
+          "kode": "uten_fagside",
+          "grunn": "Stoffet har ingen publisert fagside å kuratere.",
+          "kl": "2026-10-14T04:50:43.758Z",
+          "kilde": "system"
+        }
+      ],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "fenobarbital": {
+      "stoff": "fenobarbital",
+      "navn": "Fenobarbital",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 447.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 6,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 3,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "fentanyl": {
+      "stoff": "fentanyl",
+      "navn": "Fentanyl",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 425.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 8 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 6,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "fenytoin": {
+      "stoff": "fenytoin",
+      "navn": "Fenytoin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 447.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 6,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 3,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "flunitrazepam": {
+      "stoff": "flunitrazepam",
+      "navn": "Flunitrazepam",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 451.7,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "2 av 8 elementer har ingen kilde.",
+          "Bare 1 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 1,
+        "elementer_uten_kilde": 2
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "fluoksetin": {
+      "stoff": "fluoksetin",
+      "navn": "Fluoksetin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 421.2,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "19 av 29 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 29,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 7,
+        "elementer_uten_kilde": 19
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "flupentiksol": {
+      "stoff": "flupentiksol",
+      "navn": "Flupentiksol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 423.1,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "18 av 26 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 26,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 7,
+        "elementer_uten_kilde": 18
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "fluvoksamin": {
+      "stoff": "fluvoksamin",
+      "navn": "Fluvoksamin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 422.4,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "19 av 28 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 28,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 6,
+        "elementer_uten_kilde": 19
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "furosemid": {
+      "stoff": "furosemid",
+      "navn": "Furosemid",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 21 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "gabapentin": {
+      "stoff": "gabapentin",
+      "navn": "Gabapentin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 427.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 6,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 5,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "ghb": {
+      "stoff": "ghb",
+      "navn": "GHB",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 471.3,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "11 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 3 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 3,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 2,
+        "referanser": 3,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "haloperidol": {
+      "stoff": "haloperidol",
+      "navn": "Haloperidol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 416.7,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "13 av 23 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 23,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 7,
+        "elementer_uten_kilde": 13
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "hydroklortiazid": {
+      "stoff": "hydroklortiazid",
+      "navn": "Hydroklortiazid",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 396,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 20 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 20,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 6,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "irbesartan": {
+      "stoff": "irbesartan",
+      "navn": "Irbesartan",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 21 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 7,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "kandesartan": {
+      "stoff": "kandesartan",
+      "navn": "Kandesartan",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 21 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 7,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "karbamazepin": {
+      "stoff": "karbamazepin",
+      "navn": "Karbamazepin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 427.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 6,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 5,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "kariprazin": {
+      "stoff": "kariprazin",
+      "navn": "Kariprazin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 464.8,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "7 av 13 redaksjonelle seksjoner er tomme.",
+          "18 av 22 elementer har ingen kilde.",
+          "Bare 2 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 22,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 6,
+        "referanser": 2,
+        "elementer_uten_kilde": 18
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "karvedilol": {
+      "stoff": "karvedilol",
+      "navn": "Karvedilol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 23 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 23,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "ketamin": {
+      "stoff": "ketamin",
+      "navn": "Ketamin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 100.7,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Sist kuratert 2026-10-04.",
+          "6 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 28 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 28,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 7,
+        "referanser": 29,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": {
+        "kl": "2026-10-04T04:00:00.000Z",
+        "modus": "oppdatering",
+        "kunnskapsgrense": null,
+        "runde": null,
+        "pr": null,
+        "kilde": "repo"
+      },
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        },
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "kuratering_i_repoet",
+          "melding": "En kuratering (oppdatering) fra 2026-10-04 står i repoet."
+        }
+      ]
+    },
+    "ketobemidon": {
+      "stoff": "ketobemidon",
+      "navn": "Ketobemidon",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 451.7,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "2 av 8 elementer har ingen kilde.",
+          "Bare 1 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 1,
+        "elementer_uten_kilde": 2
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "klomipramin": {
+      "stoff": "klomipramin",
+      "navn": "Klomipramin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 418.1,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "16 av 27 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 27,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 7,
+        "elementer_uten_kilde": 16
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "klonazepam": {
+      "stoff": "klonazepam",
+      "navn": "Klonazepam",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 425.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 8 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 5,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "klorprotiksen": {
+      "stoff": "klorprotiksen",
+      "navn": "Klorprotiksen",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 421.8,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "18 av 27 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 27,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 18
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "klozapin": {
+      "stoff": "klozapin",
+      "navn": "Klozapin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 422.3,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "21 av 31 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 31,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 7,
+        "elementer_uten_kilde": 21
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "kodein": {
+      "stoff": "kodein",
+      "navn": "Kodein",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 425.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 8 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 5,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "kokain": {
+      "stoff": "kokain",
+      "navn": "Kokain",
+      "status": "blokkert",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 0,
+        "grunner": []
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": false,
+        "elementer": 0,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 0,
+        "referanser": 0,
+        "elementer_uten_kilde": 0
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [
+        {
+          "kode": "uten_fagside",
+          "grunn": "Stoffet har ingen publisert fagside å kuratere.",
+          "kl": "2026-10-14T04:50:43.758Z",
+          "kilde": "system"
+        }
+      ],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "kvetiapin": {
+      "stoff": "kvetiapin",
+      "navn": "Kvetiapin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 62.8,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Sist kuratert 2026-10-05.",
+          "1 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 51 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 51,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 12,
+        "referanser": 39,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": {
+        "kl": "2026-10-05T16:51:00.000Z",
+        "modus": "oppdatering",
+        "kunnskapsgrense": null,
+        "runde": null,
+        "pr": null,
+        "kilde": "repo"
+      },
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        },
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "kuratering_i_repoet",
+          "melding": "En kuratering (oppdatering) fra 2026-10-05 står i repoet."
+        }
+      ]
+    },
+    "labetalol": {
+      "stoff": "labetalol",
+      "navn": "Labetalol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.3,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 22 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 22,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "lamotrigin": {
+      "stoff": "lamotrigin",
+      "navn": "Lamotrigin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 449.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "6 av 13 redaksjonelle seksjoner er tomme.",
+          "12 av 18 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 18,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 7,
+        "referanser": 3,
+        "elementer_uten_kilde": 12
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "lerkanidipin": {
+      "stoff": "lerkanidipin",
+      "navn": "Lerkanidipin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 21 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 6,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "levetiracetam": {
+      "stoff": "levetiracetam",
+      "navn": "Levetiracetam",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 447.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 6,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 3,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "levomepromazin": {
+      "stoff": "levomepromazin",
+      "navn": "Levomepromazin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 419.7,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "15 av 24 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 24,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 15
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "lisinopril": {
+      "stoff": "lisinopril",
+      "navn": "Lisinopril",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 396,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 20 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 20,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "litium": {
+      "stoff": "litium",
+      "navn": "Litium",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 444.8,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 9 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 9,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 4,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "losartan": {
+      "stoff": "losartan",
+      "navn": "Losartan",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 21 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "lurasidon": {
+      "stoff": "lurasidon",
+      "navn": "Lurasidon",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 467.3,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "7 av 13 redaksjonelle seksjoner er tomme.",
+          "20 av 23 elementer har ingen kilde.",
+          "Bare 2 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 23,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 6,
+        "referanser": 2,
+        "elementer_uten_kilde": 20
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "mdma": {
+      "stoff": "mdma",
+      "navn": "MDMA",
+      "status": "blokkert",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 0,
+        "grunner": []
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": false,
+        "elementer": 0,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 0,
+        "referanser": 0,
+        "elementer_uten_kilde": 0
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [
+        {
+          "kode": "uten_fagside",
+          "grunn": "Stoffet har ingen publisert fagside å kuratere.",
+          "kl": "2026-10-14T04:50:43.758Z",
+          "kilde": "system"
+        }
+      ],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "metadon": {
+      "stoff": "metadon",
+      "navn": "Metadon",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 427.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 6,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 5,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "metamfetamin": {
+      "stoff": "metamfetamin",
+      "navn": "Metamfetamin",
+      "status": "blokkert",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 0,
+        "grunner": []
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": false,
+        "elementer": 0,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 0,
+        "referanser": 0,
+        "elementer_uten_kilde": 0
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [
+        {
+          "kode": "uten_fagside",
+          "grunn": "Stoffet har ingen publisert fagside å kuratere.",
+          "kl": "2026-10-14T04:50:43.758Z",
+          "kilde": "system"
+        }
+      ],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "metoprolol": {
+      "stoff": "metoprolol",
+      "navn": "Metoprolol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 21 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 6,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "metylfenidat": {
+      "stoff": "metylfenidat",
+      "navn": "Metylfenidat",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 426.4,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 7 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 7,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 12,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "mianserin": {
+      "stoff": "mianserin",
+      "navn": "Mianserin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 422.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "17 av 25 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 25,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 6,
+        "elementer_uten_kilde": 17
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "mirtazapin": {
+      "stoff": "mirtazapin",
+      "navn": "Mirtazapin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 421.8,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "18 av 27 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 27,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 6,
+        "elementer_uten_kilde": 18
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "morfin": {
+      "stoff": "morfin",
+      "navn": "Morfin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 424.8,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 9 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 9,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 8,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "nifedipin": {
+      "stoff": "nifedipin",
+      "navn": "Nifedipin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 21 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 8,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "nitrazepam": {
+      "stoff": "nitrazepam",
+      "navn": "Nitrazepam",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 445.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 8 elementer har ingen kilde.",
+          "Bare 2 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 2,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "nortriptylin": {
+      "stoff": "nortriptylin",
+      "navn": "Nortriptylin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 421.8,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "16 av 24 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 24,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 6,
+        "elementer_uten_kilde": 16
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "oksazepam": {
+      "stoff": "oksazepam",
+      "navn": "Oksazepam",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 445.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 8 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 3,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "okskarbazepin": {
+      "stoff": "okskarbazepin",
+      "navn": "Okskarbazepin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 447.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 6,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 3,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "oksykodon": {
+      "stoff": "oksykodon",
+      "navn": "Oksykodon",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 425.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 8 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 8,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "olanzapin": {
+      "stoff": "olanzapin",
+      "navn": "Olanzapin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 425.1,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "22 av 30 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 30,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 11,
+        "elementer_uten_kilde": 22
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "paliperidon": {
+      "stoff": "paliperidon",
+      "navn": "Paliperidon",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 426.9,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "20 av 26 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 26,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 9,
+        "elementer_uten_kilde": 20
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "paroksetin": {
+      "stoff": "paroksetin",
+      "navn": "Paroksetin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 423.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "21 av 30 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 30,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 6,
+        "elementer_uten_kilde": 21
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "perfenazin": {
+      "stoff": "perfenazin",
+      "navn": "Perfenazin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 418,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "13 av 22 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 22,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 7,
+        "elementer_uten_kilde": 13
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "petidin": {
+      "stoff": "petidin",
+      "navn": "Petidin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 445.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 8 elementer har ingen kilde.",
+          "Bare 2 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 2,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "ramipril": {
+      "stoff": "ramipril",
+      "navn": "Ramipril",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 397.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "4 av 22 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 22,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 4
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "risperidon": {
+      "stoff": "risperidon",
+      "navn": "Risperidon",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 416.7,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "13 av 23 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 23,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 11,
+        "elementer_uten_kilde": 13
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "sertindol": {
+      "stoff": "sertindol",
+      "navn": "Sertindol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 447.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 2 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 6,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 2,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "sertralin": {
+      "stoff": "sertralin",
+      "navn": "Sertralin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 423.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "21 av 30 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 30,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 6,
+        "elementer_uten_kilde": 21
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "spironolakton": {
+      "stoff": "spironolakton",
+      "navn": "Spironolakton",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 419.3,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "5 av 23 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 23,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 4,
+        "elementer_uten_kilde": 5
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "tapentadol": {
+      "stoff": "tapentadol",
+      "navn": "Tapentadol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 442.3,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "12 av 13 redaksjonelle seksjoner er tomme."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 2,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 1,
+        "referanser": 5,
+        "elementer_uten_kilde": 0
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "telmisartan": {
+      "stoff": "telmisartan",
+      "navn": "Telmisartan",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 396,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 20 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 20,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "teststoff": {
+      "stoff": "teststoff",
+      "navn": "Teststoff",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 470,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "13 av 13 redaksjonelle seksjoner er tomme.",
+          "Bare 0 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 1,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 0,
+        "referanser": 0,
+        "elementer_uten_kilde": 0
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "thc": {
+      "stoff": "thc",
+      "navn": "THC",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 50.8,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Sist kuratert 2026-10-10."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 43,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 13,
+        "referanser": 25,
+        "elementer_uten_kilde": 0
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": {
+        "kl": "2026-10-10T08:00:00.000Z",
+        "modus": "oppdatering",
+        "kunnskapsgrense": "2026-10-10",
+        "runde": null,
+        "pr": null,
+        "kilde": "repo"
+      },
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        },
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "kuratering_i_repoet",
+          "melding": "En kuratering (oppdatering) fra 2026-10-10 står i repoet."
+        }
+      ]
+    },
+    "topiramat": {
+      "stoff": "topiramat",
+      "navn": "Topiramat",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 447.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 6,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 4,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "tramadol": {
+      "stoff": "tramadol",
+      "navn": "Tramadol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 424.2,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 10 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 10,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 6,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "trimipramin": {
+      "stoff": "trimipramin",
+      "navn": "Trimipramin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 432.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "6 av 13 redaksjonelle seksjoner er tomme.",
+          "16 av 22 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 22,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 7,
+        "referanser": 5,
+        "elementer_uten_kilde": 16
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "valproat": {
+      "stoff": "valproat",
+      "navn": "Valproat",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 447.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 6 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 6,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 3,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "valsartan": {
+      "stoff": "valsartan",
+      "navn": "Valsartan",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 21 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 5,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "venlafaksin": {
+      "stoff": "venlafaksin",
+      "navn": "Venlafaksin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 419.2,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "16 av 26 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 26,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 7,
+        "elementer_uten_kilde": 16
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "verapamil": {
+      "stoff": "verapamil",
+      "navn": "Verapamil",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 395.6,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "3 av 21 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 21,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 8,
+        "elementer_uten_kilde": 3
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "vortioksetin": {
+      "stoff": "vortioksetin",
+      "navn": "Vortioksetin",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 455.7,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "6 av 13 redaksjonelle seksjoner er tomme.",
+          "19 av 24 elementer har ingen kilde.",
+          "Bare 4 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 24,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 7,
+        "referanser": 4,
+        "elementer_uten_kilde": 19
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "ziprasidon": {
+      "stoff": "ziprasidon",
+      "navn": "Ziprasidon",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 425.1,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "22 av 30 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 30,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 6,
+        "elementer_uten_kilde": 22
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "zolpidem": {
+      "stoff": "zolpidem",
+      "navn": "Zolpidem",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 445.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 8 elementer har ingen kilde.",
+          "Bare 2 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 2,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "zopiklon": {
+      "stoff": "zopiklon",
+      "navn": "Zopiklon",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 445.5,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "9 av 13 redaksjonelle seksjoner er tomme.",
+          "1 av 8 elementer har ingen kilde.",
+          "Bare 3 referanser."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 8,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 4,
+        "referanser": 3,
+        "elementer_uten_kilde": 1
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    },
+    "zuklopentiksol": {
+      "stoff": "zuklopentiksol",
+      "navn": "Zuklopentiksol",
+      "status": "klar",
+      "modus": "de_novo",
+      "prioritet": {
+        "poeng": 421.2,
+        "grunner": [
+          "De novo-kuratering i runden som gjelder.",
+          "Aldri kuratert.",
+          "Ingen kuratering å regne alderen fra.",
+          "5 av 13 redaksjonelle seksjoner er tomme.",
+          "17 av 26 elementer har ingen kilde."
+        ]
+      },
+      "maal": {
+        "kl": "2026-10-14T04:50:44.088Z",
+        "side": true,
+        "elementer": 26,
+        "redaksjonelle_paneler": 13,
+        "paneler_med_innhold": 8,
+        "referanser": 9,
+        "elementer_uten_kilde": 17
+      },
+      "reservasjon": null,
+      "forsok": 0,
+      "tidligst_kl": null,
+      "gjenoppta": null,
+      "pr": null,
+      "blokkeringer": [],
+      "sist_kuratert": null,
+      "siste_kjoring": null,
+      "aktiv": true,
+      "historikk": [
+        {
+          "kl": "2026-10-14T04:50:43.758Z",
+          "hendelse": "oppdaget",
+          "melding": "Nytt stoff i stoffregisteret."
+        }
+      ]
+    }
+  },
+  "okter": {}
+}
