@@ -92,12 +92,74 @@ export default function ghb(db: () => PGlite): void {
     expect(effekt).toContain('8,5')
     expect(effekt).toContain('5,18 minutter')
     expect(effekt).toContain('RR 2,42')
+    expect(effekt).toContain('2 studier')
+    expect(effekt).toContain('3 studier')
+    const akutteEffekter = tekst(virkninger[1]!.data)
+    expect(akutteEffekter).toContain('20 og 35 mg/kg')
+    expect(akutteEffekter).not.toContain('25 og 35 mg/kg')
     const pk = farmakokinetikk.map((e) => tekst(e.data)).join(' ')
     expect(pk).toContain('Cmax med 58 %')
     expect(pk).toContain('AUC med 37 %')
     expect(pk).toContain('3,8 ganger')
+    expect(pk).toContain('20 og 35 mg/kg')
+    expect(pk).not.toContain('25 og 35 mg/kg')
+    const barnedose = tekst(dosering[0]!.data)
+    expect(barnedose).toContain('15 til <20 kg')
+    expect(barnedose).toContain('0,2 g/kg/dag')
+    expect(barnedose).toContain('9 g/dag')
+    const kontraindikasjoner = tekst(interaksjoner[0]!.data)
+    expect(kontraindikasjoner).toContain('alvorlig depresjon')
+    expect(kontraindikasjoner).toContain('suksinsemialdehyddehydrogenasemangel')
+    expect(kontraindikasjoner).toContain('opioider eller barbiturater')
     expect(tekst(avhengighet[0]!.data)).toContain('Terapeutisk bruk')
     expect(tekst(avhengighet[1]!.data)).toContain('53 % delirium')
+  })
+
+  it('har PMID-korrekt bibliografi for de feilidentifiserte kildene', async () => {
+    const { rows } = await db().query<{ lenke: string; tittel: string; forfattere: string; aar: string }>(
+      `select r.lenke, r.tittel, r.forfattere, r.aar
+       from public.referanser r
+       where r.tilstand='publisert' and not r.arkivert and r.lenke in (
+         'https://pubmed.ncbi.nlm.nih.gov/12827115/',
+         'https://pubmed.ncbi.nlm.nih.gov/27581664/',
+         'https://pubmed.ncbi.nlm.nih.gov/30307336/',
+         'https://pubmed.ncbi.nlm.nih.gov/28004314/',
+         'https://pubmed.ncbi.nlm.nih.gov/39225220/'
+       )
+       order by r.lenke`,
+    )
+    expect(rows).toEqual([
+      {
+        lenke: 'https://pubmed.ncbi.nlm.nih.gov/12827115/',
+        tittel: 'Gamma-hydroxybutyrate serum levels and clinical syndrome after severe overdose',
+        forfattere: 'Karl A Sporer, Rachel L Chin, Jo Ellen Dyer, Ryan Lamb',
+        aar: '2003',
+      },
+      {
+        lenke: 'https://pubmed.ncbi.nlm.nih.gov/27581664/',
+        tittel: 'Presentations to an urban emergency department in Switzerland due to acute γ-hydroxybutyrate toxicity',
+        forfattere: 'Evangelia Liakoni, Fabio Walther, Christian H Nickel, Matthias E Liechti',
+        aar: '2016',
+      },
+      {
+        lenke: 'https://pubmed.ncbi.nlm.nih.gov/28004314/',
+        tittel: 'Pharmacological Treatment in γ-Hydroxybutyrate (GHB) and γ-Butyrolactone (GBL) Dependence: Detoxification and Relapse Prevention',
+        forfattere: 'Rama M Kamal, Martijn S van Noorden, Wim Wannet, Harmen Beurmanjer, Boukje A G Dijkstra, Arnt Schellekens',
+        aar: '2017',
+      },
+      {
+        lenke: 'https://pubmed.ncbi.nlm.nih.gov/30307336/',
+        tittel: 'Interpreting γ-hydroxybutyrate concentrations for clinical and forensic purposes',
+        forfattere: 'Francesco Paolo Busardò, Alan Wayne Jones',
+        aar: '2019',
+      },
+      {
+        lenke: 'https://pubmed.ncbi.nlm.nih.gov/39225220/',
+        tittel: 'Long-term Efficacy and Safety of Sodium Oxybate in Treating Alcohol Use Disorder: A Systematic Review and Meta-Analysis',
+        forfattere: 'Letizia Biso, Andrea Spini, Francesco Petragnano, Roberto Maggio, Marco Scarselli, Marco Carli',
+        aar: '2025',
+      },
+    ])
   })
 
   it('har tre selvstendige, kildefidele SPC-importer', async () => {
