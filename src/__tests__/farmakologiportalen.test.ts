@@ -11,7 +11,6 @@
  * som dekker dem. Bildene og redaksjonens navn er tatt ut.
  */
 import type { PGlite } from '@electric-sql/pglite'
-import { readFileSync } from 'node:fs'
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { lesDatakildestatus, vurderKilder } from '../datakilder/status'
 import {
@@ -47,34 +46,13 @@ import type { Tilleggstekst } from '../faginnhold/sok'
 import { byggKjemivisning } from '../kjemi/stoffside'
 import { byggForbindelsesregister, FORBINDELSER, type Forbindelse } from '../kjemi/forbindelser'
 import { githubkrav, githubkjoring, type Githubsjekk } from '../server/tilgang'
+import { falskFpApi, FPLISTER } from './hjelp/datakilder'
 import { kallSom } from './hjelp/fest'
 import { faginnholdskall, nyDatabase, opprettBruker } from './hjelp/testdatabase'
 
 type Rad = Record<string, unknown>
-const fil = (navn: string) =>
-  JSON.parse(readFileSync(new URL(`./data/farmakologiportalen/${navn}.json`, import.meta.url), 'utf8')) as Rad[]
-
-/** Listene slik portalens API ga dem, per sti. */
-const LISTER: Record<string, Rad[]> = {
-  '/units': fil('units'),
-  '/sampletypes': fil('sampletypes'),
-  '/institutions': fil('institutions'),
-  '/labs': fil('labs'),
-  '/components': fil('components'),
-  '/analyses': fil('analyses'),
-}
-
-/** Et API som svarer med utdraget, eventuelt endret per sti. */
-function falskApi(endre: (sti: string, rader: Rad[]) => Rad[] = (_, r) => r): FpApi & { kall: string[] } {
-  const kall: string[] = []
-  return {
-    kall,
-    liste: async (sti) => {
-      kall.push(sti)
-      return endre(sti, structuredClone(LISTER[sti] ?? []))
-    },
-  }
-}
+const LISTER = FPLISTER
+const falskApi = falskFpApi
 
 const enheter = new Map(LISTER['/units']!.map((u) => [String(u.id), String(u.name)]))
 const les = <T>(navn: Parameters<typeof entitet>[0], rad: Rad) => entitet(navn).les(rad, { enheter })?.data as T | undefined

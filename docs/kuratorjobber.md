@@ -7,7 +7,8 @@ den tekniske hjelpen kuratoren får fra GitHub Actions under en kuratering
 - **Funksjonstesten** leser en fagside med de samme kallene og den samme koden
   appen bruker, som en vanlig innlogget bruker, og kontrollerer at hver del
   virker: `les_stoff`, legemiddeldataene fra FEST, bivirkningene fra
-  preparatomtalene, ClinPGx og CPIC. Kuratorens Supabase-tilkobling leser
+  preparatomtalene, ClinPGx, CPIC, de kjemiske grunndataene fra PubChem og
+  laboratorieanalysene fra Farmakologiportalen. Kuratorens Supabase-tilkobling leser
   databasen direkte og kan ikke gjøre dette.
 - **SPC-hentingen** henter de originale preparatomtalene (PDF) fra DMP,
   kontrollerer at filene kom hele, tar vare på hvor og når de ble hentet, og
@@ -21,7 +22,7 @@ fagsidene. De leser og henter, og legger resultatet fram.
 bare det som allerede er offentlig: utfall, tall og tekniske meldinger fra
 funksjonstesten, og preparatomtalene fra DMP med FESTs preparatdata. Innholdet
 appen leser bak innloggingen (fagsidene, redaktørene, bivirkningene,
-farmakogenetikken) skrives aldri på grenen eller i loggen. Kuratoren leser det
+farmakogenetikken, kjemien og laboratorieanalysene) skrives aldri på grenen eller i loggen. Kuratoren leser det
 selv med Supabase-tilkoblingen sin.
 
 ## Kort fortalt for kuratoren
@@ -138,6 +139,8 @@ En kontroll har `id`, `status`, `melding` (på norsk), og eventuelt `rpc`,
 | `bivirkninger`, `bivirkningsvisning` | `les_bivirkninger`, og at appen viser alle radene den får (`antall.rader` mot `antall.rader_appen_viser`) |
 | `clinpgx`, `farmakogenetikkvisning` | `les_farmakogenetikk` for kjemikaliene siden er koblet til. Advarsel for et kjemikalie som ikke er hentet, har feil, eller når ClinPGx er eldre enn ti døgn |
 | `cpic`, `cpicvisning` | `les_cpic` for de samme kjemikaliene |
+| `kjemi`, `kjemivisning` | `les_kjemi` for forbindelsene stoffet har i registeret over forbindelser (`docs/kjemi.md`), og seksjonen «Kjemiske grunndata» med formel og molekylvekt. Feil når svaret har en forbindelse stoffet ikke er koblet til, når InChIKey eller formel i kopien ikke er den koblingen ble kontrollert mot, eller når appen forkaster rader. Advarsel for en forbindelse som ikke er hentet eller ikke er koblet sikkert, og når PubChem er eldre enn ti døgn |
+| `laboratorieanalyser`, `laboratorievisning` | `les_laboratorieanalyser` for komponentene i Farmakologiportalen forbindelsene er koblet til (`docs/farmakologiportalen.md`), og seksjonen «Analyse ved norske laboratorier» med måleområdene i hver enhet brukeren kan velge. Feil når en koblet komponent mangler i kopien eller er en gruppeanalyse, når appen forkaster rader, eller når en verifisert rad ikke regnes om selv om PubChem har molekylvekten. Advarsel når komponenten har fått et annet navn i portalen, og når kopien er eldre enn tre døgn eller aldri er hentet |
 
 Funksjonstesten tar ikke med det appen fikk fra kallene, bare om det virket
 og hvor mye som kom (`antall`). Meldingene nevner ikke innhold, navn eller
@@ -250,13 +253,12 @@ Testbrukeren og hemmelighetene settes opp av en administrator:
 Uten testbrukeren stopper funksjonstesten med en feil som sier det. SPC-
 hentingen med `spc.adresser` virker uten, men da uten preparatene fra FEST.
 
-## Videre: arbeidskøen
+## Kurateringskøen
 
-Jobbene er laget for å kunne startes av en arbeidskø senere, uten endringer:
-køen lager en jobbgren og en forespørsel per stoff, med køens ID i
-`referanse`, og leser `status.json`. `versjon` sier om formen er endret.
-`"stoffer": "alle"` med bare funksjonstesten kontrollerer alle fagsidene i én
-jobb, f.eks. før og etter en runde.
+Når kuratoren arbeider fra kurateringskøen (`docs/kurateringsko.md`), gir
+køen jobbgrenen (`kuratorjobb/<oppgave-ID>`), og oppgave-ID-en settes i
+`referanse`. `"stoffer": "alle"` med bare funksjonstesten kontrollerer alle
+fagsidene i én jobb, f.eks. før og etter en runde.
 
 ## Koden
 
@@ -267,5 +269,6 @@ jobb, f.eks. før og etter en runde.
 | `src/kuratorjobb/modell.ts` | Formen på forespørselen og resultatet, grenene og stiene |
 | `src/kuratorjobb/foresporsel.ts` | Lesingen og kontrollen av forespørselen |
 | `src/kuratorjobb/funksjonstest.ts` | Funksjonstesten, med appens egne lesere |
+| `src/kuratorjobb/testbruker.ts` | Innloggingen som testbrukeren, som kurateringskøen også bruker |
 | `src/kuratorjobb/spc.ts` | DMPs adresser, preparatomtalene i FEST, og kontrollen av filene |
 | `src/__tests__/kuratorjobb.test.ts` | Testene, med funksjonstesten mot en ekte database |

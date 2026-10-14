@@ -16,6 +16,10 @@ leser den som en vanlig innlogget bruker, og de originale preparatomtalene fra
 DMP med tekstuttrekk og sidebilder, fra GitHub Actions
 (`docs/kuratorjobber.md`).
 
+Når kuratoren arbeider seg gjennom stoffregisteret på egen hånd, henter den
+neste stoff fra kurateringskøen og følger instruksen for hver planlagte
+kjøring (`docs/kurateringsko.md`, `docs/kurateringsko-instruks.md`).
+
 1. **Preflight i produksjonen.** Les sidens elementer slik de står nå, med
    `execute_sql` (som bare kan lese):
 

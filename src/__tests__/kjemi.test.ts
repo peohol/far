@@ -9,7 +9,6 @@
  * THC med THC-OH og THC-COOH, bupropion og hydroksybupropion, og litium.
  */
 import type { PGlite } from '@electric-sql/pglite'
-import { readFileSync } from 'node:fs'
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import stoffregister from '../data/stoffregister.json'
 import { lesDatakildestatus, vurderKilder } from '../datakilder/status'
@@ -37,13 +36,11 @@ import {
 } from '../kjemi/stoffside'
 import { maksBortfall, synkroniserKjemi } from '../kjemi/synk'
 import { lagHofligHenting } from '../server/hofligHenting'
+import { falskPubchemApi, PUBCHEMRADER } from './hjelp/datakilder'
 import { kallSom } from './hjelp/fest'
 import { faginnholdskall, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
-const SVAR = JSON.parse(readFileSync(new URL('./data/pubchem/egenskaper.json', import.meta.url), 'utf8')) as {
-  PropertyTable: { Properties: Record<string, unknown>[] }
-}
-const RADER = SVAR.PropertyTable.Properties
+const RADER = PUBCHEMRADER
 const rad = (cid: number) => RADER.find((r) => r.CID === cid)!
 /** En telling for kjøringer testene avslutter selv. */
 const TELLING = { forbindelser: 1, feilet: 0, konflikter: 0, strukturavvik: 0, uavklarte: [] }
@@ -284,18 +281,7 @@ function testregister(nokler = ['citalopram', 'desmetylcitalopram', 'thc', 'thc-
   return byggForbindelsesregister([...valgte, FORBINDELSER.finn('desmetylklomipramin')!])
 }
 
-function falskApi(endre: (rader: Record<string, unknown>[]) => Record<string, unknown>[] = (r) => r): PubchemApi & { kall: number } {
-  const api = {
-    kall: 0,
-    egenskaper: async (cider: readonly number[]) => {
-      api.kall += 1
-      return endre(RADER.filter((r) => cider.includes(r.CID as number)).map((r) => ({ ...r })))
-    },
-    cidsForNavn: async () => [],
-    moderforbindelser: async () => [],
-  }
-  return api
-}
+const falskApi = falskPubchemApi
 
 describe('synkroniseringen', () => {
   let db: PGlite

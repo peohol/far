@@ -22,16 +22,16 @@
  *
  * Skriptet leser forespørselen som data og kjører aldri noe fra jobbgrenen.
  */
-import { createClient, type SupabaseClient } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { execFile } from 'node:child_process'
 import { mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { promisify } from 'node:util'
-import { internAuthAdresse } from '@delt/brukernavn'
 import { byggStoffregister } from '../src/domain/stoffregister'
 import { lagFaginnholdsleser } from '../src/faginnhold/lesing'
 import { foresporselFraFelter, lesForesporsel } from '../src/kuratorjobb/foresporsel'
 import { funksjonstest, kontrollerBruker } from '../src/kuratorjobb/funksjonstest'
+import { loggInnSomTestbruker } from '../src/kuratorjobb/testbruker'
 import {
   FORESPORSELSFIL,
   JOBBGREN,
@@ -110,31 +110,6 @@ function grunnstatus(sha: string | null): Jobbstatus {
     bruker: [],
     stoffer: {},
   }
-}
-
-/* --- Innloggingen -------------------------------------------------------- */
-
-/** Klienten som testbrukeren, slik appen logger inn. `null` med grunnen når det ikke går. */
-async function loggInn(): Promise<{ klient: SupabaseClient } | { feil: string }> {
-  const url = miljo('SUPABASE_URL')
-  const nokkel = miljo('SUPABASE_PUBLISHABLE_KEY')
-  const brukernavn = miljo('OUSFAR_TESTBRUKER')
-  const passord = process.env.OUSFAR_TESTPASSORD ?? ''
-  if (!url || !nokkel) return { feil: 'SUPABASE_URL og SUPABASE_PUBLISHABLE_KEY mangler i miljøet.' }
-  if (!brukernavn || !passord) {
-    return { feil: 'Testbrukeren er ikke satt opp: hemmelighetene OUSFAR_TESTBRUKER og OUSFAR_TESTPASSORD mangler (docs/kuratorjobber.md).' }
-  }
-  const klient = createClient(url, nokkel, { auth: { persistSession: false, autoRefreshToken: false } })
-  let adresse: string
-  try {
-    adresse = internAuthAdresse(brukernavn)
-  } catch {
-    return { feil: 'OUSFAR_TESTBRUKER er ikke et gyldig brukernavn.' }
-  }
-  const { error } = await klient.auth.signInWithPassword({ email: adresse, password: passord })
-  // Feilmeldingen fra Auth tas ikke med; den kan si noe om kontoen.
-  if (error) return { feil: `Testbrukeren kunne ikke logge inn (${error.status ?? 'ukjent status'}). Kontroller brukernavnet og passordet i hemmelighetene.` }
-  return { klient }
 }
 
 /* --- Preparatomtalene ---------------------------------------------------- */
@@ -407,7 +382,7 @@ async function kjor(status: Jobbstatus, tekst: string | null, ferdig: () => void
   status.foresporsel = foresporsel
   status.referanse = foresporsel.referanse ?? null
 
-  const innlogging = await loggInn()
+  const innlogging = await loggInnSomTestbruker()
   const klient = 'klient' in innlogging ? innlogging.klient : null
   if (!klient) {
     const feil = (innlogging as { feil: string }).feil
