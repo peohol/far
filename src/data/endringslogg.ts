@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.92.5',
+    versjon: '1.92.7',
     dato: '2026-10-14',
     sammendrag: 'Citalopram: to preparatomtaler og tydeligere forklaring av ADH-bivirkningen',
     typer: ['Fag'],
@@ -23,6 +23,28 @@ export const ENDRINGSLOGG: Endring[] = [
       'Et eget kort forklarer hvorfor de to preparatomtalene beskriver ADH-sekresjon forskjellig, og hvorfor SIADH er den relevante kliniske tilstanden.',
       'Tall om graviditet, neonatal påvirkning og amming har fått referanser direkte ved hver påstand.',
     ],
+  },
+  {
+    versjon: '1.92.6',
+    dato: '2026-10-14',
+    sammendrag: 'Kurateringskøen hopper over testsiden',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: ['Ingen endring i appen. Fagsiden «Teststoff», som er laget for å prøve appen, står ikke lenger i køen monografkuratoren henter stoffer fra.'],
+    utenVarsel: true,
+  },
+  {
+    versjon: '1.92.5',
+    dato: '2026-10-14',
+    sammendrag: 'Monografkuratoren får en arbeidskø gjennom hele stoffregisteret, og funksjonstesten dekker kjemi og laboratorieanalyser',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: [
+      'Ingen endring i appen. Monografkuratoren kan nå arbeide seg gjennom stoffregisteret fra en kø: den henter neste fagside, reserverer den så ingen andre kuraterer den samtidig, og leverer et utkast til gjennomgang. Køen prioriterer sider som mangler innhold, har få kilder eller ikke er kuratert på lenge, og følger hver kuratering til den er publisert.',
+      'Ingenting publiseres uten at et menneske har godkjent det.',
+      'Kontrollen av at en fagside leses riktig, dekker nå også kjemiske grunndata og analysene ved norske laboratorier, med koblingene til stoffet.',
+    ],
+    utenVarsel: true,
   },
   {
     versjon: '1.92.4',

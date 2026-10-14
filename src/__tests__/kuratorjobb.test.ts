@@ -21,7 +21,13 @@ import { JOBBGREN, JOBBMAPPE, offentligFeil, samletStatus, type Kontroll } from 
 import { AVSNITT_4_8, erDmpAdresse, festomtaler, finnAvsnitt, kontrollerPdfsvar, lesPdfinfo, vurderDekning, type Festomtaler, type Pdfsvar } from '../kuratorjobb/spc'
 import type { Legemiddelutvalg } from '../legemiddeldata/lesing'
 import { SITERING } from '../faginnhold/referanser'
-import { AMITRIPTYLIN, synkroniserUtdrag } from './hjelp/fest'
+import { lagFplager } from '../farmakologiportalen/lager'
+import { synkroniserFarmakologiportalen } from '../farmakologiportalen/synk'
+import { byggForbindelsesregister, FORBINDELSER, type Forbindelse } from '../kjemi/forbindelser'
+import { lagKjemilager } from '../kjemi/lager'
+import { synkroniserKjemi } from '../kjemi/synk'
+import { falskFpApi, falskPubchemApi, FPLISTER } from './hjelp/datakilder'
+import { AMITRIPTYLIN, kallSom, synkroniserUtdrag } from './hjelp/fest'
 import { faginnholdskall, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
 const ROT = fileURLToPath(new URL('../../', import.meta.url))
@@ -461,6 +467,11 @@ describe('funksjonstesten', () => {
       farmakogenetikkvisning: 'ok',
       cpic: 'advarsel',
       cpicvisning: 'ok',
+      // PubChem og Farmakologiportalen er aldri hentet i denne databasen.
+      kjemi: 'advarsel',
+      kjemivisning: 'ok',
+      laboratorieanalyser: 'advarsel',
+      laboratorievisning: 'ok',
     })
     expect(resultat.status).toBe('advarsel')
     expect(resultat.kontroller.find((k) => k.id === 'les_stoff')).toMatchObject({ rpc: 'les_stoff', antall: { elementer: 3, referanser: 1 } })
@@ -507,5 +518,98 @@ describe('funksjonstesten', () => {
     expect(JSON.stringify(resultat)).not.toContain('hemmelig')
     expect(resultat.kontroller.find((k) => k.id === 'bivirkninger')).toMatchObject({ status: 'feil', antall: { rader: 1, rader_appen_viser: 0 } })
     expect(utfall(resultat.kontroller)).toMatchObject({ les_stoff: 'ok', clinpgx: 'advarsel' })
+  })
+})
+
+describe('funksjonstesten: kjemiske grunndata og laboratorieanalysene', () => {
+  let db: PGlite
+  let brukerklient: SupabaseClient
+  const finn = (nokkel: string) => FORBINDELSER.finn(nokkel)!
+
+  beforeAll(async () => {
+    db = await nyDatabase()
+    const admin = await opprettBruker(db, { brukernavn: 'redaktor', fornavn: 'Rita', etternavn: 'Redaktør', rolle: 'admin' })
+    const bruker = await opprettBruker(db, { brukernavn: 'kuratortest', fornavn: 'Kurator', etternavn: 'Test', rolle: 'user' })
+    const kall = faginnholdskall(db, admin)
+    const lager = lagFaginnholdslager(kall.klientFor(admin))
+    const side = (await lager.opprettUtkast('infoside', { navn: 'Citalopram' })).id
+    await lager.opprettUtkast('innholdselement', { infoside: side, posisjon: 0, panel: 'indikasjon', elementtype: 'riktekst', data: { dokument: { type: 'doc', content: [] } } })
+    const leser = lagFaginnholdsleser(kall.klientFor(admin))
+    for (const steg of publiseringsplan(await leser.lesStoffside('citalopram', 'utkast'))) await lager.publiserUtkast(steg.id, steg.revisjon)
+    // Kopiene slik synkroniseringene lager dem, av de ekte utdragene.
+    const kjemiregister = byggForbindelsesregister([finn('citalopram'), finn('desmetylcitalopram')])
+    await synkroniserKjemi({ lager: lagKjemilager(kallSom(db, 'service_role')), api: falskPubchemApi(), register: kjemiregister })
+    await synkroniserFarmakologiportalen({ lager: lagFplager(kallSom(db, 'service_role')), api: falskFpApi() })
+    brukerklient = kall.klientFor(bruker)
+  }, 120_000)
+
+  it('leser dataene med appens lesere, kontrollerer koblingene og bygger begge seksjonene', async () => {
+    const resultat = await funksjonstest(brukerklient, 'citalopram')
+    expect(utfall(resultat.kontroller)).toMatchObject({ kjemi: 'ok', kjemivisning: 'ok', laboratorieanalyser: 'ok', laboratorievisning: 'ok' })
+    const kontroll = (id: string) => resultat.kontroller.find((k) => k.id === id)!
+    expect(kontroll('kjemi')).toMatchObject({ rpc: 'les_kjemi', antall: { forbindelser: 2, hentet: 2, ikke_hentet: 0, uavklarte: 0, rader: 2, rader_appen_viser: 2 } })
+    expect(kontroll('laboratorieanalyser')).toMatchObject({ rpc: 'les_laboratorieanalyser', antall: { forbindelser: 2, koblet: 2, usikre: 0 } })
+    expect(kontroll('laboratorieanalyser').antall!.analyser).toBeGreaterThan(0)
+    const visning = kontroll('laboratorievisning').antall!
+    expect(visning.rader).toBeGreaterThan(0)
+    expect(visning.tabeller).toBeGreaterThan(0)
+    // Resultatet er offentlig: ingen laboratorier, analyser eller verdier fra kopien.
+    const publisert = JSON.stringify(resultat)
+    for (const lab of FPLISTER['/labs']!) expect(publisert).not.toContain(String(lab.name))
+    expect(publisert).not.toContain('C20H21FN2O')
+  })
+
+  it('melder en kobling som ikke stemmer med kopien', async () => {
+    const citalopram = finn('citalopram')
+    const annenInchikey: Forbindelse = { ...citalopram, pubchem: { ...citalopram.pubchem!, inchikey: 'AAAAAAAAAAAAAA-UHFFFAOYSA-N' } }
+    const borteIPortalen: Forbindelse = {
+      ...finn('desmetylcitalopram'),
+      farmakologiportalen: { status: 'verifisert', id: '99999', navn: 'Desmetylcitalopram', kontrollert: '2026-10-08', grunnlag: 'Syntetisk.' },
+    }
+    const resultat = await funksjonstest(brukerklient, 'citalopram', { register: byggForbindelsesregister([annenInchikey, borteIPortalen]) })
+    expect(utfall(resultat.kontroller)).toMatchObject({ kjemi: 'feil', laboratorieanalyser: 'feil' })
+    expect(resultat.kontroller.find((k) => k.id === 'laboratorieanalyser')!.antall).toMatchObject({ mangler: 1 })
+    expect(resultat.status).toBe('feil')
+  })
+
+  it('melder en komponent som har fått et annet navn i portalen', async () => {
+    const omdopt: Forbindelse = {
+      ...finn('desmetylcitalopram'),
+      navn: 'Syntetisk',
+      engelsk: 'syntetisk',
+      nokkel: 'syntetisk',
+      farmakologiportalen: { status: 'verifisert', id: '795', navn: 'Syntetisk', kontrollert: '2026-10-08', grunnlag: 'Syntetisk.' },
+    }
+    const resultat = await funksjonstest(brukerklient, 'citalopram', { register: byggForbindelsesregister([finn('citalopram'), omdopt]) })
+    expect(resultat.kontroller.find((k) => k.id === 'laboratorieanalyser')).toMatchObject({ status: 'advarsel', antall: { nytt_navn: 1 } })
+  })
+
+  it('advarer når kopiene ikke er hentet på lenge', async () => {
+    const om30dager = () => new Date(Date.now() + 30 * 86_400_000)
+    const resultat = await funksjonstest(brukerklient, 'citalopram', { na: om30dager })
+    expect(utfall(resultat.kontroller)).toMatchObject({ kjemi: 'advarsel', laboratorieanalyser: 'advarsel' })
+  })
+
+  it('melder rader appens lesere forkaster', async () => {
+    const klient = {
+      rpc: async (funksjon: string, argumenter?: Record<string, unknown>) => {
+        const svar = await brukerklient.rpc(funksjon, argumenter)
+        if (funksjon === 'les_kjemi') {
+          const data = svar.data as { forbindelser: unknown[] }
+          return { ...svar, data: { ...data, forbindelser: [...data.forbindelser, { cid: 2771, data: { cid: 2771 } }] } }
+        }
+        if (funksjon === 'les_laboratorieanalyser') {
+          const data = svar.data as { analyser: unknown[]; institusjoner?: unknown[] }
+          return {
+            ...svar,
+            data: { ...data, analyser: [...data.analyser, { id: 'x', data: { komponent_id: '536' } }], institusjoner: [...(data.institusjoner ?? []), { id: 'y', data: {} }] },
+          }
+        }
+        return svar
+      },
+    } as unknown as SupabaseClient
+    const resultat = await funksjonstest(klient, 'citalopram')
+    expect(resultat.kontroller.find((k) => k.id === 'kjemi')).toMatchObject({ status: 'feil', antall: { rader: 3, rader_appen_viser: 2 } })
+    expect(resultat.kontroller.find((k) => k.id === 'laboratorieanalyser')).toMatchObject({ status: 'feil', antall: { forkastet: 2 } })
   })
 })
