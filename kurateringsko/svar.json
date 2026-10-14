@@ -1,0 +1,43 @@
+{
+  "versjon": 1,
+  "foresporsel_id": "forhandsvis-1",
+  "foresporsel_sha256": "e13844c7190cccebf36927cf851e20b66d30d5374e4686b0c91ceba61312b7cf",
+  "handling": "forhandsvis",
+  "utfall": "ok",
+  "melding": "ghb er neste; ingenting er reservert.",
+  "behandlet_kl": "2026-10-14T04:52:09.042Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38513594640",
+  "oppgave": {
+    "oppgave": "ghb-forhandsvisning",
+    "stoff": "ghb",
+    "navn": "GHB",
+    "modus": "de_novo",
+    "forsok": 0,
+    "frist_kl": "2026-10-14T07:52:09.042Z",
+    "jobbgren": "kuratorjobb/ghb-forhandsvisning",
+    "kurateringsgren": "kuratering/ghb-forhandsvisning",
+    "pr": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-14T04:50:44.088Z",
+      "side": true,
+      "elementer": 3,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 2,
+      "referanser": 3,
+      "elementer_uten_kilde": 1
+    },
+    "prioritet": {
+      "poeng": 471.3,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "11 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 3 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ]
+    }
+  }
+}
