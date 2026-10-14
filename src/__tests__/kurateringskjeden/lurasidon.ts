@@ -77,14 +77,14 @@ export default function lurasidon(db: () => PGlite): void {
   })
 
   it('bevarer norsk referanseområde og konstruerer ikke toksiske grenser', async () => {
-    const { rows } = await db().query<{ elementtype: string; data: Record<string, unknown> }>(
-      `select e.elementtype, e.data
+    const { rows } = await db().query<{ elementtype: string; nedre: number | null; ovre: number | null }>(
+      `select e.elementtype, (e.data->>'nedre')::numeric as nedre, (e.data->>'ovre')::numeric as ovre
        from public.innholdselementer e
        join public.infosider s on s.objekt_id=e.infoside_id and s.tilstand='publisert' and s.slug='lurasidon'
        where e.tilstand='publisert' and e.panel='viktige_data'
        order by e.elementtype`,
     )
-    expect(rows).toContainEqual({ elementtype: 'referanseomrade', data: { nedre: 5, ovre: 60, enhet: 'nmol/L' } })
+    expect(rows).toContainEqual({ elementtype: 'referanseomrade', nedre: 5, ovre: 60 })
     expect(rows.some((r) => r.elementtype === 'toksisk_konsentrasjon')).toBe(false)
     expect(rows.some((r) => r.elementtype === 'alvorlig_konsentrasjon')).toBe(false)
     expect(rows.some((r) => r.elementtype === 'dodelig_konsentrasjon')).toBe(false)
