@@ -83,6 +83,12 @@
   line-height: var(--linjehoyde-ui);
 }
 
+.innholdslogg__merknad {
+  margin: 0;
+  font-size: var(--tekst-meta);
+  color: var(--blekk-dempet);
+}
+
 .innholdslogg__blokk {
   display: flex;
   flex-direction: column;

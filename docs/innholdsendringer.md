@@ -21,6 +21,7 @@ tjenestene — er skjult til man slår på «Vis rutineendringer».
 | Hvor | Hva |
 | --- | --- |
 | `supabase/migrations/*_innholdsendringer.sql` | Tabellene, føringen av endringene, rapportkontrollen, hendelsene i stoffregisteret og bivirkningene, og lesingen (`les_endringslogg`) |
+| `supabase/migrations/*_endringslogg_tilknytning.sql` | Hva som hører til en side (`intern.sidens_utgaver`), og lesingen slik den er nå |
 | `src/endringslogg/` | Modellen og lesingen (`modell.ts`, `api.ts`), handlingen appen sender med kallene (`operasjon.ts`), sammendragene (`oppsummering.ts`) og siden loggen gjelder (`sider.ts`) |
 | `src/components/endringslogg/` | Knappen og loggvinduet (`Innholdslogg.tsx`) og det valgfrie oppsummeringsfeltet ved lagring (`Oppsummeringsfelt.tsx`) |
 | `src/faginnhold/endringserklaering.ts` | Kontrollen i CI og før utrullingen av at en migrasjon som endrer innhold, oppgir agenten |
@@ -49,18 +50,36 @@ den er ikke et system ved siden av.
   navn, art (`ki-agent` eller `system`) og om de er en rutine. En ny agent
   legges inn med en migrasjon.
 
-Hvilke objekter som hører til en side, avgjøres når loggen leses, ut fra
-objektene selv: fagsiden, kortene som har stått på den (også de som er flyttet
-bort), og referansene og kommentarene de peker på. Uten utkastene — alltid for
-andre enn administratorer — teller bare de publiserte utgavene, så et kort som
-bare i et utkast er flyttet til siden, eller en referanse som bare er sitert i
-et utkast, ikke røper koblingen før den er publisert. Et nytt navn, en flytting,
-en arkivering og en gjenoppretting endrer derfor ikke hvilken historikk siden
-har.
-
 Tabellene kan ikke endres eller slettes gjennom API-et, og radene kan aldri
 slettes. En endring kan bare fylles ut i transaksjonen den ble laget i, og en
 rapport kan ikke endres etterpå.
+
+### Hva som hører til en side
+
+Hva som hører til en side, avgjøres når loggen leses, ut fra objektene selv
+(`intern.sidens_utgaver`). Siden får bare det som angikk den da det skjedde:
+
+- **Siden selv** (fagsiden, eller regelsettene og analyttene i en fortolkning):
+  hele historikken.
+- **Et kort**: revisjonene der det sto på siden, og den der det ble flyttet dit
+  eller bort derfra. Det kortet var på en annen fagside før det, hører til den
+  andre siden.
+- **En referanse eller kommentar** (som flere sider kan dele): bare det som
+  skjedde mens siden pekte på den. At den knyttes til eller fjernes fra siden,
+  står som en endring av kortet eller siden som fikk eller mistet den. Det den
+  var før det, hører ikke til siden, og fjernes den og legges inn igjen, teller
+  den bare mens den var knyttet til siden. Ble den også brukt andre steder da
+  den ble endret, er endringen **delt**: den vises på alle sidene som brukte
+  den, merket «Delt» (ikke i ettertid, når en annen side tar den i bruk), og en
+  endring som bare gjaldt delte objekter, vises uten sammendraget og rapporten
+  fra det den ellers gjaldt (som kurateringen av en annen fagside).
+
+Uten utkastene — alltid for andre enn administratorer — avgjøres alt dette av
+de publiserte utgavene, så et kort som bare i et utkast er flyttet til siden,
+eller en referanse som bare er sitert i et utkast, ikke røper koblingen før
+den er publisert. Et nytt navn, en arkivering og en gjenoppretting endrer ikke
+hvilken historikk siden har. Historikken selv endres aldri; bare hvordan den
+knyttes til hver side.
 
 ## Én handling, én endring
 

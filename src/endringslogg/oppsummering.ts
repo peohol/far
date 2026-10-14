@@ -123,6 +123,15 @@ function navngittLinje(seksjon: string, del: Endringsdel, e: Enhet, navn: string
   return { seksjon, handling: del.fra === null ? 'nytt' : 'endret', enhet: e, ...(navn && { navn }) }
 }
 
+/**
+ * En referanse eller kommentar som også brukes andre steder: endringen gjelder
+ * alle stedene, så linjen sier at den er delt.
+ */
+function deltLinje(seksjon: string, hva: string, del: Endringsdel, navn: string): Endringslinje {
+  const handling = del.fra === null ? 'nytt' : 'endret'
+  return { seksjon, handling, tekst: `${seksjon}: den delte ${hva} ${navn ? `${sitat(navn)} ` : ''}${PARTISIPP[handling]}` }
+}
+
 /** Det én del gjorde, som linjer i én eller flere seksjoner. */
 export function dellinjer(del: Endringsdel): Endringslinje[] {
   switch (del.type) {
@@ -132,11 +141,13 @@ export function dellinjer(del: Endringsdel): Endringslinje[] {
       return infosidelinjer(del)
     case 'referanse': {
       if (del.etter.arkivert === true && del.for?.arkivert !== true) {
-        return [{ seksjon: 'Referanser', handling: 'fjernet', tekst: `Referansen ${sitat(del.etter.tittel)} arkivert` }]
+        return [{ seksjon: 'Referanser', handling: 'fjernet', tekst: `${del.delt ? 'Den delte referansen' : 'Referansen'} ${sitat(del.etter.tittel)} arkivert` }]
       }
+      if (del.delt) return [deltLinje('Referanser', 'referansen', del, tekst(del.etter.tittel))]
       return [navngittLinje('Referanser', del, REFERANSE, tekst(del.etter.tittel))]
     }
     case 'kommentar':
+      if (del.delt) return [deltLinje('Fortolkningskommentarer', 'kommentaren', del, tekst(del.etter.navn))]
       return [navngittLinje('Fortolkningskommentarer', del, KOMMENTAR, tekst(del.etter.navn))]
     case 'intervallregelsett':
     case 'scenarioregelsett':

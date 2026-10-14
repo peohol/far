@@ -223,6 +223,7 @@ function Foring({
           <Merke tone={aktor.tone}>{aktor.navn}</Merke>
           {endring.art === 'kuratering' && <Merke tone="referanse">Kuratering</Merke>}
           {endring.utkast && <Merke tone="fritak">Utkast</Merke>}
+          {endring.delt && <Merke tone="flate">Delt</Merke>}
         </>
       }
     >
@@ -254,6 +255,12 @@ function Detaljer({ endring, onSammenlign }: { endring: Endring; onSammenlign: (
   const endret = beskrivelser(endringslinjer(endring))
   return (
     <div className="innholdslogg__kropp">
+      {endring.delt && (
+        <p className="innholdslogg__merknad">
+          Endringen gjaldt en referanse eller kommentar som også brukes andre steder, og vises på alle sidene som bruker
+          den.
+        </p>
+      )}
       {endring.agent && (
         <Blokk tittel="Utført av">
           <p>

@@ -12,7 +12,7 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.92.2',
+    versjon: '1.92.3',
     dato: '2026-10-14',
     sammendrag: 'Menyen nederst på mobil går over to rader når knappene ikke får plass, i en fast rekkefølge',
     typer: ['Design / layout'],
@@ -23,6 +23,19 @@ export const ENDRINGSLOGG: Endring[] = [
       'Knappene står midt i menyen, og hovedknappen er ikke bredere enn teksten i den.',
       'Knappene står i samme rekkefølge overalt, både på én og to rader og i toppmenyen på større skjermer: søk, hovedknappen, favoritt, diskusjoner, endringslogg, rediger og «Mer», og «Lukk» alltid sist. Før kom klokken for endringsloggen etter «Lukk».',
       'Mens du søker på siden, får søkefeltet hele den øverste raden, og hovedknappen viser bare ikonet ved siden av. De andre knappene står der fortsatt, under.',
+    ],
+  },
+  {
+    versjon: '1.92.2',
+    dato: '2026-10-14',
+    sammendrag: 'Endringsloggen på en fagside viser bare det som angikk den siden',
+    typer: ['Funksjonalitet'],
+    omfang: 'Mindre omfang',
+    gjelder: ['vinduer'],
+    punkter: [
+      'En referanse som flere fagsider deler, tar ikke lenger med seg det som skjedde på andre fagsider før den ble knyttet til siden. Citalopram viser for eksempel ikke lenger kurateringen av kvetiapin.',
+      'At en referanse knyttes til eller fjernes fra siden, står som en endring av kortet eller siden som fikk eller mistet den. Senere endringer av referansen vises på alle sidene som bruker den, merket «Delt».',
+      'Et kort som er flyttet fra en annen fagside, tar ikke med seg historikken fra den andre siden. Det samme gjelder kommentarene på fortolkningssidene.',
     ],
   },
   {

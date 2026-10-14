@@ -37,6 +37,7 @@ interface Del {
   endret?: string[]
   data_endret?: string[]
   referanser?: { lagt_til: number; fjernet: number }
+  delt?: boolean
 }
 
 interface Endring {
@@ -55,6 +56,7 @@ interface Endring {
   deler?: Del[]
   hendelser?: { hendelse: string; data: Record<string, unknown> }[]
   utkast: boolean
+  delt?: boolean
 }
 
 interface Logg {
@@ -107,6 +109,23 @@ const kortinnhold = (side: string, tekst: string, ekstra: Record<string, unknown
   referanser: [],
   ...ekstra,
 })
+
+/** En publisert referanse. */
+async function nyReferanse(tittel: string) {
+  const ref = await kall.opprett('referanse', { tittel, forfattere: 'A', aar: '2026', lenke: `https://example.org/${lopenummer++}` })
+  await kall.publiser(ref.id, 1)
+  return ref.id
+}
+
+/** Gir referansen en ny tittel og publiserer den. */
+async function nyTittel(ref: string, revisjon: number, tittel: string) {
+  await kall.lagre(ref, revisjon, { tittel, forfattere: 'A', aar: '2026', lenke: `https://example.org/${ref}` })
+  await kall.publiser(ref, revisjon + 1)
+}
+
+const objekterI = (l: Logg) => new Set(l.endringer.flatMap((e) => (e.deler ?? []).map((d) => d.objekt)))
+const delerFor = (l: Logg, objekt: string) => l.endringer.flatMap((e) => (e.deler ?? []).filter((d) => d.objekt === objekt))
+const delFor = (l: Logg, objekt: string) => delerFor(l, objekt)[0]
 
 beforeAll(async () => {
   db = await nyDatabase()
@@ -242,27 +261,28 @@ describe('loggen for en fagside', () => {
 
   it('røper ikke en referanse eller et kort som bare i et utkast er knyttet til siden', async () => {
     const { side, slug, kort } = await nyFagside()
-    const ref = await kall.opprett('referanse', { tittel: 'Hemmelig kilde', forfattere: 'A', aar: '2026', lenke: 'https://example.org/utkastkilde' })
-    await kall.publiser(ref.id, 1)
+    const ref = await nyReferanse('Hemmelig kilde')
     // Et publisert kort på en annen fagside.
     const annen = await nyFagside()
     // Bare utkast: kortet siterer referansen, og kortet fra den andre siden flyttes hit.
-    await kall.lagre(kort, 1, kortinnhold(side, 'Første utgave', { referanser: [ref.id] }))
+    await kall.lagre(kort, 1, kortinnhold(side, 'Første utgave', { referanser: [ref] }))
     await kall.lagre(annen.kort, 1, kortinnhold(side, 'Første utgave', { panel: 'indikasjon' }))
 
-    const objekter = (l: Logg) => new Set(l.endringer.flatMap((e) => (e.deler ?? []).map((d) => d.objekt)))
-    const forLeser = objekter(await logg(leser, { stoff: slug }))
-    expect(forLeser.has(ref.id)).toBe(false)
-    expect(forLeser.has(annen.kort)).toBe(false)
+    const forLeser = await logg(leser, { stoff: slug })
+    expect(objekterI(forLeser).has(annen.kort)).toBe(false)
+    expect(forLeser.endringer.some((e) => e.deler?.some((d) => d.referanser?.lagt_til))).toBe(false)
     // Administratorene ser koblingene med utkastene, men ikke når de velger dem bort.
-    const medUtkast = objekter(await logg(admin, { stoff: slug }, { med_utkast: true }))
-    expect(medUtkast.has(ref.id)).toBe(true)
-    expect(medUtkast.has(annen.kort)).toBe(true)
-    expect(objekter(await logg(admin, { stoff: slug })).has(ref.id)).toBe(false)
+    const medUtkast = await logg(admin, { stoff: slug }, { med_utkast: true })
+    expect(objekterI(medUtkast).has(annen.kort)).toBe(true)
+    expect(delFor(medUtkast, kort)?.referanser).toEqual({ lagt_til: 1, fjernet: 0 })
+    expect(objekterI(await logg(admin, { stoff: slug })).has(annen.kort)).toBe(false)
 
-    // Når utkastet publiseres, hører referansen til siden for alle.
+    // Når utkastet publiseres, står tilknytningen i loggen for alle — men ikke
+    // det referansen var før den ble knyttet til siden.
     await kall.publiser(kort, 2)
-    expect(objekter(await logg(leser, { stoff: slug })).has(ref.id)).toBe(true)
+    const etter = await logg(leser, { stoff: slug })
+    expect(delFor(etter, kort)?.referanser).toEqual({ lagt_til: 1, fjernet: 0 })
+    expect(objekterI(etter).has(ref)).toBe(false)
   })
 
   it('blar bakover med «etter» og sier når det finnes flere', async () => {
@@ -286,6 +306,79 @@ describe('loggen for en fagside', () => {
   it('krever innlogging', async () => {
     const feil = await feilFra(() => kall.rpc(null, 'les_endringslogg', { side: { stoff: 'x' } }))
     expect(feil?.code).toBe('42501')
+  })
+})
+
+describe('delte referanser og kort som flyttes', () => {
+  it('tar bare med en delt referanse mens siden er knyttet til den, også når den fjernes og legges inn igjen', async () => {
+    const a = await nyFagside('Deler A')
+    const b = await nyFagside('Deler B')
+    const ref = await nyReferanse('Delt kilde')
+    await kall.lagre(a.kort, 1, kortinnhold(a.side, 'A', { referanser: [ref] }))
+    await kall.publiser(a.kort, 2)
+    // Endret før B knyttes til den: hører ikke til B.
+    await nyTittel(ref, 1, 'Delt kilde, før B')
+
+    await kall.lagre(b.kort, 1, kortinnhold(b.side, 'B', { referanser: [ref] }))
+    await kall.publiser(b.kort, 2)
+    await nyTittel(ref, 2, 'Delt kilde, mens B siterer')
+    await kall.lagre(b.kort, 2, kortinnhold(b.side, 'B'))
+    await kall.publiser(b.kort, 3)
+    await nyTittel(ref, 3, 'Delt kilde, etter at B fjernet den')
+    await kall.lagre(b.kort, 3, kortinnhold(b.side, 'B', { referanser: [ref] }))
+    await kall.publiser(b.kort, 4)
+    await nyTittel(ref, 4, 'Delt kilde, etter at B la den inn igjen')
+
+    const forB = await logg(leser, { stoff: b.slug })
+    const titler = (l: Logg) => delerFor(l, ref).map((d) => d.etter?.tittel)
+    expect(titler(forB)).toEqual(['Delt kilde, etter at B la den inn igjen', 'Delt kilde, mens B siterer'])
+    // Tilknytningene står som endringer av kortet: lagt til, fjernet, lagt til igjen.
+    const tilknytninger = delerFor(forB, b.kort)
+      .map((d) => d.referanser)
+      .filter((r) => r && r.lagt_til + r.fjernet > 0)
+    expect(tilknytninger).toEqual([
+      { lagt_til: 1, fjernet: 0 },
+      { lagt_til: 0, fjernet: 1 },
+      { lagt_til: 1, fjernet: 0 },
+    ])
+    // Endringene av referansen er merket som delte, uten sammendrag fra det de ellers gjaldt.
+    const delt = forB.endringer.find((e) => e.deler?.some((d) => d.objekt === ref))!
+    expect(delt).toMatchObject({ delt: true, art: 'redigering', deler: [expect.objectContaining({ delt: true })] })
+
+    // A har vært knyttet til den hele tiden, men den var bare delt mens B siterte
+    // den: det A endret alene, blir ikke delt i ettertid fordi B tok den i bruk.
+    const forA = await logg(leser, { stoff: a.slug })
+    expect(titler(forA)).toHaveLength(4)
+    expect(delerFor(forA, ref).map((d) => d.delt ?? false)).toEqual([true, false, true, false])
+    const alene = forA.endringer.find((e) => e.deler?.some((d) => d.objekt === ref && d.etter?.tittel === 'Delt kilde, før B'))!
+    expect(alene.delt).toBeUndefined()
+  })
+
+  it('merker ikke en referanse som bare siden bruker, som delt', async () => {
+    const { side, slug, kort } = await nyFagside('Egen kilde')
+    const ref = await nyReferanse('Bare her')
+    await kall.lagre(kort, 1, kortinnhold(side, 'Med kilde', { referanser: [ref] }))
+    await kall.publiser(kort, 2)
+    await nyTittel(ref, 1, 'Bare her, rettet')
+    const [forste] = (await logg(leser, { stoff: slug })).endringer
+    expect(forste!.delt).toBeUndefined()
+    expect(forste!.deler![0]).toMatchObject({ objekt: ref })
+    expect(forste!.deler![0]!.delt).toBeUndefined()
+  })
+
+  it('tar med et kort fra det flyttes til siden, og det som skjedde før, bare på siden det sto på', async () => {
+    const a = await nyFagside('Flytt fra')
+    const b = await nyFagside('Flytt til')
+    await kall.lagre(a.kort, 1, kortinnhold(a.side, 'Endret på A', { panel: 'indikasjon' }))
+    await kall.publiser(a.kort, 2)
+    await kall.lagre(a.kort, 2, kortinnhold(b.side, 'Flyttet til B', { panel: 'indikasjon' }))
+    await kall.publiser(a.kort, 3)
+    await kall.lagre(a.kort, 3, kortinnhold(b.side, 'Endret på B', { panel: 'indikasjon' }))
+    await kall.publiser(a.kort, 4)
+
+    const revisjoner = (l: Logg) => delerFor(l, a.kort).map((d) => d.til)
+    expect(revisjoner(await logg(leser, { stoff: b.slug }))).toEqual([4, 3])
+    expect(revisjoner(await logg(leser, { stoff: a.slug }))).toEqual([3, 2, 1])
   })
 })
 
@@ -570,6 +663,55 @@ describe('loggen kan ikke endres', () => {
 })
 
 describe('endringene fra før loggen fantes', () => {
+  it('fører ikke en kuratering av én fagside inn i loggen til en annen som senere siterer den samme referansen', async () => {
+    // Slik det skjedde med kvetiapin og citalopram: referansen ble laget under
+    // kurateringen av kvetiapin og først dagen etter sitert på citalopram. Sidene
+    // har syntetiske navn, så de virkelige kurateringene i migrasjonene etterpå
+    // ikke finner dem.
+    const eldre = await nyDatabase({ til: LOGGMIGRASJON })
+    const redaktor = await opprettBruker(eldre, { brukernavn: 'kurator', fornavn: 'Kari', etternavn: 'Kurator', rolle: 'admin' })
+    const vanlig = await opprettBruker(eldre, { brukernavn: 'vanlig', fornavn: 'Vera', etternavn: 'Vanlig', rolle: 'user' })
+    const k = faginnholdskall(eldre, redaktor)
+    const kuratering = async (kilde: string, arbeid: (kall: (f: string, a: string) => Promise<string>) => Promise<void>) =>
+      som(eldre, redaktor, async (tx) => {
+        await tx.query(`select set_config('far.revisjonskilde', $1, true)`, [kilde])
+        await arbeid(async (funksjon, argumenter) => {
+          const { rows } = await tx.query<{ svar: { id?: string } }>(`select to_jsonb(public.${funksjon}(${argumenter})) as svar`)
+          return rows[0]!.svar.id ?? ''
+        })
+      })
+    const kort = (side: string, ref: string) =>
+      `'innholdselement', '${JSON.stringify({ ...kortinnhold(side, 'Kort'), referanser: [ref] })}'::jsonb`
+
+    let ref = ''
+    await kuratering('Monografkuratering av kurert stoff 05.10.2026', async (f) => {
+      const side = await f('opprett_utkast', `'infoside', '{"navn": "Kurert stoff"}'::jsonb`)
+      ref = await f('opprett_utkast', `'referanse', '{"tittel": "Consensus Guidelines (syntetisk)", "forfattere": "A", "aar": "2026", "lenke": ""}'::jsonb`)
+      const element = await f('opprett_utkast', kort(side, ref))
+      for (const id of [side, ref, element]) await f('publiser_utkast', `'${id}', 1`)
+    })
+    await kuratering('Monografkuratering av siterende stoff 06.10.2026', async (f) => {
+      const side = await f('opprett_utkast', `'infoside', '{"navn": "Siterende stoff"}'::jsonb`)
+      const element = await f('opprett_utkast', kort(side, ref))
+      for (const id of [side, element]) await f('publiser_utkast', `'${id}', 1`)
+    })
+    await kjorMigrasjoner(eldre, { fra: LOGGMIGRASJON })
+    const les = async (stoff: string) =>
+      (await k.rpc<{ les_endringslogg: Logg }>(vanlig, 'les_endringslogg', { side: { stoff } })).les_endringslogg
+
+    const sitert = await les('siterende-stoff')
+    expect(sitert.endringer).toHaveLength(1)
+    expect(sitert.endringer[0]).toMatchObject({ oppsummering: 'Monografkuratering av siterende stoff 06.10.2026', aktor: 'system' })
+    expect(objekterI(sitert).has(ref)).toBe(false)
+    expect(JSON.stringify(sitert)).not.toContain('kurert stoff')
+
+    // Hos siden der referansen ble laget, står den som før.
+    const kurert = await les('kurert-stoff')
+    expect(kurert.endringer).toHaveLength(1)
+    expect(objekterI(kurert).has(ref)).toBe(true)
+    expect(kurert.endringer[0]!.oppsummering).toBe('Monografkuratering av kurert stoff 05.10.2026')
+  }, 120_000)
+
   it('settes sammen av revisjonene og publiseringene etter tidspunkt og person', async () => {
     const eldre = await nyDatabase({ til: LOGGMIGRASJON })
     const redaktor = await opprettBruker(eldre, { brukernavn: 'redaktor', fornavn: 'Eli', etternavn: 'Eldre', rolle: 'admin' })
