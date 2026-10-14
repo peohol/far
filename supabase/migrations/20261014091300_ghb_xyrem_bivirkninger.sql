@@ -1,6 +1,6 @@
 -- Bivirkninger for fagsiden «ghb» fra Xyrem – preparatomtale (SPC).
 -- Faglig og visuelt kontrollert av ChatGPT 14.10.2026; se docs/bivirkninger.md.
-select intern.endring_start('chatgpt-monografkurator', '20261014070800_ghb_xyrem_bivirkninger.sql', 'Importerer strukturerte bivirkninger fra Xyrem SPC', array['https://github.com/peohol/far/pull/228']);
+select intern.endring_start('chatgpt-monografkurator', '20261014091300_ghb_xyrem_bivirkninger.sql', 'Importerer strukturerte bivirkninger fra Xyrem SPC', array['https://github.com/peohol/far/pull/228']);
 
 
 select bivirkninger.importer($import${

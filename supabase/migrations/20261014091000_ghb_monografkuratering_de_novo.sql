@@ -270,7 +270,7 @@ begin
 
   perform intern.kuratering_rapport(
     'chatgpt-monografkurator',
-    '20261014070500_ghb_monografkuratering_de_novo.sql',
+    '20261014091000_ghb_monografkuratering_de_novo.sql',
     $rapport$
     {
       "oppsummering": "GHB er fullstendig de novo-kuratert med regulatorisk indikasjon og dosering, kvantitativ effekt og PK, norsk forgiftningsbehandling, reproduksjon og tydelig skille mellom terapeutisk bruk og avhengighet.",

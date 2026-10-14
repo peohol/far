@@ -13,8 +13,8 @@
       "sok": [
         "GHB identitet sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "viktige_data",
@@ -26,8 +26,8 @@
       "sok": [
         "GHB viktige_data sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "viktige_data/referanseomrade",
@@ -79,8 +79,8 @@
       "sok": [
         "GHB viktige_data/halveringstid sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "viktige_data/steady_state",
@@ -107,8 +107,8 @@
       "sok": [
         "GHB farmakodynamikk sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "virkninger",
@@ -121,8 +121,8 @@
       "sok": [
         "GHB virkninger sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "bivirkninger",
@@ -136,7 +136,7 @@
       "sok": [
         "GHB bivirkninger sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070600_ghb_kalceks_bivirkninger.sql",
+      "artefakt": "supabase/migrations/20261014091100_ghb_kalceks_bivirkninger.sql",
       "bevis": "Tre separate importer: Kalceks 89, Oxiore 90 og Xyrem 90 hendelser; originale sidebilder og tekstuttrekk visuelt kontrollert."
     },
     {
@@ -149,8 +149,8 @@
       "sok": [
         "GHB toksisitet_forgiftning sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "toksisitet_forgiftning/Toksisk dose og eksponering",
@@ -162,8 +162,8 @@
       "sok": [
         "GHB toksisitet_forgiftning/Toksisk dose og eksponering sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "toksisitet_forgiftning/Toksiske konsentrasjoner",
@@ -177,8 +177,8 @@
       "sok": [
         "GHB toksisitet_forgiftning/Toksiske konsentrasjoner sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "toksisitet_forgiftning/Klinisk forgiftningsbilde",
@@ -190,8 +190,8 @@
       "sok": [
         "GHB toksisitet_forgiftning/Klinisk forgiftningsbilde sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "toksisitet_forgiftning/Alvorlige komplikasjoner",
@@ -203,8 +203,8 @@
       "sok": [
         "GHB toksisitet_forgiftning/Alvorlige komplikasjoner sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "toksisitet_forgiftning/Toksikokinetiske særtrekk",
@@ -217,8 +217,8 @@
       "sok": [
         "GHB toksisitet_forgiftning/Toksikokinetiske særtrekk sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "toksisitet_forgiftning/Behandling ved forgiftning",
@@ -230,8 +230,8 @@
       "sok": [
         "GHB toksisitet_forgiftning/Behandling ved forgiftning sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "indikasjon",
@@ -243,8 +243,8 @@
       "sok": [
         "GHB indikasjon sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "preparater",
@@ -269,8 +269,8 @@
       "sok": [
         "GHB dosering sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "farmakokinetikk",
@@ -283,8 +283,8 @@
       "sok": [
         "GHB farmakokinetikk sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "farmakogenetikk",
@@ -310,8 +310,8 @@
       "sok": [
         "GHB interaksjoner sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "tdm",
@@ -377,8 +377,8 @@
       "sok": [
         "GHB graviditet_amming sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "graviditet_amming/Graviditet",
@@ -390,8 +390,8 @@
       "sok": [
         "GHB graviditet_amming/Graviditet sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "graviditet_amming/Perinatal og neonatal påvirkning",
@@ -417,8 +417,8 @@
       "sok": [
         "GHB graviditet_amming/Amming sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "graviditet_amming/Fertilitet og reproduksjon",
@@ -430,8 +430,8 @@
       "sok": [
         "GHB graviditet_amming/Fertilitet og reproduksjon sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "avhengighet_toleranse",
@@ -444,8 +444,8 @@
       "sok": [
         "GHB avhengighet_toleranse sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "avhengighet_toleranse/fysiologisk_adaptasjon/Toleranseutvikling",
@@ -458,8 +458,8 @@
       "sok": [
         "GHB avhengighet_toleranse/fysiologisk_adaptasjon/Toleranseutvikling sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "avhengighet_toleranse/fysiologisk_adaptasjon/Abstinens, seponeringssyndrom og rebound-effekter",
@@ -472,8 +472,8 @@
       "sok": [
         "GHB avhengighet_toleranse/fysiologisk_adaptasjon/Abstinens, seponeringssyndrom og rebound-effekter sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "avhengighet_toleranse/laering_motivasjon/Addiksjon",
@@ -486,8 +486,8 @@
       "sok": [
         "GHB avhengighet_toleranse/laering_motivasjon/Addiksjon sodium oxybate"
       ],
-      "artefakt": "supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql",
-      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014070500_ghb_monografkuratering_de_novo.sql."
+      "artefakt": "supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql",
+      "bevis": "Implementert og regresjonsdekket i supabase/migrations/20261014091000_ghb_monografkuratering_de_novo.sql."
     },
     {
       "nokkel": "avhengighet_toleranse/laering_motivasjon/Lært mestringsavhengighet",

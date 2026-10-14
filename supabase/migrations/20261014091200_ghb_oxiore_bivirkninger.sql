@@ -1,6 +1,6 @@
 -- Bivirkninger for fagsiden «ghb» fra Oxiore – preparatomtale (SPC).
 -- Faglig og visuelt kontrollert av ChatGPT 14.10.2026; se docs/bivirkninger.md.
-select intern.endring_start('chatgpt-monografkurator', '20261014070700_ghb_oxiore_bivirkninger.sql', 'Importerer strukturerte bivirkninger fra Oxiore SPC', array['https://github.com/peohol/far/pull/228']);
+select intern.endring_start('chatgpt-monografkurator', '20261014091200_ghb_oxiore_bivirkninger.sql', 'Importerer strukturerte bivirkninger fra Oxiore SPC', array['https://github.com/peohol/far/pull/228']);
 
 
 select bivirkninger.importer($import${
