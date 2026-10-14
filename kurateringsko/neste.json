@@ -1,5 +1,5 @@
 {
-  "oppdatert_kl": "2026-10-14T17:47:24.906Z",
+  "oppdatert_kl": "2026-10-14T17:49:53.342Z",
   "malt_kl": "2026-10-14T04:50:43.758Z",
   "antall": {
     "klar": 92,
@@ -16,8 +16,8 @@
       "stoff": "lurasidon",
       "oppgave": "lurasidon-0002",
       "okt": "kurateringsko/okt/20261014-173642",
-      "frist_kl": "2026-10-14T20:47:24.906Z",
-      "fase": "Evidensgjennomgang og migrasjon under arbeid"
+      "frist_kl": "2026-10-14T20:49:53.342Z",
+      "fase": "Utkast-PR opprettet; sluttkontroll pågår"
     }
   ],
   "neste": [
