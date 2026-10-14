@@ -2,22 +2,25 @@
 -- (`docs/innholdsendringer.md`): personens egen profil, eller profilen en
 -- KI-agent har fått. Kuratorboten (ChatGPT monografkurator) har sin egen
 -- brukerprofil, og knyttes til den her.
+--
+-- Koblingen går på brukernavnet, som aldri endres, og ikke på ID-en: den
+-- gjelder da også når profilen opprettes etter migrasjonene (som i et nytt
+-- miljø), eller slettes og opprettes på nytt. Finnes ingen profil med navnet,
+-- vises agenten uten bilde.
 
 create table public.agentprofiler (
   agent text primary key references public.endringsagenter (nokkel),
-  profil uuid not null unique references public.profiles (id) on delete cascade
+  brukernavn text not null unique
 );
 
 comment on table public.agentprofiler is
-  'Brukerprofilen en agent vises med i endringsloggen: navnet står i endringsagenter, bildet i profilen. Legges inn med en migrasjon.';
+  'Brukerprofilen (brukernavnet) en agent vises med i endringsloggen: navnet står i endringsagenter, bildet i profilen. Legges inn med en migrasjon.';
 
 alter table public.agentprofiler enable row level security;
 revoke all on table public.agentprofiler from anon, authenticated;
 
--- Profilen kuratorboten bruker når den tester appen. Finnes den ikke (som i
--- en tom database), vises agenten uten bilde.
-insert into public.agentprofiler (agent, profil)
-select 'chatgpt-monografkurator', p.id from public.profiles p where p.username = 'kuratortest';
+-- Profilen kuratorboten bruker når den tester appen.
+insert into public.agentprofiler (agent, brukernavn) values ('chatgpt-monografkurator', 'kuratortest');
 
 -- Endringsloggen for én side, nyeste først (`docs/innholdsendringer.md`).
 --
@@ -160,9 +163,9 @@ begin
       'profil', (select jsonb_build_object('id', p.id, 'username', p.username, 'first_name', p.first_name,
           'last_name', p.last_name, 'avatar_path', p.avatar_path, 'updated_at', p.updated_at)
         from public.profiles p
-        where p.id = case
-          when v.agent is not null then (select ap.profil from public.agentprofiler ap where ap.agent = v.agent)
-          when v.hvem = 'bruker' then v.utfort_av end),
+        where case
+          when v.agent is not null then p.username = (select ap.brukernavn from public.agentprofiler ap where ap.agent = v.agent)
+          when v.hvem = 'bruker' then p.id = v.utfort_av end),
       'person', case when coalesce(v.utfort_av_fornavn, v.eldre_fornavn) is not null then jsonb_build_object(
         'fornavn', coalesce(v.utfort_av_fornavn, v.eldre_fornavn), 'etternavn', coalesce(v.utfort_av_etternavn, v.eldre_etternavn)) end,
       'oppsummering', case when not v.bare_delt then coalesce(v.oppsummering, v.eldre_kilde) end,

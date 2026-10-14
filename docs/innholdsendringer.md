@@ -50,10 +50,11 @@ den er ikke et system ved siden av.
 - **`endringsagenter`** — agentene som kan stå for en endring, med nøkkel,
   navn, art (`ki-agent` eller `system`) og om de er en rutine. En ny agent
   legges inn med en migrasjon.
-- **`agentprofiler`** — brukerprofilen en agent vises med: loggen viser
-  agentens navn med profilbildet derfra. Kuratorboten (ChatGPT
+- **`agentprofiler`** — brukernavnet til profilen en agent vises med: loggen
+  viser agentens navn med profilbildet derfra. Kuratorboten (ChatGPT
   monografkurator) har profilen `kuratortest`. En kobling legges inn med en
-  migrasjon; uten den vises agenten med forbokstavene.
+  migrasjon, og gjelder også når profilen opprettes senere; uten profil vises
+  agenten med forbokstavene.
 
 Loggen viser hvem som gjorde hver endring først, med profilbildet: personens
 egen profil, agentens profil, eller et tannhjul for systemet.
