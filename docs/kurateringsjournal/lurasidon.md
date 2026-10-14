@@ -1,7 +1,10 @@
 # Evidensjournal – lurasidon
 
 - **Oppgave:** `lurasidon-0002`
-- **Modus:** de novo
+- **Kurateringsmodus:** de_novo
+- **Kunnskapsgrense:** 2026-10-14
+- **Siste fulle kjøring:** 2026-10-14
+- **Siste de novo-kjøring:** 2026-10-14
 - **Omfang:** full ordinær kuratering
 - **Dekningsmodell:** 37 kontrollpunkter
 - **Status:** blind protokoll låst før substansspesifikt kildesøk og før innsyn i eksisterende redaksjonelt innhold
@@ -118,3 +121,38 @@ Denne delen ble skrevet og commit-et før eksisterende lurasidoninnhold, tidlige
 ## Blind beslutning før sammenligning
 
 Planlagt monografi skal prioritere norsk/EU-godkjent schizofreniindikasjon, matkravet, CYP3A4-interaksjoner, akatisi/EPS og den begrensede sikkerheten i TDM-, toksisitets- og reproduksjonsdata. Bipolar depresjon omtales som regulatorisk ulikt mellom jurisdiksjoner, ikke som norsk godkjent indikasjon. Norske referanse- og toksisitetsfelt skal ikke gis utenlandske eller ekstrapolerte tall.
+
+
+## Sammenligning etter blindfasen
+
+Eksisterende redaksjonelt innhold ble først lest etter at blind evidensinnhenting, adversariell kontroll og dekningsmatrise var låst i egne commits.
+
+| Eksisterende påstand eller felt | Uavhengig vurdering | Status | Handling |
+| --- | --- | --- | --- |
+| Indikasjon «voksne og ungdom >13 år» | Norsk SPC angir behandling fra og med 13 år | Motsagt | Rettet til «fra og med 13 år» |
+| Biotilgjengelighet 50 % | Farmakologiportalen angir 9-19 %, og matstudien dokumenterer stor mateffekt | Motsagt | Rettet og matpåvirkning kvantifisert |
+| Norsk referanseområde 5-60 nmol/L | Ny norsk portalvisning oppgir ikke område; utenlandsk konsensus kan ikke erstatte et etablert norsk område | Ikke gjenfunnet, men beskyttet | Beholdt uendret etter bevaringsregelen; usikkerheten beskrives i TDM-kort |
+| Halveringstid 20-40 timer og steady state innen sju dager | Bekreftet i norsk SPC | Bekreftet | Beholdt |
+| D2/5-HT2A/5-HT7/5-HT1A-profil | Bekreftet i original farmakologistudie og SPC | Bekreftet/nyansert | D2-kortet fikk påstandsnær kilde og klinisk mekanismebegrensning |
+| «Skal tas med mat» | Minst 350 kcal gir maksimal eksponering; AUC omtrent dobles og Cmax øker 2-3 ganger | Forbedret | Kvantifisert i eget matkort |
+| Ingen redaksjonell TDM-, toksisitets-, reproduksjons- eller seponeringsdekning | Målrettede søk ga brukbar, men flere steder begrenset evidens | Forbedret | Nye kort med tall, usikkerhet og eksplisitte kunnskapshull |
+
+Det tidligere fjernede serumintervallet 14-158 nmol/L ble ikke gjeninnført; historikken viser at dette tilhørte et annet stoff. Ingen toksisk, alvorlig eller dødelig serumterskel ble konstruert.
+
+## Implementert kuratering
+
+- Monografimigrasjon: `20261014182000_lurasidon_monografkuratering_de_novo.sql`.
+- Strukturert SPC-import: Lurasidone Accord, separat for voksne (81 rader) og ungdom (138 rader), i alt 219 rader.
+- Regresjonstest: `src/__tests__/kurateringskjeden/lurasidon.ts`.
+- Norsk referanseområde 5-60 nmol/L er bevart uendret.
+- Alle nye eller endrede redaksjonelle elementer har påstandsnære inline-referanser.
+
+## Teknisk kontroll
+
+Kuratorjobb `lurasidon-0002` besto side-, utkast-, referanse-, FEST-, interaksjons-, ClinPGx/CPIC-, kjemi- og laboratoriekontroll. Den fant ni preparater, 12 pakninger, 38 FEST-interaksjoner og fire laboratorieanalyser ved tre laboratorier.
+
+SPC-jobben hentet og kontrollerte norsk Lurasidone Accord-SPC for tre styrker. Seks Latuda-produkter er sentralt godkjent og har ikke DMP-lenke; dette ga jobbstatus `advarsel`. EMA-produktinformasjonen, oppdatert 08.05.2026, ble kontrollert som autoritativ alternativkilde. Varslet er derfor en dokumentert kildedekningsbegrensning, ikke et uløst faglig hull.
+
+## Sluttstatus
+
+Den ordinære de novo-kurateringen er fullført med kunnskapsgrense 2026-10-14. Kontrollpunkter uten validerbare tall er beholdt tomme og dokumentert som `kunne_ikke_verifiseres`: toksiske/alvorlige serumgrenser, toleranseforekomst, lurasidonspesifikk abstinensfrekvens og lært mestringsavhengighet.
