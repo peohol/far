@@ -78,7 +78,7 @@ export default function lurasidon(db: () => PGlite): void {
 
   it('bevarer norsk referanseområde og konstruerer ikke toksiske grenser', async () => {
     const { rows } = await db().query<{ elementtype: string; nedre: number | null; ovre: number | null }>(
-      `select e.elementtype, (e.data->>'nedre')::numeric as nedre, (e.data->>'ovre')::numeric as ovre
+      `select e.elementtype, (e.data->>'nedre')::float8 as nedre, (e.data->>'ovre')::float8 as ovre
        from public.innholdselementer e
        join public.infosider s on s.objekt_id=e.infoside_id and s.tilstand='publisert' and s.slug='lurasidon'
        where e.tilstand='publisert' and e.panel='viktige_data'
