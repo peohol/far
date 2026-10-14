@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/citalopram-funksjonstest-20261014",
+    "foresporsel_commit": "7fe427e602f02beb5496c8fb2e0b60eab41804f1",
+    "foresporsel_sha256": "2da1f3c852596d74a969085fa060b1cc29183a3d84fe4b3840f53142ceb34541",
+    "kode_commit": "6d569705b7df13c8721436f422d6159c1a1390d6",
+    "kjoring": "https://github.com/peohol/far/actions/runs/38513481237",
+    "startet_kl": "2026-10-14T04:51:05.977Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
