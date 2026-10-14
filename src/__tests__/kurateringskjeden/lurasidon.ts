@@ -102,6 +102,24 @@ export default function lurasidon(db: () => PGlite): void {
     expect(tekst(graviditet[2]!.data)).toContain('1,16 %')
   })
 
+  it('har separate, kildefidele SPC-tabeller for voksne og ungdom', async () => {
+    const { rows } = await db().query<{ nokkel: string; antall: number }>(
+      `select ko.nokkel, count(b.id)::int as antall
+       from bivirkninger.kilder k
+       join public.infosider s on s.objekt_id=k.infoside and s.tilstand='publisert' and s.slug='lurasidon'
+       join bivirkninger.kontekster ko on ko.kilde=k.id
+       left join bivirkninger.bivirkninger b on b.kilde=k.id and b.kontekst=ko.id
+       where k.erstattet_av is null and k.trukket_kl is null
+         and k.nokkel='lurasidone-accord-tabletter'
+       group by ko.id,ko.nokkel,ko.posisjon
+       order by ko.posisjon`,
+    )
+    expect(rows).toEqual([
+      { nokkel: 'voksne', antall: 81 },
+      { nokkel: 'ungdom', antall: 138 },
+    ])
+  })
+
   it('har kildebelegg og ingen upubliserte kuraterte elementer', () => {
     const d2 = farmakodynamikk.find((e) => e.data.maal === 'D2-reseptor')!
     const nyeOgEndrede = [
