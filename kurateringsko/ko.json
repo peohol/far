@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-14T07:39:28.362Z",
+  "oppdatert_kl": "2026-10-14T08:40:05.104Z",
   "malt_kl": "2026-10-14T04:50:43.758Z",
   "teller": 1,
   "stoffer": {
@@ -3671,7 +3671,7 @@
       "status": "klar",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 50.8,
+        "poeng": 51.1,
         "grunner": [
           "De novo-kuratering i runden som gjelder.",
           "Sist kuratert 2026-10-10."
@@ -4288,7 +4288,7 @@
           "kjoring": "https://github.com/peohol/far/actions/runs/38529713189"
         }
       },
-      "besvart_commit": "d483b5ac1a388f6667692d542573ac167f2ea7e3",
+      "besvart_commit": "771fa9e33af574a39d006d15b0e816583a83c348",
       "sist_brukt_kl": "2026-10-14T07:39:28.362Z"
     }
   }

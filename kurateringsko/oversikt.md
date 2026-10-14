@@ -1,6 +1,6 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-14T07:39:28.362Z. Stoffene sist lest fra databasen 2026-10-14T04:50:43.758Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-14T08:40:05.104Z. Stoffene sist lest fra databasen 2026-10-14T04:50:43.758Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
 Klar: 93 · Fagarbeid ferdig (utkast-PR): 1 · Publisert: 1 · Blokkert: 4 · Utenfor køen: 1
 
@@ -115,5 +115,5 @@ Ingen kurateringer er reservert nå.
 | 90 | karvedilol | de_novo | 395 | De novo-kuratering i runden som gjelder. Aldri kuratert. Ingen kuratering å regne alderen fra. 5 av 13 redaksjonelle seksjoner er tomme. 3 av 23 elementer har ingen kilde. |
 | 91 | ketamin | de_novo | 100.7 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-04. 6 av 13 redaksjonelle seksjoner er tomme. 1 av 28 elementer har ingen kilde. |
 | 92 | kvetiapin | de_novo | 62.8 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-05. 1 av 13 redaksjonelle seksjoner er tomme. 3 av 51 elementer har ingen kilde. |
-| 93 | thc | de_novo | 50.8 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-10. |
+| 93 | thc | de_novo | 51.1 | De novo-kuratering i runden som gjelder. Sist kuratert 2026-10-10. |
 
