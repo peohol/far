@@ -582,9 +582,9 @@
 
 /* --- Smale flater ---------------------------------------------------------------
    Toppmenyen beholder meny, fagsøk og konto. Sidens handlinger og søket i
-   siden flytter til en dokk nederst i vinduet, med samme pillestil. Får ikke
-   alt plass på én rad, går dokken over to: søket i siden og hovedhandlingen
-   øverst, resten under. */
+   siden flytter til en dokk nederst i vinduet, med samme pillestil, midt i
+   vinduet og ikke bredere enn knappene. Får ikke alt plass på én rad, går
+   dokken over to: søket i siden og hovedhandlingen øverst, resten under. */
 @media (max-width: 47.5em) {
   .toppmeny {
     padding: var(--rom-3) var(--rom-3) 0;
@@ -618,6 +618,10 @@
     left: var(--rom-3);
     isolation: isolate;
     flex-wrap: wrap;
+    justify-content: center;
+    /* Ikke bredere enn knappene, midt i vinduet. */
+    width: fit-content;
+    margin-inline: auto;
     min-height: var(--hoyde-dokk);
     padding: var(--dokkluft) var(--rom-2);
     border: var(--kant) solid var(--linje);
@@ -634,38 +638,60 @@
     border-radius: inherit;
   }
 
-  /* Uten søk på siden og uten hovedhandling (søkesiden har bare «Lukk») er
-     dokken ikke bredere enn knappene i den. */
-  .toppmeny__kontekst:not(:has(.sidesok, [data-variant='primar'])) {
-    left: auto;
-  }
-
-  /* Hovedgruppen tar det som er ledig av raden. Får ikke resten plass ved
-     siden av den, går de samlet ned på en egen rad og fordeler seg over hele
-     bredden (vekstfaktorene gir hovedgruppen den ledige plassen så lenge alt
-     står på én rad). Søket i siden legger seg over hovedgruppen. */
+  /* Hver gruppe er ikke bredere enn knappene sine, og radene står midt i
+     dokken. Får ikke handlingene plass ved siden av hovedgruppen, går de
+     samlet ned på en egen rad. */
   .toppmeny__gruppe[data-gruppe='hoved'] {
-    position: relative;
-    flex: 999 1 auto;
     min-width: 0;
   }
 
-  /* Litt tettere enn ellers, så knappene i en full fagside (seks) får plass
-     på én rad også på de smaleste telefonene (320 px). */
   .toppmeny__gruppe[data-gruppe='handlinger'] {
-    flex: 1 1 auto;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     max-width: 100%;
-    column-gap: var(--rom-1);
   }
 
-  /* Hovedhandlingen fyller hovedgruppen; resten står som ikoner. */
+  /* Litt tettere på de aller smaleste telefonene (320 px), så knappene i en
+     full fagside (seks) får plass på én rad. */
+  @media (max-width: 21.25em) {
+    .toppmeny__gruppe[data-gruppe='handlinger'] {
+      column-gap: var(--rom-1);
+    }
+  }
+
+  /* Hovedhandlingen er så bred som innholdet. */
   .toppmeny__kontekst .toppmenyknapp[data-variant='primar'] {
-    flex: 1;
+    flex: 0 1 auto;
     justify-content: center;
     min-width: 0;
     height: var(--hoyde-trykk);
+  }
+
+  /* Mens det søkes på siden, tar dokken hele bredden, og søket står på en
+     egen øverste rad med handlingene under, også der alt ellers står på én.
+     Hovedhandlingen viker til bare ikonet (teksten er fortsatt knappens
+     navn), og søkefeltet tar resten av raden. */
+  .toppmeny__kontekst:has(.sidesok:focus-within) {
+    width: auto;
+  }
+
+  .toppmeny__gruppe[data-gruppe='hoved']:has(.sidesok:focus-within) {
+    flex: 1 1 100%;
+  }
+
+  .toppmeny__gruppe:has(.sidesok:focus-within) .toppmenyknapp[data-variant='primar'] {
+    flex: none;
+    width: var(--hoyde-trykk);
+    padding: 0;
+  }
+
+  .toppmeny__gruppe:has(.sidesok:focus-within) .toppmenyknapp[data-variant='primar'] .toppmenyknapp__tekst {
+    display: none;
+  }
+
+  .toppmeny__gruppe:has(.sidesok:focus-within) .toppmenyknapp[data-variant='primar'] .toppmenyknapp__ikon {
+    width: 2.25rem;
+    height: 2.25rem;
   }
 
   /* På de aller smaleste skjermene kortes teksten heller enn at dokken

@@ -570,14 +570,11 @@
     justify-content: flex-end;
   }
 
-  /* I dokken: lupen (se over) i trykkstørrelse til det brukes, og over hele
-     hovedgruppen (første rad når dokken går over to) mens det brukes. Lupen
-     holder plassen sin imens, så dokken ikke legger seg om. Stedene står over
-     dokken, like brede som gruppen. */
+  /* I dokken: lupen (se over) i trykkstørrelse til det brukes. Mens det
+     brukes, vokser feltet over det som er ledig av raden (se `toppmeny.css`).
+     Stedene står over dokken, like brede som den. */
   .toppmeny__kontekst .sidesok {
     position: static;
-    min-width: var(--hoyde-trykk);
-    min-height: var(--hoyde-trykk);
   }
 
   .toppmeny__kontekst .sidesok .hurtigtast {
@@ -589,25 +586,23 @@
     height: var(--hoyde-trykk);
   }
 
-  .toppmeny__kontekst .sidesok:focus-within .sidesok__felt {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    background: var(--flate);
+  .toppmeny__kontekst .sidesok:focus-within {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
-  .toppmeny__gruppe:has(.sidesok:focus-within) > .toppmeny__spor:not([data-spor='sidesok']) > * {
-    visibility: hidden;
+  .toppmeny__kontekst .sidesok:focus-within .sidesok__felt {
+    height: var(--hoyde-trykk);
   }
 
   .toppmeny__kontekst .sidesok:focus-within .sidesok__input {
-    flex: 1;
+    flex: 1 1 10rem;
     width: auto;
   }
 
   .toppmeny__kontekst .sidesok__treff {
     top: auto;
-    bottom: calc(100% + var(--dokkluft) + var(--rom-3));
+    bottom: calc(100% + var(--rom-3));
     left: 0;
     width: auto;
   }

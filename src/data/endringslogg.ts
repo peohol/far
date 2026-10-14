@@ -20,8 +20,9 @@ export const ENDRINGSLOGG: Endring[] = [
     gjelder: ['stoff', 'stoffregister', 'fortolkning', 'sok'],
     punkter: [
       'På mobil går menyen nederst over to rader når knappene ikke får plass på én: søket på siden og hovedknappen, som «Åpne fortolkning», står øverst med hele teksten, og de andre knappene under. Får alt plass, står det på én rad som før.',
+      'Knappene står midt i menyen, og hovedknappen er ikke bredere enn teksten i den.',
       'Knappene står i samme rekkefølge overalt, både på én og to rader og i toppmenyen på større skjermer: søk, hovedknappen, favoritt, diskusjoner, endringslogg, rediger og «Mer», og «Lukk» alltid sist. Før kom klokken for endringsloggen etter «Lukk».',
-      'Mens du søker på siden, dekker søkefeltet bare den øverste raden, så de andre knappene står der fortsatt.',
+      'Mens du søker på siden, får søkefeltet hele den øverste raden, og hovedknappen viser bare ikonet ved siden av. De andre knappene står der fortsatt, under.',
     ],
   },
   {
