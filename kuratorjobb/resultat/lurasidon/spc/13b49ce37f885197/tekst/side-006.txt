@@ -1,0 +1,59 @@
+Hvis lurasidon tas samtidig med svake eller moderate CYP3A4-induktorer, er det nødvendig å
+overvåke effekten av lurasidon nøye og justere dosen om nødvendig.
+
+Transportere
+Lurasidon er et substrat av P-gp og BCRP in vitro, og in vivo-relevansen for dette er uklar. Samtidig
+administrasjon av lurasidon og P-gp- og BCRP-hemmere kan øke eksponeringen for lurasidon.
+
+Påvirkningen av lurasidon på andre legemidler
+Samtidig administrasjon av lurasidon og midazolam, et sensitivt CYP3A4-substrat, resulterte i
+<1,5 ganger høyere eksponering for midazolam. Overvåking anbefales når lurasidon og CYP3A4-
+substrater som er kjent for å ha et smalt terapeutisk vindu (f.eks. astemizol, terfenadin, cisaprid,
+pimozid, kinidin, bepridil eller ergotalkaloider [ergotamin, dihydroergotamin] tas samtidig.
+
+Samtidig administrasjon av lurasidon og digoksin (et P-gp-substrat) økte ikke eksponeringen for
+digoksin og gav bare en svak økning i Cmax (1,3 ganger). Det anses derfor at lurasidon kan
+administreres sammen med digoksin. Lurasidon er en in vitro-hemmer av transportproteinet P-gp, og
+den kliniske betydningen av hemming av P-gp i tarmen kan ikke utelukkes. Samtidig administrasjon
+av P-gp-substratet dabigatraneteksilat kan resultere i økt plasmakonsentrasjon av dabigatran.
+
+Lurasidon er en in vitro-hemmer av transportproteinet BCRP, og den kliniske betydningen av
+hemming av BCRP i tarmen kan ikke utelukkes. Samtidig administrasjon av BCRP-substrater kan
+resultere i økt plasmakonsentrasjon av disse substratene.
+
+Samtidig administrasjon av lurasidon og litium indikerer en ubetydelig effekt av litium på
+farmakokinetikken til lurasidon. Det er derfor ikke nødvendig med dosejustering av lurasidon ved
+samtidig administrasjon av litium. Lurasidon påvirker ikke konsentrasjonen av litium.
+
+En klinisk interaksjonsstudie har undersøkt effekten av lurasidon hos pasienter som tok orale
+antikonseptiva, inklusiv norgestimat og etinyløstradiol. Studien indikerte at lurasidon ikke hadde
+noen klinisk eller statistisk effekt av betydning på farmakokinetikken til antikonseptiva eller nivå av
+kjønnshormonbindende globulin. Lurasidon kan derfor tas samtidig med orale antikonseptiva.
+
+4.6   Fertilitet, graviditet og amming
+
+Graviditet
+Det er ingen eller begrenset mengde data (utfallet av mindre enn 300 graviditeter) angående bruk av
+lurasidon hos gravide kvinner. Dyrestudier er utilstrekkelige med hensyn til effekt på graviditet,
+embryo-/fosterutvikling, fødsel og postnatal utvikling (se punkt 5.3). Den potensielle risikoen for
+mennesker er ukjent. Lurasidon skal ikke brukes under graviditet med mindre det er helt nødvendig.
+
+Nyfødte som eksponeres for antipsykotika (inklusiv lurasidon) i løpet av tredje trimester, har risiko for
+å få bivirkninger som ekstrapyramidale bivirkninger og/eller abstinenssymptomer, som kan variere i
+alvorlighetsgrad og varighet etter fødsel. Det har vært rapporter om agitasjon, hypertoni, hypotoni,
+tremor, somnolens, åndenød eller sugeproblemer. Nyfødte bør derfor overvåkes nøye.
+
+Amming
+Lurasidon ble skilt ut i morsmelk hos rotter under diegiving (se pkt. 5.3). Det er ukjent om lurasidon
+eller dets metabolitter blir skilt ut i morsmelk hos mennesker. Amming hos kvinner som får lurasidon,
+skal bare vurderes dersom den potensielle nytten av behandling rettferdiggjør den potensielle risikoen
+for barnet.
+
+Fertilitet
+Dyrestudier har vist en rekke effekter på fertilitet, hovedsakelig forbundet med økning i prolaktin, som
+ikke anses å være relevant for human reproduksjon (se pkt. 5.3).
+
+4.7   Påvirkning av evnen til å kjøre bil og bruke maskiner
+
+
+                                                   6

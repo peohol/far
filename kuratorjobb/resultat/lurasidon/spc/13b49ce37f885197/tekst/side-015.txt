@@ -1,0 +1,59 @@
+CDRS-R totalscore for lurasidon-gruppen var -1,8 (-5,6, 2,0) for forsøkspersoner i alderen 10 til
+14 år og -8,6 (-12,4, -4,8) for forsøkspersoner i alderen 15 til 17 år (Tabell 5).
+
+Sikkerhetsprofilen for lurasidon hos barn som deltok i denne kortsiktige studien, er generelt i
+overensstemmelse med det som observeres ved behandling innenfor godkjent indikasjon hos voksne.
+Det er imidlertid observert forskjeller i frekvensen av de vanligste bivirkningene som forekommer hos
+barn, som kvalme (svært vanlig), diaré (vanlig) og nedsatt appetitt (vanlig), sammenlignet med voksne
+(henholdsvis vanlig, ikke kjent og mindre vanlig).
+
+Tabell 5     Bipolar depresjon, pediatrisk studie: Children's Depression Rating Scale, Revised
+             (CDRS-R)-totalscore og Clinical Global Impression Bipolar Version,
+              Severity of Illness (CGI-BP- S)-depresjonsscore (depresjon) – endring fra baseline
+              til uke 6 – MMRM for studie D1050326: Intention-to-treat-analysesett
+
+       Parametere                    Studiestatistikk                 Placebo         Lurasidondose 18,5–74 mg
+                                                                                                (a) (b)
+Primært endepunkt:                                                    N=170                     N=173
+CDRS-R total score           Gjennomsnitt baseline (SD)             58,6 (8,26)               59,2 (8,24)
+                             LS gjennomsnittlig endring             -15,3 (1,08)             -21,0 (1,06)
+                             (SE)
+                             Behandlingsendring vs.
+                             placebo
+                             Estimat (SE; 95 % KI)                        --              -5,7 (1,39; -8,4 til -3,0)
+                             p-verdi                                      --                      < 0,0001
+
+Viktig sekundært                                                      N=170                        N=173
+endepunkt:                   Gjennomsnitt baseline (SD)                 4,5                          4,6
+CGI-BP-S-                    LS gjennomsnittlig endring            -1,05 (0,087)                -1,49 (0,085)
+depresjonsscore              (SE)
+                             Behandlingsendring vs.
+                             placebo
+                             Estimat (SE; 95 % KI)                        --           -0,44 (0,112; -0,66 til -0,22)
+                             p-verdi                                      --                     <0,0001
+N er antall forsøkspersoner
+ (a) p-verdier for lurasidon vs. placebo ble justert for flere sammenligninger.
+ (b) Lurasidondoser på 18,5, 37, 55,5 og 74 mg tilsvarer 20, 40, 60 og 80 mg lurasidonhydroklorid.
+
+5.2    Farmakokinetiske egenskaper
+
+Absorpsjon
+Lurasidon når høyeste serumkonsentrasjon innen 1–3 timer. En matpåvirkningsstudie viste at
+lurasidon administrert med mat økte gjennomsnittlig Cmax og AUC med henholdsvis cirka 2–3
+ganger og 1,5–2 ganger sammenlignet med nivåer observert ved faste.
+
+Distribusjon
+Gjennomsnittlig distribusjonsvolum var 6000 liter etter administrasjon av 37 mg lurasidon. Lurasidon
+bindes i høy grad til serumproteiner (99 %).
+
+Biotransformasjon
+Lurasidon metaboliseres hovedsakelig via CYP3A4. De viktigste biotransformasjonsveiene er
+oksidativ N-dealkylering, hydroksylering av norbornanringer og S-oksidasjon.
+
+Lurasidon metaboliseres til to aktive metabolitter (ID-14283 og ID-14326) og to ikke-aktive
+metabolitter (ID-20219 og ID-20220). Lurasidon og metabolittene ID-14283, ID-14326, ID-20219
+og ID-20220 samsvarer med henholdsvis cirka 11,4, 4,1, 0,4, 24 og 11 % av serumradioaktivitet.
+
+
+
+                                                           15

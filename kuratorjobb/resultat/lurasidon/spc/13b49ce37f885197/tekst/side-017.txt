@@ -1,0 +1,59 @@
+Basert på in vitro-studier av humane leverenzymer er lurasidon ikke substrat for CYP1A2. Røyking
+skal derfor ikke ha noen effekt på farmakokinetikken til lurasidon.
+
+Pediatrisk populasjon
+Farmakokinetikken til lurasidon hos pediatriske pasienter er evaluert hos 47 barn i alderen 6–12 år,
+og hos 234 ungdommer i alderen 13–17 år. Lurasidon ble gitt som lurasidonhydroklorid i daglige
+doser på enten 20, 40, 80, 120 mg (6–17 år) eller 160 mg (10–17 år utelukkende) i opptil 42 dager.
+Det var ingen klar sammenheng mellom serumeksponering og alder eller kroppsvekt.
+Farmakokinetikken til lurasidon hos pediatriske pasienter i alderen 6–17 år var generelt sett
+sammenlignbar med det som er sett hos voksne.
+
+5.3   Prekliniske sikkerhetsdata
+
+Prekliniske data indikerer ingen spesiell fare for mennesker basert på konvensjonelle studier av
+sikkerhetsfarmakologi, toksisitetstester ved gjentatt dosering, gentoksisitet og karsinogenitet.
+Hovedfunnene i toksisitetstester ved gjentatt dosering av lurasidon var sentralmedierte endokrine
+endringer som et resultat av økning av serumprolaktin hos rotter, hunder og aper. Høyt
+serumprolaktinnivå i en langtidsstudie med gjentatt dosering hos hunnrotter var forbundet med
+effekter på ben, binyrekjertler og reproduktivt vev. I en langsiktig studie av gjentatt dosering hos
+hunder ble høye nivåer av serumprolaktin forbundet med effekter på reproduktivt vev hos hanner
+og hunner.
+
+Lurasidon hadde ingen effekt på reproduksjon hos hann- og hunnrotter ved orale doser på henholdsvis
+150 og 0,1 mg/kg/dag lurasidonhydroklorid, eller på tidlig embryonal utvikling ved en oral dose på
+15 mg/kg/dag lurasidonhydroklorid.
+
+En fertilitetsstudie på hunnrotter resulterte i forlenget østrussyklus og forsinket kopulasjon ved
+≥1,5 mg/kg/dag lurasidonhydroklorid, mens kopulasjon, fertilitet, antall gule legemer, implantasjoner
+og levende fostre ble redusert med 150 mg/dag lurasidonhydroklorid. Disse effektene skyldes
+hyperprolaktinemi etter lurasidonbehandling, som påvirker østrussyklusen og parringsatferd samt
+vedlikehold av gult legeme hos hunnrotter, som resulterte i redusert implantasjon og antall levende
+fostre. Disse prolaktinrelaterte effektene er ikke ansett å være relevant for human reproduksjon.
+
+En enkeltdose på 10 mg/kg lurasidonhydroklorid til drektige rotter resulterte i føtal eksponering. I en
+doseområdestudie med drektige rotter forårsaket 150 mg/kg/dag lurasidonhydroklorid føtal
+vekstretardasjon uten tegn på teratogenisitet. Lurasidon var ikke teratogent hos rotter eller kaniner
+ved en eksponering lik eller under den maksimalt anbefalte dosen til mennesker (148 mg lurasidon).
+I den definitive toksisitetsstudien av unge rotter ble det ikke registrert noen økt sensitivitet hos unge
+dyr overfor lurasidonrelaterte effekter på kroppsvekt, matinntak og kliniske observasjoner, men
+lignende effekter som hos voksne rotter ble registrert (forsinket vekst og utvikling og
+hyperprolaktinemi). Hyperaktivitet som ble observert ved ≥3 mg/kg/døgn i perioden etter
+behandling, er også rapportert for andre D2-reseptorantagonister. Noe lavere fødselsvekt og
+kroppsvekt/kroppsvektøkning i den postnatale perioden ble observert hos avkom fra unge rotter som
+tidligere ble behandlet med ≥30 mg/kg/dag. Ved NOAEL på 3 mg/kg/døgn var eksponering for
+lurasidon og de fleste metabolitter lavere enn det som ble oppnådd ved den anbefalte kliniske dosen
+hos ungdom over 13 år.
+
+Lurasidon ble utskilt i melk hos rotter under diegiving.
+
+Lurasidon var ikke gentoksisk i en rekke tester. Tumorer i melkekjertler og/eller hypofysen ble
+observert i karsinogenitetsstudier hos mus og rotter, sannsynligvis på grunn av økt prolaktinnivå i
+blodet. Disse funnene er vanlige hos gnagere som er behandlet med antipsykotika med dopamin D2-
+blokkerende aktivitet og anses som gnagerspesifikke.
+
+
+6.    FARMASØYTISKE OPPLYSNINGER
+
+
+                                                   17

@@ -1,0 +1,58 @@
+-     Overfølsomhet overfor virkestoffet(ene) eller overfor (noen av) hjelpestoffene listet opp i pkt.
+      6.1.
+-     Samtidig administrasjon av sterke CYP3A4-hemmere (f.eks. boseprevir, klaritromycin,
+      kobicistat, indinavir, itrakonazol, ketokonazol, nefazodon, nelfinavir, posakonazol, ritonavir,
+      sakinavir, telaprevir, telitromycin, vorikonazol) og sterke CYP3A4-induktorer (f.eks.
+      karbamazepin, fenobarbital, fenytoin, rifampicin, johannesurt (Hypericum perforatum) (se pkt.
+      4.5).
+
+4.4   Advarsler og forsiktighetsregler
+
+Ved antipsykotisk behandling kan forbedring av pasientens kliniske tilstand ta fra flere dager til noen
+uker. Pasienter bør overvåkes nøye i hele denne perioden.
+
+Selvmord
+Forekomst av suicidal atferd følger psykotiske lidelser og er i noen tilfeller rapportert tidlig etter
+start eller bytte av antipsykotisk behandling. Nøye overvåking av høyrisikopasienter anbefales ved
+antipsykotisk behandling.
+
+Parkinsons sykdom
+Ved forskrivning til pasienter med Parkinsons sykdom kan antipsykotiske legemidler forverre de
+underliggende parkinsonssymptomene. Leger bør derfor veie risikoen opp mot nytten ved
+forskrivning av lurasidon til pasienter med Parkinsons sykdom.
+
+Ekstrapyramidale symptomer
+Legemidler med dopaminreseptorantagonistiske egenskaper er forbundet med ekstrapyramidale
+reaksjoner inklusiv rigiditet, tremor, maskelignende ansikt, dystonier, sikling, lut holdning og
+unormal gange. I placebokontrollerte kliniske studier med voksne pasienter med schizofreni var det
+en økt forekomst av ekstrapyramidale symptomer etter behandling med lurasidon sammenlignet med
+placebo.
+
+Tardiv dyskinesi
+Legemidler med dopaminreseptorantagonistiske egenskaper er forbundet med induksjon av tardiv
+dyskinesi karakterisert ved ufrivillige rytmiske bevegelser, særlig i tunge og/eller ansikt. Hvis tegn
+og symptomer på tardiv dyskinesi oppstår, bør seponering av alle antipsykotika, inklusiv lurasidon,
+vurderes.
+
+Hjerte-karsykdommer/QT-forlengelse
+Forsiktighet bør utvises når lurasidon forskrives til pasienter med kjent hjerte-karsykdom eller
+forekomst av forlenget QT-intervall i familien, hypokalemi og ved samtidig bruk av andre
+legemidler som forlenger QT-intervallet.
+
+Kramper
+Lurasidon skal brukes med forsiktighet hos pasienter med tidligere kramper eller andre tilstander
+som potensielt kan senke krampeterskelen.
+
+Malignt nevroleptikasyndrom (MNS)
+Malignt nevroleptikasyndrom, kjennetegnet ved hypertermi, muskelrigiditet, autonom ustabilitet,
+endret bevissthet og økt nivå av kreatinfosfokinase i serum er rapportert å forekomme med lurasidon.
+Ytterligere tegn kan inkludere myoglobinuri (rabdomyolyse) og akutt nyresvikt. I slike tilfeller skal
+lurasidon seponeres.
+
+Eldre pasienter med demens
+Lurasidon er ikke studert hos eldre pasienter med demens.
+
+Generell dødelighet
+
+
+                                                    3

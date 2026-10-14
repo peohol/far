@@ -1,0 +1,381 @@
+{
+  "stoff": "lurasidon",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-14T04:15:52.673451+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 9,
+    "hentet": 3,
+    "dokumenter": 1,
+    "mangler": [
+      {
+        "merkevare_id": "ID_544B9D72-FC08-4155-B863-1F1C1612B38F",
+        "varenavn": "Latuda",
+        "navn_form_styrke": "Latuda tab 37 mg",
+        "produsent": "Orifarm AS",
+        "atc": "N05AE05",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_5A0D579A-E162-42FF-9146-2E3A60B6A1C6",
+        "varenavn": "Latuda",
+        "navn_form_styrke": "Latuda tab 74 mg",
+        "produsent": "Aziende Chimiche Riunite Angelini Francesco - A.C.R.A.F. S.p.A.",
+        "atc": "N05AE05",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_8077D4D3-162C-4AA7-AFCE-8661F4E1C66D",
+        "varenavn": "Latuda",
+        "navn_form_styrke": "Latuda tab 74 mg",
+        "produsent": "2care4 ApS",
+        "atc": "N05AE05",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_9069E924-4552-4A30-A9D0-928C4F81D4FA",
+        "varenavn": "Latuda",
+        "navn_form_styrke": "Latuda tab 37 mg",
+        "produsent": "Aziende Chimiche Riunite Angelini Francesco - A.C.R.A.F. S.p.A.",
+        "atc": "N05AE05",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_A257C997-2F82-4BF9-9A50-09F753188FE2",
+        "varenavn": "Latuda",
+        "navn_form_styrke": "Latuda tab 18,5 mg",
+        "produsent": "2care4 ApS",
+        "atc": "N05AE05",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_D542349B-073C-4023-9CA3-8C6B3E26DB94",
+        "varenavn": "Latuda",
+        "navn_form_styrke": "Latuda tab 18,5 mg",
+        "produsent": "Aziende Chimiche Riunite Angelini Francesco - A.C.R.A.F. S.p.A.",
+        "atc": "N05AE05",
+        "legemiddelform": "Tablett, filmdrasjert",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 3 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 3,
+        "ikke_dmp": 0,
+        "uten_omtale": 6
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "6 av 9 preparater i FEST mangler en hentet preparatomtale fra DMP: 6 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 9,
+        "hentet": 3,
+        "mangler": 6,
+        "dokumenter": 1
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf",
+      "hentet_kl": "2026-10-14T17:39:52.159Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "414981",
+        "content-md5": "P9dnfPq4wE1W4pBBeMFqtg==",
+        "last-modified": "Thu, 08 Oct 2026 06:50:35 GMT",
+        "etag": "0x8DF2508745323CB",
+        "date": "Wed, 14 Oct 2026 17:39:52 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_7112DA05-CC87-40F2-BFE1-F6A0FA64ADA2",
+          "varenavn": "Lurasidone Accord",
+          "navn_form_styrke": "Lurasidone Accord tab 18,5 mg",
+          "produsent": "Accord Healthcare B.V.",
+          "atc": "N05AE05",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15235.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (414981 byte).",
+          "antall": {
+            "bytes": 414981
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "13b49ce37f88519790062adad1d3acbf6195aa18978d376ccbc65327e71d45db"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15237.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15237.pdf",
+      "hentet_kl": "2026-10-14T17:40:01.945Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "414981",
+        "content-md5": "P9dnfPq4wE1W4pBBeMFqtg==",
+        "last-modified": "Thu, 08 Oct 2026 06:50:35 GMT",
+        "etag": "0x8DF25087458A13C",
+        "date": "Wed, 14 Oct 2026 17:40:02 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_8A5C7C6E-BED1-4AAA-98E7-BDE2CFC90E55",
+          "varenavn": "Lurasidone Accord",
+          "navn_form_styrke": "Lurasidone Accord tab 74 mg",
+          "produsent": "Accord Healthcare B.V.",
+          "atc": "N05AE05",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15237.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (414981 byte).",
+          "antall": {
+            "bytes": 414981
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "13b49ce37f88519790062adad1d3acbf6195aa18978d376ccbc65327e71d45db"
+    },
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15236.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15236.pdf",
+      "hentet_kl": "2026-10-14T17:40:03.388Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "414981",
+        "content-md5": "P9dnfPq4wE1W4pBBeMFqtg==",
+        "last-modified": "Thu, 08 Oct 2026 06:50:35 GMT",
+        "etag": "0x8DF250874560993",
+        "date": "Wed, 14 Oct 2026 17:40:03 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_B32FEFAF-0A73-4103-B9DA-4651AECDD408",
+          "varenavn": "Lurasidone Accord",
+          "navn_form_styrke": "Lurasidone Accord tab 37 mg",
+          "produsent": "Accord Healthcare B.V.",
+          "atc": "N05AE05",
+          "legemiddelform": "Tablett, filmdrasjert"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/22-15236.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (414981 byte).",
+          "antall": {
+            "bytes": 414981
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "13b49ce37f88519790062adad1d3acbf6195aa18978d376ccbc65327e71d45db"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "13b49ce37f88519790062adad1d3acbf6195aa18978d376ccbc65327e71d45db",
+      "bytes": 414981,
+      "mappe": "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197",
+      "pdf": {
+        "sider": 19,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": "mutual-recognition-decentralised-referral-pi-template-version-42_en_CLEAN_NO",
+        "laget": "Tue Jun  2 12:08:07 2026 UTC",
+        "endret": "Tue Jun  2 12:08:07 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/original.pdf",
+        "tekst": "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-001.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-002.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-003.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-004.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-005.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-006.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-007.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-008.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-009.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-010.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-011.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-012.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-013.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-014.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-015.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-016.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-017.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-018.txt",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/tekst/side-019.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-001.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-002.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-003.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-004.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-005.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-006.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-007.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-008.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-009.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-010.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-011.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-012.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-013.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-014.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-015.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-016.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-017.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-018.png",
+          "kuratorjobb/resultat/lurasidon/spc/13b49ce37f885197/sider/side-019.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 7,
+        "til": 11
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (19 sider).",
+          "antall": {
+            "sider": 19
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 43523
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 7."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 19
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

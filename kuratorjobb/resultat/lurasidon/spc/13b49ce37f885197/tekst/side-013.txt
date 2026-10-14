@@ -1,0 +1,59 @@
+     LS gjennomsnittlig -16,0 (2,1) -25,7 (2,0)      --     -23,6 (2,1)      --     -28,7 (1,9)
+     endring (SE)
+ Behandlingsforskjell
+ vs. Placebo
+     Estimat (SE)           --       -9,7 (2,9)      --      -7,5 (3,0)      --     -12,6 (2,8)
+     p-verdi                --         0,002         --        0,022         --       <0,001
+ Studie D1050233          N=120          --       N=125          --       N=121       N=116
+ Gjennomsnitt baseline 96,6 (10,2)               97,7 (9,7)             97,9 (11,8) 97,7 (10,2)
+ (SD)
+ LS gjennomsnittlig     -10,3 (1,8)             -22,2 (1,8)             -26,5 (1,8) -27,8 (1,8)
+ endring (SE)
+ Behandlingsendring
+ vs. placebo
+ Estimat (SE)                                   -11,9 (2,6)             -16,2 (2,5) -17,5 (2,6)
+ p-verdi                                          < 0,001                < 0,001      < 0,001
+ (a) Olanzapin 15 mg i Studie D1050231, quetiapin depot 600 mg i Studie D1050233.
+ N er antallet forsøkspersoner for hvert modellestimat.
+ (b) p-verdier for lurasidon vs. placebo ble justert for flere sammenligninger. p-verdier for olanzapin og
+ quetiapin depot vs. placebo var ujustert.
+
+I korttidsstudiene ble det ikke observert noen overensstemmende dose-responskorrelasjon.
+
+Langtids vedlikeholdseffekt av lurasidon (37 til 148 mg lurasidon én gang daglig) ble demonstrert i
+en 12-måneders "non-inferiority"-studie med quetiapin depot (200 til 800 mg én gang daglig).
+Lurasidon var "non-inferior" til quetiapin depot med hensyn til tid til tilbakefall av schizofreni.
+Lurasidon hadde en liten økning fra baseline til måned 12 i kroppsvekt og kroppsmasseindeks
+(gjennomsnittlig (SD): henholdsvis 0,73 (3,36) kg og 0,28 (1,17) kg/m2)) sammenlignet med
+quetiapin depot (henholdsvis 1,23 (4,56) kg og 0,45 (1,63) kg/m2). Generelt hadde lurasidon en
+ubetydelig effekt på vekt og andre metabolske parametere som totalt nivå av kolesterol, triglyserider
+og glukose.
+
+I en langsiktig sikkerhetsstudie ble klinisk stabile pasienter behandlet med lurasidon 37–111 mg eller
+risperidon 2–6 mg. I denne studien var tilbakefallsraten over en 12-månedersperiode 20 % for
+lurasidon og 16 % for risperidon. Forskjellen var nesten, men ikke helt, statistisk signifikant.
+
+I en langtidsstudie designet for å utrede vedlikeholdseffekt var lurasidon mer effektiv enn placebo
+med hensyn til å opprettholde symptomkontroll og forsinke tilbakefall av schizofreni. Etter å ha vært
+behandlet med lurasidon for akutte episoder og stabilisert i minimum 12 uker ble pasienter
+dobbeltblindet randomisert til enten å fortsette med lurasidon eller placebo inntil de fikk tilbakefall
+av schizofrene symptomer. I den primære analysen av tid til tilbakefall hvor pasienter som trakk seg
+uten tilbakefall, ble sensurert når de trakk seg, viste pasienter som fikk lurasidon, en signifikant
+lenger tid til tilbakefall sammenlignet med pasienter som fikk placebo (p=0,039). Kaplan-Meier-
+estimatene på sannsynlighet for tilbakefall ved uke 28 var 42,2 % for lurasidon og 51,2 % for
+placebo. Sannsynligheten for seponering uansett årsak ved uke 28 var 58,2 % for lurasidon og
+69,9 % for placebo (p=0,072).
+
+Pediatrisk populasjon
+
+Schizofreni
+
+Effekten av Lurasidone Accord ble fastslått i en 6-ukers, randomisert, dobbeltblindet,
+placebokontrollert studie av ungdom (13 til 17 år) som oppfylte DSM-IV-TR-kriteriene for
+schizofreni (N = 326). Pasientene ble randomisert til én av to faste doser med Lurasidone Accord (37
+eller 74 mg/døgn) eller placebo.
+
+Primært evalueringsverktøy for å vurdere psykiatriske tegn og symptomer var PANSS. Det
+viktigste sekundære verktøyet var CGI-S.
+
+                                                           13

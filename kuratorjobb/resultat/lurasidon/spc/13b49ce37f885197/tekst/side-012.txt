@@ -1,0 +1,59 @@
+5.      FARMAKOLOGISKE EGENSKAPER
+
+5.1     Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Psykoleptika, antipsykotika. ATC-kode: N05AE05
+
+Virkningsmekanisme
+Lurasidon blokkerer selektivt dopaminerge og monoaminerge effekter. Lurasidon bindes sterkt til
+dopaminerge D2- og serotonerge 5-HT2A- og 5-HT7-reseptorer med høy bindingsaffinitet på
+henholdsvis 0,994, 0,47 og 0,495 nM. Det blokkerer også α2c-adrenerge reseptorer og α2a-adrenerge
+reseptorer med en bindingsaffinitet på henholdsvis 10,8 og 40,7 nM. Lurasidon gir også partiell
+agonisme ved 5-HT1A-reseptoren med en bindingsaffinitet på 6,38 nM. Lurasidon bindes ikke til
+histaminerge eller muskarine reseptorer.
+
+Virkningsmekanismen for den mindre aktive metabolitten ID-14283 er den samme som for
+lurasidon.
+
+Lurasidon i doseområdet 9 til 74 mg administrert til friske individer gav en
+doseavhengig reduksjon i bindingen av 11C-rakloprid, en D2-/D3-reseptorligand, til putamen og
+nucleus caudatus, detektert ved positronemisjonstomografi.
+
+Farmakodynamiske effekter
+I de kliniske hovedstudiene ble lurasidon administrert i doser på 37–148 mg.
+
+Klinisk effekt
+Effekten av lurasidon ved behandling av schizofreni ble demonstrert i fem placebokontrollerte,
+dobbeltblinde, 6-ukers flersenterstudier med pasienter som tilfredsstilte de diagnostiske kriteriene
+(DSM-IV) for schizofreni. Lurasidondosene varierte i de fem studiene og var mellom 37 til 148 mg
+lurasidon én gang daglig. I korttidsstudiene var det primære endepunktet definert som gjennomsnittlig
+endring fra baseline til uke 6 i den totale scoren på PANSS-skalaen (Positive and Negative Syndrome
+Scale), en validert metode bestående av fem faktorer som vurderer positive symptomer, negative
+symptomer, tankeforstyrrelser, ukontrollert fiendtlighet/oppstemthet og angst/depresjon. Lurasidon
+viste bedre effekt enn placebo i fase III-studiene (se tabell 2). Lurasidon viste signifikant forskjell fra
+placebo så tidlig som dag 4. I tillegg var lurasidon bedre enn placebo på det predefinerte sekundære
+endepunktet Clinical Global Impression – Severity (CGI-S) skalaen. Effekt ble også bekreftet i en
+sekundær analyse av behandlingsrespons (definert som ≥ 30 % reduksjon fra baseline i PANSS
+totalscore).
+
+Tabell 3:        Schizofrenistudier hos voksne: Positive and Negative Syndrome Scale for
+                 Schizophrenia (PANSS)-totalscore – endring fra baseline til uke 6 – MMRM for
+                 studiene D1050229, D1050231 og D1050233: Intention-to-treat-analysesett
+
+      Studiestatistikk      Placebo                     Lurasidondose (b)                       Aktiv
+                                          37 mg         74 mg     111 mg          148 mg       kontroll
+                                                                                                 (a)
+ Studie D1050229          N=124       N=121       N=118       N=123                   --          --
+     Gjennomsnitt       96,8 (11,1) 96,5 (11,6) 96,0 (10,8) 96,0 (9,7)                --          --
+     baseline (SD)
+     LS gjennomsnittlig -17,0 (1,8) -19,2 (1,7) -23,4 (1,8) -20,5 (1,8)               --           --
+     endring (SE)
+ Behandlingsforskjell
+ vs. Placebo
+     Estimat (SE)            --      -2,1 (2,5) -6,4 (2,5) -3,5 (2,5)                 --          --
+     p-verdi                 --        0,591      0,034       0,391                   --          --
+ Studie D1050231          N=114       N=118          --       N=118                   --        N=121
+     Gjennomsnitt       95,8 (10,8) 96,6 (10,7)      --     97,9 (11,3)               --      96,3 (12,2)
+     baseline (SD)
+
+                                                   12
