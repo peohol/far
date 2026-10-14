@@ -12,6 +12,21 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.92.3',
+    dato: '2026-10-14',
+    sammendrag: 'Menyen nederst på mobil går over to rader når knappene ikke får plass, i en fast rekkefølge',
+    typer: ['Design / layout'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff', 'stoffregister', 'fortolkning', 'sok'],
+    punkter: [
+      'På mobil går menyen nederst over to rader når knappene ikke får plass på én: søket på siden og hovedknappen, som «Åpne fortolkning», står øverst med hele teksten, og de andre knappene under. Får alt plass, står det på én rad som før.',
+      'Menyen står midt på skjermen og er ikke bredere enn knappene, og hovedknappen er ikke bredere enn teksten i den.',
+      'Knappene står i samme rekkefølge overalt, både på én og to rader og i toppmenyen på større skjermer: søk, hovedknappen, favoritt, diskusjoner, endringslogg, rediger og «Mer», og «Lukk» alltid sist. Før kom klokken for endringsloggen etter «Lukk».',
+      'Mens du søker på siden, har søkefeltet hele den øverste raden for seg selv. Hovedknappen flytter ned først på raden under og viser bare ikonet.',
+      '«Mer»-menyen på fagsiden (arkiver og slett) åpner seg nå rett over menyen nederst på mobil, ikke øverst på siden.',
+    ],
+  },
+  {
     versjon: '1.92.2',
     dato: '2026-10-14',
     sammendrag: 'Endringsloggen på en fagside viser bare det som angikk den siden',

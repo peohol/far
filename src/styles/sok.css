@@ -533,7 +533,7 @@
     min-width: 0;
   }
 
-  .toppmeny__spor[data-spor='sidesok'],
+  .toppmeny__gruppe[data-gruppe='hoved'],
   .sidesok {
     flex-shrink: 1;
     min-width: var(--hoyde-kontroll);
@@ -570,8 +570,13 @@
     justify-content: flex-end;
   }
 
-  /* I dokken: lupen (se over) i trykkstørrelse til det brukes, og over hele
-     dokken mens det brukes. Stedene står over dokken. */
+  /* I dokken: lupen (se over) i trykkstørrelse til det brukes. Mens det
+     brukes, vokser feltet over det som er ledig av raden (se `toppmeny.css`).
+     Stedene står over dokken, like brede som den. */
+  .toppmeny__kontekst .sidesok {
+    position: static;
+  }
+
   .toppmeny__kontekst .sidesok .hurtigtast {
     display: none;
   }
@@ -582,23 +587,15 @@
   }
 
   .toppmeny__kontekst .sidesok:focus-within {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    padding: 0 var(--rom-2);
-    background: var(--flate);
-    border-radius: var(--runding-pille);
+    min-width: 0;
   }
 
   .toppmeny__kontekst .sidesok:focus-within .sidesok__felt {
-    flex: 1;
     height: var(--hoyde-trykk);
   }
 
   .toppmeny__kontekst .sidesok:focus-within .sidesok__input {
-    flex: 1;
+    flex: 1 1 10rem;
     width: auto;
   }
 

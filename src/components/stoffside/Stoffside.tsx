@@ -112,7 +112,7 @@ export function Stoffside(props: StoffsideProps) {
 function Ikkefunnet({ onLukk, children }: { onLukk: () => void; children: ReactNode }) {
   return (
     <section className="steg stoffside" aria-labelledby="ukjent-stoff">
-      <ToppmenyInnhold spor="handlinger">
+      <ToppmenyInnhold spor="lukk">
         <Lukkeknapp onLukk={onLukk} />
       </ToppmenyInnhold>
       <div className="kort kort--start">
@@ -265,35 +265,41 @@ function Innhold({ stoff: slug, sted, register, katalog, onApneFortolkning, onLu
   return (
     <section ref={beholder} className="stoffside" aria-labelledby={overskrift} data-modus={modus}>
       {/* Sidens handlinger står i toppmenyen (i dokken på smale flater). */}
-      <ToppmenyInnhold spor="handlinger">
-        {/* Mens siden redigeres, er det redigeringen som står i menyen; veien
-            ut er «Avslutt redigering», og Escape lukker siden som før. */}
-        {kanRedigere && modus === 'rediger' ? (
-          <Redigeringshandlinger
-            data={side.data}
-            plan={plan}
-            laster={!redigerer}
-            onPubliser={handlinger.publiser}
-            onAvslutt={() => setModus('lese')}
-          />
-        ) : (
-          <>
-            {fortolkning && (
+      {/* Mens siden redigeres, er det redigeringen som står i menyen; veien
+          ut er «Avslutt redigering», og Escape lukker siden som før. */}
+      {kanRedigere && modus === 'rediger' ? (
+        <Redigeringshandlinger
+          data={side.data}
+          plan={plan}
+          laster={!redigerer}
+          onPubliser={handlinger.publiser}
+          onAvslutt={() => setModus('lese')}
+        />
+      ) : (
+        <>
+          {fortolkning && (
+            <ToppmenyInnhold spor="hovedhandling">
               <Toppmenyknapp ikon="interp" variant="primar" onClick={() => onApneFortolkning(fortolkning)}>
                 Åpne fortolkning
               </Toppmenyknapp>
-            )}
-            {favoritter && finnes && (
+            </ToppmenyInnhold>
+          )}
+          {favoritter && finnes && (
+            <ToppmenyInnhold spor="favoritt">
               <Favorittknapp stoff={slug} favoritt={favoritter.erFavoritt(slug)} onSett={favoritter.sett} />
-            )}
+            </ToppmenyInnhold>
+          )}
+          <ToppmenyInnhold spor="redigering">
             {kanRedigere && (
               <Ikonknapp ikon="edit" etikett="Rediger" aria-pressed="false" onClick={() => setModus('rediger')} />
             )}
             {finnes && <Fagsidemeny slug={slug} />}
+          </ToppmenyInnhold>
+          <ToppmenyInnhold spor="lukk">
             <Lukkeknapp onLukk={onLukk} />
-          </>
-        )}
-      </ToppmenyInnhold>
+          </ToppmenyInnhold>
+        </>
+      )}
 
       {/* Søket på siden står også i toppmenyen, foran handlingene. */}
       <ToppmenyInnhold spor="sidesok">

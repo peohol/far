@@ -6,7 +6,6 @@ import { fortolkningssidenavn } from '../../diskusjoner/modell'
 import { useLukkMedEscape } from '../../hooks/useLukkMedEscape'
 import type { Analyte } from '../../types'
 import { Button } from '../Button'
-import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
 import { SeksjonsstyringKilde, useAdressested } from '../seksjoner/Seksjonsstyring'
 import { Redigeringskilde, type Redigeringsverdi } from '../stoffside/Redigeringskontekst'
 import { Redigeringshandlinger } from '../stoffside/Redigeringslinje'
@@ -107,19 +106,17 @@ function Innhold({ fortolkning, sted, katalog, onPublisert, onAvslutt }: Fortolk
 
   return (
     <section className="stoffside fortolkningsredigering" aria-labelledby={overskrift}>
-      <ToppmenyInnhold spor="handlinger">
-        <Redigeringshandlinger
-          regler={regler}
-          publisert={publisert}
-          plan={plan}
-          laster={!kanEndres}
-          onPubliser={async (oppsummering) => {
-            await redigering.publiser(oppsummering)
-            onPublisert()
-          }}
-          onAvslutt={onAvslutt}
-        />
-      </ToppmenyInnhold>
+      <Redigeringshandlinger
+        regler={regler}
+        publisert={publisert}
+        plan={plan}
+        laster={!kanEndres}
+        onPubliser={async (oppsummering) => {
+          await redigering.publiser(oppsummering)
+          onPublisert()
+        }}
+        onAvslutt={onAvslutt}
+      />
 
       <header className="identitet">
         <p className="metalinje">Rediger fortolkningen</p>

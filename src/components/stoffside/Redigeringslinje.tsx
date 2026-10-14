@@ -10,6 +10,7 @@ import { regelsettfelterMedTekst } from '../regler/Fortolkningsregler'
 import { Button } from '../Button'
 import { Ikon } from '../ikon/Ikon'
 import { Modallag } from '../Modallag'
+import { ToppmenyInnhold } from '../toppmeny/Toppmenykilde'
 import { Toppmenyknapp } from '../toppmeny/Toppmenyknapp'
 import { useTips } from '../Tips'
 import { useBevart } from '../../oppdatering/Bevaring'
@@ -33,7 +34,9 @@ export interface RedigeringshandlingerProps {
 /**
  * Redigeringsmodusen i toppmenyen (i dokken på smale flater): hva som står
  * upublisert, publiseringen og veien tilbake til lesemodus. Felles for
- * fagsidene og redigeringen av fortolkningsreglene.
+ * fagsidene og redigeringen av fortolkningsreglene. Legger seg selv i
+ * menyens plasser: statusen under `redigering`, «Publiser» som
+ * hovedhandling og «Avslutt redigering» under `lukk`.
  *
  * Før noe publiseres, vises hva som vil bli synlig for alle, i et eget lag.
  */
@@ -75,33 +78,39 @@ export function Redigeringshandlinger({
       {/* Bare ikonet, så menyen får plass også på smale flater: fargen og
           ringen sier at siden redigeres, tallet hvor mange endringer som
           venter, og hele statusen står som tooltip. */}
-      <span className="redigeringsstatus" role="status" {...tips.props}>
-        <Ikon navn="edit" storrelse="ui" />
-        {antall > 0 && (
-          <span className="varselmerke" aria-hidden="true">
-            {antall}
+      <ToppmenyInnhold spor="redigering">
+        <span className="redigeringsstatus" role="status" {...tips.props}>
+          <Ikon navn="edit" storrelse="ui" />
+          {antall > 0 && (
+            <span className="varselmerke" aria-hidden="true">
+              {antall}
+            </span>
+          )}
+          <span className="kun-skjermleser">
+            Redigeringsmodus. Du ser utkastet. Endringene blir synlige for andre først når de publiseres.
           </span>
-        )}
-        <span className="kun-skjermleser">
-          Redigeringsmodus. Du ser utkastet. Endringene blir synlige for andre først når de publiseres.
+          <span className="kun-skjermleser">{status}</span>
         </span>
-        <span className="kun-skjermleser">{status}</span>
-      </span>
-      <Toppmenyknapp
-        ikon="publish"
-        variant="primar"
-        avslatt={laster ? status : plan.length === 0 ? INGENTING_A_PUBLISERE : undefined}
-        aria-haspopup="dialog"
-        onClick={() => {
-          setFeil(null)
-          setBekrefter(true)
-        }}
-      >
-        Publiser
-      </Toppmenyknapp>
-      <Toppmenyknapp ikon="close" aria-pressed="true" onClick={onAvslutt}>
-        Avslutt redigering
-      </Toppmenyknapp>
+      </ToppmenyInnhold>
+      <ToppmenyInnhold spor="hovedhandling">
+        <Toppmenyknapp
+          ikon="publish"
+          variant="primar"
+          avslatt={laster ? status : plan.length === 0 ? INGENTING_A_PUBLISERE : undefined}
+          aria-haspopup="dialog"
+          onClick={() => {
+            setFeil(null)
+            setBekrefter(true)
+          }}
+        >
+          Publiser
+        </Toppmenyknapp>
+      </ToppmenyInnhold>
+      <ToppmenyInnhold spor="lukk">
+        <Toppmenyknapp ikon="close" aria-pressed="true" onClick={onAvslutt}>
+          Avslutt redigering
+        </Toppmenyknapp>
+      </ToppmenyInnhold>
 
       <Modallag
         apen={bekrefter}

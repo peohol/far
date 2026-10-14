@@ -674,8 +674,8 @@ export default function App() {
                 {/* Fortolkningens handlinger i toppmenyen (i dokken på smale
                     flater). Stoffsiden, søkesiden og redigeringen har sine
                     egne mens de vises. */}
-                {!fortolkningSkjult && (fagsider.length > 0 || kanRedigeres) && (
-                  <ToppmenyInnhold spor="handlinger">
+                {!fortolkningSkjult && fagsider.length > 0 && (
+                  <ToppmenyInnhold spor="hovedhandling">
                     {fagsider.map((stoff) => (
                       <Toppmenyknapp
                         key={stoff.slug}
@@ -687,13 +687,15 @@ export default function App() {
                         {fagsider.length > 1 ? stoff.navn : 'Åpne fagside'}
                       </Toppmenyknapp>
                     ))}
-                    {kanRedigeres && state.analyte && (
-                      <Ikonknapp
-                        ikon="edit"
-                        etikett="Rediger fortolkningen"
-                        onClick={() => state.analyte && gaaTil(redigeringsrute(state.analyte.kode))}
-                      />
-                    )}
+                  </ToppmenyInnhold>
+                )}
+                {!fortolkningSkjult && kanRedigeres && state.analyte && (
+                  <ToppmenyInnhold spor="redigering">
+                    <Ikonknapp
+                      ikon="edit"
+                      etikett="Rediger fortolkningen"
+                      onClick={() => state.analyte && gaaTil(redigeringsrute(state.analyte.kode))}
+                    />
                   </ToppmenyInnhold>
                 )}
 

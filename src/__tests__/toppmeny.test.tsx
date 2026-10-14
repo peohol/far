@@ -57,7 +57,7 @@ vi.mock('../components/ideer/Oppgaver', () => ({
 
 const { Ikon } = await import('../components/ikon/Ikon')
 const { IKONER, IKONFARGER, IKONNAVN } = await import('../components/ikon/register')
-const { Toppmeny } = await import('../components/toppmeny/Toppmeny')
+const { Toppmeny, trengerToRader } = await import('../components/toppmeny/Toppmeny')
 const { ToppmenyKilde, ToppmenyInnhold } = await import('../components/toppmeny/Toppmenykilde')
 const { Fagsokfelt, erFagsokSnarvei } = await import('../components/toppmeny/Fagsokfelt')
 const { Kontomeny } = await import('../components/konto/Kontomeny')
@@ -177,7 +177,7 @@ describe('plassene i toppmenyen', () => {
   function Side() {
     const [trykk, setTrykk] = useState(0)
     return (
-      <ToppmenyInnhold spor="handlinger">
+      <ToppmenyInnhold spor="redigering">
         <button type="button" onClick={() => setTrykk((n) => n + 1)}>
           Trykket {trykk}
         </button>
@@ -201,6 +201,70 @@ describe('plassene i toppmenyen', () => {
     await userEvent.click(knapp)
     expect(within(meny).getByRole('button', { name: 'Trykket 1' })).toBeTruthy()
     expect(within(screen.getByRole('main')).queryByRole('button')).toBeNull()
+  })
+
+  it('setter handlingene i plassenes rekkefølge, uansett hvilken side som la dem dit først', () => {
+    // Dokken leses fra venstre: søket og hovedhandlingen, så det som gjelder
+    // siden, så det som endrer den, og «Lukk» alltid sist.
+    const knapp = (navn: string) => (
+      <button type="button" aria-label={navn}>
+        {navn}
+      </button>
+    )
+    function Sider({ senere }: { senere: boolean }) {
+      return (
+        <>
+          <ToppmenyInnhold spor="lukk">{knapp('Lukk')}</ToppmenyInnhold>
+          <ToppmenyInnhold spor="redigering">{knapp('Rediger')}</ToppmenyInnhold>
+          {senere && <ToppmenyInnhold spor="endringslogg">{knapp('Endringslogg')}</ToppmenyInnhold>}
+          {senere && <ToppmenyInnhold spor="diskusjoner">{knapp('Diskusjoner')}</ToppmenyInnhold>}
+          <ToppmenyInnhold spor="favoritt">{knapp('Favoritt')}</ToppmenyInnhold>
+          <ToppmenyInnhold spor="hovedhandling">{knapp('Åpne fortolkning')}</ToppmenyInnhold>
+          <ToppmenyInnhold spor="sidesok">{knapp('Søk i siden')}</ToppmenyInnhold>
+        </>
+      )
+    }
+    const tegn = (senere: boolean) => (
+      <Ramme>
+        <ToppmenyKilde>
+          <Toppmeny meny={null} konto={null} />
+          <Sider senere={senere} />
+        </ToppmenyKilde>
+      </Ramme>
+    )
+    const { rerender } = render(tegn(false))
+    rerender(tegn(true))
+    const dokk = screen.getByRole('group', { name: 'Sidehandlinger' })
+    expect(within(dokk).getAllByRole('button').map((k) => k.getAttribute('aria-label'))).toEqual([
+      'Søk i siden',
+      'Åpne fortolkning',
+      'Favoritt',
+      'Diskusjoner',
+      'Endringslogg',
+      'Rediger',
+      'Lukk',
+    ])
+    // Søket og hovedhandlingen er første rad når dokken går over to.
+    const [hoved, handlinger] = dokk.querySelectorAll('.toppmeny__gruppe')
+    expect(within(hoved as HTMLElement).getAllByRole('button')).toHaveLength(2)
+    expect(within(handlinger as HTMLElement).getAllByRole('button')).toHaveLength(5)
+  })
+
+  it('setter gruppene i dokken på hver sin rad bare når de ikke får plass ved siden av hverandre', () => {
+    // Søk og «Åpne fortolkning» (226 px) og seks ikoner (294 px), 6 px imellom.
+    expect(trengerToRader([226, 294], 6, 526)).toBe(false)
+    expect(trengerToRader([226, 294], 6, 525)).toBe(true)
+    // En side med bare én gruppe står alltid på én rad.
+    expect(trengerToRader([294], 6, 300)).toBe(false)
+    expect(trengerToRader([], 6, 300)).toBe(false)
+  })
+
+  it('går over to rader i dokken heller enn å klemme hovedhandlingen', () => {
+    const css = readFileSync('src/styles/toppmeny.css', 'utf8')
+    const smal = css.slice(css.indexOf('@media (max-width: 47.5em)'))
+    expect(smal).toMatch(/\.toppmeny__kontekst\s*\{[^}]*flex-wrap:\s*wrap/)
+    // Siden og det som står over dokken, regner med den målte høyden.
+    expect(readFileSync('src/styles/tokens.css', 'utf8')).toMatch(/--dokk-offset:\s*calc\(var\(--dokkhoyde\)/)
   })
 
   it('lar handlingene bli stående i siden når den står uten toppmeny', () => {

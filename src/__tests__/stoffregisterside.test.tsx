@@ -14,7 +14,8 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { Fagsidebanner, Fagsidemeny } from '../components/stoffregister/Fagsidestatus'
 import { Registerhandlingskilde } from '../components/stoffregister/Registerhandling'
 import { Stoffregisterside } from '../components/stoffregister/Stoffregisterside'
-import { ToppmenyKilde, useMeldSpor } from '../components/toppmeny/Toppmenykilde'
+import { Toppmeny } from '../components/toppmeny/Toppmeny'
+import { ToppmenyKilde } from '../components/toppmeny/Toppmenykilde'
 import { TipsLag } from '../components/Tips'
 import { ANALYTTKATALOG } from '../domain/analyttkatalog'
 import type { Endringskontekst } from '../endringslogg/operasjon'
@@ -112,17 +113,12 @@ function Side({
   const kilde = useLagStoffregisterkilde({ lager, admin, ...(opprettSide && { opprettSide }) })
   return (
     <ToppmenyKilde>
-      <Toppmeny />
+      <Toppmeny meny={null} konto={null} />
       <StoffregisterkildeProvider kilde={kilde}>
         {children ?? <Stoffregisterside katalog={ANALYTTKATALOG} onApneFortolkning={onApneFortolkning} onLukk={onLukk} />}
       </StoffregisterkildeProvider>
     </ToppmenyKilde>
   )
-}
-
-/** Plassen i toppmenyen der siden legger sine egne handlinger, som i appen. */
-function Toppmeny() {
-  return <nav aria-label="Toppmeny" ref={useMeldSpor('handlinger')} />
 }
 
 const onApneFortolkning = vi.fn()

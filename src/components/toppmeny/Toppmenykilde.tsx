@@ -2,17 +2,32 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
 import { createPortal } from 'react-dom'
 
 /**
- * Plassene i toppmenyen en side kan fylle med sitt eget:
+ * Plassene i toppmenyen en side kan fylle med sitt eget, i to grupper og i den
+ * rekkefølgen de står i menyen. Rekkefølgen er den samme om plassene står i
+ * toppmenyen, på én rad i dokken eller på to:
  *
- * - `sidesok`: søket i den åpne siden (monografens lokale søk)
- * - `handlinger`: sidens egne handlinger — for monografen «Åpne
- *   fortolkning», «Rediger» og «Lukk»
+ * - `hoved` (første rad i dokken når den går over to):
+ *   - `sidesok`: søket i den åpne siden (monografens lokale søk)
+ *   - `hovedhandling`: sidens hovedhandling, som «Åpne fortolkning» eller
+ *     «Publiser»
+ * - `handlinger` (andre rad):
+ *   - `favoritt`: det brukeren merker siden med for seg selv
+ *   - `diskusjoner` og `endringslogg`: samtalen om siden og historikken dens
+ *   - `redigering`: å endre siden — «Rediger», menyen med mer for siden og
+ *     statusen mens den redigeres
+ *   - `lukk`: veien ut — «Lukk» eller «Avslutt redigering», alltid sist
  *
- * På smale flater flytter begge ned i dokken nederst i vinduet. Globalt
+ * På smale flater flytter alle ned i dokken nederst i vinduet. Globalt
  * fagsøk har sin egen plass (`Toppmeny` sin `sok`), fordi det hører til
  * appen og ikke til siden som står åpen.
  */
-export type Toppmenyspor = 'sidesok' | 'handlinger'
+export const TOPPMENYSPOR = {
+  hoved: ['sidesok', 'hovedhandling'],
+  handlinger: ['favoritt', 'diskusjoner', 'endringslogg', 'redigering', 'lukk'],
+} as const
+
+export type Toppmenygruppe = keyof typeof TOPPMENYSPOR
+export type Toppmenyspor = (typeof TOPPMENYSPOR)[Toppmenygruppe][number]
 
 type Spor = Partial<Record<Toppmenyspor, HTMLElement | null>>
 

@@ -216,7 +216,7 @@ export function Diskusjonsmeny({
 
   return (
     <>
-      <ToppmenyInnhold spor="handlinger">
+      <ToppmenyInnhold spor="diskusjoner">
         <Toppmenyknapp
           ikon="diskusjon"
           className="diskusjonsknapp"

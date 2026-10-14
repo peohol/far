@@ -65,7 +65,7 @@ export function Innholdslogg({
   const lukk = useCallback(() => setApen(false), [setApen])
   return (
     <>
-      <ToppmenyInnhold spor="handlinger">
+      <ToppmenyInnhold spor="endringslogg">
         <Ikonknapp
           ikon="history"
           etikett="Endringslogg"

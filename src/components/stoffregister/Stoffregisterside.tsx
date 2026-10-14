@@ -78,14 +78,18 @@ function Innhold({ katalog, onApneFortolkning, onLukk }: StoffregistersideProps)
 
   return (
     <section className="stoffregisterside" aria-labelledby={overskrift} data-modus={modus}>
-      <ToppmenyInnhold spor="handlinger">
-        {redigerer ? (
+      {redigerer ? (
+        <ToppmenyInnhold spor="hovedhandling">
           <Toppmenyknapp ikon="done" variant="primar" onClick={() => setModus('lese')}>
             Ferdig
           </Toppmenyknapp>
-        ) : (
+        </ToppmenyInnhold>
+      ) : (
+        <ToppmenyInnhold spor="redigering">
           <Ikonknapp ikon="edit" etikett="Rediger stoffregisteret" aria-pressed="false" onClick={() => setModus('rediger')} />
-        )}
+        </ToppmenyInnhold>
+      )}
+      <ToppmenyInnhold spor="lukk">
         <Lukkeknapp onLukk={onLukk} />
       </ToppmenyInnhold>
 

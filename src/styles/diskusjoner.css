@@ -87,10 +87,9 @@
 }
 
 @media (max-width: 47.5em) {
-  /* Sist i dokken, også når siden legger sine knapper dit etter menyen. */
+  /* I dokken, etter favoritten (se `TOPPMENYSPOR`). */
   .diskusjonsknapp {
     display: inline-flex;
-    order: 1;
   }
 
   /* Smalt fyller menyen bredden; der er det ingen kant å dra. */
