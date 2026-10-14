@@ -56,7 +56,8 @@ export const INNSTILLINGER: Koinnstillinger = {
   maling_timer: 20,
   okt_slettes_etter_dager: 14,
   forrang: [],
-  utelatt: [],
+  // En fagside laget for å prøve appen, ikke en monografi.
+  utelatt: ['teststoff'],
   vekter: {
     gjenoppta: 1000,
     forrang: 500,
