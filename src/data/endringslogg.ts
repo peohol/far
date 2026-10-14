@@ -12,6 +12,19 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.92.5',
+    dato: '2026-10-14',
+    sammendrag: 'Citalopram: to preparatomtaler og tydeligere forklaring av ADH-bivirkningen',
+    typer: ['Fag'],
+    omfang: 'Mindre omfang',
+    gjelder: ['stoff/citalopram'],
+    punkter: [
+      'Bivirkningene fra Cipramil vises nå som en egen preparatomtale ved siden av Citalopram Orion, slik at ulike originaltekster og frekvenser ikke blandes.',
+      'Et eget kort forklarer hvorfor de to preparatomtalene beskriver ADH-sekresjon forskjellig, og hvorfor SIADH er den relevante kliniske tilstanden.',
+      'Tall om graviditet, neonatal påvirkning og amming har fått referanser direkte ved hver påstand.',
+    ],
+  },
+  {
     versjon: '1.92.4',
     dato: '2026-10-14',
     sammendrag: 'Endringsloggen viser hvem som gjorde endringen tydeligere, med profilbilde',
