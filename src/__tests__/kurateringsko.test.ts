@@ -24,6 +24,7 @@ import { kjorKo } from '../kurateringsko/kjoring'
 import {
   behandle,
   forfaltModus,
+  kobleApnePr,
   oppdaterPr,
   oppdaterRepohistorikk,
   oppdaterStoffer,
@@ -188,7 +189,7 @@ describe('avbrudd, feil og nye forsøk', () => {
 })
 
 describe('fra ferdig fagarbeid til publisert', () => {
-  const pr = (tilstand: Prinfo['tilstand'], endring: Partial<Prinfo> = {}): Prinfo => ({ nummer: 90, url: 'https://github.com/x/y/pull/90', tilstand, sammenslatt_kl: null, migrasjoner: true, ...endring })
+  const pr = (tilstand: Prinfo['tilstand'], endring: Partial<Prinfo> = {}): Prinfo => ({ nummer: 90, url: 'https://github.com/x/y/pull/90', tilstand, sammenslatt_kl: null, gren: 'kuratering/beta-0001', migrasjoner: true, ...endring })
 
   function ferdig() {
     const t = ny()
@@ -230,6 +231,28 @@ describe('fra ferdig fagarbeid til publisert', () => {
     oppdaterPr(t, 'beta', pr('lukket'), null, om(T0, 3))
     vurder(t, om(T0, 3), INNSTILLINGER)
     expect(t.stoffer.beta).toMatchObject({ status: 'blokkert', pr: null, blokkeringer: [{ kode: 'pr_lukket' }] })
+  })
+
+  it('godtar ikke en PR fra en annen gren som den ferdige kurateringen, men fortsetter på kurateringsgrenen', () => {
+    const t = ferdig()
+    // Et feil nummer: en annen PR som er slått sammen og rullet ut.
+    oppdaterPr(t, 'beta', pr('sammenslatt', { sammenslatt_kl: om(T0, 3), gren: 'claude/noe-annet' }), { status: 'vellykket', kl: om(T0, 3) }, om(T0, 3))
+    vurder(t, om(T0, 3), INNSTILLINGER)
+    expect(t.stoffer.beta).toMatchObject({
+      status: 'klar',
+      pr: null,
+      sist_kuratert: null,
+      forsok: 1,
+      gjenoppta: { oppgave: 'beta-0001', kurateringsgren: 'kuratering/beta-0001', pr: null },
+    })
+    expect(t.stoffer.beta!.historikk.at(-1)).toMatchObject({ hendelse: 'pr_feil_gren' })
+    // Neste forsøk fortsetter på samme gren, og finner den riktige PR-en derfra.
+    kobleApnePr(t, [{ nummer: 91, gren: 'kuratering/beta-0001' }], om(T0, 4))
+    vurder(t, om(T0, 4), INNSTILLINGER)
+    expect(behandle(t, f('reserver'), kontekst('kurateringsko/okt/c', om(T0, 4)))).toMatchObject({
+      utfall: 'ok',
+      oppgave: { stoff: 'beta', kurateringsgren: 'kuratering/beta-0001', pr: 91 },
+    })
   })
 
   it('setter publiserte stoffer i køen igjen for evidensovervåkning og nye de novo-runder', () => {
@@ -473,7 +496,7 @@ describe('livsløpet gjennom git', () => {
 
     // Ferdig: PR-en følges til den er rullet ut.
     sporr(o, 'kurateringsko/okt/fire', { id: '2', handling: 'fullfort', oppgave: andre.oppgave, pr: 77, kunnskapsgrense: '2026-11-01' })
-    github.prer.set(77, { nummer: 77, url: 'https://example.invalid/pull/77', tilstand: 'utkast', sammenslatt_kl: null, migrasjoner: true })
+    github.prer.set(77, { nummer: 77, url: 'https://example.invalid/pull/77', tilstand: 'utkast', sammenslatt_kl: null, gren: oppgave.kurateringsgren, migrasjoner: true })
     await kjor(o, om(T0, 9), github)
     expect(ko(o).stoffer.beta!.status).toBe('fagarbeid_ferdig')
     github.prer.set(77, { ...github.prer.get(77)!, tilstand: 'klar' })

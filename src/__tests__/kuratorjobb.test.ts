@@ -599,14 +599,17 @@ describe('funksjonstesten: kjemiske grunndata og laboratorieanalysene', () => {
           return { ...svar, data: { ...data, forbindelser: [...data.forbindelser, { cid: 2771, data: { cid: 2771 } }] } }
         }
         if (funksjon === 'les_laboratorieanalyser') {
-          const data = svar.data as { analyser: unknown[] }
-          return { ...svar, data: { ...data, analyser: [...data.analyser, { id: 'x', data: { komponent_id: '536' } }] } }
+          const data = svar.data as { analyser: unknown[]; institusjoner?: unknown[] }
+          return {
+            ...svar,
+            data: { ...data, analyser: [...data.analyser, { id: 'x', data: { komponent_id: '536' } }], institusjoner: [...(data.institusjoner ?? []), { id: 'y', data: {} }] },
+          }
         }
         return svar
       },
     } as unknown as SupabaseClient
     const resultat = await funksjonstest(klient, 'citalopram')
     expect(resultat.kontroller.find((k) => k.id === 'kjemi')).toMatchObject({ status: 'feil', antall: { rader: 3, rader_appen_viser: 2 } })
-    expect(resultat.kontroller.find((k) => k.id === 'laboratorieanalyser')).toMatchObject({ status: 'feil', antall: { forkastet: 1 } })
+    expect(resultat.kontroller.find((k) => k.id === 'laboratorieanalyser')).toMatchObject({ status: 'feil', antall: { forkastet: 2 } })
   })
 })

@@ -140,6 +140,8 @@ export interface Prinfo {
   url: string
   tilstand: 'utkast' | 'klar' | 'sammenslatt' | 'lukket'
   sammenslatt_kl: string | null
+  /** Grenen PR-en kommer fra. */
+  gren: string | null
   /** Om PR-en endrer migrasjonene, og må rulles ut før kurateringen er publisert. */
   migrasjoner: boolean
 }
@@ -160,6 +162,24 @@ export function oppdaterPr(t: Kotilstand, stoff: string, info: Prinfo | null, ut
     s.pr = null
     blokker(s, { kode: 'pr_ukjent', grunn: `PR #${pr.nummer} finnes ikke.`, kl: na, kilde: 'ko' })
     logg(s, { kl: na, hendelse: 'pr_ukjent', oppgave: pr.oppgave, melding: `PR #${pr.nummer} finnes ikke.` })
+    return
+  }
+  if (pr.kurateringsgren && info.gren !== pr.kurateringsgren) {
+    // Et feil nummer: kurateringen er ikke ferdig før PR-en fra kurateringsgrenen er det. Neste
+    // forsøk fortsetter på grenen, og køen finner PR-en derfra selv når den er åpen.
+    const melding = `PR #${pr.nummer} kommer ikke fra kurateringsgrenen ${pr.kurateringsgren}.`
+    s.pr = null
+    s.gjenoppta = {
+      oppgave: pr.oppgave,
+      okt: s.siste_kjoring?.okt ?? '',
+      avbrutt_kl: na,
+      grunn: melding,
+      fase: null,
+      jobbgren: pr.jobbgren,
+      kurateringsgren: pr.kurateringsgren,
+      pr: null,
+    }
+    logg(s, { kl: na, hendelse: 'pr_feil_gren', oppgave: pr.oppgave, melding })
     return
   }
   pr.url = info.url

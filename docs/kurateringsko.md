@@ -107,6 +107,9 @@ Et stoff som venter etter en feil, står sist til `tidligst_kl`.
   «Produksjonsmigrering» på `main`. Er den vellykket, er kurateringen
   publisert med modus, kunnskapsgrense, de novo-runde og PR. Feilet den, blir
   stoffet blokkert (`utrulling_feilet`) til en ny utrulling lykkes.
+- **Feil PR.** En meldt PR som ikke kommer fra kurateringsgrenen, godtas ikke:
+  stoffet går tilbake i køen med `gjenoppta` på samme grener, og køen finner
+  den riktige PR-en fra grenen selv.
 - **Lukket PR.** En PR som lukkes uten å bli slått sammen, blokkerer stoffet
   (`pr_lukket`) til et menneske har sett på det.
 

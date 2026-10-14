@@ -54,7 +54,7 @@ export function lagGithub(api: Apikall): Github {
           if (migrasjoner || filer.length < 100) break
         }
       }
-      return { nummer, url: tekst(pr.html_url) ?? '', tilstand, sammenslatt_kl, migrasjoner }
+      return { nummer, url: tekst(pr.html_url) ?? '', tilstand, sammenslatt_kl, gren: tekst((pr.head as Rad | undefined)?.ref), migrasjoner }
     },
     async apnePr() {
       const ut: { nummer: number; gren: string }[] = []

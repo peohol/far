@@ -350,7 +350,8 @@ export async function funksjonstest(
     const opptak = medOpptak(klient)
     const utvalg = await kall<Labutvalg>('laboratorieanalyser', 'les_laboratorieanalyser', () => lagLableser(opptak.klient).les(komponenter), (u) => {
       const svar = opptak.svar.get('les_laboratorieanalyser')
-      const rader = { komponenter: raderISvar(svar, 'komponenter'), analyser: raderISvar(svar, 'analyser'), laboratorier: raderISvar(svar, 'laboratorier') }
+      // Alle listene appen leser fra svaret; en rad den forkaster, mangler i seksjonen.
+      const lister = ['komponenter', 'analyser', 'laboratorier', 'institusjoner'] as const
       const etterId = new Map(u.komponenter.map((k) => [k.id, k.data]))
       const koblede = forbindelser.flatMap((f) => {
         const id = register.fpId(f)
@@ -376,7 +377,7 @@ export async function funksjonstest(
         laboratorier: u.laboratorier.length,
       }
       if (!u.kilde.kontrollert_kl) return { status: 'advarsel', melding: 'Farmakologiportalen er aldri hentet.', antall }
-      const forkastet = rader.komponenter - u.komponenter.length + (rader.analyser - u.analyser.length) + (rader.laboratorier - u.laboratorier.length)
+      const forkastet = lister.reduce((sum, l) => sum + raderISvar(svar, l) - u[l].length, 0)
       if (forkastet > 0) return { status: 'feil', melding: `Appen forkaster ${forkastet} av radene den får.`, antall: { ...antall, forkastet } }
       if (mangler > 0) return { status: 'feil', melding: `${mangler} av komponentene stoffet er koblet til, finnes ikke i kopien av Farmakologiportalen.`, antall: { ...antall, mangler } }
       if (grupper > 0) return { status: 'feil', melding: `${grupper} av komponentene stoffet er koblet til, er gruppe- eller sumanalyser.`, antall: { ...antall, grupper } }
