@@ -1,9 +1,9 @@
 {
-  "oppdatert_kl": "2026-10-14T05:02:06.361Z",
+  "oppdatert_kl": "2026-10-14T06:49:52.156Z",
   "malt_kl": "2026-10-14T04:50:43.758Z",
   "antall": {
-    "klar": 94,
-    "reservert": 0,
+    "klar": 93,
+    "reservert": 1,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 0,
     "sammenslatt": 0,
@@ -11,22 +11,16 @@
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [],
-  "neste": [
+  "aktive": [
     {
       "stoff": "ghb",
-      "modus": "de_novo",
-      "poeng": 471.3,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "11 av 13 redaksjonelle seksjoner er tomme.",
-        "1 av 3 elementer har ingen kilde.",
-        "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
-    },
+      "oppgave": "ghb-0001",
+      "okt": "kurateringsko/okt/20261014-064915",
+      "frist_kl": "2026-10-14T09:49:52.156Z",
+      "fase": null
+    }
+  ],
+  "neste": [
     {
       "stoff": "lurasidon",
       "modus": "de_novo",
@@ -148,6 +142,20 @@
         "Ingen kuratering å regne alderen fra.",
         "6 av 13 redaksjonelle seksjoner er tomme.",
         "12 av 18 elementer har ingen kilde.",
+        "Bare 3 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "fenobarbital",
+      "modus": "de_novo",
+      "poeng": 447.6,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "9 av 13 redaksjonelle seksjoner er tomme.",
+        "1 av 6 elementer har ingen kilde.",
         "Bare 3 referanser."
       ],
       "tidligst_kl": null
