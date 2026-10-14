@@ -12,6 +12,15 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
+    versjon: '1.92.6',
+    dato: '2026-10-14',
+    sammendrag: 'Kurateringskøen hopper over testsiden',
+    typer: ['Funksjonalitet'],
+    omfang: 'Minimalt omfang',
+    punkter: ['Ingen endring i appen. Fagsiden «Teststoff», som er laget for å prøve appen, står ikke lenger i køen monografkuratoren henter stoffer fra.'],
+    utenVarsel: true,
+  },
+  {
     versjon: '1.92.5',
     dato: '2026-10-14',
     sammendrag: 'Monografkuratoren får en arbeidskø gjennom hele stoffregisteret, og funksjonstesten dekker kjemi og laboratorieanalyser',
