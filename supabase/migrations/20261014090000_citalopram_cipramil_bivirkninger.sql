@@ -1,0 +1,408 @@
+-- Bivirkninger for fagsiden «citalopram» fra Cipramil – preparatomtale (SPC).
+-- Laget etter scripts/lag-bivirkningsimport.ts fra kildekontrollert importfil; se docs/bivirkninger.md.
+select intern.endring_start('chatgpt-monografkurator', '20261014090000_citalopram_cipramil_bivirkninger.sql',
+  'Bivirkningstabellen fra Cipramils preparatomtale er lagt til som egen kilde');
+select bivirkninger.importer($import${
+  "format": "ousfar-bivirkninger/1",
+  "stoff": "citalopram",
+  "kilde": {
+    "nokkel": "cipramil-tabletter",
+    "type": "spc",
+    "tittel": "Cipramil – preparatomtale (SPC)",
+    "preparat": "Cipramil 10 mg og 20 mg tabletter, filmdrasjerte",
+    "innehaver": "H. Lundbeck A/S",
+    "revisjonsdato": "2024-05-16",
+    "lenke": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/0000-08151.pdf",
+    "kontrollert": "2026-10-14",
+    "kontrollert_av": "ChatGPT",
+    "importert_av": "ChatGPT",
+    "merknad": "Tabellen i pkt. 4.8, s. 9–11, er importert etter originalordlyden. Fotnote 1 og 2 er knyttet til de aktuelle bivirkningene. Cipramil og Citalopram Orion vises som separate SPC-kilder; se redaksjonell merknad om ADH."
+  },
+  "organsystemer": [
+    {
+      "organsystem": "blod_lymfe",
+      "frekvenser": [
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Trombocytopeni"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "immunsystemet",
+      "frekvenser": [
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Hypersensitivitet",
+            "anafylaktisk reaksjon"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "endokrine",
+      "frekvenser": [
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Uhensiktsmessig sekresjon av ADH",
+            "Hyperprolaktinemi"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "stoffskifte",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Redusert appetitt",
+            "redusert vekt"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Økt appetitt",
+            "vektøkning"
+          ]
+        },
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            "Hyponatremi"
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Hypokalemi"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "psykiatriske",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Agitasjon",
+            "nedsatt libido",
+            "angst",
+            "nervøsitet",
+            "forvirring",
+            "abnormal orgasme (kvinner)",
+            "unormale drømmer"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Aggresjon",
+            "depersonalisering",
+            "hallusinasjoner",
+            "mani"
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Panikkanfall",
+            "bruksisme",
+            "rastløshet",
+            {
+              "tekst": "selvmordstanker, selvmordsrelatert atferd",
+              "fotnote": "Tilfeller av selvmordstanker og selvmordsrelatert atferd har vært rapportert i forbindelse med citaloprambehandling eller like etter behandlingsstopp (se pkt. 4.4)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "nevrologiske",
+      "frekvenser": [
+        {
+          "frekvens": "svaert_vanlige",
+          "bivirkninger": [
+            "Somnolens",
+            "insomnia",
+            "hodepine"
+          ]
+        },
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Tremor",
+            "parestesier",
+            "svimmelhet",
+            "konsentrasjonsvansker"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Synkope"
+          ]
+        },
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            "Kramper (grand mal)",
+            "dyskinesier",
+            "smaksforandringer"
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Kramper",
+            "serotonergt syndrom",
+            "ekstrapyramidale lidelser",
+            "akatisi",
+            "bevegelsesforstyrrelser"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "oye",
+      "frekvenser": [
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Mydriasis"
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Synsforstyrrelser"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "ore_labyrint",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Tinnitus"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "hjerte",
+      "frekvenser": [
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Bradykardi",
+            "takykardi"
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "QT-forlengelse",
+            "ventrikkelarytmier inkl. torsades de pointes"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "kar",
+      "frekvenser": [
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            "Blødninger"
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Ortostatisk hypotensjon"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "respirasjon",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Gjesping"
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Neseblødning"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "gastrointestinale",
+      "frekvenser": [
+        {
+          "frekvens": "svaert_vanlige",
+          "bivirkninger": [
+            "Munntørrhet",
+            "kvalme"
+          ]
+        },
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Diaré",
+            "oppkast",
+            "forstoppelse"
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Gastrointestinale blødninger (inkl. rektale blødninger)"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "lever_galle",
+      "frekvenser": [
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            "Hepatitt"
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Unormale leverfunksjonstester"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "hud",
+      "frekvenser": [
+        {
+          "frekvens": "svaert_vanlige",
+          "bivirkninger": [
+            "Økt svette"
+          ]
+        },
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Kløe"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Urtikaria",
+            "håravfall",
+            "utslett",
+            "bloduttredelser i huden",
+            "fotosensitivitetsreaksjoner"
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Ekkymose",
+            "angioødem"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "muskel_skjelett",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Muskelsmerter",
+            "leddsmerter"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "nyre_urinveier",
+      "frekvenser": [
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Urinretensjon"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "kjonnsorganer_bryst",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Impotens",
+            "ejakulasjonsforstyrrelser",
+            "ejakulasjonssvikt"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Kvinner: Menoragi"
+          ]
+        },
+        {
+          "frekvens": "ikke_kjent",
+          "bivirkninger": [
+            "Galaktore",
+            "Kvinner: Metroragi",
+            {
+              "tekst": "postpartumblødning",
+              "fotnote": "Denne bivirkningen har blitt rapportert for den terapeutiske klassen SSRIer/SNRIer (se pkt. 4.4 og 4.6)."
+            },
+            "Menn: Priapisme"
+          ]
+        }
+      ]
+    },
+    {
+      "organsystem": "generelle",
+      "frekvenser": [
+        {
+          "frekvens": "vanlige",
+          "bivirkninger": [
+            "Tretthet"
+          ]
+        },
+        {
+          "frekvens": "mindre_vanlige",
+          "bivirkninger": [
+            "Ødem"
+          ]
+        },
+        {
+          "frekvens": "sjeldne",
+          "bivirkninger": [
+            "Feber"
+          ]
+        }
+      ]
+    }
+  ]
+}$import$::jsonb);
