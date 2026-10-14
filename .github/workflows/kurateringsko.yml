@@ -1,0 +1,99 @@
+# Kurateringskøen: arbeidslisten ChatGPT-monografkuratoren henter neste stoff
+# fra (docs/kurateringsko.md).
+#
+# Kuratoren skriver en forespørsel i kurateringsko/foresporsel.json på sin egen
+# øktgren (kurateringsko/okt/<noe>). Da starter «videresend» køen på main.
+# Køen kjører også hver time, for å holde fristene og følge PR-ene, og kan
+# startes for hånd.
+#
+# Selve køen kjører alltid koden og arbeidsflyten slik de står på main. Den er
+# den eneste som skriver køen (grenen kurateringsko/tilstand) og svarene på
+# øktgrenene. Kjøringene går én om gangen, og hver behandler alle forespørslene
+# som ikke er besvart, så en kjøring GitHub hopper over, ikke mister noe.
+name: Kurateringskø
+
+on:
+  push:
+    branches: ['kurateringsko/okt/**']
+    paths: ['kurateringsko/foresporsel.json']
+  schedule:
+    - cron: '23 * * * *'
+  workflow_dispatch:
+    inputs:
+      maal:
+        description: Les stoffene og tallene fra databasen nå, ikke bare når det er et døgn siden.
+        type: boolean
+        default: false
+
+permissions: {}
+
+jobs:
+  videresend:
+    name: Start køen fra main
+    if: github.event_name == 'push' && !github.event.deleted
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      # Bare for å starte arbeidsflyten på main. Ingen hemmeligheter her.
+      actions: write
+    steps:
+      - name: Start kurateringskøen
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: gh workflow run kurateringsko.yml --repo "$REPO" --ref main
+
+  ko:
+    name: Kjør kurateringskøen
+    if: github.event_name != 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Testbrukeren stoffene og tallene leses som, ligger i miljøet, som bare main får bruke.
+    environment: kuratortest
+    permissions:
+      # For å skrive køen og svarene, og slette gamle øktgrener.
+      contents: write
+      # For å følge PR-ene og utrullingen etter at de er slått sammen.
+      pull-requests: read
+      actions: read
+    concurrency:
+      group: kurateringsko
+      cancel-in-progress: false
+    env:
+      # OUSFARs prosjekt i Supabase og den offentlige nøkkelen, de samme verdiene
+      # appen har i nettleseren. Ingen av dem er hemmelige.
+      SUPABASE_URL: https://jfzqowsmjtthpbipnxnf.supabase.co
+      SUPABASE_PUBLISHABLE_KEY: sb_publishable_-xx8oSXHh9dBqs3EnxyprA_vijEb2AU
+      KJORING: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      MAAL: ${{ inputs.maal }}
+    defaults:
+      run:
+        working-directory: kode
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          path: kode
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          package-manager-cache: false
+
+      - run: npm ci --ignore-scripts
+
+      # Klonen køen og øktgrenene skrives gjennom. Ingenting fra den kjøres.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          path: git
+          sparse-checkout: README.md
+          sparse-checkout-cone-mode: false
+
+      - name: Kjør køen
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OUSFAR_TESTBRUKER: ${{ secrets.OUSFAR_TESTBRUKER }}
+          OUSFAR_TESTPASSORD: ${{ secrets.OUSFAR_TESTPASSORD }}
+        run: npm run -s kurateringsko -- kjor ../git

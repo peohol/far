@@ -34,6 +34,7 @@
     "scripts/migrasjonsmappe.ts",
     "scripts/produksjonsmigrering.ts",
     "scripts/kuratorjobb.ts",
+    "scripts/kurateringsko.ts",
     "supabase/functions/_delt",
     "api"
   ]
