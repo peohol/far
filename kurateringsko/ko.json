@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-14T04:52:09.042Z",
+  "oppdatert_kl": "2026-10-14T05:02:06.361Z",
   "malt_kl": "2026-10-14T04:50:43.758Z",
   "teller": 0,
   "stoffer": {
@@ -3588,17 +3588,11 @@
     "teststoff": {
       "stoff": "teststoff",
       "navn": "Teststoff",
-      "status": "klar",
+      "status": "utenfor",
       "modus": "de_novo",
       "prioritet": {
-        "poeng": 470,
-        "grunner": [
-          "De novo-kuratering i runden som gjelder.",
-          "Aldri kuratert.",
-          "Ingen kuratering å regne alderen fra.",
-          "13 av 13 redaksjonelle seksjoner er tomme.",
-          "Bare 0 referanser."
-        ]
+        "poeng": 0,
+        "grunner": []
       },
       "maal": {
         "kl": "2026-10-14T04:50:44.088Z",
@@ -4226,7 +4220,7 @@
           }
         }
       },
-      "besvart_commit": null,
+      "besvart_commit": "f59d3cc0ec9fb0bab6fcfe98c3b197d8f5c36e53",
       "sist_brukt_kl": "2026-10-14T04:52:09.042Z"
     }
   }

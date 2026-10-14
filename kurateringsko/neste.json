@@ -1,15 +1,15 @@
 {
-  "oppdatert_kl": "2026-10-14T04:52:09.042Z",
+  "oppdatert_kl": "2026-10-14T05:02:06.361Z",
   "malt_kl": "2026-10-14T04:50:43.758Z",
   "antall": {
-    "klar": 95,
+    "klar": 94,
     "reservert": 0,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 0,
     "sammenslatt": 0,
     "publisert": 1,
     "blokkert": 4,
-    "utenfor": 0
+    "utenfor": 1
   },
   "aktive": [],
   "neste": [
@@ -24,19 +24,6 @@
         "11 av 13 redaksjonelle seksjoner er tomme.",
         "1 av 3 elementer har ingen kilde.",
         "Bare 3 referanser."
-      ],
-      "tidligst_kl": null
-    },
-    {
-      "stoff": "teststoff",
-      "modus": "de_novo",
-      "poeng": 470,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "13 av 13 redaksjonelle seksjoner er tomme.",
-        "Bare 0 referanser."
       ],
       "tidligst_kl": null
     },
@@ -148,6 +135,20 @@
         "9 av 13 redaksjonelle seksjoner er tomme.",
         "2 av 8 elementer har ingen kilde.",
         "Bare 1 referanser."
+      ],
+      "tidligst_kl": null
+    },
+    {
+      "stoff": "lamotrigin",
+      "modus": "de_novo",
+      "poeng": 449.5,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "6 av 13 redaksjonelle seksjoner er tomme.",
+        "12 av 18 elementer har ingen kilde.",
+        "Bare 3 referanser."
       ],
       "tidligst_kl": null
     }
