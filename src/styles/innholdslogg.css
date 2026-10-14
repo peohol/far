@@ -65,13 +65,29 @@
   color: var(--alvorlig-blekk);
 }
 
-.innholdslogg__tid {
-  font-variant-numeric: tabular-nums;
+/* Hvem som gjorde endringen står først, med bildet, og tidspunktet etter. */
+.innholdslogg__utforer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--rom-1) var(--rom-3);
+  letter-spacing: normal;
 }
 
 .innholdslogg__hvem {
+  font-size: var(--tekst-ui);
   color: var(--blekk);
-  letter-spacing: normal;
+}
+
+.innholdslogg__tid {
+  font-weight: var(--vekt-normal);
+  font-variant-numeric: tabular-nums;
+}
+
+.avatar.avatar--system {
+  color: var(--blekk-dempet);
+  background: var(--flate-hevet);
+  border: var(--kant) solid var(--linje);
 }
 
 .innholdslogg__kropp {

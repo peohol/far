@@ -8,6 +8,8 @@
  * før og etter, og hendelsene som ikke har revisjoner. Det er ikke appens egen
  * endringslogg over versjonene (`src/data/endringslogg.ts`).
  */
+import type { Profil } from '@delt/profil'
+
 /** Repoet migrasjonene og agentenes endringer ligger i. */
 export const REPO = 'https://github.com/peohol/far'
 
@@ -18,6 +20,9 @@ export type Endringsside =
   | { analyttkoder: string[]; moduler: string[]; thc: boolean }
 
 export type Aktor = 'bruker' | 'agent' | 'system'
+
+/** Profilen en endring vises med: personens egen, eller den en agent har fått. */
+export type Endringsprofil = Pick<Profil, 'id' | 'username' | 'first_name' | 'last_name' | 'avatar_path' | 'updated_at'>
 
 export interface Endringsagent {
   nokkel: string
@@ -84,6 +89,8 @@ export interface Endring {
   art: 'redigering' | 'kuratering'
   agent: Endringsagent | null
   person: { fornavn: string; etternavn: string } | null
+  /** Profilbildet til den som gjorde endringen; mangler for systemet. */
+  profil: Endringsprofil | null
   /** Det personen eller agenten skrev; uten den beskrives endringen av delene. */
   oppsummering: string | null
   rapport: Rapport | null
@@ -164,6 +171,20 @@ function lesHendelse(verdi: unknown): Hendelse | null {
   return { hendelse, kl: tekst(verdi.kl) ?? '', data: erObjekt(verdi.data) ? verdi.data : {} }
 }
 
+function lesProfil(verdi: unknown): Endringsprofil | null {
+  if (!erObjekt(verdi)) return null
+  const id = tekst(verdi.id)
+  if (!id) return null
+  return {
+    id,
+    username: tekst(verdi.username) ?? '',
+    first_name: tekst(verdi.first_name) ?? '',
+    last_name: tekst(verdi.last_name) ?? '',
+    avatar_path: tekst(verdi.avatar_path),
+    updated_at: tekst(verdi.updated_at) ?? '',
+  }
+}
+
 function lesRapport(verdi: unknown): Rapport | null {
   if (!erObjekt(verdi)) return null
   const seksjoner = Array.isArray(verdi.seksjoner)
@@ -205,6 +226,7 @@ function lesEndring(verdi: unknown): Endring | null {
       rutine: agent.rutine === true,
     },
     person: person && { fornavn: tekst(person.fornavn) ?? '', etternavn: tekst(person.etternavn) ?? '' },
+    profil: lesProfil(verdi.profil),
     oppsummering: tekst(verdi.oppsummering),
     rapport: lesRapport(verdi.rapport),
     migrasjon: tekst(verdi.migrasjon),

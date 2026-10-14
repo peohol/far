@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { visningsnavn } from '@delt/profil'
+import { useAvatarlenker } from '../../auth/avatarer'
 import type { Endringsloggleser } from '../../endringslogg/api'
 import {
   markorEtter,
@@ -18,7 +20,9 @@ import { useBevart } from '../../oppdatering/Bevaring'
 import { Bryter } from '../Bryter'
 import { Button } from '../Button'
 import { Historikkvindu } from '../historikk/Historikkvindu'
+import { Ikon } from '../ikon/Ikon'
 import { Ikonknapp } from '../Ikonknapp'
+import { Avatar } from '../konto/Avatar'
 import { FORSTE_FORING, Loggskuff } from '../Loggskuff'
 import { Merke, type Merketone } from '../Merke'
 import { Modallag } from '../Modallag'
@@ -98,6 +102,8 @@ function Loggvindu({
   const [lasting, setLasting] = useState<Lasting>({ status: 'laster', endringer: [] })
   const [sammenligner, setSammenligner] = useState<Endringsdel | null>(null)
   const nokkel = endringssidenokkel(side)
+  const profiler = useMemo(() => lasting.endringer.flatMap((e) => (e.profil ? [e.profil] : [])), [lasting.endringer])
+  const lenker = useAvatarlenker(profiler)
   const valg = useMemo(() => ({ medUtkast: admin && medUtkast, medRutiner, antall: SIDE }), [admin, medUtkast, medRutiner])
 
   useEffect(() => {
@@ -145,6 +151,7 @@ function Loggvindu({
               <Foring
                 key={endring.id}
                 endring={endring}
+                bilde={endring.profil?.avatar_path ? (lenker.get(endring.profil.avatar_path) ?? null) : null}
                 apen={apenSkuff === endring.id}
                 onVeksle={() => setApenSkuff((a) => (a === endring.id ? null : endring.id))}
                 onSammenlign={setSammenligner}
@@ -187,20 +194,44 @@ function Loggvindu({
 
 const erObjekttype = (type: string): type is Objekttype => (OBJEKTTYPER as readonly string[]).includes(type)
 
-/** Hvem som gjorde endringen, slik den står i loggen. */
+/**
+ * Hvem som gjorde endringen, slik den står i loggen. En agent med egen profil
+ * (som kuratorboten) står med navnet i profilen; agentnavnet står i detaljene.
+ */
 export function hvem(endring: Endring): string {
   const person = endring.person && fulltNavn(endring.person)
   if (endring.aktor === 'bruker') return person || 'Ukjent person'
+  if (endring.agent && endring.profil) return visningsnavn(endring.profil)
   return endring.agent?.navn ?? (endring.aktor === 'agent' ? 'Ukjent agent' : 'Systemet')
+}
+
+/**
+ * Bildet til den som gjorde endringen: profilbildet til personen eller
+ * agenten, ellers forbokstavene, og et tannhjul for systemet.
+ */
+function Utforerbilde({ endring, bilde }: { endring: Endring; bilde: string | null }) {
+  if (endring.aktor === 'system' && !endring.profil) {
+    return (
+      <span className="avatar avatar--liten avatar--system" aria-hidden="true">
+        <Ikon navn="gears" storrelse={14} />
+      </span>
+    )
+  }
+  const navn = hvem(endring)
+  const profil = endring.profil ?? { first_name: navn, last_name: '', username: navn, avatar_path: null }
+  return <Avatar profil={profil} lenke={bilde} storrelse="liten" />
 }
 
 function Foring({
   endring,
+  bilde,
   apen,
   onVeksle,
   onSammenlign,
 }: {
   endring: Endring
+  /** Den signerte lenken til profilbildet, når det er hentet. */
+  bilde: string | null
   apen: boolean
   onVeksle: () => void
   onSammenlign: (del: Endringsdel) => void
@@ -212,10 +243,11 @@ function Foring({
       onVeksle={onVeksle}
       data-endring={endring.id}
       merking={
-        <>
-          <span className="innholdslogg__tid">{tidspunkt(endring.kl)}</span> ·{' '}
+        <span className="innholdslogg__utforer">
+          <Utforerbilde endring={endring} bilde={bilde} />
           <span className="innholdslogg__hvem">{hvem(endring)}</span>
-        </>
+          <span className="innholdslogg__tid">{tidspunkt(endring.kl)}</span>
+        </span>
       }
       sammendrag={sammendrag(endring)}
       merker={
