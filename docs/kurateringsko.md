@@ -197,7 +197,7 @@ committes oppå den, på samme gren.
 | `de_novo_runde` | 1 | Øk for en ny de novo-runde gjennom hele registeret |
 | `evidensovervaking_dager` | 180 | Fra kunnskapsgrensen til evidensovervåkningen er forfalt |
 | `forrang` | tom | Stoffer som skal først, i rekkefølge, f.eks. for en pilot |
-| `utelatt` | tom | Stoffer køen ikke gir ut |
+| `utelatt` | `teststoff` | Stoffer køen ikke gir ut, som testsiden |
 | `maling_timer` | 20 | Hvor ofte sidene måles |
 | `okt_slettes_etter_dager` | 14 | Øktgrener uten aktiv reservasjon slettes etter så lenge |
 
