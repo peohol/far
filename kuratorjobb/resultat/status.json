@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/lurasidon-0002",
+    "foresporsel_commit": "bbeb396a1e95564c32bfa7da89ee2825ac277661",
+    "foresporsel_sha256": "4da1ea7c9b88e40a18e3cde646ad8bf080925ce997065364919b86947ad6e3b5",
+    "kode_commit": "b9b53d5b413c42c4567880e1590301db86f0f698",
+    "kjoring": "https://github.com/peohol/far/actions/runs/38608466732",
+    "startet_kl": "2026-10-14T17:39:41.585Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
