@@ -40,16 +40,16 @@ begin
     ('oxiore','Oxiore – preparatomtale (SPC)','Direktoratet for medisinske produkter','2025','https://produktinformasjon.legemiddelsok.no/preparatomtaler/19-12925.pdf'),
     ('kalceks','Natriumoksybat Kalceks – preparatomtale (SPC)','Direktoratet for medisinske produkter','2024','https://produktinformasjon.legemiddelsok.no/preparatomtaler/18-12473.pdf'),
     ('giftinfo','GHB – behandlingsanbefaling ved forgiftning','Giftinformasjonen / Helsebiblioteket','2017','https://www.helsebiblioteket.no/forgiftninger/rusmidler/ghb-behandlingsanbefaling-ved-forgiftning'),
-    ('review2021','γ-Hydroxybutyric Acid: Pharmacokinetics, Pharmacodynamics, and Toxicology','Felmlee MA, Morse BL, Morris ME','2021','https://pubmed.ncbi.nlm.nih.gov/33417072/'),
-    ('liechti','Pharmacokinetics and pharmacodynamics of gamma-hydroxybutyrate in healthy subjects','Liechti ME et al.','2016','https://pubmed.ncbi.nlm.nih.gov/26659543/'),
-    ('meta','Sodium oxybate for narcolepsy with cataplexy: systematic review and meta-analysis','Alshaikh MK et al.','2012','https://pubmed.ncbi.nlm.nih.gov/22893778/'),
-    ('toxprospektiv','Serum GHB concentrations and clinical syndrome in severe overdose','Zvosec DL et al.','2003','https://pubmed.ncbi.nlm.nih.gov/12827115/'),
-    ('toxswiss','Clinical features and serum concentrations in acute GHB intoxication','Liakoni E et al.','2016','https://pubmed.ncbi.nlm.nih.gov/27581664/'),
-    ('forensic','GHB concentrations in living and deceased subjects: a review','Busardò FP, Jones AW','2019','https://pubmed.ncbi.nlm.nih.gov/30307336/'),
-    ('withdrawal','Clinical features and management of gamma-hydroxybutyrate withdrawal: a review','McDonough M et al.','2004','https://pubmed.ncbi.nlm.nih.gov/15225884/'),
-    ('dependence','The neurobiological mechanisms of GHB dependence and withdrawal and their clinical relevance','Kamal RM et al.','2017','https://pubmed.ncbi.nlm.nih.gov/28004314/'),
+    ('review2021','γ-Hydroxybutyric Acid: Pharmacokinetics, Pharmacodynamics, and Toxicology','Melanie A Felmlee, Bridget L Morse, Marilyn E Morris','2021','https://pubmed.ncbi.nlm.nih.gov/33417072/'),
+    ('liechti','Pharmacokinetics and pharmacodynamics of γ-hydroxybutyrate in healthy subjects','Matthias E Liechti, Boris B Quednow, Evangelia Liakoni, Dario Dornbierer, Robin von Rotz, Maria Salomé Gachet, Jürg Gertsch, Erich Seifritz, Oliver G Bosch','2016','https://pubmed.ncbi.nlm.nih.gov/26659543/'),
+    ('meta','Sodium oxybate for narcolepsy with cataplexy: systematic review and meta-analysis','Mashael K Alshaikh, Andrea C Tricco, Mariam Tashkandi, Muhammad Mamdani, Sharon E Straus, Ahmed S BaHammam','2012','https://pubmed.ncbi.nlm.nih.gov/22893778/'),
+    ('toxprospektiv','Gamma-hydroxybutyrate serum levels and clinical syndrome after severe overdose','Karl A Sporer, Rachel L Chin, Jo Ellen Dyer, Ryan Lamb','2003','https://pubmed.ncbi.nlm.nih.gov/12827115/'),
+    ('toxswiss','Presentations to an urban emergency department in Switzerland due to acute γ-hydroxybutyrate toxicity','Evangelia Liakoni, Fabio Walther, Christian H Nickel, Matthias E Liechti','2016','https://pubmed.ncbi.nlm.nih.gov/27581664/'),
+    ('forensic','Interpreting γ-hydroxybutyrate concentrations for clinical and forensic purposes','Francesco Paolo Busardò, Alan Wayne Jones','2019','https://pubmed.ncbi.nlm.nih.gov/30307336/'),
+    ('withdrawal','Clinical features and management of gamma-hydroxybutyrate (GHB) withdrawal: a review','Michael McDonough, Noel Kennedy, Anthony Glasper, Jenny Bearn','2004','https://pubmed.ncbi.nlm.nih.gov/15225884/'),
+    ('dependence','Pharmacological Treatment in γ-Hydroxybutyrate (GHB) and γ-Butyrolactone (GBL) Dependence: Detoxification and Relapse Prevention','Rama M Kamal, Martijn S van Noorden, Wim Wannet, Harmen Beurmanjer, Boukje A G Dijkstra, Arnt Schellekens','2017','https://pubmed.ncbi.nlm.nih.gov/28004314/'),
     ('lactmed','Oxybate Salts','Drugs and Lactation Database (LactMed)','2026','https://www.ncbi.nlm.nih.gov/books/NBK500802/'),
-    ('audmeta','Gamma-hydroxybutyrate for alcohol use disorder: systematic review and meta-analysis','Caputo F et al.','2024','https://pubmed.ncbi.nlm.nih.gov/39225220/');
+    ('audmeta','Long-term Efficacy and Safety of Sodium Oxybate in Treating Alcohol Use Disorder: A Systematic Review and Meta-Analysis','Letizia Biso, Andrea Spini, Francesco Petragnano, Roberto Maggio, Marco Scarselli, Marco Carli','2025','https://pubmed.ncbi.nlm.nih.gov/39225220/');
 
   for k in select * from ghb_kilder order by nokkel loop
     ref := intern.kuratering_referanse(
@@ -100,8 +100,8 @@ begin
   -- Kvantitativ klinisk effekt og human dose-respons.
   for x in select value from jsonb_array_elements($json$
   [
-    {"posisjon":0,"tittel":"Narkolepsi med katapleksi","tekst":"I en meta-analyse av seks industrifinansierte randomiserte studier reduserte 9 g natriumoksybat per natt ukentlige katapleksianfall med gjennomsnittlig 8,5 sammenlignet med placebo (95 % KI 1,6–15,3 færre), økte Maintenance of Wakefulness Test med 5,18 minutter (2,59–7,78) og ga klinisk global bedring med RR 2,42 (1,77–3,32). Kvalme, oppkast og svimmelhet var vanligere. Estimatene gjelder delt nattlig dosering og må tolkes i lys av industrifinansiering og selekterte studiepopulasjoner.","refs":["meta"]},
-    {"posisjon":1,"tittel":"Doseavhengige akutte effekter","tekst":"I en kontrollert studie hos 32 friske menn ga 25 og 35 mg/kg både stimulerende og sederende subjektive effekter; sedasjon og svimmelhet økte med dosen. Cmax var 218 (176–270) og 453 (374–549) µmol/L, mens halveringstiden var 36 ± 9 og 39 ± 7 minutter. Plasmakonsentrasjonene skal ikke brukes som serumreferanseområde eller forgiftningsterskel.","refs":["liechti"]}
+    {"posisjon":0,"tittel":"Narkolepsi med katapleksi","tekst":"Seks industrifinansierte randomiserte studier inngikk i meta-analysen, men endepunktene bygget på ulike delmengder: 9 g natriumoksybat per natt reduserte ukentlige katapleksianfall med gjennomsnittlig 8,5 sammenlignet med placebo (2 studier; 95 % KI 1,6–15,3 færre), økte Maintenance of Wakefulness Test med 5,18 minutter (2 studier; 2,59–7,78) og ga klinisk global bedring med RR 2,42 (3 studier; 1,77–3,32). Kvalme, oppkast og svimmelhet var vanligere. Estimatene gjelder delt nattlig dosering og må tolkes i lys av industrifinansiering og selekterte studiepopulasjoner.","refs":["meta"]},
+    {"posisjon":1,"tittel":"Doseavhengige akutte effekter","tekst":"I en kontrollert studie hos 32 friske menn ga 20 og 35 mg/kg både stimulerende og sederende subjektive effekter; sedasjon og svimmelhet økte med dosen. Cmax i plasma var 218 (176–270) og 453 (374–549) µmol/L ved henholdsvis 20 og 35 mg/kg, med median tmax 35 minutter, mens halveringstiden var 36 ± 9 og 39 ± 7 minutter. Plasmakonsentrasjonene skal ikke brukes som serumreferanseområde eller forgiftningsterskel.","refs":["liechti"]}
   ]$json$::jsonb) loop
     refs := '[]'::jsonb;
     for k in select value::text as nokkel from jsonb_array_elements_text(x->'refs') loop
@@ -138,7 +138,7 @@ begin
     {"type":"paragraph","content":[{"type":"text","text":"Voksne: start 4,5 g per natt fordelt på 2,25 g ved sengetid og 2,25 g 2,5–4 timer senere. Dosen kan justeres med 1,5 g per natt med minst 1–2 ukers intervall til effekt og tolerabilitet; maksimum er 9 g per natt."}]},
     {"type":"paragraph","content":[{"type":"text","text":"Mat reduserer opptaket betydelig. Første dose tas 2–3 timer etter mat, og intervallet mellom mat og dose bør være stabilt. Begge dosene klargjøres ved sengetid."}]},
     {"type":"paragraph","content":[{"type":"text","text":"Ved nedsatt leverfunksjon halveres startdosen. Ved samtidig valproat anbefaler preparatomtalen omtrent 20 % dosereduksjon og tett oppfølging. Nyresvikt krever vurdering av natriuminntaket, ikke en etablert farmakokinetisk dosereduksjon."}]},
-    {"type":"paragraph","content":[{"type":"text","text":"Barn fra 7 år doseres etter kroppsvekt og titreres av lege med erfaring i søvnmedisin; voksenregimet skal ikke overføres ukritisk. Hvis behandlingen har vært avbrutt i mer enn 14 dager, startes titreringen på nytt fra laveste dose."}]}
+    {"type":"paragraph","content":[{"type":"text","text":"Barn fra 7 år og minst 15 kg doseres etter kroppsvekt. Ved 15 til <20 kg er startdosen høyst 1 g/dag, økning høyst 0,5 g/dag per uke og maksimal dose 0,2 g/kg/dag. Ved 20 til <30 kg er tilsvarende grenser 2 g/dag, 1 g/dag per uke og 0,2 g/kg/dag; ved 30 til <45 kg 3 g/dag, 1 g/dag per uke og 0,2 g/kg/dag; og ved ≥45 kg 4,5 g/dag, 1,5 g/dag per uke og 9 g/dag. Døgndosen deles i to doser ved sengetid og 2,5–4 timer senere, og det bør gå 1–2 uker mellom doseøkningene. Sikkerhet og effekt er ikke fastslått under 7 år eller under 15 kg. Hvis behandlingen har vært avbrutt i mer enn 14 dager, startes titreringen på nytt fra laveste dose."}]}
   ]}}
   $json$::jsonb;
   perform intern.kuratering_nytt(
@@ -152,7 +152,7 @@ begin
   [
     {"posisjon":0,"tittel":"Biotilgjengelighet og mat","tekst":"Oral biotilgjengelighet er omtrent 88 %. Et fettrikt måltid forsinket median Tmax fra 0,75 til 2 timer og reduserte Cmax med 58 % og AUC med 37 %."},
     {"posisjon":1,"tittel":"tₘₐₓ","tekst":"Maksimal plasmakonsentrasjon nås vanligvis etter 0,5–2 timer i fastende tilstand."},
-    {"posisjon":2,"tittel":"t½","tekst":"Terminal halveringstid er omtrent 0,5–1 time. I en kontrollert studie var den 36 ± 9 og 39 ± 7 minutter etter 25 og 35 mg/kg."},
+    {"posisjon":2,"tittel":"t½","tekst":"Terminal halveringstid er omtrent 0,5–1 time. I en kontrollert studie var den 36 ± 9 og 39 ± 7 minutter etter 20 og 35 mg/kg."},
     {"posisjon":3,"tittel":"Ikke-lineær eksponering","tekst":"Eksponeringen er mer enn doseproporsjonal. Når total nattdose ble doblet fra 4,5 til 9 g, økte AUC omtrent 3,8 ganger. Gjentatt dosering endret ikke farmakokinetikken vesentlig."},
     {"posisjon":4,"tittel":"Distribusjon og proteinbinding","tekst":"Tilsynelatende distribusjonsvolum er omtrent 190–384 ml/kg, og plasmaproteinbindingen er under 1 %."},
     {"posisjon":5,"tittel":"Metabolisme","tekst":"GHB metaboliseres hovedsakelig via suksinsemialdehyd til intermediater i sitronsyresyklusen og videre til karbondioksid og vann. Det er ikke identifisert farmakologisk aktive metabolitter, og klinisk relevant CYP-hemming er ikke vist in vitro."},
@@ -174,7 +174,7 @@ begin
   -- Redaksjonell interaksjonsramme; konkrete legemiddelpar beholdes i FEST-laget.
   data := $json$
   {"dokument":{"type":"doc","content":[
-    {"type":"paragraph","content":[{"type":"text","text":"Alkohol, opioider, barbiturater, benzodiazepiner, hypnotika og andre CNS-depressiva kan forsterke sedasjon og respirasjonsdepresjon; kombinasjon med alkohol skal unngås, og opioider/barbiturater er kontraindisert i preparatomtalen."}]},
+    {"type":"paragraph","content":[{"type":"text","text":"Oxiore er kontraindisert ved alvorlig depresjon, suksinsemialdehyddehydrogenasemangel og samtidig behandling med opioider eller barbiturater. Alkohol, benzodiazepiner, hypnotika og andre CNS-depressiva kan forsterke sedasjon og respirasjonsdepresjon; kombinasjon med alkohol skal unngås."}]},
     {"type":"paragraph","content":[{"type":"text","text":"Valproat 1250 mg/døgn økte GHB-AUC omtrent 25 % uten vesentlig endring i Cmax og forsterket kognitiv svekkelse og søvnighet. Koma og økt GHB-konsentrasjon er rapportert ved samtidig topiramat. De konkrete interaksjonene nedenfor hentes automatisk fra FEST."}]}
   ]}}
   $json$::jsonb;
