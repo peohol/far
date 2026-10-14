@@ -2,11 +2,69 @@
 
 - **Stoff/slug:** citalopram
 - **Dekning:** full stoffmonografi, inkludert redaksjonelle seksjoner og kontroll av automatiske datalag
-- **Sist oppdatert:** 2026-10-07
+- **Sist oppdatert:** 2026-10-13
 - **Kurateringsmodus:** de novo-kuratering
-- **Kunnskapsgrense:** 2026-10-07
-- **Siste fulle kjøring:** 2026-10-06
-- **Siste de novo-kjøring:** 2026-10-07
+- **Kunnskapsgrense:** 2026-10-13
+- **Siste fulle kjøring:** 2026-10-13
+- **Siste de novo-kjøring:** 2026-10-13
+
+## Full de novo-pilot 2026-10-13
+
+Dette er den første komplette faglige piloten etter teknisk godkjenning av GitHub-, Supabase- og SPC-infrastrukturen. Før eksisterende citalopram-monografi, referanseliste og evidensjournal ble åpnet, ble appens levende innholdsmodell kartlagt til 37 kontrollpunkter: 18 paneler, 14 faste underkort og fem strukturerte datafelt. En separat blind evidensprotokoll ble deretter låst. Først etter adversarial kontroll av hovedkonklusjonene ble eksisterende innhold åpnet og sammenlignet.
+
+### Uavhengig evidensgrunnlag og adversarial kontroll
+
+| Domene | Uavhengig kontroll | Konklusjon før avstemming |
+| --- | --- | --- |
+| SPC og regulatorisk innhold | gjeldende norske original-PDF-er, tabeller og fotnoter | indikasjon, dose, QT-risiko, PK og sikkerhetsinformasjon må være kildefidel |
+| Farmakodynamikk | human transportørstudie, PMID 21730142 | SERT-hemming er den klinisk informative hovedmekanismen; negativ reseptoroppramsing og allosterisk klinisk tolkning har lav nytte |
+| Depresjon | Apler 2011, DOI 10.1136/bmjopen-2011-000106; tilbakefalls-RCT, PMID 7622809 | statistisk effekt mot placebo, liten gjennomsnittlig symptomforskjell og betydelige publikasjons-/rapporteringsbegrensninger |
+| Panikklidelse | direkte RCT, PMID 9818634; Cochrane 2018, DOI 10.1002/14651858.CD010676.pub2 | langtidsstudien gikk fra 475 randomiserte i akuttfasen til 279 i valgfri fortsettelse, 258 i effektanalysen og 179 fullførere; Cochrane fant ingen sikker forskjell for manglende respons (RR 0,82; 95 % KI 0,65–1,04; 2 studier, n=628; I²=78 %) eller manglende remisjon (RR 0,95; 95 % KI 0,76–1,19; 1 studie, n=251) |
+| Tvangslidelse | RCT, PMID 11236072 | respons mot placebo; 60 mg-armen ligger over dagens maksimale anbefalte dose |
+| Farmakogenetikk | CPIC 2023, DOI 10.1002/cpt.2903 | CYP2C19 er handlingsrelevant når genotype foreligger; CPIC avgjør ikke hvem som skal genotypes |
+| TDM | norsk laboratoriehåndbok; Espnes 2026; AGNP 2026; Xu 2023 | 70–350 nmol/L beholdes; serum uten gel ved steady state 12–24 timer etter dose; ingen skarp universell effektgrense |
+| Forgiftning | Giftinformasjonen, kontrollert 2026-10-13 | dose, klinikk og serie-EKG styrer observasjon; tidligere kildebelagte konsentrasjonsgrenser beholdes |
+| Graviditet | UKTIS versjon 4, september 2026; Embryotox | ingen overbevisende samlet misdannelsesøkning; små absolutte signaler og residual konfundering må synliggjøres |
+| Amming | LactMed, revidert 2026-08-15; Embryotox | vanlig relativ spedbarnsdose omtrent 3–6 %, stor variasjon; amming kan vanligvis fortsette med observasjon |
+| Avhengighet/toleranse | målrettede søk, SPC og vurdering av eksisterende kilder | seponeringssyndrom er reelt, klassisk addiksjon ikke etablert; klinisk toleranse og lært mestringsavhengighet mangler robust citalopramspesifikk dokumentasjon |
+
+### Avstemming mot eksisterende innhold
+
+Følgende ble forbedret:
+
+- Antidepressiv effekt fikk direkte substansspesifikke effektmål, tilbakefallsdata og eksplisitte begrensninger.
+- Panikkortet balanserer den eldre positive studien mot Cochrane-analysen; OCD-kortet markerer at 60 mg overstiger dagens maksimum.
+- Farmakodynamikkpanelet er konsentrert til SERT med humane affinitetsdata. Seks lavt informative negative målkort og en klinisk usikker allosterisk tolkning er tatt ut av levende visning, med revisjonshistorikken bevart.
+- Prøvetakingskortet angir serum uten gel, steady state og 12–24 timer etter siste dose, med nødvendige rekvisisjonsopplysninger.
+- Graviditets- og ammekortene bruker 2026-teratologikilder, absoluttrisiko og konkret observasjon av barnet.
+- Toleransekortet er tatt ut av levende visning fordi molekylær SERT-tilpasning ikke dokumenterer klinisk toleranse.
+
+Følgende ble beholdt etter ny, selvstendig vurdering:
+
+- det norske serumreferanseområdet 70–350 nmol/L, toksisk grense 700 nmol/L og grense for alvorlig forgiftning 10 000 nmol/L;
+- den særskilte norske dose–serumtabellen og dens originalkilder;
+- SPC-baserte indikasjoner, dosering, QT-risiko og farmakokinetiske nøkkeltall;
+- CYP2C19/CPIC-innholdet, TDM-begrensningene, forgiftningskortene, fertilitetskortet, seponeringskortet og addiksjonsavgrensningen;
+- automatiske FEST-, interaksjons-, laboratorie- og ClinPGx/CPIC-lag uten manuell duplisering.
+
+### Kvalitetsporter for piloten
+
+- Faglig uavhengighet: bestått; blind protokoll ble låst før eksisterende innhold ble åpnet.
+- Beskyttede norske data: bestått ved migrasjons- og regresjonskontroll; ingen beskyttet verdi eller serumrad endres.
+- Påstand–kilde-kobling: bestått i nye heterogene kort ved inline-sitering.
+- Maskinlesbar dekning: 37 av 37 kontrollpunkter dokumentert i `citalopram-dekning.json`.
+- Modellavstemming: skillens `kontroller_dekning.py --sjekk` er kjørt mot gjeldende `src/faginnhold/paneler.ts` og manifestet. Kontrollen bekrefter nøkkel- og statusdekning, ikke faglig sannhet; alle tall og påstander er derfor også lest manuelt mot kildene.
+- Produksjonsnær funksjonstest: bestått i GitHub Actions-kjøring 38438360166. Vanlig bruker kunne lese og bygge siden; utkast var skjult. FEST ga seks merkevarer/åtte pakninger, interaksjonslaget 67 treff, bivirkningslaget 86 av 86 rader, ClinPGx 63 kliniske annotasjoner og CPIC åtte anbefalinger.
+- SPC-artefaktkontroll: bestått i samme kjøring. Alle seks preparater var dekket av to distinkte DMP-originaler: Cipramil, 15 sider, oppdatert 16.05.2024, og Citalopram Orion, 16 sider, oppdatert 01.04.2025. PDF-kontrollsummer, tekstuttrekk og 180-dpi sidebilder ble kontrollert.
+- Visuell SPC-kontroll: tabellene i punkt 4.8 ble lest i original layout. Orion-tabellen og begge fotnotene samsvarer med eksisterende strukturerte 86-raders import. Indikasjon, dose, graviditet/amming, overdose, QT-data, farmakodynamikk og farmakokinetikk ble kontrollert i begge originaldokumentene.
+- Kjemiske grunndata: koblingene for citalopram (PubChem CID 2771) og desmetylcitalopram (CID 162180) er kontrollert mot gjeldende register og PubChem. Formel, molekylvekt og InChIKey samsvarer, og de eksakte leser- og visningsfunksjonene (`lesKjemiutvalg`/`byggKjemivisning`) er gjennomgått. Innlogget produksjonskall til `les_kjemi` er ikke dekket av kuratorjobben og står derfor som gjenstående runtime-etterkontroll.
+- Laboratorieanalyser: de verifiserte koblingene til Farmakologiportalen er citalopram komponent 536 og desmetylcitalopram 795. Portalens faktiske citalopramvisning oppgir ni serum/plasmaanalyser og to fullblodsanalyser; koblingsregisteret og de eksakte leser-/visningsfunksjonene (`lesLabutvalg`/`byggLabvisning`) er kontrollert. Innlogget produksjonskall til `les_laboratorieanalyser` er ikke dekket av kuratorjobben og står derfor som gjenstående runtime-etterkontroll.
+
+### Regulatoriske kildekonflikter
+
+- Cipramil 2024 sier at citalopram ikke skal brukes under amming, mens Citalopram Orion 2025 anbefaler forsiktighet. Den kliniske teksten bygger derfor på nyere LactMed og Embryotox og synliggjør oppfølging, fremfor å presentere én produktspesifikk ordlyd som en enhetlig klasseregel.
+- Cipramil 2024 angir at dosering ikke behøver individualiseres etter CYP2C19/CYP2D6-fenotype, mens Orion har redusert maksimum for langsomme CYP2C19-omsettere. CPIC 2023 er brukt som handlingsrettet genotypekilde; SPC-ene brukes regulatorisk og konflikten er ikke glattet over.
+- Orion beskriver et allosterisk SERT-bindingssted og begge SPC-er omtaler manglende toleranse for reopptakshemmingen. Disse molekylære/regulatoriske formuleringene er ikke brukt som belegg for klinisk allosteri eller klinisk toleranse.
 
 ## Kontrollerte hovedkilder
 
@@ -22,7 +80,7 @@
 | OCD | Montgomery et al. 2001, PMID 11236072 | kontrollert 2026-10-07 |
 | Panikklidelse | Lepola et al. 1998, PMID 9818634 | kontrollert 2026-10-07 |
 | Graviditet | Kang et al. 2017, DOI 10.5468/ogs.2017.60.2.145; Janusmed fosterpåverkan | kontrollert 2026-10-07 |
-| Amming | Janusmed amning; LactMed, siste revisjon 2026-09-15 | kontrollert 2026-10-07 |
+| Amming | Janusmed amning; LactMed, siste revisjon 2026-08-15 | kontrollert på nytt mot NCBI 2026-10-13; originalsidens «Last Revision» og NLM-sitering oppgir begge 15.08.2026 |
 | Addiksjon/misbruk | Nutt 2003, DOI 10.1177/0269881103174019; Chiappini et al. 2022, DOI 10.3390/ph15050565 | kontrollert 2026-10-07 |
 | Norske serumdata | Reis et al. 2009 og Referanseområdeprosjektet 2005–2008 | eksisterende OUSFAR-grunnlag bevart |
 
@@ -37,7 +95,7 @@
 | Toksisitet | akutte doseterskler, klinisk bilde, EKG/kramper og behandlingsråd |
 | Graviditet/amming | Janusmed, LactMed, citalopramspesifikk meta-analyse og SPC |
 | Avhengighet/seponering | toleranse, seponeringssyndrom, formell addiksjon og farmakovigilanssignaler |
-| Automatiske lag | FEST-kobling, ClinPGx-kobling, CPIC-kobling, interaksjonslag og strukturert SPC-bivirkningsmodell kontrollert i repoarkitekturen |
+| Automatiske lag | FEST, ClinPGx, CPIC, interaksjoner og strukturert SPC-bivirkningsmodell kontrollert produksjonsnært; PubChem- og Farmakologiportalen-koblinger, kildedata og visningsmodeller kontrollert særskilt, mens deres innloggede RPC-er gjenstår fordi kuratorjobben ikke kaller dem |
 
 ### De novo-runde 2026-10-07
 
@@ -118,9 +176,12 @@ Den forrige testen krevde i praksis samme kildegruppe både inline og på kortet
 - CPIC beskriver hvordan tilgjengelige genotypefunn brukes; retningslinjen gir ikke et generelt kriteriesett for hvem som bør genotypes.
 - Ved amming er kildeformålet viktig: preparatomtalen er regulatorisk og anbefaler forsiktighet, mens LactMed/Janusmed gjør en klinisk laktasjonsvurdering som kan støtte fortsatt amming under observasjon.
 - Ingen tilstrekkelig citalopramspesifikk evidens ble funnet for «Lært mestringsavhengighet».
+- Kuratorjobben tester foreløpig ikke de innloggede RPC-ene `les_kjemi` og `les_laboratorieanalyser`. Koblinger, kildedata og appens visningsmodeller er kontrollert, men faktisk innlogget runtime-etterkontroll må utføres før eller etter en eventuell utrulling og kan ikke kvitteres av den generiske sidemodelltesten.
 
 ## Historikk
 
+- **2026-10-13 – oppfølging etter uavhengig PR-gjennomgang:** panikkortet korrigert slik at RR 0,95 gjelder manglende remisjon, mens responsanalysen oppgis separat som RR 0,82. Langtidsstudiens 279 fortsettende, 258 i effektanalysen og 179 fullførere er synliggjort. Dekningskontrollen er presisert, automatiske kjemi-/laboratorielag er ikke lenger feilaktig kvittert via generisk sidemodelltest, LactMed-datoen er rekontrollert mot NCBIs gjeldende originalside, og siste fulle kjøring er rettet til 13.10.
+- **2026-10-13 – full de novo-pilot:** forventet dekning avledet fra levende appmodell før søk. Blind evidens og adversarial kontroll ble låst før gammel monografi/journal ble lest. Direkte effektestimater, preanalytikk og 2026-data for graviditet/amming ble lagt inn; seks negative PD-kort og toleransekortet ble tatt ut av levende visning. Norske konsentrasjonsområder og serumtabell ble bevart.
 - **2026-10-07 – de novo-kuratering og kildeplassering:** blind evidensrunde før avstemming mot eksisterende monografi. Hovedinnholdet ble bekreftet, PGx/TDM/amming ble nyansert, og lange eller kildeheterogene tekster fikk påstandsnære inline-siteringer. Korte, kildehomogene kort beholder kortreferanser.
 - **2026-10-06 – full oppdatering:** hele levende monografien revurdert. Ny oppsummering, virkninger, toksisitet, graviditet/amming/reproduksjon og avhengighetsseksjon; PD, indikasjon, dosering, PK, PGx, TDM og interaksjonstekst revidert. Strukturert bivirkningsimport lagt til.
 - Norske referanse- og toksisitetsverdier ble eksplisitt beholdt. Eldre PK-nøkkeltall i «Viktige data» ble derimot synkronisert med gjeldende SPC fordi de ikke omfattes av bevaringsregelen.

@@ -12,8 +12,8 @@ import type { Endring } from '../domain/versjon'
  */
 export const ENDRINGSLOGG: Endring[] = [
   {
-    versjon: '1.92.1',
-    dato: '2026-10-13',
+    versjon: '1.92.2',
+    dato: '2026-10-14',
     sammendrag: 'Menyen nederst på mobil går over to rader når knappene ikke får plass, i en fast rekkefølge',
     typer: ['Design / layout'],
     omfang: 'Mindre omfang',
@@ -23,6 +23,20 @@ export const ENDRINGSLOGG: Endring[] = [
       'Knappene står midt i menyen, og hovedknappen er ikke bredere enn teksten i den.',
       'Knappene står i samme rekkefølge overalt, både på én og to rader og i toppmenyen på større skjermer: søk, hovedknappen, favoritt, diskusjoner, endringslogg, rediger og «Mer», og «Lukk» alltid sist. Før kom klokken for endringsloggen etter «Lukk».',
       'Mens du søker på siden, får søkefeltet hele den øverste raden, og hovedknappen viser bare ikonet ved siden av. De andre knappene står der fortsatt, under.',
+    ],
+  },
+  {
+    versjon: '1.92.1',
+    dato: '2026-10-13',
+    sammendrag: 'Citaloprammonografien er faglig gjennomgått fra grunnen av',
+    typer: ['Fag'],
+    omfang: 'Moderat omfang',
+    gjelder: ['stoff/citalopram'],
+    punkter: [
+      'Effektdokumentasjonen ved depresjon, panikklidelse og tvangslidelse er vurdert på nytt, med tydeligere tall, studiepopulasjoner og begrensninger.',
+      'Farmakodynamikk, prøvetaking, graviditet og amming er oppdatert med nyere og mer presise kilder.',
+      'Det norske serumreferanseområdet på 70–350 nmol/L, toksisitetsgrensene og dose–serumtabellen er kontrollert og beholdt.',
+      'Svakt dokumenterte kort om klinisk toleranse og lite informative negative mål er tatt ut.',
     ],
   },
   {

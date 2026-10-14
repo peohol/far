@@ -1,5 +1,9 @@
 import type { PGlite } from '@electric-sql/pglite'
 import { beforeAll, expect, it } from 'vitest'
+import { lesLabutvalg } from '../../farmakologiportalen/lesing'
+import { byggLabvisning } from '../../farmakologiportalen/stoffside'
+import { lesKjemiutvalg } from '../../kjemi/lesing'
+import { byggKjemivisning } from '../../kjemi/stoffside'
 import { type Element, elementer, inlineReferanser, tekst } from '../hjelp/kurateringskjeden'
 
 export default function citalopram(db: () => PGlite): void {
@@ -40,7 +44,7 @@ export default function citalopram(db: () => PGlite): void {
       'Effekt ved tvangslidelse',
       'Doseavhengig QT-forlengelse',
     ])
-    expect(farmakodynamikk).toHaveLength(7)
+    expect(farmakodynamikk.map((e) => String(e.data.maal))).toEqual(['Serotoninreopptak / SERT'])
     expect(indikasjon).toHaveLength(1)
     expect(dosering).toHaveLength(1)
     expect(farmakokinetikk.map((e) => String(e.data.tittel))).toEqual([
@@ -79,10 +83,10 @@ export default function citalopram(db: () => PGlite): void {
       'Fertilitet og reproduksjon',
     ])
     expect(avhengighet.map((e) => String(e.data.tittel))).toEqual([
-      'Toleranseutvikling',
       'Abstinens, seponeringssyndrom og rebound-effekter',
       'Addiksjon',
     ])
+    expect(avhengighet.some((e) => e.data.tittel === 'Toleranseutvikling')).toBe(false)
     expect(avhengighet.some((e) => e.data.tittel === 'Lært mestringsavhengighet')).toBe(false)
   })
 
@@ -150,6 +154,137 @@ export default function citalopram(db: () => PGlite): void {
     expect(pgx).not.toMatch(/\b(PM|IM|NM|UM)\b/)
   })
 
+  it('viser direkte citalopramevidens og sentrale begrensninger', () => {
+    const sert = tekst(farmakodynamikk[0]!.data)
+    expect(sert).toContain('4 nmol/L')
+    expect(sert).toContain('1414 nmol/L')
+    expect(sert).toContain('35 ganger')
+    expect(sert).not.toContain('alloster')
+
+    const depresjon = tekst(virkninger.find((e) => e.data.tittel === 'Antidepressiv effekt')!.data)
+    expect(depresjon).toContain('RR 1,42')
+    expect(depresjon).toContain('Hedges g -0,27')
+    expect(depresjon).toContain('upubliserte studier inngikk ikke')
+
+    const panikk = tekst(virkninger.find((e) => e.data.tittel === 'Effekt ved panikklidelse')!.data)
+    expect(panikk).toContain('258 inngikk i effektanalysen')
+    expect(panikk).toContain('RR 0,82')
+    expect(panikk).toContain('to studier, n=628')
+    expect(panikk).toContain('manglende remisjon (RR 0,95')
+    expect(panikk).toContain('ingen sikker forskjell fra placebo')
+
+    const ocd = tekst(virkninger.find((e) => e.data.tittel === 'Effekt ved tvangslidelse')!.data)
+    expect(ocd).toContain('60 mg/døgn overstiger dagens maksimale anbefalte dose')
+  })
+
+  it('bygger egne kjemi- og laboratorievisninger for begge citalopramforbindelsene', () => {
+    const kjemi = byggKjemivisning(
+      'citalopram',
+      lesKjemiutvalg({
+        kilde: 'PubChem',
+        forbindelser: [
+          {
+            cid: 2771,
+            data: {
+              cid: 2771,
+              tittel: 'Citalopram',
+              formel: 'C20H21FN2O',
+              molvekt: '324.4',
+              inchikey: 'WSEQXVZVJXJVFP-UHFFFAOYSA-N',
+              ladning: 0,
+              enheter: 1,
+              stereo: {},
+            },
+            sist_hentet_kl: '2026-10-13T00:00:00Z',
+          },
+          {
+            cid: 162180,
+            data: {
+              cid: 162180,
+              tittel: 'Desmethylcitalopram',
+              formel: 'C19H19FN2O',
+              molvekt: '310.4',
+              inchikey: 'PTJADDMMFYXMMG-UHFFFAOYSA-N',
+              ladning: 0,
+              enheter: 1,
+              stereo: {},
+            },
+            sist_hentet_kl: '2026-10-13T00:00:00Z',
+          },
+        ],
+      }),
+    )
+    expect(kjemi.rader.map((r) => [r.forbindelse.nokkel, r.status, r.data?.molvekt])).toEqual([
+      ['citalopram', 'hentet', '324.4'],
+      ['desmetylcitalopram', 'hentet', '310.4'],
+    ])
+
+    const laboratorier = byggLabvisning(
+      'citalopram',
+      lesLabutvalg({
+        kilde: { kontrollert_kl: '2026-10-13T00:00:00Z', endret_kl: null },
+        komponenter: [
+          { id: '536', data: { navn: 'Citalopram', gruppe: [], molvekt: { original: '324,39', verdi: 324.39 } } },
+          { id: '795', data: { navn: 'Desmetylcitalopram', gruppe: [], molvekt: { original: null, verdi: null } } },
+        ],
+        analyser: [
+          {
+            id: 'cit-serum',
+            data: {
+              komponent_id: '536',
+              navn: 'Citalopram',
+              laboratorium_id: 'lab-1',
+              laboratorium: 'Klinisk farmakologi',
+              institusjon_id: 'inst-1',
+              institusjon: 'Norsk sykehus',
+              provemateriale: { original: 'Serum', matrise: 'serum_plasma' },
+              metode: 'LC-MS/MS',
+              maleomrade: { nedre: null, ovre: null, enhet: { original: 'nmol/L', enhet: 'nmol/L' } },
+              svarenhet: { original: 'nmol/L', enhet: 'nmol/L' },
+              status: 'active',
+              synlighet: 'visible',
+            },
+          },
+          {
+            id: 'dcit-serum',
+            data: {
+              komponent_id: '795',
+              navn: 'Desmetylcitalopram',
+              laboratorium_id: 'lab-1',
+              laboratorium: 'Klinisk farmakologi',
+              institusjon_id: 'inst-1',
+              institusjon: 'Norsk sykehus',
+              provemateriale: { original: 'Serum', matrise: 'serum_plasma' },
+              metode: 'LC-MS/MS',
+              maleomrade: { nedre: null, ovre: null, enhet: { original: 'nmol/L', enhet: 'nmol/L' } },
+              svarenhet: { original: 'nmol/L', enhet: 'nmol/L' },
+              status: 'active',
+              synlighet: 'visible',
+            },
+          },
+        ],
+        laboratorier: [
+          { id: 'lab-1', data: { navn: 'Klinisk farmakologi', aktiv: true, institusjon_id: 'inst-1', institusjon: 'Norsk sykehus' } },
+        ],
+        institusjoner: [{ id: 'inst-1', data: { navn: 'Norsk sykehus' } }],
+      }),
+      kjemi,
+    )
+    expect(laboratorier.usikre).toHaveLength(0)
+    expect(laboratorier.tabeller.map((t) => t.tittel)).toEqual(['Serum · Citalopram', 'Serum · Desmetylcitalopram'])
+    expect(laboratorier.tabeller.flatMap((t) => t.rader).map((r) => r.forbindelse?.nokkel)).toEqual([
+      'citalopram',
+      'desmetylcitalopram',
+    ])
+  })
+
+  it('angir norsk preanalytikk for serumprøven', () => {
+    const prove = tekst(tdm.find((e) => e.data.tittel === 'Prøvetakingstidspunkt')!.data)
+    expect(prove).toContain('uten gel')
+    expect(prove).toContain('12–24 timer etter siste dose')
+    expect(prove).toContain('tidspunkt for siste dose og prøvetaking')
+  })
+
   it('bruker påstandsnære inline-kilder når teksten er heterogen, og kortkilder når én kilde dekker hele kortet', () => {
     const oppsummering = identitet[0]!
     expect(oppsummering.referanser).toHaveLength(0)
@@ -157,7 +292,7 @@ export default function citalopram(db: () => PGlite): void {
 
     const panikk = virkninger.find((e) => e.data.tittel === 'Effekt ved panikklidelse')!
     expect(panikk.referanser).toHaveLength(0)
-    expect(new Set(inlineReferanser(panikk.data)).size).toBe(2)
+    expect(new Set(inlineReferanser(panikk.data)).size).toBe(3)
 
     for (const tittel of ['CYP-enzymer (substrat)', 'CYP2C19 og citaloprameksponering', 'Når farmakogenetisk analyse er relevant']) {
       const kort = farmakogenetikk.find((e) => e.data.tittel === tittel)!
@@ -185,10 +320,6 @@ export default function citalopram(db: () => PGlite): void {
     expect(fertilitet.referanser).toHaveLength(1)
     expect(inlineReferanser(fertilitet.data)).toHaveLength(0)
 
-    const toleranse = avhengighet.find((e) => e.data.tittel === 'Toleranseutvikling')!
-    expect(toleranse.referanser).toHaveLength(1)
-    expect(inlineReferanser(toleranse.data)).toHaveLength(0)
-
     const seponering = avhengighet.find((e) => e.data.tittel === 'Abstinens, seponeringssyndrom og rebound-effekter')!
     expect(seponering.referanser).toHaveLength(0)
     expect(inlineReferanser(seponering.data).length).toBe(3)
@@ -205,11 +336,20 @@ export default function citalopram(db: () => PGlite): void {
     expect(innhold).toContain('tar ikke stilling til hvem som bør genotypes')
   })
 
-  it('skiller regulatorisk ammeråd fra LactMed/Janusmed-vurderingen', () => {
+  it('beskriver absoluttrisiko i svangerskapet og klinisk oppfølging ved amming', () => {
+    const gravid = tekst(graviditet.find((e) => e.data.tittel === 'Graviditet')!.data)
+    expect(gravid).toContain('1,3 %')
+    expect(gravid).toContain('rundt 1 %')
+
+    const perinatal = tekst(graviditet.find((e) => e.data.tittel === 'Perinatal og neonatal påvirkning')!.data)
+    expect(perinatal).toContain('to til tre av ti')
+    expect(perinatal).toContain('under 0,4 %')
+
     const amming = graviditet.find((e) => e.data.tittel === 'Amming')!
     const innhold = tekst(amming.data)
-    expect(innhold).toContain('anbefaler forsiktighet')
-    expect(innhold).toContain('ikke er grunn til å avslutte amming')
+    expect(innhold).toContain('3–6 %')
+    expect(innhold).toContain('ikke i seg selv grunn til å avslutte amming')
+    expect(innhold).toContain('matinntak og vektutvikling')
   })
 
   it('har kildebelegg og ingen upubliserte redaksjonelle elementer', () => {
