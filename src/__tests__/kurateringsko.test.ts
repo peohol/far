@@ -313,7 +313,8 @@ describe('historikken i repoet', () => {
     expect(spor.kvetiapin).toMatchObject({ modus: 'oppdatering' })
     expect(spor.ketamin).toMatchObject({ modus: 'oppdatering' })
     // Hjelpefunksjonene definerer kuratering_start, men kaller den ikke.
-    expect(Object.keys(spor).sort()).toEqual(['citalopram', 'ketamin', 'kvetiapin', 'thc'])
+    expect(spor.lurasidon).toMatchObject({ modus: 'de_novo', runde: 1, kunnskapsgrense: '2026-10-14', kilde: 'repo' })
+    expect(Object.keys(spor).sort()).toEqual(['citalopram', 'ketamin', 'kvetiapin', 'lurasidon', 'thc'])
   })
 
   it('bevarer de novo-status etter en avgrenset migrasjon dagen etter', () => {
