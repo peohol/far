@@ -1,0 +1,11 @@
+{
+  "versjon": 1,
+  "stoffer": [
+    "ghb"
+  ],
+  "oppgaver": [
+    "funksjonstest",
+    "spc"
+  ],
+  "referanse": "ghb-0001"
+}
