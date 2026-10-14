@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-14T07:37:41.938Z",
+  "oppdatert_kl": "2026-10-14T07:39:28.362Z",
   "malt_kl": "2026-10-14T04:50:43.758Z",
   "teller": 1,
   "stoffer": {
@@ -1419,7 +1419,7 @@
     "ghb": {
       "stoff": "ghb",
       "navn": "GHB",
-      "status": "reservert",
+      "status": "fagarbeid_ferdig",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -1434,30 +1434,32 @@
         "referanser": 3,
         "elementer_uten_kilde": 1
       },
-      "reservasjon": {
-        "oppgave": "ghb-0001",
-        "okt": "kurateringsko/okt/20261014-064915",
-        "modus": "de_novo",
-        "reservert_kl": "2026-10-14T06:49:52.156Z",
-        "fornyet_kl": "2026-10-14T07:09:10.092Z",
-        "frist_kl": "2026-10-14T10:09:10.092Z",
-        "fase": "Faglig kuratering og kildekontroll ferdig; kvalitetskontroller kjører",
-        "jobbgren": "kuratorjobb/ghb-0001",
-        "kurateringsgren": "kuratering/ghb-0001",
-        "pr": 228
-      },
+      "reservasjon": null,
       "forsok": 1,
       "tidligst_kl": null,
       "gjenoppta": null,
-      "pr": null,
+      "pr": {
+        "nummer": 228,
+        "url": "https://github.com/peohol/far/pull/228",
+        "oppgave": "ghb-0001",
+        "modus": "de_novo",
+        "runde": 1,
+        "kunnskapsgrense": "2026-10-14",
+        "kurateringsgren": "kuratering/ghb-0001",
+        "jobbgren": "kuratorjobb/ghb-0001",
+        "registrert_kl": "2026-10-14T07:39:28.362Z",
+        "tilstand": "utkast",
+        "sammenslatt_kl": null,
+        "utrullet_kl": null
+      },
       "blokkeringer": [],
       "sist_kuratert": null,
       "siste_kjoring": {
         "oppgave": "ghb-0001",
         "okt": "kurateringsko/okt/20261014-064915",
         "startet_kl": "2026-10-14T06:49:52.156Z",
-        "avsluttet_kl": null,
-        "utfall": "reservert"
+        "avsluttet_kl": "2026-10-14T07:39:28.362Z",
+        "utfall": "fullfort"
       },
       "aktiv": true,
       "historikk": [
@@ -1485,6 +1487,19 @@
           "oppgave": "ghb-0001",
           "okt": "kurateringsko/okt/20261014-064915",
           "melding": "Faglig kuratering og kildekontroll ferdig; kvalitetskontroller kjører"
+        },
+        {
+          "kl": "2026-10-14T07:39:28.362Z",
+          "hendelse": "fullfort",
+          "oppgave": "ghb-0001",
+          "okt": "kurateringsko/okt/20261014-064915",
+          "melding": "PR #228, kunnskapsgrense 2026-10-14."
+        },
+        {
+          "kl": "2026-10-14T07:39:28.362Z",
+          "hendelse": "pr_utkast",
+          "oppgave": "ghb-0001",
+          "melding": "PR #228: utkast."
         }
       ]
     },
@@ -4255,51 +4270,26 @@
     },
     "kurateringsko/okt/20261014-064915": {
       "ider": [
+        "fullfort-1",
         "forny-1",
         "reserver-1"
       ],
       "siste": {
-        "id": "forny-1",
-        "sha256": "7be3282461271420adc731bf77487a33045bebea4340d2c20884827c122b2f51",
+        "id": "fullfort-1",
+        "sha256": "a1f22a5cb27302934373efbef8a1239a84f876eedfdf02ef790e0343cdd9185d",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "forny-1",
-          "foresporsel_sha256": "7be3282461271420adc731bf77487a33045bebea4340d2c20884827c122b2f51",
-          "handling": "forny",
+          "foresporsel_id": "fullfort-1",
+          "foresporsel_sha256": "a1f22a5cb27302934373efbef8a1239a84f876eedfdf02ef790e0343cdd9185d",
+          "handling": "fullfort",
           "utfall": "ok",
-          "melding": "Reservasjonen av ghb varer til 2026-10-14T10:09:10.092Z.",
-          "behandlet_kl": "2026-10-14T07:09:10.092Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38526462971",
-          "oppgave": {
-            "oppgave": "ghb-0001",
-            "stoff": "ghb",
-            "navn": "GHB",
-            "modus": "de_novo",
-            "forsok": 1,
-            "frist_kl": "2026-10-14T10:09:10.092Z",
-            "jobbgren": "kuratorjobb/ghb-0001",
-            "kurateringsgren": "kuratering/ghb-0001",
-            "pr": 228,
-            "gjenoppta": null,
-            "sist_kuratert": null,
-            "maal": {
-              "kl": "2026-10-14T04:50:44.088Z",
-              "side": true,
-              "elementer": 3,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 2,
-              "referanser": 3,
-              "elementer_uten_kilde": 1
-            },
-            "prioritet": {
-              "poeng": 0,
-              "grunner": []
-            }
-          }
+          "melding": "ghb er ferdig fra kuratoren; køen følger PR #228 til den er publisert.",
+          "behandlet_kl": "2026-10-14T07:39:28.362Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38529713189"
         }
       },
       "besvart_commit": "d483b5ac1a388f6667692d542573ac167f2ea7e3",
-      "sist_brukt_kl": "2026-10-14T07:09:10.092Z"
+      "sist_brukt_kl": "2026-10-14T07:39:28.362Z"
     }
   }
 }
