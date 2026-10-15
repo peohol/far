@@ -1,7 +1,7 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-14T18:40:31.614Z",
-  "malt_kl": "2026-10-14T04:50:43.758Z",
+  "oppdatert_kl": "2026-10-15T01:00:09.870Z",
+  "malt_kl": "2026-10-15T01:00:09.870Z",
   "teller": 2,
   "stoffer": {
     "alprazolam": {
@@ -21,7 +21,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -62,7 +62,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 7,
         "redaksjonelle_paneler": 13,
@@ -103,7 +103,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 30,
         "redaksjonelle_paneler": 13,
@@ -144,7 +144,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 28,
         "redaksjonelle_paneler": 13,
@@ -185,7 +185,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -226,7 +226,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 26,
         "redaksjonelle_paneler": 13,
@@ -267,7 +267,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -309,7 +309,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 7,
         "redaksjonelle_paneler": 13,
@@ -350,7 +350,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 20,
         "redaksjonelle_paneler": 13,
@@ -391,7 +391,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -433,7 +433,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 20,
         "redaksjonelle_paneler": 13,
@@ -475,7 +475,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -516,7 +516,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -557,7 +557,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -598,7 +598,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 2,
         "redaksjonelle_paneler": 13,
@@ -633,12 +633,12 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
-        "elementer": 42,
+        "elementer": 43,
         "redaksjonelle_paneler": 13,
-        "paneler_med_innhold": 12,
-        "referanser": 22,
+        "paneler_med_innhold": 13,
+        "referanser": 23,
         "elementer_uten_kilde": 1
       },
       "reservasjon": null,
@@ -687,7 +687,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -728,7 +728,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -770,7 +770,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -812,7 +812,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 19,
         "redaksjonelle_paneler": 13,
@@ -853,7 +853,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 27,
         "redaksjonelle_paneler": 13,
@@ -894,7 +894,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -936,7 +936,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -977,7 +977,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 26,
         "redaksjonelle_paneler": 13,
@@ -1012,7 +1012,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": false,
         "elementer": 0,
         "redaksjonelle_paneler": 13,
@@ -1061,7 +1061,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -1102,7 +1102,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -1144,7 +1144,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -1186,7 +1186,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -1227,7 +1227,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 29,
         "redaksjonelle_paneler": 13,
@@ -1268,7 +1268,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 26,
         "redaksjonelle_paneler": 13,
@@ -1309,7 +1309,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 28,
         "redaksjonelle_paneler": 13,
@@ -1350,7 +1350,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -1391,7 +1391,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -1426,7 +1426,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 3,
         "redaksjonelle_paneler": 13,
@@ -1519,7 +1519,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 23,
         "redaksjonelle_paneler": 13,
@@ -1560,7 +1560,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 20,
         "redaksjonelle_paneler": 13,
@@ -1601,7 +1601,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -1642,7 +1642,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -1683,7 +1683,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -1725,7 +1725,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -1766,7 +1766,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 23,
         "redaksjonelle_paneler": 13,
@@ -1806,7 +1806,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 28,
         "redaksjonelle_paneler": 13,
@@ -1860,7 +1860,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -1901,7 +1901,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 27,
         "redaksjonelle_paneler": 13,
@@ -1942,7 +1942,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -1983,7 +1983,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 27,
         "redaksjonelle_paneler": 13,
@@ -2024,7 +2024,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 31,
         "redaksjonelle_paneler": 13,
@@ -2065,7 +2065,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -2100,7 +2100,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": false,
         "elementer": 0,
         "redaksjonelle_paneler": 13,
@@ -2147,7 +2147,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 51,
         "redaksjonelle_paneler": 13,
@@ -2200,7 +2200,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -2242,7 +2242,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 18,
         "redaksjonelle_paneler": 13,
@@ -2283,7 +2283,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -2325,7 +2325,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -2366,7 +2366,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 24,
         "redaksjonelle_paneler": 13,
@@ -2407,7 +2407,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 20,
         "redaksjonelle_paneler": 13,
@@ -2449,7 +2449,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 9,
         "redaksjonelle_paneler": 13,
@@ -2490,7 +2490,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -2533,7 +2533,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 23,
         "redaksjonelle_paneler": 13,
@@ -2617,7 +2617,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": false,
         "elementer": 0,
         "redaksjonelle_paneler": 13,
@@ -2665,7 +2665,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -2700,7 +2700,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": false,
         "elementer": 0,
         "redaksjonelle_paneler": 13,
@@ -2748,7 +2748,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -2789,7 +2789,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 7,
         "redaksjonelle_paneler": 13,
@@ -2830,7 +2830,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 25,
         "redaksjonelle_paneler": 13,
@@ -2871,7 +2871,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 27,
         "redaksjonelle_paneler": 13,
@@ -2912,7 +2912,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 9,
         "redaksjonelle_paneler": 13,
@@ -2953,7 +2953,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -2995,7 +2995,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -3036,7 +3036,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 24,
         "redaksjonelle_paneler": 13,
@@ -3078,7 +3078,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -3120,7 +3120,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -3161,7 +3161,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -3202,7 +3202,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 30,
         "redaksjonelle_paneler": 13,
@@ -3243,7 +3243,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 26,
         "redaksjonelle_paneler": 13,
@@ -3284,7 +3284,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 30,
         "redaksjonelle_paneler": 13,
@@ -3325,7 +3325,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -3367,7 +3367,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -3408,7 +3408,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -3449,7 +3449,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 23,
         "redaksjonelle_paneler": 13,
@@ -3491,7 +3491,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -3532,7 +3532,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 30,
         "redaksjonelle_paneler": 13,
@@ -3574,7 +3574,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 23,
         "redaksjonelle_paneler": 13,
@@ -3614,7 +3614,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 2,
         "redaksjonelle_paneler": 13,
@@ -3655,7 +3655,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 20,
         "redaksjonelle_paneler": 13,
@@ -3690,7 +3690,7 @@
         "grunner": []
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 1,
         "redaksjonelle_paneler": 13,
@@ -3728,7 +3728,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 43,
         "redaksjonelle_paneler": 13,
@@ -3782,7 +3782,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -3823,7 +3823,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 10,
         "redaksjonelle_paneler": 13,
@@ -3864,7 +3864,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 22,
         "redaksjonelle_paneler": 13,
@@ -3906,7 +3906,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 6,
         "redaksjonelle_paneler": 13,
@@ -3947,7 +3947,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -3988,7 +3988,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 26,
         "redaksjonelle_paneler": 13,
@@ -4029,7 +4029,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 21,
         "redaksjonelle_paneler": 13,
@@ -4071,7 +4071,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 24,
         "redaksjonelle_paneler": 13,
@@ -4112,7 +4112,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 30,
         "redaksjonelle_paneler": 13,
@@ -4154,7 +4154,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -4196,7 +4196,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 8,
         "redaksjonelle_paneler": 13,
@@ -4237,7 +4237,7 @@
         ]
       },
       "maal": {
-        "kl": "2026-10-14T04:50:44.088Z",
+        "kl": "2026-10-15T01:00:11.165Z",
         "side": true,
         "elementer": 26,
         "redaksjonelle_paneler": 13,
