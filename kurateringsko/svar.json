@@ -1,10 +1,44 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-cbd-1",
-  "foresporsel_sha256": "72003bf570344e01b1dbfa2168fbdb3a5b024e6ae9978b87d1d17848c28a44f9",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-neste-3",
+  "foresporsel_sha256": "ab5d989b3013767cc251e0748c7b7b702107b61f09b4b7c5be93a530a9ccae9e",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "cbd er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-16T23:03:10.884Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38979268248"
+  "melding": "doksepin er reservert til 2026-10-17T02:04:01.212Z.",
+  "behandlet_kl": "2026-10-16T23:04:01.212Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38979349099",
+  "oppgave": {
+    "oppgave": "doksepin-0014",
+    "stoff": "doksepin",
+    "navn": "Doksepin",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T02:04:01.212Z",
+    "jobbgren": "kuratorjobb/doksepin-0014",
+    "kurateringsgren": "kuratering/doksepin-0014",
+    "pr": null,
+    "gren": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 19,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 6,
+      "referanser": 4,
+      "elementer_uten_kilde": 14
+    },
+    "prioritet": {
+      "poeng": 460.7,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "7 av 13 redaksjonelle seksjoner er tomme.",
+        "14 av 19 elementer har ingen kilde.",
+        "Bare 4 referanser."
+      ]
+    }
+  }
 }
