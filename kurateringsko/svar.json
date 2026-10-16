@@ -1,10 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "sen-fullfort-lurasidon-0009",
-  "foresporsel_sha256": "856567f34a67bd5ac2bb36b4bd799f5bdeb4429b0310bc545a07064f892f3a27",
+  "foresporsel_id": "sen-fullfort-ghb-0010",
+  "foresporsel_sha256": "c8ea59a4e7a2290a3e991bfd7fbff962caed9df5facf5bccf90467592e1c5a14",
   "handling": "fullfort",
   "utfall": "ok",
-  "melding": "lurasidon er alt ført som publisert fra kurateringsgrenen 3517ed43-9e99-44e7-867b-d5b0dbf59c95.",
-  "behandlet_kl": "2026-10-16T19:46:58.713Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38957406646"
+  "melding": "ghb er alt ført som publisert fra kurateringsgrenen 0d920be7-9ad8-4d91-89bc-5923b8e9407a.",
+  "behandlet_kl": "2026-10-16T19:47:47.223Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38957496749"
 }
