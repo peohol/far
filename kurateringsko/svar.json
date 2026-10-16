@@ -1,23 +1,23 @@
 {
   "versjon": 1,
-  "foresporsel_id": "reserver-neste-2",
-  "foresporsel_sha256": "2f318c283b6bd5e0423aff57563e76df24ea3e723e231cd12e37eebe33b1b6cd",
-  "handling": "reserver",
+  "foresporsel_id": "forny-cbd-1",
+  "foresporsel_sha256": "84d9fd2a754a35ffe9cbb92d64543d20d9e73775ae87611876bb56d6489dd37d",
+  "handling": "forny",
   "utfall": "ok",
-  "melding": "cbd er reservert til 2026-10-17T01:04:59.838Z.",
-  "behandlet_kl": "2026-10-16T22:04:59.838Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38973522931",
+  "melding": "Reservasjonen av cbd varer til 2026-10-17T01:34:51.735Z.",
+  "behandlet_kl": "2026-10-16T22:34:51.735Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38976573355",
   "oppgave": {
     "oppgave": "cbd-0013",
     "stoff": "cbd",
     "navn": "CBD",
     "modus": "de_novo",
     "forsok": 1,
-    "frist_kl": "2026-10-17T01:04:59.838Z",
+    "frist_kl": "2026-10-17T01:34:51.735Z",
     "jobbgren": "kuratorjobb/cbd-0013",
     "kurateringsgren": "kuratering/cbd-0013",
     "pr": null,
-    "gren": null,
+    "gren": "a7bbf679-f4ca-4c6a-b74d-42d928c37b11",
     "gjenoppta": null,
     "sist_kuratert": null,
     "maal": {
@@ -30,14 +30,8 @@
       "elementer_uten_kilde": 0
     },
     "prioritet": {
-      "poeng": 462.3,
-      "grunner": [
-        "De novo-kuratering i runden som gjelder.",
-        "Aldri kuratert.",
-        "Ingen kuratering å regne alderen fra.",
-        "12 av 13 redaksjonelle seksjoner er tomme.",
-        "Bare 1 referanser."
-      ]
+      "poeng": 0,
+      "grunner": []
     }
   }
 }
