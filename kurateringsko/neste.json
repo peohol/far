@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-16T18:12:54.504Z",
+  "oppdatert_kl": "2026-10-16T18:13:44.261Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
     "klar": 93,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
-    "venter_godkjenning": 1,
+    "venter_godkjenning": 2,
     "sammenslatt": 0,
     "publisert": 0,
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "lurasidon",
-      "oppgave": "lurasidon-0007",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-16T21:12:54.504Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "citalopram",
@@ -39,6 +31,12 @@
     {
       "stoff": "ghb",
       "gren": "0d920be7-9ad8-4d91-89bc-5923b8e9407a",
+      "grenstatus": "klar",
+      "status": "venter_godkjenning"
+    },
+    {
+      "stoff": "lurasidon",
+      "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
       "grenstatus": "klar",
       "status": "venter_godkjenning"
     }

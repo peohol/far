@@ -1,6 +1,6 @@
 {
   "versjon": 1,
-  "oppdatert_kl": "2026-10-16T18:12:54.504Z",
+  "oppdatert_kl": "2026-10-16T18:13:44.261Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "teller": 7,
   "stoffer": {
@@ -2781,7 +2781,7 @@
     "lurasidon": {
       "stoff": "lurasidon",
       "navn": "Lurasidon",
-      "status": "reservert",
+      "status": "venter_godkjenning",
       "modus": "de_novo",
       "prioritet": {
         "poeng": 0,
@@ -2796,32 +2796,10 @@
         "referanser": 2,
         "elementer_uten_kilde": 20
       },
-      "reservasjon": {
-        "oppgave": "lurasidon-0007",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "modus": "de_novo",
-        "reservert_kl": "2026-10-16T18:12:54.504Z",
-        "fornyet_kl": "2026-10-16T18:12:54.504Z",
-        "frist_kl": "2026-10-16T21:12:54.504Z",
-        "fase": null,
-        "jobbgren": "kuratorjobb/lurasidon-0004",
-        "kurateringsgren": "kuratering/lurasidon-0007",
-        "pr": null,
-        "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95"
-      },
+      "reservasjon": null,
       "forsok": 1,
       "tidligst_kl": null,
-      "gjenoppta": {
-        "oppgave": "lurasidon-0004",
-        "okt": "kurateringsko/okt/20261016-125910",
-        "avbrutt_kl": "2026-10-16T18:10:24.195Z",
-        "grunn": "Grenen er tilbake hos kuratoren.",
-        "fase": null,
-        "jobbgren": "kuratorjobb/lurasidon-0004",
-        "kurateringsgren": null,
-        "pr": null,
-        "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95"
-      },
+      "gjenoppta": null,
       "pr": null,
       "blokkeringer": [],
       "sist_kuratert": null,
@@ -2829,8 +2807,8 @@
         "oppgave": "lurasidon-0007",
         "okt": "kurateringsko/okt/20261016-125910",
         "startet_kl": "2026-10-16T18:12:54.504Z",
-        "avsluttet_kl": null,
-        "utfall": "reservert"
+        "avsluttet_kl": "2026-10-16T18:13:44.261Z",
+        "utfall": "fullfort"
       },
       "aktiv": true,
       "historikk": [
@@ -2930,9 +2908,33 @@
           "oppgave": "lurasidon-0007",
           "okt": "kurateringsko/okt/20261016-125910",
           "melding": "Forsøk 1, de_novo, fortsetter lurasidon-0004."
+        },
+        {
+          "kl": "2026-10-16T18:13:44.261Z",
+          "hendelse": "fullfort",
+          "oppgave": "lurasidon-0007",
+          "okt": "kurateringsko/okt/20261016-125910",
+          "melding": "Kurateringsgrenen 3517ed43-9e99-44e7-867b-d5b0dbf59c95, kunnskapsgrense 2026-10-16."
+        },
+        {
+          "kl": "2026-10-16T18:13:44.261Z",
+          "hendelse": "gren_klar",
+          "oppgave": "lurasidon-0007",
+          "melding": "Grenen: klar, revisjon 6, kontrollrunde 2."
         }
       ],
-      "appgren": null
+      "appgren": {
+        "id": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
+        "oppgave": "lurasidon-0007",
+        "modus": "de_novo",
+        "runde": 2,
+        "kunnskapsgrense": "2026-10-16",
+        "jobbgren": "kuratorjobb/lurasidon-0004",
+        "registrert_kl": "2026-10-16T18:13:44.261Z",
+        "status": "klar",
+        "revisjon": 6,
+        "kontrollrunde": 2
+      }
     },
     "mdma": {
       "stoff": "mdma",
@@ -4771,6 +4773,7 @@
     },
     "kurateringsko/okt/20261016-125910": {
       "ider": [
+        "fullfort-lurasidon-2",
         "reserver-lurasidon-2",
         "fullfort-ghb-2",
         "reserver-ghb-2",
@@ -4786,67 +4789,21 @@
         "reserver-1"
       ],
       "siste": {
-        "id": "reserver-lurasidon-2",
-        "sha256": "0692cd858a97d73d52f12597a0e6e808d531204a7832cf3d93ffad6b791b6ff6",
+        "id": "fullfort-lurasidon-2",
+        "sha256": "3c1f0e7c3cbb67d18b1dfde0a08c2ce5ab1cb470c3904058635c3e8db3a9a469",
         "svar": {
           "versjon": 1,
-          "foresporsel_id": "reserver-lurasidon-2",
-          "foresporsel_sha256": "0692cd858a97d73d52f12597a0e6e808d531204a7832cf3d93ffad6b791b6ff6",
-          "handling": "reserver",
+          "foresporsel_id": "fullfort-lurasidon-2",
+          "foresporsel_sha256": "3c1f0e7c3cbb67d18b1dfde0a08c2ce5ab1cb470c3904058635c3e8db3a9a469",
+          "handling": "fullfort",
           "utfall": "ok",
-          "melding": "lurasidon er reservert til 2026-10-16T21:12:54.504Z.",
-          "behandlet_kl": "2026-10-16T18:12:54.504Z",
-          "kjoring": "https://github.com/peohol/far/actions/runs/38945547020",
-          "oppgave": {
-            "oppgave": "lurasidon-0007",
-            "stoff": "lurasidon",
-            "navn": "Lurasidon",
-            "modus": "de_novo",
-            "forsok": 1,
-            "frist_kl": "2026-10-16T21:12:54.504Z",
-            "jobbgren": "kuratorjobb/lurasidon-0004",
-            "kurateringsgren": "kuratering/lurasidon-0007",
-            "pr": null,
-            "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95",
-            "gjenoppta": {
-              "oppgave": "lurasidon-0004",
-              "okt": "kurateringsko/okt/20261016-125910",
-              "avbrutt_kl": "2026-10-16T18:10:24.195Z",
-              "grunn": "Grenen er tilbake hos kuratoren.",
-              "fase": null,
-              "jobbgren": "kuratorjobb/lurasidon-0004",
-              "kurateringsgren": null,
-              "pr": null,
-              "gren": "3517ed43-9e99-44e7-867b-d5b0dbf59c95"
-            },
-            "sist_kuratert": null,
-            "maal": {
-              "kl": "2026-10-16T18:10:24.842Z",
-              "side": true,
-              "elementer": 23,
-              "redaksjonelle_paneler": 13,
-              "paneler_med_innhold": 6,
-              "referanser": 2,
-              "elementer_uten_kilde": 20
-            },
-            "prioritet": {
-              "poeng": 1800.7,
-              "grunner": [
-                "Fortsetter den avbrutte kurateringen lurasidon-0004.",
-                "Står først i innstillingene.",
-                "De novo-kuratering i runden som gjelder.",
-                "Aldri kuratert.",
-                "Ingen kuratering å regne alderen fra.",
-                "7 av 13 redaksjonelle seksjoner er tomme.",
-                "20 av 23 elementer har ingen kilde.",
-                "Bare 2 referanser."
-              ]
-            }
-          }
+          "melding": "lurasidon er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+          "behandlet_kl": "2026-10-16T18:13:44.261Z",
+          "kjoring": "https://github.com/peohol/far/actions/runs/38945669069"
         }
       },
       "besvart_commit": "ca3d3d1a61321f5d58c36f8a7a2a0be2eaa09621",
-      "sist_brukt_kl": "2026-10-16T18:12:54.504Z"
+      "sist_brukt_kl": "2026-10-16T18:13:44.261Z"
     },
     "kurateringsko/okt/20261016-132230-admin": {
       "ider": [
