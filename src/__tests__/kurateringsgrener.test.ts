@@ -19,6 +19,7 @@ import type { PGlite } from '@electric-sql/pglite'
 import { readFileSync } from 'node:fs'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { PANELREKKEFOLGE } from '../faginnhold/paneler'
+import { kontrollerDekning, kontrollpunkter, tomMatrise } from '../kuratorprotokoll/dekning'
 import { AGENTHANDLINGER } from '../kuratering/handlinger'
 import { faginnholdskall, feilFra, nyDatabase, opprettBruker, type Faginnholdskall } from './hjelp/testdatabase'
 
@@ -117,8 +118,38 @@ async function nyFagside(navn = 'Grenstoff') {
 
 const DOKUMENTER = ['evidensjournal', 'dekningsmatrise', 'selvtest']
 
+/** Syntetiske arbeidsdokumenter som har formen i `docs/kuratorprotokoll.md`. */
+async function gyldigeDokumenter(): Promise<Record<string, Json>> {
+  const [{ punkter } = { punkter: [] }] = await kall.fasit<{ punkter: string[] }>('select kuratering.kontrollpunkter() as punkter')
+  return {
+    evidensjournal: {
+      modus: 'kuratering',
+      kunnskapsgrense: '2026-10-16',
+      hovedkilder: [{ omrade: 'dosering', kilde: 'Syntetisk kilde', kontrollert: '2026-10-16' }],
+      sok: [{ domene: 'dosering', hva: 'Syntetisk søk', funn: 'Ett treff' }],
+      pastander: [{ pastand: 'Syntetisk påstand', grunnlag: 'Syntetisk kilde', evidensstyrke: 'moderat' }],
+    },
+    blindprotokoll: {
+      kontrollpunkter: ['dosering'],
+      kilder: [{ domene: 'dosering', kilde: 'Syntetisk kilde' }],
+      konklusjoner: ['Syntetisk konklusjon'],
+      adversarial: 'Syntetisk motargument vurdert.',
+    },
+    dekningsmatrise: {
+      modus: 'kuratering',
+      modell_sha256: '0'.repeat(64),
+      omrader: punkter.map((nokkel) => ({ nokkel, status: 'beholdt_etter_kontroll', begrunnelse: 'Kontrollert.', kilder: ['Syntetisk kilde'], sok: [], artefakt: '', bevis: 'Lest.' })),
+    },
+    selvtest: {
+      krav: [{ krav: 'Hver påstand har kilde', status: 'bestatt', bevis: 'Dekningsmatrisen' }],
+      porter: [{ port: 'Prøvepubliseringen', status: 'bestatt', bevis: 'Revisjon 1' }],
+    },
+  }
+}
+
 async function medDokumenter(gren: string, arter = DOKUMENTER) {
-  for (const art of arter) await agent(claude, 'dokument', { gren, art, innhold: { syntetisk: art } })
+  const dokumenter = await gyldigeDokumenter()
+  for (const art of arter) await agent(claude, 'dokument', { gren, art, innhold: dokumenter[art] })
 }
 
 /** En gren med en kuratering som består prøvepubliseringen. */
@@ -279,8 +310,25 @@ describe('kontrollen', () => {
     const k = await kuratertGren()
     expect(k.svar.teknisk).toMatchObject({ ok: true, rapport_ok: true })
 
-    expect((await feilFra(() => agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })))?.message).toContain('mangler dokumentene')
+    expect((await feilFra(() => agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })))?.message).toMatch(/dekningsmatrise mangler.*evidensjournal mangler.*selvtest mangler/)
+    // Tomme eller mangelfulle dokumenter er ikke nok: grenen sendes ikke til kontroll, og feilen sier hva som mangler.
+    const gyldige = await gyldigeDokumenter()
+    const matrise = gyldige.dekningsmatrise as { omrader: Json[] }
+    for (const [art, innhold, melding] of [
+      ['dekningsmatrise', {}, 'dekningsmatrise: omrader må være en liste'],
+      ['dekningsmatrise', { ...matrise, omrader: matrise.omrader.slice(1) }, 'dekningsmatrise: identitet står 0 ganger'],
+      ['dekningsmatrise', { ...matrise, omrader: [{ ...matrise.omrader[0], kilder: [''] }, ...matrise.omrader.slice(1)] }, 'uten tomme oppføringer'],
+      ['selvtest', {}, 'selvtest: krav må ha'],
+      ['selvtest', { ...gyldige.selvtest, krav: [{ krav: 'Tallene stemmer', status: 'ikke_bestatt', bevis: 'Nei' }] }, 'kravene er ikke bestått: Tallene stemmer'],
+      ['evidensjournal', { kunnskapsgrense: '2026-10-16', hovedkilder: [], sok: [{ domene: '', hva: ' ' }] }, 'evidensjournal: hovedkilder må ha minst én kilde'],
+    ] as const) {
+      await medDokumenter(k.gren)
+      await agent(claude, 'dokument', { gren: k.gren, art, innhold })
+      expect((await feilFra(() => agent(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })))?.message).toContain(melding)
+    }
+    expect((await adm<{ manglende_dokumenter: string[] }>('les', { gren: k.gren })).manglende_dokumenter).toEqual(['evidensjournal'])
     await medDokumenter(k.gren)
+    expect((await adm<{ manglende_dokumenter: string[] }>('les', { gren: k.gren })).manglende_dokumenter).toEqual([])
     expect((await agent<Sammendrag>(claude, 'til_kontroll', { gren: k.gren, revisjon: 1 })).status).toBe('klar')
     expect((await feilFra(() => agent(claude, 'skriv', { gren: k.gren, forventet_revisjon: 1, endringer: [{ rapport: null }] })))?.message).toContain(
       'kan ikke endres',
@@ -695,10 +743,24 @@ describe('statusen og agentene', () => {
   })
 })
 
-describe('seksjonene', () => {
-  it('er de samme i databasen som på fagsiden', async () => {
+describe('innholdsmodellen i databasen', () => {
+  it('har de samme seksjonene som fagsiden', async () => {
     const [rad] = await kall.fasit<{ s: string[] }>('select kuratering.seksjoner() as s')
     expect(rad!.s).toEqual([...PANELREKKEFOLGE])
+  })
+
+  it('har de samme kontrollpunktene som dekningsmatrisen, og godtar og avviser de samme matrisene som kuratorverktøyet', async () => {
+    const [rad] = await kall.fasit<{ p: string[] }>('select kuratering.kontrollpunkter() as p')
+    expect(rad!.p).toEqual(kontrollpunkter())
+    const dbFeil = async (m: unknown) =>
+      (await kall.fasit<{ f: string[] }>(`select kuratering.dokumentfeil('dekningsmatrise', $1::jsonb) as f`, [JSON.stringify(m)]))[0]!.f
+    const m = tomMatrise('de_novo')
+    for (const o of m.omrader) Object.assign(o, { begrunnelse: 'Kontrollert.', kilder: ['SPC'], sok: [], bevis: 'Lest.' })
+    expect(kontrollerDekning(m)).toEqual([])
+    expect(await dbFeil(m)).toEqual([])
+    m.omrader[0]!.kilder = ['']
+    expect(kontrollerDekning(m)).toHaveLength(1)
+    expect(await dbFeil(m)).toHaveLength(1)
   })
 })
 
@@ -712,7 +774,13 @@ describe('de novo', () => {
     expect(blind).not.toContain('Gammel dosering')
     expect(JSON.stringify(await agent(chatgpt, 'les', { gren: g.id }))).toContain('Gammel dosering')
 
-    expect((await feilFra(() => agent(claude, 'avslutt_blindfase', { gren: g.id })))?.message).toContain('blindprotokoll og evidensjournal')
+    expect((await feilFra(() => agent(claude, 'avslutt_blindfase', { gren: g.id })))?.message).toContain('blindprotokoll mangler. evidensjournal mangler.')
+    // Tomme plassholdere avslutter ikke blindfasen.
+    for (const art of ['blindprotokoll', 'evidensjournal']) await agent(claude, 'dokument', { gren: g.id, art, innhold: {} })
+    const tomme = (await feilFra(() => agent(claude, 'avslutt_blindfase', { gren: g.id })))?.message
+    expect(tomme).toContain('blindprotokoll: kilder må ha minst én kilde fra det egne søket')
+    expect(tomme).toContain('evidensjournal: sok må beskrive minst ett søk')
+    expect((await agent<Sammendrag>(claude, 'les', { gren: g.id })).blindfase).toBe(true)
     await medDokumenter(g.id, ['blindprotokoll', 'evidensjournal'])
     expect((await agent<Sammendrag>(claude, 'avslutt_blindfase', { gren: g.id })).blindfase).toBe(false)
     expect(JSON.stringify(await agent(claude, 'les', { gren: g.id }))).toContain('Gammel dosering')

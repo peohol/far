@@ -180,11 +180,33 @@ tallene og påstandene leses mot kildene uansett.
 **`blindprotokoll`** (de novo): kontrollpunktene, kildene per domene og
 hovedkonklusjonene før avstemmingen, og den adversariale kontrollen.
 
-**`selvtest`**: hvert av de ufravikelige kravene med `bestatt`,
-`ikke_bestatt` eller `ikke_relevant` og beviset, og de tekniske portene
-(prøvepubliseringen, rapporten, dekningen, funksjonstesten). Kuratoren
-sender ikke grenen til kontroll med et krav som ikke er bestått: det rettes
-først, eller stoffet blokkeres for et menneske.
+```json
+{
+  "kontrollpunkter": ["…"],
+  "kilder": [{ "domene": "…", "kilde": "…, DOI/PMID/URL" }],
+  "konklusjoner": ["…"],
+  "adversarial": "Hva som ble prøvd mot konklusjonene, og hva det ga"
+}
+```
+
+**`selvtest`**: hvert av de ufravikelige kravene og de tekniske portene
+(prøvepubliseringen, rapporten, dekningen, funksjonstesten), med beviset.
+Kuratoren sender ikke grenen til kontroll med et krav eller en port som ikke
+er bestått: det rettes først, eller stoffet blokkeres for et menneske.
+
+```json
+{
+  "krav": [{ "krav": "…", "status": "bestatt | ikke_bestatt | ikke_relevant", "bevis": "…" }],
+  "porter": [{ "port": "…", "status": "bestatt | ikke_bestatt | gjenstar", "bevis": "…" }]
+}
+```
+
+Databasen stopper `avslutt_blindfase` og `til_kontroll` når et av dokumentene
+mangler disse feltene, har tomme oppføringer, eller (dekningsmatrisen) ikke
+dekker hvert kontrollpunkt nøyaktig én gang med belegg
+(`kuratering.dokumentfeil`). Fingeravtrykket `modell_sha256` kontrolleres av
+`npm run kurator -- dekning-gren`. Kontrollen hindrer at portene omgås med
+plassholdere; den erstatter ikke fagkontrollen.
 
 ## Kontrollen
 
