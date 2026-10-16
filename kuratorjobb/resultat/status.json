@@ -1,0 +1,18 @@
+{
+  "versjon": 1,
+  "status": "kjorer",
+  "jobb": {
+    "gren": "kuratorjobb/kariprazin-0012",
+    "foresporsel_commit": "3b4ce1c2d0c8d9ab1f6d24458ccb995ee7c214a1",
+    "foresporsel_sha256": "4360f2fbe4d3c09aa7ad9f88e2166e2f14e36295b96f7ecaf77d346d1c38f943",
+    "kode_commit": "548dba55e6654e91eba4e7467891d32c39cfb506",
+    "kjoring": "https://github.com/peohol/far/actions/runs/38965909566",
+    "startet_kl": "2026-10-16T20:57:28.412Z",
+    "ferdig_kl": null
+  },
+  "foresporsel": null,
+  "referanse": null,
+  "feil": [],
+  "bruker": [],
+  "stoffer": {}
+}
