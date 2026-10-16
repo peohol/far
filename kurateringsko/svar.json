@@ -1,0 +1,10 @@
+{
+  "versjon": 1,
+  "foresporsel_id": "tilbakestill-ghb",
+  "foresporsel_sha256": "0e7e0f3747f18cf02fe5db3e5eff99a8885ea4dbc792985e48c4665958ad499c",
+  "handling": "tilbakestill",
+  "utfall": "ok",
+  "melding": "ghb er tilbakestilt.",
+  "behandlet_kl": "2026-10-16T13:22:58.775Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38907369381"
+}
