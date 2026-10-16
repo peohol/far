@@ -312,6 +312,22 @@ describe('kurateringssiden', () => {
     await waitFor(() => expect(k.vurder).toHaveBeenCalledWith(GREN, 2, 'endringer', 'Doseringen mangler kilde.'))
   })
 
+  it('krever en begrunnelse også for å godkjenne', async () => {
+    const k = klient()
+    vis(<Kurateringsside gren={GREN} onGaaTil={vi.fn()} {...felles} />, kilde(k))
+    await userEvent.click(await screen.findByRole('button', { name: 'Godkjenn' }))
+    const felt = screen.getByRole('textbox', { name: 'Hva er kontrollert' }) as HTMLTextAreaElement
+    expect(felt.required).toBe(true)
+    // Bare mellomrom er ingen begrunnelse.
+    await userEvent.type(felt, '   ')
+    await userEvent.click(screen.getByRole('button', { name: 'Godkjenn revisjon 2' }))
+    expect(await screen.findByRole('alert')).toHaveProperty('textContent', 'Skriv kort hva som er kontrollert før du godkjenner.')
+    expect(k.vurder).not.toHaveBeenCalled()
+    await userEvent.type(felt, 'Dosering og kilder kontrollert mot preparatomtalen.')
+    await userEvent.click(screen.getByRole('button', { name: 'Godkjenn revisjon 2' }))
+    await waitFor(() => expect(k.vurder).toHaveBeenCalledWith(GREN, 2, 'godkjent', 'Dosering og kilder kontrollert mot preparatomtalen.'))
+  })
+
   it('publiserer en godkjent gren uten hindringer', async () => {
     const k = klient(grendetaljer({ status: 'godkjent', hindringer: [] }))
     vis(<Kurateringsside gren={GREN} onGaaTil={vi.fn()} {...felles} />, kilde(k))

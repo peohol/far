@@ -190,14 +190,20 @@ function Grenbanner({
       },
     )
 
-  const vurder = (beslutning: 'godkjent' | 'endringer') =>
-    utfor(
+  // Hver vurdering har en begrunnelse, også en godkjenning: det er sporet av hva som er kontrollert.
+  const vurder = (beslutning: 'godkjent' | 'endringer') => {
+    if (!begrunnelse.trim()) {
+      setFeil(beslutning === 'godkjent' ? 'Skriv kort hva som er kontrollert før du godkjenner.' : 'Skriv hva som må endres.')
+      return
+    }
+    return utfor(
       () => klient.vurder(gren.id, gren.revisjon, beslutning, begrunnelse.trim()),
       () => {
         setVurderer(null)
         setBegrunnelse('')
       },
     )
+  }
 
   const merk = merknader(gren)
   const tone = STATUSTONE[gren.status] ?? 'noytral'
@@ -324,8 +330,8 @@ function Grenbanner({
           }}
         >
           <label>
-            {vurderer === 'godkjent' ? 'Hva er kontrollert (valgfritt)' : 'Hva må endres'}
-            <textarea value={begrunnelse} onChange={(e) => setBegrunnelse(e.target.value)} required={vurderer === 'endringer'} />
+            {vurderer === 'godkjent' ? 'Hva er kontrollert' : 'Hva må endres'}
+            <textarea value={begrunnelse} onChange={(e) => setBegrunnelse(e.target.value)} required />
           </label>
           <div className="utgavebanner__handlinger">
             <Button type="submit" disabled={arbeider}>
