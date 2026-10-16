@@ -1,0 +1,58 @@
+plasmanivå av THC en 57,3 % CV for Cmaks (område 0,97–9,34 ng/ml) og en 58,5 % CV for AUC
+(område 4,2–30,84 t*ng/ml). Tilsvarende var % CV for CBD henholdsvis 64,1 % (område 0,24–
+2,57 ng/ml) og 72,5 % (område 2,18–14,85 ng/ml) for de samme parametrene. Etter ni fortløpende
+dagers dosering var % CV-verdiene for de samme parametrene henholdsvis 54,2 % (Cmaks-
+område = 0,92–6,37 ng/ml) og 37,4 % (AUC0-t = 5,34–15,01 t*ng/ml) for THC og 75,7 % (Cmaks-
+område 0,34–3,39 ng/ml) og 46,6 % (AUC0-t = 2,40–13,19 t*ng/ml) for CBD.
+
+Det er en høy grad av variabilitet i de farmakokinetiske parametrene blant friske deltakere etter enkel
+og gjentatt dosering. Av de tolv forsøkspersonene som fikk fire sprayer med Sativex som en
+enkeltdose, hadde åtte reduksjoner i Cmaks etter ni dagers gjentatt dosering, mens tre hadde økninger
+(1 utmelding). For CBD hadde syv personer reduksjoner i Cmaks etter gjentatt dosering, mens fire hadde
+økninger.
+
+Når Sativex administreres på munnslimhinnen, er plasmakonsentrasjonene av THC og andre
+cannabinoider lavere enn konsentrasjonene som oppnås etter inhalasjon av cannabinoider i en
+tilsvarende dose. En dose på 8 mg fordampet THC-ekstrakt administrert ved inhalasjon førte til
+gjennomsnittlig plasma-Cmaks på over 100 ng/ml få minutter etter administrasjon, med signifikant
+psykoaktivitet.
+
+Tabell med PK-parametre for Sativex, for fordampet THC-ekstrakt og røyket cannabis
+
+                                       Cmaks THC            Tmaks THC          AUC (0-t) THC
+                                         ng/ml               minutter           ng/ml/min.
+ Sativex                                  5,40                  60                 1362
+ (med 21,6 mg THC)
+ Inhalert fordampet THC-                  118,6               17,0                5987,9
+ ekstrakt
+ (med 8 mg THC)
+ Røyket cannabis*                         162,2                9,0              Ingen data
+ (med 33,8 mg THC)
+*Huestis et al, Journal of Analytical Toxicology 1992; 16:276-82.
+
+Distribusjon
+
+Da cannabinoider er sterkt lipofile, absorberes de hurtig og distribueres i kroppens fett.
+Konsentrasjonen i blodet etter administrasjon av Sativex på munnslimhinnen er lavere enn
+konsentrasjonen som oppnås ved å inhalere samme dose THC, siden absorpsjonen er langsommere, og
+redistribusjonen i fettvevet er hurtig. Proteinbinding av THC er høy (~97 %). THC og CBD kan lagres
+i fettvevet i inntil fire uker, hvorfra de langsomt frigjøres tilbake i blodet ved subterapeutiske
+konsentrasjoner og deretter metaboliseres og utskilles via urin og feces.
+
+Metabolisme
+
+THC og CBD metaboliseres i leveren. Dessuten gjennomgår noe av THC en
+førstepassasjemetabolisme i leveren til 11-OH-THC, THCs primære metabolitt, som gjennomgår
+ytterligere oksidering til 11-nor-9-COOH-THC, den hyppigst forekommende metabolitten av THC, og
+CBD metaboliseres tilsvarende til 7-OH-CBD. Humant hepatisk P450 2C9-isoenzym katalyserer
+dannelsen av 11-OH-THC, den primære metabolitten, som metaboliseres ytterligere av leveren til
+andre stoffer, herunder 11-nor-karboksy-9-THC (THC-COOH), den mest uttalte metabolitten i
+humant plasma og human urin. Underfamilien P450-3A katalyserer dannelsen av andre hydroksylerte
+metabolitter som forekommer i mindre grad. CBD metaboliseres i stor utstrekning, og det er
+identifisert mer enn 33 metabolitter i urin. Den primære metabolismeveien er hydroksylering og
+oksidering av C-7, etterfulgt av ytterligere hydroksylering i pentyl- og propenylgruppene. Den
+primære identifiserte oksiderte metabolitten er CBD-7-syre med en hydroksyetyl-sidekjede.
+
+
+
+                                                   12

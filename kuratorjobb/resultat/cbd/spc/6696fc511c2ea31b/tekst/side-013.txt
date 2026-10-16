@@ -1,0 +1,59 @@
+For informasjon om legemiddelinteraksjon og metabolisme av cytokrom P450-enzymsystemet, se
+pkt. 4.5.
+
+Transportører
+
+In vitro inhiberte Sativex i klinisk relevante konsentrasjoner ikke følgende transportører: BCRP,
+BSEP, OAT1, OAT3, OCT2, MATE1, MATE2-K, OATP1B1, OATP1B3, OCT1, MATE1 og
+P-glykoprotein.
+
+Eliminasjon
+
+Fra kliniske studier med Sativex viser en ikke-kompartmental PK-analyse at førsteordens terminal
+elimineringshalveringstid fra plasma er 1,94, 3,72 og 5,25 timer for THC og 5,28, 6,39 og 9,36 for
+CBD etter administrasjon av henholdsvis to, fire og åtte sprayer.
+
+I litteraturen er eliminasjon av orale cannabinoider fra plasma bifasisk med en initial halveringstid på
+omtrent fire timer, og de terminale elimineringshalveringstidene er på omtrent 24–36 timer eller mer.
+Cannabinoider distribueres i hele kroppen, er sterkt fettoppløselige og akkumuleres i fettvev
+Frigivelsen av cannabinoider fra fettvev er årsaken til den forlengede terminale halveringstiden.
+
+Spesielle populasjoner
+
+Nedsatt leverfunksjon
+
+I en spesifikk PK-studie med nedsatt leverfunksjon, viste en enkelt munnspray dose på 4 sprayer med
+Sativex (10,8 mg THC og 10 mg CBD) ingen signifikant forskjell i THC- eller CBD-clearance mellom
+personer med mild nedsatt leverfunksjon og friske kontroller. Imidlertid var det betydelig redusert
+clearance og forlenget eliminasjonshalveringstid i kohorten med personer med moderat og alvorlig
+nedsatt leverfunksjon.
+
+Nedsatt nyrefunksjon
+
+I en spesifikk PK-studie med nedsatt nyrefunksjon med en enkel munnspraydose på 4 sprayer med
+Sativex hos deltakere med alvorlig nedsatt nyrefunksjon, ble det observert en generell økning i
+eksponering (AUC) på omtrent 2 ganger for CBD og mindre enn 2 ganger for THC, og
+karboksymetabolittene sammenlignet med deltakere i gruppen med normal nyrefunksjon. 11-OH-
+THC- og 7-OH-CBD-metabolitter viste en mer markant økning (omtrent 3 til 4,5 ganger økning).
+
+5.3   Prekliniske sikkerhetsdata
+
+I prekliniske studier ble det bare observert effekter ved eksponeringer som anses å være tilstrekkelig
+over maksimal human eksponering, noe som indikerer liten relevans for klinisk bruk.
+
+Studier av reproduksjonstoksisitet med THC- og CBD-ekstraktene som er til stede i Sativex, viste
+ingen bivirkninger på verken hanners eller hunners fertilitet med hensyn til antall dyr som paret seg,
+antall fertile hanner og hunner eller på parrings- og fertilitetsindekser. Det var redusert absolutt vekt av
+epididymis med et «ingen effekt»-doseringsnivå på 25 mg/kg/døgn (150 mg/m2) for hannenes
+fertilitet. «Ingen effekt»-doseringsnivåene for effekt på tidlig embryo- og fosteroverlevelse var i
+undersøkelser med rotter ca. 1 mg/kg/døgn (6 mg/m2), hvilket er tilnærmet eller mindre enn det
+sannsynlige maksimale doseringsnivået av Sativex til mennesker. Det var ingen tegn på teratogen
+aktivitet hos verken rotte eller kanin ved doseringsnivåer som var betydelig over de sannsynlige
+maksimale doseringsnivåer til mennesker. I en pre- og postnatal undersøkelse av rotte var imidlertid
+ungenes overlevelse og dieatferd nedsatt ved doser på 2 og 4 mg/kg/døgn (henholdsvis 12 og
+24 mg/m2). Data fra litteraturen har vist negativ effekt av THC og/eller CBD på spermienes antall og
+motilitet.
+
+
+
+                                                    13

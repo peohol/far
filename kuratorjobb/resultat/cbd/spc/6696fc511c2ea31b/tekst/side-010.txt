@@ -1,0 +1,59 @@
+I en første placebokontrollert fase tre-studie over en behandlingsperiode på seks uker nådde forskjellen
+i forhold til placebo klinisk signifikans, men forskjellen mellom behandlingene på 0,5 til 0,6 poeng på
+den numeriske skalaen fra 0 til 10 var av tvilsom klinisk relevans. I en responderanalyse responderte
+40 % av Sativex og 22 % av placebo på behandling ut fra kriteriet at det skal være en reduksjon i
+NRS-score på over 30 %.
+
+En annen 14-ukers fase tre-studie kunne ikke påvise signifikant behandlingseffekt. Forskjellen i NRS-
+score i forhold til placebo var 0,2 poeng.
+
+Det ble postulert at en klinisk nyttig behandlingseffekt hos enkelte pasienter i analysene av
+gjennomsnittsendringene kunne være delvis maskert av data fra ikke-respondenter. I analyser som
+sammenlignet NRS-score med pasientens overordnede inntrykk av endring (PGI), ble en 19 % NRS-
+respons estimert å representere en klinisk relevant forbedring i PGI og en respons på 28 % en «stor
+forbedring» i PGI. I kombinerte undersøkende post hoc-analyser av de to ovennevnte studier var en
+fireukers utprøvingsperiode med en 20 % NRS-responsterskel prediktiv for den endelige responsen
+definert som en reduksjon på 30 %.
+
+En tredje fase tre-studie inkorporerte en formalisert fireukers terapeutisk utprøvingsperiode før
+randomisering. Formålet med studien var å vurdere fordelene med fortsatt behandling for pasienter
+som oppnår en initial behandlingsrespons. 572 pasienter med MS og refraktær spastisitet mottok alle
+enkeltblindet Sativex i fire uker. Etter fire ukers aktiv behandling oppnådde 273 en reduksjon på minst
+20 % på NRS for spastisitetssymptomer, hvorav 241 oppfylte inklusjonskriteriet for randomisering,
+med en gjennomsnittsendring fra behandlingsstart på -3,0 poeng på 10-poengs-NRS-skalaen. Disse
+pasientene ble deretter randomisert til enten å fortsette å motta Sativex eller skifte til placebo i den
+dobbeltblindede fasen på tolv uker, i totalt 16 ukers behandling.
+
+I den dobbeltblindede fasen forble gjennomsnittlig NRS-score for pasientene som fikk Sativex,
+generelt stabile (gjennomsnittsendring i NRS-score fra randomisering -0,19), mens gjennomsnittlig
+NRS-score for pasientene som skiftet til placebo økte (gjennomsnittsendring i NRS-score var +0,64 og
+median endring var +0.29). Forskjellen* mellom behandlingsgruppene var 0,84
+(95 % KI -1,29, -0,40).
+* Forskjell korrigert for senter-, baseline-NRS- og ambulatorisk status
+
+Av pasientene som opplevde en 20 % reduksjon i NRS-score etter screening i uke fire og fortsatte
+undersøkelsen med å motta randomisert behandling, oppnådde 74 % (Sativex) og 51 % (placebo) en
+30 % reduksjon i uke 16.
+
+Resultatene av den tolv uker lange randomiserte fasen vises nedenfor for de sekundære endepunktene.
+De fleste sekundære endepunkter viste et mønster tilsvarende NRS-score, der pasientene som fortsatt
+mottok Sativex, opprettholdte forbedringen som ble oppnådd i den initielle fire uker lange
+behandlingsperioden, mens pasientene som skiftet til placebo fikk en reduksjon:
+
+ Modifisert Ashworth-score for spastisitet:         Sativex -0,1, placebo +1,8
+                                                    Korrigert forskjell -1,75 (95 % KI -3,80, 0,30)
+
+ Spasmefrekvens (pr. døgn):                         Sativex -0,05, placebo +2,41
+                                                    Korrigert forskjell -2,53 (95 % KI -4,27, -0,79)
+
+ Søvnforstyrrelser på grunn av spastisitet (0 til   Sativex -0,25, placebo +0,59
+ 10 NRS):                                           Korrigert forskjell -0,88 (95 % KI -1,25, -0,51)
+
+ Tidsmålt ti meters gange (sekunder):               Sativex -2,3, placebo +2,0
+                                                    Korrigert forskjell -3,34 (95 % KI -6,96, 0,26)
+
+ Motricity indeks (arm og ben):                     Ingen observert forskjell mellom
+                                                    behandlingsgruppene.
+
+
+                                                    10

@@ -1,0 +1,331 @@
+{
+  "stoff": "cbd",
+  "status": "advarsel",
+  "kilde": "fest",
+  "dpi": 150,
+  "fest": {
+    "kontrollert_kl": "2026-10-16T04:15:06.398225+00:00"
+  },
+  "dekning": {
+    "dekket": false,
+    "preparater": 15,
+    "hentet": 2,
+    "dokumenter": 1,
+    "mangler": [
+      {
+        "merkevare_id": "ID_0C87394F-5B4B-4456-8789-CF8F8FA52457",
+        "varenavn": "Cannabidiol glostrup",
+        "navn_form_styrke": "Cannabidiol glostrup dråper, oppl 100 mg/ml",
+        "produsent": "Glostrup Apotek",
+        "atc": "N03AX24",
+        "legemiddelform": "Dråper, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_35BE5753-5360-4FBC-8849-0EF0CF1098FA",
+        "varenavn": "Bediol",
+        "navn_form_styrke": "Bediol urtete 6,3 %/8 %",
+        "produsent": "Bureau voor Medicinale Cannabis",
+        "atc": "N02BG10",
+        "legemiddelform": "Urtete",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_3EBB165C-58B9-49A6-8079-43C7CDAD2473",
+        "varenavn": "Bedrolite",
+        "navn_form_styrke": "Bedrolite urtete 1 %/7,5 %",
+        "produsent": "Bureau voor Medicinale Cannabis",
+        "atc": "N02BG10",
+        "legemiddelform": "Urtete",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_464B7947-9F51-40C7-8F43-C56F218DE761",
+        "varenavn": "Astrum Balanced 10-10 oil stenocare",
+        "navn_form_styrke": "Astrum Balanced 10-10 oil stenocare mikst oppl 9,83 mg/ml/10 mg/ml",
+        "produsent": "AgMedica Bioscience",
+        "atc": "N02BG10",
+        "legemiddelform": "Mikstur, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_4872F5FB-A01D-4D99-894C-E4E74A63CA66",
+        "varenavn": "Adven THC 0/50 CBD",
+        "navn_form_styrke": "Adven THC 0/50 CBD dråper, oppl 50 mg/ml",
+        "produsent": "Medalchemy",
+        "atc": "N02BG10",
+        "legemiddelform": "Dråper, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_77BD3B26-AED8-4E35-AC46-BA0D4124B829",
+        "varenavn": "Cannabidiol glostrup",
+        "navn_form_styrke": "Cannabidiol glostrup dråper, oppl 20 mg/ml",
+        "produsent": "Glostrup Apotek",
+        "atc": "N03AX24",
+        "legemiddelform": "Dråper, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_8E19EAC9-BBD8-458E-AAA0-D6DBB6B7A0D6",
+        "varenavn": "Bedrobinol",
+        "navn_form_styrke": "Bedrobinol urtete 13,5 %/1 %",
+        "produsent": "Bedrocan",
+        "atc": "N02BG10",
+        "legemiddelform": "Urtete",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_9C6D3E64-1BAD-4DC5-A203-D2AF18963214",
+        "varenavn": "Cannabis oil curaleaf",
+        "navn_form_styrke": "Cannabis oil curaleaf dråper, oppl 10 mg/ml/10 mg/ml",
+        "produsent": "Medalchemy",
+        "atc": "N02BG10",
+        "legemiddelform": "Dråper, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_BEDD1BB5-288B-4478-BBFA-A8C1DA451AAF",
+        "varenavn": "Bedrocan",
+        "navn_form_styrke": "Bedrocan urtete 22 %/< 1 %",
+        "produsent": "Bureau voor Medicinale Cannabis",
+        "atc": "N02BG10",
+        "legemiddelform": "Urtete",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_C734FEE2-4FA3-4543-9B58-ABEC338C71B0",
+        "varenavn": "Epidyolex",
+        "navn_form_styrke": "Epidyolex mikst oppl 100 mg/ml",
+        "produsent": "Jazz Pharmaceuticals Ireland Limited",
+        "atc": "N03AX24",
+        "legemiddelform": "Mikstur, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_D443A635-66C5-40E4-BE1A-5177787E0832",
+        "varenavn": "Cannabidiol glostrup",
+        "navn_form_styrke": "Cannabidiol glostrup dråper, oppl 300 mg/ml",
+        "produsent": "Glostrup Apotek",
+        "atc": "N03AX24",
+        "legemiddelform": "Dråper, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_EA79FE22-B397-4F3B-A724-8C794D09CED7",
+        "varenavn": "Bedica",
+        "navn_form_styrke": "Bedica urtete 14 %/1 %",
+        "produsent": "Bureau voor Medicinale Cannabis",
+        "atc": "N02BG10",
+        "legemiddelform": "Urtete",
+        "grunn": "uten_omtale",
+        "adresse": null
+      },
+      {
+        "merkevare_id": "ID_FDBE363B-EA87-4AAF-BBF6-FE9C7F81440E",
+        "varenavn": "Cannabidiol glostrup",
+        "navn_form_styrke": "Cannabidiol glostrup dråper, oppl 50 mg/ml",
+        "produsent": "Glostrup Apotek",
+        "atc": "N03AX24",
+        "legemiddelform": "Dråper, oppløsning",
+        "grunn": "uten_omtale",
+        "adresse": null
+      }
+    ]
+  },
+  "kontroller": [
+    {
+      "id": "fest",
+      "status": "ok",
+      "melding": "FEST oppgir 1 preparatomtaler hos DMP for stoffet; dekningen står i «dekning».",
+      "antall": {
+        "omtaler": 1,
+        "ikke_dmp": 0,
+        "uten_omtale": 13
+      }
+    },
+    {
+      "id": "dekning",
+      "status": "advarsel",
+      "melding": "13 av 15 preparater i FEST mangler en hentet preparatomtale fra DMP: 13 uten preparatomtale i FEST (f.eks. sentralt godkjente, med omtalen hos EMA). SPC-behovet er ikke dekket; se «dekning.mangler».",
+      "antall": {
+        "preparater": 15,
+        "hentet": 2,
+        "mangler": 13,
+        "dokumenter": 1
+      }
+    }
+  ],
+  "adresser": [
+    {
+      "adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/11-8809.pdf",
+      "endelig_adresse": "https://produktinformasjon.legemiddelsok.no/preparatomtaler/11-8809.pdf",
+      "hentet_kl": "2026-10-16T22:06:08.761Z",
+      "hoder": {
+        "content-type": "application/pdf",
+        "content-length": "397168",
+        "content-md5": "Fb4dSejv0EXIqCAwZKXZ3w==",
+        "last-modified": "Thu, 08 Oct 2026 06:49:54 GMT",
+        "etag": "0x8DF25085C6275E7",
+        "date": "Fri, 16 Oct 2026 22:06:09 GMT"
+      },
+      "preparater": [
+        {
+          "merkevare_id": "ID_E80847DD-D3F3-457D-978E-EBF00587234D",
+          "varenavn": "Sativex",
+          "navn_form_styrke": "Sativex munnspray oppl 27 mg/ml/25 mg/ml",
+          "produsent": "CNX Therapeutics Ireland Ltd.",
+          "atc": "N02BG10",
+          "legemiddelform": "Munnspray, oppløsning"
+        },
+        {
+          "merkevare_id": "ID_F34016DE-0E96-46AE-8539-744BEBEBD798",
+          "varenavn": "Sativex",
+          "navn_form_styrke": "Sativex munnspray oppl 27 mg/ml/25 mg/ml",
+          "produsent": "2care4 ApS",
+          "atc": "N02BG10",
+          "legemiddelform": "Munnspray, oppløsning"
+        }
+      ],
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "adresse",
+          "status": "ok",
+          "melding": "Hentet fra DMP: https://produktinformasjon.legemiddelsok.no/preparatomtaler/11-8809.pdf"
+        },
+        {
+          "id": "http",
+          "status": "ok",
+          "melding": "DMP svarte 200."
+        },
+        {
+          "id": "innholdstype",
+          "status": "ok",
+          "melding": "Innholdstypen er application/pdf."
+        },
+        {
+          "id": "lengde",
+          "status": "ok",
+          "melding": "Lengden er den DMP oppga (397168 byte).",
+          "antall": {
+            "bytes": 397168
+          }
+        },
+        {
+          "id": "kontrollsum",
+          "status": "ok",
+          "melding": "MD5-summen er den DMP oppga."
+        },
+        {
+          "id": "pdf",
+          "status": "ok",
+          "melding": "Fila begynner og slutter som en PDF."
+        }
+      ],
+      "dokument": "6696fc511c2ea31bc0e7aa43ab779f12363f37a262856e9ee0fd1725e23f8856"
+    }
+  ],
+  "dokumenter": [
+    {
+      "sha256": "6696fc511c2ea31bc0e7aa43ab779f12363f37a262856e9ee0fd1725e23f8856",
+      "bytes": 397168,
+      "mappe": "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b",
+      "pdf": {
+        "sider": 15,
+        "pdfversjon": "1.7",
+        "kryptert": false,
+        "tittel": null,
+        "laget": "Mon Jun  1 11:29:56 2026 UTC",
+        "endret": "Mon Jun  1 11:29:56 2026 UTC",
+        "produsent": null
+      },
+      "filer": {
+        "pdf": "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/original.pdf",
+        "tekst": "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst.txt",
+        "sidetekster": [
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-001.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-002.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-003.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-004.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-005.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-006.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-007.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-008.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-009.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-010.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-011.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-012.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-013.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-014.txt",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/tekst/side-015.txt"
+        ],
+        "sidebilder": [
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-001.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-002.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-003.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-004.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-005.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-006.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-007.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-008.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-009.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-010.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-011.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-012.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-013.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-014.png",
+          "kuratorjobb/resultat/cbd/spc/6696fc511c2ea31b/sider/side-015.png"
+        ]
+      },
+      "avsnitt_4_8": {
+        "fra": 7,
+        "til": 9
+      },
+      "status": "ok",
+      "kontroller": [
+        {
+          "id": "pdfinfo",
+          "status": "ok",
+          "melding": "PDF-en kan leses (15 sider).",
+          "antall": {
+            "sider": 15
+          }
+        },
+        {
+          "id": "tekst",
+          "status": "ok",
+          "melding": "Teksten er trukket ut side for side.",
+          "antall": {
+            "tegn": 33348
+          }
+        },
+        {
+          "id": "avsnitt_4_8",
+          "status": "ok",
+          "melding": "Overskriften «4.8 Bivirkninger» står på side 7."
+        },
+        {
+          "id": "sidebilder",
+          "status": "ok",
+          "melding": "Et bilde av hver side, 150 dpi i gråtoner.",
+          "antall": {
+            "sider": 15
+          }
+        }
+      ]
+    }
+  ],
+  "utelatt": []
+}

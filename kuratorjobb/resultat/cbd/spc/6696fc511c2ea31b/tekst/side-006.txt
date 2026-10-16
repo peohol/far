@@ -1,0 +1,56 @@
+Sterke CYP3A4-hemmere
+
+Samtidig behandling med CYP3A4-hemmeren ketokonazol ga en økning i Cmaks og AUC for THC
+(henholdsvis 1,2 og 1,8 ganger), dets primære metabolitt (henholdsvis 3 og 3,6 ganger) og CBD
+(henholdsvis to og to ganger). Det kan derfor være nødvendig med en ny dosetitrering hvis samtidig
+behandling med CYP3A4-hemmere (f.eks. itrakonazol, ritonavir, klaritromycin) igangsettes eller
+avbrytes under behandling med Sativex (se pkt. 4.2).
+
+Sterke CYP2C9-hemmere
+
+Samtidig behandling av Sativex (4 sprayer) med CYP2C9-hemmeren flukonazol (200 mg kapsel)
+resulterte i en økning i gjennomsnittlig THC Cmaks på 22% og gjennomsnittlig AUC på 32%.
+Eksponering for metabolitten 11-OH-THC økte også med ca. 2,1 ganger og 2,5 ganger for henholdsvis
+Cmaks og AUC, hvilket indikerer at flukonazol kan hemme dets påfølgende metabolisme. Cmaks av CBD
+økte også med ca. 40%, men det var ingen signifikant endring i AUC. Det var heller ingen signifikant
+endring i eksponeringen for 7-OH-CBD, men en økning i den mindre sirkulerende metabolitten av
+CBD, 6-OH CBD, ble observert (med opptil 2,2 ganger basert på Cmaks og AUC). Den kliniske
+relevansen av denne legemiddelinteraksjonen er ikke fullt ut forstått, men det bør utvises forsiktighet
+ved samtidig administrering av Sativex med potente CYP2C9-hemmere, da det kan føre til økt
+eksponering for THC, CBD og deres metabolitter.
+
+Sterke CYP3A4-induktorer
+
+Etter behandling med CYP3A4-induktoren rifampicin ble det observert reduksjoner i Cmaks og AUC
+for THC (henholdsvis 40 % og 20 % reduksjon), dets primære metabolitt (henholdsvis 85 % og 87 %
+reduksjon) og CBD (henholdsvis 50 % og 60 % reduksjon). Samtidig behandling med kraftige
+enzyminduktorer (f.eks. rifampicin, karbamazepin, fenytoin, fenobarbital, johannesurt) bør derfor om
+mulig unngås. Dersom det anses nødvendig, anbefales forsiktig titrering, særlig de to første ukene etter
+at induktoren seponeres.
+
+Generell
+
+Det bør utvises forsiktighet med hypnotika, sedativa og legemidler med potensielt sederende effekter,
+da det kan være en additiv effekt på sedasjon og muskelrelaksasjon.
+
+Det er ingen økt forekomst av bivirkninger hos pasienter som allerede tar antispastiske midler sammen
+med Sativex, men det bør utvises forsiktighet ved administrasjon av slike midler sammen med Sativex,
+siden det kan forekomme en reduksjon i muskeltonus og muskelkraft som medfører høyere risiko for
+fallulykker.
+
+Sativex kan interagere med alkohol og påvirke koordinasjons-, konsentrasjons- og reaksjonsevnen.
+Alkoholholdige drikker bør generelt unngås ved bruk av Sativex, spesielt ved starten av behandlingen
+eller ved doseendringer. Pasienter bør underrettes om at de additive CNS-effektene av alkohol kan
+redusere evnen til å kjøre bil eller bruke maskiner og øke risikoen for fall.
+
+Hormonelle prevensjonsmidler
+
+Sativex har blitt observert å indusere legemiddelmetaboliserende enzymer og transportører in vitro.
+Sativex kan redusere effektiviteten av systemisk virkende hormonelle prevensjonsmidler, og derfor
+bør kvinner som bruker systemisk virkende hormonelle prevensjonsmidler legge til en ekstra andre
+barrieremetode.
+
+
+
+
+                                                  6

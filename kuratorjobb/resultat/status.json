@@ -1,18 +1,55 @@
 {
   "versjon": 1,
-  "status": "kjorer",
+  "status": "advarsel",
   "jobb": {
     "gren": "kuratorjobb/cbd-0013",
     "foresporsel_commit": "bd8cd4eae5a77bc4fb8813ace630c35e4a9aba1b",
     "foresporsel_sha256": "82a633f59a8b2d08379d67763bfb11c6e3354c2c1508e224dbbc2810bf50d9ac",
     "kode_commit": "548dba55e6654e91eba4e7467891d32c39cfb506",
     "kjoring": "https://github.com/peohol/far/actions/runs/38973619497",
-    "startet_kl": "2026-10-16T22:05:58.177Z",
-    "ferdig_kl": null
+    "startet_kl": "2026-10-16T22:06:00.483Z",
+    "ferdig_kl": "2026-10-16T22:06:14.131Z"
   },
-  "foresporsel": null,
-  "referanse": null,
+  "foresporsel": {
+    "versjon": 1,
+    "stoffer": [
+      "cbd"
+    ],
+    "oppgaver": [
+      "funksjonstest",
+      "spc"
+    ],
+    "referanse": "cbd-0013-2205"
+  },
+  "referanse": "cbd-0013-2205",
   "feil": [],
-  "bruker": [],
-  "stoffer": {}
+  "bruker": [
+    {
+      "id": "innlogging",
+      "status": "ok",
+      "melding": "Testbrukeren logget inn som appen gjør."
+    },
+    {
+      "id": "bruker",
+      "status": "ok",
+      "melding": "Testbrukeren er en vanlig innlogget bruker, ikke administrator.",
+      "rpc": "er_admin",
+      "ms": 668
+    }
+  ],
+  "stoffer": {
+    "cbd": {
+      "status": "advarsel",
+      "oppgaver": {
+        "funksjonstest": {
+          "status": "ok",
+          "fil": "kuratorjobb/resultat/cbd/funksjonstest.json"
+        },
+        "spc": {
+          "status": "advarsel",
+          "fil": "kuratorjobb/resultat/cbd/spc.json"
+        }
+      }
+    }
+  }
 }

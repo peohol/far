@@ -1,0 +1,59 @@
+Melding av mistenkte bivirkninger
+
+Melding av mistenkte bivirkninger etter godkjenning av legemidlet er viktig. Det gjør det mulig å
+overvåke forholdet mellom nytte og risiko for legemidlet kontinuerlig. Helsepersonell oppfordres til å
+melde enhver mistenkt bivirkning. Dette gjøres via meldeskjema som finnes på nettsiden til
+Direktoratet for medisinske produkter: www.dmp.no/meldeskjema.
+
+4.9   Overdosering
+
+Det foreligger ingen erfaringer med tilsiktet overdosering med Sativex hos pasienter. I en omfattende
+QT-undersøkelse av Sativex med 257 forsøkspersoner, der det ble tatt 18 sprayer over 20 minutter to
+ganger daglig, ble det imidlertid observert tegn og symptomer på overdosering/forgiftning. Disse besto
+av akutte forgiftningslignende reaksjoner (CB1 agonisme) som svimmelhet, hallusinasjoner,
+vrangforestillinger, paranoia, takykardi eller bradykardi med hypotensjon. Hos tre av 41
+forsøkspersoner som tok 18 sprayer to ganger daglig, manifesterte dette seg som en forbigående
+toksisk psykose som forsvant ved seponering av behandlingen. Tjueto forsøkspersoner som fikk denne
+betydelige overdosen i forhold til den anbefalte dosen, gjennomførte den fem dager lange
+studieperioden uten problem.
+
+Ved overdosering bør behandlingen være symptomatisk og støttende.
+
+
+5.    FARMAKOLOGISKE EGENSKAPER
+
+5.1   Farmakodynamiske egenskaper
+
+Farmakoterapeutisk gruppe: Andre anelgetika og antipyretika, ATC-kode: N02BG10
+
+Hjerteelektrofysiologi
+
+I en omfattende QT-studie var det ingen klinisk relevante endringer i QTc-, PR- eller QRS-
+intervallvarighet, hjertefrekvens eller blodtrykk, etter fem dager med dosering hos friske frivillige med
+Sativex opptil 18 sprayer to ganger daglig.
+
+Virkningsmekanisme
+
+Som en del av det humane endocannabinoide systemet (ECS) finnes det cannabinoidreseptorer, CB1
+og CB2, hovedsakelig ved nerveender der de har en rolle i retrograd regulering av den synaptiske
+funksjonen. THC fungerer som delvis agonist ved både CB1- og CB2-reseptorene og etterligner
+effekten av endocannabinoidene, hvilket kan modulere effektene av enkelte nevrotransmittere (f.eks.
+redusere effektene av eksitatoriske nevrotransmittere som glutamat).
+
+I dyremodeller av MS og spastisitet er CB-reseptoragonister påvist å lindre stivhet i ekstremiteter og
+forbedre den motoriske funksjonen. Disse effektene forhindres av CB-antagonister, og CB1-knockout-
+mus utviser alvorligere spastisitet. I musemodellen CREAE (Chronic Relapsing Experimental
+Autoimmune Encephalomyelitis) fremkalte Sativex en doserelatert reduksjon av stivhet i bakbenene.
+
+Klinisk erfaring
+
+Sativex er undersøkt ved doser på opptil 48 sprayer per døgn i kontrollerte kliniske studier på opptil
+19 uker hos over 2 000 pasienter med MS. I de sentrale studiene for å vurdere effekten og sikkerheten
+av Sativex mht. symptomforbedring hos pasienter med moderat til alvorlig spastisitet på grunn av
+multippel sklerose (MS) var det primære effektmålet en numerisk skala (NRS) på 0–10 poeng der
+pasientene oppga gjennomsnittlig grad av spastisitetsrelaterte symptomer de siste 24 timene, der 0 var
+ingen spastisitet og 10 var verst mulig spastisitet.
+
+
+
+                                                   9
