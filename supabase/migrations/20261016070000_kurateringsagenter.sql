@@ -66,7 +66,12 @@ begin
     'blindfase', g.blindfase,
     'aktivitet', g.aktivitet,
     'oppdatert_kl', g.oppdatert_kl,
-    'kurator_sist_sett_kl', (select a.sist_sett_kl from kuratering.agenter a where a.id = g.kurator),
+    -- Sist kuratoren gjorde noe i nettopp denne grenen (en revisjon, en
+    -- kommentar, et dokument, en aktivitet), ikke i en annen gren den har.
+    'kurator_sist_kl', greatest(
+      (select max(h.kl) from kuratering.hendelser h where h.gren = g.id and h.agent = g.kurator),
+      (select max(r.opprettet_kl) from kuratering.grenrevisjoner r where r.gren = g.id and r.agent = g.kurator)
+    ),
     'apne_sperrer', (
       select count(*) from jsonb_array_elements(kuratering.traader(g)) t
       where t ->> 'status' = 'apen' and t ->> 'art' = 'sperrende'

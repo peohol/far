@@ -55,7 +55,7 @@ export function tomMatrise(modus: Dekningsmatrise['modus']): Dekningsmatrise {
 }
 
 const tekst = (v: unknown): v is string => typeof v === 'string' && v.trim() !== ''
-const tekster = (v: unknown): v is string[] => Array.isArray(v) && v.every((x) => typeof x === 'string')
+const tekster = (v: unknown): v is string[] => Array.isArray(v) && v.every(tekst)
 
 /**
  * Hva som mangler eller er galt i matrisen; tom når den dekker modellen. Hvert
@@ -80,7 +80,7 @@ export function kontrollerDekning(matrise: unknown, punkter: readonly string[] =
     }
     if (!DEKNINGSSTATUSER.includes(o.status as Dekningsstatus)) feil.push(`${nokkel}: status må være en av ${DEKNINGSSTATUSER.join(', ')}.`)
     if (!tekst(o.begrunnelse)) feil.push(`${nokkel}: mangler begrunnelse.`)
-    if (!tekster(o.kilder) || !tekster(o.sok)) feil.push(`${nokkel}: kilder og sok må være lister med tekst.`)
+    if (!tekster(o.kilder) || !tekster(o.sok)) feil.push(`${nokkel}: kilder og sok må være lister med tekst, uten tomme oppføringer.`)
     else if (o.status === 'tomt_begrunnet' && o.sok.length === 0) feil.push(`${nokkel}: et tomt område må si hva det ble søkt etter.`)
     else if ((o.status === 'nytt_eller_oppdatert' || o.status === 'beholdt_etter_kontroll') && (o.kilder.length === 0 || !tekst(o.bevis))) {
       feil.push(`${nokkel}: det som er skrevet eller beholdt, må ha kilder og bevis.`)
