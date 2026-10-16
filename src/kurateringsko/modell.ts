@@ -107,6 +107,8 @@ export interface Gjenopptak {
   pr: number | null
   /** Kurateringsgrenen i OUSFAR (ID-en), når kurateringen gjøres der. */
   gren?: string | null
+  /** Kunnskapsgrensen grenen ble meldt ferdig med, så den følger grenen til den er publisert. */
+  kunnskapsgrense?: string | null
 }
 
 export interface Reservasjon {
@@ -126,6 +128,8 @@ export interface Reservasjon {
   pr: number | null
   /** Kurateringsgrenen i OUSFAR (ID-en), så snart kuratoren har åpnet den. */
   gren?: string | null
+  /** Kunnskapsgrensen fra en tidligere kontrollrunde i samme gren (se {@link Gjenopptak}). */
+  kunnskapsgrense?: string | null
 }
 
 /** Statusene til en kurateringsgren i OUSFAR, som `kuratering.grener` har dem. */

@@ -169,7 +169,10 @@ neste time.
 - **Publisert.** Stoffet får grenen som sin siste kuratering. Det gjelder
   også en gren som er reservert eller står i `gjenoppta` (f.eks. en godkjent
   gren kuratoren publiserte før kjøringen stoppet): reservasjonen avsluttes,
-  og kunnskapsgrensen står som ukjent.
+  med kunnskapsgrensen grenen sist ble meldt ferdig med (den følger grenen
+  gjennom kontrollrundene). Et `fullfort` for oppgaven fra samme økt etter
+  det, godtas uten å endre noe, og fører bare inn kunnskapsgrensen om den
+  manglet.
 - **Stoppet.** En forkastet gren (også en reservert eller i `gjenoppta`) gir
   blokkeringen `gren_forkastet`, en stanset
   gren `gren_stanset`. Finnes det en åpen gren for stoffet som ikke er den køen
@@ -244,8 +247,8 @@ committes oppå den, på samme gren.
 | `aktive_modi` | `de_novo` | Legg til `evidensovervaking` for å la køen gi ut evidensovervåkning |
 | `de_novo_runde` | 2 | Øk for en ny de novo-runde gjennom hele registeret |
 | `evidensovervaking_dager` | 180 | Fra kunnskapsgrensen til evidensovervåkningen er forfalt |
-| `forrang` | `citalopram`, `lurasidon`, `ghb` | Stoffer som skal først, i rekkefølge, f.eks. for en pilot |
-| `bare_forrang` | på | Køen gir bare ut stoffene i `forrang` (og kurateringer som fortsettes). Slås av, og `forrang` tømmes, når piloten er bestått; da går de novo-runden gjennom hele registeret |
+| `forrang` | tom | Stoffer som skal først, i rekkefølge, f.eks. for en pilot (citalopram, lurasidon og GHB i piloten for grenene) |
+| `bare_forrang` | av | Køen gir bare ut stoffene i `forrang` (og kurateringer som fortsettes), mens en pilot pågår. Av siden piloten ble bestått 2026-10-16; de novo-runden går gjennom hele registeret |
 | `utelatt` | `teststoff` | Stoffer køen ikke gir ut, som testsiden |
 | `maling_timer` | 20 | Hvor ofte sidene måles |
 | `okt_slettes_etter_dager` | 14 | Øktgrener uten aktiv reservasjon slettes etter så lenge |
