@@ -785,13 +785,23 @@ describe('statusen og agentene', () => {
     expect(Date.parse(String(status.kurator_sist_kl))).toBeGreaterThan(Date.parse(String(forAnnen)))
     expect((await adm<Json>('status', { gren: annen.gren })).kurator_sist_kl).toBe(forAnnen)
     expect(Object.keys(status).sort()).toEqual(
-      ['aktivitet', 'apne_sperrer', 'blindfase', 'id', 'kurator_sist_kl', 'oppdatert_kl', 'revisjon', 'runde', 'status'].sort(),
+      ['aktivitet', 'apne_sperrer', 'blindfase', 'endring', 'id', 'kurator_sist_kl', 'oppdatert_kl', 'revisjon', 'runde', 'status'].sort(),
     )
     expect(status).toMatchObject({ id: k.gren, status: 'arbeid', revisjon: 1, apne_sperrer: 0, aktivitet: { tekst: 'Kontrollerer doseringen', objekt: k.dosering } })
     expect(JSON.stringify(status)).not.toContain('Ny dosering')
     expect(await agent<Json>(chatgpt, 'status', { gren: k.gren })).toMatchObject({ revisjon: 1 })
-    await agent(chatgpt, 'kommenter', { gren: k.gren, tekst: 'Mangler kilde.', art: 'sperrende' })
-    expect(await adm<Json>('status', { gren: k.gren })).toMatchObject({ apne_sperrer: 1 })
+    const traad = await agent<{ traad: string }>(chatgpt, 'kommenter', { gren: k.gren, tekst: 'Mangler kilde.', art: 'sperrende' })
+    const etterTraad = await adm<{ apne_sperrer: number; endring: number }>('status', { gren: k.gren })
+    expect(etterTraad.apne_sperrer).toBe(1)
+    // Et svar i tråden endrer ikke sperrene, men gir en ny endring, og lesingen har den samme.
+    await agent(claude, 'kommenter', { gren: k.gren, svar_pa: traad.traad, tekst: 'Kilde lagt til.' })
+    const etterSvar = await adm<{ apne_sperrer: number; endring: number }>('status', { gren: k.gren })
+    expect(etterSvar.apne_sperrer).toBe(1)
+    expect(etterSvar.endring).toBeGreaterThan(etterTraad.endring)
+    expect((await adm<{ endring: number }>('les', { gren: k.gren })).endring).toBe(etterSvar.endring)
+    // Aktiviteten alene er ingen endring.
+    await agent(claude, 'aktivitet', { gren: k.gren, tekst: 'Leser kilden' })
+    expect((await adm<{ endring: number }>('status', { gren: k.gren })).endring).toBe(etterSvar.endring)
     expect((await feilFra(() => adm('status', { gren: k.gren }, leser)))?.code).toBe('42501')
     expect((await feilFra(() => adm('status', { gren: crypto.randomUUID() })))?.code).toBe('PT404')
   })

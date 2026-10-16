@@ -75,6 +75,8 @@ export interface Grenstatusdata {
   /** Sist kuratoren gjorde noe i denne grenen. */
   kurator_sist_kl?: string
   apne_sperrer: number
+  /** Den siste hendelsen i grenen utenom aktiviteten; øker ved hver revisjon, kommentar, dokument og vurdering. */
+  endring: number
 }
 
 /** Hva agenten gjør, slik «Følg agenten» viser det. */
@@ -108,10 +110,23 @@ export function agenttilstand(status: Grenstatusdata | null, brutt: boolean, naa
   return KURATORENS_TUR.includes(status.status) && naa - sist < AKTIV_I_MINUTTER * 60_000 ? 'aktiv' : 'venter'
 }
 
-/** Om noe i grenen er endret siden den ble lest, så den må leses på nytt. Aktiviteten alene teller ikke. */
-export function grenenErEndret(gren: Pick<Grensammendrag, 'status' | 'revisjon' | 'runde'> & { traader?: Traad[] }, status: Grenstatusdata): boolean {
+/**
+ * Om noe i grenen er endret siden den ble lest, så den må leses på nytt: en
+ * ny hendelse (en revisjon, en kommentar, et svar, et dokument, en vurdering)
+ * eller en annen status. Aktiviteten alene teller ikke.
+ */
+export function grenenErEndret(
+  gren: Pick<Grensammendrag, 'status' | 'revisjon' | 'runde'> & { traader?: Traad[]; endring?: number },
+  status: Grenstatusdata,
+): boolean {
   const sperrer = (gren.traader ?? []).filter((t) => t.status === 'apen' && t.art === 'sperrende').length
-  return status.revisjon !== gren.revisjon || status.status !== gren.status || status.runde !== gren.runde || status.apne_sperrer !== sperrer
+  return (
+    status.endring > (gren.endring ?? 0) ||
+    status.revisjon !== gren.revisjon ||
+    status.status !== gren.status ||
+    status.runde !== gren.runde ||
+    status.apne_sperrer !== sperrer
+  )
 }
 
 /** En KI-agent som kan arbeide i grenene (`agenter`). */
@@ -246,6 +261,8 @@ export interface Grendetaljer extends Grensammendrag {
   dokumenter: { art: string; versjon: number; kl: string }[]
   hindringer: string[]
   manglende_dokumenter: string[]
+  /** Hvor langt grenen var kommet da den ble lest (`Grenstatusdata.endring`). */
+  endring?: number
   /** Bare når grenen nettopp er laget av en gjenoppretting. */
   merknader?: string[]
   /** Kommentartrådene, sperrende og åpne først. */

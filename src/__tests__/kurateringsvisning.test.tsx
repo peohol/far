@@ -9,7 +9,7 @@
  * det den skal, prøves i `kurateringsgrener.test.ts` og `sideversjoner.test.ts`.
  * Innholdet er syntetisk.
  */
-import { cleanup, render, screen, waitFor, within } from '@testing-library/react'
+import { act, cleanup, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { Kurateringsside } from '../components/kuratering/Kurateringsside'
@@ -150,6 +150,7 @@ function grenstatus(gren: Grendetaljer, overstyr: Partial<Grenstatusdata> = {}):
     blindfase: gren.blindfase,
     oppdatert_kl: gren.oppdatert_kl,
     apne_sperrer: (gren.traader ?? []).filter((t) => t.status === 'apen' && t.art === 'sperrende').length,
+    endring: gren.endring ?? 0,
     ...overstyr,
   }
 }
@@ -425,6 +426,20 @@ describe('følg agenten', () => {
     expect(k.les).toHaveBeenCalledTimes(2)
   })
 
+  it('leser grenen på nytt når det er kommet et nytt svar eller en ny merknad, også når sperrene står som før', async () => {
+    const k = klient(grendetaljer({ endring: 7 }), { endring: 8 })
+    vis(<Kurateringsside gren={GREN} onGaaTil={vi.fn()} {...felles} />, kilde(k))
+    await waitFor(() => expect(k.les).toHaveBeenCalledTimes(2))
+    await new Promise((r) => setTimeout(r, 50))
+    expect(k.les).toHaveBeenCalledTimes(2)
+    // Uten noe nytt leses den ikke på nytt.
+    const uendret = klient(grendetaljer({ endring: 8 }), { endring: 8 })
+    vis(<Kurateringsside gren={GREN} onGaaTil={vi.fn()} {...felles} />, kilde(uendret))
+    await waitFor(() => expect(uendret.status).toHaveBeenCalled())
+    await new Promise((r) => setTimeout(r, 50))
+    expect(uendret.les).toHaveBeenCalledTimes(1)
+  })
+
   it('skiller mellom en agent som arbeider, venter, er stanset og en brutt tilkobling', () => {
     const gren = grendetaljer({ status: 'arbeid' })
     const kl = '2026-10-01T12:00:00Z'
@@ -467,6 +482,24 @@ describe('agentene', () => {
     rerender(<Kurateringsoversikt apen klient={k} onLukk={vi.fn()} />)
     await screen.findByRole('list', { name: 'Agentene' })
     expect(screen.queryByRole('textbox', { name: 'Adressen til ChatGPT (MCP)' })).toBeNull()
+  })
+
+  it('viser aldri en nøkkel som kommer etter at laget er lukket', async () => {
+    const k = klient()
+    let svar: (v: { agent: string; nokkel: string }) => void = () => {}
+    vi.mocked(k.nyAgentnokkel).mockImplementationOnce(() => new Promise((r) => (svar = r)))
+    const { rerender } = render(<Kurateringsoversikt apen klient={k} onLukk={vi.fn()} />)
+    const liste = await screen.findByRole('list', { name: 'Agentene' })
+    await userEvent.click(within(liste).getByRole('button', { name: 'Lag nøkkel' }))
+    await userEvent.click(within(liste).getByRole('button', { name: 'Bekreft ny nøkkel til ChatGPT monografkurator.' }))
+    await waitFor(() => expect(k.nyAgentnokkel).toHaveBeenCalled())
+    // Laget lukkes før svaret kommer, og åpnes igjen etterpå.
+    rerender(<Kurateringsoversikt apen={false} klient={k} onLukk={vi.fn()} />)
+    await act(async () => svar({ agent: 'chatgpt-monografkurator', nokkel: 'far_' + 'c'.repeat(64) }))
+    rerender(<Kurateringsoversikt apen klient={k} onLukk={vi.fn()} />)
+    await screen.findByRole('list', { name: 'Agentene' })
+    expect(screen.queryByRole('textbox', { name: 'Adressen til ChatGPT (MCP)' })).toBeNull()
+    expect(screen.queryByText(/c{64}/)).toBeNull()
   })
 })
 

@@ -39,6 +39,18 @@ as $$
   where case when p_admin then h.admin else h.agent end
 $$;
 
+-- Hvor langt grenen er kommet: den siste hendelsen i den, utenom aktiviteten
+-- (en revisjon, en kommentar, et dokument, en vurdering, en statusendring).
+-- Hendelsene kan ikke endres eller slettes, så tallet bare øker.
+create function kuratering.endring(p_gren kuratering.grener)
+returns bigint
+language sql
+stable
+set search_path = ''
+as $$
+  select coalesce(max(h.id), 0) from kuratering.hendelser h where h.gren = p_gren.id and h.hendelse <> 'aktivitet'
+$$;
+
 -- Statusen til en gren ({gren}), for den som kan lese den. Ingen fagtekst:
 -- bare det appen trenger for å vite om noe er nytt, og hva agenten gjør.
 create function kuratering.h_status(p_aktor kuratering.aktor, p_data jsonb)
@@ -75,8 +87,30 @@ begin
     'apne_sperrer', (
       select count(*) from jsonb_array_elements(kuratering.traader(g)) t
       where t ->> 'status' = 'apen' and t ->> 'art' = 'sperrende'
-    )
+    ),
+    'endring', kuratering.endring(g)
   ));
+end;
+$$;
+
+-- Lesingen gir også hvor langt grenen var kommet da den ble lest, så appen
+-- kan sammenligne med `status` og lese på nytt når noe er nytt.
+create or replace function kuratering.h_les(p_aktor kuratering.aktor, p_data jsonb)
+returns jsonb
+language plpgsql
+stable
+set search_path = ''
+as $$
+declare
+  g kuratering.grener;
+begin
+  select x.* into g from kuratering.grener x where x.id = (p_data ->> 'gren')::uuid;
+  if g.id is null then
+    raise exception 'Fant ikke kurateringsgrenen.' using errcode = 'PT404';
+  end if;
+  perform kuratering.krev_leser(p_aktor, g);
+  return kuratering.detaljer(g, (p_data ->> 'revisjon')::integer, g.blindfase and p_aktor.agent is not distinct from g.kurator)
+    || jsonb_build_object('traader', kuratering.traader(g), 'endring', kuratering.endring(g));
 end;
 $$;
 
