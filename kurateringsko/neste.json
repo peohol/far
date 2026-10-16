@@ -1,25 +1,17 @@
 {
-  "oppdatert_kl": "2026-10-16T19:07:15.526Z",
+  "oppdatert_kl": "2026-10-16T19:08:00.644Z",
   "malt_kl": "2026-10-16T18:10:24.195Z",
   "antall": {
     "klar": 93,
-    "reservert": 1,
+    "reservert": 0,
     "fagarbeid_ferdig": 0,
     "venter_godkjenning": 0,
     "sammenslatt": 0,
-    "publisert": 1,
+    "publisert": 2,
     "blokkert": 4,
     "utenfor": 1
   },
-  "aktive": [
-    {
-      "stoff": "lurasidon",
-      "oppgave": "lurasidon-0009",
-      "okt": "kurateringsko/okt/20261016-125910",
-      "frist_kl": "2026-10-16T22:07:15.526Z",
-      "fase": null
-    }
-  ],
+  "aktive": [],
   "neste": [
     {
       "stoff": "ghb",

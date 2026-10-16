@@ -1,12 +1,12 @@
 # Kurateringskøen
 
-Oppdatert 2026-10-16T19:07:15.526Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
+Oppdatert 2026-10-16T19:08:00.644Z. Stoffene sist lest fra databasen 2026-10-16T18:10:24.195Z. Lages av arbeidsflyten «Kurateringskø»; se `docs/kurateringsko.md` på main.
 
-Klar: 93 · Reservert: 1 · Publisert: 1 · Blokkert: 4 · Utenfor køen: 1
+Klar: 93 · Publisert: 2 · Blokkert: 4 · Utenfor køen: 1
 
 ## Pågår
 
-- **lurasidon** (lurasidon-0009), frist 2026-10-16T22:07:15.526Z
+Ingen kurateringer er reservert nå.
 
 ## Til gjennomgang
 
