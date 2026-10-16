@@ -1,10 +1,43 @@
 {
   "versjon": 1,
-  "foresporsel_id": "fullfort-kariprazin-1",
-  "foresporsel_sha256": "5c2964e996b6a7f04cd75efc460d49329989baa9f9606747389cc0067f8de589",
-  "handling": "fullfort",
+  "foresporsel_id": "reserver-neste-2",
+  "foresporsel_sha256": "2f318c283b6bd5e0423aff57563e76df24ea3e723e231cd12e37eebe33b1b6cd",
+  "handling": "reserver",
   "utfall": "ok",
-  "melding": "kariprazin er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
-  "behandlet_kl": "2026-10-16T22:03:49.492Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38973395974"
+  "melding": "cbd er reservert til 2026-10-17T01:04:59.838Z.",
+  "behandlet_kl": "2026-10-16T22:04:59.838Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38973522931",
+  "oppgave": {
+    "oppgave": "cbd-0013",
+    "stoff": "cbd",
+    "navn": "CBD",
+    "modus": "de_novo",
+    "forsok": 1,
+    "frist_kl": "2026-10-17T01:04:59.838Z",
+    "jobbgren": "kuratorjobb/cbd-0013",
+    "kurateringsgren": "kuratering/cbd-0013",
+    "pr": null,
+    "gren": null,
+    "gjenoppta": null,
+    "sist_kuratert": null,
+    "maal": {
+      "kl": "2026-10-16T18:10:24.842Z",
+      "side": true,
+      "elementer": 2,
+      "redaksjonelle_paneler": 13,
+      "paneler_med_innhold": 1,
+      "referanser": 1,
+      "elementer_uten_kilde": 0
+    },
+    "prioritet": {
+      "poeng": 462.3,
+      "grunner": [
+        "De novo-kuratering i runden som gjelder.",
+        "Aldri kuratert.",
+        "Ingen kuratering å regne alderen fra.",
+        "12 av 13 redaksjonelle seksjoner er tomme.",
+        "Bare 1 referanser."
+      ]
+    }
+  }
 }
