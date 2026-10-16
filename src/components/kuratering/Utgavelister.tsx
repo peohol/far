@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { kurateringsadresse, versjonsadresse } from '../../domain/rute'
 import { tidspunkt } from '../../faginnhold/historikk'
 import { useJevnligSjekk } from '../../hooks/useJevnligSjekk'
@@ -175,20 +175,29 @@ function Agentene({ apen, klient }: { apen: boolean; klient: Kurateringsklient }
   const tilstand = useApenHenting<Agentinfo[]>(apen, hent)
   // Nøkkelen holdes bare her, aldri i det som bevares over en oppdatering, og
   // glemmes når laget lukkes. Den vises utenfor lista, så den står mens lista
-  // hentes på nytt, også om hentingen feiler.
+  // hentes på nytt, også om hentingen feiler. Hver lukking starter en ny
+  // økt: et svar som kommer etter at laget er lukket, vises aldri.
   const [ny, setNy] = useState<{ agent: string; navn: string; nokkel: string } | null>(null)
   const [feil, setFeil] = useState<string | null>(null)
+  const okt = useRef(0)
   useEffect(() => {
-    if (!apen) setNy(null)
+    if (apen) return
+    okt.current += 1
+    setNy(null)
+    setFeil(null)
   }, [apen])
   const lagNokkel = (a: Agentinfo) => {
     setFeil(null)
+    const denne = okt.current
+    const iDenneOkta = <T,>(f: (v: T) => void) => (v: T) => {
+      if (okt.current === denne) f(v)
+    }
     klient.nyAgentnokkel(a.agent).then(
-      (svar) => {
+      iDenneOkta((svar) => {
         setNy({ ...svar, navn: a.navn })
         setRunde((r) => r + 1)
-      },
-      (e: unknown) => setFeil(e instanceof Error ? e.message : String(e)),
+      }),
+      iDenneOkta((e: unknown) => setFeil(e instanceof Error ? e.message : String(e))),
     )
   }
   return (

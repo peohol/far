@@ -189,7 +189,8 @@ agentverktøyene 2026-10-16 (fase A). Endres et valg, endres det her først.
 - 2026-10-16: E2 køen og protokollen (1.98.0): `public.kuratering_kostatus`
   og `/api/kuratering-ko` (OIDC for «Kurateringskø» på `main`); køen følger
   grenene (`gren` i `forny` og `fullfort`, kontrollrundene, `annen_gren`,
-  `gren_forkastet`, `gren_stanset`); `docs/kuratorprotokoll.md`,
+  `gren_forkastet`, `gren_stanset`), og bare grener for samme stoff og med
+  arten modusen krever (`gren_feil_kobling`); `docs/kuratorprotokoll.md`,
   `docs/kontrollorinstruks.md`, skillen `monografkurator`, `npm run kurator`
   og den nye instruksen for køen. Tester i `kurateringsko.test.ts`
   («kurateringsgrenene i OUSFAR»), `kuratorprotokoll.test.ts`,

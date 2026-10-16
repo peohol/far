@@ -145,6 +145,13 @@ export interface Greninfo {
 }
 
 /**
+ * Arten en kurateringsgren i OUSFAR må ha for å kunne være kurateringen i
+ * modusen: en de novo-kuratering gjøres i en `de_novo`-gren, de andre i en
+ * `kuratering`-gren. En `gjenoppretting` er aldri en kuratering køen følger.
+ */
+export const grenartFor = (modus: Modus): Greninfo['art'] => (modus === 'de_novo' ? 'de_novo' : 'kuratering')
+
+/**
  * En ferdig kuratering i en kurateringsgren i OUSFAR, som køen følger til den
  * er publisert: gjennom den faglige kontrollen, rettingene og publiseringen.
  */
@@ -198,6 +205,7 @@ export interface Blokkering {
     | 'gren_ukjent'
     | 'gren_stanset'
     | 'annen_gren'
+    | 'gren_feil_kobling'
   grunn: string
   kl: string
   kilde: 'system' | 'ko' | 'agent'
