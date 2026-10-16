@@ -120,7 +120,12 @@ i `docs/kuratorprotokoll.md` («Dokumentene»): evidensjournalen må ha
 kunnskapsgrense, hovedkilder, søk og påstander; dekningsmatrisen hvert
 kontrollpunkt nøyaktig én gang (`kuratering.kontrollpunkter()`, de samme som
 `src/kuratorprotokoll/dekning.ts`) med status, begrunnelse og belegg; selvtesten
-kravene og portene, uten noe som ikke er bestått. Tomme plassholdere avvises,
+hvert av de ufravikelige kravene (`kuratering.selvtestkrav()`) og hver av de
+tekniske portene (`kuratering.selvtestporter()`: prøvepubliseringen, rapporten,
+dekningen og funksjonstesten) nøyaktig én gang, med bevis og bestått. Et punkt
+som mangler, står flere ganger, er ukjent, `ikke_bestatt` eller `gjenstar`,
+stopper grenen; bare kravene om preparatomtalene kan være `ikke_relevant` (et
+stoff uten norsk preparatomtale). Tomme plassholdere avvises,
 og feilen sier hva som mangler. Kontrollen hindrer at portene omgås, men
 erstatter ikke fagkontrollen. En godkjenning
 er bundet til revisjonen og fingeravtrykket; en ny lagring eller en ny
