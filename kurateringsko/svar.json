@@ -1,44 +1,10 @@
 {
   "versjon": 1,
-  "foresporsel_id": "forny-2",
-  "foresporsel_sha256": "61acdafc79d421b1688fbbb7fccc04199ef6c4cd1511099406aa44316b9c29fe",
-  "handling": "forny",
+  "foresporsel_id": "fullfort-1",
+  "foresporsel_sha256": "b1621eeeb856003680eb8381a9c212bf2e24ba489f12998bae64b76fc7f71711",
+  "handling": "fullfort",
   "utfall": "ok",
-  "melding": "Reservasjonen av citalopram varer til 2026-10-16T16:33:26.921Z.",
-  "behandlet_kl": "2026-10-16T13:33:26.921Z",
-  "kjoring": "https://github.com/peohol/far/actions/runs/38908718985",
-  "oppgave": {
-    "oppgave": "citalopram-0003",
-    "stoff": "citalopram",
-    "navn": "Citalopram",
-    "modus": "de_novo",
-    "forsok": 1,
-    "frist_kl": "2026-10-16T16:33:26.921Z",
-    "jobbgren": "kuratorjobb/citalopram-0003",
-    "kurateringsgren": "kuratering/citalopram-0003",
-    "pr": null,
-    "gren": "565f142e-dce5-4804-b3ff-c65593427539",
-    "gjenoppta": null,
-    "sist_kuratert": {
-      "kl": "2026-10-13T16:00:00.000Z",
-      "modus": "de_novo",
-      "kunnskapsgrense": "2026-10-13",
-      "runde": 1,
-      "pr": null,
-      "kilde": "repo"
-    },
-    "maal": {
-      "kl": "2026-10-15T21:31:45.692Z",
-      "side": true,
-      "elementer": 43,
-      "redaksjonelle_paneler": 13,
-      "paneler_med_innhold": 13,
-      "referanser": 23,
-      "elementer_uten_kilde": 1
-    },
-    "prioritet": {
-      "poeng": 0,
-      "grunner": []
-    }
-  }
+  "melding": "citalopram er sendt til kontroll; køen følger kurateringsgrenen til den er publisert.",
+  "behandlet_kl": "2026-10-16T14:13:14.569Z",
+  "kjoring": "https://github.com/peohol/far/actions/runs/38913951723"
 }
